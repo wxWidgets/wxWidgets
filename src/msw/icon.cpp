@@ -68,11 +68,11 @@ wxIcon::wxIcon(void)
 {
 }
 
-wxIcon::wxIcon(const char WXUNUSED(bits)[], const int WXUNUSED(width), const int WXUNUSED(height))
+wxIcon::wxIcon(const char WXUNUSED(bits)[], int WXUNUSED(width), int WXUNUSED(height))
 {
 }
 
-wxIcon::wxIcon(const wxString& icon_file, const long flags,
+wxIcon::wxIcon(const wxString& icon_file, long flags,
     int desiredWidth, int desiredHeight)
 
 {
@@ -93,7 +93,7 @@ bool wxIcon::FreeResource(bool force)
   return TRUE;
 }
 
-bool wxIcon::LoadFile(const wxString& filename, const long type,
+bool wxIcon::LoadFile(const wxString& filename, long type,
     int desiredWidth, int desiredHeight)
 {
   UnRef();
@@ -116,7 +116,7 @@ void wxIcon::SetHICON(WXHICON ico)
   M_ICONDATA->m_hIcon = ico;
 }
 
-bool wxICOFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, const long flags,
+bool wxICOFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
     int desiredWidth, int desiredHeight)
 {
 #if USE_RESOURCE_LOADING_IN_MSW
@@ -137,7 +137,7 @@ bool wxICOFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, const lo
 #endif
 }
 
-bool wxICOResourceHandler::LoadFile(wxBitmap *bitmap, const wxString& name, const long flags,
+bool wxICOResourceHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
     int desiredWidth, int desiredHeight)
 {
 	if ( bitmap->IsKindOf(CLASSINFO(wxIcon)) )

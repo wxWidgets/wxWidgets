@@ -33,8 +33,8 @@ public:
   // Constructor with a modal flag, but no window id - the old convention
   inline wxDialog(wxWindow *parent,
            const wxString& title, bool modal,
-           const int x = -1, const int y= -1, const int width = 500, const int height = 500,
-           const long style = wxDEFAULT_DIALOG_STYLE,
+           int x = -1, int y= -1, int width = 500, int height = 500,
+           long style = wxDEFAULT_DIALOG_STYLE,
            const wxString& name = wxDialogNameStr)
   {
       long modalStyle = modal ? wxDIALOG_MODAL : wxDIALOG_MODELESS ;
@@ -42,32 +42,32 @@ public:
   }
 
   // Constructor with no modal flag - the new convention.
-  inline wxDialog(wxWindow *parent, const wxWindowID id,
+  inline wxDialog(wxWindow *parent, wxWindowID id,
            const wxString& title,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           const long style = wxDEFAULT_DIALOG_STYLE,
+           long style = wxDEFAULT_DIALOG_STYLE,
            const wxString& name = wxDialogNameStr)
   {
       Create(parent, id, title, pos, size, style, name);
   }
 
-  bool Create(wxWindow *parent, const wxWindowID id,
+  bool Create(wxWindow *parent, wxWindowID id,
            const wxString& title, // bool modal = FALSE, // TODO make this a window style?
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           const long style = wxDEFAULT_DIALOG_STYLE,
+           long style = wxDEFAULT_DIALOG_STYLE,
            const wxString& name = wxDialogNameStr);
 
   ~wxDialog(void);
 
   virtual bool Destroy(void);
-  void SetSize(const int x, const int y, const int width, const int height, const int sizeFlags = wxSIZE_AUTO);
-  void SetClientSize(const int width, const int height);
+  void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
+  void SetClientSize(int width, int height);
   void GetPosition(int *x, int *y) const;
-  bool Show(const bool show);
+  bool Show(bool show);
   bool IsShown(void) const ;
-  void Iconize(const bool iconize);
+  void Iconize(bool iconize);
 
 #if WXWIN_COMPATIBILITY
   inline bool Iconized(void) const { return IsIconized(); };
@@ -84,9 +84,9 @@ public:
   void OnPaint(wxPaintEvent& event);
   void OnCloseWindow(wxCloseEvent& event);
 
-  void SetModal(const bool flag);
+  void SetModal(bool flag);
 
-  virtual void Centre(const int direction = wxBOTH);
+  virtual void Centre(int direction = wxBOTH);
   virtual bool IsModal(void) const { return ((GetWindowStyleFlag() & wxDIALOG_MODAL) == wxDIALOG_MODAL); }
 
   // For now, same as Show(TRUE) but returns return code
@@ -108,7 +108,7 @@ public:
 //  virtual bool MSWOnEraseBkgnd(WXHDC pDC);
   virtual bool MSWOnClose(void);
   inline bool IsModalShowing() const { return m_modalShowing ; }
-  virtual WXHBRUSH OnCtlColor(const WXHDC pDC, const WXHWND pWnd, const WXUINT nCtlColor,
+  virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
   			WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
 DECLARE_EVENT_TABLE()

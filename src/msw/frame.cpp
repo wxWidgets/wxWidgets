@@ -76,11 +76,11 @@ wxFrame::wxFrame(void)
 }
 
 bool wxFrame::Create(wxWindow *parent,
-           const wxWindowID id,
+           wxWindowID id,
            const wxString& title,
            const wxPoint& pos,
            const wxSize& size,
-           const long style,
+           long style,
            const wxString& name)
 {
   if (!parent)
@@ -171,7 +171,7 @@ void wxFrame::GetClientSize(int *x, int *y) const
 
 // Set the client size (i.e. leave the calculation of borders etc.
 // to wxWindows)
-void wxFrame::SetClientSize(const int width, const int height)
+void wxFrame::SetClientSize(int width, int height)
 {
   HWND hWnd = (HWND) GetHWND();
 
@@ -199,13 +199,10 @@ void wxFrame::SetClientSize(const int width, const int height)
   point.y = rect2.top;
 
   MoveWindow(hWnd, point.x, point.y, actual_width, actual_height, (BOOL)TRUE);
-#if WXWIN_COMPATIBILITY
-  GetEventHandler()->OldOnSize(width, height);
-#else
+
   wxSizeEvent event(wxSize(width, height), m_windowId);
   event.SetEventObject( this );
   GetEventHandler()->ProcessEvent(event);
-#endif
 }
 
 void wxFrame::GetSize(int *width, int *height) const
@@ -228,7 +225,7 @@ void wxFrame::GetPosition(int *x, int *y) const
   *y = point.y;
 }
 
-void wxFrame::SetSize(const int x, const int y, const int width, const int height, const int sizeFlags)
+void wxFrame::SetSize(int x, int y, int width, int height, int sizeFlags)
 {
   int currentX, currentY;
   int x1 = x;
@@ -249,16 +246,12 @@ void wxFrame::SetSize(const int x, const int y, const int width, const int heigh
 
   MoveWindow((HWND) GetHWND(), x1, y1, w1, h1, (BOOL)TRUE);
 
-#if WXWIN_COMPATIBILITY
-  GetEventHandler()->OldOnSize(width, height);
-#else
   wxSizeEvent event(wxSize(width, height), m_windowId);
   event.SetEventObject( this );
   GetEventHandler()->ProcessEvent(event);
-#endif
 }
 
-bool wxFrame::Show(const bool show)
+bool wxFrame::Show(bool show)
 {
   int cshow;
   if (show)
@@ -283,18 +276,14 @@ bool wxFrame::Show(const bool show)
   {
     BringWindowToTop((HWND) GetHWND());
 
-#if WXWIN_COMPATIBILITY
-    OldOnActivate(TRUE);
-#else
     wxActivateEvent event(wxEVT_ACTIVATE, TRUE, m_windowId);
     event.SetEventObject( this );
     GetEventHandler()->ProcessEvent(event);
-#endif
   }
   return TRUE;
 }
 
-void wxFrame::Iconize(const bool iconize)
+void wxFrame::Iconize(bool iconize)
 {
   if (!iconize)
     Show(TRUE);
@@ -309,7 +298,7 @@ void wxFrame::Iconize(const bool iconize)
 }
 
 // Equivalent to maximize/restore in Windows
-void wxFrame::Maximize(const bool maximize)
+void wxFrame::Maximize(bool maximize)
 {
   Show(TRUE);
   int cshow;
@@ -348,7 +337,7 @@ void wxFrame::SetIcon(const wxIcon& icon)
 #endif
 }
 
-wxStatusBar *wxFrame::OnCreateStatusBar(const int number)
+wxStatusBar *wxFrame::OnCreateStatusBar(int number)
 {
     wxStatusBar *statusBar = NULL;
 
@@ -378,7 +367,7 @@ wxStatusBar *wxFrame::OnCreateStatusBar(const int number)
   return statusBar;
 }
 
-bool wxFrame::CreateStatusBar(const int number)
+bool wxFrame::CreateStatusBar(int number)
 {
   // VZ: calling CreateStatusBar twice is an error - why anyone would do it?
   wxCHECK_MSG( m_frameStatusBar == NULL, FALSE, 
@@ -394,14 +383,14 @@ bool wxFrame::CreateStatusBar(const int number)
     return FALSE;
 }
 
-void wxFrame::SetStatusText(const wxString& text, const int number)
+void wxFrame::SetStatusText(const wxString& text, int number)
 {
   wxCHECK_RET( m_frameStatusBar != NULL, "no statusbar to set text for" );
 
   m_frameStatusBar->SetStatusText(text, number);
 }
 
-void wxFrame::SetStatusWidths(const int n, const int *widths_field)
+void wxFrame::SetStatusWidths(int n, int *widths_field)
 {
   wxCHECK_RET( m_frameStatusBar != NULL, "no statusbar to set widths for" );
 
@@ -543,8 +532,8 @@ void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
  *
  */
 
-void wxFrame::MSWCreate(const int id, wxWindow *parent, const char *wclass, wxWindow *wx_win, const char *title,
-                   const int x, const int y, const int width, const int height, const long style)
+void wxFrame::MSWCreate(int id, wxWindow *parent, const char *wclass, wxWindow *wx_win, const char *title,
+                   int x, int y, int width, int height, long style)
 
 {
   m_defaultIcon = (WXHICON) (wxSTD_FRAME_ICON ? wxSTD_FRAME_ICON : wxDEFAULT_FRAME_ICON);
@@ -644,7 +633,10 @@ bool wxFrame::MSWOnPaint(void)
     }
     else
     {
-      GetEventHandler()->OldOnPaint();
+        wxPaintEvent event(m_windowId);
+        event.m_eventObject = this;
+        if (!GetEventHandler()->ProcessEvent(event))
+            Default();
     }
     return 0;
   }
@@ -659,7 +651,7 @@ WXHICON wxFrame::MSWOnQueryDragIcon(void)
     return m_defaultIcon;
 }
 
-void wxFrame::MSWOnSize(const int x, const int y, const WXUINT id)
+void wxFrame::MSWOnSize(int x, int y, WXUINT id)
 {
 #if DEBUG > 1
   wxDebugMsg("wxFrameWnd::OnSize %d\n", m_hWnd);
@@ -689,13 +681,10 @@ void wxFrame::MSWOnSize(const int x, const int y, const WXUINT id)
 #endif
 
   PositionStatusBar();
-#if WXWIN_COMPATIBILITY
-  GetEventHandler()->OldOnSize(x, y);
-#else
   wxSizeEvent event(wxSize(x, y), m_windowId);
   event.SetEventObject( this );
-  GetEventHandler()->ProcessEvent(event);
-#endif
+  if (!GetEventHandler()->ProcessEvent(event))
+    Default();
  }
 }
 
@@ -707,7 +696,7 @@ bool wxFrame::MSWOnClose(void)
     return Close();
 }
 
-bool wxFrame::MSWOnCommand(const WXWORD id, const WXWORD cmd, const WXHWND control)
+bool wxFrame::MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control)
 {
 #if DEBUG > 1
   wxDebugMsg("wxFrameWnd::OnCommand %d\n", handle);
@@ -731,14 +720,8 @@ bool wxFrame::MSWOnCommand(const WXWORD id, const WXWORD cmd, const WXHWND contr
     return FALSE;
 }
 
-void wxFrame::MSWOnMenuHighlight(const WXWORD nItem, const WXWORD nFlags, const WXHMENU hSysMenu)
+void wxFrame::MSWOnMenuHighlight(WXWORD nItem, WXWORD nFlags, WXHMENU hSysMenu)
 {
-#if WXWIN_COMPATIBILITY
-  if (nFlags == 0xFFFF && hSysMenu == 0)
-    GetEventHandler()->OldOnMenuSelect(-1);
-  else if (nFlags != MF_SEPARATOR)
-    GetEventHandler()->OldOnMenuSelect(nItem);
-#else
   if (nFlags == 0xFFFF && hSysMenu == 0)
   {
     wxMenuEvent event(wxEVT_MENU_HIGHLIGHT, -1);
@@ -751,7 +734,6 @@ void wxFrame::MSWOnMenuHighlight(const WXWORD nItem, const WXWORD nFlags, const 
     event.SetEventObject( this );
     GetEventHandler()->ProcessEvent(event);
   }
-#endif
 }
 
 bool wxFrame::MSWProcessMessage(WXMSG* pMsg)
@@ -870,6 +852,7 @@ void wxFrame::OnMenuHighlight(wxMenuEvent& event)
   }
 }
 
+#if 0
 #if WXWIN_COMPATIBILITY
 void wxFrame::OldOnSize(int x, int y)
 {
@@ -973,12 +956,15 @@ void wxFrame::OldOnMenuSelect(int id)
 }
 #endif
 
+#endif
+  // 0
+
 wxMenuBar *wxFrame::GetMenuBar(void) const
 {
   return m_frameMenuBar;
 }
 
-void wxFrame::Centre(const int direction)
+void wxFrame::Centre(int direction)
 {
   int display_width, display_height, width, height, x, y;
   wxDisplaySize(&display_width, &display_height);
@@ -1010,17 +996,12 @@ void wxFrame::ProcessCommand(int id)
   if (!bar)
     return;
 
-  // Motif does the job by itself!!
-#ifndef __MOTIF__
   wxMenuItem *item = bar->FindItemForId(id) ;
   if (item && item->IsCheckable())
   {
-//wxDebugMsg("Toggling id %d\n",id) ;
     bar->Check(id,!bar->Checked(id)) ;
   }
-#endif
-  if (!ProcessEvent(commandEvent))
-    OldOnMenuCommand(id);
+  GetEventHandler()->ProcessEvent(commandEvent);
 }
 
 void wxFrame::OnIdle(wxIdleEvent& event)

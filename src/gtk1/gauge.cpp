@@ -20,9 +20,9 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxGauge,wxControl)
 
-bool wxGauge::Create( wxWindow *parent, const wxWindowID id,  const int range,
+bool wxGauge::Create( wxWindow *parent, wxWindowID id,  int range,
     const wxPoint& pos, const wxSize& size,
-    const long style, const wxString& name )
+    long style, const wxString& name )
 {
   m_needParent = TRUE;
   
@@ -43,7 +43,7 @@ bool wxGauge::Create( wxWindow *parent, const wxWindowID id,  const int range,
   return TRUE;
 };
 
-void wxGauge::SetRange( const int r )
+void wxGauge::SetRange( int r )
 {
   m_rangeMax = r;
   if (m_gaugePos > m_rangeMax) m_gaugePos = m_rangeMax;
@@ -51,7 +51,7 @@ void wxGauge::SetRange( const int r )
   gtk_progress_bar_update( GTK_PROGRESS_BAR(m_widget), (float)(m_rangeMax/m_gaugePos) );
 };
 
-void wxGauge::SetValue( const int pos )
+void wxGauge::SetValue( int pos )
 {
   m_gaugePos = pos;
   if (m_gaugePos > m_rangeMax) m_gaugePos = m_rangeMax;

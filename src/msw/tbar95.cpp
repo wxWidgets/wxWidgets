@@ -71,9 +71,9 @@ wxToolBar95::wxToolBar95(void)
   m_defaultHeight = DEFAULTBITMAPY;
 }
 
-bool wxToolBar95::Create(wxWindow *parent, const wxWindowID id, const wxPoint& pos, const wxSize& size,
-            const long style, const int orientation,
-            const int RowsOrColumns, const wxString& name)
+bool wxToolBar95::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
+            long style, int orientation,
+            int RowsOrColumns, const wxString& name)
 {
   m_backgroundColour = wxColour(GetRValue(GetSysColor(COLOR_BTNFACE)),
   	GetGValue(GetSysColor(COLOR_BTNFACE)), GetBValue(GetSysColor(COLOR_BTNFACE)));
@@ -286,7 +286,7 @@ bool wxToolBar95::CreateTools(void)
   return TRUE;
 }
 
-bool wxToolBar95::MSWCommand(const WXUINT cmd, const WXWORD id)
+bool wxToolBar95::MSWCommand(WXUINT cmd, WXWORD id)
 {
   wxNode *node = m_tools.Find((long)id);
   if (!node)
@@ -304,7 +304,7 @@ bool wxToolBar95::MSWCommand(const WXUINT cmd, const WXWORD id)
   return TRUE;
 }
 
-bool wxToolBar95::MSWNotify(const WXWPARAM WXUNUSED(wParam), const WXLPARAM lParam)
+bool wxToolBar95::MSWNotify(WXWPARAM WXUNUSED(wParam), WXLPARAM lParam)
 {
 	// First check if this applies to us
     NMHDR *hdr = (NMHDR *)lParam;
@@ -348,7 +348,7 @@ void wxToolBar95::SetDefaultSize(const wxSize& size)
   ::SendMessage((HWND) GetHWND(), TB_SETBITMAPSIZE, 0, (LPARAM) MAKELONG ((int)size.x, (int)size.y));
 }
 
-void wxToolBar95::SetRows(const int nRows)
+void wxToolBar95::SetRows(int nRows)
 {
   RECT rect;
   ::SendMessage((HWND) GetHWND(), TB_SETROWS, MAKEWPARAM(nRows, TRUE), (LPARAM) & rect);
@@ -382,7 +382,7 @@ wxSize wxToolBar95::GetDefaultButtonSize(void) const
   return wxSize(m_defaultWidth + 8, m_defaultHeight + 7);
 }
 
-void wxToolBar95::EnableTool(const int toolIndex, const bool enable)
+void wxToolBar95::EnableTool(int toolIndex, bool enable)
 {
   wxNode *node = m_tools.Find((long)toolIndex);
   if (node)
@@ -393,7 +393,7 @@ void wxToolBar95::EnableTool(const int toolIndex, const bool enable)
   }
 }
 
-void wxToolBar95::ToggleTool(const int toolIndex, const bool toggle)
+void wxToolBar95::ToggleTool(int toolIndex, bool toggle)
 {
   wxNode *node = m_tools.Find((long)toolIndex);
   if (node)
@@ -418,8 +418,8 @@ void wxToolBar95::ClearTools(void)
 // If pushedBitmap is NULL, a reversed version of bitmap is
 // created and used as the pushed/toggled image.
 // If toggle is TRUE, the button toggles between the two states.
-wxToolBarTool *wxToolBar95::AddTool(const int index, const wxBitmap& bitmap, const wxBitmap& pushedBitmap,
-             const bool toggle, const long xPos, const long yPos, wxObject *clientData, const wxString& helpString1, const wxString& helpString2)
+wxToolBarTool *wxToolBar95::AddTool(int index, const wxBitmap& bitmap, const wxBitmap& pushedBitmap,
+             bool toggle, long xPos, long yPos, wxObject *clientData, const wxString& helpString1, const wxString& helpString2)
 {
   wxToolBarTool *tool = new wxToolBarTool(index, bitmap, (wxBitmap *)NULL, toggle, xPos, yPos, helpString1, helpString2);
   tool->m_clientData = clientData;

@@ -32,7 +32,7 @@
 IMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl)
 #endif
 
-bool wxRadioBox::MSWCommand(const WXUINT param, const WXWORD id)
+bool wxRadioBox::MSWCommand(WXUINT param, WXWORD id)
 {
   if (param == BN_CLICKED)
   {
@@ -85,10 +85,10 @@ wxRadioBox::wxRadioBox(void)
   m_radioHeight = NULL ;
 }
 
-bool wxRadioBox::Create(wxWindow *parent, const wxWindowID id, const wxString& title,
+bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
              const wxPoint& pos, const wxSize& size,
-             const int n, const wxString choices[],
-             const int majorDim, const long style,
+             int n, const wxString choices[],
+             int majorDim, long style,
              const wxValidator& val, const wxString& name)
 {
   m_selectedButton = -1;
@@ -203,10 +203,10 @@ bool wxRadioBox::Create(wxWindow *parent, const wxWindowID id, const wxString& t
 }
 
 #if 0
-bool wxRadioBox::Create(wxWindow *parent, const wxWindowID id, const wxString& title,
+bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
              const wxPoint& pos, const wxSize& size,
-             const int n, const wxBitmap *choices[],
-             const int majorDim, const long style,
+             int n, const wxBitmap *choices[],
+             int majorDim, long style,
              const wxValidator& val, const wxString& name)
 {
   m_selectedButton = -1;
@@ -339,19 +339,19 @@ wxRadioBox::~wxRadioBox(void)
 
 }
 
-wxString wxRadioBox::GetLabel(const int item) const
+wxString wxRadioBox::GetLabel(int item) const
 {
   GetWindowText((HWND)m_radioButtons[item], wxBuffer, 300);
   return wxString(wxBuffer);
 }
 
-void wxRadioBox::SetLabel(const int item, const wxString& label)
+void wxRadioBox::SetLabel(int item, const wxString& label)
 {
   m_radioWidth[item] = m_radioHeight[item] = -1 ;
   SetWindowText((HWND)m_radioButtons[item], (const char *)label);
 }
 
-void wxRadioBox::SetLabel(const int item, wxBitmap *bitmap)
+void wxRadioBox::SetLabel(int item, wxBitmap *bitmap)
 {
 /*
     m_radioWidth[item] = bitmap->GetWidth() + FB_MARGIN ;
@@ -371,7 +371,7 @@ int wxRadioBox::FindString(const wxString& s) const
  return -1;
 }
 
-void wxRadioBox::SetSelection(const int N)
+void wxRadioBox::SetSelection(int N)
 {
   if ((N < 0) || (N >= m_noItems))
     return;
@@ -391,13 +391,13 @@ int wxRadioBox::GetSelection(void) const
 }
 
 // Find string for position
-wxString wxRadioBox::GetString(const int N) const
+wxString wxRadioBox::GetString(int N) const
 {
   GetWindowText((HWND) m_radioButtons[N], wxBuffer, 1000);
   return wxString(wxBuffer);
 }
 
-void wxRadioBox::SetSize(const int x, const int y, const int width, const int height, const int sizeFlags)
+void wxRadioBox::SetSize(int x, int y, int width, int height, int sizeFlags)
 {
   int currentX, currentY;
   GetPosition(&currentX, &currentY);
@@ -413,9 +413,7 @@ void wxRadioBox::SetSize(const int x, const int y, const int width, const int he
 
   int y_offset = yy;
   int x_offset = xx;
-  float current_width;
-
-  float cyf;
+  int current_width, cyf;
 
   int cx1,cy1 ;
   wxGetCharSize(m_hWnd, &cx1, &cy1, GetFont());
@@ -616,7 +614,7 @@ void wxRadioBox::SetFocus(void)
 
 }
 
-bool wxRadioBox::Show(const bool show)
+bool wxRadioBox::Show(bool show)
 {
   int cshow;
   if (show)
@@ -632,7 +630,7 @@ bool wxRadioBox::Show(const bool show)
 }
 
 // Enable a specific button
-void wxRadioBox::Enable(const int item, const bool enable)
+void wxRadioBox::Enable(int item, bool enable)
 {
   if (item<0)
     wxWindow::Enable(enable) ;
@@ -641,7 +639,7 @@ void wxRadioBox::Enable(const int item, const bool enable)
 }
 
 // Enable all controls
-void wxRadioBox::Enable(const bool enable)
+void wxRadioBox::Enable(bool enable)
 {
   wxControl::Enable(enable);
   
@@ -651,7 +649,7 @@ void wxRadioBox::Enable(const bool enable)
 }
 
 // Show a specific button
-void wxRadioBox::Show(const int item, const bool show)
+void wxRadioBox::Show(int item, bool show)
 {
   if (item<0)
     wxRadioBox::Show(show) ;
@@ -666,7 +664,7 @@ void wxRadioBox::Show(const int item, const bool show)
   }
 }
 
-WXHBRUSH wxRadioBox::OnCtlColor(const WXHDC pDC, const WXHWND pWnd, const WXUINT nCtlColor,
+WXHBRUSH wxRadioBox::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 			WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
 #if CTL3D

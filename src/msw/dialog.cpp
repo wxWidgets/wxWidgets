@@ -81,11 +81,11 @@ wxDialog::wxDialog(void)
   SetDefaultBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
 }
 
-bool wxDialog::Create(wxWindow *parent, const wxWindowID id,
+bool wxDialog::Create(wxWindow *parent, wxWindowID id,
            const wxString& title,
            const wxPoint& pos,
            const wxSize& size,
-           const long style,
+           long style,
            const wxString& name)
 {
   SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
@@ -144,7 +144,7 @@ bool wxDialog::Create(wxWindow *parent, const wxWindowID id,
   return TRUE;
 }
 
-void wxDialog::SetModal(const bool flag)
+void wxDialog::SetModal(bool flag)
 {
 	if ( flag )
 		m_windowStyle |= wxDIALOG_MODAL ;
@@ -229,7 +229,7 @@ void wxDialog::Fit(void)
   wxWindow::Fit();
 }
 
-void wxDialog::Iconize(const bool WXUNUSED(iconize))
+void wxDialog::Iconize(bool WXUNUSED(iconize))
 {
   // Windows dialog boxes can't be iconized
 }
@@ -239,12 +239,12 @@ bool wxDialog::IsIconized(void) const
   return FALSE;
 }
 
-void wxDialog::SetSize(const int x, const int y, const int width, const int height, const int WXUNUSED(sizeFlags))
+void wxDialog::SetSize(int x, int y, int width, int height, int WXUNUSED(sizeFlags))
 {
   wxWindow::SetSize(x, y, width, height);
 }
 
-void wxDialog::SetClientSize(const int width, const int height)
+void wxDialog::SetClientSize(int width, int height)
 {
   HWND hWnd = (HWND) GetHWND();
   RECT rect;
@@ -260,13 +260,10 @@ void wxDialog::SetClientSize(const int width, const int height)
   int actual_height = rect2.bottom - rect2.top - rect.bottom + height;
 
   MoveWindow(hWnd, rect2.left, rect2.top, actual_width, actual_height, TRUE);
-#if WXWIN_COMPATIBILITY
-  GetEventHandler()->OldOnSize(actual_width, actual_height);
-#else
+
   wxSizeEvent event(wxSize(actual_width, actual_height), m_windowId);
-  event.eventObject = this;
+  event.SetEventObject( this );
   GetEventHandler()->ProcessEvent(event);
-#endif
 }
 
 void wxDialog::GetPosition(int *x, int *y) const
@@ -284,7 +281,7 @@ bool wxDialog::IsShown(void) const
   return m_isShown;
 }
 
-bool wxDialog::Show(const bool show)
+bool wxDialog::Show(bool show)
 {
   m_isShown = show;
 
@@ -453,7 +450,7 @@ wxString wxDialog::GetTitle(void) const
   return wxString(wxBuffer);
 }
 
-void wxDialog::Centre(const int direction)
+void wxDialog::Centre(int direction)
 {
   int x_offset,y_offset ;
   int display_width, display_height;
@@ -504,7 +501,7 @@ void wxDialog::EndModal(int retCode)
 }
 
 // Define for each class of dialog and control
-WXHBRUSH wxDialog::OnCtlColor(const WXHDC pDC, const WXHWND pWnd, const WXUINT nCtlColor,
+WXHBRUSH wxDialog::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 			WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
 #if CTL3D

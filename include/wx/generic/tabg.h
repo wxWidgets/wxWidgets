@@ -266,10 +266,10 @@ DECLARE_DYNAMIC_CLASS(wxTabbedDialog)
  
 public:
 
-   wxTabbedDialog(wxWindow *parent, const wxWindowID id, const wxString& title,
+   wxTabbedDialog(wxWindow *parent, wxWindowID id, const wxString& title,
     const wxPoint& pos = wxDefaultPosition,
     const wxSize& size = wxDefaultSize,
-     const long windowStyle = wxDEFAULT_DIALOG_STYLE, const wxString& name = wxDialogNameStr);
+     long windowStyle = wxDEFAULT_DIALOG_STYLE, const wxString& name = wxDialogNameStr);
    ~wxTabbedDialog(void);
  
    inline wxTabView *GetTabView() const { return m_tabView; }
@@ -295,10 +295,10 @@ DECLARE_DYNAMIC_CLASS(wxTabbedPanel)
  
 public:
 
-   wxTabbedPanel(wxWindow *parent, const wxWindowID id,
+   wxTabbedPanel(wxWindow *parent, wxWindowID id,
     const wxPoint& pos = wxDefaultPosition,
     const wxSize& size = wxDefaultSize,
-    const long windowStyle = 0, const wxString& name = wxPanelNameStr);
+    long windowStyle = 0, const wxString& name = wxPanelNameStr);
    ~wxTabbedPanel(void);
  
    inline wxTabView *GetTabView() const { return m_tabView; }

@@ -44,27 +44,27 @@ class wxGauge: public wxControl
   public:
     inline wxGauge(void) { m_rangeMax = 0; m_gaugePos = 0; m_useProgressBar = TRUE; }
 
-  inline wxGauge(wxWindow *parent, const wxWindowID id,
-           const int range,
+  inline wxGauge(wxWindow *parent, wxWindowID id,
+           int range,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           const long style = wxGA_HORIZONTAL,
+           long style = wxGA_HORIZONTAL,
            const wxString& name = wxGaugeNameStr)
   {
     Create(parent, id, range, pos, size, style, name);
   };
 
-  bool Create(wxWindow *parent, const wxWindowID id,
-           const int range,
+  bool Create(wxWindow *parent, wxWindowID id,
+           int range,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           const long style = wxGA_HORIZONTAL,
+           long style = wxGA_HORIZONTAL,
            const wxString& name = wxGaugeNameStr );
 
-  void SetShadowWidth( const int WXUNUSED(w) ) {};
-  void SetBezelFace( const int WXUNUSED(w) ) {};
-  void SetRange( const int r );
-  void SetValue( const int pos );
+  void SetShadowWidth( int WXUNUSED(w) ) {};
+  void SetBezelFace( int WXUNUSED(w) ) {};
+  void SetRange( int r );
+  void SetValue( int pos );
   int GetShadowWidth(void) const { return 0; };
   int GetBezelFace(void) const { return 0; };
   int GetRange(void) const;

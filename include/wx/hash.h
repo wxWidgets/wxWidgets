@@ -38,10 +38,10 @@ class WXDLLEXPORT wxHashTable: public wxObject
   unsigned int key_type;
   wxList **hash_table;
 
-  wxHashTable(const int the_key_type = wxKEY_INTEGER, const int size = 1000);
+  wxHashTable(int the_key_type = wxKEY_INTEGER, int size = 1000);
   ~wxHashTable(void);
 
-  bool Create(const int the_key_type = wxKEY_INTEGER, const int size = 1000);
+  bool Create(int the_key_type = wxKEY_INTEGER, int size = 1000);
 
   // Note that there are 2 forms of Put, Get.
   // With a key and a value, the *value* will be checked
@@ -56,27 +56,27 @@ class WXDLLEXPORT wxHashTable: public wxObject
   // e.g. 1 + 2 = 3, 2 + 1 = 3.
 
   // key and value are NOT necessarily the same
-  void Put(const long key, const long value, wxObject *object);
-  void Put(const long key, const char *value, wxObject *object);
+  void Put(long key, long value, wxObject *object);
+  void Put(long key, const char *value, wxObject *object);
 
   // key and value are the same
-  void Put(const long value, wxObject *object);
+  void Put(long value, wxObject *object);
   void Put(const char *value, wxObject *object);
 
   // key and value not the same
-  wxObject *Get(const long key, const long value) const;
-  wxObject *Get(const long key, const char *value) const;
+  wxObject *Get(long key, long value) const;
+  wxObject *Get(long key, const char *value) const;
 
   // key and value are the same
-  wxObject *Get(const long value) const;
+  wxObject *Get(long value) const;
   wxObject *Get(const char *value) const;
 
   // Deletes entry and returns data if found
-  wxObject *Delete(const long key);
+  wxObject *Delete(long key);
   wxObject *Delete(const char *key);
 
-  wxObject *Delete(const long key, const int value);
-  wxObject *Delete(const long key, const char *value);
+  wxObject *Delete(long key, int value);
+  wxObject *Delete(long key, const char *value);
 
   // Construct your own integer key from a string, e.g. in case
   // you need to combine it with something
@@ -89,7 +89,7 @@ class WXDLLEXPORT wxHashTable: public wxObject
   void BeginFind(void);
   wxNode *Next(void);
 
-  void DeleteContents(const bool flag);
+  void DeleteContents(bool flag);
   void Clear(void);
 
 };

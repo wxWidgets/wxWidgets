@@ -49,16 +49,16 @@ wxListBox::wxListBox(void)
 
 wxListBox::wxListBox( wxWindow *parent, wxWindowID id, 
       const wxPoint &pos, const wxSize &size, 
-      const int n, const wxString choices[],
-      const long style, const wxString &name )
+      int n, const wxString choices[],
+      long style, const wxString &name )
 {
   Create( parent, id, pos, size, n, choices, style, name );
 };
 
 bool wxListBox::Create( wxWindow *parent, wxWindowID id, 
       const wxPoint &pos, const wxSize &size, 
-      const int n, const wxString choices[],
-      const long style, const wxString &name )
+      int n, const wxString choices[],
+      long style, const wxString &name )
 {
   m_needParent = TRUE;
   
@@ -150,7 +150,7 @@ int wxListBox::FindString( const wxString &item ) const
   return -1;
 };
 
-char *wxListBox::GetClientData( const int WXUNUSED(n) ) const
+char *wxListBox::GetClientData( int WXUNUSED(n) ) const
 {
   wxFAIL_MSG("wxListBox::GetClientData not implemented");
 
@@ -231,7 +231,7 @@ int wxListBox::Number(void)
   return count;
 };
 
-bool wxListBox::Selected( const int n )
+bool wxListBox::Selected( int n )
 {
   GList *target = g_list_nth( m_list->children, n );
   if (target)
@@ -246,11 +246,11 @@ bool wxListBox::Selected( const int n )
   return FALSE;
 };
 
-void wxListBox::Set( const int WXUNUSED(n), const wxString *WXUNUSED(choices) )
+void wxListBox::Set( int WXUNUSED(n), const wxString *WXUNUSED(choices) )
 {
 };
 
-void wxListBox::SetClientData( const int WXUNUSED(n), char *WXUNUSED(clientData) )
+void wxListBox::SetClientData( int WXUNUSED(n), char *WXUNUSED(clientData) )
 {
 };
 
@@ -262,7 +262,7 @@ void wxListBox::SetFirstItem( const wxString &WXUNUSED(item) )
 {
 };
 
-void wxListBox::SetSelection( const int n, const bool select )
+void wxListBox::SetSelection( int n, bool select )
 {
   if (select)
     gtk_list_select_item( m_list, n );
@@ -270,11 +270,11 @@ void wxListBox::SetSelection( const int n, const bool select )
     gtk_list_unselect_item( m_list, n );
 };
 
-void wxListBox::SetString( const int WXUNUSED(n), const wxString &WXUNUSED(string) )
+void wxListBox::SetString( int WXUNUSED(n), const wxString &WXUNUSED(string) )
 {
 };
 
-void wxListBox::SetStringSelection( const wxString &string, const bool select )
+void wxListBox::SetStringSelection( const wxString &string, bool select )
 {
   SetSelection( FindString(string), select );
 };

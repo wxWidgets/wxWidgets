@@ -39,8 +39,8 @@ class wxBrush: public wxGDIObject
   public:
 
     wxBrush(void);
-    wxBrush( const wxColour &colour, const int style );
-    wxBrush( const wxString &colourName, const int style );
+    wxBrush( const wxColour &colour, int style );
+    wxBrush( const wxString &colourName, int style );
     wxBrush( const wxBitmap &stippleBitmap );
     wxBrush( const wxBrush &brush );
     wxBrush( const wxBrush *brush );

@@ -2037,7 +2037,7 @@ void wxPostScriptDC::CalcBoundingBox(long x, long y)
 IMPLEMENT_CLASS(wxPostScriptPrintDialog, wxDialog)
 
 wxPostScriptPrintDialog::wxPostScriptPrintDialog (wxWindow *parent, const wxString& title,
-		    const wxPoint& pos, const wxSize& size, const long style):
+		    const wxPoint& pos, const wxSize& size, long style):
 wxDialog(parent, -1, title, pos, size, style)
 {
   wxBeginBusyCursor();

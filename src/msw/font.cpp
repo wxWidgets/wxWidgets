@@ -243,28 +243,28 @@ bool wxFont::IsFree(void)
   return (M_FONTDATA && (M_FONTDATA->m_hFont == 0));
 }
 
-void wxFont::SetPointSize(const int pointSize)
+void wxFont::SetPointSize(int pointSize)
 {
     if ( !m_refData )
         m_refData = new wxFontRefData;
     M_FONTDATA->m_pointSize = pointSize;
 }
 
-void wxFont::SetFamily(const int family)
+void wxFont::SetFamily(int family)
 {
     if ( !m_refData )
         m_refData = new wxFontRefData;
     M_FONTDATA->m_family = family;
 }
 
-void wxFont::SetStyle(const int style)
+void wxFont::SetStyle(int style)
 {
     if ( !m_refData )
         m_refData = new wxFontRefData;
     M_FONTDATA->m_style = style;
 }
 
-void wxFont::SetWeight(const int weight)
+void wxFont::SetWeight(int weight)
 {
     if ( !m_refData )
         m_refData = new wxFontRefData;
@@ -278,7 +278,7 @@ void wxFont::SetFaceName(const wxString& faceName)
     M_FONTDATA->m_faceName = faceName;
 }
 
-void wxFont::SetUnderlined(const bool underlined)
+void wxFont::SetUnderlined(bool underlined)
 {
     if ( !m_refData )
         m_refData = new wxFontRefData;

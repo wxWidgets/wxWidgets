@@ -1018,10 +1018,10 @@ BEGIN_EVENT_TABLE(wxTabbedDialog, wxDialog)
     EVT_PAINT(wxTabbedDialog::OnPaint)
 END_EVENT_TABLE()
 
-wxTabbedDialog::wxTabbedDialog(wxWindow *parent, const wxWindowID id,
+wxTabbedDialog::wxTabbedDialog(wxWindow *parent, wxWindowID id,
     const wxString& title,
     const wxPoint& pos, const wxSize& size,
-    const long windowStyle, const wxString& name):
+    long windowStyle, const wxString& name):
    wxDialog(parent, id, title, pos, size, windowStyle, name)
 {
   m_tabView = NULL;
@@ -1062,8 +1062,8 @@ BEGIN_EVENT_TABLE(wxTabbedPanel, wxPanel)
     EVT_PAINT(wxTabbedPanel::OnPaint)
 END_EVENT_TABLE()
 
-wxTabbedPanel::wxTabbedPanel(wxWindow *parent, const wxWindowID id, const wxPoint& pos,
-   const wxSize& size, const long windowStyle, const wxString& name):
+wxTabbedPanel::wxTabbedPanel(wxWindow *parent, wxWindowID id, const wxPoint& pos,
+   const wxSize& size, long windowStyle, const wxString& name):
    wxPanel(parent, id, pos, size, windowStyle, name)
 {
   m_tabView = NULL;

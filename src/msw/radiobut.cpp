@@ -33,10 +33,10 @@ IMPLEMENT_DYNAMIC_CLASS(wxRadioButton, wxControl)
 // IMPLEMENT_DYNAMIC_CLASS(wxBitmapRadioButton, wxRadioButton)
 #endif
 
-bool wxRadioButton::Create(wxWindow *parent, const wxWindowID id,
+bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
 		   const wxString& label,
            const wxPoint& pos,
-           const wxSize& size, const long style,
+           const wxSize& size, long style,
            const wxValidator& validator,
            const wxString& name)
 {
@@ -97,7 +97,7 @@ bool wxRadioButton::Create(wxWindow *parent, const wxWindowID id,
   // start GRW fix
   if (label != "")
   {
-    float label_width, label_height;
+    int label_width, label_height;
     GetTextExtent(label, &label_width, &label_height, NULL, NULL, GetFont());
     if (width < 0)
       width = (int)(label_width + RADIO_SIZE);
@@ -128,7 +128,7 @@ void wxRadioButton::SetLabel(const wxString& label)
   SetWindowText((HWND) GetHWND(), (const char *)label);
 }
 
-void wxRadioButton::SetValue(const bool value)
+void wxRadioButton::SetValue(bool value)
 {
 // Following necessary for Win32s, because Win32s translate BM_SETCHECK
   SendMessage((HWND) GetHWND(), BM_SETCHECK, (WPARAM)value, 0L);
@@ -140,7 +140,7 @@ bool wxRadioButton::GetValue(void) const
   return (SendMessage((HWND) GetHWND(), BM_SETCHECK, 0, 0L) != 0);
 }
 
-WXHBRUSH wxRadioButton::OnCtlColor(const WXHDC pDC, const WXHWND pWnd, const WXUINT nCtlColor,
+WXHBRUSH wxRadioButton::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 			WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
 #if CTL3D
@@ -176,10 +176,10 @@ void wxRadioButton::Command (wxCommandEvent & event)
 
 // Not implemented
 #if 0
-bool wxBitmapRadioButton::Create(wxWindow *parent, const wxWindowID id,
+bool wxBitmapRadioButton::Create(wxWindow *parent, wxWindowID id,
 		   const wxBitmap *bitmap,
            const wxPoint& pos,
-           const wxSize& size, const long style,
+           const wxSize& size, long style,
            const wxValidator& validator,
            const wxString& name)
 {
@@ -231,7 +231,7 @@ void wxBitmapRadioButton::SetLabel(const wxBitmap *bitmap)
 {
 }
 
-void wxBitmapRadioButton::SetValue(const bool value)
+void wxBitmapRadioButton::SetValue(bool value)
 {
 // Following necessary for Win32s, because Win32s translate BM_SETCHECK
   SendMessage((HWND) GetHWND(), BM_SETCHECK, (WPARAM)value, 0L);

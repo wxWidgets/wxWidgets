@@ -57,10 +57,10 @@ wxSlider95::wxSlider95(void)
   m_tickFreq = 0;
 }
 
-bool wxSlider95::Create(wxWindow *parent, const wxWindowID id,
-           const int value, const int minValue, const int maxValue,
+bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
+           int value, int minValue, int maxValue,
            const wxPoint& pos,
-           const wxSize& size, const long style,
+           const wxSize& size, long style,
            const wxValidator& validator,
            const wxString& name)
 {
@@ -189,7 +189,7 @@ bool wxSlider95::Create(wxWindow *parent, const wxWindowID id,
   return TRUE;
 }
 
-void wxSlider95::MSWOnVScroll(const WXWORD wParam, const WXWORD pos, const WXHWND control)
+void wxSlider95::MSWOnVScroll(WXWORD wParam, WXWORD pos, WXHWND control)
 {
     int position = 0; // Dummy - not used in this mode
 
@@ -257,7 +257,7 @@ void wxSlider95::MSWOnVScroll(const WXWORD wParam, const WXWORD pos, const WXHWN
     }
 }
 
-void wxSlider95::MSWOnHScroll(const WXWORD wParam, const WXWORD pos, const WXHWND control)
+void wxSlider95::MSWOnHScroll(WXWORD wParam, WXWORD pos, WXHWND control)
 {
 	MSWOnVScroll(wParam, pos, control);
 }
@@ -277,7 +277,7 @@ int wxSlider95::GetValue(void) const
   return ::SendMessage((HWND) GetHWND(), TBM_GETPOS, 0, 0);
 }
 
-void wxSlider95::SetValue(const int value)
+void wxSlider95::SetValue(int value)
 {
   ::SendMessage((HWND) GetHWND(), TBM_SETPOS, (WPARAM)TRUE, (LPARAM)value);
   if (m_staticValue)
@@ -332,7 +332,7 @@ void wxSlider95::GetPosition(int *x, int *y) const
   *y = point.y;
 }
 
-void wxSlider95::SetSize(const int x, const int y, const int width, const int height, const int sizeFlags)
+void wxSlider95::SetSize(int x, int y, int width, int height, int sizeFlags)
 {
   int x1 = x;
   int y1 = y;
@@ -353,7 +353,7 @@ void wxSlider95::SetSize(const int x, const int y, const int width, const int he
 
   int cx;     // slider,min,max sizes
   int cy;
-  float cyf;
+  int cyf;
 
   wxGetCharSize(GetHWND(), &cx, &cy,GetFont());
 
@@ -361,12 +361,12 @@ void wxSlider95::SetSize(const int x, const int y, const int width, const int he
   {
 	if ( m_windowStyle & wxSL_LABELS )
 	{
-    float min_len = 0.0;
+    int min_len = 0;
 
     GetWindowText((HWND) m_staticMin, buf, 300);
     GetTextExtent(buf, &min_len, &cyf,NULL,NULL, GetFont());
 
-    float max_len = 0.0;
+    int max_len = 0;
 
     GetWindowText((HWND) m_staticMax, buf, 300);
     GetTextExtent(buf, &max_len, &cyf,NULL,NULL, GetFont());
@@ -418,11 +418,11 @@ void wxSlider95::SetSize(const int x, const int y, const int width, const int he
   {
 	if ( m_windowStyle & wxSL_LABELS )
 	{
-    float min_len;
+    int min_len;
     GetWindowText((HWND) m_staticMin, buf, 300);
     GetTextExtent(buf, &min_len, &cyf,NULL,NULL,GetFont());
 
-    float max_len;
+    int max_len;
     GetWindowText((HWND) m_staticMax, buf, 300);
     GetTextExtent(buf, &max_len, &cyf,NULL,NULL, GetFont());
 
@@ -477,7 +477,7 @@ void wxSlider95::SetSize(const int x, const int y, const int width, const int he
   }
 }
 
-void wxSlider95::SetRange(const int minValue, const int maxValue)
+void wxSlider95::SetRange(int minValue, int maxValue)
 {
   m_rangeMin = minValue;
   m_rangeMax = maxValue;
@@ -498,7 +498,7 @@ void wxSlider95::SetRange(const int minValue, const int maxValue)
   }
 }
 
-WXHBRUSH wxSlider95::OnCtlColor(const WXHDC pDC, const WXHWND pWnd, const WXUINT nCtlColor,
+WXHBRUSH wxSlider95::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 			WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
   if ( nCtlColor == CTLCOLOR_SCROLLBAR )
@@ -518,13 +518,13 @@ WXHBRUSH wxSlider95::OnCtlColor(const WXHDC pDC, const WXHWND pWnd, const WXUINT
 }
 
 // For trackbars only
-void wxSlider95::SetTickFreq(const int n, const int pos)
+void wxSlider95::SetTickFreq(int n, int pos)
 {
   m_tickFreq = n;
   ::SendMessage( (HWND) GetHWND(), TBM_SETTICFREQ, (WPARAM) n, (LPARAM) pos );
 }
 
-void wxSlider95::SetPageSize(const int pageSize)
+void wxSlider95::SetPageSize(int pageSize)
 {
   ::SendMessage( (HWND) GetHWND(), TBM_SETPAGESIZE, (WPARAM) 0, (LPARAM) pageSize );
   m_pageSize = pageSize;
@@ -545,7 +545,7 @@ void wxSlider95::ClearTicks(void)
   ::SendMessage( (HWND) GetHWND(), TBM_CLEARTICS, (WPARAM) TRUE, (LPARAM) 0 );
 }
 
-void wxSlider95::SetLineSize(const int lineSize)
+void wxSlider95::SetLineSize(int lineSize)
 {
   m_lineSize = lineSize;
   ::SendMessage( (HWND) GetHWND(), TBM_SETLINESIZE, (WPARAM) 0, (LPARAM) lineSize );
@@ -566,12 +566,12 @@ int wxSlider95::GetSelStart(void) const
   return (int) ::SendMessage( (HWND) GetHWND(), TBM_GETSELSTART, (WPARAM) 0, (LPARAM) 0 );
 }
 
-void wxSlider95::SetSelection(const int minPos, const int maxPos)
+void wxSlider95::SetSelection(int minPos, int maxPos)
 {
   ::SendMessage( (HWND) GetHWND(), TBM_SETSEL, (WPARAM) TRUE, (LPARAM) MAKELONG( minPos, maxPos) );
 }
 
-void wxSlider95::SetThumbLength(const int len)
+void wxSlider95::SetThumbLength(int len)
 {
   ::SendMessage( (HWND) GetHWND(), TBM_SETTHUMBLENGTH, (WPARAM) len, (LPARAM) 0 );
 }
@@ -581,7 +581,7 @@ int wxSlider95::GetThumbLength(void) const
   return (int) ::SendMessage( (HWND) GetHWND(), TBM_GETTHUMBLENGTH, (WPARAM) 0, (LPARAM) 0 );
 }
 
-void wxSlider95::SetTick(const int tickPos)
+void wxSlider95::SetTick(int tickPos)
 {
   ::SendMessage( (HWND) GetHWND(), TBM_SETTIC, (WPARAM) 0, (LPARAM) tickPos );
 }
@@ -612,7 +612,7 @@ void wxSlider95::Command (wxCommandEvent & event)
   ProcessCommand (event);
 }
 
-bool wxSlider95::Show(const bool show)
+bool wxSlider95::Show(bool show)
 {
 	wxWindow::Show(show);
 

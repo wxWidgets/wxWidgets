@@ -43,12 +43,12 @@ class wxStaticBitmap: public wxControl
   public:
   
     wxStaticBitmap(void);
-    wxStaticBitmap( wxWindow *parent, const wxWindowID id, const wxBitmap& label,
+    wxStaticBitmap( wxWindow *parent, wxWindowID id, const wxBitmap& label,
       const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-      const long style = 0, const wxString& name = wxStaticBitmapNameStr );
-    bool Create( wxWindow *parent, const wxWindowID id, const wxBitmap& label,
+      long style = 0, const wxString& name = wxStaticBitmapNameStr );
+    bool Create( wxWindow *parent, wxWindowID id, const wxBitmap& label,
       const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-      const long style = 0, const wxString& name = wxStaticBitmapNameStr);
+      long style = 0, const wxString& name = wxStaticBitmapNameStr);
     virtual void SetBitmap( const wxBitmap& bitmap );
     wxBitmap& GetBitmap(void) const { return (wxBitmap&)m_bitmap; }
 

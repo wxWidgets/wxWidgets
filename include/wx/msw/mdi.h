@@ -33,11 +33,11 @@ class WXDLLEXPORT wxMDIParentFrame: public wxFrame
 
   wxMDIParentFrame(void);
   inline wxMDIParentFrame(wxWindow *parent,
-           const wxWindowID id,
+           wxWindowID id,
            const wxString& title,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           const long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
+           long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
            const wxString& name = wxFrameNameStr)
   {
       Create(parent, id, title, pos, size, style, name);
@@ -46,17 +46,19 @@ class WXDLLEXPORT wxMDIParentFrame: public wxFrame
   ~wxMDIParentFrame(void);
 
   bool Create(wxWindow *parent,
-           const wxWindowID id,
+           wxWindowID id,
            const wxString& title,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           const long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
+           long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
            const wxString& name = wxFrameNameStr);
 
+/*
 #if WXWIN_COMPATIBILITY
   virtual void OldOnActivate(bool flag);
   virtual void OldOnSize(int x, int y);
 #endif
+*/
 
   void OnSize(wxSizeEvent& event);
   void OnActivate(wxActivateEvent& event);
@@ -92,15 +94,15 @@ class WXDLLEXPORT wxMDIParentFrame: public wxFrame
   virtual void ActivatePrevious(void);
 
   // Handlers
-  void MSWOnSize(const int x, const int y, const WXUINT flag);
-  bool MSWOnCommand(const WXWORD id, const WXWORD cmd, const WXHWND control);
-  void MSWOnMenuHighlight(const WXWORD item, const WXWORD flags, const WXHMENU sysmenu);
+  void MSWOnSize(int x, int y, WXUINT flag);
+  bool MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control);
+  void MSWOnMenuHighlight(WXWORD item, WXWORD flags, WXHMENU sysmenu);
   bool MSWProcessMessage(WXMSG *msg);
   void MSWOnCreate(WXLPCREATESTRUCT cs);
   long MSWDefWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
-  bool MSWOnEraseBkgnd(const WXHDC pDC);
+  bool MSWOnEraseBkgnd(WXHDC pDC);
   bool MSWOnDestroy(void);
-  bool MSWOnActivate(const int state, const bool minimized, const WXHWND activate);
+  bool MSWOnActivate(int state, bool minimized, WXHWND activate);
 
   // Responds to colour changes
   void OnSysColourChanged(wxSysColourChangedEvent& event);
@@ -126,11 +128,11 @@ class WXDLLEXPORT wxMDIChildFrame: public wxFrame
 
   wxMDIChildFrame(void);
   inline wxMDIChildFrame(wxMDIParentFrame *parent,
-           const wxWindowID id,
+           wxWindowID id,
            const wxString& title,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           const long style = wxDEFAULT_FRAME_STYLE,
+           long style = wxDEFAULT_FRAME_STYLE,
            const wxString& name = wxFrameNameStr)
   {
       Create(parent, id, title, pos, size, style, name);
@@ -139,16 +141,16 @@ class WXDLLEXPORT wxMDIChildFrame: public wxFrame
   ~wxMDIChildFrame(void);
 
   bool Create(wxMDIParentFrame *parent,
-           const wxWindowID id,
+           wxWindowID id,
            const wxString& title,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           const long style = wxDEFAULT_FRAME_STYLE,
+           long style = wxDEFAULT_FRAME_STYLE,
            const wxString& name = wxFrameNameStr);
 
   // Set menu bar
   void SetMenuBar(wxMenuBar *menu_bar);
-  void SetClientSize(const int width, const int height);
+  void SetClientSize(int width, int height);
   void GetPosition(int *x, int *y) const ;
 
   // MDI operations
@@ -158,10 +160,10 @@ class WXDLLEXPORT wxMDIChildFrame: public wxFrame
 
   // Handlers
 
-    long MSWOnMDIActivate(const long bActivate, const WXHWND, const WXHWND);
-    void MSWOnSize(const int x, const int y, const WXUINT);
+    long MSWOnMDIActivate(long bActivate, WXHWND, WXHWND);
+    void MSWOnSize(int x, int y, WXUINT);
     void MSWOnWindowPosChanging(void *lpPos);
-    bool MSWOnCommand(const WXWORD id, const WXWORD cmd, const WXHWND control);
+    bool MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control);
     long MSWDefWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
     bool MSWProcessMessage(WXMSG *msg);
     void MSWDestroyWindow(void);
@@ -178,7 +180,7 @@ class WXDLLEXPORT wxMDIClientWindow: public wxWindow
  public:
 
   wxMDIClientWindow(void) ;
-  inline wxMDIClientWindow(wxMDIParentFrame *parent, const long style = 0)
+  inline wxMDIClientWindow(wxMDIParentFrame *parent, long style = 0)
   {
       CreateClient(parent, style);
   }
@@ -186,7 +188,7 @@ class WXDLLEXPORT wxMDIClientWindow: public wxWindow
   ~wxMDIClientWindow(void);
 
   // Note: this is virtual, to allow overridden behaviour.
-  virtual bool CreateClient(wxMDIParentFrame *parent, const long style = wxVSCROLL | wxHSCROLL);
+  virtual bool CreateClient(wxMDIParentFrame *parent, long style = wxVSCROLL | wxHSCROLL);
 
   // Explicitly call default scroll behaviour
   void OnScroll(wxScrollEvent& event);
@@ -198,7 +200,7 @@ class WXDLLEXPORT wxMDIClientWindow: public wxWindow
   virtual long MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 
   // Should hand the message to the default proc
-  long MSWOnMDIActivate(const long bActivate, const WXHWND, const WXHWND);
+  long MSWOnMDIActivate(long bActivate, WXHWND, WXHWND);
 
 protected:
     int m_scrollX;

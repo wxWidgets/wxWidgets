@@ -30,27 +30,27 @@ public:
 
   // Old-style constructor
   inline wxPanel(wxWindow *parent,
-           const int x = -1, const int y= -1, const int width = 500, const int height = 500,
-           const long style = wxTAB_TRAVERSAL | wxNO_BORDER,
+           int x = -1, int y= -1, int width = 500, int height = 500,
+           long style = wxTAB_TRAVERSAL | wxNO_BORDER,
            const wxString& name = wxPanelNameStr)
   {
       Create(parent, -1, wxPoint(x, y), wxSize(width, height), style, name);
   }
 
   // Constructor
-  inline wxPanel(wxWindow *parent, const wxWindowID id,
+  inline wxPanel(wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           const long style = wxTAB_TRAVERSAL | wxNO_BORDER,
+           long style = wxTAB_TRAVERSAL | wxNO_BORDER,
            const wxString& name = wxPanelNameStr)
   {
       Create(parent, id, pos, size, style, name);
   }
 
-  bool Create(wxWindow *parent, const wxWindowID id,
+  bool Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           const long style = wxTAB_TRAVERSAL | wxNO_BORDER,
+           long style = wxTAB_TRAVERSAL | wxNO_BORDER,
            const wxString& name = wxPanelNameStr);
 
   void OnPaint(wxPaintEvent& event);

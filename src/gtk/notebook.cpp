@@ -89,9 +89,9 @@ wxNotebook::wxNotebook()
   Init();
 };
 
-wxNotebook::wxNotebook( wxWindow *parent, const wxWindowID id,
+wxNotebook::wxNotebook( wxWindow *parent, wxWindowID id,
       const wxPoint& pos, const wxSize& size,
-      const long style, const wxString& name )
+      long style, const wxString& name )
 {
   Init();
   Create( parent, id, pos, size, style, name );
@@ -108,9 +108,9 @@ wxNotebook::~wxNotebook()
   DeleteAllPages();
 };
 
-bool wxNotebook::Create(wxWindow *parent, const wxWindowID id,
+bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
       const wxPoint& pos, const wxSize& size,
-      const long style, const wxString& name )
+      long style, const wxString& name )
 {
   m_needParent = TRUE;
 
@@ -253,7 +253,7 @@ bool wxNotebook::SetPageText( int page, const wxString &text )
   return TRUE;
 };
 
-bool wxNotebook::SetPageImage( int page, const int image )
+bool wxNotebook::SetPageImage( int page, int image )
 {
   wxNotebookPage* nb_page = GetNotebookPage(page);
   if (!nb_page)

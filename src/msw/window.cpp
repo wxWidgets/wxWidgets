@@ -103,7 +103,7 @@ END_EVENT_TABLE()
 #endif
 
 // Find an item given the MS Windows id
-wxWindow *wxWindow::FindItem(const int id) const
+wxWindow *wxWindow::FindItem(int id) const
 {
   if (!GetChildren())
     return NULL;
@@ -134,7 +134,7 @@ wxWindow *wxWindow::FindItem(const int id) const
 }
 
 // Find an item given the MS Windows handle
-wxWindow *wxWindow::FindItemByHWND(const WXHWND hWnd, bool controlOnly) const
+wxWindow *wxWindow::FindItemByHWND(WXHWND hWnd, bool controlOnly) const
 {
   if (!GetChildren())
     return NULL;
@@ -165,17 +165,17 @@ wxWindow *wxWindow::FindItemByHWND(const WXHWND hWnd, bool controlOnly) const
 }
 
 // Default command handler
-bool wxWindow::MSWCommand(const WXUINT WXUNUSED(param), const WXWORD WXUNUSED(id))
+bool wxWindow::MSWCommand(WXUINT WXUNUSED(param), WXWORD WXUNUSED(id))
 {
   return FALSE;
 }
 
-bool wxWindow::MSWNotify(const WXWPARAM WXUNUSED(wParam), const WXLPARAM WXUNUSED(lParam))
+bool wxWindow::MSWNotify(WXWPARAM WXUNUSED(wParam), WXLPARAM WXUNUSED(lParam))
 {
   return FALSE;
 }
 
-void wxWindow::PreDelete(const WXHDC WXUNUSED(dc))
+void wxWindow::PreDelete(WXHDC WXUNUSED(dc))
 {
 }
 
@@ -368,10 +368,10 @@ bool wxWindow::Destroy(void)
 extern char wxCanvasClassName[];
 
 // Constructor
-bool wxWindow::Create(wxWindow *parent, const wxWindowID id,
+bool wxWindow::Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos,
            const wxSize& size,
-           const long style,
+           long style,
            const wxString& name)
 {
   // Generic
@@ -506,7 +506,7 @@ void wxWindow::SetFocus(void)
     ::SetFocus(hWnd);
 }
 
-void wxWindow::Enable(const bool enable)
+void wxWindow::Enable(bool enable)
 {
   m_winEnabled = enable;
   HWND hWnd = (HWND) GetHWND();
@@ -581,7 +581,7 @@ void wxWindow::SetDropTarget(wxDropTarget *pDropTarget)
 // I think we should retain the old-style
 // DragAcceptFiles in parallel with SetDropTarget.
 // JACS
-void wxWindow::DragAcceptFiles(const bool accept)
+void wxWindow::DragAcceptFiles(bool accept)
 {
   HWND hWnd = (HWND) GetHWND();
   if (hWnd)
@@ -680,7 +680,7 @@ void wxWindow::GetClientSize(int *x, int *y) const
   *y = rect.bottom;
 }
 
-void wxWindow::SetSize(const int x, const int y, const int width, const int height, const int sizeFlags)
+void wxWindow::SetSize(int x, int y, int width, int height, int sizeFlags)
 {
   int currentX, currentY;
   GetPosition(&currentX, &currentY);
@@ -703,22 +703,9 @@ void wxWindow::SetSize(const int x, const int y, const int width, const int heig
   HWND hWnd = (HWND) GetHWND();
   if (hWnd)
     MoveWindow(hWnd, actualX, actualY, actualWidth, actualHeight, (BOOL)TRUE);
-
-/* Not needed? should be called anyway via MoveWindow
-  if (!(width == -1) && (height == -1))
-  {
-#if WXWIN_COMPATIBILITY
-  GetEventHandler()->OldOnSize(width, height);
-#else
-  wxSizeEvent event(wxSize(width, height), m_windowId);
-  event.eventObject = this;
-  GetEventHandler()->ProcessEvent(event);
-#endif
-  }
-*/
 }
 
-void wxWindow::SetClientSize(const int width, const int height)
+void wxWindow::SetClientSize(int width, int height)
 {
   wxWindow *parent = GetParent();
   HWND hWnd = (HWND) GetHWND();
@@ -748,16 +735,13 @@ void wxWindow::SetClientSize(const int width, const int height)
   }
 
   MoveWindow(hWnd, point.x, point.y, actual_width, actual_height, (BOOL)TRUE);
-#if WXWIN_COMPATIBILITY
-  GetEventHandler()->OldOnSize(width, height);
-#else
+
   wxSizeEvent event(wxSize(width, height), m_windowId);
-  event.m_eventObject = this;
+  event.SetEventObject(this);
   GetEventHandler()->ProcessEvent(event);
-#endif
 }
 
-bool wxWindow::Show(const bool show)
+bool wxWindow::Show(bool show)
 {
   HWND hWnd = (HWND) GetHWND();
   int cshow;
@@ -805,7 +789,7 @@ int wxWindow::GetCharWidth(void) const
 }
 
 void wxWindow::GetTextExtent(const wxString& string, int *x, int *y,
-                           int *descent, int *externalLeading, const wxFont *theFont, const bool) const
+                           int *descent, int *externalLeading, const wxFont *theFont, bool) const
 {
   wxFont *fontToUse = (wxFont *)theFont;
   if (!fontToUse)
@@ -841,23 +825,7 @@ void wxWindow::GetTextExtent(const wxString& string, int *x, int *y,
 //    fontToUse->ReleaseResource();
 }
 
-#if WXWIN_COMPATIBILITY
-void wxWindow::GetTextExtent(const wxString& string, float *x, float *y,
-                             float *descent,
-                             float *externalLeading,
-                             const wxFont *theFont, const bool use16) const
-  {
-    int x1, y1, descent1, externalLeading1;
-    GetTextExtent(string, &x1, &y1, &descent1, &externalLeading1, theFont, use16);
-    *x = x1; *y = y1;
-    if ( descent )
-        *descent = descent1;
-    if ( externalLeading )
-        *externalLeading = externalLeading1;
-  }
-#endif
-
-void wxWindow::Refresh(const bool eraseBack, const wxRectangle *rect)
+void wxWindow::Refresh(bool eraseBack, const wxRectangle *rect)
 {
   HWND hWnd = (HWND) GetHWND();
   if (hWnd)
@@ -1531,9 +1499,9 @@ void wxWindow::MSWDestroyWindow(void)
 #endif
 }
 
-void wxWindow::MSWCreate(const int id, wxWindow *parent, const char *wclass, wxWindow *wx_win, const char *title,
-                    const int x, const int y, const int width, const int height,
-                    const WXDWORD style, const char *dialog_template, const WXDWORD extendedStyle)
+void wxWindow::MSWCreate(int id, wxWindow *parent, const char *wclass, wxWindow *wx_win, const char *title,
+                    int x, int y, int width, int height,
+                    WXDWORD style, const char *dialog_template, WXDWORD extendedStyle)
 {
   bool is_dialog = (dialog_template != NULL);
   int x1 = CW_USEDEFAULT;
@@ -1650,7 +1618,7 @@ bool wxWindow::MSWOnDestroy(void)
 
 // Deal with child commands from buttons etc.
 
-bool wxWindow::MSWOnNotify(const WXWPARAM wParam, const WXLPARAM lParam)
+bool wxWindow::MSWOnNotify(WXWPARAM wParam, WXLPARAM lParam)
 {
 #if defined(__WIN95__)
     // Find a child window to send the notification to, e.g. a toolbar.
@@ -1691,37 +1659,35 @@ bool wxWindow::MSWOnNotify(const WXWPARAM wParam, const WXLPARAM lParam)
   return FALSE;
 }
 
-void wxWindow::MSWOnMenuHighlight(const WXWORD WXUNUSED(item), const WXWORD WXUNUSED(flags), const WXHMENU WXUNUSED(sysmenu))
+void wxWindow::MSWOnMenuHighlight(WXWORD WXUNUSED(item), WXWORD WXUNUSED(flags), WXHMENU WXUNUSED(sysmenu))
 {
 #if DEBUG > 1
   wxDebugMsg("wxWindow::MSWOnMenuHighlight %d\n", handle);
 #endif
 }
 
-void wxWindow::MSWOnInitMenuPopup(const WXHMENU menu, const int pos, const bool isSystem)
+void wxWindow::MSWOnInitMenuPopup(WXHMENU menu, int pos, bool isSystem)
 {
+/*
   if (!isSystem)
     OldOnInitMenuPopup(pos);
+*/
 }
 
-bool wxWindow::MSWOnActivate(const int state, const bool WXUNUSED(minimized), const WXHWND WXUNUSED(activate))
+bool wxWindow::MSWOnActivate(int state, bool WXUNUSED(minimized), WXHWND WXUNUSED(activate))
 {
 #if DEBUG > 1
   wxDebugMsg("wxWindow::MSWOnActivate %d\n", handle);
 #endif
 
-#if WXWIN_COMPATIBILITY
-  GetEventHandler()->OldOnActivate(((state == WA_ACTIVE) || (state == WA_CLICKACTIVE)));
-#else
   wxActivateEvent event(wxEVT_ACTIVATE, ((state == WA_ACTIVE) || (state == WA_CLICKACTIVE)),
 	  m_windowId);
-  event.m_eventObject = this;
+  event.SetEventObject(this);
   GetEventHandler()->ProcessEvent(event);
-#endif
   return 0;
 }
 
-bool wxWindow::MSWOnSetFocus(const WXHWND WXUNUSED(hwnd))
+bool wxWindow::MSWOnSetFocus(WXHWND WXUNUSED(hwnd))
 {
 #if DEBUG > 1
   wxDebugMsg("wxWindow::MSWOnSetFocus %d\n", m_hWnd);
@@ -1734,17 +1700,14 @@ bool wxWindow::MSWOnSetFocus(const WXHWND WXUNUSED(hwnd))
         ::ShowCaret((HWND) GetHWND());
     }
 
-#if WXWIN_COMPATIBILITY
-  GetEventHandler()->OldOnSetFocus();
-#else
   wxFocusEvent event(wxEVT_SET_FOCUS, m_windowId);
-  event.m_eventObject = this;
-  GetEventHandler()->ProcessEvent(event);
-#endif
-    return TRUE;
+  event.SetEventObject(this);
+  if (!GetEventHandler()->ProcessEvent(event))
+    Default();
+  return TRUE;
 }
 
-bool wxWindow::MSWOnKillFocus(const WXHWND WXUNUSED(hwnd))
+bool wxWindow::MSWOnKillFocus(WXHWND WXUNUSED(hwnd))
 {
 #if DEBUG > 1
   wxDebugMsg("wxWindow::MSWOnKillFocus %d\n", m_hWnd);
@@ -1755,17 +1718,14 @@ bool wxWindow::MSWOnKillFocus(const WXHWND WXUNUSED(hwnd))
       ::DestroyCaret();
     }
 
-#if WXWIN_COMPATIBILITY
-  GetEventHandler()->OldOnKillFocus();
-#else
   wxFocusEvent event(wxEVT_KILL_FOCUS, m_windowId);
-  event.m_eventObject = this;
-  GetEventHandler()->ProcessEvent(event);
-#endif
+  event.SetEventObject(this);
+  if (!GetEventHandler()->ProcessEvent(event))
+    Default();
   return TRUE;
 }
 
-void wxWindow::MSWOnDropFiles(const WXWPARAM wParam)
+void wxWindow::MSWOnDropFiles(WXWPARAM wParam)
 {
 #if DEBUG > 1
   wxDebugMsg("wxWindow::MSWOnDropFiles %d\n", m_hWnd);
@@ -1794,12 +1754,13 @@ void wxWindow::MSWOnDropFiles(const WXWPARAM wParam)
   event.m_eventObject = this;
   event.m_pos.x = dropPoint.x; event.m_pos.x = dropPoint.y;
 
-  GetEventHandler()->ProcessEvent(event);
+  if (!GetEventHandler()->ProcessEvent(event))
+    Default();
 
   delete[] files;
 }
 
-bool wxWindow::MSWOnDrawItem(const int id, WXDRAWITEMSTRUCT *itemStruct)
+bool wxWindow::MSWOnDrawItem(int id, WXDRAWITEMSTRUCT *itemStruct)
 {
 #if USE_OWNER_DRAWN
     if ( id == 0 ) {    // is it a menu item?
@@ -1832,7 +1793,7 @@ bool wxWindow::MSWOnDrawItem(const int id, WXDRAWITEMSTRUCT *itemStruct)
     return FALSE;
 }
 
-bool wxWindow::MSWOnMeasureItem(const int id, WXMEASUREITEMSTRUCT *itemStruct)
+bool wxWindow::MSWOnMeasureItem(int id, WXMEASUREITEMSTRUCT *itemStruct)
 {
 #if USE_OWNER_DRAWN
     if ( id == 0 ) {    // is it a menu item?
@@ -1856,8 +1817,8 @@ bool wxWindow::MSWOnMeasureItem(const int id, WXMEASUREITEMSTRUCT *itemStruct)
     return FALSE;
 }
 
-WXHBRUSH wxWindow::MSWOnCtlColor(const WXHDC pDC, const WXHWND pWnd, const WXUINT nCtlColor,
-                         const WXUINT message, const WXWPARAM wParam, const WXLPARAM lParam)
+WXHBRUSH wxWindow::MSWOnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
+                         WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
 #if DEBUG > 1
   wxDebugMsg("wxWindow::MSWOnCtlColour %d\n", m_hWnd);
@@ -1883,13 +1844,13 @@ WXHBRUSH wxWindow::MSWOnCtlColor(const WXHDC pDC, const WXHWND pWnd, const WXUIN
 }
 
 // Define for each class of dialog and control
-WXHBRUSH wxWindow::OnCtlColor(const WXHDC pDC, const WXHWND pWnd, const WXUINT nCtlColor,
+WXHBRUSH wxWindow::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 			WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
     return (WXHBRUSH) MSWDefWindowProc(message, wParam, lParam);
 }
 
-bool wxWindow::MSWOnColorChange(const WXHWND hWnd, const WXUINT message, const WXWPARAM wParam, const WXLPARAM lParam)
+bool wxWindow::MSWOnColorChange(WXHWND hWnd, WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
   wxSysColourChangedEvent event;
   event.m_eventObject = this;
@@ -1897,11 +1858,6 @@ bool wxWindow::MSWOnColorChange(const WXHWND hWnd, const WXUINT message, const W
   // Check if app handles this.
   if (GetEventHandler()->ProcessEvent(event))
     return 0;
-
-#if WXWIN_COMPATIBILITY
-  if (GetEventHandler()->OldOnSysColourChange())
-    return 0;
-#endif
 
   // We didn't process it
   return 1;
@@ -1964,7 +1920,7 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
   }
 }
 
-long wxWindow::MSWOnMDIActivate(const long WXUNUSED(flag), const WXHWND WXUNUSED(activate), const WXHWND WXUNUSED(deactivate))
+long wxWindow::MSWOnMDIActivate(long WXUNUSED(flag), WXHWND WXUNUSED(activate), WXHWND WXUNUSED(deactivate))
 {
 #if DEBUG > 1
   wxDebugMsg("wxWindow::MSWOnMDIActivate %d\n", m_hWnd);
@@ -1993,17 +1949,14 @@ void wxWindow::MSWDetachWindowMenu(void)
 
 bool wxWindow::MSWOnPaint(void)
 {
-#if WXWIN_COMPATIBILITY
-  GetEventHandler()->OldOnPaint();
-#else
   wxPaintEvent event(m_windowId);
-  event.m_eventObject = this;
-  GetEventHandler()->ProcessEvent(event);
-#endif
+  event.SetEventObject(this);
+  if (!GetEventHandler()->ProcessEvent(event))
+    Default();
   return TRUE;
 }
 
-void wxWindow::MSWOnSize(const int w, const int h, const WXUINT WXUNUSED(flag))
+void wxWindow::MSWOnSize(int w, int h, WXUINT WXUNUSED(flag))
 {
   if (m_inOnSize)
     return;
@@ -2016,13 +1969,10 @@ void wxWindow::MSWOnSize(const int w, const int h, const WXUINT WXUNUSED(flag))
 
   m_inOnSize = TRUE;
 
-#if WXWIN_COMPATIBILITY
-  GetEventHandler()->OldOnSize(w, h);
-#else
   wxSizeEvent event(wxSize(w, h), m_windowId);
-  event.m_eventObject = this;
-  GetEventHandler()->ProcessEvent(event);
-#endif
+  event.SetEventObject(this);
+  if (!GetEventHandler()->ProcessEvent(event))
+    Default();
 
   m_inOnSize = FALSE;
 }
@@ -2033,7 +1983,7 @@ void wxWindow::MSWOnWindowPosChanging(void *WXUNUSED(lpPos))
 }
 
 // Deal with child commands from buttons etc.
-bool wxWindow::MSWOnCommand(const WXWORD id, const WXWORD cmd, const WXHWND WXUNUSED(control))
+bool wxWindow::MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND WXUNUSED(control))
 {
 #if DEBUG > 1
   wxDebugMsg("wxWindow::MSWOnCommand\n");
@@ -2118,29 +2068,8 @@ long wxWindow::MSWOnSysCommand(WXWPARAM wParam, WXLPARAM lParam)
     return 0;
 }
 
-void wxWindow::MSWOnLButtonDown(const int x, const int y, const WXUINT flags)
+void wxWindow::MSWOnLButtonDown(int x, int y, WXUINT flags)
 {
-#if 0 // defined(__WIN32__) && !defined(WIN95)
-  // DClick not clean supported on Win3.1, except if someone know
-  // how to emulate Sleep()...
-  // This means that your app will receive Down-Up-Dclick sequences
-  // rather than Dclick
-  if (m_doubleClickAllowed)
-  {
-    UINT time = GetDoubleClickTime() ;
-    Sleep(time) ;
-    MSG dummy ;
-    if (PeekMessage(&dummy,m_hWnd,
-                    WM_LBUTTONDBLCLK,WM_LBUTTONDBLCLK,
-                    PM_NOREMOVE)
-       )
-    {
-      PeekMessage(&dummy,m_hWnd,WM_LBUTTONUP,WM_LBUTTONUP,PM_REMOVE);
-      return;
-    }
-  }
-#endif
-
   wxMouseEvent event(wxEVT_LEFT_DOWN);
 
   event.m_x = x; event.m_y = y;
@@ -2153,10 +2082,12 @@ void wxWindow::MSWOnLButtonDown(const int x, const int y, const WXUINT flags)
   event.m_eventObject = this;
 
   m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVENT_TYPE_LEFT_DOWN;
-  GetEventHandler()->OldOnMouseEvent(event);
+
+  if (!GetEventHandler()->ProcessEvent(event))
+    Default();
 }
 
-void wxWindow::MSWOnLButtonUp(const int x, const int y, const WXUINT flags)
+void wxWindow::MSWOnLButtonUp(int x, int y, WXUINT flags)
 {
   wxMouseEvent event(wxEVT_LEFT_UP);
 
@@ -2171,10 +2102,11 @@ void wxWindow::MSWOnLButtonUp(const int x, const int y, const WXUINT flags)
 
   m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVT_LEFT_UP;
 
-  GetEventHandler()->OldOnMouseEvent(event);
+  if (!GetEventHandler()->ProcessEvent(event))
+    Default();
 }
 
-void wxWindow::MSWOnLButtonDClick(const int x, const int y, const WXUINT flags)
+void wxWindow::MSWOnLButtonDClick(int x, int y, WXUINT flags)
 {
   wxMouseEvent event(wxEVT_LEFT_DCLICK);
 
@@ -2189,33 +2121,12 @@ void wxWindow::MSWOnLButtonDClick(const int x, const int y, const WXUINT flags)
 
   m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVT_LEFT_DCLICK;
 
-//  if (m_doubleClickAllowed)
-     GetEventHandler()->OldOnMouseEvent(event);
+  if (!GetEventHandler()->ProcessEvent(event))
+    Default();
 }
 
-void wxWindow::MSWOnMButtonDown(const int x, const int y, const WXUINT flags)
+void wxWindow::MSWOnMButtonDown(int x, int y, WXUINT flags)
 {
-#if 0 // defined(__WIN32__) && !defined(__WIN95__)
-  // DClick not clean supported on Win3.1, except if someone know
-  // how to emulate Sleep()...
-  // This means that your app will receive Down-Up-Dclick sequences
-  // rather than Dclick
-  if (m_doubleClickAllowed)
-  {
-    UINT time = GetDoubleClickTime() ;
-    Sleep(time) ;
-    MSG dummy ;
-    if (PeekMessage(&dummy,m_hWnd,
-                    WM_MBUTTONDBLCLK,WM_MBUTTONDBLCLK,
-                    PM_NOREMOVE)
-       )
-    {
-      PeekMessage(&dummy,m_hWnd,WM_MBUTTONUP,WM_MBUTTONUP,PM_REMOVE);
-      return;
-    }
-  }
-#endif
-
   wxMouseEvent event(wxEVT_MIDDLE_DOWN);
 
   event.m_x = x; event.m_y = y;
@@ -2228,10 +2139,12 @@ void wxWindow::MSWOnMButtonDown(const int x, const int y, const WXUINT flags)
   event.m_eventObject = this;
 
   m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVT_MIDDLE_DOWN;
-  GetEventHandler()->OldOnMouseEvent(event);
+
+  if (!GetEventHandler()->ProcessEvent(event))
+    Default();
 }
 
-void wxWindow::MSWOnMButtonUp(const int x, const int y, const WXUINT flags)
+void wxWindow::MSWOnMButtonUp(int x, int y, WXUINT flags)
 {
 //wxDebugMsg("MButtonUp\n") ;
   wxMouseEvent event(wxEVT_MIDDLE_UP);
@@ -2246,10 +2159,12 @@ void wxWindow::MSWOnMButtonUp(const int x, const int y, const WXUINT flags)
   event.m_eventObject = this;
 
   m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVT_MIDDLE_UP;
-  GetEventHandler()->OldOnMouseEvent(event);
+
+  if (!GetEventHandler()->ProcessEvent(event))
+    Default();
 }
 
-void wxWindow::MSWOnMButtonDClick(const int x, const int y, const WXUINT flags)
+void wxWindow::MSWOnMButtonDClick(int x, int y, WXUINT flags)
 {
   wxMouseEvent event(wxEVT_MIDDLE_DCLICK);
 
@@ -2263,33 +2178,13 @@ void wxWindow::MSWOnMButtonDClick(const int x, const int y, const WXUINT flags)
   event.m_eventObject = this;
 
   m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVT_MIDDLE_DCLICK;
-//  if (m_doubleClickAllowed)
-     GetEventHandler()->OldOnMouseEvent(event);
+
+  if (!GetEventHandler()->ProcessEvent(event))
+    Default();
 }
 
-void wxWindow::MSWOnRButtonDown(const int x, const int y, const WXUINT flags)
+void wxWindow::MSWOnRButtonDown(int x, int y, WXUINT flags)
 {
-#if 0 // defined(__WIN32__) && !defined(__WIN95__)
-  // DClick not clean supported on Win3.1, except if someone know
-  // how to emulate Sleep()...
-  // This means that your app will receive Down-Up-Dclick sequences
-  // rather than Dclick
-  if (m_doubleClickAllowed)
-  {
-    UINT time = GetDoubleClickTime() ;
-    Sleep(time) ;
-    MSG dummy ;
-    if (PeekMessage(&dummy,m_hWnd,
-                    WM_RBUTTONDBLCLK,WM_RBUTTONDBLCLK,
-                    PM_NOREMOVE)
-       )
-    {
-      PeekMessage(&dummy,m_hWnd,WM_RBUTTONUP,WM_RBUTTONUP,PM_REMOVE);
-      return;
-    }
-  }
-#endif
-
   wxMouseEvent event(wxEVT_RIGHT_DOWN);
 
   event.m_x = x; event.m_y = y;
@@ -2302,10 +2197,12 @@ void wxWindow::MSWOnRButtonDown(const int x, const int y, const WXUINT flags)
   event.m_eventObject = this;
 
   m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVT_RIGHT_DOWN;
-  GetEventHandler()->OldOnMouseEvent(event);
+
+  if (!GetEventHandler()->ProcessEvent(event))
+    Default();
 }
 
-void wxWindow::MSWOnRButtonUp(const int x, const int y, const WXUINT flags)
+void wxWindow::MSWOnRButtonUp(int x, int y, WXUINT flags)
 {
   wxMouseEvent event(wxEVT_RIGHT_UP);
 
@@ -2319,10 +2216,12 @@ void wxWindow::MSWOnRButtonUp(const int x, const int y, const WXUINT flags)
   event.SetTimestamp(wxApp::sm_lastMessageTime); /* MATTHEW: timeStamp */
 
   m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVT_RIGHT_UP;
-  GetEventHandler()->OldOnMouseEvent(event);
+
+  if (!GetEventHandler()->ProcessEvent(event))
+    Default();
 }
 
-void wxWindow::MSWOnRButtonDClick(const int x, const int y, const WXUINT flags)
+void wxWindow::MSWOnRButtonDClick(int x, int y, WXUINT flags)
 {
   wxMouseEvent event(wxEVT_RIGHT_DCLICK);
 
@@ -2336,11 +2235,12 @@ void wxWindow::MSWOnRButtonDClick(const int x, const int y, const WXUINT flags)
   event.m_eventObject = this;
 
   m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVT_RIGHT_DCLICK;
-//  if (m_doubleClickAllowed)
-     GetEventHandler()->OldOnMouseEvent(event);
+
+  if (!GetEventHandler()->ProcessEvent(event))
+    Default();
 }
 
-void wxWindow::MSWOnMouseMove(const int x, const int y, const WXUINT flags)
+void wxWindow::MSWOnMouseMove(int x, int y, WXUINT flags)
 {
   // 'normal' move event...
   // Set cursor, but only if we're not in 'busy' mode
@@ -2381,10 +2281,12 @@ void wxWindow::MSWOnMouseMove(const int x, const int y, const WXUINT flags)
 
   m_lastEvent = wxEVT_MOTION;
   m_lastXPos = event.m_x; m_lastYPos = event.m_y;
-  GetEventHandler()->OldOnMouseEvent(event);
+
+  if (!GetEventHandler()->ProcessEvent(event))
+    Default();
 }
 
-void wxWindow::MSWOnMouseEnter(const int x, const int y, const WXUINT flags)
+void wxWindow::MSWOnMouseEnter(int x, int y, WXUINT flags)
 {
   wxMouseEvent event(wxEVT_ENTER_WINDOW);
 
@@ -2404,7 +2306,7 @@ void wxWindow::MSWOnMouseEnter(const int x, const int y, const WXUINT flags)
   GetEventHandler()->ProcessEvent(event);
 }
 
-void wxWindow::MSWOnMouseLeave(const int x, const int y, const WXUINT flags)
+void wxWindow::MSWOnMouseLeave(int x, int y, WXUINT flags)
 {
   wxMouseEvent event(wxEVT_LEAVE_WINDOW);
 
@@ -2424,7 +2326,7 @@ void wxWindow::MSWOnMouseLeave(const int x, const int y, const WXUINT flags)
   GetEventHandler()->ProcessEvent(event);
 }
 
-void wxWindow::MSWOnChar(const WXWORD wParam, const WXLPARAM lParam, const bool isASCII)
+void wxWindow::MSWOnChar(WXWORD wParam, WXLPARAM lParam, bool isASCII)
 {
   int id;
   bool tempControlDown = FALSE;
@@ -2486,16 +2388,12 @@ void wxWindow::MSWOnChar(const WXWORD wParam, const WXLPARAM lParam, const bool 
 
     event.m_x = pt.x; event.m_y = pt.y;
 
-#if WXWIN_COMPATIBILITY
-    GetEventHandler()->OldOnChar(event);
-#else
     if (!GetEventHandler()->ProcessEvent(event))
 		Default();
-#endif
   }
 }
 
-void wxWindow::MSWOnJoyDown(const int joystick, const int x, const int y, const WXUINT flags)
+void wxWindow::MSWOnJoyDown(int joystick, int x, int y, WXUINT flags)
 {
     int buttons = 0;
     int change = 0;
@@ -2524,7 +2422,7 @@ void wxWindow::MSWOnJoyDown(const int joystick, const int x, const int y, const 
     GetEventHandler()->ProcessEvent(event);
 }
 
-void wxWindow::MSWOnJoyUp(const int joystick, const int x, const int y, const WXUINT flags)
+void wxWindow::MSWOnJoyUp(int joystick, int x, int y, WXUINT flags)
 {
     int buttons = 0;
     int change = 0;
@@ -2553,7 +2451,7 @@ void wxWindow::MSWOnJoyUp(const int joystick, const int x, const int y, const WX
     GetEventHandler()->ProcessEvent(event);
 }
 
-void wxWindow::MSWOnJoyMove(const int joystick, const int x, const int y, const WXUINT flags)
+void wxWindow::MSWOnJoyMove(int joystick, int x, int y, WXUINT flags)
 {
     int buttons = 0;
     if (flags & JOY_BUTTON1)
@@ -2572,7 +2470,7 @@ void wxWindow::MSWOnJoyMove(const int joystick, const int x, const int y, const 
     GetEventHandler()->ProcessEvent(event);
 }
 
-void wxWindow::MSWOnJoyZMove(const int joystick, const int z, const WXUINT flags)
+void wxWindow::MSWOnJoyZMove(int joystick, int z, WXUINT flags)
 {
     int buttons = 0;
     if (flags & JOY_BUTTON1)
@@ -2591,7 +2489,7 @@ void wxWindow::MSWOnJoyZMove(const int joystick, const int z, const WXUINT flags
     GetEventHandler()->ProcessEvent(event);
 }
 
-void wxWindow::MSWOnVScroll(const WXWORD wParam, const WXWORD pos, const WXHWND control)
+void wxWindow::MSWOnVScroll(WXWORD wParam, WXWORD pos, WXHWND control)
 {
   if (control)
   {
@@ -2643,14 +2541,10 @@ void wxWindow::MSWOnVScroll(const WXWORD wParam, const WXWORD pos, const WXHWND 
 	}
 
   if (!GetEventHandler()->ProcessEvent(event))
-#if WXWIN_COMPATIBILITY
-    GetEventHandler()->OldOnScroll(event);
-#else
     Default();
-#endif
 }
 
-void wxWindow::MSWOnHScroll( const WXWORD wParam, const WXWORD pos, const WXHWND control)
+void wxWindow::MSWOnHScroll( WXWORD wParam, WXWORD pos, WXHWND control)
 {
   if (control)
   {
@@ -2701,11 +2595,7 @@ void wxWindow::MSWOnHScroll( const WXWORD wParam, const WXWORD pos, const WXHWND
                         break;
 	}
   if (!GetEventHandler()->ProcessEvent(event))
-#if WXWIN_COMPATIBILITY
-    GetEventHandler()->OldOnScroll(event);
-#else
     Default();
-#endif
 }
 
 void wxWindow::MSWOnShow(bool show, int status)
@@ -2927,7 +2817,7 @@ int wxCharCodeWXToMSW(int id, bool *isVirtual)
 }
 
 // Caret manipulation
-void wxWindow::CreateCaret(const int w, const int h)
+void wxWindow::CreateCaret(int w, int h)
 {
   m_caretWidth = w;
   m_caretHeight = h;
@@ -2939,7 +2829,7 @@ void wxWindow::CreateCaret(const wxBitmap *WXUNUSED(bitmap))
   // Not implemented
 }
 
-void wxWindow::ShowCaret(const bool show)
+void wxWindow::ShowCaret(bool show)
 {
   if (m_caretEnabled)
   {
@@ -2956,7 +2846,7 @@ void wxWindow::DestroyCaret(void)
   m_caretEnabled = FALSE;
 }
 
-void wxWindow::SetCaretPos(const int x, const int y)
+void wxWindow::SetCaretPos(int x, int y)
 {
   ::SetCaretPos(x, y);
 }
@@ -3114,10 +3004,6 @@ int APIENTRY _EXPORT
 /* end Albert's fix for control and shift key 26.5 */
       event.SetTimestamp(wxApp::sm_lastMessageTime); /* MATTHEW: timeStamp */
 
-#if WXWIN_COMPATIBILITY
-		if ( wxTheApp && wxTheApp->OldOnCharHook(event) )
-			return 1;
-#endif
 		wxWindow *win = wxGetActiveWindow();
   		if (win)
 		{
@@ -3134,7 +3020,7 @@ int APIENTRY _EXPORT
   return (int)CallNextHookEx(wxTheKeyboardHook, nCode, wParam, lParam);
 }
 
-void wxWindow::SetSizeHints(const int minW, const int minH, const int maxW, const int maxH, const int WXUNUSED(incW), const int WXUNUSED(incH))
+void wxWindow::SetSizeHints(int minW, int minH, int maxW, int maxH, int WXUNUSED(incW), int WXUNUSED(incH))
 {
   m_minSizeX = minW;
   m_minSizeY = minH;
@@ -3142,7 +3028,7 @@ void wxWindow::SetSizeHints(const int minW, const int minH, const int maxW, cons
   m_maxSizeY = maxH;
 }
 
-void wxWindow::Centre(const int direction)
+void wxWindow::Centre(int direction)
 {
   int x, y, width, height, panel_width, panel_height, new_x, new_y;
 
@@ -3174,7 +3060,7 @@ void wxWindow::OnPaint(void)
 }
 */
 
-void wxWindow::WarpPointer (const int x_pos, const int y_pos)
+void wxWindow::WarpPointer (int x_pos, int y_pos)
 {
   // Move the pointer to (x_pos,y_pos) coordinates. They are expressed in
   // pixel coordinates, relatives to the canvas -- So, we first need to
@@ -3208,7 +3094,7 @@ void wxWindow::MSWDeviceToLogical (float *x, float *y) const
 */
 }
 
-bool wxWindow::MSWOnEraseBkgnd (const WXHDC pDC)
+bool wxWindow::MSWOnEraseBkgnd (WXHDC pDC)
 {
     wxDC dc ;
 
@@ -3259,7 +3145,7 @@ void wxWindow::OnEraseBackground(wxEraseEvent& event)
 }
 
 #if WXWIN_COMPATIBILITY
-void wxWindow::SetScrollRange(const int orient, const int range, const bool refresh)
+void wxWindow::SetScrollRange(int orient, int range, bool refresh)
 {
 #if defined(__WIN95__)
 
@@ -3305,7 +3191,7 @@ void wxWindow::SetScrollRange(const int orient, const int range, const bool refr
 #endif
 }
 
-void wxWindow::SetScrollPage(const int orient, const int page, const bool refresh)
+void wxWindow::SetScrollPage(int orient, int page, bool refresh)
 {
 #if defined(__WIN95__)
   SCROLLINFO info;
@@ -3335,7 +3221,7 @@ void wxWindow::SetScrollPage(const int orient, const int page, const bool refres
 #endif
 }
 
-int wxWindow::OldGetScrollRange(const int orient) const
+int wxWindow::OldGetScrollRange(int orient) const
 {
   int wOrient ;
   if (orient == wxHORIZONTAL)
@@ -3367,7 +3253,7 @@ int wxWindow::OldGetScrollRange(const int orient) const
     return 0;
 }
 
-int wxWindow::GetScrollPage(const int orient) const
+int wxWindow::GetScrollPage(int orient) const
 {
   if (orient == wxHORIZONTAL)
     return m_xThumbSize;
@@ -3376,7 +3262,7 @@ int wxWindow::GetScrollPage(const int orient) const
 }
 #endif
 
-int wxWindow::GetScrollPos(const int orient) const
+int wxWindow::GetScrollPos(int orient) const
 {
   int wOrient ;
   if (orient == wxHORIZONTAL)
@@ -3394,7 +3280,7 @@ int wxWindow::GetScrollPos(const int orient) const
 
 // This now returns the whole range, not just the number
 // of positions that we can scroll.
-int wxWindow::GetScrollRange(const int orient) const
+int wxWindow::GetScrollRange(int orient) const
 {
   int wOrient ;
   if (orient == wxHORIZONTAL)
@@ -3429,7 +3315,7 @@ int wxWindow::GetScrollRange(const int orient) const
     return 0;
 }
 
-int wxWindow::GetScrollThumb(const int orient) const
+int wxWindow::GetScrollThumb(int orient) const
 {
   if (orient == wxHORIZONTAL)
     return m_xThumbSize;
@@ -3437,7 +3323,7 @@ int wxWindow::GetScrollThumb(const int orient) const
     return m_yThumbSize;
 }
 
-void wxWindow::SetScrollPos(const int orient, const int pos, const bool refresh)
+void wxWindow::SetScrollPos(int orient, int pos, bool refresh)
 {
 #if defined(__WIN95__)
   SCROLLINFO info;
@@ -3472,8 +3358,8 @@ void wxWindow::SetScrollPos(const int orient, const int pos, const bool refresh)
 }
 
 // New function that will replace some of the above.
-void wxWindow::SetScrollbar(const int orient, const int pos, const int thumbVisible,
-    const int range, const bool refresh)
+void wxWindow::SetScrollbar(int orient, int pos, int thumbVisible,
+    int range, bool refresh)
 {
 /*
     SetScrollPage(orient, thumbVisible, FALSE);
@@ -3536,7 +3422,7 @@ void wxWindow::SetScrollbar(const int orient, const int pos, const int thumbVisi
   }
 }
 
-void wxWindow::ScrollWindow(const int dx, const int dy, const wxRectangle *rect)
+void wxWindow::ScrollWindow(int dx, int dy, const wxRectangle *rect)
 {
 	RECT rect2;
 	if ( rect )
@@ -3563,13 +3449,13 @@ void wxWindow::OnSize(wxSizeEvent& event)
 }
 
 /*
-void wxWindow::CalcScrolledPosition(const int x, const int y, int *xx, int *yy) const
+void wxWindow::CalcScrolledPosition(int x, int y, int *xx, int *yy) const
 {
   *xx = x;
   *yy = y;
 }
 
-void wxWindow::CalcUnscrolledPosition(const int x, const int y, float *xx, float *yy) const
+void wxWindow::CalcUnscrolledPosition(int x, int y, float *xx, float *yy) const
 {
   *xx = x;
   *yy = y;
@@ -3706,6 +3592,7 @@ WXDWORD wxWindow::Determine3DEffects(WXDWORD defaultBorderStyle, bool *want3D)
   return exStyle;
 }
 
+/*
 #if WXWIN_COMPATIBILITY
 void wxWindow::OldOnPaint(void)
 {
@@ -3751,6 +3638,7 @@ void wxWindow::OldOnKillFocus(void)
     Default();
 };
 #endif
+*/
 
 void wxWindow::OnChar(wxKeyEvent& event)
 {
@@ -3874,7 +3762,7 @@ void wxWindow::DestroyChildren(void)
   }
 }
 
-void wxWindow::MakeModal(const bool modal)
+void wxWindow::MakeModal(bool modal)
 {
   // Disable all other windows
   if (this->IsKindOf(CLASSINFO(wxDialog)) || this->IsKindOf(CLASSINFO(wxFrame)))
@@ -4075,7 +3963,7 @@ bool wxWindow::LayoutPhase2(int *noChanges)
 }
 
 // Do a phase of evaluating child constraints
-bool wxWindow::DoPhase(const int phase)
+bool wxWindow::DoPhase(int phase)
 {
   int noIterations = 0;
   int maxIterations = 500;
@@ -4143,7 +4031,7 @@ void wxWindow::ResetConstraints(void)
 
 // Need to distinguish between setting the 'fake' size for
 // windows and sizers, and setting the real values.
-void wxWindow::SetConstraintSizes(const bool recurse)
+void wxWindow::SetConstraintSizes(bool recurse)
 {
   wxLayoutConstraints *constr = GetConstraints();
   if (constr && constr->left.GetDone() && constr->right.GetDone() &&
@@ -4216,7 +4104,7 @@ void wxWindow::TransformSizerToActual(int *x, int *y) const
   *y += yp;
 }
 
-void wxWindow::SizerSetSize(const int x, const int y, const int w, const int h)
+void wxWindow::SizerSetSize(int x, int y, int w, int h)
 {
 	int xx = x;
 	int yy = y;
@@ -4224,7 +4112,7 @@ void wxWindow::SizerSetSize(const int x, const int y, const int w, const int h)
   SetSize(xx, yy, w, h);
 }
 
-void wxWindow::SizerMove(const int x, const int y)
+void wxWindow::SizerMove(int x, int y)
 {
 	int xx = x;
 	int yy = y;
@@ -4233,7 +4121,7 @@ void wxWindow::SizerMove(const int x, const int y)
 }
 
 // Only set the size/position of the constraint (if any)
-void wxWindow::SetSizeConstraint(const int x, const int y, const int w, const int h)
+void wxWindow::SetSizeConstraint(int x, int y, int w, int h)
 {
   wxLayoutConstraints *constr = GetConstraints();
   if (constr)
@@ -4261,7 +4149,7 @@ void wxWindow::SetSizeConstraint(const int x, const int y, const int w, const in
   }
 }
 
-void wxWindow::MoveConstraint(const int x, const int y)
+void wxWindow::MoveConstraint(int x, int y)
 {
   wxLayoutConstraints *constr = GetConstraints();
   if (constr)
@@ -4315,7 +4203,7 @@ void wxWindow::GetPositionConstraint(int *x, int *y) const
     GetPosition(x, y);
 }
 
-bool wxWindow::Close(const bool force)
+bool wxWindow::Close(bool force)
 {
   // Let's generalise it to work the same for any window.
 /*
@@ -4345,7 +4233,7 @@ bool wxWindow::Close(const bool force)
 */
 }
 
-wxObject* wxWindow::GetChild(const int number) const
+wxObject* wxWindow::GetChild(int number) const
 {
   // Return a pointer to the Nth object in the Panel
   if (!GetChildren())
@@ -4365,7 +4253,11 @@ wxObject* wxWindow::GetChild(const int number) const
 
 void wxWindow::OnDefaultAction(wxControl *initiatingItem)
 {
-  if (initiatingItem->IsKindOf(CLASSINFO(wxListBox)) && initiatingItem->GetCallback())
+/* This is obsolete now; if we wish to intercept listbox double-clicks,
+ * we explicitly intercept the wxEVT_COMMAND_LISTBOX_DOUBLECLICKED
+ * event.
+
+  if (initiatingItem->IsKindOf(CLASSINFO(wxListBox)))
   {
     wxListBox *lbox = (wxListBox *)initiatingItem;
     wxCommandEvent event(wxEVT_COMMAND_LEFT_DCLICK);
@@ -4389,8 +4281,10 @@ void wxWindow::OnDefaultAction(wxControl *initiatingItem)
   if (but)
   {
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED);
+    event.SetEventObject(but);
     but->Command(event);
   }
+*/
 }
 
 void wxWindow::Clear(void)
@@ -4434,7 +4328,7 @@ void wxWindow::SetValidator(const wxValidator& validator)
 }
 
 // Find a window by id or name
-wxWindow *wxWindow::FindWindow(const long id)
+wxWindow *wxWindow::FindWindow(long id)
 {
 	if ( GetId() == id)
 		return this;

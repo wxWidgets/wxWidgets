@@ -26,10 +26,10 @@ class WXDLLEXPORT wxScrolledWindow: public wxWindow
 
 public:
   wxScrolledWindow(void);
-  inline wxScrolledWindow(wxWindow *parent, const wxWindowID id = -1,
+  inline wxScrolledWindow(wxWindow *parent, wxWindowID id = -1,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           const long style = wxHSCROLL|wxVSCROLL,
+           long style = wxHSCROLL|wxVSCROLL,
            const wxString& name = wxPanelNameStr)
   {
       Create(parent, id, pos, size, style, name);
@@ -37,15 +37,15 @@ public:
 
   inline ~wxScrolledWindow(void) {}
 
-  bool Create(wxWindow *parent, const wxWindowID id,
+  bool Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           const long style = wxHSCROLL|wxVSCROLL,
+           long style = wxHSCROLL|wxVSCROLL,
            const wxString& name = wxPanelNameStr);
 
   // Set client size
   // Should take account of scrollbars
-//  virtual void SetClientSize(const int width, const int size);
+//  virtual void SetClientSize(int width, int size);
 
   // Is the window retained?
 //  inline bool IsRetained(void) const;
@@ -53,13 +53,13 @@ public:
   // Number of pixels per user unit (0 or -1 for no scrollbar)
   // Length of virtual canvas in user units
   // Length of page in user units
-  virtual void SetScrollbars(const int pixelsPerUnitX, const int pixelsPerUnitY,
-                             const int noUnitsX, const int noUnitsY,
-                             const int xPos = 0, const int yPos = 0, 
-			     const bool noRefresh = FALSE );
+  virtual void SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
+                             int noUnitsX, int noUnitsY,
+                             int xPos = 0, int yPos = 0,
+			     bool noRefresh = FALSE );
 
   // Physically scroll the window
-  virtual void Scroll(const int x_pos, const int y_pos);
+  virtual void Scroll(int x_pos, int y_pos);
 
 #if WXWIN_COMPATIBILITY
   virtual void GetScrollUnitsPerPage(int *x_page, int *y_page) const;
@@ -75,7 +75,7 @@ public:
   // If FALSE, the whole canvas is invalidated and a Clear() is
   // necessary. Disable for when the scroll increment is used
   // to actually scroll a non-constant distance
-  virtual void EnableScrolling(const bool x_scrolling, const bool y_scrolling);
+  virtual void EnableScrolling(bool x_scrolling, bool y_scrolling);
 
   // Get the view start
   virtual void ViewStart(int *x, int *y) const;
@@ -83,8 +83,8 @@ public:
   // Actual size in pixels when scrolling is taken into account
   virtual void GetVirtualSize(int *x, int *y) const;
 
-  virtual void CalcScrolledPosition(const int x, const int y, int *xx, int *yy) const ;
-  virtual void CalcUnscrolledPosition(const int x, const int y, float *xx, float *yy) const ;
+  virtual void CalcScrolledPosition(int x, int y, int *xx, int *yy) const ;
+  virtual void CalcUnscrolledPosition(int x, int y, float *xx, float *yy) const ;
 
   // Adjust the scrollbars
   virtual void AdjustScrollbars(void);

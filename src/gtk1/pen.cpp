@@ -120,7 +120,7 @@ void wxPen::SetColour( const wxString &colourName )
   M_PENDATA->m_colour = colourName;
 };
 
-void wxPen::SetColour( const int red, const int green, const int blue )
+void wxPen::SetColour( int red, int green, int blue )
 {
   if (!m_refData)
     m_refData = new wxPenRefData();

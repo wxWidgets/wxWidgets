@@ -47,23 +47,23 @@ class wxFrame: public wxWindow
   public:
   
     wxFrame(void);
-    wxFrame( wxWindow *parent, const wxWindowID id, const wxString &title, 
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      const long style = wxDEFAULT_FRAME_STYLE, const wxString &name = wxFrameNameStr );
-    bool Create( wxWindow *parent, const wxWindowID id, const wxString &title,
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      const long style = wxDEFAULT_FRAME_STYLE, const wxString &name = wxFrameNameStr );
+    wxFrame( wxWindow *parent, wxWindowID id, const wxString &title, 
+      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
+      long style = wxDEFAULT_FRAME_STYLE, const wxString &name = wxFrameNameStr );
+    bool Create( wxWindow *parent, wxWindowID id, const wxString &title,
+      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
+      long style = wxDEFAULT_FRAME_STYLE, const wxString &name = wxFrameNameStr );
     ~wxFrame(void);
     bool Destroy(void);
     void OnCloseWindow( wxCloseEvent& event );
-    virtual bool Show( const bool show );
-    virtual void Enable( const bool enable );
+    virtual bool Show( bool show );
+    virtual void Enable( bool enable );
     virtual void GetClientSize( int *width, int *height ) const;
     void OnSize( wxSizeEvent &event );
     void SetMenuBar( wxMenuBar *menuBar );
-    virtual bool CreateStatusBar( const int number = 1 );
-    virtual void SetStatusText( const wxString &text, const int number = 0 );
-    virtual void SetStatusWidths( const int n, const int *width );
+    virtual bool CreateStatusBar( int number = 1 );
+    virtual void SetStatusText( const wxString &text, int number = 0 );
+    virtual void SetStatusWidths( int n, int *width );
     wxStatusBar *GetStatusBar(void);
     wxMenuBar *GetMenuBar(void);
     void SetTitle( const wxString &title );

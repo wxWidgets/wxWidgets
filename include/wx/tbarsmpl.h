@@ -45,16 +45,16 @@ class WXDLLEXPORT wxToolBarSimple : public wxToolBarBase
     Create(parent, -1, wxPoint(x, y), wxSize(w, h), style, orientation, RowsOrColumns, name);
   }
 #endif
-  inline wxToolBarSimple(wxWindow *parent, const wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-            const long style = wxNO_BORDER, const int orientation = wxVERTICAL,
-            const int RowsOrColumns = 1, const wxString& name = wxToolBarNameStr)
+  inline wxToolBarSimple(wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+            long style = wxNO_BORDER, int orientation = wxVERTICAL,
+            int RowsOrColumns = 1, const wxString& name = wxToolBarNameStr)
   {
     Create(parent, id, pos, size, style, orientation, RowsOrColumns, name);
   }
   ~wxToolBarSimple(void);
 
-  bool Create(wxWindow *parent, const wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-            const long style = wxNO_BORDER, const int orientation = wxVERTICAL, const int RowsOrColumns = 1, const wxString& name = wxToolBarNameStr);
+  bool Create(wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+            long style = wxNO_BORDER, int orientation = wxVERTICAL, int RowsOrColumns = 1, const wxString& name = wxToolBarNameStr);
 
   void OnPaint(wxPaintEvent& event);
   void OnSize(wxSizeEvent& event);
@@ -64,9 +64,9 @@ class WXDLLEXPORT wxToolBarSimple : public wxToolBarBase
   // Handle wxToolBar events
 
   virtual void DrawTool(wxDC& dc, wxMemoryDC& memDC, wxToolBarTool *tool);
-  virtual void ToggleTool(const int toolIndex, const bool toggle); // toggle is TRUE if toggled on
+  virtual void ToggleTool(int toolIndex, bool toggle); // toggle is TRUE if toggled on
 
-  virtual void SpringUpButton(const int index);
+  virtual void SpringUpButton(int index);
 
   DECLARE_EVENT_TABLE()
 };

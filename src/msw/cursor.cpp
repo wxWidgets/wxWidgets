@@ -66,12 +66,12 @@ wxCursor::wxCursor(void)
 {
 }
 
-wxCursor::wxCursor(const char WXUNUSED(bits)[], const int WXUNUSED(width), const int WXUNUSED(height),
-    const int WXUNUSED(hotSpotX), const int WXUNUSED(hotSpotY), const char WXUNUSED(maskBits)[])
+wxCursor::wxCursor(const char WXUNUSED(bits)[], int WXUNUSED(width), int WXUNUSED(height),
+    int WXUNUSED(hotSpotX), int WXUNUSED(hotSpotY), const char WXUNUSED(maskBits)[])
 {
 }
 
-wxCursor::wxCursor(const wxString& cursor_file, const long flags, const int hotSpotX, const int hotSpotY)
+wxCursor::wxCursor(const wxString& cursor_file, long flags, int hotSpotX, int hotSpotY)
 {
   m_refData = new wxIconRefData;
 
@@ -123,7 +123,7 @@ wxCursor::wxCursor(const wxString& cursor_file, const long flags, const int hotS
 }
 
 // Cursors by stock number
-wxCursor::wxCursor(const int cursor_type)
+wxCursor::wxCursor(int cursor_type)
 {
   m_refData = new wxIconRefData;
 

@@ -35,10 +35,10 @@
 
 extern void wxSplitMessage2(const char *message, wxList *messageList, wxWindow *parent, wxRowColSizer *sizer);
 
-wxString wxGetSingleChoice( const wxString& message, const wxString& caption, const int n, 
-                            const wxString *choices, wxWindow *parent, 
-			    const int WXUNUSED(x), const int WXUNUSED(y), const bool WXUNUSED(centre), 
-			    const int WXUNUSED(width), const int WXUNUSED(height) )
+wxString wxGetSingleChoice( const wxString& message, const wxString& caption, int n, 
+                            const wxString *choices, wxWindow *parent,
+			    int WXUNUSED(x), int WXUNUSED(y), bool WXUNUSED(centre), 
+			    int WXUNUSED(width), int WXUNUSED(height) )
 {
 	wxSingleChoiceDialog dialog(parent, message, caption, n, choices);
 	if ( dialog.ShowModal() == wxID_OK )
@@ -50,10 +50,10 @@ wxString wxGetSingleChoice( const wxString& message, const wxString& caption, co
 }
 
 // Overloaded for backward compatibility
-wxString wxGetSingleChoice( const wxString& message, const wxString& caption, const int n, 
-                            char *choices[], wxWindow *parent, 
-			    const int x, const int y, const bool centre, 
-			    const int width, const int height )
+wxString wxGetSingleChoice( const wxString& message, const wxString& caption, int n, 
+                            char *choices[], wxWindow *parent,
+			    int x, int y, bool centre, 
+			    int width, int height )
 {
 	wxString *strings = new wxString[n];
 	int i;
@@ -67,10 +67,10 @@ wxString wxGetSingleChoice( const wxString& message, const wxString& caption, co
 	return ans;
 }
 
-int wxGetSingleChoiceIndex( const wxString& message, const wxString& caption, const int n, 
-                            const wxString *choices, wxWindow *parent, 
-			    const int WXUNUSED(x), const int WXUNUSED(y), const bool WXUNUSED(centre), 
-			    const int WXUNUSED(width), const int WXUNUSED(height) )
+int wxGetSingleChoiceIndex( const wxString& message, const wxString& caption, int n, 
+                            const wxString *choices, wxWindow *parent,
+			    int WXUNUSED(x), int WXUNUSED(y), bool WXUNUSED(centre), 
+			    int WXUNUSED(width), int WXUNUSED(height) )
 {
 	wxSingleChoiceDialog dialog(parent, message, caption, n, choices);
 	if ( dialog.ShowModal() == wxID_OK )
@@ -82,10 +82,10 @@ int wxGetSingleChoiceIndex( const wxString& message, const wxString& caption, co
 }
 
 // Overloaded for backward compatibility
-int wxGetSingleChoiceIndex( const wxString& message, const wxString& caption, const int n, 
-                            char *choices[], wxWindow *parent, 
-			    const int x, const int y, const bool centre, 
-			    const int width, const int height )
+int wxGetSingleChoiceIndex( const wxString& message, const wxString& caption, int n, 
+                            char *choices[], wxWindow *parent,
+			    int x, int y, bool centre, 
+			    int width, int height )
 {
 	wxString *strings = new wxString[n];
 	int i;
@@ -99,10 +99,10 @@ int wxGetSingleChoiceIndex( const wxString& message, const wxString& caption, co
 	return ans;
 }
 
-char *wxGetSingleChoiceData( const wxString& message, const wxString& caption, const int n,
-                             const wxString *choices, char **client_data, wxWindow *parent, 
-			     const int WXUNUSED(x), const int WXUNUSED(y), const bool WXUNUSED(centre), 
-			     const int WXUNUSED(width), const int WXUNUSED(height) )
+char *wxGetSingleChoiceData( const wxString& message, const wxString& caption, int n,
+                             const wxString *choices, char **client_data, wxWindow *parent,
+			     int WXUNUSED(x), int WXUNUSED(y), bool WXUNUSED(centre), 
+			     int WXUNUSED(width), int WXUNUSED(height) )
 {
 	wxSingleChoiceDialog dialog(parent, message, caption, n, choices, client_data);
 	if ( dialog.ShowModal() == wxID_OK )
@@ -114,10 +114,10 @@ char *wxGetSingleChoiceData( const wxString& message, const wxString& caption, c
 }
 
 // Overloaded for backward compatibility
-char *wxGetSingleChoiceData( const wxString& message, const wxString& caption, const int n, 
-                             char *choices[], char **client_data, wxWindow *parent, 
-			     const int x, const int y, const bool centre, 
-			     const int width, const int height )
+char *wxGetSingleChoiceData( const wxString& message, const wxString& caption, int n, 
+                             char *choices[], char **client_data, wxWindow *parent,
+			     int x, int y, bool centre, 
+			     int width, int height )
 {
 	wxString *strings = new wxString[n];
 	int i;
@@ -150,10 +150,10 @@ selected.
 */
 /*
 int wxGetMultipleChoice(const wxString& message, const wxString& caption,
-			  const int n, const wxString *choices,
-			  const int nsel, int * selection,
-			  wxWindow *parent , const int x , const int y, const bool centre,
-			  const int width, const int height)
+			  int n, const wxString *choices,
+			  int nsel, int * selection,
+			  wxWindow *parent , int x , int y, bool centre,
+			  int width, int height)
 {
 	return -1;
 }
@@ -164,13 +164,14 @@ int wxGetMultipleChoice(const wxString& message, const wxString& caption,
 #if !USE_SHARED_LIBRARY
 BEGIN_EVENT_TABLE(wxSingleChoiceDialog, wxDialog)
 	EVT_BUTTON(wxID_OK, wxSingleChoiceDialog::OnOK)
+	EVT_LISTBOX_DCLICK(wxID_LISTBOX, wxSingleChoiceDialog::OnListBoxDClick)
 END_EVENT_TABLE()
 
 IMPLEMENT_CLASS(wxSingleChoiceDialog, wxDialog)
 #endif
 
 wxSingleChoiceDialog::wxSingleChoiceDialog(wxWindow *parent, const wxString& message, const wxString& caption,
-        const int n, const wxString *choices, char **clientData, long style, const wxPoint& pos):
+        int n, const wxString *choices, char **clientData, long style, const wxPoint& pos):
 	  wxDialog(parent, -1, caption, pos, wxDefaultSize, wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL)
 {
         Create(parent, message, caption, n, choices, clientData, style);
@@ -198,8 +199,8 @@ bool wxSingleChoiceDialog::Create(wxWindow *parent, const wxString& message, con
 }
 
 bool wxSingleChoiceDialog::Create( wxWindow *WXUNUSED(parent), const wxString& message, 
-                                   const wxString& WXUNUSED(caption), const int n, 
-			           const wxString *choices, char **clientData, long style, 
+                                   const wxString& WXUNUSED(caption), int n, 
+			           const wxString *choices, char **clientData, long style,
 				   const wxPoint& WXUNUSED(pos) )
 {
 	m_dialogStyle = style;
@@ -300,6 +301,19 @@ void wxSingleChoiceDialog::SetSelection(int sel)
 }
 
 void wxSingleChoiceDialog::OnOK(wxCommandEvent& WXUNUSED(event))
+{
+	wxListBox *listBox = (wxListBox *)FindWindow(wxID_LISTBOX);
+	if ( listBox )
+	{
+		m_selection = listBox->GetSelection();
+		m_stringSelection = listBox->GetStringSelection();
+		m_clientData = listBox->GetClientData(m_selection);
+	}
+
+	EndModal(wxID_OK);
+}
+
+void wxSingleChoiceDialog::OnListBoxDClick(wxCommandEvent& WXUNUSED(event))
 {
 	wxListBox *listBox = (wxListBox *)FindWindow(wxID_LISTBOX);
 	if ( listBox )

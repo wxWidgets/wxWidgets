@@ -35,11 +35,11 @@ IMPLEMENT_DYNAMIC_CLASS(wxStaticBitmap, wxControl)
  * wxStaticBitmap
  */
 
-bool wxStaticBitmap::Create(wxWindow *parent, const wxWindowID id,
+bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
            const wxBitmap& bitmap,
            const wxPoint& pos,
            const wxSize& size,
-           const long style,
+           long style,
            const wxString& name)
 {
   m_messageBitmap = bitmap;
@@ -81,7 +81,7 @@ bool wxStaticBitmap::Create(wxWindow *parent, const wxWindowID id,
   return TRUE;
 }
 
-void wxStaticBitmap::SetSize(const int x, const int y, const int width, const int height, const int sizeFlags)
+void wxStaticBitmap::SetSize(int x, int y, int width, int height, int sizeFlags)
 {
   int currentX, currentY;
   GetPosition(&currentX, &currentY);
@@ -110,17 +110,6 @@ void wxStaticBitmap::SetSize(const int x, const int y, const int width, const in
   else actualHeight = height;
 
   MoveWindow((HWND) GetHWND(), x1, y1, actualWidth, actualHeight, TRUE);
-
-  if (!((width == -1) && (height == -1)))
-  {
-#if WXWIN_COMPATIBILITY
-    GetEventHandler()->OldOnSize(actualWidth, actualHeight);
-#else
-    wxSizeEvent event(wxSize(actualWidth, actualHeight), m_windowId);
-    event.eventObject = this;
-    GetEventHandler()->ProcessEvent(event);
-#endif
-  }
 }
 
 void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)

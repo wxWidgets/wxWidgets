@@ -40,7 +40,7 @@ class wxControl: public wxWindow
     wxControl(void);
     wxControl( wxWindow *parent, wxWindowID id, 
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      const long style = 0, const wxString &name = wxPanelNameStr  );
+      long style = 0, const wxString &name = wxPanelNameStr  );
     virtual void Command( wxCommandEvent &event );
     virtual void SetLabel( const wxString &label );
     virtual wxString GetLabel(void) const;

@@ -34,7 +34,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
 
 // Buttons
 
-bool wxButton::MSWCommand(const WXUINT param, const WXWORD id)
+bool wxButton::MSWCommand(WXUINT param, WXWORD id)
 {
   if (param == BN_CLICKED)
   {
@@ -46,9 +46,9 @@ bool wxButton::MSWCommand(const WXUINT param, const WXWORD id)
   else return FALSE;
 }
 
-bool wxButton::Create(wxWindow *parent, const wxWindowID id, const wxString& label,
+bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
            const wxPoint& pos,
-           const wxSize& size, const long style,
+           const wxSize& size, long style,
            const wxValidator& validator,
            const wxString& name)
 {
@@ -95,7 +95,7 @@ bool wxButton::Create(wxWindow *parent, const wxWindowID id, const wxString& lab
   return TRUE;
 }
 
-void wxButton::SetSize(const int x, const int y, const int width, const int height, const int sizeFlags)
+void wxButton::SetSize(int x, int y, int width, int height, int sizeFlags)
 {
   int currentX, currentY;
   GetPosition(&currentX, &currentY);
@@ -111,8 +111,8 @@ void wxButton::SetSize(const int x, const int y, const int width, const int heig
   int ww, hh;
   GetSize(&ww, &hh);
 
-  float current_width;
-  float cyf;
+  int current_width;
+  int cyf;
   char buf[300];
   GetWindowText((HWND) GetHWND(), buf, 300);
   GetTextExtent(buf, &current_width, &cyf,NULL,NULL,GetFont());
@@ -137,19 +137,6 @@ void wxButton::SetSize(const int x, const int y, const int width, const int heig
   }
 
   MoveWindow((HWND) GetHWND(), x1, y1, actualWidth, actualHeight, TRUE);
-
-/*
-  if (!((width == -1) && (height == -1)))
-  {
-#if WXWIN_COMPATIBILITY
-    GetEventHandler()->OldOnSize(width, height);
-#else
-    wxSizeEvent event(wxSize(width, height), m_windowId);
-    event.eventObject = this;
-    GetEventHandler()->ProcessEvent(event);
-#endif
-  }
-*/
 }
 
 void wxButton::SetDefault(void)
@@ -175,7 +162,7 @@ void wxButton::SetLabel(const wxString& label)
   SetWindowText((HWND) GetHWND(), (const char *) label);
 }
 
-WXHBRUSH wxButton::OnCtlColor(const WXHDC pDC, const WXHWND pWnd, const WXUINT nCtlColor,
+WXHBRUSH wxButton::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 			WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
 /*

@@ -28,9 +28,9 @@ wxMDIParentFrame::wxMDIParentFrame(void)
 };
 
 wxMDIParentFrame::wxMDIParentFrame( wxWindow *parent,
-      const wxWindowID id, const wxString& title,
+      wxWindowID id, const wxString& title,
       const wxPoint& pos, const wxSize& size,
-      const long style, const wxString& name )
+      long style, const wxString& name )
 {
   m_clientWindow = NULL;
   m_currentChild = NULL;
@@ -43,9 +43,9 @@ wxMDIParentFrame::~wxMDIParentFrame(void)
 };
 
 bool wxMDIParentFrame::Create( wxWindow *parent,
-      const wxWindowID id, const wxString& title,
+      wxWindowID id, const wxString& title,
       const wxPoint& pos, const wxSize& size,
-      const long style, const wxString& name )
+      long style, const wxString& name )
 {
   wxFrame::Create( parent, id, title, pos, size, style, name );
   
@@ -112,9 +112,9 @@ wxMDIChildFrame::wxMDIChildFrame(void)
 };
 
 wxMDIChildFrame::wxMDIChildFrame( wxMDIParentFrame *parent,
-      const wxWindowID id, const wxString& title,
+      wxWindowID id, const wxString& title,
       const wxPoint& pos, const wxSize& size,
-      const long style, const wxString& name )
+      long style, const wxString& name )
 {
   Create( parent, id, title, pos, size, style, name );
 };
@@ -124,9 +124,9 @@ wxMDIChildFrame::~wxMDIChildFrame(void)
 };
 
 bool wxMDIChildFrame::Create( wxMDIParentFrame *parent,
-      const wxWindowID id, const wxString& title,
+      wxWindowID id, const wxString& title,
       const wxPoint& pos, const wxSize& size,
-      const long style, const wxString& name )
+      long style, const wxString& name )
 {
   m_title = title;
   return wxPanel::Create( parent->GetClientWindow(), id, pos, size, style, name );
@@ -150,7 +150,7 @@ wxMDIClientWindow::wxMDIClientWindow(void)
 {
 };
 
-wxMDIClientWindow::wxMDIClientWindow( wxMDIParentFrame *parent, const long style )
+wxMDIClientWindow::wxMDIClientWindow( wxMDIParentFrame *parent, long style )
 {
   CreateClient( parent, style );
 };
@@ -159,7 +159,7 @@ wxMDIClientWindow::~wxMDIClientWindow(void)
 {
 };
 
-bool wxMDIClientWindow::CreateClient( wxMDIParentFrame *parent, const long style )
+bool wxMDIClientWindow::CreateClient( wxMDIParentFrame *parent, long style )
 {
   m_needParent = TRUE;
   

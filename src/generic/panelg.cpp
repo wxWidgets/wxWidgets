@@ -41,10 +41,10 @@ wxPanel::wxPanel(void)
   SetDefaultBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
 }
 
-bool wxPanel::Create(wxWindow *parent, const wxWindowID id,
+bool wxPanel::Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos,
            const wxSize& size,
-           const long style,
+           long style,
            const wxString& name)
 {
   bool ret = wxWindow::Create(parent, id, pos, size, style, name);

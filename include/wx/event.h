@@ -261,7 +261,7 @@ public:
 
   // Can instruct event processor that we wish to ignore this event
   // (treat as if the event table entry had not been found)
-  inline void Skip(const bool skip = TRUE) { m_skipped = skip; }
+  inline void Skip(bool skip = TRUE) { m_skipped = skip; }
   inline bool GetSkipped(void) const { return m_skipped; };
 
 public:
@@ -965,6 +965,8 @@ class WXDLLEXPORT wxEvtHandler: public wxObject
                                                  // callback function
   // Default behaviour
   virtual long Default(void) { if (GetNextHandler()) return GetNextHandler()->Default(); else return 0; };
+
+/*
 #if WXWIN_COMPATIBILITY
   virtual void OldOnMenuCommand(int WXUNUSED(cmd));
   virtual void OldOnMenuSelect(int WXUNUSED(cmd));
@@ -982,12 +984,14 @@ class WXDLLEXPORT wxEvtHandler: public wxObject
   virtual void OldOnKillFocus(void);
   virtual bool OldOnSysColourChange(void);
   virtual void OldOnDropFiles(int n, char *files[], int x, int y);
-#endif
 
-  virtual bool OnClose(void);
   virtual void OnDefaultAction(wxControl *WXUNUSED(initiatingItem)) {};
   virtual void OnChangeFocus(wxControl *WXUNUSED(from), wxControl *WXUNUSED(to)) {};
   virtual bool OnFunctionKey(wxKeyEvent &WXUNUSED(event)) { return FALSE; };
+#endif
+*/
+
+  virtual bool OnClose(void);
 
   inline char *GetClientData(void) const { return m_clientData; }
   inline void SetClientData(char *clientData) { m_clientData = clientData; }
@@ -995,8 +999,8 @@ class WXDLLEXPORT wxEvtHandler: public wxObject
   virtual bool ProcessEvent(wxEvent& event);
   virtual bool SearchEventTable(wxEventTable& table, wxEvent& event);
   
-  void Connect( const int id, const int lastId,
-                const int eventType, 
+  void Connect( int id, int lastId,
+                int eventType,
 		wxObjectEventFunction func,
 		wxObject *userData = NULL );
 		
@@ -1163,6 +1167,7 @@ const wxEventTableEntry theClass::sm_eventTableEntries[] = { \
 #define EVT_CHECKBOX(id, fn) { wxEVT_COMMAND_CHECKBOX_CLICKED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, NULL },
 #define EVT_CHOICE(id, fn) { wxEVT_COMMAND_CHOICE_SELECTED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, NULL },
 #define EVT_LISTBOX(id, fn) { wxEVT_COMMAND_LISTBOX_SELECTED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, NULL },
+#define EVT_LISTBOX_DCLICK(id, fn) { wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, NULL },
 #define EVT_TEXT(id, fn) { wxEVT_COMMAND_TEXT_UPDATED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, NULL },
 #define EVT_TEXT_ENTER(id, fn) { wxEVT_COMMAND_TEXT_ENTER, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, NULL },
 #define EVT_MENU(id, fn) { wxEVT_COMMAND_MENU_SELECTED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, NULL },

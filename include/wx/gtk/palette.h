@@ -38,7 +38,7 @@ class wxPalette: public wxGDIObject
   public:
   
     wxPalette(void);
-    wxPalette( const int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue );
+    wxPalette( int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue );
     wxPalette( const wxPalette& palette );
     wxPalette( const wxPalette* palette );
     ~wxPalette(void);
@@ -47,10 +47,10 @@ class wxPalette: public wxGDIObject
     bool operator != ( const wxPalette& palette );
     bool Ok(void) const;
     
-    bool Create( const int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue);
+    bool Create( int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue);
     int GetPixel( const unsigned char red, const unsigned char green, const unsigned char blue ) const;
-    bool GetRGB( const int pixel, unsigned char *red, unsigned char *green, unsigned char *blue ) const;
-    
+    bool GetRGB( int pixel, unsigned char *red, unsigned char *green, unsigned char *blue ) const;
+
     // no data
 };
 

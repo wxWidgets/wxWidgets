@@ -45,8 +45,8 @@ class WXDLLEXPORT wxBrush: public wxGDIObject
 
 public:
   wxBrush(void);
-  wxBrush(const wxColour& col, const int style);
-  wxBrush(const wxString& col, const int style);
+  wxBrush(const wxColour& col, int style);
+  wxBrush(const wxString& col, int style);
   wxBrush(const wxBitmap& stipple);
   inline wxBrush(const wxBrush& brush) { Ref(brush); }
   inline wxBrush(const wxBrush* brush) { /* UnRef(); */ if (brush) Ref(*brush); }
@@ -55,7 +55,7 @@ public:
   virtual void SetColour(const wxColour& col)  ;
   virtual void SetColour(const wxString& col)  ;
   virtual void SetColour(const unsigned char r, const unsigned char g, const unsigned char b)  ;
-  virtual void SetStyle(const int style)  ;
+  virtual void SetStyle(int style)  ;
   virtual void SetStipple(const wxBitmap& stipple)  ;
 
   inline wxBrush& operator = (const wxBrush& brush) { if (*this == brush) return (*this); Ref(brush); return *this; }

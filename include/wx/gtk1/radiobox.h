@@ -46,35 +46,35 @@ class wxRadioBox: public wxControl
   public:
   
     wxRadioBox(void);
-    wxRadioBox( wxWindow *parent, const wxWindowID id, const wxString& title,
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      const int n = 0, const wxString choices[] = NULL,
-      const int majorDim = 0, const long style = wxRA_HORIZONTAL,
+    wxRadioBox( wxWindow *parent, wxWindowID id, const wxString& title,
+      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
+      int n = 0, const wxString choices[] = NULL,
+      int majorDim = 0, long style = wxRA_HORIZONTAL,
       const wxString &name = wxRadioBoxNameStr );
-    bool Create( wxWindow *parent, const wxWindowID id, const wxString& title,
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      const int n = 0, const wxString choices[] = NULL,
-      const int majorDim = 0, const long style = wxRA_HORIZONTAL,
+    bool Create( wxWindow *parent, wxWindowID id, const wxString& title,
+      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
+      int n = 0, const wxString choices[] = NULL,
+      int majorDim = 0, long style = wxRA_HORIZONTAL,
       const wxString &name = wxRadioBoxNameStr );
     int FindString( const wxString& s) const;
-    void SetSelection( const int n );
+    void SetSelection( int n );
     int GetSelection(void) const;
-    wxString GetString( const int n ) const;
+    wxString GetString( int n ) const;
     wxString GetLabel(void) const;
     void SetLabel( const wxString& label );
-    void SetLabel( const int item, const wxString& label );
-    void SetLabel( const int item, wxBitmap *bitmap );
-    wxString GetLabel( const int item ) const;
-    bool Show( const bool show );
-    void Enable( const bool enable );
-    void Enable( const int item, const bool enable );
-    void Show( const int item, const bool show );
+    void SetLabel( int item, const wxString& label );
+    void SetLabel( int item, wxBitmap *bitmap );
+    wxString GetLabel( int item ) const;
+    bool Show( bool show );
+    void Enable( bool enable );
+    void Enable( int item, bool enable );
+    void Show( int item, bool show );
     virtual wxString GetStringSelection(void) const;
     virtual bool SetStringSelection( const wxString& s );
     virtual int Number(void) const;
     int GetNumberOfRowsOrCols(void) const;
-    void SetNumberOfRowsOrCols( const int n );
-    
+    void SetNumberOfRowsOrCols( int n );
+
   private:
   
     GtkRadioButton *m_radio;

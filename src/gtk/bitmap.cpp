@@ -34,7 +34,7 @@ wxMask::wxMask( const wxBitmap& WXUNUSED(bitmap), const wxColour& WXUNUSED(colou
 {
 };
 
-wxMask::wxMask( const wxBitmap& WXUNUSED(bitmap), const int WXUNUSED(paletteIndex) )
+wxMask::wxMask( const wxBitmap& WXUNUSED(bitmap), int WXUNUSED(paletteIndex) )
 {
 };
 
@@ -111,7 +111,7 @@ wxBitmap::wxBitmap(void)
   if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
 };
   
-wxBitmap::wxBitmap( const int width, const int height, const int depth )
+wxBitmap::wxBitmap( int width, int height, int depth )
 {
   m_refData = new wxBitmapRefData();
   M_BMPDATA->m_mask = NULL;
@@ -163,13 +163,13 @@ wxBitmap::wxBitmap( const wxBitmap* bmp )
   if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
 };
 
-wxBitmap::wxBitmap( const wxString &filename, const int type )
+wxBitmap::wxBitmap( const wxString &filename, int type )
 {
   LoadFile( filename, type );
 };
 
 // CMB 15/5/98: add constructor for xbm bitmaps
-wxBitmap::wxBitmap( const char bits[], const int width, const int height, const int WXUNUSED(depth))
+wxBitmap::wxBitmap( const char bits[], int width, int height, int WXUNUSED(depth))
 {
   m_refData = new wxBitmapRefData();
 
@@ -227,19 +227,19 @@ int wxBitmap::GetDepth(void) const
   return M_BMPDATA->m_bpp;
 };
 
-void wxBitmap::SetHeight( const int height )
+void wxBitmap::SetHeight( int height )
 {
   if (!Ok()) return;
   M_BMPDATA->m_height = height;
 };
 
-void wxBitmap::SetWidth( const int width )
+void wxBitmap::SetWidth( int width )
 {
   if (!Ok()) return;
   M_BMPDATA->m_width = width;
 };
 
-void wxBitmap::SetDepth( const int depth )
+void wxBitmap::SetDepth( int depth )
 {
   if (!Ok()) return;
   M_BMPDATA->m_bpp = depth;
@@ -258,13 +258,13 @@ void wxBitmap::SetMask( wxMask *mask )
   M_BMPDATA->m_mask = mask;
 };
 
-bool wxBitmap::SaveFile( const wxString &WXUNUSED(name), const int WXUNUSED(type), 
+bool wxBitmap::SaveFile( const wxString &WXUNUSED(name), int WXUNUSED(type), 
   wxPalette *WXUNUSED(palette) )
 {
   return FALSE;
 };
 
-bool wxBitmap::LoadFile( const wxString &name, const int WXUNUSED(type) )
+bool wxBitmap::LoadFile( const wxString &name, int WXUNUSED(type) )
 {
 #ifdef USE_GDK_IMLIB
 

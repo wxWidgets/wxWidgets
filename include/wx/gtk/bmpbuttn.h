@@ -46,10 +46,10 @@ class wxBitmapButton: public wxControl
     wxBitmapButton(void);
     wxBitmapButton( wxWindow *parent, wxWindowID id, const wxBitmap &bitmap,
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      const long style = 0, const wxString &name = wxButtonNameStr  );
+      long style = 0, const wxString &name = wxButtonNameStr  );
     bool Create(  wxWindow *parent, wxWindowID id, const wxBitmap &bitmap,
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      const long style = 0, const wxString &name = wxButtonNameStr  );
+      long style = 0, const wxString &name = wxButtonNameStr  );
     void SetDefault(void);
     void SetLabel( const wxString &label );
     wxString GetLabel(void) const;

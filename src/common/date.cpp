@@ -71,14 +71,14 @@ wxDate::wxDate()
   julian = 0;
 }
 
-wxDate::wxDate (const long j) : julian(j)
+wxDate::wxDate (long j) : julian(j)
 {
   DisplayFormat=wxMDY;
   DisplayOptions='\0';
   julian_to_mdy ();
 }
 
-wxDate::wxDate (const int m, const int d, const int y) : month(m), day(d), year(y)
+wxDate::wxDate (int m, int d, int y) : month(m), day(d), year(y)
 {
   DisplayFormat=wxMDY;
   DisplayOptions='\0';
@@ -164,25 +164,25 @@ wxDate::operator wxString( void )
 // Date Arithmetic
 //////////////////////////////////////////////////////////////
 
-wxDate wxDate::operator + (const long i)
+wxDate wxDate::operator + (long i)
 {
   wxDate dp(julian + i);
   return dp;
 }
 
-wxDate wxDate::operator + (const int i)
+wxDate wxDate::operator + (int i)
 {
   wxDate dp(julian + (long)i);
   return dp;
 }
 
-wxDate wxDate::operator - (const long i)
+wxDate wxDate::operator - (long i)
 {
   wxDate dp(julian - i);
   return dp;
 }
 
-wxDate wxDate::operator - (const int i)
+wxDate wxDate::operator - (int i)
 {
   wxDate dp(julian - (long)i);
   return dp;
@@ -193,14 +193,14 @@ long wxDate::operator - (const wxDate &dt)
 	return ( julian - dt.julian );
 }
 
-wxDate &wxDate::operator += (const long i)
+wxDate &wxDate::operator += (long i)
 {
 	 julian += i;
      julian_to_mdy();
 	 return *this;
 }
 
-wxDate &wxDate::operator -= (const long i)
+wxDate &wxDate::operator -= (long i)
 {
 	 julian -= i;
      julian_to_mdy();
@@ -333,7 +333,7 @@ void wxDate::mdy_to_julian (void)
 // Format routine
 ////////////////////////////////////////////////////////////////
 
-wxString wxDate::FormatDate (const int type) const
+wxString wxDate::FormatDate (int type) const
 {
   int actualType = type;
   if (actualType == -1)
@@ -407,12 +407,12 @@ wxString wxDate::FormatDate (const int type) const
   return wxString("");
 }
 
-void wxDate::SetFormat( const int format )
+void wxDate::SetFormat( int format )
 {
 	DisplayFormat = format;
 }
 
-int wxDate::SetOption( const int option, const bool action )
+int wxDate::SetOption( int option, bool action )
 {
 	switch ( option )
 	{
@@ -623,7 +623,7 @@ bool wxDate::IsBetween(const wxDate& first, const wxDate& second) const
 }
 
 // This function is from NIHCL
-wxDate wxDate::Previous(const int dayOfWeek) const
+wxDate wxDate::Previous(int dayOfWeek) const
 {
         int this_day_Of_Week, desired_day_Of_Week;
         long j;

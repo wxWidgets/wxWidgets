@@ -43,9 +43,9 @@ END_EVENT_TABLE()
 #endif
 
 // Scrollbar
-bool wxScrollBar::Create(wxWindow *parent, const wxWindowID id,
+bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos,
-           const wxSize& size, const long style,
+           const wxSize& size, long style,
            const wxValidator& validator,
            const wxString& name)
 {
@@ -116,7 +116,7 @@ wxScrollBar::~wxScrollBar(void)
 {
 }
 
-void wxScrollBar::MSWOnVScroll(const WXWORD wParam, const WXWORD pos, const WXHWND control)
+void wxScrollBar::MSWOnVScroll(WXWORD wParam, WXWORD pos, WXHWND control)
 {
     int position = ::GetScrollPos((HWND) control, SB_CTL);
     int minPos, maxPos;
@@ -191,12 +191,12 @@ void wxScrollBar::MSWOnVScroll(const WXWORD wParam, const WXWORD pos, const WXHW
     }
 }
 
-void wxScrollBar::MSWOnHScroll(const WXWORD wParam, const WXWORD pos, const WXHWND control)
+void wxScrollBar::MSWOnHScroll(WXWORD wParam, WXWORD pos, WXHWND control)
 {
 	MSWOnVScroll(wParam, pos, control);
 }
 
-void wxScrollBar::SetPosition(const int viewStart)
+void wxScrollBar::SetPosition(int viewStart)
 {
 #if defined(__WIN95__)
   SCROLLINFO info;
@@ -217,8 +217,8 @@ int wxScrollBar::GetPosition(void) const
     return ::GetScrollPos((HWND)m_hWnd, SB_CTL);
 }
 
-void wxScrollBar::SetScrollbar(const int position, const int thumbSize, const int range, const int pageSize,
-    const bool refresh)
+void wxScrollBar::SetScrollbar(int position, int thumbSize, int range, int pageSize,
+    bool refresh)
 {
   m_viewSize = pageSize;
   m_pageSize = thumbSize;
@@ -264,7 +264,7 @@ MaxScrollPos = MaxRangeValue - (PageSize - 1)
 */
 
 #if WXWIN_COMPATIBILITY
-void wxScrollBar::SetPageSize(const int pageLength)
+void wxScrollBar::SetPageSize(int pageLength)
 {
   m_pageSize = pageLength;
 
@@ -278,7 +278,7 @@ void wxScrollBar::SetPageSize(const int pageLength)
 #endif
 }
 
-void wxScrollBar::SetObjectLength(const int objectLength)
+void wxScrollBar::SetObjectLength(int objectLength)
 {
   m_objectSize = objectLength;
 
@@ -308,7 +308,7 @@ void wxScrollBar::SetObjectLength(const int objectLength)
 #endif
 }
 
-void wxScrollBar::SetViewLength(const int viewLength)
+void wxScrollBar::SetViewLength(int viewLength)
 {
     m_viewSize = viewLength;
 }
@@ -323,7 +323,7 @@ void wxScrollBar::GetValues(int *viewStart, int *viewLength, int *objectLength,
 }
 #endif
 
-WXHBRUSH wxScrollBar::OnCtlColor(const WXHDC pDC, const WXHWND pWnd, const WXUINT nCtlColor,
+WXHBRUSH wxScrollBar::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 			WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
   return 0;

@@ -69,7 +69,7 @@ wxPen::~wxPen()
 }
 
 // Should implement Create
-wxPen::wxPen(const wxColour& col, const int Width, const int Style)
+wxPen::wxPen(const wxColour& col, int Width, int Style)
 {
   m_refData = new wxPenRefData;
 
@@ -112,7 +112,7 @@ wxPen::wxPen(const wxColour& col, const int Width, const int Style)
     wxThePenList->AddPen(this);
 }
 
-wxPen::wxPen(const wxBitmap& stipple, const int Width)
+wxPen::wxPen(const wxBitmap& stipple, int Width)
 {
   m_refData = new wxPenRefData;
 
@@ -132,7 +132,7 @@ wxPen::wxPen(const wxBitmap& stipple, const int Width)
     wxThePenList->AddPen(this);
 }
 
-wxPen::wxPen(const wxString& col, const int Width, const int Style)
+wxPen::wxPen(const wxString& col, int Width, int Style)
 {
   m_refData = new wxPenRefData;
 
@@ -340,7 +340,7 @@ void wxPen::SetColour(const unsigned char r, const unsigned char g, const unsign
     RealizeResource();
 }
 
-void wxPen::SetWidth(const int Width)
+void wxPen::SetWidth(int Width)
 {
   if ( !M_PENDATA )
 	m_refData = new wxPenRefData;
@@ -351,7 +351,7 @@ void wxPen::SetWidth(const int Width)
     RealizeResource();
 }
 
-void wxPen::SetStyle(const int Style)
+void wxPen::SetStyle(int Style)
 {
   if ( !M_PENDATA )
 	m_refData = new wxPenRefData;
@@ -374,7 +374,7 @@ void wxPen::SetStipple(const wxBitmap& Stipple)
     RealizeResource();
 }
 
-void wxPen::SetDashes(const int nb_dashes, const wxDash *Dash)
+void wxPen::SetDashes(int nb_dashes, const wxDash *Dash)
 {
   if ( !M_PENDATA )
 	m_refData = new wxPenRefData;
@@ -386,7 +386,7 @@ void wxPen::SetDashes(const int nb_dashes, const wxDash *Dash)
     RealizeResource();
 }
 
-void wxPen::SetJoin(const int Join)
+void wxPen::SetJoin(int Join)
 {
   if ( !M_PENDATA )
 	m_refData = new wxPenRefData;
@@ -397,7 +397,7 @@ void wxPen::SetJoin(const int Join)
     RealizeResource();
 }
 
-void wxPen::SetCap(const int Cap)
+void wxPen::SetCap(int Cap)
 {
   if ( !M_PENDATA )
 	m_refData = new wxPenRefData;

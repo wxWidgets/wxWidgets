@@ -26,10 +26,10 @@ class WXDLLEXPORT wxStatusBar: public wxWindow
 
 public:
   wxStatusBar(void);
-  inline wxStatusBar(wxWindow *parent, const wxWindowID id,
+  inline wxStatusBar(wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           const long style = 0,
+           long style = 0,
            const wxString& name = wxPanelNameStr)
   {
       Create(parent, id, pos, size, style, name);
@@ -37,33 +37,33 @@ public:
 
   ~wxStatusBar(void);
 
-  bool Create(wxWindow *parent, const wxWindowID id,
+  bool Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           const long style = 0,
+           long style = 0,
            const wxString& name = wxPanelNameStr);
 
   // Create status line
-  virtual void SetFieldsCount(const int number=1, const int *widths = NULL);
+  virtual void SetFieldsCount(int number=1, int *widths = NULL);
   inline int GetFieldsCount(void) const { return m_nFields; }
 
   // Set status line text
-  virtual void SetStatusText(const wxString& text, const int number = 0);
-  virtual wxString GetStatusText(const int number = 0) const;
+  virtual void SetStatusText(const wxString& text, int number = 0);
+  virtual wxString GetStatusText(int number = 0) const;
 
   // Set status line widths
-  virtual void SetStatusWidths(const int n, const int *widths_field);
+  virtual void SetStatusWidths(int n, int *widths_field);
 
-  virtual void DrawFieldText(wxDC& dc, const int i);
-  virtual void DrawField(wxDC& dc, const int i);
+  virtual void DrawFieldText(wxDC& dc, int i);
+  virtual void DrawField(wxDC& dc, int i);
 
   // Get the position and size of the field's internal bounding rectangle
-  virtual bool GetFieldRect(const int i, wxRectangle& rect) const;
+  virtual bool GetFieldRect(int i, wxRectangle& rect) const;
 
   inline int GetBorderX(void) const { return m_borderX; }
   inline int GetBorderY(void) const { return m_borderY; }
-  inline void SetBorderX(const int x);
-  inline void SetBorderY(const int y);
+  inline void SetBorderX(int x);
+  inline void SetBorderY(int y);
 
   ////////////////////////////////////////////////////////////////////////
   // Implementation

@@ -63,7 +63,7 @@ wxBrush::~wxBrush()
         wxTheBrushList->RemoveBrush(this);
 }
 
-wxBrush::wxBrush(const wxColour& col, const int Style)
+wxBrush::wxBrush(const wxColour& col, int Style)
 {
   m_refData = new wxBrushRefData;
 
@@ -77,7 +77,7 @@ wxBrush::wxBrush(const wxColour& col, const int Style)
     wxTheBrushList->AddBrush(this);
 }
 
-wxBrush::wxBrush(const wxString& col, const int Style)
+wxBrush::wxBrush(const wxString& col, int Style)
 {
   m_refData = new wxBrushRefData;
 
@@ -238,7 +238,7 @@ void wxBrush::SetColour(const unsigned char r, const unsigned char g, const unsi
     RealizeResource();
 }
 
-void wxBrush::SetStyle(const int Style)
+void wxBrush::SetStyle(int Style)
 {
   if ( !M_BRUSHDATA )
 	m_refData = new wxBrushRefData;

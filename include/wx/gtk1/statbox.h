@@ -46,10 +46,10 @@ class wxStaticBox: public wxControl
     wxStaticBox(void);
     wxStaticBox( wxWindow *parent, wxWindowID id, const wxString &label, 
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      const long style = 0, const wxString &name = wxStaticBoxNameStr  );
-    bool Create( wxWindow *parent, wxWindowID id, const wxString &label, 
+      long style = 0, const wxString &name = wxStaticBoxNameStr  );
+    bool Create( wxWindow *parent, wxWindowID id, const wxString &label,
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      const long style = 0, const wxString &name = wxStaticBoxNameStr  );
+      long style = 0, const wxString &name = wxStaticBoxNameStr  );
 };
 
 #endif // __GTKSTATICBOXH__

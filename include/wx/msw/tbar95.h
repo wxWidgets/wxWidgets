@@ -45,17 +45,17 @@ class WXDLLEXPORT wxToolBar95: public wxToolBarBase
     Create(parent, -1, wxPoint(x, y), wxSize(w, h), style, orientation, RowsOrColumns, name);
   }
 #endif
-  inline wxToolBar95(wxWindow *parent, const wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-            const long style = wxNO_BORDER, const int orientation = wxVERTICAL,
-            const int RowsOrColumns = 1, const wxString& name = wxToolBarNameStr)
+  inline wxToolBar95(wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+            long style = wxNO_BORDER, int orientation = wxVERTICAL,
+            int RowsOrColumns = 1, const wxString& name = wxToolBarNameStr)
   {
     Create(parent, id, pos, size, style, orientation, RowsOrColumns, name);
   }
   ~wxToolBar95(void);
 
-  bool Create(wxWindow *parent, const wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-            const long style = wxNO_BORDER, const int orientation = wxVERTICAL,
-            const int RowsOrColumns = 1, const wxString& name = wxToolBarNameStr);
+  bool Create(wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+            long style = wxNO_BORDER, int orientation = wxVERTICAL,
+            int RowsOrColumns = 1, const wxString& name = wxToolBarNameStr);
 
   // Call default behaviour
   void OnPaint(wxPaintEvent& event) { Default() ; }
@@ -68,15 +68,15 @@ class WXDLLEXPORT wxToolBar95: public wxToolBarBase
   // If pushedBitmap is NULL, a reversed version of bitmap is
   // created and used as the pushed/toggled image.
   // If toggle is TRUE, the button toggles between the two states.
-  wxToolBarTool *AddTool(const int toolIndex, const wxBitmap& bitmap, const wxBitmap& pushedBitmap = wxNullBitmap,
-               const bool toggle = FALSE, const long xPos = -1, const long yPos = -1, wxObject *clientData = NULL,
+  wxToolBarTool *AddTool(int toolIndex, const wxBitmap& bitmap, const wxBitmap& pushedBitmap = wxNullBitmap,
+               bool toggle = FALSE, long xPos = -1, long yPos = -1, wxObject *clientData = NULL,
                const wxString& helpString1 = "", const wxString& helpString2 = "");
 
   // New members
   // Set default bitmap size
   void SetDefaultSize(const wxSize& size);
-  void EnableTool(const int toolIndex, const bool enable); // additional drawing on enabling
-  void ToggleTool(const int toolIndex, const bool toggle); // toggle is TRUE if toggled on
+  void EnableTool(int toolIndex, bool enable); // additional drawing on enabling
+  void ToggleTool(int toolIndex, bool toggle); // toggle is TRUE if toggled on
   void ClearTools(void);
 
   // The button size is bigger than the bitmap size
@@ -87,12 +87,12 @@ class WXDLLEXPORT wxToolBar95: public wxToolBarBase
 
   // Add all the buttons: required for Win95.
   virtual bool CreateTools(void);
-  virtual void SetRows(const int nRows);
+  virtual void SetRows(int nRows);
   virtual void Layout(void) {}
 
   // IMPLEMENTATION
-  bool MSWCommand(const WXUINT param, const WXWORD id);
-  bool MSWNotify(const WXWPARAM wParam, const WXLPARAM lParam);
+  bool MSWCommand(WXUINT param, WXWORD id);
+  bool MSWNotify(WXWPARAM wParam, WXLPARAM lParam);
 
   // Responds to colour changes
   void OnSysColourChanged(wxSysColourChangedEvent& event);

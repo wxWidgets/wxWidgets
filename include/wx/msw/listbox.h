@@ -41,28 +41,28 @@ class WXDLLEXPORT wxListBox: public wxControl
  public:
 
   wxListBox(void);
-  inline wxListBox(wxWindow *parent, const wxWindowID id,
+  inline wxListBox(wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           const int n = 0, const wxString choices[] = NULL,
-           const long style = 0,
+           int n = 0, const wxString choices[] = NULL,
+           long style = 0,
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxListBoxNameStr)
   {
     Create(parent, id, pos, size, n, choices, style, validator, name);
   }
 
-  bool Create(wxWindow *parent, const wxWindowID id,
+  bool Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           const int n = 0, const wxString choices[] = NULL,
-           const long style = 0,
+           int n = 0, const wxString choices[] = NULL,
+           long style = 0,
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxListBoxNameStr);
 
   ~wxListBox();
 
-  bool MSWCommand(const WXUINT param, const WXWORD id);
+  bool MSWCommand(WXUINT param, WXWORD id);
 
 #if USE_OWNER_DRAWN
   bool MSWOnMeasure(WXMEASUREITEMSTRUCT *item);
@@ -77,35 +77,35 @@ class WXDLLEXPORT wxListBox: public wxControl
 
   virtual void Append(const wxString& item);
   virtual void Append(const wxString& item, char *clientData);
-  virtual void Set(const int n, const wxString* choices, char **clientData = NULL);
+  virtual void Set(int n, const wxString* choices, char **clientData = NULL);
   virtual int FindString(const wxString& s) const ;
   virtual void Clear(void);
-  virtual void SetSelection(const int n, const bool select = TRUE);
+  virtual void SetSelection(int n, bool select = TRUE);
 
-  virtual void Deselect(const int n);
+  virtual void Deselect(int n);
 
   // For single choice list item only
   virtual int GetSelection() const ;
-  virtual void Delete(const int n);
-  virtual char *GetClientData(const int n) const ;
-  virtual void SetClientData(const int n, char *clientData);
-  virtual void SetString(const int n, const wxString& s);
+  virtual void Delete(int n);
+  virtual char *GetClientData(int n) const ;
+  virtual void SetClientData(int n, char *clientData);
+  virtual void SetString(int n, const wxString& s);
 
   // For single or multiple choice list item
   virtual int GetSelections(wxArrayInt& aSelections) const;
-  virtual bool Selected(const int n) const ;
-  virtual wxString GetString(const int n) const ;
-  virtual void SetSize(const int x, const int y, const int width, const int height, const int sizeFlags = wxSIZE_AUTO);
+  virtual bool Selected(int n) const ;
+  virtual wxString GetString(int n) const ;
+  virtual void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
 
   // Set the specified item at the first visible item
   // or scroll to max range.
-  virtual void SetFirstItem(const int n) ;
+  virtual void SetFirstItem(int n) ;
   virtual void SetFirstItem(const wxString& s) ;
 
-  virtual void InsertItems(const int nItems, const wxString items[], const int pos);
+  virtual void InsertItems(int nItems, const wxString items[], int pos);
 
   virtual wxString GetStringSelection(void) const ;
-  virtual bool SetStringSelection(const wxString& s, const bool flag = TRUE);
+  virtual bool SetStringSelection(const wxString& s, bool flag = TRUE);
   virtual int Number(void) const ;
 
   void Command(wxCommandEvent& event);
@@ -116,7 +116,7 @@ class WXDLLEXPORT wxListBox: public wxControl
   // Otherwise, all strings are used.
   virtual void SetHorizontalExtent(const wxString& s = wxEmptyString);
 
-  virtual WXHBRUSH OnCtlColor(const WXHDC pDC, const WXHWND pWnd, const WXUINT nCtlColor,
+  virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 			WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
   virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);

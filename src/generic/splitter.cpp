@@ -67,8 +67,8 @@ wxSplitterWindow::wxSplitterWindow(void)
     m_minimumPaneSize = 0;
 }
 
-wxSplitterWindow::wxSplitterWindow(wxWindow *parent, const wxWindowID id, const wxPoint& pos,
-    const wxSize& size, const long style, const wxString& name)
+wxSplitterWindow::wxSplitterWindow(wxWindow *parent, wxWindowID id, const wxPoint& pos,
+    const wxSize& size, long style, const wxString& name)
   :wxWindow(parent, id, pos, size, style, name)
 {
     m_splitMode = wxSPLIT_VERTICAL;
@@ -341,7 +341,7 @@ void wxSplitterWindow::OnSize(wxSizeEvent& WXUNUSED(event))
     SizeWindows();
 }
 
-bool wxSplitterWindow::SashHitTest(const int x, const int y, const int tolerance)
+bool wxSplitterWindow::SashHitTest(int x, int y, int tolerance)
 {
     if ( m_windowTwo == NULL || m_sashPosition == 0)
         return FALSE; // No sash
@@ -481,7 +481,7 @@ void wxSplitterWindow::DrawSash(wxDC& dc)
 }
 
 // Draw the sash tracker (for whilst moving the sash)
-void wxSplitterWindow::DrawSashTracker(const int x, const int y)
+void wxSplitterWindow::DrawSashTracker(int x, int y)
 {
     int w, h;
     GetClientSize(&w, &h);
@@ -591,7 +591,7 @@ void wxSplitterWindow::Initialize(wxWindow *window)
 // Associates the given window with window 2, drawing the appropriate sash
 // and changing the split mode.
 // Does nothing and returns FALSE if the window is already split.
-bool wxSplitterWindow::SplitVertically(wxWindow *window1, wxWindow *window2, const int sashPosition)
+bool wxSplitterWindow::SplitVertically(wxWindow *window1, wxWindow *window2, int sashPosition)
 {
     if ( IsSplit() )
         return FALSE;
@@ -609,7 +609,7 @@ bool wxSplitterWindow::SplitVertically(wxWindow *window1, wxWindow *window2, con
     return TRUE;
 }
 
-bool wxSplitterWindow::SplitHorizontally(wxWindow *window1, wxWindow *window2, const int sashPosition)
+bool wxSplitterWindow::SplitHorizontally(wxWindow *window1, wxWindow *window2, int sashPosition)
 {
     if ( IsSplit() )
         return FALSE;
@@ -658,7 +658,7 @@ bool wxSplitterWindow::Unsplit(wxWindow *toRemove)
     return TRUE;
 }
 
-void wxSplitterWindow::SetSashPosition(const int position, const bool redraw)
+void wxSplitterWindow::SetSashPosition(int position, bool redraw)
 {
     m_sashPosition = position;
 

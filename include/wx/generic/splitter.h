@@ -57,8 +57,8 @@ class WXDLLEXPORT wxSplitterWindow: public wxWindow
     wxSplitterWindow(void);
 
     // Normal constructor
-    wxSplitterWindow(wxWindow *parent, const wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize, const long style = wxSP_3D|wxCLIP_CHILDREN, const wxString& name = "splitter");
+    wxSplitterWindow(wxWindow *parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize, long style = wxSP_3D|wxCLIP_CHILDREN, const wxString& name = "splitter");
     ~wxSplitterWindow(void);
 
     // Gets the only or left/top pane
@@ -68,7 +68,7 @@ class WXDLLEXPORT wxSplitterWindow: public wxWindow
     inline wxWindow *GetWindow2(void) { return m_windowTwo; }
 
     // Sets the split mode
-    inline void SetSplitMode(const int mode) { m_splitMode = mode; }
+    inline void SetSplitMode(int mode) { m_splitMode = mode; }
 
     // Gets the split mode
     inline int GetSplitMode(void) const { return m_splitMode; };
@@ -80,8 +80,8 @@ class WXDLLEXPORT wxSplitterWindow: public wxWindow
     // and changing the split mode.
     // Does nothing and returns FALSE if the window is already split.
     // A sashPosition of -1 means choose a default sash position.
-    bool SplitVertically(wxWindow *window1, wxWindow *window2, const int sashPosition = -1);
-    bool SplitHorizontally(wxWindow *window1, wxWindow *window2, const int sashPosition = -1);
+    bool SplitVertically(wxWindow *window1, wxWindow *window2, int sashPosition = -1);
+    bool SplitHorizontally(wxWindow *window1, wxWindow *window2, int sashPosition = -1);
 
     // Removes the specified (or second) window from the view
     // Doesn't actually delete the window.
@@ -91,10 +91,10 @@ class WXDLLEXPORT wxSplitterWindow: public wxWindow
     inline bool IsSplit(void) const { return (m_windowTwo != NULL); }
 
     // Sets the sash size
-    inline void SetSashSize(const int width) { m_sashSize = width; }
+    inline void SetSashSize(int width) { m_sashSize = width; }
 
     // Sets the border size
-    inline void SetBorderSize(const int width) { m_borderSize = width; }
+    inline void SetBorderSize(int width) { m_borderSize = width; }
 
     // Gets the sash size
     inline int GetSashSize(void) const { return m_sashSize; }
@@ -103,13 +103,13 @@ class WXDLLEXPORT wxSplitterWindow: public wxWindow
     inline int GetBorderSize(void) const { return m_borderSize; }
 
     // Set the sash position
-    void SetSashPosition(const int position, const bool redaw = TRUE);
+    void SetSashPosition(int position, bool redaw = TRUE);
 
     // Gets the sash position
     inline int GetSashPosition(void) const { return m_sashPosition; }
 
     // If this is zero, we can remove panes by dragging the sash.
-    inline void SetMinimumPaneSize(const int min) { m_minimumPaneSize = min; }
+    inline void SetMinimumPaneSize(int min) { m_minimumPaneSize = min; }
     inline int GetMinimumPaneSize(void) const { return m_minimumPaneSize; }
 
     // If the sash is moved to an extreme position, a subwindow
@@ -141,10 +141,10 @@ class WXDLLEXPORT wxSplitterWindow: public wxWindow
     void DrawSash(wxDC& dc);
 
     // Draws the sash tracker (for whilst moving the sash)
-    void DrawSashTracker(const int x, const int y);
+    void DrawSashTracker(int x, int y);
 
     // Tests for x, y over sash
-    bool SashHitTest(const int x, const int y, const int tolerance = 2);
+    bool SashHitTest(int x, int y, int tolerance = 2);
 
     // Resizes subwindows
     void SizeWindows(void);

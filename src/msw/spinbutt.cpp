@@ -43,8 +43,8 @@ wxSpinButton::wxSpinButton(void)
 	m_max = 100;
 }
 
-bool wxSpinButton::Create(wxWindow *parent, const wxWindowID id, const wxPoint& pos, const wxSize& size,
-            const long style, const wxString& name)
+bool wxSpinButton::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
+            long style, const wxString& name)
 {
   wxSystemSettings settings;
   m_backgroundColour = parent->GetDefaultBackgroundColour() ;
@@ -117,19 +117,19 @@ int wxSpinButton::GetValue(void) const
 	return (int) ::SendMessage((HWND) GetHWND(), UDM_GETPOS, 0, 0);
 }
 
-void wxSpinButton::SetValue(const int val)
+void wxSpinButton::SetValue(int val)
 {
 	::SendMessage((HWND) GetHWND(), UDM_SETPOS, 0, (LPARAM) MAKELONG((short) val, 0));
 }
 
-void wxSpinButton::SetRange(const int minVal, const int maxVal)
+void wxSpinButton::SetRange(int minVal, int maxVal)
 {
 	m_min = minVal;
 	m_max = maxVal;
 	::SendMessage((HWND) GetHWND(), UDM_SETRANGE, 0, (LPARAM) MAKELONG((short) minVal, (short) maxVal));
 }
 
-void wxSpinButton::MSWOnVScroll(const WXWORD wParam, const WXWORD pos, const WXHWND control)
+void wxSpinButton::MSWOnVScroll(WXWORD wParam, WXWORD pos, WXHWND control)
 {
   if (control)
   {
@@ -178,7 +178,7 @@ void wxSpinButton::MSWOnVScroll(const WXWORD wParam, const WXWORD pos, const WXH
   }
 }
 
-void wxSpinButton::MSWOnHScroll( const WXWORD wParam, const WXWORD pos, const WXHWND control)
+void wxSpinButton::MSWOnHScroll( WXWORD wParam, WXWORD pos, WXHWND control)
 {
   if (control)
   {
@@ -227,13 +227,13 @@ void wxSpinButton::MSWOnHScroll( const WXWORD wParam, const WXWORD pos, const WX
   }
 }
 
-bool wxSpinButton::MSWCommand(const WXUINT cmd, const WXWORD id)
+bool wxSpinButton::MSWCommand(WXUINT cmd, WXWORD id)
 {
   // No command messages
   return FALSE;
 }
 
-bool wxSpinButton::MSWNotify(const WXWPARAM wParam, const WXLPARAM lParam)
+bool wxSpinButton::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
 {
 	NMHDR* hdr1 = (NMHDR*) lParam;
 	switch ( hdr1->code )

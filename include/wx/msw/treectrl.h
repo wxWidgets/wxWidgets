@@ -129,10 +129,10 @@ class WXDLLEXPORT wxTreeCtrl: public wxControl
 
   wxTreeCtrl(void);
 
-  inline wxTreeCtrl(wxWindow *parent, const wxWindowID id = -1,
+  inline wxTreeCtrl(wxWindow *parent, wxWindowID id = -1,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
-            const long style = wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT,
+            long style = wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT,
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = "wxTreeCtrl")
   {
@@ -140,10 +140,10 @@ class WXDLLEXPORT wxTreeCtrl: public wxControl
   }
   ~wxTreeCtrl(void);
 
-  bool Create(wxWindow *parent, const wxWindowID id = -1,
+  bool Create(wxWindow *parent, wxWindowID id = -1,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
-            const long style = wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT,
+            long style = wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT,
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = "wxTreeCtrl");
 
@@ -151,50 +151,50 @@ class WXDLLEXPORT wxTreeCtrl: public wxControl
   int GetCount(void) const ;
   int GetIndent(void) const ;
   void SetIndent(int indent) ;
-  wxImageList *GetImageList(const int which = wxIMAGE_LIST_NORMAL) const ;
-  void SetImageList(wxImageList *imageList, const int which = wxIMAGE_LIST_NORMAL) ;
-  long GetNextItem(const long item, int code) const ;
-  bool ItemHasChildren(const long item) const ;
-  long GetChild(const long item) const ;
-  long GetParent(const long item) const ;
+  wxImageList *GetImageList(int which = wxIMAGE_LIST_NORMAL) const ;
+  void SetImageList(wxImageList *imageList, int which = wxIMAGE_LIST_NORMAL) ;
+  long GetNextItem(long item, int code) const ;
+  bool ItemHasChildren(long item) const ;
+  long GetChild(long item) const ;
+  long GetParent(long item) const ;
   long GetFirstVisibleItem(void) const ;
-  long GetNextVisibleItem(const long item) const ;
+  long GetNextVisibleItem(long item) const ;
   long GetSelection(void) const ;
   long GetRootItem(void) const ;
   bool GetItem(wxTreeItem& info) const ;
   bool SetItem(wxTreeItem& info) ;
-  int  GetItemState(const long item, const long stateMask) const ;
-  bool SetItemState(const long item, const long state, const long stateMask) ;
-  bool SetItemImage(const long item, const int image, const int selImage) ;
-  wxString GetItemText(const long item) const ;
-  void SetItemText(const long item, const wxString& str) ;
-  long GetItemData(const long item) const ;
-  bool SetItemData(const long item, long data) ;
-  bool GetItemRect(const long item, wxRectangle& rect, bool textOnly = FALSE) const;
+  int  GetItemState(long item, long stateMask) const ;
+  bool SetItemState(long item, long state, long stateMask) ;
+  bool SetItemImage(long item, int image, int selImage) ;
+  wxString GetItemText(long item) const ;
+  void SetItemText(long item, const wxString& str) ;
+  long GetItemData(long item) const ;
+  bool SetItemData(long item, long data) ;
+  bool GetItemRect(long item, wxRectangle& rect, bool textOnly = FALSE) const;
   wxTextCtrl& GetEditControl(void) const;
 
   // Operations
-  bool DeleteItem(const long item);
-  bool ExpandItem(const long item, const int action);
-  long InsertItem(const long parent, wxTreeItem& info, const long insertAfter = wxTREE_INSERT_LAST);
+  bool DeleteItem(long item);
+  bool ExpandItem(long item, int action);
+  long InsertItem(long parent, wxTreeItem& info, long insertAfter = wxTREE_INSERT_LAST);
 
   // If image > -1 and selImage == -1, the same image is used for
   // both selected and unselected items.
-  long InsertItem(const long parent, const wxString& label, const int image = -1, const int selImage = -1, const long insertAfter = wxTREE_INSERT_LAST);
-  bool SelectItem(const long item);
-  bool ScrollTo(const long item);
+  long InsertItem(long parent, const wxString& label, int image = -1, int selImage = -1, long insertAfter = wxTREE_INSERT_LAST);
+  bool SelectItem(long item);
+  bool ScrollTo(long item);
   bool DeleteAllItems(void) ;
-  wxTextCtrl& Edit(const long item) ;
+  wxTextCtrl& Edit(long item) ;
   long HitTest(const wxPoint& point, int& flags);
-//  wxImageList *CreateDragImage(const long item) ;
-  bool SortChildren(const long item) ;
-  bool EnsureVisible(const long item) ;
+//  wxImageList *CreateDragImage(long item) ;
+  bool SortChildren(long item) ;
+  bool EnsureVisible(long item) ;
 
   void Command(wxCommandEvent& event) { ProcessCommand(event); };
 
   // IMPLEMENTATION
-  bool MSWCommand(const WXUINT param, const WXWORD id);
-  bool MSWNotify(const WXWPARAM wParam, const WXLPARAM lParam);
+  bool MSWCommand(WXUINT param, WXWORD id);
+  bool MSWNotify(WXWPARAM wParam, WXLPARAM lParam);
 
 protected:
   wxTextCtrl m_textCtrl;

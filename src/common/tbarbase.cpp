@@ -48,9 +48,9 @@ END_EVENT_TABLE()
 // is still valid: a tool may have quit the toolbar.
 static wxList gs_ToolBars;
 
-wxToolBarTool::wxToolBarTool(const int theIndex,
-                    const wxBitmap& theBitmap1, const wxBitmap& theBitmap2, const bool toggle,
-                    const long xPos, const long yPos, const wxString& helpS1, const wxString& helpS2)
+wxToolBarTool::wxToolBarTool(int theIndex,
+                    const wxBitmap& theBitmap1, const wxBitmap& theBitmap2, bool toggle,
+                    long xPos, long yPos, const wxString& helpS1, const wxString& helpS2)
 {
   m_toolStyle = wxTOOL_STYLE_BUTTON;
   m_clientData = NULL;
@@ -158,8 +158,8 @@ void wxToolBarBase::OnMouseEnter ( int toolIndex )
 // If pushedBitmap is NULL, a reversed version of bitmap is
 // created and used as the pushed/toggled image.
 // If toggle is TRUE, the button toggles between the two states.
-wxToolBarTool *wxToolBarBase::AddTool(const int index, const wxBitmap& bitmap, const wxBitmap& pushedBitmap,
-             const bool toggle, const long xPos, const long yPos, wxObject *clientData,
+wxToolBarTool *wxToolBarBase::AddTool(int index, const wxBitmap& bitmap, const wxBitmap& pushedBitmap,
+             bool toggle, long xPos, long yPos, wxObject *clientData,
              const wxString& helpString1, const wxString& helpString2)
 {
   wxToolBarTool *tool = new wxToolBarTool(index, bitmap, pushedBitmap, toggle, xPos, yPos, helpString1, helpString2);
@@ -207,7 +207,7 @@ void wxToolBarBase::ClearTools(void)
   }
 }
 
-void wxToolBarBase::EnableTool(const int index, const bool enable)
+void wxToolBarBase::EnableTool(int index, bool enable)
 {
   wxNode *node = m_tools.Find((long)index);
   if (node)
@@ -218,11 +218,11 @@ void wxToolBarBase::EnableTool(const int index, const bool enable)
   }
 }
 
-void wxToolBarBase::ToggleTool(const int index, const bool toggle)
+void wxToolBarBase::ToggleTool(int index, bool toggle)
 {
 }
 
-void wxToolBarBase::SetToggle(const int index, const bool value)
+void wxToolBarBase::SetToggle(int index, bool value)
 {
   wxNode *node=m_tools.Find((long)index);
   if (node){
@@ -231,7 +231,7 @@ void wxToolBarBase::SetToggle(const int index, const bool value)
   }
 }
 
-bool wxToolBarBase::GetToolState(const int index) const
+bool wxToolBarBase::GetToolState(int index) const
 {
   wxNode *node = m_tools.Find((long)index);
   if (node)
@@ -246,7 +246,7 @@ bool wxToolBarBase::GetToolState(const int index) const
   else return FALSE;
 }
 
-bool wxToolBarBase::GetToolEnabled(const int index) const
+bool wxToolBarBase::GetToolEnabled(int index) const
 {
   wxNode *node = m_tools.Find((long)index);
   if (node)
@@ -261,7 +261,7 @@ bool wxToolBarBase::GetToolEnabled(const int index) const
   else return FALSE;
 }
 
-wxObject *wxToolBarBase::GetToolClientData(const int index) const
+wxObject *wxToolBarBase::GetToolClientData(int index) const
 {
   wxNode *node = m_tools.Find((long)index);
   if (node)
@@ -276,7 +276,7 @@ wxObject *wxToolBarBase::GetToolClientData(const int index) const
   else return NULL;
 }
 
-void wxToolBarBase::SetToolShortHelp(const int index, const wxString& helpString)
+void wxToolBarBase::SetToolShortHelp(int index, const wxString& helpString)
 {
   wxNode *node=m_tools.Find((long)index);
   if (node)
@@ -286,7 +286,7 @@ void wxToolBarBase::SetToolShortHelp(const int index, const wxString& helpString
   }
 }
 
-wxString wxToolBarBase::GetToolShortHelp(const int index) const
+wxString wxToolBarBase::GetToolShortHelp(int index) const
 {
   wxNode *node=m_tools.Find((long)index);
   if (node)
@@ -298,7 +298,7 @@ wxString wxToolBarBase::GetToolShortHelp(const int index) const
     return wxString("");
 }
 
-void wxToolBarBase::SetToolLongHelp(const int index, const wxString& helpString)
+void wxToolBarBase::SetToolLongHelp(int index, const wxString& helpString)
 {
   wxNode *node=m_tools.Find((long)index);
   if (node)
@@ -308,7 +308,7 @@ void wxToolBarBase::SetToolLongHelp(const int index, const wxString& helpString)
   }
 }
 
-wxString wxToolBarBase::GetToolLongHelp(const int index) const
+wxString wxToolBarBase::GetToolLongHelp(int index) const
 {
   wxNode *node=m_tools.Find((long)index);
   if (node)
@@ -320,7 +320,7 @@ wxString wxToolBarBase::GetToolLongHelp(const int index) const
     return wxString("");
 }
 
-wxToolBarTool *wxToolBarBase::FindToolForPosition(const long x, const long y) const
+wxToolBarTool *wxToolBarBase::FindToolForPosition(long x, long y) const
 {
   wxNode *node = m_tools.First();
   while (node)
@@ -345,18 +345,18 @@ wxSize wxToolBarBase::GetMaxSize ( void ) const
 // the tool we're leaving was a 'sprung push button' and if so,
 // spring it back to the up state.
 //
-void wxToolBarBase::SetMargins(const int x, const int y)
+void wxToolBarBase::SetMargins(int x, int y)
 {
   m_xMargin = x;
   m_yMargin = y;
 }
 
-void wxToolBarBase::SetToolPacking(const int packing)
+void wxToolBarBase::SetToolPacking(int packing)
 {
   m_toolPacking = packing;
 }
 
-void wxToolBarBase::SetToolSeparation(const int separation)
+void wxToolBarBase::SetToolSeparation(int separation)
 {
   m_toolSeparation = separation;
 }
@@ -464,9 +464,9 @@ void wxToolBarBase::Layout(void)
  * pixelsPerUnitX/pixelsPerUnitY: number of pixels per unit (e.g. pixels per text line)
  * noUnitsX/noUnitsY:        : no. units per scrollbar
  */
-void wxToolBarBase::SetScrollbars (const int pixelsPerUnitX, const int pixelsPerUnitY,
-	       const int noUnitsX, const int noUnitsY,
-	       const int xPos, const int yPos)
+void wxToolBarBase::SetScrollbars (int pixelsPerUnitX, int pixelsPerUnitY,
+	       int noUnitsX, int noUnitsY,
+	       int xPos, int yPos)
 {
       m_xScrollPixelsPerLine = pixelsPerUnitX;
       m_yScrollPixelsPerLine = pixelsPerUnitY;
@@ -737,7 +737,7 @@ void wxToolBarBase::SetScrollPageSize(int orient, int pageSize)
 /*
  * Scroll to given position (scroll position, not pixel position)
  */
-void wxToolBarBase::Scroll (const int x_pos, const int y_pos)
+void wxToolBarBase::Scroll (int x_pos, int y_pos)
 {
   int old_x, old_y;
   ViewStart (&old_x, &old_y);
@@ -760,7 +760,7 @@ void wxToolBarBase::Scroll (const int x_pos, const int y_pos)
 #endif
 }
 
-void wxToolBarBase::EnableScrolling (const bool x_scroll, const bool y_scroll)
+void wxToolBarBase::EnableScrolling (bool x_scroll, bool y_scroll)
 {
   m_xScrollingEnabled = x_scroll;
   m_yScrollingEnabled = y_scroll;
@@ -780,13 +780,13 @@ void wxToolBarBase::ViewStart (int *x, int *y) const
 }
 
 /*
-void wxToolBarBase::CalcScrolledPosition(const int x, const int y, int *xx, int *yy) const
+void wxToolBarBase::CalcScrolledPosition(int x, int y, int *xx, int *yy) const
 {
   *xx = (m_calcScrolledOffset ? (x - m_xScrollPosition * m_xScrollPixelsPerLine) : x);
   *yy = (m_calcScrolledOffset ? (y - m_yScrollPosition * m_yScrollPixelsPerLine) : y);
 }
 
-void wxToolBarBase::CalcUnscrolledPosition(const int x, const int y, float *xx, float *yy) const
+void wxToolBarBase::CalcUnscrolledPosition(int x, int y, float *xx, float *yy) const
 {
   *xx = (float)(m_calcScrolledOffset ? (x + m_xScrollPosition * m_xScrollPixelsPerLine) : x);
   *yy = (float)(m_calcScrolledOffset ? (y + m_yScrollPosition * m_yScrollPixelsPerLine) : y);
@@ -829,7 +829,7 @@ void wxToolBarBase::DoToolbarUpdates(void)
 
 #ifdef __WINDOWS__
 // Circumvent wxControl::MSWOnMouseMove which doesn't set the cursor.
-void wxToolBarBase::MSWOnMouseMove(const int x, const int y, const WXUINT flags)
+void wxToolBarBase::MSWOnMouseMove(int x, int y, const WXUINT flags)
 {
     wxWindow::MSWOnMouseMove(x, y, flags);
 }

@@ -132,7 +132,7 @@ void wxConvertDialogToPixels(wxWindow *control, int *x, int *y)
 }
 */
 
-void wxControl::MSWOnMouseMove(const int x, const int y, const WXUINT flags)
+void wxControl::MSWOnMouseMove(int x, int y, WXUINT flags)
 {
 /*
   // Trouble with this is that it sets the cursor for controls too :-(
@@ -172,7 +172,9 @@ void wxControl::MSWOnMouseMove(const int x, const int y, const WXUINT flags)
 
   m_lastEvent = wxEVT_MOTION;
   m_lastXPos = event.GetX(); m_lastYPos = event.GetY();
-  GetEventHandler()->OldOnMouseEvent(event);
+
+  if (!GetEventHandler()->ProcessEvent(event))
+    Default();
 }
 
 long wxControl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
@@ -180,7 +182,7 @@ long wxControl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
   return wxWindow::MSWWindowProc(nMsg, wParam, lParam);
 }
 
-bool wxControl::MSWNotify(const WXWPARAM wParam, const WXLPARAM lParam)
+bool wxControl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
 {
 #if defined(__WIN95__)
 	wxCommandEvent event(wxEVT_NULL, m_windowId);
@@ -291,12 +293,12 @@ void wxControl::OnEraseBackground(wxEraseEvent& event)
   ::SetMapMode((HDC) event.GetDC()->GetHDC(), mode);
 }
 
-void wxControl::SetClientSize (const int width, const int height)
+void wxControl::SetClientSize (int width, int height)
 {
   SetSize (-1, -1, width, height);
 }
 
-void wxControl::Centre (const int direction)
+void wxControl::Centre (int direction)
 {
   int x, y, width, height, panel_width, panel_height, new_x, new_y;
 

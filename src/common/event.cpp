@@ -378,8 +378,8 @@ bool wxEvtHandler::SearchEventTable(wxEventTable& table, wxEvent& event)
   return FALSE;
 }
 
-void wxEvtHandler::Connect( const int id, const int lastId,
-                            const int eventType, 
+void wxEvtHandler::Connect( int id, int lastId,
+                            int eventType,
 		            wxObjectEventFunction func,
 		            wxObject *userData )
 {
@@ -432,6 +432,7 @@ bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
   return FALSE;
 };
 
+/*
 #if WXWIN_COMPATIBILITY
 void wxEvtHandler::OldOnMenuCommand(int cmd)
 {
@@ -510,6 +511,7 @@ void wxEvtHandler::OldOnDropFiles(int n, char *files[], int x, int y)
     if (GetNextHandler()) GetNextHandler()->OldOnDropFiles(n, files, x, y);
 }
 #endif
+*/
 
 bool wxEvtHandler::OnClose(void)
 {

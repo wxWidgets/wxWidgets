@@ -724,16 +724,16 @@ wxWindow::wxWindow()
   m_pDropTarget = NULL;
 };
 
-wxWindow::wxWindow( wxWindow *parent, const wxWindowID id,
-      const wxPoint &pos, const wxSize &size, 
-      const long style, const wxString &name )
+wxWindow::wxWindow( wxWindow *parent, wxWindowID id,
+      const wxPoint &pos, const wxSize &size,
+      long style, const wxString &name )
 {
   Create( parent, id, pos, size, style, name );
 };
 
-bool wxWindow::Create( wxWindow *parent, const wxWindowID id,
-      const wxPoint &pos, const wxSize &size, 
-      const long style, const wxString &name )
+bool wxWindow::Create( wxWindow *parent, wxWindowID id,
+      const wxPoint &pos, const wxSize &size,
+      long style, const wxString &name )
 {
   m_isShown = FALSE;
   m_isEnabled = TRUE;
@@ -869,9 +869,9 @@ wxWindow::~wxWindow(void)
     
 };
 
-void wxWindow::PreCreation( wxWindow *parent, const wxWindowID id,
-      const wxPoint &pos, const wxSize &size, 
-      const long style, const wxString &name )
+void wxWindow::PreCreation( wxWindow *parent, wxWindowID id,
+      const wxPoint &pos, const wxSize &size,
+      long style, const wxString &name )
 {
   if (m_needParent && (parent == NULL))
     wxFatalError( "Need complete parent.", name );
@@ -997,7 +997,7 @@ bool wxWindow::HasVMT(void)
   return m_hasVMT;
 };
 
-bool wxWindow::Close( const bool force )
+bool wxWindow::Close( bool force )
 {
   wxCloseEvent event(wxEVT_CLOSE_WINDOW, m_windowId);
   event.SetEventObject(this);
@@ -1049,7 +1049,7 @@ void wxWindow::ImplementSetPosition(void)
     gtk_widget_set_uposition( m_widget, m_x, m_y );
 };
 
-void wxWindow::SetSize( const int x, const int y, const int width, const int height, const int sizeFlags )
+void wxWindow::SetSize( int x, int y, int width, int height, int sizeFlags )
 {
   int newX = x;
   int newY = y;
@@ -1093,12 +1093,12 @@ void wxWindow::SetSize( const int x, const int y, const int width, const int hei
   ProcessEvent( event );
 };
 
-void wxWindow::SetSize( const int width, const int height )
+void wxWindow::SetSize( int width, int height )
 {
   SetSize( -1, -1, width, height, wxSIZE_USE_EXISTING );
 };
 
-void wxWindow::Move( const int x, const int y )
+void wxWindow::Move( int x, int y )
 {
   SetSize( x, y, -1, -1, wxSIZE_USE_EXISTING );
 };
@@ -1109,7 +1109,7 @@ void wxWindow::GetSize( int *width, int *height ) const
   (*height) = m_height;
 };
 
-void wxWindow::SetClientSize( const int width, const int height )
+void wxWindow::SetClientSize( int width, int height )
 {
   if (!m_wxwindow)
   {
@@ -1287,7 +1287,7 @@ void wxWindow::ScreenToClient( int *x, int *y )
   if (y) *y -= org_y;  
 };
 
-void wxWindow::Centre( const int direction )
+void wxWindow::Centre( int direction )
 {
   int x = 0;
   int y = 0;
@@ -1338,7 +1338,7 @@ void wxWindow::OnSize( wxSizeEvent &WXUNUSED(event) )
   if (GetAutoLayout()) Layout();
 };
 
-bool wxWindow::Show( const bool show )
+bool wxWindow::Show( bool show )
 {
   if (show)
     gtk_widget_show( m_widget );
@@ -1348,14 +1348,14 @@ bool wxWindow::Show( const bool show )
   return TRUE;
 };
 
-void wxWindow::Enable( const bool enable )
+void wxWindow::Enable( bool enable )
 {
   m_isEnabled = enable;
   gtk_widget_set_sensitive( m_widget, enable );
   if (m_wxwindow) gtk_widget_set_sensitive( m_wxwindow, enable );
 };
 
-void wxWindow::MakeModal( const bool modal )
+void wxWindow::MakeModal( bool modal )
 {
   return;
   // Disable all other windows
@@ -1508,7 +1508,7 @@ void wxWindow::SetCursor( const wxCursor &cursor )
     gdk_window_set_cursor( m_wxwindow->window, m_cursor->GetCursor() );
 };
 
-void wxWindow::Refresh( const bool eraseBackground, const wxRect *rect )
+void wxWindow::Refresh( bool eraseBackground, const wxRect *rect )
 {
   if (eraseBackground && m_wxwindow && m_wxwindow->window)
   {
@@ -1557,12 +1557,12 @@ void wxWindow::Refresh( const bool eraseBackground, const wxRect *rect )
   };
 };
 
-bool wxWindow::IsExposed( const long x, const long y )
+bool wxWindow::IsExposed( long x, long y )
 {
   return (m_updateRegion.Contains( x, y ) != wxOutRegion );
 };
 
-bool wxWindow::IsExposed( const long x, const long y, const long width, const long height )
+bool wxWindow::IsExposed( long x, long y, long width, long height )
 {
   return (m_updateRegion.Contains( x, y, width, height ) != wxOutRegion );
 };
@@ -1749,7 +1749,7 @@ bool wxWindow::IsRetained(void)
   return FALSE;
 };
 
-wxWindow *wxWindow::FindWindow( const long id )
+wxWindow *wxWindow::FindWindow( long id )
 {
   if (id == m_windowId) return this;
   wxNode *node = m_children.First();
@@ -1777,8 +1777,8 @@ wxWindow *wxWindow::FindWindow( const wxString& name )
   return NULL;
 };
 
-void wxWindow::SetScrollbar( const int orient, const int pos, const int thumbVisible,
-      const int range, const bool WXUNUSED(refresh) )
+void wxWindow::SetScrollbar( int orient, int pos, int thumbVisible,
+      int range, bool WXUNUSED(refresh) )
 {
   if (!m_wxwindow) return;
 
@@ -1832,7 +1832,7 @@ void wxWindow::SetScrollbar( const int orient, const int pos, const int thumbVis
   };
 };
 
-void wxWindow::SetScrollPos( const int orient, const int pos, const bool WXUNUSED(refresh) )
+void wxWindow::SetScrollPos( int orient, int pos, bool WXUNUSED(refresh) )
 {
   if (!m_wxwindow) return;
   
@@ -1861,7 +1861,7 @@ void wxWindow::SetScrollPos( const int orient, const int pos, const bool WXUNUSE
   };
 };
 
-int wxWindow::GetScrollThumb( const int orient ) const
+int wxWindow::GetScrollThumb( int orient ) const
 {
   if (!m_wxwindow) return 0;
 
@@ -1871,7 +1871,7 @@ int wxWindow::GetScrollThumb( const int orient ) const
     return (int)(m_vAdjust->page_size+0.5);
 };
 
-int wxWindow::GetScrollPos( const int orient ) const
+int wxWindow::GetScrollPos( int orient ) const
 {
   if (!m_wxwindow) return 0;
 
@@ -1881,7 +1881,7 @@ int wxWindow::GetScrollPos( const int orient ) const
     return (int)(m_vAdjust->value+0.5);
 };
 
-int wxWindow::GetScrollRange( const int orient ) const
+int wxWindow::GetScrollRange( int orient ) const
 {
   if (!m_wxwindow) return 0;
 
@@ -1891,7 +1891,7 @@ int wxWindow::GetScrollRange( const int orient ) const
     return (int)(m_vAdjust->upper+0.5);
 };
 
-void wxWindow::ScrollWindow( const int dx, const int dy, const wxRect* WXUNUSED(rect) )
+void wxWindow::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
 {
   if (!m_wxwindow) return;
   
@@ -1985,7 +1985,7 @@ void wxWindow::SetConstraints( wxLayoutConstraints *constraints )
 }
 ;
 
-void wxWindow::SetAutoLayout( const bool autoLayout )
+void wxWindow::SetAutoLayout( bool autoLayout )
 {
   m_autoLayout = autoLayout;
 };
@@ -2153,7 +2153,7 @@ bool wxWindow::LayoutPhase2(int *noChanges)
 }
 
 // Do a phase of evaluating child constraints
-bool wxWindow::DoPhase(const int phase)
+bool wxWindow::DoPhase(int phase)
 {
   int noIterations = 0;
   int maxIterations = 500;
@@ -2221,7 +2221,7 @@ void wxWindow::ResetConstraints(void)
 
 // Need to distinguish between setting the 'fake' size for
 // windows and sizers, and setting the real values.
-void wxWindow::SetConstraintSizes(const bool recurse)
+void wxWindow::SetConstraintSizes(bool recurse)
 {
   wxLayoutConstraints *constr = GetConstraints();
   if (constr && constr->left.GetDone() && constr->right.GetDone() &&
@@ -2294,7 +2294,7 @@ void wxWindow::TransformSizerToActual(int *x, int *y) const
   *y += yp;
 }
 
-void wxWindow::SizerSetSize(const int x, const int y, const int w, const int h)
+void wxWindow::SizerSetSize(int x, int y, int w, int h)
 {
 	int xx = x;
 	int yy = y;
@@ -2302,7 +2302,7 @@ void wxWindow::SizerSetSize(const int x, const int y, const int w, const int h)
   SetSize(xx, yy, w, h);
 }
 
-void wxWindow::SizerMove(const int x, const int y)
+void wxWindow::SizerMove(int x, int y)
 {
 	int xx = x;
 	int yy = y;
@@ -2311,7 +2311,7 @@ void wxWindow::SizerMove(const int x, const int y)
 }
 
 // Only set the size/position of the constraint (if any)
-void wxWindow::SetSizeConstraint(const int x, const int y, const int w, const int h)
+void wxWindow::SetSizeConstraint(int x, int y, int w, int h)
 {
   wxLayoutConstraints *constr = GetConstraints();
   if (constr)
@@ -2339,7 +2339,7 @@ void wxWindow::SetSizeConstraint(const int x, const int y, const int w, const in
   }
 }
 
-void wxWindow::MoveConstraint(const int x, const int y)
+void wxWindow::MoveConstraint(int x, int y)
 {
   wxLayoutConstraints *constr = GetConstraints();
   if (constr)

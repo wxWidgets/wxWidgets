@@ -34,7 +34,7 @@
 IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
 #endif
 
-bool wxComboBox::MSWCommand(const WXUINT param, const WXWORD WXUNUSED(id))
+bool wxComboBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 {
   if (param == CBN_SELCHANGE)
   {
@@ -49,12 +49,12 @@ bool wxComboBox::MSWCommand(const WXUINT param, const WXWORD WXUNUSED(id))
   else return FALSE;
 }
 
-bool wxComboBox::Create(wxWindow *parent, const wxWindowID id,
+bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
            const wxString& value,
            const wxPoint& pos,
            const wxSize& size,
-		   const int n, const wxString choices[],
-		   const long style,
+		   int n, const wxString choices[],
+		   long style,
            const wxValidator& validator,
            const wxString& name)
 {
@@ -188,14 +188,14 @@ void wxComboBox::Paste(void)
   SendMessage(hWnd, WM_PASTE, 0, 0L);
 }
 
-void wxComboBox::SetEditable(const bool editable)
+void wxComboBox::SetEditable(bool editable)
 {
   // Can't implement in MSW?
 //  HWND hWnd = (HWND) GetHWND();
 //  SendMessage(hWnd, EM_SETREADONLY, (WPARAM)!editable, (LPARAM)0L);
 }
 
-void wxComboBox::SetInsertionPoint(const long pos)
+void wxComboBox::SetInsertionPoint(long pos)
 {
 /*
   HWND hWnd = (HWND) GetHWND();
@@ -247,7 +247,7 @@ long wxComboBox::GetLastPosition(void) const
   return 0;
 }
 
-void wxComboBox::Replace(const long from, const long to, const wxString& value)
+void wxComboBox::Replace(long from, long to, const wxString& value)
 {
 #if USE_CLIPBOARD
     HWND hWnd = (HWND) GetHWND();
@@ -270,7 +270,7 @@ void wxComboBox::Replace(const long from, const long to, const wxString& value)
 #endif
 }
 
-void wxComboBox::Remove(const long from, const long to)
+void wxComboBox::Remove(long from, long to)
 {
     HWND hWnd = (HWND) GetHWND();
     long fromChar = from;
@@ -285,7 +285,7 @@ void wxComboBox::Remove(const long from, const long to)
     SendMessage(hWnd, WM_CUT, (WPARAM)0, (LPARAM)0);
 }
 
-void wxComboBox::SetSelection(const long from, const long to)
+void wxComboBox::SetSelection(long from, long to)
 {
     HWND hWnd = (HWND) GetHWND();
     long fromChar = from;

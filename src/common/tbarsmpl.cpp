@@ -49,8 +49,8 @@ wxToolBarSimple::wxToolBarSimple(void)
 {
 }
 
-bool wxToolBarSimple::Create(wxWindow *parent, const wxWindowID id, const wxPoint& pos, const wxSize& size, const long style,
-  const int direction, const int RowsOrColumns, const wxString& name )
+bool wxToolBarSimple::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style,
+  int direction, int RowsOrColumns, const wxString& name )
 {
 	if ( ! wxWindow::Create(parent, id, pos, size, style, name) )
 		return FALSE;
@@ -311,7 +311,7 @@ void wxToolBarSimple::DrawTool(wxDC& dc, wxMemoryDC& memDC, wxToolBarTool *tool)
   }
 }
 
-void wxToolBarSimple::ToggleTool(const int index, const bool toggle)
+void wxToolBarSimple::ToggleTool(int index, bool toggle)
 {
   wxNode *node = m_tools.Find((long)index);
   if (node)
@@ -336,7 +336,7 @@ void wxToolBarSimple::ToggleTool(const int index, const bool toggle)
 // the tool we're leaving was a 'sprung push button' and if so,
 // spring it back to the up state.
 //
-void wxToolBarSimple::SpringUpButton(const int index)
+void wxToolBarSimple::SpringUpButton(int index)
 {
   wxNode *node=m_tools.Find((long)index);
   if (node) {

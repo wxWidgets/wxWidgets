@@ -30,11 +30,11 @@ class WXDLLEXPORT wxFrame: public wxWindow {
 public:
   wxFrame(void);
   inline wxFrame(wxWindow *parent,
-           const wxWindowID id,
+           wxWindowID id,
            const wxString& title,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           const long style = wxDEFAULT_FRAME_STYLE,
+           long style = wxDEFAULT_FRAME_STYLE,
            const wxString& name = wxFrameNameStr)
   {
       Create(parent, id, title, pos, size, style, name);
@@ -43,14 +43,15 @@ public:
   ~wxFrame(void);
 
   bool Create(wxWindow *parent,
-           const wxWindowID id,
+           wxWindowID id,
            const wxString& title,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           const long style = wxDEFAULT_FRAME_STYLE,
+           long style = wxDEFAULT_FRAME_STYLE,
            const wxString& name = wxFrameNameStr);
 
 #if WXWIN_COMPATIBILITY
+/*
   // The default thing is to set the focus for the first child window.
   // Override for your own behaviour.
   virtual void OldOnActivate(bool flag);
@@ -60,15 +61,16 @@ public:
 
   inline virtual void OldOnMenuCommand(int WXUNUSED(id)) {};         // Called on frame menu command
   void OldOnSize(int x, int y);
+*/
 #endif
 
   virtual bool Destroy(void);
-  void SetClientSize(const int width, const int height);
+  void SetClientSize(int width, int height);
   void GetClientSize(int *width, int *height) const;
 
   void GetSize(int *width, int *height) const ;
   void GetPosition(int *x, int *y) const ;
-  void SetSize(const int x, const int y, const int width, const int height, const int sizeFlags = wxSIZE_AUTO);
+  void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
 
   void OnSize(wxSizeEvent& event);
   void OnMenuHighlight(wxMenuEvent& event);
@@ -76,7 +78,7 @@ public:
   void OnIdle(wxIdleEvent& event);
   void OnCloseWindow(wxCloseEvent& event);
 
-  bool Show(const bool show);
+  bool Show(bool show);
 
   // Set menu bar
   void SetMenuBar(wxMenuBar *menu_bar);
@@ -86,7 +88,7 @@ public:
   void SetTitle(const wxString& title);
   wxString GetTitle(void) const ;
 
-  void Centre(const int direction = wxBOTH);
+  void Centre(int direction = wxBOTH);
 
   // Call this to simulate a menu command
   virtual void Command(int id);
@@ -96,14 +98,14 @@ public:
   virtual void SetIcon(const wxIcon& icon);
 
   // Create status line
-  virtual bool CreateStatusBar(const int number=1);
+  virtual bool CreateStatusBar(int number=1);
   inline wxStatusBar *GetStatusBar() const { return m_frameStatusBar; }
 
   // Set status line text
-  virtual void SetStatusText(const wxString& text, const int number = 0);
+  virtual void SetStatusText(const wxString& text, int number = 0);
 
   // Set status line widths
-  virtual void SetStatusWidths(const int n, const int *widths_field);
+  virtual void SetStatusWidths(int n, int *widths_field);
 
   // Hint to tell framework which status bar to use
   // TODO: should this go into a wxFrameworkSettings class perhaps?
@@ -114,18 +116,18 @@ public:
   virtual void Fit(void);
 
   // Iconize
-  virtual void Iconize(const bool iconize);
+  virtual void Iconize(bool iconize);
 
   virtual bool IsIconized(void) const ;
 
   // Compatibility
   inline bool Iconized(void) const { return IsIconized(); }
 
-  virtual void Maximize(const bool maximize);
+  virtual void Maximize(bool maximize);
   virtual bool LoadAccelerators(const wxString& table);
 
   virtual void PositionStatusBar(void);
-  virtual wxStatusBar *OnCreateStatusBar(const int number);
+  virtual wxStatusBar *OnCreateStatusBar(int number);
 
   // Query app for menu item updates (called from OnIdle)
   void DoMenuUpdates(void);
@@ -139,13 +141,13 @@ public:
   // Handlers
   bool MSWOnPaint(void);
   WXHICON MSWOnQueryDragIcon(void);
-  void MSWOnSize(const int x, const int y, const WXUINT flag);
-  bool MSWOnCommand(const WXWORD id, const WXWORD cmd, const WXHWND control);
+  void MSWOnSize(int x, int y, WXUINT flag);
+  bool MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control);
   bool MSWOnClose(void);
-  void MSWOnMenuHighlight(const WXWORD item, const WXWORD flags, const WXHMENU sysmenu);
+  void MSWOnMenuHighlight(WXWORD item, WXWORD flags, WXHMENU sysmenu);
   bool MSWProcessMessage(WXMSG *msg);
-  void MSWCreate(const int id, wxWindow *parent, const char *WXUNUSED(wclass), wxWindow *wx_win, const char *title,
-                   const int x, const int y, const int width, const int height, const long style);
+  void MSWCreate(int id, wxWindow *parent, const char *WXUNUSED(wclass), wxWindow *wx_win, const char *title,
+                   int x, int y, int width, int height, long style);
 
 protected:
   wxMenuBar *           m_frameMenuBar;

@@ -1308,7 +1308,7 @@ BEGIN_EVENT_TABLE(wxDocChildFrame, wxFrame)
 END_EVENT_TABLE()
 
 wxDocChildFrame::wxDocChildFrame(wxDocument *doc, wxView *view, wxFrame *frame, const wxString& title,
-  const wxPoint& pos, const wxSize& size, const long style, const wxString& name):
+  const wxPoint& pos, const wxSize& size, long style, const wxString& name):
     wxFrame(frame, -1, title, pos, size, style, name)
 {
   m_childDocument = doc;
@@ -1338,18 +1338,6 @@ bool wxDocChildFrame::ProcessEvent(wxEvent& event)
 	else
 		return TRUE;
 }
-
-/*
-// Intercept menu commands
-void wxDocChildFrame::OldOnMenuCommand(int id)
-{
-  if (m_childView)
-    m_childView->Activate(TRUE);
-
-  if (GetParent())
-    ((wxFrame *)GetParent())->OldOnMenuCommand(id);
-}
-*/
 
 void wxDocChildFrame::OnActivate(wxActivateEvent& event)
 {
@@ -1389,7 +1377,7 @@ BEGIN_EVENT_TABLE(wxDocParentFrame, wxFrame)
 END_EVENT_TABLE()
 
 wxDocParentFrame::wxDocParentFrame(wxDocManager *manager, wxFrame *frame, const wxString& title,
-  const wxPoint& pos, const wxSize& size, const long style, const wxString& name):
+  const wxPoint& pos, const wxSize& size, long style, const wxString& name):
   wxFrame(frame, -1, title, pos, size, style, name)
 {
   m_docManager = manager;
@@ -1416,40 +1404,6 @@ bool wxDocParentFrame::ProcessEvent(wxEvent& event)
     else
         return TRUE;
 }
-
-/*
-// Intercept menu commands
-void wxDocParentFrame::OldOnMenuCommand(int id)
-{
-  switch (id)
-  {
-    case wxID_EXIT:
-    {
-      Close();
-      break;
-    }
-    case wxID_FILE1:
-    case wxID_FILE2:
-    case wxID_FILE3:
-    case wxID_FILE4:
-    case wxID_FILE5:
-    case wxID_FILE6:
-    case wxID_FILE7:
-    case wxID_FILE8:
-    case wxID_FILE9:
-    {
-      wxString f(m_docManager->GetHistoryFile(id-wxID_FILE1));
-      if (f != "")
-        (void)m_docManager->CreateDocument(f, wxDOC_SILENT);
-      break;
-    }
-    default:
-    {
-      m_docManager->OldOnMenuCommand(id);
-    }
-  }
-}
-*/
 
 // Define the behaviour for the frame closing
 // - must delete all frames except for the main one.

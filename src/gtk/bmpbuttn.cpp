@@ -42,14 +42,14 @@ wxBitmapButton::wxBitmapButton(void)
 
 wxBitmapButton::wxBitmapButton( wxWindow *parent, wxWindowID id, const wxBitmap &bitmap,
       const wxPoint &pos, const wxSize &size, 
-      const long style, const wxString &name )
+      long style, const wxString &name )
 {
   Create( parent, id, bitmap, pos, size, style, name );
 };
 
 bool wxBitmapButton::Create(  wxWindow *parent, wxWindowID id, const wxBitmap &bitmap,
       const wxPoint &pos, const wxSize &size, 
-      const long style, const wxString &name )
+      long style, const wxString &name )
 {
   m_needParent = TRUE;
   

@@ -44,24 +44,24 @@ class wxChoice: public wxControl
   public:
 
     wxChoice(void);
-    wxChoice( wxWindow *parent, const wxWindowID id,
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      const int n = 0, const wxString choices[] = NULL,
-      const long style = 0, const wxString &name = wxChoiceNameStr );
-    bool Create( wxWindow *parent, const wxWindowID id,
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      const int n = 0, const wxString choices[] = NULL,
-      const long style = 0, const wxString &name = wxChoiceNameStr );
+    wxChoice( wxWindow *parent, wxWindowID id,
+      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
+      int n = 0, const wxString choices[] = NULL,
+      long style = 0, const wxString &name = wxChoiceNameStr );
+    bool Create( wxWindow *parent, wxWindowID id,
+      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
+      int n = 0, const wxString choices[] = NULL,
+      long style = 0, const wxString &name = wxChoiceNameStr );
     void Append( const wxString &item );
     void Clear(void);
     int FindString( const wxString &string ) const;
     int GetColumns(void) const;
     int GetSelection(void);
-    wxString GetString( const int n ) const;
+    wxString GetString( int n ) const;
     wxString GetStringSelection(void) const;
     int Number(void) const;
-    void SetColumns( const int n = 1 );
-    void SetSelection( const int n );
+    void SetColumns( int n = 1 );
+    void SetSelection( int n );
     void SetStringSelection( const wxString &string );
 };
 

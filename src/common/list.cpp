@@ -132,7 +132,7 @@ wxList::wxList (void)
   key_type = wxKEY_NONE;
 }
 
-wxList::wxList (const int N, wxObject * Objects[])
+wxList::wxList (int N, wxObject * Objects[])
 {
   wxNode *last = NULL;
 
@@ -254,7 +254,7 @@ wxNode *wxList::Append(wxObject *object)
     return node;
 }
 
-wxNode *wxList::Nth (const int i) const
+wxNode *wxList::Nth (int i) const
 {
   int j = 0;
   for (wxNode * current = First (); current; current = current->Next ())
@@ -266,7 +266,7 @@ wxNode *wxList::Nth (const int i) const
 
 }
 
-wxNode *wxList::Find (const long key) const
+wxNode *wxList::Find (long key) const
 {
   wxNode *current = First();
   while (current)
@@ -370,7 +370,7 @@ wxNode *wxList::Insert (wxNode * position, wxObject * object)
 }
 
 // Keyed append
-wxNode *wxList::Append (const long key, wxObject * object)
+wxNode *wxList::Append (long key, wxObject * object)
 {
   wxNode *node = new wxNode (this, last_node, NULL, object, key);
   if (!first_node)
@@ -582,7 +582,7 @@ void wxStringList::Delete (const char *s)
 }
 
 // Only makes new strings if arg is TRUE
-char **wxStringList::ListToArray (const bool new_copies) const
+char **wxStringList::ListToArray (bool new_copies) const
 {
   char **string_array = new char *[Number ()];
   wxNode *node = First ();

@@ -43,43 +43,43 @@ class wxSlider: public wxControl
 
   public:
     wxSlider(void);
-    wxSlider( wxWindow *parent, const wxWindowID id,
-           const int value, const int minValue, const int maxValue,
+    wxSlider( wxWindow *parent, wxWindowID id,
+           int value, int minValue, int maxValue,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           const long style = wxSL_HORIZONTAL,
+           long style = wxSL_HORIZONTAL,
 /*           const wxValidator& validator = wxDefaultValidator, */
            const wxString& name = wxSliderNameStr);
    ~wxSlider(void);
-   bool Create(wxWindow *parent, const wxWindowID id,
-           const int value, const int minValue, const int maxValue,
+   bool Create(wxWindow *parent, wxWindowID id,
+           int value, int minValue, int maxValue,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           const long style = wxSL_HORIZONTAL,
+           long style = wxSL_HORIZONTAL,
 /*           const wxValidator& validator = wxDefaultValidator, */
            const wxString& name = wxSliderNameStr);
     virtual int GetValue(void) const;
-    virtual void SetValue( const int );
+    virtual void SetValue( int );
     void GetSize( int *x, int *y ) const;
-    void SetSize( const int x, const int y, const int width, const int height, const int sizeFlags = wxSIZE_AUTO );
+    void SetSize( int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO );
     void GetPosition( int *x, int *y ) const;
-    void SetRange( const int minValue, const int maxValue );
+    void SetRange( int minValue, int maxValue );
     int GetMin(void) const;
     int GetMax(void) const;
-    void SetTickFreq( const int n, const int pos );
+    void SetTickFreq( int n, int pos );
     int GetTickFreq(void) const;
-    void SetPageSize( const int pageSize );
+    void SetPageSize( int pageSize );
     int GetPageSize(void) const;
     void ClearSel(void);
     void ClearTicks(void);
-    void SetLineSize( const int lineSize );
+    void SetLineSize( int lineSize );
     int GetLineSize(void) const;
     int GetSelEnd(void) const;
     int GetSelStart(void) const;
-    void SetSelection( const int minPos, const int maxPos );
-    void SetThumbLength( const int len );
+    void SetSelection( int minPos, int maxPos );
+    void SetThumbLength( int len );
     int GetThumbLength(void) const;
-    void SetTick( const int tickPos );
+    void SetTick( int tickPos );
 
   public:
   

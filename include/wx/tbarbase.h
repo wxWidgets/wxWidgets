@@ -35,11 +35,11 @@ class WXDLLEXPORT wxToolBarTool: public wxObject
 {
   DECLARE_DYNAMIC_CLASS(wxToolBarTool)
  public:
-  wxToolBarTool(const int theIndex = 0, const wxBitmap& bitmap1 = wxNullBitmap, const wxBitmap& bitmap2 = wxNullBitmap,
-                const bool toggle = FALSE, const long xPos = -1, const long yPos = -1,
+  wxToolBarTool(int theIndex = 0, const wxBitmap& bitmap1 = wxNullBitmap, const wxBitmap& bitmap2 = wxNullBitmap,
+                bool toggle = FALSE, long xPos = -1, long yPos = -1,
                 const wxString& shortHelpString = "", const wxString& longHelpString = "");
   ~wxToolBarTool ();
-  inline void SetSize( const long w, const long h ) { m_width = w; m_height = h; }
+  inline void SetSize( long w, long h ) { m_width = w; m_height = h; }
   inline long GetWidth () const { return m_width; }
   inline long GetHeight () const { return m_height; }
 
@@ -85,16 +85,16 @@ class WXDLLEXPORT wxToolBarBase : public wxControl
   // If pushedBitmap is NULL, a reversed version of bitmap is
   // created and used as the pushed/toggled image.
   // If toggle is TRUE, the button toggles between the two states.
-  virtual wxToolBarTool *AddTool(const int toolIndex, const wxBitmap& bitmap, const wxBitmap& pushedBitmap = wxNullBitmap,
-               const bool toggle = FALSE, const long xPos = -1, const long yPos = -1, wxObject *clientData = NULL,
+  virtual wxToolBarTool *AddTool(int toolIndex, const wxBitmap& bitmap, const wxBitmap& pushedBitmap = wxNullBitmap,
+               bool toggle = FALSE, long xPos = -1, long yPos = -1, wxObject *clientData = NULL,
                const wxString& helpString1 = "", const wxString& helpString2 = "");
   virtual void AddSeparator(void);
   virtual void ClearTools(void);
 
-  virtual void EnableTool(const int toolIndex, const bool enable);
-  virtual void ToggleTool(const int toolIndex, const bool toggle); // toggle is TRUE if toggled on
-  virtual void SetToggle(const int toolIndex, const bool toggle); // Set this to be togglable (or not)
-  virtual wxObject *GetToolClientData(const int index) const;
+  virtual void EnableTool(int toolIndex, bool enable);
+  virtual void ToggleTool(int toolIndex, bool toggle); // toggle is TRUE if toggled on
+  virtual void SetToggle(int toolIndex, bool toggle); // Set this to be togglable (or not)
+  virtual wxObject *GetToolClientData(int index) const;
   inline wxList& GetTools(void) const { return (wxList&) m_tools; }
 
   // After the toolbar has initialized, this is the size the tools take up
@@ -104,19 +104,19 @@ class WXDLLEXPORT wxToolBarBase : public wxControl
 #endif
   virtual wxSize GetMaxSize ( void ) const;
 
-  virtual bool GetToolState(const int toolIndex) const;
-  virtual bool GetToolEnabled(const int toolIndex) const;
-  virtual wxToolBarTool *FindToolForPosition(const long x, const long y) const;
+  virtual bool GetToolState(int toolIndex) const;
+  virtual bool GetToolEnabled(int toolIndex) const;
+  virtual wxToolBarTool *FindToolForPosition(long x, long y) const;
 
-  virtual void SetToolShortHelp(const int toolIndex, const wxString& helpString);
-  virtual wxString GetToolShortHelp(const int toolIndex) const;
-  virtual void SetToolLongHelp(const int toolIndex, const wxString& helpString);
-  virtual wxString GetToolLongHelp(const int toolIndex) const;
+  virtual void SetToolShortHelp(int toolIndex, const wxString& helpString);
+  virtual wxString GetToolShortHelp(int toolIndex) const;
+  virtual void SetToolLongHelp(int toolIndex, const wxString& helpString);
+  virtual wxString GetToolLongHelp(int toolIndex) const;
 
-  virtual void SetMargins(const int x, const int y);
+  virtual void SetMargins(int x, int y);
   inline void SetMargins(const wxSize& size) { SetMargins(size.x, size.y); }
-  virtual void SetToolPacking(const int packing);
-  virtual void SetToolSeparation(const int separation);
+  virtual void SetToolPacking(int packing);
+  virtual void SetToolSeparation(int separation);
 
   inline virtual wxSize GetToolMargins(void) { return wxSize(m_xMargin, m_yMargin); }
   inline virtual int GetToolPacking(void) { return m_toolPacking; }
@@ -131,7 +131,7 @@ class WXDLLEXPORT wxToolBarBase : public wxControl
 
   // Compatibility
 #if WXWIN_COMPATIBILITY
-  inline void SetDefaultSize(const int w, const int h) { SetDefaultSize(wxSize(w, h)); }
+  inline void SetDefaultSize(int w, int h) { SetDefaultSize(wxSize(w, h)); }
   inline long GetDefaultWidth(void) const { return m_defaultWidth; }
   inline long GetDefaultHeight(void) const { return m_defaultHeight; }
   inline int GetDefaultButtonWidth(void) const { return GetDefaultButtonSize().x; };
@@ -153,14 +153,14 @@ class WXDLLEXPORT wxToolBarBase : public wxControl
 
   // Number of pixels per user unit (0 or -1 for no scrollbar)
   // Length of virtual canvas in user units
-  virtual void SetScrollbars(const int horizontal, const int vertical,
-                             const int x_length, const int y_length,
-                             const int x_pos = 0, const int y_pos = 0);
+  virtual void SetScrollbars(int horizontal, int vertical,
+                             int x_length, int y_length,
+                             int x_pos = 0, int y_pos = 0);
 
   // Physically scroll the window
-  virtual void Scroll(const int x_pos, const int y_pos);
+  virtual void Scroll(int x_pos, int y_pos);
   virtual void GetScrollPixelsPerUnit(int *x_unit, int *y_unit) const;
-  virtual void EnableScrolling(const bool x_scrolling, const bool y_scrolling);
+  virtual void EnableScrolling(bool x_scrolling, bool y_scrolling);
   virtual void AdjustScrollbars(void);
 
   // Prepare the DC by translating it according to the current scroll position
@@ -179,8 +179,8 @@ class WXDLLEXPORT wxToolBarBase : public wxControl
   virtual void DoToolbarUpdates(void);
 
 /*
-  virtual void CalcScrolledPosition(const int x, const int y, int *xx, int *yy) const ;
-  virtual void CalcUnscrolledPosition(const int x, const int y, long *xx, long *yy) const ;
+  virtual void CalcScrolledPosition(int x, int y, int *xx, int *yy) const ;
+  virtual void CalcUnscrolledPosition(int x, int y, long *xx, long *yy) const ;
 */
 
   void OnScroll(wxScrollEvent& event);
@@ -189,7 +189,7 @@ class WXDLLEXPORT wxToolBarBase : public wxControl
 
   // Required to force normal cursor-setting behaviour in Windows
 #ifdef __WINDOWS__
-  virtual void MSWOnMouseMove(const int x, const int y, const WXUINT flags);
+  virtual void MSWOnMouseMove(int x, int y, const WXUINT flags);
 #endif
 
  protected:

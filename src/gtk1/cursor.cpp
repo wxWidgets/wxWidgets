@@ -49,7 +49,7 @@ wxCursor::wxCursor(void)
 {
 };
 
-wxCursor::wxCursor( const int cursorId )
+wxCursor::wxCursor( int cursorId )
 {
   m_refData = new wxCursorRefData();
   

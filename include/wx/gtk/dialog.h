@@ -53,10 +53,10 @@ class wxDialog: public wxWindow
     wxDialog(void);
     wxDialog( wxWindow *parent, wxWindowID id, const wxString &title,
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      const long style = wxDEFAULT_DIALOG_STYLE, const wxString &name = wxDialogNameStr );
+      long style = wxDEFAULT_DIALOG_STYLE, const wxString &name = wxDialogNameStr );
     bool Create( wxWindow *parent, wxWindowID id, const wxString &title,
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      const long style = wxDEFAULT_DIALOG_STYLE, const wxString &name = wxDialogNameStr );
+      long style = wxDEFAULT_DIALOG_STYLE, const wxString &name = wxDialogNameStr );
     ~wxDialog(void);
     void SetTitle(const wxString& title);
     wxString GetTitle(void) const;
@@ -69,7 +69,7 @@ class wxDialog: public wxWindow
 /*
     void OnCharHook(wxKeyEvent& event);
 */
-    virtual bool Show( const bool show );
+    virtual bool Show( bool show );
     virtual int ShowModal(void);
     virtual void EndModal(int retCode);
     virtual bool IsModal(void) const { return ((GetWindowStyleFlag() & wxDIALOG_MODAL) == wxDIALOG_MODAL); }

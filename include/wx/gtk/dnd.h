@@ -76,7 +76,7 @@ class wxDragSource: public wxObject
 
     wxDragSource( wxWindow *win );
     ~wxDragSource(void);
-    void SetData( char *data, const long size );
+    void SetData( char *data, long size );
     void Start( int x, int y );
 
   public:

@@ -21,9 +21,9 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxToolBarTool,wxObject)
   
-wxToolBarTool::wxToolBarTool( wxToolBarGTK *owner, const int theIndex, 
-      const wxBitmap& bitmap1, const  wxBitmap& bitmap2, 
-      const bool toggle, wxObject *clientData,
+wxToolBarTool::wxToolBarTool( wxToolBarGTK *owner, int theIndex, 
+      const wxBitmap& bitmap1, const  wxBitmap& bitmap2,
+      bool toggle, wxObject *clientData,
       const wxString& shortHelpString, const wxString& longHelpString )
 {
   m_owner = owner;
@@ -68,9 +68,9 @@ wxToolBarGTK::wxToolBarGTK(void)
 {
 };
 
-wxToolBarGTK::wxToolBarGTK( wxWindow *parent, const wxWindowID id, 
+wxToolBarGTK::wxToolBarGTK( wxWindow *parent, wxWindowID id, 
   const wxPoint& pos, const wxSize& size,
-  const long style, const wxString& name )
+  long style, const wxString& name )
 {
   Create( parent, id, pos, size, style, name );
 };
@@ -79,9 +79,9 @@ wxToolBarGTK::~wxToolBarGTK(void)
 {
 };
 
-bool wxToolBarGTK::Create( wxWindow *parent, const wxWindowID id, 
+bool wxToolBarGTK::Create( wxWindow *parent, wxWindowID id, 
   const wxPoint& pos, const wxSize& size,
-  const long style, const wxString& name )
+  long style, const wxString& name )
 {
   m_needParent = TRUE;
   
@@ -131,9 +131,9 @@ void wxToolBarGTK::OnMouseEnter( int toolIndex )
   GetEventHandler()->ProcessEvent(event);
 };
 
-wxToolBarTool *wxToolBarGTK::AddTool( const int toolIndex, const wxBitmap& bitmap, 
-  const wxBitmap& pushedBitmap, const bool toggle, 
-  const float WXUNUSED(xPos), const float WXUNUSED(yPos), wxObject *clientData,  
+wxToolBarTool *wxToolBarGTK::AddTool( int toolIndex, const wxBitmap& bitmap, 
+  const wxBitmap& pushedBitmap, bool toggle,
+  float WXUNUSED(xPos), float WXUNUSED(yPos), wxObject *clientData,
   const wxString& helpString1, const wxString& helpString2 )
 {
   if (!bitmap.Ok()) return NULL;
@@ -169,39 +169,39 @@ void wxToolBarGTK::ClearTools(void)
 {
 };
 
-void wxToolBarGTK::EnableTool(const int toolIndex, const bool enable)
+void wxToolBarGTK::EnableTool(int toolIndex, bool enable)
 {
 };
 
-void wxToolBarGTK::ToggleTool(const int toolIndex, const bool toggle)
+void wxToolBarGTK::ToggleTool(int toolIndex, bool toggle)
 {
 };
 
-void wxToolBarGTK::SetToggle(const int toolIndex, const bool toggle) 
+void wxToolBarGTK::SetToggle(int toolIndex, bool toggle) 
 {
 };
 
-wxObject *wxToolBarGTK::GetToolClientData(const int index) const
+wxObject *wxToolBarGTK::GetToolClientData(int index) const
 {
 };
 
-bool wxToolBarGTK::GetToolState(const int toolIndex) const
+bool wxToolBarGTK::GetToolState(int toolIndex) const
 {
 };
 
-bool wxToolBarGTK::GetToolEnabled(const int toolIndex) const
+bool wxToolBarGTK::GetToolEnabled(int toolIndex) const
 {
 };
 
-void wxToolBarGTK::SetMargins(const int x, const int y)
+void wxToolBarGTK::SetMargins(int x, int y)
 {
 };
 
-void wxToolBarGTK::SetToolPacking(const int packing)
+void wxToolBarGTK::SetToolPacking(int packing)
 {
 };
 
-void wxToolBarGTK::SetToolSeparation(const int separation)
+void wxToolBarGTK::SetToolSeparation(int separation)
 {
 };
 

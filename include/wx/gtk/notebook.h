@@ -62,17 +62,17 @@ public:
   wxNotebook();
     // the same arguments as for wxControl (@@@ any special styles?)
   wxNotebook(wxWindow *parent,
-             const wxWindowID id,
+             wxWindowID id,
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
-             const long style = 0,
+             long style = 0,
              const wxString& name = "notebook");
     // Create() function
   bool Create(wxWindow *parent,
-              const wxWindowID id,
+              wxWindowID id,
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
-              const long style = 0,
+              long style = 0,
               const wxString& name = "notebook");
     // dtor
   ~wxNotebook();

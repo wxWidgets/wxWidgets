@@ -190,8 +190,8 @@ void wxDataStream::WriteString(const wxString& string)
   if (!m_ostream)
     return;
 
-  Write32(tmp_string.Length());
-  m_ostream->write((const char *) tmp_string, tmp_string.Length());
+  Write32(string.Length());
+  m_ostream->write((const char *) string, string.Length());
 }
 
 // Must be at global scope for VC++ 5

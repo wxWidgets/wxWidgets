@@ -75,8 +75,8 @@ char* WXDLLEXPORT wxFileSelector(const char *message = wxFileSelectorPromptStr, 
 // An extended version of wxFileSelector
 char* WXDLLEXPORT wxFileSelectorEx(const char *message = wxFileSelectorPromptStr, const char *default_path = NULL,
                      const char *default_filename = NULL, int *indexDefaultExtension = NULL,
-                     const char *wildcard = wxFileSelectorDefaultWildcardStr, const int flags = 0,
-                     wxWindow *parent = NULL, const int x = -1, const int y = -1);
+                     const char *wildcard = wxFileSelectorDefaultWildcardStr, int flags = 0,
+                     wxWindow *parent = NULL, int x = -1, int y = -1);
 
 // Generic file load dialog
 char* WXDLLEXPORT wxLoadFileSelector(const char *what, const char *extension, const char *default_name = NULL, wxWindow *parent = NULL);

@@ -30,12 +30,12 @@ class wxCheckListBox : public wxListBox
 public:
   // ctors
   wxCheckListBox();
-  wxCheckListBox(wxWindow *parent, const wxWindowID id,
+  wxCheckListBox(wxWindow *parent, wxWindowID id,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
-                 const int nStrings = 0, 
+                 int nStrings = 0, 
                  const wxString choices[] = NULL,
-                 const long style = 0,
+                 long style = 0,
                  const wxValidator& validator = wxDefaultValidator,
                  const wxString& name = wxListBoxNameStr);
 //                 const wxFont& font = wxNullFont);

@@ -56,8 +56,8 @@ wxListCtrl::wxListCtrl(void)
     m_colCount = 0;
 }
 
-bool wxListCtrl::Create(wxWindow *parent, const wxWindowID id, const wxPoint& pos, const wxSize& size,
-            const long style, const wxValidator& validator, const wxString& name)
+bool wxListCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
+            long style, const wxValidator& validator, const wxString& name)
 {
   m_imageListNormal = NULL;
   m_imageListSmall = NULL;
@@ -133,7 +133,7 @@ wxListCtrl::~wxListCtrl(void)
 }
 
 // Add or remove a single window style
-void wxListCtrl::SetSingleStyle(const long style, const bool add)
+void wxListCtrl::SetSingleStyle(long style, bool add)
 {
 	long flag = GetWindowStyleFlag();
 
@@ -167,7 +167,7 @@ void wxListCtrl::SetSingleStyle(const long style, const bool add)
 }
 
 // Set the whole window style
-void wxListCtrl::SetWindowStyleFlag(const long flag)
+void wxListCtrl::SetWindowStyleFlag(long flag)
 {
 	m_windowStyle = flag;
 
@@ -221,7 +221,7 @@ void wxListCtrl::RecreateWindow(void)
 }
 
 // Can be just a single style, or a bitlist
-long wxListCtrl::ConvertToMSWStyle(long& oldStyle, const long style) const
+long wxListCtrl::ConvertToMSWStyle(long& oldStyle, long style) const
 {
   long wstyle = 0;
   if ( style & wxLC_ICON )
@@ -330,7 +330,7 @@ void wxListCtrl::SetBackgroundColour(const wxColour& col)
 }
 
 // Gets information about this column
-bool wxListCtrl::GetColumn(const int col, wxListItem& item) const
+bool wxListCtrl::GetColumn(int col, wxListItem& item) const
 {
 	LV_COLUMN lvCol;
 	lvCol.mask = 0;
@@ -369,7 +369,7 @@ bool wxListCtrl::GetColumn(const int col, wxListItem& item) const
 }
 
 // Sets information about this column
-bool wxListCtrl::SetColumn(const int col, wxListItem& item)
+bool wxListCtrl::SetColumn(int col, wxListItem& item)
 {
 	LV_COLUMN lvCol;
 	lvCol.mask = 0;
@@ -410,13 +410,13 @@ bool wxListCtrl::SetColumn(const int col, wxListItem& item)
 }
 
 // Gets the column width
-int wxListCtrl::GetColumnWidth(const int col) const
+int wxListCtrl::GetColumnWidth(int col) const
 {
 	return ListView_GetColumnWidth((HWND) GetHWND(), col);
 }
 
 // Sets the column width
-bool wxListCtrl::SetColumnWidth(const int col, const int width)
+bool wxListCtrl::SetColumnWidth(int col, int width)
 {
 	int col2 = col;
 	if ( m_windowStyle & wxLC_LIST )
@@ -485,7 +485,7 @@ bool wxListCtrl::SetItem(wxListItem& info)
 	return (ListView_SetItem((HWND) GetHWND(), &item) != 0);
 }
 
-long wxListCtrl::SetItem(const long index, const int col, const wxString& label, const int imageId)
+long wxListCtrl::SetItem(long index, int col, const wxString& label, int imageId)
 {
 	wxListItem info;
 	info.m_text = label;
@@ -502,7 +502,7 @@ long wxListCtrl::SetItem(const long index, const int col, const wxString& label,
 
 
 // Gets the item state
-int wxListCtrl::GetItemState(const long item, const long stateMask) const
+int wxListCtrl::GetItemState(long item, long stateMask) const
 {
 	wxListItem info;
 
@@ -517,7 +517,7 @@ int wxListCtrl::GetItemState(const long item, const long stateMask) const
 }
 
 // Sets the item state
-bool wxListCtrl::SetItemState(const long item, const long state, const long stateMask)
+bool wxListCtrl::SetItemState(long item, long state, long stateMask)
 {
 	wxListItem info;
 
@@ -530,7 +530,7 @@ bool wxListCtrl::SetItemState(const long item, const long state, const long stat
 }
 
 // Sets the item image
-bool wxListCtrl::SetItemImage(const long item, const int image, const int selImage)
+bool wxListCtrl::SetItemImage(long item, int image, int selImage)
 {
 	wxListItem info;
 
@@ -542,7 +542,7 @@ bool wxListCtrl::SetItemImage(const long item, const int image, const int selIma
 }
 
 // Gets the item text
-wxString wxListCtrl::GetItemText(const long item) const
+wxString wxListCtrl::GetItemText(long item) const
 {
 	wxListItem info;
 
@@ -555,7 +555,7 @@ wxString wxListCtrl::GetItemText(const long item) const
 }
 
 // Sets the item text
-void wxListCtrl::SetItemText(const long item, const wxString& str)
+void wxListCtrl::SetItemText(long item, const wxString& str)
 {
 	wxListItem info;
 
@@ -567,7 +567,7 @@ void wxListCtrl::SetItemText(const long item, const wxString& str)
 }
 
 // Gets the item data
-long wxListCtrl::GetItemData(const long item) const
+long wxListCtrl::GetItemData(long item) const
 {
 	wxListItem info;
 
@@ -580,7 +580,7 @@ long wxListCtrl::GetItemData(const long item) const
 }
 
 // Sets the item data
-bool wxListCtrl::SetItemData(const long item, long data)
+bool wxListCtrl::SetItemData(long item, long data)
 {
 	wxListItem info;
 
@@ -592,7 +592,7 @@ bool wxListCtrl::SetItemData(const long item, long data)
 }
 
 // Gets the item rectangle
-bool wxListCtrl::GetItemRect(const long item, wxRectangle& rect, const int code) const
+bool wxListCtrl::GetItemRect(long item, wxRectangle& rect, int code) const
 {
 	RECT rect2;
 
@@ -614,7 +614,7 @@ bool wxListCtrl::GetItemRect(const long item, wxRectangle& rect, const int code)
 }
 
 // Gets the item position
-bool wxListCtrl::GetItemPosition(const long item, wxPoint& pos) const
+bool wxListCtrl::GetItemPosition(long item, wxPoint& pos) const
 {
 	POINT pt;
 
@@ -625,7 +625,7 @@ bool wxListCtrl::GetItemPosition(const long item, wxPoint& pos) const
 }
 
 // Sets the item position.
-bool wxListCtrl::SetItemPosition(const long item, const wxPoint& pos)
+bool wxListCtrl::SetItemPosition(long item, const wxPoint& pos)
 {
 	return (ListView_SetItemPosition((HWND) GetHWND(), (int) item, pos.x, pos.y) != 0);
 }
@@ -679,7 +679,7 @@ long wxListCtrl::GetTopItem(void) const
 // item can be -1 to find the first item that matches the
 // specified flags.
 // Returns the item or -1 if unsuccessful.
-long wxListCtrl::GetNextItem(const long item, int geom, int state) const
+long wxListCtrl::GetNextItem(long item, int geom, int state) const
 {
 	long flags = 0;
 
@@ -707,7 +707,7 @@ long wxListCtrl::GetNextItem(const long item, int geom, int state) const
 }
 
 
-wxImageList *wxListCtrl::GetImageList(const int which) const
+wxImageList *wxListCtrl::GetImageList(int which) const
 {
 	if ( which == wxIMAGE_LIST_NORMAL )
     {
@@ -724,7 +724,7 @@ wxImageList *wxListCtrl::GetImageList(const int which) const
 	return NULL;
 }
 
-void wxListCtrl::SetImageList(wxImageList *imageList, const int which)
+void wxListCtrl::SetImageList(wxImageList *imageList, int which)
 {
 	int flags = 0;
 	if ( which == wxIMAGE_LIST_NORMAL )
@@ -749,7 +749,7 @@ void wxListCtrl::SetImageList(wxImageList *imageList, const int which)
 ////////////////////////////////////////////////////////////////////////////
 
 // Arranges the items
-bool wxListCtrl::Arrange(const int flag)
+bool wxListCtrl::Arrange(int flag)
 {
 	UINT code = 0;
 	if ( flag == wxLIST_ALIGN_LEFT )
@@ -765,7 +765,7 @@ bool wxListCtrl::Arrange(const int flag)
 }
 
 // Deletes an item
-bool wxListCtrl::DeleteItem(const long item)
+bool wxListCtrl::DeleteItem(long item)
 {
 	return (ListView_DeleteItem((HWND) GetHWND(), (int) item) != 0);
 }
@@ -789,7 +789,7 @@ bool wxListCtrl::DeleteAllColumns(void)
 }
 
 // Deletes a column
-bool wxListCtrl::DeleteColumn(const int col)
+bool wxListCtrl::DeleteColumn(int col)
 {
 	bool success = (ListView_DeleteColumn((HWND) GetHWND(), col) != 0);
 
@@ -807,7 +807,7 @@ void wxListCtrl::ClearAll(void)
 }
 
 // Edits a label
-wxTextCtrl& wxListCtrl::Edit(const long item)
+wxTextCtrl& wxListCtrl::Edit(long item)
 {
 	HWND hWnd = (HWND) ListView_EditLabel((HWND) GetHWND(), (int) item);
 	m_textCtrl.SetHWND((WXHWND) hWnd);
@@ -815,14 +815,14 @@ wxTextCtrl& wxListCtrl::Edit(const long item)
 }
 
 // Ensures this item is visible
-bool wxListCtrl::EnsureVisible(const long item)
+bool wxListCtrl::EnsureVisible(long item)
 {
 	return (ListView_EnsureVisible((HWND) GetHWND(), (int) item, FALSE) != 0);
 }
 
 // Find an item whose label matches this string, starting from the item after 'start'
 // or the beginning if 'start' is -1.
-long wxListCtrl::FindItem(const long start, const wxString& str, const bool partial)
+long wxListCtrl::FindItem(long start, const wxString& str, bool partial)
 {
 	LV_FINDINFO findInfo;
 
@@ -836,7 +836,7 @@ long wxListCtrl::FindItem(const long start, const wxString& str, const bool part
 
 // Find an item whose data matches this data, starting from the item after 'start'
 // or the beginning if 'start' is -1.
-long wxListCtrl::FindItem(const long start, const long data)
+long wxListCtrl::FindItem(long start, long data)
 {
 	LV_FINDINFO findInfo;
 
@@ -848,7 +848,7 @@ long wxListCtrl::FindItem(const long start, const long data)
 
 // Find an item nearest this position in the specified direction, starting from
 // the item after 'start' or the beginning if 'start' is -1.
-long wxListCtrl::FindItem(const long start, const wxPoint& pt, const int direction)
+long wxListCtrl::FindItem(long start, const wxPoint& pt, int direction)
 {
 	LV_FINDINFO findInfo;
 
@@ -910,7 +910,7 @@ long wxListCtrl::InsertItem(wxListItem& info)
 	return (long) ListView_InsertItem((HWND) GetHWND(), & item);
 }
 
-long wxListCtrl::InsertItem(const long index, const wxString& label)
+long wxListCtrl::InsertItem(long index, const wxString& label)
 {
 	wxListItem info;
 	info.m_text = label;
@@ -920,7 +920,7 @@ long wxListCtrl::InsertItem(const long index, const wxString& label)
 }
 
 // Inserts an image item
-long wxListCtrl::InsertItem(const long index, const int imageIndex)
+long wxListCtrl::InsertItem(long index, int imageIndex)
 {
 	wxListItem info;
 	info.m_image = imageIndex;
@@ -930,7 +930,7 @@ long wxListCtrl::InsertItem(const long index, const int imageIndex)
 }
 
 // Inserts an image/string item
-long wxListCtrl::InsertItem(const long index, const wxString& label, const int imageIndex)
+long wxListCtrl::InsertItem(long index, const wxString& label, int imageIndex)
 {
 	wxListItem info;
 	info.m_image = imageIndex;
@@ -941,7 +941,7 @@ long wxListCtrl::InsertItem(const long index, const wxString& label, const int i
 }
 
 // For list view mode (only), inserts a column.
-long wxListCtrl::InsertColumn(const long col, wxListItem& item)
+long wxListCtrl::InsertColumn(long col, wxListItem& item)
 {
 	LV_COLUMN lvCol;
 	lvCol.mask = 0;
@@ -985,8 +985,8 @@ long wxListCtrl::InsertColumn(const long col, wxListItem& item)
     return success;
 }
 
-long wxListCtrl::InsertColumn(const long col, const wxString& heading, const int format,
-    const int width)
+long wxListCtrl::InsertColumn(long col, const wxString& heading, int format,
+    int width)
 {
 	wxListItem item;
 	item.m_mask = wxLIST_MASK_TEXT | wxLIST_MASK_FORMAT;
@@ -1006,7 +1006,7 @@ long wxListCtrl::InsertColumn(const long col, const wxString& heading, const int
 // specifies the number of columns to scroll.
 // If in icon, small icon or list view mode, y specifies the number of pixels
 // to scroll. If in report view mode, y specifies the number of lines to scroll.
-bool wxListCtrl::ScrollList(const int dx, const int dy)
+bool wxListCtrl::ScrollList(int dx, int dy)
 {
 	return (ListView_Scroll((HWND) GetHWND(), dx, dy) != 0);
 }
@@ -1027,7 +1027,7 @@ bool wxListCtrl::SortItems(wxListCtrlCompare fn, long data)
 	return (ListView_SortItems((HWND) GetHWND(), (PFNLVCOMPARE) fn, data) != 0);
 }
 
-bool wxListCtrl::MSWCommand(const WXUINT cmd, const WXWORD id)
+bool wxListCtrl::MSWCommand(WXUINT cmd, WXWORD id)
 {
   if (cmd == EN_UPDATE)
   {
@@ -1046,7 +1046,7 @@ bool wxListCtrl::MSWCommand(const WXUINT cmd, const WXWORD id)
   else return FALSE;
 }
 
-bool wxListCtrl::MSWNotify(const WXWPARAM wParam, const WXLPARAM lParam)
+bool wxListCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
 {
 	wxListEvent event(wxEVT_NULL, m_windowId);
 	wxEventType eventType = wxEVT_NULL;

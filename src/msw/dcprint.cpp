@@ -54,7 +54,7 @@
 IMPLEMENT_CLASS(wxPrinterDC, wxDC)
 #endif
 
-wxPrinterDC::wxPrinterDC(const wxString& driver_name, const wxString& device_name, const wxString& file, const bool interactive, const int orientation)
+wxPrinterDC::wxPrinterDC(const wxString& driver_name, const wxString& device_name, const wxString& file, bool interactive, int orientation)
 {
   m_isInteractive = interactive;
 

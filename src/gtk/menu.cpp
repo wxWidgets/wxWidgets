@@ -148,7 +148,7 @@ void wxMenu::AppendSeparator(void)
   m_items.Append( mitem );
 };
 
-void wxMenu::Append( const int id, const wxString &item, const wxString &helpStr, const bool checkable )
+void wxMenu::Append( int id, const wxString &item, const wxString &helpStr, bool checkable )
 {
   wxMenuItem *mitem = new wxMenuItem();
   mitem->m_id = id;
@@ -176,7 +176,7 @@ void wxMenu::Append( const int id, const wxString &item, const wxString &helpStr
   m_items.Append( mitem );
 };
 
-void wxMenu::Append( const int id, const wxString &item, wxMenu *subMenu, const wxString &helpStr )
+void wxMenu::Append( int id, const wxString &item, wxMenu *subMenu, const wxString &helpStr )
 {
   wxMenuItem *mitem = new wxMenuItem();
   mitem->m_id = id;
@@ -219,7 +219,7 @@ int wxMenu::FindItem( const wxString itemString ) const
   return -1;
 };
 
-void wxMenu::Enable( const int id, const bool enable )
+void wxMenu::Enable( int id, bool enable )
 {
   wxNode *node = m_items.First();
   while (node)
@@ -234,7 +234,7 @@ void wxMenu::Enable( const int id, const bool enable )
   };
 };
 
-bool wxMenu::Enabled( const int id ) const
+bool wxMenu::Enabled( int id ) const
 {
   wxNode *node = m_items.First();
   while (node)
@@ -246,7 +246,7 @@ bool wxMenu::Enabled( const int id ) const
   return FALSE;
 };
 
-void wxMenu::SetLabel( const int id, const wxString &label )
+void wxMenu::SetLabel( int id, const wxString &label )
 {
   wxString s( label );
   size_t pos;

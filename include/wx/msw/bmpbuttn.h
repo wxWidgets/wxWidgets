@@ -27,18 +27,18 @@ class WXDLLEXPORT wxBitmapButton: public wxButton
   DECLARE_DYNAMIC_CLASS(wxBitmapButton)
  public:
   inline wxBitmapButton(void) { m_marginX = wxDEFAULT_BUTTON_MARGIN; m_marginY = wxDEFAULT_BUTTON_MARGIN; }
-  inline wxBitmapButton(wxWindow *parent, const wxWindowID id, const wxBitmap& bitmap,
+  inline wxBitmapButton(wxWindow *parent, wxWindowID id, const wxBitmap& bitmap,
            const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize, const long style = wxBU_AUTODRAW,
+           const wxSize& size = wxDefaultSize, long style = wxBU_AUTODRAW,
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxButtonNameStr)
   {
       Create(parent, id, bitmap, pos, size, style, validator, name);
   }
 
-  bool Create(wxWindow *parent, const wxWindowID id, const wxBitmap& bitmap,
+  bool Create(wxWindow *parent, wxWindowID id, const wxBitmap& bitmap,
            const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize, const long style = wxBU_AUTODRAW,
+           const wxSize& size = wxDefaultSize, long style = wxBU_AUTODRAW,
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxButtonNameStr);
 

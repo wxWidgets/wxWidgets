@@ -80,18 +80,18 @@ wxFrame::wxFrame(void)
   wxTopLevelWindows.Insert( this );
 };
 
-wxFrame::wxFrame( wxWindow *parent, const wxWindowID id, const wxString &title, 
-      const wxPoint &pos, const wxSize &size, 
-      const long style, const wxString &name )
+wxFrame::wxFrame( wxWindow *parent, wxWindowID id, const wxString &title, 
+      const wxPoint &pos, const wxSize &size,
+      long style, const wxString &name )
 {
   m_sizeSet = FALSE;
   Create( parent, id, title, pos, size, style, name );
   wxTopLevelWindows.Insert( this );
 };
 
-bool wxFrame::Create( wxWindow *parent, const wxWindowID id, const wxString &title,
+bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
       const wxPoint &pos, const wxSize &size,
-      const long style, const wxString &name )
+      long style, const wxString &name )
 {
   m_needParent = FALSE;
   m_mainWindow = NULL;
@@ -154,7 +154,7 @@ wxFrame::~wxFrame(void)
   if (wxTopLevelWindows.Number() == 0) wxTheApp->ExitMainLoop();
 };
       
-bool wxFrame::Show( const bool show )
+bool wxFrame::Show( bool show )
 {
   if (show)
   {
@@ -165,7 +165,7 @@ bool wxFrame::Show( const bool show )
   return wxWindow::Show( show );
 };
 
-void wxFrame::Enable( const bool enable )
+void wxFrame::Enable( bool enable )
 {
   wxWindow::Enable( enable );
   gtk_widget_set_sensitive( m_mainWindow, enable );
@@ -309,7 +309,7 @@ void wxFrame::SetMenuBar( wxMenuBar *menuBar )
     m_frameMenuBar->m_widget, m_frameMenuBar->m_x, m_frameMenuBar->m_y );
 };   
 
-bool wxFrame::CreateStatusBar( const int number )
+bool wxFrame::CreateStatusBar( int number )
 {
   if (m_frameStatusBar)
   delete m_frameStatusBar;
@@ -320,12 +320,12 @@ bool wxFrame::CreateStatusBar( const int number )
   return TRUE;
 };
 
-void wxFrame::SetStatusText( const wxString &text, const int number )
+void wxFrame::SetStatusText( const wxString &text, int number )
 {
   if (m_frameStatusBar) m_frameStatusBar->SetStatusText( text, number );
 };
 
-void wxFrame::SetStatusWidths( const int n, const int *width )
+void wxFrame::SetStatusWidths( int n, int *width )
 {
   if (m_frameStatusBar) m_frameStatusBar->SetStatusWidths( n, width );
 };

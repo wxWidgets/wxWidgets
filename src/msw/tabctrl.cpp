@@ -145,12 +145,12 @@ void wxTabCtrl::Command(wxCommandEvent& event)
 {
 }
 
-bool wxTabCtrl::MSWCommand(const WXUINT cmd, const WXWORD id)
+bool wxTabCtrl::MSWCommand(WXUINT cmd, WXWORD id)
 {
   return FALSE;
 }
 
-bool wxTabCtrl::MSWNotify(const WXWPARAM wParam, const WXLPARAM lParam)
+bool wxTabCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
 {
 	wxTabEvent event(wxEVT_NULL, m_windowId);
 	wxEventType eventType = wxEVT_NULL;

@@ -63,35 +63,35 @@ class wxWindow: public wxEvtHandler
   public:
   
     wxWindow(void);
-    wxWindow( wxWindow *parent, const wxWindowID id,
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      const long style = 0, const wxString &name = wxPanelNameStr );
-    bool Create( wxWindow *parent, const wxWindowID id,
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      const long style = 0, const wxString &name = wxPanelNameStr );
+    wxWindow( wxWindow *parent, wxWindowID id,
+      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
+      long style = 0, const wxString &name = wxPanelNameStr );
+    bool Create( wxWindow *parent, wxWindowID id,
+      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
+      long style = 0, const wxString &name = wxPanelNameStr );
     virtual ~wxWindow(void);
-    bool Close( const bool force = FALSE );
+    bool Close( bool force = FALSE );
     virtual bool Destroy(void);
     virtual bool DestroyChildren(void);
     
     virtual void PrepareDC( wxDC &dc );
     
-    virtual void SetSize( const int x, const int y, const int width, const int height, 
-      const int sizeFlags = wxSIZE_AUTO );
-    virtual void SetSize( const int width, const int height );
-    virtual void Move( const int x, const int y );
+    virtual void SetSize( int x, int y, int width, int height, 
+      int sizeFlags = wxSIZE_AUTO );
+    virtual void SetSize( int width, int height );
+    virtual void Move( int x, int y );
     virtual void GetSize( int *width, int *height ) const;
     virtual void SetClientSize( int const width, int const height );
     virtual void GetClientSize( int *width, int *height ) const;
     virtual void GetPosition( int *x, int *y ) const;
-    virtual void Centre( const int direction = wxHORIZONTAL );
+    virtual void Centre( int direction = wxHORIZONTAL );
     virtual void Fit(void);
     
     void OnSize( wxSizeEvent &event );
     
-    virtual bool Show( const bool show );
-    virtual void Enable( const bool enable );
-    virtual void MakeModal( const bool modal );
+    virtual bool Show( bool show );
+    virtual void Enable( bool enable );
+    virtual void MakeModal( bool modal );
     virtual bool IsEnabled(void) const { return m_isEnabled; };
     virtual void SetFocus(void);
     virtual bool OnClose(void);
@@ -116,11 +116,11 @@ class wxWindow: public wxEvtHandler
     
     void SetCursor( const wxCursor &cursor );
     
-    virtual void Refresh( const bool eraseBackground = TRUE, const wxRect *rect = NULL );
+    virtual void Refresh( bool eraseBackground = TRUE, const wxRect *rect = NULL );
     virtual void Clear(void);
-    virtual bool IsExposed( const long x, const long y );
-    virtual bool IsExposed( const long x, const long y, const long width, const long height );
-    
+    virtual bool IsExposed( long x, long y );
+    virtual bool IsExposed( long x, long y, long width, long height );
+
     virtual wxColour GetBackgroundColour(void) const;
     virtual void SetBackgroundColour( const wxColour &colour );
     
@@ -154,7 +154,7 @@ class wxWindow: public wxEvtHandler
     
     virtual bool IsShown(void);
     virtual bool IsRetained(void);
-    virtual wxWindow *FindWindow( const long id );
+    virtual wxWindow *FindWindow( long id );
     virtual wxWindow *FindWindow( const wxString& name );
     void AllowDoubleClick( bool WXUNUSED(allow) ) {};
     void SetDoubleClick( bool WXUNUSED(allow) ) {};
@@ -170,18 +170,18 @@ class wxWindow: public wxEvtHandler
     virtual void SetDropTarget( wxDropTarget *dropTarget );
     virtual wxDropTarget *GetDropTarget() const;
     
-    virtual void SetScrollbar( const int orient, const int pos, const int thumbVisible,
-      const int range, const bool refresh = TRUE );
-    virtual void SetScrollPos( const int orient, const int pos, const bool refresh = TRUE );
-    virtual int GetScrollPos( const int orient ) const;
-    virtual int GetScrollThumb( const int orient ) const;
-    virtual int GetScrollRange( const int orient ) const;
-    virtual void ScrollWindow( const int dx, const int dy, const wxRect* rect = NULL );
-    
+    virtual void SetScrollbar( int orient, int pos, int thumbVisible,
+      int range, bool refresh = TRUE );
+    virtual void SetScrollPos( int orient, int pos, bool refresh = TRUE );
+    virtual int GetScrollPos( int orient ) const;
+    virtual int GetScrollThumb( int orient ) const;
+    virtual int GetScrollRange( int orient ) const;
+    virtual void ScrollWindow( int dx, int dy, const wxRect* rect = NULL );
+
   public:         // cannot get private going yet
     
-    void PreCreation( wxWindow *parent, const wxWindowID id, const wxPoint &pos, 
-      const wxSize &size, const long style, const wxString &name );
+    void PreCreation( wxWindow *parent, wxWindowID id, const wxPoint &pos, 
+      const wxSize &size, long style, const wxString &name );
     void PostCreation(void);
     bool HasVMT(void);
     virtual void ImplementSetSize(void);
@@ -230,7 +230,7 @@ class wxWindow: public wxEvtHandler
 
     wxLayoutConstraints *GetConstraints(void) const;
     void SetConstraints( wxLayoutConstraints *constraints );
-    void SetAutoLayout( const bool autoLayout );
+    void SetAutoLayout( bool autoLayout );
     bool GetAutoLayout(void) const;
     bool Layout(void);
     void SetSizer( wxSizer *sizer );
@@ -243,15 +243,15 @@ class wxWindow: public wxEvtHandler
     void RemoveConstraintReference(wxWindow *otherWin);
     void DeleteRelatedConstraints(void);
     virtual void ResetConstraints(void);
-    virtual void SetConstraintSizes(const bool recurse = TRUE);
+    virtual void SetConstraintSizes(bool recurse = TRUE);
     virtual bool LayoutPhase1(int *noChanges);
     virtual bool LayoutPhase2(int *noChanges);
-    virtual bool DoPhase(const int);
+    virtual bool DoPhase(int);
     virtual void TransformSizerToActual(int *x, int *y) const ;
-    virtual void SizerSetSize(const int x, const int y, const int w, const int h);
-    virtual void SizerMove(const int x, const int y);
-    virtual void SetSizeConstraint(const int x, const int y, const int w, const int h);
-    virtual void MoveConstraint(const int x, const int y);
+    virtual void SizerSetSize(int x, int y, int w, int h);
+    virtual void SizerMove(int x, int y);
+    virtual void SetSizeConstraint(int x, int y, int w, int h);
+    virtual void MoveConstraint(int x, int y);
     virtual void GetSizeConstraint(int *w, int *h) const ;
     virtual void GetClientSizeConstraint(int *w, int *h) const ;
     virtual void GetPositionConstraint(int *x, int *y) const ;

@@ -57,8 +57,8 @@ class wxImageList: public wxObject
     bool RemoveAll();
     bool GetSize( int index, int &width, int &height ) const;
     bool Draw(int index, wxDC& dc, int x, int y,
-      int flags = wxIMAGELIST_DRAW_NORMAL, const bool solidBackground = FALSE );
-    
+      int flags = wxIMAGELIST_DRAW_NORMAL, bool solidBackground = FALSE );
+
   private:
 
     wxList  m_images;

@@ -31,7 +31,7 @@
 extern wxWindow *wxWndHook;
 extern LONG APIENTRY _EXPORT wxDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-bool wxWindow::LoadNativeDialog(wxWindow* parent, const wxWindowID& id)
+bool wxWindow::LoadNativeDialog(wxWindow* parent, wxWindowID& id)
 {
 	m_windowId = id;
     wxWndHook = this;
@@ -91,7 +91,7 @@ bool wxWindow::LoadNativeDialog(wxWindow* parent, const wxString& name)
 	return TRUE;
 }
 
-wxWindow* wxWindow::GetWindowChild1(const wxWindowID& id)
+wxWindow* wxWindow::GetWindowChild1(wxWindowID& id)
 {
 	if ( m_windowId == id )
 		return this;
@@ -109,7 +109,7 @@ wxWindow* wxWindow::GetWindowChild1(const wxWindowID& id)
 	return NULL;
 }
 
-wxWindow* wxWindow::GetWindowChild(const wxWindowID& id)
+wxWindow* wxWindow::GetWindowChild(wxWindowID& id)
 {
 	wxWindow* win = GetWindowChild1(id);
 	if ( !win )

@@ -54,7 +54,7 @@ wxPalette::wxPalette(void)
 {
 }
 
-wxPalette::wxPalette(const int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue)
+wxPalette::wxPalette(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue)
 {
   Create(n, red, green, blue);
 }
@@ -73,7 +73,7 @@ bool wxPalette::FreeResource(bool force)
 	return TRUE;
 }
 
-bool wxPalette::Create(const int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue)
+bool wxPalette::Create(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue)
 {
   UnRef();
 
@@ -108,7 +108,7 @@ int wxPalette::GetPixel(const unsigned char red, const unsigned char green, cons
   return ::GetNearestPaletteIndex((HPALETTE) M_PALETTEDATA->m_hPalette, PALETTERGB(red, green, blue));
 }
 
-bool wxPalette::GetRGB(const int index, unsigned char *red, unsigned char *green, unsigned char *blue) const
+bool wxPalette::GetRGB(int index, unsigned char *red, unsigned char *green, unsigned char *blue) const
 {
   if ( !m_refData )
 	return FALSE;

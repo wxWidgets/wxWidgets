@@ -26,21 +26,21 @@ class WXDLLEXPORT wxStaticBitmap: public wxControl
  public:
   inline wxStaticBitmap(void) { }
 
-  inline wxStaticBitmap(wxWindow *parent, const wxWindowID id,
+  inline wxStaticBitmap(wxWindow *parent, wxWindowID id,
            const wxBitmap& label,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           const long style = 0,
+           long style = 0,
            const wxString& name = wxStaticBitmapNameStr)
   {
     Create(parent, id, label, pos, size, style, name);
   }
 
-  bool Create(wxWindow *parent, const wxWindowID id,
+  bool Create(wxWindow *parent, wxWindowID id,
            const wxBitmap& label,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           const long style = 0,
+           long style = 0,
            const wxString& name = wxStaticBitmapNameStr);
 
   virtual void SetBitmap(const wxBitmap& bitmap);
@@ -48,7 +48,7 @@ class WXDLLEXPORT wxStaticBitmap: public wxControl
   virtual void Command(wxCommandEvent& WXUNUSED(event)) {};
   virtual void ProcessCommand(wxCommandEvent& WXUNUSED(event)) {};
 
-  void SetSize(const int x, const int y, const int width, const int height, const int sizeFlags = wxSIZE_AUTO);
+  void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
 
   inline wxBitmap& GetBitmap(void) const { return (wxBitmap&) m_messageBitmap; }
 

@@ -47,8 +47,8 @@ class WXDLLEXPORT wxDate: public wxObject
 
  public:
   wxDate ();
-  wxDate (const long j);
-  wxDate (const int m, const int d, const int y);
+  wxDate (long j);
+  wxDate (int m, int d, int y);
   wxDate (const wxString& dat);
   wxDate (const wxDate &dt);
 
@@ -56,16 +56,16 @@ class WXDLLEXPORT wxDate: public wxObject
   void operator =   (const wxDate& date);
   void operator =   (const wxString& date);
 
-  wxDate operator +  (const long i);
-  wxDate operator +  (const int  i);
+  wxDate operator +  (long i);
+  wxDate operator +  (int  i);
 
-  wxDate operator -  (const long i);
-  wxDate operator -  (const int  i);
+  wxDate operator -  (long i);
+  wxDate operator -  (int  i);
 
   long operator -  (const wxDate &dt);
 
-  wxDate &operator += (const long i);
-  wxDate &operator -= (const long i);
+  wxDate &operator += (long i);
+  wxDate &operator -= (long i);
 
   wxDate &operator ++ ();     // Prefix increment
   wxDate &operator ++ (int);  // Postfix increment
@@ -81,9 +81,9 @@ class WXDLLEXPORT wxDate: public wxObject
 
   friend ostream &operator << (ostream &os, const wxDate &dt);
 
-  wxString FormatDate 	   (const int type=-1) const;
-  void  SetFormat (const int format);
-  int   SetOption (const int option, const bool enable=TRUE);
+  wxString FormatDate 	   (int type=-1) const;
+  void  SetFormat (int format);
+  int   SetOption (int option, bool enable=TRUE);
 
   long  GetJulianDate() const;  // returns julian date
   int   GetDayOfYear()  const;  // returns relative date since Jan. 1
@@ -123,7 +123,7 @@ class WXDLLEXPORT wxDate: public wxObject
 
   bool IsBetween(const wxDate& first, const wxDate& second) const;
 
-  wxDate Previous(const int dayOfWeek) const;
+  wxDate Previous(int dayOfWeek) const;
 };
 
 #endif

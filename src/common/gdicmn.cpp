@@ -51,7 +51,7 @@ wxRect::wxRect(void)
     x = 0; y = 0; width = 0; height = 0;
 }
 
-wxRect::wxRect(const long xx, const long yy, const long w, const long h)
+wxRect::wxRect(long xx, long yy, long w, long h)
 {
     x = xx; y = yy; width = w; height = h;
 }
@@ -454,7 +454,7 @@ void wxPenList::RemovePen (wxPen * pen)
   DeleteObject (pen);
 }
 
-wxPen *wxPenList::FindOrCreatePen (const wxColour& colour, const int width, const int style)
+wxPen *wxPenList::FindOrCreatePen (const wxColour& colour, int width, int style)
 {
   for (wxNode * node = First (); node; node = node->Next ())
     {
@@ -477,7 +477,7 @@ wxPen *wxPenList::FindOrCreatePen (const wxColour& colour, const int width, cons
   return pen;
 }
 
-wxPen *wxPenList::FindOrCreatePen (const wxString& colour, const int width, const int style)
+wxPen *wxPenList::FindOrCreatePen (const wxString& colour, int width, int style)
 {
   wxColour *the_colour = wxTheColourDatabase->FindColour (colour);
   if (the_colour)
@@ -503,7 +503,7 @@ void wxBrushList::AddBrush (wxBrush * brush)
   Append (brush);
 }
 
-wxBrush *wxBrushList::FindOrCreateBrush (const wxColour& colour, const int style)
+wxBrush *wxBrushList::FindOrCreateBrush (const wxColour& colour, int style)
 {
   for (wxNode * node = First (); node; node = node->Next ())
     {
@@ -524,7 +524,7 @@ wxBrush *wxBrushList::FindOrCreateBrush (const wxColour& colour, const int style
   return brush;
 }
 
-wxBrush *wxBrushList::FindOrCreateBrush (const wxString& colour, const int style)
+wxBrush *wxBrushList::FindOrCreateBrush (const wxString& colour, int style)
 {
   wxColour *the_colour = wxTheColourDatabase->FindColour (colour);
   if (the_colour)
@@ -573,7 +573,7 @@ void wxFontList::RemoveFont (wxFont * font)
 }
 
 wxFont *wxFontList::
-	FindOrCreateFont (const int PointSize, const int FamilyOrFontId, const int Style, const int Weight, const bool underline, const wxString& Face)
+	FindOrCreateFont (int PointSize, int FamilyOrFontId, int Style, int Weight, bool underline, const wxString& Face)
 {
   for (wxNode * node = First (); node; node = node->Next ())
     {

@@ -106,7 +106,7 @@ wxDragSource::~wxDragSource(void)
   g_blockEventsOnDrag = FALSE;
 };
    
-void wxDragSource::SetData( char *data, const long size )
+void wxDragSource::SetData( char *data, long size )
 {
   m_size = size;
   m_data = data;

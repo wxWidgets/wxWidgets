@@ -31,7 +31,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxCheckBox, wxControl)
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapCheckBox, wxCheckBox)
 #endif
 
-bool wxCheckBox::MSWCommand(const WXUINT WXUNUSED(param), const WXWORD WXUNUSED(id))
+bool wxCheckBox::MSWCommand(WXUINT WXUNUSED(param), WXWORD WXUNUSED(id))
 {
   wxCommandEvent event(wxEVENT_TYPE_CHECKBOX_COMMAND, m_windowId);
   event.SetInt(GetValue());
@@ -41,9 +41,9 @@ bool wxCheckBox::MSWCommand(const WXUINT WXUNUSED(param), const WXWORD WXUNUSED(
 }
 
 // Single check box item
-bool wxCheckBox::Create(wxWindow *parent, const wxWindowID id, const wxString& label,
+bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
            const wxPoint& pos,
-           const wxSize& size, const long style,
+           const wxSize& size, long style,
            const wxValidator& validator,
            const wxString& name)
 {
@@ -116,7 +116,7 @@ void wxCheckBox::SetLabel(const wxString& label)
   SetWindowText((HWND) GetHWND(), (const char *)label);
 }
 
-void wxCheckBox::SetSize(const int x, const int y, const int width, const int height, const int sizeFlags)
+void wxCheckBox::SetSize(int x, int y, int width, int height, int sizeFlags)
 {
   int currentX, currentY;
   GetPosition(&currentX, &currentY);
@@ -132,10 +132,7 @@ void wxCheckBox::SetSize(const int x, const int y, const int width, const int he
 
   char buf[300];
 
-  float current_width;
-
-  float cyf;
-
+  int current_width, cyf;
   HWND button = (HWND) GetHWND();
 
     GetWindowText(button, buf, 300);
@@ -160,20 +157,9 @@ void wxCheckBox::SetSize(const int x, const int y, const int width, const int he
     }
 
   MoveWindow(button, x1, y1, w1, h1, TRUE);
-
-/*
-#if WXWIN_COMPATIBILITY
-  GetEventHandler()->OldOnSize(width, height);
-#else
-  wxSizeEvent event(wxSize(width, height), m_windowId);
-  event.eventObject = this;
-  GetEventHandler()->ProcessEvent(event);
-#endif
-*/
-
 }
 
-void wxCheckBox::SetValue(const bool val)
+void wxCheckBox::SetValue(bool val)
 {
   SendMessage((HWND) GetHWND(), BM_SETCHECK, val, 0);
 }
@@ -187,7 +173,7 @@ bool wxCheckBox::GetValue(void) const
 #endif
 }
 
-WXHBRUSH wxCheckBox::OnCtlColor(const WXHDC pDC, const WXHWND pWnd, const WXUINT nCtlColor,
+WXHBRUSH wxCheckBox::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 			WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
 #if CTL3D
@@ -221,9 +207,9 @@ void wxCheckBox::Command (wxCommandEvent & event)
   ProcessCommand (event);
 }
 
-bool wxBitmapCheckBox::Create(wxWindow *parent, const wxWindowID id, const wxBitmap *label,
+bool wxBitmapCheckBox::Create(wxWindow *parent, wxWindowID id, const wxBitmap *label,
            const wxPoint& pos,
-           const wxSize& size, const long style,
+           const wxSize& size, long style,
            const wxValidator& validator,
            const wxString& name)
 {
@@ -279,7 +265,7 @@ void wxBitmapCheckBox::SetLabel(const wxBitmap *bitmap)
 {
 }
 
-void wxBitmapCheckBox::SetSize(const int x, const int y, const int width, const int height, const int sizeFlags)
+void wxBitmapCheckBox::SetSize(int x, int y, int width, int height, int sizeFlags)
 {
   int currentX, currentY;
   GetPosition(&currentX, &currentY);
@@ -302,17 +288,9 @@ void wxBitmapCheckBox::SetSize(const int x, const int y, const int width, const 
       h1 = checkHeight + FB_MARGIN ;
 */
   MoveWindow(button, x1, y1, w1, h1, TRUE);
-
-#if WXWIN_COMPATIBILITY
-  GetEventHandler()->OldOnSize(width, height);
-#else
-  wxSizeEvent event(wxSize(width, height), m_windowId);
-  event.eventObject = this;
-  GetEventHandler()->ProcessEvent(event);
-#endif
 }
 
-void wxBitmapCheckBox::SetValue(const bool val)
+void wxBitmapCheckBox::SetValue(bool val)
 {
   SendMessage((HWND) GetHWND(), BM_SETCHECK, val, 0);
 }

@@ -71,17 +71,17 @@ public:
   wxNotebook();
     // the same arguments as for wxControl (@@@ any special styles?)
   wxNotebook(wxWindow *parent,
-             const wxWindowID id, 
+             wxWindowID id, 
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
-             const long style = 0,
+             long style = 0,
              const wxString& name = "notebook");
     // Create() function
   bool Create(wxWindow *parent,
-              const wxWindowID id, 
+              wxWindowID id, 
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
-              const long style = 0,
+              long style = 0,
               const wxString& name = "notebook");
     // dtor
   ~wxNotebook();
@@ -164,7 +164,7 @@ public:
   // base class virtuals
   // -------------------
   virtual void Command(wxCommandEvent& event);
-  virtual bool MSWNotify(const WXWPARAM wParam, const WXLPARAM lParam);
+  virtual bool MSWNotify(WXWPARAM wParam, WXLPARAM lParam);
 
 protected:
   // common part of all ctors

@@ -70,10 +70,10 @@ wxStatusBar::~wxStatusBar(void)
 		delete[] m_statusStrings;
 }
 
-bool wxStatusBar::Create(wxWindow *parent, const wxWindowID id,
+bool wxStatusBar::Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos,
            const wxSize& size,
-           const long style,
+           long style,
            const wxString& name)
 {
   m_statusWidths = NULL;
@@ -94,7 +94,7 @@ bool wxStatusBar::Create(wxWindow *parent, const wxWindowID id,
   return success;
 }
 
-void wxStatusBar::SetFieldsCount(const int number, const int *widths)
+void wxStatusBar::SetFieldsCount(int number, int *widths)
 {
   m_nFields = number;
 
@@ -114,7 +114,7 @@ void wxStatusBar::SetFieldsCount(const int number, const int *widths)
   		SetStatusWidths(number, widths);
 }
 
-void wxStatusBar::SetStatusText(const wxString& text, const int number)
+void wxStatusBar::SetStatusText(const wxString& text, int number)
 {
   if ((number < 0) || (number >= m_nFields))
     return;
@@ -130,7 +130,7 @@ void wxStatusBar::SetStatusText(const wxString& text, const int number)
 #endif
 }
 
-wxString wxStatusBar::GetStatusText(const int n) const
+wxString wxStatusBar::GetStatusText(int n) const
 {
   if ((n < 0) || (n >= m_nFields))
     return wxString("");
@@ -138,7 +138,7 @@ wxString wxStatusBar::GetStatusText(const int n) const
     return m_statusStrings[n];
 }
 
-void wxStatusBar::SetStatusWidths(const int n, const int *widths_field)
+void wxStatusBar::SetStatusWidths(int n, int *widths_field)
 {
   // only set status widths, when n == number of statuswindows
   if (n == m_nFields)
@@ -178,7 +178,7 @@ void wxStatusBar::OnPaint(wxPaintEvent& WXUNUSED(event) )
 	DrawField(dc, i);
 }
 
-void wxStatusBar::DrawFieldText(wxDC& dc, const int i)
+void wxStatusBar::DrawFieldText(wxDC& dc, int i)
 {
   int leftMargin = 2;
 
@@ -201,7 +201,7 @@ void wxStatusBar::DrawFieldText(wxDC& dc, const int i)
   dc.DestroyClippingRegion();
 }
 
-void wxStatusBar::DrawField(wxDC& dc, const int i)
+void wxStatusBar::DrawField(wxDC& dc, int i)
 {
   wxRectangle rect;
   GetFieldRect(i, rect);
@@ -232,7 +232,7 @@ void wxStatusBar::DrawField(wxDC& dc, const int i)
 }
 
   // Get the position and size of the field's internal bounding rectangle
-bool wxStatusBar::GetFieldRect(const int n, wxRectangle& rect) const
+bool wxStatusBar::GetFieldRect(int n, wxRectangle& rect) const
 {
   if ((n < 0) || (n >= m_nFields))
     return FALSE;

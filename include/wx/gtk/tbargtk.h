@@ -50,9 +50,9 @@ class wxToolBarTool: public wxObject
   public:
 
     wxToolBarTool(void) {}; 
-    wxToolBarTool( wxToolBarGTK *owner, const int theIndex = 0, 
-      const wxBitmap& bitmap1 = wxNullBitmap, const wxBitmap& bitmap2 = wxNullBitmap, 
-      const bool toggle = FALSE, wxObject *clientData = NULL, 
+    wxToolBarTool( wxToolBarGTK *owner, int theIndex = 0, 
+      const wxBitmap& bitmap1 = wxNullBitmap, const wxBitmap& bitmap2 = wxNullBitmap,
+      bool toggle = FALSE, wxObject *clientData = NULL, 
       const wxString& shortHelpString = "", const wxString& longHelpString = "");
    ~wxToolBarTool(void);
 
@@ -84,14 +84,14 @@ class wxToolBarGTK: public wxControl
   public:
 
     wxToolBarGTK(void);
-    wxToolBarGTK( wxWindow *parent, const wxWindowID id, 
+    wxToolBarGTK( wxWindow *parent, wxWindowID id, 
       const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-      const long style = 0, const wxString& name = wxToolBarNameStr );
+      long style = 0, const wxString& name = wxToolBarNameStr );
    ~wxToolBarGTK(void);
 
-   bool Create( wxWindow *parent, const wxWindowID id, 
+   bool Create( wxWindow *parent, wxWindowID id, 
      const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-     const long style = 0, const wxString& name = wxToolBarNameStr);
+     long style = 0, const wxString& name = wxToolBarNameStr);
 
     // Only allow toggle if returns TRUE. Call when left button up.
     virtual bool OnLeftClick(int toolIndex, bool toggleDown);
@@ -106,26 +106,26 @@ class wxToolBarGTK: public wxControl
     // If pushedBitmap is NULL, a reversed version of bitmap is
     // created and used as the pushed/toggled image.
     // If toggle is TRUE, the button toggles between the two states.
-    virtual wxToolBarTool *AddTool( const int toolIndex, const wxBitmap& bitmap, 
-      const wxBitmap& pushedBitmap = wxNullBitmap, const bool toggle = FALSE,
-      const float xPos = -1, const float yPos = -1, wxObject *clientData = NULL,
+    virtual wxToolBarTool *AddTool( int toolIndex, const wxBitmap& bitmap, 
+      const wxBitmap& pushedBitmap = wxNullBitmap, bool toggle = FALSE,
+      float xPos = -1, float yPos = -1, wxObject *clientData = NULL,
       const wxString& helpString1 = "", const wxString& helpString2 = "");
     virtual void AddSeparator(void);
     virtual void ClearTools(void);
 
-    virtual void EnableTool(const int toolIndex, const bool enable);
-    virtual void ToggleTool(const int toolIndex, const bool toggle); // toggle is TRUE if toggled on
-    virtual void SetToggle(const int toolIndex, const bool toggle); // Set this to be togglable (or not)
-    virtual wxObject *GetToolClientData(const int index) const;
+    virtual void EnableTool(int toolIndex, bool enable);
+    virtual void ToggleTool(int toolIndex, bool toggle); // toggle is TRUE if toggled on
+    virtual void SetToggle(int toolIndex, bool toggle); // Set this to be togglable (or not)
+    virtual wxObject *GetToolClientData(int index) const;
 
-    virtual bool GetToolState(const int toolIndex) const;
-    virtual bool GetToolEnabled(const int toolIndex) const;
+    virtual bool GetToolState(int toolIndex) const;
+    virtual bool GetToolEnabled(int toolIndex) const;
 
-    virtual void SetMargins(const int x, const int y);
+    virtual void SetMargins(int x, int y);
     void SetMargins(const wxSize& size) { SetMargins(size.x, size.y); };
-    virtual void SetToolPacking(const int packing);
-    virtual void SetToolSeparation(const int separation);
-  
+    virtual void SetToolPacking(int packing);
+    virtual void SetToolSeparation(int separation);
+
   public:
   
     GtkToolbar   *m_toolbar;

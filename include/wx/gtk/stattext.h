@@ -46,10 +46,10 @@ class wxStaticText: public wxControl
     wxStaticText(void);
     wxStaticText( wxWindow *parent, wxWindowID id, const wxString &label,
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      const long style = 0, const wxString &name = wxStaticTextNameStr );
+      long style = 0, const wxString &name = wxStaticTextNameStr );
     bool Create(  wxWindow *parent, wxWindowID id, const wxString &label,
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      const long style = 0, const wxString &name = wxStaticTextNameStr );
+      long style = 0, const wxString &name = wxStaticTextNameStr );
     wxString GetLabel(void) const;
     void SetLabel( const wxString &label );
 };

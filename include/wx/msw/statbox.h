@@ -27,21 +27,21 @@ class WXDLLEXPORT wxStaticBox: public wxControl
 
  public:
   inline wxStaticBox(void) {}
-  inline wxStaticBox(wxWindow *parent, const wxWindowID id,
+  inline wxStaticBox(wxWindow *parent, wxWindowID id,
            const wxString& label,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           const long style = 0,
+           long style = 0,
            const wxString& name = wxStaticBoxNameStr)
   {
     Create(parent, id, label, pos, size, style, name);
   }
 
-  bool Create(wxWindow *parent, const wxWindowID id,
+  bool Create(wxWindow *parent, wxWindowID id,
            const wxString& label,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           const long style = 0,
+           long style = 0,
            const wxString& name = wxStaticBoxNameStr);
 
   virtual void Command(wxCommandEvent& WXUNUSED(event)) {};
@@ -51,9 +51,9 @@ class WXDLLEXPORT wxStaticBox: public wxControl
 
   virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 
-  void SetSize(const int x, const int y, const int width, const int height, const int sizeFlags = wxSIZE_AUTO);
+  void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
   void SetLabel(const wxString& label);
-  virtual WXHBRUSH OnCtlColor(const WXHDC pDC, const WXHWND pWnd, const WXUINT nCtlColor,
+  virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 			WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
 DECLARE_EVENT_TABLE()

@@ -45,7 +45,7 @@ wxBrush::wxBrush(void)
   if (wxTheBrushList) wxTheBrushList->AddBrush( this );
 };
 
-wxBrush::wxBrush( const wxColour &colour, const int style )
+wxBrush::wxBrush( const wxColour &colour, int style )
 {
   m_refData = new wxBrushRefData();
   M_BRUSHDATA->m_style = style;
@@ -54,7 +54,7 @@ wxBrush::wxBrush( const wxColour &colour, const int style )
   if (wxTheBrushList) wxTheBrushList->AddBrush( this );
 };
 
-wxBrush::wxBrush( const wxString &colourName, const int style )
+wxBrush::wxBrush( const wxString &colourName, int style )
 {
   m_refData = new wxBrushRefData();
   M_BRUSHDATA->m_style = style;

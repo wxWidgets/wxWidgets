@@ -37,11 +37,11 @@
 IMPLEMENT_DYNAMIC_CLASS(wxGauge95, wxControl)
 #endif
 
-bool wxGauge95::Create(wxWindow *parent, const wxWindowID id,
-           const int range,
+bool wxGauge95::Create(wxWindow *parent, wxWindowID id,
+           int range,
            const wxPoint& pos,
            const wxSize& size,
-           const long style,
+           long style,
            const wxValidator& validator,
            const wxString& name)
 {
@@ -93,7 +93,7 @@ bool wxGauge95::Create(wxWindow *parent, const wxWindowID id,
   return TRUE;
 }
 
-void wxGauge95::SetSize(const int x, const int y, const int width, const int height, const int sizeFlags)
+void wxGauge95::SetSize(int x, int y, int width, int height, int sizeFlags)
 {
   int currentX, currentY;
   GetPosition(&currentX, &currentY);
@@ -121,32 +121,24 @@ void wxGauge95::SetSize(const int x, const int y, const int width, const int hei
     h1 = DEFAULT_ITEM_HEIGHT;
 
   MoveWindow((HWND) GetHWND(), x1, y1, w1, h1, TRUE);
-
-#if WXWIN_COMPATIBILITY
-  GetEventHandler()->OldOnSize(width, height);
-#else
-  wxSizeEvent event(wxSize(width, height), m_windowId);
-  event.eventObject = this;
-  GetEventHandler()->ProcessEvent(event);
-#endif
 }
 
-void wxGauge95::SetShadowWidth(const int w)
+void wxGauge95::SetShadowWidth(int w)
 {
 }
 
-void wxGauge95::SetBezelFace(const int w)
+void wxGauge95::SetBezelFace(int w)
 {
 }
 
-void wxGauge95::SetRange(const int r)
+void wxGauge95::SetRange(int r)
 {
   m_rangeMax = r;
 
   SendMessage((HWND) GetHWND(), PBM_SETRANGE, 0, MAKELPARAM(0, r));
 }
 
-void wxGauge95::SetValue(const int pos)
+void wxGauge95::SetValue(int pos)
 {
   m_gaugePos = pos;
 

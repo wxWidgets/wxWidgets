@@ -173,8 +173,8 @@ void wxGenericMessageDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
 }
 
 
-int wxMessageBox(const wxString& message, const wxString& caption, const long style,
-                 wxWindow *parent, const int WXUNUSED(x), const int WXUNUSED(y) )
+int wxMessageBox(const wxString& message, const wxString& caption, long style,
+                 wxWindow *parent, int WXUNUSED(x), int WXUNUSED(y) )
 {
 	wxMessageDialog dialog(parent, message, caption, style);
 

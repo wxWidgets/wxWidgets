@@ -30,7 +30,7 @@
 IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControl)
 #endif
 
-bool wxChoice::MSWCommand(const WXUINT param, const WXWORD WXUNUSED(id))
+bool wxChoice::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 {
   if (param == CBN_SELCHANGE)
   {
@@ -45,11 +45,11 @@ bool wxChoice::MSWCommand(const WXUINT param, const WXWORD WXUNUSED(id))
   else return FALSE;
 }
 
-bool wxChoice::Create(wxWindow *parent, const wxWindowID id,
+bool wxChoice::Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos,
            const wxSize& size,
-		   const int n, const wxString choices[],
-		   const long style,
+		   int n, const wxString choices[],
+		   long style,
            const wxValidator& validator,
            const wxString& name)
 {
@@ -124,7 +124,7 @@ void wxChoice::Append(const wxString& item)
   no_strings ++;
 }
 
-void wxChoice::Delete(const int n)
+void wxChoice::Delete(int n)
 {
   no_strings = (int)SendMessage((HWND) GetHWND(), CB_DELETESTRING, n, 0);
 }
@@ -142,7 +142,7 @@ int wxChoice::GetSelection(void) const
   return (int)SendMessage((HWND) GetHWND(), CB_GETCURSEL, 0, 0);
 }
 
-void wxChoice::SetSelection(const int n)
+void wxChoice::SetSelection(int n)
 {
   SendMessage((HWND) GetHWND(), CB_SETCURSEL, n, 0);
 }
@@ -170,14 +170,14 @@ int wxChoice::FindString(const wxString& s) const
 #endif
 }
 
-wxString wxChoice::GetString(const int n) const
+wxString wxChoice::GetString(int n) const
 {
   int len = (int)SendMessage((HWND) GetHWND(), CB_GETLBTEXT, n, (long)wxBuffer);
   wxBuffer[len] = 0;
   return wxString(wxBuffer);
 }
 
-void wxChoice::SetSize(const int x, const int y, const int width, const int height, const int sizeFlags)
+void wxChoice::SetSize(int x, int y, int width, int height, int sizeFlags)
 {
   int currentX, currentY;
   GetPosition(&currentX, &currentY);
@@ -220,7 +220,7 @@ void wxChoice::SetSize(const int x, const int y, const int width, const int heig
       control_width = (float)100.0;
     else
     {
-      float len, ht;
+      int len, ht;
       float longest = (float)0.0;
       int i;
       for (i = 0; i < no_strings; i++)
@@ -257,19 +257,9 @@ void wxChoice::SetSize(const int x, const int y, const int width, const int heig
 
   MoveWindow((HWND) GetHWND(), x1, y1,
                               (int)control_width, (int)control_height, TRUE);
-
-/*
-#if WXWIN_COMPATIBILITY
-  GetEventHandler()->OldOnSize(width, height);
-#else
-  wxSizeEvent event(wxSize(width, height), m_windowId);
-  event.eventObject = this;
-  GetEventHandler()->ProcessEvent(event);
-#endif
-*/
 }
 
-WXHBRUSH wxChoice::OnCtlColor(const WXHDC pDC, const WXHWND pWnd, const WXUINT nCtlColor,
+WXHBRUSH wxChoice::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 			WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
 	return 0;

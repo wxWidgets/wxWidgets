@@ -257,24 +257,24 @@ class wxTreeCtrl: public wxScrolledWindow
    public:
 
     wxTreeCtrl(void);
-    wxTreeCtrl(wxWindow *parent, const wxWindowID id = -1,
+    wxTreeCtrl(wxWindow *parent, wxWindowID id = -1,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             long style = wxTR_HAS_BUTTONS,
             const wxString& name = "wxTreeCtrl" );
     ~wxTreeCtrl(void);
-    bool Create(wxWindow *parent, const wxWindowID id = -1,
+    bool Create(wxWindow *parent, wxWindowID id = -1,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             long style = wxTR_HAS_BUTTONS,
             const wxString& name = "wxTreeCtrl");
 
     int GetCount(void) const;
-    long InsertItem( long parent, const wxString& label, const int image = -1,
-      const int selImage = -1, long insertAfter = wxTREE_INSERT_LAST );
+    long InsertItem( long parent, const wxString& label, int image = -1,
+      int selImage = -1, long insertAfter = wxTREE_INSERT_LAST );
     long InsertItem( long parent, wxTreeItem &info, long insertAfter = wxTREE_INSERT_LAST );
     bool DeleteAllItems(void);
-    bool ExpandItem( long item, const int action );
+    bool ExpandItem( long item, int action );
     bool GetItem( wxTreeItem &info ) const;
     long GetItemData( long item ) const;
     wxString GetItemText( long item ) const;
@@ -284,7 +284,7 @@ class wxTreeCtrl: public wxScrolledWindow
     long GetSelection(void) const;
     bool SelectItem( long item ) const;
     bool ItemHasChildren( long item ) const;
-    void SetIndent( const int indent );
+    void SetIndent( int indent );
     int GetIndent(void) const;
     bool SetItem( wxTreeItem &info );
     bool SetItemData( long item, long data );

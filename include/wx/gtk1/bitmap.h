@@ -47,7 +47,7 @@ class wxMask: public wxObject
   
     wxMask(void);
     wxMask( const wxBitmap& bitmap, const wxColour& colour );
-    wxMask( const wxBitmap& bitmap, const int paletteIndex );
+    wxMask( const wxBitmap& bitmap, int paletteIndex );
     wxMask( const wxBitmap& bitmap );
     ~wxMask(void);
 
@@ -80,12 +80,12 @@ class wxBitmap: public wxObject
   public:
 
     wxBitmap(void);
-    wxBitmap( const int width, const int height, const int depth = -1 );
-    wxBitmap( const char bits[], const int width, const int height, const int depth = 1 );
+    wxBitmap( int width, int height, int depth = -1 );
+    wxBitmap( const char bits[], int width, int height, int depth = 1 );
     wxBitmap( char **bits );
     wxBitmap( const wxBitmap& bmp );
     wxBitmap( const wxBitmap* bmp );
-    wxBitmap( const wxString &filename, const int type );
+    wxBitmap( const wxString &filename, int type );
     ~wxBitmap(void);
     wxBitmap& operator = ( const wxBitmap& bmp );
     bool operator == ( const wxBitmap& bmp );
@@ -95,16 +95,16 @@ class wxBitmap: public wxObject
     int GetHeight(void) const;
     int GetWidth(void) const;
     int GetDepth(void) const;
-    void SetHeight( const int height );
-    void SetWidth( const int width );
-    void SetDepth( const int depth );
+    void SetHeight( int height );
+    void SetWidth( int width );
+    void SetDepth( int depth );
 
     wxMask *GetMask(void) const;
     void SetMask( wxMask *mask );
     
-    bool SaveFile( const wxString &name, const int type, wxPalette *palette = NULL );
-    bool LoadFile( const wxString &name, const int type );
-        
+    bool SaveFile( const wxString &name, int type, wxPalette *palette = NULL );
+    bool LoadFile( const wxString &name, int type );
+
     wxPalette *GetPalette(void) const;
     wxPalette *GetColourMap(void) const
       { return GetPalette(); };

@@ -49,7 +49,7 @@ class WXDLLEXPORT wxGenericGrid: public wxPanel
  public:
   wxGenericGrid(void);
 
-  inline wxGenericGrid(wxWindow *parent, int x, int y, int width, int height, const long style = 0, char *name = "grid")
+  inline wxGenericGrid(wxWindow *parent, int x, int y, int width, int height, long style = 0, char *name = "grid")
   {
     Create(parent, -1, wxPoint(x, y), wxSize(width, height), style, name);
   }

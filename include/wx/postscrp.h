@@ -151,7 +151,7 @@ DECLARE_CLASS(wxPostScriptPrintDialog)
 public:
     wxPostScriptPrintDialog (wxWindow *parent, const wxString& title,
 		      const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-			  const long style = wxDEFAULT_DIALOG_STYLE);
+			  long style = wxDEFAULT_DIALOG_STYLE);
 
     virtual int ShowModal(void) ;
 };

@@ -27,28 +27,28 @@ class WXDLLEXPORT wxButton: public wxControl
   DECLARE_DYNAMIC_CLASS(wxButton)
  public:
   inline wxButton(void) {}
-  inline wxButton(wxWindow *parent, const wxWindowID id, const wxString& label,
+  inline wxButton(wxWindow *parent, wxWindowID id, const wxString& label,
            const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize, const long style = 0,
+           const wxSize& size = wxDefaultSize, long style = 0,
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxButtonNameStr)
   {
       Create(parent, id, label, pos, size, style, validator, name);
   }
 
-  bool Create(wxWindow *parent, const wxWindowID id, const wxString& label,
+  bool Create(wxWindow *parent, wxWindowID id, const wxString& label,
            const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize, const long style = 0,
+           const wxSize& size = wxDefaultSize, long style = 0,
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxButtonNameStr);
 
-  virtual void SetSize(const int x, const int y, const int width, const int height, const int sizeFlags = wxSIZE_AUTO);
+  virtual void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
   virtual void SetDefault(void);
   virtual void SetLabel(const wxString& label);
   virtual wxString GetLabel(void) const ;
   virtual void Command(wxCommandEvent& event);
-  virtual bool MSWCommand(const WXUINT param, const WXWORD id);
-  virtual WXHBRUSH OnCtlColor(const WXHDC pDC, const WXHWND pWnd, const WXUINT nCtlColor,
+  virtual bool MSWCommand(WXUINT param, WXWORD id);
+  virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 			WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 };
 

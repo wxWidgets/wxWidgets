@@ -32,10 +32,10 @@ void gtk_combo_clicked_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo 
 
 IMPLEMENT_DYNAMIC_CLASS(wxComboBox,wxControl)
 
-bool wxComboBox::Create(wxWindow *parent, const wxWindowID id, const wxString& value,
+bool wxComboBox::Create(wxWindow *parent, wxWindowID id, const wxString& value,
   const wxPoint& pos, const wxSize& size,
-  const int n, const wxString choices[],
-  const long style, const wxString& name )
+  int n, const wxString choices[],
+  long style, const wxString& name )
 {
   m_needParent = TRUE;
   
@@ -97,7 +97,7 @@ void wxComboBox::Append( const wxString &WXUNUSED(item), char* WXUNUSED(clientDa
 {
 };
 
-void wxComboBox::Delete( const int n )
+void wxComboBox::Delete( int n )
 {
   GtkWidget *list = GTK_COMBO(m_widget)->list;
   gtk_list_clear_items( GTK_LIST(list), n, n );
@@ -120,14 +120,14 @@ int wxComboBox::FindString( const wxString &item )
   return -1;
 };
 
-char* wxComboBox::GetClientData( const int n )
+char* wxComboBox::GetClientData( int n )
 {
   wxNode *node = m_clientData.Nth( n );
   if (node) return (char*)node->Data();
   return NULL;
 };
 
-void wxComboBox::SetClientData( const int n, char * clientData )
+void wxComboBox::SetClientData( int n, char * clientData )
 {
   wxNode *node = m_clientData.Nth( n );
   if (node) node->SetData( (wxObject*) clientData );
@@ -152,7 +152,7 @@ int wxComboBox::GetSelection(void) const
   return -1;
 };
 
-wxString wxComboBox::GetString( const int n ) const
+wxString wxComboBox::GetString( int n ) const
 {
   GtkWidget *list = GTK_COMBO(m_widget)->list;
   
@@ -190,7 +190,7 @@ int wxComboBox::Number(void) const
   return count;
 };
 
-void wxComboBox::SetSelection( const int n )
+void wxComboBox::SetSelection( int n )
 {
   GtkWidget *list = GTK_COMBO(m_widget)->list;
   gtk_list_select_item( GTK_LIST(list), n );
@@ -229,7 +229,7 @@ void wxComboBox::Paste(void)
   gtk_editable_paste_clipboard( GTK_EDITABLE(entry), 0 );
 };
 
-void wxComboBox::SetInsertionPoint( const long pos )
+void wxComboBox::SetInsertionPoint( long pos )
 {
   GtkWidget *entry = GTK_COMBO(m_widget)->entry;
   int tmp = (int) pos;
@@ -256,7 +256,7 @@ long wxComboBox::GetLastPosition(void) const
   return (long) pos-1;
 };
 
-void wxComboBox::Replace( const long from, const long to, const wxString& value )
+void wxComboBox::Replace( long from, long to, const wxString& value )
 {
   GtkWidget *entry = GTK_COMBO(m_widget)->entry;
   gtk_editable_delete_text( GTK_EDITABLE(entry), (gint)from, (gint)to );
@@ -265,17 +265,17 @@ void wxComboBox::Replace( const long from, const long to, const wxString& value 
   gtk_editable_insert_text( GTK_EDITABLE(entry), value, value.Length(), &pos );
 };
 
-void wxComboBox::Remove(const long from, const long to)
+void wxComboBox::Remove(long from, long to)
 {
   GtkWidget *entry = GTK_COMBO(m_widget)->entry;
   gtk_editable_delete_text( GTK_EDITABLE(entry), (gint)from, (gint)to );
 };
 
-void wxComboBox::SetSelection( const long WXUNUSED(from), const long WXUNUSED(to) )
+void wxComboBox::SetSelection( long WXUNUSED(from), long WXUNUSED(to) )
 {
 };
 
-void wxComboBox::SetEditable( const bool WXUNUSED(editable) )
+void wxComboBox::SetEditable( bool WXUNUSED(editable) )
 {
 };
 

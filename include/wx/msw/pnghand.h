@@ -24,8 +24,8 @@ public:
 	m_type = wxBITMAP_TYPE_PNG;
   };
 
-  virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, const long flags,
+  virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
       int desiredWidth, int desiredHeight);
-  virtual bool SaveFile(wxBitmap *bitmap, const wxString& name, const int type, const wxPalette *palette = NULL);
+  virtual bool SaveFile(wxBitmap *bitmap, const wxString& name, int type, const wxPalette *palette = NULL);
 };
 

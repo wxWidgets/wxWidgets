@@ -1273,7 +1273,7 @@ void wxSizer::RemoveSizerChild(wxWindow *child)
   GetChildren()->DeleteObject(child);
 }
 
-void wxSizer::SetSize(const int x, const int y, const int w, const int h, const int WXUNUSED(flags))
+void wxSizer::SetSize(int x, int y, int w, int h, int WXUNUSED(flags))
 {
   wxLayoutConstraints *constr = GetConstraints();
   if (x != -1)
@@ -1302,7 +1302,7 @@ void wxSizer::SetSize(const int x, const int y, const int w, const int h, const 
   }
 }
 
-void wxSizer::Move(const int x, const int y)
+void wxSizer::Move(int x, int y)
 {
   wxLayoutConstraints *constr = GetConstraints();
   if (x != -1)
@@ -1517,7 +1517,7 @@ wxRowColSizer::~wxRowColSizer(void)
 {
 }
 
-void wxRowColSizer::SetSize(const int x, const int y, const int w, const int h, const int flags)
+void wxRowColSizer::SetSize(int x, int y, int w, int h, int flags)
 {
   wxSizer::SetSize(x, y, w, h, flags);
 }

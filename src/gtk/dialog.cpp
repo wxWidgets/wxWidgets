@@ -57,7 +57,7 @@ wxDialog::wxDialog(void)
 wxDialog::wxDialog( wxWindow *parent, 
       wxWindowID id, const wxString &title,
       const wxPoint &pos, const wxSize &size, 
-      const long style, const wxString &name )
+      long style, const wxString &name )
 {
   wxTopLevelWindows.Insert( this );
   Create( parent, id, title, pos, size, style, name );
@@ -66,7 +66,7 @@ wxDialog::wxDialog( wxWindow *parent,
 bool wxDialog::Create( wxWindow *parent,
       wxWindowID id, const wxString &title,
       const wxPoint &pos, const wxSize &size, 
-      const long style, const wxString &name )
+      long style, const wxString &name )
 {
   m_needParent = FALSE;
   
@@ -172,7 +172,7 @@ void wxDialog::OnCloseWindow(wxCloseEvent& event)
   };
 };
 
-bool wxDialog::Show( const bool show )
+bool wxDialog::Show( bool show )
 {
   if (!show && m_modalShowing)
   {

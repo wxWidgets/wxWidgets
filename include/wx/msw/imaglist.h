@@ -63,7 +63,7 @@ class WXDLLEXPORT wxImageList: public wxObject
   // Specify the width and height of the images in the list,
   // whether there are masks associated with them (e.g. if creating images
   // from icons), and the initial size of the list.
-  inline wxImageList(const int width, const int height, const bool mask = TRUE, const int initialCount = 1)
+  inline wxImageList(int width, int height, bool mask = TRUE, int initialCount = 1)
   {
     Create(width, height, mask, initialCount);
   }
@@ -83,7 +83,7 @@ class WXDLLEXPORT wxImageList: public wxObject
   // width, height specify the size of the images in the list (all the same).
   // mask specifies whether the images have masks or not.
   // initialNumber is the initial number of images to reserve.
-  bool Create(const int width, const int height, const bool mask = TRUE, const int initialNumber = 1);
+  bool Create(int width, int height, bool mask = TRUE, int initialNumber = 1);
 
   // Adds a bitmap, and optionally a mask bitmap.
   // Note that wxImageList creates *new* bitmaps, so you may delete
@@ -101,21 +101,21 @@ class WXDLLEXPORT wxImageList: public wxObject
   // Replaces a bitmap, optionally passing a mask bitmap.
   // Note that wxImageList creates new bitmaps, so you may delete
   // 'bitmap' and 'mask' after calling Replace.
-  bool Replace(const int index, const wxBitmap& bitmap, const wxBitmap& mask = wxNullBitmap);
+  bool Replace(int index, const wxBitmap& bitmap, const wxBitmap& mask = wxNullBitmap);
 
 /* Not supported by Win95
   // Replacing a bitmap, using the specified colour to create the mask bitmap
   // Note that wxImageList creates new bitmaps, so you may delete
   // 'bitmap'.
-  bool Replace(const int index, const wxBitmap& bitmap, const wxColour& maskColour);
+  bool Replace(int index, const wxBitmap& bitmap, const wxColour& maskColour);
 */
 
   // Replaces a bitmap and mask from an icon.
   // You can delete 'icon' after calling Replace.
-  bool Replace(const int index, const wxIcon& icon);
+  bool Replace(int index, const wxIcon& icon);
 
   // Removes the image at the given index.
-  bool Remove(const int index);
+  bool Remove(int index);
 
   // Remove all images
   bool RemoveAll(void);
@@ -124,13 +124,13 @@ class WXDLLEXPORT wxImageList: public wxObject
   // If 'solidBackground' is TRUE, Draw sets the image list background
   // colour to the background colour of the wxDC, to speed up
   // drawing by eliminating masked drawing where possible.
-  bool Draw(const int index, wxDC& dc, const int x, const int y,
-    const int flags = wxIMAGELIST_DRAW_NORMAL, const bool solidBackground = FALSE);
+  bool Draw(int index, wxDC& dc, int x, int y,
+    int flags = wxIMAGELIST_DRAW_NORMAL, bool solidBackground = FALSE);
 
   // TODO: miscellaneous functionality
 /*
-  wxIcon *MakeIcon(const int index);
-  bool SetOverlayImage(const int index, const int overlayMask);
+  wxIcon *MakeIcon(int index);
+  bool SetOverlayImage(int index, int overlayMask);
 
 */
 
@@ -139,7 +139,7 @@ class WXDLLEXPORT wxImageList: public wxObject
 #if 0
   // Creates a new drag image by combining the given image (typically a mouse cursor image)
   // with the current drag image.
-  bool SetDragCursorImage(const int index, const wxPoint& hotSpot);
+  bool SetDragCursorImage(int index, const wxPoint& hotSpot);
 
   // If successful, returns a pointer to the temporary image list that is used for dragging;
   // otherwise, NULL.
@@ -152,7 +152,7 @@ class WXDLLEXPORT wxImageList: public wxObject
   // current cursor. In response to subsequent mouse move messages, you can move the drag image
   // by using the DragMove member function. To end the drag operation, you can use the EndDrag
   // member function.
-  bool BeginDrag(const int index, const wxPoint& hotSpot);
+  bool BeginDrag(int index, const wxPoint& hotSpot);
 
   // Ends a drag operation.
   bool EndDrag(void);

@@ -371,7 +371,7 @@ wxString wxMenu::GetLabel(int Id) const
   return wxString(tmp) ;
 }
 
-bool wxMenu::MSWCommand(const WXUINT WXUNUSED(param), const WXWORD id)
+bool wxMenu::MSWCommand(WXUINT WXUNUSED(param), WXWORD id)
 {
   wxCommandEvent event(wxEVENT_TYPE_MENU_COMMAND);
   event.SetEventObject( this );
@@ -408,7 +408,7 @@ int wxMenu::FindItem (const wxString& itemString) const
   return -1;
 }
 
-wxMenuItem *wxMenu::FindItemForId(const int itemId, wxMenu ** itemMenu) const
+wxMenuItem *wxMenu::FindItemForId(int itemId, wxMenu ** itemMenu) const
 {
   if (itemMenu)
     *itemMenu = NULL;
@@ -436,14 +436,14 @@ wxMenuItem *wxMenu::FindItemForId(const int itemId, wxMenu ** itemMenu) const
   return NULL;
 }
 
-void wxMenu::SetHelpString(const int itemId, const wxString& helpString)
+void wxMenu::SetHelpString(int itemId, const wxString& helpString)
 {
   wxMenuItem *item = FindItemForId (itemId);
   if (item)
     item->SetHelp(helpString);
 }
 
-wxString wxMenu::GetHelpString (const int itemId) const
+wxString wxMenu::GetHelpString (int itemId) const
 {
   wxMenuItem *item = FindItemForId (itemId);
   wxString str("");
@@ -474,7 +474,7 @@ void wxMenu::ProcessCommand(wxCommandEvent & event)
 }
 
 extern wxMenu *wxCurrentPopupMenu;
-bool wxWindow::PopupMenu(wxMenu *menu, const int x, const int y)
+bool wxWindow::PopupMenu(wxMenu *menu, int x, int y)
 {
   menu->SetInvokingWindow(this);
 
@@ -506,7 +506,7 @@ wxMenuBar::wxMenuBar(void)
   m_hMenu = 0;
 }
 
-wxMenuBar::wxMenuBar(const int N, wxMenu *Menus[], const wxString Titles[])
+wxMenuBar::wxMenuBar(int N, wxMenu *Menus[], const wxString Titles[])
 {
   m_eventHandler = this;
   m_menuCount = N;
@@ -563,7 +563,7 @@ wxMenuBar::~wxMenuBar(void)
 
 // Must only be used AFTER menu has been attached to frame,
 // otherwise use individual menus to enable/disable items
-void wxMenuBar::Enable(const int Id, const bool Flag)
+void wxMenuBar::Enable(int Id, bool Flag)
 {
   int ms_flag;
   if (Flag)
@@ -583,7 +583,7 @@ void wxMenuBar::Enable(const int Id, const bool Flag)
 
 }
 
-void wxMenuBar::EnableTop(const int pos, const bool flag)
+void wxMenuBar::EnableTop(int pos, bool flag)
 {
   int ms_flag;
   if (flag)
@@ -597,7 +597,7 @@ void wxMenuBar::EnableTop(const int pos, const bool flag)
 
 // Must only be used AFTER menu has been attached to frame,
 // otherwise use individual menus
-void wxMenuBar::Check(const int Id, const bool Flag)
+void wxMenuBar::Check(int Id, bool Flag)
 {
   wxMenu *itemMenu = NULL;
   wxMenuItem *item = FindItemForId(Id, &itemMenu) ;
@@ -620,7 +620,7 @@ void wxMenuBar::Check(const int Id, const bool Flag)
 //  CheckMenuItem((HMENU)m_hMenu, Id, MF_BYCOMMAND | ms_flag);
 }
 
-bool wxMenuBar::Checked(const int Id) const
+bool wxMenuBar::Checked(int Id) const
 {
   wxMenu *itemMenu = NULL;
   wxMenuItem *item = FindItemForId(Id, &itemMenu) ;
@@ -642,7 +642,7 @@ bool wxMenuBar::Checked(const int Id) const
     return FALSE ;
 }
 
-bool wxMenuBar::Enabled(const int Id) const
+bool wxMenuBar::Enabled(int Id) const
 {
   wxMenu *itemMenu = NULL;
   wxMenuItem *item = FindItemForId(Id, &itemMenu) ;
@@ -663,7 +663,7 @@ bool wxMenuBar::Enabled(const int Id) const
 }
 
 
-void wxMenuBar::SetLabel(const int Id, const wxString& label)
+void wxMenuBar::SetLabel(int Id, const wxString& label)
 {
   wxMenu *itemMenu = NULL;
   wxMenuItem *item = FindItemForId(Id, &itemMenu) ;
@@ -683,7 +683,7 @@ void wxMenuBar::SetLabel(const int Id, const wxString& label)
   }
 }
 
-wxString wxMenuBar::GetLabel(const int Id) const
+wxString wxMenuBar::GetLabel(int Id) const
 {
   wxMenu *itemMenu = NULL;
   wxMenuItem *item = FindItemForId(Id, &itemMenu) ;
@@ -707,7 +707,7 @@ wxString wxMenuBar::GetLabel(const int Id) const
   return wxString(tmp) ;
 }
 
-void wxMenuBar::SetLabelTop(const int pos, const wxString& label)
+void wxMenuBar::SetLabelTop(int pos, const wxString& label)
 {
   UINT was_flag = GetMenuState((HMENU)m_hMenu,pos,MF_BYPOSITION) ;
   if (was_flag&MF_POPUP)
@@ -720,7 +720,7 @@ void wxMenuBar::SetLabelTop(const int pos, const wxString& label)
     ModifyMenu((HMENU)m_hMenu,pos,MF_BYPOSITION|MF_STRING|was_flag,pos,(const char *)label) ;
 }
 
-wxString wxMenuBar::GetLabelTop(const int pos) const
+wxString wxMenuBar::GetLabelTop(int pos) const
 {
   static char tmp[128] ;
   int len = GetMenuString((HMENU)m_hMenu,pos,tmp,127,MF_BYPOSITION) ;
@@ -728,7 +728,7 @@ wxString wxMenuBar::GetLabelTop(const int pos) const
   return wxString(tmp);
 }
 
-bool wxMenuBar::OnDelete(wxMenu *a_menu, const int pos)
+bool wxMenuBar::OnDelete(wxMenu *a_menu, int pos)
 {
   if (!m_menuBarFrame)
 	 return TRUE;
@@ -797,7 +797,7 @@ void wxMenuBar::Append (wxMenu * menu, const wxString& title)
   ((wxMenu *)menu)->SetParent(this);
 }
 
-void wxMenuBar::Delete(wxMenu * menu, const int i)
+void wxMenuBar::Delete(wxMenu * menu, int i)
 {
   int j;
   int ii = (int) i;
@@ -844,7 +844,7 @@ int wxMenuBar::FindMenuItem (const wxString& menuString, const wxString& itemStr
   return -1;
 }
 
-wxMenuItem *wxMenuBar::FindItemForId (const int Id, wxMenu ** itemMenu) const
+wxMenuItem *wxMenuBar::FindItemForId (int Id, wxMenu ** itemMenu) const
 {
   if (itemMenu)
     *itemMenu = NULL;
@@ -857,7 +857,7 @@ wxMenuItem *wxMenuBar::FindItemForId (const int Id, wxMenu ** itemMenu) const
   return NULL;
 }
 
-void wxMenuBar::SetHelpString (const int Id, const wxString& helpString)
+void wxMenuBar::SetHelpString (int Id, const wxString& helpString)
 {
   int i;
   for (i = 0; i < m_menuCount; i++)
@@ -870,7 +870,7 @@ void wxMenuBar::SetHelpString (const int Id, const wxString& helpString)
     }
 }
 
-wxString wxMenuBar::GetHelpString (const int Id) const
+wxString wxMenuBar::GetHelpString (int Id) const
 {
   int i;
   for (i = 0; i < m_menuCount; i++)

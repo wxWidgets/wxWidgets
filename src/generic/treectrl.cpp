@@ -357,7 +357,7 @@ wxTreeCtrl::wxTreeCtrl()
   m_hilightBrush = new wxBrush( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_HIGHLIGHT), wxSOLID );
 };
 
-wxTreeCtrl::wxTreeCtrl(wxWindow *parent, const wxWindowID id,
+wxTreeCtrl::wxTreeCtrl(wxWindow *parent, wxWindowID id,
             const wxPoint& pos,
  const wxSize& size,
             long style, const wxString& name )
@@ -381,7 +381,7 @@ wxTreeCtrl::~wxTreeCtrl()
   if (m_dc) delete m_dc;
 };
 
-bool wxTreeCtrl::Create(wxWindow *parent, const wxWindowID id,
+bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
             const wxPoint& pos,
  const wxSize& size,
             long style

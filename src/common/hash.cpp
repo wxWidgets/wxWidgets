@@ -33,7 +33,7 @@
 IMPLEMENT_DYNAMIC_CLASS(wxHashTable, wxObject)
 #endif
 
-wxHashTable::wxHashTable (const int the_key_type, const int size)
+wxHashTable::wxHashTable (int the_key_type, int size)
 {
   n = size;
   current_position = -1;
@@ -55,7 +55,7 @@ wxHashTable::~wxHashTable (void)
   delete[] hash_table;
 }
 
-bool wxHashTable::Create(const int the_key_type, const int size)
+bool wxHashTable::Create(int the_key_type, int size)
 {
   n = size;
   current_position = -1;
@@ -71,7 +71,7 @@ bool wxHashTable::Create(const int the_key_type, const int size)
   return TRUE;
 }
 
-void wxHashTable::Put (const long key, const long value, wxObject * object)
+void wxHashTable::Put (long key, long value, wxObject * object)
 {
   // Should NEVER be
   long k = (long) key;
@@ -85,7 +85,7 @@ void wxHashTable::Put (const long key, const long value, wxObject * object)
   hash_table[position]->Append (value, object);
 }
 
-void wxHashTable::Put (const long key, const char *value, wxObject * object)
+void wxHashTable::Put (long key, const char *value, wxObject * object)
 {
   // Should NEVER be
   long k = (long) key;
@@ -99,7 +99,7 @@ void wxHashTable::Put (const long key, const char *value, wxObject * object)
   hash_table[position]->Append (value, object);
 }
 
-void wxHashTable::Put (const long key, wxObject * object)
+void wxHashTable::Put (long key, wxObject * object)
 {
   // Should NEVER be
   long k = (long) key;
@@ -123,7 +123,7 @@ void wxHashTable::Put (const char *key, wxObject * object)
   hash_table[position]->Append (key, object);
 }
 
-wxObject *wxHashTable::Get (const long key, const long value) const
+wxObject *wxHashTable::Get (long key, long value) const
 {
   // Should NEVER be
   long k = (long) key;
@@ -143,7 +143,7 @@ wxObject *wxHashTable::Get (const long key, const long value) const
     }
 }
 
-wxObject *wxHashTable::Get (const long key, const char *value) const
+wxObject *wxHashTable::Get (long key, const char *value) const
 {
   // Should NEVER be
   long k = (long) key;
@@ -163,7 +163,7 @@ wxObject *wxHashTable::Get (const long key, const char *value) const
     }
 }
 
-wxObject *wxHashTable::Get (const long key) const
+wxObject *wxHashTable::Get (long key) const
 {
   // Should NEVER be
   long k = (long) key;
@@ -193,7 +193,7 @@ wxObject *wxHashTable::Get (const char *key) const
     }
 }
 
-wxObject *wxHashTable::Delete (const long key)
+wxObject *wxHashTable::Delete (long key)
 {
   // Should NEVER be
   long k = (long) key;
@@ -236,7 +236,7 @@ wxObject *wxHashTable::Delete (const char *key)
     }
 }
 
-wxObject *wxHashTable::Delete (const long key, const int value)
+wxObject *wxHashTable::Delete (long key, int value)
 {
   // Should NEVER be
   long k = (long) key;
@@ -260,7 +260,7 @@ wxObject *wxHashTable::Delete (const long key, const int value)
     }
 }
 
-wxObject *wxHashTable::Delete (const long key, const char *value)
+wxObject *wxHashTable::Delete (long key, const char *value)
 {
   int position = (int) (key % n);
   if (!hash_table[position])
@@ -328,7 +328,7 @@ wxNode *wxHashTable::Next (void)
   return found;
 }
 
-void wxHashTable::DeleteContents (const bool flag)
+void wxHashTable::DeleteContents (bool flag)
 {
   int i;
   for (i = 0; i < n; i++)

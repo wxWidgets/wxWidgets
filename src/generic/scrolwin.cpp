@@ -54,10 +54,10 @@ wxScrolledWindow::wxScrolledWindow(void)
   m_yScrollLinesPerPage = 0;
 }
 
-bool wxScrolledWindow::Create(wxWindow *parent, const wxWindowID id,
+bool wxScrolledWindow::Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos,
            const wxSize& size,
-           const long style,
+           long style,
            const wxString& name)
 {
   m_xScrollPixelsPerLine = 0;
@@ -78,9 +78,9 @@ bool wxScrolledWindow::Create(wxWindow *parent, const wxWindowID id,
  * pixelsPerUnitX/pixelsPerUnitY: number of pixels per unit (e.g. pixels per text line)
  * noUnitsX/noUnitsY:        : no. units per scrollbar
  */
-void wxScrolledWindow::SetScrollbars (const int pixelsPerUnitX, const int pixelsPerUnitY,
-	       const int noUnitsX, const int noUnitsY,
-	       const int xPos, const int yPos, const bool noRefresh )
+void wxScrolledWindow::SetScrollbars (int pixelsPerUnitX, int pixelsPerUnitY,
+	       int noUnitsX, int noUnitsY,
+	       int xPos, int yPos, bool noRefresh )
 {
   bool do_refresh =
      (
@@ -385,7 +385,7 @@ void wxScrolledWindow::SetScrollPageSize(int orient, int pageSize)
 /*
  * Scroll to given position (scroll position, not pixel position)
  */
-void wxScrolledWindow::Scroll (const int x_pos, const int y_pos)
+void wxScrolledWindow::Scroll (int x_pos, int y_pos)
 {
   int old_x, old_y;
   ViewStart (&old_x, &old_y);
@@ -408,7 +408,7 @@ void wxScrolledWindow::Scroll (const int x_pos, const int y_pos)
 #endif
 }
 
-void wxScrolledWindow::EnableScrolling (const bool x_scroll, const bool y_scroll)
+void wxScrolledWindow::EnableScrolling (bool x_scroll, bool y_scroll)
 {
   m_xScrollingEnabled = x_scroll;
   m_yScrollingEnabled = y_scroll;
@@ -427,13 +427,13 @@ void wxScrolledWindow::ViewStart (int *x, int *y) const
   *y = m_yScrollPosition;
 }
 
-void wxScrolledWindow::CalcScrolledPosition(const int x, const int y, int *xx, int *yy) const
+void wxScrolledWindow::CalcScrolledPosition(int x, int y, int *xx, int *yy) const
 {
   *xx = x - m_xScrollPosition * m_xScrollPixelsPerLine;
   *yy = y - m_yScrollPosition * m_yScrollPixelsPerLine;
 }
 
-void wxScrolledWindow::CalcUnscrolledPosition(const int x, const int y, float *xx, float *yy) const
+void wxScrolledWindow::CalcUnscrolledPosition(int x, int y, float *xx, float *yy) const
 {
   *xx = (float)(x + m_xScrollPosition * m_xScrollPixelsPerLine);
   *yy = (float)(y + m_yScrollPosition * m_yScrollPixelsPerLine);

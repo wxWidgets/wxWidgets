@@ -112,19 +112,19 @@ class WXDLLEXPORT wxRect : public wxObject {
     DECLARE_DYNAMIC_CLASS(wxRect)
 public:
    wxRect(void) ;
-   wxRect(const long x, const long y, const long w, const long h);
+   wxRect(long x, long y, long w, long h);
    wxRect(const wxPoint& topLeft, const wxPoint& bottomRight);
    wxRect(const wxPoint& pos, const wxSize& size);
    wxRect(const wxRect& rect);
 
    inline long  GetX(void) const        { return x; }
-   inline void SetX(const long X)       { x = X; }
+   inline void SetX(long X)       { x = X; }
    inline long  GetY(void) const        { return y; }
-   inline void SetY(const long Y)       { y = Y; }
+   inline void SetY(long Y)       { y = Y; }
    inline long  GetWidth() const        { return width; }
-   inline void SetWidth(const long w)   { width = w; }
+   inline void SetWidth(long w)   { width = w; }
    inline long  GetHeight() const       { return height; }
-   inline void SetHeight(const long h)  { height = h; }
+   inline void SetHeight(long h)  { height = h; }
 
    inline wxPoint GetPosition(void) { return wxPoint(x, y); }
    inline wxSize GetSize(void) { return wxSize(width, height); }
@@ -189,8 +189,8 @@ class WXDLLEXPORT wxPenList: public wxList
   ~wxPenList(void);
   void AddPen(wxPen *pen);
   void RemovePen(wxPen *pen);
-  wxPen *FindOrCreatePen(const wxColour& colour, const int width, const int style);
-  wxPen *FindOrCreatePen(const wxString& colour, const int width, const int style);
+  wxPen *FindOrCreatePen(const wxColour& colour, int width, int style);
+  wxPen *FindOrCreatePen(const wxString& colour, int width, int style);
 };
 
 class WXDLLEXPORT wxBrushList: public wxList
@@ -202,8 +202,8 @@ class WXDLLEXPORT wxBrushList: public wxList
   ~wxBrushList(void);
   void AddBrush(wxBrush *brush);
   void RemoveBrush(wxBrush *brush);
-  wxBrush *FindOrCreateBrush(const wxColour& colour, const int style);
-  wxBrush *FindOrCreateBrush(const wxString& colour, const int style);
+  wxBrush *FindOrCreateBrush(const wxColour& colour, int style);
+  wxBrush *FindOrCreateBrush(const wxString& colour, int style);
 };
 
 WXDLLEXPORT_DATA(extern const char*) wxEmptyString;
@@ -217,8 +217,8 @@ class WXDLLEXPORT wxFontList: public wxList
   ~wxFontList(void);
   void AddFont(wxFont *font);
   void RemoveFont(wxFont *font);
-  wxFont *FindOrCreateFont(const int pointSize, const int family, const int style, const int weight,
-    const bool underline = FALSE, const wxString& face = wxEmptyString);
+  wxFont *FindOrCreateFont(int pointSize, int family, int style, int weight,
+    bool underline = FALSE, const wxString& face = wxEmptyString);
 };
 
 class WXDLLEXPORT wxColourDatabase: public wxList

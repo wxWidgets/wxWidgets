@@ -68,9 +68,9 @@ wxToolBarMSW::wxToolBarMSW(void)
   m_defaultHeight = DEFAULTBITMAPY;
 }
 
-bool wxToolBarMSW::Create(wxWindow *parent, const wxWindowID id, const wxPoint& pos, const wxSize& size,
-            const long style, const int orientation,
-            const int RowsOrColumns, const wxString& name)
+bool wxToolBarMSW::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
+            long style, int orientation,
+            int RowsOrColumns, const wxString& name)
 {
 	if ( ! wxWindow::Create(parent, id, pos, size, style, name) )
 		return FALSE;
@@ -292,7 +292,7 @@ void wxToolBarMSW::OnMouseEvent(wxMouseEvent& event)
 // This function enables/disables a toolbar tool and redraws it.
 // If that would not be done, the enabling/disabling wouldn't be
 // visible on the screen.
-void wxToolBarMSW::EnableTool(const int toolIndex, const bool enable)
+void wxToolBarMSW::EnableTool(int toolIndex, bool enable)
 {
   wxNode *node = m_tools.Find((long)toolIndex);
   if (node)
@@ -329,8 +329,8 @@ void wxToolBarMSW::DrawTool(wxDC& dc, wxMemoryDC& , wxToolBarTool *tool)
 // If pushedBitmap is NULL, a reversed version of bitmap is
 // created and used as the pushed/toggled image.
 // If toggle is TRUE, the button toggles between the two states.
-wxToolBarTool *wxToolBarMSW::AddTool(const int index, const wxBitmap& bitmap, const wxBitmap& pushedBitmap,
-             const bool toggle, const long xPos, const long yPos, wxObject *clientData, const wxString& helpString1, const wxString& helpString2)
+wxToolBarTool *wxToolBarMSW::AddTool(int index, const wxBitmap& bitmap, const wxBitmap& pushedBitmap,
+             bool toggle, long xPos, long yPos, wxObject *clientData, const wxString& helpString1, const wxString& helpString2)
 {
   // Using bitmap2 can cause problems (don't know why!)
 

@@ -99,7 +99,7 @@ bool wxImageList::GetSize( int index, int &width, int &height ) const
 
 bool wxImageList::Draw( int index, wxDC &dc, 
                         int x, int y,
-                        int WXUNUSED(flags), const bool WXUNUSED(solidBackground) )
+                        int WXUNUSED(flags), bool WXUNUSED(solidBackground) )
 {
   wxNode *node = m_images.Nth( index );
   if (!node) return FALSE;

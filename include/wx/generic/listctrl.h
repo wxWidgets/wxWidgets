@@ -51,7 +51,7 @@ class wxListRenameTimer;
 //-----------------------------------------------------------------------------
 
 // type of compare function for wxListCtrl sort operation
-typedef int (*wxListCtrlCompare)(const long item1, const long item2, long sortData);
+typedef int (*wxListCtrlCompare)(long item1, long item2, long sortData);
 
 //-----------------------------------------------------------------------------
 // wxListCtrl flags
@@ -252,14 +252,14 @@ class wxListItemData : public wxObject
     wxListItemData( const wxListItem &info );
     void SetItem( const wxListItem &info );
     void SetText( const wxString &s );
-    void SetImage( const int image );
-    void SetData( const long data );
-    void SetPosition( const int x, const int y );
-    void SetSize( const int width, const int height );
+    void SetImage( int image );
+    void SetData( long data );
+    void SetPosition( int x, int y );
+    void SetSize( int width, int height );
     void SetColour( wxColour *col );
     bool HasImage(void) const;
     bool HasText(void) const;
-    bool IsHit( const int x, const int y ) const;
+    bool IsHit( int x, int y ) const;
     void GetText( wxString &s );
     int GetX( void ) const;
     int GetY( void ) const;
@@ -291,13 +291,13 @@ class wxListHeaderData : public wxObject
     wxListHeaderData(void);
     wxListHeaderData( const wxListItem &info );
     void SetItem( const wxListItem &item );
-    void SetPosition( const int x, const int y );
-    void SetWidth( const int w );
-    void SetFormat( const int format );
-    void SetHeight( const int h );
+    void SetPosition( int x, int y );
+    void SetWidth( int w );
+    void SetFormat( int format );
+    void SetHeight( int h );
     bool HasImage(void) const;
     bool HasText(void) const;
-    bool IsHit( const int x, const int y ) const;
+    bool IsHit( int x, int y ) const;
     void GetItem( wxListItem &item );
     void GetText( wxString &s );
     int GetImage(void) const;
@@ -325,32 +325,32 @@ class wxListLineData : public wxObject
     int                 m_spacing;
     wxListMainWindow   *m_owner;
 
-    void DoDraw( wxPaintDC *dc, const bool hilight, const bool paintBG );
+    void DoDraw( wxPaintDC *dc, bool hilight, bool paintBG );
 
   public:
     wxListLineData( void ) {};
-    wxListLineData( wxListMainWindow *owner, const int mode, wxBrush *hilightBrush );
-    void CalculateSize( wxPaintDC *dc, const int spacing );
-    void SetPosition( wxPaintDC *dc, const int x, const int y,  const int window_width );
-    void SetColumnPosition( const int index, const int x );
+    wxListLineData( wxListMainWindow *owner, int mode, wxBrush *hilightBrush );
+    void CalculateSize( wxPaintDC *dc, int spacing );
+    void SetPosition( wxPaintDC *dc, int x, int y,  int window_width );
+    void SetColumnPosition( int index, int x );
     void GetSize( int &width, int &height );
     void GetExtent( int &x, int &y, int &width, int &height );
     void GetLabelExtent( int &x, int &y, int &width, int &height );
-    long IsHit( const int x, const int y );
-    void InitItems( const int num );
-    void SetItem( const int index, const wxListItem &info );
-    void GetItem( const int index, wxListItem &info );
-    void GetText( const int index, wxString &s );
-    void SetText( const int index, const wxString s );
-    int GetImage( const int index );
+    long IsHit( int x, int y );
+    void InitItems( int num );
+    void SetItem( int index, const wxListItem &info );
+    void GetItem( int index, wxListItem &info );
+    void GetText( int index, wxString &s );
+    void SetText( int index, const wxString s );
+    int GetImage( int index );
     void GetRect( wxRectangle &rect );
-    void Hilight( const bool on );
+    void Hilight( bool on );
     void ReverseHilight( void );
-    void DrawRubberBand( wxPaintDC *dc, const bool on );
+    void DrawRubberBand( wxPaintDC *dc, bool on );
     void Draw( wxPaintDC *dc );
-    bool IsInRect( const int x, const int y, const wxRectangle &rect );
+    bool IsInRect( int x, int y, const wxRectangle &rect );
     bool IsHilighted( void );
-    void AssignRect( wxRectangle &dest, const int x, const int y, const int width, const int height );
+    void AssignRect( wxRectangle &dest, int x, int y, int width, int height );
     void AssignRect( wxRectangle &dest, const wxRectangle &source );
 };
 
@@ -369,9 +369,9 @@ class wxListHeaderWindow : public wxWindow
 
   public:
     wxListHeaderWindow( void );
-    wxListHeaderWindow( wxWindow *win, const wxWindowID id, wxListMainWindow *owner, 
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      const long style = 0, const wxString &name = "columntitles" );
+    wxListHeaderWindow( wxWindow *win, wxWindowID id, wxListMainWindow *owner, 
+      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
+      long style = 0, const wxString &name = "columntitles" );
     void DoDrawRect( wxPaintDC *dc, int x, int y, int w, int h );
     void OnPaint( wxPaintEvent &event );
     void OnMouse( wxMouseEvent &event );
@@ -487,13 +487,13 @@ class wxListMainWindow: public wxScrolledWindow
 
   public:
     wxListMainWindow(void); 
-    wxListMainWindow( wxWindow *parent, const wxWindowID id, 
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      const long style = 0, const wxString &name = "listctrl" );
+    wxListMainWindow( wxWindow *parent, wxWindowID id, 
+      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
+      long style = 0, const wxString &name = "listctrl" );
     ~wxListMainWindow(void);
     void RefreshLine( wxListLineData *line );
     void OnPaint( wxPaintEvent &event );
-    void HilightAll( const bool on );
+    void HilightAll( bool on );
     void ActivateLine( wxListLineData *line );
     void SendNotify( wxListLineData *line, wxEventType command );
     void FocusLine( wxListLineData *line );
@@ -517,37 +517,37 @@ class wxListMainWindow: public wxScrolledWindow
     int GetIndexOfLine( const wxListLineData *line );
     int GetTextLength( wxString &s );  // should be const
 
-    void SetImageList( wxImageList *imageList, const int which );
-    void SetItemSpacing( const int spacing, const bool isSmall = FALSE );
-    int GetItemSpacing( const bool isSmall = FALSE );
-    void SetColumn( const int col, wxListItem &item );
-    void SetColumnWidth( const int col, const int width );
-    void GetColumn( const int col, wxListItem &item );
-    int GetColumnWidth( const int vol );
+    void SetImageList( wxImageList *imageList, int which );
+    void SetItemSpacing( int spacing, bool isSmall = FALSE );
+    int GetItemSpacing( bool isSmall = FALSE );
+    void SetColumn( int col, wxListItem &item );
+    void SetColumnWidth( int col, int width );
+    void GetColumn( int col, wxListItem &item );
+    int GetColumnWidth( int vol );
     int GetColumnCount( void );
     int GetCountPerPage( void );     
     void SetItem( wxListItem &item );
     void GetItem( wxListItem &item );
-    void SetItemState( const long item, const long state, const long stateMask ); 
-    int GetItemState( const long item, const long stateMask );
+    void SetItemState( long item, long state, long stateMask ); 
+    int GetItemState( long item, long stateMask );
     int GetItemCount( void );
-    void GetItemRect( const long index, wxRectangle &rect );
+    void GetItemRect( long index, wxRectangle &rect );
     int GetSelectedItemCount( void );
-    void SetMode( const long mode );
+    void SetMode( long mode );
     long GetMode( void ) const;
     void CalculatePositions( void );
     void RealizeChanges(void);
-    long GetNextItem( const long item, int geometry, int state );
-    void DeleteItem( const long index );
+    long GetNextItem( long item, int geometry, int state );
+    void DeleteItem( long index );
     void DeleteAllItems( void );
-    void DeleteColumn( const int col );
+    void DeleteColumn( int col );
     void DeleteEverything( void );
-    void EnsureVisible( const long index );
-    long FindItem(const long start, const wxString& str, const bool partial = FALSE );
-    long FindItem(const long start, const long data);
-    long HitTest( const int x, const int y, int &flags );
+    void EnsureVisible( long index );
+    long FindItem(long start, const wxString& str, bool partial = FALSE );
+    long FindItem(long start, long data);
+    long HitTest( int x, int y, int &flags );
     void InsertItem( wxListItem &item );
-    void InsertColumn( const long col, wxListItem &item );
+    void InsertColumn( long col, wxListItem &item );
     void SortItems( wxListCtrlCompare fn, long data );
     virtual bool OnListNotify( wxListEvent &event );
     
@@ -565,66 +565,66 @@ class wxListCtrl: public wxControl
   public:
   
     wxListCtrl(void);
-    wxListCtrl( wxWindow *parent, const wxWindowID id, 
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      const long style = 0, const wxString &name = "listctrl" );
+    wxListCtrl( wxWindow *parent, wxWindowID id, 
+      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
+      long style = 0, const wxString &name = "listctrl" );
     ~wxListCtrl(void);
-    bool Create( wxWindow *parent, const wxWindowID id, 
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      const long style = 0, const wxString &name = "listctrl" );
+    bool Create( wxWindow *parent, wxWindowID id, 
+      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
+      long style = 0, const wxString &name = "listctrl" );
     void OnSize( wxSizeEvent &event );
     void SetBackgroundColour( const wxColour& col );
-    bool GetColumn( const int col, wxListItem& item );
-    bool SetColumn( const int col, wxListItem& item );
-    int GetColumnWidth( const int col );
-    bool SetColumnWidth( const int col, const int width);
+    bool GetColumn( int col, wxListItem& item );
+    bool SetColumn( int col, wxListItem& item );
+    int GetColumnWidth( int col );
+    bool SetColumnWidth( int col, int width);
     int GetCountPerPage(void); // not the same in wxGLC as in Windows, I think
 //  wxText& GetEditControl(void) const; // not supported in wxGLC
     bool GetItem( wxListItem& info );
     bool SetItem( wxListItem& info ) ;
-    long SetItem( const long index, const int col, const wxString& label, const int imageId = -1 );
-    int  GetItemState( const long item, const long stateMask );
-    bool SetItemState( const long item, const long state, const long stateMask); 
-    bool SetItemImage( const long item, const int image, const int selImage); 
-    wxString GetItemText( const long item );
-    void SetItemText( const long item, const wxString& str );
-    long GetItemData( const long item );
-    bool SetItemData( const long item, long data );
-    bool GetItemRect( const long item, wxRectangle& rect, const int code = wxLIST_RECT_BOUNDS ); // not supported in wxGLC
-    bool GetItemPosition( const long item, wxPoint& pos ) const; // not supported in wxGLC
-    bool SetItemPosition( const long item, const wxPoint& pos ); // not supported in wxGLC
+    long SetItem( long index, int col, const wxString& label, int imageId = -1 );
+    int  GetItemState( long item, long stateMask );
+    bool SetItemState( long item, long state, long stateMask);
+    bool SetItemImage( long item, int image, int selImage);
+    wxString GetItemText( long item );
+    void SetItemText( long item, const wxString& str );
+    long GetItemData( long item );
+    bool SetItemData( long item, long data );
+    bool GetItemRect( long item, wxRectangle& rect, int code = wxLIST_RECT_BOUNDS ); // not supported in wxGLC
+    bool GetItemPosition( long item, wxPoint& pos ) const; // not supported in wxGLC
+    bool SetItemPosition( long item, const wxPoint& pos ); // not supported in wxGLC
     int GetItemCount(void);
     int GetItemSpacing( bool isSmall );
     int GetSelectedItemCount(void);
 //  wxColour GetTextColour(void) const; // wxGLC has colours for every Item (see wxListItem)
 //  void SetTextColour(const wxColour& col);
     long GetTopItem(void);
-    void SetSingleStyle( const long style, const bool add = TRUE ) ;
-    void SetWindowStyleFlag(const long style);
+    void SetSingleStyle( long style, bool add = TRUE ) ;
+    void SetWindowStyleFlag(long style);
     void RecreateWindow(void) {};
-    long GetNextItem(const long item, int geometry = wxLIST_NEXT_ALL, int state = wxLIST_STATE_DONTCARE);
-    wxImageList *GetImageList(const int which);
-    void SetImageList(wxImageList *imageList, const int which) ;
-    bool Arrange( const int flag = wxLIST_ALIGN_DEFAULT ); // always wxLIST_ALIGN_LEFT in wxGLC
-    bool DeleteItem( const long item );
+    long GetNextItem(long item, int geometry = wxLIST_NEXT_ALL, int state = wxLIST_STATE_DONTCARE);
+    wxImageList *GetImageList(int which);
+    void SetImageList(wxImageList *imageList, int which) ;
+    bool Arrange( int flag = wxLIST_ALIGN_DEFAULT ); // always wxLIST_ALIGN_LEFT in wxGLC
+    bool DeleteItem( long item );
     bool DeleteAllItems(void) ;
-    bool DeleteColumn( const int col );
-//  wxText& Edit(const long item) ;  // not supported in wxGLC
-    bool EnsureVisible( const long item );
-    long FindItem(const long start, const wxString& str, const bool partial = FALSE );
-    long FindItem(const long start, const long data);
-    long FindItem(const long start, const wxPoint& pt, const int direction); // not supported in wxGLC
+    bool DeleteColumn( int col );
+//  wxText& Edit(long item) ;  // not supported in wxGLC
+    bool EnsureVisible( long item );
+    long FindItem(long start, const wxString& str, bool partial = FALSE );
+    long FindItem(long start, long data);
+    long FindItem(long start, const wxPoint& pt, int direction); // not supported in wxGLC
     long HitTest(const wxPoint& point, int& flags);
     long InsertItem(wxListItem& info);
-    long InsertItem(const long index, const wxString& label);
-    long InsertItem(const long index, const int imageIndex);
-    long InsertItem(const long index, const wxString& label, const int imageIndex);
-    long InsertColumn(const long col, wxListItem& info);
-    long InsertColumn(const long col, const wxString& heading, const int format = wxLIST_FORMAT_LEFT,
-      const int width = -1);
-    bool ScrollList(const int dx, const int dy);
+    long InsertItem(long index, const wxString& label);
+    long InsertItem(long index, int imageIndex);
+    long InsertItem(long index, const wxString& label, int imageIndex);
+    long InsertColumn(long col, wxListItem& info);
+    long InsertColumn(long col, const wxString& heading, int format = wxLIST_FORMAT_LEFT,
+      int width = -1);
+    bool ScrollList(int dx, int dy);
     bool SortItems(wxListCtrlCompare fn, long data);
-    bool Update(const long item);
+    bool Update(long item);
     virtual bool OnListNotify(wxListEvent& WXUNUSED(event)) { return FALSE; }
     void SetDropTarget( wxDropTarget *dropTarget )
       { m_mainWin->SetDropTarget( dropTarget ); };

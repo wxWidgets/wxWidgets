@@ -82,12 +82,12 @@ public:
   wxString GetWeightString(void) const ;
   inline bool GetUnderlined(void) const { return M_FONTDATA->m_underlined; }
 
-  void SetPointSize(const int pointSize);
-  void SetFamily(const int family);
-  void SetStyle(const int style);
-  void SetWeight(const int weight);
+  void SetPointSize(int pointSize);
+  void SetFamily(int family);
+  void SetStyle(int style);
+  void SetWeight(int weight);
   void SetFaceName(const wxString& faceName);
-  void SetUnderlined(const bool underlined);
+  void SetUnderlined(bool underlined);
 
   inline wxFont& operator = (const wxFont& font) { if (*this == font) return (*this); Ref(font); return *this; }
   inline bool operator == (const wxFont& font) { return m_refData == font.m_refData; }

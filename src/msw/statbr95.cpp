@@ -116,7 +116,7 @@ bool wxStatusBar95::Create(wxWindow *parent, wxWindowID id, long style)
   return TRUE;
 }
 
-void wxStatusBar95::CopyFieldsWidth(const int *widths)
+void wxStatusBar95::CopyFieldsWidth(int *widths)
 {
   if (widths && !m_statusWidths)
     m_statusWidths = new int[m_nFields];
@@ -131,7 +131,7 @@ void wxStatusBar95::CopyFieldsWidth(const int *widths)
   }
 }
 
-void wxStatusBar95::SetFieldsCount(int nFields, const int *widths)
+void wxStatusBar95::SetFieldsCount(int nFields, int *widths)
 {
   wxASSERT( (nFields > 0) && (nFields < 255) );
 
@@ -141,7 +141,7 @@ void wxStatusBar95::SetFieldsCount(int nFields, const int *widths)
   SetFieldsWidth();
 }
 
-void wxStatusBar95::SetStatusWidths(int n, const int *widths)
+void wxStatusBar95::SetStatusWidths(int n, int *widths)
 {
   // @@ I don't understand what this function is for...
   wxASSERT( n == m_nFields );
@@ -202,7 +202,7 @@ void wxStatusBar95::SetFieldsWidth()
   delete [] pWidths;
 }
 
-void wxStatusBar95::SetStatusText(const wxString& strText, const int nField)
+void wxStatusBar95::SetStatusText(const wxString& strText, int nField)
 {
   if ( !StatusBar_SetText(hwnd, nField, strText) ) {
     wxLogDebug("StatusBar_SetText failed");

@@ -222,17 +222,17 @@ class WXDLLEXPORT wxSizer: public wxWindow
   ~wxSizer(void);
 
   bool Create(wxWindow *parent, wxSizerBehaviour behav = wxSizerNone);
-  virtual void SetSize(const int x, const int y, const int w, const int h, const int flags = wxSIZE_AUTO);
+  virtual void SetSize(int x, int y, int w, int h, int flags = wxSIZE_AUTO);
   // Avoid compiler warning
-  void SetSize(const int w, const int h) { wxWindow::SetSize(w, h); }
-  virtual void Move(const int x, const int y);
+  void SetSize(int w, int h) { wxWindow::SetSize(w, h); }
+  virtual void Move(int x, int y);
   virtual void GetSize(int *w, int *h) const;
   inline virtual void GetClientSize(int *w, int *h) const { GetSize(w, h); }
   virtual void GetPosition(int *x, int *y) const;
 
-  inline void SizerSetSize(const int x, const int y, const int w, const int h)
+  inline void SizerSetSize(int x, int y, int w, int h)
     { SetSize(x, y, w, h); }
-  inline void SizerMove(const int x, const int y)
+  inline void SizerMove(int x, int y)
     { Move(x, y); }
 
   virtual void SetBorder(int w, int h);
@@ -269,9 +269,9 @@ class WXDLLEXPORT wxRowColSizer: public wxSizer
   ~wxRowColSizer(void);
 
   bool Create(wxWindow *parent, bool rowOrCol = wxSIZER_ROWS, int rowsOrColSize = 20, wxSizerBehaviour = wxSizerShrink);
-  void SetSize(const int x, const int y, const int w, const int h, const int flags = wxSIZE_AUTO);
+  void SetSize(int x, int y, int w, int h, int flags = wxSIZE_AUTO);
   // Avoid compiler warning
-  void SetSize(const int w, const int h) { wxSizer::SetSize(w, h); }
+  void SetSize(int w, int h) { wxSizer::SetSize(w, h); }
 
   inline virtual void SetRowOrCol(bool rc) { rowOrCol = rc; }
   inline virtual bool GetRowOrCol(void) { return rowOrCol; }

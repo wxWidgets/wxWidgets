@@ -63,11 +63,11 @@ BOOL FAR PASCAL gaugeInit(HINSTANCE hInstance);
 IMPLEMENT_DYNAMIC_CLASS(wxGaugeMSW, wxControl)
 #endif
 
-bool wxGaugeMSW::Create(wxWindow *parent, const wxWindowID id,
-           const int range,
+bool wxGaugeMSW::Create(wxWindow *parent, wxWindowID id,
+           int range,
            const wxPoint& pos,
            const wxSize& size,
-           const long style,
+           long style,
            const wxValidator& validator,
            const wxString& name)
 {
@@ -140,7 +140,7 @@ bool wxGaugeMSW::Create(wxWindow *parent, const wxWindowID id,
   return TRUE;
 }
 
-void wxGaugeMSW::SetSize(const int x, const int y, const int width, const int height, const int sizeFlags)
+void wxGaugeMSW::SetSize(int x, int y, int width, int height, int sizeFlags)
 {
   int currentX, currentY;
   GetPosition(&currentX, &currentY);
@@ -168,34 +168,26 @@ void wxGaugeMSW::SetSize(const int x, const int y, const int width, const int he
     h1 = DEFAULT_ITEM_HEIGHT;
 
   MoveWindow((HWND) GetHWND(), x1, y1, w1, h1, TRUE);
-
-#if WXWIN_COMPATIBILITY
-  GetEventHandler()->OldOnSize(width, height);
-#else
-  wxSizeEvent event(wxSize(width, height), m_windowId);
-  event.eventObject = this;
-  GetEventHandler()->ProcessEvent(event);
-#endif
 }
 
-void wxGaugeMSW::SetShadowWidth(const int w)
+void wxGaugeMSW::SetShadowWidth(int w)
 {
   SendMessage((HWND) GetHWND(), ZYZG_SETWIDTH3D, w, 0);
 }
 
-void wxGaugeMSW::SetBezelFace(const int w)
+void wxGaugeMSW::SetBezelFace(int w)
 {
   SendMessage((HWND) GetHWND(), ZYZG_SETBEZELFACE, w, 0);
 }
 
-void wxGaugeMSW::SetRange(const int r)
+void wxGaugeMSW::SetRange(int r)
 {
   m_rangeMax = r;
 
   SendMessage((HWND) GetHWND(), ZYZG_SETRANGE, r, 0);
 }
 
-void wxGaugeMSW::SetValue(const int pos)
+void wxGaugeMSW::SetValue(int pos)
 {
   m_gaugePos = pos;
 

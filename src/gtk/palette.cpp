@@ -49,7 +49,7 @@ wxPalette::wxPalette(void)
 {
 };
 
-wxPalette::wxPalette( const int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue )
+wxPalette::wxPalette( int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue )
 {
   m_refData = new wxPaletteRefData();
   Create( n, red, green, blue );
@@ -92,7 +92,7 @@ bool wxPalette::Ok(void) const
   return (m_refData);
 };
 
-bool wxPalette::Create( const int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue)
+bool wxPalette::Create( int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue)
 {
 };
 
@@ -100,7 +100,7 @@ int wxPalette::GetPixel( const unsigned char red, const unsigned char green, con
 {
 };
 
-bool wxPalette::GetRGB( const int pixel, unsigned char *red, unsigned char *green, unsigned char *blue ) const
+bool wxPalette::GetRGB( int pixel, unsigned char *red, unsigned char *green, unsigned char *blue ) const
 {
 };
 

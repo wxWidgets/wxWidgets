@@ -73,7 +73,7 @@ class WXDLLEXPORT wxList: public wxObject
 
   wxList(void);
   wxList(const unsigned int the_key_type);
-  wxList(const int N, wxObject *Objects[]);
+  wxList(int N, wxObject *Objects[]);
   wxList(wxObject *object, ...);
   
 #ifdef USE_STORABLE_CLASSES
@@ -95,7 +95,7 @@ class WXDLLEXPORT wxList: public wxObject
   wxNode *Insert(wxNode *position, wxObject *object);
 
   // Keyed append
-  wxNode *Append(const long key, wxObject *object);
+  wxNode *Append(long key, wxObject *object);
   wxNode *Append(const char *key, wxObject *object);
 
   bool DeleteNode(wxNode *node);
@@ -106,15 +106,15 @@ class WXDLLEXPORT wxList: public wxObject
 
   inline wxNode *First(void) const { return first_node; }
   inline wxNode *Last(void) const { return last_node; }
-  wxNode *Nth(const int i) const;                  // nth node counting from 0
+  wxNode *Nth(int i) const;                  // nth node counting from 0
 
   // Keyed search
-  wxNode *Find(const long key) const;
+  wxNode *Find(long key) const;
   wxNode *Find(const char *key) const;
 
   wxNode *Member(wxObject *object) const;
 
-  inline void DeleteContents(const int destroy) { destroy_data = destroy; }
+  inline void DeleteContents(int destroy) { destroy_data = destroy; }
                                              // Instruct it to destroy user data
                                              // when deleting nodes
   // this function allows the sorting of arbitrary lists by giving
@@ -139,7 +139,7 @@ class WXDLLEXPORT wxStringList: public wxList
 
   virtual wxNode *Add(const char *s);
   virtual void Delete(const char *s);
-  virtual char **ListToArray(const bool new_copies = FALSE) const;
+  virtual char **ListToArray(bool new_copies = FALSE) const;
   virtual void Sort(void);
   virtual bool Member(const char *s) const;
 };

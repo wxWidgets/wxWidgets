@@ -49,10 +49,10 @@ class WXDLLEXPORT wxTextCtrl: public wxControl
   wxString fileName;
  public:
   wxTextCtrl(void);
-  inline wxTextCtrl(wxWindow *parent, const wxWindowID id,
+  inline wxTextCtrl(wxWindow *parent, wxWindowID id,
            const wxString& value = wxEmptyString,
            const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize, const long style = 0,
+           const wxSize& size = wxDefaultSize, long style = 0,
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxTextCtrlNameStr)
 #ifndef NO_TEXT_WINDOW_STREAM
@@ -62,33 +62,33 @@ class WXDLLEXPORT wxTextCtrl: public wxControl
       Create(parent, id, value, pos, size, style, validator, name);
   }
 
-  bool Create(wxWindow *parent, const wxWindowID id,
+  bool Create(wxWindow *parent, wxWindowID id,
            const wxString& value = wxEmptyString,
            const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize, const long style = 0,
+           const wxSize& size = wxDefaultSize, long style = 0,
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxTextCtrlNameStr);
 
   virtual wxString GetValue(void) const ;
   virtual void SetValue(const wxString& value);
-  virtual void SetSize(const int x, const int y, const int width, const int height, const int sizeFlags = wxSIZE_AUTO);
+  virtual void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
 
   // Clipboard operations
   virtual void Copy(void);
   virtual void Cut(void);
   virtual void Paste(void);
 
-  virtual void SetInsertionPoint(const long pos);
+  virtual void SetInsertionPoint(long pos);
   virtual void SetInsertionPointEnd(void);
   virtual long GetInsertionPoint(void) const ;
   virtual long GetLastPosition(void) const ;
-  virtual void Replace(const long from, const long to, const wxString& value);
-  virtual void Remove(const long from, const long to);
-  virtual void SetSelection(const long from, const long to);
+  virtual void Replace(long from, long to, const wxString& value);
+  virtual void Remove(long from, long to);
+  virtual void SetSelection(long from, long to);
 
   virtual void Command(wxCommandEvent& event);
 
-  virtual void SetEditable(const bool editable);
+  virtual void SetEditable(bool editable);
 
 #ifndef NO_TEXT_WINDOW_STREAM
   int overflow(int i);
@@ -99,10 +99,10 @@ class WXDLLEXPORT wxTextCtrl: public wxControl
   void OnDropFiles(wxDropFilesEvent& event);
 
   wxTextCtrl& operator<<(const wxString& s);
-  wxTextCtrl& operator<<(const int i);
-  wxTextCtrl& operator<<(const long i);
-  wxTextCtrl& operator<<(const float f);
-  wxTextCtrl& operator<<(const double d);
+  wxTextCtrl& operator<<(int i);
+  wxTextCtrl& operator<<(long i);
+  wxTextCtrl& operator<<(float f);
+  wxTextCtrl& operator<<(double d);
   wxTextCtrl& operator<<(const char c);
 
   virtual bool LoadFile(const wxString& file);
@@ -115,11 +115,11 @@ class WXDLLEXPORT wxTextCtrl: public wxControl
   inline bool Modified(void) const { return IsModified(); }
 #endif
 
-  virtual long XYToPosition(const long x, const long y) const ;
-  virtual void PositionToXY(const long pos, long *x, long *y) const ;
-  virtual void ShowPosition(const long pos);
-  virtual int GetLineLength(const long lineNo) const ;
-  virtual wxString GetLineText(const long lineNo) const ;
+  virtual long XYToPosition(long x, long y) const ;
+  virtual void PositionToXY(long pos, long *x, long *y) const ;
+  virtual void ShowPosition(long pos);
+  virtual int GetLineLength(long lineNo) const ;
+  virtual wxString GetLineText(long lineNo) const ;
   virtual int GetNumberOfLines(void) const ;
   virtual void Clear(void);
 
@@ -129,10 +129,10 @@ class WXDLLEXPORT wxTextCtrl: public wxControl
   void OnEraseBackground(wxEraseEvent& event);
 
   // Implementation
-  virtual bool MSWCommand(const WXUINT param, const WXWORD id);
+  virtual bool MSWCommand(WXUINT param, WXWORD id);
   inline bool IsRich(void) { return m_isRich; }
-  inline void SetRichEdit(const bool isRich) { m_isRich = isRich; }
-  virtual WXHBRUSH OnCtlColor(const WXHDC pDC, const WXHWND pWnd, const WXUINT nCtlColor,
+  inline void SetRichEdit(bool isRich) { m_isRich = isRich; }
+  virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 			WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
   virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);

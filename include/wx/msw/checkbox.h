@@ -28,27 +28,27 @@ class WXDLLEXPORT wxCheckBox: public wxControl
 
  public:
   inline wxCheckBox(void) { }
-  inline wxCheckBox(wxWindow *parent, const wxWindowID id, const wxString& label,
+  inline wxCheckBox(wxWindow *parent, wxWindowID id, const wxString& label,
            const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize, const long style = 0,
+           const wxSize& size = wxDefaultSize, long style = 0,
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxCheckBoxNameStr)
   {
       Create(parent, id, label, pos, size, style, validator, name);
   }
 
-  bool Create(wxWindow *parent, const wxWindowID id, const wxString& label,
+  bool Create(wxWindow *parent, wxWindowID id, const wxString& label,
            const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize, const long style = 0,
+           const wxSize& size = wxDefaultSize, long style = 0,
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxCheckBoxNameStr);
-  virtual void SetValue(const bool);
+  virtual void SetValue(bool);
   virtual bool GetValue(void) const ;
-  virtual void SetSize(const int x, const int y, const int width, const int height, const int sizeFlags = wxSIZE_AUTO);
-  virtual bool MSWCommand(const WXUINT param, const WXWORD id);
+  virtual void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
+  virtual bool MSWCommand(WXUINT param, WXWORD id);
   virtual void SetLabel(const wxString& label);
   virtual void Command(wxCommandEvent& event);
-  virtual WXHBRUSH OnCtlColor(const WXHDC pDC, const WXHWND pWnd, const WXUINT nCtlColor,
+  virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 			WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 };
 
@@ -61,23 +61,23 @@ class WXDLLEXPORT wxBitmapCheckBox: public wxCheckBox
   int checkHeight ;
 
   inline wxBitmapCheckBox(void) { checkWidth = -1; checkHeight = -1; }
-  inline wxBitmapCheckBox(wxWindow *parent, const wxWindowID id, const wxBitmap *label,
+  inline wxBitmapCheckBox(wxWindow *parent, wxWindowID id, const wxBitmap *label,
            const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize, const long style = 0,
+           const wxSize& size = wxDefaultSize, long style = 0,
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxCheckBoxNameStr)
   {
       Create(parent, id, label, pos, size, style, validator, name);
   }
 
-  bool Create(wxWindow *parent, const wxWindowID id, const wxBitmap *bitmap,
+  bool Create(wxWindow *parent, wxWindowID id, const wxBitmap *bitmap,
            const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize, const long style = 0,
+           const wxSize& size = wxDefaultSize, long style = 0,
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxCheckBoxNameStr);
-  virtual void SetValue(const bool);
+  virtual void SetValue(bool);
   virtual bool GetValue(void) const ;
-  virtual void SetSize(const int x, const int y, const int width, const int height, const int sizeFlags = wxSIZE_AUTO);
+  virtual void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
   virtual void SetLabel(const wxBitmap *bitmap);
 };
 #endif

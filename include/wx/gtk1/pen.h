@@ -50,7 +50,7 @@ class wxPen: public wxGDIObject
     
     void SetColour( const wxColour &colour );
     void SetColour( const wxString &colourName );
-    void SetColour( const int red, const int green, const int blue );
+    void SetColour( int red, int green, int blue );
     void SetCap( int capStyle );
     void SetJoin( int joinStyle );
     void SetStyle( int style );

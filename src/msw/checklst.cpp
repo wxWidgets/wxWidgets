@@ -219,10 +219,10 @@ wxCheckListBox::wxCheckListBox() : wxListBox()
 }
 
 // ctor which creates the associated control
-wxCheckListBox::wxCheckListBox(wxWindow *parent, const wxWindowID id,
+wxCheckListBox::wxCheckListBox(wxWindow *parent, wxWindowID id,
                                const wxPoint& pos, const wxSize& size,
-                               const int nStrings, const wxString choices[],
-                               const long style, const wxValidator& val,
+                               int nStrings, const wxString choices[],
+                               long style, const wxValidator& val,
                                const wxString& name) // , const wxFont& font)
                 // don't use ctor with arguments! we must call Create()
                 // ourselves from here.

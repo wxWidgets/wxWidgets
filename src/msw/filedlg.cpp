@@ -118,10 +118,10 @@ char *wxFileSelectorEx( const char *title,
 			const char *defaultFileName,
 			int* defaultFilterIndex,
 			const char *filter,
-            const int       flags,
+            int       flags,
             wxWindow* parent,
-            const int       x,
-            const int       y)
+            int       x,
+            int       y)
 
 {
 	wxFileDialog fileDialog(parent, title ? title : "", defaultDir ? defaultDir : "",

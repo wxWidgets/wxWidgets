@@ -49,9 +49,9 @@ class WXDLLEXPORT wxPen: public wxGDIObject
   DECLARE_DYNAMIC_CLASS(wxPen)
 public:
   wxPen(void);
-  wxPen(const wxColour& col, const int width, const int style);
-  wxPen(const wxString& col, const int width, const int style);
-  wxPen(const wxBitmap& stipple, const int width);
+  wxPen(const wxColour& col, int width, int style);
+  wxPen(const wxString& col, int width, int style);
+  wxPen(const wxBitmap& stipple, int width);
   inline wxPen(const wxPen& pen) { Ref(pen); }
   inline wxPen(const wxPen* pen) { /* UnRef(); */ if (pen) Ref(*pen); }
   ~wxPen(void);
@@ -67,12 +67,12 @@ public:
   void SetColour(const wxString& col)  ;
   void SetColour(const unsigned char r, const unsigned char g, const unsigned char b)  ;
 
-  void SetWidth(const int width)  ;
-  void SetStyle(const int style)  ;
+  void SetWidth(int width)  ;
+  void SetStyle(int style)  ;
   void SetStipple(const wxBitmap& stipple)  ;
-  void SetDashes(const int nb_dashes, const wxDash *dash)  ;
-  void SetJoin(const int join)  ;
-  void SetCap(const int cap)  ;
+  void SetDashes(int nb_dashes, const wxDash *dash)  ;
+  void SetJoin(int join)  ;
+  void SetCap(int cap)  ;
 
   inline wxColour& GetColour(void) const { return (M_PENDATA ? M_PENDATA->m_colour : wxNullColour); };
   inline int GetWidth(void) const { return (M_PENDATA ? M_PENDATA->m_width : 0); };

@@ -50,12 +50,12 @@ class wxTextCtrl: public wxControl, public streambuf
   public:
   
     wxTextCtrl(void);
-    wxTextCtrl( wxWindow *parent, const wxWindowID id, const wxString &value = "", 
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      const int style = 0, const wxString &name = wxTextCtrlNameStr );
-    bool Create( wxWindow *parent, const wxWindowID id, const wxString &value = "", 
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      const int style = 0, const wxString &name = wxTextCtrlNameStr );
+    wxTextCtrl( wxWindow *parent, wxWindowID id, const wxString &value = "", 
+      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
+      int style = 0, const wxString &name = wxTextCtrlNameStr );
+    bool Create( wxWindow *parent, wxWindowID id, const wxString &value = "",
+      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
+      int style = 0, const wxString &name = wxTextCtrlNameStr );
     wxString GetValue(void) const;
     void SetValue( const wxString &value );
     void WriteText( const wxString &text );
@@ -65,21 +65,21 @@ class wxTextCtrl: public wxControl, public streambuf
     bool IsModified(void);
     void DiscardEdits(void);
 /*
-    wxString GetLineText( const long lineNo ) const;
+    wxString GetLineText( long lineNo ) const;
     void OnDropFiles( wxDropFilesEvent &event );
-    long PositionToXY( const long pos, long *x, long *y ) const;
-    long XYToPosition( const long x, const long y );
+    long PositionToXY( long pos, long *x, long *y ) const;
+    long XYToPosition( long x, long y );
     int GetNumberOfLines(void);
 */
-    virtual void SetInsertionPoint( const long pos );
+    virtual void SetInsertionPoint( long pos );
     virtual void SetInsertionPointEnd(void);
-    virtual void SetEditable( const bool editable );
-    virtual void SetSelection( const long from, const long to );
-    void ShowPosition( const long pos );
+    virtual void SetEditable( bool editable );
+    virtual void SetSelection( long from, long to );
+    void ShowPosition( long pos );
     virtual long GetInsertionPoint(void) const;
     virtual long GetLastPosition(void) const;
-    virtual void Remove( const long from, const long to );
-    virtual void Replace( const long from, const long to, const wxString &value );
+    virtual void Remove( long from, long to );
+    virtual void Replace( long from, long to, const wxString &value );
     void Cut(void);
     void Copy(void);
     void Paste(void);
@@ -92,10 +92,10 @@ class wxTextCtrl: public wxControl, public streambuf
     int underflow(void);
 
     wxTextCtrl& operator<<(const wxString& s);
-    wxTextCtrl& operator<<(const int i);
-    wxTextCtrl& operator<<(const long i);
-    wxTextCtrl& operator<<(const float f);
-    wxTextCtrl& operator<<(const double d);
+    wxTextCtrl& operator<<(int i);
+    wxTextCtrl& operator<<(long i);
+    wxTextCtrl& operator<<(float f);
+    wxTextCtrl& operator<<(double d);
     wxTextCtrl& operator<<(const char c);
     
   public:

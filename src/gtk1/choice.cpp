@@ -38,18 +38,18 @@ wxChoice::wxChoice(void)
 {
 };
 
-wxChoice::wxChoice( wxWindow *parent, const wxWindowID id,
-      const wxPoint &pos, const wxSize &size, 
-      const int n, const wxString choices[],
-      const long style, const wxString &name )
+wxChoice::wxChoice( wxWindow *parent, wxWindowID id,
+      const wxPoint &pos, const wxSize &size,
+      int n, const wxString choices[],
+      long style, const wxString &name )
 {
   Create( parent, id, pos, size, n, choices, style, name );
 };
 
-bool wxChoice::Create( wxWindow *parent, const wxWindowID id,
-      const wxPoint &pos, const wxSize &size, 
-      const int n, const wxString choices[],
-      const long style, const wxString &name )
+bool wxChoice::Create( wxWindow *parent, wxWindowID id,
+      const wxPoint &pos, const wxSize &size,
+      int n, const wxString choices[],
+      long style, const wxString &name )
 {
   m_needParent = TRUE;
   
@@ -141,7 +141,7 @@ int wxChoice::GetSelection(void)
   return -1;
 };
 
-wxString wxChoice::GetString( const int n ) const
+wxString wxChoice::GetString( int n ) const
 {
   GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) ) );
   int count = 0;
@@ -180,11 +180,11 @@ int wxChoice::Number(void) const
   return count;
 };
 
-void wxChoice::SetColumns( const int WXUNUSED(n) )
+void wxChoice::SetColumns( int WXUNUSED(n) )
 {
 };
 
-void wxChoice::SetSelection( const int n )
+void wxChoice::SetSelection( int n )
 {
   int tmp = n;
   gtk_option_menu_set_history( GTK_OPTION_MENU(m_widget), (gint)tmp );

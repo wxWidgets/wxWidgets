@@ -80,16 +80,16 @@ class wxMenu: public wxEvtHandler
 
     wxMenu( const wxString &title = "" );
     void AppendSeparator(void);
-    void Append( const int id, const wxString &item, 
-      const wxString &helpStr = "", const bool checkable = FALSE );
-    void Append( const int id, const wxString &item, 
+    void Append( int id, const wxString &item, 
+      const wxString &helpStr = "", bool checkable = FALSE );
+    void Append( int id, const wxString &item,
       wxMenu *subMenu, const wxString &helpStr = "" );
     int FindItem( const wxString itemString ) const;
     void Break(void) {};
-    void Enable( const int id, const bool enable );
-    bool Enabled( const int id ) const;
-    void SetLabel( const int id, const wxString &label );
-      
+    void Enable( int id, bool enable );
+    bool Enabled( int id ) const;
+    void SetLabel( int id, const wxString &label );
+
   public:
       
     int FindMenuIdByMenuItem( GtkWidget *menuItem ) const;

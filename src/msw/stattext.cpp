@@ -32,11 +32,11 @@
 IMPLEMENT_DYNAMIC_CLASS(wxStaticText, wxControl)
 #endif
 
-bool wxStaticText::Create(wxWindow *parent, const wxWindowID id,
+bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
            const wxString& label,
            const wxPoint& pos,
            const wxSize& size,
-           const long style,
+           long style,
            const wxString& name)
 {
   SetName(name);
@@ -92,7 +92,7 @@ bool wxStaticText::Create(wxWindow *parent, const wxWindowID id,
   return TRUE;
 }
 
-void wxStaticText::SetSize(const int x, const int y, const int width, const int height, const int sizeFlags)
+void wxStaticText::SetSize(int x, int y, int width, int height, int sizeFlags)
 {
   int currentX, currentY;
   GetPosition(&currentX, &currentY);
@@ -137,22 +137,11 @@ void wxStaticText::SetSize(const int x, const int y, const int width, const int 
   }
 
   MoveWindow((HWND) GetHWND(), x1, y1, actualWidth, actualHeight, TRUE);
-
-  if (!((width == -1) && (height == -1)))
-  {
-#if WXWIN_COMPATIBILITY
-    GetEventHandler()->OldOnSize(actualWidth, actualHeight);
-#else
-    wxSizeEvent event(wxSize(actualWidth, actualHeight), m_windowId);
-    event.eventObject = this;
-    GetEventHandler()->ProcessEvent(event);
-#endif
-  }
 }
 
 void wxStaticText::SetLabel(const wxString& label)
 {
-  float w, h;
+  int w, h;
   RECT rect;
 
   wxWindow *parent = GetParent();
@@ -174,7 +163,7 @@ void wxStaticText::SetLabel(const wxString& label)
   SetWindowText((HWND) GetHWND(), (const char *)label);
 }
 
-WXHBRUSH wxStaticText::OnCtlColor(const WXHDC pDC, const WXHWND pWnd, const WXUINT nCtlColor,
+WXHBRUSH wxStaticText::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 			WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
 /*

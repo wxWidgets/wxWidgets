@@ -46,11 +46,11 @@ class wxCheckBox: public wxControl
     wxCheckBox(void);
     wxCheckBox( wxWindow *parent, wxWindowID id, const wxString &label,
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      const long style = 0, const wxString &name = wxCheckBoxNameStr  );
+      long style = 0, const wxString &name = wxCheckBoxNameStr  );
     bool Create(  wxWindow *parent, wxWindowID id, const wxString &label,
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      const long style = 0, const wxString &name = wxCheckBoxNameStr  );
-    void SetValue( const bool state );
+      long style = 0, const wxString &name = wxCheckBoxNameStr  );
+    void SetValue( bool state );
     bool GetValue(void) const;
 };
 

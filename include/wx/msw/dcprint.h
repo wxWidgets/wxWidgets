@@ -24,7 +24,7 @@ class WXDLLEXPORT wxPrinterDC: public wxDC
   DECLARE_CLASS(wxPrinterDC)
 
   // Create a printer DC
-  wxPrinterDC(const wxString& driver, const wxString& device, const wxString& output, const bool interactive = TRUE, const int orientation = wxPORTRAIT);
+  wxPrinterDC(const wxString& driver, const wxString& device, const wxString& output, bool interactive = TRUE, int orientation = wxPORTRAIT);
   wxPrinterDC(WXHDC theDC);
 
   ~wxPrinterDC(void);

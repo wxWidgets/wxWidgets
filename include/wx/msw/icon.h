@@ -45,12 +45,12 @@ public:
   inline wxIcon(const wxIcon& icon) { Ref(icon); }
   inline wxIcon(const wxIcon* icon) { /* UnRef(); */ if (icon) Ref(*icon); }
 
-  wxIcon(const char bits[], const int width, const int height);
-  wxIcon(const wxString& name, const long flags = wxBITMAP_TYPE_ICO_RESOURCE,
+  wxIcon(const char bits[], int width, int height);
+  wxIcon(const wxString& name, long flags = wxBITMAP_TYPE_ICO_RESOURCE,
     int desiredWidth = -1, int desiredHeight = -1);
   ~wxIcon(void);
 
-  bool LoadFile(const wxString& name, const long flags = wxBITMAP_TYPE_ICO_RESOURCE,
+  bool LoadFile(const wxString& name, long flags = wxBITMAP_TYPE_ICO_RESOURCE,
       int desiredWidth = -1, int desiredHeight = -1);
 
   inline wxIcon& operator = (const wxIcon& icon) { if (*this == icon) return (*this); Ref(icon); return *this; }
@@ -78,7 +78,7 @@ public:
 	m_type = wxBITMAP_TYPE_ICO;
   };
 
-  virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, const long flags,
+  virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
       int desiredWidth = -1, int desiredHeight = -1);
 };
 
@@ -93,7 +93,7 @@ public:
 	m_type = wxBITMAP_TYPE_ICO_RESOURCE;
   };
 
-  virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, const long flags,
+  virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
       int desiredWidth = -1, int desiredHeight = -1);
 
 };

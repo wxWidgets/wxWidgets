@@ -31,14 +31,14 @@ public:
   bool Create(wxWindow *parent, wxWindowID id = -1, long style = wxST_SIZEGRIP);
 
   // a status line can have several (<256) fields numbered from 0
-  virtual void SetFieldsCount(int number = 1, const int *widths = NULL);
+  virtual void SetFieldsCount(int number = 1, int *widths = NULL);
 
   // each field of status line has it's own text
-  virtual void     SetStatusText(const wxString& text, const int number = 0);
+  virtual void     SetStatusText(const wxString& text, int number = 0);
   virtual wxString GetStatusText(int number = 0) const;
 
   // set status line fields' widths
-  virtual void SetStatusWidths(int n, const int *widths_field);
+  virtual void SetStatusWidths(int n, int *widths_field);
 
   // we're going to process WM_SIZE (of the parent window)
   void OnSize(wxSizeEvent& event);
@@ -46,7 +46,7 @@ public:
   DECLARE_EVENT_TABLE()
 
 protected:
-  void CopyFieldsWidth(const int *widths);
+  void CopyFieldsWidth(int *widths);
   void SetFieldsWidth();
 };
 

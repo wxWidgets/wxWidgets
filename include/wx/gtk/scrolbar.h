@@ -43,35 +43,35 @@ class wxScrollBar: public wxControl
   public:
   
     wxScrollBar(void) { m_adjust = NULL; m_oldPos = 0.0; };
-    wxScrollBar(wxWindow *parent, const wxWindowID id,
+    wxScrollBar(wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           const long style = wxSB_HORIZONTAL,
+           long style = wxSB_HORIZONTAL,
            const wxString& name = wxScrollBarNameStr );
     ~wxScrollBar(void);
-    bool Create(wxWindow *parent, const wxWindowID id,
+    bool Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           const long style = wxSB_HORIZONTAL,
+           long style = wxSB_HORIZONTAL,
            const wxString& name = wxScrollBarNameStr);
     int GetPosition(void) const;
     int GetThumbSize() const;
     int GetPageSize() const;
     int GetRange() const;
-    virtual void SetPosition( const int viewStart );
-    virtual void SetScrollbar( const int position, const int thumbSize, const int range, const int pageSize,
-      const bool refresh = TRUE );
+    virtual void SetPosition( int viewStart );
+    virtual void SetScrollbar( int position, int thumbSize, int range, int pageSize,
+      bool refresh = TRUE );
 
     // Backward compatibility
     int GetValue(void) const;
-    void SetValue( const int viewStart );
+    void SetValue( int viewStart );
     void GetValues( int *viewStart, int *viewLength, int *objectLength, int *pageLength) const;
     int GetViewLength() const;
     int GetObjectLength() const;
-    void SetPageSize( const int pageLength );
-    void SetObjectLength( const int objectLength );
-    void SetViewLength( const int viewLength );
-      
+    void SetPageSize( int pageLength );
+    void SetObjectLength( int objectLength );
+    void SetViewLength( int viewLength );
+
   public:
   
     GtkAdjustment  *m_adjust;

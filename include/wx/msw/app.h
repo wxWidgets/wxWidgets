@@ -63,11 +63,6 @@ class WXDLLEXPORT wxApp: public wxEvtHandler
 
   virtual void OnIdle(wxIdleEvent& event);
 
-  // Windows specific. Intercept keyboard input.
-#if WXWIN_COMPATIBILITY == 2
-  virtual bool OldOnCharHook(wxKeyEvent& event);
-#endif
-
 // Generic
   virtual bool OnInit(void) { return FALSE; };
 
@@ -111,7 +106,7 @@ class WXDLLEXPORT wxApp: public wxEvtHandler
   // Returns TRUE if more idle time is requested.
   bool SendIdleEvents(wxWindow* win);
 
-  inline void SetAuto3D(const bool flag) { m_auto3D = flag; }
+  inline void SetAuto3D(bool flag) { m_auto3D = flag; }
   inline bool GetAuto3D(void) const { return m_auto3D; }
 
   // Creates a log object

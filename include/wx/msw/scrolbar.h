@@ -29,19 +29,19 @@ public:
   inline wxScrollBar(void) { m_pageSize = 0; m_viewSize = 0; m_objectSize = 0; }
   ~wxScrollBar(void);
 
-  inline wxScrollBar(wxWindow *parent, const wxWindowID id,
+  inline wxScrollBar(wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           const long style = wxSB_HORIZONTAL,
+           long style = wxSB_HORIZONTAL,
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxScrollBarNameStr)
   {
       Create(parent, id, pos, size, style, validator, name);
   }
-  bool Create(wxWindow *parent, const wxWindowID id,
+  bool Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           const long style = wxSB_HORIZONTAL,
+           long style = wxSB_HORIZONTAL,
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxScrollBarNameStr);
 
@@ -50,29 +50,29 @@ public:
   inline int GetPageSize() const { return m_viewSize; }
   inline int GetRange() const { return m_objectSize; }
 
-  virtual void SetPosition(const int viewStart);
-  virtual void SetScrollbar(const int position, const int thumbSize, const int range, const int pageSize,
-    const bool refresh = TRUE);
+  virtual void SetPosition(int viewStart);
+  virtual void SetScrollbar(int position, int thumbSize, int range, int pageSize,
+    bool refresh = TRUE);
 
 #if WXWIN_COMPATIBILITY
   // Backward compatibility
   inline int GetValue(void) const { return GetPosition(); }
-  inline void SetValue(const int viewStart) { SetPosition(viewStart); }
+  inline void SetValue(int viewStart) { SetPosition(viewStart); }
   void GetValues(int *viewStart, int *viewLength, int *objectLength,
                  int *pageLength) const ;
   inline int GetViewLength() const { return m_viewSize; }
   inline int GetObjectLength() const { return m_objectSize; }
 
-  void SetPageSize(const int pageLength);
-  void SetObjectLength(const int objectLength);
-  void SetViewLength(const int viewLength);
+  void SetPageSize(int pageLength);
+  void SetObjectLength(int objectLength);
+  void SetViewLength(int viewLength);
 #endif
 
   void Command(wxCommandEvent& event);
-  virtual WXHBRUSH OnCtlColor(const WXHDC pDC, const WXHWND pWnd, const WXUINT nCtlColor,
+  virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 			WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
-  void MSWOnVScroll(const WXWORD wParam, const WXWORD pos, const WXHWND control);
-  void MSWOnHScroll(const WXWORD wParam, const WXWORD pos, const WXHWND control);
+  void MSWOnVScroll(WXWORD wParam, WXWORD pos, WXHWND control);
+  void MSWOnHScroll(WXWORD wParam, WXWORD pos, WXHWND control);
 
 #if WXWIN_COMPATIBILITY
   // Backward compatibility: generate an old-style scroll command

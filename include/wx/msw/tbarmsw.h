@@ -40,15 +40,15 @@ public:
     Create(parent, -1, wxPoint(x, y), wxSize(w, h), style, orientation, RowsOrColumns, name);
   }
 #endif
-  inline wxToolBarMSW(wxWindow *parent, const wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-            const long style = wxNO_BORDER, const int orientation = wxVERTICAL,
-            const int RowsOrColumns = 2, const wxString& name = wxButtonBarNameStr)
+  inline wxToolBarMSW(wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+            long style = wxNO_BORDER, int orientation = wxVERTICAL,
+            int RowsOrColumns = 2, const wxString& name = wxButtonBarNameStr)
   {
     Create(parent, id, pos, size, style, orientation, RowsOrColumns, name);
   }
-  bool Create(wxWindow *parent, const wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-            const long style = wxNO_BORDER, const int orientation = wxVERTICAL,
-            const int RowsOrColumns = 2, const wxString& name = wxButtonBarNameStr);
+  bool Create(wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+            long style = wxNO_BORDER, int orientation = wxVERTICAL,
+            int RowsOrColumns = 2, const wxString& name = wxButtonBarNameStr);
 
   ~wxToolBarMSW(void);
 
@@ -60,8 +60,8 @@ public:
   // If pushedBitmap is NULL, a reversed version of bitmap is
   // created and used as the pushed/toggled image.
   // If toggle is TRUE, the button toggles between the two states.
-  wxToolBarTool *AddTool(const int toolIndex, const wxBitmap& bitmap, const wxBitmap& pushedBitmap = wxNullBitmap,
-               const bool toggle = FALSE, const long xPos = -1, const long yPos = -1, wxObject *clientData = NULL,
+  wxToolBarTool *AddTool(int toolIndex, const wxBitmap& bitmap, const wxBitmap& pushedBitmap = wxNullBitmap,
+               bool toggle = FALSE, long xPos = -1, long yPos = -1, wxObject *clientData = NULL,
                const wxString& helpString1 = "", const wxString& helpString2 = "");
 
   void DrawTool(wxDC& dc, wxMemoryDC& memDc, wxToolBarTool *tool);
@@ -69,7 +69,7 @@ public:
   // New members
   // Set default bitmap size
   virtual void SetDefaultSize(const wxSize& size);
-  void EnableTool(const int toolIndex, const bool enable); // additional drawing on enabling
+  void EnableTool(int toolIndex, bool enable); // additional drawing on enabling
 
   // The button size is bigger than the bitmap size
   wxSize GetDefaultButtonSize(void) const;

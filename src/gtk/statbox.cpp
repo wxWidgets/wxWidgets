@@ -26,14 +26,14 @@ wxStaticBox::wxStaticBox(void)
 
 wxStaticBox::wxStaticBox( wxWindow *parent, wxWindowID id, const wxString &label, 
       const wxPoint &pos, const wxSize &size, 
-      const long style, const wxString &name )
+      long style, const wxString &name )
 {
   Create( parent, id, label, pos, size, style, name );
 };
 
 bool wxStaticBox::Create( wxWindow *parent, wxWindowID id, const wxString &label, 
       const wxPoint &pos, const wxSize &size, 
-      const long style, const wxString &name )
+      long style, const wxString &name )
 {
   m_needParent = TRUE;
   

@@ -66,7 +66,7 @@ int wxImageList::GetImageCount(void) const
 ////////////////////////////////////////////////////////////////////////////
 
 // Creates an image list
-bool wxImageList::Create(const int width, const int height, const bool mask, const int initial)
+bool wxImageList::Create(int width, int height, bool mask, int initial)
 {
 	UINT flags = 0;
 	if ( mask )
@@ -109,7 +109,7 @@ int wxImageList::Add(const wxIcon& icon)
 // Replaces a bitmap, optionally passing a mask bitmap.
 // Note that wxImageList creates new bitmaps, so you may delete
 // 'bitmap' and 'mask'.
-bool wxImageList::Replace(const int index, const wxBitmap& bitmap, const wxBitmap& mask)
+bool wxImageList::Replace(int index, const wxBitmap& bitmap, const wxBitmap& mask)
 {
 	HBITMAP hBitmap1 = (HBITMAP) bitmap.GetHBITMAP();
 	HBITMAP hBitmap2 = 0;
@@ -122,7 +122,7 @@ bool wxImageList::Replace(const int index, const wxBitmap& bitmap, const wxBitma
 // Replacing a bitmap, using the specified colour to create the mask bitmap
 // Note that wxImageList creates new bitmaps, so you may delete
 // 'bitmap'.
-bool wxImageList::Replace(const int index, const wxBitmap& bitmap, const wxColour& maskColour)
+bool wxImageList::Replace(int index, const wxBitmap& bitmap, const wxColour& maskColour)
 {
 	HBITMAP hBitmap1 = (HBITMAP) bitmap.GetHBITMAP();
 	COLORREF colorRef = PALETTERGB(maskColour.Red(), maskColour.Green(), maskColour.Blue());
@@ -131,14 +131,14 @@ bool wxImageList::Replace(const int index, const wxBitmap& bitmap, const wxColou
 */
 
 // Replaces a bitmap and mask from an icon.
-bool wxImageList::Replace(const int index, const wxIcon& icon)
+bool wxImageList::Replace(int index, const wxIcon& icon)
 {
 	HICON hIcon = (HICON) icon.GetHICON();
 	return (ImageList_ReplaceIcon((HIMAGELIST) GetHIMAGELIST(), index, hIcon) != 0);
 }
 
 // Removes the image at the given index.
-bool wxImageList::Remove(const int index)
+bool wxImageList::Remove(int index)
 {
 	return (ImageList_Remove((HIMAGELIST) GetHIMAGELIST(), index) != 0);
 }
@@ -158,8 +158,8 @@ bool wxImageList::RemoveAll(void)
 // If 'solidBackground' is TRUE, Draw sets the image list background
 // colour to the background colour of the wxDC, to speed up
 // drawing by eliminating masked drawing where possible.
-bool wxImageList::Draw(const int index, wxDC& dc, const int x, const int y,
-    const int flags, const bool solidBackground)
+bool wxImageList::Draw(int index, wxDC& dc, int x, int y,
+    int flags, bool solidBackground)
 {
 	HDC hDC = (HDC) dc.GetHDC();
 	if ( !hDC )

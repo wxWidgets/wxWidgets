@@ -28,7 +28,7 @@ wxControl::wxControl(void)
 
 wxControl::wxControl( wxWindow *parent, wxWindowID id, 
       const wxPoint &pos, const wxSize &size, 
-      const long style, const wxString &name ) :
+      long style, const wxString &name ) :
   wxWindow( parent, id, pos, size, style, name )
 {
 };

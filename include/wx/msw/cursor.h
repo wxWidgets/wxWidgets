@@ -46,11 +46,11 @@ public:
   inline wxCursor(const wxCursor& cursor) { Ref(cursor); }
   inline wxCursor(const wxCursor* cursor) { /* UnRef(); */ if (cursor) Ref(*cursor); }
 
-  wxCursor(const char bits[], const int width, const int height, const int hotSpotX = -1, const int hotSpotY = -1,
+  wxCursor(const char bits[], int width, int height, int hotSpotX = -1, int hotSpotY = -1,
     const char maskBits[] = NULL);
-  wxCursor(const wxString& name, const long flags = wxBITMAP_TYPE_CUR_RESOURCE,
-   const int hotSpotX = 0, const int hotSpotY = 0);
-  wxCursor(const int cursor_type);
+  wxCursor(const wxString& name, long flags = wxBITMAP_TYPE_CUR_RESOURCE,
+   int hotSpotX = 0, int hotSpotY = 0);
+  wxCursor(int cursor_type);
   ~wxCursor(void);
 
   virtual bool Ok(void) const { return (m_refData != NULL && M_CURSORDATA->m_hCursor) ; }

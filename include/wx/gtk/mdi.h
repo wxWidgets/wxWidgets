@@ -52,15 +52,15 @@ class wxMDIParentFrame: public wxFrame
 
     wxMDIParentFrame(void);
     wxMDIParentFrame( wxWindow *parent,
-      const wxWindowID id, const wxString& title,
+      wxWindowID id, const wxString& title,
       const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-      const long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
+      long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
       const wxString& name = wxFrameNameStr );
   ~wxMDIParentFrame(void);
    bool Create( wxWindow *parent,
-      const wxWindowID id, const wxString& title,
+      wxWindowID id, const wxString& title,
       const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-      const long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
+      long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
       const wxString& name = wxFrameNameStr );
 
   void OnSize( wxSizeEvent& event );
@@ -101,21 +101,21 @@ class wxMDIChildFrame: public wxPanel
 
     wxMDIChildFrame(void);
     wxMDIChildFrame( wxMDIParentFrame *parent,
-      const wxWindowID id, const wxString& title,
+      wxWindowID id, const wxString& title,
       const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-      const long style = wxDEFAULT_FRAME_STYLE, const wxString& name = wxFrameNameStr );
+      long style = wxDEFAULT_FRAME_STYLE, const wxString& name = wxFrameNameStr );
     ~wxMDIChildFrame(void);
     bool Create( wxMDIParentFrame *parent,
-      const wxWindowID id, const wxString& title,
+      wxWindowID id, const wxString& title,
       const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-      const long style = wxDEFAULT_FRAME_STYLE, const wxString& name = wxFrameNameStr );
+      long style = wxDEFAULT_FRAME_STYLE, const wxString& name = wxFrameNameStr );
     void SetMenuBar( wxMenuBar *menu_bar );
 
     // no status bars in wxGTK
-    virtual bool CreateStatusBar( const int WXUNUSED(number) = 1 ) { return FALSE; };
-    virtual void SetStatusText( const wxString &WXUNUSED(text), const int WXUNUSED(number) ) {};
-    virtual void SetStatusWidths( const int WXUNUSED(n), const int *WXUNUSED(width) ) {};
-    
+    virtual bool CreateStatusBar( int WXUNUSED(number) = 1 ) { return FALSE; };
+    virtual void SetStatusText( const wxString &WXUNUSED(text), int WXUNUSED(number) ) {};
+    virtual void SetStatusWidths( int WXUNUSED(n), int *WXUNUSED(width) ) {};
+
     virtual void Maximize(void) {};
     virtual void Restore(void) {};
     virtual void Activate(void);
@@ -136,9 +136,9 @@ class wxMDIClientWindow: public wxWindow
   public:
   
     wxMDIClientWindow(void);
-    wxMDIClientWindow( wxMDIParentFrame *parent, const long style = 0 );
+    wxMDIClientWindow( wxMDIParentFrame *parent, long style = 0 );
     ~wxMDIClientWindow(void);
-    virtual bool CreateClient( wxMDIParentFrame *parent, const long style = wxVSCROLL | wxHSCROLL );
+    virtual bool CreateClient( wxMDIParentFrame *parent, long style = wxVSCROLL | wxHSCROLL );
     void AddChild( wxWindow *child );
 };
 

@@ -38,14 +38,14 @@ wxCheckBox::wxCheckBox(void)
 
 wxCheckBox::wxCheckBox( wxWindow *parent, wxWindowID id, const wxString &label,
       const wxPoint &pos, const wxSize &size, 
-      const long style, const wxString &name )
+      long style, const wxString &name )
 {
   Create( parent, id, label, pos, size, style, name );
 };
 
 bool wxCheckBox::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
       const wxPoint &pos, const wxSize &size, 
-      const long style, const wxString &name )
+      long style, const wxString &name )
 {
   m_needParent = TRUE;
   
@@ -68,7 +68,7 @@ bool wxCheckBox::Create(  wxWindow *parent, wxWindowID id, const wxString &label
   return TRUE;
 };
 
-void wxCheckBox::SetValue( const bool state )
+void wxCheckBox::SetValue( bool state )
 {
   if (state)
     gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(m_widget), GTK_STATE_ACTIVE );

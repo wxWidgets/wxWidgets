@@ -25,11 +25,11 @@ class WXDLLEXPORT wxMiniFrame: public wxFrame {
 public:
   inline wxMiniFrame(void) {}
   inline wxMiniFrame(wxWindow *parent,
-           const wxWindowID id,
+           wxWindowID id,
            const wxString& title,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           const long style = wxDEFAULT_FRAME|wxTINY_CAPTION_HORIZ,
+           long style = wxDEFAULT_FRAME|wxTINY_CAPTION_HORIZ,
            const wxString& name = wxFrameNameStr)
   {
       Create(parent, id, title, pos, size, style, name);

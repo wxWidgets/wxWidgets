@@ -873,19 +873,6 @@ bool wxApp::SendIdleEvents(wxWindow* win)
     return needMore ;
 }
 
-// Windows specific. Intercept keyboard input: by default,
-// route it to the active frame or dialog box.
-#if WXWIN_COMPATIBILITY == 2
-bool wxApp::OldOnCharHook(wxKeyEvent& event)
-{
-  wxWindow *win = wxGetActiveWindow();
-  if (win)
-    return win->GetEventHandler()->OldOnCharHook(event);
-  else
-    return FALSE;
-}
-#endif
-
 void wxApp::DeletePendingObjects(void)
 {
   wxNode *node = wxPendingDelete.First();

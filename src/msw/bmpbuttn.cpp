@@ -32,9 +32,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton, wxButton)
 
 #define BUTTON_HEIGHT_FACTOR (EDIT_CONTROL_FACTOR * 1.1)
 
-bool wxBitmapButton::Create(wxWindow *parent, const wxWindowID id, const wxBitmap& bitmap,
+bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bitmap,
            const wxPoint& pos,
-           const wxSize& size, const long style,
+           const wxSize& size, long style,
            const wxValidator& validator,
            const wxString& name)
 {

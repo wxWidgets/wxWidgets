@@ -65,10 +65,10 @@ wxSlider::wxSlider(void)
 {
 };
 
-wxSlider::wxSlider( wxWindow *parent, const wxWindowID id,
-        const int value, const int minValue, const int maxValue,
+wxSlider::wxSlider( wxWindow *parent, wxWindowID id,
+        int value, int minValue, int maxValue,
         const wxPoint& pos, const wxSize& size,
-        const long style,
+        long style,
 /*      const wxValidator& validator = wxDefaultValidator, */
         const wxString& name )
 {
@@ -80,10 +80,10 @@ wxSlider::~wxSlider(void)
 {
 };
 
-bool wxSlider::Create(wxWindow *parent, const wxWindowID id,
-        const int value, const int minValue, const int maxValue,
+bool wxSlider::Create(wxWindow *parent, wxWindowID id,
+        int value, int minValue, int maxValue,
         const wxPoint& pos, const wxSize& size,
-        const long style,
+        long style,
 /*      const wxValidator& validator = wxDefaultValidator, */
         const wxString& name )
 {
@@ -117,7 +117,7 @@ int wxSlider::GetValue(void) const
   return (int)(m_adjust->value+0.5);
 };
 
-void wxSlider::SetValue( const int value )
+void wxSlider::SetValue( int value )
 {
   float fpos = (float)value;
   m_oldPos = fpos;
@@ -127,7 +127,7 @@ void wxSlider::SetValue( const int value )
   gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "value_changed" );
 };
 
-void wxSlider::SetRange( const int minValue, const int maxValue )
+void wxSlider::SetRange( int minValue, int maxValue )
 {
   float fmin = (float)minValue;
   float fmax = (float)maxValue;
@@ -152,7 +152,7 @@ int wxSlider::GetMax(void) const
   return (int)(m_adjust->upper+0.5);
 };
 
-void wxSlider::SetPageSize( const int pageSize )
+void wxSlider::SetPageSize( int pageSize )
 {
   float fpage = (float)pageSize;
       
@@ -168,7 +168,7 @@ int wxSlider::GetPageSize(void) const
   return (int)(m_adjust->page_increment+0.5);
 };
 
-void wxSlider::SetThumbLength( const int len )
+void wxSlider::SetThumbLength( int len )
 {
   float flen = (float)len;
       
@@ -184,7 +184,7 @@ int wxSlider::GetThumbLength(void) const
   return (int)(m_adjust->page_size+0.5);
 };
 
-void wxSlider::SetLineSize( const int WXUNUSED(lineSize) )
+void wxSlider::SetLineSize( int WXUNUSED(lineSize) )
 {
 };
 
@@ -200,7 +200,7 @@ void wxSlider::GetSize( int *x, int *y ) const
   wxWindow::GetSize( x, y );
 };
 
-void wxSlider::SetSize( const int x, const int y, const int width, const int height, const int sizeFlags )
+void wxSlider::SetSize( int x, int y, int width, int height, int sizeFlags )
 {
   wxWindow::SetSize( x, y, width, height, sizeFlags );
 };
@@ -210,11 +210,11 @@ void wxSlider::GetPosition( int *x, int *y ) const
   wxWindow::GetPosition( x, y );
 };
 
-void wxSlider::SetTick( const int WXUNUSED(tickPos) )
+void wxSlider::SetTick( int WXUNUSED(tickPos) )
 {
 };
 
-void wxSlider::SetTickFreq( const int WXUNUSED(n), const int WXUNUSED(pos) )
+void wxSlider::SetTickFreq( int WXUNUSED(n), int WXUNUSED(pos) )
 {
 };
 
@@ -227,7 +227,7 @@ void wxSlider::ClearTicks(void)
 {
 };
 
-void wxSlider::SetSelection( const int WXUNUSED(minPos), const int WXUNUSED(maxPos) )
+void wxSlider::SetSelection( int WXUNUSED(minPos), int WXUNUSED(maxPos) )
 {
 };
 

@@ -81,7 +81,7 @@ wxOwnerDrawn *wxListBox::CreateItem(uint n)
 // this macro is dangerous but still better than tons of (HWND)GetHWND()
 #define   hwnd    (HWND)GetHWND()
 
-bool wxListBox::MSWCommand(const WXUINT param, const WXWORD WXUNUSED(id))
+bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 {
 /*
   if (param == LBN_SELCANCEL)
@@ -118,7 +118,9 @@ bool wxListBox::MSWCommand(const WXUINT param, const WXWORD WXUNUSED(id))
   {
     wxCommandEvent event(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, m_windowId);
     event.SetEventObject( this );
-    if ( !GetEventHandler()->ProcessEvent(event) )
+    GetEventHandler()->ProcessEvent(event) ;
+    return TRUE;
+/*
     {
 #if WXWIN_COMPATIBILITY
       wxWindow *parent = (wxWindow *)GetParent();
@@ -127,6 +129,7 @@ bool wxListBox::MSWCommand(const WXUINT param, const WXWORD WXUNUSED(id))
 #endif
       return TRUE;
     }
+ */
   }
   return FALSE;
 }
@@ -138,11 +141,11 @@ wxListBox::wxListBox(void)
   m_selected = 0;
 }
 
-bool wxListBox::Create(wxWindow *parent, const wxWindowID id,
+bool wxListBox::Create(wxWindow *parent, wxWindowID id,
                        const wxPoint& pos,
                        const wxSize& size,
-                       const int n, const wxString choices[],
-                       const long style,
+                       int n, const wxString choices[],
+                       long style,
                        const wxValidator& validator,
                        const wxString& name)
 {
@@ -266,7 +269,7 @@ void wxListBox::SetupColours(void)
   SetForegroundColour(GetParent()->GetDefaultForegroundColour());
 }
 
-void wxListBox::SetFirstItem(const int N)
+void wxListBox::SetFirstItem(int N)
 {
   SendMessage(hwnd,LB_SETTOPINDEX,(WPARAM)N,(LPARAM)0) ;
 }
@@ -279,7 +282,7 @@ void wxListBox::SetFirstItem(const wxString& s)
     SetFirstItem(N) ;
 }
 
-void wxListBox::Delete(const int N)
+void wxListBox::Delete(int N)
 {
   SendMessage(hwnd, LB_DELETESTRING, N, 0);
   m_noItems --;
@@ -321,7 +324,7 @@ void wxListBox::Append(const wxString& item, char *Client_data)
   SetHorizontalExtent(item);
 }
 
-void wxListBox::Set(const int n, const wxString *choices, char** clientData)
+void wxListBox::Set(int n, const wxString *choices, char** clientData)
 {
   ShowWindow(hwnd, SW_HIDE);
   ListBox_ResetContent(hwnd);
@@ -377,7 +380,7 @@ void wxListBox::Clear(void)
   ListBox_GetHorizontalExtent(hwnd);
 }
 
-void wxListBox::SetSelection(const int N, const bool select)
+void wxListBox::SetSelection(int N, bool select)
 {
   if ((m_windowStyle & wxLB_MULTIPLE) || (m_windowStyle & wxLB_EXTENDED))
     SendMessage(hwnd, LB_SETSEL, select, N);
@@ -390,23 +393,23 @@ void wxListBox::SetSelection(const int N, const bool select)
   }
 }
 
-bool wxListBox::Selected(const int N) const
+bool wxListBox::Selected(int N) const
 {
   return SendMessage(hwnd, LB_GETSEL, N, 0) == 0 ? FALSE : TRUE;
 }
 
-void wxListBox::Deselect(const int N)
+void wxListBox::Deselect(int N)
 {
   if ((m_windowStyle & wxLB_MULTIPLE) || (m_windowStyle & wxLB_EXTENDED))
     SendMessage(hwnd, LB_SETSEL, FALSE, N);
 }
 
-char *wxListBox::GetClientData(const int N) const
+char *wxListBox::GetClientData(int N) const
 {
   return (char *)SendMessage(hwnd, LB_GETITEMDATA, N, 0);
 }
 
-void wxListBox::SetClientData(const int N, char *Client_data)
+void wxListBox::SetClientData(int N, char *Client_data)
 {
   if ( ListBox_SetItemData(hwnd, N, Client_data) == LB_ERR )
     wxLogDebug("LB_SETITEMDATA failed");
@@ -456,7 +459,7 @@ int wxListBox::GetSelection() const
 }
 
 // Find string for position
-wxString wxListBox::GetString(const int N) const
+wxString wxListBox::GetString(int N) const
 {
   if (N < 0 || N > m_noItems)
     return wxString("");
@@ -466,7 +469,7 @@ wxString wxListBox::GetString(const int N) const
   return wxString(wxBuffer);
 }
 
-void wxListBox::SetSize(const int x, const int y, const int width, const int height, const int sizeFlags)
+void wxListBox::SetSize(int x, int y, int width, int height, int sizeFlags)
 {
   int currentX, currentY;
   GetPosition(&currentX, &currentY);
@@ -516,16 +519,6 @@ void wxListBox::SetSize(const int x, const int y, const int width, const int hei
 //  wxDebugMsg("About to set the listbox height to %d", (int)control_height);
   MoveWindow(hwnd, (int)control_x, (int)control_y,
                    (int)control_width, (int)control_height, TRUE);
-
-/*
-#if WXWIN_COMPATIBILITY
-  GetEventHandler()->OldOnSize(width, height);
-#else
-  wxSizeEvent event(wxSize(width, height), m_windowId);
-  event.eventObject = this;
-  GetEventHandler()->ProcessEvent(event);
-#endif
-*/
 
 }
 
@@ -590,7 +583,7 @@ void wxListBox::SetHorizontalExtent(const wxString& s)
 }
 
 void
-wxListBox::InsertItems(const int nItems, const wxString items[], const int pos)
+wxListBox::InsertItems(int nItems, const wxString items[], int pos)
 {
   int i;
   for (i = 0; i < nItems; i++)
@@ -611,7 +604,7 @@ wxListBox::InsertItems(const int nItems, const wxString items[], const int pos)
   SetHorizontalExtent("");
 }
 
-void wxListBox::SetString(const int N, const wxString& s)
+void wxListBox::SetString(int N, const wxString& s)
 {
   int sel = GetSelection();
   
@@ -653,7 +646,7 @@ wxString wxListBox::GetStringSelection (void) const
     return wxString("");
 }
 
-bool wxListBox::SetStringSelection (const wxString& s, const bool flag)
+bool wxListBox::SetStringSelection (const wxString& s, bool flag)
 {
   int sel = FindString (s);
   if (sel > -1)
@@ -683,7 +676,7 @@ void wxListBox::Command (wxCommandEvent & event)
   ProcessCommand (event);
 }
 
-WXHBRUSH wxListBox::OnCtlColor(const WXHDC pDC, const WXHWND pWnd, const WXUINT nCtlColor,
+WXHBRUSH wxListBox::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 			WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
 #if CTL3D
@@ -733,9 +726,9 @@ long wxListBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
         case WM_LBUTTONUP:
         case WM_LBUTTONDBLCLK:
         case WM_MOUSEMOVE:
-        case WM_DESTROY:
         case WM_COMMAND:
         case WM_NOTIFY:
+        case WM_DESTROY:
         case WM_MENUSELECT:
         case WM_INITMENUPOPUP:
         case WM_DRAWITEM:
@@ -763,6 +756,7 @@ long wxListBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
             return MSWDefWindowProc(nMsg, wParam, lParam );
     }
 #endif
+
   return wxControl::MSWWindowProc(nMsg, wParam, lParam);
 }
 

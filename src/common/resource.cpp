@@ -561,7 +561,7 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, wxItemResource *childRe
             node = node->Next();
           }
         }
-        control = new wxRadioBox(parent, (const wxWindowID) id, wxString(childResource->GetTitle()),
+        control = new wxRadioBox(parent, (wxWindowID) id, wxString(childResource->GetTitle()),
            wxPoint(childResource->GetX(), childResource->GetY()),
 		   wxSize(childResource->GetWidth(), childResource->GetHeight()),
            noStrings, strings, (int)childResource->GetValue1(), childResource->GetStyle(), wxDefaultValidator,

@@ -30,7 +30,7 @@ class WXDLLEXPORT wxTextValidator: public wxValidator
 {
 DECLARE_DYNAMIC_CLASS(wxTextValidator)
 public:
-  wxTextValidator(const long style = wxFILTER_NONE, wxString *val = NULL);
+  wxTextValidator(long style = wxFILTER_NONE, wxString *val = NULL);
   wxTextValidator(const wxTextValidator& val);
 
   ~wxTextValidator();
@@ -54,7 +54,7 @@ public:
 
   // ACCESSORS
   inline long GetStyle(void) const { return m_validatorStyle; }
-  inline void SetStyle(const long style) { m_validatorStyle = style; }
+  inline void SetStyle(long style) { m_validatorStyle = style; }
 
   void SetIncludeList(const wxStringList& list);
   inline wxStringList& GetIncludeList(void) { return m_includeList; }

@@ -41,23 +41,23 @@ class WXDLLEXPORT wxSpinButton: public wxControl
 
   wxSpinButton(void);
 
-  inline wxSpinButton(wxWindow *parent, const wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-            const long style = wxSP_VERTICAL, const wxString& name = "wxSpinButton")
+  inline wxSpinButton(wxWindow *parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+            long style = wxSP_VERTICAL, const wxString& name = "wxSpinButton")
   {
     Create(parent, id, pos, size, style, name);
   }
   ~wxSpinButton(void);
 
-  bool Create(wxWindow *parent, const wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-            const long style = wxSP_VERTICAL, const wxString& name = "wxSpinButton");
+  bool Create(wxWindow *parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+            long style = wxSP_VERTICAL, const wxString& name = "wxSpinButton");
 
 
   // Attributes
   ////////////////////////////////////////////////////////////////////////////
 
   int GetValue(void) const ;
-  void SetValue(const int val) ;
-  void SetRange(const int minVal, const int maxVal) ;
+  void SetValue(int val) ;
+  void SetRange(int minVal, int maxVal) ;
   inline int GetMin(void) const { return m_min; }
   inline int GetMax(void) const { return m_max; }
 
@@ -67,10 +67,10 @@ class WXDLLEXPORT wxSpinButton: public wxControl
   void Command(wxCommandEvent& event) { ProcessCommand(event); };
 
   // IMPLEMENTATION
-  bool MSWCommand(const WXUINT param, const WXWORD id);
-  bool MSWNotify(const WXWPARAM wParam, const WXLPARAM lParam);
-  void MSWOnVScroll(const WXWORD wParam, const WXWORD pos, const WXHWND control);
-  void MSWOnHScroll(const WXWORD wParam, const WXWORD pos, const WXHWND control);
+  bool MSWCommand(WXUINT param, WXWORD id);
+  bool MSWNotify(WXWPARAM wParam, WXLPARAM lParam);
+  void MSWOnVScroll(WXWORD wParam, WXWORD pos, WXHWND control);
+  void MSWOnHScroll(WXWORD wParam, WXWORD pos, WXHWND control);
 
 protected:
   int   m_min;

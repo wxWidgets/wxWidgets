@@ -41,19 +41,19 @@ wxRadioBox::wxRadioBox(void)
 {
 };
 
-wxRadioBox::wxRadioBox( wxWindow *parent, const wxWindowID id, const wxString& title,
-      const wxPoint &pos, const wxSize &size, 
-      const int n, const wxString choices[],
-      const int majorDim, const long style,
+wxRadioBox::wxRadioBox( wxWindow *parent, wxWindowID id, const wxString& title,
+      const wxPoint &pos, const wxSize &size,
+      int n, const wxString choices[],
+      int majorDim, long style,
       const wxString &name )
 {
   Create( parent, id, title, pos, size, n, choices, majorDim, style, name );
 };
 
-bool wxRadioBox::Create( wxWindow *parent, const wxWindowID id, const wxString& title,
-      const wxPoint &pos, const wxSize &size, 
-      const int n, const wxString choices[],
-      const int WXUNUSED(majorDim), const long style,
+bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
+      const wxPoint &pos, const wxSize &size,
+      int n, const wxString choices[],
+      int WXUNUSED(majorDim), long style,
       const wxString &name )
 {
   m_needParent = TRUE;
@@ -108,7 +108,7 @@ bool wxRadioBox::Create( wxWindow *parent, const wxWindowID id, const wxString& 
   return TRUE;
 };
 
-bool wxRadioBox::Show( const bool show )
+bool wxRadioBox::Show( bool show )
 {
   wxWindow::Show( show );
 
@@ -128,7 +128,7 @@ int wxRadioBox::FindString( const wxString& WXUNUSED(s) ) const
   return 0;
 };
 
-void wxRadioBox::SetSelection( const int WXUNUSED(n) )
+void wxRadioBox::SetSelection( int WXUNUSED(n) )
 {
 };
 
@@ -146,7 +146,7 @@ int wxRadioBox::GetSelection(void) const
   return -1;
 };
 
-wxString wxRadioBox::GetString( const int WXUNUSED(n) ) const
+wxString wxRadioBox::GetString( int WXUNUSED(n) ) const
 {
   return "";
 };
@@ -160,28 +160,28 @@ void wxRadioBox::SetLabel( const wxString& WXUNUSED(label) )
 {
 };
 
-void wxRadioBox::SetLabel( const int WXUNUSED(item), const wxString& WXUNUSED(label) )
+void wxRadioBox::SetLabel( int WXUNUSED(item), const wxString& WXUNUSED(label) )
 {
 };
 
-void wxRadioBox::SetLabel( const int WXUNUSED(item), wxBitmap *WXUNUSED(bitmap) )
+void wxRadioBox::SetLabel( int WXUNUSED(item), wxBitmap *WXUNUSED(bitmap) )
 {
 };
 
-wxString wxRadioBox::GetLabel( const int WXUNUSED(item) ) const
+wxString wxRadioBox::GetLabel( int WXUNUSED(item) ) const
 {
   return "";
 };
 
-void wxRadioBox::Enable( const bool WXUNUSED(enable) )
+void wxRadioBox::Enable( bool WXUNUSED(enable) )
 {
 };
 
-void wxRadioBox::Enable( const int WXUNUSED(item), const bool WXUNUSED(enable) )
+void wxRadioBox::Enable( int WXUNUSED(item), bool WXUNUSED(enable) )
 {
 };
 
-void wxRadioBox::Show( const int WXUNUSED(item), const bool WXUNUSED(show) )
+void wxRadioBox::Show( int WXUNUSED(item), bool WXUNUSED(show) )
 {
 };
 
@@ -223,7 +223,7 @@ int wxRadioBox::GetNumberOfRowsOrCols(void) const
   return 1;
 };
 
-void wxRadioBox::SetNumberOfRowsOrCols( const int WXUNUSED(n) )
+void wxRadioBox::SetNumberOfRowsOrCols( int WXUNUSED(n) )
 {
 };
 

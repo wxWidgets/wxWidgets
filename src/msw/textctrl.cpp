@@ -76,10 +76,10 @@ wxTextCtrl::wxTextCtrl(void)
   m_isRich = FALSE;
 }
 
-bool wxTextCtrl::Create(wxWindow *parent, const wxWindowID id,
+bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 		   const wxString& value,
            const wxPoint& pos,
-           const wxSize& size, const long style,
+           const wxSize& size, long style,
            const wxValidator& validator,
            const wxString& name)
 {
@@ -300,7 +300,7 @@ void wxTextCtrl::SetValue(const wxString& value)
     SetWindowText((HWND) GetHWND(), (const char *)value);
 }
 
-void wxTextCtrl::SetSize(const int x, const int y, const int width, const int height, const int sizeFlags)
+void wxTextCtrl::SetSize(int x, int y, int width, int height, int sizeFlags)
 {
   int currentX, currentY;
   GetPosition(&currentX, &currentY);
@@ -345,15 +345,6 @@ void wxTextCtrl::SetSize(const int x, const int y, const int width, const int he
 
   MoveWindow((HWND) GetHWND(), (int)control_x, (int)control_y,
                               (int)control_width, (int)control_height, TRUE);
-/*
-#if WXWIN_COMPATIBILITY
-  GetEventHandler()->OldOnSize(width, height);
-#else
-  wxSizeEvent event(wxSize(width, height), m_windowId);
-  event.eventObject = this;
-  GetEventHandler()->ProcessEvent(event);
-#endif
-*/
 }
 
 // Clipboard operations
@@ -375,13 +366,13 @@ void wxTextCtrl::Paste(void)
   SendMessage(hWnd, WM_PASTE, 0, 0L);
 }
 
-void wxTextCtrl::SetEditable(const bool editable)
+void wxTextCtrl::SetEditable(bool editable)
 {
   HWND hWnd = (HWND) GetHWND();
   SendMessage(hWnd, EM_SETREADONLY, (WPARAM)!editable, (LPARAM)0L);
 }
 
-void wxTextCtrl::SetInsertionPoint(const long pos)
+void wxTextCtrl::SetInsertionPoint(long pos)
 {
   HWND hWnd = (HWND) GetHWND();
 #ifdef __WIN32__
@@ -447,7 +438,7 @@ long wxTextCtrl::GetLastPosition(void) const
     return (long)(charIndex + lineLength);
 }
 
-void wxTextCtrl::Replace(const long from, const long to, const wxString& value)
+void wxTextCtrl::Replace(long from, long to, const wxString& value)
 {
     HWND hWnd = (HWND) GetHWND();
     long fromChar = from;
@@ -468,7 +459,7 @@ void wxTextCtrl::Replace(const long from, const long to, const wxString& value)
     SendMessage(hWnd, WM_PASTE, (WPARAM)0, (LPARAM)0L);
 }
 
-void wxTextCtrl::Remove(const long from, const long to)
+void wxTextCtrl::Remove(long from, long to)
 {
     HWND hWnd = (HWND) GetHWND();
     long fromChar = from;
@@ -483,7 +474,7 @@ void wxTextCtrl::Remove(const long from, const long to)
     SendMessage(hWnd, WM_CUT, (WPARAM)0, (LPARAM)0);
 }
 
-void wxTextCtrl::SetSelection(const long from, const long to)
+void wxTextCtrl::SetSelection(long from, long to)
 {
     HWND hWnd = (HWND) GetHWND();
     long fromChar = from;
@@ -641,7 +632,7 @@ int wxTextCtrl::GetNumberOfLines(void) const
     return (int)SendMessage((HWND) GetHWND(), EM_GETLINECOUNT, (WPARAM)0, (LPARAM)0);
 }
 
-long wxTextCtrl::XYToPosition(const long x, const long y) const
+long wxTextCtrl::XYToPosition(long x, long y) const
 {
     HWND hWnd = (HWND) GetHWND();
 
@@ -650,7 +641,7 @@ long wxTextCtrl::XYToPosition(const long x, const long y) const
     return (long)(x + charIndex);
 }
 
-void wxTextCtrl::PositionToXY(const long pos, long *x, long *y) const
+void wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
 {
     HWND hWnd = (HWND) GetHWND();
 
@@ -663,7 +654,7 @@ void wxTextCtrl::PositionToXY(const long pos, long *x, long *y) const
     *y = (long)lineNo;
 }
 
-void wxTextCtrl::ShowPosition(const long pos)
+void wxTextCtrl::ShowPosition(long pos)
 {
     HWND hWnd = (HWND) GetHWND();
 
@@ -693,7 +684,7 @@ void wxTextCtrl::ShowPosition(const long pos)
       (void)SendMessage(hWnd, EM_LINESCROLL, (WPARAM)0, (LPARAM)MAKELPARAM(linesToScroll, 0));
 }
 
-int wxTextCtrl::GetLineLength(const long lineNo) const
+int wxTextCtrl::GetLineLength(long lineNo) const
 {
     long charIndex = XYToPosition(0, lineNo);
     HWND hWnd = (HWND) GetHWND();
@@ -701,7 +692,7 @@ int wxTextCtrl::GetLineLength(const long lineNo) const
     return len;
 }
 
-wxString wxTextCtrl::GetLineText(const long lineNo) const
+wxString wxTextCtrl::GetLineText(long lineNo) const
 {
     HWND hWnd = (HWND) GetHWND();
     *(WORD *)wxBuffer = 512;
@@ -853,7 +844,7 @@ wxTextCtrl& wxTextCtrl::operator<<(const wxString& s)
   return *this;
 }
 
-wxTextCtrl& wxTextCtrl::operator<<(const float f)
+wxTextCtrl& wxTextCtrl::operator<<(float f)
 {
   static char buf[100];
   sprintf(buf, "%.2f", f);
@@ -861,7 +852,7 @@ wxTextCtrl& wxTextCtrl::operator<<(const float f)
   return *this;
 }
 
-wxTextCtrl& wxTextCtrl::operator<<(const double d)
+wxTextCtrl& wxTextCtrl::operator<<(double d)
 {
   static char buf[100];
   sprintf(buf, "%.2f", d);
@@ -869,7 +860,7 @@ wxTextCtrl& wxTextCtrl::operator<<(const double d)
   return *this;
 }
 
-wxTextCtrl& wxTextCtrl::operator<<(const int i)
+wxTextCtrl& wxTextCtrl::operator<<(int i)
 {
   static char buf[100];
   sprintf(buf, "%i", i);
@@ -877,7 +868,7 @@ wxTextCtrl& wxTextCtrl::operator<<(const int i)
   return *this;
 }
 
-wxTextCtrl& wxTextCtrl::operator<<(const long i)
+wxTextCtrl& wxTextCtrl::operator<<(long i)
 {
   static char buf[100];
   sprintf(buf, "%ld", i);
@@ -896,7 +887,7 @@ wxTextCtrl& wxTextCtrl::operator<<(const char c)
 }
 
 
-WXHBRUSH wxTextCtrl::OnCtlColor(const WXHDC pDC, const WXHWND pWnd, const WXUINT nCtlColor,
+WXHBRUSH wxTextCtrl::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 			WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
 #if CTL3D
@@ -989,7 +980,7 @@ void wxTextCtrl::OnEraseBackground(wxEraseEvent& event)
 //        wxWindow::OnEraseBackground(event);
 }
 
-bool wxTextCtrl::MSWCommand(const WXUINT param, const WXWORD WXUNUSED(id))
+bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 {
 /*
   // Debugging
@@ -1069,7 +1060,7 @@ bool wxTextCtrl::MSWCommand(const WXUINT param, const WXWORD WXUNUSED(id))
 // For Rich Edit controls. Do we need it?
 #if 0
 #if defined(__WIN95__)
-bool wxTextCtrl::MSWNotify(const WXWPARAM wParam, const WXLPARAM lParam)
+bool wxTextCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
 {
 	wxCommandEvent event(0, m_windowId);
 	int eventType = 0;

@@ -46,33 +46,33 @@ class wxListBox: public wxControl
     wxListBox(void);
     wxListBox( wxWindow *parent, wxWindowID id, 
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      const int n = 0, const wxString choices[] = NULL,
-      const long style = 0, const wxString &name = wxListBoxNameStr );
-    bool Create( wxWindow *parent, wxWindowID id, 
+      int n = 0, const wxString choices[] = NULL,
+      long style = 0, const wxString &name = wxListBoxNameStr );
+    bool Create( wxWindow *parent, wxWindowID id,
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      const int n = 0, const wxString choices[] = NULL,
-      const long style = 0, const wxString &name = wxListBoxNameStr );
+      int n = 0, const wxString choices[] = NULL,
+      long style = 0, const wxString &name = wxListBoxNameStr );
     void Append( const wxString &item );
     void Append( const wxString &item, char *clientData );
     void Clear(void);
     void Delete( int n );
     void Deselect( int n );
     int FindString( const wxString &item ) const;
-    char *GetClientData( const int n ) const;
+    char *GetClientData( int n ) const;
     int GetSelection(void) const;
     int GetSelections( class wxArrayInt &) const;
     wxString GetString( int n ) const;
     wxString GetStringSelection(void) const;
     int Number(void);
-    bool Selected( const int n );
-    void Set( const int n, const wxString *choices );
-    void SetClientData( const int n, char *clientData );
+    bool Selected( int n );
+    void Set( int n, const wxString *choices );
+    void SetClientData( int n, char *clientData );
     void SetFirstItem( int n );
     void SetFirstItem( const wxString &item );
-    void SetSelection( const int n, const bool select = TRUE );
-    void SetString( const int n, const wxString &string );
-    void SetStringSelection( const wxString &string, const bool select = TRUE );
-    
+    void SetSelection( int n, bool select = TRUE );
+    void SetString( int n, const wxString &string );
+    void SetStringSelection( const wxString &string, bool select = TRUE );
+
   private:
   
     GtkList   *m_list;

@@ -89,10 +89,10 @@ class WXDLLEXPORT wxWindow: public wxEvtHandler
 
 public:
   wxWindow(void);
-  inline wxWindow(wxWindow *parent, const wxWindowID id,
+  inline wxWindow(wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           const long style = 0,
+           long style = 0,
            const wxString& name = wxPanelNameStr)
   {
   	  m_children = new wxList;
@@ -101,17 +101,17 @@ public:
 
   virtual ~wxWindow(void);
 
-  bool Create(wxWindow *parent, const wxWindowID id,
+  bool Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           const long style = 0,
+           long style = 0,
            const wxString& name = wxPanelNameStr);
 
   // Fit the window around the items
   virtual void Fit(void);
 
   // Show or hide the window
-  virtual bool Show(const bool show);
+  virtual bool Show(bool show);
 
   // Is the window shown?
   virtual bool IsShown(void) const;
@@ -169,12 +169,12 @@ public:
   virtual void GetClientSize(int *width, int *height) const;
 
   // Set overall size and position
-  virtual void SetSize(const int x, const int y, const int width, const int height, const int sizeFlags = wxSIZE_AUTO);
-  inline virtual void SetSize(const int width, const int height) { SetSize(-1, -1, width, height, wxSIZE_USE_EXISTING); }
-  inline virtual void Move(const int x, const int y) { SetSize(x, y, -1, -1, wxSIZE_USE_EXISTING); }
+  virtual void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
+  inline virtual void SetSize(int width, int height) { SetSize(-1, -1, width, height, wxSIZE_USE_EXISTING); }
+  inline virtual void Move(int x, int y) { SetSize(x, y, -1, -1, wxSIZE_USE_EXISTING); }
 
   // Set client size
-  virtual void SetClientSize(const int width, const int size);
+  virtual void SetClientSize(int width, int size);
 
   // Convert client to screen coordinates
   virtual void ClientToScreen(int *x, int *y) const;
@@ -190,7 +190,7 @@ public:
   virtual void ReleaseMouse(void);
 
   // Enable or disable the window
-  virtual void Enable(const bool enable);
+  virtual void Enable(bool enable);
 
 #if USE_DRAG_AND_DROP
   // Associate a drop target with this window (if the window already had a drop
@@ -200,7 +200,7 @@ public:
 #endif
 
   // Accept files for dragging
-  virtual void DragAcceptFiles(const bool accept);
+  virtual void DragAcceptFiles(bool accept);
 
   // Set/get the window title
   virtual inline void SetTitle(const wxString& WXUNUSED(title)) {};
@@ -214,51 +214,51 @@ public:
   inline virtual void SetName(const wxString& name);
 
   // Centre the window
-  virtual void Centre(const int direction) ;
-  inline void Center(const int direction = wxHORIZONTAL) { Centre(direction); }
+  virtual void Centre(int direction) ;
+  inline void Center(int direction = wxHORIZONTAL) { Centre(direction); }
 
   // Popup a menu
-  virtual bool PopupMenu(wxMenu *menu, const int x, const int y);
+  virtual bool PopupMenu(wxMenu *menu, int x, int y);
 
   // Send the window a refresh event
-  virtual void Refresh(const bool eraseBack = TRUE, const wxRectangle *rect = NULL);
+  virtual void Refresh(bool eraseBack = TRUE, const wxRectangle *rect = NULL);
 
 #if WXWIN_COMPATIBILITY
   // Set/get scroll attributes
-  virtual void SetScrollRange(const int orient, const int range, const bool refresh = TRUE);
-  virtual void SetScrollPage(const int orient, const int page, const bool refresh = TRUE);
-  virtual int OldGetScrollRange(const int orient) const;
-  virtual int GetScrollPage(const int orient) const;
+  virtual void SetScrollRange(int orient, int range, bool refresh = TRUE);
+  virtual void SetScrollPage(int orient, int page, bool refresh = TRUE);
+  virtual int OldGetScrollRange(int orient) const;
+  virtual int GetScrollPage(int orient) const;
 #endif
 
   // New functions that will replace the above.
-  virtual void SetScrollbar(const int orient, const int pos, const int thumbVisible,
-    const int range, const bool refresh = TRUE);
+  virtual void SetScrollbar(int orient, int pos, int thumbVisible,
+    int range, bool refresh = TRUE);
 
-  virtual void SetScrollPos(const int orient, const int pos, const bool refresh = TRUE);
-  virtual int GetScrollPos(const int orient) const;
-  virtual int GetScrollRange(const int orient) const;
-  virtual int GetScrollThumb(const int orient) const;
+  virtual void SetScrollPos(int orient, int pos, bool refresh = TRUE);
+  virtual int GetScrollPos(int orient) const;
+  virtual int GetScrollRange(int orient) const;
+  virtual int GetScrollThumb(int orient) const;
 
-  virtual void ScrollWindow(const int dx, const int dy, const wxRectangle *rect = NULL);
+  virtual void ScrollWindow(int dx, int dy, const wxRectangle *rect = NULL);
 
   // Caret manipulation
-  virtual void CreateCaret(const int w, const int h);
+  virtual void CreateCaret(int w, int h);
   virtual void CreateCaret(const wxBitmap *bitmap);
   virtual void DestroyCaret(void);
-  virtual void ShowCaret(const bool show);
-  virtual void SetCaretPos(const int x, const int y);
+  virtual void ShowCaret(bool show);
+  virtual void SetCaretPos(int x, int y);
   virtual void GetCaretPos(int *x, int *y) const;
 
   // Tell window how much it can be sized
-  virtual void SetSizeHints(const int minW = -1, const int minH = -1, const int maxW = -1, const int maxH = -1, const int incW = -1, const int incH = -1);
+  virtual void SetSizeHints(int minW = -1, int minH = -1, int maxW = -1, int maxH = -1, int incW = -1, int incH = -1);
 
   // Set/get the window's identifier
   inline int GetId() const;
-  inline void SetId(const int id);
+  inline void SetId(int id);
 
   // Make the window modal (all other windows unresponsive)
-  virtual void MakeModal(const bool modal);
+  virtual void MakeModal(bool modal);
 
   // Get the private handle (platform-dependent)
   inline void *GetHandle(void) const;
@@ -278,15 +278,15 @@ public:
   inline wxValidator *GetValidator(void) const;
 
   // Set/get the window's style
-  inline void SetWindowStyleFlag(const long flag);
+  inline void SetWindowStyleFlag(long flag);
   inline long GetWindowStyleFlag(void) const;
 
   // Set/get double-clickability
   // TODO: we probably wish to get rid of this, and
   // always allow double clicks.
-  inline void SetDoubleClick(const bool flag);
+  inline void SetDoubleClick(bool flag);
   inline bool GetDoubleClick(void) const;
-  inline void AllowDoubleClick(const bool value)  { SetDoubleClick(value); }
+  inline void AllowDoubleClick(bool value)  { SetDoubleClick(value); }
 
   // Old way to handle a control command
   virtual void OnCommand(wxWindow& win, wxCommandEvent& event);
@@ -301,14 +301,14 @@ public:
   wxEvtHandler *PopEventHandler(bool deleteHandler = FALSE) ;
   
   // Close the window by calling OnClose, posting a deletion
-  virtual bool Close(const bool force = FALSE);
+  virtual bool Close(bool force = FALSE);
 
   // Destroy the window (delayed, if a managed window)
   virtual bool Destroy(void) ;
 
   // Mode for telling default OnSize members to
   // call Layout(), if not using Sizers, just top-down constraints
-  inline void SetAutoLayout(const bool a);
+  inline void SetAutoLayout(bool a);
   inline bool GetAutoLayout(void) const;
 
   // Set/get constraints
@@ -353,42 +353,27 @@ public:
 #endif
 
   // Native resource loading
-  virtual bool LoadNativeDialog(wxWindow* parent, const wxWindowID& id);
+  virtual bool LoadNativeDialog(wxWindow* parent, wxWindowID& id);
   virtual bool LoadNativeDialog(wxWindow* parent, const wxString& name);
-  virtual wxWindow* GetWindowChild1(const wxWindowID& id);
-  virtual wxWindow* GetWindowChild(const wxWindowID& id);
+  virtual wxWindow* GetWindowChild1(wxWindowID& id);
+  virtual wxWindow* GetWindowChild(wxWindowID& id);
 
   virtual void GetTextExtent(const wxString& string, int *x, int *y,
                              int *descent = NULL,
                              int *externalLeading = NULL,
-                             const wxFont *theFont = NULL, const bool use16 = FALSE) const;
-#if WXWIN_COMPATIBILITY
-  void GetTextExtent(const wxString& string, float *x, float *y,
-                             float *descent = NULL,
-                             float *externalLeading = NULL,
-                             const wxFont *theFont = NULL, const bool use16 = FALSE) const;
-#endif
-
-  // Gets 'context' member
-  // OBSOLETE
-  // TODO: how to make backward compatible?
-//  inline wxDC *GetDC(void) const;
+                             const wxFont *theFont = NULL, bool use16 = FALSE) const;
 
   // Is the window retained?
   inline bool IsRetained(void) const;
 
-  // Set the window's colourmap/palette
-  // OBSOLETE
-//  virtual void SetPalette(wxPalette *palette);
-
   // Warp the pointer the given position
-  virtual void WarpPointer(const int x_pos, const int y_pos) ;
+  virtual void WarpPointer(int x_pos, int y_pos) ;
 
   // Clear the window
   virtual void Clear(void);
 
   // Find a window by id or name
-  virtual wxWindow *FindWindow(const long id);
+  virtual wxWindow *FindWindow(long id);
   virtual wxWindow *FindWindow(const wxString& name);
 
   // Constraint operations
@@ -410,6 +395,7 @@ public:
 //  virtual void OnChangeFocus(wxControl *from, wxControl *to);
 //  virtual bool OnFunctionKey(wxKeyEvent &event);
 
+/*
 #if WXWIN_COMPATIBILITY
   virtual void OldOnMenuSelect(int WXUNUSED(cmd));
   virtual void OldOnInitMenuPopup(int WXUNUSED(pos));
@@ -424,18 +410,6 @@ public:
   virtual void OldOnSetFocus(void);              // Called on setting focus
   virtual void OldOnKillFocus(void);             // Called on killing focus
 #endif
-
-/* THIS IS NOW OBSOLETE - all positions are in device units
-  // Calculates the position of a point on the window
-  // taking into account the position of scrollbars.
-  // Windows doesn't automatically reflect the position of the
-  // scrollbars - (0, 0) is always the top left of the visible window,
-  // whereas in XView, (0, 0) moves according to scrollbar positions.
-  virtual void CalcScrolledPosition(const int x, const int y, int *xx, int *yy) const ;
-
-  // Calculate logical (scroll-bar/scaling aware) position from
-  // device (pixel) position
-  virtual void CalcUnscrolledPosition(const int x, const int y, float *xx, float *yy) const ;
 */
 
 public:
@@ -446,11 +420,11 @@ public:
   void SubclassWin(WXHWND hWnd);
   void UnsubclassWin(void);
   virtual long Default(void);
-  virtual bool MSWCommand(const WXUINT param, const WXWORD id);
-  virtual bool MSWNotify(const WXWPARAM wParam, const WXLPARAM lParam);
-  virtual wxWindow *FindItem(const int id) const;
-  virtual wxWindow *FindItemByHWND(const WXHWND hWnd, bool controlOnly = FALSE) const ;
-  virtual void PreDelete(const WXHDC dc);              // Allows system cleanup
+  virtual bool MSWCommand(WXUINT param, WXWORD id);
+  virtual bool MSWNotify(WXWPARAM wParam, WXLPARAM lParam);
+  virtual wxWindow *FindItem(int id) const;
+  virtual wxWindow *FindItemByHWND(WXHWND hWnd, bool controlOnly = FALSE) const ;
+  virtual void PreDelete(WXHDC dc);              // Allows system cleanup
   // TO DO: how many of these need to be virtual?
   virtual WXHWND GetHWND(void) const ;
   virtual void SetHWND(WXHWND hWnd);
@@ -480,31 +454,31 @@ public:
   void DeleteRelatedConstraints(void);
 
   virtual void ResetConstraints(void);
-  virtual void SetConstraintSizes(const bool recurse = TRUE);
+  virtual void SetConstraintSizes(bool recurse = TRUE);
   virtual bool LayoutPhase1(int *noChanges);
   virtual bool LayoutPhase2(int *noChanges);
-  virtual bool DoPhase(const int);
+  virtual bool DoPhase(int);
   // Transforms from sizer coordinate space to actual
   // parent coordinate space
   virtual void TransformSizerToActual(int *x, int *y) const ;
 
   // Set size with transformation to actual coordinates if nec.
-  virtual void SizerSetSize(const int x, const int y, const int w, const int h);
-  virtual void SizerMove(const int x, const int y);
+  virtual void SizerSetSize(int x, int y, int w, int h);
+  virtual void SizerMove(int x, int y);
 
   // Only set/get the size/position of the constraint (if any)
-  virtual void SetSizeConstraint(const int x, const int y, const int w, const int h);
-  virtual void MoveConstraint(const int x, const int y);
+  virtual void SetSizeConstraint(int x, int y, int w, int h);
+  virtual void MoveConstraint(int x, int y);
   virtual void GetSizeConstraint(int *w, int *h) const ;
   virtual void GetClientSizeConstraint(int *w, int *h) const ;
   virtual void GetPositionConstraint(int *x, int *y) const ;
 
-  wxObject *GetChild(const int number) const ;
+  wxObject *GetChild(int number) const ;
 
-  void MSWCreate(const int id, wxWindow *parent, const char *wclass, wxWindow *wx_win, const char *title,
-               const int x, const int y, const int width, const int height,
-               const WXDWORD style, const char *dialog_template = NULL,
-               const WXDWORD exendedStyle = 0);
+  void MSWCreate(int id, wxWindow *parent, const char *wclass, wxWindow *wx_win, const char *title,
+               int x, int y, int width, int height,
+               WXDWORD style, const char *dialog_template = NULL,
+               WXDWORD exendedStyle = 0);
 
   // Actually defined in wx_canvs.cc since requires wxCanvas declaration
   virtual void MSWDeviceToLogical(float *x, float *y) const ;
@@ -522,57 +496,57 @@ public:
   virtual void MSWOnCreate(WXLPCREATESTRUCT cs);
   virtual bool MSWOnPaint(void);
   virtual WXHICON MSWOnQueryDragIcon(void) { return 0; }
-  virtual void MSWOnSize(const int x, const int y, const WXUINT flag);
+  virtual void MSWOnSize(int x, int y, WXUINT flag);
   virtual void MSWOnWindowPosChanging(void *lpPos);
-  virtual void MSWOnHScroll(const WXWORD nSBCode, const WXWORD pos, const WXHWND control);
-  virtual void MSWOnVScroll(const WXWORD nSBCode, const WXWORD pos, const WXHWND control);
-  virtual bool MSWOnCommand(const WXWORD id, const WXWORD cmd, const WXHWND control);
+  virtual void MSWOnHScroll(WXWORD nSBCode, WXWORD pos, WXHWND control);
+  virtual void MSWOnVScroll(WXWORD nSBCode, WXWORD pos, WXHWND control);
+  virtual bool MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control);
   virtual long MSWOnSysCommand(WXWPARAM wParam, WXLPARAM lParam);
-  virtual bool MSWOnNotify(const WXWPARAM wParam, const WXLPARAM lParam);
-  virtual WXHBRUSH MSWOnCtlColor(const WXHDC dc, const WXHWND pWnd, const WXUINT nCtlColor,
-                              const WXUINT message, const WXWPARAM wParam, const WXLPARAM lParam);
-  virtual bool MSWOnColorChange(const WXHWND hWnd, const WXUINT message, const WXWPARAM wParam, const WXLPARAM lParam);
-  virtual bool MSWOnEraseBkgnd(const WXHDC pDC);
-  virtual void MSWOnMenuHighlight(const WXWORD item, const WXWORD flags, const WXHMENU sysmenu);
-  virtual void MSWOnInitMenuPopup(const WXHMENU menu, const int pos, const bool isSystem);
+  virtual bool MSWOnNotify(WXWPARAM wParam, WXLPARAM lParam);
+  virtual WXHBRUSH MSWOnCtlColor(WXHDC dc, WXHWND pWnd, WXUINT nCtlColor,
+                              WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+  virtual bool MSWOnColorChange(WXHWND hWnd, WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+  virtual bool MSWOnEraseBkgnd(WXHDC pDC);
+  virtual void MSWOnMenuHighlight(WXWORD item, WXWORD flags, WXHMENU sysmenu);
+  virtual void MSWOnInitMenuPopup(WXHMENU menu, int pos, bool isSystem);
   virtual bool MSWOnClose(void);
   virtual bool MSWOnDestroy(void);
-  virtual bool MSWOnSetFocus(const WXHWND wnd);
-  virtual bool MSWOnKillFocus(const WXHWND wnd);
-  virtual void MSWOnDropFiles(const WXWPARAM wParam);
+  virtual bool MSWOnSetFocus(WXHWND wnd);
+  virtual bool MSWOnKillFocus(WXHWND wnd);
+  virtual void MSWOnDropFiles(WXWPARAM wParam);
   virtual bool MSWOnInitDialog(WXHWND hWndFocus);
   virtual void MSWOnShow(bool show, int status);
 
   // TODO: rationalise these functions into 1 or 2 which take the
   // event type as argument.
-  virtual void MSWOnLButtonDown(const int x, const int y, const WXUINT flags);
-  virtual void MSWOnLButtonUp(const int x, const int y, const WXUINT flags);
-  virtual void MSWOnLButtonDClick(const int x, const int y, const WXUINT flags);
+  virtual void MSWOnLButtonDown(int x, int y, WXUINT flags);
+  virtual void MSWOnLButtonUp(int x, int y, WXUINT flags);
+  virtual void MSWOnLButtonDClick(int x, int y, WXUINT flags);
 
-  virtual void MSWOnMButtonDown(const int x, const int y, const WXUINT flags);
-  virtual void MSWOnMButtonUp(const int x, const int y, const WXUINT flags);
-  virtual void MSWOnMButtonDClick(const int x, const int y, const WXUINT flags);
+  virtual void MSWOnMButtonDown(int x, int y, WXUINT flags);
+  virtual void MSWOnMButtonUp(int x, int y, WXUINT flags);
+  virtual void MSWOnMButtonDClick(int x, int y, WXUINT flags);
 
-  virtual void MSWOnRButtonDown(const int x, const int y, const WXUINT flags);
-  virtual void MSWOnRButtonUp(const int x, const int y, const WXUINT flags);
-  virtual void MSWOnRButtonDClick(const int x, const int y, const WXUINT flags);
+  virtual void MSWOnRButtonDown(int x, int y, WXUINT flags);
+  virtual void MSWOnRButtonUp(int x, int y, WXUINT flags);
+  virtual void MSWOnRButtonDClick(int x, int y, WXUINT flags);
 
-  virtual void MSWOnMouseMove(const int x, const int y, const WXUINT flags);
-  virtual void MSWOnMouseEnter(const int x, const int y, const WXUINT flags);
-  virtual void MSWOnMouseLeave(const int x, const int y, const WXUINT flags);
+  virtual void MSWOnMouseMove(int x, int y, WXUINT flags);
+  virtual void MSWOnMouseEnter(int x, int y, WXUINT flags);
+  virtual void MSWOnMouseLeave(int x, int y, WXUINT flags);
 
-  virtual void MSWOnChar(const WXWORD wParam, const WXLPARAM lParam, const bool isASCII = FALSE);
+  virtual void MSWOnChar(WXWORD wParam, WXLPARAM lParam, bool isASCII = FALSE);
 
-  virtual bool MSWOnActivate(const int flag, const bool minimized, const WXHWND activate);
-  virtual long MSWOnMDIActivate(const long flag, const WXHWND activate, const WXHWND deactivate);
+  virtual bool MSWOnActivate(int flag, bool minimized, WXHWND activate);
+  virtual long MSWOnMDIActivate(long flag, WXHWND activate, WXHWND deactivate);
 
-  virtual bool MSWOnDrawItem(const int id, WXDRAWITEMSTRUCT *item);
-  virtual bool MSWOnMeasureItem(const int id, WXMEASUREITEMSTRUCT *item);
+  virtual bool MSWOnDrawItem(int id, WXDRAWITEMSTRUCT *item);
+  virtual bool MSWOnMeasureItem(int id, WXMEASUREITEMSTRUCT *item);
 
-  virtual void MSWOnJoyDown(const int joystick, const int x, const int y, const WXUINT flags);
-  virtual void MSWOnJoyUp(const int joystick, const int x, const int y, const WXUINT flags);
-  virtual void MSWOnJoyMove(const int joystick, const int x, const int y, const WXUINT flags);
-  virtual void MSWOnJoyZMove(const int joystick, const int z, const WXUINT flags);
+  virtual void MSWOnJoyDown(int joystick, int x, int y, WXUINT flags);
+  virtual void MSWOnJoyUp(int joystick, int x, int y, WXUINT flags);
+  virtual void MSWOnJoyMove(int joystick, int x, int y, WXUINT flags);
+  virtual void MSWOnJoyZMove(int joystick, int z, WXUINT flags);
 
   // Window procedure
   virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
@@ -586,13 +560,13 @@ public:
   void MSWDetachWindowMenu(void);
   
   inline WXFARPROC MSWGetOldWndProc() const;
-  inline void MSWSetOldWndProc(const WXFARPROC proc);
+  inline void MSWSetOldWndProc(WXFARPROC proc);
 
   // Define for each class of dialog and control
-  virtual WXHBRUSH OnCtlColor(const WXHDC pDC, const WXHWND pWnd, const WXUINT nCtlColor,
+  virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 			WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
-  inline void SetShowing(const bool show);
+  inline void SetShowing(bool show);
   inline bool IsUserEnabled(void) const;
   inline bool GetUseCtl3D(void) const ;
   inline bool GetTransparentBackground(void) const ;
@@ -707,7 +681,7 @@ DECLARE_EVENT_TABLE()
 
 inline void *wxWindow::GetHandle(void) const { return (void *)GetHWND(); }
 inline int wxWindow::GetId() const { return m_windowId; }
-inline void wxWindow::SetId(const int id) { m_windowId = id; }
+inline void wxWindow::SetId(int id) { m_windowId = id; }
 inline wxWindow *wxWindow::GetParent(void) const { return m_windowParent; }
 inline void wxWindow::SetParent(wxWindow *p) { m_windowParent = p; }
 inline wxWindow *wxWindow::GetGrandParent(void) const { return (m_windowParent ? m_windowParent->m_windowParent : NULL); }
@@ -716,12 +690,12 @@ inline wxFont *wxWindow::GetFont(void) const { return (wxFont *) & m_windowFont;
 inline wxString wxWindow::GetName(void) const { return m_windowName; }
 inline void wxWindow::SetName(const wxString& name) { m_windowName = name; }
 inline long wxWindow::GetWindowStyleFlag(void) const { return m_windowStyle; }
-inline void wxWindow::SetWindowStyleFlag(const long flag) { m_windowStyle = flag; }
-inline void wxWindow::SetDoubleClick(const bool flag) { m_doubleClickAllowed = flag; }
+inline void wxWindow::SetWindowStyleFlag(long flag) { m_windowStyle = flag; }
+inline void wxWindow::SetDoubleClick(bool flag) { m_doubleClickAllowed = flag; }
 inline bool wxWindow::GetDoubleClick(void) const { return m_doubleClickAllowed; }
 inline void wxWindow::SetEventHandler(wxEvtHandler *handler) { m_windowEventHandler = handler; }
 inline wxEvtHandler *wxWindow::GetEventHandler(void) const { return m_windowEventHandler; }
-inline void wxWindow::SetAutoLayout(const bool a) { m_autoLayout = a; }
+inline void wxWindow::SetAutoLayout(bool a) { m_autoLayout = a; }
 inline bool wxWindow::GetAutoLayout(void) const { return m_autoLayout; }
 inline wxLayoutConstraints *wxWindow::GetConstraints(void) const { return m_constraints; }
 inline void wxWindow::SetBackgroundColour(const wxColour& col) { m_backgroundColour = col; };
@@ -737,6 +711,8 @@ inline wxButton *wxWindow::GetDefaultItem(void) const { return m_defaultItem; }
 inline void wxWindow::SetDefaultItem(wxButton *but) { m_defaultItem = but; }
 // inline wxDC *wxWindow::GetDC(void) const { return m_windowDC; }
 inline bool wxWindow::IsRetained(void) const { return ((m_windowStyle & wxRETAINED) == wxRETAINED); }
+
+/*
 #if WXWIN_COMPATIBILITY
 inline void wxWindow::OldOnMenuSelect(int WXUNUSED(cmd)) { Default(); };
 inline void wxWindow::OldOnInitMenuPopup(int WXUNUSED(pos)) { Default(); };
@@ -745,13 +721,15 @@ inline void wxWindow::OldOnMenuCommand(int WXUNUSED(cmd)) { Default(); } // Deal
 inline void wxWindow::OldOnMove(int WXUNUSED(x), int WXUNUSED(y)) { Default(); };          // Called on move
 inline void wxWindow::OldOnActivate(bool WXUNUSED(active)) { Default(); };       // Called on window activation (MSW)
 #endif
-inline void wxWindow::SetShowing(const bool show) { m_isShown = show; }
+*/
+
+inline void wxWindow::SetShowing(bool show) { m_isShown = show; }
 inline wxList *wxWindow::GetConstraintsInvolvedIn(void) const { return m_constraintsInvolvedIn; }
 inline wxSizer *wxWindow::GetSizer(void) const { return m_windowSizer; }
 inline wxWindow *wxWindow::GetSizerParent(void) const { return m_sizerParent; }
 inline void wxWindow::SetSizerParent(wxWindow *win) { m_sizerParent = win; }
 inline WXFARPROC wxWindow::MSWGetOldWndProc() const { return m_oldWndProc; }
-inline void wxWindow::MSWSetOldWndProc(const WXFARPROC proc) { m_oldWndProc = proc; }
+inline void wxWindow::MSWSetOldWndProc(WXFARPROC proc) { m_oldWndProc = proc; }
 inline wxValidator *wxWindow::GetValidator(void) const { return m_windowValidator; }
 inline bool wxWindow::IsUserEnabled(void) const { return m_winEnabled; }
 inline bool wxWindow::GetUseCtl3D(void) const { return m_useCtl3D; }

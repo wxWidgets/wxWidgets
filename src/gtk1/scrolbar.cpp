@@ -63,9 +63,9 @@ void gtk_scrollbar_callback( GtkWidget *WXUNUSED(widget), wxScrollBar *win )
 
 IMPLEMENT_DYNAMIC_CLASS(wxScrollBar,wxControl)
 
-wxScrollBar::wxScrollBar(wxWindow *parent, const wxWindowID id,
+wxScrollBar::wxScrollBar(wxWindow *parent, wxWindowID id,
            const wxPoint& pos, const wxSize& size,
-           const long style, const wxString& name )
+           long style, const wxString& name )
 {
   Create( parent, id, pos, size, style, name );
 };
@@ -74,9 +74,9 @@ wxScrollBar::~wxScrollBar(void)
 {
 };
 
-bool wxScrollBar::Create(wxWindow *parent, const wxWindowID id,
+bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos, const wxSize& size,
-           const long style, const wxString& name )
+           long style, const wxString& name )
 {
   m_needParent = TRUE;
   
@@ -121,7 +121,7 @@ int wxScrollBar::GetRange() const
   return (int)(m_adjust->upper+0.5);
 };
 
-void wxScrollBar::SetPosition( const int viewStart )
+void wxScrollBar::SetPosition( int viewStart )
 {
   float fpos = (float)viewStart;
   m_oldPos = fpos;
@@ -131,8 +131,8 @@ void wxScrollBar::SetPosition( const int viewStart )
   gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "value_changed" );
 };
 
-void wxScrollBar::SetScrollbar( const int position, const int thumbSize, const int range, const int pageSize,
-      const bool WXUNUSED(refresh) )
+void wxScrollBar::SetScrollbar( int position, int thumbSize, int range, int pageSize,
+      bool WXUNUSED(refresh) )
 {
   float fpos = (float)position;
   m_oldPos = fpos;
@@ -162,7 +162,7 @@ int wxScrollBar::GetValue(void) const
   return GetPosition();
 };
 
-void wxScrollBar::SetValue( const int viewStart )
+void wxScrollBar::SetValue( int viewStart )
 {
   SetPosition( viewStart );
 };
@@ -190,7 +190,7 @@ int wxScrollBar::GetObjectLength() const
   return (int)(m_adjust->page_size+0.5);
 };
 
-void wxScrollBar::SetPageSize( const int pageLength )
+void wxScrollBar::SetPageSize( int pageLength )
 {
   int pos = (int)(m_adjust->value+0.5);
   int thumb = (int)(m_adjust->page_size+0.5);
@@ -198,7 +198,7 @@ void wxScrollBar::SetPageSize( const int pageLength )
   SetScrollbar( pos, thumb, range, pageLength );
 };
 
-void wxScrollBar::SetObjectLength( const int objectLength )
+void wxScrollBar::SetObjectLength( int objectLength )
 {
   int pos = (int)(m_adjust->value+0.5);
   int page = (int)(m_adjust->page_increment+0.5);
@@ -206,7 +206,7 @@ void wxScrollBar::SetObjectLength( const int objectLength )
   SetScrollbar( pos, objectLength, range, page );
 };
 
-void wxScrollBar::SetViewLength( const int viewLength )
+void wxScrollBar::SetViewLength( int viewLength )
 {
   int pos = (int)(m_adjust->value+0.5);
   int thumb = (int)(m_adjust->page_size+0.5);

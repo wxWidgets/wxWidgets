@@ -30,45 +30,45 @@ class WXDLLEXPORT wxChoice: public wxControl
 
   inline wxChoice(void) { no_strings = 0; }
 
-  inline wxChoice(wxWindow *parent, const wxWindowID id,
+  inline wxChoice(wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           const int n = 0, const wxString choices[] = NULL,
-           const long style = 0,
+           int n = 0, const wxString choices[] = NULL,
+           long style = 0,
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxChoiceNameStr)
   {
     Create(parent, id, pos, size, n, choices, style, validator, name);
   }
 
-  bool Create(wxWindow *parent, const wxWindowID id,
+  bool Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           const int n = 0, const wxString choices[] = NULL,
-           const long style = 0,
+           int n = 0, const wxString choices[] = NULL,
+           long style = 0,
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxChoiceNameStr);
 
   virtual void Append(const wxString& item);
-  virtual void Delete(const int n);
+  virtual void Delete(int n);
   virtual void Clear(void);
   virtual int GetSelection(void) const ;
-  virtual void SetSelection(const int n);
+  virtual void SetSelection(int n);
   virtual int FindString(const wxString& s) const;
-  virtual wxString GetString(const int n) const ;
-  virtual void SetSize(const int x, const int y, const int width, const int height, const int sizeFlags = wxSIZE_AUTO);
+  virtual wxString GetString(int n) const ;
+  virtual void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
   virtual wxString GetStringSelection(void) const ;
   virtual bool SetStringSelection(const wxString& sel);
 
   virtual inline int Number(void) const { return no_strings; }
   virtual void Command(wxCommandEvent& event);
 
-  virtual bool MSWCommand(const WXUINT param, const WXWORD id);
+  virtual bool MSWCommand(WXUINT param, WXWORD id);
 
-  virtual inline void SetColumns(const int WXUNUSED(n) = 1 ) { /* No effect */ } ;
+  virtual inline void SetColumns(int WXUNUSED(n) = 1 ) { /* No effect */ } ;
   virtual inline int GetColumns(void) const { return 1 ; };
 
-  virtual WXHBRUSH OnCtlColor(const WXHDC pDC, const WXHWND pWnd, const WXUINT nCtlColor,
+  virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 			WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
   long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);

@@ -41,7 +41,7 @@ BEGIN_EVENT_TABLE(wxTextValidator, wxValidator)
 END_EVENT_TABLE()
 #endif
 
-wxTextValidator::wxTextValidator(const long style, wxString *val)
+wxTextValidator::wxTextValidator(long style, wxString *val)
 {
 	m_validatorStyle = style ;
 	m_stringValue = val ;

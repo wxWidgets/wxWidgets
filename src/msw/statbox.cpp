@@ -41,11 +41,11 @@ END_EVENT_TABLE()
  * Group box
  */
  
-bool wxStaticBox::Create(wxWindow *parent, const wxWindowID id,
+bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
            const wxString& label,
            const wxPoint& pos,
            const wxSize& size,
-           const long style,
+           long style,
            const wxString& name)
 {
   SetName(name);
@@ -102,7 +102,7 @@ void wxStaticBox::SetLabel(const wxString& label)
   SetWindowText((HWND)m_hWnd, (const char *)label);
 }
 
-void wxStaticBox::SetSize(const int x, const int y, const int width, const int height, const int sizeFlags)
+void wxStaticBox::SetSize(int x, int y, int width, int height, int sizeFlags)
 {
   int currentX, currentY;
   GetPosition(&currentX, &currentY);
@@ -125,11 +125,11 @@ void wxStaticBox::SetSize(const int x, const int y, const int width, const int h
 
   char buf[300];
 
-  float current_width;
+  int current_width;
 
   int cx;
   int cy;
-  float cyf;
+  int cyf;
 
   HWND button = (HWND)m_hWnd;
   wxGetCharSize(GetHWND(), &cx, &cy,GetFont());
@@ -141,17 +141,9 @@ void wxStaticBox::SetSize(const int x, const int y, const int width, const int h
   if (h1<0)
     h1 = (int)(cyf*EDIT_CONTROL_FACTOR) ;
   MoveWindow(button, x1, y1, w1, h1, TRUE);
-
-#if WXWIN_COMPATIBILITY
-  GetEventHandler()->OldOnSize(width, height);
-#else
-  wxSizeEvent event(wxSize(width, height), m_windowId);
-  event.eventObject = this;
-  GetEventHandler()->ProcessEvent(event);
-#endif
 }
 
-WXHBRUSH wxStaticBox::OnCtlColor(const WXHDC pDC, const WXHWND pWnd, const WXUINT nCtlColor,
+WXHBRUSH wxStaticBox::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 			WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
 #if CTL3D

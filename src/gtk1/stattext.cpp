@@ -27,14 +27,14 @@ wxStaticText::wxStaticText(void)
 
 wxStaticText::wxStaticText( wxWindow *parent, wxWindowID id, const wxString &label, 
       const wxPoint &pos, const wxSize &size, 
-      const long style, const wxString &name )
+      long style, const wxString &name )
 {
   Create( parent, id, label, pos, size, style, name );
 };
 
 bool wxStaticText::Create( wxWindow *parent, wxWindowID id, const wxString &label, 
       const wxPoint &pos, const wxSize &size, 
-      const long style, const wxString &name )
+      long style, const wxString &name )
 {
   m_needParent = TRUE;
   

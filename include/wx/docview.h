@@ -357,7 +357,7 @@ class WXDLLEXPORT wxDocChildFrame: public wxFrame
  public:
   wxDocChildFrame(wxDocument *doc, wxView *view, wxFrame *frame, const wxString& title,
     const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-    const long type = wxDEFAULT_FRAME_STYLE, const wxString& name = "frame");
+    long type = wxDEFAULT_FRAME_STYLE, const wxString& name = "frame");
   ~wxDocChildFrame(void);
 
   bool OnClose(void);
@@ -389,7 +389,7 @@ class WXDLLEXPORT wxDocParentFrame: public wxFrame
  public:
   wxDocParentFrame(wxDocManager *manager, wxFrame *frame, const wxString& title,
     const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-    const long type = wxDEFAULT_FRAME, const wxString& name = "frame");
+    long type = wxDEFAULT_FRAME, const wxString& name = "frame");
 
   bool OnClose(void);
   // Extend event processing to search the document manager's event table

@@ -39,7 +39,7 @@ class wxCursor: public wxObject
   public:
 
     wxCursor(void);
-    wxCursor( const int cursorId );
+    wxCursor( int cursorId );
     wxCursor( const wxCursor &cursor );
     wxCursor( const wxCursor *cursor );
     ~wxCursor(void);

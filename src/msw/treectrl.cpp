@@ -55,8 +55,8 @@ wxTreeCtrl::wxTreeCtrl(void)
   m_imageListState = NULL;
 }
 
-bool wxTreeCtrl::Create(wxWindow *parent, const wxWindowID id, const wxPoint& pos, const wxSize& size,
-            const long style, const wxValidator& validator, const wxString& name)
+bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
+            long style, const wxValidator& validator, const wxString& name)
 {
   wxSystemSettings settings;
   SetBackgroundColour(settings.GetSystemColour(wxSYS_COLOUR_WINDOW));
@@ -150,7 +150,7 @@ void wxTreeCtrl::SetIndent(int indent)
   TreeView_SetIndent((HWND) GetHWND(), indent);
 }
 
-wxImageList *wxTreeCtrl::GetImageList(const int which) const
+wxImageList *wxTreeCtrl::GetImageList(int which) const
 {
   if ( which == wxIMAGE_LIST_NORMAL )
     {
@@ -163,7 +163,7 @@ wxImageList *wxTreeCtrl::GetImageList(const int which) const
   return NULL;
 }
 
-void wxTreeCtrl::SetImageList(wxImageList *imageList, const int which)
+void wxTreeCtrl::SetImageList(wxImageList *imageList, int which)
 {
   int flags = 0;
   if ( which == wxIMAGE_LIST_NORMAL )
@@ -179,7 +179,7 @@ void wxTreeCtrl::SetImageList(wxImageList *imageList, const int which)
   TreeView_SetImageList((HWND) GetHWND(), (HIMAGELIST) imageList ? imageList->GetHIMAGELIST() : 0, flags);
 }
 
-long wxTreeCtrl::GetNextItem(const long item, int code) const
+long wxTreeCtrl::GetNextItem(long item, int code) const
 {
   UINT flag = 0;
   switch ( code )
@@ -221,7 +221,7 @@ long wxTreeCtrl::GetNextItem(const long item, int code) const
   return (long) TreeView_GetNextItem( (HWND) GetHWND(), (HTREEITEM) item, flag);
 }
 
-bool wxTreeCtrl::ItemHasChildren(const long item) const
+bool wxTreeCtrl::ItemHasChildren(long item) const
 {
   TV_ITEM item2;
   item2.hItem = (HTREEITEM) item;
@@ -230,12 +230,12 @@ bool wxTreeCtrl::ItemHasChildren(const long item) const
   return (item2.cChildren != 0);
 }
 
-long wxTreeCtrl::GetChild(const long item) const
+long wxTreeCtrl::GetChild(long item) const
 {
   return (long) ::SendMessage((HWND) GetHWND(), TVM_GETNEXTITEM, TVGN_CHILD, (LPARAM)item);
 }
 
-long wxTreeCtrl::GetParent(const long item) const
+long wxTreeCtrl::GetParent(long item) const
 {
   return (long) ::SendMessage((HWND) GetHWND(), TVM_GETNEXTITEM, TVGN_PARENT, (LPARAM)item);
 }
@@ -245,7 +245,7 @@ long wxTreeCtrl::GetFirstVisibleItem(void) const
   return (long) ::SendMessage((HWND) GetHWND(), TVM_GETNEXTITEM, TVGN_FIRSTVISIBLE, 0);
 }
 
-long wxTreeCtrl::GetNextVisibleItem(const long item) const
+long wxTreeCtrl::GetNextVisibleItem(long item) const
 {
   return (long) ::SendMessage((HWND) GetHWND(), TVM_GETNEXTITEM, TVGN_NEXTVISIBLE, (LPARAM)item);
 }
@@ -303,7 +303,7 @@ bool wxTreeCtrl::SetItem(wxTreeItem& info)
   return (::SendMessage((HWND) GetHWND(), TVM_SETITEM, 0, (LPARAM)&item) != 0);
 }
 
-int  wxTreeCtrl::GetItemState(const long item, const long stateMask) const
+int  wxTreeCtrl::GetItemState(long item, long stateMask) const
 {
   wxTreeItem info;
 
@@ -317,7 +317,7 @@ int  wxTreeCtrl::GetItemState(const long item, const long stateMask) const
   return info.m_state;
 }
 
-bool wxTreeCtrl::SetItemState(const long item, const long state, const long stateMask)
+bool wxTreeCtrl::SetItemState(long item, long state, long stateMask)
 {
   wxTreeItem info;
 
@@ -329,7 +329,7 @@ bool wxTreeCtrl::SetItemState(const long item, const long state, const long stat
   return SetItem(info);
 }
 
-bool wxTreeCtrl::SetItemImage(const long item, const int image, const int selImage)
+bool wxTreeCtrl::SetItemImage(long item, int image, int selImage)
 {
   wxTreeItem info;
 
@@ -345,7 +345,7 @@ bool wxTreeCtrl::SetItemImage(const long item, const int image, const int selIma
   return SetItem(info);
 }
 
-wxString wxTreeCtrl::GetItemText(const long item) const
+wxString wxTreeCtrl::GetItemText(long item) const
 {
   wxTreeItem info;
 
@@ -357,7 +357,7 @@ wxString wxTreeCtrl::GetItemText(const long item) const
   return info.m_text;
 }
 
-void wxTreeCtrl::SetItemText(const long item, const wxString& str)
+void wxTreeCtrl::SetItemText(long item, const wxString& str)
 {
   wxTreeItem info;
 
@@ -368,7 +368,7 @@ void wxTreeCtrl::SetItemText(const long item, const wxString& str)
   SetItem(info);
 }
 
-long wxTreeCtrl::GetItemData(const long item) const
+long wxTreeCtrl::GetItemData(long item) const
 {
   wxTreeItem info;
 
@@ -380,7 +380,7 @@ long wxTreeCtrl::GetItemData(const long item) const
   return info.m_data;
 }
 
-bool wxTreeCtrl::SetItemData(const long item, long data)
+bool wxTreeCtrl::SetItemData(long item, long data)
 {
   wxTreeItem info;
 
@@ -391,7 +391,7 @@ bool wxTreeCtrl::SetItemData(const long item, long data)
   return SetItem(info);
 }
 
-bool wxTreeCtrl::GetItemRect(const long item, wxRectangle& rect, bool textOnly) const
+bool wxTreeCtrl::GetItemRect(long item, wxRectangle& rect, bool textOnly) const
 {
   RECT rect2;
 
@@ -414,12 +414,12 @@ wxTextCtrl& wxTreeCtrl::GetEditControl(void) const
 }
 
 // Operations
-bool wxTreeCtrl::DeleteItem(const long item)
+bool wxTreeCtrl::DeleteItem(long item)
 {
   return (TreeView_DeleteItem((HWND) GetHWND(), (HTREEITEM) item) != 0);
 }
 
-bool wxTreeCtrl::ExpandItem(const long item, const int action)
+bool wxTreeCtrl::ExpandItem(long item, int action)
 {
   UINT mswAction = TVE_EXPAND;
   switch ( action )
@@ -440,7 +440,7 @@ bool wxTreeCtrl::ExpandItem(const long item, const int action)
   return (TreeView_Expand((HWND) GetHWND(), (HTREEITEM) item, mswAction) != 0);
 }
 
-long wxTreeCtrl::InsertItem(const long parent, wxTreeItem& info, const long insertAfter)
+long wxTreeCtrl::InsertItem(long parent, wxTreeItem& info, long insertAfter)
 {
   TV_INSERTSTRUCT tvInsertStruct;
   tvInsertStruct.hParent = (HTREEITEM) parent ;
@@ -451,8 +451,8 @@ long wxTreeCtrl::InsertItem(const long parent, wxTreeItem& info, const long inse
   return (long) TreeView_InsertItem((HWND) GetHWND(), & tvInsertStruct);
 }
 
-long wxTreeCtrl::InsertItem(const long parent, const wxString& label, const int image, const int selImage,
-  const long insertAfter)
+long wxTreeCtrl::InsertItem(long parent, const wxString& label, int image, int selImage,
+  long insertAfter)
 {
   wxTreeItem info;
   info.m_text = label;
@@ -470,12 +470,12 @@ long wxTreeCtrl::InsertItem(const long parent, const wxString& label, const int 
   return InsertItem(parent, info, insertAfter);
 }
 
-bool wxTreeCtrl::SelectItem(const long item)
+bool wxTreeCtrl::SelectItem(long item)
 {
   return (TreeView_SelectItem((HWND) GetHWND(), (HTREEITEM) item) != 0);
 }
 
-bool wxTreeCtrl::ScrollTo(const long item)
+bool wxTreeCtrl::ScrollTo(long item)
 {
   return (TreeView_SelectSetFirstVisible((HWND) GetHWND(), (HTREEITEM) item) != 0);
 }
@@ -485,7 +485,7 @@ bool wxTreeCtrl::DeleteAllItems(void)
   return (TreeView_DeleteAllItems((HWND) GetHWND()) != 0);
 }
 
-wxTextCtrl& wxTreeCtrl::Edit(const long item)
+wxTextCtrl& wxTreeCtrl::Edit(long item)
 {
   HWND hWnd = (HWND) TreeView_EditLabel((HWND) GetHWND(), item);
   m_textCtrl.SetHWND((WXHWND) hWnd);
@@ -528,22 +528,22 @@ long wxTreeCtrl::HitTest(const wxPoint& point, int& flags)
 }
 
 /*
-wxImageList *wxTreeCtrl::CreateDragImage(const long item)
+wxImageList *wxTreeCtrl::CreateDragImage(long item)
 {
 }
 */
 
-bool wxTreeCtrl::SortChildren(const long item)
+bool wxTreeCtrl::SortChildren(long item)
 {
   return (TreeView_SortChildren((HWND) GetHWND(), (HTREEITEM) item, 0) != 0);
 }
 
-bool wxTreeCtrl::EnsureVisible(const long item)
+bool wxTreeCtrl::EnsureVisible(long item)
 {
   return (TreeView_EnsureVisible((HWND) GetHWND(), (HTREEITEM) item) != 0);
 }
 
-bool wxTreeCtrl::MSWCommand(const WXUINT cmd, const WXWORD id)
+bool wxTreeCtrl::MSWCommand(WXUINT cmd, WXWORD id)
 {
   if (cmd == EN_UPDATE)
   {
@@ -562,7 +562,7 @@ bool wxTreeCtrl::MSWCommand(const WXUINT cmd, const WXWORD id)
   else return FALSE;
 }
 
-bool wxTreeCtrl::MSWNotify(const WXWPARAM wParam, const WXLPARAM lParam)
+bool wxTreeCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
 {
   wxTreeEvent event(wxEVT_NULL, m_windowId);
   wxEventType eventType = wxEVT_NULL;

@@ -31,7 +31,7 @@ public:
    virtual void Command(wxCommandEvent& WXUNUSED(event)) = 0;        // Simulates an event
    virtual void ProcessCommand(wxCommandEvent& event); // Calls the callback and
                                                                  // appropriate event handlers
-   virtual void SetClientSize(const int width, const int height);
+   virtual void SetClientSize(int width, int height);
    virtual void SetLabel(const wxString& label);
    virtual wxString GetLabel(void) const ;
 
@@ -46,15 +46,15 @@ public:
 #endif
 
    // Places item in centre of panel - so can't be used BEFORE panel->Fit()
-   void Centre(const int direction = wxHORIZONTAL);
+   void Centre(int direction = wxHORIZONTAL);
    inline void Callback(const wxFunction function);           // Adds callback
 
    // MSW-specific
    
    // Window procedure
    virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
-   virtual void MSWOnMouseMove(const int x, const int y, const WXUINT flags);
-   virtual bool MSWNotify(const WXWPARAM wParam, const WXLPARAM lParam);
+   virtual void MSWOnMouseMove(int x, int y, WXUINT flags);
+   virtual bool MSWNotify(WXWPARAM wParam, WXLPARAM lParam);
 
    void OnEraseBackground(wxEraseEvent& event);
 
