@@ -192,6 +192,7 @@ bool wxAppBase::OnInit()
 
 #define OPTION_VERBOSE _T("verbose")
 #define OPTION_THEME   _T("theme")
+#define OPTION_MODE    _T("mode")
 
 void wxAppBase::OnInitCmdLine(wxCmdLineParser& parser)
 {
@@ -226,6 +227,19 @@ void wxAppBase::OnInitCmdLine(wxCmdLineParser& parser)
         },
 #endif // __WXUNIVERSAL__
 
+#if defined(__WXMGL__)
+        // VS: this is not specific to wxMGL, all fullscreen (framebuffer) ports
+        //     should provide this option. That's why it is in common/appcmn.cpp
+        //     and not mgl/app.cpp
+        {
+            wxCMD_LINE_OPTION,
+            _T(""),
+            OPTION_MODE,
+            gettext_noop("specify display mode to use (e.g. 640x480-16)"),
+            wxCMD_LINE_VAL_STRING
+        },
+#endif // __WXMGL__
+
         // terminator
         { wxCMD_LINE_NONE }
     };
@@ -257,6 +271,22 @@ bool wxAppBase::OnCmdLineParsed(wxCmdLineParser& parser)
         wxTheme::Set(theme);
     }
 #endif // __WXUNIVERSAL__
+
+#if defined(__WXMGL__)
+    wxString modeDesc;
+    if ( parser.Found(OPTION_MODE, &modeDesc) )
+    {
+        unsigned w, h, bpp;
+        if ( wxSscanf(modeDesc.c_str(), _T("%ux%u-%u"), &w, &h, &bpp) != 3 )
+        {
+            wxLogError(_("Unsupported display mode '%s'."), themeName.c_str());
+
+            return FALSE;
+        }
+
+        SetDisplayMode(wxDisplayModeInfo(wxSize(w, h), bpp));
+    }
+#endif
 
     return TRUE;
 }
