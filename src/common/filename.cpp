@@ -257,7 +257,14 @@ void wxFileName::Assign(const wxString& fullpath,
 
 void wxFileName::AssignDir(const wxString& dir, wxPathFormat format)
 {
-    Assign(dir, _T(""), format);
+    // always recognize dir as directory, even if it doesn't end with a slash
+    wxString dirname = dir;
+    if ( !wxEndsWithPathSeparator(dirname) )
+    {
+        dirname += GetPathSeparators(format)[0u];
+    }
+
+    Assign(dirname, _T(""), format);
 }
 
 void wxFileName::Clear()
