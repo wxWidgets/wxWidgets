@@ -77,6 +77,7 @@
 %rename(SP_WRAP)                            wxSP_WRAP;
 %rename(SpinButton)                         wxSpinButton;
 %rename(SpinCtrl)                           wxSpinCtrl;
+%rename(SpinEvent)                          wxSpinEvent;
 %rename(RadioBox)                           wxRadioBox;
 %rename(RadioButton)                        wxRadioButton;
 %rename(Slider)                             wxSlider;

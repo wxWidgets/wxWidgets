@@ -120,11 +120,27 @@ public:
 };
 
 
+//---------------------------------------------------------------------------
+
+class wxSpinEvent : public wxNotifyEvent
+{
+public:
+    wxSpinEvent(wxEventType commandType = wxEVT_NULL, int winid = 0);
+
+    // get the current value of the control
+    int GetPosition() const;
+    void SetPosition(int pos);
+};
+
+
 %constant wxEventType wxEVT_COMMAND_SPINCTRL_UPDATED;
 
 
 %pythoncode {
-EVT_SPINCTRL = wx.PyEventBinder( wxEVT_COMMAND_SPINCTRL_UPDATED, 1)
+EVT_SPIN_UP   = wx.PyEventBinder( wx.wxEVT_SCROLL_LINEUP, 1)
+EVT_SPIN_DOWN = wx.PyEventBinder( wx.wxEVT_SCROLL_LINEDOWN, 1)
+EVT_SPIN      = wx.PyEventBinder( wx.wxEVT_SCROLL_THUMBTRACK, 1)
+EVT_SPINCTRL  = wx.PyEventBinder( wxEVT_COMMAND_SPINCTRL_UPDATED, 1)
 }
 
 
