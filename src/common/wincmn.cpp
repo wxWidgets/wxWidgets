@@ -932,10 +932,25 @@ bool wxWindowBase::Layout()
     }
     else
     {
-        // Evaluate child constraints
+        wxLayoutConstraints *constr = GetConstraints();
+        bool wasOk = constr && constr->AreSatisfied();
+
         ResetConstraints();   // Mark all constraints as unevaluated
-        DoPhase(1);           // Just one phase need if no sizers involved
-        DoPhase(2);
+
+        // if we're a top level panel (i.e. our parent is frame/dialog), our
+        // own constraints will never be satisfied any more unless we do it
+        // here
+        if ( wasOk )
+        {
+            int noChanges = 1;
+            while ( noChanges > 0 )
+            {
+                constr->SatisfyConstraints(this, &noChanges);
+            }
+        }
+
+        DoPhase(1);           // Layout children
+        DoPhase(2);           // Layout grand children
         SetConstraintSizes(); // Recursively set the real window sizes
     }
 
@@ -1039,8 +1054,7 @@ void wxWindowBase::ResetConstraints()
 void wxWindowBase::SetConstraintSizes(bool recurse)
 {
     wxLayoutConstraints *constr = GetConstraints();
-    if ( constr && constr->left.GetDone() && constr->right.GetDone( ) &&
-            constr->width.GetDone() && constr->height.GetDone())
+    if ( constr && constr->AreSatisfied() )
     {
         int x = constr->left.GetValue();
         int y = constr->top.GetValue();
@@ -1060,12 +1074,9 @@ void wxWindowBase::SetConstraintSizes(bool recurse)
     }
     else if ( constr )
     {
-        wxString winName = GetName();
-        if ( !winName )
-            winName = wxT("unnamed");
-        wxLogDebug(wxT("Constraint not satisfied for %s, name '%s'."),
+        wxLogDebug(wxT("Constraints not satisfied for %s named '%s'."),
                    GetClassInfo()->GetClassName(),
-                   winName.c_str());
+                   GetName().c_str());
     }
 
     if ( recurse )

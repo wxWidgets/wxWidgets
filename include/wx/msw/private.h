@@ -231,6 +231,10 @@ inline void wxRGBToColour(wxColour& c, COLORREF rgb)
 extern void HIMETRICToPixel(LONG *x, LONG *y);
 extern void PixelToHIMETRIC(LONG *x, LONG *y);
 
+// Windows convention of the mask is opposed to the wxWindows one, so we need
+// to invert the mask each time we pass one/get one to/from Windows
+extern HBITMAP wxInvertMask(HBITMAP hbmpMask, int w = 0, int h = 0);
+
 // ---------------------------------------------------------------------------
 // small helper classes
 // ---------------------------------------------------------------------------

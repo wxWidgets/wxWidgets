@@ -60,15 +60,23 @@ public:
 class WXDLLEXPORT wxIcon : public wxIconBase
 {
 public:
-    wxIcon();
+    // ctors
+        // default
+    wxIcon() { }
 
-    // Copy constructors
+        // copy
     wxIcon(const wxIcon& icon) { Ref(icon); }
 
+        // from raw data
     wxIcon(const char bits[], int width, int height);
+        // from XPM data
+    wxIcon(const char **data) { CreateIconFromXpm(data); }
+    wxIcon(char **data) { CreateIconFromXpm((const char **)data); }
+        // from resource/file
     wxIcon(const wxString& name,
            long type = wxBITMAP_TYPE_ICO_RESOURCE,
            int desiredWidth = -1, int desiredHeight = -1);
+
     virtual ~wxIcon();
 
     virtual bool LoadFile(const wxString& name,
@@ -92,6 +100,12 @@ protected:
     {
         return new wxIconRefData;
     }
+
+    // create from XPM data
+    void CreateIconFromXpm(const char **data);
+
+    // create from bitmap (which should have a mask unless it's monochrome)
+    void CopyFromBitmap(const wxBitmap& bmp);
 
 private:
     DECLARE_DYNAMIC_CLASS(wxIcon)

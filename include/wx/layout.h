@@ -177,8 +177,8 @@ public:
     bool SatisfyConstraints(wxWindowBase *win, int *noChanges);
     bool AreSatisfied() const
     {
-        return left.GetDone() && top.GetDone() && right.GetDone() &&
-               bottom.GetDone() && centreX.GetDone() && centreY.GetDone();
+        return left.GetDone() && top.GetDone() &&
+               width.GetDone() && height.GetDone();
     }
 };
 

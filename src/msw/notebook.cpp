@@ -144,7 +144,7 @@ bool wxNotebook::Create(wxWindow *parent,
 
   // colors and font
   m_backgroundColour = wxColour(GetSysColor(COLOR_BTNFACE));
-  m_foregroundColour = *wxBLACK ;
+  m_foregroundColour = *wxBLACK;
 
   // style
   m_windowStyle = style | wxTAB_TRAVERSAL;
@@ -450,10 +450,13 @@ void wxNotebook::OnSize(wxSizeEvent& event)
   GetSize((int *)&rc.right, (int *)&rc.bottom);
 
   TabCtrl_AdjustRect(m_hwnd, FALSE, &rc);
+
+  int width = rc.right - rc.left,
+      height = rc.bottom - rc.top;
   size_t nCount = m_aPages.Count();
   for ( size_t nPage = 0; nPage < nCount; nPage++ ) {
     wxNotebookPage *pPage = m_aPages[nPage];
-    pPage->SetSize(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
+    pPage->SetSize(rc.left, rc.top, width, height);
   }
 
   event.Skip();
@@ -513,13 +516,13 @@ void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
 
 // override these 2 functions to do nothing: everything is done in OnSize
 
-void wxNotebook::SetConstraintSizes(bool /* recurse */)
+void wxNotebook::SetConstraintSizes(bool WXUNUSED(recurse))
 {
   // don't set the sizes of the pages - their correct size is not yet known
   wxControl::SetConstraintSizes(FALSE);
 }
 
-bool wxNotebook::DoPhase(int /* nPhase */)
+bool wxNotebook::DoPhase(int WXUNUSED(nPhase))
 {
   return TRUE;
 }

@@ -1,19 +1,19 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcprint.h
+// Name:        wx/msw/dcprint.h
 // Purpose:     wxPrinterDC class
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_DCPRINT_H_
 #define _WX_DCPRINT_H_
 
 #ifdef __GNUG__
-#pragma interface "dcprint.h"
+    #pragma interface "dcprint.h"
 #endif
 
 #if wxUSE_PRINTING_ARCHITECTURE
@@ -36,12 +36,20 @@ DECLARE_CLASS(wxPrinterDC)
 
     ~wxPrinterDC(void);
 
-    bool StartDoc(const wxString& message);
-    void EndDoc(void);
-    void StartPage(void);
-    void EndPage(void);
+    // override some base class virtuals
+    virtual bool StartDoc(const wxString& message);
+    virtual void EndDoc();
+    virtual void StartPage();
+    virtual void EndPage();
 
 protected:
+    virtual void DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
+                              bool useMask = FALSE);
+    virtual bool DoBlit(wxCoord xdest, wxCoord ydest,
+                        wxCoord width, wxCoord height,
+                        wxDC *source, wxCoord xsrc, wxCoord ysrc,
+                        int rop = wxCOPY, bool useMask = FALSE);
+
     wxPrintData m_printData;
 };
 

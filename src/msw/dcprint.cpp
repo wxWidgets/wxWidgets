@@ -1,51 +1,70 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcprint.cpp
+// Name:        src/msw/dcprint.cpp
 // Purpose:     wxPrinterDC class
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
-#pragma implementation "dcprint.h"
+    #pragma implementation "dcprint.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/string.h"
+    #include "wx/log.h"
+    #include "wx/window.h"
 #endif
 
-#include "wx/string.h"
-#include "wx/log.h"
-#include "wx/window.h"
 #include "wx/msw/private.h"
 #include "wx/dcprint.h"
 #include "math.h"
 
 #if wxUSE_COMMON_DIALOGS || defined(__WXWINE__)
-#include <commdlg.h>
+    #include <commdlg.h>
 #endif
 
 #ifndef __WIN32__
-#include <print.h>
+    #include <print.h>
 #endif
 
+// ----------------------------------------------------------------------------
+// wxWin macros
+// ----------------------------------------------------------------------------
 IMPLEMENT_CLASS(wxPrinterDC, wxDC)
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxPrinterDC construction
+// ----------------------------------------------------------------------------
 
 // This form is deprecated
 wxPrinterDC::wxPrinterDC(const wxString& driver_name, const wxString& device_name, const wxString& file, bool interactive, int orientation)
 {
     m_isInteractive = interactive;
 
-    if (!file.IsNull() && file != wxT(""))
+    if ( !!file )
         m_printData.SetFilename(file);
 
 #if wxUSE_COMMON_DIALOGS
@@ -79,7 +98,7 @@ wxPrinterDC::wxPrinterDC(const wxString& driver_name, const wxString& device_nam
         //     m_dontDelete = TRUE;
     }
     else
-#endif
+#endif // wxUSE_COMMON_DIALOGS
         if ((!driver_name.IsNull() && driver_name != wxT("")) &&
             (!device_name.IsNull() && device_name != wxT("")) &&
             (!file.IsNull() && file != wxT("")))
@@ -138,9 +157,13 @@ wxPrinterDC::wxPrinterDC(WXHDC theDC)
     SetPen(*wxBLACK_PEN);
 }
 
-wxPrinterDC::~wxPrinterDC(void)
+wxPrinterDC::~wxPrinterDC()
 {
 }
+
+// ----------------------------------------------------------------------------
+// wxPrinterDC {Start/End}{Page/Doc} methods
+// ----------------------------------------------------------------------------
 
 bool wxPrinterDC::StartDoc(const wxString& message)
 {
@@ -163,20 +186,7 @@ bool wxPrinterDC::StartDoc(const wxString& message)
     if (!m_hDC)
         return FALSE;
 
-    int ret =
-#ifndef __WIN32__
-        ::StartDoc((HDC) m_hDC, &docinfo);
-#else
-#ifdef UNICODE
-    ::StartDocW((HDC) m_hDC, &docinfo);
-#else
-#ifdef __TWIN32__
-    ::StartDoc((HDC) m_hDC, &docinfo);
-#else
-    ::StartDocA((HDC) m_hDC, &docinfo);
-#endif
-#endif
-#endif
+    int ret = ::StartDoc(GetHdc(), &docinfo);
 
 #ifndef __WIN16__
     if (ret <= 0)
@@ -189,18 +199,18 @@ bool wxPrinterDC::StartDoc(const wxString& message)
     return (ret > 0);
 }
 
-void wxPrinterDC::EndDoc(void)
+void wxPrinterDC::EndDoc()
 {
     if (m_hDC) ::EndDoc((HDC) m_hDC);
 }
 
-void wxPrinterDC::StartPage(void)
+void wxPrinterDC::StartPage()
 {
     if (m_hDC)
         ::StartPage((HDC) m_hDC);
 }
 
-void wxPrinterDC::EndPage(void)
+void wxPrinterDC::EndPage()
 {
     if (m_hDC)
         ::EndPage((HDC) m_hDC);
@@ -350,13 +360,13 @@ WXHDC WXDLLEXPORT wxGetPrinterDC(const wxPrintData& printDataConst)
     wxChar* driverName = (wxChar*) NULL;
 
     wxString devNameStr = printData.GetPrinterName();
-    wxChar* deviceName;
     wxChar* portName = (wxChar*) NULL; // Obsolete in WIN32
 
-    if (devNameStr == wxT(""))
+    const wxChar* deviceName;
+    if ( !devNameStr )
         deviceName = (wxChar*) NULL;
     else
-        deviceName = WXSTRINGCAST devNameStr;
+        deviceName = devNameStr.c_str();
 
     LPDEVMODE lpDevMode = (LPDEVMODE) NULL;
 
@@ -365,7 +375,7 @@ WXHDC WXDLLEXPORT wxGetPrinterDC(const wxPrintData& printDataConst)
     if ( hDevMode )
         lpDevMode = (DEVMODE*) GlobalLock(hDevMode);
 
-    if (devNameStr == wxT(""))
+    if ( !devNameStr )
     {
         // Retrieve the default device name
         wxString portName;
@@ -378,7 +388,7 @@ WXHDC WXDLLEXPORT wxGetPrinterDC(const wxPrintData& printDataConst)
 
         wxASSERT_MSG( ret, wxT("Could not get default device name.") );
 
-        deviceName = WXSTRINGCAST devNameStr;
+        deviceName = devNameStr.c_str();
     }
 
 #ifdef __WIN32__
@@ -393,3 +403,180 @@ WXHDC WXDLLEXPORT wxGetPrinterDC(const wxPrintData& printDataConst)
     return (WXHDC) hDC;
 }
 
+// ----------------------------------------------------------------------------
+// wxPrinterDC bit blitting/bitmap drawing
+// ----------------------------------------------------------------------------
+
+void wxPrinterDC::DoDrawBitmap(const wxBitmap &bmp,
+                               wxCoord x, wxCoord y,
+                               bool useMask)
+{
+    wxCHECK_RET( bmp.Ok(), _T("invalid bitmap in wxPrinterDC::DrawBitmap") );
+
+    int width = bmp.GetWidth(),
+        height = bmp.GetHeight();
+
+    if ( ::GetDeviceCaps(GetHdc(), RASTERCAPS) & RC_STRETCHDIB )
+    {
+        BITMAPINFO *info = (BITMAPINFO *) malloc( sizeof( BITMAPINFOHEADER ) + 256 * sizeof(RGBQUAD ) );
+        memset( info, 0, sizeof( BITMAPINFOHEADER ) );
+
+        int iBitsSize = ((width + 3 ) & ~3 ) * height;
+
+        void* bits = malloc( iBitsSize );
+
+        info->bmiHeader.biSize = sizeof( BITMAPINFOHEADER );
+        info->bmiHeader.biWidth = width;
+        info->bmiHeader.biHeight = height;
+        info->bmiHeader.biPlanes = 1;
+        info->bmiHeader.biBitCount = 8;
+        info->bmiHeader.biCompression = BI_RGB;
+
+        ScreenHDC display;
+        if ( GetDIBits(display, GetHbitmapOf(bmp), 0,
+                       bmp.GetHeight(), bits, info,
+                       DIB_RGB_COLORS) )
+        {
+            if ( ::StretchDIBits(GetHdc(), x, y,
+                                 width, height,
+                                 0 , 0, width, height,
+                                 bits, info,
+                                 DIB_RGB_COLORS, SRCCOPY) == GDI_ERROR )
+            {
+                wxLogLastError("StretchDIBits");
+            }
+        }
+
+        free(bits);
+        free(info);
+    }
+    else // no support for StretchDIBits()
+    {
+        wxMemoryDC memDC;
+        memDC.SelectObject(bmp);
+
+        Blit(x, y, width, height, &memDC, 0, 0, wxCOPY, useMask);
+
+        memDC.SelectObject(wxNullBitmap);
+    }
+}
+
+bool wxPrinterDC::DoBlit(wxCoord xdest, wxCoord ydest,
+                         wxCoord width, wxCoord height,
+                         wxDC *source,
+                         wxCoord xsrc, wxCoord ysrc,
+                         int rop, bool useMask)
+{
+    bool success = TRUE;
+
+    if ( useMask )
+    {
+        // If we are printing source colours are screen colours
+        // not printer colours and so we need copy the bitmap
+        // pixel by pixel.
+        RECT rect;
+        HDC dc_src = GetHdcOf(*source);
+        HDC dc_mask = ::CreateCompatibleDC(dc_src);
+
+        ::SelectObject(dc_mask, (HBITMAP) source->GetSelectedBitmap().GetMask()->GetMaskBitmap());
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                COLORREF cref = ::GetPixel(dc_mask, x, y);
+                if (cref)
+                {
+                    HBRUSH brush = ::CreateSolidBrush(::GetPixel(dc_src, x, y));
+                    rect.left = xdest + x;
+                    rect.right = rect.left + 1;
+                    rect.top = ydest + y; 
+                    rect.bottom = rect.top + 1;
+                    ::FillRect(GetHdc(), &rect, brush);
+                    ::DeleteObject(brush);
+                }
+            }
+        }
+        ::SelectObject(dc_mask, 0);
+        ::DeleteDC(dc_mask);
+    }
+    else // no mask
+    {
+        if ( ::GetDeviceCaps(GetHdc(), RASTERCAPS) & RC_STRETCHDIB )
+        {
+            wxBitmap& bmp = source->GetSelectedBitmap();
+            int width = bmp.GetWidth(),
+                height = bmp.GetHeight();
+
+            BITMAPINFO *info = (BITMAPINFO *) malloc( sizeof( BITMAPINFOHEADER ) + 256 * sizeof(RGBQUAD ) );
+            int iBitsSize = ((width + 3 ) & ~3 ) * height;
+
+            void* bits = malloc( iBitsSize );
+
+            memset( info , 0 , sizeof( BITMAPINFOHEADER ) );
+
+            info->bmiHeader.biSize = sizeof( BITMAPINFOHEADER );
+            info->bmiHeader.biWidth = width;
+            info->bmiHeader.biHeight = height;
+            info->bmiHeader.biPlanes = 1;
+            info->bmiHeader.biBitCount = 8;
+            info->bmiHeader.biCompression = BI_RGB;
+
+            ScreenHDC display;
+            if ( !::GetDIBits(display, GetHbitmapOf(bmp), 0,
+                              height, bits, info, DIB_RGB_COLORS) )
+            {
+                wxLogLastError("GetDIBits");
+
+                success = FALSE;
+            }
+
+            if ( success )
+            {
+                success = ::StretchDIBits(GetHdc(), xdest, ydest,
+                                          width, height,
+                                          xsrc, ysrc,
+                                          width, height,
+                                          bits, info ,
+                                          DIB_RGB_COLORS,
+                                          SRCCOPY) != GDI_ERROR;
+                if ( !success )
+                {
+                    wxLogLastError("StretchDIBits");
+                }
+            }
+
+            free(bits);
+            free(info);
+        }
+        else // no support for StretchDIBits
+        {
+            // as we are printing, source colours are screen colours not printer
+            // colours and so we need copy the bitmap pixel by pixel.
+            HDC dc_src = GetHdcOf(*source);
+            RECT rect;
+            for (int y = 0; y < height; y++)
+            {
+                // This is Stefan Csomor's optimisation, where identical adjacent
+                // pixels are drawn together.
+                for (int x = 0; x < width; x++)
+                {
+                    COLORREF col = ::GetPixel(dc_src, x, y);
+                    HBRUSH brush = ::CreateSolidBrush( col );
+
+                    rect.left = xdest + x;
+                    rect.top = ydest + y;
+                    while( (x + 1 < width) && (::GetPixel(dc_src, x + 1, y) == col ) )
+                    {
+                        ++x;
+                    }
+                    rect.right = xdest + x + 1;
+                    rect.bottom = rect.top + 1;
+                    ::FillRect((HDC) m_hDC, &rect, brush);
+                    ::DeleteObject(brush);
+                }
+            }
+        }
+    }
+
+    return success;
+}

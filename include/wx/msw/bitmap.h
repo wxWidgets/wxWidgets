@@ -78,7 +78,8 @@ public:
     wxBitmap(const char bits[], int width, int height, int depth = 1);
 
     // Initialize with XPM data
-    wxBitmap(char **data, wxControl *anItem = NULL);
+    wxBitmap(const char **data) { CreateFromXpm(data); }
+    wxBitmap(char **data) { CreateFromXpm((const char **)data); }
 
     // Load a file or resource
     wxBitmap(const wxString& name, long type = wxBITMAP_TYPE_BMP_RESOURCE);
@@ -116,7 +117,7 @@ public:
 
     virtual ~wxBitmap();
 
-    // GRG, Dic/99
+    // get the given part of bitmap
     wxBitmap GetSubBitmap( const wxRect& rect ) const;
  
     // copies the contents and mask of the given (colour) icon to the bitmap
@@ -181,6 +182,9 @@ protected:
 
     virtual wxGDIImageRefData *CreateData() const
         { return new wxBitmapRefData; }
+
+    // creates the bitmap from XPM data, supposed to be called from ctor
+    bool CreateFromXpm(const char **bits);
 
 private:
 #ifdef __WIN32__

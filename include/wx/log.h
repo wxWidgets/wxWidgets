@@ -480,15 +480,15 @@ DECLARE_LOG_FUNCTION2(SysError, long lErrCode);
     // make life easier for people using VC++ IDE: clicking on the message
     // will take us immediately to the place of the failed API
 #ifdef __VISUALC__
-    #define wxLogApiError(api, rc)                                              \
-        wxLogDebug(wxT("%s(%d): '%s' failed with error 0x%08lx (%s)."),          \
-                   __TFILE__, __LINE__, api,                                    \
+    #define wxLogApiError(api, rc)                                            \
+        wxLogDebug(wxT("%s(%d): '%s' failed with error 0x%08lx (%s)."),       \
+                   __TFILE__, __LINE__, _T(api),                              \
                    rc, wxSysErrorMsg(rc))
 #else // !VC++
-    #define wxLogApiError(api, rc)                                              \
-        wxLogDebug(wxT("In file %s at line %d: '%s' failed with "                \
-                      "error 0x%08lx (%s)."),                                   \
-                   __TFILE__, __LINE__, api,                                    \
+    #define wxLogApiError(api, rc)                                            \
+        wxLogDebug(wxT("In file %s at line %d: '%s' failed with "             \
+                      "error 0x%08lx (%s)."),                                 \
+                   __TFILE__, __LINE__, _T(api),                              \
                    rc, wxSysErrorMsg(rc))
 #endif // VC++/!VC++
 

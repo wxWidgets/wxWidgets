@@ -617,7 +617,7 @@ public:
     virtual void SetConstraintSizes(bool recurse = TRUE);
     virtual bool LayoutPhase1(int *noChanges);
     virtual bool LayoutPhase2(int *noChanges);
-    virtual bool DoPhase(int);
+    virtual bool DoPhase(int phase);
 
         // these methods are virtual but normally won't be overridden
     virtual void SetSizeConstraint(int x, int y, int w, int h);

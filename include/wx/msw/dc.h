@@ -138,6 +138,9 @@ public:
         m_bOwnsDC = bOwnsDC;
     }
 
+    const wxBitmap& GetSelectedBitmap() const { return m_selectedBitmap; }
+    wxBitmap& GetSelectedBitmap() { return m_selectedBitmap; }
+
 protected:
     virtual void DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
                              int style = wxFLOOD_SURFACE);

@@ -47,7 +47,7 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-    IMPLEMENT_DYNAMIC_CLASS(wxIcon, wxIconBase)
+IMPLEMENT_DYNAMIC_CLASS(wxIcon, wxIconBase)
 
 // ============================================================================
 // implementation
@@ -71,14 +71,10 @@ void wxIconRefData::Free()
 // wxIcon
 // ----------------------------------------------------------------------------
 
-wxIcon::wxIcon()
+wxIcon::wxIcon(const char bits[], int width, int height)
 {
-}
-
-wxIcon::wxIcon(const char WXUNUSED(bits)[],
-               int WXUNUSED(width),
-               int WXUNUSED(height))
-{
+    wxBitmap bmp(bits, width, height);
+    CopyFromBitmap(bmp);
 }
 
 wxIcon::wxIcon(const wxString& iconfile,
@@ -92,6 +88,51 @@ wxIcon::wxIcon(const wxString& iconfile,
 
 wxIcon::~wxIcon()
 {
+}
+
+void wxIcon::CopyFromBitmap(const wxBitmap& bmp)
+{
+#ifdef __WIN32__
+    wxMask *mask = bmp.GetMask();
+    if ( !mask )
+    {
+        // we must have a mask for an icon, so even if it's probably incorrect,
+        // do create it (grey is the "standard" transparent colour)
+        mask = new wxMask(bmp, *wxLIGHT_GREY);
+    }
+
+    ICONINFO iconInfo;
+    iconInfo.fIcon = TRUE;  // we want an icon, not a cursor
+    iconInfo.hbmMask = wxInvertMask((HBITMAP)mask->GetMaskBitmap());
+    iconInfo.hbmColor = GetHbitmapOf(bmp);
+
+    HICON hicon = ::CreateIconIndirect(&iconInfo);
+    if ( !hicon )
+    {
+        wxLogLastError("CreateIconIndirect");
+    }
+    else
+    {
+        SetHICON((WXHICON)hicon);
+        SetSize(bmp.GetWidth(), bmp.GetHeight());
+    }
+
+    if ( !bmp.GetMask() )
+    {
+        // we created the mask, now delete it
+        delete mask;
+    }
+#else // Win16
+    // there are some functions in curico.cpp which probably could be used
+    // here...
+    wxFAIL_MSG("not implemented");
+#endif // Win32/16
+}
+
+void wxIcon::CreateIconFromXpm(const char **data)
+{
+    wxBitmap bmp(data);
+    CopyFromBitmap(bmp);
 }
 
 bool wxIcon::LoadFile(const wxString& filename,
