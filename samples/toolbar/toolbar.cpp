@@ -92,7 +92,7 @@ public:
             const wxString& title = _T("wxToolBar Sample"),
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
-            long style = wxDEFAULT_FRAME_STYLE);
+            long style = wxDEFAULT_FRAME_STYLE|wxCLIP_CHILDREN|wxNO_FULL_REPAINT_ON_RESIZE);
 
     void RecreateToolbar();
 
@@ -267,6 +267,7 @@ void MyFrame::RecreateToolbar()
 
     style &= ~(wxTB_HORIZONTAL | wxTB_VERTICAL);
     style |= m_horzToolbar ? wxTB_HORIZONTAL : wxTB_VERTICAL;
+    style |= wxNO_FULL_REPAINT_ON_RESIZE ;
 
     toolBar = CreateToolBar(style, ID_TOOLBAR);
 #endif
@@ -611,7 +612,8 @@ void MyFrame::DoToggleHelp()
 
 void MyFrame::OnUpdateCopyAndCut(wxUpdateUIEvent& event)
 {
-    event.Enable( m_textWindow->CanCopy() );
+    if (m_textWindow)
+        event.Enable( m_textWindow->CanCopy() );
 }
 
 void MyFrame::OnChangeToolTip(wxCommandEvent& WXUNUSED(event))

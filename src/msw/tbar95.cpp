@@ -1311,6 +1311,10 @@ bool wxToolBar::HandlePaint(WXWPARAM wParam, WXLPARAM lParam)
                 {
                     // yes, do erase it!
                     dc.DrawRectangle(rectItem);
+                    
+                    // Necessary in case we use a no-paint-on-size
+                    // style in the parent: the controls can disappear
+                    control->Refresh(FALSE);
                 }
             }
         }

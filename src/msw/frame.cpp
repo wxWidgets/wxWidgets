@@ -474,23 +474,63 @@ void wxFrame::PositionToolBar()
         }
 #endif // wxUSE_STATUSBAR
 
+        int tx, ty;
         int tw, th;
+        toolbar->GetPosition(&tx, &ty);
         toolbar->GetSize(&tw, &th);
+        
+        // Adjust
+        if (ty < 0 && (-ty == th))
+            ty = 0;
+        if (tx < 0 && (-tx == tw))
+            tx = 0;        
+        
+        int desiredW = tw;
+        int desiredH = th;
 
         if ( toolbar->GetWindowStyleFlag() & wxTB_VERTICAL )
         {
-            th = height;
+            desiredH = height;
         }
         else
         {
-            tw = width;
-            if ( toolbar->GetWindowStyleFlag() & wxTB_FLAT )
-                th -= 3;
-        }
+            desiredW = width;
+//            if ( toolbar->GetWindowStyleFlag() & wxTB_FLAT )
+//                desiredW -= 3;
+        }        
 
         // use the 'real' MSW position here, don't offset relativly to the
         // client area origin
-        toolbar->SetSize(0, 0, tw, th, wxSIZE_NO_ADJUSTMENTS);
+
+        // Optimise such that we don't have to always resize the toolbar
+        // when the frame changes, otherwise we'll get a lot of flicker.        
+        bool heightChanging = TRUE;
+        bool widthChanging = TRUE;
+        
+        if ( toolbar->GetWindowStyleFlag() & wxTB_VERTICAL )
+        {
+            // It's OK if the current height is greater than what can be shown.
+            heightChanging = (desiredH > th) ;
+            widthChanging = (desiredW != tw) ;
+            
+            // The next time around, we may not have to set the size            
+            if (heightChanging)
+                desiredH = desiredH + 200;
+        }
+        else
+        {
+            // It's OK if the current width is greater than what can be shown.
+            widthChanging = (desiredW > tw) ;
+            heightChanging = (desiredH != th) ;
+
+            // The next time around, we may not have to set the size            
+            if (widthChanging)
+                desiredW = desiredW + 200;
+        }
+        
+        if (tx != 0 || ty != 0 || widthChanging || heightChanging)
+            toolbar->SetSize(0, 0, desiredW, desiredH, wxSIZE_NO_ADJUSTMENTS);
+        
 #endif // __WXWINCE__
     }
 }
