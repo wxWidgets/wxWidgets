@@ -2616,11 +2616,14 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
 
         default:
             // do not use wxIsalnum() here
-            if ( !event.HasModifiers() && isalnum(keyCode) )
+            if ( !event.HasModifiers() && 
+                 ((keyCode >= '0' && keyCode <= '9') ||
+                  (keyCode >= 'a' && keyCode <= 'z') ||
+                  (keyCode >= 'A' && keyCode <= 'Z' )))
             {
                 // find the next item starting with the given prefix
                 char ch = (char)keyCode;
-
+                
                 wxTreeItemId id = FindItem(m_current, m_findPrefix + (wxChar)ch);
                 if ( !id.IsOk() )
                 {

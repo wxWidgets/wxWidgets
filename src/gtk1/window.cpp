@@ -1066,28 +1066,16 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
     if (g_blockEventsOnDrag)
         return FALSE;
 
-    bool ret = FALSE;
-    
-    wxKeyEvent event( wxEVT_CHAR_HOOK );    
+
+    wxKeyEvent event( wxEVT_KEY_DOWN );
     if ( !wxTranslateGTKKeyEventToWx(event, win, gdk_event) )
     {
         // unknown key pressed, ignore (the event would be useless anyhow)
         return FALSE;
     }
 
-    // Implement wxFrame::OnCharHook by checking ancestor.
-    wxWindow *parent = win;
-    while (parent && !parent->IsTopLevel())
-        parent = parent->GetParent();
-    
-    if (parent)
-        ret = parent->GetEventHandler()->ProcessEvent( event );
-
-    if (!ret)
-    {    
-        event.SetEventType(wxEVT_KEY_DOWN);
-        ret = win->GetEventHandler()->ProcessEvent( event );
-    }
+    // Emit KEY_DOWN event
+    bool ret = win->GetEventHandler()->ProcessEvent( event );
 
 #if wxUSE_ACCEL
     if (!ret)
@@ -1109,10 +1097,11 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
     }
 #endif // wxUSE_ACCEL
 
-    /* Only send wxEVT_CHAR event if not processed yet. Thus, ALT-x
-       will only be sent if it is not in an accelerator table. */
+    // Only send wxEVT_CHAR event if not processed yet. Thus, ALT-x
+    // will only be sent if it is not in an accelerator table.
     if (!ret)
     {
+        // Find key code for EVT_CHAR and EVT_CHAR_HOOK events
         KeySym keysym = gdk_event->keyval;
         long key_code = wxTranslateKeySymToWXKey(keysym, TRUE /* isChar */);
         if ( !key_code )
@@ -1132,16 +1121,27 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
         {
             wxLogTrace(TRACE_KEYS, _T("Char event: %ld"), key_code);
 
-            // reuse the same event object, just change its type and use the
-            // translated keycode instead of the raw one
-            event.SetEventType(wxEVT_CHAR);
             event.m_keyCode = key_code;
+            
+            // Implement OnCharHook by checking ancesteror top level windows
+            wxWindow *parent = win;
+            while (parent && !parent->IsTopLevel())
+            parent = parent->GetParent();
+            if (parent)
+            {
+                event.SetEventType( wxEVT_CHAR_HOOK );
+                ret = parent->GetEventHandler()->ProcessEvent( event );
+            }
 
-            ret = win->GetEventHandler()->ProcessEvent( event );
+            if (!ret)
+            {
+                event.SetEventType(wxEVT_CHAR);
+                ret = win->GetEventHandler()->ProcessEvent( event );
+            }
         }
     }
 
-    /* win is a control: tab can be propagated up */
+    // win is a control: tab can be propagated up
     if ( !ret &&
          ((gdk_event->keyval == GDK_Tab) || (gdk_event->keyval == GDK_ISO_Left_Tab)) &&
 // VZ: testing for wxTE_PROCESS_TAB shouldn't be done here the control may
@@ -1154,15 +1154,15 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
     {
         wxNavigationKeyEvent new_event;
         new_event.SetEventObject( win->GetParent() );
-        /* GDK reports GDK_ISO_Left_Tab for SHIFT-TAB */
+        // GDK reports GDK_ISO_Left_Tab for SHIFT-TAB
         new_event.SetDirection( (gdk_event->keyval == GDK_Tab) );
-        /* CTRL-TAB changes the (parent) window, i.e. switch notebook page */
+        // CTRL-TAB changes the (parent) window, i.e. switch notebook page
         new_event.SetWindowChange( (gdk_event->state & GDK_CONTROL_MASK) );
         new_event.SetCurrentFocus( win );
         ret = win->GetParent()->GetEventHandler()->ProcessEvent( new_event );
     }
 
-    /* generate wxID_CANCEL if <esc> has been pressed (typically in dialogs) */
+    // generate wxID_CANCEL if <esc> has been pressed (typically in dialogs)
     if ( !ret &&
          (gdk_event->keyval == GDK_Escape) )
     {
@@ -1171,9 +1171,9 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
         ret = win->GetEventHandler()->ProcessEvent( new_event );
     }
 
-    /* Doesn't work. */
-#if 0 // (GTK_MINOR_VERSION > 0)
-    /* Pressing F10 will activate the menu bar of the top frame. */
+    // Doesn't work.
+#if 0 
+    // Pressing F10 will activate the menu bar of the top frame
     if ( (!ret) &&
          (gdk_event->keyval == GDK_F10) )
     {
@@ -1206,7 +1206,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
         gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "key_press_event" );
         return TRUE;
     }
-
+    
     return FALSE;
 }
 
@@ -2635,8 +2635,10 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
     gtk_signal_connect( GTK_OBJECT(widget), "leave_notify_event",
       GTK_SIGNAL_FUNC(gtk_window_leave_callback), (gpointer)this );
       
-    gtk_signal_connect( GTK_OBJECT(widget), "destroy",
-      GTK_SIGNAL_FUNC(gtk_window_destroy_callback), (gpointer)this );
+    // This keeps crashing on me. RR.
+    //
+    // gtk_signal_connect( GTK_OBJECT(widget), "destroy",
+    //  GTK_SIGNAL_FUNC(gtk_window_destroy_callback), (gpointer)this );
 }
 
 bool wxWindowGTK::Destroy()
