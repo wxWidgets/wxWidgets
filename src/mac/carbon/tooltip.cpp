@@ -77,6 +77,9 @@ static wxMacToolTip s_ToolTip ;
 static wxWindow* s_LastWindowEntered = NULL ;
 static wxRect2DInt s_ToolTipArea ;
 static WindowRef s_ToolTipWindowRef = NULL ;
+
+IMPLEMENT_ABSTRACT_CLASS(wxToolTip, wxObject)
+
 wxToolTip::wxToolTip( const wxString &tip )
 {
     m_text = tip;
