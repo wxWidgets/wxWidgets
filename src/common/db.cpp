@@ -2980,7 +2980,7 @@ bool wxDb::Catalog(const wxChar *userID, const wxString &fileName)
     wxChar    colName[DB_MAX_COLUMN_NAME_LEN+1];
     SWORD     sqlDataType;
     wxChar    typeName[30+1];
-    SWORD     precision, length;
+    SDWORD    precision, length;
 
     FILE *fp = fopen(fileName.c_str(),wxT("wt"));
     if (fp == NULL)
@@ -3022,8 +3022,12 @@ bool wxDb::Catalog(const wxChar *userID, const wxString &fileName)
     tblNameSave.Empty();
     int cnt = 0;
 
-    while ((retcode = SQLFetch(hstmt)) == SQL_SUCCESS)
+    while (true)
     {
+        retcode = SQLFetch(hstmt);
+        if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO)
+            break;
+
         if (wxStrcmp(tblName, tblNameSave.c_str()))
         {
             if (cnt)
@@ -3044,12 +3048,12 @@ bool wxDb::Catalog(const wxChar *userID, const wxString &fileName)
             tblNameSave = tblName;
         }
 
-      GetData(3,SQL_C_CHAR,  (UCHAR *)tblName,     DB_MAX_TABLE_NAME_LEN+1, &cb);
-      GetData(4,SQL_C_CHAR,  (UCHAR *)colName,     DB_MAX_COLUMN_NAME_LEN+1,&cb);
-      GetData(5,SQL_C_SSHORT,(UCHAR *)&sqlDataType,0,                       &cb);
-      GetData(6,SQL_C_CHAR,  (UCHAR *)typeName,    sizeof(typeName),        &cb);
-      GetData(7,SQL_C_SSHORT,(UCHAR *)&precision,  0,                       &cb);
-      GetData(8,SQL_C_SSHORT,(UCHAR *)&length,     0,                       &cb);
+      GetData(3,SQL_C_CHAR,  (UCHAR *) tblName,     DB_MAX_TABLE_NAME_LEN+1, &cb);
+      GetData(4,SQL_C_CHAR,  (UCHAR *) colName,     DB_MAX_COLUMN_NAME_LEN+1,&cb);
+      GetData(5,SQL_C_SSHORT,(UCHAR *)&sqlDataType, 0,                       &cb);
+      GetData(6,SQL_C_CHAR,  (UCHAR *) typeName,    sizeof(typeName),        &cb);
+      GetData(7,SQL_C_SLONG, (UCHAR *)&precision,   0,                       &cb);
+      GetData(8,SQL_C_SLONG, (UCHAR *)&length,      0,                       &cb);
 
         outStr.Printf(wxT("%-32s %-32s (%04d)%-15s %9d %9d\n"),
             tblName, colName, sqlDataType, typeName, precision, length);
