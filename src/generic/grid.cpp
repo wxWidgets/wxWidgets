@@ -7920,7 +7920,7 @@ bool wxGrid::MovePageDown()
     if ( m_currentCellCoords == wxGridNoCellCoords ) return FALSE;
 
     int row = m_currentCellCoords.GetRow();
-    if ( row < m_numRows )
+    if ( (row+1) < m_numRows )
     {
         int cw, ch;
         m_gridWin->GetClientSize( &cw, &ch );
@@ -7930,7 +7930,7 @@ bool wxGrid::MovePageDown()
         if ( newRow == row )
         {
             // row < m_numRows , so newrow can't overflow here.	
-	    newRow = row + 1;
+            newRow = row + 1;
         }
 
         MakeCellVisible( newRow, m_currentCellCoords.GetCol() );
