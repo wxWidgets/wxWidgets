@@ -18,6 +18,7 @@
 #include<os2.h>
 
 #ifndef WX_PRECOMP
+#include "wx/app.h"
 #endif
 
 #include "wx/string.h"

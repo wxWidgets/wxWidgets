@@ -23,6 +23,7 @@
 #include "wx/string.h"
 #include "wx/log.h"
 #include "wx/window.h"
+#include "wx/app.h"
 
 #include "wx/os2/private.h"
 

@@ -14,13 +14,16 @@
 
 #ifndef WX_PRECOMP
 #include <stdio.h>
+#include "wx/defs.h"
 #include "wx/setup.h"
+#include "wx/string.h"
+#include "wx/os2/private.h"
 #include "wx/palette.h"
+#include "wx/app.h"
 #endif
 
 #define INCL_PM
 #define INCL_GPI
-#include <os2.h>
 
 #include "assert.h"
 

@@ -29,6 +29,7 @@
 #include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
     #include "wx/string.h"
     #include "wx/log.h"
     #include "wx/intl.h"

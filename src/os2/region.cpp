@@ -12,6 +12,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/app.h"
 #include "wx/os2/region.h"
 #include "wx/gdicmn.h"
 
