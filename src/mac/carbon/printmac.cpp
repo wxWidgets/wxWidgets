@@ -29,13 +29,11 @@
 #include "wx/msgdlg.h"
 #endif
 
+#include "wx/math.h"
 #include "wx/mac/uma.h"
 
 #include "wx/mac/printmac.h"
 #include "wx/mac/private/print.h"
-
-#define mm2pt            2.83464566929
-#define pt2mm            0.352777777778
 
 #include "wx/dcprint.h"
 #include "wx/printdlg.h"
