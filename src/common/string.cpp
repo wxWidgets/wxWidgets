@@ -407,6 +407,20 @@ bool wxStringBase::Alloc(size_t nLen)
   //else: we've already got enough
   return TRUE;
 }
+  
+wxStringBase::iterator wxStringBase::begin()
+{
+    if (length() > 0)
+        CopyBeforeWrite();
+    return m_pchData;
+}
+
+wxStringBase::iterator wxStringBase::end()
+{
+    if (length() > 0)
+        CopyBeforeWrite();
+    return m_pchData + length();
+}
 
 wxStringBase::iterator wxStringBase::erase(iterator it)
 {

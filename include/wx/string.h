@@ -429,9 +429,9 @@ public:
   const_iterator end() const { return m_pchData + length(); }
 
   // first valid index position
-  iterator begin() { CopyBeforeWrite(); return m_pchData; }
+  iterator begin();
   // position one after the last valid one
-  iterator end() { CopyBeforeWrite(); return m_pchData + length(); }
+  iterator end();
 
     // insert another string
   wxStringBase& insert(size_t nPos, const wxStringBase& str)
