@@ -16,6 +16,8 @@
 #include "wx/wx.h"
 #endif
 
+#include "wx/fontutil.h"
+
 // Current cursor, in order to hang on to
 // cursor handle when setting the cursor globally
 wxCursor *g_globalCursor = NULL;

@@ -21,6 +21,7 @@
 #endif
 
 #include "wx/fontdlg.h"
+#include "wx/fontutil.h"
 
 #define INCL_PM
 #include <os2.h>
