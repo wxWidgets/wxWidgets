@@ -29,7 +29,7 @@ class TestPanel(wx.Panel):
         self.Bind(wx.EVT_BUTTON, self.OnOpenURLButton, btn)
         btnSizer.Add(btn, proportion=1, flag=wx.EXPAND|wx.ALL, border=5)
 
-         btnSizer.Add((50,-1), proportion=2, flag=wx.EXPAND)
+        btnSizer.Add((50,-1), proportion=2, flag=wx.EXPAND)
         sizer.Add(btnSizer, proportion=0, flag=wx.EXPAND)
 
         self.SetSizer(sizer)
