@@ -681,11 +681,14 @@ MOTIF_DIST: ALL_GUI_DIST
 	cp $(MOTIFDIR)/xmcombo/copying.txt $(DISTDIR)/src/motif/xmcombo
 
 MACX_DIST: ALL_GUI_DIST
+	cp $(INCDIR)/wx/*.* $(DISTDIR)/include/wx
 	cp $(INCDIR)/wx/mac/*.h $(DISTDIR)/include/wx/mac
 	cp $(SRCDIR)/*.mcp $(DISTDIR)/src
 	cp $(MACDIR)/files.lst $(DISTDIR)/src/mac
 	cp $(MACDIR)/*.cpp $(DISTDIR)/src/mac
 	cp $(MACDIR)/*.c $(DISTDIR)/src/mac
+	cp $(MACDIR)/*.h $(DISTDIR)/src/mac
+	cp $(MACDIR)/*.r $(DISTDIR)/src/mac
 	mkdir $(DISTDIR)/src/mac/morefile
 	cp $(MACDIR)/morefile/*.h $(DISTDIR)/src/mac/morefile
 	cp $(MACDIR)/morefile/*.c $(DISTDIR)/src/mac/morefile
