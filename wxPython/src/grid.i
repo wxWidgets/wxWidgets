@@ -1804,8 +1804,8 @@ public:
     const wxGridCellCoordsArray& GetSelectedCells() const;
     const wxGridCellCoordsArray& GetSelectionBlockTopLeft() const;
     const wxGridCellCoordsArray& GetSelectionBlockBottomRight() const;
-    const wxArrayInt& GetSelectedRows() const;
-    const wxArrayInt& GetSelectedCols() const;
+    const wxArrayInt GetSelectedRows() const;
+    const wxArrayInt GetSelectedCols() const;
 
 
     // This function returns the rectangle that encloses the block of cells

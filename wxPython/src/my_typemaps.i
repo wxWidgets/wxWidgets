@@ -313,7 +313,7 @@ $function
 }
 
 
-// Typemap to convert an array of ints to a list
+// Typemaps to convert an array of ints to a list
 %typemap(python, out) wxArrayInt& {
     $target = PyList_New(0);
     size_t idx;
@@ -322,6 +322,17 @@ $function
         PyList_Append($target, val);
         Py_DECREF(val);
     }
+}
+
+%typemap(python, out) wxArrayInt {
+    $target = PyList_New(0);
+    size_t idx;
+    for (idx = 0; idx < $source->GetCount(); idx += 1) {
+        PyObject* val = PyInt_FromLong($source->Item(idx));
+        PyList_Append($target, val);
+        Py_DECREF(val);
+    }
+    delete $source;
 }
 
 
