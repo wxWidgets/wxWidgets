@@ -133,7 +133,7 @@
                                   // Use wxStream implementation within wxWindows code
 
 #define wxUSE_SERIAL        0
-                                  // Use serialization
+                                  // Use serialization (requires utils/serialize)
 
 #define wxUSE_TOOLTIPS      0
                                   // Use tooltips

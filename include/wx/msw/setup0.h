@@ -138,6 +138,13 @@
                                   // but you can't mix them. Set to 1 for <iostream.h>,
                                   // 0 for <iostream>
 
+#define wxUSE_STREAMS       1
+                                  // If enabled (1), compiles wxWindows streams classes
+
+#define wxUSE_STD_IOSTREAM  1
+                                  // Use standard C++ streams if 1. If 0, use wxWin
+                                  // streams implementation.
+
 #define wxUSE_WXCONFIG      1
                                   // if enabled, compiles built-in OS independent wxConfig
                                   // class and it's file (any platform) and registry (Win)
@@ -152,10 +159,8 @@
                                   // Use PNG bitmap code
 #define wxUSE_LIBJPEG       0
                                   // Use JPEG bitmap code
-#define wxUSE_STD_IOSTREAM  1
-                                  // Use standard C++ streams if 1. If 0, use wxWin
-                                  // streams implementation.
-
+#define wxUSE_SERIAL        0
+                                  // Use serialization (requires utils/serialize)
 #define wxUSE_TOOLTIPS      1
                                   // Define to use wxToolTip class and
                                   // wxWindow::SetToolTip() method
