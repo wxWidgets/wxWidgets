@@ -1748,8 +1748,8 @@ static PyObject *_wrap_wxToolBarBase_AddCheckTool(PyObject *self, PyObject *args
     wxString * _arg2;
     wxBitmap * _arg3;
     wxBitmap * _arg4 = (wxBitmap *) &wxNullBitmap;
-    wxString * _arg5 = (wxString *) &wxEmptyString;
-    wxString * _arg6 = (wxString *) &wxEmptyString;
+    wxString * _arg5 = (wxString *) &wxPyEmptyString;
+    wxString * _arg6 = (wxString *) &wxPyEmptyString;
     PyObject * _arg7 = (PyObject *) NULL;
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
@@ -1842,8 +1842,8 @@ static PyObject *_wrap_wxToolBarBase_AddRadioTool(PyObject *self, PyObject *args
     wxString * _arg2;
     wxBitmap * _arg3;
     wxBitmap * _arg4 = (wxBitmap *) &wxNullBitmap;
-    wxString * _arg5 = (wxString *) &wxEmptyString;
-    wxString * _arg6 = (wxString *) &wxEmptyString;
+    wxString * _arg5 = (wxString *) &wxPyEmptyString;
+    wxString * _arg6 = (wxString *) &wxPyEmptyString;
     PyObject * _arg7 = (PyObject *) NULL;
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
@@ -1938,8 +1938,8 @@ static PyObject *_wrap_wxToolBarBase_InsertTool(PyObject *self, PyObject *args, 
     wxBitmap * _arg4;
     wxBitmap * _arg5 = (wxBitmap *) &wxNullBitmap;
     wxItemKind  _arg6 = (wxItemKind ) wxITEM_NORMAL;
-    wxString * _arg7 = (wxString *) &wxEmptyString;
-    wxString * _arg8 = (wxString *) &wxEmptyString;
+    wxString * _arg7 = (wxString *) &wxPyEmptyString;
+    wxString * _arg8 = (wxString *) &wxPyEmptyString;
     PyObject * _arg9 = (PyObject *) NULL;
     PyObject * _argo0 = 0;
     PyObject * _obj3 = 0;
@@ -2030,8 +2030,8 @@ static PyObject *_wrap_wxToolBarBase_InsertSimpleTool(PyObject *self, PyObject *
     wxString * _arg3;
     wxBitmap * _arg4;
     wxItemKind  _arg5 = (wxItemKind ) wxITEM_NORMAL;
-    wxString * _arg6 = (wxString *) &wxEmptyString;
-    wxString * _arg7 = (wxString *) &wxEmptyString;
+    wxString * _arg6 = (wxString *) &wxPyEmptyString;
+    wxString * _arg7 = (wxString *) &wxPyEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _obj3 = 0;
     PyObject * _argo4 = 0;
