@@ -51,6 +51,7 @@ bool MyApp::OnInit()
     dlg.SetAutoLayout(TRUE);
     dlg.SetSizer(sizer);
     sizer->Fit(&dlg);
+	dlg.Centre();
   
     dlg.ShowModal();
 
@@ -60,5 +61,5 @@ bool MyApp::OnInit()
         res << ar[i] << _T("\n");
     wxMessageBox(res);
     
-    return TRUE;
+    return FALSE;
 }
