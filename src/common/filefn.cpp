@@ -215,6 +215,18 @@ WXDLLEXPORT int wxOpen( const wxChar *pathname, int flags, mode_t mode )
 
 IMPLEMENT_DYNAMIC_CLASS(wxPathList, wxStringList)
 
+static inline wxChar* MYcopystring(const wxString& s)
+{
+    wxChar* copy = new wxChar[s.length() + 1];
+    return wxStrcpy(copy, s.c_str());
+}
+
+static inline wxChar* MYcopystring(const wxChar* s)
+{
+    wxChar* copy = new wxChar[wxStrlen(s) + 1];
+    return wxStrcpy(copy, s);
+}
+
 void wxPathList::Add (const wxString& path)
 {
     wxStringList::Add (WXSTRINGCAST path);
@@ -239,7 +251,7 @@ void wxPathList::AddEnvList (const wxString& envVariable)
     wxChar *val = wxGetenv (WXSTRINGCAST envVariable);
     if (val && *val)
     {
-        wxChar *s = copystring (val);
+        wxChar *s = MYcopystring (val);
         wxChar *save_ptr, *token = wxStrtok (s, PATH_TOKS, &save_ptr);
 
         if (token)
@@ -502,9 +514,9 @@ wxChar *wxCopyAbsolutePath(const wxString& filename)
         wxStrcat(buf, wxT("/"));
 #endif
     wxStrcat(buf, wxFileFunctionsBuffer);
-    return copystring( wxRealPath(buf) );
+    return MYcopystring( wxRealPath(buf) );
   }
-  return copystring( wxFileFunctionsBuffer );
+  return MYcopystring( wxFileFunctionsBuffer );
 }
 
 /*-
@@ -553,7 +565,7 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
     buf[0] = wxT('\0');
     if (name == NULL || *name == wxT('\0'))
         return buf;
-    nm = copystring(name); // Make a scratch copy
+    nm = MYcopystring(name); // Make a scratch copy
     wxChar *nm_tmp = nm;
 
     /* Skip leading whitespace and cr */
@@ -1385,7 +1397,7 @@ wxChar *wxGetTempFileName(const wxString& prefix, wxChar *buf)
     if ( buf )
         wxStrcpy(buf, filename);
     else
-        buf = copystring(filename);
+        buf = MYcopystring(filename);
 
     return buf;
 }

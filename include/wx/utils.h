@@ -57,7 +57,9 @@ class WXDLLIMPEXP_BASE wxPoint;
 // ----------------------------------------------------------------------------
 
 // Make a copy of this string using 'new'
+#if WXWIN_COMPATIBILITY_2_4
 WXDLLIMPEXP_BASE wxChar* copystring(const wxChar *s);
+#endif
 
 #if WXWIN_COMPATIBILITY_2
 // Matches string one within string two regardless of case

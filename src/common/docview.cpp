@@ -1988,6 +1988,18 @@ void wxDocPrintout::GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, in
 // File history processor
 // ----------------------------------------------------------------------------
 
+static inline wxChar* MYcopystring(const wxString& s)
+{
+    wxChar* copy = new wxChar[s.length() + 1];
+    return wxStrcpy(copy, s.c_str());
+}
+
+static inline wxChar* MYcopystring(const wxChar* s)
+{
+    wxChar* copy = new wxChar[wxStrlen(s) + 1];
+    return wxStrcpy(copy, s);
+}
+
 wxFileHistory::wxFileHistory(size_t maxFiles, wxWindowID idBase)
 {
     m_fileMaxFiles = maxFiles;
@@ -2058,7 +2070,7 @@ void wxFileHistory::AddFileToHistory(const wxString& file)
     {
         m_fileHistory[i] = m_fileHistory[i-1];
     }
-    m_fileHistory[0] = copystring(file);
+    m_fileHistory[0] = MYcopystring(file);
 
     // this is the directory of the last opened file
     wxString pathCurrent;
@@ -2187,7 +2199,7 @@ void wxFileHistory::Load(wxConfigBase& config)
     wxString historyFile;
     while ((m_fileHistoryN < m_fileMaxFiles) && config.Read(buf, &historyFile) && (historyFile != wxT("")))
     {
-        m_fileHistory[m_fileHistoryN] = copystring((const wxChar*) historyFile);
+        m_fileHistory[m_fileHistoryN] = MYcopystring((const wxChar*) historyFile);
         m_fileHistoryN ++;
         buf.Printf(wxT("file%d"), (int)m_fileHistoryN+1);
         historyFile = wxT("");

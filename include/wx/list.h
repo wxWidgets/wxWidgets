@@ -37,10 +37,6 @@
 #include "wx/object.h"
 #include "wx/string.h"
 
-// due to circular header dependencies this function has to be declared here
-// (normally it's found in utils.h which includes itself list.h...)
-extern WXDLLIMPEXP_BASE wxChar* copystring(const wxChar *s);
-
 class WXDLLIMPEXP_BASE wxObjectListNode;
 typedef wxObjectListNode wxNode;
 
@@ -568,12 +564,10 @@ public:
 
     // operations
         // makes a copy of the string
-    wxNode *Add(const wxChar *s)
-        { return (wxNode *)wxStringListBase::Append(copystring(s)); }
+    wxNode *Add(const wxChar *s);
         
         // Append to beginning of list
-    wxNode *Prepend(const wxChar *s)
-        { return (wxNode *)wxStringListBase::Insert(copystring(s)); }
+    wxNode *Prepend(const wxChar *s);
 
     bool Delete(const wxChar *s);
 

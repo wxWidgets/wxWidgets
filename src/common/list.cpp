@@ -35,7 +35,6 @@
 #ifndef WX_PRECOMP
     #include "wx/defs.h"
     #include "wx/list.h"
-    #include "wx/utils.h"   // for copystring() (beurk...)
 #endif
 
 // =============================================================================
@@ -572,9 +571,21 @@ void wxObjectListNode::DeleteData()
     delete (wxObject *)GetData();
 }
 
-// -----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // wxStringList
-// -----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+
+static inline wxChar* MYcopystring(const wxString& s)
+{
+    wxChar* copy = new wxChar[s.length() + 1];
+    return wxStrcpy(copy, s.c_str());
+}
+
+static inline wxChar* MYcopystring(const wxChar* s)
+{
+    wxChar* copy = new wxChar[wxStrlen(s) + 1];
+    return wxStrcpy(copy, s);
+}
 
 IMPLEMENT_DYNAMIC_CLASS(wxStringList, wxObject)
 
@@ -656,7 +667,7 @@ wxChar **wxStringList::ListToArray(bool new_copies) const
     {
         wxChar *s = node->GetData();
         if ( new_copies )
-            string_array[i] = copystring(s);
+            string_array[i] = MYcopystring(s);
         else
             string_array[i] = s;
         node = node->GetNext();
@@ -707,6 +718,16 @@ void wxStringList::Sort()
         node->SetData( array[i++] );
 
     delete [] array;
+}
+
+wxNode *wxStringList::Add(const wxChar *s)
+{
+    return (wxNode *)wxStringListBase::Append(MYcopystring(s));
+}
+        
+wxNode *wxStringList::Prepend(const wxChar *s)
+{
+    return (wxNode *)wxStringListBase::Insert(MYcopystring(s));
 }
 
 #endif // wxLIST_COMPATIBILITY
