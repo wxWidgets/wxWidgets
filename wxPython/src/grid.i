@@ -753,6 +753,7 @@ public:
     void base_SetSize(const wxRect& rect);
     void base_Show(bool show, wxGridCellAttr *attr = NULL);
     void base_PaintBackground(const wxRect& rectCell, wxGridCellAttr *attr);
+    void base_IsAcceptedKey(wxKeyEvent& event);
     void base_StartingKey(wxKeyEvent& event);
     void base_StartingClick();
     void base_HandleReturn(wxKeyEvent& event);
