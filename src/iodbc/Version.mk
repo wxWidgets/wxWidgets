@@ -1,2 +1,0 @@
-VERSION = 2.12
-EXTVER  = .0
