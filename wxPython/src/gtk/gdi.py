@@ -1077,6 +1077,13 @@ class Locale(object):
         except: pass
     def Init1(*args, **kwargs): return _gdi.Locale_Init1(*args, **kwargs)
     def Init2(*args, **kwargs): return _gdi.Locale_Init2(*args, **kwargs)
+    def Init(self, *_args, **_kwargs):
+        if type(_args[0]) in [type(''), type(u'')]:
+            val = self.Init1(*_args, **_kwargs)
+        else:
+            val = self.Init2(*_args, **_kwargs)
+        return val
+
     GetSystemLanguage = staticmethod(_gdi.Locale_GetSystemLanguage)
     GetSystemEncoding = staticmethod(_gdi.Locale_GetSystemEncoding)
     GetSystemEncodingName = staticmethod(_gdi.Locale_GetSystemEncodingName)
@@ -1181,7 +1188,7 @@ if wx.Platform == "__WXGTK__":
 if wx.Platform == "__WXMSW__":
     import os
     localedir = os.path.join(os.path.split(__file__)[0], "locale")
-    wx.Locale_AddCatalogLookupPathPrefix(localedir)
+    Locale_AddCatalogLookupPathPrefix(localedir)
     del os
 
 #----------------------------------------------------------------------------
@@ -1603,6 +1610,61 @@ _gdi.PostScriptDC_swigregister(PostScriptDCPtr)
 PostScriptDC_SetResolution = _gdi.PostScriptDC_SetResolution
 
 PostScriptDC_GetResolution = _gdi.PostScriptDC_GetResolution
+
+#---------------------------------------------------------------------------
+
+class MetaFile(core.Object):
+    def __init__(self, *args, **kwargs):
+        newobj = _gdi.new_MetaFile(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxMetaFile instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+
+class MetaFilePtr(MetaFile):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = MetaFile
+_gdi.MetaFile_swigregister(MetaFilePtr)
+
+class MetaFileDC(DC):
+    def __init__(self, *args, **kwargs):
+        newobj = _gdi.new_MetaFileDC(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxMetaFileDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+
+class MetaFileDCPtr(MetaFileDC):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = MetaFileDC
+_gdi.MetaFileDC_swigregister(MetaFileDCPtr)
+
+class PrinterDC(DC):
+    def __init__(self, *args, **kwargs):
+        newobj = _gdi.new_PrinterDC(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxPrinterDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+
+class PrinterDCPtr(PrinterDC):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = PrinterDC
+_gdi.PrinterDC_swigregister(PrinterDCPtr)
+
+def PrinterDC2(*args, **kwargs):
+    val = _gdi.new_PrinterDC2(*args, **kwargs)
+    val.thisown = 1
+    return val
 
 #---------------------------------------------------------------------------
 

@@ -187,6 +187,8 @@ StartTimer = _misc.StartTimer
 GetOsVersion = _misc.GetOsVersion
 
 GetOsDescription = _misc.GetOsDescription
+
+GetFreeMemory = _misc.GetFreeMemory
 SHUTDOWN_POWEROFF = _misc.SHUTDOWN_POWEROFF
 SHUTDOWN_REBOOT = _misc.SHUTDOWN_REBOOT
 
@@ -267,6 +269,8 @@ GenericFindWindowAtPoint = _misc.GenericFindWindowAtPoint
 FindWindowAtPoint = _misc.FindWindowAtPoint
 
 GetTopLevelParent = _misc.GetTopLevelParent
+
+WakeUpMainThread = _misc.WakeUpMainThread
 
 MutexGuiEnter = _misc.MutexGuiEnter
 
@@ -596,10 +600,12 @@ TRACE_MemAlloc = _misc.TRACE_MemAlloc
 TRACE_Messages = _misc.TRACE_Messages
 TRACE_ResAlloc = _misc.TRACE_ResAlloc
 TRACE_RefCount = _misc.TRACE_RefCount
+TRACE_OleCalls = _misc.TRACE_OleCalls
 TraceMemAlloc = _misc.TraceMemAlloc
 TraceMessages = _misc.TraceMessages
 TraceResAlloc = _misc.TraceResAlloc
 TraceRefCount = _misc.TraceRefCount
+TraceOleCalls = _misc.TraceOleCalls
 class Log(object):
     def __init__(self, *args, **kwargs):
         newobj = _misc.new_Log(*args, **kwargs)
@@ -2194,6 +2200,22 @@ class URLDataObjectPtr(URLDataObject):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = URLDataObject
 _misc.URLDataObject_swigregister(URLDataObjectPtr)
+
+class MetafileDataObject(DataObjectSimple):
+    def __init__(self, *args, **kwargs):
+        newobj = _misc.new_MetafileDataObject(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxMetafileDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+
+class MetafileDataObjectPtr(MetafileDataObject):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = MetafileDataObject
+_misc.MetafileDataObject_swigregister(MetafileDataObjectPtr)
 
 #---------------------------------------------------------------------------
 

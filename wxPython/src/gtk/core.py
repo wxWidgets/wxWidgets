@@ -1927,11 +1927,6 @@ EVT_IDLE = wx.PyEventBinder( wxEVT_IDLE )
 EVT_UPDATE_UI = wx.PyEventBinder( wxEVT_UPDATE_UI, 1)
 EVT_UPDATE_UI_RANGE = wx.PyEventBinder( wxEVT_UPDATE_UI, 2)
 
-// EVT_HELP = wx.PyEventBinder( wxEVT_HELP, 1)
-// EVT_HELP_RANGE = wx.PyEventBinder( wxEVT_HELP, 2)
-// EVT_DETAILED_HELP = wx.PyEventBinder( wxEVT_DETAILED_HELP, 1)
-// EVT_DETAILED_HELP_RANGE = wx.PyEventBinder( wxEVT_DETAILED_HELP, 2)
-
 EVT_CONTEXT_MENU = wx.PyEventBinder( wxEVT_CONTEXT_MENU )
 
 
@@ -2740,8 +2735,6 @@ _core.WindowDestroyEvent_swigregister(WindowDestroyEventPtr)
 
 #---------------------------------------------------------------------------
 
-#---------------------------------------------------------------------------
-
 class ContextMenuEvent(CommandEvent):
     def __init__(self, *args, **kwargs):
         newobj = _core.new_ContextMenuEvent(*args, **kwargs)
@@ -2902,6 +2895,7 @@ class PyApp(EvtHandler):
     SetMacExitMenuItemId = staticmethod(_core.PyApp_SetMacExitMenuItemId)
     SetMacHelpMenuTitleName = staticmethod(_core.PyApp_SetMacHelpMenuTitleName)
     def _BootstrapApp(*args, **kwargs): return _core.PyApp__BootstrapApp(*args, **kwargs)
+    GetComCtl32Version = staticmethod(_core.PyApp_GetComCtl32Version)
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyApp instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
 
@@ -2935,6 +2929,8 @@ PyApp_SetMacPreferencesMenuItemId = _core.PyApp_SetMacPreferencesMenuItemId
 PyApp_SetMacExitMenuItemId = _core.PyApp_SetMacExitMenuItemId
 
 PyApp_SetMacHelpMenuTitleName = _core.PyApp_SetMacHelpMenuTitleName
+
+PyApp_GetComCtl32Version = _core.PyApp_GetComCtl32Version
 
 #---------------------------------------------------------------------------
 
@@ -3089,9 +3085,7 @@ App_SetMacAboutMenuItemId        = _core.PyApp_SetMacAboutMenuItemId
 App_SetMacPreferencesMenuItemId  = _core.PyApp_SetMacPreferencesMenuItemId
 App_SetMacExitMenuItemId         = _core.PyApp_SetMacExitMenuItemId
 App_SetMacHelpMenuTitleName      = _core.PyApp_SetMacHelpMenuTitleName
-
-if wx.Platform == '__WXMSW__':
-    App_GetComCtl32Version       = _core.PyApp_GetComCtl32Version
+App_GetComCtl32Version           = _core.PyApp_GetComCtl32Version
 
 #----------------------------------------------------------------------------
 
@@ -3339,6 +3333,17 @@ class Window(EvtHandler):
     def GetSizer(*args, **kwargs): return _core.Window_GetSizer(*args, **kwargs)
     def SetContainingSizer(*args, **kwargs): return _core.Window_SetContainingSizer(*args, **kwargs)
     def GetContainingSizer(*args, **kwargs): return _core.Window_GetContainingSizer(*args, **kwargs)
+    def PostCreate(self, pre):
+        """Phase 3 of the 2-phase create <wink!>
+           Call this method after precreating the window with the 2-phase create method."""
+        self.this = pre.this
+        self.thisown = pre.thisown
+        pre.thisown = 0
+        if hasattr(self, '_setOORInfo'):
+            self._setOORInfo(self)
+        if hasattr(self, '_setCallbackInfo'):
+            self._setCallbackInfo(self, self.__class__)
+
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
 
@@ -3383,6 +3388,8 @@ FindWindowById = _core.FindWindowById
 FindWindowByName = _core.FindWindowByName
 
 FindWindowByLabel = _core.FindWindowByLabel
+
+Window_FromHWND = _core.Window_FromHWND
 #---------------------------------------------------------------------------
 
 class Validator(EvtHandler):

@@ -240,7 +240,7 @@ _windows.Dialog_swigregister(DialogPtr)
 def PreDialog(*args, **kwargs):
     val = _windows.new_PreDialog(*args, **kwargs)
     val.thisown = 1
-    val._setOORInfo(self)
+    
     return val
 
 #---------------------------------------------------------------------------

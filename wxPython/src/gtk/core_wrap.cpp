@@ -314,7 +314,10 @@ static swig_type_info *swig_types[114];
 #include <wx/hashmap.h>
 WX_DECLARE_STRING_HASH_MAP( swig_type_info*, wxPyTypeInfoHashMap );
 
- 
+
+// Maintains a hashmap of className to swig_type_info pointers.  Given the
+// name of a class either looks up the type info in the cache, or scans the
+// SWIG tables for it.
 static
 swig_type_info* wxPyFindSwigType(const wxChar* className) {
 
@@ -896,6 +899,7 @@ wxPyApp *new_wxPyApp(){
             wxPythonApp = new wxPyApp();
             return wxPythonApp;
         }
+int PyApp_GetComCtl32Version(){ PyErr_SetNone(PyExc_NotImplementedError); }
 
     void wxApp_CleanUp() {
         __wxPyCleanup();
@@ -939,6 +943,19 @@ wxWindow* wxFindWindowByLabel( const wxString& label,
                                const wxWindow *parent = NULL ) {
     return wxWindow::FindWindowByLabel(label, parent);
 }
+
+
+    wxWindow* wxWindow_FromHWND(unsigned long hWnd) {
+#ifdef __WXMSW__
+        wxWindow* win = new wxWindow;
+        win->SetHWND(hWnd);
+        win->SubclassWin(hWnd);
+        return win;
+#else
+        PyErr_SetNone(PyExc_NotImplementedError);
+        return NULL;
+#endif
+    }
 
 
 IMP_PYCALLBACK_BOOL_WXWIN(wxPyValidator, wxValidator, Validate);
@@ -1004,28 +1021,48 @@ void wxSizer__Add(wxSizer *self,PyObject *item,int proportion,int flag,int borde
             // instead.  This can be removed eventually.
             if (option != -1) proportion = option;
 
-            wxWindow* window;
-            wxSizer*  sizer;
+            wxWindow* window = NULL;
+            wxSizer*  sizer = NULL;
+            bool      gotSize = false;
             wxSize    size;
             wxSize*   sizePtr = &size;
             wxPyUserData* data = NULL;
-            if (userData) data = new wxPyUserData(userData);
 
-            // Find out what type the item is and call the real Add method
-            if ( wxPyConvertSwigPtr(item, (void**)&window, wxT("wxWindow")) )
+            wxPyBeginBlockThreads();
+
+            // Find out what the type of the item is
+            // try wxWindow
+            if ( ! wxPyConvertSwigPtr(item, (void**)&window, wxT("wxWindow")) ) {
+                PyErr_Clear();
+                window = NULL;
+                
+                // try wxSizer
+                if ( ! wxPyConvertSwigPtr(item, (void**)&sizer, wxT("wxSizer")) ) {
+                    PyErr_Clear();
+                    sizer = NULL;
+                    
+                    // try wxSize or (w,h)
+                    if ( ! wxSize_helper(item, &sizePtr))
+                        PyErr_SetString(PyExc_TypeError,
+                                        "wxWindow, wxSizer, wxSize, or (w,h) expected for item");
+                    else
+                        gotSize = true;
+                }
+            }
+
+            if ( userData && (window || sizer || gotSize) )
+                data = new wxPyUserData(userData);
+
+            wxPyEndBlockThreads();
+            
+            // Now call the real Add method if a valid item type was found
+            if ( window )
                 self->Add(window, proportion, flag, border, data);
-
-            else if ( wxPyConvertSwigPtr(item, (void**)&sizer, wxT("wxSizer")) )
+            else if ( sizer )
                 self->Add(sizer, proportion, flag, border, data);
-
-            else if (wxSize_helper(item, &sizePtr))
+            else if (gotSize)
                 self->Add(sizePtr->GetWidth(), sizePtr->GetHeight(),
                           proportion, flag, border, data);
-            else {
-                if (data) delete data;
-                PyErr_SetString(PyExc_TypeError,
-                                "wxWindow, wxSizer, wxSize, or (w,h) expected for item");
-            }
         }
 void wxSizer__Insert(wxSizer *self,int before,PyObject *item,int proportion,int flag,int border,PyObject *userData,int option){
             // The option parameter is only for backwards compatibility
@@ -18310,6 +18347,28 @@ static PyObject *_wrap_PyApp__BootstrapApp(PyObject *self, PyObject *args, PyObj
 }
 
 
+static PyObject *_wrap_PyApp_GetComCtl32Version(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    int result;
+    char *kwnames[] = {
+        NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":PyApp_GetComCtl32Version",kwnames)) goto fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)PyApp_GetComCtl32Version();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = PyInt_FromLong((long)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * PyApp_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -24067,6 +24126,34 @@ static PyObject *_wrap_FindWindowByLabel(PyObject *self, PyObject *args, PyObjec
         if (temp1)
         delete arg1;
     }
+    return NULL;
+}
+
+
+static PyObject *_wrap_Window_FromHWND(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    unsigned long arg1 ;
+    wxWindow *result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "hWnd", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Window_FromHWND",kwnames,&obj0)) goto fail;
+    arg1 = (unsigned long) PyInt_AsLong(obj0);
+    if (PyErr_Occurred()) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxWindow *)wxWindow_FromHWND(arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = wxPyMake_wxObject(result); 
+    }
+    return resultobj;
+    fail:
     return NULL;
 }
 
@@ -32866,6 +32953,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PyApp_SetMacExitMenuItemId", (PyCFunction) _wrap_PyApp_SetMacExitMenuItemId, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyApp_SetMacHelpMenuTitleName", (PyCFunction) _wrap_PyApp_SetMacHelpMenuTitleName, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyApp__BootstrapApp", (PyCFunction) _wrap_PyApp__BootstrapApp, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_GetComCtl32Version", (PyCFunction) _wrap_PyApp_GetComCtl32Version, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyApp_swigregister", PyApp_swigregister, METH_VARARGS },
 	 { (char *)"Exit", (PyCFunction) _wrap_Exit, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Yield", (PyCFunction) _wrap_Yield, METH_VARARGS | METH_KEYWORDS },
@@ -33063,6 +33151,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"FindWindowById", (PyCFunction) _wrap_FindWindowById, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"FindWindowByName", (PyCFunction) _wrap_FindWindowByName, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"FindWindowByLabel", (PyCFunction) _wrap_FindWindowByLabel, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_FromHWND", (PyCFunction) _wrap_Window_FromHWND, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_Validator", (PyCFunction) _wrap_new_Validator, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Validator_Clone", (PyCFunction) _wrap_Validator_Clone, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Validator_Validate", (PyCFunction) _wrap_Validator_Validate, METH_VARARGS | METH_KEYWORDS },

@@ -1523,9 +1523,11 @@ class ListEvent(core.NotifyEvent):
     m_pointDrag = property(_controls.ListEvent_m_pointDrag_get, _controls.ListEvent_m_pointDrag_set)
     m_item = property(_controls.ListEvent_m_item_get)
     def GetKeyCode(*args, **kwargs): return _controls.ListEvent_GetKeyCode(*args, **kwargs)
+    GetCode = GetKeyCode 
     def GetIndex(*args, **kwargs): return _controls.ListEvent_GetIndex(*args, **kwargs)
     def GetColumn(*args, **kwargs): return _controls.ListEvent_GetColumn(*args, **kwargs)
     def GetPoint(*args, **kwargs): return _controls.ListEvent_GetPoint(*args, **kwargs)
+    GetPostiion = GetPoint 
     def GetLabel(*args, **kwargs): return _controls.ListEvent_GetLabel(*args, **kwargs)
     def GetText(*args, **kwargs): return _controls.ListEvent_GetText(*args, **kwargs)
     def GetImage(*args, **kwargs): return _controls.ListEvent_GetImage(*args, **kwargs)
