@@ -1012,15 +1012,28 @@ void wxTreeCtrl::SetItemImage(const wxTreeItemId& item, int image,
         return;
     }
 
-    int imageNormal, imageSel;
+    int imageNormal,
+        imageSel;
+
     switch ( which )
     {
         default:
             wxFAIL_MSG( wxT("unknown tree item image type") );
+            // fall through
 
         case wxTreeItemIcon_Normal:
-            imageNormal = image;
-            imageSel = GetItemSelectedImage(item);
+            {
+                const int imageNormalOld = GetItemImage(item);
+                const int imageSelOld = GetItemSelectedImage(item);
+
+                // always set the normal image
+                imageNormal = image;
+
+                // if the selected and normal images were the same, they should
+                // be the same after the update, otherwise leave the selected
+                // image as it was
+                imageSel = imageNormalOld == imageSelOld ? image : imageSelOld;
+            }
             break;
 
         case wxTreeItemIcon_Selected:
