@@ -171,15 +171,13 @@ void wxApp::HandleSockets()
         int i;
         struct GsocketCallbackInfo
           *CallbackInfo = (struct GsocketCallbackInfo *)m_sockCallbackInfo;
-        int r = 0;
         timeout.tv_sec = 0;
         timeout.tv_usec = 0;
         if ( select(m_maxSocketNr, &readfds, &writefds, 0, &timeout) > 0)
         {
-            for (i = m_lastUsedHandle + 1; i != m_lastUsedHandle; i++)
+            for (i = m_lastUsedHandle + 1; i != m_lastUsedHandle;
+                 (i < m_maxSocketNr - 1) ? i++ : (i = 0))
             {
-                if (i == m_maxSocketNr)
-                    i = 0;
                 if (FD_ISSET(i, &readfds))
                 {
                     int r;
@@ -192,7 +190,6 @@ void wxApp::HandleSockets()
                     {
                         CallbackInfo[r].proc(CallbackInfo[r].gsock);
                         pendingEvent = TRUE;
-                        wxYield();
                     }
                 }
                 if (FD_ISSET(i, &writefds))
@@ -206,14 +203,13 @@ void wxApp::HandleSockets()
                     {
                         CallbackInfo[r].proc(CallbackInfo[r].gsock);
                         pendingEvent = TRUE;
-                        wxYield();
                     }
                 }
             }
             m_lastUsedHandle = i;
         }
         if (pendingEvent)
-            wxYield();
+            ProcessPendingEvents();
     }
 }
 // ---------------------------------------------------------------------------
@@ -827,7 +823,6 @@ void wxApp::DoMessage(
 int wxApp::MainLoop()
 {
     m_bKeepGoing = TRUE;
-
     while (m_bKeepGoing)
     {
 #if wxUSE_THREADS
@@ -1165,6 +1160,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
     if (wxTheApp)
         wxTheApp->ProcessPendingEvents();
 
+    HandleSockets();
     //
     // Let the logs be flashed again
     //
