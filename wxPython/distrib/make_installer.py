@@ -79,6 +79,7 @@ Source: "wxPython\*.py";                    DestDir: "{app}\wxPython"; Component
 Source: "wxPython\lib\*.py";                DestDir: "{app}\wxPython\lib"; Components: core
 Source: "wxPython\lib\editor\*.py";         DestDir: "{app}\wxPython\lib\editor"; Components: core
 Source: "wxPython\lib\editor\*.txt";        DestDir: "{app}\wxPython\lib\editor"; Components: core
+Source: "wxPython\lib\mixins\*.py";         DestDir: "{app}\wxPython\lib\mixins"; Components: core
 
 Source: "demo\*.py";                        DestDir: "{app}\wxPython\demo"; Components: demo
 Source: "demo\*.xml";                       DestDir: "{app}\wxPython\demo"; Components: demo

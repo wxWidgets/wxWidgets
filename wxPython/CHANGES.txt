@@ -111,6 +111,13 @@ Fixed the __cmp__ methods for wxPoiunt and others.
 
 Added wxWave.
 
+Added the wxPython.lib.mixins package to the library, it is where
+useful mix-in classes can be placed.  Currently there is one to help
+makeing the columns in a wxListCtrl sortable, and the MagicIMageList
+from Mike Fletcher.  If you have any custom code that can be factored
+out of existing classes into a mix-in that would be useful to others
+please send it to me for inclusion in this package.
+
 
 
 

@@ -46,6 +46,7 @@ include wxPython/lib/*.py
 include wxPython/lib/*.txt
 include wxPython/lib/editor/*.py
 include wxPython/lib/editor/*.txt
+include wxPython/lib/mixins/*.py
 
 exclude wxPython/*
 exclude tests
