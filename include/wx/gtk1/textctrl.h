@@ -227,7 +227,7 @@ private:
 #endif
 
     DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS(wxTextCtrl);
+    DECLARE_DYNAMIC_CLASS(wxTextCtrl)
 };
 
 #endif // __GTKTEXTCTRLH__

@@ -48,6 +48,7 @@ OBJECTS = \
 		appcmn.obj,\
 		artprov.obj,\
 		artstd.obj,\
+		bmpbase.obj,\
 		bookctrl.obj,\
 		choiccmn.obj,\
 		clipcmn.obj,\
@@ -175,9 +176,9 @@ OBJECTS2=utilscmn.obj,\
 		zipstrm.obj,\
 		zstream.obj
 
-OBJECTS_MOTIF=bmpbase.obj,gaugecmn.obj
+OBJECTS_MOTIF=gaugecmn.obj
 
-OBJECTS_X11=accesscmn.obj,bmpbase.obj,dndcmn.obj,dpycmn.obj,dseldlg.obj,\
+OBJECTS_X11=accesscmn.obj,dndcmn.obj,dpycmn.obj,dseldlg.obj,\
 	dynload.obj,effects.obj,fddlgcmn.obj,fs_mem.obj,gaugecmn.obj,\
 	gbsizer.obj,geometry.obj,matrix.obj,radiocmn.obj,\
 	regex.obj,taskbarcmn.obj,xti.obj,xtistrm.obj,xtixml.obj

@@ -63,7 +63,7 @@ public:
         { return !(*this == icon); }
 
 
-    DECLARE_DYNAMIC_CLASS(wxIcon);
+    DECLARE_DYNAMIC_CLASS(wxIcon)
 };
 
 #endif // _WX_ICON_H_
