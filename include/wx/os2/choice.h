@@ -66,9 +66,6 @@ class WXDLLEXPORT wxChoice: public wxControl
 
 protected:
   int m_noStrings;
-
-private:
-  void SetSize(int width, int height) {wxWindow::SetSize(width, height);}
 };
 
 #endif

@@ -174,7 +174,10 @@ class WXDLLEXPORT name : public wxBaseArray                         \
 {                                                                   \
 public:                                                             \
   name()                                                            \
-    { wxASSERT( sizeof(T) <= sizeof(long) ); }                      \
+  { size_t type = sizeof(T);                                        \
+    size_t sizelong = sizeof(long);                                 \
+    wxASSERT( type <= sizelong );                                   \
+  }                                                                 \
                                                                     \
   name& operator=(const name& src)                                  \
     { wxBaseArray* temp = (wxBaseArray*) this;                      \
@@ -232,7 +235,11 @@ class WXDLLEXPORT name : public wxBaseArray                         \
 {                                                                   \
 public:                                                             \
   name(SCMPFUNC##T fn)                                              \
-    { wxASSERT( sizeof(T) <= sizeof(long) ); m_fnCompare = fn; }    \
+  { size_t type = sizeof(T);                                        \
+    size_t sizelong = sizeof(long);                                 \
+    wxASSERT( type <= sizelong );                                   \
+    m_fnCompare = fn;                                               \
+  }                                                                 \
                                                                     \
   name& operator=(const name& src)                                  \
     { wxBaseArray* temp = (wxBaseArray*) this;                      \

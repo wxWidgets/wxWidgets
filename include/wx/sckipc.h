@@ -52,7 +52,7 @@ class wxTCPClient;
 class wxTCPConnection: public wxConnectionBase
 {
   DECLARE_DYNAMIC_CLASS(wxTCPConnection)
-  
+
 protected:
   wxSocketBase *m_sock;
   wxSocketStream *m_sockstrm;
@@ -94,6 +94,9 @@ public:
 
   // To enable the compressor
   void Compress(bool on);
+private:
+  // to prevent virtual function hiding warnings
+  virtual bool Execute(const wxString& str) { return(wxConnectionBase::Execute(str)); };
 };
 
 class wxTCPServer: public wxServerBase
@@ -105,9 +108,9 @@ public:
 
   wxTCPServer();
   virtual ~wxTCPServer();
-  
+
   // Returns FALSE if can't create server (e.g. port number is already in use)
-  virtual bool Create(const wxString& server_name); 
+  virtual bool Create(const wxString& server_name);
   virtual wxConnectionBase *OnAcceptConnection(const wxString& topic);
 };
 
@@ -115,7 +118,7 @@ class wxTCPClient: public wxClientBase
 {
   DECLARE_DYNAMIC_CLASS(wxTCPClient)
 
-public: 
+public:
   wxTCPClient();
   virtual ~wxTCPClient();
 
@@ -125,7 +128,7 @@ public:
   virtual wxConnectionBase *MakeConnection(const wxString& host,
                                            const wxString& server,
                                            const wxString& topic);
-  
+
   // Tailor this to return own connection.
   virtual wxConnectionBase *OnMakeConnection();
 };

@@ -1420,6 +1420,27 @@ typedef void *          WXDRAWITEMSTRUCT;
 typedef void *          WXMEASUREITEMSTRUCT;
 typedef void *          WXLPCREATESTRUCT;
 
+#if defined(__WXPM__)
+typedef unsigned long   WXMPARAM;
+typedef unsigned long   WXMSGID;
+typedef void*           WXRESULT;
+typedef int             (*WXFARPROC)();
+// some windows handles not defined by PM
+typedef unsigned long   HANDLE;
+typedef unsigned long   HICON;
+typedef unsigned long   HFONT;
+typedef unsigned long   HMENU;
+typedef unsigned long   HPEN;
+typedef unsigned long   HBRUSH;
+typedef unsigned long   HPALETTE;
+typedef unsigned long   HCURSOR;
+typedef unsigned long   HINSTANCE;
+typedef unsigned long   HIMAGELIST;
+typedef unsigned long   HGLOBAL;
+typedef unsigned long   DWORD;
+typedef unsigned short  WORD;
+#endif
+
 #if defined(__GNUWIN32__) || defined(__WXWINE__)
     typedef int (*WXFARPROC)();
 #elif defined(__WIN32__)

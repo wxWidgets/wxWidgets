@@ -178,6 +178,8 @@ private:
 
 #if defined(__WXMSW__)
     #include "wx/msw/caret.h"
+#elif  defined(__WXPM__)
+    #include "wx/os2/caret.h"
 #else
     #include "wx/generic/caret.h"
 #endif // platform

@@ -49,8 +49,6 @@ public:
   wxIcon(const char bits[], int width, int height);
   wxIcon(const wxString& name, long flags = wxBITMAP_TYPE_ICO_RESOURCE,
     int desiredWidth = -1, int desiredHeight = -1);
-  wxIcon( char **bits, int width=-1, int height=-1 );
-
   ~wxIcon();
 
   bool LoadFile(const wxString& name, long flags = wxBITMAP_TYPE_ICO_RESOURCE,
@@ -68,9 +66,11 @@ public:
 /* TODO */
   virtual bool Ok() const { return (m_refData != NULL) ; }
 private:
-  // supress VisAge hiding warning
-  bool LoadFile(const wxString& name, long type = wxBITMAP_TYPE_BMP_RESOURCE)
-  { return(wxBitmap::LoadFile(name, type)); }
+  // supress virtual function hiding warning
+  virtual bool LoadFile( const wxString& name
+                        ,long type = wxBITMAP_TYPE_BMP_RESOURCE
+                       )
+   { return(wxBitmap::LoadFile(name, type)); };
 };
 
 /* Example handlers. TODO: write your own handlers for relevant types.

@@ -63,8 +63,6 @@ class WXDLLEXPORT wxGauge: public wxControl
  protected:
    int      m_rangeMax;
    int      m_gaugePos;
-private:
-  void SetSize(int width, int height) {wxWindow::SetSize(width, height);}
 };
 
 #endif

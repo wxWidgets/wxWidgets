@@ -29,6 +29,12 @@
 #pragma interface "list.h"
 #endif
 
+#ifdef __WXPM__
+#define LINKAGEMODE _Optlink
+#else
+#define LINKAGEMODE
+#endif
+
 // -----------------------------------------------------------------------------
 // headers
 // -----------------------------------------------------------------------------
@@ -65,10 +71,10 @@ enum wxKeyType
 // type of compare function for list sort operation (as in 'qsort'): it should
 // return a negative value, 0 or positive value if the first element is less
 // than, equal or greater than the second
-typedef int (*wxSortCompareFunction)(const void *elem1, const void *elem2);
+typedef int (* LINKAGEMODE wxSortCompareFunction)(const void *elem1, const void *elem2);
 
 //
-typedef int (*wxListIterateFunction)(void *current);
+typedef int (* LINKAGEMODE wxListIterateFunction)(void *current);
 
 // -----------------------------------------------------------------------------
 // key stuff: a list may be optionally keyed on integer or string key

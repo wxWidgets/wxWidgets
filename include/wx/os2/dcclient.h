@@ -90,22 +90,15 @@ class WXDLLEXPORT wxWindowDC: public wxDC
 
     virtual void DrawSpline( wxList *points );
 private:
-    // VisualAge function hiding warning supression
-    void DrawEllipticArc (const wxPoint& pt, const wxSize& sz, double sa, double ea)
-    { wxDC::DrawEllipticArc(pt, sz, sa, ea); }
-    void DrawPoint( wxPoint& point )
-    { wxDC::DrawPoint(point); }
-    void DrawSpline( long x1, long y1, long x2, long y2, long x3, long y3 )
-    { DrawSpline(x1, y1, x2, y2, x3, y3); }
-    void DrawSpline( int n, wxPoint points[] )
-    { DrawSpline(n, points); }
-    void GetTextExtent( const wxString &string, long *width, long *height,
-                     long *descent = NULL, long *externalLeading = NULL,
-                     wxFont *theFont = NULL ) const
-     { GetTextExtent( string, width, height, descent, externalLeading, theFont); };
-     // these next two are ridiculous! the only difference is the const
-    long GetCharWidth(void) const {return(GetCharWidth());};
-    long GetCharHeight(void) const {return(GetCharHeight());};
+    void DrawEllipticArc(const wxPoint& pt, const wxSize& sz,
+                         double sa, double ea)
+    { wxDC::DrawEllipticArc(pt, sz, sa, ea); };
+    void DrawPoint(wxPoint& pt)
+    { wxDC:DrawPoint(pt); };
+    void DrawSpline(int n, wxPoint points[])
+    { wxDC::DrawSpline(n, points); };
+    void DrawSpline(long x1, long y1, long x2, long y2, long x3, long y3)
+    { wxDC::DrawSpline(x1, y1, x2, y2, x3, y3); };
 };
 
 //-----------------------------------------------------------------------------

@@ -159,7 +159,7 @@ class WXDLLEXPORT wxPropertyListView: public wxPropertyView
   inline virtual wxButton *GetWindowCloseButton() const { return m_windowCloseButton; }
   inline virtual wxButton *GetWindowCancelButton() const { return m_windowCancelButton; }
   inline virtual wxButton *GetHelpButton() const { return m_windowHelpButton; }
-  
+
   bool OnClose(void);
 
 public:
@@ -177,15 +177,18 @@ public:
 
   static wxBitmap*  sm_tickBitmap;
   static wxBitmap*  sm_crossBitmap;
-  
+
   wxPanel*          m_propertyWindow; // Panel that the controls will appear on
   wxWindow*         m_managedWindow; // Frame or dialog
-  
+
   wxButton*         m_windowCloseButton; // Or OK
   wxButton*         m_windowCancelButton;
   wxButton*         m_windowHelpButton;
 
 DECLARE_EVENT_TABLE()
+private:
+  virtual void ShowView(wxPropertySheet *propertySheet, wxWindow *window)
+  { wxPropertyView::ShowView(propertySheet, window); };
 };
 
 class WXDLLEXPORT wxPropertyTextEdit: public wxTextCtrl
@@ -206,7 +209,7 @@ class WXDLLEXPORT wxPropertyTextEdit: public wxTextCtrl
 /*
  * The type of validator used for property lists (Visual Basic style)
  */
- 
+
 class WXDLLEXPORT wxPropertyListValidator: public wxPropertyValidator
 {
   DECLARE_DYNAMIC_CLASS(wxPropertyListValidator)
@@ -221,7 +224,7 @@ class WXDLLEXPORT wxPropertyListValidator: public wxPropertyValidator
 
    // Called when the property is double clicked. Extra functionality can be provided, such as
    // cycling through possible values.
-   inline virtual bool OnDoubleClick( 
+   inline virtual bool OnDoubleClick(
      wxProperty *WXUNUSED(property), wxPropertyListView *WXUNUSED(view), wxWindow *WXUNUSED(parentWindow) )
      { return TRUE; }
 
@@ -268,7 +271,7 @@ class WXDLLEXPORT wxPropertyListValidator: public wxPropertyValidator
 /*
  * A default dialog box class to use.
  */
- 
+
 class WXDLLEXPORT wxPropertyListDialog: public wxDialog
 {
   DECLARE_CLASS(wxPropertyListDialog)
@@ -292,7 +295,7 @@ DECLARE_EVENT_TABLE()
 /*
  * A default panel class to use.
  */
- 
+
 class WXDLLEXPORT wxPropertyListPanel: public wxPanel
 {
   DECLARE_CLASS(wxPropertyListPanel)
@@ -325,7 +328,7 @@ DECLARE_EVENT_TABLE()
 /*
  * A default frame class to use.
  */
- 
+
 class WXDLLEXPORT wxPropertyListFrame: public wxFrame
 {
   DECLARE_CLASS(wxPropertyListFrame)
@@ -355,7 +358,7 @@ DECLARE_EVENT_TABLE()
 /*
  * Some default validators
  */
- 
+
 class WXDLLEXPORT wxRealListValidator: public wxPropertyListValidator
 {
   DECLARE_DYNAMIC_CLASS(wxRealListValidator)
@@ -472,7 +475,7 @@ class WXDLLEXPORT wxStringListValidator: public wxPropertyListValidator
  protected:
   wxStringList*     m_strings;
 };
- 
+
 class WXDLLEXPORT wxFilenameListValidator: public wxPropertyListValidator
 {
   DECLARE_DYNAMIC_CLASS(wxFilenameListValidator)
@@ -501,7 +504,7 @@ class WXDLLEXPORT wxFilenameListValidator: public wxPropertyListValidator
  protected:
   wxString  m_filenameWildCard;
   wxString  m_filenameMessage;
-  
+
 };
 
 class WXDLLEXPORT wxColourListValidator: public wxPropertyListValidator

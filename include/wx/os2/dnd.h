@@ -70,8 +70,55 @@ public:
 
 private:
     wxDataFormatId  m_type;
-    wxString        m_id;
+    wxString    m_id;
 };
+
+//-------------------------------------------------------------------------
+// wxDataBroker (internal)
+//-------------------------------------------------------------------------
+
+class wxDataBroker : public wxObject
+{
+  DECLARE_CLASS( wxDataBroker )
+
+public:
+
+  /* constructor */
+  wxDataBroker();
+
+  /* add data object */
+  void Add( wxDataObject *dataObject, bool preferred = FALSE );
+
+private:
+
+  /* OLE implementation, the methods don't need to be overridden */
+
+  /* get number of supported formats */
+  virtual size_t GetFormatCount() const;
+
+  /* return nth supported format */
+  virtual wxDataFormat &GetNthFormat( size_t nth ) const;
+
+  /* return preferrd/best supported format */
+  virtual wxDataFormatId GetPreferredFormat() const;
+
+  /* search through m_dataObjects, return TRUE if found */
+  virtual bool IsSupportedFormat( wxDataFormat &format ) const;
+
+  /* search through m_dataObjects and call child's GetSize() */
+  virtual size_t GetSize( wxDataFormat& format ) const;
+
+  /* search through m_dataObjects and call child's WriteData(dest) */
+  virtual void WriteData( wxDataFormat& format, void *dest ) const;
+
+  /* implementation */
+
+public:
+
+  wxList    m_dataObjects;
+  size_t    m_preferred;
+};
+
 //-------------------------------------------------------------------------
 // wxDataObject
 //-------------------------------------------------------------------------

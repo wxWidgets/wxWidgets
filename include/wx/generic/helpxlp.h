@@ -117,6 +117,8 @@ class WXDLLEXPORT wxXLPHelpController: public wxHelpControllerBase
   bool					helpRunning;
   wxXLPHelpConnection*	helpConnection;
   wxXLPHelpClient		helpClient;
+private:
+  virtual bool Initialize(const wxString& file) { return(wxHelpControllerBase::Initialize(file)); };
 };
 
 #endif // wxUSE_HELP

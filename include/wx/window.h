@@ -646,7 +646,7 @@ public:
         // get the haqndle of the window for the underlying window system: this
         // is only used for wxWin itself or for user code which wants to call
         // platform-specific APIs
-    virtual WXWidget GetHandle() const = 0;
+    virtual WXWidget GetHandle() const;
 
 protected:
     // the window id - a number which uniquely identifies a window among

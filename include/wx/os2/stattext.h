@@ -50,8 +50,6 @@ class WXDLLEXPORT wxStaticText: public wxControl
   // operations
   virtual void Command(wxCommandEvent& WXUNUSED(event)) {};
   virtual void ProcessCommand(wxCommandEvent& WXUNUSED(event)) {};
-private:
-  void SetSize(int width, int height) {wxWindow::SetSize(width, height);}
 };
 
 #endif

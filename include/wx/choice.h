@@ -104,6 +104,11 @@ private:
 
     // the type of the client data for the items
     wxClientDataType m_clientDataItemsType;
+    // the above pure virtuals hide these virtuals in wxWindowBase
+    virtual void DoSetClientData(void* clientData ) { wxWindowBase::DoSetClientData(clientData); };
+    virtual void* DoGetClientData() const { return(wxWindowBase::DoGetClientData()); };
+    virtual void DoSetClientObject( wxClientData* clientData ) { wxWindowBase::DoSetClientObject(clientData); };
+    virtual wxClientData* DoGetClientObject() const { return(wxWindowBase::DoGetClientObject()); };
 };
 
 // ----------------------------------------------------------------------------

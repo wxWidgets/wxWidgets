@@ -78,9 +78,8 @@ class WXDLLEXPORT wxBitmapButton: public wxButton
   int      m_marginX;
   int      m_marginY;
 private:
-  // Supress VisualAge's hidden functin warning
-  void SetLabel(const wxString& label)
-  { wxButton::SetLabel(label); }
+  virtual void SetLabel(const wxString& string)
+  { wxButton::SetLabel(string); };
 };
 
 #endif

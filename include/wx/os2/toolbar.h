@@ -62,7 +62,7 @@ class WXDLLEXPORT wxToolBar: public wxToolBarBase
 
   // Add all the buttons
   virtual bool CreateTools();
-  virtual bool Layout() {return TRUE;}
+  virtual bool Layout() { return TRUE; }
 
   // The post-tool-addition call. TODO: do here whatever's
   // necessary for completing the toolbar construction.

@@ -96,7 +96,7 @@ void process_command(char *);
 void syntax_error(char *);
 }
 #else
-#if __BORLANDC__
+#if defined(__BORLANDC__) || defined(__VISAGECPP__)
 char *proio_cons(char *, char *);
 char * wxmake_integer(char *);
 char * wxmake_word(char *);
@@ -107,6 +107,7 @@ char * wxmake_exp2(char *, char *, char*);
 void add_expr(char *);
 void process_command(char *);
 void syntax_error(char *);
+int  lex_input(void);
 #else
 char *proio_cons();
 char * wxmake_integer();

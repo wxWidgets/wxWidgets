@@ -128,8 +128,8 @@ public:
   virtual void Restore();
   virtual void Activate();
 private:
-  // Supress VA's hidden function warning
-  void Maximize(bool maximize) {wxFrame::Maximize(maximize);}
+  // supress virtual function hiding warning
+  virtual void Maximize(bool maximize) { wxFrame::Maximize(maximize); };
 };
 
 /* The client window is a child of the parent MDI frame, and itself

@@ -51,8 +51,6 @@ class WXDLLEXPORT wxStaticBox: public wxControl
   void SetLabel(const wxString& label);
 
 DECLARE_EVENT_TABLE()
-private:
-  void SetSize(int width, int height) {wxWindow::SetSize(width, height);}
 };
 
 #endif

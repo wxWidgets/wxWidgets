@@ -85,8 +85,6 @@ public:
   int           m_lineSize;
   int           m_tickFreq;
 DECLARE_EVENT_TABLE()
-private:
-  void SetSize(int width, int height) {wxWindow::SetSize(width, height);}
 };
 
 #endif

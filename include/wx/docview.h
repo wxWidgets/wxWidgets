@@ -96,6 +96,11 @@ public:
     virtual wxInputStream& LoadObject(wxInputStream& stream);
 #endif
 
+#if wxUSE_SERIAL
+    // need this to keep from hiding the virtual from wxObject
+    virtual void LoadObject(wxObjectInputStream& stream) { wxObject::LoadObject(stream); };
+#endif
+
     // Called by wxWindows
     virtual bool OnSaveDocument(const wxString& filename);
     virtual bool OnOpenDocument(const wxString& filename);

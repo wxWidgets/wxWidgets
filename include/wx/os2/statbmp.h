@@ -57,8 +57,7 @@ class WXDLLEXPORT wxStaticBitmap: public wxControl
 
  protected:
   wxBitmap m_messageBitmap;
-private:
-  void SetSize(int width, int height) {wxWindow::SetSize(width, height);}
+
 };
 
 #endif

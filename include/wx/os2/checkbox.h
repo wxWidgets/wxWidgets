@@ -47,8 +47,6 @@ class WXDLLEXPORT wxCheckBox: public wxControl
   virtual void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
   virtual void SetLabel(const wxString& label);
   virtual void Command(wxCommandEvent& event);
-private:
-  void SetSize(int width, int height) {wxWindow::SetSize(width, height);}
 };
 
 class WXDLLEXPORT wxBitmapCheckBox: public wxCheckBox
@@ -79,8 +77,8 @@ class WXDLLEXPORT wxBitmapCheckBox: public wxCheckBox
   virtual void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
   virtual void SetLabel(const wxBitmap& bitmap);
 private:
-  void SetSize(int width, int height) {wxWindow::SetSize(width, height);}
-  void SetLabel(const wxString& label) {wxCheckBox::SetLabel(label);}
+  virtual void SetLabel(const wxString& string)
+  { wxCheckBox::SetLabel(string); };
 };
 #endif
     // _WX_CHECKBOX_H_
