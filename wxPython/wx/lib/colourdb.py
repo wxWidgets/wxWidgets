@@ -668,5 +668,5 @@ def updateColourDB():
         for info in cl:
             wx.TheColourDatabase.Append(*info)
             
-         _haveUpdated = True
+        _haveUpdated = True
 
