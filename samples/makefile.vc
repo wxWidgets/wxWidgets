@@ -126,10 +126,6 @@ all:
         nmake -f makefile.vc $(MAKEFLAGS)
         cd $(WXDIR)\samples\resource
         nmake -f makefile.vc $(MAKEFLAGS)
-!if "$(COMPIL)"==""
-        cd $(WXDIR)\samples\richedit
-        nmake -f makefile.vc $(MAKEFLAGS)
-!endif
         cd $(WXDIR)\samples\rotate
         nmake -f makefile.vc $(MAKEFLAGS)
         cd $(WXDIR)\samples\sashtest
@@ -245,8 +241,6 @@ clean:
         cd $(WXDIR)\samples\regtest
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\resource
-        nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\richedit
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\rotate
         nmake -f makefile.vc clean

@@ -26,7 +26,6 @@ samples/help/Makefile.in
 samples/internat/Makefile.in
 samples/ipc/Makefile.in
 samples/png/Makefile.in
-samples/richedit/Makefile.in
 samples/resource/Makefile.in
 samples/sockets/Makefile.in
 samples/html/Makefile.in

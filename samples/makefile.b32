@@ -129,10 +129,6 @@ all:
         make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
         cd $(WXDIR)\samples\resource
         make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-!if "$(COMPIL)"==""
-        cd $(WXDIR)\samples\richedit
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-!endif
         cd $(WXDIR)\samples\rotate
         make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
         cd $(WXDIR)\samples\sashtest
@@ -166,8 +162,6 @@ all:
         cd $(WXDIR)\samples\dragimag
         make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
         cd $(WXDIR)\samples\exec
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\richedit
         make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
         cd $(WXDIR)\samples\statbar
         make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
@@ -269,8 +263,6 @@ clean:
         make -f makefile.b32 clean
         cd $(WXDIR)\samples\resource
         make -f makefile.b32 clean
-        cd $(WXDIR)\samples\richedit
-        make -f makefile.b32 clean
         cd $(WXDIR)\samples\rotate
         make -f makefile.b32 clean
         cd $(WXDIR)\samples\sashtest
@@ -308,8 +300,6 @@ clean:
         cd $(WXDIR)\samples\event
         make -f makefile.b32 clean
         cd $(WXDIR)\samples\statbar
-        make -f makefile.b32 clean
-        cd $(WXDIR)\samples\richedit
         make -f makefile.b32 clean
         cd $(WXDIR)\samples\propsize
         make -f makefile.b32 clean

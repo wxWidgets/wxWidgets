@@ -171,7 +171,7 @@ public:
     ~wxView();
 
     wxDocument *GetDocument() const { return m_viewDocument; }
-    void SetDocument(wxDocument *doc);
+    virtual void SetDocument(wxDocument *doc);
 
     wxString GetViewName() const { return m_viewTypeName; }
     void SetViewName(const wxString& name) { m_viewTypeName = name; };

@@ -594,7 +594,7 @@ bool wxView::Close(bool deleteWindow)
 
 void wxView::Activate(bool activate)
 {
-    if (GetDocumentManager())
+    if (GetDocument() && GetDocumentManager())
     {
         OnActivateView(activate, this, GetDocumentManager()->GetCurrentView());
         GetDocumentManager()->ActivateView(this, activate);
@@ -1462,13 +1462,26 @@ wxDocTemplate *wxDocManager::SelectDocumentType(wxDocTemplate **templates,
     wxDocTemplate **data = new wxDocTemplate *[noTemplates];
     int i;
     int n = 0;
+        
 	for (i = 0; i < noTemplates; i++)
 	{
 		if (templates[i]->IsVisible())
 		{
-			strings.Add(templates[i]->m_description);
-			if (!sort)
+    		int j;
+            bool want = TRUE;
+			for (j = 0; j < n; j++)
 			{
+                //filter out NOT unique documents + view combinations
+				if ( templates[i]->m_docTypeName == data[j]->m_docTypeName &&
+                     templates[i]->m_viewTypeName == data[j]->m_viewTypeName
+                   )
+                    want = FALSE;
+			}
+
+            if ( want )
+			{
+    			strings.Add(templates[i]->m_description);
+
 				data[n] = templates[i];
 				n ++;
 			}
@@ -1529,14 +1542,24 @@ wxDocTemplate *wxDocManager::SelectViewType(wxDocTemplate **templates,
     wxDocTemplate **data = new wxDocTemplate *[noTemplates];
     int i;
     int n = 0;
+        
     for (i = 0; i < noTemplates; i++)
     {
         wxDocTemplate *templ = templates[i];
         if ( templ->IsVisible() && !templ->GetViewName().empty() )
         {
-            strings.Add(templ->m_viewTypeName);
-			if (!sort)
+    		int j;
+            bool want = TRUE;
+			for (j = 0; j < n; j++)
 			{
+                //filter out NOT unique views
+				if ( templates[i]->m_viewTypeName == data[j]->m_viewTypeName )
+                    want = FALSE;
+			}
+
+            if ( want )
+            {
+    			strings.Add(templ->m_viewTypeName);
 				data[n] = templ;
 				n ++;
 			}

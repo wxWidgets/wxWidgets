@@ -69,7 +69,6 @@ all clean:
 	-$(MAKE) -C propsize $(CMDLINE) $@
 	-$(MAKE) -C regtest $(CMDLINE) $@
 	-$(MAKE) -C resource $(CMDLINE) $@
-	-$(MAKE) -C richedit $(CMDLINE) $@
 	-$(MAKE) -C rotate $(CMDLINE) $@
 	-$(MAKE) -C sashtest $(CMDLINE) $@
 	-$(MAKE) -C scroll $(CMDLINE) $@

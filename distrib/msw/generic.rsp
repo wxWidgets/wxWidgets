@@ -913,21 +913,6 @@ samples/resource/*.xpm
 samples/resource/*.ico
 samples/resource/*.pro
 
-samples/richedit/*.cpp
-samples/richedit/*.h
-samples/richedit/makefile*
-samples/richedit/*.rc
-samples/richedit/*.def
-samples/richedit/*.bmp
-samples/richedit/*.xpm
-samples/richedit/*.xbm
-samples/richedit/*.png
-samples/richedit/*.ico
-samples/richedit/*.txt
-samples/richedit/*.pro
-samples/richedit/TODO
-samples/richedit/README
-
 samples/rotate/*.cpp
 samples/rotate/*.h
 samples/rotate/makefile*

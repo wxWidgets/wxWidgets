@@ -182,9 +182,6 @@ samples/regtest/regtest.dsw
 samples/resource/resource.dsp
 samples/resource/resource.dsw
 
-samples/richedit/richedit.dsp
-samples/richedit/richedit.dsw
-
 samples/rotate/rotate.dsp
 samples/rotate/rotate.dsw
 
