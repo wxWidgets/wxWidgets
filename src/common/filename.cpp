@@ -246,6 +246,8 @@ static wxString wxGetVolumeString(const wxString& volume, wxPathFormat format)
 
     if ( !volume.empty() )
     {
+        format = wxFileName::GetFormat(format);
+
         // Special Windows UNC paths hack, part 2: undo what we did in
         // SplitPath() and make an UNC path if we have a drive which is not a
         // single letter (hopefully the network shares can't be one letter only
