@@ -63,10 +63,6 @@ class WXDLLEXPORT wxMDIParentFrame: public wxFrame
   void OnSize(wxSizeEvent& event);
   void OnActivate(wxActivateEvent& event);
 
-  // Toolbar (currently, for use by Windows MDI parent frames ONLY)
-  virtual inline void SetToolBar(wxWindow *toolbar) { m_frameToolBar = toolbar; }
-  virtual inline wxWindow *GetToolBar(void) const { return m_frameToolBar; }
-
   void SetMenuBar(wxMenuBar *menu_bar);
 
   // Gets the size available for subwindows after menu size, toolbar size
@@ -113,7 +109,6 @@ class WXDLLEXPORT wxMDIParentFrame: public wxFrame
     WXHMENU                         m_windowMenu;
     bool                            m_parentFrameActive; // TRUE if MDI Frame is intercepting
                                                          // commands, not child
-    wxWindow *                      m_frameToolBar ;
 DECLARE_EVENT_TABLE()
 };
 

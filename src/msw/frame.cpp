@@ -68,6 +68,7 @@ bool wxFrame::m_useNativeStatusBar = FALSE;
 
 wxFrame::wxFrame(void)
 {
+  m_frameToolBar = NULL ;
   m_frameMenuBar = NULL;
   m_frameStatusBar = NULL;
 
@@ -90,6 +91,7 @@ bool wxFrame::Create(wxWindow *parent,
 //  m_modalShowing = FALSE;
   m_windowStyle = style;
   m_frameMenuBar = NULL;
+  m_frameToolBar = NULL ;
   m_frameStatusBar = NULL;
 
   SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE));
@@ -764,7 +766,8 @@ void wxFrame::OnSize(wxSizeEvent& event)
     wxWindow *win = (wxWindow *)node->Data();
     if ( !win->IsKindOf(CLASSINFO(wxFrame))  &&
          !win->IsKindOf(CLASSINFO(wxDialog)) && 
-         (win != GetStatusBar()) )
+         (win != GetStatusBar()) &&
+         (win != GetToolBar()) )
     {
       if ( child )
         return;     // it's our second subwindow - nothing to do
@@ -774,10 +777,23 @@ void wxFrame::OnSize(wxSizeEvent& event)
 
   if ( child ) {
     // we have exactly one child - set it's size to fill the whole frame
-    int client_x, client_y;
+    int clientW, clientH;
+    GetClientSize(&clientW, &clientH);
 
-    GetClientSize(&client_x, &client_y);
-    child->SetSize(0, 0, client_x, client_y);
+    int x = 0;
+    int y = 0;
+
+    // Manage the toolbar if there is one
+    if ( GetToolBar() )
+    {
+        int wt, ht;
+        GetToolBar()->GetSize(&wt, &ht);
+        clientH -= ht;
+        y += ht;
+        GetToolBar()->SetSize(0, 0, clientW, ht);
+    }
+
+    child->SetSize(x, y, clientW, clientH);
   }
 }
 

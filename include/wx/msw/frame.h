@@ -58,6 +58,10 @@ public:
   void GetPosition(int *x, int *y) const ;
   void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
 
+  // Toolbar: if made known to the frame, the frame will manage it automatically.
+  virtual inline void SetToolBar(wxWindow *toolbar) { m_frameToolBar = toolbar; }
+  virtual inline wxWindow *GetToolBar(void) const { return m_frameToolBar; }
+
   virtual bool OnClose(void);
 
   void OnSize(wxSizeEvent& event);
@@ -144,6 +148,7 @@ protected:
   bool                  m_iconized;
   WXHICON               m_defaultIcon;
   static bool           m_useNativeStatusBar;
+  wxWindow *            m_frameToolBar ;
 
   DECLARE_EVENT_TABLE()
 };

@@ -82,7 +82,6 @@ wxMDIParentFrame::wxMDIParentFrame(void)
     m_currentChild = NULL;
     m_windowMenu = 0;
     m_parentFrameActive = TRUE;
-  	m_frameToolBar = NULL ;
 }
 
 bool wxMDIParentFrame::Create(wxWindow *parent,
@@ -95,7 +94,6 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
 {
   m_defaultIcon = (WXHICON) (wxSTD_MDIPARENTFRAME_ICON ? wxSTD_MDIPARENTFRAME_ICON : wxDEFAULT_MDIPARENTFRAME_ICON);
 
-  m_frameToolBar = NULL ;
   m_clientWindow = NULL;
   m_currentChild = NULL;
   m_windowMenu = 0;
