@@ -87,6 +87,10 @@ static gint gtk_toolbar_enter_callback( GtkWidget *WXUNUSED(widget),
 
 IMPLEMENT_DYNAMIC_CLASS(wxToolBar,wxControl)
 
+BEGIN_EVENT_TABLE(wxToolBar, wxControl)
+  EVT_IDLE(wxToolBar::OnIdle)
+END_EVENT_TABLE()
+
 wxToolBar::wxToolBar()
 {
 }
@@ -482,4 +486,31 @@ void wxToolBar::SetToolShortHelp(int toolIndex, const wxString& helpString)
     return;
 }
 
+void wxToolBar::OnIdle( wxIdleEvent &WXUNUSED(ievent) )
+{
+    wxEvtHandler* evtHandler = GetEventHandler();
+
+    wxNode* node = m_tools.First();
+    while (node)
+    {
+        wxToolBarTool* tool = (wxToolBarTool*) node->Data();
+
+        wxUpdateUIEvent event( tool->m_index );
+        event.SetEventObject(this);
+
+        if (evtHandler->ProcessEvent( event ))
+        {
+            if (event.GetSetEnabled())
+                EnableTool(tool->m_index, event.GetEnabled());
+            if (event.GetSetChecked())
+                ToggleTool(tool->m_index, event.GetChecked());
+/*
+            if (event.GetSetText())
+                // Set tooltip?
+*/
+        }
+
+        node = node->Next();
+    }
+}
 

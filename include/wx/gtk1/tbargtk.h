@@ -45,6 +45,7 @@ extern const wxChar *wxToolBarNameStr;
 
 class wxToolBar: public wxControl
 {
+  DECLARE_EVENT_TABLE()
   DECLARE_DYNAMIC_CLASS(wxToolBar)
   
   public:
@@ -102,6 +103,8 @@ class wxToolBar: public wxControl
     
     virtual void SetToolLongHelp(int toolIndex, const wxString& helpString);
     virtual void SetToolShortHelp(int toolIndex, const wxString& helpString);
+    
+    void OnIdle( wxIdleEvent &ievent );
 
   // implementation
   
