@@ -188,6 +188,7 @@ object.cpp	C	B
 objstrm.cpp	C	B
 odbc.cpp	C	R,X,P
 paper.cpp	C
+popupcmn.cpp	C
 prntbase.cpp	C
 process.cpp	C	32,B
 protocol.cpp	C	S,B
