@@ -547,7 +547,7 @@ void ScintillaWX::DoPaint(wxDC* dc, wxRect rect) {
     if (paintState == paintAbandoned) {
         // Painting area was insufficient to cover new styling or brace
         // highlight positions
-        FullPaint(dc);
+        FullPaint();
     }
     paintState = notPainting;
     dc->EndDrawing();
@@ -862,7 +862,7 @@ void ScintillaWX::DoDragLeave() {
 //----------------------------------------------------------------------
 
 // Force the whole window to be repainted
-void ScintillaWX::FullPaint(wxDC *dc) {
+void ScintillaWX::FullPaint() {
     stc->Refresh(false);
     stc->Update();
 }

@@ -158,7 +158,7 @@ public:
 
 
     // helpers
-    void FullPaint(wxDC *dc);
+    void FullPaint();
     bool CanPaste();
     bool GetHideSelection() { return hideSelection; }
     void DoScrollToLine(int line);
