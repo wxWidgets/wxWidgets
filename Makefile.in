@@ -436,6 +436,9 @@ preinstall: $(build_libdir)/@WX_TARGET_LIBRARY@ $(top_builddir)/wx@TOOLCHAIN_NAM
 	@if test "$(USE_GUI)" = 1; then $(INSTALL) -d $(includedir)/wx/generic; fi
 	@if test "@TOOLKIT_DIR@" = "msw"; then $(INSTALL) -d $(includedir)/wx/msw/ole; fi
 
+	@# always install msw headers for wxBase, it's much simpler
+	@if test "$(USE_GUI)" = 0; then $(INSTALL) -d $(includedir)/wx/msw; fi
+
 	$(INSTALL) -d $(includedir)/wx/protocol
 	$(INSTALL) -d $(includedir)/wx/unix
 	@list='$(HEADERS)'; for p in $$list; do \
@@ -532,8 +535,6 @@ ALL_DIST: distclean
 	mkdir $(DISTDIR)
 	cp $(WXDIR)/wxwin.m4 $(DISTDIR)
 	cp $(WXDIR)/aclocal.m4 $(DISTDIR)
-	cp $(WXDIR)/configure.in $(DISTDIR)
-	cp $(WXDIR)/configure $(DISTDIR)
 	cp $(WXDIR)/config.sub $(DISTDIR)
 	cp $(WXDIR)/config.guess $(DISTDIR)
 	cp $(WXDIR)/install-sh $(DISTDIR)
@@ -543,11 +544,11 @@ ALL_DIST: distclean
 	cp $(WXDIR)/setup.h_vms $(DISTDIR)
 	cp $(WXDIR)/descrip.mms $(DISTDIR)
 	cp $(WXDIR)/Makefile.in $(DISTDIR)
+	cp $(WXDIR)/wxBase.spec $(DISTDIR)
 	cp $(DOCDIR)/lgpl.txt $(DISTDIR)/COPYING.LIB
 	cp $(DOCDIR)/licence.txt $(DISTDIR)/LICENCE.txt
 	cp $(DOCDIR)/symbols.txt $(DISTDIR)/SYMBOLS.txt
 	cp $(DOCDIR)/changes.txt $(DISTDIR)/CHANGES.txt
-	cp $(DOCDIR)/readme.txt $(DISTDIR)/README.txt
 	mkdir $(DISTDIR)/lib
 	cp $(WXDIR)/lib/vms.opt $(DISTDIR)/lib
 	cp $(WXDIR)/lib/vms_gtk.opt $(DISTDIR)/lib
@@ -572,8 +573,10 @@ ALL_DIST: distclean
 # this target is the common part of distribution script for all GUI toolkits,
 # but is not used when building wxBase distribution
 ALL_GUI_DIST: ALL_DIST
-	cp $(WXDIR)/wxBase.spec $(DISTDIR)
-	cp $(DOCDIR)/$(TOOLKITDIR)/install.txt $(DISTDIR)/INSTALL.txt        
+	cp $(WXDIR)/configure.in $(DISTDIR)
+	cp $(WXDIR)/configure $(DISTDIR)
+	cp $(DOCDIR)/readme.txt $(DISTDIR)/README.txt
+	cp $(DOCDIR)/$(TOOLKITDIR)/install.txt $(DISTDIR)/INSTALL.txt
 	if test -f $(DOCDIR)/$(TOOLKITDIR)/changes.txt ; then \
 	  cp $(DOCDIR)/$(TOOLKITDIR)/changes.txt $(DISTDIR)/CHANGES-$(TOOLKIT).txt ; fi
 	cp $(DOCDIR)/$(TOOLKITDIR)/readme.txt $(DISTDIR)/README-$(TOOLKIT).txt
@@ -636,19 +639,25 @@ ALL_GUI_DIST: ALL_DIST
 	cp $(ODBCDIR)/Changes.log $(DISTDIR)/src/iodbc
 
 BASE_DIST: ALL_DIST
+	# make --disable-gui the default
+	sed 's/DEFAULT_wxUSE_GUI=yes/DEFAULT_wxUSE_GUI=no/' \
+		$(WXDIR)/configure.in > $(DISTDIR)/configure.in
+	sed 's/DEFAULT_wxUSE_GUI=yes/DEFAULT_wxUSE_GUI=no/' \
+		$(WXDIR)/configure > $(DISTDIR)/configure
+	chmod +x $(DISTDIR)/configure
 	mkdir $(DISTDIR)/include
 	mkdir $(DISTDIR)/include/wx
 	mkdir $(DISTDIR)/include/wx/protocol
 	mkdir $(DISTDIR)/include/wx/unix
+	mkdir $(DISTDIR)/include/wx/msw
 	mkdir $(DISTDIR)/src/common
 	mkdir $(DISTDIR)/src/unix
 	mkdir $(DISTDIR)/src/msw
-	cp $(WXDIR)/wxBase.spec $(DISTDIR)
 	cp @PORT_FILES@ $(DISTDIR)
 	cp $(WXDIR)/src/wxBase*.dsp $(DISTDIR)
 	cp $(WXDIR)/src/wxBase*.dsw $(DISTDIR)
 	cp $(DOCDIR)/changes.txt $(DISTDIR)/CHANGES.txt
-	cp $(DOCDIR)/readme.txt $(DISTDIR)/README.txt
+	cp $(DOCDIR)/install.txt $(DISTDIR)/README.txt
 	cp $(SRCDIR)/*.in $(DISTDIR)/src
 	cp $(WXDIR)/src/common/*.inc $(DISTDIR)/src/common
 	cp $(WXDIR)/src/common/base.rc $(DISTDIR)/src/common
@@ -669,6 +678,7 @@ BASE_DIST: ALL_DIST
 	cp $(SAMPDIR)/console/Makefile.in $(DISTDIR)/samples/console
 	cp $(SAMPDIR)/console/makefile.unx $(DISTDIR)/samples/console
 	cp $(SAMPDIR)/console/console.cpp $(DISTDIR)/samples/console
+	cp $(SAMPDIR)/console/console.dsp $(DISTDIR)/samples/console
 	cp $(SAMPDIR)/console/testdata.fc $(DISTDIR)/samples/console
 
 GTK_DIST: ALL_GUI_DIST
