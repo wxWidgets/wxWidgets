@@ -97,7 +97,7 @@ public:
 
 WX_DECLARE_EXPORTED_HASH_MAP(unsigned long, wxImageHistogramEntry,
                              wxIntegerHash, wxIntegerEqual,
-                             wxImageHistogram)
+                             wxImageHistogram);
 
 //-----------------------------------------------------------------------------
 // wxImage
