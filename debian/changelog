@@ -12,6 +12,10 @@ wxwindows2.4 (2.4.0) unstable; urgency=low
   * Add a manpage for the wxPython scripts pointing to the pydoc docs.
   * Disabled generation of gtk-univ, it is a rather insensible combination
     now and should be replaced by x11-univ instead.
+  * There had to be some payoff to all the delays -- a clean gcc3.2
+    transition :-)  This package certainly obsoletes 2.3.3.2 and I'll
+    be seeking to finally have 2.2.9.2 removed as well once Audacity
+    is updated.
 
  -- Ron Lee <ron@debian.org>  Thu, 19 Dec 2002 00:50:48 -0800
 
