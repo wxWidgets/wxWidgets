@@ -138,7 +138,7 @@ if bcpp_compiling:
 # Boolean (int) flags
 for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC', 'BUILD_XRC',
              'BUILD_GIZMOS', 'BUILD_DLLWIDGET',
-             'CORE_ONLY', 'USE_SWIG', 'IN_CVS_TREE', 'UNICODE', 'UNDEF_NDEBUG'
+             'CORE_ONLY', 'USE_SWIG', 'IN_CVS_TREE', 'UNICODE', 'UNDEF_NDEBUG',
              'FINAL', 'HYBRID', ]:
     for x in range(len(sys.argv)):
         if string.find(sys.argv[x], flag) == 0:
