@@ -688,7 +688,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_IPC=no
   DEFAULT_wxUSE_HELP=no
   DEFAULT_wxUSE_MS_HTML_HELP=no
-  
+
   DEFAULT_wxUSE_WXHTML_HELP=no
   DEFAULT_wxUSE_WXTREE=no
   DEFAULT_wxUSE_METAFILE=no
@@ -791,7 +791,7 @@ else
 
   DEFAULT_wxUSE_GUI=yes
 
-  DEFAULT_wxUSE_REGEX=sys
+  DEFAULT_wxUSE_REGEX=yes
   DEFAULT_wxUSE_ZLIB=yes
   DEFAULT_wxUSE_LIBPNG=yes
   DEFAULT_wxUSE_LIBJPEG=yes
@@ -2027,6 +2027,12 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         fi
     fi
 
+    dnl REGEX_INCLUDE is only set if we want regex support and if we use our
+    dnl own sources and not the system library
+    if test "x$REGEX_INCLUDE" != "x" ; then
+        ALL_OBJECTS="${ALL_OBJECTS} \$(REGEXOBJS)"
+    fi
+
     if test "$wxUSE_LIBJPEG" = "yes" ; then
         ALL_OBJECTS="${ALL_OBJECTS} \$(JPEGOBJS)"
     fi
@@ -2097,7 +2103,7 @@ else
     dnl building wxBase only
     WX_LIBRARY="wx_${TOOLKIT_NAME}"
 
-    PORT_FILES="src/files.lst"
+    PORT_FILES="\${top_srcdir}/src/files.lst"
     RPM_FILES="src/rpmfiles.lst"
     RPM_SPEC="wxBase.spec"
 
