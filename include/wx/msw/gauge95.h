@@ -16,9 +16,7 @@
 #pragma interface "gauge95.h"
 #endif
 
-#if wxUSE_SLIDER
-
-#include "wx/control.h"
+#if wxUSE_GAUGE
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxGaugeNameStr;
 

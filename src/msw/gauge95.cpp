@@ -34,7 +34,7 @@
 
 #if wxUSE_GAUGE
 
-#include "wx/msw/gauge95.h"
+#include "wx/gauge.h"
 #include "wx/msw/private.h"
 
 #if !(defined(__GNUWIN32_OLD__) && !defined(__CYGWIN10__))
