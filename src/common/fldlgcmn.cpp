@@ -48,7 +48,10 @@ wxFileDialogBase::wxFileDialogBase(wxWindow *parent,
     m_message = message;
     m_dir = defaultDir;
     m_fileName = defaultFile;
-    if (wildCard.IsEmpty()) m_wildCard = wxFileSelectorDefaultWildcardStr;
+    if (wildCard.IsEmpty())
+        m_wildCard = wxFileSelectorDefaultWildcardStr;
+      else
+        m_wildCard = wildCard ;
     m_dialogStyle = style;
     m_path = wxT("");
     m_filterIndex = 0;
