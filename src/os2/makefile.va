@@ -351,6 +351,19 @@ OS2OBJS = \
   ..\os2\$D\spinctrl.obj \
   ..\os2\$D\statbmp.obj \
   ..\os2\$D\statbox.obj \
+  ..\os2\$D\stattext.obj \
+  ..\os2\$D\statbrpm.obj \
+  ..\os2\$D\tabctrl.obj \
+  ..\os2\$D\taskbar.obj \
+  ..\os2\$D\textctrl.obj \
+  ..\os2\$D\thread.obj \
+  ..\os2\$D\timer.obj \
+  ..\os2\$D\toolbar.obj \
+  ..\os2\$D\tooltip.obj \
+  ..\os2\$D\treectrl.obj \
+  ..\os2\$D\utils.obj \
+  ..\os2\$D\utilsexc.obj \
+  ..\os2\$D\wave.obj \
   ..\os2\$D\window.obj
 
 OS2LIBOBJS1 = \
@@ -417,6 +430,19 @@ OS2LIBOBJS2 = \
   spinctrl.obj \
   statbmp.obj \
   statbox.obj \
+  stattext.obj \
+  statbrpm.obj \
+  tabctrl.obj \
+  taskbar.obj \
+  textctrl.obj \
+  thread.obj \
+  timer.obj \
+  toolbar.obj \
+  tooltip.obj \
+  treectrl.obj \
+  utils.obj \
+  utilsexc.obj \
+  wave.obj \
   window.obj
 
 HTMLOBJS = \
@@ -627,6 +653,19 @@ $(OS2LIBOBJS2):
   copy ..\os2\$D\spinctrl.obj
   copy ..\os2\$D\statbmp.obj
   copy ..\os2\$D\statbox.obj
+  copy ..\os2\$D\stattext.obj
+  copy ..\os2\$D\statbrpm.obj
+  copy ..\os2\$D\tabctrl.obj
+  copy ..\os2\$D\taskbar.obj
+  copy ..\os2\$D\textctrl.obj
+  copy ..\os2\$D\thread.obj
+  copy ..\os2\$D\timer.obj
+  copy ..\os2\$D\toolbar.obj
+  copy ..\os2\$D\tooltip.obj
+  copy ..\os2\$D\treectrl.obj
+  copy ..\os2\$D\utils.obj
+  copy ..\os2\$D\utilsexc.obj
+  copy ..\os2\$D\wave.obj
   copy ..\os2\$D\window.obj
 
 # wxWindows library as DLL

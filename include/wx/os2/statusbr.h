@@ -2,31 +2,25 @@
 // Name:        statusbr.h
 // Purpose:     native implementation of wxStatusBar. Optional; can use generic
 //              version instead.
-// Author:      AUTHOR
-// Modified by: 
-// Created:     ??/??/98
+// Author:      David Webster
+// Modified by:
+// Created:     10/17/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
+// Copyright:   (c) David Webster
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef   _WX_STATBAR_H_
 #define   _WX_STATBAR_H_
 
-#ifdef __GNUG__
-#pragma interface "statbar.h"
-#endif
-
-#include "wx/generic/statusbr.h"
-
-class WXDLLEXPORT wxStatusBarXX : public wxStatusBar
+class WXDLLEXPORT wxStatusBarPM : public wxStatusBar
 {
-  DECLARE_DYNAMIC_CLASS(wxStatusBarXX);
+  DECLARE_DYNAMIC_CLASS(wxStatusBarPM);
 
 public:
   // ctors
-  wxStatusBarXX();
-  wxStatusBarXX(wxWindow *parent, wxWindowID id = -1, long style = wxST_SIZEGRIP);
+  wxStatusBarPM();
+  wxStatusBarPM(wxWindow *parent, wxWindowID id = -1, long style = wxST_SIZEGRIP);
 
   // create status line
   bool Create(wxWindow *parent, wxWindowID id = -1, long style = wxST_SIZEGRIP);
@@ -50,4 +44,5 @@ protected:
   void SetFieldsWidth();
 };
 
-#endif
+#endif // _WX_STATBAR_H_
+

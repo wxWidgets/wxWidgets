@@ -30,6 +30,8 @@
 // General features
 // ----------------------------------------------------------------------------
 
+#define wxUSE_NET_API          1 // Utilize OS/2's UPM netapi's
+
 #define wxUSE_CONFIG           1
                                 // Use wxConfig, with CreateConfig in wxApp
 

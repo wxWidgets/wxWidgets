@@ -1,20 +1,16 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        tabctrl.h
 // Purpose:     wxTabCtrl class
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
 // Created:     ??/??/98
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) David Webster
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_TABCTRL_H_
 #define _WX_TABCTRL_H_
-
-#ifdef __GNUG__
-#pragma interface "tabctrl.h"
-#endif
 
 class wxImageList;
 
@@ -111,7 +107,10 @@ class WXDLLEXPORT wxTabCtrl: public wxControl
     // Insert an item
     bool InsertItem(int item, const wxString& text, int imageId = -1, void* data = NULL);
 
-    void Command(wxCommandEvent& event);
+    virtual bool OS2OnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
+
+    // Responds to colour changes
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
 
 protected:
     wxImageList*    m_imageList;

@@ -1,24 +1,21 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        toolbar.h
 // Purpose:     wxToolBar class
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/17/98
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) David Webster
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_TOOLBAR_H_
 #define _WX_TOOLBAR_H_
 
-#ifdef __GNUG__
-#pragma interface "toolbar.h"
-#endif
-
+#if wxUSE_TOOLBAR
 #include "wx/tbarbase.h"
 
-WXDLLEXPORT_DATA(extern const char*) wxToolBarNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxToolBarNameStr;
 
 class WXDLLEXPORT wxToolBar: public wxToolBarBase
 {
@@ -42,6 +39,9 @@ class WXDLLEXPORT wxToolBar: public wxToolBarBase
             long style = wxNO_BORDER|wxTB_HORIZONTAL,
             const wxString& name = wxToolBarNameStr);
 
+  // Call default behaviour
+  void OnMouseEvent(wxMouseEvent& event);
+
   // If pushedBitmap is NULL, a reversed version of bitmap is
   // created and used as the pushed/toggled image.
   // If toggle is TRUE, the button toggles between the two states.
@@ -60,18 +60,30 @@ class WXDLLEXPORT wxToolBar: public wxToolBarBase
 
   wxSize GetMaxSize() const;
 
+  virtual bool GetToolState(int toolIndex) const;
+
   // Add all the buttons
   virtual bool CreateTools();
-  virtual bool Layout() { return TRUE; }
+  virtual void SetRows(int nRows);
+  virtual void LayoutButtons() {}
 
-  // The post-tool-addition call. TODO: do here whatever's
-  // necessary for completing the toolbar construction.
+  // The post-tool-addition call
   bool Realize() { return CreateTools(); };
 
+  // IMPLEMENTATION
+  virtual bool OS2Command(WXUINT param, WXWORD id);
+  virtual bool OS2OnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
+
+  // Responds to colour changes
+  void OnSysColourChanged(wxSysColourChangedEvent& event);
+
 protected:
+  WXHBITMAP         m_hBitmap;
 
 DECLARE_EVENT_TABLE()
 };
+
+#endif // wxUSE_TOOLBAR
 
 #endif
     // _WX_TOOLBAR_H_

@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        stattext.h
 // Purpose:     wxStaticText class
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/17/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) David Webster
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_STATTEXT_H_
@@ -22,34 +22,41 @@ WXDLLEXPORT_DATA(extern const char*) wxStaticTextNameStr;
 
 class WXDLLEXPORT wxStaticText: public wxControl
 {
-  DECLARE_DYNAMIC_CLASS(wxStaticText)
- public:
-  inline wxStaticText() { }
+ DECLARE_DYNAMIC_CLASS(wxStaticText)
 
-  inline wxStaticText(wxWindow *parent, wxWindowID id,
+ public:
+    inline wxStaticText() { }
+
+    inline wxStaticText(wxWindow *parent, wxWindowID id,
            const wxString& label,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
            long style = 0,
            const wxString& name = wxStaticTextNameStr)
-  {
-    Create(parent, id, label, pos, size, style, name);
-  }
+    {
+        Create(parent, id, label, pos, size, style, name);
+    }
 
-  bool Create(wxWindow *parent, wxWindowID id,
+    bool Create(wxWindow *parent, wxWindowID id,
            const wxString& label,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
            long style = 0,
            const wxString& name = wxStaticTextNameStr);
 
-  // accessors
-  void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
-  void SetLabel(const wxString&);
+    // accessors
+    void SetLabel(const wxString&);
 
-  // operations
-  virtual void Command(wxCommandEvent& WXUNUSED(event)) {};
-  virtual void ProcessCommand(wxCommandEvent& WXUNUSED(event)) {};
+    // overriden base class virtuals
+    virtual bool AcceptsFocus() const { return FALSE; }
+
+    // callbacks
+    virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
+                                WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+    virtual MRESULT OS2WindowProc(HWND hwnd, WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+
+protected:
+    virtual wxSize DoGetBestSize();
 };
 
 #endif

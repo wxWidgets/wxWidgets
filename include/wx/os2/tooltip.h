@@ -1,11 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        msw/tooltip.h
 // Purpose:     wxToolTip class - tooltip control
-// Author:      Vadim Zeitlin
+// Author:      David Webster
 // Modified by:
-// Created:     31.01.99
+// Created:     10/17/99
 // RCS-ID:      $Id$
-// Copyright:   (c) 1999 Robert Roebling, Vadim Zeitlin
+// Copyright:   (c) David Webster
 // Licence:     wxWindows license
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -35,6 +35,7 @@ public:
     void RelayEvent(WXMSG *msg);
 
 private:
+    static WXHWND hwndTT;
     // create the tooltip ctrl for our parent frame if it doesn't exist yet
     // and return its window handle
     WXHWND GetToolTipCtrl();

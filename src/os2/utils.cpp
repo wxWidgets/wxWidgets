@@ -9,10 +9,6 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-// #pragma implementation "utils.h"   // Note: this is done in utilscmn.cpp now.
-#endif
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
@@ -40,10 +36,12 @@
 #include <errno.h>
 #include <stdarg.h>
 
-#define INCL_OS2
+#define INCL_DOS
 #define INCL_PM
+#define INCL_GPI
 #include <os2.h>
 #include<netdb.h>
+#define PURE_32
 #include<upm.h>
 
 // In the WIN.INI file
@@ -60,7 +58,7 @@ static const wxChar eUSERNAME[]  = _T("UserName");
 // Get full hostname (eg. DoDo.BSn-Germany.crg.de)
 bool wxGetHostName(wxChar *buf, int maxSize)
 {
-#ifdef USE_NET_API
+#if wxUSE_NET_API
   char                               server[256];
   char                               computer[256];
   unsigned long                      ulLevel;
@@ -80,10 +78,12 @@ bool wxGetHostName(wxChar *buf, int maxSize)
   wxChar *sysname;
   const wxChar *default_host = _T("noname");
 
-  if ((sysname = wxGetenv(_T("SYSTEM_NAME"))) == NULL) {
-     GetProfileString(WX_SECTION, eHOSTNAME, default_host, buf, maxSize - 1);
-  } else
-    wxStrncpy(buf, sysname, maxSize - 1);
+  if ((sysname = wxGetenv(_T("SYSTEM_NAME"))) == NULL)
+  {
+      // GetProfileString(WX_SECTION, eHOSTNAME, default_host, buf, maxSize - 1);
+  }
+  else
+      wxStrncpy(buf, sysname, maxSize - 1);
   buf[maxSize] = _T('\0');
 #endif
   return *buf ? TRUE : FALSE;
@@ -92,7 +92,7 @@ bool wxGetHostName(wxChar *buf, int maxSize)
 // Get user ID e.g. jacs
 bool wxGetUserId(wxChar *buf, int maxSize)
 {
-  return(U32ELOCL(bub, maxSize));
+  return(U32ELOCL((unsigned char*)buf, (unsigned long *)&maxSize));
 }
 
 bool wxGetUserName(wxChar *buf, int maxSize)
@@ -100,16 +100,7 @@ bool wxGetUserName(wxChar *buf, int maxSize)
 #ifdef USE_NET_API
     wxGetUserId(buf, maxSize);
 #else
-    bool ok = GetProfileString(WX_SECTION, eUSERNAME, _T(""), buf, maxSize - 1) != 0;
-    if ( !ok )
-    {
-        ok = wxGetUserId(buf, maxSize);
-    }
-
-    if ( !ok )
-    {
-        wxStrncpy(buf, _T("Unknown User"), maxSize);
-    }
+    wxStrncpy(buf, _T("Unknown User"), maxSize);
 #endif
   return TRUE;
 }
@@ -140,7 +131,8 @@ bool wxShell(const wxString& command)
 // Get free memory in bytes, or -1 if cannot determine amount (e.g. on UNIX)
 long wxGetFreeMemory()
 {
-  return (long)GetFreeSpace(0);
+    // return (long)GetFreeSpace(0);
+    return 0L;
 }
 
 // Sleep for nSecs seconds. Attempt a Windows implementation using timers.
@@ -198,7 +190,6 @@ void wxDebugMsg(const wxChar *fmt ...)
   va_start(ap, fmt);
 
    sprintf(buffer,fmt,ap) ;
-   fflush(buffer) ;
 
   va_end(ap);
 }
@@ -211,24 +202,24 @@ void wxError(const wxString& msg, const wxString& title)
                       ,NULL
                       ,(PSZ)wxBuffer
                       ,(PSZ)WXSTRINGCAST title
+                      ,0
                       ,MB_ICONEXCLAMATION | MB_YESNO
-                     ) == IDNO)
+                     ) == MBID_YES)
     wxExit();
 }
 
 // Fatal error: pop up message box and abort
-void wxFatalError(const wxString& msg, const wxString& title)
+void wxFatalError(const wxString& rMsg, const wxString& rTitle)
 {
-    YUint32                         rc;
-    HWND                            hWnd;
+    unsigned long                   rc;
 
-    WinMessageBox( HWND_DESKTOP
-                  ,hWnd
-                  ,rMsg.Data()
-                  ,rTitle.Data()
-                  ,0
-                  ,MB_NOICON | MB_OK
-                 );
+    rc = ::WinMessageBox( HWND_DESKTOP
+                         ,NULL
+                         ,WXSTRINGCAST rMsg
+                         ,WXSTRINGCAST rTitle
+                         ,0
+                         ,MB_NOICON | MB_OK
+                        );
     DosExit(EXIT_PROCESS, rc);
 }
 
@@ -258,13 +249,19 @@ int wxGetOsVersion(int *majorVsn, int *minorVsn)
 }
 
 // Reading and writing resources (eg WIN.INI, .Xdefaults)
+// TODO: Ability to read and write to an INI file
+
 #if wxUSE_RESOURCES
 bool wxWriteResource(const wxString& section, const wxString& entry, const wxString& value, const wxString& file)
 {
+// TODO:
+/*
   if (file != "")
     return (WritePrivateProfileString((PCSZ)WXSTRINGCAST section, (PCSZ)WXSTRINGCAST entry, (PCSZ)value, (PCSZ)WXSTRINGCAST file) != 0);
   else
     return (WriteProfileString((PCSZ)WXSTRINGCAST section, (PCSZ)WXSTRINGCAST entry, (PCSZ)WXSTRINGCAST value) != 0);
+*/
+    return FALSE;
 }
 
 bool wxWriteResource(const wxString& section, const wxString& entry, float value, const wxString& file)
@@ -291,6 +288,8 @@ bool wxWriteResource(const wxString& section, const wxString& entry, int value, 
 bool wxGetResource(const wxString& section, const wxString& entry, wxChar **value, const wxString& file)
 {
   static const wxChar defunkt[] = _T("$$default");
+// TODO:
+/*
   if (file != "")
   {
     int n = GetPrivateProfileString((PCSZ)WXSTRINGCAST section, (PCSZ)WXSTRINGCAST entry, (PCSZ)defunkt,
@@ -308,7 +307,9 @@ bool wxGetResource(const wxString& section, const wxString& entry, wxChar **valu
   if (*value) delete[] (*value);
       *value = copystring(wxBuffer);
       return TRUE;
-    }
+*/
+    return FALSE;
+}
 
 bool wxGetResource(const wxString& section, const wxString& entry, float *value, const wxString& file)
 {
@@ -452,7 +453,7 @@ bool wxCheckForInterrupt(wxWindow *wnd)
     HWND win= (HWND) wnd->GetHWND();
     while(::WinPeekMsg(hab,&msg,hwndFilter,0,0,PM_REMOVE))
     {
-      ::WinDispatchMsg( hab, &qmsg );
+      ::WinDispatchMsg( hab, &msg );
     }
     return TRUE;//*** temporary?
   }
@@ -488,16 +489,16 @@ wxChar *wxLoadUserResource(const wxString& resourceName, const wxString& resourc
 *   wxChar *theText = (wxChar *)LockResource(hData);
 *   if (!theText)
 *     return NULL;
+*
+* s = copystring(theText);
 */
-  s = copystring(theText);
-
   return s;
 }
 
 void wxGetMousePosition( int* x, int* y )
 {
-  POINT pt;
-  GetCursorPos( & pt );
+  POINTL pt;
+  ::WinQueryPointerPos( HWND_DESKTOP, & pt );
   *x = pt.x;
   *y = pt.y;
 };
@@ -530,7 +531,7 @@ int wxDisplayDepth()
         nDepth = nPlanes * nBitsPerPixel;
     }
     DevCloseDC(hDc);
-    return (depth);
+    return (nDepth);
 }
 
 // Get size of display
@@ -545,8 +546,8 @@ void wxDisplaySize(int *width, int *height)
                     ,lArray
                    ))
     {
-        *pWidth  = (int)lArray[CAPS_WIDTH];
-        *pHeight = (int)lArray[CAPS_HEIGHT];
+        *width  = (int)lArray[CAPS_WIDTH];
+        *height = (int)lArray[CAPS_HEIGHT];
     }
     DevCloseDC(hDc);
 }
@@ -565,7 +566,7 @@ wxString WXDLLEXPORT wxGetWindowText(WXHWND hWnd)
 {
     wxString str;
     long len = ::WinQueryWindowTextLength((HWND)hWnd) + 1;
-    ::WinQueryWindowText((HWND)hWnd, str.GetWriteBuf((int)len), len);
+    ::WinQueryWindowText((HWND)hWnd, len, str.GetWriteBuf((int)len));
     str.UngetWriteBuf();
 
     return str;
@@ -579,7 +580,7 @@ wxString WXDLLEXPORT wxGetWindowClass(WXHWND hWnd)
 
     for ( ;; )
     {
-        int count = ::WinQueryClassName((HWND)hWnd, str.GetWriteBuf(len), len);
+        int count = ::WinQueryClassName((HWND)hWnd, len, str.GetWriteBuf(len));
 
         str.UngetWriteBuf();
         if ( count == len )
