@@ -240,7 +240,7 @@ NPError      wxPluginApp::NPP_SetWindow(NPP instance, NPWindow* window)
 
 void      wxPluginApp::NPP_Shutdown(void)
 {
-    // Clean up wxWindows
+    // Clean up wxWidgets
     CleanUp();
 }
 

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Program:     wxWindows Widgets Sample
+// Program:     wxWidgets Widgets Sample
 // Name:        combobox.cpp
 // Purpose:     Part of the widgets sample showing wxComboBox
 // Author:      Vadim Zeitlin

@@ -37,7 +37,7 @@
 #include "bitmaps/help.xpm"
 
 
-// start wxWindows
+// start wxWidgets
 
 IMPLEMENT_APP(MyApp)
 

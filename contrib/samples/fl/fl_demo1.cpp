@@ -124,7 +124,7 @@ wxTextCtrl* MyFrame::CreateTextCtrl( const wxString& value )
 }
 
 MyFrame::MyFrame(wxFrame *frame)
-    : wxFrame( frame, -1, _("wxWindows 2.0 wxFrameLayout Test Application"), wxDefaultPosition, 
+    : wxFrame( frame, -1, _("wxWidgets 2.0 wxFrameLayout Test Application"), wxDefaultPosition, 
           wxSize( 700, 500 ), 
           wxCLIP_CHILDREN | wxMINIMIZE_BOX | wxMAXIMIZE_BOX | 
           wxTHICK_FRAME   | wxSYSTEM_MENU  | wxCAPTION, 

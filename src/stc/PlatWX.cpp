@@ -1,5 +1,5 @@
 // Scintilla source code edit control
-// PlatWX.cxx - implementation of platform facilities on wxWindows
+// PlatWX.cxx - implementation of platform facilities on wxWidgets
 // Copyright 1998-1999 by Neil Hodgson <neilh@scintilla.org>
 //                        Robin Dunn <robin@aldunn.com>
 // The License.txt file describes the conditions under which this software may be distributed.

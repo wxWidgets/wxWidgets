@@ -252,7 +252,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 {
-    (void)wxMessageBox(wxT("wxWindows 2.0 SVG 1.0 Test\n")
+    (void)wxMessageBox(wxT("wxWidgets 2.0 SVG 1.0 Test\n")
         wxT("Author: Chris Elliott (c) 2002\n")
         wxT("Usage: svg.exe \nClick File | New to show tests\n\n"), wxT("About SVG Test"));
 }

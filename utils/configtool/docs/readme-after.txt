@@ -1,8 +1,8 @@
 
-Congratulations! You have installed wxWindows Configuration Tool.
-Please see the wxWindows web site for support:
+Congratulations! You have installed wxWidgets Configuration Tool.
+Please see the wxWidgets web site for support:
 
-http://www.wxwindows.org
+http://www.wxwidgets.org
 
 Thank you for using wxWindows Configuration Tool, and we hope
 you enjoy it!

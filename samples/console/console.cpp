@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        samples/console/console.cpp
-// Purpose:     a sample console (as opposed to GUI) progam using wxWindows
+// Purpose:     a sample console (as opposed to GUI) progam using wxWidgets
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     04.10.99
@@ -38,7 +38,7 @@
 
 /*
    A note about all these conditional compilation macros: this file is used
-   both as a test suite for various non-GUI wxWindows classes and as a
+   both as a test suite for various non-GUI wxWidgets classes and as a
    scratchpad for quick tests. So there are two compilation modes: if you
    define TEST_ALL all tests are run, otherwise you may enable the individual
    tests individually in the "#else" branch below.
@@ -2138,7 +2138,7 @@ static void TestDbOpen()
 
 /*
    NB: this stuff was taken from the glibc test suite and modified to build
-       in wxWindows: if I read the copyright below properly, this shouldn't
+       in wxWidgets: if I read the copyright below properly, this shouldn't
        be a problem
  */
 
@@ -2804,7 +2804,7 @@ static void TestSocketClient()
 {
     wxPuts(_T("*** Testing wxSocketClient ***\n"));
 
-    static const wxChar *hostname = _T("www.wxwindows.org");
+    static const wxChar *hostname = _T("www.wxwidgets.org");
 
     wxIPV4address addr;
     addr.Hostname(hostname);
@@ -2862,7 +2862,7 @@ static bool TestFtpConnect()
     wxPuts(_T("*** Testing FTP connect ***"));
 
 #ifdef FTP_ANONYMOUS
-    static const wxChar *hostname = _T("ftp.wxwindows.org");
+    static const wxChar *hostname = _T("ftp.wxwidgets.org");
 
     wxPrintf(_T("--- Attempting to connect to %s:21 anonymously...\n"), hostname);
 #else // !FTP_ANONYMOUS
@@ -3521,7 +3521,7 @@ static void TestVCardWrite()
         // set some fields
         vcard.SetName("Zeitlin", "Vadim");
         vcard.SetFullName("Vadim Zeitlin");
-        vcard.SetOrganization("wxWindows", "R&D");
+        vcard.SetOrganization("wxWidgets", "R&D");
 
         // just dump the vCard back
         wxPuts(_T("Entire vCard follows:\n"));
@@ -5285,7 +5285,7 @@ int main(int argc, char **argv)
     wxInitializer initializer;
     if ( !initializer )
     {
-        fprintf(stderr, "Failed to initialize the wxWindows library, aborting.");
+        fprintf(stderr, "Failed to initialize the wxWidgets library, aborting.");
 
         return -1;
     }

@@ -188,7 +188,7 @@ private:
     // the log target we use to redirect messages to the listbox
     wxLog *m_logTarget;
 
-    // any class wishing to process wxWindows events must use this macro
+    // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
 };
 

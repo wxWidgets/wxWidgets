@@ -1,8 +1,8 @@
-wxWindows PDA/Embedded System Emulator
+wxWidgets PDA/Embedded System Emulator
 ======================================
 
 This is a simple display emulator for embedded
-applications (wxWindows or other) that use
+applications (wxWidgets or other) that use
 an X server. The Familiar Linux distribution
 is one such environment, using Tiny-X.
 
@@ -86,7 +86,7 @@ Compiling wxEmulator
 
 You need to use wxX11 -- no other port is supported.
 Configure and make wxX11 in the usual way (see docs/x11/install.txt
-at the wxWindows top level), then compile wxEmulator
+at the wxWidgets top level), then compile wxEmulator
 using the makefile that configure created.
 
 Have fun!

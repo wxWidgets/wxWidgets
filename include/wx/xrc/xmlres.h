@@ -59,7 +59,7 @@ class wxXmlResourceModule;
 //     older versions of the library may ignore it.
 //   - if you change version number, follow these steps:
 //       - set major, minor and release numbers to respective version numbers of
-//         the wxWindows library (see wx/version.h)
+//         the wxWidgets library (see wx/version.h)
 //       - reset revision to 0 unless the first three are same as before,
 //         in which case you should increase revision by one
 #define WX_XMLRES_CURRENT_VERSION_MAJOR            2
@@ -127,7 +127,7 @@ public:
 
     // Initialize handlers for all supported controls/windows. This will
     // make the executable quite big because it forces linking against
-    // most of the wxWindows library.
+    // most of the wxWidgets library.
     void InitAllHandlers();
 
     // Initialize only a specific handler (or custom handler). Convention says
@@ -274,7 +274,7 @@ private:
 
 // This macro translates string identifier (as used in XML resource,
 // e.g. <menuitem id="my_menu">...</menuitem>) to integer id that is needed by
-// wxWindows event tables.
+// wxWidgets event tables.
 // Example:
 //    BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 //       EVT_MENU(XRCID("quit"), MyFrame::OnQuit)
@@ -463,9 +463,9 @@ WXDLLIMPEXP_XRC void wxXmlInitResourceModule();
 
 // This class is used to create instances of XRC "object" nodes with "subclass"
 // property. It is _not_ supposed to be used by XRC users, you should instead
-// register your subclasses via wxWindows' RTTI mechanism. This class is useful
+// register your subclasses via wxWidgets' RTTI mechanism. This class is useful
 // only for language bindings developer who need a way to implement subclassing
-// in wxWindows ports that don't support wxRTTI (e.g. wxPython).
+// in wxWidgets ports that don't support wxRTTI (e.g. wxPython).
 class WXDLLIMPEXP_XRC wxXmlSubclassFactory
 {
 public:

@@ -16,7 +16,7 @@
 #endif
 
 //-----------------------------------------------------------------------------
-// Standard wxWindows headers
+// Standard wxWidgets headers
 //-----------------------------------------------------------------------------
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -27,7 +27,7 @@
 #endif
 
 // For all others, include the necessary headers (this file is usually all you
-// need because it includes almost all "standard" wxWindows headers)
+// need because it includes almost all "standard" wxWidgets headers)
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif
@@ -53,10 +53,10 @@
 #include "myframe.h"
 
 //-----------------------------------------------------------------------------
-// wxWindows macro: Declare the application.
+// wxWidgets macro: Declare the application.
 //-----------------------------------------------------------------------------
 
-// Create a new application object: this macro will allow wxWindows to create
+// Create a new application object: this macro will allow wxWidgets to create
 // the application object during program execution (it's better than using a
 // static object for many reasons) and also declares the accessor function
 // wxGetApp() which will return the reference of the right type (i.e. the_app and

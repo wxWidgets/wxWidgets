@@ -1,6 +1,6 @@
 /*
  * File:	gui.h
- * Purpose:	wxWindows plugin with a few GUI elements
+ * Purpose:	wxWidgets plugin with a few GUI elements
  * Author:	Julian Smart
  * Created:	1997
  * Updated:	

@@ -161,7 +161,7 @@ bool csApp::OnInit(void)
   frame->SetMenuBar(menuBar);
 
   // Load the file history
-  wxConfig config(_T("OGL Studio"), _T("wxWindows"));
+  wxConfig config(_T("OGL Studio"), _T("wxWidgets"));
   m_docManager->FileHistoryLoad(config);
 
   frame->CreateStatusBar();
@@ -491,7 +491,7 @@ void csApp::CreateDiagramToolBar(wxFrame* parent)
 // Read/write configuration information
 bool csApp::ReadOptions()
 {
-    wxConfig config(_T("OGL Studio"), _T("wxWindows"));
+    wxConfig config(_T("OGL Studio"), _T("wxWidgets"));
 
     config.Read(_T("mainX"), & m_mainFramePos.x);
     config.Read(_T("mainY"), & m_mainFramePos.y);
@@ -505,7 +505,7 @@ bool csApp::ReadOptions()
 
 bool csApp::WriteOptions()
 {
-    wxConfig config(_T("OGL Studio"), _T("wxWindows"));
+    wxConfig config(_T("OGL Studio"), _T("wxWidgets"));
 
     config.Write(_T("mainX"), (long) m_mainFramePos.x);
     config.Write(_T("mainY"), (long) m_mainFramePos.y);

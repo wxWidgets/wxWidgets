@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        propeditor.cpp
-// Purpose:     Property editor for wxWindows configuration tool
+// Purpose:     Property editor for wxWidgets configuration tool
 // Author:      Julian Smart
 // Modified by:
 // Created:     2003-06-03

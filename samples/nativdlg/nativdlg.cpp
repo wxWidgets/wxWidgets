@@ -42,7 +42,7 @@ MyApp::MyApp()
 bool MyApp::OnInit(void)
 {
   // Create the main frame window
-  MyFrame   *frame = new MyFrame(NULL, wxID_ANY, _T("wxWindows Native Dialog Sample"), wxPoint(0, 0), wxSize(300, 250));
+  MyFrame   *frame = new MyFrame(NULL, wxID_ANY, _T("wxWidgets Native Dialog Sample"), wxPoint(0, 0), wxSize(300, 250));
 
   // Give it a status line
   frame->CreateStatusBar(2);

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        validate.h
-// Purpose:     wxWindows validation sample
+// Purpose:     wxWidgets validation sample
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        configitem.cpp
-// Purpose:     wxWindows Configuration Tool config item class
+// Purpose:     wxWidgets Configuration Tool config item class
 // Author:      Julian Smart
 // Modified by:
 // Created:     2003-06-03
@@ -246,7 +246,7 @@ void ctConfigItem::InitProperties()
 
     m_properties.AddProperty(
         new ctProperty(
-        wxT("<B>Help-topic</B><P> The help topic in the wxWindows manual for this component or setting."),
+        wxT("<B>Help-topic</B><P> The help topic in the wxWidgets manual for this component or setting."),
         wxVariant(wxT(""), wxT("help-topic")),
         wxT("multiline")));
 

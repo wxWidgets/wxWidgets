@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        event.cpp
-// Purpose:     wxWindows sample demonstrating different event usage
+// Purpose:     wxWidgets sample demonstrating different event usage
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     31.01.01
@@ -32,7 +32,7 @@
 #endif
 
 // for all others, include the necessary headers (this file is usually all you
-// need because it includes almost all "standard" wxWindows headers)
+// need because it includes almost all "standard" wxWidgets headers)
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif
@@ -107,7 +107,7 @@ protected:
     size_t m_nPush;
 
 private:
-    // any class wishing to process wxWindows events must use this macro
+    // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
 };
 
@@ -159,10 +159,10 @@ enum
 };
 
 // ----------------------------------------------------------------------------
-// event tables and other macros for wxWindows
+// event tables and other macros for wxWidgets
 // ----------------------------------------------------------------------------
 
-// the event tables connect the wxWindows events with the functions (event
+// the event tables connect the wxWidgets events with the functions (event
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -188,7 +188,7 @@ BEGIN_EVENT_TABLE(MyEvtHandler, wxEvtHandler)
     EVT_MENU(Event_Test, MyEvtHandler::OnTest)
 END_EVENT_TABLE()
 
-// Create a new application object: this macro will allow wxWindows to create
+// Create a new application object: this macro will allow wxWidgets to create
 // the application object during program execution (it's better than using a
 // static object for many reasons) and also declares the accessor function
 // wxGetApp() which will return the reference of the right type (i.e. MyApp and
@@ -207,7 +207,7 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
     // create the main application window
-    MyFrame *frame = new MyFrame(_T("Event wxWindows Sample"),
+    MyFrame *frame = new MyFrame(_T("Event wxWidgets Sample"),
                                  wxPoint(50, 50), wxSize(600, 340));
 
     // and show it (the frames, unlike simple controls, are not shown when
@@ -265,7 +265,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
 #if wxUSE_STATUSBAR
     CreateStatusBar(3);
-    SetStatusText(_T("Welcome to wxWindows event sample"));
+    SetStatusText(_T("Welcome to wxWidgets event sample"));
     SetStatusText(_T("Dynamic: off"), Status_Dynamic);
     SetStatusText(_T("Push count: 0"), Status_Push);
 #endif // wxUSE_STATUSBAR

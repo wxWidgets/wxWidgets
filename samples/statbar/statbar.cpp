@@ -162,7 +162,7 @@ private:
     wxStatusBar *m_statbarDefault;
     MyStatusBar *m_statbarCustom;
 
-    // any class wishing to process wxWindows events must use this macro
+    // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
 };
 
@@ -193,10 +193,10 @@ static const int BITMAP_SIZE_X = 32;
 static const int BITMAP_SIZE_Y = 15;
 
 // ----------------------------------------------------------------------------
-// event tables and other macros for wxWindows
+// event tables and other macros for wxWidgets
 // ----------------------------------------------------------------------------
 
-// the event tables connect the wxWindows events with the functions (event
+// the event tables connect the wxWidgets events with the functions (event
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
 #ifdef USE_MDI_PARENT_FRAME
@@ -220,7 +220,7 @@ BEGIN_EVENT_TABLE(MyStatusBar, wxStatusBar)
     EVT_TIMER(wxID_ANY, MyStatusBar::OnTimer)
 END_EVENT_TABLE()
 
-// Create a new application object: this macro will allow wxWindows to create
+// Create a new application object: this macro will allow wxWidgets to create
 // the application object during program execution (it's better than using a
 // static object for many reasons) and also declares the accessor function
 // wxGetApp() which will return the reference of the right type (i.e. MyApp and
@@ -300,7 +300,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // create default status bar to start with
     CreateStatusBar(2);
     m_statbarKind = StatBar_Default;
-    SetStatusText(_T("Welcome to wxWindows!"));
+    SetStatusText(_T("Welcome to wxWidgets!"));
 
     m_statbarDefault = GetStatusBar();
 }
@@ -363,7 +363,7 @@ void MyFrame::OnSetStatusFields(wxCommandEvent& WXUNUSED(event))
                    (
                     _T("Select the number of fields in the status bar"),
                     _T("Fields:"),
-                    _T("wxWindows statusbar sample"),
+                    _T("wxWidgets statusbar sample"),
                     sb->GetFieldsCount(),
                     1, 5,
                     this
@@ -431,7 +431,7 @@ void MyFrame::OnStatusBarToggle(wxCommandEvent& WXUNUSED(event))
         DoCreateStatusBar(m_statbarKind);
     }
 #ifdef __WXMSW__
-    // The following is a kludge suggested by Vadim Zeitlin (one of the wxWindows
+    // The following is a kludge suggested by Vadim Zeitlin (one of the wxWidgets
     // authors) while we look for a proper fix..
 //    SendSizeEvent();
 #endif

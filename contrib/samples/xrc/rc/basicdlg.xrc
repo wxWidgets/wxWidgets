@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<resource xmlns="http://www.wxwindows.org/wxxrc" version="2.3.0.1">
+<resource xmlns="http://www.wxwidgets.org/wxxrc" version="2.3.0.1">
 
 <object class="wxDialog" name="non_derived_dialog">
     <title>Non-Derived Dialog Example</title>

@@ -78,7 +78,7 @@ bool MyApp::OnInit(void)
   // Make a panel with a message
   wxPanel *panel = new wxPanel(frame);
 
-  (void)new wxStaticText(panel, -1, "Hello, this is a minimal debugging wxWindows program!", wxPoint(10, 10));
+  (void)new wxStaticText(panel, -1, "Hello, this is a minimal debugging wxWidgets program!", wxPoint(10, 10));
 
   // Show the frame
   frame->Show(TRUE);
@@ -121,7 +121,7 @@ END_EVENT_TABLE()
 
 // My frame constructor
 MyFrame::MyFrame(wxFrame *parent):
-  wxFrame(parent, -1, "MemCheck wxWindows Sample", wxPoint(-1, -1), wxSize(400, 200))
+  wxFrame(parent, -1, "MemCheck wxWidgets Sample", wxPoint(-1, -1), wxSize(400, 200))
 {}
 
 // Intercept menu commands

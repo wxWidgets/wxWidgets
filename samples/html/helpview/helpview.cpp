@@ -18,7 +18,7 @@
 #endif
 
 // for all others, include the necessary headers (this file is usually all you
-// need because it includes almost all "standard" wxWindows headers
+// need because it includes almost all "standard" wxWidgets headers
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #endif
@@ -65,7 +65,7 @@ bool MyApp::OnInit()
     wxInitAllImageHandlers();
     wxFileSystem::AddHandler(new wxZipFSHandler);
 
-    SetVendorName(wxT("wxWindows"));
+    SetVendorName(wxT("wxWidgets"));
     SetAppName(wxT("wxHTMLHelp")); 
     wxConfig::Get(); // create an instance
 

@@ -185,7 +185,7 @@ void MyFrame::OnTopBottom(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-      (void)wxMessageBox(_T("wxWindows tree library demo Vsn 2.0\nAuthor: Julian Smart (c) 1998"), _T("About tree test"));
+      (void)wxMessageBox(_T("wxWidgets tree library demo Vsn 2.0\nAuthor: Julian Smart (c) 1998"), _T("About tree test"));
 }
 
 void MyFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))

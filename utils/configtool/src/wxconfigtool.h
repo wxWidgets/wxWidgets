@@ -68,7 +68,7 @@ public:
     /// Returns the help controller object for the manual.
     wxHelpControllerBase& GetHelpController() { return *m_helpController; }
 
-    /// Returns the help controller object for the wxWindows reference manual.
+    /// Returns the help controller object for the wxWidgets reference manual.
     wxHelpControllerBase& GetReferenceHelpController() { return *m_helpControllerReference; }
 
     /// Returns the document manager object.
@@ -91,7 +91,7 @@ public:
     /// Saves config info to the registry or a file.
     virtual bool SaveConfig();
 
-    /// The help controller needs to be cleared before wxWindows
+    /// The help controller needs to be cleared before wxWidgets
     /// cleanup happens.
     void ClearHelpControllers() ;
 

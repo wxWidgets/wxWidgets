@@ -24,7 +24,7 @@
 #include "wx/wx.h"
 #endif
 
-// wxWindows headers.
+// wxWidgets headers.
 #include "wx/treectrl.h"
 #include "wx/imaglist.h"
 #include "wx/notebook.h" 
@@ -55,7 +55,7 @@ IMPLEMENT_APP    (MyApp)
 bool MyApp::OnInit(void)
 {
     // Create the main frame window
-    MyFrame *frame = new MyFrame(NULL, _("wxWindows 2.0 wxFrameLayout demo"), 50, 50, 650, 540);
+    MyFrame *frame = new MyFrame(NULL, _("wxWidgets 2.0 wxFrameLayout demo"), 50, 50, 650, 540);
     
     // Give it an icon
 #ifdef __WINDOWS__
@@ -170,7 +170,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxChar *title, int x, int y, int w, int h
 
     mpInternalFrm = (wxPanel*)this;
     
-    mAboutBox.Create( this, -1,  _T("About box in wxWindows style..."),
+    mAboutBox.Create( this, -1,  _T("About box in wxWidgets style..."),
                       wxDefaultPosition,
                       wxSize( 385,220),
                       wxDIALOG_MODAL | wxDEFAULT_DIALOG_STYLE | wxTAB_TRAVERSAL );
@@ -665,7 +665,7 @@ wxWindow* MyFrame::CreateDevLayout( wxFrameLayout& layout, wxWindow* pParent )
     
     pClassView->SetImageList( &mImageList );
     
-    wxTreeItemId rootId = pClassView->AddRoot( wxT("wxWindows 2.0 classes"), 0 );
+    wxTreeItemId rootId = pClassView->AddRoot( wxT("wxWidgets 2.0 classes"), 0 );
     
     pClassView->AppendItem( rootId, _("wxWin Dynamic classes (grabbed at run-time)"), 0 );
     pClassView->AppendItem( rootId, _("serializer-classes (grabbed at run-time)"),    0 );

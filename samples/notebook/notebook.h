@@ -5,7 +5,7 @@
 // Modified by: Dimitri Schoolwerth
 // Created:     25/10/98
 // RCS-ID:      $Id$
-// Copyright:   (c) 1998-2002 wxWindows team
+// Copyright:   (c) 1998-2002 wxWidgets team
 // License:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 

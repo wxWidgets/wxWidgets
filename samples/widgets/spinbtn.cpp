@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Program:     wxWindows Widgets Sample
+// Program:     wxWidgets Widgets Sample
 // Name:        spinbtn.cpp
 // Purpose:     Part of the widgets sample showing wxSpinButton
 // Author:      Vadim Zeitlin

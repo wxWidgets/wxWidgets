@@ -358,7 +358,7 @@ bool wxOleControl::Create( wxWindowID id, long style, const wxString &name )
 
     PreCreation( (wxWindow*) NULL, id, wxDefaultPosition, wxDefaultSize, style, name );
 
-    m_title = _T("wxWindows OLE Server");
+    m_title = _T("wxWidgets OLE Server");
     
     /* any widget that can contain another widget and resizes it
        to its full size */

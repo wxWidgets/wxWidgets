@@ -434,7 +434,7 @@ void MyFrame::OnCommand( wxCommandEvent &event )
         // VZ: this doesn't work, of course, but I think it should -
         //     wxLayoutWindow should have a flag m_highlightUrls and do it itself
         //     (instead of doing it manually like M does now)
-        m_lwin->GetLayoutList()->Insert(_T("http://www.wxwindows.org/"));
+        m_lwin->GetLayoutList()->Insert(_T("http://www.wxwidgets.org/"));
         m_lwin->Refresh();
     }
 };
@@ -577,7 +577,7 @@ bool MyApp::OnInit()
    wxFrame *frame = new MyFrame();
    wxInitAllImageHandlers();
    frame->Show( true );
-//   wxSetAFMPath("/usr/local/src/wxWindows/misc/afm/");
+//   wxSetAFMPath("/usr/local/src/wxWidgets/misc/afm/");
    return true;
 };
 

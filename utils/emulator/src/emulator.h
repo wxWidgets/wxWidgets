@@ -5,7 +5,7 @@
 // Modified by:
 // Created:     2002-03-10
 // RCS-ID:      $Id$
-// Copyright:   (c) wxWindows team
+// Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -131,7 +131,7 @@ public:
     void OnCloseWindow(wxCloseEvent& event);
 
 private:
-    // any class wishing to process wxWindows events must use this macro
+    // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
 };
 

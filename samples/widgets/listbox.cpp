@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Program:     wxWindows Widgets Sample
+// Program:     wxWidgets Widgets Sample
 // Name:        listbox.cpp
 // Purpose:     Part of the widgets sample showing wxListbox
 // Author:      Vadim Zeitlin

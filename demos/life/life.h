@@ -57,7 +57,7 @@ public:
     void DrawCell(wxInt32 i, wxInt32 j, bool alive);
 
 private:
-    // any class wishing to process wxWindows events must use this macro
+    // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
 
     // draw a cell (parametrized by DC)
@@ -109,7 +109,7 @@ public:
     LifeNavigator(wxWindow *parent);
 
 private:
-    // any class wishing to process wxWindows events must use this macro
+    // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
 
     // event handlers
@@ -133,7 +133,7 @@ public:
     void UpdateUI();
 
 private:
-    // any class wishing to process wxWindows events must use this macro
+    // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
 
     // event handlers

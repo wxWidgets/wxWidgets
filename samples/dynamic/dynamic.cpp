@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dynamic.cpp
-// Purpose:     Dynamic events wxWindows sample
+// Purpose:     Dynamic events wxWidgets sample
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
@@ -57,7 +57,7 @@ IMPLEMENT_APP  (MyApp)
 bool MyApp::OnInit(void)
 {
   // Create the main frame window
-  MyFrame *frame = new MyFrame(NULL, _T("Dynamic wxWindows App"), 50, 50, 450, 340);
+  MyFrame *frame = new MyFrame(NULL, _T("Dynamic wxWidgets App"), 50, 50, 450, 340);
 
   frame->Connect( DYNAMIC_QUIT,  -1, wxEVT_COMMAND_MENU_SELECTED,
                   (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction)

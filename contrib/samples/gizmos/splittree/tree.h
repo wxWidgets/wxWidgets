@@ -49,7 +49,7 @@ protected:
     TestValueWindow*		m_valueWindow;
 
 private:
-    // any class wishing to process wxWindows events must use this macro
+    // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
 };
 

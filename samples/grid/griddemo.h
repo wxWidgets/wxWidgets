@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        griddemo.h
-// Purpose:     Grid control wxWindows sample
+// Purpose:     Grid control wxWidgets sample
 // Author:      Michael Bedward
 // Modified by:
 // RCS-ID:      $Id$

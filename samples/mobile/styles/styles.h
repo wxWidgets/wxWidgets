@@ -11,7 +11,7 @@
     #pragma interface "styles.cpp"
 #endif
 
-// Include wxWindows' headers
+// Include wxWidgets' headers
 
 #ifndef WX_PRECOMP
     #include <wx/wx.h>

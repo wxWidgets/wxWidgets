@@ -28,7 +28,7 @@
 #endif
 
 // for all others, include the necessary headers (this file is usually all you
-// need because it includes almost all "standard" wxWindows headers
+// need because it includes almost all "standard" wxWidgets headers
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif
@@ -91,7 +91,7 @@ public:
     void CloseVideoWindow();
     
 private:
-    // any class wishing to process wxWindows events must use this macro
+    // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
 
 private:
@@ -132,7 +132,7 @@ enum
 };
 
 // ----------------------------------------------------------------------------
-// event tables and other macros for wxWindows
+// event tables and other macros for wxWidgets
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(MMBoardFrame, wxFrame)
@@ -274,7 +274,7 @@ MMBoardFrame::MMBoardFrame(const wxString& title, const wxPoint& pos, const wxSi
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(3);
-    SetStatusText(wxT("Welcome to wxWindows!"));
+    SetStatusText(wxT("Welcome to wxWidgets!"));
 #endif // wxUSE_STATUSBAR
 
     // Misc variables
@@ -398,8 +398,8 @@ void MMBoardFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void MMBoardFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxString msg;
-    msg.Printf( wxT("wxWindows Multimedia board v1.0a, wxMMedia v2.0a:\n")
-                wxT("an example of the capabilities of the wxWindows multimedia classes.\n")
+    msg.Printf( wxT("wxWidgets Multimedia board v1.0a, wxMMedia v2.0a:\n")
+                wxT("an example of the capabilities of the wxWidgets multimedia classes.\n")
 		wxT("Copyright 1999, 2000, Guilhem Lavaux.\n"));
  
     wxMessageBox(msg, _T("About MMBoard"), wxOK | wxICON_INFORMATION, this);

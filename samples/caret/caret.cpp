@@ -17,7 +17,7 @@
 #endif
 
 // for all others, include the necessary headers (this file is usually all you
-// need because it includes almost all <standard< wxWindows headers
+// need because it includes almost all <standard< wxWidgets headers
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
     #include "wx/log.h"
@@ -127,7 +127,7 @@ public:
 private:
     MyCanvas *m_canvas;
 
-    // any class wishing to process wxWindows events must use this macro
+    // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
 };
 
@@ -150,10 +150,10 @@ enum
 };
 
 // ----------------------------------------------------------------------------
-// event tables and other macros for wxWindows
+// event tables and other macros for wxWidgets
 // ----------------------------------------------------------------------------
 
-// the event tables connect the wxWindows events with the functions (event
+// the event tables connect the wxWidgets events with the functions (event
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -164,7 +164,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Caret_Move, MyFrame::OnCaretMove)
 END_EVENT_TABLE()
 
-// Create a new application object: this macro will allow wxWindows to create
+// Create a new application object: this macro will allow wxWidgets to create
 // the application object during program execution (it's better than using a
 // static object for many reasons) and also declares the accessor function
 // wxGetApp() which will return the reference of the right type (i.e. MyApp and
@@ -183,7 +183,7 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
     // create and show the main application window
-    MyFrame *frame = new MyFrame(_T("Caret wxWindows sample"),
+    MyFrame *frame = new MyFrame(_T("Caret wxWidgets sample"),
                                  wxPoint(50, 50), wxSize(450, 340));
 
     frame->Show(TRUE);
@@ -227,7 +227,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);
-    SetStatusText(_T("Welcome to wxWindows!"));
+    SetStatusText(_T("Welcome to wxWidgets!"));
 }
 
 
@@ -241,7 +241,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox(_T("The caret wxWindows sample.\n© 1999 Vadim Zeitlin"),
+    wxMessageBox(_T("The caret wxWidgets sample.\n© 1999 Vadim Zeitlin"),
                  _T("About Caret"), wxOK | wxICON_INFORMATION, this);
 }
 

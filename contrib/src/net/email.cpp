@@ -40,7 +40,7 @@
 #endif
 
 // Send a message.
-// Specify profile, or leave it to wxWindows to find the current user name
+// Specify profile, or leave it to wxWidgets to find the current user name
 
 #ifdef __WXMSW__
 bool wxEmail::Send(wxMailMessage& message, const wxString& profileName, const wxString& WXUNUSED(sendMail))

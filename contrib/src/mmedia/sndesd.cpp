@@ -44,7 +44,7 @@
 
 // --------------------------------------------------------------------------
 
-#define MY_ESD_NAME "wxWindows/wxSoundStreamESD"
+#define MY_ESD_NAME "wxWidgets/wxSoundStreamESD"
 
 // --------------------------------------------------------------------------
 // wxSoundStreamESD: ESD sound driver

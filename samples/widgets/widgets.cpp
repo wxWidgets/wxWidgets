@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
-// Program:     wxWindows Widgets Sample
+// Program:     wxWidgets Widgets Sample
 // Name:        widgets.cpp
-// Purpose:     Sample showing most of the simple wxWindows widgets
+// Purpose:     Sample showing most of the simple wxWidgets widgets
 // Author:      Vadim Zeitlin
 // Created:     27.03.01
 // Id:          $Id$
@@ -102,7 +102,7 @@ private:
     // and the image list for it
     wxImageList *m_imaglist;
 
-    // any class wishing to process wxWindows events must use this macro
+    // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
 };
 
@@ -210,7 +210,7 @@ bool WidgetsApp::OnInit()
 #elif defined(__WXMOTIF__)
     title += _T("wxMOTIF");
 #else
-    title += _T("wxWindows");
+    title += _T("wxWidgets");
 #endif
 
     wxFrame *frame = new WidgetsFrame(title + _T(" widgets demo"));

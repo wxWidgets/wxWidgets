@@ -14,7 +14,7 @@
 #endif
 
 /*
- * Purpose:  Document/view architecture demo for wxWindows class library - MDI
+ * Purpose:  Document/view architecture demo for wxWidgets class library - MDI
  */
 
 

@@ -165,7 +165,7 @@ IPCDialogBox::IPCDialogBox(wxWindow *parent, const wxString& title,
 
 IPCDialogBox::~IPCDialogBox( )
 {
-    // wxWindows exit code destroys dialog before destroying the connection in
+    // wxWidgets exit code destroys dialog before destroying the connection in
     // OnExit, so make sure connection won't try to delete the dialog later.
     if (m_connection)
         m_connection->dialog = NULL;

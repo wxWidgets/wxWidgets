@@ -44,7 +44,7 @@ Nice-to-have
   for independent apps
 
 - possibly evolve it into a central command
-  centre for wxWindows: invoke other apps such
+  centre for wxWidgets: invoke other apps such
   as poEdit, <favourite dialog editor>, help,
   wizards, etc. Upgrade your wxWin version
   via the web.

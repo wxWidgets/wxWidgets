@@ -102,7 +102,7 @@ bool MyApp::OnInit()
     // for Unix, should be a valid file name (for a nonexistent file)
     // for nonMSW, nonUnix, must be port number, for example "4242" (TCP/IP based classes)
     // should be unique to the client app
-    a_service = "/tmp/wxWindows-helpconnection";
+    a_service = "/tmp/wxWidgets-helpconnection";
     //a_service = "4242";
     a_windowname = "HTML Help Test: %s";
 	

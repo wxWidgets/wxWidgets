@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        htmllbox.cpp
-// Purpose:     HtmlLbox wxWindows sample
+// Purpose:     HtmlLbox wxWidgets sample
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     31.05.03
 // RCS-ID:      $Id$
-// Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -120,7 +120,7 @@ public:
 private:
     MyHtmlListBox *m_hlbox;
 
-    // any class wishing to process wxWindows events must use this macro
+    // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
 };
 
@@ -156,7 +156,7 @@ enum
 };
 
 // ----------------------------------------------------------------------------
-// event tables and other macros for wxWindows
+// event tables and other macros for wxWidgets
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -192,7 +192,7 @@ IMPLEMENT_APP(MyApp)
 
 // frame constructor
 MyFrame::MyFrame()
-       : wxFrame(NULL, -1, _T("HtmlLbox wxWindows Sample"),
+       : wxFrame(NULL, -1, _T("HtmlLbox wxWidgets Sample"),
                  wxDefaultPosition, wxSize(400, 500))
 {
     // set the frame icon
@@ -243,7 +243,7 @@ MyFrame::MyFrame()
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);
-    SetStatusText(_T("Welcome to wxWindows!"));
+    SetStatusText(_T("Welcome to wxWidgets!"));
 #endif // wxUSE_STATUSBAR
 
     // create the child controls

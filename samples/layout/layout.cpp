@@ -66,7 +66,7 @@ END_EVENT_TABLE()
 
 // Define my frame constructor
 MyFrame::MyFrame()
-       : wxFrame(NULL, wxID_ANY, _T("wxWindows Layout Demo"),
+       : wxFrame(NULL, wxID_ANY, _T("wxWidgets Layout Demo"),
                  wxDefaultPosition, wxDefaultSize,
                  wxDEFAULT_FRAME_STYLE | wxNO_FULL_REPAINT_ON_RESIZE)
 {
@@ -92,7 +92,7 @@ MyFrame::MyFrame()
   SetMenuBar(menu_bar);
 
   CreateStatusBar(2);
-  SetStatusText(_T("wxWindows layout demo"));
+  SetStatusText(_T("wxWidgets layout demo"));
 
 
   // we want to get a dialog that is stretchable because it
@@ -201,7 +201,7 @@ void MyFrame::TestNotebookSizers(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 {
-    (void)wxMessageBox(_T("wxWindows GUI library layout demo\n"),
+    (void)wxMessageBox(_T("wxWidgets GUI library layout demo\n"),
             _T("About Layout Demo"), wxOK|wxICON_INFORMATION);
 }
 

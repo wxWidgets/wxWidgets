@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////
 // Name:        ScintillaWX.cxx
-// Purpose:     A wxWindows implementation of Scintilla.  A class derived
+// Purpose:     A wxWidgets implementation of Scintilla.  A class derived
 //              from ScintillaBase that uses the "wx platform" defined in
 //              PlatformWX.cxx  This class is one end of a bridge between
 //              the wx world and the Scintilla world.  It needs a peer

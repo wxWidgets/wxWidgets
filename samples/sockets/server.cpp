@@ -84,7 +84,7 @@ private:
   bool            m_busy;
   int             m_numClients;
 
-  // any class wishing to process wxWindows events must use this macro
+  // any class wishing to process wxWidgets events must use this macro
   DECLARE_EVENT_TABLE()
 };
 
@@ -105,7 +105,7 @@ enum
 };
 
 // --------------------------------------------------------------------------
-// event tables and other macros for wxWindows
+// event tables and other macros for wxWidgets
 // --------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        sound.cpp
-// Purpose:     Example of sound playing in wxWindows
+// Purpose:     Example of sound playing in wxWidgets
 // Author:      Vaclav Slavik
 // Modified by:
 // Created:     2004/01/29
@@ -16,7 +16,7 @@
 #endif
 
 // for all others, include the necessary headers (this file is usually all you
-// need because it includes almost all "standard" wxWindows headers)
+// need because it includes almost all "standard" wxWidgets headers)
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/frame.h"
@@ -77,7 +77,7 @@ private:
     wxString    m_soundFile;
     wxTextCtrl* m_tc;
     
-    // any class wishing to process wxWindows events must use this macro
+    // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
 };
 
@@ -99,10 +99,10 @@ enum
 };
 
 // ----------------------------------------------------------------------------
-// event tables and other macros for wxWindows
+// event tables and other macros for wxWidgets
 // ----------------------------------------------------------------------------
 
-// the event tables connect the wxWindows events with the functions (event
+// the event tables connect the wxWidgets events with the functions (event
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -115,7 +115,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Sound_PlayLoop,         MyFrame::OnPlayLoop)
 END_EVENT_TABLE()
 
-// Create a new application object: this macro will allow wxWindows to create
+// Create a new application object: this macro will allow wxWidgets to create
 // the application object during program execution (it's better than using a
 // static object for many reasons) and also implements the accessor function
 // wxGetApp() which will return the reference of the right type (i.e. MyApp and
@@ -134,7 +134,7 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
     // create the main application window
-    MyFrame *frame = new MyFrame(_T("wxWindows Sound Sample"));
+    MyFrame *frame = new MyFrame(_T("wxWidgets Sound Sample"));
 
     // and show it (the frames, unlike simple controls, are not shown when
     // created initially)

@@ -40,8 +40,8 @@
     DiskClusterSize=512
     ReserveBytes=0
     UseSetupLdr=1
-    LicenseFile=c:\wx2dev\wxWindows\utils\tex2rtf\docs\licence.txt
-    InfoAfterFile=c:\wx2dev\wxWindows\utils\tex2rtf\docs\readme.txt
-    SourceDir=c:\wx2dev\wxWindows\deliver\tex2rtf
-    OutputDir=c:\wx2dev\wxWindows\deliver
+    LicenseFile=c:\wx2dev\wxWidgets\utils\tex2rtf\docs\licence.txt
+    InfoAfterFile=c:\wx2dev\wxWidgets\utils\tex2rtf\docs\readme.txt
+    SourceDir=c:\wx2dev\wxWidgets\deliver\tex2rtf
+    OutputDir=c:\wx2dev\wxWidgets\deliver
 

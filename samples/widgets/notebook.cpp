@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Program:     wxWindows Widgets Sample
+// Program:     wxWidgets Widgets Sample
 // Name:        notebook.cpp
 // Purpose:     Part of the widgets sample showing wxNotebook
 // Author:      Vadim Zeitlin
@@ -78,7 +78,7 @@ enum Orient
     Orient_Max
 };
 
-// old versions of wxWindows don't define this style
+// old versions of wxWidgets don't define this style
 #ifndef wxNB_TOP
     #define wxNB_TOP (0)
 #endif

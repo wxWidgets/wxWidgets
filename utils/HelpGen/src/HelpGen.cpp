@@ -48,7 +48,7 @@
 // headers
 // -----------------------------------------------------------------------------
 
-// wxWindows
+// wxWidgets
 #include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
@@ -575,7 +575,7 @@ int main(int argc, char **argv)
     wxInitializer initializer;
     if ( !initializer )
     {
-        fprintf(stderr, "Failed to initialize the wxWindows library, aborting.");
+        fprintf(stderr, "Failed to initialize the wxWidgets library, aborting.");
 
         return -1;
     }
@@ -1027,7 +1027,7 @@ void HelpGenVisitor::VisitClass( spClass& cl )
     // if the header includes other headers they must be related to it... try to
     // automatically generate the "See also" clause
     if ( !m_headers.IsEmpty() ) {
-        // correspondence between wxWindows headers and class names
+        // correspondence between wxWidgets headers and class names
         static const char *headers[] = {
             "object",
             "defs",
@@ -1430,7 +1430,7 @@ bool DocManager::ParseTeXFile(const wxString& filename)
 
     // the name of the class from the last "\membersection" command: we assume
     // that the following "\func" or "\constfunc" always documents a method of
-    // this class (and it should always be like that in wxWindows documentation)
+    // this class (and it should always be like that in wxWidgets documentation)
     wxString classname;
 
     for ( const char *current = buf; current - buf < len; current++ ) {
@@ -2185,6 +2185,9 @@ static const wxString GetVersionString()
 
 /*
    $Log$
+   Revision 1.28  2004/05/25 11:19:57  JS
+   More name changes
+
    Revision 1.27  2003/10/13 17:21:30  MBN
      Compilation fixes.
 
@@ -2299,7 +2302,7 @@ static const wxString GetVersionString()
     date: 1999/01/08 17:45:55;  author: VZ;  state: Exp;
 
     HelpGen is a prototype of the tool for automatic generation of the .tex files
-    for wxWindows documentation from C++ headers
+    for wxWidgets documentation from C++ headers
 */
 
 /* vi: set tw=80 et ts=4 sw=4: */

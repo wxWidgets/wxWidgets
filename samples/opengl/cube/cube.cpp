@@ -61,7 +61,7 @@ public:
 
 private:
 
-    // Any class wishing to process wxWindows events must use this macro
+    // Any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
 };
 
@@ -451,7 +451,7 @@ void MyFrame::OnExit( wxCommandEvent& WXUNUSED(event) )
 
 /*static*/ MyFrame *MyFrame::Create(MyFrame *parentFrame, bool isCloneWindow)
 {
-    wxString str = wxT("wxWindows OpenGL Cube Sample");
+    wxString str = wxT("wxWidgets OpenGL Cube Sample");
     if (isCloneWindow) str += wxT(" - Clone");
 
     MyFrame *frame = new MyFrame(NULL, str, wxDefaultPosition,

@@ -23,7 +23,7 @@ done for MS-Windows. On a Sun the colours look a little washed
 out and there is not as much snow or high mountains (maybe the
 random number generators fault). The viewing plane is not
 quite right as the original code used SetViewportOrg() which there
-doesn't seem to be an equivalent of under wxWindows, and my quick
+doesn't seem to be an equivalent of under wxWidgets, and my quick
 hack doesn't fix. 
 */
 
@@ -94,7 +94,7 @@ DECLARE_EVENT_TABLE()
 bool MyApp::OnInit()
 {
   // Create the main frame window
-  MyFrame *frame = new MyFrame(NULL, _T("Fractal Mountains for wxWindows"), wxPoint(-1, -1), wxSize(640, 480));
+  MyFrame *frame = new MyFrame(NULL, _T("Fractal Mountains for wxWidgets"), wxPoint(-1, -1), wxSize(640, 480));
 
   // Make a menubar
   wxMenu *file_menu = new wxMenu;

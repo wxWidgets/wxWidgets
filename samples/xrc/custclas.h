@@ -35,8 +35,8 @@
 //! A custom listctrl that resizes itself and pops up a context-sensitive menu.
 class MyResizableListCtrl : public wxListCtrl
 {
-    // Very helpful wxWindows macro required for wxWindows-RTTI tracing: By using this
-    // you will see "Leaked one object of type myResizeableListCtrl" in the debug log, 
+    // Very helpful wxWidgets macro required for wxWidgets-RTTI tracing: By using this
+    // you will see "Leaked one object of type myResizeableListCtrl" in the debug log,
     // along with which line you if was created, but you forget to free the memory.
     // NOTE: Using this REQUIRES a default constructor: that means either: giving a 
     // default value for all parameters in your constructor, or else having a dummy
@@ -47,14 +47,14 @@ public:
 
     // Constructor.        
     /*
-        These parameters are the same as a wxWindows constructor.
+        These parameters are the same as a wxWidgets constructor.
         \param parent The parent window.
         \param id The id of the progress_listbox. Will usually be -1 unless multiple
             of them on the same dialog.
         \param pos The pixel position of the listctrl on its parent window
         \param size The pixel size of the listctrl
-        \param style Style of the listbox. See wxWindows wxListBox docs for details.
-        \param validator Window validator. See wxWindows docs for details.
+        \param style Style of the listbox. See wxWidgets wxListBox docs for details.
+        \param validator Window validator. See wxWidgets docs for details.
         \param name Windows name (rarely used).
         \param exclusion_column_caption The label of header of listctrl's exclusion
             column.
@@ -76,7 +76,7 @@ protected:
     // A custom function for a context sensitive menu. 
     void ContextSensitiveMenu( wxMouseEvent& event );       
     
-    // This is a wxWindows function that we are going to override with our own behaviour.
+    // This is a wxWidgets function that we are going to override with our own behaviour.
     void OnSize( wxSizeEvent &event );
     
     // A custom function. What is called in the constructor, and in an OnSize()
@@ -84,7 +84,7 @@ protected:
     
 private:
 
-    // wxWindows macro, required to be able to use Event tables in the .cpp file.
+    // wxWidgets macro, required to be able to use Event tables in the .cpp file.
     DECLARE_EVENT_TABLE()
     
 };

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        typetest.cpp
-// Purpose:     Types wxWindows sample
+// Purpose:     Types wxWidgets sample
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
@@ -74,7 +74,7 @@ END_EVENT_TABLE()
 bool MyApp::OnInit()
 {
     // Create the main frame window
-    MyFrame *frame = new MyFrame((wxFrame *) NULL, _T("wxWindows Types Demo"),
+    MyFrame *frame = new MyFrame((wxFrame *) NULL, _T("wxWidgets Types Demo"),
                                  wxPoint(50, 50), wxSize(450, 340));
 
     // Give it an icon
@@ -1077,7 +1077,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 {
-    wxMessageDialog dialog(this, _T("Tests various wxWindows types"),
+    wxMessageDialog dialog(this, _T("Tests various wxWidgets types"),
         _T("About Types"), wxYES_NO|wxCANCEL);
 
     dialog.ShowModal();

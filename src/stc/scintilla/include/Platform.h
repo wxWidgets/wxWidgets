@@ -1,7 +1,7 @@
 // Scintilla source code edit control
 /** @file Platform.h
  ** Interface to platform facilities. Also includes some basic utilities.
- ** Implemented in PlatGTK.cxx for GTK+/Linux, PlatWin.cxx for Windows, and PlatWX.cxx for wxWindows.
+ ** Implemented in PlatGTK.cxx for GTK+/Linux, PlatWin.cxx for Windows, and PlatWX.cxx for wxWidgets.
  **/
 // Copyright 1998-2003 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
@@ -12,7 +12,7 @@
 // PLAT_GTK = GTK+ on Linux or Win32
 // PLAT_GTK_WIN32 is defined additionally when running PLAT_GTK under Win32
 // PLAT_WIN = Win32 API on Win32 OS
-// PLAT_WX is wxWindows on any supported platform
+// PLAT_WX is wxWidgets on any supported platform
 
 #define PLAT_GTK 0
 #define PLAT_GTK_WIN32 0

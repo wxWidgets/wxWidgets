@@ -67,7 +67,7 @@
 // --------------------------------------------------------------------------
 
 // IDs for the controls and the menu commands. Exluding those already defined
-// by wxWindows, such as wxID_NEW.
+// by wxWidgets, such as wxID_NEW.
 enum
 {
     // timer
@@ -99,7 +99,7 @@ enum
 };
 
 // --------------------------------------------------------------------------
-// event tables and other macros for wxWindows
+// event tables and other macros for wxWidgets
 // --------------------------------------------------------------------------
 
 // Event tables

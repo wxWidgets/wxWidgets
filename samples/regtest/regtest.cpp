@@ -398,7 +398,7 @@ void RegFrame::OnTest(wxCommandEvent& WXUNUSED(event))
 
 void RegFrame::OnGoTo(wxCommandEvent& WXUNUSED(event))
 {
-    static wxString s_location = _T("HKEY_CURRENT_USER\\Software\\wxWindows");
+    static wxString s_location = _T("HKEY_CURRENT_USER\\Software\\wxWidgets");
 
     wxString location = wxGetTextFromUser(
         _T("Enter the location to go to:"),

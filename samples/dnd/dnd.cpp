@@ -893,7 +893,7 @@ bool DnDApp::OnInit()
 
     // create the main frame window
     DnDFrame *frame = new DnDFrame((wxFrame  *) NULL,
-                                   _T("Drag-and-Drop/Clipboard wxWindows Sample"),
+                                   _T("Drag-and-Drop/Clipboard wxWidgets Sample"),
                                    10, 100, 650, 340);
 
     // activate it
@@ -912,7 +912,7 @@ bool DnDApp::OnInit()
 
 DnDFrame::DnDFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h)
         : wxFrame(frame, wxID_ANY, title, wxPoint(x, y), wxSize(w, h)),
-          m_strText(_T("wxWindows drag & drop works :-)"))
+          m_strText(_T("wxWidgets drag & drop works :-)"))
 
 {
     // frame icon and status bar
@@ -1099,7 +1099,7 @@ void DnDFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 void DnDFrame::OnHelp(wxCommandEvent& /* event */)
 {
     wxMessageDialog dialog(this,
-                           _T("This small program demonstrates drag & drop support in wxWindows. The program window\n")
+                           _T("This small program demonstrates drag & drop support in wxWidgets. The program window\n")
                            _T("consists of 3 parts: the bottom pane is for debug messages, so that you can see what's\n")
                            _T("going on inside. The top part is split into 2 listboxes, the left one accepts files\n")
                            _T("and the right one accepts text.\n")

@@ -59,7 +59,7 @@ ctSettings::ctSettings()
     // m_backgroundColour = wxColour(140, 172, 179); // blue-grey
     m_editWindowFont = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
 
-    m_appName = wxT("wxWindows Configuration Tool");
+    m_appName = wxT("wxWidgets Configuration Tool");
     m_appNameShort = wxT("Configuration Tool");
     m_showSplashScreen = FALSE;
     m_userName = wxEmptyString;
@@ -163,7 +163,7 @@ wxString ctSettings::GenerateFilename(const wxString& rootName)
 // Load config info
 bool ctSettings::LoadConfig()
 {
-    wxConfig config(wxGetApp().GetSettings().GetAppName(), wxT("wxWindows"));
+    wxConfig config(wxGetApp().GetSettings().GetAppName(), wxT("wxWidgets"));
 
     config.Read(wxT("Files/LastFile"), & m_lastFilename);
     config.Read(wxT("Files/LastSetupSaveDir"), & m_lastSetupSaveDir);
@@ -224,7 +224,7 @@ bool ctSettings::LoadConfig()
 // Save config info
 bool ctSettings::SaveConfig()
 {
-    wxConfig config(wxGetApp().GetSettings().GetAppName(), wxT("wxWindows"));
+    wxConfig config(wxGetApp().GetSettings().GetAppName(), wxT("wxWidgets"));
 
     config.Write(wxT("Files/LastFile"), m_lastFilename);
     config.Write(wxT("Files/LastSetupSaveDir"), m_lastSetupSaveDir);

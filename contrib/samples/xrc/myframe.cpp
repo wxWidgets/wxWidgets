@@ -16,7 +16,7 @@
 #endif
 
 //-----------------------------------------------------------------------------
-// Standard wxWindows headers
+// Standard wxWidgets headers
 //-----------------------------------------------------------------------------
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -27,7 +27,7 @@
 #endif
 
 // For all others, include the necessary headers (this file is usually all you
-// need because it includes almost all "standard" wxWindows headers)
+// need because it includes almost all "standard" wxWidgets headers)
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif
@@ -73,14 +73,14 @@
 // Event table: connect the events to the handler functions to process them
 //-----------------------------------------------------------------------------
 
-// The event tables connect the wxWindows events with the functions (event
+// The event tables connect the wxWidgets events with the functions (event
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
 // The reason why the menuitems and tools are given the same name in the 
 // XRC file, is that both a tool (a toolbar item) and a menuitem are designed
 // to fire the same kind of event (an EVT_MENU) and thus I give them the same 
 // ID name to help new users emphasize this point which is often overlooked 
-// when starting out with wxWindows.
+// when starting out with wxWidgets.
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(XRCID("exit_tool_or_menuitem"),  MyFrame::OnExitToolOrMenuCommand)
     EVT_MENU(XRCID("non_derived_dialog_tool_or_menuitem"), MyFrame::OnNonDerivedDialogToolOrMenuCommand) 

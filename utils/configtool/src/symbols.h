@@ -33,6 +33,6 @@
 #define ctDESCRIPTION_BACKGROUND_COLOUR wxColour(255, 255, 192)
 
 // Misc symbols
-#define ctSYMBOL_WEBSITE            wxT("http://www.wxwindows.org")
+#define ctSYMBOL_WEBSITE            wxT("http://www.wxwidgets.org")
 
 #endif

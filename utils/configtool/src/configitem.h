@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        configitem.h
-// Purpose:     wxWindows Configuration Tool config item class
+// Purpose:     wxWidgets Configuration Tool config item class
 // Author:      Julian Smart
 // Modified by:
 // Created:     2003-06-03

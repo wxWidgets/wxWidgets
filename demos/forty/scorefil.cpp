@@ -8,7 +8,7 @@
 // Copyright:   (c) 1993-1998 Chris Breeze
 // Licence:   	wxWindows licence
 //---------------------------------------------------------------------------
-// Last modified: 14th May 1998 - ported to wxWindows 2.0
+// Last modified: 14th May 1998 - ported to wxWidgets 2.0
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -68,7 +68,7 @@ ScoreFile::ScoreFile(const wxString& appName)
 	}
 #endif
 
-	m_config = new wxConfig(appName, _T("wxWindows"), appName, _T(""),
+	m_config = new wxConfig(appName, _T("wxWidgets"), appName, _T(""),
                                 wxCONFIG_USE_LOCAL_FILE);  // only local
 }
 

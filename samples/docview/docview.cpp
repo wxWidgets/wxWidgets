@@ -14,7 +14,7 @@
 #endif
 
 /*
-* Purpose:  Document/view architecture demo for wxWindows class library
+* Purpose:  Document/view architecture demo for wxWidgets class library
 *           Run with no arguments for multiple top-level windows, -single
 *           for a single window.
 */

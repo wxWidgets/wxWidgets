@@ -183,7 +183,7 @@ END_EVENT_TABLE()
 EditorFrame *EditorFrame::ms_Instance = NULL;
 
 EditorFrame::EditorFrame(wxFrame *parent, const wxString& filename)
-    : wxFrame(parent, -1, filename + _("- wxWindows resources editor"))
+    : wxFrame(parent, -1, filename + _("- wxWidgets resources editor"))
 {
     ms_Instance = this;
 

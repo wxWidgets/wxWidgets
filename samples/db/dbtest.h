@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        dbtest.h
-// Purpose:     wxWindows database demo app
+// Purpose:     wxWidgets database demo app
 // Author:      George Tasker
 // Modified by:
 // Created:     1998
@@ -83,10 +83,10 @@ class CstructContact : public wxObject
         wxChar             State[25+1];
         wxChar             PostalCode[15+1];
         wxChar             Country[20+1];
-        TIMESTAMP_STRUCT   JoinDate;            // Date on which this person joined the wxWindows project
+        TIMESTAMP_STRUCT   JoinDate;            // Date on which this person joined the wxWidgets project
         Language           NativeLanguage;      // Enumerated type indicating person's native language
         wxChar             Picture[50000];
-        bool               IsDeveloper;         // Is this person a developer for wxWindows, or just a subscriber
+        bool               IsDeveloper;         // Is this person a developer for wxWidgets, or just a subscriber
         UCHAR              Contributions;       // Something to show off an integer field
         ULONG              LinesOfCode;         // Something to show off a 'long' field
 };  // CstructContact

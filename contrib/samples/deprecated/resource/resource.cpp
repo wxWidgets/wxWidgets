@@ -41,7 +41,7 @@
 
 // If we wanted to demonstrate total platform independence,
 // then we'd use the dynamic file loading form for all platforms.
-// But this shows how to embed the wxWindows resources
+// But this shows how to embed the wxWidgets resources
 // in the program code/executable for UNIX and Windows
 // platforms.
 
@@ -104,7 +104,7 @@ bool MyApp::OnInit(void)
 
     // Create the main frame window
     frame = new MyFrame( (wxFrame *) NULL, -1,
-                         wxT("wxWindows Resource Sample"),
+                         wxT("wxWidgets Resource Sample"),
                          wxPoint(-1, -1), wxSize(300, 250) );
 
     // Give it a status line
@@ -172,8 +172,8 @@ MyFrame::MyFrame
 
 void MyFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
 {
-    wxMessageBox(wxT("wxWindows resource sample.\n")
-                 wxT("(c) Julian Smart"), wxT("About wxWindows sample"),
+    wxMessageBox(wxT("wxWidgets resource sample.\n")
+                 wxT("(c) Julian Smart"), wxT("About wxWidgets sample"),
                  wxICON_INFORMATION | wxOK);
 }
 
@@ -191,7 +191,7 @@ void MyFrame::OnTestDialog(wxCommandEvent& WXUNUSED(event) )
         wxTextCtrl *text = (wxTextCtrl *)wxFindWindowByName(wxT("multitext3"), dialog);
         if (text)
         {
-            text->SetValue(wxT("wxWindows resource demo"));
+            text->SetValue(wxT("wxWidgets resource demo"));
         }
 
         dialog->ShowModal();

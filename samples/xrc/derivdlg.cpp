@@ -16,7 +16,7 @@
 #endif
 
 //-----------------------------------------------------------------------------
-// Standard wxWindows headers
+// Standard wxWidgets headers
 //-----------------------------------------------------------------------------
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -27,7 +27,7 @@
 #endif
 
 // For all others, include the necessary headers (this file is usually all you
-// need because it includes almost all "standard" wxWindows headers)
+// need because it includes almost all "standard" wxWidgets headers)
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif

@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        render.cpp
-// Purpose:     Render wxWindows sample
+// Purpose:     Render wxWidgets sample
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     04.08.03
 // RCS-ID:      $Id$
-// Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -78,7 +78,7 @@ class MyTraits : public wxGUIAppTraits
 {
     virtual wxRendererNative *CreateRenderer()
     {
-        // it will be deleted on program shutdown by wxWindows itself
+        // it will be deleted on program shutdown by wxWidgets itself
         return new MyRenderer;
     }
 };
@@ -110,7 +110,7 @@ public:
 private:
     wxPanel *m_panel;
 
-    // any class wishing to process wxWindows events must use this macro
+    // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
 };
 
@@ -159,10 +159,10 @@ enum
 };
 
 // ----------------------------------------------------------------------------
-// event tables and other macros for wxWindows
+// event tables and other macros for wxWidgets
 // ----------------------------------------------------------------------------
 
-// the event tables connect the wxWindows events with the functions (event
+// the event tables connect the wxWidgets events with the functions (event
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -173,7 +173,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Render_About, MyFrame::OnAbout)
 END_EVENT_TABLE()
 
-// Create a new application object: this macro will allow wxWindows to create
+// Create a new application object: this macro will allow wxWidgets to create
 // the application object during program execution (it's better than using a
 // static object for many reasons) and also implements the accessor function
 // wxGetApp() which will return the reference of the right type (i.e. MyApp and
@@ -205,7 +205,7 @@ bool MyApp::OnInit()
 MyFrame::MyFrame()
        : wxFrame(NULL,
                  -1,
-                 _T("Render wxWindows Sample"),
+                 _T("Render wxWidgets Sample"),
                  wxPoint(50, 50),
                  wxSize(450, 340))
 {
@@ -237,7 +237,7 @@ MyFrame::MyFrame()
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);
-    SetStatusText(_T("Welcome to wxWindows!"));
+    SetStatusText(_T("Welcome to wxWidgets!"));
 #endif // wxUSE_STATUSBAR
 
     Show();
@@ -258,7 +258,7 @@ void MyFrame::OnLoad(wxCommandEvent& WXUNUSED(event))
     wxString name = wxGetTextFromUser
                     (
                         _T("Name of the renderer to load:"),
-                        _T("Render wxWindows Sample"),
+                        _T("Render wxWidgets Sample"),
                         s_name,
                         this
                     );
@@ -314,7 +314,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     wxMessageBox(_T("Render sample shows how to use custom renderers.\n")
                  _T("\n")
                  _T("© 2003 Vadim Zeitlin"),
-                 _T("About Render wxWindows Sample"),
+                 _T("About Render wxWidgets Sample"),
                  wxOK | wxICON_INFORMATION, this);
 }
 

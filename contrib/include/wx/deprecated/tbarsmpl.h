@@ -25,7 +25,7 @@
 class WXDLLEXPORT wxMemoryDC;
 
 // ----------------------------------------------------------------------------
-// wxToolBarSimple is a generic toolbar implementation in pure wxWindows
+// wxToolBarSimple is a generic toolbar implementation in pure wxWidgets
 // ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_DEPRECATED wxToolBarSimple : public wxToolBarBase

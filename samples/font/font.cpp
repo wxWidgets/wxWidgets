@@ -17,7 +17,7 @@
 #endif
 
 // for all others, include the necessary headers (this file is usually all you
-// need because it includes almost all standard wxWindows headers
+// need because it includes almost all standard wxWidgets headers
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 
@@ -120,7 +120,7 @@ protected:
     MyCanvas   *m_canvas;
 
 private:
-    // any class wishing to process wxWindows events must use this macro
+    // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
 };
 
@@ -156,10 +156,10 @@ enum
 };
 
 // ----------------------------------------------------------------------------
-// event tables and other macros for wxWindows
+// event tables and other macros for wxWidgets
 // ----------------------------------------------------------------------------
 
-// the event tables connect the wxWindows events with the functions (event
+// the event tables connect the wxWidgets events with the functions (event
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -187,7 +187,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Font_EnumEncodings, MyFrame::OnEnumerateEncodings)
 END_EVENT_TABLE()
 
-// Create a new application object: this macro will allow wxWindows to create
+// Create a new application object: this macro will allow wxWidgets to create
 // the application object during program execution (it's better than using a
 // static object for many reasons) and also declares the accessor function
 // wxGetApp() which will return the reference of the right type (i.e. MyApp and
@@ -206,7 +206,7 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
     // Create the main application window
-    MyFrame *frame = new MyFrame(wxT("Font wxWindows demo"),
+    MyFrame *frame = new MyFrame(wxT("Font wxWidgets demo"),
                                  wxPoint(50, 50), wxSize(600, 400));
 
     // Show it and tell the application that it's our main window
@@ -257,10 +257,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
                      wxT("Select a standard font"));
 
     wxMenu *menuStdFonts = new wxMenu;
-    menuStdFonts->Append(Font_wxNORMAL_FONT, wxT("wxNORMAL_FONT"), wxT("Normal font used by wxWindows"));
-    menuStdFonts->Append(Font_wxSMALL_FONT,  wxT("wxSMALL_FONT"),  wxT("Small font used by wxWindows"));
-    menuStdFonts->Append(Font_wxITALIC_FONT, wxT("wxITALIC_FONT"), wxT("Italic font used by wxWindows"));
-    menuStdFonts->Append(Font_wxSWISS_FONT,  wxT("wxSWISS_FONT"),  wxT("Swiss font used by wxWindows"));
+    menuStdFonts->Append(Font_wxNORMAL_FONT, wxT("wxNORMAL_FONT"), wxT("Normal font used by wxWidgets"));
+    menuStdFonts->Append(Font_wxSMALL_FONT,  wxT("wxSMALL_FONT"),  wxT("Small font used by wxWidgets"));
+    menuStdFonts->Append(Font_wxITALIC_FONT, wxT("wxITALIC_FONT"), wxT("Italic font used by wxWidgets"));
+    menuStdFonts->Append(Font_wxSWISS_FONT,  wxT("wxSWISS_FONT"),  wxT("Swiss font used by wxWidgets"));
     menuSelect->Append(Font_Standard, wxT("Standar&d fonts"), menuStdFonts);
 
     menuSelect->AppendSeparator();
@@ -295,7 +295,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar();
-    SetStatusText(wxT("Welcome to wxWindows font demo!"));
+    SetStatusText(wxT("Welcome to wxWidgets font demo!"));
 }
 
 // --------------------------------------------------------
@@ -689,7 +689,7 @@ void MyFrame::OnViewMsg(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox(wxT("wxWindows font demo\n")
+    wxMessageBox(wxT("wxWidgets font demo\n")
                  wxT("(c) 1999 Vadim Zeitlin"),
                  wxT("About Font"),
                  wxOK | wxICON_INFORMATION, this);

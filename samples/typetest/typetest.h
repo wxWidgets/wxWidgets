@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        typetest.h
-// Purpose:     Types wxWindows sample
+// Purpose:     Types wxWidgets sample
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98

@@ -98,7 +98,7 @@ private:
   wxMenuBar      *m_menuBar;
   bool            m_busy;
 
-  // any class wishing to process wxWindows events must use this macro
+  // any class wishing to process wxWidgets events must use this macro
   DECLARE_EVENT_TABLE()
 };
 
@@ -125,7 +125,7 @@ enum
 };
 
 // --------------------------------------------------------------------------
-// event tables and other macros for wxWindows
+// event tables and other macros for wxWidgets
 // --------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -419,7 +419,7 @@ void MyFrame::OnTest2(wxCommandEvent& WXUNUSED(event))
   wxString s = wxGetTextFromUser(
     _("Enter an arbitrary string to send to the server:"),
     _("Test 2 ..."),
-    _("Yes I like wxWindows!"));
+    _("Yes I like wxWidgets!"));
 
   msg1 = s.c_str();
   len  = (wxStrlen(msg1) + 1) * sizeof(wxChar);

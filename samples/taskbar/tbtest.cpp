@@ -122,7 +122,7 @@ void MyTaskBarIcon::OnMenuExit(wxCommandEvent& )
 {
     dialog->Close(true);
 
-    // Nudge wxWindows into destroying the dialog, since
+    // Nudge wxWidgets into destroying the dialog, since
     // with a hidden window no messages will get sent to put
     // it into idle processing.
     wxGetApp().ProcessIdle();

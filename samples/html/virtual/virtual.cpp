@@ -17,7 +17,7 @@
 #endif
 
 // for all others, include the necessary headers (this file is usually all you
-// need because it includes almost all "standard" wxWindows headers
+// need because it includes almost all "standard" wxWidgets headers
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif
@@ -109,7 +109,7 @@ wxFSFile* MyVFS::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString& location)
       void OnForward(wxCommandEvent& event);
 
    private:
-    // any class wishing to process wxWindows events must use this macro
+    // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
    };
 
@@ -130,10 +130,10 @@ wxFSFile* MyVFS::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString& location)
    };
 
 // ----------------------------------------------------------------------------
-// event tables and other macros for wxWindows
+// event tables and other macros for wxWidgets
 // ----------------------------------------------------------------------------
 
-// the event tables connect the wxWindows events with the functions (event
+// the event tables connect the wxWidgets events with the functions (event
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
    BEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -142,7 +142,7 @@ wxFSFile* MyVFS::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString& location)
    EVT_MENU(Minimal_Forward, MyFrame::OnForward)
    END_EVENT_TABLE()
    
-   // Create a new application object: this macro will allow wxWindows to create
+   // Create a new application object: this macro will allow wxWidgets to create
    // the application object during program execution (it's better than using a
    // static object for many reasons) and also declares the accessor function
    // wxGetApp() which will return the reference of the right type (i.e. MyApp and

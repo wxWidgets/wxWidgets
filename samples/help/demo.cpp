@@ -25,7 +25,7 @@
 #endif
 
 // for all others, include the necessary headers (this file is usually all you
-// need because it includes almost all "standard" wxWindows headers
+// need because it includes almost all "standard" wxWidgets headers
 #ifndef WX_PRECOMP
 #   include "wx/wx.h"
 #endif
@@ -143,7 +143,7 @@ private:
     wxBestHelpController    m_bestHelp;
 #endif
 
-    // any class wishing to process wxWindows events must use this macro
+    // any class wishing to process wxWidgets events must use this macro
    DECLARE_EVENT_TABLE()
 };
 
@@ -207,10 +207,10 @@ enum
 };
 
 // ----------------------------------------------------------------------------
-// event tables and other macros for wxWindows
+// event tables and other macros for wxWidgets
 // ----------------------------------------------------------------------------
 
-// the event tables connect the wxWindows events with the functions (event
+// the event tables connect the wxWidgets events with the functions (event
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -242,7 +242,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(HelpDemo_Help_Netscape, MyFrame::OnHelp)
 END_EVENT_TABLE()
 
-// Create a new application object: this macro will allow wxWindows to create
+// Create a new application object: this macro will allow wxWidgets to create
 // the application object during program execution (it's better than using a
 // static object for many reasons) and also declares the accessor function
 // wxGetApp() which will return the reference of the right type (i.e. MyApp and
@@ -283,7 +283,7 @@ bool MyApp::OnInit()
 #endif
 
     // Create the main application window
-    MyFrame *frame = new MyFrame(_T("HelpDemo wxWindows App"),
+    MyFrame *frame = new MyFrame(_T("HelpDemo wxWidgets App"),
                                  wxPoint(50, 50), wxSize(450, 340));
 
 #if !USE_SIMPLE_HELP_PROVIDER
@@ -419,7 +419,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar();
-    SetStatusText(_T("Welcome to wxWindows!"));
+    SetStatusText(_T("Welcome to wxWidgets!"));
 
     // now create some controls
 
@@ -524,9 +524,9 @@ void MyFrame::OnBestHelp(wxCommandEvent& event)
 
    A wxhelp.map file is used, for example:
 
-   0 wx.htm             ; wxWindows: Help index; additional keywords like overview
-   1 wx204.htm          ; wxWindows Function Reference
-   2 wx34.htm           ; wxWindows Class Reference
+   0 wx.htm             ; wxWidgets: Help index; additional keywords like overview
+   1 wx204.htm          ; wxWidgets Function Reference
+   2 wx34.htm           ; wxWidgets Class Reference
 
    Note that Tex2RTF doesn't currently generate the MAP section automatically.
 

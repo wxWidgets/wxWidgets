@@ -238,7 +238,7 @@ static GLenum Args(int argc, wxChar **argv)
     return GL_TRUE;
 }
 
-// The following part was written for wxWindows 1.66
+// The following part was written for wxWidgets 1.66
 MyFrame *frame = NULL;
 
 IMPLEMENT_APP(MyApp)
@@ -249,7 +249,7 @@ bool MyApp::OnInit()
     Args(argc, argv);
 
     // Create the main frame window
-    frame = new MyFrame(NULL, wxT("wxWindows OpenGL Isosurf Sample"),
+    frame = new MyFrame(NULL, wxT("wxWidgets OpenGL Isosurf Sample"),
         wxDefaultPosition, wxDefaultSize);
 
     // Give it an icon

@@ -265,7 +265,7 @@ bool MyApp::OnInit()
 
     frame->Show(TRUE);
 
-    frame->SetStatusText(_T("Hello, wxWindows"));
+    frame->SetStatusText(_T("Hello, wxWidgets"));
 
     SetTopWindow(frame);
 
@@ -596,7 +596,7 @@ void MyFrame::OnAbout(wxCommandEvent& event)
     else
         m_textWindow->WriteText( _T("Help button up now.\n") );
 
-    (void)wxMessageBox(_T("wxWindows toolbar sample"), _T("About wxToolBar"));
+    (void)wxMessageBox(_T("wxWidgets toolbar sample"), _T("About wxToolBar"));
 }
 
 void MyFrame::OnToolLeftClick(wxCommandEvent& event)

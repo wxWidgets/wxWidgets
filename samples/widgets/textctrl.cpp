@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Program:     wxWindows Widgets Sample
+// Program:     wxWidgets Widgets Sample
 // Name:        textctrl.cpp
 // Purpose:     part of the widgets sample showing wxTextCtrl
 // Author:      Vadim Zeitlin
@@ -203,7 +203,7 @@ protected:
     wxString m_range10_20;
 
 private:
-    // any class wishing to process wxWindows events must use this macro
+    // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
     DECLARE_WIDGETS_PAGE(TextWidgetsPage)
 };

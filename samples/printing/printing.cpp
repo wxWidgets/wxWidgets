@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        printing.cpp
-// Purpose:     Printing demo for wxWindows
+// Purpose:     Printing demo for wxWidgets
 // Author:      Julian Smart
 // Modified by:
 // Created:     1995
@@ -80,7 +80,7 @@ bool MyApp::OnInit(void)
     g_pageSetupData = new wxPageSetupDialogData;
 
     // Create the main frame window
-    frame = new MyFrame((wxFrame *) NULL, _T("wxWindows Printing Demo"), wxPoint(0, 0), wxSize(400, 400));
+    frame = new MyFrame((wxFrame *) NULL, _T("wxWidgets Printing Demo"), wxPoint(0, 0), wxSize(400, 400));
 
     // Give it a status line
     frame->CreateStatusBar(2);
@@ -282,8 +282,8 @@ void MyFrame::OnPageSetupPS(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnPrintAbout(wxCommandEvent& WXUNUSED(event))
 {
-    (void)wxMessageBox(_T("wxWindows printing demo\nAuthor: Julian Smart"),
-        _T("About wxWindows printing demo"), wxOK|wxCENTRE);
+    (void)wxMessageBox(_T("wxWidgets printing demo\nAuthor: Julian Smart"),
+        _T("About wxWidgets printing demo"), wxOK|wxCENTRE);
 }
 
 void MyFrame::Draw(wxDC& dc)

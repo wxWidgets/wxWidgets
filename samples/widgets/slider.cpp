@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Program:     wxWindows Widgets Sample
+// Program:     wxWidgets Widgets Sample
 // Name:        slider.cpp
 // Purpose:     Part of the widgets sample showing wxSlider
 // Author:      Vadim Zeitlin

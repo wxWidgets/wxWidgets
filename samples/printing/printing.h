@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        printing.h
-// Purpose:     Printing demo for wxWindows
+// Purpose:     Printing demo for wxWidgets
 // Author:      Julian Smart
 // Modified by:
 // Created:     1995

@@ -41,7 +41,7 @@ public:
     virtual bool OnSaveDocument(const wxString& filename);
     virtual bool OnNewDocument() { return TRUE; }
     virtual bool OnCloseDocument() ;
-    virtual bool Save(); // Overridden only to correct bug in wxWindows, docview.cpp
+    virtual bool Save(); // Overridden only to correct bug in wxWidgets, docview.cpp
 
 //// Accessors
 

@@ -137,7 +137,7 @@ bool MyApp::OnInit()
   m_canvasFont = *wxNORMAL_FONT;
 
   // Create the main frame window
-  MyFrame *frame = new MyFrame((wxFrame *) NULL, _T("wxWindows dialogs example"), wxPoint(20, 20), wxSize(400, 300));
+  MyFrame *frame = new MyFrame((wxFrame *) NULL, _T("wxWidgets dialogs example"), wxPoint(20, 20), wxSize(400, 300));
 
   // Make a menubar
   wxMenu *file_menu = new wxMenu;
@@ -889,7 +889,7 @@ void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event) )
     dc.SetFont(wxGetApp().m_canvasFont);
     dc.SetTextForeground(wxGetApp().m_canvasTextColour);
     dc.SetBackgroundMode(wxTRANSPARENT);
-    dc.DrawText(_T("wxWindows common dialogs test application"), 10, 10);
+    dc.DrawText(_T("wxWidgets common dialogs test application"), 10, 10);
 }
 
 // ----------------------------------------------------------------------------

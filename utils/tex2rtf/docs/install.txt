@@ -10,7 +10,7 @@ will need to compile Tex2RTF. There are several options for doing this.
 
 If you want to have a graphical interface for Tex2RTF
 (not essential for a conversion utility!) then you
-will need to download wxWindows from skye.aiai.ed.ac.uk
+will need to download wxWidgets from skye.aiai.ed.ac.uk
 (192.41.104.6) in the directory /pub/wxwin/beta, files
 wx150?_*.tar.Z (or .gz) where ? is the latest beta letter,
 currently i.
@@ -30,7 +30,7 @@ change the makefiles or build project files for other compilers.)
 (2) Non-GUI version
 
 Under UNIX, simply use the target 'nogui'. The supplied files in the
-src/wxwin directory supply the essential utilities from wxWindows, and
+src/wxwin directory supply the essential utilities from wxWidgets, and
 Tex2RTF will be built as a command-line program.
 
 On a PC, add 'NOGUI=1' to the makefile command line. Note that the small

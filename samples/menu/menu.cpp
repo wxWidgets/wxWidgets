@@ -347,7 +347,7 @@ bool MyApp::OnInit()
     frame->Show(true);
 
 #if wxUSE_STATUSBAR
-    frame->SetStatusText(_T("Welcome to wxWindows menu sample"));
+    frame->SetStatusText(_T("Welcome to wxWidgets menu sample"));
 #endif // wxUSE_STATUSBAR
 
     SetTopWindow(frame);
@@ -361,7 +361,7 @@ bool MyApp::OnInit()
 
 // Define my frame constructor
 MyFrame::MyFrame()
-       : wxFrame((wxFrame *)NULL, wxID_ANY, _T("wxWindows menu sample"))
+       : wxFrame((wxFrame *)NULL, wxID_ANY, _T("wxWidgets menu sample"))
 {
 #if USE_LOG_WINDOW
     m_textctrl = NULL;
@@ -573,8 +573,8 @@ void MyFrame::OnClearLog(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    (void)wxMessageBox(_T("wxWindows menu sample\n© 1999-2001 Vadim Zeitlin"),
-                       _T("About wxWindows menu sample"),
+    (void)wxMessageBox(_T("wxWidgets menu sample\n© 1999-2001 Vadim Zeitlin"),
+                       _T("About wxWidgets menu sample"),
                        wxICON_INFORMATION);
 }
 

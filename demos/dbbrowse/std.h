@@ -3,7 +3,7 @@
 //---------------------------------------------------------------------------
 //-- all #includes that the whole Project needs. ----------------------------
 //---------------------------------------------------------------------------
-#include <wx/config.h>      // to let wxWindows choose a wxConfig class for your platform
+#include <wx/config.h>      // to let wxWidgets choose a wxConfig class for your platform
 #include <wx/confbase.h>    // base config class
 #include <wx/dbtable.h>
 #include <wx/generic/grid.h>

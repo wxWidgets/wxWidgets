@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        configtree.h
-// Purpose:     wxWindows Configuration Tool tree class
+// Purpose:     wxWidgets Configuration Tool tree class
 // Author:      Julian Smart
 // Modified by:
 // Created:     2003-06-03

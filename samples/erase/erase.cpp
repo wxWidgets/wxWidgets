@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        erase.cpp
-// Purpose:     Erase wxWindows sample
+// Purpose:     Erase wxWidgets sample
 // Author:      Robert Roebling
 // Modified by:
 // Created:     04/01/98
@@ -30,7 +30,7 @@
 #endif
 
 // for all others, include the necessary headers (this file is usually all you
-// need because it includes almost all "standard" wxWindows headers)
+// need because it includes almost all "standard" wxWidgets headers)
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif
@@ -141,7 +141,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);
-    SetStatusText(_T("Welcome to wxWindows erase sample!"));
+    SetStatusText(_T("Welcome to wxWidgets erase sample!"));
 #endif // wxUSE_STATUSBAR
 
     (void)new MyCanvas( this );

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Program:     wxWindows Widgets Sample
+// Program:     wxWidgets Widgets Sample
 // Name:        static.cpp
 // Purpose:     Part of the widgets sample showing various static controls
 // Author:      Vadim Zeitlin

@@ -337,7 +337,7 @@ wxMenuBar* ctMainFrame::CreateMenuBar()
 
     wxMenu *helpMenu = new wxMenu;
     helpMenu->Append(wxID_HELP, wxT("&Help Contents"), wxT("Show Configuration Tool help"));
-    helpMenu->Append(ctID_REFERENCE_CONTENTS, wxT("&wxWindows Help Contents"), wxT("Show wxWindows reference"));
+    helpMenu->Append(ctID_REFERENCE_CONTENTS, wxT("&wxWidgets Help Contents"), wxT("Show wxWidgets reference"));
     helpMenu->AppendSeparator();
     helpMenu->Append(ctID_ITEM_HELP, wxT("&Configuration Option Help\tF1"), wxT("Show help for the selected option"));
     helpMenu->Append(wxID_HELP_CONTEXT, wxT("&What's this?"), wxT("Show help on the clicked item"));
@@ -352,7 +352,7 @@ wxMenuBar* ctMainFrame::CreateMenuBar()
     menuBar->Append(helpMenu, wxT("&Help"));
 
     {
-        wxConfig config(wxGetApp().GetSettings().GetAppName(), wxT("wxWindows"));
+        wxConfig config(wxGetApp().GetSettings().GetAppName(), wxT("wxWidgets"));
         config.SetPath(wxT("FileHistory/"));
         wxGetApp().GetDocManager()->FileHistoryLoad(config);
     }    

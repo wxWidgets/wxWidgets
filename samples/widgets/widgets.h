@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Program:     wxWindows Widgets Sample
+// Program:     wxWidgets Widgets Sample
 // Name:        widgets.h
 // Purpose:     Common stuff for all widgets project files
 // Author:      Vadim Zeitlin

@@ -33,6 +33,6 @@
 ;InnoVer=1.3
 ;AddVerTo=AppVerName
 ;SetupFilename=setup.exe
-;OutputFolder=C:\wx2dev\wxWindows\deliver
+;OutputFolder=C:\wx2dev\wxWidgets\deliver
 ;CopyrightText=Copyright © Julian Smart, 2002
 

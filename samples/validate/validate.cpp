@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        validate.cpp
-// Purpose:     wxWindows validator sample
+// Purpose:     wxWidgets validator sample
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98

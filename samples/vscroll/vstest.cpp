@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        vscroll.cpp
-// Purpose:     VScroll wxWindows sample
+// Purpose:     VScroll wxWidgets sample
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     04/01/98
 // RCS-ID:      $Id$
-// Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -25,7 +25,7 @@
 #endif
 
 // for all others, include the necessary headers (this file is usually all you
-// need because it includes almost all "standard" wxWindows headers)
+// need because it includes almost all "standard" wxWidgets headers)
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
     #include "wx/app.h"
@@ -82,7 +82,7 @@ public:
     }
 
 private:
-    // any class wishing to process wxWindows events must use this macro
+    // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
 };
 
@@ -181,10 +181,10 @@ enum
 };
 
 // ----------------------------------------------------------------------------
-// event tables and other macros for wxWindows
+// event tables and other macros for wxWidgets
 // ----------------------------------------------------------------------------
 
-// the event tables connect the wxWindows events with the functions (event
+// the event tables connect the wxWidgets events with the functions (event
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
 BEGIN_EVENT_TABLE(VScrollFrame, wxFrame)
@@ -193,7 +193,7 @@ BEGIN_EVENT_TABLE(VScrollFrame, wxFrame)
     EVT_SIZE(VScrollFrame::OnSize)
 END_EVENT_TABLE()
 
-// Create a new application object: this macro will allow wxWindows to create
+// Create a new application object: this macro will allow wxWidgets to create
 // the application object during program execution (it's better than using a
 // static object for many reasons) and also declares the accessor function
 // wxGetApp() which will return the reference of the right type (i.e. VScrollApp and
@@ -230,7 +230,7 @@ bool VScrollApp::OnInit()
 VScrollFrame::VScrollFrame()
             : wxFrame(NULL,
                       -1,
-                      _T("VScroll wxWindows Sample"),
+                      _T("VScroll wxWidgets Sample"),
                       wxDefaultPosition,
                       wxSize(400, 350))
 {
@@ -259,7 +259,7 @@ VScrollFrame::VScrollFrame()
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);
-    SetStatusText(_T("Welcome to wxWindows!"));
+    SetStatusText(_T("Welcome to wxWidgets!"));
 #endif // wxUSE_STATUSBAR
 
     // create our one and only child -- it will take our entire client area

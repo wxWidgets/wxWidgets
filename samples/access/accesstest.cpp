@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        accesstest.cpp
-// Purpose:     wxWindows accessibility sample
+// Purpose:     wxWidgets accessibility sample
 // Author:      Julian Smart
 // Modified by:
 // Created:     2002-02-12
@@ -25,7 +25,7 @@
 #endif
 
 // for all others, include the necessary headers (this file is usually all you
-// need because it includes almost all "standard" wxWindows headers)
+// need because it includes almost all "standard" wxWidgets headers)
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif
@@ -107,7 +107,7 @@ public:
 private:
     wxTextCtrl* m_textCtrl;
 
-    // any class wishing to process wxWindows events must use this macro
+    // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
 };
 
@@ -131,10 +131,10 @@ enum
 };
 
 // ----------------------------------------------------------------------------
-// event tables and other macros for wxWindows
+// event tables and other macros for wxWidgets
 // ----------------------------------------------------------------------------
 
-// the event tables connect the wxWindows events with the functions (event
+// the event tables connect the wxWidgets events with the functions (event
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -145,7 +145,7 @@ END_EVENT_TABLE()
 
 #endif // wxUSE_ACCESSIBILITY
 
-// Create a new application object: this macro will allow wxWindows to create
+// Create a new application object: this macro will allow wxWidgets to create
 // the application object during program execution (it's better than using a
 // static object for many reasons) and also declares the accessor function
 // wxGetApp() which will return the reference of the right type (i.e. MyApp and
@@ -172,7 +172,7 @@ bool MyApp::OnInit()
     wxHelpProvider::Set(new wxSimpleHelpProvider());
 
     // create the main application window
-    MyFrame *frame = new MyFrame(_T("AccessTest wxWindows App"),
+    MyFrame *frame = new MyFrame(_T("AccessTest wxWidgets App"),
                                  wxPoint(50, 50), wxSize(450, 340));
 
     // and show it (the frames, unlike simple controls, are not shown when
@@ -352,7 +352,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 #if 0 // wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);
-    SetStatusText(_T("Welcome to wxWindows!"));
+    SetStatusText(_T("Welcome to wxWidgets!"));
 #endif // wxUSE_STATUSBAR
 
 
@@ -365,12 +365,12 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     listBox->Append(wxT("Sealing wax"));
     listBox->Append(wxT("Strings"));
     listBox->CreateAccessible();
-    listBox->SetHelpText(wxT("This is a sample wxWindows listbox, with a number of items in it."));
+    listBox->SetHelpText(wxT("This is a sample wxWidgets listbox, with a number of items in it."));
 
     m_textCtrl = new wxTextCtrl(splitter, -1, wxT(""), wxDefaultPosition,
         wxDefaultSize, wxTE_MULTILINE);
     m_textCtrl->CreateAccessible();
-    m_textCtrl->SetHelpText(wxT("This is a sample wxWindows multiline text control."));
+    m_textCtrl->SetHelpText(wxT("This is a sample wxWidgets multiline text control."));
 
     splitter->SplitHorizontally(listBox, m_textCtrl, 150);
 

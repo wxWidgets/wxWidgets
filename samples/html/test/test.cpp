@@ -21,7 +21,7 @@
 #endif
 
 // For all others, include the necessary headers (this file is usually all you
-// need because it includes almost all "standard" wxWindows headers
+// need because it includes almost all "standard" wxWidgets headers
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif
@@ -62,7 +62,7 @@ private:
     wxHtmlWindow *m_Html;
     wxHtmlProcessor *m_Processor;
 
-    // Any class wishing to process wxWindows events must use this macro
+    // Any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
 };
 
@@ -97,7 +97,7 @@ enum
 };
 
 // ----------------------------------------------------------------------------
-// event tables and other macros for wxWindows
+// event tables and other macros for wxWidgets
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -130,7 +130,7 @@ bool MyApp::OnInit()
     wxFileSystem::AddHandler(new wxInternetFSHandler);
 #endif
 
-    SetVendorName(wxT("wxWindows"));
+    SetVendorName(wxT("wxWidgets"));
     SetAppName(wxT("wxHtmlTest"));
     // the following call to wxConfig::Get will use it to create an object...
 

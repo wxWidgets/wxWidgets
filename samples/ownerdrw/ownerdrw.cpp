@@ -89,7 +89,7 @@ IMPLEMENT_APP(OwnerDrawnApp);
 bool OwnerDrawnApp::OnInit(void)
 {
     OwnerDrawnFrame *pFrame
-        = new OwnerDrawnFrame(NULL, _T("wxWindows Ownerdraw Sample"),
+        = new OwnerDrawnFrame(NULL, _T("wxWidgets Ownerdraw Sample"),
                               50, 50, 450, 340);
 
     SetTopWindow(pFrame);

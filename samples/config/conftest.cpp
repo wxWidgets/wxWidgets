@@ -95,7 +95,7 @@ bool MyApp::OnInit()
   // of the config file/registry key and must be set before the first call
   // to Get() if you want to override the default values (the application
   // name is the name of the executable and the vendor name is the same)
-  SetVendorName(_T("wxWindows"));
+  SetVendorName(_T("wxWidgets"));
   SetAppName(_T("conftest")); // not needed, it's the default value
 
   wxConfigBase *pConfig = wxConfigBase::Get();

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wizard.cpp
-// Purpose:     wxWindows sample demonstrating wxWizard control
+// Purpose:     wxWidgets sample demonstrating wxWizard control
 // Author:      Vadim Zeitlin
 // Modified by: Robert Vazan (sizers)
 // Created:     15.08.99
@@ -81,7 +81,7 @@ public:
     void OnWizardFinished(wxWizardEvent& event);
 
 private:
-    // any class wishing to process wxWindows events must use this macro
+    // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
 };
 

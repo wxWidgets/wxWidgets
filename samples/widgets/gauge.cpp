@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Program:     wxWindows Widgets Sample
+// Program:     wxWidgets Widgets Sample
 // Name:        gauge.cpp
 // Purpose:     Part of the widgets sample showing wxGauge
 // Author:      Vadim Zeitlin

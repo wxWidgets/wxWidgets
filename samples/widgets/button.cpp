@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Program:     wxWindows Widgets Sample
+// Program:     wxWidgets Widgets Sample
 // Name:        button.cpp
 // Purpose:     Part of the widgets sample showing wxButton
 // Author:      Vadim Zeitlin

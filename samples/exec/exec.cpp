@@ -30,7 +30,7 @@
 #endif
 
 // for all others, include the necessary headers (this file is usually all you
-// need because it includes almost all "standard" wxWindows headers
+// need because it includes almost all "standard" wxWidgets headers
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/log.h"
@@ -177,7 +177,7 @@ private:
     // the idle event wake up timer
     wxTimer m_timerIdleWakeUp;
 
-    // any class wishing to process wxWindows events must use this macro
+    // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
 };
 
@@ -308,10 +308,10 @@ enum
 static const wxChar *DIALOG_TITLE = _T("Exec sample");
 
 // ----------------------------------------------------------------------------
-// event tables and other macros for wxWindows
+// event tables and other macros for wxWidgets
 // ----------------------------------------------------------------------------
 
-// the event tables connect the wxWindows events with the functions (event
+// the event tables connect the wxWidgets events with the functions (event
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -352,7 +352,7 @@ BEGIN_EVENT_TABLE(MyPipeFrame, wxFrame)
     EVT_END_PROCESS(-1, MyPipeFrame::OnProcessTerm)
 END_EVENT_TABLE()
 
-// Create a new application object: this macro will allow wxWindows to create
+// Create a new application object: this macro will allow wxWidgets to create
 // the application object during program execution (it's better than using a
 // static object for many reasons) and also declares the accessor function
 // wxGetApp() which will return the reference of the right type (i.e. MyApp and
@@ -371,7 +371,7 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
     // Create the main application window
-    MyFrame *frame = new MyFrame(_T("Exec wxWindows sample"),
+    MyFrame *frame = new MyFrame(_T("Exec wxWidgets sample"),
                                  wxDefaultPosition, wxSize(500, 140));
 
     // Show it and tell the application that it's our main window
@@ -461,7 +461,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar();
-    SetStatusText(_T("Welcome to wxWindows exec sample!"));
+    SetStatusText(_T("Welcome to wxWidgets exec sample!"));
 #endif // wxUSE_STATUSBAR
 }
 
@@ -482,7 +482,7 @@ void MyFrame::OnClear(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox(_T("Exec wxWindows Sample\n© 2000-2002 Vadim Zeitlin"),
+    wxMessageBox(_T("Exec wxWidgets Sample\n© 2000-2002 Vadim Zeitlin"),
                  _T("About Exec"), wxOK | wxICON_INFORMATION, this);
 }
 

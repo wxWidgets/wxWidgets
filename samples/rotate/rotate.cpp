@@ -102,7 +102,7 @@ bool MyApp::OnInit()
         return FALSE;
     }
 
-    MyFrame *frame = new MyFrame (_T("wxWindows rotate sample"),
+    MyFrame *frame = new MyFrame (_T("wxWidgets rotate sample"),
                                   wxPoint(20,20), wxSize(600,450));
 
     frame->Show (TRUE);
@@ -133,7 +133,7 @@ void MyFrame::OnAngle (wxCommandEvent &)
     long degrees = (long)((180*m_angle)/M_PI);
     degrees = wxGetNumberFromUser(_T("Change the image rotation angle"),
                                   _T("Angle in degrees:"),
-                                  _T("wxWindows rotate sample"),
+                                  _T("wxWidgets rotate sample"),
                                   degrees,
                                   -180, +180,
                                   this);

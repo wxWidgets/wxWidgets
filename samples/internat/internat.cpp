@@ -87,7 +87,7 @@ enum
 };
 
 // ----------------------------------------------------------------------------
-// wxWindows macros
+// wxWidgets macros
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -229,7 +229,7 @@ bool MyApp::OnInit()
 MyFrame::MyFrame(wxLocale& locale)
        : wxFrame(NULL,
                  -1,
-                 _("International wxWindows App"),
+                 _("International wxWidgets App"),
                  wxPoint(50, 50),
                  wxSize(350, 60)),
          m_locale(locale)

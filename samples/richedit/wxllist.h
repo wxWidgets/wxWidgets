@@ -1,5 +1,5 @@
 /*-*- c++ -*-********************************************************
- * wxLayoutList.h - a formatted text rendering engine for wxWindows *
+ * wxLayoutList.h - a formatted text rendering engine for wxWidgets *
  *                                                                  *
  * (C) 1999-2000 by Karsten Ballüder (ballueder@gmx.net)            *
  *                                                                  *
@@ -32,7 +32,7 @@
 #   include "MObject.h"
 #endif
 
-// use the wxWindows caret class instead of home grown cursor whenever possible
+// use the wxWidgets caret class instead of home grown cursor whenever possible
 #ifdef __WXMSW__
 #   undef WXLAYOUT_USE_CARET
 #   define WXLAYOUT_USE_CARET 1
@@ -1393,12 +1393,12 @@ public:
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-   The wxLayoutPrintout object for printing within the wxWindows print
+   The wxLayoutPrintout object for printing within the wxWidgets print
    framework.
 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /** This class implements a wxPrintout for printing a wxLayoutList within
-    the wxWindows printing framework.
+    the wxWidgets printing framework.
  */
 class wxLayoutPrintout: public wxPrintout
 {
@@ -1425,7 +1425,7 @@ public:
     */
     bool HasPage(int page);
 
-    /** Gets called from wxWindows to find out which pages are existing.
+    /** Gets called from wxWidgets to find out which pages are existing.
         I'm not totally sure about the parameters though.
         @param minPage the first page in the document
         @param maxPage the last page in the document

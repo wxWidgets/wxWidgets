@@ -130,6 +130,6 @@ void MyOleControl::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
   wxPaintDC dc(this);
   dc.SetFont( wxFont( 24, wxDECORATIVE, wxNORMAL, wxNORMAL, FALSE, "charter" ) );
-  dc.DrawText( "wxWindows rules!", 5, 5 );
+  dc.DrawText( "wxWidgets rules!", 5, 5 );
 }
     

@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        dbtest.cpp
-// Purpose:     wxWindows database demo app
+// Purpose:     wxWidgets database demo app
 // Author:      George Tasker
 // Modified by:
 // Created:     1998
@@ -612,7 +612,7 @@ bool DatabaseDemoApp::OnInit()
     Contact         = NULL;
 
     // Create the main frame window
-    DemoFrame = new DatabaseDemoFrame(NULL, wxT("wxWindows Database Demo"), wxPoint(50, 50), wxSize(537, 480));
+    DemoFrame = new DatabaseDemoFrame(NULL, wxT("wxWidgets Database Demo"), wxPoint(50, 50), wxSize(537, 480));
 
     // Give it an icon
     DemoFrame->SetIcon(wxICON(db));
@@ -909,7 +909,7 @@ void DatabaseDemoFrame::OnEditParameters(wxCommandEvent& WXUNUSED(event))
 
 void DatabaseDemoFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox(wxT("wxWindows sample program for database classes\n\nContributed on 27 July 1998"),wxT("About..."),wxOK | wxICON_INFORMATION);
+    wxMessageBox(wxT("wxWidgets sample program for database classes\n\nContributed on 27 July 1998"),wxT("About..."),wxOK | wxICON_INFORMATION);
 }  // DatabaseDemoFrame::OnAbout()
 
 

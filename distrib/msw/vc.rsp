@@ -119,6 +119,8 @@ samples/html/widget/widget.dsp
 samples/html/widget/widget.dsw
 samples/html/zip/zip.dsp
 samples/html/zip/zip.dsw
+samples/html/htmlctrl/htmlctrl.dsw
+samples/html/htmlctrl/htmlctrl.dsp
 
 samples/image/image.dsp
 samples/image/image.dsw

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Program:     wxWindows Widgets Sample
+// Program:     wxWidgets Widgets Sample
 // Name:        radiobox.cpp
 // Purpose:     Part of the widgets sample showing wxRadioBox
 // Author:      Vadim Zeitlin

@@ -139,7 +139,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 {
-    (void)wxMessageBox(_T("wxWindows 2 Animation Demo\n")
+    (void)wxMessageBox(_T("wxWidgets 2 Animation Demo\n")
                        _T("Author: Julian Smart (c) 2001\n"),
                        _T("About Animation Demo"));
 }

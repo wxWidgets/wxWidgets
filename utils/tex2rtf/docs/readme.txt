@@ -32,7 +32,7 @@ Output
 
   *  HTML (the World Wide Web hypertext format)
 
-  *  wxHTML Help (the wxWindows GUI library help file format)
+  *  wxHTML Help (the wxWidgets GUI library help file format)
 
 Installation
 ============
@@ -47,7 +47,7 @@ Platforms supported
 
   *  Windows (all 32-bit desktop versions)
 
-  *  Any Unix supporting wxWindows
+  *  Any Unix supporting wxWidgets
 
   *  Mac OS X
 
@@ -61,12 +61,12 @@ from:
 
 The WWW pages are at:
 
-    http://www.wxwindows.org/tex2rtf
+    http://www.wxwidgets.org/tex2rtf
 
 Tex2RTF was developed using the free, cross-platform GUI toolkit
-wxWindows, at http://www.wxwindows.org. To compile Tex2RTF
+wxWidgets, at http://www.wxwidgets.org. To compile Tex2RTF
 for platforms for which there are no Tex2RTF binaries,
-you need to download an appropriate version of wxWindows,
+you need to download an appropriate version of wxWidgets,
 configure and compile the library, then compile Tex2RTF
 in utils/tex2rtf/src.
 

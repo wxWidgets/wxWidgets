@@ -3341,7 +3341,7 @@ bool wxLayoutPrintout::HasPage(int pageNum)
 }
 
 /*
-  Stupid wxWindows doesn't draw proper ellipses, so we comment this
+  Stupid wxWidgets doesn't draw proper ellipses, so we comment this
   out. It's a waste of paper anyway.
 */
 #if 0

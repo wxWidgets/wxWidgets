@@ -20,12 +20,12 @@
 #endif
 
 // for all others, include the necessary headers (this file is usually all you
-// need because it includes almost all 'standard' wxWindows headers)
+// need because it includes almost all 'standard' wxWidgets headers)
 #ifndef WX_PRECOMP
     #include <wx/wx.h>
 #endif
 
-//! wxWindows headers
+//! wxWidgets headers
 #include <wx/config.h>   // configuration support
 #include <wx/filedlg.h>  // file dialog support
 #include <wx/filename.h> // filename support
@@ -57,14 +57,14 @@
 #define APP_DESCR _("See http://wxguide.sourceforge.net/")
 
 #define APP_MAINT _T("Otto Wyss")
-#define APP_VENDOR _T("wxWindows")
+#define APP_VENDOR _T("wxWidgets")
 #define APP_COPYRIGTH _T("(C) 2003 Otto Wyss")
-#define APP_LICENCE _T("wxWindows")
+#define APP_LICENCE _T("wxWidgets")
 
 #define APP_VERSION _T("0.1.alpha")
 #define APP_BUILD __DATE__
 
-#define APP_WEBSITE _T("http://www.wxWindows.org")
+#define APP_WEBSITE _T("http://www.wxWidgets.org")
 #define APP_MAIL _T("mailto://???")
 
 #define NONAME _("<untitled>")
@@ -99,7 +99,7 @@ private:
 
 };
 
-// created dynamically by wxWindows
+// created dynamically by wxWidgets
 DECLARE_APP (App);
 
 //----------------------------------------------------------------------------

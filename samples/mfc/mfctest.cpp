@@ -1,20 +1,20 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        mfctest.cpp
-// Purpose:     Sample to demonstrate mixing MFC and wxWindows code
+// Purpose:     Sample to demonstrate mixing MFC and wxWidgets code
 // Author:      Julian Smart
 // Id:          $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-// This sample pops up an initial wxWindows frame, with a menu item
+// This sample pops up an initial wxWidgets frame, with a menu item
 // that allows a new MFC window to be created. Note that CDummyWindow
-// is a class that allows a wxWindows window to be seen as a CWnd
+// is a class that allows a wxWidgets window to be seen as a CWnd
 // for the purposes of specifying a valid main window to the
 // MFC initialisation.
 //
 // You can easily modify this code so that an MFC window pops up
-// initially as the main frame, and allows wxWindows frames to be
+// initially as the main frame, and allows wxWidgets frames to be
 // created subsequently.
 //
 // (1) Make MyApp::OnInit not create a main window.
@@ -32,15 +32,15 @@
 // off some debugging features and also removes the windows.h inclusion
 // in wxprec.h (MFC headers don't like this to have been included previously).
 // Set to 'Use MFC in a shared DLL' or add _AFXDLL to preprocessor settings.
-// Then recompile wxWindows and this sample.
+// Then recompile wxWidgets and this sample.
 //
 // (2) I can't get the sample to link and run using a static MFC library, only the DLL
 // version. Perhaps someone else is a wizard at working out the required settings
 // in the wxWin library and the sample; then debugging the assert problem may be
 // easier.
 //
-// (3) Compiling wxWindows in DLL mode currently includes windows.h, so you must only
-// try linking wxWindows statically.
+// (3) Compiling wxWidgets in DLL mode currently includes windows.h, so you must only
+// try linking wxWidgets statically.
 
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
@@ -76,7 +76,7 @@
 //
 CTheApp theApp;
 
-// wxWindows elements
+// wxWidgets elements
 
 // Define a new application type
 class MyApp: public wxApp
@@ -168,7 +168,7 @@ void CMainWindow::OnAbout()
 
 void CMainWindow::OnTest()
 {
-    wxMessageBox("This is a wxWindows message box.\nWe're about to create a new wxWindows frame.", "wxWindows", wxOK);
+    wxMessageBox("This is a wxWidgets message box.\nWe're about to create a new wxWidgets frame.", "wxWidgets", wxOK);
     wxGetApp().CreateFrame();
 }
 
@@ -211,8 +211,8 @@ BOOL CTheApp::InitInstance()
     m_pMainWnd->ShowWindow( m_nCmdShow );
     m_pMainWnd->UpdateWindow();
 #else    
-    // Demonstrate creation of an initial wxWindows main window.
-    // Wrap wxWindows window in a dummy MFC window and
+    // Demonstrate creation of an initial wxWidgets main window.
+    // Wrap wxWidgets window in a dummy MFC window and
     // make the main window.
     if (wxTheApp && wxTheApp->GetTopWindow())
     {
@@ -232,7 +232,7 @@ int CTheApp::ExitInstance()
     return CWinApp::ExitInstance();
 }
 
-// Override this to provide wxWindows message loop
+// Override this to provide wxWidgets message loop
 // compatibility
 
 BOOL CTheApp::PreTranslateMessage(MSG *msg)
@@ -252,7 +252,7 @@ BOOL CTheApp::OnIdle(LONG lCount)
 }
 
 /*********************************************************************
-* wxWindows elements
+* wxWidgets elements
 ********************************************************************/
 
 bool MyApp::OnInit(void)
@@ -273,7 +273,7 @@ wxFrame *MyApp::CreateFrame(void)
     MyChild *subframe = new MyChild(NULL, "Canvas Frame", wxPoint(10, 10), wxSize(300, 300),
         wxDEFAULT_FRAME_STYLE);
     
-    subframe->SetTitle("wxWindows canvas frame");
+    subframe->SetTitle("wxWidgets canvas frame");
     
     // Give it a status line
     subframe->CreateStatusBar();
@@ -385,7 +385,7 @@ void MyChild::OnActivate(wxActivateEvent& event)
 }
 
 // Dummy MFC window for specifying a valid main window to MFC, using
-// a wxWindows HWND.
+// a wxWidgets HWND.
 CDummyWindow::CDummyWindow(HWND hWnd):CWnd()
 {
     Attach(hWnd);

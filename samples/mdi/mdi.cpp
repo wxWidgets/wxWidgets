@@ -211,7 +211,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 {
-    (void)wxMessageBox(_T("wxWindows 2.0 MDI Demo\n")
+    (void)wxMessageBox(_T("wxWidgets 2.0 MDI Demo\n")
                        _T("Author: Julian Smart (c) 1997\n")
                        _T("Usage: mdi.exe"), _T("About MDI Demo"));
 }

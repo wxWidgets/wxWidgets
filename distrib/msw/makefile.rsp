@@ -38,6 +38,7 @@ samples/html/test/Makefile.in
 samples/html/virtual/Makefile.in
 samples/html/widget/Makefile.in
 samples/html/zip/Makefile.in
+samples/html/htmlctrl/Makefile.in
 samples/image/Makefile.in
 samples/joytest/Makefile.in
 samples/layout/Makefile.in

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Program:     wxWindows Widgets Sample
+// Program:     wxWidgets Widgets Sample
 // Name:        checkbox.cpp
 // Purpose:     Part of the widgets sample showing wxCheckBox
 // Author:      Dimitri Schoolwerth

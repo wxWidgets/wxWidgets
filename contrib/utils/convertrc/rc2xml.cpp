@@ -28,7 +28,7 @@ cross platform (wxGTK,etc)
 #endif
 
 // for all others, include the necessary headers (this file is usually all you
-// need because it includes almost all "standard" wxWindows headers
+// need because it includes almost all "standard" wxWidgets headers
 #ifndef WX_PRECOMP
 #include <wx/wx.h>
 #endif
@@ -730,7 +730,7 @@ void rc2xml::WriteName(wxString name)
 
 //Try to convert any number ids into names
 name=LookUpId(name);
-//Replace common MS ids with wxWindows ids
+//Replace common MS ids with wxWidgets ids
 //I didn't do everyone of them
     if (name==_T("IDOK"))
         name=_T("wxID_OK");

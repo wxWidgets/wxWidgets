@@ -2373,7 +2373,7 @@ long wxParseWindowStyle(const wxString& bitListString)
 }
 
 /*
-* Load a bitmap from a wxWindows resource, choosing an optimum
+* Load a bitmap from a wxWidgets resource, choosing an optimum
 * depth and appropriate type.
 */
 
@@ -2527,7 +2527,7 @@ wxBitmap wxResourceCreateBitmap(const wxString& resource, wxResourceTable *table
 }
 
 /*
-* Load an icon from a wxWindows resource, choosing an optimum
+* Load an icon from a wxWidgets resource, choosing an optimum
 * depth and appropriate type.
 */
 
@@ -2652,7 +2652,7 @@ wxIcon wxResourceCreateIcon(const wxString& resource, wxResourceTable *table)
             }
         case wxBITMAP_TYPE_XPM_DATA:
             {
-                // *** XPM ICON NOT YET IMPLEMENTED IN WXWINDOWS ***
+                // *** XPM ICON NOT YET IMPLEMENTED IN wxWidgets ***
                 /*
                 wxItemResource *item = table->FindResource(name);
                 if (!item)

@@ -319,25 +319,25 @@ void ctLocationSettingsDialog::CreateControls()
     wxStaticBoxSizer* item13 = new wxStaticBoxSizer(item13Static, wxVERTICAL);
     item12->Add(item13, 1, wxGROW|wxALL, 5);
 
-    wxStaticText* item14 = new wxStaticText(item11, wxID_STATIC, _("&wxWindows hierarchy:"), wxDefaultPosition, wxDefaultSize, 0);
+    wxStaticText* item14 = new wxStaticText(item11, wxID_STATIC, _("&wxWidgets hierarchy:"), wxDefaultPosition, wxDefaultSize, 0);
     item13->Add(item14, 0, wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE, 5);
 
     wxBoxSizer* item15 = new wxBoxSizer(wxHORIZONTAL);
     item13->Add(item15, 0, wxGROW, 5);
 
     wxTextCtrl* item16 = new wxTextCtrl(item11, ID_WXWIN_HIERARCHY, _(""), wxDefaultPosition, wxSize(200, -1), 0);
-    item16->SetHelpText(_("Enter the root path of the wxWindows hierarchy"));
+    item16->SetHelpText(_("Enter the root path of the wxWidgets hierarchy"));
 #if wxUSE_TOOLTIPS
     if (ShowToolTips())
-        item16->SetToolTip(_("Enter the root path of the wxWindows hierarchy"));
+        item16->SetToolTip(_("Enter the root path of the wxWidgets hierarchy"));
 #endif
     item15->Add(item16, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxButton* item17 = new wxButton(item11, ID_CHOOSE_WXWIN_HIERARCHY, _("&Choose..."), wxDefaultPosition, wxDefaultSize, 0);
-    item17->SetHelpText(_("Click to choose the root path of the wxWindows hierarchy\\n"));
+    item17->SetHelpText(_("Click to choose the root path of the wxWidgets hierarchy\\n"));
 #if wxUSE_TOOLTIPS
     if (ShowToolTips())
-        item17->SetToolTip(_("Click to choose the root path of the wxWindows hierarchy\\n"));
+        item17->SetToolTip(_("Click to choose the root path of the wxWidgets hierarchy\\n"));
 #endif
     item15->Add(item17, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
@@ -382,7 +382,7 @@ void ctLocationSettingsDialog::OnChooseWxwinHierarchy( wxCommandEvent& WXUNUSED(
     wxASSERT( textCtrl != NULL );
     wxString defaultPath = textCtrl->GetValue();
 
-    wxDirDialog dialog(this, _("Choose the location of the wxWindows hierarchy"),
+    wxDirDialog dialog(this, _("Choose the location of the wxWidgets hierarchy"),
             defaultPath);
     if (dialog.ShowModal() == wxID_OK)
     {

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        controls.cpp
-// Purpose:     Controls wxWindows sample
+// Purpose:     Controls wxWidgets sample
 // Author:      Robert Roebling
 // Modified by:
 // RCS-ID:      $Id$
@@ -341,7 +341,7 @@ bool MyApp::OnInit()
     }
 
     // Create the main frame window
-    MyFrame *frame = new MyFrame(_T("Controls wxWindows App"), x, y);
+    MyFrame *frame = new MyFrame(_T("Controls wxWidgets App"), x, y);
     frame->Show(true);
 
     return true;

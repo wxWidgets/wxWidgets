@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        griddemo.cpp
-// Purpose:     Grid control wxWindows sample
+// Purpose:     Grid control wxWidgets sample
 // Author:      Michael Bedward
 // Modified by:
 // RCS-ID:      $Id$
@@ -130,7 +130,7 @@ END_EVENT_TABLE()
 
 
 GridFrame::GridFrame()
-        : wxFrame( (wxFrame *)NULL, -1, _T("wxWindows grid class demo"),
+        : wxFrame( (wxFrame *)NULL, -1, _T("wxWidgets grid class demo"),
                    wxDefaultPosition,
                    wxDefaultSize )
 {

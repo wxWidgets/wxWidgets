@@ -68,7 +68,7 @@ bool MyApp::OnInit(void)
 
   frame->Show(TRUE);
 
-  frame->SetStatusText(_T("Hello, wxWindows"));
+  frame->SetStatusText(_T("Hello, wxWidgets"));
 
   return TRUE;
 }

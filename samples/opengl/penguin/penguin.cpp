@@ -43,7 +43,7 @@ bool MyApp::OnInit()
 {
 
     // Create the main frame window
-    MyFrame *frame = new MyFrame(NULL, wxT("wxWindows OpenGL Penguin Sample"),
+    MyFrame *frame = new MyFrame(NULL, wxT("wxWidgets OpenGL Penguin Sample"),
         wxDefaultPosition, wxDefaultSize);
 
     /* Make a menubar */

@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        thread.cpp
-// Purpose:     wxWindows thread sample
+// Purpose:     wxWidgets thread sample
 // Author:      Guilhem Lavaux, Vadim Zeitlin
 // Modified by:
 // Created:     06/16/98
 // RCS-ID:      $Id$
-// Copyright:   (c) 1998-2002 wxWindows team
+// Copyright:   (c) 1998-2002 wxWidgets team
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
@@ -370,7 +370,7 @@ bool MyApp::OnInit()
     //wxLog::AddTraceMask("thread");
 
     // Create the main frame window
-    MyFrame *frame = new MyFrame((wxFrame *)NULL, _T("wxWindows threads sample"),
+    MyFrame *frame = new MyFrame((wxFrame *)NULL, _T("wxWidgets threads sample"),
                                  50, 50, 450, 340);
 
     // Make a menubar
@@ -691,7 +691,7 @@ void MyFrame::OnShowCPUs(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 {
     wxMessageDialog dialog(this,
-                           _T("wxWindows multithreaded application sample\n")
+                           _T("wxWidgets multithreaded application sample\n")
                            _T("(c) 1998 Julian Smart, Guilhem Lavaux\n")
                            _T("(c) 1999 Vadim Zeitlin\n")
                            _T("(c) 2000 Robert Roebling"),

@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        listdb.h
-// Purpose:     wxWindows database demo app
+// Purpose:     wxWidgets database demo app
 // Author:      George Tasker
 // Modified by:
 // Created:     1996

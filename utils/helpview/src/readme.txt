@@ -15,7 +15,7 @@ If USE_REMOTE in client.cpp is undefined, the "client" app will use wxHtmlHelpCo
 ------------------------------------------------
 wxRemoteHtmlHelpController Class
 
-This class can be added to an application (the client) to provide wxWindows HTML help.  It will start up the remote help controller (helpview) the first time the Display member function is called, passing the server the connection name or port number, the name of the help window and the help book (.hhp, .htb, .zip).  This class will only work with a particular server app, helpview.
+This class can be added to an application (the client) to provide wxWidgets HTML help.  It will start up the remote help controller (helpview) the first time the Display member function is called, passing the server the connection name or port number, the name of the help window and the help book (.hhp, .htb, .zip).  This class will only work with a particular server app, helpview.
 
 Most of the functions of wxHtmlHelpController are available - the relevant arguments are just passed to wxHtmlHelpController in the server.  The functions involving wxConfig are not implemented - the config parameters (font, windows size and position) are kept in the server. 
 

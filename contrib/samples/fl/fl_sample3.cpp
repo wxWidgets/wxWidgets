@@ -72,7 +72,7 @@ IMPLEMENT_APP    (MyApp)
 
 bool MyApp::OnInit(void)
 {
-    // wxWindows boiler-plate:
+    // wxWidgets boiler-plate:
     
     MyFrame *frame = new MyFrame(NULL, _("wxFrameLayout sample"));
     

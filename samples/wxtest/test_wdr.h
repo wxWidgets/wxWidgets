@@ -10,7 +10,7 @@
     #pragma interface "test_wdr.cpp"
 #endif
 
-// Include wxWindows' headers
+// Include wxWidgets' headers
 
 #ifndef WX_PRECOMP
     #include <wx/wx.h>

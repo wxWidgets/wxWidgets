@@ -1,6 +1,6 @@
 /*
  * File:	simple.cpp
- * Purpose:	Minimal wxWindows plugin
+ * Purpose:	Minimal wxWidgets plugin
  * Author:	Julian Smart
  * Created:	1997
  * Updated:	

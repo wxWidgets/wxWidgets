@@ -59,7 +59,7 @@ private:
     // Override base class functions of a wxDialog.
     void OnOK( wxCommandEvent &event );
 
-    // Any class wishing to process wxWindows events must use this macro
+    // Any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
 
 };

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        text.cpp
-// Purpose:     TextCtrl wxWindows sample
+// Purpose:     TextCtrl wxWidgets sample
 // Author:      Robert Roebling
 // Modified by:
 // RCS-ID:      $Id$
@@ -347,7 +347,7 @@ bool MyApp::OnInit()
 {
     // Create the main frame window
     MyFrame *frame = new MyFrame((wxFrame *) NULL,
-            _T("Text wxWindows sample"), 50, 50, 700, 420);
+            _T("Text wxWidgets sample"), 50, 50, 700, 420);
     frame->SetSizeHints( 500, 400 );
 
     wxMenu *file_menu = new wxMenu;

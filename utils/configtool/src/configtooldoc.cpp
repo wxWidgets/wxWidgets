@@ -266,7 +266,7 @@ bool ctConfigToolDoc::DoSave(const wxString& filename)
         return FALSE;
 
     stream << wxT("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
-    stream << wxT("<settings xmlns=\"http://www.wxwindows.org/wxs\" version=\"2.5.0.1\">");
+    stream << wxT("<settings xmlns=\"http://www.wxwidgets.org/wxs\" version=\"2.5.0.1\">");
 
     DoSave(m_topItem, stream, 1);
 

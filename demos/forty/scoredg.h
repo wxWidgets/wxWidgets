@@ -8,7 +8,7 @@
 // Copyright:   (c) 1993-1998 Chris Breeze
 // Licence:   	wxWindows licence
 //---------------------------------------------------------------------------
-// Last modified: 22nd July 1998 - ported to wxWindows 2.0
+// Last modified: 22nd July 1998 - ported to wxWidgets 2.0
 /////////////////////////////////////////////////////////////////////////////
 #ifndef _SCOREDG_H_
 #define _SCOREDG_H_

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<resource xmlns="http://www.wxwindows.org/wxxrc" version="2.3.0.1">
+<resource xmlns="http://www.wxwidgets.org/wxxrc" version="2.3.0.1">
 
 <object class="wxMenuBar" name="main_menu">
 <style>wxMB_DOCKABLE</style>
@@ -28,7 +28,7 @@
         <object class="wxMenuItem" name="controls_tool_or_menuitem">
             <label>_Controls Example</label>
             <bitmap>controls.xpm</bitmap>
-            <help>A notebook displaying all the wxWindows controls</help>
+            <help>A notebook displaying all the wxWidgets controls</help>
         </object>        
         <object class="wxMenuItem" name="uncentered_tool_or_menuitem">
             <label>_Uncentered Example</label>

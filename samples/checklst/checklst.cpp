@@ -124,7 +124,7 @@ bool CheckListBoxApp::OnInit(void)
     CheckListBoxFrame *pFrame = new CheckListBoxFrame
                                     (
                                      NULL,
-                                     _T("wxWindows Checklistbox Sample"),
+                                     _T("wxWidgets Checklistbox Sample"),
                                      50, 50, 480, 320
                                     );
     SetTopWindow(pFrame);

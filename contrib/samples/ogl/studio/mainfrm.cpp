@@ -186,7 +186,7 @@ void csFrame::OnIdle(wxIdleEvent& event)
         // window doesn't cause the proper refresh. Just refreshing the
         // client doesn't work (presumably because it's clipping the
         // children).
-        // FIXED in wxWindows, by intercepting wxMDIClientWindow::DoSetSize
+        // FIXED in wxWidgets, by intercepting wxMDIClientWindow::DoSetSize
         // and checking if the position has changed, before redrawing the
         // child windows.
 #if 0
