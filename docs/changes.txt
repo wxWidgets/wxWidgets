@@ -18,7 +18,8 @@ OTHER CHANGES
 
 All:
 
-- quite significant speed optimizations in several classes
+- significant speed optimizations in several classes
+- wxFont::operator==() fixed
 
 wxBase:
 

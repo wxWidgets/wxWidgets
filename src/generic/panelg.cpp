@@ -74,15 +74,7 @@ bool wxPanel::Create(wxWindow *parent, wxWindowID id,
                      long style,
                      const wxString& name)
 {
-    bool ret = wxWindow::Create(parent, id, pos, size, style, name);
-
-    if ( ret )
-    {
-        SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
-        SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
-    }
-
-    return ret;
+    return wxWindow::Create(parent, id, pos, size, style, name);
 }
 
 // ----------------------------------------------------------------------------

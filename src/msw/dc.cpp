@@ -1202,22 +1202,35 @@ wxCoord wxDC::GetCharWidth() const
 
 void wxDC::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
                            wxCoord *descent, wxCoord *externalLeading,
-                           wxFont *theFont) const
+                           wxFont *font) const
 {
-    wxFont *fontToUse = (wxFont*) theFont;
-    if (!fontToUse)
-        fontToUse = (wxFont*) &m_font;
+    HFONT hfontOld;
+    if ( font )
+    {
+        wxASSERT_MSG( font->Ok(), _T("invalid font in wxDC::GetTextExtent") );
+
+        hfontOld = (HFONT)::SelectObject(GetHdc(), GetHfontOf(*font));
+    }
+    else // don't change the font
+    {
+        hfontOld = 0;
+    }
 
     SIZE sizeRect;
     TEXTMETRIC tm;
 
-    GetTextExtentPoint(GetHdc(), WXSTRINGCAST string, wxStrlen(WXSTRINGCAST string), &sizeRect);
+    GetTextExtentPoint(GetHdc(), string, string.length(), &sizeRect);
     GetTextMetrics(GetHdc(), &tm);
 
     if (x) *x = XDEV2LOGREL(sizeRect.cx);
     if (y) *y = YDEV2LOGREL(sizeRect.cy);
     if (descent) *descent = tm.tmDescent;
     if (externalLeading) *externalLeading = tm.tmExternalLeading;
+
+    if ( hfontOld )
+    {
+        ::SelectObject(GetHdc(), hfontOld);
+    }
 }
 
 void wxDC::SetMapMode(int mode)

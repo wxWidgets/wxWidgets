@@ -121,8 +121,12 @@ void wxWindowBase::InitBase()
     m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BTNFACE);
     m_foregroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOWTEXT);
 
-    // GRG, changed Mar/2000
+    // don't set the font here for wxMSW as we don't call WM_SETFONT here and
+    // so the font is *not* really set - but calls to SetFont() later won't do
+    // anything because m_font appears to be already set!
+#ifndef __WXMSW__
     m_font = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
+#endif // __WXMSW__
 
     // no style bits
     m_exStyle =
@@ -623,7 +627,7 @@ bool wxWindowBase::SetFont(const wxFont& font)
     // don't try to set invalid font, always fall back to the default
     const wxFont& fontOk = font.Ok() ? font : *wxSWISS_FONT;
 
-    if ( (wxFont&)fontOk == m_font )
+    if ( fontOk == m_font )
     {
         // no change
         return FALSE;

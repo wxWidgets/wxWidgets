@@ -118,8 +118,6 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
 
     wxTopLevelWindows.Append(this);
 
-    //  windowFont = wxTheFontList->FindOrCreateFont(11, wxSWISS, wxNORMAL, wxNORMAL);
-
     if (parent) parent->AddChild(this);
 
     if ( id == -1 )
@@ -181,7 +179,6 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
     SubclassWin(GetHWND());
 
     SetWindowText(hwnd, title);
-    SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
 
     return TRUE;
 }

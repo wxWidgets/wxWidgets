@@ -336,12 +336,10 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
                      DLGC_WANTTAB | DLGC_WANTMESSAGE;
     }
 
-    MSWCreate(m_windowId, parent, wxCanvasClassName, this, NULL,
-              pos.x, pos.y,
-              WidthDefault(size.x), HeightDefault(size.y),
-              msflags, NULL, exStyle);
-
-    return TRUE;
+    return MSWCreate(m_windowId, parent, wxCanvasClassName, this, NULL,
+                     pos.x, pos.y,
+                     WidthDefault(size.x), HeightDefault(size.y),
+                     msflags, NULL, exStyle);
 }
 
 // ---------------------------------------------------------------------------
@@ -2430,6 +2428,8 @@ bool wxWindow::MSWCreate(int id,
     }
 #endif
     wxAssociateWinWithHandle((HWND) m_hWnd, this);
+
+    SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
 
     return TRUE;
 }

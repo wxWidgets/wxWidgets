@@ -101,7 +101,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
     wxLayoutConstraints *c;
 
     wxClientDC dc(this);
-    dc.SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+    dc.SetFont(GetFont());
     long widthText;
     dc.GetTextExtent(message, &widthText, NULL, NULL, NULL, NULL);
 
