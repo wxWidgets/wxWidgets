@@ -361,7 +361,7 @@ bool wxDragImage::Move(const wxPoint& pt)
     // These are in window, not client coordinates.
     // So need to convert to client coordinates.
     wxPoint pt2(pt);
-    if (m_window)
+    if (m_window && !m_fullScreen)
     {
         RECT rect;
         rect.left = 0; rect.top = 0;
@@ -379,7 +379,7 @@ bool wxDragImage::Move(const wxPoint& pt)
 
     bool ret = (ImageList_DragMove( pt2.x, pt2.y ) != 0);
 
-    m_position = pt;
+    m_position = pt2;
 
     return ret;
 }
