@@ -110,7 +110,7 @@ public:
 class WXDLLIMPEXP_MEDIA wxMediaCtrl : public wxControl
 {
 public:
-    wxMediaCtrl() : m_imp(NULL), m_bLoaded(false), m_bLoop(false)
+    wxMediaCtrl() : m_imp(NULL), m_bLoaded(false)
     {                                                                   }
 
     wxMediaCtrl(wxWindow* parent, wxWindowID winid,
@@ -121,7 +121,7 @@ public:
                 const wxString& szBackend = wxEmptyString,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxT("mediaCtrl"))
-                : m_imp(NULL), m_bLoaded(false), m_bLoop(false)
+                : m_imp(NULL), m_bLoaded(false)
     {   Create(parent, winid, fileName, pos, size, style,
                szBackend, validator, name);                             }
 
@@ -133,7 +133,7 @@ public:
                 const wxString& szBackend = wxEmptyString,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxT("mediaCtrl"))
-                : m_imp(NULL), m_bLoop(false)
+                : m_imp(NULL), m_bLoaded(false)
     {   Create(parent, winid, location, pos, size, style,
                szBackend, validator, name);                             }
 
@@ -170,19 +170,22 @@ public:
     bool Stop();
 
     bool Load(const wxString& fileName);
-    bool Load(const wxURI& location); //DirectShow only
 
-    void Loop(bool bLoop = true);
-    bool IsLooped();
 
     wxMediaState GetState();
-
-    double GetPlaybackRate();           //All but MCI
-    bool SetPlaybackRate(double dRate); //All but MCI
 
     wxFileOffset Seek(wxFileOffset where, wxSeekMode mode = wxFromStart);
     wxFileOffset Tell(); //FIXME: This should be const
     wxFileOffset Length(); //FIXME: This should be const
+
+    //
+    // Unofficial parts of API 
+    //
+    //DirectShow/GStreamer only.  Quicktime too, but somewhat buggy...
+    bool Load(const wxURI& location);  
+
+    double GetPlaybackRate();           //All but MCI & GStreamer
+    bool SetPlaybackRate(double dRate); //All but MCI & GStreamer
 
 protected:
     static wxClassInfo* NextBackend();
@@ -191,6 +194,8 @@ protected:
     virtual void DoMoveWindow(int x, int y, int w, int h);
     wxSize DoGetBestSize() const;
 
+    //FIXME:  This is nasty... find a better way to work around
+    //inheritance issues
 #ifdef __WXMAC__
     friend class wxQTMediaBackend;
 #endif
@@ -199,7 +204,6 @@ protected:
 #endif
     class wxMediaBackend* m_imp;
     bool m_bLoaded;
-    bool m_bLoop;
 
     DECLARE_DYNAMIC_CLASS(wxMediaCtrl)
 };

@@ -214,10 +214,6 @@ bool wxMediaCtrl::DoCreate(wxClassInfo* classInfo,
     if( m_imp->CreateControl(this, parent, id, pos, size,
                              style, validator, name) )
     {
-        this->Connect(GetId(), wxEVT_MEDIA_FINISHED,
-                        (wxObjectEventFunction) (wxEventFunction)
-                        (wxMediaEventFunction)
-                            &wxMediaCtrl::OnMediaFinished);
         return true;
     }
 
@@ -413,28 +409,6 @@ void wxMediaCtrl::DoMoveWindow(int x, int y, int w, int h)
 
     if(m_imp)
         m_imp->Move(x, y, w, h);
-}
-
-void wxMediaCtrl::Loop(bool bLoop)
-{
-    m_bLoop = bLoop;
-}
-
-bool wxMediaCtrl::IsLooped()
-{
-    return m_bLoop;
-}
-
-void wxMediaCtrl::OnMediaFinished(wxMediaEvent& WXUNUSED(evt))
-{
-    if(m_bLoop)
-    {
-#ifdef __WXDEBUG__
-        wxASSERT( Play() );
-#else
-        Play();
-#endif
-    }
 }
 
 //DARWIN gcc compiler badly screwed up - needs destructor impl in source

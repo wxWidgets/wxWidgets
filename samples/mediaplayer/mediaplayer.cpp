@@ -26,11 +26,10 @@
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // Known bugs with wxMediaCtrl:
 // 
-// 1) Not available on Unix :\.
-// 2) Certain backends can't play the same media file at the same time (MCI,
-//    Cocoa NSMovieView/Quicktime).
-// 3) Positioning on Mac Carbon is messed up if put in a sub-control like a 
-//    Notebook (like this sample does).
+// 1) Certain backends can't play the same media file at the same time (MCI,
+//    Cocoa NSMovieView-Quicktime).
+// 2) Positioning on Mac Carbon is messed up if put in a sub-control like a 
+//    Notebook (like this sample does) on OS versions < 10.2.
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 // ============================================================================
@@ -197,13 +196,14 @@ class MyNotebookPage : public wxPanel
     void OnSeek(wxCommandEvent& event);
 
     // Media event handlers
-    void OnMediaStop(wxMediaEvent& event);
+    void OnMediaFinished(wxMediaEvent& event);
     
 public:
     friend class MyFrame;       //make MyFrame able to access private members
     wxMediaCtrl* m_mediactrl;   //Our media control
     wxSlider* m_slider;         //The slider below our media control
     int m_nLoops;               //Number of times media has looped
+    bool m_bLoop;               //Whether we are looping or not
 };
 
 // ----------------------------------------------------------------------------
@@ -598,7 +598,9 @@ void MyFrame::OnLoop(wxCommandEvent& WXUNUSED(event))
         wxMessageBox(wxT("No files are currently open!"));
         return;
     }
-    GetCurrentMediaCtrl()->Loop( !GetCurrentMediaCtrl()->IsLooped() );
+
+    ((MyNotebookPage*)m_notebook->GetCurrentPage())->m_bLoop = 
+            !((MyNotebookPage*)m_notebook->GetCurrentPage())->m_bLoop;
 }
 
 // ----------------------------------------------------------------------------
@@ -856,7 +858,7 @@ void MyTimer::Notify()
 // ----------------------------------------------------------------------------
 
 MyNotebookPage::MyNotebookPage(wxNotebook* theBook) :
-    wxPanel(theBook, wxID_ANY), m_nLoops(0)
+    wxPanel(theBook, wxID_ANY), m_nLoops(0), m_bLoop(false)
 {
     //
     //  Create and attach the first/main sizer
@@ -904,9 +906,9 @@ MyNotebookPage::MyNotebookPage(wxNotebook* theBook) :
     //
     // Media Control events
     //
-    this->Connect(wxID_MEDIACTRL, wxEVT_MEDIA_STOP,
+    this->Connect(wxID_MEDIACTRL, wxEVT_MEDIA_FINISHED,
                   (wxObjectEventFunction) (wxEventFunction)
-                  (wxMediaEventFunction) &MyNotebookPage::OnMediaStop);
+                  (wxMediaEventFunction) &MyNotebookPage::OnMediaFinished);
 }
 
 // ----------------------------------------------------------------------------
@@ -925,14 +927,20 @@ void MyNotebookPage::OnSeek(wxCommandEvent& WXUNUSED(event))
 }
 
 // ----------------------------------------------------------------------------
-// MyNotebookPage::OnMediaStop
+// OnMediaFinished
 //
-// Called when the media is about to stop playing.
+// Called when the media stops playing.
+// Here we loop it if the user wants to (has been selected from file menu)
 // ----------------------------------------------------------------------------
-void MyNotebookPage::OnMediaStop(wxMediaEvent& WXUNUSED(event))
+void MyNotebookPage::OnMediaFinished(wxMediaEvent& WXUNUSED(event))
 {
-    if(m_mediactrl->IsLooped())
-         ++m_nLoops;
+    if(m_bLoop)
+    {
+        if ( !m_mediactrl->Play() )
+            wxMessageBox(wxT("Couldn't loop movie!"));
+        else
+            ++m_nLoops;
+    }
 }
 
 //
