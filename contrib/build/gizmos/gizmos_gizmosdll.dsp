@@ -39,12 +39,12 @@ RSC=rc.exe
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\src\gizmos\..\..\..\lib\vc_mswuddll\"
+# PROP BASE Output_Dir "..\..\src\gizmos\..\..\..\lib\vc_mswuddll"
 # PROP BASE Intermediate_Dir "vc_mswuddll\gizmosdll"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\src\gizmos\..\..\..\lib\vc_mswuddll\"
+# PROP Output_Dir "..\..\src\gizmos\..\..\..\lib\vc_mswuddll"
 # PROP Intermediate_Dir "vc_mswuddll\gizmosdll"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\gizmos\..\..\..\include" /I "..\..\src\gizmos\..\..\..\lib\vc_mswuddll" /I "..\..\src\gizmos\..\..\..\src\tiff" /I "..\..\src\gizmos\..\..\..\src\jpeg" /I "..\..\src\gizmos\..\..\..\src\png" /I "..\..\src\gizmos\..\..\..\src\zlib" /I "..\..\src\gizmos\..\..\..\src\regex" /I "..\..\src\gizmos\..\..\..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_gizmosdll.pch" /Zi /Gm /GZ /Fd..\..\src\gizmos\..\..\..\lib\vc_mswuddll\wxmsw250ud_gizmos_vc_custom.pdb /I "..\..\src\gizmos\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_GIZMOS" /c
@@ -64,20 +64,20 @@ LINK32=link.exe
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\..\src\gizmos\..\..\..\lib\vc_mswdll\"
+# PROP BASE Output_Dir "..\..\src\gizmos\..\..\..\lib\vc_mswdll"
 # PROP BASE Intermediate_Dir "vc_mswdll\gizmosdll"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\src\gizmos\..\..\..\lib\vc_mswdll\"
+# PROP Output_Dir "..\..\src\gizmos\..\..\..\lib\vc_mswdll"
 # PROP Intermediate_Dir "vc_mswdll\gizmosdll"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\gizmos\..\..\..\include" /I "..\..\src\gizmos\..\..\..\lib\vc_mswdll" /I "..\..\src\gizmos\..\..\..\src\tiff" /I "..\..\src\gizmos\..\..\..\src\jpeg" /I "..\..\src\gizmos\..\..\..\src\png" /I "..\..\src\gizmos\..\..\..\src\zlib" /I "..\..\src\gizmos\..\..\..\src\regex" /I "..\..\src\gizmos\..\..\..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_gizmosdll.pch" /Fd..\..\src\gizmos\..\..\..\lib\vc_mswdll\wxmsw250_gizmos_vc_custom.pdb /I "..\..\src\gizmos\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "NDEBUG" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_GIZMOS" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\gizmos\..\..\..\include" /I "..\..\src\gizmos\..\..\..\lib\vc_mswdll" /I "..\..\src\gizmos\..\..\..\src\tiff" /I "..\..\src\gizmos\..\..\..\src\jpeg" /I "..\..\src\gizmos\..\..\..\src\png" /I "..\..\src\gizmos\..\..\..\src\zlib" /I "..\..\src\gizmos\..\..\..\src\regex" /I "..\..\src\gizmos\..\..\..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_gizmosdll.pch" /Fd..\..\src\gizmos\..\..\..\lib\vc_mswdll\wxmsw250_gizmos_vc_custom.pdb /I "..\..\src\gizmos\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "NDEBUG" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_GIZMOS" /c
-# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "NDEBUG" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_GIZMOS" /mktyplib203 /win32
-# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "NDEBUG" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_GIZMOS" /mktyplib203 /win32
-# ADD BASE RSC /l 0x405 /d "NDEBUG" /d "__WXMSW__" /i "..\..\src\gizmos\..\..\..\include" /i "..\..\src\gizmos\..\..\..\lib\vc_mswdll" /i "..\..\src\gizmos\..\..\..\src\tiff" /i "..\..\src\gizmos\..\..\..\src\jpeg" /i "..\..\src\gizmos\..\..\..\src\png" /i "..\..\src\gizmos\..\..\..\src\zlib" /i "..\..\src\gizmos\..\..\..\src\regex" /i "..\..\src\gizmos\..\..\..\src\expat\lib" /i "..\..\src\gizmos\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_GIZMOS
-# ADD RSC /l 0x405 /d "NDEBUG" /d "__WXMSW__" /i "..\..\src\gizmos\..\..\..\include" /i "..\..\src\gizmos\..\..\..\lib\vc_mswdll" /i "..\..\src\gizmos\..\..\..\src\tiff" /i "..\..\src\gizmos\..\..\..\src\jpeg" /i "..\..\src\gizmos\..\..\..\src\png" /i "..\..\src\gizmos\..\..\..\src\zlib" /i "..\..\src\gizmos\..\..\..\src\regex" /i "..\..\src\gizmos\..\..\..\src\expat\lib" /i "..\..\src\gizmos\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_GIZMOS
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\gizmos\..\..\..\include" /I "..\..\src\gizmos\..\..\..\lib\vc_mswdll" /I "..\..\src\gizmos\..\..\..\src\tiff" /I "..\..\src\gizmos\..\..\..\src\jpeg" /I "..\..\src\gizmos\..\..\..\src\png" /I "..\..\src\gizmos\..\..\..\src\zlib" /I "..\..\src\gizmos\..\..\..\src\regex" /I "..\..\src\gizmos\..\..\..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_gizmosdll.pch" /Fd..\..\src\gizmos\..\..\..\lib\vc_mswdll\wxmsw250_gizmos_vc_custom.pdb /I "..\..\src\gizmos\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_GIZMOS" /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\gizmos\..\..\..\include" /I "..\..\src\gizmos\..\..\..\lib\vc_mswdll" /I "..\..\src\gizmos\..\..\..\src\tiff" /I "..\..\src\gizmos\..\..\..\src\jpeg" /I "..\..\src\gizmos\..\..\..\src\png" /I "..\..\src\gizmos\..\..\..\src\zlib" /I "..\..\src\gizmos\..\..\..\src\regex" /I "..\..\src\gizmos\..\..\..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_gizmosdll.pch" /Fd..\..\src\gizmos\..\..\..\lib\vc_mswdll\wxmsw250_gizmos_vc_custom.pdb /I "..\..\src\gizmos\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_GIZMOS" /c
+# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_GIZMOS" /mktyplib203 /win32
+# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_GIZMOS" /mktyplib203 /win32
+# ADD BASE RSC /l 0x405 /d "__WXMSW__" /i "..\..\src\gizmos\..\..\..\include" /i "..\..\src\gizmos\..\..\..\lib\vc_mswdll" /i "..\..\src\gizmos\..\..\..\src\tiff" /i "..\..\src\gizmos\..\..\..\src\jpeg" /i "..\..\src\gizmos\..\..\..\src\png" /i "..\..\src\gizmos\..\..\..\src\zlib" /i "..\..\src\gizmos\..\..\..\src\regex" /i "..\..\src\gizmos\..\..\..\src\expat\lib" /i "..\..\src\gizmos\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_GIZMOS
+# ADD RSC /l 0x405 /d "__WXMSW__" /i "..\..\src\gizmos\..\..\..\include" /i "..\..\src\gizmos\..\..\..\lib\vc_mswdll" /i "..\..\src\gizmos\..\..\..\src\tiff" /i "..\..\src\gizmos\..\..\..\src\jpeg" /i "..\..\src\gizmos\..\..\..\src\png" /i "..\..\src\gizmos\..\..\..\src\zlib" /i "..\..\src\gizmos\..\..\..\src\regex" /i "..\..\src\gizmos\..\..\..\src\expat\lib" /i "..\..\src\gizmos\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_GIZMOS
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -89,12 +89,12 @@ LINK32=link.exe
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\src\gizmos\..\..\..\lib\vc_mswunivuddll\"
+# PROP BASE Output_Dir "..\..\src\gizmos\..\..\..\lib\vc_mswunivuddll"
 # PROP BASE Intermediate_Dir "vc_mswunivuddll\gizmosdll"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\src\gizmos\..\..\..\lib\vc_mswunivuddll\"
+# PROP Output_Dir "..\..\src\gizmos\..\..\..\lib\vc_mswunivuddll"
 # PROP Intermediate_Dir "vc_mswunivuddll\gizmosdll"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\gizmos\..\..\..\include" /I "..\..\src\gizmos\..\..\..\lib\vc_mswunivuddll" /I "..\..\src\gizmos\..\..\..\src\tiff" /I "..\..\src\gizmos\..\..\..\src\jpeg" /I "..\..\src\gizmos\..\..\..\src\png" /I "..\..\src\gizmos\..\..\..\src\zlib" /I "..\..\src\gizmos\..\..\..\src\regex" /I "..\..\src\gizmos\..\..\..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_gizmosdll.pch" /Zi /Gm /GZ /Fd..\..\src\gizmos\..\..\..\lib\vc_mswunivuddll\wxmswuniv250ud_gizmos_vc_custom.pdb /I "..\..\src\gizmos\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_GIZMOS" /c
@@ -114,20 +114,20 @@ LINK32=link.exe
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\..\src\gizmos\..\..\..\lib\vc_mswunivudll\"
+# PROP BASE Output_Dir "..\..\src\gizmos\..\..\..\lib\vc_mswunivudll"
 # PROP BASE Intermediate_Dir "vc_mswunivudll\gizmosdll"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\src\gizmos\..\..\..\lib\vc_mswunivudll\"
+# PROP Output_Dir "..\..\src\gizmos\..\..\..\lib\vc_mswunivudll"
 # PROP Intermediate_Dir "vc_mswunivudll\gizmosdll"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\gizmos\..\..\..\include" /I "..\..\src\gizmos\..\..\..\lib\vc_mswunivudll" /I "..\..\src\gizmos\..\..\..\src\tiff" /I "..\..\src\gizmos\..\..\..\src\jpeg" /I "..\..\src\gizmos\..\..\..\src\png" /I "..\..\src\gizmos\..\..\..\src\zlib" /I "..\..\src\gizmos\..\..\..\src\regex" /I "..\..\src\gizmos\..\..\..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_gizmosdll.pch" /Fd..\..\src\gizmos\..\..\..\lib\vc_mswunivudll\wxmswuniv250u_gizmos_vc_custom.pdb /I "..\..\src\gizmos\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "NDEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_GIZMOS" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\gizmos\..\..\..\include" /I "..\..\src\gizmos\..\..\..\lib\vc_mswunivudll" /I "..\..\src\gizmos\..\..\..\src\tiff" /I "..\..\src\gizmos\..\..\..\src\jpeg" /I "..\..\src\gizmos\..\..\..\src\png" /I "..\..\src\gizmos\..\..\..\src\zlib" /I "..\..\src\gizmos\..\..\..\src\regex" /I "..\..\src\gizmos\..\..\..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_gizmosdll.pch" /Fd..\..\src\gizmos\..\..\..\lib\vc_mswunivudll\wxmswuniv250u_gizmos_vc_custom.pdb /I "..\..\src\gizmos\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "NDEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_GIZMOS" /c
-# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "NDEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_GIZMOS" /mktyplib203 /win32
-# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "NDEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_GIZMOS" /mktyplib203 /win32
-# ADD BASE RSC /l 0x405 /d "NDEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d wxUSE_UNICODE=1 /i "..\..\src\gizmos\..\..\..\include" /i "..\..\src\gizmos\..\..\..\lib\vc_mswunivudll" /i "..\..\src\gizmos\..\..\..\src\tiff" /i "..\..\src\gizmos\..\..\..\src\jpeg" /i "..\..\src\gizmos\..\..\..\src\png" /i "..\..\src\gizmos\..\..\..\src\zlib" /i "..\..\src\gizmos\..\..\..\src\regex" /i "..\..\src\gizmos\..\..\..\src\expat\lib" /i "..\..\src\gizmos\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_GIZMOS
-# ADD RSC /l 0x405 /d "NDEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d wxUSE_UNICODE=1 /i "..\..\src\gizmos\..\..\..\include" /i "..\..\src\gizmos\..\..\..\lib\vc_mswunivudll" /i "..\..\src\gizmos\..\..\..\src\tiff" /i "..\..\src\gizmos\..\..\..\src\jpeg" /i "..\..\src\gizmos\..\..\..\src\png" /i "..\..\src\gizmos\..\..\..\src\zlib" /i "..\..\src\gizmos\..\..\..\src\regex" /i "..\..\src\gizmos\..\..\..\src\expat\lib" /i "..\..\src\gizmos\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_GIZMOS
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\gizmos\..\..\..\include" /I "..\..\src\gizmos\..\..\..\lib\vc_mswunivudll" /I "..\..\src\gizmos\..\..\..\src\tiff" /I "..\..\src\gizmos\..\..\..\src\jpeg" /I "..\..\src\gizmos\..\..\..\src\png" /I "..\..\src\gizmos\..\..\..\src\zlib" /I "..\..\src\gizmos\..\..\..\src\regex" /I "..\..\src\gizmos\..\..\..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_gizmosdll.pch" /Fd..\..\src\gizmos\..\..\..\lib\vc_mswunivudll\wxmswuniv250u_gizmos_vc_custom.pdb /I "..\..\src\gizmos\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_GIZMOS" /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\gizmos\..\..\..\include" /I "..\..\src\gizmos\..\..\..\lib\vc_mswunivudll" /I "..\..\src\gizmos\..\..\..\src\tiff" /I "..\..\src\gizmos\..\..\..\src\jpeg" /I "..\..\src\gizmos\..\..\..\src\png" /I "..\..\src\gizmos\..\..\..\src\zlib" /I "..\..\src\gizmos\..\..\..\src\regex" /I "..\..\src\gizmos\..\..\..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_gizmosdll.pch" /Fd..\..\src\gizmos\..\..\..\lib\vc_mswunivudll\wxmswuniv250u_gizmos_vc_custom.pdb /I "..\..\src\gizmos\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_GIZMOS" /c
+# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_GIZMOS" /mktyplib203 /win32
+# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_GIZMOS" /mktyplib203 /win32
+# ADD BASE RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d wxUSE_UNICODE=1 /i "..\..\src\gizmos\..\..\..\include" /i "..\..\src\gizmos\..\..\..\lib\vc_mswunivudll" /i "..\..\src\gizmos\..\..\..\src\tiff" /i "..\..\src\gizmos\..\..\..\src\jpeg" /i "..\..\src\gizmos\..\..\..\src\png" /i "..\..\src\gizmos\..\..\..\src\zlib" /i "..\..\src\gizmos\..\..\..\src\regex" /i "..\..\src\gizmos\..\..\..\src\expat\lib" /i "..\..\src\gizmos\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_GIZMOS
+# ADD RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d wxUSE_UNICODE=1 /i "..\..\src\gizmos\..\..\..\include" /i "..\..\src\gizmos\..\..\..\lib\vc_mswunivudll" /i "..\..\src\gizmos\..\..\..\src\tiff" /i "..\..\src\gizmos\..\..\..\src\jpeg" /i "..\..\src\gizmos\..\..\..\src\png" /i "..\..\src\gizmos\..\..\..\src\zlib" /i "..\..\src\gizmos\..\..\..\src\regex" /i "..\..\src\gizmos\..\..\..\src\expat\lib" /i "..\..\src\gizmos\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_GIZMOS
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -139,12 +139,12 @@ LINK32=link.exe
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\src\gizmos\..\..\..\lib\vc_mswddll\"
+# PROP BASE Output_Dir "..\..\src\gizmos\..\..\..\lib\vc_mswddll"
 # PROP BASE Intermediate_Dir "vc_mswddll\gizmosdll"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\src\gizmos\..\..\..\lib\vc_mswddll\"
+# PROP Output_Dir "..\..\src\gizmos\..\..\..\lib\vc_mswddll"
 # PROP Intermediate_Dir "vc_mswddll\gizmosdll"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\gizmos\..\..\..\include" /I "..\..\src\gizmos\..\..\..\lib\vc_mswddll" /I "..\..\src\gizmos\..\..\..\src\tiff" /I "..\..\src\gizmos\..\..\..\src\jpeg" /I "..\..\src\gizmos\..\..\..\src\png" /I "..\..\src\gizmos\..\..\..\src\zlib" /I "..\..\src\gizmos\..\..\..\src\regex" /I "..\..\src\gizmos\..\..\..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_gizmosdll.pch" /Zi /Gm /GZ /Fd..\..\src\gizmos\..\..\..\lib\vc_mswddll\wxmsw250d_gizmos_vc_custom.pdb /I "..\..\src\gizmos\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_GIZMOS" /c
@@ -164,20 +164,20 @@ LINK32=link.exe
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\..\src\gizmos\..\..\..\lib\vc_mswunivdll\"
+# PROP BASE Output_Dir "..\..\src\gizmos\..\..\..\lib\vc_mswunivdll"
 # PROP BASE Intermediate_Dir "vc_mswunivdll\gizmosdll"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\src\gizmos\..\..\..\lib\vc_mswunivdll\"
+# PROP Output_Dir "..\..\src\gizmos\..\..\..\lib\vc_mswunivdll"
 # PROP Intermediate_Dir "vc_mswunivdll\gizmosdll"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\gizmos\..\..\..\include" /I "..\..\src\gizmos\..\..\..\lib\vc_mswunivdll" /I "..\..\src\gizmos\..\..\..\src\tiff" /I "..\..\src\gizmos\..\..\..\src\jpeg" /I "..\..\src\gizmos\..\..\..\src\png" /I "..\..\src\gizmos\..\..\..\src\zlib" /I "..\..\src\gizmos\..\..\..\src\regex" /I "..\..\src\gizmos\..\..\..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_gizmosdll.pch" /Fd..\..\src\gizmos\..\..\..\lib\vc_mswunivdll\wxmswuniv250_gizmos_vc_custom.pdb /I "..\..\src\gizmos\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "NDEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_GIZMOS" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\gizmos\..\..\..\include" /I "..\..\src\gizmos\..\..\..\lib\vc_mswunivdll" /I "..\..\src\gizmos\..\..\..\src\tiff" /I "..\..\src\gizmos\..\..\..\src\jpeg" /I "..\..\src\gizmos\..\..\..\src\png" /I "..\..\src\gizmos\..\..\..\src\zlib" /I "..\..\src\gizmos\..\..\..\src\regex" /I "..\..\src\gizmos\..\..\..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_gizmosdll.pch" /Fd..\..\src\gizmos\..\..\..\lib\vc_mswunivdll\wxmswuniv250_gizmos_vc_custom.pdb /I "..\..\src\gizmos\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "NDEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_GIZMOS" /c
-# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "NDEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_GIZMOS" /mktyplib203 /win32
-# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "NDEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_GIZMOS" /mktyplib203 /win32
-# ADD BASE RSC /l 0x405 /d "NDEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\src\gizmos\..\..\..\include" /i "..\..\src\gizmos\..\..\..\lib\vc_mswunivdll" /i "..\..\src\gizmos\..\..\..\src\tiff" /i "..\..\src\gizmos\..\..\..\src\jpeg" /i "..\..\src\gizmos\..\..\..\src\png" /i "..\..\src\gizmos\..\..\..\src\zlib" /i "..\..\src\gizmos\..\..\..\src\regex" /i "..\..\src\gizmos\..\..\..\src\expat\lib" /i "..\..\src\gizmos\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_GIZMOS
-# ADD RSC /l 0x405 /d "NDEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\src\gizmos\..\..\..\include" /i "..\..\src\gizmos\..\..\..\lib\vc_mswunivdll" /i "..\..\src\gizmos\..\..\..\src\tiff" /i "..\..\src\gizmos\..\..\..\src\jpeg" /i "..\..\src\gizmos\..\..\..\src\png" /i "..\..\src\gizmos\..\..\..\src\zlib" /i "..\..\src\gizmos\..\..\..\src\regex" /i "..\..\src\gizmos\..\..\..\src\expat\lib" /i "..\..\src\gizmos\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_GIZMOS
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\gizmos\..\..\..\include" /I "..\..\src\gizmos\..\..\..\lib\vc_mswunivdll" /I "..\..\src\gizmos\..\..\..\src\tiff" /I "..\..\src\gizmos\..\..\..\src\jpeg" /I "..\..\src\gizmos\..\..\..\src\png" /I "..\..\src\gizmos\..\..\..\src\zlib" /I "..\..\src\gizmos\..\..\..\src\regex" /I "..\..\src\gizmos\..\..\..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_gizmosdll.pch" /Fd..\..\src\gizmos\..\..\..\lib\vc_mswunivdll\wxmswuniv250_gizmos_vc_custom.pdb /I "..\..\src\gizmos\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_GIZMOS" /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\gizmos\..\..\..\include" /I "..\..\src\gizmos\..\..\..\lib\vc_mswunivdll" /I "..\..\src\gizmos\..\..\..\src\tiff" /I "..\..\src\gizmos\..\..\..\src\jpeg" /I "..\..\src\gizmos\..\..\..\src\png" /I "..\..\src\gizmos\..\..\..\src\zlib" /I "..\..\src\gizmos\..\..\..\src\regex" /I "..\..\src\gizmos\..\..\..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_gizmosdll.pch" /Fd..\..\src\gizmos\..\..\..\lib\vc_mswunivdll\wxmswuniv250_gizmos_vc_custom.pdb /I "..\..\src\gizmos\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_GIZMOS" /c
+# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_GIZMOS" /mktyplib203 /win32
+# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_GIZMOS" /mktyplib203 /win32
+# ADD BASE RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\src\gizmos\..\..\..\include" /i "..\..\src\gizmos\..\..\..\lib\vc_mswunivdll" /i "..\..\src\gizmos\..\..\..\src\tiff" /i "..\..\src\gizmos\..\..\..\src\jpeg" /i "..\..\src\gizmos\..\..\..\src\png" /i "..\..\src\gizmos\..\..\..\src\zlib" /i "..\..\src\gizmos\..\..\..\src\regex" /i "..\..\src\gizmos\..\..\..\src\expat\lib" /i "..\..\src\gizmos\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_GIZMOS
+# ADD RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\src\gizmos\..\..\..\include" /i "..\..\src\gizmos\..\..\..\lib\vc_mswunivdll" /i "..\..\src\gizmos\..\..\..\src\tiff" /i "..\..\src\gizmos\..\..\..\src\jpeg" /i "..\..\src\gizmos\..\..\..\src\png" /i "..\..\src\gizmos\..\..\..\src\zlib" /i "..\..\src\gizmos\..\..\..\src\regex" /i "..\..\src\gizmos\..\..\..\src\expat\lib" /i "..\..\src\gizmos\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_GIZMOS
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -189,12 +189,12 @@ LINK32=link.exe
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\src\gizmos\..\..\..\lib\vc_mswunivddll\"
+# PROP BASE Output_Dir "..\..\src\gizmos\..\..\..\lib\vc_mswunivddll"
 # PROP BASE Intermediate_Dir "vc_mswunivddll\gizmosdll"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\src\gizmos\..\..\..\lib\vc_mswunivddll\"
+# PROP Output_Dir "..\..\src\gizmos\..\..\..\lib\vc_mswunivddll"
 # PROP Intermediate_Dir "vc_mswunivddll\gizmosdll"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\gizmos\..\..\..\include" /I "..\..\src\gizmos\..\..\..\lib\vc_mswunivddll" /I "..\..\src\gizmos\..\..\..\src\tiff" /I "..\..\src\gizmos\..\..\..\src\jpeg" /I "..\..\src\gizmos\..\..\..\src\png" /I "..\..\src\gizmos\..\..\..\src\zlib" /I "..\..\src\gizmos\..\..\..\src\regex" /I "..\..\src\gizmos\..\..\..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_gizmosdll.pch" /Zi /Gm /GZ /Fd..\..\src\gizmos\..\..\..\lib\vc_mswunivddll\wxmswuniv250d_gizmos_vc_custom.pdb /I "..\..\src\gizmos\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_GIZMOS" /c
@@ -214,20 +214,20 @@ LINK32=link.exe
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\..\src\gizmos\..\..\..\lib\vc_mswudll\"
+# PROP BASE Output_Dir "..\..\src\gizmos\..\..\..\lib\vc_mswudll"
 # PROP BASE Intermediate_Dir "vc_mswudll\gizmosdll"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\src\gizmos\..\..\..\lib\vc_mswudll\"
+# PROP Output_Dir "..\..\src\gizmos\..\..\..\lib\vc_mswudll"
 # PROP Intermediate_Dir "vc_mswudll\gizmosdll"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\gizmos\..\..\..\include" /I "..\..\src\gizmos\..\..\..\lib\vc_mswudll" /I "..\..\src\gizmos\..\..\..\src\tiff" /I "..\..\src\gizmos\..\..\..\src\jpeg" /I "..\..\src\gizmos\..\..\..\src\png" /I "..\..\src\gizmos\..\..\..\src\zlib" /I "..\..\src\gizmos\..\..\..\src\regex" /I "..\..\src\gizmos\..\..\..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_gizmosdll.pch" /Fd..\..\src\gizmos\..\..\..\lib\vc_mswudll\wxmsw250u_gizmos_vc_custom.pdb /I "..\..\src\gizmos\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "NDEBUG" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_GIZMOS" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\gizmos\..\..\..\include" /I "..\..\src\gizmos\..\..\..\lib\vc_mswudll" /I "..\..\src\gizmos\..\..\..\src\tiff" /I "..\..\src\gizmos\..\..\..\src\jpeg" /I "..\..\src\gizmos\..\..\..\src\png" /I "..\..\src\gizmos\..\..\..\src\zlib" /I "..\..\src\gizmos\..\..\..\src\regex" /I "..\..\src\gizmos\..\..\..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_gizmosdll.pch" /Fd..\..\src\gizmos\..\..\..\lib\vc_mswudll\wxmsw250u_gizmos_vc_custom.pdb /I "..\..\src\gizmos\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "NDEBUG" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_GIZMOS" /c
-# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "NDEBUG" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_GIZMOS" /mktyplib203 /win32
-# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "NDEBUG" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_GIZMOS" /mktyplib203 /win32
-# ADD BASE RSC /l 0x405 /d "NDEBUG" /d "__WXMSW__" /d wxUSE_UNICODE=1 /i "..\..\src\gizmos\..\..\..\include" /i "..\..\src\gizmos\..\..\..\lib\vc_mswudll" /i "..\..\src\gizmos\..\..\..\src\tiff" /i "..\..\src\gizmos\..\..\..\src\jpeg" /i "..\..\src\gizmos\..\..\..\src\png" /i "..\..\src\gizmos\..\..\..\src\zlib" /i "..\..\src\gizmos\..\..\..\src\regex" /i "..\..\src\gizmos\..\..\..\src\expat\lib" /i "..\..\src\gizmos\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_GIZMOS
-# ADD RSC /l 0x405 /d "NDEBUG" /d "__WXMSW__" /d wxUSE_UNICODE=1 /i "..\..\src\gizmos\..\..\..\include" /i "..\..\src\gizmos\..\..\..\lib\vc_mswudll" /i "..\..\src\gizmos\..\..\..\src\tiff" /i "..\..\src\gizmos\..\..\..\src\jpeg" /i "..\..\src\gizmos\..\..\..\src\png" /i "..\..\src\gizmos\..\..\..\src\zlib" /i "..\..\src\gizmos\..\..\..\src\regex" /i "..\..\src\gizmos\..\..\..\src\expat\lib" /i "..\..\src\gizmos\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_GIZMOS
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\gizmos\..\..\..\include" /I "..\..\src\gizmos\..\..\..\lib\vc_mswudll" /I "..\..\src\gizmos\..\..\..\src\tiff" /I "..\..\src\gizmos\..\..\..\src\jpeg" /I "..\..\src\gizmos\..\..\..\src\png" /I "..\..\src\gizmos\..\..\..\src\zlib" /I "..\..\src\gizmos\..\..\..\src\regex" /I "..\..\src\gizmos\..\..\..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_gizmosdll.pch" /Fd..\..\src\gizmos\..\..\..\lib\vc_mswudll\wxmsw250u_gizmos_vc_custom.pdb /I "..\..\src\gizmos\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_GIZMOS" /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\gizmos\..\..\..\include" /I "..\..\src\gizmos\..\..\..\lib\vc_mswudll" /I "..\..\src\gizmos\..\..\..\src\tiff" /I "..\..\src\gizmos\..\..\..\src\jpeg" /I "..\..\src\gizmos\..\..\..\src\png" /I "..\..\src\gizmos\..\..\..\src\zlib" /I "..\..\src\gizmos\..\..\..\src\regex" /I "..\..\src\gizmos\..\..\..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_gizmosdll.pch" /Fd..\..\src\gizmos\..\..\..\lib\vc_mswudll\wxmsw250u_gizmos_vc_custom.pdb /I "..\..\src\gizmos\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_GIZMOS" /c
+# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_GIZMOS" /mktyplib203 /win32
+# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_GIZMOS" /mktyplib203 /win32
+# ADD BASE RSC /l 0x405 /d "__WXMSW__" /d wxUSE_UNICODE=1 /i "..\..\src\gizmos\..\..\..\include" /i "..\..\src\gizmos\..\..\..\lib\vc_mswudll" /i "..\..\src\gizmos\..\..\..\src\tiff" /i "..\..\src\gizmos\..\..\..\src\jpeg" /i "..\..\src\gizmos\..\..\..\src\png" /i "..\..\src\gizmos\..\..\..\src\zlib" /i "..\..\src\gizmos\..\..\..\src\regex" /i "..\..\src\gizmos\..\..\..\src\expat\lib" /i "..\..\src\gizmos\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_GIZMOS
+# ADD RSC /l 0x405 /d "__WXMSW__" /d wxUSE_UNICODE=1 /i "..\..\src\gizmos\..\..\..\include" /i "..\..\src\gizmos\..\..\..\lib\vc_mswudll" /i "..\..\src\gizmos\..\..\..\src\tiff" /i "..\..\src\gizmos\..\..\..\src\jpeg" /i "..\..\src\gizmos\..\..\..\src\png" /i "..\..\src\gizmos\..\..\..\src\zlib" /i "..\..\src\gizmos\..\..\..\src\regex" /i "..\..\src\gizmos\..\..\..\src\expat\lib" /i "..\..\src\gizmos\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_GIZMOS
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo

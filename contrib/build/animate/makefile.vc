@@ -182,16 +182,16 @@ __WXUNIV_DEFINE_p = /D__WXUNIVERSAL__
 ____DEBUGINFO = /D_DEBUG
 !endif
 !if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
-____DEBUGINFO = /DNDEBUG
+____DEBUGINFO = 
 !endif
 !if "$(DEBUG_INFO)" == "0"
-____DEBUGINFO = /DNDEBUG
+____DEBUGINFO = 
 !endif
 !if "$(DEBUG_INFO)" == "1"
 ____DEBUGINFO = /D_DEBUG
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "0"
-____DEBUGRUNTIME_11_p = /DNDEBUG
+____DEBUGRUNTIME_11_p = 
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "1"
 ____DEBUGRUNTIME_11_p = /D_DEBUG
@@ -200,7 +200,7 @@ ____DEBUGRUNTIME_11_p = /D_DEBUG
 ____DEBUGRUNTIME_11_p = $(____DEBUGINFO)
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "0"
-____DEBUGRUNTIME_2_p = /DNDEBUG
+____DEBUGRUNTIME_2_p = 
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "1"
 ____DEBUGRUNTIME_2_p = /D_DEBUG

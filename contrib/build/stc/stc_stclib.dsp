@@ -38,16 +38,16 @@ RSC=rc.exe
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\..\src\stc\..\..\..\lib\vc_mswuniv\"
+# PROP BASE Output_Dir "..\..\src\stc\..\..\..\lib\vc_mswuniv"
 # PROP BASE Intermediate_Dir "vc_mswuniv\stclib"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\src\stc\..\..\..\lib\vc_mswuniv\"
+# PROP Output_Dir "..\..\src\stc\..\..\..\lib\vc_mswuniv"
 # PROP Intermediate_Dir "vc_mswuniv\stclib"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_mswuniv" /I "..\..\src\stc\..\..\..\src\tiff" /I "..\..\src\stc\..\..\..\src\jpeg" /I "..\..\src\stc\..\..\..\src\png" /I "..\..\src\stc\..\..\..\src\zlib" /I "..\..\src\stc\..\..\..\src\regex" /I "..\..\src\stc\..\..\..\src\expat\lib" /Fd..\..\src\stc\..\..\..\lib\vc_mswuniv\wxmswuniv25_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_mswuniv" /I "..\..\src\stc\..\..\..\src\tiff" /I "..\..\src\stc\..\..\..\src\jpeg" /I "..\..\src\stc\..\..\..\src\png" /I "..\..\src\stc\..\..\..\src\zlib" /I "..\..\src\stc\..\..\..\src\regex" /I "..\..\src\stc\..\..\..\src\expat\lib" /Fd..\..\src\stc\..\..\..\lib\vc_mswuniv\wxmswuniv25_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_mswuniv" /I "..\..\src\stc\..\..\..\src\tiff" /I "..\..\src\stc\..\..\..\src\jpeg" /I "..\..\src\stc\..\..\..\src\png" /I "..\..\src\stc\..\..\..\src\zlib" /I "..\..\src\stc\..\..\..\src\regex" /I "..\..\src\stc\..\..\..\src\expat\lib" /Fd..\..\src\stc\..\..\..\lib\vc_mswuniv\wxmswuniv25_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_mswuniv" /I "..\..\src\stc\..\..\..\src\tiff" /I "..\..\src\stc\..\..\..\src\jpeg" /I "..\..\src\stc\..\..\..\src\png" /I "..\..\src\stc\..\..\..\src\zlib" /I "..\..\src\stc\..\..\..\src\regex" /I "..\..\src\stc\..\..\..\src\expat\lib" /Fd..\..\src\stc\..\..\..\lib\vc_mswuniv\wxmswuniv25_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -61,16 +61,16 @@ LIB32=link.exe -lib
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\..\src\stc\..\..\..\lib\vc_mswu\"
+# PROP BASE Output_Dir "..\..\src\stc\..\..\..\lib\vc_mswu"
 # PROP BASE Intermediate_Dir "vc_mswu\stclib"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\src\stc\..\..\..\lib\vc_mswu\"
+# PROP Output_Dir "..\..\src\stc\..\..\..\lib\vc_mswu"
 # PROP Intermediate_Dir "vc_mswu\stclib"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_mswu" /I "..\..\src\stc\..\..\..\src\tiff" /I "..\..\src\stc\..\..\..\src\jpeg" /I "..\..\src\stc\..\..\..\src\png" /I "..\..\src\stc\..\..\..\src\zlib" /I "..\..\src\stc\..\..\..\src\regex" /I "..\..\src\stc\..\..\..\src\expat\lib" /Fd..\..\src\stc\..\..\..\lib\vc_mswu\wxmsw25u_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_mswu" /I "..\..\src\stc\..\..\..\src\tiff" /I "..\..\src\stc\..\..\..\src\jpeg" /I "..\..\src\stc\..\..\..\src\png" /I "..\..\src\stc\..\..\..\src\zlib" /I "..\..\src\stc\..\..\..\src\regex" /I "..\..\src\stc\..\..\..\src\expat\lib" /Fd..\..\src\stc\..\..\..\lib\vc_mswu\wxmsw25u_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_mswu" /I "..\..\src\stc\..\..\..\src\tiff" /I "..\..\src\stc\..\..\..\src\jpeg" /I "..\..\src\stc\..\..\..\src\png" /I "..\..\src\stc\..\..\..\src\zlib" /I "..\..\src\stc\..\..\..\src\regex" /I "..\..\src\stc\..\..\..\src\expat\lib" /Fd..\..\src\stc\..\..\..\lib\vc_mswu\wxmsw25u_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_mswu" /I "..\..\src\stc\..\..\..\src\tiff" /I "..\..\src\stc\..\..\..\src\jpeg" /I "..\..\src\stc\..\..\..\src\png" /I "..\..\src\stc\..\..\..\src\zlib" /I "..\..\src\stc\..\..\..\src\regex" /I "..\..\src\stc\..\..\..\src\expat\lib" /Fd..\..\src\stc\..\..\..\lib\vc_mswu\wxmsw25u_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -84,12 +84,12 @@ LIB32=link.exe -lib
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\src\stc\..\..\..\lib\vc_mswunivd\"
+# PROP BASE Output_Dir "..\..\src\stc\..\..\..\lib\vc_mswunivd"
 # PROP BASE Intermediate_Dir "vc_mswunivd\stclib"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\src\stc\..\..\..\lib\vc_mswunivd\"
+# PROP Output_Dir "..\..\src\stc\..\..\..\lib\vc_mswunivd"
 # PROP Intermediate_Dir "vc_mswunivd\stclib"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_mswunivd" /I "..\..\src\stc\..\..\..\src\tiff" /I "..\..\src\stc\..\..\..\src\jpeg" /I "..\..\src\stc\..\..\..\src\png" /I "..\..\src\stc\..\..\..\src\zlib" /I "..\..\src\stc\..\..\..\src\regex" /I "..\..\src\stc\..\..\..\src\expat\lib" /Zi /Gm /GZ /Fd..\..\src\stc\..\..\..\lib\vc_mswunivd\wxmswuniv25d_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
@@ -107,16 +107,16 @@ LIB32=link.exe -lib
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\..\src\stc\..\..\..\lib\vc_msw\"
+# PROP BASE Output_Dir "..\..\src\stc\..\..\..\lib\vc_msw"
 # PROP BASE Intermediate_Dir "vc_msw\stclib"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\src\stc\..\..\..\lib\vc_msw\"
+# PROP Output_Dir "..\..\src\stc\..\..\..\lib\vc_msw"
 # PROP Intermediate_Dir "vc_msw\stclib"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_msw" /I "..\..\src\stc\..\..\..\src\tiff" /I "..\..\src\stc\..\..\..\src\jpeg" /I "..\..\src\stc\..\..\..\src\png" /I "..\..\src\stc\..\..\..\src\zlib" /I "..\..\src\stc\..\..\..\src\regex" /I "..\..\src\stc\..\..\..\src\expat\lib" /Fd..\..\src\stc\..\..\..\lib\vc_msw\wxmsw25_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_msw" /I "..\..\src\stc\..\..\..\src\tiff" /I "..\..\src\stc\..\..\..\src\jpeg" /I "..\..\src\stc\..\..\..\src\png" /I "..\..\src\stc\..\..\..\src\zlib" /I "..\..\src\stc\..\..\..\src\regex" /I "..\..\src\stc\..\..\..\src\expat\lib" /Fd..\..\src\stc\..\..\..\lib\vc_msw\wxmsw25_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_msw" /I "..\..\src\stc\..\..\..\src\tiff" /I "..\..\src\stc\..\..\..\src\jpeg" /I "..\..\src\stc\..\..\..\src\png" /I "..\..\src\stc\..\..\..\src\zlib" /I "..\..\src\stc\..\..\..\src\regex" /I "..\..\src\stc\..\..\..\src\expat\lib" /Fd..\..\src\stc\..\..\..\lib\vc_msw\wxmsw25_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_msw" /I "..\..\src\stc\..\..\..\src\tiff" /I "..\..\src\stc\..\..\..\src\jpeg" /I "..\..\src\stc\..\..\..\src\png" /I "..\..\src\stc\..\..\..\src\zlib" /I "..\..\src\stc\..\..\..\src\regex" /I "..\..\src\stc\..\..\..\src\expat\lib" /Fd..\..\src\stc\..\..\..\lib\vc_msw\wxmsw25_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -130,12 +130,12 @@ LIB32=link.exe -lib
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\src\stc\..\..\..\lib\vc_mswud\"
+# PROP BASE Output_Dir "..\..\src\stc\..\..\..\lib\vc_mswud"
 # PROP BASE Intermediate_Dir "vc_mswud\stclib"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\src\stc\..\..\..\lib\vc_mswud\"
+# PROP Output_Dir "..\..\src\stc\..\..\..\lib\vc_mswud"
 # PROP Intermediate_Dir "vc_mswud\stclib"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_mswud" /I "..\..\src\stc\..\..\..\src\tiff" /I "..\..\src\stc\..\..\..\src\jpeg" /I "..\..\src\stc\..\..\..\src\png" /I "..\..\src\stc\..\..\..\src\zlib" /I "..\..\src\stc\..\..\..\src\regex" /I "..\..\src\stc\..\..\..\src\expat\lib" /Zi /Gm /GZ /Fd..\..\src\stc\..\..\..\lib\vc_mswud\wxmsw25ud_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
@@ -153,16 +153,16 @@ LIB32=link.exe -lib
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\..\src\stc\..\..\..\lib\vc_mswunivu\"
+# PROP BASE Output_Dir "..\..\src\stc\..\..\..\lib\vc_mswunivu"
 # PROP BASE Intermediate_Dir "vc_mswunivu\stclib"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\src\stc\..\..\..\lib\vc_mswunivu\"
+# PROP Output_Dir "..\..\src\stc\..\..\..\lib\vc_mswunivu"
 # PROP Intermediate_Dir "vc_mswunivu\stclib"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_mswunivu" /I "..\..\src\stc\..\..\..\src\tiff" /I "..\..\src\stc\..\..\..\src\jpeg" /I "..\..\src\stc\..\..\..\src\png" /I "..\..\src\stc\..\..\..\src\zlib" /I "..\..\src\stc\..\..\..\src\regex" /I "..\..\src\stc\..\..\..\src\expat\lib" /Fd..\..\src\stc\..\..\..\lib\vc_mswunivu\wxmswuniv25u_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_mswunivu" /I "..\..\src\stc\..\..\..\src\tiff" /I "..\..\src\stc\..\..\..\src\jpeg" /I "..\..\src\stc\..\..\..\src\png" /I "..\..\src\stc\..\..\..\src\zlib" /I "..\..\src\stc\..\..\..\src\regex" /I "..\..\src\stc\..\..\..\src\expat\lib" /Fd..\..\src\stc\..\..\..\lib\vc_mswunivu\wxmswuniv25u_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_mswunivu" /I "..\..\src\stc\..\..\..\src\tiff" /I "..\..\src\stc\..\..\..\src\jpeg" /I "..\..\src\stc\..\..\..\src\png" /I "..\..\src\stc\..\..\..\src\zlib" /I "..\..\src\stc\..\..\..\src\regex" /I "..\..\src\stc\..\..\..\src\expat\lib" /Fd..\..\src\stc\..\..\..\lib\vc_mswunivu\wxmswuniv25u_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_mswunivu" /I "..\..\src\stc\..\..\..\src\tiff" /I "..\..\src\stc\..\..\..\src\jpeg" /I "..\..\src\stc\..\..\..\src\png" /I "..\..\src\stc\..\..\..\src\zlib" /I "..\..\src\stc\..\..\..\src\regex" /I "..\..\src\stc\..\..\..\src\expat\lib" /Fd..\..\src\stc\..\..\..\lib\vc_mswunivu\wxmswuniv25u_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -176,12 +176,12 @@ LIB32=link.exe -lib
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\src\stc\..\..\..\lib\vc_mswunivud\"
+# PROP BASE Output_Dir "..\..\src\stc\..\..\..\lib\vc_mswunivud"
 # PROP BASE Intermediate_Dir "vc_mswunivud\stclib"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\src\stc\..\..\..\lib\vc_mswunivud\"
+# PROP Output_Dir "..\..\src\stc\..\..\..\lib\vc_mswunivud"
 # PROP Intermediate_Dir "vc_mswunivud\stclib"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_mswunivud" /I "..\..\src\stc\..\..\..\src\tiff" /I "..\..\src\stc\..\..\..\src\jpeg" /I "..\..\src\stc\..\..\..\src\png" /I "..\..\src\stc\..\..\..\src\zlib" /I "..\..\src\stc\..\..\..\src\regex" /I "..\..\src\stc\..\..\..\src\expat\lib" /Zi /Gm /GZ /Fd..\..\src\stc\..\..\..\lib\vc_mswunivud\wxmswuniv25ud_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
@@ -199,12 +199,12 @@ LIB32=link.exe -lib
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\src\stc\..\..\..\lib\vc_mswd\"
+# PROP BASE Output_Dir "..\..\src\stc\..\..\..\lib\vc_mswd"
 # PROP BASE Intermediate_Dir "vc_mswd\stclib"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\src\stc\..\..\..\lib\vc_mswd\"
+# PROP Output_Dir "..\..\src\stc\..\..\..\lib\vc_mswd"
 # PROP Intermediate_Dir "vc_mswd\stclib"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_mswd" /I "..\..\src\stc\..\..\..\src\tiff" /I "..\..\src\stc\..\..\..\src\jpeg" /I "..\..\src\stc\..\..\..\src\png" /I "..\..\src\stc\..\..\..\src\zlib" /I "..\..\src\stc\..\..\..\src\regex" /I "..\..\src\stc\..\..\..\src\expat\lib" /Zi /Gm /GZ /Fd..\..\src\stc\..\..\..\lib\vc_mswd\wxmsw25d_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
