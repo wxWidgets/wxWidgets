@@ -167,11 +167,9 @@ public:
                                long numArg = 0l,
                                const wxString& strArg = wxEmptyString);
 
-    // let wxColourScheme choose the right colours for us
-    virtual bool IsContainerWindow() const { return TRUE; }
-
     // idle processing
     virtual void OnInternalIdle();
+
 protected:
     // geometry
     virtual wxSize DoGetBestClientSize() const;

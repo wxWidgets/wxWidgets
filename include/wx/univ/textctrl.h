@@ -252,8 +252,7 @@ public:
     virtual void CalcUnscrolledPosition(int x, int y, int *xx, int *yy) const;
     virtual void CalcScrolledPosition(int x, int y, int *xx, int *yy) const;
 
-    // set the right colours and border
-    virtual bool IsContainerWindow() const { return TRUE; }
+    // ensure we have correct default border
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_SUNKEN; }
 
     // perform an action

@@ -142,11 +142,6 @@ public:
     // controls only
     virtual bool IsCanvasWindow() const { return FALSE; }
 
-    // return TRUE if this a container window which contains the other items:
-    // e.g, a listbox, listctrl, treectrl, ... and FALSE if it is a monolithic
-    // control (e.g. a button, checkbox, ...)
-    virtual bool IsContainerWindow() const { return FALSE; }
-
     // returns TRUE if the control has "transparent" areas such
     // as a wxStaticText and wxCheckBox and the background should
     // be adapted from a parent window
