@@ -610,6 +610,8 @@ wxSystemSettings_GetSystemMetric = wxSystemSettings_GetMetric
 
 # workarounds for bad wxRTTI names
 __wxPyPtrTypeMap['wxGauge95']    = 'wxGauge'
+__wxPyPtrTypeMap['wxSlider95']   = 'wxSlider'
+__wxPyPtrTypeMap['wxStatusBar95']   = 'wxStatusBar'
 
 
 

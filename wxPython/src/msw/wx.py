@@ -489,6 +489,7 @@ wxSHRINK = wxc.wxSHRINK
 wxGROW = wxc.wxGROW
 wxEXPAND = wxc.wxEXPAND
 wxNB_FIXEDWIDTH = wxc.wxNB_FIXEDWIDTH
+wxNB_TOP = wxc.wxNB_TOP
 wxNB_LEFT = wxc.wxNB_LEFT
 wxNB_RIGHT = wxc.wxNB_RIGHT
 wxNB_BOTTOM = wxc.wxNB_BOTTOM
@@ -1580,6 +1581,8 @@ wxSystemSettings_GetSystemMetric = wxSystemSettings_GetMetric
 
 # workarounds for bad wxRTTI names
 __wxPyPtrTypeMap['wxGauge95']    = 'wxGauge'
+__wxPyPtrTypeMap['wxSlider95']   = 'wxSlider'
+__wxPyPtrTypeMap['wxStatusBar95']   = 'wxStatusBar'
 
 
 
