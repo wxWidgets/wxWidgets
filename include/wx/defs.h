@@ -1843,6 +1843,13 @@ typedef struct tagLOGPALETTE
     typedef int (*WXFARPROC)();
 #elif defined(__WIN32__)
     typedef int (__stdcall *WXFARPROC)();
+#elif defined(__WXPM__)
+#  if defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )
+    // VA 3.0 for some reason needs base data types when typedefing a proc proto???
+    typedef void* (_System *WXFARPROC)(unsigned long, unsigned long, void*, void*);
+#  else
+    typedef WXRESULT (_System *WXFARPROC)(WXHWND, WXMSGID, WXWPARAM, WXLPARAM);
+#  endif
 #else
     typedef int (*WXFARPROC)();
 #endif
