@@ -93,7 +93,7 @@
     #undef TEST_ALL
     static const bool TEST_ALL = TRUE;
 #else
-    #define TEST_LONGLONG
+    #define TEST_DATETIME
 
     static const bool TEST_ALL = FALSE;
 #endif
@@ -4626,44 +4626,40 @@ for n in range(20):
             wmon2 = dt.GetWeekOfMonth(wxDateTime::Sunday_First),
             dnum = dt.GetDayOfYear();
 
-        wxPrintf(_T("%s: the day number is %d"), d.FormatDate().c_str(), dnum);
-        if ( dnum == wn.dnum )
-        {
-            wxPrintf(_T(" (ok)"));
-        }
-        else
+        wxPrintf(_T("%s: the day number = %d"), d.FormatDate().c_str(), dnum);
+        if ( dnum != wn.dnum )
         {
             wxPrintf(_T(" (ERROR: should be %d)"), wn.dnum);
         }
 
-        wxPrintf(_T(", week in month is %d"), wmon);
-        if ( wmon == wn.wmon )
-        {
-            wxPrintf(_T(" (ok)"));
-        }
-        else
+        wxPrintf(_T(", week in month = %d"), wmon);
+        if ( wmon != wn.wmon )
         {
             wxPrintf(_T(" (ERROR: should be %d)"), wn.wmon);
         }
 
-        wxPrintf(_T(" or %d"), wmon2);
-        if ( wmon2 == wn.wmon2 )
-        {
-            wxPrintf(_T(" (ok)"));
-        }
-        else
+        wxPrintf(_T(" (%d)"), wmon2);
+        if ( wmon2 != wn.wmon2 )
         {
             wxPrintf(_T(" (ERROR: should be %d)"), wn.wmon2);
         }
 
-        wxPrintf(_T(", week in year is %d"), week);
-        if ( week == wn.week )
+        wxPrintf(_T(", week in year = %d"), week);
+        if ( week != wn.week )
         {
-            wxPuts(_T(" (ok)"));
+            wxPrintf(_T(" (ERROR: should be %d)"), wn.week);
         }
-        else
+
+        wxPutchar(_T('\n'));
+
+        wxDateTime dt2(1, wxDateTime::Jan, d.year);
+        dt2.SetToTheWeek(wn.week, dt.GetWeekDay());
+        if ( dt2 != dt )
         {
-            wxPrintf(_T(" (ERROR: should be %d)\n"), wn.week);
+            Date d2;
+            d2.Init(dt2.GetTm());
+            wxPrintf(_T("ERROR: SetToTheWeek() returned %s\n"),
+                     d2.FormatDate().c_str());
         }
     }
 }
@@ -6564,7 +6560,8 @@ int main(int argc, char **argv)
 
         TestTimeZoneBug();
     }
-        TestTimeFormat();
+
+    TestTimeWNumber();
 
     if ( TEST_INTERACTIVE )
         TestDateTimeInteractive();
