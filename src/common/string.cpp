@@ -1627,6 +1627,21 @@ void wxArrayString::Alloc(size_t nSize)
   m_nCount = 0;
 }
 
+// minimizes the memory usage by freeing unused memory
+void wxArrayString::Shrink()
+{
+  // only do it if we have some memory to free
+  if( m_nCount < m_nSize ) {
+    // allocates exactly as much memory as we need
+    wxChar **pNew = new wxChar *[m_nCount];              
+
+    // copy data to new location
+    memcpy(pNew, m_pItems, m_nCount*sizeof(wxChar *));
+    delete [] m_pItems;
+    m_pItems = pNew;
+  }
+}
+
 // searches the array for an item (forward or backwards)
 int wxArrayString::Index(const wxChar *sz, bool bCase, bool bFromEnd) const
 {
@@ -1920,7 +1935,7 @@ static void wxLoadCharacterSets(void)
 {
   static bool already_loaded = FALSE;
 
-#ifdef __UNIX__
+#if defined(__UNIX__) && wxUSE_UNICODE
   // search through files in /usr/share/i18n/charmaps
   for (wxString fname = ::wxFindFirstFile(_T("/usr/share/i18n/charmaps/*"));
        !fname.IsEmpty();
