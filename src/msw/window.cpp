@@ -1297,7 +1297,8 @@ void wxWindowMSW::Freeze()
 {
     if ( !m_frozenness++ )
     {
-        SendSetRedraw(GetHwnd(), false);
+        if ( IsShown() )
+            SendSetRedraw(GetHwnd(), false);
     }
 }
 
@@ -1307,11 +1308,14 @@ void wxWindowMSW::Thaw()
 
     if ( !--m_frozenness )
     {
-        SendSetRedraw(GetHwnd(), true);
+        if ( IsShown() )
+        {
+            SendSetRedraw(GetHwnd(), true);
 
-        // we need to refresh everything or otherwise he invalidated area is not
-        // repainted
-        Refresh();
+            // we need to refresh everything or otherwise the invalidated area
+            // is not going to be repainted
+            Refresh();
+        }
     }
 }
 
@@ -1507,7 +1511,7 @@ void wxWindowMSW::DoMoveWindow(int x, int y, int width, int height)
     // if our parent had prepared a defer window handle for us, use it (unless
     // we are a top level window)
     wxWindowMSW *parent = GetParent();
-    HDWP hdwp = (parent && !IsTopLevel()) ? (HDWP)parent->m_hDWP : NULL;
+    HDWP hdwp = parent && !IsTopLevel() ? (HDWP)parent->m_hDWP : NULL;
     if ( hdwp )
     {
         hdwp = ::DeferWindowPos(hdwp, GetHwnd(), NULL,
