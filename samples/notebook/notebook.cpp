@@ -390,7 +390,7 @@ void MyFrame::ReInitNotebook()
             m_notebook->AddPage(page, str, false, m_notebook->GetIconIndex() );
         }
 
-        m_sizerTop->Remove(notebook);
+        m_sizerTop->Detach(notebook);
         
         delete notebook;
 
