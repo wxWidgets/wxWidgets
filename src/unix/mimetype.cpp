@@ -644,14 +644,12 @@ void wxMimeTypesManagerImpl::LoadGnomeDataFromKeyFile(const wxString& filename,
 void wxMimeTypesManagerImpl::LoadGnomeMimeTypesFromMimeFile(const wxString& filename)
 {
     wxTextFile textfile(filename);
-#if defined(__WXGTK20__) && wxUSE_UNICODE
-    if ( !textfile.Open( wxConvUTF8) )
-#else
     if ( !textfile.Open() )
-#endif
         return;
-    wxLogTrace(TRACE_MIME, wxT("--- Opened Gnome file %s  ---"),
-                 filename.c_str());
+
+    wxLogTrace(TRACE_MIME,
+               wxT("--- Opened Gnome file %s  ---"),
+               filename.c_str());
 
     // values for the entry being parsed
     wxString curMimeType, curExtList;
@@ -680,8 +678,9 @@ void wxMimeTypesManagerImpl::LoadGnomeMimeTypesFromMimeFile(const wxString& file
             // end of the entry
             if ( !!curMimeType && !!curExtList )
             {
-                 wxLogTrace(TRACE_MIME, wxT("--- At end of Gnome file  finding mimetype %s  ---"),
-                 curMimeType.c_str());
+                 wxLogTrace(TRACE_MIME,
+                            wxT("--- At end of Gnome file  finding mimetype %s  ---"),
+                            curMimeType.c_str());
 
                  AddMimeTypeInfo(curMimeType, curExtList, wxEmptyString);
             }
@@ -703,20 +702,20 @@ void wxMimeTypesManagerImpl::LoadGnomeMimeTypesFromMimeFile(const wxString& file
             // this is a field=value ling
             pc++; // skip leading TAB
 
-            static const int lenField = 4; // strlen("ext:")
-            if ( wxStrncmp(pc, wxT("ext:"), lenField) == 0 )
+            static const int lenField = 5; // strlen("ext: ")
+            if ( wxStrncmp(pc, wxT("ext: "), lenField) == 0 )
             {
-                // skip ' ' which follows and take everything left until the end
-                // of line
-                curExtList = pc + lenField + 1;
+                // skip it and take everything left until the end of line
+                curExtList = pc + lenField;
             }
             //else: some other field, we don't care
         }
         else
         {
             // this is the start of the new section
-            wxLogTrace(TRACE_MIME, wxT("--- In Gnome file  finding mimetype %s  ---"),
-                 curMimeType.c_str());
+            wxLogTrace(TRACE_MIME,
+                       wxT("--- In Gnome file  finding mimetype %s  ---"),
+                       curMimeType.c_str());
 
             if (! curMimeType.empty())
                 AddMimeTypeInfo(curMimeType, curExtList, wxEmptyString);
