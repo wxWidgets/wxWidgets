@@ -67,12 +67,31 @@ class wxInetCacheNode : public wxObject
 //--------------------------------------------------------------------------------
 
 
+static wxString StripProtocolAnchor(const wxString& location)
+{
+    wxString myloc(location.BeforeLast(wxT('#')));
+    if (myloc.IsEmpty()) myloc = location.AfterFirst(wxT(':'));
+    else myloc = myloc.AfterFirst(wxT(':'));
+
+    // fix malformed url:
+    if (myloc.Left(2) != wxT("//")) 
+    {
+        if (myloc.GetChar(0) != wxT('/')) myloc = wxT("//") + myloc;
+        else myloc = wxT("/") + myloc;
+    }
+    if (myloc.Mid(2).Find(wxT('/')) == wxNOT_FOUND) myloc << wxT('/');
+
+    return myloc;
+}
+
+
+
 bool wxInternetFSHandler::CanOpen(const wxString& location)
 {
     wxString p = GetProtocol(location);
     if ((p == wxT("http")) || (p == wxT("ftp"))) 
     {
-        wxURL url(GetProtocol(location) + wxT(":") + GetRightLocation(location));
+        wxURL url(p + wxT(":") + StripProtocolAnchor(location));
         return (url.GetError() == wxURL_NOERR);
     }
     else 
@@ -82,17 +101,7 @@ bool wxInternetFSHandler::CanOpen(const wxString& location)
 
 wxFSFile* wxInternetFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString& location)
 {
-    wxString myloc(GetRightLocation(location));
-    
-    // fix malformed url:
-    if (myloc.Left(2) != wxT("//")) 
-    {
-        if (myloc.GetChar(0) != wxT('/')) myloc = wxT("//") + myloc;
-        else myloc = wxT("/") + myloc;
-    }
-    if (myloc.Mid(2).Find(wxT('/')) == wxNOT_FOUND) myloc << wxT('/');
-
-    wxString right = GetProtocol(location) + wxT(":") + myloc;
+    wxString right = GetProtocol(location) + wxT(":") + StripProtocolAnchor(location);
     wxInputStream *s;
     wxString content;
     wxInetCacheNode *info;
