@@ -623,7 +623,7 @@ void wxListBox::SetHorizontalExtent(const wxString& s)
     }
 }
 
-wxSize wxListBox::DoGetBestSize()
+wxSize wxListBox::DoGetBestSize() const
 {
     // find the widest string
     int wLine;

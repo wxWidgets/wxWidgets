@@ -80,6 +80,9 @@ public:
         SetBitmap( icon );
     }
 
+protected:
+    virtual wxSize DoGetBestSize() const;
+
 private:
     // creates the new pixmap widget
     void CreatePixmapWidget();

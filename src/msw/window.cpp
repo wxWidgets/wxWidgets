@@ -1257,12 +1257,6 @@ void wxWindow::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     DoMoveWindow(x, y, width, height);
 }
 
-// for a generic window there is no natural best size - just use the current one
-wxSize wxWindow::DoGetBestSize()
-{
-    return GetSize();
-}
-
 void wxWindow::DoSetClientSize(int width, int height)
 {
     wxWindow *parent = GetParent();
@@ -3353,7 +3347,7 @@ bool wxWindow::MSWOnScroll(int orientation, WXWORD wParam,
 // global functions
 // ===========================================================================
 
-void wxGetCharSize(WXHWND wnd, int *x, int *y,wxFont *the_font)
+void wxGetCharSize(WXHWND wnd, int *x, int *y, const wxFont *the_font)
 {
     TEXTMETRIC tm;
     HDC dc = ::GetDC((HWND) wnd);
@@ -3363,7 +3357,7 @@ void wxGetCharSize(WXHWND wnd, int *x, int *y,wxFont *the_font)
     {
         //    the_font->UseResource();
         //    the_font->RealizeResource();
-        fnt = (HFONT)the_font->GetResourceHandle();
+        fnt = (HFONT)((wxFont *)the_font)->GetResourceHandle(); // const_cast
         if ( fnt )
             was = (HFONT) SelectObject(dc,fnt);
     }

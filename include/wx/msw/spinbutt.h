@@ -59,7 +59,7 @@ public:
                              WXWORD pos, WXHWND control);
 
 protected:
-   virtual wxSize DoGetBestSize();
+   virtual wxSize DoGetBestSize() const;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxSpinButton)

@@ -185,7 +185,8 @@ extern bool       g_blockEventsOnDrag;
 extern bool       g_blockEventsOnScroll;
 extern wxCursor   g_globalCursor;
 static wxWindow  *g_captureWindow = (wxWindow*) NULL;
-extern wxWindow  *g_focusWindow = (wxWindow*) NULL;
+
+/* extern */ wxWindow  *g_focusWindow = (wxWindow*) NULL;
 
 // if we detect that the app has got/lost the focus, we set this variable to
 // either TRUE or FALSE and an activate event will be sent during the next

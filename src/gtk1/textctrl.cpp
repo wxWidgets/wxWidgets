@@ -182,10 +182,7 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
           m_text = gtk_entry_new();
     }
 
-    wxSize newSize = size;
-    if (newSize.x == -1) newSize.x = 80;
-    if (newSize.y == -1) newSize.y = 26;
-    SetSize( newSize.x, newSize.y );
+    SetSizeOrDefault( size );
 
     m_parent->DoAddChild( this );
 
@@ -965,4 +962,10 @@ void wxTextCtrl::OnInternalIdle()
     }
 
     UpdateWindowUI();
+}
+
+wxSize wxTextCtrl::DoGetBestSize() const
+{
+    // FIXME should be different for multi-line controls...
+    return wxSize(80, 26);
 }

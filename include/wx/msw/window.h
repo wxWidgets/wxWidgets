@@ -401,10 +401,6 @@ protected:
                            int sizeFlags = wxSIZE_AUTO);
     virtual void DoSetClientSize(int width, int height);
 
-    // get the size which best suits the window: e.g., for a static text it
-    // will be the width and height of the text
-    virtual wxSize DoGetBestSize();
-
     // move the window to the specified location and resize it: this is called
     // from both DoSetSize() and DoSetClientSize() and would usually just call
     // ::MoveWindow() except for composite controls which will want to arrange

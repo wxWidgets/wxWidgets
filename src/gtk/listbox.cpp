@@ -327,12 +327,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
     gtk_widget_show( GTK_WIDGET(m_list) );
 
-    wxSize newSize = size;
-    if (newSize.x == -1)
-        newSize.x = 100;
-    if (newSize.y == -1)
-        newSize.y = 110;
-    SetSize( newSize.x, newSize.y );
+    SetSizeOrDefault( size );
 
     if ( style & wxLB_SORT )
     {
@@ -937,6 +932,11 @@ void wxListBox::OnInternalIdle()
     }
 
     UpdateWindowUI();
+}
+
+wxSize wxListBox::DoGetBestSize() const
+{
+    return wxSize(100, 110);
 }
 
 #endif

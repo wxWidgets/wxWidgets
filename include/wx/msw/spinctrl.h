@@ -61,7 +61,7 @@ public:
 
 protected:
     virtual void DoMoveWindow(int x, int y, int width, int height);
-    virtual wxSize DoGetBestSize();
+    virtual wxSize DoGetBestSize() const;
 
     WXHWND m_hwndBuddy;
 

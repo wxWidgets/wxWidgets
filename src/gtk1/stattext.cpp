@@ -79,13 +79,7 @@ bool wxStaticText::Create(wxWindow *parent,
     static const float labelAlignments[] = { 0.0, 1.0, 0.5 };
     gtk_misc_set_alignment(GTK_MISC(m_widget), labelAlignments[justify], 0.0);
 
-    GtkRequisition req;
-    (* GTK_WIDGET_CLASS( GTK_OBJECT(m_widget)->klass )->size_request ) (m_widget, &req );
-    
-    wxSize newSize = size;
-    if (newSize.x == -1) newSize.x = req.width;
-    if (newSize.y == -1) newSize.y = req.height;
-    SetSize( newSize.x, newSize.y );
+    SetSizeOrDefault( size );
 
     m_parent->DoAddChild( this );
 
@@ -115,11 +109,7 @@ void wxStaticText::SetLabel( const wxString &label )
     // adjust the label size to the new label unless disabled
     if ( !(GetWindowStyle() & wxST_NO_AUTORESIZE) )
     {
-        GtkRequisition req;
-        (* GTK_WIDGET_CLASS( GTK_OBJECT(m_widget)->klass )->size_request )
-            (m_widget, &req );
-
-        SetSize( req.width, req.height );
+        SetSize( GetBestSize() );
     }
 }
 
@@ -128,4 +118,3 @@ void wxStaticText::ApplyWidgetStyle()
     SetWidgetStyle();
     gtk_widget_set_style( m_widget, m_widgetStyle );
 }
-

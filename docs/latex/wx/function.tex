@@ -1051,7 +1051,7 @@ See also \helpref{wxDDEServer}{wxddeserver}, \helpref{wxDDEClient}{wxddeclient},
 
 \func{void}{wxDebugMsg}{\param{const wxString\& }{fmt}, \param{...}{}}
 
-{\bf This function is deprecated, use \helpref{wxLogDebug}{wxlogoverview} instead!}
+{\bf This function is deprecated, use \helpref{wxLogDebug}{wxlogdebug} instead!}
 
 Display a debugging message; under Windows, this will appear on the
 debugger command window, and under Unix, it will be written to standard
@@ -2285,7 +2285,9 @@ Another name for \helpref{wxResourceRegisterBitmapData}{registerbitmapdata}.
 \section{Log functions}\label{logfunctions}
 
 These functions provide a variety of logging functions: see \helpref{Log classes overview}{wxlogoverview} for
-further information.
+further information. The functions use (implicitly) the currently active log
+target, so their descriptions here may not apply if the log target is not the
+standard one (installed by wxWindows in the beginning of the program).
 
 \wxheading{Include files}
 
@@ -2295,9 +2297,9 @@ further information.
 
 \func{void}{wxLogError}{\param{const char*}{ formatString}, \param{...}{}}
 
-The function to use for error messages, i.e. the
-messages that must be shown to the user. The default processing is to pop up a
-message box to inform the user about it.
+The function to use for error messages, i.e. the messages that must be shown
+to the user. The default processing is to pop up a message box to inform the
+user about it.
 
 \membersection{::wxLogFatalError}\label{wxlogfatalerror}
 
@@ -2311,18 +2313,18 @@ function also terminates the program with this exit code.
 
 \func{void}{wxLogWarning}{\param{const char*}{ formatString}, \param{...}{}}
 
-For warnings - they are also normally shown to the
-user, but don't interrupt the program work.
+For warnings - they are also normally shown to the user, but don't interrupt
+the program work.
 
 \membersection{::wxLogMessage}\label{wxlogmessage}
 
 \func{void}{wxLogMessage}{\param{const char*}{ formatString}, \param{...}{}}
 
-for all normal, informational messages. They also
-appear in a message box by default (but it can be changed). Notice
-that the standard behaviour is to not show informational messages if there are
-any errors later - the logic being that the later error messages make the
-informational messages preceding them meaningless.
+for all normal, informational messages. They also appear in a message box by
+default (but it can be changed). Notice that the standard behaviour is to not
+show informational messages if there are any errors later - the logic being
+that the later error messages make the informational messages preceding them
+meaningless.
 
 \membersection{::wxLogVerbose}\label{wxlogverbose}
 
@@ -2334,48 +2336,79 @@ progress (another, but possibly confusing name for the same function is {\bf wxL
 
 \membersection{::wxLogStatus}\label{wxlogstatus}
 
+\func{void}{wxLogStatus}{\param{wxFrame *}{frame}, \param{const char*}{ formatString}, \param{...}{}}
+
 \func{void}{wxLogStatus}{\param{const char*}{ formatString}, \param{...}{}}
 
-For status messages - they will go into the status
-bar of the active or specified (as the first argument) \helpref{wxFrame}{wxframe} if it has one.
+Messages logged by this function will appear in the statusbar of the {\it
+frame} or of the top level application window by default (i.e. when using
+the second version of the function).
+
+If the target frame doesn't have a statusbar, the message will be lost.
 
 \membersection{::wxLogSysError}\label{wxlogsyserror}
 
 \func{void}{wxLogSysError}{\param{const char*}{ formatString}, \param{...}{}}
 
-Mostly used by wxWindows itself, but might be
-handy for logging errors after system call (API function) failure. It logs the
-specified message text as well as the last system error code ({\it errno} or {\it ::GetLastError()} depending
-on the platform) and the corresponding error
-message. The second form of this function takes the error code explitly as the
-first argument.
+Mostly used by wxWindows itself, but might be handy for logging errors after
+system call (API function) failure. It logs the specified message text as well
+as the last system error code ({\it errno} or {\it ::GetLastError()} depending
+on the platform) and the corresponding error message. The second form
+of this function takes the error code explitly as the first argument.
 
 \membersection{::wxLogDebug}\label{wxlogdebug}
 
 \func{void}{wxLogDebug}{\param{const char*}{ formatString}, \param{...}{}}
 
-The right function for debug output. It only
-does anything at all in the debug mode (when the preprocessor symbol \_\_WXDEBUG\_\_ is defined)
-and expands to nothing in release mode (otherwise).
+The right function for debug output. It only does anything at all in the debug
+mode (when the preprocessor symbol \_\_WXDEBUG\_\_ is defined) and expands to
+nothing in release mode (otherwise).
 
 \membersection{::wxLogTrace}\label{wxlogtrace}
 
 \func{void}{wxLogTrace}{\param{const char*}{ formatString}, \param{...}{}}
 
-\func{void}{wxLogTrace}{\param{wxTraceMask}{ mask}, \param{const char*}{ formatString}, \param{...}{}}
+\func{void}{wxLogTrace}{\param{const char *}{mask}, \param{const char *}{formatString}, \param{...}{}}
 
-As {\bf wxLogDebug}, only does something in debug
-build. The reason for making it a separate function from it is that usually
-there are a lot of trace messages, so it might make sense to separate them
-from other debug messages which would be flooded in them. Moreover, the second
-version of this function takes a trace mask as the first argument which allows
-to further restrict the amount of messages generated. The value of {\it mask} can be:
+\func{void}{wxLogTrace}{\param{wxTraceMask}{ mask}, \param{const char *}{formatString}, \param{...}{}}
+
+As {\bf wxLogDebug}, trace functions only do something in debug build and
+expand to nothing in the release one. The reason for making
+it a separate function from it is that usually there are a lot of trace
+messages, so it might make sense to separate them from other debug messages.
+
+The trace messages also usually can be separated into different categories and
+the second and third versions of this function only log the message if the 
+{\it mask} which it has is currently enabled in \helpref{wxLog}{wxlog}. This
+allows to selectively trace only some operations and not others by changing
+the value of the trace mask (possible during the run-time).
+
+For the second function (taking a string mask), the message is logged only if
+the mask has been previously enabled by the call to 
+\helpref{AddTraceMask}{wxlogaddtracemask}. The predefined string trace masks
+used by wxWindows are:
+
+\begin{itemize}\itemsep=0pt
+\item wxTRACE\_MemAlloc: trace memory allocation (new/delete)
+\item wxTRACE\_Messages: trace window messages/X callbacks
+\item wxTRACE\_ResAlloc: trace GDI resource allocation
+\item wxTRACE\_RefCount: trace various ref counting operations
+\item wxTRACE\_OleCalls: trace OLE method calls (Win32 only)
+\end{itemize}
+
+The third version of the function only logs the message if all the bit
+corresponding to the {\it mask} are set in the wxLog trace mask which can be
+set by \helpref{SetTraceMask}{wxlogsettracemask}. This version is less
+flexible than the previous one because it doesn't allow defining the user
+trace masks easily - this is why it is deprecated in favour of using string
+trace masks.
 
 \begin{itemize}\itemsep=0pt
 \item wxTraceMemAlloc: trace memory allocation (new/delete)
 \item wxTraceMessages: trace window messages/X callbacks
 \item wxTraceResAlloc: trace GDI resource allocation
 \item wxTraceRefCount: trace various ref counting operations
+\item wxTraceOleCalls: trace OLE method calls (Win32 only)
 \end{itemize}
 
 \section{Debugging macros and functions}\label{debugmacros}

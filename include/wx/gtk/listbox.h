@@ -96,6 +96,9 @@ public:
     bool       m_hasCheckBoxes;
 #endif // wxUSE_CHECKLISTBOX
 
+protected:
+    virtual wxSize DoGetBestSize() const;
+
 private:
     // this array is only used for controls with wxCB_SORT style, so only
     // allocate it if it's needed (hence using pointer)

@@ -56,7 +56,7 @@ public:
     virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 
 protected:
-    virtual wxSize DoGetBestSize();
+    virtual wxSize DoGetBestSize() const;
 };
 
 #endif

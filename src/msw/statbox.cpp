@@ -70,7 +70,7 @@ bool wxStaticBox::Create(wxWindow *parent,
     return TRUE;
 }
 
-wxSize wxStaticBox::DoGetBestSize()
+wxSize wxStaticBox::DoGetBestSize() const
 {
     int cx, cy;
     wxGetCharSize(GetHWND(), &cx, &cy, &GetFont());

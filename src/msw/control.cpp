@@ -119,7 +119,7 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
     return TRUE;
 }
 
-wxSize wxControl::DoGetBestSize()
+wxSize wxControl::DoGetBestSize() const
 {
     return wxSize(DEFAULT_ITEM_WIDTH, DEFAULT_ITEM_HEIGHT);
 }

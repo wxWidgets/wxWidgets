@@ -106,16 +106,7 @@ bool wxCheckBox::Create(wxWindow *parent,
         m_widget = m_widgetCheckbox;
     }
 
-    wxSize newSize(size);
-    if (newSize.x == -1)
-    {
-        newSize.x = 25 + gdk_string_measure( m_widgetCheckbox->style->font,
-                                             m_label.mbc_str() );
-    }
-    if (newSize.y == -1)
-        newSize.y = 26;
-
-    SetSize( newSize.x, newSize.y );
+    SetSizeOrDefault( size );
 
     gtk_signal_connect( GTK_OBJECT(m_widgetCheckbox),
                         "clicked",
@@ -208,6 +199,12 @@ void wxCheckBox::OnInternalIdle()
     }
 
     UpdateWindowUI();
+}
+
+wxSize wxCheckBox::DoGetBestSize() const
+{
+    return wxSize( 25 + gdk_string_measure( m_widgetCheckbox->style->font,
+                                            m_label.mbc_str() ), 26 );
 }
 
 #endif

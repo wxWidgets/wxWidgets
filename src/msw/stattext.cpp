@@ -94,7 +94,7 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
   return TRUE;
 }
 
-wxSize wxStaticText::DoGetBestSize()
+wxSize wxStaticText::DoGetBestSize() const
 {
     wxString text(wxGetWindowText(GetHWND()));
 

@@ -113,12 +113,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     // make it more useable
     gtk_combo_set_use_arrows_always(GTK_COMBO(m_widget), TRUE);
 
-    wxSize newSize = size;
-    if (newSize.x == -1)
-        newSize.x = 100;
-    if (newSize.y == -1)
-        newSize.y = 26;
-    SetSize( newSize.x, newSize.y );
+    SetSizeOrDefault( size );
 
     GtkWidget *list = GTK_COMBO(m_widget)->list;
 
@@ -658,6 +653,11 @@ bool wxComboBox::IsOwnGtkWindow( GdkWindow *window )
 {
     return ( (window == GTK_ENTRY( GTK_COMBO(m_widget)->entry )->text_area) ||
              (window == GTK_COMBO(m_widget)->button->window ) );
+}
+
+wxSize wxComboBox::DoGetBestSize() const
+{
+    return wxSize(100, 26);
 }
 
 #endif

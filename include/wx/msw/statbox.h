@@ -57,7 +57,7 @@ public:
     virtual bool AcceptsFocus() const { return FALSE; }
 
 protected:
-    virtual wxSize DoGetBestSize();
+    virtual wxSize DoGetBestSize() const;
 };
 
 #endif

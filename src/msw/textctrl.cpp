@@ -886,7 +886,7 @@ bool wxTextCtrl::AcceptsFocus() const
     return IsEditable() && wxControl::AcceptsFocus();
 }
 
-wxSize wxTextCtrl::DoGetBestSize()
+wxSize wxTextCtrl::DoGetBestSize() const
 {
     int cx, cy;
     wxGetCharSize(GetHWND(), &cx, &cy, &GetFont());

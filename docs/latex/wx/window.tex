@@ -430,7 +430,8 @@ implements the following methods:\par
 
 \func{virtual void}{Fit}{\void}
 
-Sizes the window so that it fits around its subwindows.
+Sizes the window so that it fits around its subwindows. This function won't do
+anything if there are no subwindows.
 
 \membersection{wxWindow::GetBackgroundColour}\label{wxwindowgetbackgroundcolour}
 
@@ -444,6 +445,17 @@ Returns the background colour of the window.
 \helpref{wxWindow::SetForegroundColour}{wxwindowsetforegroundcolour},\rtfsp
 \helpref{wxWindow::GetForegroundColour}{wxwindowgetforegroundcolour},\rtfsp
 \helpref{wxWindow::OnEraseBackground}{wxwindowonerasebackground}
+
+\membersection{wxWindow::GetBestSize}{wxwindowgetbestsize}
+
+\constfunc{virtual wxSize}{GetBestSize}{\void}
+
+This functions returns the best acceptable minimal size for the window. For
+example, for a static control, it will be the minimal size such that the
+control label is not truncated. For windows containing subwindows (typically 
+\helpref{wxPanel}wxpanel}), the size returned by this function will be the
+same as the size the window would have had after calling 
+\helpref{Fit}{wxwindowfit}.
 
 \membersection{wxWindow::GetCharHeight}
 

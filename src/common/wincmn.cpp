@@ -302,7 +302,7 @@ bool wxWindowBase::DestroyChildren()
 }
 
 // ----------------------------------------------------------------------------
-// centre/fit the window
+// size/position related methods
 // ----------------------------------------------------------------------------
 
 // centre the window with respect to its parent in either (or both) directions
@@ -361,36 +361,55 @@ void wxWindowBase::Centre(int direction)
 // fits the window around the children
 void wxWindowBase::Fit()
 {
-    int maxX = 0,
-        maxY = 0;
-
-    for ( wxWindowList::Node *node = GetChildren().GetFirst();
-          node;
-          node = node->GetNext() )
+    if ( GetChildren().GetCount() > 0 )
     {
-        wxWindow *win = node->GetData();
-        if ( win->IsTopLevel() )
+        SetClientSize(DoGetBestSize());
+    }
+    //else: do nothing if we have no children
+}
+
+// return the size best suited for the current window
+wxSize wxWindowBase::DoGetBestSize() const
+{
+    if ( GetChildren().GetCount() > 0 )
+    {
+        // our minimal acceptable size is such that all our windows fit inside
+        int maxX = 0,
+            maxY = 0;
+
+        for ( wxWindowList::Node *node = GetChildren().GetFirst();
+              node;
+              node = node->GetNext() )
         {
-            // dialogs and frames lie in different top level windows - don't
-            // deal with them here
-            continue;
+            wxWindow *win = node->GetData();
+            if ( win->IsTopLevel() )
+            {
+                // dialogs and frames lie in different top level windows -
+                // don't deal with them here
+                continue;
+            }
+
+            int wx, wy, ww, wh;
+            win->GetPosition(&wx, &wy);
+            win->GetSize(&ww, &wh);
+            if ( wx + ww > maxX )
+                maxX = wx + ww;
+            if ( wy + wh > maxY )
+                maxY = wy + wh;
         }
 
-        int wx, wy, ww, wh;
-        win->GetPosition(&wx, &wy);
-        win->GetSize(&ww, &wh);
-        if ( wx + ww > maxX )
-            maxX = wx + ww;
-        if ( wy + wh > maxY )
-            maxY = wy + wh;
+        // leave a margin
+        return wxSize(maxX + 7, maxY + 14);
     }
-
-    // leave a margin
-    SetClientSize(maxX + 7, maxY + 14);
+    else
+    {
+        // for a generic window there is no natural best size - just use the
+        // current one
+        return GetSize();
+    }
 }
 
 // set the min/max size of the window
-
 void wxWindowBase::SetSizeHints(int minW, int minH,
                                 int maxW, int maxH,
                                 int WXUNUSED(incW), int WXUNUSED(incH))

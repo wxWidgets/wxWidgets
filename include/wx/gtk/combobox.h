@@ -121,6 +121,9 @@ public:
     bool IsOwnGtkWindow( GdkWindow *window );
     void ApplyWidgetStyle();
  
+protected:
+    virtual wxSize DoGetBestSize() const;
+
 private: 
     DECLARE_DYNAMIC_CLASS(wxComboBox)
     DECLARE_EVENT_TABLE()

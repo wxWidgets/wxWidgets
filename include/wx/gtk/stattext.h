@@ -36,25 +36,35 @@ extern const wxChar *wxStaticTextNameStr;
 // wxStaticText
 //-----------------------------------------------------------------------------
 
-class wxStaticText: public wxControl
+class wxStaticText : public wxControl
 {
-  DECLARE_DYNAMIC_CLASS(wxStaticText)
+public:
 
-  public:
+    wxStaticText();
+    wxStaticText(wxWindow *parent,
+                 wxWindowID id,
+                 const wxString &label,
+                 const wxPoint &pos = wxDefaultPosition,
+                 const wxSize &size = wxDefaultSize, 
+                 long style = 0,
+                 const wxString &name = wxStaticTextNameStr );
 
-    wxStaticText(void);
-    wxStaticText( wxWindow *parent, wxWindowID id, const wxString &label,
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      long style = 0, const wxString &name = wxStaticTextNameStr );
-    bool Create(  wxWindow *parent, wxWindowID id, const wxString &label,
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      long style = 0, const wxString &name = wxStaticTextNameStr );
-    wxString GetLabel(void) const;
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxString &label,
+                const wxPoint &pos = wxDefaultPosition,
+                const wxSize &size = wxDefaultSize, 
+                long style = 0,
+                const wxString &name = wxStaticTextNameStr );
+
+    wxString GetLabel() const;
     void SetLabel( const wxString &label );
-    
-  // implementation
-    
+
+    // implementation
     void ApplyWidgetStyle();
+
+protected:
+    DECLARE_DYNAMIC_CLASS(wxStaticText)
 };
 
 #endif // __GTKSTATICTEXTH__

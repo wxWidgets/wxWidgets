@@ -140,7 +140,7 @@ void wxStaticBitmap::Free()
     m_image.icon = NULL;
 }
 
-wxSize wxStaticBitmap::DoGetBestSize()
+wxSize wxStaticBitmap::DoGetBestSize() const
 {
     // reuse the current size (as wxWindow does) instead of using some
     // arbitrary default size (as wxControl, our immediate base class, does)

@@ -46,6 +46,8 @@ public:
     virtual wxString GetLabel() const;
 
 protected:
+    virtual wxSize DoGetBestSize() const;
+
     wxString   m_label;
     char       m_chAccel;  // enabled to avoid breaking binary compatibility later on
     

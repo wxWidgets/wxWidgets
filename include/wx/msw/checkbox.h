@@ -53,7 +53,7 @@ public:
             WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
 protected:
-    virtual wxSize DoGetBestSize();
+    virtual wxSize DoGetBestSize() const;
 };
 
 class WXDLLEXPORT wxBitmapCheckBox: public wxCheckBox

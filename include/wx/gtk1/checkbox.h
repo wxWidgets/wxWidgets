@@ -73,6 +73,9 @@ public:
     GtkWidget *m_widgetCheckbox;
     GtkWidget *m_widgetLabel;
     
+protected:
+    virtual wxSize DoGetBestSize() const;
+
 private:
     DECLARE_DYNAMIC_CLASS(wxCheckBox)
 };

@@ -71,6 +71,8 @@ protected:
     virtual void DoSetItemClientObject( int n, wxClientData* clientData );
     virtual wxClientData* DoGetItemClientObject( int n ) const;
 
+    virtual wxSize DoGetBestSize() const;
+
 private:
     // common part of Create() and DoAppend()
     size_t AppendHelper(GtkWidget *menu, const wxString& item);

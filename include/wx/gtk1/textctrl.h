@@ -131,6 +131,9 @@ public:
 
     void SetModified() { m_modified = TRUE; }
 
+protected:
+    virtual wxSize DoGetBestSize() const;
+
 private:
     bool        m_modified;
     GtkWidget  *m_text;

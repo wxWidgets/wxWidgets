@@ -90,12 +90,7 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
 
     m_widget = gtk_option_menu_new();
 
-    wxSize newSize(size);
-    if (newSize.x == -1)
-        newSize.x = 80;
-    if (newSize.y == -1)
-        newSize.y = 26;
-    SetSize( newSize.x, newSize.y );
+    SetSizeOrDefault( size );
 
     if ( style & wxCB_SORT )
     {
@@ -427,6 +422,11 @@ size_t wxChoice::AppendHelper(GtkWidget *menu, const wxString& item)
 
     // return the index of the item in the control
     return index;
+}
+
+wxSize wxChoice::DoGetBestSize() const
+{
+    return wxSize(80, 26);
 }
 
 #endif

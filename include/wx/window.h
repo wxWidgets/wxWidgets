@@ -267,6 +267,18 @@ public:
         return wxSize(w, h);
     }
 
+        // get the size best suited for the window (in fact, minimal
+        // acceptable size using which it will still look "nice")
+    wxSize GetBestSize() const { return DoGetBestSize(); }
+    void GetBestSize(int *w, int *h) const
+    {
+        wxSize s = DoGetBestSize();
+        if ( w )
+            *w = s.x;
+        if ( h )
+            *h = s.y;
+    }
+
         // centre with respect to the the parent window
     void Centre( int direction = wxBOTH );
     void Center( int direction = wxBOTH ) { Centre(direction); }
@@ -752,6 +764,26 @@ protected:
     static int WidthDefault(int w) { return w == -1 ? 20 : w; }
     static int HeightDefault(int h) { return h == -1 ? 20 : h; }
 
+    // sets the size to be size but take width and/or height from
+    // DoGetBestSize() if width/height of size is -1
+    //
+    // NB: when calling this function from the ctor, the DoGetBestSize() of
+    //     the class with the same name as the ctor, not the real (most
+    //     derived) one - but this is what we usually want
+    void SetSizeOrDefault(const wxSize& size = wxDefaultSize)
+    {
+        if ( size.x == -1 || size.y == -1 )
+        {
+            wxSize sizeDef = GetBestSize();
+            SetSize( size.x == -1 ? sizeDef.x : size.x,
+                     size.y == -1 ? sizeDef.y : size.y);
+        }
+        else
+        {
+            SetSize(size);
+        }
+    }
+
     // more pure virtual functions
     // ---------------------------
 
@@ -772,6 +804,11 @@ protected:
     virtual void DoGetPosition( int *x, int *y ) const = 0;
     virtual void DoGetSize( int *width, int *height ) const = 0;
     virtual void DoGetClientSize( int *width, int *height ) const = 0;
+
+    // get the size which best suits the window: for a control, it would be
+    // the minimal size which doesn't truncate the control, for a panel - the
+    // same size as it would have after a call to Fit()
+    virtual wxSize DoGetBestSize() const;
 
     // this is the virtual function to be overriden in any derived class which
     // wants to change how SetSize() or Move() works - it is called by all
@@ -845,6 +882,8 @@ inline wxWindow *wxWindowBase::GetGrandParent() const
 // ----------------------------------------------------------------------------
 
 WXDLLEXPORT extern wxWindow* wxGetActiveWindow();
+
+// deprecated (doesn't start with 'wx' prefix), use wxWindow::NewControlId()
 inline WXDLLEXPORT int NewControlId() { return wxWindowBase::NewControlId(); }
 
 #endif

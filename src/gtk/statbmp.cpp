@@ -69,16 +69,12 @@ bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
 
     if (m_bitmap.Ok())
     {
-       wxSize newSize = size;
-
         GdkBitmap *mask = (GdkBitmap *) NULL;
         if ( m_bitmap.GetMask() )
             mask = m_bitmap.GetMask()->GetBitmap();
         m_widget = gtk_pixmap_new( m_bitmap.GetPixmap(), mask );
 
-        if (newSize.x == -1) newSize.x = m_bitmap.GetWidth();
-        if (newSize.y == -1) newSize.y = m_bitmap.GetHeight();
-        SetSize( newSize.x, newSize.y );
+        SetSizeOrDefault( size );
     }
     else
     {
@@ -116,8 +112,16 @@ void wxStaticBitmap::SetBitmap( const wxBitmap &bitmap )
             gtk_pixmap_set( GTK_PIXMAP(m_widget), m_bitmap.GetPixmap(), mask );
         }
 
-        SetSize( m_bitmap.GetWidth(), m_bitmap.GetHeight() );
+        SetSizeOrDefault();
     }
+}
+
+wxSize wxStaticBitmap::DoGetBestSize() const
+{
+    if ( m_bitmap.Ok() )
+        return wxSize(m_bitmap.GetWidth(), m_bitmap.GetHeight());
+    else
+        return wxSize(16, 16);  // completely arbitrary
 }
 
 #endif

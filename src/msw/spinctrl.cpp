@@ -207,7 +207,7 @@ bool wxSpinCtrl::SetFont(const wxFont& font)
 // size calculations
 // ----------------------------------------------------------------------------
 
-wxSize wxSpinCtrl::DoGetBestSize()
+wxSize wxSpinCtrl::DoGetBestSize() const
 {
     wxSize sizeBtn = wxSpinButton::DoGetBestSize();
     sizeBtn.x += DEFAULT_ITEM_WIDTH + MARGIN_BETWEEN;

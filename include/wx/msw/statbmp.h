@@ -84,7 +84,7 @@ protected:
         wxBitmap *bitmap;
     } m_image;
 
-    virtual wxSize DoGetBestSize();
+    virtual wxSize DoGetBestSize() const;
 };
 
 #endif

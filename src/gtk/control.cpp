@@ -13,7 +13,7 @@
 
 #include "wx/control.h"
 
-#include "gtk/gtkfeatures.h"
+#include "gtk/gtk.h"
 
 //-----------------------------------------------------------------------------
 // wxControl
@@ -57,4 +57,13 @@ wxString wxControl::GetLabel() const
     return m_label;
 }
 
+
+wxSize wxControl::DoGetBestSize() const
+{
+    GtkRequisition req;
+    (* GTK_WIDGET_CLASS( GTK_OBJECT(m_widget)->klass )->size_request )
+        (m_widget, &req );
+
+    return wxSize(req.width, req.height);
+}
 

@@ -138,7 +138,7 @@ void wxCheckBox::SetLabel(const wxString& label)
   SetWindowText(GetHwnd(), label);
 }
 
-wxSize wxCheckBox::DoGetBestSize()
+wxSize wxCheckBox::DoGetBestSize() const
 {
     int wCheckbox, hCheckbox;
 

@@ -128,7 +128,7 @@ wxButton::~wxButton()
 // size management including autosizing
 // ----------------------------------------------------------------------------
 
-wxSize wxButton::DoGetBestSize()
+wxSize wxButton::DoGetBestSize() const
 {
     wxString label = wxGetWindowText(GetHWND());
     int wBtn;
