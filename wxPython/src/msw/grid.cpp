@@ -7822,67 +7822,6 @@ static PyObject *_wrap_wxGrid_DrawTextRectangle(PyObject *self, PyObject *args, 
     return _resultobj;
 }
 
-#define wxGrid_StringToLines(_swigobj,_swigarg0,_swigarg1)  (_swigobj->StringToLines(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxGrid_StringToLines(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxGrid * _arg0;
-    wxString * _arg1;
-    wxArrayString * _arg2;
-    PyObject * _argo0 = 0;
-    PyObject * _obj1 = 0;
-    PyObject * _argo2 = 0;
-    char *_kwnames[] = { "self","value","lines", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxGrid_StringToLines",_kwnames,&_argo0,&_obj1,&_argo2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_StringToLines. Expected _wxGrid_p.");
-        return NULL;
-        }
-    }
-{
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg1 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
-#endif
-}
-    if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxArrayString_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxGrid_StringToLines. Expected _wxArrayString_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxGrid_StringToLines(_arg0,*_arg1,*_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-{
-    if (_obj1)
-        delete _arg1;
-}
-    return _resultobj;
-}
-
 #define wxGrid_GetTextBoxSize(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->GetTextBoxSize(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
 static PyObject *_wrap_wxGrid_GetTextBoxSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -7895,7 +7834,7 @@ static PyObject *_wrap_wxGrid_GetTextBoxSize(PyObject *self, PyObject *args, PyO
     long  temp0;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
-    PyObject * _argo2 = 0;
+    PyObject * _obj2 = 0;
     char *_kwnames[] = { "self","dc","lines", NULL };
 
     self = self;
@@ -7905,7 +7844,7 @@ static PyObject *_wrap_wxGrid_GetTextBoxSize(PyObject *self, PyObject *args, PyO
 {
   _arg4 = &temp0;
 }
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxGrid_GetTextBoxSize",_kwnames,&_argo0,&_argo1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxGrid_GetTextBoxSize",_kwnames,&_argo0,&_argo1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -7921,13 +7860,21 @@ static PyObject *_wrap_wxGrid_GetTextBoxSize(PyObject *self, PyObject *args, PyO
         return NULL;
         }
     }
-    if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxArrayString_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxGrid_GetTextBoxSize. Expected _wxArrayString_p.");
+{
+    if (! PySequence_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, "Sequence of strings expected.");
         return NULL;
-        }
     }
+    _arg2 = new wxArrayString;
+    int i, len=PySequence_Length(_obj2);
+    for (i=0; i<len; i++) {
+        PyObject* item = PySequence_GetItem(_obj2, i);
+        PyObject* str  = PyObject_Str(item);
+        _arg2->Add(PyString_AsString(item));
+        Py_DECREF(item);
+        Py_DECREF(str);
+    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxGrid_GetTextBoxSize(_arg0,*_arg1,*_arg2,_arg3,_arg4);
@@ -7945,6 +7892,10 @@ static PyObject *_wrap_wxGrid_GetTextBoxSize(PyObject *self, PyObject *args, PyO
     PyObject *o;
     o = PyInt_FromLong((long) (*_arg4));
     _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    if (_obj2)
+        delete _arg2;
 }
     return _resultobj;
 }
@@ -14175,7 +14126,6 @@ static PyMethodDef gridcMethods[] = {
 	 { "wxGrid_EndBatch", (PyCFunction) _wrap_wxGrid_EndBatch, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_BeginBatch", (PyCFunction) _wrap_wxGrid_BeginBatch, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_GetTextBoxSize", (PyCFunction) _wrap_wxGrid_GetTextBoxSize, METH_VARARGS | METH_KEYWORDS },
-	 { "wxGrid_StringToLines", (PyCFunction) _wrap_wxGrid_StringToLines, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_DrawTextRectangle", (PyCFunction) _wrap_wxGrid_DrawTextRectangle, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_DrawCellHighlight", (PyCFunction) _wrap_wxGrid_DrawCellHighlight, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_DeleteCols", (PyCFunction) _wrap_wxGrid_DeleteCols, METH_VARARGS | METH_KEYWORDS },

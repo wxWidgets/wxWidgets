@@ -1297,6 +1297,19 @@ bool wxColour_helper(PyObject* source, wxColour** obj) {
 
 
 //----------------------------------------------------------------------
+
+PyObject* wxArrayString2PyList_helper(const wxArrayString& arr) {
+
+    PyObject* list = PyList_New(0);
+    for (size_t i=0; i < arr.GetCount(); i++) {
+        PyObject* str = PyString_FromString(arr[i].c_str());
+        PyList_Append(list, str);
+        // TODO:  Check refcount on str...
+    }
+    return list;
+}
+
+
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
 

@@ -34,6 +34,7 @@ _treeList = [
                                 'ErrorDialogs',
                                 'wxRightTextCtrl',
                                 'URLDragAndDrop',
+                                'wxMimeTypesManager',
                                 ##'wxPopupWindow',
                                 ]),
 
@@ -68,7 +69,7 @@ _treeList = [
                         'PythonEvents', 'Threads',
                         'ActiveXWrapper_Acrobat', 'ActiveXWrapper_IE',
                         'wxDragImage', "wxProcess", "FancyText", "OOR", "wxWave",
-                        'wxJoystick', 'DrawXXXList', 'ErrorDialogs',
+                        'wxJoystick', 'DrawXXXList', 'ErrorDialogs', 'wxMimeTypesManager',
                         ]),
 
     ('wxPython Library', ['Layoutf', 'wxScrolledMessageDialog',

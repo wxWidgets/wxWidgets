@@ -269,6 +269,29 @@
         return NULL;
 }
 
+//---------------------------------------------------------------------------
+// Typemap for wxArrayString from Python sequence objects
+
+%typemap(python,in) wxArrayString& {
+    if (! PySequence_Check($source)) {
+        PyErr_SetString(PyExc_TypeError, "Sequence of strings expected.");
+        return NULL;
+    }
+    $target = new wxArrayString;
+    int i, len=PySequence_Length($source);
+    for (i=0; i<len; i++) {
+        PyObject* item = PySequence_GetItem($source, i);
+        PyObject* str  = PyObject_Str(item);
+        $target->Add(PyString_AsString(item));
+        Py_DECREF(item);
+        Py_DECREF(str);
+    }
+}
+
+%typemap(python, freearg) wxArrayString& {
+    if ($target)
+        delete $source;
+}
 
 //---------------------------------------------------------------------------
 // Map T_OUTPUTs for floats to return ints.

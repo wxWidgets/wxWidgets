@@ -117,25 +117,13 @@ public:
         PyObject* GetFilenames() {
             wxArrayString arr;
             self->GetFilenames(arr);
-            size_t count = arr.GetCount();
-            PyObject* listObj = PyList_New(0);
-            for(size_t x=0; x<count; x++) {
-                PyObject* name = PyString_FromString(arr[x]);
-                PyList_Append(listObj, name);
-            }
-            return listObj;
+            return wxArrayString2PyList_helper(arr);
         }
 
         PyObject* GetPaths() {
             wxArrayString arr;
             self->GetPaths(arr);
-            size_t count = arr.GetCount();
-            PyObject* listObj = PyList_New(0);
-            for(size_t x=0; x<count; x++) {
-                PyObject* name = PyString_FromString(arr[x]);
-                PyList_Append(listObj, name);
-            }
-            return listObj;
+            return wxArrayString2PyList_helper(arr);
         }
     }
 };

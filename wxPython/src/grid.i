@@ -1371,10 +1371,10 @@ public:
                             int horizontalAlignment = wxLEFT,
                             int verticalAlignment = wxTOP );
 
-    // Split a string containing newline chararcters into an array of
-    // strings and return the number of lines
-    //
-    void StringToLines( const wxString& value, wxArrayString& lines );
+//      // Split a string containing newline chararcters into an array of
+//      // strings and return the number of lines
+//      //
+//      void StringToLines( const wxString& value, wxArrayString& lines );
 
     void GetTextBoxSize( wxDC& dc,
                          wxArrayString& lines,

@@ -70,6 +70,18 @@ Added a set of sophisticated Error Dialogs from Chris Fama.
 Added wxRightTextCtrl from Josu Oyanguren to wxPython.lib for aligning
 text in a wxTextCtrl to the right side.
 
+Added wxURLDataObject and and example showing drag and drop of URLs to
+and from web browsers.  It's still not 100% bullet-proof for all types
+of browsers, but it works for the majority of cases with the popular
+browsers on Windows.  On wxGTK it seems that only Netscape 4.x works,
+if anybody has any suggestions about this please bring it up on the
+wx-dev list.
+
+Added wxStopWatch.
+
+Added wxMimeTypesManager and wxFileType.
+
+
 
 
 2.3.1

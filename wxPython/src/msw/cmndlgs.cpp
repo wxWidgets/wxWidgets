@@ -1470,13 +1470,7 @@ static PyObject *_wrap_wxFileDialog_ShowModal(PyObject *self, PyObject *args, Py
 static PyObject * wxFileDialog_GetFilenames(wxFileDialog *self) {
             wxArrayString arr;
             self->GetFilenames(arr);
-            size_t count = arr.GetCount();
-            PyObject* listObj = PyList_New(0);
-            for(size_t x=0; x<count; x++) {
-                PyObject* name = PyString_FromString(arr[x]);
-                PyList_Append(listObj, name);
-            }
-            return listObj;
+            return wxArrayString2PyList_helper(arr);
         }
 static PyObject *_wrap_wxFileDialog_GetFilenames(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1510,13 +1504,7 @@ static PyObject *_wrap_wxFileDialog_GetFilenames(PyObject *self, PyObject *args,
 static PyObject * wxFileDialog_GetPaths(wxFileDialog *self) {
             wxArrayString arr;
             self->GetPaths(arr);
-            size_t count = arr.GetCount();
-            PyObject* listObj = PyList_New(0);
-            for(size_t x=0; x<count; x++) {
-                PyObject* name = PyString_FromString(arr[x]);
-                PyList_Append(listObj, name);
-            }
-            return listObj;
+            return wxArrayString2PyList_helper(arr);
         }
 static PyObject *_wrap_wxFileDialog_GetPaths(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;

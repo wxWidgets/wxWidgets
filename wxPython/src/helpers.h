@@ -151,6 +151,11 @@ bool _2int_seq_helper(PyObject* source, int* i1, int* i2);
 bool _4int_seq_helper(PyObject* source, int* i1, int* i2, int* i3, int* i4);
 
 
+PyObject* wxArrayString2PyList_helper(const wxArrayString& app);
+
+
+#define RETURN_NONE()   { Py_INCREF(Py_None); return Py_None; }
+
 //----------------------------------------------------------------------
 
 #ifndef SWIGCODE

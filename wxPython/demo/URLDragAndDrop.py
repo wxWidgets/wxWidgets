@@ -66,14 +66,16 @@ class TestPanel(wxPanel):
                     0, wxALIGN_RIGHT )
         self.dragText = wxTextCtrl(self, -1, "http://wxPython.org/")
         inSizer.Add(self.dragText, 0, wxEXPAND)
+        EVT_MOTION(self.dragText, self.OnStartDrag)
 
 
-        inSizer.Add(wxStaticText(self, -1,
-                                 "Drag this TEXT to your browser:",
-                                 style = wxALIGN_RIGHT),
-                    0, wxALIGN_RIGHT )
-        self.dragText2 = wxTextCtrl(self, -1, "http://wxPython.org/")
-        inSizer.Add(self.dragText2, 0, wxEXPAND)
+##         inSizer.Add(wxStaticText(self, -1,
+##                                  "Drag this TEXT to your browser:",
+##                                  style = wxALIGN_RIGHT),
+##                     0, wxALIGN_RIGHT )
+##         self.dragText2 = wxTextCtrl(self, -1, "http://wxPython.org/")
+##         inSizer.Add(self.dragText2, 0, wxEXPAND)
+##         EVT_MOTION(self.dragText2, self.OnStartDrag2)
 
 
         outsideSizer.Add(inSizer, 1, wxEXPAND)
@@ -82,8 +84,6 @@ class TestPanel(wxPanel):
 
         self.dropText.SetDropTarget(MyURLDropTarget(self.dropText))
 
-        EVT_MOTION(self.dragText, self.OnStartDrag)
-        EVT_MOTION(self.dragText2, self.OnStartDrag2)
 
 
     def OnStartDrag(self, evt):

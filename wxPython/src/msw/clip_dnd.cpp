@@ -294,11 +294,7 @@ bool wxPyFileDropTarget::OnDropFiles(wxCoord x, wxCoord y,
                                      const wxArrayString& filenames) {
     bool rval = FALSE;
     wxPyTState* state = wxPyBeginBlockThreads();
-    PyObject* list = PyList_New(0);
-    for (size_t i=0; i<filenames.GetCount(); i++) {
-        PyObject* str = PyString_FromString(filenames[i].c_str());
-        PyList_Append(list, str);
-    }
+    PyObject* list = wxArrayString2PyList_helper(filenames);
     if (m_myInst.findCallback("OnDropFiles"))
         rval = m_myInst.callCallback(Py_BuildValue("(iiO)",x,y,list));
     Py_DECREF(list);
@@ -1711,10 +1707,7 @@ static PyObject *_wrap_new_wxFileDataObject(PyObject *self, PyObject *args, PyOb
 
 static PyObject * wxFileDataObject_GetFilenames(wxFileDataObject *self) {
             const wxArrayString& strings = self->GetFilenames();
-            PyObject* list = PyList_New(0);
-            for (size_t x=0; x<strings.GetCount(); x++)
-                PyList_Append(list, PyString_FromString(strings[x]));
-            return list;
+            return wxArrayString2PyList_helper(strings);
         }
 static PyObject *_wrap_wxFileDataObject_GetFilenames(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
