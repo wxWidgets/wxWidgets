@@ -69,7 +69,7 @@ typedef  _TUCHAR     wxUChar;
 #define  wxStrspn    _tcsspn
 #define  wxStrstr    _tcsstr
 #define  wxStrtod    _tcstod
-#define  wxStrtok    _tcstok
+// is there a _tcstok[_r] ?
 #define  wxStrtol    _tcstol
 #define  wxStrtoul   _tcstoul
 #define  wxStrxfrm   _tcsxfrm
@@ -104,6 +104,7 @@ typedef  _TUCHAR     wxUChar;
 #define  wxVsprintf  _vstprintf
 
    // stdlib.h functions
+#define  wxAtof      _ttof /* does this exist? */
 #define  wxAtoi      _ttoi
 #define  wxAtol      _ttol
 #define  wxGetenv    _tgetenv
@@ -172,12 +173,17 @@ typedef unsigned __WCHAR_TYPE__ wxUChar;
 #define  wxStrxfrm   wcsxfrm
 
 // glibc doesn't have wc equivalents of the other stuff
-// do we need to write wrappers for them?
+#define wxNEED_WX_STDIO_H
+#define wxNEED_WX_STDLIB_H
+#define wxNEED_WX_TIME_H
 
 #else
 #error   "Please define your compiler's Unicode conventions in wxChar.h"
 #endif
 #else//!Unicode
+
+#include <ctype.h>
+#include <string.h>
 
 #if 0 // temporary - preserve binary compatibilty
 typedef char            wxChar;
@@ -216,6 +222,7 @@ typedef unsigned char   wxUChar;
 #define  wxStrcoll   strcoll
 #define  wxStrcpy    strcpy
 #define  wxStrcspn   strcspn
+#define  wxStrdup    strdup
 #define  wxStrncat   strncat
 #define  wxStrncmp   strncmp
 #define  wxStrncpy   strncpy
@@ -224,7 +231,7 @@ typedef unsigned char   wxUChar;
 #define  wxStrspn    strspn
 #define  wxStrstr    strstr
 #define  wxStrtod    strtod
-#define  wxStrtok    strtok
+// #define  wxStrtok    strtok_r // this needs a configure check
 #define  wxStrtol    strtol
 #define  wxStrtoul   strtoul
 #define  wxStrxfrm   strxfrm
@@ -259,6 +266,7 @@ typedef unsigned char   wxUChar;
 #define  wxVsprintf  vsprintf
 
    // stdlib.h functions
+#define  wxAtof      atof
 #define  wxAtoi      atoi
 #define  wxAtol      atol
 #define  wxGetenv    getenv
@@ -323,17 +331,46 @@ inline int WXDLLEXPORT wxStricmp(const wxChar *psz1, const wxChar *psz2)
   #error  "Please define string case-insensitive compare for your OS/compiler"
 #endif  // OS/compiler
 
-/// portable strdup
-inline wxChar * WXDLLEXPORT wxStrdup(const wxChar *psz)
-#if !wxUSE_UNICODE
-   { return strdup(psz); }
+// multibyte<->widechar conversion
+size_t WXDLLEXPORT wxMB2WC(wchar_t *buf, const char *psz, size_t n);
+size_t WXDLLEXPORT wxWC2MB(char *buf, const wchar_t *psz, size_t n);
+#if wxUSE_UNICODE
+#define wxMB2WX wxMB2WC
+#define wxWX2MB wxWC2MB
+#define wxWC2WX wxStrncpy
+#define wxWX2WC wxStrncpy
 #else
-   {
-     size_t size = (wxStrlen(psz) + 1) * sizeof(wxChar);
-     wxChar *ret = (wxChar *) malloc(size);
-     memcpy(ret, psz, size);
-     return ret;
-   }
+#define wxMB2WX wxStrncpy
+#define wxWX2MB wxStrncpy
+#define wxWC2WX wxWC2MB
+#define wxWX2WC wxMB2WC
+#endif
+
+// if libc versions are not available, use replacements defined in wxchar.cpp
+#ifndef wxStrdup
+wxChar * WXDLLEXPORT wxStrdup(const wxChar *psz);
+#endif
+
+#ifndef wxStrtok
+wxChar * WXDLLEXPORT wxStrtok(wxChar *psz, const wxChar *delim, wxChar **save_ptr);
+#endif
+
+#ifndef wxSetlocale
+wxChar * WXDLLEXPORT wxSetlocale(int category, const wxChar *locale);
+#endif
+
+#ifdef wxNEED_WX_STDIO_H
+#include <stdarg.h>
+int      WXDLLEXPORT wxSprintf(wxChar *buf, const wxChar *fmt, ...);
+int      WXDLLEXPORT wxVsprintf(wxChar *buf, const wxChar *fmt, va_list argptr);
+#endif
+
+#ifdef wxNEED_WX_STDLIB_H
+double   WXDLLEXPORT wxAtof(const wxChar *psz);
+int      WXDLLEXPORT wxAtoi(const wxChar *psz);
+long     WXDLLEXPORT wxAtol(const wxChar *psz);
+wxChar * WXDLLEXPORT wxGetenv(const wxChar *name);
+int      WXDLLEXPORT wxSystem(const wxChar *psz);
 #endif
 
 #endif
