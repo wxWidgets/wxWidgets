@@ -227,6 +227,7 @@ wxMSW:
 - Alt-letter didn't switch focus to a spin ctrl following static control with
   hotkey
 - fix for multiple consecutive groups of radiobuttons
+- fix for incorrect display of tooltips in non English locales (Niki Spahiev)
 
 wxMotif:
 
