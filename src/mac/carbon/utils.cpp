@@ -80,6 +80,9 @@ static int DoGetOSVersion(int *majorVsn, int *minorVsn)
 #endif
 }
 
+
+#if wxUSE_BASE
+
 // ----------------------------------------------------------------------------
 // debugging support
 // ----------------------------------------------------------------------------
@@ -220,7 +223,6 @@ extern bool WXDLLEXPORT wxIsDebuggerRunning()
 
 #endif // defined(__WXMAC__) && !defined(__DARWIN__) && (__MWERKS__ >= 0x2400)
 
-#if wxUSE_BASE
 
 #ifndef __DARWIN__
 // defined in unix/utilsunx.cpp for Mac OS X
