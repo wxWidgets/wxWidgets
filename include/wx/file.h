@@ -50,7 +50,7 @@ public:
   // -------------------
     
     // opening mode
-  enum OpenMode { read, write, read_write };
+  enum OpenMode { read, write, read_write, write_append };
     // standard values for file descriptor
   enum { fd_invalid = -1, fd_stdin, fd_stdout, fd_stderr };
     // seek type
@@ -72,8 +72,12 @@ public:
   // open/close
   bool Create(const char *szFileName, bool bOverwrite = FALSE);
   bool Open(const char *szFileName, OpenMode mode = read);
+  inline bool Close();  // Close is a NOP if not opened
+
+  // assign an existing file descriptor and get it back from wxFile object
   void Attach(int fd) { Close(); m_fd = fd; }
-  inline void Close();  // Close is a NOP if not opened
+  void Detach()       { m_fd = fd_invalid;  }
+  int  fd() const { return m_fd; }
 
   // read/write (unbuffered)
     // returns number of bytes read or ofsInvalid on error

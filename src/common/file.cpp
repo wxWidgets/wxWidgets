@@ -120,8 +120,7 @@ bool wxFile::Create(const char *szFileName, bool bOverwrite)
 {
   // if bOverwrite we create a new file or truncate the existing one,
   // otherwise we only create the new file and fail if it already exists
-  int fd = bOverwrite ? creat(szFileName, 0) 
-                      : open(szFileName, O_CREAT | O_EXCL);
+  int fd = open(szFileName, O_CREAT | (bOverwrite ? O_TRUNC : O_EXCL));
 
   if ( fd == -1 ) {
     wxLogSysError("can't create file '%s'", szFileName);
@@ -144,7 +143,11 @@ bool wxFile::Open(const char *szFileName, OpenMode mode)
       break;
 
     case write:     
-      flags |= O_WRONLY | O_CREAT; 
+      flags |= O_WRONLY | O_CREAT | O_TRUNC; 
+      break;
+
+    case write_append:
+      flags |= O_WRONLY | O_APPEND;
       break;
 
     case read_write: 
@@ -165,14 +168,19 @@ bool wxFile::Open(const char *szFileName, OpenMode mode)
 }
 
 // close
-void wxFile::Close()
+bool wxFile::Close()
 {
   if ( IsOpened() ) {
-    if ( close(m_fd) == -1 )
+    if ( close(m_fd) == -1 ) {
       wxLogSysError("can't close file descriptor %d", m_fd);
-
-    m_fd = fd_invalid;
+      m_fd = fd_invalid;
+      return FALSE;
+    }
+    else
+      m_fd = fd_invalid;
   }
+
+  return TRUE;
 }
 
 // ----------------------------------------------------------------------------
@@ -211,7 +219,7 @@ bool wxFile::Write(const void *pBuf, uint nCount)
 bool wxFile::Flush()
 {
   if ( IsOpened() ) {
-		// ## fsync() is not ANSI (BSDish)
+		// @@@ fsync() is not ANSI (BSDish)
 //    if ( fsync(m_fd) == -1 ) { // TODO
       if (TRUE) {
       wxLogSysError("can't flush file descriptor %d", m_fd);
@@ -282,7 +290,7 @@ off_t wxFile::Length() const
   #else
     int iRc = tell(m_fd);
     if ( iRc != -1 ) {
-			// # have to use const_cast :-(
+			// @ have to use const_cast :-(
       int iLen = ((wxFile *)this)->SeekEnd();
       if ( iLen != -1 ) {
         // restore old position
@@ -310,21 +318,19 @@ bool wxFile::Eof() const
 {
   wxASSERT( IsOpened() );
 
-  // TODO: no eof in GnuWin32
-  
-#ifdef __LINUX__
+  int iRc;
 
-  int iRc = Tell() == Length();
-
-#else  
-  
-#if defined(__GNUWIN32__)
-  int iRc = -1;
-#else
-  int iRc = eof(m_fd);
-#endif
-
-#endif
+  #if defined(__UNIX__) || defined(__GNUWIN32__)
+    // @@ this doesn't work, of course, on unseekable file descriptors
+    off_t ofsCur = Tell(),
+          ofsMax = Length();
+    if ( ofsCur == ofsInvalid || ofsMax == ofsInvalid )
+      iRc = -1;
+    else
+     iRc = ofsCur == ofsMax;
+  #else  // Windows and "native" compiler
+    iRc = eof(m_fd);
+  #endif // Windows/Unix
 
   switch ( iRc ) {
     case 1:
