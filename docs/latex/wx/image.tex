@@ -72,6 +72,9 @@ If all possible wxWindows settings are used, the loading a BMP (Windows bitmap) 
 a PNG (portable network graphics) file and a JPEG file is supported on all platforms that
 implement wxImage.}
 
+Note : you must call wxImage::AddHandler(new wxJPEGHandler) during application 
+initialization in order to work with JPEGs.
+
 \wxheading{See also}
 
 \helpref{wxImage::LoadFile}{wximageloadfile}
