@@ -127,7 +127,7 @@ BOOL WriteDIB(LPSTR szFile, HANDLE hdib)
 	hdr.bfSize = GlobalSize(hdib) + sizeof(BITMAPFILEHEADER);
 	hdr.bfReserved1 = 0;
 	hdr.bfReserved2 = 0;
-	hdr.bfOffBits = (DWORD) sizeof(BITMAPFILEHEADER) + lpbi->biSize + 
+	hdr.bfOffBits = (DWORD) sizeof(BITMAPFILEHEADER) + lpbi->biSize +
 		 PaletteSize(lpbi);
 
     /* Write the file header */
@@ -164,7 +164,7 @@ WORD PaletteSize(VOID FAR * pv)
 
 	if (lpbi->biSize == sizeof(BITMAPCOREHEADER))
 		return NumColors * sizeof(RGBTRIPLE);
-	else 
+	else
 		return NumColors * sizeof(RGBQUAD);
 }
 
@@ -198,7 +198,7 @@ WORD DibNumColors(VOID FAR *pv)
 			return (WORD) lpbi->biClrUsed;
 		bits = lpbi->biBitCount;
 		}
-	else 
+	else
 		bits = lpbc->bcBitCount;
 
 	switch (bits) {
@@ -412,7 +412,7 @@ DWORD PASCAL lwrite(int fh, VOID FAR *pv, DWORD ul)
  *               is loaded, the function also creates a bitmap and
  *               palette out of the DIB for a device-dependent form.
  *
- *  RETURNS    : TRUE  - DIB loaded and bitmap/palette created 
+ *  RETURNS    : TRUE  - DIB loaded and bitmap/palette created
  *                       The DIBINIT structure pointed to by pInfo is
  *                       filled with the appropriate handles.
  *		 FALSE - otherwise
@@ -436,12 +436,12 @@ BOOL ReadDIB(LPSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette)
 
     fh = OpenFile (lpFileName, &of, OF_READ);
     if (fh == -1) {
-	wsprintf(str,"Can't open file '%ls'", (LPSTR)lpFileName);
+        wsprintf(str,"Can't open file '%s'", lpFileName);
 	MessageBox(NULL, str, "Error", MB_ICONSTOP | MB_OK);
 	return (0);
     }
-    
-    hDIB = GlobalAlloc(GHND, (DWORD)(sizeof(BITMAPINFOHEADER) + 
+
+    hDIB = GlobalAlloc(GHND, (DWORD)(sizeof(BITMAPINFOHEADER) +
     					256 * sizeof(RGBQUAD)));
     if (!hDIB)
 	return(0);
@@ -497,7 +497,7 @@ BOOL ReadDIB(LPSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette)
 			 * lpbi->biHeight;
     }
 
-    /* get a proper-sized buffer for header, color table and bits */ 
+    /* get a proper-sized buffer for header, color table and bits */
     GlobalUnlock(hDIB);
     hDIB = GlobalReAlloc(hDIB, lpbi->biSize +
     					nNumColors * sizeof(RGBQUAD) +
@@ -579,7 +579,7 @@ ErrExit2:
  *               to be used for a device-dependent representation of
  *               of the image.
  *
- *  RETURNS    : TRUE  --> success. phPal and phBitmap are filled with 
+ *  RETURNS    : TRUE  --> success. phPal and phBitmap are filled with
  *                         appropriate handles.  Caller is responsible
  *                         for freeing objects.
  *               FALSE --> unable to create objects.  both pointer are
@@ -608,9 +608,9 @@ BOOL PASCAL MakeBitmapAndPalette(HDC hDC, HANDLE hDIB,
 	hOldPal = SelectPalette(hDC, hPalette, TRUE);
 	RealizePalette(hDC);
 
-	lpBits = (LPSTR)lpInfo + (WORD)lpInfo->biSize + 
+	lpBits = (LPSTR)lpInfo + (WORD)lpInfo->biSize +
 		(WORD)lpInfo->biClrUsed * sizeof(RGBQUAD);
-	hBitmap = CreateDIBitmap(hDC, lpInfo, CBM_INIT, lpBits, 
+	hBitmap = CreateDIBitmap(hDC, lpInfo, CBM_INIT, lpBits,
 				(LPBITMAPINFO)lpInfo, DIB_RGB_COLORS);
 
 	SelectPalette(hDC, hOldPal, TRUE);
@@ -632,11 +632,11 @@ BOOL PASCAL MakeBitmapAndPalette(HDC hDC, HANDLE hDIB,
  *									    *
  *  FUNCTION   : MakeDIBPalette(lpInfo)					    *
  *									    *
- *  PURPOSE    : Given a BITMAPINFOHEADER, create a palette based on 
+ *  PURPOSE    : Given a BITMAPINFOHEADER, create a palette based on
  *		 the color table.
- *		 
+ *
  *									    *
- *  RETURNS    : non-zero - handle of a corresponding palette 
+ *  RETURNS    : non-zero - handle of a corresponding palette
  *		 zero - unable to create palette
  *									    *
  ****************************************************************************/
@@ -644,7 +644,7 @@ HPALETTE MakeDIBPalette(LPBITMAPINFOHEADER lpInfo)
 {
     NPLOGPALETTE npPal;
     RGBQUAD far *lpRGB;
-    HPALETTE hLogPal; 
+    HPALETTE hLogPal;
     WORD i;
 
     /* since biClrUsed field was filled during the loading of the DIB,
@@ -653,10 +653,10 @@ HPALETTE MakeDIBPalette(LPBITMAPINFOHEADER lpInfo)
     if (lpInfo->biClrUsed)
     {
 /*
-	npPal = (NPLOGPALETTE)LocalAlloc(LMEM_FIXED, sizeof(LOGPALETTE) + 
+	npPal = (NPLOGPALETTE)LocalAlloc(LMEM_FIXED, sizeof(LOGPALETTE) +
 				(WORD)lpInfo->biClrUsed * sizeof(PALETTEENTRY));
 */
-	npPal = (NPLOGPALETTE)malloc(sizeof(LOGPALETTE) + 
+	npPal = (NPLOGPALETTE)malloc(sizeof(LOGPALETTE) +
 				(WORD)lpInfo->biClrUsed * sizeof(PALETTEENTRY));
 
         if (!npPal)
@@ -680,7 +680,7 @@ HPALETTE MakeDIBPalette(LPBITMAPINFOHEADER lpInfo)
 	hLogPal = CreatePalette((LPLOGPALETTE)npPal);
 //	LocalFree((HANDLE)npPal);
         free(npPal);
-        
+
 	return(hLogPal);
     }
 
@@ -773,7 +773,7 @@ wxBitmap *wxLoadBitmap(char *filename, wxPalette **pal)
 //
 // History:   Date      Reason
 //            11/07/91  Created
-//             
+//
 //---------------------------------------------------------------------
 
 void InitBitmapInfoHeader (LPBITMAPINFOHEADER lpBmInfoHdr,
@@ -831,7 +831,7 @@ LPSTR FindDIBBits (LPSTR lpbi)
 //
 // History:   Date      Reason
 //             6/01/91  Created
-//             
+//
 //---------------------------------------------------------------------
 
 HANDLE BitmapToDIB (HBITMAP hBitmap, HPALETTE hPal)
@@ -854,16 +854,16 @@ HANDLE BitmapToDIB (HBITMAP hBitmap, HPALETTE hPal)
    if (!GetObject (hBitmap, sizeof (Bitmap), (LPSTR) &Bitmap))
       return NULL;
 
-   InitBitmapInfoHeader (&bmInfoHdr, 
-                         Bitmap.bmWidth, 
-                         Bitmap.bmHeight, 
+   InitBitmapInfoHeader (&bmInfoHdr,
+                         Bitmap.bmWidth,
+                         Bitmap.bmHeight,
                          Bitmap.bmPlanes * Bitmap.bmBitsPixel);
 
 
       // Now allocate memory for the DIB.  Then, set the BITMAPINFOHEADER
       //  into this memory, and find out where the bitmap bits go.
 
-   hDIB = GlobalAlloc (GHND, sizeof (BITMAPINFOHEADER) + 
+   hDIB = GlobalAlloc (GHND, sizeof (BITMAPINFOHEADER) +
              PaletteSize ((LPSTR) &bmInfoHdr) + bmInfoHdr.biSizeImage);
 
    if (!hDIB)
@@ -896,12 +896,12 @@ HANDLE BitmapToDIB (HBITMAP hBitmap, HPALETTE hPal)
       //  it party on our bitmap.  It will fill in the color table,
       //  and bitmap bits of our global memory block.
 
-   if (!GetDIBits (hMemDC, 
-                   hBitmap, 
-                   0, 
-                   Bitmap.bmHeight, 
-                   lpBits, 
-                   (LPBITMAPINFO) lpbmInfoHdr, 
+   if (!GetDIBits (hMemDC,
+                   hBitmap,
+                   0,
+                   Bitmap.bmHeight,
+                   lpBits,
+                   (LPBITMAPINFO) lpbmInfoHdr,
                    DIB_RGB_COLORS))
       {
       GlobalUnlock (hDIB);
