@@ -543,24 +543,6 @@ void UMAActivateControl( ControlRef inControl )
 #endif    
 }
 
-void UMADrawControl( ControlRef inControl )
-{
-#if TARGET_API_MAC_CARBON
-    ::Draw1Control( inControl );
-#else
-    WindowRef theWindow = GetControlOwner(inControl) ;
-    wxMacPortStateHelper help( (GrafPtr) GetWindowPort(theWindow) ) ;
-    RgnHandle updateRgn = NewRgn() ;
-    GetWindowUpdateRgn( theWindow , updateRgn ) ;
-    Point zero = { 0 , 0 } ;
-    LocalToGlobal( &zero ) ;
-    OffsetRgn( updateRgn , -zero.h , -zero.v ) ;
-    ::DrawControlInCurrentPort( inControl ) ;
-    InvalWindowRgn( theWindow, updateRgn) ;
-    DisposeRgn( updateRgn ) ;
-#endif
-}
-
 void UMAMoveControl( ControlRef inControl , short x , short y )
 {
 #if !TARGET_API_MAC_OSX
