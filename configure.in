@@ -395,6 +395,12 @@ dnl ---------------------------------------------------------------------------
 dnl the file passed to AC_INIT should be specific to our package
 AC_INIT(wx-config.in)
 
+AC_CANONICAL_SYSTEM
+
+dnl When making releases do:
+dnl
+dnl WX_RELEASE_NUMBER += 1
+dnl WX_INTERFACE_AGE += 1
 dnl WX_BINARY_AGE += 1
 dnl
 dnl if any functions have been added, do:
