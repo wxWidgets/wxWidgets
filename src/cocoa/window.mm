@@ -172,7 +172,7 @@ bool wxWindow::Show(bool show)
 
 void wxWindowCocoa::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
-    wxLogDebug("wxWindow=%p::DoSetSizeWindow(%d,%d,%d,%d,Auto: %s%s)",this,x,y,width,height,(sizeFlags&wxSIZE_AUTO_WIDTH)?"W":".",sizeFlags&wxSIZE_AUTO_HEIGHT?"H":".");
+//    wxLogDebug("wxWindow=%p::DoSetSizeWindow(%d,%d,%d,%d,Auto: %s%s)",this,x,y,width,height,(sizeFlags&wxSIZE_AUTO_WIDTH)?"W":".",sizeFlags&wxSIZE_AUTO_HEIGHT?"H":".");
     int currentX, currentY;
     int currentW, currentH;
     DoGetPosition(&currentX, &currentY);
@@ -212,7 +212,7 @@ void wxWindowCocoa::DoSetSize(int x, int y, int width, int height, int sizeFlags
 
 void wxWindowCocoa::DoMoveWindow(int x, int y, int width, int height)
 {
-    wxLogDebug("wxWindow=%p::DoMoveWindow(%d,%d,%d,%d)",this,x,y,width,height);
+//    wxLogDebug("wxWindow=%p::DoMoveWindow(%d,%d,%d,%d)",this,x,y,width,height);
 
     NSView *nsview = m_dummyNSView?m_dummyNSView:m_cocoaNSView;
     NSView *superview = [nsview superview];
@@ -234,7 +234,7 @@ void wxWindow::DoGetSize(int *w, int *h) const
         *w=(int)cocoaRect.size.width;
     if(h)
         *h=(int)cocoaRect.size.height;
-    wxLogDebug("wxWindow=%p::DoGetSize = (%d,%d)",this,(int)cocoaRect.size.width,(int)cocoaRect.size.height);
+//    wxLogDebug("wxWindow=%p::DoGetSize = (%d,%d)",this,(int)cocoaRect.size.width,(int)cocoaRect.size.height);
 }
 
 void wxWindow::DoGetPosition(int *x, int *y) const
@@ -249,12 +249,17 @@ void wxWindow::DoGetPosition(int *x, int *y) const
         *x=(int)cocoaRect.origin.x;
     if(y)
         *y=(int)(parentRect.size.height-(cocoaRect.origin.y+cocoaRect.size.height));
-    wxLogDebug("wxWindow=%p::DoGetPosition = (%d,%d)",this,(int)cocoaRect.origin.x,(int)cocoaRect.origin.y);
+//    wxLogDebug("wxWindow=%p::DoGetPosition = (%d,%d)",this,(int)cocoaRect.origin.x,(int)cocoaRect.origin.y);
 }
 
 WXWidget wxWindow::GetHandle() const
 {
     return m_cocoaNSView;
+}
+
+void wxWindow::Refresh(bool eraseBack, const wxRect *rect)
+{
+    [m_cocoaNSView setNeedsDisplay:YES];
 }
 
 void wxWindow::SetFocus()
@@ -310,11 +315,6 @@ int wxWindow::GetCharWidth() const
 
 void wxWindow::GetTextExtent(const wxString& string, int *x, int *y,
         int *descent, int *externalLeading, const wxFont *theFont) const
-{
-    // TODO
-}
-
-void wxWindow::Refresh(bool eraseBack, const wxRect *rect)
 {
     // TODO
 }
