@@ -1,5 +1,6 @@
 <html>
 <head>
+   <title>Platforms supported by wxWindows 2.x</title>
    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
    <meta name="Author" content="Vadim Zeitlin">
 </head>
@@ -7,7 +8,10 @@
 
 You will find below the list of all supported platforms for different ports of wxWindows 2.x (wxMSW/wxGTK/wxMotif ports
 only). The cross icon in the third column doesn't mean that the platform is not supported, but just that wxWindows hasn't
-been tested on it recently.
+been tested on it recently (the table is being updated for wxWindows 2.1.14
+beta currently).
+<p>
+See also the <A HREF=daily/>daily rebuilds page</A> for some of the platforms mentioned below.
 <p>
 If you have tested wxWindows on a platform not mentioned here, please tell us about your experience on our mailing list!
 We would especially like to have information about compiling wxGTK on other Unix variants, such as IRIX, DG-UX,
@@ -31,38 +35,41 @@ other flavours of BSD, ...
 <tr>
 <td bgcolor="#FFFFFF" align=center valign=center rowspan=6>Win32 (Windows 9x/NT)</td>
      <td>Visual C++ 4.2/5.x/6.0</td><td align=center><IMG SRC="icons/yes.gif" ALT=Ok></td><td>VZ, JS</td><td>Project files are provided for all versions except 4.2</td>
-<tr> <td>Borland C++ 5.0</td><td align=center><IMG SRC="icons/no.gif" ALT=Unknown></td><td><br></td><td><br></td>
-<tr> <td>Myngw32</td><td align=center><IMG SRC="icons/no.gif" ALT=Unknown></td><td><br></td><td>Cross compilation from Linux works as well</td>
-<tr> <td>Cygwin</td><td align=center><IMG SRC="icons/no.gif" ALT=Unknown></td><td><br></td><td><br></td>
-<tr> <td>Watcom C++ 10</td><td align=center><IMG SRC="icons/no.gif" ALT=Unknown></td><td><br></td><td><br></td>
+<tr> <td>Borland C++ 5.0</td><td align=center><IMG SRC="icons/yes.gif" ALT=Ok></td><td><br></td><td>Also works with free command line Borland C++ 5.5</td>
+<tr> <td>Myngw32</td><td align=center><IMG SRC="icons/yes.gif" ALT=Ok></td><td>GRG, VZ</td><td>Cross compilation from Linux works as well<br>
+                                                                                               Version 2.95.2 recommended, otherwise some (included) patches must be applied<br>
+                                                                                               Memory debugging code doesn't seem to work well</td>
+<tr> <td>Cygwin</td><td align=center><IMG SRC="icons/no.gif" ALT=Unknown></td><td><br></td><td>Hasn't been tested recently, anyone?</td>
+<tr> <td>Watcom C++ 10</td><td align=center><IMG SRC="icons/somewhat.gif" ALT=Almost></td><td>JS</td><td>Tested with 10.6: works, but wxImage seems to be broken<br>no support for JPEG, TIFF or OpenGL</td>
 <tr> <td>Symantec C++</td><td align=center><IMG SRC="icons/no.gif" ALT=Unknown></td><td><br></td><td><br></td>
 </tr>
 
 <tr>
 <td bgcolor="#F0F0F0" align=center valign=center rowspan=2>Win16 (Windows 3.1)</td>
-     <td>Visual C++ 1.52</td><td align=center><IMG SRC="icons/no.gif" ALT=Unknown></td><td><br></td>
-     <td rowspan=2 valign=center>Some features are missing (OLE related classes, threads, ...)</td>
-<tr> <td>Borland C++ 4.0</td><td align=center><IMG SRC="icons/no.gif" ALT=Unknown></td><td><br></td>
+     <td>Visual C++ 1.52</td><td align=center><IMG SRC="icons/somewhat.gif" ALT=Ok></td><td><br></td>
+     <td rowspan=2 valign=center>Some features are missing (OLE related classes, threads, ...)<br>
+                                 Borland C++ can't cope with ODBC, resources and new wxGrid class</td>
+<tr> <td>Borland C++ 4.0/5.0</td><td align=center><IMG SRC="icons/somewhat.gif" ALT=Ok></td><td>JS</td>
 </tr>
 
 <tr>
 <td bgcolor="#FFFFFF" align=center valign=center rowspan=4>Linux</td>
-     <td>wxGTK with gcc 2.7.2</td><td align=center><IMG SRC="icons/no.gif" ALT=Unknown></td><td><br></td><td><br></td>
+     <td>wxGTK with gcc 2.7.2</td><td align=center><IMG SRC="icons/no.gif" ALT=Unknown></td><td><br></td><td>Should work, but nobody uses it any more</td>
 <tr> <td>wxGTK with egcs 1.1.1</td><td align=center><IMG SRC="icons/yes.gif" ALT=Ok></td><td>VZ, RR</td><td><br></td>
-<tr> <td>wxGTK with gcc 2.95</td><td align=center><IMG SRC="icons/no.gif" ALT=Unknown></td><td><br></td><td><br></td>
+<tr> <td>wxGTK with gcc 2.95</td><td align=center><IMG SRC="icons/yes.gif" ALT=Ok></td><td><br></td><td><br></td>
 <tr> <td>wxMotif with egcs 1.1.1</td><td align=center><IMG SRC="icons/yes.gif" ALT=Ok></td><td><br></td><td>with <a href=http://www.lesstif.org>LessTif</a> 0.87</td>
 </tr>
 
 <tr>
 <td bgcolor="#F0F0F0" align=center valign=center rowspan=1>FreeBSD</td>
-     <td>wxGTK with gcc</td><td align=center><IMG SRC="icons/no.gif" ALT=Unknown></td><td><br></td><td><br></td>
+     <td>wxGTK with gcc</td><td align=center><IMG SRC="icons/yes.gif" ALT=Ok></td><td>VZ</td><td>Limited thread support on older systems</td>
 </tr>
 
 <tr>
 <td bgcolor="#FFFFFF" align=center valign=center rowspan=3>Solaris</td>
-     <td>wxMotif with Sun CC 4.2</td><td align=center><IMG SRC="icons/no.gif" ALT=Unknown></td><td><br></td><td><br></td>
-<tr> <td>wxMotif with gcc</td><td align=center><IMG SRC="icons/no.gif" ALT=Unknown></td><td><br></td><td><br></td>
-<tr> <td>wxGTK with gcc</td><td align=center><IMG SRC="icons/no.gif" ALT=Unknown></td><td><br></td><td><br></td>
+     <td>wxMotif with Sun CC 4.2</td><td align=center><IMG SRC="icons/yes.gif" ALT=Ok></td><td>VZ</td><td>Thread support must be disabled on system with not MT-safe X11</td>
+<tr> <td>wxMotif with gcc</td><td align=center><IMG SRC="icons/yes.gif" ALT=Ok></td><td><br></td><td><br></td>
+<tr> <td>wxGTK with gcc</td><td align=center><IMG SRC="icons/yes.gif" ALT=Ok></td><td><br></td><td><br></td>
 </tr>
 
 <tr>
@@ -73,9 +80,16 @@ other flavours of BSD, ...
 
 <tr>
 <td bgcolor="#FFFFFF" align=center valign=center rowspan=2>HP-UX</td>
-     <td>wxGTK with HP CC A.10.22</td><td align=center><IMG SRC="icons/somewhat.gif" ALT=Unknown></td><td><br></td>
+     <td>wxGTK with HP CC A.10.22</td><td align=center><IMG SRC="icons/somewhat.gif" ALT=Almost></td><td><br></td>
      <td>special extra compiler options must be manually added, see the docs for details</td>
 <tr> <td>wxGTK with gcc</td><td align=center><IMG SRC="icons/no.gif" ALT=Unknown></td><td><br></td><td><br></td>
+</tr>
+
+<tr>
+<td bgcolor="#F0F0F0" align=center valign=center rowspan=2>OS/2</td>
+     <td>VisualAge 3.0/4.0</td><td align=center><IMG SRC="icons/no.gif" ALT="Not yet"></td><td>DW</td>
+     <td rowspan=2 valign=center>OS/2 port is work in progress...</td>
+<tr> <td>EMX</td><td align=center><IMG SRC="icons/no.gif" ALT="Not yet"></td><td>SN</td>
 </tr>
 
 </table>
