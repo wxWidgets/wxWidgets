@@ -1957,10 +1957,12 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         if test "$wxUSE_PRECOMP" = "yes"; then
             CPPFLAGS="${CPPFLAGS} -cpp-precomp"
         fi
+	CPPFLAGS="${CPPFLAGS} -I/Developer/Headers/FlatCarbon -I\${top_srcdir}/src/mac/morefile"
         CFLAGS="${CFLAGS} -fpascal-strings"
         CXXFLAGS="${CXXFLAGS} -fpascal-strings"
         TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -DTARGET_CARBON"
 
+        TOOLKIT_VPATH="\${top_srcdir}/src/mac${PATH_IFS}\${top_srcdir}/src/mac/morefile"
         TOOLKIT=MAC
         dnl we can't call this MAC_DIST or autoconf thinks its a macro
         GUIDIST=MACX_DIST
@@ -2319,8 +2321,14 @@ dnl ------------------------------------------------------------------------
 dnl Check for headers
 dnl ------------------------------------------------------------------------
 
-dnl defines HAVE_STRINGS_H (where some string functions live on AIX for example)
-AC_CHECK_HEADERS(strings.h)
+dnl do not check for strings.h for wxMac
+dnl   it exists but is only a simple redirection to string.h
+dnl   it is in conflict with Strings.h in FlatCarbon headers
+if test "$wxUSE_MAC" != 1; then
+  dnl defines HAVE_STRINGS_H (where some string functions live on AIX for example)
+  AC_CHECK_HEADERS(strings.h)
+fi
+
 dnl defines HAVE_STDLIB_H
 AC_CHECK_HEADERS(stdlib.h)
 dnl defines HAVE_UNISTD_H
