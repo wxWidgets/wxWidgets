@@ -52,6 +52,12 @@ samples/socket/Makefile.in
 samples/dialup/Makefile.in
 samples/font/Makefile.in
 samples/menu/Makefile.in
+samples/treelay/Makefile.in
+samples/opengl/cube/Makefile.in
+samples/opengl/penguin/Makefile.in
+samples/opengl/isosurf/Makefile.in
+samples/ogl/ogledit/Makefile.in
+samples/ogl/studio/Makefile.in
 demos/bombs/Makefile.in
 demos/forty/Makefile.in
 demos/fractal/Makefile.in

@@ -22,7 +22,6 @@ echo CTRL-C if this is not correct.
 pause
 
 erase %dest\wx*.zip
-erase %dest\glcanvas.zip
 erase %dest\ogl3.zip
 erase %dest\tex2rtf2.zip
 erase %dest\jpeg.zip
@@ -62,8 +61,8 @@ zip32 -@ %dest\wx%version%_cw.zip < %src\distrib\msw\cw.rsp
 rem OGL 3
 zip32 -@ %dest\ogl3.zip < %src\distrib\msw\ogl.rsp
 
-rem GLCanvas
-zip32 -@ %dest\glcanvas.zip < %src\distrib\msw\glcanvas.rsp
+rem GLCanvas: obsolete, now in main library
+rem zip32 -@ %dest\glcanvas.zip < %src\distrib\msw\glcanvas.rsp
 
 rem Tex2RTF
 zip32 -@ %dest\tex2rtf2.zip < %src\distrib\msw\tex2rtf.rsp
@@ -107,7 +106,6 @@ unzip32 -o ..\wx%version%_bc.zip
 unzip32 -o ..\wx%version%_hlp.zip
 Rem Need Word file, for Remstar DB classes
 unzip32 -o ..\wx%version%_wrd.zip
-unzip32 -o ..\glcanvas.zip
 unzip32 -o ..\treedraw.zip
 unzip32 -o ..\ogl3.zip
 unzip32 -o ..\jpeg.zip

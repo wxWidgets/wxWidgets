@@ -98,6 +98,7 @@ tbarsmpl.cpp	G
 textdlgg.cpp	G
 tipdlg.cpp	G
 treectrl.cpp	G	16
+treelay.cpp	G
 wizard.cpp	G
 
 appcmn.cpp	C	B

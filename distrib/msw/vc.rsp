@@ -3,8 +3,14 @@ src/wxvc.dsw
 src/wxvc_dll.dsp
 src/wxvc_dll.dsw
 
+src/ogl/OglVC.dsp
+src/ogl/OglVC.dsw
+
 src/jpeg/jpeg.dsp
 src/jpeg/jpeg.dsw
+
+src/tiff/tiff.dsp
+src/tiff/tiff.dsw
 
 samples/calendar/CalendarVC.dsp
 samples/calendar/CalendarVC.dsw
@@ -187,6 +193,21 @@ samples/validate/ValidateVC.dsw
 samples/wizard/WizardVC.dsp
 samples/wizard/WizardVC.dsw
 
+samples/opengl/cube/CubeVC.dsp
+samples/opengl/cube/CubeVC.dsw
+samples/opengl/isosurf/IsosurfVC.dsp
+samples/opengl/isosurf/IsosurfVC.dsw
+samples/opengl/penguin/PenguinVC.dsp
+samples/opengl/penguin/PenguinVC.dsw
+
+samples/ogl/ogledit/OgleditVC.dsp
+samples/ogl/ogledit/OgleditVC.dsw
+samples/ogl/studio/StudioVC.dsp
+samples/ogl/studio/StudioVC.dsw
+
+samples/treelay/TreeSampleVC.dsp
+samples/treelay/TreeSampleVC.dsw
+
 demos/bombs/BombsVC.dsp
 demos/bombs/BombsVC.dsw
 
@@ -211,24 +232,4 @@ utils/dialoged/src/DialogEdVC.dsw
 utils/tex2rtf/src/Tex2RTFVC.dsp
 utils/tex2rtf/src/Tex2RTFVC.dsw
 
-utils/glcanvas/win/Glcanvas*.dsp
-utils/glcanvas/win/Glcanvas*.dsw
-utils/glcanvas/samples/cube/CubeVC.dsp
-utils/glcanvas/samples/cube/CubeVC.dsw
-utils/glcanvas/samples/isosurf/IsosurfVC.dsp
-utils/glcanvas/samples/isosurf/IsosurfVC.dsw
-utils/glcanvas/samples/penguin/PenguinVC.dsp
-utils/glcanvas/samples/penguin/PenguinVC.dsw
-
-utils/ogl/src/OglVC.dsp
-utils/ogl/src/OglVC.dsw
-utils/ogl/samples/ogledit/OgleditVC.dsp
-utils/ogl/samples/ogledit/OgleditVC.dsw
-utils/ogl/samples/studio/StudioVC.dsp
-utils/ogl/samples/studio/StudioVC.dsw
-
-utils/wxtree/src/TreeVC.dsp
-utils/wxtree/src/TreeVC.dsw
-utils/wxtree/src/TreeSampleVC.dsp
-utils/wxtree/src/TreeSampleVC.dsw
 

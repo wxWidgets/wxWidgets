@@ -220,6 +220,9 @@
 // OpenGL canvas
 #define wxUSE_GLCANVAS       0
 
+// wxTreeLayout class
+#define wxUSE_TREELAYOUT     1
+
 // ----------------------------------------------------------------------------
 // Postscript support settings
 // ----------------------------------------------------------------------------

@@ -592,6 +592,14 @@ SOURCE=.\generic\textdlgg.cpp
 
 SOURCE=.\generic\tipdlg.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=.\generic\treelay.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic\wizard.cpp
+# End Source File
 # End Group
 # Begin Group "wxHTML Files"
 

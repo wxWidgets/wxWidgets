@@ -84,6 +84,7 @@ GENERICOBJS= $(GENDIR)\busyinfo.obj \
 		$(GENDIR)\textdlgg.obj \
 		$(GENDIR)\tipdlg.obj \
 		$(GENDIR)\treectrl.obj \
+		$(GENDIR)\treelay.obj \
 		$(GENDIR)\wizard.obj
 
 # we can't have all objects in one list because the library becomes too big
