@@ -187,7 +187,7 @@ public:
 	bool	SetNull(int colNo);
 	bool	SetNull(char *colName);
 
-#if __WXDEBUG__ > 0
+#ifdef __WXDEBUG__
 	ULONG	GetTableID() { return tableID; };
 #endif
 

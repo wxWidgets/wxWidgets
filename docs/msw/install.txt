@@ -2,21 +2,22 @@
 Installing wxWindows 2.1
 ------------------------
 
-This is a snapshot release of wxWindows 2.1 for
-Microsoft Windows 95, 98 and NT. This is not a production release,
+This is a beta release of wxWindows 2.1 for Microsoft
+Windows 95, 98 and NT. This is not a production release,
 although a huge number of bugs found in wxWindows 2.0 have been
 fixed.
 
 IMPORTANT NOTE: If you experience problems installing, please
-re-read this instructions and other related files (todo.txt,
-bugs.txt etc.) carefully before mailing wxwin-users or
+re-read this instructions and other related files (release.txt,
+todo.txt, bugs.txt etc.) carefully before mailing wxwin-users or
 the author. Preferably, try to fix the problem first and
-then send a patch to the author.
+then send a patch to the author. Please report bugs using the
+bug report form on the wxWindows web site.
 
 Unarchiving
 -----------
 
-A setup program is provided to automatically copy files to a
+A setup program is provided (setup.exe) to automatically copy files to a
 directory on your hard disk. Do not install into a path that contains spaces.
 The installation program should set the WXWIN environment variable, which
 will be activated when your machine is rebooted. The setup
@@ -223,6 +224,11 @@ same alignment, or you could experience mysterious crashes. To
 change the alignment, add a suitable option to the $(CFG) target code
 in src/msw/makefile.b32.
 
+Note (4): if you get undefined _SQL... symbols at link time,
+either install odbc32.lib from the BC++ CD-ROM into your BC++ lib
+directory, or set wxUSE_ODBC to 0 in include\wx\msw\setup.h and
+recompile wxWindows. The same applies if compiling using the IDE.
+
 Compiling using the IDE files:
 
 1. Load src\bc32.ide (Release settings)
@@ -394,14 +400,15 @@ and other intermediate compiler files.
 
 Notes:
 
+- See also the Cygwin/Mingw32 on the web site or CD-ROM for
+  further information about using wxWindows with these compilers.
+
 - libwx.a is 48 MB or more - but much less if compiled with no
   debug info (-g0) and level 4 optimization (-O4).
 
 - install.exe doesn't have built-in decompression because lzexpand.lib
   isn't available with Cygwin. However, you can use it with external
   decompression utilities.
-
-- Doesn't compile src/msw/ole files, so no drag and drop.
 
 - There's a bug in Mingw32 headers for some early distributions.
 

@@ -13,18 +13,33 @@ when it starts, and immediately call {\bf Initialize}\rtfsp
 to associate a filename with it. The help viewer will only get run, however,
 just before the first call to display something.
 
-Although all help controller classes actually derive from wxHelpControllerBase and have
-names of the form wxXXXHelpController, the
-appropriate class is aliased to the name wxHelpController for each platform.
+Most help controller classes actually derive from wxHelpControllerBase and have
+names of the form wxXXXHelpController or wxHelpControllerXXX. An
+appropriate class is aliased to the name wxHelpController for each platform, as follows:
+
+\begin{itemize}\itemsep=0pt
+\item On Windows, wxWinHelpController is used.
+\item On all other platforms, wxHelpControllerHtml is used if wxHTML is
+compiled into wxWindows; otherwise wxExtHelpController is used (for invoking an external
+browser).
+\end{itemize}
+
+The remaining help controller classess need to be named
+explicitly by an application that wishes to make use of them.
 
 There are currently the following help controller classes defined:
 
 \begin{itemize}\itemsep=0pt
 \item wxWinHelpController, for controlling Windows Help.
 \item wxExtHelpController, for controlling external browsers under Unix.
-The default browser is Netscape Navigator.
-\item wxHelpControllerHtml, using wxHTML to display help
-\item wxXLPHelpController, for controlling wxHelp (from wxWindows 1).
+The default browser is Netscape Navigator. The 'help' sample shows its use.
+\item wxHelpControllerHtml, using \helpref{wxHTML}{wxhtml} to display help. The API for this class
+is reasonably close to the wxWindows help controller API; see {\tt wx/helpwxht.h} for
+details of use.
+\item \helpref{wxHtmlHelpController}{wxhtmlhelpcontroller}, a more sophisticated help controller using \helpref{wxHTML}{wxhtml}, in
+a similar style to the Windows HTML Help viewer and using some of the same files.
+The API is not the same as the standard API, which is why it is documented separately.
+\item wxXLPHelpController, for controlling wxHelp (from wxWindows 1). Obsolete.
 \end{itemize}
 
 \wxheading{Derived from}
@@ -40,6 +55,10 @@ wxHelpControllerBase\\
 <wx/generic/helpext.h> (external HTML browser controller)
 <wx/generic/helpwxht.h> (wxHTML based help controller)
 <wx/generic/helpxlp.h> (wxHelp controller)
+
+\wxheading{See also}
+
+\helpref{wxHtmlHelpController}{wxhtmlhelpcontroller}, \helpref{wxHTML}{wxhtml}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 

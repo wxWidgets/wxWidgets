@@ -402,15 +402,13 @@
 
 #endif
 
-#if defined(__WXMSW__) && defined(__BORLANDC__)
-#undef wxUSE_ODBC
-#define wxUSE_ODBC 0
-#endif
-
 // BC++/Win16 can't cope with the amount of data in resource.cpp
 #if defined(__WIN16__) && defined(__BORLANDC__)
 #undef wxUSE_WX_RESOURCES
 #define wxUSE_WX_RESOURCES        0
+
+#undef wxUSE_ODBC
+#define wxUSE_ODBC                0
 #endif
 
 #if defined(__WXMSW__) && defined(__WATCOMC__)
@@ -451,14 +449,6 @@
 #define wxUSE_PCX 0
 
 #endif
-
-// Problem with VC++ 5 and dobjcmn.cpp
-/*
-#if defined(_MSC_VER) && (_MSC_VER > 1020) && (_MSC_VER < 1200)
-#undef wxUSE_DRAG_AND_DROP
-#define wxUSE_DRAG_AND_DROP 0
-#endif
-*/
 
 #endif
     // _WX_SETUP_H_

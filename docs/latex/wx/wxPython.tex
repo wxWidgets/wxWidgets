@@ -113,7 +113,7 @@ to use the GUI portions.
 There are quite a few other GUI modules available for Python, some in
 active use, some that havn't been updated for ages. Most are simple
 wrappers around some C or C++ toolkit or another, and most are not
-cross-platform compatible. See \urlref{this link}{http://www.python.org/download/Contributed.html\#Graphics}
+cross-platform compatible. See \urlref{this link}{http://www.python.org/download/Contributed.html\#Graphics} 
 for a listing of a few of them.
 
 %----------------------------------------------------------------------
@@ -159,16 +159,13 @@ You can use whatever flags you want, but I know these work.
 
 For Win32 systems I use Visual C++ 6.0, but 5.0 should work also. The
 build utility currently does not support any other Win32 compilers.
-
 \item At this point you may want to make an alias or symlink, script,
 batch file, whatever on the PATH that invokes \tt{\$(WXWIN)/utils/wxPython/distrib/build.py} to
 help simplify matters somewhat. For example, on my Win32 system I have a file named
  \tt{build}.bat in a directory on the PATH that contains:
 
 \tt{python \%WXWIN/utils/wxPython/distrib/build.py \%1 \%2 \%3 \%4 \%5 \%6}
-
 \item Change into the \tt{\$(WXWIN)/utils/wxPython/src} directory.
-
 \item Type "\tt{build -b}" to build wxPython and "\tt{build -i}" to
 install it, or "\tt{build -bi}" to do both steps at once.
 
@@ -178,13 +175,10 @@ If you have troubles building or you want it built or installed in
 a different way, take a look at the docstring in build.py. You are
 able to to override many configuration options in a file named
 build.local.
-
 \item To build and install the add-on modules, change to the appropriate
 directory under \tt{\$(WXWIN)/utils/wxPython/modules} and run the build
 utility again.
-
 \item Change to the \tt{\$(WXWIN)/utils/wxPython/demo} directory.
-
 \item Try executing the demo program. For example:
 
 \tt{python demo.py}
@@ -295,13 +289,12 @@ it by issuing this command:
 
 \wxheading{Things to notice}
 
-\begin{enumerate}\itemsep=0pt
+\begin{enumerate}\itemsep=11pt
 \item At line 2 the wxPython classes, constants, and etc. are imported
 into the current module's namespace. If you prefer to reduce
 namespace pollution you can use "\tt{from wxPython import wx}" and
 then access all the wxPython identifiers through the wx module, for
 example, "\tt{wx.wxFrame}".
-
 \item At line 13 the frame's sizing and moving events are connected to
 methods of the class. These helper functions are intended to be like
 the event table macros that wxWindows employs. But since static event
@@ -309,11 +302,9 @@ tables are impossible with wxPython, we use helpers that are named the
 same to dynamically build the table. The only real difference is
 that the first arguemnt to the event helpers is always the window that
 the event table entry should be added to.
-
 \item Notice the use of \tt{wxDLG\_PNT} and \tt{wxDLG\_SZE} in lines 19
 - 29 to convert from dialog units to pixels. These helpers are unique
 to wxPython since Python can't do method overloading like C++.
-
 \item There is an \tt{OnCloseWindow} method at line 34 but no call to
 EVT\_CLOSE to attach the event to the method. Does it really get
 called?  The answer is, yes it does. This is because many of the
@@ -322,7 +313,6 @@ called?  The answer is, yes it does. This is because many of the
 C++ classes in this area to determine what is \em{standard} but since
 that changes from time to time I can make no guarentees, nor will it
 be fully documented. When in doubt, use an EVT\_*** function.
-
 \item At lines 17 to 21 notice that there are no saved references to
 the panel or the static text items that are created. Those of you
 who know Python might be wondering what happens when Python deletes
@@ -334,13 +324,11 @@ when necessary. For this reason, most wxPython objects do not need to
 have a \_\_del\_\_ method that explicitly causes the C++ object to be
 deleted. If you ever have the need to forcibly delete a window, use
 the Destroy() method as shown on line 36.
-
 \item Just like wxWindows in C++, wxPython apps need to create a class
 derived from \tt{wxApp} (line 56) that implements a method named
 \tt{OnInit}, (line 59.) This method should create the application's
 main window (line 62) and use \tt{wxApp.SetTopWindow()} (line 66) to
 inform wxWindows about it.
-
 \item And finally, at line 72 an instance of the application class is
 created. At this point wxPython finishes initializing itself, and calls
 the \tt{OnInit} method to get things started. (The zero parameter here is
@@ -495,7 +483,7 @@ as possible to the C++ spec over time.
 \item \helpref{wxStaticBitmap}{wxstaticbitmap}
 \item \helpref{wxStaticBox}{wxstaticbox}
 \item \helpref{wxStaticBoxSizer}{wxstaticboxsizer}
-\item wxStaticLine
+\item \helpref{wxStaticLine}{wxstaticline}
 \item \helpref{wxStaticText}{wxstatictext}
 \item \helpref{wxStatusBar}{wxstatusbar}
 \item \helpref{wxSysColourChangedEvent}{wxsyscolourchangedevent}
@@ -514,16 +502,13 @@ as possible to the C++ spec over time.
 \item \helpref{wxValidator}{wxvalidator}
 \item \helpref{wxWindowDC}{wxwindowdc}
 \item \helpref{wxWindow}{wxwindow}
-
-
-
 \end{itemize}
 
 %----------------------------------------------------------------------
 \section{Where to go for help}\label{wxphelp}
 
 Since wxPython is a blending of multiple technologies, help comes from
-multiple sources. See
+multiple sources. See 
 \urlref{http://alldunn.com/wxPython}{http://alldunn.com/wxPython} for details on
 various sources of help, but probably the best source is the
 wxPython-users mail list. You can view the archive or subscribe by

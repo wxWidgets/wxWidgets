@@ -16,7 +16,7 @@
         #! native wxDirDlg can't be compiled due to GnuWin32/OLE limitations,
         #! so take the generic version
         if ( $wxGeneric{$file} =~ /\b(PS|G|U|16)\b/ ) {
-            next unless $file =~ /^dirdlgg\./;
+            next #! unless $file =~ /^dirdlgg\./;
         }
 
         $file =~ s/cp?p?$/\$(OBJSUFF)/;
@@ -108,6 +108,18 @@ ZLIBLIB = $(WXDIR)/lib/libzlib.a
 JPEGLIB = $(WXDIR)/lib/libjpeg.a
 
 DOCDIR = $(WXDIR)\docs
+
+# Only use the WIN32 wxDirDialog if we have a recent
+# version of Mingw32
+ifeq ($(MINGW32),1)
+  ifeq ($(MINGW32VERSION),2.95)
+		DIRDLGOBJ = $(MSWDIR)/dirdlg.$(OBJSUFF)
+  else
+		DIRDLGOBJ = $(GENDIR)/dirdlgg.$(OBJSUFF)
+  endif
+else
+		DIRDLGOBJ = $(GENDIR)/dirdlgg.$(OBJSUFF)
+endif
 
 GENERICOBJS = \
                 #$ ExpandList("WXGENERICOBJS");
@@ -219,16 +231,14 @@ XPMOBJECTS = 	$(XPMDIR)/crbuffri.o\
 		$(XPMDIR)/simx.o $(XPMDIR)/wrffrdat.o\
 		$(XPMDIR)/wrffrp.o $(XPMDIR)/wrffri.o
 
-#OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS)
-
 ifeq ($(MINGW32),1)
   ifeq ($(MINGW32VERSION),2.95)
-    OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) $(ADVANCEDOBJS) # $(XPMOBJECTS)   
+    OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) $(DIRDLGOBJ) $(ADVANCEDOBJS) # $(XPMOBJECTS)   
   else
-    OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) # $(XPMOBJECTS)
+    OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) $(DIRDLGOBJ) # $(XPMOBJECTS)
   endif
 else
-  OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) # $(XPMOBJECTS)
+  OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) $(DIRDLGOBJ) # $(XPMOBJECTS)
 endif
 
 all:    $(OBJECTS) $(WXLIB) $(ZLIBLIB) $(JPEGLIB) $(PNGLIB)
