@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.stm.tudelft.nl)                              *
-# Date : 10 November 1999                                                     *
+# Date : 10 November 1999                                                    *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -26,6 +26,7 @@ CXX_DEFINE =
 OBJECTS = \
 		bitmap.obj,\
 		brush.obj,\
+		glcanvas.obj,\
 		pen.obj,\
 		region.obj,\
 		utilsx.obj
@@ -33,6 +34,7 @@ OBJECTS = \
 SOURCES = \
 		bitmap.cpp,\
 		brush.cpp,\
+		glcanvas.cpp,\
 		pen.cpp,\
 		region.cpp,\
 		utilsx.cpp
@@ -45,6 +47,7 @@ all : $(SOURCES)
 
 bitmap.obj : bitmap.cpp
 brush.obj : brush.cpp
+glcanvas.obj : glcanvas.cpp
 pen.obj : pen.cpp
 region.obj : region.cpp
 utilsx.obj : utilsx.cpp

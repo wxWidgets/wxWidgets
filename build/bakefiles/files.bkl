@@ -2110,7 +2110,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <if cond="TOOLKIT=='MAC'">src/mac/glcanvas.cpp</if>
     <if cond="TOOLKIT=='GTK'">src/gtk/glcanvas.cpp</if>
     <if cond="TOOLKIT=='MSW'">src/msw/glcanvas.cpp</if>
-    <if cond="TOOLKIT=='MOTIF'">src/motif/glcanvas.cpp</if>
+    <if cond="TOOLKIT=='MOTIF'">src/x11/glcanvas.cpp</if>
     <if cond="TOOLKIT=='X11'">src/x11/glcanvas.cpp</if>
     <if cond="TOOLKIT=='PM'">src/os2/glcanvas.cpp</if>
 </set>
@@ -2119,7 +2119,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <if cond="TOOLKIT=='MAC'">wx/mac/glcanvas.h</if>
     <if cond="TOOLKIT=='GTK'">wx/gtk/glcanvas.h</if>
     <if cond="TOOLKIT=='MSW'">wx/msw/glcanvas.h</if>
-    <if cond="TOOLKIT=='MOTIF'">wx/motif/glcanvas.h</if>
+    <if cond="TOOLKIT=='MOTIF'">wx/x11/glcanvas.h</if>
     <if cond="TOOLKIT=='X11'">wx/x11/glcanvas.h</if>
     <if cond="TOOLKIT=='PM'">wx/os2/glcanvas.h</if>
 </set>

@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.stm.tudelft.nl)                              *
-# Date : 10 November 1999                                                     *
+# Date : 10 November 1999                                                    *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -51,7 +51,6 @@ OBJECTS = \
 		frame.obj,\
 		gauge.obj,\
 		gdiobj.obj,\
-		glcanvas.obj,\
 		gsockmot.obj,\
 		icon.obj,\
 		listbox.obj,\
@@ -105,7 +104,6 @@ SOURCES = \
 		frame.cpp,\
 		gauge.cpp,\
 		gdiobj.cpp,\
-		glcanvas.cpp,\
 		gsockmot.c,\
 		icon.cpp,\
 		listbox.cpp,\
@@ -168,7 +166,6 @@ font.obj : font.cpp
 frame.obj : frame.cpp
 gauge.obj : gauge.cpp
 gdiobj.obj : gdiobj.cpp
-glcanvas.obj : glcanvas.cpp
 gsockmot.obj : gsockmot.c
 icon.obj : icon.cpp
 listbox.obj : listbox.cpp
