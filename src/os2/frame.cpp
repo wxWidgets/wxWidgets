@@ -64,12 +64,15 @@ IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxWindow)
 // ----------------------------------------------------------------------------
 // static class members
 // ----------------------------------------------------------------------------
+#if wxUSE_STATUSBAR
 
 #if wxUSE_NATIVE_STATUSBAR
     bool wxFrame::m_bUseNativeStatusBar = TRUE;
 #else
     bool wxFrame::m_bUseNativeStatusBar = FALSE;
 #endif
+
+#endif //wxUSE_STATUSBAR
 
 // ----------------------------------------------------------------------------
 // creation/destruction
@@ -124,8 +127,13 @@ bool wxFrame::Create(
     SetName(rsName);
     m_windowStyle    = lulStyle;
     m_frameMenuBar   = NULL;
+#if wxUSE_TOOLBAR
     m_frameToolBar   = NULL;
+#endif //wxUSE_TOOLBAR
+
+#if wxUSE_STATUSBAR
     m_frameStatusBar = NULL;
+#endif //wxUSE_STATUSBAR
 
     SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE));
 
@@ -487,12 +495,12 @@ wxStatusBar* wxFrame::OnCreateStatusBar(
     if( !pStatusBar )
         return NULL;
 
-    // 
+    //
     // to show statusbar
     //
     if( ::WinIsWindowShowing(GetHWND()) )
         ::WinSendMsg(GetHWND(), WM_UPDATEFRAME, (MPARAM)~0, 0);
-    
+
     return pStatusBar;
 } // end of wxFrame::OnCreateStatusBar
 
@@ -674,6 +682,7 @@ void wxFrame::OnSysColourChanged(
     SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE));
     Refresh();
 
+#if wxUSE_STATUSBAR
     if (m_frameStatusBar)
     {
         wxSysColourChangedEvent     vEvent2;
@@ -681,6 +690,7 @@ void wxFrame::OnSysColourChanged(
         vEvent2.SetEventObject(m_frameStatusBar);
         m_frameStatusBar->GetEventHandler()->ProcessEvent(vEvent2);
     }
+#endif //wxUSE_STATUSBAR
 
     //
     // Propagate the event to the non-top-level children
@@ -702,16 +712,27 @@ bool wxFrame::ShowFullScreen(
         m_bFsIsShowing = TRUE;
         m_lFsStyle = lStyle;
 
+#if wxUSE_TOOLBAR
 	    wxToolBar*                  pTheToolBar = GetToolBar();
+#endif //wxUSE_TOOLBAR
+
+#if wxUSE_STATUSBAR
 	    wxStatusBar*                pTheStatusBar = GetStatusBar();
+#endif //wxUSE_STATUSBAR
 
         int                         nDummyWidth;
 
+#if wxUSE_TOOLBAR
         if (pTheToolBar)
             pTheToolBar->GetSize(&nDummyWidth, &m_nFsToolBarHeight);
+#endif //wxUSE_TOOLBAR
+
+#if wxUSE_STATUSBAR
         if (pTheStatusBar)
             pTheStatusBar->GetSize(&nDummyWidth, &m_nFsStatusBarHeight);
+#endif //wxUSE_STATUSBAR
 
+#if wxUSE_TOOLBAR
         //
         // Zap the toolbar, menubar, and statusbar
         //
@@ -720,6 +741,7 @@ bool wxFrame::ShowFullScreen(
             pTheToolBar->SetSize(-1,0);
             pTheToolBar->Show(FALSE);
         }
+#endif //wxUSE_TOOLBAR
 
         if (lStyle & wxFULLSCREEN_NOMENUBAR)
         {
@@ -728,6 +750,7 @@ bool wxFrame::ShowFullScreen(
             ::WinSendMsg((HWND)GetHWND(), WM_UPDATEFRAME, (MPARAM)FCF_MENU, (MPARAM)0);
         }
 
+#if wxUSE_STATUSBAR
         //
         // Save the number of fields in the statusbar
         //
@@ -739,6 +762,7 @@ bool wxFrame::ShowFullScreen(
         }
         else
             m_nFsStatusBarFields = 0;
+#endif //wxUSE_STATUSBAR
 
         //
         // Zap the frame borders
@@ -819,6 +843,7 @@ bool wxFrame::ShowFullScreen(
 
         m_bFsIsShowing = FALSE;
 
+#if wxUSE_TOOLBAR
         wxToolBar*                  pTheToolBar = GetToolBar();
 
         //
@@ -829,12 +854,15 @@ bool wxFrame::ShowFullScreen(
             pTheToolBar->SetSize(-1, m_nFsToolBarHeight);
             pTheToolBar->Show(TRUE);
         }
+#endif //wxUSE_TOOLBAR
 
+#if wxUSE_STATUSBAR
         if ((m_lFsStyle & wxFULLSCREEN_NOSTATUSBAR) && (m_nFsStatusBarFields > 0))
         {
             CreateStatusBar(m_nFsStatusBarFields);
 //          PositionStatusBar();
         }
+#endif //wxUSE_STATUSBAR
 
         if ((m_lFsStyle & wxFULLSCREEN_NOMENUBAR) && (m_hMenu != 0))
         {
@@ -977,7 +1005,7 @@ bool wxFrame::OS2Create(
         return FALSE;
     }
 
-    // 
+    //
     // Now need to subclass window.
     //
 
@@ -1058,6 +1086,7 @@ wxPoint wxFrame::GetClientAreaOrigin() const
 {
     wxPoint                         vPoint(0, 0);
 
+#if wxUSE_TOOLBAR
     if (GetToolBar())
     {
         int                         nWidth;
@@ -1077,6 +1106,7 @@ wxPoint wxFrame::GetClientAreaOrigin() const
             vPoint.y += nHeight;
         }
     }
+#endif //wxUSE_TOOLBAR
     return vPoint;
 } // end of wxFrame::GetClientAreaOrigin
 
@@ -1199,8 +1229,12 @@ bool wxFrame::OS2TranslateMessage(
     if (!pMenuBar )
         return FALSE;
 
+#if wxUSE_ACCEL
     const wxAcceleratorTable&       rAcceleratorTable = pMenuBar->GetAccelTable();
     return rAcceleratorTable.Translate(GetHWND(), pMsg);
+#else
+    return FALSE;
+#endif //wxUSE_ACCEL
 } // end of wxFrame::OS2TranslateMessage
 
 // ---------------------------------------------------------------------------
@@ -1334,7 +1368,10 @@ bool wxFrame::HandleSize(
 #endif // wxUSE_NATIVE_STATUSBAR
 
 //      PositionStatusBar();
+#if  wxUSE_TOOLBAR
         PositionToolBar();
+#endif // wxUSE_TOOLBAR
+
         wxSizeEvent                 vEvent( wxSize( nX
                                                    ,nY
                                                   )
@@ -1534,8 +1571,11 @@ MRESULT wxFrame::OS2WindowProc(
         case WM_QUERYFRAMECTLCOUNT:
             {
                 USHORT itemCount = SHORT1FROMMR(OS2GetOldWndProc()(GetHWND(), uMessage, wParam, lParam));
+#if wxUSE_STATUSBAR
                 if(m_frameStatusBar)
                    ++itemCount;
+#endif //wxUSE_STATUSBAR
+
                 bProcessed = TRUE;
                 mRc = MRFROMSHORT( itemCount );
             }
@@ -1556,12 +1596,13 @@ MRESULT wxFrame::OS2WindowProc(
                      && usClient < itemCount)
                     usClient++;
 
+#if wxUSE_STATUSBAR
                 if(m_frameStatusBar)
                 {
                    int height;
 
                    m_frameStatusBar->GetSize(NULL, &height);
- 
+
                    if(usClient == itemCount)
                    {
                       // frame has no client window
@@ -1601,6 +1642,8 @@ MRESULT wxFrame::OS2WindowProc(
                        ++itemCount;
                    }
                 }
+#endif //wxUSE_STATUSBAR
+
                 bProcessed = TRUE;
                 mRc = MRFROMSHORT(itemCount);
             }

@@ -21,7 +21,9 @@
 
 #include  <wx/dynarray.h>
 #include  <wx/log.h>
+
 #include  <wx/config.h>
+#if wxUSE_CONFIG
 
 #include  <wx/os2/iniconf.h>
 
@@ -461,3 +463,5 @@ bool wxIniConfig::RenameGroup(const wxString& oldName, const wxString& newName)
     // Not implemented
     return FALSE;
 }
+
+#endif //wxUSE_CONFIG

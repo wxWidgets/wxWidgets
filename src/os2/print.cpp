@@ -19,6 +19,7 @@
 #include "wx/app.h"
 #endif
 
+#if wxUSE_PRINTING_ARCHITECTURE
 
 #include "wx/os2/print.h"
 #include "wx/generic/prntdlgg.h"
@@ -94,3 +95,4 @@ void wxPrintPreview::DetermineScaling()
     // TODO
 }
 
+#endif  //wxUSE_PRINTING_ARCHITECTURE

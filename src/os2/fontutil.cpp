@@ -8,6 +8,10 @@
 // Copyright:   (c) 1999 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows license
 ///////////////////////////////////////////////////////////////////////////////
+#define DEBUG_PRINTF(NAME)   { static int raz=0; \
+  printf( #NAME " %i\n",raz); fflush(stdout);       \
+   raz++;                                        \
+ }
 
 // ============================================================================
 // declarations
@@ -85,7 +89,7 @@ bool wxNativeEncodingInfo::FromString(const wxString& s)
 wxString wxNativeEncodingInfo::ToString() const
 {
     wxString s;
-    
+
     s << (long)encoding << _T(';') << facename;
 
 // TODO: what is this for OS/2?
@@ -334,6 +338,8 @@ void wxFillLogFont(LOGFONT *logFont, const wxFont *font)
 
 wxFont wxCreateFontFromLogFont(const LOGFONT *logFont)
 {
+DEBUG_PRINTF(wxCreateFontFromLogFont)
+
     // extract family from pitch-and-family
     int lfFamily = logFont->lfPitchAndFamily;
     if ( lfFamily & FIXED_PITCH )

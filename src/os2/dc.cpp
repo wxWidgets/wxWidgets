@@ -54,6 +54,74 @@ static const int MM_METRIC = 10;
 // convert degrees to radians
 static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
 
+int SetTextColor(
+  HPS                               hPS
+, int                               nForegroundColour
+)
+{
+    CHARBUNDLE                      vCbnd;
+
+    vCbnd.lColor =  nForegroundColour;
+    ::GpiSetAttrs( hPS       // presentation-space handle
+                  ,PRIM_CHAR // Char primitive.
+                  ,CBB_COLOR // sets color.
+                  ,0         //
+                  ,&vCbnd    // buffer for attributes.
+                 );
+    return 0;
+}
+
+int QueryTextBkColor(
+  HPS                               hPS
+)
+{
+    CHARBUNDLE                      vCbnd;
+
+    ::GpiQueryAttrs(hPS            // presentation-space handle
+                    PRIM_CHAR      // Char primitive.
+                    CBB_BACK_COLOR // Background color.
+                    &vCbnd         // buffer for attributes.
+    return vCbnd.lBackColor;
+}
+
+
+int SetTextBkColor(
+  HPS                               hPS
+, int                               nBackgroundColour
+)
+{
+    CHARBUNDLE                      vCbnd;
+    int                             rc;
+
+    rc =  QueryTextBkColor(hPS);
+
+    vCbnd.lBackColor = nBackgroundColour;
+    ::GpiSetAttrs(hPS,            // presentation-space handle
+                  PRIM_CHAR,      // Char primitive.
+                  CBB_BACK_COLOR, // sets color.
+                  0,
+                  &vCbnd          // buffer for attributes.
+                 );
+    return rc;
+}
+
+int SetBkMode(
+  HPS                               hPS
+, int                               nBackgroundMode
+)
+{
+    if(nBackgroundMode == wxTRANSPARENT)
+        ::GpiSetBackMix( hPS
+                        ,BM_LEAVEALONE
+                       );
+    else
+        // the background of the primitive takes  over whatever is underneath.
+        ::GpiSetBackMix( hPS
+                        ,BM_OVERPAINT
+                        );
+    return 0;
+}
+
 // ===========================================================================
 // implementation
 // ===========================================================================
@@ -64,17 +132,20 @@ static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
 
 wxDC::wxDC(void)
 {
-    m_pCanvas     = NULL;
+    m_pCanvas      = NULL;
 
-    m_hOldBitmap  = 0;
-    m_hOldPen     = 0;
-    m_hOldBrush   = 0;
-    m_hOldFont    = 0;
-    m_hOldPalette = 0;
+    m_hOldBitmap   = 0;
+    m_hOldPen      = 0;
+    m_hOldBrush    = 0;
+    m_hOldFont     = 0;
+    m_hOldPalette  = 0;
 
-    m_bOwnsDC     = FALSE;
-    m_hDC         = 0;
-    m_nDCCount    = 0;
+    m_bOwnsDC      = FALSE;
+    m_hDC          = 0;
+    m_nDCCount     = 0;
+    m_hOldPS       = NULL;
+    m_hPS          = NULL;
+    m_bIsPaintTime = FALSE;// True at Paint Time
 };
 
 wxDC::~wxDC(void)
@@ -214,9 +285,22 @@ void wxDC::DoCrossHair(wxCoord x, wxCoord y)
    // TODO
 }
 
-void wxDC::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
+void wxDC::DoDrawLine(
+  wxCoord                           vX1
+, wxCoord                           vY1
+, wxCoord                           vX2
+, wxCoord                           vY2
+)
 {
-   // TODO
+    POINTL                          vPoint[2];
+
+    vPoint[0].x = vX1;
+    vPoint[0].y = vY1;
+    vPoint[1].x = vX2;
+    vPoint[1].y = vY2;
+    // ::GpiSetColor(m_hPS,CLR_RED); //DEbug
+    ::GpiMove(m_hPS, &vPoint[0]);
+    ::GpiLine(m_hPS, &vPoint[1]);
 }
 
 void wxDC::DoDrawArc( wxCoord x1, wxCoord y1
@@ -253,17 +337,51 @@ void wxDC::DoDrawLines( int n, wxPoint points[]
    // TODO
 }
 
-void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
+void wxDC::DoDrawRectangle(
+  wxCoord                           vS
+, wxCoord                           vY
+, wxCoord                           vWidth
+, wxCoord                           vHeight
+)
 {
-   // TODO
+    POINTL                          vPoint[2];
+
+    vPoint[0].x = vX;
+    vPoint[0].y = vY;
+    vPoint[1].x = vX + Width;
+    vPoint[1].y = vY - Height;      //mustdie !!! ??
+
+    ::GpiMove(m_hPS, &vPoint[0]);
+    ::GpiBox( m_hPS       // handle to a presentation space
+             ,DRO_OUTLINE // draw the box outline ? or ?
+             ,&vPoint[1]  // address of the corner
+             ,0L          // horizontal corner radius
+             ,0L          // vertical corner radius
+            );
 }
 
-void wxDC::DoDrawRoundedRectangle( wxCoord x, wxCoord y
-                                  ,wxCoord width, wxCoord height
-                                  ,double radius
-                                 )
+void wxDC::DoDrawRoundedRectangle(
+  wxCoord                           vX
+, wxCoord                           vY
+, wxCoord                           vWidth
+, wxCoord                           vHeight
+, double                            dRadius
+)
 {
-   // TODO
+    POINTL                          vPoint[2];
+
+    vPoint[0].x = vX;
+    vPoint[0].y = vY;
+    vPoint[1].x = vX + vWidth;
+    vPoint[1].y = vY + vHeight;      //or -height aka mustdie !!! ??
+
+    ::GpiMove(m_hPS, &vPoint[0]);
+    ::GpiBox( m_hPS        // handle to a presentation space
+             ,DRO_OUTLINE  // draw the box outline ? or ?
+             ,&vPoint[1]   // address of the corner
+             ,(LONG)radius // horizontal corner radius
+             ,(LONG)radius // vertical corner radius
+            );
 }
 
 void wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
@@ -295,20 +413,93 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp
    // TODO
 }
 
-void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
+void wxDC::DoDrawText(
+  const wxString&                   rsText
+, wxCoord                           vX
+, wxCoord                           vY
+)
 {
-   // TODO
+    DrawAnyText( rsText
+                ,vX
+                ,vY
+               );
 }
 
-void wxDC::DrawAnyText(const wxString& text, wxCoord x, wxCoord y)
+void wxDC::DrawAnyText(
+  const wxString&                   rsText
+, wxCoord                           vX
+, wxCoord                           vY
+)
 {
-    // TODO
+    int                             nOldBackground = 0;
+    POINTL                          vPtlStart;
+    LONG                            lHits;
+
+    //
+    // prepare for drawing the text
+    //
+
+    //
+    // Set text color attributes
+    //
+    if (m_textForegroundColour.Ok())
+    {
+        SetTextColor( m_hPS
+                     ,(int)m_textForegroundColour.GetPixel()
+                    );
+    }
+
+    if (m_textBackgroundColour.Ok())
+    {
+        nOldBackground = SetTextBkColor( m_hPS
+                                        ,(int)m_textBackgroundColour.GetPixel()
+                                       );
+    }
+    SetBkMode( m_hPS
+              ,m_backgroundMode
+             );
+    vPtlStart.x = vX;
+    vPtlStart.y = vY;
+
+    lHits = ::GpiCharStringAt( m_hPS
+                              ,&vPtlStart
+                              ,rsText.length()
+                              ,(PCH)rsText.c_str()
+                             );
+    if (lHits != GPI_OK)
+    {
+        wxLogLastError(wxT("TextOut"));
+    }
+
+    //
+    // Restore the old parameters (text foreground colour may be left because
+    // it never is set to anything else, but background should remain
+    // transparent even if we just drew an opaque string)
+    //
+    if (m_textBackgroundColour.Ok())
+            SetTextBkColor( m_hPS
+                           ,nOldBackground
+                          );
+    SetBkMode( m_hPS
+              ,wxTRANSPARENT
+             );
 }
 
-void wxDC::DoDrawRotatedText(const wxString& text,
-                             wxCoord x, wxCoord y,
-                             double angle)
+void wxDC::DoDrawRotatedText(
+  const wxString&                   rsText
+, wxCoord                           vX
+, wxCoord                           vY
+, double                            dAngle
+)
 {
+    if (dAngle == 0.0)
+    {
+        DoDrawText( rsText
+                   ,vX
+                   ,vY
+                  );
+    }
+
    // TODO:
    /*
     if ( angle == 0.0 )
@@ -405,10 +596,39 @@ void wxDC::SetFont(
     }
 }
 
-void wxDC::SetPen(const wxPen& pen)
+void wxDC::SetPen(
+  const wxPen&                      rPen
+)
 {
-   // TODO
+    wxCHECK_RET( Ok(), wxT("invalid window dc") );
+
+    if (m_pen == rPen)
+        return;
+    m_pen = rPen;
+    if (!m_pen.Ok())
+        return;
+
+    int                             nWidth = m_pen.GetWidth();
+
+    if (nWidth <= 0)
+    {
+        nWidth = 1;
+    }
+    else
+    {
+        double                      dW = 0.5 +
+                                       ( fabs((double) XLOG2DEVREL(width)) +
+                                         fabs((double) YLOG2DEVREL(width))
+                                       ) / 2.0;
+        nWidth = (int)dW;
+    }
+    wxColour                        vColor = m_pen.GetColour();
+
+    ::GpiSetColor( m_hPS
+                  ,vColor.GetPixel()
+                 ); //DEbug ??
 }
+
 void wxDC::SetBrush(const wxBrush& brush)
 {
    // TODO
@@ -419,9 +639,11 @@ void wxDC::SetBackground(const wxBrush& brush)
    // TODO
 }
 
-void wxDC::SetBackgroundMode(int mode)
+void wxDC::SetBackgroundMode(
+  int                               nMode
+)
 {
-   // TODO
+    m_backgroundMode = nMode;
 }
 
 void wxDC::SetLogicalFunction(int function)
@@ -486,24 +708,78 @@ void wxDC::EndPage()
 wxCoord wxDC::GetCharHeight() const
 {
     // TODO
-    return(1);
+    return(8);
 }
 
 wxCoord wxDC::GetCharWidth() const
 {
     // TODO
-    return(1);
+    return(8);
 }
 
-void wxDC::DoGetTextExtent( const wxString& string
-                           ,wxCoord* x
-                           ,wxCoord* y
-                           ,wxCoord* decent
-                           ,wxCoord* externalLeading
-                           ,wxFont* theFont
-                          ) const
+void wxDC::DoGetTextExtent(
+  const wxString&                   rsString
+, wxCoord*                          pvX
+, wxCoord*                          pvY
+, wxCoord*                          pvDecent
+, wxCoord*                          pvExternalLeading
+, wxFont*                           pTheFont
+) const
 {
-   // TODO:
+    POINTL                          avPoint[TXTBOX_COUNT];
+    POINTL                          vPtMin;
+    POINTL                          vPtMax;
+    int                             i;
+    int                             l;
+    FONTMETRICS                     vFM; // metrics structure
+    BOOL                            bRc;
+    char*                           pStr;
+    ERRORID                         vErrorCode; // last error id code
+    wxFont*                         pFontToUse = (wxFont*)pTheFont;
+
+    if (!pFontToUse)
+        pFontToUse = (wxFont*)&m_font;
+    l = rsString.length();
+    pStr = (PCH) rsString.c_str();
+
+    //
+    // In world coordinates.
+    //
+    bRc = ::GpiQueryTextBox( m_hPS
+                            ,l
+                            ,pStr
+                            ,TXTBOX_COUNT // return maximum information
+                            ,avPoint      // array of coordinates points
+                           )
+    if(!bRc)
+    {
+       vErrorCode = ::WinGetLastError(wxGetInstance());
+    }
+
+    vPtMin.x = avPoint[0].x;
+    vPtMax.x = avPoint[0].x;
+    vPtMin.y = avPoint[0].y;
+    vPtMax.y = avPoint[0].y;
+    for (i = 1; i < 4; i++)
+    {
+        if(vPtMin.x > avPoint[i].x) vPtMin.x = avPoint[i].x;
+        if(vPtMin.y > avPoint[i].y) vPtMin.y = avPoint[i].y;
+        if(vPtMax.x < avPoint[i].x) vPtMax.x = avPoint[i].x;
+        if(vPtMax.y < avPoint[i].y) vPtMax.y = avPoint[i].y;
+    }
+    ::GpiQueryFontMetrics( m_hPS
+                          ,sizeof(FONTMETRICS)
+                          ,&vFM
+                         );
+
+    if (pvX)
+        *pvX = (wxCoord)(vPtMax.x - vPtMin.x + 1);
+    if (pvY)
+        *pvY = (wxCoord)(vPtMax.y - vPtMin.y + 1);
+    if (pvDescent)
+        *pvDescent = vFM.lMaxDescender;
+    if (externalLeading)
+        *pvExternalLeading = vFM.lExternalLeading;
 }
 
 void wxDC::SetMapMode( int mode )

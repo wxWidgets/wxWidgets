@@ -30,6 +30,8 @@
 #include "wx/dynarray.h"
 #include "wx/log.h"
 
+#if wxUSE_LISTBOX
+
 #if wxUSE_OWNER_DRAWN
     #include  "wx/ownerdrw.h"
 #endif
@@ -774,3 +776,5 @@ bool wxListBox::OS2OnDraw(WXDRAWITEMSTRUCT *item)
 }
 #endif
     // wxUSE_OWNER_DRAWN
+
+#endif //wxUSE_LISTBOX

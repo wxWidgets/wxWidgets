@@ -26,6 +26,8 @@
   #include "wx/utils.h"
 #endif
 
+#if wxUSE_OWNER_DRAWN
+
 #include "wx/ownerdrw.h"
 #include "wx/menuitem.h"
 
@@ -192,3 +194,4 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODSt
   return TRUE;
 }
 
+#endif //wxUSE_OWNER_DRAWN

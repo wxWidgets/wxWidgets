@@ -8,6 +8,36 @@
 // Copyright:   (c) David Webster
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+#define DEBUG_PRINTF(NAME)   { static int raz=0; \
+  printf( #NAME " %i\n",raz); fflush(stdout);       \
+   raz++;                                        \
+ }
+
+ #include <malloc.h>
+ #include <stdio.h>
+
+ int HeapCheck(void)
+ {
+    int  rc;
+
+    if (_HEAPOK != (rc = _heapchk()))
+    {
+       switch(rc)
+       {
+          case _HEAPEMPTY:
+             puts("The heap has not been initialized.");
+             break;
+          case _HEAPBADNODE:
+             puts("A memory node is corrupted or the heap is damaged.");
+             break;
+          case _HEAPBADBEGIN:
+             puts("The heap specified is not valid.");
+             break;
+       }
+       fflush(stdout);
+    }
+    return 0;
+ }
 
 // ============================================================================
 // declarations
@@ -17,6 +47,7 @@
 // headers
 // ----------------------------------------------------------------------------
 
+ #include <malloc.h>
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
@@ -135,6 +166,7 @@ void wxFontRefData::Init(int pointSize,
 
 wxFontRefData::~wxFontRefData()
 {
+DEBUG_PRINTF(wxFontRefData::~wxFontRefData!!!)
 // TODO:
 //    if ( m_hFont )
 //    {
@@ -151,6 +183,9 @@ wxFontRefData::~wxFontRefData()
 
 void wxFont::Init()
 {
+
+DEBUG_PRINTF(wxFontRefData::~wxFontRefData!!!)
+
     if ( wxTheFontList )
         wxTheFontList->Append(this);
 }
@@ -167,6 +202,7 @@ bool wxFont::Create(int pointSize,
                     wxFontEncoding encoding)
 {
     UnRef();
+DEBUG_PRINTF(wxFontRefData::~wxFontRefData!!!)
     m_refData = new wxFontRefData(pointSize, family, style, weight,
                                   underlined, faceName, encoding);
 
@@ -177,8 +213,16 @@ bool wxFont::Create(int pointSize,
 
 wxFont::~wxFont()
 {
+  int l;
+  l = sizeof(*this);
+HeapCheck();
+ _heap_check();
+
     if ( wxTheFontList )
         wxTheFontList->DeleteObject(this);
+HeapCheck();
+ _heap_check();
+
 }
 
 // ----------------------------------------------------------------------------
@@ -190,6 +234,7 @@ wxFont::~wxFont()
 
 bool wxFont::RealizeResource()
 {
+DEBUG_PRINTF(wxFont::RealizeResource)
     if ( GetResourceHandle() )
     {
         // VZ: the old code returned FALSE in this case, but it doesn't seem
@@ -273,7 +318,7 @@ bool wxFont::RealizeResource()
             fName.usWeightClass = FWEIGHT_BOLD;
             break;
     }
-  
+
     if( M_FONTDATA->m_underlined )
         fAttrs.fsSelection |= FATTR_SEL_UNDERSCORE;
 
@@ -339,13 +384,13 @@ bool wxFont::RealizeResource()
             break;
     }
 
-// Now cheking 
+// Now cheking
     fLid = 1;
     hps  = ::WinGetPS( HWND_DESKTOP );
 
     long numLids = ::GpiQueryNumberSetIds( hps );
     long gpiError;
-    
+
     // First we should generate unique id
     if( numLids )
     {
@@ -358,7 +403,7 @@ bool wxFont::RealizeResource()
             ::WinReleasePS( hps );
             return 0;
         }
-      
+
         for(unsigned long LCNum = 0; LCNum < numLids; LCNum++)
             if(lIds[LCNum] == fLid)
                ++fLid;
@@ -513,7 +558,14 @@ void wxFont::SetEncoding(wxFontEncoding encoding)
 
 int wxFont::GetPointSize() const
 {
-    return M_FONTDATA->m_pointSize;
+DEBUG_PRINTF(wxFont::GetPointSize)
+    wxFontRefData*                  pTmp;
+
+    pTmp = M_FONTDATA;
+    if(pTmp)
+      return pTmp->m_pointSize;
+    else
+        return 10;
 }
 
 int wxFont::GetFamily() const

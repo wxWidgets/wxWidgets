@@ -117,8 +117,11 @@ wxWindowDC::~wxWindowDC()
     // They automatically close with the window, unless explicitly detached
     // but we need to destroy our PS
     //
-    ::GpiAssociate(m_hPS, NULLHANDLE);
-    ::GpiDestroyPS(m_hPS);
+    if(m_hPS)
+    {
+        ::GpiAssociate(m_hPS, NULLHANDLE);
+        ::GpiDestroyPS(m_hPS);
+    }
     m_hPS = NULLHANDLE;
     m_hDC = NULLHANDLE;
   }
@@ -137,17 +140,27 @@ wxClientDC::wxClientDC()
 
 wxClientDC::wxClientDC(wxWindow *the_canvas)
 {
-  m_pCanvas = the_canvas;
+    SIZEL                           vSizl = { 0,0};
 
-  //
-  // default under PM is that Window and Client DC's are the same
-  //
-  m_hDC = (WXHDC) ::WinOpenWindowDC(GetWinHwnd(the_canvas));
+    m_pCanvas = the_canvas;
 
-  //
-  // Default mode is BM_LEAVEALONE so we make no call Set the mix
-  //
-  SetBackground(wxBrush(m_pCanvas->GetBackgroundColour(), wxSOLID));
+    //
+    // default under PM is that Window and Client DC's are the same
+    //
+    m_hDC = (WXHDC) ::WinOpenWindowDC(GetWinHwnd(the_canvas));
+    m_hPS = ::GpiCreatePS( wxGetInstance()
+                          ,m_hDC
+                          ,&sizl
+                          ,PU_PELS | GPIF_LONG | GPIA_ASSOC
+                         );
+
+    //
+    // Default mode is BM_LEAVEALONE so we make no call Set the mix
+    //
+    SetBackground(wxBrush( m_pCanvas->GetBackgroundColour()
+                          ,wxSOLID
+                         )
+                 );
 }
 
 wxClientDC::~wxClientDC()
@@ -191,31 +204,48 @@ wxPaintDC::wxPaintDC()
     m_hDC = 0;
 }
 
-wxPaintDC::wxPaintDC(wxWindow *canvas)
+wxPaintDC::wxPaintDC(
+  wxWindow*                         pCanvas
+)
 {
     wxCHECK_RET( canvas, wxT("NULL canvas in wxPaintDC ctor") );
 
 #ifdef __WXDEBUG__
-    if ( g_isPainting <= 0 )
+    if (g_isPainting <= 0)
     {
         wxFAIL_MSG( wxT("wxPaintDC may be created only in EVT_PAINT handler!") );
-
         return;
     }
 #endif // __WXDEBUG__
 
-    m_pCanvas = canvas;
+    m_pCanvas = pCanvas;
 
-    // do we have a DC for this window in the cache?
-    wxPaintDCInfo *info = FindInCache();
-    if ( info )
+    //
+    // Do we have a DC for this window in the cache?
+    //
+    wxPaintDCInfo*                  pInfo = FindInCache();
+
+    if (pInfo)
     {
-        m_hDC = info->hdc;
-        info->count++;
+        m_hDC = pInfo->hdc;
+        pInfo->count++;
     }
     else // not in cache, create a new one
     {
-        m_hDC = (WXHDC)::WinBeginPaint(GetWinHwnd(m_pCanvas), NULLHANDLE, &g_paintStruct);
+        HPS                         hPS;
+
+        hPS = ::WinBeginPaint( GetWinHwnd(m_pCanvas)
+                              ,NULLHANDLE
+                              ,&g_paintStruct
+                             );
+        if(hPS)
+        {
+            m_hOldPS = m_hPS;
+            m_hPS = hPS;
+        }
+        m_bIsPaintTime   = TRUE;
+        m_hDC = (WXHDC) -1; // to satisfy those anonizmous efforts
+        m_vRclPaint = g_paintStruct;
         ms_cache.Add(new wxPaintDCInfo(m_pCanvas, this));
     }
     SetBackground(wxBrush(m_pCanvas->GetBackgroundColour(), wxSOLID));
@@ -235,7 +265,8 @@ wxPaintDC::~wxPaintDC()
         if ( !--info->count )
         {
             ::WinEndPaint(m_hPS);
-
+            m_hPS          = m_OldhPS;
+            m_bIsPaintTime = FALSE;
             ms_cache.Remove(index);
         }
         //else: cached DC entry is still in use

@@ -313,6 +313,7 @@ bool wxBitmapDataObject::SetData(
 
     memcpy(m_pngData, pBuf, m_pngSize);
 
+#if wxUSE_STREAMS
     wxMemoryInputStream             vMstream((char*)m_pngData, m_pngSize);
     wxImage                         vImage;
     wxPNGHandler                    vHandler;
@@ -323,6 +324,8 @@ bool wxBitmapDataObject::SetData(
     }
 
     m_bitmap = vImage.ConvertToBitmap();
+#endif //wxUSE_STREAMS
+
     return m_bitmap.Ok();
 }
 
@@ -331,6 +334,7 @@ void wxBitmapDataObject::DoConvertToPng()
     if (!m_bitmap.Ok())
         return;
 
+#if wxUSE_STREAMS
     wxImage                         vImage(m_bitmap);
     wxPNGHandler                    vHandler;
     wxCountingOutputStream          vCount;
@@ -343,5 +347,6 @@ void wxBitmapDataObject::DoConvertToPng()
     wxMemoryOutputStream            vMstream((char*) m_pngData, m_pngSize);
 
     vHandler.SaveFile(&vImage, vMstream );
+#endif
 }
 

@@ -37,6 +37,11 @@
     #include <stdio.h>
 #endif
 
+#define DEBUG_PRINTF(NAME)   { static int raz=0; \
+  printf( #NAME " %i\n",raz); fflush(stdout);       \
+   raz++;                                        \
+ }
+
 #if     wxUSE_OWNER_DRAWN
     #include "wx/ownerdrw.h"
 #endif
@@ -244,6 +249,9 @@ bool wxWindow::OS2Command(
 , WXWORD                            WXUNUSED(uId)
 )
 {
+
+DEBUG_PRINTF(wxWindow::OS2Command);
+
     return(FALSE);
 }
 
@@ -293,6 +301,9 @@ void wxWindow::Init()
     m_lLastMouseY = -1;
     m_nLastMouseEvent = -1;
 #endif // wxUSE_MOUSEEVENT_HACK
+
+DEBUG_PRINTF(wxWindow::Init-End);
+
 } // wxWindow::Init
 
 //
@@ -300,6 +311,7 @@ void wxWindow::Init()
 //
 wxWindow::~wxWindow()
 {
+DEBUG_PRINTF(wxWindow::~wxWindow-Start);
     m_isBeingDeleted = TRUE;
 
     OS2DetachWindowMenu();
@@ -318,6 +330,7 @@ wxWindow::~wxWindow()
         //
         wxRemoveHandleAssociation(this);
     }
+DEBUG_PRINTF(wxWindow::~wxWindow-End);
 } // end of wxWindow::~wxWindow
 
 bool wxWindow::Create(
@@ -500,6 +513,7 @@ bool wxWindow::SetFont(
   const wxFont&                     rFont
 )
 {
+DEBUG_PRINTF(wxWindow::SetFont);
     if (!wxWindowBase::SetFont(rFont))
     {
         // nothing to do
@@ -1505,6 +1519,8 @@ MRESULT wxWindow::OS2DefWindowProc(
 , WXLPARAM                          lParam
 )
 {
+DEBUG_PRINTF(wxWindow::OS2DefWindowProc);
+
     if (m_fnOldWndProc)
         return (MRESULT)m_fnOldWndProc(GetHWND(), (ULONG)uMsg, (MPARAM)wParam, (MPARAM)lParam);
     else
@@ -1516,6 +1532,8 @@ bool wxWindow::OS2ProcessMessage(
 )
 {
     QMSG*                           pQMsg = (QMSG*)pMsg;
+
+DEBUG_PRINTF(OS2ProcessMessage);
 
     if (m_hWnd != 0 && (GetWindowStyleFlag() & wxTAB_TRAVERSAL))
     {
@@ -1703,7 +1721,11 @@ bool wxWindow::OS2TranslateMessage(
   WXMSG*                            pMsg
 )
 {
-    return m_acceleratorTable.Translate(m_hWnd, pMsg);
+#if wxUSE_ACCEL
+  return m_acceleratorTable.Translate(m_hWnd, pMsg);
+#else
+  return FALSE;
+#endif //wxUSE_ACCEL
 } // end of wxWindow::OS2TranslateMessage
 
 // ---------------------------------------------------------------------------
@@ -1789,6 +1811,7 @@ MRESULT EXPENTRY wxWndProc(
     // Trace all ulMsgs - useful for the debugging
     //
 #ifdef __WXDEBUG__
+DEBUG_PRINTF(__WXDEBUG__wxWndProc);
     wxLogTrace(wxTraceMessages, wxT("Processing %s(wParam=%8lx, lParam=%8lx)"),
                wxGetMessageName(ulMsg), wParam, lParam);
 #endif // __WXDEBUG__
@@ -1928,6 +1951,7 @@ MRESULT wxWindow::OS2WindowProc(
             break;
 
         case WM_PAINT:
+DEBUG_PRINTF(WM_PAINT)
             bProcessed = HandlePaint();
             break;
 
@@ -1938,9 +1962,11 @@ MRESULT wxWindow::OS2WindowProc(
             //
             bProcessed = TRUE;
             mResult = (MRESULT)TRUE;
+DEBUG_PRINTF(WM_CLOSE)
             break;
 
         case WM_SHOW:
+DEBUG_PRINTF(WM_SHOW)
             bProcessed = HandleShow(wParam != 0, (int)lParam);
             break;
 
@@ -1979,9 +2005,11 @@ MRESULT wxWindow::OS2WindowProc(
             {
                 WORD id, cmd;
                 WXHWND hwnd;
+DEBUG_PRINTF(WM_COMMAND-in)
                 UnpackCommand(wParam, lParam, &id, &hwnd, &cmd);
 
                 bProcessed = HandleCommand(id, cmd, hwnd);
+DEBUG_PRINTF(WM_COMMAND-out)
             }
             break;
 
@@ -2828,12 +2856,21 @@ bool wxWindow::HandlePaint()
          wxLogLastError("CreateRectRgn");
          return FALSE;
     }
+    //
+    // Debug code
+    //
+#ifdef __WXDEBUG__
+    {
+        HWND                        hWnd
+        HWND                        hWnd0 = NULLHANDLE;
+
+        hWnd = GetHwnd();
+        if(hWnd != hWnd0)
+            printf("HandlePaint hWnd=%x  ",hWnd);
+    }
+#endif
+
     m_updateRegion = wxRegion(hRgn);
-/*
-    hPS = WinBeginPaint(GetHWND(), 0L, &vRect);
-    WinFillRect(hPS, &vRect, SYSCLR_WINDOW);
-    WinEndPaint(hPS);
-*/
     vEvent.SetEventObject(this);
     return (GetEventHandler()->ProcessEvent(vEvent));
 } // end of wxWindow::HandlePaint
@@ -3982,7 +4019,6 @@ wxWindow* wxFindWindowAtPointer(wxPoint& pt)
 
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 {
-#if 0
     POINT pt2;
     pt2.x = pt.x;
     pt2.y = pt.y;
@@ -3998,18 +4034,6 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
         win = wxFindWinFromHandle((WXHWND) hWnd) ;
     }
     return win;
-#endif
-    return (wxWindow*)NULL;
 }
 
-// Get the current mouse position.
-wxPoint wxGetMousePosition()
-{
-#if 0
-    POINT pt;
-    GetCursorPos( & pt );
-    return wxPoint(pt.x, pt.y);
-#endif
-    return wxPoint(0,0);
-}
 

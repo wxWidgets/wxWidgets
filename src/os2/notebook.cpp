@@ -347,8 +347,11 @@ void wxNotebook::OnSize(wxSizeEvent& event)
     for ( unsigned int nPage = 0; nPage < nCount; nPage++ ) {
         wxNotebookPage *pPage = m_aPages[nPage];
         pPage->SetSize(0, 0, w, h);
+#if wxUSE_CONSTRAINTS
         if ( pPage->GetAutoLayout() )
             pPage->Layout();
+#endif //wxUSE_CONSTRAINTS
+
     }
 
     // Processing continues to next OnSize
@@ -410,8 +413,10 @@ void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
 
 void wxNotebook::SetConstraintSizes(bool /* recurse */)
 {
+#if wxUSE_CONSTRAINTS
     // don't set the sizes of the pages - their correct size is not yet known
     wxControl::SetConstraintSizes(FALSE);
+#endif
 }
 
 bool wxNotebook::DoPhase(int /* nPhase */)

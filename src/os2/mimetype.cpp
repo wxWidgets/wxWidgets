@@ -27,6 +27,8 @@
 #include "wx/dynarray.h"
 #include "wx/confbase.h"
 
+#if wxUSE_FILE
+
 #include "wx/os2/mimetype.h"
 
 // other standard headers
@@ -450,3 +452,4 @@ size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxArrayString& mimetypes)
   return 0;
 }
 
+#endif //wxUSE_FILE

@@ -115,6 +115,28 @@ bool wxApp::Initialize(
   HAB                               vHab
 )
 {
+#if defined(wxUSE_CONSOLEDEBUG)
+  #if wxUSE_CONSOLEDEBUG
+/***********************************************/
+/* Code for using stdout debug                 */
+/* To use it you mast link app as "Window" - EK*/
+/***********************************************/
+  {
+     PPIB pib;
+     PTIB tib;
+
+    printf("In console\n");
+
+  DosGetInfoBlocks(&tib, &pib);
+/* Try morphing into a PM application. */
+//  if(pib->pib_ultype == 2)    /* VIO */
+    pib->pib_ultype = 3;
+   }
+/**********************************************/
+/**********************************************/
+  #endif //wxUSE_CONSOLEDEBUG
+#endif
+
     //
     // OS2 has to have an anchorblock
     //
@@ -169,6 +191,7 @@ bool wxApp::Initialize(
     return TRUE;
 } // end of wxApp::Initialize
 
+const char*                         CANTREGISTERCLASS = " Can't register Class ";
 // ---------------------------------------------------------------------------
 // RegisterWindowClasses
 // ---------------------------------------------------------------------------
@@ -402,6 +425,9 @@ void wxApp::CleanUp()
 #endif // wxUSE_LOG
 } // end of wxApp::CleanUp
 
+//----------------------------------------------------------------------
+// Main wxWindows entry point
+//----------------------------------------------------------------------
 int wxEntry(
   int                               argc
 , char*                             argv[]
@@ -460,7 +486,7 @@ int wxEntry(
 //          nRetValue = -1;
         }
     }
-
+// Normal exit
     wxWindow*                       pTopWindow = wxTheApp->GetTopWindow();
 
     if (pTopWindow)
@@ -478,8 +504,24 @@ int wxEntry(
             wxTheApp->SetTopWindow(NULL);
         }
     }
+    else // app initialization failed
+    {
+        wxLogLastError(" Gui initialization failed, exitting");
+    }
+#if wxUSE_CONSOLEDEBUG
+    printf("wxTheApp->OnExit ");
+    fflush(stdout);
+#endif
     wxTheApp->OnExit();
+#if wxUSE_CONSOLEDEBUG
+    printf("wxApp::CleanUp ");
+    fflush(stdout);
+#endif
     wxApp::CleanUp();
+#if wxUSE_CONSOLEDEBUG
+    printf("return %i ", nRetValue);
+    fflush(stdout);
+#endif
     return(nRetValue);
 } // end of wxEntry
 
@@ -550,7 +592,6 @@ bool wxApp::DoMessage()
 {
     BOOL                            bRc = ::WinGetMsg(vHabmain, &svCurrentMsg, HWND(NULL), 0, 0);
 
-//    wxUsleep(1000);
     if (bRc == 0)
     {
         // got WM_QUIT
@@ -749,13 +790,13 @@ bool wxApp::ProcessMessage(
            if((CHARMSG(pChmsg)->fs & (KC_ALT | KC_CTRL)) && CHARMSG(pChmsg)->chr != 0)
                 CHARMSG(pChmsg)->chr = (USHORT)wxToupper((UCHAR)uSch);
 
-  
+
            for(pWnd = pWndThis; pWnd; pWnd = pWnd->GetParent() )
            {
                if((bRc = pWnd->OS2TranslateMessage(pWxmsg)) == TRUE)
                    break;
            }
-  
+
             if(!bRc)    // untranslated, should restore original value
                 CHARMSG(pChmsg)->chr = uSch;
         }

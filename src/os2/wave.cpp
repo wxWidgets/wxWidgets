@@ -23,7 +23,7 @@
 #define INCL_DOSFILEMGR
 #define INCL_WIN
 #define INCL_GPI
-#define INCL_PM                         
+#define INCL_PM
 #include <os2.h>
 #include <stdio.h>
 #include <string.h>
@@ -86,6 +86,7 @@ bool wxWave::Create(const wxString& fileName, bool isResource)
   else
   {
     m_isResource = FALSE;
+#if wxUSE_FILE
 
     wxFile fileWave;
     if (!fileWave.Open(fileName, wxFile::read))
@@ -101,6 +102,9 @@ bool wxWave::Create(const wxString& fileName, bool isResource)
     fileWave.Read(m_waveData, m_waveLength);
 */
     return TRUE;
+#else
+    return FALSE;
+#endif //wxUSE_FILE
   }
 }
 
