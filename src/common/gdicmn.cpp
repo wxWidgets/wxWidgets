@@ -395,6 +395,23 @@ void wxInitializeStockObjects ()
   wxBLUE = new wxColour ("BLUE");
   wxGREEN = new wxColour ("GREEN");
   wxCYAN = new wxColour ("CYAN");
+
+  // VZ: Here is why this colour is treated specially: normally, wxLIGHT_GREY
+  //     is the window background colour and it is also used as the
+  //     "transparent" colour in the bitmaps - for example, for the toolbar
+  //     bitmaps. In particular, the mask creation code in tbar95.cpp assumes
+  //     this - but it fails under Win2K where the system 3D colour is not
+  //     0xc0c0c0 (usual light grey) but 0xc6c3c6. To make everything work as
+  //     expected there we have to define wxLIGHT_GREY accordingly - another
+  //     solution would be to hack wxMask::Create()...
+#ifdef __WIN32__
+  int majOs, minOs;
+  if ( wxGetOsVersion(&majOs, &minOs) == wxWINDOWS_NT && (majOs == 5) )
+  {
+      wxLIGHT_GREY = new wxColour(0xc6c3c6);
+  }
+  else
+#endif // MSW
   wxLIGHT_GREY = new wxColour ("LIGHT GREY");
 
   wxSTANDARD_CURSOR = new wxCursor (wxCURSOR_ARROW);

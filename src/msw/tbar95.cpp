@@ -36,7 +36,6 @@
     #include "wx/settings.h"
     #include "wx/bitmap.h"
     #include "wx/dcmemory.h"
-    #include "wx/settings.h"
 #endif
 
 #if wxUSE_TOOLBAR && defined(__WIN95__) && wxUSE_TOOLBAR_NATIVE
@@ -1055,17 +1054,17 @@ void wxMapBitmap(HBITMAP hBitmap, int width, int height)
         for ( j = 0; j < height; j++)
         {
             COLORREF pixel = ::GetPixel(hdcMem, i, j);
-/*
-            BYTE red = GetRValue(pixel);
-            BYTE green = GetGValue(pixel);
-            BYTE blue = GetBValue(pixel);
-*/
-
             for ( k = 0; k < NUM_MAPS; k ++)
             {
-                if ( ColorMap[k].from == pixel )
+                int distance = 0 ;
+
+                distance = abs( GetRValue( pixel ) - GetRValue( ColorMap[k].from )) ;
+                distance = max( distance , abs(GetGValue(pixel ) - GetGValue( ColorMap[k].from ))) ;
+                distance = max( distance , abs(GetBValue(pixel ) - GetBValue( ColorMap[k].from ))) ;
+                if ( distance < 0x10 )
+                //if ( ColorMap[k].from == pixel )
                 {
-                    /* COLORREF actualPixel = */ ::SetPixel(hdcMem, i, j, ColorMap[k].to);
+                    ::SetPixel(hdcMem, i, j, ColorMap[k].to);
                     break;
                 }
             }

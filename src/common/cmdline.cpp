@@ -155,7 +155,7 @@ struct wxCmdLineParserData
 
     // methods
     wxCmdLineParserData();
-    void SetArguments(int argc, char **argv);
+    void SetArguments(int argc, wxChar **argv);
     void SetArguments(const wxString& cmdline);
 
     int FindOption(const wxString& name);
@@ -180,7 +180,7 @@ wxCmdLineParserData::wxCmdLineParserData()
 #endif
 }
 
-void wxCmdLineParserData::SetArguments(int argc, char **argv)
+void wxCmdLineParserData::SetArguments(int argc, wxChar **argv)
 {
     m_arguments.Empty();
 
@@ -237,7 +237,7 @@ void wxCmdLineParser::Init()
     m_data = new wxCmdLineParserData;
 }
 
-void wxCmdLineParser::SetCmdLine(int argc, char **argv)
+void wxCmdLineParser::SetCmdLine(int argc, wxChar **argv)
 {
     m_data->SetArguments(argc, argv);
 }
