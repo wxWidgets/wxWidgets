@@ -110,8 +110,8 @@
 
 void wxStopWatch::Start(long t)
 {
-#ifdef 0
-__WXMSW__
+#if 0
+// __WXMSW__
     LARGE_INTEGER frequency_li;
     ::QueryPerformanceFrequency( &frequency_li );
     m_frequency = frequency_li.QuadPart;
@@ -135,8 +135,8 @@ __WXMSW__
 
 long wxStopWatch::GetElapsedTime() const
 {
-#ifdef 0
-__WXMSW__
+#if 0
+//__WXMSW__
     if (m_frequency == 0)
     {
         return (wxGetLocalTimeMillis() - m_t0).GetLo();
