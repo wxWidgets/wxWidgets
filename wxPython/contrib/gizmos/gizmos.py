@@ -280,6 +280,374 @@ def wxPreLEDNumberCtrl(*_args,**_kwargs):
     return val
 
 
+class wxTreeListColumnInfoPtr(wxObjectPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def GetAlignment(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListColumnInfo_GetAlignment(self, *_args, **_kwargs)
+        return val
+    def GetText(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListColumnInfo_GetText(self, *_args, **_kwargs)
+        return val
+    def GetImage(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListColumnInfo_GetImage(self, *_args, **_kwargs)
+        return val
+    def GetSelectedImage(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListColumnInfo_GetSelectedImage(self, *_args, **_kwargs)
+        return val
+    def GetWidth(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListColumnInfo_GetWidth(self, *_args, **_kwargs)
+        return val
+    def SetAlignment(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListColumnInfo_SetAlignment(self, *_args, **_kwargs)
+        return val
+    def SetText(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListColumnInfo_SetText(self, *_args, **_kwargs)
+        return val
+    def SetImage(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListColumnInfo_SetImage(self, *_args, **_kwargs)
+        return val
+    def SetSelectedImage(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListColumnInfo_SetSelectedImage(self, *_args, **_kwargs)
+        return val
+    def SetWidth(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListColumnInfo_SetWidth(self, *_args, **_kwargs)
+        return val
+    def __repr__(self):
+        return "<%s.%s instance; proxy of C++ wxTreeListColumnInfo instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
+class wxTreeListColumnInfo(wxTreeListColumnInfoPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = gizmosc.new_wxTreeListColumnInfo(*_args,**_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxTreeListCtrlPtr(wxControlPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_Create(self, *_args, **_kwargs)
+        return val
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl__setCallbackInfo(self, *_args, **_kwargs)
+        return val
+    def GetCount(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetCount(self, *_args, **_kwargs)
+        return val
+    def GetIndent(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetIndent(self, *_args, **_kwargs)
+        return val
+    def SetIndent(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_SetIndent(self, *_args, **_kwargs)
+        return val
+    def GetSpacing(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetSpacing(self, *_args, **_kwargs)
+        return val
+    def SetSpacing(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_SetSpacing(self, *_args, **_kwargs)
+        return val
+    def GetImageList(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetImageList(self, *_args, **_kwargs)
+        return val
+    def GetStateImageList(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetStateImageList(self, *_args, **_kwargs)
+        return val
+    def GetButtonsImageList(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetButtonsImageList(self, *_args, **_kwargs)
+        return val
+    def SetImageList(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_SetImageList(self, *_args, **_kwargs)
+        return val
+    def SetStateImageList(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_SetStateImageList(self, *_args, **_kwargs)
+        return val
+    def SetButtonsImageList(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_SetButtonsImageList(self, *_args, **_kwargs)
+        return val
+    def AssignImageList(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_AssignImageList(self, *_args, **_kwargs)
+        return val
+    def AssignStateImageList(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_AssignStateImageList(self, *_args, **_kwargs)
+        return val
+    def AssignButtonsImageList(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_AssignButtonsImageList(self, *_args, **_kwargs)
+        return val
+    def AddColumn(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_AddColumn(self, *_args, **_kwargs)
+        return val
+    def AddColumnInfo(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_AddColumnInfo(self, *_args, **_kwargs)
+        return val
+    def InsertColumn(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_InsertColumn(self, *_args, **_kwargs)
+        return val
+    def InsertColumnInfo(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_InsertColumnInfo(self, *_args, **_kwargs)
+        return val
+    def RemoveColumn(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_RemoveColumn(self, *_args, **_kwargs)
+        return val
+    def GetColumnCount(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetColumnCount(self, *_args, **_kwargs)
+        return val
+    def SetColumnWidth(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_SetColumnWidth(self, *_args, **_kwargs)
+        return val
+    def GetColumnWidth(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetColumnWidth(self, *_args, **_kwargs)
+        return val
+    def SetMainColumn(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_SetMainColumn(self, *_args, **_kwargs)
+        return val
+    def GetMainColumn(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetMainColumn(self, *_args, **_kwargs)
+        return val
+    def SetColumnText(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_SetColumnText(self, *_args, **_kwargs)
+        return val
+    def GetColumnText(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetColumnText(self, *_args, **_kwargs)
+        return val
+    def SetColumn(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_SetColumn(self, *_args, **_kwargs)
+        return val
+    def GetColumn(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetColumn(self, *_args, **_kwargs)
+        if val: val = wxTreeListColumnInfoPtr(val) 
+        return val
+    def GetItemText(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetItemText(self, *_args, **_kwargs)
+        return val
+    def GetItemImage(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetItemImage(self, *_args, **_kwargs)
+        return val
+    def SetItemText(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_SetItemText(self, *_args, **_kwargs)
+        return val
+    def SetItemImage(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_SetItemImage(self, *_args, **_kwargs)
+        return val
+    def GetItemData(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetItemData(self, *_args, **_kwargs)
+        if val: val = wxTreeItemDataPtr(val) 
+        return val
+    def SetItemData(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_SetItemData(self, *_args, **_kwargs)
+        return val
+    def GetPyData(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetPyData(self, *_args, **_kwargs)
+        return val
+    def SetPyData(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_SetPyData(self, *_args, **_kwargs)
+        return val
+    def SetItemHasChildren(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_SetItemHasChildren(self, *_args, **_kwargs)
+        return val
+    def SetItemBold(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_SetItemBold(self, *_args, **_kwargs)
+        return val
+    def SetItemTextColour(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_SetItemTextColour(self, *_args, **_kwargs)
+        return val
+    def SetItemBackgroundColour(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_SetItemBackgroundColour(self, *_args, **_kwargs)
+        return val
+    def SetItemFont(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_SetItemFont(self, *_args, **_kwargs)
+        return val
+    def IsVisible(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_IsVisible(self, *_args, **_kwargs)
+        return val
+    def ItemHasChildren(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_ItemHasChildren(self, *_args, **_kwargs)
+        return val
+    def IsExpanded(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_IsExpanded(self, *_args, **_kwargs)
+        return val
+    def IsSelected(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_IsSelected(self, *_args, **_kwargs)
+        return val
+    def IsBold(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_IsBold(self, *_args, **_kwargs)
+        return val
+    def GetChildrenCount(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetChildrenCount(self, *_args, **_kwargs)
+        return val
+    def GetRootItem(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetRootItem(self, *_args, **_kwargs)
+        if val: val = wxTreeItemIdPtr(val) ; val.thisown = 1
+        return val
+    def GetSelection(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetSelection(self, *_args, **_kwargs)
+        if val: val = wxTreeItemIdPtr(val) ; val.thisown = 1
+        return val
+    def GetSelections(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetSelections(self, *_args, **_kwargs)
+        return val
+    def GetItemParent(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetItemParent(self, *_args, **_kwargs)
+        if val: val = wxTreeItemIdPtr(val) ; val.thisown = 1
+        return val
+    def GetFirstChild(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetFirstChild(self, *_args, **_kwargs)
+        return val
+    def GetNextChild(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetNextChild(self, *_args, **_kwargs)
+        return val
+    def GetLastChild(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetLastChild(self, *_args, **_kwargs)
+        if val: val = wxTreeItemIdPtr(val) ; val.thisown = 1
+        return val
+    def GetNextSibling(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetNextSibling(self, *_args, **_kwargs)
+        if val: val = wxTreeItemIdPtr(val) ; val.thisown = 1
+        return val
+    def GetPrevSibling(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetPrevSibling(self, *_args, **_kwargs)
+        if val: val = wxTreeItemIdPtr(val) ; val.thisown = 1
+        return val
+    def GetFirstVisibleItem(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetFirstVisibleItem(self, *_args, **_kwargs)
+        if val: val = wxTreeItemIdPtr(val) ; val.thisown = 1
+        return val
+    def GetNextVisible(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetNextVisible(self, *_args, **_kwargs)
+        if val: val = wxTreeItemIdPtr(val) ; val.thisown = 1
+        return val
+    def GetPrevVisible(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetPrevVisible(self, *_args, **_kwargs)
+        if val: val = wxTreeItemIdPtr(val) ; val.thisown = 1
+        return val
+    def GetNext(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetNext(self, *_args, **_kwargs)
+        if val: val = wxTreeItemIdPtr(val) ; val.thisown = 1
+        return val
+    def AddRoot(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_AddRoot(self, *_args, **_kwargs)
+        if val: val = wxTreeItemIdPtr(val) ; val.thisown = 1
+        return val
+    def PrependItem(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_PrependItem(self, *_args, **_kwargs)
+        if val: val = wxTreeItemIdPtr(val) ; val.thisown = 1
+        return val
+    def InsertItem(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_InsertItem(self, *_args, **_kwargs)
+        if val: val = wxTreeItemIdPtr(val) ; val.thisown = 1
+        return val
+    def InsertItemBefore(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_InsertItemBefore(self, *_args, **_kwargs)
+        if val: val = wxTreeItemIdPtr(val) ; val.thisown = 1
+        return val
+    def AppendItem(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_AppendItem(self, *_args, **_kwargs)
+        if val: val = wxTreeItemIdPtr(val) ; val.thisown = 1
+        return val
+    def Delete(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_Delete(self, *_args, **_kwargs)
+        return val
+    def DeleteChildren(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_DeleteChildren(self, *_args, **_kwargs)
+        return val
+    def DeleteAllItems(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_DeleteAllItems(self, *_args, **_kwargs)
+        return val
+    def Expand(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_Expand(self, *_args, **_kwargs)
+        return val
+    def ExpandAll(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_ExpandAll(self, *_args, **_kwargs)
+        return val
+    def Collapse(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_Collapse(self, *_args, **_kwargs)
+        return val
+    def CollapseAndReset(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_CollapseAndReset(self, *_args, **_kwargs)
+        return val
+    def Toggle(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_Toggle(self, *_args, **_kwargs)
+        return val
+    def Unselect(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_Unselect(self, *_args, **_kwargs)
+        return val
+    def UnselectAll(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_UnselectAll(self, *_args, **_kwargs)
+        return val
+    def SelectItem(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_SelectItem(self, *_args, **_kwargs)
+        return val
+    def EnsureVisible(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_EnsureVisible(self, *_args, **_kwargs)
+        return val
+    def ScrollTo(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_ScrollTo(self, *_args, **_kwargs)
+        return val
+    def HitTest(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_HitTest(self, *_args, **_kwargs)
+        return val
+    def GetBoundingRect(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetBoundingRect(self, *_args, **_kwargs)
+        return val
+    def EditLabel(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_EditLabel(self, *_args, **_kwargs)
+        return val
+    def Edit(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_Edit(self, *_args, **_kwargs)
+        return val
+    def SortChildren(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_SortChildren(self, *_args, **_kwargs)
+        return val
+    def GetItemSelectedImage(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetItemSelectedImage(self, *_args, **_kwargs)
+        return val
+    def SetItemSelectedImage(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_SetItemSelectedImage(self, *_args, **_kwargs)
+        return val
+    def GetHeaderWindow(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetHeaderWindow(self, *_args, **_kwargs)
+        return val
+    def GetMainWindow(self, *_args, **_kwargs):
+        val = gizmosc.wxTreeListCtrl_GetMainWindow(self, *_args, **_kwargs)
+        return val
+    def __repr__(self):
+        return "<%s.%s instance; proxy of C++ wxTreeListCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
+    
+    # Redefine some methods that SWIG gets a bit confused on...
+    def GetFirstChild(self, *_args, **_kwargs):
+        val1,val2 = controls2c.wxTreeCtrl_GetFirstChild(self, *_args, **_kwargs)
+        val1 = wxTreeItemIdPtr(val1)
+        val1.thisown = 1
+        return (val1,val2)
+    def GetNextChild(self, *_args, **_kwargs):
+        val1,val2 = controls2c.wxTreeCtrl_GetNextChild(self, *_args, **_kwargs)
+        val1 = wxTreeItemIdPtr(val1)
+        val1.thisown = 1
+        return (val1,val2)
+    def HitTest(self, *_args, **_kwargs):
+        val1, val2, val3 = controls2c.wxTreeCtrl_HitTest(self, *_args, **_kwargs)
+        val1 = wxTreeItemIdPtr(val1)
+        val1.thisown = 1
+        return (val1, val2, val3)
+
+class wxTreeListCtrl(wxTreeListCtrlPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = gizmosc.new_wxTreeListCtrl(*_args,**_kwargs)
+        self.thisown = 1
+        self._setCallbackInfo(self, wxTreeListCtrl)
+        self._setOORInfo(self)
+
+
+
+def wxPreTreeListCtrl(*_args,**_kwargs):
+    val = wxTreeListCtrlPtr(gizmosc.new_wxPreTreeListCtrl(*_args,**_kwargs))
+    val.thisown = 1
+    val._setOORInfo(val)
+    return val
+
+
 
 
 #-------------- FUNCTION WRAPPERS ------------------
@@ -300,6 +668,10 @@ wxLED_ALIGN_RIGHT = gizmosc.wxLED_ALIGN_RIGHT
 wxLED_ALIGN_CENTER = gizmosc.wxLED_ALIGN_CENTER
 wxLED_ALIGN_MASK = gizmosc.wxLED_ALIGN_MASK
 wxLED_DRAW_FADED = gizmosc.wxLED_DRAW_FADED
+wxTL_ALIGN_LEFT = gizmosc.wxTL_ALIGN_LEFT
+wxTL_ALIGN_RIGHT = gizmosc.wxTL_ALIGN_RIGHT
+wxTL_ALIGN_CENTER = gizmosc.wxTL_ALIGN_CENTER
+wxTREE_HITTEST_ONITEMCOLUMN = gizmosc.wxTREE_HITTEST_ONITEMCOLUMN
 
 
 #-------------- USER INCLUDE -----------------------

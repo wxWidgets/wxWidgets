@@ -983,11 +983,14 @@ if BUILD_GIZMOS:
         contrib_copy_tree(opj(CTRB_SRC, 'gizmos'), GIZMOLOC)
 
     ext = Extension('gizmosc', [
-                                '%s/dynamicsash.cpp' % GIZMOLOC,
-                                '%s/editlbox.cpp' % GIZMOLOC,
-                                #'%s/multicell.cpp' % GIZMOLOC,
-                                '%s/splittree.cpp' % GIZMOLOC,
-                                '%s/ledctrl.cpp'   % GIZMOLOC,
+                                '%s/dynamicsash.cpp'  % GIZMOLOC,
+                                '%s/editlbox.cpp'     % GIZMOLOC,
+                                '%s/splittree.cpp'    % GIZMOLOC,
+                                '%s/ledctrl.cpp'      % GIZMOLOC,
+                                #'%s/multicell.cpp'    % GIZMOLOC,
+
+                                '%s/treelistctrl.cpp' % location,
+
                              ] + swig_sources,
 
                     include_dirs =  gizmos_includes,

@@ -32,6 +32,7 @@ _treeList = [
         'PopupMenu',
         'AnalogClockWindow',
         'MaskedEditControls',
+        'wxTreeListCtrl',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -134,6 +135,7 @@ _treeList = [
         'wxStyledTextCtrl_1',
         'wxStyledTextCtrl_2',
         'wxTimeCtrl',
+        'wxTreeListCtrl',
         ]),
 
     # How to lay out the controls in a frame/dialog

@@ -455,6 +455,11 @@ Added wxPython.lib.mixins.rubberband module from Robb Shecter.
 
 Added wxTimeCtrl from Will Sadkin.
 
+Added wxTreeListCtrl.  (Looks like a wxTreeCtrl embedded in a
+wxListCtrl, but actually is just giving multiple columns to a
+wxTreeCtrl.)
+
+
 
 
 2.3.2.1
