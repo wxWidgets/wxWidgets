@@ -193,6 +193,9 @@ public:
     // we refresh the window when it is dis/enabled
     virtual bool Enable(bool enable = TRUE);
 
+    // should we use the standard control colours or not?
+    virtual bool ShouldInheritColours() const { return false; }
+
 protected:
     // common part of all ctors
     void Init();
