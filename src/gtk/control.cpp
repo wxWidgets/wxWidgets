@@ -19,7 +19,7 @@
 // wxControl
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxControl,wxWindow)
+IMPLEMENT_DYNAMIC_CLASS(wxControl, wxWindow)
 
 wxControl::wxControl()
 {
@@ -32,8 +32,8 @@ wxControl::wxControl( wxWindow *parent,
                       const wxSize &size,
                       long style,
                       const wxString &name )
-         : wxWindow( parent, id, pos, size, style, name )
 {
+    (void)Create(parent, id, pos, size, style, name);
 }
 
 void wxControl::SetLabel( const wxString &label )
@@ -52,7 +52,7 @@ void wxControl::SetLabel( const wxString &label )
     }
 }
 
-wxString wxControl::GetLabel(void) const
+wxString wxControl::GetLabel() const
 {
     return m_label;
 }

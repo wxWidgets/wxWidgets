@@ -11,32 +11,14 @@
 #define __GTKCHOICEH__
 
 #ifdef __GNUG__
-#pragma interface
+    #pragma interface "choice.h"
 #endif
-
-#include "wx/defs.h"
-
-#include "wx/object.h"
-#include "wx/list.h"
-#include "wx/control.h"
-
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class wxChoice;
-
-//-----------------------------------------------------------------------------
-// global data
-//-----------------------------------------------------------------------------
-
-extern const wxChar *wxChoiceNameStr;
 
 //-----------------------------------------------------------------------------
 // wxChoice
 //-----------------------------------------------------------------------------
 
-class wxChoice : public wxControl
+class wxChoice : public wxChoiceBase
 {
 public:
     wxChoice();
@@ -59,35 +41,18 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxChoiceNameStr );
 
-    void Append( const wxString &item );
-    void Append( const wxString &item, void* clientData );
-    void Append( const wxString &item, wxClientData* clientData );
-
-    void SetClientData( int n, void* clientData );
-    void* GetClientData( int n );
-    void SetClientObject( int n, wxClientData* clientData );
-    wxClientData* GetClientObject( int n );
-
-    void SetClientObject( wxClientData *data )  { wxControl::SetClientObject( data ); }
-    wxClientData *GetClientObject() const       { return wxControl::GetClientObject(); }
-    void SetClientData( void *data )            { wxControl::SetClientData( data ); }
-    void *GetClientData() const                 { return wxControl::GetClientData(); }
-    
-    void Clear();
+    // implement base class pure virtuals
     void Delete(int n);
+    void Clear();
 
-    int FindString( const wxString &string ) const;
-    int GetColumns() const;
-    int GetSelection();
-    wxString GetString( int n ) const;
-    wxString GetStringSelection() const;
-    int Number() const;
-    void SetColumns( int n = 1 );
+    int GetSelection() const;
     void SetSelection( int n );
-    void SetStringSelection( const wxString &string );
+
+    virtual int GetCount() const;
+    int FindString( const wxString &string ) const;
+    wxString GetString( int n ) const;
 
     // implementation
-
     wxList   m_clientDataList;
     wxList   m_clientObjectList;
 
@@ -96,6 +61,14 @@ public:
     void AppendCommon( const wxString &item );
     void ApplyWidgetStyle();
     
+protected:
+    virtual int DoAppend(const wxString& item);
+
+    virtual void DoSetClientData( int n, void* clientData );
+    virtual void* DoGetClientData( int n ) const;
+    virtual void DoSetClientObject( int n, wxClientData* clientData );
+    virtual wxClientData* DoGetClientObject( int n ) const;
+
 private:
     DECLARE_DYNAMIC_CLASS(wxChoice)
 };

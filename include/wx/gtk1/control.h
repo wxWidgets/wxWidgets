@@ -29,7 +29,7 @@ class wxControl;
 // wxControl
 //-----------------------------------------------------------------------------
 
-class wxControl : public wxWindow
+class wxControl : public wxControlBase
 {
 public:
     wxControl();

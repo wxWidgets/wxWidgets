@@ -92,10 +92,10 @@ treectrl.cpp	G	16
 wizard.cpp	G
 
 appcmn.cpp	C	B
-choiccmn.cpp	C	R
+choiccmn.cpp	C
 cmndata.cpp	C
 config.cpp	C	B
-ctrlcmn.cpp	C	R
+ctrlcmn.cpp	C
 date.cpp	C	B
 datstrm.cpp	C
 db.cpp	C

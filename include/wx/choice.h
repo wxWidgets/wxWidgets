@@ -93,7 +93,7 @@ public:
     // deprecated functions, heer for backwards compatibility only
     int Number() const { return GetCount(); }
 
-private:
+protected:
     // pure virtuals to implement in the derived classes
     virtual int DoAppend(const wxString& item) = 0;
 
@@ -102,13 +102,18 @@ private:
     virtual void DoSetClientObject( int n, wxClientData* clientData ) = 0;
     virtual wxClientData* DoGetClientObject( int n ) const = 0;
 
+    // the above pure virtuals hide these virtuals in wxWindowBase
+    virtual void DoSetClientData(void* clientData )
+        { wxWindowBase::DoSetClientData(clientData); };
+    virtual void* DoGetClientData() const
+        { return(wxWindowBase::DoGetClientData()); };
+    virtual void DoSetClientObject( wxClientData* clientData )
+        { wxWindowBase::DoSetClientObject(clientData); };
+    virtual wxClientData* DoGetClientObject() const
+        { return(wxWindowBase::DoGetClientObject()); };
+
     // the type of the client data for the items
     wxClientDataType m_clientDataItemsType;
-    // the above pure virtuals hide these virtuals in wxWindowBase
-    virtual void DoSetClientData(void* clientData ) { wxWindowBase::DoSetClientData(clientData); };
-    virtual void* DoGetClientData() const { return(wxWindowBase::DoGetClientData()); };
-    virtual void DoSetClientObject( wxClientData* clientData ) { wxWindowBase::DoSetClientObject(clientData); };
-    virtual wxClientData* DoGetClientObject() const { return(wxWindowBase::DoGetClientObject()); };
 };
 
 // ----------------------------------------------------------------------------
