@@ -12,8 +12,6 @@
 -- script as an application drag-and-drop the files on top of it).
 ---------------------------------------------------------------------------------
 
-<begin applescript>
-
 on run
     set myFile to choose file
     open ({myFile})
@@ -35,6 +33,4 @@ on open (fileList)
         end tell
     end repeat
 end open
-
-</begin applescript>
 
