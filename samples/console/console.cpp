@@ -37,7 +37,7 @@
 
 //#define TEST_ARRAYS
 //#define TEST_CMDLINE
-//#define TEST_DATETIME
+#define TEST_DATETIME
 //#define TEST_DIR
 //#define TEST_DLLLOADER
 //#define TEST_EXECUTE
@@ -46,7 +46,7 @@
 //#define TEST_HASH
 //#define TEST_LIST
 //#define TEST_LOG
-#define TEST_LONGLONG
+//#define TEST_LONGLONG
 //#define TEST_MIME
 //#define TEST_INFO_FUNCTIONS
 //#define TEST_SOCKETS
@@ -140,6 +140,8 @@ static void ShowCmdLine(const wxCmdLineParser& parser)
         s << "Size:\t" << lVal << '\n';
     if ( parser.Found("d", &dt) )
         s << "Date:\t" << dt.FormatISODate() << '\n';
+    if ( parser.Found("project_name", &strVal) )
+        s << "Project:\t" << strVal << '\n';
 
     wxLogMessage(s);
 }
@@ -2473,6 +2475,20 @@ static void TestInteractive()
     puts("\n*** done ***");
 }
 
+static void TestTimeMS()
+{
+    puts("*** testing millisecond-resolution support in wxDateTime ***");
+
+    wxDateTime dt1 = wxDateTime::Now(),
+               dt2 = wxDateTime::UNow();
+
+    printf("Now = %s\n", dt1.Format("%H:%M:%S:%l").c_str());
+    printf("UNow = %s\n", dt2.Format("%H:%M:%S:%l").c_str());
+    printf("Difference is %s\n", (dt2 - dt1).Format("%l").c_str());
+
+    puts("\n*** done ***");
+}
+
 static void TestTimeArithmetics()
 {
     puts("\n*** testing arithmetic operations on wxDateTime ***");
@@ -3295,6 +3311,10 @@ int main(int argc, char **argv)
 
     wxCmdLineParser parser(cmdLineDesc, argc, argv);
 
+    parser.AddOption("project_name", "", "full path to project file",
+                     wxCMD_LINE_VAL_STRING,
+                     wxCMD_LINE_OPTION_MANDATORY | wxCMD_LINE_NEEDS_SEPARATOR);
+
     switch ( parser.Parse() )
     {
         case -1:
@@ -3503,10 +3523,11 @@ int main(int argc, char **argv)
         TestTimeParse();
         TestTimeArithmetics();
         TestTimeHolidays();
+        TestTimeFormat();
 
         TestTimeZoneBug();
     }
-        TestTimeFormat();
+    TestTimeMS();
     if ( 0 )
         TestInteractive();
 #endif // TEST_DATETIME
