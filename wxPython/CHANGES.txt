@@ -13,6 +13,7 @@ Deprecated PyShell and PyShellWindow, added a snapshot of PyCrust.
 
 Added the new virtual list capabilities to wxListCtrl.
 
+Added a wxSTC style editor from Riaan Booysen to the sample apps.
 
 
 

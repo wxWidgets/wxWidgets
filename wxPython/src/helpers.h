@@ -1337,12 +1337,12 @@ public:
 //---------------------------------------------------------------------------
 
 #define DEC_PYCALLBACK_LISTATTR_LONG(CBNAME)                                    \
-    wxListItemAttr*  CBNAME(long a);                                            \
+    wxListItemAttr*  CBNAME(long a) const;                                      \
     wxListItemAttr*  base_##CBNAME(long a);
 
 
 #define IMP_PYCALLBACK_LISTATTR_LONG(CLASS, PCLASS, CBNAME)                     \
-    wxListItemAttr *CLASS::CBNAME(long a) {                                     \
+    wxListItemAttr *CLASS::CBNAME(long a) const {                               \
         wxListItemAttr *rval = NULL;                                            \
         bool doSave = wxPyRestoreThread();                                      \
         if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                          \

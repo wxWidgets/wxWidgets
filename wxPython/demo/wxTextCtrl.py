@@ -23,7 +23,6 @@ class TestPanel(wxPanel):
         EVT_SET_FOCUS(t1, self.OnSetFocus)
         EVT_KILL_FOCUS(t1, self.OnKillFocus)
 
-
         l2 = wxStaticText(self, -1, "Passsword")
         t2 = wxTextCtrl(self, 20, "", size=(125, -1), style=wxTE_PASSWORD)
         EVT_TEXT(self, 20, self.EvtText)
@@ -44,7 +43,7 @@ class TestPanel(wxPanel):
         t4.SetStyle(44, 47, wxTextAttr("RED", "YELLOW"))
 
         points = t4.GetFont().GetPointSize()  # get the current size
-        f = wxFont(points+2, wxROMAN, wxITALIC, wxBOLD, true)
+        f = wxFont(points+3, wxROMAN, wxITALIC, wxBOLD, true)
 ##         print 'a1', sys.getrefcount(f)
 ##         t4.SetStyle(63, 77, wxTextAttr("BLUE", font=f))
         t4.SetStyle(63, 77, wxTextAttr("BLUE", wxNullColour, f))

@@ -1,16 +1,16 @@
 
 
-from wxPython.lib.PyCrust import PyCrustShell, PyCrustEditor, PyCrustVersion
+from wxPython.lib.PyCrust import shell, version
 
 
 #----------------------------------------------------------------------
 
-intro = 'Welcome To PyCrust %s - The Flakiest Python Shell' % PyCrustVersion.version
+intro = 'Welcome To PyCrust %s - The Flakiest Python Shell' % version.VERSION
 
 def runTest(frame, nb, log):
-    shell = PyCrustShell.Shell(nb, intro)
-    return shell.editor
+    win = shell.Shell(nb, -1, introText=intro)
+    return win
 
 #----------------------------------------------------------------------
 
-overview = PyCrustShell.__doc__
+overview = shell.__doc__

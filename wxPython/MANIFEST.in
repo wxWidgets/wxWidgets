@@ -44,6 +44,9 @@ include samples/stxview/StructuredText/*.py
 include samples/stxview/StructuredText/*.txt
 include samples/wxProject/*.txt
 include samples/wxProject/*.py
+include samples/StyleEditor/*.py
+include samples/StyleEditor/*.txt
+include samples/StyleEditor/*.cfg
 
 include wxPython/lib/*.py
 include wxPython/lib/*.txt

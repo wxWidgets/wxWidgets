@@ -19,7 +19,11 @@ class TestVirtualList(wxListCtrl):
 
         self.SetItemCount(1000000)
 
+        self.attr1 = wxListItemAttr()
+        self.attr1.SetBackgroundColour("yellow")
 
+        self.attr2 = wxListItemAttr()
+        self.attr2.SetBackgroundColour("light blue")
 
 
     def OnGetItemText(self, item, col):
@@ -29,7 +33,12 @@ class TestVirtualList(wxListCtrl):
         return 0
 
     def OnGetItemAttr(self, item):
-        return None
+        if item % 3 == 1:
+            return self.attr1
+        elif item % 3 == 2:
+            return self.attr2
+        else:
+            return None
 
 
 #----------------------------------------------------------------------

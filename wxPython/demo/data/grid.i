@@ -1361,6 +1361,7 @@ public:
     void     BeginBatch();
     void     EndBatch();
     int      GetBatchCount();
+    void     ForceRefresh();
 
 
     // ------ edit control functions
@@ -1693,6 +1694,22 @@ public:
     bool        AltDown();
 };
 
+
+class wxGridEditorCreatedEvent : public wxCommandEvent {
+public:
+    wxGridEditorCreatedEvent(int id, wxEventType type, wxObject* obj,
+                             int row, int col, wxControl* ctrl);
+
+    int GetRow();
+    int GetCol();
+    wxControl* GetControl();
+    void SetRow(int row);
+    void SetCol(int col);
+    void SetControl(wxControl* ctrl);
+};
+
+
+
 enum {
     wxEVT_GRID_CELL_LEFT_CLICK,
     wxEVT_GRID_CELL_RIGHT_CLICK,
@@ -1709,6 +1726,7 @@ enum {
     wxEVT_GRID_SELECT_CELL,
     wxEVT_GRID_EDITOR_SHOWN,
     wxEVT_GRID_EDITOR_HIDDEN,
+    wxEVT_GRID_EDITOR_CREATED,
 };
 
 
@@ -1758,6 +1776,9 @@ def EVT_GRID_EDITOR_SHOWN(win, fn):
 
 def EVT_GRID_EDITOR_HIDDEN(win, fn):
     win.Connect(-1, -1, wxEVT_GRID_EDITOR_HIDDEN, fn)
+
+def EVT_GRID_EDITOR_CREATED(win, fn):
+    win.Connect(-1, -1, wxEVT_GRID_EDITOR_CREATED, fn)
 
 "
 

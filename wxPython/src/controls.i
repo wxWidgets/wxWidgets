@@ -439,6 +439,8 @@ public:
     bool SetDefaultStyle(const wxTextAttr& style);
     const wxTextAttr& GetDefaultStyle() const;
 
+    void SetMaxLength(unsigned long len);
+
     %addmethods {
         void write(const wxString& text) {
             self->AppendText(text);

@@ -1984,6 +1984,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxTE_MULTILINE", PyInt_FromLong((long) wxTE_MULTILINE));
 	 PyDict_SetItemString(d,"wxTE_AUTO_SCROLL", PyInt_FromLong((long) wxTE_AUTO_SCROLL));
 	 PyDict_SetItemString(d,"wxTE_NO_VSCROLL", PyInt_FromLong((long) wxTE_NO_VSCROLL));
+	 PyDict_SetItemString(d,"wxTE_AUTO_URL", PyInt_FromLong((long) wxTE_AUTO_URL));
 	 PyDict_SetItemString(d,"wxCB_SIMPLE", PyInt_FromLong((long) wxCB_SIMPLE));
 	 PyDict_SetItemString(d,"wxCB_DROPDOWN", PyInt_FromLong((long) wxCB_DROPDOWN));
 	 PyDict_SetItemString(d,"wxCB_SORT", PyInt_FromLong((long) wxCB_SORT));
@@ -2013,12 +2014,6 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxST_NO_AUTORESIZE", PyInt_FromLong((long) wxST_NO_AUTORESIZE));
 	 PyDict_SetItemString(d,"wxBU_AUTODRAW", PyInt_FromLong((long) wxBU_AUTODRAW));
 	 PyDict_SetItemString(d,"wxBU_NOAUTODRAW", PyInt_FromLong((long) wxBU_NOAUTODRAW));
-	 PyDict_SetItemString(d,"wxTR_HAS_BUTTONS", PyInt_FromLong((long) wxTR_HAS_BUTTONS));
-	 PyDict_SetItemString(d,"wxTR_EDIT_LABELS", PyInt_FromLong((long) wxTR_EDIT_LABELS));
-	 PyDict_SetItemString(d,"wxTR_LINES_AT_ROOT", PyInt_FromLong((long) wxTR_LINES_AT_ROOT));
-	 PyDict_SetItemString(d,"wxTR_MULTIPLE", PyInt_FromLong((long) wxTR_MULTIPLE));
-	 PyDict_SetItemString(d,"wxTR_SINGLE", PyInt_FromLong((long) wxTR_SINGLE));
-	 PyDict_SetItemString(d,"wxTR_HAS_VARIABLE_ROW_HEIGHT", PyInt_FromLong((long) wxTR_HAS_VARIABLE_ROW_HEIGHT));
 	 PyDict_SetItemString(d,"wxSP_VERTICAL", PyInt_FromLong((long) wxSP_VERTICAL));
 	 PyDict_SetItemString(d,"wxSP_HORIZONTAL", PyInt_FromLong((long) wxSP_HORIZONTAL));
 	 PyDict_SetItemString(d,"wxSP_ARROW_KEYS", PyInt_FromLong((long) wxSP_ARROW_KEYS));
@@ -2442,6 +2437,8 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_SPINCTRL_UPDATED", PyInt_FromLong((long) wxEVT_COMMAND_SPINCTRL_UPDATED));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_TEXT_UPDATED", PyInt_FromLong((long) wxEVT_COMMAND_TEXT_UPDATED));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_TEXT_ENTER", PyInt_FromLong((long) wxEVT_COMMAND_TEXT_ENTER));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_TEXT_URL", PyInt_FromLong((long) wxEVT_COMMAND_TEXT_URL));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_TEXT_MAXLEN", PyInt_FromLong((long) wxEVT_COMMAND_TEXT_MAXLEN));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_MENU_SELECTED", PyInt_FromLong((long) wxEVT_COMMAND_MENU_SELECTED));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_SLIDER_UPDATED", PyInt_FromLong((long) wxEVT_COMMAND_SLIDER_UPDATED));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_RADIOBOX_SELECTED", PyInt_FromLong((long) wxEVT_COMMAND_RADIOBOX_SELECTED));

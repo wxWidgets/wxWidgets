@@ -65,6 +65,62 @@ def EVT_LIST_ITEM_ACTIVATED(win, id, func):
 def EVT_LIST_CACHE_HINT(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_LIST_CACHE_HINT, func)
 
+
+# wxTreeCtrl events
+def EVT_TREE_BEGIN_DRAG(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_BEGIN_DRAG, func)
+
+def EVT_TREE_BEGIN_RDRAG(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_BEGIN_RDRAG, func)
+
+def EVT_TREE_END_DRAG(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_END_DRAG, func)
+
+def EVT_TREE_BEGIN_LABEL_EDIT(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT, func)
+
+def EVT_TREE_END_LABEL_EDIT(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_END_LABEL_EDIT, func)
+
+def EVT_TREE_GET_INFO(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_GET_INFO, func)
+
+def EVT_TREE_SET_INFO(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_SET_INFO, func)
+
+def EVT_TREE_ITEM_EXPANDED(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_EXPANDED, func)
+
+def EVT_TREE_ITEM_EXPANDING(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_EXPANDING, func)
+
+def EVT_TREE_ITEM_COLLAPSED(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_COLLAPSED, func)
+
+def EVT_TREE_ITEM_COLLAPSING(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_COLLAPSING, func)
+
+def EVT_TREE_SEL_CHANGED(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_SEL_CHANGED, func)
+
+def EVT_TREE_SEL_CHANGING(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_SEL_CHANGING, func)
+
+def EVT_TREE_KEY_DOWN(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_KEY_DOWN, func)
+
+def EVT_TREE_DELETE_ITEM(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_DELETE_ITEM, func)
+
+def EVT_TREE_ITEM_ACTIVATED(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_ACTIVATED, func)
+
+def EVT_TREE_ITEM_RIGHT_CLICK(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK, func)
+
+def EVT_TREE_ITEM_MIDDLE_CLICK(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK, func)
+
 class wxListItemAttrPtr :
     def __init__(self,this):
         self.this = this
@@ -569,6 +625,50 @@ class wxListCtrl(wxListCtrlPtr):
 
 
 
+class wxTreeItemAttrPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def SetTextColour(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeItemAttr_SetTextColour,(self,) + _args, _kwargs)
+        return val
+    def SetBackgroundColour(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeItemAttr_SetBackgroundColour,(self,) + _args, _kwargs)
+        return val
+    def SetFont(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeItemAttr_SetFont,(self,) + _args, _kwargs)
+        return val
+    def HasTextColour(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeItemAttr_HasTextColour,(self,) + _args, _kwargs)
+        return val
+    def HasBackgroundColour(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeItemAttr_HasBackgroundColour,(self,) + _args, _kwargs)
+        return val
+    def HasFont(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeItemAttr_HasFont,(self,) + _args, _kwargs)
+        return val
+    def GetTextColour(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeItemAttr_GetTextColour,(self,) + _args, _kwargs)
+        if val: val = wxColourPtr(val) 
+        return val
+    def GetBackgroundColour(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeItemAttr_GetBackgroundColour,(self,) + _args, _kwargs)
+        if val: val = wxColourPtr(val) 
+        return val
+    def GetFont(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeItemAttr_GetFont,(self,) + _args, _kwargs)
+        if val: val = wxFontPtr(val) 
+        return val
+    def __repr__(self):
+        return "<C wxTreeItemAttr instance at %s>" % (self.this,)
+class wxTreeItemAttr(wxTreeItemAttrPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(controls2c.new_wxTreeItemAttr,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
 class wxTreeItemIdPtr :
     def __init__(self,this):
         self.this = this
@@ -644,8 +744,9 @@ class wxTreeEventPtr(wxNotifyEventPtr):
     def __repr__(self):
         return "<C wxTreeEvent instance at %s>" % (self.this,)
 class wxTreeEvent(wxTreeEventPtr):
-    def __init__(self,this):
-        self.this = this
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(controls2c.new_wxTreeEvent,_args,_kwargs)
+        self.thisown = 1
 
 
 
@@ -656,10 +757,6 @@ class wxTreeCtrlPtr(wxControlPtr):
         self.thisown = 0
     def _setSelf(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl__setSelf,(self,) + _args, _kwargs)
-        return val
-    def AssignImageList(self, *_args, **_kwargs):
-        val = apply(controls2c.wxTreeCtrl_AssignImageList,(self,) + _args, _kwargs)
-        _args[0].thisown = 0
         return val
     def GetCount(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_GetCount,(self,) + _args, _kwargs)
@@ -681,6 +778,14 @@ class wxTreeCtrlPtr(wxControlPtr):
         return val
     def SetStateImageList(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_SetStateImageList,(self,) + _args, _kwargs)
+        return val
+    def AssignImageList(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeCtrl_AssignImageList,(self,) + _args, _kwargs)
+        _args[0].thisown = 0
+        return val
+    def AssignStateImageList(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeCtrl_AssignStateImageList,(self,) + _args, _kwargs)
+        _args[0].thisown = 0
         return val
     def GetSpacing(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_GetSpacing,(self,) + _args, _kwargs)
@@ -992,6 +1097,20 @@ wxLIST_FORMAT_LEFT = controls2c.wxLIST_FORMAT_LEFT
 wxLIST_FORMAT_RIGHT = controls2c.wxLIST_FORMAT_RIGHT
 wxLIST_FORMAT_CENTRE = controls2c.wxLIST_FORMAT_CENTRE
 wxLIST_FORMAT_CENTER = controls2c.wxLIST_FORMAT_CENTER
+wxTR_NO_BUTTONS = controls2c.wxTR_NO_BUTTONS
+wxTR_HAS_BUTTONS = controls2c.wxTR_HAS_BUTTONS
+wxTR_TWIST_BUTTONS = controls2c.wxTR_TWIST_BUTTONS
+wxTR_NO_LINES = controls2c.wxTR_NO_LINES
+wxTR_MAC_BUTTONS = controls2c.wxTR_MAC_BUTTONS
+wxTR_SINGLE = controls2c.wxTR_SINGLE
+wxTR_MULTIPLE = controls2c.wxTR_MULTIPLE
+wxTR_EXTENDED = controls2c.wxTR_EXTENDED
+wxTR_EDIT_LABELS = controls2c.wxTR_EDIT_LABELS
+wxTR_LINES_AT_ROOT = controls2c.wxTR_LINES_AT_ROOT
+wxTR_HIDE_ROOT = controls2c.wxTR_HIDE_ROOT
+wxTR_ROW_LINES = controls2c.wxTR_ROW_LINES
+wxTR_HAS_VARIABLE_ROW_HEIGHT = controls2c.wxTR_HAS_VARIABLE_ROW_HEIGHT
+wxTR_DEFAULT_STYLE = controls2c.wxTR_DEFAULT_STYLE
 wxTreeItemIcon_Normal = controls2c.wxTreeItemIcon_Normal
 wxTreeItemIcon_Selected = controls2c.wxTreeItemIcon_Selected
 wxTreeItemIcon_Expanded = controls2c.wxTreeItemIcon_Expanded

@@ -6297,6 +6297,35 @@ static PyObject *_wrap_wxTextCtrl_GetDefaultStyle(PyObject *self, PyObject *args
     return _resultobj;
 }
 
+#define wxTextCtrl_SetMaxLength(_swigobj,_swigarg0)  (_swigobj->SetMaxLength(_swigarg0))
+static PyObject *_wrap_wxTextCtrl_SetMaxLength(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTextCtrl * _arg0;
+    unsigned long  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","len", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxTextCtrl_SetMaxLength",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_SetMaxLength. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTextCtrl_SetMaxLength(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static void  wxTextCtrl_write(wxTextCtrl *self,const wxString & text) {
             self->AppendText(text);
         }
@@ -9062,6 +9091,7 @@ static PyMethodDef controlscMethods[] = {
 	 { "wxScrollBar_GetRange", (PyCFunction) _wrap_wxScrollBar_GetRange, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxScrollBar", (PyCFunction) _wrap_new_wxScrollBar, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_write", (PyCFunction) _wrap_wxTextCtrl_write, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextCtrl_SetMaxLength", (PyCFunction) _wrap_wxTextCtrl_SetMaxLength, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_GetDefaultStyle", (PyCFunction) _wrap_wxTextCtrl_GetDefaultStyle, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_SetDefaultStyle", (PyCFunction) _wrap_wxTextCtrl_SetDefaultStyle, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_SetStyle", (PyCFunction) _wrap_wxTextCtrl_SetStyle, METH_VARARGS | METH_KEYWORDS },

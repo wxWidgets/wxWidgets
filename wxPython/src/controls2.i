@@ -450,8 +450,9 @@ public:
 
     //bool GetItemRect(long item, wxRect& rect, int code = wxLIST_RECT_BOUNDS) const ;
     //bool GetItemPosition(long item, wxPoint& pos) const ;
+
+    // Gets the item position
     %addmethods {
-        // Gets the item position
         %new wxPoint* GetItemPosition(long item) {
             wxPoint* pos = new wxPoint;
             self->GetItemPosition(item, *pos);
@@ -641,6 +642,27 @@ public:
 
 //----------------------------------------------------------------------
 
+// wxTreeCtrl flags
+enum {
+    wxTR_NO_BUTTONS,
+    wxTR_HAS_BUTTONS,
+    wxTR_TWIST_BUTTONS,
+    wxTR_NO_LINES,
+    wxTR_MAC_BUTTONS,
+
+    wxTR_SINGLE,
+    wxTR_MULTIPLE,
+    wxTR_EXTENDED,
+
+    wxTR_EDIT_LABELS,
+    wxTR_LINES_AT_ROOT,
+    wxTR_HIDE_ROOT,
+    wxTR_ROW_LINES,
+    wxTR_HAS_VARIABLE_ROW_HEIGHT,
+
+    wxTR_DEFAULT_STYLE,
+};
+
 enum wxTreeItemIcon
 {
     wxTreeItemIcon_Normal,              // not selected, not expanded
@@ -690,6 +712,89 @@ enum {
     wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK,
     wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK,
     wxEVT_COMMAND_TREE_END_DRAG,
+};
+
+
+%pragma(python) code = "
+# wxTreeCtrl events
+def EVT_TREE_BEGIN_DRAG(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_BEGIN_DRAG, func)
+
+def EVT_TREE_BEGIN_RDRAG(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_BEGIN_RDRAG, func)
+
+def EVT_TREE_END_DRAG(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_END_DRAG, func)
+
+def EVT_TREE_BEGIN_LABEL_EDIT(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT, func)
+
+def EVT_TREE_END_LABEL_EDIT(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_END_LABEL_EDIT, func)
+
+def EVT_TREE_GET_INFO(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_GET_INFO, func)
+
+def EVT_TREE_SET_INFO(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_SET_INFO, func)
+
+def EVT_TREE_ITEM_EXPANDED(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_EXPANDED, func)
+
+def EVT_TREE_ITEM_EXPANDING(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_EXPANDING, func)
+
+def EVT_TREE_ITEM_COLLAPSED(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_COLLAPSED, func)
+
+def EVT_TREE_ITEM_COLLAPSING(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_COLLAPSING, func)
+
+def EVT_TREE_SEL_CHANGED(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_SEL_CHANGED, func)
+
+def EVT_TREE_SEL_CHANGING(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_SEL_CHANGING, func)
+
+def EVT_TREE_KEY_DOWN(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_KEY_DOWN, func)
+
+def EVT_TREE_DELETE_ITEM(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_DELETE_ITEM, func)
+
+def EVT_TREE_ITEM_ACTIVATED(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_ACTIVATED, func)
+
+def EVT_TREE_ITEM_RIGHT_CLICK(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK, func)
+
+def EVT_TREE_ITEM_MIDDLE_CLICK(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK, func)
+"
+
+
+class wxTreeItemAttr
+{
+public:
+    // ctors
+    //wxTreeItemAttr() { }
+    wxTreeItemAttr(const wxColour& colText = wxNullColour,
+                   const wxColour& colBack = wxNullColour,
+                   const wxFont& font = wxNullFont);
+
+    // setters
+    void SetTextColour(const wxColour& colText);
+    void SetBackgroundColour(const wxColour& colBack);
+    void SetFont(const wxFont& font);
+
+    // accessors
+    bool HasTextColour();
+    bool HasBackgroundColour();
+    bool HasFont();
+
+    const wxColour& GetTextColour();
+    const wxColour& GetBackgroundColour();
+    const wxFont& GetFont();
 };
 
 
@@ -759,6 +864,8 @@ public:
 
 class wxTreeEvent : public wxNotifyEvent {
 public:
+    wxTreeEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
+
     wxTreeItemId GetItem();
     wxTreeItemId GetOldItem();
     wxPoint GetPoint();
@@ -819,8 +926,6 @@ public:
     %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
     %pragma(python) addtomethod = "__init__:self._setSelf(self, wxTreeCtrl)"
 
-    void AssignImageList(wxImageList* imageList);
-    %pragma(python) addtomethod = "AssignImageList:_args[0].thisown = 0"
     size_t GetCount();
     unsigned int GetIndent();
     void SetIndent(unsigned int indent);
@@ -828,6 +933,10 @@ public:
     wxImageList *GetStateImageList();
     void SetImageList(wxImageList *imageList);
     void SetStateImageList(wxImageList *imageList);
+    void AssignImageList(wxImageList* imageList);
+    %pragma(python) addtomethod = "AssignImageList:_args[0].thisown = 0"
+    void AssignStateImageList(wxImageList* imageList);
+    %pragma(python) addtomethod = "AssignStateImageList:_args[0].thisown = 0"
 
     unsigned int GetSpacing();
     void SetSpacing(unsigned int spacing);

@@ -118,6 +118,7 @@ Source: "samples\doodle\*.py";              DestDir: "{app}\wxPython\samples\doo
 Source: "samples\doodle\*.txt";             DestDir: "{app}\wxPython\samples\doodle"; Components: samples
 Source: "samples\doodle\sample.ddl";        DestDir: "{app}\wxPython\samples\doodle"; Components: samples
 Source: "samples\doodle\superdoodle.iss";   DestDir: "{app}\wxPython\samples\doodle"; Components: samples
+
 Source: "samples\wxProject\*.txt";          DestDir: "{app}\wxPython\samples\wxProject"; Components: samples
 Source: "samples\wxProject\*.py";           DestDir: "{app}\wxPython\samples\wxProject"; Components: samples
 
@@ -125,6 +126,10 @@ Source: "samples\stxview\*.py";                  DestDir: "{app}\wxPython\sample
 Source: "samples\stxview\*.stx";                 DestDir: "{app}\wxPython\samples\stxview"; Components: samples
 Source: "samples\stxview\*.txt";                 DestDir: "{app}\wxPython\samples\stxview"; Components: samples
 Source: "samples\stxview\StructuredText\*.py";   DestDir: "{app}\wxPython\samples\stxview\StructuredText"; Components: samples
+
+Source: "samples\StyleEditor\*.txt";          DestDir: "{app}\wxPython\samples\StyleEditor"; Components: samples
+Source: "samples\StyleEditor\*.py";           DestDir: "{app}\wxPython\samples\StyleEditor"; Components: samples
+Source: "samples\StyleEditor\*.cfg";           DestDir: "{app}\wxPython\samples\StyleEditor"; Components: samples
 
 
 ;;------------------------------------------------------------
@@ -161,6 +166,8 @@ Type: files; Name: "{app}\wxPython\samples\doodle\*.pyc";
 Type: files; Name: "{app}\wxPython\samples\doodle\*.pyo";
 Type: files; Name: "{app}\wxPython\samples\wxProject\*.pyc";
 Type: files; Name: "{app}\wxPython\samples\wxProject\*.pyo";
+Type: files; Name: "{app}\wxPython\samples\StyleEditor\*.pyc";
+Type: files; Name: "{app}\wxPython\samples\StyleEditor\*.pyo";
 Type: files; Name: "{app}\wxPython\samples\stxview\*.pyc";
 Type: files; Name: "{app}\wxPython\samples\stxview\*.pyo";
 Type: files; Name: "{app}\wxPython\samples\stxview\StructuredText\*.pyc";
@@ -170,6 +177,10 @@ Type: files; Name: "{app}\wxPython\samples\stxview\StructuredText\*.pyo";
 
 
 #----------------------------------------------------------------------
+
+## TODO:  For Python 2.2 wxPython should go into
+#         os.path.join(sys.prefix, 'Lib', 'site-packages')
+
 
 IFS_Template = r"""
 program Setup;
@@ -186,13 +197,12 @@ begin
                                    'Software\Python\PythonCore\%(PYTHONVER)s\InstallPath',
                                    '', PythonDir) then begin
 
-            MsgBox('No installation of Python %(PYTHONVER)s found.  Aborting...',
+            MsgBox('No installation of Python %(PYTHONVER)s found.\nBe sure to enter a pathname that places wxPython\non the PYTHONPATH',
                    mbConfirmation, MB_OK);
-            Result := false;
-        end else
-            Result := true;
-    end else
-        Result := true;
+            PythonDir := 'C:\Put a directory on PYTHONPATH here\wxPython';
+        end;
+    end;
+    Result := true;
 end;
 
 

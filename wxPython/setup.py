@@ -267,7 +267,10 @@ if IN_CVS_TREE and newer('setup.py', 'src/__version__.py'):
 #----------------------------------------------------------------------
 
 swig_force = force
-swig_args = ['-c++', '-shadow', '-python', '-keyword', '-dnone', #'-dascii',
+swig_args = ['-c++', '-shadow', '-python', '-keyword',
+             '-dnone',
+             #'-dascii',
+             #'-docstring', '-Sbefore',
              '-I./src', '-D'+WXPLAT]
 swig_deps = ['src/my_typemaps.i']
 

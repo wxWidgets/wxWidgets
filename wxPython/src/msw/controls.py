@@ -622,6 +622,9 @@ class wxTextCtrlPtr(wxControlPtr):
         val = apply(controlsc.wxTextCtrl_GetDefaultStyle,(self,) + _args, _kwargs)
         if val: val = wxTextAttrPtr(val) 
         return val
+    def SetMaxLength(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_SetMaxLength,(self,) + _args, _kwargs)
+        return val
     def write(self, *_args, **_kwargs):
         val = apply(controlsc.wxTextCtrl_write,(self,) + _args, _kwargs)
         return val

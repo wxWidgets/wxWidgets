@@ -365,6 +365,9 @@ def EVT_TEXT_ENTER(win, id, func):
 def EVT_TEXT_URL(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_TEXT_URL, func)
 
+def EVT_TEXT_MAXLEN(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TEXT_MAXLEN, func)
+
 def EVT_MENU(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_MENU_SELECTED, func)
 
@@ -441,62 +444,6 @@ def EVT_NOTEBOOK_PAGE_CHANGING(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, func)
 
 
-# wxTreeCtrl events
-def EVT_TREE_BEGIN_DRAG(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_BEGIN_DRAG, func)
-
-def EVT_TREE_BEGIN_RDRAG(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_BEGIN_RDRAG, func)
-
-def EVT_TREE_END_DRAG(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_END_DRAG, func)
-
-def EVT_TREE_BEGIN_LABEL_EDIT(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT, func)
-
-def EVT_TREE_END_LABEL_EDIT(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_END_LABEL_EDIT, func)
-
-def EVT_TREE_GET_INFO(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_GET_INFO, func)
-
-def EVT_TREE_SET_INFO(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_SET_INFO, func)
-
-def EVT_TREE_ITEM_EXPANDED(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_EXPANDED, func)
-
-def EVT_TREE_ITEM_EXPANDING(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_EXPANDING, func)
-
-def EVT_TREE_ITEM_COLLAPSED(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_COLLAPSED, func)
-
-def EVT_TREE_ITEM_COLLAPSING(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_COLLAPSING, func)
-
-def EVT_TREE_SEL_CHANGED(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_SEL_CHANGED, func)
-
-def EVT_TREE_SEL_CHANGING(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_SEL_CHANGING, func)
-
-def EVT_TREE_KEY_DOWN(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_KEY_DOWN, func)
-
-def EVT_TREE_DELETE_ITEM(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_DELETE_ITEM, func)
-
-def EVT_TREE_ITEM_ACTIVATED(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_ACTIVATED, func)
-
-def EVT_TREE_ITEM_RIGHT_CLICK(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK, func)
-
-def EVT_TREE_ITEM_MIDDLE_CLICK(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK, func)
-
-
 # wxSpinButton
 def EVT_SPIN_UP(win, id, func):
     win.Connect(id, -1, wxEVT_SCROLL_LINEUP, func)
@@ -506,8 +453,6 @@ def EVT_SPIN_DOWN(win, id, func):
 
 def EVT_SPIN(win, id, func):
     win.Connect(id, -1, wxEVT_SCROLL_THUMBTRACK,func)
-
-
 
 
 # wxTaskBarIcon
@@ -640,6 +585,16 @@ wxNamedColor = wxNamedColour
 wxNoRefBitmap       = wxBitmap
 wxPyDefaultPosition = wxDefaultPosition
 wxPyDefaultSize     = wxDefaultSize
+
+
+# wxGTK sets the locale when initialized.  Doing this at the Python
+# level should set it up to match what GTK is doing at the C level.
+try:
+    import locale
+    locale.setlocale(locale.LC_ALL, "")
+except:
+    pass
+
 
 #----------------------------------------------------------------------
 # This helper function will take a wxPython object and convert it to
