@@ -74,6 +74,8 @@ protected:
 // ------------------------------------------------------------------------
 protected:
     virtual void Cocoa_close(void);
+    virtual bool Cocoa_canBecomeMainWindow(bool &canBecome)
+    {   canBecome = true; return true; }
 
 // ------------------------------------------------------------------------
 // Implementation
