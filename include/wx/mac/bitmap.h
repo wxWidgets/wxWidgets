@@ -101,8 +101,8 @@ class WXDLLEXPORT wxBitmapHandler: public wxBitmapHandlerBase
   DECLARE_DYNAMIC_CLASS(wxBitmapHandler)
 public:
   wxBitmapHandler() { m_name = ""; m_extension = ""; m_type = 0; };
-#ifdef __WXMAC_X__
-  virtual ~wxBitmapHandler() {}  // Added min for Mac X
+#ifdef __DARWIN__
+  virtual ~wxBitmapHandler() { }
 #endif
 
   virtual bool Create(wxBitmap *bitmap, void *data, long flags, int width, int height, int depth = 1);

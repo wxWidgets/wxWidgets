@@ -44,7 +44,7 @@ END_EVENT_TABLE()
 // ----------------
 
 // def ctor: use Create() to really create the control
-wxCheckListBox::wxCheckListBox() : wxListBox()
+wxCheckListBox::wxCheckListBox() : wxCheckListBoxBase()
 {
 }
 
@@ -54,7 +54,7 @@ wxCheckListBox::wxCheckListBox(wxWindow *parent, wxWindowID id,
                                int nStrings, const wxString choices[],
                                long style, const wxValidator& val,
                                const wxString& name)
-              : wxListBox()
+              : wxCheckListBoxBase()
 {
     // TODO: you'll probably need a separate Create instead of using
     // the wxListBox one as here.

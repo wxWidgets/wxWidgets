@@ -23,7 +23,7 @@ enum
 #elif defined(__WXQT__)
 #include "wx/qt/filedlg.h"
 #elif defined(__WXMAC__)
-#ifdef __WXMAC_X__
+#ifdef __DARWIN__
 #include "wx/generic/filedlgg.h"
 #else
 #include "wx/mac/filedlg.h"

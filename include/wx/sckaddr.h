@@ -86,7 +86,7 @@ public:
 };
 #endif
 
-#if defined(__UNIX__) && !defined(__APPLE__)
+#if defined(__UNIX__) && !defined(__WXMAC__)
 #include <sys/socket.h>
 #ifndef __VMS__
 # include <sys/un.h>

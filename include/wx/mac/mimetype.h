@@ -24,7 +24,7 @@ class wxMimeTypesManagerImpl
 {
 public :
     wxMimeTypesManagerImpl() { }
-#ifdef __WXMAC_X__
+#ifdef __DARWIN__
     ~wxMimeTypesManagerImpl() { }
 #endif
  

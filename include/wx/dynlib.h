@@ -48,7 +48,7 @@
 #elif defined(__WINDOWS__)
 #   include <windows.h>         // needed to get HMODULE
     typedef HMODULE wxDllType;
-#elif defined(__APPLE__) && defined(__UNIX__)
+#elif defined(__DARWIN__)
     typedef void *wxDllType;
 #elif defined(__WXMAC__)
     typedef CFragConnectionID wxDllType;

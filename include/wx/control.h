@@ -48,8 +48,8 @@ public:
     // get the control alignment (left/right/centre, top/bottom/centre)
     int GetAlignment() const { return m_windowStyle & wxALIGN_MASK; }
 
-#ifdef __WXMAC_X__
-    virtual ~wxControlBase() { }   // Added min for Mac X
+#ifdef __DARWIN__
+    virtual ~wxControlBase() { }
 #endif
 
 protected:

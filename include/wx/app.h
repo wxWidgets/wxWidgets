@@ -65,6 +65,9 @@ public:
 
     // the virtual functions which may/must be overridden in the derived class
     // -----------------------------------------------------------------------
+#ifdef __DARWIN__
+    virtual ~wxAppBase() { }
+#endif
 
         // called during the program initialization, returning FALSE from here
         // prevents the program from continuing - it's a good place to create
@@ -315,11 +318,6 @@ protected:
     // does any of our windows has focus?
     bool m_isActive;
 #endif // wxUSE_GUI
-
-#ifdef __WXMAC_X__
-public:
-    virtual ~wxAppBase() {}  // Added min for Mac X
-#endif
 };
 
 // ----------------------------------------------------------------------------

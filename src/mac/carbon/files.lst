@@ -705,9 +705,9 @@ GENERICOBJS = \
 		proplist.o \
 		sashwin.o \
 		scrlwing.o \
-		spinctlg.o \
 		splash.o \
 		splitter.o \
+		spinctlg.o \
 		statusbr.o \
 		tabg.o \
 		tbarsmpl.o \
@@ -766,8 +766,8 @@ GENERICDEPS = \
 # Not included for Mac OS X
 #		dirmac.o
 #		filedlg.o
-#		statline.o
 #		spinctrl.o
+#		statline.o
 #		treectrl.o
 GUIOBJS = \
 		accel.o \
@@ -934,8 +934,7 @@ GUIDEPS = \
 #		dialup.o
 UNIXOBJS = \
 		dir.o \
-		utilsunx.o \
-		dl_macosx.o
+		utilsunx.o
 
 UNIXDEPS = \
 		dialup.d \
@@ -945,8 +944,7 @@ UNIXDEPS = \
 		gsocket.d \
 		mimetype.d \
 		threadpsx.d \
-		utilsunx.d \
-		dl_macosx.d
+		utilsunx.d
 
 HTMLOBJS = \
 		helpctrl.o \

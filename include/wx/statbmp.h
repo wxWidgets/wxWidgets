@@ -30,7 +30,7 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxStaticBitmapNameStr;
 class WXDLLEXPORT wxStaticBitmapBase : public wxControl
 {
  public:
-#ifdef __WXMAC_X__
+#ifdef __DARWIN__
     ~wxStaticBitmapBase() { }
 #endif
     

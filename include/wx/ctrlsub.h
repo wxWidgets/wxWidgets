@@ -86,8 +86,8 @@ public:
     int Number() const { return GetCount(); }
 #endif // WXWIN_COMPATIBILITY_2_2
 
-#ifdef __WXMAC_X__
-    virtual ~wxItemContainer() {}  // Added min for Mac X
+#ifdef __DARWIN__
+    virtual ~wxItemContainer() { }
 #endif
 
 protected:

@@ -30,6 +30,7 @@
 
 #if wxUSE_HTML && wxUSE_PRINTING_ARCHITECTURE && wxUSE_STREAMS
 
+#include "wx/dc.h"
 #include "wx/print.h"
 #include "wx/printdlg.h"
 #include "wx/html/htmprint.h"

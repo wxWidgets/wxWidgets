@@ -20,7 +20,7 @@
 #include "wx/filedlg.h"
 #include "wx/intl.h"
 
-#if !defined(__UNIX__)
+#ifndef __DARWIN__
   #include "PLStringFuncs.h"
 #endif
 
@@ -30,13 +30,11 @@ IMPLEMENT_CLASS(wxFileDialog, wxDialog)
 
 // begin wxmac
 
-#if defined(__UNIX__)
-  #include <Carbon/Carbon.h>
-#else
+#ifndef __DARWIN__
   #include <Navigation.h>
 #endif
 
-#ifndef __UNIX__
+#ifndef __DARWIN__
   #include "morefile.h"
   #include "moreextr.h"
   #include "fullpath.h"
@@ -546,7 +544,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
 }
 
 
-Boolean CrossPlatformFilterCallback (
+pascal Boolean CrossPlatformFilterCallback (
     AEDesc *theItem, 
     void *info, 
     void *callBackUD, 
@@ -751,7 +749,7 @@ int wxFileDialog::ShowModal()
 	  	  }
 	  	}
 
-      mNavFilterUPP = NewNavObjectFilterProc( CrossPlatformFilterCallback ) ;
+      mNavFilterUPP = NewNavObjectFilterUPP( CrossPlatformFilterCallback ) ;
 			if ( m_dialogStyle & wxMULTIPLE )
 				mNavOptions.dialogOptionFlags |= kNavAllowMultipleFiles ;
 			else

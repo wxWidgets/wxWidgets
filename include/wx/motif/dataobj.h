@@ -20,6 +20,10 @@
 
 class wxDataObject : public wxDataObjectBase
 {
+ public:
+#ifdef __DARWIN__
+    ~wxDataObject() { }
+#endif
 };
 
 #endif //_WX_MOTIF_DATAOBJ_H_

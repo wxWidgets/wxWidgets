@@ -112,41 +112,26 @@
         #define __HPUX__
     #endif // HP-UX
 
-    #if defined(__APPLE__)
-        // MacOS X
-        #ifndef __WXMAC__
-            #define __WXMAC__
-        #endif
-        #ifndef __WXMAC_X__
-            // This define really should not be necessary since __WXMAC__
-            // combined with __UNIX__ is sufficient to differentiate
-            // Classic Mac OS from Mac OS X. However, some code has been
-            // added to workaround defects(?) in the bundled gcc compiler
-            // and these corrections are identified by __WXMAC_X__
-            #define __WXMAC_X__
-        #endif
+    #if defined(__WXMAC__) && defined(__DARWIN__)
+        // Mac OS X
+
+        // Some code has been added to workaround defects(?) in the
+        // bundled gcc compiler. These corrections are identified by:
+        // __DARWIN__ for corrections necessary for Darwin (wxMac, wxMotif)
 
         #include <Carbon/Carbon.h>
-    #endif // __APPLE__
+    #endif // __WXMAC__ && __DARWIN__
 #elif defined(applec) || \
       defined(THINK_C) || \
       (defined(__MWERKS__) && !defined(__INTEL__))
       // MacOS
-#elif defined(__WXMAC__) && defined(__APPLE__)
-    // MacOS X
+#elif defined(__WXMAC__) && defined(__DARWIN__)
+    // Mac OS X
     #define __UNIX_LIKE__
 
-    #ifndef __WXMAC__
-        #define __WXMAC__
-    #endif
-    #ifndef __WXMAC_X__
-        // This define really should not be necessary since __WXMAC__
-        // combined with __UNIX__ is sufficient to differentiate
-        // Classic Mac OS from Mac OS X. However, some code has been
-        // added to workaround defects(?) in the bundled gcc compiler
-        // and these corrections are identified by __WXMAC_X__
-        #define __WXMAC_X__
-    #endif
+    // Some code has been added to workaround defects(?) in the
+    // bundled gcc compiler. These corrections are identified by:
+    // __DARWIN__ for corrections necessary for Darwin (wxMac, wxMotif)
 
     #include <Carbon/Carbon.h>
 #elif defined(__OS2__)

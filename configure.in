@@ -40,7 +40,7 @@ AC_DEFUN(WX_PATH_FIND_LIBRARIES,
 ac_find_libraries=
 for ac_dir in $1;
   do
-    for ac_extension in a so sl; do
+    for ac_extension in a so sl dylib; do
       if test -f "$ac_dir/lib$2.$ac_extension"; then
         ac_find_libraries=$ac_dir
         break 2
@@ -393,6 +393,7 @@ USE_SUNOS=
 USE_ALPHA=
 USE_OSF=
 USE_BSD=
+USE_DARWIN=
 USE_FREEBSD=
 USE_OPENBSD=
 USE_NETBSD=
@@ -556,9 +557,9 @@ case "${host}" in
 
   *-*-darwin* )
     USE_BSD=1
-    USE_MAC=1
-    AC_DEFINE(__MAC__)
+    USE_DARWIN=1
     AC_DEFINE(__BSD__)
+    AC_DEFINE(__DARWIN__)
     AC_DEFINE(__UNIX__)
     DEFAULT_DEFAULT_wxUSE_MAC=1
   ;;
@@ -2245,6 +2246,9 @@ if test "$wxUSE_SHARED" = "yes"; then
         fi
       ;;
       *-*-darwin* )
+	TOOLKIT_DEF="${TOOLKIT_DEF} -D__UNIX__ -D__DARWIN__ -D__POWERPC__"
+	CFLAGS="${CFLAGS} -fno-common"
+	CPPFLAGS="${CPPFLAGS} -fno-common"
         SHARED_LD="${CXX} -dynamiclib -o"
         PIC_FLAG="-dynamic -fPIC"
         if test "$wxUSE_OPENGL" = "yes"; then
@@ -2254,8 +2258,10 @@ if test "$wxUSE_SHARED" = "yes"; then
             WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
             WX_ALL="CREATE_LINKS"
         fi
-        dnl add the resources target
-        WX_ALL="${WX_ALL} ./lib/lib${WX_LIBRARY}-${WX_RELEASE}.r"
+        dnl add the resources target for wxMac
+	if test "$wxUSE_MAC" = 1 ; then
+	        WX_ALL="${WX_ALL} ./lib/lib${WX_LIBRARY}-${WX_RELEASE}.r"
+	fi
         dnl the name of the shared library
         WX_LIBRARY_NAME_SHARED="lib${WX_LIBRARY}-${WX_RELEASE}.dylib.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}"
         WX_LIBRARY_NAME_SHARED_GL="lib${WX_LIBRARY}_gl-${WX_RELEASE}.dylib.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}"
@@ -2775,7 +2781,7 @@ if test "$USE_BEOS" = 1; then
     HAVE_SOME_SLEEP_FUNC=1
 fi
 
-if test "$USE_MAC" = 1; then
+if test "$USE_DARWIN" = 1; then
     dnl Mac OS X has both nanosleep and usleep
     dnl but only usleep is defined in unistd.h
     AC_DEFINE(HAVE_USLEEP)
@@ -3055,8 +3061,8 @@ fi
 if test "$wxUSE_THREADS" = "yes"; then
   AC_DEFINE(wxUSE_THREADS)
 
-  dnl must define _REENTRANT for multithreaded code except for Mac OS X
-  if test "$wxUSE_MAC" = "0"; then
+  dnl must define _REENTRANT for multithreaded code except for Darwin/Mac OS X
+  if test "$wxUSE_DARWIN" = "0"; then
     CFLAGS="${CFLAGS} -D_REENTRANT"
     CXXFLAGS="${CXXFLAGS} -D_REENTRANT"
   fi
@@ -3095,9 +3101,9 @@ if test "$WXWINE" = 1 ; then
 fi
 
 if test "$wxUSE_MAC" = 1 ; then
-  TOOLKIT_DEF="${TOOLKIT_DEF} -D__UNIX__ -D__POWERPC__ -DTARGET_CARBON"
-  CFLAGS="${CFLAGS} -fno-common -fpascal-strings"
-  CPPFLAGS="${CPPFLAGS} -cpp-precomp -fno-common -fpascal-strings"
+  TOOLKIT_DEF="${TOOLKIT_DEF} -DTARGET_CARBON"
+  CFLAGS="${CFLAGS} -fpascal-strings"
+  CPPFLAGS="${CPPFLAGS} -cpp-precomp -fpascal-strings"
   AC_CHECK_PROG(REZ, Rez, Rez, /Developer/Tools/Rez)
   AC_CHECK_PROG(DEREZ, Derez, Derez, /Developer/Tools/Derez)
   RESCOMP=${REZ}
@@ -3765,8 +3771,8 @@ if test "$TOOLKIT" != "MSW"; then
 HAVE_DL_FUNCS=0
 HAVE_SHL_FUNCS=0
 if test "$wxUSE_DYNLIB_CLASS" = "yes"; then
-    if test "$USE_MAC" = 1; then
-        dnl Mac OS X needs dl_macosx.c to be compiled in to fake dlopen/dlerror
+    if test "$USE_DARWIN" = 1; then
+        dnl dlopen/dlerror is implemented in dynlib.cpp for Darwin/Mac OS X
         HAVE_DL_FUNCS=1
     else
         dnl the test is a bit complicated because we check for dlopen() both with
@@ -4430,7 +4436,7 @@ dnl
 dnl note that we always link with -lm except for Mac OS X
 dnl extended.c uses floor() and is always linked in
 EXTRA_LIBS="$LIBS $POSIX4_LINK $INET_LINK $WCHAR_LINK $THREADS_LINK $DMALLOC_LINK $DL_LINK $ZLIB_LINK -lm"
-if test "$USE_MAC" = 1 ; then
+if test "$wxUSE_MAC" = 1 ; then
     EXTRA_LIBS="$EXTRA_LIBS -framework Carbon -framework System"
 fi
 if test "$wxUSE_GUI" = "yes"; then

@@ -12,12 +12,6 @@
 #ifndef _WX_SPINBUTT_H_BASE_
 #define _WX_SPINBUTT_H_BASE_
 
-#ifdef __GNUG__
-    #if !defined(__WXMOTIF__) && !defined(__WXMAC__) // because there is no matching .cpp
-        #pragma interface "spinbutt.h"
-    #endif
-#endif
-
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------

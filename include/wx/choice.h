@@ -38,7 +38,7 @@ class WXDLLEXPORT wxChoiceBase : public wxControlWithItems
 {
 public:
     // all generic methods are in wxControlWithItems
-#ifdef __WXMAC_X__
+#ifdef __DARWIN__
     virtual ~wxChoiceBase() {}
 #endif
 
