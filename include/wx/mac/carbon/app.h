@@ -21,10 +21,8 @@
 #include "wx/gdicmn.h"
 #include "wx/event.h"
 
-#ifdef __DARWIN__
-#include <CoreFoundation/CoreFoundation.h>
-#else
-#include <CoreFoundation.h>
+#ifdef __WXMAC_OSX__
+#include <CoreFoundation/CFRunLoop.h>
 #endif
 
 class WXDLLEXPORT wxFrame;
@@ -111,7 +109,9 @@ private:
     WXEVENTHANDLERREF     m_macEventHandler ;
     WXEVENTHANDLERCALLREF m_macCurrentEventHandlerCallRef ;
     WXEVENTREF            m_macCurrentEvent ;
+#ifdef __WXMAC_OSX__
     CFRunLoopSourceRef    m_macEventPosted ;
+#endif
 
 public:
     static bool           s_macSupportPCMenuShortcuts ;

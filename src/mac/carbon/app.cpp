@@ -607,10 +607,15 @@ pascal static void wxMacAssertOutputHandler(OSType componentSignature, UInt32 op
 
 #endif //__WXDEBUG__
 
+#ifdef __WXMAC_OSX__
 extern "C" {
    /* m_macEventPosted run loop source callback: */
-   void macPostedEventCallback(void *unused) { wxTheApp->ProcessPendingEvents(); }
+   void macPostedEventCallback(void *unused);
 }
+
+void macPostedEventCallback(void *unused) {
+    wxTheApp->ProcessPendingEvents(); }
+#endif
 
 bool wxApp::Initialize(int& argc, wxChar **argv)
 {
@@ -679,12 +684,14 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 
     wxMacCreateNotifierTable() ;
 
+#ifdef __WXMAC_OSX__
     /* connect posted events to common-mode run loop so that wxPostEvent events
        are handled even while we're in the menu or on a scrollbar */
     CFRunLoopSourceContext event_posted_context = {0};
     event_posted_context.perform = macPostedEventCallback;
     m_macEventPosted = CFRunLoopSourceCreate(NULL,0,&event_posted_context);
     CFRunLoopAddSource(CFRunLoopGetCurrent(), m_macEventPosted, kCFRunLoopCommonModes);
+#endif
 
     UMAShowArrowCursor() ;
 
@@ -733,11 +740,13 @@ void wxApp::CleanUp()
     wxToolTip::RemoveToolTips() ;
 #endif
 
+#ifdef __WXMAC_OSX__
     if (m_macEventPosted)
     {
         CFRelease(m_macEventPosted);
     }
     m_macEventPosted = NULL;
+#endif
 
     // One last chance for pending objects to be cleaned up
     wxTheApp->DeletePendingObjects();
@@ -871,11 +880,13 @@ bool wxMacConvertEventToRecord( EventRef event , EventRecord *rec)
 
 wxApp::wxApp()
 {
-  m_printMode = wxPRINT_WINDOWS;
+    m_printMode = wxPRINT_WINDOWS;
 
-  m_macCurrentEvent = NULL ;
-  m_macCurrentEventHandlerCallRef = NULL ;
-  m_macEventPosted = NULL ;
+    m_macCurrentEvent = NULL ;
+    m_macCurrentEventHandlerCallRef = NULL ;
+#ifdef __WXMAC_OSX__
+    m_macEventPosted = NULL ;
+#endif
 }
 
 int wxApp::MainLoop()
@@ -932,10 +943,12 @@ void wxApp::OnIdle(wxIdleEvent& event)
 
 void wxApp::WakeUpIdle()
 {
+#ifdef __WXMAC_OSX__
     if (m_macEventPosted)
     {
         CFRunLoopSourceSignal(m_macEventPosted);
     }
+#endif
     wxMacWakeUp() ;
 }
 
