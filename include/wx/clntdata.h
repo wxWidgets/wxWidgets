@@ -29,14 +29,14 @@ enum wxClientDataType
     wxClientData_Void     // client data is untyped and we don't own it
 };
 
-class WXDLLEXPORT wxClientData
+class WXDLLIMPEXP_BASE wxClientData
 {
 public:
     wxClientData() { }
     virtual ~wxClientData() { }
 };
 
-class WXDLLEXPORT wxStringClientData : public wxClientData
+class WXDLLIMPEXP_BASE wxStringClientData : public wxClientData
 {
 public:
     wxStringClientData() : m_data() { }
@@ -57,7 +57,7 @@ private:
 // NOTE:  This functionality is currently duplicated in wxEvtHandler in order
 //        to avoid having more than one vtable in that class hierarchy.
 
-class WXDLLEXPORT wxClientDataContainer
+class WXDLLIMPEXP_BASE wxClientDataContainer
 {
 public:
     wxClientDataContainer();
@@ -98,7 +98,7 @@ protected:
 
 #include <wx/vector.h>
 
-struct WXDLLEXPORT wxClientDataDictionaryPair
+struct WXDLLIMPEXP_BASE wxClientDataDictionaryPair
 {
     wxClientDataDictionaryPair( size_t idx ) : index( idx ), data( 0 ) { }
 
@@ -114,7 +114,7 @@ WX_DECLARE_VECTOR(wxClientDataDictionaryPair,wxClientDataDictionaryPairVector);
 // wxClientData or void*. The client must ensure that
 // it does not contain a mix of the two, and that
 // DestroyData is called if it contains wxClientData
-class WXDLLEXPORT wxClientDataDictionary
+class WXDLLIMPEXP_BASE wxClientDataDictionary
 {
 public:
     wxClientDataDictionary() {};
