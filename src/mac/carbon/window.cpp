@@ -187,10 +187,23 @@ wxWindowMac::~wxWindowMac()
         gFocusWindow = NULL ;
     }
 
+	// CS: copied from MSW :
+    // VS: destroy children first and _then_ detach *this from its parent.
+    //     If we'd do it the other way around, children wouldn't be able
+    //     find their parent frame (see above).
+    DestroyChildren();
+
     if ( m_parent )
         m_parent->RemoveChild(this);
 
-    DestroyChildren();
+    // delete our drop target if we've got one
+#if wxUSE_DRAG_AND_DROP
+    if ( m_dropTarget != NULL )
+    {
+        delete m_dropTarget;
+        m_dropTarget = NULL;
+    }
+#endif // wxUSE_DRAG_AND_DROP
 }
 
 // Constructor
@@ -1491,7 +1504,6 @@ bool wxWindowMac::MacGetWindowFromPoint( const wxPoint &screenpoint , wxWindowMa
     return FALSE ;
 }
 
-extern int wxBusyCursorCount ;
 static wxWindow *gs_lastWhich = NULL;
 
 bool wxWindowMac::MacSetupCursor( const wxPoint& pt)
