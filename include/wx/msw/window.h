@@ -491,7 +491,7 @@ inline void wxWindowMSW::SetTransparent(bool WXUNUSED(t)) { }
 
 // kbd code translation
 WXDLLEXPORT int wxCharCodeMSWToWX(int keySym, WXLPARAM lParam = 0);
-WXDLLEXPORT int wxCharCodeWXToMSW(int id, bool *IsVirtual);
+WXDLLEXPORT WXWORD wxCharCodeWXToMSW(int id, bool *IsVirtual);
 
 // window creation helper class: before creating a new HWND, instantiate an
 // object of this class on stack - this allows to process the messages sent to

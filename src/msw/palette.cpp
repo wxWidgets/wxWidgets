@@ -87,7 +87,7 @@ bool wxPalette::Create(int n, const unsigned char *red, const unsigned char *gre
     return false;
 
   npPal->palVersion = 0x300;
-  npPal->palNumEntries = n;
+  npPal->palNumEntries = (WORD)n;
 
   int i;
   for (i = 0; i < n; i ++)

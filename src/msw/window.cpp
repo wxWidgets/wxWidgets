@@ -5045,10 +5045,10 @@ int wxCharCodeMSWToWX(int keySym, WXLPARAM lParam)
     return id;
 }
 
-int wxCharCodeWXToMSW(int id, bool *isVirtual)
+WXWORD wxCharCodeWXToMSW(int id, bool *isVirtual)
 {
     *isVirtual = true;
-    int keySym;
+    WXWORD keySym;
     switch (id)
     {
     case WXK_CANCEL:    keySym = VK_CANCEL; break;
@@ -5117,7 +5117,7 @@ int wxCharCodeWXToMSW(int id, bool *isVirtual)
     default:
         {
             *isVirtual = false;
-            keySym = id;
+            keySym = (WORD)id;
             break;
         }
     }
@@ -5127,7 +5127,7 @@ int wxCharCodeWXToMSW(int id, bool *isVirtual)
 bool wxGetKeyState(wxKeyCode key)
 {
     bool bVirtual;
-    int vkey = wxCharCodeWXToMSW(key, &bVirtual);
+    WORD vkey = wxCharCodeWXToMSW(key, &bVirtual);
     SHORT state;
 
     switch (key)

@@ -39,19 +39,27 @@
    still force a semicolon after the macro
 */
 
+#ifdef __WATCOMC__
+    #define wxPRE_NO_WARNING_SCOPE  for(int i=0;i<1;i++)
+    #define wxPOST_NO_WARNING_SCOPE
+#else
+    #define wxPRE_NO_WARNING_SCOPE  do
+    #define wxPOST_NO_WARNING_SCOPE while ( 0 )
+#endif
+
 #define wxCHECKED_DELETE(ptr)                                                 \
-    do                                                                        \
+    wxPRE_NO_WARNING_SCOPE                                                    \
     {                                                                         \
         typedef char complete[sizeof(*ptr)];                                  \
         delete ptr;                                                           \
-    } while ( 0 )
+    } wxPOST_NO_WARNING_SCOPE
 
 #define wxCHECKED_DELETE_ARRAY(ptr)                                           \
-    do                                                                        \
+    wxPRE_NO_WARNING_SCOPE                                                    \
     {                                                                         \
         typedef char complete[sizeof(*ptr)];                                  \
         delete [] ptr;                                                        \
-    } while ( 0 )
+    } wxPOST_NO_WARNING_SCOPE
 
 /* These scoped pointers are *not* assignable and cannot be used
    within a container.  Look for wxDECLARE_SHARED_PTR for this

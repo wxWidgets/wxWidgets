@@ -578,7 +578,7 @@ void wxNativeFontInfo::SetFaceName(wxString facename)
 
 void wxNativeFontInfo::SetFamily(wxFontFamily family)
 {
-    int ff_family;
+    BYTE ff_family;
     wxString facename;
 
     switch ( family )
@@ -647,7 +647,7 @@ void wxNativeFontInfo::SetEncoding(wxFontEncoding encoding)
         }
     }
 
-    lf.lfCharSet = info.charset;
+    lf.lfCharSet = (BYTE)info.charset;
 }
 
 bool wxNativeFontInfo::FromString(const wxString& s)

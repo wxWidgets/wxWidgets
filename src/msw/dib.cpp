@@ -118,7 +118,7 @@ bool wxDIB::Create(int width, int height, int depth)
     info->bmiHeader.biHeight = height;
 
     info->bmiHeader.biPlanes = 1;
-    info->bmiHeader.biBitCount = depth;
+    info->bmiHeader.biBitCount = (WORD)depth;
     info->bmiHeader.biSizeImage = GetLineSize(width, depth)*height;
 
     m_handle = ::CreateDIBSection
@@ -603,7 +603,7 @@ wxPalette *wxDIB::CreatePalette() const
 
     // initialize the palette header
     pPalette->palVersion = 0x300;  // magic number, not in docs but works
-    pPalette->palNumEntries = biClrUsed;
+    pPalette->palNumEntries = (WORD)biClrUsed;
 
     // and the colour table (it starts right after the end of the header)
     const RGBQUAD *pRGB = (RGBQUAD *)((char *)&ds.dsBmih + ds.dsBmih.biSize);
