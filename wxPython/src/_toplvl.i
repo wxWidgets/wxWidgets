@@ -69,6 +69,12 @@ enum
     wxTOPLEVEL_EX_DIALOG,
 };
 
+// Styles for RequestUserAttention
+enum
+{
+    wxUSER_ATTENTION_INFO = 1,
+    wxUSER_ATTENTION_ERROR = 2
+};
 
 //---------------------------------------------------------------------------
 
@@ -115,6 +121,12 @@ public:
     // Returns True if the platform supports this feature (and the operation
     // is successful.)
     virtual bool SetShape(const wxRegion& region);
+
+
+    // Attracts the users attention to this window if the application is
+    // inactive (should be called when a background event occurs)
+    virtual void RequestUserAttention(int flags = wxUSER_ATTENTION_INFO);
+
 
 #ifdef __WXMAC__
     void MacSetMetalAppearance( bool on ) ;
