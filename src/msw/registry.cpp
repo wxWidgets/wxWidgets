@@ -683,7 +683,9 @@ bool wxRegKey::DeleteSelf()
   Close();
 
   m_dwLastError = RegDeleteKey((HKEY) m_hRootKey, m_strKey);
-  if ( m_dwLastError != ERROR_SUCCESS ) {
+  // deleting a key which doesn't exist is not considered an error
+  if ( m_dwLastError != ERROR_SUCCESS &&
+          m_dwLastError !- ERROR_FILE_NOT_FOUND ) {
     wxLogSysError(m_dwLastError, _("Can't delete key '%s'"),
                   GetName().c_str());
     return FALSE;
