@@ -440,7 +440,7 @@ void wxMediaCtrl::OnMediaFinished(wxMediaEvent& WXUNUSED(evt))
 //DARWIN gcc compiler badly screwed up - needs destructor impl in source
 wxMediaBackend::~wxMediaBackend()
 {                               }
-#include <wx/html/forcelnk.h>
+#include "wx/html/forcelnk.h"
 FORCE_LINK(basewxmediabackends);
 
 //---------------------------------------------------------------------------
