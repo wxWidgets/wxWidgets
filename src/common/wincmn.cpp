@@ -598,21 +598,27 @@ void wxWindowBase::SetBestSize(const wxSize& size)
 {
     // the size only needs to be changed if the current size is incomplete,
     // i.e. one of the components was specified as default -- so if both
-    // were given, simply don't do anything
+    // were given, simply don't do anything and in particular don't call
+    // potentially expensive DoGetBestSize()
+    wxSize sizeBest;
     if ( size.x == -1 || size.y == -1 )
     {
-        wxSize sizeBest = DoGetBestSize();
+        sizeBest = DoGetBestSize();
         if ( size.x != -1 )
             sizeBest.x = size.x;
         if ( size.y != -1 )
             sizeBest.y = size.y;
 
         SetSize(sizeBest);
-
-        // don't shrink the control below its best size
-        m_minWidth = sizeBest.x;
-        m_minHeight = sizeBest.y;
     }
+    else // have explicit size
+    {
+        sizeBest = size;
+    }
+
+    // don't shrink the control below its best size
+    m_minWidth = sizeBest.x;
+    m_minHeight = sizeBest.y;
 }
 
 // by default the origin is not shifted
