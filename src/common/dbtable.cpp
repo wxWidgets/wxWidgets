@@ -1163,12 +1163,88 @@ bool wxDbTable::DropTable()
 /********** wxDbTable::CreateIndex() **********/
 bool wxDbTable::CreateIndex(const char * idxName, bool unique, int noIdxCols, wxDbIdxDef *pIdxDefs, bool attemptDrop)
 {
-//    char sqlStmt[DB_MAX_STATEMENT_LEN];
     wxString sqlStmt;
 
     // Drop the index first
     if (attemptDrop && !DropIndex(idxName))
         return (FALSE);
+
+    // MySQL (and possibly Sybase ASE?? - gt) require that any columns which are used as portions
+    // of an index have the columns defined as "NOT NULL".  During initial table creation though,
+    // it may not be known which columns are necessarily going to be part of an index (e.g. the
+    // table was created, then months later you determine that an additional index while
+    // give better performance, so you want to add an index).
+    //
+    // The following block of code will modify the column definition to make the column be
+    // defined with the "NOT NULL" qualifier.
+    if (pDb->Dbms() == dbmsMY_SQL)
+    {
+      wxString sqlStmt;
+      int i;
+      bool ok = TRUE;
+      for (i = 0; i < noIdxCols && ok; i++)
+      {
+         int   j = 0;
+         bool  found = FALSE;
+         // Find the column definition that has the ColName that matches the
+         // index column name.  We need to do this to get the DB_DATA_TYPE of
+         // the index column, as MySQL's syntax for the ALTER column requires
+         // this information
+         while (!found && (j < this->noCols))
+         {
+            if (wxStrcmp(colDefs[j].ColName,pIdxDefs[i].ColName) == 0)
+               found = TRUE;
+            if (!found)
+               j++;
+         }
+
+         if (found)
+         {
+            wxString typeNameAndSize;
+
+            switch(colDefs[j].DbDataType)
+            {
+                case DB_DATA_TYPE_VARCHAR:
+                    typeNameAndSize = pDb->GetTypeInfVarchar().TypeName; break;
+                case DB_DATA_TYPE_INTEGER:
+                    typeNameAndSize = pDb->GetTypeInfInteger().TypeName; break;
+                case DB_DATA_TYPE_FLOAT:
+                    typeNameAndSize = pDb->GetTypeInfFloat().TypeName; break;
+                case DB_DATA_TYPE_DATE:
+                    typeNameAndSize = pDb->GetTypeInfDate().TypeName; break;
+            }
+
+            // For varchars, append the size of the string
+            if (colDefs[j].DbDataType == DB_DATA_TYPE_VARCHAR)
+            {
+                wxString s;
+                s.sprintf("(%d)", colDefs[i].SzDataObj);
+                typeNameAndSize += s.c_str();
+            }
+
+            sqlStmt.sprintf("ALTER TABLE %s MODIFY %s %s NOT NULL",tableName,pIdxDefs[i].ColName,typeNameAndSize.c_str());
+            ok = pDb->ExecSql(sqlStmt.c_str());
+
+            if (!ok)
+            {
+               wxODBC_ERRORS retcode;
+               // Oracle returns a DB_ERR_GENERAL_ERROR if the column is already
+               // defined to be NOT NULL, but reportedly MySQL doesn't mind.
+               // This line is just here for debug checking of the value
+               retcode = (wxODBC_ERRORS)pDb->DB_STATUS;
+            }
+         }
+         else
+            ok = FALSE;
+      }
+      if (ok)
+         pDb->CommitTrans();
+      else
+      {
+         pDb->RollbackTrans();
+         return(FALSE);
+      }
+    }
 
     // Build a CREATE INDEX statement
     sqlStmt = "CREATE ";
@@ -1239,7 +1315,7 @@ bool wxDbTable::DropIndex(const char * idxName)
 
     wxString sqlStmt;
 
-    if (pDb->Dbms() == dbmsACCESS)
+    if (pDb->Dbms() == dbmsACCESS || pDb->Dbms() == dbmsMY_SQL)
         sqlStmt.sprintf("DROP INDEX %s ON %s",idxName,tableName);
     else if (pDb->Dbms() == dbmsSYBASE_ASE)
         sqlStmt.sprintf("DROP INDEX %s.%s",tableName,idxName);
@@ -1259,13 +1335,13 @@ bool wxDbTable::DropIndex(const char * idxName)
         if (wxStrcmp(pDb->sqlState,"S0012"))  // "Index not found"
         {
             // Check for product specific error codes
-	  if (!((pDb->Dbms() == dbmsSYBASE_ASA    && !wxStrcmp(pDb->sqlState,"42000")) ||  // v5.x (and lower?)
-		(pDb->Dbms() == dbmsSYBASE_ASE    && !wxStrcmp(pDb->sqlState,"37000"))   ||
-		(pDb->Dbms() == dbmsMS_SQL_SERVER && !wxStrcmp(pDb->sqlState,"S1000"))   ||
-		(pDb->Dbms() == dbmsSYBASE_ASE    && !wxStrcmp(pDb->sqlState,"S0002")) ||  // Base table not found
-		(pDb->Dbms() == dbmsMY_SQL        && !wxStrcmp(pDb->sqlState,"42S02")) ||    // untested
-		(pDb->Dbms() == dbmsPOSTGRES      && !wxStrcmp(pDb->sqlState,"08S01"))
-		))
+            if (!((pDb->Dbms() == dbmsSYBASE_ASA    && !wxStrcmp(pDb->sqlState,"42000")) ||  // v5.x (and lower?)
+                  (pDb->Dbms() == dbmsSYBASE_ASE    && !wxStrcmp(pDb->sqlState,"37000")) ||
+                  (pDb->Dbms() == dbmsMS_SQL_SERVER && !wxStrcmp(pDb->sqlState,"S1000")) ||
+                  (pDb->Dbms() == dbmsSYBASE_ASE    && !wxStrcmp(pDb->sqlState,"S0002")) ||  // Base table not found
+                  (pDb->Dbms() == dbmsMY_SQL        && !wxStrcmp(pDb->sqlState,"42S12")) ||  // tested by Christopher Ludwik Marino-Cebulski using v3.23.21beta
+                  (pDb->Dbms() == dbmsPOSTGRES      && !wxStrcmp(pDb->sqlState,"08S01"))
+               ))
             {
                 pDb->DispNextError();
                 pDb->DispAllErrors(henv, hdbc, hstmt);
@@ -1822,7 +1898,6 @@ wxDbColDataPtr* wxDbTable::SetColDefs (wxDbColInf *pColInfs, ULONG numCols)
     if (pColInfs)
     {
         ULONG index;
-
        
         pColDataPtrs = new wxDbColDataPtr[numCols+1];
 
