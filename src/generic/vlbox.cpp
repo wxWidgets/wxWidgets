@@ -68,6 +68,7 @@ bool wxVListBox::Create(wxWindow *parent,
                         long style,
                         const wxString& name)
 {
+    style |= wxWANTS_CHARS;
     if ( !wxVScrolledWindow::Create(parent, id, pos, size, style, name) )
         return false;
 
@@ -75,6 +76,12 @@ bool wxVListBox::Create(wxWindow *parent,
         m_selStore = new wxSelectionStore;
 
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX));
+    SetForegroundColour(parent->GetForegroundColour());
+
+    // ensure that the font actually changes and is set.
+    SetFont(wxNullFont);
+    SetFont(parent->GetFont());
+
     m_colBgSel = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
 
     return true;
@@ -537,6 +544,19 @@ void wxVListBox::OnKeyDown(wxKeyEvent& event)
             current = m_current;
             break;
 
+#ifdef __WXMSW__
+        case WXK_TAB:
+            // Since we are using wxWANTS_CHARS we need to send navigation
+            // events for the tabs on MSW
+            {
+                wxNavigationKeyEvent ne;
+                ne.SetDirection(!event.ShiftDown());
+                ne.SetCurrentFocus(this);
+                ne.SetEventObject(this);
+                GetParent()->GetEventHandler()->ProcessEvent(ne);
+            }
+            // fall through to default
+#endif
         default:
             event.Skip();
             current = 0; // just to silent the stupid compiler warnings
