@@ -28,7 +28,7 @@ on.
 """
 
 
-BUILD_GLCANVAS = 0 #1 # If true, build the contrib/glcanvas extension module
+BUILD_GLCANVAS = 1 # If true, build the contrib/glcanvas extension module
 BUILD_OGL = 1      # If true, build the contrib/ogl extension module
 BUILD_STC = 1      # If true, build the contrib/stc extension module
 BUILD_XRC = 1      # XML based resource system
@@ -40,7 +40,7 @@ BUILD_IEWIN = 0    # Internet Explorer wrapper (experimental)
 CORE_ONLY = 0      # if true, don't build any of the above
 
 
-GL_ONLY = 0 #1 #0        # Only used when making the -gl RPM.  See the "b" script
+GL_ONLY = 0        # Only used when making the -gl RPM.  See the "b" script
                    # for the ugly details
 
 USE_SWIG = 0       # Should we actually execute SWIG, or just use the
@@ -137,7 +137,7 @@ sys.argv = filter(None, sys.argv)
 
 
 if CORE_ONLY:
-    BUILD_GLCANVAS = 0 #0
+    BUILD_GLCANVAS = 0
     BUILD_OGL = 0
     BUILD_STC = 0
     BUILD_XRC = 0
