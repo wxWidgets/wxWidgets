@@ -11,6 +11,10 @@
 #
 !include <..\makevc.env>
 
+!if "$(RM)" == ""
+RM= del
+!endif
+
 THISDIR=$(WXWIN)\src\xpm
 
 !if "$(FINAL)" == "1"
@@ -23,27 +27,30 @@ LIBTARGET=$(WXDIR)\lib\xpmd.lib
 
 XPMDIR=$(WXDIR)\src\xpm
 
-OBJECTS = 	$(XPMDIR)\attrib.obj\
-		$(XPMDIR)\crbuffri.obj\
-		$(XPMDIR)\crdatfri.obj\
-		$(XPMDIR)\create.obj\
-		$(XPMDIR)\crifrbuf.obj\
-		$(XPMDIR)\crifrdat.obj\
-		$(XPMDIR)\data.obj\
-		$(XPMDIR)\image.obj\
-		$(XPMDIR)\info.obj\
-		$(XPMDIR)\hashtab.obj\
-		$(XPMDIR)\misc.obj\
-		$(XPMDIR)\parse.obj\
-		$(XPMDIR)\rdftodat.obj\
-		$(XPMDIR)\rdftoi.obj\
-		$(XPMDIR)\rgb.obj\
-		$(XPMDIR)\scan.obj\
-		$(XPMDIR)\simx.obj\
-		$(XPMDIR)\wrffrdat.obj\
-		$(XPMDIR)\wrffri.obj
+OBJECTS = 	$(XPMDIR)\$D\attrib.obj\
+		$(XPMDIR)\$D\crbuffri.obj\
+		$(XPMDIR)\$D\crdatfri.obj\
+		$(XPMDIR)\$D\create.obj\
+		$(XPMDIR)\$D\crifrbuf.obj\
+		$(XPMDIR)\$D\crifrdat.obj\
+		$(XPMDIR)\$D\data.obj\
+		$(XPMDIR)\$D\image.obj\
+		$(XPMDIR)\$D\info.obj\
+		$(XPMDIR)\$D\hashtab.obj\
+		$(XPMDIR)\$D\misc.obj\
+		$(XPMDIR)\$D\parse.obj\
+		$(XPMDIR)\$D\rdftodat.obj\
+		$(XPMDIR)\$D\rdftoi.obj\
+		$(XPMDIR)\$D\rgb.obj\
+		$(XPMDIR)\$D\scan.obj\
+		$(XPMDIR)\$D\simx.obj\
+		$(XPMDIR)\$D\wrffrdat.obj\
+		$(XPMDIR)\$D\wrffri.obj
 
-all:    $(LIBTARGET)
+all:    $D $(LIBTARGET)
+
+$D:
+    mkdir .\$D
 
 $(LIBTARGET):      $(OBJECTS)
 	-erase $(LIBTARGET)
@@ -53,107 +60,107 @@ $(LIBTARGET):      $(OBJECTS)
 $(OBJECTS) $(PERIPH_LIBS)
 <<
 
-$(XPMDIR)\attrib.obj: $(XPMDIR)\attrib.c
+$(XPMDIR)\$D\attrib.obj: $(XPMDIR)\attrib.c
 	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
+$(CPPFLAGS2) /c $(*B).c /Fo$@
 <<
 
-$(XPMDIR)\crbuffri.obj: $(XPMDIR)\crbuffri.c
+$(XPMDIR)\$D\crbuffri.obj: $(XPMDIR)\crbuffri.c
 	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
+$(CPPFLAGS2) /c $(*B).c /Fo$@
 <<
 
-$(XPMDIR)\crdatfri.obj: $(XPMDIR)\crdatfri.c
+$(XPMDIR)\$D\crdatfri.obj: $(XPMDIR)\crdatfri.c
 	 	cl @<<
-$(CPPFLAGS2) /c  $*.c /Fo$@
+$(CPPFLAGS2) /c  $(*B).c /Fo$@
 <<
 
-$(XPMDIR)\create.obj: $(XPMDIR)\create.c
+$(XPMDIR)\$D\create.obj: $(XPMDIR)\create.c
 	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
+$(CPPFLAGS2) /c $(*B).c /Fo$@
 <<
 
-$(XPMDIR)\crifrbuf.obj: $(XPMDIR)\crifrbuf.c
+$(XPMDIR)\$D\crifrbuf.obj: $(XPMDIR)\crifrbuf.c
 	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
+$(CPPFLAGS2) /c $(*B).c /Fo$@
 <<
 
-$(XPMDIR)\crifrdat.obj: $(XPMDIR)\crifrdat.c
+$(XPMDIR)\$D\crifrdat.obj: $(XPMDIR)\crifrdat.c
 	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
+$(CPPFLAGS2) /c $(*B).c /Fo$@
 <<
 
-$(XPMDIR)\data.obj: $(XPMDIR)\data.c
+$(XPMDIR)\$D\data.obj: $(XPMDIR)\data.c
 	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
+$(CPPFLAGS2) /c $(*B).c /Fo$@
 <<
 
-$(XPMDIR)\image.obj: $(XPMDIR)\image.c
+$(XPMDIR)\$D\image.obj: $(XPMDIR)\image.c
 	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
+$(CPPFLAGS2) /c $(*B).c /Fo$@
 <<
 
-$(XPMDIR)\info.obj: $(XPMDIR)\info.c
+$(XPMDIR)\$D\info.obj: $(XPMDIR)\info.c
 	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
+$(CPPFLAGS2) /c $(*B).c /Fo$@
 <<
 
-$(XPMDIR)\hashtab.obj: $(XPMDIR)\hashtab.c
+$(XPMDIR)\$D\hashtab.obj: $(XPMDIR)\hashtab.c
 	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
+$(CPPFLAGS2) /c $(*B).c /Fo$@
 <<
 
-$(XPMDIR)\misc.obj: $(XPMDIR)\misc.c
+$(XPMDIR)\$D\misc.obj: $(XPMDIR)\misc.c
 	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
+$(CPPFLAGS2) /c $(*B).c /Fo$@
 <<
 
-$(XPMDIR)\parse.obj: $(XPMDIR)\parse.c
+$(XPMDIR)\$D\parse.obj: $(XPMDIR)\parse.c
 	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
+$(CPPFLAGS2) /c $(*B).c /Fo$@
 <<
 
-$(XPMDIR)\rdftodat.obj: $(XPMDIR)\rdftodat.c
+$(XPMDIR)\$D\rdftodat.obj: $(XPMDIR)\rdftodat.c
 	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
+$(CPPFLAGS2) /c $(*B).c /Fo$@
 <<
 
-$(XPMDIR)\rdftoi.obj: $(XPMDIR)\rdftoi.c
+$(XPMDIR)\$D\rdftoi.obj: $(XPMDIR)\rdftoi.c
 	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
+$(CPPFLAGS2) /c $(*B).c /Fo$@
 <<
 
-$(XPMDIR)\rgb.obj: $(XPMDIR)\rgb.c
+$(XPMDIR)\$D\rgb.obj: $(XPMDIR)\rgb.c
 	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
+$(CPPFLAGS2) /c $(*B).c /Fo$@
 <<
 
-$(XPMDIR)\scan.obj: $(XPMDIR)\scan.c
+$(XPMDIR)\$D\scan.obj: $(XPMDIR)\scan.c
 	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
+$(CPPFLAGS2) /c $(*B).c /Fo$@
 <<
 
-$(XPMDIR)\simx.obj: $(XPMDIR)\simx.c
+$(XPMDIR)\$D\simx.obj: $(XPMDIR)\simx.c
 	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
+$(CPPFLAGS2) /c $(*B).c /Fo$@
 <<
 
-$(XPMDIR)\wrffrdat.obj: $(XPMDIR)\wrffrdat.c
+$(XPMDIR)\$D\wrffrdat.obj: $(XPMDIR)\wrffrdat.c
 	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
+$(CPPFLAGS2) /c $(*B).c /Fo$@
 <<
 
-$(XPMDIR)\wrffri.obj: $(XPMDIR)\wrffri.c
+$(XPMDIR)\$D\wrffri.obj: $(XPMDIR)\wrffri.c
 	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
+$(CPPFLAGS2) /c $(*B).c /Fo$@
 <<
 
 clean:
-        -erase *.obj
-        -erase $(LIBTARGET)
-        -erase *.pdb
-        -erase *.sbr
-        -erase *.pch
+        -$(RM) $D\*.obj
+        -$(RM) $(LIBTARGET)
+        -$(RM) *.pdb
+        -$(RM) *.sbr
+        -$(RM) *.pch
 
 cleanall: clean
 

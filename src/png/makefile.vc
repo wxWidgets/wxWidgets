@@ -1,84 +1,31 @@
-#
-# File:		makefile.vc
-# Author:	Julian Smart
-# Created:	1993
-# Updated:
-# Copyright:	(c) 1993, AIAI, University of Edinburgh
-#
-# "%W% %G%"
-#
-# Makefile : Builds winpng.lib library for Windows 3.1
-
-# Change WXDIR or WXWIN to wherever wxWindows is found
-WXDIR = $(WXWIN)
-
-WINPNGDIR = ..\png
-WINPNGINC = $(WINPNGDIR)
 
 !if "$(FINAL)" == "1"
-WINPNGLIB=..\..\lib\png.lib
+LIBTARGET=$(WXDIR)\lib\png.lib
 !else if "$(FINAL)" == "hybrid"
-WINPNGLIB=..\..\lib\pngh.lib
+LIBTARGET=$(WXDIR)\lib\pngh.lib
 !else
-WINPNGLIB=..\..\lib\pngd.lib
+LIBTARGET=$(WXDIR)\lib\pngd.lib
 !endif
 
-INC = /I..\zlib
-
-# Set this to nothing if your compiler is MS C++ 7
-ZOPTION=
-
-!ifndef FINAL
-FINAL=0
-!endif
-
-PRECOMP=/YuWX.H
-
-!if "$(FINAL)" == "0"
-OPT = /Od
-CPPFLAGS= /W4 /Zi $(CRTFLAG) /GX $(ZOPTION) $(OPT) /D__WXMSW__ $(INC)
-CFLAGS= /W4 /Zi $(CRTFLAG) /GX /Od /D__WXMSW__ $(INC)
-LINKFLAGS=/NOD /CO /ONERROR:NOEXE
-_CRTFLAG=/MDd
-!else if "$(FINAL)" == "hybrid"
-OPT = /Od
-CPPFLAGS= /W4 /Zi $(CRTFLAG) /GX $(ZOPTION) $(OPT) /D__WXMSW__ $(INC)
-CFLAGS= /W4 /Zi $(CRTFLAG) /GX /Od /D__WXMSW__ $(INC)
-LINKFLAGS=/NOD /CO /ONERROR:NOEXE
-_CRTFLAG=/MD
-!else
-# /Ox for real FINAL version
-OPT = /O2
-CPPFLAGS= /W4 $(CRTFLAG) /GX /D__WXMSW__ $(INC)
-CFLAGS= /W4 $(CRTFLAG) /GX /D__WXMSW__ $(INC)
-LINKFLAGS=/NOD /ONERROR:NOEXE
-_CRTFLAG=/MD
-!endif
-
-!if "$(CRTFLAG)" == ""
-CRTFLAG=$(_CRTFLAG)
-!endif
+OBJECTS = $D\png.obj \
+          $D\pngread.obj \
+          $D\pngrtran.obj \
+          $D\pngrutil.obj \
+          $D\pngpread.obj \
+          $D\pngtrans.obj \
+          $D\pngwrite.obj \
+          $D\pngwtran.obj \
+          $D\pngwutil.obj \
+          $D\pngerror.obj \
+          $D\pngmem.obj \
+          $D\pngwio.obj \
+          $D\pngrio.obj \
+          $D\pngget.obj \
+          $D\pngset.obj
 
 
-OBJECTS = png.obj pngread.obj pngrtran.obj pngrutil.obj \
- pngpread.obj pngtrans.obj pngwrite.obj pngwtran.obj pngwutil.obj \
- pngerror.obj pngmem.obj pngwio.obj pngrio.obj pngget.obj pngset.obj
 
-all:    $(WINPNGLIB)
+# Pull in standard variable definitions
 
-$(WINPNGLIB):      $(OBJECTS)
-        -erase $(WINPNGLIB)
-        lib @<<
--out:$(WINPNGLIB)
-$(OBJECTS)
-<<
+!include ..\makelib.vc
 
-.c.obj:
-  cl -DWIN32 $(OPT) $(CFLAGS) /c $*.c
-
-clean:
-        -erase *.obj
-        -erase *.exe
-        -erase $(WINPNGLIB)
-
-cleanall:	clean

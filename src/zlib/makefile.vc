@@ -1,7 +1,4 @@
 # Makefile for zlib
-# Borland C++   ************ UNTESTED ***********
-
-# To use, do "make -fmakefile.bor"
 
 # WARNING: the small model is supported but only for small values of
 # MAX_WBITS and MAX_MEM_LEVEL. If you wish to reduce the memory
@@ -9,19 +6,22 @@
 # to CFLAGS below: -DMAX_MEM_LEVEL=7 -DMAX_WBITS=14
 # See zconf.h for details about the memory requirements.
 
-# ------------- Turbo C++, Borland C++ -------------
+!if "$(RM)" == ""
+RM= erase
+!endif
+
 !ifndef FINAL
 FINAL=0
 !endif
 
 !if "$(FINAL)" == "0"
-CFLAGS=/Od $(CRTFLAG) /GX
+CFLAGS=/Od $(CRTFLAG) /GX /Fo$@
 _CRTFLAG=/MDd
 !else if "$(FINAL)" == "hybrid"
-CFLAGS=/Od $(CRTFLAG) /GX
+CFLAGS=/Od $(CRTFLAG) /GX /Fo$@
 _CRTFLAG=/MD
 !else
-CFLAGS=-O2 $(CRTFLAG) /GX
+CFLAGS=-O2 $(CRTFLAG) /GX /Fo$@
 _CRTFLAG=/MD
 !endif
 
@@ -33,69 +33,74 @@ CRTFLAG=$(_CRTFLAG)
 CC=cl
 LD=cl
 LIB=tlib
-#   replace bcc with tcc for Turbo C++ 1.0
 LDFLAGS=$(MODEL)
 O=.obj
 
 !if "$(FINAL)" == "1"
 LIBTARGET=..\..\lib\zlib.lib
+D=Release
 !else if "$(FINAL)" == "hybrid"
 LIBTARGET=..\..\lib\zlibh.lib
+D=Hybrid
 !else
 LIBTARGET=..\..\lib\zlibd.lib
+D=Debug
 !endif
 
 # variables
-OBJ1 = adler32$(O) compress$(O) crc32$(O) gzio$(O) uncompr$(O) deflate$(O) \
-  trees$(O)
-OBJ2 = zutil$(O) inflate$(O) infblock$(O) inftrees$(O) infcodes$(O) \
-  infutil$(O) inffast$(O)
+OBJ1 = $D\adler32$(O) $D\compress$(O) $D\crc32$(O) $D\gzio$(O) \
+  $D\uncompr$(O) $D\deflate$(O) $D\trees$(O)
+OBJ2 = $D\zutil$(O) $D\inflate$(O) $D\infblock$(O) $D\inftrees$(O) \
+  $D\infcodes$(O) $D\infutil$(O) $D\inffast$(O)
 
-all: $(LIBTARGET)
+all: $D $(LIBTARGET)
 
-adler32.obj: adler32.c zutil.h zlib.h zconf.h
-	$(CC) -c $(CFLAGS) $*.c
+$D:
+    mkdir .\$D
 
-compress.obj: compress.c zlib.h zconf.h
-	$(CC) -c $(CFLAGS) $*.c
+$D\adler32.obj: adler32.c zutil.h zlib.h zconf.h
+	$(CC) -c $(CFLAGS) $(*B).c
 
-crc32.obj: crc32.c zutil.h zlib.h zconf.h
-	$(CC) -c $(CFLAGS) $*.c
+$D\compress.obj: compress.c zlib.h zconf.h
+	$(CC) -c $(CFLAGS) $(*B).c
 
-deflate.obj: deflate.c deflate.h zutil.h zlib.h zconf.h
-	$(CC) -c $(CFLAGS) $*.c
+$D\crc32.obj: crc32.c zutil.h zlib.h zconf.h
+	$(CC) -c $(CFLAGS) $(*B).c
 
-gzio.obj: gzio.c zutil.h zlib.h zconf.h
-	$(CC) -c $(CFLAGS) $*.c
+$D\deflate.obj: deflate.c deflate.h zutil.h zlib.h zconf.h
+	$(CC) -c $(CFLAGS) $(*B).c
 
-infblock.obj: infblock.c zutil.h zlib.h zconf.h infblock.h inftrees.h\
+$D\gzio.obj: gzio.c zutil.h zlib.h zconf.h
+	$(CC) -c $(CFLAGS) $(*B).c
+
+$D\infblock.obj: infblock.c zutil.h zlib.h zconf.h infblock.h inftrees.h\
    infcodes.h infutil.h
-	$(CC) -c $(CFLAGS) $*.c
+	$(CC) -c $(CFLAGS) $(*B).c
 
-infcodes.obj: infcodes.c zutil.h zlib.h zconf.h inftrees.h infutil.h\
+$D\infcodes.obj: infcodes.c zutil.h zlib.h zconf.h inftrees.h infutil.h\
    infcodes.h inffast.h
-	$(CC) -c $(CFLAGS) $*.c
+	$(CC) -c $(CFLAGS) $(*B).c
 
-inflate.obj: inflate.c zutil.h zlib.h zconf.h infblock.h
-	$(CC) -c $(CFLAGS) $*.c
+$D\inflate.obj: inflate.c zutil.h zlib.h zconf.h infblock.h
+	$(CC) -c $(CFLAGS) $(*B).c
 
-inftrees.obj: inftrees.c zutil.h zlib.h zconf.h inftrees.h
-	$(CC) -c $(CFLAGS) $*.c
+$D\inftrees.obj: inftrees.c zutil.h zlib.h zconf.h inftrees.h
+	$(CC) -c $(CFLAGS) $(*B).c
 
-infutil.obj: infutil.c zutil.h zlib.h zconf.h inftrees.h infutil.h
-	$(CC) -c $(CFLAGS) $*.c
+$D\infutil.obj: infutil.c zutil.h zlib.h zconf.h inftrees.h infutil.h
+	$(CC) -c $(CFLAGS) $(*B).c
 
-inffast.obj: inffast.c zutil.h zlib.h zconf.h inftrees.h infutil.h inffast.h
-	$(CC) -c $(CFLAGS) $*.c
+$D\inffast.obj: inffast.c zutil.h zlib.h zconf.h inftrees.h infutil.h inffast.h
+	$(CC) -c $(CFLAGS) $(*B).c
 
-trees.obj: trees.c deflate.h zutil.h zlib.h zconf.h
-	$(CC) -c $(CFLAGS) $*.c
+$D\trees.obj: trees.c deflate.h zutil.h zlib.h zconf.h
+	$(CC) -c $(CFLAGS) $(*B).c
 
-uncompr.obj: uncompr.c zlib.h zconf.h
-	$(CC) -c $(CFLAGS) $*.c
+$D\uncompr.obj: uncompr.c zlib.h zconf.h
+	$(CC) -c $(CFLAGS) $(*B).c
 
-zutil.obj: zutil.c zutil.h zlib.h zconf.h
-	$(CC) -c $(CFLAGS) $*.c
+$D\zutil.obj: zutil.c zutil.h zlib.h zconf.h
+	$(CC) -c $(CFLAGS) $(*B).c
 
 LIBOBJECTS = $(OBJ1) $(OBJ2)
 
@@ -107,7 +112,7 @@ $(LIBOBJECTS)
 <<
 
 clean:
-    -erase *.obj
-    -erase *.exe
-    -erase *.sbr
-    -erase $(LIBTARGET)
+    -$(RM) $D\*.obj
+    -$(RM) *.exe
+    -$(RM) *.sbr
+    -$(RM) $(LIBTARGET)
