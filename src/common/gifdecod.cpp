@@ -653,6 +653,9 @@ int wxGIFDecoder::ReadGIF()
     /* try to read to the end of the stream */
     while (type != 0x3B)
     {
+        if (!m_f->IsOk())
+            return wxGIF_TRUNCATED;
+            
         type = (unsigned char)m_f->GetC();
 
         if (type == 0x21)
