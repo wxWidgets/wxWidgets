@@ -101,6 +101,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxFileHistory, wxObject)
 // ----------------------------------------------------------------------------
 
 static inline wxString FindExtension(const wxChar *path);
+static wxWindow* wxFindSuitableParent(void);
 
 // ----------------------------------------------------------------------------
 // local constants
@@ -274,8 +275,6 @@ bool wxDocument::SaveAs()
     SetFilename(fileName);
     SetTitle(wxFileNameFromPath(fileName));
 
-    GetDocumentManager()->AddFileToHistory(fileName);
-
     // Notify the views that the filename has changed
     wxNode *node = m_documentViews.GetFirst();
     while (node)
@@ -285,7 +284,22 @@ bool wxDocument::SaveAs()
         node = node->GetNext();
     }
 
-    return OnSaveDocument(m_documentFile);
+    // Files that were not saved correctly are not added to the FileHistory.
+    if (!OnSaveDocument(m_documentFile))
+        return FALSE;
+
+   // A file that doesn't use the default extension of its document template cannot be opened 
+   // via the FileHistory, so we do not add it.
+   if (docTemplate->FileMatchesTemplate(fileName))
+   {
+       GetDocumentManager()->AddFileToHistory(fileName);
+   }
+   else
+   {
+       // The user will probably not be able to open the file again, so
+       // we could warn about the wrong file-extension here.
+   }
+   return TRUE;
 }
 
 bool wxDocument::OnSaveDocument(const wxString& file)
@@ -1152,7 +1166,17 @@ wxDocument *wxDocManager::CreateDocument(const wxString& path, long flags)
         path2 = path;
 
     if (flags & wxDOC_SILENT)
+    {
         temp = FindTemplateForPath(path2);
+        if (!temp)
+        {
+            // Since we do not add files with non-default extensions to the FileHistory this 
+            // can only happen if the application changes the allowed templates in runtime.
+            (void)wxMessageBox(_("Sorry, the format for this file is unknown."),
+                                _("Open File"), 
+                               wxOK | wxICON_EXCLAMATION, wxFindSuitableParent());
+        }
+    }
     else
         temp = SelectDocumentPath(templates, n, path2, flags);
 
@@ -1179,7 +1203,11 @@ wxDocument *wxDocManager::CreateDocument(const wxString& path, long flags)
                 // delete newDoc; // Implicitly deleted by DeleteAllViews
                 return (wxDocument *) NULL;
             }
-            AddFileToHistory(path2);
+            // A file that doesn't use the default extension of its document
+            // template cannot be opened via the FileHistory, so we do not
+            // add it.
+            if (temp->FileMatchesTemplate(path2))
+                AddFileToHistory(path2);
         }
         return newDoc;
     }
@@ -1397,9 +1425,8 @@ static wxWindow* wxFindSuitableParent()
 }
 
 // Prompts user to open a file, using file specs in templates.
-// How to implement in wxWindows? Must extend the file selector
-// dialog or implement own; OR match the extension to the
-// template extension.
+// Must extend the file selector dialog or implement own; OR
+// match the extension to the template extension.
 
 wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
 #if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXMAC__)
@@ -1472,6 +1499,14 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
             theTemplate = templates[FilterIndex];
         if ( !theTemplate )
             theTemplate = FindTemplateForPath(path);
+        if ( !theTemplate )
+        {
+            // Since we do not add files with non-default extensions to the FileHistory this 
+            // can only happen if the application changes the allowed templates in runtime.
+            (void)wxMessageBox(_("Sorry, the format for this file is unknown."),
+                                _("Open File"), 
+                                wxOK | wxICON_EXCLAMATION, wxFindSuitableParent());
+        }
     }
     else
     {
@@ -1826,7 +1861,14 @@ void wxDocParentFrame::OnMRUFile(wxCommandEvent& event)
         if ( wxFile::Exists(filename) )
         {
             // try to open it
-            (void)m_docManager->CreateDocument(filename, wxDOC_SILENT);
+            if (!m_docManager->CreateDocument(filename, wxDOC_SILENT))
+            {
+                // remove the file from the MRU list. The user should already be notified.
+                m_docManager->RemoveFileFromHistory(n);
+                
+                wxLogError(_("The file '%s' couldn't be opened.\nIt has been removed from the most recently used files list."),
+                       filename.c_str());
+            }
         }
         else
         {
@@ -1957,7 +1999,14 @@ void wxFileHistory::AddFileToHistory(const wxString& file)
     // Check we don't already have this file
     for (i = 0; i < m_fileHistoryN; i++)
     {
-        if ( m_fileHistory[i] && (file == m_fileHistory[i]) )
+#if defined( __WXMSW__ ) // Add any other OSes with case insensitive file names
+        wxString testString;
+        if ( m_fileHistory[i] )
+            testString = m_fileHistory[i];
+        if ( m_fileHistory[i] && ( file.Lower() == testString.Lower() ) )
+#else
+        if ( m_fileHistory[i] && ( file == m_fileHistory[i] ) )
+#endif
         {
             // we do have it, move it to the top of the history
             RemoveFileFromHistory (i);
@@ -2053,7 +2102,6 @@ void wxFileHistory::RemoveFileFromHistory(size_t i)
     {
          wxMenu* menu = (wxMenu*) node->GetData();
 
-
          // shuffle filenames up
          wxString buf;
          for ( j = i; j < m_fileHistoryN - 1; j++ )
@@ -2137,11 +2185,14 @@ void wxFileHistory::Load(wxConfigBase& config)
 void wxFileHistory::Save(wxConfigBase& config)
 {
     size_t i;
-    for (i = 0; i < m_fileHistoryN; i++)
+    for (i = 0; i < m_fileMaxFiles; i++)
     {
         wxString buf;
         buf.Printf(wxT("file%d"), (int)i+1);
-        config.Write(buf, wxString(m_fileHistory[i]));
+        if (i < m_fileHistoryN)
+            config.Write(buf, wxString(m_fileHistory[i]));
+        else
+            config.Write(buf, wxEmptyString);            
     }
 }
 #endif // wxUSE_CONFIG
