@@ -316,7 +316,7 @@ void MyFrame::OnToggleMulti(wxCommandEvent& event)
 
 void MyFrame::OnSelectAll(wxCommandEvent& WXUNUSED(event))
 {
-    m_hlbox->SelectRange(0, m_hlbox->GetItemCount() - 1);
+    m_hlbox->SelectAll();
 }
 
 void MyFrame::OnUpdateUISelectAll(wxUpdateUIEvent& event)
@@ -412,14 +412,10 @@ MyHtmlListBox::MyHtmlListBox(wxWindow *parent, bool multi)
         SetItemCount(m_file.GetLineCount());
     }
 #else
-    SetItemCount(10);
+    SetItemCount(1000);
 #endif
 
-    // select something
-    if ( HasMultipleSelection() )
-        Select(3);
-    else
-        SetSelection(3);
+    SetSelection(3);
 }
 
 void MyHtmlListBox::OnDrawSeparator(wxDC& dc, wxRect& rect, size_t) const

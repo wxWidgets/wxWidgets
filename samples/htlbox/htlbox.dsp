@@ -149,19 +149,15 @@ SOURCE=.\htlbox.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\generic\htmllbox.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\htlbox.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\generic\vlbox.cpp
+SOURCE=..\..\src\generic\htmllbox.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\generic\selstore.cpp
+SOURCE=..\..\src\generic\vlbox.cpp
 # End Source File
 # Begin Source File
 
