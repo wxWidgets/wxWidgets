@@ -1,0 +1,236 @@
+% -----------------------------------------------------------------------------
+% wxStreamBase
+% -----------------------------------------------------------------------------
+\section{\class{wxStreamBase}}\label{wxstreambase}
+
+\wxheading{Derived from}
+
+None
+
+\wxheading{See also}
+
+\helpref{wxStreamBuffer}{wxstreambuffer}
+
+% -----------------------------------------------------------------------------
+% Members
+% -----------------------------------------------------------------------------
+\latexignore{\rtfignore{\wxheading{Members}}} 
+
+% -----------
+% ctor & dtor
+% -----------
+
+\membersection{wxStreamBase::wxStreamBase}
+\func{}{wxStreamBase}{\void}
+
+Creates a dummy stream object.
+
+\membersection{wxStreamBase::\destruct{wxStreamBase}}
+\func{}{\destruct{wxStreamBase}}
+
+Destructor.
+
+\membersection{wxStreamBase::LastError}
+\constfunc{wxStreamError}{LastError}{\void}
+
+This function returns the last happened error. It is of the form:
+% TODOTODOTODOTODOTODOTODOTODO
+
+\membersection{wxStreamBase::StreamSize}
+\constfunc{size_t}{StreamSize}{\void}
+
+This function returns the size of the stream. (E.g. for a file it the size of
+the file) Warning ! There are streams which haven't size by definition (E.g.
+a socket).
+
+\membersection{wxStreamBase::OnSysRead}\label{wxstreambaseonsysread}
+\func{size_t}{OnSysRead}{\param{void *}{buffer}, \param{size_t}{ bufsize}}
+
+Internal function. It is called when the stream buffer needs a buffer of the
+specified size. It should return the size which was actually read.
+
+\membersection{wxStreamBase::OnSysWrite}
+\func{size_t}{OnSysWrite}{\param{void *}{buffer}, \param{size_t}{ bufsize}}
+
+See \helpref{OnSysRead}{wxstreambaseonsysread}.
+
+\membersection{wxStreamBase::OnSysSeek}
+\func{off_t}{OnSysSeek}{\param{off_t}{ pos}, \param{wxSeekMode}{ mode}}
+
+Internal function. It is called when the stream buffer needs to change the
+current position in the stream. See \helpref{wxStreamBuffer::Seek}{wxstreambufferseek}
+
+\membersection{wxStreamBase::OnSysTell}
+\constfunc{off_t}{OnSysTell}{\void}
+
+Internal function. Is is called when the stream buffer needs to know the
+current position in the stream.
+
+% -----------------------------------------------------------------------------
+% wxInputStream
+% -----------------------------------------------------------------------------
+
+\section{\class{wxInputStream}}\label{wxinputstream}
+
+\wxheading{Derived from}
+
+\helpref{wxStreamBase}{wxstreambase}
+
+\wxheading{See also}
+
+\helpref{wxStreamBuffer}{wxstreambuffer}
+
+% -----------
+% ctor & dtor
+% -----------
+
+\membersection{wxInputStream::wxInputStream}
+\func{}{wxInputStream}{\void}
+
+Creates a dummy input stream.
+
+\func{}{wxInputStream}{\param{wxStreamBuffer *}{sbuf}}
+
+Creates an input stream using the specified stream buffer \it{sbuf}. This
+stream buffer can point to another stream.
+
+\membersection{wxInputStream::\destruct{wxInputStream}}
+\func{}{\destruct{wxInputStream}}
+
+Destructor.
+
+% -----------
+% IO function
+% -----------
+
+\membersection{wxInputStream::Peek}
+\func{char}{Peek}{\void}
+
+\membersection{wxInputStream::GetC}
+\func{char}{GetC}{\void}
+
+\membersection{wxInputStream::Read}
+\func{wxInputStream&}{Read}{\param{void *}{buffer}, \param{size_t}{ size}}
+
+\func{wxInputStream&}{Read}{\param{wxOutputStream&}{ stream_out}}
+
+% ------------------
+% Position functions
+% ------------------
+
+\membersection{wxInputStream::SeekI}
+\func{off_t}{SeekI}{\param{off_t}{ pos}, \param{wxSeekMode}{ mode = wxFromStart}}
+
+\membersection{wxInputStream::TellI}
+\constfunc{off_t}{TellI}{\void}
+
+% ---------------
+% State functions
+% ---------------
+
+\membersection{wxInputStream::InputStreamBuffer}
+\func{wxStreamBuffer *}{InputStreamBuffer}{\void}
+
+\membersection{wxInputStream::LastRead}
+\constfunc{size_t}{LastRead}{\void}
+
+% -----------------------------------------------------------------------------
+% wxOutputStream
+% -----------------------------------------------------------------------------
+
+\section{\class{wx0utputStream}}\label{wxoutputstream}
+
+\wxheading{Derived from}
+
+\helpref{wxStreamBase}{wxstreambase}
+
+\wxheading{See also}
+
+\helpref{wxStreamBuffer}{wxstreambuffer}
+
+% -----------
+% ctor & dtor
+% -----------
+
+\membersection{wxOutputStream::wxInputStream}
+\func{}{wxOutputStream}{\void}
+
+\func{}{wxOutputStream}{\param{wxStreamBuffer *}{sbuf}}
+
+\membersection{wxOutputStream::\destruct{wxOutputStream}}
+\func{}{\destruct{wxOutputStream}}
+
+% -----------
+% IO function
+% -----------
+
+\membersection{wxOutputStream::PutC}
+\func{char}{PutC}{\void}
+
+\membersection{wxOutputStream::Write}
+\func{wxOutputStream&}{Write}{\param{const void *}{buffer}, \param{size_t}{ size}}
+
+\func{wxOutputStream&}{Write}{\param{wxInputStream&}{ stream_in}}
+
+% ------------------
+% Position functions
+% ------------------
+
+\membersection{wxOutputStream::SeekO}
+\func{off_t}{SeekO}{\param{off_t}{ pos}, \param{wxSeekMode}{ mode = wxFromStart}}
+
+\membersection{wxOutputStream::TellO}
+\constfunc{off_t}{TellO}{\void}
+
+% ---------------
+% State functions
+% ---------------
+
+\membersection{wxOutputStream::OutputStreamBuffer}
+\func{wxStreamBuffer *}{OutputStreamBuffer}{\void}
+
+\membersection{wxOutputStream::LastWrite}
+\constfunc{size_t}{LastWrite}{\void}
+
+
+% -----------------------------------------------------------------------------
+% wxFilterInputStream
+% -----------------------------------------------------------------------------
+
+\section{\class{wxFilterInputStream}}\label{wxfilterinputstream}
+
+\wxheading{Derived from}
+
+\helpref{wxInputStream}{wxinputstream}
+
+\wxheading{Note}
+
+The use of this class is exactly the same as of wxInputStream. Only a constructor
+differs and it is documented below.
+
+% -----------
+% ctor & dtor
+% -----------
+\membersection{wxFilterInputStream::wxFilterInputStream}
+\func{}{wxFilterInputStream}{\param{wxInputStream&}{ stream}}
+
+% -----------------------------------------------------------------------------
+% wxFilterOutputStream
+% -----------------------------------------------------------------------------
+
+\section{\class{wxFilterOutputStream}}\label{wxfilteroutputstream}
+
+\wxheading{Derived from}
+
+\helpref{wxOutputStream}{wxoutputstream}
+
+\wxheading{Note}
+
+The use of this class is exactly the same as of wxOutputStream. Only a constructor
+differs and it is documented below.
+
+% -----------
+% ctor & dtor
+% -----------
+\membersection{wxFilterOutputStream::wxFilterOutputStream}
+\func{}{wxFilterOutputStream}{\param{wxOutputStream&}{ stream}}
