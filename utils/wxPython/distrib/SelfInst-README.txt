@@ -36,6 +36,16 @@ Or you can send mail directly to the list using this address:
 
 
 
+What's new in 2.0b8
+-------------------
+Support for using Python threads in wxPython apps.
+
+Several missing methods from various classes.
+
+Various bug fixes.
+
+
+
 What's new in 2.0b7
 -------------------
 Added DLG_PNT and DLG_SZE convienience methods to wxWindow class.

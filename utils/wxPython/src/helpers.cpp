@@ -28,6 +28,7 @@
 #endif
 #include <wx/module.h>
 
+
 //---------------------------------------------------------------------------
 
 //wxHashTable*  wxPyWindows = NULL;
@@ -139,7 +140,9 @@ void __wxPreStart()
 }
 
 
-
+#ifdef WXP_WITH_THREAD
+static PyThreadState *event_tstate = NULL;
+#endif
 static char* __nullArgv[1] = { 0 };
 
 // Start the user application, user App's OnInit method is a parameter here
@@ -150,6 +153,9 @@ PyObject* __wxStart(PyObject* /* self */, PyObject* args)
     PyObject*   result;
     long        bResult;
 
+#ifdef WXP_WITH_THREAD
+    event_tstate = PyThreadState_Get();
+#endif
 
     if (!PyArg_ParseTuple(args, "O", &onInitFunc))
         return NULL;
@@ -168,7 +174,12 @@ PyObject* __wxStart(PyObject* /* self */, PyObject* args)
 
     // Call the Python App's OnInit function
     arglist = PyTuple_New(0);
+
+    // Py_END_ALLOW_THREADS;  ****  __wxStart was called from Python,
+    //                              should already have the lock
     result = PyEval_CallObject(onInitFunc, arglist);
+    // Py_BEGIN_ALLOW_THREADS;
+
     if (!result) {
         PyErr_Print();
         exit(1);
@@ -260,6 +271,27 @@ PyObject* wxPyConstructObject(void* ptr, char* className)
 }
 
 
+
+wxPyCallback::wxPyCallback(PyObject* func) {
+    m_func = func;
+    Py_INCREF(m_func);
+}
+
+wxPyCallback::~wxPyCallback() {
+#ifdef WXP_WITH_THREAD
+    PyEval_RestoreThread(event_tstate);
+#endif
+
+    Py_DECREF(m_func);
+
+#ifdef WXP_WITH_THREAD
+    PyEval_SaveThread();
+#endif
+}
+
+
+
+
 // This function is used for all events destined for Python event handlers.
 void wxPyCallback::EventThunker(wxEvent& event) {
     wxPyCallback*   cb = (wxPyCallback*)event.m_callbackUserData;
@@ -268,6 +300,10 @@ void wxPyCallback::EventThunker(wxEvent& event) {
     PyObject*       arg;
     PyObject*       tuple;
 
+
+#ifdef WXP_WITH_THREAD
+    PyEval_RestoreThread(event_tstate);
+#endif
     arg = wxPyConstructObject((void*)&event, event.GetClassInfo()->GetClassName());
 
     tuple = PyTuple_New(1);
@@ -280,6 +316,9 @@ void wxPyCallback::EventThunker(wxEvent& event) {
     } else {
         PyErr_Print();
     }
+#ifdef WXP_WITH_THREAD
+    PyEval_SaveThread();
+#endif
 }
 
 
@@ -301,6 +340,9 @@ wxPyMenu::~wxPyMenu() {
 
 
 void wxPyMenu::MenuCallback(wxMenu& menu, wxCommandEvent& evt) {
+#ifdef WXP_WITH_THREAD
+    PyEval_RestoreThread(event_tstate);
+#endif
     PyObject* evtobj  = wxPyConstructObject((void*)&evt, "wxCommandEvent");
     PyObject* menuobj = wxPyConstructObject((void*)&menu, "wxMenu");
     if (PyErr_Occurred()) {
@@ -316,6 +358,9 @@ void wxPyMenu::MenuCallback(wxMenu& menu, wxCommandEvent& evt) {
     PyObject* res  = PyEval_CallObject(func, args);
     Py_DECREF(args);
     Py_XDECREF(res); /* In case res is a NULL pointer */
+#ifdef WXP_WITH_THREAD
+    PyEval_SaveThread();
+#endif
 }
 
 
@@ -331,6 +376,9 @@ wxPyTimer::~wxPyTimer() {
 }
 
 void wxPyTimer::Notify() {
+#ifdef WXP_WITH_THREAD
+    PyEval_RestoreThread(event_tstate);
+#endif
     PyObject*   result;
     PyObject*   args = Py_BuildValue("()");
 
@@ -342,9 +390,49 @@ void wxPyTimer::Notify() {
     } else {
         PyErr_Print();
     }
+#ifdef WXP_WITH_THREAD
+    PyEval_SaveThread();
+#endif
 }
 
 
+//----------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxPyEvent, wxCommandEvent)
+
+wxPyEvent::wxPyEvent(wxEventType commandType, PyObject* userData)
+    : wxCommandEvent(commandType), m_userData(Py_None)
+{
+    m_userData = userData;
+    if (m_userData != Py_None) {
+        Py_INCREF(m_userData);
+    }
+}
+
+
+wxPyEvent::~wxPyEvent() {
+    if (m_userData != Py_None) {
+        Py_DECREF(m_userData);
+        m_userData = Py_None;
+    }
+}
+
+
+void wxPyEvent::SetUserData(PyObject* userData) {
+    if (m_userData != Py_None) {
+        Py_DECREF(m_userData);
+        m_userData = Py_None;
+    }
+    m_userData = userData;
+    if (m_userData != Py_None) {
+        Py_INCREF(m_userData);
+    }
+}
+
+
+PyObject* wxPyEvent::GetUserData() {
+    return m_userData;
+}
 
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
@@ -584,6 +672,12 @@ wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source) {
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.19.4.1  1999/03/27 23:29:14  RD
+// wxPython 2.0b8
+//     Python thread support
+//     various minor additions
+//     various minor fixes
+//
 // Revision 1.19  1999/02/20 09:02:59  RD
 // Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
 // window handle.  If you can get the window handle into the python code,

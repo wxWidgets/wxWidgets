@@ -166,8 +166,12 @@ static PyObject *_wrap_wxControl_Command(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxControl_Command(_arg0,*_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxControl_Command(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -188,8 +192,12 @@ static PyObject *_wrap_wxControl_GetLabel(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = new wxString (wxControl_GetLabel(_arg0));
 {
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxControl_GetLabel(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}{
     _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
 }
 {
@@ -222,8 +230,12 @@ static PyObject *_wrap_wxControl_SetLabel(PyObject *self, PyObject *args) {
     }
     _arg1 = new wxString(PyString_AsString(_obj1));
 }
-    wxControl_SetLabel(_arg0,*_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxControl_SetLabel(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
 {
     if (_obj1)
@@ -309,8 +321,12 @@ static PyObject *_wrap_new_wxButton(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (wxButton *)new_wxButton(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,*_arg6,_arg7);
-    SWIG_MakePtr(_ptemp, (char *) _result,"_wxButton_p");
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxButton *)new_wxButton(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,*_arg6,_arg7);
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxButton_p");
     _resultobj = Py_BuildValue("s",_ptemp);
 {
     if (_obj2)
@@ -334,8 +350,12 @@ static PyObject *_wrap_wxButton_SetDefault(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxButton_SetDefault(_arg0);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxButton_SetDefault(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -424,8 +444,12 @@ static PyObject *_wrap_new_wxBitmapButton(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (wxBitmapButton *)new_wxBitmapButton(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,*_arg6,_arg7);
-    SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmapButton_p");
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxBitmapButton *)new_wxBitmapButton(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,*_arg6,_arg7);
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmapButton_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
@@ -447,9 +471,13 @@ static PyObject *_wrap_wxBitmapButton_GetBitmapLabel(PyObject *self, PyObject *a
         return NULL;
         }
     }
-    wxBitmap & _result_ref = wxBitmapButton_GetBitmapLabel(_arg0);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxBitmap & _result_ref = wxBitmapButton_GetBitmapLabel(_arg0);
     _result = (wxBitmap *) &_result_ref;
-    SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmap_p");
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmap_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
@@ -471,9 +499,13 @@ static PyObject *_wrap_wxBitmapButton_GetBitmapDisabled(PyObject *self, PyObject
         return NULL;
         }
     }
-    wxBitmap & _result_ref = wxBitmapButton_GetBitmapDisabled(_arg0);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxBitmap & _result_ref = wxBitmapButton_GetBitmapDisabled(_arg0);
     _result = (wxBitmap *) &_result_ref;
-    SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmap_p");
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmap_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
@@ -495,9 +527,13 @@ static PyObject *_wrap_wxBitmapButton_GetBitmapFocus(PyObject *self, PyObject *a
         return NULL;
         }
     }
-    wxBitmap & _result_ref = wxBitmapButton_GetBitmapFocus(_arg0);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxBitmap & _result_ref = wxBitmapButton_GetBitmapFocus(_arg0);
     _result = (wxBitmap *) &_result_ref;
-    SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmap_p");
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmap_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
@@ -519,9 +555,13 @@ static PyObject *_wrap_wxBitmapButton_GetBitmapSelected(PyObject *self, PyObject
         return NULL;
         }
     }
-    wxBitmap & _result_ref = wxBitmapButton_GetBitmapSelected(_arg0);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxBitmap & _result_ref = wxBitmapButton_GetBitmapSelected(_arg0);
     _result = (wxBitmap *) &_result_ref;
-    SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmap_p");
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmap_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
@@ -549,8 +589,12 @@ static PyObject *_wrap_wxBitmapButton_SetBitmapDisabled(PyObject *self, PyObject
         return NULL;
         }
     }
-    wxBitmapButton_SetBitmapDisabled(_arg0,*_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxBitmapButton_SetBitmapDisabled(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -578,8 +622,12 @@ static PyObject *_wrap_wxBitmapButton_SetBitmapFocus(PyObject *self, PyObject *a
         return NULL;
         }
     }
-    wxBitmapButton_SetBitmapFocus(_arg0,*_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxBitmapButton_SetBitmapFocus(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -607,8 +655,12 @@ static PyObject *_wrap_wxBitmapButton_SetBitmapSelected(PyObject *self, PyObject
         return NULL;
         }
     }
-    wxBitmapButton_SetBitmapSelected(_arg0,*_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxBitmapButton_SetBitmapSelected(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -636,8 +688,12 @@ static PyObject *_wrap_wxBitmapButton_SetBitmapLabel(PyObject *self, PyObject *a
         return NULL;
         }
     }
-    wxBitmapButton_SetBitmapLabel(_arg0,*_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxBitmapButton_SetBitmapLabel(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -719,8 +775,12 @@ static PyObject *_wrap_new_wxCheckBox(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (wxCheckBox *)new_wxCheckBox(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,*_arg6,_arg7);
-    SWIG_MakePtr(_ptemp, (char *) _result,"_wxCheckBox_p");
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxCheckBox *)new_wxCheckBox(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,*_arg6,_arg7);
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxCheckBox_p");
     _resultobj = Py_BuildValue("s",_ptemp);
 {
     if (_obj2)
@@ -745,8 +805,12 @@ static PyObject *_wrap_wxCheckBox_GetValue(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (bool )wxCheckBox_GetValue(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxCheckBox_GetValue(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -768,8 +832,12 @@ static PyObject *_wrap_wxCheckBox_SetValue(PyObject *self, PyObject *args) {
         }
     }
     _arg1 = (bool ) tempbool1;
-    wxCheckBox_SetValue(_arg0,_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxCheckBox_SetValue(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -860,8 +928,12 @@ static PyObject *_wrap_new_wxChoice(PyObject *self, PyObject *args) {
         _arg4 = 0;
     }
 }
-    _result = (wxChoice *)new_wxChoice(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5,_arg6,*_arg7,_arg8);
-    SWIG_MakePtr(_ptemp, (char *) _result,"_wxChoice_p");
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxChoice *)new_wxChoice(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5,_arg6,*_arg7,_arg8);
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxChoice_p");
     _resultobj = Py_BuildValue("s",_ptemp);
 {
     delete [] _arg5;
@@ -893,8 +965,12 @@ static PyObject *_wrap_wxChoice_Append(PyObject *self, PyObject *args) {
     }
     _arg1 = new wxString(PyString_AsString(_obj1));
 }
-    wxChoice_Append(_arg0,*_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxChoice_Append(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
 {
     if (_obj1)
@@ -918,8 +994,12 @@ static PyObject *_wrap_wxChoice_Clear(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxChoice_Clear(_arg0);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxChoice_Clear(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -949,8 +1029,12 @@ static PyObject *_wrap_wxChoice_FindString(PyObject *self, PyObject *args) {
     }
     _arg1 = new wxString(PyString_AsString(_obj1));
 }
-    _result = (int )wxChoice_FindString(_arg0,*_arg1);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxChoice_FindString(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
 {
     if (_obj1)
         delete _arg1;
@@ -974,8 +1058,12 @@ static PyObject *_wrap_wxChoice_GetColumns(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (int )wxChoice_GetColumns(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxChoice_GetColumns(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -995,8 +1083,12 @@ static PyObject *_wrap_wxChoice_GetSelection(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (int )wxChoice_GetSelection(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxChoice_GetSelection(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -1017,8 +1109,12 @@ static PyObject *_wrap_wxChoice_GetString(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = new wxString (wxChoice_GetString(_arg0,_arg1));
 {
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxChoice_GetString(_arg0,_arg1));
+
+    wxPy_END_ALLOW_THREADS;
+}{
     _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
 }
 {
@@ -1043,8 +1139,12 @@ static PyObject *_wrap_wxChoice_GetStringSelection(PyObject *self, PyObject *arg
         return NULL;
         }
     }
-    _result = new wxString (wxChoice_GetStringSelection(_arg0));
 {
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxChoice_GetStringSelection(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}{
     _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
 }
 {
@@ -1069,8 +1169,12 @@ static PyObject *_wrap_wxChoice_Number(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (int )wxChoice_Number(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxChoice_Number(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -1090,8 +1194,12 @@ static PyObject *_wrap_wxChoice_SetColumns(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxChoice_SetColumns(_arg0,_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxChoice_SetColumns(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -1112,8 +1220,12 @@ static PyObject *_wrap_wxChoice_SetSelection(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxChoice_SetSelection(_arg0,_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxChoice_SetSelection(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -1142,8 +1254,12 @@ static PyObject *_wrap_wxChoice_SetStringSelection(PyObject *self, PyObject *arg
     }
     _arg1 = new wxString(PyString_AsString(_obj1));
 }
-    wxChoice_SetStringSelection(_arg0,*_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxChoice_SetStringSelection(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
 {
     if (_obj1)
@@ -1239,8 +1355,12 @@ static PyObject *_wrap_new_wxComboBox(PyObject *self, PyObject *args) {
         _arg5 = 0;
     }
 }
-    _result = (wxComboBox *)new_wxComboBox(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5,_arg6,_arg7,*_arg8,_arg9);
-    SWIG_MakePtr(_ptemp, (char *) _result,"_wxComboBox_p");
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxComboBox *)new_wxComboBox(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5,_arg6,_arg7,*_arg8,_arg9);
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxComboBox_p");
     _resultobj = Py_BuildValue("s",_ptemp);
 {
     delete [] _arg6;
@@ -1272,8 +1392,12 @@ static PyObject *_wrap_wxComboBox_Append(PyObject *self, PyObject *args) {
     }
     _arg1 = new wxString(PyString_AsString(_obj1));
 }
-    wxComboBox_Append(_arg0,*_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxComboBox_Append(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
 {
     if (_obj1)
@@ -1297,8 +1421,12 @@ static PyObject *_wrap_wxComboBox_Clear(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxComboBox_Clear(_arg0);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxComboBox_Clear(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -1318,8 +1446,12 @@ static PyObject *_wrap_wxComboBox_Copy(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxComboBox_Copy(_arg0);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxComboBox_Copy(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -1339,8 +1471,12 @@ static PyObject *_wrap_wxComboBox_Cut(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxComboBox_Cut(_arg0);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxComboBox_Cut(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -1361,8 +1497,12 @@ static PyObject *_wrap_wxComboBox_Delete(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxComboBox_Delete(_arg0,_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxComboBox_Delete(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -1392,8 +1532,12 @@ static PyObject *_wrap_wxComboBox_FindString(PyObject *self, PyObject *args) {
     }
     _arg1 = new wxString(PyString_AsString(_obj1));
 }
-    _result = (int )wxComboBox_FindString(_arg0,*_arg1);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxComboBox_FindString(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
 {
     if (_obj1)
         delete _arg1;
@@ -1417,8 +1561,12 @@ static PyObject *_wrap_wxComboBox_GetInsertionPoint(PyObject *self, PyObject *ar
         return NULL;
         }
     }
-    _result = (long )wxComboBox_GetInsertionPoint(_arg0);
-    _resultobj = Py_BuildValue("l",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (long )wxComboBox_GetInsertionPoint(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("l",_result);
     return _resultobj;
 }
 
@@ -1438,8 +1586,12 @@ static PyObject *_wrap_wxComboBox_GetLastPosition(PyObject *self, PyObject *args
         return NULL;
         }
     }
-    _result = (long )wxComboBox_GetLastPosition(_arg0);
-    _resultobj = Py_BuildValue("l",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (long )wxComboBox_GetLastPosition(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("l",_result);
     return _resultobj;
 }
 
@@ -1459,8 +1611,12 @@ static PyObject *_wrap_wxComboBox_GetSelection(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (int )wxComboBox_GetSelection(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxComboBox_GetSelection(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -1481,8 +1637,12 @@ static PyObject *_wrap_wxComboBox_GetString(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = new wxString (wxComboBox_GetString(_arg0,_arg1));
 {
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxComboBox_GetString(_arg0,_arg1));
+
+    wxPy_END_ALLOW_THREADS;
+}{
     _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
 }
 {
@@ -1507,8 +1667,12 @@ static PyObject *_wrap_wxComboBox_GetStringSelection(PyObject *self, PyObject *a
         return NULL;
         }
     }
-    _result = new wxString (wxComboBox_GetStringSelection(_arg0));
 {
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxComboBox_GetStringSelection(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}{
     _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
 }
 {
@@ -1533,8 +1697,12 @@ static PyObject *_wrap_wxComboBox_GetValue(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = new wxString (wxComboBox_GetValue(_arg0));
 {
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxComboBox_GetValue(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}{
     _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
 }
 {
@@ -1559,8 +1727,12 @@ static PyObject *_wrap_wxComboBox_Number(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (int )wxComboBox_Number(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxComboBox_Number(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -1579,8 +1751,12 @@ static PyObject *_wrap_wxComboBox_Paste(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxComboBox_Paste(_arg0);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxComboBox_Paste(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -1611,8 +1787,12 @@ static PyObject *_wrap_wxComboBox_Replace(PyObject *self, PyObject *args) {
     }
     _arg3 = new wxString(PyString_AsString(_obj3));
 }
-    wxComboBox_Replace(_arg0,_arg1,_arg2,*_arg3);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxComboBox_Replace(_arg0,_arg1,_arg2,*_arg3);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
 {
     if (_obj3)
@@ -1638,8 +1818,12 @@ static PyObject *_wrap_wxComboBox_Remove(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxComboBox_Remove(_arg0,_arg1,_arg2);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxComboBox_Remove(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -1660,8 +1844,12 @@ static PyObject *_wrap_wxComboBox_SetInsertionPoint(PyObject *self, PyObject *ar
         return NULL;
         }
     }
-    wxComboBox_SetInsertionPoint(_arg0,_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxComboBox_SetInsertionPoint(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -1681,8 +1869,12 @@ static PyObject *_wrap_wxComboBox_SetInsertionPointEnd(PyObject *self, PyObject 
         return NULL;
         }
     }
-    wxComboBox_SetInsertionPointEnd(_arg0);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxComboBox_SetInsertionPointEnd(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -1706,8 +1898,12 @@ static PyObject *_wrap_wxComboBox_SetSelection(PyObject *self, PyObject *args) {
         }
     }
     _arg2 = (bool ) tempbool2;
-    wxComboBox_SetSelection(_arg0,_arg1,_arg2);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxComboBox_SetSelection(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -1729,8 +1925,12 @@ static PyObject *_wrap_wxComboBox_SetMark(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxComboBox_SetMark(_arg0,_arg1,_arg2);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxComboBox_SetMark(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -1759,8 +1959,12 @@ static PyObject *_wrap_wxComboBox_SetValue(PyObject *self, PyObject *args) {
     }
     _arg1 = new wxString(PyString_AsString(_obj1));
 }
-    wxComboBox_SetValue(_arg0,*_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxComboBox_SetValue(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
 {
     if (_obj1)
@@ -1838,8 +2042,12 @@ static PyObject *_wrap_new_wxGauge(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (wxGauge *)new_wxGauge(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5,*_arg6,_arg7);
-    SWIG_MakePtr(_ptemp, (char *) _result,"_wxGauge_p");
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxGauge *)new_wxGauge(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5,*_arg6,_arg7);
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxGauge_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
@@ -1860,8 +2068,12 @@ static PyObject *_wrap_wxGauge_GetBezelFace(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (int )wxGauge_GetBezelFace(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxGauge_GetBezelFace(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -1881,8 +2093,12 @@ static PyObject *_wrap_wxGauge_GetRange(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (int )wxGauge_GetRange(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxGauge_GetRange(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -1902,8 +2118,12 @@ static PyObject *_wrap_wxGauge_GetShadowWidth(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (int )wxGauge_GetShadowWidth(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxGauge_GetShadowWidth(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -1923,8 +2143,12 @@ static PyObject *_wrap_wxGauge_GetValue(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (int )wxGauge_GetValue(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxGauge_GetValue(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -1944,8 +2168,12 @@ static PyObject *_wrap_wxGauge_SetBezelFace(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxGauge_SetBezelFace(_arg0,_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGauge_SetBezelFace(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -1966,8 +2194,12 @@ static PyObject *_wrap_wxGauge_SetRange(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxGauge_SetRange(_arg0,_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGauge_SetRange(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -1988,8 +2220,12 @@ static PyObject *_wrap_wxGauge_SetShadowWidth(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxGauge_SetShadowWidth(_arg0,_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGauge_SetShadowWidth(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -2010,8 +2246,12 @@ static PyObject *_wrap_wxGauge_SetValue(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxGauge_SetValue(_arg0,_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGauge_SetValue(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -2085,8 +2325,12 @@ static PyObject *_wrap_new_wxStaticBox(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (wxStaticBox *)new_wxStaticBox(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,_arg6);
-    SWIG_MakePtr(_ptemp, (char *) _result,"_wxStaticBox_p");
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxStaticBox *)new_wxStaticBox(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,_arg6);
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxStaticBox_p");
     _resultobj = Py_BuildValue("s",_ptemp);
 {
     if (_obj2)
@@ -2164,8 +2408,12 @@ static PyObject *_wrap_new_wxStaticText(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (wxStaticText *)new_wxStaticText(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,_arg6);
-    SWIG_MakePtr(_ptemp, (char *) _result,"_wxStaticText_p");
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxStaticText *)new_wxStaticText(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,_arg6);
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxStaticText_p");
     _resultobj = Py_BuildValue("s",_ptemp);
 {
     if (_obj2)
@@ -2190,8 +2438,12 @@ static PyObject *_wrap_wxStaticText_GetLabel(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = new wxString (wxStaticText_GetLabel(_arg0));
 {
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxStaticText_GetLabel(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}{
     _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
 }
 {
@@ -2224,8 +2476,12 @@ static PyObject *_wrap_wxStaticText_SetLabel(PyObject *self, PyObject *args) {
     }
     _arg1 = new wxString(PyString_AsString(_obj1));
 }
-    wxStaticText_SetLabel(_arg0,*_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStaticText_SetLabel(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
 {
     if (_obj1)
@@ -2320,8 +2576,12 @@ static PyObject *_wrap_new_wxListBox(PyObject *self, PyObject *args) {
         _arg4 = 0;
     }
 }
-    _result = (wxListBox *)new_wxListBox(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5,_arg6,*_arg7,_arg8);
-    SWIG_MakePtr(_ptemp, (char *) _result,"_wxListBox_p");
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxListBox *)new_wxListBox(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5,_arg6,*_arg7,_arg8);
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxListBox_p");
     _resultobj = Py_BuildValue("s",_ptemp);
 {
     delete [] _arg5;
@@ -2353,8 +2613,12 @@ static PyObject *_wrap_wxListBox_Append(PyObject *self, PyObject *args) {
     }
     _arg1 = new wxString(PyString_AsString(_obj1));
 }
-    wxListBox_Append(_arg0,*_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxListBox_Append(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
 {
     if (_obj1)
@@ -2378,8 +2642,12 @@ static PyObject *_wrap_wxListBox_Clear(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxListBox_Clear(_arg0);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxListBox_Clear(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -2400,8 +2668,12 @@ static PyObject *_wrap_wxListBox_Delete(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxListBox_Delete(_arg0,_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxListBox_Delete(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -2422,8 +2694,12 @@ static PyObject *_wrap_wxListBox_Deselect(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxListBox_Deselect(_arg0,_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxListBox_Deselect(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -2453,8 +2729,12 @@ static PyObject *_wrap_wxListBox_FindString(PyObject *self, PyObject *args) {
     }
     _arg1 = new wxString(PyString_AsString(_obj1));
 }
-    _result = (int )wxListBox_FindString(_arg0,*_arg1);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxListBox_FindString(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
 {
     if (_obj1)
         delete _arg1;
@@ -2478,8 +2758,12 @@ static PyObject *_wrap_wxListBox_GetSelection(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (int )wxListBox_GetSelection(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxListBox_GetSelection(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -2500,8 +2784,12 @@ static PyObject *_wrap_wxListBox_GetString(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = new wxString (wxListBox_GetString(_arg0,_arg1));
 {
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxListBox_GetString(_arg0,_arg1));
+
+    wxPy_END_ALLOW_THREADS;
+}{
     _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
 }
 {
@@ -2526,8 +2814,12 @@ static PyObject *_wrap_wxListBox_GetStringSelection(PyObject *self, PyObject *ar
         return NULL;
         }
     }
-    _result = new wxString (wxListBox_GetStringSelection(_arg0));
 {
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxListBox_GetStringSelection(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}{
     _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
 }
 {
@@ -2552,8 +2844,12 @@ static PyObject *_wrap_wxListBox_Number(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (int )wxListBox_Number(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxListBox_Number(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -2574,8 +2870,12 @@ static PyObject *_wrap_wxListBox_Selected(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (bool )wxListBox_Selected(_arg0,_arg1);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxListBox_Selected(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -2612,8 +2912,12 @@ static PyObject *_wrap_wxListBox_Set(PyObject *self, PyObject *args) {
         _arg1 = 0;
     }
 }
-    wxListBox_Set(_arg0,_arg1,_arg2);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxListBox_Set(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
 {
     delete [] _arg2;
@@ -2637,8 +2941,12 @@ static PyObject *_wrap_wxListBox_SetFirstItem(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxListBox_SetFirstItem(_arg0,_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxListBox_SetFirstItem(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -2667,8 +2975,12 @@ static PyObject *_wrap_wxListBox_SetFirstItemStr(PyObject *self, PyObject *args)
     }
     _arg1 = new wxString(PyString_AsString(_obj1));
 }
-    wxListBox_SetFirstItemStr(_arg0,*_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxListBox_SetFirstItemStr(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
 {
     if (_obj1)
@@ -2696,8 +3008,12 @@ static PyObject *_wrap_wxListBox_SetSelection(PyObject *self, PyObject *args) {
         }
     }
     _arg2 = (bool ) tempbool2;
-    wxListBox_SetSelection(_arg0,_arg1,_arg2);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxListBox_SetSelection(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -2727,8 +3043,12 @@ static PyObject *_wrap_wxListBox_SetString(PyObject *self, PyObject *args) {
     }
     _arg2 = new wxString(PyString_AsString(_obj2));
 }
-    wxListBox_SetString(_arg0,_arg1,*_arg2);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxListBox_SetString(_arg0,_arg1,*_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
 {
     if (_obj2)
@@ -2764,8 +3084,12 @@ static PyObject *_wrap_wxListBox_SetStringSelection(PyObject *self, PyObject *ar
     _arg1 = new wxString(PyString_AsString(_obj1));
 }
     _arg2 = (bool ) tempbool2;
-    wxListBox_SetStringSelection(_arg0,*_arg1,_arg2);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxListBox_SetStringSelection(_arg0,*_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
 {
     if (_obj1)
@@ -2868,8 +3192,12 @@ static PyObject *_wrap_new_wxCheckListBox(PyObject *self, PyObject *args) {
         _arg4 = 0;
     }
 }
-    _result = (wxCheckListBox *)new_wxCheckListBox(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5,_arg6,*_arg7,_arg8);
-    SWIG_MakePtr(_ptemp, (char *) _result,"_wxCheckListBox_p");
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxCheckListBox *)new_wxCheckListBox(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5,_arg6,*_arg7,_arg8);
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxCheckListBox_p");
     _resultobj = Py_BuildValue("s",_ptemp);
 {
     delete [] _arg5;
@@ -2894,8 +3222,12 @@ static PyObject *_wrap_wxCheckListBox_IsChecked(PyObject *self, PyObject *args) 
         return NULL;
         }
     }
-    _result = (bool )wxCheckListBox_IsChecked(_arg0,_arg1);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxCheckListBox_IsChecked(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -2918,8 +3250,12 @@ static PyObject *_wrap_wxCheckListBox_Check(PyObject *self, PyObject *args) {
         }
     }
     _arg2 = (bool ) tempbool2;
-    wxCheckListBox_Check(_arg0,_arg1,_arg2);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxCheckListBox_Check(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -2940,8 +3276,12 @@ static PyObject *_wrap_wxCheckListBox_GetItemHeight(PyObject *self, PyObject *ar
         return NULL;
         }
     }
-    _result = (int )wxCheckListBox_GetItemHeight(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxCheckListBox_GetItemHeight(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -3014,8 +3354,12 @@ static PyObject *_wrap_new_wxTextCtrl(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (wxTextCtrl *)new_wxTextCtrl(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5,*_arg6,_arg7);
-    SWIG_MakePtr(_ptemp, (char *) _result,"_wxTextCtrl_p");
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxTextCtrl *)new_wxTextCtrl(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5,*_arg6,_arg7);
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxTextCtrl_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
@@ -3035,8 +3379,12 @@ static PyObject *_wrap_wxTextCtrl_Clear(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxTextCtrl_Clear(_arg0);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTextCtrl_Clear(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -3056,8 +3404,12 @@ static PyObject *_wrap_wxTextCtrl_Copy(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxTextCtrl_Copy(_arg0);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTextCtrl_Copy(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -3077,8 +3429,12 @@ static PyObject *_wrap_wxTextCtrl_Cut(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxTextCtrl_Cut(_arg0);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTextCtrl_Cut(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -3098,8 +3454,12 @@ static PyObject *_wrap_wxTextCtrl_DiscardEdits(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxTextCtrl_DiscardEdits(_arg0);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTextCtrl_DiscardEdits(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -3120,8 +3480,12 @@ static PyObject *_wrap_wxTextCtrl_GetInsertionPoint(PyObject *self, PyObject *ar
         return NULL;
         }
     }
-    _result = (long )wxTextCtrl_GetInsertionPoint(_arg0);
-    _resultobj = Py_BuildValue("l",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (long )wxTextCtrl_GetInsertionPoint(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("l",_result);
     return _resultobj;
 }
 
@@ -3141,8 +3505,12 @@ static PyObject *_wrap_wxTextCtrl_GetLastPosition(PyObject *self, PyObject *args
         return NULL;
         }
     }
-    _result = (long )wxTextCtrl_GetLastPosition(_arg0);
-    _resultobj = Py_BuildValue("l",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (long )wxTextCtrl_GetLastPosition(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("l",_result);
     return _resultobj;
 }
 
@@ -3163,8 +3531,12 @@ static PyObject *_wrap_wxTextCtrl_GetLineLength(PyObject *self, PyObject *args) 
         return NULL;
         }
     }
-    _result = (int )wxTextCtrl_GetLineLength(_arg0,_arg1);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxTextCtrl_GetLineLength(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -3185,8 +3557,12 @@ static PyObject *_wrap_wxTextCtrl_GetLineText(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = new wxString (wxTextCtrl_GetLineText(_arg0,_arg1));
 {
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxTextCtrl_GetLineText(_arg0,_arg1));
+
+    wxPy_END_ALLOW_THREADS;
+}{
     _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
 }
 {
@@ -3211,8 +3587,12 @@ static PyObject *_wrap_wxTextCtrl_GetNumberOfLines(PyObject *self, PyObject *arg
         return NULL;
         }
     }
-    _result = (int )wxTextCtrl_GetNumberOfLines(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxTextCtrl_GetNumberOfLines(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -3232,8 +3612,12 @@ static PyObject *_wrap_wxTextCtrl_GetValue(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = new wxString (wxTextCtrl_GetValue(_arg0));
 {
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxTextCtrl_GetValue(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}{
     _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
 }
 {
@@ -3258,8 +3642,12 @@ static PyObject *_wrap_wxTextCtrl_IsModified(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (bool )wxTextCtrl_IsModified(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxTextCtrl_IsModified(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -3288,8 +3676,12 @@ static PyObject *_wrap_wxTextCtrl_LoadFile(PyObject *self, PyObject *args) {
     }
     _arg1 = new wxString(PyString_AsString(_obj1));
 }
-    _result = (bool )wxTextCtrl_LoadFile(_arg0,*_arg1);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxTextCtrl_LoadFile(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
 {
     if (_obj1)
         delete _arg1;
@@ -3312,8 +3704,12 @@ static PyObject *_wrap_wxTextCtrl_Paste(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxTextCtrl_Paste(_arg0);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTextCtrl_Paste(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -3344,8 +3740,12 @@ static PyObject *_wrap_wxTextCtrl_PositionToXY(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxTextCtrl_PositionToXY(_arg0,_arg1,_arg2,_arg3);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTextCtrl_PositionToXY(_arg0,_arg1,_arg2,_arg3);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
 {
     PyObject *o;
@@ -3377,8 +3777,12 @@ static PyObject *_wrap_wxTextCtrl_Remove(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxTextCtrl_Remove(_arg0,_arg1,_arg2);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTextCtrl_Remove(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -3409,8 +3813,12 @@ static PyObject *_wrap_wxTextCtrl_Replace(PyObject *self, PyObject *args) {
     }
     _arg3 = new wxString(PyString_AsString(_obj3));
 }
-    wxTextCtrl_Replace(_arg0,_arg1,_arg2,*_arg3);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTextCtrl_Replace(_arg0,_arg1,_arg2,*_arg3);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
 {
     if (_obj3)
@@ -3444,8 +3852,12 @@ static PyObject *_wrap_wxTextCtrl_SaveFile(PyObject *self, PyObject *args) {
     }
     _arg1 = new wxString(PyString_AsString(_obj1));
 }
-    _result = (bool )wxTextCtrl_SaveFile(_arg0,*_arg1);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxTextCtrl_SaveFile(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
 {
     if (_obj1)
         delete _arg1;
@@ -3471,8 +3883,12 @@ static PyObject *_wrap_wxTextCtrl_SetEditable(PyObject *self, PyObject *args) {
         }
     }
     _arg1 = (bool ) tempbool1;
-    wxTextCtrl_SetEditable(_arg0,_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTextCtrl_SetEditable(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -3493,8 +3909,12 @@ static PyObject *_wrap_wxTextCtrl_SetInsertionPoint(PyObject *self, PyObject *ar
         return NULL;
         }
     }
-    wxTextCtrl_SetInsertionPoint(_arg0,_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTextCtrl_SetInsertionPoint(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -3514,8 +3934,12 @@ static PyObject *_wrap_wxTextCtrl_SetInsertionPointEnd(PyObject *self, PyObject 
         return NULL;
         }
     }
-    wxTextCtrl_SetInsertionPointEnd(_arg0);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTextCtrl_SetInsertionPointEnd(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -3537,8 +3961,12 @@ static PyObject *_wrap_wxTextCtrl_SetSelection(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxTextCtrl_SetSelection(_arg0,_arg1,_arg2);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTextCtrl_SetSelection(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -3567,8 +3995,12 @@ static PyObject *_wrap_wxTextCtrl_SetValue(PyObject *self, PyObject *args) {
     }
     _arg1 = new wxString(PyString_AsString(_obj1));
 }
-    wxTextCtrl_SetValue(_arg0,*_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTextCtrl_SetValue(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
 {
     if (_obj1)
@@ -3593,8 +4025,12 @@ static PyObject *_wrap_wxTextCtrl_ShowPosition(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxTextCtrl_ShowPosition(_arg0,_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTextCtrl_ShowPosition(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -3623,8 +4059,50 @@ static PyObject *_wrap_wxTextCtrl_WriteText(PyObject *self, PyObject *args) {
     }
     _arg1 = new wxString(PyString_AsString(_obj1));
 }
-    wxTextCtrl_WriteText(_arg0,*_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTextCtrl_WriteText(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxTextCtrl_AppendText(_swigobj,_swigarg0)  (_swigobj->AppendText(_swigarg0))
+static PyObject *_wrap_wxTextCtrl_AppendText(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxTextCtrl * _arg0;
+    wxString * _arg1;
+    char * _argc0 = 0;
+    PyObject * _obj1 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"sO:wxTextCtrl_AppendText",&_argc0,&_obj1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_AppendText. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AsString(_obj1));
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTextCtrl_AppendText(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
 {
     if (_obj1)
@@ -3651,8 +4129,12 @@ static PyObject *_wrap_wxTextCtrl_XYToPosition(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (long )wxTextCtrl_XYToPosition(_arg0,_arg1,_arg2);
-    _resultobj = Py_BuildValue("l",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (long )wxTextCtrl_XYToPosition(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("l",_result);
     return _resultobj;
 }
 
@@ -3724,8 +4206,12 @@ static PyObject *_wrap_new_wxScrollBar(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (wxScrollBar *)new_wxScrollBar(_arg0,_arg1,*_arg2,*_arg3,_arg4,*_arg5,_arg6);
-    SWIG_MakePtr(_ptemp, (char *) _result,"_wxScrollBar_p");
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxScrollBar *)new_wxScrollBar(_arg0,_arg1,*_arg2,*_arg3,_arg4,*_arg5,_arg6);
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxScrollBar_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
@@ -3746,8 +4232,12 @@ static PyObject *_wrap_wxScrollBar_GetRange(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (int )wxScrollBar_GetRange(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxScrollBar_GetRange(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -3767,8 +4257,12 @@ static PyObject *_wrap_wxScrollBar_GetPageSize(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (int )wxScrollBar_GetPageSize(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxScrollBar_GetPageSize(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -3788,8 +4282,12 @@ static PyObject *_wrap_wxScrollBar_GetThumbPosition(PyObject *self, PyObject *ar
         return NULL;
         }
     }
-    _result = (int )wxScrollBar_GetThumbPosition(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxScrollBar_GetThumbPosition(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -3809,8 +4307,12 @@ static PyObject *_wrap_wxScrollBar_GetThumbSize(PyObject *self, PyObject *args) 
         return NULL;
         }
     }
-    _result = (int )wxScrollBar_GetThumbSize(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxScrollBar_GetThumbSize(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -3830,8 +4332,12 @@ static PyObject *_wrap_wxScrollBar_SetThumbPosition(PyObject *self, PyObject *ar
         return NULL;
         }
     }
-    wxScrollBar_SetThumbPosition(_arg0,_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxScrollBar_SetThumbPosition(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -3858,8 +4364,12 @@ static PyObject *_wrap_wxScrollBar_SetScrollbar(PyObject *self, PyObject *args) 
         }
     }
     _arg5 = (bool ) tempbool5;
-    wxScrollBar_SetScrollbar(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxScrollBar_SetScrollbar(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -3924,8 +4434,12 @@ static PyObject *_wrap_new_wxSpinButton(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (wxSpinButton *)new_wxSpinButton(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5);
-    SWIG_MakePtr(_ptemp, (char *) _result,"_wxSpinButton_p");
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxSpinButton *)new_wxSpinButton(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5);
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxSpinButton_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
@@ -3946,8 +4460,12 @@ static PyObject *_wrap_wxSpinButton_GetMax(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (int )wxSpinButton_GetMax(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxSpinButton_GetMax(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -3967,8 +4485,12 @@ static PyObject *_wrap_wxSpinButton_GetMin(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (int )wxSpinButton_GetMin(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxSpinButton_GetMin(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -3988,8 +4510,12 @@ static PyObject *_wrap_wxSpinButton_GetValue(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (int )wxSpinButton_GetValue(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxSpinButton_GetValue(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -4010,8 +4536,12 @@ static PyObject *_wrap_wxSpinButton_SetRange(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxSpinButton_SetRange(_arg0,_arg1,_arg2);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxSpinButton_SetRange(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -4032,8 +4562,12 @@ static PyObject *_wrap_wxSpinButton_SetValue(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxSpinButton_SetValue(_arg0,_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxSpinButton_SetValue(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -4106,8 +4640,12 @@ static PyObject *_wrap_new_wxStaticBitmap(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (wxStaticBitmap *)new_wxStaticBitmap(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,_arg6);
-    SWIG_MakePtr(_ptemp, (char *) _result,"_wxStaticBitmap_p");
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxStaticBitmap *)new_wxStaticBitmap(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,_arg6);
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxStaticBitmap_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
@@ -4129,9 +4667,13 @@ static PyObject *_wrap_wxStaticBitmap_GetBitmap(PyObject *self, PyObject *args) 
         return NULL;
         }
     }
-    wxBitmap & _result_ref = wxStaticBitmap_GetBitmap(_arg0);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxBitmap & _result_ref = wxStaticBitmap_GetBitmap(_arg0);
     _result = (wxBitmap *) &_result_ref;
-    SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmap_p");
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmap_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
@@ -4159,8 +4701,12 @@ static PyObject *_wrap_wxStaticBitmap_SetBitmap(PyObject *self, PyObject *args) 
         return NULL;
         }
     }
-    wxStaticBitmap_SetBitmap(_arg0,*_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStaticBitmap_SetBitmap(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -4261,8 +4807,12 @@ static PyObject *_wrap_new_wxRadioBox(PyObject *self, PyObject *args) {
         _arg5 = 0;
     }
 }
-    _result = (wxRadioBox *)new_wxRadioBox(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,_arg6,_arg7,_arg8,*_arg9,_arg10);
-    SWIG_MakePtr(_ptemp, (char *) _result,"_wxRadioBox_p");
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxRadioBox *)new_wxRadioBox(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,_arg6,_arg7,_arg8,*_arg9,_arg10);
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxRadioBox_p");
     _resultobj = Py_BuildValue("s",_ptemp);
 {
     if (_obj2)
@@ -4292,8 +4842,12 @@ static PyObject *_wrap_wxRadioBox_Enable(PyObject *self, PyObject *args) {
         }
     }
     _arg1 = (bool ) tempbool1;
-    wxRadioBox_Enable(_arg0,_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxRadioBox_Enable(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -4317,8 +4871,12 @@ static PyObject *_wrap_wxRadioBox_EnableItem(PyObject *self, PyObject *args) {
         }
     }
     _arg2 = (bool ) tempbool2;
-    wxRadioBox_EnableItem(_arg0,_arg1,_arg2);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxRadioBox_EnableItem(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -4348,8 +4906,12 @@ static PyObject *_wrap_wxRadioBox_FindString(PyObject *self, PyObject *args) {
     }
     _arg1 = new wxString(PyString_AsString(_obj1));
 }
-    _result = (int )wxRadioBox_FindString(_arg0,*_arg1);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxRadioBox_FindString(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
 {
     if (_obj1)
         delete _arg1;
@@ -4373,8 +4935,12 @@ static PyObject *_wrap_wxRadioBox_GetLabel(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = new wxString (wxRadioBox_GetLabel(_arg0));
 {
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxRadioBox_GetLabel(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}{
     _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
 }
 {
@@ -4400,8 +4966,12 @@ static PyObject *_wrap_wxRadioBox_GetItemLabel(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = new wxString (wxRadioBox_GetItemLabel(_arg0,_arg1));
 {
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxRadioBox_GetItemLabel(_arg0,_arg1));
+
+    wxPy_END_ALLOW_THREADS;
+}{
     _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
 }
 {
@@ -4426,8 +4996,12 @@ static PyObject *_wrap_wxRadioBox_GetSelection(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (int )wxRadioBox_GetSelection(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxRadioBox_GetSelection(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -4448,8 +5022,12 @@ static PyObject *_wrap_wxRadioBox_GetString(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = new wxString (wxRadioBox_GetString(_arg0,_arg1));
 {
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxRadioBox_GetString(_arg0,_arg1));
+
+    wxPy_END_ALLOW_THREADS;
+}{
     _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
 }
 {
@@ -4474,8 +5052,12 @@ static PyObject *_wrap_wxRadioBox_GetStringSelection(PyObject *self, PyObject *a
         return NULL;
         }
     }
-    _result = new wxString (wxRadioBox_GetStringSelection(_arg0));
 {
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxRadioBox_GetStringSelection(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}{
     _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
 }
 {
@@ -4500,8 +5082,12 @@ static PyObject *_wrap_wxRadioBox_Number(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (int )wxRadioBox_Number(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxRadioBox_Number(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -4529,8 +5115,12 @@ static PyObject *_wrap_wxRadioBox_SetLabel(PyObject *self, PyObject *args) {
     }
     _arg1 = new wxString(PyString_AsString(_obj1));
 }
-    wxRadioBox_SetLabel(_arg0,*_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxRadioBox_SetLabel(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
 {
     if (_obj1)
@@ -4564,8 +5154,12 @@ static PyObject *_wrap_wxRadioBox_SetItemLabel(PyObject *self, PyObject *args) {
     }
     _arg2 = new wxString(PyString_AsString(_obj2));
 }
-    wxRadioBox_SetItemLabel(_arg0,_arg1,*_arg2);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxRadioBox_SetItemLabel(_arg0,_arg1,*_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
 {
     if (_obj2)
@@ -4590,8 +5184,12 @@ static PyObject *_wrap_wxRadioBox_SetSelection(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxRadioBox_SetSelection(_arg0,_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxRadioBox_SetSelection(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -4620,8 +5218,12 @@ static PyObject *_wrap_wxRadioBox_SetStringSelection(PyObject *self, PyObject *a
     }
     _arg1 = new wxString(PyString_AsString(_obj1));
 }
-    wxRadioBox_SetStringSelection(_arg0,*_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxRadioBox_SetStringSelection(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
 {
     if (_obj1)
@@ -4648,8 +5250,12 @@ static PyObject *_wrap_wxRadioBox_Show(PyObject *self, PyObject *args) {
         }
     }
     _arg1 = (bool ) tempbool1;
-    wxRadioBox_Show(_arg0,_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxRadioBox_Show(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -4673,8 +5279,12 @@ static PyObject *_wrap_wxRadioBox_ShowItem(PyObject *self, PyObject *args) {
         }
     }
     _arg2 = (bool ) tempbool2;
-    wxRadioBox_ShowItem(_arg0,_arg1,_arg2);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxRadioBox_ShowItem(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -4756,8 +5366,12 @@ static PyObject *_wrap_new_wxRadioButton(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (wxRadioButton *)new_wxRadioButton(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,*_arg6,_arg7);
-    SWIG_MakePtr(_ptemp, (char *) _result,"_wxRadioButton_p");
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxRadioButton *)new_wxRadioButton(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,*_arg6,_arg7);
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxRadioButton_p");
     _resultobj = Py_BuildValue("s",_ptemp);
 {
     if (_obj2)
@@ -4782,8 +5396,12 @@ static PyObject *_wrap_wxRadioButton_GetValue(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (bool )wxRadioButton_GetValue(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxRadioButton_GetValue(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -4805,8 +5423,12 @@ static PyObject *_wrap_wxRadioButton_SetValue(PyObject *self, PyObject *args) {
         }
     }
     _arg1 = (bool ) tempbool1;
-    wxRadioButton_SetValue(_arg0,_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxRadioButton_SetValue(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -4882,8 +5504,12 @@ static PyObject *_wrap_new_wxSlider(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (wxSlider *)new_wxSlider(_arg0,_arg1,_arg2,_arg3,_arg4,*_arg5,*_arg6,_arg7,*_arg8,_arg9);
-    SWIG_MakePtr(_ptemp, (char *) _result,"_wxSlider_p");
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxSlider *)new_wxSlider(_arg0,_arg1,_arg2,_arg3,_arg4,*_arg5,*_arg6,_arg7,*_arg8,_arg9);
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxSlider_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
@@ -4903,8 +5529,12 @@ static PyObject *_wrap_wxSlider_ClearSel(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxSlider_ClearSel(_arg0);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxSlider_ClearSel(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -4924,8 +5554,12 @@ static PyObject *_wrap_wxSlider_ClearTicks(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxSlider_ClearTicks(_arg0);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxSlider_ClearTicks(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -4946,8 +5580,12 @@ static PyObject *_wrap_wxSlider_GetLineSize(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (int )wxSlider_GetLineSize(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxSlider_GetLineSize(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -4967,8 +5605,12 @@ static PyObject *_wrap_wxSlider_GetMax(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (int )wxSlider_GetMax(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxSlider_GetMax(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -4988,8 +5630,12 @@ static PyObject *_wrap_wxSlider_GetMin(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (int )wxSlider_GetMin(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxSlider_GetMin(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -5009,8 +5655,12 @@ static PyObject *_wrap_wxSlider_GetPageSize(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (int )wxSlider_GetPageSize(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxSlider_GetPageSize(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -5030,8 +5680,12 @@ static PyObject *_wrap_wxSlider_GetSelEnd(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (int )wxSlider_GetSelEnd(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxSlider_GetSelEnd(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -5051,8 +5705,12 @@ static PyObject *_wrap_wxSlider_GetSelStart(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (int )wxSlider_GetSelStart(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxSlider_GetSelStart(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -5072,8 +5730,12 @@ static PyObject *_wrap_wxSlider_GetThumbLength(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (int )wxSlider_GetThumbLength(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxSlider_GetThumbLength(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -5093,8 +5755,12 @@ static PyObject *_wrap_wxSlider_GetTickFreq(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (int )wxSlider_GetTickFreq(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxSlider_GetTickFreq(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -5114,8 +5780,12 @@ static PyObject *_wrap_wxSlider_GetValue(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (int )wxSlider_GetValue(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxSlider_GetValue(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -5136,8 +5806,12 @@ static PyObject *_wrap_wxSlider_SetRange(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxSlider_SetRange(_arg0,_arg1,_arg2);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxSlider_SetRange(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -5159,8 +5833,12 @@ static PyObject *_wrap_wxSlider_SetTickFreq(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxSlider_SetTickFreq(_arg0,_arg1,_arg2);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxSlider_SetTickFreq(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -5181,8 +5859,12 @@ static PyObject *_wrap_wxSlider_SetLineSize(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxSlider_SetLineSize(_arg0,_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxSlider_SetLineSize(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -5203,8 +5885,12 @@ static PyObject *_wrap_wxSlider_SetPageSize(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxSlider_SetPageSize(_arg0,_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxSlider_SetPageSize(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -5226,8 +5912,12 @@ static PyObject *_wrap_wxSlider_SetSelection(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxSlider_SetSelection(_arg0,_arg1,_arg2);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxSlider_SetSelection(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -5248,8 +5938,12 @@ static PyObject *_wrap_wxSlider_SetThumbLength(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxSlider_SetThumbLength(_arg0,_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxSlider_SetThumbLength(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -5270,8 +5964,12 @@ static PyObject *_wrap_wxSlider_SetTick(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxSlider_SetTick(_arg0,_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxSlider_SetTick(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -5292,8 +5990,12 @@ static PyObject *_wrap_wxSlider_SetValue(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxSlider_SetValue(_arg0,_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxSlider_SetValue(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -5355,6 +6057,7 @@ static PyMethodDef controlscMethods[] = {
 	 { "wxScrollBar_GetRange", _wrap_wxScrollBar_GetRange, 1 },
 	 { "new_wxScrollBar", _wrap_new_wxScrollBar, 1 },
 	 { "wxTextCtrl_XYToPosition", _wrap_wxTextCtrl_XYToPosition, 1 },
+	 { "wxTextCtrl_AppendText", _wrap_wxTextCtrl_AppendText, 1 },
 	 { "wxTextCtrl_WriteText", _wrap_wxTextCtrl_WriteText, 1 },
 	 { "wxTextCtrl_ShowPosition", _wrap_wxTextCtrl_ShowPosition, 1 },
 	 { "wxTextCtrl_SetValue", _wrap_wxTextCtrl_SetValue, 1 },
@@ -5554,6 +6257,7 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_wxPanel","_class_wxPanel",0);
 	 SWIG_RegisterMapping("_wxInitDialogEvent","_class_wxInitDialogEvent",0);
 	 SWIG_RegisterMapping("_wxCheckBox","_class_wxCheckBox",0);
+	 SWIG_RegisterMapping("_wxPyEvent","_class_wxPyEvent",0);
 	 SWIG_RegisterMapping("_wxTextCtrl","_class_wxTextCtrl",0);
 	 SWIG_RegisterMapping("_class_wxToolTip","_wxToolTip",0);
 	 SWIG_RegisterMapping("_class_wxMask","_wxMask",0);
@@ -5583,6 +6287,7 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_wxScrollBar","_class_wxScrollBar",0);
 	 SWIG_RegisterMapping("_wxSpinButton","_class_wxSpinButton",0);
 	 SWIG_RegisterMapping("_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0);
+	 SWIG_RegisterMapping("_class_wxPyEvent","_wxPyEvent",0);
 	 SWIG_RegisterMapping("_class_wxIconizeEvent","_wxIconizeEvent",0);
 	 SWIG_RegisterMapping("_class_wxStaticBitmap","_wxStaticBitmap",0);
 	 SWIG_RegisterMapping("_wxScrollEvent","_class_wxScrollEvent",0);

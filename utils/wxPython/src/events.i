@@ -291,10 +291,27 @@ public:
 
 //---------------------------------------------------------------------------
 
+class wxPyEvent : public wxCommandEvent {
+public:
+    wxPyEvent(wxEventType commandType = wxEVT_NULL, PyObject* userData = Py_None);
+    ~wxPyEvent();
 
+    void SetUserData(PyObject* userData);
+    PyObject* GetUserData();
+};
+
+
+
+//---------------------------------------------------------------------------
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.7.4.1  1999/03/27 23:29:14  RD
+// wxPython 2.0b8
+//     Python thread support
+//     various minor additions
+//     various minor fixes
+//
 // Revision 1.7  1999/02/20 09:02:57  RD
 // Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
 // window handle.  If you can get the window handle into the python code,

@@ -144,6 +144,15 @@ class wxPyTimer;
 
 
 //---------------------------------------------------------------------------
+// Tell SWIG to wrap all the wrappers with Python's thread macros
+
+%except(python) {
+    wxPy_BEGIN_ALLOW_THREADS;
+    $function
+    wxPy_END_ALLOW_THREADS;
+}
+
+//---------------------------------------------------------------------------
 
 // some definitions for SWIG only
 typedef unsigned char   byte;
@@ -392,14 +401,14 @@ enum {
 };
 
 
-/// Standard error codes
-enum  ErrCode
-{
-  ERR_PARAM = (-4000),
-  ERR_NODATA,
-  ERR_CANCEL,
-  ERR_SUCCESS = 0
-};
+//  // Standard error codes
+//  enum  ErrCode
+//  {
+//    ERR_PARAM = (-4000),
+//    ERR_NODATA,
+//    ERR_CANCEL,
+//    ERR_SUCCESS = 0
+//  };
 
 
 enum {
@@ -756,7 +765,14 @@ enum wxEventType {
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.12.4.1  1999/03/27 23:29:13  RD
+// wxPython 2.0b8
+//     Python thread support
+//     various minor additions
+//     various minor fixes
+//
 // Revision 1.12  1999/02/27 04:21:58  RD
+//
 // Added missing wxRA_SPECIFY_ROWS, wxRA_SPECIFY_COLS
 //
 // Revision 1.11  1999/02/20 09:02:54  RD

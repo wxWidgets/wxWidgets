@@ -33,8 +33,11 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.3.4.1  1999/03/16 06:05:06  RD
- * wxPython 2.0b7
+ * Revision 1.3.4.2  1999/03/27 23:29:50  RD
+ * wxPython 2.0b8
+ *     Python thread support
+ *     various minor additions
+ *     various minor fixes
  *
  ************************************************************************/
 

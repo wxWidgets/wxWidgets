@@ -16,6 +16,9 @@ class wxEvtHandlerPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def ProcessEvent(self,arg0):
+        val = windowsc.wxEvtHandler_ProcessEvent(self.this,arg0.this)
+        return val
     def Connect(self,arg0,arg1,arg2,arg3):
         val = windowsc.wxEvtHandler_Connect(self.this,arg0,arg1,arg2,arg3)
         return val

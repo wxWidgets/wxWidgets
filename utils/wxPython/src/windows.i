@@ -34,6 +34,7 @@
 
 class wxEvtHandler {
 public:
+    bool ProcessEvent(wxEvent& event);
     %addmethods {
         void Connect( int id, int lastId, int eventType, PyObject* func) {
             if (PyCallable_Check(func)) {
@@ -398,7 +399,14 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.14.4.3  1999/03/27 23:29:15  RD
+// wxPython 2.0b8
+//     Python thread support
+//     various minor additions
+//     various minor fixes
+//
 // Revision 1.14.4.2  1999/03/16 06:26:29  RD
+//
 // wxPython 2.0b7
 //
 // Revision 1.14.4.1  1999/03/16 06:04:04  RD

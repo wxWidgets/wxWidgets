@@ -16,9 +16,10 @@ WXDIR = $(WXWIN)
 
 # Set this to the root of the Python installation
 PYTHONDIR=e:\Tools\Python15
+#PYTHONDIR=E:\PROJECTS\Python-1.5.2b2
 
 # Set this to 1 for a non-debug, optimised compile
-FINAL=1
+FINAL=0
 
 # Set this to where you want the stuff installed at.  It should
 # be a directory contained in a PYTHONPATH directory, and should be
@@ -26,16 +27,26 @@ FINAL=1
 TARGETDIR=..
 
 # Set this to 1 for make to pre-compile the Python modules, 0 to
-# just copy the sources and let Python compile them at the first
-# runtime.
+# just copy the sources and let Python compile them the first
+# time they are imported.
 COMPILEPY=0
 
 # If your wxWindows is built as a DLL, set this to 1.  Using 0 means
 # that wxWindows will be staticaly linked with wxPython.
 WXUSINGDLL=1
 
+# If you want to compile in code to aquire/release the Python
+# Interpreter at the appropriate places
+WXP_USE_THREAD=1
+
 # (experimental)
 SEPARATE=1
+
+#----------------------------------------------------------------------
+
+!if "$(WXP_USE_THREAD)" == "1"
+THREAD=-DWXP_USE_THREAD=1
+!endif
 
 #----------------------------------------------------------------------
 
@@ -43,8 +54,9 @@ NOPCH=1
 THISDIR=$(WXDIR)\utils\wxPython
 
 EXTRALIBS=$(PYTHONDIR)\libs\python15.lib
+#EXTRALIBS=$(PYTHONDIR)\PCbuild\python15_d.lib -D_DEBUG
 EXTRAINC=-I$(PYTHONDIR)\include -I.
-EXTRAFLAGS=/Fpwxp.pch /YXhelpers.h -DSWIG_GLOBAL -DHAVE_CONFIG_H
+EXTRAFLAGS=/Fpwxp.pch /YXhelpers.h -DSWIG_GLOBAL -DHAVE_CONFIG_H $(THREAD)
 OVERRIDEFLAGS=/GX- /DwxUSE_GLOBAL_MEMORY_OPERATORS=0 $(OTHERCFLAGS)
 
 
@@ -276,7 +288,14 @@ dist:
 #------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.4.2.2  1999/03/27 23:29:15  RD
+# wxPython 2.0b8
+#     Python thread support
+#     various minor additions
+#     various minor fixes
+#
 # Revision 1.4.2.1  1999/03/16 06:04:02  RD
+#
 # wxPython 2.0b7
 #
 # Revision 1.4  1999/03/05 07:22:30  RD

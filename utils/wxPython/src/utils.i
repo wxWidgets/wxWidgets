@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        utils.i
-// Purpose:     SWIG definitions of various utility classes classes
+// Purpose:     SWIG definitions of various utility classes
 //
 // Author:      Robin Dunn
 //
@@ -138,7 +138,14 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.3.4.1  1999/03/27 23:29:15  RD
+// wxPython 2.0b8
+//     Python thread support
+//     various minor additions
+//     various minor fixes
+//
 // Revision 1.3  1999/02/25 07:08:36  RD
+//
 // wxPython version 2.0b5
 //
 // Revision 1.2  1999/02/20 09:03:02  RD

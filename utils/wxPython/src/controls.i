@@ -328,6 +328,7 @@ public:
     void SetValue(const wxString& value);
     void ShowPosition(long pos);
     void WriteText(const wxString& text);
+    void AppendText(const wxString& text);
     long XYToPosition(long x, long y);
 };
 
@@ -483,7 +484,14 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.11.4.1  1999/03/27 23:29:14  RD
+// wxPython 2.0b8
+//     Python thread support
+//     various minor additions
+//     various minor fixes
+//
 // Revision 1.11  1999/02/25 07:08:30  RD
+//
 // wxPython version 2.0b5
 //
 // Revision 1.10  1998/12/17 17:52:19  RD

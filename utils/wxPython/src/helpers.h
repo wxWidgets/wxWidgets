@@ -18,6 +18,22 @@
 
 //----------------------------------------------------------------------
 
+// if we want to handle threads and Python threads are available...
+#if defined(WXP_USE_THREAD) && defined(WITH_THREAD)
+
+#define WXP_WITH_THREAD
+#define wxPy_BEGIN_ALLOW_THREADS  Py_BEGIN_ALLOW_THREADS
+#define wxPy_END_ALLOW_THREADS    Py_END_ALLOW_THREADS
+
+#else  // no Python threads...
+#undef WXP_WITH_THREAD
+#define wxPy_BEGIN_ALLOW_THREADS
+#define wxPy_END_ALLOW_THREADS
+#endif
+
+
+//----------------------------------------------------------------------
+
 class wxPyApp: public wxApp
 {
 public:
@@ -66,8 +82,8 @@ extern wxString wxPyEmptyStr;
 
 class wxPyCallback : public wxObject {
 public:
-    wxPyCallback(PyObject* func)    { m_func = func; Py_INCREF(m_func); }
-    ~wxPyCallback()                 { Py_DECREF(m_func); }
+    wxPyCallback(PyObject* func);
+    ~wxPyCallback();
 
     void EventThunker(wxEvent& event);
 
@@ -101,10 +117,32 @@ private:
 };
 
 //---------------------------------------------------------------------------
+
+class wxPyEvent : public wxCommandEvent {
+    DECLARE_DYNAMIC_CLASS(wxPyEvent)
+public:
+    wxPyEvent(wxEventType commandType = wxEVT_NULL, PyObject* userData = Py_None);
+    ~wxPyEvent();
+
+    void SetUserData(PyObject* userData);
+    PyObject* GetUserData();
+
+private:
+    PyObject* m_userData;
+};
+
+//---------------------------------------------------------------------------
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.6.4.1  1999/03/27 23:29:14  RD
+// wxPython 2.0b8
+//     Python thread support
+//     various minor additions
+//     various minor fixes
+//
 // Revision 1.6  1998/11/25 08:45:26  RD
+//
 // Added wxPalette, wxRegion, wxRegionIterator, wxTaskbarIcon
 // Added events for wxGrid
 // Other various fixes and additions

@@ -76,6 +76,7 @@ class MyApp(wxApp):
 app = MyApp(0)     # Create an instance of the application class
 app.MainLoop()     # Tell it to start processing events
 
+print 'done!'
 
 #----------------------------------------------------------------------------
 #
