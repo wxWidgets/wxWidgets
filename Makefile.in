@@ -548,7 +548,11 @@ ALL_DIST: distclean
 	cp $(WXDIR)/lib/vms.opt $(DISTDIR)/lib
 	cp $(WXDIR)/lib/vms_gtk.opt $(DISTDIR)/lib
 	mkdir $(DISTDIR)/src
-	cp $(SRCDIR)/files.lst $(DISTDIR)/src/
+	# temp hack for common/execcmn.cpp: it's not supported by tmake
+	# yet (it's a header-like file but in src/common directory and it
+	# shouldn't be distributed...)
+	mkdir $(DISTDIR)/src/common
+	cp $(SRCDIR)/common/execcmn.cpp $(DISTDIR)/src/common
 	mkdir $(DISTDIR)/src/zlib
 	cp $(ZLIBDIR)/*.h $(DISTDIR)/src/zlib
 	cp $(ZLIBDIR)/*.c $(DISTDIR)/src/zlib
@@ -597,7 +601,6 @@ ALL_GUI_DIST: ALL_DIST
 	cp $(WXDIR)/art/*.xpm $(DISTDIR)/art
 	cp $(WXDIR)/art/gtk/*.xpm $(DISTDIR)/art/gtk
 	cp $(WXDIR)/art/motif/*.xpm $(DISTDIR)/art/motif
-	mkdir $(DISTDIR)/src/common
 	mkdir $(DISTDIR)/src/generic
 	mkdir $(DISTDIR)/src/html
 	mkdir $(DISTDIR)/src/$(TOOLKITDIR)
@@ -649,7 +652,6 @@ BASE_DIST: ALL_DIST
 	mkdir $(DISTDIR)/include/wx/protocol
 	mkdir $(DISTDIR)/include/wx/unix
 	mkdir $(DISTDIR)/include/wx/msw
-	mkdir $(DISTDIR)/src/common
 	mkdir $(DISTDIR)/src/unix
 	mkdir $(DISTDIR)/src/msw
 	cp @PORT_FILES@ $(DISTDIR)
@@ -658,6 +660,7 @@ BASE_DIST: ALL_DIST
 	cp $(DOCDIR)/changes.txt $(DISTDIR)/CHANGES.txt
 	cp $(DOCDIR)/base/readme.txt $(DISTDIR)/README.txt
 	cp $(SRCDIR)/*.in $(DISTDIR)/src
+	cp $(SRCDIR)/files.lst $(DISTDIR)/src
 	cp $(WXDIR)/src/common/*.inc $(DISTDIR)/src/common
 	cp $(WXDIR)/src/common/base.rc $(DISTDIR)/src/common
 	cp $(WXDIR)/src/common/unzip.h $(DISTDIR)/src/common
