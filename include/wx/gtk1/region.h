@@ -52,11 +52,25 @@ enum wxRegionOp
 class wxRegion : public wxGDIObject
 {
 public:
-    wxRegion();
-    wxRegion( wxCoord x, wxCoord y, wxCoord w, wxCoord h );
-    wxRegion( const wxPoint& topLeft, const wxPoint& bottomRight );
-    wxRegion( const wxRect& rect );
-    wxRegion(size_t n, const wxPoint *points, int fillStyle = wxODDEVEN_RULE );
+    wxRegion() { }
+
+    wxRegion( wxCoord x, wxCoord y, wxCoord w, wxCoord h )
+    {
+        InitRect(x, y, w, h);
+    }
+
+    wxRegion( const wxPoint& topLeft, const wxPoint& bottomRight )
+    {
+        InitRect(topLeft.x, topLeft.y,
+                 bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
+    }
+
+    wxRegion( const wxRect& rect )
+    {
+        InitRect(rect.x, rect.y, rect.width, rect.height);
+    }
+
+    wxRegion( size_t n, const wxPoint *points, int fillStyle = wxODDEVEN_RULE );
     virtual ~wxRegion();
 
     wxRegion( const wxRegion& r ) { Ref(r); }
@@ -66,7 +80,7 @@ public:
     bool operator != ( const wxRegion& region );
 
     void Clear();
-    
+
     bool Offset( wxCoord x, wxCoord y );
 
     bool Union( wxCoord x, wxCoord y, wxCoord width, wxCoord height );
@@ -101,11 +115,11 @@ public:
     GdkRegion *GetRegion() const;
 
 protected:
+    // common part of ctors for a rectangle region
+    void InitRect(wxCoord x, wxCoord y, wxCoord w, wxCoord h);
+
     // helper of Intersect()
     bool IntersectRegionOnly(const wxRegion& reg);
-
-    // call this before modifying the region
-    void Unshare();
 
 private:
     DECLARE_DYNAMIC_CLASS(wxRegion);

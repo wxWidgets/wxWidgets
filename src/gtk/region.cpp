@@ -2,7 +2,7 @@
 // Name:        gtk/region.cpp
 // Purpose:
 // Author:      Robert Roebling
-// Modified:    VZ at 05.10.00: use Unshare(), comparison fixed
+// Modified:    VZ at 05.10.00: use AllocExclusive(), comparison fixed
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
@@ -100,7 +100,8 @@ wxRegionRefData::wxRegionRefData(const wxRegionRefData& refData)
 
 wxRegionRefData::~wxRegionRefData()
 {
-    if (m_region) gdk_region_destroy( m_region );
+    if (m_region)
+        gdk_region_destroy( m_region );
 
 #if OLDCODE
     wxNode *node = m_rects.First();
@@ -123,7 +124,7 @@ wxRegion::wxRegion()
 {
 }
 
-wxRegion::wxRegion( wxCoord x, wxCoord y, wxCoord w, wxCoord h )
+void wxRegion::InitRect(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
 {
     m_refData = new wxRegionRefData();
     GdkRegion *reg = gdk_region_new();
@@ -139,50 +140,9 @@ wxRegion::wxRegion( wxCoord x, wxCoord y, wxCoord w, wxCoord h )
     M_REGIONDATA->m_region = gdk_region_union_with_rect( reg, &rect );
     gdk_region_destroy( reg );
 #endif
-#if OLDCODE
-    M_REGIONDATA->m_rects.Append( (wxObject*) new wxRect(x,y,w,h) );
-#endif
-}
 
-wxRegion::wxRegion( const wxPoint& topLeft, const wxPoint& bottomRight )
-{
-    m_refData = new wxRegionRefData();
-    GdkRegion *reg = gdk_region_new();
-    GdkRectangle rect;
-    rect.x = topLeft.x;
-    rect.y = topLeft.y;
-    rect.width = bottomRight.x - rect.x;
-    rect.height = bottomRight.y - rect.y;
-#ifdef __WXGTK20__
-    gdk_region_union_with_rect( reg, &rect );
-    M_REGIONDATA->m_region = reg;
-#else
-    M_REGIONDATA->m_region = gdk_region_union_with_rect( reg, &rect );
-    gdk_region_destroy( reg );
-#endif
 #if OLDCODE
-    M_REGIONDATA->m_rects.Append( (wxObject*) new wxRect(topLeft,bottomRight) );
-#endif
-}
-
-wxRegion::wxRegion( const wxRect& rect )
-{
-    m_refData = new wxRegionRefData();
-    GdkRegion *reg = gdk_region_new();
-    GdkRectangle g_rect;
-    g_rect.x = rect.x;
-    g_rect.y = rect.y;
-    g_rect.width = rect.width;
-    g_rect.height = rect.height;
-#ifdef __WXGTK20__
-    gdk_region_union_with_rect( reg, &g_rect );
-    M_REGIONDATA->m_region = reg;
-#else
-    M_REGIONDATA->m_region = gdk_region_union_with_rect( reg, &g_rect );
-    gdk_region_destroy( reg );
-#endif
-#if OLDCODE
-    M_REGIONDATA->m_rects.Append( (wxObject*) new wxRect(rect.x,rect.y,rect.width,rect.height) );
+    M_REGIONDATA->m_rects.Append( (wxObject*) new wxRect(x, y, w, h) );
 #endif
 }
 
@@ -214,9 +174,13 @@ wxRegion::~wxRegion()
 {
 }
 
+// ----------------------------------------------------------------------------
+// wxRegion comparison
+// ----------------------------------------------------------------------------
+
 bool wxRegion::operator==( const wxRegion& region )
 {
-    // VZ: compare the regions themselves, not the pointers to ref data!
+    // compare the regions themselves, not the pointers to ref data!
     return gdk_region_equal(M_REGIONDATA->m_region,
                             M_REGIONDATA_OF(region)->m_region);
 }
@@ -224,22 +188,6 @@ bool wxRegion::operator==( const wxRegion& region )
 bool wxRegion::operator != ( const wxRegion& region )
 {
     return !(*this == region);
-}
-
-void wxRegion::Unshare()
-{
-    if ( !m_refData )
-    {
-        m_refData = new wxRegionRefData;
-        M_REGIONDATA->m_region = gdk_region_new();
-    }
-    else if ( m_refData->GetRefCount() > 1 )
-    {
-        wxRegionRefData *refData = new wxRegionRefData(*M_REGIONDATA);
-        UnRef();
-        m_refData = refData;
-    }
-    //else: we're not shared
 }
 
 // ----------------------------------------------------------------------------
@@ -272,7 +220,7 @@ bool wxRegion::Union( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
     }
     else
     {
-        Unshare();
+        AllocExclusive();
 
 #ifdef __WXGTK20__
         gdk_region_union_with_rect( M_REGIONDATA->m_region, &rect );
@@ -300,7 +248,7 @@ bool wxRegion::Union( const wxRegion& region )
     if (region.IsNull())
         return FALSE;
 
-    Unshare();
+    AllocExclusive();
 
 #ifdef __WXGTK20__
     gdk_region_union( M_REGIONDATA->m_region, region.GetRegion() );
@@ -342,7 +290,7 @@ bool wxRegion::Intersect( const wxRect& rect )
 // if we called Intersect() itself recursively
 bool wxRegion::IntersectRegionOnly(const wxRegion& region)
 {
-    Unshare();
+    AllocExclusive();
 
 #ifdef __WXGTK20__
     gdk_region_intersect( M_REGIONDATA->m_region, region.GetRegion() );
@@ -397,7 +345,8 @@ bool wxRegion::Intersect( const wxRegion& region )
 
         node = node->Next();
     }
-#endif
+#endif // OLDCODE
+
     return TRUE;
 }
 
@@ -424,7 +373,7 @@ bool wxRegion::Subtract( const wxRegion& region )
         M_REGIONDATA->m_region = gdk_region_new();
     }
 
-    Unshare();
+    AllocExclusive();
 
 #ifdef __WXGTK20__
     gdk_region_subtract( M_REGIONDATA->m_region, region.GetRegion() );
@@ -461,7 +410,7 @@ bool wxRegion::Xor( const wxRegion& region )
     }
     else
     {
-        Unshare();
+        AllocExclusive();
     }
 
 #ifdef __WXGTK20__
@@ -480,7 +429,7 @@ bool wxRegion::Xor( const wxRegion& region )
         M_REGIONDATA->m_rects.Append( (wxObject*) new wxRect(r->x,r->y,r->width,r->height) );
         node = node->Next();
     }
-#endif
+#endif // OLDCODE
 
     return TRUE;
 }
@@ -521,8 +470,10 @@ bool wxRegion::Offset( wxCoord x, wxCoord y )
     if (!m_refData)
         return FALSE;
 
+    AllocExclusive();
+
     gdk_region_offset( M_REGIONDATA->m_region, x, y );
-    
+
     return TRUE;
 }
 
@@ -669,7 +620,7 @@ wxCoord wxRegionIterator::GetH() const
     return r->height;
 }
 
-#else
+#else // !OLDCODE
 
 // the following structures must match the private structures
 // in X11 region code ( xc/lib/X11/region.h )
@@ -806,5 +757,5 @@ wxRect wxRegionIterator::GetRect() const
     return r;
 }
 
-#endif
+#endif // OLDCODE/!OLDCODE
 
