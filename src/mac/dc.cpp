@@ -1377,11 +1377,14 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
 {
     wxCHECK_RET( Ok(), wxT("wxDC::DoDrawRotatedText  Invalid window dc") );
 
-    if (angle == 0.0)
+    if (angle == 0.0 )
     {
         DrawText(str, x, y);
         return;
     }
+
+    if ( str.Length() == 0 )
+        return ;
 
     wxMacPortSetter helper(this) ;
     MacInstallFont() ;
@@ -1428,14 +1431,17 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
         &chars , (ATSUStyle*) &m_macATSUIStyle , &atsuLayout ) ;
 	wxASSERT_MSG( status == noErr , "couldn't create the layout of the rotated text" );
 
-    Fixed atsuAngle = IntToFixed( angle ) ;
-	ByteCount angleSize = sizeof(Fixed) ;
-	ATSUAttributeTag rotationTag = kATSULineRotationTag ;
-	ATSUAttributeValuePtr	angleValue = &atsuAngle ;
-	status = ::ATSUSetLayoutControls(atsuLayout , 1 , &rotationTag , &angleSize , &angleValue ) ;
+    if ( abs(angle) > 0 )
+    {
+        Fixed atsuAngle = IntToFixed( angle ) ;
+    	ByteCount angleSize = sizeof(Fixed) ;
+    	ATSUAttributeTag rotationTag = kATSULineRotationTag ;
+    	ATSUAttributeValuePtr	angleValue = &atsuAngle ;
+    	status = ::ATSUSetLayoutControls(atsuLayout , 1 , &rotationTag , &angleSize , &angleValue ) ;
+    }
 
-	status = ::ATSUDrawText( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
-					IntToFixed(XLOG2DEVMAC(x) ) , IntToFixed(YLOG2DEVMAC(y) ) );
+    status = ::ATSUDrawText( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
+				IntToFixed(XLOG2DEVMAC(x) ) , IntToFixed(YLOG2DEVMAC(y) ) );
 	wxASSERT_MSG( status == noErr , "couldn't draw the rotated text" );
     Rect rect ;
 	status = ::ATSUMeasureTextImage( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
@@ -1450,12 +1456,14 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
 }
 
 void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
-{
+{   
     wxCHECK_RET(Ok(), wxT("wxDC::DoDrawText  Invalid DC"));
     wxMacPortSetter helper(this) ;
 
 	long xx = XLOG2DEVMAC(x);
 	long yy = YLOG2DEVMAC(y);
+	
+	bool useDrawThemeText = ( DrawThemeTextBox != (void*) kUnresolvedCFragSymbolAddress ) ;
   
 	MacInstallFont() ;
     if ( 0 ) 
@@ -1468,7 +1476,9 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
 	FontInfo fi ;
 	::GetFontInfo( &fi ) ;
 	
-	yy += fi.ascent ;
+	if ( !useDrawThemeText )
+	    yy += fi.ascent ;
+	    
 	::MoveTo( xx , yy );
 	if (  m_backgroundMode == wxTRANSPARENT )
 	{
@@ -1499,19 +1509,54 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
 	int i = 0 ;
 	int line = 0 ;
 	
-	while( i < length )
-	{
-		if( text[i] == 13 || text[i] == 10)
-		{
-			::DrawText( text , laststop , i - laststop ) ;
-			line++ ;
-			::MoveTo( xx , yy + line*(fi.descent + fi.ascent + fi.leading) );
-			laststop = i+1 ;
-		}
-		i++ ;
+    {
+    	
+    	while( i < length )
+    	{
+    		if( text[i] == 13 || text[i] == 10)
+    		{
+            	if ( useDrawThemeText )
+            	{
+    	            Rect frame = { yy + line*(fi.descent + fi.ascent + fi.leading)  ,xx , yy + (line+1)*(fi.descent + fi.ascent + fi.leading) , xx + 1000 } ;
+                    CFStringRef mString = CFStringCreateWithBytes( NULL , (UInt8*) text + laststop , i - laststop , CFStringGetSystemEncoding(), false ) ;
+            		::DrawThemeTextBox( mString,
+            							kThemeCurrentPortFont,
+            							kThemeStateActive,
+            							true,
+            							&frame,
+            							teJustLeft,
+            							nil );
+            	    CFRelease( mString ) ;
+            	    line++ ;
+                }
+    		    else
+    		    {
+        			::DrawText( text , laststop , i - laststop ) ;
+            	    line++ ;
+        			::MoveTo( xx , yy + line*(fi.descent + fi.ascent + fi.leading) );
+    			}
+        		laststop = i+1 ;
+    		}
+    		i++ ;
+    	}
+        if ( useDrawThemeText )
+    	{
+    	    Rect frame = { yy + line*(fi.descent + fi.ascent + fi.leading)  ,xx , yy + (line+1)*(fi.descent + fi.ascent + fi.leading) , xx + 1000 } ;
+            CFStringRef mString = CFStringCreateWithCString( NULL , text + laststop , kCFStringEncodingMacRoman ) ;
+    		::DrawThemeTextBox( mString,
+    							kThemeCurrentPortFont,
+    							kThemeStateActive,
+    							true,
+    							&frame,
+    							teJustLeft,
+    							nil );
+            CFRelease( mString ) ;
+        }
+        else
+        {	
+    	    ::DrawText( text , laststop , i - laststop ) ;
+        }
 	}
-			
-	::DrawText( text , laststop , i - laststop ) ;
 	::TextMode( srcOr ) ;
 }
 
@@ -1635,7 +1680,7 @@ void  wxDC::Clear(void)
 {
     wxCHECK_RET(Ok(), wxT("Invalid DC"));  
     wxMacPortSetter helper(this) ;
-	Rect rect = { -32000 , -32000 , 32000 , 32000 } ;
+	Rect rect = { -31000 , -31000 , 31000 , 31000 } ;
 	
 	if (m_backgroundBrush.GetStyle() != wxTRANSPARENT) 
 	{
@@ -1652,6 +1697,8 @@ void wxDC::MacInstallFont() const
 //	if ( m_macFontInstalled )
 //		return ;
 	Pattern blackColor ;
+	
+	MacSetupBackgroundForCurrentPort(m_backgroundBrush) ;
 	
 	wxFontRefData * font = (wxFontRefData*) m_font.GetRefData() ;
 
@@ -1672,12 +1719,16 @@ void wxDC::MacInstallFont() const
 	}
 	else
 	{
-		short fontnum ;
-		
-		GetFNum( "\pGeneva" , &fontnum ) ;
-		::TextFont( fontnum ) ;
-		::TextSize( short(m_scaleY * 10) ) ;
-		::TextFace( 0 ) ;
+        FontFamilyID fontId ;
+    	Str255 fontName ;
+    	SInt16 fontSize ;
+    	Style fontStyle ;
+    	GetThemeFont(kThemeSmallSystemFont , GetApplicationScript() , fontName , &fontSize , &fontStyle ) ;
+        GetFNum( fontName, &fontId );
+        
+		::TextFont( fontId ) ;
+		::TextSize( short(m_scaleY * fontSize) ) ;
+		::TextFace( fontStyle ) ;
 	
 		// todo reset after spacing changes - or store the current spacing somewhere
 	
@@ -1747,37 +1798,48 @@ void wxDC::MacInstallFont() const
 	{
 	    kATSUFontTag ,
 	    kATSUSizeTag ,
-	    kATSUColorTag ,
-	    
+//	    kATSUColorTag ,
+	    kATSUBaselineClassTag ,
+	    kATSUVerticalCharacterTag,
+
 	    kATSUQDBoldfaceTag ,
 	    kATSUQDItalicTag ,
 	    kATSUQDUnderlineTag ,
 	    kATSUQDCondensedTag ,
 	    kATSUQDExtendedTag ,
-	    
+
 	} ;
 								
     ByteCount atsuSizes[sizeof(atsuTags)/sizeof(ATSUAttributeTag)] =
     {
         sizeof( ATSUFontID ) ,
         sizeof( Fixed ) ,
-        sizeof( RGBColor ) ,
+//        sizeof( RGBColor ) ,
+        sizeof( BslnBaselineClass ) ,
+        sizeof( ATSUVerticalCharacterType),
+        
         sizeof( Boolean ) ,
         sizeof( Boolean ) ,
         sizeof( Boolean ) ,
         sizeof( Boolean ) ,
         sizeof( Boolean ) ,
+
     } ;
 									
     Boolean kTrue = true ;
     Boolean kFalse = false ;
+    BslnBaselineClass kBaselineDefault = kBSLNHangingBaseline ;
+
+    ATSUVerticalCharacterType kHorizontal = kATSUStronglyHorizontal;
 
 	ATSUAttributeValuePtr	atsuValues[sizeof(atsuTags)/sizeof(ATSUAttributeTag)] =
 	{
 	    &atsuFont ,
 	    &atsuSize ,
-	    &MAC_WXCOLORREF( m_textForegroundColour.GetPixel() ) ,
-	    
+//	    &MAC_WXCOLORREF( m_textForegroundColour.GetPixel() ) ,
+	    &kBaselineDefault ,
+	    &kHorizontal,
+
 	    (qdStyle & bold) ? &kTrue : &kFalse ,
 	    (qdStyle & italic) ? &kTrue : &kFalse ,
 	    (qdStyle & underline) ? &kTrue : &kFalse ,
