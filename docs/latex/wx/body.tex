@@ -145,7 +145,7 @@ To make use of wxWindows, you currently need one of the following setups.
 \item A 486 or higher PC running MS Windows.
 \item A Windows compiler: most are supported, but please see {\tt install.txt} for
 details. Supported compilers include Microsoft Visual C++ 4.0 or higher, Borland C++, Cygwin,
-Metrowerks CodeWarrior.
+MinGW, Metrowerks CodeWarrior.
 \item At least 60 MB of disk space.
 \end{enumerate}
 
@@ -154,6 +154,7 @@ Metrowerks CodeWarrior.
 \begin{enumerate}\itemsep=0pt
 \item Almost any C++ compiler, including GNU C++ (EGCS 1.1.1 or above).
 \item Almost any Unix workstation, and one of: GTK+ 1.2, GTK+ 2.0, Motif 1.2 or higher, Lesstif.
+If using the wxX11 port, no such widget set is required.
 \item At least 60 MB of disk space.
 \end{enumerate}
 
@@ -260,54 +261,56 @@ multi-megabyte .pch files.
 
 \section{Libraries}
 
-The GTK and Motif ports of wxWindow can create either a static library or a shared
-library on most Unix or Unix-like systems. The static library is called libwx\_gtk.a
-and libwx\_motif.a whereas the name of the shared library is dependent on the
-system it is created on and the version you are using. The library name for the
-GTK version of wxWindows 2.2 on Linux and Solaris will be libwx\_gtk-2.2.so.0.0.0,
-on HP-UX, it will be libwx\_gtk-2.2.sl, on AIX just libwx\_gtk.a etc.
-
-Under Windows, use the library wx.lib (release) or wxd.lib (debug) for stand-alone Windows
-applications, or wxdll.lib (wxdlld.lib) for creating DLLs.
+Most ports of wxWindows can create either a static library or a shared
+library. wxWindows can also be built in multilib and monolithic variants.
+See the \helpref{libraries list}{librarieslist} for more
+information on these.
 
 \section{Configuration}
 
-Options are configurable in the file
+When using project files and makefiles directly to build wxWindows,
+options are configurable in the file
 \rtfsp{\tt "wx/XXX/setup.h"} where XXX is the required platform (such as msw, motif, gtk, mac). Some 
 settings are a matter of taste, some help with platform-specific problems, and
 others can be set to minimize the size of the library. Please see the setup.h file
 and {\tt install.txt} files for details on configuration.
 
-Under Unix (GTK and Motif) the corresponding setup.h files are generated automatically
-when configuring the wxWindows using the "configure" script. When using the RPM packages
+When using the 'configure' script to configure wxWindows (on Unix and other platforms where
+configure is available), the corresponding setup.h files are generated automatically
+along with suitable makefiles. When using the RPM packages
 for installing wxWindows on Linux, a correct setup.h is shipped in the package and
 this must not be changed.
 
 \section{Makefiles}
 
-At the moment there is no attempt to make Unix makefiles and
-PC makefiles compatible, i.e. one makefile is required for
-each environment. The Unix ports use a sophisticated system based
-on the GNU autoconf tool and this system will create the
-makefiles as required on the respective platform. Although the
-makefiles are not identical in Windows, Mac and Unix, care has
-been taken to make them relatively similar so that moving from
-one platform to another will be painless.
+On Microsoft Windows, wxWindows has a different set of makefiles for each
+compiler, because each compiler's 'make' tool is slightly different.
+Popular Windows compilers that we cater for, and the corresponding makefile
+extensions, include: Microsoft Visual C++ (.vc), Borland C++ (.bcc),
+OpenWatcom C++ (.wat) and MinGW/Cygwin (.gcc). Makefiles are provided
+for the wxWindows library itself, samples, demos, and utilities.
 
-Sample makefiles for Unix (suffix .unx), MS C++ (suffix .DOS and .NT), Borland
-C++ (.BCC and .B32) and Symantec C++ (.SC) are included for the library, demos
-and utilities.
+On Linux, Mac and OS/2, you use the 'configure' command to
+generate the necessary makefiles. You should also use this method when
+building with MinGW/Cygwin on Windows.
 
-The controlling makefile for wxWindows is in the MS-Windows
-directory {\tt src/msw} for the different Windows compiler and
-in the build directory when using the Unix ports. The build
-directory can be chosen by the user. It is the directory in
-which the "configure" script is run. This can be the normal
-base directory (by running {\tt ./configure} there) or any other
-directory (e.g. {\tt ../configure} after creating a build-directory
-in the directory level above the base directory).
+We also provide project files for some compilers, such as
+Microsoft VC++. However, we recommend using makefiles
+to build the wxWindows library itself, because makefiles
+can be more powerful and less manual intervention is required.
 
-Please see the platform-specific {\tt install.txt} file for further details.
+On Windows using a compiler other than MinGW/Cygwin, you would
+build the wxWindows library from the build/msw directory
+which contains the relevant makefiles.
+
+On Windows using MinGW/Cygwin, and on Unix, MacOS X and OS/2, you invoke
+'configure' (found in the top-level of the wxWindows source hierarchy),
+from within a suitable empty directory for containing makefiles, object files and
+libraries.
+
+For details on using makefiles, configure, and project files,
+please see docs/xxx/install.txt in your distribution, where
+xxx is the platform of interest, such as msw, gtk, x11, mac.
 
 \section{Windows-specific files}
 
@@ -320,7 +323,7 @@ The least that must be defined in the Windows resource file (extension RC)
 is the following statement:
 
 \begin{verbatim}
-rcinclude "wx/msw/wx.rc"
+#include "wx/msw/wx.rc"
 \end{verbatim}
 
 which includes essential internal wxWindows definitions.  The resource script
@@ -336,25 +339,6 @@ the MS Windows SDK documentation.
 \normalbox{Note: include wx.rc {\it after} any ICON statements
 so programs that search your executable for icons (such
 as the Program Manager) find your application icon first.}
-
-\subsection{Module definition file}
-
-A module definition file (extension DEF) is required for 16-bit applications, and
-looks like the following:
-
-\begin{verbatim}
-NAME         Hello
-DESCRIPTION  'Hello'
-EXETYPE      WINDOWS
-STUB         'WINSTUB.EXE'
-CODE         PRELOAD MOVEABLE DISCARDABLE
-DATA         PRELOAD MOVEABLE MULTIPLE
-HEAPSIZE     1024
-STACKSIZE    8192
-\end{verbatim}
-
-The only lines which will usually have to be changed per application are
-NAME and DESCRIPTION.
 
 \section{Allocating and deleting wxWindows objects}
 
@@ -421,18 +405,19 @@ The following documents some miscellaneous C++ issues.
 
 \subsection{Templates}
 
-wxWindows does not use templates since it is a notoriously unportable feature.
+wxWindows does not use templates (except for some advanced features that
+are switched off by default) since it is a notoriously unportable feature.
 
 \subsection{RTTI}
 
-wxWindows does not use run-time type information since wxWindows provides
+wxWindows does not use C++ run-time type information since wxWindows provides
 its own run-time type information system, implemented using macros.
 
 \subsection{Type of NULL}
 
 Some compilers (e.g. the native IRIX cc) define NULL to be 0L so that
 no conversion to pointers is allowed. Because of that, all these
-occurrences of NULL in the GTK port use an explicit conversion such 
+occurrences of NULL in the GTK+ port use an explicit conversion such 
 as
 
 {\small
@@ -574,10 +559,6 @@ Animate allows you to load animated GIFs and play them on a window. The library 
 to use other animation formats.
 You can find this in {\tt contrib/src/animate}, {\tt contrib/include/wx/animate}, and {\tt contrib/samples/animate}.
 
-\item[{\bf Canvas library}]
-Canvas supports high-level, double-buffered drawing operations with transformations.
-You can find this in {\tt contrib/src/canvas}, {\tt contrib/include/wx/canvas}, and {\tt contrib/samples/canvas}.
-
 \item[{\bf MMedia library}]
 Mmedia supports a variety of multimedia functionality. The status of this library is currently unclear.
 You can find this in {\tt contrib/src/mmedia}, {\tt contrib/include/wx/mmedia}, and {\tt contrib/samples/mmedia}.
@@ -697,26 +678,4 @@ scattering wxASSERTs liberally to test for problems in your code as early as pos
 will save a surprising amount of time in the long run.
 
 See the \helpref{debugging overview}{debuggingoverview} for further information.
-
-\subsection{Check Windows debug messages}
-
-Under Windows, it is worth running your program with 
-\urlref{DbgView}{http://www.sysinternals.com} running or
-some other program that shows Windows-generated debug messages. It is
-possible it will show invalid handles being used. You may have fun seeing
-what commercial programs cause these normally hidden errors! Microsoft
-recommend using the debugging version of Windows, which shows up even
-more problems. However, I doubt it is worth the hassle for most
-applications. wxWindows is designed to minimize the possibility of such
-errors, but they can still happen occasionally, slipping through unnoticed
-because they are not severe enough to cause a crash.
-
-\subsection{Genetic mutation}
-
-If we had sophisticated genetic algorithm tools that could be applied
-to programming, we could use them. Until then, a common -- if rather irrational --
-technique is to just make arbitrary changes to the code until something
-different happens. You may have an intuition why a change will make a difference;
-otherwise, just try altering the order of code, comment lines out, anything
-to get over an impasse. Obviously, this is usually a last resort.
 

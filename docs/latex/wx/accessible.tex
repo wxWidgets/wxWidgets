@@ -48,7 +48,8 @@ symbol is set to 1.
 Functions return a wxAccStatus error code, which
 may be one of the following:
 
-{\small \begin{verbatim}
+{\small%
+\begin{verbatim}
 typedef enum
 {
     wxACC\_FAIL,             // The function failed
@@ -62,7 +63,8 @@ typedef enum
 Directions of navigation are represented by
 the following:
 
-{\small \begin{verbatim}
+{\small%
+\begin{verbatim}
 typedef enum
 {
     wxNAVDIR\_DOWN,
@@ -79,7 +81,8 @@ typedef enum
 The role of a user interface element is represented
 by the following type:
 
-{\small \begin{verbatim}
+{\small%
+\begin{verbatim}
 typedef enum {  
     wxROLE\_NONE,
     wxROLE\_SYSTEM\_ALERT,
@@ -148,7 +151,8 @@ typedef enum {
 
 Objects are represented by the following type:
 
-{\small \begin{verbatim}
+{\small%
+\begin{verbatim}
 typedef enum {
     wxOBJID\_WINDOW =    0x00000000,
     wxOBJID\_SYSMENU =   0xFFFFFFFF,
@@ -168,7 +172,8 @@ typedef enum {
 Selection actions are identified by
 this type:
 
-{\small \begin{verbatim}
+{\small%
+\begin{verbatim}
 typedef enum
 {
     wxACC\_SEL\_NONE            = 0,
@@ -182,7 +187,8 @@ typedef enum
 
 States are represented by the following:
 
-{\small \begin{verbatim}
+{\small%
+\begin{verbatim}
 #define wxACC\_STATE\_SYSTEM\_ALERT\_HIGH       0x00000001
 #define wxACC\_STATE\_SYSTEM\_ALERT\_MEDIUM     0x00000002
 #define wxACC\_STATE\_SYSTEM\_ALERT\_LOW        0x00000004
@@ -214,7 +220,8 @@ States are represented by the following:
 Event identifiers that can be sent via \helpref{wxAccessible::NotifyEvent}{wxaccessiblenotifyevent} are
 as follows:
 
-{\small \begin{verbatim}
+{\small%
+\begin{verbatim}
 #define wxACC\_EVENT\_SYSTEM\_SOUND              0x0001
 #define wxACC\_EVENT\_SYSTEM\_ALERT              0x0002
 #define wxACC\_EVENT\_SYSTEM\_FOREGROUND         0x0003
