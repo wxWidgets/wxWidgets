@@ -1897,7 +1897,7 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
                 PaintLevel(children[n], dc, 1, y);
             } while (++n < count);
 
-            if (!HasFlag(wxTR_NO_LINES) && HasFlag(wxTR_LINES_AT_ROOT) && count > 1)
+            if (!HasFlag(wxTR_NO_LINES) && HasFlag(wxTR_LINES_AT_ROOT) && count > 0)
             {
                 // draw line down to last child
                 origY += GetLineHeight(children[0])>>1;
@@ -2059,7 +2059,7 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
                 PaintLevel(children[n], dc, level, y);
             } while (++n < count);
 
-            if (!HasFlag(wxTR_NO_LINES) && count > 1)
+            if (!HasFlag(wxTR_NO_LINES) && count > 0)
             {
                 // draw line down to last child
                 oldY += GetLineHeight(children[n-1])>>1;
