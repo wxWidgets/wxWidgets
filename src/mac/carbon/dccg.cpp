@@ -937,6 +937,9 @@ void  wxDC::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 )
 {
     wxCHECK_RET(Ok(), wxT("Invalid DC"));
     
+    if ( m_logicalFunction != wxCOPY )
+        return ;
+    
     wxCoord xx1 = XLOG2DEVMAC(x1) ;
     wxCoord yy1 = YLOG2DEVMAC(y1) ;
     wxCoord xx2 = XLOG2DEVMAC(x2) ;
@@ -957,6 +960,8 @@ void  wxDC::DoCrossHair( wxCoord x, wxCoord y )
 {
     wxCHECK_RET( Ok(), wxT("wxDC::DoCrossHair  Invalid window dc") );
 
+    if ( m_logicalFunction != wxCOPY )
+        return ;
     
     int w = 0;
     int h = 0;
@@ -1000,6 +1005,10 @@ void  wxDC::DoDrawArc( wxCoord x1, wxCoord y1,
                       wxCoord xc, wxCoord yc )
 {
     wxCHECK_RET(Ok(), wxT("wxDC::DoDrawArc  Invalid DC"));
+
+    if ( m_logicalFunction != wxCOPY )
+        return ;
+
     wxCoord xx1 = XLOG2DEVMAC(x1);
     wxCoord yy1 = YLOG2DEVMAC(y1);
     wxCoord xx2 = XLOG2DEVMAC(x2);
@@ -1045,6 +1054,9 @@ void  wxDC::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord w, wxCoord h,
 {
     wxCHECK_RET(Ok(), wxT("wxDC::DoDrawEllepticArc  Invalid DC"));
 
+    if ( m_logicalFunction != wxCOPY )
+        return ;
+
     double angle = sa - ea;  // Order important Mac in opposite direction to wx
     // we have to make sure that the filling is always counter-clockwise
     if ( angle > 0 )
@@ -1074,6 +1086,9 @@ void  wxDC::DoDrawLines(int n, wxPoint points[],
 {
     wxCHECK_RET(Ok(), wxT("Invalid DC"));
     
+    if ( m_logicalFunction != wxCOPY )
+        return ;
+
     wxCoord x1, x2 , y1 , y2 ;
     x1 = XLOG2DEVMAC(points[0].x + xoffset);
     y1 = YLOG2DEVMAC(points[0].y + yoffset);
@@ -1099,6 +1114,9 @@ void  wxDC::DoDrawPolygon(int n, wxPoint points[],
     if ( n== 0 || (m_brush.GetStyle() == wxTRANSPARENT && m_pen.GetStyle() == wxTRANSPARENT ) )
         return ;
         
+    if ( m_logicalFunction != wxCOPY )
+        return ;
+
     x2 = x1 = XLOG2DEVMAC(points[0].x + xoffset);
     y2 = y1 = YLOG2DEVMAC(points[0].y + yoffset);
     
@@ -1123,6 +1141,10 @@ void  wxDC::DoDrawPolygon(int n, wxPoint points[],
 void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
     wxCHECK_RET(Ok(), wxT("Invalid DC"));
+
+    if ( m_logicalFunction != wxCOPY )
+        return ;
+
     wxCoord xx = XLOG2DEVMAC(x);
     wxCoord yy = YLOG2DEVMAC(y);
     wxCoord ww = m_signX * XLOG2DEVREL(width);
@@ -1152,6 +1174,11 @@ void  wxDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
                                    double radius)
 {
     wxCHECK_RET(Ok(), wxT("Invalid DC"));
+
+    if ( m_logicalFunction != wxCOPY )
+        return ;
+
+
     if (radius < 0.0)
         radius = - radius * ((width < height) ? width : height);
     wxCoord xx = XLOG2DEVMAC(x);
@@ -1181,6 +1208,10 @@ void  wxDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
 void  wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
     wxCHECK_RET(Ok(), wxT("Invalid DC"));
+
+    if ( m_logicalFunction != wxCOPY )
+        return ;
+
     wxCoord xx = XLOG2DEVMAC(x);
     wxCoord yy = YLOG2DEVMAC(y);
     wxCoord ww = m_signX * XLOG2DEVREL(width);
@@ -1283,6 +1314,9 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
     if ( str.Length() == 0 )
         return ;
     
+    if ( m_logicalFunction != wxCOPY )
+        return ;
+
     wxCHECK_RET( m_macATSUIStyle != NULL , wxT("No valid font set") ) ;
     
     OSStatus status = noErr ;
