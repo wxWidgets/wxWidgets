@@ -211,6 +211,12 @@ dnl ### begin block 1_COND_PLATFORM_MAC_1 ###
         COND_PLATFORM_MAC_1=""
     fi
     AC_SUBST(COND_PLATFORM_MAC_1)
+dnl ### begin block 1_COND_PLATFORM_OS2_1 ###
+    COND_PLATFORM_OS2_1="#"
+    if test "x$PLATFORM_OS2" = "x1" ; then
+        COND_PLATFORM_OS2_1=""
+    fi
+    AC_SUBST(COND_PLATFORM_OS2_1)
 dnl ### begin block 1_COND_PLATFORM_UNIX_0 ###
     COND_PLATFORM_UNIX_0="#"
     if test "x$PLATFORM_UNIX" = "x0" ; then
