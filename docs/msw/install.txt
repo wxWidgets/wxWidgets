@@ -79,6 +79,10 @@ compiler.
 Visual C++ 6.0 compilation
 ---------------------------
 
+Please note that the VC++ 6.0 project files will work for
+VC++ .NET also, but you must open the .dsp files and not the .dsw
+files.
+
 Using project files (VC++ 6 only):
 
 1. Unarchive wxWindows-x.y.z-vc.zip, the VC++ 6 project
