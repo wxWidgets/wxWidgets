@@ -28,9 +28,8 @@ class WXDLLEXPORT wxMDIChildFrame;
 
 class WXDLLEXPORT wxMDIParentFrame: public wxFrame
 {
-DECLARE_DYNAMIC_CLASS(wxMDIParentFrame)
+  DECLARE_DYNAMIC_CLASS(wxMDIParentFrame)
 
-  friend class WXDLLEXPORT wxMDIChildFrame;
 public:
 
   wxMDIParentFrame();
