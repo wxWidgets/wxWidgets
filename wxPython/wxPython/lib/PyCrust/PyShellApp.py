@@ -6,12 +6,12 @@ __cvsid__ = "$Id$"
 __revision__ = "$Revision$"[11:-2]
 
 from wxPython.wx import *
-from PyCrust.shell import ShellFrame
+from shell import ShellFrame
 
 
 class App(wxApp):
     """PyShell standalone application."""
-    
+
     def OnInit(self):
         locals = {'__app__': 'PyShell Standalone Application'}
         self.shellFrame = ShellFrame(locals=locals)
@@ -33,5 +33,5 @@ def main():
 if __name__ == '__main__':
     main()
 
- 
- 
+
+

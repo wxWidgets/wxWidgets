@@ -6,12 +6,12 @@ __cvsid__ = "$Id$"
 __revision__ = "$Revision$"[11:-2]
 
 from wxPython.wx import *
-from PyCrust.crust import CrustFrame
+from crust import CrustFrame
 
 
 class App(wxApp):
     """PyCrust standalone application."""
-    
+
     def OnInit(self):
         locals = {'__app__': 'PyCrust Standalone Application'}
         self.crustFrame = CrustFrame(locals=locals)
@@ -33,4 +33,4 @@ def main():
 if __name__ == '__main__':
     main()
 
- 
+

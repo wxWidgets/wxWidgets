@@ -8,7 +8,7 @@ __revision__ = "$Revision$"[11:-2]
 # We use this object to get more introspection when run standalone.
 application = None
 
-from PyCrust import filling
+import filling
 
 # These are imported just to have something interesting to inspect.
 from PyCrust import crust
@@ -32,4 +32,4 @@ def main():
 if __name__ == '__main__':
     main()
 
- 
+
