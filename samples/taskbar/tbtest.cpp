@@ -2,7 +2,7 @@
 // Name:        tbtest.cpp
 // Purpose:     wxTaskBarIcon demo
 // Author:      Julian Smart
-// Modified by: Ryan Norton (Drawer)
+// Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c)
@@ -28,43 +28,9 @@
 #include "smile.xpm"
 
 #include "wx/taskbar.h"
-
-#if defined(__WXMAC__)
-#include "wx/mac/private.h"
-#endif
-
-//include this sample's header
 #include "tbtest.h"
 
-
-#if defined( __WXMAC__ ) && TARGET_API_MAC_OSX && ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_2 )
-
-//drawer
-#include "wx/dcclient.h"
-#include "wx/mac/carbon/drawer.h"
-
-class MyDrawer : public wxDrawerWindow
-{
-    public:
-    MyDrawer(wxWindow* p) : wxDrawerWindow(p, wxID_ANY, wxT(""), wxSize(200,200)) 
-    {	}
-    
-    void OnPaint(wxPaintEvent&)
-    {
-        wxPaintDC dc(this);
-        dc.DrawRectangle(30,30,60,60);
-    }
-    
-	DECLARE_EVENT_TABLE()
-};
-
-BEGIN_EVENT_TABLE(MyDrawer, wxDrawerWindow)
-    EVT_PAINT(MyDrawer::OnPaint)
-END_EVENT_TABLE()
-
-#endif 
-    //OSX 10.2+
-    
+// Declare two frames
 MyDialog   *dialog = NULL;
 
 IMPLEMENT_APP(MyApp)
@@ -127,38 +93,15 @@ void MyDialog::Init(void)
   (new wxButton(this, wxID_OK, _T("Hide me"), wxPoint(100, 230), wxSize(80, 25)))->SetDefault();
   Centre(wxBOTH);
    
-#if defined( __WXMAC__ ) && TARGET_API_MAC_OSX && ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_2 )
-
-    MacSetMetalAppearance(true);
-    Show(TRUE);
- 
-    MyDrawer* pMyDrawer = new MyDrawer(this);
-    pMyDrawer->Open(true);
-   
-    m_taskBarIcon = new MyTaskBarIcon(pMyDrawer);    
-#else
-    m_taskBarIcon = new MyTaskBarIcon();
-#endif
-    
-    if (!m_taskBarIcon->SetIcon(wxICON(sample), wxT("wxTaskBarIcon Sample")))
+  m_taskBarIcon = new MyTaskBarIcon();
+  if (!m_taskBarIcon->SetIcon(wxICON(sample), wxT("wxTaskBarIcon Sample")))
         wxMessageBox(wxT("Could not set icon."));
 }
 
 
 enum {
     PU_RESTORE = 10001,
-    
     PU_NEW_ICON,
-    PU_OLD_ICON,
-    
-    PU_OPEN_DRAWER,
-    PU_CLOSE_DRAWER,
-    
-    PU_LEFT_DRAWER,
-    PU_RIGHT_DRAWER,
-    PU_TOP_DRAWER,
-    PU_BOTTOM_DRAWER,
-    
     PU_EXIT,
 };
 
@@ -167,14 +110,7 @@ BEGIN_EVENT_TABLE(MyTaskBarIcon, wxTaskBarIcon)
     EVT_MENU(PU_RESTORE, MyTaskBarIcon::OnMenuRestore)
     EVT_MENU(PU_EXIT,    MyTaskBarIcon::OnMenuExit)
     EVT_MENU(PU_NEW_ICON,MyTaskBarIcon::OnMenuSetNewIcon)
-    EVT_MENU(PU_OLD_ICON,MyTaskBarIcon::OnMenuSetOldIcon)
-    EVT_MENU(PU_OPEN_DRAWER,MyTaskBarIcon::OnMenuOpenDrawer)
-    EVT_MENU(PU_CLOSE_DRAWER,MyTaskBarIcon::OnMenuCloseDrawer)
-    EVT_MENU(PU_TOP_DRAWER,MyTaskBarIcon::OnMenuTopDrawer)
-    EVT_MENU(PU_BOTTOM_DRAWER,MyTaskBarIcon::OnMenuBottomDrawer)
-    EVT_MENU(PU_LEFT_DRAWER,MyTaskBarIcon::OnMenuLeftDrawer)
-    EVT_MENU(PU_RIGHT_DRAWER,MyTaskBarIcon::OnMenuRightDrawer)
-    EVT_TASKBAR_LEFT_DCLICK  (MyTaskBarIcon::OnLButtonDClick)
+    EVT_TASKBAR_LEFT_DCLICK  (MyTaskBarIcon::OnLeftButtonDClick)
 END_EVENT_TABLE()
 
 void MyTaskBarIcon::OnMenuRestore(wxCommandEvent& )
@@ -195,47 +131,6 @@ void MyTaskBarIcon::OnMenuSetNewIcon(wxCommandEvent&)
         wxMessageBox(wxT("Could not set new icon."));
 }
 
-void MyTaskBarIcon::OnMenuSetOldIcon(wxCommandEvent&)
-{
-    wxIcon icon(wxT("wxDEFAULT_FRAME"));
-
-    if (!RemoveIcon())
-        wxMessageBox(wxT("Could not restore old icon."));
-}
-
-#if defined( __WXMAC__ ) && TARGET_API_MAC_OSX && ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_2 )
-
-void MyTaskBarIcon::OnMenuOpenDrawer(wxCommandEvent&)
-{
-    m_pMyDrawer->Open(true);
-}
-
-void MyTaskBarIcon::OnMenuCloseDrawer(wxCommandEvent&)
-{
-    m_pMyDrawer->Close();
-}
-
-void MyTaskBarIcon::OnMenuLeftDrawer(wxCommandEvent&)
-{
-    m_pMyDrawer->SetPreferredEdge(wxLEFT);
-}
-
-void MyTaskBarIcon::OnMenuRightDrawer(wxCommandEvent&)
-{
-    m_pMyDrawer->SetPreferredEdge(wxRIGHT);
-}
-
-void MyTaskBarIcon::OnMenuTopDrawer(wxCommandEvent&)
-{
-    m_pMyDrawer->SetPreferredEdge(wxTOP);
-}
-
-void MyTaskBarIcon::OnMenuBottomDrawer(wxCommandEvent&)
-{
-    m_pMyDrawer->SetPreferredEdge(wxBOTTOM);
-}
-#endif
-
 // Overridables
 wxMenu *MyTaskBarIcon::CreatePopupMenu()
 {
@@ -243,24 +138,12 @@ wxMenu *MyTaskBarIcon::CreatePopupMenu()
     
     menu->Append(PU_RESTORE, _T("&Restore TBTest"));
     menu->Append(PU_NEW_ICON,_T("&Set New Icon"));
-    menu->Append(PU_OLD_ICON,_T("&Restore Old Icon"));
-#if defined( __WXMAC__ ) && TARGET_API_MAC_OSX && ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_2 )
-    menu->AppendSeparator();
-    menu->Append(PU_OPEN_DRAWER,_T("Open Drawer"));
-    menu->Append(PU_CLOSE_DRAWER,_T("Close Drawer"));
-    menu->AppendSeparator();
-    menu->Append(PU_LEFT_DRAWER,_T("Set Drawer to come out on the LEFT side"));
-    menu->Append(PU_RIGHT_DRAWER,_T("Set Drawer to come out on the RIGHT side"));
-    menu->Append(PU_TOP_DRAWER,_T("Set Drawer to come out on the TOP side"));
-    menu->Append(PU_BOTTOM_DRAWER,_T("Set Drawer to come out on the BOTTOM side"));
-#else    
-    menu->AppendSeparator();
     menu->Append(PU_EXIT,    _T("E&xit"));
-#endif
+
     return menu;
 }
 
-void MyTaskBarIcon::OnLButtonDClick(wxTaskBarIconEvent&)
+void MyTaskBarIcon::OnLeftButtonDClick(wxTaskBarIconEvent&)
 {
     dialog->Show(true);
 }

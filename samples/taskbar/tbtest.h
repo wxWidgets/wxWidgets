@@ -2,7 +2,7 @@
 // Name:        tbtest.h
 // Purpose:     wxTaskBarIcon sample
 // Author:      Julian Smart
-// Modified by: Ryan Norton (OSX 10.2+ Drawer)
+// Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c)
@@ -14,25 +14,10 @@ class MyTaskBarIcon: public wxTaskBarIcon
 public:
     MyTaskBarIcon() {};
 
-    void OnLButtonDClick(wxTaskBarIconEvent&);
+    void OnLeftButtonDClick(wxTaskBarIconEvent&);
     void OnMenuRestore(wxCommandEvent&);
     void OnMenuExit(wxCommandEvent&);
-
     void OnMenuSetNewIcon(wxCommandEvent&);
-    void OnMenuSetOldIcon(wxCommandEvent&);
-
-#if defined( __WXMAC__ ) && TARGET_API_MAC_OSX && ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_2 )
-    class MyDrawer* m_pMyDrawer;
-    MyTaskBarIcon(class MyDrawer* p) {m_pMyDrawer = p;}
-
-    void OnMenuOpenDrawer(wxCommandEvent&);
-    void OnMenuCloseDrawer(wxCommandEvent&);
-
-    void OnMenuLeftDrawer(wxCommandEvent&);
-    void OnMenuRightDrawer(wxCommandEvent&);
-    void OnMenuTopDrawer(wxCommandEvent&);
-    void OnMenuBottomDrawer(wxCommandEvent&);
-#endif //10.2+
 
     virtual wxMenu *CreatePopupMenu();
 
@@ -62,7 +47,5 @@ public:
 protected:
     MyTaskBarIcon   *m_taskBarIcon;
 
-    DECLARE_EVENT_TABLE()
+DECLARE_EVENT_TABLE()
 };
-
-
