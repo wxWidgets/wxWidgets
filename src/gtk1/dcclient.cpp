@@ -773,6 +773,7 @@ void wxWindowDC::DoDrawPolygon( int n, wxPoint points[], wxCoord xoffset, wxCoor
 
         if (m_pen.GetStyle() != wxTRANSPARENT)
         {
+/*
             for (i = 0 ; i < n ; i++)
             {
                 gdk_draw_line( m_window, m_penGC,
@@ -781,6 +782,9 @@ void wxWindowDC::DoDrawPolygon( int n, wxPoint points[], wxCoord xoffset, wxCoor
                                gdkpoints[(i+1)%n].x,
                                gdkpoints[(i+1)%n].y);
             }
+*/
+            gdk_draw_polygon( m_window, m_penGC, FALSE, gdkpoints, n );
+            
         }
     }
 
