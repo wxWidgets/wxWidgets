@@ -6,7 +6,7 @@
 // Created:     2002/12/15
 // RCS-ID:      $Id: 
 // Copyright:   2002 David Elliott
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -73,7 +73,7 @@
 
 - (BOOL)validateMenuItem: (id)menuItem
 {
-    // TODO: Do wxWindows validation here and avoid sending during idle time
+    // TODO: Do wxWidgets validation here and avoid sending during idle time
     wxLogTrace(wxTRACE_COCOA,wxT("wxMenuItemAction"));
     wxMenuItem *item = wxMenuItem::GetFromCocoa(menuItem);
     wxCHECK_MSG(item,NO,wxT("validateMenuItem received but no wxMenuItem exists!"));

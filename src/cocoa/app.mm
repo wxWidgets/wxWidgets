@@ -6,7 +6,7 @@
 // Created:     2002/11/27
 // RCS-ID:      $Id$
 // Copyright:   (c) David Elliott
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
@@ -119,7 +119,7 @@ WX_IMPLEMENT_POSER(wxPoserNSApplication);
 @implementation wxNSApplicationDelegate : NSObject
 
 // NOTE: Terminate means that the event loop does NOT return and thus
-// cleanup code doesn't properly execute.  Furthermore, wxWindows has its
+// cleanup code doesn't properly execute.  Furthermore, wxWidgets has its
 // own exit on frame delete mechanism.
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)theApplication
 {

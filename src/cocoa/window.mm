@@ -6,7 +6,7 @@
 // Created:     2002/12/26
 // RCS-ID:      $Id:
 // Copyright:   (c) 2002 David Elliott
-// Licence:   	wxWindows license
+// Licence:   	wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
@@ -283,7 +283,7 @@ wxWindow::~wxWindow()
     wxAutoNSAutoreleasePool pool;
     DestroyChildren();
 
-    // Make sure our parent (in the wxWindows sense) is our superview
+    // Make sure our parent (in the wxWidgets sense) is our superview
     // before we go removing from it.
     if(m_parent && m_parent->GetNSView()==[GetNSViewForSuperview() superview])
         CocoaRemoveFromParent();
@@ -631,7 +631,7 @@ void wxWindowCocoa::SetInitialFrameRect(const wxPoint& pos, const wxSize& size)
     frameRect.origin.y = parentRect.size.height-(pos.y+frameRect.size.height);
     // Tell Cocoa to change the margin between the bottom of the superview
     // and the bottom of the control.  Keeps the control pinned to the top
-    // of its superview so that its position in the wxWindows coordinate
+    // of its superview so that its position in the wxWidgets coordinate
     // system doesn't change.
     if(![superview isFlipped])
         [nsview setAutoresizingMask: NSViewMinYMargin];

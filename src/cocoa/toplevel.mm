@@ -6,7 +6,7 @@
 // Created:     2002/11/27
 // RCS-ID:      $Id$
 // Copyright:   (c) 2002 David Elliott
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -274,7 +274,7 @@ bool wxTopLevelWindowCocoa::Show(bool show)
     wxAutoNSAutoreleasePool pool;
     if(show)
     {
-        // Send the window a size event because wxWindows apps expect it
+        // Send the window a size event because wxWidgets apps expect it
         // NOTE: This should really only be done the first time a window
         // is shown.  I doubt this will cause any problems though.
         wxSizeEvent event(GetSize(), GetId());
