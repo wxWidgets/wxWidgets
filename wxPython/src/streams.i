@@ -2,7 +2,7 @@
 // Name:        streams.i
 // Purpose:     SWIG definitions of the wxFileSystem family of classes
 //
-// Author:      Joerg Baumann
+// Author:      Joerg Baumann and Robin Dunn
 //
 // Created:     25-Sept-2000
 // RCS-ID:      $Id$
@@ -14,6 +14,7 @@
 
 %{
 #include "helpers.h"
+#include "pyistream.h"
 #include <wx/stream.h>
 #include <wx/list.h>
 %}

@@ -15,6 +15,7 @@
 #undef DEBUG
 #include <Python.h>
 #include "helpers.h"
+#include "pyistream.h"
 
 #ifdef __WXMSW__
 #include <wx/msw/private.h>

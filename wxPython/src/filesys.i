@@ -14,6 +14,7 @@
 
 %{
 #include "helpers.h"
+#include "pyistream.h"
 #include <wx/filesys.h>
 #include <wx/fs_inet.h>
 #include <wx/fs_mem.h>
