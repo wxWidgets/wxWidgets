@@ -295,10 +295,6 @@ static long map_to_wx_keysym( KeySym keysym )
 
     switch (keysym)
     {
-        case GDK_Shift_L:
-        case GDK_Shift_R:       key_code = WXK_SHIFT;       break;
-        case GDK_Control_L:
-        case GDK_Control_R:     key_code = WXK_CONTROL;     break;
         case GDK_Menu:          key_code = WXK_MENU;        break;
         case GDK_Help:          key_code = WXK_HELP;        break;
         case GDK_BackSpace:     key_code = WXK_BACK;        break;
@@ -592,7 +588,8 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
     key_code = map_to_wx_keysym( gdk_event->keyval );
 
     /* wxMSW doesn't send char events with Alt pressed */
-    if (((gdk_event->state & GDK_MOD1_MASK) == 0) &&
+    if ((key_code != 0) &&
+        ((gdk_event->state & GDK_MOD1_MASK) == 0) &&
         ((gdk_event->state & GDK_MOD1_MASK) == 0))
     {
         wxKeyEvent event2( wxEVT_CHAR );                 
