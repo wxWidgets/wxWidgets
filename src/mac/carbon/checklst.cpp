@@ -73,46 +73,44 @@ static pascal  void DataBrowserItemNotificationProc(ControlRef browser, DataBrow
     if ( ref )
     {
         wxCheckListBox* list = wxDynamicCast( (wxObject*) ref , wxCheckListBox ) ;
-        for ( size_t i = 0 ; i < list->m_idArray.GetCount() ; ++i )
-            if ( list->m_idArray[i] == (long) itemID )
+        size_t i = itemID - 1 ;
+        if (i >= 0 && i < list->GetCount() )
+        {
+            bool trigger = false ;
+            wxCommandEvent event(
+                wxEVT_COMMAND_LISTBOX_SELECTED, list->GetId() );
+            switch( message )
             {
-                bool trigger = false ;
-                wxCommandEvent event(
-                    wxEVT_COMMAND_LISTBOX_SELECTED, list->GetId() );
-                switch( message )
-                {
-                    case kDataBrowserItemDeselected :
-                        if ( list->HasMultipleSelection() )
-                            trigger = true ;
-                        break ;
-                    case kDataBrowserItemSelected :
+                case kDataBrowserItemDeselected :
+                    if ( list->HasMultipleSelection() )
                         trigger = true ;
-                        break ;
-                    case kDataBrowserItemDoubleClicked :
-                        event.SetEventType(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED) ;
-                        trigger = true ;
-                        break ;
-                     default :
-                        break ;
-                }
-
-                if ( trigger )
-                {
-                    event.SetEventObject( list );
-                    if ( list->HasClientObjectData() )
-                        event.SetClientObject( list->GetClientObject(i) );
-                    else if ( list->HasClientUntypedData() )
-                        event.SetClientData( list->GetClientData(i) );
-                    event.SetString( list->GetString(i) );
-                    event.SetInt(i) ;
-                    event.SetExtraLong( list->HasMultipleSelection() ? message == kDataBrowserItemSelected : TRUE );
-                    wxPostEvent( list->GetEventHandler() , event ) ;
-                    // direct notification is not always having the listbox GetSelection() having in synch with event
-                    // list->GetEventHandler()->ProcessEvent(event) ; 
-                } 
-
-                break ;
+                    break ;
+                case kDataBrowserItemSelected :
+                    trigger = true ;
+                    break ;
+                case kDataBrowserItemDoubleClicked :
+                    event.SetEventType(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED) ;
+                    trigger = true ;
+                    break ;
+                 default :
+                    break ;
             }
+
+            if ( trigger )
+            {
+                event.SetEventObject( list );
+                if ( list->HasClientObjectData() )
+                    event.SetClientObject( list->GetClientObject(i) );
+                else if ( list->HasClientUntypedData() )
+                    event.SetClientData( list->GetClientData(i) );
+                event.SetString( list->GetString(i) );
+                event.SetInt(i) ;
+                event.SetExtraLong( list->HasMultipleSelection() ? message == kDataBrowserItemSelected : TRUE );
+                wxPostEvent( list->GetEventHandler() , event ) ;
+                // direct notification is not always having the listbox GetSelection() having in synch with event
+                // list->GetEventHandler()->ProcessEvent(event) ; 
+            } 
+        }
     }
 }
 
@@ -134,14 +132,13 @@ static pascal OSStatus ListBoxGetSetItemData(ControlRef browser,
     		    if ( ref )
     		    {
     		        wxCheckListBox* list = wxDynamicCast( (wxObject*) ref , wxCheckListBox ) ;
-    		        for ( size_t i = 0 ; i < list->m_idArray.GetCount() ; ++i )
-    		            if ( list->m_idArray[i] == (long) itemID )
-    		            {
-    		                wxMacCFStringHolder cf( list->GetString(i) , list->GetFont().GetEncoding() ) ;
-    		                verify_noerr( ::SetDataBrowserItemDataText( itemData , cf ) ) ;
-    		                err = noErr ;
-    		                break ;
-    		            }
+                    size_t i = itemID - 1 ;
+                    if (i >= 0 && i < list->GetCount() )
+		            {
+		                wxMacCFStringHolder cf( list->GetString(i) , list->GetFont().GetEncoding() ) ;
+		                verify_noerr( ::SetDataBrowserItemDataText( itemData , cf ) ) ;
+		                err = noErr ;
+		            }
     			}
     		}	
     		break;
@@ -151,13 +148,12 @@ static pascal OSStatus ListBoxGetSetItemData(ControlRef browser,
     		    if ( ref )
     		    {
     		        wxCheckListBox* list = wxDynamicCast( (wxObject*) ref , wxCheckListBox ) ;
-    		        for ( size_t i = 0 ; i < list->m_idArray.GetCount() ; ++i )
-    		            if ( list->m_idArray[i] == (long) itemID )
-    		            {
-    		                verify_noerr( ::SetDataBrowserItemDataButtonValue( itemData , list->IsChecked( i ) ? kThemeButtonOn : kThemeButtonOff ) ) ;
-    		                err = noErr ;
-    		                break ;
-    		            }
+                    size_t i = itemID - 1 ;
+                    if (i >= 0 && i < list->GetCount() )
+		            {
+		                verify_noerr( ::SetDataBrowserItemDataButtonValue( itemData , list->IsChecked( i ) ? kThemeButtonOn : kThemeButtonOff ) ) ;
+		                err = noErr ;
+		            }
     			}
     	    }
     	    break ;
@@ -181,23 +177,21 @@ static pascal OSStatus ListBoxGetSetItemData(ControlRef browser,
     		    if ( ref )
     		    {
     		        wxCheckListBox* list = wxDynamicCast( (wxObject*) ref , wxCheckListBox ) ;
-    		        for ( size_t i = 0 ; i < list->m_idArray.GetCount() ; ++i )
-    		            if ( list->m_idArray[i] == (long) itemID )
-    		            {
-    		                // we have to change this behind the back, since Check() would be triggering another update round
-                            bool newVal = !list->IsChecked( i ) ;
-    		                verify_noerr( ::SetDataBrowserItemDataButtonValue( itemData , newVal ? kThemeButtonOn : kThemeButtonOff ) ) ;
-    		                err = noErr ;
-    		                list->m_checks[ i ] = newVal ;
+                    size_t i = itemID - 1 ;
+                    if (i >= 0 && i < list->GetCount() )
+		            {
+		                // we have to change this behind the back, since Check() would be triggering another update round
+                        bool newVal = !list->IsChecked( i ) ;
+		                verify_noerr( ::SetDataBrowserItemDataButtonValue( itemData , newVal ? kThemeButtonOn : kThemeButtonOff ) ) ;
+		                err = noErr ;
+		                list->m_checks[ i ] = newVal ;
 
-                            wxCommandEvent event(wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, list->GetId());
-                            event.SetInt(i);
-                            event.SetEventObject(list);
-                            list->GetEventHandler()->ProcessEvent(event);
-
-    		                break ;
-    		            }
-    			}
+                        wxCommandEvent event(wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, list->GetId());
+                        event.SetInt(i);
+                        event.SetEventObject(list);
+                        list->GetEventHandler()->ProcessEvent(event);
+		            }
+			}
 	        
 	        }
 	        break ;
@@ -227,8 +221,6 @@ bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
 
     m_noItems = 0 ; // this will be increased by our append command
     m_selected = 0;
-    m_nextId = 1 ;
-    
 
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
 
@@ -341,7 +333,7 @@ void wxCheckListBox::Check(size_t item, bool check)
     if ( check != isChecked )
     {
         m_checks[item] = check;
-        UInt32 id = m_idArray[item] ;
+        UInt32 id = item + 1 ;
         verify_noerr( m_peer->UpdateItems(kDataBrowserNoItem , 1 , &id , kDataBrowserItemNoProperty , kDataBrowserItemNoProperty ) ) ;
     }
 }
