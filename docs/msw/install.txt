@@ -414,16 +414,16 @@ Here are the steps required:
   extra files to use the wxWindows makefiles. You can find these
   files in ports/mingw32 on the ftp site or CD-ROM, as extra.zip.
   These should be extracted to the Mingw32 directory.
-  If you have already have downloaded bison, flex, make, rm, cp, mv
+  If you have alread downloaded bison, flex, make, rm, cp, mv
   from elsewhere, you won't need this.
 
   If using Mingw32 2.8.1, see also see mingw32.txt in this directory
   (docs/msw) about a fix that has to be applied to a Mingw32 header file.
 
   If using Mingw32 2.95 and below with wxWindows 2.1 or above, you
-  must hand-patch in Mingw32-gcc295.patches (located in the top-level of the
-  wxWindows 2 installation). Mingw32 2.95.2 and above contain the
-  fixes already.
+  must hand-patch with Mingw32-gcc295.patches (located in the
+  top-level of the wxWindows 2 installation). Mingw32 2.95.2
+  and above contain the fixes already.
 
 - Modify the file wx/src/cygnus.bat (or mingw32.bat or mingegcs.bat)
   to set up appropriate variables, if necessary mounting drives.
@@ -438,9 +438,6 @@ Here are the steps required:
   the file to either 1 (you have Mingw32) or 0 (you have Cygwin32).
   If using MINGW32, also set the MINGW32VERSION variable
   appropriately.
-
-- Mingw32 may not support winsock.h, so if you have a problem
-  here, comment out socket-related files in src/msw/makefile.g95.
 
 - Set your WXWIN variable to where wxWindows is installed.
   *** IMPORTANT: For Cygwin/Mingw32, use forward slashes in the path, not
@@ -487,9 +484,9 @@ Notes:
 
    (a missing bracket).
 
-4. If there's a problem with the copy command in
+4. If there's a problem with the copy or remove commands in
    src/msw/makefile.g95, you may need to change the COPY and
-   COPYSEP variables in makeg95.env.
+   RM variables in makeg95.env.
 
 5. If there's a problem executing the windres program, try
    commenting out RCPREPROCESSOR in makeg95.env.
@@ -512,7 +509,7 @@ References:
  - The GNU-WIN32 site is at
      http://www.cygnus.com/gnu-win32/
  - Mingw32 is available at:
-     ftp://ftp.xraylith.wisc.edu/pub/khan/gnu-win32/mingw32/gcc-2.95/
+     ftp://www,mingw.org
  - See also http://web.ukonline.co.uk/julian.smart/wxwin/gnuwin32.htm
 
 TWIN32 and gcc on Linux
@@ -542,5 +539,6 @@ General Notes
 - If you are installing wxWindows 2 from CVS, you may find that
   include/wx/msw/setup.h is missing. This is deliberate, to avoid
   developers' different setup.h configurations getting confused.
-  Please copy setup0.h to setup.h before compiling.
+  Please copy setup0.h to setup.h before compiling. Also, read
+  the BuildCVS.txt for other hints.
 
