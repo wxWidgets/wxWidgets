@@ -14,30 +14,47 @@
 %module ogl
 
 %{
-#include "wxPython.h"
+#include "wx/wxPython/wxPython.h"
+#include "wx/wxPython/pyclasses.h"
 #include "oglhelpers.h"
+
+
+    static const wxString wxPyEmptyString(wxT(""));
 %}
 
 //---------------------------------------------------------------------------
 
-%include typemaps.i
-%include my_typemaps.i
-
-%extern wx.i
 %import windows.i
-%extern _defs.i
-%extern misc.i
-%extern gdi.i
+
+%pythoncode { wx = core }
+
+%include _ogl_rename.i
 
 %include _ogldefs.i
+%include _oglbasic.i
+%include _oglshapes.i
+%include _oglshapes2.i
+%include _oglcanvas.i
 
-%import oglbasic.i
-%import oglshapes.i
-%import oglshapes2.i
-%import oglcanvas.i
+%pythoncode {
+%# Aliases    
+ShapeCanvas =       PyShapeCanvas
+ShapeEvtHandler =   PyShapeEvtHandler
+Shape =             PyShape
+RectangleShape =    PyRectangleShape
+BitmapShape =       PyBitmapShape
+DrawnShape =        PyDrawnShape
+CompositeShape =    PyCompositeShape
+DividedShape =      PyDividedShape
+DivisionShape =     PyDivisionShape
+EllipseShape =      PyEllipseShape
+CircleShape =       PyCircleShape
+LineShape =         PyLineShape
+PolygonShape =      PyPolygonShape
+TextShape =         PyTextShape
+ControlPoint =      PyControlPoint
+}    
 
-
-%pragma(python) code = "import wx"
 
 //---------------------------------------------------------------------------
 
@@ -135,10 +152,11 @@ void wxOGLCleanUp();
 
 %{
 //---------------------------------------------------------------------------
-// This one will work for any class for the VERY generic cases, but beyond that
-// the helper needs to know more about the type.
 
-wxList* wxPy_wxListHelper(PyObject* pyList, char* className) {
+// Convert from a Python list to a list of className objects.  This one will
+// work for any class for the VERY generic cases, but beyond that the helper
+// needs to know more about the type.
+wxList* wxPy_wxListHelper(PyObject* pyList, const wxChar* className) {
     wxPyBeginBlockThreads();
     if (!PyList_Check(pyList)) {
         PyErr_SetString(PyExc_TypeError, "Expected a list object.");
@@ -156,10 +174,10 @@ wxList* wxPy_wxListHelper(PyObject* pyList, char* className) {
         PyObject* pyo = PyList_GetItem(pyList, x);
         wxObject* wxo = NULL;
 
-        if (SWIG_GetPtrObj(pyo, (void **)&wxo, className)) {
-            char errmsg[1024];
-            sprintf(errmsg, "Type error, expected list of %s objects", className);
-            PyErr_SetString(PyExc_TypeError, errmsg);
+        if ( !wxPyConvertSwigPtr(pyo, (void **)&wxo, className) ) {
+            wxString errmsg;
+            errmsg.Printf(wxT("Type error, expected list of %s objects"), className);
+            PyErr_SetString(PyExc_TypeError, errmsg.mb_str());
             wxPyEndBlockThreads();
             return NULL;
         }
@@ -199,7 +217,7 @@ wxList* wxPy_wxRealPoint_ListHelper(PyObject* pyList) {
 
         } else {
             wxRealPoint* wxo = NULL;
-            if (SWIG_GetPtrObj(pyo, (void **)&wxo, "_wxRealPoint_p")) {
+            if (wxPyConvertSwigPtr(pyo, (void **)&wxo, wxT("wxRealPoint"))) {
                 PyErr_SetString(PyExc_TypeError, "Type error, expected list of wxRealPoint objects or 2-tuples");
                 wxPyEndBlockThreads();
                 return NULL;
@@ -237,7 +255,7 @@ PyObject*  wxPyMake_wxShapeEvtHandler(wxShapeEvtHandler* source) {
 
 //---------------------------------------------------------------------------
 
-PyObject* wxPy_ConvertShapeList(wxListBase* listbase, const char* className) {
+PyObject* wxPy_ConvertShapeList(wxListBase* listbase) {
     wxList*     list = (wxList*)listbase;
     PyObject*   pyList;
     PyObject*   pyObj;
@@ -277,19 +295,19 @@ IMPLEMENT_DYNAMIC_CLASS(wxPyTextShape, wxTextShape);
 
 //---------------------------------------------------------------------------
 
-extern "C" SWIGEXPORT(void) initoglbasicc();
-extern "C" SWIGEXPORT(void) initoglshapesc();
-extern "C" SWIGEXPORT(void) initoglshapes2c();
-extern "C" SWIGEXPORT(void) initoglcanvasc();
+// extern "C" SWIGEXPORT(void) initoglbasicc();
+// extern "C" SWIGEXPORT(void) initoglshapesc();
+// extern "C" SWIGEXPORT(void) initoglshapes2c();
+// extern "C" SWIGEXPORT(void) initoglcanvasc();
 %}
 
 
 %init %{
 
-    initoglbasicc();
-    initoglshapesc();
-    initoglshapes2c();
-    initoglcanvasc();
+//     initoglbasicc();
+//     initoglshapesc();
+//     initoglshapes2c();
+//     initoglcanvasc();
 
 
     wxPyPtrTypeMap_Add("wxControlPoint", "wxPyControlPoint");
@@ -308,12 +326,6 @@ extern "C" SWIGEXPORT(void) initoglcanvasc();
     wxPyPtrTypeMap_Add("wxTextShape", "wxPyTextShape");
 
 %}
-
-//----------------------------------------------------------------------
-// And this gets appended to the shadow class file.
-//----------------------------------------------------------------------
-
-%pragma(python) include="_oglextras.py";
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------

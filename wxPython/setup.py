@@ -56,7 +56,7 @@ Topic :: Software Development :: User Interfaces
 # Config values below this point can be reset on the setup.py command line.
 
 BUILD_GLCANVAS = 1 # If true, build the contrib/glcanvas extension module
-BUILD_OGL = 0      # If true, build the contrib/ogl extension module
+BUILD_OGL = 1      # If true, build the contrib/ogl extension module
 BUILD_STC = 1      # If true, build the contrib/stc extension module
 BUILD_XRC = 1      # XML based resource system
 BUILD_GIZMOS = 1   # Build a module for the gizmos contrib library
@@ -930,13 +930,16 @@ if BUILD_OGL:
     msg('Preparing OGL...')
     location = 'contrib/ogl'
 
-    swig_files = ['ogl.i', 'oglbasic.i', 'oglshapes.i', 'oglshapes2.i',
-                  'oglcanvas.i']
+    swig_sources = run_swig(['ogl.i'], location, '', PKGDIR,
+                            USE_SWIG, swig_force, swig_args, swig_deps +
+                            [ '%s/_oglbasic.i' % location,
+                              '%s/_oglshapes.i' % location,
+                              '%s/_oglshapes2.i' % location,
+                              '%s/_oglcanvas.i' % location,
+                              '%s/_ogldefs.i' % location,
+                              ])
 
-    swig_sources = run_swig(swig_files, location, '', PKGDIR,
-                            USE_SWIG, swig_force, swig_args, swig_deps)
-
-    ext = Extension('oglc',
+    ext = Extension('_ogl',
                     swig_sources,
 
                     include_dirs =  includes,
