@@ -1,5 +1,5 @@
 [OPTIONS]
-BMROOT=n:\wx2dev\wxWind~1\docs/latex/wx ; Assume that bitmaps are where the source is
+BMROOT=c:\wx2dev\wxWind~1\docs/latex/wx ; Assume that bitmaps are where the source is
 TITLE=wxWindows Manual
 CONTENTS=Contents
 COMPRESS=HIGH

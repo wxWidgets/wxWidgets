@@ -665,7 +665,7 @@ clean: $(PERIPH_CLEAN_TARGET)
 
 
 # Making documents
-docs:   allhlp allhtml allpdfrtf htb htmlhelp
+docs:   allhlp allhtml allpdfrtf allhtb allhtmlhelp
 alldocs: docs
 hlp:    wxhlp
 wxhlp:  $(DOCDIR)/winhelp/wx.hlp
@@ -684,10 +684,14 @@ referencps:	$(WXDIR)\docs\ps\referenc.ps
 allhlp: wxhlp
         cd $(WXDIR)\utils\dialoged\src
         nmake -f makefile.vc hlp
+        cd $(WXDIR)\utils\tex2rtf\src
+        nmake -f makefile.vc hlp
         cd $(THISDIR)
 
 allhtml: wxhtml
         cd $(WXDIR)\utils\dialoged\src
+        nmake -f makefile.vc html
+        cd $(WXDIR)\utils\tex2rtf\src
         nmake -f makefile.vc html
         cd $(THISDIR)
 
@@ -699,12 +703,29 @@ allps: wxps referencps
 allpdfrtf: pdfrtf
         cd $(WXDIR)\utils\dialoged\src
         nmake -f makefile.vc pdfrtf
+        cd $(WXDIR)\utils\tex2rtf\src
+        nmake -f makefile.vc pdfrtf
+        cd $(THISDIR)
+
+allhtmlhelp: htmlhelp
+        cd $(WXDIR)\utils\dialoged\src
+        nmake -f makefile.vc htmlhelp
+        cd $(WXDIR)\utils\tex2rtf\src
+        nmake -f makefile.vc htmlhelp
+        cd $(THISDIR)
+
+allhtb: htb
+        cd $(WXDIR)\utils\dialoged\src
+        nmake -f makefile.vc htb
+        cd $(WXDIR)\utils\tex2rtf\src
+        nmake -f makefile.vc htb
         cd $(THISDIR)
 
 $(DOCDIR)/winhelp/wx.hlp:         $(DOCDIR)/latex/wx/wx.rtf $(DOCDIR)/latex/wx/wx.hpj
         cd $(DOCDIR)/latex/wx
         -erase wx.ph
         hc wx
+        -mkdir $(DOCDIR)\winhelp
         -erase $(DOCDIR)\winhelp\wx.hlp
         -erase $(DOCDIR)\winhelp\wx.cnt
         move wx.hlp $(DOCDIR)\winhelp\wx.hlp
@@ -731,6 +752,7 @@ $(DOCDIR)/latex/techref/techref.rtf:         $(DOCDIR)/latex/techref/techref.tex
 
 $(DOCDIR)/pdf/wx.rtf:         $(DOCDIR)/latex/wx/classes.tex $(DOCDIR)/latex/wx/body.tex $(DOCDIR)/latex/wx/topics.tex $(DOCDIR)/latex/wx/manual.tex
         cd $(DOCDIR)\latex\wx
+        -mkdir $(DOCDIR)\pdf
         -copy *.wmf $(DOCDIR)\pdf
         -copy *.bmp $(DOCDIR)\pdf
         -start $(WAITFLAG) tex2rtf $(DOCDIR)/latex/wx/manual.tex $(DOCDIR)/pdf/wx.rtf -twice -rtf
@@ -745,6 +767,7 @@ $(DOCDIR)/pdf/techref.rtf:         $(DOCDIR)/latex/techref/techref.tex
 
 $(DOCDIR)\html\wx\wx.htm:         $(DOCDIR)\latex\wx\classes.tex $(DOCDIR)\latex\wx\body.tex $(DOCDIR)/latex/wx/topics.tex $(DOCDIR)\latex\wx\manual.tex
         cd $(DOCDIR)\latex\wx
+        -mkdir $(DOCDIR)\html
         -mkdir $(DOCDIR)\html\wx
         copy *.gif $(DOCDIR)\html\wx
         -start $(WAITFLAG) tex2rtf $(DOCDIR)\latex\wx\manual.tex $(DOCDIR)\html\wx\wx.htm -twice -html
