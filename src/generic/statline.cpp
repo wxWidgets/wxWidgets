@@ -48,6 +48,8 @@ bool wxStaticLine::Create( wxWindow *parent,
                            long style,
                            const wxString &name)
 {
+    m_statbox = NULL;
+
     if ( !CreateBase(parent, id, pos, size, style, wxDefaultValidator, name) )
         return FALSE;
 
@@ -61,6 +63,10 @@ bool wxStaticLine::Create( wxWindow *parent,
     return TRUE;
 }
 
+wxStaticLine::~wxStaticLine()
+{
+    delete m_statbox;
+}
 
 WXWidget wxStaticLine::GetMainWidget() const
 {
