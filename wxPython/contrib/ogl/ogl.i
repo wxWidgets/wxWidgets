@@ -256,22 +256,23 @@ PyObject*  wxPyMake_wxShapeEvtHandler(wxShapeEvtHandler* source) {
 
 //---------------------------------------------------------------------------
 
-PyObject* wxPy_ConvertRealPointList(wxListBase* list) {
-      PyObject*   pyList;
-      PyObject*   pyObj;
-      wxObject*   wxObj;
-      wxNode*     node = list->GetFirst();
-
-      bool blocked = wxPyBeginBlockThreads();
-      pyList = PyList_New(0);
-      while (node) {
-          wxObj = node->GetData();
-          pyObj = wxPyConstructObject(wxObj, wxT("wxRealPoint"), 0);
-          PyList_Append(pyList, pyObj);
-          node = node->GetNext();
-      }
-      wxPyEndBlockThreads(blocked);
-      return pyList;
+PyObject* wxPy_ConvertRealPointList(wxListBase* listbase) {
+    wxList*     list = (wxList*)listbase;
+    PyObject*   pyList;
+    PyObject*   pyObj;
+    wxObject*   wxObj;
+    wxNode*     node = list->GetFirst();
+    
+    bool blocked = wxPyBeginBlockThreads();
+    pyList = PyList_New(0);
+    while (node) {
+        wxObj = node->GetData();
+        pyObj = wxPyConstructObject(wxObj, wxT("wxRealPoint"), 0);
+        PyList_Append(pyList, pyObj);
+        node = node->GetNext();
+    } 
+    wxPyEndBlockThreads(blocked);
+    return pyList;
 }
 
 //---------------------------------------------------------------------------
