@@ -74,7 +74,7 @@ wxHtmlWinParser::wxHtmlWinParser(wxHtmlWindow *wnd) : wxHtmlParser()
     }
 
     // fill in wxHtmlParser's tables:
-    wxNode *node = m_Modules.GetFirst();
+    wxList::compatibility_iterator node = m_Modules.GetFirst();
     while (node)
     {
         wxHtmlTagsModule *mod = (wxHtmlTagsModule*) node->GetData();

@@ -354,11 +354,8 @@ bool wxIsDriveAvailable(const wxString& dirName)
 
 // Function which is called by quick sort. We want to override the default wxArrayString behaviour,
 // and sort regardless of case.
-static int LINKAGEMODE wxDirCtrlStringCompareFunction(const void *first, const void *second)
+static int LINKAGEMODE wxDirCtrlStringCompareFunction(wxString* strFirst, wxString* strSecond)
 {
-    wxString *strFirst = (wxString *)first;
-    wxString *strSecond = (wxString *)second;
-
     return strFirst->CmpNoCase(*strSecond);
 }
 
@@ -725,7 +722,7 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
             while (d.GetNext(& eachFilename));
         }
     }
-    dirs.Sort((wxArrayString::CompareFunction) wxDirCtrlStringCompareFunction);
+    dirs.Sort(wxDirCtrlStringCompareFunction);
 
     // Now do the filenames -- but only if we're allowed to
     if ((GetWindowStyle() & wxDIRCTRL_DIR_ONLY) == 0)
@@ -748,7 +745,7 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
                 while (d.GetNext(& eachFilename));
             }
         }
-        filenames.Sort((wxArrayString::CompareFunction) wxDirCtrlStringCompareFunction);
+        filenames.Sort(wxDirCtrlStringCompareFunction);
     }
 
     // Add the sorted dirs
@@ -1369,7 +1366,11 @@ wxFileIconsTable::wxFileIconsTable()
 
 wxFileIconsTable::~wxFileIconsTable()
 {
-    if (m_HashTable) delete m_HashTable;
+    if (m_HashTable)
+    {
+        WX_CLEAR_HASH_TABLE(*m_HashTable);
+        delete m_HashTable;
+    }
     if (m_smallImageList) delete m_smallImageList;
 }
 
@@ -1380,7 +1381,6 @@ void wxFileIconsTable::Create()
     m_HashTable = new wxHashTable(wxKEY_STRING);
     m_smallImageList = new wxImageList(16, 16);
 
-    m_HashTable->DeleteContents(TRUE);
     // folder:
     m_smallImageList->Add(wxArtProvider::GetBitmap(wxART_FOLDER, wxART_CMN_DIALOG));
     // folder_open
@@ -1401,6 +1401,7 @@ void wxFileIconsTable::Create()
     if (GetIconID(wxEmptyString, _T("application/x-executable")) == file)
     {
         m_smallImageList->Add(wxArtProvider::GetBitmap(wxART_EXECUTABLE_FILE, wxART_CMN_DIALOG));
+        delete m_HashTable->Get(_T("exe"));
         m_HashTable->Delete(_T("exe"));
         m_HashTable->Put(_T("exe"), new wxFileIconEntry(executable));
     }

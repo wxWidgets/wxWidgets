@@ -289,7 +289,11 @@ public:
 public:
     wxListLineData(wxListMainWindow *owner);
 
-    ~wxListLineData() { delete m_gi; }
+    ~wxListLineData()
+    {
+        WX_CLEAR_LIST(wxListItemDataList, m_items);
+        delete m_gi;
+    }
 
     // are we in report mode?
     inline bool InReportView() const;
@@ -1090,7 +1094,6 @@ inline bool wxListLineData::IsVirtual() const
 wxListLineData::wxListLineData( wxListMainWindow *owner )
 {
     m_owner = owner;
-    m_items.DeleteContents( TRUE );
 
     if ( InReportView() )
     {
@@ -1108,7 +1111,7 @@ wxListLineData::wxListLineData( wxListMainWindow *owner )
 
 void wxListLineData::CalculateSize( wxDC *dc, int spacing )
 {
-    wxListItemDataList::Node *node = m_items.GetFirst();
+    wxListItemDataList::compatibility_iterator node = m_items.GetFirst();
     wxCHECK_RET( node, _T("no subitems at all??") );
 
     wxListItemData *item = node->GetData();
@@ -1218,7 +1221,7 @@ void wxListLineData::SetPosition( int x, int y,
                                   int window_width,
                                   int spacing )
 {
-    wxListItemDataList::Node *node = m_items.GetFirst();
+    wxListItemDataList::compatibility_iterator node = m_items.GetFirst();
     wxCHECK_RET( node, _T("no subitems at all??") );
 
     wxListItemData *item = node->GetData();
@@ -1291,7 +1294,7 @@ void wxListLineData::InitItems( int num )
 
 void wxListLineData::SetItem( int index, const wxListItem &info )
 {
-    wxListItemDataList::Node *node = m_items.Item( index );
+    wxListItemDataList::compatibility_iterator node = m_items.Item( index );
     wxCHECK_RET( node, _T("invalid column index in SetItem") );
 
     wxListItemData *item = node->GetData();
@@ -1300,7 +1303,7 @@ void wxListLineData::SetItem( int index, const wxListItem &info )
 
 void wxListLineData::GetItem( int index, wxListItem &info )
 {
-    wxListItemDataList::Node *node = m_items.Item( index );
+    wxListItemDataList::compatibility_iterator node = m_items.Item( index );
     if (node)
     {
         wxListItemData *item = node->GetData();
@@ -1312,7 +1315,7 @@ wxString wxListLineData::GetText(int index) const
 {
     wxString s;
 
-    wxListItemDataList::Node *node = m_items.Item( index );
+    wxListItemDataList::compatibility_iterator node = m_items.Item( index );
     if (node)
     {
         wxListItemData *item = node->GetData();
@@ -1324,7 +1327,7 @@ wxString wxListLineData::GetText(int index) const
 
 void wxListLineData::SetText( int index, const wxString s )
 {
-    wxListItemDataList::Node *node = m_items.Item( index );
+    wxListItemDataList::compatibility_iterator node = m_items.Item( index );
     if (node)
     {
         wxListItemData *item = node->GetData();
@@ -1334,7 +1337,7 @@ void wxListLineData::SetText( int index, const wxString s )
 
 void wxListLineData::SetImage( int index, int image )
 {
-    wxListItemDataList::Node *node = m_items.Item( index );
+    wxListItemDataList::compatibility_iterator node = m_items.Item( index );
     wxCHECK_RET( node, _T("invalid column index in SetImage()") );
 
     wxListItemData *item = node->GetData();
@@ -1343,7 +1346,7 @@ void wxListLineData::SetImage( int index, int image )
 
 int wxListLineData::GetImage( int index ) const
 {
-    wxListItemDataList::Node *node = m_items.Item( index );
+    wxListItemDataList::compatibility_iterator node = m_items.Item( index );
     wxCHECK_MSG( node, -1, _T("invalid column index in GetImage()") );
 
     wxListItemData *item = node->GetData();
@@ -1352,7 +1355,7 @@ int wxListLineData::GetImage( int index ) const
 
 wxListItemAttr *wxListLineData::GetAttr() const
 {
-    wxListItemDataList::Node *node = m_items.GetFirst();
+    wxListItemDataList::compatibility_iterator node = m_items.GetFirst();
     wxCHECK_MSG( node, NULL, _T("invalid column index in GetAttr()") );
 
     wxListItemData *item = node->GetData();
@@ -1361,7 +1364,7 @@ wxListItemAttr *wxListLineData::GetAttr() const
 
 void wxListLineData::SetAttr(wxListItemAttr *attr)
 {
-    wxListItemDataList::Node *node = m_items.GetFirst();
+    wxListItemDataList::compatibility_iterator node = m_items.GetFirst();
     wxCHECK_RET( node, _T("invalid column index in SetAttr()") );
 
     wxListItemData *item = node->GetData();
@@ -1434,7 +1437,7 @@ bool wxListLineData::SetAttributes(wxDC *dc,
 
 void wxListLineData::Draw( wxDC *dc )
 {
-    wxListItemDataList::Node *node = m_items.GetFirst();
+    wxListItemDataList::compatibility_iterator node = m_items.GetFirst();
     wxCHECK_RET( node, _T("no subitems at all??") );
 
     bool highlighted = IsHighlighted();
@@ -1481,7 +1484,7 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
             y = rect.y + (LINE_SPACING + EXTRA_HEIGHT) / 2;
 
     size_t col = 0;
-    for ( wxListItemDataList::Node *node = m_items.GetFirst();
+    for ( wxListItemDataList::compatibility_iterator node = m_items.GetFirst();
           node;
           node = node->GetNext(), col++ )
     {
@@ -2169,7 +2172,6 @@ END_EVENT_TABLE()
 
 void wxListMainWindow::Init()
 {
-    m_columns.DeleteContents( TRUE );
     m_dirty = TRUE;
     m_countVirt = 0;
     m_lineFrom =
@@ -2265,6 +2267,7 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent,
 wxListMainWindow::~wxListMainWindow()
 {
     DoDeleteAllItems();
+    WX_CLEAR_LIST(wxListHeaderDataList, m_columns);
 
     delete m_highlightBrush;
     delete m_highlightUnfocusedBrush;
@@ -3506,7 +3509,7 @@ int wxListMainWindow::GetItemSpacing( bool isSmall )
 
 void wxListMainWindow::SetColumn( int col, wxListItem &item )
 {
-    wxListHeaderDataList::Node *node = m_columns.Item( col );
+    wxListHeaderDataList::compatibility_iterator node = m_columns.Item( col );
 
     wxCHECK_RET( node, _T("invalid column index in SetColumn") );
 
@@ -3539,7 +3542,7 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
     if ( headerWin )
         headerWin->m_dirty = TRUE;
 
-    wxListHeaderDataList::Node *node = m_columns.Item( col );
+    wxListHeaderDataList::compatibility_iterator node = m_columns.Item( col );
     wxCHECK_RET( node, _T("no column?") );
 
     wxListHeaderData *column = node->GetData();
@@ -3567,7 +3570,7 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
             for ( size_t i = 0; i < count; i++ )
             {
                 wxListLineData *line = GetLine(i);
-                wxListItemDataList::Node *n = line->m_items.Item( col );
+                wxListItemDataList::compatibility_iterator n = line->m_items.Item( col );
 
                 wxCHECK_RET( n, _T("no subitem?") );
 
@@ -3620,7 +3623,7 @@ int wxListMainWindow::GetHeaderWidth() const
 
 void wxListMainWindow::GetColumn( int col, wxListItem &item ) const
 {
-    wxListHeaderDataList::Node *node = m_columns.Item( col );
+    wxListHeaderDataList::compatibility_iterator node = m_columns.Item( col );
     wxCHECK_RET( node, _T("invalid column index in GetColumn") );
 
     wxListHeaderData *column = node->GetData();
@@ -3629,7 +3632,7 @@ void wxListMainWindow::GetColumn( int col, wxListItem &item ) const
 
 int wxListMainWindow::GetColumnWidth( int col ) const
 {
-    wxListHeaderDataList::Node *node = m_columns.Item( col );
+    wxListHeaderDataList::compatibility_iterator node = m_columns.Item( col );
     wxCHECK_MSG( node, 0, _T("invalid column index") );
 
     wxListHeaderData *column = node->GetData();
@@ -4106,12 +4109,13 @@ void wxListMainWindow::DeleteItem( long lindex )
 
 void wxListMainWindow::DeleteColumn( int col )
 {
-    wxListHeaderDataList::Node *node = m_columns.Item( col );
+    wxListHeaderDataList::compatibility_iterator node = m_columns.Item( col );
 
     wxCHECK_RET( node, wxT("invalid column index in DeleteColumn()") );
 
     m_dirty = TRUE;
-    m_columns.DeleteNode( node );
+    delete node->GetData();
+    m_columns.Erase( node );
 
     if ( !IsVirtual() )
     {
@@ -4119,8 +4123,9 @@ void wxListMainWindow::DeleteColumn( int col )
         for ( size_t i = 0; i < m_lines.GetCount(); i++ )
         {
             wxListLineData * const line = GetLine(i);
-            wxListItemDataList::Node *n = line->m_items.Item( col );
-            line->m_items.DeleteNode(n);
+            wxListItemDataList::compatibility_iterator n = line->m_items.Item( col );
+            delete n->GetData();
+            line->m_items.Erase(n);
         }
     }
 
@@ -4171,7 +4176,7 @@ void wxListMainWindow::DeleteAllItems()
 
 void wxListMainWindow::DeleteEverything()
 {
-    m_columns.Clear();
+    WX_CLEAR_LIST(wxListHeaderDataList, m_columns);
 
     DeleteAllItems();
 }
@@ -4321,7 +4326,7 @@ void wxListMainWindow::InsertColumn( long col, wxListItem &item )
         bool insert = (col >= 0) && ((size_t)col < m_columns.GetCount());
         if ( insert )
         {
-            wxListHeaderDataList::Node *node = m_columns.Item( col );
+            wxListHeaderDataList::compatibility_iterator node = m_columns.Item( col );
             m_columns.Insert( node, column );
         }
         else

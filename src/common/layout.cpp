@@ -734,7 +734,7 @@ int wxIndividualLayoutConstraint::GetEdge(wxEdge which,
     // If the edge or dimension belongs to the parent, then we know the
     // dimension is obtainable immediately. E.g. a wxExpandSizer may contain a
     // button (but the button's true parent is a panel, not the sizer)
-    if (other->GetChildren().Find(thisWin))
+    if (other->GetChildren().Find((wxWindow*)thisWin))
     {
         switch (which)
         {

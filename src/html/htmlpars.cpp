@@ -82,11 +82,18 @@ wxHtmlParser::~wxHtmlParser()
 {
     while (RestoreState()) {}
     DestroyDOMTree();
-    
+
+    if (m_HandlersStack)
+    {
+        wxList& tmp = *m_HandlersStack;
+        wxList::iterator it, en;
+        for( it = tmp.begin(), en = tmp.end(); it != en; ++it )
+            delete (wxHashTable*)*it;
+        tmp.clear();
+    }
     delete m_HandlersStack;
     m_HandlersHash.Clear();
-    m_HandlersList.DeleteContents(TRUE);
-    m_HandlersList.Clear();
+    WX_CLEAR_LIST(wxList, m_HandlersList);
     delete m_entitiesParser;
 }
 
@@ -351,10 +358,9 @@ void wxHtmlParser::PushTagHandler(wxHtmlTagHandler *handler, wxString tags)
     if (m_HandlersStack == NULL)
     {
         m_HandlersStack = new wxList;
-        m_HandlersStack->DeleteContents(TRUE);
     }
 
-    m_HandlersStack->Insert(new wxHashTable(m_HandlersHash));
+    m_HandlersStack->Insert((wxObject*)new wxHashTable(m_HandlersHash));
 
     while (tokenizer.HasMoreTokens())
     {
@@ -366,16 +372,17 @@ void wxHtmlParser::PushTagHandler(wxHtmlTagHandler *handler, wxString tags)
 
 void wxHtmlParser::PopTagHandler()
 {
-    wxNode *first;
+    wxList::compatibility_iterator first;
 
     if (m_HandlersStack == NULL ||
-        (first = m_HandlersStack->GetFirst()) == NULL)
+        !(first = m_HandlersStack->GetFirst()))
     {
         wxLogWarning(_("Warning: attempt to remove HTML tag handler from empty stack."));
         return;
     }
     m_HandlersHash = *((wxHashTable*) first->GetData());
-    m_HandlersStack->DeleteNode(first);
+    delete (wxHashTable*) first->GetData();
+    m_HandlersStack->Erase(first);
 }
 
 void wxHtmlParser::SetSourceAndSaveState(const wxString& src)

@@ -203,6 +203,8 @@ wxHtmlWindow::~wxHtmlWindow()
 
     if (m_Cell) delete m_Cell;
 
+    WX_CLEAR_LIST(wxHtmlProcessorList, *m_Processors);
+
     delete m_Parser;
     delete m_FS;
     delete m_History;
@@ -248,11 +250,11 @@ bool wxHtmlWindow::SetPage(const wxString& source)
     // pass HTML through registered processors:
     if (m_Processors || m_GlobalProcessors)
     {
-        wxHtmlProcessorList::Node *nodeL, *nodeG;
+        wxHtmlProcessorList::compatibility_iterator nodeL, nodeG;
         int prL, prG;
 
-        nodeL = (m_Processors) ? m_Processors->GetFirst() : NULL;
-        nodeG = (m_GlobalProcessors) ? m_GlobalProcessors->GetFirst() : NULL;
+        nodeL = (m_Processors) ? m_Processors->GetFirst() : wxHtmlProcessorList::compatibility_iterator();
+        nodeG = (m_GlobalProcessors) ? m_GlobalProcessors->GetFirst() : wxHtmlProcessorList::compatibility_iterator();
 
         // VS: there are two lists, global and local, both of them sorted by
         //     priority. Since we have to go through _both_ lists with
@@ -374,7 +376,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
 
         else
         {
-            wxNode *node;
+            wxList::compatibility_iterator node;
             wxString src = wxEmptyString;
 
             if (m_RelatedStatusBar != -1)
@@ -653,9 +655,8 @@ void wxHtmlWindow::AddProcessor(wxHtmlProcessor *processor)
     if (!m_Processors)
     {
         m_Processors = new wxHtmlProcessorList;
-        m_Processors->DeleteContents(TRUE);
     }
-    wxHtmlProcessorList::Node *node;
+    wxHtmlProcessorList::compatibility_iterator node;
 
     for (node = m_Processors->GetFirst(); node; node = node->GetNext())
     {
@@ -673,9 +674,8 @@ void wxHtmlWindow::AddProcessor(wxHtmlProcessor *processor)
     if (!m_GlobalProcessors)
     {
         m_GlobalProcessors = new wxHtmlProcessorList;
-        m_GlobalProcessors->DeleteContents(TRUE);
     }
-    wxHtmlProcessorList::Node *node;
+    wxHtmlProcessorList::compatibility_iterator node;
 
     for (node = m_GlobalProcessors->GetFirst(); node; node = node->GetNext())
     {
@@ -697,8 +697,9 @@ wxHtmlProcessorList *wxHtmlWindow::m_GlobalProcessors = NULL;
 void wxHtmlWindow::CleanUpStatics()
 {
     wxDELETE(m_DefaultFilter);
-    m_Filters.DeleteContents(TRUE);
-    m_Filters.Clear();
+    WX_CLEAR_LIST(wxList, m_Filters);
+    if (m_GlobalProcessors)
+        WX_CLEAR_LIST(wxHtmlProcessorList, *m_GlobalProcessors);
     wxDELETE(m_GlobalProcessors);
 }
 

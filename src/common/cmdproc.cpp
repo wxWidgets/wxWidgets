@@ -64,7 +64,6 @@ wxCommand::~wxCommand()
 wxCommandProcessor::wxCommandProcessor(int maxCommands)
 {
     m_maxNoCommands = maxCommands;
-    m_currentCommand = (wxNode *) NULL;
 #if wxUSE_MENUS
     m_commandEditMenu = (wxMenu *) NULL;
 #endif // wxUSE_MENUS
@@ -114,10 +113,10 @@ void wxCommandProcessor::Store(wxCommand *command)
 
     if ( (int)m_commands.GetCount() == m_maxNoCommands )
     {
-        wxNode *firstNode = m_commands.GetFirst();
+        wxList::compatibility_iterator firstNode = m_commands.GetFirst();
         wxCommand *firstCommand = (wxCommand *)firstNode->GetData();
         delete firstCommand;
-        delete firstNode;
+        m_commands.Erase(firstNode);
     }
 
     // Correct a bug: we must chop off the current 'branch'
@@ -126,12 +125,12 @@ void wxCommandProcessor::Store(wxCommand *command)
         ClearCommands();
     else
     {
-        wxNode *node = m_currentCommand->GetNext();
+        wxList::compatibility_iterator node = m_currentCommand->GetNext();
         while (node)
         {
-            wxNode *next = node->GetNext();
+            wxList::compatibility_iterator next = node->GetNext();
             delete (wxCommand *)node->GetData();
-            delete node;
+            m_commands.Erase(node);
             node = next;
         }
     }
@@ -160,7 +159,7 @@ bool wxCommandProcessor::Undo()
 bool wxCommandProcessor::Redo()
 {
     wxCommand *redoCommand = (wxCommand *) NULL;
-    wxNode *redoNode = (wxNode *) NULL;
+    wxList::compatibility_iterator redoNode;
 
     if ( m_currentCommand )
     {
@@ -202,13 +201,13 @@ bool wxCommandProcessor::CanUndo() const
 
 bool wxCommandProcessor::CanRedo() const
 {
-    if ((m_currentCommand != (wxNode*) NULL) && (m_currentCommand->GetNext() == (wxNode*) NULL))
+    if (m_currentCommand && !m_currentCommand->GetNext())
         return FALSE;
 
-    if ((m_currentCommand != (wxNode*) NULL) && (m_currentCommand->GetNext() != (wxNode*) NULL))
+    if (m_currentCommand && m_currentCommand->GetNext())
         return TRUE;
 
-    if ((m_currentCommand == (wxNode*) NULL) && (m_commands.GetCount() > 0))
+    if (!m_currentCommand && (m_commands.GetCount() > 0))
         return TRUE;
 
     return FALSE;
@@ -300,15 +299,15 @@ wxString wxCommandProcessor::GetRedoMenuLabel() const
 
 void wxCommandProcessor::ClearCommands()
 {
-    wxNode *node = m_commands.GetFirst();
+    wxList::compatibility_iterator node = m_commands.GetFirst();
     while (node)
     {
         wxCommand *command = (wxCommand *)node->GetData();
         delete command;
-        delete node;
+        m_commands.Erase(node);
         node = m_commands.GetFirst();
     }
-    m_currentCommand = (wxNode *) NULL;
+    m_currentCommand = wxList::compatibility_iterator();
 }
 
 

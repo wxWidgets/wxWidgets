@@ -234,7 +234,8 @@ void wxStatusBarBase::FreeStacks()
     {
         if(m_statusTextStacks[i])
         {
-            m_statusTextStacks[i]->Clear();
+            wxListString& t = *m_statusTextStacks[i];
+            WX_CLEAR_LIST(wxListString, t);
             delete m_statusTextStacks[i];
         }
     }
@@ -257,10 +258,11 @@ void wxStatusBarBase::PopStatusText(int number)
 {
     wxListString *st = GetStatusStack(number);
     wxCHECK_RET( st, _T("Unbalanced PushStatusText/PopStatusText") );
-    wxListString::Node *top = st->GetFirst();
+    wxListString::compatibility_iterator top = st->GetFirst();
 
     SetStatusText(*top->GetData(), number);
-    st->DeleteNode(top);
+    delete top->GetData();
+    st->Erase(top);
     if(st->GetCount() == 0)
     {
         delete st;
@@ -288,7 +290,6 @@ wxListString *wxStatusBarBase::GetOrCreateStatusStack(int i)
     if(!m_statusTextStacks[i])
     {
         m_statusTextStacks[i] = new wxListString();
-        m_statusTextStacks[i]->DeleteContents(TRUE);
     }
 
     return m_statusTextStacks[i];

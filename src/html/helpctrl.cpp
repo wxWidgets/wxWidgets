@@ -271,7 +271,7 @@ void wxHtmlHelpController::AddGrabIfNeeded()
     
     // Check if there are any modal windows present,
     // in which case we need to add a grab.
-    for ( wxWindowList::Node * node = wxTopLevelWindows.GetFirst();
+    for ( wxWindowList::compatibility_iterator node = wxTopLevelWindows.GetFirst();
           node;
           node = node->GetNext() )
     {

@@ -278,7 +278,7 @@ void wxToolBar::Recreate()
     }
 
     // reparent all our children under the new toolbar
-    for ( wxWindowList::Node *node = m_children.GetFirst();
+    for ( wxWindowList::compatibility_iterator node = m_children.GetFirst();
           node;
           node = node->GetNext() )
     {
@@ -394,7 +394,7 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
     // first determine the position of the first button to delete: it may be
     // different from pos if we use several separators to cover the space used
     // by a control
-    wxToolBarToolsList::Node *node;
+    wxToolBarToolsList::compatibility_iterator node;
     for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
     {
         wxToolBarToolBase *tool2 = node->GetData();
@@ -485,7 +485,7 @@ bool wxToolBar::Realize()
     // First, add the bitmap: we use one bitmap for all toolbar buttons
     // ----------------------------------------------------------------
 
-    wxToolBarToolsList::Node *node;
+    wxToolBarToolsList::compatibility_iterator node;
     int bitmapId = 0;
 
     wxSize sizeBmp;
@@ -1021,7 +1021,7 @@ static
 wxToolBarToolBase *GetItemSkippingDummySpacers(const wxToolBarToolsList& tools,
                                                size_t index )
 {
-    wxToolBarToolsList::Node* current = tools.GetFirst();
+    wxToolBarToolsList::compatibility_iterator current = tools.GetFirst();
 
     for ( ; current != 0; current = current->GetNext() )
     {
@@ -1225,7 +1225,7 @@ bool wxToolBar::HandlePaint(WXWPARAM wParam, WXLPARAM lParam)
     // any here
 
     // first of all, do we have any controls at all?
-    wxToolBarToolsList::Node *node;
+    wxToolBarToolsList::compatibility_iterator node;
     for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
     {
         if ( node->GetData()->IsControl() )

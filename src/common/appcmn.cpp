@@ -85,7 +85,7 @@ bool wxAppBase::Initialize(int& argc, wxChar **argv)
     wxPendingEventsLocker = new wxCriticalSection;
 #endif
 
-    wxTheColourDatabase = new wxColourDatabase(wxKEY_STRING);
+    wxTheColourDatabase = new wxColourDatabase;
     wxTheColourDatabase->Initialize();
 
     wxInitializeStockLists();
@@ -189,7 +189,7 @@ void wxAppBase::SetActive(bool active, wxWindow * WXUNUSED(lastFocus))
 
 void wxAppBase::DeletePendingObjects()
 {
-    wxNode *node = wxPendingDelete.GetFirst();
+    wxList::compatibility_iterator node = wxPendingDelete.GetFirst();
     while (node)
     {
         wxObject *obj = node->GetData();
@@ -197,7 +197,7 @@ void wxAppBase::DeletePendingObjects()
         delete obj;
 
         if (wxPendingDelete.Member(obj))
-            delete node;
+            wxPendingDelete.Erase(node);
 
         // Deleting one object may have deleted other pending
         // objects, so start from beginning of list again.
@@ -208,7 +208,7 @@ void wxAppBase::DeletePendingObjects()
 // Returns TRUE if more time is needed.
 bool wxAppBase::ProcessIdle()
 {
-    wxWindowList::Node* node = wxTopLevelWindows.GetFirst();
+    wxWindowList::compatibility_iterator node = wxTopLevelWindows.GetFirst();
     node = wxTopLevelWindows.GetFirst();
     while (node)
     {
@@ -231,7 +231,7 @@ bool wxAppBase::SendIdleEvents()
 {
     bool needMore = FALSE;
 
-    wxWindowList::Node* node = wxTopLevelWindows.GetFirst();
+    wxWindowList::compatibility_iterator node = wxTopLevelWindows.GetFirst();
     while (node)
     {
         wxWindow* win = node->GetData();
@@ -257,7 +257,7 @@ bool wxAppBase::SendIdleEvents(wxWindow* win)
         needMore = event.MoreRequested();
     }
 
-    wxWindowList::Node *node = win->GetChildren().GetFirst();
+    wxWindowList::compatibility_iterator node = win->GetChildren().GetFirst();
     while ( node )
     {
         wxWindow *win = node->GetData();

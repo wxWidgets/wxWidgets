@@ -55,14 +55,17 @@ class wxAccelRefData : public wxObjectRefData
 public:
     wxAccelRefData()
     {
-        m_accels.DeleteContents(TRUE);
     }
 
     wxAccelRefData(const wxAccelRefData& data)
         : wxObjectRefData()
     {
-        m_accels.DeleteContents(TRUE);
         m_accels = data.m_accels;
+    }
+
+    virtual ~wxAccelRefData()
+    {
+        WX_CLEAR_LIST(wxAccelList, m_accels);
     }
 
     wxAccelList m_accels;
@@ -133,14 +136,15 @@ void wxAcceleratorTable::Remove(const wxAcceleratorEntry& entry)
 {
     AllocExclusive();
 
-    wxAccelList::Node *node = M_ACCELDATA->m_accels.GetFirst();
+    wxAccelList::compatibility_iterator node = M_ACCELDATA->m_accels.GetFirst();
     while ( node )
     {
         const wxAcceleratorEntry *entryCur = node->GetData();
 
         if ( *entryCur == entry )
         {
-            M_ACCELDATA->m_accels.DeleteNode(node);
+            delete node->GetData();
+            M_ACCELDATA->m_accels.Erase(node);
 
             return;
         }
@@ -164,7 +168,7 @@ wxAcceleratorTable::GetEntry(const wxKeyEvent& event) const
         return NULL;
     }
 
-    wxAccelList::Node *node = M_ACCELDATA->m_accels.GetFirst();
+    wxAccelList::compatibility_iterator node = M_ACCELDATA->m_accels.GetFirst();
     while ( node )
     {
         const wxAcceleratorEntry *entry = node->GetData();

@@ -23,6 +23,7 @@
 #if wxUSE_TIMER
 
 #ifndef WX_PRECOMP
+    #include "wx/hashmap.h"
     #include "wx/setup.h"
     #include "wx/window.h"
     #include "wx/list.h"
@@ -40,7 +41,13 @@
 // private functions
 // ----------------------------------------------------------------------------
 
-wxList wxTimerList(wxKEY_INTEGER);
+WX_DECLARE_HASH_MAP( long,
+                     wxTimer*,
+                     wxIntegerHash,
+                     wxIntegerEqual,
+                     wxTimerMap );
+
+wxTimerMap wxTimerList;
 UINT WINAPI _EXPORT wxTimerProc(HWND hwnd, WORD, int idTimer, DWORD);
 
 // ----------------------------------------------------------------------------
@@ -75,9 +82,11 @@ void wxTimer::Init()
 
 wxTimer::~wxTimer()
 {
+    long id = m_id;
+
     wxTimer::Stop();
 
-    wxTimerList.DeleteObject(this);
+    wxTimerList.erase(id);
 }
 
 bool wxTimer::Start(int milliseconds, bool oneShot)
@@ -94,7 +103,7 @@ bool wxTimer::Start(int milliseconds, bool oneShot)
 
     if ( m_id > 0 )
     {
-        wxTimerList.Append(m_id, this);
+        wxTimerList[m_id] = this;
 
         return true;
     }
@@ -112,7 +121,7 @@ void wxTimer::Stop()
     {
         ::KillTimer(NULL, (UINT)m_id);
 
-        wxTimerList.DeleteObject(this);
+        wxTimerList.erase(m_id);
     }
 
     m_id = 0;
@@ -136,11 +145,13 @@ void wxProcessTimer(wxTimer& timer)
 
 UINT WINAPI _EXPORT wxTimerProc(HWND WXUNUSED(hwnd), WORD, int idTimer, DWORD)
 {
-    wxNode *node = wxTimerList.Find((long)idTimer);
+    
+    wxTimerMap::iterator node = wxTimerList.find((long)idTimer);
 
-    wxCHECK_MSG( node, 0, wxT("bogus timer id in wxTimerProc") );
+    wxCHECK_MSG( node != wxTimerList.end(), 0,
+                 wxT("bogus timer id in wxTimerProc") );
 
-    wxProcessTimer(*(wxTimer *)node->GetData());
+    wxProcessTimer(*(node->second));
 
     return 0;
 }

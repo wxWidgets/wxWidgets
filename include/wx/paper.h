@@ -69,10 +69,14 @@ private:
     DECLARE_DYNAMIC_CLASS(wxPrintPaperType)
 };
 
-class WXDLLEXPORT wxPrintPaperDatabase: public wxList
+class WXDLLEXPORT wxStringToPrintPaperTypeHashMap;
+class WXDLLEXPORT wxPrintPaperTypeList;
+
+class WXDLLEXPORT wxPrintPaperDatabase
 {
 public:
     wxPrintPaperDatabase();
+    ~wxPrintPaperDatabase();
 
     void CreateDatabase();
     void ClearDatabase();
@@ -104,8 +108,13 @@ public:
     // Get the paper size
     wxPaperSize GetSize(const wxSize& size);
 
+    //
+    wxPrintPaperType* Item(size_t index) const;
+    size_t GetCount() const;
 private:
-    DECLARE_DYNAMIC_CLASS(wxPrintPaperDatabase)
+    wxStringToPrintPaperTypeHashMap* m_map;
+    wxPrintPaperTypeList* m_list;
+    // DECLARE_DYNAMIC_CLASS(wxPrintPaperDatabase)
 };
 
 WXDLLEXPORT_DATA(extern wxPrintPaperDatabase*) wxThePrintPaperDatabase;

@@ -377,11 +377,11 @@ typedef wxInt8 wxDash;
 
 class WXDLLEXPORT wxPenList : public wxList
 {
-    DECLARE_DYNAMIC_CLASS(wxPenList)
+    // DECLARE_DYNAMIC_CLASS(wxPenList)
 
 public:
     wxPenList() { }
-    ~wxPenList();
+    virtual ~wxPenList();
 
     void AddPen(wxPen *pen);
     void RemovePen(wxPen *pen);
@@ -390,11 +390,11 @@ public:
 
 class WXDLLEXPORT wxBrushList : public wxList
 {
-    DECLARE_DYNAMIC_CLASS(wxBrushList)
+    // DECLARE_DYNAMIC_CLASS(wxBrushList)
 
 public:
     wxBrushList() { }
-    ~wxBrushList();
+    virtual ~wxBrushList();
 
     void AddBrush(wxBrush *brush);
     void RemoveBrush(wxBrush *brush);
@@ -403,11 +403,11 @@ public:
 
 class WXDLLEXPORT wxFontList : public wxList
 {
-    DECLARE_DYNAMIC_CLASS(wxFontList)
+    // DECLARE_DYNAMIC_CLASS(wxFontList)
 
 public:
     wxFontList() { }
-    ~wxFontList();
+    virtual ~wxFontList();
 
     void AddFont(wxFont *font);
     void RemoveFont(wxFont *font);
@@ -417,16 +417,19 @@ public:
                              wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 };
 
-class WXDLLEXPORT wxColourDatabase : public wxList
+class WXDLLEXPORT wxStringToColourHashMap;
+
+class WXDLLEXPORT wxColourDatabase
 {
-    DECLARE_CLASS(wxColourDatabase)
+    // DECLARE_CLASS(wxColourDatabase)
 
 public:
-    wxColourDatabase(int type);
-    ~wxColourDatabase() ;
+    wxColourDatabase();
+    virtual ~wxColourDatabase() ;
 
     // Not const because it may add a name to the database
     wxColour *FindColour(const wxString& colour) ;
+    wxColour *FindColourNoAdd(const wxString& colour) const;
     wxString FindName(const wxColour& colour) const;
     void Initialize();
 #ifdef __WXPM__
@@ -434,15 +437,19 @@ public:
     long*                           m_palTable;
     size_t                          m_nSize;
 #endif
+private:
+    wxColour* FindColour(const wxString& colour, bool add);
+
+    wxStringToColourHashMap* m_map;
 };
 
 class WXDLLEXPORT wxBitmapList : public wxList
 {
-    DECLARE_DYNAMIC_CLASS(wxBitmapList)
+    // DECLARE_DYNAMIC_CLASS(wxBitmapList)
 
 public:
     wxBitmapList();
-    ~wxBitmapList();
+    virtual ~wxBitmapList();
 
     void AddBitmap(wxBitmap *bitmap);
     void RemoveBitmap(wxBitmap *bitmap);
@@ -452,11 +459,13 @@ class WXDLLEXPORT wxResourceCache: public wxList
 {
 public:
     wxResourceCache() { }
+#if !wxUSE_STL
     wxResourceCache(const unsigned int keyType) : wxList(keyType) { }
-    ~wxResourceCache();
+#endif
+    virtual ~wxResourceCache();
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxResourceCache)
+    // DECLARE_DYNAMIC_CLASS(wxResourceCache)
 };
 
 // ---------------------------------------------------------------------------

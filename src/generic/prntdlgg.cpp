@@ -503,7 +503,7 @@ bool wxGenericPrintSetupDialog::TransferDataFromWindow()
         int selectedItem = m_paperTypeChoice->GetSelection();
         if (selectedItem != -1)
         {
-            wxPrintPaperType *paper = (wxPrintPaperType*)wxThePrintPaperDatabase->Item(selectedItem)->GetData();
+            wxPrintPaperType *paper = wxThePrintPaperDatabase->Item(selectedItem);
             if (paper != NULL)
               m_printData.SetPaperId( paper->GetId());
         }
@@ -527,7 +527,7 @@ wxComboBox *wxGenericPrintSetupDialog::CreatePaperTypeChoice(int *x, int *y)
 
     for (size_t i = 0; i < n; i++)
     {
-        wxPrintPaperType *paper = (wxPrintPaperType *)wxThePrintPaperDatabase->Item(i)->GetData();
+        wxPrintPaperType *paper = wxThePrintPaperDatabase->Item(i);
         choices[i] = paper->GetName();
         if (m_printData.GetPaperId() == paper->GetId())
             sel = i;
@@ -611,7 +611,7 @@ wxGenericPageSetupDialog::wxGenericPageSetupDialog( wxWindow *parent,
 
     for (size_t i = 0; i < n; i++)
     {
-        wxPrintPaperType *paper = (wxPrintPaperType *)wxThePrintPaperDatabase->Item(i)->GetData();
+        wxPrintPaperType *paper = wxThePrintPaperDatabase->Item(i);
         choices[i] = paper->GetName();
     }
 
@@ -774,7 +774,7 @@ bool wxGenericPageSetupDialog::TransferDataFromWindow()
         int selectedItem = m_paperTypeChoice->GetSelection();
         if (selectedItem != -1)
         {
-            wxPrintPaperType *paper = (wxPrintPaperType*)wxThePrintPaperDatabase->Item(selectedItem)->GetData();
+            wxPrintPaperType *paper = wxThePrintPaperDatabase->Item(selectedItem);
             if ( paper )
             {
                 m_pageData.SetPaperSize(wxSize(paper->GetWidth()/10, paper->GetHeight()/10));
@@ -801,7 +801,7 @@ wxComboBox *wxGenericPageSetupDialog::CreatePaperTypeChoice(int *x, int *y)
 
     for (size_t i = 0; i < n; i++)
     {
-        wxPrintPaperType *paper = (wxPrintPaperType *)wxThePrintPaperDatabase->Item(i)->GetData();
+        wxPrintPaperType *paper = wxThePrintPaperDatabase->Item(i);
         choices[i] = paper->GetName();
     }
 

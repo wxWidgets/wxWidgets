@@ -169,8 +169,7 @@ wxHtmlPrintout::~wxHtmlPrintout()
 
 void wxHtmlPrintout::CleanUpStatics()
 {
-    m_Filters.DeleteContents(TRUE);
-    m_Filters.Clear();
+    WX_CLEAR_LIST(wxList, m_Filters);
 }
 
 // Adds input filter
@@ -293,7 +292,7 @@ void wxHtmlPrintout::SetHtmlFile(const wxString& htmlfile)
     wxHtmlFilterHTML defaultFilter;
     wxString doc;
 
-    wxNode* node = m_Filters.GetFirst();
+    wxList::compatibility_iterator node = m_Filters.GetFirst();
     while (node)
     {
         wxHtmlFilter *h = (wxHtmlFilter*) node->GetData();

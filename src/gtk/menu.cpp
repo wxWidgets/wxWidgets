@@ -200,8 +200,6 @@ wxMenuBar::wxMenuBar( long style )
         return;
     }
 
-    m_menus.DeleteContents( TRUE );
-
     /* GTK 1.2.0 doesn't have gtk_item_factory_get_item(), but GTK 1.2.1 has. */
 #if GTK_CHECK_VERSION(1, 2, 1)
     m_accel = gtk_accel_group_new();
@@ -241,8 +239,6 @@ wxMenuBar::wxMenuBar()
         return;
     }
 
-    m_menus.DeleteContents( TRUE );
-
     /* GTK 1.2.0 doesn't have gtk_item_factory_get_item(), but GTK 1.2.1 has. */
 #if GTK_CHECK_VERSION(1, 2, 1)
     m_accel = gtk_accel_group_new();
@@ -275,7 +271,7 @@ static void wxMenubarUnsetInvokingWindow( wxMenu *menu, wxWindow *win )
     /* support for native hot keys */
     gtk_accel_group_detach( menu->m_accel, ACCEL_OBJ_CAST(top_frame->m_widget) );
 
-    wxMenuItemList::Node *node = menu->GetMenuItems().GetFirst();
+    wxMenuItemList::compatibility_iterator node = menu->GetMenuItems().GetFirst();
     while (node)
     {
         wxMenuItem *menuitem = node->GetData();
@@ -300,7 +296,7 @@ static void wxMenubarSetInvokingWindow( wxMenu *menu, wxWindow *win )
         gtk_accel_group_attach( menu->m_accel, obj );
 #endif // GTK+ 1.2.1+
 
-    wxMenuItemList::Node *node = menu->GetMenuItems().GetFirst();
+    wxMenuItemList::compatibility_iterator node = menu->GetMenuItems().GetFirst();
     while (node)
     {
         wxMenuItem *menuitem = node->GetData();
@@ -324,7 +320,7 @@ void wxMenuBar::SetInvokingWindow( wxWindow *win )
         gtk_accel_group_attach( m_accel, obj );
 #endif // GTK+ 1.2.1+
 
-    wxMenuList::Node *node = m_menus.GetFirst();
+    wxMenuList::compatibility_iterator node = m_menus.GetFirst();
     while (node)
     {
         wxMenu *menu = node->GetData();
@@ -345,7 +341,7 @@ void wxMenuBar::UnsetInvokingWindow( wxWindow *win )
     gtk_accel_group_detach( m_accel, ACCEL_OBJ_CAST(top_frame->m_widget) );
 #endif // GTK+ 1.2.1+
 
-    wxMenuList::Node *node = m_menus.GetFirst();
+    wxMenuList::compatibility_iterator node = m_menus.GetFirst();
     while (node)
     {
         wxMenu *menu = node->GetData();
@@ -474,7 +470,7 @@ wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
 static wxMenu *CopyMenu (wxMenu *menu)
 {
     wxMenu *menucopy = new wxMenu ();
-    wxMenuItemList::Node *node = menu->GetMenuItems().GetFirst();
+    wxMenuItemList::compatibility_iterator node = menu->GetMenuItems().GetFirst();
     while (node)
     {
         wxMenuItem *item = node->GetData();
@@ -552,7 +548,7 @@ static int FindMenuItemRecursive( const wxMenu *menu, const wxString &menuString
             return res;
     }
 
-    wxMenuItemList::Node *node = menu->GetMenuItems().GetFirst();
+    wxMenuItemList::compatibility_iterator node = menu->GetMenuItems().GetFirst();
     while (node)
     {
         wxMenuItem *item = node->GetData();
@@ -567,7 +563,7 @@ static int FindMenuItemRecursive( const wxMenu *menu, const wxString &menuString
 
 int wxMenuBar::FindMenuItem( const wxString &menuString, const wxString &itemString ) const
 {
-    wxMenuList::Node *node = m_menus.GetFirst();
+    wxMenuList::compatibility_iterator node = m_menus.GetFirst();
     while (node)
     {
         wxMenu *menu = node->GetData();
@@ -585,7 +581,7 @@ static wxMenuItem* FindMenuItemByIdRecursive(const wxMenu* menu, int id)
 {
     wxMenuItem* result = menu->FindChildItem(id);
 
-    wxMenuItemList::Node *node = menu->GetMenuItems().GetFirst();
+    wxMenuItemList::compatibility_iterator node = menu->GetMenuItems().GetFirst();
     while ( node && result == NULL )
     {
         wxMenuItem *item = node->GetData();
@@ -602,7 +598,7 @@ static wxMenuItem* FindMenuItemByIdRecursive(const wxMenu* menu, int id)
 wxMenuItem* wxMenuBar::FindItem( int id, wxMenu **menuForItem ) const
 {
     wxMenuItem* result = 0;
-    wxMenuList::Node *node = m_menus.GetFirst();
+    wxMenuList::compatibility_iterator node = m_menus.GetFirst();
     while (node && result == 0)
     {
         wxMenu *menu = node->GetData();
@@ -620,7 +616,7 @@ wxMenuItem* wxMenuBar::FindItem( int id, wxMenu **menuForItem ) const
 
 void wxMenuBar::EnableTop( size_t pos, bool flag )
 {
-    wxMenuList::Node *node = m_menus.Item( pos );
+    wxMenuList::compatibility_iterator node = m_menus.Item( pos );
 
     wxCHECK_RET( node, wxT("menu not found") );
 
@@ -632,7 +628,7 @@ void wxMenuBar::EnableTop( size_t pos, bool flag )
 
 wxString wxMenuBar::GetLabelTop( size_t pos ) const
 {
-    wxMenuList::Node *node = m_menus.Item( pos );
+    wxMenuList::compatibility_iterator node = m_menus.Item( pos );
 
     wxCHECK_MSG( node, wxT("invalid"), wxT("menu not found") );
 
@@ -659,7 +655,7 @@ wxString wxMenuBar::GetLabelTop( size_t pos ) const
 
 void wxMenuBar::SetLabelTop( size_t pos, const wxString& label )
 {
-    wxMenuList::Node *node = m_menus.Item( pos );
+    wxMenuList::compatibility_iterator node = m_menus.Item( pos );
 
     wxCHECK_RET( node, wxT("menu not found") );
 
@@ -1122,7 +1118,7 @@ void wxMenu::Init()
 
 wxMenu::~wxMenu()
 {
-   m_items.Clear();
+   WX_CLEAR_LIST(wxMenuItemList, m_items);
 
    if ( GTK_IS_WIDGET( m_menu ))
        gtk_widget_destroy( m_menu );
@@ -1398,7 +1394,7 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
 
 int wxMenu::FindMenuIdByMenuItem( GtkWidget *menuItem ) const
 {
-    wxMenuItemList::Node    *node = m_items.GetFirst();
+    wxMenuItemList::compatibility_iterator node = m_items.GetFirst();
     while (node)
     {
         wxMenuItem *item = node->GetData();

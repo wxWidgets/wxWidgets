@@ -97,14 +97,17 @@ bool wxDataObjectBase::IsSupported(const wxDataFormat& format,
 wxDataObjectComposite::wxDataObjectComposite()
 {
     m_preferred = 0;
+}
 
-    m_dataObjects.DeleteContents(TRUE);
+wxDataObjectComposite::~wxDataObjectComposite()
+{
+    WX_CLEAR_LIST(wxSimpleDataObjectList, m_dataObjects);
 }
 
 wxDataObjectSimple *
 wxDataObjectComposite::GetObject(const wxDataFormat& format) const
 {
-    wxSimpleDataObjectList::Node *node = m_dataObjects.GetFirst();
+    wxSimpleDataObjectList::compatibility_iterator node = m_dataObjects.GetFirst();
     while ( node )
     {
         wxDataObjectSimple *dataObj = node->GetData();
@@ -131,7 +134,7 @@ void wxDataObjectComposite::Add(wxDataObjectSimple *dataObject, bool preferred)
 wxDataFormat
 wxDataObjectComposite::GetPreferredFormat(Direction WXUNUSED(dir)) const
 {
-    wxSimpleDataObjectList::Node *node = m_dataObjects.Item( m_preferred );
+    wxSimpleDataObjectList::compatibility_iterator node = m_dataObjects.Item( m_preferred );
 
     wxCHECK_MSG( node, wxFormatInvalid, wxT("no preferred format") );
 
@@ -189,7 +192,7 @@ void wxDataObjectComposite::GetAllFormats(wxDataFormat *formats,
                                           Direction WXUNUSED(dir)) const
 {
     size_t n = 0;
-    wxSimpleDataObjectList::Node *node;
+    wxSimpleDataObjectList::compatibility_iterator node;
     for ( node = m_dataObjects.GetFirst(); node; node = node->GetNext() )
     {
         // TODO if ( !outputOnlyToo ) && this one counts ...

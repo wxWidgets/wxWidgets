@@ -725,7 +725,8 @@ wxTreeCtrl::~wxTreeCtrl()
     // delete any attributes
     if ( m_hasAnyAttr )
     {
-        for ( wxNode *node = m_attrs.Next(); node; node = m_attrs.Next() )
+        for ( wxHashTable::compatibility_iterator node = m_attrs.Next();
+              node; node = m_attrs.Next() )
         {
             delete (wxTreeItemAttr *)node->GetData();
         }

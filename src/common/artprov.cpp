@@ -114,7 +114,6 @@ wxArtProviderCache *wxArtProvider::sm_cache = NULL;
     if ( !sm_providers )
     {
         sm_providers = new wxArtProvidersList;
-        sm_providers->DeleteContents(TRUE);
         sm_cache = new wxArtProviderCache;
     }
 
@@ -127,7 +126,8 @@ wxArtProviderCache *wxArtProvider::sm_cache = NULL;
     wxCHECK_MSG( sm_providers, FALSE, _T("no wxArtProvider exists") );
     wxCHECK_MSG( sm_providers->GetCount() > 0, FALSE, _T("wxArtProviders stack is empty") );
 
-    sm_providers->DeleteNode(sm_providers->GetFirst());
+    delete sm_providers->GetFirst()->GetData();
+    sm_providers->Erase(sm_providers->GetFirst());
     sm_cache->Clear();
     return TRUE;
 }
@@ -138,6 +138,7 @@ wxArtProviderCache *wxArtProvider::sm_cache = NULL;
 
     if ( sm_providers->DeleteObject(provider) )
     {
+        delete provider;
         sm_cache->Clear();
         return TRUE;
     }
@@ -165,7 +166,7 @@ wxArtProviderCache *wxArtProvider::sm_cache = NULL;
     wxBitmap bmp;
     if ( !sm_cache->GetBitmap(hashId, &bmp) )
     {
-        for (wxArtProvidersList::Node *node = sm_providers->GetFirst();
+        for (wxArtProvidersList::compatibility_iterator node = sm_providers->GetFirst();
              node; node = node->GetNext())
         {
             bmp = node->GetData()->CreateBitmap(id, client, size);

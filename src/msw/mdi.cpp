@@ -558,7 +558,7 @@ bool wxMDIParentFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND hwnd)
 
     if ( IsMdiCommandId(id) )
     {
-        wxWindowList::Node *node = GetChildren().GetFirst();
+        wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
         while ( node )
         {
             wxWindow *child = node->GetData();
@@ -1246,7 +1246,7 @@ void wxMDIClientWindow::DoSetSize(int x, int y, int width, int height, int sizeF
     {
         if (GetParent())
         {
-            wxWindowList::Node *node = GetParent()->GetChildren().GetFirst();
+            wxWindowList::compatibility_iterator node = GetParent()->GetChildren().GetFirst();
             while (node)
             {
                 wxWindow *child = node->GetData();

@@ -345,7 +345,7 @@ wxWindow *wxFindFocusedChild(wxWindowGTK *win)
     if ( winFocus == win )
         return (wxWindow *)win;
 
-    for ( wxWindowList::Node *node = win->GetChildren().GetFirst();
+    for ( wxWindowList::compatibility_iterator node = win->GetChildren().GetFirst();
           node;
           node = node->GetNext() )
     {
@@ -1405,7 +1405,7 @@ wxWindowGTK *FindWindowForMouseEvent(wxWindowGTK *win, wxCoord& x, wxCoord& y)
         yy += pizza->yoffset;
     }
 
-    wxWindowList::Node  *node = win->GetChildren().GetFirst();
+    wxWindowList::compatibility_iterator node = win->GetChildren().GetFirst();
     while (node)
     {
         wxWindowGTK *child = node->GetData();
@@ -3274,7 +3274,7 @@ static void wxWindowNotifyEnable(wxWindowGTK* win, bool enable)
     // Recurse, so that children have the opportunity to Do The Right Thing
     // and reset colours that have been messed up by a parent's (really ancestor's)
     // Enable call
-    for ( wxWindowList::Node *node = win->GetChildren().GetFirst();
+    for ( wxWindowList::compatibility_iterator node = win->GetChildren().GetFirst();
           node;
           node = node->GetNext() )
     {
@@ -4141,7 +4141,7 @@ void gtk_pop_hide_callback( GtkWidget *WXUNUSED(widget), bool* is_waiting  )
 static void SetInvokingWindow( wxMenu *menu, wxWindowGTK *win )
 {
     menu->SetInvokingWindow( win );
-    wxMenuItemList::Node *node = menu->GetMenuItems().GetFirst();
+    wxMenuItemList::compatibility_iterator node = menu->GetMenuItems().GetFirst();
     while (node)
     {
         wxMenuItem *menuitem = node->GetData();

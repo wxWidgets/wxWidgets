@@ -125,8 +125,6 @@ wxToolBarToolBase::~wxToolBarToolBase()
 wxToolBarBase::wxToolBarBase()
 {
     // the list owns the pointers
-    m_tools.DeleteContents(TRUE);
-
     m_xMargin = m_yMargin = 0;
 
     m_maxRows = m_maxCols = 0;
@@ -224,7 +222,7 @@ wxToolBarToolBase *wxToolBarBase::InsertControl(size_t pos, wxControl *control)
 
 wxControl *wxToolBarBase::FindControl( int id )
 {
-    for ( wxToolBarToolsList::Node* node = m_tools.GetFirst();
+    for ( wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();
           node;
           node = node->GetNext() )
     {
@@ -279,7 +277,7 @@ wxToolBarToolBase *wxToolBarBase::InsertSeparator(size_t pos)
 wxToolBarToolBase *wxToolBarBase::RemoveTool(int id)
 {
     size_t pos = 0;
-    wxToolBarToolsList::Node *node;
+    wxToolBarToolsList::compatibility_iterator node;
     for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
     {
         if ( node->GetData()->GetId() == id )
@@ -301,10 +299,7 @@ wxToolBarToolBase *wxToolBarBase::RemoveTool(int id)
         return (wxToolBarToolBase *)NULL;
     }
 
-    // the node would delete the data, so set it to NULL to avoid this
-    node->SetData(NULL);
-
-    m_tools.DeleteNode(node);
+    m_tools.Erase(node);
 
     return tool;
 }
@@ -314,14 +309,15 @@ bool wxToolBarBase::DeleteToolByPos(size_t pos)
     wxCHECK_MSG( pos < GetToolsCount(), FALSE,
                  _T("invalid position in wxToolBar::DeleteToolByPos()") );
 
-    wxToolBarToolsList::Node *node = m_tools.Item(pos);
+    wxToolBarToolsList::compatibility_iterator node = m_tools.Item(pos);
 
     if ( !DoDeleteTool(pos, node->GetData()) )
     {
         return FALSE;
     }
 
-    m_tools.DeleteNode(node);
+    delete node->GetData();
+    m_tools.Erase(node);
 
     return TRUE;
 }
@@ -329,7 +325,7 @@ bool wxToolBarBase::DeleteToolByPos(size_t pos)
 bool wxToolBarBase::DeleteTool(int id)
 {
     size_t pos = 0;
-    wxToolBarToolsList::Node *node;
+    wxToolBarToolsList::compatibility_iterator node;
     for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
     {
         if ( node->GetData()->GetId() == id )
@@ -343,7 +339,8 @@ bool wxToolBarBase::DeleteTool(int id)
         return FALSE;
     }
 
-    m_tools.DeleteNode(node);
+    delete node->GetData();
+    m_tools.Erase(node);
 
     return TRUE;
 }
@@ -352,7 +349,7 @@ wxToolBarToolBase *wxToolBarBase::FindById(int id) const
 {
     wxToolBarToolBase *tool = (wxToolBarToolBase *)NULL;
 
-    for ( wxToolBarToolsList::Node *node = m_tools.GetFirst();
+    for ( wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();
           node;
           node = node->GetNext() )
     {
@@ -371,7 +368,7 @@ wxToolBarToolBase *wxToolBarBase::FindById(int id) const
 
 void wxToolBarBase::ClearTools()
 {
-    m_tools.Clear();
+    WX_CLEAR_LIST(wxToolBarToolsList, m_tools);
 }
 
 bool wxToolBarBase::Realize()
@@ -381,6 +378,7 @@ bool wxToolBarBase::Realize()
 
 wxToolBarBase::~wxToolBarBase()
 {
+    WX_CLEAR_LIST(wxToolBarToolsList, m_tools);
 }
 
 // ----------------------------------------------------------------------------
@@ -460,7 +458,7 @@ void wxToolBarBase::SetToolClientData(int id, wxObject *clientData)
 int wxToolBarBase::GetToolPos(int id) const
 {
     size_t pos = 0;
-    wxToolBarToolsList::Node *node;
+    wxToolBarToolsList::compatibility_iterator node;
 
     for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
     {
@@ -587,7 +585,7 @@ void wxToolBarBase::UpdateWindowUI(long flags)
 
     wxEvtHandler* evtHandler = GetEventHandler() ;
 
-    for ( wxToolBarToolsList::Node* node = m_tools.GetFirst();
+    for ( wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();
           node;
           node = node->GetNext() )
     {

@@ -1069,7 +1069,6 @@ BEGIN_EVENT_TABLE(wxHtmlHelpFrameOptionsDialog, wxDialog)
     EVT_SPINCTRL(-1, wxHtmlHelpFrameOptionsDialog::OnUpdateSpin)
 END_EVENT_TABLE()
 
-
 void wxHtmlHelpFrame::OptionsDialog()
 {
     wxHtmlHelpFrameOptionsDialog dlg(this);
@@ -1081,7 +1080,7 @@ void wxHtmlHelpFrame::OptionsDialog()
         enu.EnumerateFacenames();
         m_NormalFonts = new wxArrayString;
         *m_NormalFonts = *enu.GetFacenames();
-        m_NormalFonts->Sort();
+        m_NormalFonts->Sort(wxStringSortAscending);
     }
     if (m_FixedFonts == NULL)
     {
@@ -1089,7 +1088,7 @@ void wxHtmlHelpFrame::OptionsDialog()
         enu.EnumerateFacenames(wxFONTENCODING_SYSTEM, TRUE);
         m_FixedFonts = new wxArrayString;
         *m_FixedFonts = *enu.GetFacenames();
-        m_FixedFonts->Sort();
+        m_FixedFonts->Sort(wxStringSortAscending);
     }
     
     // VS: We want to show the font that is actually used by wxHtmlWindow.

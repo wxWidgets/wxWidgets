@@ -455,7 +455,7 @@ void wxFrame::PositionToolBar()
 // on the desktop, but are iconized/restored with it
 void wxFrame::IconizeChildFrames(bool bIconize)
 {
-    for ( wxWindowList::Node *node = GetChildren().GetFirst();
+    for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
           node;
           node = node->GetNext() )
     {

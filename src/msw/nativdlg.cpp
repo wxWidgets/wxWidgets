@@ -135,7 +135,7 @@ wxWindow* wxWindow::GetWindowChild1(wxWindowID id)
     if ( m_windowId == id )
         return this;
 
-    wxWindowList::Node *node = GetChildren().GetFirst();
+    wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
     while ( node )
     {
         wxWindow* child = node->GetData();

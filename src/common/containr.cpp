@@ -61,7 +61,7 @@ bool wxControlContainer::AcceptsFocus() const
         // otherwise we can accept focus either if we have no children at all
         // (in this case we're probably not used as a container) or only when
         // at least one child will accept focus
-        wxWindowList::Node *node = m_winParent->GetChildren().GetFirst();
+        wxWindowList::compatibility_iterator node = m_winParent->GetChildren().GetFirst();
         if ( !node )
             return TRUE;
 
@@ -185,7 +185,7 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
 
     // the node of the children list from which we should start looking for the
     // next acceptable child
-    wxWindowList::Node *node, *start_node;
+    wxWindowList::compatibility_iterator node, start_node;
 
     // we should start from the first/last control and not from the one which
     // had focus the last time if we're propagating the event downwards because
@@ -200,7 +200,7 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
         node = forward ? children.GetFirst() : children.GetLast();
 
         // we want to cycle over all nodes
-        start_node = (wxWindowList::Node *)NULL;
+        start_node = wxWindowList::compatibility_iterator();
     }
     else
     {
@@ -224,7 +224,7 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
         }
         else
         {
-            start_node = (wxWindowList::Node *)NULL;
+            start_node = wxWindowList::compatibility_iterator();
         }
 
         if ( !start_node && m_winLastFocused )
@@ -413,7 +413,7 @@ bool wxSetFocusToChild(wxWindow *win, wxWindow **childLastFocused)
     }
 
     // set the focus to the first child who wants it
-    wxWindowList::Node *node = win->GetChildren().GetFirst();
+    wxWindowList::compatibility_iterator node = win->GetChildren().GetFirst();
     while ( node )
     {
         wxWindow *child = node->GetData();

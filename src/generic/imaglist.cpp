@@ -62,7 +62,6 @@ bool wxGenericImageList::Create( int width, int height, bool WXUNUSED(mask), int
 
 bool wxGenericImageList::Create()
 {
-    m_images.DeleteContents( TRUE );
     return TRUE;
 }
 
@@ -92,7 +91,7 @@ int wxGenericImageList::Add( const wxBitmap& bitmap, const wxColour& maskColour 
 
 const wxBitmap *wxGenericImageList::GetBitmap( int index ) const
 {
-    wxNode *node = m_images.Item( index );
+    wxList::compatibility_iterator node = m_images.Item( index );
 
     wxCHECK_MSG( node, (wxBitmap *) NULL, wxT("wrong index in image list") );
 
@@ -101,7 +100,7 @@ const wxBitmap *wxGenericImageList::GetBitmap( int index ) const
 
 bool wxGenericImageList::Replace( int index, const wxBitmap &bitmap )
 {
-    wxNode *node = m_images.Item( index );
+    wxList::compatibility_iterator node = m_images.Item( index );
 
     wxCHECK_MSG( node, FALSE, wxT("wrong index in image list") );
 
@@ -119,13 +118,15 @@ bool wxGenericImageList::Replace( int index, const wxBitmap &bitmap )
 
     if (index == (int) m_images.GetCount() - 1)
     {
-        m_images.DeleteNode( node );
+        delete node->GetData();
+        m_images.Erase( node );
         m_images.Append( newBitmap );
     }
     else
     {
-        wxNode *next = node->GetNext();
-        m_images.DeleteNode( node );
+        wxList::compatibility_iterator next = node->GetNext();
+        delete node->GetData();
+        m_images.Erase( node );
         m_images.Insert( next, newBitmap );
     }
 
@@ -134,17 +135,19 @@ bool wxGenericImageList::Replace( int index, const wxBitmap &bitmap )
 
 bool wxGenericImageList::Remove( int index )
 {
-    wxNode *node = m_images.Item( index );
+    wxList::compatibility_iterator node = m_images.Item( index );
 
     wxCHECK_MSG( node, FALSE, wxT("wrong index in image list") );
 
-    m_images.DeleteNode( node );
+    delete node->GetData();
+    m_images.Erase( node );
 
     return TRUE;
 }
 
 bool wxGenericImageList::RemoveAll()
 {
+    WX_CLEAR_LIST(wxList, m_images);
     m_images.Clear();
 
     return TRUE;
@@ -155,7 +158,7 @@ bool wxGenericImageList::GetSize( int index, int &width, int &height ) const
     width = 0;
     height = 0;
 
-    wxNode *node = m_images.Item( index );
+    wxList::compatibility_iterator node = m_images.Item( index );
 
     wxCHECK_MSG( node, FALSE, wxT("wrong index in image list") );
 
@@ -169,7 +172,7 @@ bool wxGenericImageList::GetSize( int index, int &width, int &height ) const
 bool wxGenericImageList::Draw( int index, wxDC &dc, int x, int y,
                         int flags, bool WXUNUSED(solidBackground) )
 {
-    wxNode *node = m_images.Item( index );
+    wxList::compatibility_iterator node = m_images.Item( index );
 
     wxCHECK_MSG( node, FALSE, wxT("wrong index in image list") );
 

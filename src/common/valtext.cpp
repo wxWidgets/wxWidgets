@@ -73,20 +73,9 @@ bool wxTextValidator::Copy(const wxTextValidator& val)
     m_validatorStyle = val.m_validatorStyle ;
     m_stringValue = val.m_stringValue ;
 
-    wxStringList::Node *node = val.m_includeList.GetFirst() ;
-    while ( node )
-    {
-        wxChar *s = node->GetData();
-        m_includeList.Add(s);
-        node = node->GetNext();
-    }
-    node = val.m_excludeList.GetFirst() ;
-    while ( node )
-    {
-        wxChar *s = node->GetData();
-        m_excludeList.Add(s);
-        node = node->GetNext();
-    }
+    m_includeList = val.m_includeList;
+    m_excludeList = val.m_excludeList;
+    
     return TRUE;
 }
 
@@ -232,38 +221,12 @@ bool wxTextValidator::TransferFromWindow(void)
 
 void wxTextValidator::SetIncludeList(const wxStringList& list)
 {
-/*
-    if ( !M_VTEXTDATA )
-        return;
-*/
-
-    m_includeList.Clear();
-    // TODO: replace with =
-    wxStringList::Node     *node = list.GetFirst();
-    while ( node )
-    {
-        wxChar *s = node->GetData();
-        m_includeList.Add(s);
-        node = node->GetNext();
-    }
+    m_includeList = list;
 }
 
 void wxTextValidator::SetExcludeList(const wxStringList& list)
 {
-/*
-    if ( !M_VTEXTDATA )
-        return;
-*/
-
-    m_excludeList.Clear();
-    // TODO: replace with =
-    wxStringList::Node  *node = list.GetFirst() ;
-    while ( node )
-    {
-        wxChar *s = node->GetData();
-        m_excludeList.Add(s);
-        node = node->GetNext();
-    }
+    m_excludeList = list;
 }
 
 void wxTextValidator::OnChar(wxKeyEvent& event)

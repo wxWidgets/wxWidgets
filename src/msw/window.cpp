@@ -262,7 +262,7 @@ wxWindow *wxWindowMSW::FindItem(long id) const
     }
 #endif // wxUSE_CONTROLS
 
-    wxWindowList::Node *current = GetChildren().GetFirst();
+    wxWindowList::compatibility_iterator current = GetChildren().GetFirst();
     while (current)
     {
         wxWindow *childWin = current->GetData();
@@ -280,7 +280,7 @@ wxWindow *wxWindowMSW::FindItem(long id) const
 // Find an item given the MS Windows handle
 wxWindow *wxWindowMSW::FindItemByHWND(WXHWND hWnd, bool controlOnly) const
 {
-    wxWindowList::Node *current = GetChildren().GetFirst();
+    wxWindowList::compatibility_iterator current = GetChildren().GetFirst();
     while (current)
     {
         wxWindow *parent = current->GetData();
@@ -517,7 +517,7 @@ bool wxWindowMSW::Enable(bool enable)
     // well but when it is enabled back, only those of the children which
     // hadn't been already disabled in the beginning should be enabled again,
     // so we have to keep the list of those children
-    for ( wxWindowList::Node *node = GetChildren().GetFirst();
+    for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
           node;
           node = node->GetNext() )
     {
@@ -1946,7 +1946,7 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
             {
                 // passimistic by default
                 canSafelyCallIsDlgMsg = FALSE;
-                for ( wxWindowList::Node *node = GetChildren().GetFirst();
+                for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
                       node;
                       node = node->GetNext() )
                 {
@@ -2955,7 +2955,7 @@ bool wxWindowMSW::HandleNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     //     correct button tooltips
 #if 0
     // try all our children
-    wxWindowList::Node *node = GetChildren().GetFirst();
+    wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
     while ( node )
     {
         wxWindow *child = node->GetData();
@@ -3612,7 +3612,7 @@ void wxWindowMSW::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
         // FIXME-MT
         gs_hasStdCmap = FALSE;
     }
-    wxWindowList::Node *node = GetChildren().GetFirst();
+    wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
     while ( node )
     {
         // Only propagate to non-top-level windows because Windows already

@@ -184,14 +184,14 @@ bool wxDocument::DeleteAllViews()
 {
     wxDocManager* manager = GetDocumentManager();
 
-    wxNode *node = m_documentViews.GetFirst();
+    wxList::compatibility_iterator node = m_documentViews.GetFirst();
     while (node)
     {
         wxView *view = (wxView *)node->GetData();
         if (!view->Close())
             return FALSE;
 
-        wxNode *next = node->GetNext();
+        wxList::compatibility_iterator next = node->GetNext();
 
         delete view; // Deletes node implicitly
         node = next;
@@ -276,7 +276,7 @@ bool wxDocument::SaveAs()
     SetTitle(wxFileNameFromPath(fileName));
 
     // Notify the views that the filename has changed
-    wxNode *node = m_documentViews.GetFirst();
+    wxList::compatibility_iterator node = m_documentViews.GetFirst();
     while (node)
     {
         wxView *view = (wxView *)node->GetData();
@@ -525,7 +525,7 @@ void wxDocument::OnChangedViewList()
 
 void wxDocument::UpdateAllViews(wxView *sender, wxObject *hint)
 {
-    wxNode *node = m_documentViews.GetFirst();
+    wxList::compatibility_iterator node = m_documentViews.GetFirst();
     while (node)
     {
         wxView *view = (wxView *)node->GetData();
@@ -537,7 +537,7 @@ void wxDocument::UpdateAllViews(wxView *sender, wxObject *hint)
 
 void wxDocument::NotifyClosing()
 {
-    wxNode *node = m_documentViews.GetFirst();
+    wxList::compatibility_iterator node = m_documentViews.GetFirst();
     while (node)
     {
         wxView *view = (wxView *)node->GetData();
@@ -552,7 +552,7 @@ void wxDocument::SetFilename(const wxString& filename, bool notifyViews)
     if ( notifyViews )
     {
         // Notify the views that the filename has changed
-        wxNode *node = m_documentViews.GetFirst();
+        wxList::compatibility_iterator node = m_documentViews.GetFirst();
         while (node)
         {
             wxView *view = (wxView *)node->GetData();
@@ -806,12 +806,12 @@ bool wxDocManager::CloseDocument(wxDocument* doc, bool force)
 
 bool wxDocManager::CloseDocuments(bool force)
 {
-    wxNode *node = m_docs.GetFirst();
+    wxList::compatibility_iterator node = m_docs.GetFirst();
     while (node)
     {
         wxDocument *doc = (wxDocument *)node->GetData();
-        wxNode *next = node->GetNext();
-
+        wxList::compatibility_iterator next = node->GetNext();
+        
         if (!CloseDocument(doc, force))
             return FALSE;
 
@@ -828,11 +828,11 @@ bool wxDocManager::Clear(bool force)
     if (!CloseDocuments(force))
         return FALSE;
 
-    wxNode *node = m_templates.GetFirst();
+    wxList::compatibility_iterator node = m_templates.GetFirst();
     while (node)
     {
         wxDocTemplate *templ = (wxDocTemplate*) node->GetData();
-        wxNode* next = node->GetNext();
+        wxList::compatibility_iterator next = node->GetNext();
         delete templ;
         node = next;
     }
@@ -1530,7 +1530,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
 wxDocTemplate *wxDocManager::SelectDocumentType(wxDocTemplate **templates,
                                                 int noTemplates, bool sort)
 {
-    wxArrayString strings(sort);
+    wxArrayString strings;
     wxDocTemplate **data = new wxDocTemplate *[noTemplates];
     int i;
     int n = 0;
@@ -1562,6 +1562,7 @@ wxDocTemplate *wxDocManager::SelectDocumentType(wxDocTemplate **templates,
 
     if (sort)
     {
+        strings.Sort(wxStringSortAscending);
         // Yes, this will be slow, but template lists
         // are typically short.
         int j;
@@ -1610,7 +1611,7 @@ wxDocTemplate *wxDocManager::SelectDocumentType(wxDocTemplate **templates,
 wxDocTemplate *wxDocManager::SelectViewType(wxDocTemplate **templates,
                                             int noTemplates, bool sort)
 {
-    wxArrayString strings(sort);
+    wxArrayString strings;
     wxDocTemplate **data = new wxDocTemplate *[noTemplates];
     int i;
     int n = 0;
@@ -1640,6 +1641,7 @@ wxDocTemplate *wxDocManager::SelectViewType(wxDocTemplate **templates,
 
     if (sort)
     {
+        strings.Sort(wxStringSortAscending);
         // Yes, this will be slow, but template lists
         // are typically short.
         int j;
@@ -2022,7 +2024,7 @@ void wxFileHistory::AddFileToHistory(const wxString& file)
     // Move existing files (if any) down so we can insert file at beginning.
     if (m_fileHistoryN < m_fileMaxFiles)
     {
-        wxNode* node = m_fileMenus.GetFirst();
+        wxList::compatibility_iterator node = m_fileMenus.GetFirst();
         while (node)
         {
             wxMenu* menu = (wxMenu*) node->GetData();
@@ -2067,7 +2069,7 @@ void wxFileHistory::AddFileToHistory(const wxString& file)
 
             wxString buf;
             buf.Printf(s_MRUEntryFormat, i + 1, pathInMenu.c_str());
-            wxNode* node = m_fileMenus.GetFirst();
+            wxList::compatibility_iterator node = m_fileMenus.GetFirst();
             while (node)
             {
                 wxMenu* menu = (wxMenu*) node->GetData();
@@ -2092,7 +2094,7 @@ void wxFileHistory::RemoveFileFromHistory(size_t i)
         m_fileHistory[j] = m_fileHistory[j + 1];
     }
 
-    wxNode* node = m_fileMenus.GetFirst();
+    wxList::compatibility_iterator node = m_fileMenus.GetFirst();
     while ( node )
     {
          wxMenu* menu = (wxMenu*) node->GetData();
@@ -2117,7 +2119,7 @@ void wxFileHistory::RemoveFileFromHistory(size_t i)
         // delete the last separator too if no more files are left
         if ( m_fileHistoryN == 1 )
         {
-            wxMenuItemList::Node *node = menu->GetMenuItems().GetLast();
+            wxMenuItemList::compatibility_iterator node = menu->GetMenuItems().GetLast();
             if ( node )
             {
                 wxMenuItem *menuItem = node->GetData();
@@ -2196,7 +2198,7 @@ void wxFileHistory::AddFilesToMenu()
 {
     if (m_fileHistoryN > 0)
     {
-        wxNode* node = m_fileMenus.GetFirst();
+        wxList::compatibility_iterator node = m_fileMenus.GetFirst();
         while (node)
         {
             wxMenu* menu = (wxMenu*) node->GetData();

@@ -195,7 +195,7 @@ bool wxLayoutAlgorithm::LayoutMDIFrame(wxMDIParentFrame* frame, wxRect* r)
     wxCalculateLayoutEvent event;
     event.SetRect(rect);
 
-    wxWindowList::Node	*node = frame->GetChildren().GetFirst();
+    wxWindowList::compatibility_iterator node = frame->GetChildren().GetFirst();
     while (node)
     {
         wxWindow* win = node->GetData();
@@ -264,7 +264,7 @@ bool wxLayoutAlgorithm::LayoutWindow(wxWindow* parent, wxWindow* mainWindow)
     // Find the last layout-aware window, so we can make it fill all remaining
     // space.
     wxWindow		*lastAwareWindow = NULL;
-    wxWindowList::Node	*node = parent->GetChildren().GetFirst();
+    wxWindowList::compatibility_iterator node = parent->GetChildren().GetFirst();
 
     while (node)
     {

@@ -114,7 +114,6 @@ void wxWindowBase::InitBase()
     // no window yet, no parent nor children
     m_parent = (wxWindow *)NULL;
     m_windowId = -1;
-    m_children.DeleteContents( FALSE ); // don't auto delete node data
 
     // no constraints on the minimal window size
     m_minWidth =
@@ -263,7 +262,7 @@ wxWindowBase::~wxWindowBase()
 
     // Just in case we've loaded a top-level window via LoadNativeDialog but
     // we weren't a dialog class
-    wxTopLevelWindows.DeleteObject(this);
+    wxTopLevelWindows.DeleteObject((wxWindow*)this);
 
     wxASSERT_MSG( GetChildren().GetCount() == 0, wxT("children not destroyed") );
 
@@ -344,7 +343,7 @@ bool wxWindowBase::Close(bool force)
 
 bool wxWindowBase::DestroyChildren()
 {
-    wxWindowList::Node *node;
+    wxWindowList::compatibility_iterator node;
     for ( ;; )
     {
         // we iterate until the list becomes empty
@@ -520,7 +519,7 @@ wxSize wxWindowBase::DoGetBestSize() const
         int maxX = 0,
             maxY = 0;
 
-        for ( wxWindowList::Node *node = GetChildren().GetFirst();
+        for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
               node;
               node = node->GetNext() )
         {
@@ -554,7 +553,7 @@ wxSize wxWindowBase::DoGetBestSize() const
         int maxX = 0,
             maxY = 0;
 
-        for ( wxWindowList::Node *node = GetChildren().GetFirst();
+        for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
               node;
               node = node->GetNext() )
         {
@@ -708,9 +707,9 @@ void wxWindowBase::AddChild(wxWindowBase *child)
     // this should never happen and it will lead to a crash later if it does
     // because RemoveChild() will remove only one node from the children list
     // and the other(s) one(s) will be left with dangling pointers in them
-    wxASSERT_MSG( !GetChildren().Find(child), _T("AddChild() called twice") );
+    wxASSERT_MSG( !GetChildren().Find((wxWindow*)child), _T("AddChild() called twice") );
 
-    GetChildren().Append(child);
+    GetChildren().Append((wxWindow*)child);
     child->SetParent(this);
 }
 
@@ -718,8 +717,8 @@ void wxWindowBase::RemoveChild(wxWindowBase *child)
 {
     wxCHECK_RET( child, wxT("can't remove a NULL child") );
 
-    GetChildren().DeleteObject(child);
-    child->SetParent((wxWindow *)NULL);
+    GetChildren().DeleteObject((wxWindow *)child);
+    child->SetParent(NULL);
 }
 
 bool wxWindowBase::Reparent(wxWindowBase *newParent)
@@ -738,7 +737,7 @@ bool wxWindowBase::Reparent(wxWindowBase *newParent)
     }
     else
     {
-        wxTopLevelWindows.DeleteObject(this);
+        wxTopLevelWindows.DeleteObject((wxWindow *)this);
     }
 
     // add it to the new one
@@ -748,7 +747,7 @@ bool wxWindowBase::Reparent(wxWindowBase *newParent)
     }
     else
     {
-        wxTopLevelWindows.Append(this);
+        wxTopLevelWindows.Append((wxWindow *)this);
     }
 
     return TRUE;
@@ -988,7 +987,7 @@ wxWindow *wxWindowBase::FindWindow( long id )
         return (wxWindow *)this;
 
     wxWindowBase *res = (wxWindow *)NULL;
-    wxWindowList::Node *node;
+    wxWindowList::compatibility_iterator node;
     for ( node = m_children.GetFirst(); node && !res; node = node->GetNext() )
     {
         wxWindowBase *child = node->GetData();
@@ -1004,7 +1003,7 @@ wxWindow *wxWindowBase::FindWindow( const wxString& name )
         return (wxWindow *)this;
 
     wxWindowBase *res = (wxWindow *)NULL;
-    wxWindowList::Node *node;
+    wxWindowList::compatibility_iterator node;
     for ( node = m_children.GetFirst(); node && !res; node = node->GetNext() )
     {
         wxWindow *child = node->GetData();
@@ -1060,7 +1059,7 @@ wxWindow *wxFindWindowRecursively(const wxWindow *parent,
             return (wxWindow *)parent;
 
         // It wasn't, so check all its children
-        for ( wxWindowList::Node * node = parent->GetChildren().GetFirst();
+        for ( wxWindowList::compatibility_iterator node = parent->GetChildren().GetFirst();
               node;
               node = node->GetNext() )
         {
@@ -1090,7 +1089,7 @@ wxWindow *wxFindWindowHelper(const wxWindow *parent,
     }
 
     // start at very top of wx's windows
-    for ( wxWindowList::Node * node = wxTopLevelWindows.GetFirst();
+    for ( wxWindowList::compatibility_iterator node = wxTopLevelWindows.GetFirst();
           node;
           node = node->GetNext() )
     {
@@ -1142,7 +1141,7 @@ void wxWindowBase::MakeModal(bool modal)
     // Disable all other windows
     if ( IsTopLevel() )
     {
-        wxWindowList::Node *node = wxTopLevelWindows.GetFirst();
+        wxWindowList::compatibility_iterator node = wxTopLevelWindows.GetFirst();
         while (node)
         {
             wxWindow *win = node->GetData();
@@ -1159,7 +1158,7 @@ bool wxWindowBase::Validate()
 #if wxUSE_VALIDATORS
     bool recurse = (GetExtraStyle() & wxWS_EX_VALIDATE_RECURSIVELY) != 0;
 
-    wxWindowList::Node *node;
+    wxWindowList::compatibility_iterator node;
     for ( node = m_children.GetFirst(); node; node = node->GetNext() )
     {
         wxWindowBase *child = node->GetData();
@@ -1184,7 +1183,7 @@ bool wxWindowBase::TransferDataToWindow()
 #if wxUSE_VALIDATORS
     bool recurse = (GetExtraStyle() & wxWS_EX_VALIDATE_RECURSIVELY) != 0;
 
-    wxWindowList::Node *node;
+    wxWindowList::compatibility_iterator node;
     for ( node = m_children.GetFirst(); node; node = node->GetNext() )
     {
         wxWindowBase *child = node->GetData();
@@ -1218,7 +1217,7 @@ bool wxWindowBase::TransferDataFromWindow()
 #if wxUSE_VALIDATORS
     bool recurse = (GetExtraStyle() & wxWS_EX_VALIDATE_RECURSIVELY) != 0;
 
-    wxWindowList::Node *node;
+    wxWindowList::compatibility_iterator node;
     for ( node = m_children.GetFirst(); node; node = node->GetNext() )
     {
         wxWindow *child = node->GetData();
@@ -1409,15 +1408,15 @@ void wxWindowBase::AddConstraintReference(wxWindowBase *otherWin)
 {
     if ( !m_constraintsInvolvedIn )
         m_constraintsInvolvedIn = new wxWindowList;
-    if ( !m_constraintsInvolvedIn->Find(otherWin) )
-        m_constraintsInvolvedIn->Append(otherWin);
+    if ( !m_constraintsInvolvedIn->Find((wxWindow *)otherWin) )
+        m_constraintsInvolvedIn->Append((wxWindow *)otherWin);
 }
 
 // REMOVE back-pointer to other windows we're involved with.
 void wxWindowBase::RemoveConstraintReference(wxWindowBase *otherWin)
 {
     if ( m_constraintsInvolvedIn )
-        m_constraintsInvolvedIn->DeleteObject(otherWin);
+        m_constraintsInvolvedIn->DeleteObject((wxWindow *)otherWin);
 }
 
 // Reset any constraints that mention this window
@@ -1425,7 +1424,7 @@ void wxWindowBase::DeleteRelatedConstraints()
 {
     if ( m_constraintsInvolvedIn )
     {
-        wxWindowList::Node *node = m_constraintsInvolvedIn->GetFirst();
+        wxWindowList::compatibility_iterator node = m_constraintsInvolvedIn->GetFirst();
         while (node)
         {
             wxWindow *win = node->GetData();
@@ -1444,8 +1443,8 @@ void wxWindowBase::DeleteRelatedConstraints()
                 constr->centreY.ResetIfWin(this);
             }
 
-            wxWindowList::Node *next = node->GetNext();
-            delete node;
+            wxWindowList::compatibility_iterator next = node->GetNext();
+            m_constraintsInvolvedIn->Erase(node);
             node = next;
         }
 
@@ -1559,7 +1558,7 @@ bool wxWindowBase::DoPhase(int phase)
         int noChanges = 0;
 
         // loop over all children setting their constraints
-        for ( wxWindowList::Node *node = GetChildren().GetFirst();
+        for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
               node;
               node = node->GetNext() )
         {
@@ -1612,7 +1611,7 @@ void wxWindowBase::ResetConstraints()
         constr->centreY.SetDone(FALSE);
     }
 
-    wxWindowList::Node *node = GetChildren().GetFirst();
+    wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
     while (node)
     {
         wxWindow *win = node->GetData();
@@ -1654,7 +1653,7 @@ void wxWindowBase::SetConstraintSizes(bool recurse)
 
     if ( recurse )
     {
-        wxWindowList::Node *node = GetChildren().GetFirst();
+        wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
         while (node)
         {
             wxWindow *win = node->GetData();
@@ -1782,7 +1781,7 @@ void wxWindowBase::UpdateWindowUI(long flags)
 
     if (flags & wxUPDATE_UI_RECURSE)
     {
-        wxWindowList::Node* node = GetChildren().GetFirst();
+        wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
         while (node)
         {
             wxWindow* child = (wxWindow*) node->GetData();
@@ -1836,7 +1835,7 @@ void wxWindowBase::ProcessInternalIdle()
 {
     OnInternalIdle();
 
-    wxWindowList::Node  *node = GetChildren().GetFirst();
+    wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
     while (node)
     {
         wxWindow *child = node->GetData();
@@ -1882,7 +1881,7 @@ wxPoint wxWindowBase::ConvertDialogToPixels(const wxPoint& pt)
 // propagate the colour change event to the subwindows
 void wxWindowBase::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
-    wxWindowList::Node *node = GetChildren().GetFirst();
+    wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
     while ( node )
     {
         // Only propagate to non-top-level windows
@@ -2004,6 +2003,7 @@ wxAccessible* wxWindowBase::CreateAccessible()
 
 #endif
 
+#if !wxUSE_STL
 // ----------------------------------------------------------------------------
 // list classes implementation
 // ----------------------------------------------------------------------------
@@ -2012,6 +2012,7 @@ void wxWindowListNode::DeleteData()
 {
     delete (wxWindow *)GetData();
 }
+#endif
 
 // ----------------------------------------------------------------------------
 // borders
@@ -2271,7 +2272,7 @@ wxAccStatus wxWindowAccessible::Navigate(wxNavDir navDir, int fromId,
     case wxNAVDIR_DOWN:
     case wxNAVDIR_NEXT:
         {
-            wxWindowList::Node *node = NULL;
+            wxWindowList::compatibility_iterator node = NULL;
             if (fromId == 0)
             {
                 // Can't navigate to sibling of this window
@@ -2284,7 +2285,7 @@ wxAccStatus wxWindowAccessible::Navigate(wxNavDir navDir, int fromId,
             else
             {
                 if (fromId <= (int) GetWindow()->GetChildren().GetCount())
-                    node = (wxWindowList::Node*) GetWindow()->GetChildren().Nth(fromId-1);
+                    node = GetWindow()->GetChildren().Nth(fromId-1);
             }
 
             if (node && node->GetNext())
@@ -2300,7 +2301,7 @@ wxAccStatus wxWindowAccessible::Navigate(wxNavDir navDir, int fromId,
     case wxNAVDIR_UP:
     case wxNAVDIR_PREVIOUS:
         {
-            wxWindowList::Node *node = NULL;
+            wxWindowList::compatibility_iterator node = NULL;
             if (fromId == 0)
             {
                 // Can't navigate to sibling of this window
@@ -2313,7 +2314,7 @@ wxAccStatus wxWindowAccessible::Navigate(wxNavDir navDir, int fromId,
             else
             {
                 if (fromId <= (int) GetWindow()->GetChildren().GetCount())
-                    node = (wxWindowList::Node*) GetWindow()->GetChildren().Nth(fromId-1);
+                    node = GetWindow()->GetChildren().Nth(fromId-1);
             }
 
             if (node && node->GetPrevious())

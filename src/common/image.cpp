@@ -1128,7 +1128,7 @@ bool wxImage::CanRead( wxInputStream &stream )
 {
     const wxList& list = GetHandlers();
 
-    for ( wxList::Node *node = list.GetFirst(); node; node = node->GetNext() )
+    for ( wxList::compatibility_iterator node = list.GetFirst(); node; node = node->GetNext() )
     {
         wxImageHandler *handler=(wxImageHandler*)node->GetData();
         if (handler->CanRead( stream ))
@@ -1146,7 +1146,7 @@ int wxImage::GetImageCount( wxInputStream &stream, long type )
     {
         wxList &list=GetHandlers();
 
-        for (wxList::Node *node = list.GetFirst(); node; node = node->GetNext())
+        for (wxList::compatibility_iterator node = list.GetFirst(); node; node = node->GetNext())
         {
              handler=(wxImageHandler*)node->GetData();
              if ( handler->CanRead(stream) )
@@ -1189,7 +1189,7 @@ bool wxImage::LoadFile( wxInputStream& stream, long type, int index )
     {
         wxList &list=GetHandlers();
 
-        for ( wxList::Node *node = list.GetFirst(); node; node = node->GetNext() )
+        for ( wxList::compatibility_iterator node = list.GetFirst(); node; node = node->GetNext() )
         {
              handler=(wxImageHandler*)node->GetData();
              if ( handler->CanRead(stream) )
@@ -1266,9 +1266,6 @@ bool wxImage::SaveFile( wxOutputStream& stream, const wxString& mimetype ) const
 
 void wxImage::AddHandler( wxImageHandler *handler )
 {
-    // make sure that the memory will be freed at the program end
-    sm_handlers.DeleteContents(true);
-
     // Check for an existing handler of the type being added.
     if (FindHandler( handler->GetType() ) == 0)
     {
@@ -1290,9 +1287,6 @@ void wxImage::AddHandler( wxImageHandler *handler )
 
 void wxImage::InsertHandler( wxImageHandler *handler )
 {
-    // make sure that the memory will be freed at the program end
-    sm_handlers.DeleteContents(true);
-
     // Check for an existing handler of the type being added.
     if (FindHandler( handler->GetType() ) == 0)
     {
@@ -1313,6 +1307,7 @@ bool wxImage::RemoveHandler( const wxString& name )
     if (handler)
     {
         sm_handlers.DeleteObject(handler);
+        delete handler;
         return true;
     }
     else
@@ -1321,7 +1316,7 @@ bool wxImage::RemoveHandler( const wxString& name )
 
 wxImageHandler *wxImage::FindHandler( const wxString& name )
 {
-    wxNode *node = sm_handlers.GetFirst();
+    wxList::compatibility_iterator node = sm_handlers.GetFirst();
     while (node)
     {
         wxImageHandler *handler = (wxImageHandler*)node->GetData();
@@ -1334,7 +1329,7 @@ wxImageHandler *wxImage::FindHandler( const wxString& name )
 
 wxImageHandler *wxImage::FindHandler( const wxString& extension, long bitmapType )
 {
-    wxNode *node = sm_handlers.GetFirst();
+    wxList::compatibility_iterator node = sm_handlers.GetFirst();
     while (node)
     {
         wxImageHandler *handler = (wxImageHandler*)node->GetData();
@@ -1348,7 +1343,7 @@ wxImageHandler *wxImage::FindHandler( const wxString& extension, long bitmapType
 
 wxImageHandler *wxImage::FindHandler( long bitmapType )
 {
-    wxNode *node = sm_handlers.GetFirst();
+    wxList::compatibility_iterator node = sm_handlers.GetFirst();
     while (node)
     {
         wxImageHandler *handler = (wxImageHandler *)node->GetData();
@@ -1360,7 +1355,7 @@ wxImageHandler *wxImage::FindHandler( long bitmapType )
 
 wxImageHandler *wxImage::FindHandlerMime( const wxString& mimetype )
 {
-    wxNode *node = sm_handlers.GetFirst();
+    wxList::compatibility_iterator node = sm_handlers.GetFirst();
     while (node)
     {
         wxImageHandler *handler = (wxImageHandler *)node->GetData();
@@ -1379,24 +1374,24 @@ void wxImage::InitStandardHandlers()
 
 void wxImage::CleanUpHandlers()
 {
-    wxNode *node = sm_handlers.GetFirst();
+    wxList::compatibility_iterator node = sm_handlers.GetFirst();
     while (node)
     {
         wxImageHandler *handler = (wxImageHandler *)node->GetData();
-        wxNode *next = node->GetNext();
+        wxList::compatibility_iterator next = node->GetNext();
         delete handler;
-        delete node;
         node = next;
     }
-}
 
+    sm_handlers.Clear();
+}
 
 wxString wxImage::GetImageExtWildcard()
 {
     wxString fmts;
 
     wxList& Handlers = wxImage::GetHandlers();
-    wxNode* Node = Handlers.GetFirst();
+    wxList::compatibility_iterator Node = Handlers.GetFirst();
     while ( Node )
     {
         wxImageHandler* Handler = (wxImageHandler*)Node->GetData();
@@ -1407,7 +1402,6 @@ wxString wxImage::GetImageExtWildcard()
 
     return wxT("(") + fmts + wxT(")|") + fmts;
 }
-
 
 //-----------------------------------------------------------------------------
 // wxImageHandler

@@ -114,14 +114,14 @@ void wxRadioButton::SetValue(bool value)
     if ( value )
     {
         const wxWindowList& siblings = GetParent()->GetChildren();
-        wxWindowList::Node *nodeThis = siblings.Find(this);
+        wxWindowList::compatibility_iterator nodeThis = siblings.Find(this);
         wxCHECK_RET( nodeThis, _T("radio button not a child of its parent?") );
 
         // if it's not the first item of the group ...
         if ( !HasFlag(wxRB_GROUP) )
         {
             // ... turn off all radio buttons before it
-            for ( wxWindowList::Node *nodeBefore = nodeThis->GetPrevious();
+            for ( wxWindowList::compatibility_iterator nodeBefore = nodeThis->GetPrevious();
                   nodeBefore;
                   nodeBefore = nodeBefore->GetPrevious() )
             {
@@ -146,7 +146,7 @@ void wxRadioButton::SetValue(bool value)
         }
 
         // ... and also turn off all buttons after this one
-        for ( wxWindowList::Node *nodeAfter = nodeThis->GetNext();
+        for ( wxWindowList::compatibility_iterator nodeAfter = nodeThis->GetNext();
               nodeAfter;
               nodeAfter = nodeAfter->GetNext() )
         {

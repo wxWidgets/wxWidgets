@@ -236,7 +236,7 @@ bool wxGDIImage::RemoveHandler(const wxString& name)
 
 wxGDIImageHandler *wxGDIImage::FindHandler(const wxString& name)
 {
-    wxGDIImageHandlerList::Node *node = ms_handlers.GetFirst();
+    wxGDIImageHandlerList::compatibility_iterator node = ms_handlers.GetFirst();
     while ( node )
     {
         wxGDIImageHandler *handler = node->GetData();
@@ -251,7 +251,7 @@ wxGDIImageHandler *wxGDIImage::FindHandler(const wxString& name)
 wxGDIImageHandler *wxGDIImage::FindHandler(const wxString& extension,
                                            long type)
 {
-    wxGDIImageHandlerList::Node *node = ms_handlers.GetFirst();
+    wxGDIImageHandlerList::compatibility_iterator node = ms_handlers.GetFirst();
     while ( node )
     {
         wxGDIImageHandler *handler = node->GetData();
@@ -268,7 +268,7 @@ wxGDIImageHandler *wxGDIImage::FindHandler(const wxString& extension,
 
 wxGDIImageHandler *wxGDIImage::FindHandler(long type)
 {
-    wxGDIImageHandlerList::Node *node = ms_handlers.GetFirst();
+    wxGDIImageHandlerList::compatibility_iterator node = ms_handlers.GetFirst();
     while ( node )
     {
         wxGDIImageHandler *handler = node->GetData();
@@ -283,13 +283,13 @@ wxGDIImageHandler *wxGDIImage::FindHandler(long type)
 
 void wxGDIImage::CleanUpHandlers()
 {
-    wxGDIImageHandlerList::Node *node = ms_handlers.GetFirst();
+    wxGDIImageHandlerList::compatibility_iterator node = ms_handlers.GetFirst();
     while ( node )
     {
         wxGDIImageHandler *handler = node->GetData();
-        wxGDIImageHandlerList::Node *next = node->GetNext();
+        wxGDIImageHandlerList::compatibility_iterator next = node->GetNext();
         delete handler;
-        delete node;
+        ms_handlers.Erase( node );
         node = next;
     }
 }

@@ -433,8 +433,9 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 
                 if ( tool->IsRadio() )
                 {
-                    wxToolBarToolsList::Node *node = pos ? m_tools.Item(pos - 1)
-                                                         : NULL;
+                    wxToolBarToolsList::compatibility_iterator node;
+                    if ( pos ) node = m_tools.Item(pos - 1);
+
                     while ( node )
                     {
                         wxToolBarTool *tool = (wxToolBarTool *)node->GetData();
@@ -660,7 +661,7 @@ void wxToolBar::OnInternalIdle()
             gdk_window_set_cursor( m_widget->window, cursor.GetCursor() );
         }
 
-        wxToolBarToolsList::Node *node = m_tools.GetFirst();
+        wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();
         while ( node )
         {
             wxToolBarTool *tool = (wxToolBarTool *)node->GetData();

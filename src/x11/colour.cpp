@@ -158,9 +158,9 @@ wxColour::wxColour( unsigned char red, unsigned char green, unsigned char blue )
 void wxColour::InitFromName( const wxString &colourName )
 {
     wxNode *node = (wxNode *) NULL;
-    if ( (wxTheColourDatabase) && (node = wxTheColourDatabase->Find(colourName)) )
+    wxColour* col;
+    if ( (wxTheColourDatabase) && (col = wxTheColourDatabase->FindColourNoAdd(colourName)) )
     {
-        wxColour *col = (wxColour*)node->GetData();
         UnRef();
         if (col) Ref( *col );
     }

@@ -237,7 +237,7 @@ void wxTaskBarIcon::_OnRButtonDClick(wxEvent& e)  { OnRButtonDClick(e); }
 
 wxTaskBarIcon* wxTaskBarIcon::FindObjectForHWND(WXHWND hWnd)
 {
-    wxTaskBarIconList::Node *node = sm_taskBarIcons.GetFirst();
+    wxTaskBarIconList::compatibility_iterator node = sm_taskBarIcons.GetFirst();
     while (node)
     {
         wxTaskBarIcon *obj = node->GetData();

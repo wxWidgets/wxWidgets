@@ -163,7 +163,7 @@ void wxMenu::UpdateAccel(wxMenuItem *item)
     if ( item->IsSubMenu() )
     {
         wxMenu *submenu = item->GetSubMenu();
-        wxMenuItemList::Node *node = submenu->GetMenuItems().GetFirst();
+        wxMenuItemList::compatibility_iterator node = submenu->GetMenuItems().GetFirst();
         while ( node )
         {
             UpdateAccel(node->GetData());
@@ -329,7 +329,7 @@ bool wxMenu::DoAppend(wxMenuItem *item)
         {
             // we need to update its end item
             item->SetRadioGroupStart(m_startRadioGroup);
-            wxMenuItemList::Node *node = GetMenuItems().Item(m_startRadioGroup);
+            wxMenuItemList::compatibility_iterator node = GetMenuItems().Item(m_startRadioGroup);
 
             if ( node )
             {
@@ -369,7 +369,7 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
 {
     // we need to find the items position in the child list
     size_t pos;
-    wxMenuItemList::Node *node = GetMenuItems().GetFirst();
+    wxMenuItemList::compatibility_iterator node = GetMenuItems().GetFirst();
     for ( pos = 0; node; pos++ )
     {
         if ( node->GetData() == item )
@@ -590,11 +590,12 @@ WXHMENU wxMenuBar::Create()
     }
     else
     {
-        size_t count = GetMenuCount();
-        for ( size_t i = 0; i < count; i++ )
+        size_t count = GetMenuCount(), i;
+        wxMenuList::iterator it;
+        for ( i = 0, it = m_menus.begin(); i < count; i++, it++ )
         {
             if ( !::AppendMenu((HMENU)m_hMenu, MF_POPUP | MF_STRING,
-                               (UINT)m_menus[i]->GetHMenu(),
+                               (UINT)(*it)->GetHMenu(),
                                m_titles[i]) )
             {
                 wxLogLastError(wxT("AppendMenu"));
@@ -811,9 +812,10 @@ void wxMenuBar::RebuildAccelTable()
     // merge the accelerators of all menus into one accel table
     size_t nAccelCount = 0;
     size_t i, count = GetMenuCount();
-    for ( i = 0; i < count; i++ )
+    wxMenuList::iterator it;
+    for ( i = 0, it = m_menus.begin(); i < count; i++, it++ )
     {
-        nAccelCount += m_menus[i]->GetAccelCount();
+        nAccelCount += (*it)->GetAccelCount();
     }
 
     if ( nAccelCount )
@@ -821,9 +823,9 @@ void wxMenuBar::RebuildAccelTable()
         wxAcceleratorEntry *accelEntries = new wxAcceleratorEntry[nAccelCount];
 
         nAccelCount = 0;
-        for ( i = 0; i < count; i++ )
+        for ( i = 0, it = m_menus.begin(); i < count; i++, it++ )
         {
-            nAccelCount += m_menus[i]->CopyAccels(&accelEntries[nAccelCount]);
+            nAccelCount += (*it)->CopyAccels(&accelEntries[nAccelCount]);
         }
 
         m_accelTable = wxAcceleratorTable(nAccelCount, accelEntries);

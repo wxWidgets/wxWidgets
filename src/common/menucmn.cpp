@@ -276,8 +276,6 @@ void wxMenuItemBase::SetAccel(wxAcceleratorEntry *accel)
 
 void wxMenuBase::Init(long style)
 {
-    m_items.DeleteContents(TRUE);
-
     m_menuBar = (wxMenuBar *)NULL;
     m_menuParent = (wxMenu *)NULL;
 
@@ -289,8 +287,8 @@ void wxMenuBase::Init(long style)
 
 wxMenuBase::~wxMenuBase()
 {
-    // nothing to do, wxMenuItemList dtor will delete the menu items.
-
+    WX_CLEAR_LIST(wxMenuItemList, m_items);
+    
     // Actually, in GTK, the submenus have to get deleted first.
 }
 
@@ -345,7 +343,7 @@ bool wxMenuBase::DoInsert(size_t pos, wxMenuItem *item)
 {
     wxCHECK_MSG( item, FALSE, wxT("invalid item in wxMenu::Insert()") );
 
-    wxMenuItemList::Node *node = m_items.Item(pos);
+    wxMenuItemList::compatibility_iterator node = m_items.Item(pos);
     wxCHECK_MSG( node, FALSE, wxT("invalid index in wxMenu::Insert()") );
 
     m_items.Insert(node, item);
@@ -367,15 +365,14 @@ wxMenuItem *wxMenuBase::Remove(wxMenuItem *item)
 
 wxMenuItem *wxMenuBase::DoRemove(wxMenuItem *item)
 {
-    wxMenuItemList::Node *node = m_items.Find(item);
+    wxMenuItemList::compatibility_iterator node = m_items.Find(item);
 
     // if we get here, the item is valid or one of Remove() functions is broken
     wxCHECK_MSG( node, NULL, wxT("bug in wxMenu::Remove logic") );
 
     // we detach the item, but we do delete the list node (i.e. don't call
     // DetachNode() here!)
-    node->SetData((wxMenuItem *)NULL);  // to prevent it from deleting the item
-    m_items.DeleteNode(node);
+    m_items.Erase(node);
 
     // item isn't attached to anything any more
     item->SetMenu((wxMenu *)NULL);
@@ -433,7 +430,7 @@ bool wxMenuBase::DoDestroy(wxMenuItem *item)
 int wxMenuBase::FindItem(const wxString& text) const
 {
     wxString label = wxMenuItem::GetLabelFromText(text);
-    for ( wxMenuItemList::Node *node = m_items.GetFirst();
+    for ( wxMenuItemList::compatibility_iterator node = m_items.GetFirst();
           node;
           node = node->GetNext() )
     {
@@ -464,7 +461,7 @@ wxMenuItem *wxMenuBase::FindItem(int itemId, wxMenu **itemMenu) const
         *itemMenu = NULL;
 
     wxMenuItem *item = NULL;
-    for ( wxMenuItemList::Node *node = m_items.GetFirst();
+    for ( wxMenuItemList::compatibility_iterator node = m_items.GetFirst();
           node && !item;
           node = node->GetNext() )
     {
@@ -493,7 +490,7 @@ wxMenuItem *wxMenuBase::FindItem(int itemId, wxMenu **itemMenu) const
 wxMenuItem *wxMenuBase::FindChildItem(int id, size_t *ppos) const
 {
     wxMenuItem *item = (wxMenuItem *)NULL;
-    wxMenuItemList::Node *node = GetMenuItems().GetFirst();
+    wxMenuItemList::compatibility_iterator node = GetMenuItems().GetFirst();
 
     size_t pos;
     for ( pos = 0; node; pos++ )
@@ -541,7 +538,7 @@ void wxMenuBase::UpdateUI(wxEvtHandler* source)
     if ( !source )
         source = this;
 
-    wxMenuItemList::Node* node = GetMenuItems().GetFirst();
+    wxMenuItemList::compatibility_iterator  node = GetMenuItems().GetFirst();
     while ( node )
     {
         wxMenuItem* item = node->GetData();
@@ -714,17 +711,13 @@ wxString wxMenuBase::GetHelpString( int id ) const
 
 wxMenuBarBase::wxMenuBarBase()
 {
-    // we own the menus when we get them
-    m_menus.DeleteContents(TRUE);
-
     // not attached yet
     m_menuBarFrame = NULL;
 }
 
 wxMenuBarBase::~wxMenuBarBase()
 {
-    // nothing to do, the list will delete the menus because of the call to
-    // DeleteContents() above
+    WX_CLEAR_LIST(wxMenuList, m_menus);
 }
 
 // ----------------------------------------------------------------------------
@@ -734,7 +727,7 @@ wxMenuBarBase::~wxMenuBarBase()
 
 wxMenu *wxMenuBarBase::GetMenu(size_t pos) const
 {
-    wxMenuList::Node *node = m_menus.Item(pos);
+    wxMenuList::compatibility_iterator node = m_menus.Item(pos);
     wxCHECK_MSG( node, NULL, wxT("bad index in wxMenuBar::GetMenu()") );
 
     return node->GetData();
@@ -761,7 +754,7 @@ bool wxMenuBarBase::Insert(size_t pos, wxMenu *menu,
     {
         wxCHECK_MSG( menu, FALSE, wxT("can't insert NULL menu") );
 
-        wxMenuList::Node *node = m_menus.Item(pos);
+        wxMenuList::compatibility_iterator node = m_menus.Item(pos);
         wxCHECK_MSG( node, FALSE, wxT("bad index in wxMenuBar::Insert()") );
 
         m_menus.Insert(node, menu);
@@ -776,7 +769,7 @@ wxMenu *wxMenuBarBase::Replace(size_t pos, wxMenu *menu,
 {
     wxCHECK_MSG( menu, NULL, wxT("can't insert NULL menu") );
 
-    wxMenuList::Node *node = m_menus.Item(pos);
+    wxMenuList::compatibility_iterator node = m_menus.Item(pos);
     wxCHECK_MSG( node, NULL, wxT("bad index in wxMenuBar::Replace()") );
 
     wxMenu *menuOld = node->GetData();
@@ -790,15 +783,13 @@ wxMenu *wxMenuBarBase::Replace(size_t pos, wxMenu *menu,
 
 wxMenu *wxMenuBarBase::Remove(size_t pos)
 {
-    wxMenuList::Node *node = m_menus.Item(pos);
+    wxMenuList::compatibility_iterator node = m_menus.Item(pos);
     wxCHECK_MSG( node, NULL, wxT("bad index in wxMenuBar::Remove()") );
 
-    node = m_menus.DetachNode(node);
-    wxCHECK( node, NULL );  // unexpected
     wxMenu *menu = node->GetData();
+    wxCHECK( node, NULL );  // unexpected
+    m_menus.Erase(node);
     menu->Detach();
-
-    delete node;
 
     return menu;
 }
@@ -851,10 +842,11 @@ wxMenuItem *wxMenuBarBase::FindItem(int id, wxMenu **menu) const
         *menu = NULL;
 
     wxMenuItem *item = NULL;
-    size_t count = GetMenuCount();
-    for ( size_t i = 0; !item && (i < count); i++ )
+    size_t count = GetMenuCount(), i;
+    wxMenuList::const_iterator it;
+    for ( i = 0, it = m_menus.begin(); !item && (i < count); i++, it++ )
     {
-        item = m_menus[i]->FindItem(id, menu);
+        item = (*it)->FindItem(id, menu);
     }
 
     return item;
@@ -865,7 +857,7 @@ int wxMenuBarBase::FindMenuItem(const wxString& menu, const wxString& item) cons
     wxString label = wxMenuItem::GetLabelFromText(menu);
 
     int i = 0;
-    wxMenuList::Node *node;
+    wxMenuList::compatibility_iterator node;
     for ( node = m_menus.GetFirst(); node; node = node->GetNext(), i++ )
     {
         if ( label == wxMenuItem::GetLabelFromText(GetLabelTop(i)) )

@@ -114,7 +114,7 @@ protected:
 
     int           m_maxNoCommands;
     wxList        m_commands;
-    wxNode*       m_currentCommand;
+    wxList::compatibility_iterator m_currentCommand;
 
 #if wxUSE_MENUS
     wxMenu*       m_commandEditMenu;

@@ -240,7 +240,6 @@ void wxNotebook::Init()
     m_inSwitchPage = FALSE;
 
     m_imageList = (wxImageList *) NULL;
-    m_pagesData.DeleteContents( TRUE );
     m_selection = -1;
     m_themeEnabled = TRUE;
 }
@@ -567,7 +566,9 @@ wxNotebookPage *wxNotebook::DoRemovePage( int page )
 
     gtk_notebook_remove_page( GTK_NOTEBOOK(m_widget), page );
 
-    m_pagesData.DeleteObject(GetNotebookPage(page));
+    wxGtkNotebookPage* p = GetNotebookPage(page);
+    m_pagesData.DeleteObject(p);
+    delete p;
 
     return client;
 }

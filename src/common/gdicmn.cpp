@@ -37,6 +37,7 @@
 #include "wx/dc.h"
 #include "wx/utils.h"
 #include "wx/settings.h"
+#include "wx/hashmap.h"
 
 #include "wx/log.h"
 #include <string.h>
@@ -63,12 +64,12 @@
 #include "wx/mac/private.h"
 #include "wx/mac/uma.h"
 #endif
-IMPLEMENT_CLASS(wxColourDatabase, wxList)
-IMPLEMENT_DYNAMIC_CLASS(wxFontList, wxList)
-IMPLEMENT_DYNAMIC_CLASS(wxPenList, wxList)
-IMPLEMENT_DYNAMIC_CLASS(wxBrushList, wxList)
-IMPLEMENT_DYNAMIC_CLASS(wxBitmapList, wxList)
-IMPLEMENT_DYNAMIC_CLASS(wxResourceCache, wxList)
+//IMPLEMENT_CLASS(wxColourDatabase, wxList)
+//IMPLEMENT_DYNAMIC_CLASS(wxFontList, wxList)
+//IMPLEMENT_DYNAMIC_CLASS(wxPenList, wxList)
+//IMPLEMENT_DYNAMIC_CLASS(wxBrushList, wxList)
+//IMPLEMENT_DYNAMIC_CLASS(wxBitmapList, wxList)
+//IMPLEMENT_DYNAMIC_CLASS(wxResourceCache, wxList)
 
 IMPLEMENT_ABSTRACT_CLASS(wxDCBase, wxObject)
 
@@ -186,21 +187,22 @@ bool wxRect::Intersects(const wxRect& rect) const
     return r.width != 0;
 }
 
-wxColourDatabase::wxColourDatabase (int type) : wxList (type)
+WX_DECLARE_STRING_HASH_MAP( wxColour*, wxStringToColourHashMap );
+
+wxColourDatabase::wxColourDatabase ()
 {
+    m_map = new wxStringToColourHashMap;
 }
 
 wxColourDatabase::~wxColourDatabase ()
 {
-  // Cleanup Colour allocated in Initialize()
-  wxNode *node = GetFirst ();
-  while (node)
-    {
-      wxColour *col = (wxColour *) node->GetData ();
-      wxNode *next = node->GetNext ();
-      delete col;
-      node = next;
-    }
+    typedef wxStringToColourHashMap::iterator iterator;
+
+    for( iterator it = m_map->begin(), en = m_map->end(); it != en; ++it )
+        delete it->second;
+
+    delete m_map;
+    m_map = NULL;
 #ifdef __WXPM__
     delete [] m_palTable;
 #endif
@@ -298,7 +300,7 @@ void wxColourDatabase::Initialize ()
     for ( n = 0; n < WXSIZEOF(wxColourTable); n++ )
     {
         const wxColourDesc& cc = wxColourTable[n];
-        Append(cc.name, new wxColour(cc.r,cc.g,cc.b));
+        (*m_map)[cc.name] =  new wxColour(cc.r,cc.g,cc.b);
     }
 #ifdef __WXPM__
     m_palTable = new long[n];
@@ -322,6 +324,16 @@ void wxColourDatabase::Initialize ()
 
 wxColour *wxColourDatabase::FindColour(const wxString& colour)
 {
+    return FindColour(colour, true);
+}
+
+wxColour *wxColourDatabase::FindColourNoAdd(const wxString& colour) const
+{
+    return ((wxColourDatabase*)this)->FindColour(colour, false);
+}
+
+wxColour *wxColourDatabase::FindColour(const wxString& colour, bool add)
+{
     // VZ: make the comparaison case insensitive and also match both grey and
     //     gray
     wxString colName = colour;
@@ -330,17 +342,14 @@ wxColour *wxColourDatabase::FindColour(const wxString& colour)
     if ( !colName2.Replace(_T("GRAY"), _T("GREY")) )
         colName2.clear();
 
-    wxNode *node = GetFirst();
-    while ( node )
-    {
-        const wxChar *key = node->GetKeyString();
-        if ( colName == key || colName2 == key )
-        {
-            return (wxColour *)node->GetData();
-        }
+    wxStringToColourHashMap::iterator it = m_map->find(colName);
+    if ( it == m_map->end() )
+        it = m_map->find(colName2);
+    if ( it != m_map->end() )
+        return it->second;
 
-        node = node->GetNext();
-    }
+    if ( !add )
+        return NULL;
 
 #ifdef __WXMSW__
   return NULL;
@@ -372,7 +381,7 @@ wxColour *wxColourDatabase::FindColour(const wxString& colour)
       delete col;
       return (wxColour *) NULL;
   }
-  Append( colour, col );
+  (*m_map)[colour] = col;
   return col;
 #endif
 
@@ -400,7 +409,7 @@ wxColour *wxColourDatabase::FindColour(const wxString& colour)
 #endif
 
     wxColour *col = new wxColour(r, g, b);
-    Append(colour, col);
+    (*m_map)[colour] = col;
 
     return col;
 #endif // __X__
@@ -408,29 +417,21 @@ wxColour *wxColourDatabase::FindColour(const wxString& colour)
 
 wxString wxColourDatabase::FindName (const wxColour& colour) const
 {
-    wxString name;
-
     unsigned char red = colour.Red ();
     unsigned char green = colour.Green ();
     unsigned char blue = colour.Blue ();
 
-    for (wxNode * node = GetFirst (); node; node = node->GetNext ())
+    typedef wxStringToColourHashMap::iterator iterator;
+
+    for (iterator it = m_map->begin(), en = m_map->end(); it != en; ++it )
     {
-        wxColour *col = (wxColour *) node->GetData ();
+        wxColour *col = it->second;
 
         if (col->Red () == red && col->Green () == green && col->Blue () == blue)
-        {
-            const wxChar *found = node->GetKeyString();
-            if ( found )
-            {
-                name = found;
-
-                break;
-            }
-        }
+            return it->first;
     }
 
-    return name;
+    return wxEmptyString;
 }
 
 void wxInitializeStockLists()
@@ -589,11 +590,11 @@ wxBitmapList::wxBitmapList()
 
 wxBitmapList::~wxBitmapList ()
 {
-  wxNode *node = GetFirst ();
+  wxList::compatibility_iterator node = GetFirst ();
   while (node)
     {
       wxBitmap *bitmap = (wxBitmap *) node->GetData ();
-      wxNode *next = node->GetNext ();
+      wxList::compatibility_iterator next = node->GetNext ();
       if (bitmap->GetVisible())
         delete bitmap;
       node = next;
@@ -603,11 +604,11 @@ wxBitmapList::~wxBitmapList ()
 // Pen and Brush lists
 wxPenList::~wxPenList ()
 {
-  wxNode *node = GetFirst ();
+  wxList::compatibility_iterator node = GetFirst ();
   while (node)
     {
       wxPen *pen = (wxPen *) node->GetData ();
-      wxNode *next = node->GetNext ();
+      wxList::compatibility_iterator next = node->GetNext ();
       if (pen->GetVisible())
         delete pen;
       node = next;
@@ -626,7 +627,7 @@ void wxPenList::RemovePen (wxPen * pen)
 
 wxPen *wxPenList::FindOrCreatePen (const wxColour& colour, int width, int style)
 {
-    for (wxNode * node = GetFirst (); node; node = node->GetNext ())
+    for (wxList::compatibility_iterator node = GetFirst (); node; node = node->GetNext ())
     {
         wxPen *each_pen = (wxPen *) node->GetData ();
         if (each_pen &&
@@ -658,11 +659,11 @@ wxPen *wxPenList::FindOrCreatePen (const wxColour& colour, int width, int style)
 
 wxBrushList::~wxBrushList ()
 {
-  wxNode *node = GetFirst ();
+  wxList::compatibility_iterator node = GetFirst ();
   while (node)
     {
       wxBrush *brush = (wxBrush *) node->GetData ();
-      wxNode *next = node->GetNext ();
+      wxList::compatibility_iterator next = node->GetNext ();
       if (brush && brush->GetVisible())
         delete brush;
       node = next;
@@ -676,7 +677,7 @@ void wxBrushList::AddBrush (wxBrush * brush)
 
 wxBrush *wxBrushList::FindOrCreateBrush (const wxColour& colour, int style)
 {
-    for (wxNode * node = GetFirst (); node; node = node->GetNext ())
+    for (wxList::compatibility_iterator node = GetFirst (); node; node = node->GetNext ())
     {
         wxBrush *each_brush = (wxBrush *) node->GetData ();
         if (each_brush &&
@@ -713,7 +714,7 @@ void wxBrushList::RemoveBrush (wxBrush * brush)
 
 wxFontList::~wxFontList ()
 {
-    wxNode *node = GetFirst ();
+    wxList::compatibility_iterator node = GetFirst ();
     while (node)
     {
         // Only delete objects that are 'visible', i.e.
@@ -721,7 +722,7 @@ wxFontList::~wxFontList ()
         // where the pointers are expected to be shared
         // (and therefore not deleted by any one part of an app).
         wxFont *font = (wxFont *) node->GetData ();
-        wxNode *next = node->GetNext ();
+        wxList::compatibility_iterator next = node->GetNext ();
         if (font->GetVisible())
             delete font;
         node = next;
@@ -747,7 +748,7 @@ wxFont *wxFontList::FindOrCreateFont(int pointSize,
                                      wxFontEncoding encoding)
 {
     wxFont *font = (wxFont *)NULL;
-    wxNode *node;
+    wxList::compatibility_iterator node;
     for ( node = GetFirst(); node; node = node->GetNext() )
     {
         font = (wxFont *)node->GetData();
@@ -845,7 +846,7 @@ wxSize wxGetDisplaySizeMM()
 
 wxResourceCache::~wxResourceCache ()
 {
-    wxNode *node = GetFirst ();
+    wxList::compatibility_iterator node = GetFirst ();
     while (node) {
         wxObject *item = (wxObject *)node->GetData();
         delete item;

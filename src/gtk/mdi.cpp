@@ -75,7 +75,7 @@ gtk_mdi_page_change_callback( GtkNotebook *WXUNUSED(widget),
 
     child = (wxMDIChildFrame*) NULL;
 
-    wxWindowList::Node  *node = client_window->GetChildren().GetFirst();
+    wxWindowList::compatibility_iterator node = client_window->GetChildren().GetFirst();
     while (node)
     {
         wxMDIChildFrame *child_frame = wxDynamicCast( node->GetData(), wxMDIChildFrame );
@@ -170,7 +170,7 @@ void wxMDIParentFrame::OnInternalIdle()
     wxMDIChildFrame *active_child_frame = GetActiveChild();
     bool visible_child_menu = false;
 
-    wxWindowList::Node     *node = m_clientWindow->GetChildren().GetFirst();
+    wxWindowList::compatibility_iterator node = m_clientWindow->GetChildren().GetFirst();
     while (node)
     {
         wxMDIChildFrame *child_frame = wxDynamicCast( node->GetData(), wxMDIChildFrame );
@@ -247,7 +247,7 @@ wxMDIChildFrame *wxMDIParentFrame::GetActiveChild() const
     GtkNotebookPage* page = (GtkNotebookPage*) (g_list_nth(notebook->children,i)->data);
     if (!page) return (wxMDIChildFrame*) NULL;
 
-    wxWindowList::Node  *node = m_clientWindow->GetChildren().GetFirst();
+    wxWindowList::compatibility_iterator node = m_clientWindow->GetChildren().GetFirst();
     while (node)
     {
         wxMDIChildFrame *child_frame = wxDynamicCast( node->GetData(), wxMDIChildFrame );

@@ -156,12 +156,13 @@ wxColour::wxColour( unsigned char red, unsigned char green, unsigned char blue )
     M_COLDATA->m_color.pixel = 0;
 }
 
+
+
 void wxColour::InitFromName( const wxString &colourName )
 {
-    wxNode *node = (wxNode *) NULL;
-    if ( (wxTheColourDatabase) && (node = wxTheColourDatabase->Find(colourName)) )
+    wxColour* col = NULL;
+    if ( (wxTheColourDatabase) && (col = wxTheColourDatabase->FindColourNoAdd(colourName)) )
     {
-        wxColour *col = (wxColour*)node->GetData();
         UnRef();
         if (col) Ref( *col );
     }
