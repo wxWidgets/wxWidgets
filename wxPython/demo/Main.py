@@ -70,6 +70,7 @@ class wxPythonDemo(wxFrame):
                          style=wxDEFAULT_FRAME_STYLE|wxNO_FULL_REPAINT_ON_RESIZE)
 
         self.cwd = os.getcwd()
+        self.curOverview = ""
 
         if wxPlatform == '__WXMSW__':
             self.icon = wxIcon('bitmaps/mondrian.ico', wxBITMAP_TYPE_ICO)

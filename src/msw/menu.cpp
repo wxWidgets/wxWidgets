@@ -434,7 +434,13 @@ bool wxMenu::MSWCommand(WXUINT WXUNUSED(param), WXWORD id)
         wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED);
         event.SetEventObject( this );
         event.SetId( id );
-        event.SetInt( id );
+
+        // VZ: previosuly, the command int was set to id too which was quite
+        //     useless anyhow (as it could be retrieved using GetId()) and
+        //     uncompatible with wxGTK, so now we use the command int instead
+        //     to pass the checked status
+        event.SetInt(::GetMenuState(GetHmenu(), id, MF_BYCOMMAND) & MF_CHECKED);
+
         ProcessCommand(event);
     }
 
@@ -552,10 +558,8 @@ void wxMenuBar::Refresh()
 
 WXHMENU wxMenuBar::Create()
 {
-    if (m_hMenu != 0 )
+    if ( m_hMenu != 0 )
         return m_hMenu;
-
-    wxCHECK_MSG( !m_hMenu, TRUE, wxT("menubar already created") );
 
     m_hMenu = (WXHMENU)::CreateMenu();
 

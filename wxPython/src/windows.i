@@ -207,6 +207,8 @@ public:
     void Centre(int direction = wxBOTH);
     void CentreOnParent(int direction = wxBOTH );
     void CenterOnParent(int direction = wxBOTH );
+    void CentreOnScreen(int direction = wxBOTH );
+    void CenterOnScreen(int direction = wxBOTH );
 
     // (uses apply'ed INOUT typemap, see above)
     %name(ClientToScreenXY)void ClientToScreen(int* x, int* y);

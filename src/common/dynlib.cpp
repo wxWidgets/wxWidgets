@@ -102,7 +102,6 @@ static wxString ConstructLibraryName(const wxString& basename)
     return fullname;
 }
 
-
 // ---------------------------------------------------------------------------
 // wxLibrary (one instance per dynamic library)
 // ---------------------------------------------------------------------------

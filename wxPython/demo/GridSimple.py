@@ -30,6 +30,9 @@ class SimpleGrid(wxGrid):
         # you can set cell attributes for the whole row (or column)
         self.SetRowAttr(5, attr)
 
+        self.SetColLabelValue(0, "Custom")
+        self.SetColLabelValue(1, "column")
+        self.SetColLabelValue(2, "labels")
 
         # test all the events
         EVT_GRID_CELL_LEFT_CLICK(self, self.OnCellLeftClick)

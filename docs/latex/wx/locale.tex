@@ -61,13 +61,6 @@ The destructor, like the constructor, also has global side effects: the previous
 set locale is restored and so the changes described in 
 \helpref{Init}{wxlocaleinit} documentation are rolled back.
 
-\membersection{wxLocale::GetLocale}\label{wxlocalegetlocale}
-
-\constfunc{const char*}{GetLocale}{\void}
-
-Returns the locale name as passed to the constructor or 
-\helpref{Init()}{wxlocaleinit}.
-
 \membersection{wxLocale::AddCatalog}\label{wxlocaleaddcatalog}
 
 \func{bool}{AddCatalog}{\param{const char }{*szDomain}}
@@ -92,6 +85,36 @@ looked up under prefix/<lang>/LC\_MESSAGES, prefix/LC\_MESSAGES and prefix
 (in this order).
 
 This only applies to subsequent invocations of AddCatalog()!
+
+\membersection{wxLocale::GetLocale}\label{wxlocalegetlocale}
+
+\constfunc{const char*}{GetLocale}{\void}
+
+Returns the locale name as passed to the constructor or 
+\helpref{Init()}{wxlocaleinit}.
+
+\membersection{wxLocale::GetName}\label{wxlocalegetname}
+
+\constfunc{const wxString\&}{GetName}{\void}
+
+Returns the current short name for the locale (as given to the constructor or
+the Init() function).
+
+\membersection{wxLocale::GetString}\label{wxlocalegetstring}
+
+\constfunc{const char*}{GetString}{\param{const char }{*szOrigString}, \param{const char }{*szDomain = NULL}}
+
+Retrieves the translation for a string in all loaded domains unless the szDomain
+parameter is specified (and then only this catalog/domain is searched).
+
+Returns original string if translation is not available
+(in this case an error message is generated the first time
+a string is not found; use \helpref{wxLogNull}{wxlogoverview} to suppress it).
+
+\wxheading{Remarks}
+
+Domains are searched in the last to first order, i.e. catalogs
+added later override those added before.
 
 \membersection{wxLocale::Init}\label{wxlocaleinit}
 
@@ -129,26 +152,9 @@ normally corresponds to 'domain' which is more or less the application name.
 
 See also: \helpref{AddCatalog}{wxlocaleaddcatalog}
 
-\membersection{wxLocale::GetName}\label{wxlocalegetname}
+\membersection{wxLocale::IsOk}\label{wxlocaleisok}
 
-\constfunc{const wxString\&}{GetName}{\void}
+\constfunc{bool}{IsOk}{\void}
 
-Returns the current short name for the locale (as given to the constructor or
-the Init() function).
-
-\membersection{wxLocale::GetString}\label{wxlocalegetstring}
-
-\constfunc{const char*}{GetString}{\param{const char }{*szOrigString}, \param{const char }{*szDomain = NULL}}
-
-Retrieves the translation for a string in all loaded domains unless the szDomain
-parameter is specified (and then only this catalog/domain is searched).
-
-Returns original string if translation is not available
-(in this case an error message is generated the first time
-a string is not found; use \helpref{wxLogNull}{wxlogoverview} to suppress it).
-
-\wxheading{Remarks}
-
-Domains are searched in the last to first order, i.e. catalogs
-added later override those added before.
+Returns TRUE if the locale could be set successfully.
 

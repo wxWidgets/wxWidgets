@@ -90,9 +90,9 @@ below.)
    command, as well as to build.local for wxPython, (see below.)
 
 
-2. For either platform, you should be sure to set an environment
+2. For the win32 platform you should be sure to set an environment
    variable named WXWIN to be the path to the top of the wxWindows
-   tree.
+   source tree.
 
 
 3. If you are working from a copy of the code retrieved from CVS, then
@@ -106,6 +106,9 @@ below.)
 
    WXPSRCDIR = "~/MyStuff/wxPython-2.1.15/src"
 
+   If your wxPython sources are not under $WXWIN then you'll need to
+   adjust the remainder of these instructions accordingly.
+
 
 4. At this point you may want to make an alias, symlink, script,
    batch file, or whatever on the PATH that invokes
@@ -116,7 +119,7 @@ below.)
    python %WXWIN%/wxPython/distrib/build.py %1 %2 %3 %4 %5 %6
 
 
-5. Change into the $(WXWIN)/utils/wxPython/src directory.
+5. Change into the $(WXWIN)/wxPython/src directory.
 
 
 6. If you don't use SWIG, or don't have a new enough version
@@ -153,7 +156,7 @@ below.)
    again.
 
 
-9. Change to the $WXWIN/utils/wxPython/demo directory.
+9. Change to the $WXWIN/wxPython/demo directory.
 
 
 10. Try executing the demo program.  For example:
@@ -163,4 +166,3 @@ below.)
     To run it without requiring a console on win32, you can use the
     pythonw.exe version of Python either from the command line or from
     a shortcut.
-

@@ -5,6 +5,8 @@
 //              source such as opening and closing the data source.
 // Author:      Doug Card
 // Modified by: George Tasker
+//              Bart Jourquin
+//              Mark Johnson
 // Mods:        Dec, 1998:
 //                -Added support for SQL statement logging and database cataloging
 //                     April, 1999
@@ -42,7 +44,7 @@
 // BJO 20000503: introduce new GetColumns members which are more database independant and 
 //               return columns in the order they were created
 #define OLD_GETCOLUMNS 1
-
+#define EXPERIMENTAL_WXDB_FUNCTIONS 0
 
 // Use this line for wxWindows v1.x
 //#include "wx_ver.h"
@@ -51,7 +53,7 @@
 
 #if wxMAJOR_VERSION == 2
     #ifdef __GNUG__
-    #pragma interface "db.h"
+        #pragma interface "db.h"
     #endif
 #endif
 
@@ -268,8 +270,8 @@ class WXDLLEXPORT wxDbColFor
 public:
     wxString       s_Field;             // Formated String for Output
     wxString       s_Format[7];         // Formated Objects - TIMESTAMP has the biggest (7)
-    wxString       s_Menge[7];          // Formated Objects - amount of things that can be formatted
-    int            i_Menge[7];          // Formated Objects - TT MM YYYY HH MM SS m
+    wxString       s_Amount[7];          // Formated Objects - amount of things that can be formatted
+    int            i_Amount[7];          // Formated Objects - TT MM YYYY HH MM SS m
     int            i_Nation;            // 0 = timestamp , 1=EU, 2=UK, 3=International, 4=US
     int            i_dbDataType;        // conversion of the 'sqlDataType' to the generic data type used by these classes
     SWORD          i_sqlDataType;
@@ -303,6 +305,9 @@ public:
     int          FkCol;       // Foreign key column       0=No; 1= First Key, 2 = Second Key etc.
     char         FkTableName[DB_MAX_TABLE_NAME_LEN+1]; // Foreign key table name
     wxDbColFor  *pColFor;                              // How should this columns be formatted
+
+    wxDbColInf();
+    ~wxDbColInf();
 };
 
 
@@ -316,6 +321,8 @@ public:
     char        tableRemarks[254+1];
     int         numCols;                    // How many Columns does this Table have: GetColumnCount(..);
     wxDbColInf *pColInf;                    // pColInf = NULL ; User can later call GetColumns(..);
+    wxDbTableInf();
+    ~wxDbTableInf();
 };
 
 
@@ -326,6 +333,9 @@ public:
     char          schema[128+1];
     int           numTables;           // How many tables does this database have
     wxDbTableInf *pTableInf;           // pTableInf = new wxDbTableInf[numTables];
+
+    wxDbInf();
+    ~wxDbInf();
 };
 
 
@@ -393,7 +403,7 @@ private:
     unsigned int nTables;
 
     // Information about logical data types VARCHAR, INTEGER, FLOAT and DATE.
-	 //
+     //
     // This information is obtained from the ODBC driver by use of the
     // SQLGetTypeInfo() function.  The key piece of information is the
     // type name the data source uses for each logical data type.
@@ -432,6 +442,9 @@ public:
         char   databaseName[128];                        // Database filename
         char   outerJoins[2];                            // Indicates whether the data source supports outer joins
         char   procedureSupport[2];                      // Indicates whether the data source supports stored procedures
+#if EXPERIMENTAL_WXDB_FUNCTIONS  // will be added in 2.4
+        char   accessibleTables[2];                      // Indicates whether the data source only reports accessible tables in SQLTables.
+#endif
         UWORD  maxConnections;                           // Maximum # of connections the data source supports
         UWORD  maxStmts;                                 // Maximum # of HSTMTs per HDBC
         UWORD  apiConfLvl;                               // ODBC API conformance level
@@ -464,7 +477,7 @@ public:
 
 #if wxODBC_BACKWARD_COMPATABILITY
     // Information about logical data types VARCHAR, INTEGER, FLOAT and DATE.
-	 //
+     //
     // This information is obtained from the ODBC driver by use of the
     // SQLGetTypeInfo() function.  The key piece of information is the
     // type name the data source uses for each logical data type.
@@ -476,7 +489,7 @@ public:
 #endif
 
     // Public member functions
-    wxDb(HENV &aHenv, bool FwdOnlyCursors=(bool)TRUE);
+    wxDb(HENV &aHenv, bool FwdOnlyCursors=(bool)wxODBC_FWD_ONLY_CURSORS);
     bool         Open(char *Dsn, char *Uid, char *AuthStr);  // Data Source Name, User ID, Password
     void         Close(void);
     bool         CommitTrans(void);
@@ -514,6 +527,9 @@ public:
     wxDbSqlTypeInfo GetTypeInfDate()   {return typeInfDate;}
 
     bool         TableExists(const char *tableName, const char *userID=NULL, const char *path=NULL);  // Table name can refer to a table, view, alias or synonym
+#if EXPERIMENTAL_WXDB_FUNCTIONS  // will be added in 2.4
+    bool         TablePrivileges(const char *tableName, const char* priv, const char *userID=NULL, const char *path=NULL);  // Table name can refer to a table, view, alias or synonym
+#endif
     void         LogError(const char *errMsg, const char *SQLState = 0) {logError(errMsg, SQLState);}
     void         SetDebugErrorMessages(bool state) { silent = !state; }
     bool         SetSqlLogging(wxDbSqlLogState state, const wxChar *filename = SQL_LOG_FILENAME, bool append = FALSE);

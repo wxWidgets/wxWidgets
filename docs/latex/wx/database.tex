@@ -3,9 +3,6 @@
 Every database object represents an ODBC connection.
 The connection may be closed and reopened.
 
-Note: this class is considered obsolete, replaced by the Remstar wxDB/wxTable classes
-(documented separately in Word and PDF format, as odbc.doc and odbc.pdf).
-
 \wxheading{Derived from}
 
 \helpref{wxObject}{wxobject}
@@ -80,9 +77,9 @@ and disconnects from the current data source.
 
 Commits previous transactions. Not implemented.
 
-\membersection{wxDatabase::ErrorOccurred}
+\membersection{wxDatabase::ErrorOccured}
 
-\func{bool}{ErrorOccurred}{\void}
+\func{bool}{ErrorOccured}{\void}
 
 Returns TRUE if the last action caused an error.
 
@@ -90,7 +87,7 @@ Returns TRUE if the last action caused an error.
 
 \func{void}{ErrorSnapshot}{\param{HSTMT}{ statement = SQL\_NULL\_HSTMT}}
 
-This function will be called whenever an ODBC error occurred. It stores the
+This function will be called whenever an ODBC error occured. It stores the
 error related information returned by ODBC. If a statement handle of the
 concerning ODBC action is available it should be passed to the function.
 

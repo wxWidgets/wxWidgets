@@ -1114,8 +1114,8 @@ wxDocument *wxDocManager::CreateDocument(const wxString& path, long flags)
         }
         return newDoc;
     }
-    else
-        return (wxDocument *) NULL;
+
+    return (wxDocument *) NULL;
 }
 
 wxView *wxDocManager::CreateView(wxDocument *doc, long flags)
@@ -1364,7 +1364,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
     wxString descrBuf = wxT("*.*");
 #endif
 
-    int FilterIndex = 0;
+    int FilterIndex = -1;
 
     wxWindow* parent = wxFindSuitableParent();
 
@@ -1376,6 +1376,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
                                         0,
                                         parent);
 
+    wxDocTemplate *theTemplate = (wxDocTemplate *)NULL;
     if (!pathTmp.IsEmpty())
     {
         if (!wxFileExists(pathTmp))
@@ -1396,21 +1397,20 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
 
         path = pathTmp;
 
-        // This is dodgy in that we're selecting the template on the
-        // basis of the file extension, which may not be a standard
-        // one. We really want to know exactly which template was
-        // chosen by using a more advanced file selector.
-        wxDocTemplate *theTemplate = FindTemplateForPath(path);
-        if ( !theTemplate )
+        // first choose the template using the extension, if this fails (i.e.
+        // wxFileSelectorEx() didn't fill it), then use the path
+        if ( FilterIndex != -1 )
             theTemplate = templates[FilterIndex];
-
-        return theTemplate;
+        if ( !theTemplate )
+            theTemplate = FindTemplateForPath(path);
     }
     else
     {
         path = wxT("");
-        return (wxDocTemplate *) NULL;
     }
+
+    return theTemplate;
+
 #if 0
     // In all other windowing systems, until we have more advanced
     // file selectors, we must select the document type (template) first, and

@@ -443,7 +443,7 @@ public:
     wxString GetString() const { return m_commandString; }
 
     // Get checkbox value
-    bool Checked() const { return (m_commandInt != 0); }
+    bool IsChecked() const { return m_commandInt != 0; }
 
     // TRUE if the listbox event was a selection.
     bool IsSelection() const { return (m_extraLong != 0); }
@@ -455,6 +455,10 @@ public:
     long GetInt() const { return m_commandInt ; }
 
     void CopyObject(wxObject& obj) const;
+
+#ifdef WXWIN_COMPATIBILITY_2
+    bool Checked() const { return IsChecked(); }
+#endif // WXWIN_COMPATIBILITY_2
 
 public:
     wxString          m_commandString; // String event argument
@@ -1802,15 +1806,17 @@ const wxEventTableEntry theClass::sm_eventTableEntries[] = { \
  { wxEVT_JOY_BUTTON_DOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxJoystickEventFunction) & func, (wxObject *) NULL },\
  { wxEVT_JOY_BUTTON_UP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxJoystickEventFunction) & func, (wxObject *) NULL },\
  { wxEVT_JOY_MOVE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxJoystickEventFunction) & func, (wxObject *) NULL },\
- { wxEVT_JOY_ZMOVE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxJoystickEventFunction) & func, (wxObject *) NULL },\
+ { wxEVT_JOY_ZMOVE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxJoystickEventFunction) & func, (wxObject *) NULL },
 
 // Idle event
 #define EVT_IDLE(func) \
- { wxEVT_IDLE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxIdleEventFunction) & func, (wxObject *) NULL },\
+ { wxEVT_IDLE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxIdleEventFunction) & func, (wxObject *) NULL },
 
 // Update UI event
 #define EVT_UPDATE_UI(id, func) \
- { wxEVT_UPDATE_UI, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxUpdateUIEventFunction) & func, (wxObject *) NULL },\
+ { wxEVT_UPDATE_UI, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxUpdateUIEventFunction) & func, (wxObject *) NULL },
+#define EVT_UPDATE_UI_RANGE(id1, id2, func) \
+ { wxEVT_UPDATE_UI, id1, id2, (wxObjectEventFunction)(wxEventFunction)(wxUpdateUIEventFunction)&func, (wxObject *) NULL },
 
 // ----------------------------------------------------------------------------
 // Global data

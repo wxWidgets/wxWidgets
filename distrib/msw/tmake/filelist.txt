@@ -96,7 +96,7 @@ splash.cpp	G
 splitter.cpp	G
 statline.cpp	G	U,R,P
 statusbr.cpp	G
-tabg.cpp	G	P
+tabg.cpp	G	16,P
 numdlgg.cpp	G
 tbarsmpl.cpp	G
 textdlgg.cpp	G

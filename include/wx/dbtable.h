@@ -3,6 +3,8 @@
 // Purpose:     Declaration of the wxDbTable class.
 // Author:      Doug Card
 // Modified by: George Tasker
+//              Bart Jourquin
+//              Mark Johnson
 // Created:     9.96
 // RCS-ID:      $Id$
 // Copyright:   (c) 1996 Remstar International, Inc.
@@ -33,7 +35,7 @@
 
 #if wxMAJOR_VERSION == 2
     #ifdef __GNUG__
-    #pragma interface "dbtable.h"
+        #pragma interface "dbtable.h"
     #endif
 #endif
 
@@ -94,20 +96,20 @@ public:
 class WXDLLEXPORT wxDbTable
 {
 private:
-    ULONG    tableID;  // Used for debugging.  This can help to match up mismatched constructors/destructors
+    ULONG       tableID;  // Used for debugging.  This can help to match up mismatched constructors/destructors
 
     // Private member variables
-    UDWORD cursorType;
-    bool   insertable;
+    UDWORD      cursorType;
+    bool        insertable;
 
     // Private member functions
-    bool bindInsertParams(void);
-    bool bindUpdateParams(void);
-    bool bindCols(HSTMT cursor);
-    bool getRec(UWORD fetchType);
-    bool execDelete(const char *pSqlStmt);
-    bool execUpdate(const char *pSqlStmt);
-    bool query(int queryType, bool forUpdate, bool distinct, const char *pSqlStmt = 0);
+    bool        bindInsertParams(void);
+    bool        bindUpdateParams(void);
+    bool        bindCols(HSTMT cursor);
+    bool        getRec(UWORD fetchType);
+    bool        execDelete(const char *pSqlStmt);
+    bool        execUpdate(const char *pSqlStmt);
+    bool        query(int queryType, bool forUpdate, bool distinct, const char *pSqlStmt = 0);
 
 #if !wxODBC_BACKWARD_COMPATABILITY
 // these were public
@@ -188,32 +190,32 @@ public:
     bool            CreateIndex(const char * idxName, bool unique, int noIdxCols, wxDbIdxDef *pIdxDefs, bool attemptDrop=TRUE);
     bool            DropIndex(const char * idxName);
 
-// Accessors
+    // Accessors
 
     // The member variables returned by these accessors are all
     // set when the wxDbTable instance is createand cannot be 
     // changed, hence there is no corresponding SetXxxx function
-	 wxDb           *GetDb()              { return pDb; }
-	 const char     *GetTableName()       { return tableName; }
-	 const char     *GetQueryTableName()  { return queryTableName; }
-	 const char     *GetTablePath()       { return tablePath; }
+    wxDb           *GetDb()              { return pDb; }
+    const char     *GetTableName()       { return tableName; }
+    const char     *GetQueryTableName()  { return queryTableName; }
+    const char     *GetTablePath()       { return tablePath; }
 
-         int GetNumberOfColumns() { return noCols; }  // number of "defined" columns for this wxDbTable instance
+    int             GetNumberOfColumns() { return noCols; }  // number of "defined" columns for this wxDbTable instance
        
 
-	 const char     *GetFromClause()      { return from; }
-	 const char     *GetOrderByClause()   { return orderBy; }
-	 const char     *GetWhereClause()     { return where; }
+    const char     *GetFromClause()      { return from; }
+    const char     *GetOrderByClause()   { return orderBy; }
+    const char     *GetWhereClause()     { return where; }
 
-	 bool            IsQueryOnly()        { return queryOnly; }
+    bool            IsQueryOnly()        { return queryOnly; }
 #if wxODBC_BACKWARD_COMPATABILITY
     void            SetFromClause(const char *From) { from = (char *)From; }
-	 void            SetOrderByClause(const char *OrderBy) { orderBy = (char *)OrderBy; }
-	 void            SetWhereClause(const char *Where) { where = (char *)Where; }
+    void            SetOrderByClause(const char *OrderBy) { orderBy = (char *)OrderBy; }
+    void            SetWhereClause(const char *Where) { where = (char *)Where; }
 #else
-	 void            SetFromClause(const wxString& From) { from = From; }
-	 void            SetOrderByClause(const wxString& OrderBy) { orderBy = OrderBy; }
-	 void            SetWhereClause(const wxString& Where) { where = Where; }
+    void            SetFromClause(const wxString& From) { from = From; }
+    void            SetOrderByClause(const wxString& OrderBy) { orderBy = OrderBy; }
+    void            SetWhereClause(const wxString& Where) { where = Where; }
 #endif
     int             Insert(void);
     bool            Update(void);

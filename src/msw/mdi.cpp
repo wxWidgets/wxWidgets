@@ -63,8 +63,10 @@
 extern wxWindowList wxModelessWindows;      // from dialog.cpp
 extern wxMenu *wxCurrentPopupMenu;
 
-extern const wxChar *wxMDIFrameClassName;
+extern const wxChar *wxMDIFrameClassName;   // from app.cpp
 extern const wxChar *wxMDIChildFrameClassName;
+extern const wxChar *wxMDIChildFrameClassNameNoRedraw;
+
 extern wxWindow *wxWndHook;                 // from window.cpp
 
 extern void wxAssociateWinWithHandle(HWND hWnd, wxWindow *win);
@@ -221,8 +223,16 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
   if (style & wxCLIP_CHILDREN)
     msflags |= WS_CLIPCHILDREN;
 
-  wxWindow::MSWCreate(m_windowId, parent, wxMDIFrameClassName, this, title, x, y, width, height,
-         msflags);
+  if ( !wxWindow::MSWCreate(m_windowId,
+                            parent,
+                            wxMDIFrameClassName,
+                            this,
+                            title,
+                            x, y, width, height,
+                            msflags) )
+  {
+      return FALSE;
+  }
 
   wxModelessWindows.Append(this);
 
@@ -653,7 +663,9 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
 
   MDICREATESTRUCT mcs;
 
-  mcs.szClass = wxMDIChildFrameClassName;
+  mcs.szClass = style & wxNO_FULL_REPAINT_ON_RESIZE
+                    ? wxMDIChildFrameClassNameNoRedraw
+                    : wxMDIChildFrameClassName;
   mcs.szTitle = title;
   mcs.hOwner = wxGetInstance();
   if (x > -1)
@@ -696,12 +708,8 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
 
   mcs.lParam = 0;
 
-  DWORD Return = SendMessage(GetWinHwnd(parent->GetClientWindow()),
-                             WM_MDICREATE, 0, (LONG)(LPSTR)&mcs);
-
-  //handle = (HWND)LOWORD(Return);
-  // Must be the DWORRD for WIN32. And in 16 bits, HIWORD=0 (says Microsoft)
-  m_hWnd = (WXHWND)Return;
+  m_hWnd = (WXHWND)::SendMessage(GetWinHwnd(parent->GetClientWindow()),
+                                 WM_MDICREATE, 0, (LONG)(LPSTR)&mcs);
 
   wxWndHook = NULL;
   wxAssociateWinWithHandle((HWND) GetHWND(), this);
@@ -917,15 +925,17 @@ bool wxMDIChildFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND hwnd)
             return TRUE;
     }
 
+    bool processed;
     if (GetMenuBar() && GetMenuBar()->FindItem(id))
     {
-        ProcessCommand(id);
-        return TRUE;
+        processed = ProcessCommand(id);
     }
     else
-        return FALSE;
+    {
+        processed = FALSE;
+    }
 
-    return TRUE;
+    return processed;
 }
 
 bool wxMDIChildFrame::HandleMDIActivate(long WXUNUSED(activate),

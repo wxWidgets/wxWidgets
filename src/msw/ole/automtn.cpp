@@ -435,13 +435,9 @@ WXIDISPATCH* wxAutomationObject::GetDispatchProperty(const wxString& property, i
 		{
 			return (WXIDISPATCH*) retVariant.GetVoidPtr();
 		}
-		else
-		{
-			return (WXIDISPATCH*) NULL;
-		}
 	}
-	else
-		return (WXIDISPATCH*) NULL;
+
+	return (WXIDISPATCH*) NULL;
 }
 
 // A way of initialising another wxAutomationObject with a dispatch object

@@ -1,7 +1,7 @@
 Source: wxwindows=V
 Section: libs
 Priority: optional
-Build-Depends: debhelper, flex, bison, libgtk1.2-dev, python-dev (>=1.5), zlib1g-dev, libjpeg62-dev, libpng2-dev, libtiff3g-dev, mesag-dev
+Build-Depends: debhelper, flex, bison, libgtk1.2-dev, python-dev (>=1.5.2), zlib1g-dev, libjpeg62-dev, libpng2-dev, libtiff3g-dev, mesag-dev
 Maintainer: Ron Lee <ron@debian.org>
 Standards-Version: 3.1.1
 
@@ -107,7 +107,7 @@ Description: wxWindows Cross-platform C++ GUI toolkit (GTK+ development)
 Package: libwxgtk=V-python
 Architecture: any
 Section: interpreters
-Depends: libwxgtk=V (= ${Source-Version}), python-base (>=1.5), ${shlibs:Depends}
+Depends: libwxgtk=V (= ${Source-Version}), python-base (>=1.5.2), ${shlibs:Depends}
 Suggests: wxwin=V-doc
 Description: wxWindows Cross-platform C++ GUI toolkit (Python binding)
  wxWindows is a class library for C++ providing GUI (Graphical User
@@ -156,6 +156,19 @@ Description: wxWindows Cross-platform C++ GUI toolkit (header files)
  .
  This package provides the common header files required to build applications
  using the wxWindows toolkit.
+
+Package: wxwin=V-i18n
+Architecture: all
+Section: libs
+Conflicts: wxwin-i18n
+Replaces: wxwin-i18n
+Provides: wxwin-i18n
+Description: wxWindows Cross-platform C++ GUI toolkit (i18n support)
+ wxWindows is a class library for C++ providing GUI (Graphical User
+ Interface) and other facilities on more than one platform.  Version =V
+ currently supports subsets of GTK+, Motif, and MS Windows.
+ .
+ This package provides the i18n message catalogs for wxWindows.
 
 Package: wxwin=V-doc
 Architecture: all

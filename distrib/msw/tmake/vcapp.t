@@ -30,20 +30,26 @@
     if ( Config("wx") ) {
 	#! VC 6.0 supports env vars in include path
 	#! $WXDIR = $ENV{'WX'};
-	$WXDIR = "\$(WX)";
+	if ( $ENV{'wx'} ) { $WXDIR = "\$(wx)"; }
+	else { $WXDIR = "\$(WXWIN)"; }
 	$TMAKE_INCDIR_WX = $WXDIR . "\\include";
 	AddIncludePath($TMAKE_INCDIR_WX);
     }
 
     if ( Config("dll") ) {
 	$DLL="Dll";
-	$DLL_OR_LIB="wxWinDll";
+	$DLL_SUFFIX="d";
+	$DLL_OR_LIB=(Config("wxbase") ? "wxbase" : "wxmsw") . "221";
 	$DLL_FLAGS="/D WXUSINGDLL ";
+	$EXTRA_LIBS="";
     }
     else {
 	$DLL="";
+	$DLL_SUFFIX="";
 	$DLL_OR_LIB="wxWindows";
 	$DLL_FLAGS=" ";
+	#! actually this depends on the contents of setup.h
+	$EXTRA_LIBS=Config("wxbase") ? "" : "xpm zlib png jpeg tiff";
     }
 
     #! let's be smarter: first of all, if no extension is given, add .lib
@@ -64,11 +70,20 @@
 	if ( Config("wx") ) {
 	    $vc_base_libs .= "comctl32.lib rpcrt4.lib wsock32.lib ";
 
-	    $vc_link_release = "$WXDIR\\Release$DLL\\$DLL_OR_LIB.lib $WXDIR\\src\\xpm\\Release\\xpm.lib ";
-	    $vc_link_debug = "$WXDIR\\Debug$DLL\\$DLL_OR_LIB.lib $WXDIR\\src\\xpm\\Debug\\xpm.lib "; 
+	    $vc_link_release = "$WXDIR\\Release$DLL\\$DLL_OR_LIB.lib ";
+	    $vc_link_debug = "$WXDIR\\Debug$DLL\\$DLL_OR_LIB$DLL_SUFFIX.lib ";
+	    foreach ( split(/ /, $EXTRA_LIBS) ) {
+		$vc_link_release .= "$WXDIR\\src\\$_\\Release\\$_.lib ";
+		$vc_link_debug .= "$WXDIR\\src\\$_\\Debug\\$_.lib ";
+	    }
 	}
 	$vc_link_release .= '/nologo /subsystem:windows /machine:I386';
 	$vc_link_debug   .= '/nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept';
+
+	foreach ( split(/ /, Project('LIBPATH')) ) {
+	    $vc_link_release .= " /libpath:$_\\Release";
+	    $vc_link_debug .= " /libpath:$_\\Debug";
+	}
 
 	$vc_cpp_def_common = '/D "WIN32" /D "_WINDOWS" ' . $DLL_FLAGS;
 	$vc_cpp_def_release = '/D "NDEBUG" ' . $vc_cpp_def_common;
@@ -79,8 +94,8 @@
 	$vc_base_libs = 'kernel32.lib user32.lib advapi32.lib ';
 	if ( Config("wx") ) {
 	    $vc_base_libs .= 'wsock32.lib ';
-	    $vc_link_release = "$WXDIR\\Base${DLL}Release\\wxBase$DLL.lib ";
-	    $vc_link_debug = "$WXDIR\\Base${DLL}Debug\\wxBase$DLL.lib "; 
+	    $vc_link_release = "$WXDIR\\Base${DLL}Release\\$DLL_OR_LIB.lib ";
+	    $vc_link_debug = "$WXDIR\\Base${DLL}Debug\\$DLL_OR_LIB" . "d.lib ";
 	}
 	$vc_link_release .= '/nologo /subsystem:console /machine:I386';
 	$vc_link_debug   .= '/nologo /subsystem:console /debug /machine:I386 /pdbtype:sept';
@@ -205,13 +220,13 @@ RSC=rc.exe
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "Release"
-# PROP BASE Intermediate_Dir "Release"
+# PROP BASE Output_Dir "Release#$ $text = "$DLL" . '"'
+# PROP BASE Intermediate_Dir "Release#$ $text = "$DLL" . '"'
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "Release"
-# PROP Intermediate_Dir "Release"
+# PROP Output_Dir "Release#$ $text = "$DLL" . '"'
+# PROP Intermediate_Dir "Release#$ $text = "$DLL" . '"'
 #$ Config("windows") && ($text='# PROP Ignore_Export_Lib 0');
 # PROP Target_Dir ""
 # ADD BASE CPP #$ Expand("VC_BASE_CPP_RELEASE");
@@ -233,13 +248,13 @@ LINK32=link.exe
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "Debug"
-# PROP BASE Intermediate_Dir "Debug"
+# PROP BASE Output_Dir "Debug#$ $text = "$DLL" . '"'
+# PROP BASE Intermediate_Dir "Debug#$ $text = "$DLL" . '"'
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "Debug"
-# PROP Intermediate_Dir "Debug"
+# PROP Output_Dir "Debug#$ $text = "$DLL" . '"'
+# PROP Intermediate_Dir "Debug#$ $text = "$DLL" . '"'
 #$ Config("windows") && ($text='# PROP Ignore_Export_Lib 0');
 # PROP Target_Dir ""
 # ADD BASE CPP #$ Expand("VC_BASE_CPP_DEBUG");

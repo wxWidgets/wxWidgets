@@ -77,13 +77,13 @@ static void     gtk_pizza_adjust_allocations         (GtkPizza  *pizza,
                                                       gint       dy);
 
 
+/* unused */
+#if 0
 static void     gtk_pizza_expose_area        (GtkPizza       *pizza,
                                               gint            x,
                                               gint            y,
                                               gint            width,
                                               gint            height);
-/* unused */
-#if 0
 static void     gtk_pizza_adjustment_changed (GtkAdjustment  *adjustment,
                                               GtkPizza       *pizza);
 #endif
@@ -981,6 +981,8 @@ gtk_pizza_adjust_allocations (GtkPizza *pizza,
 
 /* Callbacks */
 
+/* unused */
+#if 0
 /* Send a synthetic expose event to the widget
  */
 static void
@@ -1006,6 +1008,7 @@ gtk_pizza_expose_area (GtkPizza    *pizza,
         gdk_window_unref (event.window);
     }
 }
+#endif /* unused */
 
 /* This function is used to find events to process while scrolling
  */

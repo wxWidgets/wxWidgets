@@ -7,8 +7,8 @@ cwd = os.getcwd()
 
 logfile = 'c:\\temp\\autobuild.log'
 WXDIR   = os.environ['WXWIN']
-dllVer  = '21_16'
-wxpVer  = '2.1.16'
+dllVer  = '22_0'
+wxpVer  = '2.2.0'
 dateSt  = time.strftime("%Y%m%d", time.localtime(time.time()))
 
 base = os.path.split(sys.argv[0])[0]

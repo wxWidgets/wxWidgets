@@ -1297,12 +1297,12 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
 {
     // we want to work with logical coords
 #if wxUSE_GENERIC_LIST_EXTENSIONS
-    int x, y;
-    m_owner->CalcUnscrolledPosition(event.GetX(), event.GetY(), &x, &y);
+    int x;
+    m_owner->CalcUnscrolledPosition(event.GetX(), 0, &x, NULL);
 #else // !wxUSE_GENERIC_LIST_EXTENSIONS
     int x = event.GetX();
-    int y = event.GetY();
 #endif // wxUSE_GENERIC_LIST_EXTENSIONS
+    int y = event.GetY();
 
     if (m_isDragging)
     {
@@ -2880,7 +2880,7 @@ long wxListMainWindow::FindItem(long start, const wxString& str, bool WXUNUSED(p
     long pos = start;
     wxString tmp = str;
     if (pos < 0) pos = 0;
-    for (size_t i = pos; i < m_lines.GetCount(); i++)
+    for (size_t i = (size_t)pos; i < m_lines.GetCount(); i++)
     {
         wxListLineData *line = &m_lines[i];
         wxString s = "";
@@ -2895,7 +2895,7 @@ long wxListMainWindow::FindItem(long start, long data)
 {
     long pos = start;
     if (pos < 0) pos = 0;
-    for (size_t i = pos; i < m_lines.GetCount(); i++)
+    for (size_t i = (size_t)pos; i < m_lines.GetCount(); i++)
     {
         wxListLineData *line = &m_lines[i];
         wxListItem item;

@@ -1110,6 +1110,62 @@ static PyObject *_wrap_wxWindow_CenterOnParent(PyObject *self, PyObject *args, P
     return _resultobj;
 }
 
+#define wxWindow_CentreOnScreen(_swigobj,_swigarg0)  (_swigobj->CentreOnScreen(_swigarg0))
+static PyObject *_wrap_wxWindow_CentreOnScreen(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxWindow * _arg0;
+    int  _arg1 = (int ) wxBOTH;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","direction", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|i:wxWindow_CentreOnScreen",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_CentreOnScreen. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxWindow_CentreOnScreen(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxWindow_CenterOnScreen(_swigobj,_swigarg0)  (_swigobj->CenterOnScreen(_swigarg0))
+static PyObject *_wrap_wxWindow_CenterOnScreen(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxWindow * _arg0;
+    int  _arg1 = (int ) wxBOTH;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","direction", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|i:wxWindow_CenterOnScreen",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_CenterOnScreen. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxWindow_CenterOnScreen(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxWindow_ClientToScreenXY(_swigobj,_swigarg0,_swigarg1)  (_swigobj->ClientToScreen(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxWindow_ClientToScreenXY(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -9226,6 +9282,8 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxWindow_Close", (PyCFunction) _wrap_wxWindow_Close, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_ClientToScreen", (PyCFunction) _wrap_wxWindow_ClientToScreen, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_ClientToScreenXY", (PyCFunction) _wrap_wxWindow_ClientToScreenXY, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_CenterOnScreen", (PyCFunction) _wrap_wxWindow_CenterOnScreen, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_CentreOnScreen", (PyCFunction) _wrap_wxWindow_CentreOnScreen, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_CenterOnParent", (PyCFunction) _wrap_wxWindow_CenterOnParent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_CentreOnParent", (PyCFunction) _wrap_wxWindow_CentreOnParent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_Centre", (PyCFunction) _wrap_wxWindow_Centre, METH_VARARGS | METH_KEYWORDS },

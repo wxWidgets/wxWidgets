@@ -100,7 +100,7 @@ class MyCanvas(wxScrolledWindow):
         self.x, self.y = self.ConvertEventCoords(event)
 
     def ConvertEventCoords(self, event):
-        xView, yView = self.ViewStart()
+        xView, yView = self.GetViewStart()
         xDelta, yDelta = self.GetScrollPixelsPerUnit()
         return (event.GetX() + (xView * xDelta),
                 event.GetY() + (yView * yDelta))

@@ -93,9 +93,10 @@ const int LISTDB_NO_SPACES_BETWEEN_COLS = 3;
  * NOTE: The value returned by this function is for temporary use only and
  *       should be copied for long term use
  */
-char *GetExtendedDBErrorMsg2(char *ErrFile, int ErrLine)
+const char *GetExtendedDBErrorMsg2(char *ErrFile, int ErrLine)
 {
     static wxString msg;
+    msg = "";
 
     wxString tStr;
 
@@ -128,12 +129,15 @@ char *GetExtendedDBErrorMsg2(char *ErrFile, int ErrLine)
                 msg.Append(pDbList->PtrDb->errorList[i]);
                 if (wxStrcmp(pDbList->PtrDb->errorList[i],"") != 0)
                     msg.Append("\n");
+                // Clear the errmsg buffer so the next error will not
+                // end up showing the previous error that have occurred
+                wxStrcpy(pDbList->PtrDb->errorList[i],"");
             }
         }
     }
     msg += "\n";
 
-    return (char*) (const char*) msg;
+    return /*(char*) (const char*) msg*/msg.c_str();
 }  // GetExtendedDBErrorMsg
 
 
@@ -407,8 +411,10 @@ void ClookUpDlg::OnClose(wxCloseEvent& event)
     if (lookup2)
         delete lookup2;
 
+     SetReturnCode(1);
+
     while (wxIsBusy()) wxEndBusyCursor();
-   event.Skip();
+    event.Skip();
 
 //    return TRUE;
 

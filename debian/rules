@@ -23,6 +23,7 @@ package_gtk_py=libwxgtk$(release)-python
 package_gtk_contrib=libwxgtk$(release)-contrib
 package_gtk_contrib_dev=libwxgtk$(release)-contrib-dev
 package_headers=wxwin$(release)-headers
+package_i18n=wxwin$(release)-i18n
 package_doc=wxwin$(release)-doc
 package_examples=wxwin$(release)-examples
 
@@ -36,6 +37,7 @@ objdir_gtk_debug=objs_gtk_d
 objdir_doc_cruft=objs_doc_con
 objdir_doc=docs/wxWindows-manual.html
 objdir_examples=docs/examples
+objdir_i18n=locale
 objdirs=$(objdir_wxbase_shared) $(objdir_wxbase_static) $(objdir_wxbase_debug) \
 	$(objdir_gtk_shared) $(objdir_gtk_static) $(objdir_gtk_debug) \
 	$(objdir_doc) $(objdir_examples)
@@ -44,12 +46,13 @@ build_stamps=build-wxbase-shared-stamp build-wxbase-static-stamp \
              build-wxbase-debug-stamp build-gtk-shared-stamp \
              build-gtk-static-stamp build-gtk-debug-stamp \
              build-contrib-shared-stamp build-contrib-static-stamp \
-             build-gtk-python-stamp build-examples-stamp build-doc-stamp
+             build-gtk-python-stamp build-examples-stamp build-doc-stamp \
+             build-i18n-stamp
 
 install_all=install-wxbase-lib install-wxbase-dev install-wxbase-dbg \
             install-gtk-lib install-gtk-dev install-gtk-dbg \
             install-gtk-contrib install-gtk-contrib-dev install-gtk-py \
-            install-headers install-doc install-examples
+            install-headers install-i18n install-doc install-examples
 
 wxconfig:=$(shell pwd)/$(objdir_gtk_shared)/wx-config \
 		--prefix=$(shell pwd) \
@@ -105,6 +108,10 @@ control-files-stamp: debian/control debian/wxwin-doc.doc-base
 	@for f in dirs docs files; do \
 		echo "generating control file $(package_headers).$$f"; \
 		cp debian/wxwin-headers.$$f debian/$(package_headers).$$f; \
+	done;
+	@for f in dirs docs files; do \
+		echo "generating control file $(package_i18n).$$f"; \
+		cp debian/wxwin-i18n.$$f debian/$(package_i18n).$$f; \
 	done;
 	@for f in dirs docs doc-base; do \
 		echo "generating control file $(package_doc).$$f"; \
@@ -250,6 +257,12 @@ build-examples-stamp:
 	done;
 	touch $@
 
+build-i18n-stamp: build-gtk-shared-stamp
+	dh_testdir
+	cd $(objdir_i18n) \
+		&& $(MAKE) allmo
+	touch $@
+
 clean: debian/control
 	dh_testdir
 	dh_testroot
@@ -266,6 +279,7 @@ clean: debian/control
 	rm -f debian/$(package_gtk_contrib).*
 	rm -f debian/$(package_gtk_contrib_dev).*
 	rm -f debian/$(package_headers).*
+	rm -f debian/$(package_i18n).*
 	rm -f debian/$(package_doc).*
 	rm -f debian/$(package_examples).*
 
@@ -375,6 +389,14 @@ install-headers: install-gtk-lib
 		zlib.3     \
 		png.5
 
+install-i18n: DH_OPTIONS=-p$(package_i18n)
+install-i18n: build-i18n-stamp install-gtk-lib
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs
+	dh_movefiles --sourcedir=debian/$(package_gtk_lib)
+
 install-doc: DH_OPTIONS=-p$(package_doc)
 install-doc: build-doc-stamp
 	dh_testdir
@@ -461,5 +483,5 @@ binary-doc: control-files-stamp install-doc
 	binary-wxbase-dbg binary-doc install install-wxbase-lib \
 	install-wxbase-dev install-wxbase-dbg install-gtk-lib install-gtk-dev \
 	install-gtk-dbg install-gtk-contrib install-gtk-contrib-dev \
-	install-gtk-py install-headers install-doc install-examples
+	install-gtk-py install-headers install-i18n install-doc install-examples
 

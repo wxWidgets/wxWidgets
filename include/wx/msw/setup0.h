@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_SETUP_H_
@@ -48,6 +48,22 @@
 //
 // Recommended setting: 0
 #define wxICON_IS_BITMAP    0
+
+// Define as 1 for font size to be backward compatible to 1.63 and earlier.
+// 1.64 and later define point sizes to be compatible with Windows.
+//
+// Default is 0
+//
+// Recommended setting: 0
+#define wxFONT_SIZE_COMPATIBILITY    0
+
+// Set to 0 for accurate dialog units, else 1 to be as per 2.1.16 and before.
+// If migrating between versions, your dialogs may seem to shrink.
+//
+// Default is 1
+//
+// Recommended setting: 0 (the new calculations are more correct!)
+#define wxDIALOG_UNIT_COMPATIBILITY   1
 
 // ----------------------------------------------------------------------------
 // debugging settings
@@ -240,14 +256,15 @@
 
 // If wxUSE_DIALUP_MANAGER is 1, compile in wxDialUpManager class which allows
 // to connect/disconnect from the network and be notified whenever the dial-up
-// network connection is established/terminated.
+// network connection is established/terminated. Requires wxUSE_DYNLIB_CLASS.
 //
 // Default is 1.
 //
 // Recommended setting: 1
 #define wxUSE_DIALUP_MANAGER   1
 
-// Compile in wxLibrary class for run-time DLL loading and function calling
+// Compile in wxLibrary class for run-time DLL loading and function calling.
+// Required by wxUSE_DIALUP_MANAGER.
 //
 // This setting is for Win32 only
 //
@@ -259,32 +276,57 @@
 // Set to 1 to use socket classes
 #define wxUSE_SOCKETS       1
 
-// Set to 1 to enable virtual file systems
-// (needed by wxHTML)
+#if wxUSE_GUI
+
+// Set to 1 to enable virtual file systems (required by wxHTML)
 #define wxUSE_FILESYSTEM    1
+
+// Set to 1 to enable virtual ZIP filesystem (requires wxUSE_FILESYSTEM)
 #define wxUSE_FS_ZIP        1
+
+// Set to 1 to enable virtual Internet filesystem (requires wxUSE_FILESYSTEM)
 #define wxUSE_FS_INET       1
 
-// input stream for reading from zip archives
+// Set to 1 to compile wxZipInput/OutputStream classes.
 #define wxUSE_ZIPSTREAM     1
 
-#define wxUSE_APPLE_IEEE          1
-                                // if enabled, the float codec written by Apple
-                                // will be used to write, in a portable way,
-                                // float on the disk
+// Set to 1 to compile wxZlibInput/OutputStream classes. Also required by
+// wxUSE_LIBPNG.
+#define wxUSE_ZLIB          1
 
-// use wxFile class - required by i18n code, wxConfig and others - recommended
+#else // !wxUSE_GUI
+
+// although it is possible to compile all of those in wxBase, this is not done
+// by default
+#define wxUSE_FILESYSTEM    0
+#define wxUSE_FS_ZIP        0
+#define wxUSE_FS_INET       0
+#define wxUSE_ZIPSTREAM     0
+#define wxUSE_ZLIB          0
+
+#endif // wxUSE_GUI/!wxUSE_GUI
+
+// If enabled, the code written by Apple will be used to write, in a portable
+// way, float on the disk. See extended.c for the license which is different
+// from wxWindows one.
+//
+// Default is 1.
+//
+// Recommended setting: 1 unless you don't like the license terms (unlikely)
+#define wxUSE_APPLE_IEEE          1
+
+// Use wxFile class.
+//
+// Default is 1.
+//
+// Recommended setting: 1 (highly recommended, required i18n code, wxConfig...)
 #define wxUSE_FILE                1
 
-// use wxTextFile class: requires wxFile, required by wxConfig
+// use wxTextFile class: requires wxFile, required by wxFileConfig
 #define wxUSE_TEXTFILE            1
 
-// i18n support: _() macro, wxLocale class. Requires wxFile
+// i18n support: _() macro, wxLocale class. Requires wxTextFile.
 #define wxUSE_INTL                1
-
-#define wxUSE_DYNAMIC_CLASSES     1
-                                // If 1, enables provision of run-time type information.
-                                // NOW MANDATORY: don't change.
 
 // ----------------------------------------------------------------------------
 // Optional controls
@@ -323,7 +365,7 @@
 // of disabled controls)
 #define wxUSE_CARET        1
 #define wxUSE_CHECKBOX     1
-#define wxUSE_CHECKLISTBOX 1
+#define wxUSE_CHECKLISTBOX 1        // requires wxUSE_OWNER_DRAWN
 #define wxUSE_CHOICE       1
 #define wxUSE_COMBOBOX     1
 #define wxUSE_GAUGE        1
@@ -359,7 +401,7 @@
 // Default is 1 for both options.
 //
 // Recommended setting: 1 for wxUSE_NEW_GRID, 0 if you have an old code using
-// wxGrid and 100% backwards compatible (with all old wxGrid quirks) is
+// wxGrid and 100% backwards compatibality (with all old wxGrid quirks) is
 // essential.
 //
 // WIN16/BC++ resets wxUSE_NEW_GRID to 0 because it exceeds the data limit.
@@ -504,42 +546,41 @@
                                 // Use .wxr resource mechanism (requires PrologIO library)
 
 // ----------------------------------------------------------------------------
-// Postscript support settings
+// postscript support settings
 // ----------------------------------------------------------------------------
 
+// Set to 1 for PostScript device context.
 #define wxUSE_POSTSCRIPT  0
-                                // 0 for no PostScript device context
-#define wxUSE_AFM_FOR_POSTSCRIPT 0
-                                // 1 to use font metric files in GetTextExtent
 
+// Set to 1 to use font metric files in GetTextExtent
+#define wxUSE_AFM_FOR_POSTSCRIPT 0
+
+// Set to 0 to disable PostScript print/preview architecture code under Windows
+// (just use Windows printing).
 #define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 1
-                                // Set to 0 to disable PostScript print/preview architecture code
-                                // under Windows (just use Windows printing).
 
 // ----------------------------------------------------------------------------
 // database classes
 // ----------------------------------------------------------------------------
 
+// Define 1 to use ODBC classes
 #define wxUSE_ODBC          0
-                                // Define 1 to use ODBC classes
 
+// For backward compatibility reasons, this parameter now only controls the
+// default scrolling method used by cursors.  This default behavior can be
+// overriden by setting the second param of wxDB::wxDbGetConnection() or 
+// wxDb() constructor to indicate whether the connection (and any wxDbTable()s
+// that use the connection) should support forward only scrolling of cursors, 
+// or both forward and backward support for backward scrolling cursors is 
+// dependent on the data source as well as the ODBC driver being used.
 #define wxODBC_FWD_ONLY_CURSORS	 1
-                                // For backward compatibility reasons, this parameter now only
-                                // controls the default scrolling method used by cursors.  This
-                                // default behavior can be overriden by setting the second param
-                                // of wxDB::GetDbConnection() to indicate whether the connection
-                                // (and any wxTable()s that use the connection) should support
-                                // forward only scrolling of cursors, or both forward and backward
-                                // Support for backward scrolling cursors is dependent on the
-                                // data source as well as the ODBC driver being used.
 
+// Default is 0.  Set to 1 to use the deprecated classes, enum types, function,
+// member variables.  With a setting of 1, full backward compatability with the
+// 2.0.x release is possible. It is STRONGLY recommended that this be set to 0,
+// as future development will be done only on the non-deprecated
+// functions/classes/member variables/etc.
 #define wxODBC_BACKWARD_COMPATABILITY 0
-                                // Default is 0.  Set to 1 to use the deprecated classes, enum
-                                // types, function, member variables.  With a setting of 1, full
-                                // backward compatability with the 2.0.x release is possible.
-                                // It is STRONGLY recommended that this be set to 0, as 
-                                // future development will be done only on the non-deprecated
-                                // functions/classes/member variables/etc.
 
 // ----------------------------------------------------------------------------
 // other compiler (mis)features
@@ -565,76 +606,126 @@
 // image format support
 // ----------------------------------------------------------------------------
 
-#define wxUSE_ZLIB          1
-                                // Use zlib for compression in streams and PNG code
+// wxImage supports many different image formats which can be configured at
+// compile-time. BMP is always supported, others are optional and can be safely
+// disabled if you don't plan to use images in such format sometimes saving
+// substantial amount of code in the final library.
+//
+// Some formats require an extra library which is included in wxWin sources
+// which is mentioned if it is the case.
+
+// Set to 1 for PNG format support (requires libpng). Also requires wxUSE_ZLIB.
 #define wxUSE_LIBPNG        1
-                                // Use PNG bitmap/image code
+
+// Set to 1 for JPEG format support (requires libjpeg)
 #define wxUSE_LIBJPEG       1
-                                // Use JPEG bitmap/image code
+
+// Set to 1 for TIFF format support (requires libtiff)
 #define wxUSE_LIBTIFF       1
-                                // Use TIFF bitmap/image code
+
+// Set to 1 for GIF format support
 #define wxUSE_GIF           1
-                                // Use GIF bitmap/image code
+
+// Set to 1 for PNM format support
 #define wxUSE_PNM           1
-                                // Use PNM bitmap/image code
+
+// Set to 1 for PCX format support
 #define wxUSE_PCX           1
-                                // Use PCX bitmap/image code
 
 // ----------------------------------------------------------------------------
 // Windows-only settings
 // ----------------------------------------------------------------------------
 
-// Make settings compatible with MFC
+// Set this to 1 if you want to use wxWindows and MFC in the same program. This
+// will override some other settings (see below)
+//
+// Default is 0.
+//
+// Recommended setting: 0 unless you really have to use MFC
 #define wxUSE_MFC           0
 
-// required for drag-and-drop, clipboard, OLE Automation
+// Set this to 1 for generic OLE support: this is required for drag-and-drop,
+// clipboard, OLE Automation. Only set it to 0 if your compiler is very old and
+// can't compile/doesn't have the OLE headers.
+//
+// Default is 1.
+//
+// Recommended setting: 1
 #define wxUSE_OLE           1
 
+// Set this to 1 to use Microsoft CTL3D library for "3D-look" under Win16 or NT
+// 3.x. This setting is ignored under Win9x and NT 4.0+.
+//
+// Default is 0 for (most) Win32 (systems), 1 for Win16
+//
+// Recommended setting: same as default
 #if defined(__WIN95__)
 #define wxUSE_CTL3D                      0
 #else
-// Define 1 to use Microsoft CTL3D library.
 #define wxUSE_CTL3D                      1
 #endif
 
-// can we use RICHEDIT control?
+// Define as 1 to use Microsoft's ItsyBitsy small title bar library, for
+// wxMiniFrame. This setting is only used for Win3.1; Win9x and NT use native
+// miniframes support instead.
+//
+// Default is 0 for (most) Win32 (systems), 1 for Win16
+//
+// Recommended setting: same as default
+#if defined(__WIN95__)
+#define wxUSE_ITSY_BITSY             0
+#else
+#define wxUSE_ITSY_BITSY             1
+#endif
+
+// Set this to 1 to use RICHEDIT controls for wxTextCtrl with style wxTE_RICH
+// which allows to put more than ~32Kb of text in it even under Win9x (NT
+// doesn't have such limitation).
+//
+// Default is 1 for compilers which support it
+//
+// Recommended setting: 1, only set it to 0 if your compiler doesn't have
+//                      or can't compile <richedit.h>
 #if defined(__WIN95__) && !defined(__TWIN32__) && !defined(__GNUWIN32_OLD__)
 #define wxUSE_RICHEDIT 1
 #else
 #define wxUSE_RICHEDIT 0
 #endif
 
-#define wxUSE_ITSY_BITSY             1
-                                // Define 1 to use Microsoft's ItsyBitsy
-                                // small title bar library, for wxMiniFrame.
-                                // This setting is only used for Win3.1;
-                                // Win9x and NT use native miniframes
-                                // support instead.
-#define wxUSE_BITMAP_MESSAGE         1
-                                // Define 1 to use bitmap messages.
-#define wxFONT_SIZE_COMPATIBILITY    0
-                                // Define 1 for font size to be backward compatible
-                                // to 1.63 and earlier. 1.64 and later define point
-                                // sizes to be compatible with Windows.
-#define wxDIALOG_UNIT_COMPATIBILITY   0
-                                // Set to 0 for accurate dialog units, else
-                                // 1 to be as per 2.1.16 and before. If migrating
-                                // between versions, your dialogs may seem to shrink.
-#define wxUSE_PENWINDOWS             0
-                                // Set to 1 to use PenWindows
+// Set this to 1 to enable support for the owner-drawn menu and listboxes. This
+// is required by wxUSE_CHECKLISTBOX.
+//
+// Default is 1.
+//
+// Recommended setting: 1, set to 0 for a small library size reduction
+#define wxUSE_OWNER_DRAWN 1
 
-#define wxUSE_OWNER_DRAWN             1
-                                // Owner-drawn menus and listboxes
+// ----------------------------------------------------------------------------
+// obsolete settings
+// ----------------------------------------------------------------------------
+
+// NB: all settings in this section are obsolete and should not be used/changed
+//     at all, they will disappear
+
+// Set to 1 to use PenWindows
+#define wxUSE_PENWINDOWS             0
+
+// Define 1 to use bitmap messages.
+#define wxUSE_BITMAP_MESSAGE         1
+
+// If 1, enables provision of run-time type information.
+// NOW MANDATORY: don't change.
+#define wxUSE_DYNAMIC_CLASSES     1
+
+// ----------------------------------------------------------------------------
+// disable the settings which don't work for some compilers
+// ----------------------------------------------------------------------------
 
 #if (defined(__MINGW32__) || defined(__CYGWIN__)) && ((__GNUC__>2) ||((__GNUC__==2) && (__GNUC_MINOR__>=95)))
 #ifndef wxUSE_NORLANDER_HEADERS
 #   define wxUSE_NORLANDER_HEADERS 1
 #endif
 #endif
-
-// ----------------------------------------------------------------------------
-// disable the settings which don't work for some compilers
-// ----------------------------------------------------------------------------
 
 #if defined(__GNUWIN32__)
 // These don't work as expected for mingw32 and cygwin32
@@ -746,7 +837,7 @@
 #define wxUSE_MS_HTML_HELP 0
 #endif
 
-// wxUSE_DBEUG_NEW_ALWAYS = 1 not compatible with BC++ in DLL mode
+// wxUSE_DEBUG_NEW_ALWAYS = 1 not compatible with BC++ in DLL mode
 #if defined(__BORLANDC__) && (defined(WXMAKINGDLL) || defined(WXUSINGDLL))
 #undef wxUSE_DEBUG_NEW_ALWAYS
 #define wxUSE_DEBUG_NEW_ALWAYS 0
@@ -810,6 +901,17 @@
 #define wxUSE_WCHAR_T 0
 
 #endif // Win16
+
+// ----------------------------------------------------------------------------
+// undef the things which don't make sense for wxBase build
+// ----------------------------------------------------------------------------
+
+#if !wxUSE_GUI
+
+#undef wxUSE_HTML
+#define wxUSE_HTML 0
+
+#endif // !wxUSE_GUI
 
 // ----------------------------------------------------------------------------
 // check the settings consistency: do it here to abort compilation immediately

@@ -9,15 +9,21 @@
 // Licence:     wxWindows license
 ///////////////////////////////////////////////////////////////////////////////
 
-VS_VERSION_INFO VERSIONINFO
- FILEVERSION 2,2,0,0
- PRODUCTVERSION 2,2,0,0
- FILEFLAGSMASK 0x3fL
-#ifdef __WXDEBUG__
- FILEFLAGS 0x1L
+#include "wx/version.h"
+
+#ifdef _DEBUG
+    #define DLL_FLAGS 0x1L
+    #define DLL_SUFFIX "d"
 #else
- FILEFLAGS 0x0L
+    #define DLL_FLAGS 0x0L
+    #define DLL_SUFFIX ""
 #endif
+
+1 VERSIONINFO
+ FILEVERSION wxMAJOR_VERSION,wxMINOR_VERSION,wxRELEASE_NUMBER,wxBETA_NUMBER
+ PRODUCTVERSION wxMAJOR_VERSION,wxMINOR_VERSION,wxRELEASE_NUMBER,wxBETA_NUMBER
+ FILEFLAGSMASK 0x3fL
+ FILEFLAGS DLL_FLAGS
  FILEOS 0x40004L
  FILETYPE 0x2L
  FILESUBTYPE 0x0L
@@ -29,19 +35,15 @@ BEGIN
             VALUE "Comments", "wxWindows cross-platform GUI framework\0"
             VALUE "CompanyName", "wxWindows development team\0"
             VALUE "FileDescription", "wxWindows for MSW\0"
-            VALUE "FileVersion", "2, 2, 0, 0\0"
+            VALUE "FileVersion", "2.2.1\0"
             VALUE "InternalName", "wxMSW\0"
-            VALUE "LegalCopyright", "Copyright © 1993,2000 wxWindows development team\0"
+            VALUE "LegalCopyright", "Copyright © 1993, 2000 wxWindows development team\0"
             VALUE "LegalTrademarks", "\0"
-            VALUE "OriginalFilename", "wx220.dll\0"
+            VALUE "OriginalFilename", "wxmsw221" DLL_SUFFIX ".dll\0"
             VALUE "PrivateBuild", "\0"
-            VALUE "ProductName", "wxMSW\0"
-            VALUE "ProductVersion", "2, 2, 0, 0\0"
+            VALUE "ProductName", "wxWindows\0"
+            VALUE "ProductVersion", "2.2.1\0"
             VALUE "SpecialBuild", "\0"
         END
-    END
-    BLOCK "VarFileInfo"
-    BEGIN
-        VALUE "Translation", 0x409, 1200
     END
 END

@@ -75,7 +75,8 @@ class wxCommandEvent : public wxEvent {
 public:
     wxCommandEvent(int commandEventType = 0, int id = 0);
 
-    bool Checked();
+    bool IsChecked();
+    %name(Checked)bool IsChecked();
     long GetExtraLong();
     int GetInt();
     int GetSelection();

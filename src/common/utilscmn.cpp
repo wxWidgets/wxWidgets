@@ -498,20 +498,29 @@ wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
                     keyCode = WXK_F1 + n - 1;
                 }
                 else {
-#if 0 // this is not supported by GTK+, apparently
                     // several special cases
                     current.MakeUpper();
                     if ( current == wxT("DEL") ) {
-                        keyCode = VK_DELETE;
+                        keyCode = WXK_DELETE;
                     }
+                    else if ( current == wxT("DELETE") ) {
+                        keyCode = WXK_DELETE;
+                    }
+                    else if ( current == wxT("INS") ) {
+                        keyCode = WXK_INSERT;
+                    }
+                    else if ( current == wxT("INSERT") ) {
+                        keyCode = WXK_INSERT;
+                    }
+#if 0
                     else if ( current == wxT("PGUP") ) {
                         keyCode = VK_PRIOR;
                     }
                     else if ( current == wxT("PGDN") ) {
                         keyCode = VK_NEXT;
                     }
+#endif
                     else
-#endif // 0
                     {
                         wxLogDebug(wxT("Unrecognized accel key '%s', accel string ignored."),
                                    current.c_str());
@@ -878,10 +887,13 @@ int wxMessageBox(const wxString& message, const wxString& caption, long style,
             return wxYES;
         case wxID_NO:
             return wxNO;
-        default:
         case wxID_CANCEL:
             return wxCANCEL;
     }
+
+    wxFAIL_MSG( _T("unexpected return code from wxMessageDialog") );
+
+    return wxCANCEL;
 }
 
 #if wxUSE_TEXTDLG

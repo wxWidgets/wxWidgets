@@ -149,6 +149,11 @@ typedef struct
 int unzlocal_CheckCurrentFileCoherencyHeader (unz_s*, uInt*, uLong*, uInt*);
 #endif
 
+/* disable warnings about K&R declarations until the end of file */
+#ifdef _MSC_VER
+#pragma warning(disable:4131)
+#endif /* VC++ */
+
 /* ===========================================================================
      Read a byte from a gz_stream; update next_in and avail_in. Return EOF
    for end of file.

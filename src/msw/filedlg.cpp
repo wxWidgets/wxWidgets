@@ -151,13 +151,13 @@ wxString wxFileSelector(const wxChar *title,
         fileDialog.SetFilterIndex(filterFind);
     }
 
+    wxString filename;
     if ( fileDialog.ShowModal() == wxID_OK )
     {
-        wxStrcpy(wxBuffer, (const wxChar *)fileDialog.GetPath());
-        return wxBuffer;
+        filename = fileDialog.GetPath();
     }
-    else
-        return wxGetEmptyString();
+
+    return filename;
 }
 
 
@@ -172,17 +172,23 @@ wxString wxFileSelectorEx(const wxChar *title,
                        int       y)
 
 {
-    wxFileDialog fileDialog(parent, title ? title : wxT(""), defaultDir ? defaultDir : wxT(""),
-        defaultFileName ? defaultFileName : wxT(""), filter ? filter : wxT(""), flags, wxPoint(x, y));
+    wxFileDialog fileDialog(parent,
+                            title ? title : wxT(""),
+                            defaultDir ? defaultDir : wxT(""),
+                            defaultFileName ? defaultFileName : wxT(""),
+                            filter ? filter : wxT(""),
+                            flags, wxPoint(x, y));
 
+    wxString filename;
     if ( fileDialog.ShowModal() == wxID_OK )
     {
-        *defaultFilterIndex = fileDialog.GetFilterIndex();
-        wxStrcpy(wxBuffer, (const wxChar *)fileDialog.GetPath());
-        return wxBuffer;
+        if ( defaultFilterIndex )
+            *defaultFilterIndex = fileDialog.GetFilterIndex();
+
+        filename = fileDialog.GetPath();
     }
-    else
-        return wxGetEmptyString();
+
+    return filename;
 }
 
 wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWindows-2.2\n"
-"POT-Creation-Date: 2000-07-01 14:41+0200\n"
+"POT-Creation-Date: 2000-07-09 00:08+0200\n"
 "PO-Revision-Date: 2000-06-17 19:23+0200\n"
 "Last-Translator: Vaclav Slavik <v.slavik@volny.cz>\n"
 "Language-Team: wxWindows Team <wx-devel@wxwindows.org>\n"
@@ -77,20 +77,23 @@ msgstr "#define %s musí být integer."
 msgid "%i of %i"
 msgstr "%i z %i"
 
-#: ../src/common/cmdline.cpp:727
+#: ../src/common/cmdline.cpp:735
 #, c-format
 msgid "%s (or %s)"
 msgstr "%s (nebo %s)"
 
 #: ../src/generic/logg.cpp:239
+#, c-format
 msgid "%s Error"
 msgstr "%s - chyba"
 
 #: ../src/generic/logg.cpp:247
+#, c-format
 msgid "%s Information"
 msgstr "%s - informace"
 
 #: ../src/generic/logg.cpp:243
+#, c-format
 msgid "%s Warning"
 msgstr "%s - varování"
 
@@ -173,7 +176,7 @@ msgstr "'%s' obsahuje pøebyteèné '..', ignoruji."
 msgid "'%s' is invalid"
 msgstr "'%s' je neplatný"
 
-#: ../src/common/cmdline.cpp:649
+#: ../src/common/cmdline.cpp:657
 #, c-format
 msgid "'%s' is not a correct numeric value for option '%s'."
 msgstr "'%s' není správná èíselná hodnota pro volbu '%s'."
@@ -269,7 +272,7 @@ msgstr "<ADR>"
 
 #: ../src/generic/filedlgg.cpp:323
 msgid "<DIR> "
-msgstr "<ADR >"
+msgstr "<ADR> "
 
 #: ../src/generic/filedlgg.cpp:357
 msgid "<LINK>"
@@ -331,7 +334,7 @@ msgstr "ABCDEFGabcdefg12345"
 msgid "Add current page to bookmarks"
 msgstr "Pøidá tuto stránku k zálo¾kám"
 
-#: ../src/generic/colrdlgg.cpp:272
+#: ../src/generic/colrdlgg.cpp:269
 msgid "Add to custom colours"
 msgstr "Pøidat k u¾ivatelským barvám"
 
@@ -660,7 +663,7 @@ msgstr "Nemohu nastavit prioritu vlákna"
 msgid "Can't set value of '%s'"
 msgstr "Nemohu nastavit hodnotu '%s'"
 
-#: ../src/common/dlgcmn.cpp:148 ../src/common/prntbase.cpp:107
+#: ../src/common/dlgcmn.cpp:148 ../src/common/prntbase.cpp:109
 #: ../src/generic/dcpsg.cpp:2241 ../src/generic/dirdlgg.cpp:424
 #: ../src/generic/filedlgg.cpp:916 ../src/generic/fontdlgg.cpp:257
 #: ../src/generic/prntdlgg.cpp:468 ../src/generic/progdlgg.cpp:179
@@ -761,7 +764,7 @@ msgstr "Vyberte písmo"
 msgid "Clear the log contents"
 msgstr "Smazat obsah logu"
 
-#: ../src/common/prntbase.cpp:357 ../src/generic/progdlgg.cpp:307
+#: ../src/common/prntbase.cpp:359 ../src/generic/progdlgg.cpp:307
 #: ../src/generic/proplist.cpp:518
 msgid "Close"
 msgstr "Zavøít"
@@ -831,15 +834,15 @@ msgstr ""
 "Nemohu zjistit id menu '%s'. Pou¾ijte (nenulové) èíslo\n"
 "nebo poskytnìte #define (viz. manuál)"
 
-#: ../src/common/prntbase.cpp:709
+#: ../src/common/prntbase.cpp:711
 msgid "Could not start document preview."
 msgstr "Nemohu zobrazit náhled dokumentu."
 
-#: ../src/generic/printps.cpp:200 ../src/msw/printwin.cpp:242
+#: ../src/generic/printps.cpp:209 ../src/msw/printwin.cpp:252
 msgid "Could not start printing."
 msgstr "Nemohu zahájit tisk."
 
-#: ../src/common/wincmn.cpp:777
+#: ../src/common/wincmn.cpp:782
 msgid "Could not transfer data to window"
 msgstr "Nemohu pøenést data do okna."
 
@@ -1000,13 +1003,13 @@ msgid ""
 msgstr ""
 "Chyba bìhem expanze promìnných prostøedí: chybí '%c' na pozici %d v '%s'."
 
-#: ../src/generic/dcpsg.cpp:1584 ../src/generic/dirdlgg.cpp:268
-#: ../src/generic/dirdlgg.cpp:286 ../src/generic/dirdlgg.cpp:297
-#: ../src/generic/dirdlgg.cpp:604 ../src/generic/filedlgg.cpp:625
-#: ../src/generic/filedlgg.cpp:717 ../src/generic/filedlgg.cpp:731
-#: ../src/generic/filedlgg.cpp:744 ../src/generic/filedlgg.cpp:1043
-#: ../src/generic/filedlgg.cpp:1092 ../src/generic/helpxlp.cpp:241
-#: ../src/gtk/filedlg.cpp:83 ../src/gtk/fontdlg.cpp:72
+#: ../src/generic/dirdlgg.cpp:268 ../src/generic/dirdlgg.cpp:286
+#: ../src/generic/dirdlgg.cpp:297 ../src/generic/dirdlgg.cpp:604
+#: ../src/generic/filedlgg.cpp:625 ../src/generic/filedlgg.cpp:717
+#: ../src/generic/filedlgg.cpp:731 ../src/generic/filedlgg.cpp:744
+#: ../src/generic/filedlgg.cpp:1043 ../src/generic/filedlgg.cpp:1092
+#: ../src/generic/helpxlp.cpp:241 ../src/gtk/filedlg.cpp:83
+#: ../src/gtk/fontdlg.cpp:72
 msgid "Error"
 msgstr "Chyba"
 
@@ -1176,11 +1179,11 @@ msgstr "Nepodaøilo se získat jména ISP: %s"
 msgid "Failed to get data from the clipboard"
 msgstr "Nelze získat data ze schránky"
 
-#: ../src/common/timercmn.cpp:243
+#: ../src/common/timercmn.cpp:237
 msgid "Failed to get the UTC system time."
 msgstr "Nemohu zjistit systémový UTC èas."
 
-#: ../src/common/timercmn.cpp:195
+#: ../src/common/timercmn.cpp:189
 msgid "Failed to get the local system time"
 msgstr "Nepodaøilo se zjistit místní systémový èas"
 
@@ -1703,12 +1706,12 @@ msgstr "Zakázaná operace."
 msgid "Option '%s' requires a value, '=' expected."
 msgstr "Volba '%s' vy¾aduje hodnotu, oèekávám '='."
 
-#: ../src/common/cmdline.cpp:609
+#: ../src/common/cmdline.cpp:610
 #, c-format
 msgid "Option '%s' requires a value."
 msgstr "Volba '%s' vy¾aduje hodnotu."
 
-#: ../src/common/cmdline.cpp:663
+#: ../src/common/cmdline.cpp:671
 #, c-format
 msgid "Option '%s': '%s' cannot be converted to a date."
 msgstr "Volba '%s': '%s' neudává datum."
@@ -1757,12 +1760,12 @@ msgstr "PNM: formát souboru nerozeznán."
 msgid "PNM: File seems truncated."
 msgstr "PNM: Soubor je nejspí¹ uøíznutý pøed koncem."
 
-#: ../src/common/prntbase.cpp:729
+#: ../src/common/prntbase.cpp:731
 #, c-format
 msgid "Page %d"
 msgstr "Strana %d"
 
-#: ../src/common/prntbase.cpp:727
+#: ../src/common/prntbase.cpp:729
 #, c-format
 msgid "Page %d of %d"
 msgstr "Strana %d z %d"
@@ -1805,7 +1808,7 @@ msgstr "Vyberte prosím existující soubor."
 msgid "Please choose which ISP do you want to connect to"
 msgstr "Prosím vyberte si poskytovatele (ISP), ke kterému se chcete pøipojit"
 
-#: ../src/common/prntbase.cpp:105
+#: ../src/common/prntbase.cpp:107
 msgid "Please wait..."
 msgstr "Èekejte prosím..."
 
@@ -1834,10 +1837,6 @@ msgstr "Pouze náhled"
 msgid "Preview:"
 msgstr "Náhled:"
 
-#: ../src/html/htmprint.cpp:486
-msgid "Previewing"
-msgstr "Vytváøím náhled"
-
 #: ../src/html/helpfrm.cpp:512
 msgid "Previous page"
 msgstr "Pøedchozí stránka"
@@ -1846,15 +1845,11 @@ msgstr "Pøedchozí stránka"
 msgid "Print"
 msgstr "Vytisknout"
 
-#: ../src/generic/printps.cpp:200
-msgid "Print Error"
-msgstr "Chyba tisku"
-
 #: ../src/common/docview.cpp:895
 msgid "Print Preview"
 msgstr "Náhled tisku"
 
-#: ../src/common/prntbase.cpp:685 ../src/common/prntbase.cpp:709
+#: ../src/common/prntbase.cpp:687 ../src/common/prntbase.cpp:711
 msgid "Print Preview Failure"
 msgstr "Chyba bìhem vytváøení náhledu."
 
@@ -1882,7 +1877,7 @@ msgstr "Vytiskne tuto stránku"
 msgid "Print to File"
 msgstr "Tisknout do souboru"
 
-#: ../src/common/prntbase.cpp:364
+#: ../src/common/prntbase.cpp:366
 msgid "Print..."
 msgstr "Tisknout..."
 
@@ -1914,21 +1909,20 @@ msgstr "Nastavení tiskárny:"
 msgid "Printer..."
 msgstr "Tiskárna..."
 
-#: ../src/common/prntbase.cpp:104 ../src/common/prntbase.cpp:146
-#: ../src/html/htmprint.cpp:507
+#: ../src/common/prntbase.cpp:106 ../src/common/prntbase.cpp:148
 msgid "Printing"
 msgstr "Tisk"
 
-#: ../src/common/prntbase.cpp:118
+#: ../src/common/prntbase.cpp:120
 msgid "Printing Error"
 msgstr "Chyba tisku"
 
-#: ../src/generic/printps.cpp:218
+#: ../src/generic/printps.cpp:232
 #, c-format
 msgid "Printing page %d..."
 msgstr "Tisknu stranu %d..."
 
-#: ../src/generic/printps.cpp:185
+#: ../src/generic/printps.cpp:192
 msgid "Printing..."
 msgstr "Tisknu..."
 
@@ -2064,6 +2058,11 @@ msgstr "Vyberte soubor"
 msgid "Send to Printer"
 msgstr "Poslat na tiskárnu"
 
+#: ../src/common/cmdline.cpp:627
+#, c-format
+msgid "Separator expected after the option '%s'."
+msgstr ""
+
 #: ../src/common/dlgcmn.cpp:138
 msgid "Setup"
 msgstr "Nastavení"
@@ -2113,7 +2112,7 @@ msgstr "Tento soubor nelze otevøít."
 msgid "Sorry, could not save this file."
 msgstr "Tento soubor nelze ulo¾it."
 
-#: ../src/common/prntbase.cpp:685
+#: ../src/common/prntbase.cpp:687
 msgid "Sorry, not enough memory to create a preview."
 msgstr "Nedostatek pamìti na vytvoøení náhledu."
 
@@ -2214,7 +2213,7 @@ msgstr ""
 "Soubor '%s' neexistuje.\n"
 "Bude odstranìn ze seznamu nedávno otevøených souborù."
 
-#: ../src/common/cmdline.cpp:753
+#: ../src/common/cmdline.cpp:761
 #, c-format
 msgid "The required parameter '%s' was not specified."
 msgstr "Po¾adovaný parametr '%s' nebyl zadán."
@@ -2223,7 +2222,7 @@ msgstr "Po¾adovaný parametr '%s' nebyl zadán."
 msgid "The text couldn't be saved."
 msgstr "Text nelze ulo¾it."
 
-#: ../src/common/cmdline.cpp:732
+#: ../src/common/cmdline.cpp:740
 #, c-format
 msgid "The value for the option '%s' must be specified."
 msgstr "Musíte zadat hodnotu volby '%s'."
@@ -2236,22 +2235,6 @@ msgid ""
 msgstr ""
 "Verze Remote Access Service (RAS) na tomto poèítaèi je pøíli¹ stará, prosím "
 "upgradujte (chybí tato funkce: %s)."
-
-#: ../src/html/htmprint.cpp:486
-msgid ""
-"There was a problem previewing.\n"
-"Perhaps your current printer is not set correctly?"
-msgstr ""
-"Pøi vytváøení náhledu se vyskytl problém.\n"
-"Mo¾ná nemáte správnì nastavenou tiskárnu?"
-
-#: ../src/html/htmprint.cpp:507
-msgid ""
-"There was a problem printing.\n"
-"Perhaps your current printer is not set correctly?"
-msgstr ""
-"Pøi tisku se vyskytla chyba.\n"
-"Mo¾ná máte ¹patnì nastavenou tiskárnu?"
 
 #: ../src/msw/thread.cpp:1058
 msgid ""
@@ -2336,7 +2319,7 @@ msgstr "Podtr¾ené"
 msgid "Unexpected end of file whilst parsing resource."
 msgstr "Neoèekávaný konec souboru bìhem zpracování resource"
 
-#: ../src/common/cmdline.cpp:704
+#: ../src/common/cmdline.cpp:712
 #, c-format
 msgid "Unexpected parameter '%s'"
 msgstr "Neoèekávaný parametr '%s'"
@@ -2385,7 +2368,7 @@ msgstr "Neznámý styl %s bìhem zpracování resource"
 msgid "Unsupported clipboard format."
 msgstr "Nepodporovaný formát schránky."
 
-#: ../src/common/cmdline.cpp:789
+#: ../src/common/cmdline.cpp:797
 #, c-format
 msgid "Usage: %s"
 msgstr "Pou¾ití: %s"
@@ -2748,19 +2731,19 @@ msgstr "katalog pro doménu '%s' nenalezen."
 msgid "ctrl"
 msgstr "ctrl"
 
-#: ../src/common/cmdline.cpp:897
+#: ../src/common/cmdline.cpp:910
 msgid "date"
 msgstr "datum"
 
-#: ../src/common/datetime.cpp:3213
+#: ../src/common/datetime.cpp:3232
 msgid "eighteenth"
 msgstr "osmnáctý"
 
-#: ../src/common/datetime.cpp:3203
+#: ../src/common/datetime.cpp:3222
 msgid "eighth"
 msgstr "osmý"
 
-#: ../src/common/datetime.cpp:3206
+#: ../src/common/datetime.cpp:3225
 msgid "eleventh"
 msgstr "jedenáctý"
 
@@ -2778,11 +2761,11 @@ msgstr "navázat"
 msgid "failed to flush the file '%s'"
 msgstr "nelze vyprázdnit buffer souboru '%s'"
 
-#: ../src/common/datetime.cpp:3210
+#: ../src/common/datetime.cpp:3229
 msgid "fifteenth"
 msgstr "patnáctý"
 
-#: ../src/common/datetime.cpp:3200
+#: ../src/common/datetime.cpp:3219
 msgid "fifth"
 msgstr "pátý"
 
@@ -2811,19 +2794,19 @@ msgstr "soubor '%s', øádka %d: hodnota pro nemìnný klíè '%s' ignorována."
 msgid "file '%s': unexpected character %c at line %d."
 msgstr "soubor '%s': neoèekávaný znak %c na øádku %d."
 
-#: ../src/common/datetime.cpp:3196
+#: ../src/common/datetime.cpp:3215
 msgid "first"
 msgstr "první"
 
-#: ../src/common/datetime.cpp:3209
+#: ../src/common/datetime.cpp:3228
 msgid "fourteenth"
 msgstr "ètrnáctý"
 
-#: ../src/common/datetime.cpp:3199
+#: ../src/common/datetime.cpp:3218
 msgid "fourth"
 msgstr "ètvrtý"
 
-#: ../src/common/timercmn.cpp:239
+#: ../src/common/timercmn.cpp:233
 msgid "gmtime() failed"
 msgstr "gmtime() selhalo"
 
@@ -2857,19 +2840,19 @@ msgstr "hledám katalog '%s' v cestì '%s'."
 msgid "medium"
 msgstr "støední"
 
-#: ../src/common/datetime.cpp:3360
+#: ../src/common/datetime.cpp:3379
 msgid "midnight"
 msgstr "Tenké"
 
-#: ../src/common/timercmn.cpp:235
+#: ../src/common/timercmn.cpp:229
 msgid "mktime() failed"
 msgstr "mktime() selhalo"
 
-#: ../src/common/datetime.cpp:3214
+#: ../src/common/datetime.cpp:3233
 msgid "nineteenth"
 msgstr "devatenáctý"
 
-#: ../src/common/datetime.cpp:3204
+#: ../src/common/datetime.cpp:3223
 msgid "ninth"
 msgstr "devátý"
 
@@ -2881,11 +2864,11 @@ msgstr "¾ádná chyba DDE."
 msgid "noname"
 msgstr "bezejmenná"
 
-#: ../src/common/datetime.cpp:3359
+#: ../src/common/datetime.cpp:3378
 msgid "noon"
 msgstr "poledne"
 
-#: ../src/common/cmdline.cpp:896
+#: ../src/common/cmdline.cpp:909
 msgid "num"
 msgstr "èíslo"
 
@@ -2893,15 +2876,15 @@ msgstr "èíslo"
 msgid "reentrancy problem."
 msgstr "problém reentrance."
 
-#: ../src/common/datetime.cpp:3197
+#: ../src/common/datetime.cpp:3216
 msgid "second"
 msgstr "druhý"
 
-#: ../src/common/datetime.cpp:3212
+#: ../src/common/datetime.cpp:3231
 msgid "seventeenth"
 msgstr "sedmnáctý"
 
-#: ../src/common/datetime.cpp:3202
+#: ../src/common/datetime.cpp:3221
 msgid "seventh"
 msgstr "sedmý"
 
@@ -2909,11 +2892,11 @@ msgstr "sedmý"
 msgid "shift"
 msgstr "shift"
 
-#: ../src/common/datetime.cpp:3211
+#: ../src/common/datetime.cpp:3230
 msgid "sixteenth"
 msgstr "¹estnáctý"
 
-#: ../src/common/datetime.cpp:3201
+#: ../src/common/datetime.cpp:3220
 msgid "sixth"
 msgstr "¹estý"
 
@@ -2921,11 +2904,11 @@ msgstr "¹estý"
 msgid "small"
 msgstr "malé"
 
-#: ../src/common/cmdline.cpp:895
+#: ../src/common/cmdline.cpp:908
 msgid "str"
 msgstr "øetìzec"
 
-#: ../src/common/datetime.cpp:3205
+#: ../src/common/datetime.cpp:3224
 msgid "tenth"
 msgstr "desátý"
 
@@ -2933,27 +2916,27 @@ msgstr "desátý"
 msgid "the response to the transaction caused the DDE_FBUSY bit to be set."
 msgstr "odpovìï na transakci zpùsobila nastavení bitu DDE_FBUSY."
 
-#: ../src/common/datetime.cpp:3198
+#: ../src/common/datetime.cpp:3217
 msgid "third"
 msgstr "tøetí"
 
-#: ../src/common/datetime.cpp:3208
+#: ../src/common/datetime.cpp:3227
 msgid "thirteenth"
 msgstr "tøináctý"
 
-#: ../src/common/datetime.cpp:3003
+#: ../src/common/datetime.cpp:3022
 msgid "today"
 msgstr "dnes"
 
-#: ../src/common/datetime.cpp:3005
+#: ../src/common/datetime.cpp:3024
 msgid "tomorrow"
 msgstr "vèera"
 
-#: ../src/common/datetime.cpp:3207
+#: ../src/common/datetime.cpp:3226
 msgid "twelfth"
 msgstr "dvanáctý"
 
-#: ../src/common/datetime.cpp:3215
+#: ../src/common/datetime.cpp:3234
 msgid "twentieth"
 msgstr "dvacátý"
 
@@ -3002,7 +2985,7 @@ msgstr "velmi velké"
 msgid "very small"
 msgstr "velmi malé"
 
-#: ../src/common/timercmn.cpp:266
+#: ../src/common/timercmn.cpp:260
 msgid "wxGetTimeOfDay failed."
 msgstr "wxGetTimeOfDay selhalo."
 
@@ -3023,9 +3006,29 @@ msgstr "wxWindows nemohou otevøít displej pro '%s': ukonèuji."
 msgid "wxWindows: error finding temporary file name.\n"
 msgstr "wxWindows: chyba pøi hledání jména doèasného souboru.\n"
 
-#: ../src/common/datetime.cpp:3004
+#: ../src/common/datetime.cpp:3023
 msgid "yesterday"
 msgstr "vèera"
+
+#~ msgid "Previewing"
+#~ msgstr "Vytváøím náhled"
+
+#~ msgid "Print Error"
+#~ msgstr "Chyba tisku"
+
+#~ msgid ""
+#~ "There was a problem previewing.\n"
+#~ "Perhaps your current printer is not set correctly?"
+#~ msgstr ""
+#~ "Pøi vytváøení náhledu se vyskytl problém.\n"
+#~ "Mo¾ná nemáte správnì nastavenou tiskárnu?"
+
+#~ msgid ""
+#~ "There was a problem printing.\n"
+#~ "Perhaps your current printer is not set correctly?"
+#~ msgstr ""
+#~ "Pøi tisku se vyskytla chyba.\n"
+#~ "Mo¾ná máte ¹patnì nastavenou tiskárnu?"
 
 #~ msgid "Baltic II (ISO-8859-10)"
 #~ msgstr "Baltské II (ISO-8859-10)"

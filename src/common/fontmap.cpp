@@ -54,7 +54,7 @@
 // ----------------------------------------------------------------------------
 
 // the config paths we use
-static const wxChar* FONTMAPPER_ROOT_PATH = wxT("wxWindows/FontMapper");
+static const wxChar* FONTMAPPER_ROOT_PATH = wxT("/wxWindows/FontMapper");
 static const wxChar* FONTMAPPER_CHARSET_PATH = wxT("Charsets");
 static const wxChar* FONTMAPPER_CHARSET_ALIAS_PATH = wxT("Aliases");
 #if wxUSE_GUI
@@ -403,6 +403,15 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
     // if didn't find it there, try to reckognise it ourselves
     if ( encoding == wxFONTENCODING_SYSTEM )
     {
+        // discard the optional quotes
+        if ( !!cs )
+        {
+            if ( cs[0u] == _T('"') && cs.Last() == _T('"') )
+            {
+                cs = wxString(cs.c_str(), cs.length() - 1);
+            }
+        }
+
         cs.MakeUpper();
 
         if ( !cs || cs == wxT("US-ASCII") )
@@ -699,10 +708,13 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
     // now try the default mappings:
     wxFontEncodingArray equiv = wxEncodingConverter::GetAllEquivalents(encoding);
     size_t count = equiv.GetCount();
-    for ( size_t i = (equiv[0] == encoding) ? 1 : 0; i < count; i++ )
+    if ( count )
     {
-        if ( TestAltEncoding(configEntry, equiv[i], info) )
-            return TRUE;
+        for ( size_t i = (equiv[0] == encoding) ? 1 : 0; i < count; i++ )
+        {
+            if ( TestAltEncoding(configEntry, equiv[i], info) )
+                return TRUE;
+        }
     }
 
     return FALSE;
@@ -729,8 +741,8 @@ bool wxFontMapper::IsEncodingAvailable(wxFontEncoding encoding,
         info.facename = facename;
         return wxTestFontEncoding(info);
     }
-    else
-        return FALSE;
+
+    return FALSE;
 }
 
 #endif // wxUSE_GUI

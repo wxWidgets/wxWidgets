@@ -1046,7 +1046,7 @@ void wxPostScriptDC::SetPen( const wxPen& pen )
         sprintf( buffer, "%f setlinewidth\n", XLOG2DEVREL(1000 * m_pen.GetWidth()) / 1000.0f );
         #endif
         for (int i = 0; i < 100; i++)
-            if (buffer[i] == ',') buffer[i] = '.'; 
+            if (buffer[i] == ',') buffer[i] = '.';
         fprintf( m_pstream, buffer );
     }
 
@@ -1109,13 +1109,13 @@ void wxPostScriptDC::SetPen( const wxPen& pen )
         double redPS = (double)(red) / 255.0;
         double bluePS = (double)(blue) / 255.0;
         double greenPS = (double)(green) / 255.0;
-        
+
         char buffer[100];
         sprintf( buffer,
                 "%.8f %.8f %.8f setrgbcolor\n",
                 redPS, greenPS, bluePS );
         for (int i = 0; i < 100; i++)
-            if (buffer[i] == ',') buffer[i] = '.'; 
+            if (buffer[i] == ',') buffer[i] = '.';
         fprintf( m_pstream, buffer );
 
         m_currentRed = red;
@@ -1162,7 +1162,7 @@ void wxPostScriptDC::SetBrush( const wxBrush& brush )
                 "%.8f %.8f %.8f setrgbcolor\n",
                 redPS, greenPS, bluePS );
         for (int i = 0; i < 100; i++)
-            if (buffer[i] == ',') buffer[i] = '.'; 
+            if (buffer[i] == ',') buffer[i] = '.';
         fprintf( m_pstream, buffer );
 
         m_currentRed = red;
@@ -1212,7 +1212,7 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
                 "%.8f %.8f %.8f setrgbcolor\n",
                 redPS, greenPS, bluePS );
             for (int i = 0; i < 100; i++)
-                if (buffer[i] == ',') buffer[i] = '.'; 
+                if (buffer[i] == ',') buffer[i] = '.';
             fprintf( m_pstream, buffer );
 
             m_currentRed = red;
@@ -1277,7 +1277,7 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
                 m_underlineThickness,
                 XLOG2DEV(x + text_w), YLOG2DEV(uy) );
         for (i = 0; i < 100; i++)
-            if (buffer[i] == ',') buffer[i] = '.'; 
+            if (buffer[i] == ',') buffer[i] = '.';
         fprintf( m_pstream, buffer );
     }
 
@@ -1328,7 +1328,7 @@ void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord
                 "%.8f %.8f %.8f setrgbcolor\n",
                 redPS, greenPS, bluePS );
             for (int i = 0; i < 100; i++)
-                if (buffer[i] == ',') buffer[i] = '.'; 
+                if (buffer[i] == ',') buffer[i] = '.';
             fprintf( m_pstream, buffer );
 
             m_currentRed = red;
@@ -1343,13 +1343,13 @@ void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord
 
     // FIXME only correct for 90 degrees
     fprintf(m_pstream, "%d %d moveto\n",
-            XLOG2DEV((wxCoord)(x + size)), YLOG2DEV(by) );
-            
+            XLOG2DEV((wxCoord)(x + size)), YLOG2DEV((wxCoord)by) );
+
     char buffer[100];
     sprintf(buffer, "%.8f rotate\n", angle);
     int i;
     for (i = 0; i < 100; i++)
-        if (buffer[i] == ',') buffer[i] = '.'; 
+        if (buffer[i] == ',') buffer[i] = '.';
     fprintf(m_pstream, buffer);
 
     /* I don't know how to write char to a stream, so I use a mini string */
@@ -1382,10 +1382,10 @@ void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord
     }
 
     fprintf( m_pstream, ") show\n" );
-    
+
     sprintf( buffer, "%.8f rotate\n", -angle );
     for (i = 0; i < 100; i++)
-        if (buffer[i] == ',') buffer[i] = '.'; 
+        if (buffer[i] == ',') buffer[i] = '.';
     fprintf( m_pstream, buffer );
 
     if (m_font.GetUnderlined())
@@ -1406,7 +1406,7 @@ void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord
                  m_underlineThickness,
                  XLOG2DEV(x + w), YLOG2DEV(uy) );
         for (i = 0; i < 100; i++)
-            if (buffer[i] == ',') buffer[i] = '.'; 
+            if (buffer[i] == ',') buffer[i] = '.';
         fprintf( m_pstream, buffer );
     }
 
@@ -1819,7 +1819,7 @@ void wxPostScriptDC::StartPage()
     for (int i = 0; i < 100; i++)
         if (buffer[i] == ',') buffer[i] = '.';
     fprintf( m_pstream, buffer );
-    
+
     fprintf( m_pstream, "%d %d translate\n", translate_x, translate_y );
 }
 
@@ -2141,9 +2141,9 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
         // VS: dirty, but is there any better solution?
         double *pt;
         pt = (double*) &m_underlinePosition;
-        *pt = YLOG2DEVREL(UnderlinePosition * fontToUse->GetPointSize()) / 1000.0f;
+        *pt = YLOG2DEVREL((wxCoord)(UnderlinePosition * fontToUse->GetPointSize())) / 1000.0f;
         pt = (double*) &m_underlineThickness;
-        *pt = YLOG2DEVREL(UnderlineThickness * fontToUse->GetPointSize()) / 1000.0f;
+        *pt = YLOG2DEVREL((wxCoord)(UnderlineThickness * fontToUse->GetPointSize())) / 1000.0f;
 
     }
 
@@ -2510,7 +2510,8 @@ void wxPrintSetupData::operator=(const wxPrintData& data)
     SetPrinterCommand(data.GetPrinterCommand());
     SetPrintPreviewCommand(data.GetPreviewCommand());
     SetPrinterOptions(data.GetPrinterOptions());
-    SetPrinterTranslation(data.GetPrinterTranslateX(), data.GetPrinterTranslateY());
+    SetPrinterTranslation((wxCoord)data.GetPrinterTranslateX(),
+                          (wxCoord)data.GetPrinterTranslateY());
     SetPrinterScaling(data.GetPrinterScaleX(), data.GetPrinterScaleY());
     SetPrinterOrientation(data.GetOrientation());
     SetPrinterMode((int) data.GetPrintMode());

@@ -85,12 +85,9 @@ wxFSFile* wxZipFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString& l
                             GetAnchor(location),
                             wxDateTime(wxFileModificationTime(left)));
     }
-    else
-    {
-        if (s)
-            delete s;
-        return NULL;
-    }
+
+    delete s;
+    return NULL;
 }
 
 

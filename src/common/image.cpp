@@ -317,7 +317,7 @@ wxImage wxImage::Mirror( bool horizontally ) const
         for (long i = 0; i < height; i++)
         {
             target_data = data + 3*width*(height-1-i);
-            memcpy( target_data, source_data, 3*width );
+            memcpy( target_data, source_data, (size_t)3*width );
             source_data += 3*width;
         }
     }
@@ -739,9 +739,9 @@ bool wxImage::SaveFile( const wxString& filename, int type )
         wxBufferedOutputStream bstream( stream );
         return SaveFile(bstream, type);
     }
-    else
 #endif // wxUSE_STREAMS
-        return FALSE;
+
+    return FALSE;
 }
 
 bool wxImage::SaveFile( const wxString& filename, const wxString& mimetype )
@@ -754,9 +754,9 @@ bool wxImage::SaveFile( const wxString& filename, const wxString& mimetype )
         wxBufferedOutputStream bstream( stream );
         return SaveFile(bstream, mimetype);
     }
-    else
 #endif // wxUSE_STREAMS
-        return FALSE;
+
+    return FALSE;
 }
 
 bool wxImage::CanRead( const wxString &name )

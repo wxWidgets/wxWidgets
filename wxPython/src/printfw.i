@@ -132,7 +132,7 @@ public:
     void SetMarginBottomRight(const wxPoint& pt);
     void SetMinMarginTopLeft(const wxPoint& pt);
     void SetMinMarginBottomRight(const wxPoint& pt);
-    void SetPaperId(wxPaperSize& id);
+    void SetPaperId(wxPaperSize id);
     void SetPaperSize(const wxSize& size);
     void SetPrintData(const wxPrintData& printData);
 };

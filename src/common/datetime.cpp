@@ -3044,6 +3044,11 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
         }
     }
 
+    // We try to guess what we have here: for each new (numeric) token, we
+    // determine if it can be a month, day or a year. Of course, there is an
+    // ambiguity as some numbers may be days as well as months, so we also
+    // have the ability to back track.
+
     // what do we have?
     bool haveDay = FALSE,       // the months day?
          haveWDay = FALSE,      // the day of week?
@@ -3063,6 +3068,8 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
     while ( tok.HasMoreTokens() )
     {
         wxString token = tok.GetNextToken();
+        if ( !token )
+            continue;
 
         // is it a number?
         unsigned long val;
@@ -3072,110 +3079,53 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
 
             bool isDay = FALSE,
                  isMonth = FALSE,
-                 // only years are counted from 0
-                 isYear = (val == 0) || (val > 31);
-            if ( !isYear )
+                 isYear = FALSE;
+
+            if ( !haveMon && val > 0 && val <= 12 )
             {
-                // may be the month or month day or the year, assume the
-                // month day by default and fallback to month if the range
-                // allow it or to the year if our assumption doesn't work
-                if ( haveDay )
+                // assume it is month
+                isMonth = TRUE;
+            }
+            else // not the month
+            {
+                wxDateTime_t maxDays = haveMon
+                    ? GetNumOfDaysInMonth(haveYear ? year : Inv_Year, mon)
+                    : 31;
+
+                // can it be day?
+                if ( (val == 0) || (val > maxDays) )
                 {
-                    // we already have the day, so may only be a month or year
-                    if ( val > 12 )
-                    {
-                        isYear = TRUE;
-                    }
-                    else
-                    {
-                        isMonth = TRUE;
-                    }
+                    isYear = TRUE;
                 }
-                else // it may be day
+                else
                 {
                     isDay = TRUE;
-
-                    // check the range
-                    if ( haveMon )
-                    {
-                        if ( val > GetNumOfDaysInMonth(haveYear ? year
-                                                                : Inv_Year,
-                                                       mon) )
-                        {
-                            // oops, it can't be a day finally
-                            isDay = FALSE;
-
-                            if ( val > 12 )
-                            {
-                                isYear = TRUE;
-                            }
-                            else
-                            {
-                                isMonth = TRUE;
-                            }
-                        }
-                    }
                 }
             }
 
-            // remember that we have this and stop the scan if it's the second
-            // time we find this, except for the day logic (see there)
             if ( isYear )
             {
                 if ( haveYear )
-                {
                     break;
-                }
 
                 haveYear = TRUE;
 
-                // no roll over - 99 means 99, not 1999 for us
                 year = (wxDateTime_t)val;
             }
-            else if ( isMonth )
+            else if ( isDay )
             {
-                if ( haveMon )
-                {
-                    break;
-                }
-
-                haveMon = TRUE;
-
-                // month 1 is Jan
-                mon = (wxDateTime::Month)(val - 1);
-            }
-            else
-            {
-                wxASSERT_MSG( isDay, _T("logic error") );
-
                 if ( haveDay )
-                {
-                    // may be were mistaken when we found it for the first
-                    // time? may be it was a month or year instead?
-                    //
-                    // this ability to "backtrack" allows us to correctly parse
-                    // both things like 01/13 and 13/01 - but, of course, we
-                    // still can't resolve the ambiguity in 01/02 (it will be
-                    // Feb 1 for us, not Jan 2 as americans might expect!)
-                    if ( (day <= 12) && !haveMon )
-                    {
-                        // exchange day and month
-                        mon = (wxDateTime::Month)(day - 1);
-
-                        haveMon = TRUE;
-                    }
-                    else if ( !haveYear )
-                    {
-                        // exchange day and year
-                        year = day;
-
-                        haveYear = TRUE;
-                    }
-                }
+                    break;
 
                 haveDay = TRUE;
 
                 day = (wxDateTime_t)val;
+            }
+            else if ( isMonth )
+            {
+                haveMon = TRUE;
+
+                mon = (Month)(val - 1);
             }
         }
         else // not a number

@@ -169,11 +169,15 @@ Adds a separator for spacing groups of tools.
 \membersection{wxToolBar::AddTool}\label{wxtoolbaraddtool}
 
 \func{wxToolBarTool*}{AddTool}{\param{int}{ toolId}, \param{const wxBitmap\&}{ bitmap1},\rtfsp
+\param{const wxString\& }{shortHelpString = ""}, \param{const wxString\& }{longHelpString = ""}}
+
+\func{wxToolBarTool*}{AddTool}{\param{int}{ toolId}, \param{const wxBitmap\&}{ bitmap1},\rtfsp
 \param{const wxBitmap\&}{ bitmap2 = wxNullBitmap}, \param{bool}{ isToggle = FALSE},\rtfsp
 \param{long}{ xPos = -1}, \param{long}{ yPos = -1},\rtfsp
 \param{wxObject* }{clientData = NULL}, \param{const wxString\& }{shortHelpString = ""}, \param{const wxString\& }{longHelpString = ""}}
 
-Adds a tool to the toolbar.
+Adds a tool to the toolbar. The first (short and most commonly used) version
+adds a normal (and not a togglable) button without any associated client data.
 
 \wxheading{Parameters}
 

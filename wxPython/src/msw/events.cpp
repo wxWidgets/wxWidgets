@@ -764,8 +764,8 @@ static PyObject *_wrap_new_wxCommandEvent(PyObject *self, PyObject *args, PyObje
     return _resultobj;
 }
 
-#define wxCommandEvent_Checked(_swigobj)  (_swigobj->Checked())
-static PyObject *_wrap_wxCommandEvent_Checked(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxCommandEvent_IsChecked(_swigobj)  (_swigobj->IsChecked())
+static PyObject *_wrap_wxCommandEvent_IsChecked(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxCommandEvent * _arg0;
@@ -773,18 +773,18 @@ static PyObject *_wrap_wxCommandEvent_Checked(PyObject *self, PyObject *args, Py
     char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxCommandEvent_Checked",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxCommandEvent_IsChecked",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCommandEvent_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCommandEvent_Checked. Expected _wxCommandEvent_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCommandEvent_IsChecked. Expected _wxCommandEvent_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxCommandEvent_Checked(_arg0);
+        _result = (bool )wxCommandEvent_IsChecked(_arg0);
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);
@@ -5214,7 +5214,8 @@ static PyMethodDef eventscMethods[] = {
 	 { "wxCommandEvent_GetSelection", (PyCFunction) _wrap_wxCommandEvent_GetSelection, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCommandEvent_GetInt", (PyCFunction) _wrap_wxCommandEvent_GetInt, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCommandEvent_GetExtraLong", (PyCFunction) _wrap_wxCommandEvent_GetExtraLong, METH_VARARGS | METH_KEYWORDS },
-	 { "wxCommandEvent_Checked", (PyCFunction) _wrap_wxCommandEvent_Checked, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCommandEvent_Checked", (PyCFunction) _wrap_wxCommandEvent_IsChecked, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCommandEvent_IsChecked", (PyCFunction) _wrap_wxCommandEvent_IsChecked, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxCommandEvent", (PyCFunction) _wrap_new_wxCommandEvent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCloseEvent_SetCanVeto", (PyCFunction) _wrap_wxCloseEvent_SetCanVeto, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCloseEvent_GetVeto", (PyCFunction) _wrap_wxCloseEvent_GetVeto, METH_VARARGS | METH_KEYWORDS },

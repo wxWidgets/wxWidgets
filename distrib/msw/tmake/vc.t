@@ -79,15 +79,15 @@ LIBTARGET=$(WXLIB)
 DUMMYOBJ=$D\dummy.obj
 !endif
 
-# Please set these according to the settings in setup.h, so we can include
-# the appropriate libraries in wx.lib
-
 # This one overrides the others, to be consistent with the settings in setup.h
 MINIMAL_WXWINDOWS_SETUP=0
 
 PERIPH_LIBS=
 PERIPH_TARGET=
 PERIPH_CLEAN_TARGET=
+
+# Set to 0 if not using GLCanvas (only affects DLL build)
+USE_GLCANVAS=1
 
 # These are absolute paths, so that the compiler
 # generates correct __FILE__ symbols for debugging.

@@ -85,8 +85,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
-# ADD LINK32 kernel32.lib user32.lib advapi32.lib wsock32.lib /nologo /version:2.2 /dll /machine:I386
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386 /out:"BaseDllRelease/wxbase221.dll"
+# ADD LINK32 kernel32.lib user32.lib advapi32.lib wsock32.lib /nologo /version:2.2 /dll /machine:I386 /out:"BaseDllRelease/wxbase221.dll"
 
 !ELSEIF  "$(CFG)" == "wxBaseDll - Win32 Debug"
 
@@ -101,8 +101,8 @@ LINK32=link.exe
 # PROP Intermediate_Dir "BaseDllDebug"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WXBASEDLL_EXPORTS" /YX /FD /GZ /c
-# ADD CPP /nologo /MTd /W4 /Gm /ZI /Od /I "$(wx)\include" /I "$(wx)\src\zlib" /D "_DEBUG" /D wxUSE_GUI=0 /D "__WIN95__" /D "WIN32" /D "_WIN32" /D WINVER=0x400 /D "__WINDOWS__" /D "__WIN32__" /D "__WXMSW__" /D "_MT" /D "WXMAKINGDLL" /D "__WXDEBUG__" /Yu"wx/wxprec.h" /FD /GZ /c
+# ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WXBASEDLL_EXPORTS" /YX /FD /GZ /c
+# ADD CPP /nologo /MTd /W4 /Gm /Zi /Od /I "$(wx)\include" /I "$(wx)\src\zlib" /D "_DEBUG" /D wxUSE_GUI=0 /D "__WIN95__" /D "WIN32" /D "_WIN32" /D WINVER=0x400 /D "__WINDOWS__" /D "__WIN32__" /D "__WXMSW__" /D "_MT" /D "WXMAKINGDLL" /D "__WXDEBUG__" /Yu"wx/wxprec.h" /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -111,8 +111,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib advapi32.lib wsock32.lib /nologo /version:2.2 /dll /debug /machine:I386 /pdbtype:sept
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept /out:"BaseDllDebug/wxbase221d.dll"
+# ADD LINK32 kernel32.lib user32.lib advapi32.lib wsock32.lib /nologo /version:2.2 /dll /debug /machine:I386 /pdbtype:sept /out:"BaseDllDebug/wxbase221d.dll"
 
 !ENDIF 
 
@@ -120,6 +120,10 @@ LINK32=link.exe
 
 # Name "wxBaseDll - Win32 Release"
 # Name "wxBaseDll - Win32 Debug"
+# Begin Source File
+
+SOURCE=.\src\common\base.rc
+# End Source File
 # Begin Source File
 
 SOURCE=.\src\msw\dummydll.cpp

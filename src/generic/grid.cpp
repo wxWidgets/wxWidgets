@@ -3825,8 +3825,9 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             wxGridCellAttrProvider * attrProvider = m_table->GetAttrProvider();
             if (attrProvider) {
                 attrProvider->UpdateAttrRows( pos, -((int)numRows) );
-// ifdef'd out following patch from Paul Gammans
-#if 0
+// ifdef'd out following patch from Paul Gammans                
+#if 0                
+                // No need to touch column attributes, unless we
                 // removed _all_ rows, in this case, we remove
                 // all column attributes.
                 // I hate to do this here, but the
@@ -3961,7 +3962,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             if (attrProvider) {
                 attrProvider->UpdateAttrCols( pos, -((int)numCols) );
 // ifdef'd out following patch from Paul Gammans                
-#if 0
+#if 0                
                 // No need to touch row attributes, unless we
                 // removed _all_ columns, in this case, we remove
                 // all row attributes.
@@ -5595,7 +5596,7 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
         HideCellEditControl();
         DisableCellEditControl();
 
-        if ( IsVisible( m_currentCellCoords, FALSE ) )  // zzz
+        if ( IsVisible( m_currentCellCoords, FALSE ) )
         {
             wxRect r;
             r = BlockToDeviceRect(m_currentCellCoords, m_currentCellCoords);
@@ -6417,7 +6418,7 @@ void wxGrid::ShowCellEditControl()
     {
         if ( !IsVisible( m_currentCellCoords ) )
         {
-            m_cellEditCtrlEnabled = false;        
+            m_cellEditCtrlEnabled = FALSE;
             return;
         }
         else
