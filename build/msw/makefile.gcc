@@ -1048,7 +1048,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_dcpsg.o \
 	$(OBJS)\monolib_dirctrlg.o \
 	$(OBJS)\monolib_dragimgg.o \
-	$(OBJS)\monolib_listbook.o \
+	$(OBJS)\monolib_listbkg.o \
 	$(OBJS)\monolib_logg.o \
 	$(OBJS)\monolib_numdlgg.o \
 	$(OBJS)\monolib_panelg.o \
@@ -1244,7 +1244,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_dcpsg.o \
 	$(OBJS)\monolib_dirctrlg.o \
 	$(OBJS)\monolib_dragimgg.o \
-	$(OBJS)\monolib_listbook.o \
+	$(OBJS)\monolib_listbkg.o \
 	$(OBJS)\monolib_logg.o \
 	$(OBJS)\monolib_numdlgg.o \
 	$(OBJS)\monolib_panelg.o \
@@ -1437,7 +1437,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_dcpsg.o \
 	$(OBJS)\coredll_dirctrlg.o \
 	$(OBJS)\coredll_dragimgg.o \
-	$(OBJS)\coredll_listbook.o \
+	$(OBJS)\coredll_listbkg.o \
 	$(OBJS)\coredll_logg.o \
 	$(OBJS)\coredll_numdlgg.o \
 	$(OBJS)\coredll_panelg.o \
@@ -1633,7 +1633,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_dcpsg.o \
 	$(OBJS)\coredll_dirctrlg.o \
 	$(OBJS)\coredll_dragimgg.o \
-	$(OBJS)\coredll_listbook.o \
+	$(OBJS)\coredll_listbkg.o \
 	$(OBJS)\coredll_logg.o \
 	$(OBJS)\coredll_numdlgg.o \
 	$(OBJS)\coredll_panelg.o \
@@ -1826,7 +1826,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_dcpsg.o \
 	$(OBJS)\corelib_dirctrlg.o \
 	$(OBJS)\corelib_dragimgg.o \
-	$(OBJS)\corelib_listbook.o \
+	$(OBJS)\corelib_listbkg.o \
 	$(OBJS)\corelib_logg.o \
 	$(OBJS)\corelib_numdlgg.o \
 	$(OBJS)\corelib_panelg.o \
@@ -2022,7 +2022,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_dcpsg.o \
 	$(OBJS)\corelib_dirctrlg.o \
 	$(OBJS)\corelib_dragimgg.o \
-	$(OBJS)\corelib_listbook.o \
+	$(OBJS)\corelib_listbkg.o \
 	$(OBJS)\corelib_logg.o \
 	$(OBJS)\corelib_numdlgg.o \
 	$(OBJS)\corelib_panelg.o \
@@ -2215,7 +2215,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_dcpsg.o \
 	$(OBJS)\monodll_dirctrlg.o \
 	$(OBJS)\monodll_dragimgg.o \
-	$(OBJS)\monodll_listbook.o \
+	$(OBJS)\monodll_listbkg.o \
 	$(OBJS)\monodll_logg.o \
 	$(OBJS)\monodll_numdlgg.o \
 	$(OBJS)\monodll_panelg.o \
@@ -2411,7 +2411,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_dcpsg.o \
 	$(OBJS)\monodll_dirctrlg.o \
 	$(OBJS)\monodll_dragimgg.o \
-	$(OBJS)\monodll_listbook.o \
+	$(OBJS)\monodll_listbkg.o \
 	$(OBJS)\monodll_logg.o \
 	$(OBJS)\monodll_numdlgg.o \
 	$(OBJS)\monodll_panelg.o \
@@ -3851,7 +3851,7 @@ $(OBJS)\coredll_lboxcmn.o: ..\..\src\common\lboxcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\coredll_listbook.o: ..\..\src\generic\listbook.cpp
+$(OBJS)\coredll_listbkg.o: ..\..\src\generic\listbkg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 endif
 
@@ -5070,7 +5070,7 @@ $(OBJS)\corelib_lboxcmn.o: ..\..\src\common\lboxcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\corelib_listbook.o: ..\..\src\generic\listbook.cpp
+$(OBJS)\corelib_listbkg.o: ..\..\src\generic\listbkg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 endif
 
@@ -6619,7 +6619,7 @@ $(OBJS)\monodll_list.o: ..\..\src\common\list.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\monodll_listbook.o: ..\..\src\generic\listbook.cpp
+$(OBJS)\monodll_listbkg.o: ..\..\src\generic\listbkg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 endif
 
@@ -8177,7 +8177,7 @@ $(OBJS)\monolib_list.o: ..\..\src\common\list.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\monolib_listbook.o: ..\..\src\generic\listbook.cpp
+$(OBJS)\monolib_listbkg.o: ..\..\src\generic\listbkg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 endif
 

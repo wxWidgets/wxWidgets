@@ -4275,7 +4275,7 @@ SOURCE=..\..\src\generic\imaglist.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\generic\listbook.cpp
+SOURCE=..\..\src\generic\listbkg.cpp
 # End Source File
 # Begin Source File
 

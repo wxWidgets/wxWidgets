@@ -2168,7 +2168,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_dcpsg.o \
 	monodll_dirctrlg.o \
 	monodll_dragimgg.o \
-	monodll_listbook.o \
+	monodll_listbkg.o \
 	monodll_logg.o \
 	monodll_numdlgg.o \
 	monodll_panelg.o \
@@ -2313,7 +2313,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_dcpsg.o \
 	monodll_dirctrlg.o \
 	monodll_dragimgg.o \
-	monodll_listbook.o \
+	monodll_listbkg.o \
 	monodll_logg.o \
 	monodll_numdlgg.o \
 	monodll_panelg.o \
@@ -2410,7 +2410,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_dcpsg.o \
 	monolib_dirctrlg.o \
 	monolib_dragimgg.o \
-	monolib_listbook.o \
+	monolib_listbkg.o \
 	monolib_logg.o \
 	monolib_numdlgg.o \
 	monolib_panelg.o \
@@ -2555,7 +2555,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_dcpsg.o \
 	monolib_dirctrlg.o \
 	monolib_dragimgg.o \
-	monolib_listbook.o \
+	monolib_listbkg.o \
 	monolib_logg.o \
 	monolib_numdlgg.o \
 	monolib_panelg.o \
@@ -2652,7 +2652,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_dcpsg.o \
 	coredll_dirctrlg.o \
 	coredll_dragimgg.o \
-	coredll_listbook.o \
+	coredll_listbkg.o \
 	coredll_logg.o \
 	coredll_numdlgg.o \
 	coredll_panelg.o \
@@ -2797,7 +2797,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_dcpsg.o \
 	coredll_dirctrlg.o \
 	coredll_dragimgg.o \
-	coredll_listbook.o \
+	coredll_listbkg.o \
 	coredll_logg.o \
 	coredll_numdlgg.o \
 	coredll_panelg.o \
@@ -2894,7 +2894,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_dcpsg.o \
 	corelib_dirctrlg.o \
 	corelib_dragimgg.o \
-	corelib_listbook.o \
+	corelib_listbkg.o \
 	corelib_logg.o \
 	corelib_numdlgg.o \
 	corelib_panelg.o \
@@ -3039,7 +3039,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_dcpsg.o \
 	corelib_dirctrlg.o \
 	corelib_dragimgg.o \
-	corelib_listbook.o \
+	corelib_listbkg.o \
 	corelib_logg.o \
 	corelib_numdlgg.o \
 	corelib_panelg.o \
@@ -7956,7 +7956,7 @@ coredll_inphand.o: $(srcdir)/src/univ/inphand.cpp
 @COND_USE_GUI_1@coredll_lboxcmn.o: $(srcdir)/src/common/lboxcmn.cpp
 @COND_USE_GUI_1@	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
-@COND_USE_GUI_1@coredll_listbook.o: $(srcdir)/src/generic/listbook.cpp
+@COND_USE_GUI_1@coredll_listbkg.o: $(srcdir)/src/generic/listbkg.cpp
 @COND_USE_GUI_1@	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_listbox.o: $(srcdir)/src/os2/listbox.cpp
@@ -10019,7 +10019,7 @@ corelib_inphand.o: $(srcdir)/src/univ/inphand.cpp
 @COND_USE_GUI_1@corelib_lboxcmn.o: $(srcdir)/src/common/lboxcmn.cpp
 @COND_USE_GUI_1@	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
-@COND_USE_GUI_1@corelib_listbook.o: $(srcdir)/src/generic/listbook.cpp
+@COND_USE_GUI_1@corelib_listbkg.o: $(srcdir)/src/generic/listbkg.cpp
 @COND_USE_GUI_1@	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_listbox.o: $(srcdir)/src/os2/listbox.cpp
@@ -12709,7 +12709,7 @@ monodll_laywin.o: $(srcdir)/src/generic/laywin.cpp
 monodll_list.o: $(srcdir)/src/common/list.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-@COND_USE_GUI_1@monodll_listbook.o: $(srcdir)/src/generic/listbook.cpp
+@COND_USE_GUI_1@monodll_listbkg.o: $(srcdir)/src/generic/listbkg.cpp
 @COND_USE_GUI_1@	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_listbox.o: $(srcdir)/src/os2/listbox.cpp
@@ -15240,7 +15240,7 @@ monolib_laywin.o: $(srcdir)/src/generic/laywin.cpp
 monolib_list.o: $(srcdir)/src/common/list.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-@COND_USE_GUI_1@monolib_listbook.o: $(srcdir)/src/generic/listbook.cpp
+@COND_USE_GUI_1@monolib_listbkg.o: $(srcdir)/src/generic/listbkg.cpp
 @COND_USE_GUI_1@	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_listbox.o: $(srcdir)/src/os2/listbox.cpp
