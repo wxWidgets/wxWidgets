@@ -25,11 +25,15 @@ Please report bugs using the SourceForge bug tracker:
 Unarchiving
 -----------
 
-A setup program is provided (setup.exe) to automatically copy files to a
-directory on your hard disk. Do not install into a path that contains spaces.
-The installation program should set the WXWIN environment variable, which
-will be activated when your machine is rebooted. The setup
-program contains the following:
+A setup program is provided (setup.exe) to automatically copy
+files to a directory on your hard disk. Do not install into a
+path that contains spaces. To avoid confusion with other
+wxWindows installations that might be on your machine, the
+installation program does not se the WXWIN environment variable;
+please set this by hand via the System applet if you wish to
+make it permanent.
+
+The setup program contains the following:
 
 - All common, generic and MSW-specific wxWindows source;
 - samples;
