@@ -48,7 +48,10 @@ class TestPopup(wx.PopupWindow):
         st.Bind(wx.EVT_LEFT_UP, self.OnMouseLeftUp)
         st.Bind(wx.EVT_RIGHT_UP, self.OnRightUp)
 
+        wx.CallAfter(self.Refresh)
+
     def OnMouseLeftDown(self, evt):
+        self.Refresh()
         self.ldPos = evt.GetEventObject().ClientToScreen(evt.GetPosition())
         self.wPos = self.ClientToScreen((0,0))
         self.CaptureMouse()
