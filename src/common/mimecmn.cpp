@@ -524,11 +524,11 @@ wxMimeTypesManager::GetFileTypeFromMimeType(const wxString& mimeType)
     EnsureImpl();
     wxFileType *ft = m_impl->GetFileTypeFromMimeType(mimeType);
 
-    if ( ft ) {
+    if ( !ft ) {
         // check the fallbacks
         //
-        // TODO linear search is potentially slow, perhaps we should use a sorted
-        //      array?
+        // TODO linear search is potentially slow, perhaps we should use a
+        //      sorted array?
         size_t count = m_fallbacks.GetCount();
         for ( size_t n = 0; n < count; n++ ) {
             if ( wxMimeTypesManager::IsOfType(mimeType,
