@@ -158,7 +158,7 @@ public:
   virtual bool RenameEntry(const wxString& oldName, const wxString& newName);
   virtual bool RenameGroup(const wxString& oldName, const wxString& newName);
 
-  virtual bool DeleteEntry(const wxString& key, bool bGroupIfEmptyAlso);
+  virtual bool DeleteEntry(const wxString& key, bool bGroupIfEmptyAlso = TRUE);
   virtual bool DeleteGroup(const wxString& szKey);
   virtual bool DeleteAll();
 

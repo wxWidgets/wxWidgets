@@ -70,7 +70,7 @@ public:
   virtual bool RenameGroup(const wxString& oldName, const wxString& newName);
 
   // delete
-  virtual bool DeleteEntry(const wxString& key, bool bGroupIfEmptyAlso);
+  virtual bool DeleteEntry(const wxString& key, bool bGroupIfEmptyAlso = TRUE);
   virtual bool DeleteGroup(const wxString& key);
   virtual bool DeleteAll();
 
