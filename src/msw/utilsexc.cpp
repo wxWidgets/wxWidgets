@@ -463,22 +463,24 @@ static bool wxExecuteDDE(const wxString& ddeServer,
     }
     else // connected to DDE server
     {
-        // the added complication here is that although most
-        // programs use XTYP_EXECUTE for their DDE API, some
-        // important ones - like IE and other MS stuff - use
-        // XTYP_REQUEST!
+        // the added complication here is that although most programs use
+        // XTYP_EXECUTE for their DDE API, some important ones -- like Word
+        // and other MS stuff - use XTYP_REQUEST!
         //
-        // so we try one first and then the other one if it
-        // failed
+        // moreover, anotheri mportant program (IE) understands both but
+        // returns an error from Execute() so we must try Request() first
+        // to avoid doing it twice
         {
+            // we're prepared for this one to fail, so don't show errors
             wxLogNull noErrors;
-            ok = conn->Execute(ddeCommand);
+
+            ok = conn->Request(ddeCommand) != NULL;
         }
 
         if ( !ok )
         {
-            // now try request - but show the errors
-            ok = conn->Request(ddeCommand) != NULL;
+            // now try execute -- but show the errors
+            ok = conn->Execute(ddeCommand);
         }
     }
 
