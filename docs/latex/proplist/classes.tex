@@ -768,9 +768,9 @@ wxProperty objects (essentially names and values).
 
 \membersection{wxPropertySheet::wxPropertySheet}
 
-\func{void}{wxPropertySheet}{\void}
+\func{void}{wxPropertySheet}{\param{const wxString}{ name = ""}}
 
-Constructor.
+Constructor. Sets property sheet's name to name if present.
 
 \membersection{wxPropertySheet::\destruct{wxPropertySheet}}
 
@@ -790,17 +790,47 @@ Adds a property to the sheet.
 
 Clears all the properties from the sheet (deleting them).
 
+\membersection{wxPropertySheet::GetName}\label{wxpropertysheetgetname}
+
+\func{wxString}{GetName}{\void}
+
+Gets the sheet's name.
+
+\membersection{wxPropertySheet::GetProperty}\label{wxpropertysheetgetproperty}
+
+\func{wxProperty *}{GetProperty}{\param{wxString}{ name}}
+
+Gets a property by name.
+
 \membersection{wxPropertySheet::GetProperties}\label{wxpropertysheetgetproperties}
 
 \func{wxList\&}{GetProperties}{\void}
 
 Returns a reference to the internal list of properties.
 
-\membersection{wxPropertySheet::GetProperty}\label{wxpropertysheetgetproperty}
+\membersection{wxPropertySheet::HasProperty}\label{wxpropertysheethasproperty}
 
-\func{wxProperty *}{GetProperty}{\param{char *}{name}}
+\func{bool}{HasProperty}{\param{wxString}{ propname}}
 
-Gets a property by name.
+Returns true if sheet contains property propname.
+
+\membersection{wxPropertySheet::RemoveProperty}\label{wxpropertysheetremoveproperty}
+
+\func{void}{RemoveProperty}{\param{wxString}{ propname}}
+
+Removes property propname from sheet, deleting it.
+
+\membersection{wxPropertySheet::SetName}\label{wxpropertysheetsetname}
+
+\func{void}{SetName}{\param{wxString}{ sheetname}}
+
+Set the sheet's name to sheetname
+
+\membersection{wxPropertySheet::SetProperty}\label{wxpropertysheetsetproperty}
+
+\func{bool}{SetProperty}{\param{wxString}{ propname}, \param{wxPropertyValue}{ value}}
+
+Sets property propname to value. Returns false if property is not a member of sheet.
 
 \membersection{wxPropertySheet::SetAllModified}
 

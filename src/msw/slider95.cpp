@@ -37,13 +37,6 @@
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxSlider95, wxControl)
-
-BEGIN_EVENT_TABLE(wxSlider95, wxControl)
-#if WXWIN_COMPATIBILITY
-  EVT_SCROLL(wxSlider95::OnScroll)
-#endif
-END_EVENT_TABLE()
-
 #endif
 
 // Slider
@@ -257,6 +250,11 @@ void wxSlider95::MSWOnVScroll(WXWORD wParam, WXWORD pos, WXHWND control)
         event.SetPosition(newPos);
         event.SetEventObject( this );
         GetEventHandler()->ProcessEvent(event);
+
+        wxCommandEvent cevent( wxEVT_COMMAND_SLIDER_UPDATED, GetId() );
+        cevent.SetEventObject( this );
+        GetEventHandler()->ProcessEvent( cevent );
+
       }
     }
 }
@@ -615,21 +613,6 @@ bool wxSlider95::ContainsHWND(WXHWND hWnd) const
 {
 	return ( hWnd == GetStaticMin() || hWnd == GetStaticMax() || hWnd == GetEditValue() );
 }
-
-#if WXWIN_COMPATIBILITY
-// Backward compatibility
-void wxSlider95::OnScroll(wxScrollEvent& event)
-{
-    wxEventType oldEvent = event.GetEventType();
-    event.SetEventType( wxEVT_COMMAND_SLIDER_UPDATED );
-    if ( !GetEventHandler()->ProcessEvent(event) )
-    {
-        event.SetEventType( oldEvent );
-        if (!GetParent()->GetEventHandler()->ProcessEvent(event))
-            event.Skip();
-    }
-}
-#endif
 
 void wxSlider95::Command (wxCommandEvent & event)
 {

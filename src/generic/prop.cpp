@@ -941,7 +941,8 @@ wxPropertyValidator *wxPropertyView::FindPropertyValidator(wxProperty *property)
 
 IMPLEMENT_DYNAMIC_CLASS(wxPropertySheet, wxObject)
 
-wxPropertySheet::wxPropertySheet(void):m_properties(wxKEY_STRING)
+wxPropertySheet::wxPropertySheet(wxString name)
+:m_properties(wxKEY_STRING),m_name(name)
 {
 }
 
@@ -979,7 +980,30 @@ wxProperty *wxPropertySheet::GetProperty(wxString name)
   else
     return (wxProperty *)node->Data();
 }
-
+bool wxPropertySheet::SetProperty(const wxString name, wxPropertyValue value)
+{
+  wxProperty* prop = GetProperty(name);
+  if(prop){
+    prop->SetValue(value);
+    return true;
+  }else{
+    return false;
+  }
+}
+void wxPropertySheet::RemoveProperty(wxString name)
+{
+  wxNode *node = m_properties.Find(name);
+  if(node)
+  {
+    wxProperty *prop = (wxProperty *)node->Data();
+ 	delete prop;
+    m_properties.DeleteNode(node);
+  }
+}	
+bool wxPropertySheet::HasProperty(wxString name)
+{ 
+	return (GetProperty(name)?true:false); 
+}
 // Clear all properties
 void wxPropertySheet::Clear(void)
 {

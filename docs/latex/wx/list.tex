@@ -89,7 +89,7 @@ It is very common to iterate on a list as follows:
 
   ...
 
-  wxNode *node = SomeList.First();
+  wxNode *node = SomeList.GetFirst();
   while (node)
   {
     wxPoint *point = (wxPoint *)node->Data();
@@ -112,7 +112,7 @@ with
     ...
     delete point;
     delete node;
-    node = SomeList.First();
+    node = SomeList.GetFirst();
     ...
 \end{verbatim}
 
@@ -203,9 +203,9 @@ TRUE if successful. The application must delete the actual object separately.
 
 Returns the node whose stored key matches {\it key}. Use on a keyed list only.
 
-\membersection{wxList::First}
+\membersection{wxList::GetFirst}
 
-\func{wxNode *}{First}{\void}
+\func{wxNode *}{GetFirst}{\void}
 
 Returns the first node in the list (NULL if the list is empty).
 
@@ -227,9 +227,9 @@ Insert object at front of list.
 Insert object before {\it position}.
 
 
-\membersection{wxList::Last}
+\membersection{wxList::GetLast}
 
-\func{wxNode *}{Last}{\void}
+\func{wxNode *}{GetLast}{\void}
 
 Returns the last node in the list (NULL if the list is empty).
 

@@ -82,7 +82,6 @@ LIB_CPP_SRC=\
  choice.cpp \
  clipbrd.cpp \
  colour.cpp \
- colordlg.cpp \
  control.cpp \
  combobox.cpp \
  cursor.cpp \
@@ -97,7 +96,6 @@ LIB_CPP_SRC=\
  dnd.cpp \
  filedlg.cpp \
  font.cpp \
- fontdlg.cpp \
  frame.cpp \
  gauge.cpp \
  gdiobj.cpp \
@@ -108,12 +106,10 @@ LIB_CPP_SRC=\
  mdi.cpp \
  menu.cpp \
  menuitem.cpp \
- metafile.cpp \
  minifram.cpp \
  msgdlg.cpp \
  palette.cpp \
  pen.cpp \
- print.cpp \
  radiobox.cpp \
  radiobut.cpp \
  region.cpp \
@@ -139,6 +135,7 @@ LIB_CPP_SRC=\
  ../generic/dirdlgg.cpp \
  ../generic/fontdlgg.cpp \
  ../generic/gridg.cpp \
+ ../generic/helphtml.cpp \
  ../generic/helpext.cpp \
  ../generic/imaglist.cpp \
  ../generic/listctrl.cpp \

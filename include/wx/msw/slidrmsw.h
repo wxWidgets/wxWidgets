@@ -92,11 +92,6 @@ public:
   inline WXHWND GetEditValue() const { return m_staticValue; }
   virtual bool ContainsHWND(WXHWND hWnd) const;
 
-  // Backward compatibility: translate to familiar wxEVT_COMMAND_SLIDER_UPDATED
-#if WXWIN_COMPATIBILITY
-  void OnScroll(wxScrollEvent& event);
-#endif
-
   void Command(wxCommandEvent& event);
   virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 			WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
@@ -112,9 +107,6 @@ public:
   int           m_pageSize;
   int           m_lineSize;
   int           m_tickFreq;
-#if WXWIN_COMPATIBILITY
-DECLARE_EVENT_TABLE()
-#endif
 };
 
 #endif
