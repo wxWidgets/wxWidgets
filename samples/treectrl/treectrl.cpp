@@ -243,8 +243,7 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
 
     m_treeCtrl = new MyTreeCtrl(this, TreeTest_Ctrl,
                                 wxDefaultPosition, wxDefaultSize,
-                                wxTR_TWIST_BUTTONS | wxTR_NO_LINES |
-                                wxTR_EDIT_LABELS |
+                                wxTR_DEFAULT_STYLE | wxTR_EDIT_LABELS |
 #ifndef NO_VARIABLE_HEIGHT
                                 wxTR_HAS_VARIABLE_ROW_HEIGHT |
 #endif
