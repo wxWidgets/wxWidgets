@@ -13,7 +13,7 @@ from my_distutils import run_swig, contrib_copy_tree
 # flags and values that affect this script
 #----------------------------------------------------------------------
 
-VERSION          = "2.3b3"
+VERSION          = "2.3b4"
 DESCRIPTION      = "Cross platform GUI toolkit for Python"
 AUTHOR           = "Robin Dunn"
 AUTHOR_EMAIL     = "robin@alldunn.com"
@@ -31,6 +31,8 @@ on.
 BUILD_GLCANVAS = 1 # If true, build the contrib/glcanvas extension module
 BUILD_OGL = 1      # If true, build the contrib/ogl extension module
 BUILD_STC = 1      # If true, build the contrib/stc extension module
+BUILD_IEWIN = 0    # Internet Explorer wrapper (experimental)
+
 CORE_ONLY = 0      # if true, don't build any of the above
 GL_ONLY = 0        # Only used when making the -gl RPM.  See the "b" script
                    # for the ugly details
@@ -526,6 +528,37 @@ if not GL_ONLY and BUILD_STC:
 
                     include_dirs = stc_includes,
                     define_macros = stc_defines,
+
+                    library_dirs = libdirs,
+                    libraries = libs,
+
+                    extra_compile_args = cflags,
+                    extra_link_args = lflags,
+                    )
+
+    wxpExtensions.append(ext)
+
+
+
+#----------------------------------------------------------------------
+# Define the IEWIN extension module (experimental)
+#----------------------------------------------------------------------
+
+if not GL_ONLY and BUILD_IEWIN:
+    print 'Preparing IEWIN...'
+    location = 'contrib/iewin'
+
+    swig_files = ['iewin.i', ]
+
+    swig_sources = run_swig(swig_files, location, '', PKGDIR,
+                            USE_SWIG, swig_force, swig_args)
+
+
+    ext = Extension('iewinc', ['%s/IEHtmlWin.cpp' % location,
+                             ] + swig_sources,
+
+                    include_dirs =  includes,
+                    define_macros = defines,
 
                     library_dirs = libdirs,
                     libraries = libs,

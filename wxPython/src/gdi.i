@@ -31,7 +31,6 @@
 %import _defs.i
 %import misc.i
 
-
 %{
     static wxString wxPyEmptyStr("");
 %}
@@ -157,6 +156,7 @@ public:
     wxBitmap* wxBitmapFromIcon(const wxIcon& icon) {
         return new wxBitmap(icon);
     }
+
 
 
 #ifdef __WXMSW__

@@ -281,6 +281,11 @@ def wxImageFromBitmap(*_args, **_kwargs):
 
 wxInitAllImageHandlers = imagec.wxInitAllImageHandlers
 
+def wxBitmapFromImage(*_args, **_kwargs):
+    val = apply(imagec.wxBitmapFromImage,_args,_kwargs)
+    if val: val = wxBitmapPtr(val); val.thisown = 1
+    return val
+
 wxImage_CanRead = imagec.wxImage_CanRead
 
 wxImage_AddHandler = imagec.wxImage_AddHandler

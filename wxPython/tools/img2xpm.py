@@ -8,7 +8,7 @@ Usage:
 
 Options:
 
-    -o <dir>       The directory to place the .xmp file(s), defaults to
+    -o <dir>       The directory to place the .xpm file(s), defaults to
                    the current directory.
 
     -m <#rrggbb>   If the original image has a mask or transparency defined
@@ -26,7 +26,11 @@ import sys, os, glob, getopt, string
 from wxPython.wx import *
 
 wxInitAllImageHandlers()
-app = wxPySimpleApp()     # just to let global initialization to take place...
+
+if wxPlatform == "__WXGTK__":
+    app = wxPySimpleApp()     # Blech!  the GUI needs initialized before
+                              # bitmaps can be created...
+
 
 def convert(file, maskClr, outputDir, outputName):
     if string.lower(os.path.splitext(file)[1]) == ".ico":
@@ -96,9 +100,6 @@ def main(args):
 
 
 if __name__ == "__main__":
-    if wxPlatform == "__WXGTK__":
-        app = wxPySimpleApp()     # Blech!  the GUI needs initialized before
-                                  # bitmaps can be created...
     main(sys.argv[1:])
 
 

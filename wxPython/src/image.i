@@ -96,6 +96,9 @@ public:
     ~wxImage();
 
     wxBitmap ConvertToBitmap();
+#ifdef __WXGTK__
+    wxBitmap ConvertToMonoBitmap( unsigned char red, unsigned char green, unsigned char blue ) const;
+#endif
     void Create( int width, int height );
     void Destroy();
     wxImage Scale( int width, int height );
@@ -169,6 +172,7 @@ public:
     static bool RemoveHandler( const wxString& name );
 };
 
+
 // Alternate constructors
 %new wxImage* wxEmptyImage(int width=0, int height=0);
 %new wxImage* wxImageFromMime(const wxString& name, const wxString& mimetype);
@@ -208,4 +212,16 @@ extern wxImage    wxNullImage;
 
 
 //---------------------------------------------------------------------------
+// This one is here to avoid circular imports
+
+%new wxBitmap* wxBitmapFromImage(const wxImage& img, int depth=-1);
+
+%{
+    wxBitmap* wxBitmapFromImage(const wxImage& img, int depth=-1) {
+        return new wxBitmap(img, depth);
+    }
+
+%}
+
+
 //---------------------------------------------------------------------------

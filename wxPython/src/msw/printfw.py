@@ -81,6 +81,72 @@ class wxPrintDataPtr :
     def SetQuality(self, *_args, **_kwargs):
         val = apply(printfwc.wxPrintData_SetQuality,(self,) + _args, _kwargs)
         return val
+    def GetPrinterCommand(self, *_args, **_kwargs):
+        val = apply(printfwc.wxPrintData_GetPrinterCommand,(self,) + _args, _kwargs)
+        return val
+    def GetPrinterOptions(self, *_args, **_kwargs):
+        val = apply(printfwc.wxPrintData_GetPrinterOptions,(self,) + _args, _kwargs)
+        return val
+    def GetPreviewCommand(self, *_args, **_kwargs):
+        val = apply(printfwc.wxPrintData_GetPreviewCommand,(self,) + _args, _kwargs)
+        return val
+    def GetFilename(self, *_args, **_kwargs):
+        val = apply(printfwc.wxPrintData_GetFilename,(self,) + _args, _kwargs)
+        return val
+    def GetFontMetricPath(self, *_args, **_kwargs):
+        val = apply(printfwc.wxPrintData_GetFontMetricPath,(self,) + _args, _kwargs)
+        return val
+    def GetPrinterScaleX(self, *_args, **_kwargs):
+        val = apply(printfwc.wxPrintData_GetPrinterScaleX,(self,) + _args, _kwargs)
+        return val
+    def GetPrinterScaleY(self, *_args, **_kwargs):
+        val = apply(printfwc.wxPrintData_GetPrinterScaleY,(self,) + _args, _kwargs)
+        return val
+    def GetPrinterTranslateX(self, *_args, **_kwargs):
+        val = apply(printfwc.wxPrintData_GetPrinterTranslateX,(self,) + _args, _kwargs)
+        return val
+    def GetPrinterTranslateY(self, *_args, **_kwargs):
+        val = apply(printfwc.wxPrintData_GetPrinterTranslateY,(self,) + _args, _kwargs)
+        return val
+    def GetPrintMode(self, *_args, **_kwargs):
+        val = apply(printfwc.wxPrintData_GetPrintMode,(self,) + _args, _kwargs)
+        return val
+    def SetPrinterCommand(self, *_args, **_kwargs):
+        val = apply(printfwc.wxPrintData_SetPrinterCommand,(self,) + _args, _kwargs)
+        return val
+    def SetPrinterOptions(self, *_args, **_kwargs):
+        val = apply(printfwc.wxPrintData_SetPrinterOptions,(self,) + _args, _kwargs)
+        return val
+    def SetPreviewCommand(self, *_args, **_kwargs):
+        val = apply(printfwc.wxPrintData_SetPreviewCommand,(self,) + _args, _kwargs)
+        return val
+    def SetFilename(self, *_args, **_kwargs):
+        val = apply(printfwc.wxPrintData_SetFilename,(self,) + _args, _kwargs)
+        return val
+    def SetFontMetricPath(self, *_args, **_kwargs):
+        val = apply(printfwc.wxPrintData_SetFontMetricPath,(self,) + _args, _kwargs)
+        return val
+    def SetPrinterScaleX(self, *_args, **_kwargs):
+        val = apply(printfwc.wxPrintData_SetPrinterScaleX,(self,) + _args, _kwargs)
+        return val
+    def SetPrinterScaleY(self, *_args, **_kwargs):
+        val = apply(printfwc.wxPrintData_SetPrinterScaleY,(self,) + _args, _kwargs)
+        return val
+    def SetPrinterScaling(self, *_args, **_kwargs):
+        val = apply(printfwc.wxPrintData_SetPrinterScaling,(self,) + _args, _kwargs)
+        return val
+    def SetPrinterTranslateX(self, *_args, **_kwargs):
+        val = apply(printfwc.wxPrintData_SetPrinterTranslateX,(self,) + _args, _kwargs)
+        return val
+    def SetPrinterTranslateY(self, *_args, **_kwargs):
+        val = apply(printfwc.wxPrintData_SetPrinterTranslateY,(self,) + _args, _kwargs)
+        return val
+    def SetPrinterTranslation(self, *_args, **_kwargs):
+        val = apply(printfwc.wxPrintData_SetPrinterTranslation,(self,) + _args, _kwargs)
+        return val
+    def SetPrintMode(self, *_args, **_kwargs):
+        val = apply(printfwc.wxPrintData_SetPrintMode,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxPrintData instance at %s>" % (self.this,)
 class wxPrintData(wxPrintDataPtr):

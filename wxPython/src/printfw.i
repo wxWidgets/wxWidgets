@@ -69,30 +69,30 @@ public:
     void SetPaperSize(const wxSize& sz);
     void SetQuality(wxPrintQuality quality);
 
-//    // PostScript-specific data
-//      const wxString& GetPrinterCommand();
-//      const wxString& GetPrinterOptions();
-//      const wxString& GetPreviewCommand();
-//      const wxString& GetFilename();
-//      const wxString& GetFontMetricPath();
-//      double GetPrinterScaleX();
-//      double GetPrinterScaleY();
-//      long GetPrinterTranslateX();
-//      long GetPrinterTranslateY();
-//      wxPrintMode GetPrintMode();
+    // PostScript-specific data
+    const wxString& GetPrinterCommand();
+    const wxString& GetPrinterOptions();
+    const wxString& GetPreviewCommand();
+    const wxString& GetFilename();
+    const wxString& GetFontMetricPath();
+    double GetPrinterScaleX();
+    double GetPrinterScaleY();
+    long GetPrinterTranslateX();
+    long GetPrinterTranslateY();
+    wxPrintMode GetPrintMode();
 
-//      void SetPrinterCommand(const wxString& command);
-//      void SetPrinterOptions(const wxString& options);
-//      void SetPreviewCommand(const wxString& command);
-//      void SetFilename(const wxString& filename);
-//      void SetFontMetricPath(const wxString& path);
-//      void SetPrinterScaleX(double x);
-//      void SetPrinterScaleY(double y);
-//      void SetPrinterScaling(double x, double y);
-//      void SetPrinterTranslateX(long x);
-//      void SetPrinterTranslateY(long y);
-//      void SetPrinterTranslation(long x, long y);
-//      void SetPrintMode(wxPrintMode printMode);
+    void SetPrinterCommand(const wxString& command);
+    void SetPrinterOptions(const wxString& options);
+    void SetPreviewCommand(const wxString& command);
+    void SetFilename(const wxString& filename);
+    void SetFontMetricPath(const wxString& path);
+    void SetPrinterScaleX(double x);
+    void SetPrinterScaleY(double y);
+    void SetPrinterScaling(double x, double y);
+    void SetPrinterTranslateX(long x);
+    void SetPrinterTranslateY(long y);
+    void SetPrinterTranslation(long x, long y);
+    void SetPrintMode(wxPrintMode printMode);
 
 };
 

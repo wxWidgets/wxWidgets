@@ -71,12 +71,16 @@ public:
                                     &wxPyCallback::EventThunker);
         }
 
+        // This really belongs in the wxObject base class.  It's probably
+        // time to actually add it...
+        const char* GetClassName() {
+            return self->GetClassInfo()->GetClassName();
+        }
     }
 
-    %pragma(python) addtoclass = "
-    _prop_list_ = {}
-    "
-
+//      %pragma(python) addtoclass = "
+//      _prop_list_ = {}
+//      "
 //      %pragma(python) addtoclass = "
 //      def __getattr__(self, name):
 //          pl = self._prop_list_
@@ -604,7 +608,7 @@ public:
 
     void Append(int id, const wxString& item,
                 const wxString& helpString = wxPyEmptyStr,
-                bool checkable = FALSE);
+                int checkable = FALSE);
     %name(AppendMenu)void Append(int id, const wxString& item, wxMenu *subMenu,
                 const wxString& helpString = wxPyEmptyStr);
     %name(AppendItem)void Append(const wxMenuItem* item);

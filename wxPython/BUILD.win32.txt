@@ -95,8 +95,9 @@ D. Change to the wx2\include\wx\msw directory and copy setup0.h to
     ** NEW **
     Be sure that wxUSE_GLCANVAS is defined to be 0 as wxPython now
     keeps its own copy of the glcanvas sources and expects that it is
-    not in the main library.  This is reduce the number of dependant
-    DLLs on the core library and therefore help reduce startup time.
+    not in the main library.  This is done to reduce the number of
+    dependant DLLs on the core library and therefore help reduce
+    startup time.
 
 
 
