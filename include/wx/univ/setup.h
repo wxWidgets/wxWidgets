@@ -83,7 +83,7 @@
 #define wxUSE_RADIOBTN     1
 #define wxUSE_SASH         0
 #define wxUSE_SCROLLBAR    1
-#define wxUSE_SLIDER       0
+#define wxUSE_SLIDER       1
 #define wxUSE_SPINBTN      1
 #define wxUSE_SPINCTRL     1
 #define wxUSE_STATBOX      1

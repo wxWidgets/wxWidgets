@@ -1,0 +1,135 @@
+///////////////////////////////////////////////////////////////////////////////
+// Name:        wx/univ/slider.h
+// Purpose:     wxSlider control for wxUniversal
+// Author:      Vadim Zeitlin
+// Modified by:
+// Created:     09.02.01
+// RCS-ID:      $Id$
+// Copyright:   (c) 2001 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+// Licence:     wxWindows licence
+///////////////////////////////////////////////////////////////////////////////
+
+#ifdef __GNUG__
+    #pragma interface "univslider.h"
+#endif
+
+#ifndef _WX_UNIV_SLIDER_H_
+#define _WX_UNIV_SLIDER_H_
+
+// ----------------------------------------------------------------------------
+// the actions supported by this control
+// ----------------------------------------------------------------------------
+
+// our actions are the same as scrollbars
+
+#define wxACTION_SLIDER_START       _T("start")     // to the beginning
+#define wxACTION_SLIDER_END         _T("end")       // to the end
+#define wxACTION_SLIDER_LINE_UP     _T("lineup")    // one line up/left
+#define wxACTION_SLIDER_PAGE_UP     _T("pageup")    // one page up/left
+#define wxACTION_SLIDER_LINE_DOWN   _T("linedown")  // one line down/right
+#define wxACTION_SLIDER_PAGE_DOWN   _T("pagedown")  // one page down/right
+
+#define wxACTION_SLIDER_THUMB_DRAG      _T("thumbdrag")
+#define wxACTION_SLIDER_THUMB_MOVE      _T("thumbmove")
+#define wxACTION_SLIDER_THUMB_RELEASE   _T("thumbrelease")
+
+// ----------------------------------------------------------------------------
+// wxSlider
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxSlider: public wxSliderBase
+{
+public:
+    // ctors and such
+    wxSlider() { Init(); }
+
+    wxSlider(wxWindow *parent,
+             wxWindowID id,
+             int value, int minValue, int maxValue,
+             const wxPoint& pos = wxDefaultPosition,
+             const wxSize& size = wxDefaultSize,
+             long style = wxSL_HORIZONTAL,
+             const wxValidator& validator = wxDefaultValidator,
+             const wxString& name = wxSliderNameStr)
+    {
+        Init();
+
+        (void)Create(parent, id, value, minValue, maxValue,
+                     pos, size, style, validator, name);
+    }
+
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                int value, int minValue, int maxValue,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxSL_HORIZONTAL,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxSliderNameStr);
+
+    // implement base class pure virtuals
+    virtual int GetValue() const;
+    virtual void SetValue(int value);
+
+    virtual void SetRange(int minValue, int maxValue);
+    virtual int GetMin() const;
+    virtual int GetMax() const;
+
+    virtual void SetLineSize(int lineSize);
+    virtual void SetPageSize(int pageSize);
+    virtual int GetLineSize() const;
+    virtual int GetPageSize() const;
+
+    virtual void SetThumbLength(int lenPixels);
+    virtual int GetThumbLength() const;
+
+    // wxUniv-specific methods
+    // -----------------------
+
+    // is this a vertical slider?
+    bool IsVertical() const { return (GetWindowStyle() & wxSL_VERTICAL) != 0; }
+
+    // do we have labels?
+    bool HasLabels() const { return (GetWindowStyle() & wxSL_LABELS) != 0; }
+
+protected:
+    virtual wxSize DoGetBestClientSize() const;
+    virtual void DoDraw(wxControlRenderer *renderer);
+    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+
+    virtual bool PerformAction(const wxControlAction& action,
+                               long numArg = 0,
+                               const wxString& strArg = wxEmptyString);
+
+    // common part of all ctors
+    void Init();
+
+    // normalize the value to fit in the range
+    int NormalizeValue(int value) const;
+
+    // change the value by the given increment, return TRUE if really changed
+    bool ChangeValueBy(int inc);
+
+    // change the value to the given one
+    bool ChangeValueTo(int value);
+
+    // is the value inside the range?
+    bool IsInRange(int value) { return (value >= m_min) && (value <= m_max); }
+
+private:
+    // the slider range and value
+    int m_min,
+        m_max,
+        m_value;
+
+    // the line and page increments (logical units)
+    int m_lineSize,
+        m_pageSize;
+
+    // the size of the thumb (in pixels)
+    int m_thumbSize;
+
+    DECLARE_DYNAMIC_CLASS(wxSpinButton)
+};
+
+#endif // _WX_UNIV_SLIDER_H_

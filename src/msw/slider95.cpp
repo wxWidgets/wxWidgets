@@ -192,58 +192,41 @@ bool wxSlider95::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
 {
     int position = 0; // Dummy - not used in this mode
 
-    int nScrollInc;
-    wxEventType scrollEvent = wxEVT_NULL;
+    wxEventType scrollEvent;
     switch ( wParam )
     {
         case SB_TOP:
-            nScrollInc = m_rangeMax - position;
             scrollEvent = wxEVT_SCROLL_TOP;
             break;
 
         case SB_BOTTOM:
-            nScrollInc = - position;
             scrollEvent = wxEVT_SCROLL_BOTTOM;
             break;
 
         case SB_LINEUP:
-            nScrollInc = - GetLineSize();
             scrollEvent = wxEVT_SCROLL_LINEUP;
             break;
 
         case SB_LINEDOWN:
-            nScrollInc = GetLineSize();
             scrollEvent = wxEVT_SCROLL_LINEDOWN;
             break;
 
         case SB_PAGEUP:
-            nScrollInc = -GetPageSize();
             scrollEvent = wxEVT_SCROLL_PAGEUP;
             break;
 
         case SB_PAGEDOWN:
-            nScrollInc = GetPageSize();
             scrollEvent = wxEVT_SCROLL_PAGEDOWN;
             break;
 
         case SB_THUMBTRACK:
         case SB_THUMBPOSITION:
-#ifdef __WIN32__
-            nScrollInc = (signed short)pos - position;
-#else // Win16
-            nScrollInc = pos - position;
-#endif // Win32/16
             scrollEvent = wxEVT_SCROLL_THUMBTRACK;
             break;
 
         default:
-            nScrollInc = 0;
-    }
-
-    if (scrollEvent == wxEVT_NULL)
-    {
-        // no event...
-        return FALSE;
+            // unknown scroll event?
+            return FALSE;
     }
 
     int newPos = (int)::SendMessage((HWND) control, TBM_GETPOS, 0, 0);

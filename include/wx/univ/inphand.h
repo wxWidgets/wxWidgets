@@ -33,6 +33,7 @@
 #define wxINP_HANDLER_NOTEBOOK          _T("notebook")
 #define wxINP_HANDLER_RADIOBTN          _T("radiobtn")
 #define wxINP_HANDLER_SCROLLBAR         _T("scrollbar")
+#define wxINP_HANDLER_SLIDER            _T("slider")
 #define wxINP_HANDLER_SPINBTN           _T("spinbtn")
 #define wxINP_HANDLER_TEXTCTRL          _T("textctrl")
 

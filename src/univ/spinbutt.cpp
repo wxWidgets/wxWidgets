@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        univ/spinbutt.cpp
-// Purpose:     implementation fo the universal version of wxSpinButton
+// Purpose:     implementation of the universal version of wxSpinButton
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     21.01.01
@@ -130,7 +130,12 @@ int wxSpinButton::GetValue() const
 
 void wxSpinButton::SetValue(int val)
 {
-    m_value = val;
+    if ( val != m_value )
+    {
+        m_value = val;
+
+        Refresh();
+    }
 }
 
 int wxSpinButton::NormalizeValue(int value) const
