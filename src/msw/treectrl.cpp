@@ -595,14 +595,15 @@ bool wxTreeCtrl::Create(wxWindow *parent,
 {
     Init();
 
+    if ( (style & wxBORDER_MASK) == wxBORDER_DEFAULT )
+        style |= wxBORDER_SUNKEN;
+
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return FALSE;
 
-    DWORD wstyle = WS_VISIBLE | WS_CHILD | WS_TABSTOP |
-                   TVS_SHOWSELALWAYS;
-
-    if ( m_windowStyle & wxCLIP_SIBLINGS )
-        wstyle |= WS_CLIPSIBLINGS;
+    DWORD exStyle = 0;
+    DWORD wstyle = MSWGetStyle(m_windowStyle, & exStyle);
+    wstyle |= WS_TABSTOP | TVS_SHOWSELALWAYS;
 
     if ((m_windowStyle & wxTR_NO_LINES) == 0)
         wstyle |= TVS_HASLINES;
