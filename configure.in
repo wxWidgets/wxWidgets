@@ -2296,23 +2296,31 @@ dnl OpenGL libraries
 dnl ---------------------------------------------------------------------------
 if test "$wxUSE_OPENGL" = "yes"; then
   if test "$wxUSE_MAC" = 1; then
-    AC_DEFINE(wxUSE_OPENGL)
-    AC_DEFINE(wxUSE_GLCANVAS)
     OPENGL_LIBS="-framework OpenGL -framework AGL"
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS opengl"
   else
+    dnl check for OpenGL libs availability first
     AC_CHECK_HEADER(GL/gl.h, [
-      AC_DEFINE(wxUSE_OPENGL)
-      AC_DEFINE(wxUSE_GLCANVAS)
-      SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS opengl"
       AC_CHECK_LIB(GL, glFlush, [
         OPENGL_LIBS="-lGL -lGLU"
-      ],[
-          AC_CHECK_LIB(MesaGL, glFlush, [
+      ], [
+        AC_CHECK_LIB(MesaGL, glFlush, [
           OPENGL_LIBS="-lMesaGL -lMesaGLU"
-        ],)
-       ],)
-      ],wxUSE_OPENGL=0)
+        ])
+      ])
+    ])
+
+    if test "x$OPENGL_LIBS" = "x"; then
+        dnl it should be an error and not a warning because OpenGL is not on
+        dnl by default and so if it had been explicitely requested, we
+        dnl shouldn't just fall back to compiling the library without it
+        AC_MSG_ERROR(OpenGL libraries not available)
+    fi
+  fi
+
+  if test "$wxUSE_OPENGL" = "yes"; then
+    AC_DEFINE(wxUSE_OPENGL)
+    AC_DEFINE(wxUSE_GLCANVAS)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS opengl"
   fi
 fi
 
