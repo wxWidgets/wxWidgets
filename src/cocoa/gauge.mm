@@ -49,7 +49,7 @@ wxGauge::~wxGauge()
 
 int wxGauge::GetValue() const
 {
-    return [(NSProgressIndicator*)m_cocoaNSView doubleValue];
+    return (int)[(NSProgressIndicator*)m_cocoaNSView doubleValue];
 }
 
 void wxGauge::SetValue(int value)
@@ -59,7 +59,7 @@ void wxGauge::SetValue(int value)
 
 int wxGauge::GetRange() const
 {
-    return [(NSProgressIndicator*)m_cocoaNSView maxValue];
+    return (int)[(NSProgressIndicator*)m_cocoaNSView maxValue];
 }
 
 void wxGauge::SetRange(int maxValue)
