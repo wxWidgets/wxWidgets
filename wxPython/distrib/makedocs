@@ -55,6 +55,7 @@ done
 popd
 cp ../distrib/viewdocs.py $DEST
 cp ../distrib/README.viewdocs.txt $DEST/README.txt
+cp ../docs/xml/wxPython-metadata.xml $DEST
 
 rm -f ../dist/wxPythonDocs-$VERSION.tar.gz
 tar cvf ../dist/wxPythonDocs-$VERSION.tar $DEST
