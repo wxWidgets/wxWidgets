@@ -9,7 +9,7 @@
 
 
 #ifdef __GNUG__
-#pragma implementation
+#pragma interface "fs_zip.h"
 #endif
 
 #include "wx/wxprec.h"
