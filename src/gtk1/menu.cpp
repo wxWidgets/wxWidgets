@@ -448,6 +448,36 @@ wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
     return menuOld;
 }
 
+static wxMenu *CopyMenu (wxMenu *menu)
+{
+    wxMenu *menucopy = new wxMenu ();
+    wxMenuItemList::Node *node = menu->GetMenuItems().GetFirst();
+    while (node)
+    {
+        wxMenuItem *item = node->GetData();
+        int itemid = item->GetId();
+        wxString text = item->GetText();
+        text.Replace(wxT("_"), wxT("&"));
+        wxMenu *submenu = item->GetSubMenu();
+        if (!submenu)
+        {
+            wxMenuItem* itemcopy = new wxMenuItem(menucopy,
+                                        itemid, text,
+                                        menu->GetHelpString(itemid));
+            itemcopy->SetBitmap(item->GetBitmap());
+            itemcopy->SetCheckable(item->IsCheckable());
+            menucopy->Append(itemcopy);
+        }
+        else
+          menucopy->Append (itemid, text, CopyMenu(submenu),
+                            menu->GetHelpString(itemid));
+    
+        node = node->GetNext();
+    }
+  
+    return menucopy;
+}
+
 wxMenu *wxMenuBar::Remove(size_t pos)
 {
     wxMenu *menu = wxMenuBarBase::Remove(pos);
@@ -461,13 +491,17 @@ wxMenu *wxMenuBar::Remove(size_t pos)
     printf( "menu shell entries before %d\n", (int)g_list_length( menu_shell->children ) );
 */
 
+    wxMenu *menucopy = CopyMenu( menu );
+
     // unparent calls unref() and that would delete the widget so we raise
     // the ref count to 2 artificially before invoking unparent.
     gtk_widget_ref( menu->m_menu );
     gtk_widget_unparent( menu->m_menu );
 
     gtk_widget_destroy( menu->m_owner );
+    delete menu;
 
+    menu = menucopy;
 /*
     printf( "factory entries after %d\n", (int)g_slist_length(m_factory->items) );
     printf( "menu shell entries after %d\n", (int)g_list_length( menu_shell->children ) );

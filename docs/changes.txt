@@ -177,6 +177,10 @@ wxMSW:
 
 - fixed loss of client data in wxChoice::SetString()
 
+wxGTK:
+
+- fixed wxMenu::Remove (John Skiff and Benjamin Williams)
+
 All:
 
 - Improved contrib/utils/convertrc parsing (David J. Cooke)
