@@ -14,6 +14,7 @@ PROGRAM=stctest
 OBJECTS=$(PROGRAM).o
 
 APPEXTRALIBS=$(top_builddir)/contrib/src/stc/libstc.a
+APPEXTRADEFS=-I$(top_srcdir)/contrib/include
 
 DATAFILES=stctest.cpp
 
