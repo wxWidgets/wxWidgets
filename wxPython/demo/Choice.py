@@ -12,8 +12,8 @@ class TestChoice(wx.Panel):
                       'six', 'seven', 'eight']
 
         wx.StaticText(self, -1, "This example uses the wxChoice control.", (15, 10))
-        wx.StaticText(self, -1, "Select one:", (15, 50), (75, 20))
-        self.ch = wx.Choice(self, -1, (90, 50), choices = sampleList)
+        wx.StaticText(self, -1, "Select one:", (15, 50), (75, -1))
+        self.ch = wx.Choice(self, -1, (100, 50), choices = sampleList)
         self.Bind(wx.EVT_CHOICE, self.EvtChoice, self.ch)
 
 
