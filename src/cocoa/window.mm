@@ -884,7 +884,7 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
 }
 
 // Get the window with the focus
-wxWindow *wxWindowBase::FindFocus()
+wxWindow *wxWindowBase::DoFindFocus()
 {
     // TODO
     return NULL;

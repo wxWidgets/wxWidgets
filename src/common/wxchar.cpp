@@ -1043,6 +1043,84 @@ WXDLLEXPORT int wxTolower(wxChar ch) { return (wxChar)CharLower((LPTSTR)(ch)); }
 WXDLLEXPORT int wxToupper(wxChar ch) { return (wxChar)CharUpper((LPTSTR)(ch)); }
 #endif
 
+#if wxUSE_UNICODE && __DARWIN__ && ( MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_2 ) 
+
+WXDLLEXPORT size_t wxInternalMbstowcs (wchar_t * out, const char * in, size_t outlen)
+{
+    if (!out)
+    {
+        size_t outsize = 0;
+        while(*in++)
+            outsize++;
+        return outsize;
+    }
+    
+    const char* origin = in;
+    
+    while (outlen-- && *in)
+    {
+        *out++ = (wchar_t) *in++;
+    }
+    
+    *out = '\0';
+    
+    return in - origin;
+}
+
+WXDLLEXPORT size_t	wxInternalWcstombs (char * out, const wchar_t * in, size_t outlen)
+{
+    if (!out)
+    {
+        size_t outsize = 0;
+        while(*in++)
+            outsize++;
+        return outsize;
+    }
+    
+    const wchar_t* origin = in;
+    
+    while (outlen-- && *in)
+    {
+        *out++ = (char) *in++;
+    }
+    
+    *out = '\0';
+    
+    return in - origin;
+}
+        
+#if defined(wxNEED_WX_CTYPE_H)
+
+#include <CoreFoundation/CoreFoundation.h>
+
+CFCharacterSetRef cfalnumset = CFCharacterSetGetPredefined(kCFCharacterSetAlphaNumeric);
+CFCharacterSetRef cfalphaset = CFCharacterSetGetPredefined(kCFCharacterSetLetter);
+CFCharacterSetRef cfcntrlset = CFCharacterSetGetPredefined(kCFCharacterSetControl);
+CFCharacterSetRef cfdigitset = CFCharacterSetGetPredefined(kCFCharacterSetDecimalDigit);
+//CFCharacterSetRef cfgraphset = kCFCharacterSetControl && !' '
+CFCharacterSetRef cflowerset = CFCharacterSetGetPredefined(kCFCharacterSetLowercaseLetter);
+//CFCharacterSetRef cfprintset = !kCFCharacterSetControl
+CFCharacterSetRef cfpunctset = CFCharacterSetGetPredefined(kCFCharacterSetPunctuation);
+CFCharacterSetRef cfspaceset = CFCharacterSetGetPredefined(kCFCharacterSetWhitespaceAndNewline);
+CFCharacterSetRef cfupperset = CFCharacterSetGetPredefined(kCFCharacterSetUppercaseLetter);
+
+WXDLLEXPORT int wxIsalnum(wxChar ch) { return CFCharacterSetIsCharacterMember(cfalnumset, ch); }
+WXDLLEXPORT int wxIsalpha(wxChar ch) { return CFCharacterSetIsCharacterMember(cfalphaset, ch); }
+WXDLLEXPORT int wxIscntrl(wxChar ch) { return CFCharacterSetIsCharacterMember(cfcntrlset, ch); }
+WXDLLEXPORT int wxIsdigit(wxChar ch) { return CFCharacterSetIsCharacterMember(cfdigitset, ch); }
+WXDLLEXPORT int wxIsgraph(wxChar ch) { return !CFCharacterSetIsCharacterMember(cfcntrlset, ch) && ch != ' '; }
+WXDLLEXPORT int wxIslower(wxChar ch) { return CFCharacterSetIsCharacterMember(cflowerset, ch); }
+WXDLLEXPORT int wxIsprint(wxChar ch) { return !CFCharacterSetIsCharacterMember(cfcntrlset, ch); }
+WXDLLEXPORT int wxIspunct(wxChar ch) { return CFCharacterSetIsCharacterMember(cfpunctset, ch); }
+WXDLLEXPORT int wxIsspace(wxChar ch) { return CFCharacterSetIsCharacterMember(cfspaceset, ch); }
+WXDLLEXPORT int wxIsupper(wxChar ch) { return CFCharacterSetIsCharacterMember(cfupperset, ch); }
+WXDLLEXPORT int wxIsxdigit(wxChar ch) { return wxIsdigit(ch) || (ch>='a' && ch<='f') || (ch>='A' && ch<='F'); }
+WXDLLEXPORT int wxTolower(wxChar ch) { return (wxChar)tolower((char)(ch)); }
+WXDLLEXPORT int wxToupper(wxChar ch) { return (wxChar)toupper((char)(ch)); }
+#endif
+
+#endif
+
 #ifndef wxStrdupA
 
 WXDLLEXPORT char *wxStrdupA(const char *s)
@@ -1139,6 +1217,16 @@ WXDLLEXPORT wxChar * wxStrcpy(wxChar *dest, const wxChar *src)
   return ret;
 }
 
+WXDLLEXPORT size_t wxStrlen_(const wxChar *s)
+{
+    size_t n = 0;
+    while ( *s++ )
+        n++;
+            
+    return n;
+}
+
+
 WXDLLEXPORT wxChar * wxStrncat(wxChar *dest, const wxChar *src, size_t n)
 {
   wxChar *ret = dest;
@@ -1196,7 +1284,7 @@ WXDLLEXPORT size_t wxStrspn(const wxChar *s, const wxChar *accept)
 
 WXDLLEXPORT const wxChar *wxStrstr(const wxChar *haystack, const wxChar *needle)
 {
-    wxCHECK_RET( needle, NULL, _T("NULL argument in wxStrstr") );
+    wxASSERT_MSG( needle != NULL, _T("NULL argument in wxStrstr") );
 
     // VZ: this is not exactly the most efficient string search algorithm...
 
@@ -1259,7 +1347,7 @@ WXDLLEXPORT long int wxStrtol(const wxChar *nptr, wxChar **endptr, int base)
   while ((wxIsdigit(*nptr) && (*nptr - wxT('0') < base)) ||
          (wxIsalpha(*nptr) && (wxToupper(*nptr) - wxT('A') + 10 < base))) nptr++;
 
-  wxString data(nptr, nptr-start);
+  wxString data(start, nptr-start);
   wxWX2MBbuf dat = data.mb_str(wxConvLocal);
   char *rdat = wxMBSTRINGCAST dat;
   long int ret = strtol(dat, &rdat, base);
@@ -1268,6 +1356,12 @@ WXDLLEXPORT long int wxStrtol(const wxChar *nptr, wxChar **endptr, int base)
 
   return ret;
 }
+
+WXDLLEXPORT unsigned long int wxStrtoul(const wxChar *nptr, wxChar **endptr, int base)
+{
+    return (unsigned long int) wxStrtol(nptr, endptr, base);
+}
+
 #endif // wxNEED_WX_STRING_H
 
 #ifdef wxNEED_WX_STDIO_H
@@ -1436,7 +1530,6 @@ char *strdup(const char *s)
         strcpy( dest , s ) ;
     return dest ;
 }
-
 #endif // wxNEED_STRDUP
 
 #if defined(__WXWINCE__) && (_WIN32_WCE <= 211)

@@ -49,6 +49,8 @@ private:
         CPPUNIT_TEST( Replace );
         CPPUNIT_TEST( Match );
         CPPUNIT_TEST( CaseChanges );
+        CPPUNIT_TEST( Compare );
+        CPPUNIT_TEST( CompareNoCase );
     CPPUNIT_TEST_SUITE_END();
 
     void String();
@@ -65,6 +67,8 @@ private:
     void Replace();
     void Match();
     void CaseChanges();
+    void Compare();
+    void CompareNoCase();
 
     DECLARE_NO_COPY_CLASS(StringTestCase)
 };
@@ -336,4 +340,86 @@ void StringTestCase::CaseChanges()
         CPPUNIT_ASSERT( sLower.Upper() == sUpper );
     }
 #endif // !wxUSE_UNICODE
+}
+
+void StringTestCase::Compare()
+{
+    wxString s1 = wxT("AHH");
+    wxString eq = wxT("AHH");
+    wxString neq1 = wxT("HAH");
+    wxString neq2 = wxT("AH");
+    wxString neq3 = wxT("AHHH");
+    wxString neq4 = wxT("AhH");
+    
+    CPPUNIT_ASSERT( s1 == eq );
+    CPPUNIT_ASSERT( s1 != neq1 );
+    CPPUNIT_ASSERT( s1 != neq2 );
+    CPPUNIT_ASSERT( s1 != neq3 );
+    CPPUNIT_ASSERT( s1 != neq4 );
+
+//    wxString _s1 = wxT("A\0HH");
+//    wxString _eq = wxT("A\0HH");
+//    wxString _neq1 = wxT("H\0AH");
+//    wxString _neq2 = wxT("A\0H");
+//    wxString _neq3 = wxT("A\0HHH");
+//    wxString _neq4 = wxT("A\0hH");
+    s1.insert(1,1,'\0');
+    eq.insert(1,1,'\0');
+    neq1.insert(1,1,'\0');
+    neq2.insert(1,1,'\0');
+    neq3.insert(1,1,'\0');
+    neq4.insert(1,1,'\0');
+    
+    CPPUNIT_ASSERT( s1 == eq );
+    CPPUNIT_ASSERT( s1 != neq1 );
+    CPPUNIT_ASSERT( s1 != neq2 );
+    CPPUNIT_ASSERT( s1 != neq3 );
+    CPPUNIT_ASSERT( s1 != neq4 );
+}
+
+void StringTestCase::CompareNoCase()
+{
+    wxString s1 = wxT("AHH");
+    wxString eq = wxT("AHH");
+    wxString eq2 = wxT("AhH");
+    wxString eq3 = wxT("ahh");
+    wxString neq = wxT("HAH");
+    wxString neq2 = wxT("AH");
+    wxString neq3 = wxT("AHHH");
+    
+    #define CPPUNIT_CNCEQ_ASSERT(s1, s2) CPPUNIT_ASSERT( s1.CmpNoCase(s2) == 0)
+    #define CPPUNIT_CNCNEQ_ASSERT(s1, s2) CPPUNIT_ASSERT( s1.CmpNoCase(s2) != 0)
+
+    CPPUNIT_CNCEQ_ASSERT( s1, eq );
+    CPPUNIT_CNCEQ_ASSERT( s1, eq2 );
+    CPPUNIT_CNCEQ_ASSERT( s1, eq3 );
+
+    CPPUNIT_CNCNEQ_ASSERT( s1, neq );
+    CPPUNIT_CNCNEQ_ASSERT( s1, neq2 );
+    CPPUNIT_CNCNEQ_ASSERT( s1, neq3 );
+
+
+//    wxString _s1 = wxT("A\0HH");
+//    wxString _eq = wxT("A\0HH");
+//    wxString _eq2 = wxT("A\0hH");
+//    wxString _eq3 = wxT("a\0hh");
+//    wxString _neq = wxT("H\0AH");
+//    wxString _neq2 = wxT("A\0H");
+//    wxString _neq3 = wxT("A\0HHH");
+    
+    s1.insert(1,1,'\0');
+    eq.insert(1,1,'\0');
+    eq2.insert(1,1,'\0');
+    eq3.insert(1,1,'\0');
+    neq.insert(1,1,'\0');
+    neq2.insert(1,1,'\0');
+    neq3.insert(1,1,'\0');
+
+    CPPUNIT_CNCEQ_ASSERT( s1, eq );
+    CPPUNIT_CNCEQ_ASSERT( s1, eq2 );
+    CPPUNIT_CNCEQ_ASSERT( s1, eq3 );
+
+    CPPUNIT_CNCNEQ_ASSERT( s1, neq );
+    CPPUNIT_CNCNEQ_ASSERT( s1, neq2 );
+    CPPUNIT_CNCNEQ_ASSERT( s1, neq3 );
 }

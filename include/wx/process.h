@@ -59,8 +59,8 @@ public:
 
 
     // ctors
-    wxProcess(wxEvtHandler *parent = (wxEvtHandler *) NULL, int id = wxID_ANY)
-        { Init(parent, id, wxPROCESS_DEFAULT); }
+    wxProcess(wxEvtHandler *parent = (wxEvtHandler *) NULL, int nId = wxID_ANY)
+        { Init(parent, nId, wxPROCESS_DEFAULT); }
 
     wxProcess(int flags) { Init(NULL, wxID_ANY, flags); }
 
@@ -142,7 +142,7 @@ END_DECLARE_EVENT_TYPES()
 class WXDLLIMPEXP_BASE wxProcessEvent : public wxEvent
 {
 public:
-    wxProcessEvent(int id = 0, int pid = 0, int exitcode = 0) : wxEvent(id)
+    wxProcessEvent(int nId = 0, int pid = 0, int exitcode = 0) : wxEvent(nId)
     {
         m_eventType = wxEVT_END_PROCESS;
         m_pid = pid;

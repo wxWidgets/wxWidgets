@@ -572,17 +572,15 @@ public:
     // All compare functions return -1, 0 or 1 if the [sub]string is less,
     // equal or greater than the compare() argument.
 
-    // just like strcmp()
-  int compare(const wxStringBase& str) const
-    { return wxStrcmp(c_str(), str.c_str()); }
+    // comparison with another string
+  int compare(const wxStringBase& str) const;
     // comparison with a substring
   int compare(size_t nStart, size_t nLen, const wxStringBase& str) const;
     // comparison of 2 substrings
   int compare(size_t nStart, size_t nLen,
               const wxStringBase& str, size_t nStart2, size_t nLen2) const;
-    // just like strcmp()
-  int compare(const wxChar* sz) const
-    { return wxStrcmp(c_str(), sz); }
+    // comparison with a c string
+  int compare(const wxChar* sz) const;
     // substring comparison with first nCount characters of sz
   int compare(size_t nStart, size_t nLen,
               const wxChar* sz, size_t nCount = npos) const;
@@ -971,9 +969,11 @@ public:
 
   // string comparison
     // case-sensitive comparison (returns a value < 0, = 0 or > 0)
-  int Cmp(const wxChar *psz) const { return wxStrcmp(c_str(), psz); }
+  int Cmp(const wxChar *psz) const;
+  int Cmp(const wxString& s) const;
     // same as Cmp() but not case-sensitive
-  int CmpNoCase(const wxChar *psz) const { return wxStricmp(c_str(), psz); }
+  int CmpNoCase(const wxChar *psz) const;
+  int CmpNoCase(const wxString& s) const;
     // test for the string equality, either considering case or not
     // (if compareWithCase then the case matters)
   bool IsSameAs(const wxChar *psz, bool compareWithCase = true) const

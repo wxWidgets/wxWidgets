@@ -6,13 +6,15 @@
 // Created:     2002/11/27
 // RCS-ID:      $Id$
 // Copyright:   (c) David Elliott
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
 #ifndef WX_PRECOMP
     #include "wx/defs.h"
     #include "wx/app.h"
+    #include "wx/frame.h"
+    #include "wx/dialog.h"
     #include "wx/dc.h"
     #include "wx/intl.h"
     #include "wx/log.h"
@@ -23,7 +25,6 @@
 #include "wx/cocoa/ObjcPose.h"
 #include "wx/cocoa/autorelease.h"
 #include "wx/cocoa/mbarman.h"
-#include "wx/cocoa/NSApplication.h"
 
 #if wxUSE_WX_RESOURCES
 #  include "wx/resource.h"
@@ -31,11 +32,11 @@
 
 #import <AppKit/NSApplication.h>
 #import <Foundation/NSRunLoop.h>
+#import <Foundation/NSArray.h>
+#import <Foundation/NSAutoreleasePool.h>
 #import <Foundation/NSThread.h>
 #import <AppKit/NSEvent.h>
 #import <Foundation/NSString.h>
-#import <Foundation/NSNotification.h>
-#import <AppKit/NSCell.h>
 
 // ========================================================================
 // wxPoseAsInitializer
@@ -70,45 +71,49 @@ WX_IMPLEMENT_POSER(wxPoserNSApplication);
     plan on stopping the event loop, it is wise to send an event through
     the queue to ensure this method will return.
     See wxEventLoop::Exit() for more information.
+    
+    RN: We used to use nil as the untilDate in previous versions since nil
+    is a shorter and more concise way of specifying an infinite amount of 
+    time than [NSDate distantPast].  However, Apple neglects to mention in 
+    their documentation that nil is not handled correctly in OSX 10.2 
+    (and possibly lower) and when the call is reached the system comes to 
+    a screeching halt, therefore we need to specify [NSDate distantPast]
+    explicitly so that wxCocoa will work correctly in OSX 10.2.
 */
    
 - (NSEvent *)nextEventMatchingMask:(unsigned int)mask untilDate:(NSDate *)expiration inMode:(NSString *)mode dequeue:(BOOL)flag
 {
     // Get the same events except don't block
-    NSEvent *event = [super nextEventMatchingMask:mask untilDate:nil/* equivalent to [NSDate distantPast] */ inMode:mode dequeue:flag];
+    NSEvent *event = [super nextEventMatchingMask:mask untilDate:[NSDate distantPast] inMode:mode dequeue:flag];
     // If we got one, simply return it
     if(event)
         return event;
     // No events, try doing some idle stuff
-    if(sg_needIdle
-#ifdef __WXDEBUG__
-        && !wxTheApp->IsInAssert()
-#endif
-        && ([NSDefaultRunLoopMode isEqualToString:mode] || [NSModalPanelRunLoopMode isEqualToString:mode]))
+    if(sg_needIdle /*&& !wxTheApp->IsInAssert()*/ && ([NSDefaultRunLoopMode isEqualToString:mode] || [NSModalPanelRunLoopMode isEqualToString:mode]))
     {
         sg_needIdle = false;
-        wxLogTrace(wxTRACE_COCOA,wxT("Processing idle events"));
+        wxLogDebug(wxT("Processing idle events"));
         while(wxTheApp->ProcessIdle())
         {
             // Get the same events except don't block
-            NSEvent *event = [super nextEventMatchingMask:mask untilDate:nil/* equivalent to [NSDate distantPast] */ inMode:mode dequeue:flag];
+            NSEvent *event = [super nextEventMatchingMask:mask untilDate:[NSDate distantPast]/* equivalent to [NSDate distantPast] */ inMode:mode dequeue:flag];
             // If we got one, simply return it
             if(event)
                 return event;
             // we didn't get one, do some idle work
-            wxLogTrace(wxTRACE_COCOA,wxT("Looping idle events"));
+            wxLogDebug(wxT("Looping idle events"));
         }
         // No more idle work requested, block
-        wxLogTrace(wxTRACE_COCOA,wxT("Finished idle processing"));
+        wxLogDebug(wxT("Finished idle processing"));
     }
     else
-        wxLogTrace(wxTRACE_COCOA,wxT("Avoiding idle processing sg_needIdle=%d"),sg_needIdle);
+        wxLogDebug(wxT("Avoiding idle processing sg_needIdle=%d"),sg_needIdle);
     return [super nextEventMatchingMask:mask untilDate:expiration inMode:mode dequeue:flag];
 }
 
 - (void)sendEvent: (NSEvent*)anEvent
 {
-    wxLogTrace(wxTRACE_COCOA,wxT("SendEvent"));
+    wxLogDebug(wxT("SendEvent"));
     sg_needIdle = true;
     [super sendEvent: anEvent];
 }
@@ -118,10 +123,22 @@ WX_IMPLEMENT_POSER(wxPoserNSApplication);
 // ========================================================================
 // wxNSApplicationDelegate
 // ========================================================================
+@interface wxNSApplicationDelegate : NSObject
+{
+}
+
+// Delegate methods
+- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)theApplication;
+- (void)applicationWillBecomeActive:(NSNotification *)notification;
+- (void)applicationDidBecomeActive:(NSNotification *)notification;
+- (void)applicationWillResignActive:(NSNotification *)notification;
+- (void)applicationDidResignActive:(NSNotification *)notification;
+@end // interface wxNSApplicationDelegate : NSObject
+
 @implementation wxNSApplicationDelegate : NSObject
 
 // NOTE: Terminate means that the event loop does NOT return and thus
-// cleanup code doesn't properly execute.  Furthermore, wxWidgets has its
+// cleanup code doesn't properly execute.  Furthermore, wxWindows has its
 // own exit on frame delete mechanism.
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)theApplication
 {
@@ -146,11 +163,6 @@ WX_IMPLEMENT_POSER(wxPoserNSApplication);
 - (void)applicationDidResignActive:(NSNotification *)notification
 {
     wxTheApp->CocoaDelegate_applicationDidResignActive();
-}
-
-- (void)controlTintChanged:(NSNotification *)notification
-{
-    wxLogDebug("TODO: send EVT_SYS_COLOUR_CHANGED as appropriate");
 }
 
 @end // implementation wxNSApplicationDelegate : NSObject
@@ -206,8 +218,6 @@ void wxApp::CleanUp()
     wxMenuBarManager::DestroyInstance();
 
     [m_cocoaApp setDelegate:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:m_cocoaAppDelegate
-        name:NSControlTintDidChangeNotification object:nil];
     [m_cocoaAppDelegate release];
     m_cocoaAppDelegate = NULL;
 
@@ -261,13 +271,11 @@ bool wxApp::OnInitGui()
     m_cocoaApp = [NSApplication sharedApplication];
     m_cocoaAppDelegate = [[wxNSApplicationDelegate alloc] init];
     [m_cocoaApp setDelegate:m_cocoaAppDelegate];
-    [[NSNotificationCenter defaultCenter] addObserver:m_cocoaAppDelegate
-        selector:@selector(controlTintChanged:)
-        name:NSControlTintDidChangeNotification object:nil];
 
     wxMenuBarManager::CreateInstance();
 
     wxDC::CocoaInitializeTextSystem();
+//    [ m_cocoaApp setDelegate:m_cocoaApp ];
     return TRUE;
 }
 
@@ -317,16 +325,12 @@ bool wxApp::Yield(bool onlyIfNeeded)
     s_inYield = true;
 
     // Run the event loop until it is out of events
-    while(1)
-    {
-        wxAutoNSAutoreleasePool pool;
-        NSEvent *event = [GetNSApplication()
+    while(NSEvent *event = [GetNSApplication()
                 nextEventMatchingMask:NSAnyEventMask
-                untilDate:nil /* ==[NSDate distantPast] */
+                untilDate:[NSDate distantPast]
                 inMode:NSDefaultRunLoopMode
-                dequeue: YES];
-        if(!event)
-            break;
+                dequeue: YES])
+    {
         [GetNSApplication() sendEvent: event];
     }
 

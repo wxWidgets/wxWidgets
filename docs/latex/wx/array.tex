@@ -161,7 +161,29 @@ default for the array iterators by these macros only makes sense if the array
 element type is not a pointer itself and, although it still works, this
 provokes warnings from some compilers and to avoid them you should use the 
 {\tt \_PTR} versions of the macros above. For example, to define an array of
-pointers to {\tt double} you should use
+pointers to {\tt double} you should use.
+
+If that isn't complicated enough, the above macros are generally only useful for 
+wxObject types.  There are seperate macros for declaring an array of a simple type, 
+such as an int.
+
+The following simple types are supported:
+int\\
+long\\
+size_t\\
+double
+
+To create an array of a simple type, simply append the type you want in CAPS to
+the array definition.
+
+For example, for an integer array, you'd use one of the following variants:
+
+\helpref{WX\_DEFINE\_ARRAY\_INT}{wxdefinearray}\\
+\helpref{WX\_DEFINE\_EXPORTED\_ARRAY\_INT}{wxdefinearray}\\
+\helpref{WX\_DEFINE\_USER\_EXPORTED\_ARRAY\_INT}{wxdefinearray}\\
+\helpref{WX\_DEFINE\_SORTED\_ARRAY\_INT}{wxdefinesortedarray}\\
+\helpref{WX\_DEFINE\_SORTED\_EXPORTED\_ARRAY\_INT}{wxdefinesortedarray}\\
+\helpref{WX\_DEFINE\_SORTED\_USER\_EXPORTED\_ARRAY\_INT}{wxdefinesortedarray}\\
 
 \begin{verbatim} 
 WX_DEFINE_ARRAY_PTR(double *, MyArrayOfDoublePointers);
@@ -255,7 +277,7 @@ needed for exporting an array from a user DLL.
 Example:
 
 \begin{verbatim}
-WX_DEFINE_ARRAY(int, wxArrayInt);
+WX_DEFINE_ARRAY_INT(wxArrayInt);
 
 class MyClass;
 WX_DEFINE_ARRAY(MyClass *, wxArrayOfMyClass);
@@ -280,7 +302,7 @@ needed for exporting an array from a user DLL.
 Example:
 
 \begin{verbatim}
-WX_DEFINE_SORTED_ARRAY(int, wxSortedArrayInt);
+WX_DEFINE_SORTED_ARRAY_INT(wxSortedArrayInt);
 
 class MyClass;
 WX_DEFINE_SORTED_ARRAY(MyClass *, wxArrayOfMyClass);

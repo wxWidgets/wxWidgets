@@ -474,8 +474,10 @@ bool wxSound::DoPlay(unsigned flags) const
         wxASSERT_MSG(!(flags & wxSOUND_LOOP), wxT("Can't loop and play syncronously at the same time"));
 
         //Play movie until it ends, then exit
+        //Note that due to quicktime caching this may not always 
+        //work 100% correctly
         while (!IsMovieDone(movie))
-            MoviesTask(movie, 0);
+            MoviesTask(movie, 1);
 
         DisposeMovie(movie);
     }
