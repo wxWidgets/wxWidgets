@@ -398,7 +398,7 @@
 //
 // Recommended setting: 1 if your compiler supports it, if it doesn't please
 // contribute us a makefile for src/regex for it
-#define wxUSE_REGEX       0
+#define wxUSE_REGEX       1
 
 // wxWave class
 #define wxUSE_WAVE      1
@@ -521,6 +521,9 @@
 // WIN16/BC++ resets wxUSE_NEW_GRID to 0 because it exceeds the data limit.
 #define wxUSE_GRID         1
 #define wxUSE_NEW_GRID     1
+
+// wxProperty[Value/Form/List] classes, used by Dialog Editor
+#define wxUSE_PROPSHEET    0
 
 // ----------------------------------------------------------------------------
 // Miscellaneous GUI stuff

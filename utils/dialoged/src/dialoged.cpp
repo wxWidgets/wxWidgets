@@ -25,6 +25,10 @@
 
 #include "dialoged.h"
 
+#if !wxUSE_PROPSHEET
+#error Please set wxUSE_PROPSHEET to 1 in setup.h.
+#endif
+
 IMPLEMENT_APP(MyApp)
 
 BEGIN_EVENT_TABLE(MyApp, wxApp)

@@ -66,8 +66,8 @@ samples/drawing/Drawing.dsw
 samples/dynamic/Dynamic.dsp
 samples/dynamic/Dynamic.dsw
 
-samples/dynamic/Erase.dsp
-samples/dynamic/Erase.dsw
+samples/erase/Erase.dsp
+samples/erase/Erase.dsw
 
 samples/event/Event.dsp
 samples/event/Event.dsw
@@ -256,17 +256,17 @@ demos/life/Life.dsw
 demos/poem/Poem.dsp
 demos/poem/Poem.dsw
 
-utils/dialoged/src/DialogEd.dsp
-utils/dialoged/src/DialogEd.dsw
+utils/dialoged/src/DialogEdVC.dsp
+utils/dialoged/src/DialogEdVC.dsw
 
-utils/tex2rtf/src/Tex2RTF.dsp
-utils/tex2rtf/src/Tex2RTF.dsw
+utils/tex2rtf/src/Tex2RTFVC.dsp
+utils/tex2rtf/src/Tex2RTFVC.dsw
 
 utils/hhp2cached/hhp2cached.dsp
 utils/hhp2cached/hhp2cached.dsw
 
-utils/helpgen/src/HelpGen.dsp
-utils/helpgen/src/HelpGen.dsw
+utils/helpgen/src/HelpGenVC.dsp
+utils/helpgen/src/HelpGenVC.dsw
 
 contrib/src/ogl/OglVC.dsp
 contrib/src/ogl/OglVC.dsw

@@ -22,9 +22,10 @@
 
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
+#endif
+
 #include "wx/listctrl.h"
 #include "wx/treectrl.h"
-#endif
 
 #include <ctype.h>
 #include <stdlib.h>
