@@ -121,8 +121,6 @@ void wxFontRefData::MacFindFont()
 
 void wxFont::Init()
 {
-    if ( wxTheFontList )
-        wxTheFontList->Append(this);
 }
 
 bool wxFont::Create(const wxNativeFontInfo& info)
@@ -157,8 +155,6 @@ bool wxFont::Create(int pointSize,
 
 wxFont::~wxFont()
 {
-    if (wxTheFontList)
-        wxTheFontList->DeleteObject(this);
 }
 
 bool wxFont::RealizeResource()

@@ -367,15 +367,10 @@ bool wxBitmap::CopyFromIcon(const wxIcon& icon)
 wxBitmap::wxBitmap()
 {
     m_refData = NULL;
-
-    if ( wxTheBitmapList )
-        wxTheBitmapList->AddBitmap(this);
 }
 
 wxBitmap::~wxBitmap()
 {
-    if (wxTheBitmapList)
-        wxTheBitmapList->DeleteObject(this);
 }
 
 wxBitmap::wxBitmap(const char bits[], int the_width, int the_height, int no_bits)
@@ -437,34 +432,21 @@ wxBitmap::wxBitmap(const char bits[], int the_width, int the_height, int no_bits
     {
         wxFAIL_MSG(wxT("multicolor BITMAPs not yet implemented"));
     }
-    
-    if ( wxTheBitmapList ) {
-        wxTheBitmapList->AddBitmap(this);
-    }
 }
 
 wxBitmap::wxBitmap(int w, int h, int d)
 {
     (void)Create(w, h, d);
-
-    if ( wxTheBitmapList )
-        wxTheBitmapList->AddBitmap(this);
 }
 
 wxBitmap::wxBitmap(void *data, wxBitmapType type, int width, int height, int depth)
 {
     (void) Create(data, type, width, height, depth);
-
-    if ( wxTheBitmapList )
-        wxTheBitmapList->AddBitmap(this);
 }
 
 wxBitmap::wxBitmap(const wxString& filename, wxBitmapType type)
 {
     LoadFile(filename, type);
-
-    if ( wxTheBitmapList )
-        wxTheBitmapList->AddBitmap(this);
 }
 
 bool wxBitmap::CreateFromXpm(const char **bits)
@@ -474,7 +456,6 @@ bool wxBitmap::CreateFromXpm(const char **bits)
     wxImage img = decoder.ReadData(bits);
     wxCHECK_MSG( img.Ok(), FALSE, wxT("invalid bitmap data") )    
     *this = wxBitmap(img);   
-    if ( wxTheBitmapList ) wxTheBitmapList->AddBitmap(this);
     return TRUE;
 }
 
@@ -656,8 +637,6 @@ wxBitmap::wxBitmap(const wxImage& image, int depth)
 
     m_refData = new wxBitmapRefData();
       
-    if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
-
     // width and height of the device-dependent bitmap
     int width = image.GetWidth();
     int height = image.GetHeight();
