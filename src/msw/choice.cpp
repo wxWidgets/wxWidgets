@@ -179,8 +179,9 @@ bool wxChoice::MSWShouldPreProcessMessage(WXMSG *pMsg)
 {
     MSG *msg = (MSG *) pMsg;
 
-    // don't preprocess "ESC" if combobox is dropped down
-    if ( msg->message == WM_KEYDOWN && msg->wParam == VK_ESCAPE )
+    // if the dropdown list is visible, don't preprocess certain keys
+    if ( msg->message == WM_KEYDOWN
+        && (msg->wParam == VK_ESCAPE || msg->wParam == VK_RETURN) )
     {
         if (::SendMessage(GetHwndOf(this), CB_GETDROPPEDSTATE, 0, 0))
         {
