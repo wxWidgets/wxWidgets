@@ -54,7 +54,7 @@
 // ----------------------------------------------------------------------------
 
 // the config paths we use
-static const wxChar* FONTMAPPER_ROOT_PATH = wxT("wxWindows/FontMapper");
+static const wxChar* FONTMAPPER_ROOT_PATH = wxT("/wxWindows/FontMapper");
 static const wxChar* FONTMAPPER_CHARSET_PATH = wxT("Charsets");
 static const wxChar* FONTMAPPER_CHARSET_ALIAS_PATH = wxT("Aliases");
 #if wxUSE_GUI
