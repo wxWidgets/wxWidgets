@@ -2320,7 +2320,7 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
         if(lastWidths[*p]== INT_MIN)
         {
             wxLogDebug(wxT("GetTextExtent: undefined width for character '%c' (%d)"), *p,*p);
-            sum += lastWidths[' ']; /* assume space */
+            sum += lastWidths[(unsigned char)' ']; /* assume space */
         }
         else
         {
