@@ -625,8 +625,7 @@ void wxApp::OnQueryEndSession(wxCloseEvent& event)
 /* static */
 int wxApp::GetComCtl32Version()
 {
-//FIX ME FOR DIGITALMARS!!
-#if defined(__WXMICROWIN__) || defined(__WXWINCE__) || defined(__DIGITALMARS__)
+#if defined(__WXMICROWIN__) || defined(__WXWINCE__)
     return 0;
 #else
     // cache the result
