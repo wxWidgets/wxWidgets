@@ -29,6 +29,8 @@
 #define wxFILTER_NUMERIC        0x0008
 #define wxFILTER_INCLUDE_LIST   0x0010
 #define wxFILTER_EXCLUDE_LIST   0x0020
+#define wxFILTER_INCLUDE_CHAR_LIST 0x0040
+#define wxFILTER_EXCLUDE_CHAR_LIST 0x0080
 
 class WXDLLEXPORT wxTextValidator: public wxValidator
 {
@@ -69,6 +71,9 @@ public:
 
     // Filter keystrokes
     void OnChar(wxKeyEvent& event);
+
+    bool IsInCharIncludeList(const wxString& val);
+    bool IsNotInCharExcludeList(const wxString& val);
 
 DECLARE_EVENT_TABLE()
 

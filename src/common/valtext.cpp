@@ -170,6 +170,18 @@ bool wxTextValidator::Validate(wxWindow *parent)
 
         errormsg = _("'%s' should be numeric.");
     }
+    else if ( (m_validatorStyle & wxFILTER_INCLUDE_CHAR_LIST) && !IsInCharIncludeList(val))
+    {
+        //it's only ok to have the members of the list
+        errormsg = _("'%s' is invalid");
+        ok = FALSE;    
+    }
+    else if ( (m_validatorStyle & wxFILTER_EXCLUDE_CHAR_LIST) && !IsNotInCharExcludeList(val))
+    {
+        // it's only ok to have non-members of the list
+        errormsg = _("'%s' is invalid");
+        ok = FALSE;    
+    }
 
     if ( !ok )
     {
@@ -262,6 +274,8 @@ void wxTextValidator::OnChar(wxKeyEvent& event)
         if (
              !(keyCode < WXK_SPACE || keyCode == WXK_DELETE || keyCode > WXK_START) &&
              (
+			  ((m_validatorStyle & wxFILTER_INCLUDE_CHAR_LIST) && !IsInCharIncludeList(wxString((char) keyCode, 1))) ||
+              ((m_validatorStyle & wxFILTER_EXCLUDE_CHAR_LIST) && !IsNotInCharExcludeList(wxString((char) keyCode, 1))) ||
               ((m_validatorStyle & wxFILTER_ASCII) && !isascii(keyCode)) ||
               ((m_validatorStyle & wxFILTER_ALPHA) && !wxIsalpha(keyCode)) ||
               ((m_validatorStyle & wxFILTER_ALPHANUMERIC) && !wxIsalnum(keyCode)) ||
@@ -291,6 +305,28 @@ static bool wxIsNumeric(const wxString& val)
         if ((!isdigit(val[i])) && (val[i] != '.') && (val[i] != ','))
           if(!((i == 0) && (val[i] == '-')))
             return FALSE;
+    }
+    return TRUE;
+}
+
+bool wxTextValidator::IsInCharIncludeList(const wxString& val)
+{
+    size_t i;
+    for ( i = 0; i < val.Length(); i++)
+    {
+        if (!m_includeList.Member((wxString) val[i]))
+            return FALSE;
+    }
+    return TRUE;
+}
+
+bool wxTextValidator::IsNotInCharExcludeList(const wxString& val)
+{
+    size_t i;
+    for ( i = 0; i < val.Length(); i++)
+    {
+       if (m_excludeList.Member((wxString) val[i]))
+       return FALSE;
     }
     return TRUE;
 }
