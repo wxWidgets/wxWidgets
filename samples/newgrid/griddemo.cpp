@@ -105,6 +105,7 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_SELECT_COL, GridFrame::SelectCol)
     EVT_MENU( ID_SELECT_ROW, GridFrame::SelectRow)
     EVT_MENU( ID_SELECT_ALL, GridFrame::SelectAll)
+    EVT_MENU( ID_SELECT_UNSELECT, GridFrame::OnAddToSelectToggle)
 
     EVT_GRID_LABEL_LEFT_CLICK( GridFrame::OnLabelLeftClick )
     EVT_GRID_CELL_LEFT_CLICK( GridFrame::OnCellLeftClick )
@@ -176,6 +177,9 @@ GridFrame::GridFrame()
     editMenu->Append( ID_CLEARGRID, "Cl&ear grid cell contents" );
 
     wxMenu *selectMenu = new wxMenu;
+    selectMenu->Append( ID_SELECT_UNSELECT, "Add new cells to the selection",
+                        "When off, old selection is deselected before "
+                        "selecting the new cells", TRUE );
     selectMenu->Append( ID_SELECT_ALL, "Select all");
     selectMenu->Append( ID_SELECT_ROW, "Select row 2");
     selectMenu->Append( ID_SELECT_COL, "Select col 2");
@@ -206,6 +210,8 @@ GridFrame::GridFrame()
     menuBar->Append( helpMenu, "&Help" );
 
     SetMenuBar( menuBar );
+
+    m_addToSel = FALSE;
 
     grid = new wxGrid( this,
                        -1,
@@ -623,22 +629,27 @@ void GridFrame::DeselectAll(wxCommandEvent& WXUNUSED(event))
 
 void GridFrame::SelectCell(wxCommandEvent& WXUNUSED(event))
 {
-      grid->SelectBlock(3, 1, 3, 1);
+      grid->SelectBlock(3, 1, 3, 1, m_addToSel);
 }
 
 void GridFrame::SelectCol(wxCommandEvent& WXUNUSED(event))
 {
-      grid->SelectCol(2, TRUE);
+      grid->SelectCol(2, m_addToSel);
 }
 
 void GridFrame::SelectRow(wxCommandEvent& WXUNUSED(event))
 {
-      grid->SelectRow(2, TRUE);
+      grid->SelectRow(2, m_addToSel);
 }
 
 void GridFrame::SelectAll(wxCommandEvent& WXUNUSED(event))
 {
       grid->SelectAll();
+}
+
+void GridFrame::OnAddToSelectToggle(wxCommandEvent& event)
+{
+    m_addToSel = event.IsChecked();
 }
 
 void GridFrame::OnLabelLeftClick( wxGridEvent& ev )

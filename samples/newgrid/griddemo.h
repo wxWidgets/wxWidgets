@@ -70,6 +70,7 @@ class GridFrame : public wxFrame
     void SelectCol(wxCommandEvent& event);
     void SelectRow(wxCommandEvent& event);
     void SelectAll(wxCommandEvent& event);
+    void OnAddToSelectToggle(wxCommandEvent& event);
 
     void OnLabelLeftClick( wxGridEvent& );
     void OnCellLeftClick( wxGridEvent& );
@@ -115,15 +116,16 @@ public:
         ID_DELETEROW,
         ID_DELETECOL,
         ID_CLEARGRID,
-	ID_CHANGESEL,
-	ID_SELCELLS,
-	ID_SELROWS,
-	ID_SELCOLS,
+        ID_CHANGESEL,
+        ID_SELCELLS,
+        ID_SELROWS,
+        ID_SELCOLS,
         ID_SET_CELL_FG_COLOUR,
         ID_SET_CELL_BG_COLOUR,
         ID_ABOUT,
         ID_VTABLE,
         ID_BUGS_TABLE,
+        ID_SELECT_UNSELECT,
         ID_SELECT_ALL,
         ID_SELECT_ROW,
         ID_SELECT_COL,
@@ -137,6 +139,9 @@ public:
     };
 
     wxLog *m_logOld;
+
+    // add the cells to selection when using commands from select menu?
+    bool m_addToSel;
 
     DECLARE_EVENT_TABLE()
 };
