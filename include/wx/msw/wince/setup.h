@@ -1084,10 +1084,6 @@
 #undef wxUSE_CHECKLISTBOX
 #define wxUSE_CHECKLISTBOX 0
 
-// ???
-#undef wxUSE_COMMON_DIALOGS
-#define wxUSE_COMMON_DIALOGS 0
-
 // Windows CE doesn't use RAS so wxDialUpManager doesn't work under it
 #undef wxUSE_DIALUP_MANAGER
 #define wxUSE_DIALUP_MANAGER 0
@@ -1097,9 +1093,6 @@
 
 #undef wxUSE_DYNAMIC_LOADER
 #define wxUSE_DYNAMIC_LOADER 0
-
-#undef wxUSE_FILECONFIG
-#define wxUSE_FILECONFIG 0
 
 #undef wxUSE_FSVOLUME
 #define wxUSE_FSVOLUME 0

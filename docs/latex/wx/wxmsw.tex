@@ -192,10 +192,12 @@ using the wxToolBar class as usual, for example to implement an optional
 formatting toolbar above the menubar as Pocket Word does. But don't assign
 a wxToolBar to a frame using SetToolBar - you should always use CreateToolBar
 for the main frame toolbar.
-\item Deleting and adding tools to wxToolMenuBar is not supported.
+\item Deleting and adding tools to wxToolMenuBar after Realize is called is not supported.
 \item For speed, colours are not remapped to the system colours as they are
 in wxMSW. Provide the tool bitmaps either with the correct system button background,
 or with transparency (for example, using XPMs).
+\item Adding controls to wxToolMenuBar is not supported. However, wxToolBar supports
+controls.
 \end{itemize}
 
 Unlike in all other ports, a wxDialog has a wxToolBar, automatically created
@@ -221,15 +223,27 @@ wxID\_EXIT, it will do the right thing.
 
 \subsubsection{Control differences on wxWinCE}
 
+These controls and styles are specific to wxWinCE:
+
+\itemsep=0pt
+\begin{itemize}
+\item {\bf wxTextCtrl} The wxTE\_CAPITALIZE style causes a CAPEDIT control to
+be created, which capitalizes the first letter.
+\end{itemize}
+
 These controls are missing from wxWinCE:
 
 \itemsep=0pt
 \begin{itemize}
 \item {\bf wxCheckListBox} This can be implemented using a wxListCtrl in report mode
 with checked/unchecked images.
+\item {\bf MDI classes} MDI is not supported under Windows CE.
+\item {\bf wxMiniFrame} Not supported under Windows CE.
 \end{itemize}
 
-This section is currently incomplete.
+Tooltips are not currently supported for controls, since on PocketPC controls with
+tooltips are distinct controls, and it will be hard to add dynamic
+tooltip support.
 
 \subsubsection{Online help in wxWinCE}
 
@@ -307,6 +321,13 @@ in report mode, using icons for checkbox states. This is necessary because owner
 are not supported on Windows CE.
 \item {\bf wxFileDialog.} A more flexible dialog needs to be written (probably using wxGenericFileDialog)
 that can access arbitrary locations.
+\item {\bf HTML control.} PocketPC has its own HTML control which can be used for showing
+local pages or navigating the web. We should create a version of wxHtmlWindow that uses this
+control, or have a separately-named control (wxHtmlCtrl), with a syntax as close as possible to wxHtmlWindow.
+\item {\bf Tooltip control.} PocketPC uses special TTBUTTON and TTSTATIC controls for adding
+tooltips, with the tooltip separated from the label with a double tilde. We need to support this using SetToolTip.
+(Unfortunately it does not seem possible to dynamically remove the tooltip, so an extra style may
+be required.)
 \item {\bf OK button.} We should allow the OK button on a dialog to be optional, perhaps
 by using wxCLOSE\_BOX to indicate when the OK button should be displayed.
 \item {\bf Dynamic adaptation.} We should probably be using run-time tests more
