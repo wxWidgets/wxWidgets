@@ -164,7 +164,7 @@ bool wxApp::Initialize(
 
     // This is to foil optimizations in Visual C++ that throw out dummy.obj.
     // PLEASE DO NOT ALTER THIS.
-#if !defined(WXMAKINGDLL)
+#if !defined(WXMAKINGDLL) && defined(__VISAGECPP__)
     extern char wxDummyChar;
     if (wxDummyChar) wxDummyChar++;
 #endif
@@ -510,7 +510,7 @@ wxApp::wxApp()
 
 wxApp::~wxApp()
 {
-#ifdef wxUSE_UNICODE
+#if wxUSE_UNICODE
     // Delete command-line args
     int i;
     for (i = 0; i < argc; i++)
