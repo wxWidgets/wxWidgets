@@ -99,6 +99,9 @@ protected:
     // the total number of toolbar elements
     size_t m_nButtons;
 
+    // the tool the cursor is in
+    wxToolBarToolBase *m_pInTool;
+
 private:
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxToolBar)

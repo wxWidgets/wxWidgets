@@ -128,12 +128,12 @@ static void gtk_toolbar_callback( GtkWidget *WXUNUSED(widget),
 }
 
 //-----------------------------------------------------------------------------
-// "enter_notify_event"
+// "enter_notify_event" / "leave_notify_event"
 //-----------------------------------------------------------------------------
 
-static gint gtk_toolbar_enter_callback( GtkWidget *WXUNUSED(widget), 
-                                        GdkEventCrossing *WXUNUSED(gdk_event),
-                                        wxToolBarTool *tool )
+static gint gtk_toolbar_tool_callback( GtkWidget *WXUNUSED(widget), 
+                                       GdkEventCrossing *gdk_event,
+                                       wxToolBarTool *tool )
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
@@ -142,7 +142,10 @@ static gint gtk_toolbar_enter_callback( GtkWidget *WXUNUSED(widget),
     wxToolBar *tb = (wxToolBar *)tool->GetToolBar();
     
     // emit the event
-    tb->OnMouseEnter( tool->GetId() );
+    if( gdk_event->type == GDK_ENTER_NOTIFY )
+        tb->OnMouseEnter( tool->GetId() );
+    else
+        tb->OnMouseEnter( -1 );
   
     return FALSE;
 }
@@ -349,7 +352,11 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 
             gtk_signal_connect( GTK_OBJECT(tool->m_item),
                                 "enter_notify_event", 
-                                GTK_SIGNAL_FUNC(gtk_toolbar_enter_callback),
+                                GTK_SIGNAL_FUNC(gtk_toolbar_tool_callback),
+                                (gpointer)tool );
+            gtk_signal_connect( GTK_OBJECT(tool->m_item),
+                                "leave_notify_event", 
+                                GTK_SIGNAL_FUNC(gtk_toolbar_tool_callback),
                                 (gpointer)tool );
             break;
 

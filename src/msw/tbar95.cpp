@@ -815,9 +815,6 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
         }
     }
 
-    // For backward compatibility...
-    OnMouseEnter(tool->GetId());
-
     return TRUE;
 }
 
@@ -872,6 +869,25 @@ wxSize wxToolBar::GetToolSize() const
     }
 }
 
+static wxToolBarToolBase *GetItemSkippingDummySpacers( const wxToolBarToolsList& tools, size_t index )
+{
+    wxToolBarToolsList::Node* current = tools.GetFirst();
+
+    for( ; current != 0; current = current->GetNext() )
+    {
+        if( index == 0 )
+            return current->GetData();
+        size_t separators = ((wxToolBarTool*)current->GetData())->GetSeparatorsCount();
+        // if it is a normal button, sepcount == 0, so skip 1
+        // item ( the button )
+        // otherwise, skip as many items as the separator count,
+        // plus the control itself
+        index -= separators ? separators + 1: 1;
+    }
+
+    return 0;
+}
+
 wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
 {
     POINT pt;
@@ -884,7 +900,20 @@ wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
         return (wxToolBarToolBase *)NULL;
     }
 
-    return m_tools.Item((size_t)index)->GetData();
+    // if comctl32 version < 4.71
+    // wxToolBar95 adds dummy spacers
+#if defined(_WIN32_IE) && (_WIN32_IE >= 0x400 )
+    if ( wxTheApp->GetComCtl32Version() >= 471 )
+    {
+        return m_tools.Item((size_t)index)->GetData();
+    }
+    else
+    {
+        return GetItemSkippingDummySpacers( m_tools, (size_t) index );
+    }
+#else
+    return GetItemSkippingDummySpacers( m_tools, (size_t) index );
+#endif
 }
 
 void wxToolBar::UpdateSize()
@@ -1001,6 +1030,28 @@ long wxToolBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
             // message processed
             return 0;
         }
+    }
+    else if ( nMsg == WM_MOUSEMOVE )
+    {
+        wxCoord x = GET_X_LPARAM(lParam), y = GET_Y_LPARAM(lParam);
+        wxToolBarToolBase* tool = FindToolForPosition( x, y );
+
+        // cursor left current tool
+        if( tool != m_pInTool && !tool )
+        {
+            m_pInTool = 0;
+            OnMouseEnter( -1 );
+        }
+
+        // cursor entered a tool
+        if( tool != m_pInTool && tool )
+        {
+            m_pInTool = tool;
+            OnMouseEnter( tool->GetId() );
+        }
+
+        // we don't handle mouse moves, so fall through
+        // to wxControl::MSWWindowProc
     }
 
     return wxControl::MSWWindowProc(nMsg, wParam, lParam);
