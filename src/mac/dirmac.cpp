@@ -41,10 +41,8 @@
 #endif
 
 #ifndef __DARWIN__
-  #include "morefile.h"
-  #include "moreextr.h"
-  #include "fullpath.h"
-  #include "fspcompa.h"
+  #include "MoreFiles.h"
+  #include "MoreFilesExtras.h"
 #endif
 
 // ----------------------------------------------------------------------------

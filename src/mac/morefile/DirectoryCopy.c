@@ -1,37 +1,53 @@
 /*
-**	Apple Macintosh Developer Technical Support
-**
-**	DirectoryCopy: A robust, general purpose directory copy routine.
-**
-**	by Jim Luther, Apple Developer Technical Support Emeritus
-**
-**	File:		DirectoryCopy.c
-**
-**	Copyright © 1992-1998 Apple Computer, Inc.
-**	All rights reserved.
-**
-**	You may incorporate this sample code into your applications without
-**	restriction, though the sample code has been provided "AS IS" and the
-**	responsibility for its operation is 100% yours.  However, what you are
-**	not permitted to do is to redistribute the source as "DSC Sample Code"
-**	after having made changes. If you're going to re-distribute the source,
-**	we require that you make it clear in the source that the code was
-**	descended from Apple Sample Code, but that you've made changes.
+	File:		DirectoryCopy.c
+
+	Contains:	A robust, general purpose directory copy routine.
+
+	Version:	MoreFiles
+
+	Copyright:	© 1992-2001 by Apple Computer, Inc., all rights reserved.
+
+	You may incorporate this sample code into your applications without
+	restriction, though the sample code has been provided "AS IS" and the
+	responsibility for its operation is 100% yours.  However, what you are
+	not permitted to do is to redistribute the source as "DSC Sample Code"
+	after having made changes. If you're going to re-distribute the source,
+	we require that you make it clear in the source that the code was
+	descended from Apple Sample Code, but that you've made changes.
+
+	File Ownership:
+
+		DRI:				Apple Macintosh Developer Technical Support
+
+		Other Contact:		Apple Macintosh Developer Technical Support
+							<http://developer.apple.com/bugreporter/>
+
+		Technology:			DTS Sample Code
+
+	Writers:
+
+		(JL)	Jim Luther
+
+	Change History (most recent first):
+
+		 <2>	  2/7/01	JL		Added standard header. Updated names of includes.
+		<1>		12/06/99	JL		MoreFiles 1.5.
 */
 
-#include <Types.h>
-#include <Errors.h>
-#include <Memory.h>
+#include <MacTypes.h>
+#include <MacErrors.h>
+#include <MacMemory.h>
 #include <Files.h>
 #include <Script.h>
+#include <Math64.h>
 
 #define	__COMPILINGMOREFILES
 
-#include "morefile.h"
-#include "moreextr.h"
-#include "moredesk.h"
-#include "filecopy.h"
-#include "director.h"
+#include "MoreFiles.h"
+#include "MoreFilesExtras.h"
+#include "MoreDesktopMgr.h"
+#include "FileCopy.h"
+#include "DirectoryCopy.h"
 
 /*****************************************************************************/
 
@@ -53,13 +69,8 @@ enum
 ** global information that might be needed at any time. */
 
 #if PRAGMA_STRUCT_ALIGN
-    #pragma options align=mac68k
-#elif PRAGMA_STRUCT_PACKPUSH
-    #pragma pack(push, 2)
-#elif PRAGMA_STRUCT_PACK
-    #pragma pack(2)
+#pragma options align=mac68k
 #endif
-
 struct EnumerateGlobals
 {
 	Ptr			copyBuffer;			/* pointer to buffer used for file copy operations */
@@ -73,11 +84,7 @@ struct EnumerateGlobals
 	CInfoPBRec	myCPB;				/* the parameter block used for PBGetCatInfo calls */
 };
 #if PRAGMA_STRUCT_ALIGN
-    #pragma options align=reset
-#elif PRAGMA_STRUCT_PACKPUSH
-    #pragma pack(pop)
-#elif PRAGMA_STRUCT_PACK
-    #pragma pack()
+#pragma options align=reset
 #endif
 
 typedef struct EnumerateGlobals EnumerateGlobals;
@@ -89,13 +96,8 @@ typedef EnumerateGlobals *EnumerateGlobalsPtr;
 ** global information that might be needed at any time. */
 
 #if PRAGMA_STRUCT_ALIGN
-    #pragma options align=mac68k
-#elif PRAGMA_STRUCT_PACKPUSH
-    #pragma pack(push, 2)
-#elif PRAGMA_STRUCT_PACK
-    #pragma pack(2)
+#pragma options align=mac68k
 #endif
-
 struct PreflightGlobals
 {
 	OSErr			result;				/* temporary holder of results - saves 2 bytes of stack each level */
@@ -110,11 +112,7 @@ struct PreflightGlobals
 	CopyFilterProcPtr copyFilterProc;	/* pointer to filter function */
 };
 #if PRAGMA_STRUCT_ALIGN
-    #pragma options align=reset
-#elif PRAGMA_STRUCT_PACKPUSH
-    #pragma pack(pop)
-#elif PRAGMA_STRUCT_PACK
-    #pragma pack()
+#pragma options align=reset
 #endif
 
 typedef struct PreflightGlobals PreflightGlobals;
@@ -157,7 +155,7 @@ static	void	GetLevelSize(long currentDirID,
 				 CallCopyFilterProc(theGlobals->copyFilterProc, &theGlobals->myCPB) ) /* filter if filter proc was supplied */
 			{
 				/* Either there's no filter proc OR the filter proc says to use this item */
-				if ( (theGlobals->myCPB.dirInfo.ioFlAttrib & ioDirMask) != 0 )
+				if ( (theGlobals->myCPB.dirInfo.ioFlAttrib & kioFlAttribDirMask) != 0 )
 				{
 					/* we have a directory */
 					
@@ -214,9 +212,6 @@ static	void	GetLevelSize(long currentDirID,
 	} while ( theGlobals->result == noErr );
 }
 
-
-#if !TARGET_CARBON
-
 /*****************************************************************************/
 
 static	OSErr	PreflightDirectoryCopySpace(short srcVRefNum,
@@ -234,8 +229,7 @@ static	OSErr	PreflightDirectoryCopySpace(short srcVRefNum,
 	if ( error == noErr )
 	{
 		/* Convert freeBytes to free disk blocks (512-byte blocks) */
-		// dstFreeBlocks = (pb.ioVFreeBytes.hi << 23) + (pb.ioVFreeBytes.lo >> 9);
-		dstFreeBlocks = pb.ioVFreeBytes >> 9 ;
+		dstFreeBlocks = U32SetU(U64ShiftRight(pb.ioVFreeBytes, 9));
 		
 		/* get allocation block size (always multiple of 512) and divide by 512
 		  to get number of 512-byte blocks per allocation block */
@@ -259,7 +253,7 @@ static	OSErr	PreflightDirectoryCopySpace(short srcVRefNum,
 
 	return ( error );
 }
-#endif
+
 /*****************************************************************************/
 
 static	void	CopyLevel(long sourceDirID,
@@ -286,7 +280,7 @@ static	void	CopyLevel(long sourceDirID,
 				/* Either there's no filter proc OR the filter proc says to use this item */
 
 				/* We have an item.  Is it a file or directory? */
-				if ( (theGlobals->myCPB.hFileInfo.ioFlAttrib & ioDirMask) != 0 )
+				if ( (theGlobals->myCPB.hFileInfo.ioFlAttrib & kioFlAttribDirMask) != 0 )
 				{
 					/* We have a directory */
 					
@@ -425,6 +419,7 @@ pascal	OSErr	FilteredDirectoryCopy(short srcVRefNum,
 									  short dstVRefNum,
 									  long dstDirID,
 									  ConstStr255Param dstName,
+									  ConstStr255Param copyName,
 									  void *copyBufferPtr,
 									  long copyBufferSize,
 									  Boolean preflight,
@@ -537,18 +532,26 @@ pascal	OSErr	FilteredDirectoryCopy(short srcVRefNum,
 		error = GetDirName(dstVRefNum, fsRtDirID, oldDiskName);
 		if ( error == noErr )	
 		{
+			/* use the copyName as srcDirName if supplied */
+			if ( copyName != NULL )
+			{
+				/* make a copy since copyName is a const input */
+				BlockMoveData(copyName, srcDirName, sizeof(Str31));
+			}
 			/* Shorten the name if it's too long to be the volume name */
 			TruncPString(srcDirName, srcDirName, 27);
 			
 			/* Rename the disk */
 			error = HRename(dstVRefNum, fsRtParID, oldDiskName, srcDirName);
+			
 			/* and copy to the root directory */
 			dstDirID = fsRtDirID;
 		}
 	}
 	else
 	{
-		error = DirCreate(dstVRefNum, dstDirID, srcDirName, &dstDirID);
+		/* use the copyName as srcDirName if supplied */
+		error = DirCreate(dstVRefNum, dstDirID, ((copyName != NULL) ? copyName : srcDirName), &dstDirID);
 	}
 	if ( error != noErr )
 	{
@@ -629,6 +632,7 @@ pascal	OSErr	DirectoryCopy(short srcVRefNum,
 							  short dstVRefNum,
 							  long dstDirID,
 							  ConstStr255Param dstName,
+							  ConstStr255Param copyName,
 							  void *copyBufferPtr,
 							  long copyBufferSize,
 							  Boolean preflight,
@@ -636,6 +640,7 @@ pascal	OSErr	DirectoryCopy(short srcVRefNum,
 {
 	return ( FilteredDirectoryCopy(srcVRefNum, srcDirID, srcName,
 								   dstVRefNum, dstDirID, dstName,
+								   copyName,
 								   copyBufferPtr, copyBufferSize, preflight,
 								   copyErrHandler, NULL) );
 }
@@ -644,6 +649,7 @@ pascal	OSErr	DirectoryCopy(short srcVRefNum,
 
 pascal	OSErr	FSpFilteredDirectoryCopy(const FSSpec *srcSpec,
 										 const FSSpec *dstSpec,
+										 ConstStr255Param copyName,
 										 void *copyBufferPtr,
 										 long copyBufferSize,
 										 Boolean preflight,
@@ -652,6 +658,7 @@ pascal	OSErr	FSpFilteredDirectoryCopy(const FSSpec *srcSpec,
 {
 	return ( FilteredDirectoryCopy(srcSpec->vRefNum, srcSpec->parID, srcSpec->name,
 								   dstSpec->vRefNum, dstSpec->parID, dstSpec->name,
+								   copyName,
 								   copyBufferPtr, copyBufferSize, preflight,
 								   copyErrHandler, copyFilterProc) );
 }
@@ -660,6 +667,7 @@ pascal	OSErr	FSpFilteredDirectoryCopy(const FSSpec *srcSpec,
 
 pascal	OSErr	FSpDirectoryCopy(const FSSpec *srcSpec,
 								 const FSSpec *dstSpec,
+								 ConstStr255Param copyName,
 								 void *copyBufferPtr,
 								 long copyBufferSize,
 								 Boolean preflight,
@@ -667,6 +675,7 @@ pascal	OSErr	FSpDirectoryCopy(const FSSpec *srcSpec,
 {
 	return ( FilteredDirectoryCopy(srcSpec->vRefNum, srcSpec->parID, srcSpec->name,
 								   dstSpec->vRefNum, dstSpec->parID, dstSpec->name,
+								   copyName,
 								   copyBufferPtr, copyBufferSize, preflight,
 								   copyErrHandler, NULL) );
 }

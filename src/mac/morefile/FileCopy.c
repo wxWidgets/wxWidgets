@@ -1,36 +1,53 @@
 /*
-**	Apple Macintosh Developer Technical Support
-**
-**	FileCopy: A robust, general purpose file copy routine.
-**
-**	by Jim Luther, Apple Developer Technical Support Emeritus
-**
-**	File:		FileCopy.c
-**
-**	Copyright © 1992-1998 Apple Computer, Inc.
-**	All rights reserved.
-**
-**	You may incorporate this sample code into your applications without
-**	restriction, though the sample code has been provided "AS IS" and the
-**	responsibility for its operation is 100% yours.  However, what you are
-**	not permitted to do is to redistribute the source as "DSC Sample Code"
-**	after having made changes. If you're going to re-distribute the source,
-**	we require that you make it clear in the source that the code was
-**	descended from Apple Sample Code, but that you've made changes.
+	File:		FileCopy.c
+
+	Contains:	A robust, general purpose file copy routine.
+
+	Version:	MoreFiles
+
+	Copyright:	© 1992-2001 by Apple Computer, Inc., all rights reserved.
+
+	You may incorporate this sample code into your applications without
+	restriction, though the sample code has been provided "AS IS" and the
+	responsibility for its operation is 100% yours.  However, what you are
+	not permitted to do is to redistribute the source as "DSC Sample Code"
+	after having made changes. If you're going to re-distribute the source,
+	we require that you make it clear in the source that the code was
+	descended from Apple Sample Code, but that you've made changes.
+
+	File Ownership:
+
+		DRI:				Apple Macintosh Developer Technical Support
+
+		Other Contact:		Apple Macintosh Developer Technical Support
+							<http://developer.apple.com/bugreporter/>
+
+		Technology:			DTS Sample Code
+
+	Writers:
+
+		(JL)	Jim Luther
+
+	Change History (most recent first):
+
+		 <2>	  2/7/01	JL		Added standard header. Updated names of includes. Updated
+									various routines to use new calling convention of the
+									MoreFilesExtras accessor functions.
+		<1>		12/06/99	JL		MoreFiles 1.5.
 */
 
-#include <Types.h>
-#include <Errors.h>
-#include <Memory.h>
+#include <MacTypes.h>
+#include <MacErrors.h>
+#include <MacMemory.h>
 #include <Files.h>
 #include <Math64.h>
 
 #define	__COMPILINGMOREFILES
 
-#include "morefile.h"
-#include "moreextr.h"
-#include "moredesk.h"
-#include "filecopy.h"
+#include "MoreFiles.h"
+#include "MoreFilesExtras.h"
+#include "MoreDesktopMgr.h"
+#include "FileCopy.h"
 
 /*****************************************************************************/
 
@@ -129,9 +146,9 @@ static	OSErr	GetDestinationDirInfo(short vRefNum,
 	pb.dirInfo.ioACUser = 0;	/* ioACUser used to be filler2, clear it before calling GetCatInfo */
 	error = GetCatInfoNoName(vRefNum, dirID, name, &pb);
 	*theDirID = pb.dirInfo.ioDrDirID;
-	*isDirectory = (pb.dirInfo.ioFlAttrib & ioDirMask) != 0;
+	*isDirectory = (pb.dirInfo.ioFlAttrib & kioFlAttribDirMask) != 0;
 	/* see if access priviledges are make changes, not see folder, and not see files (drop box) */
-	*isDropBox = ((pb.dirInfo.ioACUser & 0x07) == 0x03);
+	*isDropBox = userHasDropBoxAccess(pb.dirInfo.ioACUser);
 	
 	return ( error );
 }
@@ -161,8 +178,6 @@ static	OSErr	CheckForForks(short vRefNum,
 
 /*****************************************************************************/
 
-#if !TARGET_CARBON
-
 static	OSErr	PreflightFileCopySpace(short srcVRefNum,
 									   long srcDirID,
 									   ConstStr255Param srcName,
@@ -185,8 +200,7 @@ static	OSErr	PreflightFileCopySpace(short srcVRefNum,
 		dstBlksPerAllocBlk = ((unsigned long)pb.xPB.ioVAlBlkSiz >> 9);
 		
 		/* Convert freeBytes to free disk blocks (512-byte blocks) */
-		// dstFreeBlocks = (pb.xPB.ioVFreeBytes.hi << 23) + (pb.xPB.ioVFreeBytes.lo >> 9);
-		dstFreeBlocks = pb.xPB.ioVFreeBytes >> 9 ;
+		dstFreeBlocks = U32SetU(U64ShiftRight(pb.xPB.ioVFreeBytes, 9));
 		
 		/* Now, get the size of the file's data resource forks */
 		pb.hPB.fileParam.ioNamePtr = (StringPtr)srcName;
@@ -247,7 +261,7 @@ static	OSErr	PreflightFileCopySpace(short srcVRefNum,
 	
 	return ( error );
 }
-#endif
+
 /*****************************************************************************/
 
 pascal	OSErr	FileCopy(short srcVRefNum,
@@ -331,7 +345,7 @@ pascal	OSErr	FileCopy(short srcVRefNum,
 		return ( err );
 	}
 
-	if ( (err != paramErr) && hasCopyFile(infoBuffer) )
+	if ( (err != paramErr) && hasCopyFile(&infoBuffer) )
 	{
 		/* The source volume supports PBHCopyFile. */
 		srcServerAdr = infoBuffer.vMServerAdr;

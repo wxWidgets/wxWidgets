@@ -1,41 +1,57 @@
 /*
-**	Apple Macintosh Developer Technical Support
-**
-**	A collection of useful high-level Desktop Manager routines.
-**	If the Desktop Manager isn't available, use the Desktop file
-**	for 'read' operations.
-**
-**	We do more because we can...
-**
-**	by Jim Luther and Nitin Ganatra, Apple Developer Technical Support Emeriti
-**
-**	File:	MoreDesktopMgr.c
-**
-**	Copyright © 1992-1998 Apple Computer, Inc.
-**	All rights reserved.
-**
-**	You may incorporate this sample code into your applications without
-**	restriction, though the sample code has been provided "AS IS" and the
-**	responsibility for its operation is 100% yours.  However, what you are
-**	not permitted to do is to redistribute the source as "DSC Sample Code"
-**	after having made changes. If you're going to re-distribute the source,
-**	we require that you make it clear in the source that the code was
-**	descended from Apple Sample Code, but that you've made changes.
+	File:		MoreDesktopMgr.c
+
+	Contains:	A collection of useful high-level Desktop Manager routines.
+				If the Desktop Manager is not available, use the Desktop file
+				for 'read' operations.
+
+	Version:	MoreFiles
+
+	Copyright:	© 1992-2001 by Apple Computer, Inc., all rights reserved.
+
+	You may incorporate this sample code into your applications without
+	restriction, though the sample code has been provided "AS IS" and the
+	responsibility for its operation is 100% yours.  However, what you are
+	not permitted to do is to redistribute the source as "DSC Sample Code"
+	after having made changes. If you're going to re-distribute the source,
+	we require that you make it clear in the source that the code was
+	descended from Apple Sample Code, but that you've made changes.
+
+	File Ownership:
+
+		DRI:				Apple Macintosh Developer Technical Support
+
+		Other Contact:		Apple Macintosh Developer Technical Support
+							<http://developer.apple.com/bugreporter/>
+
+		Technology:			DTS Sample Code
+
+	Writers:
+
+		(JL)	Jim Luther
+		(NG)	Nitin Ganatra
+
+	Change History (most recent first):
+
+		 <2>	  2/7/01	JL		Added standard header. Updated names of includes. Updated
+									various routines to use new calling convention of the
+									MoreFilesExtras accessor functions.
+		<1>		12/06/99	JL		MoreFiles 1.5.
 */
 
-#include <Types.h>
-#include <Errors.h>
-#include <Memory.h>
+#include <MacTypes.h>
+#include <MacErrors.h>
+#include <MacMemory.h>
 #include <Files.h>
 #include <Resources.h>
 #include <Icons.h>
 
 #define	__COMPILINGMOREFILES
 
-#include "morefile.h"
-#include "moreextr.h"
-#include "mfsearch.h"
-#include "moredesk.h"
+#include "MoreFiles.h"
+#include "MoreFilesExtras.h"
+#include "Search.h"
+#include "MoreDesktopMgr.h"
 
 /*****************************************************************************/
 
@@ -81,11 +97,7 @@ enum
 /* local data structures */
 
 #if PRAGMA_STRUCT_ALIGN
-    #pragma options align=mac68k
-#elif PRAGMA_STRUCT_PACKPUSH
-    #pragma pack(push, 2)
-#elif PRAGMA_STRUCT_PACK
-    #pragma pack(2)
+#pragma options align=mac68k
 #endif
 
 struct IDRec
@@ -134,11 +146,7 @@ typedef struct APPLRec APPLRec;
 typedef APPLRec *APPLRecPtr;
 
 #if PRAGMA_STRUCT_ALIGN
-    #pragma options align=reset
-#elif PRAGMA_STRUCT_PACKPUSH
-    #pragma pack(pop)
-#elif PRAGMA_STRUCT_PACK
-    #pragma pack()
+#pragma options align=reset
 #endif
 
 /*****************************************************************************/
@@ -245,7 +253,7 @@ pascal	OSErr	DTOpen(ConstStr255Param volName,
 	error = HGetVolParms(volName, vRefNum, &volParmsInfo, &infoSize);
 	if ( error == noErr )
 	{
-		if ( hasDesktopMgr(volParmsInfo) )
+		if ( hasDesktopMgr(&volParmsInfo) )
 		{
 			pb.ioNamePtr = (StringPtr)volName;
 			pb.ioVRefNum = vRefNum;
@@ -317,11 +325,7 @@ static	OSErr	GetAPPLFromDesktopFile(ConstStr255Param volName,
 				applResHandle = Get1Resource(kAPPLResType, 0);
 				if ( applResHandle != NULL )
 				{
-#if !TARGET_CARBON
-					applSize = InlineGetHandleSize((Handle)applResHandle);
-#else
 					applSize = GetHandleSize((Handle)applResHandle);
-#endif
 					if ( applSize != 0 )	/* make sure the APPL resource isn't empty */
 					{
 						foundCreator = false;
@@ -1117,11 +1121,7 @@ static	OSErr	GetCommentFromDesktopFile(short vRefNum,
 						commentHandle = (StringHandle)Get1Resource(kFCMTResType,commentID);
 						if ( commentHandle != NULL )
 						{
-#if !TARGET_CARBON
-							if ( InlineGetHandleSize((Handle)commentHandle) > 0 )
-#else
 							if ( GetHandleSize((Handle)commentHandle) > 0 )
-#endif
 							{
 								BlockMoveData(*commentHandle, comment, *commentHandle[0] + 1);
 							}

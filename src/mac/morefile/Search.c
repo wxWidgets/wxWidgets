@@ -1,37 +1,56 @@
 /*
-**	Apple Macintosh Developer Technical Support
-**
-**	IndexedSearch and the PBCatSearch compatibility function.
-**
-**	by Jim Luther, Apple Developer Technical Support Emeritus
-**
-**	File:		Search.c
-**
-**	Copyright © 1992-1998 Apple Computer, Inc.
-**	All rights reserved.
-**
-**	You may incorporate this sample code into your applications without
-**	restriction, though the sample code has been provided "AS IS" and the
-**	responsibility for its operation is 100% yours.  However, what you are
-**	not permitted to do is to redistribute the source as "DSC Sample Code"
-**	after having made changes. If you're going to re-distribute the source,
-**	we require that you make it clear in the source that the code was
-**	descended from Apple Sample Code, but that you've made changes.
+	File:		Search.c
+
+	Contains:	IndexedSearch and the PBCatSearch compatibility function.
+
+	Version:	MoreFiles
+
+	Copyright:	© 1992-2001 by Apple Computer, Inc., all rights reserved.
+
+	You may incorporate this sample code into your applications without
+	restriction, though the sample code has been provided "AS IS" and the
+	responsibility for its operation is 100% yours.  However, what you are
+	not permitted to do is to redistribute the source as "DSC Sample Code"
+	after having made changes. If you're going to re-distribute the source,
+	we require that you make it clear in the source that the code was
+	descended from Apple Sample Code, but that you've made changes.
+
+	File Ownership:
+
+		DRI:				Jim Luther
+
+		Other Contact:		Apple Macintosh Developer Technical Support
+							<http://developer.apple.com/bugreporter/>
+
+		Technology:			DTS Sample Code
+
+	Writers:
+
+		(JL)	Jim Luther
+
+	Change History (most recent first):
+
+		 <2>	  2/7/01	JL		Added standard header. Updated names of includes. Updated
+									various routines to use new calling convention of the
+									MoreFilesExtras accessor functions. Added TARGET_API_MAC_CARBON
+									conditional checks around TimeOutTask.
+		<1>		12/06/99	JL		MoreFiles 1.5.
 */
 
-#include <Types.h>
+#include <MacTypes.h>
 #include <Gestalt.h>
 #include <Timer.h>
-#include <Errors.h>
-#include <Memory.h>
+#include <MacErrors.h>
+#include <MacMemory.h>
 #include <Files.h>
 #include <TextUtils.h>
 
 #define	__COMPILINGMOREFILES
 
-#include "morefile.h"
-#include "moreextr.h"
-#include "mfsearch.h"
+#include "MoreFiles.h"
+#include "MoreFilesExtras.h"
+
+#include "Search.h"
 
 /*****************************************************************************/
 
@@ -67,11 +86,7 @@ typedef LevelRec *LevelRecPtr, **LevelRecHandle;
 **	information I need to resuming searching.
 */
 #if PRAGMA_STRUCT_ALIGN
-    #pragma options align=mac68k
-#elif PRAGMA_STRUCT_PACKPUSH
-    #pragma pack(push, 2)
-#elif PRAGMA_STRUCT_PACK
-    #pragma pack(2)
+#pragma options align=mac68k
 #endif
 struct SearchPositionRec
 {
@@ -81,11 +96,7 @@ struct SearchPositionRec
 	short			priv[11];		/* For future use... */
 };
 #if PRAGMA_STRUCT_ALIGN
-    #pragma options align=reset
-#elif PRAGMA_STRUCT_PACKPUSH
-    #pragma pack(pop)
-#elif PRAGMA_STRUCT_PACK
-    #pragma pack()
+#pragma options align=reset
 #endif
 typedef struct SearchPositionRec SearchPositionRec;
 typedef SearchPositionRec *SearchPositionRecPtr;
@@ -95,11 +106,7 @@ typedef SearchPositionRec *SearchPositionRecPtr;
 **	ExtendedTMTask is a TMTask record extended to hold the timer flag.
 */
 #if PRAGMA_STRUCT_ALIGN
-    #pragma options align=mac68k
-#elif PRAGMA_STRUCT_PACKPUSH
-    #pragma pack(push, 2)
-#elif PRAGMA_STRUCT_PACK
-    #pragma pack(2)
+#pragma options align=mac68k
 #endif
 struct ExtendedTMTask
 {
@@ -108,11 +115,7 @@ struct ExtendedTMTask
 									/* true when the timer expires */
 };
 #if PRAGMA_STRUCT_ALIGN
-    #pragma options align=reset
-#elif PRAGMA_STRUCT_PACKPUSH
-    #pragma pack(pop)
-#elif PRAGMA_STRUCT_PACK
-    #pragma pack()
+#pragma options align=reset
 #endif
 typedef struct ExtendedTMTask ExtendedTMTask;
 typedef ExtendedTMTask *ExtendedTMTaskPtr;
@@ -151,11 +154,7 @@ static	void	CheckForMatches(CInfoPBPtr cPB,
 #undef	pascal
 #endif
 
-#if TARGET_CARBON
-static	pascal	void	TimeOutTask(TMTaskPtr tmTaskPtr);
-
-#else
-#if GENERATINGCFM
+#if TARGET_RT_MAC_CFM || TARGET_API_MAC_CARBON
 
 static	pascal	void	TimeOutTask(TMTaskPtr tmTaskPtr);
 
@@ -165,7 +164,6 @@ static	pascal	TMTaskPtr	GetTMTaskPtr(void);
 
 static	void	TimeOutTask(void);
 
-#endif
 #endif
 
 #if	__WANTPASCALELIMINATION
@@ -226,11 +224,7 @@ static	OSErr	CheckStack(unsigned short stackDepth,
 		/* Time to grow stack */
 		SetHandleSize((Handle)searchStack, *searchStackSize + (kAdditionalLevelRecs * sizeof(LevelRec)));
 		result = MemError();	/* should be noErr */
-#if TARGET_CARBON
 		*searchStackSize = GetHandleSize((Handle)searchStack);
-#else
-		*searchStackSize = InlineGetHandleSize((Handle)searchStack);
-#endif
 	}
 	else
 	{
@@ -302,16 +296,16 @@ static	OSErr	VerifyUserPB(CSParamPtr userPB,
 	{
 		/* The only attributes you can search on are the directory flag */
 		/* and the locked flag. */
-		if ( (searchInfo2->hFileInfo.ioFlAttrib & ~(ioDirMask | 0x01)) != 0 )
+		if ( (searchInfo2->hFileInfo.ioFlAttrib & ~(kioFlAttribDirMask | kioFlAttribLockedMask)) != 0 )
 		{
 			goto ParamErrExit;
 		}
 		
 		/* interested in the directory bit? */
-		if ( (searchInfo2->hFileInfo.ioFlAttrib & ioDirMask) != 0 )
+		if ( (searchInfo2->hFileInfo.ioFlAttrib & kioFlAttribDirMask) != 0 )
 		{
 			/* yes, so do they want just directories or just files? */
-			if ( (searchInfo1->hFileInfo.ioFlAttrib & ioDirMask) != 0 )
+			if ( (searchInfo1->hFileInfo.ioFlAttrib & kioFlAttribDirMask) != 0 )
 			{
 				*includeDirs = true;
 			}
@@ -338,7 +332,7 @@ static	OSErr	VerifyUserPB(CSParamPtr userPB,
 	/* then the locked attribute cannot be requested. */
 	if ( *includeDirs &&
 		 ((userPB->ioSearchBits & fsSBFlAttrib) != 0) &&
-		 ((searchInfo2->hFileInfo.ioFlAttrib & 0x01) != 0) )
+		 ((searchInfo2->hFileInfo.ioFlAttrib & kioFlAttribLockedMask) != 0) )
 	{
 		goto ParamErrExit;
 	}
@@ -487,7 +481,7 @@ static	void	CheckForMatches(CInfoPBPtr cPB,
 	
 	/* Into the if statements that go on forever... */
 	
-	if ( (cPB->hFileInfo.ioFlAttrib & ioDirMask) == 0 )
+	if ( (cPB->hFileInfo.ioFlAttrib & kioFlAttribDirMask) == 0 )
 	{
 		if (!includeFiles)
 		{
@@ -702,13 +696,8 @@ Failed:
 #if	__WANTPASCALELIMINATION
 #undef	pascal
 #endif
-#if TARGET_CARBON
-static	pascal	void	TimeOutTask(TMTaskPtr tmTaskPtr)
-{
-	((ExtendedTMTaskPtr)tmTaskPtr)->stopSearch = true;
-}
-#else
-#if GENERATINGCFM
+
+#if TARGET_RT_MAC_CFM || TARGET_API_MAC_CARBON
 
 static	pascal	void	TimeOutTask(TMTaskPtr tmTaskPtr)
 {
@@ -724,7 +713,7 @@ static	void	TimeOutTask(void)
 {
 	((ExtendedTMTaskPtr)GetTMTaskPtr())->stopSearch = true;
 }
-#endif
+
 #endif
 
 #if	__WANTPASCALELIMINATION
@@ -791,11 +780,7 @@ pascal	OSErr	IndexedSearch(CSParamPtr pb,
 	if ( pb->ioSearchTime != 0 )
 	{
 		/* Start timer */
-#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0340)
 		timerTask.theTask.tmAddr = NewTimerUPP(TimeOutTask);
-#else
-		timerTask.theTask.tmAddr = NewTimerProc(TimeOutTask);
-#endif
 		InsTime((QElemPtr)&(timerTask.theTask));
 		PrimeTime((QElemPtr)&(timerTask.theTask), pb->ioSearchTime);
 	}
@@ -834,11 +819,7 @@ pascal	OSErr	IndexedSearch(CSParamPtr pb,
 		/* Make sure searchStack really exists */
 		if ( searchStack != NULL )
 		{
-#if TARGET_CARBON
 			searchStackSize = GetHandleSize((Handle)searchStack);
-#else
-			searchStackSize = InlineGetHandleSize((Handle)searchStack);
-#endif
 			
 			/* See if the search is a new search or a resumed search. */
 			if ( catPosition->initialize == 0 )
@@ -935,7 +916,7 @@ pascal	OSErr	IndexedSearch(CSParamPtr pb,
 							CheckForMatches(&cPB, pb, upperName, includeFiles, includeDirs);
 							
 							++index;
-							if ( (cPB.dirInfo.ioFlAttrib & ioDirMask) != 0 )
+							if ( (cPB.dirInfo.ioFlAttrib & kioFlAttribDirMask) != 0 )
 							{
 								/* It's a directory */
 								
@@ -1055,19 +1036,22 @@ pascal	OSErr	IndexedSearch(CSParamPtr pb,
 
 pascal OSErr PBCatSearchSyncCompat(CSParamPtr paramBlock)
 {
-	static Boolean			fullExtFSDispatchingtested = false;
-	static Boolean			hasFullExtFSDispatching = false;
 	OSErr 					result;
 	Boolean					supportsCatSearch;
-	long					response;
 	GetVolParmsInfoBuffer	volParmsInfo;
 	long					infoSize;
+#if !__MACOSSEVENORLATER
+	static Boolean			fullExtFSDispatchingtested = false;
+	static Boolean			hasFullExtFSDispatching = false;
+	long					response;
+#endif
 	
 	result = noErr;
 
+#if !__MACOSSEVENORLATER
 	/* See if File Manager will pass CatSearch requests to external file systems */
 	/* we'll store the results in a static variable so we don't have to call Gestalt */
-	/* everytime we're called. */
+	/* everytime we're called. (System 7.0 and later always do this) */
 	if ( !fullExtFSDispatchingtested )
 	{
 		fullExtFSDispatchingtested = true;
@@ -1076,18 +1060,21 @@ pascal OSErr PBCatSearchSyncCompat(CSParamPtr paramBlock)
 			hasFullExtFSDispatching = ((response & (1L << gestaltFullExtFSDispatching)) != 0);
 		}
 	}
+#endif
 	
 	/* CatSearch is a per volume attribute, so we have to check each time we're */
 	/* called to see if it is available on the volume specified. */
 	supportsCatSearch = false;
+#if !__MACOSSEVENORLATER
 	if ( hasFullExtFSDispatching )
+#endif
 	{
 		infoSize = sizeof(GetVolParmsInfoBuffer);
 		result = HGetVolParms(paramBlock->ioNamePtr, paramBlock->ioVRefNum,
 							&volParmsInfo, &infoSize);
 		if ( result == noErr )
 		{
-			supportsCatSearch = hasCatSearch(volParmsInfo);
+			supportsCatSearch = hasCatSearch(&volParmsInfo);
 		}
 	}
 	
@@ -1163,7 +1150,7 @@ pascal	OSErr	NameFileSearch(ConstStr255Param volName,
 	
 	/* only match files (not directories) */
 	searchInfo1.hFileInfo.ioFlAttrib = 0x00;
-	searchInfo2.hFileInfo.ioFlAttrib = ioDirMask;
+	searchInfo2.hFileInfo.ioFlAttrib = kioFlAttribDirMask;
 
 	error = PBCatSearchSyncCompat((CSParamPtr)&pb);
 	
@@ -1242,7 +1229,7 @@ pascal	OSErr	CreatorTypeFileSearch(ConstStr255Param volName,
 	
 	/* only match files (not directories) */
 	searchInfo1.hFileInfo.ioFlAttrib = 0x00;
-	searchInfo2.hFileInfo.ioFlAttrib = ioDirMask;
+	searchInfo2.hFileInfo.ioFlAttrib = kioFlAttribDirMask;
 	
 	/* search for creator; if creator = 0x00000000, ignore creator */
 	searchInfo1.hFileInfo.ioFlFndrInfo.fdCreator = creator;

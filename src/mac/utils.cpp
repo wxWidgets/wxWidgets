@@ -28,8 +28,8 @@
 #include <stdarg.h>
 
 #ifndef __DARWIN__
-#  include "morefile.h"
-#  include "moreextr.h"
+  #include "MoreFiles.h"
+  #include "MoreFilesExtras.h"
 #endif
 
 #ifndef __DARWIN__

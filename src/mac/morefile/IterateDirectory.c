@@ -1,29 +1,47 @@
 /*
-**	IterateDirectory: File Manager directory iterator routines.
-**
-**	by Jim Luther
-**
-**	File:		IterateDirectory.c
-**
-**	Copyright © 1995-1998 Jim Luther and Apple Computer, Inc.
-**	All rights reserved.
-**
-**	You may incorporate this sample code into your applications without
-**	restriction, though the sample code has been provided "AS IS" and the
-**	responsibility for its operation is 100% yours.
-**
-**	IterateDirectory is designed to drop into the MoreFiles sample code
-**	library I wrote while in Apple Developer Technical Support
+	File:		IterateDirectory.c
+
+	Contains:	File Manager directory iterator routines.
+
+	Version:	MoreFiles
+
+	Copyright:	© 1995-2001 by Jim Luther and Apple Computer, Inc., all rights reserved.
+
+	You may incorporate this sample code into your applications without
+	restriction, though the sample code has been provided "AS IS" and the
+	responsibility for its operation is 100% yours.  However, what you are
+	not permitted to do is to redistribute the source as "DSC Sample Code"
+	after having made changes. If you're going to re-distribute the source,
+	we require that you make it clear in the source that the code was
+	descended from Apple Sample Code, but that you've made changes.
+
+	File Ownership:
+
+		DRI:				Apple Macintosh Developer Technical Support
+
+		Other Contact:		Apple Macintosh Developer Technical Support
+							<http://developer.apple.com/bugreporter/>
+
+		Technology:			DTS Sample Code
+
+	Writers:
+
+		(JL)	Jim Luther
+
+	Change History (most recent first):
+
+		 <2>	  2/7/01	JL		Added standard header. Updated names of includes.
+		<1>		12/06/99	JL		MoreFiles 1.5.
 */
 
-#include <Types.h>
-#include <Errors.h>
+#include <MacTypes.h>
+#include <MacErrors.h>
 #include <Files.h>
 
 #define	__COMPILINGMOREFILES
 
-#include "moreextr.h"
-#include "iterated.h"
+#include "MoreFilesExtras.h"
+#include "IterateDirectory.h"
 
 /*
 **	Type definitions
@@ -34,13 +52,8 @@
 ** and to hold global information that might be needed at any time.
 */
 #if PRAGMA_STRUCT_ALIGN
-    #pragma options align=mac68k
-#elif PRAGMA_STRUCT_PACKPUSH
-    #pragma pack(push, 2)
-#elif PRAGMA_STRUCT_PACK
-    #pragma pack(2)
+#pragma options align=mac68k
 #endif
-
 struct IterateGlobals
 {
 	IterateFilterProcPtr	iterateFilter;	/* pointer to IterateFilterProc */
@@ -52,13 +65,8 @@ struct IterateGlobals
 	unsigned short			currentLevel;	/* The current level IterateLevel is on */
 	void					*yourDataPtr;	/* A pointer to caller data the filter may need to access */
 };
-
 #if PRAGMA_STRUCT_ALIGN
-    #pragma options align=reset
-#elif PRAGMA_STRUCT_PACKPUSH
-    #pragma pack(pop)
-#elif PRAGMA_STRUCT_PACK
-    #pragma pack()
+#pragma options align=reset
 #endif
 
 typedef struct IterateGlobals IterateGlobals;
@@ -102,7 +110,7 @@ static	void	IterateDirectoryLevel(long dirID,
 				CallIterateFilterProc(theGlobals->iterateFilter, &theGlobals->cPB, &theGlobals->quitFlag, theGlobals->yourDataPtr);
 				
 				/* Is it a directory? */
-				if ( (theGlobals->cPB.hFileInfo.ioFlAttrib & ioDirMask) != 0 )
+				if ( (theGlobals->cPB.hFileInfo.ioFlAttrib & kioFlAttribDirMask) != 0 )
 				{
 					/* We have a directory */
 					if ( !theGlobals->quitFlag )

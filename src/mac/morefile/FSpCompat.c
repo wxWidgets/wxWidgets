@@ -1,22 +1,39 @@
 /*
-**	Apple Macintosh Developer Technical Support
-**
-**	FSSpec compatibility functions.
-**
-**	by Jim Luther, Apple Developer Technical Support Emeritus
-**
-**	File:		FSpCompat.c
-**
-**	Copyright © 1992-1998 Apple Computer, Inc.
-**	All rights reserved.
-**
-**	You may incorporate this sample code into your applications without
-**	restriction, though the sample code has been provided "AS IS" and the
-**	responsibility for its operation is 100% yours.  However, what you are
-**	not permitted to do is to redistribute the source as "DSC Sample Code"
-**	after having made changes. If you're going to re-distribute the source,
-**	we require that you make it clear in the source that the code was
-**	descended from Apple Sample Code, but that you've made changes.
+	File:		FSpCompat.c
+
+	Contains:	FSSpec compatibility functions.
+
+	Version:	MoreFiles
+
+	Copyright:	© 1992-2001 by Apple Computer, Inc., all rights reserved.
+
+	You may incorporate this sample code into your applications without
+	restriction, though the sample code has been provided "AS IS" and the
+	responsibility for its operation is 100% yours.  However, what you are
+	not permitted to do is to redistribute the source as "DSC Sample Code"
+	after having made changes. If you're going to re-distribute the source,
+	we require that you make it clear in the source that the code was
+	descended from Apple Sample Code, but that you've made changes.
+
+	File Ownership:
+
+		DRI:				Apple Macintosh Developer Technical Support
+
+		Other Contact:		Apple Macintosh Developer Technical Support
+							<http://developer.apple.com/bugreporter/>
+
+		Technology:			DTS Sample Code
+
+	Writers:
+
+		(JL)	Jim Luther
+
+	Change History (most recent first):
+
+		 <2>	  2/7/01	JL		Added standard header. Updated names of includes. Updated
+									various routines to use new calling convention of the
+									MoreFilesExtras accessor functions.
+		<1>		12/06/99	JL		MoreFiles 1.5.
 */
 
 /*
@@ -28,8 +45,9 @@
 #define GENERATENODATA 0
 #endif
 
-#include <Types.h>
-#include <Errors.h>
+#include <MacTypes.h>
+#include <MacErrors.h>
+#include <Files.h>
 #include <LowMem.h>
 #include <Gestalt.h>
 #include <Resources.h>
@@ -37,8 +55,8 @@
 
 #define	__COMPILINGMOREFILES
 
-#include "moreextr.h"
-#include "fspcompa.h"
+#include "MoreFilesExtras.h"
+#include "FSpCompat.h"
 
 /*****************************************************************************/
 
@@ -684,7 +702,7 @@ pascal	OSErr	FSpExchangeFilesCompat(const FSSpec *source,
 			result2 = PBHGetVolParmsSync(&pb);
 			
 			/* continue if volume has no fileID support (or no GetVolParms support) */
-			if ( (result2 == noErr) && hasFileIDs(volInfo) )
+			if ( (result2 == noErr) && hasFileIDs(&volInfo) )
 			{
 				goto errorExit3;
 			}
@@ -701,7 +719,7 @@ pascal	OSErr	FSpExchangeFilesCompat(const FSSpec *source,
 			{
 				goto errorExit3;
 			}
-			if ( (catInfoSource.hFileInfo.ioFlAttrib & ioDirMask) != 0 )
+			if ( (catInfoSource.hFileInfo.ioFlAttrib & kioFlAttribDirMask) != 0 )
 			{
 				result = notAFileErr;
 				goto errorExit3;
@@ -717,7 +735,7 @@ pascal	OSErr	FSpExchangeFilesCompat(const FSSpec *source,
 			{
 				goto errorExit3;
 			}
-			if ( (catInfoDest.hFileInfo.ioFlAttrib & ioDirMask) != 0 )
+			if ( (catInfoDest.hFileInfo.ioFlAttrib & kioFlAttribDirMask) != 0 )
 			{
 				result = notAFileErr;
 				goto errorExit3;
