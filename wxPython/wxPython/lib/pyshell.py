@@ -126,8 +126,8 @@ class PyShellWindow(wxStyledTextCtrl, InteractiveInterpreter):
         """
         p = self.props
 
-        self.SetEdgeMode(wxSTC_EDGE_LINE)
-        self.SetEdgeColumn(80)
+        #self.SetEdgeMode(wxSTC_EDGE_LINE)
+        #self.SetEdgeColumn(80)
 
 
         # set the selection margin and window margin
