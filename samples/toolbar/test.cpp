@@ -373,7 +373,12 @@ void MyFrame::DoEnablePrint()
 void MyFrame::DoDeletePrint()
 {
     wxToolBar *tb = GetToolBar();
+    // Not implemented in MSW
+#ifdef __WXMSW__
+    wxMessageBox("Sorry, wxToolBar::DeleteTool is not implemented under Windows.");
+#else
     tb->DeleteTool( wxID_PRINT );
+#endif
 }
 
 void MyFrame::DoToggleHelp()

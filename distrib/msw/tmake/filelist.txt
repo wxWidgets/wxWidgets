@@ -215,6 +215,7 @@ dcprint.cpp	M
 dcscreen.cpp	M
 dde.cpp	M
 dialog.cpp	M
+dialup.cpp	M
 dib.cpp	M
 dibutils.cpp	M
 dirdlg.cpp	M	32
