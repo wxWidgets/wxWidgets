@@ -455,15 +455,17 @@ bool wxIsDragResultOk(wxDragResult res);
 class wxPyDropSource : public wxDropSource {
 public:
 #ifdef __WXMSW__
-    wxPyDropSource(wxWindow *win = NULL,
-                   const wxCursor &cursorCopy = wxNullCursor,
-                   const wxCursor &cursorMove = wxNullCursor,
-                   const wxCursor &cursorStop = wxNullCursor)
-        : wxDropSource(win, cursorCopy, cursorMove, cursorStop) {}
+     wxPyDropSource(wxWindow *win = NULL,
+                    const wxCursor &copy = wxNullCursor,
+                    const wxCursor &move = wxNullCursor,
+                    const wxCursor &none = wxNullCursor)
+         : wxDropSource(win, copy, move, none) {}
 #else
     wxPyDropSource(wxWindow *win = NULL,
-                   const wxIcon &go = wxNullIcon)
-        : wxDropSource(win, go) {}
+                   const wxIcon& copy = wxNullIcon,
+                   const wxIcon& move = wxNullIcon,
+                   const wxIcon& none = wxNullIcon)
+        : wxDropSource(win, copy, move, none) {}
 #endif
     ~wxPyDropSource() { }
 
@@ -479,13 +481,15 @@ IMP_PYCALLBACK_BOOL_DR(wxPyDropSource, wxDropSource, GiveFeedback);
 %name(wxDropSource) class wxPyDropSource {
 public:
 #ifdef __WXMSW__
-    wxPyDropSource(wxWindow *win = NULL,
-                 const wxCursor &cursorCopy = wxNullCursor,
-                 const wxCursor &cursorMove = wxNullCursor,
-                 const wxCursor &cursorStop = wxNullCursor);
+     wxPyDropSource(wxWindow *win = NULL,
+                    const wxCursor &copy = wxNullCursor,
+                    const wxCursor &move = wxNullCursor,
+                    const wxCursor &none = wxNullCursor);
 #else
     wxPyDropSource(wxWindow *win = NULL,
-                   const wxIcon &go = wxNullIcon);
+                   const wxIcon& copy = wxNullIcon,
+                   const wxIcon& move = wxNullIcon,
+                   const wxIcon& none = wxNullIcon);
 #endif
 
     void _setCallbackInfo(PyObject* self, PyObject* _class, int incref);
