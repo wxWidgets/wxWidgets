@@ -127,7 +127,7 @@ wxStaticBitmapBase::~wxStaticBitmapBase()
     // this destructor is required for Darwin
 }
 
-wxSize wxStaticBitmapBase::DoGetBestClientSize() const
+wxSize wxStaticBitmapBase::DoGetBestSize() const
 {
     wxBitmap bmp = GetBitmap();
     if ( bmp.Ok() )

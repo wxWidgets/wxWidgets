@@ -44,7 +44,7 @@ public:
     virtual bool AcceptsFocus() const { return FALSE; }
 
 protected:
-    virtual wxSize DoGetBestClientSize() const;
+    virtual wxSize DoGetBestSize() const;
 
     DECLARE_NO_COPY_CLASS(wxStaticBitmapBase)
 };

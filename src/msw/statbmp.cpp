@@ -201,13 +201,6 @@ void wxStaticBitmap::Free()
     m_image = NULL;
 }
 
-wxSize wxStaticBitmap::DoGetBestSize() const
-{
-    // reuse the current size (as wxWindow does) instead of using some
-    // arbitrary default size (as wxControl, our immediate base class, does)
-    return wxWindow::DoGetBestSize();
-}
-
 void wxStaticBitmap::SetImage( const wxGDIImage* image )
 {
     wxGDIImage* convertedImage = ConvertImage( *image );

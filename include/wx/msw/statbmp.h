@@ -78,7 +78,6 @@ public:
 
 protected:
     virtual wxBorder GetDefaultBorder() const;
-    virtual wxSize DoGetBestSize() const;
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
     // ctor/dtor helpers
