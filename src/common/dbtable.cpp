@@ -1291,7 +1291,9 @@ void wxDbTable::BuildWhereClause(wxString &pWhereClause, int typeOfWhere,
             switch(colDefs[colNo].SqlCtype)
             {
                 case SQL_C_CHAR:
+#ifndef __UNIX__
                 case SQL_C_WCHAR:
+#endif                 
                 //case SQL_C_WXCHAR:  SQL_C_WXCHAR is covered by either SQL_C_CHAR or SQL_C_WCHAR
                     colValue.Printf(wxT("'%s'"), (UCHAR FAR *) colDefs[colNo].PtrDataObj);
                     break;
@@ -2177,7 +2179,9 @@ void wxDbTable::ClearMemberVar(UWORD colNo, bool setToNull)
     switch(colDefs[colNo].SqlCtype)
     {
         case SQL_C_CHAR:
+#ifndef __UNIX__
         case SQL_C_WCHAR:
+#endif
         //case SQL_C_WXCHAR:  SQL_C_WXCHAR is covered by either SQL_C_CHAR or SQL_C_WCHAR
             ((UCHAR FAR *) colDefs[colNo].PtrDataObj)[0]    = 0;
             break;
