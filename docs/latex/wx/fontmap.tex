@@ -124,6 +124,15 @@ If no facename is given, find {\it any} font in this encoding.
 Returns the encoding for the given charset (in the form of RFC 2046) or
 wxFONTENCODING\_SYSTEM if couldn't decode it.
 
+\membersection{wxFontMapper::GetEncoding}\label{wxfontmappergetencoding}
+
+\func{static wxFontEncoding}{GetEncoding}{\param{size\_t }{n}}
+
+Returns the {\it n}-th supported encoding. Together with 
+\helpref{GetSupportedEncodingsCount()}{wxfontmappergetsupportedencodingscount} 
+this method may be used to get all supported encodings.
+
+
 \membersection{wxFontMapper::GetEncodingName}\label{wxfontmappergetencodingname}
 
 \func{static wxString}{GetEncodingName}{\param{wxFontEncoding }{encoding}}
@@ -136,6 +145,15 @@ Return internal string identifier for the encoding (see also
 \func{static wxString}{GetEncodingDescription}{\param{wxFontEncoding }{encoding}}
 
 Return user-readable string describing the given encoding.
+
+\membersection{wxFontMapper::GetSupportedEncodingsCount}\label{wxfontmappergetsupportedencodingscount}
+
+\func{static size\_t}{GetSupportedEncodingsCount}{\void}
+
+Returns the number of the font encodings supported by this class. Together with 
+\helpref{GetEncoding}{wxfontmappergetencoding} this method may be used to get
+all supported encodings.
+
 
 \membersection{wxFontMapper::SetDialogParent}\label{wxfontmappersetdialogparent}
 

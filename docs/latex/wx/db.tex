@@ -1421,7 +1421,7 @@ at least minimal privileges to the table).
 \docparam{tableName}{Name of the table on which to check privileges.
 {\it tableName} may refer to a table, view, alias or synonym.}
 \docparam{priv}{The table privilege being evaluated. May be one of the
-following (or a datasource specific privilege):
+following (or a datasource specific privilege):}
 
 \begin{verbatim}
     SELECT      : The connected user is permitted to retrieve data for
@@ -1442,28 +1442,29 @@ following (or a datasource specific privilege):
                   example, a unique, referential, or table check
                   constraint).
 \end{verbatim}
-}
+
 \docparam{userID}{{\it OPTIONAL.}  User for which to determine if the privilege
 specified to be checked is granted or not.  Default is "".
-{\it userID} is evaluated as follows:
+{\it userID} is evaluated as follows:}
 
 \begin{verbatim}
          userID == NULL  ... NOT ALLOWED!
          userID == ""    ... UserID set equal to 'this->uid'
          userID != ""    ... UserID set equal to 'userID'
 \end{verbatim}
-}
+
 \docparam{schema}{{\it OPTIONAL.}  Owner of the table.  Specify a userID when the datasource
 you are connected to allows multiple unique tables with the same name to be
 owned by different users.  Specifying the table owner makes determination of the
-users privileges MUCH faster.  Default is NULL.  {\it userID} is evaluated as follows:
+users privileges MUCH faster.  Default is NULL.  {\it userID} is
+evaluated as follows:}
 
 \begin{verbatim}
          schema == NULL  ... Any owner (DEFAULT)
          schema == ""    ... Owned by 'this->uid'
          schema != ""    ... Owned by userID specified in 'schema'
 \end{verbatim}
-}
+
 \docparam{path}{{\it OPTIONAL.}  Path to the table.  Default is "".
 Currently unused.}
 
