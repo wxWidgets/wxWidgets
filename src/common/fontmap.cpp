@@ -208,8 +208,7 @@ wxFontMapper::~wxFontMapper()
 void wxFontMapper::SetConfigPath(const wxString& prefix)
 {
     wxCHECK_RET( !prefix.IsEmpty() && prefix[0] == wxCONFIG_PATH_SEPARATOR,
-                 wxT("an absolute path should be given to "
-                     "wxFontMapper::SetConfigPath()") );
+                 wxT("an absolute path should be given to wxFontMapper::SetConfigPath()") );
 
     m_configRootPath = prefix;
 }

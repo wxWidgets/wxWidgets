@@ -21,7 +21,13 @@
  *****************************************************************************/
 
 // needed to resolve the conflict between global T and macro parameter T
+
+// VC++ can't cope with string concatenation in Unicode mode
+#if defined(wxUSE_UNICODE) && wxUSE_UNICODE
+#define _WX_ERROR_REMOVE2(x)     wxT("bad index in ::RemoveAt()")
+#else
 #define _WX_ERROR_REMOVE2(x)     wxT("bad index in " #x "::RemoveAt()")
+#endif
 
 // macro implements remaining (not inline) methods of template list
 // (it's private to this file)

@@ -155,7 +155,7 @@ int wxColFor::Format(int Nation,int dbDataType,SWORD sqlDataType,short columnSiz
     i_Nation      = Nation;                                 // 0 = timestamp , 1=EU, 2=UK, 3=International, 4=US
     i_dbDataType  = dbDataType;
     i_sqlDataType = sqlDataType;
-    s_Field.Printf("%s%d",s_Menge[1].c_str(),i_Menge[1]);   // OK for VARCHAR, INTEGER and FLOAT
+    s_Field.Printf(wxT("%s%d"),s_Menge[1].c_str(),i_Menge[1]);   // OK for VARCHAR, INTEGER and FLOAT
     if (i_dbDataType == 0)                                  // Filter unsupported dbDataTypes
     {
         if ((i_sqlDataType == SQL_VARCHAR) || (i_sqlDataType == SQL_LONGVARCHAR))
@@ -185,8 +185,8 @@ int wxColFor::Format(int Nation,int dbDataType,SWORD sqlDataType,short columnSiz
             if (decimalDigits == 0)
                 decimalDigits = 2;
             Temp0 = "%";
-            Temp0.Printf("%s%d.%d",Temp0.c_str(),columnSize,decimalDigits);
-            s_Field.Printf("%sf",Temp0.c_str());        //
+            Temp0.Printf(wxT("%s%d.%d"),Temp0.c_str(),columnSize,decimalDigits);
+            s_Field.Printf(wxT("%sf"),Temp0.c_str());        //
             break;
         case DB_DATA_TYPE_DATE:
             if (i_Nation == 0)      // timestamp       YYYY-MM-DD HH:MM:SS.SSS (tested for SYBASE)
@@ -211,7 +211,7 @@ int wxColFor::Format(int Nation,int dbDataType,SWORD sqlDataType,short columnSiz
             }
             break;
         default:
-            s_Field.Printf("-E-> unknown Format(%d)-sql(%d)",dbDataType,sqlDataType);        //
+            s_Field.Printf(wxT("-E-> unknown Format(%d)-sql(%d)"),dbDataType,sqlDataType);        //
             break;
     };
     return TRUE;
@@ -227,32 +227,32 @@ wxDB::wxDB(HENV &aHenv, bool FwdOnlyCursors)
     sqlLogState   = sqlLogOFF;    // By default, logging is turned off
     nTables       = 0;
 
-    wxStrcpy(sqlState,"");
-    wxStrcpy(errorMsg,"");
+    wxStrcpy(sqlState,wxT(""));
+    wxStrcpy(errorMsg,wxT(""));
     nativeError = cbErrorMsg = 0;
     for (i = 0; i < DB_MAX_ERROR_HISTORY; i++)
-        wxStrcpy(errorList[i], "");
+        wxStrcpy(errorList[i], wxT(""));
 
     // Init typeInf structures
-    wxStrcpy(typeInfVarchar.TypeName,"");
+    wxStrcpy(typeInfVarchar.TypeName,wxT(""));
     typeInfVarchar.FsqlType      = 0;
     typeInfVarchar.Precision     = 0;
     typeInfVarchar.CaseSensitive = 0;
     typeInfVarchar.MaximumScale  = 0;
 
-    wxStrcpy(typeInfInteger.TypeName,"");
+    wxStrcpy(typeInfInteger.TypeName,wxT(""));
     typeInfInteger.FsqlType      = 0;
     typeInfInteger.Precision     = 0;
     typeInfInteger.CaseSensitive = 0;
     typeInfInteger.MaximumScale  = 0;
 
-    wxStrcpy(typeInfFloat.TypeName,"");
+    wxStrcpy(typeInfFloat.TypeName,wxT(""));
     typeInfFloat.FsqlType      = 0;
     typeInfFloat.Precision     = 0;
     typeInfFloat.CaseSensitive = 0;
     typeInfFloat.MaximumScale  = 0;
 
-    wxStrcpy(typeInfDate.TypeName,"");
+    wxStrcpy(typeInfDate.TypeName,wxT(""));
     typeInfDate.FsqlType      = 0;
     typeInfDate.Precision     = 0;
     typeInfDate.CaseSensitive = 0;
@@ -896,8 +896,8 @@ void wxDB::Close(void)
         tiu = (wxTablesInUse *)pNode->Data();
         if (tiu->pDb == this)
         {
-            s.sprintf("(%-20s)     tableID:[%6lu]     pDb:[%p]", tiu->tableName,tiu->tableID,tiu->pDb);
-            s2.sprintf("Orphaned found using pDb:[%p]",this);
+            s.sprintf(wxT("(%-20s)     tableID:[%6lu]     pDb:[%p]"), tiu->tableName,tiu->tableID,tiu->pDb);
+            s2.sprintf(wxT("Orphaned found using pDb:[%p]"),this);
             wxLogDebug (s.c_str(),s2.c_str());
         }
         pNode = pNode->Next();

@@ -339,8 +339,7 @@ wxString wxExpandEnvVars(const wxString& str)
           // check the closing bracket
           if ( bracket != Bracket_None ) {
             if ( m == str.Len() || str[m] != (char)bracket ) {
-              wxLogWarning(_("Environment variables expansion failed: "
-			     "missing '%c' at position %d in '%s'."),
+              wxLogWarning(_("Environment variables expansion failed: missing '%c' at position %d in '%s'."),
                            (char)bracket, m + 1, str.c_str());
             }
             else {

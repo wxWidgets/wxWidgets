@@ -545,7 +545,16 @@ bool wxTreeCtrl::Create(wxWindow *parent,
     if ( !MSWCreateControl(WC_TREEVIEW, wstyle) )
         return FALSE;
 
+#if 0
     SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
+#else
+    // This works around a bug in the Windows tree control whereby for some versions
+    // of comctrl32, setting any colour actually draws the background in black.
+    // This will initialise the background to the system colour.
+    ::SendMessage(GetHwnd(), TVM_SETBKCOLOR, 0,-1);
+    wxWindow::SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
+#endif
+
     SetForegroundColour(wxWindow::GetParent()->GetForegroundColour());
 
     // VZ: this is some experimental code which may be used to get the
