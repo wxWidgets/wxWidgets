@@ -13,6 +13,10 @@
 #pragma implementation "wave.h"
 #endif
 
+#include <wx/setup.h>
+
+#if wxUSE_WAVE
+
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
@@ -221,4 +225,5 @@ bool wxWave::InitDSP(int dev, int iDataBits, int iChannel,unsigned long ulSampli
   
   return TRUE;
 }
+#endif
 

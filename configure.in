@@ -247,6 +247,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_FILE=no
   DEFAULT_wxUSE_TEXTFILE=no
   DEFAULT_wxUSE_TIMEDATE=no
+  DEFAULT_wxUSE_WAVE=no
   DEFAULT_wxUSE_INTL=no
   DEFAULT_wxUSE_CONFIG=no
   DEFAULT_wxUSE_STREAMS=no
@@ -337,6 +338,7 @@ else
   DEFAULT_wxUSE_FILE=yes
   DEFAULT_wxUSE_TEXTFILE=yes
   DEFAULT_wxUSE_TIMEDATE=yes
+  DEFAULT_wxUSE_WAVE=no
   DEFAULT_wxUSE_INTL=yes
   DEFAULT_wxUSE_CONFIG=yes
   DEFAULT_wxUSE_STREAMS=yes
@@ -488,6 +490,7 @@ WX_ARG_ENABLE(sockets,     [  --enable-sockets        use socket/network classes
 WX_ARG_ENABLE(ipc,         [  --enable-ipc            use interprocess communication (wxSocket etc.)], wxUSE_IPC)
 WX_ARG_ENABLE(apple_ieee,  [  --enable-apple_ieee     use the Apple IEEE codec], wxUSE_APPLE_IEEE)
 WX_ARG_ENABLE(timedate,    [  --enable-timedate       use date/time classes], wxUSE_TIMEDATE)
+WX_ARG_ENABLE(wave,    [  --enable-wave       use wxWave class], wxUSE_WAVE)
 WX_ARG_ENABLE(fraction,    [  --enable-fraction       use wxFraction class], wxUSE_FRACTION)
 WX_ARG_ENABLE(dynlib,      [  --enable-dynlib         use wxLibrary class for DLL loading], wxUSE_DYNLIB_CLASS)
 WX_ARG_ENABLE(longlong,    [  --enable-longlong       use wxLongLong class], wxUSE_LONGLONG)
@@ -1440,6 +1443,10 @@ fi
 if test "$wxUSE_TIMEDATE" = "yes"; then
   AC_DEFINE(wxUSE_TIMEDATE)
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS typetest"
+fi
+
+if test "$wxUSE_WAVE" = "yes"; then
+  AC_DEFINE(wxUSE_WAVE)
 fi
 
 if test "$wxUSE_FILE" = "yes"; then

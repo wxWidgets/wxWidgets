@@ -12,6 +12,8 @@
 #ifndef _WX_WAVE_H_
 #define _WX_WAVE_H_
 
+#if wxUSE_WAVE
+
 #ifdef __GNUG__
 #pragma interface "wave.h"
 #endif
@@ -54,6 +56,8 @@ private:
   char *m_data;
   int m_sizeData;
 };
+
+#endif
 
 #endif
 
