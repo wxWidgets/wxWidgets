@@ -30,3 +30,4 @@ wxbase*.ilk
 wxmsw*.dll
 wxmsw*.exp
 wxmsw*.ilk
+.DS_Store
