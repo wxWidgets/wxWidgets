@@ -2996,10 +2996,10 @@ void wxWindowMac::MacRepositionScrollBars()
     width -= MacGetLeftBorderSize() + MacGetRightBorderSize();
     height -= MacGetTopBorderSize() + MacGetBottomBorderSize();
 
-    wxPoint vPoint(width-MAC_SCROLLBAR_SIZE, 0) ;
-    wxSize vSize(MAC_SCROLLBAR_SIZE, height - adjust) ;
-    wxPoint hPoint(0 , height-MAC_SCROLLBAR_SIZE ) ;
-    wxSize hSize( width - adjust, MAC_SCROLLBAR_SIZE) ;
+    wxPoint vPoint(width-scrlsize, 0) ;
+    wxSize vSize(scrlsize, height - adjust) ;
+    wxPoint hPoint(0 , height-scrlsize ) ;
+    wxSize hSize( width - adjust, scrlsize) ;
 /*
     int x = 0 ;
     int y = 0 ;
