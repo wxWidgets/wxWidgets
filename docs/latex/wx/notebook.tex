@@ -33,18 +33,7 @@ managed by wxNotebook.
 
 See also \helpref{window styles overview}{windowstyles}.
 
-
-\wxheading{Event handling}
-
-To process input from a notebook control, use the following event handler macros to direct input to member
-functions that take a \helpref{wxNotebookEvent}{wxnotebookevent} argument.
-
-\twocolwidtha{7cm}
-\begin{twocollist}\itemsep=0pt
-\twocolitem{{\bf EVT\_NOTEBOOK\_PAGE\_CHANGED(id, func)}}{The page selection was changed.}
-\twocolitem{{\bf EVT\_NOTEBOOK\_PAGE\_CHANGING(id, func)}}{The page selection is about to be changed.
-This can be prevented by calling \helpref{Veto()}{wxnotifyeventveto}.}
-\end{twocollist}%
+\input noteevt.inc
 
 \wxheading{See also}
 
