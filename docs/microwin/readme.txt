@@ -27,19 +27,32 @@ Installation
 MicroWindows:
 
 - unarchive MicroWindows 0.89pre7
-- change 'config' to use X11 and any other options you feel fit,
-  such as verbose compilation
-- cd to src/mwin and apply microwindows.patches (from wxWindows:
+
+- change 'config' to use X11 and any other options you feel fit.
+  Suggestions for changes to the defaults:
+
+  ERASEMOVE=N (otherwise moving windows will look messy)
+  X11=Y
+  OPTIMIZE=N
+  DEBUG=Y
+  VERBOSE=Y
+
+- apply microwindows.patches (from wxWindows:
   docs/microwin/microwindows.patches) to fix PeekMessage
+  and other issues
+
 - compile by typing 'make' from within the MicroWindows src directory
 
 wxMicroWindows:
 
 - untar the wxMicroWindows port/download from CVS
-- and change the TOP variable at the top of src/msw/makefile.mic
+
+- change the TOP variable at the top of src/msw/makefile.mic
   to reflect where MicroWindows is installed
+
 - type 'make all' from src/msw. To clean, use cleanwx and NOT clean
   since that will clean MicroWindows itself
+
 - to make the sample, cd into samples/minimal, edit the TOP variable,
   and type 'make all'
 
@@ -50,7 +63,8 @@ they are one and the same binary.
 Status
 ======
 
-A frame comes up :-) The menus don't work properly just yet.
+The minimal sample is almost fully-functional, apart from minor
+menu presentation issues (no borders, for example).
 
 Implementation Notes
 ====================
@@ -95,7 +109,4 @@ wxUniversal).
 No ::GetObject so we can't get LOGFONT from an HFONT
 in wxSystemSettings (worked around by passing HFONT to
 the wxFont constructor).
-
-No ::CreateDialog so how do we create dialogs? Simulate
-one with a frame...
 
