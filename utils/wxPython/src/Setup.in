@@ -1,0 +1,18 @@
+# This file gives the details of what is needed to uild this extension
+# module so the Makefile can be created.
+
+*shared*
+
+CCC=c++
+WXWIN=../../..
+
+## Pick one of these, or set your own
+#TARGETDIR=$(BINLIBDEST)/site-packages/wxPython
+TARGETDIR=..
+
+wxpc  wxp.cpp helpers.cpp windows.cpp events.cpp misc.cpp gdi.cpp \
+      mdi.cpp controls.cpp controls2.cpp windows2.cpp cmndlgs.cpp \
+      -I$(WXWIN)/include -I/usr/lib/glib/include \
+      -DSWIG_GLOBAL -D__WXGTK__ -L$(WXWIN)/lib/Linux -lwx_gtk
+
+

@@ -1,0 +1,184 @@
+#----------------------------------------------------------------------------
+# Name:		makefile.nt
+# Purpose:	Win32, VC++ 5 makefile for wxPython
+#
+# Author:       Robin Dunn
+#
+# Created:	3/27/97
+# RCS-ID:       $Id$
+# Copyright:    (c) 1998 by Total Control Software
+# Licence:      wxWindows license
+#----------------------------------------------------------------------------
+
+# Set WXDIR to the root wxWindows directory for your system
+WXDIR = $(WXWIN)
+
+# Set this to the root of the Python installation
+PYTHONDIR=e:\Tools\Python15
+
+# Set this to 1 for a non-debug, optimised compile
+FINAL=0
+
+# Set this to where you want the stuff installed at.  It should
+# be a directory contained in a PYTHONPATH directory.
+TARGETDIR=..
+
+
+#----------------------------------------------------------------------
+
+WXUSINGDLL=0
+NOPCH=1
+THISDIR=$(WXDIR)\utils\wxPython
+
+EXTRALIBS=$(PYTHONDIR)\libs\python15.lib
+EXTRAINC=-I$(PYTHONDIR)\include
+EXTRAFLAGS=/Fpwxp.pch /YXhelpers.h -DSWIG_GLOBAL -DHAVE_CONFIG_H
+
+SWIGFLAGS=-c++ -shadow -python -dnone
+
+
+!include $(WXDIR)\src\ntwxwin.mak
+
+#----------------------------------------------------------------------
+
+TARGET = wxpc
+
+OBJECTS = wxp.obj        helpers.obj    windows.obj    events.obj     \
+	  misc.obj       gdi.obj        mdi.obj        controls.obj   \
+	  controls2.obj  windows2.obj   cmndlgs.obj
+
+PYMODULES = $(TARGETDIR)\wxp.py       $(TARGETDIR)\events.py    \
+	    $(TARGETDIR)\windows.py   $(TARGETDIR)\misc.py      \
+	    $(TARGETDIR)\gdi.py       $(TARGETDIR)\mdi.py       \
+	    $(TARGETDIR)\controls.py  $(TARGETDIR)\controls2.py \
+            $(TARGETDIR)\windows2.py  $(TARGETDIR)\cmndlgs.py   \
+            $(TARGETDIR)\__init__.py
+
+#----------------------------------------------------------------------
+
+!if "$(FINAL)" == "0"
+DEBUGLFLAGS = /DEBUG /INCREMENTAL:YES
+!else
+DEBUGLFLAGS = /INCREMENTAL:NO
+!endif
+
+LFLAGS= $(DEBUGLFLAGS) /DLL /def:$(TARGET).def /subsystem:windows,3.50 \
+	/machine:I386 /implib:./$(TARGET).lib /nologo
+
+#----------------------------------------------------------------------
+
+default: $(TARGETDIR)\$(TARGET).pyd pycfiles
+
+all:	wx $(TARGET)
+
+wx:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.nt FINAL=$(FINAL)
+        cd $(THISDIR)
+
+wxclean:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.nt clean
+        cd $(THISDIR)
+
+
+pycfiles : $(PYMODULES)
+	$(PYTHONDIR)\python $(PYTHONDIR)\Lib\compileall.py -l $(TARGETDIR)
+	$(PYTHONDIR)\python -O $(PYTHONDIR)\Lib\compileall.py -l $(TARGETDIR)
+
+#----------------------------------------------------------------------
+
+$(TARGETDIR)\$(TARGET).pyd : $(DUMMYOBJ) $(WXLIB) $(OBJECTS) $(TARGET).res
+	$(link) @<<
+/out:$@ /dll
+$(LFLAGS)
+$(DUMMYOBJ) $(OBJECTS) $(TARGET).res
+$(LIBS)
+<<
+
+
+$(TARGET).res :      $(TARGET).rc $(WXDIR)\include\wx\msw\wx.rc
+    $(rc) -r /i$(WXDIR)\include -fo$@ $(TARGET).rc
+
+
+
+# implicit rule for compiling .cpp files
+{}.cpp{}.obj:
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $<
+<<
+
+
+clean:
+        -erase *.obj
+        -erase *.exe
+        -erase *.res
+        -erase *.map
+        -erase *.sbr
+        -erase *.pdb
+	-erase *.pch
+	-erase $(TARGET).exp
+	-erase $(TARGET).lib
+	-erase $(TARGETDIR)\$(TARGET).pyd
+	-erase $(TARGETDIR)\*.py
+	-erase $(TARGETDIR)\*.pyc
+	-erase $(TARGETDIR)\*.pyo
+	-erase $(TARGETDIR)\$(TARGET).*
+
+
+
+#------------------------------------------------------------------------
+
+.SUFFIXES : .i .py
+
+# Implicit rules to run SWIG
+{}.i{}.cpp:
+	swig $(SWIGFLAGS) -c -o $*.cpp $*.i
+
+{}.i{}.py:
+	swig $(SWIGFLAGS) -c -o $*.cpp $*.i
+
+{}.py{$(TARGETDIR)}.py:
+	copy $< $@
+
+#{}.py{$(TARGETDIR)}.$(PYEXT):
+#	$(PYTHON) -c "import py_compile; py_compile.compile('$<', '$@')"
+
+
+
+
+# This one must leave out the -c flag so we define the whole rule
+wxp.cpp wxp.py : wxp.i my_typemaps.i _defs.i _extras.py
+        swig $(SWIGFLAGS) -o wxp.cpp wxp.i
+
+
+# define some dependencies
+windows.cpp   windows.py   : windows.i    my_typemaps.i _defs.i
+windows2.cpp  windows2.py  : windows2.i   my_typemaps.i _defs.i
+events.cpp    events.py    : events.i     my_typemaps.i _defs.i
+misc.cpp      misc.py      : misc.i       my_typemaps.i _defs.i
+gdi.cpp       gdi.py       : gdi.i        my_typemaps.i _defs.i
+mdi.cpp       mdi.py       : mdi.i        my_typemaps.i _defs.i
+controls.cpp  controls.py  : controls.i   my_typemaps.i _defs.i
+controls2.cpp controls2.py : controls2.i  my_typemaps.i _defs.i
+cmndlgs.cpp   cmndlgs.py   : cmndlgs.i    my_typemaps.i _defs.i
+
+
+$(TARGETDIR)\wxp.py       : wxp.py
+$(TARGETDIR)\windows.py   : windows.py
+$(TARGETDIR)\windows2.py  : windows2.py
+$(TARGETDIR)\events.py    : events.py
+$(TARGETDIR)\misc.py      : misc.py
+$(TARGETDIR)\gdi.py       : gdi.py
+$(TARGETDIR)\mdi.py       : mdi.py
+$(TARGETDIR)\controls.py  : controls.py
+$(TARGETDIR)\controls2.py : controls2.py
+$(TARGETDIR)\cmndlgs.py   : cmndlgs.py
+
+
+#------------------------------------------------------------------------
+#
+# $Log$
+# Revision 1.1  1998/08/09 08:25:51  RD
+# Initial version
+#
