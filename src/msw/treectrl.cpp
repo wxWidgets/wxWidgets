@@ -1015,7 +1015,8 @@ void wxTreeCtrl::SetItemImage(const wxTreeItemId& item, int image,
         case wxTreeItemIcon_Normal:
             {
                 const int imageNormalOld = GetItemImage(item);
-                const int imageSelOld = GetItemSelectedImage(item);
+                const int imageSelOld =
+                    GetItemImage(item, wxTreeItemIcon_Selected);
 
                 // always set the normal image
                 imageNormal = image;
@@ -1040,7 +1041,7 @@ void wxTreeCtrl::SetItemImage(const wxTreeItemId& item, int image,
                 // the wxTreeItemIndirectData GetItemXXXImage() will use it to
                 // get the images
                 imageNormal = GetItemImage(item);
-                imageSel = GetItemSelectedImage(item);
+                imageSel = GetItemImage(item, wxTreeItemIcon_Selected);
 
                 // if it doesn't have it yet, add it
                 wxTreeItemIndirectData *data = new
@@ -1772,10 +1773,12 @@ void wxTreeCtrl::Toggle(const wxTreeItemId& item)
     DoExpand(item, TVE_TOGGLE);
 }
 
+#if WXWIN_COMPATIBILITY_2_4
 void wxTreeCtrl::ExpandItem(const wxTreeItemId& item, int action)
 {
     DoExpand(item, action);
 }
+#endif
 
 void wxTreeCtrl::Unselect()
 {

@@ -792,7 +792,8 @@ void wxHtmlHelpFrame::CreateContents()
             else if (m_hfStyle & wxHF_ICONS_BOOK_CHAPTER)
                 image = (it->m_Level == 1) ? IMG_Book : IMG_Folder;
             m_ContentsBox->SetItemImage(roots[it->m_Level], image);
-            m_ContentsBox->SetItemSelectedImage(roots[it->m_Level], image);
+            m_ContentsBox->SetItemImage(roots[it->m_Level], image,
+                                        wxTreeItemIcon_Selected);
             imaged[it->m_Level] = TRUE;
         }
     }
