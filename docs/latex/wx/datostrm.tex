@@ -82,7 +82,6 @@ Writes the double {\it f} to the stream using the IEEE format.
 
 \func{void}{WriteString}{{\param const wxString\&}{string}}
 
-
 Writes {\it string} to the stream. Actually, this method writes the size of
 the string before writing {\it string} itself.
 
@@ -92,3 +91,4 @@ is first converted to multibyte representation with {\it conv} object passed
 to stream's constructor (consequently, ANSI application can read data 
 written by Unicode application, as long as they agree on encoding) and this
 representation is written to the stream. UTF-8 is used by default.
+
