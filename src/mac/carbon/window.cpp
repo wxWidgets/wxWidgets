@@ -930,10 +930,12 @@ void wxWindow::Refresh(bool eraseBack, const wxRect *rect)
 //    if ( !IsShown() )
 //        return ;
         
-	wxMacDrawingHelper focus( this ) ;
+	wxMacDrawingClientHelper focus( this ) ;
 	if ( focus.Ok() )
 	{
-	  	Rect clientrect = { 0 , 0 , m_height , m_width } ;
+  	    wxPoint client ;
+	    client = GetClientAreaOrigin( ) ;
+	  	Rect clientrect = { -client.y , -client.x , m_height - client.y , m_width - client.x} ;
   		// ClipRect( &clientrect ) ;
 
     	if ( rect )
