@@ -628,7 +628,7 @@ void wxImage::CleanUpHandlers()
 //-----------------------------------------------------------------------------
 
 #if !USE_SHARED_LIBRARIES
-IMPLEMENT_DYNAMIC_CLASS(wxImageHandler,wxObject)
+IMPLEMENT_ABSTRACT_CLASS(wxImageHandler,wxObject)
 #endif
 
 #if wxUSE_STREAMS
