@@ -265,7 +265,7 @@ static gint wxapp_wakeup_timerout_callback( gpointer WXUNUSED(data) )
 
     return TRUE;
 }
-#endif
+#endif // wxUSE_THREADS
 
 //-----------------------------------------------------------------------------
 // wxApp
@@ -653,9 +653,8 @@ void wxApp::CleanUp()
     wxLog *oldLog = wxLog::SetActiveTarget( (wxLog*) NULL );
     if (oldLog)
         delete oldLog;
-}
-
 #endif // wxUSE_LOG
+}
 
 //-----------------------------------------------------------------------------
 // wxEntry
