@@ -187,6 +187,8 @@ void wxTopLevelWindowCocoa::Restore()
 
 bool wxTopLevelWindowCocoa::Show(bool show)
 {
+    if(m_isShown == show)
+        return false;
     wxAutoNSAutoreleasePool pool;
     if(show)
     {
@@ -201,6 +203,7 @@ bool wxTopLevelWindowCocoa::Show(bool show)
     }
     else
         [m_cocoaNSWindow orderOut:m_cocoaNSWindow];
+    m_isShown = show;
     return true;
 }
 
