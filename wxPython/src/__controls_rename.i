@@ -88,6 +88,17 @@
 %rename(SpinEvent)                          wxSpinEvent;
 %rename(RadioBox)                           wxRadioBox;
 %rename(RadioButton)                        wxRadioButton;
+%rename(SL_HORIZONTAL)                      wxSL_HORIZONTAL;
+%rename(SL_VERTICAL)                        wxSL_VERTICAL;
+%rename(SL_AUTOTICKS)                       wxSL_AUTOTICKS;
+%rename(SL_LABELS)                          wxSL_LABELS;
+%rename(SL_LEFT)                            wxSL_LEFT;
+%rename(SL_TOP)                             wxSL_TOP;
+%rename(SL_RIGHT)                           wxSL_RIGHT;
+%rename(SL_BOTTOM)                          wxSL_BOTTOM;
+%rename(SL_BOTH)                            wxSL_BOTH;
+%rename(SL_SELRANGE)                        wxSL_SELRANGE;
+%rename(SL_INVERSE)                         wxSL_INVERSE;
 %rename(Slider)                             wxSlider;
 %rename(ToggleButton)                       wxToggleButton;
 %rename(BookCtrlBase)                       wxBookCtrlBase;
