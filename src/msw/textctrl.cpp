@@ -2234,6 +2234,7 @@ void wxRichEditModule::OnExit()
         if ( ms_hRichEdit[i] )
         {
             ::FreeLibrary(ms_hRichEdit[i]);
+            ms_hRichEdit[i] = NULL;
         }
     }
 }
