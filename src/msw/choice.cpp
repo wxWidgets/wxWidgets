@@ -38,12 +38,13 @@ bool wxChoice::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
     wxCommandEvent event(wxEVT_COMMAND_CHOICE_SELECTED, m_windowId);
     event.SetInt(GetSelection());
     event.SetEventObject(this);
-    event.SetString(copystring(GetStringSelection()));
+    event.SetString(GetStringSelection());
     ProcessCommand(event);
-    delete[] event.GetString();
+
     return TRUE;
   }
-  else return FALSE;
+  else
+      return FALSE;
 }
 
 bool wxChoice::Create(wxWindow *parent, wxWindowID id,

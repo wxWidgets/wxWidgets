@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -48,12 +48,12 @@
 /*
  * Property text edit control
  */
- 
+
 IMPLEMENT_CLASS(wxPropertyTextEdit, wxTextCtrl)
 
 wxPropertyTextEdit::wxPropertyTextEdit(wxPropertyListView *v, wxWindow *parent,
     const wxWindowID id, const wxString& value,
-	const wxPoint& pos, const wxSize& size,
+    const wxPoint& pos, const wxSize& size,
     long style, const wxString& name):
  wxTextCtrl(parent, id, value, pos, size, style, wxDefaultValidator, name)
 {
@@ -75,16 +75,17 @@ void wxPropertyTextEdit::OnKillFocus(void)
 IMPLEMENT_DYNAMIC_CLASS(wxPropertyListView, wxPropertyView)
 
 BEGIN_EVENT_TABLE(wxPropertyListView, wxPropertyView)
-	EVT_BUTTON(wxID_OK, 		wxPropertyListView::OnOk)
-	EVT_BUTTON(wxID_CANCEL, 	wxPropertyListView::OnCancel)
-	EVT_BUTTON(wxID_HELP, 		wxPropertyListView::OnHelp)
-	EVT_BUTTON(wxID_PROP_CROSS,	wxPropertyListView::OnCross)
-	EVT_BUTTON(wxID_PROP_CHECK,	wxPropertyListView::OnCheck)
-	EVT_BUTTON(wxID_PROP_EDIT,	wxPropertyListView::OnEdit)
-	EVT_TEXT_ENTER(wxID_PROP_TEXT,	wxPropertyListView::OnText)
-	EVT_LISTBOX(wxID_PROP_SELECT,	wxPropertyListView::OnPropertySelect)
-    EVT_COMMAND(wxID_PROP_SELECT, wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxPropertyListView::OnPropertyDoubleClick)
-	EVT_LISTBOX(wxID_PROP_VALUE_SELECT,	wxPropertyListView::OnValueListSelect)
+    EVT_BUTTON(wxID_OK,                 wxPropertyListView::OnOk)
+    EVT_BUTTON(wxID_CANCEL,             wxPropertyListView::OnCancel)
+    EVT_BUTTON(wxID_HELP,               wxPropertyListView::OnHelp)
+    EVT_BUTTON(wxID_PROP_CROSS,         wxPropertyListView::OnCross)
+    EVT_BUTTON(wxID_PROP_CHECK,         wxPropertyListView::OnCheck)
+    EVT_BUTTON(wxID_PROP_EDIT,          wxPropertyListView::OnEdit)
+    EVT_TEXT_ENTER(wxID_PROP_TEXT,      wxPropertyListView::OnText)
+    EVT_LISTBOX(wxID_PROP_SELECT,       wxPropertyListView::OnPropertySelect)
+    EVT_COMMAND(wxID_PROP_SELECT, wxEVT_COMMAND_LISTBOX_DOUBLECLICKED,
+                                        wxPropertyListView::OnPropertyDoubleClick)
+    EVT_LISTBOX(wxID_PROP_VALUE_SELECT, wxPropertyListView::OnValueListSelect)
 END_EVENT_TABLE()
 
 bool wxPropertyListView::sm_dialogCancelled = FALSE;
@@ -180,7 +181,7 @@ bool wxPropertyListView::UpdatePropertyDisplayInList(wxProperty *property)
   {
     // Don't update the listbox unnecessarily because it can cause
     // ugly flashing.
-    
+
     if (paddedString != m_propertyScrollingList->GetString(sel))
       m_propertyScrollingList->SetString(sel, paddedString.GetData());
   }
@@ -419,10 +420,10 @@ bool wxPropertyListView::CreateControls(void)
   smallButtonWidth = -1;
   smallButtonHeight = -1;
 #endif
-  
+
   if (m_valueText)
     return TRUE;
-    
+
   if (!panel)
     return FALSE;
 
@@ -499,7 +500,7 @@ bool wxPropertyListView::CreateControls(void)
       c2->left.SameAs       (panel, wxLeft, 2);
     else
       c2->left.RightOf      (leftMostWindow, 2);
-      
+
     c2->bottom.SameAs          (panel, wxBottom, 2);
     c2->width.AsIs();
     c2->height.AsIs();
@@ -592,7 +593,7 @@ bool wxPropertyListView::CreateControls(void)
 
   m_valueText = new wxPropertyTextEdit(this, panel, wxID_PROP_TEXT, "", wxPoint(-1, -1), wxSize(-1, -1), wxPROCESS_ENTER);
   m_valueText->Enable(FALSE);
-  
+
   wxLayoutConstraints *c = new wxLayoutConstraints;
 
   if (m_cancelButton)
@@ -706,7 +707,7 @@ bool wxPropertyListView::OnClose(void)
   // Retrieve the value if any
   wxCommandEvent event;
   OnCheck(event);
-  
+
   delete this;
   return TRUE;
 }
@@ -728,7 +729,7 @@ void wxPropertyListView::OnOk(wxCommandEvent& event)
 {
   // Retrieve the value if any
   OnCheck(event);
-  
+
   m_managedWindow->Close(TRUE);
 }
 
@@ -803,16 +804,16 @@ void wxPropertyListView::OnText(wxCommandEvent& event)
 /*
  * Property dialog box
  */
- 
+
 IMPLEMENT_CLASS(wxPropertyListDialog, wxDialog)
 
 BEGIN_EVENT_TABLE(wxPropertyListDialog, wxDialog)
-    EVT_BUTTON(wxID_CANCEL,				wxPropertyListDialog::OnCancel)
+    EVT_BUTTON(wxID_CANCEL,                wxPropertyListDialog::OnCancel)
     EVT_CLOSE(wxPropertyListDialog::OnCloseWindow)
 END_EVENT_TABLE()
 
 wxPropertyListDialog::wxPropertyListDialog(wxPropertyListView *v, wxWindow *parent,
-	const wxString& title, const wxPoint& pos,
+    const wxString& title, const wxPoint& pos,
     const wxSize& size, long style, const wxString& name):
      wxDialog(parent, -1, title, pos, size, style, name)
 {
@@ -826,10 +827,10 @@ void wxPropertyListDialog::OnCloseWindow(wxCloseEvent& event)
 {
   if (m_view)
   {
-	SetReturnCode(wxID_CANCEL);
+    SetReturnCode(wxID_CANCEL);
     m_view->OnClose();
-	m_view = NULL;
-	this->Destroy();
+    m_view = NULL;
+    this->Destroy();
   }
   else
   {
@@ -839,7 +840,7 @@ void wxPropertyListDialog::OnCloseWindow(wxCloseEvent& event)
 
 void wxPropertyListDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
 {
-	SetReturnCode(wxID_CANCEL);
+    SetReturnCode(wxID_CANCEL);
     this->Close();
 }
 
@@ -854,16 +855,16 @@ void wxPropertyListDialog::OnDefaultAction(wxControl *WXUNUSED(item))
 // Extend event processing to search the view's event table
 bool wxPropertyListDialog::ProcessEvent(wxEvent& event)
 {
-	if ( !m_view || ! m_view->ProcessEvent(event) )
-		return wxEvtHandler::ProcessEvent(event);
-	else
-		return TRUE;
+    if ( !m_view || ! m_view->ProcessEvent(event) )
+        return wxEvtHandler::ProcessEvent(event);
+    else
+        return TRUE;
 }
 
 /*
  * Property panel
  */
- 
+
 IMPLEMENT_CLASS(wxPropertyListPanel, wxPanel)
 
 BEGIN_EVENT_TABLE(wxPropertyListPanel, wxPanel)
@@ -885,10 +886,10 @@ void wxPropertyListPanel::OnDefaultAction(wxControl *WXUNUSED(item))
 // Extend event processing to search the view's event table
 bool wxPropertyListPanel::ProcessEvent(wxEvent& event)
 {
-	if ( !m_view || ! m_view->ProcessEvent(event) )
-		return wxEvtHandler::ProcessEvent(event);
-	else
-		return TRUE;
+    if ( !m_view || ! m_view->ProcessEvent(event) )
+        return wxEvtHandler::ProcessEvent(event);
+    else
+        return TRUE;
 }
 
 void wxPropertyListPanel::OnSize(wxSizeEvent& WXUNUSED(event))
@@ -899,7 +900,7 @@ void wxPropertyListPanel::OnSize(wxSizeEvent& WXUNUSED(event))
 /*
  * Property frame
  */
- 
+
 IMPLEMENT_CLASS(wxPropertyListFrame, wxFrame)
 
 BEGIN_EVENT_TABLE(wxPropertyListFrame, wxFrame)
@@ -944,7 +945,7 @@ bool wxPropertyListFrame::Initialize(void)
  /*
   * Property list specific validator
   */
-  
+
 IMPLEMENT_ABSTRACT_CLASS(wxPropertyListValidator, wxPropertyValidator)
 
 bool wxPropertyListValidator::OnSelect(bool select, wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow)
@@ -1013,12 +1014,12 @@ IMPLEMENT_DYNAMIC_CLASS(wxRealListValidator, wxPropertyListValidator)
 
 ///
 /// Real number validator
-/// 
+///
 bool wxRealListValidator::OnCheckValue(wxProperty *WXUNUSED(property), wxPropertyListView *view, wxWindow *parentWindow)
 {
   if (m_realMin == 0.0 && m_realMax == 0.0)
     return TRUE;
-    
+
   if (!view->GetValueText())
     return FALSE;
   wxString value(view->GetValueText()->GetValue());
@@ -1031,7 +1032,7 @@ bool wxRealListValidator::OnCheckValue(wxProperty *WXUNUSED(property), wxPropert
     wxMessageBox(buf, "Property value error", wxOK | wxICON_EXCLAMATION, parentWindow);
     return FALSE;
   }
-  
+
   if (val < m_realMin || val > m_realMax)
   {
     char buf[200];
@@ -1052,7 +1053,7 @@ bool wxRealListValidator::OnRetrieveValue(wxProperty *property, wxPropertyListVi
 
   if (strlen(view->GetValueText()->GetValue()) == 0)
     return FALSE;
-    
+
   wxString value(view->GetValueText()->GetValue());
   float f = (float)atof(value.GetData());
   property->GetValue() = f;
@@ -1074,14 +1075,14 @@ bool wxRealListValidator::OnPrepareControls(wxProperty *WXUNUSED(property), wxPr
 
 ///
 /// Integer validator
-/// 
+///
 IMPLEMENT_DYNAMIC_CLASS(wxIntegerListValidator, wxPropertyListValidator)
 
 bool wxIntegerListValidator::OnCheckValue(wxProperty *WXUNUSED(property), wxPropertyListView *view, wxWindow *parentWindow)
 {
   if (m_integerMin == 0 && m_integerMax == 0)
     return TRUE;
-    
+
   if (!view->GetValueText())
     return FALSE;
   wxString value(view->GetValueText()->GetValue());
@@ -1114,7 +1115,7 @@ bool wxIntegerListValidator::OnRetrieveValue(wxProperty *property, wxPropertyLis
 
   if (strlen(view->GetValueText()->GetValue()) == 0)
     return FALSE;
-    
+
   wxString value(view->GetValueText()->GetValue());
   long val = (long)atoi(value.GetData());
   property->GetValue() = (long)val;
@@ -1162,7 +1163,7 @@ bool wxBoolListValidator::OnRetrieveValue(wxProperty *property, wxPropertyListVi
 
   if (strlen(view->GetValueText()->GetValue()) == 0)
     return FALSE;
-    
+
   wxString value(view->GetValueText()->GetValue());
   bool boolValue = FALSE;
   if (value == "True")
@@ -1207,7 +1208,7 @@ bool wxBoolListValidator::OnPrepareDetailControls(wxProperty *WXUNUSED(property)
   {
     view->ShowListBoxControl(TRUE);
     view->GetValueList()->Enable(TRUE);
-    
+
     view->GetValueList()->Append("True");
     view->GetValueList()->Append("False");
     char *currentString = copystring(view->GetValueText()->GetValue());
@@ -1246,7 +1247,7 @@ bool wxBoolListValidator::OnDoubleClick(wxProperty *property, wxPropertyListView
 
 ///
 /// String validator
-/// 
+///
 IMPLEMENT_DYNAMIC_CLASS(wxStringListValidator, wxPropertyListValidator)
 
 wxStringListValidator::wxStringListValidator(wxStringList *list, long flags):
@@ -1321,7 +1322,7 @@ bool wxStringListValidator::OnPrepareControls(wxProperty *WXUNUSED(property), wx
       view->GetValueText()->Enable(TRUE);
     return TRUE;
   }
-  
+
   // Constrained
   if (view->GetValueText())
     view->GetValueText()->Enable(FALSE);
@@ -1405,7 +1406,7 @@ bool wxStringListValidator::OnDoubleClick(wxProperty *property, wxPropertyListVi
 
 ///
 /// Filename validator
-/// 
+///
 IMPLEMENT_DYNAMIC_CLASS(wxFilenameListValidator, wxPropertyListValidator)
 
 wxFilenameListValidator::wxFilenameListValidator(wxString message , wxString wildcard, long flags):
@@ -1493,7 +1494,7 @@ void wxFilenameListValidator::OnEdit(wxProperty *property, wxPropertyListView *v
 
 ///
 /// Colour validator
-/// 
+///
 IMPLEMENT_DYNAMIC_CLASS(wxColourListValidator, wxPropertyListValidator)
 
 wxColourListValidator::wxColourListValidator(long flags):
@@ -1518,7 +1519,7 @@ bool wxColourListValidator::OnRetrieveValue(wxProperty *property, wxPropertyList
   if (!view->GetValueText())
     return FALSE;
   wxString value(view->GetValueText()->GetValue());
-  
+
   property->GetValue() = value ;
   return TRUE;
 }
@@ -1562,7 +1563,7 @@ void wxColourListValidator::OnEdit(wxProperty *property, wxPropertyListView *vie
 {
   if (!view->GetValueText())
     return;
-    
+
   char *s = property->GetValue().StringValue();
   int r = 0;
   int g = 0;
@@ -1573,25 +1574,25 @@ void wxColourListValidator::OnEdit(wxProperty *property, wxPropertyListView *vie
     g = wxHexToDec(s+2);
     b = wxHexToDec(s+4);
   }
-  
+
   wxColour col(r,g,b);
-  
+
   wxColourData data;
   data.SetChooseFull(TRUE);
   data.SetColour(col);
-  
+
   for (int i = 0; i < 16; i++)
   {
     wxColour colour(i*16, i*16, i*16);
     data.SetCustomColour(i, colour);
   }
-      
+
   wxColourDialog dialog(parentWindow, &data);
   if (dialog.ShowModal() != wxID_CANCEL)
   {
     wxColourData retData = dialog.GetColourData();
     col = retData.GetColour();
-    
+
     char buf[7];
     wxDecToHex(col.Red(), buf);
     wxDecToHex(col.Green(), buf+2);
@@ -1665,7 +1666,7 @@ void wxListOfStringsListValidator::OnEdit(wxProperty *property, wxPropertyListVi
 {
   // Convert property value to a list of strings for editing
   wxStringList *stringList = new wxStringList;
-  
+
   wxPropertyValue *expr = property->GetValue().GetFirst();
   while (expr)
   {
@@ -1674,10 +1675,10 @@ void wxListOfStringsListValidator::OnEdit(wxProperty *property, wxPropertyListVi
       stringList->Add(s);
     expr = expr->GetNext();
   }
-  
+
   wxString title("Editing ");
   title += property->GetName();
-  
+
   if (EditStringList(parentWindow, stringList, title.GetData()))
   {
     wxPropertyValue& oldValue = property->GetValue();
@@ -1687,10 +1688,10 @@ void wxListOfStringsListValidator::OnEdit(wxProperty *property, wxPropertyListVi
     {
       char *s = (char *)node->Data();
       oldValue.Append(new wxPropertyValue(s));
-      
+
       node = node->Next();
     }
-    
+
     view->DisplayProperty(property);
     view->UpdatePropertyDisplayInList(property);
     view->OnPropertyChanged(property);
@@ -1702,9 +1703,9 @@ class wxPropertyStringListEditorDialog: public wxDialog
 {
   public:
     wxPropertyStringListEditorDialog(wxWindow *parent, const wxString& title,
-		const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-      	long windowStyle = wxDEFAULT_DIALOG_STYLE, const wxString& name = "stringEditorDialogBox"):
-       		wxDialog(parent, -1, title, pos, size, windowStyle, name)
+        const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+          long windowStyle = wxDEFAULT_DIALOG_STYLE, const wxString& name = "stringEditorDialogBox"):
+               wxDialog(parent, -1, title, pos, size, windowStyle, name)
     {
       m_stringList = NULL;
       m_stringText = NULL;
@@ -1717,12 +1718,12 @@ class wxPropertyStringListEditorDialog: public wxDialog
     void SaveCurrentSelection(void);
     void ShowCurrentSelection(void);
 
-	void OnOK(wxCommandEvent& event);
-	void OnCancel(wxCommandEvent& event);
-	void OnAdd(wxCommandEvent& event);
-	void OnDelete(wxCommandEvent& event);
-	void OnStrings(wxCommandEvent& event);
-	void OnText(wxCommandEvent& event);
+    void OnOK(wxCommandEvent& event);
+    void OnCancel(wxCommandEvent& event);
+    void OnAdd(wxCommandEvent& event);
+    void OnDelete(wxCommandEvent& event);
+    void OnStrings(wxCommandEvent& event);
+    void OnText(wxCommandEvent& event);
 
 public:
     wxStringList*       m_stringList;
@@ -1733,18 +1734,18 @@ public:
 DECLARE_EVENT_TABLE()
 };
 
-#define	wxID_PROP_SL_ADD			3000
-#define	wxID_PROP_SL_DELETE			3001
-#define	wxID_PROP_SL_STRINGS		3002
-#define	wxID_PROP_SL_TEXT			3003
+#define    wxID_PROP_SL_ADD            3000
+#define    wxID_PROP_SL_DELETE            3001
+#define    wxID_PROP_SL_STRINGS        3002
+#define    wxID_PROP_SL_TEXT            3003
 
 BEGIN_EVENT_TABLE(wxPropertyStringListEditorDialog, wxDialog)
-	EVT_BUTTON(wxID_OK, 				wxPropertyStringListEditorDialog::OnOK)
-    EVT_BUTTON(wxID_CANCEL,				wxPropertyStringListEditorDialog::OnCancel)
-    EVT_BUTTON(wxID_PROP_SL_ADD,		wxPropertyStringListEditorDialog::OnAdd)
-    EVT_BUTTON(wxID_PROP_SL_DELETE,		wxPropertyStringListEditorDialog::OnDelete)
-    EVT_LISTBOX(wxID_PROP_SL_STRINGS,	wxPropertyStringListEditorDialog::OnStrings)
-    EVT_TEXT_ENTER(wxID_PROP_SL_TEXT,			wxPropertyStringListEditorDialog::OnText)
+    EVT_BUTTON(wxID_OK,                 wxPropertyStringListEditorDialog::OnOK)
+    EVT_BUTTON(wxID_CANCEL,                wxPropertyStringListEditorDialog::OnCancel)
+    EVT_BUTTON(wxID_PROP_SL_ADD,        wxPropertyStringListEditorDialog::OnAdd)
+    EVT_BUTTON(wxID_PROP_SL_DELETE,        wxPropertyStringListEditorDialog::OnDelete)
+    EVT_LISTBOX(wxID_PROP_SL_STRINGS,    wxPropertyStringListEditorDialog::OnStrings)
+    EVT_TEXT_ENTER(wxID_PROP_SL_TEXT,            wxPropertyStringListEditorDialog::OnText)
     EVT_CLOSE(wxPropertyStringListEditorDialog::OnCloseWindow)
 END_EVENT_TABLE()
 
@@ -1752,7 +1753,7 @@ class wxPropertyStringListEditorText: public wxTextCtrl
 {
  public:
   wxPropertyStringListEditorText(wxWindow *parent, wxWindowID id, const wxString& val,
-  	const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+      const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
     long windowStyle = 0, const wxString& name = "text"):
      wxTextCtrl(parent, id, val, pos, size, windowStyle, wxDefaultValidator, name)
   {
@@ -1774,10 +1775,10 @@ bool wxListOfStringsListValidator::EditStringList(wxWindow *parent, wxStringList
 
   wxBeginBusyCursor();
   wxPropertyStringListEditorDialog *dialog = new wxPropertyStringListEditorDialog(parent,
-  	title, wxPoint(10, 10), wxSize(400, 400), wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL);
-  
+      title, wxPoint(10, 10), wxSize(400, 400), wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL);
+
   dialog->m_stringList = stringList;
-  
+
   dialog->m_listBox = new wxListBox(dialog, wxID_PROP_SL_STRINGS,
     wxPoint(-1, -1), wxSize(-1, -1), 0, NULL, wxLB_SINGLE);
 
@@ -1851,9 +1852,9 @@ bool wxListOfStringsListValidator::EditStringList(wxWindow *parent, wxStringList
   dialog->Centre(wxBOTH);
   wxEndBusyCursor();
   if (dialog->ShowModal() == wxID_CANCEL)
-	return FALSE;
+    return FALSE;
   else
-	return TRUE;
+    return TRUE;
 }
 
 /*
@@ -1877,11 +1878,11 @@ void wxPropertyStringListEditorDialog::OnDelete(wxCommandEvent& WXUNUSED(event))
   int sel = m_listBox->GetSelection();
   if (sel == -1)
     return;
-    
+
   wxNode *node = (wxNode *)m_listBox->wxListBox::GetClientData(sel);
   if (!node)
     return;
-    
+
   m_listBox->Delete(sel);
   delete[] (char *)node->Data();
   delete node;
@@ -1892,7 +1893,7 @@ void wxPropertyStringListEditorDialog::OnDelete(wxCommandEvent& WXUNUSED(event))
 void wxPropertyStringListEditorDialog::OnAdd(wxCommandEvent& WXUNUSED(event))
 {
   SaveCurrentSelection();
-  
+
   char *initialText = "";
   wxNode *node = m_stringList->Add(initialText);
   m_listBox->Append(initialText, (char *)node);
@@ -1936,16 +1937,16 @@ void wxPropertyStringListEditorDialog::SaveCurrentSelection(void)
 {
   if (m_currentSelection == -1)
     return;
-    
+
   wxNode *node = (wxNode *)m_listBox->wxListBox::GetClientData(m_currentSelection);
   if (!node)
     return;
-    
+
   wxString txt(m_stringText->GetValue());
   if (node->Data())
     delete[] (char *)node->Data();
   node->SetData((wxObject *)copystring(txt));
-  
+
   m_listBox->SetString(m_currentSelection, (char *)node->Data());
 }
 

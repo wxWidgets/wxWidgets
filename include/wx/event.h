@@ -346,8 +346,8 @@ public:
     int GetSelection() const { return m_commandInt; }
 
     // Set/Get listbox/choice selection string
-    void SetString(char* s) { m_commandString = s; }
-    char *GetString() const { return m_commandString; }
+    void SetString(const wxString& s) { m_commandString = s; }
+    const wxString& GetString() const { return m_commandString; }
 
     // Get checkbox value
     bool Checked() const { return (m_commandInt != 0); }
@@ -362,7 +362,7 @@ public:
     long GetInt() const { return m_commandInt ; }
 
 public:
-    char*             m_commandString; // String event argument
+    wxString          m_commandString; // String event argument
     int               m_commandInt;
     long              m_extraLong;     // Additional information (e.g. select/deselect)
     void*             m_clientData;    // Arbitrary client data

@@ -10,7 +10,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "listbox.h"
+    #pragma implementation "listbox.h"
 #endif
 
 #include "wx/listbox.h"
@@ -23,20 +23,23 @@
 #include "wx/motif/private.h"
 
 #if !USE_SHARED_LIBRARY
-IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)
+    IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)
 #endif
 
-void wxListBoxCallback (Widget w, XtPointer clientData,
-                        XmListCallbackStruct * cbs);
+static void wxListBoxCallback(Widget w,
+                              XtPointer clientData,
+                              XmListCallbackStruct * cbs);
 
-void wxListBoxDefaultActionProc (Widget list_w, XtPointer client_data, XmListCallbackStruct * cbs);
+static void wxListBoxDefaultActionProc(Widget list_w,
+                                XtPointer client_data,
+                                XmListCallbackStruct * cbs);
 
 // ============================================================================
 // list box control implementation
 // ============================================================================
 
 // Listbox item
-wxListBox::wxListBox(): m_clientDataList(wxKEY_INTEGER)
+wxListBox::wxListBox() : m_clientDataList(wxKEY_INTEGER)
 {
     m_noItems = 0;
     m_selected = 0;
@@ -56,16 +59,16 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     //    m_backgroundColour = parent->GetBackgroundColour();
     m_backgroundColour = * wxWHITE;
     m_foregroundColour = parent->GetForegroundColour();
-    
+
     SetName(name);
     SetValidator(validator);
-    
+
     if (parent) parent->AddChild(this);
-    
+
     m_windowId = ( id == -1 ) ? (int)NewControlId() : id;
-    
+
     Widget parentWidget = (Widget) parent->GetClientWidget();
-    
+
     Arg args[3];
     int count;
     XtSetArg (args[0], XmNlistSizePolicy, XmCONSTANT);
@@ -82,40 +85,40 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     }
     else
         count = 2;
-    
+
     Widget listWidget = XmCreateScrolledList (parentWidget, (char*) (const char*) name, args, count);
-    
+
     m_mainWidget = (WXWidget) listWidget;
-    
+
     Set(n, choices);
-    
+
     XtManageChild (listWidget);
-    
+
     long width = size.x;
     long height = size.y;
     if (width == -1)
         width = 150;
     if (height == -1)
         height = 80;
-    
+
     XtAddCallback (listWidget, XmNbrowseSelectionCallback, (XtCallbackProc) wxListBoxCallback,
         (XtPointer) this);
     XtAddCallback (listWidget, XmNextendedSelectionCallback, (XtCallbackProc) wxListBoxCallback,
         (XtPointer) this);
     XtAddCallback (listWidget, XmNmultipleSelectionCallback, (XtCallbackProc) wxListBoxCallback,
         (XtPointer) this);
-    
+
     XtAddCallback (listWidget, XmNdefaultActionCallback, (XtCallbackProc) wxListBoxDefaultActionProc,
         (XtPointer) this);
-    
+
     m_windowFont = parent->GetFont();
     ChangeFont(FALSE);
-    
+
     SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, width, height);
-    
+
     ChangeBackgroundColour();
-    
+
     return TRUE;
 }
 
@@ -126,13 +129,13 @@ wxListBox::~wxListBox()
 void wxListBox::SetFirstItem(int N)
 {
     int count, length;
-    
+
     if (N < 0)
         return;
     XtVaGetValues ((Widget) m_mainWidget,
-        XmNvisibleItemCount, &count,
-        XmNitemCount, &length,
-        NULL);
+                    XmNvisibleItemCount, &count,
+                    XmNitemCount, &length,
+                    NULL);
     if ((N + count) >= length)
         N = length - count;
     XmListSetPos ((Widget) m_mainWidget, N + 1);
@@ -141,7 +144,7 @@ void wxListBox::SetFirstItem(int N)
 void wxListBox::SetFirstItem(const wxString& s)
 {
     int N = FindString (s);
-    
+
     if (N >= 0)
         SetFirstItem (N);
 }
@@ -152,32 +155,33 @@ void wxListBox::Delete(int N)
     int width2, height2;
     Widget listBox = (Widget) m_mainWidget;
     GetSize (&width1, &height1);
-    
+
     bool managed = XtIsManaged(listBox);
-    
+
     if (managed)
         XtUnmanageChild (listBox);
-    
+
     XmListDeletePos (listBox, N + 1);
-    
+
     if (managed)
         XtManageChild (listBox);
-    
+
     GetSize (&width2, &height2);
     // Correct for randomly resized listbox - bad boy, Motif!
     if (width1 != width2 || height1 != height2)
         SetSize (-1, -1, width1, height1);
-    
+
     // (JDH) need to add code here to take care of clientDataList
     wxNode *node = m_clientDataList.Find((long)N);  // get item from list
     if (node) m_clientDataList.DeleteNode(node);    // if existed then delete from list
     node = m_clientDataList.First();                // we now have to adjust all keys that
     while (node)                                  // are >=N+1
-    { if (node->GetKeyInteger() >= (long)(N+1))
-    node->SetKeyInteger(node->GetKeyInteger() - 1);
-    node = node->Next();
+    {
+        if (node->GetKeyInteger() >= (long)(N+1))
+            node->SetKeyInteger(node->GetKeyInteger() - 1);
+        node = node->Next();
     }
-    
+
     m_noItems --;
 }
 
@@ -185,12 +189,12 @@ void wxListBox::Append(const wxString& item)
 {
     int width1, height1;
     int width2, height2;
-    
+
     Widget listBox = (Widget) m_mainWidget;
     GetSize (&width1, &height1);
-    
+
     bool managed = XtIsManaged(listBox);
-    
+
     if (managed)
         XtUnmanageChild (listBox);
     int n;
@@ -199,7 +203,7 @@ void wxListBox::Append(const wxString& item)
     //  XmListAddItem(listBox, text, n + 1);
     XmListAddItemUnselected (listBox, text, 0);
     XmStringFree (text);
-    
+
     // It seems that if the list is cleared, we must re-ask for
     // selection policy!!
     Arg args[3];
@@ -211,10 +215,10 @@ void wxListBox::Append(const wxString& item)
     else
         XtSetArg (args[1], XmNselectionPolicy, XmBROWSE_SELECT);
     XtSetValues (listBox, args, 2);
-    
+
     if (managed)
         XtManageChild (listBox);
-    
+
     GetSize (&width2, &height2);
     // Correct for randomly resized listbox - bad boy, Motif!
     if (width1 != width2 || height1 != height2)
@@ -226,22 +230,22 @@ void wxListBox::Append(const wxString& item, char *clientData)
 {
     int width1, height1;
     int width2, height2;
-    
+
     Widget listBox = (Widget) m_mainWidget;
-    
+
     GetSize (&width1, &height1);
     Bool managed = XtIsManaged(listBox);
-    
+
     if (managed)
         XtUnmanageChild (listBox);
-    
+
     int n;
     XtVaGetValues (listBox, XmNitemCount, &n, NULL);
     XmString text = XmStringCreateSimple ((char*) (const char*) item);
     //  XmListAddItem(listBox, text, n + 1);
     XmListAddItemUnselected (listBox, text, 0);
     XmStringFree (text);
-    
+
     // It seems that if the list is cleared, we must re-ask for
     // selection policy!!
     Arg args[3];
@@ -253,18 +257,18 @@ void wxListBox::Append(const wxString& item, char *clientData)
     else
         XtSetArg (args[1], XmNselectionPolicy, XmBROWSE_SELECT);
     XtSetValues (listBox, args, 2);
-    
+
     m_clientDataList.Append ((long) n, (wxObject *) clientData);
-    
+
     if (managed)
         XtManageChild (listBox);
-    
+
     GetSize (&width2, &height2);
-    
+
     // Correct for randomly resized listbox - bad boy, Motif!
     if (width1 != width2 || height1 != height2)
         SetSize (-1, -1, width1, height1);
-    
+
     m_noItems ++;
 }
 
@@ -273,12 +277,12 @@ void wxListBox::Set(int n, const wxString *choices, char** clientData)
     m_clientDataList.Clear();
     int width1, height1;
     int width2, height2;
-    
+
     Widget listBox = (Widget) m_mainWidget;
     GetSize (&width1, &height1);
-    
+
     bool managed = XtIsManaged(listBox);
-    
+
     if (managed)
         XtUnmanageChild (listBox);
         /***
@@ -293,16 +297,16 @@ void wxListBox::Set(int n, const wxString *choices, char** clientData)
     int i;
     for (i = 0; i < n; i++)
         text[i] = XmStringCreateSimple ((char*) (const char*) choices[i]);
-    
+
     if ( clientData )
         for (i = 0; i < n; i++)
             m_clientDataList.Append ((long) i, (wxObject *) clientData[i]);
-        
+
         XmListAddItems (listBox, text, n, 0);
         for (i = 0; i < n; i++)
             XmStringFree (text[i]);
         delete[]text;
-        
+
         // It seems that if the list is cleared, we must re-ask for
         // selection policy!!
         Arg args[3];
@@ -314,15 +318,15 @@ void wxListBox::Set(int n, const wxString *choices, char** clientData)
         else
             XtSetArg (args[1], XmNselectionPolicy, XmBROWSE_SELECT);
         XtSetValues (listBox, args, 2);
-        
+
         if (managed)
             XtManageChild (listBox);
-        
+
         GetSize (&width2, &height2);
         // Correct for randomly resized listbox - bad boy, Motif!
         if (width1 != width2 || height1 != height2)
             SetSize (-1, -1, width1, height1);
-        
+
         m_noItems = n;
 }
 
@@ -348,21 +352,21 @@ void wxListBox::Clear()
 {
     if (m_noItems <= 0)
         return;
-    
+
     int width1, height1;
     int width2, height2;
-    
+
     Widget listBox = (Widget) m_mainWidget;
     GetSize (&width1, &height1);
-    
+
     XmListDeleteAllItems (listBox);
     m_clientDataList.Clear ();
     GetSize (&width2, &height2);
-    
+
     // Correct for randomly resized listbox - bad boy, Motif!
     if (width1 != width2 || height1 != height2)
         SetSize (-1, -1, width1, height1);
-    
+
     m_noItems = 0;
 }
 
@@ -371,33 +375,33 @@ void wxListBox::SetSelection(int N, bool select)
     m_inSetValue = TRUE;
     if (select)
     {
-    /*
-    if (m_windowStyle & wxLB_MULTIPLE)
-    {
-    int *selections = NULL;
-    int n = GetSelections (&selections);
-    
-      // This hack is supposed to work, to make it possible to select more
-      // than one item, but it DOESN'T under Motif 1.1.
-      
-        XtVaSetValues ((Widget) m_mainWidget, XmNselectionPolicy, XmMULTIPLE_SELECT, NULL);
-        
-          int i;
-          for (i = 0; i < n; i++)
-          XmListSelectPos ((Widget) m_mainWidget, selections[i] + 1, FALSE);
-          
+#if 0
+        if (m_windowStyle & wxLB_MULTIPLE)
+        {
+            int *selections = NULL;
+            int n = GetSelections (&selections);
+
+            // This hack is supposed to work, to make it possible to select more
+            // than one item, but it DOESN'T under Motif 1.1.
+
+            XtVaSetValues ((Widget) m_mainWidget, XmNselectionPolicy, XmMULTIPLE_SELECT, NULL);
+
+            int i;
+            for (i = 0; i < n; i++)
+                XmListSelectPos ((Widget) m_mainWidget, selections[i] + 1, FALSE);
+
             XmListSelectPos ((Widget) m_mainWidget, N + 1, FALSE);
-            
-              XtVaSetValues ((Widget) m_mainWidget, XmNselectionPolicy, XmEXTENDED_SELECT, NULL);
-              }
-              else
-        */
-        XmListSelectPos ((Widget) m_mainWidget, N + 1, FALSE);
-        
+
+            XtVaSetValues ((Widget) m_mainWidget, XmNselectionPolicy, XmEXTENDED_SELECT, NULL);
+        }
+        else
+#endif // 0
+            XmListSelectPos ((Widget) m_mainWidget, N + 1, FALSE);
+
     }
     else
         XmListDeselectPos ((Widget) m_mainWidget, N + 1);
-    
+
     m_inSetValue = FALSE;
 }
 
@@ -445,7 +449,7 @@ void wxListBox::SetClientData(int N, char *Client_data)
 int wxListBox::GetSelections(wxArrayInt& aSelections) const
 {
     aSelections.Empty();
-    
+
     Widget listBox = (Widget) m_mainWidget;
     int *posList = NULL;
     int posCnt = 0;
@@ -455,11 +459,11 @@ int wxListBox::GetSelections(wxArrayInt& aSelections) const
         if (posCnt > 0)
         {
             aSelections.Alloc(posCnt);
-            
+
             int i;
             for (i = 0; i < posCnt; i++)
                 aSelections.Add(posList[i] - 1);
-            
+
             XtFree ((char *) posList);
             return posCnt;
         }
@@ -515,11 +519,11 @@ wxString wxListBox::GetString(int N) const
 void wxListBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
     wxWindow::DoSetSize(x, y, width, height, sizeFlags);
-    
+
     // Check resulting size is correct
     int tempW, tempH;
     GetSize (&tempW, &tempH);
-    
+
     /*
     if (tempW != width || tempH != height)
     {
@@ -532,16 +536,16 @@ void wxListBox::InsertItems(int nItems, const wxString items[], int pos)
 {
     int width1, height1;
     int width2, height2;
-    
+
     Widget listBox = (Widget) m_mainWidget;
-    
+
     GetSize(&width1, &height1);
-    
+
     bool managed = XtIsManaged(listBox);
-    
+
     if (managed)
         XtUnmanageChild(listBox);
-    
+
     XmString *text = new XmString[nItems];
     int i;
     // Steve Hammes: Motif 1.1 compatibility
@@ -561,9 +565,9 @@ void wxListBox::InsertItems(int nItems, const wxString items[], int pos)
 #endif
     for (i = 0; i < nItems; i++)
         XmStringFree(text[i]);
-    
+
     delete[] text;
-    
+
     // It seems that if the list is cleared, we must re-ask for
     // selection policy!!
     Arg args[3];
@@ -574,15 +578,15 @@ void wxListBox::InsertItems(int nItems, const wxString items[], int pos)
         XtSetArg(args[1], XmNselectionPolicy, XmEXTENDED_SELECT);
     else XtSetArg(args[1], XmNselectionPolicy, XmBROWSE_SELECT);
     XtSetValues(listBox,args,2) ;
-    
+
     if (managed)
         XtManageChild(listBox);
-    
+
     GetSize(&width2, &height2);
     // Correct for randomly resized listbox - bad boy, Motif!
     if (width1 != width2 /*|| height1 != height2*/)
         SetSize(-1, -1, width1, height1);
-    
+
     m_noItems += nItems;
 }
 
@@ -590,34 +594,19 @@ void wxListBox::SetString(int N, const wxString& s)
 {
     int width1, height1;
     int width2, height2;
-    
+
     Widget listBox = (Widget) m_mainWidget;
     GetSize (&width1, &height1);
-    
+
     XmString text = XmStringCreateSimple ((char*) (const char*) s);
-    
-    // WHAT'S THE MOTIF CALL TO SET THE TEXT OF AN EXISTING
-    // ITEM???
-    // There isn't one, so delete the item and add it again.
+
+    // delete the item and add it again.
+    // FIXME isn't there a way to change it in place?
     XmListDeletePos (listBox, N+1);
     XmListAddItem (listBox, text, N+1);
-    
+
     XmStringFree(text);
-    
-    /*
-    // It seems that if the list is cleared, we must re-ask for
-    // selection policy!!
-    Arg args[3];
-    XtSetArg (args[0], XmNlistSizePolicy, XmCONSTANT);
-    if (m_windowStyle & wxLB_MULTIPLE)
-    XtSetArg (args[1], XmNselectionPolicy, XmMULTIPLE_SELECT);
-    else if (m_windowStyle & wxLB_EXTENDED)
-    XtSetArg (args[1], XmNselectionPolicy, XmEXTENDED_SELECT);
-    else
-    XtSetArg (args[1], XmNselectionPolicy, XmBROWSE_SELECT);
-    XtSetValues (listBox, args, 2);
-    */
-    
+
     GetSize (&width2, &height2);
     // Correct for randomly resized listbox - bad boy, Motif!
     if (width1 != width2 || height1 != height2)
@@ -632,11 +621,12 @@ int wxListBox::Number () const
 // For single selection items only
 wxString wxListBox::GetStringSelection () const
 {
-    int sel = GetSelection ();
+    wxString res;
+    int sel = GetSelection();
     if (sel > -1)
-        return this->GetString (sel);
-    else
-        return wxString("");
+        res = GetString(sel);
+
+    return res;
 }
 
 bool wxListBox::SetStringSelection (const wxString& s, bool flag)
@@ -666,7 +656,7 @@ void wxListBox::Command (wxCommandEvent & event)
 void wxListBoxCallback (Widget w, XtPointer clientData,
                         XmListCallbackStruct * cbs)
 {
-/*
+    /*
     if (cbs->reason == XmCR_EXTENDED_SELECT)
         cout << "*** Extend select\n";
     else if (cbs->reason == XmCR_SINGLE_SELECT)
@@ -683,12 +673,12 @@ void wxListBoxCallback (Widget w, XtPointer clientData,
     else if (cbs->selection_type == XmADDITION)
         cout << "*** Addition\n";
     */
-    
+
     wxListBox *item = (wxListBox *) clientData;
-    
+
     if (item->InSetValue())
         return;
-    
+
     wxCommandEvent event (wxEVT_COMMAND_LISTBOX_SELECTED, item->GetId());
     switch (cbs->reason)
     {
@@ -696,12 +686,10 @@ void wxListBoxCallback (Widget w, XtPointer clientData,
     case XmCR_BROWSE_SELECT:
         {
             event.m_clientData = item->GetClientData (cbs->item_position - 1);
-            //event.commandString = item->GetStringSelection();
             event.m_commandInt = cbs->item_position - 1;
             event.m_extraLong = TRUE;
             event.SetEventObject(item);
             item->ProcessCommand (event);
-            //delete[] event.commandString; // Let's not store the command string any more
             break;
         }
     case XmCR_EXTENDED_SELECT:
@@ -732,7 +720,7 @@ void wxListBoxCallback (Widget w, XtPointer clientData,
 void wxListBoxDefaultActionProc (Widget list_w, XtPointer client_data, XmListCallbackStruct * cbs)
 {
     wxListBox *lbox = (wxListBox *) client_data;
-    
+
     wxCommandEvent event(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, lbox->GetId());
     event.SetEventObject( lbox );
     lbox->GetEventHandler()->ProcessEvent(event) ;
@@ -751,15 +739,15 @@ void wxListBox::ChangeFont(bool keepOriginalSize)
 void wxListBox::ChangeBackgroundColour()
 {
     wxWindow::ChangeBackgroundColour();
-    
+
     Widget parent = XtParent ((Widget) m_mainWidget);
     Widget hsb, vsb;
-    
+
     XtVaGetValues (parent,
         XmNhorizontalScrollBar, &hsb,
         XmNverticalScrollBar, &vsb,
         NULL);
-    
+
    /* TODO: should scrollbars be affected? Should probably have separate
     * function to change them (by default, taken from wxSystemSettings)
     */
@@ -773,23 +761,25 @@ void wxListBox::ChangeBackgroundColour()
     XtVaSetValues (vsb,
         XmNtroughColor, backgroundColour.AllocColour(XtDisplay(vsb)),
         NULL);
-    
+
     DoChangeBackgroundColour((WXWidget) parent, m_backgroundColour, TRUE);
 }
 
 void wxListBox::ChangeForegroundColour()
 {
     wxWindow::ChangeForegroundColour();
-    
+
     Widget parent = XtParent ((Widget) m_mainWidget);
     Widget hsb, vsb;
-    
-    XtVaGetValues (parent,
-        XmNhorizontalScrollBar, &hsb,
-        XmNverticalScrollBar, &vsb,
-        NULL);
-        /* TODO: should scrollbars be affected? Should probably have separate
-        * function to change them (by default, taken from wxSystemSettings)
+
+    XtVaGetValues(parent,
+                  XmNhorizontalScrollBar, &hsb,
+                  XmNverticalScrollBar, &vsb,
+                  NULL);
+
+    /* TODO: should scrollbars be affected? Should probably have separate
+             function to change them (by default, taken from wxSystemSettings)
+
         DoChangeForegroundColour((WXWidget) hsb, m_foregroundColour);
         DoChangeForegroundColour((WXWidget) vsb, m_foregroundColour);
         DoChangeForegroundColour((WXWidget) parent, m_foregroundColour);

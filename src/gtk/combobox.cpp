@@ -11,7 +11,6 @@
 #pragma implementation "combobox.h"
 #endif
 
-
 #include "wx/combobox.h"
 
 #include <wx/intl.h>
@@ -48,11 +47,9 @@ gtk_combo_clicked_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
 
     wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, combo->GetId() );
     event.SetInt( combo->GetSelection() );
-    event.SetString( copystring(combo->GetStringSelection()) );
+    event.SetString( combo->GetStringSelection() );
     event.SetEventObject( combo );
     combo->GetEventHandler()->ProcessEvent( event );
-
-    delete [] event.GetString();
 }
 
 //-----------------------------------------------------------------------------
@@ -63,11 +60,9 @@ static void
 gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
 {
     wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, combo->GetId() );
-    event.SetString( copystring(combo->GetValue()) );
+    event.SetString( combo->GetValue() );
     event.SetEventObject( combo );
     combo->GetEventHandler()->ProcessEvent( event );
-
-    delete [] event.GetString();
 }
 
 //-----------------------------------------------------------------------------
@@ -542,7 +537,7 @@ void wxComboBox::OnChar( wxKeyEvent &event )
             // all!
             wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, GetId() );
             event.SetInt( 0 );
-            event.SetString( (char *)value.c_str() );
+            event.SetString( value );
             event.SetEventObject( this );
             GetEventHandler()->ProcessEvent( event );
         }
@@ -556,7 +551,7 @@ void wxComboBox::OnChar( wxKeyEvent &event )
                 // and generate the selected event for it
                 wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, GetId() );
                 event.SetInt( Number() - 1 );
-                event.SetString( (char *)value.c_str() );
+                event.SetString( value );
                 event.SetEventObject( this );
                 GetEventHandler()->ProcessEvent( event );
             }
