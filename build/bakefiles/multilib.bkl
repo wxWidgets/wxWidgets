@@ -1,0 +1,43 @@
+<?xml version="1.0" ?>
+<makefile>
+
+    <!-- ================================================================= -->
+    <!--                           Main GUI library                        -->
+    <!-- ================================================================= -->
+    
+    <dll id="coredll" template="wx_dll"
+         cond="SHARED=='1' and MONOLITHIC=='0'">
+        <define>WXMAKINGDLL</define>
+        <sources>$(BASE_SRC) $(CORE_SRC)</sources>
+      
+        <library>$(LIB_ZLIB)</library>
+        <library>$(LIB_REGEX)</library>
+        <library>$(LIB_PNG)</library>
+        <library>$(LIB_JPEG)</library>
+        <library>$(LIB_TIFF)</library>
+        <library>$(LIB_ODBC)</library>
+    </dll>
+    
+    <lib id="corelib" template="wx_lib"
+         cond="SHARED=='0' and MONOLITHIC=='0'">
+        <sources>$(BASE_SRC) $(CORE_SRC)</sources>
+    </lib>
+
+    
+    <!-- ================================================================ -->
+    <!--                               wxHTML                             -->
+    <!-- ================================================================ -->
+    
+    <dll id="htmldll" template="wx_dll"
+         cond="SHARED=='1' and MONOLITHIC=='0'">
+        <define>WXMAKINGDLL</define>
+        <sources>$(HTML_SRC)</sources>
+        <wx-lib>core</wx-lib>
+    </dll>
+    
+    <lib id="htmllib" template="wx_lib"
+         cond="SHARED=='0' and MONOLITHIC=='0'">
+        <sources>$(HTML_SRC)</sources>
+    </lib>
+
+</makefile>

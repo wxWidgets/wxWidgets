@@ -1665,16 +1665,15 @@
         <if cond="TOOLKIT=='OS2'">$(OS2_SRC)</if>
     </set>
 
-    <set var="PORT_SRC">
+    <set var="CORE_SRC">
         <if cond="USE_GUI=='0'">
             src/common/init.cpp
         </if>
         <if cond="USE_GUI=='1' and WXUNIV=='0'">
-            $(LOWLEVEL_SRC) $(GUI_SRC) $(GUICMN_SRC) $(HTML_SRC)
+            $(LOWLEVEL_SRC) $(GUI_SRC) $(GUICMN_SRC)
         </if>
         <if cond="USE_GUI=='1' and WXUNIV=='1'">
-            $(LOWLEVEL_SRC) $(UNIV_SRC) $(UNIV_THEMES_SRC)
-            $(GUICMN_SRC) $(HTML_SRC)
+            $(LOWLEVEL_SRC) $(UNIV_SRC) $(UNIV_THEMES_SRC) $(GUICMN_SRC)
         </if>
     </set>
 

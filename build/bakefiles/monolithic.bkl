@@ -4,7 +4,7 @@
     <dll id="monodll" template="wx_dll"
          cond="SHARED=='1' and MONOLITHIC=='1'">
         <define>WXMAKINGDLL</define>
-        <sources>$(BASE_SRC) $(PORT_SRC)</sources>
+        <sources>$(BASE_SRC) $(CORE_SRC) $(HTML_SRC)</sources>
       
         <library>$(LIB_ZLIB)</library>
         <library>$(LIB_REGEX)</library>
@@ -16,7 +16,7 @@
     
     <lib id="monolib" template="wx_lib"
          cond="SHARED=='0' and MONOLITHIC=='1'">
-        <sources>$(BASE_SRC) $(PORT_SRC)</sources>
+        <sources>$(BASE_SRC) $(CORE_SRC) $(HTML_SRC)</sources>
     </lib>
 
 </makefile>
