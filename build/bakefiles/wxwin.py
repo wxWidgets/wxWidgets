@@ -11,8 +11,15 @@ import utils
 # register a substitution function for it that provides additional knowledge
 # about the option (in this case that it does not contain dir separators and
 # so utils.nativePaths() doesn't have to do anything with it):
-def __noopSubst(func, name):
-    return '$(%s)' % name
+
+try:
+    # this fails in 0.1.4 and 0.1.5 has different subst.callbacks signature:
+    utils.checkBakefileVersion('0.1.5') 
+    def __noopSubst(name, func, caller):
+        return '$(%s)' % name
+except AttributeError:
+    def __noopSubst(func, name):
+        return '$(%s)' % name
 utils.addSubstituteCallback('CFG', __noopSubst)
 utils.addSubstituteCallback('LIBDIRNAME', __noopSubst)
 utils.addSubstituteCallback('SETUPHDIR', __noopSubst)
