@@ -98,7 +98,7 @@ and forth without loss in that respect.
 Creates an image with the given width and height.  If {\it clear} is true, the new image will be initialized to black.
 Otherwise, the image data will be uninitialized.
 
-\func{}{wxImage}{\param{int}{ width}, \param{int}{ height}, \param{unsigned char*}{ data}, \param{bool}{ static\_data=false}}
+\func{}{wxImage}{\param{int}{ width}, \param{int}{ height}, \param{unsigned char*}{ data}, \param{bool}{ static\_data = \false}}
 
 Creates an image from given data with the given width and height. If 
 {\it static\_data} is true, then wxImage will not delete the actual
@@ -1023,14 +1023,16 @@ suitable mask colour for any newly exposed areas.
 
 \membersection{wxImage::SetAlpha}\label{wximagesetalpha}
 
-\func{void}{SetAlpha}{\param{unsigned char *}{alpha = {\tt NULL}}}
+\func{void}{SetAlpha}{\param{unsigned char *}{alpha = {\tt NULL}},\param{bool}{ static\_data = \false}}
 
 This function is similar to \helpref{SetData}{wximagesetdata} and has similar
 restrictions. The pointer passed to it may however be {\tt NULL} in which case
 the function will allocate the alpha array internally -- this is useful to add
 alpha channel data to an image which doesn't have any. If the pointer is not 
 {\tt NULL}, it must have one byte for each image pixel and be allocated with 
-{\tt malloc()}. wxImage takes ownership of the pointer and will free it.
+{\tt malloc()}. wxImage takes ownership of the pointer and will free it unless
+\arg{static\_data} parameter is set.to \true -- in this case the caller should
+do it.
 
 \func{void}{SetAlpha}{\param{int }{x}, \param{int }{y}, \param{unsigned char }{alpha}}
 
