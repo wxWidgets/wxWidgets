@@ -409,7 +409,7 @@ done
 rm -f $defFile
 echo "LIBRARY `basnam $dllFile` $library_flags" >> $defFile
 dllFile="$dllFile.dll"
-if [ -n $description ]; then
+if [ ! -z $description ]; then
     echo "DESCRIPTION  \"${description}\"" >> $defFile
 fi
 echo "EXPORTS" >> $defFile
