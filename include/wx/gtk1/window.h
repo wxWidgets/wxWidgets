@@ -88,6 +88,10 @@ public:
 
     virtual void ClientToScreen( int *x, int *y ) const;
     virtual void ScreenToClient( int *x, int *y ) const;
+    wxPoint ClientToScreen(const wxPoint& pt) const
+        { int x = pt.x; int y = pt.y; ClientToScreen(& x, & y); return wxPoint(x, y); }
+    wxPoint ScreenToClient(const wxPoint& pt) const
+        { int x = pt.x; int y = pt.y; ScreenToClient(& x, & y); return wxPoint(x, y); }
 
     virtual bool PopupMenu( wxMenu *menu, int x, int y );
 
@@ -148,10 +152,10 @@ public:
     // creates a new widget style if none is there
     // and sets m_widgetStyle to this value.
     GtkStyle *GetWidgetStyle();
-    
+
     // called by SetFont() and SetXXXColour etc
     void SetWidgetStyle();
-    
+
     // overridden in many GTK widgets
     virtual void ApplyWidgetStyle();
 
@@ -193,7 +197,7 @@ public:
     bool                 m_isStaticBox:1;   /* faster than IS_KIND_OF */
     bool                 m_isFrame:1;       /* faster than IS_KIND_OF */
     bool                 m_acceptsFocus:1;  /* ! wxStaticBox etc.  */
-    
+
     // these are true if the style were set before the widget was realized
     // (typcally in the constructor) but the actual GTK style must not be set
     // before the widget has been "realized"

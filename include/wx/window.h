@@ -611,7 +611,7 @@ public:
     virtual WXWidget GetHandle() const = 0;
 
 protected:
-    // the window id - a number which uniquely identifies a window among 
+    // the window id - a number which uniquely identifies a window among
     // its siblings unless it is -1
     wxWindowID           m_windowId;
 
@@ -763,8 +763,8 @@ inline wxWindow *wxWindowBase::GetGrandParent() const
 // global function
 // ----------------------------------------------------------------------------
 
-extern wxWindow* WXDLLEXPORT wxGetActiveWindow();
-inline int WXDLLEXPORT NewControlId() { return wxWindowBase::NewControlId(); }
+WXDLLEXPORT extern wxWindow* wxGetActiveWindow();
+inline WXDLLEXPORT int NewControlId() { return wxWindowBase::NewControlId(); }
 
 #endif
     // _WX_WINDOW_H_BASE_

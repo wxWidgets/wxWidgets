@@ -116,6 +116,10 @@ public:
 
     virtual void ClientToScreen( int *x, int *y ) const;
     virtual void ScreenToClient( int *x, int *y ) const;
+    wxPoint ClientToScreen(const wxPoint& pt) const
+        { int x = pt.x; int y = pt.y; ClientToScreen(& x, & y); return wxPoint(x, y); }
+    wxPoint ScreenToClient(const wxPoint& pt) const
+        { int x = pt.x; int y = pt.y; ScreenToClient(& x, & y); return wxPoint(x, y); }
 
     virtual bool PopupMenu( wxMenu *menu, int x, int y );
 
