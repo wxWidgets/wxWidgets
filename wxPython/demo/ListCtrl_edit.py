@@ -35,7 +35,7 @@ class TestListCtrl(wx.ListCtrl,
         wx.ListCtrl.__init__(self, parent, ID, pos, size, style)
 
         # Divide remaining space over all columns
-        listmix.ListCtrlAutoWidthMixin.__init__(self, 0, 3)
+        listmix.ListCtrlAutoWidthMixin.__init__(self)
         self.Populate()
         listmix.TextEditMixin.__init__(self)
 
