@@ -68,11 +68,11 @@ public:
     void DetachSizer()
         { m_sizer = 0; }
 
-    virtual wxSize GetSize();
+    virtual wxSize GetSize() const;
     virtual wxSize CalcMin();
     virtual void SetDimension( wxPoint pos, wxSize size );
 
-    wxSize GetMinSize()
+    wxSize GetMinSize() const
         { return m_minSize; }
     void SetInitSize( int x, int y )
         { m_minSize.x = x; m_minSize.y = y; }
@@ -88,9 +88,9 @@ public:
     float GetRatio() const
         { return m_ratio; }
 
-    bool IsWindow();
-    bool IsSizer();
-    bool IsSpacer();
+    bool IsWindow() const;
+    bool IsSizer() const;
+    bool IsSpacer() const;
 
     // Deprecated in 2.6, use {G,S}etProportion instead.
     wxDEPRECATED( void SetOption( int option ) );
@@ -126,9 +126,9 @@ public:
     bool IsShown() const
         { return m_show; }
 
-    wxObject* GetUserData()
+    wxObject* GetUserData() const
         { return m_userData; }
-    wxPoint GetPosition()
+    wxPoint GetPosition() const
         { return m_pos; }
 
 protected:
@@ -152,7 +152,8 @@ protected:
 
     wxObject    *m_userData;
 
-    DECLARE_DYNAMIC_CLASS(wxSizerItem);
+private:
+    DECLARE_CLASS(wxSizerItem);
     DECLARE_NO_COPY_CLASS(wxSizerItem)
 };
 
@@ -263,9 +264,9 @@ public:
     bool SetItemMinSize( size_t index, wxSize size )
         { return DoSetItemMinSize( index, size.x, size.y ); }
 
-    wxSize GetSize()
+    wxSize GetSize() const
         { return m_size; }
-    wxPoint GetPosition()
+    wxPoint GetPosition() const
         { return m_position; }
 
     /* Calculate the minimal size or return m_minSize if bigger. */
@@ -299,9 +300,9 @@ public:
     void Hide( size_t index )
         { Show( index, false ); }
 
-    bool IsShown( wxWindow *window );
-    bool IsShown( wxSizer *sizer );
-    bool IsShown( size_t index );
+    bool IsShown( wxWindow *window ) const;
+    bool IsShown( wxSizer *sizer ) const;
+    bool IsShown( size_t index ) const;
     
     // Recursively call wxWindow::Show () on all sizer items.
     void ShowItems (bool show);
@@ -312,9 +313,9 @@ protected:
     wxPoint             m_position;
     wxSizerItemList     m_children;
 
-    wxSize GetMaxWindowSize( wxWindow *window );
+    wxSize GetMaxWindowSize( wxWindow *window ) const;
     wxSize GetMinWindowSize( wxWindow *window );
-    wxSize GetMaxClientSize( wxWindow *window );
+    wxSize GetMaxClientSize( wxWindow *window ) const;
     wxSize GetMinClientSize( wxWindow *window );
     wxSize FitSize( wxWindow *window );
     wxSize VirtualFitSize( wxWindow *window );
@@ -324,7 +325,8 @@ protected:
     virtual bool DoSetItemMinSize( wxSizer *sizer, int width, int height );
     virtual bool DoSetItemMinSize( size_t index, int width, int height );
 
-    DECLARE_DYNAMIC_CLASS(wxSizer);
+private:
+    DECLARE_CLASS(wxSizer);
 };
 
 //---------------------------------------------------------------------------
@@ -344,10 +346,10 @@ public:
     void SetRows( int rows )    { m_rows = rows; }
     void SetVGap( int gap )     { m_vgap = gap; }
     void SetHGap( int gap )     { m_hgap = gap; }
-    int GetCols()               { return m_cols; }
-    int GetRows()               { return m_rows; }
-    int GetVGap()               { return m_vgap; }
-    int GetHGap()               { return m_hgap; }
+    int GetCols() const         { return m_cols; }
+    int GetRows() const         { return m_rows; }
+    int GetVGap() const         { return m_vgap; }
+    int GetHGap() const         { return m_hgap; }
 
 protected:
     int    m_rows;
@@ -360,7 +362,8 @@ protected:
 
     void SetItemBounds( wxSizerItem *item, int x, int y, int w, int h );
 
-    DECLARE_DYNAMIC_CLASS(wxGridSizer);
+private:
+    DECLARE_CLASS(wxGridSizer);
 };
 
 //---------------------------------------------------------------------------
@@ -390,7 +393,8 @@ protected:
 
     void CreateArrays();
 
-    DECLARE_DYNAMIC_CLASS(wxFlexGridSizer);
+private:
+    DECLARE_CLASS(wxFlexGridSizer);
     DECLARE_NO_COPY_CLASS(wxFlexGridSizer)
 };
 
@@ -406,7 +410,7 @@ public:
     void RecalcSizes();
     wxSize CalcMin();
 
-    int GetOrientation()
+    int GetOrientation() const
         { return m_orient; }
 
     void SetOrientation(int orient)
@@ -420,7 +424,8 @@ protected:
     int m_fixedWidth;
     int m_fixedHeight;
 
-    DECLARE_DYNAMIC_CLASS(wxBoxSizer);
+private:
+    DECLARE_CLASS(wxBoxSizer);
 };
 
 //---------------------------------------------------------------------------
@@ -439,13 +444,14 @@ public:
     void RecalcSizes();
     wxSize CalcMin();
 
-    wxStaticBox *GetStaticBox()
+    wxStaticBox *GetStaticBox() const
         { return m_staticBox; }
 
 protected:
     wxStaticBox   *m_staticBox;
 
-    DECLARE_DYNAMIC_CLASS(wxStaticBoxSizer);
+private:
+    DECLARE_CLASS(wxStaticBoxSizer);
     DECLARE_NO_COPY_CLASS(wxStaticBoxSizer)
 };
 
@@ -467,13 +473,14 @@ public:
     void RecalcSizes();
     wxSize CalcMin();
 
-    wxNotebook *GetNotebook()
+    wxNotebook *GetNotebook() const
         { return m_notebook; }
 
 protected:
     wxNotebook   *m_notebook;
 
-    DECLARE_DYNAMIC_CLASS(wxNotebookSizer);
+private:
+    DECLARE_CLASS(wxNotebookSizer);
     DECLARE_NO_COPY_CLASS(wxNotebookSizer)
 };
 

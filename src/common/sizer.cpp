@@ -29,16 +29,16 @@
 
 //---------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxSizerItem, wxObject)
-IMPLEMENT_ABSTRACT_CLASS(wxSizer, wxObject)
-IMPLEMENT_ABSTRACT_CLASS(wxGridSizer, wxSizer)
-IMPLEMENT_ABSTRACT_CLASS(wxFlexGridSizer, wxGridSizer)
-IMPLEMENT_ABSTRACT_CLASS(wxBoxSizer, wxSizer)
+IMPLEMENT_CLASS(wxSizerItem, wxObject)
+IMPLEMENT_CLASS(wxSizer, wxObject)
+IMPLEMENT_CLASS(wxGridSizer, wxSizer)
+IMPLEMENT_CLASS(wxFlexGridSizer, wxGridSizer)
+IMPLEMENT_CLASS(wxBoxSizer, wxSizer)
 #if wxUSE_STATBOX
-IMPLEMENT_ABSTRACT_CLASS(wxStaticBoxSizer, wxBoxSizer)
+IMPLEMENT_CLASS(wxStaticBoxSizer, wxBoxSizer)
 #endif
 #if wxUSE_NOTEBOOK
-IMPLEMENT_ABSTRACT_CLASS(wxNotebookSizer, wxSizer)
+IMPLEMENT_CLASS(wxNotebookSizer, wxSizer)
 #endif
 
 WX_DEFINE_EXPORTED_LIST( wxSizerItemList );
@@ -101,7 +101,7 @@ wxSizerItem::~wxSizerItem()
 }
 
 
-wxSize wxSizerItem::GetSize()
+wxSize wxSizerItem::GetSize() const
 {
     wxSize ret;
     if (IsSizer())
@@ -232,17 +232,17 @@ void wxSizerItem::DeleteWindows()
         m_sizer->DeleteWindows();
 }
 
-bool wxSizerItem::IsWindow()
+bool wxSizerItem::IsWindow() const
 {
     return (m_window != NULL);
 }
 
-bool wxSizerItem::IsSizer()
+bool wxSizerItem::IsSizer() const
 {
     return (m_sizer != NULL);
 }
 
-bool wxSizerItem::IsSpacer()
+bool wxSizerItem::IsSpacer() const
 {
     return (m_window == NULL) && (m_sizer == NULL);
 }
@@ -409,6 +409,11 @@ bool wxSizer::Remove( size_t index )
 
     wxCHECK_MSG( node, false, _T("Failed to find child node") );
 
+    wxSizerItem     *item = node->GetData();
+
+    if( item->IsWindow() )
+        item->GetWindow()->SetContainingSizer( NULL );
+
     return m_children.DeleteNode( node );
 }
 
@@ -462,7 +467,12 @@ bool wxSizer::Detach( size_t index )
 
     wxCHECK_MSG( node, false, _T("Failed to find child node") );
 
-    node->GetData()->DetachSizer();
+    wxSizerItem     *item = node->GetData();
+
+    if( item->IsSizer() )
+        item->DetachSizer();
+    else if( item->IsWindow() )
+        item->GetWindow()->SetContainingSizer( NULL );
 
     return m_children.DeleteNode( node );
 }
@@ -556,7 +566,7 @@ void wxSizer::SetVirtualSizeHints( wxWindow *window )
                                  window->GetMaxHeight() );
 }
 
-wxSize wxSizer::GetMaxWindowSize( wxWindow *window )
+wxSize wxSizer::GetMaxWindowSize( wxWindow *window ) const
 {
     return window->GetMaxSize();
 }
@@ -587,7 +597,7 @@ wxSize wxSizer::FitSize( wxWindow *window )
     return size;
 }
 
-wxSize wxSizer::GetMaxClientSize( wxWindow *window )
+wxSize wxSizer::GetMaxClientSize( wxWindow *window ) const
 {
     wxSize maxSize( window->GetMaxSize() );
 
@@ -798,7 +808,7 @@ void wxSizer::ShowItems( bool show )
     }
 }
 
-bool wxSizer::IsShown( wxWindow *window )
+bool wxSizer::IsShown( wxWindow *window ) const
 {
     wxSizerItemList::Node   *node = m_children.GetFirst();
     while (node)
@@ -817,7 +827,7 @@ bool wxSizer::IsShown( wxWindow *window )
     return false;
 }
 
-bool wxSizer::IsShown( wxSizer *sizer )
+bool wxSizer::IsShown( wxSizer *sizer ) const
 {
     wxSizerItemList::Node   *node = m_children.GetFirst();
     while (node)
@@ -836,7 +846,7 @@ bool wxSizer::IsShown( wxSizer *sizer )
     return false;
 }
 
-bool wxSizer::IsShown( size_t index )
+bool wxSizer::IsShown( size_t index ) const
 {
     wxCHECK_MSG( index < m_children.GetCount(),
                  false,
