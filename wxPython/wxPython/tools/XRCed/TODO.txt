@@ -1,6 +1,8 @@
 TODO for XRCed
 ==============
 
+- better help
+
 + undo/redo
 
 + tree icons
