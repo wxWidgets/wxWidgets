@@ -623,6 +623,7 @@ main.cpp	X11
 minifram.cpp	X11
 palette.cpp	X11
 pen.cpp	X11
+popupwin.cpp	X11
 region.cpp	X11
 settings.cpp	X11
 toplevel.cpp	X11
