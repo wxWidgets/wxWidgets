@@ -1957,17 +1957,19 @@ equivalent variable and GTK+ is version 1.2.3 or above.
                     ;;
         esac
 
-        if test "$wxUSE_PRINTING_ARCHITECTURE" = "yes" ; then
-            PKG_CHECK_MODULES(PANGOFT2, pangoft2,
-                [
-                    CXXFLAGS="$CXXFLAGS $PANGOFT2_CFLAGS"
-                    LIBS="$LIBS $PANGOFT2_LIBS"
-                ],
-                [
-                    AC_MSG_WARN([pangoft2 library not found, library will be compiled without printing support])
-                    wxUSE_PRINTING_ARCHITECTURE="no"
-                ]
-            )
+        if test "$WXGTK20" = 1; then
+            if test "$wxUSE_PRINTING_ARCHITECTURE" = "yes" ; then
+                PKG_CHECK_MODULES(PANGOFT2, pangoft2,
+                    [
+                        CXXFLAGS="$CXXFLAGS $PANGOFT2_CFLAGS"
+                        LIBS="$LIBS $PANGOFT2_LIBS"
+                    ],
+                    [
+                        AC_MSG_WARN([pangoft2 library not found, library will be compiled without printing support])
+                        wxUSE_PRINTING_ARCHITECTURE="no"
+                    ]
+                )
+            fi
         fi
 
         TOOLKIT_INCLUDE="$wx_cv_cflags_gtk"
