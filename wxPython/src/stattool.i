@@ -270,7 +270,7 @@ public:
     # 2.3.3.  They are renamed to have 'Label' in the name so as to be
     # able to keep backwards compatibility with using the above
     # methods.  Eventually these should migrate to be the methods used
-    # primarily and loose the 'Label' in the name...
+    # primarily and lose the 'Label' in the name...
 
     def AddLabelTool(self, id, label, bitmap,
                      bmpDisabled = wxNullBitmap,
