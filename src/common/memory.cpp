@@ -44,15 +44,6 @@
 
 #include "wx/ioswrap.h"
 
-// Obsolete
-#if 0
-#if wxUSE_IOSTREAMH
-    #include <fstream.h>
-#else
-    #include <fstream>
-#endif
-#endif
-
 #if !defined(__WATCOMC__) && !(defined(__VMS__) && ( __VMS_VER < 70000000 ) )\
      && !defined( __MWERKS__ ) && !defined(__SALFORDC__)
 #include <memory.h>
@@ -75,6 +66,13 @@
 #endif
 
 #include "wx/memory.h"
+
+#if wxUSE_THREADS && defined(__WXDEBUG__) && !defined(__WXMAC__)
+#define USE_THREADSAFE_MEMORY_ALLOCATION 1
+#else
+#define USE_THREADSAFE_MEMORY_ALLOCATION 0
+#endif
+
 
 #ifdef new
 #undef new
@@ -859,7 +857,7 @@ int wxDebugContext::CountObjectsLeft(bool sinceCheckpoint)
   return n ;
 }
 
-#if wxUSE_THREADS
+#if USE_THREADSAFE_MEMORY_ALLOCATION
 static bool memSectionOk = FALSE;
 
 class MemoryCriticalSection : public wxCriticalSection
@@ -892,7 +890,7 @@ static MemoryCriticalSection memLocker;
 // TODO: store whether this is a vector or not.
 void * wxDebugAlloc(size_t size, wxChar * fileName, int lineNum, bool isObject, bool WXUNUSED(isVect) )
 {
-#if wxUSE_THREADS
+#if USE_THREADSAFE_MEMORY_ALLOCATION
   MemoryCriticalSectionLocker lock(memLocker);
 #endif
 
@@ -952,7 +950,7 @@ void * wxDebugAlloc(size_t size, wxChar * fileName, int lineNum, bool isObject, 
 // TODO: check whether was allocated as a vector
 void wxDebugFree(void * buf, bool WXUNUSED(isVect) )
 {
-#if wxUSE_THREADS
+#if USE_THREADSAFE_MEMORY_ALLOCATION
   MemoryCriticalSectionLocker lock(memLocker);
 #endif
 
