@@ -3,6 +3,7 @@
 // Purpose:     wxFileSystem class - interface for opening files
 // Author:      Vaclav Slavik
 // Copyright:   (c) 1999 Vaclav Slavik
+// CVS-ID:      $Id$
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -221,14 +222,51 @@ IMPLEMENT_DYNAMIC_CLASS(wxFileSystem, wxObject)
 wxList wxFileSystem::m_Handlers;
 
 
+static wxString MakeCorrectPath(const wxString& path)
+{
+    wxString p(path);
+    wxString r;
+    int i, j, cnt;
+    
+    cnt = p.Length();
+    for (i = 0; i < cnt; i++)
+        if (p[i] == wxT('\\')) p.GetWritableChar(i) = wxT('/'); // wanna be windows-safe
+        
+    if (p.Left(2) == wxT("./")) { p = p.Mid(2); cnt -= 2; }
+    
+    if (cnt < 3) return p;
+    
+    r << p[0] << p[1];
+    
+    // skip trailing ../.., if any
+    for (i = 2; i < cnt && (p[i] == wxT('/') || p[i] == wxT('.')); i++) r << p[i];
+    
+    // remove back references: translate dir1/../dir2 to dir2
+    for (; i < cnt; i++)
+    {
+        r << p[i];
+        if (p[i] == wxT('/') && p[i-1] == wxT('.') && p[i-2] == wxT('.'))
+        {
+            for (j = r.Length() - 2; j >= 0 && r[j] != wxT('/') && r[j] != wxT(':'); j--) {}
+            if (j >= 0 && r[j] != wxT(':'))
+            {
+                for (j = j - 1; j >= 0 && r[j] != wxT('/') && r[j] != wxT(':'); j--) {}
+                r.Remove(j + 1);
+            }
+        }
+    }
+        
+    for (; i < cnt; i++) r << p[i];
+        
+    return r;
+}
+
 
 void wxFileSystem::ChangePathTo(const wxString& location, bool is_dir)
 {
     int i, pathpos = -1;
-    m_Path = location;
 
-    for (i = m_Path.Length()-1; i >= 0; i--)
-        if (m_Path[(unsigned int) i] == wxT('\\')) m_Path.GetWritableChar(i) = wxT('/');         // wanna be windows-safe
+    m_Path = MakeCorrectPath(location);
 
     if (is_dir)
     {
@@ -282,8 +320,8 @@ void wxFileSystem::ChangePathTo(const wxString& location, bool is_dir)
 
 wxFSFile* wxFileSystem::OpenFile(const wxString& location)
 {
-    wxString loc = location;
-    int i, ln;
+    wxString loc = MakeCorrectPath(location);
+    unsigned i, ln;
     char meta;
     wxFSFile *s = NULL;
     wxNode *node;
@@ -292,11 +330,10 @@ wxFSFile* wxFileSystem::OpenFile(const wxString& location)
     meta = 0;
     for (i = 0; i < ln; i++)
     {
-        if (loc[(unsigned int) i] == wxT('\\')) loc.GetWritableChar(i) = wxT('/');         // wanna be windows-safe
         if (!meta) 
-            switch (loc[(unsigned int) i])
+            switch (loc[i])
         	{
-                case wxT('/') : case wxT(':') : case wxT('#') : meta = loc[(unsigned int) i];
+                case wxT('/') : case wxT(':') : case wxT('#') : meta = loc[i];
             }
     }
     m_LastName = wxEmptyString;
