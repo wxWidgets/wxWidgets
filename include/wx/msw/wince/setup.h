@@ -522,7 +522,11 @@
 // Default is 1
 //
 // Recommended setting: 1
+#ifdef __SMARTPHONE__
+#define wxUSE_STATUSBAR    0
+#else
 #define wxUSE_STATUSBAR    1
+#endif
 
 // Two status bar implementations are available under Win32: the generic one
 // or the wrapper around native control. For native look and feel the native

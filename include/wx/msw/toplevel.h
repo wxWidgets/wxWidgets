@@ -81,6 +81,12 @@ public:
     void SetLastFocus(wxWindow *win) { m_winLastFocused = win; }
     wxWindow *GetLastFocus() const { return m_winLastFocused; }
 
+#ifdef __SMARTPHONE__
+    void SetLeftMenu(int id = wxID_ANY, const wxString& label = wxEmptyString, wxMenu *subMenu = NULL);
+    void SetRightMenu(int id = wxID_ANY, const wxString& label = wxEmptyString, wxMenu *subMenu = NULL);
+    bool HandleCommand(WXWORD id, WXWORD cmd, WXHWND control);
+#endif // __SMARTPHONE__
+
 protected:
     // common part of all ctors
     void Init();
@@ -122,6 +128,41 @@ protected:
 
     // the last focused child: we restore focus to it on activation
     wxWindow             *m_winLastFocused;
+
+#ifdef __SMARTPHONE__
+    class ButtonMenu
+    {
+    public:
+        ButtonMenu();
+        ~ButtonMenu();
+
+        void SetButton(int id = wxID_ANY, 
+                       const wxString& label  = wxEmptyString, 
+                       wxMenu *subMenu = NULL);
+
+        bool IsAssigned() const {return m_assigned;}
+        bool IsMenu() const {return m_menu!=NULL;}
+
+        int GetId() const {return m_id;}
+        wxMenu* GetMenu() const {return m_menu;}
+        wxString GetLabel() {return m_label;}
+
+        static wxMenu *DuplicateMenu(wxMenu *menu);
+
+    protected:
+        int      m_id;
+        wxString m_label;
+        wxMenu  *m_menu;
+        bool     m_assigned;
+    };
+
+    ButtonMenu               m_LeftButton;
+    ButtonMenu               m_RightButton;
+    HWND                     m_MenuBarHWND;
+
+    void ReloadButton(ButtonMenu& button, UINT menuID);
+    void ReloadAllButtons();
+#endif // __SMARTPHONE__
 
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxTopLevelWindowMSW)

@@ -143,6 +143,10 @@ void wxTopLevelWindowMSW::Init()
     m_fsIsShowing = FALSE;
 
     m_winLastFocused = (wxWindow *)NULL;
+
+#ifdef __SMARTPHONE__
+    m_MenuBarHWND = 0;
+#endif
 }
 
 WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
@@ -521,6 +525,11 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
 	{
 	    this->Maximize();
 	}
+#endif
+
+#ifdef __SMARTPHONE__
+    SetLeftMenu(wxID_EXIT, _("Done"));
+    SetRightMenu(); // to nothing for initialization
 #endif
 
     return ret;

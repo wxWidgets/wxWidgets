@@ -25,6 +25,7 @@
 #include "wx/wx.h"
 #endif
 
+#include "wx/datetime.h"
 #include "wx/image.h"
 
 #if wxUSE_COLOURDLG
@@ -256,7 +257,7 @@ bool MyApp::OnInit()
 
         file_menu->Append(wxID_ANY,_T("Entry dialogs"),entry_menu);
 
-    #endif
+    #endif // wxUSE_TEXTDLG || wxUSE_NUMBERDLG
 
 
     #if wxUSE_FILEDLG
@@ -327,9 +328,13 @@ bool MyApp::OnInit()
     file_menu->AppendSeparator();
     file_menu->Append(wxID_EXIT, _T("E&xit\tAlt-X"));
 
+#if !defined( __SMARTPHONE__ )
     wxMenuBar *menu_bar = new wxMenuBar;
     menu_bar->Append(file_menu, _T("&File"));
     frame->SetMenuBar(menu_bar);
+#else
+    frame->SetRightMenu(wxID_ANY, _T("Menu"), file_menu);
+#endif // __SMARTPHONE__
 
     myCanvas = new MyCanvas(frame);
     myCanvas->SetBackgroundColour(*wxWHITE);
@@ -366,7 +371,9 @@ MyFrame::MyFrame(wxWindow *parent,
     }
 #endif // wxUSE_COLOURDLG
 
+#if wxUSE_STATUSBAR
     CreateStatusBar();
+#endif // wxUSE_STATUSBAR
 }
 
 #if wxUSE_COLOURDLG

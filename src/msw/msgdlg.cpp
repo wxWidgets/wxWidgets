@@ -79,9 +79,11 @@ int wxMessageDialog::ShowModal()
     unsigned int msStyle = MB_OK;
     if (m_dialogStyle & wxYES_NO)
     {
+#if !defined(__SMARTPHONE__)
         if (m_dialogStyle & wxCANCEL)
             msStyle = MB_YESNOCANCEL;
         else
+#endif // __SMARTPHONE__
             msStyle = MB_YESNO;
 
         if (m_dialogStyle & wxNO_DEFAULT)
