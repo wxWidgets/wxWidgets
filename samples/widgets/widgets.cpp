@@ -55,6 +55,9 @@ enum
 {
     Widgets_ClearLog = 100,
     Widgets_Quit,
+#if wxUSE_TOOLTIPS
+    Widgets_SetTooltip,
+#endif // wxUSE_TOOLTIPS
     Widgets_SetFgColour,
     Widgets_SetBgColour
 };
@@ -91,6 +94,9 @@ protected:
 #endif // USE_LOG
     void OnExit(wxCommandEvent& event);
 #if wxUSE_MENUS
+#if wxUSE_TOOLTIPS
+    void OnSetTooltip(wxCommandEvent& event);
+#endif // wxUSE_TOOLTIPS
     void OnSetFgCol(wxCommandEvent& event);
     void OnSetBgCol(wxCommandEvent& event);
 #endif // wxUSE_MENUS
@@ -204,9 +210,14 @@ BEGIN_EVENT_TABLE(WidgetsFrame, wxFrame)
 #endif // USE_LOG
     EVT_BUTTON(Widgets_Quit, WidgetsFrame::OnExit)
 
-    EVT_MENU(wxID_EXIT, WidgetsFrame::OnExit)
+#if wxUSE_TOOLTIPS
+    EVT_MENU(Widgets_SetTooltip, WidgetsFrame::OnSetTooltip)
+#endif // wxUSE_TOOLTIPS
+
     EVT_MENU(Widgets_SetFgColour, WidgetsFrame::OnSetFgCol)
     EVT_MENU(Widgets_SetBgColour, WidgetsFrame::OnSetBgCol)
+
+    EVT_MENU(wxID_EXIT, WidgetsFrame::OnExit)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -275,6 +286,10 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     // create the menubar
     wxMenuBar *mbar = new wxMenuBar;
     wxMenu *menuWidget = new wxMenu;
+#if wxUSE_TOOLTIPS
+    menuWidget->Append(Widgets_SetTooltip, _T("Set &tooltip...\tCtrl-T"));
+    menuWidget->AppendSeparator();
+#endif // wxUSE_TOOLTIPS
     menuWidget->Append(Widgets_SetFgColour, _T("Set &foreground...\tCtrl-F"));
     menuWidget->Append(Widgets_SetBgColour, _T("Set &background...\tCtrl-B"));
     menuWidget->AppendSeparator();
@@ -416,6 +431,33 @@ void WidgetsFrame::OnButtonClearLog(wxCommandEvent& WXUNUSED(event))
 
 #if wxUSE_MENUS
 
+#if wxUSE_TOOLTIPS
+
+void WidgetsFrame::OnSetTooltip(wxCommandEvent& WXUNUSED(event))
+{
+    static wxString s_tip = _T("This is a tooltip");
+
+    wxString s = wxGetTextFromUser
+                 (
+                    _T("Tooltip text: "),
+                    _T("Widgets sample"),
+                    s_tip,
+                    this
+                 );
+
+    if ( s.empty() )
+        return;
+
+    WidgetsPage *page = wxStaticCast(m_book->GetCurrentPage(), WidgetsPage);
+    page->GetWidget()->SetToolTip(s_tip = s);
+
+    wxControl *ctrl2 = page->GetWidget2();
+    if ( ctrl2 )
+        ctrl2->SetToolTip(s);
+}
+
+#endif // wxUSE_TOOLTIPS
+
 void WidgetsFrame::OnSetFgCol(wxCommandEvent& WXUNUSED(event))
 {
 #if wxUSE_COLOURDLG
@@ -428,8 +470,15 @@ void WidgetsFrame::OnSetFgCol(wxCommandEvent& WXUNUSED(event))
     WidgetsPage *page = wxStaticCast(m_book->GetCurrentPage(), WidgetsPage);
     page->GetWidget()->SetForegroundColour(m_colFg);
     page->GetWidget()->Refresh();
+
+    wxControl *ctrl2 = page->GetWidget2();
+    if ( ctrl2 )
+    {
+        ctrl2->SetForegroundColour(m_colFg);
+        ctrl2->Refresh();
+    }
 #else
-    wxLogMessage(_T("None colour dialog available in current build."));
+    wxLogMessage(_T("Colour selection dialog not available in current build."));
 #endif
 }
 
@@ -445,8 +494,15 @@ void WidgetsFrame::OnSetBgCol(wxCommandEvent& WXUNUSED(event))
     WidgetsPage *page = wxStaticCast(m_book->GetCurrentPage(), WidgetsPage);
     page->GetWidget()->SetBackgroundColour(m_colBg);
     page->GetWidget()->Refresh();
+
+    wxControl *ctrl2 = page->GetWidget2();
+    if ( ctrl2 )
+    {
+        ctrl2->SetBackgroundColour(m_colFg);
+        ctrl2->Refresh();
+    }
 #else
-    wxLogMessage(_T("None colour dialog available in current build."));
+    wxLogMessage(_T("Colour selection dialog not available in current build."));
 #endif
 }
 

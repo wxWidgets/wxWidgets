@@ -77,6 +77,7 @@ public:
     virtual ~SpinBtnWidgetsPage(){};
 
     virtual wxControl *GetWidget() const { return m_spinbtn; }
+    virtual wxControl *GetWidget2() const { return m_spinctrl; }
 
 protected:
     // event handlers
