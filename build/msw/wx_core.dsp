@@ -4275,6 +4275,10 @@ SOURCE=..\..\src\generic\imaglist.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\generic\listbkg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\generic\listctrl.cpp
 
 !IF  "$(CFG)" == "core - Win32 Debug"
@@ -7832,6 +7836,10 @@ SOURCE=..\..\include\wx\bmpbuttn.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\bookctrl.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\brush.h
 # End Source File
 # Begin Source File
@@ -8133,6 +8141,10 @@ SOURCE=..\..\include\wx\laywin.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\listbase.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\listbook.h
 # End Source File
 # Begin Source File
 
