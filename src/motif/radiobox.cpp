@@ -102,7 +102,8 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
     if (label1 != "")
     {
         wxXmString text(label1);
-        (void)XtVaCreateManagedWidget( label1.c_str(),
+        m_labelWidget = (WXWidget)
+            XtVaCreateManagedWidget( label1.c_str(),
 #if wxUSE_GADGETS
                                        style & wxCOLOURED ? xmLabelWidgetClass
                                                           : xmLabelGadgetClass,

@@ -73,8 +73,9 @@ public:
     virtual void ChangeFont(bool keepOriginalSize = TRUE);
     virtual void ChangeBackgroundColour();
     virtual void ChangeForegroundColour();
-    inline WXWidget* GetRadioButtons() const { return m_radioButtons; }
-    inline void SetSel(int i) { m_selectedButton = i; }
+    WXWidget* GetRadioButtons() const { return m_radioButtons; }
+    void SetSel(int i) { m_selectedButton = i; }
+    virtual WXWidget GetLabelWidget() const { return m_labelWidget; }
 
 protected:
     int               m_majorDim;
@@ -83,6 +84,7 @@ protected:
     int               m_selectedButton;
 
     WXWidget*         m_radioButtons;
+    WXWidget          m_labelWidget;
     wxString*         m_radioButtonLabels;
 
     virtual void DoSetSize(int x, int y,
