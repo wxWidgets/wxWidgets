@@ -124,6 +124,15 @@
 
 wxPrintSetupData *wxThePrintSetupData = (wxPrintSetupData *) NULL;
 
+#if !USE_SHARED_LIBRARY
+IMPLEMENT_DYNAMIC_CLASS(wxPostScriptModule, wxModule)
+IMPLEMENT_DYNAMIC_CLASS(wxPostScriptDC, wxDC)
+IMPLEMENT_DYNAMIC_CLASS(wxPrintSetupData, wxObject)
+IMPLEMENT_DYNAMIC_CLASS(wxPrintPaperType, wxObject)
+#endif
+
+#ifndef __WXGTK__
+
 // these should move into wxPostscriptDC:
 double UnderlinePosition = 0.0F;
 double UnderlineThickness = 0.0F;
@@ -162,13 +171,6 @@ static const char *wxPostScriptHeaderSpline = (char *) NULL;
 #ifdef __VMS__
 #define VMS_BUFSIZ (1024L*1024L)
 static char *fileBuffer = NULL;
-#endif
-
-#if !USE_SHARED_LIBRARY
-IMPLEMENT_DYNAMIC_CLASS(wxPostScriptModule, wxModule)
-IMPLEMENT_DYNAMIC_CLASS(wxPostScriptDC, wxDC)
-IMPLEMENT_DYNAMIC_CLASS(wxPrintSetupData, wxObject)
-IMPLEMENT_DYNAMIC_CLASS(wxPrintPaperType, wxObject)
 #endif
 
 wxPostScriptDC::wxPostScriptDC ()
@@ -2051,6 +2053,9 @@ void wxPostScriptDC::CalcBoundingBox(long x, long y)
     if (device_x > m_maxX) m_maxX = device_x;
     if (device_y > m_maxY) m_maxY = device_y;
 }
+
+#endif
+       //  __WXGTK__
 
 IMPLEMENT_CLASS(wxPostScriptPrintDialog, wxDialog)
 

@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_POSTSCRPH__
-#define _WX_POSTSCRPH__
+#ifndef __GTKDCPSH__
+#define __GTKDCPSNH__
 
 #ifdef __GNUG__
 #pragma interface
@@ -26,89 +26,7 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class wxPostScriptModule;
 class wxPostScriptDC;
-class wxPostScriptPrintDialog;
-class wxPrintSetupData;
-class wxPrintPaperType;
-class wxPrintPaperDatabase;
-
-//-----------------------------------------------------------------------------
-// constants
-//-----------------------------------------------------------------------------
-
-#define wxID_PRINTER_COMMAND        1
-#define wxID_PRINTER_OPTIONS        2
-#define wxID_PRINTER_ORIENTATION    3
-#define wxID_PRINTER_MODES          4
-#define wxID_PRINTER_X_SCALE        5
-#define wxID_PRINTER_Y_SCALE        6
-#define wxID_PRINTER_X_TRANS        7
-#define wxID_PRINTER_Y_TRANS        8
-
-// Print Orientation (Should also add Left, Right)
-enum {
-  PS_PORTRAIT = 1,
-  PS_LANDSCAPE = 2
-};// ps_orientation = PS_PORTRAIT;
-
-// Print Actions
-enum {
-  PS_PRINTER,
-  PS_FILE,
-  PS_PREVIEW
-};// ps_action = PS_PREVIEW;
-
-//-----------------------------------------------------------------------------
-// global data
-//-----------------------------------------------------------------------------
-
-WXDLLEXPORT_DATA(extern wxPrintSetupData*) wxThePrintSetupData;
-WXDLLEXPORT_DATA(extern wxPrintPaperDatabase*) wxThePrintPaperDatabase;
-
-//-----------------------------------------------------------------------------
-// functions for compatibility
-//-----------------------------------------------------------------------------
-
-// PostScript printer settings
-WXDLLEXPORT void wxSetPrinterCommand(const char *cmd);
-WXDLLEXPORT void wxSetPrintPreviewCommand(const char *cmd);
-WXDLLEXPORT void wxSetPrinterOptions(const char *flags);
-WXDLLEXPORT void wxSetPrinterOrientation(int orientation);
-WXDLLEXPORT void wxSetPrinterScaling(double x, double y);
-WXDLLEXPORT void wxSetPrinterTranslation(long x, long y);
-WXDLLEXPORT void wxSetPrinterMode(int mode);
-WXDLLEXPORT void wxSetPrinterFile(const char *f);
-WXDLLEXPORT void wxSetAFMPath(const char *f);
-
-// Get current values
-WXDLLEXPORT char* wxGetPrinterCommand();
-WXDLLEXPORT char* wxGetPrintPreviewCommand();
-WXDLLEXPORT char* wxGetPrinterOptions();
-WXDLLEXPORT int wxGetPrinterOrientation();
-WXDLLEXPORT void wxGetPrinterScaling(double* x, double* y);
-WXDLLEXPORT void wxGetPrinterTranslation(long *x, long *y);
-WXDLLEXPORT int wxGetPrinterMode();
-WXDLLEXPORT char* wxGetPrinterFile();
-WXDLLEXPORT char* wxGetAFMPath();
-
-WXDLLEXPORT extern void wxInitializePrintSetupData(bool init = TRUE);
-
-//-----------------------------------------------------------------------------
-// wxPostScriptModule
-//-----------------------------------------------------------------------------
-
-// A module to allow initialization/cleanup of PostScript-related
-// things without calling these functions from app.cpp.
-
-class WXDLLEXPORT wxPostScriptModule: public wxModule
-{
-DECLARE_DYNAMIC_CLASS(wxPostScriptModule)
-public:
-    wxPostScriptModule() {}
-    bool OnInit();
-    void OnExit();
-};
 
 //-----------------------------------------------------------------------------
 // wxPostScriptDC
@@ -214,133 +132,8 @@ protected:
   double            m_underlineThickness;
 };
 
-//-----------------------------------------------------------------------------
-// wxPostScriptPrintDialog
-//-----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxPostScriptPrintDialog: public wxDialog
-{
-DECLARE_CLASS(wxPostScriptPrintDialog)
-public:
-    wxPostScriptPrintDialog (wxWindow *parent, const wxString& title,
-          const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-          long style = wxDEFAULT_DIALOG_STYLE);
-
-    virtual int ShowModal(void) ;
-};
-
-//-----------------------------------------------------------------------------
-// wxPrintSetupData
-//-----------------------------------------------------------------------------
-
-/*
- * PostScript print setup information
- */
-
-class WXDLLEXPORT wxPrintSetupData: public wxObject
-{
-public:
-    char *printerCommand;
-    char *previewCommand;
-    char *printerFlags;
-    char *printerFile;
-    int printerOrient;
-    double printerScaleX;
-    double printerScaleY;
-    long printerTranslateX;
-    long printerTranslateY;
-    // 1 = Preview, 2 = print to file, 3 = send to printer
-    int printerMode;
-    char *afmPath;
-    // A name in the paper database (see wx_print.h: the printing framework)
-    char *paperName;
-    bool printColour;
-
-public:
-    wxPrintSetupData();
-    ~wxPrintSetupData();
-
-    void SetPrinterCommand(const char *cmd);
-    void SetPaperName(const char *paper);
-    void SetPrintPreviewCommand(const char *cmd);
-    void SetPrinterOptions(const char *flags);
-    void SetPrinterFile(const char *f);
-    void SetPrinterOrientation(int orient);
-    void SetPrinterScaling(double x, double y);
-    void SetPrinterTranslation(long x, long y);
-    // 1 = Preview, 2 = print to file, 3 = send to printer
-    void SetPrinterMode(int mode);
-    void SetAFMPath(const char *f);
-    void SetColour(bool col);
-
-    // Get current values
-    char *GetPrinterCommand();
-    char *GetPrintPreviewCommand();
-    char *GetPrinterOptions();
-    char *GetPrinterFile();
-    char *GetPaperName();
-    int GetPrinterOrientation();
-    void GetPrinterScaling(double* x, double* y);
-    void GetPrinterTranslation(long *x, long *y);
-    int GetPrinterMode();
-    char *GetAFMPath();
-    bool GetColour();
-
-    void operator=(wxPrintSetupData& data);
-
-private:
-  DECLARE_DYNAMIC_CLASS(wxPrintSetupData)
-};
-
-//-----------------------------------------------------------------------------
-// wxPrintPaperType
-//-----------------------------------------------------------------------------
-
-/*
- * Again, this only really needed for non-Windows platforms
- * or if you want to test the PostScript printing under Windows.
- */
-
-class WXDLLEXPORT wxPrintPaperType: public wxObject
-{
-public:
-    wxPrintPaperType(const char *name = (const char *) NULL, int wmm = 0, int hmm = 0, int wp = 0, int hp = 0);
-    ~wxPrintPaperType();
-
-public:
-    int widthMM;
-    int heightMM;
-    int widthPixels;
-    int heightPixels;
-    char *pageName;
-
-private:
-    DECLARE_DYNAMIC_CLASS(wxPrintPaperType)
-};
-
-//-----------------------------------------------------------------------------
-// wxPrintPaperDataBase
-//-----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxPrintPaperDatabase: public wxList
-{
-public:
-    wxPrintPaperDatabase();
-    ~wxPrintPaperDatabase();
-
-    void CreateDatabase();
-    void ClearDatabase();
-
-    void AddPaperType(const char *name, int wmm, int hmm, int wp, int hp);
-    wxPrintPaperType *FindPaperType(const char *name);
-
-private:
-    DECLARE_DYNAMIC_CLASS(wxPrintPaperDatabase)
-};
-
-
 #endif 
     // wxUSE_POSTSCRIPT
 
 #endif
-        // _WX_POSTSCRPH__
+        // __GTKDCPSH__

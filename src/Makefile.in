@@ -79,6 +79,10 @@ install::
 	for f in *.h ; do \
 	  rm -f $(includedir)/wx/$$f ; \
 	  $(INSTALL_DATA) $$f $(includedir)/wx/$$f ; \
+	done ; \
+	for f in *.cpp ; do \
+	  rm -f $(includedir)/wx/$$f ; \
+	  $(INSTALL_DATA) $$f $(includedir)/wx/$$f ; \
 	done
 	@echo "  Copying headers from /include/wx/gtk"
 	@cd $(WXBASEDIR)/include/wx/gtk ; \
@@ -86,7 +90,7 @@ install::
 	for f in *.h ; do \
 	  rm -f $(includedir)/wx/gtk/$$f ; \
 	  $(INSTALL_DATA) $$f $(includedir)/wx/gtk/$$f ; \
-	done ;
+	done
 	@echo "  Copying headers from /include/wx/generic"
 	@cd $(WXBASEDIR)/include/wx/generic ; \
 	$(INSTALL) -d $(includedir)/wx/generic ; \

@@ -9,12 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __WXGTK__
-
-#include "wx/gtk/dcps.h"
-
-#else
-
 #ifndef _WX_POSTSCRPH__
 #define _WX_POSTSCRPH__
 
@@ -48,6 +42,14 @@ public:
       using namespace std;
 #  endif
 #endif
+
+#ifdef __WXGTK__
+
+// wxGTK has its own wxPostscriptDC
+
+#include "wx/gtk/dcps.h"
+
+#else
 
 class WXDLLEXPORT wxPostScriptDC: public wxDC
 {
@@ -156,6 +158,9 @@ protected:
   double            m_scaleFactor;
 };
 
+#endif 
+        // __WXGTK__
+      
 #define wxID_PRINTER_COMMAND        1
 #define wxID_PRINTER_OPTIONS        2
 #define wxID_PRINTER_ORIENTATION    3
@@ -320,7 +325,4 @@ WXDLLEXPORT_DATA(extern wxPrintPaperDatabase*) wxThePrintPaperDatabase;
 #endif
         // _WX_POSTSCRPH__
 	
-#endif 
-        // __WXGTK__
-      
 	

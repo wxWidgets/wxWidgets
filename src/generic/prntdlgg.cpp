@@ -197,12 +197,12 @@ void wxGenericPrintDialog::OnRange(wxCommandEvent& event)
 {
   if (!fromText) return;
 
-  if (event.GetInt() == 1)
+  if (event.GetInt() == 0)
   {
     fromText->Enable(FALSE);
     toText->Enable(FALSE);
   }
-  else if (event.GetInt() == 0)
+  else if (event.GetInt() == 1)
   {
     fromText->Enable(TRUE);
     toText->Enable(TRUE);
