@@ -140,7 +140,13 @@ int wxDirDialog::ShowModal()
     bi.hwndOwner      = parent ? GetHwndOf(parent) : NULL;
     bi.pidlRoot       = NULL;
     bi.pszDisplayName = NULL;
+    // Please don't change this without checking it compiles
+    // with eVC++ first.
+#if defined(__POCKETPC__) || defined(__SMARTPHONE__)
+    bi.lpszTitle      = m_message.mb_str();
+#else
     bi.lpszTitle      = m_message.c_str();
+#endif
     bi.ulFlags        = BIF_RETURNONLYFSDIRS | BIF_STATUSTEXT;
     bi.lpfn           = BrowseCallbackProc;
     bi.lParam         = (LPARAM)m_path.c_str();    // param for the callback
