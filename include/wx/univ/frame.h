@@ -65,7 +65,7 @@ public:
     virtual int GetMinHeight() const;
 
     // sends wxSizeEvent to itself (used after attaching xxxBar)
-    void SendSizeEvent();
+    virtual void SendSizeEvent();
 
 protected:
     void OnSize(wxSizeEvent& event);
