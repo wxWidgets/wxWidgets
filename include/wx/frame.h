@@ -28,6 +28,7 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxFrameNameStr;
 WXDLLEXPORT_DATA(extern const wxChar*) wxStatusLineNameStr;
 WXDLLEXPORT_DATA(extern const wxChar*) wxToolBarNameStr;
 
+class WXDLLEXPORT wxFrame;
 class WXDLLEXPORT wxMenuBar;
 class WXDLLEXPORT wxStatusBar;
 class WXDLLEXPORT wxToolBar;
@@ -170,6 +171,7 @@ public:
     void OnCloseWindow(wxCloseEvent& event);
     void OnMenuHighlight(wxMenuEvent& event);
     void OnSize(wxSizeEvent& event);
+
     // this should go away, but for now it's called from docview.cpp,
     // so should be there for all platforms
     void OnActivate(wxActivateEvent &WXUNUSED(event)) { }
@@ -188,7 +190,13 @@ protected:
     // main menubar, statusbar and toolbar (if any)
     void DeleteAllBars();
 
+    // test whether this window makes part of the frame
+    virtual bool IsOneOfBars(const wxWindow *win) const;
+
 #if wxUSE_MENUS
+    // override to update menu bar position when the frame size changes
+    virtual void PositionMenuBar() { }
+
     wxMenuBar *m_frameMenuBar;
 #endif // wxUSE_MENUS
 
@@ -226,10 +234,12 @@ protected:
 // include the real class declaration
 #if defined(__WXMSW__)
     #include "wx/msw/frame.h"
+    #define wxFrameNative wxFrameMSW
 #elif defined(__WXMOTIF__)
     #include "wx/motif/frame.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk/frame.h"
+    #define wxFrameNative wxFrameGTK
 #elif defined(__WXMGL__)
     #include "wx/mgl/frame.h"
 #elif defined(__WXQT__)
@@ -240,6 +250,12 @@ protected:
     #include "wx/os2/frame.h"
 #elif defined(__WXSTUBS__)
     #include "wx/stubs/frame.h"
+#endif
+
+#ifdef __WXUNIVERSAL__
+    #include "wx/univ/frame.h"
+#else
+    #define wxFrame wxFrameNative
 #endif
 
 #endif

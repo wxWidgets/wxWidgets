@@ -56,6 +56,7 @@ struct WXDLLEXPORT wxMenuInfo
 
         wxSize size;
         wxClientDC dc(menubar);
+        dc.SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
         dc.GetTextExtent(label, &size.x, &size.y);
 
         // adjust for the renderer we use and store the width
@@ -82,8 +83,11 @@ IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
 
 BEGIN_EVENT_TABLE(wxMenuBar, wxMenuBarBase)
     EVT_SET_FOCUS(wxMenuBar::OnSetFocus)
+
     EVT_KEY_DOWN(wxMenuBar::OnKeyDown)
+
     EVT_LEFT_DOWN(wxMenuBar::OnLeftDown)
+    EVT_MOTION(wxMenuBar::OnMouseMove)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -214,6 +218,7 @@ void wxMenuBar::Init()
 {
     m_frameLast = NULL;
     m_focusOld = NULL;
+    m_current = -1;
 }
 
 void wxMenuBar::Attach(wxFrame *frame)
@@ -386,6 +391,9 @@ void wxMenuBar::RefreshItem(size_t pos)
 
 void wxMenuBar::DoDraw(wxControlRenderer *renderer)
 {
+    wxDC& dc = renderer->GetDC();
+    dc.SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+
     // redraw only the items which must be redrawn
 
     // we don't have to use GetUpdateClientRect() here because our client rect
@@ -425,7 +433,7 @@ void wxMenuBar::DoDraw(wxControlRenderer *renderer)
 
         GetRenderer()->DrawMenuBarItem
                        (
-                            renderer->GetDC(),
+                            dc,
                             rect,
                             m_menuInfos[n].label,
                             flags,
@@ -463,6 +471,7 @@ wxSize wxMenuBar::DoGetBestClientSize() const
     if ( GetMenuCount() > 0 )
     {
         wxClientDC dc(wxConstCast(this, wxMenuBar));
+        dc.SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
         dc.GetTextExtent(GetLabelTop(0), &size.x, &size.y);
 
         // adjust for the renderer we use
@@ -478,6 +487,28 @@ wxSize wxMenuBar::DoGetBestClientSize() const
     size.x = 100;
 
     return size;
+}
+
+int wxMenuBar::GetMenuFromPoint(const wxPoint& pos) const
+{
+    if ( pos.x < 0 || pos.y < 0 || pos.y > GetClientSize().y )
+        return -1;
+
+    // do find it
+    wxCoord x = 0;
+    size_t count = GetCount();
+    for ( size_t item = 0; item < count; item++ )
+    {
+        x += GetItemWidth(item);
+
+        if ( x > pos.x )
+        {
+            return item;
+        }
+    }
+
+    // to the right of the last menu item
+    return -1;
 }
 
 // ----------------------------------------------------------------------------
@@ -503,18 +534,48 @@ void wxMenuBar::OnSetFocus(wxFocusEvent& event)
 
 void wxMenuBar::OnLeftDown(wxMouseEvent& event)
 {
-    m_current = HitTest(event.GetPosition());
-    if ( m_current == -1 )
+    if ( HasCapture() )
     {
-        // don't skip the event so we won't get the focus
-        return;
+        if ( m_current != -1 )
+        {
+            RefreshItem(m_current);
+            m_current = -1;
+        }
+
+        ReleaseCapture();
     }
+    else // we didn't have mosue capture, capture it now
+    {
+        m_current = GetMenuFromPoint(event.GetPosition());
+        if ( m_current == -1 )
+        {
+            // don't skip the event so we won't get the focus
+            return;
+        }
 
-    // show it as selected
-    RefreshItem(m_current);
+        // show it as selected
+        RefreshItem(m_current);
 
-    // and let the menu bar to have focus
-    event.Skip();
+        CaptureMouse();
+    }
+}
+
+void wxMenuBar::OnMouseMove(wxMouseEvent& event)
+{
+    if ( HasCapture() )
+    {
+        int currentNew = GetMenuFromPoint(event.GetPosition());
+        if ( currentNew != m_current )
+        {
+            if ( m_current != -1 )
+                RefreshItem(m_current);
+
+            m_current = currentNew;
+
+            if ( m_current != -1 )
+                RefreshItem(m_current);
+        }
+    }
 }
 
 void wxMenuBar::OnKeyDown(wxKeyEvent& event)
@@ -562,11 +623,11 @@ void wxMenuBar::OnKeyDown(wxKeyEvent& event)
                 if ( key == WXK_LEFT )
                 {
                     if ( m_current-- == 0 )
-                        m_current = count;
+                        m_current = count - 1;
                 }
                 else // right
                 {
-                    if ( m_current++ == (int)count )
+                    if ( ++m_current == (int)count )
                         m_current = 0;
                 }
 

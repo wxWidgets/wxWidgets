@@ -113,7 +113,7 @@ void wxFontBase::SetNativeFontInfo(const wxNativeFontInfo& info)
     SetFaceName(info.faceName);
     SetEncoding(info.encoding);
 #else
-	(void)info;	
+    (void)info;
 #endif
 }
 

@@ -121,6 +121,26 @@ void wxFrameBase::DeleteAllBars()
 #endif // wxUSE_TOOLBAR
 }
 
+bool wxFrameBase::IsOneOfBars(const wxWindow *win) const
+{
+#if wxUSE_MENUS
+    if ( win == GetMenuBar() )
+        return TRUE;
+#endif // wxUSE_MENUS
+
+#if wxUSE_STATUSBAR
+    if ( win == GetStatusBar() )
+        return TRUE;
+#endif // wxUSE_STATUSBAR
+
+#if wxUSE_TOOLBAR
+    if ( win == GetToolBar() )
+        return TRUE;
+#endif // wxUSE_TOOLBAR
+
+    return FALSE;
+}
+
 // ----------------------------------------------------------------------------
 // wxFrame size management: we exclude the areas taken by menu/status/toolbars
 // from the client area, so the client area is what's really available for the
@@ -234,7 +254,7 @@ void wxFrameBase::OnSize(wxSizeEvent& WXUNUSED(event))
         Layout();
     }
     else
-#endif
+#endif // wxUSE_CONSTRAINTS
     {
         // do we have _exactly_ one child?
         wxWindow *child = (wxWindow *)NULL;
@@ -247,14 +267,7 @@ void wxFrameBase::OnSize(wxSizeEvent& WXUNUSED(event))
             // exclude top level and managed windows (status bar isn't
             // currently in the children list except under wxMac anyhow, but
             // it makes no harm to test for it)
-            if ( !win->IsTopLevel()
-#if wxUSE_STATUSBAR
-                    && (win != GetStatusBar())
-#endif // wxUSE_STATUSBAR
-#if wxUSE_TOOLBAR
-                    && (win != GetToolBar())
-#endif // wxUSE_TOOLBAR
-               )
+            if ( !win->IsTopLevel() && !IsOneOfBars(win) )
             {
                 if ( child )
                 {

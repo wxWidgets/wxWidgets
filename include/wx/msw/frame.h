@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/msw/frame.h
-// Purpose:     wxFrame class
+// Purpose:     wxFrameMSW class
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
@@ -16,20 +16,18 @@
     #pragma interface "frame.h"
 #endif
 
-WXDLLEXPORT_DATA(extern wxWindowMSW*) wxWndHook;
-
-class WXDLLEXPORT wxFrame : public wxFrameBase
+class WXDLLEXPORT wxFrameMSW : public wxFrameBase
 {
 public:
     // construction
-    wxFrame() { Init(); }
-    wxFrame(wxWindow *parent,
-            wxWindowID id,
-            const wxString& title,
-            const wxPoint& pos = wxDefaultPosition,
-            const wxSize& size = wxDefaultSize,
-            long style = wxDEFAULT_FRAME_STYLE,
-            const wxString& name = wxFrameNameStr)
+    wxFrameMSW() { Init(); }
+    wxFrameMSW(wxWindow *parent,
+               wxWindowID id,
+               const wxString& title,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               long style = wxDEFAULT_FRAME_STYLE,
+               const wxString& name = wxFrameNameStr)
     {
         Init();
 
@@ -44,7 +42,7 @@ public:
                 long style = wxDEFAULT_FRAME_STYLE,
                 const wxString& name = wxFrameNameStr);
 
-    virtual ~wxFrame();
+    virtual ~wxFrameMSW();
 
     // implement base class pure virtuals
     virtual void Maximize(bool maximize = TRUE);
@@ -173,7 +171,7 @@ private:
 #endif // tooltips
 
     DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS(wxFrame)
+    DECLARE_DYNAMIC_CLASS(wxFrameMSW)
 };
 
 #endif

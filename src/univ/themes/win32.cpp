@@ -2258,11 +2258,14 @@ void wxWin32Renderer::DrawSliderTicks(wxDC& dc,
 // ----------------------------------------------------------------------------
 
 void wxWin32Renderer::DrawMenuBarItem(wxDC& dc,
-                                      const wxRect& rect,
+                                      const wxRect& rectOrig,
                                       const wxString& label,
                                       int flags,
                                       int indexAccel)
 {
+    wxRect rect = rectOrig;
+    rect.height--;
+
     wxDCTextColourChanger colChanger(dc);
 
     if ( flags & wxCONTROL_SELECTED )
@@ -2285,8 +2288,8 @@ wxSize wxWin32Renderer::GetMenuBarItemSize(const wxSize& sizeText) const
     wxSize size = sizeText;
 
     // FIXME: menubar height is configurable under Windows
-    size.x += 5;
-    size.y += 5;
+    size.x += 12;
+    size.y += 6;
 
     return size;
 }

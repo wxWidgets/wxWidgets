@@ -11,8 +11,8 @@
 // Licence:     wxWindows license
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_UNIX_WINDOW_H_
-#define _WX_UNIX_WINDOW_H_
+#ifndef _WX_UNIV_WINDOW_H_
+#define _WX_UNIV_WINDOW_H_
 
 #ifdef __GNUG__
     #pragma interface "univwindow.h"
@@ -261,4 +261,5 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-#endif // _WX_UNIX_WINDOW_H_
+#endif // _WX_UNIV_WINDOW_H_
+

@@ -82,6 +82,7 @@ protected:
     // event handlers
     void OnSetFocus(wxFocusEvent& event);
     void OnLeftDown(wxMouseEvent& event);
+    void OnMouseMove(wxMouseEvent& event);
     void OnKeyDown(wxKeyEvent& event);
 
     // draw the menubar
@@ -101,6 +102,9 @@ protected:
 
     // get the rect of the item
     wxRect GetItemRect(size_t pos) const;
+
+    // get the menu from the given point or -1 if none
+    int GetMenuFromPoint(const wxPoint& pos) const;
 
     // refresh the given item
     void RefreshItem(size_t pos);
