@@ -27,22 +27,23 @@
 
 class WXDLLEXPORT wxRegionRefData : public wxGDIRefData {
 public:
-	wxRegionRefData()
-	{
-		m_macRgn = NewRgn() ;
-	}
+    wxRegionRefData()
+    {
+        m_macRgn = NewRgn() ;
+    }
 
-	wxRegionRefData(const wxRegionRefData& data)
-	{
-		m_macRgn = NewRgn() ;
+    wxRegionRefData(const wxRegionRefData& data)
+        : wxGDIRefData()
+    {
+        m_macRgn = NewRgn() ;
         CopyRgn( data.m_macRgn , m_macRgn ) ;
-	}
+    }
 
-	~wxRegionRefData()
-	{
+    ~wxRegionRefData()
+    {
         DisposeRgn( m_macRgn ) ;
-	}
-	RgnHandle	m_macRgn ;
+    }
+    RgnHandle	m_macRgn ;
 };
 
 #define M_REGION (((wxRegionRefData*)m_refData)->m_macRgn)
@@ -286,15 +287,16 @@ wxRegionContain wxRegion::Contains(const wxRect& rect) const
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-//																			 //
-//							   wxRegionIterator								 //
-//																			 //
+//                                                                           //
+//                               wxRegionIterator                            //
+//                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
 /*!
  * Initialize empty iterator
  */
-wxRegionIterator::wxRegionIterator() : m_current(0), m_numRects(0), m_rects(NULL)
+wxRegionIterator::wxRegionIterator()
+    : m_current(0), m_numRects(0), m_rects(NULL)
 {
 }
 
@@ -304,6 +306,22 @@ wxRegionIterator::~wxRegionIterator()
         delete[] m_rects;
 }
 
+wxRegionIterator::wxRegionIterator(const wxRegionIterator& iterator)
+    : wxObject()
+    , m_current(iterator.m_current)
+    , m_numRects(iterator.m_numRects)
+    , m_rects(iterator.m_rects)
+{
+}
+
+wxRegionIterator& wxRegionIterator::operator=(const wxRegionIterator& iterator)
+{
+    m_current  = iterator.m_current;
+    m_numRects = iterator.m_numRects;
+    m_rects    = iterator.m_rects;
+    return *this;
+}
+
 /*!
  * Initialize iterator for region
  */
@@ -311,7 +329,7 @@ wxRegionIterator::wxRegionIterator(const wxRegion& region)
 {
     m_rects = NULL;
 
-	Reset(region);
+    Reset(region);
 }
 
 /*!
@@ -347,20 +365,25 @@ void wxRegionIterator::Reset(const wxRegion& region)
  * Increment iterator. The rectangle returned is the one after the
  * incrementation.
  */
-void wxRegionIterator::operator ++ ()
+wxRegionIterator& wxRegionIterator::operator ++ ()
 {
-	if (m_current < m_numRects)
-		++m_current;
+    if (m_current < m_numRects)
+        ++m_current;
+    return *this;
 }
 
 /*!
  * Increment iterator. The rectangle returned is the one before the
  * incrementation.
  */
-void wxRegionIterator::operator ++ (int)
+wxRegionIterator wxRegionIterator::operator ++ (int)
 {
-	if (m_current < m_numRects)
-		++m_current;
+    wxRegionIterator previous(*this);
+
+    if (m_current < m_numRects)
+        ++m_current;
+
+    return previous;
 }
 
 long wxRegionIterator::GetX() const
