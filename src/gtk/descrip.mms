@@ -72,6 +72,7 @@ OBJECTS = \
 	stattext.obj,\
 	tbargtk.obj,\
 	textctrl.obj,\
+	tglbtn.obj,\
 	timer.obj,\
 	tooltip.obj,\
 	utilsgtk.obj,\
@@ -132,6 +133,7 @@ SOURCES =\
 	stattext.cpp,\
 	tbargtk.cpp,\
 	textctrl.cpp,\
+	tglbtn.cpp,\
 	timer.cpp,\
 	tooltip.cpp,\
 	utilsgtk.cpp,\
@@ -195,6 +197,7 @@ statline.obj : statline.cpp
 stattext.obj : stattext.cpp
 tbargtk.obj : tbargtk.cpp
 textctrl.obj : textctrl.cpp
+tglbtn.obj : tglbtn.cpp
 timer.obj : timer.cpp
 tooltip.obj : tooltip.cpp
 utilsgtk.obj : utilsgtk.cpp

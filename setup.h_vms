@@ -334,6 +334,10 @@
  */
 #define wxUSE_STATUSBAR 1
 /*
+ * Use this control
+ */
+#define wxUSE_TOGGLEBTN 1
+/*
  * Use Tab dialog class - obsolete, use wxNotebook instead
  */
 #define wxUSE_TAB_DIALOG 0
