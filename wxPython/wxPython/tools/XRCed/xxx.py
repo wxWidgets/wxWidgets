@@ -230,6 +230,29 @@ class xxxObject:
                 # Remove all other nodes
                 element.removeChild(node)
                 node.unlink()
+        # Check that all required params are set
+        for param in self.required:
+            if not self.params.has_key(param):
+                # If default is specified, set it
+                if self.default.has_key(param):
+                    elem = g.tree.dom.createElement(param)
+                    self.params[param] = xxxParam(elem)
+                    # Find place to put new element: first present element after param
+                    found = False
+                    paramStyles = self.allParams + self.styles
+                    for p in paramStyles[paramStyles.index(param) + 1:]:
+                        # Content params don't have same type
+                        if self.params.has_key(p) and p != 'content':
+                            found = True
+                            break
+                    if found:
+                        nextTextElem = self.params[p].node
+                        self.element.insertBefore(elem, nextTextElem)
+                    else:
+                        self.element.appendChild(elem)
+                else:
+                    wxLogWarning('Required parameter %s of %s missing' %
+                                 (param, self.className))
     # Returns real tree object
     def treeObject(self):
         if self.hasChild: return self.child
@@ -301,6 +324,7 @@ class xxxEncoding:
 class xxxMainNode(xxxContainer):
     allParams = ['encoding']
     required = ['encoding']
+    default = {'encoding': ''}
     hasStyle = hasName = False
     def __init__(self, dom):
         xxxContainer.__init__(self, None, dom.documentElement)
@@ -377,6 +401,7 @@ class xxxIcon(xxxObject):
 class xxxStaticText(xxxObject):
     allParams = ['label', 'pos', 'size', 'style']
     required = ['label']
+    default = {'label': ''}
     winStyles = ['wxALIGN_LEFT', 'wxALIGN_RIGHT', 'wxALIGN_CENTRE', 'wxST_NO_AUTORESIZE']
 
 class xxxStaticLine(xxxObject):
@@ -542,7 +567,6 @@ class xxxBoxSizer(xxxSizer):
 class xxxStaticBoxSizer(xxxBoxSizer):
     allParams = ['label', 'orient']
     required = ['label', 'orient']
-    default = {'orient': 'wxVERTICAL'}
 
 class xxxGridSizer(xxxSizer):
     allParams = ['cols', 'rows', 'vgap', 'hgap']
@@ -611,8 +635,8 @@ class xxxChildContainer(xxxObject):
         assert 0, 'no child found'
 
 class xxxSizerItem(xxxChildContainer):
-    allParams = ['option', 'flag', 'border']
-    paramDict = {'option': ParamInt}
+    allParams = ['option', 'flag', 'border', 'minsize']
+    paramDict = {'option': ParamInt, 'minsize': ParamPosSize}
     def __init__(self, parent, element):
         xxxChildContainer.__init__(self, parent, element)
         # Remove pos parameter - not needed for sizeritems
