@@ -183,7 +183,9 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
 
     m_widget = gtk_frame_new( title.mbc_str() );
 
-    m_majorDim = majorDim;
+    // majorDim may be 0 if all trailing parameters were omitted, so don't
+    // assert here but just use the correct value for it
+    m_majorDim = majorDim == 0 ? n : majorDim;
 
     GtkRadioButton *m_radio = (GtkRadioButton*) NULL;
 
