@@ -113,7 +113,7 @@ void PropEditCtrlColor::OnDetails()
     wxString txt = m_TextCtrl->GetValue();
     long unsigned tmp;
     
-    if (txt.Length() == 7 && txt[0] == _T('#') &&
+    if (txt.Length() == 7 && txt[0u] == _T('#') &&
         wxSscanf(txt.c_str(), _T("#%lX"), &tmp) == 1)
         clr = wxColour((tmp & 0xFF0000) >> 16, 
                        (tmp & 0x00FF00) >> 8, 

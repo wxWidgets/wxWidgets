@@ -49,7 +49,7 @@ void NodeInfo::Read(const wxString& filename, wxPathList& list)
 
     for (size_t i = 0; i < tf.GetLineCount(); i++)
     {
-        if (tf[i].IsEmpty() || tf[i][0] == _T('#')) continue;
+        if (tf[i].IsEmpty() || tf[i][0u] == _T('#')) continue;
         wxStringTokenizer tkn(tf[i], _T(' '));
         wxString s = tkn.GetNextToken();
         if (s == _T("node"))

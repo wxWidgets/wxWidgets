@@ -15,7 +15,7 @@
 #define _PROPEDIT_H_
 
 #include "wx/panel.h"
-#include "wx/treectrl.h"
+#include "wx/generic/treectlg.h"
 #include "nodesdb.h"
 #include "propframe.h"
 

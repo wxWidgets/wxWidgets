@@ -96,7 +96,9 @@ PreviewFrame::PreviewFrame()
 
     CreateStatusBar();
 
-    SetSize(GetSize()); // refresh: MSW needs it
+#ifdef __WXMSW__
+    SendSizeEvent(); // force resize for WXMSW
+#endif
 }
 
 
