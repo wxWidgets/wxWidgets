@@ -1004,21 +1004,21 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
             bf.SourceConstantAlpha = 0xff;
             bf.AlphaFormat = AC_SRC_ALPHA;
 
-            if ( !pfnAlphaBlend(GetHdc(), x, y, width, height,
-                                hdcMem, 0, 0, width, height,
-                                bf) )
+            if ( pfnAlphaBlend(GetHdc(), x, y, width, height,
+                               hdcMem, 0, 0, width, height,
+                               bf) )
             {
-                wxLogLastError(_T("AlphaBlend"));
+                // skip wxAlphaBlend() call below
+                return;
             }
+
+            wxLogLastError(_T("AlphaBlend"));
         }
-        else // use our own (probably much slower) implementation
-        {
+
+        // use our own (probably much slower) implementation
 #ifdef wxHAVE_RAW_BITMAP
-            wxAlphaBlend(*this, x, y, width, height, bmp);
-#else
-            wxLogLastError(_T("AlphaBlend not available with this compiler setup"));
-#endif //#ifdef wxHAVE_RAW_BITMAP
-        }
+        wxAlphaBlend(*this, x, y, width, height, bmp);
+#endif // wxHAVE_RAW_BITMAP
 
         return;
     }
