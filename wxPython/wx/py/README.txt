@@ -30,7 +30,7 @@ build a Python program without a PyCrust either.
 What else do I need to use PyCrust?
 -----------------------------------
 
-PyCrust requires Python 2.1.3 or later, and wxPython 2.4 or later.
+PyCrust requires Python 2.2 or later, and wxPython 2.4 or later.
 PyCrust uses wxPython and the Scintilla wrapper (wxStyledTextCtrl).
 Python is available at http://www.python.org/.  wxPython is available
 at http://www.wxpython.org/.
@@ -40,15 +40,19 @@ Where can I get the latest version of PyCrust?
 ----------------------------------------------
 
 The latest production version ships with wxPython.  The latest
-developer version is available in CVS at:
-http://sourceforge.net/cvs/?group_id=31263
+developer version is available in the wxWindows CVS at:
+http://cvs.wxwindows.org/viewcvs.cgi/
 
 
 Where is the PyCrust project hosted?
 ------------------------------------
 
-At SourceForge, of course. The SourceForge summary page:
+The old answer was "At SourceForge, of course." The SourceForge
+summary page is still available at:
 http://sourceforge.net/projects/pycrust/
+
+The new answer is that there is no longer a need for a separate
+project.  Simply install wxPython and you'll have everything you need.
 
 
 I found a bug in PyCrust, what do I do with it?

@@ -62,20 +62,20 @@ class Crust(wx.SplitterWindow):
         self.notebook.AddPage(page=self.sessionlisting, text='Session')
         self.dispatcherlisting = DispatcherListing(parent=self.notebook)
         self.notebook.AddPage(page=self.dispatcherlisting, text='Dispatcher')
-        from wxd import wx_
-        self.wxdocs = Filling(parent=self.notebook, 
-                              rootObject=wx_,
-                              rootLabel='wx', 
-                              rootIsNamespace=False,
-                              static=True)
-        self.notebook.AddPage(page=self.wxdocs, text='wxPython Docs')
-        from wxd import stc_
-        self.stcdocs = Filling(parent=self.notebook, 
-                               rootObject=stc_.StyledTextCtrl,
-                               rootLabel='StyledTextCtrl', 
-                               rootIsNamespace=False,
-                               static=True)
-        self.notebook.AddPage(page=self.stcdocs, text='StyledTextCtrl Docs')
+##         from wxd import wx_
+##         self.wxdocs = Filling(parent=self.notebook, 
+##                               rootObject=wx_,
+##                               rootLabel='wx', 
+##                               rootIsNamespace=False,
+##                               static=True)
+##         self.notebook.AddPage(page=self.wxdocs, text='wxPython Docs')
+##         from wxd import stc_
+##         self.stcdocs = Filling(parent=self.notebook, 
+##                                rootObject=stc_.StyledTextCtrl,
+##                                rootLabel='StyledTextCtrl', 
+##                                rootIsNamespace=False,
+##                                static=True)
+##         self.notebook.AddPage(page=self.stcdocs, text='StyledTextCtrl Docs')
         self.SplitHorizontally(self.shell, self.notebook, 300)
         self.SetMinimumPaneSize(1)
 

@@ -1,5 +1,21 @@
+0.9.4 (1/25/2004 to //2004)
+------------------------------
 
-0.9.2 (5/3/2003 to //2003)
+Removed wxd decorators in favor of new SWIG-generated docstrings.
+
+Removed docs tabs from crust interface:
+* wxPython Docs
+* wxSTC Docs
+
+
+0.9.3 (9/25/2003 to 1/24/2004)
+------------------------------
+
+Fun and games with dynamic renaming.  Details of any other changes
+were lost in the confusion.  I'll try to do better in the future.
+
+
+0.9.2 (5/3/2003 to 9/25/2003)
 -----------------------------
 
 Changed to the new prefix-less "wx" package::
