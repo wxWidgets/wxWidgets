@@ -485,7 +485,7 @@ wxBEGIN_FLAGS( wxTreeCtrlStyle )
     wxFLAGS_MEMBER(wxBORDER_RAISED)
     wxFLAGS_MEMBER(wxBORDER_STATIC)
     wxFLAGS_MEMBER(wxBORDER_NONE)
-    
+
     // old style border flags
     wxFLAGS_MEMBER(wxSIMPLE_BORDER)
     wxFLAGS_MEMBER(wxSUNKEN_BORDER)
@@ -524,7 +524,7 @@ wxEND_FLAGS( wxTreeCtrlStyle )
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxTreeCtrl, wxControl,"wx/treectrl.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxTreeCtrl)
-    wxEVENT_PROPERTY( TextUpdated , wxEVT_COMMAND_TEXT_UPDATED , wxCommandEvent ) 
+    wxEVENT_PROPERTY( TextUpdated , wxEVT_COMMAND_TEXT_UPDATED , wxCommandEvent )
     wxEVENT_RANGE_PROPERTY( TreeEvent , wxEVT_COMMAND_TREE_BEGIN_DRAG , wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK , wxTreeEvent )
     wxPROPERTY_FLAGS( WindowStyle , wxTreeCtrlStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
@@ -532,7 +532,7 @@ wxEND_PROPERTIES_TABLE()
 wxBEGIN_HANDLERS_TABLE(wxTreeCtrl)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_5( wxTreeCtrl , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle ) 
+wxCONSTRUCTOR_5( wxTreeCtrl , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle )
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxTreeCtrl, wxControl)
 #endif
@@ -681,7 +681,7 @@ bool wxTreeCtrl::Create(wxWindow *parent,
     // Need so that TVN_GETINFOTIP messages will be sent
     wstyle |= TVS_INFOTIP;
 #endif
-    
+
     // Create the tree control.
     if ( !MSWCreateControl(WC_TREEVIEW, wstyle) )
         return false;
@@ -1894,7 +1894,11 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& item, bool select)
         event.SetEventType(wxEVT_COMMAND_TREE_SEL_CHANGING);
         if ( !GetEventHandler()->ProcessEvent(event) || event.IsAllowed() )
         {
-            if ( ::SelectItem(GetHwnd(), HITEM(item), select) )
+            if ( !TreeView_SelectItem(GetHwnd(), HITEM(item)) )
+            {
+                wxLogLastError(wxT("TreeView_SelectItem"));
+            }
+            else // ok
             {
                 event.SetEventType(wxEVT_COMMAND_TREE_SEL_CHANGED);
                 (void)GetEventHandler()->ProcessEvent(event);
@@ -2205,7 +2209,7 @@ long wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                     {
                         // avoid doing anything if we click on the only
                         // currently selected item
-                        
+
                         wxArrayTreeItemIds selections;
                         size_t count = GetSelections(selections);
                         if ( count == 0 ||
@@ -2216,7 +2220,7 @@ long wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                             // user clicked outside of the present selection.
                             // otherwise, perform the deselection on mouse-up.
                             // this allows multiple drag and drop to work.
-                            
+
                             if (IsItemSelected(GetHwnd(), htItem))
                             {
                                 ::SetFocus(GetHwnd(), htItem);
@@ -2499,7 +2503,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 break;
             }
 #endif
-        
+
         case TVN_GETDISPINFO:
             eventType = wxEVT_COMMAND_TREE_GET_INFO;
             // fall through
@@ -2590,7 +2594,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             }
             break;
 
-        // NB: MSLU is broken and sends TVN_SELCHANGEDA instead of 
+        // NB: MSLU is broken and sends TVN_SELCHANGEDA instead of
         //     TVN_SELCHANGEDW in Unicode mode under Win98. Therefore
         //     we have to handle both messages:
         case TVN_SELCHANGEDA:
@@ -2605,7 +2609,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     eventType = wxEVT_COMMAND_TREE_SEL_CHANGING;
                 //else: already set above
 
-                if (hdr->code == TVN_SELCHANGINGW || 
+                if (hdr->code == TVN_SELCHANGINGW ||
                     hdr->code == TVN_SELCHANGEDW)
                 {
                     NM_TREEVIEWW* tv = (NM_TREEVIEWW *)lParam;
@@ -2811,7 +2815,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 HWND hText = TreeView_GetEditControl(GetHwnd());
                 if(hText != NULL)
                 {
-                    // MBN: if m_textCtrl already has an HWND, it is a stale 
+                    // MBN: if m_textCtrl already has an HWND, it is a stale
                     // pointer from a previous edit (because the user
                     // didn't modify the label before dismissing the control,
                     // and TVN_ENDLABELEDIT was not sent), so delete it
@@ -2857,7 +2861,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             }
             break;
 #endif
-        
+
         case TVN_SELCHANGING:
         case TVN_ITEMEXPANDING:
             // return true to prevent the action from happening
@@ -2934,7 +2938,7 @@ void wxTreeCtrl::SetState(const wxTreeItemId& node, int state)
     // Select the specified state, or -1 == cycle to the next one.
     if ( state == -1 )
     {
-        TreeView_GetItem(GetHwnd(), &tvi); 
+        TreeView_GetItem(GetHwnd(), &tvi);
 
         state = STATEIMAGEMASKTOINDEX(tvi.state) + 1;
         if ( state == m_imageListState->GetImageCount() )
@@ -2944,7 +2948,7 @@ void wxTreeCtrl::SetState(const wxTreeItemId& node, int state)
     wxCHECK_RET( state < m_imageListState->GetImageCount(),
                  _T("wxTreeCtrl::SetState(): item index out of bounds") );
 
-    tvi.state = INDEXTOSTATEIMAGEMASK(state); 
+    tvi.state = INDEXTOSTATEIMAGEMASK(state);
 
     TreeView_SetItem(GetHwnd(), &tvi);
 }
@@ -2955,7 +2959,7 @@ int wxTreeCtrl::GetState(const wxTreeItemId& node)
     tvi.hItem = (HTREEITEM)node.m_pItem;
     tvi.mask = TVIF_STATE;
     tvi.stateMask = TVIS_STATEIMAGEMASK;
-    TreeView_GetItem(GetHwnd(), &tvi); 
+    TreeView_GetItem(GetHwnd(), &tvi);
 
     return STATEIMAGEMASKTOINDEX(tvi.state);
 }
