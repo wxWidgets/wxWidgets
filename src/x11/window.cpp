@@ -393,6 +393,11 @@ void wxWindowX11::SetFocus()
     {
         m_needsInputFocus = TRUE;
     }
+#if 0
+    wxString msg;
+    msg.Printf("SetFocus: %s\n", GetClassInfo()->GetClassName());
+    printf(msg.c_str());
+#endif
 }
 
 // Get the window with the focus
@@ -1232,7 +1237,15 @@ void wxWindowX11::OnInternalIdle()
     // Set the input focus if couldn't do it before
     if (m_needsInputFocus)
     {
+#if 0
+        wxString msg;
+        msg.Printf("Setting focus for %s from OnInternalIdle\n", GetClassInfo()->GetClassName());
+        printf(msg.c_str());
+#endif        
 	SetFocus();
+        // If it couldn't set the focus now, there's
+        // no point in trying again.
+        m_needsInputFocus = FALSE;
     }
 }
 

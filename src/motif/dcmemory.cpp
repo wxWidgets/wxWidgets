@@ -119,6 +119,7 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
             &gcvalues);
         
         m_backgroundPixel = (int) gcvalues.background;
+        m_ok = TRUE;
         
         // Get the current Font so we can set it back later
         XGCValues valReturn;
@@ -133,7 +134,6 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
         
         SetOptimization(oldOpt);
         
-        m_ok = TRUE;
     }
     else
     {

@@ -782,7 +782,12 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
 #endif
                 {
                     // wxLogDebug( "FocusIn from %s of type %s", win->GetName().c_str(), win->GetClassInfo()->GetClassName() );
-
+#if 0
+                    wxString msg;
+                    msg.Printf( "FocusIn from %s of type %s\n", win->GetName().c_str(), win->GetClassInfo()->GetClassName() );
+                    printf(msg.c_str());
+#endif
+                    
                     wxFocusEvent focusEvent(wxEVT_SET_FOCUS, win->GetId());
                     focusEvent.SetEventObject(win);
                     focusEvent.SetWindow( g_prevFocus );

@@ -43,7 +43,10 @@
     extern "C" ulong _EVT_getTicks();
     #define GetMillisecondsTime() _EVT_getTicks()
 #else
-    #define GetMillisecondsTime() wxGetLocalTimeMillis().ToLong()
+//    #define GetMillisecondsTime() wxGetLocalTimeMillis().ToLong()
+    // Suppresses the debug warning in ToLong. FIXME: check
+    // that we don't drastically lose precision
+    #define GetMillisecondsTime() (unsigned long) wxGetLocalTimeMillis().GetValue()
 #endif
 
 // ----------------------------------------------------------------------------
