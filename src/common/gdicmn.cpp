@@ -512,15 +512,6 @@ wxPen *wxPenList::FindOrCreatePen (const wxColour& colour, int width, int style)
   return pen;
 }
 
-wxPen *wxPenList::FindOrCreatePen (const wxString& colour, int width, int style)
-{
-  wxColour *the_colour = wxTheColourDatabase->FindColour (colour);
-  if (the_colour)
-    return FindOrCreatePen (*the_colour, width, style);
-  else
-    return (wxPen *) NULL;
-}
-
 wxBrushList::~wxBrushList ()
 {
 #ifdef __WXMSW__
@@ -560,15 +551,6 @@ wxBrush *wxBrushList::FindOrCreateBrush (const wxColour& colour, int style)
   wxBrush *brush = new wxBrush (colour, style);
   brush->SetVisible(TRUE);
   return brush;
-}
-
-wxBrush *wxBrushList::FindOrCreateBrush (const wxString& colour, int style)
-{
-  wxColour *the_colour = wxTheColourDatabase->FindColour (colour);
-  if (the_colour)
-    return FindOrCreateBrush (*the_colour, style);
-  else
-    return (wxBrush *) NULL;
 }
 
 void wxBrushList::RemoveBrush (wxBrush * brush)

@@ -38,7 +38,7 @@ wxColour::wxColour ()
   m_red = m_blue = m_green = 0;
 }
 
-wxColour::wxColour (const unsigned char r, const unsigned char g, const unsigned char b)
+wxColour::wxColour (unsigned char r, unsigned char g, unsigned char b)
 {
   m_red = r;
   m_green = g;
@@ -88,27 +88,6 @@ void wxColour::InitFromName(const wxString& col)
 
 wxColour::~wxColour()
 {
-}
-
-wxColour& wxColour::operator = (const wxString& col)
-{
-  wxColour *the_colour = wxTheColourDatabase->FindColour (col);
-  if (the_colour)
-    {
-      m_red = the_colour->Red ();
-      m_green = the_colour->Green ();
-      m_blue = the_colour->Blue ();
-      m_isInit = TRUE;
-    }
-  else
-    {
-      m_red = 0;
-      m_green = 0;
-      m_blue = 0;
-      m_isInit = FALSE;
-    }
-  m_pixel = PALETTERGB (m_red, m_green, m_blue);
-  return (*this);
 }
 
 void wxColour::Set (unsigned char r, unsigned char g, unsigned char b)

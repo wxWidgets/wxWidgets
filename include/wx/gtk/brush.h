@@ -40,7 +40,6 @@ class wxBrush: public wxGDIObject
 
     wxBrush(void);
     wxBrush( const wxColour &colour, int style );
-    wxBrush( const wxString &colourName, int style );
     wxBrush( const wxBitmap &stippleBitmap );
     wxBrush( const wxBrush &brush );
     wxBrush( const wxBrush *brush );
@@ -56,7 +55,6 @@ class wxBrush: public wxGDIObject
     
     
     void SetColour( const wxColour& col );
-    void SetColour( const wxString& col );
     void SetColour( unsigned char r, unsigned char g, unsigned char b );
     void SetStyle( int style );
     void SetStipple( const wxBitmap& stipple );

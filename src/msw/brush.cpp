@@ -84,20 +84,6 @@ wxBrush::wxBrush(const wxColour& col, int Style)
     wxTheBrushList->AddBrush(this);
 }
 
-wxBrush::wxBrush(const wxString& col, int Style)
-{
-  m_refData = new wxBrushRefData;
-
-  M_BRUSHDATA->m_colour = col;
-  M_BRUSHDATA->m_style = Style;
-  M_BRUSHDATA->m_hBrush = 0;
-
-  RealizeResource();
-
-  if ( wxTheBrushList )
-    wxTheBrushList->AddBrush(this);
-}
-
 wxBrush::wxBrush(const wxBitmap& stipple)
 {
   m_refData = new wxBrushRefData;
@@ -223,16 +209,7 @@ void wxBrush::SetColour(const wxColour& col)
     RealizeResource();
 }
 
-void wxBrush::SetColour(const wxString& col)
-{
-    Unshare();
-
-    M_BRUSHDATA->m_colour = col;
-
-    RealizeResource();
-}
-
-void wxBrush::SetColour(const unsigned char r, const unsigned char g, const unsigned char b)
+void wxBrush::SetColour(unsigned char r, unsigned char g, unsigned char b)
 {
     Unshare();
 

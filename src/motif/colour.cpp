@@ -65,7 +65,7 @@ wxColour& wxColour::operator =(const wxColour& col)
   return *this;
 }
 
-wxColour::wxColour (const wxString& col)
+void wxColour::InitFromName(const wxString& col)
 {
     wxColour *the_colour = wxTheColourDatabase->FindColour (col);
     if (the_colour)
@@ -87,28 +87,6 @@ wxColour::wxColour (const wxString& col)
 
 wxColour::~wxColour ()
 {
-}
-
-wxColour& wxColour::operator = (const wxString& col)
-{
-    wxColour *the_colour = wxTheColourDatabase->FindColour (col);
-    if (the_colour)
-    {
-        m_red = the_colour->Red ();
-        m_green = the_colour->Green ();
-        m_blue = the_colour->Blue ();
-        m_pixel = the_colour->m_pixel;
-        m_isInit = TRUE;
-    }
-    else
-    {
-        m_red = 0;
-        m_green = 0;
-        m_blue = 0;
-        m_isInit = FALSE;
-    }
-
-    return (*this);
 }
 
 void wxColour::Set (unsigned char r, unsigned char g, unsigned char b)

@@ -20,40 +20,42 @@
 #include "wx/string.h"
 
 // Colour
-class WXDLLEXPORT wxColour: public wxObject
+class WXDLLEXPORT wxColour : public wxObject
 {
-  DECLARE_DYNAMIC_CLASS(wxColour)
 public:
+  // ctors
+    // default
   wxColour();
-  wxColour(unsigned char r, unsigned char g, unsigned char b);
-  wxColour(unsigned long colRGB) { Set(colRGB); }
-  wxColour(const wxColour& col);
-  wxColour(const wxString& col);
-  ~wxColour() ;
-  wxColour& operator =(const wxColour& src) ;
-  wxColour& operator =(const wxString& src) ;
-  inline int Ok() const { return (m_isInit) ; }
+    // from RGB
+  wxColour( char red, char green, char blue );
+    // implicit conversion from the colour name
+  wxColour( const wxString &colourName ) { InitFromName(colourName); }
+  wxColour( const char *colourName ) { InitFromName(colourName); }
 
-  void Set(unsigned char r, unsigned char g, unsigned char b);
-  void Set(unsigned long colRGB) 
-  { 
+    // copy ctors and assignment operators
+  wxColour( const wxColour& col );
+  wxColour( const wxColour* col );
+  wxColour& operator = ( const wxColour& col );
+
+    // dtor
+  ~wxColour();
+
+  // Set() functions
+  void Set( unsigned char red, unsigned char green, unsigned char blue );
+  void Set( unsigned long colRGB )
+  {
     // we don't need to know sizeof(long) here because we assume that the three
     // least significant bytes contain the R, G and B values
-    Set((unsigned char)colRGB, 
+    Set((unsigned char)colRGB,
         (unsigned char)(colRGB >> 8),
-        (unsigned char)(colRGB >> 16)); 
+        (unsigned char)(colRGB >> 16));
   }
 
-  inline unsigned char Red() const { return m_red; }
-  inline unsigned char Green() const { return m_green; }
-  inline unsigned char Blue() const { return m_blue; }
+  // accessors
+  bool Ok() const {return m_isInit; }
 
-  inline bool operator == (const wxColour& colour) { return (m_red == colour.m_red && m_green == colour.m_green && m_blue == colour.m_blue); }
-
-  inline bool operator != (const wxColour& colour) { return (!(m_red == colour.m_red && m_green == colour.m_green && m_blue == colour.m_blue)); }
-
-  inline int GetPixel() const { return m_pixel; };
-  inline void SetPixel(int pixel) { m_pixel = pixel; m_isInit = TRUE; };
+  int GetPixel() const { return m_pixel; };
+  void SetPixel(int pixel) { m_pixel = pixel; m_isInit = TRUE; };
 
   // Allocate a colour, or nearest colour, using the given display.
   // If realloc is TRUE, ignore the existing pixel, otherwise just return
@@ -65,17 +67,15 @@ public:
 
   int AllocColour(WXDisplay* display, bool realloc = FALSE);
 
- private:
+private:
   bool          m_isInit;
   unsigned char m_red;
   unsigned char m_blue;
   unsigned char m_green;
- public:
+
+public:
   int           m_pixel;
-
 };
-
-#define wxColor wxColour
 
 #endif
 	// _WX_COLOUR_H_

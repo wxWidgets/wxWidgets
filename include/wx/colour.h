@@ -15,5 +15,7 @@
 #include "wx/stubs/colour.h"
 #endif
 
+#define wxColor wxColour
+
 #endif
     // _WX_COLOUR_H_BASE_

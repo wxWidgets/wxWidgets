@@ -351,10 +351,14 @@ bool wxNotebook::AddPage(wxWindow* win, const wxString& text,
   {
     wxASSERT( m_imageList != NULL );
 
-    wxBitmap *bmp = m_imageList->GetBitmap(imageId);
+    const wxBitmap *bmp = m_imageList->GetBitmap(imageId);
     GdkPixmap *pixmap = bmp->GetPixmap();
     GdkBitmap *mask = (GdkBitmap*) NULL;
-    if (bmp->GetMask()) mask = bmp->GetMask()->GetBitmap();
+    if ( bmp->GetMask() )
+    {
+      mask = bmp->GetMask()->GetBitmap();
+    }
+
     GtkWidget *pixmapwid = gtk_pixmap_new (pixmap, mask );
 
     gtk_box_pack_start(GTK_BOX(page->m_box), pixmapwid, FALSE, FALSE, 3);

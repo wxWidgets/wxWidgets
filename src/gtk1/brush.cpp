@@ -62,15 +62,6 @@ wxBrush::wxBrush( const wxColour &colour, int style )
   if (wxTheBrushList) wxTheBrushList->AddBrush( this );
 }
 
-wxBrush::wxBrush( const wxString &colourName, int style )
-{
-  m_refData = new wxBrushRefData();
-  M_BRUSHDATA->m_style = style;
-  M_BRUSHDATA->m_colour = colourName;
-  
-  if (wxTheBrushList) wxTheBrushList->AddBrush( this );
-}
-
 wxBrush::wxBrush( const wxBitmap &stippleBitmap )
 {
   m_refData = new wxBrushRefData();
@@ -156,12 +147,6 @@ wxBitmap *wxBrush::GetStipple(void) const
 }
 
 void wxBrush::SetColour( const wxColour& col )
-{
-  Unshare();
-  M_BRUSHDATA->m_colour = col;
-}
-
-void wxBrush::SetColour( const wxString& col )
 {
   Unshare();
   M_BRUSHDATA->m_colour = col;

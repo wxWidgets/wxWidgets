@@ -9,7 +9,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma interface "controls.h"
+#pragma implementation "controls.h"
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -209,7 +209,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   wxPanel( frame, -1, wxPoint(x, y), wxSize(w, h) )
 {
   m_text = new wxTextCtrl( this, -1, "This is the log window.\n", wxPoint(0,50), wxSize(100,50), wxTE_MULTILINE );
-  m_text->SetBackgroundColour(wxColor("yellow"));
+  m_text->SetBackgroundColour("yellow");
   
   m_notebook = new wxNotebook( this, ID_NOTEBOOK, wxPoint(0,0), wxSize(200,150) );
   
@@ -248,11 +248,11 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
 
   wxPanel *panel = new wxPanel(m_notebook);
   m_listbox = new wxListBox( panel, ID_LISTBOX, wxPoint(10,10), wxSize(120,70), 4, choices );
-  m_listbox->SetBackgroundColour(wxColour("red"));
+  m_listbox->SetBackgroundColour("red");
   (void)new wxButton( panel, ID_LISTBOX_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(140,30) );
   (void)new wxButton( panel, ID_LISTBOX_SEL_STR, "Select 'This'", wxPoint(340,30), wxSize(140,30) );
   wxButton *btn = new wxButton( panel, ID_LISTBOX_CLEAR, "Clear", wxPoint(180,80), wxSize(140,30) );
-  btn->SetBackgroundColour(wxColour("green"));
+  btn->SetBackgroundColour("green");
   (void)new wxButton( panel, ID_LISTBOX_APPEND, "Append 'Hi!'", wxPoint(340,80), wxSize(140,30) );
   (void)new wxButton( panel, ID_LISTBOX_DELETE, "Delete selected item", wxPoint(180,130), wxSize(140,30) );
   (void)new wxButton( panel, ID_LISTBOX_FONT, "Set Italic font", wxPoint(340,130), wxSize(140,30) );

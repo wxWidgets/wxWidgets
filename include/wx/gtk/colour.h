@@ -39,43 +39,46 @@ class wxColour;
 
 class wxColour: public wxGDIObject
 {
-  public:
+public:
+  // ctors
+    // default
+  wxColour();
+    // from RGB
+  wxColour( char red, char green, char blue );
+    // implicit conversion from the colour name
+  wxColour( const wxString &colourName ) { InitFromName(colourName); }
+  wxColour( const char *colourName ) { InitFromName(colourName); }
 
-    wxColour();
-    wxColour( char red, char green, char blue );
-    wxColour( const wxString &colourName ) { InitFromName(colourName); }
-//    wxColour( const char *colourName ) { InitFromName(colourName); }
-    wxColour( const wxColour& col );
-    wxColour( const wxColour* col );
-    ~wxColour();
-    wxColour& operator = ( const wxColour& col );
-    wxColour& operator = ( const wxString& colourName );
-    bool operator == ( const wxColour& col );
-    bool operator != ( const wxColour& col );
-    void Set( const unsigned char red, const unsigned char green, const unsigned char blue );
-    unsigned char Red() const;
-    unsigned char Green() const;
-    unsigned char Blue() const;
-    bool Ok() const;
+    // copy ctors and assignment operators
+  wxColour( const wxColour& col );
+  wxColour( const wxColour* col );
+  wxColour& operator = ( const wxColour& col );
 
-  private:
-  public:
+    // dtor
+  ~wxColour();
 
-    friend wxDC;
-    friend wxPaintDC;
-    friend wxBitmap;
-    friend wxWindow;
+  // comparison
+  bool operator == ( const wxColour& col );
+  bool operator != ( const wxColour& col );
+  
+  // accessors
+  void Set( unsigned char red, unsigned char green, unsigned char blue );
+  unsigned char Red() const;
+  unsigned char Green() const;
+  unsigned char Blue() const;
+  bool Ok() const;
 
-    void CalcPixel( GdkColormap *cmap );
-    int GetPixel() const;
-    GdkColor *GetColor() const;
+  // implementation
+  void CalcPixel( GdkColormap *cmap );
+  int GetPixel() const;
+  GdkColor *GetColor() const;
 
 protected:
-    // helper functions
-    void InitFromName(const wxString& colourName);
+  // helper functions
+  void InitFromName(const wxString& colourName);
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxColour)
+  DECLARE_DYNAMIC_CLASS(wxColour)
 };
 
 #endif // __GTKCOLOURH__

@@ -71,16 +71,6 @@ wxPen::wxPen( const wxColour &colour, int width, int style )
   if (wxThePenList) wxThePenList->AddPen( this );
 }
 
-wxPen::wxPen( const wxString &colourName, int width, int style )
-{
-  m_refData = new wxPenRefData();
-  M_PENDATA->m_width = width;
-  M_PENDATA->m_style = style;
-  M_PENDATA->m_colour = colourName;
-  
-  if (wxThePenList) wxThePenList->AddPen( this );
-}
-
 wxPen::wxPen( const wxPen& pen )
 {
   Ref( pen );
@@ -121,12 +111,6 @@ void wxPen::SetColour( const wxColour &colour )
 {
   Unshare();
   M_PENDATA->m_colour = colour;
-}
-
-void wxPen::SetColour( const wxString &colourName )
-{
-  Unshare();
-  M_PENDATA->m_colour = colourName;
 }
 
 void wxPen::SetColour( int red, int green, int blue )

@@ -121,28 +121,6 @@ wxColour& wxColour::operator = ( const wxColour& col )
   return *this; 
 }
 
-wxColour& wxColour::operator = ( const wxString& colourName ) 
-{ 
-  UnRef();
-  wxNode *node = (wxNode *) NULL;
-  if ((wxTheColourDatabase) && (node = wxTheColourDatabase->Find(colourName)) ) 
-  {
-    wxColour *col = (wxColour*)node->Data();
-    if (col) Ref( *col );
-  } 
-  else 
-  {
-    m_refData = new wxColourRefData();
-    if (!gdk_color_parse( colourName, &M_COLDATA->m_color ))
-    {
-      wxFAIL_MSG( "wxColour: couldn't find colour" );
-      delete m_refData;
-      m_refData = (wxObjectRefData *) NULL;
-    }
-  }
-  return *this; 
-}
-
 bool wxColour::operator == ( const wxColour& col ) 
 { 
   return m_refData == col.m_refData; 

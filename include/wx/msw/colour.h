@@ -20,19 +20,25 @@
 class WXDLLEXPORT wxColour: public wxObject
 {
 public:
+  // ctors
+    // default
   wxColour();
-  wxColour(const unsigned char r, const unsigned char g, const unsigned char b);
-  wxColour(unsigned long colRGB) { Set(colRGB); }
-  wxColour(const wxColour& col);
-  wxColour(const wxString& col) { InitFromName(col); }
-//  wxColour(const char *col) { InitFromName(col); }
+    // from RGB
+  wxColour( char red, char green, char blue );
+    // implicit conversion from the colour name
+  wxColour( const wxString &colourName ) { InitFromName(colourName); }
+  wxColour( const char *colourName ) { InitFromName(colourName); }
+
+    // copy ctors and assignment operators
+  wxColour( const wxColour& col );
+  wxColour( const wxColour* col );
+  wxColour& operator = ( const wxColour& col );
+
+    // dtor
   ~wxColour();
 
-  wxColour& operator =(const wxColour& src) ;
-  wxColour& operator =(const wxString& src) ;
-  inline int Ok() const { return (m_isInit) ; }
-
-  void Set(unsigned char r, unsigned char g, unsigned char b);
+  // Set() functions
+  void Set( unsigned char red, unsigned char green, unsigned char blue );
   void Set(unsigned long colRGB)
   {
     // we don't need to know sizeof(long) here because we assume that the three
@@ -42,23 +48,31 @@ public:
         (unsigned char)(colRGB >> 16));
   }
 
+  // accessors
+  bool Ok() const {return m_isInit; }
+
   // Let's remove this inelegant function
 #if WXWIN_COMPATIBILITY
   void Get(unsigned char *r, unsigned char *g, unsigned char *b) const;
 #endif
 
-  inline unsigned char Red() const { return m_red; }
-  inline unsigned char Green() const { return m_green; }
-  inline unsigned char Blue() const { return m_blue; }
+  unsigned char Red() const { return m_red; }
+  unsigned char Green() const { return m_green; }
+  unsigned char Blue() const { return m_blue; }
 
-  inline bool operator == (const wxColour& colour) { return (m_red == colour.m_red && m_green == colour.m_green && m_blue == colour.m_blue); }
-
-  inline bool operator != (const wxColour& colour) { return (!(m_red == colour.m_red && m_green == colour.m_green && m_blue == colour.m_blue)); }
+  // comparison
+  bool operator == (const wxColour& colour)
+  {
+    return (m_red == colour.m_red && 
+            m_green == colour.m_green && 
+            m_blue == colour.m_blue);
+  }
+  bool operator != (const wxColour& colour) { return !(*this == colour); }
 
   WXCOLORREF GetPixel() const { return m_pixel; };
 
 private:
-  bool 			m_isInit;
+  bool 			    m_isInit;
   unsigned char m_red;
   unsigned char m_blue;
   unsigned char m_green;
@@ -72,8 +86,6 @@ public:
 private:
   DECLARE_DYNAMIC_CLASS(wxColour)
 };
-
-#define wxColor wxColour
 
 #endif
 	// _WX_COLOUR_H_

@@ -40,7 +40,6 @@ class wxPen: public wxGDIObject
   
     wxPen(void);
     wxPen( const wxColour &colour, int width, int style );
-    wxPen( const wxString &colourName, int width, int style );
     wxPen( const wxPen& pen );
     wxPen( const wxPen* pen );
     ~wxPen(void);
@@ -49,7 +48,6 @@ class wxPen: public wxGDIObject
     bool operator != ( const wxPen& pen );
     
     void SetColour( const wxColour &colour );
-    void SetColour( const wxString &colourName );
     void SetColour( int red, int green, int blue );
     void SetCap( int capStyle );
     void SetJoin( int joinStyle );

@@ -36,7 +36,7 @@
 IMPLEMENT_DYNAMIC_CLASS(wxPen, wxGDIObject)
 #endif
 
-wxPenRefData::wxPenRefData(void)
+wxPenRefData::wxPenRefData()
 {
   m_style = wxSOLID;
   m_width = 1;
@@ -59,7 +59,7 @@ wxPenRefData::wxPenRefData(const wxPenRefData& data)
     m_hPen = 0;
 }
 
-wxPenRefData::~wxPenRefData(void)
+wxPenRefData::~wxPenRefData()
 {
 	if ( m_hPen )
 		::DeleteObject((HPEN) m_hPen);
@@ -67,7 +67,7 @@ wxPenRefData::~wxPenRefData(void)
 
 // Pens
 
-wxPen::wxPen(void)
+wxPen::wxPen()
 {
   if ( wxThePenList )
     wxThePenList->AddPen(this);
@@ -143,27 +143,7 @@ wxPen::wxPen(const wxBitmap& stipple, int Width)
     wxThePenList->AddPen(this);
 }
 
-wxPen::wxPen(const wxString& col, int Width, int Style)
-{
-  m_refData = new wxPenRefData;
-
-  M_PENDATA->m_colour = col;
-//  M_PENDATA->m_stipple = NULL ;
-  M_PENDATA->m_width = Width;
-  M_PENDATA->m_style = Style;
-  M_PENDATA->m_join = wxJOIN_ROUND ;
-  M_PENDATA->m_cap = wxCAP_ROUND ;
-  M_PENDATA->m_nbDash = 0 ;
-  M_PENDATA->m_dash = 0 ;
-  M_PENDATA->m_hPen = 0 ;
-
-  RealizeResource();
-
-  if ( wxThePenList )
-    wxThePenList->AddPen(this);
-}
-
-bool wxPen::RealizeResource(void)
+bool wxPen::RealizeResource()
 {
   if (M_PENDATA && (M_PENDATA->m_hPen == 0))
   {
@@ -280,7 +260,7 @@ bool wxPen::RealizeResource(void)
   return FALSE;
 }
 
-WXHANDLE wxPen::GetResourceHandle(void)
+WXHANDLE wxPen::GetResourceHandle()
 {
 	if ( !M_PENDATA )
 		return 0;
@@ -299,7 +279,7 @@ bool wxPen::FreeResource(bool force)
   else return FALSE;
 }
 
-bool wxPen::IsFree(void)
+bool wxPen::IsFree() const
 {
   return (M_PENDATA && M_PENDATA->m_hPen == 0);
 }
@@ -328,16 +308,7 @@ void wxPen::SetColour(const wxColour& col)
     RealizeResource();
 }
 
-void wxPen::SetColour(const wxString& col)
-{
-    Unshare();
-
-    M_PENDATA->m_colour = col;
-  
-    RealizeResource();
-}
-
-void wxPen::SetColour(const unsigned char r, const unsigned char g, const unsigned char b)
+void wxPen::SetColour(unsigned char r, unsigned char g, unsigned char b)
 {
     Unshare();
 

@@ -104,24 +104,6 @@ wxPen::wxPen(const wxBitmap& stipple, int Width)
         wxThePenList->AddPen(this);
 }
 
-wxPen::wxPen(const wxString& col, int Width, int Style)
-{
-    m_refData = new wxPenRefData;
-
-    M_PENDATA->m_colour = col;
-    M_PENDATA->m_width = Width;
-    M_PENDATA->m_style = Style;
-    M_PENDATA->m_join = wxJOIN_ROUND ;
-    M_PENDATA->m_cap = wxCAP_ROUND ;
-    M_PENDATA->m_nbDash = 0 ;
-    M_PENDATA->m_dash = 0 ;
-
-    RealizeResource();
-
-    if ( wxThePenList )
-        wxThePenList->AddPen(this);
-}
-
 void wxPen::Unshare()
 {
 	// Don't change shared data
@@ -146,16 +128,7 @@ void wxPen::SetColour(const wxColour& col)
     RealizeResource();
 }
 
-void wxPen::SetColour(const wxString& col)
-{
-    Unshare();
-
-    M_PENDATA->m_colour = col;
-  
-    RealizeResource();
-}
-
-void wxPen::SetColour(const unsigned char r, const unsigned char g, const unsigned char b)
+void wxPen::SetColour(unsigned char r, unsigned char g, unsigned char b)
 {
     Unshare();
 

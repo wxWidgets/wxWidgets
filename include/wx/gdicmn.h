@@ -199,7 +199,6 @@ class WXDLLEXPORT wxPenList: public wxList
   void AddPen(wxPen *pen);
   void RemovePen(wxPen *pen);
   wxPen *FindOrCreatePen(const wxColour& colour, int width, int style);
-  wxPen *FindOrCreatePen(const wxString& colour, int width, int style);
 };
 
 class WXDLLEXPORT wxBrushList: public wxList
@@ -212,7 +211,6 @@ class WXDLLEXPORT wxBrushList: public wxList
   void AddBrush(wxBrush *brush);
   void RemoveBrush(wxBrush *brush);
   wxBrush *FindOrCreateBrush(const wxColour& colour, int style);
-  wxBrush *FindOrCreateBrush(const wxString& colour, int style);
 };
 
 WXDLLEXPORT_DATA(extern const char*) wxEmptyString;
