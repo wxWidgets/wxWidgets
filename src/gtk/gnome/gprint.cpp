@@ -460,16 +460,22 @@ void wxGnomePrintDC::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y,
         wxImage image = bitmap.ConvertToImage();
 
         if (!image.Ok()) return;
-
-    	gnome_print_moveto (m_gpc, XLOG2DEV(x), YLOG2DEV(y) );
+        
+        double matrix[6];
+    	matrix[0] = XLOG2DEVREL(image.GetWidth());
+    	matrix[1] = 0;
+    	matrix[2] = 0;
+    	matrix[3] = YLOG2DEVREL(image.GetHeight());
+    	matrix[4] = XLOG2DEV(x);
+        matrix[5] = YLOG2DEV(y+image.GetHeight());
+    	gnome_print_concat( m_gpc, matrix );
+	    gnome_print_moveto(  m_gpc, 0, 0 );
         gnome_print_rgbimage( m_gpc, (guchar*) image.GetData(), image.GetWidth(), image.GetHeight(), image.GetWidth()*3 );
     }
 }
 
 void wxGnomePrintDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y )
 {
-    return;
-
     if (m_textForegroundColour.Ok())
     {
         unsigned char red = m_textForegroundColour.Red();
