@@ -1164,6 +1164,7 @@ GSocketError _GAddress_translate_to(GAddress *address,
 
 GSocketError _GAddress_Init_INET(GAddress *address)
 {
+  address->m_len = sizeof(struct sockaddr_in);
   address->m_addr = (struct sockaddr *) malloc(address->m_len);
   if (address->m_addr == NULL)
   {
@@ -1171,7 +1172,6 @@ GSocketError _GAddress_Init_INET(GAddress *address)
     return GSOCK_MEMERR;
   }
 
-  address->m_len = sizeof(struct sockaddr_in);
   address->m_family = GSOCK_INET;
   address->m_realfamily = PF_INET;
   ((struct sockaddr_in *)address->m_addr)->sin_family = AF_INET;
