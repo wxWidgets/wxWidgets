@@ -3252,13 +3252,7 @@ void wxTreeListMainWindow::PaintItem(wxTreeListItem *item, wxDC& dc)
         colText = GetForegroundColour();
     }
 
-    wxPen *pen =
-#ifndef __WXMAC__
-        // don't draw rect outline if we already have the
-        // background color under Mac
-        (item->IsSelected() && m_hasFocus) ? wxBLACK_PEN :
-#endif // !__WXMAC__
-         wxTRANSPARENT_PEN;
+    dc.SetPen(*wxTRANSPARENT_PEN);
 
     long text_w = 0, text_h = 0;
 
@@ -3266,21 +3260,23 @@ void wxTreeListMainWindow::PaintItem(wxTreeListItem *item, wxDC& dc)
 
     int total_h = GetLineHeight(item);
 
-    if (item->IsSelected() && HasFlag (wxTR_FULL_ROW_HIGHLIGHT)) {
-        dc.SetBrush(*(m_hasFocus ? m_hilightBrush : m_hilightUnfocusedBrush));
-        int offset = HasFlag(wxTR_ROW_LINES) ? 1 : 0;
-        dc.DrawRectangle (0, item->GetY() + offset,
-                          m_owner->GetHeaderWindow()->GetWidth(), total_h-offset);
-        colText = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
-    }else{
+    if (item->IsSelected() && HasFlag(wxTR_FULL_ROW_HIGHLIGHT)) {
+            dc.SetBrush(*(m_hasFocus ? m_hilightBrush : m_hilightUnfocusedBrush));
+            dc.SetPen(*wxBLACK_PEN);
+            colText = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
+    } else {
         wxColour colBg;
         if (attr && attr->HasBackgroundColour()) {
             colBg = attr->GetBackgroundColour();
-        }else{
-            colBg = m_backgroundColour;
+        } else {
+            colBg = GetBackgroundColour();
         }
-        dc.SetBrush(wxBrush(colBg, wxTRANSPARENT));
+        dc.SetBrush(wxBrush(colBg, wxSOLID));
     }
+
+    int offset = HasFlag(wxTR_ROW_LINES) ? 1 : 0;
+    dc.DrawRectangle(0, item->GetY() + offset,
+                     m_owner->GetHeaderWindow()->GetWidth(), total_h-offset);
 
     dc.SetBackgroundMode(wxTRANSPARENT);
     int text_extraH = (total_h > text_h) ? (total_h - text_h)/2 : 0;
@@ -3292,9 +3288,9 @@ void wxTreeListMainWindow::PaintItem(wxTreeListItem *item, wxDC& dc)
         int image;
         int image_x = 0;
         int image_w = 0;
-        if(i == GetMainColumn()) {
+        if (i == GetMainColumn()) {
             image = item->GetCurrentImage();
-            if (HasButtons()) {
+            if (item->HasPlus()) {
                  image_x = item->GetX() + (m_btnWidth-m_btnWidth2) + LINEATROOT;
             }else{
                  image_x = item->GetX() - m_imgWidth2;
@@ -3325,18 +3321,18 @@ void wxTreeListMainWindow::PaintItem(wxTreeListItem *item, wxDC& dc)
         }
         int text_x = image_x + image_w;
 
-        if (item->IsSelected() && (i==GetMainColumn()) && !HasFlag (wxTR_FULL_ROW_HIGHLIGHT))
+        if (item->IsSelected() && (i==GetMainColumn()) && !HasFlag(wxTR_FULL_ROW_HIGHLIGHT))
         {
+            dc.SetPen(*wxBLACK_PEN);
             dc.SetBrush(*(m_hasFocus ? m_hilightBrush : m_hilightUnfocusedBrush));
             int offset = HasFlag (wxTR_ROW_LINES) ? 1 : 0;
-            dc.DrawRectangle (text_x, item->GetY() + offset, text_w, total_h-offset);
+            int width = wxMin(text_w+2, colwidth - text_x - x_colstart);
+            dc.DrawRectangle(text_x-1, item->GetY() + offset, width, total_h-offset);
             dc.SetBackgroundMode(wxTRANSPARENT);
             dc.SetTextForeground(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
         }else{
             dc.SetTextForeground(colText);
         }
-
-        dc.SetPen(*pen);
 
         wxDCClipper clipper (dc, x_colstart, item->GetY(), colwidth, total_h);
         if (image != NO_IMAGE)
@@ -3399,6 +3395,9 @@ void wxTreeListMainWindow::PaintLevel (wxTreeListItem *item, wxDC &dc,
 
     if (IsExposed(exposed_x, exposed_y, 10000, h))  // 10000 = very much
     {
+        // draw item
+        PaintItem(item, dc);
+
         if (HasFlag(wxTR_ROW_LINES))
         {
             //dc.DestroyClippingRegion();
@@ -3428,6 +3427,16 @@ void wxTreeListMainWindow::PaintLevel (wxTreeListItem *item, wxDC &dc,
         {
             // clip to the column width
             wxDCClipper clipper(dc, x_colstart, y_top, clip_width, 10000);
+
+            if (!HasFlag(wxTR_NO_LINES))
+            {
+                if (x > m_indent)
+                    dc.DrawLine(x - m_indent, y_mid, x - m_btnWidth2, y_mid);
+                else if (HasFlag(wxTR_LINES_AT_ROOT))
+                    dc.DrawLine(m_btnWidth2-2, y_mid,
+                                x - m_btnWidth2, y_mid);
+                dc.DrawLine(x + m_btnWidth2, y_mid, x /*+ m_spacing*/, y_mid);
+            }
 
             if (m_imageListButtons != NULL)
             {
@@ -3506,18 +3515,14 @@ void wxTreeListMainWindow::PaintLevel (wxTreeListItem *item, wxDC &dc,
 
             // draw the horizontal line here
             if (!(level == 0) && !((level == 1) && HasFlag(wxTR_HIDE_ROOT))) {
-                int x2 = x;
-                if (!HasButtons()) x2 = x - m_indent;
+                int x2 = x - m_indent;
                 if (m_imgWidth > 0) {
                     dc.DrawLine(x2, y_mid, x2+m_indent-m_imgWidth2, y_mid);
                 }else{
-                    dc.DrawLine(x2, y_mid, x2+m_btnWidth2+LINEATROOT-MARGIN, y_mid);
+                    dc.DrawLine(x2, y_mid, x2+m_btnWidth2+LINEATROOT+MARGIN, y_mid);
                 }
             }
         }
-
-        // draw item
-        PaintItem(item, dc);
     }
 
     // restore DC objects
@@ -3528,47 +3533,69 @@ void wxTreeListMainWindow::PaintLevel (wxTreeListItem *item, wxDC &dc,
     if (item->IsExpanded())
     {
         wxArrayTreeListItems& children = item->GetChildren();
+        int count = children.Count();
+        int n, oldY;
 
-        // clip to the column width
-        size_t clip_width = m_owner->GetHeaderWindow()->
-                            GetColumn(m_main_column).GetWidth();
-        wxDCClipper clipper(dc, x_colstart, y_top, clip_width, 10000);
-
-        // process lower levels
-        int oldY;
-        if (m_imgWidth > 0) {
-            oldY = y_mid + m_imgHeight2;
-        }else{
-            oldY = y_mid + h/2;
+        // paint sublevel items first
+        for (n=0; n<count; ++n) {
+            oldY = y;
+            PaintLevel(children[n], dc, level+1, y, x_colstart);
         }
-        int y2;
-        int n;
-        for (n = 0; n < (int)children.Count(); ++n) {
 
-            if (!HasFlag(wxTR_NO_LINES))
-            {
-                // draw line down to last child
-                if (children[n]->HasPlus() && HasButtons()) {
-                    y2 = y + h/2 - m_btnHeight2;
-                    if (HasButtons()) {
-                        dc.DrawLine(x+m_indent, oldY, x+m_indent, y2);
-                    }else{
-                        dc.DrawLine(x, oldY, x, y2);
-                    }
-                    oldY = y2 + m_btnHeight;
-                }else{
-                    y2 = y + h/2;
-                    if (HasButtons()) {
-                        dc.DrawLine(x+m_indent, oldY, x+m_indent, y2);
-                    }else{
-                        dc.DrawLine(x, oldY, x, y2);
-                    }
-                    oldY = y2;
-                }
-            }
+        // then draw the connecting lines
+        if (!HasFlag(wxTR_NO_LINES) && count > 0)
+        {
+            // clip to the column width
+            size_t clip_width = m_owner->GetHeaderWindow()->GetColumn(m_main_column).GetWidth();
+            wxDCClipper clipper(dc, x_colstart, y_top, clip_width, 10000);
 
-            PaintLevel (children[n], dc, level+1, y, x_colstart);
+            // draw line down to last child
+            oldY += GetLineHeight(children[n-1]) >> 1;
+            if (HasButtons()) y_mid += 5;
+            dc.DrawLine(x, y_mid, x, oldY);
         }
+
+        
+//         // clip to the column width
+//         size_t clip_width = m_owner->GetHeaderWindow()->
+//                             GetColumn(m_main_column).GetWidth();
+//         wxDCClipper clipper(dc, x_colstart, y_top, clip_width, 10000);
+
+//         // process lower levels
+//         int oldY;
+//         if (m_imgWidth > 0) {
+//             oldY = y_mid + m_imgHeight2;
+//         }else{
+//             oldY = y_mid + h/2;
+//         }
+//         int y2;
+//         int n;
+//         for (n = 0; n < (int)children.Count(); ++n) {
+
+//             if (!HasFlag(wxTR_NO_LINES))
+//             {
+//                 // draw line down to last child
+//                 if (children[n]->HasPlus() && HasButtons()) {
+//                     y2 = y + h/2 - m_btnHeight2;
+//                     if (HasButtons()) {
+//                         dc.DrawLine(x+m_indent, oldY, x+m_indent, y2);
+//                     }else{
+//                         dc.DrawLine(x, oldY, x, y2);
+//                     }
+//                     oldY = y2 + m_btnHeight;
+//                 }else{
+//                     y2 = y + h/2;
+//                     if (HasButtons()) {
+//                         dc.DrawLine(x+m_indent, oldY, x+m_indent, y2);
+//                     }else{
+//                         dc.DrawLine(x, oldY, x, y2);
+//                     }
+//                     oldY = y2;
+//                 }
+//             }
+
+//             PaintLevel (children[n], dc, level+1, y, x_colstart);
+//         }
     }
 }
 
