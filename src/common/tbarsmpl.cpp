@@ -119,18 +119,6 @@ void wxToolBarSimple::OnPaint (wxPaintEvent& event)
       DrawTool(dc, mem_dc, tool);
   }
 
-/* Old code which drew a line beneath the toolbar - not generally
- * wanted.
-  int w, h;
-  GetClientSize( &w, &h );
-  wxPen * old_pen = dc.GetPen();
-  dc.SetPen( *white_pen );
-  dc.DrawLine(0,0,w,0);
-  dc.SetPen( *black_pen );
-  dc.DrawLine(0,(h-1),w,(h-1));
-  dc.SetPen( *old_pen );
-*/
-
   count--;
 }
 

@@ -195,7 +195,7 @@ bool wxGenericGrid::Create(wxWindow *parent, const wxWindowID id, const wxPoint&
   textItem->GetSize(&controlW, &controlH);
   editControlPosition.height = controlH;
   
-  topOfSheet = editControlPosition.x + controlH + 2;
+  topOfSheet = editControlPosition.y + controlH + 2;
 
   bEditCreated = TRUE;
   
@@ -330,7 +330,7 @@ void wxGenericGrid::UpdateDimensions(void)
   {
     int controlW, controlH;
     GetTextItem()->GetSize(&controlW, &controlH);
-    topOfSheet = editControlPosition.x + controlH + 2;
+    topOfSheet = editControlPosition.y + controlH + 2;
   }
   else
     topOfSheet = 0;

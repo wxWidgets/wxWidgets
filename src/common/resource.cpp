@@ -1770,14 +1770,19 @@ static wxResourceBitListStruct wxResourceBitListTable[] =
   { "wxLB_NEEDED_SB", wxLB_NEEDED_SB },
   { "wxLB_ALWAYS_SB", wxLB_ALWAYS_SB },
   { "wxLB_SORT", wxLB_SORT },
+  { "wxLB_OWNERDRAW", wxLB_OWNERDRAW },
+  { "wxLB_HSCROLL", wxLB_HSCROLL },
   
   /* wxComboxBox */
   { "wxCB_SIMPLE", wxCB_SIMPLE },
   { "wxCB_DROPDOWN", wxCB_DROPDOWN },
+  { "wxCB_READONLY", wxCB_READONLY },
   { "wxCB_SORT", wxCB_SORT },
   
   /* wxGauge */
   { "wxGA_PROGRESSBAR", wxGA_PROGRESSBAR },
+  { "wxGA_HORIZONTAL", wxGA_HORIZONTAL },
+  { "wxGA_VERTICAL", wxGA_VERTICAL },
 
   /* wxTextCtrl */
   { "wxPASSWORD", wxPASSWORD},
@@ -1785,16 +1790,80 @@ static wxResourceBitListStruct wxResourceBitListTable[] =
   { "wxTE_PASSWORD", wxTE_PASSWORD},
   { "wxTE_READONLY", wxTE_READONLY},
   { "wxTE_PROCESS_ENTER", wxTE_PROCESS_ENTER},
+  { "wxTE_MULTILINE", wxTE_MULTILINE},
 
-  /* wxRadioButton */
+  /* wxRadioBox/wxRadioButton */
   { "wxRB_GROUP", wxRB_GROUP },
+  { "wxRA_HORIZONTAL", wxRA_HORIZONTAL },
+  { "wxRA_VERTICAL", wxRA_VERTICAL },
 
-  /* wxItem */
+  /* wxSlider */
+  { "wxSL_HORIZONTAL", wxSL_HORIZONTAL },
+  { "wxSL_VERTICAL", wxSL_VERTICAL },
+  { "wxSL_AUTOTICKS", wxSL_AUTOTICKS },
+  { "wxSL_LABELS", wxSL_LABELS },
+  { "wxSL_LEFT", wxSL_LEFT },
+  { "wxSL_TOP", wxSL_TOP },
+  { "wxSL_RIGHT", wxSL_RIGHT },
+  { "wxSL_BOTTOM", wxSL_BOTTOM },
+  { "wxSL_BOTH", wxSL_BOTH },
+  { "wxSL_SELRANGE", wxSL_SELRANGE },
+
+  /* wxScrollBar */
+  { "wxSB_HORIZONTAL", wxSB_HORIZONTAL },
+  { "wxSB_VERTICAL", wxSB_VERTICAL },
+
+  /* wxButton */
+  { "wxBU_AUTODRAW", wxBU_AUTODRAW },
+  { "wxBU_NOAUTODRAW", wxBU_NOAUTODRAW },
+
+  /* wxTreeCtrl */
+  { "wxTR_HAS_BUTTONS", wxTR_HAS_BUTTONS },
+  { "wxTR_EDIT_LABELS", wxTR_EDIT_LABELS },
+
+  /* wxListCtrl */
+  { "wxLC_ICON", wxLC_ICON },
+  { "wxLC_SMALL_ICON", wxLC_SMALL_ICON },
+  { "wxLC_LIST", wxLC_LIST },
+  { "wxLC_REPORT", wxLC_REPORT },
+  { "wxLC_ALIGN_TOP", wxLC_ALIGN_TOP },
+  { "wxLC_ALIGN_LEFT", wxLC_ALIGN_LEFT },
+  { "wxLC_AUTOARRANGE", wxLC_AUTOARRANGE },
+  { "wxLC_USER_TEXT", wxLC_USER_TEXT },
+  { "wxLC_EDIT_LABELS", wxLC_EDIT_LABELS },
+  { "wxLC_NO_HEADER", wxLC_NO_HEADER },
+  { "wxLC_NO_SORT_HEADER", wxLC_NO_SORT_HEADER },
+  { "wxLC_SINGLE_SEL", wxLC_SINGLE_SEL },
+  { "wxLC_SORT_ASCENDING", wxLC_SORT_ASCENDING },
+  { "wxLC_SORT_DESCENDING", wxLC_SORT_DESCENDING },
+
+  /* wxSpinButton */
+  { "wxSP_VERTICAL", wxSP_VERTICAL},
+  { "wxSP_HORIZONTAL", wxSP_HORIZONTAL},
+  { "wxSP_ARROW_KEYS", wxSP_ARROW_KEYS},
+  { "wxSP_WRAP", wxSP_WRAP},
+
+  /* wxSplitterWnd */
+  { "wxSP_NOBORDER", wxSP_NOBORDER},
+  { "wxSP_3D", wxSP_3D},
+  { "wxSP_BORDER", wxSP_BORDER},
+
+  /* wxTabCtrl */
+  { "wxTC_MULTILINE", wxTC_MULTILINE},
+  { "wxTC_RIGHTJUSTIFY", wxTC_RIGHTJUSTIFY},
+  { "wxTC_FIXEDWIDTH", wxTC_FIXEDWIDTH},
+  { "wxTC_OWNERDRAW", wxTC_OWNERDRAW},
+
+  /* wxStatusBar95 */
+  { "wxST_SIZEGRIP", wxST_SIZEGRIP},
+
+  /* wxControl */
   { "wxFIXED_LENGTH", wxFIXED_LENGTH},
   { "wxALIGN_LEFT", wxALIGN_LEFT},
   { "wxALIGN_CENTER", wxALIGN_CENTER},
   { "wxALIGN_CENTRE", wxALIGN_CENTRE},
   { "wxALIGN_RIGHT", wxALIGN_RIGHT},
+  { "wxCOLOURED", wxCOLOURED},
   
   /* wxToolBar */
   { "wxTB_3DBUTTONS", wxTB_3DBUTTONS},
@@ -1827,22 +1896,16 @@ static wxResourceBitListStruct wxResourceBitListTable[] =
   { "wxBACKINGSTORE", wxBACKINGSTORE},
 //  { "wxFLAT", wxFLAT},
 //  { "wxMOTIF_RESIZE", wxMOTIF_RESIZE},
-  { "wxFIXED_LENGTH", wxFIXED_LENGTH},
+  { "wxFIXED_LENGTH", 0},
+  { "wxDOUBLE_BORDER", wxDOUBLE_BORDER},
+  { "wxSUNKEN_BORDER", wxSUNKEN_BORDER},
+  { "wxRAISED_BORDER", wxRAISED_BORDER},
+  { "wxSIMPLE_BORDER", wxSIMPLE_BORDER},
+  { "wxSTATIC_BORDER", wxSTATIC_BORDER},
+  { "wxTRANSPARENT_WINDOW", wxTRANSPARENT_WINDOW},
+  { "wxNO_BORDER", wxNO_BORDER},
+  { "wxCLIP_CHILDREN", wxCLIP_CHILDREN},
 
-#if USE_ENHANCED_DIALOG
-  // Enhanced dialog
-  { "wxBOTTOM_COMMANDS", wxBOTTOM_COMMANDS},
-  { "wxRIGHT_COMMANDS", wxRIGHT_COMMANDS},
-  { "wxSTATUS_FOOTER", wxSTATUS_FOOTER},
-  { "wxNO_STATUS_FOOTER", wxNO_STATUS_FOOTER},
-  { "wxNO_CANCEL_BUTTON", wxNO_CANCEL_BUTTON},
-  { "wxCANCEL_BUTTON_FIRST", wxCANCEL_BUTTON_FIRST},
-  { "wxCANCEL_BUTTON_SECOND", wxCANCEL_BUTTON_SECOND},
-  { "wxCANCEL_BUTTON_LAST", wxCANCEL_BUTTON_LAST},
-  { "wxENH_DEFAULT", wxENH_DEFAULT},
-#endif
-
-  { "wxCOLOURED", wxCOLOURED},
   { "wxTINY_CAPTION_HORIZ", wxTINY_CAPTION_HORIZ},
   { "wxTINY_CAPTION_VERT", wxTINY_CAPTION_VERT},
 

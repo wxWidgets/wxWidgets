@@ -862,6 +862,28 @@ int wxString::PrintfV(const char* pszFormat, va_list argptr)
   return iLen;
 }
 
+int wxString::Scanf(const char *pszFormat, ...) const
+{
+  va_list argptr;
+  va_start(argptr, pszFormat);
+
+  int iLen = ScanfV(pszFormat, argptr);
+
+  va_end(argptr);
+
+  return iLen;
+}
+
+int wxString::ScanfV(const char *pszFormat, va_list argptr) const
+{
+#ifdef __WINDOWS__
+  wxMessageBox("ScanfV not implemented");
+  return 0;
+#else
+  return vsscanf(c_str(), pszFormat, argptr);
+#endif
+}
+
 // ---------------------------------------------------------------------------
 // standard C++ library string functions
 // ---------------------------------------------------------------------------
