@@ -103,27 +103,6 @@ bool gtk_dialog_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED
 }
 
 //-----------------------------------------------------------------------------
-// "size_allocate"
-//-----------------------------------------------------------------------------
-
-extern "C" {
-static void gtk_dialog_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxPopupWindow *win )
-{
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-
-    if (!win->m_hasVMT) return;
-
-    if ((win->m_width != alloc->width) || (win->m_height != alloc->height))
-    {
-        win->m_width = alloc->width;
-        win->m_height = alloc->height;
-        win->GtkUpdateSize();
-    }
-}
-}
-
-//-----------------------------------------------------------------------------
 // "realize" from m_widget
 //-----------------------------------------------------------------------------
 
@@ -232,10 +211,6 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
     gtk_signal_connect( GTK_OBJECT(m_widget), "realize",
                         GTK_SIGNAL_FUNC(gtk_dialog_realized_callback), (gpointer) this );
 
-    // the user resized the frame by dragging etc.
-    gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
-        GTK_SIGNAL_FUNC(gtk_dialog_size_callback), (gpointer)this );
-
     // disable native tab traversal
     gtk_signal_connect( GTK_OBJECT(m_widget), "focus",
         GTK_SIGNAL_FUNC(gtk_dialog_focus_callback), (gpointer)this );
@@ -338,21 +313,16 @@ void wxPopupWindow::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int 
     m_height = height;
 
     /* FIXME: is this a hack? */
-    /* since for some reason GTK will revert to using maximum size ever set
-       for this window, we have to set geometry hints maxsize to match
-       size given. */
-    int minWidth = GetMinWidth(),
-        minHeight = GetMinHeight();
-
-    if ((minWidth != -1) && (m_width < minWidth)) m_width = minWidth;
-    if ((minHeight != -1) && (m_height < minHeight)) m_height = minHeight;
+    /* Since for some reason GTK will revert to using maximum size ever set
+       for this window, we have to set geometry hints maxsize to match size
+       given. Also set the to that minsize since resizing isn't possible
+       anyway. */
 
     /* set size hints */
-    gint flag = GDK_HINT_MAX_SIZE; // GDK_HINT_POS;
-    if ((minWidth != -1) || (minHeight != -1)) flag |= GDK_HINT_MIN_SIZE;
+    gint flag = GDK_HINT_MAX_SIZE | GDK_HINT_MIN_SIZE; // GDK_HINT_POS;
     GdkGeometry geom;
-    geom.min_width = minWidth;
-    geom.min_height = minHeight;
+    geom.min_width = m_width;
+    geom.min_height = m_height;
     geom.max_width = m_width;
     geom.max_height = m_height;
     gtk_window_set_geometry_hints( GTK_WINDOW(m_widget),
