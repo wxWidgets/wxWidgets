@@ -1769,7 +1769,7 @@ class Joystick(object):
         return _misc.Joystick_SetMovementThreshold(*args, **kwargs)
 
     def IsOk(*args, **kwargs):
-        """IsOk(void ??) -> bool"""
+        """IsOk() -> bool"""
         return _misc.Joystick_IsOk(*args, **kwargs)
 
     def GetNumberJoysticks(*args, **kwargs):

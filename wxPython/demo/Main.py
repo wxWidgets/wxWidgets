@@ -463,6 +463,22 @@ class wxPythonDemo(wx.Frame):
         splitter = wx.SplitterWindow(self, -1)
         splitter2 = wx.SplitterWindow(splitter, -1)
 
+        # Set up a log on the View Log Notebook page
+        self.log = wx.TextCtrl(splitter2, -1,
+                              style = wx.TE_MULTILINE|wx.TE_READONLY|wx.HSCROLL)
+
+        # Set the wxWindows log target to be this textctrl
+        #wx.Log_SetActiveTarget(wx.LogTextCtrl(self.log))
+
+        # But instead of the above we want to show how to use our own wx.Log class
+        wx.Log_SetActiveTarget(MyLog(self.log))
+
+        # for serious debugging
+        #wx.Log_SetActiveTarget(wx.LogStderr())
+        #wx.Log_SetTraceMask(wx.TraceMessages)
+
+
+
         def EmptyHandler(evt): pass
         #splitter.Bind(wx.EVT_ERASE_BACKGROUND, EmptyHandler)
         #splitter2.Bind(wx.EVT_ERASE_BACKGROUND, EmptyHandler)
@@ -576,21 +592,6 @@ class wxPythonDemo(wx.Frame):
         self.txt = DemoCodeViewer(self.nb, -1)
         self.nb.AddPage(self.txt, "Demo Code")
         self.LoadDemoSource('Main.py')
-
-
-        # Set up a log on the View Log Notebook page
-        self.log = wx.TextCtrl(splitter2, -1,
-                              style = wx.TE_MULTILINE|wx.TE_READONLY|wx.HSCROLL)
-
-        # Set the wxWindows log target to be this textctrl
-        #wx.Log_SetActiveTarget(wx.LogTextCtrl(self.log))
-
-        # But instead of the above we want to show how to use our own wx.Log class
-        wx.Log_SetActiveTarget(MyLog(self.log))
-
-        # for serious debugging
-        #wx.Log_SetActiveTarget(wx.LogStderr())
-        #wx.Log_SetTraceMask(wx.TraceMessages)
 
 
         # add the windows to the splitter and split it.

@@ -929,6 +929,12 @@ class TextAttr(object):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
+    def __del__(self, destroy=_controls.delete_TextAttr):
+        """__del__()"""
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+
     def Init(*args, **kwargs):
         """Init()"""
         return _controls.TextAttr_Init(*args, **kwargs)
@@ -1590,12 +1596,13 @@ class RadioBox(core.Control):
         return "<%s.%s; proxy of C++ wxRadioBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, int id, String label, Point point=DefaultPosition, 
+        __init__(Window parent, int id, String label, Point pos=DefaultPosition, 
             Size size=DefaultSize, int choices=0, 
             String choices_array=None, int majorDimension=0, 
             long style=RA_HORIZONTAL, Validator validator=DefaultValidator, 
             String name=RadioBoxNameStr) -> RadioBox
         """
+        if kwargs.has_key('point'): kwargs['pos'] = kwargs['point']
         newobj = _controls.new_RadioBox(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -1604,7 +1611,7 @@ class RadioBox(core.Control):
 
     def Create(*args, **kwargs):
         """
-        Create(Window parent, int id, String label, Point point=DefaultPosition, 
+        Create(Window parent, int id, String label, Point pos=DefaultPosition, 
             Size size=DefaultSize, int choices=0, 
             String choices_array=None, int majorDimension=0, 
             long style=RA_HORIZONTAL, Validator validator=DefaultValidator, 
@@ -1737,10 +1744,11 @@ class Slider(core.Control):
     def __init__(self, *args, **kwargs):
         """
         __init__(Window parent, int id, int value, int minValue, int maxValue, 
-            Point point=DefaultPosition, Size size=DefaultSize, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=SL_HORIZONTAL, Validator validator=DefaultValidator, 
             String name=SliderNameStr) -> Slider
         """
+        if kwargs.has_key('point'): kwargs['pos'] = kwargs['point']
         newobj = _controls.new_Slider(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -1750,7 +1758,7 @@ class Slider(core.Control):
     def Create(*args, **kwargs):
         """
         Create(Window parent, int id, int value, int minValue, int maxValue, 
-            Point point=DefaultPosition, Size size=DefaultSize, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=SL_HORIZONTAL, Validator validator=DefaultValidator, 
             String name=SliderNameStr) -> bool
         """
@@ -1809,7 +1817,7 @@ class Slider(core.Control):
         return _controls.Slider_GetThumbLength(*args, **kwargs)
 
     def SetTickFreq(*args, **kwargs):
-        """SetTickFreq(int n, int pos)"""
+        """SetTickFreq(int n, int pos=1)"""
         return _controls.Slider_SetTickFreq(*args, **kwargs)
 
     def GetTickFreq(*args, **kwargs):

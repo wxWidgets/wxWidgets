@@ -121,7 +121,6 @@ SWIGIMPORT(char *)           SWIG_UnpackData(char *, void *, int);
 
 #ifdef __cplusplus
 }
-
 #endif
 
 
@@ -136,178 +135,6 @@ SWIGIMPORT(char *)           SWIG_UnpackData(char *, void *, int);
  ************************************************************************/
 
 #include "Python.h"
-
-#include <limits.h>
-#include <float.h>
-
-#ifdef __cplusplus
-#define SWIG_STATIC_INLINE static inline 
-#else
-#define SWIG_STATIC_INLINE static 
-#endif 
-
-SWIG_STATIC_INLINE long
-SPyObj_AsLong(PyObject * obj)
-{
-  return PyInt_Check(obj) ?  PyInt_AsLong(obj) : PyLong_AsLong(obj);
-}
-
-SWIG_STATIC_INLINE unsigned long
-SPyObj_AsUnsignedLong(PyObject * obj) 
-{
-  if (PyLong_Check(obj)) {
-    return PyLong_AsUnsignedLong(obj);
-  } else {
-    long i = PyInt_AsLong(obj);
-    if ( !PyErr_Occurred() && (i < 0)) {
-      PyErr_SetString(PyExc_TypeError, "negative value for unsigned type");
-    }
-    return i;
-  }
-}
-
-#if !defined(_MSC_VER)
-SWIG_STATIC_INLINE PyObject* 
-SPyObj_FromLongLong(long long value)
-{
-  return (value > (long)(LONG_MAX)) ?
-    PyLong_FromLongLong(value) : PyInt_FromLong((long)value); 
-}
-#endif
-
-SWIG_STATIC_INLINE PyObject* 
-SPyObj_FromUnsignedLong(unsigned long value)
-{
-  return (value > (unsigned long)(LONG_MAX)) ?
-    PyLong_FromUnsignedLong(value) : PyInt_FromLong((long)value); 
-}
-
-#if !defined(_MSC_VER)
-SWIG_STATIC_INLINE PyObject* 
-SPyObj_FromUnsignedLongLong(unsigned long long value)
-{
-  return (value > (unsigned long long)(LONG_MAX)) ?
-    PyLong_FromUnsignedLongLong(value) : PyInt_FromLong((long)value); 
-}
-#endif
-
-SWIG_STATIC_INLINE long
-SPyObj_AsLongInRange(PyObject * obj, long min_value, long max_value)
-{
-  long value = SPyObj_AsLong(obj);
-  if (!PyErr_Occurred()) {
-    if (value < min_value) {
-      PyErr_SetString(PyExc_OverflowError,"value is smaller than type minimum");
-    } else if (value > max_value) {
-      PyErr_SetString(PyExc_OverflowError,"value is greater than type maximum");
-    }
-  }
-  return value;
-}
-
-SWIG_STATIC_INLINE unsigned long
-SPyObj_AsUnsignedLongInRange(PyObject *obj, unsigned long max_value) 
-{
-  unsigned long value = SPyObj_AsUnsignedLong(obj);
-  if (!PyErr_Occurred()) {
-    if (value > max_value) {     
-      PyErr_SetString(PyExc_OverflowError,"value is greater than type maximum");
-    }
-  }
-  return value;
-}
-
-SWIG_STATIC_INLINE signed char
-SPyObj_AsSignedChar(PyObject *obj) { 
-  return (signed char)SPyObj_AsLongInRange(obj, SCHAR_MIN, SCHAR_MAX);
-}
-
-SWIG_STATIC_INLINE short
-SPyObj_AsShort(PyObject *obj) { 
-  return (short)SPyObj_AsLongInRange(obj, SHRT_MIN, SHRT_MAX);
-}
-
-SWIG_STATIC_INLINE int
-SPyObj_AsInt(PyObject *obj) { 
-  return SPyObj_AsLongInRange(obj, INT_MIN, INT_MAX);
-}
-
-SWIG_STATIC_INLINE unsigned char
-SPyObj_AsUnsignedChar(PyObject *obj) { 
-  return (unsigned char)SPyObj_AsUnsignedLongInRange(obj, UCHAR_MAX);
-}
-
-SWIG_STATIC_INLINE unsigned short 
-SPyObj_AsUnsignedShort(PyObject *obj) { 
-  return (unsigned short)SPyObj_AsUnsignedLongInRange(obj, USHRT_MAX);
-}
-
-SWIG_STATIC_INLINE unsigned int
-SPyObj_AsUnsignedInt(PyObject *obj) { 
-  return SPyObj_AsUnsignedLongInRange(obj, UINT_MAX);
-}
-
-#if !defined(_MSC_VER)
-SWIG_STATIC_INLINE long long
-SPyObj_AsLongLong(PyObject *obj) {
-  return PyInt_Check(obj) ?
-    PyInt_AsLong(obj) : PyLong_AsLongLong(obj);
-}
-
-SWIG_STATIC_INLINE unsigned long long
-SPyObj_AsUnsignedLongLong(PyObject *obj) {
-  return PyLong_Check(obj) ?
-    PyLong_AsUnsignedLongLong(obj) : SPyObj_AsUnsignedLong(obj);
-}
-#endif
-
-SWIG_STATIC_INLINE double
-SPyObj_AsDouble(PyObject *obj) {
-  return (PyFloat_Check(obj)) ? PyFloat_AsDouble(obj) :
-    (double)((PyInt_Check(obj)) ? PyInt_AsLong(obj) : PyLong_AsLongLong(obj));
-}
-
-SWIG_STATIC_INLINE float
-SPyObj_AsFloat(PyObject *obj) {
-  double value = SPyObj_AsDouble(obj);
-  if (!PyErr_Occurred()) {
-    if (value < FLT_MIN) {
-      PyErr_SetString(PyExc_OverflowError,"float is smaller than flt_min");
-    } else if (value > FLT_MAX) {     
-      PyErr_SetString(PyExc_OverflowError,"float is greater than flt_max");
-    }
-  }
-  return (float) value;
-}
-
-SWIG_STATIC_INLINE char
-SPyObj_AsChar(PyObject *obj) { 
-  char c = (PyString_Check(obj) && PyString_Size(obj) == 1) ?
-    PyString_AsString(obj)[0] 
-    : (char) SPyObj_AsLongInRange(obj, CHAR_MIN, CHAR_MAX);
-  if (PyErr_Occurred()) {
-    PyErr_Clear();
-    PyErr_SetString(PyExc_TypeError, "a char is required");
-  }
-  return c;
-}
-
-SWIG_STATIC_INLINE PyObject *
-SPyObj_FromChar(char c) { 
-  return PyString_FromStringAndSize(&c,1);
-}
-
-SWIG_STATIC_INLINE PyObject *
-SPyObj_FromCharPtr(const char* cptr) { 
-  return cptr ? PyString_FromString(cptr) : Py_BuildValue((char*)"");
-}
- 
-SWIG_STATIC_INLINE int
-SPyObj_AsBool(PyObject *obj) {
-    return SPyObj_AsLong/*Long*/(obj) ?  1 : 0;
-}
-
-
 
 #ifdef __cplusplus
 extern "C" {
@@ -357,6 +184,7 @@ typedef struct swig_const_info {
 #define SWIG_InstallConstants(d, constants) \
   SWIG_Python_InstallConstants(d, constants)
 
+typedef double (*py_objasdbl_conv)(PyObject *obj);
 
 SWIGIMPORT(int)               SWIG_Python_ConvertPtr(PyObject *, void **, swig_type_info *, int);
 SWIGIMPORT(PyObject *)        SWIG_Python_NewPointerObj(void *, swig_type_info *,int own);
@@ -367,6 +195,27 @@ SWIGIMPORT(int)               SWIG_Python_ConvertPacked(PyObject *, void *, int 
 SWIGIMPORT(PyObject *)        SWIG_Python_NewPackedObj(void *, int sz, swig_type_info *);
 SWIGIMPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_const_info constants[]);
 
+/* -----------------------------------------------------------------------------
+ *  the needed conversions between C++ and python
+ * ----------------------------------------------------------------------------- */
+/* basic types */
+/*
+  utilities
+*/
+SWIGIMPORT(char* )         SWIG_PyObj_AsCharPtr(PyObject *obj, swig_type_info* pchar_info);
+SWIGIMPORT(PyObject *)     SWIG_PyObj_FromCharPtr(const char* cptr);
+SWIGIMPORT(unsigned long)  SWIG_PyObj_AsUnsignedLong(PyObject * obj);
+SWIGIMPORT(long)           SWIG_PyObj_AsLongInRange(PyObject * obj, const char* type,
+						    long min_value, long max_value);
+SWIGIMPORT(unsigned long)  SWIG_PyObj_AsUnsignedLongInRange(PyObject *obj, const char* type,
+							    unsigned long max_value);
+SWIGIMPORT(char *)         SWIG_PyObj_AsNewCharPtr(PyObject *obj, swig_type_info* pchar_info);
+SWIGIMPORT(void)           SWIG_PyObj_AsCharPtrAndSize(PyObject *obj, swig_type_info* pchar_info,
+						       char** cptr, size_t* size);
+SWIGIMPORT(void)           SWIG_PyObj_AsCharArray(PyObject *obj, swig_type_info* pchar_info,
+						  char* carray, size_t size);
+SWIGIMPORT(PyObject *)     SWIG_PyObj_FromCharArray(const char* carray, size_t size);
+SWIGIMPORT(float)          SWIG_PyObj_AsFloatConv(PyObject *obj,  py_objasdbl_conv pyconv);
 
 
 /* Contract support */
@@ -390,49 +239,50 @@ SWIGIMPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_con
 #define  SWIGTYPE_p_wxMouseEvent swig_types[6] 
 #define  SWIGTYPE_p_wxHtmlWordCell swig_types[7] 
 #define  SWIGTYPE_p_wxHtmlHelpData swig_types[8] 
-#define  SWIGTYPE_p_wxHtmlWinParser swig_types[9] 
-#define  SWIGTYPE_p_wxHtmlParser swig_types[10] 
-#define  SWIGTYPE_p_wxPanel swig_types[11] 
-#define  SWIGTYPE_p_wxHtmlFontCell swig_types[12] 
+#define  SWIGTYPE_p_char swig_types[9] 
+#define  SWIGTYPE_p_wxHtmlWinParser swig_types[10] 
+#define  SWIGTYPE_p_wxHtmlParser swig_types[11] 
+#define  SWIGTYPE_p_wxPanel swig_types[12] 
 #define  SWIGTYPE_p_wxFont swig_types[13] 
 #define  SWIGTYPE_p_wxHtmlColourCell swig_types[14] 
 #define  SWIGTYPE_p_wxPyHtmlWindow swig_types[15] 
 #define  SWIGTYPE_p_wxScrolledWindow swig_types[16] 
 #define  SWIGTYPE_p_wxWindow swig_types[17] 
 #define  SWIGTYPE_p_wxTopLevelWindow swig_types[18] 
-#define  SWIGTYPE_p_wxHtmlEasyPrinting swig_types[19] 
-#define  SWIGTYPE_p_wxHtmlSelection swig_types[20] 
-#define  SWIGTYPE_p_wxHtmlRenderingInfo swig_types[21] 
-#define  SWIGTYPE_p_wxHtmlWidgetCell swig_types[22] 
-#define  SWIGTYPE_p_wxObject swig_types[23] 
-#define  SWIGTYPE_p_wxString swig_types[24] 
-#define  SWIGTYPE_p_wxPyHtmlWinTagHandler swig_types[25] 
-#define  SWIGTYPE_p_wxHtmlTagHandler swig_types[26] 
-#define  SWIGTYPE_p_wxPyHtmlTagHandler swig_types[27] 
-#define  SWIGTYPE_p_wxEvtHandler swig_types[28] 
-#define  SWIGTYPE_p_wxPoint swig_types[29] 
-#define  SWIGTYPE_p_wxHtmlHelpController swig_types[30] 
-#define  SWIGTYPE_p_wxCursor swig_types[31] 
-#define  SWIGTYPE_p_wxFileSystem swig_types[32] 
-#define  SWIGTYPE_p_wxHtmlBookRecArray swig_types[33] 
-#define  SWIGTYPE_p_wxPyPrintout swig_types[34] 
-#define  SWIGTYPE_p_wxHtmlPrintout swig_types[35] 
-#define  SWIGTYPE_p_wxHtmlSearchStatus swig_types[36] 
-#define  SWIGTYPE_p_wxHtmlContentsItem swig_types[37] 
-#define  SWIGTYPE_p_wxConfigBase swig_types[38] 
-#define  SWIGTYPE_p_wxPrintData swig_types[39] 
-#define  SWIGTYPE_p_wxHtmlHelpFrame swig_types[40] 
-#define  SWIGTYPE_p_wxHtmlRenderingState swig_types[41] 
-#define  SWIGTYPE_p_wxFrame swig_types[42] 
-#define  SWIGTYPE_p_wxPyHtmlFilter swig_types[43] 
-#define  SWIGTYPE_p_wxHtmlFilter swig_types[44] 
-#define  SWIGTYPE_p_wxHtmlCell swig_types[45] 
-#define  SWIGTYPE_p_wxHtmlContainerCell swig_types[46] 
-#define  SWIGTYPE_p_wxHtmlTag swig_types[47] 
-#define  SWIGTYPE_p_wxHtmlLinkInfo swig_types[48] 
-#define  SWIGTYPE_p_int swig_types[49] 
-#define  SWIGTYPE_p_wxHtmlBookRecord swig_types[50] 
-static swig_type_info *swig_types[52];
+#define  SWIGTYPE_p_wxHtmlFontCell swig_types[19] 
+#define  SWIGTYPE_p_wxHtmlEasyPrinting swig_types[20] 
+#define  SWIGTYPE_p_wxHtmlSelection swig_types[21] 
+#define  SWIGTYPE_p_wxHtmlRenderingInfo swig_types[22] 
+#define  SWIGTYPE_p_wxHtmlWidgetCell swig_types[23] 
+#define  SWIGTYPE_p_wxObject swig_types[24] 
+#define  SWIGTYPE_p_wxString swig_types[25] 
+#define  SWIGTYPE_p_wxPyHtmlWinTagHandler swig_types[26] 
+#define  SWIGTYPE_p_wxHtmlTagHandler swig_types[27] 
+#define  SWIGTYPE_p_wxPyHtmlTagHandler swig_types[28] 
+#define  SWIGTYPE_p_wxEvtHandler swig_types[29] 
+#define  SWIGTYPE_p_wxPoint swig_types[30] 
+#define  SWIGTYPE_p_wxHtmlHelpController swig_types[31] 
+#define  SWIGTYPE_p_wxCursor swig_types[32] 
+#define  SWIGTYPE_p_wxFileSystem swig_types[33] 
+#define  SWIGTYPE_p_wxHtmlBookRecArray swig_types[34] 
+#define  SWIGTYPE_p_wxPyPrintout swig_types[35] 
+#define  SWIGTYPE_p_wxHtmlPrintout swig_types[36] 
+#define  SWIGTYPE_p_wxHtmlSearchStatus swig_types[37] 
+#define  SWIGTYPE_p_wxHtmlContentsItem swig_types[38] 
+#define  SWIGTYPE_p_wxConfigBase swig_types[39] 
+#define  SWIGTYPE_p_wxPrintData swig_types[40] 
+#define  SWIGTYPE_p_wxHtmlHelpFrame swig_types[41] 
+#define  SWIGTYPE_p_wxHtmlRenderingState swig_types[42] 
+#define  SWIGTYPE_p_wxFrame swig_types[43] 
+#define  SWIGTYPE_p_wxPyHtmlFilter swig_types[44] 
+#define  SWIGTYPE_p_wxHtmlFilter swig_types[45] 
+#define  SWIGTYPE_p_wxHtmlCell swig_types[46] 
+#define  SWIGTYPE_p_wxHtmlContainerCell swig_types[47] 
+#define  SWIGTYPE_p_wxHtmlTag swig_types[48] 
+#define  SWIGTYPE_p_wxHtmlLinkInfo swig_types[49] 
+#define  SWIGTYPE_p_int swig_types[50] 
+#define  SWIGTYPE_p_wxHtmlBookRecord swig_types[51] 
+static swig_type_info *swig_types[53];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -443,6 +293,44 @@ static swig_type_info *swig_types[52];
 #define SWIG_init    init_html
 
 #define SWIG_name    "_html"
+
+#include <limits.h>
+#include <float.h>
+#include <string.h>
+
+#ifndef SWIGSTATIC
+#ifdef __cplusplus
+#define SWIGSTATIC(a) static inline a
+#else
+#define SWIGSTATIC(a) static a
+#endif
+#endif
+
+#ifndef numeric_cast
+#ifdef __cplusplus
+#ifdef HAVE_NUMERIC_CAST
+#define numeric_cast(type,a) numeric_cast<type>(a)
+#else
+#define numeric_cast(type,a) static_cast<type>(a)
+#endif
+#else
+#define numeric_cast(type,a) (type)(a)
+#endif
+#endif
+
+
+
+#define SWIG_PyObj_FromSignedChar     PyInt_FromLong
+#define SWIG_PyObj_FromUnsignedChar   PyInt_FromLong
+#define SWIG_PyObj_FromShort         PyInt_FromLong
+#define SWIG_PyObj_FromUnsignedShort  PyInt_FromLong
+#define SWIG_PyObj_FromInt           PyInt_FromLong
+#define SWIG_PyObj_FromLong          PyInt_FromLong
+#define SWIG_PyObj_FromFloat         PyFloat_FromDouble
+#define SWIG_PyObj_FromDouble        PyFloat_FromDouble
+#define SWIG_PyObj_FromFloat         PyFloat_FromDouble
+#define SWIG_PyObj_FromDouble        PyFloat_FromDouble
+
 
 #include "wx/wxPython/wxPython.h"
 #include "wx/wxPython/pyclasses.h"
@@ -458,6 +346,23 @@ static swig_type_info *swig_types[52];
  static const wxString wxPyHtmlWindowNameStr(wxT("htmlWindow")); 
  static const wxString wxPyHtmlPrintoutTitleStr(wxT("Printout")); 
  static const wxString wxPyHtmlPrintingTitleStr(wxT("Printing")); 
+
+SWIGSTATIC(PyObject*)
+SWIG_PyObj_FromBool(bool value)
+{
+  PyObject *obj = value ? Py_True : Py_False;
+  Py_INCREF(obj);
+  return obj;
+}
+
+
+SWIGSTATIC(int)
+SWIG_PyObj_AsInt(PyObject *obj)
+{ 
+  return numeric_cast(int,
+    SWIG_PyObj_AsLongInRange(obj, "int", INT_MIN, INT_MAX));
+}
+
 void wxHtmlWinParser_SetFonts(wxHtmlWinParser *self,wxString normal_face,wxString fixed_face,PyObject *sizes){
             int* temp = NULL;
             if (sizes) temp = int_LIST_helper(sizes);
@@ -591,6 +496,32 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     }
     return target;
 }
+
+
+SWIGSTATIC(bool)
+SWIG_PyObj_AsBool(PyObject *obj)
+{
+  return PyObject_IsTrue(obj) ? true : false;
+}
+
+
+SWIGSTATIC(unsigned int)
+SWIG_PyObj_AsUnsignedInt(PyObject *obj)
+{ 
+  return numeric_cast(unsigned int,
+    SWIG_PyObj_AsUnsignedLongInRange(obj, "unsigned int", UINT_MAX));
+}
+
+
+SWIGSTATIC(PyObject* )
+SWIG_PyObj_FromUnsignedLong(unsigned long value)
+{
+  return (value > (unsigned long)(LONG_MAX)) ?
+    PyLong_FromUnsignedLong(value) : PyInt_FromLong((long)value); 
+}
+
+
+#define SWIG_PyObj_FromUnsignedInt    SWIG_PyObj_FromUnsignedLong  
 
  // here's the C++ version
 class wxPyHtmlFilter : public wxHtmlFilter {
@@ -750,6 +681,29 @@ void wxHtmlPrintout_SetFonts(wxHtmlPrintout *self,wxString normal_face,wxString 
             if (temp)
                 delete [] temp;
         }
+
+SWIGSTATIC(double)
+SWIG_PyObj_AsDouble(PyObject *obj)
+{
+  return (PyFloat_Check(obj)) ? PyFloat_AsDouble(obj) :
+#if HAVE_LONG_LONG
+    (double)((PyInt_Check(obj)) ? PyInt_AsLong(obj) : PyLong_AsLongLong(obj));
+#else
+    (double)((PyInt_Check(obj)) ? PyInt_AsLong(obj) : PyLong_AsLong(obj));
+#endif
+  if (PyErr_Occurred()) {
+    PyErr_Clear();
+    PyErr_SetString(PyExc_TypeError, "a double is expected");
+  }
+}
+
+
+SWIGSTATIC(float)
+SWIG_PyObj_AsFloat(PyObject *obj)
+{
+  return SWIG_PyObj_AsFloatConv(obj, SWIG_PyObj_AsDouble);
+}
+
 void wxHtmlEasyPrinting_SetFonts(wxHtmlEasyPrinting *self,wxString normal_face,wxString fixed_face,PyObject *sizes){
             int* temp = NULL;
             if (sizes) temp = int_LIST_helper(sizes);
@@ -765,7 +719,7 @@ wxHtmlBookRecord *wxHtmlContentsItem_GetBook(wxHtmlContentsItem *self){ return s
 #ifdef __cplusplus
 extern "C" {
 #endif
-static int _wrap_HtmlWindowNameStr_set(PyObject *_val) {
+static int _wrap_HtmlWindowNameStr_set(PyObject *) {
     PyErr_SetString(PyExc_TypeError,"Variable HtmlWindowNameStr is read-only.");
     return 1;
 }
@@ -785,7 +739,7 @@ static PyObject *_wrap_HtmlWindowNameStr_get() {
 }
 
 
-static int _wrap_HtmlPrintoutTitleStr_set(PyObject *_val) {
+static int _wrap_HtmlPrintoutTitleStr_set(PyObject *) {
     PyErr_SetString(PyExc_TypeError,"Variable HtmlPrintoutTitleStr is read-only.");
     return 1;
 }
@@ -805,7 +759,7 @@ static PyObject *_wrap_HtmlPrintoutTitleStr_get() {
 }
 
 
-static int _wrap_HtmlPrintingTitleStr_set(PyObject *_val) {
+static int _wrap_HtmlPrintingTitleStr_set(PyObject *) {
     PyErr_SetString(PyExc_TypeError,"Variable HtmlPrintingTitleStr is read-only.");
     return 1;
 }
@@ -1114,7 +1068,7 @@ static PyObject *_wrap_HtmlTag_HasParam(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -1138,16 +1092,23 @@ static PyObject *_wrap_HtmlTag_GetParam(PyObject *self, PyObject *args, PyObject
     bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "par",(char *) "with_commas", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|i:HtmlTag_GetParam",kwnames,&obj0,&obj1,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:HtmlTag_GetParam",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlTag,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
         temp2 = True;
+    }
+    if (obj2) {
+        {
+            arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1226,7 +1187,7 @@ static PyObject *_wrap_HtmlTag_HasEnding(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -1251,7 +1212,7 @@ static PyObject *_wrap_HtmlTag_GetBeginPos(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -1276,7 +1237,7 @@ static PyObject *_wrap_HtmlTag_GetEndPos1(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -1301,7 +1262,7 @@ static PyObject *_wrap_HtmlTag_GetEndPos2(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -1482,12 +1443,22 @@ static PyObject *_wrap_HtmlParser_DoParsing(PyObject *self, PyObject *args, PyOb
     int arg2 ;
     int arg3 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "begin_pos",(char *) "end_pos", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oii:HtmlParser_DoParsing",kwnames,&obj0,&arg2,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:HtmlParser_DoParsing",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlParser,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->DoParsing(arg2,arg3);
@@ -1749,7 +1720,7 @@ static PyObject *_wrap_HtmlWinParser_GetCharHeight(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -1774,7 +1745,7 @@ static PyObject *_wrap_HtmlWinParser_GetCharWidth(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -1974,7 +1945,7 @@ static PyObject *_wrap_HtmlWinParser_GetFontSize(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -1986,12 +1957,17 @@ static PyObject *_wrap_HtmlWinParser_SetFontSize(PyObject *self, PyObject *args,
     wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
     int arg2 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "s", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:HtmlWinParser_SetFontSize",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:HtmlWinParser_SetFontSize",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlWinParser,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetFontSize(arg2);
@@ -2024,7 +2000,7 @@ static PyObject *_wrap_HtmlWinParser_GetFontBold(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -2036,12 +2012,17 @@ static PyObject *_wrap_HtmlWinParser_SetFontBold(PyObject *self, PyObject *args,
     wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
     int arg2 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "x", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:HtmlWinParser_SetFontBold",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:HtmlWinParser_SetFontBold",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlWinParser,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetFontBold(arg2);
@@ -2074,7 +2055,7 @@ static PyObject *_wrap_HtmlWinParser_GetFontItalic(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -2086,12 +2067,17 @@ static PyObject *_wrap_HtmlWinParser_SetFontItalic(PyObject *self, PyObject *arg
     wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
     int arg2 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "x", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:HtmlWinParser_SetFontItalic",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:HtmlWinParser_SetFontItalic",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlWinParser,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetFontItalic(arg2);
@@ -2124,7 +2110,7 @@ static PyObject *_wrap_HtmlWinParser_GetFontUnderlined(PyObject *self, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -2136,12 +2122,17 @@ static PyObject *_wrap_HtmlWinParser_SetFontUnderlined(PyObject *self, PyObject 
     wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
     int arg2 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "x", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:HtmlWinParser_SetFontUnderlined",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:HtmlWinParser_SetFontUnderlined",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlWinParser,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetFontUnderlined(arg2);
@@ -2174,7 +2165,7 @@ static PyObject *_wrap_HtmlWinParser_GetFontFixed(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -2186,12 +2177,17 @@ static PyObject *_wrap_HtmlWinParser_SetFontFixed(PyObject *self, PyObject *args
     wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
     int arg2 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "x", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:HtmlWinParser_SetFontFixed",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:HtmlWinParser_SetFontFixed",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlWinParser,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetFontFixed(arg2);
@@ -2224,7 +2220,7 @@ static PyObject *_wrap_HtmlWinParser_GetAlign(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -2236,12 +2232,17 @@ static PyObject *_wrap_HtmlWinParser_SetAlign(PyObject *self, PyObject *args, Py
     wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
     int arg2 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "a", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:HtmlWinParser_SetAlign",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:HtmlWinParser_SetAlign",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlWinParser,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetAlign(arg2);
@@ -3169,7 +3170,7 @@ static PyObject *_wrap_HtmlSelection_IsEmpty(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -3234,12 +3235,17 @@ static PyObject *_wrap_HtmlRenderingState_SetSelectionState(PyObject *self, PyOb
     wxHtmlRenderingState *arg1 = (wxHtmlRenderingState *) 0 ;
     int arg2 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "s", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:HtmlRenderingState_SetSelectionState",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:HtmlRenderingState_SetSelectionState",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlRenderingState,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (wxHtmlSelectionState) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetSelectionState((wxHtmlSelectionState )arg2);
@@ -3272,7 +3278,7 @@ static PyObject *_wrap_HtmlRenderingState_GetSelectionState(PyObject *self, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -3790,7 +3796,7 @@ static PyObject *_wrap_HtmlCell_GetPosX(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -3815,7 +3821,7 @@ static PyObject *_wrap_HtmlCell_GetPosY(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -3840,7 +3846,7 @@ static PyObject *_wrap_HtmlCell_GetWidth(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -3865,7 +3871,7 @@ static PyObject *_wrap_HtmlCell_GetHeight(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -3890,7 +3896,7 @@ static PyObject *_wrap_HtmlCell_GetDescent(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -3978,12 +3984,26 @@ static PyObject *_wrap_HtmlCell_GetLink(PyObject *self, PyObject *args, PyObject
     int arg3 = (int) 0 ;
     wxHtmlLinkInfo *result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "x",(char *) "y", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|ii:HtmlCell_GetLink",kwnames,&obj0,&arg2,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OO:HtmlCell_GetLink",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlCell,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (obj1) {
+        {
+            arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj2) {
+        {
+            arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxHtmlLinkInfo *)(arg1)->GetLink(arg2,arg3);
@@ -4120,7 +4140,7 @@ static PyObject *_wrap_HtmlCell_IsFormattingCell(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -4217,12 +4237,22 @@ static PyObject *_wrap_HtmlCell_SetPos(PyObject *self, PyObject *args, PyObject 
     int arg2 ;
     int arg3 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "x",(char *) "y", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oii:HtmlCell_SetPos",kwnames,&obj0,&arg2,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:HtmlCell_SetPos",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlCell,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetPos(arg2,arg3);
@@ -4242,12 +4272,17 @@ static PyObject *_wrap_HtmlCell_Layout(PyObject *self, PyObject *args, PyObject 
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
     int arg2 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "w", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:HtmlCell_Layout",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:HtmlCell_Layout",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlCell,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->Layout(arg2);
@@ -4273,16 +4308,36 @@ static PyObject *_wrap_HtmlCell_Draw(PyObject *self, PyObject *args, PyObject *k
     wxHtmlRenderingInfo *arg7 = 0 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    PyObject * obj4 = 0 ;
+    PyObject * obj5 = 0 ;
     PyObject * obj6 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "dc",(char *) "x",(char *) "y",(char *) "view_y1",(char *) "view_y2",(char *) "info", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOiiiiO:HtmlCell_Draw",kwnames,&obj0,&obj1,&arg3,&arg4,&arg5,&arg6,&obj6)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOOOO:HtmlCell_Draw",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlCell,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxDC,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (arg2 == NULL) {
         PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+    }
+    {
+        arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg4 = (int) SWIG_PyObj_AsInt(obj3);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg5 = (int) SWIG_PyObj_AsInt(obj4);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg6 = (int) SWIG_PyObj_AsInt(obj5);  
+        if (PyErr_Occurred()) SWIG_fail;
     }
     if ((SWIG_ConvertPtr(obj6,(void **) &arg7, SWIGTYPE_p_wxHtmlRenderingInfo,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (arg7 == NULL) {
@@ -4311,16 +4366,26 @@ static PyObject *_wrap_HtmlCell_DrawInvisible(PyObject *self, PyObject *args, Py
     wxHtmlRenderingInfo *arg5 = 0 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
     PyObject * obj4 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "dc",(char *) "x",(char *) "y",(char *) "info", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOiiO:HtmlCell_DrawInvisible",kwnames,&obj0,&obj1,&arg3,&arg4,&obj4)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:HtmlCell_DrawInvisible",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlCell,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxDC,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (arg2 == NULL) {
         PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+    }
+    {
+        arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg4 = (int) SWIG_PyObj_AsInt(obj3);  
+        if (PyErr_Occurred()) SWIG_fail;
     }
     if ((SWIG_ConvertPtr(obj4,(void **) &arg5, SWIGTYPE_p_wxHtmlRenderingInfo,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (arg5 == NULL) {
@@ -4347,13 +4412,18 @@ static PyObject *_wrap_HtmlCell_Find(PyObject *self, PyObject *args, PyObject *k
     void *arg3 = (void *) 0 ;
     wxHtmlCell *result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "condition",(char *) "param", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiO:HtmlCell_Find",kwnames,&obj0,&arg2,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:HtmlCell_Find",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlCell,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     if ((SWIG_ConvertPtr(obj2,(void **) &arg3, 0, SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -4395,7 +4465,7 @@ static PyObject *_wrap_HtmlCell_AdjustPagebreak(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         PyObject *o = PyInt_FromLong((long) (*arg2));
         resultobj = t_output_helper(resultobj,o);
@@ -4419,7 +4489,7 @@ static PyObject *_wrap_HtmlCell_SetCanLiveOnPagebreak(PyObject *self, PyObject *
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:HtmlCell_SetCanLiveOnPagebreak",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlCell,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
-        arg2 = (bool) SPyObj_AsBool(obj1);  
+        arg2 = (bool) SWIG_PyObj_AsBool(obj1);  
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
@@ -4454,7 +4524,7 @@ static PyObject *_wrap_HtmlCell_IsLinebreakAllowed(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -4479,7 +4549,7 @@ static PyObject *_wrap_HtmlCell_IsTerminalCell(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -4494,16 +4564,26 @@ static PyObject *_wrap_HtmlCell_FindCellByPos(PyObject *self, PyObject *args, Py
     unsigned int arg4 = (unsigned int) wxHTML_FIND_EXACT ;
     wxHtmlCell *result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "x",(char *) "y",(char *) "flags", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oii|O:HtmlCell_FindCellByPos",kwnames,&obj0,&arg2,&arg3,&obj3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|O:HtmlCell_FindCellByPos",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlCell,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     if (obj3) {
         {
-            arg4 = (unsigned int) SPyObj_AsUnsignedInt(obj3);  
+            arg4 = (unsigned int) SWIG_PyObj_AsUnsignedInt(obj3);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
@@ -4618,7 +4698,7 @@ static PyObject *_wrap_HtmlCell_GetDepth(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SPyObj_FromUnsignedLong((unsigned long)result);
+    resultobj = SWIG_PyObj_FromUnsignedInt((unsigned int)result);
     return resultobj;
     fail:
     return NULL;
@@ -4646,7 +4726,7 @@ static PyObject *_wrap_HtmlCell_IsBefore(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -4802,12 +4882,17 @@ static PyObject *_wrap_HtmlContainerCell_SetAlignHor(PyObject *self, PyObject *a
     wxHtmlContainerCell *arg1 = (wxHtmlContainerCell *) 0 ;
     int arg2 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "al", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:HtmlContainerCell_SetAlignHor",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:HtmlContainerCell_SetAlignHor",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlContainerCell,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetAlignHor(arg2);
@@ -4840,7 +4925,7 @@ static PyObject *_wrap_HtmlContainerCell_GetAlignHor(PyObject *self, PyObject *a
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -4852,12 +4937,17 @@ static PyObject *_wrap_HtmlContainerCell_SetAlignVer(PyObject *self, PyObject *a
     wxHtmlContainerCell *arg1 = (wxHtmlContainerCell *) 0 ;
     int arg2 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "al", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:HtmlContainerCell_SetAlignVer",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:HtmlContainerCell_SetAlignVer",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlContainerCell,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetAlignVer(arg2);
@@ -4890,7 +4980,7 @@ static PyObject *_wrap_HtmlContainerCell_GetAlignVer(PyObject *self, PyObject *a
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -4904,12 +4994,29 @@ static PyObject *_wrap_HtmlContainerCell_SetIndent(PyObject *self, PyObject *arg
     int arg3 ;
     int arg4 = (int) wxHTML_UNITS_PIXELS ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "i",(char *) "what",(char *) "units", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oii|i:HtmlContainerCell_SetIndent",kwnames,&obj0,&arg2,&arg3,&arg4)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|O:HtmlContainerCell_SetIndent",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlContainerCell,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj3) {
+        {
+            arg4 = (int) SWIG_PyObj_AsInt(obj3);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetIndent(arg2,arg3,arg4);
@@ -4930,12 +5037,17 @@ static PyObject *_wrap_HtmlContainerCell_GetIndent(PyObject *self, PyObject *arg
     int arg2 ;
     int result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "ind", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:HtmlContainerCell_GetIndent",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:HtmlContainerCell_GetIndent",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlContainerCell,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (int)(arg1)->GetIndent(arg2);
@@ -4943,7 +5055,7 @@ static PyObject *_wrap_HtmlContainerCell_GetIndent(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -4956,12 +5068,17 @@ static PyObject *_wrap_HtmlContainerCell_GetIndentUnits(PyObject *self, PyObject
     int arg2 ;
     int result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "ind", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:HtmlContainerCell_GetIndentUnits",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:HtmlContainerCell_GetIndentUnits",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlContainerCell,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (int)(arg1)->GetIndentUnits(arg2);
@@ -4969,7 +5086,7 @@ static PyObject *_wrap_HtmlContainerCell_GetIndentUnits(PyObject *self, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -5012,12 +5129,22 @@ static PyObject *_wrap_HtmlContainerCell_SetWidthFloat(PyObject *self, PyObject 
     int arg2 ;
     int arg3 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "w",(char *) "units", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oii:HtmlContainerCell_SetWidthFloat",kwnames,&obj0,&arg2,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:HtmlContainerCell_SetWidthFloat",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlContainerCell,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetWidthFloat(arg2,arg3);
@@ -5068,12 +5195,24 @@ static PyObject *_wrap_HtmlContainerCell_SetMinHeight(PyObject *self, PyObject *
     int arg2 ;
     int arg3 = (int) wxHTML_ALIGN_TOP ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "h",(char *) "align", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi|i:HtmlContainerCell_SetMinHeight",kwnames,&obj0,&arg2,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:HtmlContainerCell_SetMinHeight",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlContainerCell,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj2) {
+        {
+            arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetMinHeight(arg2,arg3);
@@ -5225,13 +5364,20 @@ static PyObject *_wrap_new_HtmlColourCell(PyObject *self, PyObject *args, PyObje
     wxHtmlColourCell *result;
     wxColour *argp1 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "clr",(char *) "flags", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|i:new_HtmlColourCell",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:new_HtmlColourCell",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &argp1, SWIGTYPE_p_wxColour,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
     arg1 = *argp1; 
+    if (obj1) {
+        {
+            arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxHtmlColourCell *)new wxHtmlColourCell(arg1,arg2);
@@ -5291,12 +5437,19 @@ static PyObject *_wrap_new_HtmlWidgetCell(PyObject *self, PyObject *args, PyObje
     int arg2 = (int) 0 ;
     wxHtmlWidgetCell *result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "wnd",(char *) "w", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|i:new_HtmlWidgetCell",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:new_HtmlWidgetCell",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (obj1) {
+        {
+            arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxHtmlWidgetCell *)new wxHtmlWidgetCell(arg1,arg2);
@@ -5393,15 +5546,23 @@ static PyObject *_wrap_new_HtmlWindow(PyObject *self, PyObject *args, PyObject *
     wxSize temp4 ;
     bool temp6 = False ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
+    PyObject * obj4 = 0 ;
     PyObject * obj5 = 0 ;
     char *kwnames[] = {
         (char *) "parent",(char *) "id",(char *) "pos",(char *) "size",(char *) "style",(char *) "name", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|iOOiO:new_HtmlWindow",kwnames,&obj0,&arg2,&obj2,&obj3,&arg5,&obj5)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOOO:new_HtmlWindow",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (obj1) {
+        {
+            arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     if (obj2) {
         {
             arg3 = &temp3;
@@ -5412,6 +5573,12 @@ static PyObject *_wrap_new_HtmlWindow(PyObject *self, PyObject *args, PyObject *
         {
             arg4 = &temp4;
             if ( ! wxSize_helper(obj3, &arg4)) SWIG_fail;
+        }
+    }
+    if (obj4) {
+        {
+            arg5 = (int) SWIG_PyObj_AsInt(obj4);  
+            if (PyErr_Occurred()) SWIG_fail;
         }
     }
     if (obj5) {
@@ -5487,16 +5654,24 @@ static PyObject *_wrap_HtmlWindow_Create(PyObject *self, PyObject *args, PyObjec
     bool temp7 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
     PyObject * obj4 = 0 ;
+    PyObject * obj5 = 0 ;
     PyObject * obj6 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "parent",(char *) "id",(char *) "pos",(char *) "size",(char *) "style",(char *) "name", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|iOOiO:HtmlWindow_Create",kwnames,&obj0,&obj1,&arg3,&obj3,&obj4,&arg6,&obj6)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOOO:HtmlWindow_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyHtmlWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (obj2) {
+        {
+            arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     if (obj3) {
         {
             arg4 = &temp4;
@@ -5507,6 +5682,12 @@ static PyObject *_wrap_HtmlWindow_Create(PyObject *self, PyObject *args, PyObjec
         {
             arg5 = &temp5;
             if ( ! wxSize_helper(obj4, &arg5)) SWIG_fail;
+        }
+    }
+    if (obj5) {
+        {
+            arg6 = (int) SWIG_PyObj_AsInt(obj5);  
+            if (PyErr_Occurred()) SWIG_fail;
         }
     }
     if (obj6) {
@@ -5523,7 +5704,7 @@ static PyObject *_wrap_HtmlWindow_Create(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp7)
         delete arg7;
@@ -5594,7 +5775,7 @@ static PyObject *_wrap_HtmlWindow_SetPage(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -5635,7 +5816,7 @@ static PyObject *_wrap_HtmlWindow_LoadPage(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -5676,7 +5857,7 @@ static PyObject *_wrap_HtmlWindow_LoadFile(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -5717,7 +5898,7 @@ static PyObject *_wrap_HtmlWindow_AppendToPage(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -5900,12 +6081,17 @@ static PyObject *_wrap_HtmlWindow_SetRelatedStatusBar(PyObject *self, PyObject *
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     int arg2 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "bar", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:HtmlWindow_SetRelatedStatusBar",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:HtmlWindow_SetRelatedStatusBar",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyHtmlWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetRelatedStatusBar(arg2);
@@ -6010,12 +6196,17 @@ static PyObject *_wrap_HtmlWindow_SetBorders(PyObject *self, PyObject *args, PyO
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     int arg2 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "b", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:HtmlWindow_SetBorders",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:HtmlWindow_SetBorders",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyHtmlWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetBorders(arg2);
@@ -6122,7 +6313,7 @@ static PyObject *_wrap_HtmlWindow_HistoryBack(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -6147,7 +6338,7 @@ static PyObject *_wrap_HtmlWindow_HistoryForward(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -6172,7 +6363,7 @@ static PyObject *_wrap_HtmlWindow_HistoryCanBack(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -6197,7 +6388,7 @@ static PyObject *_wrap_HtmlWindow_HistoryCanForward(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -6304,7 +6495,7 @@ static PyObject *_wrap_HtmlWindow_ScrollToAnchor(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -6345,7 +6536,7 @@ static PyObject *_wrap_HtmlWindow_HasAnchor(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -6462,13 +6653,23 @@ static PyObject *_wrap_HtmlWindow_base_OnCellMouseHover(PyObject *self, PyObject
     int arg4 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "cell",(char *) "x",(char *) "y", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOii:HtmlWindow_base_OnCellMouseHover",kwnames,&obj0,&obj1,&arg3,&arg4)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:HtmlWindow_base_OnCellMouseHover",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyHtmlWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxHtmlCell,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg4 = (int) SWIG_PyObj_AsInt(obj3);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->base_OnCellMouseHover(arg2,arg3,arg4);
@@ -6492,14 +6693,24 @@ static PyObject *_wrap_HtmlWindow_base_OnCellClicked(PyObject *self, PyObject *a
     wxMouseEvent *arg5 = 0 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
     PyObject * obj4 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "cell",(char *) "x",(char *) "y",(char *) "event", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOiiO:HtmlWindow_base_OnCellClicked",kwnames,&obj0,&obj1,&arg3,&arg4,&obj4)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:HtmlWindow_base_OnCellClicked",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyHtmlWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxHtmlCell,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg4 = (int) SWIG_PyObj_AsInt(obj3);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     if ((SWIG_ConvertPtr(obj4,(void **) &arg5, SWIGTYPE_p_wxMouseEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (arg5 == NULL) {
         PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
@@ -6578,13 +6789,18 @@ static PyObject *_wrap_HtmlDCRenderer_SetDC(PyObject *self, PyObject *args, PyOb
     int arg3 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "dc",(char *) "maxwidth", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOi:HtmlDCRenderer_SetDC",kwnames,&obj0,&obj1,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:HtmlDCRenderer_SetDC",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlDCRenderer,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxDC,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetDC(arg2,arg3);
@@ -6605,12 +6821,22 @@ static PyObject *_wrap_HtmlDCRenderer_SetSize(PyObject *self, PyObject *args, Py
     int arg2 ;
     int arg3 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "width",(char *) "height", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oii:HtmlDCRenderer_SetSize",kwnames,&obj0,&arg2,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:HtmlDCRenderer_SetSize",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlDCRenderer,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetSize(arg2,arg3);
@@ -6658,7 +6884,7 @@ static PyObject *_wrap_HtmlDCRenderer_SetHtmlText(PyObject *self, PyObject *args
     }
     if (obj3) {
         {
-            arg4 = (bool) SPyObj_AsBool(obj3);  
+            arg4 = (bool) SWIG_PyObj_AsBool(obj3);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
@@ -6749,15 +6975,53 @@ static PyObject *_wrap_HtmlDCRenderer_Render(PyObject *self, PyObject *args, PyO
     int arg8 = (int) 0 ;
     int result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    PyObject * obj4 = 0 ;
+    PyObject * obj5 = 0 ;
     PyObject * obj6 = 0 ;
+    PyObject * obj7 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "x",(char *) "y",(char *) "from",(char *) "dont_render",(char *) "to",(char *) "choices",(char *) "LCOUNT", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oii|iiiOi:HtmlDCRenderer_Render",kwnames,&obj0,&arg2,&arg3,&arg4,&arg5,&arg6,&obj6,&arg8)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OOOOO:HtmlDCRenderer_Render",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlDCRenderer,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj3) {
+        {
+            arg4 = (int) SWIG_PyObj_AsInt(obj3);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj4) {
+        {
+            arg5 = (int) SWIG_PyObj_AsInt(obj4);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj5) {
+        {
+            arg6 = (int) SWIG_PyObj_AsInt(obj5);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     if (obj6) {
         if ((SWIG_ConvertPtr(obj6,(void **) &arg7, SWIGTYPE_p_int,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    }
+    if (obj7) {
+        {
+            arg8 = (int) SWIG_PyObj_AsInt(obj7);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -6766,7 +7030,7 @@ static PyObject *_wrap_HtmlDCRenderer_Render(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -6791,7 +7055,7 @@ static PyObject *_wrap_HtmlDCRenderer_GetTotalHeight(PyObject *self, PyObject *a
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -6879,7 +7143,7 @@ static PyObject *_wrap_HtmlPrintout_SetHtmlText(PyObject *self, PyObject *args, 
     }
     if (obj3) {
         {
-            arg4 = (bool) SPyObj_AsBool(obj3);  
+            arg4 = (bool) SWIG_PyObj_AsBool(obj3);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
@@ -6961,16 +7225,23 @@ static PyObject *_wrap_HtmlPrintout_SetHeader(PyObject *self, PyObject *args, Py
     bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "header",(char *) "pg", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|i:HtmlPrintout_SetHeader",kwnames,&obj0,&obj1,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:HtmlPrintout_SetHeader",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlPrintout,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
         temp2 = True;
+    }
+    if (obj2) {
+        {
+            arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7002,16 +7273,23 @@ static PyObject *_wrap_HtmlPrintout_SetFooter(PyObject *self, PyObject *args, Py
     bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "footer",(char *) "pg", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|i:HtmlPrintout_SetFooter",kwnames,&obj0,&obj1,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:HtmlPrintout_SetFooter",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlPrintout,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
         temp2 = True;
+    }
+    if (obj2) {
+        {
+            arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7089,12 +7367,47 @@ static PyObject *_wrap_HtmlPrintout_SetMargins(PyObject *self, PyObject *args, P
     float arg5 = (float) 25.2 ;
     float arg6 = (float) 5 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    PyObject * obj4 = 0 ;
+    PyObject * obj5 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "top",(char *) "bottom",(char *) "left",(char *) "right",(char *) "spaces", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|fffff:HtmlPrintout_SetMargins",kwnames,&obj0,&arg2,&arg3,&arg4,&arg5,&arg6)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOOO:HtmlPrintout_SetMargins",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlPrintout,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (obj1) {
+        {
+            arg2 = (float) SWIG_PyObj_AsFloat(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj2) {
+        {
+            arg3 = (float) SWIG_PyObj_AsFloat(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj3) {
+        {
+            arg4 = (float) SWIG_PyObj_AsFloat(obj3);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj4) {
+        {
+            arg5 = (float) SWIG_PyObj_AsFloat(obj4);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj5) {
+        {
+            arg6 = (float) SWIG_PyObj_AsFloat(obj5);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetMargins(arg2,arg3,arg4,arg5,arg6);
@@ -7485,16 +7798,23 @@ static PyObject *_wrap_HtmlEasyPrinting_SetHeader(PyObject *self, PyObject *args
     bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "header",(char *) "pg", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|i:HtmlEasyPrinting_SetHeader",kwnames,&obj0,&obj1,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:HtmlEasyPrinting_SetHeader",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlEasyPrinting,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
         temp2 = True;
+    }
+    if (obj2) {
+        {
+            arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7526,16 +7846,23 @@ static PyObject *_wrap_HtmlEasyPrinting_SetFooter(PyObject *self, PyObject *args
     bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "footer",(char *) "pg", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|i:HtmlEasyPrinting_SetFooter",kwnames,&obj0,&obj1,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:HtmlEasyPrinting_SetFooter",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlEasyPrinting,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
         temp2 = True;
+    }
+    if (obj2) {
+        {
+            arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7877,12 +8204,22 @@ static PyObject *_wrap_HtmlBookRecord_SetContentsRange(PyObject *self, PyObject 
     int arg2 ;
     int arg3 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "start",(char *) "end", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oii:HtmlBookRecord_SetContentsRange",kwnames,&obj0,&arg2,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:HtmlBookRecord_SetContentsRange",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlBookRecord,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetContentsRange(arg2,arg3);
@@ -7915,7 +8252,7 @@ static PyObject *_wrap_HtmlBookRecord_GetContentsStart(PyObject *self, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -7940,7 +8277,7 @@ static PyObject *_wrap_HtmlBookRecord_GetContentsEnd(PyObject *self, PyObject *a
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -8139,7 +8476,7 @@ static PyObject *_wrap_HtmlContentsItem_GetLevel(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -8164,7 +8501,7 @@ static PyObject *_wrap_HtmlContentsItem_GetID(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -8283,7 +8620,7 @@ static PyObject *_wrap_HtmlSearchStatus_Search(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -8308,7 +8645,7 @@ static PyObject *_wrap_HtmlSearchStatus_IsActive(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -8333,7 +8670,7 @@ static PyObject *_wrap_HtmlSearchStatus_GetCurIndex(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -8358,7 +8695,7 @@ static PyObject *_wrap_HtmlSearchStatus_GetMaxIndex(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -8543,7 +8880,7 @@ static PyObject *_wrap_HtmlHelpData_AddBook(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -8611,12 +8948,17 @@ static PyObject *_wrap_HtmlHelpData_FindPageById(PyObject *self, PyObject *args,
     int arg2 ;
     wxString result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "id", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:HtmlHelpData_FindPageById",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:HtmlHelpData_FindPageById",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlHelpData,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (arg1)->FindPageById(arg2);
@@ -8708,7 +9050,7 @@ static PyObject *_wrap_HtmlHelpData_GetContentsCnt(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -8758,7 +9100,7 @@ static PyObject *_wrap_HtmlHelpData_GetIndexCnt(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -8783,19 +9125,31 @@ static PyObject *_wrap_new_HtmlHelpFrame(PyObject *self, PyObject *args, PyObjec
     wxHtmlHelpFrame *result;
     bool temp3 = False ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
     PyObject * obj4 = 0 ;
     char *kwnames[] = {
         (char *) "parent","arg2",(char *) "title",(char *) "style",(char *) "data", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi|OiO:new_HtmlHelpFrame",kwnames,&obj0,&arg2,&obj2,&arg4,&obj4)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOO:new_HtmlHelpFrame",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     if (obj2) {
         {
             arg3 = wxString_in_helper(obj2);
             if (arg3 == NULL) SWIG_fail;
             temp3 = True;
+        }
+    }
+    if (obj3) {
+        {
+            arg4 = (int) SWIG_PyObj_AsInt(obj3);  
+            if (PyErr_Occurred()) SWIG_fail;
         }
     }
     if (obj4) {
@@ -8933,12 +9287,17 @@ static PyObject *_wrap_HtmlHelpFrame_DisplayID(PyObject *self, PyObject *args, P
     wxHtmlHelpFrame *arg1 = (wxHtmlHelpFrame *) 0 ;
     int arg2 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "id", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:HtmlHelpFrame_DisplayID",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:HtmlHelpFrame_DisplayID",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlHelpFrame,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->Display(arg2);
@@ -9027,7 +9386,7 @@ static PyObject *_wrap_HtmlHelpFrame_KeywordSearch(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -9173,11 +9532,18 @@ static PyObject *_wrap_new_HtmlHelpController(PyObject *self, PyObject *args, Py
     PyObject *resultobj;
     int arg1 = (int) wxHF_DEFAULTSTYLE ;
     wxHtmlHelpController *result;
+    PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "style", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|i:new_HtmlHelpController",kwnames,&arg1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:new_HtmlHelpController",kwnames,&obj0)) goto fail;
+    if (obj0) {
+        {
+            arg1 = (int) SWIG_PyObj_AsInt(obj0);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxHtmlHelpController *)new wxHtmlHelpController(arg1);
@@ -9305,16 +9671,23 @@ static PyObject *_wrap_HtmlHelpController_AddBook(PyObject *self, PyObject *args
     bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "book",(char *) "show_wait_msg", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|i:HtmlHelpController_AddBook",kwnames,&obj0,&obj1,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:HtmlHelpController_AddBook",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlHelpController,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
         temp2 = True;
+    }
+    if (obj2) {
+        {
+            arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -9323,7 +9696,7 @@ static PyObject *_wrap_HtmlHelpController_AddBook(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -9383,12 +9756,17 @@ static PyObject *_wrap_HtmlHelpController_DisplayID(PyObject *self, PyObject *ar
     wxHtmlHelpController *arg1 = (wxHtmlHelpController *) 0 ;
     int arg2 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "id", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:HtmlHelpController_DisplayID",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:HtmlHelpController_DisplayID",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxHtmlHelpController,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->Display(arg2);
@@ -9477,7 +9855,7 @@ static PyObject *_wrap_HtmlHelpController_KeywordSearch(PyObject *self, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -10860,16 +11238,17 @@ static swig_type_info _swigt__p_wxHtmlRenderingStyle[] = {{"_p_wxHtmlRenderingSt
 static swig_type_info _swigt__p_wxMouseEvent[] = {{"_p_wxMouseEvent", 0, "wxMouseEvent *", 0},{"_p_wxMouseEvent"},{0}};
 static swig_type_info _swigt__p_wxHtmlWordCell[] = {{"_p_wxHtmlWordCell", 0, "wxHtmlWordCell *", 0},{"_p_wxHtmlWordCell"},{0}};
 static swig_type_info _swigt__p_wxHtmlHelpData[] = {{"_p_wxHtmlHelpData", 0, "wxHtmlHelpData *", 0},{"_p_wxHtmlHelpData"},{0}};
+static swig_type_info _swigt__p_char[] = {{"_p_char", 0, "char *", 0},{"_p_char"},{0}};
 static swig_type_info _swigt__p_wxHtmlWinParser[] = {{"_p_wxHtmlWinParser", 0, "wxHtmlWinParser *", 0},{"_p_wxHtmlWinParser"},{0}};
 static swig_type_info _swigt__p_wxHtmlParser[] = {{"_p_wxHtmlParser", 0, "wxHtmlParser *", 0},{"_p_wxHtmlParser"},{"_p_wxHtmlWinParser", _p_wxHtmlWinParserTo_p_wxHtmlParser},{0}};
 static swig_type_info _swigt__p_wxPanel[] = {{"_p_wxPanel", 0, "wxPanel *", 0},{"_p_wxPanel"},{"_p_wxScrolledWindow", _p_wxScrolledWindowTo_p_wxPanel},{"_p_wxPyHtmlWindow", _p_wxPyHtmlWindowTo_p_wxPanel},{"_p_wxPyVScrolledWindow", _p_wxPyVScrolledWindowTo_p_wxPanel},{"_p_wxPyVListBox", _p_wxPyVListBoxTo_p_wxPanel},{"_p_wxPyHtmlListBox", _p_wxPyHtmlListBoxTo_p_wxPanel},{"_p_wxPyPanel", _p_wxPyPanelTo_p_wxPanel},{"_p_wxPreviewCanvas", _p_wxPreviewCanvasTo_p_wxPanel},{"_p_wxPreviewControlBar", _p_wxPreviewControlBarTo_p_wxPanel},{"_p_wxPyPreviewControlBar", _p_wxPyPreviewControlBarTo_p_wxPanel},{0}};
-static swig_type_info _swigt__p_wxHtmlFontCell[] = {{"_p_wxHtmlFontCell", 0, "wxHtmlFontCell *", 0},{"_p_wxHtmlFontCell"},{0}};
 static swig_type_info _swigt__p_wxFont[] = {{"_p_wxFont", 0, "wxFont *", 0},{"_p_wxFont"},{0}};
 static swig_type_info _swigt__p_wxHtmlColourCell[] = {{"_p_wxHtmlColourCell", 0, "wxHtmlColourCell *", 0},{"_p_wxHtmlColourCell"},{0}};
 static swig_type_info _swigt__p_wxPyHtmlWindow[] = {{"_p_wxPyHtmlWindow", 0, "wxPyHtmlWindow *", 0},{"_p_wxPyHtmlWindow"},{0}};
 static swig_type_info _swigt__p_wxScrolledWindow[] = {{"_p_wxScrolledWindow", 0, "wxScrolledWindow *", 0},{"_p_wxScrolledWindow"},{"_p_wxPyHtmlWindow", _p_wxPyHtmlWindowTo_p_wxScrolledWindow},{"_p_wxPreviewCanvas", _p_wxPreviewCanvasTo_p_wxScrolledWindow},{0}};
 static swig_type_info _swigt__p_wxWindow[] = {{"_p_wxWindow", 0, "wxWindow *", 0},{"_p_wxSplashScreen", _p_wxSplashScreenTo_p_wxWindow},{"_p_wxMiniFrame", _p_wxMiniFrameTo_p_wxWindow},{"_p_wxPyPanel", _p_wxPyPanelTo_p_wxWindow},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxWindow},{"_p_wxFindReplaceDialog", _p_wxFindReplaceDialogTo_p_wxWindow},{"_p_wxProgressDialog", _p_wxProgressDialogTo_p_wxWindow},{"_p_wxMessageDialog", _p_wxMessageDialogTo_p_wxWindow},{"_p_wxTextEntryDialog", _p_wxTextEntryDialogTo_p_wxWindow},{"_p_wxSingleChoiceDialog", _p_wxSingleChoiceDialogTo_p_wxWindow},{"_p_wxMultiChoiceDialog", _p_wxMultiChoiceDialogTo_p_wxWindow},{"_p_wxFileDialog", _p_wxFileDialogTo_p_wxWindow},{"_p_wxPanel", _p_wxPanelTo_p_wxWindow},{"_p_wxStatusBar", _p_wxStatusBarTo_p_wxWindow},{"_p_wxTipWindow", _p_wxTipWindowTo_p_wxWindow},{"_p_wxTopLevelWindow", _p_wxTopLevelWindowTo_p_wxWindow},{"_p_wxSplashScreenWindow", _p_wxSplashScreenWindowTo_p_wxWindow},{"_p_wxSplitterWindow", _p_wxSplitterWindowTo_p_wxWindow},{"_p_wxSashWindow", _p_wxSashWindowTo_p_wxWindow},{"_p_wxPyVScrolledWindow", _p_wxPyVScrolledWindowTo_p_wxWindow},{"_p_wxPyHtmlWindow", _p_wxPyHtmlWindowTo_p_wxWindow},{"_p_wxWindow"},{"_p_wxScrolledWindow", _p_wxScrolledWindowTo_p_wxWindow},{"_p_wxSashLayoutWindow", _p_wxSashLayoutWindowTo_p_wxWindow},{"_p_wxPopupWindow", _p_wxPopupWindowTo_p_wxWindow},{"_p_wxPyPopupTransientWindow", _p_wxPyPopupTransientWindowTo_p_wxWindow},{"_p_wxMDIClientWindow", _p_wxMDIClientWindowTo_p_wxWindow},{"_p_wxPyPreviewFrame", _p_wxPyPreviewFrameTo_p_wxWindow},{"_p_wxPreviewFrame", _p_wxPreviewFrameTo_p_wxWindow},{"_p_wxControl", _p_wxControlTo_p_wxWindow},{"_p_wxMDIChildFrame", _p_wxMDIChildFrameTo_p_wxWindow},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxWindow},{"_p_wxPreviewCanvas", _p_wxPreviewCanvasTo_p_wxWindow},{"_p_wxPyWindow", _p_wxPyWindowTo_p_wxWindow},{"_p_wxPyHtmlListBox", _p_wxPyHtmlListBoxTo_p_wxWindow},{"_p_wxPyVListBox", _p_wxPyVListBoxTo_p_wxWindow},{"_p_wxPyPreviewControlBar", _p_wxPyPreviewControlBarTo_p_wxWindow},{"_p_wxPreviewControlBar", _p_wxPreviewControlBarTo_p_wxWindow},{"_p_wxHtmlHelpFrame", _p_wxHtmlHelpFrameTo_p_wxWindow},{"_p_wxFrame", _p_wxFrameTo_p_wxWindow},{"_p_wxPrintDialog", _p_wxPrintDialogTo_p_wxWindow},{"_p_wxPageSetupDialog", _p_wxPageSetupDialogTo_p_wxWindow},{"_p_wxDialog", _p_wxDialogTo_p_wxWindow},{"_p_wxColourDialog", _p_wxColourDialogTo_p_wxWindow},{"_p_wxDirDialog", _p_wxDirDialogTo_p_wxWindow},{"_p_wxFontDialog", _p_wxFontDialogTo_p_wxWindow},{"_p_wxMDIParentFrame", _p_wxMDIParentFrameTo_p_wxWindow},{0}};
 static swig_type_info _swigt__p_wxTopLevelWindow[] = {{"_p_wxTopLevelWindow", 0, "wxTopLevelWindow *", 0},{"_p_wxFrame", _p_wxFrameTo_p_wxTopLevelWindow},{"_p_wxMiniFrame", _p_wxMiniFrameTo_p_wxTopLevelWindow},{"_p_wxDialog", _p_wxDialogTo_p_wxTopLevelWindow},{"_p_wxPageSetupDialog", _p_wxPageSetupDialogTo_p_wxTopLevelWindow},{"_p_wxPrintDialog", _p_wxPrintDialogTo_p_wxTopLevelWindow},{"_p_wxColourDialog", _p_wxColourDialogTo_p_wxTopLevelWindow},{"_p_wxDirDialog", _p_wxDirDialogTo_p_wxTopLevelWindow},{"_p_wxFontDialog", _p_wxFontDialogTo_p_wxTopLevelWindow},{"_p_wxSplashScreen", _p_wxSplashScreenTo_p_wxTopLevelWindow},{"_p_wxTipWindow", _p_wxTipWindowTo_p_wxTopLevelWindow},{"_p_wxTopLevelWindow"},{"_p_wxMDIParentFrame", _p_wxMDIParentFrameTo_p_wxTopLevelWindow},{"_p_wxMDIChildFrame", _p_wxMDIChildFrameTo_p_wxTopLevelWindow},{"_p_wxHtmlHelpFrame", _p_wxHtmlHelpFrameTo_p_wxTopLevelWindow},{"_p_wxProgressDialog", _p_wxProgressDialogTo_p_wxTopLevelWindow},{"_p_wxMessageDialog", _p_wxMessageDialogTo_p_wxTopLevelWindow},{"_p_wxTextEntryDialog", _p_wxTextEntryDialogTo_p_wxTopLevelWindow},{"_p_wxSingleChoiceDialog", _p_wxSingleChoiceDialogTo_p_wxTopLevelWindow},{"_p_wxMultiChoiceDialog", _p_wxMultiChoiceDialogTo_p_wxTopLevelWindow},{"_p_wxFileDialog", _p_wxFileDialogTo_p_wxTopLevelWindow},{"_p_wxFindReplaceDialog", _p_wxFindReplaceDialogTo_p_wxTopLevelWindow},{"_p_wxPyPreviewFrame", _p_wxPyPreviewFrameTo_p_wxTopLevelWindow},{"_p_wxPreviewFrame", _p_wxPreviewFrameTo_p_wxTopLevelWindow},{0}};
+static swig_type_info _swigt__p_wxHtmlFontCell[] = {{"_p_wxHtmlFontCell", 0, "wxHtmlFontCell *", 0},{"_p_wxHtmlFontCell"},{0}};
 static swig_type_info _swigt__p_wxHtmlEasyPrinting[] = {{"_p_wxHtmlEasyPrinting", 0, "wxHtmlEasyPrinting *", 0},{"_p_wxHtmlEasyPrinting"},{0}};
 static swig_type_info _swigt__p_wxHtmlSelection[] = {{"_p_wxHtmlSelection", 0, "wxHtmlSelection *", 0},{"_p_wxHtmlSelection"},{0}};
 static swig_type_info _swigt__p_wxHtmlRenderingInfo[] = {{"_p_wxHtmlRenderingInfo", 0, "wxHtmlRenderingInfo *", 0},{"_p_wxHtmlRenderingInfo"},{0}};
@@ -10913,16 +11292,17 @@ _swigt__p_wxHtmlRenderingStyle,
 _swigt__p_wxMouseEvent, 
 _swigt__p_wxHtmlWordCell, 
 _swigt__p_wxHtmlHelpData, 
+_swigt__p_char, 
 _swigt__p_wxHtmlWinParser, 
 _swigt__p_wxHtmlParser, 
 _swigt__p_wxPanel, 
-_swigt__p_wxHtmlFontCell, 
 _swigt__p_wxFont, 
 _swigt__p_wxHtmlColourCell, 
 _swigt__p_wxPyHtmlWindow, 
 _swigt__p_wxScrolledWindow, 
 _swigt__p_wxWindow, 
 _swigt__p_wxTopLevelWindow, 
+_swigt__p_wxHtmlFontCell, 
 _swigt__p_wxHtmlEasyPrinting, 
 _swigt__p_wxHtmlSelection, 
 _swigt__p_wxHtmlRenderingInfo, 
@@ -10962,60 +11342,6 @@ _swigt__p_wxHtmlBookRecord,
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (END) -------- */
 
 static swig_const_info swig_const_table[] = {
-{ SWIG_PY_INT,     (char *)"HTML_ALIGN_LEFT", (long) wxHTML_ALIGN_LEFT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_ALIGN_CENTER", (long) wxHTML_ALIGN_CENTER, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_ALIGN_RIGHT", (long) wxHTML_ALIGN_RIGHT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_ALIGN_BOTTOM", (long) wxHTML_ALIGN_BOTTOM, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_ALIGN_TOP", (long) wxHTML_ALIGN_TOP, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_CLR_FOREGROUND", (long) wxHTML_CLR_FOREGROUND, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_CLR_BACKGROUND", (long) wxHTML_CLR_BACKGROUND, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_UNITS_PIXELS", (long) wxHTML_UNITS_PIXELS, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_UNITS_PERCENT", (long) wxHTML_UNITS_PERCENT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_INDENT_LEFT", (long) wxHTML_INDENT_LEFT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_INDENT_RIGHT", (long) wxHTML_INDENT_RIGHT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_INDENT_TOP", (long) wxHTML_INDENT_TOP, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_INDENT_BOTTOM", (long) wxHTML_INDENT_BOTTOM, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_INDENT_HORIZONTAL", (long) wxHTML_INDENT_HORIZONTAL, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_INDENT_VERTICAL", (long) wxHTML_INDENT_VERTICAL, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_INDENT_ALL", (long) wxHTML_INDENT_ALL, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_COND_ISANCHOR", (long) wxHTML_COND_ISANCHOR, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_COND_ISIMAGEMAP", (long) wxHTML_COND_ISIMAGEMAP, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_COND_USER", (long) wxHTML_COND_USER, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_FONT_SIZE_1", (long) wxHTML_FONT_SIZE_1, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_FONT_SIZE_2", (long) wxHTML_FONT_SIZE_2, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_FONT_SIZE_3", (long) wxHTML_FONT_SIZE_3, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_FONT_SIZE_4", (long) wxHTML_FONT_SIZE_4, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_FONT_SIZE_5", (long) wxHTML_FONT_SIZE_5, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_FONT_SIZE_6", (long) wxHTML_FONT_SIZE_6, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_FONT_SIZE_7", (long) wxHTML_FONT_SIZE_7, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HW_SCROLLBAR_NEVER", (long) wxHW_SCROLLBAR_NEVER, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HW_SCROLLBAR_AUTO", (long) wxHW_SCROLLBAR_AUTO, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HW_NO_SELECTION", (long) wxHW_NO_SELECTION, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HW_DEFAULT_STYLE", (long) wxHW_DEFAULT_STYLE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_OPEN", (long) wxHTML_OPEN, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_BLOCK", (long) wxHTML_BLOCK, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_REDIRECT", (long) wxHTML_REDIRECT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_URL_PAGE", (long) wxHTML_URL_PAGE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_URL_IMAGE", (long) wxHTML_URL_IMAGE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_URL_OTHER", (long) wxHTML_URL_OTHER, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_SEL_OUT", (long) wxHTML_SEL_OUT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_SEL_IN", (long) wxHTML_SEL_IN, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_SEL_CHANGING", (long) wxHTML_SEL_CHANGING, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_FIND_EXACT", (long) wxHTML_FIND_EXACT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_FIND_NEAREST_BEFORE", (long) wxHTML_FIND_NEAREST_BEFORE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HTML_FIND_NEAREST_AFTER", (long) wxHTML_FIND_NEAREST_AFTER, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"PAGE_ODD", (long) wxPAGE_ODD, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"PAGE_EVEN", (long) wxPAGE_EVEN, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"PAGE_ALL", (long) wxPAGE_ALL, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HF_TOOLBAR", (long) wxHF_TOOLBAR, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HF_FLATTOOLBAR", (long) wxHF_FLATTOOLBAR, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HF_CONTENTS", (long) wxHF_CONTENTS, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HF_INDEX", (long) wxHF_INDEX, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HF_SEARCH", (long) wxHF_SEARCH, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HF_BOOKMARKS", (long) wxHF_BOOKMARKS, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HF_OPENFILES", (long) wxHF_OPENFILES, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HF_PRINT", (long) wxHF_PRINT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"HF_DEFAULTSTYLE", (long) wxHF_DEFAULTSTYLE, 0, 0, 0},
 {0}};
 
 #ifdef __cplusplus
@@ -11046,6 +11372,60 @@ SWIGEXPORT(void) SWIG_init(void) {
     SWIG_addvarlink(SWIG_globals,(char*)"HtmlWindowNameStr",_wrap_HtmlWindowNameStr_get, _wrap_HtmlWindowNameStr_set);
     SWIG_addvarlink(SWIG_globals,(char*)"HtmlPrintoutTitleStr",_wrap_HtmlPrintoutTitleStr_get, _wrap_HtmlPrintoutTitleStr_set);
     SWIG_addvarlink(SWIG_globals,(char*)"HtmlPrintingTitleStr",_wrap_HtmlPrintingTitleStr_get, _wrap_HtmlPrintingTitleStr_set);
+    PyDict_SetItemString(d,"HTML_ALIGN_LEFT", SWIG_PyObj_FromInt((int)wxHTML_ALIGN_LEFT));
+    PyDict_SetItemString(d,"HTML_ALIGN_CENTER", SWIG_PyObj_FromInt((int)wxHTML_ALIGN_CENTER));
+    PyDict_SetItemString(d,"HTML_ALIGN_RIGHT", SWIG_PyObj_FromInt((int)wxHTML_ALIGN_RIGHT));
+    PyDict_SetItemString(d,"HTML_ALIGN_BOTTOM", SWIG_PyObj_FromInt((int)wxHTML_ALIGN_BOTTOM));
+    PyDict_SetItemString(d,"HTML_ALIGN_TOP", SWIG_PyObj_FromInt((int)wxHTML_ALIGN_TOP));
+    PyDict_SetItemString(d,"HTML_CLR_FOREGROUND", SWIG_PyObj_FromInt((int)wxHTML_CLR_FOREGROUND));
+    PyDict_SetItemString(d,"HTML_CLR_BACKGROUND", SWIG_PyObj_FromInt((int)wxHTML_CLR_BACKGROUND));
+    PyDict_SetItemString(d,"HTML_UNITS_PIXELS", SWIG_PyObj_FromInt((int)wxHTML_UNITS_PIXELS));
+    PyDict_SetItemString(d,"HTML_UNITS_PERCENT", SWIG_PyObj_FromInt((int)wxHTML_UNITS_PERCENT));
+    PyDict_SetItemString(d,"HTML_INDENT_LEFT", SWIG_PyObj_FromInt((int)wxHTML_INDENT_LEFT));
+    PyDict_SetItemString(d,"HTML_INDENT_RIGHT", SWIG_PyObj_FromInt((int)wxHTML_INDENT_RIGHT));
+    PyDict_SetItemString(d,"HTML_INDENT_TOP", SWIG_PyObj_FromInt((int)wxHTML_INDENT_TOP));
+    PyDict_SetItemString(d,"HTML_INDENT_BOTTOM", SWIG_PyObj_FromInt((int)wxHTML_INDENT_BOTTOM));
+    PyDict_SetItemString(d,"HTML_INDENT_HORIZONTAL", SWIG_PyObj_FromInt((int)wxHTML_INDENT_HORIZONTAL));
+    PyDict_SetItemString(d,"HTML_INDENT_VERTICAL", SWIG_PyObj_FromInt((int)wxHTML_INDENT_VERTICAL));
+    PyDict_SetItemString(d,"HTML_INDENT_ALL", SWIG_PyObj_FromInt((int)wxHTML_INDENT_ALL));
+    PyDict_SetItemString(d,"HTML_COND_ISANCHOR", SWIG_PyObj_FromInt((int)wxHTML_COND_ISANCHOR));
+    PyDict_SetItemString(d,"HTML_COND_ISIMAGEMAP", SWIG_PyObj_FromInt((int)wxHTML_COND_ISIMAGEMAP));
+    PyDict_SetItemString(d,"HTML_COND_USER", SWIG_PyObj_FromInt((int)wxHTML_COND_USER));
+    PyDict_SetItemString(d,"HTML_FONT_SIZE_1", SWIG_PyObj_FromInt((int)wxHTML_FONT_SIZE_1));
+    PyDict_SetItemString(d,"HTML_FONT_SIZE_2", SWIG_PyObj_FromInt((int)wxHTML_FONT_SIZE_2));
+    PyDict_SetItemString(d,"HTML_FONT_SIZE_3", SWIG_PyObj_FromInt((int)wxHTML_FONT_SIZE_3));
+    PyDict_SetItemString(d,"HTML_FONT_SIZE_4", SWIG_PyObj_FromInt((int)wxHTML_FONT_SIZE_4));
+    PyDict_SetItemString(d,"HTML_FONT_SIZE_5", SWIG_PyObj_FromInt((int)wxHTML_FONT_SIZE_5));
+    PyDict_SetItemString(d,"HTML_FONT_SIZE_6", SWIG_PyObj_FromInt((int)wxHTML_FONT_SIZE_6));
+    PyDict_SetItemString(d,"HTML_FONT_SIZE_7", SWIG_PyObj_FromInt((int)wxHTML_FONT_SIZE_7));
+    PyDict_SetItemString(d,"HW_SCROLLBAR_NEVER", SWIG_PyObj_FromInt((int)wxHW_SCROLLBAR_NEVER));
+    PyDict_SetItemString(d,"HW_SCROLLBAR_AUTO", SWIG_PyObj_FromInt((int)wxHW_SCROLLBAR_AUTO));
+    PyDict_SetItemString(d,"HW_NO_SELECTION", SWIG_PyObj_FromInt((int)wxHW_NO_SELECTION));
+    PyDict_SetItemString(d,"HW_DEFAULT_STYLE", SWIG_PyObj_FromInt((int)wxHW_DEFAULT_STYLE));
+    PyDict_SetItemString(d,"HTML_OPEN", SWIG_PyObj_FromInt((int)wxHTML_OPEN));
+    PyDict_SetItemString(d,"HTML_BLOCK", SWIG_PyObj_FromInt((int)wxHTML_BLOCK));
+    PyDict_SetItemString(d,"HTML_REDIRECT", SWIG_PyObj_FromInt((int)wxHTML_REDIRECT));
+    PyDict_SetItemString(d,"HTML_URL_PAGE", SWIG_PyObj_FromInt((int)wxHTML_URL_PAGE));
+    PyDict_SetItemString(d,"HTML_URL_IMAGE", SWIG_PyObj_FromInt((int)wxHTML_URL_IMAGE));
+    PyDict_SetItemString(d,"HTML_URL_OTHER", SWIG_PyObj_FromInt((int)wxHTML_URL_OTHER));
+    PyDict_SetItemString(d,"HTML_SEL_OUT", SWIG_PyObj_FromInt((int)wxHTML_SEL_OUT));
+    PyDict_SetItemString(d,"HTML_SEL_IN", SWIG_PyObj_FromInt((int)wxHTML_SEL_IN));
+    PyDict_SetItemString(d,"HTML_SEL_CHANGING", SWIG_PyObj_FromInt((int)wxHTML_SEL_CHANGING));
+    PyDict_SetItemString(d,"HTML_FIND_EXACT", SWIG_PyObj_FromInt((int)wxHTML_FIND_EXACT));
+    PyDict_SetItemString(d,"HTML_FIND_NEAREST_BEFORE", SWIG_PyObj_FromInt((int)wxHTML_FIND_NEAREST_BEFORE));
+    PyDict_SetItemString(d,"HTML_FIND_NEAREST_AFTER", SWIG_PyObj_FromInt((int)wxHTML_FIND_NEAREST_AFTER));
+    PyDict_SetItemString(d,"PAGE_ODD", SWIG_PyObj_FromInt((int)wxPAGE_ODD));
+    PyDict_SetItemString(d,"PAGE_EVEN", SWIG_PyObj_FromInt((int)wxPAGE_EVEN));
+    PyDict_SetItemString(d,"PAGE_ALL", SWIG_PyObj_FromInt((int)wxPAGE_ALL));
+    PyDict_SetItemString(d,"HF_TOOLBAR", SWIG_PyObj_FromInt((int)wxHF_TOOLBAR));
+    PyDict_SetItemString(d,"HF_FLATTOOLBAR", SWIG_PyObj_FromInt((int)wxHF_FLATTOOLBAR));
+    PyDict_SetItemString(d,"HF_CONTENTS", SWIG_PyObj_FromInt((int)wxHF_CONTENTS));
+    PyDict_SetItemString(d,"HF_INDEX", SWIG_PyObj_FromInt((int)wxHF_INDEX));
+    PyDict_SetItemString(d,"HF_SEARCH", SWIG_PyObj_FromInt((int)wxHF_SEARCH));
+    PyDict_SetItemString(d,"HF_BOOKMARKS", SWIG_PyObj_FromInt((int)wxHF_BOOKMARKS));
+    PyDict_SetItemString(d,"HF_OPENFILES", SWIG_PyObj_FromInt((int)wxHF_OPENFILES));
+    PyDict_SetItemString(d,"HF_PRINT", SWIG_PyObj_FromInt((int)wxHF_PRINT));
+    PyDict_SetItemString(d,"HF_DEFAULTSTYLE", SWIG_PyObj_FromInt((int)wxHF_DEFAULTSTYLE));
     
     wxPyPtrTypeMap_Add("wxHtmlTagHandler",    "wxPyHtmlTagHandler");
     wxPyPtrTypeMap_Add("wxHtmlWinTagHandler", "wxPyHtmlWinTagHandler");

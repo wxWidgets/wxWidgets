@@ -126,6 +126,10 @@ def ColourRGB(*args, **kwargs):
     val.thisown = 1
     return val
 
+Color = Colour
+NamedColor = NamedColour
+ColorRGB = ColourRGB
+
 class Palette(GDIObject):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPalette instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -3521,6 +3525,49 @@ class PenListPtr(PenList):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = PenList
 _gdi.PenList_swigregister(PenListPtr)
+cvar = _gdi.cvar
+NORMAL_FONT = cvar.NORMAL_FONT
+SMALL_FONT = cvar.SMALL_FONT
+ITALIC_FONT = cvar.ITALIC_FONT
+SWISS_FONT = cvar.SWISS_FONT
+RED_PEN = cvar.RED_PEN
+CYAN_PEN = cvar.CYAN_PEN
+GREEN_PEN = cvar.GREEN_PEN
+BLACK_PEN = cvar.BLACK_PEN
+WHITE_PEN = cvar.WHITE_PEN
+TRANSPARENT_PEN = cvar.TRANSPARENT_PEN
+BLACK_DASHED_PEN = cvar.BLACK_DASHED_PEN
+GREY_PEN = cvar.GREY_PEN
+MEDIUM_GREY_PEN = cvar.MEDIUM_GREY_PEN
+LIGHT_GREY_PEN = cvar.LIGHT_GREY_PEN
+BLUE_BRUSH = cvar.BLUE_BRUSH
+GREEN_BRUSH = cvar.GREEN_BRUSH
+WHITE_BRUSH = cvar.WHITE_BRUSH
+BLACK_BRUSH = cvar.BLACK_BRUSH
+TRANSPARENT_BRUSH = cvar.TRANSPARENT_BRUSH
+CYAN_BRUSH = cvar.CYAN_BRUSH
+RED_BRUSH = cvar.RED_BRUSH
+GREY_BRUSH = cvar.GREY_BRUSH
+MEDIUM_GREY_BRUSH = cvar.MEDIUM_GREY_BRUSH
+LIGHT_GREY_BRUSH = cvar.LIGHT_GREY_BRUSH
+BLACK = cvar.BLACK
+WHITE = cvar.WHITE
+RED = cvar.RED
+BLUE = cvar.BLUE
+GREEN = cvar.GREEN
+CYAN = cvar.CYAN
+LIGHT_GREY = cvar.LIGHT_GREY
+STANDARD_CURSOR = cvar.STANDARD_CURSOR
+HOURGLASS_CURSOR = cvar.HOURGLASS_CURSOR
+CROSS_CURSOR = cvar.CROSS_CURSOR
+NullBitmap = cvar.NullBitmap
+NullIcon = cvar.NullIcon
+NullCursor = cvar.NullCursor
+NullPen = cvar.NullPen
+NullBrush = cvar.NullBrush
+NullPalette = cvar.NullPalette
+NullFont = cvar.NullFont
+NullColour = cvar.NullColour
 
 class BrushList(core.Object):
     def __init__(self): raise RuntimeError, "No constructor defined"
@@ -3624,6 +3671,7 @@ _gdi.FontList_swigregister(FontListPtr)
 
 #---------------------------------------------------------------------------
 
+NullColor = NullColour 
 #---------------------------------------------------------------------------
 
 class Effects(core.Object):
@@ -3697,49 +3745,6 @@ class EffectsPtr(Effects):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = Effects
 _gdi.Effects_swigregister(EffectsPtr)
-cvar = _gdi.cvar
-NORMAL_FONT = cvar.NORMAL_FONT
-SMALL_FONT = cvar.SMALL_FONT
-ITALIC_FONT = cvar.ITALIC_FONT
-SWISS_FONT = cvar.SWISS_FONT
-RED_PEN = cvar.RED_PEN
-CYAN_PEN = cvar.CYAN_PEN
-GREEN_PEN = cvar.GREEN_PEN
-BLACK_PEN = cvar.BLACK_PEN
-WHITE_PEN = cvar.WHITE_PEN
-TRANSPARENT_PEN = cvar.TRANSPARENT_PEN
-BLACK_DASHED_PEN = cvar.BLACK_DASHED_PEN
-GREY_PEN = cvar.GREY_PEN
-MEDIUM_GREY_PEN = cvar.MEDIUM_GREY_PEN
-LIGHT_GREY_PEN = cvar.LIGHT_GREY_PEN
-BLUE_BRUSH = cvar.BLUE_BRUSH
-GREEN_BRUSH = cvar.GREEN_BRUSH
-WHITE_BRUSH = cvar.WHITE_BRUSH
-BLACK_BRUSH = cvar.BLACK_BRUSH
-TRANSPARENT_BRUSH = cvar.TRANSPARENT_BRUSH
-CYAN_BRUSH = cvar.CYAN_BRUSH
-RED_BRUSH = cvar.RED_BRUSH
-GREY_BRUSH = cvar.GREY_BRUSH
-MEDIUM_GREY_BRUSH = cvar.MEDIUM_GREY_BRUSH
-LIGHT_GREY_BRUSH = cvar.LIGHT_GREY_BRUSH
-BLACK = cvar.BLACK
-WHITE = cvar.WHITE
-RED = cvar.RED
-BLUE = cvar.BLUE
-GREEN = cvar.GREEN
-CYAN = cvar.CYAN
-LIGHT_GREY = cvar.LIGHT_GREY
-STANDARD_CURSOR = cvar.STANDARD_CURSOR
-HOURGLASS_CURSOR = cvar.HOURGLASS_CURSOR
-CROSS_CURSOR = cvar.CROSS_CURSOR
-NullBitmap = cvar.NullBitmap
-NullIcon = cvar.NullIcon
-NullCursor = cvar.NullCursor
-NullPen = cvar.NullPen
-NullBrush = cvar.NullBrush
-NullPalette = cvar.NullPalette
-NullFont = cvar.NullFont
-NullColour = cvar.NullColour
 TheFontList = cvar.TheFontList
 ThePenList = cvar.ThePenList
 TheBrushList = cvar.TheBrushList
