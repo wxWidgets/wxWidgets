@@ -1148,10 +1148,15 @@ public:
 
     size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const
     {
+        // note that we have to use MB_ERR_INVALID_CHARS flag as it without it
+        // the behaviour is not compatible with the Unix version (using iconv)
+        // and break the library itself, e.g. wxTextInputStream::NextChar()
+        // wouldn't work if reading an incomplete MB char didn't result in an
+        // error
         const size_t len = ::MultiByteToWideChar
                              (
                                 m_CodePage,     // code page
-                                0,              // flags (none)
+                                MB_ERR_INVALID_CHARS, // flags: fall on error
                                 psz,            // input string
                                 -1,             // its length (NUL-terminated)
                                 buf,            // output string
