@@ -249,6 +249,17 @@ wxFont wxCreateFontFromStockObject(int index)
 
 wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
 {
+#ifdef __WXWINCE__
+    // under CE only a single SYSTEM_FONT exists
+    index;
+
+    if ( !gs_fontDefault )
+    {
+        gs_fontDefault = new wxFont(wxCreateFontFromStockObject(SYSTEM_FONT));
+    }
+
+    return *gs_fontDefault;
+#else // !__WXWINCE__
     // wxWindow ctor calls GetSystemFont(wxSYS_DEFAULT_GUI_FONT) so we're
     // called fairly often -- this is why we cache this particular font
     const bool isDefaultRequested = index == wxSYS_DEFAULT_GUI_FONT;
@@ -267,6 +278,7 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
     }
 
     return font;
+#endif // __WXWINCE__/!__WXWINCE__
 }
 
 // ----------------------------------------------------------------------------
