@@ -46,8 +46,8 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
 
   parent->AddChild(this);
 
-  m_backgroundColour = parent->GetBackgroundColour() ;
-  m_foregroundColour = parent->GetForegroundColour() ;
+  m_backgroundColour = parent->GetBackgroundColour();
+  m_foregroundColour = parent->GetForegroundColour();
   m_windowStyle = style;
   m_marginX = 0;
   m_marginY = 0;
@@ -90,7 +90,7 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
   // Subclass again for purposes of dialog editing mode
   SubclassWin(m_hWnd);
 
-  SetFont(parent->GetFont()) ;
+  SetFont(parent->GetFont());
 
   SetSize(x, y, width, height);
 
@@ -244,68 +244,125 @@ bool wxBitmapButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
     return TRUE;
 }
 
+// GRG Feb/2000, support for bmp buttons with Win95/98 standard LNF
+
+#if defined(__WIN95__)
+
 void wxBitmapButton::DrawFace( WXHDC dc, int left, int top, int right, int bottom, bool sel )
 {
     HPEN oldp;
-    HBRUSH oldb ;
+    HPEN penHiLight;
+    HPEN penLight;
+    HPEN penShadow;
+    HPEN penDkShadow;
+    HBRUSH brushFace;
 
+    // create needed pens and brush
+    penHiLight  = CreatePen(PS_SOLID, 0, GetSysColor(COLOR_3DHILIGHT));
+    penLight    = CreatePen(PS_SOLID, 0, GetSysColor(COLOR_3DLIGHT));
+    penShadow   = CreatePen(PS_SOLID, 0, GetSysColor(COLOR_3DSHADOW));
+    penDkShadow = CreatePen(PS_SOLID, 0, GetSysColor(COLOR_3DDKSHADOW));
+    brushFace   = CreateSolidBrush(GetSysColor(COLOR_BTNFACE));
+
+    // draw the rectangle
+    RECT rect;
+    rect.left   = left;
+    rect.right  = right;
+    rect.top    = top;
+    rect.bottom = bottom;
+    FillRect((HDC) dc, &rect, brushFace);
+
+    // draw the border
+    oldp = (HPEN) SelectObject( (HDC) dc, sel? penDkShadow : penHiLight);
+    MoveToEx((HDC) dc, left, top, NULL); LineTo((HDC) dc, right-1, top);
+    MoveToEx((HDC) dc, left, top+1, NULL); LineTo((HDC) dc, left, bottom-1);
+
+    SelectObject( (HDC) dc, sel? penShadow : penLight);
+    MoveToEx((HDC) dc, left+1, top+1, NULL); LineTo((HDC) dc, right-2, top+1);
+    MoveToEx((HDC) dc, left+1, top+2, NULL); LineTo((HDC) dc, left+1, bottom-2);
+
+    SelectObject( (HDC) dc, sel? penLight : penShadow);
+    MoveToEx((HDC) dc, left+1, bottom-2, NULL); LineTo((HDC) dc, right-1, bottom-2);
+    MoveToEx((HDC) dc, right-2, bottom-3, NULL); LineTo((HDC) dc, right-2, top);
+
+    SelectObject( (HDC) dc, sel? penHiLight : penDkShadow);
+    MoveToEx((HDC) dc, left, bottom-1, NULL); LineTo((HDC) dc, right+2, bottom-1);
+    MoveToEx((HDC) dc, right-1, bottom-2, NULL); LineTo((HDC) dc, right-1, top-1);
+
+    // delete allocated resources
+    SelectObject((HDC) dc,oldp);
+    DeleteObject(penHiLight);
+    DeleteObject(penLight);
+    DeleteObject(penShadow);
+    DeleteObject(penDkShadow);
+    DeleteObject(brushFace);
+}
+
+#else
+
+void wxBitmapButton::DrawFace( WXHDC dc, int left, int top, int right, int bottom, bool sel )
+{
+    HPEN oldp;
     HPEN penBorder;
     HPEN penLight;
     HPEN penShadow;
     HBRUSH brushFace;
-    COLORREF ms_color;
 
-    ms_color = GetSysColor(COLOR_WINDOWFRAME) ;
-    penBorder = CreatePen(PS_SOLID,0,ms_color) ;
+    // create needed pens and brush
+    penBorder = CreatePen(PS_SOLID, 0, GetSysColor(COLOR_WINDOWFRAME));
+    penShadow = CreatePen(PS_SOLID, 0, GetSysColor(COLOR_BTNSHADOW));
+    penLight  = CreatePen(PS_SOLID, 0, GetSysColor(COLOR_BTNHIGHLIGHT));
+    brushFace = CreateSolidBrush(COLOR_BTNFACE);
 
-    ms_color = GetSysColor(COLOR_BTNSHADOW) ;
-    penShadow = CreatePen(PS_SOLID,0,ms_color) ;
+    // draw the rectangle
+    RECT rect;
+    rect.left   = left;
+    rect.right  = right;
+    rect.top    = top;
+    rect.bottom = bottom;
+    FillRect((HDC) dc, &rect, brushFace);
 
-    ms_color = GetSysColor(COLOR_BTNHIGHLIGHT) ;
-    penLight = CreatePen(PS_SOLID,0,ms_color) ;
-
-    ms_color = GetSysColor(COLOR_BTNFACE) ;
-    brushFace = CreateSolidBrush(ms_color) ;
-
-    oldp = (HPEN) SelectObject( (HDC) dc, GetStockObject( NULL_PEN ) ) ;
-    oldb = (HBRUSH) SelectObject( (HDC) dc, brushFace ) ;
-    Rectangle( (HDC) dc, left, top, right, bottom ) ;
-    SelectObject( (HDC) dc, penBorder) ;
+    // draw the border
+    oldp = (HPEN) SelectObject( (HDC) dc, penBorder);
     MoveToEx((HDC) dc,left+1,top,NULL);LineTo((HDC) dc,right-1,top);
     MoveToEx((HDC) dc,left,top+1,NULL);LineTo((HDC) dc,left,bottom-1);
     MoveToEx((HDC) dc,left+1,bottom-1,NULL);LineTo((HDC) dc,right-1,bottom-1);
     MoveToEx((HDC) dc,right-1,top+1,NULL);LineTo((HDC) dc,right-1,bottom-1);
 
-    SelectObject( (HDC) dc, penShadow) ;
+    SelectObject( (HDC) dc, penShadow);
     if (sel)
     {
-        MoveToEx((HDC) dc,left+1    ,bottom-2   ,NULL) ;
-        LineTo((HDC) dc,  left+1    ,top+1) ;
-        LineTo((HDC) dc,  right-2   ,top+1) ;
+        MoveToEx((HDC) dc,left+1    ,bottom-2   ,NULL);
+        LineTo((HDC) dc,  left+1    ,top+1);
+        LineTo((HDC) dc,  right-2   ,top+1);
     }
     else
     {
-        MoveToEx((HDC) dc,left+1    ,bottom-2   ,NULL) ;
-        LineTo((HDC) dc,  right-2   ,bottom-2) ;
-        LineTo((HDC) dc,  right-2   ,top) ;
-        MoveToEx((HDC) dc,left+2    ,bottom-3   ,NULL) ;
-        LineTo((HDC) dc,  right-3   ,bottom-3) ;
-        LineTo((HDC) dc,  right-3   ,top+1) ;
+        MoveToEx((HDC) dc,left+1    ,bottom-2   ,NULL);
+        LineTo((HDC) dc,  right-2   ,bottom-2);
+        LineTo((HDC) dc,  right-2   ,top);
 
-        SelectObject( (HDC) dc, penLight) ;
+        MoveToEx((HDC) dc,left+2    ,bottom-3   ,NULL);
+        LineTo((HDC) dc,  right-3   ,bottom-3);
+        LineTo((HDC) dc,  right-3   ,top+1);
 
-        MoveToEx((HDC) dc,left+1    ,bottom-2   ,NULL) ;
-        LineTo((HDC) dc,  left+1    ,top+1) ;
-        LineTo((HDC) dc,  right-2   ,top+1) ;
+        SelectObject( (HDC) dc, penLight);
+
+        MoveToEx((HDC) dc,left+1    ,bottom-2   ,NULL);
+        LineTo((HDC) dc,  left+1    ,top+1);
+        LineTo((HDC) dc,  right-2   ,top+1);
     }
-    SelectObject((HDC) dc,oldp) ;
-    SelectObject((HDC) dc,oldb) ;
 
+    // delete allocated resources
+    SelectObject((HDC) dc,oldp);
     DeleteObject(penBorder);
     DeleteObject(penLight);
     DeleteObject(penShadow);
     DeleteObject(brushFace);
 }
+
+#endif // defined(__WIN95__)
+
 
 // VZ: should be at the very least less than wxDEFAULT_BUTTON_MARGIN
 #define FOCUS_MARGIN 3
@@ -317,16 +374,20 @@ void wxBitmapButton::DrawButtonFocus( WXHDC dc, int left, int top, int right, in
     rect.top = top;
     rect.right = right;
     rect.bottom = bottom;
-    InflateRect( &rect, - FOCUS_MARGIN, - FOCUS_MARGIN ) ;
+    InflateRect( &rect, - FOCUS_MARGIN, - FOCUS_MARGIN );
+
+    // GRG: the focus rectangle should not move when the button is pushed!
+/*
     if ( sel )
-        OffsetRect( &rect, 1, 1 ) ;
-    DrawFocusRect( (HDC) dc, &rect ) ;
+        OffsetRect( &rect, 1, 1 );
+*/
+    DrawFocusRect( (HDC) dc, &rect );
 }
 
 extern HBRUSH wxDisableButtonBrush;
 void wxBitmapButton::DrawButtonDisable( WXHDC dc, int left, int top, int right, int bottom, bool with_marg )
 {
-    HBRUSH  old = (HBRUSH) SelectObject( (HDC) dc, wxDisableButtonBrush ) ;
+    HBRUSH  old = (HBRUSH) SelectObject( (HDC) dc, wxDisableButtonBrush );
 
     // VZ: what's this?? there is no such ROP AFAIK
 #ifdef __SALFORDC__
@@ -345,7 +406,7 @@ void wxBitmapButton::DrawButtonDisable( WXHDC dc, int left, int top, int right, 
 
     ::PatBlt( (HDC) dc, left, top, right, bottom, dwRop);
 
-    ::SelectObject( (HDC) dc, old ) ;
+    ::SelectObject( (HDC) dc, old );
 }
 
 void wxBitmapButton::SetDefault()
