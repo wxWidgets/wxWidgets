@@ -519,7 +519,10 @@ int wxListBox::GetSelection() const
 // Find string for position
 wxString wxListBox::GetString(int N) const
 {
-	return m_stringArray[N]  ;
+    wxCHECK_MSG( N >= 0 && N < m_noItems, wxEmptyString,
+                 wxT("invalid index in wxListBox::GetString") );
+
+    return m_stringArray[N]  ;
 }
 
 void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
