@@ -1081,6 +1081,8 @@ bool wxWindowBase::SetFont(const wxFont& font)
     m_hasFont = font.Ok();
     m_inheritFont = m_hasFont;
 
+    InvalidateBestSize();
+
     return true;
 }
 
