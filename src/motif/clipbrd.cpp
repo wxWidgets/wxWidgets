@@ -163,9 +163,13 @@ struct wxDataIdToDataObject
 WX_DEFINE_LIST(wxDataObjectList);
 WX_DEFINE_LIST(wxDataIdToDataObjectList);
 
+#if wxCHECK_LESSTIF()
+static void wxClipboardCallback( Widget widget, int* data_id,
+                                 int* priv, int* reason );
+#else
 static void wxClipboardCallback( Widget widget, long* data_id,
                                  long* priv, int* reason );
-
+#endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxClipboard,wxObject)
 
@@ -217,8 +221,13 @@ bool wxClipboard::SetData( wxDataObject *data )
 wxDECLARE_SCOPED_ARRAY( wxDataFormat, wxDataFormatScopedArray );
 wxDEFINE_SCOPED_ARRAY( wxDataFormat, wxDataFormatScopedArray );
 
+#if wxCHECK_LESSTIF()
+void wxClipboardCallback( Widget xwidget, int* data_id,
+                          int* priv, int* reason )
+#else
 void wxClipboardCallback( Widget xwidget, long* data_id,
                           long* priv, int* reason )
+#endif
 {
     Display* xdisplay = XtDisplay( xwidget );
     Window xwindow = XtWindow( xwidget );
