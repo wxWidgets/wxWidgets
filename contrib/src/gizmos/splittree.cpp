@@ -427,7 +427,7 @@ void wxTreeCompanionWindow::OnPaint(wxPaintEvent& event)
 			dc.DrawLine(0, cy, clientSize.x, cy);
 		}
 	}
-	if (m_treeCtrl->GetBoundingRect(lastH, itemRect))
+	if (lastH.IsOk() && m_treeCtrl->GetBoundingRect(lastH, itemRect))
 	{
 		cy = itemRect.GetBottom();
 		dc.DrawLine(0, cy, clientSize.x, cy);
