@@ -184,7 +184,7 @@ IMPLEMENT_CLASS( wxPyPrintPreview, wxWindowsPrintPreview );
 #elif defined(__WXMAC__)
 IMPLEMENT_CLASS( wxPyPrintPreview, wxMacPrintPreview );
 #else
-IMPLEMENT_CLASS( wxPyPrintPreview, wxPrintPreview );
+IMPLEMENT_CLASS( wxPyPrintPreview, wxPostScriptPrintPreview );
 #endif
 
 IMP_PYCALLBACK_BOOL_INT    (wxPyPrintPreview, wxPrintPreview, SetCurrentPage);

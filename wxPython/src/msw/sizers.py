@@ -119,56 +119,26 @@ class wxSizerPtr(wxObjectPtr):
     def Destroy(self, *_args, **_kwargs):
         val = sizersc.wxSizer_Destroy(self, *_args, **_kwargs)
         return val
-    def AddWindow(self, *_args, **_kwargs):
-        val = sizersc.wxSizer_AddWindow(self, *_args, **_kwargs)
+    def _Add(self, *_args, **_kwargs):
+        val = sizersc.wxSizer__Add(self, *_args, **_kwargs)
         return val
-    def AddSizer(self, *_args, **_kwargs):
-        val = sizersc.wxSizer_AddSizer(self, *_args, **_kwargs)
+    def _Insert(self, *_args, **_kwargs):
+        val = sizersc.wxSizer__Insert(self, *_args, **_kwargs)
         return val
-    def AddSpacer(self, *_args, **_kwargs):
-        val = sizersc.wxSizer_AddSpacer(self, *_args, **_kwargs)
+    def _Prepend(self, *_args, **_kwargs):
+        val = sizersc.wxSizer__Prepend(self, *_args, **_kwargs)
         return val
-    def InsertWindow(self, *_args, **_kwargs):
-        val = sizersc.wxSizer_InsertWindow(self, *_args, **_kwargs)
+    def Remove(self, *_args, **_kwargs):
+        val = sizersc.wxSizer_Remove(self, *_args, **_kwargs)
         return val
-    def InsertSizer(self, *_args, **_kwargs):
-        val = sizersc.wxSizer_InsertSizer(self, *_args, **_kwargs)
-        return val
-    def InsertSpacer(self, *_args, **_kwargs):
-        val = sizersc.wxSizer_InsertSpacer(self, *_args, **_kwargs)
-        return val
-    def PrependWindow(self, *_args, **_kwargs):
-        val = sizersc.wxSizer_PrependWindow(self, *_args, **_kwargs)
-        return val
-    def PrependSizer(self, *_args, **_kwargs):
-        val = sizersc.wxSizer_PrependSizer(self, *_args, **_kwargs)
-        return val
-    def PrependSpacer(self, *_args, **_kwargs):
-        val = sizersc.wxSizer_PrependSpacer(self, *_args, **_kwargs)
-        return val
-    def RemoveWindow(self, *_args, **_kwargs):
-        val = sizersc.wxSizer_RemoveWindow(self, *_args, **_kwargs)
-        return val
-    def RemoveSizer(self, *_args, **_kwargs):
-        val = sizersc.wxSizer_RemoveSizer(self, *_args, **_kwargs)
-        return val
-    def RemovePos(self, *_args, **_kwargs):
-        val = sizersc.wxSizer_RemovePos(self, *_args, **_kwargs)
+    def _SetItemMinSize(self, *_args, **_kwargs):
+        val = sizersc.wxSizer__SetItemMinSize(self, *_args, **_kwargs)
         return val
     def SetDimension(self, *_args, **_kwargs):
         val = sizersc.wxSizer_SetDimension(self, *_args, **_kwargs)
         return val
     def SetMinSize(self, *_args, **_kwargs):
         val = sizersc.wxSizer_SetMinSize(self, *_args, **_kwargs)
-        return val
-    def SetItemMinSizeWindow(self, *_args, **_kwargs):
-        val = sizersc.wxSizer_SetItemMinSizeWindow(self, *_args, **_kwargs)
-        return val
-    def SetItemMinSizeSizer(self, *_args, **_kwargs):
-        val = sizersc.wxSizer_SetItemMinSizeSizer(self, *_args, **_kwargs)
-        return val
-    def SetItemMinSizePos(self, *_args, **_kwargs):
-        val = sizersc.wxSizer_SetItemMinSizePos(self, *_args, **_kwargs)
         return val
     def GetSize(self, *_args, **_kwargs):
         val = sizersc.wxSizer_GetSize(self, *_args, **_kwargs)
@@ -207,23 +177,14 @@ class wxSizerPtr(wxObjectPtr):
     def GetChildren(self, *_args, **_kwargs):
         val = sizersc.wxSizer_GetChildren(self, *_args, **_kwargs)
         return val
-    def ShowWindow(self, *_args, **_kwargs):
-        val = sizersc.wxSizer_ShowWindow(self, *_args, **_kwargs)
+    def Show(self, *_args, **_kwargs):
+        val = sizersc.wxSizer_Show(self, *_args, **_kwargs)
         return val
-    def HideWindow(self, *_args, **_kwargs):
-        val = sizersc.wxSizer_HideWindow(self, *_args, **_kwargs)
+    def Hide(self, *_args, **_kwargs):
+        val = sizersc.wxSizer_Hide(self, *_args, **_kwargs)
         return val
-    def ShowSizer(self, *_args, **_kwargs):
-        val = sizersc.wxSizer_ShowSizer(self, *_args, **_kwargs)
-        return val
-    def HideSizer(self, *_args, **_kwargs):
-        val = sizersc.wxSizer_HideSizer(self, *_args, **_kwargs)
-        return val
-    def IsShownWindow(self, *_args, **_kwargs):
-        val = sizersc.wxSizer_IsShownWindow(self, *_args, **_kwargs)
-        return val
-    def IsShownSizer(self, *_args, **_kwargs):
-        val = sizersc.wxSizer_IsShownSizer(self, *_args, **_kwargs)
+    def IsShown(self, *_args, **_kwargs):
+        val = sizersc.wxSizer_IsShown(self, *_args, **_kwargs)
         return val
     def ShowItems(self, *_args, **_kwargs):
         val = sizersc.wxSizer_ShowItems(self, *_args, **_kwargs)
@@ -231,45 +192,11 @@ class wxSizerPtr(wxObjectPtr):
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxSizer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
     
-    def Add(self, *args, **kw):
-        if type(args[0]) == type(1):
-            self.AddSpacer(*args, **kw)
-        elif isinstance(args[0], wxSizerPtr):
-            self.AddSizer(*args, **kw)
-        elif isinstance(args[0], wxWindowPtr):
-            self.AddWindow(*args, **kw)
-        else:
-            raise TypeError, 'Expected int, wxSizer or wxWindow parameter'
-
-    def Insert(self, *args, **kw):
-        if type(args[1]) == type(1):
-            self.InsertSpacer(*args, **kw)
-        elif isinstance(args[1], wxSizerPtr):
-            self.InsertSizer(*args, **kw)
-        elif isinstance(args[1], wxWindowPtr):
-            self.InsertWindow(*args, **kw)
-        else:
-            raise TypeError, 'Expected int, wxSizer or wxWindow parameter'
-
-    def Prepend(self, *args, **kw):
-        if type(args[0]) == type(1):
-            self.PrependSpacer(*args, **kw)
-        elif isinstance(args[0], wxSizerPtr):
-            self.PrependSizer(*args, **kw)
-        elif isinstance(args[0], wxWindowPtr):
-            self.PrependWindow(*args, **kw)
-        else:
-            raise TypeError, 'Expected int, wxSizer or wxWindow parameter'
-
-    def Remove(self, *args, **kw):
-        if type(args[0]) == type(1):
-            return self.RemovePos(*args, **kw)
-        elif isinstance(args[0], wxSizerPtr):
-            return self.RemoveSizer(*args, **kw)
-        elif isinstance(args[0], wxWindowPtr):
-            return self.RemoveWindow(*args, **kw)
-        else:
-            raise TypeError, 'Expected int, wxSizer or wxWindow parameter'
+    def Add(self, item, *args, **kw):
+        if type(item) == type(1):
+            item = (item, args[0])  # backwards compatibility, args are width, height
+            args = args[1:]
+        self._Add(item, *args, **kw)
 
     def AddMany(self, widgets):
         for childinfo in widgets:
@@ -277,17 +204,33 @@ class wxSizerPtr(wxObjectPtr):
                 childinfo = (childinfo, )
             self.Add(*childinfo)
 
-    
-    def SetItemMinSize(self, *args):
-        if type(args[0]) == type(1):
-            self.SetItemMinSizePos(*args)
-        elif isinstance(args[0], wxSizerPtr):
-            self.SetItemMinSizeSizer(*args)
-        elif isinstance(args[0], wxWindowPtr):
-            self.SetItemMinSizeWindow(*args)
+    def Prepend(self, item, *args, **kw):
+        if type(item) == type(1):
+            item = (item, args[0])  # backwards compatibility, args are width, height
+            args = args[1:]
+        self._Prepend(item, *args, **kw)
+
+    def Insert(self, before, item, *args, **kw):
+        if type(item) == type(1):
+            item = (item, args[0])  # backwards compatibility, args are width, height
+            args = args[1:]
+        self._Insert(before, item, *args, **kw)
+
+
+    # for backwards compatibility only
+    AddWindow = AddSizer = AddSpacer = Add
+    PrependWindow = PrependSizer = PrependSpacer = Prepend
+    InsertWindow = InsertSizer = InsertSpacer = Insert
+    RemoveWindow = RemoveSizer = RemovePos = Remove
+
+
+    def SetItemMinSize(self, item, *args):
+        if len(args) == 2:
+            return self._SetItemMinSize(item, args)
         else:
-            raise TypeError, 'Expected int, wxSizer or wxWindow parameter'
-     
+            return self._SetItemMinSize(item, args[0])
+
+
     
     def GetSizeTuple(self):
         return self.GetSize().asTuple()
@@ -296,31 +239,6 @@ class wxSizerPtr(wxObjectPtr):
     def GetMinSizeTuple(self):
         return self.GetMinSize().asTuple()
     
-    
-    def Show(self, *args):
-        if isinstance(args[0], wxSizerPtr):
-            self.ShowSizer(*args)
-        elif isinstance(args[0], wxWindowPtr):
-            self.ShowWindow(*args)
-        else:
-            raise TypeError, 'Expected wxSizer or wxWindow parameter'
-
-    def Hide(self, *args):
-        if isinstance(args[0], wxSizerPtr):
-            self.HideSizer(*args)
-        elif isinstance(args[0], wxWindowPtr):
-            self.HideWindow(*args)
-        else:
-            raise TypeError, 'Expected wxSizer or wxWindow parameter'
-
-    def IsShown(self, *args):
-        if isinstance(args[0], wxSizerPtr):
-            return self.IsShownSizer(*args)
-        elif isinstance(args[0], wxWindowPtr):
-            return self.IsShownWindow(*args)
-        else:
-            raise TypeError, 'Expected wxSizer or wxWindow parameter'
-
 class wxSizer(wxSizerPtr):
     def __init__(self,this):
         self.this = this
