@@ -161,6 +161,10 @@ SOURCE=..\..\src\generic\vlbox.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\generic\selstore.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\generic\vscroll.cpp
 # End Source File
 # End Target
