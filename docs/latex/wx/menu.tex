@@ -485,7 +485,7 @@ by the application frame.
 
 \membersection{wxMenuBar::wxMenuBar}\label{wxmenubarconstr}
 
-\func{void}{wxMenuBar}{\void}
+\func{void}{wxMenuBar}{\param{long }{style = 0}}
 
 Default constructor.
 
@@ -501,6 +501,8 @@ Construct a menu bar from arrays of menus and titles.
 menu bar.}
 
 \docparam{titles}{An array of title strings. Deallocate this array after creating the menu bar.}
+
+\docparam{style}{If {\tt wxMB_DOCKABLE} the menu bar can be detached (wxGTK only).}
 
 \pythonnote{Only the default constructor is supported in wxPython.
 Use wxMenuBar.Append instead.}
