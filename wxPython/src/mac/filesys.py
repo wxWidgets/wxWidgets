@@ -218,6 +218,8 @@ class wxMemoryFSHandler(wxMemoryFSHandlerPtr):
 
 #-------------- FUNCTION WRAPPERS ------------------
 
+wxFileSystem_URLToFileName = filesysc.wxFileSystem_URLToFileName
+
 __wxMemoryFSHandler_AddFile_wxImage = filesysc.__wxMemoryFSHandler_AddFile_wxImage
 
 __wxMemoryFSHandler_AddFile_wxBitmap = filesysc.__wxMemoryFSHandler_AddFile_wxBitmap
@@ -227,6 +229,8 @@ __wxMemoryFSHandler_AddFile_Data = filesysc.__wxMemoryFSHandler_AddFile_Data
 wxFileSystem_AddHandler = filesysc.wxFileSystem_AddHandler
 
 wxFileSystem_CleanUpHandlers = filesysc.wxFileSystem_CleanUpHandlers
+
+wxFileSystem_FileNameToURL = filesysc.wxFileSystem_FileNameToURL
 
 wxMemoryFSHandler_RemoveFile = filesysc.wxMemoryFSHandler_RemoveFile
 
