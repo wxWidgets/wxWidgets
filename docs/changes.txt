@@ -71,6 +71,7 @@ wxMSW:
 - fixed bug with wxTR_EDIT_LABELS not workign with wxTR_MULTIPLE
 - fixes for compilation with OpenWatcom compiler
 - fixed wxStaticText best size calculation (was wrong by '&' width)
+- fixed calling wxFrame::Maximize(FALSE) before the window is shown
 
 OLD CHANGES
 ===========
