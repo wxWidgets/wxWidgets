@@ -74,6 +74,8 @@ public:
     // factory function
     static wxPyCBInputStream* create(PyObject *py, bool block=true);
 
+    wxPyCBInputStream(const wxPyCBInputStream& other);
+    
 protected:
     // can only be created via the factory
     wxPyCBInputStream(PyObject *r, PyObject *s, PyObject *t, bool block);

@@ -23,8 +23,15 @@
 %newgroup
 
 
-// typemaps for wxInputStream
-%typemap(in) wxInputStream*  (wxPyInputStream* temp, bool created) {
+// Typemaps for wxInputStream
+//
+// We assume that input params taking a wxInputStream& will *not* take
+// ownership of the stream and so we manage it in the typemaps. On the other
+// hand, when a paramter expects a wxInputStream* then it does take ownership
+// (such as wxFSFile) and so the typemap will make a copy of the stream object
+// to give to it.
+ 
+%typemap(in) wxInputStream&  (wxPyInputStream* temp, bool created) {
     if (wxPyConvertSwigPtr($input, (void **)&temp, wxT("wxPyInputStream"))) {
         $1 = temp->m_wxis;
         created = false;
@@ -32,20 +39,28 @@
         PyErr_Clear();  // clear the failure of the wxPyConvert above
         $1 = wxPyCBInputStream_create($input, false);
         if ($1 == NULL) {
-            PyErr_SetString(PyExc_TypeError, "Expected wxInputStream or Python file-like object.");
+            PyErr_SetString(PyExc_TypeError, "Expected wx.InputStream or Python file-like object.");
             SWIG_fail;
         }
         created = true;
     }
 }
-%typemap(freearg) wxInputStream* {
-    if (created$argnum)
-        delete $1;
+%typemap(freearg) wxInputStream& { if (created$argnum) delete $1; }
+
+
+%typemap(in) wxInputStream*  (wxPyInputStream* temp) {
+    if (wxPyConvertSwigPtr($input, (void **)&temp, wxT("wxPyInputStream"))) {
+        $1 = wxPyCBInputStream_copy((wxPyCBInputStream*)temp->m_wxis);
+    } else {
+        PyErr_Clear();  // clear the failure of the wxPyConvert above
+        $1 = wxPyCBInputStream_create($input, true);
+        if ($1 == NULL) {
+            PyErr_SetString(PyExc_TypeError, "Expected wx.InputStream or Python file-like object.");
+            SWIG_fail;
+        }
+    }
 }
 
-
-%typemap(in) wxInputStream&       = wxInputStream*;
-%typemap(freearg) wxInputStream&  = wxInputStream*;
 
 
 %typemap(out) wxInputStream* {

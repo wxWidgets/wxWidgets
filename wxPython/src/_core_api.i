@@ -183,7 +183,8 @@ static wxPyCoreAPI API = {
     wxPyOORClientData_dtor,
                                              
     wxPyCBInputStream_create,
-
+    wxPyCBInputStream_copy,
+    
     wxPyInstance_Check,
     wxPySwigInstance_Check,
 

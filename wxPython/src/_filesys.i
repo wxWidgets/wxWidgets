@@ -27,8 +27,8 @@ class wxFSFile : public wxObject
 {
 public:
     %pythonAppend wxFSFile
-        "self.thisown = 0   # It will normally be deleted by the user of the wxFileSystem";
-    
+        "self.thisown = 0   # It will normally be deleted by the user of the wx.FileSystem";
+
     wxFSFile(wxInputStream *stream, const wxString& loc,
              const wxString& mimetype, const wxString& anchor,
              wxDateTime modif);

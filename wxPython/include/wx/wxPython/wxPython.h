@@ -111,6 +111,7 @@ inline wxPyCoreAPI* wxPyGetCoreAPIPtr()
 #define wxPyOORClientData_dtor(a)               (wxPyGetCoreAPIPtr()->p_wxPyOORClientData_dtor(a))
                                                 
 #define wxPyCBInputStream_create(a, b)          (wxPyGetCoreAPIPtr()->p_wxPyCBInputStream_create(a, b))
+#define wxPyCBInputStream_copy(a)               (wxPyGetCoreAPIPtr()->p_wxPyCBInputStream_copy(a))
 
 #define wxPyInstance_Check(a)                   (wxPyGetCoreAPIPtr()->p_wxPyInstance_Check(a))
 #define wxPySwigInstance_Check(a)               (wxPyGetCoreAPIPtr()->p_wxPySwigInstance_Check(a))

@@ -323,7 +323,7 @@ void wxPyClientData_dtor(wxPyClientData* self);
 void wxPyUserData_dtor(wxPyUserData* self);
 void wxPyOORClientData_dtor(wxPyOORClientData* self);
 wxPyCBInputStream* wxPyCBInputStream_create(PyObject *py, bool block);
-
+wxPyCBInputStream* wxPyCBInputStream_copy(wxPyCBInputStream* other);
 
 //---------------------------------------------------------------------------
 // Export a C API in a struct.  Other modules will be able to load this from
@@ -389,7 +389,8 @@ struct wxPyCoreAPI {
     void                (*p_wxPyOORClientData_dtor)(wxPyOORClientData*);
 
     wxPyCBInputStream*  (*p_wxPyCBInputStream_create)(PyObject *py, bool block);
-
+    wxPyCBInputStream*  (*p_wxPyCBInputStream_copy)(wxPyCBInputStream* other);
+    
     bool                (*p_wxPyInstance_Check)(PyObject* obj);
     bool                (*p_wxPySwigInstance_Check)(PyObject* obj);
 
