@@ -53,7 +53,7 @@
 #ifndef USE_PCH
 #   include   "iostream.h"
 #   include   <wx/dc.h>
-#   include   <wx/postscrp.h>
+#   include   <wx/dcps.h>
 #   include   <wx/print.h>
 #   include   <wx/log.h>
 #endif
