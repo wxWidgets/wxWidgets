@@ -207,6 +207,11 @@ extern LONG APIENTRY _EXPORT
 // make conversion from wxColour and COLORREF a bit less painful
 inline COLORREF wxColourToRGB(const wxColour& c)
 {
+    return RGB(c.Red(), c.Green(), c.Blue());
+}
+
+inline COLORREF wxColourToPalRGB(const wxColour& c)
+{
     return PALETTERGB(c.Red(), c.Green(), c.Blue());
 }
 
