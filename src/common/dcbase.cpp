@@ -106,6 +106,49 @@ void wxDCBase::DrawPolygon(const wxList *list,
     delete [] points;
 }
 
+void
+wxDCBase::DoDrawPolyPolygon(int n,
+                            int start[],
+                            wxPoint points[],
+                            wxCoord xoffset, wxCoord yoffset,
+                            int fillStyle)
+{
+    if ( n == 1 )
+    {
+        DoDrawPolygon(start[0], points, xoffset, yoffset, fillStyle);
+        return;
+    }
+
+    int      i, j, lastOfs;
+    wxPoint* pts;
+    wxPen    pen;
+
+    for (i = j = lastOfs = 0; i < n; i++)
+    {
+        lastOfs = j;
+        j      += start[i];
+    }
+    pts = new wxPoint[j+n-1];
+    for (i = 0; i < j; i++)
+        pts[i] = points[i];
+    for (i = 2; i <= n; i++)
+    {
+        lastOfs -= start[n-i];
+        pts[j++] = pts[lastOfs];
+    }
+
+    pen = GetPen();
+    SetPen(wxPen(*wxBLACK, 0, wxTRANSPARENT));
+    DoDrawPolygon(j, pts, xoffset, yoffset, fillStyle);
+    SetPen(pen);
+    for (i = j = 0; i < n; i++)
+    {
+        DoDrawLines(start[i], pts+j, xoffset, yoffset);
+        j += start[i];
+    }
+    delete pts;
+}
+
 // ----------------------------------------------------------------------------
 // splines
 // ----------------------------------------------------------------------------
@@ -617,7 +660,7 @@ void wxDCBase::DoDrawEllipticArcRot( wxCoord x, wxCoord y,
     }
 
     // first draw the pie without pen, if necessary
-	if( GetBrush() != *wxTRANSPARENT_BRUSH )
+    if( GetBrush() != *wxTRANSPARENT_BRUSH )
     {
         wxPen tempPen( GetPen() );
         SetPen( *wxTRANSPARENT_PEN );
@@ -626,7 +669,7 @@ void wxDCBase::DoDrawEllipticArcRot( wxCoord x, wxCoord y,
     }
 
     // then draw the arc without brush, if necessary
-	if( GetPen() != *wxTRANSPARENT_PEN )
+    if( GetPen() != *wxTRANSPARENT_PEN )
     {
         // without center
         DoDrawLines( n-1, points, 0, 0 );
