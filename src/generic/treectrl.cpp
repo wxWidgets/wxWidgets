@@ -1422,7 +1422,7 @@ void wxTreeCtrl::SetImageList(wxImageList *imageList)
       if(height > m_lineHeight) m_lineHeight = height;
    }
 
-   if (m_lineHeight<40) m_lineHeight+=4; // at least 4 pixels (odd such that a line can be drawn in between)
+   if (m_lineHeight<40) m_lineHeight+=2; // at least 4 pixels (odd such that a line can be drawn in between)
    else m_lineHeight+=m_lineHeight/10;   // otherwise 10% extra spacing
 
 #endif
@@ -2086,7 +2086,7 @@ void wxTreeCtrl::CalculateSize( wxGenericTreeItem *item, wxDC &dc )
 
     int total_h = (image_h > text_h) ? image_h : text_h;
 
-    if (total_h<40) total_h+=4; // at least 4 pixels
+    if (total_h<40) total_h+=2; // at least 4 pixels
     else total_h+=total_h/10;   // otherwise 10% extra spacing
 
     item->SetHeight(total_h);
