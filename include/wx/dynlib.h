@@ -70,7 +70,7 @@
     There are no instances of this class, it simply serves as a
     namespace for its static member functions.
 */
-class wxDllLoader
+class WXDLLEXPORT wxDllLoader
 {
 public:
     /** This function loads a shared library into memory, with libname
@@ -103,7 +103,7 @@ private:
 // wxLibrary
 // ----------------------------------------------------------------------------
 
-class wxLibrary : public wxObject
+class WXDLLEXPORT wxLibrary : public wxObject
 {
 public:
     wxHashTable classTable;
@@ -130,7 +130,7 @@ protected:
 // wxLibraries
 // ----------------------------------------------------------------------------
 
-class wxLibraries
+class WXDLLEXPORT wxLibraries
 {
 public:
     wxLibraries();
