@@ -607,5 +607,19 @@ void wxComboBox::SetSelection(long from, long to)
     }
 }
 
+void wxComboBox::GetSelection(long* from, long* to) const
+{
+    DWORD dwStart, dwEnd;
+    ::SendMessage(GetHwnd(), CB_GETEDITSEL, (WPARAM)&dwStart, (LPARAM)&dwEnd);
+
+    *from = dwStart;
+    *to = dwEnd;
+}
+
+int wxComboBox::GetSelection() const
+{   
+    return wxChoice::GetSelection();    
+}
+
 #endif // wxUSE_COMBOBOX
 
