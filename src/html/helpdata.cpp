@@ -48,17 +48,17 @@ WX_DEFINE_OBJARRAY(wxHtmlBookRecArray)
 //-----------------------------------------------------------------------------
 
 // Reads one line, stores it into buf and returns pointer to new line or NULL.
-static const char* ReadLine(const char *line, char *buf, size_t bufsize)
+static const wxChar* ReadLine(const wxChar *line, wxChar *buf, size_t bufsize)
 {
-    char *writeptr = buf;
-    char *endptr = buf + bufsize - 1;
-    const char *readptr = line;
+    wxChar *writeptr = buf;
+    wxChar *endptr = buf + bufsize - 1;
+    const wxChar *readptr = line;
 
-    while (*readptr != 0 && *readptr != '\r' && *readptr != '\n' &&
+    while (*readptr != 0 && *readptr != _T('\r') && *readptr != _T('\n') &&
            writeptr != endptr) 
         *(writeptr++) = *(readptr++);
     *writeptr = 0;
-    while (*readptr == '\r' || *readptr == '\n')
+    while (*readptr == _T('\r') || *readptr == _T('\n'))
         readptr++;
     if (*readptr == 0)
         return NULL;
@@ -582,8 +582,8 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
         fsys.ChangePathTo(bookFull);
         s = fi->GetStream();
 
-        const char *lineptr;
-        char linebuf[300];
+        const wxChar *lineptr;
+        wxChar linebuf[300];
         wxString tmp;
 
         wxPrivate_ReadString(tmp, s);
@@ -593,19 +593,19 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
         {
             lineptr = ReadLine(lineptr, linebuf, 300);
             
-            for (char *ch = linebuf; *ch != '\0' && *ch != '='; ch++)
+            for (wxChar *ch = linebuf; *ch != '\0' && *ch != '='; ch++)
                *ch = tolower(*ch);
 
-            if (strstr(linebuf, "title=") == linebuf)
-                title = linebuf + strlen("title=");
-            if (strstr(linebuf, "default topic=") == linebuf)
-                start = linebuf + strlen("default topic=");
-            if (strstr(linebuf, "index file=") == linebuf)
-                index = linebuf + strlen("index file=");
-            if (strstr(linebuf, "contents file=") == linebuf)
-                contents = linebuf + strlen("contents file=");
-            if (strstr(linebuf, "charset=") == linebuf)
-                charset = linebuf + strlen("charset=");
+            if (wxStrstr(linebuf, _T("title=")) == linebuf)
+                title = linebuf + wxStrlen(_T("title="));
+            if (wxStrstr(linebuf, _T("default topic=")) == linebuf)
+                start = linebuf + wxStrlen(_T("default topic="));
+            if (wxStrstr(linebuf, _T("index file=")) == linebuf)
+                index = linebuf + wxStrlen(_T("index file="));
+            if (wxStrstr(linebuf, _T("contents file=")) == linebuf)
+                contents = linebuf + wxStrlen(_T("contents file="));
+            if (wxStrstr(linebuf, _T("charset=")) == linebuf)
+                charset = linebuf + wxStrlen(_T("charset="));
         } while (lineptr != NULL);
 
         wxFontEncoding enc;
@@ -812,8 +812,10 @@ void wxSearchEngine::LookFor(const wxString& keyword, bool case_sensitive, bool 
 }
 
 
-
-#define WHITESPACE(c)  (c == ' ' || c == '\n' || c == '\r' || c == '\t')
+static inline bool WHITESPACE(wxChar c)
+{
+    return c == _T(' ') || c == _T('\n') || c == _T('\r') || c == _T('\t');
+}
 
 bool wxSearchEngine::Scan(wxInputStream *stream)
 {
@@ -825,11 +827,11 @@ bool wxSearchEngine::Scan(wxInputStream *stream)
     wxString tmp;
     wxPrivate_ReadString(tmp, stream);
     int lng = tmp.length();
-    const char *buf = tmp.c_str();
+    const wxChar *buf = tmp.c_str();
 
     if (!m_CaseSensitive)
         for (i = 0; i < lng; i++)
-            tmp[(size_t)i] = (char)tolower(tmp[(size_t)i]);
+            tmp[(size_t)i] = (wxChar)wxTolower(tmp[(size_t)i]);
 
     if (m_WholeWords)
     {
