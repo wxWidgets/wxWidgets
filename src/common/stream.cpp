@@ -856,6 +856,7 @@ wxBufferedOutputStream::wxBufferedOutputStream(wxOutputStream& s)
 
 wxBufferedOutputStream::~wxBufferedOutputStream()
 {
+  Sync();
   delete m_o_streambuf;
 }
 
@@ -868,6 +869,7 @@ wxOutputStream& wxBufferedOutputStream::Write(const void *buffer, size_t size)
 
 off_t wxBufferedOutputStream::SeekO(off_t pos, wxSeekMode mode)
 {
+  Sync();
   return m_o_streambuf->Seek(pos, mode);
 }
 

@@ -381,7 +381,8 @@ bool wxImage::LoadFile( const wxString& filename, long type )
     if (wxFileExists(filename))
     {
         wxFileInputStream stream(filename);
-        return LoadFile(stream, type);
+	wxBufferedInputStream bstream( stream );
+        return LoadFile(bstream, type);
     }
     else 
     {
@@ -400,7 +401,8 @@ bool wxImage::LoadFile( const wxString& filename, const wxString& mimetype )
     if (wxFileExists(filename))
     {
         wxFileInputStream stream(filename);
-        return LoadFile(stream, mimetype);
+	wxBufferedInputStream bstream( stream );
+        return LoadFile(bstream, mimetype);
     }
     else 
     {
@@ -419,7 +421,10 @@ bool wxImage::SaveFile( const wxString& filename, int type )
     wxFileOutputStream stream(filename);
 
     if ( stream.LastError() == wxStream_NOERROR )
-        return SaveFile(stream, type);
+    {
+	wxBufferedOutputStream bstream( stream );
+        return SaveFile(bstream, type);
+    }
     else
 #endif // wxUSE_STREAMS
         return FALSE;
@@ -431,7 +436,10 @@ bool wxImage::SaveFile( const wxString& filename, const wxString& mimetype )
     wxFileOutputStream stream(filename);
 
     if ( stream.LastError() == wxStream_NOERROR )
-        return SaveFile(stream, mimetype);
+    {
+	wxBufferedOutputStream bstream( stream );
+        return SaveFile(bstream, mimetype);
+    }
     else
 #endif // wxUSE_STREAMS
         return FALSE;

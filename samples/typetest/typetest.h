@@ -30,6 +30,7 @@ public:
     void DoVariantDemo(wxCommandEvent& event);
     void DoByteOrderDemo(wxCommandEvent& event);
     void DoStreamDemo(wxCommandEvent& event);
+    void DoStreamDemo2(wxCommandEvent& event);
 #if wxUSE_UNICODE
     void DoUnicodeDemo(wxCommandEvent& event);
 #endif
@@ -74,6 +75,7 @@ enum
     TYPES_BYTEORDER,
     TYPES_UNICODE,
     TYPES_STREAM,
+    TYPES_STREAM2,
     TYPES_MIME
 };
 

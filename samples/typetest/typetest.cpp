@@ -60,6 +60,7 @@ BEGIN_EVENT_TABLE(MyApp, wxApp)
 #if wxUSE_UNICODE
     EVT_MENU(TYPES_UNICODE,   MyApp::DoUnicodeDemo)
 #endif
+    EVT_MENU(TYPES_STREAM2, MyApp::DoStreamDemo2)
     EVT_MENU(TYPES_STREAM, MyApp::DoStreamDemo)
     EVT_MENU(TYPES_MIME, MyApp::DoMIMEDemo)
 END_EVENT_TABLE()
@@ -89,6 +90,7 @@ bool MyApp::OnInit()
     test_menu->Append(TYPES_UNICODE, "&Unicode test");
 #endif
     test_menu->Append(TYPES_STREAM, "&Stream test");
+    test_menu->Append(TYPES_STREAM2, "&Stream seek test");
     test_menu->AppendSeparator();
     test_menu->Append(TYPES_MIME, "&MIME database test");
 
@@ -254,6 +256,78 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
     str = data_input.ReadString();
     tmp.Printf( _T("String: %s\n"), str.c_str() );
     textCtrl.WriteText( tmp );
+}
+
+void MyApp::DoStreamDemo2(wxCommandEvent& WXUNUSED(event))
+{
+    wxTextCtrl& textCtrl = * GetTextCtrl();
+
+    textCtrl.Clear();
+    textCtrl << _T("\nTest wxBufferedStream:\n\n");
+
+    char ch,ch2;
+
+    textCtrl.WriteText( "Writing number 0 to 9 to buffered wxFileOutputStream:\n\n" );
+
+    wxFileOutputStream file_output( "test_wx.dat" );
+    wxBufferedOutputStream buf_output( file_output );
+    for (ch = 0; ch < 10; ch++)
+        buf_output.Write( &ch, 1 );
+    buf_output.Sync();
+    
+    wxFileInputStream file_input( "test_wx.dat" );
+    for (ch2 = 0; ch2 < 10; ch2++)
+    {
+        file_input.Read( &ch, 1 );
+	textCtrl.WriteText( (char)(ch + '0') );
+    }
+    textCtrl.WriteText( "\n\n\n" );
+    
+    textCtrl.WriteText( "Writing number 0 to 9 to buffered wxFileOutputStream, then\n" );
+    textCtrl.WriteText( "seeking back to #3 and writing 3:\n\n" );
+
+    wxFileOutputStream file_output2( "test_wx2.dat" );
+    wxBufferedOutputStream buf_output2( file_output2 );
+    for (ch = 0; ch < 10; ch++)
+        buf_output2.Write( &ch, 1 );
+    buf_output2.SeekO( 3 );
+    ch = 3;
+    buf_output2.Write( &ch, 1 );
+    buf_output2.Sync();
+    
+    wxFileInputStream file_input2( "test_wx2.dat" );
+    for (ch2 = 0; ch2 < 10; ch2++)
+    {
+        file_input2.Read( &ch, 1 );
+	textCtrl.WriteText( (char)(ch + '0') );
+    }
+    textCtrl.WriteText( "\n\n\n" );
+    
+    // now append 2000 bytes to file (bigger than buffer)
+    buf_output2.SeekO( 0, wxFromEnd );
+    ch = 1;
+    for (int i = 0; i < 2000; i++)
+       buf_output2.Write( &ch, 1 );
+    buf_output2.Sync();
+    
+    textCtrl.WriteText( "Reading number 0 to 9 from buffered wxFileInputStream, then\n" );
+    textCtrl.WriteText( "seeking back to #3 and reading 3:\n\n" );
+
+    wxFileInputStream file_input3( "test_wx2.dat" );
+    wxBufferedInputStream buf_input3( file_input3 );
+    for (ch2 = 0; ch2 < 10; ch2++)
+    {
+        buf_input3.Read( &ch, 1 );
+	textCtrl.WriteText( (char)(ch + '0') );
+    }
+    for (int j = 0; j < 2000; j++)
+       buf_input3.Read( &ch, 1 );
+    textCtrl.WriteText( "\n" );
+    buf_input3.SeekI( 3 );
+    buf_input3.Read( &ch, 1 );
+    textCtrl.WriteText( (char)(ch + '0') );
+    textCtrl.WriteText( "\n\n\n" );
+    
 }
 
 #if wxUSE_UNICODE
