@@ -90,7 +90,8 @@ public:
   static wxConfigBase *Set(wxConfigBase *pConfig);
     // get the config object, creates it on demand unless DontCreateOnDemand
     // was called
-  static wxConfigBase *Get() { if ( !ms_pConfig ) Create(); return ms_pConfig; }
+  static wxConfigBase *Get(bool createOnDemand = TRUE) 
+       { if ( createOnDemand && (!ms_pConfig) ) Create(); return ms_pConfig; }
     // create a new config object: this function will create the "best"
     // implementation of wxConfig available for the current platform, see
     // comments near definition wxUSE_CONFIG_NATIVE for details. It returns

@@ -17,6 +17,9 @@ wxFileConfig otherwise.
 See \helpref{config overview}{wxconfigoverview} for the descriptions of all
 features of this class.
 
+It is highly recommended to use static functions {\it Get()} and/or {\it Set()}, 
+so please have a \helpref{look at them.}{wxconfigstaticfunctions}
+
 \wxheading{Derived from}
 
 No base class
@@ -75,7 +78,7 @@ physical storage where a wxConfigBase-derived class stores its data.
 
 \latexignore{\rtfignore{\wxheading{Function groups}}}
 
-\membersection{Static functions}
+\membersection{Static functions}\label{wxconfigstaticfunctions}
 
 These functions deal with the "default" config object. Although its usage is
 not at all mandatory it may be convenient to use a global config object
@@ -92,6 +95,11 @@ As it happens, you may even further simplify the procedure described above:
 you may forget about calling {\it Set()}. When {\it Get()} is called and there
 is no current object, it will create one using {\it Create()} function. To
 disable this behaviour {\it DontCreateOnDemand()} is provided.
+
+{\bf Note:} You should use either {\it Set()} or {\it Get()} because wxWindows
+library itself would take advantage of it and could save various information
+in it. For example \helpref{wxFontMapper}{wxfontmapper} or Unix version
+of \helpref{wxFileDialog}{wxfiledialog} have ability to use wxConfig class.
 
 \helpref{Set}{wxconfigbaseset}\\
 \helpref{Get}{wxconfigbaseget}\\
@@ -426,9 +434,10 @@ destructor)
 
 \membersection{wxConfigBase::Get}\label{wxconfigbaseget}
 
-\func{wxConfigBase *}{Get}{\void}
+\func{wxConfigBase *}{Get}{\param{bool }{CreateOnDemand = TRUE}}
 
-Get the current config object. If there is no current object, creates one
+Get the current config object. If there is no current object and
+{\it CreateOnDemand} is TRUE, creates one
 (using {\it Create}) unless DontCreateOnDemand was called previously.
 
 \membersection{wxConfigBase::GetAppName}\label{wxconfigbasegetappname}
