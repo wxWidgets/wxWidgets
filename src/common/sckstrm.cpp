@@ -47,14 +47,12 @@ size_t wxSocketOutputStream::OnSysWrite(const void *buffer, size_t size)
   size_t ret;
 
   ret = m_o_socket->Write((const char *)buffer, size).LastCount();
-  switch (m_o_socket->LastError()) {
-  case GSOCK_NOERROR:
+
+  if (ret > 0)
     m_lasterror = wxStream_NOERROR;
-    break;
-  default:
+  else
     m_lasterror = wxStream_READ_ERR;
-    break;
-  }
+
   return ret;
 
 }
@@ -77,14 +75,12 @@ size_t wxSocketInputStream::OnSysRead(void *buffer, size_t size)
   size_t ret;
 
   ret = m_i_socket->Read((char *)buffer, size).LastCount();
-  switch (m_i_socket->LastError()) {
-  case GSOCK_NOERROR:
+
+  if (ret > 0)
     m_lasterror = wxStream_NOERROR;
-    break;
-  default:
-    m_lasterror = wxStream_WRITE_ERR;
-    break;
-  }
+  else
+    m_lasterror = wxStream_READ_ERR;
+
   return ret;
 }
 
