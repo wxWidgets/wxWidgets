@@ -9,7 +9,7 @@ RULE=bin
 # define exexutable name
 BIN_TARGET=ogledit
 # define library sources
-BIN_SRC=\
+BIN_CPP_SRC=\
   ogledit.cpp\
   doc.cpp\
   view.cpp\
@@ -23,7 +23,7 @@ BIN_OBJ=\
 BIN_LINK=-lwx_ogl_gtk
 
 # additional things needed to compile
-ADD_COMPILE=-I../../src
+ADD_COMPILE=-I../../../src
 
 # include the definitions now
 include ../../../../../template.mak

@@ -18,7 +18,7 @@
 
 #include <wx/wx.h>
 #include <wx/string.h>
-#ifdef __WXGTK__
+#if 0 // def __WXGTK__
 #include <wx/toolbar.h>
 #else
 #include <wx/tbarsmpl.h>
