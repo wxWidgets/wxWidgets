@@ -83,6 +83,12 @@ wxDC::~wxDC(void)
 {
 }
 
+bool wxDC::Ok(void) const 
+{ 
+  wxASSERT_MSG( !ok, "invalid display context" );
+  return m_ok; 
+}
+
 void wxDC::DrawArc( long WXUNUSED(x1), long WXUNUSED(y1), long WXUNUSED(x2), long WXUNUSED(y2), 
   double WXUNUSED(xc), double WXUNUSED(yc) )
 {

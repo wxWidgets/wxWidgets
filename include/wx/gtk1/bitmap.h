@@ -131,7 +131,7 @@ class wxBitmap: public wxObject
 
     GdkPixmap *GetPixmap() const;
     GdkBitmap *GetBitmap() const;
-
+  
     void DestroyImage();
     void RecreateImage();
     void Render();

@@ -66,7 +66,7 @@ class wxDC: public wxObject
     void BeginDrawing(void) {};
     void EndDrawing(void) {};
     
-    virtual bool Ok(void) const { return m_ok; };
+    virtual bool Ok(void) const;
 
     virtual void FloodFill( long x1, long y1, wxColour *col, int style=wxFLOOD_SURFACE ) = 0;
     virtual bool GetPixel( long x1, long y1, wxColour *col ) const = 0;

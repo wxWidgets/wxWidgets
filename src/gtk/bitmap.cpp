@@ -17,7 +17,12 @@
 #include "gdk/gdkprivate.h"
 
 #ifdef USE_GDK_IMLIB
+
 #include "../gdk_imlib/gdk_imlib.h"
+#include "gdk/gdkx.h"        // GDK_DISPLAY
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+
 #endif
 
 //-----------------------------------------------------------------------------
@@ -223,7 +228,8 @@ bool wxBitmap::operator != ( const wxBitmap& bmp )
   
 bool wxBitmap::Ok(void) const
 {
-  return m_refData != NULL;
+  wxASSERT_MSG( m_refData != NULL, "invalid bitmap" );
+  return (m_refData != NULL);
 }
   
 int wxBitmap::GetHeight(void) const
@@ -247,18 +253,27 @@ int wxBitmap::GetDepth(void) const
 void wxBitmap::SetHeight( int height )
 {
   if (!Ok()) return;
+  
+  wxFAIL_MSG( "wxBitmap::SetHeight not implemented" );
+  
   M_BMPDATA->m_height = height;
 }
 
 void wxBitmap::SetWidth( int width )
 {
   if (!Ok()) return;
+  
+  wxFAIL_MSG( "wxBitmap::SetWidth not implemented" );
+  
   M_BMPDATA->m_width = width;
 }
 
 void wxBitmap::SetDepth( int depth )
 {
   if (!Ok()) return;
+  
+  wxFAIL_MSG( "wxBitmap::SetDepth not implemented" );
+  
   M_BMPDATA->m_bpp = depth;
 }
 
@@ -274,6 +289,7 @@ void wxBitmap::SetMask( wxMask *mask )
   if (!Ok()) return;
   
   if (M_BMPDATA->m_mask) delete M_BMPDATA->m_mask;
+  
   M_BMPDATA->m_mask = mask;
 }
 
@@ -298,6 +314,10 @@ void wxBitmap::Resize( int height, int width )
   
   Render();
   
+#else
+  
+  wxFAIL_MSG( "wxBitmap::Resize not implemented without GdkImlib" );
+  
 #endif
 }
 
@@ -312,6 +332,10 @@ bool wxBitmap::SaveFile( const wxString &name, int WXUNUSED(type),
   
   return gdk_imlib_save_image( M_BMPDATA->m_image, WXSTRINGCAST name, (GdkImlibSaveInfo *) NULL );
 
+#else
+  
+  wxFAIL_MSG( "wxBitmap::SaveFile not implemented without GdkImlib" );
+  
 #endif
 
   return FALSE;
@@ -338,6 +362,11 @@ bool wxBitmap::LoadFile( const wxString &name, int WXUNUSED(type) )
   M_BMPDATA->m_bpp = 24; // ?
   
   return TRUE;
+  
+#else
+  
+  wxFAIL_MSG( "wxBitmap::LoadFile not implemented without GdkImlib" );
+  
 #endif
 
   return FALSE;
@@ -352,6 +381,9 @@ wxPalette *wxBitmap::GetPalette(void) const
 GdkPixmap *wxBitmap::GetPixmap(void) const
 {
   if (!Ok()) return (GdkPixmap *) NULL;
+  
+//  if (!M_BMPDATA->m_image) RecreateImage();
+  
   return M_BMPDATA->m_pixmap;
 }
   
@@ -375,6 +407,53 @@ void wxBitmap::DestroyImage(void)
 
 void wxBitmap::RecreateImage(void)
 {
+  if (!Ok()) return;
+  
+#ifdef USE_GDK_IMLIB
+
+  DestroyImage();
+  
+  wxCHECK_RET( M_BMPDATA->m_pixmap != NULL, "invalid bitmap" );
+  
+  long size = (long)(M_BMPDATA->m_width)*(long)(M_BMPDATA->m_height)*(long)3;
+  unsigned char *data = new unsigned char[size];
+  for (long i = 0; i < size; i++) data[i] = 100;
+  
+  GdkImage *image = gdk_image_get( M_BMPDATA->m_pixmap, 0, 0, M_BMPDATA->m_width, M_BMPDATA->m_height );
+  
+  long pos = 0;
+  for (int j = 0; j < M_BMPDATA->m_height; j++)
+  {
+    for (int i = 0; i < M_BMPDATA->m_width; i++)
+    {
+      XColor xcol;
+      xcol.pixel = gdk_image_get_pixel( image, i, j );
+      Colormap cm = ((GdkColormapPrivate*)gdk_imlib_get_colormap())->xcolormap;
+      XQueryColor( gdk_display, cm, &xcol );
+      
+      data[pos] = xcol.red;
+      data[pos+1] = xcol.green;
+      data[pos+2] = xcol.blue;
+      pos += 3;
+    }
+  }
+  
+  wxCHECK_RET( M_BMPDATA->m_pixmap != NULL, "invalid bitmap" );
+  
+  M_BMPDATA->m_image = gdk_imlib_create_image_from_data( 
+     data, (unsigned char*)NULL, M_BMPDATA->m_width, M_BMPDATA->m_height );
+  
+  delete[] data;
+  
+  gdk_image_destroy( image );
+  
+  Render();
+  
+#else
+  
+  wxFAIL_MSG( "wxBitmap::RecreateImage not implemented without GdkImlib" );
+  
+#endif
 }
 
 void wxBitmap::Render(void)
@@ -383,16 +462,36 @@ void wxBitmap::Render(void)
   
 #ifdef USE_GDK_IMLIB
 
+  if (!M_BMPDATA->m_image) RecreateImage();
+  
+  if (M_BMPDATA->m_pixmap)
+  { 
+    gdk_imlib_free_pixmap( M_BMPDATA->m_pixmap );
+    M_BMPDATA->m_pixmap = (GdkPixmap*) NULL;
+  }
+  if (M_BMPDATA->m_mask)
+  {
+    delete M_BMPDATA->m_mask;
+    M_BMPDATA->m_mask = (wxMask*) NULL;
+  }
+  
   gdk_imlib_render( M_BMPDATA->m_image, M_BMPDATA->m_image->rgb_width, M_BMPDATA->m_image->rgb_height );
   M_BMPDATA->m_width = M_BMPDATA->m_image->rgb_width;
   M_BMPDATA->m_height = M_BMPDATA->m_image->rgb_height;
   M_BMPDATA->m_pixmap = gdk_imlib_move_image( M_BMPDATA->m_image );
+  
+  wxCHECK_RET( M_BMPDATA->m_pixmap != NULL, "pixmap rendering failed" ) 
+  
   GdkBitmap *mask = gdk_imlib_move_mask( M_BMPDATA->m_image );
   if (mask)
   {
     M_BMPDATA->m_mask = new wxMask();
     M_BMPDATA->m_mask->m_bitmap = mask;
   }
+  
+#else
+  
+  wxFAIL_MSG( "wxBitmap::Render not implemented without GdkImlib" );
   
 #endif
 }

@@ -150,7 +150,7 @@ bool wxMenuBar::Enabled( int id ) const
 }
 
 //-----------------------------------------------------------------------------
-// wxMenu
+// "activate"
 //-----------------------------------------------------------------------------
 
 static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
@@ -161,7 +161,7 @@ static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
 
   if (!menu->IsEnabled(id)) return;
 
-  wxCommandEvent event( wxEVENT_TYPE_MENU_COMMAND, id );
+  wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, id );
   event.SetEventObject( menu );
   event.SetInt(id );
   
@@ -176,6 +176,38 @@ static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
   wxWindow *win = menu->GetInvokingWindow();
   if (win) win->GetEventHandler()->ProcessEvent( event );
 }
+
+//-----------------------------------------------------------------------------
+// "select"
+//-----------------------------------------------------------------------------
+
+static void gtk_menu_hilight_callback( GtkWidget *widget, wxMenu *menu )
+{
+  int id = menu->FindMenuIdByMenuItem(widget);
+
+  wxASSERT( id != -1 ); // should find it!
+
+  if (!menu->IsEnabled(id)) return;
+
+  wxCommandEvent event( wxEVT_MENU_HIGHLIGHT, id );
+  event.SetEventObject( menu );
+  event.SetInt(id );
+  
+  if (menu->m_callback)
+  {
+     (void) (*(menu->m_callback)) (*menu, event);
+     return;
+  }
+
+  if (menu->GetEventHandler()->ProcessEvent(event)) return;
+
+  wxWindow *win = menu->GetInvokingWindow();
+  if (win) win->GetEventHandler()->ProcessEvent( event );
+}
+
+//-----------------------------------------------------------------------------
+// wxMenu
+//-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxMenuItem,wxObject)
 
@@ -281,6 +313,10 @@ void wxMenu::Append( int id, const wxString &item, const wxString &helpStr, bool
 
   gtk_signal_connect( GTK_OBJECT(menuItem), "activate",
                       GTK_SIGNAL_FUNC(gtk_menu_clicked_callback),
+                      (gpointer*)this );
+
+  gtk_signal_connect( GTK_OBJECT(menuItem), "select",
+                      GTK_SIGNAL_FUNC(gtk_menu_hilight_callback),
                       (gpointer*)this );
 
   gtk_menu_append( GTK_MENU(m_menu), menuItem );

@@ -4,11 +4,20 @@
 If you compile wxWindows on Unix for the first time and don't like
 to read install instructions just do (in the base dir):
 
-./configure --with-gtk --with-shared --without-threads
+./configure --without-threads
 make
 
-and drink 10 coffees.
+and drink 10 coffees. Then you may log in as root and type
 
+make install
+
+You can leave out the --without-threads option if you have a NEW
+Linux distribution based on glibc (e.g. RedHat 5.1) or any other
+Unix that comes with Posix threads or SGI threads.
+
+Now create your super-application myfoo.app and compile anywhere with
+
+gcc -o -c myfoo.cpp -I/usr/local/include -L/usr/local/lib -lwx_gtk
 
 * General
 -----------------------
@@ -141,8 +150,10 @@ not been defined. And Make in some circumstances as well...
 * General options
 -------------------
 
-Obviously, you have to choose a toolkit. You must do this by
-running configure with either of
+Normally, you won't have to choose a toolkit, because when
+you download wxGTK, it will default to --with-gtk etc. But
+if you use all of our CVS repository you have to choose a 
+toolkit. You must do this by running configure with either of:
 
         --with-gtk               Use the GIMP ToolKit (GTK)
 	
@@ -155,7 +166,7 @@ The following options handle the kind of library you want to build.
 
 	--without-threads       Compile without thread support.
 
-	--with-shared           Create shared libraries.
+	--without-shared        Do not create shared libraries.
 
 	--without-optimise	Do not optimise the code.
 
@@ -191,25 +202,21 @@ implemented.
 -------------
 
 The following must be done in the base directory (e.g. ~/wxGTK
-or ~/wxWin)
-
-First you have to create all makefiles in all subdirectories:
-
-	make Makefiles
+or ~/wxWin or whatever)
 
 Dependencies are generated automatically using
 
 	make depend
 	
-(For some reason, this doesn't seem to work completely.)
+(For some reason, this doesn't seem to work.)
 
 Now the makefiles are created you can compile everything is as simple
 as typing:
 
 	make
 
-make yourself some coffee, as it will try to compile
-ALL the files in this distribution.
+make yourself some coffee, as it will try to compile ALL the 
+files in this distribution.
 
 if you want to be more selective:
 
@@ -219,6 +226,13 @@ if you want to be more selective:
 	make other	will build the other samples
 	make user	will build the files in the directory other
 
+Then you may install the library and it's header files under
+/usr/local/include/wx and /usr/local/lib respectively. You
+have to log in as root (i.e. run "su" and enter the root
+password) and type
+
+        make install	
+	
 Depending on the configuration of some files, the libraries
 and binaries will be placed in different directories.
 The "global" binaries and libraries will be placed in:
@@ -242,8 +256,10 @@ will do the work for you.
 * Creating a new Project
 --------------------------
 
-I propose to put all contributed programs in the directory
-"~/wxWin/user", with a directory of its own.
+There are two ways to create your own project. The first creates
+a project within the source code directories of wxWindows: In this
+case I propose to put all contributed programs in the directory
+"/user", with a directory of its own.
 
 This directory then should include the following files:
 
@@ -257,6 +273,13 @@ Makefile.in	(This is the base application-Makefile template, from
 
 put ALL your source code along with all the other stuff you need for
 your application in this directory (subdirectories are welcome).
+
+The other way uses the installed libraries and header files in 
+/usr/local/include/wx and /usr/local/lib. In this case, just
+compile your program like this:
+
+gcc -o -c myfoo.cpp -I/usr/local/include -L/usr/local/lib -lwx_gtk
+
 
 ** Something about Makefiles
 ------------------------------

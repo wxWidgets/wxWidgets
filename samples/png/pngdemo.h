@@ -35,6 +35,7 @@ class MyFrame: public wxFrame
     bool OnClose(void);
     void OnActivate(bool) {}
     void OnLoadFile(wxCommandEvent& event);
+    void OnSaveFile(wxCommandEvent& event);
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 DECLARE_EVENT_TABLE()
@@ -54,4 +55,5 @@ DECLARE_EVENT_TABLE()
 #define PNGDEMO_QUIT       100
 #define PNGDEMO_ABOUT      101
 #define PNGDEMO_LOAD_FILE  102
+#define PNGDEMO_SAVE_FILE  103
 

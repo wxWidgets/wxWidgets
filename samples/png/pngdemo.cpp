@@ -52,6 +52,7 @@ bool MyApp::OnInit(void)
   wxMenu *help_menu = new wxMenu;
 
   file_menu->Append(PNGDEMO_LOAD_FILE, "&Load file",                "Load file");
+  file_menu->Append(PNGDEMO_SAVE_FILE, "&Save file",                "Save file");
   file_menu->Append(PNGDEMO_QUIT, "E&xit",                "Quit program");
   help_menu->Append(PNGDEMO_ABOUT, "&About",              "About PNG demo");
 
@@ -80,6 +81,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(PNGDEMO_QUIT,      MyFrame::OnQuit)
     EVT_MENU(PNGDEMO_ABOUT,     MyFrame::OnAbout)
     EVT_MENU(PNGDEMO_LOAD_FILE, MyFrame::OnLoadFile)
+    EVT_MENU(PNGDEMO_SAVE_FILE, MyFrame::OnSaveFile)
 END_EVENT_TABLE()
 
 // Define my frame constructor
@@ -98,6 +100,33 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     (void)wxMessageBox("PNG demo\nJulian Smart (c) 1998",
             "About PNG Demo", wxOK);
+}
+
+void MyFrame::OnSaveFile(wxCommandEvent& WXUNUSED(event))
+{
+  char *f = wxFileSelector( "Save Image", (const char *)NULL, (const char *)NULL, 
+                            "png", "PNG files (*.png)|*.png" );
+
+  if (!f)  return;
+  
+  wxBitmap *backstore = new wxBitmap( 150, 150 );
+  
+  wxMemoryDC memDC;
+  memDC.SelectObject( *backstore );
+  memDC.Clear();
+  memDC.SetBrush( *wxBLACK_BRUSH );
+  memDC.SetPen( *wxWHITE_PEN );
+  memDC.DrawRectangle( 0, 0, 150, 150 );
+  memDC.SetPen( *wxBLACK_PEN );
+  memDC.DrawLine( 0, 0, 0, 10 );
+  memDC.SetTextForeground( *wxWHITE );
+  memDC.DrawText( "This is a memory dc.", 10, 10 );
+  
+  memDC.SelectObject( wxNullBitmap );
+  
+  backstore->SaveFile( f, wxBITMAP_TYPE_PNG, (wxPalette*)NULL );
+  
+  delete backstore;
 }
 
 void MyFrame::OnLoadFile(wxCommandEvent& WXUNUSED(event))

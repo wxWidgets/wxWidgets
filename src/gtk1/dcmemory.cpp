@@ -14,6 +14,10 @@
 
 #include "wx/dcmemory.h"
 
+#ifdef USE_GDK_IMLIB
+#include "../gdk_imlib/gdk_imlib.h"
+#endif
+
 //-----------------------------------------------------------------------------
 // wxMemoryDC
 //-----------------------------------------------------------------------------
@@ -23,13 +27,23 @@ IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC,wxPaintDC)
 wxMemoryDC::wxMemoryDC(void)
 {
   m_ok = FALSE;
+  
+#ifdef USE_GDK_IMLIB
+  m_cmap = gdk_imlib_get_colormap();
+#else
   m_cmap = gdk_colormap_get_system();
+#endif
 }
 
 wxMemoryDC::wxMemoryDC( wxDC *WXUNUSED(dc) )
 {
   m_ok = FALSE;
+  
+#ifdef USE_GDK_IMLIB
+  m_cmap = gdk_imlib_get_colormap();
+#else
   m_cmap = gdk_colormap_get_system();
+#endif
 }
 
 wxMemoryDC::~wxMemoryDC(void)
