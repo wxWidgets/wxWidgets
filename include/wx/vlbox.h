@@ -189,6 +189,8 @@ public:
     void SetSelectionBackground(const wxColour& col);
 
 
+    virtual bool CanApplyParentThemeBackground() const { return false; }
+    
 protected:
     // the derived class must implement this function to actually draw the item
     // with the given index on the provided DC

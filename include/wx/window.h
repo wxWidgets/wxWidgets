@@ -394,6 +394,13 @@ public:
     virtual void SetThemeEnabled(bool enableTheme) { m_themeEnabled = enableTheme; }
     virtual bool GetThemeEnabled() const { return m_themeEnabled; }
 
+        // Returns true if this class should have the background colour
+        // changed to match the parent window's theme.  For example when a
+        // page is added to a notebook it and it's children may need to have
+        // the colours adjusted depending on the current theme settings, but
+        // not all windows/controls can do this without looking wrong.
+    virtual bool CanApplyParentThemeBackground() const { return false; }
+    
         // returns true if this window should inherit its parent colours on
         // creation
     virtual bool ShouldInheritColours() const { return false; }

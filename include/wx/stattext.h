@@ -12,8 +12,9 @@ class WXDLLEXPORT wxStaticTextBase : public wxControl
 public:
     wxStaticTextBase() { }
 
-    // overriden base cirtuals
-    virtual bool AcceptsFocus() const { return FALSE; }
+    // overriden base virtuals
+    virtual bool AcceptsFocus() const { return false; }
+    virtual bool CanApplyParentThemeBackground() const { return true; }
 
 private:
     DECLARE_NO_COPY_CLASS(wxStaticTextBase)

@@ -966,24 +966,15 @@ void wxNotebook::ApplyThemeBackground(wxWindow*, const wxColour&)
 #endif
 {
 #if wxUSE_UXTHEME
-    // Don't set the background for buttons since this will
-    // switch it into ownerdraw mode
+    // Special case for wxButton: Don't set the background for buttons since
+    // this will switch it into ownerdraw mode
     if (window->IsKindOf(CLASSINFO(wxButton)) && !window->IsKindOf(CLASSINFO(wxBitmapButton)))
         // This is essential, otherwise you'll see dark grey
         // corners in the buttons.
         ((wxButton*)window)->wxControl::SetBackgroundColour(colour);
-    else if (window->IsKindOf(CLASSINFO(wxStaticText)) ||
-             window->IsKindOf(CLASSINFO(wxStaticBox)) ||
-             window->IsKindOf(CLASSINFO(wxStaticLine)) ||
-             window->IsKindOf(CLASSINFO(wxRadioButton)) ||
-             window->IsKindOf(CLASSINFO(wxRadioBox)) ||
-             window->IsKindOf(CLASSINFO(wxCheckBox)) ||
-             window->IsKindOf(CLASSINFO(wxBitmapButton)) ||
-             window->IsKindOf(CLASSINFO(wxSlider)) ||
-             window->IsKindOf(CLASSINFO(wxPanel)) ||
-             (window->IsKindOf(CLASSINFO(wxNotebook)) && (window != this)) ||
-             window->IsKindOf(CLASSINFO(wxScrolledWindow))
-        )
+
+    // for all other classes let them decide
+    else if ((window != this) && window->CanApplyParentThemeBackground())
     {
         window->SetBackgroundColour(colour);
     }

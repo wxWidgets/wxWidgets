@@ -106,6 +106,8 @@ public:
         return HasFlag(wxCHK_ALLOW_3RD_STATE_FOR_USER);
     }
 
+    virtual bool CanApplyParentThemeBackground() const { return true; }
+
 protected:
     virtual void DoSet3StateValue(wxCheckBoxState WXUNUSED(state)) { wxFAIL; }
 

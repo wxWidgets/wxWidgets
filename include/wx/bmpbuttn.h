@@ -61,6 +61,8 @@ public:
     int GetMarginX() const { return m_marginX; }
     int GetMarginY() const { return m_marginY; }
 
+    virtual bool CanApplyParentThemeBackground() const { return true; }
+
 protected:
     // function called when any of the bitmaps changes
     virtual void OnSetBitmap() { }

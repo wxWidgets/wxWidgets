@@ -80,6 +80,9 @@ public:
     virtual int GetSelStart() const { return GetMax(); }
     virtual void SetSelection(int WXUNUSED(min), int WXUNUSED(max)) { }
 
+
+    virtual bool CanApplyParentThemeBackground() const { return true; }
+
 private:
     DECLARE_NO_COPY_CLASS(wxSliderBase)
 };

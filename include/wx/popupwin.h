@@ -46,6 +46,8 @@ public:
     virtual void Position(const wxPoint& ptOrigin,
                           const wxSize& size);
 
+    virtual bool IsTopLevel() const { return TRUE; }
+
     DECLARE_NO_COPY_CLASS(wxPopupWindowBase)
 };
 

@@ -198,6 +198,8 @@ public:
     void SelectAll();
 #endif
 
+    virtual bool CanApplyParentThemeBackground() const { return false; }
+    
 protected:
     void Init();
 

@@ -86,6 +86,8 @@ public:
     virtual bool ProvidesBackground() const { return TRUE; }
 #endif
 
+    virtual bool CanApplyParentThemeBackground() const { return true; }
+    
     WX_DECLARE_CONTROL_CONTAINER();
 
 protected:

@@ -47,7 +47,8 @@ public:
     static int GetDefaultSize() { return 2; }
 
     // overriden base class virtuals
-    virtual bool AcceptsFocus() const { return FALSE; }
+    virtual bool AcceptsFocus() const { return false; }
+    virtual bool CanApplyParentThemeBackground() const { return true; }
 
 protected:
     // set the right size for the right dimension
