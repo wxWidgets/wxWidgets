@@ -231,15 +231,8 @@ public:
     void UpdateUI(wxEvtHandler* source = (wxEvtHandler*)NULL);
 
     // called when the menu is attached/detached to/from a menu bar
-    void Attach(wxMenuBarBase *menubar)
-    {
-        // use Detach() instead!
-        wxASSERT_MSG( menubar, _T("menu can't be attached to NULL menubar") );
-
-        m_menuBar = (wxMenuBar *)menubar;
-    }
-
-    void Detach() { m_menuBar = NULL; }
+    virtual void Attach(wxMenuBarBase *menubar);
+    virtual void Detach();
 
     // is the menu attached to a menu bar (or is it a popup one)?
     bool IsAttached() const { return m_menuBar != NULL; }
@@ -272,6 +265,12 @@ public:
     // pos != NULL
     wxMenuItem *FindChildItem(int id, size_t *pos = NULL) const;
 
+    // called to generate a wxCommandEvent, return TRUE if it was processed,
+    // FALSE otherwise
+    //
+    // the checked parameter may have boolean value or -1 for uncheckable items
+    bool SendEvent(int id, int checked = -1);
+
 protected:
     // virtuals to override in derived classes
     // ---------------------------------------
@@ -289,7 +288,9 @@ protected:
     // common part of all ctors
     void Init(long style);
 
-protected:
+    // associate the submenu with this menu
+    void AddSubMenu(wxMenu *submenu);
+
     wxMenuBar     *m_menuBar;           // menubar we belong to or NULL
     wxMenu        *m_menuParent;        // parent menu or NULL
 

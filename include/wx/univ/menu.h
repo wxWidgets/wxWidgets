@@ -64,6 +64,10 @@ public:
     // dismiss the menu
     void Dismiss();
 
+    // override the base class methods to connect/disconnect event handlers
+    virtual void Attach(wxMenuBarBase *menubar);
+    virtual void Detach();
+
 protected:
     // implement base class virtuals
     virtual bool DoAppend(wxMenuItem *item);
@@ -71,10 +75,7 @@ protected:
     virtual wxMenuItem *DoRemove(wxMenuItem *item);
 
     // called by wxPopupMenuWindow when the window is hidden
-    void OnDismiss();
-
-    // draw the menu
-    void DoDraw(wxControlRenderer *renderer);
+    void OnDismiss(bool dismissParent);
 
     // return true if the menu is currently shown on screen
     bool IsShown() const;
@@ -106,7 +107,7 @@ private:
     // is the popup window currently shown?
     bool m_isShown;
 
-    // it calls our DoDraw()
+    // it calls out OnDismiss()
     friend wxPopupMenuWindow;
 
     DECLARE_DYNAMIC_CLASS(wxMenu)
@@ -139,7 +140,7 @@ public:
     virtual void Detach();
 
     // called by wxMenu when it is dismissed
-    void OnDismiss();
+    void OnDismissMenu(bool dismissMenuBar = FALSE);
 
 protected:
     // common part of all ctors
@@ -150,6 +151,10 @@ protected:
     void OnLeftDown(wxMouseEvent& event);
     void OnMouseMove(wxMouseEvent& event);
     void OnKeyDown(wxKeyEvent& event);
+
+    // called when the menu bar loses mouse capture - it is not hidden unlike
+    // menus, but it doesn't have modal status any longer
+    void OnDismiss();
 
     // draw the menubar
     virtual void DoDraw(wxControlRenderer *renderer);

@@ -397,6 +397,9 @@ void wxWindowMSW::SetFocus()
                 wxLogApiError(_T("SetFocus"), dwRes);
             }
         }
+
+        HWND hwndFocus = ::GetFocus();
+        wxASSERT_MSG( hwndFocus == hWnd, _T("SetFocus() didn't work?") );
     }
 }
 

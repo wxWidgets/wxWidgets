@@ -60,9 +60,6 @@ public:
     }
 #endif // wxUSE_MENU_CALLBACK
 
-    // MSW-specific
-    bool ProcessCommand(wxCommandEvent& event);
-
     // implementation only from now on
     // -------------------------------
 

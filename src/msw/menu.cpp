@@ -433,48 +433,14 @@ bool wxMenu::MSWCommand(WXUINT WXUNUSED(param), WXWORD id)
     // NB: VC++ generates wrong assembler for `if ( id != idMenuTitle )'!!
     if ( id != (WXWORD)idMenuTitle )
     {
-        wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED);
-        event.SetEventObject( this );
-        event.SetId( id );
-
         // VZ: previosuly, the command int was set to id too which was quite
         //     useless anyhow (as it could be retrieved using GetId()) and
         //     uncompatible with wxGTK, so now we use the command int instead
         //     to pass the checked status
-        event.SetInt(::GetMenuState(GetHmenu(), id, MF_BYCOMMAND) & MF_CHECKED);
-
-        ProcessCommand(event);
+        SendEvent(id, ::GetMenuState(GetHmenu(), id, MF_BYCOMMAND) & MF_CHECKED);
     }
 
     return TRUE;
-}
-
-bool wxMenu::ProcessCommand(wxCommandEvent & event)
-{
-    bool processed = FALSE;
-
-#if wxUSE_MENU_CALLBACK
-    // Try a callback
-    if (m_callback)
-    {
-        (void)(*(m_callback))(*this, event);
-        processed = TRUE;
-    }
-#endif // wxUSE_MENU_CALLBACK
-
-    // Try the menu's event handler
-    if ( !processed && GetEventHandler())
-    {
-        processed = GetEventHandler()->ProcessEvent(event);
-    }
-
-    // Try the window the menu was popped up from (and up through the
-    // hierarchy)
-    wxWindow *win = GetInvokingWindow();
-    if ( !processed && win )
-        processed = win->GetEventHandler()->ProcessEvent(event);
-
-    return processed;
 }
 
 // ---------------------------------------------------------------------------

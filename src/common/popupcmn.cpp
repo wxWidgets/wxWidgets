@@ -179,15 +179,20 @@ void wxPopupTransientWindow::Popup(wxWindow *winFocus)
     if ( children.GetCount() )
     {
         m_child = children.GetFirst()->GetData();
-        m_child->CaptureMouse();
-        m_child->PushEventHandler(new wxPopupWindowHandler(this));
     }
+    else
+    {
+        m_child = this;
+    }
+
+    m_child->CaptureMouse();
+    m_child->PushEventHandler(new wxPopupWindowHandler(this));
 
     Show();
 
     m_focus = winFocus ? winFocus : this;
-    m_focus->SetFocus();
     m_focus->PushEventHandler(new wxPopupFocusHandler(this));
+    m_focus->SetFocus();
 }
 
 void wxPopupTransientWindow::Dismiss()
@@ -306,13 +311,6 @@ void wxPopupWindowHandler::OnLeftDown(wxMouseEvent& event)
         event2.m_y = pos.y;
 
         (void)sbar->GetEventHandler()->ProcessEvent(event2);
-
-        if ( wxWindow::GetCapture() != win )
-        {
-            // scrollbar has captured the mouse so we need to ensure it
-            // will be restored to us when it releases it
-            wxWindow::SetStickyCapture(win);
-        }
     }
 }
 

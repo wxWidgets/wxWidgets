@@ -232,18 +232,35 @@ void wxMenuBase::Init(long style)
 wxMenuBase::~wxMenuBase()
 {
     // nothing to do, wxMenuItemList dtor will delete the menu items.
-       // Actually, in GTK, the submenus have to get deleted first.
+
+    // Actually, in GTK, the submenus have to get deleted first.
 }
 
 // ----------------------------------------------------------------------------
 // wxMenu item adding/removing
 // ----------------------------------------------------------------------------
 
+void wxMenuBase::AddSubMenu(wxMenu *submenu)
+{
+    wxCHECK_RET( submenu, _T("can't add a NULL submenu") );
+
+    if ( m_menuBar )
+    {
+        submenu->Attach(m_menuBar);
+    }
+
+    submenu->SetParent((wxMenu *)this);
+}
+
 bool wxMenuBase::DoAppend(wxMenuItem *item)
 {
     wxCHECK_MSG( item, FALSE, wxT("invalid item in wxMenu::Append()") );
 
     m_items.Append(item);
+    if ( item->IsSubMenu() )
+    {
+        AddSubMenu(item->GetSubMenu());
+    }
 
     return TRUE;
 }
@@ -273,6 +290,10 @@ bool wxMenuBase::DoInsert(size_t pos, wxMenuItem *item)
     wxCHECK_MSG( node, FALSE, wxT("invalid index in wxMenu::Insert()") );
 
     m_items.Insert(node, item);
+    if ( item->IsSubMenu() )
+    {
+        AddSubMenu(item->GetSubMenu());
+    }
 
     return TRUE;
 }
@@ -432,7 +453,7 @@ wxMenuItem *wxMenuBase::FindChildItem(int id, size_t *ppos) const
 }
 
 // ----------------------------------------------------------------------------
-// wxMenu helpers
+// wxMenu helpers used by derived classes
 // ----------------------------------------------------------------------------
 
 // Update a menu and all submenus recursively. source is the object that has
@@ -476,6 +497,64 @@ void wxMenuBase::UpdateUI(wxEvtHandler* source)
 
         node = node->GetNext();
     }
+}
+
+bool wxMenuBase::SendEvent(int id, int checked)
+{
+    wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED, id);
+    event.SetEventObject(this);
+    event.SetInt(checked);
+
+    bool processed = FALSE;
+
+#if wxUSE_MENU_CALLBACK
+    // Try a callback
+    if (m_callback)
+    {
+        (void)(*(m_callback))(*this, event);
+        processed = TRUE;
+    }
+#endif // wxUSE_MENU_CALLBACK
+
+    // Try the menu's event handler
+    if ( !processed && GetEventHandler() )
+    {
+        processed = GetEventHandler()->ProcessEvent(event);
+    }
+
+    // Try the window the menu was popped up from (and up through the
+    // hierarchy)
+    if ( !processed )
+    {
+        wxWindow *win = GetInvokingWindow();
+        if ( win )
+            processed = win->GetEventHandler()->ProcessEvent(event);
+    }
+
+    return processed;
+}
+
+// ----------------------------------------------------------------------------
+// wxMenu attaching/detaching to/from menu bar
+// ----------------------------------------------------------------------------
+
+void wxMenuBase::Attach(wxMenuBarBase *menubar)
+{
+    // use Detach() instead!
+    wxASSERT_MSG( menubar, _T("menu can't be attached to NULL menubar") );
+
+    // use IsAttached() to prevent this from happening
+    wxASSERT_MSG( !m_menuBar, _T("attaching menu twice?") );
+
+    m_menuBar = (wxMenuBar *)menubar;
+}
+
+void wxMenuBase::Detach()
+{
+    // use IsAttached() to prevent this from happening
+    wxASSERT_MSG( m_menuBar, _T("detaching unattached menu?") );
+
+    m_menuBar = NULL;
 }
 
 // ----------------------------------------------------------------------------

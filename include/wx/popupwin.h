@@ -79,7 +79,7 @@ protected:
     // common part of all ctors
     void Init();
 
-    // this is called when the popup is abotu disappeared because of anything
+    // this is called when the popup is disappeared because of anything
     // else but direct call to Dismiss()
     virtual void OnDismiss();
 

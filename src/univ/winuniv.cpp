@@ -943,11 +943,26 @@ bool wxWindow::SetFont(const wxFont& font)
 // mouse capture
 // ----------------------------------------------------------------------------
 
-wxWindow *wxWindow::ms_winCaptureNext = NULL;
-
-/* static */ void wxWindow::SetStickyCapture(wxWindow *win)
+struct WXDLLEXPORT wxWindowNext
 {
-    ms_winCaptureNext = win;
+    wxWindow *win;
+    wxWindowNext *next;
+} *wxWindow::ms_winCaptureNext = NULL;
+
+void wxWindow::CaptureMouse()
+{
+    wxWindow *winOld = GetCapture();
+    if ( winOld )
+    {
+        // save it on stack
+        wxWindowNext *item = new wxWindowNext;
+        item->win = winOld;
+        item->next = ms_winCaptureNext;
+        ms_winCaptureNext = item;
+    }
+    //else: no mouse capture to save
+
+    wxWindowNative::CaptureMouse();
 }
 
 void wxWindow::ReleaseMouse()
@@ -956,9 +971,12 @@ void wxWindow::ReleaseMouse()
 
     if ( ms_winCaptureNext )
     {
-        ms_winCaptureNext->CaptureMouse();
+        ms_winCaptureNext->win->CaptureMouse();
 
-        ms_winCaptureNext = NULL;
+        wxWindowNext *item = ms_winCaptureNext;
+        ms_winCaptureNext = item->next;
+        delete item;
     }
+    //else: stack is empty, no previous capture
 }
 

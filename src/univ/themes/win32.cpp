@@ -104,6 +104,7 @@ public:
         Arrow_Normal,
         Arrow_Disabled,
         Arrow_Pressed,
+        Arrow_Inversed,
         Arrow_StateMax
     };
 
@@ -234,17 +235,17 @@ public:
                                  const wxString& label,
                                  int flags = 0,
                                  int indexAccel = -1);
-    virtual wxCoord DrawMenuItem(wxDC& dc,
-                                 wxCoord y,
-                                 const wxMenuGeometryInfo& geometryInfo,
-                                 const wxString& label,
-                                 const wxString& accel,
-                                 const wxBitmap& bitmap = wxNullBitmap,
-                                 int flags = 0,
-                                 int indexAccel = -1);
-    virtual wxCoord DrawMenuSeparator(wxDC& dc,
-                                      wxCoord y,
-                                      const wxMenuGeometryInfo& geomInfo);
+    virtual void DrawMenuItem(wxDC& dc,
+                              wxCoord y,
+                              const wxMenuGeometryInfo& geometryInfo,
+                              const wxString& label,
+                              const wxString& accel,
+                              const wxBitmap& bitmap = wxNullBitmap,
+                              int flags = 0,
+                              int indexAccel = -1);
+    virtual void DrawMenuSeparator(wxDC& dc,
+                                   wxCoord y,
+                                   const wxMenuGeometryInfo& geomInfo);
 
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
                                  wxBitmap *bmpPressed,
@@ -524,6 +525,44 @@ private:
 // ----------------------------------------------------------------------------
 // standard bitmaps
 // ----------------------------------------------------------------------------
+
+// menu bitmaps
+
+static const char *menu_checked_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"9 9 2 1",
+"w c None",
+"b c black",
+/* pixels */
+"wwwwwwwww",
+"wwwwwwwbw",
+"wwwwwwbbw",
+"wbwwwbbbw",
+"wbbwbbbww",
+"wbbbbbwww",
+"wwbbbwwww",
+"wwwbwwwww",
+"wwwwwwwww"
+};
+
+static const char *menu_checked_inversed_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"9 9 2 1",
+"w c None",
+"b c white",
+/* pixels */
+"wwwwwwwww",
+"wwwwwwwbw",
+"wwwwwwbbw",
+"wbwwwbbbw",
+"wbbwbbbww",
+"wbbbbbwww",
+"wwbbbwwww",
+"wwwbwwwww",
+"wwwwwwwww"
+};
+
+// checkbox and radiobox bitmaps below
 
 static const char *checked_xpm[] = {
 /* columns rows colors chars-per-pixel */
@@ -1053,7 +1092,9 @@ wxWin32Renderer::wxWin32Renderer(const wxColourScheme *scheme)
     static const size_t ARROW_LENGTH = 4;
 
     wxMask *mask;
-    wxMemoryDC dcNormal, dcDisabled;
+    wxMemoryDC dcNormal,
+               dcDisabled,
+               dcInverse;
     for ( size_t n = 0; n < Arrow_Max; n++ )
     {
         bool isVertical = n > Arrow_Right;
@@ -1176,6 +1217,21 @@ wxWin32Renderer::wxWin32Renderer(const wxColourScheme *scheme)
                 dcDisabled.DrawLine(++x1, y1, x2, ++y2);
                 break;
 
+        }
+
+        // create the inversed bitmap but only for the right arrow as we only
+        // use it for the menus
+        if ( n == Arrow_Right )
+        {
+            m_bmpArrows[Arrow_Inversed][n].Create(w, h);
+            dcInverse.SelectObject(m_bmpArrows[Arrow_Inversed][n]);
+            dcInverse.Clear();
+            dcInverse.Blit(0, 0, w, h,
+                          &dcNormal, 0, 0,
+                          wxXOR);
+
+            mask = new wxMask(m_bmpArrows[Arrow_Inversed][n], *wxWHITE);
+            m_bmpArrows[Arrow_Inversed][n].SetMask(mask);
         }
 
         dcNormal.SelectObject(wxNullBitmap);
@@ -2306,14 +2362,23 @@ private:
 };
 
 // FIXME: all constants are hardcoded but shouldn't be
-static const wxCoord MENU_LEFT_MARGIN = 16;
+static const wxCoord MENU_LEFT_MARGIN = 9;
 static const wxCoord MENU_RIGHT_MARGIN = 18;
 static const wxCoord MENU_VERT_MARGIN = 3;
+
+// the margin around bitmap/check marks (on each side)
+static const wxCoord MENU_BMP_MARGIN = 2;
+
+// the margin between the labels and accel strings
+static const wxCoord MENU_ACCEL_MARGIN = 8;
 
 // the separator height in pixels: in fact, strangely enough, the real height
 // is 2 but Windows adds one extra pixel in the bottom margin, so take it into
 // account here
 static const wxCoord MENU_SEPARATOR_HEIGHT = 3;
+
+// the size of the standard checkmark bitmap
+static const wxCoord MENU_CHECK_SIZE = 9;
 
 void wxWin32Renderer::DrawMenuBarItem(wxDC& dc,
                                       const wxRect& rectOrig,
@@ -2341,28 +2406,55 @@ void wxWin32Renderer::DrawMenuBarItem(wxDC& dc,
               wxALIGN_CENTRE, indexAccel);
 }
 
-wxCoord wxWin32Renderer::DrawMenuItem(wxDC& dc,
-                                      wxCoord y,
-                                      const wxMenuGeometryInfo& gi,
-                                      const wxString& label,
-                                      const wxString& accel,
-                                      const wxBitmap& bitmap,
-                                      int flags,
-                                      int indexAccel)
+void wxWin32Renderer::DrawMenuItem(wxDC& dc,
+                                   wxCoord y,
+                                   const wxMenuGeometryInfo& gi,
+                                   const wxString& label,
+                                   const wxString& accel,
+                                   const wxBitmap& bitmap,
+                                   int flags,
+                                   int indexAccel)
 {
     const wxWin32MenuGeometryInfo& geometryInfo =
         (const wxWin32MenuGeometryInfo&)gi;
 
-    // draw the bitmap
+    wxRect rect;
+    rect.x = 0;
+    rect.y = y;
+    rect.width = geometryInfo.GetSize().x;
+    rect.height = geometryInfo.GetItemHeight();
 
-    // TODO
+    // draw the selected item specially
+    wxDCTextColourChanger colChanger(dc);
+    if ( flags & wxCONTROL_SELECTED )
+    {
+        colChanger.Set(wxSCHEME_COLOUR(m_scheme, HIGHLIGHT_TEXT));
+
+        wxColour colBg = wxSCHEME_COLOUR(m_scheme, HIGHLIGHT);
+        dc.SetBrush(wxBrush(colBg, wxSOLID));
+        dc.SetPen(wxPen(colBg, 0, wxSOLID));
+        dc.DrawRectangle(rect);
+    }
+
+    // draw the bitmap: use the bitmap provided or the standard checkmark for
+    // the checkable items
+    wxBitmap bmp = bitmap;
+    if ( !bmp.Ok() && (flags & wxCONTROL_CHECKED) )
+    {
+        bmp = wxBitmap(flags & wxCONTROL_SELECTED
+                        ? menu_checked_inversed_xpm
+                        : menu_checked_xpm);
+    }
+
+    if ( bmp.Ok() )
+    {
+        rect.SetRight(geometryInfo.GetLabelOffset());
+        wxControlRenderer::DrawBitmap(dc, bmp, rect);
+    }
 
     // draw the label
-    wxRect rect;
     rect.x = geometryInfo.GetLabelOffset();
-    rect.y = y;
     rect.SetRight(geometryInfo.GetAccelOffset());
-    rect.height = geometryInfo.GetItemHeight();
 
     DrawLabel(dc, label, rect, flags, wxALIGN_CENTRE_VERTICAL, indexAccel);
 
@@ -2370,24 +2462,31 @@ wxCoord wxWin32Renderer::DrawMenuItem(wxDC& dc,
     rect.x = geometryInfo.GetAccelOffset();
     rect.SetRight(geometryInfo.GetSize().x);
 
-    DrawLabel(dc, accel, rect, flags, wxALIGN_CENTRE_VERTICAL, indexAccel);
+    // no accel index here
+    DrawLabel(dc, accel, rect, flags, wxALIGN_CENTRE_VERTICAL);
 
     // draw the submenu indicator
     if ( flags & wxCONTROL_ISSUBMENU )
     {
-        // TODO
-    }
+        rect.x = rect.GetRight() - MENU_RIGHT_MARGIN;
 
-    return rect.height + 2*MENU_VERT_MARGIN;
+        wxArrowStyle arrowStyle;
+        if ( flags & wxCONTROL_DISABLED )
+            arrowStyle = Arrow_Disabled;
+        else if ( flags & wxCONTROL_SELECTED )
+            arrowStyle = Arrow_Inversed;
+        else
+            arrowStyle = Arrow_Normal;
+
+        DrawArrow(dc, rect, Arrow_Right, arrowStyle);
+    }
 }
 
-wxCoord wxWin32Renderer::DrawMenuSeparator(wxDC& dc,
-                                           wxCoord y,
-                                           const wxMenuGeometryInfo& geomInfo)
+void wxWin32Renderer::DrawMenuSeparator(wxDC& dc,
+                                        wxCoord y,
+                                        const wxMenuGeometryInfo& geomInfo)
 {
     DrawHorizontalLine(dc, y + MENU_VERT_MARGIN, 0, geomInfo.GetSize().x);
-
-    return MENU_SEPARATOR_HEIGHT + 2*MENU_VERT_MARGIN;
 }
 
 wxSize wxWin32Renderer::GetMenuBarItemSize(const wxSize& sizeText) const
@@ -2417,21 +2516,28 @@ wxMenuGeometryInfo *wxWin32Renderer::GetMenuGeometry(wxWindow *win,
     // the max length of label and accel strings: the menu width is the sum of
     // them, even if they're for different items (as the accels should be
     // aligned)
+    //
+    // the max length of the bitmap is never 0 as Windows always leaves enough
+    // space for a check mark indicator
     wxCoord widthLabelMax = 0,
-            widthAccelMax = 0;
+            widthAccelMax = 0,
+            widthBmpMax = MENU_LEFT_MARGIN;
 
     for ( wxMenuItemList::Node *node = menu.GetMenuItems().GetFirst();
           node;
           node = node->GetNext() )
     {
+        // height of this item
+        wxCoord h;
+
         wxMenuItem *item = node->GetData();
         if ( item->IsSeparator() )
         {
-            height += MENU_SEPARATOR_HEIGHT;
+            h = MENU_SEPARATOR_HEIGHT;
         }
         else // not separator
         {
-            height += heightText;
+            h = heightText;
 
             wxCoord widthLabel;
             dc.GetTextExtent(item->GetLabel(), &widthLabel, NULL);
@@ -2446,17 +2552,38 @@ wxMenuGeometryInfo *wxWin32Renderer::GetMenuGeometry(wxWindow *win,
             {
                 widthAccelMax = widthAccel;
             }
+
+            const wxBitmap& bmp = item->GetBitmap();
+            if ( bmp.Ok() )
+            {
+                wxCoord widthBmp = bmp.GetWidth();
+                if ( widthBmp > widthBmpMax )
+                    widthBmpMax = widthBmp;
+            }
+            //else if ( item->IsCheckable() ): no need to check for this as
+            // MENU_LEFT_MARGIN is big enough to show the check mark
         }
 
-        height += 2*MENU_VERT_MARGIN;
+        h += 2*MENU_VERT_MARGIN;
+
+        // remember the item position and height
+        item->SetGeometry(height, h);
+
+        height += h;
     }
 
     // bundle the metrics into a struct and return it
     wxWin32MenuGeometryInfo *gi = new wxWin32MenuGeometryInfo;
 
-    gi->m_ofsLabel = MENU_LEFT_MARGIN;
+    gi->m_ofsLabel = widthBmpMax + 2*MENU_BMP_MARGIN;
     gi->m_ofsAccel = gi->m_ofsLabel + widthLabelMax;
-    gi->m_heightItem = heightText;
+    if ( widthAccelMax > 0 )
+    {
+        // if we actually have any accesl, add a margin
+        gi->m_ofsAccel += MENU_ACCEL_MARGIN;
+    }
+
+    gi->m_heightItem = heightText + 2*MENU_VERT_MARGIN;
 
     gi->m_size.x = gi->m_ofsAccel + widthAccelMax + MENU_RIGHT_MARGIN;
     gi->m_size.y = height;

@@ -226,19 +226,19 @@ public:
     // draw a menu item (also used for submenus if flags has ISSUBMENU flag)
     //
     // the geometryInfo is calculated by GetMenuGeometry() function from below
-    virtual wxCoord DrawMenuItem(wxDC& dc,
-                                 wxCoord y,
-                                 const wxMenuGeometryInfo& geometryInfo,
-                                 const wxString& label,
-                                 const wxString& accel,
-                                 const wxBitmap& bitmap = wxNullBitmap,
-                                 int flags = 0,
-                                 int indexAccel = -1) = 0;
+    virtual void DrawMenuItem(wxDC& dc,
+                              wxCoord y,
+                              const wxMenuGeometryInfo& geometryInfo,
+                              const wxString& label,
+                              const wxString& accel,
+                              const wxBitmap& bitmap = wxNullBitmap,
+                              int flags = 0,
+                              int indexAccel = -1) = 0;
 
     // draw a menu bar separator
-    virtual wxCoord DrawMenuSeparator(wxDC& dc,
-                                      wxCoord y,
-                                      const wxMenuGeometryInfo& geomInfo) = 0;
+    virtual void DrawMenuSeparator(wxDC& dc,
+                                   wxCoord y,
+                                   const wxMenuGeometryInfo& geomInfo) = 0;
 
     // misc functions
     // --------------
@@ -549,20 +549,20 @@ public:
                                  int flags = 0,
                                  int indexAccel = -1)
         { m_renderer->DrawMenuBarItem(dc, rect, label, flags, indexAccel); }
-    virtual wxCoord DrawMenuItem(wxDC& dc,
-                                 wxCoord y,
-                                 const wxMenuGeometryInfo& gi,
-                                 const wxString& label,
-                                 const wxString& accel,
-                                 const wxBitmap& bitmap = wxNullBitmap,
-                                 int flags = 0,
-                                 int indexAccel = -1)
-        { return m_renderer->DrawMenuItem(dc, y, gi, label, accel,
-                                          bitmap, flags, indexAccel); }
-    virtual wxCoord DrawMenuSeparator(wxDC& dc,
-                                      wxCoord y,
-                                      const wxMenuGeometryInfo& geomInfo)
-        { return m_renderer->DrawMenuSeparator(dc, y, geomInfo); }
+    virtual void DrawMenuItem(wxDC& dc,
+                              wxCoord y,
+                              const wxMenuGeometryInfo& gi,
+                              const wxString& label,
+                              const wxString& accel,
+                              const wxBitmap& bitmap = wxNullBitmap,
+                              int flags = 0,
+                              int indexAccel = -1)
+        { m_renderer->DrawMenuItem(dc, y, gi, label, accel,
+                                   bitmap, flags, indexAccel); }
+    virtual void DrawMenuSeparator(wxDC& dc,
+                                   wxCoord y,
+                                   const wxMenuGeometryInfo& geomInfo)
+        { m_renderer->DrawMenuSeparator(dc, y, geomInfo); }
 
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
                                  wxBitmap *bmpPressed,

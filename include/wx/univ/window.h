@@ -135,12 +135,6 @@ public:
         return orient & wxVERTICAL ? m_scrollbarVert : m_scrollbarHorz;
     }
 
-    // set the "sticky" capture, i.e. the window to which capture will return
-    // after ReleaseMouse() is called the next time: this is used by a window
-    // which has capture but wants to temporarily yield to another one (usually
-    // one of its own scrollbars)
-    static void SetStickyCapture(wxWindow *win);
-
     // methods used by wxColourScheme to choose the colours for this window
     // --------------------------------------------------------------------
 
@@ -195,7 +189,11 @@ public:
     virtual bool SetForegroundColour(const wxColour& colour);
     virtual bool SetFont(const wxFont& font);
 
-    // restore the "sticky" capture
+    // our Capture/ReleaseMouse() maintains the stack of windows which had
+    // captured the mouse and when ReleaseMouse() is called, the mouse freed
+    // only if the stack is empty, otherwise it is captured back by the window
+    // on top of the stack
+    virtual void CaptureMouse();
     virtual void ReleaseMouse();
 
 protected:
@@ -255,9 +253,8 @@ private:
     wxScrollBar *m_scrollbarHorz,
                 *m_scrollbarVert;
 
-    // the window to which the capture must be restored after next
-    // ReleaseMouse()
-    static wxWindow *ms_winCaptureNext;
+    // the stack of windows which have captured the mouse
+    static struct WXDLLEXPORT wxWindowNext *ms_winCaptureNext;
 
     DECLARE_DYNAMIC_CLASS(wxWindow)
     DECLARE_EVENT_TABLE()

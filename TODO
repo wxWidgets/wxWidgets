@@ -10,15 +10,14 @@ TODO
 
 wxMenuXXX
 
-* understand how should mouse capturing work
-* accel string not shown
-* submenu arrow not shown
-* menu item bitmaps not implemented
-* spacing seems wrong
+* SetFocus(popup) doesn't work!!
+* test mouse capturing
+* menus draws over the submenu
+* kbd interface (letters as accels!)
 
 Misc
 
-*   problems with large fonts!
+*** problems with large fonts!
 
 *   sizer calculate layout slightly incorrectly
 
