@@ -417,15 +417,21 @@ def PreChoice(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class ComboBox(Choice):
+    """
+    A combobox is like a combination of an edit control and a listbox. It can be
+    displayed as static list with editable or read-only text field; or a drop-down
+    list with text field.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxComboBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, int id, String value=EmptyString, Point pos=DefaultPosition, 
-            Size size=DefaultSize, 
-            wxArrayString choices=wxPyEmptyStringArray, 
-            long style=0, Validator validator=DefaultValidator, 
-            String name=ComboBoxNameStr) -> ComboBox
+        __init__(Window parent, int id, String value=EmptyString,
+            Point pos=DefaultPosition, Size size=DefaultSize,
+             List choices=[], long style=0, Validator validator=DefaultValidator,
+             String name=ComboBoxNameStr) -> ComboBox
+
+        Constructor, creates and shows a ComboBox control.
         """
         newobj = _controls.new_ComboBox(*args, **kwargs)
         self.this = newobj.this
@@ -435,16 +441,21 @@ class ComboBox(Choice):
 
     def Create(*args, **kwargs):
         """
-        Create(Window parent, int id, String value=EmptyString, Point pos=DefaultPosition, 
-            Size size=DefaultSize, 
-            wxArrayString choices=wxPyEmptyStringArray, 
-            long style=0, Validator validator=DefaultValidator, 
-            String name=ComboBoxNameStr) -> bool
+        Create(Window parent, int id, String value=EmptyString,
+            Point pos=DefaultPosition, Size size=DefaultSize,
+            List choices=[], long style=0, Validator validator=DefaultValidator,
+            String name=ChoiceNameStr) -> bool
+
+        Actually create the GUI Choice control for 2-phase creation
         """
         return _controls.ComboBox_Create(*args, **kwargs)
 
     def GetValue(*args, **kwargs):
-        """GetValue() -> String"""
+        """
+        GetValue() -> String
+
+        Returns the current value in the combobox text field.
+        """
         return _controls.ComboBox_GetValue(*args, **kwargs)
 
     def SetValue(*args, **kwargs):
@@ -452,35 +463,68 @@ class ComboBox(Choice):
         return _controls.ComboBox_SetValue(*args, **kwargs)
 
     def Copy(*args, **kwargs):
-        """Copy()"""
+        """
+        Copy()
+
+        Copies the selected text to the clipboard.
+        """
         return _controls.ComboBox_Copy(*args, **kwargs)
 
     def Cut(*args, **kwargs):
-        """Cut()"""
+        """
+        Cut()
+
+        Copies the selected text to the clipboard and removes the selection.
+        """
         return _controls.ComboBox_Cut(*args, **kwargs)
 
     def Paste(*args, **kwargs):
-        """Paste()"""
+        """
+        Paste()
+
+        Pastes text from the clipboard to the text field.
+        """
         return _controls.ComboBox_Paste(*args, **kwargs)
 
     def SetInsertionPoint(*args, **kwargs):
-        """SetInsertionPoint(long pos)"""
+        """
+        SetInsertionPoint(long pos)
+
+        Sets the insertion point in the combobox text field.
+        """
         return _controls.ComboBox_SetInsertionPoint(*args, **kwargs)
 
     def GetInsertionPoint(*args, **kwargs):
-        """GetInsertionPoint() -> long"""
+        """
+        GetInsertionPoint() -> long
+
+        Returns the insertion point for the combobox's text field.
+        """
         return _controls.ComboBox_GetInsertionPoint(*args, **kwargs)
 
     def GetLastPosition(*args, **kwargs):
-        """GetLastPosition() -> long"""
+        """
+        GetLastPosition() -> long
+
+        Returns the last position in the combobox text field.
+        """
         return _controls.ComboBox_GetLastPosition(*args, **kwargs)
 
     def Replace(*args, **kwargs):
-        """Replace(long from, long to, String value)"""
+        """
+        Replace(long from, long to, String value)
+
+        Replaces the text between two positions with the given text, in the
+        combobox text field.
+        """
         return _controls.ComboBox_Replace(*args, **kwargs)
 
     def SetSelection(*args, **kwargs):
-        """SetSelection(int n)"""
+        """
+        SetSelection(int n)
+
+        Selects the text between the two positions, in the combobox text field.
+        """
         return _controls.ComboBox_SetSelection(*args, **kwargs)
 
     def SetMark(*args, **kwargs):
@@ -492,11 +536,19 @@ class ComboBox(Choice):
         return _controls.ComboBox_SetEditable(*args, **kwargs)
 
     def SetInsertionPointEnd(*args, **kwargs):
-        """SetInsertionPointEnd()"""
+        """
+        SetInsertionPointEnd()
+
+        Sets the insertion point at the end of the combobox text field.
+        """
         return _controls.ComboBox_SetInsertionPointEnd(*args, **kwargs)
 
     def Remove(*args, **kwargs):
-        """Remove(long from, long to)"""
+        """
+        Remove(long from, long to)
+
+        Removes the text between the two positions in the combobox text field.
+        """
         return _controls.ComboBox_Remove(*args, **kwargs)
 
 
@@ -509,7 +561,11 @@ _controls.ComboBox_swigregister(ComboBoxPtr)
 ComboBoxNameStr = cvar.ComboBoxNameStr
 
 def PreComboBox(*args, **kwargs):
-    """PreComboBox() -> ComboBox"""
+    """
+    PreComboBox() -> ComboBox
+
+    Precreate a ComboBox control for 2-phase creation.
+    """
     val = _controls.new_PreComboBox(*args, **kwargs)
     val.thisown = 1
     return val

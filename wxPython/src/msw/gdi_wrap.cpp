@@ -371,6 +371,17 @@ PyObject *wxColour_Get(wxColour *self){
             PyTuple_SetItem(rv, 2, PyInt_FromLong(blue));
             return rv;
         }
+unsigned long wxColour_GetRGB(wxColour *self){
+            return self->Red() | (self->Green() << 8) | (self->Blue() << 16);
+        }
+
+SWIGSTATIC(PyObject* )
+SWIG_PyObj_FromUnsignedLong(unsigned long value)
+{
+  return (value > (unsigned long)(LONG_MAX)) ?
+    PyLong_FromUnsignedLong(value) : PyInt_FromLong((long)value); 
+}
+
 
 SWIGSTATIC(int)
 SWIG_PyObj_AsInt(PyObject *obj)
@@ -416,6 +427,8 @@ PyObject *wxPen_GetDashes(wxPen *self){
             wxPyEndBlockThreads();
             return retval;
         }
+bool wxPen___eq__(wxPen *self,wxPen const *other){ return other ? (*self == *other) : False; }
+bool wxPen___ne__(wxPen *self,wxPen const *other){ return other ? (*self != *other) : True;  }
 
 wxPyPen::~wxPyPen()
 {
@@ -570,14 +583,6 @@ wxString wxNativeFontInfo___str__(wxNativeFontInfo *self){
     bool wxTestFontEncoding(const wxNativeEncodingInfo& info)
         { wxPyRaiseNotImplemented(); return False; }
 
-
-SWIGSTATIC(PyObject* )
-SWIG_PyObj_FromUnsignedLong(unsigned long value)
-{
-  return (value > (unsigned long)(LONG_MAX)) ?
-    PyLong_FromUnsignedLong(value) : PyInt_FromLong((long)value); 
-}
-
 PyObject *wxFontMapper_GetAltForEncoding(wxFontMapper *self,wxFontEncoding encoding,wxString const &facename,bool interactive){
             wxFontEncoding alt_enc;
             if (self->GetAltForEncoding(encoding, &alt_enc, facename, interactive))
@@ -595,6 +600,8 @@ wxFont *new_wxFont(wxString const &info){
 wxFont *new_wxFont(int pointSize,wxFontFamily family,int flags,wxString const &face,wxFontEncoding encoding){
             return wxFont::New(pointSize, family, flags, face, encoding);
         }
+bool wxFont___eq__(wxFont *self,wxFont const *other){ return other ? (*self == *other) : False; }
+bool wxFont___ne__(wxFont *self,wxFont const *other){ return other ? (*self != *other) : True;  }
 
 class wxPyFontEnumerator : public wxFontEnumerator {
 public:
@@ -690,6 +697,93 @@ static void wxDC_GetBoundingBox(wxDC* dc, int* x1, int* y1, int* x2, int* y2) {
     *x2 = dc->MaxX();
     *y2 = dc->MaxY();
 }
+
+
+//-=-=-=-=-=-=-=-=-=-=-    
+#if 0
+#include <wx/dcbuffer.h>
+#else
+
+
+//  Temporarily put a set of classes here similar to the old buffered DC
+//  classes until the real ones can be fixed to work "correctly" again.
+
+class wxBufferedDC : public wxMemoryDC
+{
+private:
+    wxDC        *m_dc;
+    wxBitmap    m_buffer;
+
+public:
+
+    wxBufferedDC() : m_dc( 0 ) {}
+    
+    wxBufferedDC( wxDC *dc, const wxBitmap &buffer )
+        : m_dc( dc ), m_buffer( buffer )
+    {
+        SelectObject( m_buffer );
+    }
+       
+    wxBufferedDC( wxDC *dc, const wxSize &area )
+        : m_dc( dc ), m_buffer( area.GetWidth(), area.GetHeight() )
+    {
+        SelectObject( m_buffer );
+    }
+
+    ~wxBufferedDC() {
+        if( m_dc != 0 )
+            UnMask();
+    }
+
+
+    void Init( wxDC *dc, const wxBitmap &buffer ) {
+        wxASSERT_MSG( m_dc == 0 && m_buffer == wxNullBitmap,
+                      _T("wxBufferedDC already initialised") );
+        m_dc = dc;
+        m_buffer = buffer;
+        SelectObject( m_buffer );
+    }
+
+    void Init( wxDC *dc, const wxSize &area ) {
+        wxASSERT_MSG( m_dc == 0 && m_buffer == wxNullBitmap,
+                      _T("wxBufferedDC already initialised") );
+        m_dc = dc;
+        m_buffer = wxBitmap( area.GetWidth(), area.GetHeight() );
+        SelectObject( m_buffer );
+    }
+
+    void UnMask() {
+        wxASSERT_MSG( m_dc != 0, _T("No low level DC associated with buffer (anymore)") );
+        m_dc->Blit( 0, 0, m_buffer.GetWidth(), m_buffer.GetHeight(), this, 0, 0 );
+        m_dc = 0;
+    }
+};
+ 
+
+class wxBufferedPaintDC : public wxBufferedDC
+{
+private:
+    wxPaintDC    m_paintdc;
+
+public:
+    wxBufferedPaintDC( wxWindow *window, const wxBitmap &buffer = wxNullBitmap )
+        : m_paintdc( window )
+    {
+        window->PrepareDC( m_paintdc );
+
+        if( buffer != wxNullBitmap )
+            Init( &m_paintdc, buffer );
+        else
+            Init( &m_paintdc, window->GetClientSize() );
+    }
+        
+    ~wxBufferedPaintDC() {
+        UnMask();
+    }
+};
+
+#endif
+//-=-=-=-=-=-=-=-=-=-=-    
 
 
 #include <wx/dcps.h>
@@ -887,30 +981,6 @@ static PyObject *_wrap_new_Colour(PyObject *self, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_delete_Colour(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxColour *arg1 = (wxColour *) 0 ;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:delete_Colour",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxColour,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        delete arg1;
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
 static PyObject *_wrap_new_NamedColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString *arg1 = 0 ;
@@ -971,6 +1041,30 @@ static PyObject *_wrap_new_ColourRGB(PyObject *self, PyObject *args, PyObject *k
         if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxColour, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_delete_Colour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxColour *arg1 = (wxColour *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:delete_Colour",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxColour,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        delete arg1;
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
     return resultobj;
     fail:
     return NULL;
@@ -1149,6 +1243,71 @@ static PyObject *_wrap_Colour_SetRGB(PyObject *self, PyObject *args, PyObject *k
 }
 
 
+static PyObject *_wrap_Colour_SetFromName(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxColour *arg1 = (wxColour *) 0 ;
+    wxString *arg2 = 0 ;
+    bool temp2 = False ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "colourName", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Colour_SetFromName",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxColour,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = wxString_in_helper(obj1);
+        if (arg2 == NULL) SWIG_fail;
+        temp2 = True;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->InitFromName((wxString const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    {
+        if (temp2)
+        delete arg2;
+    }
+    return resultobj;
+    fail:
+    {
+        if (temp2)
+        delete arg2;
+    }
+    return NULL;
+}
+
+
+static PyObject *_wrap_Colour_GetPixel(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxColour *arg1 = (wxColour *) 0 ;
+    long result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Colour_GetPixel",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxColour,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (long)((wxColour const *)arg1)->GetPixel();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_PyObj_FromLong((long)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_Colour___eq__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxColour *arg1 = (wxColour *) 0 ;
@@ -1213,46 +1372,6 @@ static PyObject *_wrap_Colour___ne__(PyObject *self, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_Colour_InitFromName(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxColour *arg1 = (wxColour *) 0 ;
-    wxString *arg2 = 0 ;
-    bool temp2 = False ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "colourName", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Colour_InitFromName",kwnames,&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxColour,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        arg2 = wxString_in_helper(obj1);
-        if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->InitFromName((wxString const &)*arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    {
-        if (temp2)
-        delete arg2;
-    }
-    return resultobj;
-    fail:
-    {
-        if (temp2)
-        delete arg2;
-    }
-    return NULL;
-}
-
-
 static PyObject *_wrap_Colour_Get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxColour *arg1 = (wxColour *) 0 ;
@@ -1272,6 +1391,31 @@ static PyObject *_wrap_Colour_Get(PyObject *self, PyObject *args, PyObject *kwar
         if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = result;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Colour_GetRGB(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxColour *arg1 = (wxColour *) 0 ;
+    unsigned long result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Colour_GetRGB",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxColour,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (unsigned long)wxColour_GetRGB(arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_PyObj_FromUnsignedLong((unsigned long)result);
     return resultobj;
     fail:
     return NULL;
@@ -1913,23 +2057,48 @@ static PyObject *_wrap_Pen_GetDashes(PyObject *self, PyObject *args, PyObject *k
 static PyObject *_wrap_Pen___eq__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPen *arg1 = (wxPen *) 0 ;
-    wxPen *arg2 = 0 ;
+    wxPen *arg2 = (wxPen *) 0 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "pen", NULL 
+        (char *) "self",(char *) "other", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Pen___eq__",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPen,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxPen,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if (arg2 == NULL) {
-        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
-    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->operator ==((wxPen const &)*arg2);
+        result = (bool)wxPen___eq__(arg1,(wxPen const *)arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Pen___ne__(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPen *arg1 = (wxPen *) 0 ;
+    wxPen *arg2 = (wxPen *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "other", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Pen___ne__",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPen,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxPen,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)wxPen___ne__(arg1,(wxPen const *)arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -7907,23 +8076,20 @@ static PyObject *_wrap_Font_Ok(PyObject *self, PyObject *args, PyObject *kwargs)
 static PyObject *_wrap_Font___eq__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxFont *arg1 = (wxFont *) 0 ;
-    wxFont *arg2 = 0 ;
+    wxFont *arg2 = (wxFont *) 0 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "font", NULL 
+        (char *) "self",(char *) "other", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Font___eq__",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxFont,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxFont,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if (arg2 == NULL) {
-        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
-    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)((wxFont const *)arg1)->operator ==((wxFont const &)*arg2);
+        result = (bool)wxFont___eq__(arg1,(wxFont const *)arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -7938,23 +8104,20 @@ static PyObject *_wrap_Font___eq__(PyObject *self, PyObject *args, PyObject *kwa
 static PyObject *_wrap_Font___ne__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxFont *arg1 = (wxFont *) 0 ;
-    wxFont *arg2 = 0 ;
+    wxFont *arg2 = (wxFont *) 0 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "font", NULL 
+        (char *) "self",(char *) "other", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Font___ne__",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxFont,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxFont,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if (arg2 == NULL) {
-        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
-    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)((wxFont const *)arg1)->operator !=((wxFont const &)*arg2);
+        result = (bool)wxFont___ne__(arg1,(wxFont const *)arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -15168,28 +15331,20 @@ static PyObject *_wrap_new_BufferedDC__SWIG_1(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxDC *arg1 = (wxDC *) 0 ;
     wxSize *arg2 = 0 ;
-    int arg3 = (int) wxBUFFER_DC_DEFAULT ;
     wxBufferedDC *result;
     wxSize temp2 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
-    PyObject * obj2 = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO|O:new_BufferedDC",&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"OO:new_BufferedDC",&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDC,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         arg2 = &temp2;
         if ( ! wxSize_helper(obj1, &arg2)) SWIG_fail;
     }
-    if (obj2) {
-        {
-            arg3 = (int) SWIG_PyObj_AsInt(obj2);  
-            if (PyErr_Occurred()) SWIG_fail;
-        }
-    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxBufferedDC *)new wxBufferedDC(arg1,(wxSize const &)*arg2,arg3);
+        result = (wxBufferedDC *)new wxBufferedDC(arg1,(wxSize const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -15203,11 +15358,11 @@ static PyObject *_wrap_new_BufferedDC__SWIG_1(PyObject *self, PyObject *args) {
 
 static PyObject *_wrap_new_BufferedDC(PyObject *self, PyObject *args) {
     int argc;
-    PyObject *argv[4];
+    PyObject *argv[3];
     int ii;
     
     argc = PyObject_Length(args);
-    for (ii = 0; (ii < argc) && (ii < 3); ii++) {
+    for (ii = 0; (ii < argc) && (ii < 2); ii++) {
         argv[ii] = PyTuple_GetItem(args,ii);
     }
     if (argc == 2) {
@@ -15236,7 +15391,7 @@ static PyObject *_wrap_new_BufferedDC(PyObject *self, PyObject *args) {
             }
         }
     }
-    if ((argc >= 2) && (argc <= 3)) {
+    if (argc == 2) {
         int _v;
         {
             void *ptr;
@@ -15252,21 +15407,7 @@ static PyObject *_wrap_new_BufferedDC(PyObject *self, PyObject *args) {
                 _v = wxPySimple_typecheck(argv[1], wxT("wxSize"), 2);
             }
             if (_v) {
-                if (argc <= 2) {
-                    return _wrap_new_BufferedDC__SWIG_1(self,args);
-                }
-                {
-                    SWIG_PyObj_AsInt(argv[2]);
-                    if (PyErr_Occurred()) {
-                        _v = 0;
-                        PyErr_Clear();
-                    } else {
-                        _v = 1;
-                    }
-                }
-                if (_v) {
-                    return _wrap_new_BufferedDC__SWIG_1(self,args);
-                }
+                return _wrap_new_BufferedDC__SWIG_1(self,args);
             }
         }
     }
@@ -15280,33 +15421,49 @@ static PyObject *_wrap_new_BufferedDCInternalBuffer(PyObject *self, PyObject *ar
     PyObject *resultobj;
     wxDC *arg1 = (wxDC *) 0 ;
     wxSize *arg2 = 0 ;
-    int arg3 = (int) wxBUFFER_DC_DEFAULT ;
     wxBufferedDC *result;
     wxSize temp2 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
-    PyObject * obj2 = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO|O:new_BufferedDCInternalBuffer",&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"OO:new_BufferedDCInternalBuffer",&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDC,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         arg2 = &temp2;
         if ( ! wxSize_helper(obj1, &arg2)) SWIG_fail;
     }
-    if (obj2) {
-        {
-            arg3 = (int) SWIG_PyObj_AsInt(obj2);  
-            if (PyErr_Occurred()) SWIG_fail;
-        }
-    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxBufferedDC *)new wxBufferedDC(arg1,(wxSize const &)*arg2,arg3);
+        result = (wxBufferedDC *)new wxBufferedDC(arg1,(wxSize const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxBufferedDC, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_delete_BufferedDC(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxBufferedDC *arg1 = (wxBufferedDC *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:delete_BufferedDC",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxBufferedDC,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        delete arg1;
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
     return resultobj;
     fail:
     return NULL;
@@ -15344,19 +15501,25 @@ static PyObject * BufferedDC_swigregister(PyObject *self, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_BufferedPaintDC__SWIG_0(PyObject *self, PyObject *args) {
+static PyObject *_wrap_new_BufferedPaintDC(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxBitmap *arg2 = 0 ;
+    wxBitmap const &arg2_defvalue = wxNullBitmap ;
+    wxBitmap *arg2 = (wxBitmap *) &arg2_defvalue ;
     wxBufferedPaintDC *result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "window",(char *) "buffer", NULL 
+    };
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:new_BufferedPaintDC",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:new_BufferedPaintDC",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxBitmap,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if (arg2 == NULL) {
-        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+    if (obj1) {
+        if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxBitmap,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+        if (arg2 == NULL) {
+            PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -15368,106 +15531,6 @@ static PyObject *_wrap_new_BufferedPaintDC__SWIG_0(PyObject *self, PyObject *arg
     resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxBufferedPaintDC, 1);
     return resultobj;
     fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_new_BufferedPaintDC__SWIG_1(PyObject *self, PyObject *args) {
-    PyObject *resultobj;
-    wxWindow *arg1 = (wxWindow *) 0 ;
-    int arg2 = (int) wxBUFFER_DC_DEFAULT ;
-    wxBufferedPaintDC *result;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    
-    if(!PyArg_ParseTuple(args,(char *)"O|O:new_BufferedPaintDC",&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if (obj1) {
-        {
-            arg2 = (int) SWIG_PyObj_AsInt(obj1);  
-            if (PyErr_Occurred()) SWIG_fail;
-        }
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxBufferedPaintDC *)new wxBufferedPaintDC(arg1,arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxBufferedPaintDC, 1);
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_new_BufferedPaintDC(PyObject *self, PyObject *args) {
-    int argc;
-    PyObject *argv[3];
-    int ii;
-    
-    argc = PyObject_Length(args);
-    for (ii = 0; (ii < argc) && (ii < 2); ii++) {
-        argv[ii] = PyTuple_GetItem(args,ii);
-    }
-    if ((argc >= 1) && (argc <= 2)) {
-        int _v;
-        {
-            void *ptr;
-            if (SWIG_ConvertPtr(argv[0], (void **) &ptr, SWIGTYPE_p_wxWindow, 0) == -1) {
-                _v = 0;
-                PyErr_Clear();
-            } else {
-                _v = 1;
-            }
-        }
-        if (_v) {
-            if (argc <= 1) {
-                return _wrap_new_BufferedPaintDC__SWIG_1(self,args);
-            }
-            {
-                SWIG_PyObj_AsInt(argv[1]);
-                if (PyErr_Occurred()) {
-                    _v = 0;
-                    PyErr_Clear();
-                } else {
-                    _v = 1;
-                }
-            }
-            if (_v) {
-                return _wrap_new_BufferedPaintDC__SWIG_1(self,args);
-            }
-        }
-    }
-    if (argc == 2) {
-        int _v;
-        {
-            void *ptr;
-            if (SWIG_ConvertPtr(argv[0], (void **) &ptr, SWIGTYPE_p_wxWindow, 0) == -1) {
-                _v = 0;
-                PyErr_Clear();
-            } else {
-                _v = 1;
-            }
-        }
-        if (_v) {
-            {
-                void *ptr;
-                if (SWIG_ConvertPtr(argv[1], (void **) &ptr, SWIGTYPE_p_wxBitmap, 0) == -1) {
-                    _v = 0;
-                    PyErr_Clear();
-                } else {
-                    _v = 1;
-                }
-            }
-            if (_v) {
-                return _wrap_new_BufferedPaintDC__SWIG_0(self,args);
-            }
-        }
-    }
-    
-    PyErr_SetString(PyExc_TypeError,"No matching function for overloaded 'new_BufferedPaintDC'");
     return NULL;
 }
 
@@ -18486,19 +18549,21 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"GDIObject_IsNull", (PyCFunction) _wrap_GDIObject_IsNull, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"GDIObject_swigregister", GDIObject_swigregister, METH_VARARGS },
 	 { (char *)"new_Colour", (PyCFunction) _wrap_new_Colour, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"delete_Colour", (PyCFunction) _wrap_delete_Colour, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_NamedColour", (PyCFunction) _wrap_new_NamedColour, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_ColourRGB", (PyCFunction) _wrap_new_ColourRGB, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"delete_Colour", (PyCFunction) _wrap_delete_Colour, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Colour_Red", (PyCFunction) _wrap_Colour_Red, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Colour_Green", (PyCFunction) _wrap_Colour_Green, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Colour_Blue", (PyCFunction) _wrap_Colour_Blue, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Colour_Ok", (PyCFunction) _wrap_Colour_Ok, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Colour_Set", (PyCFunction) _wrap_Colour_Set, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Colour_SetRGB", (PyCFunction) _wrap_Colour_SetRGB, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Colour_SetFromName", (PyCFunction) _wrap_Colour_SetFromName, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Colour_GetPixel", (PyCFunction) _wrap_Colour_GetPixel, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Colour___eq__", (PyCFunction) _wrap_Colour___eq__, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Colour___ne__", (PyCFunction) _wrap_Colour___ne__, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"Colour_InitFromName", (PyCFunction) _wrap_Colour_InitFromName, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Colour_Get", (PyCFunction) _wrap_Colour_Get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Colour_GetRGB", (PyCFunction) _wrap_Colour_GetRGB, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Colour_swigregister", Colour_swigregister, METH_VARARGS },
 	 { (char *)"new_Palette", (PyCFunction) _wrap_new_Palette, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"delete_Palette", (PyCFunction) _wrap_delete_Palette, METH_VARARGS | METH_KEYWORDS },
@@ -18522,6 +18587,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Pen_SetDashes", (PyCFunction) _wrap_Pen_SetDashes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Pen_GetDashes", (PyCFunction) _wrap_Pen_GetDashes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Pen___eq__", (PyCFunction) _wrap_Pen___eq__, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Pen___ne__", (PyCFunction) _wrap_Pen___ne__, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Pen_GetDashCount", (PyCFunction) _wrap_Pen_GetDashCount, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Pen_GetStipple", (PyCFunction) _wrap_Pen_GetStipple, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Pen_SetStipple", (PyCFunction) _wrap_Pen_SetStipple, METH_VARARGS | METH_KEYWORDS },
@@ -18931,9 +18997,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"MemoryDC_swigregister", MemoryDC_swigregister, METH_VARARGS },
 	 { (char *)"new_BufferedDC", _wrap_new_BufferedDC, METH_VARARGS },
 	 { (char *)"new_BufferedDCInternalBuffer", _wrap_new_BufferedDCInternalBuffer, METH_VARARGS },
+	 { (char *)"delete_BufferedDC", (PyCFunction) _wrap_delete_BufferedDC, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"BufferedDC_UnMask", (PyCFunction) _wrap_BufferedDC_UnMask, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"BufferedDC_swigregister", BufferedDC_swigregister, METH_VARARGS },
-	 { (char *)"new_BufferedPaintDC", _wrap_new_BufferedPaintDC, METH_VARARGS },
+	 { (char *)"new_BufferedPaintDC", (PyCFunction) _wrap_new_BufferedPaintDC, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"BufferedPaintDC_swigregister", BufferedPaintDC_swigregister, METH_VARARGS },
 	 { (char *)"new_ScreenDC", (PyCFunction) _wrap_new_ScreenDC, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ScreenDC_StartDrawingOnTopWin", (PyCFunction) _wrap_ScreenDC_StartDrawingOnTopWin, METH_VARARGS | METH_KEYWORDS },
@@ -19944,9 +20011,6 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"PLATFORM_WINDOWS", SWIG_PyObj_FromInt((int)wxPLATFORM_WINDOWS));
     PyDict_SetItemString(d,"PLATFORM_OS2", SWIG_PyObj_FromInt((int)wxPLATFORM_OS2));
     PyDict_SetItemString(d,"PLATFORM_MAC", SWIG_PyObj_FromInt((int)wxPLATFORM_MAC));
-    PyDict_SetItemString(d,"BUFFER_DC_OVERWRITE_BG", SWIG_PyObj_FromInt((int)wxBUFFER_DC_OVERWRITE_BG));
-    PyDict_SetItemString(d,"BUFFER_DC_PRESERVE_BG", SWIG_PyObj_FromInt((int)wxBUFFER_DC_PRESERVE_BG));
-    PyDict_SetItemString(d,"BUFFER_DC_DEFAULT", SWIG_PyObj_FromInt((int)wxBUFFER_DC_DEFAULT));
     PyDict_SetItemString(d,"IMAGELIST_DRAW_NORMAL", SWIG_PyObj_FromInt((int)wxIMAGELIST_DRAW_NORMAL));
     PyDict_SetItemString(d,"IMAGELIST_DRAW_TRANSPARENT", SWIG_PyObj_FromInt((int)wxIMAGELIST_DRAW_TRANSPARENT));
     PyDict_SetItemString(d,"IMAGELIST_DRAW_SELECTED", SWIG_PyObj_FromInt((int)wxIMAGELIST_DRAW_SELECTED));

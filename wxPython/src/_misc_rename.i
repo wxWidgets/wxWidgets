@@ -277,9 +277,9 @@
 %rename(CONFIG_USE_RELATIVE_PATH)           wxCONFIG_USE_RELATIVE_PATH;
 %rename(CONFIG_USE_NO_ESCAPE_CHARACTERS)    wxCONFIG_USE_NO_ESCAPE_CHARACTERS;
 %rename(ConfigBase)                         wxConfigBase;
-%rename(ConfigPathChanger)                  wxConfigPathChanger;
 %rename(Config)                             wxConfig;
 %rename(FileConfig)                         wxFileConfig;
+%rename(ConfigPathChanger)                  wxConfigPathChanger;
 %rename(ExpandEnvVars)                      wxExpandEnvVars;
 %rename(DateTime)                           wxDateTime;
 %rename(TimeSpan)                           wxTimeSpan;

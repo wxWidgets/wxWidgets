@@ -7518,11 +7518,11 @@ class GBPosition(object):
         return _core.GBPosition_SetCol(*args, **kwargs)
 
     def __eq__(*args, **kwargs):
-        """__eq__(GBPosition p) -> bool"""
+        """__eq__(GBPosition other) -> bool"""
         return _core.GBPosition___eq__(*args, **kwargs)
 
     def __ne__(*args, **kwargs):
-        """__ne__(GBPosition p) -> bool"""
+        """__ne__(GBPosition other) -> bool"""
         return _core.GBPosition___ne__(*args, **kwargs)
 
     def Set(*args, **kwargs):
@@ -7583,11 +7583,11 @@ class GBSpan(object):
         return _core.GBSpan_SetColspan(*args, **kwargs)
 
     def __eq__(*args, **kwargs):
-        """__eq__(GBSpan o) -> bool"""
+        """__eq__(GBSpan other) -> bool"""
         return _core.GBSpan___eq__(*args, **kwargs)
 
     def __ne__(*args, **kwargs):
-        """__ne__(GBSpan o) -> bool"""
+        """__ne__(GBSpan other) -> bool"""
         return _core.GBSpan___ne__(*args, **kwargs)
 
     def Set(*args, **kwargs):
