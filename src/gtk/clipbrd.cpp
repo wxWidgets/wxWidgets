@@ -244,36 +244,28 @@ selection_handler( GtkWidget *WXUNUSED(widget),
 
     if (!data->IsSupportedFormat( format )) return;
 
-    /* this will fail for composite formats */
-    if (format.GetType() == wxDF_TEXT)
-    {
-        wxTextDataObject *text_object = (wxTextDataObject*) data;
-        wxString text( text_object->GetText() );
-
-#if wxUSE_UNICODE
-        const wxWX2MBbuf s = text.mbc_str();
-        int len = strlen(s);
-#else // more efficient in non-Unicode
-        const char *s = text.c_str();
-        int len = (int) text.Length();
-#endif
-        gtk_selection_data_set(
-            selection_data,
-            GDK_SELECTION_TYPE_STRING,
-            8*sizeof(gchar),
-            (unsigned char*) (const char*) s,
-            len );
-
-        return;
-    }
-
     int size = data->GetDataSize( format );
 
     if (size == 0) return;
 
-    char *d = new char[size];
+    void *d = malloc(size);
 
-    data->GetDataHere( selection_data->target, (void*) d );
+    data->GetDataHere( selection_data->target, d );
+
+    // transform Unicode text into multibyte before putting it on clipboard
+#if wxUSE_UNICODE
+    if ( format.GetType() == wxDF_TEXT )
+    {
+        const wchar_t *wstr = (const wchar_t *)d;
+        size_t len = wxConvCurrent->WC2MB(NULL, wstr, 0);
+        char *str = malloc(len + 1);
+        wxConvCurrent->WC2MB(str, wstr, len);
+        str[len] = '\0';
+
+        free(d);
+        d = str;
+    }
+#endif // wxUSE_UNICODE
 
     gtk_selection_data_set(
         selection_data,
@@ -281,6 +273,8 @@ selection_handler( GtkWidget *WXUNUSED(widget),
         8*sizeof(gchar),
         (unsigned char*) d,
         size );
+
+    free(d);
 }
 
 //-----------------------------------------------------------------------------
