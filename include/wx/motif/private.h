@@ -18,6 +18,8 @@
 class WXDLLEXPORT wxFont;
 class WXDLLEXPORT wxWindow;
 class WXDLLEXPORT wxSize;
+class WXDLLEXPORT wxBitmap;
+class WXDLLEXPORT wxColour;
 
 #include "wx/x11/privx.h"
 
@@ -58,6 +60,13 @@ extern wxWindow *wxGetWindowFromTable(Widget w);
 extern bool wxAddWindowToTable(Widget w, wxWindow *win);
 
 // ----------------------------------------------------------------------------
+// wxBitmap related functions
+// ----------------------------------------------------------------------------
+
+// Creates a bitmap with transparent areas drawn in the given colour.
+wxBitmap wxCreateMaskedBitmap(const wxBitmap& bitmap, wxColour& colour);
+
+// ----------------------------------------------------------------------------
 // key events related functions
 // ----------------------------------------------------------------------------
 
@@ -95,7 +104,7 @@ extern XColor itemColors[5] ;
 #define wxBOTS_INDEX 4
 
 // ----------------------------------------------------------------------------
-// utility classes
+// XmString/wxString conversion utilities
 // ----------------------------------------------------------------------------
 
 wxString wxXmStringToString( const XmString& xmString );

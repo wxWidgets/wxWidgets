@@ -27,7 +27,6 @@ OBJECTS = \
 		xmcombo.obj,\
 		accel.obj,\
 		app.obj,\
-		bitmap.obj,\
 		bmpbuttn.obj,\
 		bmpmotif.obj,\
 		button.obj,\
@@ -83,7 +82,6 @@ OBJECTS = \
 SOURCES = \
 		accel.cpp,\
 		app.cpp,\
-		bitmap.cpp,\
 		bmpbuttn.cpp,\
 		bmpmotif.cpp,
 		button.cpp,\
@@ -148,7 +146,6 @@ xmcombo.obj : [.xmcombo]xmcombo.c
 
 accel.obj : accel.cpp
 app.obj : app.cpp
-bitmap.obj : bitmap.cpp
 bmpbuttn.obj : bmpbuttn.cpp
 bmpmotif.obj : bmpmotif.cpp
 button.obj : button.cpp

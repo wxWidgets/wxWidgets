@@ -177,7 +177,7 @@ void wxBitmapButton::DoSetBitmap()
             m_bmpNormal = newBitmap;
             m_bitmapCache.SetBitmap( m_bmpNormal );
 
-            pixmap = (Pixmap) m_bmpNormal.GetPixmap();
+            pixmap = (Pixmap) m_bmpNormal.GetDrawable();
         }
         else
         {
@@ -201,7 +201,7 @@ void wxBitmapButton::DoSetBitmap()
                     wxCreateMaskedBitmap(m_bmpDisabledOriginal, col);
                 m_bmpDisabled = newBitmap;
 
-                insensPixmap = (Pixmap) m_bmpDisabled.GetPixmap();
+                insensPixmap = (Pixmap) m_bmpDisabled.GetDrawable();
             }
             else
                 insensPixmap = (Pixmap) m_bitmapCache.GetInsensPixmap(m_mainWidget);
@@ -226,7 +226,7 @@ void wxBitmapButton::DoSetBitmap()
                     wxCreateMaskedBitmap(m_bmpSelectedOriginal, col);
                 m_bmpSelected = newBitmap;
 
-                armPixmap = (Pixmap) m_bmpSelected.GetPixmap();
+                armPixmap = (Pixmap) m_bmpSelected.GetDrawable();
             }
             else
                 armPixmap = (Pixmap) m_bitmapCache.GetArmPixmap(m_mainWidget);

@@ -616,7 +616,6 @@ window.mm	Cocoa
 gsockmot.c	Motif	Socket
 accel.cpp	Motif
 app.cpp	Motif
-bitmap.cpp	Motif
 bmpbuttn.cpp	Motif
 bmpmotif.cpp	Motif
 button.cpp	Motif
@@ -672,7 +671,7 @@ window.cpp	Motif
 gsockx11.c	X11	Socket
 nanox.c	X11
 app.cpp	X11
-bitmap.cpp	X11
+bitmap.cpp	X11	Motif
 brush.cpp	X11	Motif
 clipbrd.cpp	X11
 colour.cpp	X11
@@ -1236,7 +1235,6 @@ window.h	CocoaH
 
 accel.h	MotifH
 app.h	MotifH
-bitmap.h	MotifH
 bmpbuttn.h	MotifH
 bmpmotif.h	MotifH
 button.h	MotifH
@@ -1291,7 +1289,7 @@ toplevel.h	MotifH
 window.h	MotifH
 
 app.h	X11H
-bitmap.h	X11H
+bitmap.h	X11H	Motif
 brush.h	X11H	Motif
 clipbrd.h	X11H
 colour.h	X11H

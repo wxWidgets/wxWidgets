@@ -1235,3 +1235,30 @@ XmString wxStringToXmString( const char* str )
 {
     return XmStringCreateLtoR((char *)str, XmSTRING_DEFAULT_CHARSET);
 }
+
+// ----------------------------------------------------------------------------
+// wxBitmap utility functions
+// ----------------------------------------------------------------------------
+
+// Creates a bitmap with transparent areas drawn in
+// the given colour.
+wxBitmap wxCreateMaskedBitmap(const wxBitmap& bitmap, wxColour& colour)
+{
+    wxBitmap newBitmap(bitmap.GetWidth(),
+                       bitmap.GetHeight(),
+                       bitmap.GetDepth());
+    wxMemoryDC destDC;
+    wxMemoryDC srcDC;
+
+    srcDC.SelectObject(bitmap);
+    destDC.SelectObject(newBitmap);
+
+    wxBrush brush(colour, wxSOLID);
+    // destDC.SetOptimization(FALSE);
+    destDC.SetBackground(brush);
+    destDC.Clear();
+    destDC.Blit(0, 0, bitmap.GetWidth(), bitmap.GetHeight(),
+                &srcDC, 0, 0, wxCOPY, TRUE);
+
+    return newBitmap;
+}

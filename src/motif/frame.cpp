@@ -505,10 +505,12 @@ void wxFrame::DoSetIcon(const wxIcon& icon)
     if (!m_frameShell)
         return;
 
-    if (!icon.Ok() || !icon.GetPixmap())
+    if (!icon.Ok() || !icon.GetDrawable())
         return;
 
-    XtVaSetValues((Widget) m_frameShell, XtNiconPixmap, icon.GetPixmap(), NULL);
+    XtVaSetValues((Widget) m_frameShell,
+                  XtNiconPixmap, icon.GetDrawable(),
+                  NULL);
 }
 
 void wxFrame::SetIcon(const wxIcon& icon)

@@ -167,7 +167,7 @@ protected:
 #if defined(__WXMSW__)
 #include "wx/msw/bitmap.h"
 #elif defined(__WXMOTIF__)
-#include "wx/motif/bitmap.h"
+#include "wx/x11/bitmap.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/bitmap.h"
 #elif defined(__WXX11__)

@@ -812,7 +812,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     (void)new wxBitmapButton(panel, ID_BITMAP_BTN, bitmap, wxPoint(100, 20));
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXMOTIF__)
     // test for masked bitmap display
     bitmap = wxBitmap(_T("test2.bmp"), wxBITMAP_TYPE_BMP);
     if (bitmap.Ok())

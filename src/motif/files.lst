@@ -178,7 +178,6 @@ ALL_SOURCES = \
 		common/zstream.cpp \
 		motif/accel.cpp \
 		motif/app.cpp \
-		motif/bitmap.cpp \
 		motif/bmpbuttn.cpp \
 		motif/bmpmotif.cpp \
 		motif/button.cpp \
@@ -231,6 +230,7 @@ ALL_SOURCES = \
 		motif/toplevel.cpp \
 		motif/utils.cpp \
 		motif/window.cpp \
+		x11/bitmap.cpp \
 		x11/brush.cpp \
 		x11/pen.cpp \
 		x11/utilsx.cpp \
@@ -507,7 +507,6 @@ ALL_HEADERS = \
 		zstream.h \
 		motif/accel.h \
 		motif/app.h \
-		motif/bitmap.h \
 		motif/bmpbuttn.h \
 		motif/bmpmotif.h \
 		motif/button.h \
@@ -623,6 +622,7 @@ ALL_HEADERS = \
 		protocol/ftp.h \
 		protocol/http.h \
 		protocol/protocol.h \
+		x11/bitmap.h \
 		x11/brush.h \
 		x11/pen.h
 
@@ -809,7 +809,6 @@ GUIOBJS = \
 		xmcombo.o \
 		accel.o \
 		app.o \
-		bitmap.o \
 		bmpbuttn.o \
 		bmpmotif.o \
 		button.o \
@@ -862,6 +861,7 @@ GUIOBJS = \
 		toplevel.o \
 		utils.o \
 		window.o \
+		bitmap.o \
 		brush.o \
 		pen.o \
 		utilsx.o

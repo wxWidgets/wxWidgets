@@ -99,7 +99,7 @@ void wxBitmapCache::CreateImageIfNeeded( WXWidget w )
                 (WXDisplay*)wxGetDisplay();
 
     XImage *ximage = XGetImage( (Display*)m_display,
-                                (Drawable)m_bitmap.GetPixmap(),
+                                (Drawable)m_bitmap.GetDrawable(),
                                 0, 0,
                                 m_bitmap.GetWidth(), m_bitmap.GetHeight(),
                                 AllPlanes, ZPixmap );
@@ -197,7 +197,7 @@ WXPixmap wxBitmapCache::GetInsensPixmap( WXWidget w )
 
     m_insensPixmap =
         (WXPixmap)XCreateInsensitivePixmap( (Display*)m_display,
-                                            (Pixmap)m_bitmap.GetPixmap() );
+                                            (Pixmap)m_bitmap.GetDrawable() );
 
     m_recalcPixmaps.insens = !m_insensPixmap;
     return m_insensPixmap;

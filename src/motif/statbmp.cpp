@@ -121,7 +121,7 @@ void wxStaticBitmap::DoSetBitmap()
             wxBitmap newBitmap = wxCreateMaskedBitmap(m_messageBitmapOriginal, col);
             m_messageBitmap = newBitmap;
 
-            pixmap = (Pixmap) m_messageBitmap.GetPixmap();
+            pixmap = (Pixmap) m_messageBitmap.GetDrawable();
         }
         else
         {

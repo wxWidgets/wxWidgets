@@ -24,12 +24,16 @@ CXX_DEFINE =
 	cc $(CFLAGS)$(CC_DEFINE) $(MMS$TARGET_NAME).c
 
 OBJECTS = \
+		bitmap.obj,\
 		brush.obj,\
-		pen.obj
+		pen.obj,\
+		utilsx.obj
 
 SOURCES = \
+		bitmap.cpp,\
 		brush.cpp,\
-		pen.cpp
+		pen.cpp,\
+		utilsx.cpp
 
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -37,5 +41,7 @@ all : $(SOURCES)
 	library [--.lib]libwx_motif.olb $(OBJECTS)
 .endif
 
+bitmap.obj : bitmap.cpp
 brush.obj : brush.cpp
 pen.obj : pen.cpp
+utilsx.obj : utilsx.cpp

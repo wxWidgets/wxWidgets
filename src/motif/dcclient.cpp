@@ -826,7 +826,7 @@ void wxWindowDC::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y)
         SetPen (m_pen);
 
     int width, height;
-    Pixmap iconPixmap = (Pixmap) icon.GetPixmap();
+    Pixmap iconPixmap = (Pixmap) icon.GetDrawable();
     width = icon.GetWidth();
     height = icon.GetHeight();
     if (icon.GetDisplay() == m_display)
@@ -941,7 +941,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
         wxImage image = bitmap.ConvertToImage();
         if (!image.Ok())
         {
-            sourcePixmap = (Pixmap) bitmap.GetPixmap();
+            sourcePixmap = (Pixmap) bitmap.GetDrawable();
         }
         else
         {
@@ -950,7 +950,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
 
             image = image.Scale(scaledW, scaledH);
             scaledBitmap = new wxBitmap(image);
-            sourcePixmap = (Pixmap) scaledBitmap->GetPixmap();
+            sourcePixmap = (Pixmap) scaledBitmap->GetDrawable();
         }
     }
     else
@@ -982,9 +982,9 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
             {
                 wxMemoryDC *memDC = (wxMemoryDC *)source;
                 wxBitmap& sel = memDC->GetBitmap();
-                if ( sel.Ok() && sel.GetMask() && sel.GetMask()->GetPixmap() )
+                if ( sel.Ok() && sel.GetMask() && sel.GetMask()->GetBitmap() )
                 {
-                    XSetClipMask   ((Display*) m_display, (GC) m_gc, (Pixmap) sel.GetMask()->GetPixmap());
+                    XSetClipMask   ((Display*) m_display, (GC) m_gc, (Pixmap) sel.GetMask()->GetBitmap());
                     XSetClipOrigin ((Display*) m_display, (GC) m_gc, XLOG2DEV (xdest), YLOG2DEV (ydest));
                 }
             }
@@ -1033,9 +1033,9 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
             {
                 wxMemoryDC *memDC = (wxMemoryDC *)source;
                 wxBitmap& sel = memDC->GetBitmap();
-                if ( sel.Ok() && sel.GetMask() && sel.GetMask()->GetPixmap() )
+                if ( sel.Ok() && sel.GetMask() && sel.GetMask()->GetBitmap() )
                 {
-                    XSetClipMask   ((Display*) m_display, (GC) m_gc, (Pixmap) sel.GetMask()->GetPixmap());
+                    XSetClipMask   ((Display*) m_display, (GC) m_gc, (Pixmap) sel.GetMask()->GetBitmap());
                     XSetClipOrigin ((Display*) m_display, (GC) m_gc, XLOG2DEV (xdest), YLOG2DEV (ydest));
                 }
             }
@@ -1843,10 +1843,10 @@ void wxWindowDC::SetPen( const wxPen &pen )
     else if (m_currentStipple.Ok()
         && ((m_currentStipple != oldStipple) || !GetOptimization()))
     {
-        XSetStipple ((Display*) m_display, (GC) m_gc, (Pixmap) m_currentStipple.GetPixmap());
+        XSetStipple ((Display*) m_display, (GC) m_gc, (Pixmap) m_currentStipple.GetDrawable());
 
         if (m_window && m_window->GetBackingPixmap())
-            XSetStipple ((Display*) m_display,(GC) m_gcBacking, (Pixmap) m_currentStipple.GetPixmap());
+            XSetStipple ((Display*) m_display,(GC) m_gcBacking, (Pixmap) m_currentStipple.GetDrawable());
     }
 
     if ((m_currentFill != oldFill) || !GetOptimization())
@@ -2017,18 +2017,18 @@ void wxWindowDC::SetBrush( const wxBrush &brush )
         if (m_currentStipple.GetDepth() == 1)
         {
             XSetStipple ((Display*) m_display, (GC) m_gc,
-                         (Pixmap) m_currentStipple.GetPixmap());
+                         (Pixmap) m_currentStipple.GetDrawable());
         if (m_window && m_window->GetBackingPixmap())
                 XSetStipple ((Display*) m_display,(GC) m_gcBacking,
-                             (Pixmap) m_currentStipple.GetPixmap());
+                             (Pixmap) m_currentStipple.GetDrawable());
         }
         else
         {
             XSetTile ((Display*) m_display, (GC) m_gc,
-                      (Pixmap) m_currentStipple.GetPixmap());
+                      (Pixmap) m_currentStipple.GetDrawable());
             if (m_window && m_window->GetBackingPixmap())
                 XSetTile ((Display*) m_display,(GC) m_gcBacking,
-                          (Pixmap) m_currentStipple.GetPixmap());
+                          (Pixmap) m_currentStipple.GetDrawable());
         }
     }
 
