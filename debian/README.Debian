@@ -13,7 +13,7 @@ libwxgtk-dbg		wxGTK libraries built with -g and __WXDEBUG__
 
 libwxgtk-python		Python binding to wxGTK  (from 2.2.3 onward, this
 			obsoletes the libwxgtk-python-contrib package as
-			all python modules are build into a single monolith)
+			all python modules are built into a single monolith)
 
 wxwin-contrib		wxWin contrib runtime shared libs (built with wxGTK)
 wxwin-contrib-dev	extra files and static contrib libs for building apps
@@ -35,7 +35,7 @@ wxwin-i18n		message catalogs for native language support
 	  http://bugs.debian.org/cgi-bin/pkgreport.cgi?pkg=wxwindows2.2 ]
 
 	Oh and, please do *not* file bug reports for these packages
-	to the Debian bts.  But do feel free to email be personally
+	to the Debian bts.  But do feel free to email me personally
 	if you find problems and/or have patches to fix them.
 
 libwxmsw-dev		mingw32-cross wxMSW libs.
