@@ -1198,6 +1198,8 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
     {
         if (!memDC->m_selected.Ok()) return FALSE;
 
+        is_mono = (memDC->m_selected.GetDepth() == 1);
+
         /* we use the "XCopyArea" way to copy a memory dc into
            y different window if the memory dc BOTH
            a) doesn't have any mask or its mask isn't used
@@ -1211,12 +1213,11 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
               about masks */
             use_bitmap_method = TRUE;
         }
-        else if (memDC->m_selected.GetDepth() == 1)
+        else if (is_mono)
         {
            /* we HAVE TO use the direct way for memory dcs
               that are bitmaps because XCopyArea doesn't cope
               with different bit depths */
-            is_mono = TRUE;
             use_bitmap_method = TRUE;
         }
         else if ((xsrc == 0) && (ysrc == 0) &&
@@ -1238,14 +1239,14 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
     CalcBoundingBox( xdest, ydest );
     CalcBoundingBox( xdest + width, ydest + height );
 
-    /* scale/translate size and position */
+    // scale/translate size and position
     wxCoord xx = XLOG2DEV(xdest);
     wxCoord yy = YLOG2DEV(ydest);
 
     wxCoord ww = XLOG2DEVREL(width);
     wxCoord hh = YLOG2DEVREL(height);
 
-    /* compare to current clipping region */
+    // compare to current clipping region
     if (!m_currentClippingRegion.IsNull())
     {
         wxRegion tmp( xx,yy,ww,hh );
@@ -1259,32 +1260,39 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
 
     if (use_bitmap_method)
     {
-        /* scale/translate bitmap size */
+        // scale/translate bitmap size
         wxCoord bm_width = memDC->m_selected.GetWidth();
         wxCoord bm_height = memDC->m_selected.GetHeight();
+
+        // get clip coords
+        wxRegion tmp( xx,yy,ww,hh );
+        tmp.Intersect( m_currentClippingRegion );
+        wxCoord cx,cy,cw,ch;
+        tmp.GetBox(cx,cy,cw,ch);
+        
+        // interpret userscale of src too
+        double xsc,ysc;
+        memDC->GetUserScale(&xsc,&ysc);
+        bm_width = (int) (bm_width / xsc);
+        bm_height = (int) (bm_height / ysc);
 
         wxCoord bm_ww = XLOG2DEVREL( bm_width );
         wxCoord bm_hh = YLOG2DEVREL( bm_height );
 
-        /* scale bitmap if required */
+        // scale bitmap if required
         wxBitmap use_bitmap;
 
         if ((bm_width != bm_ww) || (bm_height != bm_hh))
         {
-            wxImage image = memDC->m_selected.ConvertToImage();
-            image = image.Scale( bm_ww, bm_hh );
-
-            if (is_mono)
-                use_bitmap = wxBitmap(image.ConvertToMono(255,255,255), 1);
-            else
-                use_bitmap = wxBitmap(image);
+            use_bitmap = memDC->m_selected.Rescale(cx-xx,cy-yy,cw,ch,bm_ww,bm_hh);	
         }
         else
         {
+            // FIXME: use cx,cy,cw,ch here, too?
             use_bitmap = memDC->m_selected;
         }
 
-        /* apply mask if any */
+        // apply mask if any
         GdkBitmap *mask = (GdkBitmap *) NULL;
         if (use_bitmap.GetMask()) mask = use_bitmap.GetMask()->GetBitmap();
 
@@ -1305,7 +1313,8 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
                 col.pixel = 1;
                 gdk_gc_set_foreground( gc, &col );
                 gdk_gc_set_clip_region( gc, m_currentClippingRegion.GetRegion() );
-                gdk_gc_set_clip_origin( gc, -xx, -yy );
+                // was: gdk_gc_set_clip_origin( gc, -xx, -yy );
+                gdk_gc_set_clip_origin( gc, -cx, -cy );
                 gdk_gc_set_fill( gc, GDK_OPAQUE_STIPPLED );
                 gdk_gc_set_stipple( gc, mask );
                 gdk_draw_rectangle( new_mask, gc, TRUE, 0, 0, bm_ww, bm_hh );
@@ -1318,7 +1327,8 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
                     gdk_gc_set_clip_mask( m_textGC, new_mask );
                 else
                     gdk_gc_set_clip_mask( m_textGC, mask );
-                gdk_gc_set_clip_origin( m_textGC, xx, yy );
+                // was: gdk_gc_set_clip_origin( m_textGC, xx, yy );
+                gdk_gc_set_clip_origin( m_textGC, cx, cy );
             }
             else
             {
@@ -1326,7 +1336,8 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
                     gdk_gc_set_clip_mask( m_penGC, new_mask );
                 else
                     gdk_gc_set_clip_mask( m_penGC, mask );
-                gdk_gc_set_clip_origin( m_penGC, xx, yy );
+                // was: gdk_gc_set_clip_origin( m_penGC, xx, yy );
+                gdk_gc_set_clip_origin( m_penGC, cx, cy );
             }
             if (new_mask)
                 gdk_bitmap_unref( new_mask );
@@ -1336,9 +1347,11 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
            drawing a mono-bitmap (XBitmap) we use the current text GC */
 
         if (is_mono)
-            gdk_wx_draw_bitmap( m_window, m_textGC, use_bitmap.GetBitmap(), xsrc, ysrc, xx, yy, ww, hh );
+            // was: gdk_wx_draw_bitmap( m_window, m_textGC, use_bitmap.GetBitmap(), xsrc, ysrc, xx, yy, ww, hh );
+            gdk_wx_draw_bitmap( m_window, m_textGC, use_bitmap.GetBitmap(), xsrc, ysrc, cx, cy, cw, ch );
         else
-            gdk_draw_pixmap( m_window, m_penGC, use_bitmap.GetPixmap(), xsrc, ysrc, xx, yy, ww, hh );
+            // was: gdk_draw_pixmap( m_window, m_penGC, use_bitmap.GetPixmap(), xsrc, ysrc, xx, yy, ww, hh );
+            gdk_draw_pixmap( m_window, m_penGC, use_bitmap.GetPixmap(), xsrc, ysrc, cx, cy, cw, ch );
 
         /* remove mask again if any */
         if (useMask && mask)
@@ -1363,38 +1376,18 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
     {
         if ((width != ww) || (height != hh))
         {
-            /* draw source window into a bitmap as we cannot scale
-               a window in contrast to a bitmap. this would actually
-               work with memory dcs as well, but we'd lose the mask
-               information and waste one step in this process since
-               a memory already has a bitmap. all this is slightly
-               inefficient as we could take an XImage directly from
-               an X window, but we'd then also have to care that
-               the window is not outside the screen (in which case
-               we'd get a BadMatch or what not).
-               Is a double XGetImage and combined XGetPixel and
-               XPutPixel really faster? I'm not sure. look at wxXt
-               for a different implementation of the same problem. */
+            // get clip coords
+            wxRegion tmp( xx,yy,ww,hh );
+            tmp.Intersect( m_currentClippingRegion );
+            wxCoord cx,cy,cw,ch;
+            tmp.GetBox(cx,cy,cw,ch);
+            
+            // rescale bitmap	
+            wxBitmap bitmap = memDC->m_selected.Rescale( cx-xx, cy-yy, cw, ch, ww, hh );
 
-            wxBitmap bitmap( width, height );
-
-            /* copy including child window contents */
-            gdk_gc_set_subwindow( m_penGC, GDK_INCLUDE_INFERIORS );
-            gdk_window_copy_area( bitmap.GetPixmap(), m_penGC, 0, 0,
-                                  srcDC->GetWindow(),
-                                  xsrc, ysrc, width, height );
-            gdk_gc_set_subwindow( m_penGC, GDK_CLIP_BY_CHILDREN );
-
-            /* scale image */
-            wxImage image = bitmap.ConvertToImage();
-            image = image.Scale( ww, hh );
-
-            /* convert to bitmap */
-            bitmap = wxBitmap(image);
-
-            /* draw scaled bitmap */
-            gdk_draw_pixmap( m_window, m_penGC, bitmap.GetPixmap(), 0, 0, xx, yy, -1, -1 );
-
+            // draw scaled bitmap
+            // was: gdk_draw_pixmap( m_window, m_penGC, bitmap.GetPixmap(), 0, 0, xx, yy, -1, -1 );
+            gdk_draw_pixmap( m_window, m_penGC, bitmap.GetPixmap(), 0, 0, cx, cy, -1, -1 );
         }
         else
         {
@@ -1447,7 +1440,7 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
 
     pango_layout_set_text( layout, (const char*)data, strlen((const char*)data) );
 
-    if (m_scaleY != 1.0)
+    if (m_scaleY - 1.0 < 0.00001)
     {
          // If there is a user or actually any scale applied to
          // the device context, scale the font.
