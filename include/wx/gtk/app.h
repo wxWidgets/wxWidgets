@@ -90,6 +90,8 @@ class wxApp: public wxEvtHandler
     inline void SetAppName(const wxString& name) { m_appName = name; };
     inline wxString GetClassName(void) const { return m_className; }
     inline void SetClassName(const wxString& name) { m_className = name; }
+    const wxString& GetVendorName() const { return m_vendorName; }
+    void SetVendorName(const wxString& name) { m_vendorName = name; }
 
     inline void SetExitOnFrameDelete(bool flag) { m_exitOnFrameDelete = flag; }
     inline bool GetExitOnFrameDelete(void) const { return m_exitOnFrameDelete; }
@@ -119,8 +121,6 @@ class wxApp: public wxEvtHandler
     bool          m_exitOnFrameDelete;
     bool          m_wantDebugOutput;
     wxWindow     *m_topWindow;
-    wxString      m_appName;
-    wxString      m_className;
     
     gint          m_idleTag;
     
@@ -129,6 +129,11 @@ class wxApp: public wxEvtHandler
     
     static wxAppInitializerFunction m_appInitFn;
     
+private:
+  wxString m_vendorName,
+           m_appName,
+           m_className;
+
   DECLARE_EVENT_TABLE()
 };
 
