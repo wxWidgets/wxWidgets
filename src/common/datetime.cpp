@@ -3201,6 +3201,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                     hour = tm.hour;
                     min = tm.min;
                 }
+                break;
 
             case _T('S'):       // second as a decimal number (00-61)
                 if ( !GetNumericToken(width, input, &num) || (num > 61) )
