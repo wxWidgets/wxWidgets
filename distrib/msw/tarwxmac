@@ -63,7 +63,7 @@ echo Removing backup files...
 rm *~ */*~ */*/*~ */*/*/*~ */*/*/*/*~
 
 rm -f $2/wxMac-${WXVER}*.tar.gz
-rm -f -r $2/wxMac-${WXVER}
+rm -f -r $2/wxWindows-${WXVER}
 
 cp $1/include/wx/mac/setup0.h $1/include/wx/setup.h
 
