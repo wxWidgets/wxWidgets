@@ -206,6 +206,18 @@ class wxCheckBoxPtr(wxControlPtr):
     def SetValue(self, *_args, **_kwargs):
         val = controlsc.wxCheckBox_SetValue(self, *_args, **_kwargs)
         return val
+    def Get3StateValue(self, *_args, **_kwargs):
+        val = controlsc.wxCheckBox_Get3StateValue(self, *_args, **_kwargs)
+        return val
+    def Set3StateValue(self, *_args, **_kwargs):
+        val = controlsc.wxCheckBox_Set3StateValue(self, *_args, **_kwargs)
+        return val
+    def Is3State(self, *_args, **_kwargs):
+        val = controlsc.wxCheckBox_Is3State(self, *_args, **_kwargs)
+        return val
+    def Is3rdStateAllowedForUser(self, *_args, **_kwargs):
+        val = controlsc.wxCheckBox_Is3rdStateAllowedForUser(self, *_args, **_kwargs)
+        return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxCheckBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxCheckBox(wxCheckBoxPtr):
@@ -1262,6 +1274,12 @@ def wxTextAttr_Combine(*_args, **_kwargs):
 
 cvar = controlsc.cvar
 wxDefaultValidator = wxValidatorPtr(controlsc.cvar.wxDefaultValidator)
+wxCHK_2STATE = controlsc.wxCHK_2STATE
+wxCHK_3STATE = controlsc.wxCHK_3STATE
+wxCHK_ALLOW_3RD_STATE_FOR_USER = controlsc.wxCHK_ALLOW_3RD_STATE_FOR_USER
+wxCHK_UNCHECKED = controlsc.wxCHK_UNCHECKED
+wxCHK_CHECKED = controlsc.wxCHK_CHECKED
+wxCHK_UNDETERMINED = controlsc.wxCHK_UNDETERMINED
 wxTE_NO_VSCROLL = controlsc.wxTE_NO_VSCROLL
 wxTE_AUTO_SCROLL = controlsc.wxTE_AUTO_SCROLL
 wxTE_READONLY = controlsc.wxTE_READONLY

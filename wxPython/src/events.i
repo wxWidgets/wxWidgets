@@ -46,17 +46,18 @@ int wxNewEventType();
 
 class wxEvent : public wxObject {
 public:
-    // wxEvent(int id = 0);     // *** This class is now an ABC
+    // wxEvent(int winid = 0, wxEventType commandType = wxEVT_NULL);     // *** This class is now an ABC
     ~wxEvent();
 
-    wxObject* GetEventObject();
-    wxEventType GetEventType();
-    int GetId();
-    long GetTimestamp();
-    void SetEventObject(wxObject* object);
     void SetEventType(wxEventType typ);
-    void SetId(int id);
-    void SetTimestamp(long timeStamp);
+    wxEventType GetEventType() const;
+    wxObject *GetEventObject() const;
+    void SetEventObject(wxObject *obj);
+    long GetTimestamp() const;
+    void SetTimestamp(long ts = 0);
+    int GetId() const;
+    void SetId(int Id);
+
 
     bool IsCommandEvent() const;
 
@@ -78,7 +79,10 @@ public:
     // (returned by StopPropagation())
     void ResumePropagation(int propagationLevel);
 
-   wxEvent *Clone();
+    // this function is used to create a copy of the event polymorphically and
+    // all derived classes must implement it because otherwise wxPostEvent()
+    // for them wouldn't work (it needs to do a copy of the event)
+    virtual wxEvent *Clone() /* =0*/;
 };
 
 //---------------------------------------------------------------------------

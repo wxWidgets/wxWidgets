@@ -318,6 +318,20 @@ public:
 
 //----------------------------------------------------------------------
 
+enum {
+    wxCHK_2STATE,
+    wxCHK_3STATE,
+    wxCHK_ALLOW_3RD_STATE_FOR_USER,
+};
+
+enum wxCheckBoxState
+{
+    wxCHK_UNCHECKED,
+    wxCHK_CHECKED,
+    wxCHK_UNDETERMINED /* 3-state checkbox only */
+};
+
+
 class wxCheckBox : public wxControl {
 public:
     wxCheckBox(wxWindow* parent, wxWindowID id, const wxString& label,
@@ -341,6 +355,10 @@ public:
     bool GetValue();
     bool IsChecked();
     void SetValue(const bool state);
+    wxCheckBoxState Get3StateValue() const;
+    void Set3StateValue(wxCheckBoxState state);
+    bool Is3State() const;
+    bool Is3rdStateAllowedForUser() const;
 };
 
 //----------------------------------------------------------------------

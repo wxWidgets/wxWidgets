@@ -115,9 +115,6 @@ int  wxPyApp::MainLoop() {
 
     DeletePendingObjects();
     bool initialized = wxTopLevelWindows.GetCount() != 0;
-#ifdef __WXGTK__
-    m_initialized = initialized;
-#endif
 
     if (initialized) {
         if ( m_exitOnFrameDelete == Later ) {
@@ -438,10 +435,6 @@ PyObject* __wxStart(PyObject* /* self */, PyObject* args)
         PyErr_SetString(PyExc_SystemExit, "OnInit returned FALSE, exiting...");
         goto error;
     }
-
-#ifdef __WXGTK__
-    wxTheApp->m_initialized = (wxTopLevelWindows.GetCount() > 0);
-#endif
 
     Py_DECREF(result);
     Py_DECREF(pyint);
