@@ -817,10 +817,12 @@ wxString wxDateTime::GetWeekDayName(wxDateTime::WeekDay wday,
 {
     wxCHECK_MSG( wday != Inv_WeekDay, _T(""), _T("invalid weekday") );
 
-    // take some arbitrary Sunday
+    // take some arbitrary Sunday (but notice that the day should be such that
+    // after adding wday to it below we still have a valid date, e.g. don't
+    // take 28 here!)
     tm tm;
     InitTm(tm);
-    tm.tm_mday = 28;
+    tm.tm_mday = 21;
     tm.tm_mon = Nov;
     tm.tm_year = 99;
 

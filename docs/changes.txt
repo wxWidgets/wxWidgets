@@ -205,6 +205,7 @@ All:
   (based on patch by Stefan Kowski)
 - added wxMicroSleep() and wxMilliSleep() replacing deprecated wxUsleep()
 - basic UDP sockets support (Lenny Maiorani)
+- fixed wxDateTime::GetWeekDayName() for some dates (Daniel Kaps)
 
 All (GUI):
 
