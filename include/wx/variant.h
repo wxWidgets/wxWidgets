@@ -106,6 +106,7 @@ public:
     wxVariant(wxVariantData* data, const wxString& name = wxEmptyString); // User-defined data
 //TODO: Need to document
     wxVariant(const wxDateTime& val, const wxString& name = wxEmptyString); // Date
+    wxVariant(const wxArrayString& val, const wxString& name = wxEmptyString); // String array
 #if wxUSE_ODBC
     wxVariant(const DATE_STRUCT* valptr, const wxString& name = wxEmptyString); // DateTime
     wxVariant(const TIME_STRUCT* valptr, const wxString& name = wxEmptyString); // DateTime
@@ -124,6 +125,10 @@ public:
     bool operator== (const wxDateTime& value) const;
     bool operator!= (const wxDateTime& value) const;
     void operator= (const wxDateTime& value) ;
+
+    bool operator== (const wxArrayString& value) const;
+    bool operator!= (const wxArrayString& value) const;
+    void operator= (const wxArrayString& value) ;
 #if wxUSE_ODBC
     void operator= (const DATE_STRUCT* value) ;
     void operator= (const TIME_STRUCT* value) ;
@@ -237,6 +242,7 @@ public:
     void* GetVoidPtr() const ;
 //TODO: Need to document
     wxDateTime GetDateTime() const ;
+    wxArrayString GetArrayString() const;
 //TODO: End of Need to document
 
 // Operations

@@ -36,6 +36,8 @@
 #endif
 
 #include "wx/string.h"
+#include "wx/tokenzr.h"
+
 #include "wx/variant.h"
 
 #if wxUSE_TIMEDATE
@@ -1172,6 +1174,105 @@ bool wxVariantDataDateTime::Read(wxString& str)
     return TRUE;
 }
 
+// ----------------------------------------------------------------------------
+// wxVariantDataArrayString
+// ----------------------------------------------------------------------------
+
+class wxVariantDataArrayString: public wxVariantData
+{
+public:
+    wxVariantDataArrayString() { }
+    wxVariantDataArrayString(const wxArrayString& value) { m_value = value; }
+
+    wxArrayString GetValue() const { return m_value; }
+    void SetValue(const wxArrayString& value) { m_value = value; }
+
+    virtual void Copy(wxVariantData& data);
+    virtual bool Eq(wxVariantData& data) const;
+#if wxUSE_STD_IOSTREAM
+    virtual bool Write(wxSTD ostream& str) const;
+#endif
+    virtual bool Write(wxString& str) const;
+#if wxUSE_STD_IOSTREAM
+    virtual bool Read(wxSTD istream& str);
+#endif
+    virtual bool Read(wxString& str);
+    virtual wxString GetType() const { return wxT("arrstring"); };
+    virtual wxVariantData* Clone() { return new wxVariantDataArrayString; }
+
+protected:
+    wxArrayString m_value;
+
+    DECLARE_DYNAMIC_CLASS(wxVariantDataArrayString)
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxVariantDataArrayString, wxVariantData)
+
+void wxVariantDataArrayString::Copy(wxVariantData& data)
+{
+    wxASSERT_MSG( data.GetType() == GetType(), wxT("wxVariantDataArrayString::Copy: Can't copy to this type of data") );
+
+    wxVariantDataArrayString& otherData = (wxVariantDataArrayString&) data;
+
+    otherData.m_value = m_value;
+}
+
+
+bool wxVariantDataArrayString::Eq(wxVariantData& data) const
+{
+    wxASSERT_MSG( data.GetType() == GetType(), wxT("wxVariantDataArrayString::Eq: argument mismatch") );
+
+    wxVariantDataArrayString& otherData = (wxVariantDataArrayString&) data;
+
+    return otherData.m_value == m_value;
+}
+
+
+#if wxUSE_STD_IOSTREAM
+bool wxVariantDataArrayString::Write(wxSTD ostream& str) const
+{
+    // Not implemented
+    return FALSE;
+}
+#endif
+
+
+bool wxVariantDataArrayString::Write(wxString& str) const
+{
+    size_t count = m_value.GetCount();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        if ( n )
+            str += _T(';');
+
+        str += m_value[n];
+    }
+
+    return TRUE;
+}
+
+
+#if wxUSE_STD_IOSTREAM
+bool wxVariantDataArrayString::Read(wxSTD istream& WXUNUSED(str))
+{
+    // Not implemented
+    return FALSE;
+}
+#endif
+
+
+bool wxVariantDataArrayString::Read(wxString& str)
+{
+    wxStringTokenizer tk(str, _T(";"));
+    while ( tk.HasMoreTokens() )
+    {
+        m_value.Add(tk.GetNextToken());
+    }
+
+    return TRUE;
+}
+
+
 
 /*
  * wxVariant
@@ -1280,7 +1381,13 @@ wxVariant::wxVariant(const DATE_STRUCT* valptr, const wxString& name) // Date
     m_data = new wxVariantDataDateTime(valptr);
     m_name = name;
 }
-#endif
+#endif // wxUSE_ODBC
+
+wxVariant::wxVariant(const wxArrayString& val, const wxString& name) // Strings
+{
+    m_data = new wxVariantDataArrayString(val);
+    m_name = name;
+}
 
 wxVariant::wxVariant(const wxVariant& variant)
 {
@@ -1677,7 +1784,6 @@ void wxVariant::operator= (const wxDateTime& value)
     }
 }
 
-
 #if wxUSE_ODBC
 void wxVariant::operator= (const DATE_STRUCT* value)
 {
@@ -1702,7 +1808,41 @@ void wxVariant::operator= (const TIMESTAMP_STRUCT* value)
     m_data = new wxVariantDataDateTime(value);
 }
 
-#endif
+#endif // wxUSE_ODBC
+
+bool wxVariant::operator==(const wxArrayString& value) const
+{
+    wxFAIL_MSG( _T("TODO") );
+
+    return FALSE;
+}
+
+bool wxVariant::operator!=(const wxArrayString& value) const
+{
+    return !(*this == value);
+}
+
+void wxVariant::operator=(const wxArrayString& value)
+{
+    if (GetType() == wxT("arrstring"))
+    {
+        ((wxVariantDataArrayString *)GetData())->SetValue(value);
+    }
+    else
+    {
+        delete m_data;
+        m_data = new wxVariantDataArrayString(value);
+    }
+}
+
+wxArrayString wxVariant::GetArrayString() const
+{
+    if ( GetType() == wxT("arrstring") )
+        return ((wxVariantDataArrayString *)GetData())->GetValue();
+
+    return wxArrayString();
+}
+
 
 // Treat a list variant as an array
 wxVariant wxVariant::operator[] (size_t idx) const
