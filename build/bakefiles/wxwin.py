@@ -125,3 +125,22 @@ def headersOnly(files):
                 retval.append(s)
         return '%s%s%s' % (prf, ' '.join(retval), suf)
     return utils.substitute2(files, callback)
+
+
+def makeDspDependency(lib):
+    """Returns suitable entry for <depends-on-dsp> for main libs."""
+
+    DEPS_TABLE = {
+        'core':'base',
+        'adv':'core',
+        'html':'core',
+        'xml':'base',
+        'net':'base',
+        'odbc':'base',
+        'dbgrid':'adv,odbc',
+    }
+    if lib in DEPS_TABLE:
+        deps = ':%s' % DEPS_TABLE[lib]
+    else:
+        deps = ''
+    return '%s:$(nativePaths(WXTOPDIR))build\msw\wx_%s.dsp%s' % (lib,lib,deps)
