@@ -119,7 +119,7 @@ private:
                     m_ext;
 };
 
-WX_DECLARE_OBJARRAY(wxFileTypeInfo, wxArrayFileTypeInfo);
+WX_DECLARE_EXPORTED_OBJARRAY(wxFileTypeInfo, wxArrayFileTypeInfo);
 #include "wx/arrimpl.cpp"
 WX_DEFINE_OBJARRAY(wxArrayFileTypeInfo);
 

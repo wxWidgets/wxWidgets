@@ -26,7 +26,7 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxListBoxNameStr;
   // define the array of list box items
   #include  <wx/dynarray.h>
 
-  WX_DEFINE_ARRAY(wxOwnerDrawn *, wxListBoxItemsArray);
+  WX_DEFINE_EXPORTED_ARRAY(wxOwnerDrawn *, wxListBoxItemsArray);
 
 #endif
 

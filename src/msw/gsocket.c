@@ -1350,11 +1350,15 @@ GSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf)
   return GSOCK_INVADDR;
 }
 
+#else /* !wxUSE_SOCKETS */
+
+/* 
+ * translation unit shouldn't be empty, so include this typedef to make the
+ * compiler (VC++ 6.0, for example) happy
+ */
+typedef (*wxDummy)();
 
 #endif  /* wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__) */
-
-
-
 
 /* Diferencias con la version Unix:
  *  - El descriptor es SOCKET y no int

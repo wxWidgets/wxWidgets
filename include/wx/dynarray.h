@@ -165,9 +165,9 @@ private:
 //    { ((wxBaseArray *)this)->operator=((const wxBaseArray&)src);
 // so using a temporary variable instead.
 // ----------------------------------------------------------------------------
-#define  _WX_DEFINE_ARRAY(T, name)                                  \
+#define  _WX_DEFINE_ARRAY(T, name, classexp)                        \
 typedef int (CMPFUNC_CONV *CMPFUNC##T)(T *pItem1, T *pItem2);       \
-class WXDLLEXPORT name : public wxBaseArray                         \
+classexp name : public wxBaseArray                                  \
 {                                                                   \
 public:                                                             \
   name()                                                            \
@@ -228,9 +228,9 @@ public:                                                             \
 //    { ((wxBaseArray *)this)->operator=((const wxBaseArray&)src);
 // so using a temporary variable instead.
 // ----------------------------------------------------------------------------
-#define  _WX_DEFINE_SORTED_ARRAY(T, name)                           \
+#define  _WX_DEFINE_SORTED_ARRAY(T, name, classexp)                 \
 typedef int (CMPFUNC_CONV *SCMPFUNC##T)(T pItem1, T pItem2);        \
-class WXDLLEXPORT name : public wxBaseArray                         \
+classexp name : public wxBaseArray                                  \
 {                                                                   \
 public:                                                             \
   name(SCMPFUNC##T fn)                                              \
@@ -274,9 +274,9 @@ private:                                                            \
 // ----------------------------------------------------------------------------
 // see WX_DECLARE_OBJARRAY and WX_DEFINE_OBJARRAY
 // ----------------------------------------------------------------------------
-#define _WX_DECLARE_OBJARRAY(T, name)                               \
+#define _WX_DECLARE_OBJARRAY(T, name, classexp)                     \
 typedef int (CMPFUNC_CONV *CMPFUNC##T)(T** pItem1, T** pItem2);     \
-class WXDLLEXPORT name : public wxBaseArray                         \
+classexp name : public wxBaseArray                                  \
 {                                                                   \
 public:                                                             \
   name() { }                                                        \
@@ -340,15 +340,17 @@ private:                                                            \
 
    @memo declare and define array class 'name' containing elements of type 'T'
   */
-#define WX_DEFINE_ARRAY(T, name)  typedef T _A##name;                        \
-                                  _WX_DEFINE_ARRAY(_A##name, name)
+#define WX_DEFINE_ARRAY(T, name)                \
+    typedef T _A##name;                         \
+    _WX_DEFINE_ARRAY(_A##name, name, class)
 
   /**
    This macro does the same as WX_DEFINE_ARRAY except that the array will be
    sorted with the specified compare function.
    */
-#define WX_DEFINE_SORTED_ARRAY(T, name)  typedef T _A##name;                 \
-                                  _WX_DEFINE_SORTED_ARRAY(_A##name, name)
+#define WX_DEFINE_SORTED_ARRAY(T, name)             \
+    typedef T _A##name;                             \
+    _WX_DEFINE_SORTED_ARRAY(_A##name, name, class)
 
   /**
    This macro generates a new objarrays class which owns the objects it
@@ -385,8 +387,10 @@ private:                                                            \
 
    @memo declare objarray class 'name' containing elements of type 'T'
   */
-#define WX_DECLARE_OBJARRAY(T, name)  typedef T _L##name;                 \
-                                      _WX_DECLARE_OBJARRAY(_L##name, name)
+#define WX_DECLARE_OBJARRAY(T, name)            \
+    typedef T _L##name;                         \
+    _WX_DECLARE_OBJARRAY(_L##name, name, class)
+
   /**
     To use an objarray class you must
     <ll>
@@ -407,18 +411,32 @@ private:                                                            \
 #define WX_DEFINE_OBJARRAY(name)       "don't forget to include arrimpl.cpp!"
 //@}
 
+// these macros do the same thing as the WX_XXX ones above, but should be used
+// inside the library for user visible classes because otherwise they wouldn't
+// be visible from outside (when using wxWindows as DLL under Windows)
+#define WX_DEFINE_EXPORTED_ARRAY(T, name)               \
+    typedef T _A##name;                                 \
+    _WX_DEFINE_ARRAY(_A##name, name, class WXDLLEXPORT)
+
+#define WX_DEFINE_SORTED_EXPORTED_ARRAY(T, name)        \
+    typedef T _A##name;                                 \
+    _WX_DEFINE_SORTED_ARRAY(_A##name, name, class WXDLLEXPORT)
+
+#define WX_DECLARE_EXPORTED_OBJARRAY(T, name)           \
+    typedef T _L##name;                                 \
+    _WX_DECLARE_OBJARRAY(_L##name, name, class WXDLLEXPORT)
+
 // ----------------------------------------------------------------------------
 /** @name Some commonly used predefined arrays */
-// # overhead if not used?
 // ----------------------------------------------------------------------------
 
 //@{
   /** @name ArrayInt */
-WX_DEFINE_ARRAY(int,    wxArrayInt);
+WX_DEFINE_EXPORTED_ARRAY(int, wxArrayInt);
   /** @name ArrayLong */
-WX_DEFINE_ARRAY(long,   wxArrayLong);
+WX_DEFINE_EXPORTED_ARRAY(long, wxArrayLong);
   /** @name ArrayPtrVoid */
-WX_DEFINE_ARRAY(void *, wxArrayPtrVoid);
+WX_DEFINE_EXPORTED_ARRAY(void *, wxArrayPtrVoid);
 //@}
 
 //@}
@@ -443,5 +461,6 @@ WX_DEFINE_ARRAY(void *, wxArrayPtrVoid);
                                                                               \
         array.Empty();                                                        \
     }
+
 #endif // _DYNARRAY_H
 

@@ -45,7 +45,7 @@ enum wxTextFileType
     wxTextFileType_Os2    //                         'CR' 'LF'
 };
 
-WX_DEFINE_ARRAY(wxTextFileType, ArrayFileType);
+WX_DEFINE_EXPORTED_ARRAY(wxTextFileType, ArrayFileType);
 
 class WXDLLEXPORT wxTextFile
 {

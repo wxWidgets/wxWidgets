@@ -34,7 +34,7 @@ class WXDLLEXPORT wxWindow;
 // array of notebook pages
 typedef wxWindow WXDLLEXPORT wxNotebookPage;  // so far, any window can be a page
 
-WX_DEFINE_ARRAY(wxNotebookPage *, wxArrayPages);
+WX_DEFINE_EXPORTED_ARRAY(wxNotebookPage *, wxArrayPages);
 
 // ----------------------------------------------------------------------------
 // wxNotebook

@@ -84,7 +84,7 @@
 	#include "wx/db.h"
 #endif
 
-DbList* WXDLLEXPORT PtrBegDbList = 0;
+DbList WXDLLEXPORT *PtrBegDbList = 0;
 
 #if __WXDEBUG__ > 0
         #if   wxMAJOR_VERSION == 2
@@ -1728,7 +1728,7 @@ DBMS wxDB::Dbms(void)
 
 
 /********** GetDbConnection() **********/
-wxDB* WXDLLEXPORT GetDbConnection(DbStuff *pDbStuff)
+wxDB WXDLLEXPORT *GetDbConnection(DbStuff *pDbStuff)
 {
 	DbList *pList;
 

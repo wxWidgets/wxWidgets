@@ -30,7 +30,7 @@
 // this one if used by wxPaintDC only
 struct WXDLLEXPORT wxPaintDCInfo;
 
-WX_DECLARE_OBJARRAY(wxPaintDCInfo, wxArrayDCInfo);
+WX_DECLARE_EXPORTED_OBJARRAY(wxPaintDCInfo, wxArrayDCInfo);
 
 // ----------------------------------------------------------------------------
 // DC classes

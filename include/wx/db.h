@@ -443,7 +443,7 @@ class CstructTablesInUse : public wxObject
 // for other code segments to use, or close all of them when the application has
 // completed.
 
-wxDB* WXDLLEXPORT GetDbConnection(DbStuff *pDbStuff);
+wxDB WXDLLEXPORT *GetDbConnection(DbStuff *pDbStuff);
 bool  WXDLLEXPORT FreeDbConnection(wxDB *pDb);
 void  WXDLLEXPORT CloseDbConnections(void);
 int   WXDLLEXPORT NumberDbConnectionsInUse(void);
