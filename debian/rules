@@ -263,7 +263,7 @@ build-doc-stamp: build-gtk-shared-stamp
 	mkdir $(objdir_doc)
 	mkdir $(objdir_doc_cruft)
 	cd $(objdir_doc_cruft) \
-		&& LD_LIBRARY_PATH=../$(objdir_gtk_shared)/lib \
+		&& LD_LIBRARY_PATH=../$(objdir_gtk_shared)/lib:$(LD_LIBRARY_PATH) \
 		   ../$(objdir_gtk_shared)/utils/tex2rtf/src/tex2rtf \
 		   ../docs/latex/wx/manual.tex ../$(objdir_doc)/wxwin.htm -twice -html
 	cp docs/latex/wx/*.gif $(objdir_doc)

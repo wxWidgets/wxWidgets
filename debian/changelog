@@ -1,10 +1,18 @@
+wxwindows2.2 (2.2.8) unstable; urgency=low
+
+  * 2.2.7 was never released for various sundry reasons,
+    but here's a 2.2.8 prerelease to play with instead.
+
+ -- Ron Lee <ron@debian.org>  Thu, 30 Aug 2001 15:41:49 -0700
+
 wxwindows2.2 (2.2.7) unstable; urgency=medium
 
   * The "Testing Tarantella" release.
   * various small control (mis)behaviours corrected.
   * added missing build-dep for gettext.
+  * updated wxPython description, Closes: #102689
 
- -- Ron <ron@debian.org>  Sun, 10 Jun 2001 19:32:46 -0700
+ -- Ron Lee <ron@debian.org>  Sun, 10 Jun 2001 19:32:46 -0700
 
 wxwindows2.2 (2.2.6.1) unstable; urgency=low
 

@@ -155,12 +155,14 @@ typedef unsigned int UINT16;
 typedef short INT16;
 #endif
 
-/* INT32 must hold at least signed 32-bit values. */
+#if defined( __GNUWIN32__ ) || defined( __MINGW32__ ) || defined( __CYGWIN__ )
+#include <wx/msw/gccpriv.h>
+#else
+#undef wxCHECK_W32API_VERSION
+#define wxCHECK_W32API_VERSION(maj, min) (0)
+#endif
 
-#ifdef INT32
-#   undef INT32_DEFINED
-#   define INT32_DEFINED
-#endif /* INT32 defined */
+/* INT32 must hold at least signed 32-bit values. */
 
 /* you may define INT32_DEFINED if it is already defined somewhere */
 #ifndef INT32_DEFINED
@@ -168,8 +170,10 @@ typedef short INT16;
 /* X11/xmd.h correctly defines INT32 */
 #define INT32_DEFINED
 #elif (_MSC_VER >= 1200) || (__BORLANDC__ >= 0x550) || \
+      wxCHECK_W32API_VERSION( 0, 5 ) || \
       ((defined(__MINGW32__) || defined(__CYGWIN__)) \
        && ((__GNUC__>2) || ((__GNUC__==2) && (__GNUC_MINOR__>95))))
+
 /* INT32 is defined in windows.h  for these compilers */
 #define INT32_DEFINED
 #include <windows.h>

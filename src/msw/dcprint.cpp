@@ -173,7 +173,7 @@ wxPrinterDC::~wxPrinterDC()
     {
         ::DeleteDC(GetHdc());
 
-        m_hDC = NULL;
+        m_hDC = 0;
     }
 }
 
