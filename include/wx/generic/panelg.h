@@ -78,7 +78,11 @@ public:
         // set the focus to the first child if we get it
     void OnFocus(wxFocusEvent& event);
 
+        // calls layout for layout constraints and sizers
     void OnSize(wxSizeEvent& event);
+
+        // overridden to tab move focus into first focusable child
+    virtual void SetFocus();
 
         // called by wxWindow whenever it gets focus
     void SetLastFocus(wxWindow *win) { m_winLastFocused = win; }

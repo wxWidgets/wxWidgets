@@ -739,9 +739,12 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
     /* win is a control: tab can be propagated up */
     if ( (!ret) &&
          ((gdk_event->keyval == GDK_Tab) || (gdk_event->keyval == GDK_ISO_Left_Tab)) &&
-         (win->HasFlag(wxTE_PROCESS_TAB) == 0))
+         (!win->HasFlag(wxTE_PROCESS_TAB)) &&
+	 (win->GetParent()) &&
+	 (win->GetParent()->HasFlag( wxTAB_TRAVERSAL)) )
     {
         wxNavigationKeyEvent new_event;
+	new_event.SetEventObject( win );
         /* GDK reports GDK_ISO_Left_Tab for SHIFT-TAB */
         new_event.SetDirection( (gdk_event->keyval == GDK_Tab) );
         /* CTRL-TAB changes the (parent) window, i.e. switch notebook page */
@@ -1295,21 +1298,6 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget, GdkEvent *WXUNUSED(
 
     g_focusWindow = win;
 
-    if (win->m_wxwindow)
-    {
-        if (GTK_WIDGET_CAN_FOCUS(win->m_wxwindow))
-        {
-            GTK_WIDGET_SET_FLAGS (win->m_wxwindow, GTK_HAS_FOCUS);
-/*
-            printf( "SetFocus flag from " );
-            if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
-                printf( win->GetClassInfo()->GetClassName() );
-            printf( ".\n" );
-*/
-        }
-    }
-
-
 /*
     printf( "OnSetFocus from " );
     if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
@@ -1319,6 +1307,12 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget, GdkEvent *WXUNUSED(
     printf( ".\n" );
 */
 
+    wxPanel *panel = wxDynamicCast(win->GetParent(), wxPanel);
+    if (panel)
+    {
+        panel->SetLastFocus(win);
+    }
+    
     wxFocusEvent event( wxEVT_SET_FOCUS, win->GetId() );
     event.SetEventObject( win );
 
@@ -1342,12 +1336,6 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEvent *WXUNUSED
 
     if (!win->m_hasVMT) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;
-
-    if (win->m_wxwindow)
-    {
-      if (GTK_WIDGET_CAN_FOCUS(win->m_wxwindow))
-          GTK_WIDGET_UNSET_FLAGS (win->m_wxwindow, GTK_HAS_FOCUS);
-    }
 
 /*
     printf( "OnKillFocus from " );
@@ -1671,13 +1659,6 @@ static void wxInsertChildInWindow( wxWindow* parent, wxWindow* child )
                      child->m_y,
                      child->m_width,
                      child->m_height );
-
-    if (parent->HasFlag(wxTAB_TRAVERSAL))
-    {
-        /* we now allow a window to get the focus as long as it
-           doesn't have any children. */
-        GTK_WIDGET_UNSET_FLAGS( parent->m_wxwindow, GTK_CAN_FOCUS );
-    }
 }
 
 //-----------------------------------------------------------------------------
@@ -1832,18 +1813,8 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
     }
 #endif // GTK_MINOR_VERSION
 
-    if (HasFlag(wxTAB_TRAVERSAL))
-    {
-        /* we now allow a window to get the focus as long as it
-           doesn't have any children. */
-        GTK_WIDGET_SET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
-        m_acceptsFocus = FALSE;
-    }
-    else
-    {
-        GTK_WIDGET_SET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
-        m_acceptsFocus = TRUE;
-    }
+    GTK_WIDGET_SET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
+    m_acceptsFocus = TRUE;
 
 #if (GTK_MINOR_VERSION == 0)
     // shut the viewport up
@@ -2485,18 +2456,6 @@ void wxWindow::GetTextExtent( const wxString& string,
 void wxWindow::SetFocus()
 {
     wxCHECK_RET( (m_widget != NULL), wxT("invalid window") );
-
-    wxNode *node = m_children.First();
-    while (node)
-    {
-	wxWindow *child = (wxWindow*) node->Data();
-	if (child->AcceptsFocus())
-	{
-	    child->SetFocus();
-	    return;
-	}
-        node = node->Next();
-    }
 
     if (m_wxwindow)
     {
