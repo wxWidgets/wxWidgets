@@ -22,7 +22,6 @@ CFG=regex - Win32 Debug Unicode
 !MESSAGE "regex - Win32 Release Unicode" (based on "Win32 (x86) Static Library")
 !MESSAGE "regex - Win32 Debug Unicode" (based on "Win32 (x86) Static Library")
 !MESSAGE "regex - Win32 Release With Debug Info" (based on "Win32 (x86) Static Library")
-!MESSAGE "regex - Win32 Release Unicode With Debug Info" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -149,30 +148,6 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\regex.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\regex.lib"
 
-!ELSEIF  "$(CFG)" == "regex - Win32 Release Unicode With Debug Info"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "regex___Win32_Release_Unicode_With_Debug_Info"
-# PROP BASE Intermediate_Dir "regex___Win32_Release_Unicode_With_Debug_Info"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "regex___Win32_Release_Unicode_With_Debug_Info"
-# PROP Intermediate_Dir "regex___Win32_Release_Unicode_With_Debug_Info"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /MD /O1 /I "." /D "WIN32" /D "_WINDOWS" /D "_UNICODE" /D "UNICODE" /D "wxUSE_UNICODE" /D "__WINDOWS__" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /FD /c
-# SUBTRACT BASE CPP /YX
-# ADD CPP /nologo /MD /W4 /Zi /O1 /I "." /I "../../include" /D "WIN32" /D "_WINDOWS" /D "_UNICODE" /D "UNICODE" /D "wxUSE_UNICODE" /D "__WINDOWS__" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /FD /c
-# ADD BASE RSC /l 0x809 /d "NDEBUG"
-# ADD RSC /l 0x809 /d "NDEBUG"
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\regexu.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\regexu.lib"
-
 !ENDIF 
 
 # Begin Target
@@ -182,7 +157,6 @@ LIB32=link.exe -lib
 # Name "regex - Win32 Release Unicode"
 # Name "regex - Win32 Debug Unicode"
 # Name "regex - Win32 Release With Debug Info"
-# Name "regex - Win32 Release Unicode With Debug Info"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
@@ -226,70 +200,10 @@ SOURCE=.\regguts.h
 
 SOURCE=..\..\include\wx\msw\setup.h
 
-!IF  "$(CFG)" == "regex - Win32 Release Unicode DLL"
-
-# Begin Custom Build - Creating ..\lib\mswdllu\wx\setup.h from $(InputPath)
-InputPath=..\include\wx\msw\setup.h
-
-"../lib/mswdllu/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\lib\mswdllu\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "regex - Win32 Debug Unicode DLL"
-
-# Begin Custom Build - Creating ..\lib\mswdllud\wx\setup.h from $(InputPath)
-InputPath=..\include\wx\msw\setup.h
-
-"../lib/mswdllud/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\lib\mswdllud\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "regex - Win32 Release Unicode"
-
-# Begin Custom Build - Creating ..\lib\mswu\wx\setup.h from $(InputPath)
-InputPath=..\include\wx\msw\setup.h
-
-"../lib/mswu/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\lib\mswu\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "regex - Win32 Debug Unicode"
-
-# Begin Custom Build - Creating ..\lib\mswud\wx\setup.h from $(InputPath)
-InputPath=..\include\wx\msw\setup.h
-
-"../lib/mswud/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\lib\mswud\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "regex - Win32 Release DLL"
-
-# Begin Custom Build - Creating ..\lib\mswdll\wx\setup.h from $(InputPath)
-InputPath=..\include\wx\msw\setup.h
-
-"../lib/mswdll/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\lib\mswdll\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "regex - Win32 Debug DLL"
-
-# Begin Custom Build - Creating ..\lib\mswdlld\wx\setup.h from $(InputPath)
-InputPath=..\include\wx\msw\setup.h
-
-"../lib/mswdlld/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\lib\mswdlld\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "regex - Win32 Release"
+!IF  "$(CFG)" == "regex - Win32 Release"
 
 # Begin Custom Build - Creating ..\lib\msw\wx\setup.h from $(InputPath)
-InputPath=..\include\wx\msw\setup.h
+InputPath=..\..\include\wx\msw\setup.h
 
 "../lib/msw/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy "$(InputPath)" ..\lib\msw\wx\setup.h
@@ -299,17 +213,45 @@ InputPath=..\include\wx\msw\setup.h
 !ELSEIF  "$(CFG)" == "regex - Win32 Debug"
 
 # Begin Custom Build - Creating ..\lib\mswd\wx\setup.h from $(InputPath)
-InputPath=..\include\wx\msw\setup.h
+InputPath=..\..\include\wx\msw\setup.h
 
 "../lib/mswd/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy "$(InputPath)" ..\lib\mswd\wx\setup.h
 
 # End Custom Build
 
+!ELSEIF  "$(CFG)" == "regex - Win32 Release Unicode"
+
+# Begin Custom Build - Creating ..\lib\mswu\wx\setup.h from $(InputPath)
+InputPath=..\..\include\wx\msw\setup.h
+
+"../lib/mswu/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\lib\mswu\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "regex - Win32 Debug Unicode"
+
+# Begin Custom Build - Creating ..\lib\mswdlld\wx\setup.h from $(InputPath)
+InputPath=..\..\include\wx\msw\setup.h
+
+BuildCmds= \
+	copy "$(InputPath)" ..\lib\mswdlld\wx\setup.h
+
+"../lib/mswud/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+"../lib/mswdll/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+"../lib/mswdlld/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "regex - Win32 Release With Debug Info"
 
 # Begin Custom Build - Creating ..\lib\msw\wx\setup.h from $(InputPath)
-InputPath=..\include\wx\msw\setup.h
+InputPath=..\..\include\wx\msw\setup.h
 
 "../lib/msw/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy "$(InputPath)" ..\lib\msw\wx\setup.h
