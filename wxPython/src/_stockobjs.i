@@ -50,7 +50,8 @@ public:
     // find colour by name or name for the given colour
     wxColour Find(const wxString& name) const;
     wxString FindName(const wxColour& colour) const;
-
+    %pythoncode { FindColour = Find }
+    
     // add a new colour to the database
     void AddColour(const wxString& name, const wxColour& colour);
 
