@@ -19,7 +19,7 @@ DEPRECATEDDLL_CFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\src\deprecated\..\..\..\include /I$(SETUPHDIR) \
 	/I..\..\src\deprecated\..\..\include /DWXUSINGDLL /DWXMAKINGDLL_DEPRECATED \
-	/I..\..\src\deprecated $(CFLAGS)
+	$(CFLAGS)
 DEPRECATEDDLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) \
 	/DWIN32 $(__DEBUGINFO_2) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_deprecated_vc$(VENDORTAG).pdb \
@@ -27,14 +27,14 @@ DEPRECATEDDLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\src\deprecated\..\..\..\include /I$(SETUPHDIR) \
 	/I..\..\src\deprecated\..\..\include /DWXUSINGDLL /DWXMAKINGDLL_DEPRECATED \
-	/I..\..\src\deprecated $(CXXFLAGS) /Yu"wx/wxprec.h" \
-	/Fp"$(OBJS)\wxprec_deprecateddll.pch"
+	$(CXXFLAGS) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_deprecateddll.pch"
 DEPRECATEDDLL_OBJECTS =  \
 	$(OBJS)\deprecateddll_dummy.obj \
 	$(OBJS)\deprecateddll_prop.obj \
 	$(OBJS)\deprecateddll_propform.obj \
 	$(OBJS)\deprecateddll_proplist.obj \
 	$(OBJS)\deprecateddll_resource.obj \
+	$(OBJS)\deprecateddll_tbarsmpl.obj \
 	$(OBJS)\deprecateddll_treelay.obj \
 	$(OBJS)\deprecateddll_wxexpr.obj \
 	$(OBJS)\deprecateddll_dosyacc.obj
@@ -44,21 +44,22 @@ DEPRECATEDLIB_CFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_12) \
 	$(____DEBUGRUNTIME_11_p) $(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\src\deprecated\..\..\..\include /I$(SETUPHDIR) \
-	/I..\..\src\deprecated\..\..\include /I..\..\src\deprecated $(CFLAGS)
+	/I..\..\src\deprecated\..\..\include $(CFLAGS)
 DEPRECATEDLIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_12) \
 	/DWIN32 $(__DEBUGINFO_2) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_deprecated.pdb \
 	$(____DEBUGRUNTIME_11_p) $(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\src\deprecated\..\..\..\include /I$(SETUPHDIR) \
-	/I..\..\src\deprecated\..\..\include /I..\..\src\deprecated $(CXXFLAGS) \
-	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_deprecatedlib.pch"
+	/I..\..\src\deprecated\..\..\include $(CXXFLAGS) /Yu"wx/wxprec.h" \
+	/Fp"$(OBJS)\wxprec_deprecatedlib.pch"
 DEPRECATEDLIB_OBJECTS =  \
 	$(OBJS)\deprecatedlib_dummy.obj \
 	$(OBJS)\deprecatedlib_prop.obj \
 	$(OBJS)\deprecatedlib_propform.obj \
 	$(OBJS)\deprecatedlib_proplist.obj \
 	$(OBJS)\deprecatedlib_resource.obj \
+	$(OBJS)\deprecatedlib_tbarsmpl.obj \
 	$(OBJS)\deprecatedlib_treelay.obj \
 	$(OBJS)\deprecatedlib_wxexpr.obj \
 	$(OBJS)\deprecatedlib_dosyacc.obj
@@ -269,6 +270,9 @@ $(OBJS)\deprecateddll_proplist.obj: ../../src/deprecated\proplist.cpp
 $(OBJS)\deprecateddll_resource.obj: ../../src/deprecated\resource.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(DEPRECATEDDLL_CXXFLAGS) $**
 
+$(OBJS)\deprecateddll_tbarsmpl.obj: ../../src/deprecated\tbarsmpl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(DEPRECATEDDLL_CXXFLAGS) $**
+
 $(OBJS)\deprecateddll_treelay.obj: ../../src/deprecated\treelay.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(DEPRECATEDDLL_CXXFLAGS) $**
 
@@ -291,6 +295,9 @@ $(OBJS)\deprecatedlib_proplist.obj: ../../src/deprecated\proplist.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(DEPRECATEDLIB_CXXFLAGS) $**
 
 $(OBJS)\deprecatedlib_resource.obj: ../../src/deprecated\resource.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(DEPRECATEDLIB_CXXFLAGS) $**
+
+$(OBJS)\deprecatedlib_tbarsmpl.obj: ../../src/deprecated\tbarsmpl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(DEPRECATEDLIB_CXXFLAGS) $**
 
 $(OBJS)\deprecatedlib_treelay.obj: ../../src/deprecated\treelay.cpp

@@ -4689,10 +4689,6 @@ SOURCE=..\..\src\generic\tabg.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\generic\tbarsmpl.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\generic\textdlgg.cpp
 # End Source File
 # Begin Source File
@@ -8345,10 +8341,6 @@ SOURCE=..\..\include\wx\taskbar.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\tbarbase.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\tbarsmpl.h
 # End Source File
 # Begin Source File
 

@@ -225,7 +225,8 @@ $TAR xf ../wxAll-${WXVER}.tar
 unix2dos --unix2dos `cat $WXSRC/distrib/msw/vc.rsp`
 
 # Copy OS/2 specific configure files
-cp $WXSRC/distrib/os2/os2-specific.zip docs/os2
+# (no longer)
+# cp $WXSRC/distrib/os2/os2-specific.zip docs/os2
 
 # Copy the OS/2 files which probably haven't been copied yet
 mkdir include/wx/os2

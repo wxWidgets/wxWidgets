@@ -399,14 +399,6 @@ HTMLLIB_OBJECTS =  \
 	$(OBJS)\htmllib_m_tables.obj \
 	$(OBJS)\htmllib_winpars.obj \
 	$(OBJS)\htmllib_htmllbox.obj
-MAKEARGS = CPPFLAGS="$(CPPFLAGS)" DEBUG_FLAG="$(DEBUG_FLAG)" \
-	LDFLAGS="$(LDFLAGS)" DEBUG_RUNTIME_LIBS="$(DEBUG_RUNTIME_LIBS)" CC="$(CC)" \
-	USE_GUI="$(USE_GUI)" MONOLITHIC="$(MONOLITHIC)" CXXFLAGS="$(CXXFLAGS)" \
-	USE_HTML="$(USE_HTML)" BUILD="$(BUILD)" DEBUG_INFO="$(DEBUG_INFO)" \
-	VENDOR="$(VENDOR)" UNICODE="$(UNICODE)" OFFICIAL_BUILD="$(OFFICIAL_BUILD)" \
-	MSLU="$(MSLU)" WXUNIV="$(WXUNIV)" RUNTIME_LIBS="$(RUNTIME_LIBS)" \
-	CXX="$(CXX)" CFG="$(CFG)" CFLAGS="$(CFLAGS)" SHARED="$(SHARED)" \
-	USE_ODBC="$(USE_ODBC)" USE_OPENGL="$(USE_OPENGL)"
 MONODLL_CFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_51) /DWIN32 \
 	$(__DEBUGINFO_36) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_vc$(VENDORTAG).pdb \
@@ -1398,7 +1390,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_selstore.obj \
 	$(OBJS)\monolib_spinctlg.obj \
 	$(OBJS)\monolib_splitter.obj \
-	$(OBJS)\monolib_tbarsmpl.obj \
 	$(OBJS)\monolib_textdlgg.obj \
 	$(OBJS)\monolib_tipwin.obj \
 	$(OBJS)\monolib_treectlg.obj \
@@ -1591,7 +1582,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_selstore.obj \
 	$(OBJS)\monolib_spinctlg.obj \
 	$(OBJS)\monolib_splitter.obj \
-	$(OBJS)\monolib_tbarsmpl.obj \
 	$(OBJS)\monolib_textdlgg.obj \
 	$(OBJS)\monolib_tipwin.obj \
 	$(OBJS)\monolib_treectlg.obj \
@@ -1781,7 +1771,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_selstore.obj \
 	$(OBJS)\coredll_spinctlg.obj \
 	$(OBJS)\coredll_splitter.obj \
-	$(OBJS)\coredll_tbarsmpl.obj \
 	$(OBJS)\coredll_textdlgg.obj \
 	$(OBJS)\coredll_tipwin.obj \
 	$(OBJS)\coredll_treectlg.obj \
@@ -1974,7 +1963,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_selstore.obj \
 	$(OBJS)\coredll_spinctlg.obj \
 	$(OBJS)\coredll_splitter.obj \
-	$(OBJS)\coredll_tbarsmpl.obj \
 	$(OBJS)\coredll_textdlgg.obj \
 	$(OBJS)\coredll_tipwin.obj \
 	$(OBJS)\coredll_treectlg.obj \
@@ -2164,7 +2152,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_selstore.obj \
 	$(OBJS)\corelib_spinctlg.obj \
 	$(OBJS)\corelib_splitter.obj \
-	$(OBJS)\corelib_tbarsmpl.obj \
 	$(OBJS)\corelib_textdlgg.obj \
 	$(OBJS)\corelib_tipwin.obj \
 	$(OBJS)\corelib_treectlg.obj \
@@ -2357,7 +2344,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_selstore.obj \
 	$(OBJS)\corelib_spinctlg.obj \
 	$(OBJS)\corelib_splitter.obj \
-	$(OBJS)\corelib_tbarsmpl.obj \
 	$(OBJS)\corelib_textdlgg.obj \
 	$(OBJS)\corelib_tipwin.obj \
 	$(OBJS)\corelib_treectlg.obj \
@@ -2547,7 +2533,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_selstore.obj \
 	$(OBJS)\monodll_spinctlg.obj \
 	$(OBJS)\monodll_splitter.obj \
-	$(OBJS)\monodll_tbarsmpl.obj \
 	$(OBJS)\monodll_textdlgg.obj \
 	$(OBJS)\monodll_tipwin.obj \
 	$(OBJS)\monodll_treectlg.obj \
@@ -2740,7 +2725,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_selstore.obj \
 	$(OBJS)\monodll_spinctlg.obj \
 	$(OBJS)\monodll_splitter.obj \
-	$(OBJS)\monodll_tbarsmpl.obj \
 	$(OBJS)\monodll_textdlgg.obj \
 	$(OBJS)\monodll_tipwin.obj \
 	$(OBJS)\monodll_treectlg.obj \
@@ -3151,11 +3135,11 @@ __netdll___depname = \
 __netlib___depname = \
 	$(LIBDIRNAME)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net.lib
 !endif
-!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_GUI)" == "1" && "$(USE_ODBC)" == "1"
+!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_ODBC)" == "1"
 __odbcdll___depname = \
 	$(LIBDIRNAME)\wxbase250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc_vc$(VENDORTAG).dll
 !endif
-!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_GUI)" == "1" && "$(USE_ODBC)" == "1"
+!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_ODBC)" == "1"
 __odbclib___depname = \
 	$(LIBDIRNAME)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc.lib
 !endif
@@ -4664,11 +4648,6 @@ $(OBJS)\coredll_tbarbase.obj: ..\..\src\common\tbarbase.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\coredll_tbarsmpl.obj: ..\..\src\generic\tbarsmpl.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) $**
-!endif
-
-!if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_textcmn.obj: ..\..\src\common\textcmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) $**
 !endif
@@ -5774,11 +5753,6 @@ $(OBJS)\corelib_tbar95.obj: ..\..\src\msw\tbar95.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_tbarbase.obj: ..\..\src\common\tbarbase.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) $**
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\corelib_tbarsmpl.obj: ..\..\src\generic\tbarsmpl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) $**
 !endif
 
@@ -7335,11 +7309,6 @@ $(OBJS)\monodll_tbarbase.obj: ..\..\src\common\tbarbase.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
 !endif
 
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_tbarsmpl.obj: ..\..\src\generic\tbarsmpl.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
-!endif
-
 $(OBJS)\monodll_textbuf.obj: ..\..\src\common\textbuf.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
 
@@ -8788,11 +8757,6 @@ $(OBJS)\monolib_tbarbase.obj: ..\..\src\common\tbarbase.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
 !endif
 
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_tbarsmpl.obj: ..\..\src\generic\tbarsmpl.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
-!endif
-
 $(OBJS)\monolib_textbuf.obj: ..\..\src\common\textbuf.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
 
@@ -9617,14 +9581,14 @@ $(LIBDIRNAME)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net.lib: $(OBJS)\netlib_dum
 <<
 !endif
 
-!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_GUI)" == "1" && "$(USE_ODBC)" == "1"
+!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_ODBC)" == "1"
 $(LIBDIRNAME)\wxbase250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc_vc$(VENDORTAG).dll: $(OBJS)\odbcdll_dummy.obj  $(ODBCDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXDEBUGFLAG).lib $(__basedll___depname)
 	link /DLL /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_34)  /LIBPATH:$(LIBDIRNAME) @<<
 	$(ODBCDLL_OBJECTS)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib $(LIBDIRNAME)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib  /IMPLIB:$(LIBDIRNAME)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc.lib
 <<
 !endif
 
-!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_GUI)" == "1" && "$(USE_ODBC)" == "1"
+!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_ODBC)" == "1"
 $(LIBDIRNAME)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc.lib: $(OBJS)\odbclib_dummy.obj  $(ODBCLIB_OBJECTS)
 	if exist $@ del $@
 	lib /NOLOGO /OUT:$@ @<<
@@ -9634,7 +9598,7 @@ $(LIBDIRNAME)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc.lib: $(OBJS)\odbclib_d
 
 sub_samples: 
 	cd ..\..\samples
-	$(MAKE) -f makefile.vc $(MAKEARGS) all
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
 	cd $(MAKEDIR)
 
 $(SETUPHDIR)\wx\setup.h: 

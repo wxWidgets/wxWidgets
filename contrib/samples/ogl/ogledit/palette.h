@@ -21,7 +21,7 @@
 #if 0 // def __WXGTK__
 #include <wx/toolbar.h>
 #else
-#include <wx/tbarsmpl.h>
+#include <wx/deprecated/tbarsmpl.h>
 #endif
 
 /*

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        generic/tbarsmpl.cpp
+// Name:        contrib/src/deprecated//tbarsmpl.cpp
 // Purpose:     wxToolBarSimple
 // Author:      Julian Smart
 // Modified by: VZ on 14.12.99 during wxToolBarSimple reorganization
@@ -38,13 +38,13 @@
 #endif
 
 #include "wx/toolbar.h"
-#include "wx/tbarsmpl.h"
+#include "wx/deprecated/tbarsmpl.h"
 
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxToolBarToolSimple : public wxToolBarToolBase
+class WXDLLIMPEXP_DEPRECATED wxToolBarToolSimple : public wxToolBarToolBase
 {
 public:
     wxToolBarToolSimple(wxToolBarSimple *tbar,
@@ -1010,3 +1010,4 @@ void wxToolBarSimple::ViewStart (int *x, int *y) const
 }
 
 #endif // wxUSE_TOOLBAR_SIMPLE
+

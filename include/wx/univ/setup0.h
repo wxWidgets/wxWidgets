@@ -566,17 +566,13 @@
 
 // wxToolBar related settings: if wxUSE_TOOLBAR is 0, don't compile any toolbar
 // classes at all. Otherwise, use the native toolbar class unless
-// wxUSE_TOOLBAR_NATIVE is 0. Additionally, the generic toolbar class which
-// supports some features which might not be supported by the native wxToolBar
-// class may be compiled in if wxUSE_TOOLBAR_SIMPLE is 1.
+// wxUSE_TOOLBAR_NATIVE is 0.
 //
 // Default is 0 for all settings.
 //
-// Recommended setting: 1 for wxUSE_TOOLBAR and 0 for wxUSE_TOOLBAR_NATIVE and
-// wxUSE_TOOLBAR_SIMPLE.
+// Recommended setting: 1 for wxUSE_TOOLBAR and 0 for wxUSE_TOOLBAR_NATIVE.
 #define wxUSE_TOOLBAR 1
 #define wxUSE_TOOLBAR_NATIVE 0
-#define wxUSE_TOOLBAR_SIMPLE 1
 
 // this setting is obsolete, value is ignored
 #define wxUSE_BUTTONBAR 0

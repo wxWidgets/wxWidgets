@@ -123,8 +123,9 @@ dospinos2()
     mkdir $DESTDIR/wxWindows-$VERSION
     cd $DESTDIR/wxWindows-$VERSION
     unzip $ZIPFLAGS ../wxOS2-$VERSION.zip
-    echo Overwriting with OS2-specific versions of configure files...
-    unzip $ZIPFLAGS -o $APPDIR/distrib/os2/os2-specific.zip
+    # No longer do this, configure should be OK (maybe)
+    # echo Overwriting with OS2-specific versions of configure files...
+    # unzip $ZIPFLAGS -o $APPDIR/distrib/os2/os2-specific.zip
     rm -f src/gtk/descrip.mms src/motif/descrip.mms docs/pdf/*.pdf
     rm -f src/tiff/*.mcp src/jpeg/*.mcp src/png/*.mcp src/zlib/*.mcp
     rm -f -r docs/html/dialoged docs/html/tex2rtf

@@ -16,38 +16,39 @@ DEPRECATEDDLL_CFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) 
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I..\..\src\deprecated\..\..\..\include \
 	-I$(SETUPHDIR) -I..\..\src\deprecated\..\..\include -DWXUSINGDLL \
-	-DWXMAKINGDLL_DEPRECATED -I..\..\src\deprecated $(CFLAGS)
+	-DWXMAKINGDLL_DEPRECATED $(CFLAGS)
 DEPRECATEDDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	-I..\..\src\deprecated\..\..\..\include -I$(SETUPHDIR) \
 	-I..\..\src\deprecated\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_DEPRECATED \
-	-I..\..\src\deprecated $(CXXFLAGS)
+	$(CXXFLAGS)
 DEPRECATEDDLL_OBJECTS =  \
 	$(OBJS)\deprecateddll_dummy.o \
 	$(OBJS)\deprecateddll_prop.o \
 	$(OBJS)\deprecateddll_propform.o \
 	$(OBJS)\deprecateddll_proplist.o \
 	$(OBJS)\deprecateddll_resource.o \
+	$(OBJS)\deprecateddll_tbarsmpl.o \
 	$(OBJS)\deprecateddll_treelay.o \
 	$(OBJS)\deprecateddll_wxexpr.o \
 	$(OBJS)\deprecateddll_dosyacc.o
 DEPRECATEDLIB_CFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I..\..\src\deprecated\..\..\..\include \
-	-I$(SETUPHDIR) -I..\..\src\deprecated\..\..\include -I..\..\src\deprecated \
-	$(CFLAGS)
+	-I$(SETUPHDIR) -I..\..\src\deprecated\..\..\include $(CFLAGS)
 DEPRECATEDLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	-I..\..\src\deprecated\..\..\..\include -I$(SETUPHDIR) \
-	-I..\..\src\deprecated\..\..\include -I..\..\src\deprecated $(CXXFLAGS)
+	-I..\..\src\deprecated\..\..\include $(CXXFLAGS)
 DEPRECATEDLIB_OBJECTS =  \
 	$(OBJS)\deprecatedlib_dummy.o \
 	$(OBJS)\deprecatedlib_prop.o \
 	$(OBJS)\deprecatedlib_propform.o \
 	$(OBJS)\deprecatedlib_proplist.o \
 	$(OBJS)\deprecatedlib_resource.o \
+	$(OBJS)\deprecatedlib_tbarsmpl.o \
 	$(OBJS)\deprecatedlib_treelay.o \
 	$(OBJS)\deprecatedlib_wxexpr.o \
 	$(OBJS)\deprecatedlib_dosyacc.o
@@ -191,6 +192,9 @@ $(OBJS)\deprecateddll_proplist.o: ../../src/deprecated\proplist.cpp
 $(OBJS)\deprecateddll_resource.o: ../../src/deprecated\resource.cpp
 	$(CXX) -c -o $@ $(DEPRECATEDDLL_CXXFLAGS) $<
 
+$(OBJS)\deprecateddll_tbarsmpl.o: ../../src/deprecated\tbarsmpl.cpp
+	$(CXX) -c -o $@ $(DEPRECATEDDLL_CXXFLAGS) $<
+
 $(OBJS)\deprecateddll_treelay.o: ../../src/deprecated\treelay.cpp
 	$(CXX) -c -o $@ $(DEPRECATEDDLL_CXXFLAGS) $<
 
@@ -213,6 +217,9 @@ $(OBJS)\deprecatedlib_proplist.o: ../../src/deprecated\proplist.cpp
 	$(CXX) -c -o $@ $(DEPRECATEDLIB_CXXFLAGS) $<
 
 $(OBJS)\deprecatedlib_resource.o: ../../src/deprecated\resource.cpp
+	$(CXX) -c -o $@ $(DEPRECATEDLIB_CXXFLAGS) $<
+
+$(OBJS)\deprecatedlib_tbarsmpl.o: ../../src/deprecated\tbarsmpl.cpp
 	$(CXX) -c -o $@ $(DEPRECATEDLIB_CXXFLAGS) $<
 
 $(OBJS)\deprecatedlib_treelay.o: ../../src/deprecated\treelay.cpp

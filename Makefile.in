@@ -87,6 +87,7 @@ ADVLIB_OBJECTS =  \
 	advlib_wizard.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_3)
 ALL_BASE_HEADERS =  \
+	wx/afterstd.h \
 	wx/app.h \
 	wx/apptrait.h \
 	wx/arrimpl.cpp \
@@ -1026,7 +1027,6 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/window.h \
 	wx/accel.h \
 	wx/access.h \
-	wx/afterstd.h \
 	wx/artprov.h \
 	wx/bitmap.h \
 	wx/busyinfo.h \
@@ -1099,7 +1099,6 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/tab.h \
 	wx/tabctrl.h \
 	wx/tbarbase.h \
-	wx/tbarsmpl.h \
 	wx/tglbtn.h \
 	wx/tipwin.h \
 	wx/tooltip.h \
@@ -2179,7 +2178,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_selstore.o \
 	monodll_spinctlg.o \
 	monodll_splitter.o \
-	monodll_tbarsmpl.o \
 	monodll_textdlgg.o \
 	monodll_tipwin.o \
 	monodll_treectlg.o \
@@ -2323,7 +2321,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_selstore.o \
 	monodll_spinctlg.o \
 	monodll_splitter.o \
-	monodll_tbarsmpl.o \
 	monodll_textdlgg.o \
 	monodll_tipwin.o \
 	monodll_treectlg.o \
@@ -2419,7 +2416,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_selstore.o \
 	monolib_spinctlg.o \
 	monolib_splitter.o \
-	monolib_tbarsmpl.o \
 	monolib_textdlgg.o \
 	monolib_tipwin.o \
 	monolib_treectlg.o \
@@ -2563,7 +2559,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_selstore.o \
 	monolib_spinctlg.o \
 	monolib_splitter.o \
-	monolib_tbarsmpl.o \
 	monolib_textdlgg.o \
 	monolib_tipwin.o \
 	monolib_treectlg.o \
@@ -2659,7 +2654,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_selstore.o \
 	coredll_spinctlg.o \
 	coredll_splitter.o \
-	coredll_tbarsmpl.o \
 	coredll_textdlgg.o \
 	coredll_tipwin.o \
 	coredll_treectlg.o \
@@ -2803,7 +2797,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_selstore.o \
 	coredll_spinctlg.o \
 	coredll_splitter.o \
-	coredll_tbarsmpl.o \
 	coredll_textdlgg.o \
 	coredll_tipwin.o \
 	coredll_treectlg.o \
@@ -2899,7 +2892,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_selstore.o \
 	corelib_spinctlg.o \
 	corelib_splitter.o \
-	corelib_tbarsmpl.o \
 	corelib_textdlgg.o \
 	corelib_tipwin.o \
 	corelib_treectlg.o \
@@ -3043,7 +3035,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_selstore.o \
 	corelib_spinctlg.o \
 	corelib_splitter.o \
-	corelib_tbarsmpl.o \
 	corelib_textdlgg.o \
 	corelib_tipwin.o \
 	corelib_treectlg.o \
@@ -8612,9 +8603,6 @@ coredll_tbar95.o: $(srcdir)/src/msw/tbar95.cpp
 coredll_tbargtk.o: $(srcdir)/src/gtk/tbargtk.cpp
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
-@COND_USE_GUI_1@coredll_tbarsmpl.o: $(srcdir)/src/generic/tbarsmpl.cpp
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
 @COND_USE_GUI_1@coredll_textcmn.o: $(srcdir)/src/common/textcmn.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
@@ -10668,9 +10656,6 @@ corelib_tbar95.o: $(srcdir)/src/msw/tbar95.cpp
 
 corelib_tbargtk.o: $(srcdir)/src/gtk/tbargtk.cpp
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
-@COND_USE_GUI_1@corelib_tbarsmpl.o: $(srcdir)/src/generic/tbarsmpl.cpp
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 @COND_USE_GUI_1@corelib_textcmn.o: $(srcdir)/src/common/textcmn.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
@@ -13490,9 +13475,6 @@ monodll_tbar95.o: $(srcdir)/src/msw/tbar95.cpp
 monodll_tbargtk.o: $(srcdir)/src/gtk/tbargtk.cpp
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-@COND_USE_GUI_1@monodll_tbarsmpl.o: $(srcdir)/src/generic/tbarsmpl.cpp
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
-
 monodll_textbuf.o: $(srcdir)/src/common/textbuf.cpp
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -16002,9 +15984,6 @@ monolib_tbar95.o: $(srcdir)/src/msw/tbar95.cpp
 
 monolib_tbargtk.o: $(srcdir)/src/gtk/tbargtk.cpp
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-
-@COND_USE_GUI_1@monolib_tbarsmpl.o: $(srcdir)/src/generic/tbarsmpl.cpp
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 monolib_textbuf.o: $(srcdir)/src/common/textbuf.cpp
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<

@@ -49,8 +49,11 @@
 #endif
 #define wxUSE_WX_RESOURCES      1
 
-
-
+// Use simple, generic toolbar
+#ifdef wxUSE_TOOLBAR_SIMPLE
+#undef wxUSE_TOOLBAR_SIMPLE
+#endif
+#define wxUSE_TOOLBAR_SIMPLE 1
 
 
 #ifdef WXMAKINGDLL_DEPRECATED

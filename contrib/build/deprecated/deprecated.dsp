@@ -56,8 +56,8 @@ RSC=rc.exe
 # PROP Output_Dir "..\..\src\deprecated\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswd\deprecated"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswd" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw25d_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /c
-# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswd" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw25d_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /c
+# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswd" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw25d_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /c
+# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswd" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw25d_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -79,8 +79,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\deprecated\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_msw\deprecated"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_lib\msw" /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw25_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "__WXMSW__" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_lib\msw" /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw25_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "__WXMSW__" /c
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_lib\msw" /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw25_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_lib\msw" /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw25_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -102,8 +102,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\deprecated\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswud\deprecated"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswud" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw25ud_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /c
-# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswud" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw25ud_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /c
+# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswud" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw25ud_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /c
+# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswud" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw25ud_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -125,8 +125,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\deprecated\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswu\deprecated"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswu" /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw25u_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_UNICODE=1 /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswu" /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw25u_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_UNICODE=1 /c
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswu" /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw25u_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_UNICODE=1 /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswu" /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw25u_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_UNICODE=1 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -148,8 +148,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\deprecated\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivd\deprecated"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswunivd" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv25d_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /c
-# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswunivd" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv25d_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /c
+# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswunivd" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv25d_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /c
+# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswunivd" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv25d_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -171,8 +171,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\deprecated\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswuniv\deprecated"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswuniv" /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv25_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswuniv" /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv25_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /c
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswuniv" /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv25_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswuniv" /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv25_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -194,8 +194,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\deprecated\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivud\deprecated"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswunivud" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv25ud_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /c
-# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswunivud" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv25ud_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /c
+# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswunivud" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv25ud_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /c
+# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswunivud" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv25ud_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -217,8 +217,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\deprecated\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivu\deprecated"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswunivu" /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv25u_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswunivu" /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv25u_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /c
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswunivu" /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv25u_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswunivu" /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv25u_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -240,12 +240,12 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\deprecated\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswddll\deprecated"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswd" /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_deprecateddll.pch" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw250d_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
-# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswd" /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_deprecateddll.pch" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw250d_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
+# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswd" /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_deprecateddll.pch" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw250d_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
+# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswd" /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_deprecateddll.pch" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw250d_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /mktyplib203 /win32
-# ADD BASE RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\src\deprecated\..\..\..\include" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswd" /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
-# ADD RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\src\deprecated\..\..\..\include" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswd" /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
+# ADD BASE RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\src\deprecated\..\..\..\include" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswd" /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_DEPRECATED
+# ADD RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\src\deprecated\..\..\..\include" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswd" /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_DEPRECATED
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -265,12 +265,12 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\deprecated\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswdll\deprecated"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_dll\msw" /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_deprecateddll.pch" /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw250_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_dll\msw" /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_deprecateddll.pch" /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw250_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_dll\msw" /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_deprecateddll.pch" /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw250_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_dll\msw" /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_deprecateddll.pch" /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw250_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /mktyplib203 /win32
-# ADD BASE RSC /l 0x405 /d "__WXMSW__" /i "..\..\src\deprecated\..\..\..\include" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\msw" /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
-# ADD RSC /l 0x405 /d "__WXMSW__" /i "..\..\src\deprecated\..\..\..\include" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\msw" /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
+# ADD BASE RSC /l 0x405 /d "__WXMSW__" /i "..\..\src\deprecated\..\..\..\include" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\msw" /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_DEPRECATED
+# ADD RSC /l 0x405 /d "__WXMSW__" /i "..\..\src\deprecated\..\..\..\include" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\msw" /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_DEPRECATED
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -290,12 +290,12 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\deprecated\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswuddll\deprecated"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswud" /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_deprecateddll.pch" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw250ud_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
-# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswud" /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_deprecateddll.pch" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw250ud_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
+# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswud" /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_deprecateddll.pch" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw250ud_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
+# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswud" /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_deprecateddll.pch" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw250ud_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /mktyplib203 /win32
-# ADD BASE RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d wxUSE_UNICODE=1 /i "..\..\src\deprecated\..\..\..\include" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswud" /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
-# ADD RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d wxUSE_UNICODE=1 /i "..\..\src\deprecated\..\..\..\include" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswud" /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
+# ADD BASE RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d wxUSE_UNICODE=1 /i "..\..\src\deprecated\..\..\..\include" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswud" /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_DEPRECATED
+# ADD RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d wxUSE_UNICODE=1 /i "..\..\src\deprecated\..\..\..\include" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswud" /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_DEPRECATED
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -315,12 +315,12 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\deprecated\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswudll\deprecated"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswu" /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_deprecateddll.pch" /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw250u_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswu" /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_deprecateddll.pch" /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw250u_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswu" /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_deprecateddll.pch" /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw250u_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswu" /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_deprecateddll.pch" /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw250u_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /mktyplib203 /win32
-# ADD BASE RSC /l 0x405 /d "__WXMSW__" /d wxUSE_UNICODE=1 /i "..\..\src\deprecated\..\..\..\include" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswu" /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
-# ADD RSC /l 0x405 /d "__WXMSW__" /d wxUSE_UNICODE=1 /i "..\..\src\deprecated\..\..\..\include" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswu" /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
+# ADD BASE RSC /l 0x405 /d "__WXMSW__" /d wxUSE_UNICODE=1 /i "..\..\src\deprecated\..\..\..\include" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswu" /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_DEPRECATED
+# ADD RSC /l 0x405 /d "__WXMSW__" /d wxUSE_UNICODE=1 /i "..\..\src\deprecated\..\..\..\include" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswu" /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_DEPRECATED
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -340,12 +340,12 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\deprecated\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivddll\deprecated"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivd" /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_deprecateddll.pch" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv250d_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
-# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivd" /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_deprecateddll.pch" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv250d_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
+# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivd" /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_deprecateddll.pch" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv250d_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
+# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivd" /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_deprecateddll.pch" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv250d_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /mktyplib203 /win32
-# ADD BASE RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\src\deprecated\..\..\..\include" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivd" /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
-# ADD RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\src\deprecated\..\..\..\include" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivd" /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
+# ADD BASE RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\src\deprecated\..\..\..\include" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivd" /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_DEPRECATED
+# ADD RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\src\deprecated\..\..\..\include" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivd" /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_DEPRECATED
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -365,12 +365,12 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\deprecated\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivdll\deprecated"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswuniv" /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_deprecateddll.pch" /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv250_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswuniv" /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_deprecateddll.pch" /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv250_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswuniv" /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_deprecateddll.pch" /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv250_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswuniv" /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_deprecateddll.pch" /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv250_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /mktyplib203 /win32
-# ADD BASE RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\src\deprecated\..\..\..\include" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswuniv" /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
-# ADD RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\src\deprecated\..\..\..\include" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswuniv" /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
+# ADD BASE RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\src\deprecated\..\..\..\include" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswuniv" /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_DEPRECATED
+# ADD RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\src\deprecated\..\..\..\include" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswuniv" /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_DEPRECATED
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -390,12 +390,12 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\deprecated\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivuddll\deprecated"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivud" /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_deprecateddll.pch" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv250ud_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
-# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivud" /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_deprecateddll.pch" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv250ud_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
+# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivud" /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_deprecateddll.pch" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv250ud_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
+# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivud" /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_deprecateddll.pch" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv250ud_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /mktyplib203 /win32
-# ADD BASE RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d wxUSE_UNICODE=1 /i "..\..\src\deprecated\..\..\..\include" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivud" /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
-# ADD RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d wxUSE_UNICODE=1 /i "..\..\src\deprecated\..\..\..\include" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivud" /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
+# ADD BASE RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d wxUSE_UNICODE=1 /i "..\..\src\deprecated\..\..\..\include" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivud" /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_DEPRECATED
+# ADD RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d wxUSE_UNICODE=1 /i "..\..\src\deprecated\..\..\..\include" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivud" /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_DEPRECATED
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -415,12 +415,12 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\deprecated\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivudll\deprecated"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivu" /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_deprecateddll.pch" /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv250u_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivu" /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_deprecateddll.pch" /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv250u_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivu" /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_deprecateddll.pch" /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv250u_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\deprecated\..\..\..\include" /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivu" /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_deprecateddll.pch" /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv250u_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /mktyplib203 /win32
-# ADD BASE RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d wxUSE_UNICODE=1 /i "..\..\src\deprecated\..\..\..\include" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivu" /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
-# ADD RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d wxUSE_UNICODE=1 /i "..\..\src\deprecated\..\..\..\include" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivu" /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
+# ADD BASE RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d wxUSE_UNICODE=1 /i "..\..\src\deprecated\..\..\..\include" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivu" /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_DEPRECATED
+# ADD RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d wxUSE_UNICODE=1 /i "..\..\src\deprecated\..\..\..\include" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivu" /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_DEPRECATED
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -476,6 +476,10 @@ SOURCE=../../src/deprecated\proplist.cpp
 # Begin Source File
 
 SOURCE=../../src/deprecated\resource.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=../../src/deprecated\tbarsmpl.cpp
 # End Source File
 # Begin Source File
 

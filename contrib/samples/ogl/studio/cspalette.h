@@ -18,7 +18,7 @@
 
 #include <wx/wx.h>
 #include <wx/string.h>
-#include <wx/tbarsmpl.h>
+#include <wx/deprecated/tbarsmpl.h>
 
 /*
  * Object editor tool palette

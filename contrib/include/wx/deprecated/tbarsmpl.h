@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/tbarsmpl.h
+// Name:        wx/deprecated/tbarsmpl.h
 // Purpose:     wxToolBarSimple class
 // Author:      Julian Smart
 // Modified by: VZ on 14.12.99 during wxToolBar classes reorganization
@@ -18,6 +18,8 @@
 
 #include "wx/tbarbase.h"
 
+#include "wx/deprecated/setup.h"
+
 #if wxUSE_TOOLBAR && wxUSE_TOOLBAR_SIMPLE
 
 class WXDLLEXPORT wxMemoryDC;
@@ -26,7 +28,7 @@ class WXDLLEXPORT wxMemoryDC;
 // wxToolBarSimple is a generic toolbar implementation in pure wxWindows
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxToolBarSimple : public wxToolBarBase
+class WXDLLIMPEXP_DEPRECATED wxToolBarSimple : public wxToolBarBase
 {
 public:
     // ctors and dtor
