@@ -135,11 +135,20 @@ void wxObject::operator delete[] (void *buf)
 
 wxClassInfo *wxClassInfo::FindClass(const wxChar *className)
 {
-    for(wxClassInfo *info = sm_first; info ; info = info->m_next)
-        if( wxStrcmp(info->GetClassName(), className) == 0 )
-            return info;
+    if ( sm_classTable )
+    {
+        return (wxClassInfo *)wxClassInfo::sm_classTable->Get(className);
+    }
+    else
+    {
+        for ( wxClassInfo *info = sm_first; info ; info = info->m_next )
+        {
+            if ( wxStrcmp(info->GetClassName(), className) == 0 )
+                return info;
+        }
 
-    return 0;
+        return NULL;
+    }
 }
 
     // Set pointers to base class(es) to speed up IsKindOf
