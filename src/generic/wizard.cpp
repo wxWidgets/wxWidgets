@@ -86,7 +86,7 @@ wxWizardPage::wxWizardPage(wxWizard *parent,
 {
     if ( resource != NULL )
     {
-#if wxUSE_RESOURCES
+#if wxUSE_WX_RESOURCES
         if ( !LoadFromResource(this, resource) )
         {
             wxFAIL_MSG(wxT("wxWizardPage LoadFromResource failed!!!!"));
