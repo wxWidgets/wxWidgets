@@ -36,8 +36,6 @@
     #include "wx/tooltip.h"
 #endif
 
-    #include "wx/progdlg.h"
-
 // We test for wxUSE_DRAG_AND_DROP also, because data objects may not be
 // implemented for compilers that can't cope with the OLE parts in
 // wxUSE_DRAG_AND_DROP.
@@ -108,6 +106,7 @@ public:
 #endif // wxUSE_CLIPBOARD
 
     void DoRemoveText();
+    void DoReplaceText();
     void DoMoveToEndOfText();
     void DoMoveToEndOfEntry();
 
@@ -162,6 +161,8 @@ public:
         { DoAddText(false); }
     void OnRemoveText( wxCommandEvent& event )
         { m_panel->DoRemoveText(); }
+    void OnReplaceText( wxCommandEvent& event )
+        { m_panel->DoReplaceText(); }
 
     void OnMoveToEndOfText( wxCommandEvent &event )
         { m_panel->DoMoveToEndOfText(); }
@@ -234,23 +235,21 @@ public:
 private:
     void DoAddText(bool freeze)
     {
-        wxTextCtrl *text = m_panel->m_textrich;
+        wxTextCtrl * const text = m_panel->m_textrich;
+        text->Clear();
+
         if ( freeze )
             text->Freeze();
 
-        text->Clear();
-
-        wxProgressDialog dlg(_T("Wait..."), _T("Updating"), 100, this);
         for ( int i = 0; i < 100; i++ )
         {
-            dlg.Update(i);
             text->AppendText(wxString::Format(wxT("Line %i\n"), i));
         }
 
-        text->SetInsertionPoint(0);
-
         if ( freeze )
             text->Thaw();
+
+        text->SetInsertionPoint(0);
     }
 
     MyPanel *m_panel;
@@ -296,6 +295,7 @@ enum
     TEXT_PAGE_DOWN,
     TEXT_PAGE_UP,
     TEXT_REMOVE,
+    TEXT_REPLACE,
     TEXT_SET,
 
     // log menu
@@ -350,7 +350,8 @@ bool MyApp::OnInit()
     wxMenu *menuText = new wxMenu;
     menuText->Append(TEXT_ADD_SOME, _T("&Append some text\tCtrl-A"));
     menuText->Append(TEXT_ADD_FREEZE, _T("&Append text with freeze/thaw\tShift-Ctrl-A"));
-    menuText->Append(TEXT_REMOVE, _T("&Remove first 10 characters\tCtrl-X"));
+    menuText->Append(TEXT_REMOVE, _T("&Remove first 10 characters\tCtrl-Y"));
+    menuText->Append(TEXT_REPLACE, _T("&Replace characters 4 to 8 with ABC\tCtrl-R"));
     menuText->Append(TEXT_SET, _T("&Set the first text zone value\tCtrl-E"));
     menuText->AppendSeparator();
     menuText->Append(TEXT_MOVE_ENDTEXT, _T("Move cursor to the end of &text"));
@@ -885,17 +886,17 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
       wxPoint(180,170), wxSize(240,70), wxTE_MULTILINE);
     m_enter->SetClientData((void *)_T("enter"));
 
+#if 0
     m_textrich = new MyTextCtrl(this, -1, _T("Allows more than 30Kb of text\n")
                                 _T("(even under broken Win9x)\n")
                                 _T("and a very very very very very ")
                                 _T("very very very long line to test ")
                                 _T("wxHSCROLL style"),
                                 wxPoint(450, 10), wxSize(230, 230),
-                                wxTE_RICH |
+                                wxTE_RICH2 |
                                 wxTE_MULTILINE |
                                 // wxTE_AUTO_URL |
                                 wxHSCROLL);
-
     m_textrich->SetStyle(0, 10, *wxRED);
     m_textrich->SetStyle(10, 20, *wxBLUE);
     m_textrich->SetStyle(30, 40,
@@ -910,6 +911,13 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_textrich->SetDefaultStyle(wxTextAttr(*wxBLUE, *wxWHITE));
     m_textrich->AppendText(_T("And this should be in blue and the text you ")
                            _T("type should be in blue as well"));
+#else
+    m_textrich = new MyTextCtrl(this, -1, _T(""),
+                                wxPoint(450, 10), wxSize(230, 230),
+                                wxTE_RICH2 |
+                                wxTE_MULTILINE |
+                                wxHSCROLL);
+#endif
 }
 
 void MyPanel::OnSize( wxSizeEvent &event )
@@ -1033,6 +1041,11 @@ void MyPanel::DoRemoveText()
     GetFocusedText(m_multitext)->Remove(0, 10);
 }
 
+void MyPanel::DoReplaceText()
+{
+    GetFocusedText(m_multitext)->Replace(3, 8, _T("ABC"));
+}
+
 //----------------------------------------------------------------------
 // MyFrame
 //----------------------------------------------------------------------
@@ -1061,6 +1074,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #endif // wxUSE_CLIPBOARD
 
     EVT_MENU(TEXT_REMOVE,             MyFrame::OnRemoveText)
+    EVT_MENU(TEXT_REPLACE,            MyFrame::OnReplaceText)
     EVT_MENU(TEXT_ADD_SOME,           MyFrame::OnAddText)
     EVT_MENU(TEXT_ADD_FREEZE,         MyFrame::OnAddTextFreeze)
     EVT_MENU(TEXT_MOVE_ENDTEXT,       MyFrame::OnMoveToEndOfText)
