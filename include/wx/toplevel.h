@@ -191,6 +191,7 @@ public:
     virtual bool Destroy();
     virtual bool IsTopLevel() const { return true; }
     virtual wxSize GetMaxSize() const;
+    virtual bool ProvidesBackground() const { return true; }
 
     // event handlers
     void OnCloseWindow(wxCloseEvent& event);

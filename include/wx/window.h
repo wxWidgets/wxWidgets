@@ -757,6 +757,13 @@ public:
     }
     wxColour GetBackgroundColour() const;
 
+    // if the window shouldn't inherit its colour from the parent, override
+    // this function to return true
+    //
+    // this is currently only used by wxMSW and wxUniv but should be useful for
+    // the other ports too
+    virtual bool ProvidesBackground() const { return false; }
+
     virtual bool SetForegroundColour(const wxColour& colour);
     void SetOwnForegroundColour(const wxColour& colour)
     {

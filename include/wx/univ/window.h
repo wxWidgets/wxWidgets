@@ -148,11 +148,6 @@ public:
     // as a wxStaticText and wxCheckBox and the background should
     // be adapted from a parent window
     virtual bool HasTransparentBackground() { return false; }
-    
-    // to be used with function above: transparent windows get
-    // their background from parents that return true here,
-    // so this is mostly for wxPanel, wxTopLevelWindow etc.
-    virtual bool ProvidesBackground() const { return false; }
 
     // return true if this control can be highlighted when the mouse is over
     // it (the theme decides itself whether it is really highlighted or not)
@@ -183,7 +178,7 @@ public:
 
     // erase part of the control
     virtual void EraseBackground(wxDC& dc, const wxRect& rect);
-    
+
     // overridden base class methods
     // -----------------------------
 
@@ -252,12 +247,12 @@ protected:
 
     // the renderer we use
     wxRenderer *m_renderer;
-    
+
     // background bitmap info
     wxBitmap  m_bitmapBg;
     int       m_alignBgBitmap;
     wxStretch m_stretchBgBitmap;
-    
+
     // old size
     wxSize m_oldSize;
 
