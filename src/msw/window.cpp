@@ -1653,13 +1653,6 @@ void wxWindowMSW::DoSetClientSize(int width, int height)
     }
 }
 
-// For implementation purposes - sometimes decorations make the client area
-// smaller
-wxPoint wxWindowMSW::GetClientAreaOrigin() const
-{
-    return wxPoint(0, 0);
-}
-
 // ---------------------------------------------------------------------------
 // text metrics
 // ---------------------------------------------------------------------------
