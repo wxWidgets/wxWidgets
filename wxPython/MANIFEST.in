@@ -36,6 +36,7 @@ include demo/data/*.xrc
 
 include samples/doodle/*.txt
 include samples/doodle/*.py
+include samples/doodle/*.iss
 include samples/doodle/sample.ddl
 include samples/stxview/*.txt
 include samples/stxview/*.py
@@ -79,6 +80,10 @@ include src/gtk/*.cpp
 include src/gtk/*.h
 include src/gtk/*.py
 
+include src/mac/*.cpp
+include src/mac/*.h
+include src/mac/*.py
+
 include tools/*.py
 include tools/XRCed/CHANGES
 include tools/XRCed/TODO
@@ -97,6 +102,9 @@ include contrib/glcanvas/msw/*.py
 include contrib/glcanvas/gtk/*.cpp
 include contrib/glcanvas/gtk/*.h
 include contrib/glcanvas/gtk/*.py
+include contrib/glcanvas/mac/*.cpp
+include contrib/glcanvas/mac/*.h
+include contrib/glcanvas/mac/*.py
 
 include contrib/ogl/*.txt
 include contrib/ogl/*.i
@@ -112,19 +120,26 @@ include contrib/stc/*.i
 include contrib/stc/*.py
 include contrib/stc/*.cpp
 include contrib/stc/*.c
-include contrib/stc/*.h
-include contrib/stc/*.cpp
-include contrib/stc/*.py
+include contrib/stc/msw/*.h
+include contrib/stc/msw/*.cpp
+include contrib/stc/msw/*.py
+include contrib/stc/gtk/*.h
+include contrib/stc/gtk/*.cpp
+include contrib/stc/gtk/*.py
+include contrib/stc/mac/*.h
+include contrib/stc/mac/*.cpp
+include contrib/stc/mac/*.py
 include contrib/stc/contrib/include/wx/stc/*.h
 include contrib/stc/contrib/src/stc/*.h
 include contrib/stc/contrib/src/stc/*.cpp
 include contrib/stc/contrib/src/stc/*.txt
 include contrib/stc/contrib/src/stc/*.py
-include contrib/stc/contrib/src/stc/*.in
+include contrib/stc/contrib/src/stc/stc.*.in
 include contrib/stc/contrib/src/stc/scintilla/include/*.h
 include contrib/stc/contrib/src/stc/scintilla/include/*.iface
 include contrib/stc/contrib/src/stc/scintilla/src/*.h
 include contrib/stc/contrib/src/stc/scintilla/src/*.cxx
+include contrib/stc/contrib/src/stc/scintilla/*.txt
 
 include contrib/xrc/*.txt
 include contrib/xrc/*.i
