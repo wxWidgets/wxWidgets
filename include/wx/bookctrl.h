@@ -241,7 +241,7 @@ private:
 
 // make a default book control for given platform
 #if defined(__WXMSW__) && defined(__SMARTPHONE__)
-    #include "wx/choicebook.h"
+    #include "wx/choicebk.h"
     #define wxBookCtrl                             wxChoicebook
     #define wxBookCtrlEvent                        wxChoicebookEvent
     #define wxEVT_COMMAND_BOOKCTRL_PAGE_CHANGED    wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED
