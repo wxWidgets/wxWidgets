@@ -23,7 +23,7 @@
 %if %{unicode}
 %define name        wx-%{portname}-unicode
 %define wxbasename  wx-base-unicode
-%else 
+%else
 %define name        wx-%{portname}
 %define wxbasename  wx-base
 %endif
@@ -312,6 +312,9 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/libwx_base*
 rm -f $RPM_BUILD_ROOT%{_libdir}/libwxregexu-%{ver2}.a
 rm -f $RPM_BUILD_ROOT%{_datadir}/aclocal/*
 rm -f $RPM_BUILD_ROOT%{_datadir}/locale/*/*/*
+%if !%{unicode}
+rm -f $RPM_BUILD_ROOT%{_libdir}/libwxodbc-2.5.a
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -333,7 +336,7 @@ rm -rf $RPM_BUILD_ROOT
 ln -sf %{_libdir}/wx/config/%{wxconfigname} %{_bindir}/wx-config
 # link wx-config with explicit name.
 ln -sf %{_libdir}/wx/config/%{wxconfigname} %{_bindir}/%{wxconfiglinkname}
-                                                                                   
+
 %preun devel
 if test -f %{_bindir}/wx-config -a -f /usr/bin/md5sum ; then
   SUM1=`md5sum %{_libdir}/wx/config/%{wxconfigname} | cut -c 0-32`
@@ -342,7 +345,7 @@ if test -f %{_bindir}/wx-config -a -f /usr/bin/md5sum ; then
     rm -f %{_bindir}/wx-config
   fi
 fi
-                                                                                   
+
 rm -f %{_bindir}/%{wxconfiglinkname}
 
 %files
