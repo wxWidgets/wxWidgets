@@ -1025,6 +1025,8 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
                     }
                 }
             }
+            break;
+
 #ifdef __WIN32__
         case WM_HELP:
         {
