@@ -764,6 +764,8 @@ void wxLogStream::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
 
 wxLogChain::wxLogChain(wxLog *logger)
 {
+    m_bPassMessages = TRUE;
+
     m_logNew = logger;
     m_logOld = wxLog::SetActiveTarget(this);
 }
@@ -780,8 +782,6 @@ void wxLogChain::SetLog(wxLog *logger)
 {
     if ( m_logNew != this )
         delete m_logNew;
-
-    wxLog::SetActiveTarget(logger);
 
     m_logNew = logger;
 }
