@@ -371,7 +371,6 @@ void MyTextCtrl::LogEvent(const wxChar *name, wxKeyEvent& event) const
                   GetChar( event.AltDown(), _T('A') ),
                   GetChar( event.ShiftDown(), _T('S') ),
                   GetChar( event.MetaDown(), _T('M') ) );
-
 }
 
 void MyTextCtrl::OnMouseEvent(wxMouseEvent& ev)
@@ -424,9 +423,9 @@ void MyTextCtrl::OnMouseEvent(wxMouseEvent& ev)
 
         msg << _T(" at (") << ev.GetX() << _T(", ") << ev.GetY() << _T(") ")
             << _T("Flags: ")
-            << GetChar( ev.LeftDown(), _T('1') )
-            << GetChar( ev.MiddleDown(), _T('2') )
-            << GetChar( ev.RightDown(), _T('3') )
+            << GetChar( ev.LeftIsDown(), _T('1') )
+            << GetChar( ev.MiddleIsDown(), _T('2') )
+            << GetChar( ev.RightIsDown(), _T('3') )
             << GetChar( ev.ControlDown(), _T('C') )
             << GetChar( ev.AltDown(), _T('A') )
             << GetChar( ev.ShiftDown(), _T('S') )
@@ -435,6 +434,8 @@ void MyTextCtrl::OnMouseEvent(wxMouseEvent& ev)
         wxLogMessage(msg);
     }
     //else: we're not interested in mouse move events
+
+    ev.Skip();
 }
 
 void MyTextCtrl::OnText(wxCommandEvent& event)
@@ -553,6 +554,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     m_text = new MyTextCtrl( this, -1, "Single line.",
       wxPoint(10,10), wxSize(140,-1), 0);
+    m_text->SetForegroundColour(*wxBLUE);
+    m_text->SetBackgroundColour(*wxLIGHT_GREY);
     (*m_text) << " Appended.";
     m_text->SetInsertionPoint(0);
     m_text->WriteText( "Prepended. " );
