@@ -113,7 +113,9 @@ public:
 
        Returns the pointer to the symbol or NULL on error.
      */
-    static void *GetSymbol(wxDllType dllHandle, const wxString &name, bool success = 0);
+    static void *GetSymbol(wxDllType dllHandle,
+                           const wxString &name,
+                           bool *success = NULL);
 
     // return the standard DLL extension (with leading dot) for this platform
     static const wxString &GetDllExt() { return ms_dllext; }
