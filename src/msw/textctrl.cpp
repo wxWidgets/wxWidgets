@@ -676,7 +676,6 @@ bool wxTextCtrl::IsEditable() const
 
 void wxTextCtrl::Replace(long from, long to, const wxString& value)
 {
-#if wxUSE_CLIPBOARD
     HWND hWnd = GetHwnd();
     long fromChar = from;
     long toChar = to;
@@ -684,21 +683,10 @@ void wxTextCtrl::Replace(long from, long to, const wxString& value)
     // Set selection and remove it
 #ifdef __WIN32__
     SendMessage(hWnd, EM_SETSEL, fromChar, toChar);
+    SendMessage(hWnd, EM_REPLACESEL, (WPARAM)TRUE, (LPARAM)value.c_str());
 #else
     SendMessage(hWnd, EM_SETSEL, (WPARAM)0, (LPARAM)MAKELONG(fromChar, toChar));
-#endif
-    SendMessage(hWnd, WM_CUT, (WPARAM)0, (LPARAM)0);
-
-    // Now replace with 'value', by pasting.
-    if (wxOpenClipboard()) {
-        wxSetClipboardData(wxDF_TEXT, (wxObject *) (const wxChar *)value, 0, 0);
-        wxCloseClipboard();
-
-        // Paste into edit control
-        SendMessage(hWnd, WM_PASTE, (WPARAM)0, (LPARAM)0L);
-    }
-#else
-    wxFAIL_MSG("wxTextCtrl::Replace not implemented if wxUSE_CLIPBOARD is 0.");
+    SendMessage(hWnd, EM_REPLACESEL, (WPARAM)0, (LPARAM)value.c_str());
 #endif
 }
 
@@ -711,10 +699,11 @@ void wxTextCtrl::Remove(long from, long to)
     // Cut all selected text
 #ifdef __WIN32__
     SendMessage(hWnd, EM_SETSEL, fromChar, toChar);
+    SendMessage(hWnd, EM_REPLACESEL, (WPARAM)TRUE, (LPARAM)"");
 #else
     SendMessage(hWnd, EM_SETSEL, (WPARAM)0, (LPARAM)MAKELONG(fromChar, toChar));
+    SendMessage(hWnd, EM_REPLACESEL, (WPARAM)0, (LPARAM)"");
 #endif
-    SendMessage(hWnd, WM_CUT, (WPARAM)0, (LPARAM)0);
 }
 
 void wxTextCtrl::SetSelection(long from, long to)
