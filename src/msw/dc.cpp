@@ -1704,7 +1704,7 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
             HBITMAP buffer_bmap ;
 
 #if wxUSE_DC_CACHEING
-            if (CacheEnabled())
+            if (TRUE)
             {
                 // create a temp buffer bitmap and DCs to access it and the mask
                 wxDCCacheEntry* dcCacheEntry1 = FindDCInCache(NULL, source->GetHDC());
@@ -1776,14 +1776,13 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
             ::SelectObject(dc_mask, 0);
             ::SelectObject(dc_buffer, 0);
 
-#if wxUSE_DC_CACHEING
-            if (!CacheEnabled())
-#endif
+#if !wxUSE_DC_CACHEING
             {
                 ::DeleteDC(dc_mask);
                 ::DeleteDC(dc_buffer);
                 ::DeleteObject(buffer_bmap);
             }
+#endif
         }
     }
     else // no mask, just BitBlt() it

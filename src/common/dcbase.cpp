@@ -32,7 +32,7 @@
 
 #include <math.h>
 
-bool wxDCBase::sm_cacheing = FALSE;
+// bool wxDCBase::sm_cacheing = FALSE;
 
 // ============================================================================
 // implementation

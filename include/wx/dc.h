@@ -491,7 +491,7 @@ public:
     // Put ClearCache in the wxDC implementation class, since it has to be
     // static.
     // static void ClearCache() ;
-#if wxUSE_DC_CACHEING
+#if 0 // wxUSE_DC_CACHEING
     static void EnableCache(bool cacheing) { sm_cacheing = cacheing; }
     static bool CacheEnabled() { return sm_cacheing ; }
 #endif
@@ -699,7 +699,7 @@ protected:
     bool m_isInteractive:1;
     bool m_isBBoxValid:1;
 #if wxUSE_DC_CACHEING
-    static bool sm_cacheing;
+//    static bool sm_cacheing;
 #endif
 
     // coordinate system variables
