@@ -902,51 +902,59 @@ void wxHtmlContainerCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
     dc.SetPen(*wxRED_PEN);
     dc.DrawRectangle(x+m_PosX,y+m_PosY,m_Width,m_Height);
 #endif
-    // container visible, draw it:
-    if ((y + m_PosY <= view_y2) && (y + m_PosY + m_Height > view_y1))
+            
+    int xlocal = x + m_PosX;
+    int ylocal = y + m_PosY;
+
+    if (m_UseBkColour)
     {
-        if (m_UseBkColour)
+        wxBrush myb = wxBrush(m_BkColour, wxSOLID);
+
+        int real_y1 = mMax(ylocal, view_y1);
+        int real_y2 = mMin(ylocal + m_Height - 1, view_y2);
+
+        dc.SetBrush(myb);
+        dc.SetPen(*wxTRANSPARENT_PEN);
+        dc.DrawRectangle(xlocal, real_y1, m_Width, real_y2 - real_y1 + 1);
+    }
+
+    if (m_UseBorder)
+    {
+        wxPen mypen1(m_BorderColour1, 1, wxSOLID);
+        wxPen mypen2(m_BorderColour2, 1, wxSOLID);
+
+        dc.SetPen(mypen1);
+        dc.DrawLine(xlocal, ylocal, xlocal, ylocal + m_Height - 1);
+        dc.DrawLine(xlocal, ylocal, xlocal + m_Width, ylocal);
+        dc.SetPen(mypen2);
+        dc.DrawLine(xlocal + m_Width - 1, ylocal, xlocal +  m_Width - 1, ylocal + m_Height - 1);
+        dc.DrawLine(xlocal, ylocal + m_Height - 1, xlocal + m_Width, ylocal + m_Height - 1);
+    }
+
+    if (m_Cells)
+    {
+        // draw container's contents:
+        for (wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext())
         {
-            wxBrush myb = wxBrush(m_BkColour, wxSOLID);
-
-            int real_y1 = mMax(y + m_PosY, view_y1);
-            int real_y2 = mMin(y + m_PosY + m_Height - 1, view_y2);
-
-            dc.SetBrush(myb);
-            dc.SetPen(*wxTRANSPARENT_PEN);
-            dc.DrawRectangle(x + m_PosX, real_y1, m_Width, real_y2 - real_y1 + 1);
-        }
-
-        if (m_UseBorder)
-        {
-            wxPen mypen1(m_BorderColour1, 1, wxSOLID);
-            wxPen mypen2(m_BorderColour2, 1, wxSOLID);
-
-            dc.SetPen(mypen1);
-            dc.DrawLine(x + m_PosX, y + m_PosY, x + m_PosX, y + m_PosY + m_Height - 1);
-            dc.DrawLine(x + m_PosX, y + m_PosY, x + m_PosX + m_Width, y + m_PosY);
-            dc.SetPen(mypen2);
-            dc.DrawLine(x + m_PosX + m_Width - 1, y + m_PosY, x + m_PosX +  m_Width - 1, y + m_PosY + m_Height - 1);
-            dc.DrawLine(x + m_PosX, y + m_PosY + m_Height - 1, x + m_PosX + m_Width, y + m_PosY + m_Height - 1);
-        }
-
-        if (m_Cells)
-        {
-            // draw container's contents:
-            for (wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext())
+            
+            // optimize drawing: don't render off-screen content:
+            if ((ylocal + cell->GetPosY() <= view_y2) &&
+                (ylocal + cell->GetPosY() + cell->GetHeight() > view_y1))
             {
+                // the cell is visible, draw it:
                 UpdateRenderingStatePre(info, cell);
                 cell->Draw(dc,
-                           x + m_PosX, y + m_PosY, view_y1, view_y2,
+                           xlocal, ylocal, view_y1, view_y2,
                            info);
                 UpdateRenderingStatePost(info, cell);
             }
+            else
+            {
+                // the cell is off-screen, proceed with font+color+etc.
+                // changes only:
+                cell->DrawInvisible(dc, xlocal, ylocal, info);
+            }
         }
-    }
-    // container invisible, just proceed font+color changing:
-    else
-    {
-        DrawInvisible(dc, x, y, info);
     }
 }
 
