@@ -189,8 +189,10 @@ wxMGLFontInstance::~wxMGLFontInstance()
         MGL_unloadFontInstance(m_font);
 }
     
-wxMGLFontLibrary::wxMGLFontLibrary(const wxString& filename, int type)
+wxMGLFontLibrary::wxMGLFontLibrary(const wxString& filename, int type, 
+                                   wxMGLFontFamily *parentFamily)
 {
+    m_family = parentFamily;
     m_type = type;
     m_fileName = filename;
     m_refs = 0;
@@ -299,25 +301,25 @@ wxMGLFontFamily::wxMGLFontFamily(const font_info_t *info)
         m_fontLibs[wxFONTFACE_REGULAR] = NULL;
     else
         m_fontLibs[wxFONTFACE_REGULAR] = 
-            new wxMGLFontLibrary(info->regularFace, wxFONTFACE_REGULAR);
+            new wxMGLFontLibrary(info->regularFace, wxFONTFACE_REGULAR, this);
     
     if ( info->italicFace[0] == '\0' )
         m_fontLibs[wxFONTFACE_ITALIC] = NULL;
     else
         m_fontLibs[wxFONTFACE_ITALIC] = 
-            new wxMGLFontLibrary(info->italicFace, wxFONTFACE_ITALIC);
+            new wxMGLFontLibrary(info->italicFace, wxFONTFACE_ITALIC, this);
     
     if ( info->boldFace[0] == '\0' )
         m_fontLibs[wxFONTFACE_BOLD] = NULL;
     else
         m_fontLibs[wxFONTFACE_BOLD] = 
-            new wxMGLFontLibrary(info->boldFace, wxFONTFACE_BOLD);
+            new wxMGLFontLibrary(info->boldFace, wxFONTFACE_BOLD, this);
     
     if ( info->boldItalicFace[0] == '\0' )
         m_fontLibs[wxFONTFACE_BOLD_ITALIC] = NULL;
     else
         m_fontLibs[wxFONTFACE_BOLD_ITALIC] = 
-            new wxMGLFontLibrary(info->boldItalicFace, wxFONTFACE_BOLD_ITALIC);
+            new wxMGLFontLibrary(info->boldItalicFace, wxFONTFACE_BOLD_ITALIC, this);
             
     wxLogTrace("mgl_font", "new family '%s' (r=%s, i=%s, b=%s, bi=%s)\n",
                info->familyName, info->regularFace, info->italicFace, 

@@ -33,6 +33,7 @@
 #include "wx/gdicmn.h"
 #include "wx/tokenzr.h"
 #include "wx/settings.h"
+#include "wx/mgl/private.h"
 
 // ----------------------------------------------------------------------------
 // wxFontRefData
@@ -257,6 +258,13 @@ wxFontEncoding wxFont::GetEncoding() const
     wxCHECK_MSG( Ok(), wxFONTENCODING_DEFAULT, wxT("invalid font") );
 
     return M_FONTDATA->m_encoding;
+}
+
+bool wxFont::IsFixedWidth() const
+{
+    wxCHECK_MSG( Ok(), FALSE, wxT("invalid font") );
+
+    return (bool)(M_FONTDATA->m_library->GetFamily()->GetInfo()->isFixed);
 }
 
 

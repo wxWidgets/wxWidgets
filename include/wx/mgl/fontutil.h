@@ -57,10 +57,11 @@ private:
 class wxMGLFontLibrary
 {
 public:
-    wxMGLFontLibrary(const wxString& filename, int type);
+    wxMGLFontLibrary(const wxString& filename, int type, wxMGLFontFamily *parentFamily);
     ~wxMGLFontLibrary();
     
     wxMGLFontInstance *GetFontInstance(wxFont *font, float scale, bool aa);
+    wxMGLFontFamily *GetFamily() const { return m_family; }
     
     void IncRef();
     void DecRef();
@@ -73,6 +74,7 @@ private:
     wxString m_fileName;
     size_t m_refs;
     wxMGLFontInstanceList *m_instances;
+    wxMGLFontFamily *m_family;
 };
 
 // structure representing native MGL font family
