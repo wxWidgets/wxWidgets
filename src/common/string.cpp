@@ -481,8 +481,14 @@ size_t wxStringBase::find(const wxStringBase& str, size_t nStart) const
   while(p - c_str() + str.length() <= length() &&
         wxTmemcmp(p, str.c_str(), str.length()) )
   {
+      //Previosly passed as the first argument to wxTmemchr,
+      //but C/C++ standard does not specify evaluation order
+      //of arguments to functions -
+      //http://embedded.com/showArticle.jhtml?articleID=9900607
+      ++p;
+
       //anchor again
-      p = (const wxChar*)wxTmemchr(++p,
+      p = (const wxChar*)wxTmemchr(p,
                                   str.c_str()[0],
                                   length() - (p - c_str()));
 
