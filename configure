@@ -7012,7 +7012,6 @@ fi
 if test "x$wxUSE_COCOA" != "x" -a "$wxUSE_COCOA" != "0" ; then
   wxUSE_PRINTING_ARCHITECTURE=no
   wxUSE_DRAG_AND_DROP=no
-  DEFAULT_wxUSE_TOOLTIPS=no
   DEFAULT_wxUSE_DRAGIMAGE=no
 fi
 

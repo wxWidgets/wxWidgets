@@ -13,6 +13,8 @@
 #include "wx/gtk/tooltip.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/tooltip.h"
+#elif defined(__WXCOCOA__)
+#include "wx/cocoa/tooltip.h"
 #elif defined(__WXPM__)
 #include "wx/os2/tooltip.h"
 #endif

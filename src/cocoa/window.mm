@@ -12,10 +12,12 @@
 #include "wx/wxprec.h"
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/tooltip.h"
     #include "wx/window.h"
 #endif //WX_PRECOMP
 
 #include "wx/cocoa/autorelease.h"
+#include "wx/cocoa/string.h"
 
 #import <AppKit/NSView.h>
 #import <AppKit/NSEvent.h>
@@ -23,6 +25,7 @@
 #import <AppKit/NSColor.h>
 #import <AppKit/NSClipView.h>
 #import <Foundation/NSException.h>
+#import <Foundation/NSString.h>
 
 #include <objc/objc-runtime.h>
 
@@ -354,10 +357,9 @@ bool wxWindowCocoa::Cocoa_drawRect(const NSRect &rect)
     int countRects = 1;
     // Try replacing the larger rectangle with a list of smaller ones:
 NS_DURING
-    // This only works on Panther
-//    [GetNSView() getRectsBeingDrawn:&rects count:&countRects];
-    // This compiles everywhere (and still only works on Panther)
-    objc_msgSend(GetNSView(),@selector(getRectsBeingDrawn:count:),&rects,&countRects);
+    //getRectsBeingDrawn:count: is a optimization that is only available on
+    //Panthar (10.3) and higher.  Check to see if it supports it -
+    if ( [GetNSView() respondsToSelector:@selector(getRectsBeingDrawn:count:)] )    objc_msgSend(GetNSView(),@selector(getRectsBeingDrawn:count:),&rects,&countRects);
 NS_HANDLER
 NS_ENDHANDLER
     m_updateRegion = wxRegion(rects,countRects);
@@ -596,6 +598,22 @@ void wxWindowCocoa::DoSetSize(int x, int y, int width, int height, int sizeFlags
             height=currentH;
     }
     DoMoveWindow(x,y,width,height);
+}
+
+//We should really get rid of wxToolTip :)
+IMPLEMENT_ABSTRACT_CLASS(wxToolTip, wxObject)
+
+void wxWindowCocoa::DoSetToolTip( wxToolTip *tip )
+{
+    wxWindowBase::DoSetToolTip(tip);
+
+    wxAutoNSAutoreleasePool pool;
+
+    if ( m_tooltip )
+    {
+        m_tooltip->SetWindow((wxWindow *)this);
+        [GetNSView() setToolTip:wxNSStringWithWxString(m_tooltip->GetTip())];
+    }
 }
 
 void wxWindowCocoa::DoMoveWindow(int x, int y, int width, int height)
