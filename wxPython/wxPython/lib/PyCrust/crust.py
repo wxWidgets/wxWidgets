@@ -50,20 +50,20 @@ class Crust(wx.wxSplitterWindow):
         self.notebook.AddPage(self.sessionlisting, 'Session')
         self.dispatcherlisting = DispatcherListing(parent=self.notebook)
         self.notebook.AddPage(self.dispatcherlisting, 'Dispatcher')
-        from decor import wxDecor
+        from wxd import wx_
         self.wxdocs = Filling(parent=self.notebook, 
-                              rootObject=wxDecor,
+                              rootObject=wx_,
                               rootLabel='wx', 
                               rootIsNamespace=False,
                               static=True)
         self.notebook.AddPage(self.wxdocs, 'wxPython Docs')
-        from decor import stcDecor
+        from wxd import stc_
         self.stcdocs = Filling(parent=self.notebook, 
-                               rootObject=stcDecor.wxStyledTextCtrl,
-                               rootLabel='wxStyledTextCtrl', 
+                               rootObject=stc_.StyledTextCtrl,
+                               rootLabel='StyledTextCtrl', 
                                rootIsNamespace=False,
                                static=True)
-        self.notebook.AddPage(self.stcdocs, 'wxSTC Docs')
+        self.notebook.AddPage(self.stcdocs, 'StyledTextCtrl Docs')
         self.SplitHorizontally(self.shell, self.notebook, 300)
         self.SetMinimumPaneSize(1)
 

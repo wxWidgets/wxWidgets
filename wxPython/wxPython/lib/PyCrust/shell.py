@@ -22,13 +22,18 @@ from version import VERSION
 import dispatcher
 
 try:
-    import decor
+    import wxd.d_wx
 except ImportError:
     from wxPython import wx
+else:
+    from wxd.d_wx import wx
+
+try:
+    import wxd.d_stc
+except ImportError:
     from wxPython import stc
 else:
-    from decor.decorate import wx
-    from decor.decorate import stc
+    from wxd.d_stc import stc
 
 try:
     True
@@ -259,6 +264,7 @@ class Shell(stc.wxStyledTextCtrl):
         # Do this last so the user has complete control over their
         # environment.  They can override anything they want.
         self.execStartupScript(self.interp.startupScript)
+        wx.wxCallAfter(self.ScrollToLine, 0)
 
     def fontsizer(self, signal):
         """Receiver for Font* signals."""
@@ -315,7 +321,6 @@ class Shell(stc.wxStyledTextCtrl):
             self.write(self.interp.introText)
         except AttributeError:
             pass
-        wx.wxCallAfter(self.ScrollToLine, 0)
 
     def setBuiltinKeywords(self):
         """Create pseudo keywords as part of builtins.

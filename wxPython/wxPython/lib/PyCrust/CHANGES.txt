@@ -29,7 +29,7 @@ Introduced new tabbed interface:
 * wxSTC Docs
 
 Filling.tree now expands tuples as well as lists. (It should have done
-this all along, I just never noticed this before.)
+this all along, I just never noticed this omission before.)
 
 Added this True/False test to all modules:
 
@@ -39,6 +39,7 @@ Added this True/False test to all modules:
         True = 1==1
         False = 1==0
 
+Added wxd directory with decoration classes.
 
 
 0.8.2 (1/5/2003 to 2/26/2003)

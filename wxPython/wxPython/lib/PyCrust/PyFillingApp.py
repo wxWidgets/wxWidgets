@@ -6,7 +6,7 @@ __cvsid__ = "$Id$"
 __revision__ = "$Revision$"[11:-2]
 
 # We use this object to get more introspection when run standalone.
-application = None
+app = None
 
 import filling
 
@@ -30,16 +30,15 @@ except NameError:
 class App(filling.App):
     def OnInit(self):
         filling.App.OnInit(self)
-        root = self.fillingFrame.filling.fillingTree.root
-        self.fillingFrame.filling.fillingTree.Expand(root)
-        return 1
-
+        self.root = self.fillingFrame.filling.tree.root
+        return True
 
 def main():
     """Create and run the application."""
-    global application
-    application = App(0)
-    application.MainLoop()
+    global app
+    app = App(0)
+    app.fillingFrame.filling.tree.Expand(app.root)
+    app.MainLoop()
 
 
 if __name__ == '__main__':

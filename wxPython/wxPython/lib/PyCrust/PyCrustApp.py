@@ -41,19 +41,29 @@ class App(wx.wxApp):
         sys.application = self
         return 1
 
+'''
+The main() function needs to handle being imported, such as with the
+pycrust script that wxPython installs:
+
+    #!/usr/bin/env python
+
+    from wxPython.lib.PyCrust.PyCrustApp import main
+    main()
+'''
 
 def main():
-    locals = __main__.__dict__
+    import __main__
+    md = __main__.__dict__
     keepers = original
     keepers.append('App')
-    for key in locals.keys():
+    for key in md.keys():
         if key not in keepers:
-            del locals[key]
+            del md[key]
     application = App(0)
-    if locals.has_key('App') and locals['App'] is App:
-        del locals['App']
-    if locals.has_key('__main__') and locals['__main__'] is __main__:
-        del locals['__main__']
+    if md.has_key('App') and md['App'] is App:
+        del md['App']
+    if md.has_key('__main__') and md['__main__'] is __main__:
+        del md['__main__']
     application.MainLoop()
 
 if __name__ == '__main__':

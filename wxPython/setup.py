@@ -1206,7 +1206,7 @@ if __name__ == "__main__":
                           PKGDIR+'.lib.editor',
                           PKGDIR+'.lib.mixins',
                           PKGDIR+'.lib.PyCrust',
-                          PKGDIR+'.lib.PyCrust.decor',
+                          PKGDIR+'.lib.PyCrust.wxd',
                           PKGDIR+'.tools',
                           PKGDIR+'.tools.XRCed',
                           ],
