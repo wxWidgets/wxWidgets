@@ -41,7 +41,6 @@ ALL_SOURCES = \
 		generic/spinctlg.cpp \
 		generic/splash.cpp \
 		generic/splitter.cpp \
-		generic/statline.cpp \
 		generic/statusbr.cpp \
 		generic/tabg.cpp \
 		generic/tbarsmpl.cpp \
@@ -185,10 +184,56 @@ ALL_SOURCES = \
 		common/xpmdecod.cpp \
 		common/zipstrm.cpp \
 		common/zstream.cpp \
+		cocoa/NSBox.mm \
+		cocoa/NSButton.mm \
+		cocoa/NSControl.mm \
+		cocoa/NSMenu.mm \
+		cocoa/NSPanel.mm \
+		cocoa/NSTextField.mm \
+		cocoa/NSView.mm \
+		cocoa/NSWindow.mm \
+		cocoa/app.mm \
+		cocoa/bitmap.mm \
+		cocoa/bmpbuttn.mm \
+		cocoa/brush.cpp \
+		cocoa/button.mm \
+		cocoa/checkbox.mm \
+		cocoa/checklst.mm \
+		cocoa/choice.mm \
+		cocoa/colour.cpp \
+		cocoa/control.mm \
+		cocoa/cursor.mm \
+		cocoa/data.cpp \
+		cocoa/dc.cpp \
+		cocoa/dcclient.cpp \
+		cocoa/dcmemory.cpp \
+		cocoa/dcscreen.cpp \
+		cocoa/dialog.mm \
+		cocoa/font.cpp \
+		cocoa/fontutil.cpp \
+		cocoa/frame.mm \
+		cocoa/gdiobj.cpp \
+		cocoa/icon.cpp \
+		cocoa/listbox.mm \
+		cocoa/main.cpp \
+		cocoa/menu.mm \
+		cocoa/menuitem.mm \
+		cocoa/pen.cpp \
+		cocoa/radiobox.mm \
+		cocoa/radiobut.mm \
+		cocoa/region.cpp \
+		cocoa/settings.cpp \
+		cocoa/statbmp.mm \
+		cocoa/statbox.mm \
+		cocoa/statline2.mm \
+		cocoa/stattext.mm \
+		cocoa/textctrl.mm \
+		cocoa/toplevel.mm \
+		cocoa/utils.cpp \
+		cocoa/utilsexc.cpp \
+		cocoa/window.mm \
 		unix/dialup.cpp \
 		unix/dir.cpp \
-		unix/fontenum.cpp \
-		unix/fontutil.cpp \
 		unix/gsocket.c \
 		unix/mimetype.cpp \
 		unix/snglinst.cpp \
@@ -462,6 +507,49 @@ ALL_HEADERS = \
 		xpmdecod.h \
 		zipstrm.h \
 		zstream.h \
+		cocoa/NSBox.h \
+		cocoa/NSButton.h \
+		cocoa/NSControl.h \
+		cocoa/NSMenu.h \
+		cocoa/NSPanel.h \
+		cocoa/NSTextField.h \
+		cocoa/NSView.h \
+		cocoa/NSWindow.h \
+		cocoa/ObjcPose.h \
+		cocoa/app.h \
+		cocoa/bitmap.h \
+		cocoa/bmpbuttn.h \
+		cocoa/brush.h \
+		cocoa/button.h \
+		cocoa/checkbox.h \
+		cocoa/checklst.h \
+		cocoa/choice.h \
+		cocoa/colour.h \
+		cocoa/control.h \
+		cocoa/cursor.h \
+		cocoa/dc.h \
+		cocoa/dcclient.h \
+		cocoa/dcmemory.h \
+		cocoa/dcscreen.h \
+		cocoa/dialog.h \
+		cocoa/font.h \
+		cocoa/frame.h \
+		cocoa/gdiobj.h \
+		cocoa/icon.h \
+		cocoa/listbox.h \
+		cocoa/menu.h \
+		cocoa/menuitem.h \
+		cocoa/pen.h \
+		cocoa/radiobox.h \
+		cocoa/radiobut.h \
+		cocoa/region.h \
+		cocoa/statbmp.h \
+		cocoa/statbox.h \
+		cocoa/statline.h \
+		cocoa/stattext.h \
+		cocoa/textctrl.h \
+		cocoa/toplevel.h \
+		cocoa/window.h \
 		generic/accel.h \
 		generic/calctrl.h \
 		generic/caret.h \
@@ -702,7 +790,6 @@ GENERICOBJS = \
 		spinctlg.o \
 		splash.o \
 		splitter.o \
-		statline.o \
 		statusbr.o \
 		tabg.o \
 		tbarsmpl.o \
@@ -715,12 +802,58 @@ GENERICOBJS = \
 		wizard.o
 
 GUIOBJS = \
+		NSBox.o \
+		NSButton.o \
+		NSControl.o \
+		NSMenu.o \
+		NSPanel.o \
+		NSTextField.o \
+		NSView.o \
+		NSWindow.o \
+		app.o \
+		bitmap.o \
+		bmpbuttn.o \
+		brush.o \
+		button.o \
+		checkbox.o \
+		checklst.o \
+		choice.o \
+		colour.o \
+		control.o \
+		cursor.o \
+		data.o \
+		dc.o \
+		dcclient.o \
+		dcmemory.o \
+		dcscreen.o \
+		dialog.o \
+		font.o \
+		fontutil.o \
+		frame.o \
+		gdiobj.o \
+		icon.o \
+		listbox.o \
+		main.o \
+		menu.o \
+		menuitem.o \
+		pen.o \
+		radiobox.o \
+		radiobut.o \
+		region.o \
+		settings.o \
+		statbmp.o \
+		statbox.o \
+		statline2.o \
+		stattext.o \
+		textctrl.o \
+		toplevel.o \
+		utils.o \
+		utilsexc.o \
+		window.o
 
 UNIXOBJS = \
 		dialup.o \
 		dir.o \
-		fontenum.o \
-		fontutil.o \
 		gsocket.o \
 		mimetype.o \
 		snglinst.o \
