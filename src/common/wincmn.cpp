@@ -175,9 +175,10 @@ void wxWindowBase::InitBase()
 #endif // wxUSE_PALETTE
 
     m_virtualSize = wxDefaultSize;
-    m_minVirtualWidth = -1;
-    m_minVirtualHeight = -1;
-    m_maxVirtualWidth = -1;
+
+    m_minVirtualWidth =
+    m_minVirtualHeight =
+    m_maxVirtualWidth =
     m_maxVirtualHeight = -1;
 
     // Whether we're using the current theme for this window (wxGTK only for now)
@@ -580,13 +581,16 @@ void wxWindowBase::SetVirtualSizeHints( int minW, int minH,
 
 void wxWindowBase::DoSetVirtualSize( int x, int y )
 {
-    if( m_minVirtualWidth != -1 && m_minVirtualWidth > x )   x = m_minVirtualWidth;
-    if( m_maxVirtualWidth != -1 && m_maxVirtualWidth < x )   x = m_maxVirtualWidth;
-    if( m_minVirtualHeight != -1 && m_minVirtualHeight > y ) y = m_minVirtualHeight;
-    if( m_maxVirtualHeight != -1 && m_maxVirtualHeight < y ) y = m_maxVirtualHeight;
+    if ( m_minVirtualWidth != -1 && m_minVirtualWidth > x )
+        x = m_minVirtualWidth;
+    if ( m_maxVirtualWidth != -1 && m_maxVirtualWidth < x )
+        x = m_maxVirtualWidth;
+    if ( m_minVirtualHeight != -1 && m_minVirtualHeight > y )
+        y = m_minVirtualHeight;
+    if ( m_maxVirtualHeight != -1 && m_maxVirtualHeight < y )
+        y = m_maxVirtualHeight;
 
-    m_virtualSize.SetWidth( x );
-    m_virtualSize.SetHeight( y );
+    m_virtualSize = wxSize(x, y);
 }
 
 wxSize wxWindowBase::DoGetVirtualSize() const
