@@ -115,6 +115,7 @@ protected:
     void OnThaw(wxCommandEvent& event);
 
     void OnUpdateShowColInfo(wxUpdateUIEvent& event);
+    void OnUpdateToggleMultiSel(wxUpdateUIEvent& event);
 
     wxImageList *m_imageListNormal;
     wxImageList *m_imageListSmall;

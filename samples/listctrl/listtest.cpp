@@ -78,6 +78,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LIST_THAW, MyFrame::OnThaw)
 
     EVT_UPDATE_UI(LIST_SHOW_COL_INFO, MyFrame::OnUpdateShowColInfo)
+    EVT_UPDATE_UI(LIST_TOGGLE_MULTI_SEL, MyFrame::OnUpdateToggleMultiSel)    
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyListCtrl, wxListCtrl)
@@ -589,6 +590,11 @@ void MyFrame::OnToggleMultiSel(wxCommandEvent& WXUNUSED(event))
                            (flags & wxLC_SINGLE_SEL) ? _T("sing") : _T("multip")));
 
     RecreateList(flags);
+}
+
+void MyFrame::OnUpdateToggleMultiSel(wxUpdateUIEvent& event)
+{
+     event.Check((m_listCtrl->GetWindowStyleFlag() & wxLC_SINGLE_SEL) == 0);
 }
 
 void MyFrame::OnSetFgColour(wxCommandEvent& WXUNUSED(event))
