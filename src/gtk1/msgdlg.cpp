@@ -39,9 +39,12 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
     m_caption = caption;
     m_message = message;
     m_dialogStyle = style;
-    
-    while (!parent->IsTopLevel())
-        parent = parent->GetParent();
+
+    if (parent)
+    {    
+        while (!parent->IsTopLevel())
+            parent = parent->GetParent();
+    }
         
     m_parent = parent;
 }
