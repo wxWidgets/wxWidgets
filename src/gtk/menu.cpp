@@ -48,11 +48,11 @@ void wxMenuBar::Append( wxMenu *menu, const wxString &title )
   m_menus.Append( menu );
   menu->m_title = title;    // ??????
 
-  size_t pos;
+  int pos;
   do {
     pos = menu->m_title.First( '&' );
-    if (pos != wxString::npos) menu->m_title.Remove( pos, 1 );
-  } while (pos != wxString::npos);
+    if (pos != -1) menu->m_title.Remove( pos, 1 );
+  } while (pos != -1);
 
   GtkWidget *root_menu;
   root_menu = gtk_menu_item_new_with_label( WXSTRINGCAST(menu->m_title) );
@@ -262,11 +262,11 @@ int wxMenu::FindItem( const wxString itemString ) const
 {
   wxString s( itemString );
 
-  size_t pos;
+  int pos;
   do {
     pos = s.First( '&' );
-    if (pos != wxString::npos) s.Remove( pos, 1 );
-  } while (pos != wxString::npos);
+    if (pos != -1) s.Remove( pos, 1 );
+  } while (pos != -1);
 
   wxNode *node = m_items.First();
   while (node)

@@ -54,7 +54,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxDialog,wxWindow)
 wxDialog::wxDialog(void)
 {
   m_title = "";
-  m_modalShowing = TRUE;
+  m_modalShowing = FALSE;
   wxTopLevelWindows.Insert( this );
 };
 
@@ -63,6 +63,7 @@ wxDialog::wxDialog( wxWindow *parent,
       const wxPoint &pos, const wxSize &size, 
       long style, const wxString &name )
 {
+  m_modalShowing = FALSE;
   wxTopLevelWindows.Insert( this );
   Create( parent, id, title, pos, size, style, name );
 };
@@ -75,8 +76,6 @@ bool wxDialog::Create( wxWindow *parent,
   m_needParent = FALSE;
   
   PreCreation( parent, id, pos, size, style, name );
-  
-  m_modalShowing = ((m_windowStyle & wxDIALOG_MODAL) == wxDIALOG_MODAL);
   
   m_widget = gtk_window_new( GTK_WINDOW_TOPLEVEL );
   GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
@@ -189,7 +188,7 @@ void wxDialog::OnCloseWindow(wxCloseEvent& event)
 
 bool wxDialog::Show( bool show )
 {
-  if (!show && m_modalShowing)
+  if (!show && IsModal() && m_modalShowing)
   {
     EndModal( wxID_CANCEL );
   };
@@ -198,25 +197,31 @@ bool wxDialog::Show( bool show )
   
   if (show) InitDialog();
   
-  if (show && m_modalShowing)
-  {
-    gtk_grab_add( m_widget );
-    gtk_main();
-    gtk_grab_remove( m_widget );
-  };
-  
   return TRUE;
 };
 
 int wxDialog::ShowModal(void)
 {
+  if (m_modalShowing) return GetReturnCode();
+
   Show( TRUE );
+  
+  m_modalShowing = TRUE;
+  
+  gtk_grab_add( m_widget );
+  gtk_main();
+  gtk_grab_remove( m_widget );
+  
   return GetReturnCode();
 };
 
 void wxDialog::EndModal( int retCode )
 {
   SetReturnCode( retCode );
+  
+  if (!m_modalShowing) return;
+  m_modalShowing = FALSE;
+  
   gtk_main_quit();
 };
 

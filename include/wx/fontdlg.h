@@ -7,6 +7,8 @@
 #include "wx/generic/fontdlgg.h"
 #elif defined(__WXGTK__)
 #include "wx/generic/fontdlgg.h"
+#   define wxFontDialog wxGenericFontDialog
+#   define classwxFontDialog classwxGenericFontDialog
 #endif
 
 #endif

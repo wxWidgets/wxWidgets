@@ -442,3 +442,16 @@ void wxFrame::SetSizeHints(int minW, int minH, int maxW, int maxH, int WXUNUSED(
     gdk_window_set_hints( m_wxwindow->window, -1, -1, 
 	                  minW, minH, maxW, maxH, GDK_HINT_MIN_SIZE | GDK_HINT_MIN_SIZE );
 }
+
+void wxFrame::SetIcon( const wxIcon &icon )
+{
+  m_icon = icon;
+  if (!icon.Ok()) return;
+  
+  wxMask *mask = icon.GetMask();
+  GdkBitmap *bm = NULL;
+  if (mask) bm = mask->GetBitmap();
+  
+  gdk_window_set_icon( m_widget->window, NULL, icon.GetPixmap(), bm );
+}
+

@@ -537,13 +537,13 @@ public:
   wxString& Remove(size_t nStart, size_t nLen)
     { return erase( nStart, nLen ); }
 
-  size_t First( const char ch ) const { return find(ch); }
-  size_t First( const char* psz ) const { return find(psz); }
-  size_t First( const wxString &str ) const { return find(str); }
+  int First( const char ch ) const { size_t res = find(ch); return res == wxString::npos ? -1 : res; }
+  int First( const char* psz ) const { size_t res = find(psz); return res == wxString::npos ? -1 : res; }
+  int First( const wxString &str ) const { size_t res =  find(str); return res == wxString::npos ? -1 : res; }
 
-  size_t Last( const char ch ) const { return rfind(ch,0); }
-  size_t Last( const char* psz ) const { return rfind(psz,0); }
-  size_t Last( const wxString &str ) const { return rfind(str,0); }
+  int Last( const char ch ) const { size_t res = rfind(ch,0); return res == wxString::npos ? -1 : res; }
+  int Last( const char* psz ) const { size_t res = rfind(psz,0); return res == wxString::npos ? -1 : res; }
+  int Last( const wxString &str ) const { size_t res = rfind(str,0); return res == wxString::npos ? -1 : res; }
 
     /// same as IsEmpty
   bool IsNull() const { return IsEmpty(); }

@@ -103,7 +103,7 @@ MyFrame::MyFrame(wxWindow *parent, const wxString& title, const wxPoint& pos, co
   wxFrame(parent, -1, title, pos, size)
 {}
 
-void MyFrame::ChooseColour(wxCommandEvent& event)
+void MyFrame::ChooseColour(wxCommandEvent& WXUNUSED(event) )
 {
       wxColourData data;
       data.SetChooseFull(TRUE);
@@ -126,7 +126,7 @@ void MyFrame::ChooseColour(wxCommandEvent& event)
       dialog->Close();
 }
 
-void MyFrame::ChooseFont(wxCommandEvent& event)
+void MyFrame::ChooseFont(wxCommandEvent& WXUNUSED(event) )
 {
       wxFontData data;
       data.SetInitialFont(wxGetApp().m_canvasFont);
@@ -144,7 +144,7 @@ void MyFrame::ChooseFont(wxCommandEvent& event)
 }
 
 #if !defined(__WXMSW__) || USE_GENERIC_DIALOGS_IN_MSW
-void MyFrame::ChooseColourGeneric(wxCommandEvent& event)
+void MyFrame::ChooseColourGeneric(wxCommandEvent& WXUNUSED(event))
 {
       wxColourData data;
       data.SetChooseFull(TRUE);
@@ -167,7 +167,7 @@ void MyFrame::ChooseColourGeneric(wxCommandEvent& event)
       dialog->Close();
 }
 
-void MyFrame::ChooseFontGeneric(wxCommandEvent& event)
+void MyFrame::ChooseFontGeneric(wxCommandEvent& WXUNUSED(event) )
 {
       wxFontData data;
       data.SetInitialFont(wxGetApp().m_canvasFont);
@@ -185,7 +185,7 @@ void MyFrame::ChooseFontGeneric(wxCommandEvent& event)
 }
 #endif
 
-void MyFrame::MessageBox(wxCommandEvent& event)
+void MyFrame::MessageBox(wxCommandEvent& WXUNUSED(event) )
 {
   wxMessageDialog dialog(this, "This is a message box\nA long, long string to test out the message box properly",
   	"Message box text", wxYES_NO|wxCANCEL);
@@ -193,7 +193,7 @@ void MyFrame::MessageBox(wxCommandEvent& event)
   dialog.ShowModal();
 }
 
-void MyFrame::TextEntry(wxCommandEvent& event)
+void MyFrame::TextEntry(wxCommandEvent& WXUNUSED(event) )
 {
   wxTextEntryDialog dialog(this, "This is a small sample\nA long, long string to test out the text entrybox",
   	"Please enter a string", "Default value", wxOK|wxCANCEL);
@@ -205,7 +205,7 @@ void MyFrame::TextEntry(wxCommandEvent& event)
   }
 }
 
-void MyFrame::SingleChoice(wxCommandEvent& event)
+void MyFrame::SingleChoice(wxCommandEvent& WXUNUSED(event) )
 {
     const wxString choices[] = { "One", "Two", "Three", "Four", "Five" } ;
     int n = 5;
@@ -222,7 +222,7 @@ void MyFrame::SingleChoice(wxCommandEvent& event)
     }
 }
 
-void MyFrame::FileOpen(wxCommandEvent& event)
+void MyFrame::FileOpen(wxCommandEvent& WXUNUSED(event) )
 {
 	wxFileDialog dialog(this, "Testing open file dialog", "", "", "*.txt", 0);
 
@@ -233,7 +233,7 @@ void MyFrame::FileOpen(wxCommandEvent& event)
 	}
 }
 
-void MyFrame::FileSave(wxCommandEvent& event)
+void MyFrame::FileSave(wxCommandEvent& WXUNUSED(event) )
 {
 	wxFileDialog dialog(this, "Testing save file dialog", "", "",
 		"Text files (*.txt)|*.txt|Document files (*.doc)|*.doc",
@@ -248,8 +248,9 @@ void MyFrame::FileSave(wxCommandEvent& event)
 	}
 }
 
-void MyFrame::DirChoose(wxCommandEvent& event)
+void MyFrame::DirChoose(wxCommandEvent& WXUNUSED(event) )
 {
+#ifndef __WXGTK__
 	wxDirDialog dialog(this, "Testing directory picker", "");
 
 	if (dialog.ShowModal() == wxID_OK)
@@ -257,14 +258,15 @@ void MyFrame::DirChoose(wxCommandEvent& event)
 		wxMessageDialog dialog2(this, dialog.GetPath(), "Selected path");
 		dialog2.ShowModal();
 	}
+#endif
 }
 
-void MyFrame::OnExit(wxCommandEvent& event)
+void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event) )
 {
 	Close(TRUE);
 }
 
-void MyCanvas::OnPaint(wxPaintEvent& event)
+void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event) )
 {
 	wxPaintDC dc(this);
     dc.SetFont(wxGetApp().m_canvasFont);

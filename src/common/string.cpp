@@ -1270,7 +1270,7 @@ void wxArrayString::Remove(const char *sz)
 
 // sort array elements using passed comparaison function
 
-void wxArrayString::Sort(bool bCase, bool bReverse)
+void wxArrayString::Sort(bool WXUNUSED(bCase), bool WXUNUSED(bReverse) )
 {
   //@@@@ TO DO
   //qsort(m_pItems, m_nCount, sizeof(char *), fCmp);

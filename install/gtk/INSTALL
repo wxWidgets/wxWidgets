@@ -110,15 +110,17 @@ implemented.
 * Compiling
 -------------
 
-This must be done in ~/wxGTK
+The following must be done in ~/wxGTK
 
 First you have to create all makefiles in all subdirectories:
 
-	make makefiles
+	make Makefiles
 
 Dependencies are generated automatically using
 
 	make depend
+	
+for some reason, this doesn't seem to work.	
 
 Now the makefiles are created you can compile everything is as simple
 as typing:
@@ -160,7 +162,7 @@ will do the work for you.
 --------------------------
 
 I propose to put all contributed programs in the directory
-"~/wcGTK/user", with a directory of its own.
+"~/wxGTK/user", with a directory of its own.
 
 This directory then should include the following files:
 
@@ -186,7 +188,7 @@ this will include all the necessary definitions for creating the applications
 
 the only case where you might want to add another line is the following:
 this version of configure also supports creation of source archives of the
-application for easy distribution and updates to newer version of wxxt.
+application for easy distribution and updates to newer version of wxGTK.
     For this purpose all files in the application-directory will be put into
 a gziped tar-file in the full notation user/<your application>/*
 if you want to include some other files that you want "more visible", like
@@ -206,7 +208,7 @@ distribution is:
 
 	make distrib
 
-NOTE: If you are in the base directory of wxxt it will create 
+NOTE: If you are in the base directory of wxGTK it will create 
 distribution packages for wxxt as well as for all packages in the
 user directory.
     So if you want to create only packages for the files in user,

@@ -79,6 +79,8 @@ public:
 
   void SetTitle( const wxString &title );
   wxString GetTitle() const { return m_title; }
+  
+  void SetIcon( const wxIcon &icon );
 
   void OnActivate( wxActivateEvent &WXUNUSED(event) ) { } // called from docview.cpp
   void OnSize( wxSizeEvent &event );
@@ -104,6 +106,7 @@ private:
   bool          m_doingOnSize;
   bool          m_addPrivateChild;   // for toolbar (and maybe menubar)
   wxString      m_title;
+  wxIcon        m_icon;
 
   DECLARE_EVENT_TABLE()
 };
