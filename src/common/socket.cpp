@@ -678,6 +678,10 @@ bool wxSocketBase::_Wait(long seconds,
   else
     timeout = m_timeout * 1000;
 
+#if !defined(wxUSE_GUI) || !wxUSE_GUI
+  GSocket_SetTimeout(m_socket, timeout);
+#endif 
+
   // Wait in an active polling loop.
   //
   // NOTE: We duplicate some of the code in OnRequest, but this doesn't

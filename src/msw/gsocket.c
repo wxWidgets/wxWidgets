@@ -759,15 +759,15 @@ GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
     fd_set readfds;
     fd_set writefds;
     fd_set exceptfds;
-    static const struct timeval tv = { 0, 0 };
-
+    
     assert(socket != NULL);
 
     FD_ZERO(&readfds);
     FD_ZERO(&writefds);
     FD_ZERO(&exceptfds);
     FD_SET(socket->m_fd, &readfds);
-    FD_SET(socket->m_fd, &writefds);
+	if (flags & GSOCK_OUTPUT_FLAG)
+      FD_SET(socket->m_fd, &writefds);
     FD_SET(socket->m_fd, &exceptfds);
 
     /* Check 'sticky' CONNECTION flag first */
@@ -784,7 +784,8 @@ GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
     }
 
     /* Try select now */
-    if (select(socket->m_fd + 1, &readfds, &writefds, &exceptfds, &tv) <= 0)
+    if (select(socket->m_fd + 1, &readfds, &writefds, &exceptfds,
+	    &socket->m_timeout) <= 0)
     {
       /* What to do here? */
       return (result & flags);
@@ -795,7 +796,7 @@ GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
     {
       char c;
 
-      if (recv(socket->m_fd, &c, 1, MSG_PEEK) > 0)
+      if (!socket->m_stream || recv(socket->m_fd, &c, 1, MSG_PEEK) > 0)
       {
         result |= GSOCK_INPUT_FLAG;
       }

@@ -914,8 +914,8 @@ GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
     struct timeval tv;
 
     /* Do not use a static struct, Linux can garble it */
-    tv.tv_sec = 0;
-    tv.tv_usec = 0;
+    tv.tv_sec = socket->m_timeout / 1000;
+    tv.tv_usec = (socket->m_timeout % 1000) / 1000;
 
     assert(socket != NULL);
 
@@ -923,7 +923,8 @@ GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
     FD_ZERO(&writefds);
     FD_ZERO(&exceptfds);
     FD_SET(socket->m_fd, &readfds);
-    FD_SET(socket->m_fd, &writefds);
+    if (flags & GSOCK_OUTPUT_FLAG)
+      FD_SET(socket->m_fd, &writefds);
     FD_SET(socket->m_fd, &exceptfds);
 
     /* Check 'sticky' CONNECTION flag first */
