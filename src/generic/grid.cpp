@@ -6131,7 +6131,7 @@ void wxGrid::DrawRowLabel( wxDC& dc, int row )
 
     dc.DrawLine( 0, rowBottom, m_rowLabelWidth-1, rowBottom );
 
-//    dc.SetPen( *wxWHITE_PEN );
+    dc.SetPen( *wxWHITE_PEN );
     dc.DrawLine( 0, rowTop, 0, rowBottom );
     dc.DrawLine( 0, rowTop, m_rowLabelWidth-1, rowTop );
 
