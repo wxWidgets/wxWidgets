@@ -2422,12 +2422,13 @@ See \helpref{Window styles}{windowstyles} for more information about flags.
 
 \func{virtual bool}{Show}{\param{bool}{ show}}
 
-Shows or hides the window.
+Shows or hides the window. You may need to call \helpref{Raise}{wxwindowraise} 
+for a top level window if you want to bring it to top, although this is not
+needed if Show() is called immediately after the frame creation.
 
 \wxheading{Parameters}
 
-\docparam{show}{If TRUE, displays the window and brings it to the front. Otherwise,
-hides the window.}
+\docparam{show}{If TRUE displays the window. Otherwise, hides it.}
 
 \wxheading{See also}
 
