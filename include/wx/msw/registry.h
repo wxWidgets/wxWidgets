@@ -168,8 +168,11 @@ public:
   wxRegKey& operator=(long lValue)
     { SetValue(NULL, lValue); return *this; }
 
-    // conversion operators query the default value of the key
-  operator wxString() const;
+    // query the default value of the key: implicitly or explicitly
+  wxString QueryDefaultValue() const;
+  operator wxString() const { return QueryDefaultValue(); }
+
+    // named values
 
     // set the string value
   bool  SetValue(const wxChar *szValue, const wxString& strValue);

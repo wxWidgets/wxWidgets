@@ -930,7 +930,7 @@ bool wxRegKey::SetValue(const wxChar *szValue, const wxString& strValue)
   return FALSE;
 }
 
-wxRegKey::operator wxString() const
+wxString wxRegKey::QueryDefaultValue() const
 {
   wxString str;
   QueryValue(NULL, str);
