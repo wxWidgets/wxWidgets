@@ -1451,6 +1451,7 @@ void wxTextCtrl::WriteText(const wxString& str)
         val.Remove( start , end - start ) ;
         val.insert( start , str ) ;
         SetValue( val ) ;
+        SetInsertionPoint( start + str.Length() ) ;
     #endif
     #endif
     }
