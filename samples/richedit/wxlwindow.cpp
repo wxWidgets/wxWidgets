@@ -84,6 +84,8 @@ static const int Y_SCROLL_PAGE = 20;
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(wxLayoutWindow,wxScrolledWindow)
+   EVT_SIZE    (wxLayoutWindow::OnSize)
+
    EVT_PAINT    (wxLayoutWindow::OnPaint)
 
    EVT_CHAR     (wxLayoutWindow::OnChar)
@@ -159,6 +161,11 @@ wxLayoutWindow::wxLayoutWindow(wxWindow *parent)
    EnableScrolling(true, true);
    m_maxx = max.x + X_SCROLL_PAGE;
    m_maxy = max.y + Y_SCROLL_PAGE;
+
+   // no scrollbars initially (BTW, why then we do all the stuff above?)
+   m_hasHScrollbar =
+   m_hasVScrollbar = false;
+
    m_Selecting = false;
 
 #ifdef WXLAYOUT_USE_CARET
@@ -331,6 +338,10 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
 
             DoPaint();     // TODO: we don't have to redraw everything!
          }
+         break;
+
+      case WXLOWIN_MENU_RCLICK:
+         // remove the selection if mouse click is outside it (TODO)
          break;
 
       case WXLOWIN_MENU_DBLCLICK:
@@ -828,17 +839,35 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
    }
 }
 
+void
+wxLayoutWindow::OnSize(wxSizeEvent &event)
+{
+    ResizeScrollbars();
+
+    event.Skip();
+}
+
 // change the range and position of scrollbars
 void
 wxLayoutWindow::ResizeScrollbars(bool exact)
 {
    wxPoint max = m_llist->GetSize();
+   wxSize size = GetClientSize();
 
    WXLO_DEBUG(("ResizeScrollbars: max size = (%ld, %ld)",
                (long int)max.x, (long int) max.y));
 
+   // in the absence of scrollbars we should compare with the client size
+   if ( !m_hasHScrollbar )
+      m_maxx = size.x - WXLO_ROFFSET;
+   if ( !m_hasVScrollbar )
+      m_maxy = size.y - WXLO_BOFFSET;
+
+   // check if the text hasn't become too big
+   // TODO why do we set both at once? they're independent...
    if( max.x > m_maxx - WXLO_ROFFSET || max.y > m_maxy - WXLO_BOFFSET || exact )
    {
+      // text became too large
       if ( !exact )
       {
          // add an extra bit to the sizes to avoid future updates
@@ -852,8 +881,29 @@ wxLayoutWindow::ResizeScrollbars(bool exact)
                     m_ViewStartX, m_ViewStartY,
                     true);
 
+      m_hasHScrollbar =
+      m_hasVScrollbar = true;
+
       m_maxx = max.x + X_SCROLL_PAGE;
       m_maxy = max.y + Y_SCROLL_PAGE;
+   }
+   else
+   {
+      // check if the window hasn't become too big, thus making the scrollbars
+      // unnecessary
+      if ( m_hasHScrollbar && (max.x < size.x) )
+      {
+         // remove the horizontal scrollbar
+         SetScrollbars(0, -1, 0, -1, 0, -1, true);
+         m_hasHScrollbar = false;
+      }
+
+      if ( m_hasVScrollbar && (max.y < size.y) )
+      {
+         // remove the vertical scrollbar
+         SetScrollbars(-1, 0, -1, 0, -1, 0, true);
+         m_hasVScrollbar = false;
+      }
    }
 }
 

@@ -127,6 +127,7 @@ public:
 
    /**@name Callbacks */
    //@{
+   void OnSize(wxSizeEvent &event);
    void OnPaint(wxPaintEvent &event);
    void OnChar(wxKeyEvent& event);
    void OnKeyUp(wxKeyEvent& event);
@@ -202,6 +203,11 @@ protected:
    int m_maxx;
    int m_maxy;
    int m_lineHeight;
+
+   /// do we have the corresponding scrollbar?
+   bool m_hasHScrollbar,
+        m_hasVScrollbar;
+
    /** Visibility parameter for cursor. 0/1 as expected, -1: visible
        on demand.
    */

@@ -472,7 +472,7 @@ wxLayoutStyleInfo::wxLayoutStyleInfo(int ifamily,
    m_fg_valid = fg != 0;
    m_bg_valid = bg != 0;
    m_fg = m_fg_valid ? *fg : *wxBLACK;
-   m_bg = m_fg_valid ? *bg : *wxWHITE;
+   m_bg = m_bg_valid ? *bg : *wxWHITE;
 }
 
 #define COPY_SI_(what) if(right.what != -1) what = right.what;
