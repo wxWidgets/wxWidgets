@@ -167,9 +167,9 @@ void wxMenuItem::CreateItem (WXWidget menu, wxMenuBar * menuBar, wxMenu * topMen
     m_menuBar = menuBar;
     m_topMenu = topMenu;
 
-    if (GetId() == -2)
+    if (GetId() == -3)
     {
-        // Id=-2 identifies a Title item.
+        // Id=-3 identifies a Title item.
         m_buttonWidget = (WXWidget) XtVaCreateManagedWidget
             (wxStripMenuCodes(m_text),
             xmLabelGadgetClass, (Widget) menu, NULL);
@@ -226,7 +226,7 @@ void wxMenuItem::CreateItem (WXWidget menu, wxMenuBar * menuBar, wxMenu * topMen
             (XtCallbackProc) wxMenuItemDisarmCallback,
             (XtPointer) this);
     }
-    else if (GetId() == -1)
+    else if (GetId() == wxID_SEPARATOR)
     {
         m_buttonWidget = (WXWidget) XtVaCreateManagedWidget ("separator",
             xmSeparatorGadgetClass, (Widget) menu, NULL);
@@ -246,7 +246,7 @@ void wxMenuItem::CreateItem (WXWidget menu, wxMenuBar * menuBar, wxMenu * topMen
 
 void wxMenuItem::DestroyItem(bool full)
 {
-    if (GetId() == -2)
+    if (GetId() == -3)
     {
         ;      // Nothing
 
@@ -267,7 +267,7 @@ void wxMenuItem::DestroyItem(bool full)
                 wxMenuItemDisarmCallback, (XtPointer) this);
         }
     }
-    else if (GetId() == -1)
+    else if (GetId() == wxID_SEPARATOR)
     {
         ;      // Nothing
 

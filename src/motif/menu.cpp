@@ -83,7 +83,7 @@ void wxMenu::Init()
 
     if ( !!m_title )
     {
-        Append(wxID_SEPARATOR, m_title) ;
+        Append(-3, m_title) ;
         AppendSeparator() ;
     }
 
