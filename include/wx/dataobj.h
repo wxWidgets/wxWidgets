@@ -445,14 +445,23 @@ private:
 
 #if defined(__WXMSW__)
     #include "wx/msw/ole/dataobj2.h"
-#elif defined(__WXMOTIF__)
-    // #include "wx/motif/dataobj2.h" -- not yet
-#elif defined(__WXGTK__)
-    #include "wx/gtk/dataobj2.h"
-#elif defined(__WXMAC__)
-    #include "wx/mac/dataobj2.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/dataobj2.h"
-#endif
+
+    // wxURLDataObject defined in msw/ole/dataobj2.h
+#else // !__WXMSW__
+    #if defined(__WXGTK__)
+        #include "wx/gtk/dataobj2.h"
+    #elif defined(__WXMAC__)
+        #include "wx/mac/dataobj2.h"
+    #elif defined(__WXPM__)
+        #include "wx/os2/dataobj2.h"
+    #endif
+
+    // wxURLDataObject is simply wxTextDataObject with a different name
+    class WXDLLEXPORT wxURLDataObject : public wxTextDataObject
+    {
+    public:
+        wxString GetURL() const { return GetText(); }
+    };
+#endif // __WXMSW__/!__WXMSW__
 
 #endif // _WX_DATAOBJ_H_BASE_

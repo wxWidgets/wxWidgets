@@ -40,13 +40,13 @@ public:
     bool IsSupportedFormat(const wxDataFormat& format) const
         { return wxDataObjectBase::IsSupported(format, Get); }
 
-#ifdef __WXDEBUG__
     // function to return symbolic name of clipboard format (for debug messages)
+#ifdef __WXDEBUG__
     static const wxChar *GetFormatName(wxDataFormat format);
 
     #define wxGetFormatName(format) wxDataObject::GetFormatName(format)
 #else // !Debug
-    #define wxGetFormatName(format) ""
+    #define wxGetFormatName(format) _T("")
 #endif // Debug/!Debug
 
 private:

@@ -1036,6 +1036,47 @@ bool wxFileDataObject::GetDataHere(void *pData) const
 }
 
 // ----------------------------------------------------------------------------
+// wxURLDataObject
+// ----------------------------------------------------------------------------
+
+wxURLDataObject::wxURLDataObject()
+{
+    // we support CF_TEXT and CFSTR_SHELLURL formats which are basicly the same
+    // but it seems that some browsers only provideo ne of them so we have to
+    // support both
+    Add(new wxCustomDataObject(CFSTR_SHELLURL));
+    Add(new wxTextDataObject);
+
+    // we don't have any data yet
+    m_dataObjectLast = NULL;
+}
+
+bool wxURLDataObject::SetData(const wxDataFormat& format,
+                              size_t len,
+                              const void *buf)
+{
+    m_dataObjectLast = GetObject(format);
+
+    wxCHECK_MSG( m_dataObjectLast, FALSE,
+                 wxT("unsupported format in wxURLDataObject"));
+
+    return m_dataObjectLast->SetData(len, buf);
+}
+
+wxString wxURLDataObject::GetURL() const
+{
+    wxString url;
+    wxCHECK_MSG( m_dataObjectLast, url, _T("no data in wxURLDataObject") );
+
+    size_t len = m_dataObjectLast->GetDataSize();
+
+    m_dataObjectLast->GetDataHere(url.GetWriteBuf(len + 1));
+    url.UngetWriteBuf();
+
+    return url;
+}
+
+// ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
 

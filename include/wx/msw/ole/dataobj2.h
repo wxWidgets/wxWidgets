@@ -78,4 +78,26 @@ public:
     virtual void AddFile(const wxString& file);
 };
 
+// ----------------------------------------------------------------------------
+// wxURLDataObject: data object for URLs
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxURLDataObject : public wxDataObjectComposite
+{
+public:
+    wxURLDataObject();
+
+    // return the URL as string
+    wxString GetURL() const;
+
+    // override to set m_textFormat
+    virtual bool SetData(const wxDataFormat& format,
+                         size_t len,
+                         const void *buf);
+
+private:
+    // last data object we got data in
+    wxDataObjectSimple *m_dataObjectLast;
+};
+
 #endif // _WX_MSW_OLE_DATAOBJ2_H

@@ -148,7 +148,7 @@ STDMETHODIMP wxIDropTarget::DragEnter(IDataObject *pIDataSource,
                   _T("drop target must have data object") );
 
     // show the list of formats supported by the source data object for the
-    // debugging purposes
+    // debugging purposes, this is quite useful sometimes - please don't remove
 #if 0
     IEnumFORMATETC *penumFmt;
     if ( SUCCEEDED(pIDataSource->EnumFormatEtc(DATADIR_GET, &penumFmt)) )
@@ -402,11 +402,11 @@ bool wxDropTarget::GetData()
             rc = TRUE;
         }
         else {
-            wxLogLastError(wxT("IDataObject::SetData()"));
+            wxLogApiError(wxT("IDataObject::SetData()"), hr);
         }
     }
     else {
-        wxLogLastError(wxT("IDataObject::GetData()"));
+        wxLogApiError(wxT("IDataObject::GetData()"), hr);
     }
 
     return rc;

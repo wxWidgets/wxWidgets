@@ -81,6 +81,39 @@ private:
 };
 
 // ----------------------------------------------------------------------------
+// Define a custom dtop target accepting URLs
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT URLDropTarget : public wxDropTarget
+{
+public:
+    URLDropTarget() { SetDataObject(new wxURLDataObject); }
+
+    void OnDropURL(wxCoord x, wxCoord y, const wxString& text)
+    {
+        // of course, a real program would do something more useful here...
+        wxMessageBox(text, _T("wxDnD sample: got URL"),
+                     wxICON_INFORMATION | wxOK);
+    }
+
+    // URLs can't be moved, only copied
+    virtual wxDragResult OnDragOver(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
+                                    wxDragResult def)
+        { return def == wxDragMove ? wxDragCopy : def; }
+
+    // translate this to calls to OnDropURL() just for convenience
+    virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def)
+    {
+        if ( !GetData() )
+            return wxDragNone;
+
+        OnDropURL(x, y, ((wxURLDataObject *)m_dataObject)->GetURL());
+
+        return def;
+    }
+};
+
+// ----------------------------------------------------------------------------
 // Define a new application type
 // ----------------------------------------------------------------------------
 
@@ -921,9 +954,10 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
     m_pLog = new wxLogTextCtrl(m_ctrlLog);
     m_pLogPrev = wxLog::SetActiveTarget(m_pLog);
 
-    // associate drop targets with 2 text controls
+    // associate drop targets with the controls
     m_ctrlFile->SetDropTarget(new DnDFile(m_ctrlFile));
     m_ctrlText->SetDropTarget(new DnDText(m_ctrlText));
+    m_ctrlLog->SetDropTarget(new URLDropTarget);
 
     wxLayoutConstraints *c;
 
