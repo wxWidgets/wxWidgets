@@ -265,12 +265,6 @@ long wxButton::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 
         // and conitnue with processing the message normally as well
     }
-#if 0
-    else if ( nMsg == WM_MOVE )
-    {
-        Refresh();
-    }
-#endif
 
     // let the base class do all real processing
     return wxControl::MSWWindowProc(nMsg, wParam, lParam);
