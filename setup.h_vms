@@ -501,6 +501,10 @@
  */
 #define wxUSE_LOGGUI 1
 /*
+ * Use old log dialog instead of new wxLogGui
+ */
+#define wxUSE_LOG_DIALOG 1
+/*
  * Use wxStopWatch
  */
 #define wxUSE_STOPWATCH 1
@@ -624,6 +628,10 @@
 #else
 #define wxUSE_DRAG_AND_DROP 0
 #endif
+/*
+ * Use OLE (MSW only)
+*/
+#define wxUSE_OLE 0
 /*
  * Use spline
  */
@@ -971,6 +979,14 @@
 
 /* Define if you have the <langinfo.h> header file.  */
 #define HAVE_LANGINFO_H 1
+
+/* Define if you have the <w32api.h> header file (mingw,cygwin).  */
+#undef HAVE_W32API_H
+
+/*
+ * Use MS HTML Help controller (win32)
+ */
+#define wxUSE_MS_HTML_HELP 0
 
 /* Define this if you are using gtk and gdk contains support for X11R6 XIM */
 #undef HAVE_XIM

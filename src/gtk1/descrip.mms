@@ -20,7 +20,6 @@ CC_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/iee=denorm
 	cc $(CFLAGS)$(CC_DEFINE) $(MMS$TARGET_NAME).c
 
 OBJECTS = \
-	accel.obj,\
 	app.obj,\
 	bitmap.obj,\
         bmpbuttn.obj,\
@@ -81,7 +80,6 @@ OBJECTS = \
 	window.obj
 
 SOURCES =\
-	accel.cpp,\
 	app.cpp,\
 	bitmap.cpp,\
         bmpbuttn.cpp,\
@@ -145,7 +143,6 @@ all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
 	library [--.lib]libwx_gtk.olb $(OBJECTS)
 
-accel.obj : accel.cpp
 app.obj : app.cpp
 bitmap.obj : bitmap.cpp
 bmpbuttn.obj : bmpbuttn.cpp

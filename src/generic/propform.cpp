@@ -25,6 +25,7 @@
 #ifndef WX_PRECOMP
 #endif
 
+#include "wx/wx.h"
 #include "wx/propform.h"
 
 #include <ctype.h>

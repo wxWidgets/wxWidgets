@@ -206,7 +206,7 @@ void wxAppBase::OnInitCmdLine(wxCmdLineParser& parser)
             OPTION_VERBOSE,
             gettext_noop("generate verbose log messages")
         },
-#endif wxUSE_LOG
+#endif // wxUSE_LOG
 
 #ifdef __WXUNIVERSAL__
         {

@@ -120,6 +120,7 @@ OBJECTS1=framecmn.obj,\
 		strconv.obj,\
 		stream.obj,\
 		string.obj,\
+		sysopt.obj,\
 		tbarbase.obj,\
 		textcmn.obj,\
 		textfile.obj,\
@@ -223,6 +224,7 @@ SOURCES = \
 		socket.cpp,\
 		strconv.cpp,\
 		stream.cpp,\
+		sysopt.cpp,\
 		string.cpp,\
 		tbarbase.cpp,\
 		textcmn.cpp,\
@@ -357,6 +359,7 @@ sizer.obj : sizer.cpp
 socket.obj : socket.cpp
 strconv.obj : strconv.cpp
 stream.obj : stream.cpp
+sysopt.obj : sysopt.cpp
 string.obj : string.cpp
 tbarbase.obj : tbarbase.cpp
 textcmn.obj : textcmn.cpp

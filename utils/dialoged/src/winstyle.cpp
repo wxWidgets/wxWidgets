@@ -22,6 +22,7 @@
 
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
+#include "wx/listctrl.h"
 #endif
 
 #include <ctype.h>
