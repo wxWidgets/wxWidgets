@@ -83,10 +83,22 @@ class wxFont;
 class wxLayoutObject
 {
 public:
-   /// This structure can be used to contain data associated with the object.
+   /** This structure can be used to contain data associated with the
+       object.
+       It is refcounted, so the caller has to do a DecRef() on it
+       instead of a delete.
+   */
    struct UserData
    {
-      virtual ~UserData() { }
+      UserData() { m_refcount = 1; }
+      void IncRef(void) { m_refcount++; }
+      void DecRef(void) { m_refcount--; if(m_refcount == 0) delete this;}
+   private:
+      int m_refcount;
+   protected:
+      virtual ~UserData() { wxASSERT(m_refcount == 0); }
+      /// prevents gcc from generating stupid warnings
+      friend class dummy_UserData;
    };
 
    /// return the type of this object
@@ -125,7 +137,7 @@ public:
    /// constructor
    wxLayoutObject() { m_UserData = NULL; }
    /// delete the user data
-   virtual ~wxLayoutObject() { if(m_UserData) delete m_UserData; }
+   virtual ~wxLayoutObject() { if(m_UserData) m_UserData->DecRef(); }
 
 #ifdef WXLAYOUT_DEBUG
    virtual void Debug(void);
@@ -134,10 +146,20 @@ public:
    /** Tells the object about some user data. This data is associated
        with the object and will be deleted at destruction time.
    */
-   void   SetUserData(UserData *data) { m_UserData = data; }
-   /** Return the user data. */
-   void * GetUserData(void) const { return m_UserData; }
+   void   SetUserData(UserData *data)
+      {
+         if(m_UserData)
+            m_UserData->DecRef();
+         m_UserData = data;
+         m_UserData->IncRef();
+      }
    
+   /** Return the user data. */
+   void * GetUserData(void) const { if(m_UserData) m_UserData->IncRef(); return m_UserData; }
+
+   /** Makes a copy of this object.
+    */
+   virtual wxLayoutObject *Copy(void) = 0;
 private:
    /// optional data for application's use
    UserData *m_UserData;
@@ -192,7 +214,9 @@ public:
    // for editing:
    wxString & GetText(void) { return m_Text; }
    void SetText(wxString const &text) { m_Text = text; }
-
+   /** Makes a copy of this object.
+    */
+   virtual wxLayoutObject *Copy(void);
 private:
    wxString m_Text;
    /// size of the box containing text
@@ -230,7 +254,11 @@ public:
    virtual wxPoint GetSize(CoordType * top, CoordType *bottom) const;
    /// Return just the width of the object on the screen.
    virtual CoordType GetWidth(void) const { return m_Icon->GetWidth(); }
-
+   // return a pointer to the icon
+   wxBitmap *GetIcon(void) const { return m_Icon; }
+   /** Makes a copy of this object.
+    */
+   virtual wxLayoutObject *Copy(void);
 private:
    wxBitmap *m_Icon;
 };
@@ -269,6 +297,9 @@ public:
    void GetStyle(wxLayoutStyleInfo *si) const;
    /// return the background colour for setting colour of window
    wxColour const *GetBGColour(void) const { return m_ColourBG; }
+   /** Makes a copy of this object.
+    */
+   virtual wxLayoutObject *Copy(void);
 private:
    /// the font to use
    wxFont *m_font;
@@ -539,7 +570,9 @@ public:
               int underline=0,
               char const *fg="black",
               char const *bg="white");
-
+   /// Empty: clear the list but leave font settings.
+   void Empty(void);
+   
    /**@name Cursor Management */
    //@{
    /** Set new cursor position.

@@ -33,7 +33,7 @@ IMPLEMENT_APP(MyApp)
    enum ids{ ID_ADD_SAMPLE = 1, ID_CLEAR, ID_PRINT,
              ID_PRINT_SETUP, ID_PAGE_SETUP, ID_PREVIEW, ID_PRINT_PS,
              ID_PRINT_SETUP_PS, ID_PAGE_SETUP_PS,ID_PREVIEW_PS,
-             ID_WRAP, ID_NOWRAP,
+             ID_WRAP, ID_NOWRAP, ID_PASTE,
              ID_WXLAYOUT_DEBUG, ID_QUIT, ID_CLICK, ID_HTML, ID_TEXT, ID_TEST };
 
 
@@ -63,10 +63,9 @@ MyFrame::MyFrame(void) :
   
    SetStatusText( "wxLayout by Karsten Ballüder." );
 
+   wxMenuBar *menu_bar = new wxMenuBar();
+   
    wxMenu *file_menu = new wxMenu;
-   file_menu->Append( ID_CLEAR, "Clear");
-   file_menu->Append( ID_ADD_SAMPLE, "Example");
-
    file_menu->Append(ID_PRINT, "&Print...", "Print");
    file_menu->Append(ID_PRINT_SETUP, "Print &Setup...","Setup printer properties");
    file_menu->Append(ID_PAGE_SETUP, "Page Set&up...", "Page setup");
@@ -79,16 +78,20 @@ MyFrame::MyFrame(void) :
    file_menu->Append(ID_PREVIEW_PS, "Print Preview PostScript", "Preview (PostScript)");
 #endif
    file_menu->AppendSeparator();
-   file_menu->Append(ID_WRAP, "Wrap mode", "Activate wrapping at pixel 200.");
-   file_menu->Append(ID_NOWRAP, "No-wrap mode", "Deactivate wrapping.");
-
-   file_menu->AppendSeparator();
    file_menu->Append( ID_TEXT, "Export Text");
    file_menu->Append( ID_HTML, "Export HTML");
    file_menu->Append( ID_QUIT, "Exit");
-  
-   wxMenuBar *menu_bar = new wxMenuBar();
    menu_bar->Append(file_menu, "File" );
+
+   wxMenu *edit_menu = new wxMenu;
+   edit_menu->Append( ID_CLEAR, "Clear");
+   edit_menu->Append( ID_ADD_SAMPLE, "Example");
+   edit_menu->AppendSeparator();
+   edit_menu->Append(ID_WRAP, "Wrap mode", "Activate wrapping at pixel 200.");
+   edit_menu->Append(ID_NOWRAP, "No-wrap mode", "Deactivate wrapping.");
+   edit_menu->AppendSeparator();
+   edit_menu->Append(ID_PASTE, "Paste", "Paste text from clipboard.");
+   menu_bar->Append(edit_menu, "Edit" );
 
 #ifndef __WXMSW__
    menu_bar->Show( TRUE );
@@ -221,6 +224,9 @@ void MyFrame::OnCommand( wxCommandEvent &event )
       break;
    case ID_CLICK:
       cerr << "Received click event." << endl;
+      break;
+   case ID_PASTE:
+      m_lwin->Paste();
       break;
    case ID_HTML:
    {

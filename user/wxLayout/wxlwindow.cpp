@@ -27,10 +27,11 @@
 #       undef StartDoc
 #   endif
 #   include "wxlwindow.h"
+#   include "wxlparser.h"
 #endif
 
 #include <ctype.h>
-
+#include <wx/clipbrd.h>
 
 #define WXLO_XOFFSET   4
 #define WXLO_YOFFSET   4
@@ -266,11 +267,23 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
 void
 wxLayoutWindow::OnPaint( wxPaintEvent &WXUNUSED(event))  // or: OnDraw(wxDC& dc)
 {
-   DoPaint();
+   m_ScrollToCursor = false;
+   InternalPaint();
 }
 
 void
 wxLayoutWindow::DoPaint(bool scrollToCursor)
+{
+   m_ScrollToCursor = scrollToCursor;
+#ifdef __WXGTK__
+   InternalPaint();
+#else
+   Refresh();
+#endif
+}
+
+void
+wxLayoutWindow::InternalPaint(void)
 {
    wxPaintDC dc( this );
    PrepareDC( dc );
@@ -301,7 +314,7 @@ wxLayoutWindow::DoPaint(bool scrollToCursor)
    /* Make sure that the scrollbars are at a position so that the
       cursor is visible if we are editing. */
       /** Scroll so that cursor is visible! */
-   if(IsEditable() && scrollToCursor)
+   if(IsEditable() && m_ScrollToCursor)
    {
       wxPoint cc = m_llist->GetCursorScreenPos();
       if(cc.x < x0 || cc.y < y0
@@ -363,6 +376,22 @@ wxLayoutWindow::ResizeScrollbars(bool exact)
       ViewStart(&m_ViewStartX, &m_ViewStartY);
       SetScrollbars(10, 20, max.x/10+1,max.y/20+1,m_ViewStartX,m_ViewStartY,true);
       m_maxx = max.x; m_maxy = max.y;
+   }
+}
+
+void
+wxLayoutWindow::Paste(void)
+{
+   // Read some text
+   if (wxTheClipboard->Open())
+   {
+      wxTextDataObject data;
+      if (wxTheClipboard->IsSupported(wxDF_TEXT))
+      {
+         wxTheClipboard->GetData(&data);
+         wxLayoutImportText( m_llist, data.GetText());
+      }  
+      wxTheClipboard->Close();
    }
 }
 

@@ -32,7 +32,7 @@ inline static bool IsEndOfLine(const char *p, int mode)
       (((*p == '\r') && (*(p + 1) == '\n'))||(*p == '\n'));
 }
 
-void wxLayoutImportText(wxLayoutList &list, wxString const &str, int withflag)
+void wxLayoutImportText(wxLayoutList *list, wxString const &str, int withflag)
 {
    char * cptr = (char *)str.c_str(); // string gets changed only temporarily
    const char * begin = cptr;
@@ -45,7 +45,7 @@ void wxLayoutImportText(wxLayoutList &list, wxString const &str, int withflag)
          cptr++;
       backup = *cptr;
       *cptr = '\0';
-      list.Insert(begin);
+      list->Insert(begin);
       *cptr = backup;
 
       // check if it's the end of this line
@@ -54,7 +54,7 @@ void wxLayoutImportText(wxLayoutList &list, wxString const &str, int withflag)
          // if it was "\r\n", skip the following '\n'
          if ( *cptr == '\r' )
             cptr++;
-         list.LineBreak();
+         list->LineBreak();
       }
       else if(backup == '\0') // reached end of string
          break;
@@ -158,7 +158,7 @@ wxLayoutExportObject *wxLayoutExport(wxLayoutExportStatus *status,
 {
    wxASSERT(status);
    wxLayoutExportObject * export;
-
+   
    if(status->m_iterator == NULLIT) // end of line
    {
       if(!status->m_line || status->m_line->GetNextLine() == NULL) // reached end of list
@@ -168,6 +168,14 @@ wxLayoutExportObject *wxLayoutExport(wxLayoutExportStatus *status,
          status->m_line = status->m_line->GetNextLine();
          status->m_iterator = status->m_line->GetFirstObject();
          export = new wxLayoutExportObject();;
+      if( (mode & WXLO_EXPORT_AS_MASK) == WXLO_EXPORT_AS_OBJECTS) // simple case
+         {
+            export->type = WXLO_EXPORT_OBJECT;
+            export->content.object = *status->m_iterator;
+            status->m_iterator++;
+            return export;
+         }
+         //else: text object:
          export->type = ((mode & WXLO_EXPORT_AS_MASK) == WXLO_EXPORT_AS_HTML)
             ?  WXLO_EXPORT_HTML : WXLO_EXPORT_TEXT;
          if((mode & WXLO_EXPORT_WITH_CRLF) == WXLO_EXPORT_WITH_CRLF)

@@ -16,7 +16,7 @@
 #  include   <wx/wx.h>
 #endif
 
-#include   "wxllist.h"
+#include "wxllist.h"
 
 #ifndef WXLOWIN_MENU_FIRST
 #   define WXLOWIN_MENU_FIRST 12000
@@ -76,7 +76,9 @@ public:
    void SetEditable(bool toggle) { m_Editable = toggle; }
    /// Query whether list can be edited by user.
    bool IsEditable(void) const { return m_Editable; }
-
+   /// Pastes text from clipboard.
+   void Paste(void);
+   
    //@}
    
    void EnablePopup(bool enable = true) { m_DoPopupMenu = enable; }
@@ -87,6 +89,8 @@ public:
    void SetWrapMargin(CoordType margin) { m_WrapMargin = margin; }
    
    /** Redraws the window.
+       Internally, this stores the parameter and calls a refresh on
+       wxMSW, draws directly on wxGTK.
        @param scrollToCursor if true, scroll the window so that the
        cursor becomes visible
    */
@@ -121,16 +125,17 @@ public:
 
    /// Creates a wxMenu for use as a format popup.
    static wxMenu * MakeFormatMenu(void);
-   /// Set dirty flag.
-   void SetDirty(void) { m_Dirty = true; }
-protected:
    /**@name Dirty flag handling for optimisations. */
    //@{
+   /// Set dirty flag.
+   void SetDirty(void) { m_Dirty = true; }
    /// Query whether window needs redrawing.
    bool IsDirty(void) const { return m_Dirty; }
    /// Reset dirty flag.
    void ResetDirty(void) { m_Dirty = false; }
    //@}
+   /// Redraws the window, used by DoPaint() or OnPaint().
+   void InternalPaint(void);
 protected:   
    /// generic function for mouse events processing
    void OnMouse(int eventId, wxMouseEvent& event);
@@ -145,6 +150,8 @@ protected:
    bool m_HaveFocus;
    /// do we handle clicks of the right mouse button?
    bool m_DoPopupMenu;
+   /// Should InternalPaint() scroll to cursor.
+   bool m_ScrollToCursor;
    /// the menu
    wxMenu * m_PopupMenu;
    /// for derived classes, set when mouse is clicked

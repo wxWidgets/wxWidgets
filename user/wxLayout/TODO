@@ -5,9 +5,14 @@ BUGS
 - dmalloc shows duplicate deletion after merging two lines and
   deleting the second half
 
+- printout page calculation still a bit wrong
+- word wrap for objects with lots of non-space needs to search in positive
+direction if begin of first object is reached
+
 TODO
 =====================================================================
-
+- replacement of llist in window
+- undo
 - Selections
 - More optimisations
 

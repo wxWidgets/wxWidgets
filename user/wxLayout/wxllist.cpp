@@ -72,6 +72,7 @@ bool operator !=(wxPoint const &p1, wxPoint const &p2)
    return p1.x != p2.x || p1.y != p2.y;
 }
 
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 
    wxLayoutObjectText
@@ -87,6 +88,17 @@ wxLayoutObjectText::wxLayoutObjectText(const wxString &txt)
    m_Bottom = 0;
 }
 
+wxLayoutObject *
+wxLayoutObjectText::Copy(void)
+{
+   wxLayoutObjectText *obj = new wxLayoutObjectText(m_Text);
+   obj->m_Width = m_Width;
+   obj->m_Height = m_Height;
+   obj->m_Top = m_Top;
+   obj->m_Bottom = m_Bottom;
+   obj->SetUserData(m_UserData);
+   return obj;
+}
 
 wxPoint
 wxLayoutObjectText::GetSize(CoordType *top, CoordType *bottom) const
@@ -157,6 +169,15 @@ wxLayoutObjectIcon::wxLayoutObjectIcon(wxBitmap const &icon)
    m_Icon = new wxBitmap(icon);
 }
 
+wxLayoutObject *
+wxLayoutObjectIcon::Copy(void)
+{
+   wxLayoutObjectIcon *obj = new wxLayoutObjectIcon(new
+                                                    wxBitmap(*m_Icon));
+   obj->SetUserData(m_UserData);
+   return obj;
+}
+
 wxLayoutObjectIcon::wxLayoutObjectIcon(wxBitmap *icon)
 {
    m_Icon = icon;
@@ -198,6 +219,20 @@ wxLayoutObjectCmd::wxLayoutObjectCmd(int size, int family, int style, int
    m_ColourFG = fg;
    m_ColourBG = bg;
 }
+
+wxLayoutObject *
+wxLayoutObjectCmd::Copy(void)
+{
+   wxLayoutStyleInfo si;
+   GetStyle(&si);
+   
+   wxLayoutObjectCmd *obj = new wxLayoutObjectCmd(
+      si.size, si.family, si.style, si.weight, si.underline,
+      m_ColourFG, m_ColourBG);
+   obj->SetUserData(m_UserData);
+   return obj;
+}
+
 
 wxLayoutObjectCmd::~wxLayoutObjectCmd()
 {
@@ -787,15 +822,38 @@ wxLayoutLine::GetWrapPosition(CoordType column)
                column--;
             }
          }while(offset != -1);
+         i--;  // move on to previous object
       }
       else
+      {
          column -= (**i).GetLength();
-      // This is both "else" and what has to be done after checking
-      // all positions of the text object:
-      i--;
-      offset = (**i).GetLength();
+         i--;
+      }
+      if( i != NULLIT)
+         offset = (**i).GetLength();
    }while(i != NULLIT);
-   return -1;
+   /* If we reached the begin of the list and have more than one
+      object, that one is longer than the margin, so break behind
+      it. */
+   CoordType pos = 0;
+   i = m_ObjectList.begin();
+   while(i != NULLIT && (**i).GetType() != WXLO_TYPE_TEXT)
+   {
+      pos += (**i).GetLength();
+      i++;
+   }
+   if(i == NULLIT) return -1;  //why should this happen?
+   pos += (**i).GetLength();
+   i++;
+   while(i != NULLIT && (**i).GetType() != WXLO_TYPE_TEXT)
+   {
+            pos += (**i).GetLength();
+            i++;
+   }
+   if(i == NULLIT) return -1;  //this is possible, if there is only one text object
+   // now we are at the second text object:
+   pos -= (**i).GetLength();
+   return pos; // in front of it
 }
    
 
@@ -809,7 +867,7 @@ wxLayoutList::wxLayoutList()
 {
    m_DefaultSetting = NULL;
    m_FirstLine = NULL;
-   InternalClear();
+   Clear();
 }
 
 wxLayoutList::~wxLayoutList()
@@ -818,22 +876,28 @@ wxLayoutList::~wxLayoutList()
 }
 
 void
-wxLayoutList::InternalClear(void)
+wxLayoutList::Empty(void)
 {
    while(m_FirstLine)
       m_FirstLine = m_FirstLine->DeleteLine(false);
-
-   if(m_DefaultSetting)
-   {
-      delete m_DefaultSetting;
-      m_DefaultSetting = NULL;
-   }
 
    m_CursorPos = wxPoint(0,0);
    m_CursorScreenPos = wxPoint(0,0);
    m_CursorSize = wxPoint(0,0);
    m_FirstLine = new wxLayoutLine(NULL); // empty first line
    m_CursorLine = m_FirstLine;
+}
+
+
+void
+wxLayoutList::InternalClear(void)
+{
+   Empty();
+   if(m_DefaultSetting)
+   {
+      delete m_DefaultSetting;
+      m_DefaultSetting = NULL;
+   }
 }
 
 void
@@ -906,7 +970,7 @@ wxLayoutList::MoveCursorTo(wxPoint const &p)
 {
    wxLayoutLine *line = m_FirstLine;
    while(line && line->GetLineNumber() != p.y)
-      ;
+      line = line->GetNextLine();
    if(line && line->GetLineNumber() == p.y) // found it
    {
       m_CursorPos.y = p.y;

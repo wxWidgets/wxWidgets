@@ -68,14 +68,14 @@ struct wxLayoutExportStatus
 
 #ifdef OS_WIN
 /// import text into a wxLayoutList (including linefeeds):
-void wxLayoutImportText(wxLayoutList &list, wxString const &str,
+void wxLayoutImportText(wxLayoutList *list, wxString const &str,
                         int withflag = WXLO_EXPORT_WITH_CRLF);
 
 wxLayoutExportObject *wxLayoutExport(wxLayoutExportStatus *status,
                                int mode = WXLO_EXPORT_AS_TEXT|WXLO_EXPORT_WITH_CRLF); 
 #else
 /// import text into a wxLayoutList (including linefeeds):
-void wxLayoutImportText(wxLayoutList &list, wxString const &str,
+void wxLayoutImportText(wxLayoutList *list, wxString const &str,
                         int withflag = WXLO_EXPORT_WITH_LF_ONLY);
 
 /// export text in a given format FIXME-MT: not thread safe, uses static variable
