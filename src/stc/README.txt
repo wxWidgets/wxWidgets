@@ -44,4 +44,12 @@ wxEvents.
 
 Robin
 
+[SOLARIS NOTE - ellers@iinet.net.au - June 2002]
+
+On sunos5 (sparc) the stc code breaks if optimisation is turned on (the
+default). If your release build breaks but the debug build is fine, 
+try reconfiguring with --disable-optimise and rebuilding. If you are using
+wxPython you will also need to disable optimised compiling. To do this I
+had to hand modify the python makefile in (prefix)/lib/python2.2/config/Makefile
+to remove optimisation flags.
 

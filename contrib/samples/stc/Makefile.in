@@ -19,3 +19,6 @@ APPEXTRADEFS=-I$(top_srcdir)/contrib/include
 DATAFILES=stctest.cpp
 
 include $(top_builddir)/src/makeprog.env
+
+INSTALL:=../../$(INSTALL)
+
