@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<makefile>
+    
+    <!-- ================================================================= -->
+    <!--                         OpenGL canvas library                     -->
+    <!-- ================================================================= -->
+    
+    <dll id="gldll" template="wx_dll"
+         cond="SHARED=='1' and USE_GUI=='1' and USE_OPENGL=='1'">
+        <define>WXUSINGDLL</define>
+        <define>WXMAKINGDLL_GL</define>
+        <sources>$(OPENGL_SRC)</sources>
+        <library>coredll</library>
+        <library>basedll</library>
+
+        <if cond="FORMAT=='autoconf'">
+            <ldflags>$(OPENGL_LIBS)</ldflags>
+        </if>
+    </dll>
+    
+    <lib id="gllib" template="wx_lib"
+         cond="SHARED=='0' and USE_GUI=='1' and USE_OPENGL=='1'">
+        <sources>$(OPENGL_SRC)</sources>
+    </lib>
+
+</makefile>
