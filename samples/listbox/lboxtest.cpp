@@ -71,8 +71,11 @@ enum
     LboxTest_Add,
     LboxTest_AddText,
     LboxTest_AddSeveral,
+    LboxTest_AddMany,
     LboxTest_Clear,
     LboxTest_ClearLog,
+    LboxTest_Change,
+    LboxTest_ChangeText,
     LboxTest_Delete,
     LboxTest_DeleteText,
     LboxTest_DeleteSel,
@@ -109,12 +112,14 @@ protected:
     // event handlers
     void OnButtonReset(wxCommandEvent& event);
     void OnButtonCreate(wxCommandEvent& event);
+    void OnButtonChange(wxCommandEvent& event);
     void OnButtonDelete(wxCommandEvent& event);
     void OnButtonDeleteSel(wxCommandEvent& event);
     void OnButtonClear(wxCommandEvent& event);
     void OnButtonClearLog(wxCommandEvent& event);
     void OnButtonAdd(wxCommandEvent& event);
     void OnButtonAddSeveral(wxCommandEvent& event);
+    void OnButtonAddMany(wxCommandEvent& event);
     void OnButtonQuit(wxCommandEvent& event);
 
     void OnListbox(wxCommandEvent& event);
@@ -173,8 +178,9 @@ protected:
     // the listbox for logging messages
     wxListBox *m_lboxLog;
 
-    // the text entries for "Add string" and "Delete" buttons
+    // the text entries for "Add/change string" and "Delete" buttons
     wxTextCtrl *m_textAdd,
+               *m_textChange,
                *m_textDelete;
 
 private:
@@ -192,6 +198,7 @@ public:
     LboxLogger(wxListBox *lbox, wxLog *logOld)
     {
         m_lbox = lbox;
+        //m_lbox->Disable(); -- looks ugly under MSW
         m_logOld = logOld;
     }
 
@@ -225,7 +232,16 @@ private:
         wxString msg;
         TimeStamp(&msg);
         msg += szString;
-        m_lbox->Append(msg);
+        #ifdef __WXUNIVERSAL__
+            m_lbox->AppendAndEnsureVisible(msg);
+        #else // other ports don't have this method yet
+            m_lbox->Append(msg);
+
+            // SetFirstItem() isn't implemented in wxGTK
+            #ifndef __WXGTK__
+                m_lbox->SetFirstItem(m_lbox->GetCount() - 1);
+            #endif
+        #endif
     }
 
     // the control we use
@@ -253,12 +269,14 @@ IMPLEMENT_APP(LboxTestApp)
 BEGIN_EVENT_TABLE(LboxTestFrame, wxFrame)
     EVT_BUTTON(LboxTest_Reset, LboxTestFrame::OnButtonReset)
     EVT_BUTTON(LboxTest_Create, LboxTestFrame::OnButtonCreate)
+    EVT_BUTTON(LboxTest_Change, LboxTestFrame::OnButtonChange)
     EVT_BUTTON(LboxTest_Delete, LboxTestFrame::OnButtonDelete)
     EVT_BUTTON(LboxTest_DeleteSel, LboxTestFrame::OnButtonDeleteSel)
     EVT_BUTTON(LboxTest_Clear, LboxTestFrame::OnButtonClear)
     EVT_BUTTON(LboxTest_ClearLog, LboxTestFrame::OnButtonClearLog)
     EVT_BUTTON(LboxTest_Add, LboxTestFrame::OnButtonAdd)
     EVT_BUTTON(LboxTest_AddSeveral, LboxTestFrame::OnButtonAddSeveral)
+    EVT_BUTTON(LboxTest_AddMany, LboxTestFrame::OnButtonAddMany)
     EVT_BUTTON(LboxTest_Quit, LboxTestFrame::OnButtonQuit)
 
     EVT_TEXT_ENTER(LboxTest_AddText, LboxTestFrame::OnButtonAdd)
@@ -271,6 +289,8 @@ BEGIN_EVENT_TABLE(LboxTestFrame, wxFrame)
     EVT_UPDATE_UI(LboxTest_Clear, LboxTestFrame::OnUpdateUIClearButton)
     EVT_UPDATE_UI(LboxTest_DeleteText, LboxTestFrame::OnUpdateUIClearButton)
     EVT_UPDATE_UI(LboxTest_Delete, LboxTestFrame::OnUpdateUIDeleteButton)
+    EVT_UPDATE_UI(LboxTest_Change, LboxTestFrame::OnUpdateUIDeleteSelButton)
+    EVT_UPDATE_UI(LboxTest_ChangeText, LboxTestFrame::OnUpdateUIDeleteSelButton)
     EVT_UPDATE_UI(LboxTest_DeleteSel, LboxTestFrame::OnUpdateUIDeleteSelButton)
 
     EVT_LISTBOX(LboxTest_Listbox, LboxTestFrame::OnListbox)
@@ -379,8 +399,18 @@ LboxTestFrame::LboxTestFrame(const wxString& title)
     btn = new wxButton(panel, LboxTest_AddSeveral, _T("&Insert a few strings"));
     sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
 
+    btn = new wxButton(panel, LboxTest_AddMany, _T("Add &many strings"));
+    sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
+
     sizerRow = new wxBoxSizer(wxHORIZONTAL);
-    btn = new wxButton(panel, LboxTest_Delete, _T("&Delete panel item"));
+    btn = new wxButton(panel, LboxTest_Change, _T("C&hange current"));
+    m_textChange = new wxTextCtrl(panel, LboxTest_ChangeText, _T(""));
+    sizerRow->Add(btn, 0, wxRIGHT, 5);
+    sizerRow->Add(m_textChange, 1, wxLEFT, 5);
+    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+
+    sizerRow = new wxBoxSizer(wxHORIZONTAL);
+    btn = new wxButton(panel, LboxTest_Delete, _T("&Delete this item"));
     m_textDelete = new wxTextCtrl(panel, LboxTest_DeleteText, _T(""));
     sizerRow->Add(btn, 0, wxRIGHT, 5);
     sizerRow->Add(m_textDelete, 1, wxLEFT, 5);
@@ -504,7 +534,7 @@ void LboxTestFrame::CreateLbox()
         delete m_lbox;
     }
 
-    m_lbox = new wxListBox(this, -1,
+    m_lbox = new wxListBox(this, LboxTest_Listbox,
                            wxDefaultPosition, wxDefaultSize,
                            0, NULL,
                            flags);
@@ -532,6 +562,17 @@ void LboxTestFrame::OnButtonReset(wxCommandEvent& WXUNUSED(event))
 void LboxTestFrame::OnButtonCreate(wxCommandEvent& WXUNUSED(event))
 {
     CreateLbox();
+}
+
+void LboxTestFrame::OnButtonChange(wxCommandEvent& WXUNUSED(event))
+{
+    wxArrayInt selections;
+    int count = m_lbox->GetSelections(selections);
+    wxString s = m_textChange->GetValue();
+    for ( int n = 0; n < count; n++ )
+    {
+        m_lbox->SetString(selections[n], s);
+    }
 }
 
 void LboxTestFrame::OnButtonDelete(wxCommandEvent& WXUNUSED(event))
@@ -578,6 +619,15 @@ void LboxTestFrame::OnButtonAdd(wxCommandEvent& event)
     }
 
     m_lbox->Append(s);
+}
+
+void LboxTestFrame::OnButtonAddMany(wxCommandEvent& WXUNUSED(event))
+{
+    // "many" means 1000 here
+    for ( size_t n = 0; n < 1000; n++ )
+    {
+        m_lbox->Append(wxString::Format(_T("item #%u"), n));
+    }
 }
 
 void LboxTestFrame::OnButtonAddSeveral(wxCommandEvent& event)
