@@ -87,12 +87,22 @@ static const char *wxArtIDToStock(const wxArtID& id)
     //ART(wxART_REPORT_VIEW,                         )
     //ART(wxART_LIST_VIEW,                           )
     //ART(wxART_NEW_DIR,                             )
+#ifdef __WXGTK24__
     ART(wxART_FOLDER,                              GTK_STOCK_DIRECTORY)
+    ART(wxART_FOLDER_OPEN,                         GTK_STOCK_DIRECTORY)
+#endif
     //ART(wxART_GO_DIR_UP,                           )
     ART(wxART_EXECUTABLE_FILE,                     GTK_STOCK_EXECUTE)
     ART(wxART_NORMAL_FILE,                         GTK_STOCK_FILE)
     ART(wxART_TICK_MARK,                           GTK_STOCK_APPLY)
     ART(wxART_CROSS_MARK,                          GTK_STOCK_CANCEL)
+
+#ifdef __WXGTK24__
+    ART(wxART_FLOPPY,                              GTK_STOCK_FLOPPY)
+    ART(wxART_CDROM,                               GTK_STOCK_CDROM)
+    ART(wxART_HARDDISK,                            GTK_STOCK_HARDDISK)
+    ART(wxART_REMOVABLE,                           GTK_STOCK_HARDDISK)
+#endif
     
     return NULL;
     

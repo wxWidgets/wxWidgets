@@ -1,0 +1,27 @@
+/* XPM */
+static char *harddisk_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 7 1",
+"     s None    c None",
+".    c #808080",
+"X    c #c0c0c0",
+"o    c Black",
+"O    c Gray100",
+"+    c Green",
+"@    c #008000",
+"                ",
+"                ",
+"                ",
+"                ",
+"  ............. ",
+" .XXXXXXXXXXXX.o",
+".OOOOOOOOOOOO..o",
+".XXXXXXXXX+@X..o",
+".XXXXXXXXXXXX..o",
+".X..........X..o",
+".XOOOOOOOOOOX..o",
+"..............o ",
+" ooooooooooooo  ",
+"                ",
+"                ",
+"                "};

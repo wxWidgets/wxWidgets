@@ -129,7 +129,12 @@ protected:
 #include "../../art/repview.xpm"
 #include "../../art/listview.xpm"
 #include "../../art/new_dir.xpm"
+#include "../../art/harddisk.xpm"
+#include "../../art/cdrom.xpm"
+#include "../../art/floppy.xpm"
+#include "../../art/removable.xpm"
 #include "../../art/folder.xpm"
+#include "../../art/folder_open.xpm"
 #include "../../art/dir_up.xpm"
 #include "../../art/exefile.xpm"
 #include "../../art/deffile.xpm"
@@ -176,7 +181,12 @@ wxBitmap wxDefaultArtProvider::CreateBitmap(const wxArtID& id,
     ART(wxART_REPORT_VIEW,                         repview)
     ART(wxART_LIST_VIEW,                           listview)
     ART(wxART_NEW_DIR,                             new_dir)
+    ART(wxART_HARDDISK,                            harddisk)
+    ART(wxART_FLOPPY,                              floppy)
+    ART(wxART_CDROM,                               cdrom)
+    ART(wxART_REMOVABLE,                           removable)
     ART(wxART_FOLDER,                              folder)
+    ART(wxART_FOLDER_OPEN,                         folder_open)
     ART(wxART_GO_DIR_UP,                           dir_up)
     ART(wxART_EXECUTABLE_FILE,                     exefile)
     ART(wxART_NORMAL_FILE,                         deffile)
