@@ -578,12 +578,11 @@ WXLRESULT wxChoice::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
         case WM_CTLCOLORLISTBOX:
         case WM_CTLCOLORSTATIC:
             {
-                WXWORD nCtlColor;
                 WXHDC hdc;
                 WXHWND hwnd;
-                UnpackCtlColor(wParam, lParam, &nCtlColor, &hdc, &hwnd);
+                UnpackCtlColor(wParam, lParam, &hdc, &hwnd);
 
-                return (WXLRESULT)OnCtlColor(hdc, hwnd, nCtlColor,
+                return (WXLRESULT)OnCtlColor(hdc, hwnd, 0,
                                              nMsg, wParam, lParam);
             }
     }

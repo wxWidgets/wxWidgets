@@ -248,12 +248,11 @@ WXLRESULT wxComboBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
         // wxCB_READONLY
         case WM_CTLCOLOREDIT:
         case WM_CTLCOLORSTATIC:
-            WXWORD nCtlColor;
             WXHDC hdc;
             WXHWND hwnd;
-            UnpackCtlColor(wParam, lParam, &nCtlColor, &hdc, &hwnd);
+            UnpackCtlColor(wParam, lParam, &hdc, &hwnd);
 
-            return (WXLRESULT)OnCtlColor(hdc, hwnd, nCtlColor, nMsg, wParam, lParam);
+            return (WXLRESULT)OnCtlColor(hdc, hwnd, 0, nMsg, wParam, lParam);
             
         case CB_SETCURSEL:
             // Selection was set with SetSelection.  Update the value too.
