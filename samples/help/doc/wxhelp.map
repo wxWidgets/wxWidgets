@@ -5,6 +5,6 @@
 ; First, some wxWindows documentation files:
 ;
 0 wx.htm             ; wxWindows: Help index; additional keywords like overview
-1 wx204.htm          ; wxWindows Class References
-2 wx34.htm           ; wxWindows Function References; methods
-3 aindex.html
+1 wx204.htm          ; wxWindows Function Reference
+2 wx34.htm           ; wxWindows Class Reference
+3 aindex.html        ; 

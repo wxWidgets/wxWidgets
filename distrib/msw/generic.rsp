@@ -238,13 +238,15 @@ utils/dialoged/test/*.ico
 utils/dialoged/test/*.prj
 utils/dialoged/test/*.bmp
 
+contrib/configure
+contrib/configure.in
+
 contrib/include/wx/mmedia/*.h
 contrib/include/wx/mmedia/internal/*.h
 contrib/src/mmedia/makefile*
 contrib/src/mmedia/README
 contrib/src/mmedia/*.h
 contrib/src/mmedia/*.cpp
-contrib/src/mmedia/makefile*
 contrib/samples/mmedia/*.h
 contrib/samples/mmedia/*.cpp
 contrib/samples/mmedia/makefile*
@@ -322,7 +324,13 @@ samples/help/makefile*
 samples/help/*.xbm
 samples/help/*.xpm
 samples/help/*.ico
+samples/help/*.bmp
 samples/help/*.rc
+samples/help/*.hlp
+samples/help/*.cnt
+samples/help/*.hpj
+samples/help/*.tex
+samples/help/*.ini
 samples/help/doc/*.html
 samples/help/doc/*.htm
 samples/help/doc/*.class

@@ -9,7 +9,22 @@
     #define wxHelpController wxWinHelpController
     #define sm_classwxHelpController sm_classwxWinHelpController
 #else // !MSW
-    #include "wx/helpbase.h"
+
+/* By default, if wxHTML is compiled in, use the
+   wxHelpControllerHtml. If not, use the external help controller.
+   (of course, we shouldn't do it for wxMSW)
+*/
+
+#if wxUSE_HTML
+#   include "wx/generic/helpwxht.h"
+#   define wxHelpController wxHelpControllerHtml
+#   define sm_classwxHelpController sm_classwxHelpControllerHtml
+#else
+#   include "wx/generic/helpext.h"
+#   define wxHelpController wxExtHelpController
+#   define sm_classwxHelpController sm_classwxExtHelpController
+#endif
+
 #endif // MSW/!MSW
 
 #endif

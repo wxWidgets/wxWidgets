@@ -30,13 +30,22 @@
 #   include "wx/wx.h"
 #endif
 
-// define this to 1 to use HTML help even under Windows (by default, Windows
-// version will HLP-based help)
-#define USE_HTML_HELP 1
-#if USE_HTML_HELP
-#   include "wx/helpbase.h"
-#else
+#   include "wx/image.h"
 #   include "wx/help.h"
+
+// define this to 1 to use HTML help even under Windows (by default, Windows
+// version will use WinHelp).
+// Please also see samples/html/helpview for a more complex help viewer.
+
+#define USE_HTML_HELP 1
+
+#if !wxUSE_HTML
+#undef USE_HTML_HELP
+#define USE_HTML_HELP 0
+#endif
+
+#if USE_HTML_HELP
+#   include "wx/generic/helpwxht.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -73,12 +82,21 @@ public:
 
     wxHelpController& GetHelpController() { return m_help; }
 
+#if USE_HTML_HELP
+    wxHelpControllerHtml& GetHtmlHelpController() { return m_htmlHelp; }
+#endif
+
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
     void OnHelp(wxCommandEvent& event);
+    void OnHtmlHelp(wxCommandEvent& event);
 
 private:
-   wxHelpController m_help;
+   wxHelpController         m_help;
+
+#if USE_HTML_HELP
+   wxHelpControllerHtml     m_htmlHelp;
+#endif
 
     // any class wishing to process wxWindows events must use this macro
    DECLARE_EVENT_TABLE()
@@ -97,10 +115,17 @@ enum
     HelpDemo_Help_Classes,
     HelpDemo_Help_Functions,
     HelpDemo_Help_Help,
+    HelpDemo_Help_Search,
+
+    HelpDemo_Html_Help_Index,
+    HelpDemo_Html_Help_Classes,
+    HelpDemo_Html_Help_Functions,
+    HelpDemo_Html_Help_Help,
+    HelpDemo_Html_Help_Search,
+
     HelpDemo_Help_KDE,
     HelpDemo_Help_GNOME,
     HelpDemo_Help_Netscape,
-    HelpDemo_Help_Search,
     // controls start here (the numbers are, of course, arbitrary)
     HelpDemo_Text = 1000,
 };
@@ -118,10 +143,17 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(HelpDemo_Help_Classes, MyFrame::OnHelp)
     EVT_MENU(HelpDemo_Help_Functions, MyFrame::OnHelp)
     EVT_MENU(HelpDemo_Help_Help, MyFrame::OnHelp)
+    EVT_MENU(HelpDemo_Help_Search, MyFrame::OnHelp)
+
+    EVT_MENU(HelpDemo_Html_Help_Index, MyFrame::OnHtmlHelp)
+    EVT_MENU(HelpDemo_Html_Help_Classes, MyFrame::OnHtmlHelp)
+    EVT_MENU(HelpDemo_Html_Help_Functions, MyFrame::OnHtmlHelp)
+    EVT_MENU(HelpDemo_Html_Help_Help, MyFrame::OnHtmlHelp)
+    EVT_MENU(HelpDemo_Html_Help_Search, MyFrame::OnHtmlHelp)
+
     EVT_MENU(HelpDemo_Help_KDE, MyFrame::OnHelp)
     EVT_MENU(HelpDemo_Help_GNOME, MyFrame::OnHelp)
     EVT_MENU(HelpDemo_Help_Netscape, MyFrame::OnHelp)
-    EVT_MENU(HelpDemo_Help_Search, MyFrame::OnHelp)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWindows to create
@@ -142,13 +174,19 @@ IMPLEMENT_APP(MyApp)
 // `Main program' equivalent: the program execution "starts" here
 bool MyApp::OnInit()
 {
+#if wxUSE_HTML
+#if wxUSE_GIF
+    // Required for images in the online documentation
+    wxImage::AddHandler(new wxGIFHandler);
+#endif
+#endif
+
     // Create the main application window
     MyFrame *frame = new MyFrame("HelpDemo wxWindows App",
                                  wxPoint(50, 50), wxSize(450, 340));
 
     frame->Show(TRUE);
     SetTopWindow(frame);
-
 
     // initialise the help system: this means that we'll use doc.hlp file under
     // Windows and that the HTML docs are in the subdirectory doc for platforms
@@ -159,6 +197,17 @@ bool MyApp::OnInit()
 
         return FALSE;
     }
+
+#if USE_HTML_HELP
+    // initialise the help system: this means that the HTML docs are in the
+    // subdirectory doc for platforms using HTML help
+    if ( !frame->GetHtmlHelpController().Initialize("doc") )
+    {
+        wxLogError("Cannot initialize the HTML help system, aborting.");
+
+        return FALSE;
+    }
+#endif
 
     return TRUE;
 }
@@ -183,6 +232,16 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(HelpDemo_Help_Help, "&About Help Demo...");
     menuFile->AppendSeparator();
     menuFile->Append(HelpDemo_Help_Search, "&Search help...");
+#if USE_HTML_HELP
+    menuFile->AppendSeparator();
+    menuFile->Append(HelpDemo_Html_Help_Index, "HTML &Help Index...");
+    menuFile->Append(HelpDemo_Html_Help_Classes, "HTML &Help on Classes...");
+    menuFile->Append(HelpDemo_Html_Help_Functions, "HTML &Help on Functions...");
+    menuFile->Append(HelpDemo_Html_Help_Help, "HTML &About Help Demo...");
+    menuFile->AppendSeparator();
+    menuFile->Append(HelpDemo_Html_Help_Search, "HTML &Search help...");
+#endif
+
 #ifndef __WXMSW__
 #if !wxUSE_HTML
     menuFile->AppendSeparator();
@@ -229,14 +288,15 @@ void MyFrame::OnHelp(wxCommandEvent& event)
    switch(event.GetId())
    {
 
-   // Note: these DisplaySection calls use ids that are specific to wxExtHelpController
-   // (on Unix). For WinHelp, we'd need to use different context ids.
+   // Note: For WinHelp, these ids are specified in the map session, mapping
+   // topic names to numbers.
+   // For HTML and external help, a wxhelp.map file is used.
 
    case HelpDemo_Help_Classes:
-      m_help.DisplaySection(1);
+      m_help.DisplaySection(2);
       break;
    case HelpDemo_Help_Functions:
-      m_help.DisplaySection(2);
+      m_help.DisplaySection(1);
       break;
    case HelpDemo_Help_Help:
       m_help.DisplaySection(3);
@@ -269,5 +329,39 @@ void MyFrame::OnHelp(wxCommandEvent& event)
       m_help.DisplayContents();
       break;
    }
+}
+
+void MyFrame::OnHtmlHelp(wxCommandEvent& event)
+{
+#if USE_HTML_HELP
+   switch(event.GetId())
+   {
+
+   case HelpDemo_Html_Help_Classes:
+      m_htmlHelp.DisplaySection(2);
+      break;
+   case HelpDemo_Html_Help_Functions:
+      m_htmlHelp.DisplaySection(1);
+      break;
+   case HelpDemo_Html_Help_Help:
+      m_htmlHelp.DisplaySection(3);
+      break;
+
+   case HelpDemo_Html_Help_Search:
+   {
+      wxString key = wxGetTextFromUser("Search for?",
+                                       "Search help for keyword",
+                                       "",
+                                       this);
+      if(! key.IsEmpty())
+         m_htmlHelp.KeywordSearch(key);
+   }
+   break;
+   case HelpDemo_Html_Help_Index:
+   default:
+      m_htmlHelp.DisplayContents();
+      break;
+   }
+#endif
 }
 

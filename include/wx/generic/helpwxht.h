@@ -6,8 +6,8 @@
  * $Id$
  *******************************************************************/
 
-#ifndef __WX_HELPWXHT_H_
-#define __WX_HELPWXHT_H_
+#ifndef _WX_HELPWXHT_H_
+#define _WX_HELPWXHT_H_
 
 #if wxUSE_HELP
 #if wxUSE_HTML
@@ -72,4 +72,4 @@ protected:
 #endif // wxUSE_HELP
 #endif // wxUSE_HTML
 
-#endif // __WX_HELPEXT_H_
+#endif // _WX_HELPWXHT_H_

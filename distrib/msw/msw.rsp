@@ -53,7 +53,6 @@ src/common/doslex.c
 src/common/y_tab.c
 src/common/lex_yy.c
 
-src/msw/files.lst
 src/msw/*.cpp
 src/msw/*.h
 src/msw/makefile.*
@@ -150,33 +149,4 @@ samples/oleauto/makefile.*
 samples/oleauto/*.txt
 samples/oleauto/*.bmp
 samples/oleauto/*.ico
-
-utils/nplugin/make*.*
-utils/nplugin/src/*.cpp
-utils/nplugin/src/*.h
-utils/nplugin/src/*.rc
-utils/nplugin/src/*.def
-utils/nplugin/src/makefile.*
-utils/nplugin/src/*.txt
-utils/nplugin/samples/simple/*.cpp
-utils/nplugin/samples/simple/*.h
-utils/nplugin/samples/simple/*.rc
-utils/nplugin/samples/simple/*.def
-utils/nplugin/samples/simple/makefile.*
-utils/nplugin/samples/simple/*.txt
-utils/nplugin/samples/gui/*.cpp
-utils/nplugin/samples/gui/*.h
-utils/nplugin/samples/gui/*.rc
-utils/nplugin/samples/gui/*.def
-utils/nplugin/samples/gui/makefile.*
-utils/nplugin/samples/gui/*.txt
-utils/nplugin/docs/*.tex
-utils/nplugin/docs/*.txt
-utils/nplugin/docs/*.hpj
-utils/nplugin/docs/*.eps
-utils/nplugin/docs/*.ps
-utils/nplugin/docs/*.ini
-utils/nplugin/docs/*.cnt
-utils/nplugin/docs/*.hlp
-utils/nplugin/lib/dummy
 
