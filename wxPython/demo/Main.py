@@ -1088,7 +1088,7 @@ class wxPythonDemo(wx.Frame):
  
         item = menu.Append(-1, 'E&xit\tAlt-X', 'Get the heck outta here!')
         self.Bind(wx.EVT_MENU, self.OnFileExit, item)
-        wx.App_SetMacExitMenuItemId(item.GetId())
+        wx.App.SetMacExitMenuItemId(item.GetId())
         self.mainmenu.Append(menu, '&File')
 
         # Make a Demo menu
@@ -1128,7 +1128,7 @@ class wxPythonDemo(wx.Frame):
                                 'An interactive interpreter window with the demo app and frame objects in the namesapce')
         menu.AppendSeparator()
         helpItem = menu.Append(-1, '&About\tCtrl-H', 'wxPython RULES!!!')
-        wx.App_SetMacAboutMenuItemId(helpItem.GetId())
+        wx.App.SetMacAboutMenuItemId(helpItem.GetId())
 
         self.Bind(wx.EVT_MENU, self.OnOpenShellWindow, shellItem)
         self.Bind(wx.EVT_MENU, self.OnHelpAbout, helpItem)
