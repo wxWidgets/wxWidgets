@@ -723,7 +723,7 @@ void wxCompositeShape::ReadConstraints(wxExpr *clause, wxExprDatabase *database)
     if (objExpr1 && objExpr1->GetClientData())
       m_constrainingObject = (wxShape *)objExpr1->GetClientData();
     else
-      wxFatalError("Couldn't find constraining image of composite.", "Object graphics error");
+      wxLogFatalError("Object graphics error: Couldn't find constraining image of composite.");
 
     int i = 0;
     wxExpr *currentIdExpr = constrainedExpr->Nth(i);
@@ -737,7 +737,7 @@ void wxCompositeShape::ReadConstraints(wxExpr *clause, wxExprDatabase *database)
       }
       else
       {
-        wxFatalError("Couldn't find constrained image of composite.", "Object graphics error");
+        wxLogFatalError("Object graphics error: Couldn't find constrained image of composite.");
       }
 
       i ++;

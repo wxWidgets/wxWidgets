@@ -820,7 +820,7 @@ void wxLineShape::DrawArrow(wxDC& dc, wxArrowHead *arrow, double xOffset, bool p
 
         else
         {
-          wxFatalError("Unknown arrowhead rotation case in lines.cc");
+          wxLogFatalError("Unknown arrowhead rotation case in lines.cc");
         }
 
         // Rotate about the centre of the object, then place
