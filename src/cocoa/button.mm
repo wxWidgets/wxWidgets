@@ -66,3 +66,9 @@ void wxButton::Cocoa_wxNSButtonAction(void)
     Command(event);
 }
 
+wxSize wxButtonBase::GetDefaultSize()
+{
+    // FIXME: stub
+    return wxDefaultSize;
+}
+
