@@ -2745,7 +2745,7 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
     }
     else // !popup
     {
-        if ( (isChild || (style & WS_POPUPWINDOW)) && parent )
+        if ( (isChild || HasFlag(wxFRAME_TOOL_WINDOW)) && parent )
         {
             // this is either a normal child window or a top level window with
             // wxFRAME_TOOL_WINDOW style (see below)
@@ -2758,8 +2758,7 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
             // style: we should use NULL parent HWND for it or it would be
             // always on top of its parent which is not what we usually want
             // (in fact, we only want it for frames with the special
-            // wxFRAME_TOOL_WINDOW style translated into WS_POPUPWINDOW we test
-            // against above)
+            // wxFRAME_TOOL_WINDOW as above)
             hParent = NULL;
         }
 
