@@ -21,6 +21,8 @@ linux-gnu.system.cache
 *.d
 *.swp
 *.swo
+*.vcp
+*.vcw
 Release
 Debug
 ReleaseUnicode
@@ -45,6 +47,7 @@ BaseRelease
 BaseDebug
 BaseReleaseDLL
 BaseDebugDLL
+build-debug
 robert
 stamp-h.in
 Makefile
