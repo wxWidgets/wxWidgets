@@ -20,7 +20,11 @@
 
 // If 1, start a server to allow this to be used
 // as an external help viewer.
+#if defined(__WXMAC__) && !defined(__UNIX__)
+#define hvUSE_IPC 0
+#else
 #define hvUSE_IPC 1
+#endif
 
 #if hvUSE_IPC
 #include <wx/ipc.h>
