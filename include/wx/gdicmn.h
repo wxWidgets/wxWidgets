@@ -181,7 +181,7 @@ enum wxStockCursor
 
 #if defined(__WXMSW__) || defined(__WXPM__)
     #define wxBITMAP(name) wxBitmap(wxT(#name), wxBITMAP_TYPE_RESOURCE)
-#elif defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXX11__) || defined(__WXMAC__) || defined(__WXMGL__)
+#elif defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXX11__) || defined(__WXMAC__) || defined(__WXMGL__) || defined(__WXCOCOA__)
     // Initialize from an included XPM
     #define wxBITMAP(name) wxBitmap( (const char**) name##_xpm )
 #else // other platforms
