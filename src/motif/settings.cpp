@@ -30,6 +30,8 @@
 #pragma message enable nosimpint
 #endif
 
+#include "wx/x11/privx.h"
+
 // To correctly read the resources from the database, we create a
 // sample widget. This has the application shell as the parent and
 // so will be destroyed when the applicaion is closed.
