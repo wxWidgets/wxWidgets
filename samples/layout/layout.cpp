@@ -313,6 +313,7 @@ NewSizerFrame::NewSizerFrame(wxFrame *frame, char *title, int x, int y ):
      0,          // make vertically unstretchable
      wxCENTER ); // no border and centre horizontally
 
+  SetAutoLayout( TRUE );
   
   // set frame to minimum size
   topsizer->Fit( this );  
@@ -321,8 +322,6 @@ NewSizerFrame::NewSizerFrame(wxFrame *frame, char *title, int x, int y ):
   topsizer->SetSizeHints( this );  
   
   SetSizer( topsizer );
-  
-  SetAutoLayout( TRUE );
 }
 
 

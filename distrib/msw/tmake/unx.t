@@ -861,10 +861,7 @@ SAMPLES_DIST:
 	cp $(SAMPDIR)/html/help/helpfiles/*.??? $(DISTDIR)/samples/html/help/helpfiles
 	mkdir $(DISTDIR)/samples/html/printing
 	cp $(SAMPDIR)/html/printing/Makefile.in $(DISTDIR)/samples/html/printing
-	cp $(SAMPDIR)/html/printing/*.xpm $(DISTDIR)/samples/html/printing
 	cp $(SAMPDIR)/html/printing/*.cpp $(DISTDIR)/samples/html/printing
-	cp $(SAMPDIR)/html/printing/*.h $(DISTDIR)/samples/html/printing
-	cp $(SAMPDIR)/html/printing/*.png $(DISTDIR)/samples/html/printing
 	cp $(SAMPDIR)/html/printing/*.htm $(DISTDIR)/samples/html/printing
 	mkdir $(DISTDIR)/samples/html/test
 	cp $(SAMPDIR)/html/test/Makefile.in $(DISTDIR)/samples/html/test
@@ -911,24 +908,29 @@ SAMPLES_DIST:
 	cp $(SAMPDIR)/listctrl/*.cpp $(DISTDIR)/samples/listctrl
 	cp $(SAMPDIR)/listctrl/*.h $(DISTDIR)/samples/listctrl
 	cp $(SAMPDIR)/listctrl/*.xpm $(DISTDIR)/samples/listctrl
-	mkdir $(DISTDIR)/samples/listctrl/bitmap
-	cp $(SAMPDIR)/listctrl/*.xpm $(DISTDIR)/samples/listctrl/bitmaps
+	mkdir $(DISTDIR)/samples/listctrl/bitmaps
+	cp $(SAMPDIR)/listctrl/bitmaps/*.xpm $(DISTDIR)/samples/listctrl/bitmaps
 	mkdir $(DISTDIR)/samples/mdi
 	cp $(SAMPDIR)/mdi/Makefile.in $(DISTDIR)/samples/mdi
 	cp $(SAMPDIR)/mdi/*.cpp $(DISTDIR)/samples/mdi
 	cp $(SAMPDIR)/mdi/*.h $(DISTDIR)/samples/mdi
 	cp $(SAMPDIR)/mdi/*.xpm $(DISTDIR)/samples/mdi
+	mkdir $(DISTDIR)/samples/mdi/bitmaps
+	cp $(SAMPDIR)/mdi/bitmaps/*.xpm $(DISTDIR)/samples/mdi/bitmaps
 	mkdir $(DISTDIR)/samples/minifram
 	cp $(SAMPDIR)/minifram/Makefile.in $(DISTDIR)/samples/minifram
 	cp $(SAMPDIR)/minifram/*.cpp $(DISTDIR)/samples/minifram
 	cp $(SAMPDIR)/minifram/*.h $(DISTDIR)/samples/minifram
 	cp $(SAMPDIR)/minifram/*.xpm $(DISTDIR)/samples/minifram
-	mkdir $(DISTDIR)/samples/minifram/bitmap
-	cp $(SAMPDIR)/minifram/*.xpm $(DISTDIR)/samples/minifram/bitmaps
+	mkdir $(DISTDIR)/samples/minifram/bitmaps
+	cp $(SAMPDIR)/minifram/bitmaps/*.xpm $(DISTDIR)/samples/minifram/bitmaps
 	mkdir $(DISTDIR)/samples/minimal
 	cp $(SAMPDIR)/minimal/Makefile.in $(DISTDIR)/samples/minimal
 	cp $(SAMPDIR)/minimal/*.cpp $(DISTDIR)/samples/minimal
 	cp $(SAMPDIR)/minimal/*.xpm $(DISTDIR)/samples/minimal
+	mkdir $(DISTDIR)/samples/nettest
+	cp $(SAMPDIR)/nettest/Makefile.in $(DISTDIR)/samples/nettest
+	cp $(SAMPDIR)/nettest/*.cpp $(DISTDIR)/samples/nettest
 	mkdir $(DISTDIR)/samples/newgrid
 	cp $(SAMPDIR)/newgrid/Makefile.in $(DISTDIR)/samples/newgrid
 	cp $(SAMPDIR)/newgrid/*.cpp $(DISTDIR)/samples/newgrid
@@ -965,6 +967,9 @@ SAMPLES_DIST:
 	mkdir $(DISTDIR)/samples/scroll
 	cp $(SAMPDIR)/scroll/Makefile.in $(DISTDIR)/samples/scroll
 	cp $(SAMPDIR)/scroll/*.cpp $(DISTDIR)/samples/scroll
+	mkdir $(DISTDIR)/samples/scrollsub
+	cp $(SAMPDIR)/scrollsub/Makefile.in $(DISTDIR)/samples/scrollsub
+	cp $(SAMPDIR)/scrollsub/*.cpp $(DISTDIR)/samples/scrollsub
 	mkdir $(DISTDIR)/samples/splitter
 	cp $(SAMPDIR)/splitter/Makefile.in $(DISTDIR)/samples/splitter
 	cp $(SAMPDIR)/splitter/*.cpp $(DISTDIR)/samples/splitter
@@ -980,8 +985,8 @@ SAMPLES_DIST:
 	cp $(SAMPDIR)/toolbar/*.cpp $(DISTDIR)/samples/toolbar
 	cp $(SAMPDIR)/toolbar/*.h $(DISTDIR)/samples/toolbar
 	cp $(SAMPDIR)/toolbar/*.xpm $(DISTDIR)/samples/toolbar
-	mkdir $(DISTDIR)/samples/toolbar/bitmap
-	cp $(SAMPDIR)/toolbar/*.xpm $(DISTDIR)/samples/toolbar/bitmaps
+	mkdir $(DISTDIR)/samples/toolbar/bitmaps
+	cp $(SAMPDIR)/toolbar/bitmaps/*.xpm $(DISTDIR)/samples/toolbar/bitmaps
 	mkdir $(DISTDIR)/samples/treectrl
 	cp $(SAMPDIR)/treectrl/Makefile.in $(DISTDIR)/samples/treectrl
 	cp $(SAMPDIR)/treectrl/*.cpp $(DISTDIR)/samples/treectrl

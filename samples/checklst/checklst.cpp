@@ -30,6 +30,7 @@
 
 #include  "wx/log.h"
 
+#include  "wx/sizer.h"
 #include  "wx/menuitem.h"
 #include  "wx/checklst.h"
 
@@ -167,9 +168,33 @@ CheckListBoxFrame::CheckListBoxFrame(wxFrame *frame,
     m_pListBox->Check(2);
 
     // create buttons for moving the items around
-    (void)new wxButton(panel, Btn_Up, "   &Up  ", wxPoint(420, 90));
-    (void)new wxButton(panel, Btn_Down, "&Down", wxPoint(420, 120));
+    wxButton *button1 = new wxButton(panel, Btn_Up, "   &Up  ", wxPoint(420, 90));
+    wxButton *button2 = new wxButton(panel, Btn_Down, "&Down", wxPoint(420, 120));
 
+
+    wxBoxSizer *mainsizer = new wxBoxSizer( wxVERTICAL );
+  
+    mainsizer->Add( m_pListBox, 1, wxGROW|wxALL, 10 );
+    
+    wxBoxSizer *bottomsizer = new wxBoxSizer( wxHORIZONTAL );
+    
+    bottomsizer->Add( button1, 0, wxALL, 10 );
+    bottomsizer->Add( button2, 0, wxALL, 10 );
+
+    mainsizer->Add( bottomsizer, 0, wxCENTER );
+  
+    // tell frame to make use of sizer (or constraints, if any)
+    SetAutoLayout( TRUE );
+
+    // set frame to minimum size
+    mainsizer->Fit( this );  
+  
+    // don't allow frame to get smaller than what the sizers tell ye
+    mainsizer->SetSizeHints( this );  
+  
+    SetSizer( mainsizer );
+
+  
     Show(TRUE);
 }
 

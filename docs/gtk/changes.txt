@@ -13,11 +13,14 @@ almost universally agreed that only a commercial entity
 will have the motivation ($$$) to do that - so far there
 is no wxWindows Inc.
 
-Support for GTK 1.0 has been dropped.
+Support for GTK 1.0 has been dropped. This version has
+been tested with GTK 1.2.3 and GTK 1.2.6 - it is known
+not work with some other versions.
 
 Many build fixes for various platforms have been applied,
 try again, poor HP-UX and *BSD users, but don't reckon
-with immediate success.
+with immediate success. Actually, when using GNU compilers,
+your chances are quite good.
 
 My total rewrite of the wxWindows underlying GTK widget
 has turned scrolling including subwindows from barely
