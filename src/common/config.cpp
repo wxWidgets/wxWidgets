@@ -239,7 +239,7 @@ wxConfigPathChanger::wxConfigPathChanger(const wxConfigBase *pContainer,
     strPath = wxCONFIG_PATH_SEPARATOR;
   }
 
-  if ( !strPath.IsEmpty() ) {
+  if ( !strPath.IsEmpty() && m_pContainer->GetPath() != strPath ) {
     // do change the path
     m_bChanged = true;
     m_strName = strEntry.AfterLast(wxCONFIG_PATH_SEPARATOR);
