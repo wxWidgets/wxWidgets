@@ -108,6 +108,7 @@ public:
         Arrow_Disabled,
         Arrow_Pressed,
         Arrow_Inversed,
+        Arrow_InversedDisabled,
         Arrow_StateMax
     };
 
@@ -1286,6 +1287,17 @@ wxWin32Renderer::wxWin32Renderer(const wxColourScheme *scheme)
 
             mask = new wxMask(m_bmpArrows[Arrow_Inversed][n], *wxBLACK);
             m_bmpArrows[Arrow_Inversed][n].SetMask(mask);
+
+            m_bmpArrows[Arrow_InversedDisabled][n].Create(w, h);
+            dcInverse.SelectObject(m_bmpArrows[Arrow_InversedDisabled][n]);
+            dcInverse.Clear();
+            dcInverse.Blit(0, 0, w, h,
+                          &dcDisabled, 0, 0,
+                          wxXOR);
+            dcInverse.SelectObject(wxNullBitmap);
+
+            mask = new wxMask(m_bmpArrows[Arrow_InversedDisabled][n], *wxBLACK);
+            m_bmpArrows[Arrow_InversedDisabled][n].SetMask(mask);
         }
 
         dcNormal.SelectObject(wxNullBitmap);
@@ -2543,7 +2555,8 @@ void wxWin32Renderer::DrawMenuItem(wxDC& dc,
 
         wxArrowStyle arrowStyle;
         if ( flags & wxCONTROL_DISABLED )
-            arrowStyle = Arrow_Disabled;
+            arrowStyle = flags & wxCONTROL_SELECTED ? Arrow_InversedDisabled
+                                                    : Arrow_Disabled;
         else if ( flags & wxCONTROL_SELECTED )
             arrowStyle = Arrow_Inversed;
         else

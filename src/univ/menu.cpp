@@ -71,7 +71,7 @@ public:
         m_width = 0;
     }
 
-    void SetEnabled(bool enabled = TRUE) { m_isEnabled = TRUE; }
+    void SetEnabled(bool enabled = TRUE) { m_isEnabled = enabled; }
 
     // accessors
 
@@ -556,8 +556,7 @@ void wxPopupMenuWindow::ClickItem(wxMenuItem *item)
     wxASSERT_MSG( !item->IsSeparator() && !item->IsSubMenu(),
                   _T("can't click this item") );
 
-    m_menu->SendEvent(item->GetId(),
-                      item->IsCheckable() ? item->IsChecked() : -1);
+    m_menu->ClickItem(item);
 
     // close all menus
     DismissAndNotify();
@@ -1176,6 +1175,25 @@ bool wxMenu::ProcessKeyDown(int key)
     return m_popupMenu->ProcessKeyDown(key);
 }
 
+bool wxMenu::ClickItem(wxMenuItem *item)
+{
+    int isChecked;
+    if ( item->IsCheckable() )
+    {
+        // update the item state
+        isChecked = !item->IsChecked();
+
+        item->Check(isChecked != 0);
+    }
+    else
+    {
+        // not applicabled
+        isChecked = -1;
+    }
+
+    return SendEvent(item->GetId(), isChecked);
+}
+
 // ----------------------------------------------------------------------------
 // wxMenu accel support
 // ----------------------------------------------------------------------------
@@ -1186,15 +1204,9 @@ bool wxMenu::ProcessAccelEvent(const wxKeyEvent& event)
 {
     // do we have an item for this accel?
     wxMenuItem *item = m_accelTable.GetMenuItem(event);
-    if ( item )
+    if ( item && item->IsEnabled() )
     {
-        if ( item->IsEnabled() )
-        {
-            SendEvent(item->GetId(),
-                      item->IsCheckable() ? item->IsChecked() : -1);
-        }
-
-        return TRUE;
+        return ClickItem(item);
     }
 
     // try our submenus
@@ -2036,14 +2048,19 @@ int wxMenuBar::FindNextItemForAccel(int idxStart, int key, bool *unique) const
 
 bool wxMenuBar::ProcessAccelEvent(const wxKeyEvent& event)
 {
+    size_t n = 0;
     for ( wxMenuList::Node *node = m_menus.GetFirst();
           node;
-          node = node->GetNext() )
+          node = node->GetNext(), n++ )
     {
-        if ( node->GetData()->ProcessAccelEvent(event) )
+        // accels of the items in the disabled menus shouldn't work
+        if ( m_menuInfos[n].IsEnabled() )
         {
-            // menu processed it
-            return TRUE;
+            if ( node->GetData()->ProcessAccelEvent(event) )
+            {
+                // menu processed it
+                return TRUE;
+            }
         }
     }
 

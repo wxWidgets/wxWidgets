@@ -74,6 +74,10 @@ public:
 
     // implementation only from here
 
+    // do as if this item were clicked, return TRUE if the resulting event was
+    // processed, FALSE otherwise
+    bool ClickItem(wxMenuItem *item);
+
     // process the key event, return TRUE if done
     bool ProcessKeyDown(int key);
 

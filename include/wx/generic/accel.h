@@ -48,7 +48,6 @@ public:
     wxMenuItem *GetMenuItem(const wxKeyEvent& event) const;
     int GetCommand(const wxKeyEvent& event) const;
 
-protected:
     const wxAcceleratorEntry *GetEntry(const wxKeyEvent& event) const;
 
 private:
