@@ -374,6 +374,18 @@
 /* Define if you have vsnprintf() */
 #undef HAVE_VSNPRINTF
 
+/* Define if you have usleep() */
+#undef HAVE_USLEEP
+
+/* Define if you have nanosleep() */
+#undef HAVE_NANOSLEEP
+
+/* Define if you have usleep() */
+#undef HAVE_USLEEP
+
+/* Define if you have nanosleep() */
+#undef HAVE_NANOSLEEP
+
 /* Define if your system has its own `getloadavg' function.  */
 #undef HAVE_GETLOADAVG
 

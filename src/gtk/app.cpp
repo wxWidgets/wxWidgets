@@ -8,7 +8,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "app.h"
+    #pragma implementation "app.h"
 #endif
 
 #include "wx/app.h"
@@ -20,34 +20,23 @@
 #include "wx/font.h"
 #include "wx/settings.h"
 #include "wx/dialog.h"
+
 #if wxUSE_WX_RESOURCES
-#include "wx/resource.h"
+    #include "wx/resource.h"
 #endif
+
 #include "wx/module.h"
 #include "wx/image.h"
-#if wxUSE_THREADS
+
 #include "wx/thread.h"
-#endif
+
 #include "unistd.h"
 
-// many versions of Unices have this function, but it is not defined in system
-// headers - please add your system here if it is the case for your OS.
-// SunOS < 5.6 (i.e. Solaris < 2.6) and DG-UX are like this.
-#if (defined(__SUN__) && !defined(__SunOs_5_6) && \
-                         !defined(__SunOs_5_7) && !defined(__SUNPRO_CC)) || \
-     defined(__osf__)
-    extern "C"
-    {
-        void usleep(unsigned long usec);
-    };
-#endif // Unices without usleep()
+#include <glib.h>
+#include <gdk/gdk.h>
+#include <gtk/gtk.h>
 
-#include "glib.h"
-#include "gdk/gdk.h"
-#include "gtk/gtk.h"
 #include "wx/gtk/win_gtk.h"
-
-#include   <unistd.h> // usleep() on solaris
 
 //-----------------------------------------------------------------------------
 // global data
@@ -160,14 +149,17 @@ END_EVENT_TABLE()
 
 gint wxapp_idle_callback( gpointer WXUNUSED(data) )
 {
-    if (wxTheApp) while (wxTheApp->ProcessIdle()) {}
-#if wxUSE_THREADS
+    if (wxTheApp)
+    {
+        while (wxTheApp->ProcessIdle())
+        {
+        }
+    }
+
     wxMutexGuiLeave();
-#endif
-    usleep(10000);
-#if wxUSE_THREADS
+    wxUsleep(10);
     wxMutexGuiEnter();
-#endif
+
     return TRUE;
 }
 

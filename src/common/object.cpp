@@ -54,20 +54,20 @@ wxHashTable* wxClassInfo::sm_classTable = (wxHashTable*) NULL;
  * wxWindows root object.
  */
 
-wxObject::wxObject(void)
+wxObject::wxObject()
 {
-  m_refData = (wxObjectRefData *) NULL;
+    m_refData = (wxObjectRefData *) NULL;
 #if wxUSE_SERIAL
-  m_serialObj = (wxObject_Serialize *)NULL;
+    m_serialObj = (wxObject_Serialize *)NULL;
 #endif
 }
 
-wxObject::~wxObject(void)
+wxObject::~wxObject()
 {
-	UnRef();
+    UnRef();
 #if wxUSE_SERIAL
-	if (m_serialObj)
-	  delete m_serialObj;
+    if (m_serialObj)
+        delete m_serialObj;
 #endif
 }
 
@@ -77,23 +77,23 @@ wxObject::~wxObject(void)
  * Go from this class to superclass, taking into account
  * two possible base classes.
  */
- 
+
 bool wxObject::IsKindOf(wxClassInfo *info) const
 {
-  wxClassInfo *thisInfo = GetClassInfo();
-  if (thisInfo)
-    return thisInfo->IsKindOf(info);
-  else
-    return FALSE;
+    wxClassInfo *thisInfo = GetClassInfo();
+    if (thisInfo)
+        return thisInfo->IsKindOf(info);
+    else
+        return FALSE;
 }
 
 #if defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT
 void wxObject::Dump(ostream& str)
 {
-  if (GetClassInfo() && GetClassInfo()->GetClassName())
-    str << GetClassInfo()->GetClassName();
-  else
-    str << "unknown object class";
+    if (GetClassInfo() && GetClassInfo()->GetClassName())
+        str << GetClassInfo()->GetClassName();
+    else
+        str << "unknown object class";
 }
 #endif
 
@@ -103,21 +103,21 @@ void wxObject::Dump(ostream& str)
 #undef new
 #endif
 
-void * wxObject::operator new (size_t size, char * fileName, int lineNum)
+void *wxObject::operator new (size_t size, char * fileName, int lineNum)
 {
-  return wxDebugAlloc(size, fileName, lineNum, TRUE);
+    return wxDebugAlloc(size, fileName, lineNum, TRUE);
 }
 
 void wxObject::operator delete (void * buf)
 {
-  wxDebugFree(buf);
+    wxDebugFree(buf);
 }
 
 // VC++ 6.0
 #if defined(__VISUALC__) && (__VISUALC__ >= 1200)
 void wxObject::operator delete(void* pData, char* /* fileName */, int /* lineNum */)
 {
- ::operator delete(pData);
+    ::operator delete(pData);
 }
 #endif
 
@@ -125,12 +125,12 @@ void wxObject::operator delete(void* pData, char* /* fileName */, int /* lineNum
 #if !defined(__VISUALC__) && wxUSE_ARRAY_MEMORY_OPERATORS
 void * wxObject::operator new[] (size_t size, char * fileName, int lineNum)
 {
-  return wxDebugAlloc(size, fileName, lineNum, TRUE, TRUE);
+    return wxDebugAlloc(size, fileName, lineNum, TRUE, TRUE);
 }
 
 void wxObject::operator delete[] (void * buf)
 {
-  wxDebugFree(buf, TRUE);
+    wxDebugFree(buf, TRUE);
 }
 #endif
 
@@ -142,97 +142,97 @@ void wxObject::operator delete[] (void * buf)
 
 wxClassInfo::wxClassInfo(char *cName, char *baseName1, char *baseName2, int sz, wxObjectConstructorFn constr)
 {
-  m_className = cName;
-  m_baseClassName1 = baseName1;
-  m_baseClassName2 = baseName2;
+    m_className = cName;
+    m_baseClassName1 = baseName1;
+    m_baseClassName2 = baseName2;
 
-  m_objectSize = sz;
-  m_objectConstructor = constr;
-  
-  m_next = sm_first;
-  sm_first = this;
+    m_objectSize = sz;
+    m_objectConstructor = constr;
 
-  m_baseInfo1 = (wxClassInfo *) NULL;
-  m_baseInfo2 = (wxClassInfo *) NULL;
+    m_next = sm_first;
+    sm_first = this;
+
+    m_baseInfo1 = (wxClassInfo *) NULL;
+    m_baseInfo2 = (wxClassInfo *) NULL;
 }
 
-wxObject *wxClassInfo::CreateObject(void)
+wxObject *wxClassInfo::CreateObject()
 {
-  if (m_objectConstructor)
-    return (wxObject *)(*m_objectConstructor)();
-  else
-    return (wxObject *) NULL;
+    if (m_objectConstructor)
+        return (wxObject *)(*m_objectConstructor)();
+    else
+        return (wxObject *) NULL;
 }
 
 wxClassInfo *wxClassInfo::FindClass(char *c)
 {
-  wxClassInfo *p = sm_first;
-  while (p)
-  {
-    if (p && p->GetClassName() && strcmp(p->GetClassName(), c) == 0)
-      return p;
-    p = p->m_next;
-  }
-  return (wxClassInfo *) NULL;
+    wxClassInfo *p = sm_first;
+    while (p)
+    {
+        if (p && p->GetClassName() && strcmp(p->GetClassName(), c) == 0)
+            return p;
+        p = p->m_next;
+    }
+    return (wxClassInfo *) NULL;
 }
 
 // Climb upwards through inheritance hierarchy.
 // Dual inheritance is catered for.
 bool wxClassInfo::IsKindOf(wxClassInfo *info) const
 {
-  if (info == NULL)
-    return FALSE;
+    if (info == NULL)
+        return FALSE;
 
-  // For some reason, when making/using a DLL, static data has to be included
-  // in both the DLL and the application. This can lead to duplicate
-  // wxClassInfo objects, so we have to test the name instead of the pointers.
-  // PROBABLY NO LONGER TRUE now I've done DLL creation right.
-/*
+    // For some reason, when making/using a DLL, static data has to be included
+    // in both the DLL and the application. This can lead to duplicate
+    // wxClassInfo objects, so we have to test the name instead of the pointers.
+    // PROBABLY NO LONGER TRUE now I've done DLL creation right.
+    /*
 #if WXMAKINGDLL
-  if (GetClassName() && info->GetClassName() && (strcmp(GetClassName(), info->GetClassName()) == 0))
-    return TRUE;
+if (GetClassName() && info->GetClassName() && (strcmp(GetClassName(), info->GetClassName()) == 0))
+return TRUE;
 #else
-*/
-  if (this == info)
-    return TRUE;
+     */
+    if (this == info)
+        return TRUE;
 
-  if (m_baseInfo1)
-    if (m_baseInfo1->IsKindOf(info))
-      return TRUE;
+    if (m_baseInfo1)
+        if (m_baseInfo1->IsKindOf(info))
+            return TRUE;
 
-  if (m_baseInfo2)
-    return m_baseInfo2->IsKindOf(info);
+    if (m_baseInfo2)
+        return m_baseInfo2->IsKindOf(info);
 
-  return FALSE;
+    return FALSE;
 }
 
 // Set pointers to base class(es) to speed up IsKindOf
-void wxClassInfo::InitializeClasses(void)
+void wxClassInfo::InitializeClasses()
 {
-  wxClassInfo::sm_classTable = new wxHashTable(wxKEY_STRING);
+    wxClassInfo::sm_classTable = new wxHashTable(wxKEY_STRING);
 
-  // Index all class infos by their class name
-  wxClassInfo *info = sm_first;
-  while (info)
-  {
-    if (info->m_className)
-      sm_classTable->Put(info->m_className, (wxObject *)info);
-    info = info->m_next;
-  }
+    // Index all class infos by their class name
+    wxClassInfo *info = sm_first;
+    while (info)
+    {
+        if (info->m_className)
+            sm_classTable->Put(info->m_className, (wxObject *)info);
+        info = info->m_next;
+    }
 
-  // Set base pointers for each wxClassInfo
-  info = sm_first;
-  while (info)
-  {
-    if (info->GetBaseClassName1())
-      info->m_baseInfo1 = (wxClassInfo *)sm_classTable->Get(info->GetBaseClassName1());
-    if (info->GetBaseClassName2())
-      info->m_baseInfo2 = (wxClassInfo *)sm_classTable->Get(info->GetBaseClassName2());
-    info = info->m_next;
-  }
+    // Set base pointers for each wxClassInfo
+    info = sm_first;
+    while (info)
+    {
+        if (info->GetBaseClassName1())
+            info->m_baseInfo1 = (wxClassInfo *)sm_classTable->Get(info->GetBaseClassName1());
+        if (info->GetBaseClassName2())
+            info->m_baseInfo2 = (wxClassInfo *)sm_classTable->Get(info->GetBaseClassName2());
+        info = info->m_next;
+    }
 }
 
-void wxClassInfo::CleanUpClasses(void)
+void wxClassInfo::CleanUpClasses()
 {
     delete wxClassInfo::sm_classTable;
     wxClassInfo::sm_classTable = NULL;
@@ -270,54 +270,54 @@ wxObject *wxCreateDynamicObject(const char *name)
 
 wxObject* wxCreateStoredObject( wxInputStream &stream )
 {
-  wxObjectInputStream obj_s(stream);
-  return obj_s.LoadObject();
+    wxObjectInputStream obj_s(stream);
+    return obj_s.LoadObject();
 };
 
 void wxObject::StoreObject( wxObjectOutputStream& stream )
 {
-  wxString obj_name = wxString(GetClassInfo()->GetClassName()) + "_Serialize";
-  wxLibrary *lib = wxTheLibraries.LoadLibrary("wxserial");
+    wxString obj_name = wxString(GetClassInfo()->GetClassName()) + "_Serialize";
+    wxLibrary *lib = wxTheLibraries.LoadLibrary("wxserial");
 
-  if (!lib) {
-    wxLogError(_("Can't load wxSerial dynamic library."));
-    return;
-  }
-  if (!m_serialObj) {
-    m_serialObj = (WXSERIAL(wxObject) *)lib->CreateObject( obj_name );
-
-    if (!m_serialObj) {
-      wxLogError(_("Can't find the serialization object '%s' "
-                   "for the object '%s'."),
-                 obj_name.c_str(),
-                 GetClassInfo()->GetClassName());
-      return;
+    if (!lib) {
+        wxLogError(_("Can't load wxSerial dynamic library."));
+        return;
     }
-    m_serialObj->SetObject(this);
-  }
+    if (!m_serialObj) {
+        m_serialObj = (WXSERIAL(wxObject) *)lib->CreateObject( obj_name );
 
-  m_serialObj->StoreObject(stream);
+        if (!m_serialObj) {
+            wxLogError(_("Can't find the serialization object '%s' "
+                        "for the object '%s'."),
+                    obj_name.c_str(),
+                    GetClassInfo()->GetClassName());
+            return;
+        }
+        m_serialObj->SetObject(this);
+    }
+
+    m_serialObj->StoreObject(stream);
 }
 
 void wxObject::LoadObject( wxObjectInputStream& stream )
 {
-  wxString obj_name = wxString(GetClassInfo()->GetClassName()) + "_Serialize";
-  wxLibrary *lib = wxTheLibraries.LoadLibrary("wxserial");
-
-  if (!m_serialObj) {
-    m_serialObj = (WXSERIAL(wxObject) *)lib->CreateObject( obj_name );
+    wxString obj_name = wxString(GetClassInfo()->GetClassName()) + "_Serialize";
+    wxLibrary *lib = wxTheLibraries.LoadLibrary("wxserial");
 
     if (!m_serialObj) {
-      wxLogError(_("Can't find the serialization object '%s' "
-                   "for the object '%s'."),
-                 obj_name.c_str(),
-                 GetClassInfo()->GetClassName());
-      return;
-    }
-    m_serialObj->SetObject(this);
-  }
+        m_serialObj = (WXSERIAL(wxObject) *)lib->CreateObject( obj_name );
 
-  m_serialObj->LoadObject(stream);
+        if (!m_serialObj) {
+            wxLogError(_("Can't find the serialization object '%s' "
+                        "for the object '%s'."),
+                    obj_name.c_str(),
+                    GetClassInfo()->GetClassName());
+            return;
+        }
+        m_serialObj->SetObject(this);
+    }
+
+    m_serialObj->LoadObject(stream);
 }
 
 #endif // wxUSE_SERIAL
@@ -337,7 +337,7 @@ void wxObject::Ref(const wxObject& clone)
     }
 }
 
-void wxObject::UnRef(void)
+void wxObject::UnRef()
 {
     if (m_refData) {
         assert(m_refData->m_count > 0);
@@ -356,7 +356,7 @@ wxObjectRefData::wxObjectRefData(void) : m_count(1)
 {
 }
 
-wxObjectRefData::~wxObjectRefData(void)
+wxObjectRefData::~wxObjectRefData()
 {
 }
 

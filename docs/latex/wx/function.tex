@@ -1434,6 +1434,18 @@ This function is now obsolete, replaced by \helpref{Log functions}{logfunctions}
 
 <wx/memory.h>
 
+\membersection{::wxUsleep}\label{wxusleep}
+
+\func{void}{wxUsleep}{\param{unsigned long}{ milliseconds}}
+
+Sleeps for the specified number of milliseconds. Notice that usage of this
+function is encouraged instead of calling usleep(3) directly because the
+standard usleep() function is not MT safe.
+
+\wxheading{Include files}
+
+<wx/utils.h>
+
 \membersection{::wxWriteResource}\label{wxwriteresource}
 
 \func{bool}{wxWriteResource}{\param{const wxString\& }{section}, \param{const wxString\& }{entry},

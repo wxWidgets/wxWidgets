@@ -7,11 +7,6 @@
 // Licence:           wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
-//#ifdef __GNUG__
-//#pragma implementation "utils.h"
-//#endif
-
 #include "wx/utils.h"
 #include "wx/string.h"
 
@@ -32,16 +27,29 @@
 #include <netdb.h>
 #include <signal.h>
 #include <fcntl.h>          // for O_WRONLY and friends
+#include <time.h>           // nanosleep() and/or usleep()
 
-#include "glib.h"
-#include "gdk/gdk.h"
-#include "gtk/gtk.h"
-#include "gtk/gtkfeatures.h"
-#include "gdk/gdkx.h"
+#include <glib.h>
+#include <gdk/gdk.h>
+#include <gtk/gtk.h>
+#include <gtk/gtkfeatures.h>
+#include <gdk/gdkx.h>
 
 #ifdef __SVR4__
   #include <sys/systeminfo.h>
 #endif
+
+// many versions of Unices have this function, but it is not defined in system
+// headers - please add your system here if it is the case for your OS.
+// SunOS < 5.6 (i.e. Solaris < 2.6) and DG-UX are like this.
+#if (defined(__SUN__) && !defined(__SunOs_5_6) && \
+                         !defined(__SunOs_5_7) && !defined(__SUNPRO_CC)) || \
+     defined(__osf__)
+    extern "C"
+    {
+        void usleep(unsigned long usec);
+    };
+#endif // Unices without usleep()
 
 // many versions of Unices have this function, but it is not defined in system
 // headers - please add your system here if it is the case for your OS.
@@ -76,6 +84,30 @@ void wxBell(void)
 void wxSleep(int nSecs)
 {
     sleep(nSecs);
+}
+
+void wxUsleep(unsigned long milliseconds)
+{
+#if defined(HAVE_NANOSLEEP)
+    timespec tmReq;
+    tmReq.tv_sec = milliseconds / 1000;
+    tmReq.tv_nsec = (milliseconds % 1000) * 1000 * 1000;
+
+    // we're not interested in remaining time nor in return value
+    (void)nanosleep(&tmReq, (timespec *)NULL);
+#elif defined(HAVE_USLEEP)
+    // uncomment this if you feel brave or if you are sure that your version
+    // of Solaris has a safe usleep() function but please notice that usleep()
+    // is known to lead to crashes in MT programs in Solaris 2.[67] and is not
+    // documented as MT-Safe
+    #if defined(__SUN__) && defined(wxUSE_THREADS)
+        #error "usleep() cannot be used in MT programs under Solaris."
+    #endif // Sun
+
+    usleep(milliseconds * 1000); // usleep(3) wants microseconds
+#else // !sleep function
+    #error "usleep() or nanosleep() function required for wxUsleep"
+#endif // sleep function
 }
 
 int wxKill(long pid, int sig)
