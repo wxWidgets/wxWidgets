@@ -279,7 +279,6 @@ void *wxDynamicLibrary::GetSymbol(const wxString &name, bool *success) const
 
     if ( !symbol )
     {
-        wxString msg(_("wxDynamicLibrary failed to GetSymbol '%s'"));
 #if defined(HAVE_DLERROR) && !defined(__EMX__)
 
 #if wxUSE_UNICODE
@@ -291,8 +290,7 @@ void *wxDynamicLibrary::GetSymbol(const wxString &name, bool *success) const
 
         if( err )
         {
-            failed = TRUE;
-            wxLogError( msg, err );
+            wxLogError(wxT("%s"), err);
         }
 #else
         failed = TRUE;
