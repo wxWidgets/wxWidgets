@@ -819,7 +819,11 @@ wxArrayString XmlResApp::FindStrings(wxXmlNode *node)
             ))
             // ...and known to contain translatable string
         {
-            arr.Add(ConvertText(n->GetContent()));
+            if (!flagGettext ||
+                node->GetPropVal(_T("translate"), _T("1")) != _T("0"))
+            {
+                arr.Add(ConvertText(n->GetContent()));
+            }
         }
 
         // subnodes:
