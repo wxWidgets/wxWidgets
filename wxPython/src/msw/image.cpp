@@ -1685,55 +1685,6 @@ static PyObject *_wrap_wxImage_SetMaskFromImage(PyObject *self, PyObject *args, 
     return _resultobj;
 }
 
-#define wxImage_DoFloodFill(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5)  (_swigobj->DoFloodFill(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
-static PyObject *_wrap_wxImage_DoFloodFill(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxImage * _arg0;
-    wxCoord  _arg1;
-    wxCoord  _arg2;
-    wxBrush * _arg3;
-    wxColour * _arg4;
-    int  _arg5 = (int ) wxFLOOD_SURFACE;
-    int  _arg6 = (int ) wxCOPY;
-    PyObject * _argo0 = 0;
-    PyObject * _argo3 = 0;
-    wxColour  temp;
-    PyObject * _obj4 = 0;
-    char *_kwnames[] = { "self","x","y","fillBrush","testColour","style","LogicalFunction", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiiOO|ii:wxImage_DoFloodFill",_kwnames,&_argo0,&_arg1,&_arg2,&_argo3,&_obj4,&_arg5,&_arg6)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxImage_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxImage_DoFloodFill. Expected _wxImage_p.");
-        return NULL;
-        }
-    }
-    if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxBrush_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxImage_DoFloodFill. Expected _wxBrush_p.");
-        return NULL;
-        }
-    }
-{
-    _arg4 = &temp;
-    if (! wxColour_helper(_obj4, &_arg4))
-        return NULL;
-}
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxImage_DoFloodFill(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5,_arg6);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
 static PyObject *_wrap_wxImage_CanRead(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
@@ -3192,7 +3143,6 @@ static PyMethodDef imagecMethods[] = {
 	 { "wxImage_LoadFile", (PyCFunction) _wrap_wxImage_LoadFile, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_GetImageCount", (PyCFunction) _wrap_wxImage_GetImageCount, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_CanRead", (PyCFunction) _wrap_wxImage_CanRead, METH_VARARGS | METH_KEYWORDS },
-	 { "wxImage_DoFloodFill", (PyCFunction) _wrap_wxImage_DoFloodFill, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_SetMaskFromImage", (PyCFunction) _wrap_wxImage_SetMaskFromImage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_FindFirstUnusedColour", (PyCFunction) _wrap_wxImage_FindFirstUnusedColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_GetBlue", (PyCFunction) _wrap_wxImage_GetBlue, METH_VARARGS | METH_KEYWORDS },

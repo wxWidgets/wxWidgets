@@ -206,18 +206,26 @@ public:
     long GetKeyCode();
     bool HasModifiers();
 
+    // get the raw key code (platform-dependent)
+    long GetRawKeyCode() const;
+
+    // get the raw key flags (platform-dependent)
+    long GetRawKeyFlags() const;
+
     long GetX();
     long GetY();
     wxPoint GetPosition();
     %name(GetPositionTuple) void GetPosition(long* OUTPUT, long* OUTPUT);
 
-    long          m_x, m_y;
-    long          m_keyCode;
-    bool          m_controlDown;
-    bool          m_shiftDown;
-    bool          m_altDown;
-    bool          m_metaDown;
-    bool          m_scanCode;
+    long        m_x, m_y;
+    long        m_keyCode;
+    bool        m_controlDown;
+    bool        m_shiftDown;
+    bool        m_altDown;
+    bool        m_metaDown;
+    bool        m_scanCode;
+    long        m_rawCode;
+    long        m_rawFlags;
 
 };
 

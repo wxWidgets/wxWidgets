@@ -227,9 +227,6 @@ class wxImagePtr(wxObjectPtr):
     def SetMaskFromImage(self, *_args, **_kwargs):
         val = apply(imagec.wxImage_SetMaskFromImage,(self,) + _args, _kwargs)
         return val
-    def DoFloodFill(self, *_args, **_kwargs):
-        val = apply(imagec.wxImage_DoFloodFill,(self,) + _args, _kwargs)
-        return val
     def LoadFile(self, *_args, **_kwargs):
         val = apply(imagec.wxImage_LoadFile,(self,) + _args, _kwargs)
         return val

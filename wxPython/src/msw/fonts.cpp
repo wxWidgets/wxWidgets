@@ -58,7 +58,6 @@ extern PyObject *SWIG_newvarlink(void);
 #include "helpers.h"
 #include <wx/fontmap.h>
 #include <wx/fontenc.h>
-#include <wx/fontmap.h>
 #include <wx/fontutil.h>
 #include <wx/fontenum.h>
 #include <wx/intl.h>
@@ -890,6 +889,65 @@ static PyObject *_wrap_delete_wxFontMapper(PyObject *self, PyObject *args, PyObj
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxFontMapper_Get(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFontMapper * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxFontMapper_Get",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxFontMapper *)wxFontMapper::Get();
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFontMapper_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxFontMapper_Set(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFontMapper * _result;
+    wxFontMapper * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "mapper", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFontMapper_Set",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFontMapper_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFontMapper_Set. Expected _wxFontMapper_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxFontMapper *)wxFontMapper::Set(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFontMapper_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
     return _resultobj;
 }
 
@@ -3660,6 +3718,8 @@ static PyMethodDef fontscMethods[] = {
 	 { "wxFontMapper_CharsetToEncoding", (PyCFunction) _wrap_wxFontMapper_CharsetToEncoding, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFontMapper_IsEncodingAvailable", (PyCFunction) _wrap_wxFontMapper_IsEncodingAvailable, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFontMapper_GetAltForEncoding", (PyCFunction) _wrap_wxFontMapper_GetAltForEncoding, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFontMapper_Set", (PyCFunction) _wrap_wxFontMapper_Set, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFontMapper_Get", (PyCFunction) _wrap_wxFontMapper_Get, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxFontMapper", (PyCFunction) _wrap_delete_wxFontMapper, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxFontMapper", (PyCFunction) _wrap_new_wxFontMapper, METH_VARARGS | METH_KEYWORDS },
 	 { "wxNativeFontInfo_ToUserString", (PyCFunction) _wrap_wxNativeFontInfo_ToUserString, METH_VARARGS | METH_KEYWORDS },

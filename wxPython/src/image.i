@@ -136,11 +136,11 @@ public:
     bool SetMaskFromImage(const wxImage & mask,
                           byte mr, byte mg, byte mb);
 
-    void DoFloodFill (wxCoord x, wxCoord y,
-        const wxBrush & fillBrush,
-        const wxColour& testColour,
-        int style = wxFLOOD_SURFACE,
-        int LogicalFunction = wxCOPY /* currently unused */ ) ;
+//      void DoFloodFill (wxCoord x, wxCoord y,
+//          const wxBrush & fillBrush,
+//          const wxColour& testColour,
+//          int style = wxFLOOD_SURFACE,
+//          int LogicalFunction = wxCOPY /* currently unused */ ) ;
 
     static bool CanRead( const wxString& name );
     static int GetImageCount( const wxString& name, long type = wxBITMAP_TYPE_ANY );

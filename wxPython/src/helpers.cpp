@@ -1777,7 +1777,14 @@ bool wxSize_helper(PyObject* source, wxSize** obj) {
     else if (PySequence_Check(source) && PyObject_Length(source) == 2) {
         PyObject* o1 = PySequence_GetItem(source, 0);
         PyObject* o2 = PySequence_GetItem(source, 1);
+        if (!PyNumber_Check(o1) || !PyNumber_Check(o2)) {
+            Py_DECREF(o1);
+            Py_DECREF(o2);
+            goto error;
+        }
         **obj = wxSize(PyInt_AsLong(o1), PyInt_AsLong(o2));
+        Py_DECREF(o1);
+        Py_DECREF(o2);
         return TRUE;
     }
 
@@ -1800,15 +1807,15 @@ bool wxPoint_helper(PyObject* source, wxPoint** obj) {
     if (PySequence_Check(source) && PySequence_Length(source) == 2) {
         PyObject* o1 = PySequence_GetItem(source, 0);
         PyObject* o2 = PySequence_GetItem(source, 1);
-                // This should really check for integers, not numbers -- but that would break code.
-                if (!PyNumber_Check(o1) || !PyNumber_Check(o2)) {
-                        Py_DECREF(o1);
-                    Py_DECREF(o2);
-                        goto error;
-                }
-                **obj = wxPoint(PyInt_AsLong(o1), PyInt_AsLong(o2));
-                Py_DECREF(o1);
-                Py_DECREF(o2);
+        // This should really check for integers, not numbers -- but that would break code.
+        if (!PyNumber_Check(o1) || !PyNumber_Check(o2)) {
+            Py_DECREF(o1);
+            Py_DECREF(o2);
+            goto error;
+        }
+        **obj = wxPoint(PyInt_AsLong(o1), PyInt_AsLong(o2));
+        Py_DECREF(o1);
+        Py_DECREF(o2);
         return TRUE;
     }
  error:
@@ -1832,7 +1839,14 @@ bool wxRealPoint_helper(PyObject* source, wxRealPoint** obj) {
     else if (PySequence_Check(source) && PyObject_Length(source) == 2) {
         PyObject* o1 = PySequence_GetItem(source, 0);
         PyObject* o2 = PySequence_GetItem(source, 1);
+        if (!PyNumber_Check(o1) || !PyNumber_Check(o2)) {
+            Py_DECREF(o1);
+            Py_DECREF(o2);
+            goto error;
+        }
         **obj = wxRealPoint(PyFloat_AsDouble(o1), PyFloat_AsDouble(o2));
+        Py_DECREF(o1);
+        Py_DECREF(o2);
         return TRUE;
     }
 
@@ -1860,8 +1874,20 @@ bool wxRect_helper(PyObject* source, wxRect** obj) {
         PyObject* o2 = PySequence_GetItem(source, 1);
         PyObject* o3 = PySequence_GetItem(source, 2);
         PyObject* o4 = PySequence_GetItem(source, 3);
+        if (!PyNumber_Check(o1) || !PyNumber_Check(o2) ||
+            !PyNumber_Check(o3) || !PyNumber_Check(o4)) {
+            Py_DECREF(o1);
+            Py_DECREF(o2);
+            Py_DECREF(o3);
+            Py_DECREF(o4);
+            goto error;
+        }
         **obj = wxRect(PyInt_AsLong(o1), PyInt_AsLong(o2),
-                     PyInt_AsLong(o3), PyInt_AsLong(o4));
+                       PyInt_AsLong(o3), PyInt_AsLong(o4));
+        Py_DECREF(o1);
+        Py_DECREF(o2);
+        Py_DECREF(o3);
+        Py_DECREF(o4);
         return TRUE;
     }
 

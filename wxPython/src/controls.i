@@ -809,6 +809,10 @@ public:
     void WriteText(const wxString& text);
     void AppendText(const wxString& text);
 
+    // insert the character which would have resulted from this key event,
+    // return TRUE if anything has been inserted
+    bool EmulateKeyPress(const wxKeyEvent& event);
+
     // text control under some platforms supports the text styles: these
     // methods allow to apply the given text style to the given selection or to
     // set/get the style which will be used for all appended text

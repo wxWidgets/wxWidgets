@@ -17,7 +17,6 @@
 #include "helpers.h"
 #include <wx/fontmap.h>
 #include <wx/fontenc.h>
-#include <wx/fontmap.h>
 #include <wx/fontutil.h>
 #include <wx/fontenum.h>
 #include <wx/intl.h>
@@ -222,6 +221,11 @@ class  wxFontMapper
 public:
     wxFontMapper();
     ~wxFontMapper();
+
+    // return instance of the wxFontMapper singleton
+    static wxFontMapper *Get();
+    // set the sigleton to 'mapper' instance and return previous one
+    static wxFontMapper *Set(wxFontMapper *mapper);
 
 
     // find an alternative for the given encoding (which is supposed to not be

@@ -414,6 +414,12 @@ class wxKeyEventPtr(wxEventPtr):
     def HasModifiers(self, *_args, **_kwargs):
         val = apply(eventsc.wxKeyEvent_HasModifiers,(self,) + _args, _kwargs)
         return val
+    def GetRawKeyCode(self, *_args, **_kwargs):
+        val = apply(eventsc.wxKeyEvent_GetRawKeyCode,(self,) + _args, _kwargs)
+        return val
+    def GetRawKeyFlags(self, *_args, **_kwargs):
+        val = apply(eventsc.wxKeyEvent_GetRawKeyFlags,(self,) + _args, _kwargs)
+        return val
     def GetX(self, *_args, **_kwargs):
         val = apply(eventsc.wxKeyEvent_GetX,(self,) + _args, _kwargs)
         return val
@@ -452,6 +458,12 @@ class wxKeyEventPtr(wxEventPtr):
         if name == "m_scanCode" :
             eventsc.wxKeyEvent_m_scanCode_set(self,value)
             return
+        if name == "m_rawCode" :
+            eventsc.wxKeyEvent_m_rawCode_set(self,value)
+            return
+        if name == "m_rawFlags" :
+            eventsc.wxKeyEvent_m_rawFlags_set(self,value)
+            return
         self.__dict__[name] = value
     def __getattr__(self,name):
         if name == "m_x" : 
@@ -470,6 +482,10 @@ class wxKeyEventPtr(wxEventPtr):
             return eventsc.wxKeyEvent_m_metaDown_get(self)
         if name == "m_scanCode" : 
             return eventsc.wxKeyEvent_m_scanCode_get(self)
+        if name == "m_rawCode" : 
+            return eventsc.wxKeyEvent_m_rawCode_get(self)
+        if name == "m_rawFlags" : 
+            return eventsc.wxKeyEvent_m_rawFlags_get(self)
         raise AttributeError,name
     def __repr__(self):
         return "<C wxKeyEvent instance at %s>" % (self.this,)
