@@ -867,7 +867,7 @@ DEFAULT_wxUSE_WX_RESOURCES=1
 DEFAULT_wxUSE_RPC=0
 DEFAULT_wxUSE_HELP=1
 
-DEFAULT_wxUSE_UNICODE=1
+DEFAULT_wxUSE_UNICODE=0
 DEFAULT_wxUSE_WCSRTOMBS=0
 
 dnl ----------------------------------------------------------------
