@@ -224,24 +224,30 @@ public:
         // get the item on which the operation was performed or the newly
         // selected item for wxEVT_COMMAND_TREE_SEL_CHANGED/ING events
     wxTreeItemId GetItem() const { return m_item; }
+    void SetItem(const wxTreeItemId& item) { m_item = item; }
 
         // for wxEVT_COMMAND_TREE_SEL_CHANGED/ING events, get the previously
         // selected item
     wxTreeItemId GetOldItem() const { return m_itemOld; }
+    void SetOldItem(const wxTreeItemId& item) { m_itemOld = item; }
 
         // the point where the mouse was when the drag operation started (for
         // wxEVT_COMMAND_TREE_BEGIN_(R)DRAG events only) or click position
     wxPoint GetPoint() const { return m_pointDrag; }
+    void SetPoint(const wxPoint& pt) { m_pointDrag = pt; }
 
         // keyboard data (for wxEVT_COMMAND_TREE_KEY_DOWN only)
     const wxKeyEvent& GetKeyEvent() const { return m_evtKey; }
     int GetKeyCode() const { return m_evtKey.GetKeyCode(); }
+    void SetKeyEvent(const wxKeyEvent& evt) { m_evtKey = evt; }
 
         // label (for EVT_TREE_{BEGIN|END}_LABEL_EDIT only)
     const wxString& GetLabel() const { return m_label; }
+    void SetLabel(const wxString& label) { m_label = label; }
 
         // edit cancel flag (for EVT_TREE_{BEGIN|END}_LABEL_EDIT only)
     bool IsEditCancelled() const { return m_editCancelled; }
+    void SetEditCanceled(bool editCancelled) { m_editCancelled = editCancelled; }
 
 #if WXWIN_COMPATIBILITY_2_2
     // for compatibility only, don't use
