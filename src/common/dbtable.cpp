@@ -24,6 +24,7 @@
 // SYNOPSIS START
 // SYNOPSIS STOP
 */
+
 #ifdef __GNUG__
     #pragma implementation "dbtable.h"
 #endif
@@ -57,7 +58,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//#include <assert.h>
 
 #include "wx/dbtable.h"
 
@@ -78,6 +78,16 @@ ULONG lastTableID = 0;
 #ifdef __WXDEBUG__
     wxList TablesInUse;
 #endif
+
+
+void csstrncpyt(char *target, const char *source, int n)
+{
+    while ( (*target++ = *source++) != '\0' && --n )
+        ;
+
+    *target = '\0';
+}
+
 
 
 /********** wxDbColDef::wxDbColDef() Constructor **********/
@@ -1031,17 +1041,17 @@ void wxDbTable::BuildSelectStmt(wxString &pSqlStmt, int typeOfSelect, bool disti
 
     // Add the column list
     int i;
+	 wxString tStr;
     for (i = 0; i < noCols; i++)
     {
+		  tStr = colDefs[i].ColName;
         // If joining tables, the base table column names must be qualified to avoid ambiguity
-        if (appendFromClause || pDb->Dbms() == dbmsACCESS)
+        if ((appendFromClause || pDb->Dbms() == dbmsACCESS) && !tStr.Find(wxT('.')))
         {
             pSqlStmt += pDb->SQLTableName(queryTableName.c_str());
-//            pSqlStmt += queryTableName;
             pSqlStmt += wxT(".");
         }
         pSqlStmt += pDb->SQLColumnName(colDefs[i].ColName);
-//        pSqlStmt += colDefs[i].ColName;
         if (i + 1 < noCols)
             pSqlStmt += wxT(",");
     }
@@ -1230,56 +1240,59 @@ void wxDbTable::BuildWhereClause(wxString &pWhereClause, int typeOfWhere,
     wxString colValue;
 
     // Loop through the columns building a where clause as you go
-    int i;
-    for (i = 0; i < noCols; i++)
+    int colNo;
+    for (colNo = 0; colNo < noCols; colNo++)
     {
         // Determine if this column should be included in the WHERE clause
-        if ((typeOfWhere == DB_WHERE_KEYFIELDS && colDefs[i].KeyField) ||
-             (typeOfWhere == DB_WHERE_MATCHING  && (!IsColNull(i))))
+        if ((typeOfWhere == DB_WHERE_KEYFIELDS && colDefs[colNo].KeyField) ||
+             (typeOfWhere == DB_WHERE_MATCHING  && (!IsColNull(colNo))))
         {
             // Skip over timestamp columns
-            if (colDefs[i].SqlCtype == SQL_C_TIMESTAMP)
+            if (colDefs[colNo].SqlCtype == SQL_C_TIMESTAMP)
                 continue;
             // If there is more than 1 column, join them with the keyword "AND"
             if (moreThanOneColumn)
                 pWhereClause += wxT(" AND ");
             else
                 moreThanOneColumn = TRUE;
+
             // Concatenate where phrase for the column
-            if (qualTableName.Length())
+            wxString tStr = colDefs[colNo].ColName;
+
+            if (qualTableName.Length() && !tStr.Find(wxT('.')))
             {
                 pWhereClause += pDb->SQLTableName(qualTableName);
-//                pWhereClause += qualTableName;
                 pWhereClause += wxT(".");
             }
-            pWhereClause += pDb->SQLColumnName(colDefs[i].ColName);
-//            pWhereClause += colDefs[i].ColName;
-            if (useLikeComparison && (colDefs[i].SqlCtype == SQL_C_CHAR))
+            pWhereClause += pDb->SQLColumnName(colDefs[colNo].ColName);
+
+            if (useLikeComparison && (colDefs[colNo].SqlCtype == SQL_C_CHAR))
                 pWhereClause += wxT(" LIKE ");
             else
                 pWhereClause += wxT(" = ");
-            switch(colDefs[i].SqlCtype)
+
+            switch(colDefs[colNo].SqlCtype)
             {
                 case SQL_C_CHAR:
-                    colValue.Printf(wxT("'%s'"), (UCHAR FAR *) colDefs[i].PtrDataObj);
+                    colValue.Printf(wxT("'%s'"), (UCHAR FAR *) colDefs[colNo].PtrDataObj);
                     break;
                 case SQL_C_SSHORT:
-                    colValue.Printf(wxT("%hi"), *((SWORD *) colDefs[i].PtrDataObj));
+                    colValue.Printf(wxT("%hi"), *((SWORD *) colDefs[colNo].PtrDataObj));
                     break;
                 case SQL_C_USHORT:
-                    colValue.Printf(wxT("%hu"), *((UWORD *) colDefs[i].PtrDataObj));
+                    colValue.Printf(wxT("%hu"), *((UWORD *) colDefs[colNo].PtrDataObj));
                     break;
                 case SQL_C_SLONG:
-                    colValue.Printf(wxT("%li"), *((SDWORD *) colDefs[i].PtrDataObj));
+                    colValue.Printf(wxT("%li"), *((SDWORD *) colDefs[colNo].PtrDataObj));
                     break;
                 case SQL_C_ULONG:
-                    colValue.Printf(wxT("%lu"), *((UDWORD *) colDefs[i].PtrDataObj));
+                    colValue.Printf(wxT("%lu"), *((UDWORD *) colDefs[colNo].PtrDataObj));
                     break;
                 case SQL_C_FLOAT:
-                    colValue.Printf(wxT("%.6f"), *((SFLOAT *) colDefs[i].PtrDataObj));
+                    colValue.Printf(wxT("%.6f"), *((SFLOAT *) colDefs[colNo].PtrDataObj));
                     break;
                 case SQL_C_DOUBLE:
-                    colValue.Printf(wxT("%.6f"), *((SDOUBLE *) colDefs[i].PtrDataObj));
+                    colValue.Printf(wxT("%.6f"), *((SDOUBLE *) colDefs[colNo].PtrDataObj));
                     break;
             }
             pWhereClause += colValue;
@@ -2481,7 +2494,10 @@ bool wxDbTable::SetColNull(UWORD colNo, bool set)
     {
         colDefs[colNo].Null = set;
         if (set)  // Blank out the values in the member variable
-            ClearMemberVar(colNo,FALSE);  // Must call with FALSE, or infinite recursion will happen
+        {
+           colDefs[colNo].CbValue = SQL_NULL_DATA; // SF PATCH#766404
+           ClearMemberVar(colNo,FALSE);  // Must call with FALSE, or infinite recursion will happen
+        }
         return(TRUE);
     }
     else
@@ -2493,18 +2509,21 @@ bool wxDbTable::SetColNull(UWORD colNo, bool set)
 /********** wxDbTable::SetColNull() **********/
 bool wxDbTable::SetColNull(const wxString &colName, bool set)
 {
-    int i;
-    for (i = 0; i < noCols; i++)
+    int colNo;
+    for (colNo = 0; colNo < noCols; colNo++)
     {
-        if (!wxStricmp(colName, colDefs[i].ColName))
+        if (!wxStricmp(colName, colDefs[colNo].ColName))
             break;
     }
 
-    if (i < noCols)
+    if (colNo < noCols)
     {
-        colDefs[i].Null = set;
+        colDefs[colNo].Null = set;
         if (set)  // Blank out the values in the member variable
-            ClearMemberVar(i,FALSE);  // Must call with FALSE, or infinite recursion will happen
+        {
+           colDefs[colNo].CbValue = SQL_NULL_DATA;  // SF PATCH#766404
+           ClearMemberVar(colNo,FALSE);  // Must call with FALSE, or infinite recursion will happen
+        }
         return(TRUE);
     }
     else
@@ -2600,7 +2619,7 @@ void wxDbTable::SetRowMode(const rowmode_t rowmode)
             SetCursor(hstmtDefault);
             break;
         default:
-            assert(0);
+           wxASSERT(0);
     }
 }  // wxDbTable::SetRowMode()
 
@@ -2655,14 +2674,6 @@ wxVariant wxDbTable::GetCol(const int colNo) const
     return val;
 }  // wxDbTable::GetCol()
 
-
-void csstrncpyt(char *s, const char *t, int n)
-{
-    while ( (*s++ = *t++) != '\0' && --n )
-        ;
-
-    *s = '\0';
-}
 
 void wxDbTable::SetCol(const int colNo, const wxVariant val)
 {
