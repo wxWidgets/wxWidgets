@@ -224,6 +224,8 @@ void wxBeginBusyCursor( wxCursor *WXUNUSED(cursor) )
 
     if (wxTheApp)
         wxTheApp->SendIdleEvents();
+        
+    gdk_flush();
 }
 
 bool wxIsBusy()
