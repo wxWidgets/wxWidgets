@@ -1437,63 +1437,94 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
 wxDocTemplate *wxDocManager::SelectDocumentType(wxDocTemplate **templates,
                                                 int noTemplates)
 {
-    wxChar **strings = new wxChar *[noTemplates];
-    wxChar **data = new wxChar *[noTemplates];
+    wxArrayString strings;
+    wxDocTemplate **data = new wxDocTemplate *[noTemplates];
     int i;
     int n = 0;
     for (i = 0; i < noTemplates; i++)
     {
         if (templates[i]->IsVisible())
         {
-            strings[n] = (wxChar *)templates[i]->m_description.c_str();
-            data[n] = (wxChar *)templates[i];
+            strings.Add(templates[i]->m_description);
+            data[n] = templates[i];
             n ++;
         }
     }
-    if (n == 0)
+
+    wxDocTemplate *theTemplate;
+
+    switch ( n )
     {
-        delete[] strings;
-        delete[] data;
-        return (wxDocTemplate *) NULL;
-    }
-    else if (n == 1)
-    {
-        wxDocTemplate *temp = (wxDocTemplate *)data[0];
-        delete[] strings;
-        delete[] data;
-        return temp;
+        case 0:
+            // no visible templates, hence nothing to choose from
+            theTemplate = NULL;
+            break;
+
+        case 1:
+            // don't propose the user to choose if he heas no choice
+            theTemplate = data[0];
+            break;
+
+        default:
+            // propose the user to choose one of several
+            theTemplate = (wxDocTemplate *)wxGetSingleChoiceData
+                          (
+                            _("Select a document template"),
+                            _("Templates"),
+                            strings,
+                            (void **)data,
+                            wxFindSuitableParent()
+                          );
     }
 
-    wxWindow* parent = wxFindSuitableParent();
-
-    wxDocTemplate *theTemplate = (wxDocTemplate *)wxGetSingleChoiceData(_("Select a document template"), _("Templates"), n,
-            strings, (void **)data, parent);
-    delete[] strings;
     delete[] data;
+
     return theTemplate;
 }
 
 wxDocTemplate *wxDocManager::SelectViewType(wxDocTemplate **templates,
-        int noTemplates)
+                                            int noTemplates)
 {
-    wxChar **strings = new wxChar *[noTemplates];
-    wxChar **data = new wxChar *[noTemplates];
+    wxArrayString strings;
+    wxDocTemplate **data = new wxDocTemplate *[noTemplates];
     int i;
     int n = 0;
     for (i = 0; i < noTemplates; i++)
     {
-        if (templates[i]->IsVisible() && (templates[i]->GetViewName() != wxT("")))
+        wxDocTemplate *templ = templates[i];
+        if ( templ->IsVisible() && !templ->GetViewName().empty() )
         {
-            strings[n] = (wxChar *)templates[i]->m_viewTypeName.c_str();
-            data[n] = (wxChar *)templates[i];
+            strings.Add(templ->m_viewTypeName);
+            data[n] = templ;
             n ++;
         }
     }
-    wxWindow* parent = wxFindSuitableParent();
 
-    wxDocTemplate *theTemplate = (wxDocTemplate *)wxGetSingleChoiceData(_("Select a document view"), _("Views"), n,
-            strings, (void **)data, parent);
-    delete[] strings;
+    wxDocTemplate *theTemplate;
+
+    // the same logic as above
+    switch ( n )
+    {
+        case 0:
+            theTemplate = (wxDocTemplate *)NULL;
+            break;
+
+        case 1:
+            theTemplate = data[0];
+            break;
+
+        default:
+            theTemplate = (wxDocTemplate *)wxGetSingleChoiceData
+                          (
+                            _("Select a document view"),
+                            _("Views"),
+                            strings,
+                            (void **)data,
+                            wxFindSuitableParent()
+                          );
+
+    }
+
     delete[] data;
     return theTemplate;
 }
