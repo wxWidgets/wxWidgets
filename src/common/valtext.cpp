@@ -50,13 +50,13 @@ static bool wxIsNumeric(const wxString& val);
 
 wxTextValidator::wxTextValidator(long style, wxString *val)
 {
-    m_validatorStyle = style ;
-    m_stringValue = val ;
+    m_validatorStyle = style;
+    m_stringValue = val;
 /*
     m_refData = new wxVTextRefData;
 
-    M_VTEXTDATA->m_validatorStyle = style ;
-    M_VTEXTDATA->m_stringValue = val ;
+    M_VTEXTDATA->m_validatorStyle = style;
+    M_VTEXTDATA->m_stringValue = val;
 */
 }
 
@@ -70,12 +70,12 @@ bool wxTextValidator::Copy(const wxTextValidator& val)
 {
     wxValidator::Copy(val);
 
-    m_validatorStyle = val.m_validatorStyle ;
-    m_stringValue = val.m_stringValue ;
+    m_validatorStyle = val.m_validatorStyle;
+    m_stringValue = val.m_stringValue;
 
     m_includeList = val.m_includeList;
     m_excludeList = val.m_excludeList;
-    
+
     return TRUE;
 }
 
@@ -112,7 +112,7 @@ bool wxTextValidator::Validate(wxWindow *parent)
     if( !CheckValidator() )
         return FALSE;
 
-    wxTextCtrl *control = (wxTextCtrl *) m_validatorWindow ;
+    wxTextCtrl *control = (wxTextCtrl *) m_validatorWindow;
 
     // If window is disabled, simply return
     if ( !control->IsEnabled() )
@@ -195,11 +195,11 @@ bool wxTextValidator::TransferToWindow(void)
     if( !CheckValidator() )
         return FALSE;
 
-    if (!m_stringValue)
-        return TRUE;
-
-    wxTextCtrl *control = (wxTextCtrl *) m_validatorWindow ;
-    control->SetValue(* m_stringValue) ;
+    if ( m_stringValue )
+    {
+        wxTextCtrl *control = (wxTextCtrl *) m_validatorWindow;
+        control->SetValue(* m_stringValue);
+    }
 
     return TRUE;
 }
@@ -210,11 +210,11 @@ bool wxTextValidator::TransferFromWindow(void)
     if( !CheckValidator() )
         return FALSE;
 
-    if (!m_stringValue)
-        return TRUE;
-
-    wxTextCtrl *control = (wxTextCtrl *) m_validatorWindow ;
-    * m_stringValue = control->GetValue() ;
+    if ( m_stringValue )
+    {
+        wxTextCtrl *control = (wxTextCtrl *) m_validatorWindow;
+        *m_stringValue = control->GetValue();
+    }
 
     return TRUE;
 }
