@@ -45,7 +45,7 @@ wxMSW -a wxWindows/docs !wxWindows/docs/latex !wxWindows/docs/gtk !wxWindows/doc
 	wxWindows/src !wxWindows/src/Makefile \
 	!wxWindows/src/Makefile.in !wxWindows/src/gtk !wxWindows/src/qt !wxWindows/src/motif \
 	!wxWindows/src/gdk_imlib \
-	!wxWindows/src/png !wxWindows/src/zlib !wxWindows/src/mkdirs \
+	wxWindows/src/png wxWindows/src/zlib !wxWindows/src/mkdirs \
 	!wxWindows/include/wx/stubs !wxWindows/src/stubs \
 	wxWindows/lib \
 	wxWindows/misc !wxWindows/misc/imlib \
@@ -71,5 +71,5 @@ wxOS2 -a wxWindows wxWindows/docs !wxWindows/docs/latex !wxWindows/docs/motif \
       !wxWindows/src/iodbc
       wxWindows/src/generic wxWindows/src/html wxWindows/src/common wxWindows/src/os2 \
       wxWindows/src/xpm 
-      wxWindows/lib wxWindows\samples wxWindows/misc !wxWindows/misc/implib \
+      wxWindows/lib wxWindows/samples wxWindows/misc !wxWindows/misc/implib \
       wxWindows/testconf 
