@@ -712,7 +712,7 @@ int wxEntry(WXHINSTANCE hInstance,
             if ( enterLoop )
             {
                 // run the main loop
-                retValue = wxTheApp->OnRun();
+                wxTheApp->OnRun();
             }
             else
             {
@@ -739,7 +739,7 @@ int wxEntry(WXHINSTANCE hInstance,
             }
         }
 
-        wxTheApp->OnExit();
+        retValue = wxTheApp->OnExit();
 
         wxEntryCleanup();
 
