@@ -29,7 +29,7 @@ Windows.}
 \twocolitem{\windowstyle{wxHSCROLL}}{A horizontal scrollbar will be created.}
 \end{twocollist}
 
-See also \helpref{window styles overview}{windowstyles} and 
+See also \helpref{window styles overview}{windowstyles} and
 \helpref{wxTextCtrl::wxTextCtrl}{wxtextctrlconstr}.
 
 \wxheading{Remarks}
@@ -105,11 +105,11 @@ Constructor, creating and showing a text control.
 
 \wxheading{Remarks}
 
-The horizontal scrollbar ({\bf wxTE\_HSCROLL} style flag) will only be created for multi-line text controls. 
-Without a horizontal scrollbar, text lines that don't fit in the control's 
+The horizontal scrollbar ({\bf wxTE\_HSCROLL} style flag) will only be created for multi-line text controls.
+Without a horizontal scrollbar, text lines that don't fit in the control's
 size will be wrapped (but no newline character is inserted). Single line
 controls don't have a horizontal scrollbar, the text is automatically scrolled
-so that the \helpref{insertion point}{wxtextctrlgetinsertionpoint} is always 
+so that the \helpref{insertion point}{wxtextctrlgetinsertionpoint} is always
 visible.
 
 Under Windows, if the {\bf wxTE\_MULTILINE} style is used, the window is implemented
@@ -220,8 +220,8 @@ Resets the internal `modified' flag as if the current edits had been saved.
 Returns the insertion point. This is defined as the zero based index of the
 character position to the right of the insertion point. For example, if
 the insertion point is at the end of the text control, it is equal to
-both \helpref{GetValue()}{wxtextctrlgetvalue}.Length() and 
-\helpref{GetLastPosition()}{wxtextctrlgetlastposition}. 
+both \helpref{GetValue()}{wxtextctrlgetvalue}.Length() and
+\helpref{GetLastPosition()}{wxtextctrlgetlastposition}.
 
 The following code snippet safely returns the character at the insertion
 point or the zero character if the point is at the end of the control.
@@ -232,7 +232,7 @@ point or the zero character if the point is at the end of the control.
     if (tc->GetInsertionPoint() == tc->GetLastPosition())
       return '\0';
     return tc->GetValue[tc->GetInsertionPoint()];
-  }	
+  }
 \end{verbatim}
 }%
 
@@ -240,14 +240,14 @@ point or the zero character if the point is at the end of the control.
 
 \constfunc{virtual long}{GetLastPosition}{\void}
 
-Returns the zero based index of the last position in the text control, 
+Returns the zero based index of the last position in the text control,
 which is equal to the number of characters in the control.
 
 \membersection{wxTextCtrl::GetLineLength}\label{wxtextctrlgetlinelength}
 
 \constfunc{int}{GetLineLength}{\param{long}{ lineNo}}
 
-Gets the length of the specified line, not including any trailing newline 
+Gets the length of the specified line, not including any trailing newline
 character(s).
 
 \wxheading{Parameters}
@@ -301,6 +301,9 @@ no selection.
 \docparam{from}{The returned first position.}
 
 \docparam{to}{The returned last position.}
+
+\pythonnote{The wxPython version of this method returns a tuple
+consisting of the from and to values.}
 
 \membersection{wxTextCtrl::GetValue}\label{wxtextctrlgetvalue}
 
@@ -432,7 +435,7 @@ the character at the last position.
 
 \func{virtual void}{Replace}{\param{long}{ from}, \param{long}{ to}, \param{const wxString\& }{value}}
 
-Replaces the text starting at the first position up to (but not including) 
+Replaces the text starting at the first position up to (but not including)
 the character at the last position with the given text.
 
 \wxheading{Parameters}
@@ -528,7 +531,7 @@ if there is no undo facility.
 
 \func{void}{WriteText}{\param{const wxString\& }{ text}}
 
-Writes the text into the text control at the current insertion position. 
+Writes the text into the text control at the current insertion position.
 
 \wxheading{Parameters}
 
