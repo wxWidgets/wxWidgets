@@ -315,7 +315,6 @@
                 <sys-lib>winmm</sys-lib>
                 <sys-lib>shell32</sys-lib>
                 <sys-lib>comctl32</sys-lib>
-                <sys-lib>odbc32</sys-lib>
                 <sys-lib>ole32</sys-lib>
                 <sys-lib>oleaut32</sys-lib>
                 <sys-lib>uuid</sys-lib>
@@ -326,6 +325,7 @@
             <if cond="FORMAT=='msvc' or FORMAT=='msvc6prj' or FORMAT=='borland'">
                 <sys-lib>oleacc</sys-lib>
             </if>
+            <sys-lib>odbc32</sys-lib>
         </if>
     </template>
 
