@@ -484,9 +484,9 @@ public:
 
         // we don't draw the shape to a bitmap until it's really needed (i.e.
         // we're asked to do so)
-        m_hasBitmap = FALSE;
+        m_hasBitmap = false;
 #if wxUSE_METAFILES
-        m_hasMetaFile = FALSE;
+        m_hasMetaFile = false;
 #endif // wxUSE_METAFILES
     }
 
@@ -503,9 +503,9 @@ public:
         DnDShape *shape = m_shape;
 
         m_shape = (DnDShape *)NULL;
-        m_hasBitmap = FALSE;
+        m_hasBitmap = false;
 #if wxUSE_METAFILES
-        m_hasMetaFile = FALSE;
+        m_hasMetaFile = false;
 #endif // wxUSE_METAFILES
 
         return shape;
@@ -586,7 +586,7 @@ public:
         {
             m_shape->GetDataHere(pBuf);
 
-            return TRUE;
+            return true;
         }
 #if wxUSE_METAFILES
         else if ( m_dobjMetaFile.IsSupported(format) )
@@ -612,20 +612,20 @@ public:
     virtual bool SetData(const wxDataFormat& format,
                          size_t len, const void *buf)
     {
-        wxCHECK_MSG( format == m_formatShape, FALSE,
+        wxCHECK_MSG( format == m_formatShape, false,
                      wxT( "unsupported format") );
 
         delete m_shape;
         m_shape = DnDShape::New(buf);
 
         // the shape has changed
-        m_hasBitmap = FALSE;
+        m_hasBitmap = false;
 
 #if wxUSE_METAFILES
-        m_hasMetaFile = FALSE;
+        m_hasMetaFile = false;
 #endif // wxUSE_METAFILES
 
-        return TRUE;
+        return true;
     }
 
 private:
@@ -888,21 +888,21 @@ bool DnDApp::OnInit()
                                    10, 100, 650, 340);
 
     // activate it
-    frame->Show(TRUE);
+    frame->Show(true);
 
     SetTopWindow(frame);
 
-    return TRUE;
+    return true;
 #else
     wxMessageBox( _T("This sample has to be compiled with wxUSE_DRAG_AND_DROP"), _T("Building error"), wxOK);
-    return FALSE;
+    return false;
 #endif // wxUSE_DRAG_AND_DROP
 }
 
 #if wxUSE_DRAG_AND_DROP
 
 DnDFrame::DnDFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h)
-        : wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h)),
+        : wxFrame(frame, wxID_ANY, title, wxPoint(x, y), wxSize(w, h)),
           m_strText(_T("wxWindows drag & drop works :-)"))
 
 {
@@ -951,17 +951,14 @@ DnDFrame::DnDFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h)
     SetMenuBar(menu_bar);
 
     // make a panel with 3 subwindows
-    wxPoint pos(0, 0);
-    wxSize  size(400, 200);
-
     wxString strFile(_T("Drop files here!")), strText(_T("Drop text on me"));
 
-    m_ctrlFile  = new wxListBox(this, -1, pos, size, 1, &strFile,
+    m_ctrlFile  = new wxListBox(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 1, &strFile,
                                 wxLB_HSCROLL | wxLB_ALWAYS_SB );
-    m_ctrlText  = new wxListBox(this, -1, pos, size, 1, &strText,
+    m_ctrlText  = new wxListBox(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 1, &strText,
                                 wxLB_HSCROLL | wxLB_ALWAYS_SB );
 
-    m_ctrlLog   = new wxTextCtrl(this, -1, _T(""), pos, size,
+    m_ctrlLog   = new wxTextCtrl(this, wxID_ANY, _T(""), wxDefaultPosition, wxDefaultSize,
                                  wxTE_MULTILINE | wxTE_READONLY |
                                  wxSUNKEN_BORDER );
 
@@ -974,43 +971,26 @@ DnDFrame::DnDFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h)
     m_ctrlText->SetDropTarget(new DnDText(m_ctrlText));
     m_ctrlLog->SetDropTarget(new URLDropTarget);
 
-    wxLayoutConstraints *c;
+    wxBoxSizer *m_sizer_top = new wxBoxSizer( wxHORIZONTAL );
+    m_sizer_top->Add(m_ctrlFile, 1, wxEXPAND );
+    m_sizer_top->Add(m_ctrlText, 1, wxEXPAND );
 
-    // Top-left listbox
-    c = new wxLayoutConstraints;
-    c->left.SameAs(this, wxLeft);
-    c->top.SameAs(this, wxTop);
-    c->right.PercentOf(this, wxRight, 50);
-    c->height.PercentOf(this, wxHeight, 30);
-    m_ctrlFile->SetConstraints(c);
+    wxBoxSizer *m_sizer = new wxBoxSizer( wxVERTICAL );
+    m_sizer->Add(m_sizer_top, 1, wxEXPAND );
+    m_sizer->Add(m_ctrlLog, 1, wxEXPAND | wxBOTTOM, 50);
 
-    // Top-right listbox
-    c = new wxLayoutConstraints;
-    c->left.SameAs    (m_ctrlFile, wxRight);
-    c->top.SameAs     (this, wxTop);
-    c->right.SameAs   (this, wxRight);
-    c->height.PercentOf(this, wxHeight, 30);
-    m_ctrlText->SetConstraints(c);
-
-    // Lower text control
-    c = new wxLayoutConstraints;
-    c->left.SameAs    (this, wxLeft);
-    c->right.SameAs   (this, wxRight);
-    c->height.PercentOf(this, wxHeight, 50);
-    c->top.SameAs(m_ctrlText, wxBottom);
-    m_ctrlLog->SetConstraints(c);
-
-    SetAutoLayout(TRUE);
+    SetSizer( m_sizer );
+    m_sizer->SetSizeHints( this );
 
     // copy data by default but allow moving it as well
-    m_moveByDefault = FALSE;
-    m_moveAllow = TRUE;
-    menu_bar->Check(Menu_DragMoveAllow, TRUE);
+    m_moveByDefault = false;
+    m_moveAllow = true;
+    menu_bar->Check(Menu_DragMoveAllow, true);
 }
 
 void DnDFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    Close(TRUE);
+    Close(true);
 }
 
 void DnDFrame::OnSize(wxSizeEvent& event)
@@ -1028,7 +1008,7 @@ void DnDFrame::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     wxPaintDC dc(this);
     // dc.Clear(); -- this kills wxGTK
-    dc.SetFont( wxFont( 24, wxDECORATIVE, wxNORMAL, wxNORMAL, FALSE, _T("charter") ) );
+    dc.SetFont( wxFont( 24, wxDECORATIVE, wxNORMAL, wxNORMAL, false, _T("charter") ) );
     dc.DrawText( _T("Drag text from here!"), 100, h-50 );
 }
 
@@ -1062,7 +1042,7 @@ void DnDFrame::OnUpdateUIPasteBitmap(wxUpdateUIEvent& event)
 
 void DnDFrame::OnNewFrame(wxCommandEvent& WXUNUSED(event))
 {
-    (new DnDShapeFrame(this))->Show(TRUE);
+    (new DnDShapeFrame(this))->Show(true);
 
     wxLogStatus(this, wxT("Double click the new frame to select a shape for it"));
 }
@@ -1453,7 +1433,7 @@ bool DnDText::OnDropText(wxCoord, wxCoord, const wxString& text)
 {
     m_pOwner->Append(text);
 
-    return TRUE;
+    return true;
 }
 
 bool DnDFile::OnDropFiles(wxCoord, wxCoord, const wxArrayString& filenames)
@@ -1466,7 +1446,7 @@ bool DnDFile::OnDropFiles(wxCoord, wxCoord, const wxArrayString& filenames)
         m_pOwner->Append(filenames[n]);
     }
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -1486,39 +1466,39 @@ DnDShapeDialog::DnDShapeDialog(wxFrame *parent, DnDShape *shape)
     const wxString choices[] = { wxT("None"), wxT("Triangle"),
                                  wxT("Rectangle"), wxT("Ellipse") };
 
-    m_radio = new wxRadioBox( this, -1, wxT("&Shape"),
+    m_radio = new wxRadioBox( this, wxID_ANY, wxT("&Shape"),
                               wxDefaultPosition, wxDefaultSize, 4, choices, 4,
                               wxRA_SPECIFY_COLS );
     shapesSizer->Add( m_radio, 0, wxGROW|wxALL, 5 );
     topSizer->Add( shapesSizer, 0, wxALL, 2 );
 
     // attributes
-    wxStaticBox* box = new wxStaticBox( this, -1, wxT("&Attributes") );
+    wxStaticBox* box = new wxStaticBox( this, wxID_ANY, wxT("&Attributes") );
     wxStaticBoxSizer* attrSizer = new wxStaticBoxSizer( box, wxHORIZONTAL );
     wxFlexGridSizer* xywhSizer = new wxFlexGridSizer( 4, 2 );
 
     wxStaticText* st;
 
-    st = new wxStaticText( this, -1, wxT("Position &X:") );
-    m_textX = new wxTextCtrl( this, -1, wxEmptyString, wxDefaultPosition,
+    st = new wxStaticText( this, wxID_ANY, wxT("Position &X:") );
+    m_textX = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition,
                               wxSize( 30, 20 ) );
     xywhSizer->Add( st, 1, wxGROW|wxALL, 2 );
     xywhSizer->Add( m_textX, 1, wxGROW|wxALL, 2 );
 
-    st = new wxStaticText( this, -1, wxT("Size &width:") );
-    m_textW = new wxTextCtrl( this, -1, wxEmptyString, wxDefaultPosition,
+    st = new wxStaticText( this, wxID_ANY, wxT("Size &width:") );
+    m_textW = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition,
                               wxSize( 30, 20 ) );
     xywhSizer->Add( st, 1, wxGROW|wxALL, 2 );
     xywhSizer->Add( m_textW, 1, wxGROW|wxALL, 2 );
 
-    st = new wxStaticText( this, -1, wxT("&Y:") );
-    m_textY = new wxTextCtrl( this, -1, wxEmptyString, wxDefaultPosition,
+    st = new wxStaticText( this, wxID_ANY, wxT("&Y:") );
+    m_textY = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition,
                               wxSize( 30, 20 ) );
     xywhSizer->Add( st, 1, wxALL|wxALIGN_RIGHT, 2 );
     xywhSizer->Add( m_textY, 1, wxGROW|wxALL, 2 );
 
-    st = new wxStaticText( this, -1, wxT("&height:") );
-    m_textH = new wxTextCtrl( this, -1, wxEmptyString, wxDefaultPosition,
+    st = new wxStaticText( this, wxID_ANY, wxT("&height:") );
+    m_textH = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition,
                               wxSize( 30, 20 ) );
     xywhSizer->Add( st, 1, wxALL|wxALIGN_RIGHT, 2 );
     xywhSizer->Add( m_textH, 1, wxGROW|wxALL, 2 );
@@ -1537,7 +1517,6 @@ DnDShapeDialog::DnDShapeDialog(wxFrame *parent, DnDShape *shape)
     buttonSizer->Add( bt, 0, wxALL, 2 );
     topSizer->Add( buttonSizer, 0, wxALL|wxALIGN_RIGHT, 2 );
 
-    SetAutoLayout( TRUE );
     SetSizer( topSizer );
     topSizer->Fit( this );
 }
@@ -1576,7 +1555,7 @@ bool DnDShapeDialog::TransferDataToWindow()
     m_textW->SetValue(wxString() << m_size.x);
     m_textH->SetValue(wxString() << m_size.y);
 
-    return TRUE;
+    return true;
 }
 
 bool DnDShapeDialog::TransferDataFromWindow()
@@ -1593,16 +1572,16 @@ bool DnDShapeDialog::TransferDataFromWindow()
         wxMessageBox(_T("All sizes and positions should be non null!"),
                      _T("Invalid shape"), wxICON_HAND | wxOK, this);
 
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 void DnDShapeDialog::OnColour(wxCommandEvent& WXUNUSED(event))
 {
     wxColourData data;
-    data.SetChooseFull(TRUE);
+    data.SetChooseFull(true);
     for (int i = 0; i < 16; i++)
     {
         wxColour colour(i*16, i*16, i*16);
@@ -1623,7 +1602,7 @@ void DnDShapeDialog::OnColour(wxCommandEvent& WXUNUSED(event))
 DnDShapeFrame *DnDShapeFrame::ms_lastDropTarget = NULL;
 
 DnDShapeFrame::DnDShapeFrame(wxFrame *parent)
-             : wxFrame(parent, -1, _T("Shape Frame"),
+             : wxFrame(parent, wxID_ANY, _T("Shape Frame"),
                        wxDefaultPosition, wxSize(250, 150))
 {
     CreateStatusBar();
@@ -1682,7 +1661,7 @@ void DnDShapeFrame::OnDrag(wxMouseEvent& event)
     wxDropSource source(shapeData, this);
 
     const wxChar *pc = NULL;
-    switch ( source.DoDragDrop(TRUE) )
+    switch ( source.DoDragDrop(true) )
     {
         default:
         case wxDragError:
@@ -1868,7 +1847,7 @@ void DnDShapeDataObject::CreateMetaFile() const
 
     DnDShapeDataObject *self = (DnDShapeDataObject *)this; // const_cast
     self->m_dobjMetaFile.SetMetafile(*mf);
-    self->m_hasMetaFile = TRUE;
+    self->m_hasMetaFile = true;
 
     delete mf;
 }
@@ -1891,7 +1870,7 @@ void DnDShapeDataObject::CreateBitmap() const
 
     DnDShapeDataObject *self = (DnDShapeDataObject *)this; // const_cast
     self->m_dobjBitmap.SetBitmap(bitmap);
-    self->m_hasBitmap = TRUE;
+    self->m_hasBitmap = true;
 }
 
 // ----------------------------------------------------------------------------
@@ -1900,7 +1879,7 @@ void DnDShapeDataObject::CreateBitmap() const
 
 static void ShowBitmap(const wxBitmap& bitmap)
 {
-    wxFrame *frame = new wxFrame(NULL, -1, _T("Bitmap view"));
+    wxFrame *frame = new wxFrame(NULL, wxID_ANY, _T("Bitmap view"));
     frame->CreateStatusBar();
     DnDCanvasBitmap *canvas = new DnDCanvasBitmap(frame);
     canvas->SetBitmap(bitmap);
@@ -1910,14 +1889,14 @@ static void ShowBitmap(const wxBitmap& bitmap)
     frame->SetStatusText(wxString::Format(_T("%dx%d"), w, h));
 
     frame->SetClientSize(w > 100 ? 100 : w, h > 100 ? 100 : h);
-    frame->Show(TRUE);
+    frame->Show(true);
 }
 
 #if wxUSE_METAFILES
 
 static void ShowMetaFile(const wxMetaFile& metafile)
 {
-    wxFrame *frame = new wxFrame(NULL, -1, _T("Metafile view"));
+    wxFrame *frame = new wxFrame(NULL, wxID_ANY, _T("Metafile view"));
     frame->CreateStatusBar();
     DnDCanvasMetafile *canvas = new DnDCanvasMetafile(frame);
     canvas->SetMetafile(metafile);

@@ -337,7 +337,7 @@ bool MyApp::OnInit()
 {
     // use standard command line handling:
     if ( !wxApp::OnInit() )
-        return FALSE;
+        return false;
 
     // parse the cmd line
     int x = 50,
@@ -350,9 +350,9 @@ bool MyApp::OnInit()
 
     // Create the main frame window
     MyFrame *frame = new MyFrame(_T("Controls wxWindows App"), x, y);
-    frame->Show(TRUE);
+    frame->Show(true);
 
-    return TRUE;
+    return true;
 }
 
 //----------------------------------------------------------------------
@@ -520,7 +520,7 @@ END_EVENT_TABLE()
 // ============================================================================
 
 MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
-       : wxPanel( frame, -1, wxPoint(x, y), wxSize(w, h) )
+       : wxPanel( frame, wxID_ANY, wxPoint(x, y), wxSize(w, h) )
 {
     m_listbox = NULL;
     m_listboxSorted = NULL;
@@ -549,7 +549,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_notebook = NULL;
     m_label = NULL;
 
-    m_text = new wxTextCtrl(this, -1, _T("This is the log window.\n"),
+    m_text = new wxTextCtrl(this, wxID_ANY, _T("This is the log window.\n"),
                             wxPoint(0, 250), wxSize(100, 50), wxTE_MULTILINE);
     m_text->SetBackgroundColour(wxT("wheat"));
 
@@ -591,7 +591,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     {
         Image_List, Image_Choice, Image_Combo, Image_Text, Image_Radio, Image_Gauge, Image_Max
     };
-    wxImageList *imagelist = new wxImageList(16, 16, FALSE, Image_Max);
+    wxImageList *imagelist = new wxImageList(16, 16, false, Image_Max);
 
     static const wxChar *s_iconNames[Image_Max] =
     {
@@ -655,14 +655,14 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 #endif // wxUSE_TOOLTIPS
 
     m_checkbox = new wxCheckBox( panel, ID_LISTBOX_ENABLE, _T("&Disable"), wxPoint(20,170) );
-    m_checkbox->SetValue(FALSE);
+    m_checkbox->SetValue(false);
 #if wxUSE_TOOLTIPS
     m_checkbox->SetToolTip( _T("Click here to disable the listbox") );
 #endif // wxUSE_TOOLTIPS
     (void)new wxCheckBox( panel, ID_CHANGE_COLOUR, _T("&Toggle colour"),
                           wxPoint(110,170) );
     panel->SetCursor(wxCursor(wxCURSOR_HAND));
-    m_notebook->AddPage(panel, _T("wxListBox"), TRUE, Image_List);
+    m_notebook->AddPage(panel, _T("wxListBox"), true, Image_List);
 
 #if wxUSE_CHOICE
     panel = new wxPanel(m_notebook);
@@ -683,11 +683,11 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     (void)new wxButton( panel, ID_CHOICE_FONT, _T("Set &Italic font"), wxPoint(340,130), wxSize(140,30) );
     (void)new wxCheckBox( panel, ID_CHOICE_ENABLE, _T("&Disable"), wxPoint(20,130), wxSize(140,30) );
 
-    m_notebook->AddPage(panel, _T("wxChoice"), FALSE, Image_Choice);
+    m_notebook->AddPage(panel, _T("wxChoice"), false, Image_Choice);
 #endif // wxUSE_CHOICE
 
     panel = new wxPanel(m_notebook);
-    (void)new wxStaticBox( panel, -1, _T("&Box around combobox"),
+    (void)new wxStaticBox( panel, wxID_ANY, _T("&Box around combobox"),
                            wxPoint(5, 5), wxSize(150, 100));
     m_combo = new MyComboBox( panel, ID_COMBO, _T("This"),
                               wxPoint(20,25), wxSize(120, -1),
@@ -702,7 +702,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     (void)new wxButton( panel, ID_COMBO_DELETE, _T("D&elete selected item"), wxPoint(180,130), wxSize(140,30) );
     (void)new wxButton( panel, ID_COMBO_FONT, _T("Set &Italic font"), wxPoint(340,130), wxSize(140,30) );
     (void)new wxCheckBox( panel, ID_COMBO_ENABLE, _T("&Disable"), wxPoint(20,130), wxSize(140,30) );
-    m_notebook->AddPage(panel, _T("wxComboBox"), FALSE, Image_Combo);
+    m_notebook->AddPage(panel, _T("wxComboBox"), false, Image_Combo);
 
     wxString choices2[] =
     {
@@ -713,8 +713,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     };
 
     panel = new wxPanel(m_notebook);
-    (void)new MyRadioBox( panel, ID_RADIOBOX, _T("&That"), wxPoint(10,160), wxSize(-1,-1), WXSIZEOF(choices2), choices2, 1, wxRA_SPECIFY_ROWS );
-    m_radio = new wxRadioBox( panel, ID_RADIOBOX, _T("T&his"), wxPoint(10,10), wxSize(-1,-1), WXSIZEOF(choices), choices, 1, wxRA_SPECIFY_COLS );
+    (void)new MyRadioBox( panel, ID_RADIOBOX, _T("&That"), wxPoint(10,160), wxDefaultSize, WXSIZEOF(choices2), choices2, 1, wxRA_SPECIFY_ROWS );
+    m_radio = new wxRadioBox( panel, ID_RADIOBOX, _T("T&his"), wxPoint(10,10), wxDefaultSize, WXSIZEOF(choices), choices, 1, wxRA_SPECIFY_COLS );
     m_radio->SetForegroundColour(*wxRED);
 
 #if wxUSE_TOOLTIPS
@@ -728,16 +728,16 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     (void)new wxButton( panel, ID_RADIOBOX_FONT, _T("Set &Italic font"), wxPoint(340,80), wxSize(140,30) );
     (void)new wxCheckBox( panel, ID_RADIOBOX_ENABLE, _T("&Disable"), wxPoint(340,130), wxDefaultSize );
     wxRadioButton *rb = new wxRadioButton( panel, ID_RADIOBUTTON_1, _T("Radiobutton1"), wxPoint(210,170), wxDefaultSize, wxRB_GROUP );
-    rb->SetValue( FALSE );
+    rb->SetValue( false );
     (void)new wxRadioButton( panel, ID_RADIOBUTTON_2, _T("&Radiobutton2"), wxPoint(340,170), wxDefaultSize );
-    m_notebook->AddPage(panel, _T("wxRadioBox"), FALSE, Image_Radio);
+    m_notebook->AddPage(panel, _T("wxRadioBox"), false, Image_Radio);
 
     panel = new wxPanel(m_notebook);
-    (void)new wxStaticBox( panel, -1, _T("&wxGauge and wxSlider"), wxPoint(10,10), wxSize(222,130) );
-    m_gauge = new wxGauge( panel, -1, 200, wxPoint(18,50), wxSize(155, 30), wxGA_HORIZONTAL|wxNO_BORDER );
+    (void)new wxStaticBox( panel, wxID_ANY, _T("&wxGauge and wxSlider"), wxPoint(10,10), wxSize(222,130) );
+    m_gauge = new wxGauge( panel, wxID_ANY, 200, wxPoint(18,50), wxSize(155, 30), wxGA_HORIZONTAL|wxNO_BORDER );
     m_gauge->SetBackgroundColour(*wxGREEN);
     m_gauge->SetForegroundColour(*wxRED);
-    m_gaugeVert = new wxGauge( panel, -1, 100,
+    m_gaugeVert = new wxGauge( panel, wxID_ANY, 100,
                                wxPoint(195,35), wxSize(30, 90),
                                wxGA_VERTICAL | wxGA_SMOOTH | wxNO_BORDER );
     m_slider = new wxSlider( panel, ID_SLIDER, 0, 0, 200, wxPoint(18,90), wxSize(155,-1),
@@ -747,19 +747,19 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_slider->SetToolTip(_T("This is a sliding slider"));
 #endif // wxUSE_TOOLTIPS
 
-    (void)new wxStaticBox( panel, -1, _T("&Explanation"),
+    (void)new wxStaticBox( panel, wxID_ANY, _T("&Explanation"),
                            wxPoint(230,10), wxSize(270,130),
                            wxALIGN_CENTER );
 
 #ifdef __WXMOTIF__
     // No wrapping text in wxStaticText yet :-(
-    (void)new wxStaticText( panel, -1,
+    (void)new wxStaticText( panel, wxID_ANY,
                             _T("Drag the slider!"),
                             wxPoint(250,30),
                             wxSize(240, -1)
                           );
 #else
-    (void)new wxStaticText( panel, -1,
+    (void)new wxStaticText( panel, wxID_ANY,
                             _T("In order see the gauge (aka progress bar)\n")
                             _T("control do something you have to drag the\n")
                             _T("handle of the slider to the right.\n")
@@ -773,7 +773,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     int initialSpinValue = -5;
     wxString s;
     s << initialSpinValue;
-    m_spintext = new wxTextCtrl( panel, -1, s, wxPoint(20,160), wxSize(80,-1) );
+    m_spintext = new wxTextCtrl( panel, wxID_ANY, s, wxPoint(20,160), wxSize(80,-1) );
 #if wxUSE_SPINBTN
     m_spinbutton = new wxSpinButton( panel, ID_SPIN, wxPoint(103,160), wxSize(80, -1) );
     m_spinbutton->SetRange(-40,30);
@@ -789,16 +789,16 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_spinctrl->SetValue(15);
 #endif // wxUSE_SPINCTRL
 
-    m_notebook->AddPage(panel, _T("wxGauge"), FALSE, Image_Gauge);
+    m_notebook->AddPage(panel, _T("wxGauge"), false, Image_Gauge);
 
     panel = new wxPanel(m_notebook);
 
 #if !defined(__WXMOTIF__) && !defined(__WIN16__)  // wxStaticBitmap not working under Motif yet; and icons not allowed under WIN16.
     wxIcon icon = wxArtProvider::GetIcon(wxART_INFORMATION);
-    (void) new wxStaticBitmap( panel, -1, icon, wxPoint(10, 10) );
+    (void) new wxStaticBitmap( panel, wxID_ANY, icon, wxPoint(10, 10) );
 
     // VZ: don't leak memory
-    // bmpStatic = new wxStaticBitmap(panel, -1, wxNullIcon, wxPoint(50, 10));
+    // bmpStatic = new wxStaticBitmap(panel, wxID_ANY, wxNullIcon, wxPoint(50, 10));
     // bmpStatic->SetIcon(wxArtProvider::GetIcon(wxART_QUESTION));
 #endif // !Motif
 
@@ -820,7 +820,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     {
        bitmap.SetMask(new wxMask(bitmap, *wxBLUE));
 
-       (void)new wxStaticBitmap /* wxBitmapButton */ (panel, -1, bitmap, wxPoint(300, 120));
+       (void)new wxStaticBitmap /* wxBitmapButton */ (panel, wxID_ANY, bitmap, wxPoint(300, 120));
     }
 #endif
 
@@ -829,7 +829,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
              bmp3(wxArtProvider::GetBitmap(wxART_QUESTION));
     wxBitmapButton *bmpBtn = new wxBitmapButton
                                  (
-                                  panel, -1,
+                                  panel, wxID_ANY,
                                   bmp1,
                                   wxPoint(30, 70)
                                  );
@@ -845,70 +845,42 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                          _T("&Toggle label"), wxPoint(250, 20));
 #endif // wxUSE_TOGGLEBTN
 
-    m_label = new wxStaticText(panel, -1, _T("Label with some long text"),
+    m_label = new wxStaticText(panel, wxID_ANY, _T("Label with some long text"),
                                wxPoint(250, 60), wxDefaultSize,
                                wxALIGN_RIGHT /*| wxST_NO_AUTORESIZE*/);
     m_label->SetForegroundColour( *wxBLUE );
 
     m_notebook->AddPage(panel, _T("wxBitmapXXX"));
 
-    // layout constraints
-#if wxUSE_CONSTRAINTS
-    wxLayoutConstraints *c;
-
-    panel = new wxPanel(m_notebook);
-    panel->SetAutoLayout( TRUE );
-
-    c = new wxLayoutConstraints;
-    c->top.SameAs( panel, wxTop, 10 );
-    c->height.AsIs( );
-    c->left.SameAs( panel, wxLeft, 10 );
-    c->width.PercentOf( panel, wxWidth, 40 );
-
-    wxButton *pMyButton = new wxButton(panel, ID_BUTTON_TEST1, _T("Test Button &1") );
-    pMyButton->SetConstraints( c );
-
-    c = new wxLayoutConstraints;
-    c->top.SameAs( panel, wxTop, 10 );
-    c->bottom.SameAs( panel, wxBottom, 10 );
-    c->right.SameAs( panel, wxRight, 10 );
-    c->width.PercentOf( panel, wxWidth, 40 );
-
-    wxButton *pMyButton2 = new wxButton(panel, ID_BUTTON_TEST2, _T("Test Button &2") );
-    pMyButton2->SetConstraints( c );
-
-    m_notebook->AddPage(panel, _T("wxLayoutConstraint"));
-#endif
-    
     // sizer
 
     panel = new wxPanel(m_notebook);
-    panel->SetAutoLayout( TRUE );
+    panel->SetAutoLayout( true );
 
     wxBoxSizer *sizer = new wxBoxSizer( wxVERTICAL );
 
     wxStaticBoxSizer *csizer =
-      new wxStaticBoxSizer (new wxStaticBox (panel, -1, _T("Show Buttons")),
+      new wxStaticBoxSizer (new wxStaticBox (panel, wxID_ANY, _T("Show Buttons")),
 			    wxHORIZONTAL );
     
     wxCheckBox *check1, *check2, *check3, *check4, *check14, *checkBig;
     check1 = new wxCheckBox (panel, ID_SIZER_CHECK1, _T("1"));
-    check1->SetValue (TRUE);
+    check1->SetValue (true);
     csizer->Add (check1);
     check2 = new wxCheckBox (panel, ID_SIZER_CHECK2, _T("2"));
-    check2->SetValue (TRUE);
+    check2->SetValue (true);
     csizer->Add (check2);
     check3 = new wxCheckBox (panel, ID_SIZER_CHECK3, _T("3"));
-    check3->SetValue (TRUE);
+    check3->SetValue (true);
     csizer->Add (check3);
     check4 = new wxCheckBox (panel, ID_SIZER_CHECK4, _T("4"));
-    check4->SetValue (TRUE);
+    check4->SetValue (true);
     csizer->Add (check4);
     check14 = new wxCheckBox (panel, ID_SIZER_CHECK14, _T("1-4"));
-    check14->SetValue (TRUE);
+    check14->SetValue (true);
     csizer->Add (check14);
     checkBig = new wxCheckBox (panel, ID_SIZER_CHECKBIG, _T("Big"));
-    checkBig->SetValue (TRUE);
+    checkBig->SetValue (true);
     csizer->Add (checkBig);
     
     sizer->Add (csizer);
@@ -917,18 +889,18 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     m_buttonSizer = new wxBoxSizer (wxVERTICAL);
     
-    m_sizerBtn1 = new wxButton(panel, -1, _T("Test Button &1") );
+    m_sizerBtn1 = new wxButton(panel, wxID_ANY, _T("Test Button &1") );
     m_buttonSizer->Add( m_sizerBtn1, 0, wxALL, 10 );
-    m_sizerBtn2 = new wxButton(panel, -1, _T("Test Button &2") );
+    m_sizerBtn2 = new wxButton(panel, wxID_ANY, _T("Test Button &2") );
     m_buttonSizer->Add( m_sizerBtn2, 0, wxALL, 10 );
-    m_sizerBtn3 = new wxButton(panel, -1, _T("Test Button &3") );
+    m_sizerBtn3 = new wxButton(panel, wxID_ANY, _T("Test Button &3") );
     m_buttonSizer->Add( m_sizerBtn3, 0, wxALL, 10 );
-    m_sizerBtn4 = new wxButton(panel, -1, _T("Test Button &4") );
+    m_sizerBtn4 = new wxButton(panel, wxID_ANY, _T("Test Button &4") );
     m_buttonSizer->Add( m_sizerBtn4, 0, wxALL, 10 );
 
     m_hsizer->Add (m_buttonSizer);
     m_hsizer->Add( 20,20, 1 );
-    m_bigBtn = new wxButton(panel, -1, _T("Multiline\nbutton") );
+    m_bigBtn = new wxButton(panel, wxID_ANY, _T("Multiline\nbutton") );
     m_hsizer->Add( m_bigBtn , 3, wxGROW|wxALL, 10 );
 
     sizer->Add (m_hsizer, 1, wxGROW);
@@ -1467,7 +1439,7 @@ void MyPanel::OnShowProgress( wxCommandEvent& WXUNUSED(event) )
                             wxPD_REMAINING_TIME);
 
 
-    bool cont = TRUE;
+    bool cont = true;
     for ( int i = 0; i <= max && cont; i++ )
     {
         wxSleep(1);
@@ -1558,7 +1530,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame(const wxChar *title, int x, int y)
-       : wxFrame(NULL, -1, title, wxPoint(x, y), wxSize(500, 430))
+       : wxFrame(NULL, wxID_ANY, title, wxPoint(x, y), wxSize(500, 430))
 {
     // Give it an icon
     // The wxICON() macros loads an icon from a resource under Windows
@@ -1584,14 +1556,14 @@ MyFrame::MyFrame(const wxChar *title, int x, int y)
     tooltip_menu->Append(CONTROLS_SET_TOOLTIP_DELAY, _T("Set &delay\tCtrl-D"));
     tooltip_menu->AppendSeparator();
     tooltip_menu->Append(CONTROLS_ENABLE_TOOLTIPS, _T("&Toggle tooltips\tCtrl-T"),
-            _T("enable/disable tooltips"), TRUE);
-    tooltip_menu->Check(CONTROLS_ENABLE_TOOLTIPS, TRUE);
+            _T("enable/disable tooltips"), true);
+    tooltip_menu->Check(CONTROLS_ENABLE_TOOLTIPS, true);
     menu_bar->Append(tooltip_menu, _T("&Tooltips"));
 #endif // wxUSE_TOOLTIPS
 
     wxMenu *panel_menu = new wxMenu;
     panel_menu->Append(CONTROLS_ENABLE_ALL, _T("&Disable all\tCtrl-E"),
-                       _T("Enable/disable all panel controls"), TRUE);
+                       _T("Enable/disable all panel controls"), true);
     menu_bar->Append(panel_menu, _T("&Panel"));
 
     SetMenuBar(menu_bar);
@@ -1605,7 +1577,7 @@ MyFrame::MyFrame(const wxChar *title, int x, int y)
 
 void MyFrame::OnQuit (wxCommandEvent& WXUNUSED(event) )
 {
-    Close(TRUE);
+    Close(true);
 }
 
 void MyFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
@@ -1645,7 +1617,7 @@ void MyFrame::OnSetTooltipDelay(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnToggleTooltips(wxCommandEvent& WXUNUSED(event))
 {
-    static bool s_enabled = TRUE;
+    static bool s_enabled = true;
 
     s_enabled = !s_enabled;
 
@@ -1657,7 +1629,7 @@ void MyFrame::OnToggleTooltips(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnEnableAll(wxCommandEvent& WXUNUSED(event))
 {
-    static bool s_enable = TRUE;
+    static bool s_enable = true;
 
     s_enable = !s_enable;
     m_panel->Enable(s_enable);

@@ -23,7 +23,6 @@ class MyFrame : public wxFrame
 public:
     MyFrame();
 
-    void TestConstraints(wxCommandEvent& event);
     void TestFlexSizers(wxCommandEvent& event);
     void TestNotebookSizers(wxCommandEvent& event);
     void TestGridBagSizer(wxCommandEvent& event);
@@ -33,13 +32,6 @@ public:
 
 private:
     DECLARE_EVENT_TABLE()
-};
-
-// a frame using constraints for layout
-class MyConstraintsFrame : public wxFrame
-{
-public:
-    MyConstraintsFrame(const wxChar *title, int x, int y );
 };
 
 // a frame using flex sizers for layout
@@ -94,7 +86,6 @@ enum
 {
     LAYOUT_QUIT = 100,
     LAYOUT_ABOUT,
-    LAYOUT_TEST_CONSTRAINTS,
     LAYOUT_TEST_SIZER,
     LAYOUT_TEST_NB_SIZER,
     LAYOUT_TEST_GB_SIZER
