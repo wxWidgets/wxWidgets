@@ -262,7 +262,7 @@ void XmlResApp::FindFilesInXML(wxXmlNode *node, wxArrayString& flist, const wxSt
             // ...and known to contain filename
         {
             wxString fullname;
-            if (wxIsAbsolutePath(n->GetContent())) fullname = n->GetContent();
+            if (wxIsAbsolutePath(n->GetContent()) || inputPath == "") fullname = n->GetContent();
             else fullname = inputPath + "/" + n->GetContent();
 
             if (flagVerbose) 
