@@ -42,6 +42,20 @@ wxFileInputStream::wxFileInputStream()
   m_file = NULL;
 }
 
+wxFileInputStream::wxFileInputStream(wxFile& file)
+{
+  m_file = &file;
+  m_file_destroy = FALSE;
+  m_i_streambuf->SetBufferIO(1024);
+}
+
+wxFileInputStream::wxFileInputStream(int fd)
+{
+  m_file = new wxFile(fd);
+  m_file_destroy = TRUE;
+  m_i_streambuf->SetBufferIO(1024);
+}
+
 wxFileInputStream::~wxFileInputStream()
 {
   if (m_file_destroy)
@@ -97,6 +111,13 @@ wxFileOutputStream::wxFileOutputStream()
   m_o_streambuf->SetBufferIO(1024);
   m_file_destroy = FALSE;
   m_file = NULL;
+}
+
+wxFileOutputStream::wxFileOutputStream(int fd)
+{
+  m_file = new wxFile(fd);
+  m_file_destroy = TRUE;
+  m_o_streambuf->SetBufferIO(1024);
 }
 
 wxFileOutputStream::~wxFileOutputStream()
