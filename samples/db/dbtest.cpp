@@ -1015,7 +1015,7 @@ void DatabaseDemoFrame::BuildParameterDialog(wxWindow *parent)
  *     will be committed or rolled back when any of the objects has this function call made.
  */
 Ccontact::Ccontact (wxDb *pwxDb) : wxDbTable(pwxDb ? pwxDb : wxDbGetConnection(wxGetApp().DbConnectInf),
-                                             CONTACT_TABLE_NAME, CONTACT_NO_COLS, wxEmptyString,
+                                             CONTACT_TABLE_NAME, CONTACT_NO_COLS, (const wxString &)wxEmptyString,
                                              !wxDB_QUERY_ONLY, wxGetApp().DbConnectInf->GetDefaultDir())
 {
     // This is used to represent whether the database connection should be released
@@ -1359,7 +1359,7 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& WXUNUSED(event))
         // Display the query dialog box
         wxChar qryWhere[DB_MAX_WHERE_CLAUSE_LEN+1];
         wxStrcpy(qryWhere, (const wxChar*) wxGetApp().Contact->qryWhereStr);
-        wxChar *tblName[] = {(wxChar *)CONTACT_TABLE_NAME, 0};
+        wxChar *tblName[] = {(wxChar *)CONTACT_TABLE_NAME.c_str(), 0};
         new CqueryDlg(GetParent(), wxGetApp().Contact->GetDb(), tblName, qryWhere);
 
         // Query the first record in the new record set and
@@ -1443,16 +1443,16 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& WXUNUSED(event))
 
     if (widgetName == pNameListBtn->GetName())
     {
-        new ClookUpDlg(/* wxWindow    *parent        */ this,
-                       /* wxChar      *windowTitle   */ wxT("Select contact name"),
-                       /* wxChar      *tableName     */ (wxChar *) CONTACT_TABLE_NAME,
-                       /* wxChar      *dispCol1      */ wxT("NAME"),
-                       /* wxChar      *dispCol2      */ wxT("JOINDATE"),
-                       /* wxChar      *where         */ wxT(""),
-                       /* wxChar      *orderBy       */ wxT("NAME"),
-                       /* wxDb        *pDb           */ wxGetApp().READONLY_DB,
-                       /* const wxString &defDir     */ wxGetApp().DbConnectInf->GetDefaultDir(),
-                       /* bool        distinctValues */ true);
+        new ClookUpDlg(/* wxWindow       *parent        */ this,
+                       /* const wxString &windowTitle   */ wxT("Select contact name"),
+                       /* const wxString &tableName     */ CONTACT_TABLE_NAME,
+                       /* const wxString &dispCol1      */ wxT("NAME"),
+                       /* const wxString &dispCol2      */ wxT("JOINDATE"),
+                       /* const wxString &where         */ wxT(""),
+                       /* const wxString &orderBy       */ wxT("NAME"),
+                       /* wxDb           *pDb           */ wxGetApp().READONLY_DB,
+                       /* const wxString &defDir        */ wxGetApp().DbConnectInf->GetDefaultDir(),
+                       /* bool            distinctValues*/ true);
 
         if (ListDB_Selection && wxStrlen(ListDB_Selection))
         {
@@ -1518,7 +1518,7 @@ bool CeditorDlg::Initialize()
 
     // Check if the table exists or not.  If it doesn't, ask the user if they want to
     // create the table.  Continue trying to create the table until it exists, or user aborts
-    while (!wxGetApp().Contact->GetDb()->TableExists((wxChar *)CONTACT_TABLE_NAME,
+    while (!wxGetApp().Contact->GetDb()->TableExists(CONTACT_TABLE_NAME,
                                           wxGetApp().DbConnectInf->GetUserID(),
                                           wxGetApp().DbConnectInf->GetDefaultDir()))
     {
@@ -2818,7 +2818,7 @@ void CqueryDlg::ProcessCountBtn()
 
     if (!dbTable)  // wxDbTable object needs to be created and opened
     {
-        dbTable = new wxDbTable(pDB, masterTableName, 0, wxEmptyString,
+        dbTable = new wxDbTable(pDB, masterTableName, 0, (const wxString &)wxEmptyString,
                                 !wxDB_QUERY_ONLY,
                                 wxGetApp().DbConnectInf->GetDefaultDir());
         if (!dbTable)

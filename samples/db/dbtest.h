@@ -40,7 +40,7 @@ enum    DialogModes {mView,mCreate,mEdit,mSearch};
 #endif
 
 // Name of the table to be created/opened
-const wxChar     CONTACT_TABLE_NAME[]       = wxT("contacts");
+const wxString     CONTACT_TABLE_NAME       = wxT("contacts");
 
 #define wxODBC_BLOB_SUPPORT
 
@@ -53,7 +53,7 @@ const wxChar     CONTACT_TABLE_NAME[]       = wxT("contacts");
     const int        CONTACT_NO_COLS        = 12;        // 0-11
 #endif
 
-const wxChar     PARAM_FILENAME[]           = wxT("dbtest.cfg");
+const wxString       PARAM_FILENAME         = wxT("dbtest.cfg");
 
 enum Language {langENGLISH, langFRENCH, langGERMAN, langSPANISH, langOTHER};
 
@@ -479,15 +479,15 @@ enum qryOp
 
 
 // Query strings
-wxChar * const langQRY_EQ           = wxT("column = column | value");
-wxChar * const langQRY_LT           = wxT("column < column | value");
-wxChar * const langQRY_GT           = wxT("column > column | value");
-wxChar * const langQRY_LE           = wxT("column <= column | value");
-wxChar * const langQRY_GE           = wxT("column >= column | value");
-wxChar * const langQRY_BEGINS       = wxT("columns that BEGIN with the string entered");
-wxChar * const langQRY_CONTAINS     = wxT("columns that CONTAIN the string entered");
-wxChar * const langQRY_LIKE         = wxT("% matches 0 or more of any char; _ matches 1 char");
-wxChar * const langQRY_BETWEEN      = wxT("column BETWEEN value AND value");
+wxString const & langQRY_EQ           = wxT("column = column | value");
+const wxString & langQRY_LT           = wxT("column < column | value");
+const wxString & langQRY_GT           = wxT("column > column | value");
+const wxString & langQRY_LE           = wxT("column <= column | value");
+const wxString & langQRY_GE           = wxT("column >= column | value");
+const wxString & langQRY_BEGINS       = wxT("columns that BEGIN with the string entered");
+const wxString & langQRY_CONTAINS     = wxT("columns that CONTAIN the string entered");
+const wxString & langQRY_LIKE         = wxT("% matches 0 or more of any char; _ matches 1 char");
+const wxString & langQRY_BETWEEN      = wxT("column BETWEEN value AND value");
 
 
 class CqueryDlg : public wxDialog
