@@ -79,7 +79,7 @@ public:
             wxCHECK_MSG(False, NULL,
                         wxT("wx.Cursor constructor not implemented for wxGTK, use wx.StockCursor, wx.CursorFromImage, or wx.CursorFromBits instead."));
 %#else
-            return new wxCursor(*cursorName, flags, hotSpotX, hotSpotY);
+            return new wxCursor(*cursorName, type, hotSpotX, hotSpotY);
 %#endif
         }
     }
