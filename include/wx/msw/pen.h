@@ -51,7 +51,6 @@ class WXDLLEXPORT wxPen: public wxGDIObject
 public:
   wxPen();
   wxPen(const wxColour& col, int width, int style);
-  wxPen(const wxString& col, int width, int style);
   wxPen(const wxBitmap& stipple, int width);
   inline wxPen(const wxPen& pen) { Ref(pen); }
   inline wxPen(const wxPen* pen) { if (pen) Ref(*pen); }
@@ -65,8 +64,7 @@ public:
 
   // Override in order to recreate the pen
   void SetColour(const wxColour& col) ;
-  void SetColour(const wxString& col)  ;
-  void SetColour(const unsigned char r, const unsigned char g, const unsigned char b)  ;
+  void SetColour(unsigned char r, unsigned char g, unsigned char b);
 
   void SetWidth(int width)  ;
   void SetStyle(int style)  ;
