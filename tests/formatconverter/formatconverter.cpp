@@ -35,11 +35,6 @@
 //  CPPUNIT_ASSERT(wxString::Format(_T("%hs"), "test") == _T("test"));
 //
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma implementation
-    #pragma interface
-#endif
-
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
@@ -95,7 +90,6 @@ class FormatConverterTestCase : public TestCase
 #endif
     CPPUNIT_TEST_SUITE_END();
 
-private:
     void format_d();
     void format_hd();
     void format_ld();
@@ -126,6 +120,12 @@ void FormatConverterTestCase::format_d()
     doTest(_T("d"), _T("d"));
 #endif
     CPPUNIT_ASSERT(wxString::Format(_T("%d"), 255) == _T("255"));
+    CPPUNIT_ASSERT(wxString::Format(_T("%05d"), 255) == _T("00255"));
+    CPPUNIT_ASSERT(wxString::Format(_T("% 5d"), 255) == _T("  255"));
+    CPPUNIT_ASSERT(wxString::Format(_T("% 5d"), -255) == _T(" -255"));
+    CPPUNIT_ASSERT(wxString::Format(_T("%-5d"), -255) == _T("-255 "));
+    CPPUNIT_ASSERT(wxString::Format(_T("%+5d"), 255) == _T(" +255"));
+    CPPUNIT_ASSERT(wxString::Format(_T("%*d"), 5, 255) == _T("  255"));
 }
 
 void FormatConverterTestCase::format_hd()
@@ -151,7 +151,11 @@ void FormatConverterTestCase::format_s()
 #ifdef CAN_TEST
     doTest(_T("s"), _T("ls"));
 #endif
-    CPPUNIT_ASSERT(wxString::Format(_T("%s"), _T("test")) == _T("test"));
+    CPPUNIT_ASSERT(wxString::Format(_T("%s!"), _T("test")) == _T("test!"));
+    CPPUNIT_ASSERT(wxString::Format(_T("%6s!"), _T("test")) == _T("  test!"));
+    CPPUNIT_ASSERT(wxString::Format(_T("%-6s!"), _T("test")) == _T("test  !"));
+    CPPUNIT_ASSERT(wxString::Format(_T("%.6s!"), _T("test")) == _T("test!"));
+    CPPUNIT_ASSERT(wxString::Format(_T("%6.4s!"), _T("testing")) == _T("  test!"));
 }
 
 void FormatConverterTestCase::format_hs()
@@ -159,7 +163,11 @@ void FormatConverterTestCase::format_hs()
 #ifdef CAN_TEST
     doTest(_T("hs"), _T("hs"));
 #endif
-    CPPUNIT_ASSERT(wxString::Format(_T("%hs"), "test") == _T("test"));
+    CPPUNIT_ASSERT(wxString::Format(wxString(_T("%hs!")), "test") == _T("test!"));
+    CPPUNIT_ASSERT(wxString::Format(wxString(_T("%6hs!")), "test") == _T("  test!"));
+    CPPUNIT_ASSERT(wxString::Format(wxString(_T("%-6hs!")), "test") == _T("test  !"));
+    CPPUNIT_ASSERT(wxString::Format(wxString(_T("%.6hs!")), "test") == _T("test!"));
+    CPPUNIT_ASSERT(wxString::Format(wxString(_T("%6.4hs!")), "testing") == _T("  test!"));
 }
 
 void FormatConverterTestCase::format_ls()
@@ -167,7 +175,11 @@ void FormatConverterTestCase::format_ls()
 #ifdef CAN_TEST
     doTest(_T("ls"), _T("ls"));
 #endif
-    CPPUNIT_ASSERT(wxString::Format(_T("%ls"), L"test") == _T("test"));
+    CPPUNIT_ASSERT(wxString::Format(_T("%ls!"), L"test") == _T("test!"));
+    CPPUNIT_ASSERT(wxString::Format(_T("%6ls!"), L"test") == _T("  test!"));
+    CPPUNIT_ASSERT(wxString::Format(_T("%-6ls!"), L"test") == _T("test  !"));
+    CPPUNIT_ASSERT(wxString::Format(_T("%.6ls!"), L"test") == _T("test!"));
+    CPPUNIT_ASSERT(wxString::Format(_T("%6.4ls!"), L"testing") == _T("  test!"));
 }
 
 void FormatConverterTestCase::format_c()
@@ -176,6 +188,8 @@ void FormatConverterTestCase::format_c()
     doTest(_T("c"), _T("lc"));
 #endif
     CPPUNIT_ASSERT(wxString::Format(_T("%c"), _T('x')) == _T("x"));
+    CPPUNIT_ASSERT(wxString::Format(_T("%2c"), _T('x')) == _T(" x"));
+    CPPUNIT_ASSERT(wxString::Format(_T("%-2c"), _T('x')) == _T("x "));
 }
 
 void FormatConverterTestCase::format_hc()
@@ -183,7 +197,9 @@ void FormatConverterTestCase::format_hc()
 #ifdef CAN_TEST
     doTest(_T("hc"), _T("hc"));
 #endif
-    CPPUNIT_ASSERT(wxString::Format(_T("%hc"), 'x') == _T("x"));
+    CPPUNIT_ASSERT(wxString::Format(wxString(_T("%hc")), 'x') == _T("x"));
+    CPPUNIT_ASSERT(wxString::Format(wxString(_T("%2hc")), 'x') == _T(" x"));
+    CPPUNIT_ASSERT(wxString::Format(wxString(_T("%-2hc")), 'x') == _T("x "));
 }
 
 void FormatConverterTestCase::format_lc()
@@ -192,6 +208,8 @@ void FormatConverterTestCase::format_lc()
     doTest(_T("lc"), _T("lc"));
 #endif
     CPPUNIT_ASSERT(wxString::Format(_T("%lc"), L'x') == _T("x"));
+    CPPUNIT_ASSERT(wxString::Format(_T("%2lc"), L'x') == _T(" x"));
+    CPPUNIT_ASSERT(wxString::Format(_T("%-2lc"), L'x') == _T("x "));
 }
 
 #ifdef CAN_TEST

@@ -59,7 +59,7 @@ III. Running the tests
 
 3. Run the test program with no arguments to run the default set of tests
    (which are all those registered with CPPUNIT_TEST_SUITE_REGISTRATION).
-   Or to list the tests without running them:
+   Or to list the test suites without running them:
       test -l
 
 4. Tests that have been registered under a name using
@@ -67,7 +67,7 @@ III. Running the tests
    example:
       test MBConvTestCase
    or to list the tests:
-      test -l MBConvTestCase
+      test -L MBConvTestCase
 
 
 IV. Notes
@@ -76,11 +76,26 @@ IV. Notes
 1. You can register your tests (or a subset of them) just under a name, and not
    in the unnamed registry if you don't want them to be executed by default.
 
-2. If you are going to register your tests both in the unnamed registry and
-   under a name, then use the name that the tests have in the 'test -l'
-   listing (which is often the name of the TestCase class). Then the top
-   level names in a 'test -l' listing can be a hint as to the name those
-   tests have been registered under.
+2. If you are going to register your tests both in the unnamed registry
+   and under a name, then use the name that the tests have in the 'test -l'
+   listing.
+
+3. Tests which fail can be temporarily registered under "fixme" while the
+   problems they expose are fixed, instead of the unnamed registry. That
+   way they can easily be run, but they do not make regression testing with
+   the default suite more difficult. E.g.:
+
+    // register in the unnamed registry so that these tests are run by default
+    //CPPUNIT_TEST_SUITE_REGISTRATION(wxRegExTestCase);
+    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(wxRegExTestCase, "fixme");
+
+    // also include in it's own registry so that these tests can be run alone
+    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(wxRegExTestCase, "wxRegExTestCase");
+
+4. Tests which take a long time to execute can be registered under "advanced"
+   instead of the unnamed registry. The default suite should execute reasonably
+   quickly. To run the default and advanced tests together:
+    test "" advanced
 
 
 === EOF ===

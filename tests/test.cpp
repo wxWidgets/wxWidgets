@@ -45,7 +45,7 @@ public:
     int  OnRun();
 
 private:
-    void List(Test *test, int depth = 0) const;
+    void List(Test *test, const string& parent = "") const;
 
     // command lines options/parameters
     bool m_list;
@@ -56,7 +56,8 @@ private:
 IMPLEMENT_APP_CONSOLE(TestApp)
 
 TestApp::TestApp()
-  : m_list(false)
+  : m_list(false),
+    m_longlist(false)
 {
 }
 
@@ -137,12 +138,25 @@ int TestApp::OnRun()
 
 // List the tests
 //
-void TestApp::List(Test *test, int depth /*=0*/) const
+void TestApp::List(Test *test, const string& parent /*=""*/) const
 {
     TestSuite *suite = dynamic_cast<TestSuite*>(test);
+    string name;
 
-    if (suite || m_longlist)
-        cout << string(depth * 2, ' ') << test->getName() << "\n";
+    if (suite || m_longlist) {
+        // take the last component of the name and append to the parent
+        name = test->getName();
+        string::size_type i = name.find_last_of(".:");
+        name = parent + "." + (i != string::npos ? name.substr(i + 1) : name);
+
+        // drop the 1st component from the display and indent
+        if (parent != "") {
+            string::size_type j = i = name.find('.', 1);
+            while ((j = name.find('.', j + 1)) != string::npos)
+                cout << "  ";
+            cout << "  " << name.substr(i + 1) << "\n";
+        }
+    }
 
     if (suite) {
         typedef const vector<Test*> Tests;
@@ -151,6 +165,6 @@ void TestApp::List(Test *test, int depth /*=0*/) const
         Tests& tests = suite->getTests();
 
         for (Iter it = tests.begin(); it != tests.end(); ++it)
-            List(*it, depth + 1);
+            List(*it, name);
     }
 }
