@@ -19,6 +19,10 @@
 // Default is 0
 //
 // Recommended setting: 0 unless you have legacy code which uses these classes
+#ifdef wxUSE_TIMEDATE
+#undef wxUSE_TIMEDATE
+#endif
+
 #define wxUSE_TIMEDATE 0
 
 // wxProperty[Value/Form/List] classes, used by Dialog Editor
@@ -31,6 +35,9 @@
 #define wxUSE_PROLOGIO          1
 
 // Use .wxr resource mechanism (requires PrologIO library)
+#ifdef wxUSE_WX_RESOURCES
+#undef wxUSE_WX_RESOURCES
+#endif
 #define wxUSE_WX_RESOURCES      1
 
 #endif
