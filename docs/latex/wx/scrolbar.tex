@@ -12,16 +12,6 @@ events are received.
 \helpref{wxEvtHandler}{wxevthandler}\\
 \helpref{wxObject}{wxobject}
 
-\wxheading{Window styles}
-
-\twocolwidtha{5cm}
-\begin{twocollist}\itemsep=0pt
-\twocolitem{\windowstyle{wxSB\_HORIZONTAL}}{Specifies a horizontal scrollbar.}
-\twocolitem{\windowstyle{wxSB\_VERTICAL}}{Specifies a vertical scrollbar.}
-\end{twocollist}
-
-See also \helpref{window styles overview}{windowstyles}.
-
 \wxheading{Remarks}
 
 A scrollbar has the following main attributes: {\it range}, {\it thumb size}, {\it page size}, and {\it position}.
@@ -45,6 +35,16 @@ be called initially, from an {\bf OnSize} event handler, and whenever the applic
 changes in size. It will adjust the view, object and page size according
 to the size of the window and the size of the data.
 
+\wxheading{Window styles}
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxSB\_HORIZONTAL}}{Specifies a horizontal scrollbar.}
+\twocolitem{\windowstyle{wxSB\_VERTICAL}}{Specifies a vertical scrollbar.}
+\end{twocollist}
+
+See also \helpref{window styles overview}{windowstyles}.
+
 \wxheading{Event handling}
 
 To process input from a scrollbar, use one of these event handler macros to direct input to member
@@ -61,7 +61,7 @@ functions that take a \helpref{wxScrollEvent}{wxscrollevent} argument:
 \twocolitem{{\bf EVT\_COMMAND\_PAGEDOWN(id, func)}}{Catch a page down command.}
 \twocolitem{{\bf EVT\_COMMAND\_THUMBTRACK(id, func)}}{Catch a thumbtrack command (continuous movement of the scroll thumb).}
 \end{twocollist}%
-%
+
 \wxheading{See also}
 
 \helpref{Scrolling overview}{scrollingoverview},\rtfsp

@@ -89,17 +89,49 @@ void wxOGLInitialize()
 
 void wxOGLCleanUp()
 {
-  if (GraphicsBuffer)
-  {
-    delete[] GraphicsBuffer;
+    if (GraphicsBuffer)
+    {
+        delete[] GraphicsBuffer;
+        GraphicsBuffer = NULL;
+    }
     GraphicsBuffer = NULL;
-  }
-  GraphicsBuffer = NULL;
-  if (oglPopupDivisionMenu)
-  {
-    delete oglPopupDivisionMenu;
-    oglPopupDivisionMenu = NULL;
-  }
+    if (oglPopupDivisionMenu)
+    {
+        delete oglPopupDivisionMenu;
+        oglPopupDivisionMenu = NULL;
+    }
+    if (g_oglNormalFont)
+    {
+        delete g_oglNormalFont;
+        g_oglNormalFont = NULL;
+    }
+    if (black_pen)
+    {
+        delete black_pen;
+        black_pen = NULL;
+    }
+    if (white_background_pen)
+    {
+        delete white_background_pen;
+        white_background_pen = NULL;
+    }
+    if (transparent_pen)
+    {
+        delete transparent_pen;
+        transparent_pen = NULL;
+    }
+    if (white_background_brush)
+    {
+        delete white_background_brush;
+        white_background_brush = NULL;
+    }
+    if (black_foreground_pen)
+    {
+        delete black_foreground_pen;
+        black_foreground_pen = NULL;
+    }
+
+    OGLCleanUpConstraintTypes();
 }
 
 wxFont *MatchFont(int point_size)

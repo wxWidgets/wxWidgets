@@ -843,6 +843,7 @@ enum {
 #define wxID_APPLY              5102
 #define wxID_YES                5103
 #define wxID_NO                 5104
+#define wxID_STATIC             5105
 
 #ifdef __WXMSW__
 // Stand-ins for Windows types, to avoid

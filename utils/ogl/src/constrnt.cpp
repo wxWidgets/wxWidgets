@@ -32,7 +32,7 @@
 #include "constrnt.h"
 #include "canvas.h"
 
-wxList OGLConstraintTypes(wxKEY_INTEGER);
+wxList *OGLConstraintTypes = NULL;
 
 /*
  * Constraint type
@@ -54,52 +54,73 @@ OGLConstraintType::~OGLConstraintType()
 
 void OGLInitializeConstraintTypes()
 {
-  OGLConstraintTypes.Append(gyCONSTRAINT_CENTRED_VERTICALLY,
-    new OGLConstraintType(gyCONSTRAINT_CENTRED_VERTICALLY, "Centre vertically", "centred vertically w.r.t."));
+    if (!OGLConstraintTypes)
+        return;
 
-  OGLConstraintTypes.Append(gyCONSTRAINT_CENTRED_HORIZONTALLY,
-    new OGLConstraintType(gyCONSTRAINT_CENTRED_HORIZONTALLY, "Centre horizontally", "centred horizontally w.r.t."));
+    OGLConstraintTypes = new wxList(wxKEY_INTEGER);
 
-  OGLConstraintTypes.Append(gyCONSTRAINT_CENTRED_BOTH,
-    new OGLConstraintType(gyCONSTRAINT_CENTRED_BOTH, "Centre", "centred w.r.t."));
+    OGLConstraintTypes->Append(gyCONSTRAINT_CENTRED_VERTICALLY,
+        new OGLConstraintType(gyCONSTRAINT_CENTRED_VERTICALLY, "Centre vertically", "centred vertically w.r.t."));
 
-  OGLConstraintTypes.Append(gyCONSTRAINT_LEFT_OF,
-    new OGLConstraintType(gyCONSTRAINT_LEFT_OF, "Left of", "left of"));
+    OGLConstraintTypes->Append(gyCONSTRAINT_CENTRED_HORIZONTALLY,
+        new OGLConstraintType(gyCONSTRAINT_CENTRED_HORIZONTALLY, "Centre horizontally", "centred horizontally w.r.t."));
 
-  OGLConstraintTypes.Append(gyCONSTRAINT_RIGHT_OF,
-    new OGLConstraintType(gyCONSTRAINT_RIGHT_OF, "Right of", "right of"));
+    OGLConstraintTypes->Append(gyCONSTRAINT_CENTRED_BOTH,
+        new OGLConstraintType(gyCONSTRAINT_CENTRED_BOTH, "Centre", "centred w.r.t."));
 
-  OGLConstraintTypes.Append(gyCONSTRAINT_ABOVE,
-   new OGLConstraintType(gyCONSTRAINT_ABOVE, "Above", "above"));
+    OGLConstraintTypes->Append(gyCONSTRAINT_LEFT_OF,
+        new OGLConstraintType(gyCONSTRAINT_LEFT_OF, "Left of", "left of"));
 
-  OGLConstraintTypes.Append(gyCONSTRAINT_BELOW,
-    new OGLConstraintType(gyCONSTRAINT_BELOW, "Below", "below"));
+    OGLConstraintTypes->Append(gyCONSTRAINT_RIGHT_OF,
+        new OGLConstraintType(gyCONSTRAINT_RIGHT_OF, "Right of", "right of"));
 
-  // Alignment
-  OGLConstraintTypes.Append(gyCONSTRAINT_ALIGNED_TOP,
-    new OGLConstraintType(gyCONSTRAINT_ALIGNED_TOP, "Top-aligned", "aligned to the top of"));
+    OGLConstraintTypes->Append(gyCONSTRAINT_ABOVE,
+        new OGLConstraintType(gyCONSTRAINT_ABOVE, "Above", "above"));
 
-  OGLConstraintTypes.Append(gyCONSTRAINT_ALIGNED_BOTTOM,
-    new OGLConstraintType(gyCONSTRAINT_ALIGNED_BOTTOM, "Bottom-aligned", "aligned to the bottom of"));
+    OGLConstraintTypes->Append(gyCONSTRAINT_BELOW,
+        new OGLConstraintType(gyCONSTRAINT_BELOW, "Below", "below"));
 
-  OGLConstraintTypes.Append(gyCONSTRAINT_ALIGNED_LEFT,
-    new OGLConstraintType(gyCONSTRAINT_ALIGNED_LEFT, "Left-aligned", "aligned to the left of"));
+    // Alignment
+    OGLConstraintTypes->Append(gyCONSTRAINT_ALIGNED_TOP,
+        new OGLConstraintType(gyCONSTRAINT_ALIGNED_TOP, "Top-aligned", "aligned to the top of"));
 
-  OGLConstraintTypes.Append(gyCONSTRAINT_ALIGNED_RIGHT,
-    new OGLConstraintType(gyCONSTRAINT_ALIGNED_RIGHT, "Right-aligned", "aligned to the right of"));
+    OGLConstraintTypes->Append(gyCONSTRAINT_ALIGNED_BOTTOM,
+        new OGLConstraintType(gyCONSTRAINT_ALIGNED_BOTTOM, "Bottom-aligned", "aligned to the bottom of"));
 
-  // Mid-alignment
-  OGLConstraintTypes.Append(gyCONSTRAINT_MIDALIGNED_TOP,
-    new OGLConstraintType(gyCONSTRAINT_MIDALIGNED_TOP, "Top-midaligned", "centred on the top of"));
+    OGLConstraintTypes->Append(gyCONSTRAINT_ALIGNED_LEFT,
+        new OGLConstraintType(gyCONSTRAINT_ALIGNED_LEFT, "Left-aligned", "aligned to the left of"));
 
-  OGLConstraintTypes.Append(gyCONSTRAINT_MIDALIGNED_BOTTOM,
-    new OGLConstraintType(gyCONSTRAINT_MIDALIGNED_BOTTOM, "Bottom-midaligned", "centred on the bottom of"));
+    OGLConstraintTypes->Append(gyCONSTRAINT_ALIGNED_RIGHT,
+        new OGLConstraintType(gyCONSTRAINT_ALIGNED_RIGHT, "Right-aligned", "aligned to the right of"));
 
-  OGLConstraintTypes.Append(gyCONSTRAINT_MIDALIGNED_LEFT,
-    new OGLConstraintType(gyCONSTRAINT_MIDALIGNED_LEFT, "Left-midaligned", "centred on the left of"));
+    // Mid-alignment
+    OGLConstraintTypes->Append(gyCONSTRAINT_MIDALIGNED_TOP,
+        new OGLConstraintType(gyCONSTRAINT_MIDALIGNED_TOP, "Top-midaligned", "centred on the top of"));
 
-  OGLConstraintTypes.Append(gyCONSTRAINT_MIDALIGNED_RIGHT,
-    new OGLConstraintType(gyCONSTRAINT_MIDALIGNED_RIGHT, "Right-midaligned", "centred on the right of"));
+    OGLConstraintTypes->Append(gyCONSTRAINT_MIDALIGNED_BOTTOM,
+        new OGLConstraintType(gyCONSTRAINT_MIDALIGNED_BOTTOM, "Bottom-midaligned", "centred on the bottom of"));
+
+    OGLConstraintTypes->Append(gyCONSTRAINT_MIDALIGNED_LEFT,
+        new OGLConstraintType(gyCONSTRAINT_MIDALIGNED_LEFT, "Left-midaligned", "centred on the left of"));
+
+    OGLConstraintTypes->Append(gyCONSTRAINT_MIDALIGNED_RIGHT,
+        new OGLConstraintType(gyCONSTRAINT_MIDALIGNED_RIGHT, "Right-midaligned", "centred on the right of"));
+}
+
+void OGLCleanUpConstraintTypes()
+{
+    if (!OGLConstraintTypes)
+        return;
+
+    wxNode* node = OGLConstraintTypes->First();
+    while (node)
+    {
+        OGLConstraintType* ct = (OGLConstraintType*) node->Data();
+        delete ct;
+        node = node->Next();
+    }
+    delete OGLConstraintTypes;
+    OGLConstraintTypes = NULL;
 }
 
 /*

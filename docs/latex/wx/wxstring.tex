@@ -431,7 +431,19 @@ The same as MakeUpper.
 \func{wxString\&}{operator $=$}{\param{const wchar\_t*}{ pwz}}
 
 Assignment.
- 
+
+\membersection{operator wxString::$+$}\label{wxstringoperatorplus}
+
+Concatenation.
+
+\func{wxString}{operator $+$}{\param{const wxString\&}{ x}, \param{const wxString\&}{ y}}
+
+\func{wxString}{operator $+$}{\param{const wxString\&}{ x}, \param{const char*}{ y}}
+
+\func{wxString}{operator $+$}{\param{const wxString\&}{ x}, \param{char}{ y}}
+
+\func{wxString}{operator $+$}{\param{const char*}{ x}, \param{const wxString\&}{ y}}
+
 \membersection{wxString::operator $+=$}\label{wxstringPlusEqual}
 
 \func{void}{operator $+=$}{\param{const wxString\&}{ str}}
@@ -509,15 +521,5 @@ Implicit conversion to a C string.
 \wxheading{Remarks}
 
 These comparisons are case-sensitive.
-
-\membersection{operator $+$}\label{wxstringoperatorplus}
-
-\func{wxString}{operator $+$}{\param{const wxString\&}{ x}, \param{const wxString\&}{ y}}
-
-\func{wxString}{operator $+$}{\param{const wxString\&}{ x}, \param{const char*}{ y}}
-
-\func{wxString}{operator $+$}{\param{const wxString\&}{ x}, \param{char}{ y}}
-
-\func{wxString}{operator $+$}{\param{const char*}{ x}, \param{const wxString\&}{ y}}
 
 

@@ -26,9 +26,20 @@ displaying the current selection.}
 
 See also \helpref{window styles overview}{windowstyles}.
 
+\wxheading{Event handling}
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_COMBOBOX(id, func)}}{Process a wxEVT\_COMMAND\_COMBOBOX\_SELECTED event,
+when an item on the list is selected.}
+\twocolitem{{\bf EVT\_TEXT(id, func)}}{Process a wxEVT\_COMMAND\_TEXT\_UPDATED event,
+when the combobox text changes.}
+\end{twocollist}
+
 \wxheading{See also}
 
-\helpref{wxListBox}{wxlistbox}, \helpref{wxTextCtrl}{wxtextctrl}, \helpref{wxChoice}{wxchoice}
+\helpref{wxListBox}{wxlistbox}, \helpref{wxTextCtrl}{wxtextctrl}, \helpref{wxChoice}{wxchoice},
+\rtfsp\helpref{wxCommandEvent}{wxcommandevent}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 

@@ -344,8 +344,11 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
       return win->GetParent()->GetEventHandler()->ProcessEvent(event);
   }
 
-  // Last try - application object
-  if (wxTheApp && this != wxTheApp && wxTheApp->ProcessEvent(event))
+  // Last try - application object.
+  // Special case: don't pass wxEVT_IDLE to wxApp, since it'll always swallow it.
+  // wxEVT_IDLE is sent explicitly to wxApp so it will be processed appropriately
+  // via SearchEventTable.
+  if (wxTheApp && this != wxTheApp && (event.GetEventType() != wxEVT_IDLE) && wxTheApp->ProcessEvent(event))
     return TRUE;
   else
     return FALSE;

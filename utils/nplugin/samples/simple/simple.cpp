@@ -32,7 +32,7 @@
 // Define a new application type
 class MyApp: public wxPluginApp
 { public:
-    virtual wxFrame *OnInit(void);
+    virtual bool OnInit(void);
     virtual wxPluginFrame* OnNewInstance(const wxPluginData& data);
 };
 
@@ -70,9 +70,9 @@ IMPLEMENT_APP(MyApp)
 
 // No app initialisation necessary, and for a plugin there is no
 // top frame.
-wxFrame *MyApp::OnInit(void)
+bool MyApp::OnInit(void)
 {
-    return NULL;
+    return TRUE;
 }
 
 // Called whenever a new plugin instance is called. We could check

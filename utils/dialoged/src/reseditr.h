@@ -220,6 +220,18 @@ public:
 
    char *FindBitmapFilenameForResource(wxItemResource *resource);
 
+   // Is this window identifier in use?
+   bool IsSymbolUsed(wxItemResource* thisResource, wxWindowID id) ;
+
+   // Is this window identifier compatible with the given name? (i.e.
+   // does it already exist under a different name)
+   bool IsIdentifierOK(const wxString& name, wxWindowID id);
+
+   // Change all integer ids that match oldId, to newId.
+   // This is necessary if an id is changed for one resource - all resources
+   // must be changed.
+   void ChangeIds(int oldId, int newId);
+
    // Deletes 'win' and creates a new window from the resource that
    // was associated with it. E.g. if you can't change properties on the
    // fly, you'll need to delete the window and create it again.
@@ -275,6 +287,11 @@ public:
    inline wxRect& GetPropertyWindowSize() { return m_propertyWindowSize; }
    inline wxRect& GetResourceEditorWindowSize() { return m_resourceEditorWindowSize; }
 
+   wxResourceSymbolTable& GetSymbolTable() { return m_symbolTable; }
+
+   // Generate a window id and a first stab at a name
+   int GenerateWindowId(const wxString& prefix, wxString& idName) ;
+
 // Member variables
  protected:
    wxHelpController*                m_helpController;
@@ -286,6 +303,7 @@ public:
    wxResourceEditorControlList*     m_editorControlList;
    EditorToolBar*                   m_editorToolBar;
    int                              m_nameCounter;
+   int                              m_symbolIdCounter; // For generating window ids
    bool                             m_modified;
    wxHashTable                      m_resourceAssociations;
    wxList                           m_selections;

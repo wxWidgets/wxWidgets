@@ -367,7 +367,7 @@ class wxResourceSymbolDialog: public wxDialog
 public:
     wxResourceSymbolDialog(wxWindow* parent, const wxWindowID id, const wxString& title,
         const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE);
+        const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL);
 
     void Init();
 
@@ -379,6 +379,8 @@ public:
 
     bool CheckValues();
     void OnOK(wxCommandEvent& event);
+    void OnComboBoxSelect(wxCommandEvent& event);
+    void OnSymbolNameUpdate(wxCommandEvent& event);
 
 protected:
     wxString        m_symbolName;

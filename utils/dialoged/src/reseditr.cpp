@@ -93,6 +93,7 @@ wxResourceManager::wxResourceManager():
   m_editorResourceTree = NULL;
   m_editorControlList = NULL;
   m_nameCounter = 1;
+  m_symbolIdCounter = 99;
   m_modified = FALSE;
   m_currentFilename = "";
   m_symbolFilename = "";
@@ -177,6 +178,8 @@ bool wxResourceManager::Initialize()
   m_imageList.Add(icon3);
   m_imageList.Add(icon4);
 #endif
+
+  m_symbolTable.AddStandardSymbols();
 
   return TRUE;
 }
@@ -363,6 +366,8 @@ bool wxResourceManager::New(bool loadFromFile, const wxString& filename)
   if (!Clear(TRUE, FALSE))
     return FALSE;
     
+  m_symbolTable.AddStandardSymbols();
+
   if (loadFromFile)
   {
     wxString str = filename;
@@ -389,46 +394,7 @@ bool wxResourceManager::New(bool loadFromFile, const wxString& filename)
     // Construct include filename from this file
     m_symbolFilename = m_currentFilename;
 
-	if (m_symbolFilename[0] == 'c')
-	{
-	}
-
-	wxString stringA("123456.45");
-	wxString stringB("");
-	stringB = str;
-
-	size_t i = 0;
-	char c = stringB[i];
-#if 0
-	size_t len = stringB.Length();
-	size_t i = len-1;
-	while (i > 0)
-	{
-		//    if (buffer.GetChar(i) == '.')
-		if (stringB[i] == '.')
-		{
-			stringB = stringB.Left(i);
-			break;
-		}
-		i --;
-	}
-#endif
-
-#if 0	
-	size_t len = m_symbolFilename.Length();
-	size_t i = len-1;
-	while (i > 0)
-	{
-		//    if (buffer.GetChar(i) == '.')
-		if (m_symbolFilename[i] == '.')
-		{
-			m_symbolFilename = m_symbolFilename.Left(i);
-			break;
-		}
-		i --;
-	}
-#endif
-//    wxStripExtension(m_symbolFilename);
+    wxStripExtension(m_symbolFilename);
     m_symbolFilename += ".h";
 
     if (!m_symbolTable.ReadIncludeFile(m_symbolFilename))
@@ -436,6 +402,13 @@ bool wxResourceManager::New(bool loadFromFile, const wxString& filename)
         wxString str("Could not find include file ");
         str += m_symbolFilename;
         wxMessageBox(str, "Dialog Editor Warning", MB_OK);
+
+        m_symbolIdCounter = 99;
+    }
+    else
+    {
+        // Set the id counter to the last known id
+        m_symbolIdCounter = m_symbolTable.FindHighestId();
     }
   }
   else
@@ -919,6 +892,14 @@ bool wxResourceManager::CreateNewPanel()
   resource->SetType("wxPanel");
   resource->SetName(buf);
   resource->SetTitle(buf);
+
+  wxString newIdName;
+  int id = GenerateWindowId("ID_DIALOG", newIdName);
+  resource->SetId(id);
+
+  // This is now guaranteed to be unique, so just add to symbol table
+  m_symbolTable.AddSymbol(newIdName, id);
+
   m_resourceTable.AddResource(resource);
 
   wxPanel *panel = new wxPanel(m_editorPanel, -1,
@@ -963,11 +944,14 @@ bool wxResourceManager::CreatePanelItem(wxItemResource *panelResource, wxPanel *
   wxControl *newItem = NULL;
   res->SetSize(x, y, -1, -1);
   res->SetType(iType);
+
+  wxString prefix;
   
   wxString itemType(iType);
 
   if (itemType == "wxButton")
     {
+      prefix = "ID_BUTTON";
       MakeUniqueName("button", buf);
       res->SetName(buf);
       if (isBitmap)
@@ -977,12 +961,14 @@ bool wxResourceManager::CreatePanelItem(wxItemResource *panelResource, wxPanel *
     }
   if (itemType == "wxBitmapButton")
     {
+      prefix = "ID_BITMAPBUTTON";
       MakeUniqueName("button", buf);
       res->SetName(buf);
       newItem = new wxBitmapButton(panel, -1, m_bitmapImage, wxPoint(x, y), wxSize(-1, -1), 0, wxDefaultValidator, buf);
     }
   else if (itemType == "wxMessage" || itemType == "wxStaticText")
     {
+      prefix = "ID_STATIC";
       MakeUniqueName("message", buf);
       res->SetName(buf);
       if (isBitmap)
@@ -992,24 +978,28 @@ bool wxResourceManager::CreatePanelItem(wxItemResource *panelResource, wxPanel *
     }
   else if (itemType == "wxStaticBitmap")
     {
+      prefix = "ID_STATICBITMAP";
       MakeUniqueName("message", buf);
       res->SetName(buf);
       newItem = new wxStaticBitmap(panel, -1, m_bitmapImage, wxPoint(x, y), wxSize(-1, -1), 0, buf);
     }
   else if (itemType == "wxCheckBox")
     {
+      prefix = "ID_CHECKBOX";
       MakeUniqueName("checkbox", buf);
       res->SetName(buf);
       newItem = new wxCheckBox(panel, -1, "Checkbox", wxPoint(x, y), wxSize(-1, -1), 0, wxDefaultValidator, buf);
     }
   else if (itemType == "wxListBox")
     {
+      prefix = "ID_LISTBIX";
       MakeUniqueName("listbox", buf);
       res->SetName(buf);
       newItem = new wxListBox(panel, -1, wxPoint(x, y), wxSize(-1, -1), 0, NULL, 0, wxDefaultValidator, buf);
     }
   else if (itemType == "wxRadioBox")
     {
+      prefix = "ID_RADIOBOX";
       MakeUniqueName("radiobox", buf);
       res->SetName(buf);
       wxString names[] = { "One", "Two" };
@@ -1019,6 +1009,7 @@ bool wxResourceManager::CreatePanelItem(wxItemResource *panelResource, wxPanel *
     }
   else if (itemType == "wxRadioButton")
     {
+      prefix = "ID_RADIOBUTTON";
       MakeUniqueName("radiobutton", buf);
       res->SetName(buf);
       wxString names[] = { "One", "Two" };
@@ -1027,30 +1018,35 @@ bool wxResourceManager::CreatePanelItem(wxItemResource *panelResource, wxPanel *
     }
   else if (itemType == "wxChoice")
     {
+      prefix = "ID_CHOICE";
       MakeUniqueName("choice", buf);
       res->SetName(buf);
       newItem = new wxChoice(panel, -1, wxPoint(x, y), wxSize(-1, -1), 0, NULL, 0, wxDefaultValidator, buf);
     }
   else if (itemType == "wxGroupBox" || itemType == "wxStaticBox")
     {
+      prefix = "ID_STATICBOX";
       MakeUniqueName("group", buf);
       res->SetName(buf);
       newItem = new wxStaticBox(panel, -1, "Groupbox", wxPoint(x, y), wxSize(200, 200), 0, buf);
     }
   else if (itemType == "wxGauge")
     {
+      prefix = "ID_GAUGE";
       MakeUniqueName("gauge", buf);
       res->SetName(buf);
       newItem = new wxGauge(panel, -1, 10, wxPoint(x, y), wxSize(80, 30), wxHORIZONTAL, wxDefaultValidator, buf);
     }
   else if (itemType == "wxSlider")
     {
+      prefix = "ID_SLIDER";
       MakeUniqueName("slider", buf);
       res->SetName(buf);
       newItem = new wxSlider(panel, -1, 1, 1, 10, wxPoint(x, y), wxSize(120, -1), wxHORIZONTAL, wxDefaultValidator, buf);
     }
   else if (itemType == "wxText" || itemType == "wxTextCtrl (single-line)")
     {
+      prefix = "ID_TEXTCTRL";
       MakeUniqueName("textctrl", buf);
       res->SetName(buf);
       res->SetType("wxTextCtrl");
@@ -1058,6 +1054,7 @@ bool wxResourceManager::CreatePanelItem(wxItemResource *panelResource, wxPanel *
     }
   else if (itemType == "wxMultiText" || itemType == "wxTextCtrl (multi-line)")
     {
+      prefix = "ID_TEXTCTRL";
       MakeUniqueName("textctrl", buf);
       res->SetName(buf);
       res->SetType("wxTextCtrl");
@@ -1065,12 +1062,20 @@ bool wxResourceManager::CreatePanelItem(wxItemResource *panelResource, wxPanel *
     }
   else if (itemType == "wxScrollBar")
     {
+      prefix = "ID_SCROLLBAR";
       MakeUniqueName("scrollbar", buf);
       res->SetName(buf);
       newItem = new wxScrollBar(panel, -1, wxPoint(x, y), wxSize(140, -1), wxHORIZONTAL, wxDefaultValidator, buf);
     }
   if (!newItem)
     return FALSE;
+
+  wxString newIdName;
+  int id = GenerateWindowId(prefix, newIdName);
+  res->SetId(id);
+
+  // This is now guaranteed to be unique, so just add to symbol table
+  m_symbolTable.AddSymbol(newIdName, id);
 
   newItem->PushEventHandler(new wxResourceEditorControlHandler(newItem, newItem));
 
@@ -1350,6 +1355,12 @@ bool wxResourceManager::DeleteResource(wxItemResource *res)
     PossiblyDeleteBitmapResource(res->GetValue4());
   }
 
+  // Remove symbol from table if appropriate
+  if (!IsSymbolUsed(res, res->GetId()))
+  {
+    m_symbolTable.RemoveSymbol(res->GetId());
+  }
+
   m_resourceTable.Delete(res->GetName());
   delete res;
   Modify(TRUE);
@@ -1497,6 +1508,78 @@ wxItemResource *wxResourceManager::FindBitmapResourceByFilename(char *filename)
     }
   }
   return NULL;
+}
+
+// Is this window identifier symbol in use?
+// Let's assume that we can't have 2 names for the same integer id.
+// Therefore we can tell by the integer id whether the symbol is
+// in use.
+bool wxResourceManager::IsSymbolUsed(wxItemResource* thisResource, wxWindowID id)
+{
+  m_resourceTable.BeginFind();
+  wxNode *node;
+  while (node = m_resourceTable.Next())
+  {
+    wxItemResource *res = (wxItemResource *)node->Data();
+    if ((res != thisResource) && (res->GetId() == id))
+        return TRUE;
+
+    wxString resType(res->GetType());
+    if (resType == "wxDialog" || resType == "wxDialogBox" || resType == "wxPanel")
+    {
+      wxNode *node1 = res->GetChildren().First();
+      while (node1)
+      {
+        wxItemResource *child = (wxItemResource *)node1->Data();
+        if ((child != thisResource) && (child->GetId() == id))
+          return TRUE;
+        node1 = node1->Next();
+      }
+    }
+  }
+  return FALSE;
+}
+
+// Is this window identifier compatible with the given name? (i.e.
+// does it already exist under a different name)
+bool wxResourceManager::IsIdentifierOK(const wxString& name, wxWindowID id)
+{
+    if (m_symbolTable.SymbolExists(name))
+    {
+        int foundId = m_symbolTable.GetIdForSymbol(name);
+        if (foundId != id)
+            return FALSE;
+    }
+    return TRUE;
+}
+
+// Change all integer ids that match oldId, to newId.
+// This is necessary if an id is changed for one resource - all resources
+// must be changed.
+void wxResourceManager::ChangeIds(int oldId, int newId)
+{
+  m_resourceTable.BeginFind();
+  wxNode *node;
+  while (node = m_resourceTable.Next())
+  {
+    wxItemResource *res = (wxItemResource *)node->Data();
+    if (res->GetId() == oldId)
+        res->SetId(newId);
+
+    wxString resType(res->GetType());
+    if (resType == "wxDialog" || resType == "wxDialogBox" || resType == "wxPanel")
+    {
+      wxNode *node1 = res->GetChildren().First();
+      while (node1)
+      {
+        wxItemResource *child = (wxItemResource *)node1->Data();
+        if (child->GetId() == oldId)
+            child->SetId(newId);
+
+        node1 = node1->Next();
+      }
+    }
+  }
 }
 
  // Deletes 'win' and creates a new window from the resource that
@@ -1733,6 +1816,29 @@ void wxResourceManager::EditWindow(wxWindow *win)
         str += "properties";
     info->Edit(NULL, str);
   }
+}
+
+// Generate a window id and a first stab at a name
+int wxResourceManager::GenerateWindowId(const wxString& prefix, wxString& idName)
+{
+    m_symbolIdCounter ++;
+    while (m_symbolTable.IdExists(m_symbolIdCounter))
+        m_symbolIdCounter ++;
+
+    int nameId = m_symbolIdCounter;
+
+    wxString str;
+    str.Printf("%d", nameId);
+    idName = prefix + str;
+
+    while (m_symbolTable.SymbolExists(idName))
+    {
+        nameId ++;
+        str.Printf("%d", nameId);
+        idName = prefix + str;
+    }
+
+    return m_symbolIdCounter;
 }
 
 

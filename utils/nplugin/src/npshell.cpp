@@ -42,12 +42,16 @@ typedef struct _PluginInstance
 NPError NPP_Initialize(void)
 {
 //    MessageBox(NULL, "NPP_Initialize", "NPTest", MB_OK);
-
+/*
     wxPluginApp *app = wxGetPluginApp();
     if ( app )
         return app->NPP_Initialize();
     else
         return NPERR_NO_ERROR;
+*/
+    wxEntry((WXHINSTANCE) GetModuleHandle(NULL));
+
+    return NPERR_NO_ERROR;
 }
 
 

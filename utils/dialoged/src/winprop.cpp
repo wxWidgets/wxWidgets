@@ -292,8 +292,20 @@ wxProperty *wxWindowPropertyInfo::GetProperty(wxString& name)
   }
   else if (name == "id")
   {
-    wxString symbolName("TODO");
-    return new wxProperty("id", symbolName, "window_id");
+    wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(propertyWindow);
+    if (resource)
+    {
+        int id = resource->GetId();
+        wxString idStr;
+        idStr.Printf("%d", id);
+        wxString symbolName = wxResourceManager::GetCurrentResourceManager()->GetSymbolTable().GetSymbolForId(id);
+        symbolName += "=";
+        symbolName += idStr;
+        // symbolName is now e.g. "ID_PANEL21=105"
+        return new wxProperty("id", symbolName, "window_id");
+    }
+    else
+        return NULL;
   }
   else
     return NULL;
@@ -389,8 +401,77 @@ bool wxWindowPropertyInfo::SetProperty(wxString& name, wxProperty *property)
   }
   else if (name == "id")
   {
-    // TODO
-    return TRUE;
+    wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(propertyWindow);
+    if (resource)
+    {
+        wxString value = property->GetValue().StringValue();
+
+        wxString strName = value.Before('=');
+        wxString strId = value.After('=');
+        int id = atoi(strId);
+
+        wxString oldSymbolName = wxResourceManager::GetCurrentResourceManager()->GetSymbolTable().GetSymbolForId(resource->GetId());
+        int oldSymbolId = resource->GetId();
+
+        if (strName != "")
+        {
+            // If we change the id for an existing symbol, we need to:
+            // 1) Check if there are any other resources currently using the original id.
+            //    If so, will need to change their id to the new id.
+            // 2) Remove the old symbol, add the new symbol.
+            // In this check, we don't have to do this, but we need to do it in SetProperty.
+
+            if (strName == oldSymbolName && id != oldSymbolId)
+            {
+                wxASSERT( (!wxResourceManager::GetCurrentResourceManager()->GetSymbolTable().IsStandardSymbol(oldSymbolName)) );
+
+                // It's OK to change just the id. But we'll need to change all matching ids in all resources,
+                // because ids are unique and changing one resource's id must change all identical ones.
+                wxResourceManager::GetCurrentResourceManager()->ChangeIds(oldSymbolId, id);
+
+                wxResourceManager::GetCurrentResourceManager()->GetSymbolTable().RemoveSymbol(oldSymbolName);
+                wxResourceManager::GetCurrentResourceManager()->GetSymbolTable().AddSymbol(strName, id);
+            }
+
+            // If we change the name but not the id, we'll just need to remove and
+            // re-add the symbol/id pair.
+            if (strName != oldSymbolName && id == oldSymbolId)
+            {
+                wxASSERT( (!wxResourceManager::GetCurrentResourceManager()->GetSymbolTable().IsStandardSymbol(oldSymbolName)) );
+
+                wxResourceManager::GetCurrentResourceManager()->GetSymbolTable().RemoveSymbol(oldSymbolName);
+
+                if (!wxResourceManager::GetCurrentResourceManager()->GetSymbolTable().SymbolExists(strName))
+                {
+                    wxResourceManager::GetCurrentResourceManager()->GetSymbolTable().AddSymbol(strName, id);
+                }
+            }
+
+            // What if we're changing both the name and the id?
+            // - if there's no symbol of that name, just remove the old, add the new (in SetProperty)
+            // - if there is a symbol of that name, if id matches, do nothing. If not, veto.
+
+            if (strName != oldSymbolName && id != oldSymbolId)
+            {
+                // Remove old symbol if it's not being used
+                if (!wxResourceManager::GetCurrentResourceManager()->IsSymbolUsed(resource, oldSymbolId) &&
+                    !wxResourceManager::GetCurrentResourceManager()->GetSymbolTable().IsStandardSymbol(oldSymbolName))
+                {
+                    wxResourceManager::GetCurrentResourceManager()->GetSymbolTable().RemoveSymbol(oldSymbolName);
+                }
+
+                if (!wxResourceManager::GetCurrentResourceManager()->GetSymbolTable().SymbolExists(strName))
+                {
+                    wxResourceManager::GetCurrentResourceManager()->GetSymbolTable().AddSymbol(strName, id);
+                }
+            }
+            resource->SetId(id);
+        }
+
+        return TRUE;
+    }
+    else
+        return FALSE;
   }
   else
     return FALSE;
@@ -1778,21 +1859,26 @@ void wxResourceSymbolValidator::OnEdit(wxProperty *property, wxPropertyListView 
 
   wxResourceSymbolDialog* dialog = new wxResourceSymbolDialog(parentWindow, -1, "Edit Symbol");
 
-  dialog->SetSymbol(property->GetValue().StringValue());
+  // Split name/id pair e.g. "IDC_TEXT=123"
+  wxString value(property->GetValue().StringValue());
 
-  // TODO: split name/id pair e.g. "IDC_TEXT=123" or get from symbol table - which?
-  dialog->SetId(1234);
+  wxString strName = value.Before('=');
+  wxString strId = value.After('=');
+
+  dialog->SetSymbol(strName);
+  dialog->SetId(atoi(strId));
 
   dialog->Init();
 
-  if (dialog->ShowModal())
+  if (dialog->ShowModal() == wxID_OK)
   {
     wxString symbolName(dialog->GetSymbol());
     long id = dialog->GetId();
     dialog->Destroy();
 
-    // TODO: set id somewhere
-    property->GetValue() = wxString(symbolName);
+    wxString str;
+    str.Printf("%d", id);
+    property->GetValue() = symbolName + wxString("=") + str;
 
     view->DisplayProperty(property);
     view->UpdatePropertyDisplayInList(property);
@@ -1820,6 +1906,8 @@ void wxResourceSymbolValidator::OnEdit(wxProperty *property, wxPropertyListView 
 
 BEGIN_EVENT_TABLE(wxResourceSymbolDialog, wxDialog)
     EVT_BUTTON(wxID_OK, wxResourceSymbolDialog::OnOK)
+    EVT_COMBOBOX(ID_SYMBOLNAME_COMBOBOX, wxResourceSymbolDialog::OnComboBoxSelect)
+    EVT_TEXT(ID_SYMBOLNAME_COMBOBOX, wxResourceSymbolDialog::OnSymbolNameUpdate)
 END_EVENT_TABLE()
 
 wxResourceSymbolDialog::wxResourceSymbolDialog(wxWindow* parent, const wxWindowID id, const wxString& title, const wxPoint& pos,
@@ -1848,10 +1936,10 @@ wxResourceSymbolDialog::wxResourceSymbolDialog(wxWindow* parent, const wxWindowI
 
     y += 30;
     x = 5;
-    (void) new wxButton(this, wxID_OK, "OK", wxPoint(x, y), wxSize(90, -1));
+    (void) new wxButton(this, wxID_OK, "OK", wxPoint(x, y), wxSize(80, -1));
 
-    x += 120;
-    (void) new wxButton(this, wxID_CANCEL, "Cancel", wxPoint(x, y), wxSize(90, -1));
+    x += 100;
+    (void) new wxButton(this, wxID_CANCEL, "Cancel", wxPoint(x, y), wxSize(80, -1));
 
     Fit();
     Centre();
@@ -1864,6 +1952,8 @@ void wxResourceSymbolDialog::Init()
 
     m_nameCtrl->SetValue(m_symbolName);
     m_idCtrl->SetValue(defaultId);
+
+    wxResourceManager::GetCurrentResourceManager()->GetSymbolTable().FillComboBox(m_nameCtrl);
 }
 
 void wxResourceSymbolDialog::OnOK(wxCommandEvent& event)
@@ -1876,6 +1966,124 @@ void wxResourceSymbolDialog::OnOK(wxCommandEvent& event)
 
 bool wxResourceSymbolDialog::CheckValues()
 {
+    wxString nameStr(m_nameCtrl->GetValue());
+    wxString idStr(m_idCtrl->GetValue());
+    int id = atoi(idStr);
+
+    if (id <= 0 )
+    {
+        wxMessageBox("Identifier cannot be missing or zero", "Dialog Editor", wxOK|wxICON_EXCLAMATION, this);
+        return FALSE;
+    }
+    if (nameStr == "")
+    {
+        wxMessageBox("Please enter a symbol name", "Dialog Editor", wxOK|wxICON_EXCLAMATION, this);
+        return FALSE;
+    }
+    if (nameStr.Contains(" "))
+    {
+        wxMessageBox("Symbol name cannot contain spaces.", "Dialog Editor", wxOK|wxICON_EXCLAMATION, this);
+        return FALSE;
+    }
+    if (nameStr.Contains("="))
+    {
+        wxMessageBox("Symbol name cannot contain =.", "Dialog Editor", wxOK|wxICON_EXCLAMATION, this);
+        return FALSE;
+    }
+    if (nameStr.IsNumber())
+    {
+        wxMessageBox("Symbol name cannot be a number.", "Dialog Editor", wxOK|wxICON_EXCLAMATION, this);
+        return FALSE;
+    }
+    // TODO: other checks on the name syntax.
+
+    if (!wxResourceManager::GetCurrentResourceManager()->GetSymbolTable().IsStandardSymbol(nameStr))
+    {
+        // If we change the id for an existing symbol, we need to:
+        // 1) Check if there are any other resources currently using the original id.
+        //    If so, will need to change their id to the new id, in SetProperty.
+        // 2) Remove the old symbol, add the new symbol.
+        // In this check, we don't have to do this, but we need to do it in SetProperty.
+
+        if (nameStr == GetSymbol() && id != GetId())
+        {
+            // It's OK to change the id. But we'll need to change all matching ids in all resources,
+            // in SetProperty.
+        }
+
+        // If we change the name but not the id... we'll just need to remove and
+        // re-add the symbol/id pair, in SetProperty.
+        if (nameStr != GetSymbol() && id == GetId())
+        {
+        }
+
+        // What if we're changing both the name and the id?
+        // - if there's no symbol of that name, just remove the old, add the new (in SetProperty)
+        // - if there is a symbol of that name, if id matches, do nothing. If not, veto.
+
+        if (nameStr != GetSymbol() && id != GetId())
+        {
+            if (!wxResourceManager::GetCurrentResourceManager()->IsIdentifierOK(nameStr, id))
+            {
+                wxMessageBox("This integer id is already being used under a different name.\nPlease choose another.",
+                    "Dialog Editor", wxOK|wxICON_EXCLAMATION, this);
+                return FALSE;
+            }
+        }
+
+    }
+
+    SetSymbol(nameStr);
+    SetId(id);
+
     return TRUE;
+}
+
+void wxResourceSymbolDialog::OnComboBoxSelect(wxCommandEvent& event)
+{
+    wxString str(m_nameCtrl->GetValue());
+    if (wxResourceManager::GetCurrentResourceManager()->GetSymbolTable().IsStandardSymbol(str))
+    {
+        int id = wxResourceManager::GetCurrentResourceManager()->GetSymbolTable().GetIdForSymbol(str);
+        wxString str2;
+        str2.Printf("%d", id);
+        m_idCtrl->SetValue(str2);
+        m_idCtrl->Enable(FALSE);
+    }
+    else
+    {
+        if (wxResourceManager::GetCurrentResourceManager()->GetSymbolTable().SymbolExists(str))
+        {
+            int id = wxResourceManager::GetCurrentResourceManager()->GetSymbolTable().GetIdForSymbol(str);
+            wxString str2;
+            str2.Printf("%d", id);
+            m_idCtrl->SetValue(str2);
+        }
+        m_idCtrl->Enable(TRUE);
+    }
+}
+
+void wxResourceSymbolDialog::OnSymbolNameUpdate(wxCommandEvent& event)
+{
+    wxString str(m_nameCtrl->GetValue());
+    if (wxResourceManager::GetCurrentResourceManager()->GetSymbolTable().IsStandardSymbol(str))
+    {
+        int id = wxResourceManager::GetCurrentResourceManager()->GetSymbolTable().GetIdForSymbol(str);
+        wxString str2;
+        str2.Printf("%d", id);
+        m_idCtrl->SetValue(str2);
+        m_idCtrl->Enable(FALSE);
+    }
+    else
+    {
+        if (wxResourceManager::GetCurrentResourceManager()->GetSymbolTable().SymbolExists(str))
+        {
+            int id = wxResourceManager::GetCurrentResourceManager()->GetSymbolTable().GetIdForSymbol(str);
+            wxString str2;
+            str2.Printf("%d", id);
+            m_idCtrl->SetValue(str2);
+        }
+        m_idCtrl->Enable(TRUE);
+    }
 }
 

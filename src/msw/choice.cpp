@@ -34,7 +34,7 @@ bool wxChoice::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 {
   if (param == CBN_SELCHANGE)
   {
-    wxCommandEvent event(wxEVENT_TYPE_CHOICE_COMMAND, m_windowId);
+    wxCommandEvent event(wxEVT_COMMAND_CHOICE_SELECTED, m_windowId);
     event.SetInt(GetSelection());
     event.SetEventObject(this);
     event.SetString(copystring(GetStringSelection()));

@@ -46,6 +46,19 @@ as the following:
 If your compiler does not support derivation from {\bf streambuf} and gives a compile error, define the symbol {\bf NO\_TEXT\_WINDOW\_STREAM} in the
 wxTextCtrl header file.
 
+\wxheading{Event handling}
+
+To process input from a text control, use these event handler macros to direct input to member
+functions that take a \helpref{wxCommandEvent}{wxcommandevent} argument.
+
+\twocolwidtha{7cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_TEXT(id, func)}}{Respond to a wxEVT\_COMMAND\_TEXT\_UPDATED event,
+generated when the text changes.}
+\twocolitem{{\bf EVT\_TEXT\_ENTER(id, func)}}{Respond to a wxEVT\_COMMAND\_TEXT\_ENTER event,
+generated when enter is pressed in a single-line text control.}
+\end{twocollist}%
+
 %\wxheading{See also}
 %
 %\helpref{wxRichTextCtrl}{wxrichtextctrl}

@@ -121,6 +121,8 @@ jref      wxPluginApp::NPP_GetJavaClass(void)
 }
 */
 
+// This can't work now because we don't have a global app until wxEntry is called.
+// We'll put the wxEntry call in npshell.cpp instead.
 NPError   wxPluginApp::NPP_Initialize(void)
 {
     static int init = FALSE;

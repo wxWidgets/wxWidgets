@@ -67,6 +67,8 @@ wxPolygonShape::wxPolygonShape()
 
 void wxPolygonShape::Create(wxList *the_points)
 {
+  ClearPoints();
+
   m_originalPoints = the_points;
 
   // Duplicate the list of points
@@ -88,6 +90,11 @@ void wxPolygonShape::Create(wxList *the_points)
 
 wxPolygonShape::~wxPolygonShape()
 {
+    ClearPoints();
+}
+
+void wxPolygonShape::ClearPoints()
+{
   if (m_points)
   {
     wxNode *node = m_points->First();
@@ -99,6 +106,7 @@ wxPolygonShape::~wxPolygonShape()
       node = m_points->First();
     }
     delete m_points;
+    m_points = NULL;
   }
   if (m_originalPoints)
   {
@@ -111,6 +119,7 @@ wxPolygonShape::~wxPolygonShape()
       node = m_originalPoints->First();
     }
     delete m_originalPoints;
+    m_originalPoints = NULL;
   }
 }
 
@@ -534,7 +543,7 @@ void wxPolygonShape::OnDrawOutline(wxDC& dc, float x, float y, float w, float h)
     intPoints[i].y = (int) point->y;
   }
   dc.DrawPolygon(n, intPoints, x, y);
-//  wxShape::OnDrawOutline(x, y, w, h);
+  delete[] intPoints;
 }
 
 // Make as many control points as there are vertices.
@@ -834,14 +843,9 @@ void wxPolygonShape::Copy(wxShape& copy)
 
   wxPolygonShape& polyCopy = (wxPolygonShape&) copy;
 
-  if (polyCopy.m_points)
-    delete polyCopy.m_points;
+  polyCopy.ClearPoints();
 
   polyCopy.m_points = new wxList;
-
-  if (polyCopy.m_originalPoints)
-    delete polyCopy.m_originalPoints;
-
   polyCopy.m_originalPoints = new wxList;
 
   wxNode *node = m_points->First();

@@ -109,6 +109,7 @@ wxLineShape::~wxLineShape()
       m_labelObjects[i] = NULL;
     }
   }
+  ClearArrowsAtPosition(-1);
 }
 
 void wxLineShape::MakeLineControlPoints(int n)

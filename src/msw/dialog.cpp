@@ -490,6 +490,7 @@ void wxDialog::Centre(int direction)
 // Replacement for Show(TRUE) for modal dialogs - returns return code
 int wxDialog::ShowModal(void)
 {
+    m_windowStyle |= wxDIALOG_MODAL;
 	Show(TRUE);
 	return GetReturnCode();
 }

@@ -362,7 +362,12 @@ void wxLogStream::DoLogString(const char *szString)
 // ----------------------------------------------------------------------------
 wxLogTextCtrl::wxLogTextCtrl(wxTextCtrl *pTextCtrl)
 // @@@ TODO: in wxGTK wxTextCtrl doesn't derive from streambuf
+
+// Also, in DLL mode in wxMSW, can't use it.
+#if defined(NO_TEXT_WINDOW_STREAM)
+#else
              : wxLogStream(new ostream(pTextCtrl))
+#endif
 {
 }
 

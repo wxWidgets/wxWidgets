@@ -46,6 +46,9 @@ wxResourceSymbolTable::~wxResourceSymbolTable()
 bool wxResourceSymbolTable::ReadIncludeFile(const wxString& filename)
 {
     wxFile file;
+    if (!wxFileExists(filename))
+        return FALSE;
+
     if (!file.Open(filename, wxFile::read))
         return FALSE;
 
@@ -53,10 +56,13 @@ bool wxResourceSymbolTable::ReadIncludeFile(const wxString& filename)
     if (len == -1)
         return FALSE;
 
+    Clear();
+    AddStandardSymbols();
+
     wxString str;
     char* p = str.GetWriteBuf(len + 1);
 
-    if (file.Read(p, len) == ofsInvalid)
+    if (file.Read(p, len) == wxFile::fd_invalid)
     {
         str.UngetWriteBuf();
         return FALSE;
@@ -98,7 +104,7 @@ bool wxResourceSymbolTable::ReadIncludeFile(const wxString& filename)
 
         wxString numStr(str.Mid(startNum, (endNum - startNum + 1)));
 
-        long id = atol(numStr);
+        int id = atol(numStr);
 
         AddSymbol(symbol, id);
 
@@ -121,12 +127,15 @@ bool wxResourceSymbolTable::WriteIncludeFile(const wxString& filename)
     while (node)
     {
         char* str = node->key.string;
-        long id = (long) node->Data() ;
+        int id = (int) node->Data() ;
 
-        wxString line;
-        line.Printf("#define %s %ld\n", str, id);
+        if (!IsStandardSymbol(str))
+        {
+            wxString line;
+            line.Printf("#define %s %ld\n", str, id);
 
-        file.Write(line, line.Length());
+            file.Write(line, line.Length());
+        }
 
         node = m_hashTable.Next();
     }
@@ -138,14 +147,27 @@ void wxResourceSymbolTable::Clear()
     m_hashTable.Clear();
 }
 
-bool wxResourceSymbolTable::AddSymbol(const wxString& symbol, long id)
+bool wxResourceSymbolTable::AddSymbol(const wxString& symbol, int id)
 {
     m_hashTable.Put(symbol, (wxObject*) id);
     return TRUE;
 }
 
+bool wxResourceSymbolTable::RemoveSymbol(const wxString& symbol)
+{
+    m_hashTable.Delete(symbol);
+    return TRUE;
+}
+
+bool wxResourceSymbolTable::RemoveSymbol(int id)
+{
+    wxString symbol(GetSymbolForId(id));
+    m_hashTable.Delete(symbol);
+    return TRUE;
+}
+
 // Accessors
-wxString wxResourceSymbolTable::GetSymbolForId(long id)
+wxString wxResourceSymbolTable::GetSymbolForId(int id)
 {
     m_hashTable.BeginFind();
 
@@ -153,7 +175,7 @@ wxString wxResourceSymbolTable::GetSymbolForId(long id)
     while (node)
     {
         char* str = node->key.string;
-        if (str && ( ((long) node->Data()) == id) )
+        if (str && ( ((int) node->Data()) == id) )
             return wxString(str);
 
         node = m_hashTable.Next();
@@ -161,13 +183,103 @@ wxString wxResourceSymbolTable::GetSymbolForId(long id)
     return wxString("");
 }
 
-long wxResourceSymbolTable::GetIdForSymbol(const wxString& symbol)
+int wxResourceSymbolTable::GetIdForSymbol(const wxString& symbol)
 {
-    return (long) m_hashTable.Get(symbol);
+    return (int) m_hashTable.Get(symbol);
 }
 
 bool wxResourceSymbolTable::SymbolExists(const wxString& symbol) const
 {
     return (m_hashTable.Get(symbol) != NULL);
+}
+
+bool wxResourceSymbolTable::IdExists(int id)
+{
+    m_hashTable.BeginFind();
+
+    wxNode* node = m_hashTable.Next();
+    while (node)
+    {
+        if ( (((int) node->Data()) == id) )
+            return TRUE;
+
+        node = m_hashTable.Next();
+    }
+    return FALSE;
+}
+
+int wxResourceSymbolTable::FindHighestId()
+{
+    int highest = 0;
+
+    m_hashTable.BeginFind();
+
+    wxNode* node = m_hashTable.Next();
+    while (node)
+    {
+        int id = ((int) node->Data());
+        if (id > highest)
+            highest = id;
+
+        node = m_hashTable.Next();
+    }
+    return highest;
+}
+
+/*
+ * A table of the standard identifiers
+ */
+
+struct wxStandardSymbolStruct
+{
+    char*       m_name;
+    int         m_id;
+};
+
+static wxStandardSymbolStruct sg_StandardSymbols[] =
+{
+    { "wxID_OK", wxID_OK },
+    { "wxID_CANCEL", wxID_CANCEL },
+    { "wxID_APPLY", wxID_APPLY },
+//    { "wxID_STATIC", wxID_STATIC },
+    { "wxID_YES", wxID_YES },
+    { "wxID_NO", wxID_NO }
+};
+
+static int sg_StandardSymbolSize = (sizeof(sg_StandardSymbols)/sizeof(wxStandardSymbolStruct));
+
+void wxResourceSymbolTable::AddStandardSymbols()
+{
+    int i;
+    for (i = 0; i < sg_StandardSymbolSize; i++)
+    {
+        AddSymbol(sg_StandardSymbols[i].m_name, sg_StandardSymbols[i].m_id);
+    }
+}
+
+bool wxResourceSymbolTable::IsStandardSymbol(const wxString& symbol) const
+{
+    int i;
+    for (i = 0; i < sg_StandardSymbolSize; i++)
+    {
+        if (symbol == sg_StandardSymbols[i].m_name)
+            return TRUE;
+    }
+    return FALSE;
+}
+
+bool wxResourceSymbolTable::FillComboBox(wxComboBox* comboBox)
+{
+    m_hashTable.BeginFind();
+
+    wxNode* node = m_hashTable.Next();
+    while (node)
+    {
+        char* str = node->key.string;
+
+        comboBox->Append(str);
+        node = m_hashTable.Next();
+    }
+    return TRUE;
 }
 

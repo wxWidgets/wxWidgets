@@ -2108,8 +2108,8 @@ wxShape *wxShape::CreateNewCopy(bool resetMapping, bool recompute)
   {
     wxShapeEvtHandler* newHandler = GetEventHandler()->CreateNewCopy();
     newObject->SetEventHandler(newHandler);
-    newObject->SetPreviousHandler(newObject);
-    newHandler->SetPreviousHandler(newHandler);
+    newObject->SetPreviousHandler(NULL);
+    newHandler->SetPreviousHandler(newObject);
     newHandler->SetShape(newObject);
   }
 

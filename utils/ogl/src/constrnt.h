@@ -35,7 +35,7 @@ public:
 
 };
 
-extern wxList OGLConstraintTypes;
+extern wxList* OGLConstraintTypes;
 
 #define gyCONSTRAINT_CENTRED_VERTICALLY   1
 #define gyCONSTRAINT_CENTRED_HORIZONTALLY 2
@@ -81,6 +81,7 @@ class OGLConstraint: public wxObject
 };
 
 void OGLInitializeConstraintTypes();
+void OGLCleanUpConstraintTypes();
 
 #endif
  // _OGL_CONSTRNT_H_

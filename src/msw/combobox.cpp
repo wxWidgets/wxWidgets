@@ -38,10 +38,18 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 {
   if (param == CBN_SELCHANGE)
   {
-    wxCommandEvent event(wxEVENT_TYPE_COMBOBOX_COMMAND, m_windowId);
+    wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_SELECTED, m_windowId);
     event.SetInt(GetSelection());
     event.SetEventObject(this);
     event.SetString(copystring(GetStringSelection()));
+    ProcessCommand(event);
+    delete[] event.GetString();
+    return TRUE;
+  }
+  else if (param == CBN_EDITCHANGE)
+  {
+    wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, m_windowId);
+    event.SetString(copystring(GetValue()));
     ProcessCommand(event);
     delete[] event.GetString();
     return TRUE;

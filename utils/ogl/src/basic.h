@@ -467,6 +467,7 @@ class wxPolygonShape: public wxShape
   // Takes a list of wxRealPoints; each point is an OFFSET from the centre.
   // Deletes user's points in destructor.
   virtual void Create(wxList *points);
+  virtual void ClearPoints();
 
   void GetBoundingBoxMin(float *w, float *h);
   void CalculateBoundingBox();

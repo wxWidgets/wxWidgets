@@ -31,6 +31,25 @@ Slider events are handled in the same way as a scrollbar.
 
 See also \helpref{window styles overview}{windowstyles}.
 
+\wxheading{Event handling}
+
+To process input from a slider, use one of these event handler macros to direct input to member
+functions that take a \helpref{wxScrollEvent}{wxscrollevent} argument:
+
+\twocolwidtha{7cm}
+\begin{twocollist}
+\twocolitem{{\bf EVT\_COMMAND\_SCROLL(id, func)}}{Catch all scroll commands.}
+\twocolitem{{\bf EVT\_COMMAND\_TOP(id, func)}}{Catch a command to put the scroll thumb at the maximum position.}
+\twocolitem{{\bf EVT\_COMMAND\_BOTTOM(id, func)}}{Catch a command to put the scroll thumb at the maximum position.}
+\twocolitem{{\bf EVT\_COMMAND\_LINEUP(id, func)}}{Catch a line up command.}
+\twocolitem{{\bf EVT\_COMMAND\_LINEDOWN(id, func)}}{Catch a line down command.}
+\twocolitem{{\bf EVT\_COMMAND\_PAGEUP(id, func)}}{Catch a page up command.}
+\twocolitem{{\bf EVT\_COMMAND\_PAGEDOWN(id, func)}}{Catch a page down command.}
+\twocolitem{{\bf EVT\_COMMAND\_THUMBTRACK(id, func)}}{Catch a thumbtrack command (continuous movement of the scroll thumb).}
+\twocolitem{{\bf EVT\_SLIDER(id, func)}}{Process a wxEVT\_COMMAND\_SLIDER\_UPDATED event,
+when the slider is moved. Though provided for backward compatibility, this is obsolete.}
+\end{twocollist}%
+
 \wxheading{See also}
 
 \helpref{Event handling overview}{eventhandlingoverview}, \helpref{wxScrollBar}{wxscrollbar}

@@ -307,19 +307,6 @@ wxWindow::~wxWindow(void)
   // wxWnd
   MSWDetachWindowMenu();
 
-  // TODO for backward compatibility
-#if 0
-  // WX_CANVAS
-  if (m_windowDC)
-  {
-    HWND hWnd = (HWND) GetHWND();
-    HDC dc = ::GetDC(hWnd);
-    m_windowDC->SelectOldObjects (dc);
-    ReleaseDC(hWnd, dc);
-    delete m_windowDC;
-  }
-#endif
-
   if (m_windowParent)
     m_windowParent->RemoveChild(this);
 
@@ -350,9 +337,6 @@ wxWindow::~wxWindow(void)
   // wxWindow::LoadNativeDialog but we weren't a dialog
   // class
   wxTopLevelWindows.DeleteObject(this);
-
-//  if (GetFont() && GetFont()->Ok())
-//    GetFont()->ReleaseResource();
 
   if ( m_windowValidator )
 	delete m_windowValidator;
@@ -385,10 +369,6 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
   m_windowStyle = 0;
   m_windowParent = NULL;
   m_windowEventHandler = this;
-//  m_windowFont = NULL;
-  // We don't wish internal (potentially transient) fonts to be found
-  // by FindOrCreate
-//  wxTheFontList->RemoveFont(& m_windowFont);
   m_windowName = "";
   m_windowCursor = *wxSTANDARD_CURSOR;
   m_doubleClickAllowed = 0 ;
@@ -414,8 +394,6 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
   m_minSizeY = -1;
   m_maxSizeX = -1;
   m_maxSizeY = -1;
-//  m_paintHDC = 0;
-//  m_tempHDC = 0;
   m_oldWndProc = 0;
 #ifndef __WIN32__
   m_globalHandle = 0;
@@ -423,7 +401,6 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
   m_useCtl3D = FALSE;
   m_defaultItem = NULL;
   m_windowParent = NULL;
-//  m_windowDC = NULL;
   m_mouseInWindow = FALSE;
   if (!parent)
     return FALSE;
@@ -434,7 +411,6 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
   m_lastMsg = 0;
   m_lastWParam = 0;
   m_lastLParam = 0;
-//  m_acceleratorTable = 0;
   m_hMenu = 0;
 
   m_xThumbSize = 0;
@@ -464,10 +440,6 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
   m_foregroundColour = *wxBLACK;
   m_defaultForegroundColour = *wxBLACK ;
   m_defaultBackgroundColour = settings.GetSystemColour(wxSYS_COLOUR_3DFACE) ;
-/*
-  m_defaultBackgroundColour = wxColour(GetRValue(GetSysColor(COLOR_BTNFACE)),
-  	GetGValue(GetSysColor(COLOR_BTNFACE)), GetBValue(GetSysColor(COLOR_BTNFACE)));
-*/
 
   m_windowStyle = style;
 
@@ -953,6 +925,59 @@ LRESULT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 // Main Windows 3 window proc
 long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
+#if 0
+  switch (message)
+  {
+        case WM_INITDIALOG:
+        case WM_ACTIVATE:
+        case WM_SETFOCUS:
+        case WM_KILLFOCUS:
+	case WM_CREATE:
+	case WM_PAINT:
+	case WM_QUERYDRAGICON:
+        case WM_SIZE:
+        case WM_RBUTTONDOWN:
+        case WM_RBUTTONUP:
+        case WM_RBUTTONDBLCLK:
+        case WM_MBUTTONDOWN:
+        case WM_MBUTTONUP:
+        case WM_MBUTTONDBLCLK:
+        case WM_LBUTTONDOWN:
+        case WM_LBUTTONUP:
+        case WM_LBUTTONDBLCLK:
+        case WM_MOUSEMOVE:
+//        case WM_COMMAND:
+        case WM_NOTIFY:
+        case WM_DESTROY:
+        case WM_MENUSELECT:
+        case WM_INITMENUPOPUP:
+        case WM_DRAWITEM:
+        case WM_MEASUREITEM:
+        case WM_KEYDOWN:
+        case WM_KEYUP:
+        case WM_CHAR: // Always an ASCII character
+        case WM_HSCROLL:
+        case WM_VSCROLL:
+        case WM_CTLCOLORBTN:
+        case WM_CTLCOLORDLG:
+        case WM_CTLCOLORLISTBOX:
+        case WM_CTLCOLORMSGBOX:
+        case WM_CTLCOLORSCROLLBAR:
+        case WM_CTLCOLORSTATIC:
+        case WM_CTLCOLOREDIT:
+        case WM_SYSCOLORCHANGE:
+        case WM_ERASEBKGND:
+        case WM_MDIACTIVATE:
+        case WM_DROPFILES:
+        case WM_QUERYENDSESSION:
+        case WM_CLOSE:
+        case WM_GETMINMAXINFO:
+		case WM_NCHITTEST:
+            return MSWDefWindowProc(message, wParam, lParam );
+    }
+#endif
+
+
   #ifdef __WXDEBUG__
     wxLogTrace(wxTraceMessages, "Processing %s", wxGetMessageName(message));
   #endif // WXDEBUG
@@ -1381,8 +1406,6 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
           // Prevents flicker when dragging
           if (IsIconic(hWnd)) return 1;
 
-          // EXPERIMENTAL
-//          return 1;
           if (!MSWOnEraseBkgnd((WXHDC) (HDC)wParam))
             return 0; // Default(); MSWDefWindowProc(message, wParam, lParam );
           else return 1;
@@ -1443,19 +1466,6 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
         case WM_GETDLGCODE:
           return MSWGetDlgCode();
 
-/*
-#if HAVE_SOCKET
-        case WM_TIMER:
-	{
-          __ddeUnblock(hWnd, wParam);
-          break;
-	}
-
- 	case ASYNC_SELECT_MESSAGE:
- 	    return ddeWindowProc(hWnd,message,wParam,lParam);
-#endif
-*/
-
         default:
             return MSWDefWindowProc(message, wParam, lParam );
     }
@@ -1497,29 +1507,6 @@ void wxRemoveHandleAssociation(wxWindow *win)
 // (e.g. with MDI child windows)
 void wxWindow::MSWDestroyWindow(void)
 {
-#if 0
-
-#if WXDEBUG > 1
-  wxDebugMsg("wxWindow::MSWDestroyWindow %d\n", handle);
-#endif
-  MSWDetachWindowMenu();
-//  SetWindowLong(handle, 0, (long)0);
-  HWND oldHandle = handle;
-  handle = NULL;
-
-  ::DestroyWindow(oldHandle);
-
-  // Menu is destroyed explicitly by wxMDIChild::DestroyWindow,
-  // or when Windows HWND is deleted if MDI parent or
-  // SDI frame.
-/*
-  if (m_hMenu)
-  {
-    ::DestroyMenu(m_hMenu);
-    m_hMenu = 0;
-  }
- */
-#endif
 }
 
 void wxWindow::MSWCreate(int id, wxWindow *parent, const char *wclass, wxWindow *wx_win, const char *title,
@@ -1588,7 +1575,6 @@ void wxWindow::MSWCreate(int id, wxWindow *parent, const char *wclass, wxWindow 
                 style,
                 x1, y1,
                 width1, height1,
-//                hParent, NULL, wxGetInstance(),
                 hParent, (HMENU)controlId, wxGetInstance(),
                 NULL);
 
@@ -2969,97 +2955,6 @@ void wxWindow::GetCaretPos(int *x, int *y) const
   *y = point.y;
 }
 
-// OBSOLETE: use GetUpdateRegion instead.
-
-#if 0
-/*
- * Update iterator. Use from within OnPaint.
- */
-
-static RECT gs_UpdateRect;
-
-wxUpdateIterator::wxUpdateIterator(wxWindow* wnd)
-{
-  current = 0;					//start somewhere...
-#if defined(__WIN32__) && !defined(__win32s__)
-  rlist = NULL;					//make sure I don't free randomly
-  int len = GetRegionData((HRGN) wnd->m_updateRgn,0,NULL);	//Get buffer size
-  if (len)
-  {
-    rlist = (WXRGNDATA *) (RGNDATA *)new char[len];
-    GetRegionData((HRGN) wnd->m_updateRgn,len, (RGNDATA *)rlist);
-    rp = (void *)(RECT*) ((RGNDATA *)rlist)->Buffer;
-    rects = ((RGNDATA *)rlist)->rdh.nCount;
-  }
-  else
-#endif
-  {
-	gs_UpdateRect.left = wnd->m_updateRect.x;
-	gs_UpdateRect.top = wnd->m_updateRect.y;
-	gs_UpdateRect.right = wnd->m_updateRect.x + wnd->m_updateRect.width;
-	gs_UpdateRect.bottom = wnd->m_updateRect.y + wnd->m_updateRect.height;
-    rects = 1;
-    rp = (void *)&gs_UpdateRect;			//Only one available in Win16,32s
-  }
-}
-
-wxUpdateIterator::~wxUpdateIterator(void)
-{
-#ifdef __WIN32__
-#ifndef __win32s__
-  if (rlist) delete (RGNDATA *) rlist;
-#endif
-#endif
-}
-
-wxUpdateIterator::operator int (void)
-{
-  if (current < rects)
-  {
-    return TRUE;
-  }
-  else
-  {
-    return FALSE;
-  }
-}
-
-wxUpdateIterator* wxUpdateIterator::operator ++(int)
-{
-  current++;
-  return this;
-}
-
-void wxUpdateIterator::GetRect(wxRect *rect)
-{
-  RECT *mswRect = ((RECT *)rp)+current;	//ought to error check this...
-  rect->x = mswRect->left;
-  rect->y = mswRect->top;
-  rect->width = mswRect->right - mswRect->left;
-  rect->height = mswRect->bottom - mswRect->top;
-}
-
-int wxUpdateIterator::GetX()
-{
-  return ((RECT*)rp)[current].left;
-}
-
-int wxUpdateIterator::GetY()
-{
-  return ((RECT *)rp)[current].top;
-}
-
-int wxUpdateIterator::GetW()
-{
- return ((RECT *)rp)[current].right-GetX();
-}
-
-int wxUpdateIterator::GetH()
-{
-  return ((RECT *)rp)[current].bottom-GetY();
-}
-#endif
-
 wxWindow *wxGetActiveWindow(void)
 {
   HWND hWnd = GetActiveWindow();
@@ -3176,36 +3071,22 @@ void wxWindow::OnPaint(void)
 
 void wxWindow::WarpPointer (int x_pos, int y_pos)
 {
-  // Move the pointer to (x_pos,y_pos) coordinates. They are expressed in
-  // pixel coordinates, relatives to the canvas -- So, we first need to
-  // substract origin of the window, then convert to screen position
+    // Move the pointer to (x_pos,y_pos) coordinates. They are expressed in
+    // pixel coordinates, relatives to the canvas -- So, we first need to
+    // substract origin of the window, then convert to screen position
 
-  int x = x_pos; int y = y_pos;
-/* Leave this to the app to decide (and/or wxScrolledWindow)
-      x -= m_xScrollPosition * m_xScrollPixelsPerLine;
-      y -= m_yScrollPosition * m_yScrollPixelsPerLine;
-*/
-      RECT rect;
-      GetWindowRect ((HWND) GetHWND(), &rect);
+    int x = x_pos; int y = y_pos;
+    RECT rect;
+    GetWindowRect ((HWND) GetHWND(), &rect);
 
-      x += rect.left;
-      y += rect.top;
+    x += rect.left;
+    y += rect.top;
 
-      SetCursorPos (x, y);
+    SetCursorPos (x, y);
 }
 
 void wxWindow::MSWDeviceToLogical (float *x, float *y) const
 {
-    // TODO
-    // Do we have a SetUserScale in wxWindow too, so we can
-    // get mouse events scaled?
-/*
-      if (m_windowDC)
-      {
-        *x = m_windowDC->DeviceToLogicalX ((int) *x);
-        *y = m_windowDC->DeviceToLogicalY ((int) *y);
-      }
-*/
 }
 
 bool wxWindow::MSWOnEraseBkgnd (WXHDC pDC)
@@ -3553,39 +3434,16 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRectangle *rect)
 		::ScrollWindow((HWND) GetHWND(), dx, dy, NULL, NULL);
 }
 
-/*
-void wxWindow::CalcScrolledPosition(int x, int y, int *xx, int *yy) const
-{
-  *xx = x;
-  *yy = y;
-}
-
-void wxWindow::CalcUnscrolledPosition(int x, int y, float *xx, float *yy) const
-{
-  *xx = x;
-  *yy = y;
-}
-*/
-
 void wxWindow::SetFont(const wxFont& font)
 {
-  // Decrement the usage count of the old label font
-  // (we may be able to free it up)
-//  if (GetFont()->Ok())
-//    GetFont()->ReleaseResource();
-    
   m_windowFont = font;
 
   if (!m_windowFont.Ok())
 	return;
 
-//  m_windowFont.UseResource();
-
   HWND hWnd = (HWND) GetHWND();
   if (hWnd != 0)
   {
-//      m_windowFont.RealizeResource();
-
       if (m_windowFont.GetResourceHandle())
         SendMessage(hWnd, WM_SETFONT,
                   (WPARAM)m_windowFont.GetResourceHandle(),TRUE);
@@ -4539,6 +4397,7 @@ void wxWindow::SetupColours(void)
 
 void wxWindow::OnIdle(wxIdleEvent& event)
 {
+#if 0
     // Check if we need to send a LEAVE event
     if (m_mouseInWindow)
     {
@@ -4552,6 +4411,7 @@ void wxWindow::OnIdle(wxIdleEvent& event)
         }
     }
 	UpdateWindowUI();
+#endif
 }
 
 // Raise the window to the top of the Z order
