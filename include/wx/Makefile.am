@@ -76,7 +76,6 @@ wx_include_HEADERS = \
  helpxlp.h \
  icon.h \
  image.h \
- imaggif.h \
  imaglist.h \
  intl.h \
  ioswrap.h \

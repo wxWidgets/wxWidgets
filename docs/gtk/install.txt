@@ -33,8 +33,8 @@ of wxWindows - you may also want to create different versions of wxWindows
 and test them concurrently. Most typically, this would be a version configured 
 with --enable-debug_flag and one without. Note, that only one build can currently 
 be installed, so you'd have to use local version of the library for that purpose.
-For building three version, one GTK, one Motif and a debug version of the GTK 
-source, you'd do this:
+For building three versions (one GTK, one Motif and a debug version of the GTK 
+source) you'd do this:
 
 md buildmotif
 cd buildmotif
@@ -50,7 +50,7 @@ cd ..
 
 md buildgtkd
 cd buildgtkd
-../configure --with-gtk --enable-debug
+../configure --with-gtk --enable-debug_flag
 make
 cd ..
 
@@ -58,8 +58,8 @@ cd ..
 ------------------------
 
 configure reports, that you don't have GTK 1.X installed although you are 
-certainly sure you have. Well, you have installed it, but you also have another 
-version of the GTK installed, which you may need to removed including other 
+very sure you have. Well, you have installed it, but you also have another 
+version of the GTK installed, which you may need to remove including other 
 versions of glib (and its headers). Also, look for the PATH variable and check 
 if it includes the path to the correct gtk-config! The check your LDPATH if it 
 points to the correct library. There is no way to compile wxGTK if configure 
@@ -104,14 +104,14 @@ YOU USE AND WHAT ERROR WAS REPORTED. I know this has no effect, but I tried...
 
 wxWindows/GTK requires the GTK+ library to be installed on your system. It has to 
 be a stable version, preferebly version 1.2.3. You can use GTK 1.0 in connection 
-with wxWindows, but only without Drag'n'Drop. wxWindows does work with the 1.1.X 
+with wxWindows, albeit without Drag'n'Drop. wxWindows does work with the 1.1.X 
 versions of the GTK+ library.
 
 You can get the newest version of the GTK+ from the GTK homepage at:
 
   http://www.gtk.org
   
-We also mirror GTK+ 1.2.1 at my ftp site soon. You'll find information about downloading 
+We also mirror GTK+ 1.0.6 at my ftp site. You'll find information about downloading 
 at my homepage.
   
 * Additional libraries
@@ -265,7 +265,7 @@ The following options handle the kind of library you want to build.
 -------------------
 
 The confiugre options have not yet been thoroughly tested
-in wxWindows snapshot 6.
+in wxWindows snapshot 6. ODBC not at all.
 
 When producing an executable that is linked statically with wxGTK
 you'll be surprised at its immense size. This can sometimes be
@@ -314,7 +314,7 @@ make yourself some coffee, as it will take some time. On an old
 386SX possibly two weeks. During compilation, you'll get a few 
 warning messages depending in your compiler.
 
-if you want to be more selective, you can change into a specific
+If you want to be more selective, you can change into a specific
 directiry and type "make" there.
 
 Then you may install the library and it's header files under
@@ -367,11 +367,12 @@ the usual number of GNU tools, at least
 GNU automake version 1.4
 GNU autoheader version 2.14
 GNU autoconf version 2.14
+GNU libtool version 1.3
 
 and quite possibly 
 
 GNU make
-GNU cc
+GNU C++
 
 and if you have all this then you probably know enough to
 go ahead yourself :-)

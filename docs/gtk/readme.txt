@@ -6,12 +6,13 @@ the wxWindows GUI library. This is a developers release
 and is it not suited for production development. Beware
 that major changes can happen before a final release.
 
-Beginning from snapshot 6 wxWindows uses a completely
+Beginning with snapshot 6, wxWindows uses a completely
 new make file system on Unix that uses GNU automake,
 GNU autoconf and GNU autoheader. You do not need these
 programs in order to use the library, but for taking
 part in its development, they are required. Read the
-INSTALL.txt file for learning what you can do with it.
+INSTALL.txt file for learning what you can do with the
+new configure/automake/libtool system.
 
 More information is available from my homepage at:
 
@@ -48,8 +49,8 @@ once a binary incompatible version of wxWindows/Gtk comes out
 we'll augment the library version number to avoid linking problems.
 
 Please send problems concerning installation, feature requests, 
-bug reports or comments to the wxWindows users Information on 
-how to subscribe is available from my homepage.
+bug reports or comments to the wxWindows users list. Information 
+on how to subscribe is available from my homepage.
 
 wxWindows/Gtk doesn't come with any guarantee whatsoever. It might 
 crash your harddisk or destroy your monitor. It doesn't claim to be
