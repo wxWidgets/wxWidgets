@@ -219,12 +219,12 @@ protected:
     public:
         wxScrolledWindow() { }
         wxScrolledWindow(wxWindow *parent,
-                         wxWindowID id = -1,
+                         wxWindowID winid = -1,
                          const wxPoint& pos = wxDefaultPosition,
                          const wxSize& size = wxDefaultSize,
                          long style = wxScrolledWindowStyle,
                          const wxString& name = wxPanelNameStr)
-            : wxGenericScrolledWindow(parent, id, pos, size, style, name)
+            : wxGenericScrolledWindow(parent, winid, pos, size, style, name)
         {
         }
 
