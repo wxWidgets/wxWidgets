@@ -1882,12 +1882,17 @@ int wxWin32Renderer::PixelToScrollbar(const wxScrollBar *scrollbar,
 // text control geometry
 // ----------------------------------------------------------------------------
 
+static inline int GetTextBorderWidth()
+{
+    return 1;
+}
+
 wxRect wxWin32Renderer::GetTextTotalArea(const wxTextCtrl *text,
                                          const wxRect& rect)
 {
     // this is what Windows does
     wxRect rectTotal = rect;
-    rectTotal.Inflate(10);
+    rectTotal.Inflate(GetTextBorderWidth());
     rectTotal.height++;
 
     return rectTotal;
@@ -1900,7 +1905,7 @@ wxRect wxWin32Renderer::GetTextClientArea(const wxTextCtrl *text,
     // undo GetTextTotalArea()
     wxRect rectText = rect;
     rectText.height--;
-    rectText.Inflate(-10);
+    rectText.Inflate(-GetTextBorderWidth());
 
     if ( extraSpaceBeyond )
         *extraSpaceBeyond = 0;

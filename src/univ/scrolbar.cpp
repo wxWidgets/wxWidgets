@@ -222,6 +222,7 @@ void wxScrollBar::SetScrollbar(int position, int thumbSize,
     {
         // and update the window
         Refresh();
+        Update();
     }
 }
 

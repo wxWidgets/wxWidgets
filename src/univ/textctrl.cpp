@@ -598,9 +598,6 @@ BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
     EVT_SIZE(OnSize)
 
     EVT_IDLE(OnIdle)
-
-    EVT_SCROLLWIN_LINEUP(OnScroll)
-    EVT_SCROLLWIN_LINEDOWN(OnScroll)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxControl)
@@ -1428,16 +1425,10 @@ void wxTextCtrl::SetSelection(wxTextPos from, wxTextPos to)
                     RefreshTextRange(m_selStart, m_selEnd);
             }
 
-#ifdef __WXMSW__
             // we need to fully repaint the invalidated areas of the window
-            // before scrolling it (from DoSetInsertionPoint below), otherwise
-            // they may stay unpainted
+            // before scrolling it (from DoSetInsertionPoint which is typically
+            // called after SetSelection()), otherwise they may stay unpainted
             m_targetWindow->Update();
-#endif
-
-            // the cursor should always be at the end of the selection to which
-            // it had been extended to
-            DoSetInsertionPoint(selEndOld == m_selEnd ? m_selStart : m_selEnd);
         }
         //else: nothing to do
     }
@@ -3229,10 +3220,15 @@ void wxTextCtrl::ScrollText(wxTextCoord col)
 
     if ( ofsHorz != SData().m_ofsHorz )
     {
-        // what is currently shown?
-        if ( SData().m_colLastVisible == -1 )
+        // remember the last currently used pixel
+        int posLastVisible = SData().m_posLastVisible;
+        if ( posLastVisible == -1 )
         {
+            // this may happen when we're called very early, during the
+            // controls construction
             UpdateLastVisible();
+
+            posLastVisible = SData().m_posLastVisible;
         }
 
         // NB1: to scroll to the right, offset must be negative, hence the
@@ -3244,32 +3240,29 @@ void wxTextCtrl::ScrollText(wxTextCoord col)
         SData().m_ofsHorz = ofsHorz;
         SData().m_colStart = col;
 
-        // scroll only the rectangle inside which there is the text
-        if ( dx > 0 )
-        {
-            // scrolling to the right: we need to recalc the last visible
-            // position beore scrolling in order to make it appear exactly at
-            // the right edge of the text area after scrolling
-            UpdateLastVisible();
-        }
-        else
-        {
-            // when scrolling to the left, we need to scroll the old rectangle
-            // occupied by the text - then the area where there was no text
-            // before will be refreshed and redrawn
+        // after changing m_colStart, recalc the last visible position: we need
+        // to recalc the last visible position beore scrolling in order to make
+        // it appear exactly at the right edge of the text area after scrolling
+        UpdateLastVisible();
 
-            // but we still need to force updating after scrolling
+#if 0 // do we?
+        if ( dx < 0 )
+        {
+            // we want to force the update of it after scrolling
             SData().m_colLastVisible = -1;
         }
+#endif
 
+        // scroll only the rectangle inside which there is the text
         wxRect rect = m_rectText;
-        rect.width = SData().m_posLastVisible;
+        rect.width = posLastVisible;
 
         rect = ScrollNoRefresh(dx, 0, &rect);
 
         /*
            we need to manually refresh the part which ScrollWindow() doesn't
-           refresh: indeed, if we had this:
+           refresh (with new API this means the part outside the rect returned
+           by ScrollNoRefresh): indeed, if we had this:
 
                                    ********o
 
@@ -3296,17 +3289,23 @@ void wxTextCtrl::ScrollText(wxTextCoord col)
             Refresh(TRUE, &rect);
 
             // and now the area on the right
-            rect.x = m_rectText.x + SData().m_posLastVisible;
-            rect.width = m_rectText.width - SData().m_posLastVisible;
+            rect.x = m_rectText.x + posLastVisible;
+            rect.width = m_rectText.width - posLastVisible;
         }
-        else
+        else // scrolling to the left
         {
             // just extend the rect covering the uncovered area to the edge of
             // the text rect
-            rect.width += m_rectText.width - SData().m_posLastVisible;
+            rect.width += m_rectText.width - posLastVisible;
         }
 
         Refresh(TRUE, &rect);
+
+        // I don't know exactly why is this needed here but without it we may
+        // scroll the window again (from the same method) before the previously
+        // invalidated area is repainted when typing *very* quickly - and this
+        // may lead to the display corruption
+        Update();
     }
 }
 
@@ -3539,25 +3538,14 @@ void wxTextCtrl::OnIdle(wxIdleEvent& event)
 
 bool wxTextCtrl::SendAutoScrollEvents(wxScrollWinEvent& event) const
 {
-    return event.GetEventType() == wxEVT_SCROLLWIN_LINEDOWN
-            ? m_curCol < GetLineLength(m_curRow)
-            : m_curCol > 0;
-}
-
-void wxTextCtrl::OnScroll(wxScrollWinEvent& event)
-{
-#if 0
-    if ( IsAutoScrolling() )
+    bool forward = event.GetEventType() == wxEVT_SCROLLWIN_LINEDOWN;
+    if ( event.GetOrientation() == wxHORIZONTAL )
     {
-        wxControlAction action;
-        action << wxACTION_TEXT_PREFIX_SEL
-               << (forward ? wxACTION_TEXT_RIGHT : wxACTION_TEXT_LEFT);
-        PerformAction(action);
+        return forward ? m_curCol <= GetLineLength(m_curRow) : m_curCol > 0;
     }
-    else
-#endif
+    else // wxVERTICAL
     {
-        event.Skip();
+        return forward ? m_curRow < GetNumberOfLines() : m_curRow > 0;
     }
 }
 
@@ -4385,6 +4373,7 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
     else if ( action == wxACTION_TEXT_SEL_WORD )
     {
         SetSelection(GetWordStart(), GetWordEnd());
+        DoSetInsertionPoint(m_selEnd);
     }
     else if ( action == wxACTION_TEXT_ANCHOR_SEL )
     {
@@ -4393,6 +4382,7 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
     else if ( action == wxACTION_TEXT_EXTEND_SEL )
     {
         SetSelection(m_selAnchor, numArg);
+        DoSetInsertionPoint(numArg);
     }
     else if ( action == wxACTION_TEXT_COPY )
     {

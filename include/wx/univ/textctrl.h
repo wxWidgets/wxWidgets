@@ -428,7 +428,6 @@ protected:
     void RecalcFontMetrics();
 
     // event handlers
-    void OnScroll(wxScrollWinEvent& event);
     void OnIdle(wxIdleEvent& event);
     void OnChar(wxKeyEvent& event);
     void OnSize(wxSizeEvent& event);

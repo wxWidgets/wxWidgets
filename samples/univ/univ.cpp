@@ -241,8 +241,8 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
 {
     SetBackgroundColour(wxGetApp().GetBgColour());
 
-#ifndef TEST_TEXT_ONLY
     new wxStaticText(this, _T("Test static text"), wxPoint(10, 10));
+#ifndef TEST_TEXT_ONLY
     new wxStaticText(this, _T("Test static text"), wxPoint(10, 10));
     new wxStaticText(this,
                      _T("&Multi line\n(and very very very very long)\nstatic text"),
@@ -386,7 +386,7 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
     new wxTextCtrl(this, -1, _T("Hello, Universe!"),
                    wxPoint(550, 150), wxDefaultSize);
 #else // TEST_TEXT_ONLY
-#if 0
+#if 1
     wxTextCtrl *text = new wxTextCtrl(this, -1, _T("Hello, Universe!"),
                                       wxPoint(10, 40));
 #else
@@ -421,7 +421,7 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
                          wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
     text->SetFocus();
     //text->SetEditable(FALSE);
-#if 0
+#if 1
     wxSize sizeText = text->GetBestSize();
     sizeText.x = 200;
     text->SetSize(sizeText);
