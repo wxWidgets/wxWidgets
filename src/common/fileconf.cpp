@@ -274,90 +274,14 @@ wxString wxFileConfig::GetGlobalDir()
     if (rc == 0)
     {
         drive = aulSysInfo[QSV_BOOT_DRIVE - 1];
-        switch(drive)
-        {
-           case 1:
-              strDir = "A:\\OS2\\";
-              break;
-           case 2:
-              strDir = "B:\\OS2\\";
-              break;
-           case 3:
-              strDir = "C:\\OS2\\";
-              break;
-           case 4:
-              strDir = "D:\\OS2\\";
-              break;
-           case 5:
-              strDir = "E:\\OS2\\";
-              break;
-           case 6:
-              strDir = "F:\\OS2\\";
-              break;
-           case 7:
-              strDir = "G:\\OS2\\";
-              break;
-           case 8:
-              strDir = "H:\\OS2\\";
-              break;
-           case 9:
-              strDir = "I:\\OS2\\";
-              break;
-           case 10:
-              strDir = "J:\\OS2\\";
-              break;
-           case 11:
-              strDir = "K:\\OS2\\";
-              break;
-           case 12:
-              strDir = "L:\\OS2\\";
-              break;
-           case 13:
-              strDir = "M:\\OS2\\";
-              break;
-           case 14:
-              strDir = "N:\\OS2\\";
-              break;
-           case 15:
-              strDir = "O:\\OS2\\";
-              break;
-           case 16:
-              strDir = "P:\\OS2\\";
-              break;
-           case 17:
-              strDir = "Q:\\OS2\\";
-              break;
-           case 18:
-              strDir = "R:\\OS2\\";
-              break;
-           case 19:
-              strDir = "S:\\OS2\\";
-              break;
-           case 20:
-              strDir = "T:\\OS2\\";
-              break;
-           case 21:
-              strDir = "U:\\OS2\\";
-              break;
-           case 22:
-              strDir = "V:\\OS2\\";
-              break;
-           case 23:
-              strDir = "W:\\OS2\\";
-              break;
-           case 24:
-              strDir = "X:\\OS2\\";
-              break;
-           case 25:
-              strDir = "Y:\\OS2\\";
-              break;
-           case 26:
-              strDir = "Z:\\OS2\\";
-              break;
-        }
+        strDir.Printf(wxT("%c:\\OS2\\"), 'A'+drive-1);
     }
   #elif defined(__WXSTUBS__)
     wxASSERT_MSG( FALSE, wxT("TODO") ) ;
+  #elif defined(__DOS__)
+    // There's no such thing as global cfg dir in MS-DOS, let's return
+    // current directory (FIXME_MGL?)
+    return wxT(".\\");
   #else // Windows
     wxChar szWinDir[MAX_PATH];
     ::GetWindowsDirectory(szWinDir, MAX_PATH);
