@@ -659,7 +659,9 @@ void wxAssociateControlWithMacControl(ControlRef inControl, wxWindow *control)
 
 void wxRemoveMacControlAssociation(wxWindow *control)
 {
-    wxWinMacControlList.DeleteObject(control);
+    // remove all associations pointing to us
+    while ( wxWinMacControlList.DeleteObject(control) )
+        {}
 }
 #else
 
@@ -686,13 +688,22 @@ void wxAssociateControlWithMacControl(ControlRef inControl, wxWindow *control)
 void wxRemoveMacControlAssociation(wxWindow *control)
 {
    // iterate over all the elements in the class
-    MacControlMap::iterator it;
-    for ( it = wxWinMacControlList.begin(); it != wxWinMacControlList.end(); ++it )
+    // is the iterator stable ? as we might have two associations pointing to the same wxWindow
+    // we should go on...
+
+    bool found = true ;
+    while( found )
     {
-        if ( it->second == control )
+        found = false ;
+        MacControlMap::iterator it;
+        for ( it = wxWinMacControlList.begin(); it != wxWinMacControlList.end(); ++it )
         {
-            wxWinMacControlList.erase(it);
-            break;
+            if ( it->second == control )
+            {
+                wxWinMacControlList.erase(it);
+                found = true ;
+                break;
+            }
         }
     }
 }
