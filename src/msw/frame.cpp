@@ -615,7 +615,7 @@ bool wxFrameMSW::ShowFullScreen(bool show, long style)
         LONG offFlags = 0;
 
         if (style & wxFULLSCREEN_NOBORDER)
-            offFlags |= WS_BORDER;
+            offFlags |= WS_BORDER | WS_THICKFRAME;
         if (style & wxFULLSCREEN_NOCAPTION)
             offFlags |= (WS_CAPTION | WS_SYSMENU);
 
