@@ -2036,10 +2036,18 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
         }
 #endif // 1/0
 
-        if ( ::IsDialogMessage(GetHwnd(), msg) )
+        // we handle VK_ESCAPE ourselves in wxDialog::OnCharHook() and we
+        // shouldn't let IsDialogMessage() get it as it _always_ eats the
+        // message even when there is no cancel button and when the message is
+        // needed by the control itself: in particular, it prevents the tree in
+        // place edit control from being closed with Escape in a dialog
+        if ( msg->message != WM_KEYDOWN || msg->wParam != VK_ESCAPE )
         {
-            // IsDialogMessage() did something...
-            return TRUE;
+            if ( ::IsDialogMessage(GetHwnd(), msg) )
+            {
+                // IsDialogMessage() did something...
+                return TRUE;
+            }
         }
     }
 #endif // __WXUNIVERSAL__
