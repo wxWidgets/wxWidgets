@@ -246,11 +246,11 @@ public:
 
 protected:
   static bool IsImmutable(const wxString& key)
-  #ifndef __WXMAC__
+#if !defined(__WXMAC__) && !defined(__EMX__)
     { return !key.IsEmpty() && key[0u] == wxCONFIG_IMMUTABLE_PREFIX; }
-  #else
+#else
     { return !key.IsEmpty() && key[0ul] == wxCONFIG_IMMUTABLE_PREFIX; }
-  #endif
+#endif
 
 private:
   // are we doing automatic environment variable expansion?

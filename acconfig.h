@@ -55,6 +55,7 @@
 #undef __VMS__
 #undef __ULTRIX__
 #undef __DATA_GENERAL__
+#undef __EMX__
 
 /* ------------------------------------------------------------------------ */
 /* compiler options                                                         */

@@ -1,14 +1,13 @@
 
-  !!! When sending bug reports tell us what version of
-      wxWindows you are using (including the beta) and
-      what compiler on what system. One example:
-      wxGTK 2.1 beta 6, egcs 1.1.1, Redhat 5.0 !!!
+  !!! When sending bug reports tell us what version of wxWindows you are 
+      using (including the beta) and what compiler on what system. One 
+      example: wxGTK 2.1 beta 6, egcs 1.1.1, Redhat 5.0 !!!
 
 * The most simple case
 -----------------------
 
-If you compile wxWindows on Unix for the first time and don't 
-like to read install instructions just do (in the base dir):
+If you compile wxWindows on Unix for the first time and don't like to read 
+install instructions just do (in the base dir):
 
 ./configure
 make
@@ -27,17 +26,15 @@ exit
 * The expert case
 -----------------
 
-If you want to do some more serious cross-platform programming
-with wxWindows, such as for GTK and Motif, you can now build
-two complete libraries and use them concurretly. For this end,
-you have to create a directory for each build of wxWindows -
-you may also want to create different versions of wxWindows
-and test them concurrently. Most typically, this would be a
-version configured with --enable-debug_flag and one without.
-Note, that only one build can currenty be installed, so you'd
-have to use local version of the library for that purpose.
-For building three version, one GTK, one Motif and a debug
-version of the GTK source, you'd do this:
+If you want to do some more serious cross-platform programming with wxWindows, 
+such as for GTK and Motif, you can now build two complete libraries and use 
+them concurretly. For this end, you have to create a directory for each build 
+of wxWindows - you may also want to create different versions of wxWindows
+and test them concurrently. Most typically, this would be a version configured 
+with --enable-debug_flag and one without. Note, that only one build can currently 
+be installed, so you'd have to use local version of the library for that purpose.
+For building three version, one GTK, one Motif and a debug version of the GTK 
+source, you'd do this:
 
 md buildmotif
 cd buildmotif
@@ -60,84 +57,70 @@ cd ..
 * The most simple errors
 ------------------------
 
-configure reports, that you don't have GTK 1.X installed
-although you are certainly sure you have. Well, you have
-installed it, but you also have another version of the
-GTK installed, which you may need to removed including
-other versions of glib (and its headers). Also, look
-for the PATH variable and check if it includes the path
-to the correct gtk-config! The check your LDPATH if 
-it points to the correct library. There is no way to
-compile wxGTK if configure doesn't pass this test as
-all this test does is compile and link a GTK program.
+configure reports, that you don't have GTK 1.X installed although you are 
+certainly sure you have. Well, you have installed it, but you also have another 
+version of the GTK installed, which you may need to removed including other 
+versions of glib (and its headers). Also, look for the PATH variable and check 
+if it includes the path to the correct gtk-config! The check your LDPATH if it 
+points to the correct library. There is no way to compile wxGTK if configure 
+doesn't pass this test as all this test does is compile and link a GTK program.
 
-You get errors during compilation: The reason is that you
-probably have a broken compiler, which includes almost
-everything that is called gcc. If you use gcc 2.8 you
-have to disable optimsation as the compiler will give
-up with an internal compiler error.
+You get errors during compilation: The reason is that you probably have a broken 
+compiler, which includes almost everything that is called gcc. If you use gcc 2.8 
+you have to disable optimsation as the compiler will give up with an internal 
+compiler error.
 
-If there is just any way for you to use egcs, use egcs. 
-We are sorry, but we cannot fix gcc.
+If there is just any way for you to use egcs, use egcs. We cannot fix gcc.
 
-You get immediate segfault when starting any sample
-or application: This is either due to having compiled
-the library with different flags or options than your
-program - typically you might have the __WXDEBUG__ option
-set for the library but not for your program - or due
-to using a broken compiler (and its optimisation) such
-as GCC 2.8.
+You get immediate segfault when starting any sample or application: This is either 
+due to having compiled the library with different flags or options than your program - 
+typically you might have the __WXDEBUG__ option set for the library but not for your 
+program - or due to using a broken compiler (and its optimisation) such as GCC 2.8.
 
 * The most simple program
 -------------------------
 
-Now create your super-application myfoo.app and compile anywhere 
-with
+Now create your super-application myfoo.app and compile anywhere with
 
 g++ myfoo.cpp `wx-config --libs --cflags` -o myfoo
 
 * General
 -----------------------
 
-The Unix variants of wxWindows use GNU configure. If you have 
-problems with your make use GNU make instead.
+The Unix variants of wxWindows use GNU configure. If you have problems with your 
+make use GNU make instead.
 
-If you have general problems with installation, read my 
-homepage at 
+If you have general problems with installation, read my homepage at 
 
   http://wesley.informatik.uni-freiburg.de/~wxxt
   
-for newest information. If you still don't have any success,
-please send a bug report to one of our mailing lists (see
-my homepage) INCLUDING A DESCRIPTION OF YOUR SYSTEM AND 
-YOUR PROBLEM, SUCH AS YOUR VERSION OF GTK, WXGTK, WHAT
-DISTRIBUTION YOU USE AND WHAT ERROR WAS REPORTED. I know 
-this has no effect, but I tried...
+for newest information. If you still don't have any success, please send a bug 
+report to one of our mailing lists (see my homepage) INCLUDING A DESCRIPTION OF 
+YOUR SYSTEM AND YOUR PROBLEM, SUCH AS YOUR VERSION OF GTK, WXGTK, WHAT DISTRIBUTION 
+YOU USE AND WHAT ERROR WAS REPORTED. I know this has no effect, but I tried...
 
 * GUI libraries
 -----------------------
 
-wxWindows/GTK requires the GTK+ library to be installed on your system.
-It has to be a stable version, preferebly version 1.2.3. You can use
-GTK 1.0 in connection with wxWindows, but only without Drag'n'Drop.
-wxWindows does work with the 1.1.X versions of the GTK+ library.
+wxWindows/GTK requires the GTK+ library to be installed on your system. It has to 
+be a stable version, preferebly version 1.2.3. You can use GTK 1.0 in connection 
+with wxWindows, but only without Drag'n'Drop. wxWindows does work with the 1.1.X 
+versions of the GTK+ library.
 
-You can get the newest version of the GTK+ from the GTK homepage
-at
+You can get the newest version of the GTK+ from the GTK homepage at:
+
   http://www.gtk.org
   
-We also mirror GTK+ 1.2.1 at my ftp site soon. You'll find information
-about downloading at my homepage.
+We also mirror GTK+ 1.2.1 at my ftp site soon. You'll find information about downloading 
+at my homepage.
   
 * Additional libraries
 -----------------------
 
-wxWindows/Gtk requires a thread library and X libraries
-known to work with threads. This is the case on all
-commercial Unix-Variants and all Linux-Versions that
-are based on glibc 2 except RedHat 5.0 which is broken
-in many aspects. As of writing this, these Linux 
-distributions have correct glibc 2 support:
+wxWindows/Gtk requires a thread library and X libraries known to work with threads. 
+This is the case on all commercial Unix-Variants and all Linux-Versions that are 
+based on glibc 2 except RedHat 5.0 which is broken in many aspects. As of writing 
+this, these Linux distributions have correct glibc 2 support:
 
  - RedHat 5.1
  - Debian 2.0
@@ -154,22 +137,33 @@ make install
 ldconfig
 exit
   
-NB: DO NOT COMPILE WXGTK WITH GCC AND THREADS, SINCE
-ALL PROGRAMS WILL CRASH UPON START-UP! Just always
-use egcs and be happy.
+NB: DO NOT COMPILE WXGTK WITH GCC AND THREADS, SINCE ALL PROGRAMS WILL CRASH UPON 
+START-UP! Just always use egcs and be happy.
 
-* Create your configuration
------------------------------
+* Building wxGTK on OS/2
+--------------------------
 
-Usage:
-	./configure options
+Please send comments and question about the OS/2 installation
+to Andrea Venturoli <a.ventu@flashnet.it> and patches to
+make the installation work (better) to me (Robert Roebling).
 
-If you want to use system's C and C++ compiler,
-set environment variables CC and CCC as
+You'll need OS/2 Warp (4.00FP#6), X-Free86/2 (3.3.3), 
+gtk+ (?), emx (0.9d fix 1), flex (2.5.4), yacc (1.8), 
+korn shell (5.2.13), Autoconf (?),  GNU file utilities (3.6), 
+GNU text utilities (1.3), GNU shell utilites (1.12), m4 (1.4), 
+sed (2.05), grep (2.0), Awk (3.0.3), GNU Make (3.76.1).
 
-	% setenv CC cc
-	% setenv CCC CC
-	% ./configure options
+Open an OS/2 prompt and switch to the directory above.
+First set some global environment variables we need:
+
+SET CXXFLAGS=-Zmtd -D__ST_MT_ERRNO__
+SET OSTYPE=OS2X              
+SET COMSPEC=sh
+
+Notice you can choose whatever you want, if you don't like OS2X.
+
+* Building wxGTK on SGI
+--------------------------
 
 Using the SGI native compilers, it is recommended that you
 also set CFLAGS and CXXFLAGS before running configure. These 
@@ -185,6 +179,19 @@ you don't accidently build the libraries as 64bit (which is
 untested).
 
 The SGI native compiler support has only been tested on Irix 6.5.
+
+* Create your configuration
+-----------------------------
+
+Usage:
+	./configure options
+
+If you want to use system's C and C++ compiler,
+set environment variables CC and CCC as
+
+	% setenv CC cc
+	% setenv CCC CC
+	% ./configure options
 
 to see all the options please use:
 
@@ -331,8 +338,6 @@ in the various directories will do the work for you.
 * Creating a new Project
 --------------------------
 
-There are two ways to create your own project:
-
 1) The first way uses the installed libraries and header files
 automatically using wx-config
 
@@ -371,163 +376,10 @@ GNU cc
 and if you have all this then you probably know enough to
 go ahead yourself :-)
 
-** Something about Makefiles
-------------------------------
-
-On general principle it should only contain ONE line, which is as follows:
-
-	include ../../setup/general/makeapp
-
-this will include all the necessary definitions for creating the applications
-
-the only case where you might want to add another line is the following:
-this version of configure also supports creation of source archives of the
-application for easy distribution and updates to newer version of wxWindows.
-    For this purpose all files in the application-directory will be put into
-a gziped tar-file in the full notation user/<your application>/*
-if you want to include some other files that you want "more visible", like
-a README.<yourApp> or a shell script for easy 
-compilation/installation/distribution, then you have to add a variable
-
-	DISTRIBUTE_ADDITIONAL=<your files>
-
-to the Makefile.
-So it would look like this:
-
-	DISTRIBUTE_ADDITIONAL=README.TheApp
-	include ../../setup/general/makeapp
-
-As we have already talked about distribution the command to create a 
-distribution is:
-
-	make distrib
-
-NOTE: If you are in the base directory of wxWindows it will create 
-distribution packages for wxWindows as well as for all packages in the
-user directory.
-    So if you want to create only packages for the files in user,
-then go to the directory other and type:
-
-	make distrib
-
-or if you only want one application to be created then
-enter the specific directory and type there:
-make distrib
-
-All the distribution files will be put in the directory
-distrib at the base of the wxWindows-tree (where also configure
-and template.mak can be found).
-
-** Something about Makefile.in
---------------------------------
-
-As you have already seen with Makefile, configure makes a lot of use
-if the include statement in make to keep the Makefiles as simple as 
-possible.
-
-So basically there are only variables to define and then a include command.
-Exception to this rule is if you have special rules for some stuff...
-These rules should go AFTER the include statement!!!
-
-so the general header looks like this:
-
-	# wxWindows base directory
-	WXBASEDIR=@WXBASEDIR@
-	# set the OS type for compilation
-	OS=@OS@
-	# compile a library only
-	RULE=bin
-
-and the general footer will look like this:
-
-	# include the definitions now
-	include ../../../template.mak
-
-the key variable is RULE, which defines what make should create
-in this directory.
-
-here are some examples:
-
-  RULE	  description              
-  ===========================================================================
-  bin	  creates a local binary (for a global binary prefix bin with g)
-  	  additional variables needed:
-  		BIN_TARGET	this gives the name of your application
-  		BIN_OBJ		this gives the object files needed to
-  				link the application
-  	  optional variables are:
-  		BIN_SRC		this gives the list of c/c++ files for
-  				which dependencies will be checked.
-  				(This can be achieved with: make depend)
-  		BIN_LINK	this gives commands for additional
-  				libraries needed to link the application
-  ---------------------------------------------------------------------------
-  bin2	  creates two local binaries (for global binaries prefix bin2 with g)
-  	  in addition to the variables specified above you MUST also
-  	  provide the same variables with BIN2_ instead of BIN_
-  ---------------------------------------------------------------------------
-  lib	  creates a local library (for a global binary prefix bin with g)
-  	  additional variables needed:
-  		LIB_TARGET	this gives the name of your library
-  		LIB_OBJ		this gives the object files needed for
-  				the library to be build.
-  	  optional variables are:
-  		LIB_SRC		this gives the list of c/c++ files for
-  				which dependencies will be checked.
-  	  libbin and libgbin are also possible and will need in addition
-  	  the variables from bin
-  ---------------------------------------------------------------------------
-  gslib	  is similar to lib, but it creates a shared library if the system
-  	  supports it.
-  	  additional variables needed:
-  		LIB_MAJOR	major number of the shared library
-  		LIB_MINOR	minor number of the shared library
-  ---------------------------------------------------------------------------
-  other additional variables:
-
-  	  ADD_COMPILE	   define additional includes/defines that
-  			   are needed to compile the object files
-  			   (if you need to reference some directory
-  			   utils - like wxGrid -, then please 
-  			   reference them with the variables defined
-  			   in template.mak - e.g.: $(SRCDIR),$(UTILS),
-  			   $(SAMPLES),$(OTHERS))
-
-  	  NEEDED_DEFINES   lists all the defines that HAVE to be set in
-  			   /include/wx/setup.h to compile correctly.
-
-	  SRC_DIR	   lists all directories that are needed to
-			   compile. (i.e: lists all the directories,
-			   where there are source-files.) But it is 
-			   also needed to clean an object and for 
-			   machines, for which make does not support 
-			   VPATH
-
-currently there are the following compiling rules provided:
-object files are created for the following file extensions:
-.c .cc .cpp
-
-Please have a closer look at the Makefiles in this distribution.
-
-* Platforms configure is working with
----------------------------------------
-
-Please report build succes on any machine. Especially non-
-Linux operating systems (which I don't have).
-
-Original author of the autoconf system for wxxt-1.66 and for this INSTALL
-file:
-
-	Martin Sperl	sperl@dsn.ast.univie.ac.at
-	
-Ported to wxGTK 0.1:
-
-	Wolfram Gloger  wmglo@dent.med.uni-muenchen.de
-
-Thanks alot to both of them.
+----------------------
 
 In the hope that it will be useful,
 
-        Robert Roebling roebling@sun2.ruf.uni-freiburg.de
+        Robert Roebling <roebling@sun2.ruf.uni-freiburg.de>
 	
 	

@@ -41,6 +41,10 @@ public:
   wxMask( const wxBitmap& bitmap, int paletteIndex );
   wxMask( const wxBitmap& bitmap );
   ~wxMask();
+  
+  bool Create( const wxBitmap& bitmap, const wxColour& colour );
+  bool Create( const wxBitmap& bitmap, int paletteIndex );
+  bool Create( const wxBitmap& bitmap );
 
  // implementation
 

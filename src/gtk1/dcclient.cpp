@@ -1172,9 +1172,15 @@ void wxWindowDC::SetUpDC()
     m_brush = wxNullBrush;
     SetBrush( tmp_brush );
     
+/*
     tmp_brush = m_backgroundBrush;
     m_backgroundBrush = wxNullBrush;
     SetBackground( tmp_brush );
+*/
+    tmp_brush = m_backgroundBrush;
+    m_backgroundBrush = wxNullBrush;
+    SetBackground( *wxWHITE_BRUSH );
+    m_backgroundBrush = tmp_brush;
   
     if (!hatch_bitmap) 
     {

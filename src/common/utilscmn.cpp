@@ -168,6 +168,12 @@ int strncasecmp(const char *str_1, const char *str_2, size_t maxchar)
 #endif
 
 #else
+
+#ifdef __EMX__
+#define strcasecmp stricmp
+#define strncasecmp strnicmp
+#endif
+
 // This declaration is missing in SunOS!
 // (Yes, I know it is NOT ANSI-C but its in BSD libc)
 #if defined(__xlC) || defined(__AIX__) || defined(__GNUG__)

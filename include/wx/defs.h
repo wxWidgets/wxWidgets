@@ -28,7 +28,8 @@
 // OS
 #if defined(__unix) || defined(__unix__) || defined(____SVR4____) || \
     defined(__LINUX__) || defined(__sgi ) || \
-    defined(__hpux) || defined(sun) || defined(__SUN__) || defined(_AIX)
+    defined(__hpux) || defined(sun) || defined(__SUN__) || defined(_AIX) || \
+    defined(__EMX__)
 
     #ifndef __UNIX__
         #define __UNIX__

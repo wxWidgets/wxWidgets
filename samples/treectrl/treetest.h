@@ -102,6 +102,7 @@ public:
     void OnAbout(wxCommandEvent& event);
 
     void OnDump(wxCommandEvent& event);
+    void OnDumpSelected(wxCommandEvent& event);
     void OnDelete(wxCommandEvent& event);
     void OnDeleteChildren(wxCommandEvent& event);
     void OnDeleteAll(wxCommandEvent& event);
@@ -141,6 +142,7 @@ enum
     TreeTest_Quit,
     TreeTest_About,
     TreeTest_Dump,
+    TreeTest_Dump_Selected,
     TreeTest_Sort,
     TreeTest_SortRev,
     TreeTest_Bold,

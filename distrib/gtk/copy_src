@@ -37,6 +37,7 @@ echo Docs..
 cd docs/gtk
 cp COPYING.LIB ~/wxgtk_dist/wxGTK
 cp install.txt ~/wxgtk_dist/wxGTK/INSTALL.txt
+cp changes.txt ~/wxgtk_dist/wxGTK/CHANGES.txt
 cp licence.txt ~/wxgtk_dist/wxGTK/LICENCE.txt
 cp readme.txt ~/wxgtk_dist/wxGTK/README.txt
 cp todo.txt ~/wxgtk_dist/wxGTK/TODO.txt

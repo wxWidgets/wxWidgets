@@ -20,6 +20,10 @@
     #include <ctype.h>
 #endif
 
+#ifdef __EMX__
+    #include <std.h>
+#endif
+
 #include <string.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -89,17 +93,19 @@ inline size_t WXDLLEXPORT Strlen(const char *psz)
 // portable strcasecmp/_stricmp
 inline int WXDLLEXPORT Stricmp(const char *psz1, const char *psz2)
 {
-#if     defined(__VISUALC__) || ( defined(__MWERKS__) && defined(__INTEL__) )
+#if defined(__VISUALC__) || ( defined(__MWERKS__) && defined(__INTEL__) )
   return _stricmp(psz1, psz2);
-#elif     defined(__SC__)
+#elif defined(__SC__)
   return _stricmp(psz1, psz2);
-#elif     defined(__SALFORDC__)
+#elif defined(__SALFORDC__)
   return stricmp(psz1, psz2);
 #elif defined(__BORLANDC__)
   return stricmp(psz1, psz2);
 #elif defined(__WATCOMC__)
   return stricmp(psz1, psz2);
-#elif   defined(__UNIX__) || defined(__GNUWIN32__)
+#elif defined(__EMX__)
+  return stricmp(psz1, psz2);
+#elif defined(__UNIX__) || defined(__GNUWIN32__)
   return strcasecmp(psz1, psz2);
 #elif defined(__MWERKS__) && !defined(__INTEL__)
   register char c1, c2;

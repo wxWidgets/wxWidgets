@@ -179,6 +179,9 @@ case "${host}" in
     AC_DEFINE(__SVR4__)
     DEFAULT_DEFAULT_wxUSE_MOTIF=1
   ;;
+  *-pc-os2_emx )
+    AC_DEFINE(__EMX__)
+  ;;
   *)
     AC_MSG_ERROR(unknown system type $(host).)
 esac

@@ -69,6 +69,17 @@
     };
 #endif // Unices without usleep()
 
+#ifdef __EMX__
+  /* I copied this from the XFree86 diffs. AV. */
+extern void DosSleep(unsigned long);
+#define INCL_DOSPROCESS
+#include <os2.h>
+void usleep(unsigned long delay)
+{
+    DosSleep(delay ? (delay/1000l) : 1l);
+}
+#endif
+
 // ============================================================================
 // implementation
 // ============================================================================

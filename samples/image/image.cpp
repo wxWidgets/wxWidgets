@@ -200,6 +200,7 @@ void MyCanvas::CreateAntiAliasedBitmap()
   dc.DrawText( "And a Rectangle.", 20, 60 );
   
   dc.SetBrush( *wxRED_BRUSH );
+  dc.SetPen( *wxTRANSPARENT_PEN );
   dc.DrawRoundedRectangle( 20, 100, 200, 180, 20 );
   
   wxImage original( bitmap );

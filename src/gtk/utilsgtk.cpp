@@ -18,23 +18,16 @@
 #include "wx/unix/execute.h"
 
 #include <stdarg.h>
-#include <dirent.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <sys/wait.h>
-#include <pwd.h>
-#include <errno.h>
-#include <netdb.h>
-#include <signal.h>
-#include <fcntl.h>          // for O_WRONLY and friends
 
-#include <glib.h>
-#include <gdk/gdk.h>
-#include <gtk/gtk.h>
-#include <gtk/gtkfeatures.h>
-#include <gdk/gdkx.h>
+#include "glib.h"
+#include "gdk/gdk.h"
+#include "gtk/gtk.h"
+#include "gtk/gtkfeatures.h"
+#include "gdk/gdkx.h"
 
 #ifdef HAVE_X11_XKBLIB_H
   #ifdef __HPUX__

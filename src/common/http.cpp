@@ -130,7 +130,7 @@ bool wxHTTP::ParseHeaders()
       break;
 
     tokenzr.SetString(line, " :\t\n\r");
-    if (!tokenzr.HasMoreToken())
+    if (!tokenzr.HasMoreTokens())
       return FALSE;
 
     wxString left_str = tokenzr.GetNextToken();

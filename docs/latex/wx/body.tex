@@ -8,13 +8,14 @@
 wxWindows is a C++ framework providing GUI (Graphical User
 Interface) and other facilities on more than one platform.  Version 2.0 currently
 supports MS Windows (16-bit, Windows 95 and Windows NT), Unix with GTK+, and Unix with Motif.
-A Mac port is in an advanced state.
+A Mac port is in an advanced state, an OS/2 port and a port to the MGL graphics library
+have been started.
 
 wxWindows was originally developed at the Artificial Intelligence
 Applications Institute, University of Edinburgh, for internal use.
 wxWindows has been released into the public domain in the hope
 that others will also find it useful. Version 2.0 is written and
-maintained by Julian Smart, Robert Roebling and others.
+maintained by Julian Smart, Robert Roebling, Vadim Zeitlin and others.
 
 This manual discusses wxWindows in the context of multi-platform
 development.\helpignore{For more detail on the wxWindows version 2.0 API
@@ -182,8 +183,8 @@ Metrowerks CodeWarrior.
 (b) Unix:
 
 \begin{enumerate}\itemsep=0pt
-\item Almost any C++ compiler, including GNU C++.
-\item Almost any Unix workstation, and one of: GTK+ 1.0, Motif 1.2 or higher, Lesstif.
+\item Almost any C++ compiler, including GNU C++ (EGCS 1.1.1 or above).
+\item Almost any Unix workstation, and one of: GTK+ 1.0, GTK+ 1.2, Motif 1.2 or higher, Lesstif.
 \item At least 60 MB of disk space.
 \end{enumerate}
 
@@ -356,7 +357,7 @@ STACKSIZE    8192
 The only lines which will usually have to be changed per application are
 NAME and DESCRIPTION.
 
-\subsection{Allocating and deleting wxWindows objects}
+\section{Allocating and deleting wxWindows objects}
 
 In general, classes derived from wxWindow must dynamically allocated
 with {\it new} and deleted with {\it delete}. If you delete a window,
@@ -385,6 +386,26 @@ Windows is particularly sensitive to this: so make sure you
 make calls like wxDC::SetPen(wxNullPen) or wxDC::SelectObject(wxNullBitmap) before deleting
 a drawing object that may be in use. Code that doesn't do this will probably work
 fine on some platforms, and then fail under Windows.
+
+\section{Architecture dependency}
+
+A problem which sometimes arises from writing multi-platform programs is that
+the basic C types are not defiend the same on all platforms. This holds true
+for both the length in bits of the standard types (such as int and long) as 
+well as their byte order, which might be little endian (typically
+on Intel computers) or big endian (typically on some Unix workstations). wxWindows
+defines types and macros that make it easy to write architecture independent
+code. The types are:
+
+wxInt32, wxInt16, wxInt8, wxUint32, wxUint16 = wxWord, wxUint8 = wxByte
+
+where wxInt32 stands for a 32-bit signed integer type etc. You can also check
+which architecture the program is compiled on using the wxBYTE\_ORDER define
+which is either wxBIG\_ENDIAN or wxLITTLE\_ENDIAN (in the future maybe wxPDP\_ENDIAN
+as well).
+
+The macros handling bit-swapping with respect to the applications endianness
+are described in the \helpref{Macros}{macros} section.
 
 \section{Conditional compilation}
 

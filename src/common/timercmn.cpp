@@ -44,7 +44,7 @@
 
 #if defined(__linux__) || defined(__SVR4__) || defined(__SYSV__) || defined(__SGI__) || \
     defined(__ALPHA__) || defined(__GNUWIN32__) || defined(__FreeBSD__) || defined(__NetBSD__) || \
-    defined(__SALFORDC__)
+    defined(__SALFORDC__) || defined(__EMX__)
 #include <sys/time.h>
 #endif
 
@@ -73,15 +73,17 @@ extern "C" int gettimeofday(struct timeval *tp, void *);
 long wxStartTime = 0;
 void wxStartTimer(void)
 {
-#if defined(__xlC__) || defined(__AIX__) || defined(__SVR4__) || defined(__SYSV__) || (defined(__GNUWIN32__) && !defined(__MINGW32__)) // || defined(__AIXV3__)
+#if defined(__EMX__) || defined(__xlC__) || defined(__AIX__) || defined(__SVR4__) || defined(__SYSV__) || \
+    (defined(__GNUWIN32__) && !defined(__MINGW32__)) // || defined(__AIXV3__)
   struct timeval tp;
-#if defined(__SYSV__) || (defined (__GNUWIN32__) && !defined (__MINGW32__))
+#if defined(__EMX__) || defined(__SYSV__) || (defined (__GNUWIN32__) && !defined (__MINGW32__))
   gettimeofday(&tp, (struct timezone *)NULL);
 #else
   gettimeofday(&tp);
 #endif
   wxStartTime = 1000*tp.tv_sec + tp.tv_usec/1000;
-#elif (defined(__SC__) || defined(__SGI__) || defined(___BSDI__) || defined(__ALPHA__) || defined(__MINGW32__) || defined(__MWERKS__) || defined(__FreeBSD__) ) 
+#elif (defined(__SC__) || defined(__SGI__) || defined(___BSDI__) || defined(__ALPHA__) || \
+       defined(__MINGW32__) || defined(__MWERKS__) || defined(__FreeBSD__) ) 
   time_t t0;
   struct tm *tp;
   time(&t0);
@@ -97,7 +99,8 @@ void wxStartTimer(void)
 // Returns elapsed time in milliseconds
 long wxGetElapsedTime(bool resetTimer)
 {
-#if defined(__xlC__) || defined(__AIX__) || defined(__SVR4__) || defined(__SYSV__) || (defined(__GNUWIN32__) && !defined(__MINGW32__)) // || defined(__AIXV3__)
+#if defined(__xlC__) || defined(__AIX__) || defined(__SVR4__) || defined(__SYSV__) || \
+    (defined(__GNUWIN32__) && !defined(__MINGW32__)) // || defined(__AIXV3__)
   struct timeval tp;
 #if defined(__SYSV__) || (defined (__GNUWIN32__) && !defined (__MINGW32__))
   gettimeofday(&tp, (struct timezone *)NULL);
@@ -108,7 +111,8 @@ long wxGetElapsedTime(bool resetTimer)
   long newTime = 1000*tp.tv_sec + tp.tv_usec / 1000;
   if (resetTimer)
     wxStartTime = newTime;
-#elif (defined(__SC__) || defined(__SGI__) || defined(___BSDI__) || defined(__ALPHA__) || defined(__MINGW32__)|| defined(__MWERKS__) || defined(__FreeBSD__))
+#elif (defined(__SC__) || defined(__SGI__) || defined(___BSDI__) || defined(__ALPHA__) || \
+  defined(__MINGW32__)|| defined(__MWERKS__) || defined(__FreeBSD__))
   time_t t0;
   struct tm *tp;
   time(&t0);
@@ -150,7 +154,7 @@ bool wxGetLocalTime(long *timeZone, int *dstObserved)
   *dstObserved = tp->tm_isdst;
 #else
 
-#if (((defined(__SYSV__) && !defined(__HPUX__)) || defined(__MSDOS__) || defined(__WXMSW__))\
+#if (((defined(__SYSV__) && !defined(__HPUX__)) || defined(__MSDOS__) || defined(__WXMSW__)) \
    && !defined(__GNUWIN32__) && !defined(__MWERKS__) )
 #if defined(__BORLANDC__)
   /* Borland uses underscores */

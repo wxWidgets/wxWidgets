@@ -29,6 +29,14 @@ WXDLLEXPORT_DATA(extern const char*) wxTreeCtrlNameStr;
 #include "wx/scrolwin.h"
 #include "wx/textctrl.h"
 #include "wx/pen.h"
+#include "wx/dynarray.h"
+
+#ifndef wxTR_SINGLE
+#define wxTR_SINGLE                 0x0000
+#define wxTR_MULTIPLE               0x0020
+#define wxTR_EXTENDED               0x0040
+#define wxTR_HAS_VARIABLE_ROW_HIGHT 0x0080
+#endif
 
 // -----------------------------------------------------------------------------
 // constants
@@ -36,11 +44,31 @@ WXDLLEXPORT_DATA(extern const char*) wxTreeCtrlNameStr;
 
 // values for the `flags' parameter of wxTreeCtrl::HitTest() which determine
 // where exactly the specified point is situated:
+
+static const int wxTREE_HITTEST_ABOVE            = 0x0001;
+static const int wxTREE_HITTEST_BELOW            = 0x0002;
 static const int wxTREE_HITTEST_NOWHERE          = 0x0004;
+    // on the button associated with an item.
+static const int wxTREE_HITTEST_ONITEMBUTTON     = 0x0008;
     // on the bitmap associated with an item.
-static const int wxTREE_HITTEST_ONITEMICON       = 0x0020;
+static const int wxTREE_HITTEST_ONITEMICON       = 0x0010;
+    // on the ident associated with an item.
+static const int wxTREE_HITTEST_ONITEMIDENT      = 0x0020;
     // on the label (string) associated with an item.
-static const int wxTREE_HITTEST_ONITEMLABEL      = 0x0080;
+static const int wxTREE_HITTEST_ONITEMLABEL      = 0x0040;
+    // on the right of the label associated with an item.
+static const int wxTREE_HITTEST_ONITEMRIGHT      = 0x0080;
+    // on the label (string) associated with an item.
+//static const int wxTREE_HITTEST_ONITEMSTATEICON  = 0x0100;
+    // on the left of the wxTreeCtrl.
+static const int wxTREE_HITTEST_TOLEFT           = 0x0200;
+    // on the right of the wxTreeCtrl.
+static const int wxTREE_HITTEST_TORIGHT          = 0x0400;
+    // on the upper part (first half) of the item.
+static const int wxTREE_HITTEST_ONITEMUPPERPART  = 0x0800;
+    // on the lower part (second half) of the item.
+static const int wxTREE_HITTEST_ONITEMLOWERPART  = 0x1000;
+
     // anywhere on the item
 static const int wxTREE_HITTEST_ONITEM  = wxTREE_HITTEST_ONITEMICON |
                                           wxTREE_HITTEST_ONITEMLABEL;
@@ -83,6 +111,8 @@ public:
 
     wxGenericTreeItem *m_pItem;
 };
+
+WX_DECLARE_OBJARRAY(wxTreeItemId, wxArrayTreeItemIds);
 
 // ----------------------------------------------------------------------------
 // wxTreeItemData is some (arbitrary) user class associated with some item.
@@ -324,7 +354,7 @@ public:
     wxTreeItemId GetSelection() const { return m_current; }
 
         // get the items currently selected, return the number of such item
-  //size_t GetSelections(wxArrayTreeItems*) const;
+    size_t GetSelections(wxArrayTreeItemIds&) const;
 
         // get the parent of this item (may return NULL if root)
     wxTreeItemId GetParent(const wxTreeItemId& item) const;
@@ -405,7 +435,7 @@ public:
     void Unselect();
     void UnselectAll();
         // select this item
-    void SelectItem(const wxTreeItemId& item, bool unselect_others=TRUE, bool extended_select=FALSE);
+    void SelectItem(const wxTreeItemId& item, bool unselect_others=true, bool extended_select=false);
         // make sure this item is visible (expanding the parent item and/or
         // scrolling to this item if necessary)
     void EnsureVisible(const wxTreeItemId& item);
@@ -454,9 +484,15 @@ public:
     // implementation
     void SendDeleteEvent(wxGenericTreeItem *itemBeingDeleted);
 
+    // Draw Special Information
+    void DrawBorder(wxTreeItemId& item);
+    void DrawLine(wxTreeItemId& item, bool below);
+    
 protected:
+    friend class wxGenericTreeItem;
+
     wxGenericTreeItem   *m_anchor;
-    wxGenericTreeItem   *m_current;
+    wxGenericTreeItem   *m_current, *m_key_current;
     bool                 m_hasFocus;
     bool                 m_dirty;
     int                  m_xScroll,m_yScroll;
@@ -480,15 +516,18 @@ protected:
                               wxTreeItemData *data);
 
     void AdjustMyScrollbars();
+    int  GetLineHeight(wxGenericTreeItem *item) const;
     void PaintLevel( wxGenericTreeItem *item, wxDC& dc, int level, int &y );
     void PaintItem( wxGenericTreeItem *item, wxDC& dc);
 
     void CalculateLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &y );
     void CalculatePositions();
+    void CalculateSize( wxGenericTreeItem *item, wxDC &dc );
 
     void RefreshSubtree( wxGenericTreeItem *item );
     void RefreshLine( wxGenericTreeItem *item );
 
+    void FillArray(wxGenericTreeItem*, wxArrayTreeItemIds&) const;
     void SelectItemRange( wxGenericTreeItem *item1, wxGenericTreeItem *item2 );
     bool TagAllChildrenUntilLast(wxGenericTreeItem *crt_item, wxGenericTreeItem *last_item, bool select);
     bool TagNextChildren(wxGenericTreeItem *crt_item, wxGenericTreeItem *last_item, bool select);

@@ -25,21 +25,27 @@
   #include "wx/wx.h"
 #endif
 
-// under Windows the icons are in the .rc file
-#ifndef __WXMSW__
-  #include "icon1.xpm"
-  #include "icon2.xpm"
-  #include "mondrian.xpm"
-#endif
-
 #include "wx/log.h"
 
+#include "wx/image.h"
 #include "wx/imaglist.h"
 #include "wx/treectrl.h"
 
 #include "math.h"
 
 #include "treetest.h"
+
+#define USE_TR_HAS_VARIABLE_ROW_HIGHT 1
+
+// under Windows the icons are in the .rc file
+#ifndef __WXMSW__
+#if !USE_TR_HAS_VARIABLE_ROW_HIGHT
+  #include "icon1.xpm"
+#endif
+  #include "icon2.xpm"
+  #include "mondrian.xpm"
+#endif
+
 
 // verify that the item is ok and insult the user if it is not
 #define CHECK_ITEM( item ) if ( !item.IsOk() ) {                            \
@@ -54,6 +60,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TreeTest_Quit, MyFrame::OnQuit)
     EVT_MENU(TreeTest_About, MyFrame::OnAbout)
     EVT_MENU(TreeTest_Dump, MyFrame::OnDump)
+    EVT_MENU(TreeTest_Dump_Selected, MyFrame::OnDumpSelected)
     EVT_MENU(TreeTest_Rename, MyFrame::OnRename)
     EVT_MENU(TreeTest_Sort, MyFrame::OnSort)
     EVT_MENU(TreeTest_SortRev, MyFrame::OnSortRev)
@@ -146,9 +153,11 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     tree_menu->Append(TreeTest_IncSpacing, "Add 5 points to spacing\tCtrl-I");
     tree_menu->Append(TreeTest_DecSpacing, "Reduce spacing by 5 points\tCtrl-R");
 
-    item_menu->Append(TreeTest_Dump, "&Dump item children");
     item_menu->AppendSeparator();
+    item_menu->Append(TreeTest_Dump, "&Dump item children");
+    item_menu->Append(TreeTest_Dump_Selected, "Dump selected items\tAlt-S");
     item_menu->Append(TreeTest_Rename, "&Rename item...");
+
     item_menu->AppendSeparator();
     item_menu->Append(TreeTest_Bold, "Make item &bold");
     item_menu->Append(TreeTest_UnBold, "Make item &not bold");
@@ -161,9 +170,12 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
 
     m_treeCtrl = new MyTreeCtrl(this, TreeTest_Ctrl,
                                 wxDefaultPosition, wxDefaultSize,
-                                wxTR_HAS_BUTTONS | wxSUNKEN_BORDER
-				| wxTR_MULTIPLE
-				);
+                                wxTR_HAS_BUTTONS | 
+				wxTR_MULTIPLE |
+#if USE_TR_HAS_VARIABLE_ROW_HIGHT
+				wxTR_HAS_VARIABLE_ROW_HIGHT |
+#endif
+				wxSUNKEN_BORDER);
     wxTextCtrl *textCtrl = new wxTextCtrl(this, -1, "",
                                 wxDefaultPosition, wxDefaultSize,
                                 wxTE_MULTILINE | wxSUNKEN_BORDER);
@@ -248,6 +260,18 @@ void MyFrame::OnDump(wxCommandEvent& WXUNUSED(event))
     CHECK_ITEM( root );
 
     m_treeCtrl->GetItemsRecursively(root, -1);
+}
+
+void MyFrame::OnDumpSelected(wxCommandEvent& WXUNUSED(event))
+{
+    wxArrayTreeItemIds array;
+
+    m_treeCtrl->GetSelections(array);
+    size_t nos=array.Count();
+    wxLogMessage(wxString("items selected : ")<< (int)nos);
+
+    for (size_t n=0; n<nos; ++n)
+      wxLogMessage(m_treeCtrl->GetItemText(array.Item(n)));
 }
 
 void MyFrame::DoSetBold(bool bold)
@@ -346,6 +370,13 @@ MyTreeCtrl::MyTreeCtrl(wxWindow *parent, const wxWindowID id,
                        long style)
           : wxTreeCtrl(parent, id, pos, size, style)
 {
+#if USE_TR_HAS_VARIABLE_ROW_HIGHT
+    wxImage::AddHandler(new wxJPEGHandler); 
+    wxImage image;
+
+    image.LoadFile(wxString("horse.jpg"), wxBITMAP_TYPE_JPEG );
+#endif
+
     m_reverseSort = FALSE;
 
     // Make an image list containing small icons
@@ -355,10 +386,18 @@ MyTreeCtrl::MyTreeCtrl(wxWindow *parent, const wxWindowID id,
 #if defined(__WXMSW__) && defined(__WIN16__)
     // This is required in 16-bit Windows mode only because we can't load a specific (16x16)
     // icon image, so it comes out stretched
+#  if USE_TR_HAS_VARIABLE_ROW_HIGHT
+    m_imageListNormal->Add(image.ConvertToBitmap());
+#  else
     m_imageListNormal->Add(wxBitmap("bitmap1", wxBITMAP_TYPE_BMP_RESOURCE));
+#  endif
     m_imageListNormal->Add(wxBitmap("bitmap2", wxBITMAP_TYPE_BMP_RESOURCE));
 #else
+#  if USE_TR_HAS_VARIABLE_ROW_HIGHT
+    m_imageListNormal->Add(image.ConvertToBitmap());
+#  else
     m_imageListNormal->Add(wxICON(icon1));
+#  endif
     m_imageListNormal->Add(wxICON(icon2));
 #endif
 
