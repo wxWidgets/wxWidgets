@@ -456,7 +456,7 @@ public:
     } // The OOR typemaps don't know what to do with the %new, so fix it up.
     %pragma(python) addtoclass = "
     def GetColumn(self, *_args, **_kwargs):
-        val = ontrols2c.wxListCtrl_GetColumn(self, *_args, **_kwargs)
+        val = controls2c.wxListCtrl_GetColumn(self, *_args, **_kwargs)
         if val is not None: val.thisown = 1
         return val
     "
