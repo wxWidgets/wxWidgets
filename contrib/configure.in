@@ -59,7 +59,6 @@ AC_OUTPUT([
             src/stc/Makefile
             src/svg/Makefile	    
             src/xrc/Makefile
-            src/canvas/Makefile
             src/gizmos/Makefile
             src/plot/Makefile
             src/applet/Makefile
@@ -72,9 +71,6 @@ AC_OUTPUT([
             samples/ogl/studio/Makefile
             samples/stc/Makefile
             samples/svg/Makefile
-            samples/canvas/Makefile
-            samples/canvas/test/Makefile
-            samples/canvas/simple/Makefile
             samples/gizmos/Makefile
             samples/gizmos/editlbox/Makefile
             samples/gizmos/dynsash/Makefile
