@@ -127,9 +127,14 @@ void wxDataFormat::SetId( const wxChar *id )
 void wxDataFormat::PrepareFormats()
 {
     // VZ: GNOME included in RedHat 6.1 uses the MIME types below and not the
-    //     atoms STRING and file:ALL as the old code was
+    //     atoms STRING and file:ALL as the old code was, but normal X apps
+    //     use STRING for text selection when transfering the data via
+    //     clipboard, for example, so do use STRING for now (GNOME apps will
+    //     probably support STRING as well for compatibility anyhow), but use
+    //     text/uri-list for file dnd because compatibility is not important
+    //     here (with whom?)
     if (!g_textAtom)
-        g_textAtom = gdk_atom_intern( "text/plain", FALSE );
+        g_textAtom = gdk_atom_intern( "STRING" /* "text/plain" */, FALSE );
     if (!g_pngAtom)
         g_pngAtom = gdk_atom_intern( "image/png", FALSE );
     if (!g_fileAtom)
@@ -224,18 +229,36 @@ bool wxFileDataObject::SetData(size_t size, const void *buf)
     // "file:" as far as I see) delimited by "\r\n" of total length size
     // (I wonder what happens if the file has '\n' in its filename??)
     wxString filename;
-    for ( const char *p = (const char *)buf; *p; p++ )
+    for ( const char *p = (const char *)buf; ; p++ )
     {
-        if ( *p == '\r' && *(p+1) == '\n' )
+        // some broken programs (testdnd GTK+ sample!) omit the trailing
+        // "\r\n", so check for '\0' explicitly here instead of doing it in
+        // the loop statement to account for it
+        if ( (*p == '\r' && *(p+1) == '\n') || !*p )
         {
-            static const int lenPrefix = 5; // strlen("file:")
+            size_t lenPrefix = 5; // strlen("file:")
             if ( filename.Left(lenPrefix).MakeLower() == _T("file:") )
             {
-                filename.erase(0, lenPrefix);
+                // sometimes the syntax is "file:filename", sometimes it's
+                // URL-like: "file://filename" - deal with both
+                if ( filename[lenPrefix] == _T('/') &&
+                     filename[lenPrefix + 1] == _T('/') )
+                {
+                    // skip the slashes
+                    lenPrefix += 2;
+                }
+
+                AddFile(filename.c_str() + lenPrefix);
+                filename.Empty();
+            }
+            else
+            {
+                wxLogDebug(_T("Unsupported URI '%s' in wxFileDataObject"),
+                           filename.c_str());
             }
 
-            AddFile(filename);
-            filename.Empty();
+            if ( !*p )
+                break;
 
             // skip '\r'
             p++;

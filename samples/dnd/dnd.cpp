@@ -661,6 +661,10 @@ bool DnDApp::OnInit()
     wxImage::AddHandler( new wxPNGHandler );
 #endif
 
+    // under X we usually want to use the primary selection by default (which
+    // is shared with other apps)
+    wxTheClipboard->UsePrimarySelection();
+
     // create the main frame window
     DnDFrame *frame = new DnDFrame((wxFrame  *) NULL,
                                    "Drag-and-Drop/Clipboard wxWindows Sample",
