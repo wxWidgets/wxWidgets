@@ -131,7 +131,10 @@ extern WXDLLEXPORT wxLocale* wxGetLocale();
 inline const wxMB2WXbuf wxGetTranslation(const wxChar *sz)
 {
     wxLocale *pLoc = wxGetLocale();
-    return pLoc ? pLoc->GetString(sz) : (const wxMB2WXbuf)sz;
+    if (pLoc)
+        return pLoc->GetString(sz);
+    else
+        return (const wxMB2WXbuf)sz;
 }
 
 #endif

@@ -454,6 +454,7 @@ size_t   WXDLLEXPORT wcslen(const wchar_t *s);
 #endif
 
 #ifdef wxNEED_WX_STRING_H
+int      WXDLLEXPORT wxStrcmp(const wxChar *psz1, const wxChar *psz2);
 size_t   WXDLLEXPORT wxStrlen(const wxChar *s);
 #endif
 
