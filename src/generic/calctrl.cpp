@@ -36,6 +36,9 @@
     #include "wx/stattext.h"
 #endif //WX_PRECOMP
 
+// Can only use wxSpinEvent if this is enabled
+#if wxUSE_SPINBTN
+
 #include "wx/calctrl.h"
 
 #define DEBUG_PAINT 0
@@ -1033,3 +1036,6 @@ wxCalendarEvent::wxCalendarEvent(wxCalendarCtrl *cal, wxEventType type)
 {
     m_date = cal->GetDate();
 }
+
+#endif // wxUSE_SPINBTN
+

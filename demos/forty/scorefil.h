@@ -15,7 +15,12 @@
 
 #include <wx/config.h>
 
-class wxConfig;
+#ifdef __WIN16__
+#include <wx/fileconf.h>
+
+#undef wxConfig
+#define wxConfig wxFileConfig
+#endif
 
 class ScoreFile {
 public:

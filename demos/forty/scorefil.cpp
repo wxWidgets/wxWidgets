@@ -38,7 +38,6 @@
 
 #include "scorefil.h"
 
-
 ScoreFile::ScoreFile(const char* appName)
 {
 #if 0

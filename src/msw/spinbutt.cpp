@@ -38,6 +38,8 @@
 
 #if wxUSE_SPINBTN
 
+IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxNotifyEvent)
+
 #if defined(__WIN95__) && !defined(__TWIN32__)
 
 #include "wx/spinbutt.h"
@@ -56,7 +58,6 @@
 // ----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxSpinButton, wxControl)
-IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxScrollEvent);
 
 // ----------------------------------------------------------------------------
 // wxSpinButton

@@ -16,7 +16,7 @@
 #include "wx/spinbutt.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxSpinButton, wxControl)
-IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxScrollEvent);
+IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxNotifyEvent)
 
 bool wxSpinButton::Create(wxWindow *parent, wxWindowID id, const wxPoint& WXUNUSED(pos), const wxSize& WXUNUSED(size),
             long style, const wxString& name)

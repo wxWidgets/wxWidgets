@@ -17,7 +17,19 @@
     #pragma implementation "game.h"
 #endif
 
+// For compilers that support precompilation, includes "wx/wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+#pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+#include "wx/wx.h"
+#endif
+
 #include "wx/log.h"
+#include "wx/module.h"
 #include "game.h"
 
 #include <string.h>           // for memset
@@ -31,7 +43,13 @@
 // ==========================================================================
 
 #define HASH(x, y) (((x >> 3) & 0x7f) << 7) + ((y >> 3) & 0x7f)
+
+#ifdef __WIN16__
+#define HASHSIZE   10000
+#else
 #define HASHSIZE   32768
+#endif
+
 #define MAXDEAD    8
 
 

@@ -24,7 +24,7 @@
 
 #include "wx/defs.h"
 
-#ifdef wxUSE_SPINBTN
+#if wxUSE_SPINBTN
 
 #include "wx/control.h"
 #include "wx/event.h"

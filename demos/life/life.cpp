@@ -17,6 +17,17 @@
     #pragma implementation "life.h"
 #endif
 
+// For compilers that support precompilation, includes "wx/wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+#pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+#include "wx/wx.h"
+#endif
+
 #include "wx/statline.h"
 
 #include "life.h"
@@ -459,7 +470,7 @@ void LifeCanvas::SetCellSize(int cellsize)
     wxInt32 cy = m_viewportY + m_viewportH / 2;
 
     // get current canvas size and adjust viewport accordingly
-    wxCoord w, h;
+    int w, h;
     GetClientSize(&w, &h);
     m_viewportW = (w + m_cellsize - 1) / m_cellsize;
     m_viewportH = (h + m_cellsize - 1) / m_cellsize;

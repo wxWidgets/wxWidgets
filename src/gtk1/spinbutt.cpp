@@ -15,7 +15,7 @@
 
 #include "wx/spinbutt.h"
 
-#ifdef wxUSE_SPINBTN
+#if wxUSE_SPINBTN
 
 #include "wx/utils.h"
 
@@ -104,7 +104,7 @@ static void gtk_spinbutt_callback( GtkWidget *WXUNUSED(widget), wxSpinButton *wi
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxSpinButton,wxControl)
-IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxScrollEvent);
+IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxNotifyEvent)
 
 BEGIN_EVENT_TABLE(wxSpinButton, wxControl)
     EVT_SIZE(wxSpinButton::OnSize)

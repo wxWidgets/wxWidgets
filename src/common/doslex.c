@@ -145,7 +145,7 @@ int read();
 		} \
 	while ( 0 )
 #else
-// suppress expression always false warning
+/* suppress expression always false warning */
 int os2var = 0;
 #define YY_FATAL_ERROR(msg) \
 	do \
@@ -777,7 +777,7 @@ case YY_STATE_EOF(INITIAL):
 	    }
 	}
 #if defined(__VISAGECPP__)
-// VA complains about proc maybe not returning a value so return one
+/* VA complains about proc maybe not returning a value so return one */
 return 0;
 #endif
     }

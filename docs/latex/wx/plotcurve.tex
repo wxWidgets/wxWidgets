@@ -26,13 +26,6 @@ and \helpref{GetY()}{wxplotcurvegety}).
 
 Constructor assigning start values. See below for interpretation.
 
-\membersection{wxPlotCurve::GetStartX}\label{wxplotcurvegetstartx}
-
-\func{wxInt32}{GetStartX}{\void}
-
-Must be overridden. This function should return the index of the first value
-of this curve, typically zero.
-
 \membersection{wxPlotCurve::GetEndX}\label{wxplotcurvegetendx}
 
 \func{wxInt32}{GetEndX}{\void}
@@ -40,6 +33,17 @@ of this curve, typically zero.
 Must be overridden. This function should return the index of the last value
 of this curve, typically 99 if 100 values have been measured.
 
+\membersection{wxPlotCurve::GetEndY}\label{wxplotcurvegetendy}
+
+\func{double}{GetEndY}{\void}
+
+See \helpref{SetStartY}{wxplotcurvesetendy}.
+
+\membersection{wxPlotCurve::GetOffsetY}\label{wxplotcurvegetoffsety}
+
+\func{int}{GetOffsetY}{\void}
+
+Returns the vertical offset.
 \membersection{wxPlotCurve::GetY}\label{wxplotcurvegety}
 
 \func{double}{GetY}{\param{wxInt32 }{x}}
@@ -48,14 +52,12 @@ Must be overridden. This function will return the actual Y value corresponding
 to the given X value. The x value is of an integer type because it is considered
 to be an index in row of measured values.
 
-\membersection{wxPlotCurve::SetStartY}\label{wxplotcurvesetstarty}
+\membersection{wxPlotCurve::GetStartX}\label{wxplotcurvegetstartx}
 
-\func{void}{SetStartY}{\param{double }{startY}}
+\func{wxInt32}{GetStartX}{\void}
 
-The value returned by this function tells the plot window what the lowest values
-in the curve will be os that a suitable scale can be found for the display. If
-the Y values in this curve are in the range of -1.5 to 0.5, this function should
-return -1.5 or maybe -2.0 for nicer optics.
+Must be overridden. This function should return the index of the first value
+of this curve, typically zero.
 
 \membersection{wxPlotCurve::GetStartY}\label{wxplotcurvegetstarty}
 
@@ -68,15 +70,9 @@ See \helpref{SetStartY}{wxplotcurvesetstarty}.
 \func{void}{SetEndY}{\param{double }{endY}}
 
 The value returned by this function tells the plot window what the highest values
-in the curve will be os that a suitable scale can be found for the display. If
+in the curve will be so that a suitable scale can be found for the display. If
 the Y values in this curve are in the range of -1.5 to 0.5, this function should
-return 0.5 or maybe 1.0 for nicer optics.
-
-\membersection{wxPlotCurve::GetEndY}\label{wxplotcurvegetendy}
-
-\func{double}{GetEndY}{\void}
-
-See \helpref{SetStartY}{wxplotcurvesetendy}.
+return 0.5 or maybe 1.0 for nicer aesthetics.
 
 \membersection{wxPlotCurve::SetOffsetY}\label{wxplotcurvesetoffsety}
 
@@ -86,8 +82,12 @@ When displaying several curves in one window, it is often useful to assign
 different offsets to the curves. You should call \helpref{wxPlotWindow::Move}{wxplotwindowmove}
 to set this value after you have added the curve to the window.
 
-\membersection{wxPlotCurve::GetOffsetY}\label{wxplotcurvegetoffsety}
+\membersection{wxPlotCurve::SetStartY}\label{wxplotcurvesetstarty}
 
-\func{int}{GetOffsetY}{\void}
+\func{void}{SetStartY}{\param{double }{startY}}
 
-Returns the vertical offset.
+The value returned by this function tells the plot window what the lowest values
+in the curve will be so that a suitable scale can be found for the display. If
+the Y values in this curve are in the range of -1.5 to 0.5, this function should
+return -1.5 or maybe -2.0 for nicer aesthetics.
+
