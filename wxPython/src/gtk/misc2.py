@@ -143,6 +143,42 @@ class wxBusyCursor(wxBusyCursorPtr):
 
 
 
+class wxTipProviderPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __del__(self,misc2c=misc2c):
+        if self.thisown == 1 :
+            misc2c.delete_wxTipProvider(self)
+    def GetTip(self, *_args, **_kwargs):
+        val = apply(misc2c.wxTipProvider_GetTip,(self,) + _args, _kwargs)
+        return val
+    def GetCurrentTip(self, *_args, **_kwargs):
+        val = apply(misc2c.wxTipProvider_GetCurrentTip,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxTipProvider instance at %s>" % (self.this,)
+class wxTipProvider(wxTipProviderPtr):
+    def __init__(self,this):
+        self.this = this
+
+
+
+
+class wxPyTipProviderPtr(wxTipProviderPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __repr__(self):
+        return "<C wxPyTipProvider instance at %s>" % (self.this,)
+class wxPyTipProvider(wxPyTipProviderPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(misc2c.new_wxPyTipProvider,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
 
 
 #-------------- FUNCTION WRAPPERS ------------------
@@ -232,6 +268,13 @@ wxCaret_SetBlinkTime = misc2c.wxCaret_SetBlinkTime
 wxPostEvent = misc2c.wxPostEvent
 
 wxWakeUpIdle = misc2c.wxWakeUpIdle
+
+wxShowTip = misc2c.wxShowTip
+
+def wxCreateFileTipProvider(*_args, **_kwargs):
+    val = apply(misc2c.wxCreateFileTipProvider,_args,_kwargs)
+    if val: val = wxTipProviderPtr(val); val.thisown = 1
+    return val
 
 
 

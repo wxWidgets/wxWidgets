@@ -636,6 +636,9 @@ extern "C" SWIGEXPORT(void) initprintfwc();
 extern "C" SWIGEXPORT(void) initsizersc();
 extern "C" SWIGEXPORT(void) initclip_dndc();
 extern "C" SWIGEXPORT(void) initgridc();
+extern "C" SWIGEXPORT(void) initutilsc();
+extern "C" SWIGEXPORT(void) inithtmlc();
+extern "C" SWIGEXPORT(void) inithtmlhelpc();
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -1644,6 +1647,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxPyCommandEvent","_wxPyCommandEvent",0},
     { "_wxBMPHandler","_class_wxBMPHandler",0},
     { "_wxImage","_class_wxImage",0},
+    { "_wxFlexGridSizer","_class_wxFlexGridSizer",0},
     { "_wxPrintQuality","_wxCoord",0},
     { "_wxPrintQuality","_int",0},
     { "_wxPrintQuality","_signed_int",0},
@@ -1700,6 +1704,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxSizer","_wxSizer",0},
     { "_class_wxTIFFHandler","_wxTIFFHandler",0},
     { "_class_wxPrintDialogData","_wxPrintDialogData",0},
+    { "_wxGridSizer","_class_wxGridSizer",0},
     { "_class_wxAcceleratorTable","_wxAcceleratorTable",0},
     { "_class_wxClipboard","_wxClipboard",0},
     { "_class_wxGauge","_wxGauge",0},
@@ -1712,6 +1717,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxProgressDialog","_class_wxProgressDialog",0},
     { "_class_wxBMPHandler","_wxBMPHandler",0},
     { "_wxPrintPreview","_class_wxPrintPreview",0},
+    { "_class_wxFlexGridSizer","_wxFlexGridSizer",0},
     { "_wxSpinEvent","_class_wxSpinEvent",0},
     { "_wxSashLayoutWindow","_class_wxSashLayoutWindow",0},
     { "_size_t","_wxCoord",0},
@@ -1869,6 +1875,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxCaret","_wxCaret",0},
     { "_class_wxMDIClientWindow","_wxMDIClientWindow",0},
     { "_class_wxBrush","_wxBrush",0},
+    { "_wxTipProvider","_class_wxTipProvider",0},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
     { "_class_wxWindow","_wxWindow",0},
@@ -1939,8 +1946,10 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxCalculateLayoutEvent","_wxCalculateLayoutEvent",0},
     { "_class_wxImageList","_wxImageList",0},
     { "_class_wxBitmapButton","_wxBitmapButton",0},
+    { "_wxPyTipProvider","_class_wxPyTipProvider",0},
     { "_wxFrame","_class_wxFrame",0},
     { "_wxPCXHandler","_class_wxPCXHandler",0},
+    { "_class_wxGridSizer","_wxGridSizer",0},
     { "_class_wxPaletteChangedEvent","_wxPaletteChangedEvent",0},
     { "_class_wxNotebook","_wxNotebook",0},
     { "_wxJPEGHandler","_class_wxJPEGHandler",0},
@@ -2008,6 +2017,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxEraseEvent","_class_wxEraseEvent",0},
     { "_wxDataObjectComposite","_class_wxDataObjectComposite",0},
     { "_class_wxJoystickEvent","_wxJoystickEvent",0},
+    { "_class_wxTipProvider","_wxTipProvider",0},
     { "_class_wxMiniFrame","_wxMiniFrame",0},
     { "_wxFontDialog","_class_wxFontDialog",0},
     { "_wxRegion","_class_wxRegion",0},
@@ -2015,6 +2025,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPreviewFrame","_class_wxPreviewFrame",0},
     { "_wxSizer","_class_wxSizer",0},
     { "_class_wxShowEvent","_wxShowEvent",0},
+    { "_class_wxPyTipProvider","_wxPyTipProvider",0},
     { "_class_wxPCXHandler","_wxPCXHandler",0},
     { "_wxTIFFHandler","_class_wxTIFFHandler",0},
     { "_wxPyDropTarget","_class_wxPyDropTarget",0},
@@ -2753,7 +2764,7 @@ SWIGEXPORT(void) initwxc() {
 
 
         // Since these modules are all linked together, initialize them now
-        // because python won't be able to find their shared library files,
+        // because Python won't be able to find their shared library files,
         // (since there isn't any.)
     initwindowsc();
     initwindows2c();
@@ -2772,7 +2783,12 @@ SWIGEXPORT(void) initwxc() {
     initprintfwc();
     initsizersc();
     initclip_dndc();
+
     initgridc();
+    initutilsc();
+    inithtmlc();
+    inithtmlhelpc();
+
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

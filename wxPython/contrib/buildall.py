@@ -17,13 +17,13 @@ sys.path.insert(0, '../distrib')
 import build
 
 MODULELIST = ['glcanvas', 'ogl', 'stc', ]
-
+sys.argv[0] = '../../distrib/build.py'
 
 
 for module in MODULELIST:
     cwd = os.getcwd()
     print "**** Building %s ****" % module
-    err = build.main(['../../distrib/build.py', '-C', module] + sys.argv[1:])
+    err = build.main([sys.argv[0], '-C', module] + sys.argv[1:])
     os.chdir(cwd)
     if err:
         break

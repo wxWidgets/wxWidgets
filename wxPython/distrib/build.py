@@ -592,7 +592,7 @@ clean:
 	-erase $(MODULE).lib
 	-erase $(MODULE).ilk
 	-erase $(TARGET)
-        -erase $(BUILDDIR)\$(TARGET)
+	-erase $(BUILDDIR)\$(TARGET)
 %(PYCLEANUP)s
 
 
@@ -762,7 +762,7 @@ install: default $(TARGETDIR) $(TARGETDIR)/$(TARGET) pycfiles %(OTHERINSTALLTARG
 clean:
 	-rm -f *.o *$(SO) *~
 	-rm -f $(TARGET)
-        -rm -f $(BUILDDIR)/$(TARGET)
+	-rm -f $(BUILDDIR)/$(TARGET)
 %(PYCLEANUP)s
 
 uninstall: %(OTHERUNINSTALLTARGETS)s

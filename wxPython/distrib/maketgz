@@ -34,15 +34,12 @@ tar xf dist-temp.tar
 rm dist-temp.tar
 mv wxPython wxPython-$1
 rm wxPython-$1/src/gtk/helpers.cpp
+touch `find wxPython-$1 -name "*.cpp"`
+touch `find wxPython-$1 -name "*.py"`
+
 
 tar cvf wxPython-$1.tar wxPython-$1
 gzip wxPython-$1.tar
 
 rm -rf wxPython-$1
-
-
-
-
-
-
 

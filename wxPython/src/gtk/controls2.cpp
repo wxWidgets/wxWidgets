@@ -4514,6 +4514,7 @@ static PyObject *_wrap_wxTreeItemId_IsOk(PyObject *self, PyObject *args, PyObjec
 }
 
 static int  wxTreeItemId___cmp__(wxTreeItemId *self,wxTreeItemId * other) {
+            if (! other) return 0;
             return *self != *other;
         }
 static PyObject *_wrap_wxTreeItemId___cmp__(PyObject *self, PyObject *args, PyObject *kwargs) {

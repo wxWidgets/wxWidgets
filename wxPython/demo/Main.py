@@ -407,6 +407,7 @@ class MyApp(wxApp):
             showTip, index = eval(showTipText)
         except IOError:
             showTip, index = (1, 0)
+        print showTip, index
         if showTip:
             tp = wxCreateFileTipProvider("data/tips.txt", index)
             showTip = wxShowTip(frame, tp)

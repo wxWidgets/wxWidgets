@@ -1018,6 +1018,10 @@ class wxGridPtr(wxScrolledWindowPtr):
         val = apply(gridc.wxGrid_GetGridLineColour,(self,) + _args, _kwargs)
         if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
+    def GetCellHighlightColour(self, *_args, **_kwargs):
+        val = apply(gridc.wxGrid_GetCellHighlightColour,(self,) + _args, _kwargs)
+        if val: val = wxColourPtr(val) ; val.thisown = 1
+        return val
     def SetRowLabelSize(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_SetRowLabelSize,(self,) + _args, _kwargs)
         return val
@@ -1047,6 +1051,9 @@ class wxGridPtr(wxScrolledWindowPtr):
         return val
     def SetGridLineColour(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_SetGridLineColour,(self,) + _args, _kwargs)
+        return val
+    def SetCellHighlightColour(self, *_args, **_kwargs):
+        val = apply(gridc.wxGrid_SetCellHighlightColour,(self,) + _args, _kwargs)
         return val
     def EnableDragRowSize(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_EnableDragRowSize,(self,) + _args, _kwargs)

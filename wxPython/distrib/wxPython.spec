@@ -35,13 +35,14 @@ cd ../modules/html
 python ../../distrib/build.py -b WXPSRCDIR=../../src
 cd ../utils
 python ../../distrib/build.py -b WXPSRCDIR=../../src
-cd ../glcanvas
-python ../../distrib/build.py -b WXPSRCDIR=../../src
 cd ../ogl
 python ../../distrib/build.py -b WXPSRCDIR=../../src
 cd ../stc
 python ../../distrib/build.py -b WXPSRCDIR=../../src
-
+if [ ! -z $NOGLCANVAS ]; then
+    cd ../glcanvas
+    python ../../distrib/build.py -b WXPSRCDIR=../../src
+fi
 
 %install
 cd src
@@ -50,12 +51,14 @@ cd ../modules/html
 python ../../distrib/build.py -i
 cd ../utils
 python ../../distrib/build.py -i
-cd ../glcanvas
-python ../../distrib/build.py -i
 cd ../ogl
 python ../../distrib/build.py -i
 cd ../stc
 python ../../distrib/build.py -i
+if [ ! -z $NOGLCANVAS ]; then
+    cd ../glcanvas
+    python ../../distrib/build.py -i
+fi
 
 
 %post
@@ -68,9 +71,6 @@ python ../../distrib/build.py -i
 %doc BUILD.txt CHANGES.txt README.txt gpl.txt lgpl.txt licence.txt licendoc.txt preamble.txt
 %{pref}/lib/libwxPyHelpers.so
 %{pref}/lib/python1.5/site-packages/wxPython
-
-
-
 
 
 

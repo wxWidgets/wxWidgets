@@ -54,9 +54,15 @@ class wxSizerItemPtr :
         val = apply(sizersc.wxSizerItem_GetWindow,(self,) + _args, _kwargs)
         if val: val = wxWindowPtr(val) 
         return val
+    def SetWindow(self, *_args, **_kwargs):
+        val = apply(sizersc.wxSizerItem_SetWindow,(self,) + _args, _kwargs)
+        return val
     def GetSizer(self, *_args, **_kwargs):
         val = apply(sizersc.wxSizerItem_GetSizer,(self,) + _args, _kwargs)
         if val: val = wxSizerPtr(val) 
+        return val
+    def SetSizer(self, *_args, **_kwargs):
+        val = apply(sizersc.wxSizerItem_SetSizer,(self,) + _args, _kwargs)
         return val
     def GetOption(self, *_args, **_kwargs):
         val = apply(sizersc.wxSizerItem_GetOption,(self,) + _args, _kwargs)
@@ -107,6 +113,15 @@ class wxSizerPtr :
     def AddSpacer(self, *_args, **_kwargs):
         val = apply(sizersc.wxSizer_AddSpacer,(self,) + _args, _kwargs)
         return val
+    def InsertWindow(self, *_args, **_kwargs):
+        val = apply(sizersc.wxSizer_InsertWindow,(self,) + _args, _kwargs)
+        return val
+    def InsertSizer(self, *_args, **_kwargs):
+        val = apply(sizersc.wxSizer_InsertSizer,(self,) + _args, _kwargs)
+        return val
+    def InsertSpacer(self, *_args, **_kwargs):
+        val = apply(sizersc.wxSizer_InsertSpacer,(self,) + _args, _kwargs)
+        return val
     def PrependWindow(self, *_args, **_kwargs):
         val = apply(sizersc.wxSizer_PrependWindow,(self,) + _args, _kwargs)
         return val
@@ -127,6 +142,18 @@ class wxSizerPtr :
         return val
     def SetDimension(self, *_args, **_kwargs):
         val = apply(sizersc.wxSizer_SetDimension,(self,) + _args, _kwargs)
+        return val
+    def SetMinSize(self, *_args, **_kwargs):
+        val = apply(sizersc.wxSizer_SetMinSize,(self,) + _args, _kwargs)
+        return val
+    def SetItemMinSizeWindow(self, *_args, **_kwargs):
+        val = apply(sizersc.wxSizer_SetItemMinSizeWindow,(self,) + _args, _kwargs)
+        return val
+    def SetItemMinSizeSizer(self, *_args, **_kwargs):
+        val = apply(sizersc.wxSizer_SetItemMinSizeSizer,(self,) + _args, _kwargs)
+        return val
+    def SetItemMinSizePos(self, *_args, **_kwargs):
+        val = apply(sizersc.wxSizer_SetItemMinSizePos,(self,) + _args, _kwargs)
         return val
     def GetSize(self, *_args, **_kwargs):
         val = apply(sizersc.wxSizer_GetSize,(self,) + _args, _kwargs)
@@ -163,6 +190,14 @@ class wxSizerPtr :
         else:
             apply(self.AddWindow, args)
 
+    def Insert(self, *args):
+        if type(args[0]) == type(1):
+            apply(self.InsertSpacer, args)
+        elif string.find(args[0].this, 'Sizer') != -1:
+            apply(self.InsertSizer, args)
+        else:
+            apply(self.InsertWindow, args)
+
     def Prepend(self, *args):
         if type(args[0]) == type(1):
             apply(self.PrependSpacer, args)
@@ -185,6 +220,15 @@ class wxSizerPtr :
                 childinfo = (childinfo, )
             apply(self.Add, childinfo)
 
+    
+    def SetItemMinSize(self, *args):
+        if type(args[0]) == type(1):
+            apply(self.SetItemMinSizePos, args)
+        elif string.find(args[0].this, 'Sizer') != -1:
+            apply(self.SetItemMinSizeSizer, args)
+        else:
+            apply(self.SetItemMinSizeWindow, args)
+     
 class wxSizer(wxSizerPtr):
     def __init__(self,this):
         self.this = this
@@ -279,6 +323,84 @@ class wxNotebookSizerPtr(wxSizerPtr):
 class wxNotebookSizer(wxNotebookSizerPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(sizersc.new_wxNotebookSizer,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxGridSizerPtr(wxSizerPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def RecalcSizes(self, *_args, **_kwargs):
+        val = apply(sizersc.wxGridSizer_RecalcSizes,(self,) + _args, _kwargs)
+        return val
+    def CalcMin(self, *_args, **_kwargs):
+        val = apply(sizersc.wxGridSizer_CalcMin,(self,) + _args, _kwargs)
+        if val: val = wxSizePtr(val) ; val.thisown = 1
+        return val
+    def SetCols(self, *_args, **_kwargs):
+        val = apply(sizersc.wxGridSizer_SetCols,(self,) + _args, _kwargs)
+        return val
+    def SetRows(self, *_args, **_kwargs):
+        val = apply(sizersc.wxGridSizer_SetRows,(self,) + _args, _kwargs)
+        return val
+    def SetVGap(self, *_args, **_kwargs):
+        val = apply(sizersc.wxGridSizer_SetVGap,(self,) + _args, _kwargs)
+        return val
+    def SetHGap(self, *_args, **_kwargs):
+        val = apply(sizersc.wxGridSizer_SetHGap,(self,) + _args, _kwargs)
+        return val
+    def GetCols(self, *_args, **_kwargs):
+        val = apply(sizersc.wxGridSizer_GetCols,(self,) + _args, _kwargs)
+        return val
+    def GetRows(self, *_args, **_kwargs):
+        val = apply(sizersc.wxGridSizer_GetRows,(self,) + _args, _kwargs)
+        return val
+    def GetVGap(self, *_args, **_kwargs):
+        val = apply(sizersc.wxGridSizer_GetVGap,(self,) + _args, _kwargs)
+        return val
+    def GetHGap(self, *_args, **_kwargs):
+        val = apply(sizersc.wxGridSizer_GetHGap,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxGridSizer instance at %s>" % (self.this,)
+class wxGridSizer(wxGridSizerPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(sizersc.new_wxGridSizer,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxFlexGridSizerPtr(wxGridSizerPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def RecalcSizes(self, *_args, **_kwargs):
+        val = apply(sizersc.wxFlexGridSizer_RecalcSizes,(self,) + _args, _kwargs)
+        return val
+    def CalcMin(self, *_args, **_kwargs):
+        val = apply(sizersc.wxFlexGridSizer_CalcMin,(self,) + _args, _kwargs)
+        if val: val = wxSizePtr(val) ; val.thisown = 1
+        return val
+    def AddGrowableRow(self, *_args, **_kwargs):
+        val = apply(sizersc.wxFlexGridSizer_AddGrowableRow,(self,) + _args, _kwargs)
+        return val
+    def RemoveGrowableRow(self, *_args, **_kwargs):
+        val = apply(sizersc.wxFlexGridSizer_RemoveGrowableRow,(self,) + _args, _kwargs)
+        return val
+    def AddGrowableCol(self, *_args, **_kwargs):
+        val = apply(sizersc.wxFlexGridSizer_AddGrowableCol,(self,) + _args, _kwargs)
+        return val
+    def RemoveGrowableCol(self, *_args, **_kwargs):
+        val = apply(sizersc.wxFlexGridSizer_RemoveGrowableCol,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxFlexGridSizer instance at %s>" % (self.this,)
+class wxFlexGridSizer(wxFlexGridSizerPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(sizersc.new_wxFlexGridSizer,_args,_kwargs)
         self.thisown = 1
 
 

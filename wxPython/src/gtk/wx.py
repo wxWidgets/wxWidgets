@@ -1388,33 +1388,33 @@ def EVT_TASKBAR_RIGHT_DCLICK(win, func):
     win.Connect(-1, -1, wxEVT_TASKBAR_RIGHT_DCLICK, func)
 
 
-# wxGrid
-def EVT_GRID_SELECT_CELL(win, fn):
-    win.Connect(-1, -1, wxEVT_GRID_SELECT_CELL, fn)
+## # wxGrid  *** THE OLD ONE ***
+## def EVT_GRID_SELECT_CELL(win, fn):
+##     win.Connect(-1, -1, wxEVT_GRID_SELECT_CELL, fn)
 
-def EVT_GRID_CREATE_CELL(win, fn):
-    win.Connect(-1, -1, wxEVT_GRID_CREATE_CELL, fn)
+## def EVT_GRID_CREATE_CELL(win, fn):
+##     win.Connect(-1, -1, wxEVT_GRID_CREATE_CELL, fn)
 
-def EVT_GRID_CHANGE_LABELS(win, fn):
-    win.Connect(-1, -1, wxEVT_GRID_CHANGE_LABELS, fn)
+## def EVT_GRID_CHANGE_LABELS(win, fn):
+##     win.Connect(-1, -1, wxEVT_GRID_CHANGE_LABELS, fn)
 
-def EVT_GRID_CHANGE_SEL_LABEL(win, fn):
-    win.Connect(-1, -1, wxEVT_GRID_CHANGE_SEL_LABEL, fn)
+## def EVT_GRID_CHANGE_SEL_LABEL(win, fn):
+##     win.Connect(-1, -1, wxEVT_GRID_CHANGE_SEL_LABEL, fn)
 
-def EVT_GRID_CELL_CHANGE(win, fn):
-    win.Connect(-1, -1, wxEVT_GRID_CELL_CHANGE, fn)
+## def EVT_GRID_CELL_CHANGE(win, fn):
+##     win.Connect(-1, -1, wxEVT_GRID_CELL_CHANGE, fn)
 
-def EVT_GRID_CELL_LCLICK(win, fn):
-    win.Connect(-1, -1, wxEVT_GRID_CELL_LCLICK, fn)
+## def EVT_GRID_CELL_LCLICK(win, fn):
+##     win.Connect(-1, -1, wxEVT_GRID_CELL_LCLICK, fn)
 
-def EVT_GRID_CELL_RCLICK(win, fn):
-    win.Connect(-1, -1, wxEVT_GRID_CELL_RCLICK, fn)
+## def EVT_GRID_CELL_RCLICK(win, fn):
+##     win.Connect(-1, -1, wxEVT_GRID_CELL_RCLICK, fn)
 
-def EVT_GRID_LABEL_LCLICK(win, fn):
-    win.Connect(-1, -1, wxEVT_GRID_LABEL_LCLICK, fn)
+## def EVT_GRID_LABEL_LCLICK(win, fn):
+##     win.Connect(-1, -1, wxEVT_GRID_LABEL_LCLICK, fn)
 
-def EVT_GRID_LABEL_RCLICK(win, fn):
-    win.Connect(-1, -1, wxEVT_GRID_LABEL_RCLICK, fn)
+## def EVT_GRID_LABEL_RCLICK(win, fn):
+##     win.Connect(-1, -1, wxEVT_GRID_LABEL_RCLICK, fn)
 
 
 # wxSashWindow
@@ -1661,6 +1661,20 @@ class wxPySimpleApp(wxApp):
     def OnInit(self):
         return true
 
+
+class wxPyWidgetTester(wxApp):
+    def __init__(self, size = (250, 100)):
+        self.size = size
+        wxApp.__init__(self, 0)
+
+    def OnInit(self):
+        self.frame = wxFrame(None, -1, "Widget Tester", pos=(0,0), size=self.size)
+        self.SetTopWindow(self.frame)
+        return true
+
+    def SetWidget(self, widgetClass, *args):
+        w = apply(widgetClass, (self.frame,) + args)
+        self.frame.Show(true)
 
 #----------------------------------------------------------------------------
 # DO NOT hold any other references to this object.  This is how we know when
