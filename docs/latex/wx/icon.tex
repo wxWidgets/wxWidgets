@@ -80,7 +80,7 @@ Creates a new icon.
 
 Creates an icon from XPM data.
 
-\func{}{wxIcon}{\param{const wxString\& }{name}, \param{long}{ type},
+\func{}{wxIcon}{\param{const wxString\& }{name}, \param{wxBitmapType}{ type},
   \param{int}{ desiredWidth = -1}, \param{int}{ desiredHeight = -1}}
 
 Loads an icon from a file or resource.
@@ -247,7 +247,7 @@ Gets the width of the icon in pixels.
 
 \membersection{wxIcon::LoadFile}\label{wxiconloadfile}
 
-\func{bool}{LoadFile}{\param{const wxString\&}{ name}, \param{long}{ type}}
+\func{bool}{LoadFile}{\param{const wxString\&}{ name}, \param{wxBitmapType}{ type}}
 
 Loads an icon from a file or resource.
 
@@ -286,7 +286,7 @@ Returns true if icon data is present.
 \begin{comment}
 \membersection{wxIcon::SaveFile}\label{wxiconsavefile}
 
-\func{bool}{SaveFile}{\param{const wxString\& }{name}, \param{int}{ type}, \param{wxPalette* }{palette = NULL}}
+\func{bool}{SaveFile}{\param{const wxString\& }{name}, \param{wxBitmapType}{ type}, \param{wxPalette* }{palette = NULL}}
 
 Saves an icon in the named file.
 

@@ -296,11 +296,11 @@ type of data.
 
 Finds the handler with the given name.
 
-\func{static wxBitmapHandler*}{FindHandler}{\param{const wxString\& }{extension}, \param{long}{ bitmapType}}
+\func{static wxBitmapHandler*}{FindHandler}{\param{const wxString\& }{extension}, \param{wxBitmapType}{ bitmapType}}
 
 Finds the handler associated with the given extension and type.
 
-\func{static wxBitmapHandler*}{FindHandler}{\param{long }{bitmapType}}
+\func{static wxBitmapHandler*}{FindHandler}{\param{wxBitmapType }{bitmapType}}
 
 Finds the handler associated with the given bitmap type.
 
@@ -408,7 +408,7 @@ of a given handler class in an application session.}
 
 \membersection{wxBitmap::LoadFile}\label{wxbitmaploadfile}
 
-\func{bool}{LoadFile}{\param{const wxString\&}{ name}, \param{long}{ type}}
+\func{bool}{LoadFile}{\param{const wxString\&}{ name}, \param{wxBitmapType}{ type}}
 
 Loads a bitmap from a file or resource.
 
@@ -473,7 +473,7 @@ true if the handler was found and removed, false otherwise.
 
 \membersection{wxBitmap::SaveFile}\label{wxbitmapsavefile}
 
-\func{bool}{SaveFile}{\param{const wxString\& }{name}, \param{int}{ type}, \param{wxPalette* }{palette = NULL}}
+\func{bool}{SaveFile}{\param{const wxString\& }{name}, \param{wxBitmapType}{ type}, \param{wxPalette* }{palette = NULL}}
 
 Saves a bitmap in the named file.
 

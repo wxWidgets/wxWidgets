@@ -1961,7 +1961,7 @@ Accessor function to set the user ID for this class instance.
 
 Accessor function to assign the user ID for this class instance.
 
-\section{\class{wxDbIndexDef}}\label{wxdbindexdef}
+\section{\class{wxDbIdxDef}}\label{wxdbidxdef}
 
 Used in creation of non-primary indexes.  Currently there are no member
 functions for this class.
@@ -1977,6 +1977,11 @@ There are no constructors/destructors as of this time, and no member functions.
 
 See the \helpref{database classes overview}{odbcoverview} for
 an introduction to using the ODBC classes.
+
+
+\wxheading{Include files}
+
+<wx/db.h>
 
 \section{\class{wxDbInf}}\label{wxdbinf}
 
@@ -2032,7 +2037,7 @@ with the wxDbTable class.
 \begin{itemize}\itemsep=0pt
 \item \helpref{wxDbColDef}{wxdbcoldef}
 \item \helpref{wxDbColDataPtr}{wxdbcoldataptr}
-\item \helpref{wxDbIndexDef}{wxdbindexdef}
+\item \helpref{wxDbIdxDef}{wxdbidxdef}
 \end{itemize}
 
 \wxheading{Constants}
@@ -2417,7 +2422,7 @@ this function.
 \membersection{wxDbTable::CreateIndex}\label{wxdbtablecreateindex}
 
 \func{bool}{CreateIndex}{\param{const wxString \&}{IndexName}, \param{bool }{unique},
-\param{UWORD }{numIndexColumns}, \param{wxDbIndexDef *}{pIndexDefs},
+\param{UWORD }{numIndexColumns}, \param{wxDbIdxDef *}{pIndexDefs},
 \param{bool }{attemptDrop=true}}
 
 This member function allows you to create secondary (non primary) indexes on
@@ -2436,7 +2441,7 @@ take advantage of those indexes.
 space of the datasource.}
 \docparam{unique}{Indicates if this index is unique.}
 \docparam{numIndexColumns}{Number of columns in the index.}
-\docparam{pIndexDefs}{A pointer to an array \helpref{wxDbIndexDef}{wxdbindexdef} structures. }
+\docparam{pIndexDefs}{A pointer to an array \helpref{wxDbIdxDef}{wxdbidxdef} structures. }
 \docparam{attemptDrop}{{\it OPTIONAL}.  Indicates if the function should try
 to execute a \helpref{wxDbTable::DropIndex}{wxdbtabledropindex} on the index
 name provided before trying to create the index name.  Default is true.}
@@ -2458,9 +2463,9 @@ In the third parameter, specify how many columns are in your index.  This
 number must match the number of columns defined in the 'pIndexDefs' parameter.
 
 The fourth parameter specifies which columns make up the index using the
-\helpref{wxDbIndexDef}{wxdbindexdef} structure.  For each column in the index, you must specify two
+\helpref{wxDbIdxDef}{wxdbidxdef} structure.  For each column in the index, you must specify two
 things, the column name and the sort order (ascending / descending).  See
-the example below to see how to build and pass in the \helpref{wxDbIndexDef}{wxdbindexdef} structure.
+the example below to see how to build and pass in the \helpref{wxDbIdxDef}{wxdbidxdef} structure.
 
 The fifth parameter is provided to handle the differences in datasources as
 to whether they will automatically overwrite existing indexes with the same
@@ -2485,7 +2490,7 @@ after executing this function.
 
 \begin{verbatim}
     // Create a secondary index on the PARTS table
-    wxDbIndexDef  IndexDef[2];  // 2 columns make up the index
+    wxDbIdxDef  IndexDef[2];  // 2 columns make up the index
 
     wxStrcpy(IndexDef[0].ColName, "PART_DESC");  // Column 1
     IndexDef[0].Ascending = true;
