@@ -70,12 +70,21 @@
 #  include <Devices.h>
 #endif
 
-extern char *wxBuffer;
 extern wxList wxPendingDelete;
 extern wxList *wxWinMacWindowList;
 extern wxList *wxWinMacControlList;
 
+// statics for implementation
+
 static bool s_inYield = FALSE;
+static bool s_inOnIdle = FALSE;
+
+#if TARGET_CARBON
+static bool s_inReceiveEvent = FALSE ;
+static EventTime sleepTime = kEventDurationNoWait ;
+#else
+static long sleepTime = 0 ;
+#endif
 
 wxApp *wxTheApp = NULL;
 
@@ -218,12 +227,13 @@ short wxApp::MacHandleAEOApp(const WXEVENTREF WXUNUSED(event) , WXEVENTREF WXUNU
 
 short wxApp::MacHandleAEQuit(const WXEVENTREF WXUNUSED(event) , WXEVENTREF WXUNUSED(reply))
 {
-    wxWindow* win = GetTopWindow() ;
+ /*   wxWindow* win = GetTopWindow() ;
     if ( win )
     {
         win->Close(TRUE ) ;
     }
     else
+ */
     {
         ExitMainLoop() ;
     }
@@ -273,218 +283,6 @@ void wxApp::MacNewFile()
 {
 }
 
-char StringMac[] =  "\x0d\x80\x81\x82\x83\x84\x85\x86\x87\x88\x89\x8a\x8b\x8c\x8d\x8e\x8f"
-                    "\x90\x91\x92\x93\x94\x95\x96\x97\x98\x99\x9a\x9b\x9c\x9d\x9e\x9f"
-                    "\xa0\xa1\xa2\xa3\xa4\xa5\xa6\xa7\xa8\xa9\xaa\xab\xac\xae\xaf"
-                    "\xb1\xb4\xb5\xb6\xbb\xbc\xbe\xbf"
-                    "\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xcb\xcc\xcd\xce\xcf"
-                    "\xd0\xd1\xd2\xd3\xd4\xd5\xd6\xd8\xca\xdb" ;
-
-char StringANSI[] = "\x0a\xC4\xC5\xC7\xC9\xD1\xD6\xDC\xE1\xE0\xE2\xE4\xE3\xE5\xE7\xE9\xE8"
-                    "\xEA\xEB\xED\xEC\xEE\xEF\xF1\xF3\xF2\xF4\xF6\xF5\xFA\xF9\xFB\xFC"
-                    "\x86\xBA\xA2\xA3\xA7\x95\xB6\xDF\xAE\xA9\x99\xB4\xA8\xC6\xD8"
-                    "\xB1\xA5\xB5\xF0\xAA\xBA\xE6\xF8"
-                    "\xBF\xA1\xAC\x83\xAB\xBB\x85\xC0\xC3\xD5\x8C\x9C"
-                    "\x96\x97\x93\x94\x91\x92\xF7\xFF\xA0\x80" ;
-
-void wxMacConvertFromPC( const char *from , char *to , int len )
-{
-    char *c ;
-    if ( from == to )
-    {
-        for( int i = 0 ; i < len ; ++ i )
-        {
-            c = strchr( StringANSI , *from ) ;
-            if ( c != NULL )
-            {
-                *to = StringMac[ c - StringANSI] ;
-            }
-            ++to ;
-            ++from ;
-        }
-    }
-    else
-    {
-        for( int i = 0 ; i < len ; ++ i )
-        {
-            c = strchr( StringANSI , *from ) ;
-            if ( c != NULL )
-            {
-                *to = StringMac[ c - StringANSI] ;
-            }
-            else
-            {
-                *to = *from ;
-            }
-            ++to ;
-            ++from ;
-        }
-    }
-}
-
-void wxMacConvertToPC( const char *from , char *to , int len )
-{
-    char *c ;
-    if ( from == to )
-    {
-        for( int i = 0 ; i < len ; ++ i )
-        {
-            c = strchr( StringMac , *from ) ;
-            if ( c != NULL )
-            {
-                *to = StringANSI[ c - StringMac] ;
-            }
-            ++to ;
-            ++from ;
-        }
-    }
-    else
-    {
-        for( int i = 0 ; i < len ; ++ i )
-        {
-            c = strchr( StringMac , *from ) ;
-            if ( c != NULL )
-            {
-                *to = StringANSI[ c - StringMac] ;
-            }
-            else
-            {
-                *to = *from ;
-            }
-            ++to ;
-            ++from ;
-        }
-    }
-}
-
-void wxMacConvertFromPC( char * p )
-{
-    char *ptr = p ;
-    int len = strlen ( p ) ;
-
-    wxMacConvertFromPC( ptr , ptr , len ) ;
-}
-
-void wxMacConvertFromPCForControls( char * p )
-{
-    char *ptr = p ;
-    int len = strlen ( p ) ;
-
-    wxMacConvertFromPC( ptr , ptr , len ) ;
-    for ( unsigned int i = 0 ; i < strlen ( ptr ) ; i++ )
-    {
-        if ( ptr[i] == '&' && ptr[i]+1 != ' ' )
-        {
-            memmove( &ptr[i] , &ptr[i+1] , strlen( &ptr[i+1] ) + 1) ;
-        }
-    }
-}
-
-void wxMacConvertFromPC( unsigned char *p )
-{
-    char *ptr = (char*) p + 1 ;
-    int len = p[0] ;
-
-    wxMacConvertFromPC( ptr , ptr , len ) ;
-}
-
-extern char *wxBuffer ;
-
-wxString wxMacMakeMacStringFromPC( const char * p )
-{
-    const char *ptr = p ;
-    int len = strlen ( p ) ;
-    char *buf = wxBuffer ;
-
-    if ( len >= BUFSIZ + 512 )
-    {
-        buf = new char [len+1] ;
-    }
-
-    wxMacConvertFromPC( ptr , buf , len ) ;
-    buf[len] = 0 ;
-    wxString result( buf ) ;
-    if ( buf != wxBuffer )
-        delete buf ;
-    return result ;
-}
-
-
-void wxMacConvertToPC( char * p )
-{
-    char *ptr = p ;
-    int len = strlen ( p ) ;
-
-    wxMacConvertToPC( ptr , ptr , len ) ;
-}
-
-void wxMacConvertToPC( unsigned char *p )
-{
-    char *ptr = (char*) p + 1 ;
-    int len = p[0] ;
-
-    wxMacConvertToPC( ptr , ptr , len ) ;
-}
-
-wxString wxMacMakePCStringFromMac( const char * p )
-{
-    const char *ptr = p ;
-    int len = strlen ( p ) ;
-    char *buf = wxBuffer ;
-
-    if ( len >= BUFSIZ + 512 )
-    {
-        buf = new char [len+1] ;
-    }
-
-    wxMacConvertToPC( ptr , buf , len ) ;
-    buf[len] = 0 ;
-
-    wxString result( buf ) ;
-    if ( buf != wxBuffer )
-        delete buf ;
-    return result ;
-}
-
-wxString wxMacMakeStringFromMacString( const char* from , bool mac2pcEncoding )
-{
-    if (mac2pcEncoding)
-    {
-      return wxMacMakePCStringFromMac( from ) ;
-    }
-    else
-    {
-      return wxString( from ) ;
-    }
-}
-
-wxString wxMacMakeStringFromPascal( StringPtr from , bool mac2pcEncoding )
-{
-  // this is safe since a pascal string can never be larger than 256 bytes
-  char s[256] ;
-  CopyPascalStringToC( from , s ) ;
-    if (mac2pcEncoding)
-    {
-      return wxMacMakePCStringFromMac( s ) ;
-    }
-    else
-    {
-      return wxString( s ) ;
-    }
-}
-
-void wxMacStringToPascal( const char * from , StringPtr to , bool pc2macEncoding )
-{
-    if (pc2macEncoding)
-    {
-      CopyCStringToPascal( wxMacMakeMacStringFromPC( from ) , to ) ;
-    }
-    else
-    {
-      CopyCStringToPascal( from , to ) ;
-    }
-}
-
 //----------------------------------------------------------------------
 // Carbon Event Handler
 //----------------------------------------------------------------------
@@ -495,9 +293,53 @@ void wxMacStringToPascal( const char * from , StringPtr to , bool pc2macEncoding
 	{
 	    { kEventClassCommand, kEventProcessCommand } ,
 	    { kEventClassCommand, kEventCommandUpdateStatus } ,
+	    
 	    { kEventClassApplication , kEventAppActivated } ,
 	    { kEventClassApplication , kEventAppDeactivated } ,
+	    // handling the quit event is not recommended by apple
+	    // rather using the quit apple event - which we do
+	    
+    	{ kEventClassMouse , kEventMouseDown } ,
 	} ;
+
+static pascal OSStatus MenuEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+{
+    OSStatus result = eventNotHandledErr ;
+    UInt32 kind = GetEventKind( event ) ;
+    
+    return result ;
+}
+
+// due to the rather low-level event API of wxWindows, we cannot use RunApplicationEventLoop 
+// but have to use ReceiveNextEvent dealing with events manually, therefore we also have
+// deal with clicks in the menu bar explicitely
+
+static pascal OSStatus MouseEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+{
+    OSStatus result = eventNotHandledErr ;
+    
+    switch( GetEventKind(event) )
+    {
+    	case kEventMouseDown :
+    	{
+			Point point ;
+			WindowRef window ;
+		
+			GetEventParameter( event, kEventParamMouseLocation, typeQDPoint, NULL,
+				sizeof( Point ), NULL, &point );
+		    short windowPart = ::FindWindow(point, &window);
+
+			if ( windowPart == inMenuBar )
+			{
+				MenuSelect( point ) ;
+				result = noErr ;
+			}
+    	}
+    	break ;
+    }	
+
+    return result ;
+}
 
 static pascal OSStatus CommandEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
 {
@@ -580,7 +422,12 @@ pascal OSStatus wxAppEventHandler( EventHandlerCallRef handler , EventRef event 
     	case kEventClassApplication :
     		result = ApplicationEventHandler( handler , event , data ) ;
     		break ;
-    	
+    	case kEventClassMenu :
+    		result = MenuEventHandler( handler , event , data ) ;
+    		break ;
+    	case kEventClassMouse :
+    		result = MouseEventHandler( handler , event , data ) ;
+    		break ;
     	default :
     		break ;
     }
@@ -684,8 +531,6 @@ bool wxApp::Initialize()
 
     s_macCursorRgn = ::NewRgn() ;
 
-    wxBuffer = new char[BUFSIZ + 512];
-
     wxClassInfo::InitializeClasses();
 
 #if wxUSE_RESOURCES
@@ -742,6 +587,8 @@ bool wxApp::OnInitGui()
 		return false ;
 		
 #if TARGET_CARBON		
+	InstallStandardEventHandler( GetApplicationEventTarget() ) ;
+	
 	InstallApplicationEventHandler(
 		GetwxAppEventHandlerUPP(), 
 		GetEventTypeCount(eventList), eventList, wxTheApp, &((EventHandlerRef)wxTheApp->m_macEventHandler));    
@@ -810,9 +657,6 @@ void wxApp::CleanUp()
     wxTheColourDatabase = NULL;
 
     wxBitmap::CleanUpHandlers();
-
-    delete[] wxBuffer;
-    wxBuffer = NULL;
 
     wxMacDestroyNotifierTable() ;
     if (wxWinMacWindowList) {
@@ -1317,15 +1161,26 @@ bool wxApp::ProcessIdle()
 
 void wxApp::ExitMainLoop()
 {
-  m_keepGoing = FALSE;
+#if TARGET_CARBON
+	if (s_inReceiveEvent)
+		QuitApplicationEventLoop() ;
+	else
+  		m_keepGoing = FALSE;
+#else
+  	m_keepGoing = FALSE;
+#endif
 }
 
 // Is a message/event pending?
 bool wxApp::Pending()
 {
+#if TARGET_CARBON
+	return GetNumEventsInQueue( GetMainEventQueue() ) > 0 ;
+#else
     EventRecord event ;
 
-  return EventAvail( everyEvent , &event ) ;
+  	return EventAvail( everyEvent , &event ) ;
+#endif
 }
 
 // Dispatch a message.
@@ -1336,8 +1191,6 @@ void wxApp::Dispatch()
 
 void wxApp::OnIdle(wxIdleEvent& event)
 {
-   static bool s_inOnIdle = FALSE;
-
     // Avoid recursion (via ProcessEvent default case)
     if ( s_inOnIdle )
         return;
@@ -1480,21 +1333,51 @@ bool wxApp::Yield(bool onlyIfNeeded)
 #if wxUSE_THREADS
     YieldToAnyThread() ;
 #endif
+	// by definition yield should handle all non-processed events
+#if TARGET_CARBON
+	EventRef theEvent;
+
+	OSStatus status = noErr ;
+	do
+	{
+		s_inReceiveEvent = true ;
+		status = ReceiveNextEvent(0, NULL,kEventDurationNoWait,true,&theEvent) ;
+		s_inReceiveEvent = false ;
+		
+		if ( status == eventLoopTimedOutErr )
+		{
+			// make sure next time the event loop will trigger idle events
+	        sleepTime = kEventDurationNoWait ;
+		}
+		else if ( status == eventLoopQuitErr )
+		{
+			m_keepGoing = false ;
+		}
+		else
+		{
+			MacHandleOneEvent( theEvent ) ;
+			ReleaseEvent(theEvent);
+		}
+	} while( status == noErr ) ;
+#else
     EventRecord event ;
 
-    long sleepTime = 1 ; //::GetCaretTime();
+	// having a larger value here leads to large performance slowdowns
+	// so we cannot give background apps more processor time here
+	// we do so however having a large sleep value in the main event loop
+    long sleepTime = 0 ; 
 
-    while ( !wxTheApp->IsExiting() && WaitNextEvent(everyEvent, &event,sleepTime, (RgnHandle) wxApp::s_macCursorRgn))
+    while ( !IsExiting() && WaitNextEvent(everyEvent, &event,sleepTime, (RgnHandle) wxApp::s_macCursorRgn))
     {
-        wxTheApp->MacHandleModifierEvents( &event ) ;
-        wxTheApp->MacHandleOneEvent( &event );
+        MacHandleModifierEvents( &event ) ;
+        MacHandleOneEvent( &event );
         if ( event.what != kHighLevelEvent )
             SetRectRgn( (RgnHandle) wxApp::s_macCursorRgn , event.where.h , event.where.v ,  event.where.h + 1 , event.where.v + 1 ) ;
     }
-    wxTheApp->MacHandleModifierEvents( &event ) ;
+    MacHandleModifierEvents( &event ) ;
+#endif
 
     wxMacProcessNotifierAndPendingEvents() ;
-
     s_inYield = FALSE;
 
     return TRUE;
@@ -1561,11 +1444,34 @@ void wxApp::MacConvertPublicToPrivateScrap()
 
 void wxApp::MacDoOneEvent()
 {
-  EventRecord event ;
+#if TARGET_CARBON
+	EventRef theEvent;
 
-    long sleepTime = 1; // GetCaretTime() / 4 ;
+	s_inReceiveEvent = true ;
+	OSStatus status = ReceiveNextEvent(0, NULL,sleepTime,true,&theEvent) ;
+	s_inReceiveEvent = false ;
+	if ( status == eventLoopTimedOutErr )
+	{
+        if ( wxTheApp->ProcessIdle() )
+        	sleepTime = kEventDurationNoWait ;
+        else
+        	sleepTime = kEventDurationForever ;
+	}
+	else if ( status == eventLoopQuitErr )
+	{
+		m_keepGoing = false ;
+	}
+	else
+	{
+		MacHandleOneEvent( theEvent ) ;
+		ReleaseEvent(theEvent);
+	}
+#else
+  	EventRecord event ;
 
-    if (WaitNextEvent(everyEvent, &event, sleepTime, (RgnHandle) s_macCursorRgn))
+	EventMask eventMask = everyEvent ;
+
+    if (WaitNextEvent(eventMask, &event, sleepTime, (RgnHandle) s_macCursorRgn))
     {
         MacHandleModifierEvents( &event ) ;
         MacHandleOneEvent( &event );
@@ -1578,37 +1484,89 @@ void wxApp::MacDoOneEvent()
         if ( window )
             ::IdleControls( window ) ;
 
-        wxTheApp->ProcessIdle() ;
+        if ( wxTheApp->ProcessIdle() )
+        	sleepTime = 0 ;
+        else
+        	sleepTime = GetCaretTime() / 2 ;
     }
     if ( event.what != kHighLevelEvent )
         SetRectRgn( (RgnHandle) s_macCursorRgn , event.where.h , event.where.v ,  event.where.h + 1 , event.where.v + 1 ) ;
-
+#endif
     // repeaters
 
     DeletePendingObjects() ;
     wxMacProcessNotifierAndPendingEvents() ;
 }
 
+void wxApp::MacHandleOneEvent( WXEVENTREF evr )
+{
+#if TARGET_CARBON
+	EventTargetRef theTarget;
+	theTarget = GetEventDispatcherTarget();
+    m_macCurrentEvent = evr ;
+	SendEventToEventTarget ((EventRef) evr , theTarget);
+#else
+    EventRecord* ev = (EventRecord*) evr ;
+    m_macCurrentEvent = ev ;
+
+    wxApp::sm_lastMessageTime = ev->when ;
+
+    switch (ev->what)
+    {
+        case mouseDown:
+            MacHandleMouseDownEvent( ev ) ;
+            if ( ev->modifiers & controlKey )
+                s_lastMouseDown = 2;
+            else
+                s_lastMouseDown = 1;
+            break;
+        case mouseUp:
+            if ( s_lastMouseDown == 2 )
+            {
+                ev->modifiers |= controlKey ;
+            }
+            else
+            {
+                ev->modifiers &= ~controlKey ;
+            }
+            MacHandleMouseUpEvent( ev ) ;
+            s_lastMouseDown = 0;
+            break;
+        case activateEvt:
+            MacHandleActivateEvent( ev ) ;
+            break;
+        case updateEvt:
+            MacHandleUpdateEvent( ev ) ;
+            break;
+        case keyDown:
+        case autoKey:
+            MacHandleKeyDownEvent( ev ) ;
+            break;
+        case keyUp:
+            MacHandleKeyUpEvent( ev ) ;
+            break;
+        case diskEvt:
+            MacHandleDiskEvent( ev ) ;
+            break;
+        case osEvt:
+            MacHandleOSEvent( ev ) ;
+            break;
+        case kHighLevelEvent:
+            MacHandleHighLevelEvent( ev ) ;
+            break;
+        default:
+            break;
+    }
+#endif
+    wxMacProcessNotifierAndPendingEvents() ;
+}
+
+#if !TARGET_CARBON
+bool s_macIsInModalLoop = false ;
+
 void wxApp::MacHandleModifierEvents( WXEVENTREF evr )
 {
     EventRecord* ev = (EventRecord*) evr ;
-#if TARGET_CARBON
-    if ( ev->what == mouseDown || ev->what == mouseUp || ev->what == activateEvt ||
-        ev->what == keyDown || ev->what == autoKey || ev->what == keyUp || ev->what == kHighLevelEvent ||
-        ev->what == nullEvent
-        )
-    {
-        // in these cases the modifiers are already correctly setup by carbon
-    }
-    else
-    {
-        EventRecord nev ;
-        WaitNextEvent( 0 , &nev , 0 , NULL ) ;
-        ev->modifiers = nev.modifiers ;
-        // KeyModifiers unfortunately don't include btnState...
-//        ev->modifiers = GetCurrentKeyModifiers() ; 
-    }
-#endif
     if ( ev->modifiers != s_lastModifiers && wxWindow::FindFocus() != NULL )
     {
         wxKeyEvent event(wxEVT_KEY_DOWN);
@@ -1646,66 +1604,6 @@ void wxApp::MacHandleModifierEvents( WXEVENTREF evr )
     }
 }
 
-void wxApp::MacHandleOneEvent( WXEVENTREF evr )
-{
-    EventRecord* ev = (EventRecord*) evr ;
-    m_macCurrentEvent = ev ;
-
-    wxApp::sm_lastMessageTime = ev->when ;
-
-    switch (ev->what)
-    {
-        case mouseDown:
-            MacHandleMouseDownEvent( ev ) ;
-            if ( ev->modifiers & controlKey )
-                s_lastMouseDown = 2;
-            else
-                s_lastMouseDown = 1;
-            break;
-#if !TARGET_CARBON
-        case mouseUp:
-            if ( s_lastMouseDown == 2 )
-            {
-                ev->modifiers |= controlKey ;
-            }
-            else
-            {
-                ev->modifiers &= ~controlKey ;
-            }
-            MacHandleMouseUpEvent( ev ) ;
-            s_lastMouseDown = 0;
-            break;
-        case activateEvt:
-            MacHandleActivateEvent( ev ) ;
-            break;
-        case updateEvt:
-            MacHandleUpdateEvent( ev ) ;
-            break;
-#endif
-        case keyDown:
-        case autoKey:
-            MacHandleKeyDownEvent( ev ) ;
-            break;
-        case keyUp:
-            MacHandleKeyUpEvent( ev ) ;
-            break;
-#if !TARGET_CARBON
-        case diskEvt:
-            MacHandleDiskEvent( ev ) ;
-            break;
-        case osEvt:
-            MacHandleOSEvent( ev ) ;
-            break;
-#endif
-        case kHighLevelEvent:
-            MacHandleHighLevelEvent( ev ) ;
-            break;
-        default:
-            break;
-    }
-    wxMacProcessNotifierAndPendingEvents() ;
-}
-
 void wxApp::MacHandleHighLevelEvent( WXEVENTREF evr )
 {
     // we must avoid reentrancy problems when processing high level events eg printing
@@ -1715,8 +1613,6 @@ void wxApp::MacHandleHighLevelEvent( WXEVENTREF evr )
     ::AEProcessAppleEvent( ev ) ;
     s_inYield = former ;
 }
-
-bool s_macIsInModalLoop = false ;
 
 void wxApp::MacHandleMouseDownEvent( WXEVENTREF evr )
 {
@@ -1747,13 +1643,10 @@ void wxApp::MacHandleMouseDownEvent( WXEVENTREF evr )
             else
             {
                 UInt32 menuresult = MenuSelect(ev->where) ;
-#if !TARGET_CARBON
                MacHandleMenuSelect( HiWord( menuresult ) , LoWord( menuresult ) );
-#endif
                 s_lastMouseDown = 0;
             }
             break ;
-#if !TARGET_CARBON
         case inSysWindow :
             SystemClick( ev , window ) ;
             s_lastMouseDown = 0;
@@ -1875,13 +1768,10 @@ void wxApp::MacHandleMouseDownEvent( WXEVENTREF evr )
                         win->MacMouseDown( ev , windowPart ) ;
                 }
             break ;
-#endif
         default:
             break;
     }
 }
-
-#if !TARGET_CARBON
 
 void wxApp::MacHandleMouseUpEvent( WXEVENTREF evr )
 {
@@ -2026,12 +1916,12 @@ long wxMacTranslateKey(unsigned char key, unsigned char code)
     return retval;
 }
 
+#if !TARGET_CARBON
 void wxApp::MacHandleKeyDownEvent( WXEVENTREF evr )
 {
     EventRecord* ev = (EventRecord*) evr ;
     wxToolTip::RemoveToolTips() ;
 
-#if !TARGET_CARBON
     UInt32 menuresult = UMAMenuEvent(ev) ;
     if ( HiWord( menuresult ) )
     {
@@ -2039,7 +1929,6 @@ void wxApp::MacHandleKeyDownEvent( WXEVENTREF evr )
             MacHandleMenuSelect( HiWord( menuresult ) , LoWord( menuresult ) ) ;
     }
     else
-#endif
     {
          wxWindow* focus = wxWindow::FindFocus() ;
  
@@ -2058,6 +1947,23 @@ void wxApp::MacHandleKeyDownEvent( WXEVENTREF evr )
         }
     }
 }
+
+void wxApp::MacHandleKeyUpEvent( WXEVENTREF evr )
+{
+    EventRecord* ev = (EventRecord*) evr ;
+    wxToolTip::RemoveToolTips() ;
+
+    UInt32 menuresult = UMAMenuEvent(ev) ;
+    if ( HiWord( menuresult ) )
+    {
+    }
+    else
+    {
+        MacSendKeyUpEvent( wxWindow::FindFocus() , ev->message , ev->modifiers , ev->when , ev->where.h , ev->where.v ) ;
+    }
+}
+
+#endif
 
 bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey )
 {
@@ -2189,22 +2095,6 @@ bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifi
     return handled ;
 }
 
-
-void wxApp::MacHandleKeyUpEvent( WXEVENTREF evr )
-{
-    EventRecord* ev = (EventRecord*) evr ;
-    wxToolTip::RemoveToolTips() ;
-
-    UInt32 menuresult = UMAMenuEvent(ev) ;
-    if ( HiWord( menuresult ) )
-    {
-    }
-    else
-    {
-        MacSendKeyUpEvent( wxWindow::FindFocus() , ev->message , ev->modifiers , ev->when , ev->where.h , ev->where.v ) ;
-    }
-}
-
 bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey )
 {
     if ( !focus )
@@ -2246,6 +2136,7 @@ bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keymessage , long modifier
 
     return handled ;
 }
+
 #if !TARGET_CARBON
 void wxApp::MacHandleActivateEvent( WXEVENTREF evr )
 {

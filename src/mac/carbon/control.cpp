@@ -36,7 +36,6 @@ IMPLEMENT_ABSTRACT_CLASS(wxControl, wxWindow)
 
 BEGIN_EVENT_TABLE(wxControl, wxWindow)
     EVT_MOUSE_EVENTS( wxControl::OnMouseEvent ) 
-//    EVT_CHAR( wxControl::OnKeyDown ) 
     EVT_PAINT( wxControl::OnPaint ) 
 END_EVENT_TABLE()
 #endif
@@ -357,19 +356,7 @@ void wxControl::MacPreControlCreate( wxWindow *parent, wxWindowID id, wxString l
     ((Rect*)outBounds)->bottom = 0;
     ((Rect*)outBounds)->right = 0;
 
-    char c_text[255];
-    strcpy( c_text , label ) ;
-    if( wxApp::s_macDefaultEncodingIsPC )
-    {
-        wxMacConvertFromPCForControls( c_text ) ;
-    }
-
-#if TARGET_CARBON
-    c2pstrcpy( (StringPtr) maclabel , c_text ) ;
-#else
-    strcpy( (char *) maclabel , c_text ) ;
-    c2pstr( (char *) maclabel ) ;
-#endif
+    wxMacStringToPascal( wxStripMenuCodes(label) , maclabel ) ;
 }
 
 void wxControl::MacPostControlCreate()
@@ -820,12 +807,24 @@ void wxControl::OnEraseBackground(wxEraseEvent& event)
     wxWindow::OnEraseBackground( event ) ; 
 }
 
-
 void  wxControl::OnKeyDown( wxKeyEvent &event ) 
 {
     if ( (ControlHandle) m_macControl == NULL )
         return ;
     
+#if TARGET_CARBON
+
+	char charCode ;
+	UInt32 keyCode ;	
+    UInt32 modifiers ;
+
+	GetEventParameter( (EventRef) wxTheApp->MacGetCurrentEvent(), kEventParamKeyMacCharCodes, typeChar, NULL,sizeof(char), NULL,&charCode );
+	GetEventParameter( (EventRef) wxTheApp->MacGetCurrentEvent(), kEventParamKeyCode, typeUInt32, NULL,  sizeof(UInt32), NULL, &keyCode );
+   	GetEventParameter((EventRef) wxTheApp->MacGetCurrentEvent(), kEventParamKeyModifiers, typeUInt32, NULL, sizeof(UInt32), NULL, &modifiers);
+
+    ::HandleControlKey( (ControlHandle) m_macControl , keyCode , charCode , modifiers ) ;
+	
+#else
     EventRecord *ev = (EventRecord*) wxTheApp->MacGetCurrentEvent() ;
     short keycode ;
     short keychar ;
@@ -833,6 +832,7 @@ void  wxControl::OnKeyDown( wxKeyEvent &event )
     keycode = short(ev->message & keyCodeMask) >> 8 ;
 
     ::HandleControlKey( (ControlHandle) m_macControl , keycode , keychar , ev->modifiers ) ;
+#endif
 }
 
 void  wxControl::OnMouseEvent( wxMouseEvent &event ) 

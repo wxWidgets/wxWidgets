@@ -74,12 +74,12 @@ extern long wxMacTranslateKey(unsigned char key, unsigned char code) ;
 static const EventTypeSpec eventList[] = 
 {
     { kEventClassTextInput, kEventTextInputUnicodeForKeyEvent } ,
-    /*
-    	{ kEventClassKeyboard, kEventRawKeyDown } ,
-	    { kEventClassKeyboard, kEventRawKeyRepeat } ,
-	    { kEventClassKeyboard, kEventRawKeyUp } ,
-	    { kEventClassKeyboard, kEventRawKeyModifiersChanged } ,
-	*/
+
+	{ kEventClassKeyboard, kEventRawKeyDown } ,
+    { kEventClassKeyboard, kEventRawKeyRepeat } ,
+    { kEventClassKeyboard, kEventRawKeyUp } ,
+    { kEventClassKeyboard, kEventRawKeyModifiersChanged } ,
+
     { kEventClassWindow , kEventWindowUpdate } ,
     { kEventClassWindow , kEventWindowActivated } ,
     { kEventClassWindow , kEventWindowDeactivated } ,
@@ -97,18 +97,112 @@ static const EventTypeSpec eventList[] =
 static pascal OSStatus TextInputEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
 {
     OSStatus result = eventNotHandledErr ;
-    EventRecord rec ;
 
-    if ( wxMacConvertEventToRecord( event , &rec ) )
-    {
-		wxTheApp->m_macCurrentEvent = &rec ;
-        wxWindow* focus = wxWindow::FindFocus() ;
-        if ( (focus != NULL) && !UMAMenuEvent(&rec) && wxTheApp->MacSendKeyDownEvent( focus , rec.message , rec.modifiers , rec.when , rec.where.h , rec.where.v ) )
-        {
-            // was handled internally
-            result = noErr ;
-        }
-    }
+    wxWindow* focus = wxWindow::FindFocus() ;
+	char charCode ;
+	UInt32 keyCode ;	
+    UInt32 modifiers ;
+	Point point ;
+	UInt32 when = EventTimeToTicks( GetEventTime( event ) ) ;
+
+    EventRef rawEvent ;
+    
+    GetEventParameter( event , kEventParamTextInputSendKeyboardEvent ,typeEventRef,NULL,sizeof(rawEvent),NULL,&rawEvent ) ;
+    
+	GetEventParameter( rawEvent, kEventParamKeyMacCharCodes, typeChar, NULL,sizeof(char), NULL,&charCode );
+	GetEventParameter( rawEvent, kEventParamKeyCode, typeUInt32, NULL,  sizeof(UInt32), NULL, &keyCode );
+   	GetEventParameter( rawEvent, kEventParamKeyModifiers, typeUInt32, NULL, sizeof(UInt32), NULL, &modifiers);
+	GetEventParameter( rawEvent, kEventParamMouseLocation, typeQDPoint, NULL,
+		sizeof( Point ), NULL, &point );
+
+	UInt32 message = (keyCode << 8) + charCode;
+
+	switch ( GetEventKind( event ) )
+	{
+		case kEventTextInputUnicodeForKeyEvent :
+	        if ( (focus != NULL) && wxTheApp->MacSendKeyDownEvent( 
+	        	focus , message , modifiers , when , point.h , point.v ) )
+	        {
+	            result = noErr ;
+	        }
+			break ;
+	}
+
+    return result ;
+}
+
+static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+{
+    OSStatus result = eventNotHandledErr ;
+
+    wxWindow* focus = wxWindow::FindFocus() ;
+	char charCode ;
+	UInt32 keyCode ;	
+    UInt32 modifiers ;
+	Point point ;
+	UInt32 when = EventTimeToTicks( GetEventTime( event ) ) ;
+
+	GetEventParameter( event, kEventParamKeyMacCharCodes, typeChar, NULL,sizeof(char), NULL,&charCode );
+	GetEventParameter( event, kEventParamKeyCode, typeUInt32, NULL,  sizeof(UInt32), NULL, &keyCode );
+   	GetEventParameter(event, kEventParamKeyModifiers, typeUInt32, NULL, sizeof(UInt32), NULL, &modifiers);
+	GetEventParameter( event, kEventParamMouseLocation, typeQDPoint, NULL,
+		sizeof( Point ), NULL, &point );
+
+	UInt32 message = (keyCode << 8) + charCode;
+	switch( GetEventKind( event ) )
+	{
+		case kEventRawKeyRepeat :
+		case kEventRawKeyDown :
+	        if ( (focus != NULL) && wxTheApp->MacSendKeyDownEvent( 
+	        	focus , message , modifiers , when , point.h , point.v ) )
+	        {
+	            result = noErr ;
+	        }
+			break ;
+		case kEventRawKeyUp :
+	        if ( (focus != NULL) && wxTheApp->MacSendKeyUpEvent( 
+	        	focus , message , modifiers , when , point.h , point.v ) )
+	        {
+	            result = noErr ;
+	        }
+			break ;
+		case kEventRawKeyModifiersChanged :
+			{
+		        wxKeyEvent event(wxEVT_KEY_DOWN);
+
+		        event.m_shiftDown = modifiers & shiftKey;
+		        event.m_controlDown = modifiers & controlKey;
+		        event.m_altDown = modifiers & optionKey;
+		        event.m_metaDown = modifiers & cmdKey;
+
+		        event.m_x = point.h;
+		        event.m_y = point.v;
+		        event.m_timeStamp = when;
+		        wxWindow* focus = wxWindow::FindFocus() ;
+		        event.SetEventObject(focus);
+
+		        if ( (modifiers ^ wxTheApp->s_lastModifiers ) & controlKey )
+		        {
+		            event.m_keyCode = WXK_CONTROL ;
+		            event.SetEventType( ( modifiers & controlKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;
+		            focus->GetEventHandler()->ProcessEvent( event ) ;
+		        }
+		        if ( (modifiers ^ wxTheApp->s_lastModifiers ) & shiftKey )
+		        {
+		            event.m_keyCode = WXK_SHIFT ;
+		            event.SetEventType( ( modifiers & shiftKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;
+		            focus->GetEventHandler()->ProcessEvent( event ) ;
+		        }
+		        if ( (modifiers ^ wxTheApp->s_lastModifiers ) & optionKey )
+		        {
+		            event.m_keyCode = WXK_ALT ;
+		            event.SetEventType( ( modifiers & optionKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;
+		            focus->GetEventHandler()->ProcessEvent( event ) ;
+		        }
+		        wxTheApp->s_lastModifiers = modifiers ;
+		    }
+		 	break ;
+	}
 
     return result ;
 }
@@ -138,7 +232,7 @@ static pascal OSStatus MouseEventHandler( EventHandlerCallRef handler , EventRef
 	WindowRef window ;
     short windowPart = ::FindWindow(point, &window);
 
-    if ( IsWindowActive(window) && windowPart == inContent )
+	if ( IsWindowActive(window) && windowPart == inContent )
     {
 		switch ( GetEventKind( event ) )
 		{
@@ -227,6 +321,9 @@ pascal OSStatus wxMacWindowEventHandler( EventHandlerCallRef handler , EventRef 
 
     switch ( GetEventClass( event ) )
     {
+        case kEventClassKeyboard :
+        	result = KeyboardEventHandler( handler, event , data ) ;
+            break ;
         case kEventClassTextInput :
         	result = TextInputEventHandler( handler, event , data ) ;
             break ;

@@ -296,7 +296,13 @@ static pascal ControlPartCode TPPaneTrackingProc(ControlHandle theControl, Point
             case kmUPTextPart:
                 {   SetPort((**tpvars).fDrawingEnvironment);
                     wxMacWindowClipper clipper( wxFindControlFromMacControl(theControl ) ) ;
+#if !TARGET_CARBON 
                     TXNClick( varsp->fTXNRec, (const EventRecord*) wxTheApp->MacGetCurrentEvent());
+#else
+					EventRecord rec ;
+					ConvertEventRefToEventRecord( (EventRef) wxTheApp->MacGetCurrentEvent() , &rec ) ;
+                    TXNClick( varsp->fTXNRec, &rec );
+#endif
                 }
                 break;
             
@@ -729,12 +735,6 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
         m_macControl = NewControl(MAC_WXHWND(parent->MacGetRootWindow()), &bounds, "\p", true, featurSet, 0, featurSet, kControlUserPaneProc, 0);
             /* set up the mUP specific features and data */
         mUPOpenControl((ControlHandle) m_macControl, m_windowStyle );
-        /*
-        if ( parent )
-        {
-            parent->MacGetTopLevelWindow()->MacInstallEventHandler() ;
-        }
-        */
     }
     MacPostControlCreate() ;
 
@@ -769,46 +769,53 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 
 wxString wxTextCtrl::GetValue() const
 {
-    Size actualsize;
-    
+    Size actualSize = 0;
+    wxString result ;
+    OSStatus err ;
     if ( !m_macUsesTXN )
     {
-        ::GetControlData( (ControlHandle) m_macControl, 0,
-            ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag, 
-            32767 , wxBuffer , &actualsize ) ;
+    	err = ::GetControlDataSize((ControlHandle) m_macControl, 0,
+            ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag, &actualSize ) ;
+       
+       	if ( err )
+       		return wxEmptyString ;
+       	
+       	if ( actualSize > 0 )
+       	{
+	        wxChar *ptr = result.GetWriteBuf(actualSize) ;
+	        
+	        ::GetControlData( (ControlHandle) m_macControl, 0,
+	            ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag, 
+	            actualSize , ptr , &actualSize ) ;
+	        ptr[actualSize] = 0 ;
+	        result.UngetWriteBuf(actualSize) ;
+        }
+        
     }
     else
     {
         Handle theText ;
-        OSStatus err = TXNGetDataEncoded( ((TXNObject) m_macTXN), kTXNStartOffset, kTXNEndOffset, &theText , kTXNTextData );
+        err = TXNGetDataEncoded( ((TXNObject) m_macTXN), kTXNStartOffset, kTXNEndOffset, &theText , kTXNTextData );
         // all done
         if ( err )
         {
-            actualsize = 0 ;
+            actualSize = 0 ;
         }
         else
         {
-            actualsize = GetHandleSize( theText ) ;
-            if (actualsize != 0)
-              strncpy( wxBuffer , *theText , actualsize ) ;
-            DisposeHandle( theText ) ;
+            actualSize = GetHandleSize( theText ) ;
+	       	if ( actualSize > 0 )
+	       	{
+	        	wxChar *ptr = result.GetWriteBuf(actualSize) ;
+	            strncpy( ptr , *theText , actualSize ) ;
+	            ptr[actualSize] = 0 ;
+	            result.UngetWriteBuf( actualSize ) ;
+	        }
+	        DisposeHandle( theText ) ;
         }
     }
     
-    wxBuffer[actualsize] = 0 ;
-    
-    wxString value;
-
-    if( wxApp::s_macDefaultEncodingIsPC )
-    {
-        value = wxMacMakePCStringFromMac( wxBuffer ) ;
-        value.Replace( "\r", "\n" );
-    }
-    else
-        value = wxBuffer;
-        
-    
-    return value;
+    return wxMacMakeStringFromMacString( result ) ;
 }
 
 void wxTextCtrl::GetSelection(long* from, long* to) const
@@ -831,7 +838,7 @@ void wxTextCtrl::SetValue(const wxString& st)
     if( wxApp::s_macDefaultEncodingIsPC )
     {
         value = wxMacMakeMacStringFromPC( st ) ;
-        value.Replace( "\n", "\r" );
+        // value.Replace( "\n", "\r" ); TODO this should be handled by the conversion
     }
     else
         value = st;
@@ -1207,7 +1214,7 @@ void wxTextCtrl::WriteText(const wxString& text)
     if( wxApp::s_macDefaultEncodingIsPC )
     {
         value = wxMacMakeMacStringFromPC( text ) ;
-        value.Replace( "\n", "\r" );
+        // value.Replace( "\n", "\r" ); // TODO this should be handled by the conversion
     }
     else
         value = text ;
