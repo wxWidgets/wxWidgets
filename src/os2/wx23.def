@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  F:\DEV\WX2\WXWINDOWS\LIB\WX.lib
+;From library:  H:\Dev\Wx2\WxWindows\lib\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -1378,8 +1378,8 @@ EXPORTS
       Convert__19wxEncodingConverterFPCcPc
   ;From object file:  ..\common\event.cpp
     ;PUBDEFs (Symbols available from object file):
-      ;wxEvent::CopyObject(wxObject&) const
-      CopyObject__7wxEventCFR8wxObject
+      ;wxSetCursorEvent::sm_classwxSetCursorEvent
+      sm_classwxSetCursorEvent__16wxSetCursorEvent
       wxEVT_SETTING_CHANGED
       wxEVT_SCROLLWIN_TOP
       wxEVT_NC_LEFT_UP
@@ -1394,13 +1394,6 @@ EXPORTS
       sm_classwxFocusEvent__12wxFocusEvent
       ;wxCloseEvent::sm_classwxCloseEvent
       sm_classwxCloseEvent__12wxCloseEvent
-      __vft16wxDropFilesEvent8wxObject
-      __vft11wxShowEvent8wxObject
-      __vft11wxMenuEvent8wxObject
-      ;wxNotifyEvent::CopyObject(wxObject&) const
-      CopyObject__13wxNotifyEventCFR8wxObject
-      ;wxCloseEvent::CopyObject(wxObject&) const
-      CopyObject__12wxCloseEventCFR8wxObject
       ;wxCommandEvent::wxCommandEvent(int,int)
       __ct__14wxCommandEventFiT1
       wxEVT_MAXIMIZE
@@ -1475,15 +1468,6 @@ EXPORTS
       sm_classwxJoystickEvent__15wxJoystickEvent
       ;wxCommandEvent::sm_classwxCommandEvent
       sm_classwxCommandEvent__14wxCommandEvent
-      __vft22wxQueryNewPaletteEvent8wxObject
-      __vft15wxActivateEvent8wxObject
-      __vft12wxEraseEvent8wxObject
-      ;wxQueryNewPaletteEvent::CopyObject(wxObject&) const
-      CopyObject__22wxQueryNewPaletteEventCFR8wxObject
-      ;wxScrollWinEvent::CopyObject(wxObject&) const
-      CopyObject__16wxScrollWinEventCFR8wxObject
-      ;wxMouseEvent::CopyObject(wxObject&) const
-      CopyObject__12wxMouseEventCFR8wxObject
       ;wxEvtHandler::AddPendingEvent(wxEvent&)
       AddPendingEvent__12wxEvtHandlerFR7wxEvent
       ;wxMouseEvent::Button(int) const
@@ -1548,23 +1532,9 @@ EXPORTS
       sm_classwxIconizeEvent__14wxIconizeEvent
       ;wxChildFocusEvent::sm_classwxChildFocusEvent
       sm_classwxChildFocusEvent__17wxChildFocusEvent
-      __vft16wxScrollWinEvent8wxObject
-      __vft13wxNotifyEvent8wxObject
-      __vft12wxMouseEvent8wxObject
       __vft12wxEvtHandler8wxObject
-      __vft11wxMoveEvent8wxObject
-      ;wxDropFilesEvent::CopyObject(wxObject&) const
-      CopyObject__16wxDropFilesEventCFR8wxObject
-      ;wxJoystickEvent::CopyObject(wxObject&) const
-      CopyObject__15wxJoystickEventCFR8wxObject
-      ;wxActivateEvent::CopyObject(wxObject&) const
-      CopyObject__15wxActivateEventCFR8wxObject
-      ;wxSizeEvent::CopyObject(wxObject&) const
-      CopyObject__11wxSizeEventCFR8wxObject
-      ;wxMenuEvent::CopyObject(wxObject&) const
-      CopyObject__11wxMenuEventCFR8wxObject
-      ;wxIdleEvent::CopyObject(wxObject&) const
-      CopyObject__11wxIdleEventCFR8wxObject
+      ;wxEvent::wxEvent(int,int)
+      __ct__7wxEventFiT1
       wxEVT_SIZE
       wxEVT_SCROLL_BOTTOM
       wxEVT_SCROLLWIN_BOTTOM
@@ -1578,6 +1548,8 @@ EXPORTS
       wxEVT_NC_MOTION
       wxEVT_LEFT_DOWN
       wxEVT_COMMAND_TOOL_ENTER
+      ;wxConstructorForwxSetCursorEvent()
+      wxConstructorForwxSetCursorEvent__Fv
       ;wxConstructorForwxScrollWinEvent()
       wxConstructorForwxScrollWinEvent__Fv
       ;wxConstructorForwxPaintEvent()
@@ -1597,8 +1569,8 @@ EXPORTS
       wxEVT_KILL_FOCUS
       wxEVT_COMMAND_RIGHT_DCLICK
       wxEVT_CLOSE_WINDOW
-      ;wxCommandEvent::CopyObject(wxObject&) const
-      CopyObject__14wxCommandEventCFR8wxObject
+      ;wxEvtHandler::ProcessEvent(wxEvent&)
+      ProcessEvent__12wxEvtHandlerFR7wxEvent
       wxEVT_SCROLL_LINEUP
       wxEVT_PAINT
       wxEVT_NULL
@@ -1624,25 +1596,8 @@ EXPORTS
       sm_classwxEvent__7wxEvent
       ;wxEraseEvent::sm_classwxEraseEvent
       sm_classwxEraseEvent__12wxEraseEvent
-      __vft7wxEvent8wxObject
-      __vft21wxPaletteChangedEvent8wxObject
-      __vft14wxCommandEvent8wxObject
-      __vft11wxSizeEvent8wxObject
-      __vft10wxKeyEvent8wxObject
       ;wxEvtHandler::SearchEventTable(wxEventTable&,wxEvent&)
       SearchEventTable__12wxEvtHandlerFR12wxEventTableR7wxEvent
-      ;wxEvtHandler::ProcessEvent(wxEvent&)
-      ProcessEvent__12wxEvtHandlerFR7wxEvent
-      ;wxUpdateUIEvent::CopyObject(wxObject&) const
-      CopyObject__15wxUpdateUIEventCFR8wxObject
-      ;wxEraseEvent::CopyObject(wxObject&) const
-      CopyObject__12wxEraseEventCFR8wxObject
-      ;wxShowEvent::CopyObject(wxObject&) const
-      CopyObject__11wxShowEventCFR8wxObject
-      ;wxMoveEvent::CopyObject(wxObject&) const
-      CopyObject__11wxMoveEventCFR8wxObject
-      ;wxKeyEvent::CopyObject(wxObject&) const
-      CopyObject__10wxKeyEventCFR8wxObject
       ;wxMouseEvent::wxMouseEvent(int)
       __ct__12wxMouseEventFi
       wxEVT_JOY_ZMOVE
@@ -1693,8 +1648,8 @@ EXPORTS
       wxEVT_COMMAND_LEFT_DCLICK
       ;wxMouseEvent::GetLogicalPosition(const wxDC&) const
       GetLogicalPosition__12wxMouseEventCFRC4wxDC
-      ;wxPaletteChangedEvent::CopyObject(wxObject&) const
-      CopyObject__21wxPaletteChangedEventCFR8wxObject
+      ;wxEvent::wxEvent(const wxEvent&)
+      __ct__7wxEventFRC7wxEvent
       wxEVT_RIGHT_UP
       wxEVT_POPUP_MENU_INIT
       wxEVT_PALETTE_CHANGED
@@ -1720,19 +1675,13 @@ EXPORTS
       sm_classwxContextMenuEvent__18wxContextMenuEvent
       ;wxActivateEvent::sm_classwxActivateEvent
       sm_classwxActivateEvent__15wxActivateEvent
-      __vft15wxUpdateUIEvent8wxObject
-      __vft15wxJoystickEvent8wxObject
-      __vft12wxCloseEvent8wxObject
-      __vft11wxIdleEvent8wxObject
       ;wxEvtHandler::SearchDynamicEventTable(wxEvent&)
       SearchDynamicEventTable__12wxEvtHandlerFR7wxEvent
       ;wxEvtHandler::ProcessThreadEvent(wxEvent&)
       ProcessThreadEvent__12wxEvtHandlerFR7wxEvent
-      ;wxEvent::wxEvent(int)
-      __ct__7wxEventFi
-      wxEVT_UPDATE_UI
       ;wxScrollEvent::wxScrollEvent(int,int,int,int)
       __ct__13wxScrollEventFiN31
+      wxEVT_UPDATE_UI
       ;wxConstructorForwxIdleEvent()
       wxConstructorForwxIdleEvent__Fv
       wxEVT_SCROLL_PAGEDOWN
@@ -1758,7 +1707,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -2771,14 +2720,25 @@ EXPORTS
       wxInitAllImageHandlers__Fv
   ;From object file:  ..\common\imagbmp.cpp
     ;PUBDEFs (Symbols available from object file):
+      ;wxBMPHandler::DoLoadDib(wxImage*,int,int,int,int,int,long,wxInputStream&,unsigned long,unsigned long,unsigned long)
+      DoLoadDib__12wxBMPHandlerFP7wxImageiN42lR13wxInputStreamUlN29
       ;wxBMPHandler::sm_classwxBMPHandler
       sm_classwxBMPHandler__12wxBMPHandler
+      __vft12wxICOHandler8wxObject
+      ;wxBMPHandler::LoadDib(wxImage*,wxInputStream&,unsigned long,unsigned long)
+      LoadDib__12wxBMPHandlerFP7wxImageR13wxInputStreamUlT3
       ;wxBMPHandler::SaveFile(wxImage*,wxOutputStream&,unsigned long)
       SaveFile__12wxBMPHandlerFP7wxImageR14wxOutputStreamUl
       ;wxConstructorForwxBMPHandler()
       wxConstructorForwxBMPHandler__Fv
+      ;wxICOHandler::SaveFile(wxImage*,wxOutputStream&,unsigned long)
+      SaveFile__12wxICOHandlerFP7wxImageR14wxOutputStreamUl
       ;wxBMPHandler::LoadFile(wxImage*,wxInputStream&,unsigned long,int)
       LoadFile__12wxBMPHandlerFP7wxImageR13wxInputStreamUli
+      ;wxICOHandler::LoadFile(wxImage*,wxInputStream&,unsigned long,int)
+      LoadFile__12wxICOHandlerFP7wxImageR13wxInputStreamUli
+      ;wxICOHandler::DoCanRead(wxInputStream&)
+      DoCanRead__12wxICOHandlerFR13wxInputStream
       ;wxBMPHandler::DoCanRead(wxInputStream&)
       DoCanRead__12wxBMPHandlerFR13wxInputStream
       __vft12wxBMPHandler8wxObject
@@ -2895,6 +2855,8 @@ EXPORTS
       SetMask__7wxImageFUl
       ;wxImage::Rotate90(unsigned long) const
       Rotate90__7wxImageCFUl
+      ;wxImage::FindFirstUnusedColour(unsigned char*,unsigned char*,unsigned char*,unsigned char,unsigned char,unsigned char)
+      FindFirstUnusedColour__7wxImageFPUcN21UcN24
       ;wxImage::Create(int,int)
       Create__7wxImageFiT1
       __vft14wxImageRefData15wxObjectRefData
@@ -2940,10 +2902,12 @@ EXPORTS
       ComputeHistogram__7wxImageFR11wxHashTable
       ;wxImage::CanRead(wxInputStream&)
       CanRead__7wxImageFR13wxInputStream
-      ;wxImage::AddHandler(wxImageHandler*)
-      AddHandler__7wxImageFP14wxImageHandler
+      ;wxImage::SetMaskFromImage(const wxImage&,unsigned char,unsigned char,unsigned char)
+      SetMaskFromImage__7wxImageFRC7wxImageUcN22
       ;wxImageHandler::sm_classwxImageHandler
       sm_classwxImageHandler__14wxImageHandler
+      ;wxImage::AddHandler(wxImageHandler*)
+      AddHandler__7wxImageFP14wxImageHandler
       ;wxImage::wxImage(wxInputStream&,const wxString&)
       __ct__7wxImageFR13wxInputStreamRC8wxString
       ;wxImage::HasOption(const wxString&) const
@@ -4728,8 +4692,6 @@ EXPORTS
       SetTimeout__12wxSocketBaseFl
       ;wxSocketEvent::sm_classwxSocketEvent
       sm_classwxSocketEvent__13wxSocketEvent
-      ;wxSocketEvent::CopyObject(wxObject&) const
-      CopyObject__13wxSocketEventCFR8wxObject
       ;wxSocketClient::Connect(wxSockAddress&,unsigned long)
       Connect__14wxSocketClientFR13wxSockAddressUl
       ;wxSocketServer::AcceptWith(wxSocketBase&,unsigned long)
@@ -4764,15 +4726,12 @@ EXPORTS
       sm_classwxSocketClient__14wxSocketClient
       ;wxDatagramSocket::sm_classwxDatagramSocket
       sm_classwxDatagramSocket__16wxDatagramSocket
-      ;wxSocketEvent::wxSocketEvent(int)
-      __ct__13wxSocketEventFi
-      ;wxSocketModule::sm_classwxSocketModule
-      sm_classwxSocketModule__14wxSocketModule
       ;wxSocketBase::wxSocketBase(int,wxSocketType)
       __ct__12wxSocketBaseFi12wxSocketType
+      ;wxSocketModule::sm_classwxSocketModule
+      sm_classwxSocketModule__14wxSocketModule
       ;wxSocketBase::SaveState()
       SaveState__12wxSocketBaseFv
-      __vft13wxSocketEvent8wxObject
       __vft12wxSocketBase8wxObject
       ;wxSocketBase::WaitForRead(long,long)
       WaitForRead__12wxSocketBaseFlT1
@@ -5609,7 +5568,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -5679,8 +5638,6 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;IntToString(int)
       IntToString__Fi
-      ;wxStripMenuCodes(char*,char*)
-      wxStripMenuCodes__FPcT1
       ;wxDecToHex(int)
       wxDecToHex__Fi
       ;wxNow()
@@ -5701,10 +5658,8 @@ EXPORTS
       wxGetTextFromUser__FRC8wxStringN21P8wxWindowiT5Ul
       ;wxFindWindowAtPoint(wxWindow*,const wxPoint&)
       wxFindWindowAtPoint__FP8wxWindowRC7wxPoint
-      ;StringToDouble(char*,double*)
-      StringToDouble__FPcPd
-      ;StringToInt(char*,int*)
-      StringToInt__FPcPi
+      ;StringToLong(const char*,long*)
+      StringToLong__FPCcPl
       ;wxMessageBox(const wxString&,const wxString&,long,wxWindow*,int,int)
       wxMessageBox__FRC8wxStringT1lP8wxWindowiT5
       ;wxNewId()
@@ -5717,8 +5672,6 @@ EXPORTS
       wxHexToDec__FRC8wxString
       ;wxExecute(const wxString&,wxArrayString&)
       wxExecute__FRC8wxStringR13wxArrayString
-      ;StringToLong(char*,long*)
-      StringToLong__FPcPl
       ;LongToString(long)
       LongToString__Fl
       ;wxGetCurrentId()
@@ -5733,32 +5686,38 @@ EXPORTS
       wxGetFullHostName__Fv
       ;wxFindWindowByName(const wxString&,wxWindow*)
       wxFindWindowByName__FRC8wxStringP8wxWindow
+      ;StringToDouble(const char*,double*)
+      StringToDouble__FPCcPd
       ;wxGenericFindWindowAtPoint(const wxPoint&)
       wxGenericFindWindowAtPoint__FRC7wxPoint
       ;wxEnableTopLevelWindows(unsigned long)
       wxEnableTopLevelWindows__FUl
+      ;StringToInt(const char*,int*)
+      StringToInt__FPCcPi
       ;wxGetEmailAddress(char*,int)
       wxGetEmailAddress__FPci
+      ;StringToFloat(const char*,float*)
+      StringToFloat__FPCcPf
       ;wxGetUserId()
       wxGetUserId__Fv
       ;DoubleToString(double,const char*)
       DoubleToString__FdPCc
       ;wxStripMenuCodes(const wxString&)
       wxStripMenuCodes__FRC8wxString
+      ;wxStripMenuCodes(const char*,char*)
+      wxStripMenuCodes__FPCcPc
       ;wxSafeYield(wxWindow*)
       wxSafeYield__FP8wxWindow
-      ;StringMatch(char*,char*,unsigned long,unsigned long)
-      StringMatch__FPcT1UlT3
-      ;StringToFloat(char*,float*)
-      StringToFloat__FPcPf
+      ;StringMatch(const char*,const char*,unsigned long,unsigned long)
+      StringMatch__FPCcT1UlT3
+      ;wxFindMenuItemId(wxFrame*,const wxString&,const wxString&)
+      wxFindMenuItemId__FP7wxFrameRC8wxStringT2
       ;wxGetUserName()
       wxGetUserName__Fv
       ;wxGetEmailAddress()
       wxGetEmailAddress__Fv
       ;wxGetColourFromUser(wxWindow*,const wxColour&)
       wxGetColourFromUser__FP8wxWindowRC8wxColour
-      ;wxFindMenuItemId(wxFrame*,const wxString&,const wxString&)
-      wxFindMenuItemId__FP7wxFrameRC8wxStringT2
       ;FloatToString(float,const char*)
       FloatToString__FfPCc
       ;wxFindWindowByLabel(const wxString&,wxWindow*)
@@ -8563,8 +8522,6 @@ EXPORTS
       DeleteItem__16wxListMainWindowFl
       ;wxListLineDataArray::wxListLineDataArray(const wxListLineDataArray&)
       __ct__19wxListLineDataArrayFRC19wxListLineDataArray
-      ;wxListEvent::wxListEvent(int,int)
-      __ct__11wxListEventFiT1
       ;wxListItemData::SetSize(int,int)
       SetSize__14wxListItemDataFiT1
       ;wxListLineData::SetItem(int,const wxListItem&)
@@ -8640,8 +8597,6 @@ EXPORTS
       OnKeyDown__16wxListMainWindowFR10wxKeyEvent
       ;wxListMainWindow::OnArrowChar(unsigned int,const wxKeyEvent&)
       OnArrowChar__16wxListMainWindowFUiRC10wxKeyEvent
-      ;wxListEvent::CopyObject(wxObject&) const
-      CopyObject__11wxListEventCFR8wxObject
       ;wxListLineDataArray::operator=(const wxListLineDataArray&)
       __as__19wxListLineDataArrayFRC19wxListLineDataArray
       wxEVT_COMMAND_LIST_INSERT_ITEM
@@ -8730,7 +8685,6 @@ EXPORTS
       sm_classwxListCtrl__10wxListCtrl
       __vft18wxListHeaderWindow8wxObject
       __vft17wxListRenameTimer8wxObject
-      __vft11wxListEvent8wxObject
       ;wxListMainWindow::SortItems(int(*)(long,long,long),long)
       SortItems__16wxListMainWindowFPFlN21_il
       ;wxListCtrl::SetSingleStyle(long,unsigned long)
