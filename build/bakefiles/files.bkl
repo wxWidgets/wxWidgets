@@ -920,7 +920,6 @@
     src/msw/textctrl.cpp
     src/msw/tglbtn.cpp
     src/msw/treectrl.cpp
-    src/msw/mslu.cpp
 </set>
 <set var="MSW_HDR">
     wx/msw/access.h
