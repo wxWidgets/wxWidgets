@@ -568,19 +568,6 @@ auto-merge for MDI in case this will be necessary
 
 */
 
-const wxMenuInfoList& wxMenuBar::GetMenuInfos() const
-{
-    wxMenuInfoList* list = const_cast< wxMenuInfoList* >( &m_menuInfos ) ;
-    WX_CLEAR_LIST( wxMenuInfoList , *list ) ;
-    for( size_t i = 0 ; i < GetMenuCount() ; ++i )
-    {
-        wxMenuInfo* info = new wxMenuInfo() ;
-        info->Create( const_cast<wxMenuBar*>(this)->GetMenu(i) , GetLabelTop(i) ) ;
-        list->Append( info ) ;
-    }
-    return m_menuInfos ;
-}
-
 wxMenuBar* wxMenuBar::s_macInstalledMenuBar = NULL ;
 wxMenuBar* wxMenuBar::s_macCommonMenuBar = NULL ;
 
