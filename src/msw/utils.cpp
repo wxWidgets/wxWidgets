@@ -322,7 +322,7 @@ void wxBell(void)
 //#ifdef __WIN32__
 //  Beep(1000,1000) ; // 1kHz during 1 sec.
 //#else
-  MessageBeep(-1) ;
+  MessageBeep((UINT)-1) ;
 //#endif
 }
 
