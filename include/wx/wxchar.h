@@ -277,7 +277,7 @@ typedef unsigned char   wxUChar;
 inline bool WXDLLEXPORT wxIsEmpty(const wxChar *p) { return !p || !*p; }
 
 /// safe version of strlen() (returns 0 if passed NULL pointer)
-inline size_t  WXDLLEXPORT wxStrlen(const wxChar *psz)
+inline size_t WXDLLEXPORT wxStrlen(const wxChar *psz)
 #if defined(__VISUALC__)
    { return psz ? _tcslen(psz) : 0; }
 #elif wxUSE_UNICODE
@@ -322,6 +322,19 @@ inline int WXDLLEXPORT wxStricmp(const wxChar *psz1, const wxChar *psz2)
 
   #error  "Please define string case-insensitive compare for your OS/compiler"
 #endif  // OS/compiler
+
+/// portable strdup
+inline wxChar * WXDLLEXPORT wxStrdup(const wxChar *psz)
+#if !wxUSE_UNICODE
+   { return strdup(psz); }
+#else
+   {
+     size_t size = (wxStrlen(psz) + 1) * sizeof(wxChar);
+     wxChar *ret = (wxChar *) malloc(size);
+     memcpy(ret, psz, size);
+     return ret;
+   }
+#endif
 
 #endif
   //_WX_WXCHAR_H_
