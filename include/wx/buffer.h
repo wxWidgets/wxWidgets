@@ -83,13 +83,13 @@ public:
    {
      m_wcs = src.m_wcs;
      // no reference count yet...
-     (wxWCharBuffer)src.m_wcs = (wchar_t *)NULL;
+     ((wxWCharBuffer*)&src)->m_wcs = (wchar_t *)NULL;
    }
    wxWCharBuffer& operator=(const wxWCharBuffer& src)
    {
      m_wcs = src.m_wcs;
      // no reference count yet...
-     (wxWCharBuffer)src.m_wcs = (wchar_t *)NULL;
+     ((wxWCharBuffer*)&src)->m_wcs = (wchar_t *)NULL;
      return *this;
    }
 
