@@ -258,7 +258,7 @@ PyObject* wxPyDrawTextList(wxDC& dc, PyObject* textList, PyObject* pyPoints, PyO
             else {
                 obj = PySequence_GetItem(textList, i);
             }
-            if (! PyString_Check(obj) ) {
+            if (! PyString_Check(obj) && !PyUnicode_Check(obj) ) {
                 Py_DECREF(obj);
                 goto err1;
             }
