@@ -66,9 +66,8 @@ public:
 
     virtual bool SetShape(const wxRegion& region);
 
-    virtual bool ShowFullScreen(bool WXUNUSED(show), long WXUNUSED(style) = wxFULLSCREEN_ALL)
-    { return FALSE; }
-    virtual bool IsFullScreen() const { return FALSE; }
+    virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL) ;
+    virtual bool IsFullScreen() const ;
 
     // implementation from now on
     // --------------------------
@@ -124,6 +123,7 @@ protected:
     WXWindow m_macWindow ;
 
     wxWindowMac* m_macFocus ;
+    void *m_macFullScreenData ;
 
     static wxTopLevelWindowMac *s_macDeactivateWindow;
 private :
