@@ -603,6 +603,20 @@ int wxScrollHelper::CalcScrollInc(wxScrollWinEvent& event)
 // Adjust the scrollbars - new version.
 void wxScrollHelper::AdjustScrollbars()
 {
+    static bool s_isInside = false;
+    if ( s_isInside )
+    {
+        // don't reenter AdjustScrollbars() while another call to
+        // AdjustScrollbars() is in progress because this may lead to calling
+        // ScrollWindow() twice and this can really happen under MSW if
+        // SetScrollbar() call below adds or removes the scrollbar which
+        // changes the window size and hence results in another
+        // AdjustScrollbars() call
+        return;
+    }
+
+    s_isInside = true;
+
 #ifdef __WXMAC__
     m_targetWindow->MacUpdateImmediately();
 #endif
@@ -678,7 +692,7 @@ void wxScrollHelper::AdjustScrollbars()
         oldh = h;
 
         GetTargetSize( &w, &h );
-    } while ( w != oldw && h != oldh );
+    } while ( w != oldw || h != oldh );
 
 #ifdef __WXMOTIF__
     // Sorry, some Motif-specific code to implement a backing pixmap
@@ -734,6 +748,8 @@ void wxScrollHelper::AdjustScrollbars()
 #ifdef __WXMAC__
     m_targetWindow->MacUpdateImmediately();
 #endif
+
+    s_isInside = false;
 }
 
 void wxScrollHelper::DoPrepareDC(wxDC& dc)
