@@ -208,6 +208,8 @@ extern bool g_mainThreadLocked;
 // debug
 //-----------------------------------------------------------------------------
 
+#define DISABLE_STYLE_IF_BROKEN_THEME 1
+
 #ifdef __WXDEBUG__
 
 #if wxUSE_THREADS
@@ -2157,10 +2159,11 @@ wxWindow::~wxWindow()
 
     if (m_widgetStyle)
     {
+#if DISABLE_STYLE_IF_BROKEN_THEME
         // don't delete if it's a pixmap theme style
         if (!m_widgetStyle->engine_data)
             gtk_style_unref( m_widgetStyle );
-            
+#endif            
         m_widgetStyle = (GtkStyle*) NULL;
     }
 
@@ -3053,6 +3056,7 @@ GtkStyle *wxWindow::GetWidgetStyle()
 
 void wxWindow::SetWidgetStyle()
 {
+#if DISABLE_STYLE_IF_BROKEN_THEM
     if (m_widget->style->engine_data)
     {
         static bool s_warningPrinted = FALSE;
@@ -3064,6 +3068,7 @@ void wxWindow::SetWidgetStyle()
         m_widgetStyle = m_widget->style;
         return;
     }
+#endif
 
     GtkStyle *style = GetWidgetStyle();
 

@@ -302,7 +302,6 @@ void wxWindowDC::SetUpDC()
     gdk_gc_set_background( m_penGC, bg_col );
     
     gdk_gc_set_line_attributes( m_penGC, 0, GDK_LINE_SOLID, GDK_CAP_NOT_LAST, GDK_JOIN_ROUND );
-
     
     /* m_brushGC */
     m_brush.GetColour().CalcPixel( m_cmap );
@@ -310,7 +309,6 @@ void wxWindowDC::SetUpDC()
     gdk_gc_set_background( m_brushGC, bg_col );
     
     gdk_gc_set_fill( m_brushGC, GDK_SOLID );
-    
     
     /* m_bgGC */
     gdk_gc_set_background( m_bgGC, bg_col );
@@ -552,8 +550,6 @@ void wxWindowDC::DoDrawPolygon( int n, wxPoint points[], wxCoord xoffset, wxCoor
             }
         }
 
-        // To do: Fillstyle
-
         if (m_pen.GetStyle() != wxTRANSPARENT)
         {
             for (i = 0 ; i < n ; i++)
@@ -666,12 +662,41 @@ void wxWindowDC::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width, wx
 
         if (m_brush.GetStyle() != wxTRANSPARENT)
         {
-            gdk_draw_rectangle( m_window, m_brushGC, TRUE, xx+rr, yy, ww-dd+1, hh );
-            gdk_draw_rectangle( m_window, m_brushGC, TRUE, xx, yy+rr, ww, hh-dd+1 );
-            gdk_draw_arc( m_window, m_brushGC, TRUE, xx, yy, dd, dd, 90*64, 90*64 );
-            gdk_draw_arc( m_window, m_brushGC, TRUE, xx+ww-dd, yy, dd, dd, 0, 90*64 );
-            gdk_draw_arc( m_window, m_brushGC, TRUE, xx+ww-dd, yy+hh-dd, dd, dd, 270*64, 90*64 );
-            gdk_draw_arc( m_window, m_brushGC, TRUE, xx, yy+hh-dd, dd, dd, 180*64, 90*64 );
+            if ((m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE) && (m_brush.GetStipple()->GetMask()))
+            {
+                gdk_gc_set_ts_origin( m_textGC, 
+                                      m_deviceOriginX % m_brush.GetStipple()->GetWidth(), 
+                                      m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
+                gdk_draw_rectangle( m_window, m_textGC, TRUE, xx+rr, yy, ww-dd+1, hh );
+                gdk_draw_rectangle( m_window, m_textGC, TRUE, xx, yy+rr, ww, hh-dd+1 );
+                gdk_draw_arc( m_window, m_textGC, TRUE, xx, yy, dd, dd, 90*64, 90*64 );
+                gdk_draw_arc( m_window, m_textGC, TRUE, xx+ww-dd, yy, dd, dd, 0, 90*64 );
+                gdk_draw_arc( m_window, m_textGC, TRUE, xx+ww-dd, yy+hh-dd, dd, dd, 270*64, 90*64 );
+                gdk_draw_arc( m_window, m_textGC, TRUE, xx, yy+hh-dd, dd, dd, 180*64, 90*64 );
+                gdk_gc_set_ts_origin( m_textGC, 0, 0 );
+            }
+            else if (m_brush.GetStyle() == wxSTIPPLE)
+            {
+                gdk_gc_set_ts_origin( m_brushGC, 
+                                      m_deviceOriginX % m_brush.GetStipple()->GetWidth(), 
+                                      m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
+                gdk_draw_rectangle( m_window, m_brushGC, TRUE, xx+rr, yy, ww-dd+1, hh );
+                gdk_draw_rectangle( m_window, m_brushGC, TRUE, xx, yy+rr, ww, hh-dd+1 );
+                gdk_draw_arc( m_window, m_brushGC, TRUE, xx, yy, dd, dd, 90*64, 90*64 );
+                gdk_draw_arc( m_window, m_brushGC, TRUE, xx+ww-dd, yy, dd, dd, 0, 90*64 );
+                gdk_draw_arc( m_window, m_brushGC, TRUE, xx+ww-dd, yy+hh-dd, dd, dd, 270*64, 90*64 );
+                gdk_draw_arc( m_window, m_brushGC, TRUE, xx, yy+hh-dd, dd, dd, 180*64, 90*64 );
+                gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
+            }
+            else
+            {
+                gdk_draw_rectangle( m_window, m_brushGC, TRUE, xx+rr, yy, ww-dd+1, hh );
+                gdk_draw_rectangle( m_window, m_brushGC, TRUE, xx, yy+rr, ww, hh-dd+1 );
+                gdk_draw_arc( m_window, m_brushGC, TRUE, xx, yy, dd, dd, 90*64, 90*64 );
+                gdk_draw_arc( m_window, m_brushGC, TRUE, xx+ww-dd, yy, dd, dd, 0, 90*64 );
+                gdk_draw_arc( m_window, m_brushGC, TRUE, xx+ww-dd, yy+hh-dd, dd, dd, 270*64, 90*64 );
+                gdk_draw_arc( m_window, m_brushGC, TRUE, xx, yy+hh-dd, dd, dd, 180*64, 90*64 );
+            }
         }
 
         if (m_pen.GetStyle() != wxTRANSPARENT)
@@ -708,7 +733,28 @@ void wxWindowDC::DoDrawEllipse( wxCoord x, wxCoord y, wxCoord width, wxCoord hei
     if (m_window)
     {
         if (m_brush.GetStyle() != wxTRANSPARENT)
-            gdk_draw_arc( m_window, m_brushGC, TRUE, xx, yy, ww, hh, 0, 360*64 );
+        {
+            if ((m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE) && (m_brush.GetStipple()->GetMask()))
+            {
+                gdk_gc_set_ts_origin( m_textGC, 
+                                      m_deviceOriginX % m_brush.GetStipple()->GetWidth(), 
+                                      m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
+                gdk_draw_arc( m_window, m_textGC, TRUE, xx, yy, ww, hh, 0, 360*64 );
+                gdk_gc_set_ts_origin( m_textGC, 0, 0 );
+            }
+            else if (m_brush.GetStyle() == wxSTIPPLE)
+            {
+                gdk_gc_set_ts_origin( m_brushGC, 
+                                      m_deviceOriginX % m_brush.GetStipple()->GetWidth(), 
+                                      m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
+                gdk_draw_arc( m_window, m_brushGC, TRUE, xx, yy, ww, hh, 0, 360*64 );
+                gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
+            }
+            else
+            {
+                gdk_draw_arc( m_window, m_brushGC, TRUE, xx, yy, ww, hh, 0, 360*64 );
+            }
+        }
 
         if (m_pen.GetStyle() != wxTRANSPARENT)
             gdk_draw_arc( m_window, m_penGC, FALSE, xx, yy, ww, hh, 0, 360*64 );
@@ -798,14 +844,6 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
                 gdk_gc_set_fill( gc, GDK_OPAQUE_STIPPLED );
                 gdk_gc_set_stipple( gc, mask );
                 gdk_draw_rectangle( new_mask, gc, TRUE, 0, 0, ww, hh );
-/*                
-                gdk_gc_set_clip_mask( m_brushGC, NULL );
-                gdk_gc_set_clip_mask( m_textGC, NULL );
-                SetBrush( *wxRED_BRUSH );
-                DrawRectangle( 70, 0, 70, 1000 );
-                gdk_draw_bitmap( m_window, m_textGC, new_mask, 0, 0, 100, 5, ww, hh );
-                gdk_draw_bitmap( m_window, m_textGC, mask, 0, 0, 80, 5, ww, hh );
-*/                
                 gdk_gc_unref( gc );
             }
         
@@ -1060,27 +1098,21 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
 
             wxBitmap bitmap( width, height );
             
-            if (srcDC->m_isScreenDC)
-                gdk_gc_set_subwindow( m_penGC, GDK_INCLUDE_INFERIORS );
-
+            /* copy including child window contents */
+            gdk_gc_set_subwindow( m_penGC, GDK_INCLUDE_INFERIORS );
             gdk_window_copy_area( bitmap.GetPixmap(), m_penGC, 0, 0,
                                   srcDC->GetWindow(),
                                   xsrc, ysrc, width, height );
-
-            if (srcDC->m_isScreenDC)
-                gdk_gc_set_subwindow( m_penGC, GDK_CLIP_BY_CHILDREN );
+            gdk_gc_set_subwindow( m_penGC, GDK_CLIP_BY_CHILDREN );
                 
             /* scale image */
-
             wxImage image( bitmap );
             image = image.Scale( ww, hh );
 
             /* convert to bitmap */
-
             bitmap = image.ConvertToBitmap();
 
             /* draw scaled bitmap */
-
             gdk_draw_pixmap( m_window, m_penGC, bitmap.GetPixmap(), 0, 0, xx, yy, -1, -1 );
 
         }
@@ -1088,15 +1120,12 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
         {
             /* No scaling and not a memory dc with a mask either */
 
-            if (srcDC->m_isScreenDC)
-                gdk_gc_set_subwindow( m_penGC, GDK_INCLUDE_INFERIORS );
-
+            /* copy including child window contents */
+            gdk_gc_set_subwindow( m_penGC, GDK_INCLUDE_INFERIORS );
             gdk_window_copy_area( m_window, m_penGC, xx, yy,
                                   srcDC->GetWindow(),
                                   xsrc, ysrc, width, height );
-                                  
-            if (srcDC->m_isScreenDC)
-                gdk_gc_set_subwindow( m_penGC, GDK_CLIP_BY_CHILDREN );
+            gdk_gc_set_subwindow( m_penGC, GDK_CLIP_BY_CHILDREN );
         }
     }
 

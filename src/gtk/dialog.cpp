@@ -59,7 +59,8 @@ bool gtk_dialog_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-    win->Close();
+    if (win->IsEnabled())
+        win->Close();
 
     return TRUE;
 }

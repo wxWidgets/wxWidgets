@@ -51,14 +51,6 @@ wxButton      *button     = (wxButton*) NULL;
 // main frame
 bool MyApp::OnInit()
 {
-  // Create the mini frame window
-  mini_frame = new MyMiniFrame((wxFrame *) NULL, -1, "wxMiniFrame sample",
-     wxPoint(100, 100), wxSize(220, 100));
-  mini_frame_exists = TRUE;
-
-  mini_frame->CreateToolBar(wxNO_BORDER|wxTB_HORIZONTAL|wxTB_FLAT, ID_TOOLBAR);
-  InitToolbar(mini_frame->GetToolBar());
-
   // Create the main frame window
   main_frame = new MyMainFrame((wxFrame *) NULL, -1, "wxFrame sample",
      wxPoint(100, 100), wxSize(300, 200));
@@ -67,6 +59,14 @@ bool MyApp::OnInit()
   InitToolbar(main_frame->GetToolBar());
 
   button = new wxButton( main_frame, ID_REPARENT, "Press to reparent!" );
+
+  // Create the mini frame window
+  mini_frame = new MyMiniFrame( main_frame, -1, "wxMiniFrame sample",
+     wxPoint(100, 100), wxSize(220, 100));
+  mini_frame_exists = TRUE;
+
+  mini_frame->CreateToolBar(wxNO_BORDER|wxTB_HORIZONTAL|wxTB_FLAT, ID_TOOLBAR);
+  InitToolbar(mini_frame->GetToolBar());
 
 #ifdef __WXMSW__
   main_frame->SetIcon(wxIcon("mondrian"));

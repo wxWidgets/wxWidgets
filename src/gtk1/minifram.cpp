@@ -318,6 +318,9 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
     
     wxFrame::Create( parent, id, title, pos, size, style, name );
 
+    if ((m_parent) && (GTK_IS_WINDOW(m_parent->m_widget)))
+        gtk_window_set_transient_for( GTK_WINDOW(m_widget), GTK_WINDOW(m_parent->m_widget) );
+
     if ((style & wxSYSTEM_MENU) &&
         ((style & wxCAPTION) || (style & wxTINY_CAPTION_HORIZ) || (style & wxTINY_CAPTION_VERT)))
     {

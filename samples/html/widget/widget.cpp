@@ -203,7 +203,7 @@ wxHtmlWindow *html;
     // ... and attach this menu bar to the frame
       SetMenuBar(menuBar);
    
-      CreateStatusBar(1);
+      CreateStatusBar(2);
 
       html = new wxHtmlWindow(this);
       html -> SetRelatedFrame(this, "VFS Demo: '%s'");

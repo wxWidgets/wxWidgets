@@ -139,7 +139,7 @@ static gint gtk_frame_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WX
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-    if (g_openDialogs == 0)
+    if ((g_openDialogs == 0) && (win->IsEnabled()))
         win->Close();
 
     return TRUE;

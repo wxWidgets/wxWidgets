@@ -392,6 +392,8 @@ void MyCanvas::DrawTestPoly( int x, int y,wxDC &dc,int transparent )
                 dc.SetTextBackground(m_owner->m_colourBackground);
                 dc.DrawRectangle( x+50, y+50, 200, 200 );
                 
+                dc.DrawCircle( x+400, y+50, 130 );
+                
                 dc.SetBrush(wxNullBrush);
                 dc.SetPen(wxNullPen);
                 break;

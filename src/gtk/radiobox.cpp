@@ -192,6 +192,12 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
 
     wxSize ls = LayoutItems();
 
+    GtkRequisition req;
+    req.width = 2;
+    req.height = 2;
+    (* GTK_WIDGET_CLASS( GTK_OBJECT(m_widget)->klass )->size_request ) (m_widget, &req );
+    if (req.width > ls.x) ls.x = req.width;
+    
     wxSize newSize = size;
     if (newSize.x == -1) newSize.x = ls.x;
     if (newSize.y == -1) newSize.y = ls.y;
