@@ -393,8 +393,6 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
     gtk_widget_show( GTK_WIDGET(m_list) );
 
-    SetBestSize( size );
-
     if ( style & wxLB_SORT )
     {
         // this will change DoAppend() behaviour
@@ -410,6 +408,10 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
         // add one by one
         DoAppend(choices[i]);
     }
+
+    // call it after appending the strings to the listbox, otherwise it doesn't
+    // work correctly
+    SetBestSize( size );
 
     m_parent->DoAddChild( this );
 
