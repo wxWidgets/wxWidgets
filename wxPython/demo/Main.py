@@ -245,8 +245,11 @@ class wxPythonDemo(wxFrame):
         # Set up a log on the View Log Notebook page
         self.log = wxTextCtrl(splitter2, -1,
                               style = wxTE_MULTILINE|wxTE_READONLY|wxHSCROLL)
+
         # Set the wxWindows log target to be this textctrl
         #wxLog_SetActiveTarget(wxLogTextCtrl(self.log))
+
+        # But instead of the above we want to show how to use our own wxLog class
         wxLog_SetActiveTarget(MyLog(self.log))
 
 

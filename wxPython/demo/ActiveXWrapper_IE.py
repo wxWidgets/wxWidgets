@@ -78,7 +78,7 @@ class TestPanel(wxWindow):
         self.location = wxComboBox(self, wxNewId(), "", style=wxCB_DROPDOWN)
         EVT_COMBOBOX(self, self.location.GetId(), self.OnLocationSelect)
         EVT_KEY_UP(self.location, self.OnLocationKey)
-        #EVT_CHAR(self.location, self.IgnoreReturn)
+        EVT_CHAR(self.location, self.IgnoreReturn)
         btnSizer.Add(self.location, 1, wxEXPAND|wxALL, 5)
 
         sizer.Add(btnSizer, 0, wxEXPAND)
