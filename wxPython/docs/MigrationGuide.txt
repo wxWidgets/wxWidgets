@@ -598,8 +598,8 @@ provided by the makers of the ActiveX control that you are using.
 
 
 
-Other Stuff
------------
+Obsolete Modules
+----------------
 
 Instead of over a dozen separate extension modules linked together
 into a single extension module, the "core" module is now just a few
@@ -608,10 +608,51 @@ later into the main namespace via Python code.
 
 Because of the above and also because of the way the new SWIG works,
 the "internal" module names have changed, but you shouldn't have been
-using them anyway so it shouldn't bother you. ;-)
+using them anyway so it shouldn't bother you. ;-) In case you were
+erroneously using them in 2.4, here are the internal extension modules
+no longer exist:
+
+    * clip_dnd
+    * cmndlgs
+    * controls
+    * controls2
+    * events
+    * filesys
+    * fonts
+    * frames
+    * gdi
+    * image
+    * mdi
+    * misc
+    * misc2
+    * printfw
+    * sizers
+    * stattool
+    * streams
+    * utils
+    * windows
+    * windows2
+    * windows3
+
+They have been replaced by the following, but please remember that
+these are just "implementation details" and you shoudl reall be using
+the objects in these modules via the wx or wxPython.wx packages:
+
+    * _core
+    * _gdi
+    * _windows
+    * _controls
+    * _misc
+
 
 The help module no longer exists and the classes therein are now part
 of the core module imported with wxPython.wx or the wx package.
+
+
+
+
+Other Stuff
+-----------
 
 wxPyDefaultPosition and wxPyDefaultSize are gone.  Use the
 wxDefaultPosition and wxDefaultSize objects instead.
