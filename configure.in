@@ -5002,7 +5002,48 @@ dnl FIXME: should this be covered by the conditional above
 dnl given the -lm comment there?  Or should that comment (and
 dnl this one) be removed..   [ 7 Nov 2001 ]
 
-LIBS="$ZLIB_LINK $POSIX4_LINK $INET_LINK $WCHAR_LINK $DL_LINK -lm $LIBS"
+LIBS="$ZLIB_LINK $POSIX4_LINK $INET_LINK $WCHAR_LINK $DL_LINK $LIBS"
+
+dnl Only add the -lm library if floating point functions cannot be used
+dnl without it.  This check is important on cygwin because of the bizarre
+dnl way that they have organized functions into libraries.  On cygwin, both
+dnl libc.a and libm.a are symbolic links to a single lib libcygwin.a.  This
+dnl means that
+dnl   1) linking with -lm is not necessary, and
+dnl   2) linking with -lm is dangerous if the order of libraries is wrong
+dnl In particular, if you compile any program with -mno-cygwin and link with
+dnl -lm, it will crash instantly when it is run.  This happens because the
+dnl linker incorrectly links the Cygwin libm.a (==libcygwin.a), which replaces
+dnl the ___main function instead of allowing it to be defined by
+dnl /usr/lib/mingw/libmingw32.a as it should be.
+dnl
+dnl On MacOS X, this test will find that -lm is unnecessary and leave it out.
+dnl
+dnl Just check a few floating point functions. If they are all found without
+dnl -lm, then we must not need -lm.
+have_cos=0
+have_floor=0
+AC_CHECK_FUNCS(cos, have_cos=1)
+AC_CHECK_FUNCS(floor, have_floor=1)
+AC_MSG_CHECKING(if floating point functions link without -lm)
+if test "$have_cos" = 1 -a "$have_floor" = 1; then
+    AC_MSG_RESULT(yes)
+else
+    AC_MSG_RESULT(no)
+    LIBS="$LIBS -lm"
+    # use different functions to avoid configure caching
+    have_sin=0
+    have_ceil=0
+    AC_CHECK_FUNCS(sin, have_sin=1)
+    AC_CHECK_FUNCS(ceil, have_ceil=1)
+    AC_MSG_CHECKING(if floating point functions link with -lm)
+    if test "$have_sin" = 1 -a "$have_ceil" = 1; then
+        AC_MSG_RESULT(yes)
+    else
+        AC_MSG_RESULT(no)
+        # not sure we should warn the user, crash, etc.
+    fi
+fi
 
 if test "$wxUSE_GUI" = "yes"; then
 
