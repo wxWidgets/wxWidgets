@@ -83,7 +83,7 @@ int wxSpinButton::GetValue() const
 
 void wxSpinButton::SetValue(int val)
 {
-	m_value = val ;
+	MacHandleValueChanged( val - m_value ) ;
 }
 
 void wxSpinButton::SetRange(int minVal, int maxVal)
@@ -94,55 +94,47 @@ void wxSpinButton::SetRange(int minVal, int maxVal)
     SetControlMinimum((ControlHandle) m_macControl , minVal ) ;
 }
 
-void wxSpinButton::MacHandleControlClick( WXWidget control , wxInt16 controlpart ) 
+void wxSpinButton::MacHandleValueChanged( int inc )
 {
-	if ( (ControlHandle) m_macControl == NULL )
-		return ;
-	
+     
+    wxEventType scrollEvent = wxEVT_NULL;
 	int oldValue = m_value ;
-  wxEventType scrollEvent = wxEVT_NULL;
-  int nScrollInc = 0;
 
-	switch( controlpart )
-	{
-		case kControlUpButtonPart :
-        nScrollInc = 1;
-        scrollEvent = wxEVT_SCROLL_LINEUP;
-			break ;
-		case kControlDownButtonPart :
-        nScrollInc = -1;
-        scrollEvent = wxEVT_SCROLL_LINEDOWN;
-			break ;
-	}
+    m_value = oldValue + inc;
 
-  m_value = m_value + nScrollInc;
-
-  if (m_value < m_min)
-  {
-  	if ( m_windowStyle & wxSP_WRAP )
+    if (m_value < m_min)
+    {
+    if ( m_windowStyle & wxSP_WRAP )
       m_value = m_max;
-  	else
+    else
       m_value = m_min;
-  }
-  
-  if (m_value > m_max)
-  {
-  	if ( m_windowStyle & wxSP_WRAP )
+    }
+
+    if (m_value > m_max)
+    {
+    if ( m_windowStyle & wxSP_WRAP )
       m_value = m_min;
     else
       m_value = m_max;
-  }
-  	
-  wxSpinEvent event(scrollEvent, m_windowId);
+    }
 
-  event.SetPosition(m_value);
-  event.SetEventObject( this );
-  if ((GetEventHandler()->ProcessEvent( event )) &&
+    if ( oldValue - m_value == -1 )
+        scrollEvent = wxEVT_SCROLL_LINEDOWN ;
+    else if ( oldValue - m_value == 1 )
+        scrollEvent = wxEVT_SCROLL_LINEUP ;
+    else
+        scrollEvent = wxEVT_SCROLL_THUMBTRACK ;
+        
+    wxSpinEvent event(scrollEvent, m_windowId);
+
+    event.SetPosition(m_value);
+    event.SetEventObject( this );
+    if ((GetEventHandler()->ProcessEvent( event )) &&
         !event.IsAllowed() )
-  {
-  	m_value = oldValue ;
-  }
-  SetControlValue( (ControlHandle) m_macControl , m_value ) ;
+    {
+        m_value = oldValue ;
+    }
+    SetControlValue( (ControlHandle) m_macControl , m_value ) ;
 
     /* always send a thumbtrack event */
     if (scrollEvent != wxEVT_SCROLL_THUMBTRACK)
@@ -153,6 +145,26 @@ void wxSpinButton::MacHandleControlClick( WXWidget control , wxInt16 controlpart
         event2.SetEventObject( this );
         GetEventHandler()->ProcessEvent( event2 );
     }
+}
+
+void wxSpinButton::MacHandleControlClick( WXWidget control , wxInt16 controlpart ) 
+{
+	if ( (ControlHandle) m_macControl == NULL )
+		return ;
+	
+  int nScrollInc = 0;
+
+	switch( controlpart )
+	{
+		case kControlUpButtonPart :
+            nScrollInc = 1;
+			break ;
+		case kControlDownButtonPart :
+            nScrollInc = -1;
+			break ;
+	}
+	MacHandleValueChanged( nScrollInc ) ;
+
 }
 
 // ----------------------------------------------------------------------------
