@@ -161,7 +161,7 @@ void wxStatusBar95::SetFieldsWidth()
     // default: all fields have the same width
     int nWidth = nWindowWidth / m_nFields;
     for ( int i = 0; i < m_nFields; i++ )
-      pWidths[i] = (i + 1) * nWindowWidth;
+      pWidths[i] = (i + 1) * nWidth;
   }
   else {
     // -1 doesn't mean the same thing for wxWindows and Win32, recalc
