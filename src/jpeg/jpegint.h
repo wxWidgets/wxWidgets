@@ -142,6 +142,11 @@ struct jpeg_decomp_master {
   boolean is_dummy_pass;	/* True during 1st pass for 2-pass quant */
 };
 
+#if defined(__VISAGECPP__)
+/* Visual Age fixups for multiple declarations */
+#  define start_input_pass   start_input_pass2 /* already in jcmaint.c */
+#endif
+
 /* Input control module */
 struct jpeg_input_controller {
   JMETHOD(int, consume_input, (j_decompress_ptr cinfo));
@@ -153,6 +158,12 @@ struct jpeg_input_controller {
   boolean has_multiple_scans;	/* True if file has multiple scans */
   boolean eoi_reached;		/* True when EOI has been consumed */
 };
+
+#if defined(__VISAGECPP__)
+#  ifdef start_input_pass2
+#   undef start_input_pass2
+#  endif
+#endif
 
 /* Main buffer control (downsampled-data buffer) */
 struct jpeg_d_main_controller {
