@@ -15,7 +15,7 @@ fi
 
 function usage {
     echo ""
-    echo "Usage: $0  [apple|local]  [command flags...]"
+    echo "Usage: $0  [panther|jaguar]  [command flags...]"
     echo ""
     echo "   panther        Build for Apple's python in /usr/bin, such as on Panther"
     echo "   jaguar         Build for a python in /usr/local/bin, such as on Jaguar"
