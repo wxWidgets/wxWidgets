@@ -74,6 +74,8 @@ GENERICOBJS= \
 COMMONOBJS = \
   $(COMMDIR)\cmndata.obj \
   $(COMMDIR)\config.obj \
+  $(COMMDIR)\db.obj \
+  $(COMMDIR)\dbtable.obj \
   $(COMMDIR)\docview.obj \
   $(COMMDIR)\dynarray.obj \
   $(COMMDIR)\event.obj \
@@ -717,6 +719,18 @@ $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
 
 $(COMMDIR)/config.obj:     $*.$(SRCSUFF)
+        echo $(CPPFLAGS)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/db.obj:     $*.$(SRCSUFF)
+        echo $(CPPFLAGS)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/dbtable.obj:     $*.$(SRCSUFF)
         echo $(CPPFLAGS)
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@

@@ -142,13 +142,6 @@
 #define USE_ODBC                   1
                                     // Define 1 to use ODBC classes
 
-#define USE_ODBC_IN_MSW_ONLY           1
-
-#if USE_ODBC && USE_ODBC_IN_MSW_ONLY
-#undef USE_ODBC
-#define USE_ODBC 0
-#endif
-
 #define USE_IOSTREAMH     1
                                   // VC++ 4.2 and above allows <iostream> and <iostream.h>
                                   // but you can't mix them. Set to 1 for <iostream.h>,

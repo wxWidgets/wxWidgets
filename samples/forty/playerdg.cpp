@@ -59,8 +59,8 @@ PlayerSelectionDialog::PlayerSelectionDialog(
 						0, 0,
 						wxLB_SINGLE
 						);
-/*
-    Robert Roebling
+#if 1
+//    Robert Roebling
     
 	int numPlayers = 0;
 	wxString* players = 0;
@@ -70,7 +70,7 @@ PlayerSelectionDialog::PlayerSelectionDialog(
 		list->Append(players[i]);
 	}
 	delete players;
-*/
+#endif
 
 	m_textField = new wxTextCtrl(this, -1, "", wxDefaultPosition, wxDefaultSize, 0);
 

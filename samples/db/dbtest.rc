@@ -1,0 +1,3 @@
+db_icon ICON "dbtest.ico"
+#include "wx.rc"
+
