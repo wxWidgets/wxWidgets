@@ -131,9 +131,18 @@ Identifying art resources
 Every bitmap is known to wx.ArtProvider under an unique ID that is
 used when requesting a resource from it. The IDs can have one of the
 following predefined values.  Additionally, any string recognized by
-custom art providers registered using `PushProvider` may be used. When
-running under GTK+ 2, GTK+ stock item IDs (e.g. 'gtk-cdrom') may be
-used as well.
+custom art providers registered using `PushProvider` may be used.
+
+GTK+ Note
+---------
+
+When running under GTK+ 2, GTK+ stock item IDs (e.g. 'gtk-cdrom') may be used
+as well.  Additionally, if wxGTK was compiled against GTK+ >= 2.4, then it is
+also possible to load icons from current icon theme by specifying their name
+without the extension and directory components. Icon themes recognized by GTK+
+follow the freedesktop.org Icon Themes specification.  Note that themes are
+not guaranteed to contain all icons, so wx.ArtProvider may return wx.NullBitmap
+or wx.NullIcon.  The default theme is typically installed in /usr/share/icons/hicolor.
 
 
     * wx.ART_ADD_BOOKMARK
