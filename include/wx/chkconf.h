@@ -1569,17 +1569,6 @@
 #    endif
 #endif /* wxUSE_LOG_DIALOG */
 
-/* I wonder if we shouldn't just remove all occurrences of
-   wxUSE_DYNAMIC_CLASSES from the sources? */
-#if !defined(wxUSE_DYNAMIC_CLASSES) || !wxUSE_DYNAMIC_CLASSES
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_DYNAMIC_CLASSES must be defined as 1"
-#   else
-#       undef wxUSE_DYNAMIC_CLASSES
-#       define wxUSE_DYNAMIC_CLASSES 1
-#   endif
-#endif /* wxUSE_DYNAMIC_CLASSES */
-
 #if wxUSE_CLIPBOARD && !wxUSE_DATAOBJ
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxClipboard requires wxDataObject"

@@ -26,8 +26,6 @@
 
 class WXDLLIMPEXP_BASE wxObject;
 
-#if wxUSE_DYNAMIC_CLASSES
-
 #ifndef wxUSE_EXTENDED_RTTI
 #define wxUSE_EXTENDED_RTTI 0
 #endif
@@ -295,36 +293,6 @@ name##PluginSentinel  m_pluginsentinel;
  IMPLEMENT_ABSTRACT_PLUGGABLE_CLASS2(name, basename1, basename2)
 
 #define CLASSINFO(name) (&name::ms_classInfo)
-
-#else // !wxUSE_DYNAMIC_CLASSES
-
-    // No dynamic class system: so stub out the macros
-
-#define DECLARE_DYNAMIC_CLASS(name)
-#define DECLARE_ABSTRACT_CLASS(name)
-#define DECLARE_CLASS(name)
-#define IMPLEMENT_DYNAMIC_CLASS(name, basename)
-#define IMPLEMENT_DYNAMIC_CLASS2(name, basename1, basename2)
-#define IMPLEMENT_ABSTRACT_CLASS(name, basename)
-#define IMPLEMENT_ABSTRACT_CLASS2(name, basename1, basename2)
-#define IMPLEMENT_CLASS IMPLEMENT_ABSTRACT_CLASS
-#define IMPLEMENT_CLASS2 IMPLEMENT_ABSTRACT_CLASS2
-
-#define DECLARE_PLUGGABLE_CLASS(name)
-#define DECLARE_ABSTRACT_PLUGGABLE_CLASS(name)
-#define IMPLEMENT_PLUGGABLE_CLASS(name, basename)
-#define IMPLEMENT_PLUGGABLE_CLASS2(name, basename1, basename2)
-#define IMPLEMENT_ABSTRACT_PLUGGABLE_CLASS(name, basename)
-#define IMPLEMENT_ABSTRACT_PLUGGABLE_CLASS2(name, basename1, basename2)
-
-#define DECLARE_USER_EXPORTED_PLUGGABLE_CLASS(name, usergoo)
-#define DECLARE_USER_EXPORTED_ABSTRACT_PLUGGABLE_CLASS(name, usergoo)
-#define IMPLEMENT_USER_EXPORTED_PLUGGABLE_CLASS(name, basename)
-#define IMPLEMENT_USER_EXPORTED_PLUGGABLE_CLASS2(name, basename1, basename2)
-#define IMPLEMENT_USER_EXPORTED_ABSTRACT_PLUGGABLE_CLASS(name, basename)
-#define IMPLEMENT_USER_EXPORTED_ABSTRACT_PLUGGABLE_CLASS2(name, basename1, basename2)
-
-#endif // wxUSE_DYNAMIC_CLASSES
 
 #define wxIS_KIND_OF(obj, className) obj->IsKindOf(&className::ms_classInfo)
 
