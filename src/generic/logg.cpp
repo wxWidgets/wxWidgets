@@ -310,12 +310,10 @@ void wxLogGui::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
             if ( GetVerbose() )
         case wxLOG_Message:
             {
-                if ( !m_bErrors ) {
-                    m_aMessages.Add(szString);
-                    m_aSeverity.Add(wxLOG_Message);
-                    m_aTimes.Add((long)t);
-                    m_bHasMessages = TRUE;
-                }
+                m_aMessages.Add(szString);
+                m_aSeverity.Add(wxLOG_Message);
+                m_aTimes.Add((long)t);
+                m_bHasMessages = TRUE;
             }
             break;
 
