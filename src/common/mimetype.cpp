@@ -557,7 +557,7 @@ bool wxFileTypeImpl::GetMimeType(wxString *mimeType) const
 {
     // suppress possible error messages
     wxLogNull nolog;
-    wxRegKey key(wxRegKey::HKCR, m_strFileType);
+    wxRegKey key(wxRegKey::HKCR, /*m_strFileType*/ "." + m_ext);
     if ( key.Open() && key.QueryValue("Content Type", *mimeType) ) {
         return TRUE;
     }
