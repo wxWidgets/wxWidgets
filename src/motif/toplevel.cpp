@@ -317,6 +317,25 @@ bool wxTopLevelWindowMotif::IsMaximized() const
     return FALSE;
 }
 
+void wxTopLevelWindowMotif::SetSizeHints( int minW, int minH,
+                                          int maxW, int maxH,
+                                          int incW, int incH )
+{
+    wxTopLevelWindowBase::SetSizeHints( minW, minH, maxW, maxH, incW, incH );
+
+    int count = 0;
+    Arg args[6];
+
+    if( minW > -1 ) { XtSetArg( args[count], XmNminWidth,  minW ); ++count; }
+    if( minH > -1 ) { XtSetArg( args[count], XmNminHeight, minH ); ++count; }
+    if( maxW > -1 ) { XtSetArg( args[count], XmNmaxWidth,  maxW ); ++count; }
+    if( maxH > -1 ) { XtSetArg( args[count], XmNmaxHeight, maxH ); ++count; }
+    if( incW > -1 ) { XtSetArg( args[count], XmNwidthInc,  incW ); ++count; }
+    if( incH > -1 ) { XtSetArg( args[count], XmNheightInc, incH ); ++count; }
+
+    XtSetValues( (Widget)GetShellWidget(), args, count ); 
+}
+
 // ---------------------------------------------------------------------------
 // Callback definition
 // ---------------------------------------------------------------------------

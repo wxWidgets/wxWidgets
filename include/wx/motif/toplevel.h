@@ -56,6 +56,10 @@ public:
     virtual wxString GetTitle() const { return m_title; }
     virtual void SetTitle( const wxString& title ) { m_title = title; }
 
+    virtual void SetSizeHints( int minW, int minH,
+                               int maxW = -1, int maxH = -1,
+                               int incW = -1, int incH = -1 );
+
     WXWidget GetShellWidget() const;
 protected:
     // common part of all constructors

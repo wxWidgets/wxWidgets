@@ -1334,7 +1334,7 @@ void wxWindow::DoSetSizeIntr(int x, int y, int width, int height,
     wxSize size(-1, -1);
     if ( width <= 0 )
     {
-        if ( sizeFlags & wxSIZE_AUTO_WIDTH && !fromCtor )
+        if ( ( sizeFlags & wxSIZE_AUTO_WIDTH ) && !fromCtor )
         {
             size = DoGetBestSize();
             width = size.x;
@@ -1347,7 +1347,7 @@ void wxWindow::DoSetSizeIntr(int x, int y, int width, int height,
 
     if ( height == -1 )
     {
-        if( sizeFlags & wxSIZE_AUTO_HEIGHT && !fromCtor )
+        if( ( sizeFlags & wxSIZE_AUTO_HEIGHT ) && !fromCtor )
         {
             if( size.x == -1 ) size = DoGetBestSize();
             height = size.y;
@@ -1438,36 +1438,6 @@ wxPoint wxWindow::GetClientAreaOrigin() const
     return wxPoint(0, 0);
 }
 
-void wxWindow::SetSizeHints(int minW, int minH, int maxW, int maxH, int incW, int incH)
-{
-    m_minWidth = minW;
-    m_minHeight = minH;
-    m_maxWidth = maxW;
-    m_maxHeight = maxH;
-
-    wxFrame *frame = wxDynamicCast(this, wxFrame);
-    if ( !frame )
-    {
-        // TODO what about dialogs?
-        return;
-    }
-
-    Widget widget = (Widget) frame->GetShellWidget();
-
-    if (minW > -1)
-        XtVaSetValues(widget, XmNminWidth, minW, NULL);
-    if (minH > -1)
-        XtVaSetValues(widget, XmNminHeight, minH, NULL);
-    if (maxW > -1)
-        XtVaSetValues(widget, XmNmaxWidth, maxW, NULL);
-    if (maxH > -1)
-        XtVaSetValues(widget, XmNmaxHeight, maxH, NULL);
-    if (incW > -1)
-        XtVaSetValues(widget, XmNwidthInc, incW, NULL);
-    if (incH > -1)
-        XtVaSetValues(widget, XmNheightInc, incH, NULL);
-}
-
 void wxWindow::DoMoveWindowIntr(int xx, int yy, int w, int h,
                                 int flags)
 {
@@ -1479,7 +1449,6 @@ void wxWindow::DoMoveWindowIntr(int xx, int yy, int w, int h,
             (Widget) m_scrolledWindow;
 
         bool managed = XtIsManaged(borderOrScrolled);
-
         if (managed)
             XtUnmanageChild (borderOrScrolled);
         XtVaSetValues(drawingArea, XmNresizePolicy, XmRESIZE_ANY, NULL);
@@ -2025,7 +1994,8 @@ WXWidget wxWindow::GetLabelWidget() const
 
 // All widgets should have this as their resize proc.
 // OnSize sent to wxWindow via client data.
-void wxWidgetResizeProc(Widget w, XConfigureEvent *WXUNUSED(event), String WXUNUSED(args)[], int *WXUNUSED(num_args))
+void wxWidgetResizeProc(Widget w, XConfigureEvent *WXUNUSED(event),
+                        String WXUNUSED(args)[], int *WXUNUSED(num_args))
 {
     wxWindow *win = wxGetWindowFromTable(w);
     if (!win)
@@ -2290,8 +2260,8 @@ static void wxCanvasInputEvent(Widget drawingArea,
             if (wxTranslateKeyEvent (event, canvas, (Widget) 0, &local_event))
             {
                 // Implement wxFrame::OnCharHook by checking ancestor.
-                wxWindow *parent = canvas->GetParent();
-                while (parent && !parent->IsKindOf(CLASSINFO(wxFrame)))
+                wxWindow *parent = canvas;
+                while (parent && !parent->IsTopLevel())
                     parent = parent->GetParent();
 
                 if (parent)
@@ -2308,9 +2278,9 @@ static void wxCanvasInputEvent(Widget drawingArea,
                 // Only process OnChar if OnKeyDown didn't swallow it
                 if (!canvas->GetEventHandler()->ProcessEvent (event))
                 {
-                  event.SetEventType(wxEVT_CHAR);
-                  canvas->GetEventHandler()->ProcessEvent (event);
-        }
+                    event.SetEventType(wxEVT_CHAR);
+                    canvas->GetEventHandler()->ProcessEvent (event);
+                }
             }
             break;
         }
