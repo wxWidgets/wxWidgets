@@ -297,9 +297,13 @@ wxApp::~wxApp()
 
 bool wxApp::OnInitGui()
 {
-    /* Nothing to do for 15, 16, 24, 32 bit displays */
+    /* on some SGIs, the default visual is just 256 colours, so we
+       make sure we get the best. this can sometimes be wasteful,
+       of course, but what do these guys pay $30.000 for? */
+    GdkVisual* visual = gdk_visual_get_best();
+    gtk_widget_set_default_visual( visual );
 
-    GdkVisual *visual = gdk_visual_get_system();
+    /* Nothing to do for 15, 16, 24, 32 bit displays */
     if (visual->depth > 8) return TRUE;
 
         /* this initiates the standard palette as defined by GdkImlib

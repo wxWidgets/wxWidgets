@@ -33,36 +33,22 @@ libwx_gtk_la_SOURCES = \
  parser.c \
 \
  cmndata.cpp \
- dynarray.cpp \
- filefn.cpp \
- hash.cpp \
- list.cpp \
- matrix.cpp \
- memory.cpp \
- module.cpp \
- object.cpp \
- string.cpp \
- timercmn.cpp \
- utilscmn.cpp \
- tokenzr.cpp \
- variant.cpp \
- wxchar.cpp \
-\
  config.cpp \
  date.cpp \
  datstrm.cpp \
- db.cpp \
- dbtable.cpp \
  dcbase.cpp \
  docmdi.cpp \
  docview.cpp \
+ dynarray.cpp \
  dynlib.cpp \
  event.cpp \
  file.cpp \
  fileconf.cpp \
+ filefn.cpp \
  framecmn.cpp \
  ftp.cpp \
  gdicmn.cpp \
+ hash.cpp \
  helpbase.cpp \
  http.cpp \
  image.cpp \
@@ -73,10 +59,15 @@ libwx_gtk_la_SOURCES = \
  intl.cpp \
  ipcbase.cpp \
  layout.cpp \
+ list.cpp \
  log.cpp \
  longlong.cpp \
+ matrix.cpp \
+ memory.cpp \
  mimetype.cpp \
+ module.cpp \
  mstream.cpp \
+ object.cpp \
  objstrm.cpp \
  odbc.cpp \
  paper.cpp \
@@ -92,18 +83,27 @@ libwx_gtk_la_SOURCES = \
  serbase.cpp \
  socket.cpp \
  stream.cpp \
+ string.cpp \
  tbarbase.cpp \
  tbarsmpl.cpp \
  textfile.cpp \
  time.cpp \
+ timercmn.cpp \
+ utilscmn.cpp \
+ tokenzr.cpp \
  url.cpp \
  valgen.cpp \
  validate.cpp \
  valtext.cpp \
+ variant.cpp \
  wfstream.cpp \
  wincmn.cpp \
+ wxchar.cpp \
  wxexpr.cpp \
  zstream.cpp \
+\
+ db.cpp \
+ dbtable.cpp \
 \
  caret.cpp \
  choicdgg.cpp \
