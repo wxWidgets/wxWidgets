@@ -376,6 +376,12 @@ void wxEntryCleanup()
 
 int wxEntryReal(int& argc, wxChar **argv)
 {
+#if wxUSE_LOG
+    // Create a non-GUI log target, to be used until GUI (if any) is ready.
+    // Target will be reset by wxAppConsole::Initialize, when GUI logging will work.
+    wxLog::GetActiveTarget();
+#endif
+
     // library initialization
     if ( !wxEntryStart(argc, argv) )
     {
