@@ -193,9 +193,11 @@ wxString::wxString(const unsigned char* psz, size_t nLength)
 #ifdef  STD_STRING_COMPATIBILITY
 
 // ctor from a substring
-wxString::wxString(const wxString& s, size_t nPos, size_t nLen)
+wxString::wxString(const wxString& str, size_t nPos, size_t nLen)
 {
-  InitWith(s.c_str(), nPos, nLen == npos ? 0 : nLen);
+  wxASSERT( str.GetStringData()->IsValid() );
+
+  InitWith(str.c_str(), nPos, nLen == npos ? 0 : nLen);
 }
 
 // poor man's iterators are "void *" pointers
@@ -293,10 +295,21 @@ void wxString::AllocBeforeWrite(size_t nLen)
 }
 
 // get the pointer to writable buffer of (at least) nLen bytes
-char *wxString::GetWriteBuf(size_t nLen)
+char *wxString::GetWriteBuf(int nLen)
 {
   AllocBeforeWrite(nLen);
+
+  wxASSERT( GetStringData()->nRefs == 1 );
+  GetStringData()->Validate(FALSE);
+
   return m_pchData;
+}
+
+// put string back in a reasonable state after GetWriteBuf
+void wxString::UngetWriteBuf()
+{
+  GetStringData()->nDataLength = strlen(m_pchData);
+  GetStringData()->Validate(TRUE);
 }
 
 // dtor frees memory if no other strings use it
@@ -332,6 +345,8 @@ void wxString::AssignCopy(size_t nSrcLen, const char *pszSrcData)
 // assigns one string to another
 wxString& wxString::operator=(const wxString& stringSrc)
 {
+  wxASSERT( stringSrc.GetStringData()->IsValid() );
+
   // don't copy string over itself
   if ( m_pchData != stringSrc.m_pchData ) {
     if ( stringSrc.GetStringData()->IsEmpty() ) {
@@ -429,6 +444,8 @@ void wxString::ConcatSelf(int nSrcLen, const char *pszSrcData)
 
 void wxString::operator+=(const wxString& string)
 {
+  wxASSERT( string.GetStringData()->IsValid() );
+
   ConcatSelf(string.Len(), string);
 }
 
@@ -448,6 +465,8 @@ void wxString::operator+=(char ch)
 
 wxString& wxString::operator<<(const wxString& string)
 {
+  wxASSERT( string.GetStringData()->IsValid() );
+
   ConcatSelf(string.Len(), string);
   return *this;
 }
@@ -473,6 +492,9 @@ wxString& wxString::operator<<(char ch)
 
 wxString operator+(const wxString& string1, const wxString& string2)
 {
+  wxASSERT( string1.GetStringData()->IsValid() );
+  wxASSERT( string2.GetStringData()->IsValid() );
+
   wxString s;
   s.ConcatCopy(string1.GetStringData()->nDataLength, string1.m_pchData,
                string2.GetStringData()->nDataLength, string2.m_pchData);
@@ -481,6 +503,8 @@ wxString operator+(const wxString& string1, const wxString& string2)
 
 wxString operator+(const wxString& string1, char ch)
 {
+  wxASSERT( string1.GetStringData()->IsValid() );
+
   wxString s;
   s.ConcatCopy(string1.GetStringData()->nDataLength, string1.m_pchData, 1, &ch);
   return s;
@@ -488,6 +512,8 @@ wxString operator+(const wxString& string1, char ch)
 
 wxString operator+(char ch, const wxString& string)
 {
+  wxASSERT( string.GetStringData()->IsValid() );
+
   wxString s;
   s.ConcatCopy(1, &ch, string.GetStringData()->nDataLength, string.m_pchData);
   return s;
@@ -495,6 +521,8 @@ wxString operator+(char ch, const wxString& string)
 
 wxString operator+(const wxString& string, const char *psz)
 {
+  wxASSERT( string.GetStringData()->IsValid() );
+
   wxString s;
   s.ConcatCopy(string.GetStringData()->nDataLength, string.m_pchData,
                Strlen(psz), psz);
@@ -503,6 +531,8 @@ wxString operator+(const wxString& string, const char *psz)
 
 wxString operator+(const char *psz, const wxString& string)
 {
+  wxASSERT( string.GetStringData()->IsValid() );
+
   wxString s;
   s.ConcatCopy(Strlen(psz), psz,
                string.GetStringData()->nDataLength, string.m_pchData);
@@ -886,6 +916,68 @@ int wxString::ScanfV(const char *pszFormat, va_list argptr) const
 }
 #endif
 
+// ----------------------------------------------------------------------------
+// misc other operations
+// ----------------------------------------------------------------------------
+bool wxString::Matches(const char *pszMask) const
+{
+  // check char by char
+  const char *pszTxt;
+  for ( pszTxt = c_str(); *pszMask != '\0'; pszMask++, pszTxt++ ) {
+    switch ( *pszMask ) {
+      case '?':
+        if ( *pszTxt == '\0' )
+          return FALSE;
+
+        pszTxt++;
+        pszMask++;
+        break;
+
+      case '*':
+        {
+          // ignore special chars immediately following this one
+          while ( *pszMask == '*' || *pszMask == '?' )
+            pszMask++;
+
+          // if there is nothing more, match
+          if ( *pszMask == '\0' )
+            return TRUE;
+
+          // are there any other metacharacters in the mask?
+          uint uiLenMask;
+          const char *pEndMask = strpbrk(pszMask, "*?");
+
+          if ( pEndMask != NULL ) {
+            // we have to match the string between two metachars
+            uiLenMask = pEndMask - pszMask;
+          }
+          else {
+            // we have to match the remainder of the string
+            uiLenMask = strlen(pszMask);
+          }
+
+          wxString strToMatch(pszMask, uiLenMask);
+          const char* pMatch = strstr(pszTxt, strToMatch);
+          if ( pMatch == NULL )
+            return FALSE;
+
+          // -1 to compensate "++" in the loop
+          pszTxt = pMatch + uiLenMask - 1;
+          pszMask += uiLenMask - 1;
+        }
+        break;
+
+      default:
+        if ( *pszMask != *pszTxt )
+          return FALSE;
+        break;
+    }
+  }
+
+  // match only if nothing left
+  return *pszTxt == '\0';
+}
+
 // ---------------------------------------------------------------------------
 // standard C++ library string functions
 // ---------------------------------------------------------------------------
@@ -893,6 +985,7 @@ int wxString::ScanfV(const char *pszFormat, va_list argptr) const
 
 wxString& wxString::insert(size_t nPos, const wxString& str)
 {
+  wxASSERT( str.GetStringData()->IsValid() );
   wxASSERT( nPos <= Len() );
 
   wxString strTmp;
@@ -907,6 +1000,7 @@ wxString& wxString::insert(size_t nPos, const wxString& str)
 
 size_t wxString::find(const wxString& str, size_t nStart) const
 {
+  wxASSERT( str.GetStringData()->IsValid() );
   wxASSERT( nStart <= Len() );
 
   const char *p = strstr(c_str() + nStart, str);
@@ -933,6 +1027,7 @@ size_t wxString::find(char ch, size_t nStart) const
 
 size_t wxString::rfind(const wxString& str, size_t nStart) const
 {
+  wxASSERT( str.GetStringData()->IsValid() );
   wxASSERT( nStart <= Len() );
 
   // # could be quicker than that
@@ -1007,7 +1102,7 @@ wxString& wxString::replace(size_t nStart, size_t nLen, size_t nCount, char ch)
 }
 
 wxString& wxString::replace(size_t nStart, size_t nLen, 
-                        const wxString& str, size_t nStart2, size_t nLen2)
+                            const wxString& str, size_t nStart2, size_t nLen2)
 {
   return replace(nStart, nLen, str.substr(nStart2, nLen2));
 }
@@ -1181,18 +1276,22 @@ int wxArrayString::Index(const char *sz, bool bCase, bool bFromEnd) const
 }
 
 // add item at the end
-void wxArrayString::Add(const wxString& src)
+void wxArrayString::Add(const wxString& str)
 {
+  wxASSERT( str.GetStringData()->IsValid() );
+
   Grow();
 
   // the string data must not be deleted!
-  src.GetStringData()->Lock();
-  m_pItems[m_nCount++] = (char *)src.c_str();
+  str.GetStringData()->Lock();
+  m_pItems[m_nCount++] = (char *)str.c_str();
 }
 
 // add item at the given position
-void wxArrayString::Insert(const wxString& src, size_t nIndex)
+void wxArrayString::Insert(const wxString& str, size_t nIndex)
 {
+  wxASSERT( str.GetStringData()->IsValid() );
+
   wxCHECK_RET( nIndex <= m_nCount, "bad index in wxArrayString::Insert" );
 
   Grow();
@@ -1200,8 +1299,8 @@ void wxArrayString::Insert(const wxString& src, size_t nIndex)
   memmove(&m_pItems[nIndex + 1], &m_pItems[nIndex], 
           (m_nCount - nIndex)*sizeof(char *));
 
-  src.GetStringData()->Lock();
-  m_pItems[nIndex] = (char *)src.c_str();
+  str.GetStringData()->Lock();
+  m_pItems[nIndex] = (char *)str.c_str();
 
   m_nCount++;
 }
