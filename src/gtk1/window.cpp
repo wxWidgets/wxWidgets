@@ -219,7 +219,9 @@ extern bool g_mainThreadLocked;
 // debug
 //-----------------------------------------------------------------------------
 
+#ifndef __WXGTK20__
 #define DISABLE_STYLE_IF_BROKEN_THEME 1
+#endif
 
 #ifdef __WXDEBUG__
 

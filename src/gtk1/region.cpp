@@ -16,7 +16,14 @@
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
 
+// Unfortunately the new way of implementing the region iterator
+// doesn't work with GTK+ 2.0 or above (can't access a Region in
+// GdkPrivateRegion)
+#ifdef __WXGTK20__
+#define OLDCODE 1
+#else
 #define OLDCODE 0
+#endif
 
 //-----------------------------------------------------------------------------
 // wxRegion
