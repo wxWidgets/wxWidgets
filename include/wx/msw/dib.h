@@ -41,7 +41,7 @@ bool wxSaveBitmap(wxChar *filename, wxBitmap *bitmap, wxPalette *colourmap = NUL
 wxBitmap         *wxLoadBitmap(wxChar *filename, wxPalette **colourmap = NULL);
 
 // Load into existing bitmap;
-bool wxLoadIntoBitmap(wxChar *filename, wxBitmap *bitmap, wxColourMap **pal = NULL);
+bool wxLoadIntoBitmap(wxChar *filename, wxBitmap *bitmap, wxPalette **pal = NULL);
 
 HANDLE wxBitmapToDIB (HBITMAP hBitmap, HPALETTE hPal);
 BOOL   wxReadDIB(LPTSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette);
