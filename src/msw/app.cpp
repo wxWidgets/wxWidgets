@@ -193,8 +193,8 @@ END_EVENT_TABLE()
 bool wxApp::Initialize()
 {
     // the first thing to do is to check if we're trying to run an Unicode
-    // program under Win9x - if so, abort right now as it has no chance to
-    // work
+    // program under Win9x w/o MSLU emulation layer - if so, abort right now 
+    // as it has no chance to work
 #if wxUSE_UNICODE && !wxUSE_UNICODE_MSLU
     if ( wxGetOsVersion() != wxWINDOWS_NT )
     {
