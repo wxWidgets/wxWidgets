@@ -662,8 +662,11 @@ size_t IC_CharSet::MB2WC(wchar_t *buf, const char *psz, size_t n)
             WC_BSWAP(buf /* _not_ bufPtr */, res)
         }
         
-        // iconv doesn't seem to set the trailing 0
-        buf[res] = 0;
+        // NB: iconv was given only strlen(psz) characters on input, and so
+        //     it couldn't convert the trailing zero. Let's do it ourselves
+        //     if there's some room left for it in the output buffer.
+        if (res < n)
+            buf[res] = 0;
     }
     else
     {
@@ -724,9 +727,11 @@ size_t IC_CharSet::WC2MB(char *buf, const wchar_t *psz, size_t n)
 
         res = n-outbuf;
         
-        // iconv() doesn't set the trailing zero, but moves buf to
-        // that position
-        buf[0] = 0;
+        // NB: iconv was given only wcslen(psz) characters on input, and so
+        //     it couldn't convert the trailing zero. Let's do it ourselves
+        //     if there's some room left for it in the output buffer.
+        if (res < n)
+            buf[0] = 0;
     }
     else
     {
