@@ -404,8 +404,6 @@ USE_OPENBSD=
 USE_NETBSD=
 USE_VMS=
 USE_ULTRIX=
-USE_CYGWIN=
-USE_MINGW=
 USE_DATA_GENERAL=
 
 dnl on some platforms xxx_r() functions are declared inside "#ifdef
@@ -416,7 +414,7 @@ NEEDS_D_REENTRANT_FOR_R_FUNCS=0
 dnl the list of all available toolkits
 dnl
 dnl update NUM_TOOLKITS calculation below when adding a new toolkit here!
-ALL_TOOLKITS="CYGWIN GTK MAC MGL MINGW MOTIF PM WINE"
+ALL_TOOLKITS="GTK MAC MGL MOTIF MSW PM WINE"
 
 dnl NB: these wxUSE_XXX constants have value of 0 or 1 unlike all the other ones
 dnl     which are either yes or no
@@ -992,8 +990,7 @@ AC_ARG_WITH(gtk,           [  --with-gtk              use GTK+], [wxUSE_GTK="$wi
 AC_ARG_WITH(motif,         [  --with-motif            use Motif/Lesstif], [wxUSE_MOTIF="$withval" CACHE_MOTIF=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(mac,           [  --with-mac              use Mac OS X], [wxUSE_MAC="$withval" TOOLKIT_GIVEN=1])
 AC_ARG_WITH(wine,          [  --with-wine             use WINE], [wxUSE_WINE="$withval" CACHE_WINE=1 TOOLKIT_GIVEN=1])
-AC_ARG_WITH(cygwin,        [  --with-cygwin           use Cygwin for MS-Windows], [wxUSE_CYGWIN="$withval" CACHE_CYGWIN=1 TOOLKIT_GIVEN=1])
-AC_ARG_WITH(mingw,         [  --with-mingw            use GCC Minimal MS-Windows], [wxUSE_MINGW="$withval" CACHE_MINGW=1 TOOLKIT_GIVEN=1])
+AC_ARG_WITH(msw,           [  --with-msw              use MS-Windows], [wxUSE_MSW="$withval" CACHE_MSW TOOLKIT_GIVEN=1])
 AC_ARG_WITH(pm,            [  --with-pm               use OS/2 Presentation Manager], [wxUSE_PM="$withval" CACHE_PM=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(mgl,           [  --with-mgl              use SciTech MGL], [wxUSE_MGL="$withval" CACHE_MGL=1 TOOLKIT_GIVEN=1])
 
@@ -1351,8 +1348,7 @@ if test "$wxUSE_GUI" = "yes"; then
     dnl we suppose that expr is available (maybe there is a better way to do
     dnl this? what about using ALL_TOOLKITS? TODO)
     NUM_TOOLKITS=`expr ${wxUSE_GTK:-0} + ${wxUSE_MOTIF:-0} + ${wxUSE_MAC:-0}  \
-                  + ${wxUSE_WINE:-0} + ${wxUSE_MINGW:-0} + ${wxUSE_CYGWIN:-0} \
-                  + ${wxUSE_MGL:-0}`
+                  + ${wxUSE_WINE:-0} + ${wxUSE_MSW:-0} + ${wxUSE_MGL:-0}`
 
     dnl Allow wxUSE_PM only for OS/2 with EMX.
     dnl Path separator; ':' for unix.
@@ -1892,23 +1888,16 @@ if test "$USE_WIN32" = 1 ; then
     dnl ---        some of them should probably be included conditionally.
     LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lcomctl32 -lctl3d32 -ladvapi32 -lwsock32"
 
-    dnl Cygwin doesn't link these by default
-    if test "$wxUSE_CYGWIN" = 1; then
-        LIBS="$LIBS -lkernel32 -luser32 -lgdi32 -lcomdlg32"
-    fi
+    case "${host}" in
+        *-*-cygwin* )
+            dnl Cygwin doesn't include these by default
+            LIBS="$LIBS -lkernel32 -luser32 -lgdi32 -lcomdlg32"
+            TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WIN95__"
+    esac
 
     dnl add extra odbc libs if we have compiled in odbc
     if test "$wxUSE_ODBC" = "yes" ; then
         LIBS="$LIBS -lodbc32 -lole32 -loleaut32"
-    fi
-
-    dnl -mwindows is needed to avoid that spawning of a console window
-    dnl This probably doesn't belong here..  The user may actually *want*
-    dnl a console window.  People should add this to their own app makefiles
-    dnl instead.  Unless someone cries murder about it, expect this to
-    dnl disappear from here soon.
-    if test "$wxUSE_MINGW" = 1; then
-        LDFLAGS="$LDFLAGS -mwindows"
     fi
 
     RESFLAGS="--include-dir \$(top_srcdir)/include --include-dir \$(top_srcdir)/\$(program_dir) --define __WIN32__ --define __WIN95__ --define __GNUWIN32__"
@@ -1924,9 +1913,17 @@ if test "$wxUSE_GUI" = "yes"; then
     WXGTK127=
     WXGTK20=
 
-    if test "$wxUSE_CYGWIN" = 1 || test "$wxUSE_MINGW" = 1 ; then
+    if test "$wxUSE_MSW" = 1 ; then
         TOOLKIT=MSW
         GUIDIST=MSW_DIST
+
+        dnl -mwindows causes a heap of other default gui libs to be linked in.
+        dnl FIXME: If cygwin needs this, please push it above, if not, please
+        dnl        remove this comment :-)
+        case "${host}" in
+            *-*-mingw32* )
+                EXTRA_LIBS="$EXTRA_LIBS -Wl,--subsystem,windows -mwindows"
+        esac
     fi
 
     if test "$wxUSE_GTK" = 1; then
@@ -2333,10 +2330,6 @@ if test -n "$TOOLKIT" ; then
     TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WX${TOOLKIT}__"
 fi
 
-if test "$wxUSE_CYGWIN" = 1 ; then
-  TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WIN95__"
-fi
-
 lib_unicode_suffix=
 if test "$wxUSE_UNICODE" = "yes"; then
     lib_unicode_suffix=u
@@ -2345,7 +2338,6 @@ fi
 lib_debug_suffix=
 if test "$wxUSE_DEBUG_FLAG" = "yes"; then
     lib_debug_suffix=d
-    TOOLCHAIN_NAME="${TOOLCHAIN_NAME}d"
 fi
 
 TOOLCHAIN_NAME="${TOOLKIT_DIR}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}-${WX_RELEASE}"
@@ -2479,11 +2471,28 @@ if test "$wxUSE_SHARED" = "yes"; then
       ;;
 
       *-*-cygwin* | *-*-mingw32* )
-        WX_LIBRARY="wxmsw${WX_MAJOR_VERSION_NUMBER}${WX_MINOR_VERSION_NUMBER}${WX_RELEASE_NUMBER}${lib_unicode_suffix}${lib_debug_suffix}"
-        WX_LIBRARY_NAME_SHARED="${WX_LIBRARY}.dll"
-        WX_LIBRARY_NAME_STATIC="lib${WX_LIBRARY}.a"
-        WXCONFIG_LIBS="-l${WX_LIBRARY}"
-        SHARED_LD="${CXX} -shared -Wl,--out-implib,lib/${WX_LIBRARY_NAME_STATIC} -o"
+        dnl If we are cross compiling we want to use the 'full' unix type name for the
+        dnl lib, but for a native install use the windows style naming convention.
+
+        if test "$cross_compiling" != "yes"; then
+            WX_LIBRARY="wxmsw${WX_MAJOR_VERSION_NUMBER}${WX_MINOR_VERSION_NUMBER}${WX_RELEASE_NUMBER}${lib_unicode_suffix}${lib_debug_suffix}"
+            WX_LIBRARY_GL=${WX_LIBRARY} "wxmsw${WX_MAJOR_VERSION_NUMBER}${WX_MINOR_VERSION_NUMBER}${WX_RELEASE_NUMBER}${lib_unicode_suffix}${lib_debug_suffix}"
+            WX_LIBRARY_NAME_SHARED="${WX_LIBRARY}.${SO_SUFFIX}"
+            WX_LIBRARY_NAME_SHARED_GL="${WX_LIBRARY_GL}.${SO_SUFFIX}"
+            WX_LIBRARY_NAME_STATIC="lib${WX_LIBRARY}.a"
+            WX_LIBRARY_NAME_STATIC_GL="lib${WX_LIBRARY_GL}.a"
+        fi
+
+        WX_LIBRARY_IMPORTLIB="lib${WX_LIBRARY}.lib"
+
+        dnl  FIXME: this is a hack..  do we need a --static flag to wx-config?
+        if test "$wxUSE_SHARED" = "yes" ; then
+            WXCONFIG_LIBS="${WX_LIBRARY_IMPORTLIB}"
+        else
+            WXCONFIG_LIBS="-l${WX_LIBRARY}"
+        fi
+
+        SHARED_LD="${CXX} -shared -Wl,--out-implib,lib/${WX_LIBRARY_IMPORTLIB} -o"
         TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -DWXUSINGDLL=1"
         WXMSW_DLL_DEFINES="-UWXUSINGDLL -DWXMAKINGDLL=1 -D_DLL=1 -D_WINDLL=1"
 
@@ -4019,7 +4028,7 @@ if test "$wxUSE_HELP" = "yes"; then
     AC_DEFINE(wxUSE_HELP)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS help"
 
-    if test "$USE_WIN32" = 1; then
+    if test "$wxUSE_MSW" = 1; then
       if test "$wxUSE_MS_HTML_HELP" = "yes"; then
         AC_CHECK_HEADER(htmlhelp.h, 
             [
@@ -4070,9 +4079,9 @@ dnl ---------------------------------------------------------------------------
 
 dnl check for ole headers and disable a few features requiring it if not
 dnl present (earlier versions of mingw32 don't have ole2.h)
-if test "$USE_WIN32" = 1 -a \( "$wxUSE_DATAOBJ"       = "yes" \
-                            -o "$wxUSE_CLIPBOARD"     = "yes" \
-                            -o "$wxUSE_DRAG_AND_DROP" = "yes" \) ; then
+if test "$wxUSE_MSW" = 1 -a \( "$wxUSE_DATAOBJ"       = "yes" \
+                          -o "$wxUSE_CLIPBOARD"     = "yes" \
+                          -o "$wxUSE_DRAG_AND_DROP" = "yes" \) ; then
     AC_CHECK_HEADERS(ole2.h)
 
     if test "$ac_cv_header_ole2_h" = "yes" ; then
@@ -4094,7 +4103,6 @@ if test "$USE_WIN32" = 1 -a \( "$wxUSE_DATAOBJ"       = "yes" \
         wxUSE_DATAOBJ=no
     fi
 
-    dnl this is for MSW only, so we test for it inside "if USE_WIN32"
     if test "$wxUSE_METAFILE" = "yes"; then
         AC_DEFINE(wxUSE_METAFILE)
 
@@ -4586,7 +4594,7 @@ dnl all additional libraries (except wxWindows itself) we link with
 dnl
 dnl note that we always link with -lm except for Mac OS X
 dnl extended.c uses floor() and is always linked in
-EXTRA_LIBS="$LIBS $POSIX4_LINK $INET_LINK $WCHAR_LINK $THREADS_LINK $DMALLOC_LINK $DL_LINK $ZLIB_LINK -lm"
+EXTRA_LIBS="$EXTRA_LIBS $LIBS $POSIX4_LINK $INET_LINK $WCHAR_LINK $THREADS_LINK $DMALLOC_LINK $DL_LINK $ZLIB_LINK -lm"
 
 if test "$wxUSE_MAC" = 1 ; then
     EXTRA_LIBS="$EXTRA_LIBS -framework Carbon -framework System"
@@ -4660,6 +4668,7 @@ AC_SUBST(WX_MINOR_VERSION_NUMBER)
 AC_SUBST(WX_RELEASE_NUMBER)
 AC_SUBST(WX_LIBRARY_NAME_STATIC)
 AC_SUBST(WX_LIBRARY_NAME_SHARED)
+AC_SUBST(WX_LIBRARY_IMPORTLIB)
 AC_SUBST(WX_TARGET_LIBRARY)
 AC_SUBST(WX_LIBRARY_LINK1)
 AC_SUBST(WX_LIBRARY_LINK2)
@@ -4699,6 +4708,7 @@ AC_SUBST(TOOLCHAIN_NAME)
 AC_SUBST(TOOLCHAIN_DEFS)
 
 dnl wx-config options
+AC_SUBST(host_alias)
 AC_SUBST(cross_compiling)
 AC_SUBST(WXCONFIG_LIBS)
 AC_SUBST(WXCONFIG_LIBS_GL)

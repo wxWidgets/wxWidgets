@@ -7,6 +7,7 @@ CC="@CC@"
 CXX="@CXX@"
 LD="@SHARED_LD@"
 cross_compiling=@cross_compiling@
+target=@host_alias@
 
 usage()
 {
@@ -27,9 +28,10 @@ EOF
 
 cppflags()
 {
-    if test "${cross_compiling}" != "yes" \
-            -a @includedir@ != /usr/include \
-            -a @includedir@ != /usr/include/c++ ;
+    if test "@includedir@" != "/usr/include" \
+            -a "@includedir@" != "/usr/include/c++" \
+            -a \( "${cross_compiling}" != "yes" \
+                  -o "@includedir@" != "/usr/${target}/include" \) ;
     then
         includes=-I@includedir@
     fi
@@ -80,8 +82,9 @@ while test $# -gt 0; do
       echo @LIBWXMACRESWXCONFIG@
       ;;
     --libs)
-      if test "${cross_compiling}" != "yes" \
-              -a @libdir@ != /usr/lib ;
+      if test "@libdir@" != "/usr/lib" \
+              -a \( "${cross_compiling}" != "yes" \
+                    -o "@libdir@" != "/usr/${target}/lib" \) ;
       then
           libs="-L@libdir@"
       fi
