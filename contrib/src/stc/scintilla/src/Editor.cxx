@@ -1,6 +1,7 @@
 // Scintilla source code edit control
 /** @file Editor.cxx
  ** Main code for the edit control.
+	Last change:  JS   18 Jun 103    1:07 am
  **/
 // Copyright 1998-2003 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
@@ -2352,6 +2353,10 @@ void Editor::Paint(Surface *surfaceWindow, PRectangle rcArea) {
 			return;
 		}
 	}
+        // Workaround by JACS: sometimes due to a re-entry condition,
+        // pixmapLine becomes uninitialised, followed by a crash.
+        if (!pixmapLine->Initialised())
+                return;
 
 	PRectangle rcRightMargin = rcClient;
 	rcRightMargin.left = rcRightMargin.right - vs.rightMarginWidth;
