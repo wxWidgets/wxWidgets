@@ -50,8 +50,8 @@ static struct rerr {
  */
 /* ARGSUSED */
 size_t				/* actual space needed (including NUL) */
-regerror(errcode, preg, errbuf, errbuf_size)
-int errcode;			/* error code, or REG_ATOI or REG_ITOA */
+regerror(rxerrcode, preg, errbuf, errbuf_size)
+int rxerrcode;			/* error code, or REG_ATOI or REG_ITOA */
 CONST regex_t *preg;		/* associated regex_t (unused at present) */
 char *errbuf;			/* result buffer (unless errbuf_size==0) */
 size_t errbuf_size;		/* available space in errbuf, can be 0 */
@@ -62,7 +62,7 @@ size_t errbuf_size;		/* available space in errbuf, can be 0 */
 	size_t len;
 	int icode;
 
-	switch (errcode) {
+	switch (rxerrcode) {
 	case REG_ATOI:		/* convert name to number */
 		for (r = rerrs; r->code >= 0; r++)
 			if (strcmp(r->name, errbuf) == 0)
@@ -84,12 +84,12 @@ size_t errbuf_size;		/* available space in errbuf, can be 0 */
 		break;
 	default:		/* a real, normal error code */
 		for (r = rerrs; r->code >= 0; r++)
-			if (r->code == errcode)
+			if (r->code == rxerrcode)
 				break;
 		if (r->code >= 0)
 			msg = r->explain;
 		else {			/* unknown; say so */
-			sprintf(convbuf, unk, errcode);
+			sprintf(convbuf, unk, rxerrcode);
 			msg = convbuf;
 		}
 		break;
