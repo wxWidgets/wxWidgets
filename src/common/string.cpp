@@ -1632,7 +1632,7 @@ void wxString::resize(size_t nSize, wxChar ch)
     }
     else if ( nSize > len )
     {
-        *this += wxString(ch, len - nSize);
+        *this += wxString(ch, nSize - len);
     }
     //else: we have exactly the specified length, nothing to do
 }
