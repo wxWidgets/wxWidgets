@@ -272,7 +272,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
         {
             SetResizeCursor();
         }
-#if defined(__WXGTK__) || defined(__WXMSW__)
+#if defined(__WXGTK__) || defined(__WXMSW__) || defined(__WXMAC__)
         else
         {
             // We must set the normal cursor in MSW, because
