@@ -673,6 +673,10 @@ long wxFileCtrl::Add( wxFileData *fd, wxListItem &item )
 
 void wxFileCtrl::UpdateFiles()
 {
+    // don't do anything before ShowModal() call which sets m_dirName
+    if ( m_dirName.empty() )
+        return;
+
     wxBusyCursor bcur; // this may take a while...
 
     long my_style = GetWindowStyleFlag();
@@ -988,7 +992,7 @@ BEGIN_EVENT_TABLE(wxFileDialog,wxDialog)
         EVT_BUTTON(wxID_OK, wxFileDialog::OnListOk)
         EVT_LIST_ITEM_SELECTED(ID_LIST_CTRL, wxFileDialog::OnSelected)
         EVT_LIST_ITEM_ACTIVATED(ID_LIST_CTRL, wxFileDialog::OnActivated)
-        EVT_CHOICE(ID_CHOICE,wxFileDialog::OnChoice)
+        EVT_CHOICE(ID_CHOICE,wxFileDialog::OnChoiceFilter)
         EVT_TEXT_ENTER(ID_TEXT,wxFileDialog::OnTextEnter)
         EVT_CHECKBOX(ID_CHECK,wxFileDialog::OnCheck)
 END_EVENT_TABLE()
@@ -1221,27 +1225,33 @@ int wxFileDialog::ShowModal()
     return wxDialog::ShowModal();
 }
 
+void wxFileDialog::DoSetFilterIndex(int filterindex)
+{
+    wxString *str = (wxString*) m_choice->GetClientData( filterindex );
+    m_list->SetWild( *str );
+    m_filterIndex = filterindex;
+    if ( str->Left(2) == wxT("*.") )
+    {
+        m_filterExtension = str->Mid(2);
+        if (m_filterExtension == _T("*"))
+            m_filterExtension.clear();
+    }
+    else
+    {
+        m_filterExtension.clear();
+    }
+}
+
 void wxFileDialog::SetFilterIndex( int filterindex )
 {
     m_choice->SetSelection( filterindex );
-    wxCommandEvent event;
-    event.SetInt( filterindex );
-    OnChoice( event );
+
+    DoSetFilterIndex(filterindex);
 }
 
-void wxFileDialog::OnChoice( wxCommandEvent &event )
+void wxFileDialog::OnChoiceFilter( wxCommandEvent &event )
 {
-    int index = (int)event.GetInt();
-    wxString *str = (wxString*) m_choice->GetClientData( index );
-    m_list->SetWild( *str );
-    m_filterIndex = index;
-    if ( str -> Left( 2 ) == wxT("*.") )
-    {
-        m_filterExtension = str -> Mid( 1 );
-        if (m_filterExtension == ".*") m_filterExtension = wxEmptyString;
-    }
-    else
-        m_filterExtension = wxEmptyString;
+    DoSetFilterIndex((int)event.GetInt());
 }
 
 void wxFileDialog::OnCheck( wxCommandEvent &event )
