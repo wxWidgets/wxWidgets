@@ -20,8 +20,8 @@ NONE =
 
 # define library name
 LIB_TARGET=wx_gtk
-LIB_MAJOR=1
-LIB_MINOR=90
+LIB_MAJOR=0
+LIB_MINOR=12
 
 # define library sources
 
@@ -58,13 +58,11 @@ LIB_CPP_SRC=\
 \
  gtk/app.cpp \
  gtk/bitmap.cpp \
- gtk/bmpbuttn.cpp \
  gtk/brush.cpp \
  gtk/button.cpp \
  gtk/checkbox.cpp \
  gtk/choice.cpp \
  gtk/colour.cpp \
- gtk/combobox.cpp \
  gtk/control.cpp \
  gtk/cursor.cpp \
  gtk/data.cpp \
@@ -77,13 +75,11 @@ LIB_CPP_SRC=\
  gtk/filedlg.cpp \
  gtk/font.cpp \
  gtk/frame.cpp \
- gtk/gauge.cpp \
  gtk/gdiobj.cpp \
  gtk/icon.cpp \
  gtk/listbox.cpp \
  gtk/mdi.cpp \
  gtk/menu.cpp \
- gtk/notebook.cpp \
  gtk/palette.cpp \
  gtk/pen.cpp \
  gtk/radiobox.cpp \
@@ -93,7 +89,6 @@ LIB_CPP_SRC=\
  gtk/settings.cpp \
  gtk/slider.cpp \
  gtk/statbox.cpp \
- gtk/statbmp.cpp \
  gtk/stattext.cpp \
  gtk/tbargtk.cpp \
  gtk/textctrl.cpp \
@@ -101,6 +96,8 @@ LIB_CPP_SRC=\
  gtk/utilsgtk.cpp \
  gtk/utilsres.cpp \
  gtk/window.cpp \
+ @GTK_JOYSTICK@ \
+ @UNIX_THREAD@ \
 \
  generic/choicdgg.cpp \
  generic/colrdlgg.cpp \
@@ -182,10 +179,7 @@ clean::
 
 #additional things needed for compile
 ADD_COMPILE= \
-   -DHAVE_LIBPNG -DDJPEG_PROG=\"\" -DCJPEG_PROG=\"\" \
-   -I$(WXBASEDIR)/src/png \
-   -I$(WXBASEDIR)/src/zlib \
-   -I$(WXBASEDIR)/src/gdk_imlib
+   -DHAVE_LIBPNG -DDJPEG_PROG=\"\" -DCJPEG_PROG=\"\"
 
 # include the definitions now
 include ../../template.mak

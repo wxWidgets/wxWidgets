@@ -419,6 +419,13 @@ AC_CHECK_HEADER(sys/time.h)
 dnl   defines HAVE_SYS_TIME_H
 AC_CHECK_HEADER(unistd.h)
 dnl   defines HAVE_UNISTD_H
+dnl As it needs Linux 2.1.x for the moment: check whether the file exists (GL).
+AC_CHECK_HEADER(linux/joystick.h)
+GTK_JOYSTICK=""
+if test "$ac_cv_header_linux_joystick_h" != ""; then
+  GTK_JOYSTICK="gtk/joystick.cpp"
+fi
+AC_SUBST(GTK_JOYSTICK)
 
 dnl ###################
 dnl # checks typedefs #
@@ -487,9 +494,21 @@ dnl ############################
 dnl # checks library functions #
 dnl ############################
 
+UNIX_THREAD=gtk/threadno.cpp
+AC_CHECK_LIB(pthread, pthread_create, [UNIX_THREAD=gtk/threadpsx.cpp])
+
 dnl ##########################
 dnl # checks system services #
 dnl ##########################
+
+
+dnl ##### Threads #####
+UNIX_THREAD="gtk/threadno.cpp"
+AC_CHECK_LIB(pthread, pthread_create, [UNIX_THREAD="gtk/threadpsx.cpp"])
+AC_CHECK_LIB(pthreads, pthread_create, [UNIX_THREAD="gtk/threadpsx.cpp"])
+AC_CHECK_HEADER(sys/prctl.h, [UNIX_THREAD="gtk/threadsgi.cpp"])
+AC_SUBST(UNIX_THREAD)
+dnl   defines UNIX_THREAD it contains the source file to use for threads. (GL)
 
 AC_SYS_LONG_FILE_NAMES
 dnl   defines HAVE_LONG_FILENAMES if filenames longer then
