@@ -892,6 +892,7 @@ listctrl.h	WXH
 listbase.h	WXH
 log.h	WXH	Base
 longlong.h	WXH	Base
+math.h	WXH	Base
 matrix.h	WXH
 mdi.h	WXH
 memory.h	WXH	Base
