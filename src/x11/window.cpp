@@ -960,6 +960,7 @@ void wxWindowX11::Update()
 {
     if (!m_updateRegion.IsEmpty())
     {
+        //        wxLogDebug("wxWindowX11::Update: %s", GetClassInfo()->GetClassName());
         // Actually send erase events.
         SendEraseEvents();
         
@@ -987,7 +988,7 @@ void wxWindowX11::SendEraseEvents()
         
         wxEraseEvent erase_event( GetId(), &dc );
         erase_event.SetEventObject( this );
-    
+
         if (!GetEventHandler()->ProcessEvent(erase_event))
         {
             Window xwindow = (Window) GetMainWindow();
@@ -1022,9 +1023,8 @@ void wxWindowX11::SendPaintEvents()
     wxPaintEvent paint_event( GetId() );
     paint_event.SetEventObject( this );
     GetEventHandler()->ProcessEvent( paint_event );
-
-    m_updateRegion.Clear();
     
+    m_updateRegion.Clear();
     m_clipPaintRegion = FALSE;
 }
 

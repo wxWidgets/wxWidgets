@@ -101,6 +101,18 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     m_backgroundColour.CalcPixel( (WXColormap) cm );
     m_hasBgCol = TRUE;
 	
+    wxSize size2(size);
+    if (size2.x == -1)
+	size2.x = 100;
+    if (size2.y == -1)
+	size2.y = 100;
+
+    wxPoint pos2(pos);
+    if (pos2.x == -1)
+	pos2.x = 100;
+    if (pos2.y == -1)
+	pos2.y = 100;
+    
 #if !wxUSE_NANOX
     XSetWindowAttributes xattributes;
     XSizeHints size_hints;
@@ -117,18 +129,6 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     // No. RR.
     xattributes.override_redirect = False;
 #endif
-    
-    wxSize size2(size);
-    if (size2.x == -1)
-	size2.x = 100;
-    if (size2.y == -1)
-	size2.y = 100;
-
-    wxPoint pos2(pos);
-    if (pos2.x == -1)
-	pos2.x = 100;
-    if (pos2.y == -1)
-	pos2.y = 100;
     
 #if wxUSE_NANOX
     long backColor, foreColor;
@@ -148,7 +148,6 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     extraFlags |= GR_EVENT_MASK_CLOSE_REQ;
 #endif
 
-#if wxUSE_NANOX
     XSelectInput( xdisplay, xwindow,
                   extraFlags |
                   ExposureMask |
@@ -166,25 +165,6 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
                   StructureNotifyMask |
                   PropertyChangeMask
                   );
-#else
-    XSelectInput( xdisplay, xwindow,
-                  extraFlags |
-                  ExposureMask |
-                  KeyPressMask |
-                  KeyReleaseMask |
-                  ButtonPressMask |
-                  ButtonReleaseMask |
-                  ButtonMotionMask |
-                  EnterWindowMask |
-                  LeaveWindowMask |
-                  PointerMotionMask |
-                  KeymapStateMask |
-                  FocusChangeMask |
-                  ColormapChangeMask |
-                  StructureNotifyMask |
-                  PropertyChangeMask
-                  );
-#endif
     
     wxAddWindowToTable( xwindow, (wxWindow*) this );
 
@@ -221,14 +201,7 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     XSetWMProtocols( xdisplay, xwindow, wm_protocols, 2);
 #endif
     
-#if 0 // wxUSE_NANOX
-    GR_WM_PROPERTIES props;
-    props.flags = GR_WM_FLAGS_TITLE;
-    props.title = (GR_CHAR*) "Hello";
-    GrSetWMProperties(xwindow, &props);
-#else
     wxSetWMDecorations( xwindow, style);
-#endif
 
     SetTitle(title);
     
@@ -423,6 +396,7 @@ bool wxSetWMDecorations(Window w, long style)
     GR_WM_PROPERTIES wmProp;
 
     wmProp.flags = 0;
+    wmProp.props = 0;
 
     if (style & wxRESIZE_BORDER)
     {

@@ -111,8 +111,6 @@ typedef struct {
 #define GXnand GR_MODE_NAND
 #define GXset GR_MODE_SET
 
-inline void wxNoop() { /* Do nothing */ }
-
 #define XSynchronize(display,sync)
 #define XDefaultRootWindow(d) GR_ROOT_WINDOW_ID
 #define RootWindowOfScreen(s) GR_ROOT_WINDOW_ID
@@ -343,6 +341,8 @@ Status XGetWindowAttributes(Display* display, Window w,
 
 int XConfigureWindow(Display* display, Window w, int mask, XWindowChanges* changes);
 int XTranslateCoordinates(Display* display, Window srcWindow, Window destWindow, int srcX, int srcY, int* destX, int* destY, Window* childReturn);
+
+void wxNoop();
 
 #ifdef __cplusplus
 }

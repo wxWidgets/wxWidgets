@@ -137,9 +137,15 @@ IMPLEMENT_DYNAMIC_CLASS(wxColour,wxGDIObject)
 wxColour::wxColour( unsigned char red, unsigned char green, unsigned char blue )
 {
     m_refData = new wxColourRefData();
+#if wxUSE_NANOX
+    M_COLDATA->m_color.red = ((unsigned short)red) ;
+    M_COLDATA->m_color.green = ((unsigned short)green) ;
+    M_COLDATA->m_color.blue = ((unsigned short)blue) ;
+#else    
     M_COLDATA->m_color.red = ((unsigned short)red) << SHIFT;
     M_COLDATA->m_color.green = ((unsigned short)green) << SHIFT;
     M_COLDATA->m_color.blue = ((unsigned short)blue) << SHIFT;
+#endif
     M_COLDATA->m_color.pixel = 0;
 }
 
@@ -209,9 +215,15 @@ void wxColour::Set( unsigned char red, unsigned char green, unsigned char blue )
     AllocExclusive();
     
     m_refData = new wxColourRefData();
+#if wxUSE_NANOX
+    M_COLDATA->m_color.red = ((unsigned short)red) ;
+    M_COLDATA->m_color.green = ((unsigned short)green) ;
+    M_COLDATA->m_color.blue = ((unsigned short)blue) ;
+#else
     M_COLDATA->m_color.red = ((unsigned short)red) << SHIFT;
     M_COLDATA->m_color.green = ((unsigned short)green) << SHIFT;
     M_COLDATA->m_color.blue = ((unsigned short)blue) << SHIFT;
+#endif
     M_COLDATA->m_color.pixel = 0;
 }
 
@@ -219,21 +231,33 @@ unsigned char wxColour::Red() const
 {
     wxCHECK_MSG( Ok(), 0, wxT("invalid colour") );
 
+#if wxUSE_NANOX
+    return (unsigned char) M_COLDATA->m_color.red ;
+#else
     return (unsigned char)(M_COLDATA->m_color.red >> SHIFT);
+#endif
 }
 
 unsigned char wxColour::Green() const
 {
     wxCHECK_MSG( Ok(), 0, wxT("invalid colour") );
 
+#if wxUSE_NANOX
+    return (unsigned char) M_COLDATA->m_color.green ;
+#else
     return (unsigned char)(M_COLDATA->m_color.green >> SHIFT);
+#endif
 }
 
 unsigned char wxColour::Blue() const
 {
     wxCHECK_MSG( Ok(), 0, wxT("invalid colour") );
 
+#if wxUSE_NANOX
+    return (unsigned char) M_COLDATA->m_color.blue ;
+#else
     return (unsigned char)(M_COLDATA->m_color.blue >> SHIFT);
+#endif
 }
 
 void wxColour::CalcPixel( WXColormap cmap )

@@ -381,10 +381,16 @@ wxColour *wxColourDatabase::FindColour(const wxString& colour)
     if (!XParseColor(display, (Colormap) wxTheApp->GetMainColormap((WXDisplay*) display), colour,&xcolour))
       return NULL;
 
+#if wxUSE_NANOX
+    unsigned char r = (unsigned char)(xcolour.red);
+    unsigned char g = (unsigned char)(xcolour.green);
+    unsigned char b = (unsigned char)(xcolour.blue);
+#else
     unsigned char r = (unsigned char)(xcolour.red >> 8);
     unsigned char g = (unsigned char)(xcolour.green >> 8);
     unsigned char b = (unsigned char)(xcolour.blue >> 8);
-
+#endif
+    
     wxColour *col = new wxColour(r, g, b);
     Append(colour, col);
 

@@ -433,5 +433,13 @@ int XTranslateCoordinates(Display* display, Window srcWindow, Window destWindow,
     return 1;
 }
 
+/* Should not really be necessary but in no-optimize mode
+ * gcc complains that wxNoop is not found if wxNoop is inline.
+ */
+
+void wxNoop()
+{
+}
+
 #endif
   /* wxUSE_NANOX */

@@ -255,6 +255,11 @@ void wxWindowDC::SetUpDC()
 
     XSetFillStyle( (Display*) m_display, (GC) m_textGC, FillSolid );
 
+#if wxUSE_NANOX
+    // By default, draw transparently
+    GrSetGCUseBackground((GC) m_textGC, FALSE);
+#endif
+
     /* m_penGC */
     m_pen.GetColour().CalcPixel( m_cmap );
     XSetForeground( (Display*) m_display, (GC) m_penGC, m_pen.GetColour().GetPixel() );
@@ -1713,6 +1718,10 @@ void wxWindowDC::SetBackgroundMode( int mode )
     wxCHECK_RET( Ok(), wxT("invalid window dc") );
 
     m_backgroundMode = mode;
+
+#if wxUSE_NANOX
+    GrSetGCUseBackground((GC) m_textGC, mode == wxTRANSPARENT ? FALSE : TRUE);
+#endif
 
     if (!m_window) return;
 

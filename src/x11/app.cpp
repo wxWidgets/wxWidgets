@@ -457,7 +457,7 @@ void wxApp::ProcessXEvent(WXEvent* _event)
     wxWindow* win = NULL;
     Window window = XEventGetWindow(event);
     Window actualWindow = window;
-    
+
     // Find the first wxWindow that corresponds to this event window
     // Because we're receiving events after a window
     // has been destroyed, assume a 1:1 match between
@@ -468,6 +468,10 @@ void wxApp::ProcessXEvent(WXEvent* _event)
     if (!win)
 	    return;
 
+#ifdef __WXDEBUG__
+    wxString windowClass = win->GetClassInfo()->GetClassName();
+#endif
+    
     switch (event->type)
     {
         case KeyPress:
@@ -506,6 +510,7 @@ void wxApp::ProcessXEvent(WXEvent* _event)
             if (event->update.utype == GR_UPDATE_SIZE)
 #endif
             {
+                //wxLogDebug("ConfigureNotify: %s", windowClass.c_str());
                 wxSizeEvent sizeEvent( wxSize(XConfigureEventGetWidth(event), XConfigureEventGetHeight(event)), win->GetId() );
                 sizeEvent.SetEventObject( win );
                 
@@ -515,6 +520,7 @@ void wxApp::ProcessXEvent(WXEvent* _event)
 #if !wxUSE_NANOX
         case PropertyNotify:
         {
+            //wxLogDebug("PropertyNotify: %s", windowClass.c_str());
             HandlePropertyChange(_event);
             return;
         }
@@ -573,6 +579,7 @@ void wxApp::ProcessXEvent(WXEvent* _event)
 #endif
         case Expose:
         {
+            //wxLogDebug("Expose: %s", windowClass.c_str());
             win->GetUpdateRegion().Union( XExposeEventGetX(event), XExposeEventGetY(event),
                                           XExposeEventGetWidth(event), XExposeEventGetHeight(event));
                                               
