@@ -246,6 +246,7 @@ wxList wxBitmapBase::sm_handlers;
 bool wxBitmap::CopyFromIcon(const wxIcon& icon)
 {
     Ref(icon) ;
+    return true;
 }
 
 wxBitmap::wxBitmap()
