@@ -377,8 +377,8 @@ try:
             # Python styles
             self.StyleSetSpec(wx.stc.STC_P_DEFAULT, 'fore:#000000')
             # Comments
-            self.StyleSetSpec(wx.stc.STC_P_COMMENTLINE, 'fore:#00CC00,back:#F0FFF0')
-            self.StyleSetSpec(wx.stc.STC_P_COMMENTBLOCK, 'fore:#00CC00,back:#F0FFF0')
+            self.StyleSetSpec(wx.stc.STC_P_COMMENTLINE,  'fore:#008000,back:#F0FFF0')
+            self.StyleSetSpec(wx.stc.STC_P_COMMENTBLOCK, 'fore:#008000,back:#F0FFF0')
             # Numbers
             self.StyleSetSpec(wx.stc.STC_P_NUMBER, 'fore:#008080')
             # Strings and characters
@@ -430,7 +430,7 @@ class wxPythonDemo(wx.Frame):
 
     def __init__(self, parent, id, title):
         wx.Frame.__init__(self, parent, -1, title, size = (800, 600),
-                         style=wx.DEFAULT_FRAME_STYLE|wx.NO_FULL_REPAINT_ON_RESIZE)
+                          style=wx.DEFAULT_FRAME_STYLE|wx.NO_FULL_REPAINT_ON_RESIZE)
 
         self.cwd = os.getcwd()
         self.curOverview = ""
@@ -590,8 +590,6 @@ class wxPythonDemo(wx.Frame):
         # for serious debugging
         #wx.Log_SetActiveTarget(wx.LogStderr())
         #wx.Log_SetTraceMask(wx.TraceMessages)
-
-        self.Show(True)
 
 
         # add the windows to the splitter and split it.
@@ -892,9 +890,8 @@ class MySplashScreen(wx.SplashScreen):
     def __init__(self):
         bmp = wx.Image(opj("bitmaps/splash.gif")).ConvertToBitmap()
         wx.SplashScreen.__init__(self, bmp,
-                                wx.SPLASH_CENTRE_ON_SCREEN|wx.SPLASH_TIMEOUT,
-                                4000, None, -1,
-                                style = wx.SIMPLE_BORDER|wx.FRAME_NO_TASKBAR|wx.STAY_ON_TOP)
+                                 wx.SPLASH_CENTRE_ON_SCREEN | wx.SPLASH_TIMEOUT,
+                                 3000, None, -1)
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
     def OnClose(self, evt):
@@ -910,13 +907,17 @@ class MyApp(wx.App):
         the main frame when it is time to do so.
         """
 
-        #import locale
-        #self.locale = wx.Locale(wx.LANGUAGE_FRENCH)
-        #locale.setlocale(locale.LC_ALL, 'fr')
-
         wx.InitAllImageHandlers()
+
+        # Normally when using a SplashScreen you would create it, show
+        # it and then continue on with the applicaiton's
+        # initialization, finally creating and showing the main
+        # application window(s).  In this case we have nothing else to
+        # do so we'll delay showing the main frame until later (see
+        # OnClose above) so the users can see the SplashScrren effect.        
         splash = MySplashScreen()
         splash.Show()
+
         return True
 
 
