@@ -695,7 +695,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     dc.DrawText(fontInfo, x, y);
     y += hLine;
-                        
+
     fontInfo.Printf(wxT("Style: %s, weight: %s, fixed width: %s"),
                     m_font.GetStyleString().c_str(),
                     m_font.GetWeightString().c_str(),
