@@ -1648,7 +1648,6 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         dc.SetBrush(* wxTRANSPARENT_BRUSH);
 
         wxSize clientSize = GetClientSize();
-        wxRect itemRect;
 
         int lineSpacing = 0;
         wxListLineData *line = &m_lines[0];

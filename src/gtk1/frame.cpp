@@ -328,7 +328,9 @@ gtk_frame_realized_callback( GtkWidget * WXUNUSED(widget), wxFrame *win )
 //-----------------------------------------------------------------------------
 
 static void
-gtk_frame_map_callback( GtkWidget * WXUNUSED(widget), wxFrame *win )
+gtk_frame_map_callback( GtkWidget * WXUNUSED(widget),
+                        GdkEvent * WXUNUSED(event),
+                        wxFrame *win )
 {
     win->m_isIconized = FALSE;
 }
@@ -338,7 +340,9 @@ gtk_frame_map_callback( GtkWidget * WXUNUSED(widget), wxFrame *win )
 //-----------------------------------------------------------------------------
 
 static void
-gtk_frame_unmap_callback( GtkWidget * WXUNUSED(widget), wxFrame *win )
+gtk_frame_unmap_callback( GtkWidget * WXUNUSED(widget),
+                          GdkEvent * WXUNUSED(event),
+                          wxFrame *win )
 {
     win->m_isIconized = TRUE;
 }
@@ -1130,20 +1134,24 @@ void wxFrame::SetIcon( const wxIcon &icon )
 }
 
 // ----------------------------------------------------------------------------
-// frame state: maximized/iconized/normal (TODO)
+// frame state: maximized/iconized/normal
 // ----------------------------------------------------------------------------
 
 void wxFrame::Maximize(bool WXUNUSED(maximize))
 {
+    wxFAIL_MSG( _T("not implemented") );
 }
 
 bool wxFrame::IsMaximized() const
 {
+    wxFAIL_MSG( _T("not implemented") );
+
     return FALSE;
 }
 
 void wxFrame::Restore()
 {
+    wxFAIL_MSG( _T("not implemented") );
 }
 
 void wxFrame::Iconize( bool iconize )

@@ -114,6 +114,8 @@ public:
     bool          m_toolBarDetached;
     bool          m_insertInClientArea;  /* not from within OnCreateXXX */
 
+    bool          m_isIconized;
+
     bool          m_fsIsShowing;         /* full screen */
     long          m_fsSaveStyle;
     long          m_fsSaveFlag;

@@ -116,9 +116,9 @@ static void wxDrawSplashBitmap(wxDC& dc, const wxBitmap& bitmap, int x, int y)
 {
     wxMemoryDC dcMem;
 
+#ifndef __WXGTK__
     bool hiColour = (wxDisplayDepth() >= 16) ;
     
-#ifndef __WXGTK__
     if (bitmap.GetPalette() && !hiColour)
     {
         dc.SetPalette(* bitmap.GetPalette());
