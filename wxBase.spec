@@ -15,6 +15,8 @@ Packager: Vadim Zeitlin <vadim@wxwindows.org>
 Prefix: %{pref}
 BuildRoot: /var/tmp/%{name}-root
 
+Provides: wxbase
+
 %description
 wxBase is a collection of C++ classes providing basic data structures (strings,
 lists, arrays), powerful wxDateTime class for date manipulations, portable
@@ -47,6 +49,8 @@ $MAKE
 %install
 make prefix=$RPM_BUILD_ROOT%{pref} install
 
+%find_lang wxstd
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -56,7 +60,7 @@ rm -rf $RPM_BUILD_ROOT
 %postun
 /sbin/ldconfig
 
-%files
+%files -f wxstd.lang
 %defattr (-, root, root)
 %doc COPYING.LIB LICENCE.txt README.txt SYMBOLS.txt
 %{pref}/lib/libwx_base*
