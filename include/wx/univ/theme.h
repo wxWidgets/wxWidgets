@@ -69,11 +69,7 @@ private:
 
     // the current theme
     static wxTheme *ms_theme;
-#ifdef __MWERKS__
     friend class wxThemeInfo;
-#else
-    friend wxThemeInfo;
-#endif
 };
 
 // ----------------------------------------------------------------------------
