@@ -418,8 +418,10 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     // for m_mainWidget themes
     gtk_signal_connect( GTK_OBJECT(m_mainWidget), "expose_event",
                 GTK_SIGNAL_FUNC(gtk_window_expose_callback), (gpointer)this );
+#ifndef __WXGTK20__
     gtk_signal_connect( GTK_OBJECT(m_mainWidget), "draw",
                 GTK_SIGNAL_FUNC(gtk_window_draw_callback), (gpointer)this );
+#endif
 
 #ifdef __WXDEBUG__
     debug_focus_in( m_mainWidget, wxT("wxTopLevelWindowGTK::m_mainWidget"), name );

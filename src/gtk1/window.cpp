@@ -70,6 +70,12 @@
     #define SET_CONTAINER_FOCUS(w, d) gtk_container_focus(GTK_CONTAINER(w), (d))
 #endif
 
+#ifdef __WXGTK20__
+    #ifdef HAVE_XIM
+        #undef HAVE_XIM
+    #endif
+#endif
+
 //-----------------------------------------------------------------------------
 // documentation on internals
 //-----------------------------------------------------------------------------
@@ -208,6 +214,8 @@ extern wxList     wxPendingDelete;
 extern bool       g_blockEventsOnDrag;
 extern bool       g_blockEventsOnScroll;
 extern wxCursor   g_globalCursor;
+
+static GdkGC *g_eraseGC = NULL;
 
 // mouse capture state: the window which has it and if the mouse is currently
 // inside it
@@ -2336,12 +2344,8 @@ bool wxWindowGTK::Create( wxWindow *parent,
     m_vAdjust = gtk_range_get_adjustment( GTK_RANGE(scrolledWindow->vscrollbar) );
 
     m_wxwindow = gtk_pizza_new();
-
-    gtk_container_add( GTK_CONTAINER(m_widget), m_wxwindow );
-
+    
 #ifndef __WXUNIVERSAL__
-
-#if GTK_CHECK_VERSION(1, 2, 0)
     GtkPizza *pizza = GTK_PIZZA(m_wxwindow);
 
     if (HasFlag(wxRAISED_BORDER))
@@ -2360,33 +2364,12 @@ bool wxWindowGTK::Create( wxWindow *parent,
     {
         gtk_pizza_set_shadow_type( pizza, GTK_MYSHADOW_NONE );
     }
-#else // GTK+ 1.0
-    GtkViewport *viewport = GTK_VIEWPORT(scrolledWindow->viewport);
-
-    if (HasFlag(wxRAISED_BORDER))
-    {
-        gtk_viewport_set_shadow_type( viewport, GTK_SHADOW_OUT );
-    }
-    else if (HasFlag(wxSUNKEN_BORDER))
-    {
-        gtk_viewport_set_shadow_type( viewport, GTK_SHADOW_IN );
-    }
-    else
-    {
-        gtk_viewport_set_shadow_type( viewport, GTK_SHADOW_NONE );
-    }
-#endif // GTK+ > 1.0/<= 1.0
-
 #endif // __WXUNIVERSAL__
+
+    gtk_container_add( GTK_CONTAINER(m_widget), m_wxwindow );
 
     GTK_WIDGET_SET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
     m_acceptsFocus = TRUE;
-
-#if !GTK_CHECK_VERSION(1, 2, 0)
-    // shut the viewport up
-    gtk_viewport_set_hadjustment( viewport, (GtkAdjustment*) gtk_adjustment_new( 0.0, 0.0, 0.0, 0.0, 0.0, 0.0) );
-    gtk_viewport_set_vadjustment( viewport, (GtkAdjustment*) gtk_adjustment_new( 0.0, 0.0, 0.0, 0.0, 0.0, 0.0) );
-#endif // GTK+ 1.0
 
     // I _really_ don't want scrollbars in the beginning
     m_vAdjust->lower = 0.0;
@@ -2539,34 +2522,34 @@ void wxWindowGTK::PostCreation()
             gtk_signal_connect( GTK_OBJECT(m_wxwindow), "expose_event",
                 GTK_SIGNAL_FUNC(gtk_window_expose_callback), (gpointer)this );
 
+#ifndef __WXGTK20__
             gtk_signal_connect( GTK_OBJECT(m_wxwindow), "draw",
                 GTK_SIGNAL_FUNC(gtk_window_draw_callback), (gpointer)this );
-
+                
             if (HasFlag(wxNO_FULL_REPAINT_ON_RESIZE))
             {
                 gtk_signal_connect( GTK_OBJECT(m_wxwindow), "event",
                     GTK_SIGNAL_FUNC(gtk_window_event_event_callback), (gpointer)this );
             }
+#else
+            gtk_widget_set_redraw_on_allocate( GTK_WIDGET(m_wxwindow), HasFlag( wxNO_FULL_REPAINT_ON_RESIZE ) );
+#endif
         }
 
         // these are called when the "sunken" or "raised" borders are drawn */
         gtk_signal_connect( GTK_OBJECT(m_widget), "expose_event",
           GTK_SIGNAL_FUNC(gtk_window_own_expose_callback), (gpointer)this );
 
+#ifndef __WXGTK20__
         gtk_signal_connect( GTK_OBJECT(m_widget), "draw",
           GTK_SIGNAL_FUNC(gtk_window_own_draw_callback), (gpointer)this );
+#endif
     }
 
     // focus handling
 
     if (m_focusWidget == NULL)
         m_focusWidget = m_widget;
-
-#if 0
-    if (GetClassInfo() && GetClassInfo()->GetClassName())
-        wxPrintf( GetClassInfo()->GetClassName() );
-    wxPrintf( ".\n" );
-#endif
 
     gtk_signal_connect( GTK_OBJECT(m_focusWidget), "focus_in_event",
         GTK_SIGNAL_FUNC(gtk_window_focus_in_callback), (gpointer)this );
@@ -2683,7 +2666,6 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
     else
     {
         GtkPizza *pizza = GTK_PIZZA(m_parent->m_wxwindow);
-
         if ((sizeFlags & wxSIZE_ALLOW_MINUS_ONE) == 0)
         {
             if (x != -1) m_x = x + pizza->xoffset;
@@ -3289,12 +3271,7 @@ void wxWindowGTK::Refresh( bool eraseBackground, const wxRect *rect )
     if (!m_widget) return;
     if (!m_widget->window) return;
 
-    // temporarily hide the caret to avoid nasty interactions between caret
-    // drawing and the window contents redraw
-#if 0 // def wxUSE_CARET -- doesn't seem to help :-(
-    wxCaretSuspend cs((wxWindow *)this);
-#endif // wxUSE_CARET
-
+#ifndef __WXGTK20__
     if (eraseBackground && m_wxwindow && m_wxwindow->window)
     {
         if (rect)
@@ -3340,14 +3317,35 @@ void wxWindowGTK::Refresh( bool eraseBackground, const wxRect *rect )
             gtk_widget_draw( m_widget, (GdkRectangle*) NULL );
         }
     }
+#else
+    if (m_wxwindow)
+    {
+        if (rect)
+        {
+            GdkRectangle gdk_rect;
+            gdk_rect.x = rect->x;
+            gdk_rect.y = rect->y;
+            gdk_rect.width = rect->width;
+            gdk_rect.height = rect->height;
+            gdk_window_invalidate_rect( GTK_PIZZA(m_wxwindow)->bin_window, &gdk_rect, TRUE );
+        }
+        else
+        {
+            gdk_window_invalidate_rect( GTK_PIZZA(m_wxwindow)->bin_window, NULL, TRUE );
+        }
+    }
+#endif
 }
 
 void wxWindowGTK::Update()
 {
+#ifdef __WXGTK20__
+    if (m_wxwindow && GTK_PIZZA(m_wxwindow)->bin_window)
+        gdk_window_process_updates( GTK_PIZZA(m_wxwindow)->bin_window, FALSE );
+#endif
+
     if (!m_updateRegion.IsEmpty())
-    {
         GtkSendPaintEvents();
-    }
 }
 
 void wxWindowGTK::GtkSendPaintEvents()
@@ -3371,10 +3369,12 @@ void wxWindowGTK::GtkSendPaintEvents()
     
         if (!GetEventHandler()->ProcessEvent(erase_event))
         {
+            gdk_gc_set_foreground( g_eraseGC, m_backgroundColour.GetColor() );
+        
             wxRegionIterator upd( m_clearRegion );
             while (upd)
             {
-                gdk_window_clear_area( GTK_PIZZA(m_wxwindow)->bin_window,
+                gdk_draw_rectangle( GTK_PIZZA(m_wxwindow)->bin_window, g_eraseGC, 0,
                                        upd.GetX(), upd.GetY(), upd.GetWidth(), upd.GetHeight() );
                 upd ++;
             }
@@ -3393,6 +3393,7 @@ void wxWindowGTK::GtkSendPaintEvents()
     m_clipPaintRegion = FALSE;
 
 #ifndef __WXUNIVERSAL__
+#ifndef __WXGTK20__
     // The following code will result in all window-less widgets
     // being redrawn because the wxWindows class is allowed to
     // paint over the window-less widgets.
@@ -3434,6 +3435,7 @@ void wxWindowGTK::GtkSendPaintEvents()
             }
         }
     }
+#endif
 #endif
 
     m_updateRegion.Clear();
@@ -4038,6 +4040,7 @@ void wxWindowGTK::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
     // No scrolling requested.
     if ((dx == 0) && (dy == 0)) return;
     
+#ifndef __WXGTK20__
     if (!m_updateRegion.IsEmpty())
     {
         m_updateRegion.Offset( dx, dy );
@@ -4058,67 +4061,22 @@ void wxWindowGTK::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
         m_clearRegion.Intersect( 0, 0, cw, ch );
     }
     
-#if 1
-
     m_clipPaintRegion = TRUE;
     
     gtk_pizza_scroll( GTK_PIZZA(m_wxwindow), -dx, -dy );
     
     m_clipPaintRegion = FALSE;
-
 #else
 
-    if (m_children.GetCount() > 0)
-    {
-        gtk_pizza_scroll( GTK_PIZZA(m_wxwindow), -dx, -dy );
-    }
-    else
-    {
-        GtkPizza *pizza = GTK_PIZZA(m_wxwindow);
-
-        pizza->xoffset -= dx;
-        pizza->yoffset -= dy;
-
-        GdkGC *m_scrollGC = gdk_gc_new( pizza->bin_window );
-        gdk_gc_set_exposures( m_scrollGC, TRUE );
-
-        int cw = 0;
-        int ch = 0;
-        GetClientSize( &cw, &ch );
-        int w = cw - abs(dx);
-        int h = ch - abs(dy);
-
-        if ((h < 0) || (w < 0))
-        {
-            Refresh();
-        }
-        else
-        {
-            int s_x = 0;
-            int s_y = 0;
-            if (dx < 0) s_x = -dx;
-            if (dy < 0) s_y = -dy;
-            int d_x = 0;
-            int d_y = 0;
-            if (dx > 0) d_x = dx;
-            if (dy > 0) d_y = dy;
-
-            gdk_window_copy_area( pizza->bin_window, m_scrollGC, d_x, d_y,
-                pizza->bin_window, s_x, s_y, w, h );
-
-            wxRect rect;
-            if (dx < 0) rect.x = cw+dx; else rect.x = 0;
-            if (dy < 0) rect.y = ch+dy; else rect.y = 0;
-            if (dy != 0) rect.width = cw; else rect.width = abs(dx);
-            if (dx != 0) rect.height = ch; else rect.height = abs(dy);
-
-            Refresh( TRUE, &rect );
-        }
-
-        gdk_gc_unref( m_scrollGC );
-    }
-#endif
+    gdk_window_scroll( GTK_PIZZA(m_wxwindow)->bin_window, -dx, -dy );
+    
+    GTK_PIZZA(m_wxwindow)->xoffset -= dx;
+    GTK_PIZZA(m_wxwindow)->yoffset -= dy;
+    
+#endif    
+   
 }
+
 
 // Find the wxWindow at the current mouse position, also returning the mouse
 // position.
@@ -4159,5 +4117,34 @@ wxPoint wxGetMousePosition()
                    &rootX, &rootY, &winX, &winY, &maskReturn);
     return wxPoint(rootX, rootY);
 
+}
+
+// ----------------------------------------------------------------------------
+// wxDCModule
+// ----------------------------------------------------------------------------
+
+class wxWinModule : public wxModule
+{
+public:
+    bool OnInit();
+    void OnExit();
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxWinModule)
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxWinModule, wxModule)
+
+bool wxWinModule::OnInit()
+{
+    g_eraseGC = gdk_gc_new( GDK_ROOT_PARENT() );
+    gdk_gc_set_fill( g_eraseGC, GDK_SOLID );
+    
+    return TRUE;
+}
+
+void wxWinModule::OnExit()
+{
+    gdk_gc_unref( g_eraseGC );
 }
 

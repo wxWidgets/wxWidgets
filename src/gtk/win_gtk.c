@@ -766,6 +766,12 @@ gtk_pizza_expose (GtkWidget      *widget,
 
     pizza = GTK_PIZZA (widget);
 
+#ifdef __WXGTK20__
+
+    (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
+    
+#else
+
     /* Sometimes, We handle all expose events in window.cpp now. */
     if (pizza->external_expose)
         return FALSE;
@@ -788,6 +794,7 @@ gtk_pizza_expose (GtkWidget      *widget,
             gtk_widget_event (child->widget, (GdkEvent*) &child_event);
         }
     }
+#endif
 
     return TRUE;
 }
