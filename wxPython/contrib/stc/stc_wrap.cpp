@@ -11285,6 +11285,61 @@ static PyObject *_wrap_StyledTextCtrl_DoDropText(PyObject *self, PyObject *args,
 }
 
 
+static PyObject *_wrap_StyledTextCtrl_SetUseAntiAliasing(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    bool arg2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "useAA", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetUseAntiAliasing",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxStyledTextCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (bool) SWIG_PyObj_AsBool(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetUseAntiAliasing(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_StyledTextCtrl_GetUseAntiAliasing(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:StyledTextCtrl_GetUseAntiAliasing",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxStyledTextCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->GetUseAntiAliasing();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * StyledTextCtrl_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -12942,6 +12997,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"StyledTextCtrl_LoadFile", (PyCFunction) _wrap_StyledTextCtrl_LoadFile, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"StyledTextCtrl_DoDragOver", (PyCFunction) _wrap_StyledTextCtrl_DoDragOver, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"StyledTextCtrl_DoDropText", (PyCFunction) _wrap_StyledTextCtrl_DoDropText, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"StyledTextCtrl_SetUseAntiAliasing", (PyCFunction) _wrap_StyledTextCtrl_SetUseAntiAliasing, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"StyledTextCtrl_GetUseAntiAliasing", (PyCFunction) _wrap_StyledTextCtrl_GetUseAntiAliasing, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"StyledTextCtrl_swigregister", StyledTextCtrl_swigregister, METH_VARARGS },
 	 { (char *)"new_StyledTextEvent", (PyCFunction) _wrap_new_StyledTextEvent, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"delete_StyledTextEvent", (PyCFunction) _wrap_delete_StyledTextEvent, METH_VARARGS | METH_KEYWORDS },

@@ -231,6 +231,7 @@ wxPRINT_MODE_NONE = wx.windows.PRINT_MODE_NONE
 wxPRINT_MODE_PREVIEW = wx.windows.PRINT_MODE_PREVIEW
 wxPRINT_MODE_FILE = wx.windows.PRINT_MODE_FILE
 wxPRINT_MODE_PRINTER = wx.windows.PRINT_MODE_PRINTER
+wxPRINT_MODE_STREAM = wx.windows.PRINT_MODE_STREAM
 wxPrintData = wx.windows.PrintData
 wxPrintDataPtr = wx.windows.PrintDataPtr
 wxPageSetupDialogData = wx.windows.PageSetupDialogData

@@ -4210,13 +4210,21 @@ class TreeCtrl(core.Control):
         """Unselect()"""
         return _controls.TreeCtrl_Unselect(*args, **kwargs)
 
+    def UnselectItem(*args, **kwargs):
+        """UnselectItem(TreeItemId item)"""
+        return _controls.TreeCtrl_UnselectItem(*args, **kwargs)
+
     def UnselectAll(*args, **kwargs):
         """UnselectAll()"""
         return _controls.TreeCtrl_UnselectAll(*args, **kwargs)
 
     def SelectItem(*args, **kwargs):
-        """SelectItem(TreeItemId item)"""
+        """SelectItem(TreeItemId item, bool select=True)"""
         return _controls.TreeCtrl_SelectItem(*args, **kwargs)
+
+    def ToggleItemSelection(*args, **kwargs):
+        """ToggleItemSelection(TreeItemId item)"""
+        return _controls.TreeCtrl_ToggleItemSelection(*args, **kwargs)
 
     def EnsureVisible(*args, **kwargs):
         """EnsureVisible(TreeItemId item)"""

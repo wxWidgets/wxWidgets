@@ -2444,6 +2444,10 @@ class DC(core.Object):
         """
         return _gdi.DC_GetMultiLineTextExtent(*args, **kwargs)
 
+    def GetPartialTextExtents(*args, **kwargs):
+        """GetPartialTextExtents(String text) -> wxArrayInt"""
+        return _gdi.DC_GetPartialTextExtents(*args, **kwargs)
+
     def GetSize(*args, **kwargs):
         """
         GetSize() -> Size

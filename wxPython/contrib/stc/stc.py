@@ -2297,6 +2297,14 @@ class StyledTextCtrl(core.Control):
         """DoDropText(long x, long y, String data) -> bool"""
         return _stc.StyledTextCtrl_DoDropText(*args, **kwargs)
 
+    def SetUseAntiAliasing(*args, **kwargs):
+        """SetUseAntiAliasing(bool useAA)"""
+        return _stc.StyledTextCtrl_SetUseAntiAliasing(*args, **kwargs)
+
+    def GetUseAntiAliasing(*args, **kwargs):
+        """GetUseAntiAliasing() -> bool"""
+        return _stc.StyledTextCtrl_GetUseAntiAliasing(*args, **kwargs)
+
 
 class StyledTextCtrlPtr(StyledTextCtrl):
     def __init__(self, this):

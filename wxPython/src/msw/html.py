@@ -1056,6 +1056,18 @@ class HtmlWindow(windows.ScrolledWindow):
         return _html.HtmlWindow_AddFilter(*args, **kwargs)
 
     AddFilter = staticmethod(AddFilter)
+    def SelectWord(*args, **kwargs):
+        """SelectWord(Point pos)"""
+        return _html.HtmlWindow_SelectWord(*args, **kwargs)
+
+    def SelectLine(*args, **kwargs):
+        """SelectLine(Point pos)"""
+        return _html.HtmlWindow_SelectLine(*args, **kwargs)
+
+    def SelectAll(*args, **kwargs):
+        """SelectAll()"""
+        return _html.HtmlWindow_SelectAll(*args, **kwargs)
+
     def base_OnLinkClicked(*args, **kwargs):
         """base_OnLinkClicked(HtmlLinkInfo link)"""
         return _html.HtmlWindow_base_OnLinkClicked(*args, **kwargs)

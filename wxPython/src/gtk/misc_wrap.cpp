@@ -23469,12 +23469,12 @@ static PyObject *_wrap_DataFormat___eq____SWIG_0(PyObject *self, PyObject *args)
     if(!PyArg_ParseTuple(args,(char *)"OO:DataFormat___eq__",&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDataFormat,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
-        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        arg2 = (wxDataFormatId) SWIG_PyObj_AsInt(obj1);  
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)((wxDataFormat const *)arg1)->operator ==(arg2);
+        result = (bool)((wxDataFormat const *)arg1)->operator ==((wxDataFormatId )arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -23497,12 +23497,12 @@ static PyObject *_wrap_DataFormat___ne____SWIG_0(PyObject *self, PyObject *args)
     if(!PyArg_ParseTuple(args,(char *)"OO:DataFormat___ne__",&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDataFormat,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
-        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        arg2 = (wxDataFormatId) SWIG_PyObj_AsInt(obj1);  
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)((wxDataFormat const *)arg1)->operator !=(arg2);
+        result = (bool)((wxDataFormat const *)arg1)->operator !=((wxDataFormatId )arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;

@@ -656,6 +656,11 @@ wxRect wxDC_GetClippingRect(wxDC *self){
             self->GetClippingBox(rect);
             return rect;
         }
+wxArrayInt wxDC_GetPartialTextExtents(wxDC *self,wxString const &text){
+            wxArrayInt widths;
+            self->GetPartialTextExtents(text, widths);
+            return widths;
+        }
 PyObject *wxDC__DrawPointList(wxDC *self,PyObject *pyCoords,PyObject *pyPens,PyObject *pyBrushes){
             return wxPyDrawXXXList(*self, wxPyDrawXXXPoint, pyCoords, pyPens, pyBrushes);
         }
@@ -12730,6 +12735,55 @@ static PyObject *_wrap_DC_GetMultiLineTextExtent(PyObject *self, PyObject *args,
 }
 
 
+static PyObject *_wrap_DC_GetPartialTextExtents(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxDC *arg1 = (wxDC *) 0 ;
+    wxString *arg2 = 0 ;
+    wxArrayInt result;
+    bool temp2 = False ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "text", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DC_GetPartialTextExtents",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDC,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = wxString_in_helper(obj1);
+        if (arg2 == NULL) SWIG_fail;
+        temp2 = True;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = wxDC_GetPartialTextExtents(arg1,(wxString const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = PyList_New(0);
+        size_t idx;
+        for (idx = 0; idx < (&result)->GetCount(); idx += 1) {
+            PyObject* val = PyInt_FromLong( (&result)->Item(idx) );
+            PyList_Append(resultobj, val);
+            Py_DECREF(val);
+        }
+    }
+    {
+        if (temp2)
+        delete arg2;
+    }
+    return resultobj;
+    fail:
+    {
+        if (temp2)
+        delete arg2;
+    }
+    return NULL;
+}
+
+
 static PyObject *_wrap_DC_GetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDC *arg1 = (wxDC *) 0 ;
@@ -18036,6 +18090,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DC_GetTextExtent", (PyCFunction) _wrap_DC_GetTextExtent, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"DC_GetFullTextExtent", (PyCFunction) _wrap_DC_GetFullTextExtent, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"DC_GetMultiLineTextExtent", (PyCFunction) _wrap_DC_GetMultiLineTextExtent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"DC_GetPartialTextExtents", (PyCFunction) _wrap_DC_GetPartialTextExtents, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"DC_GetSize", (PyCFunction) _wrap_DC_GetSize, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"DC_GetSizeTuple", (PyCFunction) _wrap_DC_GetSizeTuple, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"DC_GetSizeMM", (PyCFunction) _wrap_DC_GetSizeMM, METH_VARARGS | METH_KEYWORDS },

@@ -6566,6 +6566,92 @@ static PyObject *_wrap_HtmlWindow_AddFilter(PyObject *self, PyObject *args, PyOb
 }
 
 
+static PyObject *_wrap_HtmlWindow_SelectWord(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
+    wxPoint *arg2 = 0 ;
+    wxPoint temp2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "pos", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:HtmlWindow_SelectWord",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyHtmlWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = &temp2;
+        if ( ! wxPoint_helper(obj1, &arg2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SelectWord((wxPoint const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_HtmlWindow_SelectLine(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
+    wxPoint *arg2 = 0 ;
+    wxPoint temp2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "pos", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:HtmlWindow_SelectLine",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyHtmlWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = &temp2;
+        if ( ! wxPoint_helper(obj1, &arg2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SelectLine((wxPoint const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_HtmlWindow_SelectAll(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:HtmlWindow_SelectAll",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyHtmlWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SelectAll();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_HtmlWindow_base_OnLinkClicked(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
@@ -10217,6 +10303,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"HtmlWindow_ScrollToAnchor", (PyCFunction) _wrap_HtmlWindow_ScrollToAnchor, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"HtmlWindow_HasAnchor", (PyCFunction) _wrap_HtmlWindow_HasAnchor, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"HtmlWindow_AddFilter", (PyCFunction) _wrap_HtmlWindow_AddFilter, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_SelectWord", (PyCFunction) _wrap_HtmlWindow_SelectWord, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_SelectLine", (PyCFunction) _wrap_HtmlWindow_SelectLine, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_SelectAll", (PyCFunction) _wrap_HtmlWindow_SelectAll, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"HtmlWindow_base_OnLinkClicked", (PyCFunction) _wrap_HtmlWindow_base_OnLinkClicked, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"HtmlWindow_base_OnSetTitle", (PyCFunction) _wrap_HtmlWindow_base_OnSetTitle, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"HtmlWindow_base_OnCellMouseHover", (PyCFunction) _wrap_HtmlWindow_base_OnCellMouseHover, METH_VARARGS | METH_KEYWORDS },
