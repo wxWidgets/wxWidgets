@@ -34,6 +34,7 @@ wxScreenDC::wxScreenDC()
     SetPort( port ) ;
     m_macLocalOrigin.x = -pt.h ;
     m_macLocalOrigin.y = -pt.v ;
+    m_macLocalOriginInPort = m_macLocalOrigin ;
 
     BitMap screenBits;
     GetQDGlobalsScreenBits( &screenBits );
