@@ -141,8 +141,8 @@ int WXDLLEXPORT wxIspunct(wxChar ch) { return wxMSW_ctype(ch) & C1_PUNCT; }
 int WXDLLEXPORT wxIsspace(wxChar ch) { return wxMSW_ctype(ch) & C1_SPACE; }
 int WXDLLEXPORT wxIsupper(wxChar ch) { return IsCharUpper(ch); }
 int WXDLLEXPORT wxIsxdigit(wxChar ch) { return wxMSW_ctype(ch) & C1_XDIGIT; }
-int WXDLLEXPORT wxTolower(wxChar ch) { return (wxChar)CharLower((LPTSTR)(ch); }
-int WXDLLEXPORT wxToupper(wxChar ch) { return (wxChar)CharUpper((LPTSTR)(ch); }
+int WXDLLEXPORT wxTolower(wxChar ch) { return (wxChar)CharLower((LPTSTR)(ch)); }
+int WXDLLEXPORT wxToupper(wxChar ch) { return (wxChar)CharUpper((LPTSTR)(ch)); }
 #endif
 
 #ifndef wxStrdup
