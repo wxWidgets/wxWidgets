@@ -149,7 +149,8 @@
 
 WX_IMPLEMENT_OBJC_INTERFACE_HASHMAP(NSWindow)
 
-wxCocoaNSWindow::wxCocoaNSWindow()
+wxCocoaNSWindow::wxCocoaNSWindow(wxTopLevelWindow *tlw)
+:   m_wxTopLevelWindow(tlw)
 {
     m_cocoaDelegate = [[wxNSWindowDelegate alloc] init];
     [m_cocoaDelegate setWxCocoaInterface: this];
