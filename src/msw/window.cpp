@@ -5480,9 +5480,10 @@ static TEXTMETRIC wxGetTextMetrics(const wxWindowMSW *win)
 
 // Find the wxWindow at the current mouse position, returning the mouse
 // position.
-wxWindow* wxFindWindowAtPointer(wxPoint& WXUNUSED(pt))
+wxWindow* wxFindWindowAtPointer(wxPoint& pt)
 {
-    return wxFindWindowAtPoint(wxGetMousePosition());
+    pt = wxGetMousePosition();
+    return wxFindWindowAtPoint(pt);
 }
 
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
