@@ -60,6 +60,8 @@ public:
 
     virtual ~wxCalendarCtrl();
 
+    virtual bool Destroy();
+
     // set/get the current date
     // ------------------------
 

@@ -253,6 +253,18 @@ wxCalendarCtrl::~wxCalendarCtrl()
 // forward wxWin functions to subcontrols
 // ----------------------------------------------------------------------------
 
+bool wxCalendarCtrl::Destroy()
+{
+    if( m_staticYear ) m_staticYear->Destroy();
+    if( m_spinYear ) m_spinYear->Destroy();
+    if( m_comboMonth ) m_comboMonth->Destroy();
+    if( m_staticMonth ) m_staticMonth->Destroy();
+
+    m_staticYear = 0; m_spinYear = 0; m_comboMonth = 0; m_staticMonth = 0;
+
+    return wxControl::Destroy();
+}
+
 bool wxCalendarCtrl::Show(bool show)
 {
     if ( !wxControl::Show(show) )
