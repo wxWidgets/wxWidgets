@@ -2,11 +2,11 @@
 // Name:        checklst.h
 // Purpose:     wxCheckListBox class - a listbox with checkable items
 //              Note: this is an optional class.
-// Author:      AUTHOR
-// Modified by: 
-// Created:     ??/??/98
+// Author:      Stefan Csomor
+// Modified by:
+// Created:     1998-01-01
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
+// Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 

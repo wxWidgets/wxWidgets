@@ -1,9 +1,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        dnd.h
 // Purpose:     Declaration of the wxDropTarget, wxDropSource class etc.
-// Author:      AUTHOR
+// Author:      Stefan Csomor
 // RCS-ID:      $Id$
-// Copyright:   (c) 1998 AUTHOR
+// Copyright:   (c) 1998 Stefan Csomor
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 

@@ -2,9 +2,9 @@
 // File:        taskbar.cpp
 // Purpose:	    Implements wxTaskBarIcon class for manipulating icons on
 //              the task bar. Optional.
-// Author:      AUTHOR
+// Author:      Stefan Csomor
 // Modified by:
-// Created:     ??/??/98
+// Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c)
 // Licence:   	wxWindows licence

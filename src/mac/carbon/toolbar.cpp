@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        toolbar.cpp
 // Purpose:     wxToolBar
-// Author:      AUTHOR
+// Author:      Stefan Csomor
 // Modified by:
 // Created:     04/01/98
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHORy
+// Copyright:   (c) Stefan Csomory
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__

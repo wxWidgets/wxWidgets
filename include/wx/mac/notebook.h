@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        notebook.h
 // Purpose:     MSW/GTK compatible notebook (a.k.a. property sheet)
-// Author:      AUTHOR
+// Author:      Stefan Csomor
 // Modified by:
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
+// Copyright:   (c) Stefan Csomor
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

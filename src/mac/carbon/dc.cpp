@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dc.cpp
 // Purpose:     wxDC class
-// Author:      AUTHOR
+// Author:      Stefan Csomor
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
+// Copyright:   (c) Stefan Csomor
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 #ifdef __GNUG__

@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
 // File:      region.cpp
 // Purpose:   Region class
-// Author:    Markus Holzem/Julian Smart/AUTHOR
+// Author:    Markus Holzem/Julian Smart/Stefan Csomor
 // Created:   Fri Oct 24 10:46:34 MET 1997
 // RCS-ID:	  $Id$
-// Copyright: (c) 1997 Markus Holzem/Julian Smart/AUTHOR
+// Copyright: (c) 1997 Markus Holzem/Julian Smart/Stefan Csomor
 // Licence:   wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

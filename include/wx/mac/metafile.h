@@ -3,11 +3,11 @@
 // Purpose:     wxMetaFile, wxMetaFileDC classes.
 //              This probably should be restricted to Windows platforms,
 //              but if there is an equivalent on your platform, great.
-// Author:      AUTHOR
+// Author:      Stefan Csomor
 // Modified by:
-// Created:     ??/??/98
+// Created:     1998-01-01
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
+// Copyright:   (c) Stefan Csomor
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

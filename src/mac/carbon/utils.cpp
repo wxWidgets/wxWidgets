@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        utils.cpp
 // Purpose:     Various utilities
-// Author:      AUTHOR
+// Author:      Stefan Csomor
 // Modified by:
-// Created:     ??/??/98
+// Created:     1998-01-01
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
+// Copyright:   (c) Stefan Csomor
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -87,7 +87,7 @@ const wxChar* wxGetHomeDir(wxString *pstr)
 	return pstr->c_str() ;
 }
 
-// Get user name e.g. AUTHOR
+// Get user name e.g. Stefan Csomor
 bool wxGetUserName(char *buf, int maxSize)
 {
 	// Gets Chooser name of user by examining a System resource.

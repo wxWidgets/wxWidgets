@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        radiobox.cpp
 // Purpose:     wxRadioBox
-// Author:      AUTHOR
+// Author:      Stefan Csomor
 // Modified by: JS Lair (99/11/15) first implementation
-// Created:     ??/??/98
+// Created:     1998-01-01
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
+// Copyright:   (c) Stefan Csomor
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

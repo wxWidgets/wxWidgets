@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        msgdlg.cpp
 // Purpose:     wxMessageDialog
-// Author:      AUTHOR
+// Author:      Stefan Csomor
 // Modified by:
 // Created:     04/01/98
 // RCS-ID:      $$
-// Copyright:   (c) AUTHOR
+// Copyright:   (c) Stefan Csomor
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

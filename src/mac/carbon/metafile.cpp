@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        metafile.cpp
 // Purpose:     wxMetaFile, wxMetaFileDC etc. These classes are optional.
-// Author:      AUTHOR
+// Author:      Stefan Csomor
 // Modified by:
 // Created:     04/01/98
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
+// Copyright:   (c) Stefan Csomor
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

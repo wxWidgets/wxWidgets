@@ -1,11 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        statbar.cpp
 // Purpose:     native implementation of wxStatusBar (optional)
-// Author:      AUTHOR
+// Author:      Stefan Csomor
 // Modified by: 
-// Created:     ??/??/98
+// Created:     1998-01-01
 // RCS-ID:      $Id$
-// Copyright:   (c) 1998 AUTHOR
+// Copyright:   (c) 1998 Stefan Csomor
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 

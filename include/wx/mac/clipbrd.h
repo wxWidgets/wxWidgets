@@ -4,11 +4,11 @@
 //              Note: this functionality is under review, and
 //              is derived from wxWindows 1.xx code. Please contact
 //              the wxWindows developers for further information.
-// Author:      AUTHOR
+// Author:      Stefan Csomor
 // Modified by:
-// Created:     ??/??/98
+// Created:     1998-01-01
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
+// Copyright:   (c) Stefan Csomor
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

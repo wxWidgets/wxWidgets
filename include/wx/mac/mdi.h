@@ -3,11 +3,11 @@
 // Purpose:     MDI (Multiple Document Interface) classes.
 //              This doesn't have to be implemented just like Windows,
 //              it could be a tabbed design as in wxGTK.
-// Author:      AUTHOR
+// Author:      Stefan Csomor
 // Modified by:
-// Created:     ??/??/98
+// Created:     1998-01-01
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
+// Copyright:   (c) Stefan Csomor
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
