@@ -44,6 +44,15 @@ CodeWarrior Pro 5:Pre-Release:Carbon & MacOSX Development:Carbonized MSL and
 CodeWarrior Pro 5:Pre-Release:Carbon & MacOSX Development:Carbonized Runtimes 
 (consult the file CodeWarrior Pro 5:Pre-Release:Carbon & MacOSX Development:Carbon & MacOSX README)
 
+Patching headers: CodeWarrior 8.x
+---------------------------------
+
+If you run into trouble with WCHAR_MIN and WCHAR_MAX in ansi.h,
+apply the patch ansi.diff.
+
+You may also need to comment out the _T definition in
+ctype.h if you get multiple definition errors.
+
 setup.h
 -------
 
