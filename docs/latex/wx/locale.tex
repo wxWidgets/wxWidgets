@@ -59,6 +59,7 @@ No base class
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 
+
 \membersection{Supported languages}\label{wxlanguage}
 
 The following wxLanguage constants may be used to specify the language
@@ -312,6 +313,7 @@ this
 
 
 
+
 \membersection{wxLocale::wxLocale}\label{wxlocaledefctor}
 
 \func{}{wxLocale}{\void}
@@ -336,6 +338,7 @@ application and so all subsequent calls to wxGetTranslation() will try to
 translate the messages using the message catalogs for this locale.
 
 
+
 \membersection{wxLocale::\destruct{wxLocale}}\label{wxlocaledtor}
 
 \func{}{\destruct{wxLocale}}{\void}
@@ -343,6 +346,7 @@ translate the messages using the message catalogs for this locale.
 The destructor, like the constructor, also has global side effects: the previously
 set locale is restored and so the changes described in 
 \helpref{Init}{wxlocaleinit} documentation are rolled back.
+
 
 \membersection{wxLocale::AddCatalog}\label{wxlocaleaddcatalog}
 
@@ -384,6 +388,7 @@ If you have to deal with non-English strings or 8-bit characters in the source
 code, see the instructions in 
 \helpref{Writing non-English applications}{nonenglishoverview}.
 
+
 \membersection{wxLocale::AddCatalogLookupPathPrefix}\label{wxlocaleaddcataloglookuppathprefix}
 
 \func{void}{AddCatalogLookupPathPrefix}{\param{const wxString\& }{prefix}}
@@ -393,6 +398,7 @@ looked up under prefix/<lang>/LC\_MESSAGES, prefix/LC\_MESSAGES and prefix
 (in this order).
 
 This only applies to subsequent invocations of AddCatalog()!
+
 
 \membersection{wxLocale::AddLanguage}\label{wxlocaleaddlanguage}
 
@@ -423,6 +429,7 @@ struct WXDLLEXPORT wxLanguageInfo
 \perlnote{In wxPerl Wx::LanguageInfo has only one method:\par
 Wx::LanguageInfo->new( language, canonicalName, WinLang, WinSubLang, Description )}
 
+
 \membersection{wxLocale::FindLanguageInfo}{wxlocalefindlanguageinfo}
 
 \constfunc{static wxLanguageInfo *}{FindLanguageInfo}{\param{const wxString\& }{locale}}
@@ -440,6 +447,7 @@ is unknown. Note that even if the returned pointer is valid, the caller should
 
 \helpref{GetLanguageInfo}{wxlocalegetlanguageinfo}
 
+
 \membersection{wxLocale::GetCanonicalName}\label{wxlocalegetcanonicalname}
 
 \constfunc{wxString}{GetSysName}{\void}
@@ -455,6 +463,7 @@ Compare \helpref{GetSysName}{wxlocalegetsysname}.
 
 
 
+
 \membersection{wxLocale::GetLanguage}\label{wxlocalegetlanguage}
 
 \constfunc{int}{GetLanguage}{\void}
@@ -462,6 +471,7 @@ Compare \helpref{GetSysName}{wxlocalegetsysname}.
 Returns \helpref{wxLanguage}{wxlanguage} constant of current language.
 Note that you can call this function only if you used the form of
 \helpref{Init}{wxlocaleinit} that takes wxLanguage argument.
+
 
 \membersection{wxLocale::GetLanguageInfo}\label{wxlocalegetlanguageinfo}
 
@@ -474,12 +484,20 @@ returned pointer is valid, the caller should {\it not} delete it.
 See \helpref{AddLanguage}{wxlocaleaddlanguage} for the wxLanguageInfo
 description.
 
+As with \helpref{Init}{wxlocaleinit}, \texttt{wxLANGUAGE\_DEFAULT} has the
+special meaning if passed as an argument to this function and in this case the
+result of \helpref{GetSystemLanguage()}{wxlocalegetsystemlanguage} is used.
+
+
 \membersection{wxLocale::GetLanguageName}\label{wxlocalegetlanguagename}
 
 \constfunc{static wxString}{GetLanguageName}{\param{int }{lang}}
 
 Returns English name of the given language or empty string if this
 language is unknown.
+
+See \helpref{GetLanguageInfo}{wxlocalegetlanguageinfo} for a remark about
+special meaning of \texttt{wxLANGUAGE\_DEFAULT}.
 
 
 \membersection{wxLocale::GetLocale}\label{wxlocalegetlocale}
@@ -491,12 +509,14 @@ Returns the locale name as passed to the constructor or
 e.g. "English" or "French".
 
 
+
 \membersection{wxLocale::GetName}\label{wxlocalegetname}
 
 \constfunc{const wxString\&}{GetName}{\void}
 
 Returns the current short name for the locale (as given to the constructor or
 the Init() function).
+
 
 \membersection{wxLocale::GetString}\label{wxlocalegetstring}
 
@@ -530,6 +550,7 @@ function and \helpref{\_()}{underscore} macro.
 Domains are searched in the last to first order, i.e. catalogs
 added later override those added before.
 
+
 \membersection{wxLocale::GetSysName}\label{wxlocalegetsysname}
 
 \constfunc{wxString}{GetSysName}{\void}
@@ -539,6 +560,7 @@ Returns current platform-specific locale name as passed to setlocale().
 Compare \helpref{GetCanonicalName}{wxlocalegetcanonicalname}.
 
 
+
 \membersection{wxLocale::GetSystemEncoding}\label{wxlocalegetsystemencoding}
 
 \constfunc{static wxFontEncoding}{GetSystemEncoding}{\void}
@@ -546,6 +568,7 @@ Compare \helpref{GetCanonicalName}{wxlocalegetcanonicalname}.
 Tries to detect the user's default font encoding.
 Returns \helpref{wxFontEncoding}{wxfont} value or 
 {\bf wxFONTENCODING\_SYSTEM} if it couldn't be determined.
+
 
 \membersection{wxLocale::GetSystemEncodingName}\label{wxlocalegetsystemencodingname}
 
@@ -559,6 +582,7 @@ so you should probably use
 Returns a user-readable string value or an empty string if it couldn't be
 determined.
 
+
 \membersection{wxLocale::GetSystemLanguage}\label{wxlocalegetsystemlanguage}
 
 \constfunc{static int}{GetSystemLanguage}{\void}
@@ -566,6 +590,7 @@ determined.
 Tries to detect the user's default language setting.
 Returns \helpref{wxLanguage}{wxlanguage} value or 
  {\bf wxLANGUAGE\_UNKNOWN} if the language-guessing algorithm failed.
+
 
 
 \membersection{wxLocale::Init}\label{wxlocaleinit}
@@ -631,6 +656,7 @@ translate the messages using the message catalogs for this locale.
 
 Returns true on success or false if the given locale couldn't be set.
 
+
 \membersection{wxLocale::IsLoaded}\label{wxlocaleisloaded}
 
 \constfunc{bool}{IsLoaded}{\param{const char* }{domain}}
@@ -641,6 +667,7 @@ According to GNU gettext tradition, each catalog
 normally corresponds to 'domain' which is more or less the application name.
 
 See also: \helpref{AddCatalog}{wxlocaleaddcatalog}
+
 
 \membersection{wxLocale::IsOk}\label{wxlocaleisok}
 

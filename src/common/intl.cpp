@@ -2339,6 +2339,11 @@ const wxLanguageInfo *wxLocale::GetLanguageInfo(int lang)
 {
     CreateLanguagesDB();
 
+    // calling GetLanguageInfo(wxLANGUAGE_DEFAULT) is a natural thing to do, so
+    // make it work
+    if ( lang == wxLANGUAGE_DEFAULT )
+        lang = GetSystemLanguage();
+
     const size_t count = ms_languagesDB->GetCount();
     for ( size_t i = 0; i < count; i++ )
     {
