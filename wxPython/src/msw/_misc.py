@@ -5847,11 +5847,23 @@ class StandardPaths(object):
         return _misc_.StandardPaths_GetPluginsDir(*args, **kwargs)
 
     def SetInstallPrefix(*args, **kwargs):
-        """SetInstallPrefix(self, String prefix)"""
+        """
+        SetInstallPrefix(self, String prefix)
+
+        Set the program installation directory which is /usr/local by default.
+        This value will be used by other methods such as `GetDataDir` and
+        `GetPluginsDir` as the prefix for what they return. (This function
+        only has meaning on Unix systems.)
+        """
         return _misc_.StandardPaths_SetInstallPrefix(*args, **kwargs)
 
     def GetInstallPrefix(*args, **kwargs):
-        """GetInstallPrefix(self) -> String"""
+        """
+        GetInstallPrefix(self) -> String
+
+        Get the program installation prefix. The default is the prefix where
+        Python is installed. (This function only has meaning on Unix systems.)
+        """
         return _misc_.StandardPaths_GetInstallPrefix(*args, **kwargs)
 
 
