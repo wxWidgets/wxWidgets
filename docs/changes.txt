@@ -276,6 +276,7 @@ wxUniv/X11:
 
 wxWinCE:
 
+- added native SmartPhone wxTextCtrl implementation using spinners
 - added native SmartPhone wxChoice implementation using spinners
 - added automatized but customizable handling of native SmartPhone menus
 - fixed wxRadioBox and wxStaticBox

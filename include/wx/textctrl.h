@@ -399,6 +399,8 @@ protected:
     #include "wx/x11/textctrl.h"
 #elif defined(__WXUNIVERSAL__)
     #include "wx/univ/textctrl.h"
+#elif defined(__SMARTPHONE__)
+    #include "wx/msw/wince/textctrlce.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/textctrl.h"
 #elif defined(__WXMOTIF__)

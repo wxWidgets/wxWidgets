@@ -28,7 +28,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_TEXTCTRL
+#if wxUSE_TEXTCTRL && !defined(__SMARTPHONE__)
 
 #ifndef WX_PRECOMP
     #include "wx/textctrl.h"
@@ -2642,4 +2642,4 @@ bool wxRichEditModule::Load(int version)
 
 #endif // wxUSE_RICHEDIT
 
-#endif // wxUSE_TEXTCTRL
+#endif // wxUSE_TEXTCTRL && !__SMARTPHONE__
