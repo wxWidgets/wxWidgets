@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:       	taskbar.cpp
+// Name:        taskbar.cpp
 // Purpose:     wxTaskBarIcon OSX Implementation
 // Author:      Ryan Norton
 // Modified by:
@@ -29,8 +29,8 @@
 //TODO:
 IMPLEMENT_DYNAMIC_CLASS(wxTaskBarIcon, wxEvtHandler)
 
-pascal OSStatus wxDockEventHandler(	EventHandlerCallRef inHandlerCallRef,
-									EventRef inEvent, void* pData)
+pascal OSStatus wxDockEventHandler( EventHandlerCallRef inHandlerCallRef,
+                                    EventRef inEvent, void* pData)
 {
     wxTaskBarIcon*& pTB = (wxTaskBarIcon*&) pData;
 
@@ -40,17 +40,17 @@ pascal OSStatus wxDockEventHandler(	EventHandlerCallRef inHandlerCallRef,
     if (eventClass == kEventClassCommand && eventKind == kEventCommandProcess) 
     {
     //TODO:
-    //TODO:	This is a complete copy of 
+    //TODO: This is a complete copy of 
     //static pascal OSStatus wxMacAppCommandEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
     //FIND A WAY TO EXTERN THIS AND USE THAT HERE INSTEAD!!
     //TODO:
-	MenuRef hMenu = MAC_WXHMENU(pTB->GetCurrentMenu()->GetHMenu());
+    MenuRef hMenu = MAC_WXHMENU(pTB->GetCurrentMenu()->GetHMenu());
     OSStatus result = eventNotHandledErr ;
 
     HICommand command ;
     OSErr err;
     
-    err =    GetEventParameter(inEvent, kEventParamDirectObject, typeHICommand, 	
+    err =    GetEventParameter(inEvent, kEventParamDirectObject, typeHICommand,     
                             NULL, sizeof(HICommand), NULL, &command);
     wxASSERT(err == noErr);
                 
@@ -78,23 +78,23 @@ pascal OSStatus wxDockEventHandler(	EventHandlerCallRef inHandlerCallRef,
 
     if ( item )
     {
-                if (item->IsCheckable())
-                {
-                    item->Check( !item->IsChecked() ) ;
-                }
-
-                item->GetMenu()->SendEvent( id , item->IsCheckable() ? item->IsChecked() : -1 ) ;
-                result = noErr ;
+        if (item->IsCheckable())
+        {
+            item->Check( !item->IsChecked() ) ;
+        }
+        
+        item->GetMenu()->SendEvent( id , item->IsCheckable() ? item->IsChecked() : -1 ) ;
+        result = noErr ;
     }
     return result ;
     }
     
     wxASSERT(eventClass == kEventClassApplication && eventKind == kEventAppGetDockTileMenu);
-		    	
-	//process the right click event
-	wxTaskBarIconEvent evt(wxEVT_TASKBAR_RIGHT_UP,NULL);
-	pTB->ProcessEvent(evt);
-		
+                
+    //process the right click event
+    wxTaskBarIconEvent evt(wxEVT_TASKBAR_RIGHT_UP,NULL);
+    pTB->ProcessEvent(evt);
+        
     //create popup menu
     wxMenu* menu = pTB->DoCreatePopupMenu();
     
@@ -112,12 +112,12 @@ pascal OSStatus wxDockEventHandler(	EventHandlerCallRef inHandlerCallRef,
 
         //set the actual dock menu
         err = SetEventParameter((EventRef) inEvent, kEventParamMenuRef, 
-					typeMenuRef, sizeof(MenuRef), 
-					 &hMenu);
+                    typeMenuRef, sizeof(MenuRef), 
+                     &hMenu);
         wxASSERT(err == 0);
     }
 
-	return err;
+    return err;
 }
 
 DEFINE_ONE_SHOT_HANDLER_GETTER( wxDockEventHandler );
@@ -126,18 +126,18 @@ wxTaskBarIcon::wxTaskBarIcon(const wxTaskBarIconType& nType)
     : m_nType(nType), m_pEventHandlerRef(NULL), m_pMenu(NULL), m_iconAdded(false)
 {
     //Register the events that will return the dock menu
-	EventTypeSpec tbEventList[] = { { kEventClassCommand, kEventProcessCommand },
+    EventTypeSpec tbEventList[] = { { kEventClassCommand, kEventProcessCommand },
                                     { kEventClassApplication, kEventAppGetDockTileMenu } };
-	
+    
 #ifdef __WXDEBUG__
-	OSStatus err =
+    OSStatus err =
 #endif
-      InstallApplicationEventHandler(
+    InstallApplicationEventHandler(
             GetwxDockEventHandlerUPP(),
             GetEventTypeCount(tbEventList), tbEventList, 
-			this, (&(EventHandlerRef&)m_pEventHandlerRef));
-			
-	wxASSERT(err == noErr);
+            this, (&(EventHandlerRef&)m_pEventHandlerRef));
+            
+    wxASSERT(err == noErr);
 }
 
 wxTaskBarIcon::~wxTaskBarIcon()
@@ -166,38 +166,51 @@ wxMenu* wxTaskBarIcon::DoCreatePopupMenu()
 // Operations:
 bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
 {
-    //TODO: (IT WORKS!)  Make work without mask - mayby by using a wxDC?
+    wxMask* mask = icon.GetMask();
+    if (!mask)
+    {
+        // Make a mask with no transparent pixels
+        wxBitmap   bmp(icon.GetWidth(), icon.GetHeight());
+        wxMemoryDC dc;
+        dc.SelectObject(bmp);
+        dc.SetBackground(*wxBLACK_BRUSH);
+        dc.Clear();
+        dc.SelectObject(wxNullBitmap);
+        mask = new wxMask(bmp, *wxWHITE);
+    } 
+        
+    CGImageRef pImage;
     
-    wxASSERT(icon.GetMask() != NULL);
+    //create the icon from the bitmap and mask bitmap contained within
+    OSStatus err = CreateCGImageFromPixMaps(
+        GetGWorldPixMap(MAC_WXHBITMAP(icon.GetHBITMAP())),
+        GetGWorldPixMap(MAC_WXHBITMAP(mask->GetMaskBitmap())),
+        &pImage
+        );
+        
+    wxASSERT(err == 0);
     
-	CGImageRef pImage;
-	//create the icon from the bitmap and mask bitmap contained within
-	OSStatus err = CreateCGImageFromPixMaps(
-		GetGWorldPixMap(MAC_WXHBITMAP(icon.GetHBITMAP())),
-		GetGWorldPixMap(MAC_WXHBITMAP(icon.GetMask()->GetMaskBitmap())),
-		&pImage
-		);
-		
-	wxASSERT(err == 0);
-	
-	err = SetApplicationDockTileImage(pImage);
-		
-	wxASSERT(err == 0);
+    err = SetApplicationDockTileImage(pImage);
+        
+    wxASSERT(err == 0);
     
     if (pImage != NULL)
         CGImageRelease(pImage);
 
-	return m_iconAdded = err == noErr;
+    if (!icon.GetMask())
+        delete mask;
+    
+    return m_iconAdded = err == noErr;
 }
-	
+    
 bool wxTaskBarIcon::RemoveIcon()
 {
-	OSStatus err = RestoreApplicationDockTileImage();
-	wxASSERT(err == 0);
+    OSStatus err = RestoreApplicationDockTileImage();
+    wxASSERT(err == 0);
 
-	return !(m_iconAdded = !(err == noErr));
+    return !(m_iconAdded = !(err == noErr));
 }
-	
+    
 bool wxTaskBarIcon::PopupMenu(wxMenu *menu)
 {
     if (m_pMenu)
