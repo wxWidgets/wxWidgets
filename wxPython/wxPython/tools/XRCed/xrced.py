@@ -8,8 +8,7 @@ from wxPython.wx import *
 from wxPython.xrc import *
 from wxPython.html import wxHtmlWindow
 from xml.dom import minidom
-import os
-import getopt
+import os, sys, getopt, traceback
 
 # Icons
 import images
@@ -27,7 +26,7 @@ else:
     modernFont = wxFont(10, wxMODERN, wxNORMAL, wxNORMAL)
 
 progname = 'XRCed'
-version = '0.0.7-3'
+version = '0.0.7-5'
 
 # Local modules
 from xxx import *
@@ -294,7 +293,7 @@ class PropPage(ParamPage):
                             (control, 0, wxALIGN_CENTER_VERTICAL) ])
             self.controlName = control
         for param in xxx.allParams:
-            present = param in xxx.params
+            present = xxx.params.has_key(param)
             if param in xxx.required:
                 label = wxStaticText(self, paramIDs[param], param + ':',
                                      size = (100,-1), name = param)
@@ -354,7 +353,7 @@ class StylePage(ParamPage):
         topSizer = wxStaticBoxSizer(box, wxVERTICAL)
         sizer = wxFlexGridSizer(len(xxx.styles), 2, 1, 1)
         for param in xxx.styles:
-            present = param in xxx.params.keys()
+            present = xxx.params.has_key(param)
             check = wxCheckBox(self, paramIDs[param],
                                param + ':', size = (100,-1), name = param)
             check.SetValue(present)
@@ -372,7 +371,7 @@ class StylePage(ParamPage):
     def SetValues(self, xxx):
         self.xxx = xxx
         for param in xxx.styles:
-            present = param in xxx.params.keys()
+            present = xxx.params.has_key(param)
             check = self.checks[param]
             check.SetValue(present)
             w = self.controls[param]
@@ -388,6 +387,8 @@ class StylePage(ParamPage):
 
 class HightLightBox:
     def __init__(self, pos, size):
+        if size.x == -1: size.x = 0
+        if size.y == -1: size.y = 0
         w = testWin.panel
         l1 = wxWindow(w, -1, pos, wxSize(size.x, 2))
         l1.SetBackgroundColour(wxRED)
@@ -400,12 +401,12 @@ class HightLightBox:
         self.lines = [l1, l2, l3, l4]
     # Move highlight to a new position
     def Replace(self, pos, size):
-        self.lines[0].SetDimensions(pos.x, pos.y, size.x, 2, wxSIZE_ALLOW_MINUS_ONE)
-        self.lines[1].SetDimensions(pos.x, pos.y, 2, size.y, wxSIZE_ALLOW_MINUS_ONE)
-        self.lines[2].SetDimensions(pos.x + size.x - 2, pos.y, 2, size.y,
-                                    wxSIZE_ALLOW_MINUS_ONE)
-        self.lines[3].SetDimensions(pos.x, pos.y + size.y - 2, size.x, 2,
-                                    wxSIZE_ALLOW_MINUS_ONE)
+        if size.x == -1: size.x = 0
+        if size.y == -1: size.y = 0
+        self.lines[0].SetDimensions(pos.x, pos.y, size.x, 2)
+        self.lines[1].SetDimensions(pos.x, pos.y, 2, size.y)
+        self.lines[2].SetDimensions(pos.x + size.x - 2, pos.y, 2, size.y)
+        self.lines[3].SetDimensions(pos.x, pos.y + size.y - 2, size.x, 2)
     # Remove it
     def Remove(self):
         map(wxWindow.Destroy, self.lines)
@@ -578,21 +579,16 @@ class XML_Tree(wxTreeCtrl):
         return parentPos + pos
     # Find window (or sizer) corresponding to a tree item.
     def FindNodeObject(self, item):
+        # If top-level, return testWin (or panel its panel)
         if item == testWin.item: return testWin.panel
         itemParent = self.GetItemParent(item)
-        # If top-level, return testWin (or panel if wxFrame)
         xxx = self.GetPyData(item).treeObject()
         parentWin = self.FindNodeObject(itemParent)
         # Top-level sizer? return window's sizer
         if xxx.isSizer and isinstance(parentWin, wxWindowPtr):
             return parentWin.GetSizer()
         # Otherwise get parent's object and it's child
-        n = 0                           # index of sibling
-        prev = self.GetPrevSibling(item)
-        while prev.IsOk():
-            prev = self.GetPrevSibling(prev)
-            n += 1
-        child = parentWin.GetChildren()[n]
+        child = parentWin.GetChildren()[self.ItemIndex(item)]
         # Return window or sizer for sizer items
         if child.GetClassName() == 'wxSizerItem':
             if child.IsWindow(): child = child.GetWindow()
@@ -615,7 +611,7 @@ class XML_Tree(wxTreeCtrl):
                 self.Apply(xxx, oldItem)
                 #if conf.autoRefresh:
                 if testWin:
-                    if testWin.highLight and not tree.IsHighlatable(oldItem):
+                    if testWin.highLight:
                         testWin.highLight.Remove()
                     self.needUpdate = true
                 status = 'Changes were applied'
@@ -642,12 +638,9 @@ class XML_Tree(wxTreeCtrl):
     # Highlight selected item
     def HighLight(self, item):
         self.pendingHighLight = None
-        if not testWin or self.GetPyData(testWin.item).className \
-            not in ['wxDialog', 'wxPanel', 'wxFrame']:
-            return
-        # Top-level does not have highlight
-        if item == testWin.item or item == tree.root:
-            if testWin.highLight: testWin.highLight.Remove()
+        # Can highlight only with some top-level windows
+        if not testWin or self.GetPyData(testWin.item).__class__ \
+            not in [xxxDialog, xxxPanel, xxxFrame]:
             return
         # If a control from another window is selected, remove highlight
         if not self.IsHighlatable(item):
@@ -673,14 +666,12 @@ class XML_Tree(wxTreeCtrl):
                                      'wxMenuBar', 'wxToolBar']:
             wxLogMessage('No view for this element (yet)')
             return
-        if not treeObj.name:
-            wxLogError("Can't display a noname element!")
-            return
         # Show item in bold
-        if testWin:
+        if testWin:     # Reset old
             self.SetItemBold(testWin.item, false)
-        self.SetItemBold(item)
         self.CreateTestWin(item)
+        # Maybe an error occured, so we need to test
+        if testWin: self.SetItemBold(testWin.item)
     # Double-click on Linux
     def OnItemActivated(self, evt):
         if evt.GetItem() != self.root:
@@ -731,6 +722,12 @@ class XML_Tree(wxTreeCtrl):
 
         # Remove temporarily from old parent
         elem = xxx.element
+        # Give temporary name if not exist
+        if not xxx.name:
+            name = 'noname'
+            elem.setAttribute('name', name)
+        else:
+            name = xxx.name
         parent = elem.parentNode
         next = elem.nextSibling
         parent.replaceChild(self.dummyNode, elem)
@@ -741,46 +738,57 @@ class XML_Tree(wxTreeCtrl):
         mainNode.removeChild(elem)
         dom.unlink()
         parent.replaceChild(elem, self.dummyNode)
+        if not xxx.name:
+            name = 'noname'
+            elem.removeAttribute('name')
         memFile.close()                 # write to wxMemoryFS
         res = wxXmlResource('')
         res.Load('memory:xxx.xrc')
-        if xxx.className == 'wxFrame':
-            # Create new frame
+        if xxx.__class__ == xxxFrame:
+            # Frame can't have many children,
+            # but it's first child possibly can...
+            child = tree.GetFirstChild(item, 0)[0]
+            if child.IsOk() and tree.GetPyData(child).__class__ == xxxPanel:
+                # Clean-up before recurcive call or error
+                wxMemoryFSHandler_RemoveFile('xxx.xrc')
+                wxEndBusyCursor()
+                self.CreateTestWin(child)
+                return
+            # This currently works under GTK, but not under MSW
             testWin = wxPreFrame()
-            res.LoadOnFrame(testWin, frame, xxx.name)
+            res.LoadOnFrame(testWin, frame, name)
             # Create status bar
             testWin.CreateStatusBar()
             testWin.panel = testWin
             testWin.SetPosition(pos)
             testWin.Show(true)
-        elif xxx.className == 'wxPanel':
+        elif xxx.__class__ == xxxPanel:
             # Create new frame
             if not testWin:
-                testWin = wxFrame(frame, -1, 'Panel: ' + xxx.name, pos=pos)
-            testWin.panel = res.LoadPanel(testWin, xxx.name)
+                testWin = wxFrame(frame, -1, 'Panel: ' + name, pos=pos)
+            testWin.panel = res.LoadPanel(testWin, name)
             testWin.SetClientSize(testWin.panel.GetSize())
             testWin.Show(true)
-        elif xxx.className == 'wxDialog':
-            # Create new frame
-            testWin = res.LoadDialog(None, xxx.name)
+        elif xxx.__class__ == xxxDialog:
+            testWin = res.LoadDialog(None, name)
             testWin.panel = testWin
             testWin.Layout()
             testWin.SetPosition(pos)
             testWin.Show(true)
-        elif xxx.className == 'wxMenuBar':
-            testWin = wxFrame(frame, -1, 'MenuBar: ' + xxx.name, pos=pos)
+        elif xxx.__class__ == xxxMenuBar:
+            testWin = wxFrame(frame, -1, 'MenuBar: ' + name, pos=pos)
             testWin.panel = None
             # Set status bar to display help
             testWin.CreateStatusBar()
-            testWin.menuBar = res.LoadMenuBar(xxx.name)
+            testWin.menuBar = res.LoadMenuBar(name)
             testWin.SetMenuBar(testWin.menuBar)
             testWin.Show(true)
-        elif xxx.className == 'wxToolBar':
-            testWin = wxFrame(frame, -1, 'ToolBar: ' + xxx.name, pos=pos)
+        elif xxx.__class__ == xxxToolBar:
+            testWin = wxFrame(frame, -1, 'ToolBar: ' + name, pos=pos)
             testWin.panel = None
             # Set status bar to display help
             testWin.CreateStatusBar()
-            testWin.toolBar = res.LoadToolBar(testWin, xxx.name)
+            testWin.toolBar = res.LoadToolBar(testWin, name)
             testWin.SetToolBar(testWin.toolBar)
             testWin.Show(true)
         wxMemoryFSHandler_RemoveFile('xxx.xrc')
@@ -801,13 +809,13 @@ class XML_Tree(wxTreeCtrl):
         testWin = None
 
     # Return item index in parent
-    def ItemIndex(self, parent, item):
-        i = 0
-        it, cookie = self.GetFirstChild(parent, 0)
-        while it != item:
-            i += 1
-            it, cookie = self.GetNextChild(parent, cookie)
-        return i
+    def ItemIndex(self, item):
+        n = 0                           # index of sibling
+        prev = self.GetPrevSibling(item)
+        while prev.IsOk():
+            prev = self.GetPrevSibling(prev)
+            n += 1
+        return n
 
     # True if next item should be inserted after current (vs. appended to it)
     def NeedInsert(self, item):
@@ -1028,6 +1036,9 @@ class Frame(wxFrame):
         menu.Append(wxID_PASTE, '&Paste\tCtrl-V', 'Paste from the clipboard')
         self.ID_DELETE = wxNewId()
         menu.Append(self.ID_DELETE, '&Delete\tCtrl-D', 'Delete object')
+#        menu.AppendSeparator()
+        ID_SELECT = wxNewId()
+#        menu.Append(ID_SELECT, '&Select', 'Select object')
         menuBar.Append(menu, '&Edit')
 
         menu = wxMenu()
@@ -1095,6 +1106,7 @@ class Frame(wxFrame):
         EVT_MENU(self, wxID_COPY, self.OnCopy)
         EVT_MENU(self, wxID_PASTE, self.OnPaste)
         EVT_MENU(self, self.ID_DELETE, self.OnDelete)
+        EVT_MENU(self, ID_SELECT, self.OnSelect)
         # View
         EVT_MENU(self, self.ID_EMBED_PANEL, self.OnEmbedPanel)
         EVT_MENU(self, self.ID_TEST, self.OnTest)
@@ -1118,7 +1130,6 @@ class Frame(wxFrame):
         splitter = wxSplitterWindow(self, -1, style=wxSP_3DSASH)
         self.splitter = splitter
         splitter.SetMinimumPaneSize(100)
-
         # Create tree
         global tree
         tree = XML_Tree(splitter, -1)
@@ -1281,6 +1292,7 @@ class Frame(wxFrame):
         # Other events
         EVT_IDLE(self, self.OnIdle)
         EVT_CLOSE(self, self.OnCloseWindow)
+        EVT_LEFT_DOWN(self, self.OnLeftDown)
 
     def OnNew(self, evt):
         self.Clear()
@@ -1294,12 +1306,10 @@ class Frame(wxFrame):
             self.SetStatusText('Loading...')
             wxYield()
             wxBeginBusyCursor()
-            try:
-                self.Open(path)
+            if self.Open(path):
                 self.SetStatusText('Data loaded')
-            except:
+            else:
                 self.SetStatusText('Failed')
-                raise
             wxEndBusyCursor()
         dlg.Destroy()
 
@@ -1472,7 +1482,7 @@ class Frame(wxFrame):
             node = tree.GetPyData(nextItem).element
             parent.element.insertBefore(elem, node)
             # Inserting before is difficult, se we insert after or first child
-            index = tree.ItemIndex(parentLeaf, nextItem)
+            index = tree.ItemIndex(nextItem)
             newItem = tree.InsertItemBefore(parentLeaf, index,
                         xxx.treeName(), image=xxx.treeImage())
             tree.SetPyData(newItem, xxx)
@@ -1515,9 +1525,9 @@ class Frame(wxFrame):
                 testWin = None
             else:
                 # Remove highlight, update testWin
-                if not tree.IsHighlatable(selected):
-                    if testWin.highLight: testWin.highLight.Remove()
-                    tree.needUpdate = true
+                if testWin.highLight:
+                    testWin.highLight.Remove()
+                tree.needUpdate = true
         xnode = tree.RemoveLeaf(selected)
         # !!! cloneNode is broken, or something is wrong
 #        self.undo.append(xnode.cloneNode(true))
@@ -1527,6 +1537,17 @@ class Frame(wxFrame):
         panel.Clear()
         self.modified = true
         self.SetStatusText('Deleted')
+
+    def OnSelect(self, evt):
+        print >> sys.stderr, 'Xperimental function!'
+        wxYield()
+        self.SetCursor(wxCROSS_CURSOR)
+        self.CaptureMouse()
+
+    def OnLeftDown(self, evt):
+        pos = evt.GetPosition()
+        self.SetCursor(wxNullCursor)
+        self.ReleaseMouse()
 
     def OnEmbedPanel(self, evt):
         conf.embedPanel = evt.IsChecked()
@@ -1669,7 +1690,7 @@ class Frame(wxFrame):
             parent.element.insertBefore(elem, node)
             # !!! There is a different behavious on Win and GTK
             # !!! On Win InsertItem(parent, parent, ...) inserts at the end.
-            index = tree.ItemIndex(parentLeaf, nextItem)
+            index = tree.ItemIndex(nextItem)
             newItem = tree.InsertItemBefore(parentLeaf, index,
                         xxx.treeName(), image=xxx.treeImage())
 #                       data=wxTreeItemData(xxx)) # does not work
@@ -1771,6 +1792,9 @@ class Frame(wxFrame):
         self.maxIDs[xxxMenuBar] = self.maxIDs[xxxMenu] = self.maxIDs[xxxToolBar] = 0
 
     def Open(self, path):
+        if not os.path.exists(path):
+            wxLogError('File does not exists: %s' % path)
+            return false
         # Try to read the file
         try:
             open(path)
@@ -1781,8 +1805,12 @@ class Frame(wxFrame):
             self.dataFile = path
             self.SetTitle(progname + ': ' + os.path.basename(path))
         except:
+            # Nice exception printing
+            inf = sys.exc_info()
+            wxLogError(traceback.format_exception(inf[0], inf[1], None)[-1])
             wxLogError('Error reading file: %s' % path)
-            raise
+            return false
+        return true
 
     def Indent(self, node, indent = 0):
         # Copy child list because it will change soon
@@ -1804,7 +1832,8 @@ class Frame(wxFrame):
     def Save(self, path):
         try:
             # Apply changes
-            self.OnRefresh(wxCommandEvent())
+            if tree.selection and panel.IsModified():
+                self.OnRefresh(wxCommandEvent())
             f = open(path, 'w')
             # Make temporary copy
             # !!! We can't clone dom node, it works only once

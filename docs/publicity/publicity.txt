@@ -32,7 +32,7 @@ comp.windows.x.motif
 News and links sites:
 -----------------------
 
-slashdot.org, freshmeat.net
+slashdot.org, freshmeat.net, http://lwn.net/
 
 Many of these links will be out of date now:
 

@@ -21,10 +21,11 @@
     #pragma implementation "reparent.h"
 #endif
 
-#include "wx/x11/reparent.h"
+#include "wx/setup.h"
 
 #if !wxUSE_NANOX
 
+#include "wx/x11/reparent.h"
 #include "wx/evtloop.h"
 #include "wx/log.h"
 #include "wx/app.h"

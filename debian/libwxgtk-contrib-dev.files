@@ -1,12 +1,12 @@
 usr/include/wx/
-usr/lib/libcanvas.so
-usr/lib/libfl.so
-usr/lib/libgizmos.so
-usr/lib/libmmedia.so
-usr/lib/libogl.so
-usr/lib/libstc.so
-usr/lib/libwx_dcsvg.so
-usr/lib/libwx_net.so
-usr/lib/libwx_plot.so
-usr/lib/libwxxrc.so
+usr/lib/libwx_gtk_canvas-*.so
+usr/lib/libwx_gtk_dcsvg-*.so
+usr/lib/libwx_gtk_fl-*.so
+usr/lib/libwx_gtk_gizmos-*.so
+usr/lib/libwx_gtk_mmedia-*.so
+usr/lib/libwx_gtk_net-*.so
+usr/lib/libwx_gtk_ogl-*.so
+usr/lib/libwx_gtk_plot-*.so
+usr/lib/libwx_gtk_stc-*.so
+usr/lib/libwx_gtk_xrc-*.so
 

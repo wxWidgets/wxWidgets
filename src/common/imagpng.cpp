@@ -188,6 +188,10 @@ bool wxPNGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
     if (color_type == PNG_COLOR_TYPE_PALETTE)
         png_set_expand( png_ptr );
 
+    // Fix for Bug [ 439207 ] Monochrome PNG images come up black
+    if (bit_depth < 8)
+        png_set_expand( png_ptr );
+
     png_set_strip_16( png_ptr );
     png_set_packing( png_ptr );
     if (png_get_valid( png_ptr, info_ptr, PNG_INFO_tRNS))

@@ -879,6 +879,8 @@ private:
 
     DECLARE_DYNAMIC_CLASS(wxListMainWindow)
     DECLARE_EVENT_TABLE()
+
+    friend class wxGenericListCtrl;
 };
 
 // ============================================================================
@@ -1811,6 +1813,11 @@ wxListHeaderWindow::~wxListHeaderWindow()
     delete m_resizeCursor;
 }
 
+#ifdef __WXUNIVERSAL__
+#include "wx/univ/renderer.h"
+#include "wx/univ/theme.h"
+#endif
+
 void wxListHeaderWindow::DoDrawRect( wxDC *dc, int x, int y, int w, int h )
 {
 #if defined(__WXGTK__) && !defined(__WXUNIVERSAL__)
@@ -1824,7 +1831,11 @@ void wxListHeaderWindow::DoDrawRect( wxDC *dc, int x, int y, int w, int h )
                    (GdkRectangle*) NULL, m_wxwindow,
                    (char *)"button", // const_cast
                    x-1, y-1, w+2, h+2);
-#elif defined( __WXMAC__  )
+#elif defined(__WXUNIVERSAL__)
+    wxTheme *theme = wxTheme::Get();
+    wxRenderer *renderer = theme->GetRenderer();
+    renderer->DrawBorder( *dc, wxBORDER_RAISED, wxRect(x,y,w,h), 0 );
+#elif defined(__WXMAC__)
     const int m_corner = 1;
 
     dc->SetBrush( *wxTRANSPARENT_BRUSH );
@@ -4882,7 +4893,9 @@ void wxGenericListCtrl::SetTextColour(const wxColour& col)
 
 long wxGenericListCtrl::GetTopItem() const
 {
-    return 0;
+    size_t top;
+    m_mainWin->GetVisibleLinesRange(&top, NULL);
+    return (long)top;
 }
 
 long wxGenericListCtrl::GetNextItem( long item, int geom, int state ) const

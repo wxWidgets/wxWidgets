@@ -246,7 +246,13 @@ GridFrame::GridFrame()
 
     // this will create a grid and, by default, an associated grid
     // table for strings
-    grid->CreateGrid( 100, 100 );
+    grid->CreateGrid( 0, 0 );
+    grid->AppendRows(100);
+    grid->AppendCols(100);
+
+    int ir = grid->GetNumberRows();
+    grid->DeleteRows(0, ir);
+    grid->AppendRows(ir);
 
     grid->SetRowSize( 0, 60 );
     grid->SetCellValue( 0, 0, "Ctrl+Home\nwill go to\nthis cell" );

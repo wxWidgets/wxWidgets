@@ -1353,15 +1353,15 @@ void wxGridCellChoiceEditor::BeginEdit(int row, int col, wxGrid* grid)
 
     m_startValue = grid->GetTable()->GetValue(row, col);
 
-    Combo()->SetValue(m_startValue);
-    size_t count = m_choices.GetCount();
-    for (size_t i=0; i<count; i++)
+    if (m_allowOthers)
+        Combo()->SetValue(m_startValue);
+    else
     {
-        if (m_startValue == m_choices[i])
-        {
-            Combo()->SetSelection(i);
-            break;
-        }
+        // find the right position, or default to the first if not found
+        int pos = Combo()->FindString(m_startValue);
+        if (pos == -1)
+            pos = 0;
+        Combo()->SetSelection(pos);
     }
     Combo()->SetInsertionPointEnd();
     Combo()->SetFocus();
@@ -1377,7 +1377,10 @@ bool wxGridCellChoiceEditor::EndEdit(int row, int col,
         grid->GetTable()->SetValue(row, col, value);
 
     m_startValue = wxEmptyString;
-    Combo()->SetValue(m_startValue);
+    if (m_allowOthers)
+        Combo()->SetValue(m_startValue);
+    else
+        Combo()->SetSelection(0);
 
     return changed;
 }
@@ -1581,9 +1584,9 @@ void wxGridCellStringRenderer::Draw(wxGrid& grid,
                 for (int j=row; j<row+cell_rows; j++)
                 {
                     // check w/ anchor cell for multicell block
-                    grid.GetCellSize(row, i, &c_rows, &c_cols);
+                    grid.GetCellSize(j, i, &c_rows, &c_cols);
                     if (c_rows > 0) c_rows = 0;
-                    if (grid.GetTable()->IsEmptyCell(row+c_rows, i))
+                    if (!grid.GetTable()->IsEmptyCell(j+c_rows, i))
                     {
 		        is_empty = FALSE;
                        break;
@@ -1605,7 +1608,7 @@ void wxGridCellStringRenderer::Draw(wxGrid& grid,
         if (overflowCols > 0) // redraw overflow cells w/ proper hilight
         {
             hAlign = wxALIGN_LEFT; // if oveflowed then it's left aligned
-            wxRect clip = rect; 
+            wxRect clip = rect;
             clip.x += rectCell.width;
             // draw each overflow cell individually
             int col_end = col+cell_cols+overflowCols;
@@ -3909,7 +3912,7 @@ void wxGrid::InitRowHeights()
     m_rowBottoms.Alloc( m_numRows );
 
     int rowBottom = 0;
-    
+
     m_rowHeights.Add( m_defaultRowHeight, m_numRows );
 
     for ( int i = 0;  i < m_numRows;  i++ )
@@ -5898,7 +5901,7 @@ void wxGrid::Refresh(bool eraseb, const wxRect* rect)
         else
         {
             m_cornerLabelWin->Refresh(eraseb, NULL);
-            m_colLabelWin->Refresh(eraseb, NULL);     
+            m_colLabelWin->Refresh(eraseb, NULL);
             m_rowLabelWin->Refresh(eraseb, NULL);
             m_gridWin->Refresh(eraseb, NULL);
         }
@@ -6258,7 +6261,7 @@ void wxGrid::HighlightBlock( int topRow, int leftCol, int bottomRow, int rightCo
         wxRect rect;
         rect = BlockToDeviceRect( wxGridCellCoords ( topRow, leftCol ),
                                   wxGridCellCoords ( bottomRow, rightCol ) );
-        m_gridWin->Refresh( FALSE, &rect );     
+        m_gridWin->Refresh( FALSE, &rect );
     }
     // Now handle changing an existing selection area.
     else if ( m_selectingTopLeft != updateTopLeft ||

@@ -1606,7 +1606,13 @@ void wxTextCtrl::OnUpdateRedo(wxUpdateUIEvent& event)
     event.Enable( CanRedo() );
 }
 
-
+bool wxTextCtrl::MacSetupCursor( const wxPoint& pt )
+{
+    if ( m_macUsesTXN )
+        return true ;
+    else
+        return wxWindow::MacSetupCursor( pt ) ;
+}
 
 #endif
     // wxUSE_TEXTCTRL

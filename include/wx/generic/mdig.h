@@ -63,7 +63,7 @@ public:
 
 #if wxUSE_MENUS
     wxMenu* GetWindowMenu() const { return m_pWindowMenu; };
-    void SetWindowMenu(wxMenu* pMenu);    
+    void SetWindowMenu(wxMenu* pMenu);
 
     virtual void SetMenuBar(wxMenuBar *pMenuBar);
 #endif // wxUSE_MENUS
@@ -134,13 +134,13 @@ public:
                  long style = wxDEFAULT_FRAME_STYLE,
                  const wxString& name = wxFrameNameStr );
 
-#if wxUSE_MENUS      
+#if wxUSE_MENUS
     virtual void SetMenuBar( wxMenuBar *menu_bar );
     virtual wxMenuBar *GetMenuBar() const;
-#endif // wxUSE_MENUS  
+#endif // wxUSE_MENUS
 
     virtual void SetTitle(const wxString& title);
-    virtual wxString GetTitle();
+    virtual wxString GetTitle() const;
 
     virtual void Activate();
 
@@ -187,8 +187,8 @@ public:
     virtual bool ShowFullScreen(bool WXUNUSED(show), long WXUNUSED(style)) { return FALSE; }
     virtual bool IsFullScreen() const { return FALSE; }
 
-    virtual bool IsTopLevel() const { return FALSE; }    
-    
+    virtual bool IsTopLevel() const { return FALSE; }
+
     void OnMenuHighlight(wxMenuEvent& event);
     void OnActivate(wxActivateEvent& event);
 
@@ -206,7 +206,7 @@ protected:
 
 #if wxUSE_MENUS
     wxMenuBar        *m_pMenuBar;
-#endif // wxUSE_MENUS  
+#endif // wxUSE_MENUS
 
 protected:
     void Init();
@@ -214,7 +214,7 @@ protected:
     virtual void DoMoveWindow(int x, int y, int width, int height);
 
     // This function needs to be called when a size change is confirmed,
-    // we needed this function to prevent any body from the outside 
+    // we needed this function to prevent any body from the outside
     // changing the panel... it messes the UI layout when we would allow it.
     void ApplyMDIChildFrameRect();
 
@@ -256,7 +256,7 @@ private:
  */
 
 #ifndef wxUSE_GENERIC_MDI_AS_NATIVE
-#if defined(__WXUNIVERSAL__)
+#if defined(__WXUNIVERSAL__) || defined(__WXPM__)
 #define wxUSE_GENERIC_MDI_AS_NATIVE   1
 #else
 #define wxUSE_GENERIC_MDI_AS_NATIVE   0

@@ -537,10 +537,14 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
             const wxChar *p = cs.c_str() + 3;
             if ( *p == wxT('-') )
                 p++;
+                
+            // printf( "iso %s\n", (const char*) cs.ToAscii() );
 
             unsigned int value;
             if ( wxSscanf(p, wxT("8859-%u"), &value) == 1 )
             {
+                // printf( "value %d\n", (int)value );
+   
                 // make it 0 based and check that it is strictly positive in
                 // the process (no such thing as iso8859-0 encoding)
                 if ( (value-- > 0) &&

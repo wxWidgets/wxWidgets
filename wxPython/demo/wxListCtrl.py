@@ -223,7 +223,8 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
 
     def OnItemActivated(self, event):
         self.currentItem = event.m_itemIndex
-        self.log.WriteText("OnItemActivated: %s\n" % self.list.GetItemText(self.currentItem))
+        self.log.WriteText("OnItemActivated: %s\nTopItem: %s" %
+                           (self.list.GetItemText(self.currentItem), self.list.GetTopItem()))
 
     def OnItemDelete(self, event):
         self.log.WriteText("OnItemDelete\n")

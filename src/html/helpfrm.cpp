@@ -878,10 +878,15 @@ void wxHtmlHelpFrame::WriteCustomization(wxConfigBase *cfg, const wxString& path
 
     cfg->Write(wxT("hcNavigPanel"), m_Cfg.navig_on);
     cfg->Write(wxT("hcSashPos"), (long)m_Cfg.sashpos);
-    cfg->Write(wxT("hcX"), (long)m_Cfg.x);
-    cfg->Write(wxT("hcY"), (long)m_Cfg.y);
-    cfg->Write(wxT("hcW"), (long)m_Cfg.w);
-    cfg->Write(wxT("hcH"), (long)m_Cfg.h);
+    if ( !IsIconized() )
+    {
+        //  Don't write if iconized as this would make the window
+        //  disappear next time it is shown!
+        cfg->Write(wxT("hcX"), (long)m_Cfg.x);
+        cfg->Write(wxT("hcY"), (long)m_Cfg.y);
+        cfg->Write(wxT("hcW"), (long)m_Cfg.w);
+        cfg->Write(wxT("hcH"), (long)m_Cfg.h);
+    }
     cfg->Write(wxT("hcFixedFace"), m_FixedFace);
     cfg->Write(wxT("hcNormalFace"), m_NormalFace);
     cfg->Write(wxT("hcBaseFontSize"), (long)m_FontSize);

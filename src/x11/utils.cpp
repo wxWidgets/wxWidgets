@@ -34,7 +34,7 @@
 #include <sys/wait.h>
 #include <pwd.h>
 #include <errno.h>
-#include <netdb.h>
+// #include <netdb.h>
 #include <signal.h>
 
 #if (defined(__SUNCC__) || defined(__CLCC__))

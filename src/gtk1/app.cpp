@@ -44,13 +44,27 @@
 #endif
 
 #include <unistd.h>
+
+// TODO: use configure test to detect which of select()/poll() is available!
 #if defined(__DARWIN__)
-# warning "FIXME: select must be used instead of poll (GD)"
+    #warning "FIXME: select must be used instead of poll (GD)"
 #elif defined(__VMS)
-# include <poll.h>
+    #include <poll.h>
 #else
-# include <sys/poll.h>
-#endif
+    // bug in the OpenBSD headers: at least in 3.1 there is no extern "C" in
+    // neither poll.h nor sys/poll.h which results in link errors later
+    #ifdef __OPENBSD__
+        extern "C"
+        {
+    #endif
+
+    #include <sys/poll.h>
+
+    #ifdef __OPENBSD__
+        };
+    #endif
+#endif // platform
+
 #include "wx/gtk/win_gtk.h"
 
 #include <gtk/gtk.h>
@@ -545,7 +559,7 @@ bool wxApp::SendIdleEvents( wxWindow* win )
     event.SetEventObject(win);
 
     win->GetEventHandler()->ProcessEvent(event);
-    
+
     if (event.MoreRequested())
         needMore = TRUE;
 

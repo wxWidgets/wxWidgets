@@ -785,7 +785,7 @@ wxDialUpManagerImpl::NetConnection wxDialUpManagerImpl::CheckPing()
    cmd << m_PingPath << ' ';
 #if defined(__SOLARIS__) || defined (__SUNOS__)
    // nothing to add to ping command
-#elif defined(__LINUX__) || defined ( __FREEBSD__) || defined(__DARWIN__) || defined( __VMS )
+#elif defined(__LINUX__) || defined (__BSD__) || defined( __VMS )
    cmd << "-c 1 "; // only ping once
 #elif defined(__HPUX__)
    cmd << "64 1 "; // only ping once (need also specify the packet size)

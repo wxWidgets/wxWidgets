@@ -257,6 +257,7 @@
     #define  wxStrcoll   _tcscoll
     #define  wxStrcpy    _tcscpy
     #define  wxStrcspn   _tcscspn
+    #define  wxStrdup    _tcsdup
     #define  wxStrftime  _tcsftime
     #define  wxStricmp   _tcsicmp
     #define  wxStrnicmp  _tcsnicmp

@@ -149,6 +149,7 @@ class MyCanvas(wxScrolledWindow):
 
     def OnLeftButtonEvent(self, event):
         if event.LeftDown():
+            self.SetFocus()
             self.SetXY(event)
             self.curLine = []
             self.CaptureMouse()

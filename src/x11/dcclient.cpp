@@ -344,8 +344,19 @@ void wxWindowDC::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 )
     if (m_pen.GetStyle() != wxTRANSPARENT)
     {
         if (m_window)
-            XDrawLine( (Display*) m_display, (Window) m_window, 
-                (GC) m_penGC, XLOG2DEV(x1), YLOG2DEV(y1), XLOG2DEV(x2), YLOG2DEV(y2) );
+        {
+            // This hack is for the iPaq: XDrawLine draws
+            // nothing, whereas XDrawLines works...
+            wxPoint points[2];
+            points[0].x = x1;
+            points[0].y = y1;
+            points[1].x = x2;
+            points[1].y = y2;
+            DrawLines( 2, points, 0, 0 );
+            
+            // XDrawLine( (Display*) m_display, (Window) m_window, 
+            //    (GC) m_penGC, XLOG2DEV(x1), YLOG2DEV(y1), XLOG2DEV(x2), YLOG2DEV(y2) );
+        }
 
         CalcBoundingBox(x1, y1);
         CalcBoundingBox(x2, y2);
@@ -2047,7 +2058,7 @@ wxClientDC::wxClientDC( wxWindow *window )
     
     m_window = (WXWindow*) window->GetClientAreaWindow();
     
-    // Adjust the client area when the wxWindow is not using 2 X windows.
+    // Adjust the client area when the wxWindow is not using 2 X11 windows.
     if (m_window == (WXWindow*) window->GetMainWindow())
     {
         wxPoint ptOrigin = window->GetClientAreaOrigin();

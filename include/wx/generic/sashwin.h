@@ -144,6 +144,11 @@ public:
     // Adjusts the panes
     void OnSize(wxSizeEvent& event);
 
+#ifdef __WXMSW__
+    // Handle cursor correctly
+    void OnSetCursor(wxSetCursorEvent& event);
+#endif // wxMSW
+
     // Draws borders
     void DrawBorders(wxDC& dc);
 
@@ -189,6 +194,7 @@ private:
     wxColour    m_hilightColour;
     wxColour    m_faceColour;
     bool        m_mouseCaptured;
+    wxCursor*   m_currentCursor;
 
 DECLARE_EVENT_TABLE()
 };

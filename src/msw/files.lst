@@ -658,7 +658,6 @@ ALL_HEADERS = \
 		generic/imaglist.h \
 		generic/laywin.h \
 		generic/listctrl.h \
-		generic/mdig.cpp \
 		generic/msgdlgg.h \
 		generic/notebook.h \
 		generic/paletteg.h \

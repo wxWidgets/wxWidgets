@@ -251,28 +251,40 @@ wxArrayString XmlResApp::PrepareTempFiles()
 // find all files mentioned in structure, e.g. <bitmap>filename</bitmap>
 void XmlResApp::FindFilesInXML(wxXmlNode *node, wxArrayString& flist, const wxString& inputPath)
 {
-    wxXmlNode *n = node;
-    if (n == NULL) return;
-    n = n->GetChildren();
-    
+    // Is 'node' XML node element?
+    if (node == NULL) return;
+    if (node->GetType() != wxXML_ELEMENT_NODE) return;
+
+    // Does 'node' contain filename information at all?
+    bool containsFilename = (
+        // Any bitmaps:
+        (node->GetName() == _T("bitmap")) ||
+        // URLs in wxHtmlWindow:
+        (node->GetName() == _T("url")) ||
+        // wxBitmapButton:
+        (node->GetParent() != NULL && 
+         node->GetParent()->GetPropVal(_T("class"), _T("")) == _T("wxBitmapButton") &&
+           (node->GetName() == _T("focus") || 
+            node->GetName() == _T("disabled") ||
+            node->GetName() == _T("selected")))
+        );
+
+    wxXmlNode *n = node->GetChildren();
     while (n)
     {
-        if ((node->GetType() == wxXML_ELEMENT_NODE) &&
-            // parent is an element, i.e. has subnodes...
+        if (containsFilename &&
             (n->GetType() == wxXML_TEXT_NODE || 
-            n->GetType() == wxXML_CDATA_SECTION_NODE) &&
-            // ...it is textnode...
-            ((node/*not n!*/->GetName() == "bitmap") ||
-             (node/*not n!*/->GetName() == "url")))
-            // ...and known to contain filename
+             n->GetType() == wxXML_CDATA_SECTION_NODE))
         {
             wxString fullname;
-            if (wxIsAbsolutePath(n->GetContent()) || inputPath == "") fullname = n->GetContent();
-            else fullname = inputPath + "/" + n->GetContent();
+            if (wxIsAbsolutePath(n->GetContent()) || inputPath == "")
+                fullname = n->GetContent();
+            else
+                fullname = inputPath + "/" + n->GetContent();
 
             if (flagVerbose) 
                 wxPrintf("adding     " + fullname +  "...\n");
-            
+
             wxString filename = GetInternalFileName(n->GetContent(), flist);
             n->SetContent(filename);
 
@@ -282,11 +294,11 @@ void XmlResApp::FindFilesInXML(wxXmlNode *node, wxArrayString& flist, const wxSt
             wxFileOutputStream sout(parOutputPath + "/" + filename);
             sin.Read(sout); // copy the stream
         }
-        
+
         // subnodes:
         if (n->GetType() == wxXML_ELEMENT_NODE)
             FindFilesInXML(n, flist, inputPath);
-        
+
         n = n->GetNext();
     }
 }

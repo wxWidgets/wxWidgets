@@ -761,6 +761,7 @@ public:
     wxMenu *Replace(size_t pos, wxMenu *menu, const wxString& title);
     wxMenu *Remove(size_t pos);
     void EnableTop(size_t pos, bool enable);
+    bool IsEnabledTop(size_t pos);
     void SetLabelTop(size_t pos, const wxString& label);
     wxString GetLabelTop(size_t pos);
     int FindMenu(const wxString& title);

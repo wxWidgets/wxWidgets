@@ -453,7 +453,7 @@ static bool wxExecuteDDE(const wxString& ddeServer,
                          const wxString& ddeTopic,
                          const wxString& ddeCommand)
 {
-    bool ok;
+    bool ok = FALSE;
 
     wxDDEClient client;
     wxConnectionBase *conn = client.MakeConnection(_T(""),
@@ -470,17 +470,17 @@ static bool wxExecuteDDE(const wxString& ddeServer,
         // important ones - like IE and other MS stuff - use
         // XTYP_REQUEST!
         //
-        // so we try it first and then the other one if it
+        // so we try one first and then the other one if it
         // failed
         {
             wxLogNull noErrors;
-            ok = conn->Request(ddeCommand) != NULL;
+            ok = conn->Execute(ddeCommand);
         }
 
         if ( !ok )
         {
-            // now try execute - but show the errors
-            ok = conn->Execute(ddeCommand);
+            // now try request - but show the errors
+            ok = conn->Request(ddeCommand) != NULL;
         }
     }
 

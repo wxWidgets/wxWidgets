@@ -73,7 +73,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxCheckListBox, wxListBox)
 
 class wxCheckListBoxItem : public wxOwnerDrawn
 {
-friend class wxCheckListBox;
+friend class WXDLLEXPORT wxCheckListBox;
 public:
   // ctor
   wxCheckListBoxItem(wxCheckListBox *pParent, size_t nIndex);
@@ -329,7 +329,7 @@ bool wxCheckListBox::SetFont( const wxFont &font )
 // --------------------
 
 // create a check list box item
-wxOwnerDrawn *wxCheckListBox::CreateItem(size_t nIndex)
+wxOwnerDrawn *wxCheckListBox::CreateLboxItem(size_t nIndex)
 {
   wxCheckListBoxItem *pItem = new wxCheckListBoxItem(this, nIndex);
   return pItem;

@@ -1346,6 +1346,7 @@ void wxMimeTypesManagerImpl::ClearData()
     m_aExtensions.Clear ();
     m_aDescriptions.Clear ();
 
+    WX_CLEAR_ARRAY(m_aEntries);
     m_aEntries.Empty();
 
     m_mailcapStylesInited = 0;
@@ -1354,8 +1355,6 @@ void wxMimeTypesManagerImpl::ClearData()
 wxMimeTypesManagerImpl::~wxMimeTypesManagerImpl()
 {
     ClearData();
-
-    WX_CLEAR_ARRAY(m_aEntries);
 }
 
 
@@ -2367,11 +2366,11 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
                             // something is wrong, bail out
                             cont = FALSE;
 
-                            wxLogDebug(wxT("Mailcap file %s, line %d: "
+                            wxLogDebug(wxT("Mailcap file %s, line %lu: "
                                            "'\\' on the end of the last line "
                                            "ignored."),
                                        strFileName.c_str(),
-                                       nLine + 1);
+                                       (unsigned long)nLine + 1);
                         }
                         else
                         {
@@ -2433,11 +2432,11 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
                                 // this might be useful for the programmer
                                 wxLogDebug
                                 (
-                                    wxT("Mailcap file %s, line %d: "
+                                    wxT("Mailcap file %s, line %lu: "
                                         "unknown field '%s' for the "
                                         "MIME type '%s' ignored."),
                                     strFileName.c_str(),
-                                    nLine + 1,
+                                    (unsigned long)nLine + 1,
                                     curField.c_str(),
                                     data.type.c_str()
                                 );
@@ -2504,7 +2503,8 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
 
         if ( data.needsterminal )
         {
-            data.cmdOpen.Printf(_T("xterm -e sh -c '%s'"), data.cmdOpen.c_str());
+            data.cmdOpen = wxString::Format(_T("xterm -e sh -c '%s'"),
+                                            data.cmdOpen.c_str());
         }
 
         if ( !data.cmdOpen.empty() )

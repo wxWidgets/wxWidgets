@@ -17,6 +17,7 @@
 
 #include "wx/popupwin.h"
 #include "wx/app.h"
+#include "wx/settings.h"
 
 #include "wx/x11/private.h"
 #include "X11/Xatom.h"

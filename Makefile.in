@@ -1499,6 +1499,7 @@ debian-dist: debian-native-dist debian-msw-dirs MSW_DIST
 	mv $(DISTDIR) $(WXDIR)/../wxwindows$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER)-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER)
 
 debian-native-dist: @GUIDIST@ UNIV_DIST MANUAL_DIST PYTHON_DIST
+	cp $(SRCDIR)/files.lst $(DISTDIR)/src
 
 debian-msw-dirs:
 	mkdir $(DISTDIR)/include/wx/msw

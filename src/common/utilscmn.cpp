@@ -207,7 +207,8 @@ int strncasecmp(const char *str_1, const char *str_2, size_t maxchar)
 
 // This declaration is missing in SunOS!
 // (Yes, I know it is NOT ANSI-C but its in BSD libc)
-#if defined(__xlC) || defined(__AIX__) || defined(__GNUG__)
+#if defined(__xlC) || defined(__AIX__) 
+// || defined(__GNUG__)
 extern "C"
 {
   int strcasecmp (const char *, const char *);

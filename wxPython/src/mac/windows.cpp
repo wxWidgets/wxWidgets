@@ -9978,6 +9978,35 @@ static PyObject *_wrap_wxMenuBar_EnableTop(PyObject *self, PyObject *args, PyObj
     return _resultobj;
 }
 
+#define wxMenuBar_IsEnabledTop(_swigobj,_swigarg0)  (_swigobj->IsEnabledTop(_swigarg0))
+static PyObject *_wrap_wxMenuBar_IsEnabledTop(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxMenuBar * _arg0;
+    size_t  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","pos", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxMenuBar_IsEnabledTop",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMenuBar_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMenuBar_IsEnabledTop. Expected _wxMenuBar_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxMenuBar_IsEnabledTop(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxMenuBar_SetLabelTop(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetLabelTop(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxMenuBar_SetLabelTop(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -11377,6 +11406,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxMenuBar_FindMenu", (PyCFunction) _wrap_wxMenuBar_FindMenu, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuBar_GetLabelTop", (PyCFunction) _wrap_wxMenuBar_GetLabelTop, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuBar_SetLabelTop", (PyCFunction) _wrap_wxMenuBar_SetLabelTop, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMenuBar_IsEnabledTop", (PyCFunction) _wrap_wxMenuBar_IsEnabledTop, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuBar_EnableTop", (PyCFunction) _wrap_wxMenuBar_EnableTop, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuBar_Remove", (PyCFunction) _wrap_wxMenuBar_Remove, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuBar_Replace", (PyCFunction) _wrap_wxMenuBar_Replace, METH_VARARGS | METH_KEYWORDS },

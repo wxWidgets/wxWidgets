@@ -31,7 +31,7 @@ dnl ---------------------------------------------------------------------------
 AC_DEFUN([WX_PATH_FIND_INCLUDES],
 [
 ac_find_includes=
-for ac_dir in $1;
+for ac_dir in $1 /usr/include;
   do
     if test -f "$ac_dir/$2"; then
       ac_find_includes=$ac_dir
@@ -47,7 +47,7 @@ dnl ---------------------------------------------------------------------------
 AC_DEFUN([WX_PATH_FIND_LIBRARIES],
 [
 ac_find_libraries=
-for ac_dir in $1;
+for ac_dir in $1 /usr/lib;
   do
     for ac_extension in a so sl dylib; do
       if test -f "$ac_dir/lib$2.$ac_extension"; then
@@ -63,13 +63,17 @@ dnl Path to include, already defined
 dnl ---------------------------------------------------------------------------
 AC_DEFUN([WX_INCLUDE_PATH_EXIST],
 [
-  ac_path_to_include=$1
-  echo "$2" | grep "\-I$1" > /dev/null
-  result=$?
-  if test $result = 0; then
+  dnl never add -I/usr/include to the CPPFLAGS
+  if test "x$1" = "x/usr/include"; then
     ac_path_to_include=""
   else
-    ac_path_to_include=" -I$1"
+    echo "$2" | grep "\-I$1" > /dev/null
+    result=$?
+    if test $result = 0; then
+      ac_path_to_include=""
+    else
+      ac_path_to_include=" -I$1"
+    fi
   fi
 ])
 

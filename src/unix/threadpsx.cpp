@@ -495,8 +495,8 @@ wxSemaError wxSemaphoreInternal::Wait()
             return wxSEMA_MISC_ERROR;
 
         wxLogTrace(TRACE_SEMA,
-                   "Thread %ld finished waiting for semaphore, count = %u",
-                   wxThread::GetCurrentId(), m_count);
+                   "Thread %ld finished waiting for semaphore, count = %lu",
+                   wxThread::GetCurrentId(), (unsigned long)m_count);
     }
 
     m_count--;
@@ -553,9 +553,9 @@ wxSemaError wxSemaphoreInternal::Post()
     m_count++;
 
     wxLogTrace(TRACE_SEMA,
-               "Thread %ld about to signal semaphore, count = %u",
-               wxThread::GetCurrentId(), m_count);
-    
+               "Thread %ld about to signal semaphore, count = %lu",
+               wxThread::GetCurrentId(), (unsigned long)m_count);
+
     return m_cond.Signal() == wxCOND_NO_ERROR ? wxSEMA_NO_ERROR
                                               : wxSEMA_MISC_ERROR;
 }
@@ -620,7 +620,7 @@ public:
         };
 
         wxLogTrace(TRACE_THREADS, _T("Thread %ld: %s => %s."),
-                   GetId(), stateNames[m_state], stateNames[state]);
+                   (long)GetId(), stateNames[m_state], stateNames[state]);
 #endif // __WXDEBUG__
 
         m_state = state;
@@ -696,7 +696,7 @@ void *wxThreadInternal::PthreadStart(wxThread *thread)
 {
     wxThreadInternal *pthread = thread->m_internal;
 
-    wxLogTrace(TRACE_THREADS, _T("Thread %ld started."), pthread->GetId());
+    wxLogTrace(TRACE_THREADS, _T("Thread %ld started."), (long)pthread->GetId());
 
     // associate the thread pointer with the newly created thread so that
     // wxThread::This() will work
@@ -734,12 +734,12 @@ void *wxThreadInternal::PthreadStart(wxThread *thread)
     {
         // call the main entry
         wxLogTrace(TRACE_THREADS, _T("Thread %ld about to enter its Entry()."),
-                   pthread->GetId());
+                   (long)pthread->GetId());
 
         pthread->m_exitcode = thread->Entry();
 
         wxLogTrace(TRACE_THREADS, _T("Thread %ld Entry() returned %lu."),
-                   pthread->GetId(), (unsigned long)pthread->m_exitcode);
+                   (long)pthread->GetId(), (unsigned long)pthread->m_exitcode);
 
         {
             wxCriticalSectionLocker lock(thread->m_critsect);
@@ -849,7 +849,7 @@ void wxThreadInternal::Wait()
         wxMutexGuiLeave();
 
     wxLogTrace(TRACE_THREADS,
-               _T("Starting to wait for thread %ld to exit."), GetId());
+               _T("Starting to wait for thread %ld to exit."), (long)GetId());
 
     // to avoid memory leaks we should call pthread_join(), but it must only be
     // done once so use a critical section to serialize the code below
@@ -862,7 +862,7 @@ void wxThreadInternal::Wait()
             //       we're cancelled inside pthread_join(), things will almost
             //       certainly break - but if we disable the cancellation, we
             //       might deadlock
-            if ( pthread_join((pthread_t)GetId(), &m_exitcode) != 0 )
+            if ( pthread_join(GetId(), &m_exitcode) != 0 )
             {
                 // this is a serious problem, so use wxLogError and not
                 // wxLogDebug: it is possible to bring the system to its knees
@@ -888,7 +888,7 @@ void wxThreadInternal::Pause()
     wxCHECK_RET( m_state == STATE_PAUSED,
                  wxT("thread must first be paused with wxThread::Pause().") );
 
-    wxLogTrace(TRACE_THREADS, _T("Thread %ld goes to sleep."), GetId());
+    wxLogTrace(TRACE_THREADS, _T("Thread %ld goes to sleep."), (long)GetId());
 
     // wait until the semaphore is Post()ed from Resume()
     m_semSuspend.Wait();
@@ -903,7 +903,7 @@ void wxThreadInternal::Resume()
     // TestDestroy() since the last call to Pause() for example
     if ( IsReallyPaused() )
     {
-        wxLogTrace(TRACE_THREADS, _T("Waking up thread %ld"), GetId());
+        wxLogTrace(TRACE_THREADS, _T("Waking up thread %ld"), (long)GetId());
 
         // wake up Pause()
         m_semSuspend.Post();
@@ -914,7 +914,7 @@ void wxThreadInternal::Resume()
     else
     {
         wxLogTrace(TRACE_THREADS, _T("Thread %ld is not yet really paused"),
-                   GetId());
+                   (long)GetId());
     }
 
     SetState(STATE_RUNNING);
@@ -1598,8 +1598,9 @@ void wxThreadModule::OnExit()
 
         if ( nThreadsBeingDeleted > 0 )
         {
-            wxLogTrace(TRACE_THREADS, _T("Waiting for %u threads to disappear"),
-                       nThreadsBeingDeleted);
+            wxLogTrace(TRACE_THREADS,
+                       _T("Waiting for %lu threads to disappear"),
+                       (unsigned long)nThreadsBeingDeleted);
 
             // have to wait until all of them disappear
             gs_condAllDeleted->Wait();
@@ -1610,8 +1611,8 @@ void wxThreadModule::OnExit()
     size_t count = gs_allThreads.GetCount();
     if ( count != 0u )
     {
-        wxLogDebug(wxT("%u threads were not terminated by the application."),
-                   count);
+        wxLogDebug(wxT("%lu threads were not terminated by the application."),
+                   (unsigned long)count);
     }
 
     for ( size_t n = 0u; n < count; n++ )
@@ -1645,8 +1646,8 @@ static void ScheduleThreadForDeletion()
 
     gs_nThreadsBeingDeleted++;
 
-    wxLogTrace(TRACE_THREADS, _T("%u thread%s waiting to be deleted"),
-               gs_nThreadsBeingDeleted,
+    wxLogTrace(TRACE_THREADS, _T("%lu thread%s waiting to be deleted"),
+               (unsigned long)gs_nThreadsBeingDeleted,
                gs_nThreadsBeingDeleted == 1 ? "" : "s");
 }
 
@@ -1663,8 +1664,8 @@ static void DeleteThread(wxThread *This)
     wxCHECK_RET( gs_nThreadsBeingDeleted > 0,
                  _T("no threads scheduled for deletion, yet we delete one?") );
 
-    wxLogTrace(TRACE_THREADS, _T("%u scheduled for deletion threads left."),
-               gs_nThreadsBeingDeleted - 1);
+    wxLogTrace(TRACE_THREADS, _T("%lu scheduled for deletion threads left."),
+               (unsigned long)gs_nThreadsBeingDeleted - 1);
 
     if ( !--gs_nThreadsBeingDeleted )
     {

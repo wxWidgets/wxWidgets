@@ -63,7 +63,6 @@ public:
     // implementation only from now on
     // -------------------------------
 
-  	bool MacMenuSelect(wxEvtHandler* handler, long when , int macMenuId, int macMenuItemNum) ;
   	int	MacGetIndexFromId( int id ) ; 
   	int	MacGetIndexFromItem( wxMenuItem *pItem ) ; 
   	void MacEnableMenu( bool bDoEnable ) ;
@@ -176,7 +175,6 @@ public:
     void Refresh(bool eraseBackground = TRUE, const wxRect *rect = (const wxRect *) NULL);
 
   void MacInstallMenuBar() ;
-  void MacMenuSelect(wxEvtHandler* handler, long when , int macMenuId, int macMenuItemNum) ;
   static wxMenuBar* MacGetInstalledMenuBar() { return s_macInstalledMenuBar ; }
 
 protected:

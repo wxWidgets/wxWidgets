@@ -102,7 +102,7 @@ wxListBoxItem::wxListBoxItem(const wxString& str) : wxOwnerDrawn(str, FALSE)
     SetMarginWidth(0);
 }
 
-wxOwnerDrawn *wxListBox::CreateItem(size_t WXUNUSED(n))
+wxOwnerDrawn *wxListBox::CreateLboxItem(size_t WXUNUSED(n))
 {
     return new wxListBoxItem();
 }
@@ -282,7 +282,7 @@ int wxListBox::DoAppend(const wxString& item)
 
 #if wxUSE_OWNER_DRAWN
     if ( m_windowStyle & wxLB_OWNERDRAW ) {
-        wxOwnerDrawn *pNewItem = CreateItem(index); // dummy argument
+        wxOwnerDrawn *pNewItem = CreateLboxItem(index); // dummy argument
         pNewItem->SetName(item);
         m_aItems.Insert(pNewItem, index);
         ListBox_SetItemData(GetHwnd(), index, pNewItem);
@@ -333,7 +333,7 @@ void wxListBox::DoSetItems(const wxArrayString& choices, void** clientData)
 
         // then create new ones
         for ( size_t ui = 0; ui < (size_t)m_noItems; ui++ ) {
-            wxOwnerDrawn *pNewItem = CreateItem(ui);
+            wxOwnerDrawn *pNewItem = CreateLboxItem(ui);
             pNewItem->SetName(choices[ui]);
             m_aItems.Add(pNewItem);
             ListBox_SetItemData(GetHwnd(), ui, pNewItem);
@@ -529,7 +529,7 @@ wxListBox::DoInsertItems(const wxArrayString& items, int pos)
 #if wxUSE_OWNER_DRAWN
         if ( m_windowStyle & wxLB_OWNERDRAW )
         {
-            wxOwnerDrawn *pNewItem = CreateItem(idx);
+            wxOwnerDrawn *pNewItem = CreateLboxItem(idx);
             pNewItem->SetName(items[i]);
             pNewItem->SetFont(GetFont());
             m_aItems.Insert(pNewItem, idx);

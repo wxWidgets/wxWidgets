@@ -14,7 +14,12 @@ without consuming much memory. To use virtual list control you must use
 \helpref{OnGetItemText}{wxlistctrlongetitemtext} (and optionally 
 \helpref{OnGetItemImage}{wxlistctrlongetitemimage} and 
 \helpref{OnGetItemAttr}{wxlistctrlongetitemattr}) to return the information
-about the items when the control requests it.
+about the items when the control requests it. Virtual list control can be used
+as a normal one except that no operations which can take time proportional to
+the number of items in the control happen -- this is required to allow having a
+practically infinite number of items. For example, in a multiple selection
+virtual list control, the selections won't be sent when many items are selected
+at once because this could mean iterating over all the items.
 
 Using many of wxListCtrl features is shown in the
 \helpref{corresponding sample}{samplelistctrl}.
