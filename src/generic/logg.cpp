@@ -717,15 +717,10 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
     for ( size_t n = 0; n < count; n++ )
     {
         wxString msg = messages[n];
-        do
-        {
-            m_messages.Add(msg.BeforeFirst(_T('\n')));
-            msg = msg.AfterFirst(_T('\n'));
-
-            m_severity.Add(severity[n]);
-            m_times.Add(times[n]);
-        }
-        while ( !!msg );
+        msg.Replace("\n", " ");
+        m_messages.Add(msg);
+        m_severity.Add(severity[n]);
+        m_times.Add(times[n]);
     }
 
     m_showingDetails = false; // not initially
