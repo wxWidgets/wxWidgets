@@ -649,7 +649,14 @@
 
 #undef wxUSE_MS_HTML_HELP
 #define wxUSE_MS_HTML_HELP 0
+
 #endif // __GNUWIN32__
+
+// Cygwin b20 doesn't have wcslen
+#if defined(__GNUWIN32__) && !defined(__MINGW32__)
+#undef wxUSE_WCHAR_T
+#define wxUSE_WCHAR_T 0
+#endif
 
 // MFC duplicates these operators
 #if wxUSE_MFC
