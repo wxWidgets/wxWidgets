@@ -30,12 +30,12 @@
 // what to test?
 
 //#define TEST_ARRAYS
-#define TEST_DIR
+//#define TEST_DIR
 //#define TEST_LOG
 //#define TEST_MIME
 //#define TEST_STRINGS
 //#define TEST_THREADS
-//#define TEST_TIME
+#define TEST_TIME
 //#define TEST_LONGLONG
 
 // ============================================================================
@@ -262,6 +262,7 @@ struct Date
     int year;
     wxDateTime::wxDateTime_t hour, min, sec;
     double jdn;
+    wxDateTime::WeekDay wday;
     time_t gmticks, ticks;
 
     void Init(const wxDateTime::Tm& tm)
@@ -294,21 +295,21 @@ struct Date
 
 static const Date testDates[] =
 {
-    {  1, wxDateTime::Jan,  1970, 00, 00, 00, 2440587.5,         0,     -3600 },
-    { 21, wxDateTime::Jan,  2222, 00, 00, 00, 2532648.5,        -1,        -1 },
-    { 29, wxDateTime::May,  1976, 12, 00, 00, 2442928.0, 202219200, 202212000 },
-    { 29, wxDateTime::Feb,  1976, 00, 00, 00, 2442837.5, 194400000, 194396400 },
-    {  1, wxDateTime::Jan,  1900, 12, 00, 00, 2415021.0,        -1,        -1 },
-    {  1, wxDateTime::Jan,  1900, 00, 00, 00, 2415020.5,        -1,        -1 },
-    { 15, wxDateTime::Oct,  1582, 00, 00, 00, 2299160.5,        -1,        -1 },
-    {  4, wxDateTime::Oct,  1582, 00, 00, 00, 2299149.5,        -1,        -1 },
-    {  1, wxDateTime::Mar,     1, 00, 00, 00, 1721484.5,        -1,        -1 },
-    {  1, wxDateTime::Jan,     1, 00, 00, 00, 1721425.5,        -1,        -1 },
-    { 31, wxDateTime::Dec,     0, 00, 00, 00, 1721424.5,        -1,        -1 },
-    {  1, wxDateTime::Jan,     0, 00, 00, 00, 1721059.5,        -1,        -1 },
-    { 12, wxDateTime::Aug, -1234, 00, 00, 00, 1270573.5,        -1,        -1 },
-    { 12, wxDateTime::Aug, -4000, 00, 00, 00,  260313.5,        -1,        -1 },
-    { 24, wxDateTime::Nov, -4713, 00, 00, 00,      -0.5,        -1,        -1 },
+    {  1, wxDateTime::Jan,  1970, 00, 00, 00, 2440587.5, wxDateTime::Thu,         0,     -3600 },
+    { 21, wxDateTime::Jan,  2222, 00, 00, 00, 2532648.5, wxDateTime::Mon,        -1,        -1 },
+    { 29, wxDateTime::May,  1976, 12, 00, 00, 2442928.0, wxDateTime::Sat, 202219200, 202212000 },
+    { 29, wxDateTime::Feb,  1976, 00, 00, 00, 2442837.5, wxDateTime::Sun, 194400000, 194396400 },
+    {  1, wxDateTime::Jan,  1900, 12, 00, 00, 2415021.0, wxDateTime::Mon,        -1,        -1 },
+    {  1, wxDateTime::Jan,  1900, 00, 00, 00, 2415020.5, wxDateTime::Mon,        -1,        -1 },
+    { 15, wxDateTime::Oct,  1582, 00, 00, 00, 2299160.5, wxDateTime::Fri,        -1,        -1 },
+    {  4, wxDateTime::Oct,  1582, 00, 00, 00, 2299149.5, wxDateTime::Mon,        -1,        -1 },
+    {  1, wxDateTime::Mar,     1, 00, 00, 00, 1721484.5, wxDateTime::Thu,        -1,        -1 },
+    {  1, wxDateTime::Jan,     1, 00, 00, 00, 1721425.5, wxDateTime::Mon,        -1,        -1 },
+    { 31, wxDateTime::Dec,     0, 00, 00, 00, 1721424.5, wxDateTime::Tue,        -1,        -1 },
+    {  1, wxDateTime::Jan,     0, 00, 00, 00, 1721059.5, wxDateTime::Wed,        -1,        -1 },
+    { 12, wxDateTime::Aug, -1234, 00, 00, 00, 1270573.5, wxDateTime::Thu,        -1,        -1 },
+    { 12, wxDateTime::Aug, -4000, 00, 00, 00,  260313.5, wxDateTime::Wed,        -1,        -1 },
+    { 24, wxDateTime::Nov, -4713, 00, 00, 00,      -0.5, wxDateTime::Mon,        -1,        -1 },
 };
 
 // this test miscellaneous static wxDateTime functions
@@ -396,16 +397,18 @@ static void TestTimeRange()
 {
     puts("\n*** wxDateTime out-of-standard-range dates test ***");
 
+    static const char *fmt = "%d-%b-%Y %H:%M:%S";
+
     printf("Unix epoch:\t%s\n",
-           wxDateTime(2440587.5).Format().c_str());
+           wxDateTime(2440587.5).Format(fmt).c_str());
     printf("Feb 29, 0: \t%s\n",
-            wxDateTime(29, wxDateTime::Feb, 0).Format().c_str());
+            wxDateTime(29, wxDateTime::Feb, 0).Format(fmt).c_str());
     printf("JDN 0:     \t%s\n",
-            wxDateTime(0.0).Format().c_str());
+            wxDateTime(0.0).Format(fmt).c_str());
     printf("Jan 1, 1AD:\t%s\n",
-            wxDateTime(1, wxDateTime::Jan, 1).Format().c_str());
+            wxDateTime(1, wxDateTime::Jan, 1).Format(fmt).c_str());
     printf("May 29, 2099:\t%s\n",
-            wxDateTime(29, wxDateTime::May, 2099).Format().c_str());
+            wxDateTime(29, wxDateTime::May, 2099).Format(fmt).c_str());
 }
 
 static void TestTimeTicks()
@@ -468,6 +471,32 @@ static void TestTimeJDN()
         {
             printf(" (ERROR: should be %f, delta = %f)\n",
                    d.jdn, jdn - d.jdn);
+        }
+    }
+}
+
+// test week days computation
+static void TestTimeWDays()
+{
+    puts("\n*** wxDateTime weekday test ***");
+
+    for ( size_t n = 0; n < WXSIZEOF(testDates); n++ )
+    {
+        const Date& d = testDates[n];
+        wxDateTime dt(d.day, d.month, d.year, d.hour, d.min, d.sec);
+
+        wxDateTime::WeekDay wday = dt.GetWeekDay();
+        printf("%s is: %s",
+               d.Format().c_str(),
+               wxDateTime::GetWeekDayName(wday));
+        if ( wday == d.wday )
+        {
+            puts(" (ok)");
+        }
+        else
+        {
+            printf(" (ERROR: should be %s)\n",
+                   wxDateTime::GetWeekDayName(d.wday));
         }
     }
 }
@@ -911,15 +940,16 @@ int main(int argc, char **argv)
 #endif // TEST_MIME
 
 #ifdef TEST_TIME
-    TestTimeSet();
     if ( 0 )
     {
+    TestTimeSet();
     TestTimeStatic();
     TestTimeZones();
     TestTimeRange();
     TestTimeTicks();
-    }
     TestTimeJDN();
+    }
+    TestTimeWDays();
 #endif // TEST_TIME
 
     wxUninitialize();
