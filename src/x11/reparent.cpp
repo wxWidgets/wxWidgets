@@ -22,6 +22,9 @@
 #endif
 
 #include "wx/x11/reparent.h"
+
+#if !wxUSE_NANOX
+
 #include "wx/evtloop.h"
 #include "wx/log.h"
 #include "wx/app.h"
@@ -327,3 +330,4 @@ WXWindow wxReparenter::FindAClientWindow(WXWindow window, const wxString& name)
   } return (WXWindow) result;
 }
 
+#endif

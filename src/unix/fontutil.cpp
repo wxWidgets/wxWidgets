@@ -650,7 +650,7 @@ static wxNativeFont wxLoadQueryFont(int pointSize,
     // In fact pointSize is 10 * the normal point size so
     // divide by 10.
 
-    int pixelHeight = (int) ( (((float)pointSize) / 720.0) * 2.541 * (float) yPixelsPerCM * fudgeFactor) ;
+    int pixelHeight = (int) ( (((float)pointSize) / 720.0) * 2.541 * (float) yPixelsPerCM) ;
 
     // An alternative: assume that the screen is 72 dpi.
     //int pixelHeight = (int) (((float)pointSize / 720.0) * 72.0) ;

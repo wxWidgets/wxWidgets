@@ -586,6 +586,7 @@ void wxTopLevelWindowX11::DoSetClientSize(int width, int height)
 {
     wxWindowX11::DoSetClientSize(width, height);
 
+#if !wxUSE_NANOX
     // Set the top-level window size
     XSizeHints size_hints;
     wxSize oldSize = GetSize();
@@ -608,26 +609,6 @@ void wxTopLevelWindowX11::DoSetClientSize(int width, int height)
     wxSize newSize = GetSize();
     wxLogDebug("New size is %d, %d", (int) newSize.x, (int) newSize.y);
 #endif
-    
-#if 0
-    if (!GetMainWindow())
-        return;
-
-    XWindowChanges windowChanges;
-    int valueMask = 0;
-
-    if (width != -1)
-    {
-        windowChanges.width = width ;
-        valueMask |= CWWidth;
-    }
-    if (height != -1)
-    {
-        windowChanges.height = height ;
-        valueMask |= CWHeight;
-    }
-    XConfigureWindow(wxGlobalDisplay(), (Window) GetMainWindow(),
-        valueMask, & windowChanges);
 #endif
 }
 
@@ -650,7 +631,12 @@ void wxTopLevelWindowX11::DoSetSize(int x, int y, int width, int height, int siz
     // search for the parent that is child of ROOT, because the WM may
     // reparent twice and notify only the next parent (like FVWM)
     while (next_parent != root) {
-        Window *theChildren; unsigned int n;
+        Window *theChildren;
+#if wxUSE_NANOX
+        GR_COUNT n;
+#else
+        unsigned int n;
+#endif
         parent_window = next_parent;
         XQueryTree(display, parent_window, &root,
             &next_parent, &theChildren, &n);
@@ -685,7 +671,8 @@ void wxTopLevelWindowX11::DoSetSize(int x, int y, int width, int height, int siz
     }
 
     XConfigureWindow( display, parent_window, valueMask, &windowChanges );
-    
+
+#if !wxUSE_NANOX    
     XSizeHints size_hints;
     size_hints.flags = 0;
     if (x > -1 && y > -1)
@@ -704,62 +691,6 @@ void wxTopLevelWindowX11::DoSetSize(int x, int y, int width, int height, int siz
     // box of the minimal sample probably won't be resized right.
     XSync(wxGlobalDisplay(), False);
     XSync(wxGlobalDisplay(), False);
-
-#if 0
-    wxLogDebug("DoSetSize: Tried to set size to %d, %d", (int) size_hints.width, (int) size_hints.height);
-
-    XSync(wxGlobalDisplay(), False);
-    wxSize newSize = GetSize();
-    wxLogDebug("New size is %d, %d", (int) newSize.x, (int) newSize.y);
-#endif
-    
-#if 0
-    wxPoint pt = GetPosition();
-    // wxLogDebug( "After, pos: %d, %d", pt.x, pt.y );
-
-    XSync(wxGlobalDisplay(), False);
-    int w, h;
-    GetSize(& w, & h);
-    wxString msg;
-    msg.Printf("Before setting size: %d, %d", w, h);
-    wxLogDebug(msg);
-    if (!GetMainWindow())
-        return;
-
-    XWindowChanges windowChanges;
-    int valueMask = 0;
-
-    if (x != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-    {
-        int yy = 0;
-        AdjustForParentClientOrigin( x, yy, sizeFlags);
-        windowChanges.x = x;
-        valueMask |= CWX;
-    }
-    if (y != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-    {
-        int xx = 0;
-        AdjustForParentClientOrigin( xx, y, sizeFlags);
-        windowChanges.y = y;
-        valueMask |= CWY;
-    }
-    if (width != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-    {
-        windowChanges.width = width /* - m_borderSize*2 */;
-        valueMask |= CWWidth;
-    }
-    if (height != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-    {
-        windowChanges.height = height /* -m_borderSize*2*/;
-        valueMask |= CWHeight;
-    }
-
-    XConfigureWindow(wxGlobalDisplay(), (Window) GetMainWindow(),
-		     valueMask, & windowChanges);
-    XSync(wxGlobalDisplay(), False);
-    GetSize(& w, & h);
-    msg.Printf("Tried to set to %d, %d. After setting size: %d, %d", width, height, w, h);
-    wxLogDebug(msg);
 #endif
 }
 
@@ -778,42 +709,35 @@ void wxTopLevelWindowX11::DoGetPosition(int *x, int *y) const
     // search for the parent that is child of ROOT, because the WM may
     // reparent twice and notify only the next parent (like FVWM)
     while (next_parent != root) {
-        Window *theChildren; unsigned int n;
+        Window *theChildren;
+#if wxUSE_NANOX
+        GR_COUNT n;
+#else
+        unsigned int n;
+#endif
         parent_window = next_parent;
         XQueryTree(display, parent_window, &root,
             &next_parent, &theChildren, &n);
         XFree(theChildren); // not needed
     }
+#if 0
     int xx, yy; unsigned int dummy;
     XGetGeometry(display, parent_window, &root,
-        &xx, &yy, &dummy, &dummy, &dummy, &dummy);
+                 &xx, &yy, &dummy, &dummy, &dummy, &dummy);
     if (x) *x = xx;
     if (y) *y = yy;
-
-#if 0    
-    if (window)
+#else
+    XWindowAttributes attr;
+    Status status = XGetWindowAttributes((Display*) GetXDisplay(), parent_window, & attr);
+    if (status)
     {
-        int offsetX = 0;
-        int offsetY = 0;
-	
-#if !wxUSE_NANOX
-        // wxLogDebug("Translating...");
-        Window childWindow;
-        XTranslateCoordinates(wxGlobalDisplay(), window, XDefaultRootWindow(wxGlobalDisplay()),
-				  0, 0, & offsetX, & offsetY, & childWindow);
-
-        // wxLogDebug("Offset: %d, %d", offsetX, offsetY);
-#endif
-	
-        XWindowAttributes attr;
-        Status status = XGetWindowAttributes(wxGlobalDisplay(), window, & attr);
-        wxASSERT(status);
-        
-        if (status)
-        {
-            *x = attr.x + offsetX;
-            *y = attr.y + offsetY;
-        }
+        if (x) *x = attr.x;
+        if (y) *y = attr.y;
+    }
+    else
+    {
+        if (x) *x = 0;
+        if (y) *y = 0;
     }
 #endif
 }
