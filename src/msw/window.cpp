@@ -1201,12 +1201,12 @@ static inline void SendSetRedraw(HWND hwnd, bool on)
 
 void wxWindowMSW::Freeze()
 {
-    SendSetRedraw(FALSE);
+    SendSetRedraw(GetHwnd(), FALSE);
 }
 
 void wxWindowMSW::Thaw()
 {
-    SendSetRedraw(TRUE);
+    SendSetRedraw(GetHwnd(), TRUE);
 }
 
 void wxWindowMSW::Refresh(bool eraseBack, const wxRect *rect)
