@@ -246,7 +246,7 @@ $(WXDIR)\lib\$(WXLIBNAME).lib: $(DUMMYOBJ) $(OBJECTS)
 <<
 
 # Update the dynamic link library
-$(WXDIR)\lib\$(WXLIBNAME).dll: $(DUMMYOBJ) $(OBJECTS) $(WXDIR)\lib\$(WXLIBNAME).lib
+$(WXDIR)\lib\$(WXLIBNAME).dll: $(DUMMYOBJ) $(OBJECTS)
     $(link) @<<
     $(LINKFLAGS)
     -out:$(WXDIR)\lib\$(WXLIBNAME).dll
