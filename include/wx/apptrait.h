@@ -24,7 +24,11 @@ class WXDLLEXPORT wxMessageOutput;
 // wxAppTraits: this class defines various configurable aspects of wxApp
 // ----------------------------------------------------------------------------
 
+#if wxUSE_BASE
 class WXDLLIMPEXP_BASE wxAppTraitsBase
+#else
+class WXDLLIMPEXP_CORE wxAppTraitsBase
+#endif
 {
 public:
     // wxAppTraits is an ABC, but we also provide 2 standard implementations of
