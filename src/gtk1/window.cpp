@@ -2043,11 +2043,11 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEventFocus *gdk
         wxFocusEvent event( wxEVT_KILL_FOCUS, win->GetId() );
         event.SetEventObject( win );
 
-        if (win->GetEventHandler()->ProcessEvent( event ))
-        {
-            gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "focus_out_event" );
-            return TRUE;
-        }
+        // even if we did process the event in wx code, still let GTK itself
+        // process it too as otherwise bad things happen, especially in GTK2
+        // where the text control simply aborts the program if it doesn't get
+        // the matching focus out event
+        (void)win->GetEventHandler()->ProcessEvent( event );
     }
 
     return FALSE;
