@@ -40,7 +40,7 @@ DisableReadyPage = true
 DisableProgramGroupPage = no
 DisableAppendDir = true
 UsePreviousAppDir = no
-UsePreviousGroup = yes
+UsePreviousGroup = no
 
 UninstallFilesDir = {app}\wxPython
 AppPublisherURL = http://wxPython.org/
