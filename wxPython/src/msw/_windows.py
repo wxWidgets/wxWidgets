@@ -376,6 +376,10 @@ class TopLevelWindow(_core.Window):
         """RequestUserAttention(self, int flags=USER_ATTENTION_INFO)"""
         return _windows_.TopLevelWindow_RequestUserAttention(*args, **kwargs)
 
+    def IsActive(*args, **kwargs):
+        """IsActive(self) -> bool"""
+        return _windows_.TopLevelWindow_IsActive(*args, **kwargs)
+
 
 class TopLevelWindowPtr(TopLevelWindow):
     def __init__(self, this):
@@ -2051,18 +2055,18 @@ def PreHtmlListBox(*args, **kwargs):
 
 class TaskBarIcon(_core.EvtHandler):
     def __repr__(self):
-        return "<%s.%s; proxy of C++ wxTaskBarIcon instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+        return "<%s.%s; proxy of C++ wxPyTaskBarIcon instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """__init__(self) -> TaskBarIcon"""
         newobj = _windows_.new_TaskBarIcon(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
-    def __del__(self, destroy=_windows_.delete_TaskBarIcon):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
+        self._setCallbackInfo(self, TaskBarIcon, 0)
+
+    def _setCallbackInfo(*args, **kwargs):
+        """_setCallbackInfo(self, PyObject self, PyObject _class, int incref)"""
+        return _windows_.TaskBarIcon__setCallbackInfo(*args, **kwargs)
 
     def Destroy(*args, **kwargs):
         """
@@ -2105,7 +2109,7 @@ class TaskBarIconEvent(_core.Event):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTaskBarIconEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self, wxEventType evtType, TaskBarIcon tbIcon) -> TaskBarIconEvent"""
+        """__init__(self, wxEventType evtType, wxTaskBarIcon tbIcon) -> TaskBarIconEvent"""
         newobj = _windows_.new_TaskBarIconEvent(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
