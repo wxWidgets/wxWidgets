@@ -1,11 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/iosfwrap.h
 // Purpose:     includes the correct stream-related forward declarations
-// Author:      Jan van Dijk
+// Author:      Jan van Dijk <jan@etpmod.phys.tue.nl>
 // Modified by:
 // Created:     18.12.2002
 // RCS-ID:      $Id$
-// Copyright:   (c) 2002 Jan van Dijk <jan@etpmod.phys.tue.nl>
+// Copyright:   wxWindows team
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
