@@ -157,7 +157,9 @@ void yyerror(char *s)
  * to test
  */
 
-#if !defined(__SC__) && !defined(__GNUWIN32__)
+/* HH: Added test for __WX_SETUP_H__ for gnuwin builds
+ * using configure */ 
+#if !defined(__SC__) && !defined(__GNUWIN32__) 
 #ifdef USE_DEFINE
 #ifndef yywrap
 #define yywrap() 1
@@ -165,4 +167,6 @@ void yyerror(char *s)
 #else if !defined(__alpha___) && !defined(__ultrix)
 int yywrap() { return 1; }
 #endif
+#elif defined(__WX_SETUP_H__)
+int yywrap() { return 1; }
 #endif
