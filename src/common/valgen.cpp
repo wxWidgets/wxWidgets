@@ -44,13 +44,13 @@
   #include "wx/slider.h"
 #endif
 
-#if wxUSE_SPINCTRL && !defined(__WIN16__)
+ 
   #include "wx/spinctrl.h"
-#endif
-#if wxUSE_SPINBTN && !defined(__WIN16__)
+
+#if wxUSE_SPINBTN 
   #include "wx/spinbutt.h"
 #endif
-#if wxUSE_CHECKLISTBOX && !defined(__WIN16__)
+#if wxUSE_CHECKLISTBOX 
   #include "wx/checklst.h"
 #endif
 

@@ -331,7 +331,8 @@ MAKEARCHDIR:
     @if not exist $(ARCHINCDIR)\wx\setup.h copy $(MSWINCDIR)\setup.h $(ARCHINCDIR)\wx\setup.h
 
 MAKEWINSOCKLIB:
-    implib /system /v /suffix /Ic:\wx\dm\include\win32 $(WINSOCKLIB) $(WINDIR)\system32\winsock.dll
+      @if not exist $(WINSOCKLIB) implib  /s $(WINSOCKLIB) $(WINDIR)\system32\winsock.dll
+##    implib /system /v /suffix /Ic:\wx\dm\include\win32 $(WINSOCKLIB) $(WINDIR)\system32\winsock.dll
 ##    implib  /s $(WINSOCKLIB) $(WINDIR)\system32\winsock.dll
 ##@if not exist $(WINSOCKLIB)  
 

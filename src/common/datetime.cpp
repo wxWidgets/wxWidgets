@@ -3530,7 +3530,8 @@ const wxChar *wxDateTime::ParseTime(const wxChar *time)
         size_t len = timeString.length();
         if ( timeString.CmpNoCase(wxString(time, len)) == 0 )
         {
-            Set(stdTimes[n].hour, 0, 0);
+            // casts required by DigitalMars
+            Set(stdTimes[n].hour, wxDateTime_t(0), wxDateTime_t(0));
 
             return time + len;
         }

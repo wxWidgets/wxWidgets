@@ -614,7 +614,9 @@ void wxGenericDirCtrl::OnExpandItem(wxTreeEvent &event)
 
     // VS: this is needed because the event handler is called from wxTreeCtrl
     //     ctor when wxTR_HIDE_ROOT was specified
-    if (m_rootId == 0)
+
+    if (!m_rootId.IsOk())
+
         m_rootId = m_treeCtrl->GetRootItem();
 
     ExpandDir(parentId);
