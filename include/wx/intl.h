@@ -320,6 +320,38 @@ struct WXDLLEXPORT wxLanguageInfo
 };
 
 // ----------------------------------------------------------------------------
+// wxLocaleCategory: the category of locale settings
+// ----------------------------------------------------------------------------
+
+enum wxLocaleCategory
+{
+    // (any) numbers
+    wxLOCALE_CAT_NUMBER,
+
+    // date/time
+    wxLOCALE_CAT_DATE,
+
+    // monetary value
+    wxLOCALE_CAT_MONEY,
+
+    wxLOCALE_CAT_MAX
+};
+
+// ----------------------------------------------------------------------------
+// wxLocaleInfo: the items understood by wxLocale::GetInfo()
+// ----------------------------------------------------------------------------
+
+enum wxLocaleInfo
+{
+    // the thounsands separator
+    wxLOCALE_THOUSANDS_SEP,
+
+    // the character used as decimal point
+    wxLOCALE_DECIMAL_POINT,
+
+};
+
+// ----------------------------------------------------------------------------
 // wxLocale: encapsulates all language dependent settings, including current
 //           message catalogs, date, time and currency formats (TODO) &c
 // ----------------------------------------------------------------------------
@@ -377,6 +409,10 @@ public:
     // get the string describing the system encoding, return empty string if
     // couldn't be determined
     static wxString GetSystemEncodingName();
+
+    // get the values of the given locale-dependent datum: the current locale
+    // is used, the US default value is returned if everything else fails
+    static wxString GetInfo(wxLocaleInfo index, wxLocaleCategory cat);
 
     // return TRUE if the locale was set successfully
     bool IsOk() const { return m_pszOldLocale != NULL; }
