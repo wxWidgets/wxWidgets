@@ -84,6 +84,10 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 // this is for Win32 richedit controls only so far
 #define wxTE_AUTO_URL       0x1000
 
+// by default, the Windows text control doesn't show the selection when it
+// doesn't have focus - use this style to force it to always show it
+#define wxTE_NOHIDESEL      0x2000
+
 // ----------------------------------------------------------------------------
 // wxTextAttr: a structure containing the visual attributes of a text
 // ----------------------------------------------------------------------------

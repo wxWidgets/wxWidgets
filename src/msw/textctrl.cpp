@@ -200,21 +200,27 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
             msStyle |= WS_VSCROLL;
         m_windowStyle |= wxTE_PROCESS_ENTER;
     }
-    else
+    else // !multiline
+    {
+        // there is really no reason to not have this style for single line
+        // text controls
         msStyle |= ES_AUTOHSCROLL;
+    }
 
-    if (m_windowStyle & wxHSCROLL)
-        msStyle |= (WS_HSCROLL | ES_AUTOHSCROLL);
+    if ( m_windowStyle & wxHSCROLL )
+        msStyle |= WS_HSCROLL | ES_AUTOHSCROLL;
 
-    if (m_windowStyle & wxTE_READONLY)
+    if ( m_windowStyle & wxTE_READONLY )
         msStyle |= ES_READONLY;
 
-    if (m_windowStyle & wxTE_PASSWORD) // hidden input
+    if ( m_windowStyle & wxTE_PASSWORD )
         msStyle |= ES_PASSWORD;
 
-   if (m_windowStyle & wxTE_AUTO_SCROLL)
-        msStyle |=  ES_AUTOHSCROLL;
+    if ( m_windowStyle & wxTE_AUTO_SCROLL )
+        msStyle |= ES_AUTOHSCROLL;
 
+    if ( m_windowStyle & wxTE_NOHIDESEL )
+        msStyle |= ES_NOHIDESEL;
 
     // we always want the characters and the arrows
     m_lDlgCode = DLGC_WANTCHARS | DLGC_WANTARROWS;
