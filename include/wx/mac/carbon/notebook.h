@@ -119,7 +119,6 @@ public:
   void OnSelChange(wxNotebookEvent& event);
   void OnSetFocus(wxFocusEvent& event);
   void OnNavigationKey(wxNavigationKeyEvent& event);
-  void OnMouse(wxMouseEvent &event);  
 
     // implementation
     // --------------
@@ -136,7 +135,7 @@ public:
 protected:
   virtual wxSize DoGetBestSize() const ;
   virtual wxNotebookPage *DoRemovePage(size_t page) ;
-  virtual void MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown ) ;
+  virtual wxInt32 MacControlHit( WXEVENTHANDLERREF handler , WXEVENTREF event ) ;
   // common part of all ctors
   void Init();
 

@@ -86,7 +86,7 @@ public:
   virtual int FindString(const wxString& s) const;
   virtual wxString GetString(int n) const ;
   virtual void SetString( int , const wxString& s ) ;
-    void        MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown ) ;
+  virtual wxInt32 MacControlHit( WXEVENTHANDLERREF handler , WXEVENTREF event ) ;
 
 protected:
     virtual wxSize DoGetBestSize() const ;

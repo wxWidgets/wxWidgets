@@ -44,7 +44,7 @@ public:
     virtual void SetValue(bool value);
     virtual bool GetValue() const ;
 
-    virtual void MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown ) ;
+    virtual wxInt32 MacControlHit( WXEVENTHANDLERREF handler , WXEVENTREF event ) ;
 
     virtual void Command(wxCommandEvent& event);
 

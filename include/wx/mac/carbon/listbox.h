@@ -127,8 +127,6 @@ public:
 
     // Windows callbacks
 
-    virtual void    MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown ) ;
-       virtual bool MacCanFocus() const { return true ; }
     void OnChar(wxKeyEvent& event);
 
     void*           m_macList ;

@@ -57,8 +57,8 @@ public:
     bool refresh = TRUE);
 
   void Command(wxCommandEvent& event);
-        virtual void                         MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown ) ;
-
+    virtual void  MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown ) ;
+    virtual wxInt32 MacControlHit( WXEVENTHANDLERREF handler , WXEVENTREF mevent ) ;
 protected:
     int m_pageSize;
     int m_viewSize;

@@ -90,6 +90,7 @@ public:
      virtual void   DoMoveWindow(int x, int y, int w, int h);
  
   void Command(wxCommandEvent& event);
+    virtual wxInt32 MacControlHit( WXEVENTHANDLERREF handler , WXEVENTREF event ) ;
     void                     MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown ) ;
 
      wxStaticText*    m_macMinimumStatic ;

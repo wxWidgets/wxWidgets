@@ -41,7 +41,7 @@ public:
     void DoSet3StateValue(wxCheckBoxState val);
     virtual wxCheckBoxState DoGet3StateValue() const;
 
-    virtual void MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown );
+    virtual wxInt32 MacControlHit( WXEVENTHANDLERREF handler , WXEVENTREF event ) ;
     virtual void Command(wxCommandEvent& event);
 
     DECLARE_DYNAMIC_CLASS(wxCheckBox)

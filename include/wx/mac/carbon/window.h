@@ -185,6 +185,7 @@ public:
     virtual void        MacVisibilityChanged() ;
     virtual void        MacEnabledStateChanged() ;
     virtual void        MacHiliteChanged() ;
+    virtual wxInt32     MacControlHit( WXEVENTHANDLERREF handler , WXEVENTREF event ) ;
     
     bool                MacIsReallyShown() ;
     bool                MacIsReallyEnabled() ;
