@@ -2077,8 +2077,19 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
         }
         case WXK_SPACE:
         {
-            m_current->ReverseHilight();
-            RefreshLine( m_current );
+            if (m_mode & wxLC_SINGLE_SEL)
+            {
+                wxListEvent le( wxEVT_COMMAND_LIST_ITEM_ACTIVATED, GetParent()->GetId() );
+                le.SetEventObject( GetParent() );
+                le.m_itemIndex = GetIndexOfLine( m_current );
+                m_current->GetItem( 0, le.m_item );
+                GetParent()->GetEventHandler()->ProcessEvent( le );
+            }
+            else
+            {
+                m_current->ReverseHilight();
+                RefreshLine( m_current );
+            }
             break;
         }
         case WXK_INSERT:

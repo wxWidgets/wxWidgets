@@ -357,6 +357,10 @@ int wxNotebook::SetSelection( int page )
     int selOld = GetSelection();
 
     gtk_notebook_set_page( GTK_NOTEBOOK(m_widget), page );
+    
+    wxGtkNotebookPage* g_page = GetNotebookPage( page );
+    if (g_page->m_client) 
+        g_page->m_client->SetFocus();
 
     return selOld;
 }

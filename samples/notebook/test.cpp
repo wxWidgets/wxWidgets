@@ -62,9 +62,17 @@ void MyApp::InitTabView(wxNotebook* notebook, wxPanel* window)
   m_okButton = new wxButton(window, wxID_OK, "Close", wxPoint(-1, -1), wxSize(80, 25));
   m_cancelButton = new wxButton(window, ID_DELETE_PAGE, "Delete page", wxPoint(-1, -1), wxSize(80, 25));
   m_addPageButton = new wxButton(window, ID_ADD_PAGE, "Add page", wxPoint(-1, -1), wxSize(80, 25));
+  m_nextPageButton = new wxButton(window, ID_NEXT_PAGE, "Next page", wxPoint(-1, -1), wxSize(80, 25));
   m_okButton->SetDefault();
 
   wxLayoutConstraints* c = new wxLayoutConstraints;
+  c->right.SameAs(m_addPageButton, wxLeft, 4);
+  c->bottom.SameAs(window, wxBottom, 4);
+  c->height.AsIs();
+  c->width.AsIs();
+  m_nextPageButton->SetConstraints(c);
+
+  c = new wxLayoutConstraints;
   c->right.SameAs(window, wxRight, 4);
   c->bottom.SameAs(window, wxBottom, 4);
   c->height.AsIs();
@@ -189,6 +197,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON(wxID_OK, MyFrame::OnOK)
     EVT_BUTTON(ID_DELETE_PAGE, MyFrame::OnDeletePage)
     EVT_BUTTON(ID_ADD_PAGE, MyFrame::OnAddPage)
+    EVT_BUTTON(ID_NEXT_PAGE, MyFrame::OnNextPage)
     EVT_IDLE(MyFrame::OnIdle)
 END_EVENT_TABLE()
 
@@ -212,6 +221,11 @@ void MyFrame::OnAddPage(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnDeletePage(wxCommandEvent& WXUNUSED(event))
 {
     m_notebook->DeletePage( m_notebook->GetPageCount()-1 );
+}
+
+void MyFrame::OnNextPage(wxCommandEvent& WXUNUSED(event))
+{
+    m_notebook->AdvanceSelection();
 }
 
 void MyFrame::OnOK(wxCommandEvent& WXUNUSED(event) )
