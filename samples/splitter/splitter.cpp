@@ -186,6 +186,7 @@ MyFrame::MyFrame()
     m_right->Show(FALSE);
     m_splitter->Initialize(m_left);
 #else
+    // you can also try -100
     m_splitter->SplitVertically(m_left, m_right, 100);
 #endif
 
@@ -210,6 +211,8 @@ void MyFrame::SplitHorizontal(wxCommandEvent& WXUNUSED(event) )
     m_left->Show(TRUE);
     m_right->Show(TRUE);
     m_splitter->SplitHorizontally( m_left, m_right );
+
+    SetStatusText(_T("Splitter split horizontally"), 1);
 }
 
 void MyFrame::SplitVertical(wxCommandEvent& WXUNUSED(event) )
@@ -219,6 +222,8 @@ void MyFrame::SplitVertical(wxCommandEvent& WXUNUSED(event) )
     m_left->Show(TRUE);
     m_right->Show(TRUE);
     m_splitter->SplitVertically( m_left, m_right );
+
+    SetStatusText(_T("Splitter split vertically"), 1);
 }
 
 void MyFrame::Unsplit(wxCommandEvent& WXUNUSED(event) )

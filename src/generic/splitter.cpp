@@ -718,13 +718,17 @@ int wxSplitterWindow::AdjustSashPosition(int sashPos) const
 
 void wxSplitterWindow::DoSetSashPosition(int sashPos)
 {
-    m_requestedSashPosition = sashPos;
-    m_sashPosition = sashPos == 0 ? 0 : AdjustSashPosition(sashPos);
+    int newSashPosition = AdjustSashPosition(sashPos);
 
-    wxSplitterEvent event(wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED, this);
-    event.m_data.pos = m_sashPosition;
+    if ( newSashPosition != m_sashPosition )
+    {
+        m_sashPosition = newSashPosition;
 
-    (void)DoSendEvent(event);
+        wxSplitterEvent event(wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED, this);
+        event.m_data.pos = m_sashPosition;
+
+        (void)DoSendEvent(event);
+    }
 }
 
 // Position and size subwindows.
@@ -732,8 +736,21 @@ void wxSplitterWindow::DoSetSashPosition(int sashPos)
 // including the edges next to the sash.
 void wxSplitterWindow::SizeWindows()
 {
-    if ( m_requestedSashPosition != m_sashPosition )
-        DoSetSashPosition(m_requestedSashPosition);
+    // check if we have delayed setting the real sash position
+    if ( m_requestedSashPosition != INT_MAX )
+    {
+        int newSashPosition = ConvertSashPosition(m_requestedSashPosition);
+        if ( newSashPosition != m_sashPosition )
+        {
+            DoSetSashPosition(newSashPosition);
+        }
+
+        if ( newSashPosition == m_sashPosition )
+        {
+            // don't update it any more
+            m_requestedSashPosition = INT_MAX;
+        }
+    }
 
     int w, h;
     GetClientSize(&w, &h);
@@ -794,30 +811,37 @@ bool wxSplitterWindow::DoSplit(wxSplitMode mode,
     if ( IsSplit() )
         return FALSE;
 
-    int window_size = GetWindowSize();
-
     m_splitMode = mode;
     m_windowOne = window1;
     m_windowTwo = window2;
 
-    if ( sashPosition > 0 )
-    {
-        DoSetSashPosition(sashPosition);
-    }
-    else if ( sashPosition < 0 )
-    {
-        // It's negative so adding is subtracting
-        DoSetSashPosition(window_size + sashPosition);
-    }
-    else
-    {
-        // default
-        DoSetSashPosition(window_size/2);
-    }
+    // remember the sash position we want to set for later if we can't set it
+    // right now (e.g. because the window is too small)
+    m_requestedSashPosition = sashPosition;
+
+    DoSetSashPosition(ConvertSashPosition(sashPosition));
 
     SizeWindows();
 
     return TRUE;
+}
+
+int wxSplitterWindow::ConvertSashPosition(int sashPosition) const
+{
+    if ( sashPosition > 0 )
+    {
+        return sashPosition;
+    }
+    else if ( sashPosition < 0 )
+    {
+        // It's negative so adding is subtracting
+        return GetWindowSize() + sashPosition;
+    }
+    else // sashPosition == 0
+    {
+        // default, put it in the centre
+        return GetWindowSize() / 2;
+    }
 }
 
 // Remove the specified (or second) window from the view

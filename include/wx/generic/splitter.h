@@ -237,8 +237,13 @@ protected:
 
     // get either width or height depending on the split mode
     int GetWindowSize() const;
-    
-    // set m_sashPosition w/ safeguards
+
+    // convert the user specified sash position which may be > 0 (as is), < 0
+    // (specifying the size of the right pane) or 0 (use default) to the real
+    // position to be passed to DoSetSashPosition()
+    int ConvertSashPosition(int sashPos) const;
+
+    // set the real sash position, sashPos here must be positive
     void DoSetSashPosition(int sashPos);
 
     wxSplitMode m_splitMode;
