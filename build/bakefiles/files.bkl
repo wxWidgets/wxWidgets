@@ -1728,6 +1728,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/cocoa/icon.cpp
     src/cocoa/listbox.mm
     src/cocoa/main.cpp
+    src/cocoa/mbarman.mm
     src/cocoa/menu.mm
     src/cocoa/menuitem.mm
     src/cocoa/pen.mm
@@ -1803,6 +1804,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/cocoa/gdiobj.h
     wx/cocoa/icon.h
     wx/cocoa/listbox.h
+    wx/cocoa/mbarman.h
     wx/cocoa/menu.h
     wx/cocoa/menuitem.h
     wx/cocoa/pen.h
