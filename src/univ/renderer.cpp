@@ -376,8 +376,13 @@ void wxControlRenderer::DrawButtonBorder()
 
     m_renderer->DrawButtonBorder(m_dc, m_rect, flags, &m_rect);
 
-    m_renderer->DrawBackground(m_dc, m_window->GetBackgroundColour(),
-                               m_rect, flags);
+    wxColour colBg;
+    if ( !(flags & wxCONTROL_CURRENT) )
+    {
+        colBg = m_window->GetBackgroundColour();
+    }
+
+    m_renderer->DrawBackground(m_dc, colBg, m_rect, flags);
 }
 
 void wxControlRenderer::DrawBitmap(const wxBitmap& bitmap)

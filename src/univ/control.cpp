@@ -79,7 +79,7 @@ bool wxControl::Create(wxWindow *parent,
 
     m_handler = CreateInputHandler();
 
-    SetBackgroundColour(parent->GetBackgroundColour());
+    //SetBackgroundColour(parent->GetBackgroundColour());
 
     return TRUE;
 }

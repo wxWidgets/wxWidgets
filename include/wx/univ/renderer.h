@@ -289,7 +289,7 @@ public:
     virtual void AdjustSize(wxSize *size, const wxWindow *window)
         { m_renderer->AdjustSize(size, window); }
     virtual wxRect GetBorderDimensions(wxBorder border) const
-        { m_renderer->GetBorderDimensions(border); }
+        { return m_renderer->GetBorderDimensions(border); }
 
     virtual wxRect GetScrollbarRect(const wxScrollBar *scrollbar,
                                     wxScrollBar::Element elem,

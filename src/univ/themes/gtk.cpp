@@ -374,7 +374,15 @@ wxColour wxGTKColourScheme::Get(wxGTKColourScheme::StdColour col,
                                     return wxColour(0xd6d6d6);
                                 }
 
-        case CONTROL_TEXT:      return *wxBLACK;
+        case CONTROL_TEXT:      if ( flags & wxCONTROL_DISABLED )
+                                {
+                                    return wxColour(0x757575);
+                                }
+                                else
+                                {
+                                    return *wxBLACK;
+                                }
+
         case SCROLLBAR:         return wxColour(0xc3c3c3);
 
         case HIGHLIGHT:         return wxColour(0x9c0000);
@@ -733,12 +741,12 @@ void wxGTKRenderer::DrawLabel(wxDC& dc,
     if ( flags & wxCONTROL_DISABLED )
     {
         // make the text grey and draw a shade for it
-        dc.SetTextForeground(0xe0e0e0);
+        dc.SetTextForeground(*wxWHITE); // FIXME hardcoded colour
         wxRect rectShadow = rect;
         rectShadow.x++;
         rectShadow.y++;
         dc.DrawLabel(label, rectShadow, alignment, indexAccel);
-        dc.SetTextForeground(0x7f7f7f);
+        dc.SetTextForeground(m_scheme->Get(wxColourScheme::CONTROL_TEXT, flags));
     }
 
     dc.DrawLabel(label, image, rect, alignment, indexAccel, rectBounds);
@@ -808,10 +816,17 @@ void wxGTKRenderer::DrawBackground(wxDC& dc,
                                    const wxRect& rect,
                                    int flags)
 {
-    DoDrawBackground(dc,
-                     col.Ok() ? col
-                               : GetBackgroundColour(flags),
-                     rect);
+    wxColour colBg;
+    if ( !col.Ok() )
+    {
+        colBg = m_scheme->Get(wxColourScheme::CONTROL, flags);
+    }
+    else
+    {
+        colBg = col;
+    }
+
+    DoDrawBackground(dc, colBg, rect);
 }
 
 // ----------------------------------------------------------------------------
@@ -1142,8 +1157,17 @@ wxRect wxGTKRenderer::GetScrollbarRect(const wxScrollBar *scrollbar,
                                        wxScrollBar::Element elem,
                                        int thumbPos) const
 {
+    // as GTK scrollbars can't be disabled, it makes no sense to remove the
+    // thumb for a scrollbar with range 0 - instead, make it fill the entire
+    // scrollbar shaft
+    if ( (elem == wxScrollBar::Element_Thumb) && !scrollbar->GetRange() )
+    {
+        elem = wxScrollBar::Element_Bar_2;
+    }
+
     return StandardGetScrollbarRect(scrollbar, elem,
-                                    thumbPos, GetScrollbarArrowSize(scrollbar));
+                                    thumbPos,
+                                    GetScrollbarArrowSize(scrollbar));
 }
 
 wxCoord wxGTKRenderer::GetScrollbarSize(const wxScrollBar *scrollbar)
