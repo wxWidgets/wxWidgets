@@ -520,10 +520,7 @@ bool wxComboListBox::SetSelection(const wxString& value)
 
 void wxComboListBox::OnSelect(wxCommandEvent& event)
 {
-    // first update the combo and close the listbox
-    m_combo->OnSelect(event.GetString());
-
-    // next let the user code have the event
+    // first let the user code have the event
 
     // all fields are already filled by the listbox, just change the event
     // type and send it to the combo
@@ -532,6 +529,9 @@ void wxComboListBox::OnSelect(wxCommandEvent& event)
     event2.SetEventObject(m_combo);
     event2.SetId(m_combo->GetId());
     m_combo->ProcessEvent(event2);
+
+    // next update the combo and close the listbox
+    m_combo->OnSelect(event.GetString());
 }
 
 void wxComboListBox::OnShow()
