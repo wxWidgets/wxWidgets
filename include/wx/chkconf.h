@@ -1221,6 +1221,104 @@
 #   endif
 #endif /* wxUSE_WXHTML_HELP */
 
+#if !wxUSE_IMAGE
+/*
+   The default wxUSE_IMAGE setting is 1, so if it's set to 0 we assume the
+   user explicitly wants this and disable all other features that require
+   wxUSE_IMAGE.
+ */
+#   if wxUSE_DRAGIMAGE
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "wxUSE_DRAGIMAGE requires wxUSE_IMAGE"
+#        else
+#            undef wxUSE_DRAGIMAGE
+#            define wxUSE_DRAGIMAGE 0
+#        endif
+#   endif
+
+#   if wxUSE_LIBPNG
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "wxUSE_LIBPNG requires wxUSE_IMAGE"
+#        else
+#            undef wxUSE_LIBPNG
+#            define wxUSE_LIBPNG 0
+#        endif
+#   endif
+
+#   if wxUSE_LIBJPEG
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "wxUSE_LIBJPEG requires wxUSE_IMAGE"
+#        else
+#            undef wxUSE_LIBJPEG
+#            define wxUSE_LIBJPEG 0
+#        endif
+#   endif
+
+#   if wxUSE_LIBTIFF
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "wxUSE_LIBTIFF requires wxUSE_IMAGE"
+#        else
+#            undef wxUSE_LIBTIFF
+#            define wxUSE_LIBTIFF 0
+#        endif
+#   endif
+
+#   if wxUSE_GIF
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "wxUSE_GIF requires wxUSE_IMAGE"
+#        else
+#            undef wxUSE_GIF
+#            define wxUSE_GIF 0
+#        endif
+#   endif
+
+#   if wxUSE_PNM
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "wxUSE_PNM requires wxUSE_IMAGE"
+#        else
+#            undef wxUSE_PNM
+#            define wxUSE_PNM 0
+#        endif
+#   endif
+
+#   if wxUSE_PCX
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "wxUSE_PCX requires wxUSE_IMAGE"
+#        else
+#            undef wxUSE_PCX
+#            define wxUSE_PCX 0
+#        endif
+#   endif
+
+#   if wxUSE_IFF
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "wxUSE_IFF requires wxUSE_IMAGE"
+#        else
+#            undef wxUSE_IFF
+#            define wxUSE_IFF 0
+#        endif
+#   endif
+
+#   if wxUSE_TOOLBAR
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "wxUSE_TOOLBAR requires wxUSE_IMAGE"
+#        else
+#            undef wxUSE_TOOLBAR
+#            define wxUSE_TOOLBAR 0
+#        endif
+#   endif
+
+#   if wxUSE_XPM
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "wxUSE_XPM requires wxUSE_IMAGE"
+#        else
+#            undef wxUSE_XPM
+#            define wxUSE_XPM 0
+#        endif
+#   endif
+
+#endif /* !wxUSE_IMAGE */
+
 #if wxUSE_DOC_VIEW_ARCHITECTURE
 #   if !wxUSE_MENUS
 #        ifdef wxABORT_ON_CONFIG_ERROR
