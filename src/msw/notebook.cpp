@@ -185,8 +185,6 @@ bool wxNotebook::Create(wxWindow *parent,
   if ( parent != NULL )
     parent->AddChild(this);
 
-  SubclassWin(m_hWnd);
-
   return TRUE;
 }
 
