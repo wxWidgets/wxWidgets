@@ -2,7 +2,7 @@
 /** @file LineMarker.h
  ** Defines the look of a line marker in the margin .
  **/
-// Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
+// Copyright 1998-2003 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
 #ifndef LINEMARKER_H
@@ -15,11 +15,34 @@ public:
 	int markType;
 	ColourPair fore;
 	ColourPair back;
+	XPM *pxpm;
 	LineMarker() {
 		markType = SC_MARK_CIRCLE;
 		fore = ColourDesired(0,0,0);
 		back = ColourDesired(0xff,0xff,0xff);
+		pxpm = NULL;
 	}
+	LineMarker(const LineMarker &) {
+		// Defined to avoid pxpm being blindly copied, not as real copy constructor
+		markType = SC_MARK_CIRCLE;
+		fore = ColourDesired(0,0,0);
+		back = ColourDesired(0xff,0xff,0xff);
+		pxpm = NULL;
+	}
+	~LineMarker() {
+		delete pxpm;
+	}
+	LineMarker &operator=(const LineMarker &) {
+		// Defined to avoid pxpm being blindly copied, not as real assignment operator
+		markType = SC_MARK_CIRCLE;
+		fore = ColourDesired(0,0,0);
+		back = ColourDesired(0xff,0xff,0xff);
+		pxpm = NULL;
+		return *this;
+	}
+	void RefreshColourPalette(Palette &pal, bool want);
+	void SetXPM(const char *textForm);
+	void SetXPM(const char * const *linesForm);
 	void Draw(Surface *surface, PRectangle &rc, Font &fontForCharacter);
 };
 
