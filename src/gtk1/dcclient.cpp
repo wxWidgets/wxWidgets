@@ -1473,6 +1473,8 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     const wxCharBuffer data = wxConvUTF8.cWC2MB( text );
 #else
     const wxWCharBuffer wdata = wxConvLocal.cMB2WC( text );
+    if ( !wdata )
+        return;
     const wxCharBuffer data = wxConvUTF8.cWC2MB( wdata );
 #endif
     size_t datalen = strlen((const char*)data);
@@ -1714,7 +1716,11 @@ void wxWindowDC::DoGetTextExtent(const wxString &string,
 #else
     const wxWCharBuffer wdata = wxConvLocal.cMB2WC( string );
     if ( !wdata )
+    {
+        if (width) (*width) = 0;
+        if (height) (*height) = 0;
         return;
+    }
     const wxCharBuffer data = wxConvUTF8.cWC2MB( wdata );
     const char *dataUTF8 = (const char *)data;
 #endif
