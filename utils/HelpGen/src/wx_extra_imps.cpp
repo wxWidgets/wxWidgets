@@ -61,9 +61,4 @@ const char *wxLocale::GetString(const char *szOrigString,
     return szOrigString;
 }
 
-#else // !MSW
-const char *wxGetTranslation(const char *str)
-{
-    return str;
-}
 #endif // MSW
