@@ -759,7 +759,7 @@ bool wxRegKey::GetNextKey(wxString& strKeyName, long& lIndex) const
 }
 
 // ============================================================================
-// implementation of global functions
+// implementation of global private functions
 // ============================================================================
 bool KeyExists(HKEY hRootKey, const char *szKey)
 {
@@ -786,4 +786,75 @@ void RemoveTrailingSeparator(wxString& str)
 {
   if ( !str.IsEmpty() && str.Last() == REG_SEPARATOR )
     str.Truncate(str.Len() - 1);
+}
+
+// ============================================================================
+// global public functions
+// ============================================================================
+
+bool GetExtensionFromMimeType(wxString *pExt, const wxString& strMimeType)
+{
+  // @@@ VZ: I don't know of any official documentation which mentions this
+  //         location, but as a matter of fact IE uses it, so why not we?
+  static const char *szMimeDbase = "MIME\\Database\\Content Type\\";
+
+  wxString strKey = szMimeDbase;
+  strKey << strMimeType;
+
+  // suppress possible error messages
+  wxLogNull nolog;
+  wxRegKey key(wxRegKey::HKCR, strKey);
+  if ( key.IsOpened() ) {
+    if ( key.QueryValue("Extension", *pExt) )
+      return TRUE;
+  }
+
+  // no such MIME type or no extension for it
+  return FALSE;
+}
+
+bool GetMimeTypeFromExtension(wxString *pMimeType, const wxString& strExt)
+{
+  wxCHECK( !strExt.IsEmpty(), FALSE );
+
+  // add the leading point if necessary
+  wxString str;
+  if ( strExt[0] != '.' ) {
+    str = '.';
+  }
+  str << strExt;
+
+  // suppress possible error messages
+  wxLogNull nolog;
+  wxRegKey key(wxRegKey::HKCR, str);
+  if ( key.IsOpened() ) {
+    if ( key.QueryValue("Content Type", *pMimeType) )
+      return TRUE;
+  }
+
+  // no such extension or no content-type
+  return FALSE;
+}
+
+bool GetFileTypeFromExtension(wxString *pFileType, const wxString& strExt)
+{
+  wxCHECK( !strExt.IsEmpty(), FALSE );
+
+  // add the leading point if necessary
+  wxString str;
+  if ( strExt[0] != '.' ) {
+    str = '.';
+  }
+  str << strExt;
+
+  // suppress possible error messages
+  wxLogNull nolog;
+  wxRegKey key(wxRegKey::HKCR, str);
+  if ( key.IsOpened() ) {
+    if ( key.QueryValue("", *pFileType) )  // it's the default value of the key
+      return TRUE;
+  }
+
+  // no such extension or no value
+  return FALSE;
 }
