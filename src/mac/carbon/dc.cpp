@@ -781,8 +781,8 @@ void  wxDC::DoCrossHair( wxCoord x, wxCoord y )
 static double wxConvertWXangleToMACangle(double angle)
 {
     double newAngle = 90 - angle ;
-    if ( newAngle < 0 )
-        newAngle += 360 ;
+    while ( newAngle > 360 ) newAngle -= 360 ;
+    while ( newAngle < 0 ) newAngle += 360 ;
     return newAngle ;
 }
 
@@ -823,9 +823,8 @@ void  wxDC::DoDrawArc( wxCoord x1, wxCoord y1,
     }
     wxCoord alpha2 = wxCoord(radius2 - radius1);
     wxCoord alpha1 = wxCoord(wxConvertWXangleToMACangle(radius1));
-    if( (xx1 > xx2) || (yy1 > yy2) ) {
-        alpha2 *= -1;
-    }
+    while( alpha2 < 0 ) alpha2 += 360 ;
+    alpha2 = -alpha2 ;
     Rect r = { yyc - rad, xxc - rad, yyc + rad, xxc + rad };
     if(m_brush.GetStyle() != wxTRANSPARENT) {
         MacInstallBrush();
