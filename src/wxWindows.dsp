@@ -1891,6 +1891,10 @@ SOURCE=..\include\wx\apptrait.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\archive.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\arrstr.h
 # End Source File
 # Begin Source File

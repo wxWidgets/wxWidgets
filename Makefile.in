@@ -163,6 +163,7 @@ WXTIFF_OBJECTS =  \
 	wxtiff_tif_aux.o \
 	wxtiff_tif_close.o \
 	wxtiff_tif_codec.o \
+	wxtiff_tif_color.o \
 	wxtiff_tif_compress.o \
 	wxtiff_tif_dir.o \
 	wxtiff_tif_dirinfo.o \
@@ -8364,11 +8365,11 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1___dbgridlib___depname = \
 @COND_GCC_PCH_1@__dbgridlib_PCH_INC = -I.pch/wxprec_dbgridlib
 @COND_GCC_PCH_1@___pch_wxprec_dbgridlib_wx_wxprec_h_gch___depname \
 @COND_GCC_PCH_1@	= .pch/wxprec_dbgridlib/wx/wxprec.h.gch
-COND_MONOLITHIC_0_SHARED_1_USE_HTML_1___htmldll___depname = \
+COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_HTML_1___htmldll___depname = \
 	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
-@COND_MONOLITHIC_0_SHARED_1_USE_HTML_1@__htmldll___depname = $(COND_MONOLITHIC_0_SHARED_1_USE_HTML_1___htmldll___depname)
-@COND_MONOLITHIC_0_SHARED_1_USE_HTML_1@__install_htmldll___depname \
-@COND_MONOLITHIC_0_SHARED_1_USE_HTML_1@	= install_htmldll
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_HTML_1@__htmldll___depname = $(COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_HTML_1___htmldll___depname)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_HTML_1@__install_htmldll___depname \
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_HTML_1@	= install_htmldll
 COND_PLATFORM_MACOSX_1___htmldll___macinstnamecmd = -install_name \
 	$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
 @COND_PLATFORM_MACOSX_1@__htmldll___macinstnamecmd = $(COND_PLATFORM_MACOSX_1___htmldll___macinstnamecmd)
@@ -8410,11 +8411,11 @@ COND_USE_SOSYMLINKS_1___htmldll___so_symlinks_inst_cmd = rm -f \
 @COND_PLATFORM_MACOSX_1@__HTML_SRC_PLATFORM_OBJECTS_2 = htmldll_chm.o
 @COND_PLATFORM_UNIX_1@__HTML_SRC_PLATFORM_OBJECTS_2 = htmldll_chm.o
 @COND_TOOLKIT_MSW@__HTML_SRC_PLATFORM_OBJECTS_2 = htmldll_helpbest.o
-COND_MONOLITHIC_0_SHARED_0_USE_HTML_1___htmllib___depname = \
+COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_HTML_1___htmllib___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
-@COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@__htmllib___depname = $(COND_MONOLITHIC_0_SHARED_0_USE_HTML_1___htmllib___depname)
-@COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@__install_htmllib___depname \
-@COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@	= install_htmllib
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_HTML_1@__htmllib___depname = $(COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_HTML_1___htmllib___depname)
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_HTML_1@__install_htmllib___depname \
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_HTML_1@	= install_htmllib
 @COND_GCC_PCH_1@__htmllib_PCH_INC = -I.pch/wxprec_htmllib
 @COND_GCC_PCH_1@___pch_wxprec_htmllib_wx_wxprec_h_gch___depname \
 @COND_GCC_PCH_1@	= .pch/wxprec_htmllib/wx/wxprec.h.gch
@@ -8771,7 +8772,7 @@ clean: $(__clean_wxrc___depname)
 	rm -f lib/libwx_$(TOOLCHAIN_NAME).3.rsrc lib/libwx_$(TOOLCHAIN_NAME).3.r
 
 distclean: clean
-	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
+	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 @COND_WXUSE_REGEX_BUILTIN@$(LIBDIRNAME)/$(LIBPREFIX)wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT): $(WXREGEX_OBJECTS)
 @COND_WXUSE_REGEX_BUILTIN@	rm -f $@
@@ -9044,28 +9045,28 @@ distclean: clean
 @COND_GCC_PCH_1@.pch/wxprec_dbgridlib/wx/wxprec.h.gch: 
 @COND_GCC_PCH_1@	$(top_builddir)./bk-make-pch .pch/wxprec_dbgridlib/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(DBGRIDLIB_CXXFLAGS)
 
-@COND_MONOLITHIC_0_SHARED_1_USE_HTML_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(HTMLDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname) $(__coredll___depname) $(__basedll___depname)
-@COND_MONOLITHIC_0_SHARED_1_USE_HTML_1@	$(SHARED_LD_CXX) $@ $(HTMLDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__htmldll___macinstnamecmd) $(__htmldll___importlib) $(__htmldll___soname_flags) $(dll___macver)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(EXTRALIBS_FOR_GUI) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(LIBDIRNAME)/$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(EXTRALIBS_HTML)
-@COND_MONOLITHIC_0_SHARED_1_USE_HTML_1@	
-@COND_MONOLITHIC_0_SHARED_1_USE_HTML_1@	$(__htmldll___so_symlinks_cmd)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_HTML_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(HTMLDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname) $(__coredll___depname) $(__basedll___depname)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_HTML_1@	$(SHARED_LD_CXX) $@ $(HTMLDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__htmldll___macinstnamecmd) $(__htmldll___importlib) $(__htmldll___soname_flags) $(dll___macver)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(EXTRALIBS_FOR_GUI) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(LIBDIRNAME)/$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(EXTRALIBS_HTML)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_HTML_1@	
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_HTML_1@	$(__htmldll___so_symlinks_cmd)
 
-@COND_MONOLITHIC_0_SHARED_1_USE_HTML_1@install_htmldll: 
-@COND_MONOLITHIC_0_SHARED_1_USE_HTML_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
-@COND_MONOLITHIC_0_SHARED_1_USE_HTML_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(DESTDIR)$(libdir)
-@COND_MONOLITHIC_0_SHARED_1_USE_HTML_1@	$(INSTALL_PROGRAM) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) $(DESTDIR)$(libdir)
-@COND_MONOLITHIC_0_SHARED_1_USE_HTML_1@	(cd $(DESTDIR)$(libdir) ; $(__htmldll___so_symlinks_inst_cmd))
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_HTML_1@install_htmldll: 
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_HTML_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_HTML_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(DESTDIR)$(libdir)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_HTML_1@	$(INSTALL_PROGRAM) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) $(DESTDIR)$(libdir)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_HTML_1@	(cd $(DESTDIR)$(libdir) ; $(__htmldll___so_symlinks_inst_cmd))
 
 @COND_GCC_PCH_1@.pch/wxprec_htmldll/wx/wxprec.h.gch: 
 @COND_GCC_PCH_1@	$(top_builddir)./bk-make-pch .pch/wxprec_htmldll/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(HTMLDLL_CXXFLAGS)
 
-@COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT): $(HTMLLIB_OBJECTS)
-@COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@	rm -f $@
-@COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@	$(AR) rcu $@ $(HTMLLIB_OBJECTS)
-@COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@	$(RANLIB) $@
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_HTML_1@$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT): $(HTMLLIB_OBJECTS)
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_HTML_1@	rm -f $@
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_HTML_1@	$(AR) rcu $@ $(HTMLLIB_OBJECTS)
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_HTML_1@	$(RANLIB) $@
 
-@COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@install_htmllib: 
-@COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
-@COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT) $(DESTDIR)$(libdir)
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_HTML_1@install_htmllib: 
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_HTML_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_HTML_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT) $(DESTDIR)$(libdir)
 
 @COND_GCC_PCH_1@.pch/wxprec_htmllib/wx/wxprec.h.gch: 
 @COND_GCC_PCH_1@	$(top_builddir)./bk-make-pch .pch/wxprec_htmllib/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(HTMLLIB_CXXFLAGS)
@@ -9457,6 +9458,9 @@ wxtiff_tif_close.o: $(srcdir)/src/tiff/tif_close.c
 	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $<
 
 wxtiff_tif_codec.o: $(srcdir)/src/tiff/tif_codec.c
+	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $<
+
+wxtiff_tif_color.o: $(srcdir)/src/tiff/tif_color.c
 	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $<
 
 wxtiff_tif_compress.o: $(srcdir)/src/tiff/tif_compress.c

@@ -142,6 +142,7 @@ WXTIFF_OBJECTS =  \
 	$(OBJS)\wxtiff_tif_aux.obj \
 	$(OBJS)\wxtiff_tif_close.obj \
 	$(OBJS)\wxtiff_tif_codec.obj \
+	$(OBJS)\wxtiff_tif_color.obj \
 	$(OBJS)\wxtiff_tif_compress.obj \
 	$(OBJS)\wxtiff_tif_dir.obj \
 	$(OBJS)\wxtiff_tif_dirinfo.obj \
@@ -192,6 +193,7 @@ MONODLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_dummy.obj \
 	$(OBJS)\monodll_appbase.obj \
+	$(OBJS)\monodll_archive.obj \
 	$(OBJS)\monodll_clntdata.obj \
 	$(OBJS)\monodll_cmdline.obj \
 	$(OBJS)\monodll_config.obj \
@@ -237,7 +239,6 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_textfile.obj \
 	$(OBJS)\monodll_tokenzr.obj \
 	$(OBJS)\monodll_txtstrm.obj \
-	$(OBJS)\monodll_archive.obj \
 	$(OBJS)\monodll_uri.obj \
 	$(OBJS)\monodll_variant.obj \
 	$(OBJS)\monodll_wfstream.obj \
@@ -294,6 +295,7 @@ MONOLIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_dummy.obj \
 	$(OBJS)\monolib_appbase.obj \
+	$(OBJS)\monolib_archive.obj \
 	$(OBJS)\monolib_clntdata.obj \
 	$(OBJS)\monolib_cmdline.obj \
 	$(OBJS)\monolib_config.obj \
@@ -339,7 +341,6 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_textfile.obj \
 	$(OBJS)\monolib_tokenzr.obj \
 	$(OBJS)\monolib_txtstrm.obj \
-	$(OBJS)\monolib_archive.obj \
 	$(OBJS)\monolib_uri.obj \
 	$(OBJS)\monolib_variant.obj \
 	$(OBJS)\monolib_wfstream.obj \
@@ -397,6 +398,7 @@ BASEDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_dummy.obj \
 	$(OBJS)\basedll_appbase.obj \
+	$(OBJS)\basedll_archive.obj \
 	$(OBJS)\basedll_clntdata.obj \
 	$(OBJS)\basedll_cmdline.obj \
 	$(OBJS)\basedll_config.obj \
@@ -442,7 +444,6 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_textfile.obj \
 	$(OBJS)\basedll_tokenzr.obj \
 	$(OBJS)\basedll_txtstrm.obj \
-	$(OBJS)\basedll_archive.obj \
 	$(OBJS)\basedll_uri.obj \
 	$(OBJS)\basedll_variant.obj \
 	$(OBJS)\basedll_wfstream.obj \
@@ -484,6 +485,7 @@ BASELIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_dummy.obj \
 	$(OBJS)\baselib_appbase.obj \
+	$(OBJS)\baselib_archive.obj \
 	$(OBJS)\baselib_clntdata.obj \
 	$(OBJS)\baselib_cmdline.obj \
 	$(OBJS)\baselib_config.obj \
@@ -529,7 +531,6 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_textfile.obj \
 	$(OBJS)\baselib_tokenzr.obj \
 	$(OBJS)\baselib_txtstrm.obj \
-	$(OBJS)\baselib_archive.obj \
 	$(OBJS)\baselib_uri.obj \
 	$(OBJS)\baselib_variant.obj \
 	$(OBJS)\baselib_wfstream.obj \
@@ -2771,11 +2772,11 @@ __dbgriddll___depname = \
 __dbgridlib___depname = \
 	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_dbgrid.lib
 !endif
-!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_HTML)" == "1"
+!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_GUI)" == "1" && "$(USE_HTML)" == "1"
 __htmldll___depname = \
 	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html_bcc$(VENDORTAG).dll
 !endif
-!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_HTML)" == "1"
+!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_GUI)" == "1" && "$(USE_HTML)" == "1"
 __htmllib___depname = \
 	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html.lib
 !endif
@@ -3173,7 +3174,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 |
 !endif
 
-!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_HTML)" == "1"
+!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_GUI)" == "1" && "$(USE_HTML)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html_bcc$(VENDORTAG).dll: $(OBJS)\htmldll_dummy.obj  $(HTMLDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib $(__coredll___depname) $(__basedll___depname)
 	ilink32 -Tpd -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) @&&|
 	c0d32.obj $(HTMLDLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib  $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib  import32.lib cw32mt$(__RUNTIME_LIBS_3).lib,,
@@ -3181,7 +3182,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXD
 	implib -f $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html $@
 !endif
 
-!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_HTML)" == "1"
+!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_GUI)" == "1" && "$(USE_HTML)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html.lib: $(OBJS)\htmllib_dummy.obj  $(HTMLLIB_OBJECTS)
 	if exist $@ del $@
 	tlib /a /p4096 $@ @&&|
@@ -3536,6 +3537,9 @@ $(OBJS)\wxtiff_tif_close.obj: ..\..\src\tiff\tif_close.c
 $(OBJS)\wxtiff_tif_codec.obj: ..\..\src\tiff\tif_codec.c
 	$(CC) -q -c -P- -o$@ $(WXTIFF_CFLAGS) $**
 
+$(OBJS)\wxtiff_tif_color.obj: ..\..\src\tiff\tif_color.c
+	$(CC) -q -c -P- -o$@ $(WXTIFF_CFLAGS) $**
+
 $(OBJS)\wxtiff_tif_compress.obj: ..\..\src\tiff\tif_compress.c
 	$(CC) -q -c -P- -o$@ $(WXTIFF_CFLAGS) $**
 
@@ -3636,6 +3640,9 @@ $(OBJS)\monodll_dummy.obj: ..\..\src\msw\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) -H $**
 
 $(OBJS)\monodll_appbase.obj: ..\..\src\common\appbase.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
+
+$(OBJS)\monodll_archive.obj: ..\..\src\common\archive.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 
 $(OBJS)\monodll_clntdata.obj: ..\..\src\common\clntdata.cpp
@@ -3771,9 +3778,6 @@ $(OBJS)\monodll_tokenzr.obj: ..\..\src\common\tokenzr.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 
 $(OBJS)\monodll_txtstrm.obj: ..\..\src\common\txtstrm.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
-
-$(OBJS)\monodll_archive.obj: ..\..\src\common\archive.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 
 $(OBJS)\monodll_uri.obj: ..\..\src\common\uri.cpp
@@ -5255,6 +5259,9 @@ $(OBJS)\monolib_dummy.obj: ..\..\src\msw\dummy.cpp
 $(OBJS)\monolib_appbase.obj: ..\..\src\common\appbase.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 
+$(OBJS)\monolib_archive.obj: ..\..\src\common\archive.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
+
 $(OBJS)\monolib_clntdata.obj: ..\..\src\common\clntdata.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 
@@ -5388,9 +5395,6 @@ $(OBJS)\monolib_tokenzr.obj: ..\..\src\common\tokenzr.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 
 $(OBJS)\monolib_txtstrm.obj: ..\..\src\common\txtstrm.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
-
-$(OBJS)\monolib_archive.obj: ..\..\src\common\archive.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 
 $(OBJS)\monolib_uri.obj: ..\..\src\common\uri.cpp
@@ -6872,6 +6876,9 @@ $(OBJS)\basedll_dummy.obj: ..\..\src\msw\dummy.cpp
 $(OBJS)\basedll_appbase.obj: ..\..\src\common\appbase.cpp
 	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
 
+$(OBJS)\basedll_archive.obj: ..\..\src\common\archive.cpp
+	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
+
 $(OBJS)\basedll_clntdata.obj: ..\..\src\common\clntdata.cpp
 	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
 
@@ -7007,9 +7014,6 @@ $(OBJS)\basedll_tokenzr.obj: ..\..\src\common\tokenzr.cpp
 $(OBJS)\basedll_txtstrm.obj: ..\..\src\common\txtstrm.cpp
 	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
 
-$(OBJS)\basedll_archive.obj: ..\..\src\common\archive.cpp
-	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
-
 $(OBJS)\basedll_uri.obj: ..\..\src\common\uri.cpp
 	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
 
@@ -7095,6 +7099,9 @@ $(OBJS)\baselib_dummy.obj: ..\..\src\msw\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) -H $**
 
 $(OBJS)\baselib_appbase.obj: ..\..\src\common\appbase.cpp
+	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) $**
+
+$(OBJS)\baselib_archive.obj: ..\..\src\common\archive.cpp
 	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) $**
 
 $(OBJS)\baselib_clntdata.obj: ..\..\src\common\clntdata.cpp
@@ -7230,9 +7237,6 @@ $(OBJS)\baselib_tokenzr.obj: ..\..\src\common\tokenzr.cpp
 	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) $**
 
 $(OBJS)\baselib_txtstrm.obj: ..\..\src\common\txtstrm.cpp
-	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) $**
-
-$(OBJS)\baselib_archive.obj: ..\..\src\common\archive.cpp
 	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) $**
 
 $(OBJS)\baselib_uri.obj: ..\..\src\common\uri.cpp
@@ -10207,3 +10211,4 @@ $(OBJS)\gllib_dummy.obj: ..\..\src\msw\dummy.cpp
 
 $(OBJS)\gllib_glcanvas.obj: ..\..\src\msw\glcanvas.cpp
 	$(CXX) -q -c -P -o$@ $(GLLIB_CXXFLAGS) $**
+

@@ -142,6 +142,7 @@ cat <<EOF >wxbase-headers-list
 wx/afterstd.h
 wx/app.h
 wx/apptrait.h
+wx/archive.h
 wx/arrimpl.cpp
 wx/arrstr.h
 wx/beforestd.h
