@@ -292,7 +292,11 @@ else
   OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) $(DIRDLGOBJ)
 endif
 
+ifndef WXMAKINGDLL
 all:    $(OBJECTS) $(WXLIB) $(ZLIBLIB) $(PNGLIB) $(JPEGLIB) $(XPMLIB) $(TIFFLIB)
+else
+all:    $(OBJECTS) $(ZLIBLIB) $(PNGLIB) $(JPEGLIB) $(XPMLIB) $(TIFFLIB) $(WXDLL)
+endif
 
 ifndef WXMAKINGDLL
 
@@ -346,23 +350,23 @@ endif
 
 
 $(ZLIBLIB): $(ZLIBOBJS)
-	ar $(AROPTIONS) $@ $(ZLIBOBJS)
+	$(AR) $(AROPTIONS) $@ $(ZLIBOBJS)
 	$(RANLIB) $@
 
 $(PNGLIB): $(PNGOBJS)
-	ar $(AROPTIONS) $@ $(PNGOBJS)
+	$(AR) $(AROPTIONS) $@ $(PNGOBJS)
 	$(RANLIB) $@
 
 $(JPEGLIB): $(JPEGOBJS)
-	ar $(AROPTIONS) $@ $(JPEGOBJS)
+	$(AR) $(AROPTIONS) $@ $(JPEGOBJS)
 	$(RANLIB) $@
 
 $(XPMLIB): $(XPMOBJS)
-	ar $(AROPTIONS) $@ $(XPMOBJS)
+	$(AR) $(AROPTIONS) $@ $(XPMOBJS)
 	$(RANLIB) $@
 
 $(TIFFLIB): $(TIFFOBJS)
-	ar $(AROPTIONS) $@ $(TIFFOBJS)
+	$(AR) $(AROPTIONS) $@ $(TIFFOBJS)
 	$(RANLIB) $@
 
 
@@ -430,6 +434,11 @@ clean:
 	-$(RM) ../tiff/*.o
 	-$(RM) ../tiff/*.bak
 	-$(RM) $(WXLIB)
+	-$(RM) $(ZLIBLIB)
+	-$(RM) $(PNGLIB)
+	-$(RM) $(JPEGLIB)
+	-$(RM) $(XPMLIB)
+	-$(RM) $(TIFFLIB)
 
 ifdef WXMAKINGDLL
 	-$(RM) $(WXDLL)
