@@ -487,6 +487,11 @@ public:
     int GetWidth();
     int GetHeight();
     int GetDescent();
+
+    // Returns the maximum possible length of the cell.
+    // Call Layout at least once before using GetMaxTotalWidth()
+    int GetMaxTotalWidth() const;
+   
     const wxString& GetId() const;
     void SetId(const wxString& id);
     wxHtmlLinkInfo* GetLink(int x = 0, int y = 0);
