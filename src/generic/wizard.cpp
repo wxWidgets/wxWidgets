@@ -249,7 +249,12 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
     bool bmpIsDefault = !m_page->GetBitmap().Ok();
     if ( m_statbmp && (bmpIsDefault != bmpWasDefault) )
     {
-        m_statbmp->SetBitmap(bmpIsDefault ? m_bitmap : m_page->GetBitmap());
+        wxBitmap bmp;
+        if ( bmpIsDefault )
+            bmp = m_bitmap;
+        else
+            bmp = m_page->GetBitmap();
+        m_statbmp->SetBitmap(bmp);
     }
 
     // and update the buttons state
