@@ -48,6 +48,10 @@
   #include <langinfo.h>
 #endif
 
+#ifdef __WXMSW__
+  #include <windows.h>
+#endif
+
 #include "wx/debug.h"
 #include "wx/strconv.h"
 
