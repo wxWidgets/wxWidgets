@@ -144,9 +144,12 @@ public:
 #endif
 
     // no size hints
-    virtual void SetSizeHints( int WXUNUSED(minW), int WXUNUSED(minH),
-                               int WXUNUSED(maxW), int WXUNUSED(maxH),
-                               int WXUNUSED(incW), int WXUNUSED(incH) ) {}
+    virtual void SetSizeHints( int WXUNUSED(minW),
+                               int WXUNUSED(minH),
+                               int WXUNUSED(maxW) = -1,
+                               int WXUNUSED(maxH) = -1,
+                               int WXUNUSED(incW) = -1,
+                               int WXUNUSED(incH) = -1) {}
 
 #if wxUSE_TOOLBAR
     // no toolbar bars
