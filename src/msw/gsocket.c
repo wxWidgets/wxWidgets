@@ -6,7 +6,6 @@
  * -------------------------------------------------------------------------
  */
 
-
 #ifndef __GSOCKET_STANDALONE__
 #include "wx/setup.h"
 #endif
@@ -143,6 +142,7 @@ GSocket *GSocket_new()
   socket->m_non_blocking    = FALSE;
   socket->m_timeout.tv_sec  = 10 * 60;  /* 10 minutes */
   socket->m_timeout.tv_usec = 0;
+  socket->m_detected        = 0;
 
   /* Allocate a new message number for this socket */
   EnterCriticalSection(&critical);
@@ -172,26 +172,23 @@ void GSocket_destroy(GSocket *socket)
 {
   assert(socket != NULL);
 
-  /* We don't want more event notifications; so first of all we
-   * remove the socket from the list (NOTE: we won't get a CLOSE
-   * event for this socket if it wasn't closed before).
-   */
+  /* Remove the socket from the list */
   EnterCriticalSection(&critical);
   socketList[(socket->m_msgnumber - WM_USER)] = NULL;
   LeaveCriticalSection(&critical);
 
-  /* We check that the socket is really shutdowned */
+  /* Check that the socket is really shutdowned */
   if (socket->m_fd != INVALID_SOCKET)
     GSocket_Shutdown(socket);
 
-  /* We destroy private addresses */
+  /* Destroy private addresses */
   if (socket->m_local)
     GAddress_destroy(socket->m_local);
 
   if (socket->m_peer)
     GAddress_destroy(socket->m_peer);
 
-  /* We destroy socket itself */
+  /* Destroy socket itself */
   free(socket);
 }
 
@@ -201,7 +198,7 @@ void GSocket_Shutdown(GSocket *socket)
 
   assert(socket != NULL);
 
-  /* If socket has been created, we shutdown it */
+  /* If socket has been created, shutdown it */
   if (socket->m_fd != INVALID_SOCKET)
   {
     shutdown(socket->m_fd, 2);
@@ -209,13 +206,12 @@ void GSocket_Shutdown(GSocket *socket)
     socket->m_fd = INVALID_SOCKET;
   }
 
-  /* We disable GUI callbacks */
+  /* Disable GUI callbacks */
   for (evt = 0; evt < GSOCK_MAX_EVENT; evt++)
-  {
     socket->m_cbacks[evt] = NULL;
-  }
 
-  _GSocket_Configure_Callbacks(socket);
+  socket->m_detected = 0;
+  _GSocket_Disable_Events(socket);
 }
 
 /* Address handling */
@@ -355,7 +351,7 @@ GSocketError GSocket_SetServer(GSocket *sck)
   }
 
   ioctlsocket(sck->m_fd, FIONBIO, (u_long FAR *) &arg);
-  _GSocket_Configure_Callbacks(sck);
+  _GSocket_Enable_Events(sck);
 
   /* Bind the socket to the LOCAL address */
   if (bind(sck->m_fd, sck->m_local->m_addr, sck->m_local->m_len) != 0)
@@ -388,7 +384,8 @@ GSocket *GSocket_WaitConnection(GSocket *sck)
 
   assert(sck != NULL);
 
-  /* If the socket has already been created, we exit immediately */
+  sck->m_detected &= ~GSOCK_CONNECTION_FLAG;
+
   if (sck->m_fd == INVALID_SOCKET || !sck->m_server)
   {
     sck->m_error = GSOCK_INVSOCK;
@@ -431,7 +428,7 @@ GSocket *GSocket_WaitConnection(GSocket *sck)
   connection->m_oriented = TRUE;
 
   ioctlsocket(connection->m_fd, FIONBIO, (u_long FAR *) &arg);
-  _GSocket_Configure_Callbacks(connection);
+  _GSocket_Enable_Events(connection);
 
   return connection;
 }
@@ -471,7 +468,7 @@ GSocketError GSocket_SetNonOriented(GSocket *sck)
   }
 
   ioctlsocket(sck->m_fd, FIONBIO, (u_long FAR *) &arg);
-  _GSocket_Configure_Callbacks(sck);
+  _GSocket_Enable_Events(sck);
 
   /* Bind it to the LOCAL address */
   if (bind(sck->m_fd, sck->m_local->m_addr, sck->m_local->m_len) != 0)
@@ -487,15 +484,15 @@ GSocketError GSocket_SetNonOriented(GSocket *sck)
 
 GSocketError GSocket_SetBroadcast(GSocket *sck)
 {
-  BOOL b;
+  BOOL b = TRUE;
 
   assert(sck != NULL);
 
   if (GSocket_SetNonOriented(sck) != GSOCK_NOERROR)
     return sck->m_error;
 
-  b = TRUE;
-  setsockopt(sck->m_fd, SOL_SOCKET, SO_BROADCAST, (const char FAR *) &b, sizeof(b));
+  setsockopt(sck->m_fd, SOL_SOCKET, SO_BROADCAST,
+             (const char FAR *) &b, sizeof(b));
 
   return GSOCK_NOERROR;
 }
@@ -517,6 +514,8 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
   int type, ret, err;
 
   assert(sck != NULL);
+
+  sck->m_detected &= ~GSOCK_CONNECTION_FLAG;
 
   if (sck->m_fd != INVALID_SOCKET)
   {
@@ -550,7 +549,7 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
   }
 
   ioctlsocket(sck->m_fd, FIONBIO, (u_long FAR *) &arg);
-  _GSocket_Configure_Callbacks(sck);
+  _GSocket_Enable_Events(sck);
 
   /* Connect it to the PEER address, with a timeout (see below) */
   ret = connect(sck->m_fd, sck->m_peer->m_addr, sck->m_peer->m_len);
@@ -606,7 +605,11 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
 /* Like recv(), send(), ... */
 int GSocket_Read(GSocket *socket, char *buffer, int size)
 {
+  int ret;
+
   assert(socket != NULL);
+
+  socket->m_detected &= ~GSOCK_INPUT_FLAG;
 
   if (socket->m_fd == INVALID_SOCKET || socket->m_server)
   {
@@ -614,17 +617,48 @@ int GSocket_Read(GSocket *socket, char *buffer, int size)
     return -1;
   }
 
+  /* If the socket is blocking, wait for data (with a timeout) */
   if (_GSocket_Input_Timeout(socket) == GSOCK_TIMEDOUT)
     return -1;
 
+  /* Read the data */
   if (socket->m_stream)
-    return _GSocket_Recv_Stream(socket, buffer, size);
+    ret = _GSocket_Recv_Stream(socket, buffer, size);
   else
-    return _GSocket_Recv_Dgram(socket, buffer, size);
+    ret = _GSocket_Recv_Dgram(socket, buffer, size);
+
+  if (ret == SOCKET_ERROR)
+  {
+    /* NOTE: Window sockets exhibit a very strange property;
+     * if the socket is in non-blocking mode (which is always
+     * the case here, no matter the setting of GSocket itself)
+     * a call to send() can fail with EWOULDBLOCK even when
+     * select() says that the socket is readable.
+     *
+     * This can break several things because, usually, if
+     * select() says that the socket is writable, it is
+     * assumed that send() won't fail. To avoid this, we
+     * return 0 instead of -1 for this special case.
+     */
+    if (WSAGetLastError() != WSAEWOULDBLOCK)
+    {
+      socket->m_error = GSOCK_IOERR;
+      return -1;
+    }
+    else
+    {
+      socket->m_error = GSOCK_WOULDBLOCK;
+      return 0;
+    }
+  }
+
+  return ret;
 }
 
 int GSocket_Write(GSocket *socket, const char *buffer, int size)
 {
+  int ret;
+
   assert(socket != NULL);
 
   if (socket->m_fd == INVALID_SOCKET || socket->m_server)
@@ -633,13 +667,28 @@ int GSocket_Write(GSocket *socket, const char *buffer, int size)
     return -1;
   }
 
+  /* If the socket is blocking, wait for writability (with a timeout) */
   if (_GSocket_Output_Timeout(socket) == GSOCK_TIMEDOUT)
     return -1;
 
+  /* Read the data */
   if (socket->m_stream)
-    return _GSocket_Send_Stream(socket, buffer, size);
+    ret = _GSocket_Send_Stream(socket, buffer, size);
   else
-    return _GSocket_Send_Dgram(socket, buffer, size);
+    ret = _GSocket_Send_Dgram(socket, buffer, size);
+
+  if (ret == SOCKET_ERROR)
+  {
+    if (WSAGetLastError() != WSAEWOULDBLOCK)
+      socket->m_error = GSOCK_IOERR;
+    else
+      socket->m_error = GSOCK_WOULDBLOCK;
+
+    socket->m_detected &= ~GSOCK_OUTPUT_FLAG;
+    return -1;
+  }
+
+  return ret;
 }
 
 /* GSocket_Select:
@@ -651,53 +700,9 @@ int GSocket_Write(GSocket *socket, const char *buffer, int size)
  */
 GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
 {
-  fd_set readfds, writefds, exceptfds;
-  struct timeval tv;
-  GSocketEventFlags mask;
-
   assert(socket != NULL);
 
-  if (socket->m_fd == INVALID_SOCKET)
-  {
-    socket->m_error = GSOCK_INVSOCK;
-    return FALSE;
-  }
-
-  FD_ZERO(&readfds);
-  FD_ZERO(&writefds);
-  FD_ZERO(&exceptfds);
-  FD_SET(socket->m_fd, &readfds);
-  FD_SET(socket->m_fd, &writefds);
-  FD_SET(socket->m_fd, &exceptfds);
-
-  tv.tv_sec = 0;
-  tv.tv_usec = 0;
-  select(socket->m_fd + 1, &readfds, &writefds, &exceptfds, &tv);
-
-  mask = 0;
-
-  /* If select() says that the socket is readable, then we have
-   * no way to distinguish if that means 'data available' (to
-   * recv) or 'incoming connection' (to accept). The same goes
-   * for writability: we cannot distinguish between 'you can
-   * send data' and 'connection request completed'. So we will
-   * assume the following: if the flag was set upon entry,
-   * that means that the event was possible.
-   */
-  if (FD_ISSET(socket->m_fd, &readfds))
-  {
-    mask |= (flags & GSOCK_CONNECTION_FLAG);
-    mask |= (flags & GSOCK_INPUT_FLAG);
-  }
-  if (FD_ISSET(socket->m_fd, &writefds))
-  {
-    mask |= (flags & GSOCK_CONNECTION_FLAG);
-    mask |= (flags & GSOCK_OUTPUT_FLAG);
-  }
-  if (FD_ISSET(socket->m_fd, &exceptfds))
-    mask |= (flags & GSOCK_LOST_FLAG);
-
-  return mask;
+  return (flags & socket->m_detected);
 }
 
 /* Flags */
@@ -717,12 +722,12 @@ void GSocket_SetNonBlocking(GSocket *socket, bool non_block)
  *  Sets the timeout for blocking calls. Time is
  *  expressed in milliseconds.
  */
-void GSocket_SetTimeout(GSocket *socket, unsigned long millisecs)
+void GSocket_SetTimeout(GSocket *socket, unsigned long millis)
 {
   assert(socket != NULL);
 
-  socket->m_timeout.tv_sec  = (millisecs / 1000);
-  socket->m_timeout.tv_usec = (millisecs % 1000) * 1000;
+  socket->m_timeout.tv_sec  = (millis / 1000);
+  socket->m_timeout.tv_usec = (millis % 1000) * 1000;
 }
 
 /* GSocket_GetError:
@@ -770,15 +775,12 @@ void GSocket_SetCallback(GSocket *socket, GSocketEventFlags flags,
 
   for (count = 0; count < GSOCK_MAX_EVENT; count++)
   {
-    /* We test each flag and enable the corresponding events */
     if ((flags & (1 << count)) != 0)
     {
       socket->m_cbacks[count] = callback;
       socket->m_data[count] = cdata;
     }
   }
-
-  _GSocket_Configure_Callbacks(socket);
 }
 
 /* GSocket_UnsetCallback:
@@ -793,43 +795,46 @@ void GSocket_UnsetCallback(GSocket *socket, GSocketEventFlags flags)
 
   for (count = 0; count < GSOCK_MAX_EVENT; count++)
   {
-    /* We test each flag and disable the corresponding events */
     if ((flags & (1 << count)) != 0)
     {
       socket->m_cbacks[count] = NULL;
+      socket->m_data[count] = NULL;
     }
   }
-
-  _GSocket_Configure_Callbacks(socket);
 }
 
 
 /* Internals */
 
-void _GSocket_Configure_Callbacks(GSocket *socket)
+/* _GSocket_Enable_Events:
+ *  We enable all event notifications here (we need to be notified
+ *  of all events for internal processing) but we will only notify
+ *  users when an appropiate callback function has been installed.
+ */
+void _GSocket_Enable_Events(GSocket *socket)
 {
-  long mask = 0;
-  int count;
+  assert (socket != NULL);
 
-  if (socket->m_fd == INVALID_SOCKET)
-    return;
-
-  for (count = 0; count < GSOCK_MAX_EVENT; count++)
+  if (socket->m_fd != INVALID_SOCKET)
   {
-    if (socket->m_cbacks[count] != NULL)
-    {
-      switch (count)
-      {
-        case GSOCK_INPUT:      mask |= FD_READ; break;
-        case GSOCK_OUTPUT:     mask |= FD_WRITE; break;
-        case GSOCK_CONNECTION: mask |= (FD_ACCEPT | FD_CONNECT); break;
-        case GSOCK_LOST:       mask |= FD_CLOSE; break;
-      }
-    }
+    WSAAsyncSelect(socket->m_fd, hWin, socket->m_msgnumber,
+                   FD_READ | FD_WRITE | FD_ACCEPT | FD_CONNECT | FD_CLOSE);
   }
-
-  WSAAsyncSelect(socket->m_fd, hWin, socket->m_msgnumber, mask);
 }
+
+/* _GSocket_Disable_Events:
+ *  Disable event notifications (when shutdowning the socket)
+ */
+void _GSocket_Disable_Events(GSocket *socket)
+{
+  assert (socket != NULL);
+
+  if (socket->m_fd != INVALID_SOCKET)
+  {
+    WSAAsyncSelect(socket->m_fd, hWin, socket->m_msgnumber, 0);
+  }
+}
+
 
 LRESULT CALLBACK _GSocket_Internal_WinProc(HWND hWnd,
                                            UINT uMsg,
@@ -839,6 +844,7 @@ LRESULT CALLBACK _GSocket_Internal_WinProc(HWND hWnd,
   GSocket *socket;
   GSocketEvent event;
   GSocketCallback cback;
+  char *data;
 
   if (uMsg >= WM_USER && uMsg <= (WM_USER + MAXSOCKETS - 1))
   {
@@ -846,6 +852,7 @@ LRESULT CALLBACK _GSocket_Internal_WinProc(HWND hWnd,
     socket = socketList[(uMsg - WM_USER)];
     event = -1;
     cback = NULL;
+    data = NULL;
 
     /* Check that the socket still exists (it has not been
      * destroyed) and for safety, check that the m_fd field
@@ -870,7 +877,15 @@ LRESULT CALLBACK _GSocket_Internal_WinProc(HWND hWnd,
       }
 
       if (event != -1)
+      {
         cback = socket->m_cbacks[event];
+        data = socket->m_data[event];
+
+        if (event == GSOCK_LOST)
+          socket->m_detected = GSOCK_LOST_FLAG;
+        else
+          socket->m_detected |= (1 << event);
+      }
     }
 
     /* OK, we can now leave the critical section because we have
@@ -880,7 +895,7 @@ LRESULT CALLBACK _GSocket_Internal_WinProc(HWND hWnd,
     LeaveCriticalSection(&critical);
 
     if (cback != NULL)
-      (cback)(socket, event, socket->m_data[event]);
+      (cback)(socket, event, data);
 
     return (LRESULT) 0;
   }
@@ -933,42 +948,19 @@ GSocketError _GSocket_Output_Timeout(GSocket *socket)
 
 int _GSocket_Recv_Stream(GSocket *socket, char *buffer, int size)
 {
-  int ret;
-
-  ret = recv(socket->m_fd, buffer, size, 0);
-
-  if (ret == SOCKET_ERROR)
-  {
-    if (WSAGetLastError() != WSAEWOULDBLOCK)
-      socket->m_error = GSOCK_IOERR;
-    else
-      socket->m_error = GSOCK_WOULDBLOCK;
-
-    return -1;
-  }
-
-  return ret;
+  return recv(socket->m_fd, buffer, size, 0);
 }
 
 int _GSocket_Recv_Dgram(GSocket *socket, char *buffer, int size)
 {
   struct sockaddr from;
-  SOCKLEN_T fromlen;
+  SOCKLEN_T fromlen = sizeof(from);
   int ret;
-
-  fromlen = sizeof(from);
 
   ret = recvfrom(socket->m_fd, buffer, size, 0, &from, &fromlen);
 
   if (ret == SOCKET_ERROR)
-  {
-    if (WSAGetLastError() != WSAEWOULDBLOCK)
-      socket->m_error = GSOCK_IOERR;
-    else
-      socket->m_error = GSOCK_WOULDBLOCK;
-
-    return -1;
-  }
+    return SOCKET_ERROR;
 
   /* Translate a system address into a GSocket address */
   if (!socket->m_peer)
@@ -992,20 +984,7 @@ int _GSocket_Recv_Dgram(GSocket *socket, char *buffer, int size)
 
 int _GSocket_Send_Stream(GSocket *socket, const char *buffer, int size)
 {
-  int ret;
-
-  ret = send(socket->m_fd, buffer, size, 0);
-
-  if (ret == SOCKET_ERROR)
-  {
-    if (WSAGetLastError() != WSAEWOULDBLOCK)
-      socket->m_error = GSOCK_IOERR;
-    else
-      socket->m_error = GSOCK_WOULDBLOCK;
-
-    return -1;
-  }
-  return ret;
+  return send(socket->m_fd, buffer, size, 0);
 }
 
 int _GSocket_Send_Dgram(GSocket *socket, const char *buffer, int size)
@@ -1030,15 +1009,6 @@ int _GSocket_Send_Dgram(GSocket *socket, const char *buffer, int size)
   /* Frees memory allocated by _GAddress_translate_to */
   free(addr);
 
-  if (ret == SOCKET_ERROR)
-  {
-    if (WSAGetLastError() != WSAEWOULDBLOCK)
-      socket->m_error = GSOCK_IOERR;
-    else
-      socket->m_error = GSOCK_WOULDBLOCK;
-
-    return -1;
-  }
   return ret;
 }
 
@@ -1394,9 +1364,7 @@ GSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf)
  *  - inet_addr en lugar de inet_aton
  *  - Codigo de inicializacion y terminacion para inicializar y
  *    terminar WinSocket y para la ventana interna.
- *  - SetTimeout en la version MSW simplemente guarda el valor en
- *    socket.m_timeout, por tanto no hay necesidad de llamar a
- *    SetTimeout cada vez que se crea realmente un socket (no
- *    un gsocket).
- *  - Lo mismo para SetNonBlocking.
+ *  - SetTimeout, SetNonBlocking y la implementacion de los
+ *    timeouts eran bastante diferentes, pero ahora se han
+ *    hecho en la version Unix igual que en esta.
  */
