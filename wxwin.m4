@@ -1,46 +1,54 @@
 dnl ---------------------------------------------------------------------------
 dnl Macros for wxWindows detection. Typically used in configure.in as:
 dnl
-dnl 	AC_ARG_ENABLE(...)
-dnl 	AC_ARG_WITH(...)
-dnl	...
-dnl	AM_OPTIONS_WXCONFIG
-dnl	...
-dnl	...
-dnl	AM_PATH_WXCONFIG(2.3.4, wxWin=1)
+dnl     AC_ARG_ENABLE(...)
+dnl     AC_ARG_WITH(...)
+dnl        ...
+dnl     AM_OPTIONS_WXCONFIG
+dnl        ...
+dnl        ...
+dnl     AM_PATH_WXCONFIG(2.3.4, wxWin=1)
 dnl     if test "$wxWin" != 1; then
 dnl        AC_MSG_ERROR([
-dnl     	   wxWindows must be installed on your system
-dnl     	   but wx-config script couldn't be found.
-dnl     
-dnl     	   Please check that wx-config is in path, the directory
-dnl     	   where wxWindows libraries are installed (returned by
-dnl     	   'wx-config --libs' command) is in LD_LIBRARY_PATH or
-dnl     	   equivalent variable and wxWindows version is 2.3.4 or above.
+dnl                wxWindows must be installed on your system
+dnl                but wx-config script couldn't be found.
+dnl
+dnl                Please check that wx-config is in path, the directory
+dnl                where wxWindows libraries are installed (returned by
+dnl                'wx-config --libs' command) is in LD_LIBRARY_PATH or
+dnl                equivalent variable and wxWindows version is 2.3.4 or above.
 dnl        ])
 dnl     fi
 dnl     CPPFLAGS="$CPPFLAGS $WX_CPPFLAGS"
 dnl     CXXFLAGS="$CXXFLAGS $WX_CXXFLAGS_ONLY"
 dnl     CFLAGS="$CFLAGS $WX_CFLAGS_ONLY"
-dnl     
+dnl
 dnl     LDFLAGS="$LDFLAGS $WX_LIBS"
 dnl ---------------------------------------------------------------------------
 
 dnl ---------------------------------------------------------------------------
 dnl AM_OPTIONS_WXCONFIG
 dnl
-dnl adds support for --wx-prefix, --wx-exec-prefix and --wx-config 
-dnl command line options
+dnl adds support for --wx-prefix, --wx-exec-prefix, --with-wxdir and
+dnl --wx-config command line options
 dnl ---------------------------------------------------------------------------
 
 AC_DEFUN(AM_OPTIONS_WXCONFIG,
 [
-   AC_ARG_WITH(wx-prefix, [  --with-wx-prefix=PREFIX   Prefix where wxWindows is installed (optional)],
-               wx_config_prefix="$withval", wx_config_prefix="")
-   AC_ARG_WITH(wx-exec-prefix,[  --with-wx-exec-prefix=PREFIX Exec prefix where wxWindows is installed (optional)],
-               wx_config_exec_prefix="$withval", wx_config_exec_prefix="")
-   AC_ARG_WITH(wx-config,[  --with-wx-config=CONFIG   wx-config script to use (optional)],
-               wx_config_name="$withval", wx_config_name="")
+    AC_ARG_WITH(wxdir,
+                [  --with-wxdir=PATH       Use uninstalled version of wxWindows in PATH],
+                [ wx_config_name="$withval/wx-config"
+                  wx_config_args="--inplace"])
+    AC_ARG_WITH(wx-config,
+                [  --with-wx-config=CONFIG wx-config script to use (optional)],
+                wx_config_name="$withval" )
+    AC_ARG_WITH(wx-prefix,
+                [  --with-wx-prefix=PREFIX Prefix where wxWindows is installed (optional)],
+                wx_config_prefix="$withval", wx_config_prefix="")
+    AC_ARG_WITH(wx-exec-prefix,
+                [  --with-wx-exec-prefix=PREFIX
+                          Exec prefix where wxWindows is installed (optional)],
+                wx_config_exec_prefix="$withval", wx_config_exec_prefix="")
 ])
 
 dnl ---------------------------------------------------------------------------
@@ -62,6 +70,7 @@ AC_DEFUN(AM_PATH_WXCONFIG,
   if test x${WX_CONFIG_NAME+set} != xset ; then
      WX_CONFIG_NAME=wx-config
   fi
+
   if test "x$wx_config_name" != x ; then
      WX_CONFIG_NAME="$wx_config_name"
   fi
@@ -174,10 +183,10 @@ AC_DEFUN(AM_PATH_WXCONFIG,
        ifelse([$2], , :, [$2])
     else
        if test "x$WX_VERSION" = x; then
-	  dnl no wx-config at all
-	  AC_MSG_RESULT(no)
+          dnl no wx-config at all
+          AC_MSG_RESULT(no)
        else
-	  AC_MSG_RESULT(no (version $WX_VERSION is not new enough))
+          AC_MSG_RESULT(no (version $WX_VERSION is not new enough))
        fi
 
        WX_CFLAGS=""
