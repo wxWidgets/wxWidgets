@@ -106,7 +106,7 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
     
     XmFontList fontList = (XmFontList) m_font.GetFontList(1.0, XtDisplay(parentWidget));
 
-    Widget labelWidget = XtVaCreateManagedWidget ((char*) (const char*) name,
+    m_labelWidget = XtVaCreateManagedWidget ((char*) (const char*) name,
                                          xmLabelWidgetClass,
                                          borderWidget ? borderWidget : parentWidget,
                                          XmNfontList, fontList,
@@ -119,7 +119,7 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
 
     XmStringFree (text);
 
-    m_mainWidget = borderWidget ? borderWidget : labelWidget;
+    m_mainWidget = borderWidget ? borderWidget : m_labelWidget;
 
     SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);

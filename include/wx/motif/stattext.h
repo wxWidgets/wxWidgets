@@ -56,6 +56,13 @@ public:
     virtual void ChangeFont(bool keepOriginalSize = TRUE);
     virtual void ChangeBackgroundColour();
     virtual void ChangeForegroundColour();
+    
+    // Get the widget that corresponds to the label (for font setting, label setting etc.)
+    virtual WXWidget GetLabelWidget() const
+        { return m_labelWidget; }
+    
+protected:
+    WXWidget              m_labelWidget;
 };
 
 #endif
