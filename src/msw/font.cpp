@@ -432,6 +432,7 @@ void wxNativeFontInfo::SetStyle(wxFontStyle style)
             // fall through
 
         case wxFONTSTYLE_NORMAL:
+            lf.lfItalic = FALSE;
             break;
 
         case wxFONTSTYLE_ITALIC:
