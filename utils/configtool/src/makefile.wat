@@ -185,10 +185,11 @@ OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 SETUPHDIR = &
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
-WXCONFIGTOOL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
+WXCONFIGTOOL_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
 	$(__RUNTIME_LIBS_5) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(SETUPHDIR) -i=. &
-	$(__DLLFLAG_p) -i=.\..\..\..\samples $(CXXFLAGS) $(__EXCEPTIONSFLAG_7)
+	$(__DLLFLAG_p) -i=.\..\..\..\samples $(__EXCEPTIONSFLAG_7) $(CPPFLAGS) &
+	$(CXXFLAGS)
 WXCONFIGTOOL_OBJECTS =  &
 	$(OBJS)\wxconfigtool_wxconfigtool.obj &
 	$(OBJS)\wxconfigtool_appsettings.obj &

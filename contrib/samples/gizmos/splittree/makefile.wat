@@ -171,11 +171,11 @@ OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 SETUPHDIR = &
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
-SPLITTREE_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
+SPLITTREE_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
 	$(__RUNTIME_LIBS_5) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=.\..\..\..\..\include -i=$(SETUPHDIR) -i=. &
-	$(__DLLFLAG_p) -i=.\..\..\..\..\samples -i=.\..\..\..\include $(CXXFLAGS) &
-	$(__EXCEPTIONSFLAG_7)
+	$(__DLLFLAG_p) -i=.\..\..\..\..\samples -i=.\..\..\..\include &
+	$(__EXCEPTIONSFLAG_7) $(CPPFLAGS) $(CXXFLAGS)
 SPLITTREE_OBJECTS =  &
 	$(OBJS)\splittree_tree.obj
 

@@ -182,19 +182,19 @@ __plotlib___depname = &
 
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-PLOTDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
-	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\plot\..\..\..\include -i=$(SETUPHDIR) &
-	-i=..\..\src\plot\..\..\include -dWXUSINGDLL -dWXMAKINGDLL_PLOT $(CXXFLAGS) &
-	/fh=$(OBJS)\wxprec_plotdll.pch $(__EXCEPTIONSFLAG)
+PLOTDLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
+	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
+	-i=..\..\src\plot\..\..\..\include -i=$(SETUPHDIR) &
+	-i=..\..\src\plot\..\..\include -dWXUSINGDLL -dWXMAKINGDLL_PLOT &
+	/fh=$(OBJS)\wxprec_plotdll.pch $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 PLOTDLL_OBJECTS =  &
 	$(OBJS)\plotdll_dummy.obj &
 	$(OBJS)\plotdll_plot.obj
-PLOTLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
-	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\plot\..\..\..\include -i=$(SETUPHDIR) &
-	-i=..\..\src\plot\..\..\include $(CXXFLAGS) /fh=$(OBJS)\wxprec_plotlib.pch &
-	$(__EXCEPTIONSFLAG)
+PLOTLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
+	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
+	-i=..\..\src\plot\..\..\..\include -i=$(SETUPHDIR) &
+	-i=..\..\src\plot\..\..\include /fh=$(OBJS)\wxprec_plotlib.pch &
+	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 PLOTLIB_OBJECTS =  &
 	$(OBJS)\plotlib_dummy.obj &
 	$(OBJS)\plotlib_plot.obj
@@ -250,5 +250,5 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)251$(WXUNICODEFLAG)$(WXDEBUGFLAG)_plot_w
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_plot.lib :  $(PLOTLIB_OBJECTS)
 	@%create $(OBJS)\plotlib.lbc
 	@for %i in ($(PLOTLIB_OBJECTS)) do @%append $(OBJS)\plotlib.lbc +%i
-	wlib -q -p2048 -n -b $^@ @$(OBJS)\plotlib.lbc
+	wlib -q -p4096 -n -b $^@ @$(OBJS)\plotlib.lbc
 !endif

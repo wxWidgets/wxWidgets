@@ -12,19 +12,19 @@ include ../../../build/msw/config.gcc
 
 ### Variables: ###
 
-ANIMATEDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
+ANIMATEDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I..\..\src\animate\..\..\..\include -I$(SETUPHDIR) \
 	-Wall -I..\..\src\animate\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_ANIMATE \
-	$(CXXFLAGS) $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0)
+	$(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0) $(CPPFLAGS) $(CXXFLAGS)
 ANIMATEDLL_OBJECTS =  \
 	$(OBJS)\animatedll_dummy.o \
 	$(OBJS)\animatedll_animate.o
-ANIMATELIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
+ANIMATELIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I..\..\src\animate\..\..\..\include -I$(SETUPHDIR) \
-	-Wall -I..\..\src\animate\..\..\include $(CXXFLAGS) $(__EXCEPTIONSFLAG) \
-	$(__EXCEPTIONSFLAG_0)
+	-Wall -I..\..\src\animate\..\..\include $(__EXCEPTIONSFLAG) \
+	$(__EXCEPTIONSFLAG_0) $(CPPFLAGS) $(CXXFLAGS)
 ANIMATELIB_OBJECTS =  \
 	$(OBJS)\animatelib_dummy.o \
 	$(OBJS)\animatelib_animate.o

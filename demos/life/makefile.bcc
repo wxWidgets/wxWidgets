@@ -7,6 +7,9 @@
 .autodepend
 
 !ifndef BCCDIR
+!ifndef MAKEDIR
+!error Your Borland compiler does not define MAKEDIR. Please define the BCCDIR variable, e.g. BCCDIR=d:\bc4
+!endif
 BCCDIR = $(MAKEDIR)\..
 !endif
 
@@ -15,10 +18,6 @@ BCCDIR = $(MAKEDIR)\..
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
 # -------------------------------------------------------------------------
-
-!if "$(BCCDIR)" == "\.."
-!error Your Borland compiler does not define MAKEDIR. Please define the BCCDIR variable, e.g. BCCDIR=d:\bc4
-!endif
 
 ### Variables: ###
 

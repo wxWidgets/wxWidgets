@@ -12,48 +12,48 @@ include ../../../build/msw/config.gcc
 
 ### Variables: ###
 
-FL_DEMO1_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
+FL_DEMO1_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I.\..\..\..\include -I$(SETUPHDIR) -Wall -I. \
 	$(__DLLFLAG_p) -I.\..\..\..\samples -I.\..\..\include \
-	-DBMP_DIR=\"bitmaps/\" $(CXXFLAGS) $(__EXCEPTIONSFLAG) \
-	$(__EXCEPTIONSFLAG_1)
+	-DBMP_DIR=\"bitmaps/\" $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_1) \
+	$(CPPFLAGS) $(CXXFLAGS)
 FL_DEMO1_OBJECTS =  \
 	$(OBJS)\fl_demo1_fl_demo1.o \
 	$(OBJS)\fl_demo1_fl_demo1_rc.o
-FL_DEMO2_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
+FL_DEMO2_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I.\..\..\..\include -I$(SETUPHDIR) -Wall -I. \
 	$(__DLLFLAG_p) -I.\..\..\..\samples -I.\..\..\include \
-	-DBMP_DIR=\"bitmaps/\" $(CXXFLAGS) $(__EXCEPTIONSFLAG) \
-	$(__EXCEPTIONSFLAG_1)
+	-DBMP_DIR=\"bitmaps/\" $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_1) \
+	$(CPPFLAGS) $(CXXFLAGS)
 FL_DEMO2_OBJECTS =  \
 	$(OBJS)\fl_demo2_fl_demo2.o \
 	$(OBJS)\fl_demo2_fl_demo2_rc.o
-FL_SAMPLE1_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
+FL_SAMPLE1_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I.\..\..\..\include -I$(SETUPHDIR) -Wall -I. \
 	$(__DLLFLAG_p) -I.\..\..\..\samples -I.\..\..\include \
-	-DBMP_DIR=\"bitmaps/\" $(CXXFLAGS) $(__EXCEPTIONSFLAG) \
-	$(__EXCEPTIONSFLAG_1)
+	-DBMP_DIR=\"bitmaps/\" $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_1) \
+	$(CPPFLAGS) $(CXXFLAGS)
 FL_SAMPLE1_OBJECTS =  \
 	$(OBJS)\fl_sample1_fl_sample1.o \
 	$(OBJS)\fl_sample1_fl_sample1_rc.o
-FL_SAMPLE2_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
+FL_SAMPLE2_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I.\..\..\..\include -I$(SETUPHDIR) -Wall -I. \
 	$(__DLLFLAG_p) -I.\..\..\..\samples -I.\..\..\include \
-	-DBMP_DIR=\"bitmaps/\" $(CXXFLAGS) $(__EXCEPTIONSFLAG) \
-	$(__EXCEPTIONSFLAG_1)
+	-DBMP_DIR=\"bitmaps/\" $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_1) \
+	$(CPPFLAGS) $(CXXFLAGS)
 FL_SAMPLE2_OBJECTS =  \
 	$(OBJS)\fl_sample2_fl_sample2.o \
 	$(OBJS)\fl_sample2_fl_sample2_rc.o
-FL_SAMPLE3_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
+FL_SAMPLE3_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I.\..\..\..\include -I$(SETUPHDIR) -Wall -I. \
 	$(__DLLFLAG_p) -I.\..\..\..\samples -I.\..\..\include \
-	-DBMP_DIR=\"bitmaps/\" $(CXXFLAGS) $(__EXCEPTIONSFLAG) \
-	$(__EXCEPTIONSFLAG_1)
+	-DBMP_DIR=\"bitmaps/\" $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_1) \
+	$(CPPFLAGS) $(CXXFLAGS)
 FL_SAMPLE3_OBJECTS =  \
 	$(OBJS)\fl_sample3_fl_sample3.o \
 	$(OBJS)\fl_sample3_fl_sample3_rc.o

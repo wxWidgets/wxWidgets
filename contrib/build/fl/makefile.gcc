@@ -12,11 +12,11 @@ include ../../../build/msw/config.gcc
 
 ### Variables: ###
 
-FLDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
-	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\fl\..\..\..\include -I$(SETUPHDIR) -Wall \
-	-I..\..\src\fl\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_FL $(CXXFLAGS) \
-	$(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0)
+FLDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H \
+	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	-I..\..\src\fl\..\..\..\include -I$(SETUPHDIR) -Wall \
+	-I..\..\src\fl\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_FL \
+	$(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0) $(CPPFLAGS) $(CXXFLAGS)
 FLDLL_OBJECTS =  \
 	$(OBJS)\fldll_dummy.o \
 	$(OBJS)\fldll_antiflickpl.o \
@@ -36,11 +36,11 @@ FLDLL_OBJECTS =  \
 	$(OBJS)\fldll_rowlayoutpl.o \
 	$(OBJS)\fldll_toolwnd.o \
 	$(OBJS)\fldll_updatesmgr.o
-FLLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
-	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\fl\..\..\..\include -I$(SETUPHDIR) -Wall \
-	-I..\..\src\fl\..\..\include $(CXXFLAGS) $(__EXCEPTIONSFLAG) \
-	$(__EXCEPTIONSFLAG_0)
+FLLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H \
+	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	-I..\..\src\fl\..\..\..\include -I$(SETUPHDIR) -Wall \
+	-I..\..\src\fl\..\..\include $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0) \
+	$(CPPFLAGS) $(CXXFLAGS)
 FLLIB_OBJECTS =  \
 	$(OBJS)\fllib_dummy.o \
 	$(OBJS)\fllib_antiflickpl.o \

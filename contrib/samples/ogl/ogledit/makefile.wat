@@ -169,11 +169,11 @@ __WXUNIV_DEFINE_p = -d__WXUNIVERSAL__
 
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-OGLEDIT_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
-	$(__RUNTIME_LIBS_5) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=.\..\..\..\..\include -i=$(SETUPHDIR) -i=. &
-	$(__DLLFLAG_p) -i=.\..\..\..\..\samples -i=.\..\..\..\include $(CXXFLAGS) &
-	$(__EXCEPTIONSFLAG_7)
+OGLEDIT_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm $(__RUNTIME_LIBS_5) &
+	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
+	-i=.\..\..\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) &
+	-i=.\..\..\..\..\samples -i=.\..\..\..\include $(__EXCEPTIONSFLAG_7) &
+	$(CPPFLAGS) $(CXXFLAGS)
 OGLEDIT_OBJECTS =  &
 	$(OBJS)\ogledit_ogledit.obj &
 	$(OBJS)\ogledit_doc.obj &

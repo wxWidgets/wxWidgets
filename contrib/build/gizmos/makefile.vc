@@ -12,15 +12,15 @@
 
 ### Variables: ###
 
-GIZMOSDLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) \
-	/DWIN32 $(__DEBUGINFO_2) \
+GIZMOSDLL_CXXFLAGS = /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) /DWIN32 \
+	$(__DEBUGINFO_2) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)251$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos_vc$(VENDORTAG).pdb \
 	$(____DEBUGRUNTIME_2_p) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\src\gizmos\..\..\..\include /I$(SETUPHDIR) /W4 \
 	/I..\..\src\gizmos\..\..\include /DWXUSINGDLL /DWXMAKINGDLL_GIZMOS \
-	$(CXXFLAGS) $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0) /Yu"wx/wxprec.h" \
-	/Fp"$(OBJS)\wxprec_gizmosdll.pch"
+	$(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0) /Yu"wx/wxprec.h" \
+	/Fp"$(OBJS)\wxprec_gizmosdll.pch" $(CPPFLAGS) $(CXXFLAGS)
 GIZMOSDLL_OBJECTS =  \
 	$(OBJS)\gizmosdll_dummy.obj \
 	$(OBJS)\gizmosdll_dynamicsash.obj \
@@ -29,14 +29,14 @@ GIZMOSDLL_OBJECTS =  \
 	$(OBJS)\gizmosdll_multicell.obj \
 	$(OBJS)\gizmosdll_splittree.obj \
 	$(OBJS)\gizmosdll_statpict.obj
-GIZMOSLIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_15) \
-	/DWIN32 $(__DEBUGINFO_2) \
+GIZMOSLIB_CXXFLAGS = /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_15) /DWIN32 \
+	$(__DEBUGINFO_2) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos.pdb \
 	$(____DEBUGRUNTIME_14_p) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\src\gizmos\..\..\..\include /I$(SETUPHDIR) /W4 \
-	/I..\..\src\gizmos\..\..\include $(CXXFLAGS) $(__EXCEPTIONSFLAG) \
-	$(__EXCEPTIONSFLAG_0) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_gizmoslib.pch"
+	/I..\..\src\gizmos\..\..\include $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0) \
+	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_gizmoslib.pch" $(CPPFLAGS) $(CXXFLAGS)
 GIZMOSLIB_OBJECTS =  \
 	$(OBJS)\gizmoslib_dummy.obj \
 	$(OBJS)\gizmoslib_dynamicsash.obj \

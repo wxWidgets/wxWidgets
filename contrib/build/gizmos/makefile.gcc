@@ -12,11 +12,11 @@ include ../../../build/msw/config.gcc
 
 ### Variables: ###
 
-GIZMOSDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
+GIZMOSDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I..\..\src\gizmos\..\..\..\include -I$(SETUPHDIR) \
 	-Wall -I..\..\src\gizmos\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_GIZMOS \
-	$(CXXFLAGS) $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0)
+	$(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0) $(CPPFLAGS) $(CXXFLAGS)
 GIZMOSDLL_OBJECTS =  \
 	$(OBJS)\gizmosdll_dummy.o \
 	$(OBJS)\gizmosdll_dynamicsash.o \
@@ -25,11 +25,11 @@ GIZMOSDLL_OBJECTS =  \
 	$(OBJS)\gizmosdll_multicell.o \
 	$(OBJS)\gizmosdll_splittree.o \
 	$(OBJS)\gizmosdll_statpict.o
-GIZMOSLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
+GIZMOSLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I..\..\src\gizmos\..\..\..\include -I$(SETUPHDIR) \
-	-Wall -I..\..\src\gizmos\..\..\include $(CXXFLAGS) $(__EXCEPTIONSFLAG) \
-	$(__EXCEPTIONSFLAG_0)
+	-Wall -I..\..\src\gizmos\..\..\include $(__EXCEPTIONSFLAG) \
+	$(__EXCEPTIONSFLAG_0) $(CPPFLAGS) $(CXXFLAGS)
 GIZMOSLIB_OBJECTS =  \
 	$(OBJS)\gizmoslib_dummy.o \
 	$(OBJS)\gizmoslib_dynamicsash.o \

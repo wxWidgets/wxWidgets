@@ -45,14 +45,16 @@ top_srcdir = @top_srcdir@
 DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
 SVGDLL_CXXFLAGS = $(__svgdll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
-	-I$(top_srcdir)/include -I$(srcdir)/../../include -DWXUSINGDLL \
-	-DWXMAKINGDLL_SVG $(PIC_FLAG) $(CPPFLAGS) $(CXXFLAGS)
+	-I$(srcdir)/../../include -DWXUSINGDLL -DWXMAKINGDLL_SVG $(PIC_FLAG) \
+	$(CPPFLAGS) $(CXXFLAGS)
 SVGDLL_OBJECTS =  \
 	svgdll_dcsvg.o
+SVGDLL_ODEP =  $(___pch_wxprec_svgdll_wx_wxprec_h_gch___depname)
 SVGLIB_CXXFLAGS = $(__svglib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
-	-I$(top_srcdir)/include -I$(srcdir)/../../include $(CPPFLAGS) $(CXXFLAGS)
+	-I$(srcdir)/../../include $(CPPFLAGS) $(CXXFLAGS)
 SVGLIB_OBJECTS =  \
 	svglib_dcsvg.o
+SVGLIB_ODEP =  $(___pch_wxprec_svglib_wx_wxprec_h_gch___depname)
 WX_VERSION = 2.5.1
 
 ### Conditionally set variables: ###
@@ -101,9 +103,12 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)
 @COND_MONOLITHIC_1@__WXLIB_MONO_p = $(COND_MONOLITHIC_1___WXLIB_MONO_p)
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
+@COND_GCC_PCH_1@___pch_wxprec_svgdll_wx_wxprec_h_gch___depname \
+@COND_GCC_PCH_1@	= .pch/wxprec_svgdll/wx/wxprec.h.gch
+@COND_GCC_PCH_1@___pch_wxprec_svglib_wx_wxprec_h_gch___depname \
+@COND_GCC_PCH_1@	= .pch/wxprec_svglib/wx/wxprec.h.gch
 @COND_SHARED_1@__install_svgdll___depname = install_svgdll
 @COND_SHARED_0@__install_svglib___depname = install_svglib
-@COND_GCC_PCH_1@__svgdll_PCH_DEP = .pch/wxprec_svgdll/wx/wxprec.h.gch
 @COND_GCC_PCH_1@__svgdll_PCH_INC = -I.pch/wxprec_svgdll
 COND_SHARED_1___svgdll___depname = \
 	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_svg$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__svgdll___targetsuf3)
@@ -153,7 +158,6 @@ COND_USE_SOVERSOLARIS_1___svgdll___soname_flags = \
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@__svgdll___targetsuf3 \
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .1.0.0.$(SO_SUFFIX)
 @COND_USE_SOVERSION_0@__svgdll___targetsuf3 = .$(SO_SUFFIX)
-@COND_GCC_PCH_1@__svglib_PCH_DEP = .pch/wxprec_svglib/wx/wxprec.h.gch
 @COND_GCC_PCH_1@__svglib_PCH_INC = -I.pch/wxprec_svglib
 COND_SHARED_0___svglib___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_svg-2.5$(HOST_SUFFIX).a
@@ -202,20 +206,20 @@ install-strip: install
 @COND_SHARED_0@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
 @COND_SHARED_0@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_svg-2.5$(HOST_SUFFIX).a $(DESTDIR)$(libdir)
 
-@COND_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_svg$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__svgdll___targetsuf3): $(__svgdll_PCH_DEP)  $(SVGDLL_OBJECTS)
+@COND_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_svg$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__svgdll___targetsuf3): $(SVGDLL_OBJECTS)
 @COND_SHARED_1@	$(SHARED_LD_CXX) $@ $(SVGDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__svgdll___macinstnamecmd) $(__svgdll___importlib) $(__svgdll___soname_flags) $(__svgdll___macver)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)
 @COND_SHARED_1@	
 @COND_SHARED_1@	$(__svgdll___so_symlinks_cmd)
 
-svgdll_dcsvg.o: $(srcdir)/dcsvg.cpp
+svgdll_dcsvg.o: $(srcdir)/dcsvg.cpp $(SVGDLL_ODEP)
 	$(CXXC) -c -o $@ $(SVGDLL_CXXFLAGS) $<
 
-@COND_SHARED_0@$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_svg-2.5$(HOST_SUFFIX).a: $(__svglib_PCH_DEP)  $(SVGLIB_OBJECTS)
+@COND_SHARED_0@$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_svg-2.5$(HOST_SUFFIX).a: $(SVGLIB_OBJECTS)
 @COND_SHARED_0@	rm -f $@
 @COND_SHARED_0@	$(AR) rcu $@ $(SVGLIB_OBJECTS)
 @COND_SHARED_0@	$(RANLIB) $@
 
-svglib_dcsvg.o: $(srcdir)/dcsvg.cpp
+svglib_dcsvg.o: $(srcdir)/dcsvg.cpp $(SVGLIB_ODEP)
 	$(CXXC) -c -o $@ $(SVGLIB_CXXFLAGS) $<
 
 uninstall: 

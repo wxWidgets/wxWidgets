@@ -4,7 +4,12 @@
 #     Do not modify, all changes will be overwritten!
 # =========================================================================
 
+.autodepend
+
 !ifndef BCCDIR
+!ifndef MAKEDIR
+!error Your Borland compiler does not define MAKEDIR. Please define the BCCDIR variable, e.g. BCCDIR=d:\bc4
+!endif
 BCCDIR = $(MAKEDIR)\..
 !endif
 
@@ -14,16 +19,12 @@ BCCDIR = $(MAKEDIR)\..
 # Do not modify the rest of this file!
 # -------------------------------------------------------------------------
 
-!if "$(BCCDIR)" == "\.."
-!error Your Borland compiler does not define MAKEDIR. Please define the BCCDIR variable, e.g. BCCDIR=d:\bc4
-!endif
-
 ### Variables: ###
 
-HELPGEN_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS_6) -I$(BCCDIR)\include \
-	$(__DEBUGINFO) $(__OPTIMIZEFLAG_2) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
+HELPGEN_CXXFLAGS = $(__RUNTIME_LIBS_6) -I$(BCCDIR)\include $(__DEBUGINFO) \
+	$(__OPTIMIZEFLAG_2) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I.\..\..\..\include \
-	-I$(SETUPHDIR) -I. $(__DLLFLAG_p) $(CXXFLAGS)
+	-I$(SETUPHDIR) -I. $(__DLLFLAG_p) $(CPPFLAGS) $(CXXFLAGS)
 HELPGEN_OBJECTS =  \
 	$(OBJS)\HelpGen_HelpGen.obj \
 	$(OBJS)\HelpGen_cjparser.obj \
@@ -166,7 +167,7 @@ $(OBJS)\HelpGen_srcparser.obj: .\srcparser.cpp
 	$(CXX) -q -c -P -o$@ $(HELPGEN_CXXFLAGS) $**
 
 $(OBJS)\HelpGen.exe: $(HELPGEN_OBJECTS)
-	ilink32 -Tpe -q $(LDFLAGS) -L$(BCCDIR)\lib $(__DEBUGINFO)  -L$(LIBDIRNAME) -ap @&&|
+	ilink32 -Tpe -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -ap @&&|
 	c0x32.obj $(HELPGEN_OBJECTS),$@,, $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib import32.lib cw32mt$(__RUNTIME_LIBS_7).lib,,
 |
 

@@ -198,11 +198,11 @@ OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 SETUPHDIR = &
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
-XRCDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
-	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\xrc\..\..\..\include -i=$(SETUPHDIR) &
-	-i=..\..\src\xrc\..\..\include -dWXUSINGDLL -dWXMAKINGDLL_XRC $(CXXFLAGS) &
-	/fh=$(OBJS)\wxprec_xrcdll.pch $(__EXCEPTIONSFLAG)
+XRCDLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
+	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
+	-i=..\..\src\xrc\..\..\..\include -i=$(SETUPHDIR) &
+	-i=..\..\src\xrc\..\..\include -dWXUSINGDLL -dWXMAKINGDLL_XRC &
+	/fh=$(OBJS)\wxprec_xrcdll.pch $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 XRCDLL_OBJECTS =  &
 	$(OBJS)\xrcdll_dummy.obj &
 	$(OBJS)\xrcdll_xmlres.obj &
@@ -242,12 +242,12 @@ XRCDLL_OBJECTS =  &
 	$(OBJS)\xrcdll_xh_unkwn.obj &
 	$(OBJS)\xrcdll_xh_wizrd.obj &
 	$(OBJS)\xrcdll_xmlrsall.obj
-XRCLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
-	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\xrc\..\..\..\include -i=$(SETUPHDIR) &
+XRCLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
+	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
+	-i=..\..\src\xrc\..\..\..\include -i=$(SETUPHDIR) &
 	-i=..\..\src\xrc\..\..\include -i=..\..\src\xrc\expat\xmlparse &
-	-i=..\..\src\xrc\expat\xmltok $(CXXFLAGS) /fh=$(OBJS)\wxprec_xrclib.pch &
-	$(__EXCEPTIONSFLAG)
+	-i=..\..\src\xrc\expat\xmltok /fh=$(OBJS)\wxprec_xrclib.pch &
+	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 XRCLIB_OBJECTS =  &
 	$(OBJS)\xrclib_dummy.obj &
 	$(OBJS)\xrclib_xmlres.obj &
@@ -553,5 +553,5 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)251$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc_wa
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.lib :  $(XRCLIB_OBJECTS)
 	@%create $(OBJS)\xrclib.lbc
 	@for %i in ($(XRCLIB_OBJECTS)) do @%append $(OBJS)\xrclib.lbc +%i
-	wlib -q -p2048 -n -b $^@ @$(OBJS)\xrclib.lbc
+	wlib -q -p4096 -n -b $^@ @$(OBJS)\xrclib.lbc
 !endif

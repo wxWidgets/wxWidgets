@@ -167,11 +167,11 @@ __WXUNIV_DEFINE_p = -d__WXUNIVERSAL__
 
 ### Variables: ###
 
-MTEST_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
-	$(__RUNTIME_LIBS_5) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=.\..\..\..\..\include -i=$(SETUPHDIR) -i=. &
-	$(__DLLFLAG_p) -i=.\..\..\..\..\samples -i=.\..\..\..\include $(CXXFLAGS) &
-	$(__EXCEPTIONSFLAG_7)
+MTEST_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm $(__RUNTIME_LIBS_5) &
+	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
+	-i=.\..\..\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) &
+	-i=.\..\..\..\..\samples -i=.\..\..\..\include $(__EXCEPTIONSFLAG_7) &
+	$(CPPFLAGS) $(CXXFLAGS)
 MTEST_OBJECTS =  &
 	$(OBJS)\mtest_mtest.obj
 OBJS = &

@@ -182,11 +182,11 @@ __ogllib___depname = &
 
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-OGLDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
-	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\ogl\..\..\..\include -i=$(SETUPHDIR) &
-	-i=..\..\src\ogl\..\..\include -dWXUSINGDLL -dWXMAKINGDLL_OGL $(CXXFLAGS) &
-	/fh=$(OBJS)\wxprec_ogldll.pch $(__EXCEPTIONSFLAG)
+OGLDLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
+	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
+	-i=..\..\src\ogl\..\..\..\include -i=$(SETUPHDIR) &
+	-i=..\..\src\ogl\..\..\include -dWXUSINGDLL -dWXMAKINGDLL_OGL &
+	/fh=$(OBJS)\wxprec_ogldll.pch $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 OGLDLL_OBJECTS =  &
 	$(OBJS)\ogldll_dummy.obj &
 	$(OBJS)\ogldll_basic2.obj &
@@ -201,11 +201,11 @@ OGLDLL_OBJECTS =  &
 	$(OBJS)\ogldll_constrnt.obj &
 	$(OBJS)\ogldll_lines.obj &
 	$(OBJS)\ogldll_ogldiag.obj
-OGLLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
-	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\ogl\..\..\..\include -i=$(SETUPHDIR) &
-	-i=..\..\src\ogl\..\..\include $(CXXFLAGS) /fh=$(OBJS)\wxprec_ogllib.pch &
-	$(__EXCEPTIONSFLAG)
+OGLLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
+	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
+	-i=..\..\src\ogl\..\..\..\include -i=$(SETUPHDIR) &
+	-i=..\..\src\ogl\..\..\include /fh=$(OBJS)\wxprec_ogllib.pch &
+	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 OGLLIB_OBJECTS =  &
 	$(OBJS)\ogllib_dummy.obj &
 	$(OBJS)\ogllib_basic2.obj &
@@ -338,5 +338,5 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)251$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl_wa
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl.lib :  $(OGLLIB_OBJECTS)
 	@%create $(OBJS)\ogllib.lbc
 	@for %i in ($(OGLLIB_OBJECTS)) do @%append $(OBJS)\ogllib.lbc +%i
-	wlib -q -p2048 -n -b $^@ @$(OBJS)\ogllib.lbc
+	wlib -q -p4096 -n -b $^@ @$(OBJS)\ogllib.lbc
 !endif

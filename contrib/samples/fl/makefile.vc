@@ -12,53 +12,53 @@
 
 ### Variables: ###
 
-FL_DEMO1_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) /DWIN32 \
+FL_DEMO1_CXXFLAGS = /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) /DWIN32 \
 	$(__DEBUGINFO_8) /Fd$(OBJS)\fl_demo1.pdb $(____DEBUGRUNTIME_2_p) \
 	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I.\..\..\..\include \
 	/I$(SETUPHDIR) /W4 /I. $(__DLLFLAG_p) /D_WINDOWS /I.\..\..\..\samples \
-	/I.\..\..\include /DBMP_DIR=\"bitmaps/\" $(CXXFLAGS) $(__EXCEPTIONSFLAG) \
-	$(__EXCEPTIONSFLAG_3)
+	/I.\..\..\include /DBMP_DIR=\"bitmaps/\" $(__EXCEPTIONSFLAG) \
+	$(__EXCEPTIONSFLAG_3) $(CPPFLAGS) $(CXXFLAGS)
 FL_DEMO1_OBJECTS =  \
 	$(OBJS)\fl_demo1_fl_demo1.obj \
 	$(OBJS)\fl_demo1_fl_demo1.res
-FL_DEMO2_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_16) \
-	/DWIN32 $(__DEBUGINFO_8) /Fd$(OBJS)\fl_demo2.pdb $(____DEBUGRUNTIME_15_p) \
+FL_DEMO2_CXXFLAGS = /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_16) /DWIN32 \
+	$(__DEBUGINFO_8) /Fd$(OBJS)\fl_demo2.pdb $(____DEBUGRUNTIME_15_p) \
 	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I.\..\..\..\include \
 	/I$(SETUPHDIR) /W4 /I. $(__DLLFLAG_p) /D_WINDOWS /I.\..\..\..\samples \
-	/I.\..\..\include /DBMP_DIR=\"bitmaps/\" $(CXXFLAGS) $(__EXCEPTIONSFLAG) \
-	$(__EXCEPTIONSFLAG_3)
+	/I.\..\..\include /DBMP_DIR=\"bitmaps/\" $(__EXCEPTIONSFLAG) \
+	$(__EXCEPTIONSFLAG_3) $(CPPFLAGS) $(CXXFLAGS)
 FL_DEMO2_OBJECTS =  \
 	$(OBJS)\fl_demo2_fl_demo2.obj \
 	$(OBJS)\fl_demo2_fl_demo2.res
-FL_SAMPLE1_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_29) \
-	/DWIN32 $(__DEBUGINFO_8) /Fd$(OBJS)\fl_sample1.pdb $(____DEBUGRUNTIME_28_p) \
+FL_SAMPLE1_CXXFLAGS = /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_29) /DWIN32 \
+	$(__DEBUGINFO_8) /Fd$(OBJS)\fl_sample1.pdb $(____DEBUGRUNTIME_28_p) \
 	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I.\..\..\..\include \
 	/I$(SETUPHDIR) /W4 /I. $(__DLLFLAG_p) /D_WINDOWS /I.\..\..\..\samples \
-	/I.\..\..\include /DBMP_DIR=\"bitmaps/\" $(CXXFLAGS) $(__EXCEPTIONSFLAG) \
-	$(__EXCEPTIONSFLAG_3)
+	/I.\..\..\include /DBMP_DIR=\"bitmaps/\" $(__EXCEPTIONSFLAG) \
+	$(__EXCEPTIONSFLAG_3) $(CPPFLAGS) $(CXXFLAGS)
 FL_SAMPLE1_OBJECTS =  \
 	$(OBJS)\fl_sample1_fl_sample1.obj \
 	$(OBJS)\fl_sample1_fl_sample1.res
-FL_SAMPLE2_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_42) \
-	/DWIN32 $(__DEBUGINFO_8) /Fd$(OBJS)\fl_sample2.pdb $(____DEBUGRUNTIME_41_p) \
+FL_SAMPLE2_CXXFLAGS = /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_42) /DWIN32 \
+	$(__DEBUGINFO_8) /Fd$(OBJS)\fl_sample2.pdb $(____DEBUGRUNTIME_41_p) \
 	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I.\..\..\..\include \
 	/I$(SETUPHDIR) /W4 /I. $(__DLLFLAG_p) /D_WINDOWS /I.\..\..\..\samples \
-	/I.\..\..\include /DBMP_DIR=\"bitmaps/\" $(CXXFLAGS) $(__EXCEPTIONSFLAG) \
-	$(__EXCEPTIONSFLAG_3)
+	/I.\..\..\include /DBMP_DIR=\"bitmaps/\" $(__EXCEPTIONSFLAG) \
+	$(__EXCEPTIONSFLAG_3) $(CPPFLAGS) $(CXXFLAGS)
 FL_SAMPLE2_OBJECTS =  \
 	$(OBJS)\fl_sample2_fl_sample2.obj \
 	$(OBJS)\fl_sample2_fl_sample2.res
-FL_SAMPLE3_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_55) \
-	/DWIN32 $(__DEBUGINFO_8) /Fd$(OBJS)\fl_sample3.pdb $(____DEBUGRUNTIME_54_p) \
+FL_SAMPLE3_CXXFLAGS = /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_55) /DWIN32 \
+	$(__DEBUGINFO_8) /Fd$(OBJS)\fl_sample3.pdb $(____DEBUGRUNTIME_54_p) \
 	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I.\..\..\..\include \
 	/I$(SETUPHDIR) /W4 /I. $(__DLLFLAG_p) /D_WINDOWS /I.\..\..\..\samples \
-	/I.\..\..\include /DBMP_DIR=\"bitmaps/\" $(CXXFLAGS) $(__EXCEPTIONSFLAG) \
-	$(__EXCEPTIONSFLAG_3)
+	/I.\..\..\include /DBMP_DIR=\"bitmaps/\" $(__EXCEPTIONSFLAG) \
+	$(__EXCEPTIONSFLAG_3) $(CPPFLAGS) $(CXXFLAGS)
 FL_SAMPLE3_OBJECTS =  \
 	$(OBJS)\fl_sample3_fl_sample3.obj \
 	$(OBJS)\fl_sample3_fl_sample3.res

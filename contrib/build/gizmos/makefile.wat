@@ -180,11 +180,12 @@ __gizmoslib___depname = &
 
 ### Variables: ###
 
-GIZMOSDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
-	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\gizmos\..\..\..\include -i=$(SETUPHDIR) &
+GIZMOSDLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
+	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
+	-i=..\..\src\gizmos\..\..\..\include -i=$(SETUPHDIR) &
 	-i=..\..\src\gizmos\..\..\include -dWXUSINGDLL -dWXMAKINGDLL_GIZMOS &
-	$(CXXFLAGS) /fh=$(OBJS)\wxprec_gizmosdll.pch $(__EXCEPTIONSFLAG)
+	/fh=$(OBJS)\wxprec_gizmosdll.pch $(__EXCEPTIONSFLAG) $(CPPFLAGS) &
+	$(CXXFLAGS)
 GIZMOSDLL_OBJECTS =  &
 	$(OBJS)\gizmosdll_dummy.obj &
 	$(OBJS)\gizmosdll_dynamicsash.obj &
@@ -193,11 +194,11 @@ GIZMOSDLL_OBJECTS =  &
 	$(OBJS)\gizmosdll_multicell.obj &
 	$(OBJS)\gizmosdll_splittree.obj &
 	$(OBJS)\gizmosdll_statpict.obj
-GIZMOSLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
-	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\gizmos\..\..\..\include -i=$(SETUPHDIR) &
-	-i=..\..\src\gizmos\..\..\include $(CXXFLAGS) &
-	/fh=$(OBJS)\wxprec_gizmoslib.pch $(__EXCEPTIONSFLAG)
+GIZMOSLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
+	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
+	-i=..\..\src\gizmos\..\..\..\include -i=$(SETUPHDIR) &
+	-i=..\..\src\gizmos\..\..\include /fh=$(OBJS)\wxprec_gizmoslib.pch &
+	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 GIZMOSLIB_OBJECTS =  &
 	$(OBJS)\gizmoslib_dummy.obj &
 	$(OBJS)\gizmoslib_dynamicsash.obj &
@@ -290,5 +291,5 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)251$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos.lib :  $(GIZMOSLIB_OBJECTS)
 	@%create $(OBJS)\gizmoslib.lbc
 	@for %i in ($(GIZMOSLIB_OBJECTS)) do @%append $(OBJS)\gizmoslib.lbc +%i
-	wlib -q -p2048 -n -b $^@ @$(OBJS)\gizmoslib.lbc
+	wlib -q -p4096 -n -b $^@ @$(OBJS)\gizmoslib.lbc
 !endif

@@ -14,15 +14,15 @@
 
 OBJS = \
 	vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-OGLDLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) /DWIN32 \
+OGLDLL_CXXFLAGS = /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) /DWIN32 \
 	$(__DEBUGINFO_2) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)251$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl_vc$(VENDORTAG).pdb \
 	$(____DEBUGRUNTIME_2_p) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\src\ogl\..\..\..\include /I$(SETUPHDIR) /W4 \
-	/I..\..\src\ogl\..\..\include /DWXUSINGDLL /DWXMAKINGDLL_OGL $(CXXFLAGS) \
+	/I..\..\src\ogl\..\..\include /DWXUSINGDLL /DWXMAKINGDLL_OGL \
 	$(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0) /Yu"wx/wxprec.h" \
-	/Fp"$(OBJS)\wxprec_ogldll.pch"
+	/Fp"$(OBJS)\wxprec_ogldll.pch" $(CPPFLAGS) $(CXXFLAGS)
 OGLDLL_OBJECTS =  \
 	$(OBJS)\ogldll_dummy.obj \
 	$(OBJS)\ogldll_basic2.obj \
@@ -37,14 +37,14 @@ OGLDLL_OBJECTS =  \
 	$(OBJS)\ogldll_constrnt.obj \
 	$(OBJS)\ogldll_lines.obj \
 	$(OBJS)\ogldll_ogldiag.obj
-OGLLIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_15) /DWIN32 \
+OGLLIB_CXXFLAGS = /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_15) /DWIN32 \
 	$(__DEBUGINFO_2) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl.pdb \
 	$(____DEBUGRUNTIME_14_p) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\src\ogl\..\..\..\include /I$(SETUPHDIR) /W4 \
-	/I..\..\src\ogl\..\..\include $(CXXFLAGS) $(__EXCEPTIONSFLAG) \
-	$(__EXCEPTIONSFLAG_0) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_ogllib.pch"
+	/I..\..\src\ogl\..\..\include $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0) \
+	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_ogllib.pch" $(CPPFLAGS) $(CXXFLAGS)
 OGLLIB_OBJECTS =  \
 	$(OBJS)\ogllib_dummy.obj \
 	$(OBJS)\ogllib_basic2.obj \

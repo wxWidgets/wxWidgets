@@ -184,19 +184,19 @@ OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 SETUPHDIR = &
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
-SVGDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
-	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\svg\..\..\..\include -i=$(SETUPHDIR) &
-	-i=..\..\src\svg\..\..\include -dWXUSINGDLL -dWXMAKINGDLL_SVG $(CXXFLAGS) &
-	/fh=$(OBJS)\wxprec_svgdll.pch $(__EXCEPTIONSFLAG)
+SVGDLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
+	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
+	-i=..\..\src\svg\..\..\..\include -i=$(SETUPHDIR) &
+	-i=..\..\src\svg\..\..\include -dWXUSINGDLL -dWXMAKINGDLL_SVG &
+	/fh=$(OBJS)\wxprec_svgdll.pch $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 SVGDLL_OBJECTS =  &
 	$(OBJS)\svgdll_dummy.obj &
 	$(OBJS)\svgdll_dcsvg.obj
-SVGLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
-	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\svg\..\..\..\include -i=$(SETUPHDIR) &
-	-i=..\..\src\svg\..\..\include $(CXXFLAGS) /fh=$(OBJS)\wxprec_svglib.pch &
-	$(__EXCEPTIONSFLAG)
+SVGLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
+	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
+	-i=..\..\src\svg\..\..\..\include -i=$(SETUPHDIR) &
+	-i=..\..\src\svg\..\..\include /fh=$(OBJS)\wxprec_svglib.pch &
+	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 SVGLIB_OBJECTS =  &
 	$(OBJS)\svglib_dummy.obj &
 	$(OBJS)\svglib_dcsvg.obj
@@ -250,5 +250,5 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)251$(WXUNICODEFLAG)$(WXDEBUGFLAG)_svg_wa
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_svg.lib :  $(SVGLIB_OBJECTS)
 	@%create $(OBJS)\svglib.lbc
 	@for %i in ($(SVGLIB_OBJECTS)) do @%append $(OBJS)\svglib.lbc +%i
-	wlib -q -p2048 -n -b $^@ @$(OBJS)\svglib.lbc
+	wlib -q -p4096 -n -b $^@ @$(OBJS)\svglib.lbc
 !endif

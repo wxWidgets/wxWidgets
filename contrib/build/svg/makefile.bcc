@@ -4,7 +4,12 @@
 #     Do not modify, all changes will be overwritten!
 # =========================================================================
 
+.autodepend
+
 !ifndef BCCDIR
+!ifndef MAKEDIR
+!error Your Borland compiler does not define MAKEDIR. Please define the BCCDIR variable, e.g. BCCDIR=d:\bc4
+!endif
 BCCDIR = $(MAKEDIR)\..
 !endif
 
@@ -14,29 +19,25 @@ BCCDIR = $(MAKEDIR)\..
 # Do not modify the rest of this file!
 # -------------------------------------------------------------------------
 
-!if "$(BCCDIR)" == "\.."
-!error Your Borland compiler does not define MAKEDIR. Please define the BCCDIR variable, e.g. BCCDIR=d:\bc4
-!endif
-
 ### Variables: ###
 
 OBJS = \
 	bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
-SVGDLL_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) -I$(BCCDIR)\include \
-	$(__DEBUGINFO) $(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
-	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I..\..\src\svg\..\..\..\include \
-	-I$(SETUPHDIR) -I..\..\src\svg\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_SVG \
-	$(CXXFLAGS) -Hu -H=$(OBJS)\wxprec_svgdll.csm
+SVGDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
+	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+	$(__UNICODE_DEFINE_p) -I..\..\src\svg\..\..\..\include -I$(SETUPHDIR) \
+	-I..\..\src\svg\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_SVG -Hu \
+	-H=$(OBJS)\wxprec_svgdll.csm $(CPPFLAGS) $(CXXFLAGS)
 SVGDLL_OBJECTS =  \
 	$(OBJS)\svgdll_dummy.obj \
 	$(OBJS)\svgdll_dcsvg.obj
-SVGLIB_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) -I$(BCCDIR)\include \
-	$(__DEBUGINFO) $(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
-	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I..\..\src\svg\..\..\..\include \
-	-I$(SETUPHDIR) -I..\..\src\svg\..\..\include $(CXXFLAGS) -Hu \
-	-H=$(OBJS)\wxprec_svglib.csm
+SVGLIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
+	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+	$(__UNICODE_DEFINE_p) -I..\..\src\svg\..\..\..\include -I$(SETUPHDIR) \
+	-I..\..\src\svg\..\..\include -Hu -H=$(OBJS)\wxprec_svglib.csm $(CPPFLAGS) \
+	$(CXXFLAGS)
 SVGLIB_OBJECTS =  \
 	$(OBJS)\svglib_dummy.obj \
 	$(OBJS)\svglib_dcsvg.obj
@@ -185,7 +186,7 @@ clean:
 
 !if "$(SHARED)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)251$(WXUNICODEFLAG)$(WXDEBUGFLAG)_svg_bcc$(VENDORTAG).dll: $(OBJS)\svgdll_dummy.obj  $(SVGDLL_OBJECTS)
-	ilink32 -Tpd -q $(LDFLAGS) -L$(BCCDIR)\lib $(__DEBUGINFO)  -L$(LIBDIRNAME) @&&|
+	ilink32 -Tpd -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) @&&|
 	c0d32.obj $(SVGDLL_OBJECTS),$@,, $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  import32.lib cw32mt$(__RUNTIME_LIBS_7).lib,,
 |
 	implib -f $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_svg $@
@@ -194,7 +195,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)251$(WXUNICODEFLAG)$(WXDEBUGFLAG)_svg_bc
 !if "$(SHARED)" == "0"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_svg.lib: $(OBJS)\svglib_dummy.obj  $(SVGLIB_OBJECTS)
 	if exist $@ del $@
-	tlib /a /p2048 $@ @&&|
+	tlib /a /p4096 $@ @&&|
 	$(SVGLIB_OBJECTS)
 |
 !endif

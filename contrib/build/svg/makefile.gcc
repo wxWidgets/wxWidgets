@@ -16,19 +16,19 @@ OBJS = \
 	gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
-SVGDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
-	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\svg\..\..\..\include -I$(SETUPHDIR) -Wall \
-	-I..\..\src\svg\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_SVG $(CXXFLAGS) \
-	$(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0)
+SVGDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H \
+	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	-I..\..\src\svg\..\..\..\include -I$(SETUPHDIR) -Wall \
+	-I..\..\src\svg\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_SVG \
+	$(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0) $(CPPFLAGS) $(CXXFLAGS)
 SVGDLL_OBJECTS =  \
 	$(OBJS)\svgdll_dummy.o \
 	$(OBJS)\svgdll_dcsvg.o
-SVGLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
-	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\svg\..\..\..\include -I$(SETUPHDIR) -Wall \
-	-I..\..\src\svg\..\..\include $(CXXFLAGS) $(__EXCEPTIONSFLAG) \
-	$(__EXCEPTIONSFLAG_0)
+SVGLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H \
+	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	-I..\..\src\svg\..\..\..\include -I$(SETUPHDIR) -Wall \
+	-I..\..\src\svg\..\..\include $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0) \
+	$(CPPFLAGS) $(CXXFLAGS)
 SVGLIB_OBJECTS =  \
 	$(OBJS)\svglib_dummy.o \
 	$(OBJS)\svglib_dcsvg.o

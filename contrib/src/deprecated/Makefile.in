@@ -45,13 +45,11 @@ top_srcdir = @top_srcdir@
 ### Variables: ###
 
 DEPRECATEDDLL_CFLAGS = $(__deprecateddll_PCH_INC) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include -I$(srcdir)/../../include \
-	-DWXUSINGDLL -DWXMAKINGDLL_DEPRECATED -I$(srcdir) $(PIC_FLAG) $(CPPFLAGS) \
-	$(CFLAGS)
+	$(__WXUNIV_DEFINE_p) -I$(srcdir)/../../include -DWXUSINGDLL \
+	-DWXMAKINGDLL_DEPRECATED -I$(srcdir) $(PIC_FLAG) $(CPPFLAGS) $(CFLAGS)
 DEPRECATEDDLL_CXXFLAGS = $(__deprecateddll_PCH_INC) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include -I$(srcdir)/../../include \
-	-DWXUSINGDLL -DWXMAKINGDLL_DEPRECATED -I$(srcdir) $(PIC_FLAG) $(CPPFLAGS) \
-	$(CXXFLAGS)
+	$(__WXUNIV_DEFINE_p) -I$(srcdir)/../../include -DWXUSINGDLL \
+	-DWXMAKINGDLL_DEPRECATED -I$(srcdir) $(PIC_FLAG) $(CPPFLAGS) $(CXXFLAGS)
 DEPRECATEDDLL_OBJECTS =  \
 	deprecateddll_prop.o \
 	deprecateddll_propform.o \
@@ -61,12 +59,14 @@ DEPRECATEDDLL_OBJECTS =  \
 	deprecateddll_treelay.o \
 	deprecateddll_wxexpr.o \
 	deprecateddll_dosyacc.o
+DEPRECATEDDLL_ODEP = \
+	$(___pch_wxprec_deprecateddll_wx_wxprec_h_gch___depname)
 DEPRECATEDLIB_CFLAGS = $(__deprecatedlib_PCH_INC) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include -I$(srcdir)/../../include \
-	-I$(srcdir) $(CPPFLAGS) $(CFLAGS)
+	$(__WXUNIV_DEFINE_p) -I$(srcdir)/../../include -I$(srcdir) $(CPPFLAGS) \
+	$(CFLAGS)
 DEPRECATEDLIB_CXXFLAGS = $(__deprecatedlib_PCH_INC) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include -I$(srcdir)/../../include \
-	-I$(srcdir) $(CPPFLAGS) $(CXXFLAGS)
+	$(__WXUNIV_DEFINE_p) -I$(srcdir)/../../include -I$(srcdir) $(CPPFLAGS) \
+	$(CXXFLAGS)
 DEPRECATEDLIB_OBJECTS =  \
 	deprecatedlib_prop.o \
 	deprecatedlib_propform.o \
@@ -76,6 +76,8 @@ DEPRECATEDLIB_OBJECTS =  \
 	deprecatedlib_treelay.o \
 	deprecatedlib_wxexpr.o \
 	deprecatedlib_dosyacc.o
+DEPRECATEDLIB_ODEP = \
+	$(___pch_wxprec_deprecatedlib_wx_wxprec_h_gch___depname)
 DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
 WX_VERSION = 2.5.1
@@ -128,8 +130,10 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)
 @COND_MONOLITHIC_1@__WXLIB_MONO_p = $(COND_MONOLITHIC_1___WXLIB_MONO_p)
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
-@COND_GCC_PCH_1@__deprecateddll_PCH_DEP = \
-@COND_GCC_PCH_1@	.pch/wxprec_deprecateddll/wx/wxprec.h.gch
+@COND_GCC_PCH_1@___pch_wxprec_deprecateddll_wx_wxprec_h_gch___depname \
+@COND_GCC_PCH_1@	= .pch/wxprec_deprecateddll/wx/wxprec.h.gch
+@COND_GCC_PCH_1@___pch_wxprec_deprecatedlib_wx_wxprec_h_gch___depname \
+@COND_GCC_PCH_1@	= .pch/wxprec_deprecatedlib/wx/wxprec.h.gch
 @COND_GCC_PCH_1@__deprecateddll_PCH_INC = -I.pch/wxprec_deprecateddll
 COND_SHARED_1___deprecateddll___depname = \
 	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_deprecated$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__deprecateddll___targetsuf3)
@@ -180,8 +184,6 @@ COND_USE_SOVERSOLARIS_1___deprecateddll___soname_flags = \
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@__deprecateddll___targetsuf3 \
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .1.0.0.$(SO_SUFFIX)
 @COND_USE_SOVERSION_0@__deprecateddll___targetsuf3 = .$(SO_SUFFIX)
-@COND_GCC_PCH_1@__deprecatedlib_PCH_DEP = \
-@COND_GCC_PCH_1@	.pch/wxprec_deprecatedlib/wx/wxprec.h.gch
 @COND_GCC_PCH_1@__deprecatedlib_PCH_INC = -I.pch/wxprec_deprecatedlib
 COND_SHARED_0___deprecatedlib___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_deprecated-2.5$(HOST_SUFFIX).a
@@ -207,62 +209,62 @@ clean:
 	rm -f $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_deprecated-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_deprecated$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__deprecateddll___targetsuf2)
 	rm -f $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_deprecated-2.5$(HOST_SUFFIX).a
 
-@COND_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_deprecated$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__deprecateddll___targetsuf3): $(__deprecateddll_PCH_DEP)  $(DEPRECATEDDLL_OBJECTS)
+@COND_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_deprecated$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__deprecateddll___targetsuf3): $(DEPRECATEDDLL_OBJECTS)
 @COND_SHARED_1@	$(SHARED_LD_CXX) $@ $(DEPRECATEDDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__deprecateddll___macinstnamecmd) $(__deprecateddll___importlib) $(__deprecateddll___soname_flags) $(__deprecateddll___macver)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)
 @COND_SHARED_1@	
 @COND_SHARED_1@	$(__deprecateddll___so_symlinks_cmd)
 
-deprecateddll_dosyacc.o: $(srcdir)/dosyacc.c
+deprecateddll_dosyacc.o: $(srcdir)/dosyacc.c $(DEPRECATEDDLL_ODEP)
 	$(CCC) -c -o $@ $(DEPRECATEDDLL_CFLAGS) $<
 
-deprecateddll_prop.o: $(srcdir)/prop.cpp
+deprecateddll_prop.o: $(srcdir)/prop.cpp $(DEPRECATEDDLL_ODEP)
 	$(CXXC) -c -o $@ $(DEPRECATEDDLL_CXXFLAGS) $<
 
-deprecateddll_propform.o: $(srcdir)/propform.cpp
+deprecateddll_propform.o: $(srcdir)/propform.cpp $(DEPRECATEDDLL_ODEP)
 	$(CXXC) -c -o $@ $(DEPRECATEDDLL_CXXFLAGS) $<
 
-deprecateddll_proplist.o: $(srcdir)/proplist.cpp
+deprecateddll_proplist.o: $(srcdir)/proplist.cpp $(DEPRECATEDDLL_ODEP)
 	$(CXXC) -c -o $@ $(DEPRECATEDDLL_CXXFLAGS) $<
 
-deprecateddll_resource.o: $(srcdir)/resource.cpp
+deprecateddll_resource.o: $(srcdir)/resource.cpp $(DEPRECATEDDLL_ODEP)
 	$(CXXC) -c -o $@ $(DEPRECATEDDLL_CXXFLAGS) $<
 
-deprecateddll_tbarsmpl.o: $(srcdir)/tbarsmpl.cpp
+deprecateddll_tbarsmpl.o: $(srcdir)/tbarsmpl.cpp $(DEPRECATEDDLL_ODEP)
 	$(CXXC) -c -o $@ $(DEPRECATEDDLL_CXXFLAGS) $<
 
-deprecateddll_treelay.o: $(srcdir)/treelay.cpp
+deprecateddll_treelay.o: $(srcdir)/treelay.cpp $(DEPRECATEDDLL_ODEP)
 	$(CXXC) -c -o $@ $(DEPRECATEDDLL_CXXFLAGS) $<
 
-deprecateddll_wxexpr.o: $(srcdir)/wxexpr.cpp
+deprecateddll_wxexpr.o: $(srcdir)/wxexpr.cpp $(DEPRECATEDDLL_ODEP)
 	$(CXXC) -c -o $@ $(DEPRECATEDDLL_CXXFLAGS) $<
 
-@COND_SHARED_0@$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_deprecated-2.5$(HOST_SUFFIX).a: $(__deprecatedlib_PCH_DEP)  $(DEPRECATEDLIB_OBJECTS)
+@COND_SHARED_0@$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_deprecated-2.5$(HOST_SUFFIX).a: $(DEPRECATEDLIB_OBJECTS)
 @COND_SHARED_0@	rm -f $@
 @COND_SHARED_0@	$(AR) rcu $@ $(DEPRECATEDLIB_OBJECTS)
 @COND_SHARED_0@	$(RANLIB) $@
 
-deprecatedlib_dosyacc.o: $(srcdir)/dosyacc.c
+deprecatedlib_dosyacc.o: $(srcdir)/dosyacc.c $(DEPRECATEDLIB_ODEP)
 	$(CCC) -c -o $@ $(DEPRECATEDLIB_CFLAGS) $<
 
-deprecatedlib_prop.o: $(srcdir)/prop.cpp
+deprecatedlib_prop.o: $(srcdir)/prop.cpp $(DEPRECATEDLIB_ODEP)
 	$(CXXC) -c -o $@ $(DEPRECATEDLIB_CXXFLAGS) $<
 
-deprecatedlib_propform.o: $(srcdir)/propform.cpp
+deprecatedlib_propform.o: $(srcdir)/propform.cpp $(DEPRECATEDLIB_ODEP)
 	$(CXXC) -c -o $@ $(DEPRECATEDLIB_CXXFLAGS) $<
 
-deprecatedlib_proplist.o: $(srcdir)/proplist.cpp
+deprecatedlib_proplist.o: $(srcdir)/proplist.cpp $(DEPRECATEDLIB_ODEP)
 	$(CXXC) -c -o $@ $(DEPRECATEDLIB_CXXFLAGS) $<
 
-deprecatedlib_resource.o: $(srcdir)/resource.cpp
+deprecatedlib_resource.o: $(srcdir)/resource.cpp $(DEPRECATEDLIB_ODEP)
 	$(CXXC) -c -o $@ $(DEPRECATEDLIB_CXXFLAGS) $<
 
-deprecatedlib_tbarsmpl.o: $(srcdir)/tbarsmpl.cpp
+deprecatedlib_tbarsmpl.o: $(srcdir)/tbarsmpl.cpp $(DEPRECATEDLIB_ODEP)
 	$(CXXC) -c -o $@ $(DEPRECATEDLIB_CXXFLAGS) $<
 
-deprecatedlib_treelay.o: $(srcdir)/treelay.cpp
+deprecatedlib_treelay.o: $(srcdir)/treelay.cpp $(DEPRECATEDLIB_ODEP)
 	$(CXXC) -c -o $@ $(DEPRECATEDLIB_CXXFLAGS) $<
 
-deprecatedlib_wxexpr.o: $(srcdir)/wxexpr.cpp
+deprecatedlib_wxexpr.o: $(srcdir)/wxexpr.cpp $(DEPRECATEDLIB_ODEP)
 	$(CXXC) -c -o $@ $(DEPRECATEDLIB_CXXFLAGS) $<
 
 distclean: clean

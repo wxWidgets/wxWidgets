@@ -12,15 +12,15 @@
 
 ### Variables: ###
 
-MMEDIADLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) \
-	/DWIN32 $(__DEBUGINFO_2) \
+MMEDIADLL_CXXFLAGS = /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) /DWIN32 \
+	$(__DEBUGINFO_2) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)251$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia_vc$(VENDORTAG).pdb \
 	$(____DEBUGRUNTIME_2_p) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\src\mmedia\..\..\..\include /I$(SETUPHDIR) /W4 \
 	/I..\..\src\mmedia\..\..\include /DWXUSINGDLL /DWXMAKINGDLL_MMEDIA \
-	$(CXXFLAGS) $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0) /Yu"wx/wxprec.h" \
-	/Fp"$(OBJS)\wxprec_mmediadll.pch"
+	$(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0) /Yu"wx/wxprec.h" \
+	/Fp"$(OBJS)\wxprec_mmediadll.pch" $(CPPFLAGS) $(CXXFLAGS)
 MMEDIADLL_OBJECTS =  \
 	$(OBJS)\mmediadll_dummy.obj \
 	$(OBJS)\mmediadll_cdwin.obj \
@@ -43,14 +43,14 @@ MMEDIADLL_OBJECTS =  \
 	$(OBJS)\mmediadll_sndulaw.obj \
 	$(OBJS)\mmediadll_sndwav.obj \
 	$(OBJS)\mmediadll_vidbase.obj
-MMEDIALIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_15) \
-	/DWIN32 $(__DEBUGINFO_2) \
+MMEDIALIB_CXXFLAGS = /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_15) /DWIN32 \
+	$(__DEBUGINFO_2) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia.pdb \
 	$(____DEBUGRUNTIME_14_p) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\src\mmedia\..\..\..\include /I$(SETUPHDIR) /W4 \
-	/I..\..\src\mmedia\..\..\include $(CXXFLAGS) $(__EXCEPTIONSFLAG) \
-	$(__EXCEPTIONSFLAG_0) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_mmedialib.pch"
+	/I..\..\src\mmedia\..\..\include $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0) \
+	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_mmedialib.pch" $(CPPFLAGS) $(CXXFLAGS)
 MMEDIALIB_OBJECTS =  \
 	$(OBJS)\mmedialib_dummy.obj \
 	$(OBJS)\mmedialib_cdwin.obj \

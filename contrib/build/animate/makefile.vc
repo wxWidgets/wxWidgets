@@ -12,26 +12,27 @@
 
 ### Variables: ###
 
-ANIMATEDLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) \
-	/DWIN32 $(__DEBUGINFO_2) \
+ANIMATEDLL_CXXFLAGS = /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) /DWIN32 \
+	$(__DEBUGINFO_2) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)251$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate_vc$(VENDORTAG).pdb \
 	$(____DEBUGRUNTIME_2_p) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\src\animate\..\..\..\include /I$(SETUPHDIR) /W4 \
 	/I..\..\src\animate\..\..\include /DWXUSINGDLL /DWXMAKINGDLL_ANIMATE \
-	$(CXXFLAGS) $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0) /Yu"wx/wxprec.h" \
-	/Fp"$(OBJS)\wxprec_animatedll.pch"
+	$(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0) /Yu"wx/wxprec.h" \
+	/Fp"$(OBJS)\wxprec_animatedll.pch" $(CPPFLAGS) $(CXXFLAGS)
 ANIMATEDLL_OBJECTS =  \
 	$(OBJS)\animatedll_dummy.obj \
 	$(OBJS)\animatedll_animate.obj
-ANIMATELIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_15) \
-	/DWIN32 $(__DEBUGINFO_2) \
+ANIMATELIB_CXXFLAGS = /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_15) /DWIN32 \
+	$(__DEBUGINFO_2) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate.pdb \
 	$(____DEBUGRUNTIME_14_p) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\src\animate\..\..\..\include /I$(SETUPHDIR) /W4 \
-	/I..\..\src\animate\..\..\include $(CXXFLAGS) $(__EXCEPTIONSFLAG) \
-	$(__EXCEPTIONSFLAG_0) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_animatelib.pch"
+	/I..\..\src\animate\..\..\include $(__EXCEPTIONSFLAG) \
+	$(__EXCEPTIONSFLAG_0) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_animatelib.pch" \
+	$(CPPFLAGS) $(CXXFLAGS)
 ANIMATELIB_OBJECTS =  \
 	$(OBJS)\animatelib_dummy.obj \
 	$(OBJS)\animatelib_animate.obj

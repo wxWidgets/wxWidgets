@@ -12,18 +12,17 @@ include ../../../build/msw/config.gcc
 
 ### Variables: ###
 
-DEPRECATEDDLL_CFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
+DEPRECATEDDLL_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I..\..\src\deprecated\..\..\..\include \
 	-I$(SETUPHDIR) -Wall -I..\..\src\deprecated\..\..\include -DWXUSINGDLL \
-	-DWXMAKINGDLL_DEPRECATED -I..\..\src\deprecated $(CFLAGS)
-DEPRECATEDDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) \
-	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
-	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	-I..\..\src\deprecated\..\..\..\include -I$(SETUPHDIR) -Wall \
-	-I..\..\src\deprecated\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_DEPRECATED \
-	-I..\..\src\deprecated $(CXXFLAGS) $(__EXCEPTIONSFLAG) \
-	$(__EXCEPTIONSFLAG_0)
+	-DWXMAKINGDLL_DEPRECATED -I..\..\src\deprecated $(CPPFLAGS) $(CFLAGS)
+DEPRECATEDDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
+	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+	$(__UNICODE_DEFINE_p) -I..\..\src\deprecated\..\..\..\include \
+	-I$(SETUPHDIR) -Wall -I..\..\src\deprecated\..\..\include -DWXUSINGDLL \
+	-DWXMAKINGDLL_DEPRECATED -I..\..\src\deprecated $(__EXCEPTIONSFLAG) \
+	$(__EXCEPTIONSFLAG_0) $(CPPFLAGS) $(CXXFLAGS)
 DEPRECATEDDLL_OBJECTS =  \
 	$(OBJS)\deprecateddll_dummy.o \
 	$(OBJS)\deprecateddll_prop.o \
@@ -34,17 +33,17 @@ DEPRECATEDDLL_OBJECTS =  \
 	$(OBJS)\deprecateddll_treelay.o \
 	$(OBJS)\deprecateddll_wxexpr.o \
 	$(OBJS)\deprecateddll_dosyacc.o
-DEPRECATEDLIB_CFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
+DEPRECATEDLIB_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I..\..\src\deprecated\..\..\..\include \
 	-I$(SETUPHDIR) -Wall -I..\..\src\deprecated\..\..\include \
-	-I..\..\src\deprecated $(CFLAGS)
-DEPRECATEDLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) \
-	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
-	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	-I..\..\src\deprecated\..\..\..\include -I$(SETUPHDIR) -Wall \
-	-I..\..\src\deprecated\..\..\include -I..\..\src\deprecated $(CXXFLAGS) \
-	$(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0)
+	-I..\..\src\deprecated $(CPPFLAGS) $(CFLAGS)
+DEPRECATEDLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
+	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+	$(__UNICODE_DEFINE_p) -I..\..\src\deprecated\..\..\..\include \
+	-I$(SETUPHDIR) -Wall -I..\..\src\deprecated\..\..\include \
+	-I..\..\src\deprecated $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0) \
+	$(CPPFLAGS) $(CXXFLAGS)
 DEPRECATEDLIB_OBJECTS =  \
 	$(OBJS)\deprecatedlib_dummy.o \
 	$(OBJS)\deprecatedlib_prop.o \

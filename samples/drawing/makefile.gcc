@@ -12,11 +12,11 @@ include ../../build/msw/config.gcc
 
 ### Variables: ###
 
-DRAWING_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(GCCFLAGS) \
+DRAWING_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I.\..\..\include -I$(SETUPHDIR) -Wall -I. \
-	$(__DLLFLAG_p) -I.\..\..\samples $(CXXFLAGS) $(__EXCEPTIONSFLAG_4) \
-	$(__EXCEPTIONSFLAG_5)
+	$(__DLLFLAG_p) -I.\..\..\samples $(__EXCEPTIONSFLAG_4) \
+	$(__EXCEPTIONSFLAG_5) $(CPPFLAGS) $(CXXFLAGS)
 DRAWING_OBJECTS =  \
 	$(OBJS)\drawing_drawing.o \
 	$(OBJS)\drawing_drawing_rc.o

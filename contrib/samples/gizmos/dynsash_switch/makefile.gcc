@@ -12,12 +12,11 @@ include ../../../../build/msw/config.gcc
 
 ### Variables: ###
 
-DYNSASH_SWITCH_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) \
-	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
-	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I.\..\..\..\..\include \
-	-I$(SETUPHDIR) -Wall -I. $(__DLLFLAG_p) -I.\..\..\..\..\samples \
-	-I.\..\..\..\include $(CXXFLAGS) $(__EXCEPTIONSFLAG_4) \
-	$(__EXCEPTIONSFLAG_5)
+DYNSASH_SWITCH_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(GCCFLAGS) \
+	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+	$(__UNICODE_DEFINE_p) -I.\..\..\..\..\include -I$(SETUPHDIR) -Wall -I. \
+	$(__DLLFLAG_p) -I.\..\..\..\..\samples -I.\..\..\..\include \
+	$(__EXCEPTIONSFLAG_4) $(__EXCEPTIONSFLAG_5) $(CPPFLAGS) $(CXXFLAGS)
 DYNSASH_SWITCH_OBJECTS =  \
 	$(OBJS)\dynsash_switch_sample_rc.o \
 	$(OBJS)\dynsash_switch_dynsash_switch.o

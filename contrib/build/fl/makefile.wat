@@ -180,11 +180,11 @@ __fllib___depname = &
 
 ### Variables: ###
 
-FLDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
-	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\fl\..\..\..\include -i=$(SETUPHDIR) &
-	-i=..\..\src\fl\..\..\include -dWXUSINGDLL -dWXMAKINGDLL_FL $(CXXFLAGS) &
-	/fh=$(OBJS)\wxprec_fldll.pch $(__EXCEPTIONSFLAG)
+FLDLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
+	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
+	-i=..\..\src\fl\..\..\..\include -i=$(SETUPHDIR) &
+	-i=..\..\src\fl\..\..\include -dWXUSINGDLL -dWXMAKINGDLL_FL &
+	/fh=$(OBJS)\wxprec_fldll.pch $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 FLDLL_OBJECTS =  &
 	$(OBJS)\fldll_dummy.obj &
 	$(OBJS)\fldll_antiflickpl.obj &
@@ -204,11 +204,11 @@ FLDLL_OBJECTS =  &
 	$(OBJS)\fldll_rowlayoutpl.obj &
 	$(OBJS)\fldll_toolwnd.obj &
 	$(OBJS)\fldll_updatesmgr.obj
-FLLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
-	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\fl\..\..\..\include -i=$(SETUPHDIR) &
-	-i=..\..\src\fl\..\..\include $(CXXFLAGS) /fh=$(OBJS)\wxprec_fllib.pch &
-	$(__EXCEPTIONSFLAG)
+FLLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
+	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
+	-i=..\..\src\fl\..\..\..\include -i=$(SETUPHDIR) &
+	-i=..\..\src\fl\..\..\include /fh=$(OBJS)\wxprec_fllib.pch &
+	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 FLLIB_OBJECTS =  &
 	$(OBJS)\fllib_dummy.obj &
 	$(OBJS)\fllib_antiflickpl.obj &
@@ -378,5 +378,5 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)251$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl_wat
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl.lib :  $(FLLIB_OBJECTS)
 	@%create $(OBJS)\fllib.lbc
 	@for %i in ($(FLLIB_OBJECTS)) do @%append $(OBJS)\fllib.lbc +%i
-	wlib -q -p2048 -n -b $^@ @$(OBJS)\fllib.lbc
+	wlib -q -p4096 -n -b $^@ @$(OBJS)\fllib.lbc
 !endif

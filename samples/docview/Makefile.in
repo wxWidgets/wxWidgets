@@ -35,9 +35,8 @@ top_srcdir = @top_srcdir@
 ### Variables: ###
 
 DESTDIR = 
-DOCVIEW_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
-	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
-	-I$(srcdir)/../../samples $(CPPFLAGS) $(CXXFLAGS)
+DOCVIEW_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir) \
+	$(__DLLFLAG_p) -I$(srcdir)/../../samples $(CPPFLAGS) $(CXXFLAGS)
 DOCVIEW_OBJECTS =  \
 	$(__docview_os2_lib_res) \
 	docview_docview.o \
@@ -92,9 +91,9 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p_1 = -d __WXUNIVERSAL__
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p_2 = --define __WXUNIVERSAL__
 COND_PLATFORM_MAC_1___docview___mac_rezcmd = $(RESCOMP) -d __DARWIN__ -t APPL -d \
-	__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -i $(top_srcdir)/include -i $(srcdir) \
-	$(__DLLFLAG_p_1) -i $(srcdir)/../../samples -o docview$(EXEEXT) \
-	$(MACOSX_RESOURCES) chart.r doc.r docview.r mondrian.r
+	__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -i $(srcdir) $(__DLLFLAG_p_1) -i \
+	$(srcdir)/../../samples -o docview$(EXEEXT) $(MACOSX_RESOURCES) chart.r doc.r \
+	docview.r mondrian.r
 @COND_PLATFORM_MAC_1@__docview___mac_rezcmd = $(COND_PLATFORM_MAC_1___docview___mac_rezcmd)
 @COND_PLATFORM_MAC_1@__docview___mac_setfilecmd = \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -a C docview$(EXEEXT)
@@ -156,7 +155,7 @@ docview_docview.o: $(srcdir)/docview.cpp
 	$(CXXC) -c -o $@ $(DOCVIEW_CXXFLAGS) $<
 
 docview_docview_rc.o: $(srcdir)/docview.rc
-	$(RESCOMP) -i$< -o$@  --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples
+	$(RESCOMP) -i$< -o$@  --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples
 
 docview_view.o: $(srcdir)/view.cpp
 	$(CXXC) -c -o $@ $(DOCVIEW_CXXFLAGS) $<

@@ -180,20 +180,20 @@ __animatelib___depname = &
 
 ### Variables: ###
 
-ANIMATEDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
-	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\animate\..\..\..\include &
-	-i=$(SETUPHDIR) -i=..\..\src\animate\..\..\include -dWXUSINGDLL &
-	-dWXMAKINGDLL_ANIMATE $(CXXFLAGS) /fh=$(OBJS)\wxprec_animatedll.pch &
-	$(__EXCEPTIONSFLAG)
+ANIMATEDLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
+	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
+	-i=..\..\src\animate\..\..\..\include -i=$(SETUPHDIR) &
+	-i=..\..\src\animate\..\..\include -dWXUSINGDLL -dWXMAKINGDLL_ANIMATE &
+	/fh=$(OBJS)\wxprec_animatedll.pch $(__EXCEPTIONSFLAG) $(CPPFLAGS) &
+	$(CXXFLAGS)
 ANIMATEDLL_OBJECTS =  &
 	$(OBJS)\animatedll_dummy.obj &
 	$(OBJS)\animatedll_animate.obj
-ANIMATELIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
-	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\animate\..\..\..\include &
-	-i=$(SETUPHDIR) -i=..\..\src\animate\..\..\include $(CXXFLAGS) &
-	/fh=$(OBJS)\wxprec_animatelib.pch $(__EXCEPTIONSFLAG)
+ANIMATELIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
+	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
+	-i=..\..\src\animate\..\..\..\include -i=$(SETUPHDIR) &
+	-i=..\..\src\animate\..\..\include /fh=$(OBJS)\wxprec_animatelib.pch &
+	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 ANIMATELIB_OBJECTS =  &
 	$(OBJS)\animatelib_dummy.obj &
 	$(OBJS)\animatelib_animate.obj
@@ -242,7 +242,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)251$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animat
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate.lib :  $(ANIMATELIB_OBJECTS)
 	@%create $(OBJS)\animatelib.lbc
 	@for %i in ($(ANIMATELIB_OBJECTS)) do @%append $(OBJS)\animatelib.lbc +%i
-	wlib -q -p2048 -n -b $^@ @$(OBJS)\animatelib.lbc
+	wlib -q -p4096 -n -b $^@ @$(OBJS)\animatelib.lbc
 !endif
 
 clean : .SYMBOLIC 

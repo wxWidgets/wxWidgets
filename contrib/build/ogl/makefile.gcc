@@ -14,11 +14,11 @@ include ../../../build/msw/config.gcc
 
 OBJS = \
 	gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-OGLDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
-	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\ogl\..\..\..\include -I$(SETUPHDIR) -Wall \
-	-I..\..\src\ogl\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_OGL $(CXXFLAGS) \
-	$(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0)
+OGLDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H \
+	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	-I..\..\src\ogl\..\..\..\include -I$(SETUPHDIR) -Wall \
+	-I..\..\src\ogl\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_OGL \
+	$(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0) $(CPPFLAGS) $(CXXFLAGS)
 OGLDLL_OBJECTS =  \
 	$(OBJS)\ogldll_dummy.o \
 	$(OBJS)\ogldll_basic2.o \
@@ -33,11 +33,11 @@ OGLDLL_OBJECTS =  \
 	$(OBJS)\ogldll_constrnt.o \
 	$(OBJS)\ogldll_lines.o \
 	$(OBJS)\ogldll_ogldiag.o
-OGLLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
-	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\ogl\..\..\..\include -I$(SETUPHDIR) -Wall \
-	-I..\..\src\ogl\..\..\include $(CXXFLAGS) $(__EXCEPTIONSFLAG) \
-	$(__EXCEPTIONSFLAG_0)
+OGLLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H \
+	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	-I..\..\src\ogl\..\..\..\include -I$(SETUPHDIR) -Wall \
+	-I..\..\src\ogl\..\..\include $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0) \
+	$(CPPFLAGS) $(CXXFLAGS)
 OGLLIB_OBJECTS =  \
 	$(OBJS)\ogllib_dummy.o \
 	$(OBJS)\ogllib_basic2.o \

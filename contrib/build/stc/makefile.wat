@@ -184,12 +184,12 @@ OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 SETUPHDIR = &
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
-STCDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
-	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\stc\..\..\..\include -i=$(SETUPHDIR) &
+STCDLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
+	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
+	-i=..\..\src\stc\..\..\..\include -i=$(SETUPHDIR) &
 	-i=..\..\src\stc\..\..\include -i=..\..\src\stc\scintilla\include &
 	-i=..\..\src\stc\scintilla\src -d__WX__ -dSCI_LEXER -dLINK_LEXERS &
-	-dWXUSINGDLL -dWXMAKINGDLL_STC $(CXXFLAGS) $(__EXCEPTIONSFLAG)
+	-dWXUSINGDLL -dWXMAKINGDLL_STC $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 STCDLL_OBJECTS =  &
 	$(OBJS)\stcdll_PlatWX.obj &
 	$(OBJS)\stcdll_ScintillaWX.obj &
@@ -244,12 +244,12 @@ STCDLL_OBJECTS =  &
 	$(OBJS)\stcdll_ViewStyle.obj &
 	$(OBJS)\stcdll_WindowAccessor.obj &
 	$(OBJS)\stcdll_XPM.obj
-STCLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
-	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\stc\..\..\..\include -i=$(SETUPHDIR) &
+STCLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
+	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
+	-i=..\..\src\stc\..\..\..\include -i=$(SETUPHDIR) &
 	-i=..\..\src\stc\..\..\include -i=..\..\src\stc\scintilla\include &
 	-i=..\..\src\stc\scintilla\src -d__WX__ -dSCI_LEXER -dLINK_LEXERS &
-	$(CXXFLAGS) $(__EXCEPTIONSFLAG)
+	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 STCLIB_OBJECTS =  &
 	$(OBJS)\stclib_PlatWX.obj &
 	$(OBJS)\stclib_ScintillaWX.obj &
@@ -660,5 +660,5 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)251$(WXUNICODEFLAG)$(WXDEBUGFLAG)_stc_wa
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_stc.lib :  $(STCLIB_OBJECTS)
 	@%create $(OBJS)\stclib.lbc
 	@for %i in ($(STCLIB_OBJECTS)) do @%append $(OBJS)\stclib.lbc +%i
-	wlib -q -p2048 -n -b $^@ @$(OBJS)\stclib.lbc
+	wlib -q -p4096 -n -b $^@ @$(OBJS)\stclib.lbc
 !endif

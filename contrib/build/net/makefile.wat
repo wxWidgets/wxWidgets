@@ -180,21 +180,22 @@ __netutilslib___depname = &
 
 ### Variables: ###
 
-NETUTILSDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
+NETUTILSDLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\..\src\net\..\..\..\include -i=$(SETUPHDIR) &
 	-i=..\..\src\net\..\..\include -dWXUSINGDLL -dWXMAKINGDLL_NETUTILS &
-	$(CXXFLAGS) /fh=$(OBJS)\wxprec_netutilsdll.pch $(__EXCEPTIONSFLAG)
+	/fh=$(OBJS)\wxprec_netutilsdll.pch $(__EXCEPTIONSFLAG) $(CPPFLAGS) &
+	$(CXXFLAGS)
 NETUTILSDLL_OBJECTS =  &
 	$(OBJS)\netutilsdll_dummy.obj &
 	$(OBJS)\netutilsdll_email.obj &
 	$(OBJS)\netutilsdll_smapi.obj &
 	$(OBJS)\netutilsdll_web.obj
-NETUTILSLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
-	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\net\..\..\..\include -i=$(SETUPHDIR) &
-	-i=..\..\src\net\..\..\include $(CXXFLAGS) &
-	/fh=$(OBJS)\wxprec_netutilslib.pch $(__EXCEPTIONSFLAG)
+NETUTILSLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
+	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
+	-i=..\..\src\net\..\..\..\include -i=$(SETUPHDIR) &
+	-i=..\..\src\net\..\..\include /fh=$(OBJS)\wxprec_netutilslib.pch &
+	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 NETUTILSLIB_OBJECTS =  &
 	$(OBJS)\netutilslib_dummy.obj &
 	$(OBJS)\netutilslib_email.obj &
@@ -266,5 +267,5 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)251$(WXUNICODEFLAG)$(WXDEBUGFLAG)_netuti
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_netutils.lib :  $(NETUTILSLIB_OBJECTS)
 	@%create $(OBJS)\netutilslib.lbc
 	@for %i in ($(NETUTILSLIB_OBJECTS)) do @%append $(OBJS)\netutilslib.lbc +%i
-	wlib -q -p2048 -n -b $^@ @$(OBJS)\netutilslib.lbc
+	wlib -q -p4096 -n -b $^@ @$(OBJS)\netutilslib.lbc
 !endif

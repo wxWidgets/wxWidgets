@@ -45,15 +45,16 @@ top_srcdir = @top_srcdir@
 DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
 PLOTDLL_CXXFLAGS = $(__plotdll_PCH_INC) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include -I$(srcdir)/../../include \
-	-DWXUSINGDLL -DWXMAKINGDLL_PLOT $(PIC_FLAG) $(CPPFLAGS) $(CXXFLAGS)
+	$(__WXUNIV_DEFINE_p) -I$(srcdir)/../../include -DWXUSINGDLL \
+	-DWXMAKINGDLL_PLOT $(PIC_FLAG) $(CPPFLAGS) $(CXXFLAGS)
 PLOTDLL_OBJECTS =  \
 	plotdll_plot.o
+PLOTDLL_ODEP =  $(___pch_wxprec_plotdll_wx_wxprec_h_gch___depname)
 PLOTLIB_CXXFLAGS = $(__plotlib_PCH_INC) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include -I$(srcdir)/../../include \
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(__WXUNIV_DEFINE_p) -I$(srcdir)/../../include $(CPPFLAGS) $(CXXFLAGS)
 PLOTLIB_OBJECTS =  \
 	plotlib_plot.o
+PLOTLIB_ODEP =  $(___pch_wxprec_plotlib_wx_wxprec_h_gch___depname)
 WX_VERSION = 2.5.1
 
 ### Conditionally set variables: ###
@@ -102,9 +103,12 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)
 @COND_MONOLITHIC_1@__WXLIB_MONO_p = $(COND_MONOLITHIC_1___WXLIB_MONO_p)
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
+@COND_GCC_PCH_1@___pch_wxprec_plotdll_wx_wxprec_h_gch___depname \
+@COND_GCC_PCH_1@	= .pch/wxprec_plotdll/wx/wxprec.h.gch
+@COND_GCC_PCH_1@___pch_wxprec_plotlib_wx_wxprec_h_gch___depname \
+@COND_GCC_PCH_1@	= .pch/wxprec_plotlib/wx/wxprec.h.gch
 @COND_SHARED_1@__install_plotdll___depname = install_plotdll
 @COND_SHARED_0@__install_plotlib___depname = install_plotlib
-@COND_GCC_PCH_1@__plotdll_PCH_DEP = .pch/wxprec_plotdll/wx/wxprec.h.gch
 @COND_GCC_PCH_1@__plotdll_PCH_INC = -I.pch/wxprec_plotdll
 COND_SHARED_1___plotdll___depname = \
 	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_plot$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__plotdll___targetsuf3)
@@ -154,7 +158,6 @@ COND_USE_SOVERSOLARIS_1___plotdll___soname_flags = \
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@__plotdll___targetsuf3 \
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .1.0.0.$(SO_SUFFIX)
 @COND_USE_SOVERSION_0@__plotdll___targetsuf3 = .$(SO_SUFFIX)
-@COND_GCC_PCH_1@__plotlib_PCH_DEP = .pch/wxprec_plotlib/wx/wxprec.h.gch
 @COND_GCC_PCH_1@__plotlib_PCH_INC = -I.pch/wxprec_plotlib
 COND_SHARED_0___plotlib___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_plot-2.5$(HOST_SUFFIX).a
@@ -203,20 +206,20 @@ install-strip: install
 @COND_SHARED_0@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
 @COND_SHARED_0@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_plot-2.5$(HOST_SUFFIX).a $(DESTDIR)$(libdir)
 
-@COND_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_plot$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__plotdll___targetsuf3): $(__plotdll_PCH_DEP)  $(PLOTDLL_OBJECTS)
+@COND_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_plot$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__plotdll___targetsuf3): $(PLOTDLL_OBJECTS)
 @COND_SHARED_1@	$(SHARED_LD_CXX) $@ $(PLOTDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__plotdll___macinstnamecmd) $(__plotdll___importlib) $(__plotdll___soname_flags) $(__plotdll___macver)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)
 @COND_SHARED_1@	
 @COND_SHARED_1@	$(__plotdll___so_symlinks_cmd)
 
-plotdll_plot.o: $(srcdir)/plot.cpp
+plotdll_plot.o: $(srcdir)/plot.cpp $(PLOTDLL_ODEP)
 	$(CXXC) -c -o $@ $(PLOTDLL_CXXFLAGS) $<
 
-@COND_SHARED_0@$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_plot-2.5$(HOST_SUFFIX).a: $(__plotlib_PCH_DEP)  $(PLOTLIB_OBJECTS)
+@COND_SHARED_0@$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_plot-2.5$(HOST_SUFFIX).a: $(PLOTLIB_OBJECTS)
 @COND_SHARED_0@	rm -f $@
 @COND_SHARED_0@	$(AR) rcu $@ $(PLOTLIB_OBJECTS)
 @COND_SHARED_0@	$(RANLIB) $@
 
-plotlib_plot.o: $(srcdir)/plot.cpp
+plotlib_plot.o: $(srcdir)/plot.cpp $(PLOTLIB_ODEP)
 	$(CXXC) -c -o $@ $(PLOTLIB_CXXFLAGS) $<
 
 uninstall: 

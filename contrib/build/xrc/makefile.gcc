@@ -16,11 +16,11 @@ OBJS = \
 	gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
-XRCDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
-	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\xrc\..\..\..\include -I$(SETUPHDIR) -Wall \
-	-I..\..\src\xrc\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_XRC $(CXXFLAGS) \
-	$(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0)
+XRCDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H \
+	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	-I..\..\src\xrc\..\..\..\include -I$(SETUPHDIR) -Wall \
+	-I..\..\src\xrc\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_XRC \
+	$(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0) $(CPPFLAGS) $(CXXFLAGS)
 XRCDLL_OBJECTS =  \
 	$(OBJS)\xrcdll_dummy.o \
 	$(OBJS)\xrcdll_xmlres.o \
@@ -60,12 +60,12 @@ XRCDLL_OBJECTS =  \
 	$(OBJS)\xrcdll_xh_unkwn.o \
 	$(OBJS)\xrcdll_xh_wizrd.o \
 	$(OBJS)\xrcdll_xmlrsall.o
-XRCLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
-	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\xrc\..\..\..\include -I$(SETUPHDIR) -Wall \
+XRCLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H \
+	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	-I..\..\src\xrc\..\..\..\include -I$(SETUPHDIR) -Wall \
 	-I..\..\src\xrc\..\..\include -I..\..\src\xrc\expat\xmlparse \
-	-I..\..\src\xrc\expat\xmltok $(CXXFLAGS) $(__EXCEPTIONSFLAG) \
-	$(__EXCEPTIONSFLAG_0)
+	-I..\..\src\xrc\expat\xmltok $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0) \
+	$(CPPFLAGS) $(CXXFLAGS)
 XRCLIB_OBJECTS =  \
 	$(OBJS)\xrclib_dummy.o \
 	$(OBJS)\xrclib_xmlres.o \

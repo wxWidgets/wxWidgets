@@ -180,11 +180,12 @@ __mmedialib___depname = &
 
 ### Variables: ###
 
-MMEDIADLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
-	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\mmedia\..\..\..\include -i=$(SETUPHDIR) &
+MMEDIADLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
+	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
+	-i=..\..\src\mmedia\..\..\..\include -i=$(SETUPHDIR) &
 	-i=..\..\src\mmedia\..\..\include -dWXUSINGDLL -dWXMAKINGDLL_MMEDIA &
-	$(CXXFLAGS) /fh=$(OBJS)\wxprec_mmediadll.pch $(__EXCEPTIONSFLAG)
+	/fh=$(OBJS)\wxprec_mmediadll.pch $(__EXCEPTIONSFLAG) $(CPPFLAGS) &
+	$(CXXFLAGS)
 MMEDIADLL_OBJECTS =  &
 	$(OBJS)\mmediadll_dummy.obj &
 	$(OBJS)\mmediadll_cdwin.obj &
@@ -207,11 +208,11 @@ MMEDIADLL_OBJECTS =  &
 	$(OBJS)\mmediadll_sndulaw.obj &
 	$(OBJS)\mmediadll_sndwav.obj &
 	$(OBJS)\mmediadll_vidbase.obj
-MMEDIALIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
-	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\mmedia\..\..\..\include -i=$(SETUPHDIR) &
-	-i=..\..\src\mmedia\..\..\include $(CXXFLAGS) &
-	/fh=$(OBJS)\wxprec_mmedialib.pch $(__EXCEPTIONSFLAG)
+MMEDIALIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
+	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
+	-i=..\..\src\mmedia\..\..\..\include -i=$(SETUPHDIR) &
+	-i=..\..\src\mmedia\..\..\include /fh=$(OBJS)\wxprec_mmedialib.pch &
+	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 MMEDIALIB_OBJECTS =  &
 	$(OBJS)\mmedialib_dummy.obj &
 	$(OBJS)\mmedialib_cdwin.obj &
@@ -402,5 +403,5 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)251$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia.lib :  $(MMEDIALIB_OBJECTS)
 	@%create $(OBJS)\mmedialib.lbc
 	@for %i in ($(MMEDIALIB_OBJECTS)) do @%append $(OBJS)\mmedialib.lbc +%i
-	wlib -q -p2048 -n -b $^@ @$(OBJS)\mmedialib.lbc
+	wlib -q -p4096 -n -b $^@ @$(OBJS)\mmedialib.lbc
 !endif

@@ -45,19 +45,20 @@ top_srcdir = @top_srcdir@
 DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
 NETUTILSDLL_CXXFLAGS = $(__netutilsdll_PCH_INC) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include -I$(srcdir)/../../include \
-	-DWXUSINGDLL -DWXMAKINGDLL_NETUTILS $(PIC_FLAG) $(CPPFLAGS) $(CXXFLAGS)
+	$(__WXUNIV_DEFINE_p) -I$(srcdir)/../../include -DWXUSINGDLL \
+	-DWXMAKINGDLL_NETUTILS $(PIC_FLAG) $(CPPFLAGS) $(CXXFLAGS)
 NETUTILSDLL_OBJECTS =  \
 	netutilsdll_email.o \
 	netutilsdll_smapi.o \
 	netutilsdll_web.o
+NETUTILSDLL_ODEP =  $(___pch_wxprec_netutilsdll_wx_wxprec_h_gch___depname)
 NETUTILSLIB_CXXFLAGS = $(__netutilslib_PCH_INC) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include -I$(srcdir)/../../include \
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(__WXUNIV_DEFINE_p) -I$(srcdir)/../../include $(CPPFLAGS) $(CXXFLAGS)
 NETUTILSLIB_OBJECTS =  \
 	netutilslib_email.o \
 	netutilslib_smapi.o \
 	netutilslib_web.o
+NETUTILSLIB_ODEP =  $(___pch_wxprec_netutilslib_wx_wxprec_h_gch___depname)
 WX_VERSION = 2.5.1
 
 ### Conditionally set variables: ###
@@ -106,10 +107,12 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)
 @COND_MONOLITHIC_1@__WXLIB_MONO_p = $(COND_MONOLITHIC_1___WXLIB_MONO_p)
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
+@COND_GCC_PCH_1@___pch_wxprec_netutilsdll_wx_wxprec_h_gch___depname \
+@COND_GCC_PCH_1@	= .pch/wxprec_netutilsdll/wx/wxprec.h.gch
+@COND_GCC_PCH_1@___pch_wxprec_netutilslib_wx_wxprec_h_gch___depname \
+@COND_GCC_PCH_1@	= .pch/wxprec_netutilslib/wx/wxprec.h.gch
 @COND_SHARED_1@__install_netutilsdll___depname = install_netutilsdll
 @COND_SHARED_0@__install_netutilslib___depname = install_netutilslib
-@COND_GCC_PCH_1@__netutilsdll_PCH_DEP = \
-@COND_GCC_PCH_1@	.pch/wxprec_netutilsdll/wx/wxprec.h.gch
 @COND_GCC_PCH_1@__netutilsdll_PCH_INC = -I.pch/wxprec_netutilsdll
 COND_SHARED_1___netutilsdll___depname = \
 	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_netutils$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__netutilsdll___targetsuf3)
@@ -160,8 +163,6 @@ COND_USE_SOVERSOLARIS_1___netutilsdll___soname_flags = \
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@__netutilsdll___targetsuf3 \
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .1.0.0.$(SO_SUFFIX)
 @COND_USE_SOVERSION_0@__netutilsdll___targetsuf3 = .$(SO_SUFFIX)
-@COND_GCC_PCH_1@__netutilslib_PCH_DEP = \
-@COND_GCC_PCH_1@	.pch/wxprec_netutilslib/wx/wxprec.h.gch
 @COND_GCC_PCH_1@__netutilslib_PCH_INC = -I.pch/wxprec_netutilslib
 COND_SHARED_0___netutilslib___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_netutils-2.5$(HOST_SUFFIX).a
@@ -210,32 +211,32 @@ install-strip: install
 @COND_SHARED_0@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
 @COND_SHARED_0@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_netutils-2.5$(HOST_SUFFIX).a $(DESTDIR)$(libdir)
 
-@COND_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_netutils$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__netutilsdll___targetsuf3): $(__netutilsdll_PCH_DEP)  $(NETUTILSDLL_OBJECTS)
+@COND_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_netutils$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__netutilsdll___targetsuf3): $(NETUTILSDLL_OBJECTS)
 @COND_SHARED_1@	$(SHARED_LD_CXX) $@ $(NETUTILSDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__netutilsdll___macinstnamecmd) $(__netutilsdll___importlib) $(__netutilsdll___soname_flags) $(__netutilsdll___macver)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)
 @COND_SHARED_1@	
 @COND_SHARED_1@	$(__netutilsdll___so_symlinks_cmd)
 
-netutilsdll_email.o: $(srcdir)/email.cpp
+netutilsdll_email.o: $(srcdir)/email.cpp $(NETUTILSDLL_ODEP)
 	$(CXXC) -c -o $@ $(NETUTILSDLL_CXXFLAGS) $<
 
-netutilsdll_smapi.o: $(srcdir)/smapi.cpp
+netutilsdll_smapi.o: $(srcdir)/smapi.cpp $(NETUTILSDLL_ODEP)
 	$(CXXC) -c -o $@ $(NETUTILSDLL_CXXFLAGS) $<
 
-netutilsdll_web.o: $(srcdir)/web.cpp
+netutilsdll_web.o: $(srcdir)/web.cpp $(NETUTILSDLL_ODEP)
 	$(CXXC) -c -o $@ $(NETUTILSDLL_CXXFLAGS) $<
 
-@COND_SHARED_0@$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_netutils-2.5$(HOST_SUFFIX).a: $(__netutilslib_PCH_DEP)  $(NETUTILSLIB_OBJECTS)
+@COND_SHARED_0@$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_netutils-2.5$(HOST_SUFFIX).a: $(NETUTILSLIB_OBJECTS)
 @COND_SHARED_0@	rm -f $@
 @COND_SHARED_0@	$(AR) rcu $@ $(NETUTILSLIB_OBJECTS)
 @COND_SHARED_0@	$(RANLIB) $@
 
-netutilslib_email.o: $(srcdir)/email.cpp
+netutilslib_email.o: $(srcdir)/email.cpp $(NETUTILSLIB_ODEP)
 	$(CXXC) -c -o $@ $(NETUTILSLIB_CXXFLAGS) $<
 
-netutilslib_smapi.o: $(srcdir)/smapi.cpp
+netutilslib_smapi.o: $(srcdir)/smapi.cpp $(NETUTILSLIB_ODEP)
 	$(CXXC) -c -o $@ $(NETUTILSLIB_CXXFLAGS) $<
 
-netutilslib_web.o: $(srcdir)/web.cpp
+netutilslib_web.o: $(srcdir)/web.cpp $(NETUTILSLIB_ODEP)
 	$(CXXC) -c -o $@ $(NETUTILSLIB_CXXFLAGS) $<
 
 uninstall: 

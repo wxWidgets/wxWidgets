@@ -12,28 +12,29 @@
 
 ### Variables: ###
 
-NETUTILSDLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) \
-	/DWIN32 $(__DEBUGINFO_2) \
+NETUTILSDLL_CXXFLAGS = /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) /DWIN32 \
+	$(__DEBUGINFO_2) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)251$(WXUNICODEFLAG)$(WXDEBUGFLAG)_netutils_vc$(VENDORTAG).pdb \
 	$(____DEBUGRUNTIME_2_p) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\src\net\..\..\..\include /I$(SETUPHDIR) /W4 \
 	/I..\..\src\net\..\..\include /DWXUSINGDLL /DWXMAKINGDLL_NETUTILS \
-	$(CXXFLAGS) $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0) /Yu"wx/wxprec.h" \
-	/Fp"$(OBJS)\wxprec_netutilsdll.pch"
+	$(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0) /Yu"wx/wxprec.h" \
+	/Fp"$(OBJS)\wxprec_netutilsdll.pch" $(CPPFLAGS) $(CXXFLAGS)
 NETUTILSDLL_OBJECTS =  \
 	$(OBJS)\netutilsdll_dummy.obj \
 	$(OBJS)\netutilsdll_email.obj \
 	$(OBJS)\netutilsdll_smapi.obj \
 	$(OBJS)\netutilsdll_web.obj
-NETUTILSLIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_15) \
-	/DWIN32 $(__DEBUGINFO_2) \
+NETUTILSLIB_CXXFLAGS = /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_15) /DWIN32 \
+	$(__DEBUGINFO_2) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_netutils.pdb \
 	$(____DEBUGRUNTIME_14_p) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\src\net\..\..\..\include /I$(SETUPHDIR) /W4 \
-	/I..\..\src\net\..\..\include $(CXXFLAGS) $(__EXCEPTIONSFLAG) \
-	$(__EXCEPTIONSFLAG_0) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_netutilslib.pch"
+	/I..\..\src\net\..\..\include $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0) \
+	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_netutilslib.pch" $(CPPFLAGS) \
+	$(CXXFLAGS)
 NETUTILSLIB_OBJECTS =  \
 	$(OBJS)\netutilslib_dummy.obj \
 	$(OBJS)\netutilslib_email.obj \

@@ -12,11 +12,11 @@ include ../../../build/msw/config.gcc
 
 ### Variables: ###
 
-MMEDIADLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
+MMEDIADLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I..\..\src\mmedia\..\..\..\include -I$(SETUPHDIR) \
 	-Wall -I..\..\src\mmedia\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_MMEDIA \
-	$(CXXFLAGS) $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0)
+	$(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0) $(CPPFLAGS) $(CXXFLAGS)
 MMEDIADLL_OBJECTS =  \
 	$(OBJS)\mmediadll_dummy.o \
 	$(OBJS)\mmediadll_cdwin.o \
@@ -39,11 +39,11 @@ MMEDIADLL_OBJECTS =  \
 	$(OBJS)\mmediadll_sndulaw.o \
 	$(OBJS)\mmediadll_sndwav.o \
 	$(OBJS)\mmediadll_vidbase.o
-MMEDIALIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
+MMEDIALIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I..\..\src\mmedia\..\..\..\include -I$(SETUPHDIR) \
-	-Wall -I..\..\src\mmedia\..\..\include $(CXXFLAGS) $(__EXCEPTIONSFLAG) \
-	$(__EXCEPTIONSFLAG_0)
+	-Wall -I..\..\src\mmedia\..\..\include $(__EXCEPTIONSFLAG) \
+	$(__EXCEPTIONSFLAG_0) $(CPPFLAGS) $(CXXFLAGS)
 MMEDIALIB_OBJECTS =  \
 	$(OBJS)\mmedialib_dummy.o \
 	$(OBJS)\mmedialib_cdwin.o \

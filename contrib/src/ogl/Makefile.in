@@ -45,8 +45,8 @@ top_srcdir = @top_srcdir@
 DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
 OGLDLL_CXXFLAGS = $(__ogldll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
-	-I$(top_srcdir)/include -I$(srcdir)/../../include -DWXUSINGDLL \
-	-DWXMAKINGDLL_OGL $(PIC_FLAG) $(CPPFLAGS) $(CXXFLAGS)
+	-I$(srcdir)/../../include -DWXUSINGDLL -DWXMAKINGDLL_OGL $(PIC_FLAG) \
+	$(CPPFLAGS) $(CXXFLAGS)
 OGLDLL_OBJECTS =  \
 	ogldll_basic2.o \
 	ogldll_canvas.o \
@@ -60,8 +60,9 @@ OGLDLL_OBJECTS =  \
 	ogldll_constrnt.o \
 	ogldll_lines.o \
 	ogldll_ogldiag.o
+OGLDLL_ODEP =  $(___pch_wxprec_ogldll_wx_wxprec_h_gch___depname)
 OGLLIB_CXXFLAGS = $(__ogllib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
-	-I$(top_srcdir)/include -I$(srcdir)/../../include $(CPPFLAGS) $(CXXFLAGS)
+	-I$(srcdir)/../../include $(CPPFLAGS) $(CXXFLAGS)
 OGLLIB_OBJECTS =  \
 	ogllib_basic2.o \
 	ogllib_canvas.o \
@@ -75,6 +76,7 @@ OGLLIB_OBJECTS =  \
 	ogllib_constrnt.o \
 	ogllib_lines.o \
 	ogllib_ogldiag.o
+OGLLIB_ODEP =  $(___pch_wxprec_ogllib_wx_wxprec_h_gch___depname)
 WX_VERSION = 2.5.1
 
 ### Conditionally set variables: ###
@@ -123,9 +125,12 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)
 @COND_MONOLITHIC_1@__WXLIB_MONO_p = $(COND_MONOLITHIC_1___WXLIB_MONO_p)
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
+@COND_GCC_PCH_1@___pch_wxprec_ogldll_wx_wxprec_h_gch___depname \
+@COND_GCC_PCH_1@	= .pch/wxprec_ogldll/wx/wxprec.h.gch
+@COND_GCC_PCH_1@___pch_wxprec_ogllib_wx_wxprec_h_gch___depname \
+@COND_GCC_PCH_1@	= .pch/wxprec_ogllib/wx/wxprec.h.gch
 @COND_SHARED_1@__install_ogldll___depname = install_ogldll
 @COND_SHARED_0@__install_ogllib___depname = install_ogllib
-@COND_GCC_PCH_1@__ogldll_PCH_DEP = .pch/wxprec_ogldll/wx/wxprec.h.gch
 @COND_GCC_PCH_1@__ogldll_PCH_INC = -I.pch/wxprec_ogldll
 COND_SHARED_1___ogldll___depname = \
 	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__ogldll___targetsuf3)
@@ -175,7 +180,6 @@ COND_USE_SOVERSOLARIS_1___ogldll___soname_flags = \
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@__ogldll___targetsuf3 \
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .1.0.0.$(SO_SUFFIX)
 @COND_USE_SOVERSION_0@__ogldll___targetsuf3 = .$(SO_SUFFIX)
-@COND_GCC_PCH_1@__ogllib_PCH_DEP = .pch/wxprec_ogllib/wx/wxprec.h.gch
 @COND_GCC_PCH_1@__ogllib_PCH_INC = -I.pch/wxprec_ogllib
 COND_SHARED_0___ogllib___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl-2.5$(HOST_SUFFIX).a
@@ -224,86 +228,86 @@ install-strip: install
 @COND_SHARED_0@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
 @COND_SHARED_0@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl-2.5$(HOST_SUFFIX).a $(DESTDIR)$(libdir)
 
-@COND_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__ogldll___targetsuf3): $(__ogldll_PCH_DEP)  $(OGLDLL_OBJECTS)
+@COND_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__ogldll___targetsuf3): $(OGLDLL_OBJECTS)
 @COND_SHARED_1@	$(SHARED_LD_CXX) $@ $(OGLDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__ogldll___macinstnamecmd) $(__ogldll___importlib) $(__ogldll___soname_flags) $(__ogldll___macver)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)
 @COND_SHARED_1@	
 @COND_SHARED_1@	$(__ogldll___so_symlinks_cmd)
 
-ogldll_basic.o: $(srcdir)/basic.cpp
+ogldll_basic.o: $(srcdir)/basic.cpp $(OGLDLL_ODEP)
 	$(CXXC) -c -o $@ $(OGLDLL_CXXFLAGS) $<
 
-ogldll_basic2.o: $(srcdir)/basic2.cpp
+ogldll_basic2.o: $(srcdir)/basic2.cpp $(OGLDLL_ODEP)
 	$(CXXC) -c -o $@ $(OGLDLL_CXXFLAGS) $<
 
-ogldll_bmpshape.o: $(srcdir)/bmpshape.cpp
+ogldll_bmpshape.o: $(srcdir)/bmpshape.cpp $(OGLDLL_ODEP)
 	$(CXXC) -c -o $@ $(OGLDLL_CXXFLAGS) $<
 
-ogldll_canvas.o: $(srcdir)/canvas.cpp
+ogldll_canvas.o: $(srcdir)/canvas.cpp $(OGLDLL_ODEP)
 	$(CXXC) -c -o $@ $(OGLDLL_CXXFLAGS) $<
 
-ogldll_composit.o: $(srcdir)/composit.cpp
+ogldll_composit.o: $(srcdir)/composit.cpp $(OGLDLL_ODEP)
 	$(CXXC) -c -o $@ $(OGLDLL_CXXFLAGS) $<
 
-ogldll_constrnt.o: $(srcdir)/constrnt.cpp
+ogldll_constrnt.o: $(srcdir)/constrnt.cpp $(OGLDLL_ODEP)
 	$(CXXC) -c -o $@ $(OGLDLL_CXXFLAGS) $<
 
-ogldll_divided.o: $(srcdir)/divided.cpp
+ogldll_divided.o: $(srcdir)/divided.cpp $(OGLDLL_ODEP)
 	$(CXXC) -c -o $@ $(OGLDLL_CXXFLAGS) $<
 
-ogldll_drawn.o: $(srcdir)/drawn.cpp
+ogldll_drawn.o: $(srcdir)/drawn.cpp $(OGLDLL_ODEP)
 	$(CXXC) -c -o $@ $(OGLDLL_CXXFLAGS) $<
 
-ogldll_lines.o: $(srcdir)/lines.cpp
+ogldll_lines.o: $(srcdir)/lines.cpp $(OGLDLL_ODEP)
 	$(CXXC) -c -o $@ $(OGLDLL_CXXFLAGS) $<
 
-ogldll_mfutils.o: $(srcdir)/mfutils.cpp
+ogldll_mfutils.o: $(srcdir)/mfutils.cpp $(OGLDLL_ODEP)
 	$(CXXC) -c -o $@ $(OGLDLL_CXXFLAGS) $<
 
-ogldll_ogldiag.o: $(srcdir)/ogldiag.cpp
+ogldll_ogldiag.o: $(srcdir)/ogldiag.cpp $(OGLDLL_ODEP)
 	$(CXXC) -c -o $@ $(OGLDLL_CXXFLAGS) $<
 
-ogldll_oglmisc.o: $(srcdir)/oglmisc.cpp
+ogldll_oglmisc.o: $(srcdir)/oglmisc.cpp $(OGLDLL_ODEP)
 	$(CXXC) -c -o $@ $(OGLDLL_CXXFLAGS) $<
 
-@COND_SHARED_0@$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl-2.5$(HOST_SUFFIX).a: $(__ogllib_PCH_DEP)  $(OGLLIB_OBJECTS)
+@COND_SHARED_0@$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl-2.5$(HOST_SUFFIX).a: $(OGLLIB_OBJECTS)
 @COND_SHARED_0@	rm -f $@
 @COND_SHARED_0@	$(AR) rcu $@ $(OGLLIB_OBJECTS)
 @COND_SHARED_0@	$(RANLIB) $@
 
-ogllib_basic.o: $(srcdir)/basic.cpp
+ogllib_basic.o: $(srcdir)/basic.cpp $(OGLLIB_ODEP)
 	$(CXXC) -c -o $@ $(OGLLIB_CXXFLAGS) $<
 
-ogllib_basic2.o: $(srcdir)/basic2.cpp
+ogllib_basic2.o: $(srcdir)/basic2.cpp $(OGLLIB_ODEP)
 	$(CXXC) -c -o $@ $(OGLLIB_CXXFLAGS) $<
 
-ogllib_bmpshape.o: $(srcdir)/bmpshape.cpp
+ogllib_bmpshape.o: $(srcdir)/bmpshape.cpp $(OGLLIB_ODEP)
 	$(CXXC) -c -o $@ $(OGLLIB_CXXFLAGS) $<
 
-ogllib_canvas.o: $(srcdir)/canvas.cpp
+ogllib_canvas.o: $(srcdir)/canvas.cpp $(OGLLIB_ODEP)
 	$(CXXC) -c -o $@ $(OGLLIB_CXXFLAGS) $<
 
-ogllib_composit.o: $(srcdir)/composit.cpp
+ogllib_composit.o: $(srcdir)/composit.cpp $(OGLLIB_ODEP)
 	$(CXXC) -c -o $@ $(OGLLIB_CXXFLAGS) $<
 
-ogllib_constrnt.o: $(srcdir)/constrnt.cpp
+ogllib_constrnt.o: $(srcdir)/constrnt.cpp $(OGLLIB_ODEP)
 	$(CXXC) -c -o $@ $(OGLLIB_CXXFLAGS) $<
 
-ogllib_divided.o: $(srcdir)/divided.cpp
+ogllib_divided.o: $(srcdir)/divided.cpp $(OGLLIB_ODEP)
 	$(CXXC) -c -o $@ $(OGLLIB_CXXFLAGS) $<
 
-ogllib_drawn.o: $(srcdir)/drawn.cpp
+ogllib_drawn.o: $(srcdir)/drawn.cpp $(OGLLIB_ODEP)
 	$(CXXC) -c -o $@ $(OGLLIB_CXXFLAGS) $<
 
-ogllib_lines.o: $(srcdir)/lines.cpp
+ogllib_lines.o: $(srcdir)/lines.cpp $(OGLLIB_ODEP)
 	$(CXXC) -c -o $@ $(OGLLIB_CXXFLAGS) $<
 
-ogllib_mfutils.o: $(srcdir)/mfutils.cpp
+ogllib_mfutils.o: $(srcdir)/mfutils.cpp $(OGLLIB_ODEP)
 	$(CXXC) -c -o $@ $(OGLLIB_CXXFLAGS) $<
 
-ogllib_ogldiag.o: $(srcdir)/ogldiag.cpp
+ogllib_ogldiag.o: $(srcdir)/ogldiag.cpp $(OGLLIB_ODEP)
 	$(CXXC) -c -o $@ $(OGLLIB_CXXFLAGS) $<
 
-ogllib_oglmisc.o: $(srcdir)/oglmisc.cpp
+ogllib_oglmisc.o: $(srcdir)/oglmisc.cpp $(OGLLIB_ODEP)
 	$(CXXC) -c -o $@ $(OGLLIB_CXXFLAGS) $<
 
 uninstall: 

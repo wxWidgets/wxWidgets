@@ -44,8 +44,8 @@ top_srcdir = @top_srcdir@
 
 DESTDIR = 
 FLDLL_CXXFLAGS = $(__fldll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
-	-I$(top_srcdir)/include -I$(srcdir)/../../include -DWXUSINGDLL \
-	-DWXMAKINGDLL_FL $(PIC_FLAG) $(CPPFLAGS) $(CXXFLAGS)
+	-I$(srcdir)/../../include -DWXUSINGDLL -DWXMAKINGDLL_FL $(PIC_FLAG) \
+	$(CPPFLAGS) $(CXXFLAGS)
 FLDLL_OBJECTS =  \
 	fldll_antiflickpl.o \
 	fldll_bardragpl.o \
@@ -64,8 +64,9 @@ FLDLL_OBJECTS =  \
 	fldll_rowlayoutpl.o \
 	fldll_toolwnd.o \
 	fldll_updatesmgr.o
+FLDLL_ODEP =  $(___pch_wxprec_fldll_wx_wxprec_h_gch___depname)
 FLLIB_CXXFLAGS = $(__fllib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
-	-I$(top_srcdir)/include -I$(srcdir)/../../include $(CPPFLAGS) $(CXXFLAGS)
+	-I$(srcdir)/../../include $(CPPFLAGS) $(CXXFLAGS)
 FLLIB_OBJECTS =  \
 	fllib_antiflickpl.o \
 	fllib_bardragpl.o \
@@ -84,6 +85,7 @@ FLLIB_OBJECTS =  \
 	fllib_rowlayoutpl.o \
 	fllib_toolwnd.o \
 	fllib_updatesmgr.o
+FLLIB_ODEP =  $(___pch_wxprec_fllib_wx_wxprec_h_gch___depname)
 LIBDIRNAME = $(top_builddir)lib
 WX_VERSION = 2.5.1
 
@@ -133,7 +135,10 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)
 @COND_MONOLITHIC_1@__WXLIB_MONO_p = $(COND_MONOLITHIC_1___WXLIB_MONO_p)
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
-@COND_GCC_PCH_1@__fldll_PCH_DEP = .pch/wxprec_fldll/wx/wxprec.h.gch
+@COND_GCC_PCH_1@___pch_wxprec_fldll_wx_wxprec_h_gch___depname \
+@COND_GCC_PCH_1@	= .pch/wxprec_fldll/wx/wxprec.h.gch
+@COND_GCC_PCH_1@___pch_wxprec_fllib_wx_wxprec_h_gch___depname \
+@COND_GCC_PCH_1@	= .pch/wxprec_fllib/wx/wxprec.h.gch
 @COND_GCC_PCH_1@__fldll_PCH_INC = -I.pch/wxprec_fldll
 COND_SHARED_1___fldll___depname = \
 	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__fldll___targetsuf3)
@@ -183,7 +188,6 @@ COND_USE_SOVERSOLARIS_1___fldll___soname_flags = \
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@__fldll___targetsuf3 \
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .1.0.0.$(SO_SUFFIX)
 @COND_USE_SOVERSION_0@__fldll___targetsuf3 = .$(SO_SUFFIX)
-@COND_GCC_PCH_1@__fllib_PCH_DEP = .pch/wxprec_fllib/wx/wxprec.h.gch
 @COND_GCC_PCH_1@__fllib_PCH_INC = -I.pch/wxprec_fllib
 COND_SHARED_0___fllib___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl-2.5$(HOST_SUFFIX).a
@@ -212,116 +216,116 @@ clean:
 distclean: clean
 	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
-@COND_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__fldll___targetsuf3): $(__fldll_PCH_DEP)  $(FLDLL_OBJECTS)
+@COND_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__fldll___targetsuf3): $(FLDLL_OBJECTS)
 @COND_SHARED_1@	$(SHARED_LD_CXX) $@ $(FLDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__fldll___macinstnamecmd) $(__fldll___importlib) $(__fldll___soname_flags) $(__fldll___macver)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)
 @COND_SHARED_1@	
 @COND_SHARED_1@	$(__fldll___so_symlinks_cmd)
 
-fldll_antiflickpl.o: $(srcdir)/antiflickpl.cpp
+fldll_antiflickpl.o: $(srcdir)/antiflickpl.cpp $(FLDLL_ODEP)
 	$(CXXC) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-fldll_bardragpl.o: $(srcdir)/bardragpl.cpp
+fldll_bardragpl.o: $(srcdir)/bardragpl.cpp $(FLDLL_ODEP)
 	$(CXXC) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-fldll_barhintspl.o: $(srcdir)/barhintspl.cpp
+fldll_barhintspl.o: $(srcdir)/barhintspl.cpp $(FLDLL_ODEP)
 	$(CXXC) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-fldll_cbcustom.o: $(srcdir)/cbcustom.cpp
+fldll_cbcustom.o: $(srcdir)/cbcustom.cpp $(FLDLL_ODEP)
 	$(CXXC) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-fldll_controlbar.o: $(srcdir)/controlbar.cpp
+fldll_controlbar.o: $(srcdir)/controlbar.cpp $(FLDLL_ODEP)
 	$(CXXC) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-fldll_dyntbar.o: $(srcdir)/dyntbar.cpp
+fldll_dyntbar.o: $(srcdir)/dyntbar.cpp $(FLDLL_ODEP)
 	$(CXXC) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-fldll_dyntbarhnd.o: $(srcdir)/dyntbarhnd.cpp
+fldll_dyntbarhnd.o: $(srcdir)/dyntbarhnd.cpp $(FLDLL_ODEP)
 	$(CXXC) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-fldll_frmview.o: $(srcdir)/frmview.cpp
+fldll_frmview.o: $(srcdir)/frmview.cpp $(FLDLL_ODEP)
 	$(CXXC) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-fldll_garbagec.o: $(srcdir)/garbagec.cpp
+fldll_garbagec.o: $(srcdir)/garbagec.cpp $(FLDLL_ODEP)
 	$(CXXC) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-fldll_gcupdatesmgr.o: $(srcdir)/gcupdatesmgr.cpp
+fldll_gcupdatesmgr.o: $(srcdir)/gcupdatesmgr.cpp $(FLDLL_ODEP)
 	$(CXXC) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-fldll_hintanimpl.o: $(srcdir)/hintanimpl.cpp
+fldll_hintanimpl.o: $(srcdir)/hintanimpl.cpp $(FLDLL_ODEP)
 	$(CXXC) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-fldll_newbmpbtn.o: $(srcdir)/newbmpbtn.cpp
+fldll_newbmpbtn.o: $(srcdir)/newbmpbtn.cpp $(FLDLL_ODEP)
 	$(CXXC) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-fldll_panedrawpl.o: $(srcdir)/panedrawpl.cpp
+fldll_panedrawpl.o: $(srcdir)/panedrawpl.cpp $(FLDLL_ODEP)
 	$(CXXC) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-fldll_rowdragpl.o: $(srcdir)/rowdragpl.cpp
+fldll_rowdragpl.o: $(srcdir)/rowdragpl.cpp $(FLDLL_ODEP)
 	$(CXXC) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-fldll_rowlayoutpl.o: $(srcdir)/rowlayoutpl.cpp
+fldll_rowlayoutpl.o: $(srcdir)/rowlayoutpl.cpp $(FLDLL_ODEP)
 	$(CXXC) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-fldll_toolwnd.o: $(srcdir)/toolwnd.cpp
+fldll_toolwnd.o: $(srcdir)/toolwnd.cpp $(FLDLL_ODEP)
 	$(CXXC) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-fldll_updatesmgr.o: $(srcdir)/updatesmgr.cpp
+fldll_updatesmgr.o: $(srcdir)/updatesmgr.cpp $(FLDLL_ODEP)
 	$(CXXC) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-@COND_SHARED_0@$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl-2.5$(HOST_SUFFIX).a: $(__fllib_PCH_DEP)  $(FLLIB_OBJECTS)
+@COND_SHARED_0@$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl-2.5$(HOST_SUFFIX).a: $(FLLIB_OBJECTS)
 @COND_SHARED_0@	rm -f $@
 @COND_SHARED_0@	$(AR) rcu $@ $(FLLIB_OBJECTS)
 @COND_SHARED_0@	$(RANLIB) $@
 
-fllib_antiflickpl.o: $(srcdir)/antiflickpl.cpp
+fllib_antiflickpl.o: $(srcdir)/antiflickpl.cpp $(FLLIB_ODEP)
 	$(CXXC) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-fllib_bardragpl.o: $(srcdir)/bardragpl.cpp
+fllib_bardragpl.o: $(srcdir)/bardragpl.cpp $(FLLIB_ODEP)
 	$(CXXC) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-fllib_barhintspl.o: $(srcdir)/barhintspl.cpp
+fllib_barhintspl.o: $(srcdir)/barhintspl.cpp $(FLLIB_ODEP)
 	$(CXXC) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-fllib_cbcustom.o: $(srcdir)/cbcustom.cpp
+fllib_cbcustom.o: $(srcdir)/cbcustom.cpp $(FLLIB_ODEP)
 	$(CXXC) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-fllib_controlbar.o: $(srcdir)/controlbar.cpp
+fllib_controlbar.o: $(srcdir)/controlbar.cpp $(FLLIB_ODEP)
 	$(CXXC) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-fllib_dyntbar.o: $(srcdir)/dyntbar.cpp
+fllib_dyntbar.o: $(srcdir)/dyntbar.cpp $(FLLIB_ODEP)
 	$(CXXC) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-fllib_dyntbarhnd.o: $(srcdir)/dyntbarhnd.cpp
+fllib_dyntbarhnd.o: $(srcdir)/dyntbarhnd.cpp $(FLLIB_ODEP)
 	$(CXXC) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-fllib_frmview.o: $(srcdir)/frmview.cpp
+fllib_frmview.o: $(srcdir)/frmview.cpp $(FLLIB_ODEP)
 	$(CXXC) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-fllib_garbagec.o: $(srcdir)/garbagec.cpp
+fllib_garbagec.o: $(srcdir)/garbagec.cpp $(FLLIB_ODEP)
 	$(CXXC) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-fllib_gcupdatesmgr.o: $(srcdir)/gcupdatesmgr.cpp
+fllib_gcupdatesmgr.o: $(srcdir)/gcupdatesmgr.cpp $(FLLIB_ODEP)
 	$(CXXC) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-fllib_hintanimpl.o: $(srcdir)/hintanimpl.cpp
+fllib_hintanimpl.o: $(srcdir)/hintanimpl.cpp $(FLLIB_ODEP)
 	$(CXXC) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-fllib_newbmpbtn.o: $(srcdir)/newbmpbtn.cpp
+fllib_newbmpbtn.o: $(srcdir)/newbmpbtn.cpp $(FLLIB_ODEP)
 	$(CXXC) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-fllib_panedrawpl.o: $(srcdir)/panedrawpl.cpp
+fllib_panedrawpl.o: $(srcdir)/panedrawpl.cpp $(FLLIB_ODEP)
 	$(CXXC) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-fllib_rowdragpl.o: $(srcdir)/rowdragpl.cpp
+fllib_rowdragpl.o: $(srcdir)/rowdragpl.cpp $(FLLIB_ODEP)
 	$(CXXC) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-fllib_rowlayoutpl.o: $(srcdir)/rowlayoutpl.cpp
+fllib_rowlayoutpl.o: $(srcdir)/rowlayoutpl.cpp $(FLLIB_ODEP)
 	$(CXXC) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-fllib_toolwnd.o: $(srcdir)/toolwnd.cpp
+fllib_toolwnd.o: $(srcdir)/toolwnd.cpp $(FLLIB_ODEP)
 	$(CXXC) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-fllib_updatesmgr.o: $(srcdir)/updatesmgr.cpp
+fllib_updatesmgr.o: $(srcdir)/updatesmgr.cpp $(FLLIB_ODEP)
 	$(CXXC) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
 install: all $(__install_fldll___depname) $(__install_fllib___depname)
