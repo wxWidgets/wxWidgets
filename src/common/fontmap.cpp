@@ -140,15 +140,15 @@ static const wxChar* gs_encodingNames[] =
     wxT( "iso8859-14" ),
     wxT( "iso8859-15" ),
     wxT( "koi8-r" ),
-    wxT( "windows1250" ),
-    wxT( "windows1251" ),
-    wxT( "windows1252" ),
-    wxT( "windows1253" ),
-    wxT( "windows1254" ),
-    wxT( "windows1255" ),
-    wxT( "windows1256" ),
-    wxT( "windows1257" ),
-    wxT( "windows437" ),
+    wxT( "windows-1250" ),
+    wxT( "windows-1251" ),
+    wxT( "windows-1252" ),
+    wxT( "windows-1253" ),
+    wxT( "windows-1254" ),
+    wxT( "windows-1255" ),
+    wxT( "windows-1256" ),
+    wxT( "windows-1257" ),
+    wxT( "windows-437" ),
 };
 
 // ----------------------------------------------------------------------------
@@ -438,10 +438,14 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
                 }
             }
         }
-        else if ( cs.Left(8) == wxT("WINDOWS-") )
+        else if ( cs.Left(7) == wxT("WINDOWS") )
         {
+            const wxChar *p = cs.c_str() + 7;
+            if ( *p == wxT('-') )
+                p++;
+
             int value;
-            if ( wxSscanf(cs.c_str() + 8, wxT("%u"), &value) == 1 )
+            if ( wxSscanf(p, wxT("%u"), &value) == 1 )
             {
                 if ( value >= 1250 )
                 {
