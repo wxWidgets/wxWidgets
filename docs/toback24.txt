@@ -299,3 +299,16 @@ Checking in src/gtk/scrolwin.cpp;
 new revision: 1.27; previous revision: 1.26
 done
 
+
+25.  Fix wxMac client data handling in wxChoice/wxComboBox
+
+Checking in src/mac/combobox.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/mac/combobox.cpp,v  <--  combobox.cpp
+new revision: 1.23; previous revision: 1.22
+done
+Checking in src/mac/choice.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/mac/choice.cpp,v  <--  choice.cpp
+new revision: 1.28; previous revision: 1.27
+done
+
+
