@@ -9,25 +9,9 @@
 # Created:  1998
 #
 # Makefile : Builds wxWindows library for Watcom C++, WIN32
-#
-# NOTE: This file is generated from wat.t by tmake, but not all bugs have
-# been removed from this process. If wxWindows doesn't compile,
-# check the following and edit this makefile accordingly:
-#
-# - OLE-related files such as oleutils.cpp should have 'ole\' prepended
-#   to the path.
-# - extended.c, gsocket.c, unzip.c must be compiled using $(CC), not $(CCC).
-#   They may also be wrongly specified as extended.cpp, etc.
+!include ..\makewat.env
 
-WXDIR = ..\..
-
-!include $(WXDIR)\src\makewat.env
-
-WXLIB = $(WXDIR)\lib
-
-LIBTARGET   = $(WXLIB)\wx.lib
-DUMMY=dummydll
-# ODBCLIB     = ..\..\contrib\odbc\odbc32.lib
+LIBTARGET   = $(WXDIR)\lib\wx$(TOOLKIT)$(DEBGUSUFFIX)_w.lib
 
 EXTRATARGETS = png zlib jpeg tiff regex
 EXTRATARGETSCLEAN = clean_png clean_zlib clean_jpeg clean_tiff clean_regex
@@ -41,353 +25,348 @@ HTMLDIR=$(WXDIR)\src\html
 
 DOCDIR = $(WXDIR)\docs
 
-GENERICOBJS= busyinfo.obj &
-	calctrl.obj &
-	choicdgg.obj &
-	dcbuffer.obj &
-	dcpsg.obj &
-	dirctrlg.obj &
-	dragimgg.obj &
-	grid.obj &
-	gridctrl.obj &
-	gridsel.obj &
-	laywin.obj &
-	logg.obj &
-	numdlgg.obj &
-	panelg.obj &
-	progdlgg.obj &
-	prop.obj &
-	propform.obj &
-	proplist.obj &
-	sashwin.obj &
-	scrlwing.obj &
-	spinctlg.obj &
-	splash.obj &
-	splitter.obj &
-	statusbr.obj &
-	tbarsmpl.obj &
-	textdlgg.obj &
-	tipdlg.obj &
-	tipwin.obj &
-	treectlg.obj &
-	treelay.obj &
-	wizard.obj
+GENERICOBJS= $(OUTPUTDIR)\busyinfo.obj &
+	$(OUTPUTDIR)\calctrl.obj &
+	$(OUTPUTDIR)\choicdgg.obj &
+	$(OUTPUTDIR)\dcbuffer.obj &
+	$(OUTPUTDIR)\dcpsg.obj &
+	$(OUTPUTDIR)\dirctrlg.obj &
+	$(OUTPUTDIR)\dragimgg.obj &
+	$(OUTPUTDIR)\grid.obj &
+	$(OUTPUTDIR)\gridctrl.obj &
+	$(OUTPUTDIR)\gridsel.obj &
+	$(OUTPUTDIR)\laywin.obj &
+	$(OUTPUTDIR)\logg.obj &
+	$(OUTPUTDIR)\numdlgg.obj &
+	$(OUTPUTDIR)\panelg.obj &
+	$(OUTPUTDIR)\progdlgg.obj &
+	$(OUTPUTDIR)\prop.obj &
+	$(OUTPUTDIR)\propform.obj &
+	$(OUTPUTDIR)\proplist.obj &
+	$(OUTPUTDIR)\sashwin.obj &
+	$(OUTPUTDIR)\scrlwing.obj &
+	$(OUTPUTDIR)\spinctlg.obj &
+	$(OUTPUTDIR)\splash.obj &
+	$(OUTPUTDIR)\splitter.obj &
+	$(OUTPUTDIR)\statusbr.obj &
+	$(OUTPUTDIR)\tbarsmpl.obj &
+	$(OUTPUTDIR)\textdlgg.obj &
+	$(OUTPUTDIR)\tipdlg.obj &
+	$(OUTPUTDIR)\tipwin.obj &
+	$(OUTPUTDIR)\treectlg.obj &
+	$(OUTPUTDIR)\treelay.obj &
+	$(OUTPUTDIR)\wizard.obj
 
 # These are generic things that don't need to be compiled on MSW,
 # but sometimes it's useful to do so for testing purposes.
-NONESSENTIALOBJS= accel.obj &
-	caret.obj &
-	colrdlgg.obj &
-	dirdlgg.obj &
-	fdrepdlg.obj &
-	filedlgg.obj &
-	fontdlgg.obj &
-	helpext.obj &
-	helphtml.obj &
-	imaglist.obj &
-	listctrl.obj &
-	mdig.obj &
-	msgdlgg.obj &
-	notebook.obj &
-	paletteg.obj &
-	printps.obj &
-	prntdlgg.obj &
-	statline.obj &
-	tabg.obj &
-	timer.obj
+NONESSENTIALOBJS= $(OUTPUTDIR)\accel.obj &
+	$(OUTPUTDIR)\caret.obj &
+	$(OUTPUTDIR)\colrdlgg.obj &
+	$(OUTPUTDIR)\dirdlgg.obj &
+	$(OUTPUTDIR)\fdrepdlg.obj &
+	$(OUTPUTDIR)\filedlgg.obj &
+	$(OUTPUTDIR)\fontdlgg.obj &
+	$(OUTPUTDIR)\helpext.obj &
+	$(OUTPUTDIR)\helphtml.obj &
+	$(OUTPUTDIR)\imaglist.obj &
+	$(OUTPUTDIR)\listctrl.obj &
+	$(OUTPUTDIR)\mdig.obj &
+	$(OUTPUTDIR)\msgdlgg.obj &
+	$(OUTPUTDIR)\notebook.obj &
+	$(OUTPUTDIR)\paletteg.obj &
+	$(OUTPUTDIR)\printps.obj &
+	$(OUTPUTDIR)\prntdlgg.obj &
+	$(OUTPUTDIR)\statline.obj &
+	$(OUTPUTDIR)\tabg.obj &
+	$(OUTPUTDIR)\timer.obj
 
 COMMONOBJS = &
-	y_tab.obj &
-	appcmn.obj &
-	artprov.obj &
-	artstd.obj &
-	choiccmn.obj &
-	clipcmn.obj &
-	clntdata.obj &
-	cmdline.obj &
-	cmdproc.obj &
-	cmndata.obj &
-	config.obj &
-	containr.obj &
-	cshelp.obj &
-	ctrlcmn.obj &
-	ctrlsub.obj &
-	datetime.obj &
-	datstrm.obj &
-	db.obj &
-	dbgrid.obj &
-	dbtable.obj &
-	dcbase.obj &
-	dircmn.obj &
-	dlgcmn.obj &
-	dndcmn.obj &
-	dobjcmn.obj &
-	docmdi.obj &
-	docview.obj &
-	dseldlg.obj &
-	dynarray.obj &
-	dynlib.obj &
-	dynload.obj &
-	effects.obj &
-	encconv.obj &
-	event.obj &
-	extended.obj &
-	fddlgcmn.obj &
-	ffile.obj &
-	file.obj &
-	fileconf.obj &
-	filefn.obj &
-	filename.obj &
-	filesys.obj &
-	fontcmn.obj &
-	fontmap.obj &
-	framecmn.obj &
-	fs_inet.obj &
-	fs_mem.obj &
-	fs_zip.obj &
-	ftp.obj &
-	gaugecmn.obj &
-	gdicmn.obj &
-	geometry.obj &
-	gifdecod.obj &
-	hash.obj &
-	hashmap.obj &
-	helpbase.obj &
-	http.obj &
-	iconbndl.obj &
-	imagall.obj &
-	imagbmp.obj &
-	image.obj &
-	imagfill.obj &
-	imaggif.obj &
-	imagiff.obj &
-	imagjpeg.obj &
-	imagpcx.obj &
-	imagpng.obj &
-	imagpnm.obj &
-	imagtiff.obj &
-	imagxpm.obj &
-	intl.obj &
-	ipcbase.obj &
-	layout.obj &
-	lboxcmn.obj &
-	list.obj &
-	log.obj &
-	longlong.obj &
-	matrix.obj &
-	memory.obj &
-	menucmn.obj &
-	mimecmn.obj &
-	module.obj &
-	msgout.obj &
-	mstream.obj &
-	nbkbase.obj &
-	object.obj &
-	odbc.obj &
-	paper.obj &
-	popupcmn.obj &
-	prntbase.obj &
-	process.obj &
-	protocol.obj &
-	quantize.obj &
-	radiocmn.obj &
-	regex.obj &
-	resource.obj &
-	sckaddr.obj &
-	sckfile.obj &
-	sckipc.obj &
-	sckstrm.obj &
-	settcmn.obj &
-	sizer.obj &
-	socket.obj &
-	statbar.obj &
-	strconv.obj &
-	stream.obj &
-	string.obj &
-	sysopt.obj &
-	tbarbase.obj &
-	textbuf.obj &
-	textcmn.obj &
-	textfile.obj &
-	timercmn.obj &
-	tokenzr.obj &
-	toplvcmn.obj &
-	treebase.obj &
-	txtstrm.obj &
-	unzip.obj &
-	url.obj &
-	utilscmn.obj &
-	valgen.obj &
-	validate.obj &
-	valtext.obj &
-	variant.obj &
-	wfstream.obj &
-	wincmn.obj &
-	wxchar.obj &
-	wxexpr.obj &
-	xpmdecod.obj &
-	zipstrm.obj &
-	zstream.obj
+	$(OUTPUTDIR)\y_tab.obj &
+	$(OUTPUTDIR)\appcmn.obj &
+	$(OUTPUTDIR)\artprov.obj &
+	$(OUTPUTDIR)\artstd.obj &
+	$(OUTPUTDIR)\choiccmn.obj &
+	$(OUTPUTDIR)\clipcmn.obj &
+	$(OUTPUTDIR)\clntdata.obj &
+	$(OUTPUTDIR)\cmdline.obj &
+	$(OUTPUTDIR)\cmdproc.obj &
+	$(OUTPUTDIR)\cmndata.obj &
+	$(OUTPUTDIR)\config.obj &
+	$(OUTPUTDIR)\containr.obj &
+	$(OUTPUTDIR)\cshelp.obj &
+	$(OUTPUTDIR)\ctrlcmn.obj &
+	$(OUTPUTDIR)\ctrlsub.obj &
+	$(OUTPUTDIR)\datetime.obj &
+	$(OUTPUTDIR)\datstrm.obj &
+	$(OUTPUTDIR)\db.obj &
+	$(OUTPUTDIR)\dbgrid.obj &
+	$(OUTPUTDIR)\dbtable.obj &
+	$(OUTPUTDIR)\dcbase.obj &
+	$(OUTPUTDIR)\dircmn.obj &
+	$(OUTPUTDIR)\dlgcmn.obj &
+	$(OUTPUTDIR)\dndcmn.obj &
+	$(OUTPUTDIR)\dobjcmn.obj &
+	$(OUTPUTDIR)\docmdi.obj &
+	$(OUTPUTDIR)\docview.obj &
+	$(OUTPUTDIR)\dseldlg.obj &
+	$(OUTPUTDIR)\dynarray.obj &
+	$(OUTPUTDIR)\dynlib.obj &
+	$(OUTPUTDIR)\dynload.obj &
+	$(OUTPUTDIR)\effects.obj &
+	$(OUTPUTDIR)\encconv.obj &
+	$(OUTPUTDIR)\event.obj &
+	$(OUTPUTDIR)\extended.obj &
+	$(OUTPUTDIR)\fddlgcmn.obj &
+	$(OUTPUTDIR)\ffile.obj &
+	$(OUTPUTDIR)\file.obj &
+	$(OUTPUTDIR)\fileconf.obj &
+	$(OUTPUTDIR)\filefn.obj &
+	$(OUTPUTDIR)\filename.obj &
+	$(OUTPUTDIR)\filesys.obj &
+	$(OUTPUTDIR)\fontcmn.obj &
+	$(OUTPUTDIR)\fontmap.obj &
+	$(OUTPUTDIR)\framecmn.obj &
+	$(OUTPUTDIR)\fs_inet.obj &
+	$(OUTPUTDIR)\fs_mem.obj &
+	$(OUTPUTDIR)\fs_zip.obj &
+	$(OUTPUTDIR)\ftp.obj &
+	$(OUTPUTDIR)\gaugecmn.obj &
+	$(OUTPUTDIR)\gdicmn.obj &
+	$(OUTPUTDIR)\geometry.obj &
+	$(OUTPUTDIR)\gifdecod.obj &
+	$(OUTPUTDIR)\hash.obj &
+	$(OUTPUTDIR)\hashmap.obj &
+	$(OUTPUTDIR)\helpbase.obj &
+	$(OUTPUTDIR)\http.obj &
+	$(OUTPUTDIR)\iconbndl.obj &
+	$(OUTPUTDIR)\imagall.obj &
+	$(OUTPUTDIR)\imagbmp.obj &
+	$(OUTPUTDIR)\image.obj &
+	$(OUTPUTDIR)\imagfill.obj &
+	$(OUTPUTDIR)\imaggif.obj &
+	$(OUTPUTDIR)\imagiff.obj &
+	$(OUTPUTDIR)\imagjpeg.obj &
+	$(OUTPUTDIR)\imagpcx.obj &
+	$(OUTPUTDIR)\imagpng.obj &
+	$(OUTPUTDIR)\imagpnm.obj &
+	$(OUTPUTDIR)\imagtiff.obj &
+	$(OUTPUTDIR)\imagxpm.obj &
+	$(OUTPUTDIR)\intl.obj &
+	$(OUTPUTDIR)\ipcbase.obj &
+	$(OUTPUTDIR)\layout.obj &
+	$(OUTPUTDIR)\lboxcmn.obj &
+	$(OUTPUTDIR)\list.obj &
+	$(OUTPUTDIR)\log.obj &
+	$(OUTPUTDIR)\longlong.obj &
+	$(OUTPUTDIR)\matrix.obj &
+	$(OUTPUTDIR)\memory.obj &
+	$(OUTPUTDIR)\menucmn.obj &
+	$(OUTPUTDIR)\mimecmn.obj &
+	$(OUTPUTDIR)\module.obj &
+	$(OUTPUTDIR)\msgout.obj &
+	$(OUTPUTDIR)\mstream.obj &
+	$(OUTPUTDIR)\nbkbase.obj &
+	$(OUTPUTDIR)\object.obj &
+	$(OUTPUTDIR)\odbc.obj &
+	$(OUTPUTDIR)\paper.obj &
+	$(OUTPUTDIR)\popupcmn.obj &
+	$(OUTPUTDIR)\prntbase.obj &
+	$(OUTPUTDIR)\process.obj &
+	$(OUTPUTDIR)\protocol.obj &
+	$(OUTPUTDIR)\quantize.obj &
+	$(OUTPUTDIR)\radiocmn.obj &
+	$(OUTPUTDIR)\regex.obj &
+	$(OUTPUTDIR)\resource.obj &
+	$(OUTPUTDIR)\sckaddr.obj &
+	$(OUTPUTDIR)\sckfile.obj &
+	$(OUTPUTDIR)\sckipc.obj &
+	$(OUTPUTDIR)\sckstrm.obj &
+	$(OUTPUTDIR)\settcmn.obj &
+	$(OUTPUTDIR)\sizer.obj &
+	$(OUTPUTDIR)\socket.obj &
+	$(OUTPUTDIR)\statbar.obj &
+	$(OUTPUTDIR)\strconv.obj &
+	$(OUTPUTDIR)\stream.obj &
+	$(OUTPUTDIR)\string.obj &
+	$(OUTPUTDIR)\sysopt.obj &
+	$(OUTPUTDIR)\tbarbase.obj &
+	$(OUTPUTDIR)\textbuf.obj &
+	$(OUTPUTDIR)\textcmn.obj &
+	$(OUTPUTDIR)\textfile.obj &
+	$(OUTPUTDIR)\timercmn.obj &
+	$(OUTPUTDIR)\tokenzr.obj &
+	$(OUTPUTDIR)\toplvcmn.obj &
+	$(OUTPUTDIR)\treebase.obj &
+	$(OUTPUTDIR)\txtstrm.obj &
+	$(OUTPUTDIR)\unzip.obj &
+	$(OUTPUTDIR)\url.obj &
+	$(OUTPUTDIR)\utilscmn.obj &
+	$(OUTPUTDIR)\valgen.obj &
+	$(OUTPUTDIR)\validate.obj &
+	$(OUTPUTDIR)\valtext.obj &
+	$(OUTPUTDIR)\variant.obj &
+	$(OUTPUTDIR)\wfstream.obj &
+	$(OUTPUTDIR)\wincmn.obj &
+	$(OUTPUTDIR)\wxchar.obj &
+	$(OUTPUTDIR)\wxexpr.obj &
+	$(OUTPUTDIR)\xpmdecod.obj &
+	$(OUTPUTDIR)\zipstrm.obj &
+	$(OUTPUTDIR)\zstream.obj
 
-MSWOBJS = accel.obj &
-	app.obj &
-	automtn.obj &
-	bitmap.obj &
-	bmpbuttn.obj &
-	brush.obj &
-	button.obj &
-	caret.obj &
-	checkbox.obj &
-	checklst.obj &
-	choice.obj &
-	clipbrd.obj &
-	colordlg.obj &
-	colour.obj &
-	combobox.obj &
-	control.obj &
-	curico.obj &
-	cursor.obj &
-	data.obj &
-	dataobj.obj &
-	dc.obj &
-	dcclient.obj &
-	dcmemory.obj &
-	dcprint.obj &
-	dcscreen.obj &
-	dde.obj &
-	dialog.obj &
-	dialup.obj &
-	dib.obj &
-	dibutils.obj &
-	dir.obj &
-	dirdlg.obj &
-	dragimag.obj &
-	dropsrc.obj &
-	droptgt.obj &
-	enhmeta.obj &
-	evtloop.obj &
-	fdrepdlg.obj &
-	filedlg.obj &
-	font.obj &
-	fontdlg.obj &
-	fontenum.obj &
-	fontutil.obj &
-	frame.obj &
-	gauge95.obj &
-	gaugemsw.obj &
-	gdiimage.obj &
-	gdiobj.obj &
-	glcanvas.obj &
-	gsocket.obj &
-	gsockmsw.obj &
-	helpbest.obj &
-	helpchm.obj &
-	helpwin.obj &
-	icon.obj &
-	imaglist.obj &
-	iniconf.obj &
-	joystick.obj &
-	listbox.obj &
-	listctrl.obj &
-	main.obj &
-	mdi.obj &
-	menu.obj &
-	menuitem.obj &
-	metafile.obj &
-	mimetype.obj &
-	minifram.obj &
-	msgdlg.obj &
-	mslu.obj &
-	nativdlg.obj &
-	notebook.obj &
-	oleutils.obj &
-	ownerdrw.obj &
-	palette.obj &
-	pen.obj &
-	penwin.obj &
-	popupwin.obj &
-	printdlg.obj &
-	printwin.obj &
-	radiobox.obj &
-	radiobut.obj &
-	regconf.obj &
-	region.obj &
-	registry.obj &
-	scrolbar.obj &
-	settings.obj &
-	slider95.obj &
-	slidrmsw.obj &
-	snglinst.obj &
-	spinbutt.obj &
-	spinctrl.obj &
-	statbmp.obj &
-	statbox.obj &
-	statbr95.obj &
-	statline.obj &
-	stattext.obj &
-	tabctrl.obj &
-	taskbar.obj &
-	tbar95.obj &
-	tbarmsw.obj &
-	textctrl.obj &
-	tglbtn.obj &
-	thread.obj &
-	timer.obj &
-	tooltip.obj &
-	toplevel.obj &
-	treectrl.obj &
-	utils.obj &
-	utilsexc.obj &
-	uuid.obj &
-	volume.obj &
-	wave.obj &
-	window.obj
+MSWOBJS = $(OUTPUTDIR)\accel.obj &
+	$(OUTPUTDIR)\app.obj &
+	$(OUTPUTDIR)\automtn.obj &
+	$(OUTPUTDIR)\bitmap.obj &
+	$(OUTPUTDIR)\bmpbuttn.obj &
+	$(OUTPUTDIR)\brush.obj &
+	$(OUTPUTDIR)\button.obj &
+	$(OUTPUTDIR)\caret.obj &
+	$(OUTPUTDIR)\checkbox.obj &
+	$(OUTPUTDIR)\checklst.obj &
+	$(OUTPUTDIR)\choice.obj &
+	$(OUTPUTDIR)\clipbrd.obj &
+	$(OUTPUTDIR)\colordlg.obj &
+	$(OUTPUTDIR)\colour.obj &
+	$(OUTPUTDIR)\combobox.obj &
+	$(OUTPUTDIR)\control.obj &
+	$(OUTPUTDIR)\curico.obj &
+	$(OUTPUTDIR)\cursor.obj &
+	$(OUTPUTDIR)\data.obj &
+	$(OUTPUTDIR)\dataobj.obj &
+	$(OUTPUTDIR)\dc.obj &
+	$(OUTPUTDIR)\dcclient.obj &
+	$(OUTPUTDIR)\dcmemory.obj &
+	$(OUTPUTDIR)\dcprint.obj &
+	$(OUTPUTDIR)\dcscreen.obj &
+	$(OUTPUTDIR)\dde.obj &
+	$(OUTPUTDIR)\dialog.obj &
+	$(OUTPUTDIR)\dialup.obj &
+	$(OUTPUTDIR)\dib.obj &
+	$(OUTPUTDIR)\dibutils.obj &
+	$(OUTPUTDIR)\dir.obj &
+	$(OUTPUTDIR)\dirdlg.obj &
+	$(OUTPUTDIR)\dragimag.obj &
+	$(OUTPUTDIR)\dropsrc.obj &
+	$(OUTPUTDIR)\droptgt.obj &
+	$(OUTPUTDIR)\enhmeta.obj &
+	$(OUTPUTDIR)\evtloop.obj &
+	$(OUTPUTDIR)\fdrepdlg.obj &
+	$(OUTPUTDIR)\filedlg.obj &
+	$(OUTPUTDIR)\font.obj &
+	$(OUTPUTDIR)\fontdlg.obj &
+	$(OUTPUTDIR)\fontenum.obj &
+	$(OUTPUTDIR)\fontutil.obj &
+	$(OUTPUTDIR)\frame.obj &
+	$(OUTPUTDIR)\gauge95.obj &
+	$(OUTPUTDIR)\gdiimage.obj &
+	$(OUTPUTDIR)\gdiobj.obj &
+	$(OUTPUTDIR)\glcanvas.obj &
+	$(OUTPUTDIR)\gsocket.obj &
+	$(OUTPUTDIR)\gsockmsw.obj &
+	$(OUTPUTDIR)\helpbest.obj &
+	$(OUTPUTDIR)\helpchm.obj &
+	$(OUTPUTDIR)\helpwin.obj &
+	$(OUTPUTDIR)\icon.obj &
+	$(OUTPUTDIR)\imaglist.obj &
+	$(OUTPUTDIR)\iniconf.obj &
+	$(OUTPUTDIR)\joystick.obj &
+	$(OUTPUTDIR)\listbox.obj &
+	$(OUTPUTDIR)\listctrl.obj &
+	$(OUTPUTDIR)\main.obj &
+	$(OUTPUTDIR)\mdi.obj &
+	$(OUTPUTDIR)\menu.obj &
+	$(OUTPUTDIR)\menuitem.obj &
+	$(OUTPUTDIR)\metafile.obj &
+	$(OUTPUTDIR)\mimetype.obj &
+	$(OUTPUTDIR)\minifram.obj &
+	$(OUTPUTDIR)\msgdlg.obj &
+	$(OUTPUTDIR)\mslu.obj &
+	$(OUTPUTDIR)\nativdlg.obj &
+	$(OUTPUTDIR)\notebook.obj &
+	$(OUTPUTDIR)\oleutils.obj &
+	$(OUTPUTDIR)\ownerdrw.obj &
+	$(OUTPUTDIR)\palette.obj &
+	$(OUTPUTDIR)\pen.obj &
+	$(OUTPUTDIR)\penwin.obj &
+	$(OUTPUTDIR)\popupwin.obj &
+	$(OUTPUTDIR)\printdlg.obj &
+	$(OUTPUTDIR)\printwin.obj &
+	$(OUTPUTDIR)\radiobox.obj &
+	$(OUTPUTDIR)\radiobut.obj &
+	$(OUTPUTDIR)\regconf.obj &
+	$(OUTPUTDIR)\region.obj &
+	$(OUTPUTDIR)\registry.obj &
+	$(OUTPUTDIR)\scrolbar.obj &
+	$(OUTPUTDIR)\settings.obj &
+	$(OUTPUTDIR)\slider95.obj &
+	$(OUTPUTDIR)\snglinst.obj &
+	$(OUTPUTDIR)\spinbutt.obj &
+	$(OUTPUTDIR)\spinctrl.obj &
+	$(OUTPUTDIR)\statbmp.obj &
+	$(OUTPUTDIR)\statbox.obj &
+	$(OUTPUTDIR)\statbr95.obj &
+	$(OUTPUTDIR)\statline.obj &
+	$(OUTPUTDIR)\stattext.obj &
+	$(OUTPUTDIR)\tabctrl.obj &
+	$(OUTPUTDIR)\taskbar.obj &
+	$(OUTPUTDIR)\tbar95.obj &
+	$(OUTPUTDIR)\textctrl.obj &
+	$(OUTPUTDIR)\tglbtn.obj &
+	$(OUTPUTDIR)\thread.obj &
+	$(OUTPUTDIR)\timer.obj &
+	$(OUTPUTDIR)\tooltip.obj &
+	$(OUTPUTDIR)\toplevel.obj &
+	$(OUTPUTDIR)\treectrl.obj &
+	$(OUTPUTDIR)\utils.obj &
+	$(OUTPUTDIR)\utilsexc.obj &
+	$(OUTPUTDIR)\uuid.obj &
+	$(OUTPUTDIR)\volume.obj &
+	$(OUTPUTDIR)\wave.obj &
+	$(OUTPUTDIR)\window.obj
 
-HTMLOBJS = helpctrl.obj &
-	helpdata.obj &
-	helpfrm.obj &
-	htmlcell.obj &
-	htmlfilt.obj &
-	htmlpars.obj &
-	htmltag.obj &
-	htmlwin.obj &
-	htmprint.obj &
-	m_dflist.obj &
-	m_fonts.obj &
-	m_hline.obj &
-	m_image.obj &
-	m_layout.obj &
-	m_links.obj &
-	m_list.obj &
-	m_pre.obj &
-	m_style.obj &
-	m_tables.obj &
-	winpars.obj
+HTMLOBJS = $(OUTPUTDIR)\helpctrl.obj &
+	$(OUTPUTDIR)\helpdata.obj &
+	$(OUTPUTDIR)\helpfrm.obj &
+	$(OUTPUTDIR)\htmlcell.obj &
+	$(OUTPUTDIR)\htmlfilt.obj &
+	$(OUTPUTDIR)\htmlpars.obj &
+	$(OUTPUTDIR)\htmltag.obj &
+	$(OUTPUTDIR)\htmlwin.obj &
+	$(OUTPUTDIR)\htmprint.obj &
+	$(OUTPUTDIR)\m_dflist.obj &
+	$(OUTPUTDIR)\m_fonts.obj &
+	$(OUTPUTDIR)\m_hline.obj &
+	$(OUTPUTDIR)\m_image.obj &
+	$(OUTPUTDIR)\m_layout.obj &
+	$(OUTPUTDIR)\m_links.obj &
+	$(OUTPUTDIR)\m_list.obj &
+	$(OUTPUTDIR)\m_pre.obj &
+	$(OUTPUTDIR)\m_style.obj &
+	$(OUTPUTDIR)\m_tables.obj &
+	$(OUTPUTDIR)\winpars.obj
 
 # Add $(NONESSENTIALOBJS) if wanting generic dialogs, PostScript etc.
 OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) $(HTMLOBJS)
 
-ARCHINCDIR=$(WXDIR)\lib\msw
 SETUP_H=$(ARCHINCDIR)\wx\setup.h
 
-all:        $(SETUP_H) $(OBJECTS) $(LIBTARGET) $(EXTRATARGETS) .SYMBOLIC
+all: $(SETUP_H) $(OUTPUTDIR) $(OBJECTS) $(LIBTARGET) $(EXTRATARGETS) .SYMBOLIC
 
 $(ARCHINCDIR)\wx:
-    mkdir $(ARCHINCDIR)
-    mkdir $(ARCHINCDIR)\wx
+	mkdir $(ARCHINCDIR)
+	mkdir $(ARCHINCDIR)\wx
+
+$(OUTPUTDIR):
+	@if not exist $^@ mkdir $^@
 
 $(SETUP_H): $(WXDIR)\include\wx\msw\setup.h $(ARCHINCDIR)\wx
-    copy $(WXDIR)\include\wx\msw\setup.h $@
+	copy $(WXDIR)\include\wx\msw\setup.h $@
 
+LBCFILE=wx$(TOOLKIT).lbc
 $(LIBTARGET) : $(OBJECTS)
-    %create tmp.lbc
-    @for %i in ( $(OBJECTS) ) do @%append tmp.lbc +%i
-    wlib /b /c /n /p=512 $^@ @tmp.lbc
-
-#test : $(OBJECTS)
-#    %create tmp.lbc
-#    @for %i in ( $(OBJECTS) ) do @%append tmp.lbc +%i
-#    wlib /b /c /n /p=512 $^@ @tmp.lbc
+    %create $(LBCFILE)
+    @for %i in ( $(OBJECTS) ) do @%append $(LBCFILE) +%i
+    wlib /b /c /n /p=512 $^@ @$(LBCFILE)
 
 
 clean:   .SYMBOLIC $(EXTRATARGETSCLEAN)
@@ -399,749 +378,738 @@ clean:   .SYMBOLIC $(EXTRATARGETSCLEAN)
 
 cleanall:   clean
 
-accel.obj:     $(MSWDIR)\accel.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\accel.obj:     $(MSWDIR)\accel.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-app.obj:     $(MSWDIR)\app.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\app.obj:     $(MSWDIR)\app.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-automtn.obj:     $(OLEDIR)\automtn.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\automtn.obj:     $(OLEDIR)\automtn.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-bitmap.obj:     $(MSWDIR)\bitmap.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\bitmap.obj:     $(MSWDIR)\bitmap.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-bmpbuttn.obj:     $(MSWDIR)\bmpbuttn.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\bmpbuttn.obj:     $(MSWDIR)\bmpbuttn.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-brush.obj:     $(MSWDIR)\brush.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\brush.obj:     $(MSWDIR)\brush.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-button.obj:     $(MSWDIR)\button.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\button.obj:     $(MSWDIR)\button.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-caret.obj:     $(MSWDIR)\caret.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\caret.obj:     $(MSWDIR)\caret.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-checkbox.obj:     $(MSWDIR)\checkbox.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\checkbox.obj:     $(MSWDIR)\checkbox.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-checklst.obj:     $(MSWDIR)\checklst.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\checklst.obj:     $(MSWDIR)\checklst.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-choice.obj:     $(MSWDIR)\choice.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\choice.obj:     $(MSWDIR)\choice.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-clipbrd.obj:     $(MSWDIR)\clipbrd.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\clipbrd.obj:     $(MSWDIR)\clipbrd.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-colordlg.obj:     $(MSWDIR)\colordlg.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\colordlg.obj:     $(MSWDIR)\colordlg.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-colour.obj:     $(MSWDIR)\colour.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\colour.obj:     $(MSWDIR)\colour.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-combobox.obj:     $(MSWDIR)\combobox.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\combobox.obj:     $(MSWDIR)\combobox.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-control.obj:     $(MSWDIR)\control.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\control.obj:     $(MSWDIR)\control.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-curico.obj:     $(MSWDIR)\curico.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\curico.obj:     $(MSWDIR)\curico.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-cursor.obj:     $(MSWDIR)\cursor.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\cursor.obj:     $(MSWDIR)\cursor.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-data.obj:     $(MSWDIR)\data.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\data.obj:     $(MSWDIR)\data.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-dataobj.obj:     $(OLEDIR)\dataobj.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\dataobj.obj:     $(OLEDIR)\dataobj.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-dc.obj:     $(MSWDIR)\dc.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\dc.obj:     $(MSWDIR)\dc.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-dcclient.obj:     $(MSWDIR)\dcclient.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\dcclient.obj:     $(MSWDIR)\dcclient.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-dcmemory.obj:     $(MSWDIR)\dcmemory.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\dcmemory.obj:     $(MSWDIR)\dcmemory.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-dcprint.obj:     $(MSWDIR)\dcprint.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\dcprint.obj:     $(MSWDIR)\dcprint.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-dcscreen.obj:     $(MSWDIR)\dcscreen.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\dcscreen.obj:     $(MSWDIR)\dcscreen.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-dde.obj:     $(MSWDIR)\dde.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\dde.obj:     $(MSWDIR)\dde.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-dialog.obj:     $(MSWDIR)\dialog.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\dialog.obj:     $(MSWDIR)\dialog.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-dialup.obj:     $(MSWDIR)\dialup.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\dialup.obj:     $(MSWDIR)\dialup.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-dib.obj:     $(MSWDIR)\dib.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\dib.obj:     $(MSWDIR)\dib.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-dibutils.obj:     $(MSWDIR)\dibutils.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\dibutils.obj:     $(MSWDIR)\dibutils.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-dir.obj:     $(MSWDIR)\dir.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\dir.obj:     $(MSWDIR)\dir.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-dirdlg.obj:     $(MSWDIR)\dirdlg.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\dirdlg.obj:     $(MSWDIR)\dirdlg.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-dragimag.obj:     $(MSWDIR)\dragimag.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\dragimag.obj:     $(MSWDIR)\dragimag.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-dropsrc.obj:     $(OLEDIR)\dropsrc.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\dropsrc.obj:     $(OLEDIR)\dropsrc.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-droptgt.obj:     $(OLEDIR)\droptgt.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\droptgt.obj:     $(OLEDIR)\droptgt.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-enhmeta.obj:     $(MSWDIR)\enhmeta.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\enhmeta.obj:     $(MSWDIR)\enhmeta.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-evtloop.obj:     $(MSWDIR)\evtloop.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\evtloop.obj:     $(MSWDIR)\evtloop.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-fdrepdlg.obj:     $(MSWDIR)\fdrepdlg.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\fdrepdlg.obj:     $(MSWDIR)\fdrepdlg.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-filedlg.obj:     $(MSWDIR)\filedlg.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\filedlg.obj:     $(MSWDIR)\filedlg.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-font.obj:     $(MSWDIR)\font.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\font.obj:     $(MSWDIR)\font.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-fontdlg.obj:     $(MSWDIR)\fontdlg.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\fontdlg.obj:     $(MSWDIR)\fontdlg.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-fontenum.obj:     $(MSWDIR)\fontenum.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\fontenum.obj:     $(MSWDIR)\fontenum.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-fontutil.obj:     $(MSWDIR)\fontutil.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\fontutil.obj:     $(MSWDIR)\fontutil.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-frame.obj:     $(MSWDIR)\frame.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\frame.obj:     $(MSWDIR)\frame.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-gauge95.obj:     $(MSWDIR)\gauge95.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\gauge95.obj:     $(MSWDIR)\gauge95.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-gaugemsw.obj:     $(MSWDIR)\gaugemsw.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\gdiimage.obj:     $(MSWDIR)\gdiimage.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-gdiimage.obj:     $(MSWDIR)\gdiimage.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\gdiobj.obj:     $(MSWDIR)\gdiobj.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-gdiobj.obj:     $(MSWDIR)\gdiobj.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\glcanvas.obj:     $(MSWDIR)\glcanvas.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-glcanvas.obj:     $(MSWDIR)\glcanvas.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\gsocket.obj:     $(MSWDIR)\gsocket.c
+  *$(CC) $(CFLAGS) $<
 
-gsocket.obj:     $(MSWDIR)\gsocket.c
-  *$(CC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\gsockmsw.obj:     $(MSWDIR)\gsockmsw.c
+  *$(CC) $(CFLAGS) $<
 
-gsockmsw.obj:     $(MSWDIR)\gsockmsw.c
-  *$(CC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\helpbest.obj:     $(MSWDIR)\helpbest.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-helpbest.obj:     $(MSWDIR)\helpbest.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\helpchm.obj:     $(MSWDIR)\helpchm.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-helpchm.obj:     $(MSWDIR)\helpchm.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\helpwin.obj:     $(MSWDIR)\helpwin.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-helpwin.obj:     $(MSWDIR)\helpwin.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\icon.obj:     $(MSWDIR)\icon.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-icon.obj:     $(MSWDIR)\icon.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\imaglist.obj:     $(MSWDIR)\imaglist.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-imaglist.obj:     $(MSWDIR)\imaglist.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\iniconf.obj:     $(MSWDIR)\iniconf.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-iniconf.obj:     $(MSWDIR)\iniconf.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\joystick.obj:     $(MSWDIR)\joystick.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-joystick.obj:     $(MSWDIR)\joystick.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\listbox.obj:     $(MSWDIR)\listbox.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-listbox.obj:     $(MSWDIR)\listbox.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\listctrl.obj:     $(MSWDIR)\listctrl.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-listctrl.obj:     $(MSWDIR)\listctrl.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\main.obj:     $(MSWDIR)\main.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-main.obj:     $(MSWDIR)\main.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\mdi.obj:     $(MSWDIR)\mdi.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-mdi.obj:     $(MSWDIR)\mdi.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\menu.obj:     $(MSWDIR)\menu.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-menu.obj:     $(MSWDIR)\menu.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\menuitem.obj:     $(MSWDIR)\menuitem.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-menuitem.obj:     $(MSWDIR)\menuitem.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\metafile.obj:     $(MSWDIR)\metafile.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-metafile.obj:     $(MSWDIR)\metafile.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\mimetype.obj:     $(MSWDIR)\mimetype.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-mimetype.obj:     $(MSWDIR)\mimetype.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\minifram.obj:     $(MSWDIR)\minifram.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-minifram.obj:     $(MSWDIR)\minifram.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\msgdlg.obj:     $(MSWDIR)\msgdlg.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-msgdlg.obj:     $(MSWDIR)\msgdlg.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\mslu.obj:     $(MSWDIR)\mslu.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-mslu.obj:     $(MSWDIR)\mslu.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\nativdlg.obj:     $(MSWDIR)\nativdlg.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-nativdlg.obj:     $(MSWDIR)\nativdlg.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\notebook.obj:     $(MSWDIR)\notebook.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-notebook.obj:     $(MSWDIR)\notebook.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\oleutils.obj:     $(OLEDIR)\oleutils.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-oleutils.obj:     $(OLEDIR)\oleutils.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\ownerdrw.obj:     $(MSWDIR)\ownerdrw.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-ownerdrw.obj:     $(MSWDIR)\ownerdrw.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\palette.obj:     $(MSWDIR)\palette.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-palette.obj:     $(MSWDIR)\palette.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\pen.obj:     $(MSWDIR)\pen.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-pen.obj:     $(MSWDIR)\pen.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\penwin.obj:     $(MSWDIR)\penwin.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-penwin.obj:     $(MSWDIR)\penwin.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\popupwin.obj:     $(MSWDIR)\popupwin.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-popupwin.obj:     $(MSWDIR)\popupwin.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\printdlg.obj:     $(MSWDIR)\printdlg.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-printdlg.obj:     $(MSWDIR)\printdlg.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\printwin.obj:     $(MSWDIR)\printwin.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-printwin.obj:     $(MSWDIR)\printwin.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\radiobox.obj:     $(MSWDIR)\radiobox.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-radiobox.obj:     $(MSWDIR)\radiobox.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\radiobut.obj:     $(MSWDIR)\radiobut.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-radiobut.obj:     $(MSWDIR)\radiobut.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\regconf.obj:     $(MSWDIR)\regconf.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-regconf.obj:     $(MSWDIR)\regconf.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\region.obj:     $(MSWDIR)\region.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-region.obj:     $(MSWDIR)\region.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\registry.obj:     $(MSWDIR)\registry.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-registry.obj:     $(MSWDIR)\registry.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\scrolbar.obj:     $(MSWDIR)\scrolbar.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-scrolbar.obj:     $(MSWDIR)\scrolbar.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\settings.obj:     $(MSWDIR)\settings.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-settings.obj:     $(MSWDIR)\settings.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\slider95.obj:     $(MSWDIR)\slider95.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-slider95.obj:     $(MSWDIR)\slider95.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\snglinst.obj:     $(MSWDIR)\snglinst.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-slidrmsw.obj:     $(MSWDIR)\slidrmsw.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\spinbutt.obj:     $(MSWDIR)\spinbutt.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-snglinst.obj:     $(MSWDIR)\snglinst.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\spinctrl.obj:     $(MSWDIR)\spinctrl.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-spinbutt.obj:     $(MSWDIR)\spinbutt.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\statbmp.obj:     $(MSWDIR)\statbmp.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-spinctrl.obj:     $(MSWDIR)\spinctrl.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\statbox.obj:     $(MSWDIR)\statbox.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-statbmp.obj:     $(MSWDIR)\statbmp.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\statbr95.obj:     $(MSWDIR)\statbr95.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-statbox.obj:     $(MSWDIR)\statbox.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\statline.obj:     $(MSWDIR)\statline.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-statbr95.obj:     $(MSWDIR)\statbr95.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\stattext.obj:     $(MSWDIR)\stattext.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-statline.obj:     $(MSWDIR)\statline.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\tabctrl.obj:     $(MSWDIR)\tabctrl.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-stattext.obj:     $(MSWDIR)\stattext.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\taskbar.obj:     $(MSWDIR)\taskbar.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-tabctrl.obj:     $(MSWDIR)\tabctrl.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\tbar95.obj:     $(MSWDIR)\tbar95.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-taskbar.obj:     $(MSWDIR)\taskbar.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\textctrl.obj:     $(MSWDIR)\textctrl.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-tbar95.obj:     $(MSWDIR)\tbar95.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\tglbtn.obj:     $(MSWDIR)\tglbtn.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-tbarmsw.obj:     $(MSWDIR)\tbarmsw.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\thread.obj:     $(MSWDIR)\thread.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-textctrl.obj:     $(MSWDIR)\textctrl.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\timer.obj:     $(MSWDIR)\timer.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-tglbtn.obj:     $(MSWDIR)\tglbtn.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\tooltip.obj:     $(MSWDIR)\tooltip.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-thread.obj:     $(MSWDIR)\thread.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\toplevel.obj:     $(MSWDIR)\toplevel.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-timer.obj:     $(MSWDIR)\timer.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\treectrl.obj:     $(MSWDIR)\treectrl.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-tooltip.obj:     $(MSWDIR)\tooltip.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\utils.obj:     $(MSWDIR)\utils.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-toplevel.obj:     $(MSWDIR)\toplevel.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\utilsexc.obj:     $(MSWDIR)\utilsexc.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-treectrl.obj:     $(MSWDIR)\treectrl.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\uuid.obj:     $(OLEDIR)\uuid.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-utils.obj:     $(MSWDIR)\utils.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\volume.obj:     $(MSWDIR)\volume.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-utilsexc.obj:     $(MSWDIR)\utilsexc.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\wave.obj:     $(MSWDIR)\wave.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-uuid.obj:     $(OLEDIR)\uuid.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
-
-volume.obj:     $(MSWDIR)\volume.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
-
-wave.obj:     $(MSWDIR)\wave.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
-
-window.obj:     $(MSWDIR)\window.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\window.obj:     $(MSWDIR)\window.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
 
 
 ########################################################
 # Common objects (always compiled)
 
-appcmn.obj:     $(COMMDIR)\appcmn.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\appcmn.obj:     $(COMMDIR)\appcmn.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-artprov.obj:     $(COMMDIR)\artprov.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\artprov.obj:     $(COMMDIR)\artprov.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-artstd.obj:     $(COMMDIR)\artstd.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\artstd.obj:     $(COMMDIR)\artstd.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-choiccmn.obj:     $(COMMDIR)\choiccmn.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\choiccmn.obj:     $(COMMDIR)\choiccmn.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-clipcmn.obj:     $(COMMDIR)\clipcmn.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\clipcmn.obj:     $(COMMDIR)\clipcmn.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-clntdata.obj:     $(COMMDIR)\clntdata.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\clntdata.obj:     $(COMMDIR)\clntdata.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-cmdline.obj:     $(COMMDIR)\cmdline.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\cmdline.obj:     $(COMMDIR)\cmdline.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-cmdproc.obj:     $(COMMDIR)\cmdproc.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\cmdproc.obj:     $(COMMDIR)\cmdproc.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-cmndata.obj:     $(COMMDIR)\cmndata.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\cmndata.obj:     $(COMMDIR)\cmndata.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-config.obj:     $(COMMDIR)\config.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\config.obj:     $(COMMDIR)\config.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-containr.obj:     $(COMMDIR)\containr.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\containr.obj:     $(COMMDIR)\containr.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-cshelp.obj:     $(COMMDIR)\cshelp.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\cshelp.obj:     $(COMMDIR)\cshelp.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-ctrlcmn.obj:     $(COMMDIR)\ctrlcmn.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\ctrlcmn.obj:     $(COMMDIR)\ctrlcmn.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-ctrlsub.obj:     $(COMMDIR)\ctrlsub.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\ctrlsub.obj:     $(COMMDIR)\ctrlsub.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-datetime.obj:     $(COMMDIR)\datetime.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\datetime.obj:     $(COMMDIR)\datetime.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-datstrm.obj:     $(COMMDIR)\datstrm.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\datstrm.obj:     $(COMMDIR)\datstrm.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-db.obj:     $(COMMDIR)\db.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\db.obj:     $(COMMDIR)\db.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-dbgrid.obj:     $(COMMDIR)\dbgrid.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\dbgrid.obj:     $(COMMDIR)\dbgrid.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-dbtable.obj:     $(COMMDIR)\dbtable.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\dbtable.obj:     $(COMMDIR)\dbtable.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-dcbase.obj:     $(COMMDIR)\dcbase.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\dcbase.obj:     $(COMMDIR)\dcbase.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-dircmn.obj:     $(COMMDIR)\dircmn.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\dircmn.obj:     $(COMMDIR)\dircmn.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-dlgcmn.obj:     $(COMMDIR)\dlgcmn.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\dlgcmn.obj:     $(COMMDIR)\dlgcmn.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-dndcmn.obj:     $(COMMDIR)\dndcmn.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\dndcmn.obj:     $(COMMDIR)\dndcmn.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-dobjcmn.obj:     $(COMMDIR)\dobjcmn.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\dobjcmn.obj:     $(COMMDIR)\dobjcmn.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-docmdi.obj:     $(COMMDIR)\docmdi.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\docmdi.obj:     $(COMMDIR)\docmdi.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-docview.obj:     $(COMMDIR)\docview.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\docview.obj:     $(COMMDIR)\docview.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-dseldlg.obj:     $(COMMDIR)\dseldlg.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\dseldlg.obj:     $(COMMDIR)\dseldlg.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-dynarray.obj:     $(COMMDIR)\dynarray.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\dynarray.obj:     $(COMMDIR)\dynarray.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-dynlib.obj:     $(COMMDIR)\dynlib.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\dynlib.obj:     $(COMMDIR)\dynlib.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-dynload.obj:     $(COMMDIR)\dynload.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\dynload.obj:     $(COMMDIR)\dynload.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-effects.obj:     $(COMMDIR)\effects.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\effects.obj:     $(COMMDIR)\effects.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-encconv.obj:     $(COMMDIR)\encconv.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\encconv.obj:     $(COMMDIR)\encconv.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-event.obj:     $(COMMDIR)\event.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\event.obj:     $(COMMDIR)\event.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-extended.obj:     $(COMMDIR)\extended.c
-  *$(CC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\extended.obj:     $(COMMDIR)\extended.c
+  *$(CC) $(CFLAGS) $<
 
-fddlgcmn.obj:     $(COMMDIR)\fddlgcmn.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\fddlgcmn.obj:     $(COMMDIR)\fddlgcmn.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-ffile.obj:     $(COMMDIR)\ffile.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\ffile.obj:     $(COMMDIR)\ffile.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-file.obj:     $(COMMDIR)\file.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\file.obj:     $(COMMDIR)\file.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-fileconf.obj:     $(COMMDIR)\fileconf.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\fileconf.obj:     $(COMMDIR)\fileconf.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-filefn.obj:     $(COMMDIR)\filefn.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\filefn.obj:     $(COMMDIR)\filefn.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-filename.obj:     $(COMMDIR)\filename.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\filename.obj:     $(COMMDIR)\filename.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-filesys.obj:     $(COMMDIR)\filesys.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\filesys.obj:     $(COMMDIR)\filesys.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-fontcmn.obj:     $(COMMDIR)\fontcmn.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\fontcmn.obj:     $(COMMDIR)\fontcmn.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-fontmap.obj:     $(COMMDIR)\fontmap.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\fontmap.obj:     $(COMMDIR)\fontmap.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-framecmn.obj:     $(COMMDIR)\framecmn.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\framecmn.obj:     $(COMMDIR)\framecmn.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-fs_inet.obj:     $(COMMDIR)\fs_inet.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\fs_inet.obj:     $(COMMDIR)\fs_inet.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-fs_mem.obj:     $(COMMDIR)\fs_mem.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\fs_mem.obj:     $(COMMDIR)\fs_mem.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-fs_zip.obj:     $(COMMDIR)\fs_zip.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\fs_zip.obj:     $(COMMDIR)\fs_zip.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-ftp.obj:     $(COMMDIR)\ftp.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\ftp.obj:     $(COMMDIR)\ftp.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-gaugecmn.obj:     $(COMMDIR)\gaugecmn.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\gaugecmn.obj:     $(COMMDIR)\gaugecmn.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-gdicmn.obj:     $(COMMDIR)\gdicmn.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\gdicmn.obj:     $(COMMDIR)\gdicmn.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-geometry.obj:     $(COMMDIR)\geometry.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\geometry.obj:     $(COMMDIR)\geometry.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-gifdecod.obj:     $(COMMDIR)\gifdecod.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\gifdecod.obj:     $(COMMDIR)\gifdecod.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-hash.obj:     $(COMMDIR)\hash.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\hash.obj:     $(COMMDIR)\hash.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-hashmap.obj:     $(COMMDIR)\hashmap.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\hashmap.obj:     $(COMMDIR)\hashmap.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-helpbase.obj:     $(COMMDIR)\helpbase.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\helpbase.obj:     $(COMMDIR)\helpbase.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-http.obj:     $(COMMDIR)\http.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\http.obj:     $(COMMDIR)\http.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-iconbndl.obj:     $(COMMDIR)\iconbndl.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\iconbndl.obj:     $(COMMDIR)\iconbndl.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-imagall.obj:     $(COMMDIR)\imagall.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\imagall.obj:     $(COMMDIR)\imagall.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-imagbmp.obj:     $(COMMDIR)\imagbmp.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\imagbmp.obj:     $(COMMDIR)\imagbmp.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-image.obj:     $(COMMDIR)\image.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\image.obj:     $(COMMDIR)\image.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-imagfill.obj:     $(COMMDIR)\imagfill.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\imagfill.obj:     $(COMMDIR)\imagfill.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-imaggif.obj:     $(COMMDIR)\imaggif.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\imaggif.obj:     $(COMMDIR)\imaggif.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-imagiff.obj:     $(COMMDIR)\imagiff.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\imagiff.obj:     $(COMMDIR)\imagiff.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-imagjpeg.obj:     $(COMMDIR)\imagjpeg.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\imagjpeg.obj:     $(COMMDIR)\imagjpeg.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-imagpcx.obj:     $(COMMDIR)\imagpcx.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\imagpcx.obj:     $(COMMDIR)\imagpcx.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-imagpng.obj:     $(COMMDIR)\imagpng.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\imagpng.obj:     $(COMMDIR)\imagpng.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-imagpnm.obj:     $(COMMDIR)\imagpnm.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\imagpnm.obj:     $(COMMDIR)\imagpnm.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-imagtiff.obj:     $(COMMDIR)\imagtiff.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\imagtiff.obj:     $(COMMDIR)\imagtiff.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-imagxpm.obj:     $(COMMDIR)\imagxpm.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\imagxpm.obj:     $(COMMDIR)\imagxpm.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-intl.obj:     $(COMMDIR)\intl.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\intl.obj:     $(COMMDIR)\intl.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-ipcbase.obj:     $(COMMDIR)\ipcbase.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\ipcbase.obj:     $(COMMDIR)\ipcbase.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-layout.obj:     $(COMMDIR)\layout.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\layout.obj:     $(COMMDIR)\layout.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-lboxcmn.obj:     $(COMMDIR)\lboxcmn.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\lboxcmn.obj:     $(COMMDIR)\lboxcmn.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-list.obj:     $(COMMDIR)\list.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\list.obj:     $(COMMDIR)\list.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-log.obj:     $(COMMDIR)\log.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\log.obj:     $(COMMDIR)\log.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-longlong.obj:     $(COMMDIR)\longlong.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\longlong.obj:     $(COMMDIR)\longlong.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-matrix.obj:     $(COMMDIR)\matrix.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\matrix.obj:     $(COMMDIR)\matrix.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-memory.obj:     $(COMMDIR)\memory.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\memory.obj:     $(COMMDIR)\memory.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-menucmn.obj:     $(COMMDIR)\menucmn.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\menucmn.obj:     $(COMMDIR)\menucmn.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-mimecmn.obj:     $(COMMDIR)\mimecmn.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\mimecmn.obj:     $(COMMDIR)\mimecmn.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-module.obj:     $(COMMDIR)\module.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\module.obj:     $(COMMDIR)\module.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-msgout.obj:     $(COMMDIR)\msgout.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\msgout.obj:     $(COMMDIR)\msgout.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-mstream.obj:     $(COMMDIR)\mstream.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\mstream.obj:     $(COMMDIR)\mstream.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-nbkbase.obj:     $(COMMDIR)\nbkbase.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\nbkbase.obj:     $(COMMDIR)\nbkbase.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-object.obj:     $(COMMDIR)\object.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\object.obj:     $(COMMDIR)\object.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-odbc.obj:     $(COMMDIR)\odbc.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\odbc.obj:     $(COMMDIR)\odbc.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-paper.obj:     $(COMMDIR)\paper.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\paper.obj:     $(COMMDIR)\paper.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-popupcmn.obj:     $(COMMDIR)\popupcmn.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\popupcmn.obj:     $(COMMDIR)\popupcmn.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-prntbase.obj:     $(COMMDIR)\prntbase.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\prntbase.obj:     $(COMMDIR)\prntbase.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-process.obj:     $(COMMDIR)\process.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\process.obj:     $(COMMDIR)\process.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-protocol.obj:     $(COMMDIR)\protocol.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\protocol.obj:     $(COMMDIR)\protocol.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-quantize.obj:     $(COMMDIR)\quantize.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\quantize.obj:     $(COMMDIR)\quantize.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-radiocmn.obj:     $(COMMDIR)\radiocmn.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\radiocmn.obj:     $(COMMDIR)\radiocmn.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-regex.obj:     $(COMMDIR)\regex.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\regex.obj:     $(COMMDIR)\regex.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-resource.obj:     $(COMMDIR)\resource.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\resource.obj:     $(COMMDIR)\resource.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-sckaddr.obj:     $(COMMDIR)\sckaddr.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\sckaddr.obj:     $(COMMDIR)\sckaddr.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-sckfile.obj:     $(COMMDIR)\sckfile.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\sckfile.obj:     $(COMMDIR)\sckfile.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-sckipc.obj:     $(COMMDIR)\sckipc.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\sckipc.obj:     $(COMMDIR)\sckipc.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-sckstrm.obj:     $(COMMDIR)\sckstrm.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\sckstrm.obj:     $(COMMDIR)\sckstrm.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-settcmn.obj:     $(COMMDIR)\settcmn.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\settcmn.obj:     $(COMMDIR)\settcmn.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-sizer.obj:     $(COMMDIR)\sizer.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\sizer.obj:     $(COMMDIR)\sizer.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-socket.obj:     $(COMMDIR)\socket.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\socket.obj:     $(COMMDIR)\socket.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-statbar.obj:     $(COMMDIR)\statbar.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\statbar.obj:     $(COMMDIR)\statbar.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-strconv.obj:     $(COMMDIR)\strconv.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\strconv.obj:     $(COMMDIR)\strconv.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-stream.obj:     $(COMMDIR)\stream.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\stream.obj:     $(COMMDIR)\stream.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-string.obj:     $(COMMDIR)\string.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\string.obj:     $(COMMDIR)\string.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-sysopt.obj:     $(COMMDIR)\sysopt.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\sysopt.obj:     $(COMMDIR)\sysopt.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-tbarbase.obj:     $(COMMDIR)\tbarbase.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\tbarbase.obj:     $(COMMDIR)\tbarbase.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-textbuf.obj:     $(COMMDIR)\textbuf.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\textbuf.obj:     $(COMMDIR)\textbuf.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-textcmn.obj:     $(COMMDIR)\textcmn.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\textcmn.obj:     $(COMMDIR)\textcmn.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-textfile.obj:     $(COMMDIR)\textfile.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\textfile.obj:     $(COMMDIR)\textfile.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-timercmn.obj:     $(COMMDIR)\timercmn.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\timercmn.obj:     $(COMMDIR)\timercmn.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-tokenzr.obj:     $(COMMDIR)\tokenzr.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\tokenzr.obj:     $(COMMDIR)\tokenzr.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-toplvcmn.obj:     $(COMMDIR)\toplvcmn.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\toplvcmn.obj:     $(COMMDIR)\toplvcmn.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-treebase.obj:     $(COMMDIR)\treebase.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\treebase.obj:     $(COMMDIR)\treebase.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-txtstrm.obj:     $(COMMDIR)\txtstrm.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\txtstrm.obj:     $(COMMDIR)\txtstrm.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-unzip.obj:     $(COMMDIR)\unzip.c
-  *$(CC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\unzip.obj:     $(COMMDIR)\unzip.c
+  *$(CC) $(CFLAGS) $<
 
-url.obj:     $(COMMDIR)\url.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\url.obj:     $(COMMDIR)\url.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-utilscmn.obj:     $(COMMDIR)\utilscmn.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\utilscmn.obj:     $(COMMDIR)\utilscmn.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-valgen.obj:     $(COMMDIR)\valgen.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\valgen.obj:     $(COMMDIR)\valgen.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-validate.obj:     $(COMMDIR)\validate.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\validate.obj:     $(COMMDIR)\validate.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-valtext.obj:     $(COMMDIR)\valtext.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\valtext.obj:     $(COMMDIR)\valtext.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-variant.obj:     $(COMMDIR)\variant.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\variant.obj:     $(COMMDIR)\variant.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-wfstream.obj:     $(COMMDIR)\wfstream.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\wfstream.obj:     $(COMMDIR)\wfstream.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-wincmn.obj:     $(COMMDIR)\wincmn.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\wincmn.obj:     $(COMMDIR)\wincmn.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-wxchar.obj:     $(COMMDIR)\wxchar.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\wxchar.obj:     $(COMMDIR)\wxchar.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-wxexpr.obj:     $(COMMDIR)\wxexpr.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\wxexpr.obj:     $(COMMDIR)\wxexpr.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-xpmdecod.obj:     $(COMMDIR)\xpmdecod.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\xpmdecod.obj:     $(COMMDIR)\xpmdecod.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-zipstrm.obj:     $(COMMDIR)\zipstrm.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\zipstrm.obj:     $(COMMDIR)\zipstrm.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-zstream.obj:     $(COMMDIR)\zstream.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\zstream.obj:     $(COMMDIR)\zstream.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
 
 
-y_tab.obj:     $(COMMDIR)\y_tab.c $(COMMDIR)\lex_yy.c
-  *$(CC) $(CPPFLAGS) $(IFLAGS) -DUSE_DEFINE $(COMMDIR)\y_tab.c
-
-#  *$(CC) $(CPPFLAGS) $(IFLAGS) -DUSE_DEFINE -DYY_USE_PROTOS $(COMMDIR)\y_tab.c
+$(OUTPUTDIR)\y_tab.obj:     $(COMMDIR)\y_tab.c $(COMMDIR)\lex_yy.c
+  *$(CC) $(CFLAGS) -DUSE_DEFINE $(COMMDIR)\y_tab.c
 
 $(COMMDIR)\y_tab.c:     $(COMMDIR)\dosyacc.c
-        copy $(COMMDIR)\dosyacc.c $(COMMDIR)\y_tab.c
+    copy $(COMMDIR)\dosyacc.c $(COMMDIR)\y_tab.c
 
 $(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
     copy $(COMMDIR)\doslex.c $(COMMDIR)\lex_yy.c
@@ -1150,98 +1118,98 @@ $(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
 # Generic objects (not always compiled, depending on
 # whether platforms have native implementations)
 
-busyinfo.obj:     $(GENDIR)\busyinfo.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\busyinfo.obj:     $(GENDIR)\busyinfo.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-calctrl.obj:     $(GENDIR)\calctrl.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\calctrl.obj:     $(GENDIR)\calctrl.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-choicdgg.obj:     $(GENDIR)\choicdgg.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\choicdgg.obj:     $(GENDIR)\choicdgg.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-dcbuffer.obj:     $(GENDIR)\dcbuffer.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\dcbuffer.obj:     $(GENDIR)\dcbuffer.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-dcpsg.obj:     $(GENDIR)\dcpsg.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\dcpsg.obj:     $(GENDIR)\dcpsg.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-dirctrlg.obj:     $(GENDIR)\dirctrlg.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\dirctrlg.obj:     $(GENDIR)\dirctrlg.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-dragimgg.obj:     $(GENDIR)\dragimgg.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\dragimgg.obj:     $(GENDIR)\dragimgg.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-grid.obj:     $(GENDIR)\grid.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\grid.obj:     $(GENDIR)\grid.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-gridctrl.obj:     $(GENDIR)\gridctrl.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\gridctrl.obj:     $(GENDIR)\gridctrl.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-gridsel.obj:     $(GENDIR)\gridsel.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\gridsel.obj:     $(GENDIR)\gridsel.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-laywin.obj:     $(GENDIR)\laywin.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\laywin.obj:     $(GENDIR)\laywin.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-logg.obj:     $(GENDIR)\logg.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\logg.obj:     $(GENDIR)\logg.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-numdlgg.obj:     $(GENDIR)\numdlgg.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\numdlgg.obj:     $(GENDIR)\numdlgg.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-panelg.obj:     $(GENDIR)\panelg.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\panelg.obj:     $(GENDIR)\panelg.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-progdlgg.obj:     $(GENDIR)\progdlgg.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\progdlgg.obj:     $(GENDIR)\progdlgg.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-prop.obj:     $(GENDIR)\prop.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\prop.obj:     $(GENDIR)\prop.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-propform.obj:     $(GENDIR)\propform.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\propform.obj:     $(GENDIR)\propform.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-proplist.obj:     $(GENDIR)\proplist.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\proplist.obj:     $(GENDIR)\proplist.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-sashwin.obj:     $(GENDIR)\sashwin.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\sashwin.obj:     $(GENDIR)\sashwin.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-scrlwing.obj:     $(GENDIR)\scrlwing.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\scrlwing.obj:     $(GENDIR)\scrlwing.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-spinctlg.obj:     $(GENDIR)\spinctlg.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\spinctlg.obj:     $(GENDIR)\spinctlg.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-splash.obj:     $(GENDIR)\splash.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\splash.obj:     $(GENDIR)\splash.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-splitter.obj:     $(GENDIR)\splitter.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\splitter.obj:     $(GENDIR)\splitter.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-statusbr.obj:     $(GENDIR)\statusbr.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\statusbr.obj:     $(GENDIR)\statusbr.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-tbarsmpl.obj:     $(GENDIR)\tbarsmpl.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\tbarsmpl.obj:     $(GENDIR)\tbarsmpl.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-textdlgg.obj:     $(GENDIR)\textdlgg.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\textdlgg.obj:     $(GENDIR)\textdlgg.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-tipdlg.obj:     $(GENDIR)\tipdlg.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\tipdlg.obj:     $(GENDIR)\tipdlg.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-tipwin.obj:     $(GENDIR)\tipwin.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\tipwin.obj:     $(GENDIR)\tipwin.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-treectlg.obj:     $(GENDIR)\treectlg.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\treectlg.obj:     $(GENDIR)\treectlg.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-treelay.obj:     $(GENDIR)\treelay.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\treelay.obj:     $(GENDIR)\treelay.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-wizard.obj:     $(GENDIR)\wizard.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\wizard.obj:     $(GENDIR)\wizard.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
 
 
@@ -1249,65 +1217,65 @@ wizard.obj:     $(GENDIR)\wizard.cpp
 ########################################################
 # HTML objects (always compiled)
 
-helpctrl.obj:     $(HTMLDIR)\helpctrl.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\helpctrl.obj:     $(HTMLDIR)\helpctrl.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-helpdata.obj:     $(HTMLDIR)\helpdata.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\helpdata.obj:     $(HTMLDIR)\helpdata.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-helpfrm.obj:     $(HTMLDIR)\helpfrm.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\helpfrm.obj:     $(HTMLDIR)\helpfrm.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-htmlcell.obj:     $(HTMLDIR)\htmlcell.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\htmlcell.obj:     $(HTMLDIR)\htmlcell.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-htmlfilt.obj:     $(HTMLDIR)\htmlfilt.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\htmlfilt.obj:     $(HTMLDIR)\htmlfilt.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-htmlpars.obj:     $(HTMLDIR)\htmlpars.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\htmlpars.obj:     $(HTMLDIR)\htmlpars.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-htmltag.obj:     $(HTMLDIR)\htmltag.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\htmltag.obj:     $(HTMLDIR)\htmltag.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-htmlwin.obj:     $(HTMLDIR)\htmlwin.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\htmlwin.obj:     $(HTMLDIR)\htmlwin.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-htmprint.obj:     $(HTMLDIR)\htmprint.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\htmprint.obj:     $(HTMLDIR)\htmprint.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-m_dflist.obj:     $(HTMLDIR)\m_dflist.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\m_dflist.obj:     $(HTMLDIR)\m_dflist.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-m_fonts.obj:     $(HTMLDIR)\m_fonts.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\m_fonts.obj:     $(HTMLDIR)\m_fonts.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-m_hline.obj:     $(HTMLDIR)\m_hline.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\m_hline.obj:     $(HTMLDIR)\m_hline.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-m_image.obj:     $(HTMLDIR)\m_image.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\m_image.obj:     $(HTMLDIR)\m_image.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-m_layout.obj:     $(HTMLDIR)\m_layout.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\m_layout.obj:     $(HTMLDIR)\m_layout.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-m_links.obj:     $(HTMLDIR)\m_links.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\m_links.obj:     $(HTMLDIR)\m_links.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-m_list.obj:     $(HTMLDIR)\m_list.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\m_list.obj:     $(HTMLDIR)\m_list.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-m_pre.obj:     $(HTMLDIR)\m_pre.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\m_pre.obj:     $(HTMLDIR)\m_pre.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-m_style.obj:     $(HTMLDIR)\m_style.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\m_style.obj:     $(HTMLDIR)\m_style.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-m_tables.obj:     $(HTMLDIR)\m_tables.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\m_tables.obj:     $(HTMLDIR)\m_tables.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
-winpars.obj:     $(HTMLDIR)\winpars.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+$(OUTPUTDIR)\winpars.obj:     $(HTMLDIR)\winpars.cpp
+  *$(CXX) $(CXXFLAGS) $<
 
 
 

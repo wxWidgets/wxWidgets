@@ -9,24 +9,30 @@
 WXDIR = ..\..
 EXTRACPPFLAGS=-DPOSIX_MISTAKE
 
+OUTPUTDIR=watcom\
+
 !include $(WXDIR)\src\makewat.env
 
 WXLIB = $(WXDIR)\lib
 
-LIBTARGET   = $(WXLIB)\regex.lib
+LIBTARGET = $(WXLIB)\regex$(WATCOM_SUFFIX).lib
 
-OBJECTS= &
-		regcomp.obj &
-		regexec.obj &
-		regerror.obj &
-		regfree.obj
+OBJECTS = &
+		$(OUTPUTDIR)regcomp.obj &
+		$(OUTPUTDIR)regexec.obj &
+		$(OUTPUTDIR)regerror.obj &
+		$(OUTPUTDIR)regfree.obj
 
-all:        $(OBJECTS) $(LIBTARGET)
+all:        $(OUTPUTDIR) $(LIBTARGET) .SYMBOLIC
 
+$(OUTPUTDIR):
+	@if not exist $^@ mkdir $^@
+
+LBCFILE=$(OUTPUTDIR)regex.lbc
 $(LIBTARGET) : $(OBJECTS)
-    %create tmp.lbc
-    @for %i in ( $(OBJECTS) ) do @%append tmp.lbc +%i
-    wlib /b /c /n /p=512 $^@ @tmp.lbc
+    %create $(LBCFILE)
+    @for %i in ( $(OBJECTS) ) do @%append $(LBCFILE) +%i
+    wlib /q /b /c /n /p=512 $^@ @$(LBCFILE)
 
 clean:   .SYMBOLIC
     -erase *.obj

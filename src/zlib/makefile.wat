@@ -1,103 +1,51 @@
-# Makefile for zlib
-# Watcom 10a
+##############################################################################
+# Name:			src/zlib/makefile.wat
+# Purpose:		build zlib using Watcom 11.0+ compiler
+# Author:		Vadim Zeitlin
+# Created:		21.01.03
+# RCS-ID:		$Id$
+# Copyright:	(c) 2003 Vadim Zeitlin
+# Licence:		wxWindows licence
+##############################################################################
 
-# This version of the zlib makefile was adapted by Chris Young for use
-# with Watcom 10a 32-bit protected mode flat memory model.  It was created 
-# for use with POV-Ray ray tracer and you may choose to edit the CFLAGS to 
-# suit your needs but the -DMSDOS is required.
-# -- Chris Young 76702.1655@compuserve.com
+WXDIR = ..\..
+OUTPUTDIR=watcom\
 
-# To use, do "wmake -f makefile.wat"
+!include $(WXDIR)\src\makewat.env
 
-# See zconf.h for details about the memory requirements.
-
-# ------------- Watcom 10a -------------
-MODEL=-mf 
-CFLAGS= $(MODEL) -fpi87 -fp5 -zp4 -5r -w5 -oneatx -DWIN32
-CC=wcc386
-LD=wcl386
-LIB=wlib -b -c 
-LDFLAGS= 
-O=.obj
-LIBTARGET=..\..\lib\zlib.lib
+LIBTARGET=$(WXDIR)\lib\zlib$(WATCOM_SUFFIX).lib
 
 # variables
-OBJECTS=adler32$(O) compress$(O) crc32$(O) gzio$(O) uncompr$(O) deflate$(O) &
-        trees$(O) zutil$(O) inflate$(O) infblock$(O) inftrees$(O) infcodes$(O) &
-        infutil$(O) inffast$(O)
+OBJECTS = &
+	$(OUTPUTDIR)adler32.obj &
+	$(OUTPUTDIR)compress.obj &
+	$(OUTPUTDIR)crc32.obj &
+	$(OUTPUTDIR)gzio.obj &
+	$(OUTPUTDIR)uncompr.obj &
+	$(OUTPUTDIR)deflate.obj &
+	$(OUTPUTDIR)trees.obj &
+	$(OUTPUTDIR)zutil.obj &
+	$(OUTPUTDIR)inflate.obj &
+	$(OUTPUTDIR)infblock.obj &
+	$(OUTPUTDIR)inftrees.obj &
+	$(OUTPUTDIR)infcodes.obj &
+	$(OUTPUTDIR)infutil.obj &
+	$(OUTPUTDIR)inffast.obj
 
 # all: test
 
-all: $(LIBTARGET)
+all: $(OUTPUTDIR) $(LIBTARGET) .SYMBOLIC
 
-adler32.obj: adler32.c zutil.h zlib.h zconf.h
-	$(CC) $(CFLAGS) $*.c
+$(OUTPUTDIR):
+	@if not exist $^@ mkdir $^@
 
-compress.obj: compress.c zlib.h zconf.h
-	$(CC) $(CFLAGS) $*.c
-
-crc32.obj: crc32.c zutil.h zlib.h zconf.h
-	$(CC) $(CFLAGS) $*.c
-
-deflate.obj: deflate.c deflate.h zutil.h zlib.h zconf.h
-	$(CC) $(CFLAGS) $*.c
-
-gzio.obj: gzio.c zutil.h zlib.h zconf.h
-	$(CC) $(CFLAGS) $*.c
-
-infblock.obj: infblock.c zutil.h zlib.h zconf.h infblock.h inftrees.h &
-  infcodes.h infutil.h
-	$(CC) $(CFLAGS) $*.c
-
-infcodes.obj: infcodes.c zutil.h zlib.h zconf.h inftrees.h infutil.h &
-  infcodes.h inffast.h
-	$(CC) $(CFLAGS) $*.c
-
-inflate.obj: inflate.c zutil.h zlib.h zconf.h infblock.h
-	$(CC) $(CFLAGS) $*.c
-
-inftrees.obj: inftrees.c zutil.h zlib.h zconf.h inftrees.h
-	$(CC) $(CFLAGS) $*.c
-
-infutil.obj: infutil.c zutil.h zlib.h zconf.h inftrees.h infutil.h
-	$(CC) $(CFLAGS) $*.c
-
-inffast.obj: inffast.c zutil.h zlib.h zconf.h inftrees.h infutil.h inffast.h
-	$(CC) $(CFLAGS) $*.c
-
-trees.obj: trees.c deflate.h zutil.h zlib.h zconf.h
-	$(CC) $(CFLAGS) $*.c
-
-uncompr.obj: uncompr.c zlib.h zconf.h
-	$(CC) $(CFLAGS) $*.c
-
-zutil.obj: zutil.c zutil.h zlib.h zconf.h
-	$(CC) $(CFLAGS) $*.c
-
-example.obj: example.c zlib.h zconf.h
-	$(CC) $(CFLAGS) $*.c
-
-minigzip.obj: minigzip.c zlib.h zconf.h
-	$(CC) $(CFLAGS) $*.c
-
+LBCFILE=$(OUTPUTDIR)zlib.lbc
 $(LIBTARGET) : $(OBJECTS)
-	%create tmp.lbc
-	@for %i in ( $(OBJECTS) ) do @%append tmp.lbc +%i
-	wlib /b /c /n /p=512 $^@ @tmp.lbc
-
-
-example.exe: example.obj $(LIBTARGET)
-	$(LD) $(LDFLAGS) example.obj $(LIBTARGET)
-
-minigzip.exe: minigzip.obj $(LIBTARGET)
-	$(LD) $(LDFLAGS) minigzip.obj $(LIBTARGET)
-
-test: minigzip.exe example.exe
-	example
-	echo hello world | minigzip | minigzip -d >test
-	type test
+	%create $(LBCFILE)
+	@for %i in ( $(OBJECTS) ) do @%append $(LBCFILE) +%i
+	wlib /q /b /c /n /p=512 $^@ @$(LBCFILE)
 
 clean: .SYMBOLIC
 	-erase *.obj
 	-erase *.exe
-        -erase $(LIBTARGET)
+	-erase $(LIBTARGET)
