@@ -683,7 +683,7 @@ class wxPythonDemo(wx.Frame):
         if itemText == self.overviewText:
             self.LoadDemoSource('Main.py')
             self.SetOverview(self.overviewText, overview)
-            self.nb.Refresh();
+##            self.nb.Refresh();
             self.window = None
 
         else:
@@ -703,14 +703,14 @@ class wxPythonDemo(wx.Frame):
                 self.tree.Refresh()
 
                 # in case runTest is modal, make sure things look right...
-                self.nb.Refresh();
-                wx.SafeYield()
+##                self.nb.Refresh();
+##                wx.SafeYield()
 
                 self.window = module.runTest(self, self.nb, self) ###
                 if self.window is not None:
                     self.nb.AddPage(self.window, 'Demo')
                     self.nb.SetSelection(2)
-                    self.nb.Refresh()  # without this wxMac has troubles showing the just added page
+##                    self.nb.Refresh()  # without this wxMac has troubles showing the just added page
 
             else:
                 self.ovr.SetPage("")
@@ -931,7 +931,7 @@ def main():
         os.chdir(demoPath)
     except:
         pass
-    app = MyApp(wx.Platform == "__WXMAC__")
+    app = MyApp(0) ##wx.Platform == "__WXMAC__")
     app.MainLoop()
 
 
