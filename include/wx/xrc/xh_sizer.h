@@ -16,6 +16,8 @@
 #endif
 
 #include "wx/xrc/xmlres.h"
+#include "wx/sizer.h"
+#include "wx/gbsizer.h"
 
 
 class WXDLLEXPORT wxSizer;
@@ -30,9 +32,27 @@ public:
 
 private:
     bool m_isInside;
+    bool m_isGBS;
+    
     wxSizer *m_parentSizer;
 
     bool IsSizerNode(wxXmlNode *node);
+
+    wxObject* Handle_sizeritem();
+    wxObject* Handle_spacer();
+    wxObject* Handle_sizer();
+    wxSizer*  Handle_wxBoxSizer();
+    wxSizer*  Handle_wxStaticBoxSizer();
+    wxSizer*  Handle_wxGridSizer();
+    wxSizer*  Handle_wxFlexGridSizer();
+    wxSizer*  Handle_wxGridBagSizer();
+
+    void SetGrowables(wxFlexGridSizer* fsizer, const wxChar* param, bool rows);
+    wxGBPosition GetGBPos(const wxString& param);
+    wxGBSpan GetGBSpan(const wxString& param);
+    wxSizerItem* MakeSizerItem();
+    void SetSizerItemAttributes(wxSizerItem* sitem);
+    void AddSizerItem(wxSizerItem* sitem);    
 };
 
 
