@@ -324,21 +324,6 @@ public:
         { wxEndBusyCursor(); }
 };
 
-// ----------------------------------------------------------------------------
-// Error message functions used by wxWindows (deprecated, use wxLog)
-// ----------------------------------------------------------------------------
-
-// Format a message on the standard error (UNIX) or the debugging
-// stream (Windows)
-WXDLLEXPORT void wxDebugMsg(const wxChar *fmt ...);
-
-// Non-fatal error (continues)
-WXDLLEXPORT_DATA(extern const wxChar*) wxInternalErrorStr;
-WXDLLEXPORT void wxError(const wxString& msg, const wxString& title = wxInternalErrorStr);
-
-// Fatal error (exits)
-WXDLLEXPORT_DATA(extern const wxChar*) wxFatalErrorStr;
-WXDLLEXPORT void wxFatalError(const wxString& msg, const wxString& title = wxFatalErrorStr);
 
 // ----------------------------------------------------------------------------
 // Reading and writing resources (eg WIN.INI, .Xdefaults)
@@ -417,6 +402,23 @@ void wxAllocColor(Display *display,Colormap colormap,XColor *xcolor);
 #endif //__X__
 
 #endif // wxUSE_GUI
+
+// ----------------------------------------------------------------------------
+// Error message functions used by wxWindows (deprecated, use wxLog)
+// ----------------------------------------------------------------------------
+
+// Format a message on the standard error (UNIX) or the debugging
+// stream (Windows)
+WXDLLEXPORT void wxDebugMsg(const wxChar *fmt ...);
+
+// Non-fatal error (continues)
+WXDLLEXPORT_DATA(extern const wxChar*) wxInternalErrorStr;
+WXDLLEXPORT void wxError(const wxString& msg, const wxString& title = wxInternalErrorStr);
+
+// Fatal error (exits)
+WXDLLEXPORT_DATA(extern const wxChar*) wxFatalErrorStr;
+WXDLLEXPORT void wxFatalError(const wxString& msg, const wxString& title = wxFatalErrorStr);
+
 
 #endif
     // _WX_UTILSH__
