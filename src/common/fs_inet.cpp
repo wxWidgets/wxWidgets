@@ -86,9 +86,9 @@ wxFSFile* wxInternetFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxStri
         if (content == wxEmptyString) content = GetMimeTypeFromExt(location);
         if (s) 
 	{
-            char buf[256];
+            wxChar buf[256];
 
-            wxGetTempFileName( "wxhtml", buf);
+            wxGetTempFileName( _T("wxhtml"), buf);
             info = new wxInetCacheNode(buf, content);
             m_Cache.Put(right, info);
 

@@ -180,11 +180,6 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
 {
   wxChar *tmp_buf;
   wxChar buf[200]; // 200 is arbitrary.
-#if wxUNICODE
-  wxWX2MBbuf pathbuf((size_t)200);
-#else
-  const wxWX2MBbuf pathbuf;
-#endif
   wxString tmp_str;
 
   switch (req) {
@@ -201,7 +196,7 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
 
   tmp_str = wxURL::ConvertToValidURI(path);
   wxSprintf(buf, _T("%s %s HTTP/1.0\n\r"), tmp_buf, tmp_str.GetData());
-  pathbuf = wxConvLibc.cWX2MB(buf);
+  const wxWX2MBbuf pathbuf = wxConvLibc.cWX2MB(buf);
   Write(pathbuf, strlen(MBSTRINGCAST pathbuf));
   SendHeaders();
   Write("\n\r", 2);
