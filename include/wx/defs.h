@@ -2043,7 +2043,7 @@ typedef struct _PangoFontDescription PangoFontDescription;
 #endif // GTK
 
 #ifdef __WXMGL__
-typedef void *WXWidget; // FIXME_MGL - type-safe
+typedef struct window_t *WXWidget;
 #endif // MGL
 
 // This is required because of clashing macros in windows.h, which may be
