@@ -2064,7 +2064,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
         case WXK_DOWN:
         {
             int index = m_lines.Index(*m_current);
-            if (index != wxNOT_FOUND && (size_t)index < m_lines.GetCount()-2)
+            if (index != wxNOT_FOUND && (size_t)index < m_lines.GetCount()-1)
                 OnArrowChar( &m_lines[index+1], event.ShiftDown() );
             break;
         }
@@ -2080,50 +2080,59 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
                 OnArrowChar( &m_lines[0], event.ShiftDown() );
             break;
         }
-/*        case WXK_PRIOR: FIXME - finish porting
+        case WXK_PRIOR:
         {
             int steps = 0;
+            int index = m_lines.Index(*m_current);
             if (m_mode & wxLC_REPORT)
             {
                 steps = m_visibleLines-1;
             }
             else
             {
-                int pos = 0;
-                wxNode *node = m_lines.First();
-                for (;;) { if (m_current == (wxListLineData*)node->Data()) break; pos++; node = node->Next(); }
-                steps = pos % m_visibleLines;
+                steps = index % m_visibleLines;
             }
-            wxNode *node = m_lines.Member( m_current );
-            for (int i = 0; i < steps; i++) if (node->Previous()) node = node->Previous();
-            if (node) OnArrowChar( (wxListLineData*)node->Data(), event.ShiftDown() );
+            if (index != wxNOT_FOUND)
+            {
+                index -= steps;
+                if (index < 0) index = 0;          
+                OnArrowChar( &m_lines[index], event.ShiftDown() );
+            }
             break;
         }
         case WXK_NEXT:
         {
             int steps = 0;
+            int index = m_lines.Index(*m_current);
             if (m_mode & wxLC_REPORT)
             {
                 steps = m_visibleLines-1;
             }
             else
             {
-                int pos = 0; wxNode *node = m_lines.First();
-                for (;;) { if (m_current == (wxListLineData*)node->Data()) break; pos++; node = node->Next(); }
-                steps = m_visibleLines-(pos % m_visibleLines)-1;
+                steps = m_visibleLines-(index % m_visibleLines)-1;
             }
-            wxNode *node = m_lines.Member( m_current );
-            for (int i = 0; i < steps; i++) if (node->Next()) node = node->Next();
-            if (node) OnArrowChar( (wxListLineData*)node->Data(), event.ShiftDown() );
+
+            if (index != wxNOT_FOUND)
+            {
+                index += steps;
+                if ((size_t)index >= m_lines.GetCount()) 
+                    index = m_lines.GetCount()-1;
+                OnArrowChar( &m_lines[index], event.ShiftDown() );
+            }
             break;
         }
         case WXK_LEFT:
         {
             if (!(m_mode & wxLC_REPORT))
             {
-                wxNode *node = m_lines.Member( m_current );
-                for (int i = 0; i <m_visibleLines; i++) if (node->Previous()) node = node->Previous();
-                if (node) OnArrowChar( (wxListLineData*)node->Data(), event.ShiftDown() );
+                int index = m_lines.Index(*m_current);
+                if (index != wxNOT_FOUND)
+                {
+                    index -= m_visibleLines;
+                    if (index < 0) index = 0;
+                    OnArrowChar( &m_lines[index], event.ShiftDown() );
+                }
             }
             break;
         }
@@ -2131,9 +2140,14 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
         {
             if (!(m_mode & wxLC_REPORT))
             {
-                wxNode *node = m_lines.Member( m_current );
-                for (int i = 0; i <m_visibleLines; i++) if (node->Next()) node = node->Next();
-                if (node) OnArrowChar( (wxListLineData*)node->Data(), event.ShiftDown() );
+                int index = m_lines.Index(*m_current);
+                if (index != wxNOT_FOUND)
+                {
+                    index += m_visibleLines;
+                    if ((size_t)index >= m_lines.GetCount()) 
+                        index = m_lines.GetCount()-1;
+                    OnArrowChar( &m_lines[index], event.ShiftDown() );
+                }
             }
             break;
         }
@@ -2160,8 +2174,9 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
             {
                 wxListLineData *oldCurrent = m_current;
                 m_current->ReverseHilight();
-                wxNode *node = m_lines.Member( m_current )->Next();
-                if (node) m_current = (wxListLineData*)node->Data();
+                int index = m_lines.Index( *m_current ) + 1;
+                if ( (size_t)index < m_lines.GetCount() )
+                    m_current = &m_lines[index];
                 RefreshLine( oldCurrent );
                 RefreshLine( m_current );
                 UnfocusLine( oldCurrent );
@@ -2179,7 +2194,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
             m_current->GetItem( 0, le.m_item );
             GetParent()->GetEventHandler()->ProcessEvent( le );
             break;
-        }*/
+        }
         default:
         {
             event.Skip();
