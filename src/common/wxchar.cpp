@@ -303,7 +303,8 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
                             ::sprintf(szScratch, s_szFlags, val);
                         }
                         {
-                            wxMB2WXbuf tmp = wxConvLibc.cMB2WX(szScratch);
+                            const wxMB2WXbuf tmp =
+                                wxConvLibc.cMB2WX(szScratch);
                             APPEND_STR(tmp);
                         }
 
@@ -326,7 +327,8 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
                             ::sprintf(szScratch, s_szFlags, val);
                         }
                         {
-                            wxMB2WXbuf tmp = wxConvLibc.cMB2WX(szScratch);
+                            const wxMB2WXbuf tmp =
+                                wxConvLibc.cMB2WX(szScratch);
                             APPEND_STR(tmp);
                         }
 
@@ -341,7 +343,8 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
                             s_szFlags[flagofs] = '\0';
                             ::sprintf(szScratch, s_szFlags, val);
 
-                            wxMB2WXbuf tmp = wxConvLibc.cMB2WX(szScratch);
+                            const wxMB2WXbuf tmp =
+                                wxConvLibc.cMB2WX(szScratch);
                             APPEND_STR(tmp);
 
                             done = TRUE;
