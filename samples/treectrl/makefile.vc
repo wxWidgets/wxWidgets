@@ -1,17 +1,10 @@
-#
-# File:		makefile.vc
-# Author:	Julian Smart
-# Created:	1999
-# Updated:	
-# Copyright:	(c) Julian Smart
-#
-# Makefile : Builds sample (VC++, WIN32)
-# Use FINAL=1 argument to nmake to build final version with no debug info.
+# Purpose: makefile for treectrl example (VC++ 32bit)
+# Created: 2000-03-15
 
 # Set WXDIR for your system
 WXDIR = $(WXWIN)
 
-PROGRAM=treetest
+PROGRAM=treectrl
 OBJECTS = $(PROGRAM).obj
 
 !include $(WXDIR)\src\makeprog.vc

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        treetest.h
+// Name:        treectrl.h
 // Purpose:     wxTreeCtrl sample
 // Author:      Julian Smart
 // Modified by:

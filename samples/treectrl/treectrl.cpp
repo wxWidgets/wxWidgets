@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        treetest.cpp
+// Name:        treectrl.cpp
 // Purpose:     wxTreeCtrl sample
 // Author:      Julian Smart
 // Modified by:
@@ -38,7 +38,7 @@
     #define NO_VARIABLE_HEIGHT
 #endif
 
-#include "treetest.h"
+#include "treectrl.h"
 
 // under Windows the icons are in the .rc file
 #ifndef __WXMSW__
