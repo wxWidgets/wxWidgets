@@ -18,7 +18,7 @@ HEADERS=basic.h basicp.h bmpshape.h canvas.h composit.h constrnt.h \
 	divided.h drawn.h drawnp.h lines.h linesp.h mfutils.h misc.h \
 	ogl.h ogldiag.h
 
-OBJECTS=basic.o bmpshape.o composit.o divided.o lines.o misc.o \
+OBJECTS=basic.o bmpshape.o composit.o divided.o lines.o oglmisc.o \
         basic2.o canvas.o constrnt.o drawn.o mfutils.o ogldiag.o
 DEPFILES=$(OBJECTS:.o=.d)
 

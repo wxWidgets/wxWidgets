@@ -25,7 +25,7 @@ DOCSOURCEDIR=$(WXDIR)\contrib\docs\latex\ogl
 
 PROGRAM=test
 
-OBJECTS = $(D)\basic.obj $(D)\basic2.obj $(D)\canvas.obj $(D)\ogldiag.obj $(D)\lines.obj $(D)\misc.obj $(D)\divided.obj $(D)\constrnt.obj\
+OBJECTS = $(D)\basic.obj $(D)\basic2.obj $(D)\canvas.obj $(D)\ogldiag.obj $(D)\lines.obj $(D)\oglmisc.obj $(D)\divided.obj $(D)\constrnt.obj\
  $(D)\composit.obj $(D)\drawn.obj $(D)\bmpshape.obj $(D)\mfutils.obj
 
 LIBTARGET=$(WXDIR)\lib\ogl$(LIBEXT).lib
@@ -82,7 +82,7 @@ $(D)\lines.obj:      lines.$(SRCSUFF) $(OGLINC)/basic.h $(OGLINC)/misc.h $(OGLIN
 $(CPPFLAGS) /c /Fo$@ /Tp $(*B).$(SRCSUFF)
 <<
 
-$(D)\misc.obj:      misc.$(SRCSUFF) $(OGLINC)/basic.h $(OGLINC)/misc.h $(OGLINC)/constrnt.h $(OGLINC)/basicp.h
+$(D)\oglmisc.obj:      oglmisc.$(SRCSUFF) $(OGLINC)/basic.h $(OGLINC)/misc.h $(OGLINC)/constrnt.h $(OGLINC)/basicp.h
         cl @<<
 $(CPPFLAGS) /c /Fo$@ /Tp $(*B).$(SRCSUFF)
 <<
