@@ -117,8 +117,8 @@ class wxMenuBar : public wxMenuBarBase
 public:
     wxMenuBar() { Init(); }
     wxMenuBar(long WXUNUSED(style)) { Init(); }
-    wxMenuBar(int n, wxMenu *menus[], const wxString titles[]);
-    wxMenuBar(int n, wxMenu *menus[], const wxArrayString& titles);
+    wxMenuBar(size_t n, wxMenu *menus[], const wxString titles[], long style = 0);
+    wxMenuBar(size_t n, wxMenu *menus[], const wxArrayString& titles, long style = 0);
     virtual ~wxMenuBar();
     
     // implement base class (pure) virtuals

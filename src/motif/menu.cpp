@@ -209,7 +209,7 @@ void wxMenuBar::Init()
     m_font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
 }
 
-wxMenuBar::wxMenuBar(int n, wxMenu *menus[], const wxArrayString& titles)
+wxMenuBar::wxMenuBar(size_t n, wxMenu *menus[], const wxArrayString& titles, long WXUNUSED(style))
 {
     wxASSERT( size_t(n) == titles.GetCount() );
 
@@ -220,7 +220,7 @@ wxMenuBar::wxMenuBar(int n, wxMenu *menus[], const wxArrayString& titles)
         m_menus.Append(menus[i]);
 }
 
-wxMenuBar::wxMenuBar(int n, wxMenu *menus[], const wxString titles[])
+wxMenuBar::wxMenuBar(size_t n, wxMenu *menus[], const wxString titles[], long WXUNUSED(style))
 {
     Init();
 

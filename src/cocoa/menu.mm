@@ -128,6 +128,14 @@ bool wxMenuBar::Create(long style)
     return true;
 }
 
+wxMenuBar::wxMenuBar(size_t n, wxMenu *menus[], const wxString titles[], long WXUNUSED(style))
+{
+    Create(style);
+
+    for(size_t i = 0; i < n; ++i )
+        Append(menus[i], titles[i]);
+}
+
 wxMenuBar::~wxMenuBar()
 {
     [m_cocoaNSMenu release];

@@ -194,6 +194,7 @@ public:
     wxMenuBar( int            n
               ,wxMenu*        vMenus[]
               ,const wxString sTitles[]
+              ,long           lStyle = 0
              );
     virtual ~wxMenuBar();
 

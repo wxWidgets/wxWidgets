@@ -332,7 +332,7 @@ wxMenuBar::wxMenuBar( long WXUNUSED(style) )
 {
 }
 
-wxMenuBar::wxMenuBar(int count, wxMenu *menus[], const wxString titles[])
+wxMenuBar::wxMenuBar(size_t count, wxMenu *menus[], const wxString titles[], long WXUNUSED(style))
 {
 }
 

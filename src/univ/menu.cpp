@@ -1678,6 +1678,14 @@ void wxMenuBar::Init()
     m_shouldShowMenu = false;
 }
 
+wxMenuBar::wxMenuBar(size_t n, wxMenu *menus[], const wxString titles[], long WXUNUSED(style))
+{
+    Init();
+
+    for (size_t i = 0; i < n; ++i )
+        Append(menus[i], titles[i]);
+}
+
 void wxMenuBar::Attach(wxFrame *frame)
 {
     // maybe you really wanted to call Detach()?

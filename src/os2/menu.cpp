@@ -697,6 +697,7 @@ wxMenuBar::wxMenuBar(
   int                               nCount
 , wxMenu*                           vMenus[]
 , const wxString                    sTitles[]
+, long                              WXUNUSED(lStyle)
 )
 {
     Init();

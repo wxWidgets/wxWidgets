@@ -146,7 +146,7 @@ public:
 
     wxMenuBar(long style);
         // menubar takes ownership of the menus arrays but copies the titles
-    wxMenuBar(int n, wxMenu *menus[], const wxString titles[]);
+    wxMenuBar(size_t n, wxMenu *menus[], const wxString titles[], long style = 0);
     virtual ~wxMenuBar();
 
     // menubar construction

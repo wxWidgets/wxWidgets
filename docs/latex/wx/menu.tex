@@ -702,7 +702,7 @@ menu shortcuts may cease to work.
 
 Default constructor.
 
-\func{}{wxMenuBar}{\param{int}{ n}, \param{wxMenu*}{ menus[]}, \param{const wxString }{titles[]}}
+\func{}{wxMenuBar}{\param{size\_t}{ n}, \param{wxMenu*}{ menus[]}, \param{const wxString }{titles[]}, \param{long }{style = 0}}
 
 Construct a menu bar from arrays of menus and titles.
 
@@ -718,10 +718,10 @@ menu bar.}
 \docparam{style}{If {\tt wxMB\_DOCKABLE} the menu bar can be detached (wxGTK only).}
 
 \pythonnote{Only the default constructor is supported in wxPython.
-Use wxMenuBar.Append instead.}
+Use \helpref{wxMenuBar::Append}{wxmenubarappend} instead.}
 
 \perlnote{wxPerl only supports the first constructor: 
-use {\tt Append} instead.}
+use \helpref{wxMenuBar::Append}{wxmenubarappend} instead.}
 
 \membersection{wxMenuBar::\destruct{wxMenuBar}}\label{wxmenubardtor}
 

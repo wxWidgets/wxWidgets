@@ -170,7 +170,7 @@ static void gtk_menu_open_callback( GtkWidget *widget, wxMenu *menu )
 
 IMPLEMENT_DYNAMIC_CLASS(wxMenuBar,wxWindow)
 
-wxMenuBar::wxMenuBar( long style )
+void wxMenuBar::Init(size_t n, wxMenu *menus[], const wxString titles[], long style)
 {
     // the parent window is known after wxFrame::SetMenu()
     m_needParent = FALSE;
@@ -203,32 +203,24 @@ wxMenuBar::wxMenuBar( long style )
     PostCreation();
 
     ApplyWidgetStyle();
+
+    for (size_t i = 0; i < n; ++i )
+        Append(menus[i], titles[i]);
+}
+
+wxMenuBar::wxMenuBar(size_t n, wxMenu *menus[], const wxString titles[], long style)
+{
+    Init(n, menus, titles, style);
+}
+
+wxMenuBar::wxMenuBar(long style)
+{
+    Init(0, NULL, NULL, style);
 }
 
 wxMenuBar::wxMenuBar()
 {
-    // the parent window is known after wxFrame::SetMenu()
-    m_needParent = FALSE;
-    m_style = 0;
-    m_invokingWindow = (wxWindow*) NULL;
-
-    if (!PreCreation( (wxWindow*) NULL, wxDefaultPosition, wxDefaultSize ) ||
-        !CreateBase( (wxWindow*) NULL, -1, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, wxT("menubar") ))
-    {
-        wxFAIL_MSG( wxT("wxMenuBar creation failed") );
-        return;
-    }
-
-    m_menubar = gtk_menu_bar_new();
-#ifndef __WXGTK20__
-    m_accel = gtk_accel_group_new();
-#endif
-
-    m_widget = GTK_WIDGET(m_menubar);
-
-    PostCreation();
-
-    ApplyWidgetStyle();
+    Init(0, NULL, NULL, 0);
 }
 
 wxMenuBar::~wxMenuBar()

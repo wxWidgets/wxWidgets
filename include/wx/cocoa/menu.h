@@ -78,6 +78,7 @@ class WXDLLEXPORT wxMenuBar : public wxMenuBarBase, public wxCocoaNSMenu
 public:
     // ctors and dtor
     wxMenuBar(long style = 0) { Create(style); }
+    wxMenuBar(size_t n, wxMenu *menus[], const wxString titles[], long style = 0)
     bool Create(long style = 0);
     virtual ~wxMenuBar();
 
