@@ -351,6 +351,7 @@ bool wxRegion::Intersect( const wxRegion& region )
     }
 
     // we need to update the rect list as well
+#if OLDCODE
     wxList& list = *GetRectList();
     wxNode *node = list.First();
     while (node)
@@ -372,7 +373,7 @@ bool wxRegion::Intersect( const wxRegion& region )
 
         node = node->Next();
     }
-
+#endif
     return TRUE;
 }
 

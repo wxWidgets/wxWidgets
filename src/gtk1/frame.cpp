@@ -603,7 +603,7 @@ wxFrameGTK::~wxFrameGTK()
     }
 }
 
-bool wxFrame::ShowFullScreen(bool show, long style )
+bool wxFrameGTK::ShowFullScreen(bool show, long style )
 {
     if (show == m_fsIsShowing) return FALSE; // return what?
 
@@ -1241,7 +1241,7 @@ bool wxFrameGTK::IsIconized() const
     return m_isIconized;
 }
 
-void wxFrame::SetIconizeState(bool iconize)
+void wxFrameGTK::SetIconizeState(bool iconize)
 {
     if ( iconize != m_isIconized )
     {
