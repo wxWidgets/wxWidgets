@@ -140,7 +140,9 @@ void wxRadioBox::SetSelection(int n)
 {
     wxCHECK_RET( IsValid(n), _T("invalid index in wxRadioBox::SetSelection") );
 
-    // this will unselect the previously selected button in our group
+    m_selection = n;
+
+    // this will also unselect the previously selected button in our group
     m_buttons[n]->SetValue(TRUE);
 }
 
@@ -278,9 +280,9 @@ void wxRadioBox::DoMoveWindow(int x0, int y0, int width, int height)
         if ( GetWindowStyle() & wxRA_SPECIFY_COLS )
         {
             // from to to bottom
-            if ( n % m_numRows )
+            if ( (n == 0) || (n % m_numRows) )
             {
-                // continue in this column
+                // continue (or start if n == 0) in this column
                 y += sizeBtn.y;
             }
             else
@@ -293,7 +295,7 @@ void wxRadioBox::DoMoveWindow(int x0, int y0, int width, int height)
         else // wxRA_SPECIFY_ROWS: mirror the code above
         {
             // from left to right
-            if ( n % m_numCols )
+            if ( (n == 0) || (n % m_numCols) )
             {
                 // continue in this row
                 x += sizeBtn.x;

@@ -200,6 +200,12 @@ protected:
     virtual void DoDrawRange(wxControlRenderer *renderer,
                              int itemFirst, int itemLast);
 
+    // update (show/hide/adjust) the scrollbars
+    void UpdateScrollbars();
+
+    // refresh the items specified by m_updateCount and m_updateFrom
+    void UpdateItems();
+
     // the array containing all items (it is sorted if the listbox has
     // wxLB_SORT style)
     wxArrayString m_strings;
@@ -227,6 +233,10 @@ private:
 
     // the maximal width of a listbox item
     wxCoord m_maxWidth;
+
+    // the extents of horz and vert scrollbars
+    int m_scrollRangeX,
+        m_scrollRangeY;
 
     // the number of items per page
     size_t m_itemsPerPage;

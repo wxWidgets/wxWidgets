@@ -63,6 +63,7 @@ void wxListBox::Init()
     m_lineHeight = 0;
     m_itemsPerPage = 0;
     m_maxWidth = 0;
+    m_scrollRangeY = 0;
 
     // no items hence no current item
     m_current = -1;
@@ -159,7 +160,7 @@ void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
         m_itemsClientData.Insert(NULL, pos + n);
     }
 
-    // the number of items has changed
+    // the number of items has changed so we might have to show the scrollbar
     m_updateScrollbarY = TRUE;
 
     // the max width also might have changed - just recalculate it instead of
@@ -168,7 +169,9 @@ void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
     m_maxWidth = 0;
     m_updateScrollbarX = TRUE;
 
-    RefreshItems(pos, count);
+    // note that we have to refresh all the items after the ones we inserted,
+    // not just these items
+    RefreshItems(pos, GetCount() - pos);
 }
 
 void wxListBox::DoSetItems(const wxArrayString& items, void **clientData)
@@ -424,50 +427,90 @@ void wxListBox::RefreshAll()
     m_updateCount = -1;
 }
 
+void wxListBox::UpdateScrollbars()
+{
+    wxSize size = GetClientSize();
+
+    // is our height enough to show all items?
+    int nLines = GetCount();
+    wxCoord lineHeight = GetLineHeight();
+    bool showScrollbarY = nLines*lineHeight > size.y;
+
+    // check the width too if required
+    wxCoord charWidth, maxWidth;
+    bool showScrollbarX;
+    if ( HasHorzScrollbar() )
+    {
+        charWidth = GetCharWidth();
+        maxWidth = GetMaxWidth();
+        showScrollbarX = maxWidth > size.x;
+    }
+    else // never show it
+    {
+        charWidth = maxWidth = 0;
+        showScrollbarX = FALSE;
+    }
+
+    // what should be the scrollbar range now?
+    int scrollRangeX = showScrollbarX
+                        ? (maxWidth + 2*charWidth - 1) / charWidth
+                        : 0;
+    int scrollRangeY = showScrollbarY ? nLines : 0;
+
+    // reset scrollbars if something changed: either the visibility status
+    // or the range of a scrollbar which is shown
+    if ( (showScrollbarY != m_showScrollbarY) ||
+         (showScrollbarX != m_showScrollbarX) ||
+         (showScrollbarY && (scrollRangeY != m_scrollRangeY)) ||
+         (showScrollbarX && (scrollRangeX != m_scrollRangeX)) )
+    {
+        int x, y;
+        GetViewStart(&x, &y);
+        SetScrollbars(charWidth, lineHeight,
+                      scrollRangeX, scrollRangeY,
+                      x, y);
+
+        m_showScrollbarX = showScrollbarX;
+        m_showScrollbarY = showScrollbarY;
+
+        m_scrollRangeX = scrollRangeX;
+        m_scrollRangeY = scrollRangeY;
+    }
+}
+
+void wxListBox::UpdateItems()
+{
+    // only refresh the items which must be refreshed
+    if ( m_updateCount == -1 )
+    {
+        // refresh all
+        wxLogTrace(_T("listbox"), _T("Refreshing all"));
+
+        Refresh();
+    }
+    else
+    {
+        wxSize size = GetClientSize();
+        wxRect rect;
+        rect.width = size.x;
+        rect.height = size.y;
+        rect.y += m_updateFrom*GetLineHeight();
+        rect.height = m_updateCount*GetLineHeight();
+        CalcScrolledPosition(rect.x, rect.y, &rect.x, &rect.y);
+
+        wxLogTrace(_T("listbox"), _T("Refreshing items %d..%d (%d-%d)"),
+                   m_updateFrom, m_updateFrom + m_updateCount - 1,
+                   rect.GetTop(), rect.GetBottom());
+
+        Refresh(TRUE, &rect);
+    }
+}
+
 void wxListBox::OnIdle(wxIdleEvent& event)
 {
     if ( m_updateScrollbarY || m_updateScrollbarX )
     {
-        wxSize size = GetClientSize();
-
-        // is our height enough to show all items?
-        int nLines = GetCount();
-        wxCoord lineHeight = GetLineHeight();
-        bool showScrollbarY = nLines*lineHeight > size.y;
-
-        // check the width too if required
-        wxCoord charWidth, maxWidth;
-        bool showScrollbarX;
-        if ( HasHorzScrollbar() )
-        {
-            charWidth = GetCharWidth();
-            maxWidth = GetMaxWidth();
-            showScrollbarX = maxWidth > size.x;
-        }
-        else // never show it
-        {
-            charWidth = maxWidth = 0;
-            showScrollbarX = FALSE;
-        }
-
-        // reset scrollbars if something changed
-        if ( (showScrollbarY != m_showScrollbarY) ||
-             (showScrollbarX != m_showScrollbarX) )
-        {
-            int x, y;
-            GetViewStart(&x, &y);
-            SetScrollbars(charWidth, lineHeight,
-                          showScrollbarX
-                            ? (maxWidth + 2*charWidth - 1) / charWidth
-                            : 0,
-                          showScrollbarY
-                            ? nLines
-                            : 0,
-                          x, y);
-
-            m_showScrollbarX = showScrollbarX;
-            m_showScrollbarY = showScrollbarY;
-        }
+        UpdateScrollbars();
 
         m_updateScrollbarX = FALSE;
         m_updateScrollbarY = FALSE;
@@ -482,30 +525,7 @@ void wxListBox::OnIdle(wxIdleEvent& event)
 
     if ( m_updateCount )
     {
-        // only refresh the items which must be refreshed
-        if ( m_updateCount == -1 )
-        {
-            // refresh all
-            wxLogTrace(_T("listbox"), _T("Refreshing all"));
-
-            Refresh();
-        }
-        else
-        {
-            wxSize size = GetClientSize();
-            wxRect rect;
-            rect.width = size.x;
-            rect.height = size.y;
-            rect.y += m_updateFrom*GetLineHeight();
-            rect.height = m_updateCount*GetLineHeight();
-            CalcScrolledPosition(rect.x, rect.y, &rect.x, &rect.y);
-
-            wxLogTrace(_T("listbox"), _T("Refreshing items %d..%d (%d-%d)"),
-                       m_updateFrom, m_updateFrom + m_updateCount - 1,
-                       rect.GetTop(), rect.GetBottom());
-
-            Refresh(TRUE, &rect);
-        }
+        UpdateItems();
 
         m_updateCount = 0;
     }

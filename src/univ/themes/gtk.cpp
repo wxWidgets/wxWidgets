@@ -1649,7 +1649,9 @@ void wxGTKRenderer::AdjustSize(wxSize *size, const wxWindow *window)
     {
         // TODO: this is ad hoc...
         size->x += 3*window->GetCharWidth();
-        wxCoord minBtnHeight = (11*(window->GetCharHeight() + 8))/10;
+        if ( size->x < 80 )
+            size->x = 80;
+        wxCoord minBtnHeight = 22;
         if ( size->y < minBtnHeight )
             size->y = minBtnHeight;
 
