@@ -1603,7 +1603,8 @@ static wxPySizerItemInfo wxPySizerItemTypeHelper(PyObject* item, bool checkSize,
 }
 
 void wxSizer__setOORInfo(wxSizer *self,PyObject *_self){
-            self->SetClientObject(new wxPyOORClientData(_self));
+            if (!self->GetClientObject())
+                self->SetClientObject(new wxPyOORClientData(_self));
         }
 void wxSizer_Add(wxSizer *self,PyObject *item,int proportion,int flag,int border,PyObject *userData){
             
@@ -11781,9 +11782,7 @@ static PyObject *_wrap_new_EvtHandler(PyObject *self, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    {
-        resultobj = wxPyMake_wxObject(result, 1); 
-    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxEvtHandler, 1);
     return resultobj;
     fail:
     return NULL;
@@ -19490,9 +19489,7 @@ static PyObject *_wrap_new_PyApp(PyObject *self, PyObject *args, PyObject *kwarg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    {
-        resultobj = wxPyMake_wxObject(result, 1); 
-    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxPyApp, 1);
     return resultobj;
     fail:
     return NULL;
@@ -21518,9 +21515,7 @@ static PyObject *_wrap_new_Window(PyObject *self, PyObject *args, PyObject *kwar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    {
-        resultobj = wxPyMake_wxObject(result, 1); 
-    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxWindow, 1);
     {
         if (temp6)
         delete arg6;
@@ -21551,9 +21546,7 @@ static PyObject *_wrap_new_PreWindow(PyObject *self, PyObject *args, PyObject *k
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    {
-        resultobj = wxPyMake_wxObject(result, 1); 
-    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxWindow, 1);
     return resultobj;
     fail:
     return NULL;
@@ -28560,9 +28553,7 @@ static PyObject *_wrap_new_Validator(PyObject *self, PyObject *args, PyObject *k
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    {
-        resultobj = wxPyMake_wxObject(result, 1); 
-    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxValidator, 1);
     return resultobj;
     fail:
     return NULL;
@@ -28913,9 +28904,7 @@ static PyObject *_wrap_new_Menu(PyObject *self, PyObject *args, PyObject *kwargs
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    {
-        resultobj = wxPyMake_wxObject(result, 1); 
-    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxMenu, 1);
     {
         if (temp1)
         delete arg1;
@@ -31100,9 +31089,7 @@ static PyObject *_wrap_new_MenuBar(PyObject *self, PyObject *args, PyObject *kwa
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    {
-        resultobj = wxPyMake_wxObject(result, 1); 
-    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxMenuBar, 1);
     return resultobj;
     fail:
     return NULL;
@@ -33516,9 +33503,7 @@ static PyObject *_wrap_new_Control(PyObject *self, PyObject *args, PyObject *kwa
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    {
-        resultobj = wxPyMake_wxObject(result, 1); 
-    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxControl, 1);
     {
         if (temp7)
         delete arg7;
@@ -33549,9 +33534,7 @@ static PyObject *_wrap_new_PreControl(PyObject *self, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    {
-        resultobj = wxPyMake_wxObject(result, 1); 
-    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxControl, 1);
     return resultobj;
     fail:
     return NULL;
@@ -43336,6 +43319,7 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"MOUSE_BTN_RIGHT", SWIG_FromInt((int)wxMOUSE_BTN_RIGHT));
     PyDict_SetItemString(d,"UPDATE_UI_PROCESS_ALL", SWIG_FromInt((int)wxUPDATE_UI_PROCESS_ALL));
     PyDict_SetItemString(d,"UPDATE_UI_PROCESS_SPECIFIED", SWIG_FromInt((int)wxUPDATE_UI_PROCESS_SPECIFIED));
+    PyDict_SetItemString(d,"NavigationKeyEvent_IsBackward", SWIG_FromInt((int)wxNavigationKeyEvent::IsBackward));
     PyDict_SetItemString(d,"NavigationKeyEvent_IsForward", SWIG_FromInt((int)wxNavigationKeyEvent::IsForward));
     PyDict_SetItemString(d,"NavigationKeyEvent_WinChange", SWIG_FromInt((int)wxNavigationKeyEvent::WinChange));
     PyDict_SetItemString(d,"IDLE_PROCESS_ALL", SWIG_FromInt((int)wxIDLE_PROCESS_ALL));

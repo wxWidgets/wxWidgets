@@ -1077,6 +1077,14 @@ class HtmlWindow(_windows.ScrolledWindow):
         """SelectAll(self)"""
         return _html.HtmlWindow_SelectAll(*args, **kwargs)
 
+    def SelectionToText(*args, **kwargs):
+        """SelectionToText(self) -> String"""
+        return _html.HtmlWindow_SelectionToText(*args, **kwargs)
+
+    def ToText(*args, **kwargs):
+        """ToText(self) -> String"""
+        return _html.HtmlWindow_ToText(*args, **kwargs)
+
     def base_OnLinkClicked(*args, **kwargs):
         """base_OnLinkClicked(self, HtmlLinkInfo link)"""
         return _html.HtmlWindow_base_OnLinkClicked(*args, **kwargs)

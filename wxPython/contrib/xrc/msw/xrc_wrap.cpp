@@ -5760,6 +5760,7 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"WX_XMLRES_CURRENT_VERSION_REVISION", SWIG_FromInt((int)WX_XMLRES_CURRENT_VERSION_REVISION));
     PyDict_SetItemString(d,"XRC_USE_LOCALE", SWIG_FromInt((int)wxXRC_USE_LOCALE));
     PyDict_SetItemString(d,"XRC_NO_SUBCLASSING", SWIG_FromInt((int)wxXRC_NO_SUBCLASSING));
+    PyDict_SetItemString(d,"XRC_NO_RELOADING", SWIG_FromInt((int)wxXRC_NO_RELOADING));
     PyDict_SetItemString(d,"XML_ELEMENT_NODE", SWIG_FromInt((int)wxXML_ELEMENT_NODE));
     PyDict_SetItemString(d,"XML_ATTRIBUTE_NODE", SWIG_FromInt((int)wxXML_ATTRIBUTE_NODE));
     PyDict_SetItemString(d,"XML_TEXT_NODE", SWIG_FromInt((int)wxXML_TEXT_NODE));

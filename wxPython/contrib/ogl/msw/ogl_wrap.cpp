@@ -1998,9 +1998,7 @@ static PyObject *_wrap_new_PyShapeEvtHandler(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    {
-        resultobj = wxPyMake_wxShapeEvtHandler(result, 1); 
-    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxPyShapeEvtHandler, 1);
     return resultobj;
     fail:
     return NULL;
@@ -3441,9 +3439,7 @@ static PyObject *_wrap_new_PyShape(PyObject *self, PyObject *args, PyObject *kwa
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    {
-        resultobj = wxPyMake_wxShapeEvtHandler(result, 1); 
-    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxPyShape, 1);
     return resultobj;
     fail:
     return NULL;
@@ -20174,9 +20170,7 @@ static PyObject *_wrap_new_PyDivisionShape(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    {
-        resultobj = wxPyMake_wxShapeEvtHandler(result, 1); 
-    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxPyDivisionShape, 1);
     return resultobj;
     fail:
     return NULL;
@@ -31791,9 +31785,7 @@ static PyObject *_wrap_new_PyShapeCanvas(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    {
-        resultobj = wxPyMake_wxObject(result, 1); 
-    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxPyShapeCanvas, 1);
     {
         if (temp6)
         delete arg6;

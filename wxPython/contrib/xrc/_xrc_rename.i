@@ -5,6 +5,7 @@
 
 %rename(XRC_USE_LOCALE)                     wxXRC_USE_LOCALE;
 %rename(XRC_NO_SUBCLASSING)                 wxXRC_NO_SUBCLASSING;
+%rename(XRC_NO_RELOADING)                   wxXRC_NO_RELOADING;
 %rename(XmlResource)                        wxXmlResource;
 %rename(XML_ELEMENT_NODE)                   wxXML_ELEMENT_NODE;
 %rename(XML_ATTRIBUTE_NODE)                 wxXML_ATTRIBUTE_NODE;

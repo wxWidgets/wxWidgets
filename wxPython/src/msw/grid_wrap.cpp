@@ -336,7 +336,8 @@ PyObject* wxPyMake_##TYPE(TYPE* source, bool setThisOwn) { \
         wxPyOORClientData* data = (wxPyOORClientData*)source->GetClientObject(); \
         if (data) { \
             target = data->m_obj; \
-            Py_INCREF(target); \
+            if (target) \
+                Py_INCREF(target); \
         } \
         /* Otherwise make a new wrapper for it the old fashioned way and \
            give it the OOR treatment */ \
@@ -781,8 +782,21 @@ SWIG_FromCharPtr(const char* cptr)
   }
 }
 
+
+#define wxGRID_DEFAULT_NUMBER_ROWS        WXGRID_DEFAULT_NUMBER_ROWS
+#define wxGRID_DEFAULT_NUMBER_COLS        WXGRID_DEFAULT_NUMBER_COLS
+#define wxGRID_DEFAULT_ROW_HEIGHT         WXGRID_DEFAULT_ROW_HEIGHT
+#define wxGRID_DEFAULT_COL_WIDTH          WXGRID_DEFAULT_COL_WIDTH
+#define wxGRID_DEFAULT_COL_LABEL_HEIGHT   WXGRID_DEFAULT_COL_LABEL_HEIGHT
+#define wxGRID_DEFAULT_ROW_LABEL_WIDTH    WXGRID_DEFAULT_ROW_LABEL_WIDTH
+#define wxGRID_LABEL_EDGE_ZONE            WXGRID_LABEL_EDGE_ZONE
+#define wxGRID_MIN_ROW_HEIGHT             WXGRID_MIN_ROW_HEIGHT
+#define wxGRID_MIN_COL_WIDTH              WXGRID_MIN_COL_WIDTH
+#define wxGRID_DEFAULT_SCROLLBAR_WIDTH    WXGRID_DEFAULT_SCROLLBAR_WIDTH
+
 void wxGridCellRenderer__setOORInfo(wxGridCellRenderer *self,PyObject *_self){
-            self->SetClientObject(new wxPyOORClientData(_self));
+            if (!self->GetClientObject())
+                self->SetClientObject(new wxPyOORClientData(_self));
         }
 
 #include <limits.h>
@@ -969,7 +983,8 @@ IMP_PYCALLBACK__STRING( wxPyGridCellRenderer, wxGridCellRenderer, SetParameters)
 
 
 void wxGridCellEditor__setOORInfo(wxGridCellEditor *self,PyObject *_self){
-            self->SetClientObject(new wxPyOORClientData(_self));
+            if (!self->GetClientObject())
+                self->SetClientObject(new wxPyOORClientData(_self));
         }
 
 class wxPyGridCellEditor : public wxGridCellEditor
@@ -1097,7 +1112,8 @@ IMP_PYCALLBACK_STRING__constpure(wxPyGridCellEditor, wxGridCellEditor, GetValue)
 
 
 void wxGridCellAttr__setOORInfo(wxGridCellAttr *self,PyObject *_self){
-            self->SetClientObject(new wxPyOORClientData(_self));
+            if (!self->GetClientObject())
+                self->SetClientObject(new wxPyOORClientData(_self));
         }
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
@@ -1127,7 +1143,8 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 }
 
 void wxGridCellAttrProvider__setOORInfo(wxGridCellAttrProvider *self,PyObject *_self){
-            self->SetClientObject(new wxPyOORClientData(_self));
+            if (!self->GetClientObject())
+                self->SetClientObject(new wxPyOORClientData(_self));
         }
 
 SWIGSTATICINLINE(unsigned long)
@@ -1172,7 +1189,8 @@ public:
 };
 
 void wxGridTableBase__setOORInfo(wxGridTableBase *self,PyObject *_self){
-            self->SetClientObject(new wxPyOORClientData(_self));
+            if (!self->GetClientObject())
+                self->SetClientObject(new wxPyOORClientData(_self));
         }
 
 SWIGSTATICINLINE(int)
@@ -8108,9 +8126,7 @@ static PyObject *_wrap_new_Grid(PyObject *self, PyObject *args, PyObject *kwargs
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    {
-        resultobj = wxPyMake_wxObject(result, 1); 
-    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxGrid, 1);
     {
         if (temp6)
         delete arg6;
@@ -8141,9 +8157,7 @@ static PyObject *_wrap_new_PreGrid(PyObject *self, PyObject *args, PyObject *kwa
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    {
-        resultobj = wxPyMake_wxObject(result, 1); 
-    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxGrid, 1);
     return resultobj;
     fail:
     return NULL;
@@ -17269,16 +17283,16 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"GRID_VALUE_DATETIME", SWIG_FromCharPtr("datetime"));
     SWIG_addvarlink(SWIG_globals,(char*)"GridNoCellCoords",_wrap_GridNoCellCoords_get, _wrap_GridNoCellCoords_set);
     SWIG_addvarlink(SWIG_globals,(char*)"GridNoCellRect",_wrap_GridNoCellRect_get, _wrap_GridNoCellRect_set);
-    PyDict_SetItemString(d,"GRID_DEFAULT_NUMBER_ROWS", SWIG_FromInt((int)WXGRID_DEFAULT_NUMBER_ROWS));
-    PyDict_SetItemString(d,"GRID_DEFAULT_NUMBER_COLS", SWIG_FromInt((int)WXGRID_DEFAULT_NUMBER_COLS));
-    PyDict_SetItemString(d,"GRID_DEFAULT_ROW_HEIGHT", SWIG_FromInt((int)WXGRID_DEFAULT_ROW_HEIGHT));
-    PyDict_SetItemString(d,"GRID_DEFAULT_COL_WIDTH", SWIG_FromInt((int)WXGRID_DEFAULT_COL_WIDTH));
-    PyDict_SetItemString(d,"GRID_DEFAULT_COL_LABEL_HEIGHT", SWIG_FromInt((int)WXGRID_DEFAULT_COL_LABEL_HEIGHT));
-    PyDict_SetItemString(d,"GRID_DEFAULT_ROW_LABEL_WIDTH", SWIG_FromInt((int)WXGRID_DEFAULT_ROW_LABEL_WIDTH));
-    PyDict_SetItemString(d,"GRID_LABEL_EDGE_ZONE", SWIG_FromInt((int)WXGRID_LABEL_EDGE_ZONE));
-    PyDict_SetItemString(d,"GRID_MIN_ROW_HEIGHT", SWIG_FromInt((int)WXGRID_MIN_ROW_HEIGHT));
-    PyDict_SetItemString(d,"GRID_MIN_COL_WIDTH", SWIG_FromInt((int)WXGRID_MIN_COL_WIDTH));
-    PyDict_SetItemString(d,"GRID_DEFAULT_SCROLLBAR_WIDTH", SWIG_FromInt((int)WXGRID_DEFAULT_SCROLLBAR_WIDTH));
+    PyDict_SetItemString(d,"GRID_DEFAULT_NUMBER_ROWS", SWIG_FromInt((int)wxGRID_DEFAULT_NUMBER_ROWS));
+    PyDict_SetItemString(d,"GRID_DEFAULT_NUMBER_COLS", SWIG_FromInt((int)wxGRID_DEFAULT_NUMBER_COLS));
+    PyDict_SetItemString(d,"GRID_DEFAULT_ROW_HEIGHT", SWIG_FromInt((int)wxGRID_DEFAULT_ROW_HEIGHT));
+    PyDict_SetItemString(d,"GRID_DEFAULT_COL_WIDTH", SWIG_FromInt((int)wxGRID_DEFAULT_COL_WIDTH));
+    PyDict_SetItemString(d,"GRID_DEFAULT_COL_LABEL_HEIGHT", SWIG_FromInt((int)wxGRID_DEFAULT_COL_LABEL_HEIGHT));
+    PyDict_SetItemString(d,"GRID_DEFAULT_ROW_LABEL_WIDTH", SWIG_FromInt((int)wxGRID_DEFAULT_ROW_LABEL_WIDTH));
+    PyDict_SetItemString(d,"GRID_LABEL_EDGE_ZONE", SWIG_FromInt((int)wxGRID_LABEL_EDGE_ZONE));
+    PyDict_SetItemString(d,"GRID_MIN_ROW_HEIGHT", SWIG_FromInt((int)wxGRID_MIN_ROW_HEIGHT));
+    PyDict_SetItemString(d,"GRID_MIN_COL_WIDTH", SWIG_FromInt((int)wxGRID_MIN_COL_WIDTH));
+    PyDict_SetItemString(d,"GRID_DEFAULT_SCROLLBAR_WIDTH", SWIG_FromInt((int)wxGRID_DEFAULT_SCROLLBAR_WIDTH));
     PyDict_SetItemString(d,"GridCellAttr_Any", SWIG_FromInt((int)wxGridCellAttr::Any));
     PyDict_SetItemString(d,"GridCellAttr_Default", SWIG_FromInt((int)wxGridCellAttr::Default));
     PyDict_SetItemString(d,"GridCellAttr_Cell", SWIG_FromInt((int)wxGridCellAttr::Cell));

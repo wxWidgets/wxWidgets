@@ -19,6 +19,7 @@ WX_XMLRES_CURRENT_VERSION_RELEASE = _xrc.WX_XMLRES_CURRENT_VERSION_RELEASE
 WX_XMLRES_CURRENT_VERSION_REVISION = _xrc.WX_XMLRES_CURRENT_VERSION_REVISION
 XRC_USE_LOCALE = _xrc.XRC_USE_LOCALE
 XRC_NO_SUBCLASSING = _xrc.XRC_NO_SUBCLASSING
+XRC_NO_RELOADING = _xrc.XRC_NO_RELOADING
 class XmlResource(_core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxXmlResource instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)

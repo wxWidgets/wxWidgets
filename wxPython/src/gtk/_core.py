@@ -4323,6 +4323,7 @@ class NavigationKeyEvent(Event):
         """SetCurrentFocus(self, Window win)"""
         return _core_.NavigationKeyEvent_SetCurrentFocus(*args, **kwargs)
 
+    IsBackward = _core_.NavigationKeyEvent_IsBackward
     IsForward = _core_.NavigationKeyEvent_IsForward
     WinChange = _core_.NavigationKeyEvent_WinChange
 
