@@ -38,6 +38,11 @@ Removed the old python sizers.
 Added __add__, __sub__ and __cmp__ (equality check only) for wxPoint
 and wxRealPoint.
 
+Changed the build to make one big extension module instead of one for
+the core and each contrib.  This allowed me to do away with the
+libwxPyHelpers.so on unix systems.
+
+
 
 
 New in 2.2.1

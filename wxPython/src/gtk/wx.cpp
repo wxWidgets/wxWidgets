@@ -646,6 +646,10 @@ extern "C" SWIGEXPORT(void) inithtmlhelpc();
 extern "C" SWIGEXPORT(void) initcalendarc();
 extern "C" SWIGEXPORT(void) initstreamsc();
 extern "C" SWIGEXPORT(void) initfilesysc();
+
+extern "C" SWIGEXPORT(void) initglcanvasc();
+extern "C" SWIGEXPORT(void) initoglc();
+extern "C" SWIGEXPORT(void) initstc_c();
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -2903,6 +2907,10 @@ SWIGEXPORT(void) initwxc() {
     inithtmlc();
     inithtmlhelpc();
     initcalendarc();
+
+    initglcanvasc();
+    initoglc();
+    initstc_c();
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

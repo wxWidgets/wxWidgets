@@ -177,8 +177,7 @@ elif os.name == 'posix':
              os.popen('gtk-config --cflags', 'r').read()[:-1]
     cflags = string.split(cflags)
 
-    lflags = os.popen('wx-config --libs', 'r').read()[:-1] + ' ' + \
-             os.popen('gtk-config --libs', 'r').read()[:-1]
+    lflags = os.popen('wx-config --libs', 'r').read()[:-1]
     lflags = string.split(lflags)
 
 
@@ -228,7 +227,7 @@ else:
     rc_file = []
 
 
-ext = Extension('wxc', ['src/helpers.cpp',
+wxext = ext = Extension('wxc', ['src/helpers.cpp',
                         'src/libpy.c',
                         ] + rc_file + swig_sources,
 
@@ -256,7 +255,9 @@ if os.name == 'nt':
 # Define the GLCanvas extension module
 #----------------------------------------------------------------------
 
-if BUILD_GLCANVAS:
+if not BUILD_GLCANVAS:
+    wxext.sources = wxext.sources + ['contrib/glcanvas/stub.cpp']
+else:
     print 'Preparing GLCANVAS...'
     location = 'contrib/glcanvas'
     swig_files = ['glcanvas.i']
@@ -271,26 +272,18 @@ if BUILD_GLCANVAS:
         else:
             gl_libs = ['wx_gtk_gl', 'GL', 'GLU']
 
-    ext = Extension('glcanvasc',
-                    swig_sources,
+    wxext.sources = wxext.sources + swig_sources
+    wxext.libraries = wxext.libraries + gl_libs
 
-                    include_dirs = includes,
-                    define_macros = defines,
-
-                    library_dirs = libdirs,
-                    libraries = libs + gl_libs,
-
-                    extra_compile_args = cflags,
-                    extra_link_args = lflags,
-                    )
-
-    wxpExtensions.append(ext)
 
 #----------------------------------------------------------------------
 # Define the OGL extension module
 #----------------------------------------------------------------------
 
-if BUILD_OGL:
+
+if not BUILD_OGL:
+    wxext.sources = wxext.sources + ['contrib/ogl/stub.cpp']
+else:
     print 'Preparing OGL...'
     location = 'contrib/ogl'
     OGLLOC = location + '/contrib/src/ogl'
@@ -307,38 +300,32 @@ if BUILD_OGL:
         contrib_copy_tree(WXDIR + '/contrib/include/wx/ogl', OGLINC+'/wx/ogl')
         contrib_copy_tree(WXDIR + '/contrib/src/ogl', OGLLOC)
 
-    ext = Extension('oglc', [location + '/oglhelpers.cpp',
-                             '%s/basic.cpp' % OGLLOC,
-                             '%s/bmpshape.cpp' % OGLLOC,
-                             '%s/composit.cpp' % OGLLOC,
-                             '%s/divided.cpp' % OGLLOC,
-                             '%s/lines.cpp' % OGLLOC,
-                             '%s/misc.cpp' % OGLLOC,
-                             '%s/basic2.cpp' % OGLLOC,
-                             '%s/canvas.cpp' % OGLLOC,
-                             '%s/constrnt.cpp' % OGLLOC,
-                             '%s/drawn.cpp' % OGLLOC,
-                             '%s/mfutils.cpp' % OGLLOC,
-                             '%s/ogldiag.cpp' % OGLLOC,
-                             ] + swig_sources,
+    # add items to the core extension module definition
+    wxext.sources = wxext.sources + [location + '/oglhelpers.cpp',
+                                     '%s/basic.cpp' % OGLLOC,
+                                     '%s/bmpshape.cpp' % OGLLOC,
+                                     '%s/composit.cpp' % OGLLOC,
+                                     '%s/divided.cpp' % OGLLOC,
+                                     '%s/lines.cpp' % OGLLOC,
+                                     '%s/misc.cpp' % OGLLOC,
+                                     '%s/basic2.cpp' % OGLLOC,
+                                     '%s/canvas.cpp' % OGLLOC,
+                                     '%s/constrnt.cpp' % OGLLOC,
+                                     '%s/drawn.cpp' % OGLLOC,
+                                     '%s/mfutils.cpp' % OGLLOC,
+                                     '%s/ogldiag.cpp' % OGLLOC,
+                                     ] + swig_sources
 
-                    include_dirs =  [OGLINC] + includes,
-                    define_macros = defines,
-
-                    library_dirs = libdirs,
-                    libraries = libs,
-
-                    extra_compile_args = cflags,
-                    extra_link_args = lflags,
-                    )
-
-    wxpExtensions.append(ext)
+    wxext.include_dirs = wxext.include_dirs + [OGLINC]
 
 #----------------------------------------------------------------------
 # Define the STC extension module
 #----------------------------------------------------------------------
 
-if BUILD_STC:
+
+if not BUILD_STC:
+    wxext.sources = wxext.sources + ['contrib/stc/stub.cpp']
+else:
     print 'Preparing STC...'
     location = 'contrib/stc'
     STCLOC = location + '/contrib/src/stc'
@@ -361,19 +348,18 @@ if BUILD_STC:
     copy_file(location+'/stc.py', PKGDIR, update=1, verbose=1)
 
     # add some include dirs to the standard set
-    stc_includes = includes[:]
-    stc_includes.append('%s/scintilla/include' % STCLOC)
-    stc_includes.append('%s/scintilla/src' % STCLOC)
-    stc_includes.append(STCINC)
+    stc_includes = [ '%s/scintilla/include' % STCLOC,
+                     '%s/scintilla/src' % STCLOC,
+                     STCINC ]
 
     # and some macro definitions
-    stc_defines = defines[:]
-    stc_defines.append( ('__WX__', None) )
-    stc_defines.append( ('SCI_LEXER', None) )
+    stc_defines = [ ('__WX__', None),
+                    ('SCI_LEXER', None) ]
 
 
-    ext = Extension('stc_c',
-                    ['%s/scintilla/src/AutoComplete.cxx' % STCLOC,
+    # add items to the core extension module definition
+    wxext.sources = wxext.sources +  [
+                     '%s/scintilla/src/AutoComplete.cxx' % STCLOC,
                      '%s/scintilla/src/CallTip.cxx' % STCLOC,
                      '%s/scintilla/src/CellBuffer.cxx' % STCLOC,
                      '%s/scintilla/src/ContractionState.cxx' % STCLOC,
@@ -403,19 +389,11 @@ if BUILD_STC:
                      '%s/PlatWX.cpp' % STCLOC,
                      '%s/ScintillaWX.cpp' % STCLOC,
                      '%s/stc.cpp' % STCLOC,
-                     ] + swig_sources,
+                     ] + swig_sources
 
-                    include_dirs = stc_includes,
-                    define_macros = stc_defines,
+    wxext.include_dirs = wxext.include_dirs + stc_includes
+    wxext.define_macros = wxext.define_macros + stc_defines
 
-                    library_dirs = libdirs,
-                    libraries = libs,
-
-                    extra_compile_args = cflags,
-                    extra_link_args = lflags,
-                    )
-
-    wxpExtensions.append(ext)
 
 
 #----------------------------------------------------------------------
@@ -445,6 +423,9 @@ setup(name             = PKGDIR,
 
 
 #----------------------------------------------------------------------
+#----------------------------------------------------------------------
+#----------------------------------------------------------------------
+
 # The pre-distutils binary distributions of wxPython included the demo
 # as a subdirectory of the package dir.  This doesn't really make sense
 # for Linux/Unix platforms as it's not part of the package, and the user
@@ -472,4 +453,174 @@ setup(name             = PKGDIR,
 ##                preserve_path=1
 ##            )
 ##        ],
+
+
+
+#----------------------------------------------------------------------
+#----------------------------------------------------------------------
+#----------------------------------------------------------------------
+
+# Originally I was building separate extension module .so's for the
+# CORE and the various contribs.  Because of shared library issues I've
+# decided to combine things into one .so as implemented above, but as
+# I'm still not entirely convinced that this is the right thing to do
+# I will keep the old code around for a while, but commented out below.
+
+## if BUILD_GLCANVAS:
+##     print 'Preparing GLCANVAS...'
+##     location = 'contrib/glcanvas'
+##     swig_files = ['glcanvas.i']
+
+##     swig_sources = run_swig(swig_files, location, GENDIR, PKGDIR,
+##                             USE_SWIG, swig_force, swig_args)
+
+##     gl_libs = []
+##     if os.name == 'posix':
+##         if '-D__WXDEBUG__' in cflags:
+##             gl_libs = ['wx_gtkd_gl', 'GL', 'GLU']
+##         else:
+##             gl_libs = ['wx_gtk_gl', 'GL', 'GLU']
+
+##     ext = Extension('glcanvasc',
+##                     swig_sources,
+
+##                     include_dirs = includes,
+##                     define_macros = defines,
+
+##                     library_dirs = libdirs,
+##                     libraries = libs + gl_libs,
+
+##                     extra_compile_args = cflags,
+##                     extra_link_args = lflags,
+##                     )
+
+##     wxpExtensions.append(ext)
+
+
+
+## if BUILD_OGL:
+##     print 'Preparing OGL...'
+##     location = 'contrib/ogl'
+##     OGLLOC = location + '/contrib/src/ogl'
+##     OGLINC = location + '/contrib/include'
+
+##     swig_files = ['ogl.i', 'oglbasic.i', 'oglshapes.i', 'oglshapes2.i',
+##                   'oglcanvas.i']
+
+##     swig_sources = run_swig(swig_files, location, '', PKGDIR,
+##                             USE_SWIG, swig_force, swig_args)
+
+##     # make sure local copy of contrib files are up to date
+##     if IN_CVS_TREE:
+##         contrib_copy_tree(WXDIR + '/contrib/include/wx/ogl', OGLINC+'/wx/ogl')
+##         contrib_copy_tree(WXDIR + '/contrib/src/ogl', OGLLOC)
+
+##     ext = Extension('oglc', [location + '/oglhelpers.cpp',
+##                              '%s/basic.cpp' % OGLLOC,
+##                              '%s/bmpshape.cpp' % OGLLOC,
+##                              '%s/composit.cpp' % OGLLOC,
+##                              '%s/divided.cpp' % OGLLOC,
+##                              '%s/lines.cpp' % OGLLOC,
+##                              '%s/misc.cpp' % OGLLOC,
+##                              '%s/basic2.cpp' % OGLLOC,
+##                              '%s/canvas.cpp' % OGLLOC,
+##                              '%s/constrnt.cpp' % OGLLOC,
+##                              '%s/drawn.cpp' % OGLLOC,
+##                              '%s/mfutils.cpp' % OGLLOC,
+##                              '%s/ogldiag.cpp' % OGLLOC,
+##                              ] + swig_sources,
+
+##                     include_dirs =  [OGLINC] + includes,
+##                     define_macros = defines,
+
+##                     library_dirs = libdirs,
+##                     libraries = libs,
+
+##                     extra_compile_args = cflags,
+##                     extra_link_args = lflags,
+##                     )
+
+##     wxpExtensions.append(ext)
+
+
+
+## if BUILD_STC:
+##     print 'Preparing STC...'
+##     location = 'contrib/stc'
+##     STCLOC = location + '/contrib/src/stc'
+##     STCINC = location + '/contrib/include'
+##     STC_H =  location + '/contrib/include/wx/stc'
+
+##     # make sure local copy of contrib files are up to date
+##     if IN_CVS_TREE:
+##         contrib_copy_tree(WXDIR + '/contrib/include/wx/stc', STCINC+'/wx/stc')
+##         contrib_copy_tree(WXDIR + '/contrib/src/stc', STCLOC)
+
+
+##     swig_files = ['stc_.i']
+##     swig_sources = run_swig(swig_files, location, '', PKGDIR,
+##                             USE_SWIG, swig_force,
+##                             swig_args + ['-I'+STC_H, '-I'+location],
+##                             [STC_H+'/stc.h'])
+
+##     # copy a project specific py module to the main package dir
+##     copy_file(location+'/stc.py', PKGDIR, update=1, verbose=1)
+
+##     # add some include dirs to the standard set
+##     stc_includes = includes[:]
+##     stc_includes.append('%s/scintilla/include' % STCLOC)
+##     stc_includes.append('%s/scintilla/src' % STCLOC)
+##     stc_includes.append(STCINC)
+
+##     # and some macro definitions
+##     stc_defines = defines[:]
+##     stc_defines.append( ('__WX__', None) )
+##     stc_defines.append( ('SCI_LEXER', None) )
+
+
+##     ext = Extension('stc_c',
+##                     ['%s/scintilla/src/AutoComplete.cxx' % STCLOC,
+##                      '%s/scintilla/src/CallTip.cxx' % STCLOC,
+##                      '%s/scintilla/src/CellBuffer.cxx' % STCLOC,
+##                      '%s/scintilla/src/ContractionState.cxx' % STCLOC,
+##                      '%s/scintilla/src/Document.cxx' % STCLOC,
+##                      '%s/scintilla/src/Editor.cxx' % STCLOC,
+##                      '%s/scintilla/src/Indicator.cxx' % STCLOC,
+##                      '%s/scintilla/src/KeyMap.cxx' % STCLOC,
+##                      '%s/scintilla/src/KeyWords.cxx' % STCLOC,
+##                      '%s/scintilla/src/LineMarker.cxx' % STCLOC,
+##                      '%s/scintilla/src/PropSet.cxx' % STCLOC,
+##                      '%s/scintilla/src/ScintillaBase.cxx' % STCLOC,
+##                      '%s/scintilla/src/Style.cxx' % STCLOC,
+##                      '%s/scintilla/src/ViewStyle.cxx' % STCLOC,
+##                      '%s/scintilla/src/LexCPP.cxx' % STCLOC,
+##                      '%s/scintilla/src/LexHTML.cxx' % STCLOC,
+##                      '%s/scintilla/src/LexLua.cxx' % STCLOC,
+##                      '%s/scintilla/src/LexOthers.cxx' % STCLOC,
+##                      '%s/scintilla/src/LexPerl.cxx' % STCLOC,
+##                      '%s/scintilla/src/LexPython.cxx' % STCLOC,
+##                      '%s/scintilla/src/LexSQL.cxx' % STCLOC,
+##                      '%s/scintilla/src/LexVB.cxx' % STCLOC,
+##                      '%s/scintilla/src/DocumentAccessor.cxx' % STCLOC,
+##                      '%s/scintilla/src/UniConversion.cxx' % STCLOC,
+##                      '%s/scintilla/src/WindowAccessor.cxx' % STCLOC,
+##                      '%s/scintilla/src/PosRegExp.cxx' % STCLOC,
+
+##                      '%s/PlatWX.cpp' % STCLOC,
+##                      '%s/ScintillaWX.cpp' % STCLOC,
+##                      '%s/stc.cpp' % STCLOC,
+##                      ] + swig_sources,
+
+##                     include_dirs = stc_includes,
+##                     define_macros = stc_defines,
+
+##                     library_dirs = libdirs,
+##                     libraries = libs,
+
+##                     extra_compile_args = cflags,
+##                     extra_link_args = lflags,
+##                     )
+
+##     wxpExtensions.append(ext)
+
 

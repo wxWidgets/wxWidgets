@@ -148,6 +148,10 @@ extern "C" SWIGEXPORT(void) inithtmlhelpc();
 extern "C" SWIGEXPORT(void) initcalendarc();
 extern "C" SWIGEXPORT(void) initstreamsc();
 extern "C" SWIGEXPORT(void) initfilesysc();
+
+extern "C" SWIGEXPORT(void) initglcanvasc();
+extern "C" SWIGEXPORT(void) initoglc();
+extern "C" SWIGEXPORT(void) initstc_c();
 %}
 
 
@@ -185,6 +189,10 @@ extern "C" SWIGEXPORT(void) initfilesysc();
     inithtmlc();
     inithtmlhelpc();
     initcalendarc();
+
+    initglcanvasc();
+    initoglc();
+    initstc_c();
 %}
 
 //----------------------------------------------------------------------

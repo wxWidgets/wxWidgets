@@ -39,7 +39,7 @@ Okay, now on the the fun stuff...
 
 A. First of all, check and see if you've already got glib/gtk+ on your
    system, all the Linux distributions I know of come with it, at
-   least as an option.  Look for libglib* and libgtk* in your system's
+   least as an option.  Look for libglib.* and libgtk.* in your system's
    standard library directories.  You'll also need the headers and
    config scripts in order to build things that use glib/gtk.  Try
    running gtk-config:
@@ -120,7 +120,7 @@ D. If using the sources (either from the tarball or from CVS) then
    macro.  You'll get some extra asserts, failure logging, etc.
 
 E. Now just compile and install.  You need to use GNU make, so if your
-   system has something else get GNU make and build, install it and
+   system has something else get GNU make and build and install it and
    use it instead of your system's default make command.
 
        make
@@ -147,7 +147,7 @@ A. You have the same options (and same advantages/disadvantages) for
    above) in the wxWindows/wxPython directory.
 
 B. As mentioned previouslly, wxPython is built with the standard
-   Python Distutils tool.  If you are using Python 2.0c1 or later you
+   Python Distutils tool.  If you are using Python 2.0 or later you
    are all set, otherwise you need to download and install Distutils
    1.0 from http://www.python.org/sigs/distutils-sig/.
 
@@ -193,10 +193,10 @@ C. Change to the root wxPython directory and look at the setup.py
    file.  This is the script that configures and defines all the
    information that Distutils needs to build wxPython.  There are some
    options near the begining of the script that you may want or need
-   to change based on what options you have selected up to this point,
-   (sources from tar.gz or from CVS, etc.)  You can either change
-   these flags directly in setup.py or supply them on the
-   command-line.
+   to change based on your system and what options you have selected
+   up to this point, (sources from tar.gz or from CVS, etc.)  You can
+   either change these flags directly in setup.py or supply them on
+   the command-line.
 
 	BUILD_GLCANVAS Set to zero if you don't want to build the
 		       Open GL canvas extension module.  If you don't
@@ -215,18 +215,18 @@ C. Change to the root wxPython directory and look at the setup.py
 		       will be executed to regenerate the wrapper C++
 		       and shadow python files.
 
-	   IN_CVS_TREE If you using the CVS version of the wxWindows
-		       and wxPython sources then you will need to set
-		       this flag to non-zero.  This is needed because
-		       some source files from the wxWindows tree are
-		       copied to be under the wxPython tree in order
-		       to keep Distutils happy.  With this flag set
-		       then setup.py will automatically keep these
-		       copied sources up to date if the original
-		       version is ever updated.  If you are using the
-		       tar.gz version of the Python sources then these
-		       copied sources are already present in your
-		       source tree.
+	   IN_CVS_TREE If you are using the CVS version of the
+		       wxWindows and wxPython sources then you will
+		       need to set this flag to non-zero.  This is
+		       needed because some source files from the
+		       wxWindows tree are copied to be under the
+		       wxPython tree in order to keep Distutils happy.
+		       With this flag set then setup.py will
+		       automatically keep these copied sources up to
+		       date if the original version is ever updated.
+		       If you are using the tar.gz version of the
+		       Python sources then these copied sources are
+		       already present in your source tree.
 
 
 D. To build and install wxPython you simply need to execute the
