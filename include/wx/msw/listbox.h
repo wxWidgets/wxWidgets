@@ -18,7 +18,7 @@
 
 #include "wx/control.h"
 
-WXDLLEXPORT_DATA(extern const char*) wxListBoxNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxListBoxNameStr;
 
 #if wxUSE_OWNER_DRAWN
   class WXDLLEXPORT wxOwnerDrawn;
