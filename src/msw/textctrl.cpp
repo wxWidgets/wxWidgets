@@ -571,15 +571,14 @@ void wxTextCtrl::SetValue(const wxString& value)
     {
         DoWriteText(value, FALSE /* not selection only */);
 
-        // we should reset the modified flag even if the value didn't really change
-
-        // mark the control as being not dirty - we changed its text, not the
-        // user
-        DiscardEdits();
-
         // for compatibility, don't move the cursor when doing SetValue()
         SetInsertionPoint(0);
     }
+    // we should reset the modified flag even if the value didn't really change
+
+    // mark the control as being not dirty - we changed its text, not the
+    // user
+    DiscardEdits();
 }
 
 #if wxUSE_RICHEDIT && (!wxUSE_UNICODE || wxUSE_UNICODE_MSLU)
