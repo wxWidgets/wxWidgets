@@ -678,8 +678,8 @@ bool wxLocale::Init(int language, int flags)
                 buffer[0] = wxT('\0');
                 GetLocaleInfo(lcid, LOCALE_SENGLANGUAGE, buffer, 256);
                 locale << buffer;
-                buffer[0] = wxT('\0');
-                GetLocaleInfo(lcid, LOCALE_SENGCOUNTRY, buffer, 256);
+                if (GetLocaleInfo(lcid, LOCALE_SENGCOUNTRY, buffer, 256) > 0)
+                    locale << wxT("_") << buffer;
             }
             if (locale.IsEmpty())
             {
