@@ -2411,8 +2411,14 @@ void ObjectMenuProc(wxMenu *menu, wxCommandEvent& event)
         }
     case OBJECT_MENU_DELETE:
         {
+            if (data->IsKindOf(CLASSINFO(wxPanel)))
+            {
+                if (wxMessageBox(wxT("Are you sure?"), wxT("Deleting dialog"), wxYES_NO) == wxNO)
+                    return;
+            }
+
             wxResourceManager::GetCurrentResourceManager()->DeselectItemIfNecessary(data);
-            
+
             wxResourceManager::GetCurrentResourceManager()->SaveInfoAndDeleteHandler(data);
             wxResourceManager::GetCurrentResourceManager()->DeleteResource(data);
             wxResourceManager::GetCurrentResourceManager()->DeleteWindow(data);
