@@ -921,7 +921,7 @@ bool wxApp::ProcessIdle()
 
 #if wxUSE_THREADS
 void wxApp::ProcessPendingEvents()
-
+{
     wxNode *node = wxPendingEvents.First();
     wxCriticalSectionLocker locker(wxPendingEventsLocker);
 
