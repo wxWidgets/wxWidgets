@@ -5159,6 +5159,9 @@ fi
 
 AC_DEFINE_UNQUOTED(wxINSTALL_PREFIX, "$wxPREFIX")
 
+dnl define the variables used in wx-config
+top_builddir=`pwd`
+
 dnl ---------------------------------------------------------------------------
 dnl Output the makefiles and such from the results found above
 dnl ---------------------------------------------------------------------------
@@ -5348,6 +5351,7 @@ AC_SUBST(TOOLCHAIN_DEFS)
 AC_SUBST(TOOLCHAIN_DLL_DEFS)
 
 dnl wx-config options
+AC_SUBST(top_builddir)
 AC_SUBST(host_alias)
 AC_SUBST(cross_compiling)
 AC_SUBST(WXCONFIG_LIBS)

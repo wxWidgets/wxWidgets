@@ -7,9 +7,28 @@ CC="@CC@"
 GCC="@GCC@"
 CXX="@CXX@"
 LD="@SHARED_LD@"
+srcdir=@top_srcdir@
+builddir=@top_builddir@
 cross_compiling=@cross_compiling@
 target=@host_alias@
 static_flag=@STATIC_FLAG@
+
+# return the absolute path prepending builddir to it if needed
+makeabs()
+{
+    path=$1
+    # TODO: this only works under Unix and even there it could be
+    #       enhanced to remove ".." and "."
+    if [ `echo $path | sed 's/^\(.\).*/\1/'` != "/" ]; then
+        if [ $path = "." ]; then
+            path=$builddir
+        else
+            path="$builddir/$path"
+        fi
+    fi
+
+    echo $path
+}
 
 usage()
 {
@@ -88,6 +107,11 @@ while test $# -gt 0; do
   esac
 
   case $1 in
+    --inplace)
+      prefix=`makeabs $srcdir`
+      exec_prefix=`makeabs $builddir`
+      exec_prefix_set=yes
+      ;;
     --prefix=*)
       prefix=$optarg
       if test $exec_prefix_set = no ; then
