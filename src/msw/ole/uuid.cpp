@@ -26,7 +26,7 @@
 
 #include  "wx/setup.h"
 
-#if wxUSE_OLE && ( wxUSE_DRAG_AND_DROP || (__WXDEBUG__ && wxUSE_DATAOBJ) )
+#if wxUSE_OLE && ( wxUSE_DRAG_AND_DROP || (defined(__WXDEBUG__) && wxUSE_DATAOBJ) )
 
 // standard headers
 #if wxCHECK_W32API_VERSION( 1, 0 )
