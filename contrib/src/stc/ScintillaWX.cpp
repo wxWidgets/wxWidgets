@@ -557,6 +557,8 @@ void ScintillaWX::DoMouseWheel(int rotation, int delta,
         }
     }
     else { // otherwise just scroll the window
+        if ( !delta )
+            delta = 120;
         wheelRotation += rotation;
         lines = wheelRotation / delta;
         wheelRotation -= lines * delta;
