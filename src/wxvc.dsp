@@ -808,6 +808,10 @@ SOURCE=.\msw\gaugemsw.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\gdiimage.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\gdiobj.cpp
 # End Source File
 # Begin Source File

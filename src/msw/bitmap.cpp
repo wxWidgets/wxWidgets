@@ -71,6 +71,7 @@ wxBitmapRefData::wxBitmapRefData()
     m_selectedInto = NULL;
     m_numColors = 0;
     m_bitmapMask = NULL;
+    m_hBitmap = (WXHBITMAP) NULL;
 }
 
 void wxBitmapRefData::Free()

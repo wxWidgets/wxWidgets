@@ -60,6 +60,10 @@ bool wxChoice::Create(wxWindow *parent,
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return FALSE;
 
+    // A choice/combobox normally has a white background (or other, depending
+    // on global settings) rather than inheriting the parent's background colour.
+    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
+
     long msStyle = WS_CHILD | CBS_DROPDOWNLIST | WS_TABSTOP | WS_VISIBLE | WS_HSCROLL | WS_VSCROLL;
     if ( style & wxCB_SORT )
         msStyle |= CBS_SORT;

@@ -74,7 +74,12 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
   SetName(name);
   SetValidator(validator);
   if (parent) parent->AddChild(this);
-  SetBackgroundColour(parent->GetBackgroundColour()) ;
+//  SetBackgroundColour(parent->GetBackgroundColour()) ;
+
+  // A choice/combobox normally has a white background (or other, depending
+  // on global settings) rather than inheriting the parent's background colour.
+  SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
+
   SetForegroundColour(parent->GetForegroundColour()) ;
 
   m_windowStyle = style;
