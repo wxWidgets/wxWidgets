@@ -399,7 +399,7 @@ protected:
     #include "wx/x11/textctrl.h"
 #elif defined(__WXUNIVERSAL__)
     #include "wx/univ/textctrl.h"
-#elif defined(__SMARTPHONE__)
+#elif defined(__SMARTPHONE__) && defined(__WXWINCE__)
     #include "wx/msw/wince/textctrlce.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/textctrl.h"

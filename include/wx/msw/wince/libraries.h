@@ -21,7 +21,7 @@
 //     VC++'s #pragma to link against the libraries conditionally, instead of
 //     including libraries in project files.
 
-#ifdef __VISUALC__
+#if defined(__VISUALC__) && defined(__WXWINCE__)
 
 #if _WIN32_WCE >= 400
     #pragma comment(lib,"commdlg.lib")
@@ -47,6 +47,6 @@
     #error "Unknown SDK, please fill-in missing pieces"
 #endif
 
-#endif // __VISUALC__
+#endif // __VISUALC__ && __WXWINCE__
 
 #endif // _WX_LIBRARIES_H_

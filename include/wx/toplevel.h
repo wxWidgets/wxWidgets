@@ -174,10 +174,15 @@ public:
     // Attracts the users attention to this window if the application is
     // inactive (should be called when a background event occurs)
     virtual void RequestUserAttention(int flags = wxUSER_ATTENTION_INFO);
-    
+
     // Is this the active frame (highlighted in the taskbar)?
     virtual bool IsActive()
         { return (wxGetTopLevelParent(FindFocus()) == this); }
+
+#if defined(__SMARTPHONE__)
+    virtual void SetLeftMenu(int id = wxID_ANY, const wxString& label = wxEmptyString, wxMenu *subMenu = NULL) = 0;
+    virtual void SetRightMenu(int id = wxID_ANY, const wxString& label = wxEmptyString, wxMenu *subMenu = NULL) = 0;
+#endif // __SMARTPHONE__
 
     // implementation only from now on
     // -------------------------------

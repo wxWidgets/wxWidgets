@@ -39,11 +39,11 @@ public:
 
 protected:
 
-#ifndef __SMARTPHONE__
+#if !(defined(__SMARTPHONE__) && defined(__WXWINCE__))
     virtual void DoMoveWindow(int x, int y, int width, int height);
     virtual void DoGetSize( int *width, int *height ) const;
     virtual void DoGetPosition( int *x, int *y ) const;
-#endif // __SMARTPHONE__
+#endif // !(__SMARTPHONE__ && __WXWINCE__)
 
 private:
     wxArrayString m_fileNames;

@@ -1170,12 +1170,12 @@
 #endif /* wxMGL */
 
 /* Hopefully we can emulate these dialogs in due course */
-#ifdef __SMARTPHONE__
+#if defined(__SMARTPHONE__) && defined(__WXWINCE__)
 #   ifdef wxUSE_COLOURDLG
 #       undef wxUSE_COLOURDLG
 #       define wxUSE_COLOURDLG 0
 #   endif
-#endif /* __SMARTPHONE__ */
+#endif /* __SMARTPHONE__ && __WXWINCE__ */
 
 
 /* generic controls dependencies */

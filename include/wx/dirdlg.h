@@ -44,10 +44,15 @@ public:
 
 // Universal and non-port related switches with need for generic implementation
 #if defined(__WXMSW__) && (defined(__WXUNIVERSAL__) || \
-                           defined(__SMARTPHONE__)  || \
                            defined(__SALFORDC__)    || \
                            !wxUSE_OLE               || \
                            (defined (__GNUWIN32__) && !wxUSE_NORLANDER_HEADERS))
+
+    #include "wx/generic/dirdlgg.h"
+    #define wxDirDialog wxGenericDirDialog
+
+// MS Smartphone
+#elif defined(__SMARTPHONE__) && defined(__WXWINCE__)
 
     #include "wx/generic/dirdlgg.h"
     #define wxDirDialog wxGenericDirDialog

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/msw/wince/textctrlce.h
-// Purpose:     wxTextCtrl class - Smartphone implementation
+// Purpose:     wxTextCtrl implementation for smart phones driven by WinCE 
 // Author:      Wlodzimierz ABX Skiba
 // Modified by:
 // Created:     30.08.2004

@@ -67,7 +67,7 @@ private:
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/choice.h"
-#elif defined(__SMARTPHONE__)
+#elif defined(__SMARTPHONE__) && defined(__WXWINCE__)
     #include "wx/msw/wince/choicece.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/choice.h"

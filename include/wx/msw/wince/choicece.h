@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/msw/wince/choicece.h
-// Purpose:     wxChoice implementation for Smartphones
+// Purpose:     wxChoice implementation for smart phones driven by WinCE
 // Author:      Wlodzimierz ABX Skiba
 // Modified by:
 // Created:     29.07.2004

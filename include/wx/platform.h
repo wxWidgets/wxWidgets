@@ -143,36 +143,45 @@
 #endif /* Win32 */
 
 #if defined(__WXMSW__) || defined(__WIN32__)
-#    if !defined(__WINDOWS__)
-#        define __WINDOWS__
-#    endif
+#   if !defined(__WINDOWS__)
+#       define __WINDOWS__
+#   endif
 #endif
 
 #ifdef __WINE__
-#    ifndef __WIN95__
-#        define __WIN95__
-#    endif
+#   ifndef __WIN95__
+#       define __WIN95__
+#   endif
 #endif /* WINE */
 
-/* detect SmartPhone */
+/* detect MS SmartPhone */
 #if defined( WIN32_PLATFORM_WFSP )
-#    ifndef __SMARTPHONE__
-#        define __SMARTPHONE__
-#    endif
+#   ifndef __SMARTPHONE__
+#       define __SMARTPHONE__
+#   endif
+#   ifndef __WXWINCE__
+#       define __WXWINCE__
+#   endif
 #endif
 
 /* detect PocketPC */
 #if defined( WIN32_PLATFORM_PSPC )
-#    ifndef __POCKETPC__
-#        define __POCKETPC__
-#    endif
+#   ifndef __POCKETPC__
+#       define __POCKETPC__
+#   endif
+#   ifndef __WXWINCE__
+#       define __WXWINCE__
+#   endif
 #endif
 
 /* detect Standard WinCE SDK */
 #if defined( WCE_PLATFORM_STANDARDSDK )
-#    ifndef __WINCE_STANDARDSDK__
-#        define __WINCE_STANDARDSDK__
-#    endif
+#   ifndef __WINCE_STANDARDSDK__
+#       define __WINCE_STANDARDSDK__
+#   endif
+#   ifndef __WXWINCE__
+#       define __WXWINCE__
+#   endif
 #endif
 
 #if defined(_WIN32_WCE) && !defined(WIN32_PLATFORM_WFSP) && !defined(WIN32_PLATFORM_PSPC)
@@ -184,6 +193,9 @@
 #       ifndef __HANDHELDPC__
 #           define __HANDHELDPC__
 #       endif
+#   endif
+#   ifndef __WXWINCE__
+#       define __WXWINCE__
 #   endif
 #endif
 

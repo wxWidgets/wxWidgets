@@ -82,11 +82,11 @@ public:
     void SetLastFocus(wxWindow *win) { m_winLastFocused = win; }
     wxWindow *GetLastFocus() const { return m_winLastFocused; }
 
-#ifdef __SMARTPHONE__
-    void SetLeftMenu(int id = wxID_ANY, const wxString& label = wxEmptyString, wxMenu *subMenu = NULL);
-    void SetRightMenu(int id = wxID_ANY, const wxString& label = wxEmptyString, wxMenu *subMenu = NULL);
+#if defined(__SMARTPHONE__) && defined(__WXWINCE__)
+    virtual void SetLeftMenu(int id = wxID_ANY, const wxString& label = wxEmptyString, wxMenu *subMenu = NULL);
+    virtual void SetRightMenu(int id = wxID_ANY, const wxString& label = wxEmptyString, wxMenu *subMenu = NULL);
     bool HandleCommand(WXWORD id, WXWORD cmd, WXHWND control);
-#endif // __SMARTPHONE__
+#endif // __SMARTPHONE__ && __WXWINCE__
 
 protected:
     // common part of all ctors
@@ -130,7 +130,7 @@ protected:
     // the last focused child: we restore focus to it on activation
     wxWindow             *m_winLastFocused;
 
-#ifdef __SMARTPHONE__
+#if defined(__SMARTPHONE__) && defined(__WXWINCE__)
     class ButtonMenu
     {
     public:
@@ -163,7 +163,7 @@ protected:
 
     void ReloadButton(ButtonMenu& button, UINT menuID);
     void ReloadAllButtons();
-#endif // __SMARTPHONE__
+#endif // __SMARTPHONE__ && __WXWINCE__
 
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxTopLevelWindowMSW)
