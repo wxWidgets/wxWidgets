@@ -71,7 +71,7 @@ wxFontStyle wxNativeFontInfo::GetStyle() const
             m_style = wxFONTSTYLE_SLANT;
             break;
     }
-    
+
     return m_style;
 }
 
@@ -100,7 +100,7 @@ wxFontWeight wxNativeFontInfo::GetWeight() const
             m_weight = wxFONTWEIGHT_BOLD;
             break;
     }
-    
+
     return m_weight;
 }
 
@@ -112,7 +112,7 @@ bool wxNativeFontInfo::GetUnderlined() const
 wxString wxNativeFontInfo::GetFaceName() const
 {
     wxString tmp = wxGTK_CONV_BACK( pango_font_description_get_family( description ) );
-    
+
     return tmp;
 }
 
@@ -178,8 +178,7 @@ bool wxGetNativeFontEncoding(wxFontEncoding encoding,
     return FALSE;
 }
 
-#else 
-   // __WXGTK20__
+#else // GTK+ 1.x
 
 #ifdef __X__
     #ifdef __VMS__
@@ -450,6 +449,164 @@ void wxNativeFontInfo::SetXFontName(const wxString& xFontName_)
     xFontName = xFontName_;
 
     m_isDefault = FALSE;
+}
+
+int wxNativeFontInfo::GetPointSize() const
+{
+    const wxString s = GetXFontComponent(wxXLFD_POINTSIZE);
+
+    // return -1 to indicate that the size is unknown
+    long l;
+    return s.ToLong(&l) ? l : -1;
+}
+
+wxFontStyle wxNativeFontInfo::GetStyle() const
+{
+    const wxString s = GetXFontComponent(wxXLFD_SLANT);
+
+    if ( s.length() != 1 )
+    {
+        // it is really unknown but we don't have any way to return it from
+        // here
+        return wxFONTSTYLE_NORMAL;
+    }
+
+    switch ( s[0] )
+    {
+        default:
+            // again, unknown but consider normal by default
+
+        case _T('r'):
+            return wxFONTSTYLE_NORMAL;
+
+        case _T('i'):
+            return wxFONTSTYLE_ITALIC;
+
+        case _T('o'):
+            return wxFONTSTYLE_SLANT;
+    }
+}
+
+wxFontWeight wxNativeFontInfo::GetWeight() const
+{
+    const wxString s = GetXFontComponent(wxXLFD_WEIGHT).MakeLower();
+    if ( s.find(_T("bold")) != wxString::npos || s == _T("black") )
+        return wxFONTWEIGHT_BOLD;
+    else if ( s == _T("light") )
+        return wxFONTWEIGHT_LIGHT;
+
+    return wxFONTWEIGHT_NORMAL;
+}
+
+bool wxNativeFontInfo::GetUnderlined() const
+{
+    // X fonts are never underlined
+    return FALSE;
+}
+
+wxString wxNativeFontInfo::GetFaceName() const
+{
+    // wxWindows facename probably more accurately corresponds to X family
+    return GetXFontComponent(wxXLFD_FAMILY);
+}
+
+wxFontFamily wxNativeFontInfo::GetFamily() const
+{
+    // and wxWindows family -- to X foundry, but we have to translate it to
+    // wxFontFamily somehow...
+    wxFAIL_MSG(_T("not implemented")); // GetXFontComponent(wxXLFD_FOUNDRY);
+
+    return wxFONTFAMILY_DEFAULT;
+}
+
+wxFontEncoding wxNativeFontInfo::GetEncoding() const
+{
+    // we already have the code for this but need to refactor it first
+    wxFAIL_MSG( _T("not implemented") );
+
+    return wxFONTENCODING_MAX;
+}
+
+void wxNativeFontInfo::SetPointSize(int pointsize)
+{
+    SetXFontComponent(wxXLFD_POINTSIZE, wxString::Format(_T("%d"), pointsize));
+}
+
+void wxNativeFontInfo::SetStyle(wxFontStyle style)
+{
+    wxString s;
+    switch ( style )
+    {
+        case wxFONTSTYLE_ITALIC:
+            s = _T('i');
+            break;
+
+        case wxFONTSTYLE_SLANT:
+            s = _T('o');
+            break;
+
+        case wxFONTSTYLE_NORMAL:
+            s = _T('r');
+
+        default:
+            wxFAIL_MSG( _T("unknown wxFontStyle in wxNativeFontInfo::SetStyle") );
+            return;
+    }
+
+    SetXFontComponent(wxXLFD_SLANT, s);
+}
+
+void wxNativeFontInfo::SetWeight(wxFontWeight weight)
+{
+    wxString s;
+    switch ( weight )
+    {
+        case wxFONTWEIGHT_BOLD:
+            s = _T("bold");
+            break;
+
+        case wxFONTWEIGHT_LIGHT:
+            s = _T("light");
+            break;
+
+        case wxFONTWEIGHT_NORMAL:
+            s = _T("medium");
+            break;
+
+        default:
+            wxFAIL_MSG( _T("unknown wxFontWeight in wxNativeFontInfo::SetWeight") );
+            return;
+    }
+
+    SetXFontComponent(wxXLFD_WEIGHT, s);
+}
+
+void wxNativeFontInfo::SetUnderlined(bool WXUNUSED(underlined))
+{
+    // can't do this under X
+}
+
+void wxNativeFontInfo::SetFaceName(wxString facename)
+{
+    SetXFontComponent(wxXLFD_FAMILY, facename);
+}
+
+void wxNativeFontInfo::SetFamily(wxFontFamily family)
+{
+    // wxFontFamily -> X foundry, anyone?
+    wxFAIL_MSG( _T("not implemented") );
+
+    // SetXFontComponent(wxXLFD_FOUNDRY, ...);
+}
+
+void wxNativeFontInfo::SetEncoding(wxFontEncoding encoding)
+{
+    wxNativeEncodingInfo info;
+    if ( wxGetNativeFontEncoding(encoding, &info) )
+    {
+        SetXFontComponent(wxXLFD_ENCODING, info.xencoding);
+        SetXFontComponent(wxXLFD_REGISTRY, info.xregistry);
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -806,7 +963,7 @@ static wxNativeFont wxLoadQueryFont(int pointSize,
     // An alternative: assume that the screen is 72 dpi.
     //int pixelHeight = (int) (((float)pointSize / 720.0) * 72.0) ;
     //int pixelHeight = (int) ((float)pointSize / 10.0) ;
-    
+
     GR_LOGFONT logFont;
     logFont.lfHeight = pixelHeight;
     logFont.lfWidth = 0;
@@ -833,7 +990,7 @@ static wxNativeFont wxLoadQueryFont(int pointSize,
     fontInfo->fid = GrCreateFont((GR_CHAR*) facename.c_str(), pixelHeight, & logFont);
     GrGetFontInfo(fontInfo->fid, & fontInfo->info);
     return (wxNativeFont) fontInfo;
-    
+
 #else
     wxString fontSpec;
     if (!facename.IsEmpty())
@@ -1044,5 +1201,5 @@ void wxFontModule::OnExit()
     g_fontHash = (wxHashTable *)NULL;
 }
 
-#endif
-  // not GTK 2.0
+#endif // GTK 2.0/1.x
+
