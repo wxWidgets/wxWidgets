@@ -1523,6 +1523,13 @@ void wxTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
 
     int total_h = GetLineHeight(item);
 
+    wxColour colBg;
+    if ( attr && attr->HasBackgroundColour() )
+        colBg = attr->GetBackgroundColour();
+    else
+        colBg = m_backgroundColour;
+    dc.SetBrush(wxBrush(colBg, wxSOLID));
+
     dc.DrawRectangle( item->GetX()-2, item->GetY(), item->GetWidth()+2, total_h );
 
     if ( image != NO_IMAGE )
@@ -1535,10 +1542,7 @@ void wxTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
         dc.DestroyClippingRegion();
     }
 
-    bool hasBgCol = attr && attr->HasBackgroundColour();
-    dc.SetBackgroundMode(hasBgCol ? wxSOLID : wxTRANSPARENT);
-    if ( hasBgCol )
-        dc.SetTextBackground(attr->GetBackgroundColour());
+    dc.SetBackgroundMode(wxTRANSPARENT);
     dc.DrawText( item->GetText(), image_w + item->GetX(), item->GetY()
                  + ((total_h > text_h) ? (total_h - text_h)/2 : 0));
 
