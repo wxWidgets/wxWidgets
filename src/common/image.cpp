@@ -2756,11 +2756,11 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
     wxRotationPoint p3 = rotated_point (img.GetWidth(), 0, cos_angle, sin_angle, p0);
     wxRotationPoint p4 = rotated_point (img.GetWidth(), img.GetHeight(), cos_angle, sin_angle, p0);
 
-    int x1 = floor (wxMin (wxMin(p1.x, p2.x), wxMin(p3.x, p4.x)));
-    int y1 = floor (wxMin (wxMin(p1.y, p2.y), wxMin(p3.y, p4.y)));
+    int x1 = (int) floor (wxMin (wxMin(p1.x, p2.x), wxMin(p3.x, p4.x)));
+    int y1 = (int) floor (wxMin (wxMin(p1.y, p2.y), wxMin(p3.y, p4.y)));
 
-    int x2 = ceil (wxMax (wxMax(p1.x, p2.x), wxMax(p3.x, p4.x)));
-    int y2 = ceil (wxMax (wxMax(p1.y, p2.y), wxMax(p3.y, p4.y)));
+    int x2 = (int) ceil (wxMax (wxMax(p1.x, p2.x), wxMax(p3.x, p4.x)));
+    int y2 = (int) ceil (wxMax (wxMax(p1.y, p2.y), wxMax(p3.y, p4.y)));
 
     wxImage rotated (x2 - x1 + 1, y2 - y1 + 1);
 
@@ -2841,7 +2841,7 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
                     else
                     {
                     		// weights for the weighted average are proportional to the inverse of the distance
-                    	const w1 = 1/d1, w2 = 1/d2, w3 = 1/d3, w4 = 1/d4;
+		      const double w1 = 1/d1, w2 = 1/d2, w3 = 1/d3, w4 = 1/d4;
                     	
 	                    for (int i = 0; i < 3; i++)     // repeat calculation for R, G, and B
     	                {
