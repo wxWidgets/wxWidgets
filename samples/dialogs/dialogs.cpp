@@ -199,9 +199,11 @@ MyFrame::MyFrame(wxWindow *parent,
 {
     m_dialog = (MyModelessDialog *)NULL;
 
+#if wxUSE_FINDREPLDLG
     m_dlgFind =
     m_dlgReplace = NULL;
-
+#endif
+   
     CreateStatusBar();
 }
 
