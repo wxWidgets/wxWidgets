@@ -6,7 +6,7 @@ wxwindows2.2 (2.2.2) unstable; urgency=low
     and cache the results of configure tests for all packages.
   * and of course a whole stack of minor fixes in the main codebase too.
 
- -- Ron Lee <ron@microtronics.com.au>  Tue,  5 Sep 2000 18:51:24 +0930
+ -- Ron Lee <ron@debian.org>  Tue,  5 Sep 2000 18:51:24 +0930
 
 wxwindows2.2 (2.2.1) unstable; urgency=low
 
