@@ -477,6 +477,14 @@ wxDialUpManagerImpl::CheckStatusInternal(void)
       //  sys_error("cannot create socket for gw");
       return;
    }
+#if 0
+   // PING method:
+
+   if(sendto(sockfd, "hello", strlen("hello"), /* flags */ 0, &serv_addr,
+             sizeof(serv_addr)) == -1)
+      return;
+#endif
+   
    if( connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
    {	
       //sys_error("cannot connect to server");
@@ -484,6 +492,7 @@ wxDialUpManagerImpl::CheckStatusInternal(void)
    }
    //connected!
    close(sockfd);
+   m_IsOnline = TRUE;
 }
 
 
