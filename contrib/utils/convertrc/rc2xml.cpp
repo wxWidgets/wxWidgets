@@ -176,6 +176,12 @@ void rc2xml::ParseControls()
     token=GetToken();
     while ((token!="END")&(token!="}"))
         {
+        if (token=="AUTOCHECKBOX")
+            ParseCheckBox();
+        else
+        if (token=="AUTORADIOBUTTON")
+            ParseRadioButton();
+        else
         if (token=="LTEXT")
             ParseStaticText();
         else if (token=="EDITTEXT")
@@ -225,11 +231,50 @@ void rc2xml::ParseTextCtrl()
     ReadRect(x,y,width,height);
 //TODO
 //style=GetToken();
-    m_xmlfile.Write("\t\t<object class\"wxTextCtrl\"");
+    m_xmlfile.Write("\t\t<object class=\"wxTextCtrl\"");
     WriteBasicInfo(x,y,width,height,varname);
     m_xmlfile.Write("\t\t</object>\n");
 
 }
+//AUTOCHECKBOX "&log.", ID_XLOG, 25, 24, 21, 12
+void rc2xml::ParseCheckBox()
+{
+    wxString token;
+    wxString phrase,varname;
+    phrase=GetQuoteField();
+    varname=GetToken();
+
+    int x,y,width,height;
+    ReadRect(x,y,width,height);
+
+    m_xmlfile.Write("\t\t<object class=\"wxCheckBox\"");
+    WriteBasicInfo(x,y,width,height,varname);
+    WriteLabel(phrase);
+    m_xmlfile.Write("\t\t</object>\n");
+
+}
+//AUTORADIOBUTTON "&text", ID_SW10, 13, 12, 68, 10, BS_AUTORADIOBUTTON | WS_GROUP
+void rc2xml::ParseRadioButton()
+{
+    wxString token,style;
+    wxString phrase,varname;
+    phrase=GetQuoteField();
+    varname=GetToken();
+
+    int x,y,width,height;
+    if (ReadRect(x,y,width,height))
+      ReadOrs(token);
+    if (token.Find("WS_GROUP") != -1)
+        style += "wxRB_GROUP";
+
+    m_xmlfile.Write("\t\t<object class=\"wxRadioButton\"");
+    WriteBasicInfo(x,y,width,height,varname);
+    WriteLabel(phrase);
+    WriteStyle(style);
+    m_xmlfile.Write("\t\t</object>\n");
+
+}
+
 //PUSHBUTTON      "Create/Update",IDC_CREATE,15,25,53,13,NOT WS_TABSTOP
 void rc2xml::ParsePushButton()
 {
@@ -280,15 +325,18 @@ void rc2xml::ParseGroupBox()
     m_xmlfile.Write("\t\t</object>\n");
 }
 
-void rc2xml::ReadRect(int & x, int & y, int & width, int & height)
+bool rc2xml::ReadRect(int & x, int & y, int & width, int & height)
 {
     x=atoi(GetToken());
     y=atoi(GetToken());
     width=atoi(GetToken());
-    height=atoi(GetToken());
+    bool ret;
+    wxString tmp = GetToken(&ret);
+    height=atoi(tmp);
+    return ret; // check for more parameters
 }
 
-wxString rc2xml::GetToken()
+wxString rc2xml::GetToken(bool *listseperator)
 {
     wxString token="";
 
@@ -321,13 +369,15 @@ wxString rc2xml::GetToken()
 
     while (!Seperator(ch))
     {
-    token+=(char)ch;
+    token += (char)ch;
     ReadChar(ch);
     }
 
-    if (ch==EOF)
-        m_done=TRUE;
+    if (ch == EOF)
+        m_done = TRUE;
 
+    if (listseperator)
+      *listseperator = (ch == ',');
     return token;
 }
 
@@ -372,14 +422,21 @@ void rc2xml::ParseComboBox()
 {
 /* COMBOBOX        IDC_SCALECOMBO,10,110,48,52,CBS_DROPDOWNLIST | CBS_SORT | 
                     WS_VSCROLL | WS_TABSTOP */
-    wxString token;
+    wxString token,style;
     wxString varname;
     varname=GetToken();
     int x,y,width,height;
-    ReadRect(x,y,width,height);
+    if (ReadRect(x,y,width,height))
+      ReadOrs(token);
 
     m_xmlfile.Write("\t\t<object class=\"wxComboBox\"");
     WriteBasicInfo(x,y,width,height,varname);
+    if (token.Find("CBS_SIMPLE") != -1)
+        WriteStyle("wxCB_SIMPLE");
+    if (token.Find("CBS_SORT") != -1)
+        WriteStyle("wxCB_SORT");
+    if (token.Find("CBS_DISABLENOSCROLL") != -1)
+        WriteStyle("wxLB_ALWAYS_SB");
     m_xmlfile.Write("\n\t\t</object>\n");
 
 }
@@ -615,6 +672,12 @@ name=LookUpId(name);
         name="wxID_COPY";
     else if (name=="ID_EDIT_PASTE")
         name="wxID_PASTE";
+    else if (name=="IDYES")
+        name="wxID_YES";
+    else if (name=="IDNO")
+        name="wxID_NO";
+    else if (name=="IDHELP")
+        name="wxID_HELP";
 
     m_xmlfile.Write(" name= \""+name+"\"");
 }
@@ -639,7 +702,7 @@ void rc2xml::WriteStyle(wxString style)
 {
     if (style.Length()==0)
         return;
-    m_xmlfile.Write("\n\t\t<style>"+style+"</style>\n");
+    m_xmlfile.Write("\t\t\t<style>"+style+"</style>\n");
 }
 /*
     LISTBOX         IDC_LIST1,16,89,48,40,LBS_SORT | LBS_MULTIPLESEL | 

@@ -55,11 +55,13 @@ protected:
     void ParseListBox();
     void ParseStaticText();
     void ParseTextCtrl();
+    void ParseRadioButton();
+    void ParseCheckBox();
     void ParsePushButton();
     bool Seperator(int ch);
     void ParseGroupBox();
-    void ReadRect(int & x, int & y, int & width, int & height);
-    wxString GetToken();
+    bool ReadRect(int & x, int & y, int & width, int & height);
+    wxString GetToken(bool *listseperator = 0);
     wxString GetQuoteField();
     void ReadChar(int &ch);
     void ParseComboBox();
