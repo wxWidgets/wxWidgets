@@ -3016,9 +3016,9 @@ else
     STATIC_FLAG="no"
 fi
 
-dnl default value is comment for makefile
-MACRESCOMP="#"
-MACSETFILE="#"
+dnl default value is to (silently) do nothing in the makefile
+MACRESCOMP="@#"
+MACSETFILE="@#"
 MACRESWXCONFIG="#"
 if test "$wxUSE_MAC" = 1; then
     dnl add the resources target for wxMac
