@@ -67,7 +67,9 @@ public:
   virtual void SetClientSize( int const width, int const height );
   
     // set minimal/maxmimal size for the frame
-  virtual void SetSizeHints( int minW, int minH, int maxW, int maxH, int incW = -1 );
+  virtual void SetSizeHints(int minW, int minH,
+                            int maxW = -1, int maxH = -1, 
+                            int incW = -1 );
 
   virtual wxStatusBar* CreateStatusBar(int number=1, long style = wxST_SIZEGRIP, wxWindowID id = 0,
     const wxString& name = "statusBar");
