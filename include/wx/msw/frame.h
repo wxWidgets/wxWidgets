@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/msw/frame.h
-// Purpose:     wxFrameMSW class
+// Purpose:     wxFrame class
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
@@ -16,12 +16,12 @@
     #pragma interface "frame.h"
 #endif
 
-class WXDLLEXPORT wxFrameMSW : public wxFrameBase
+class WXDLLEXPORT wxFrame : public wxFrameBase
 {
 public:
     // construction
-    wxFrameMSW() { Init(); }
-    wxFrameMSW(wxWindow *parent,
+    wxFrame() { Init(); }
+    wxFrame(wxWindow *parent,
                wxWindowID id,
                const wxString& title,
                const wxPoint& pos = wxDefaultPosition,
@@ -42,7 +42,7 @@ public:
                 long style = wxDEFAULT_FRAME_STYLE,
                 const wxString& name = wxFrameNameStr);
 
-    virtual ~wxFrameMSW();
+    virtual ~wxFrame();
 
     // implement base class pure virtuals
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
@@ -156,6 +156,7 @@ private:
 #endif // tooltips
 
     DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS(wxFrame)
 };
 
 #endif

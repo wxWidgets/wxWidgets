@@ -61,9 +61,7 @@ extern int g_openDialogs;
 // event tables
 // ----------------------------------------------------------------------------
 
-#ifndef __WXUNIVERSAL__
-    IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxTopLevelWindow)
-#endif
+IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxTopLevelWindow)
 
 // ============================================================================
 // implementation
@@ -79,7 +77,7 @@ extern int g_openDialogs;
 // "child_attached" of menu bar
 //-----------------------------------------------------------------------------
 
-static void gtk_menu_attached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *WXUNUSED(child), wxFrameGTK *win )
+static void gtk_menu_attached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *WXUNUSED(child), wxFrame *win )
 {
     if (!win->m_hasVMT) return;
 
@@ -91,7 +89,7 @@ static void gtk_menu_attached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *
 // "child_detached" of menu bar
 //-----------------------------------------------------------------------------
 
-static void gtk_menu_detached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *WXUNUSED(child), wxFrameGTK *win )
+static void gtk_menu_detached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *WXUNUSED(child), wxFrame *win )
 {
     if (!win->m_hasVMT) return;
 
@@ -106,7 +104,7 @@ static void gtk_menu_detached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *
 // "child_attached" of tool bar
 //-----------------------------------------------------------------------------
 
-static void gtk_toolbar_attached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *WXUNUSED(child), wxFrameGTK *win )
+static void gtk_toolbar_attached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *WXUNUSED(child), wxFrame *win )
 {
     if (!win->m_hasVMT) return;
 
@@ -119,7 +117,7 @@ static void gtk_toolbar_attached_callback( GtkWidget *WXUNUSED(widget), GtkWidge
 // "child_detached" of tool bar
 //-----------------------------------------------------------------------------
 
-static void gtk_toolbar_detached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *WXUNUSED(child), wxFrameGTK *win )
+static void gtk_toolbar_detached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *WXUNUSED(child), wxFrame *win )
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
@@ -133,26 +131,26 @@ static void gtk_toolbar_detached_callback( GtkWidget *WXUNUSED(widget), GtkWidge
 
 
 // ----------------------------------------------------------------------------
-// wxFrameGTK itself
+// wxFrame itself
 // ----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-// InsertChild for wxFrameGTK
+// InsertChild for wxFrame
 //-----------------------------------------------------------------------------
 
-/* Callback for wxFrameGTK. This very strange beast has to be used because
+/* Callback for wxFrame. This very strange beast has to be used because
  * C++ has no virtual methods in a constructor. We have to emulate a
  * virtual function here as wxWindows requires different ways to insert
  * a child in container classes. */
 
-static void wxInsertChildInFrame( wxFrameGTK* parent, wxWindow* child )
+static void wxInsertChildInFrame( wxFrame* parent, wxWindow* child )
 {
     wxASSERT( GTK_IS_WIDGET(child->m_widget) );
 
     if (!parent->m_insertInClientArea)
     {
         /* these are outside the client area */
-        wxFrameGTK* frame = (wxFrameGTK*) parent;
+        wxFrame* frame = (wxFrame*) parent;
         gtk_pizza_put( GTK_PIZZA(frame->m_mainWidget),
                          GTK_WIDGET(child->m_widget),
                          child->m_x,
@@ -193,16 +191,16 @@ static void wxInsertChildInFrame( wxFrameGTK* parent, wxWindow* child )
 }
 
 // ----------------------------------------------------------------------------
-// wxFrameGTK creation
+// wxFrame creation
 // ----------------------------------------------------------------------------
 
-void wxFrameGTK::Init()
+void wxFrame::Init()
 {
     m_menuBarDetached = FALSE;
     m_toolBarDetached = FALSE;
 }
 
-bool wxFrameGTK::Create( wxWindow *parent,
+bool wxFrame::Create( wxWindow *parent,
                       wxWindowID id,
                       const wxString& title,
                       const wxPoint& pos,
@@ -216,7 +214,7 @@ bool wxFrameGTK::Create( wxWindow *parent,
     return rt;
 }
 
-wxFrameGTK::~wxFrameGTK()
+wxFrame::~wxFrame()
 {
     m_isBeingDeleted = TRUE;
     DeleteAllBars();
@@ -226,7 +224,7 @@ wxFrameGTK::~wxFrameGTK()
 // overridden wxWindow methods
 // ----------------------------------------------------------------------------
 
-void wxFrameGTK::DoGetClientSize( int *width, int *height ) const
+void wxFrame::DoGetClientSize( int *width, int *height ) const
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
     
@@ -277,7 +275,7 @@ void wxFrameGTK::DoGetClientSize( int *width, int *height ) const
     }
 }
 
-void wxFrameGTK::DoSetClientSize( int width, int height )
+void wxFrame::DoSetClientSize( int width, int height )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
@@ -324,7 +322,7 @@ void wxFrameGTK::DoSetClientSize( int width, int height )
     wxTopLevelWindow::DoSetClientSize( width, height );
 }
 
-void wxFrameGTK::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
+void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
                          int width, int height )
 {
     // due to a bug in gtk, x,y are always 0
@@ -335,7 +333,7 @@ void wxFrameGTK::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
     if (m_resizing) return;
     m_resizing = TRUE;
 
-    /* this shouldn't happen: wxFrameGTK, wxMDIParentFrame and wxMDIChildFrame have m_wxwindow */
+    /* this shouldn't happen: wxFrame, wxMDIParentFrame and wxMDIChildFrame have m_wxwindow */
     wxASSERT_MSG( (m_wxwindow != NULL), wxT("invalid frame") );
 
     m_width = width;
@@ -345,9 +343,9 @@ void wxFrameGTK::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
     int client_area_x_offset = 0,
         client_area_y_offset = 0;
 
-    /* wxMDIChildFrame derives from wxFrameGTK but it _is_ a wxWindow as it uses
+    /* wxMDIChildFrame derives from wxFrame but it _is_ a wxWindow as it uses
        wxWindow::Create to create it's GTK equivalent. m_mainWidget is only
-       set in wxFrameGTK::Create so it is used to check what kind of frame we
+       set in wxFrame::Create so it is used to check what kind of frame we
        have here. if m_mainWidget is NULL it is a wxMDIChildFrame and so we
        skip the part which handles m_frameMenuBar, m_frameToolBar and (most
        importantly) m_mainWidget */
@@ -494,7 +492,7 @@ void wxFrameGTK::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
     m_resizing = FALSE;
 }
 
-void wxFrameGTK::OnInternalIdle()
+void wxFrame::OnInternalIdle()
 {
     wxTopLevelWindow::OnInternalIdle();
 
@@ -515,7 +513,7 @@ void wxFrameGTK::OnInternalIdle()
 
 #if wxUSE_MENUS_NATIVE
 
-void wxFrameGTK::DetachMenuBar()
+void wxFrame::DetachMenuBar()
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
     wxASSERT_MSG( (m_wxwindow != NULL), wxT("invalid frame") );
@@ -541,7 +539,7 @@ void wxFrameGTK::DetachMenuBar()
     wxFrameBase::DetachMenuBar();
 }
 
-void wxFrameGTK::AttachMenuBar( wxMenuBar *menuBar )
+void wxFrame::AttachMenuBar( wxMenuBar *menuBar )
 {
     wxFrameBase::AttachMenuBar(menuBar);
 
@@ -577,7 +575,7 @@ void wxFrameGTK::AttachMenuBar( wxMenuBar *menuBar )
 
 #if wxUSE_TOOLBAR
 
-wxToolBar* wxFrameGTK::CreateToolBar( long style, wxWindowID id, const wxString& name )
+wxToolBar* wxFrame::CreateToolBar( long style, wxWindowID id, const wxString& name )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
@@ -592,7 +590,7 @@ wxToolBar* wxFrameGTK::CreateToolBar( long style, wxWindowID id, const wxString&
     return m_frameToolBar;
 }
 
-void wxFrameGTK::SetToolBar(wxToolBar *toolbar)
+void wxFrame::SetToolBar(wxToolBar *toolbar)
 {
     wxFrameBase::SetToolBar(toolbar);
 
@@ -614,7 +612,7 @@ void wxFrameGTK::SetToolBar(wxToolBar *toolbar)
 
 #if wxUSE_STATUSBAR
 
-wxStatusBar* wxFrameGTK::CreateStatusBar(int number,
+wxStatusBar* wxFrame::CreateStatusBar(int number,
                                       long style,
                                       wxWindowID id,
                                       const wxString& name)
@@ -627,7 +625,7 @@ wxStatusBar* wxFrameGTK::CreateStatusBar(int number,
     return wxFrameBase::CreateStatusBar( number, style, id, name );
 }
 
-void wxFrameGTK::PositionStatusBar()
+void wxFrame::PositionStatusBar()
 {
     if ( !m_frameStatusBar )
         return;

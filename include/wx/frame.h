@@ -192,50 +192,21 @@ protected:
 };
 
 // include the real class declaration
-#if defined(__WXMSW__)
-    #include "wx/msw/frame.h"
-    #define wxFrameNative wxFrameMSW
-#elif defined(__WXGTK__)
-    #include "wx/gtk/frame.h"
-    #define wxFrameNative wxFrameGTK
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/frame.h"
-#elif defined(__WXMAC__)
-    #include "wx/mac/frame.h"
-    #define wxFrameNative wxFrameMac
-#elif defined(__WXMGL__)
-    #include "wx/mgl/frame.h"
-    #define wxFrameNative wxFrameMGL
-#elif defined(__WXPM__)
-    #include "wx/os2/frame.h"
-    #define wxFrameNative wxFrameOS2
-#endif
-
 #ifdef __WXUNIVERSAL__
     #include "wx/univ/frame.h"
 #else // !__WXUNIVERSAL__
-    #ifdef wxFrameNative
-        class WXDLLEXPORT wxFrame : public wxFrameNative
-        {
-        public:
-            // construction
-            wxFrame() { Init(); }
-            wxFrame(wxWindow *parent,
-                       wxWindowID id,
-                       const wxString& title,
-                       const wxPoint& pos = wxDefaultPosition,
-                       const wxSize& size = wxDefaultSize,
-                       long style = wxDEFAULT_FRAME_STYLE,
-                       const wxString& name = wxFrameNameStr)
-            {
-                Init();
-                Create(parent, id, title, pos, size, style, name);
-            }
-
-            DECLARE_DYNAMIC_CLASS(wxFrame)
-        };
-    #endif // wxFrameNative
-#endif // __WXUNIVERSAL__/!__WXUNIVERSAL__
+    #if defined(__WXMSW__)
+        #include "wx/msw/frame.h"
+    #elif defined(__WXGTK__)
+        #include "wx/gtk/frame.h"
+    #elif defined(__WXMOTIF__)
+        #include "wx/motif/frame.h"
+    #elif defined(__WXMAC__)
+        #include "wx/mac/frame.h"
+    #elif defined(__WXPM__)
+        #include "wx/os2/frame.h"
+    #endif
+#endif
 
 #endif
     // _WX_FRAME_H_BASE_

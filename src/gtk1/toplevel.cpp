@@ -594,7 +594,7 @@ void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int si
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
-    /* this shouldn't happen: wxFrameGTK, wxMDIParentFrame and wxMDIChildFrame have m_wxwindow */
+    /* this shouldn't happen: wxFrame, wxMDIParentFrame and wxMDIChildFrame have m_wxwindow */
     wxASSERT_MSG( (m_wxwindow != NULL), wxT("invalid frame") );
 
     /* avoid recursions */
@@ -701,9 +701,9 @@ void wxTopLevelWindowGTK::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
     m_width = width;
     m_height = height;
 
-    /* wxMDIChildFrame derives from wxFrameGTK but it _is_ a wxWindow as it uses
+    /* wxMDIChildFrame derives from wxFrame but it _is_ a wxWindow as it uses
        wxWindow::Create to create it's GTK equivalent. m_mainWidget is only
-       set in wxFrameGTK::Create so it is used to check what kind of frame we
+       set in wxFrame::Create so it is used to check what kind of frame we
        have here. if m_mainWidget is NULL it is a wxMDIChildFrame and so we
        skip the part which handles m_frameMenuBar, m_frameToolBar and (most
        importantly) m_mainWidget */

@@ -27,15 +27,15 @@ class wxToolBar;
 class wxStatusBar;
 
 //-----------------------------------------------------------------------------
-// wxFrameGTK
+// wxFrame
 //-----------------------------------------------------------------------------
 
-class wxFrameGTK : public wxFrameBase
+class wxFrame : public wxFrameBase
 {
 public:
     // construction
-    wxFrameGTK() { Init(); }
-    wxFrameGTK(wxWindow *parent,
+    wxFrame() { Init(); }
+    wxFrame(wxWindow *parent,
                wxWindowID id,
                const wxString& title,
                const wxPoint& pos = wxDefaultPosition,
@@ -56,7 +56,7 @@ public:
                 long style = wxDEFAULT_FRAME_STYLE,
                 const wxString& name = wxFrameNameStr);
 
-    virtual ~wxFrameGTK();
+    virtual ~wxFrame();
 
 #if wxUSE_STATUSBAR
     virtual void PositionStatusBar();
@@ -98,6 +98,8 @@ protected:
     virtual void DetachMenuBar();
     virtual void AttachMenuBar(wxMenuBar *menubar);
 #endif // wxUSE_MENUS_NATIVE
+
+    DECLARE_DYNAMIC_CLASS(wxFrame)
 };
 
 #endif // __GTKFRAMEH__
