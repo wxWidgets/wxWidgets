@@ -12,7 +12,12 @@ predefined derived classes or derive your own class from it.
 
 wxGridCellWorker
 
-\wxheading{Data structures}
+\wxheading{See also}
+
+\helpref{wxGridCellStringRenderer}{wxgridcellstringrenderer},\rtfsp
+\helpref{wxGridCellNumberRenderer}{wxgridcellnumberrenderer},\rtfsp
+\helpref{wxGridCellFloatRenderer}{wxgridcellfloatrenderer},\rtfsp
+\helpref{wxGridCellBoolRenderer}{wxgridcellboolrenderer}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -37,4 +42,138 @@ Get the preferred size of the cell for its contents.
 \membersection{wxGridCellRenderer::Clone}\label{wxgridcellrendererclone}
 
 \constfunc{wxGridCellRenderer*}{Clone}{\void}
+
+
+\section{\class{wxGridCellBoolRenderer}}\label{wxgridcellboolrenderer}
+
+This class may be used to format boolean data in a cell.
+for string cells.
+
+\wxheading{Derived from}
+
+\helpref{wxGridCellRenderer}{wxgridcellrenderer}
+
+\wxheading{See also}
+
+\helpref{wxGridCellRenderer}{wxgridcellrenderer},\rtfsp
+\helpref{wxGridCellStringRenderer}{wxgridcellstringrenderer},\rtfsp
+\helpref{wxGridCellFloatRenderer}{wxgridcellfloatrenderer},\rtfsp
+\helpref{wxGridCellNumberRenderer}{wxgridcellnumberrenderer}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxGridCellBoolRenderer::wxGridCellBoolRenderer}\label{wxgridcellboolrendererconstr}
+
+\func{}{wxGridCellBoolRenderer}{}
+
+Default constructor
+
+
+
+\section{\class{wxGridCellFloatRenderer}}\label{wxgridcellfloatrenderer}
+
+This class may be used to format floating point data in a cell.
+
+\wxheading{Derived from}
+
+\helpref{wxGridCellStringRenderer}{wxgridcellstringrenderer}\\
+\helpref{wxGridCellRenderer}{wxgridcellrenderer}
+
+\wxheading{See also}
+
+\helpref{wxGridCellRenderer}{wxgridcellrenderer},\rtfsp
+\helpref{wxGridCellNumberRenderer}{wxgridcellnumberrenderer},\rtfsp
+\helpref{wxGridCellTextRenderer}{wxgridcelltextrenderer},\rtfsp
+\helpref{wxGridCellBoolRenderer}{wxgridcellboolrenderer}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxGridCellFloatRenderer::wxGridCellFloatRenderer}\label{wxgridcellfloatrendererconstr}
+
+\func{}{wxGridCellFloatRenderer}{\param{int }{width = -1}, \param{int }{precision = -1}}
+
+\docparam{width}{Minimum number of characters to be shown.}
+\docparam{precision}{Number of digits after the decimal dot.}
+
+\membersection{wxGridCellFloatRenderer::GetPrecision}\label{wxgridcellfloatrenderergetprecision}
+
+\constfunc{int}{GetPrecision}{\void}
+
+Returns the precision ( see \helpref{wxGridCellFloatRenderer}{wxgridcellfloatrendererconstr} ).
+
+\membersection{wxGridCellFloatRenderer::GetWidth}\label{wxgridcellfloatrenderergetwidth}
+
+\constfunc{int}{GetWidth}{\void}
+
+Returns the width ( see \helpref{wxGridCellFloatRenderer}{wxgridcellfloatrendererconstr} ).
+
+\membersection{wxGridCellFloatRenderer::SetParameters}\label{wxgridcellfloatrenderersetparameters}
+
+\func{void}{SetParameters}{\param{const wxString\& }{params}}
+
+Parameters string format is "width[,precision]".
+
+\membersection{wxGridCellFloatRenderer::SetPrecision}\label{wxgridcellfloatrenderersetprecision}
+
+\func{void}{SetPrecision}{\param{int }{precision}}
+
+Sets the precision ( see \helpref{wxGridCellFloatRenderer}{wxgridcellfloatrendererconstr} ).
+
+\membersection{wxGridCellFloatRenderer::SetWidth}\label{wxgridcellfloatrenderersetwidth}
+
+\func{void}{SetWidth}{\param{int }{width}}
+
+Sets the width ( see \helpref{wxGridCellFloatRenderer}{wxgridcellfloatrendererconstr} )
+
+
+
+\section{\class{wxGridCellNumberRenderer}}\label{wxgridcellnumberrenderer}
+
+This class may be used to format integer data in a cell.
+
+\wxheading{Derived from}
+
+\helpref{wxGridellStringRenderer}{wxgridcellstringrenderer}\\
+\helpref{wxGridCellRenderer}{wxgridcellrenderer}
+
+\wxheading{See also}
+
+\helpref{wxGridCellRenderer}{wxgridcellrenderer},\rtfsp
+\helpref{wxGridCellStringRenderer}{wxgridcellstringrenderer},\rtfsp
+\helpref{wxGridCellFloatRenderer}{wxgridcellfloatrenderer},\rtfsp
+\helpref{wxGridCellBoolRenderer}{wxgridcellboolrenderer}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxGridCellNumberRenderer::wxGridCellNumberRenderer}\label{wxgridcellnumberrendererconstr}
+
+\func{}{wxGridCellNumberRenderer}{}
+
+Default constructor
+
+
+\section{\class{wxGridCellStringRenderer}}\label{wxgridcellstringrenderer}
+
+This class may be used to format string data in a cell; it is the default
+for string cells.
+
+\wxheading{Derived from}
+
+\helpref{wxGridCellRenderer}{wxgridcellrenderer}
+
+\wxheading{See also}
+
+\helpref{wxGridCellRenderer}{wxgridcellrenderer},\rtfsp
+\helpref{wxGridCellNumberRenderer}{wxgridcellnumberrenderer},\rtfsp
+\helpref{wxGridCellFloatRenderer}{wxgridcellfloatrenderer},\rtfsp
+\helpref{wxGridCellBoolRenderer}{wxgridcellboolrenderer}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxGridCellStringRenderer::wxGridCellStringRenderer}\label{wxgridcellstringrendererconstr}
+
+\func{}{wxGridCellStringRenderer}{}
+
+Default constructor
+
 
