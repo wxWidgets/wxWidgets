@@ -56,9 +56,7 @@ bool wxDir::HasFiles(const wxString& spec)
 }
 
 // we have a (much) faster version for Unix
-// MBN: Cygwin should use the Unix version, but with the current build sistem
-//      this is painful
-#if defined(__CYGWIN__) || !defined(__UNIX_LIKE__) || defined(__WXMAC__)
+#if (defined(__CYGWIN__) && defined(__WINDOWS__)) || !defined(__UNIX_LIKE__) || defined(__WXMAC__)
 
 bool wxDir::HasSubDirs(const wxString& spec)
 {

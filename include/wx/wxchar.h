@@ -303,6 +303,8 @@ typedef  _TUCHAR     wxUChar;
 #   if wxUSE_WCHAR_T
 #       ifdef HAVE_WCHAR_H
             // include wchar.h to get wcslen() declaration used by wx/buffer.h
+            // stddef.h is needed for Cygwin
+#           include <stddef.h>
 #           include <wchar.h>
 #       elif defined(HAVE_WCSTR_H)
             // old compilers have wcslen() here

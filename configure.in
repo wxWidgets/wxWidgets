@@ -234,15 +234,10 @@ case "${host}" in
   ;;
 
   *-*-cygwin* | *-*-mingw32* )
-    USE_UNIX=0
-    USE_WIN32=1
+    dnl MBN: some of the defines have been moved after toolkit detection
+    dnl      because for wxMotif/wxGTK/wxX11 to build on Cygwin
+    dnl      USE_UNIX  must be set and not USE_WIN32
     SO_SUFFIX=dll
-    AC_DEFINE(__WIN32__)
-    AC_DEFINE(__WIN95__)
-    AC_DEFINE(__WINDOWS__)
-    AC_DEFINE(__GNUWIN32__)
-    AC_DEFINE(STRICT)
-    AC_DEFINE(WINVER, 0x0400)
     PROGRAM_EXT=".exe"
     RESCOMP=windres
     DEFAULT_DEFAULT_wxUSE_MSW=1
@@ -283,11 +278,6 @@ case "${host}" in
   *)
     AC_MSG_ERROR(unknown system type ${host}.)
 esac
-
-if test "$USE_UNIX" = 1 ; then
-    wxUSE_UNIX=yes
-    AC_DEFINE(__UNIX__)
-fi
 
 dnl ---------------------------------------------------------------------------
 dnl command line options for configure
@@ -1119,6 +1109,42 @@ if test "$wxUSE_GUI" = "yes"; then
     done
 else
     AC_MSG_RESULT(base ($host_alias hosted) only)
+fi
+
+dnl ---------------------------------------------------------------------------
+dnl When we are using Cygwin with Motif/GTK+, we want it to appear like
+dnl 'just' a POSIX platform, so the Win32 API must not be available
+dnl ---------------------------------------------------------------------------
+
+define_win32=0
+case "${host}" in
+  *-*-cygwin*)
+      if test "$wxUSE_MSW" = 1 ; then
+        define_win32=1
+      fi
+  ;;
+  *-*-mingw*)
+      define_win32=1
+  ;;
+esac
+
+if test "$define_win32" = 1 ; then
+    USE_UNIX=0
+    USE_WIN32=1
+    AC_DEFINE(__WIN32__)
+    AC_DEFINE(__WIN95__)
+    AC_DEFINE(__WINDOWS__)
+    AC_DEFINE(__GNUWIN32__)
+    AC_DEFINE(STRICT)
+    AC_DEFINE(WINVER, 0x0400)
+else
+    USE_UNIX=1
+    USE_WIN32=0
+fi
+
+if test "$USE_UNIX" = 1 ; then
+    wxUSE_UNIX=yes
+    AC_DEFINE(__UNIX__)
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -2197,7 +2223,16 @@ equivalent variable and GTK+ is version 1.2.3 or above.
             )
         fi
 
-        GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXm$xpm_link -lXmu -lXext -lXt -lX11"
+        dnl MBN: this should really be an AC_TRY_LINK, but it is faster
+        dnl      to special case it
+        xt_needs_sm_ice=
+        case "${host}" in
+          *-*-cygwin* )
+            xt_needs_sm_ice=" -lSM -lICE"
+            ;;
+        esac
+
+        GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXm$xpm_link -lXmu -lXext -lXt${xt_needs_sm_ice} -lX11"
         TOOLKIT_VPATH="\${top_srcdir}/src/motif${PATH_IFS}\${top_srcdir}/src/motif/xmcombo"
         TOOLKIT=MOTIF
         GUIDIST=MOTIF_DIST
@@ -2429,7 +2464,7 @@ case "${host}" in
 
         dnl FIXME: is this GL stuff actually even used for wxMSW?  should it be??
 
-        if test "$cross_compiling" != "yes"; then
+        if test "$cross_compiling" != "yes" -a "$TOOLKIT_DIR" = "msw"; then
             WX_LIBRARY="wxmsw${WX_MSW_VERSION}${lib_unicode_suffix}${lib_debug_suffix}"
             WX_LIBRARY_GL="wxmsw_gl${WX_MSW_VERSION}${lib_unicode_suffix}${lib_debug_suffix}"
             WX_LIBRARY_NAME_SHARED="${WX_LIBRARY}.${SO_SUFFIX}"
@@ -3207,8 +3242,9 @@ if test "$TOOLKIT" != "MSW"; then
                 dnl and finally the userland threads
                 THREAD_OPTS="-kthread lthread $THREAD_OPTS c_r"
                 ;;
-          *-*-darwin*)
+          *-*-darwin* | *-*-cygwin* )
                 dnl Darwin / Mac OS X just uses -lpthread tested below
+                dnl and so does Cygwin
                 THREAD_OPTS=""
                 ;;
           *-*-aix*)

@@ -1477,7 +1477,9 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
         }
 #endif // __DJGPP__
 
-#ifdef __CYGWIN__
+// MBN: we hope that in the case the user is compiling a GTK+/Motif app,
+//      he needs Unix as opposed to Win32 pathnames
+#if defined( __CYGWIN__ ) && defined( __WINDOWS__ )
         // another example of DOS/Unix mix (Cygwin)
         wxString pathUnix = buf;
         cygwin_conv_to_full_win32_path(pathUnix, buf);
