@@ -321,9 +321,25 @@ void MyFrame::LogDialog(wxCommandEvent& event)
 void MyFrame::MessageBox(wxCommandEvent& WXUNUSED(event) )
 {
   wxMessageDialog dialog( NULL, "This is a message box\nA long, long string to test out the message box properly",
-      "Message box text", wxYES_NO|wxCANCEL|wxICON_INFORMATION);
+      "Message box text", wxNO_DEFAULT|wxYES_NO|wxCANCEL|wxICON_INFORMATION);
 
-  dialog.ShowModal();
+  switch ( dialog.ShowModal() )
+  {
+      case wxID_YES:
+          wxLogStatus("You pressed \"Yes\"");
+          break;
+
+      case wxID_NO:
+          wxLogStatus("You pressed \"No\"");
+          break;
+
+      case wxID_CANCEL:
+          wxLogStatus("You pressed \"Cancel\"");
+          break;
+
+      default:
+          wxLogError("Unexpected wxMessageDialog return code!");
+  }
 }
 
 void MyFrame::NumericEntry(wxCommandEvent& WXUNUSED(event) )
