@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        fontdlgg.h
+// Name:        wx/generic/fontdlgg.h
 // Purpose:     wxGenericFontDialog
 // Author:      Julian Smart
 // Modified by:
@@ -9,8 +9,8 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __FONTDLGH_G__
-#define __FONTDLGH_G__
+#ifndef _WX_GENERIC_FONTDLGG_H
+#define _WX_GENERIC_FONTDLGG_H
 
 #ifdef __GNUG__
 #pragma interface "fontdlgg.h"
@@ -31,52 +31,59 @@ class WXDLLEXPORT wxText;
 class WXDLLEXPORT wxCheckBox;
 class WXDLLEXPORT wxFontPreviewer;
 
-#define wxID_FONT_UNDERLINE 3000
-#define wxID_FONT_STYLE     3001
-#define wxID_FONT_WEIGHT    3002
-#define wxID_FONT_FAMILY    3003
-#define wxID_FONT_COLOUR    3004
-#define wxID_FONT_SIZE      3005
-
-class WXDLLEXPORT wxGenericFontDialog: public wxDialog
+enum
 {
- DECLARE_DYNAMIC_CLASS(wxGenericFontDialog)
- protected:
-  wxFontData fontData;
-  wxFont dialogFont;
-  wxWindow *dialogParent;
+    wxID_FONT_UNDERLINE = 3000,
+    wxID_FONT_STYLE,
+    wxID_FONT_WEIGHT,
+    wxID_FONT_FAMILY,
+    wxID_FONT_COLOUR,
+    wxID_FONT_SIZE
+};
 
-  wxChoice *familyChoice;
-  wxChoice *styleChoice;
-  wxChoice *weightChoice;
-  wxChoice *colourChoice;
-  wxCheckBox *underLineCheckBox;
-  wxChoice   *pointSizeChoice;
-  wxFontPreviewer *m_previewer;
-  bool       m_useEvents;
+class WXDLLEXPORT wxGenericFontDialog : public wxFontDialogBase
+{
+public:
+    wxGenericFontDialog() { Init(); }
+    wxGenericFontDialog(wxWindow *parent, const wxFontData& data)
+        : wxFontDialogBase(parent, data) { Init(); }
+    virtual ~wxGenericFontDialog();
 
-//  static bool fontDialogCancelled;
- public:
- 
-  wxGenericFontDialog(void);
-  wxGenericFontDialog(wxWindow *parent, const wxFontData& data);
-  ~wxGenericFontDialog(void);
+    virtual int ShowModal();
 
-  bool Create(wxWindow *parent, const wxFontData& data);
+    // deprecated, for backwards compatibility only
+    wxGenericFontDialog(wxWindow *parent, const wxFontData *data)
+        : wxFontDialogBase(parent, data) { Init(); }
 
-  int ShowModal(void);
+    // Internal functions
+    void OnCloseWindow(wxCloseEvent& event);
 
-  inline wxFontData& GetFontData(void) { return fontData; }
+    virtual void CreateWidgets();
+    virtual void InitializeFont();
 
-  // Internal functions
-  void OnCloseWindow(wxCloseEvent& event);
+    void OnChangeFont(wxCommandEvent& event);
 
-  virtual void CreateWidgets(void);
-  virtual void InitializeFont(void);
-  
-  void OnChangeFont(wxCommandEvent& event);
+protected:
+    // common part of all ctors
+    void Init();
 
-DECLARE_EVENT_TABLE()
+    virtual bool DoCreate(wxWindow *parent);
+
+    wxFont dialogFont;
+
+    wxChoice *familyChoice;
+    wxChoice *styleChoice;
+    wxChoice *weightChoice;
+    wxChoice *colourChoice;
+    wxCheckBox *underLineCheckBox;
+    wxChoice   *pointSizeChoice;
+
+    wxFontPreviewer *m_previewer;
+    bool       m_useEvents;
+
+    //  static bool fontDialogCancelled;
+    DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS(wxGenericFontDialog)
 };
 
 WXDLLEXPORT const wxChar *wxFontFamilyIntToString(int family);
@@ -86,4 +93,5 @@ WXDLLEXPORT int wxFontFamilyStringToInt(wxChar *family);
 WXDLLEXPORT int wxFontWeightStringToInt(wxChar *weight);
 WXDLLEXPORT int wxFontStyleStringToInt(wxChar *style);
 
-#endif
+#endif // _WX_GENERIC_FONTDLGG_H
+

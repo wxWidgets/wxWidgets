@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        fontdlgg.cpp
+// Name:        src/generic/fontdlgg.cpp
 // Purpose:     Generic font dialog
 // Author:      Julian Smart
 // Modified by:
@@ -41,7 +41,7 @@
 
 #include "wx/cmndata.h"
 #include "wx/sizer.h"
-#include "wx/generic/fontdlgg.h"
+#include "wx/fontdlg.h"
 
 //-----------------------------------------------------------------------------
 // helper class - wxFontPreviewer
@@ -163,23 +163,13 @@ static wxString wxColourDialogNames[NUM_COLS]={wxT("ORANGE"),
  * Generic wxFontDialog
  */
 
-wxGenericFontDialog::wxGenericFontDialog(void)
+void wxGenericFontDialog::Init()
 {
   m_useEvents = FALSE;
   m_previewer = NULL;
-  dialogParent = NULL;
 }
 
-wxGenericFontDialog::wxGenericFontDialog(wxWindow *parent, const wxFontData& data):
-  wxDialog(parent, -1, _("Font"), wxDefaultPosition, wxDefaultSize,
-           wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL|wxRESIZE_BORDER)
-{
-  m_useEvents = FALSE;
-  m_previewer = NULL;
-  Create(parent, data);
-}
-
-wxGenericFontDialog::~wxGenericFontDialog(void)
+wxGenericFontDialog::~wxGenericFontDialog()
 {
 }
 
@@ -188,31 +178,27 @@ void wxGenericFontDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
   EndModal(wxID_CANCEL);
 }
 
-bool wxGenericFontDialog::Create(wxWindow *parent, const wxFontData& data)
+bool wxGenericFontDialog::DoCreate(wxWindow *parent)
 {
-  dialogParent = parent;
-
-  fontData = data;
-
   InitializeFont();
   CreateWidgets();
  
   return TRUE;
 }
 
-int wxGenericFontDialog::ShowModal(void)
+int wxGenericFontDialog::ShowModal()
 {
   int ret = wxDialog::ShowModal();
 
     if (ret != wxID_CANCEL)
     {
-      fontData.chosenFont = dialogFont;
+      m_fontData.chosenFont = dialogFont;
     }
 
     return ret;
 }
 
-void wxGenericFontDialog::CreateWidgets(void)
+void wxGenericFontDialog::CreateWidgets()
 {
   wxBusyCursor bcur;
 
@@ -259,7 +245,7 @@ void wxGenericFontDialog::CreateWidgets(void)
   familyChoice->SetStringSelection( wxFontFamilyIntToString(dialogFont.GetFamily()) );
   styleChoice->SetStringSelection(wxFontStyleIntToString(dialogFont.GetStyle()));
   weightChoice->SetStringSelection(wxFontWeightIntToString(dialogFont.GetWeight()));
-  wxString name(wxTheColourDatabase->FindName(fontData.fontColour));
+  wxString name(wxTheColourDatabase->FindName(m_fontData.fontColour));
   colourChoice->SetStringSelection(name);
 
   underLineCheckBox->SetValue(dialogFont.GetUnderlined());
@@ -304,7 +290,7 @@ void wxGenericFontDialog::CreateWidgets(void)
   m_useEvents = TRUE;
 }
 
-void wxGenericFontDialog::InitializeFont(void)
+void wxGenericFontDialog::InitializeFont()
 {
   int fontFamily = wxSWISS;
   int fontWeight = wxNORMAL;
@@ -312,13 +298,13 @@ void wxGenericFontDialog::InitializeFont(void)
   int fontSize = 12;
   int fontUnderline = FALSE;
 
-  if (fontData.initialFont.Ok())
+  if (m_fontData.initialFont.Ok())
   {
-      fontFamily = fontData.initialFont.GetFamily();
-      fontWeight = fontData.initialFont.GetWeight();
-      fontStyle = fontData.initialFont.GetStyle();
-      fontSize = fontData.initialFont.GetPointSize();
-      fontUnderline = fontData.initialFont.GetUnderlined();
+      fontFamily = m_fontData.initialFont.GetFamily();
+      fontWeight = m_fontData.initialFont.GetWeight();
+      fontStyle = m_fontData.initialFont.GetStyle();
+      fontSize = m_fontData.initialFont.GetPointSize();
+      fontUnderline = m_fontData.initialFont.GetUnderlined();
   }
 
   dialogFont = wxFont(fontSize, fontFamily, fontStyle, fontWeight, (fontUnderline != 0));
@@ -348,7 +334,7 @@ void wxGenericFontDialog::OnChangeFont(wxCommandEvent& WXUNUSED(event))
     col = wxTheColourDatabase->FindColour(colourChoice->GetStringSelection());
     if (col)
     {
-      fontData.fontColour = *col;
+      m_fontData.fontColour = *col;
       m_previewer->SetForegroundColour(*col);
     }
   }
