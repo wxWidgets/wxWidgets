@@ -105,24 +105,27 @@ bool wxRadioBox::MSWCommand(WXUINT param, WXWORD id)
 {
     if ( param == BN_CLICKED )
     {
-        m_selectedButton = -1;
+        int selectedButton = -1;
 
         for ( int i = 0; i < m_noItems; i++ )
         {
             if ( id == GET_WIN_ID(m_radioButtons[i]) )
             {
-                m_selectedButton = i;
+                selectedButton = i;
 
                 break;
             }
         }
 
-        wxASSERT_MSG( m_selectedButton != -1, "click from alien button?" );
+        wxASSERT_MSG( selectedButton != -1, "click from alien button?" );
 
-        wxCommandEvent event(wxEVT_COMMAND_RADIOBOX_SELECTED, m_windowId);
-        event.SetInt( m_selectedButton );
-        event.SetEventObject( this );
-        ProcessCommand(event);
+        if ( selectedButton != m_selectedButton )
+        {
+            m_selectedButton = selectedButton;
+
+            SendNotificationEvent();
+        }
+        //else: don't generate events when the selection doesn't change
 
         return TRUE;
     }
@@ -708,13 +711,20 @@ void wxRadioBox::SubclassRadioButton(WXHWND hWndBtn)
 
     if ( !s_wndprocRadioBtn )
         s_wndprocRadioBtn = (WXFARPROC)::GetWindowLong(hwndBtn, GWL_WNDPROC);
-//        s_wndprocRadioBtn = (WNDPROC)::GetWindowLong(hwndBtn, GWL_WNDPROC);
 
     // No GWL_USERDATA in Win16, so omit this subclassing.
 #ifdef __WIN32__
     ::SetWindowLong(hwndBtn, GWL_WNDPROC, (long)wxRadioBtnWndProc);
     ::SetWindowLong(hwndBtn, GWL_USERDATA, (long)this);
 #endif
+}
+
+void wxRadioBox::SendNotificationEvent()
+{
+    wxCommandEvent event(wxEVT_COMMAND_RADIOBOX_SELECTED, m_windowId);
+    event.SetInt( m_selectedButton );
+    event.SetEventObject( this );
+    ProcessCommand(event);
 }
 
 // ---------------------------------------------------------------------------
@@ -777,7 +787,12 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
         if ( processed )
         {
             if ( sel >= 0 && sel < radiobox->Number() )
+            {
                 radiobox->SetSelection(sel);
+
+                // emulate the button click
+                radiobox->SendNotificationEvent();
+            }
         }
     }
 
