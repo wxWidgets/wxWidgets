@@ -440,6 +440,8 @@ elif os.name == 'posix' and sys.platform[:6] == "darwin":
     if debug:
         cflags.append('-g')
         cflags.append('-O0')
+    else:
+        cflags.append('-O3')
 
     lflags = os.popen(WX_CONFIG + ' --libs', 'r').read()[:-1]
     lflags = lflags.split()
