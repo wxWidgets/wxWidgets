@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\DEV\WX2\WxWindows\lib\wx.lib
+;From library:  H:\Dev\wx2\wxwindows\lib\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -14,7 +14,13 @@ EXPORTS
       wxOnAssert__FPCciT1
       ;wxAppBase::OnInitGui()
       OnInitGui__9wxAppBaseFv
+      ;wxAppBase::OnInitCmdLine(wxCmdLineParser&)
+      OnInitCmdLine__9wxAppBaseFR15wxCmdLineParser
+      ;wxAppBase::OnCmdLineParsed(wxCmdLineParser&)
+      OnCmdLineParsed__9wxAppBaseFR15wxCmdLineParser
       __vft9wxAppBase8wxObject
+      ;wxAppBase::OnCmdLineHelp(wxCmdLineParser&)
+      OnCmdLineHelp__9wxAppBaseFR15wxCmdLineParser
       ;wxTrap()
       wxTrap__Fv
       ;wxAppBase::OnAssert(const char*,int,const char*)
@@ -29,9 +35,10 @@ EXPORTS
       OnInit__9wxAppBaseFv
       ;wxAppBase::ProcessPendingEvents()
       ProcessPendingEvents__9wxAppBaseFv
+      ;wxAppBase::OnCmdLineError(wxCmdLineParser&)
+      OnCmdLineError__9wxAppBaseFR15wxCmdLineParser
       ;wxAppBase::SetActive(unsigned long,wxWindow*)
       SetActive__9wxAppBaseFUlP8wxWindow
-  ;From object file:  ..\common\bmpbase.cpp
   ;From object file:  ..\common\choiccmn.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxChoiceBase::SetStringSelection(const wxString&)
@@ -54,7 +61,95 @@ EXPORTS
       __vft17wxClipboardModule8wxObject
       ;wxConstructorForwxClipboardModule()
       wxConstructorForwxClipboardModule__Fv
+  ;From object file:  ..\common\clntdata.cpp
   ;From object file:  ..\common\cmdline.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxCmdLineParser::EnableLongOptions(unsigned long)
+      EnableLongOptions__15wxCmdLineParserFUl
+      ;wxArrayParams::Index(const wxCmdLineParam&,unsigned long) const
+      Index__13wxArrayParamsCFRC14wxCmdLineParamUl
+      ;wxCmdLineParser::Found(const wxString&,long*) const
+      Found__15wxCmdLineParserCFRC8wxStringPl
+      ;wxArrayParams::RemoveAt(unsigned int)
+      RemoveAt__13wxArrayParamsFUi
+      ;wxCmdLineParser::AddSwitch(const wxString&,const wxString&,const wxString&,int)
+      AddSwitch__15wxCmdLineParserFRC8wxStringN21i
+      ;wxArrayOptions::Add(const wxCmdLineOption&)
+      Add__14wxArrayOptionsFRC15wxCmdLineOption
+      ;wxCmdLineParser::Reset()
+      Reset__15wxCmdLineParserFv
+      ;wxCmdLineParser::SetCmdLine(int,char**)
+      SetCmdLine__15wxCmdLineParserFiPPc
+      ;wxArrayOptions::wxArrayOptions(const wxArrayOptions&)
+      __ct__14wxArrayOptionsFRC14wxArrayOptions
+      ;wxCmdLineParser::SetSwitchChars(const wxString&)
+      SetSwitchChars__15wxCmdLineParserFRC8wxString
+      ;wxCmdLineParser::SetDesc(const wxCmdLineEntryDesc*)
+      SetDesc__15wxCmdLineParserFPC18wxCmdLineEntryDesc
+      ;wxCmdLineParser::Found(const wxString&,wxString*) const
+      Found__15wxCmdLineParserCFRC8wxStringP8wxString
+      ;wxCmdLineParserData::FindOptionByLongName(const wxString&)
+      FindOptionByLongName__19wxCmdLineParserDataFRC8wxString
+      ;wxArrayOptions::Index(const wxCmdLineOption&,unsigned long) const
+      Index__14wxArrayOptionsCFRC15wxCmdLineOptionUl
+      ;wxArrayOptions::RemoveAt(unsigned int)
+      RemoveAt__14wxArrayOptionsFUi
+      ;wxArrayParams::Insert(const wxCmdLineParam&,unsigned int)
+      Insert__13wxArrayParamsFRC14wxCmdLineParamUi
+      ;wxCmdLineParserData::wxCmdLineParserData()
+      __ct__19wxCmdLineParserDataFv
+      ;wxCmdLineParser::SetCmdLine(const wxString&)
+      SetCmdLine__15wxCmdLineParserFRC8wxString
+      ;wxArrayParams::wxArrayParams(const wxArrayParams&)
+      __ct__13wxArrayParamsFRC13wxArrayParams
+      ;wxArrayOptions::operator=(const wxArrayOptions&)
+      __as__14wxArrayOptionsFRC14wxArrayOptions
+      ;wxCmdLineParserData::SetArguments(const wxString&)
+      SetArguments__19wxCmdLineParserDataFRC8wxString
+      ;wxArrayOptions::Insert(const wxCmdLineOption&,unsigned int)
+      Insert__14wxArrayOptionsFRC15wxCmdLineOptionUi
+      ;wxArrayParams::Add(const wxCmdLineParam&)
+      Add__13wxArrayParamsFRC14wxCmdLineParam
+      ;wxArrayParams::DoEmpty()
+      DoEmpty__13wxArrayParamsFv
+      ;wxArrayOptions::~wxArrayOptions()
+      __dt__14wxArrayOptionsFv
+      ;wxCmdLineParser::Usage()
+      Usage__15wxCmdLineParserFv
+      ;wxCmdLineParser::Parse()
+      Parse__15wxCmdLineParserFv
+      ;wxCmdLineParserData::SetArguments(int,char**)
+      SetArguments__19wxCmdLineParserDataFiPPc
+      ;wxCmdLineParser::Found(const wxString&) const
+      Found__15wxCmdLineParserCFRC8wxString
+      ;wxCmdLineParser::AddParam(const wxString&,wxCmdLineParamType,int)
+      AddParam__15wxCmdLineParserFRC8wxString18wxCmdLineParamTypei
+      ;wxCmdLineParser::GetParam(unsigned int) const
+      GetParam__15wxCmdLineParserCFUi
+      ;wxCmdLineParser::Found(const wxString&,wxDateTime*) const
+      Found__15wxCmdLineParserCFRC8wxStringP10wxDateTime
+      ;wxCmdLineParser::Init()
+      Init__15wxCmdLineParserFv
+      ;wxCmdLineParser::~wxCmdLineParser()
+      __dt__15wxCmdLineParserFv
+      ;wxArrayParams::~wxArrayParams()
+      __dt__13wxArrayParamsFv
+      ;wxArrayParams::operator=(const wxArrayParams&)
+      __as__13wxArrayParamsFRC13wxArrayParams
+      ;wxCmdLineParser::AddOption(const wxString&,const wxString&,const wxString&,wxCmdLineParamType,int)
+      AddOption__15wxCmdLineParserFRC8wxStringN2118wxCmdLineParamTypei
+      ;wxArrayOptions::DoEmpty()
+      DoEmpty__14wxArrayOptionsFv
+      ;wxCmdLineParser::GetParamCount() const
+      GetParamCount__15wxCmdLineParserCFv
+      ;wxArrayOptions::DoCopy(const wxArrayOptions&)
+      DoCopy__14wxArrayOptionsFRC14wxArrayOptions
+      ;wxCmdLineParser::SetLogo(const wxString&)
+      SetLogo__15wxCmdLineParserFRC8wxString
+      ;wxCmdLineParserData::FindOption(const wxString&)
+      FindOption__19wxCmdLineParserDataFRC8wxString
+      ;wxArrayParams::DoCopy(const wxArrayParams&)
+      DoCopy__13wxArrayParamsFRC13wxArrayParams
   ;From object file:  ..\common\cmndata.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxColourData::GetCustomColour(int)
@@ -1331,6 +1426,8 @@ EXPORTS
       wxConstructorForwxDropFilesEvent__Fv
       ;wxEvtHandler::sm_eventTableEntries
       sm_eventTableEntries__12wxEvtHandler
+      ;wxEvtHandler::DoGetClientData() const
+      DoGetClientData__12wxEvtHandlerCFv
       ;wxChildFocusEvent::wxChildFocusEvent(wxWindow*)
       __ct__17wxChildFocusEventFP8wxWindow
       ;wxFindFocusDescendant(wxWindow*)
@@ -1393,6 +1490,8 @@ EXPORTS
       wxEVT_DRAW_ITEM
       ;wxKeyEvent::wxKeyEvent(int)
       __ct__10wxKeyEventFi
+      ;wxEvtHandler::DoSetClientObject(wxClientData*)
+      DoSetClientObject__12wxEvtHandlerFP12wxClientData
       ;wxEvtHandler::wxEvtHandler()
       __ct__12wxEvtHandlerFv
       wxEVT_POWER
@@ -1483,6 +1582,8 @@ EXPORTS
       wxConstructorForwxCloseEvent__Fv
       ;wxEvtHandler::sm_classwxEvtHandler
       sm_classwxEvtHandler__12wxEvtHandler
+      ;wxEvtHandler::DoGetClientObject() const
+      DoGetClientObject__12wxEvtHandlerCFv
       wxEVT_LEAVE_WINDOW
       wxEVT_NC_RIGHT_DCLICK
       wxEVT_KILL_FOCUS
@@ -1642,6 +1743,8 @@ EXPORTS
       wxConstructorForwxChildFocusEvent__Fv
       ;wxEvtHandler::sm_eventTable
       sm_eventTable__12wxEvtHandler
+      ;wxEvtHandler::DoSetClientData(void*)
+      DoSetClientData__12wxEvtHandlerFPv
       wxEVT_LEFT_DCLICK
       wxEVT_SET_FOCUS
       wxEVT_NC_LEFT_DCLICK
@@ -6275,8 +6378,6 @@ EXPORTS
       UpdateWindowUI__12wxWindowBaseFv
       ;wxWindowBase::PushEventHandler(wxEvtHandler*)
       PushEventHandler__12wxWindowBaseFP12wxEvtHandler
-      ;wxWindowBase::DoGetClientObject() const
-      DoGetClientObject__12wxWindowBaseCFv
       ;wxWindowBase::DestroyChildren()
       DestroyChildren__12wxWindowBaseFv
       ;wxWindowListNode::DeleteData()
@@ -6306,16 +6407,12 @@ EXPORTS
       LayoutPhase1__12wxWindowBaseFPi
       ;wxWindowBase::GetPositionConstraint(int*,int*) const
       GetPositionConstraint__12wxWindowBaseCFPiT1
-      ;wxWindowBase::DoSetClientObject(wxClientData*)
-      DoSetClientObject__12wxWindowBaseFP12wxClientData
       ;wxWindowBase::TransferDataToWindow()
       TransferDataToWindow__12wxWindowBaseFv
       ;wxWindowBase::Layout()
       Layout__12wxWindowBaseFv
       ;wxWindowBase::InitDialog()
       InitDialog__12wxWindowBaseFv
-      ;wxWindowBase::DoSetClientData(void*)
-      DoSetClientData__12wxWindowBaseFPv
       ;wxWindowBase::FindWindow(const wxString&)
       FindWindow__12wxWindowBaseFRC8wxString
       ;wxWindowBase::SetHelpTextForId(const wxString&)
@@ -6348,8 +6445,6 @@ EXPORTS
       GetUpdateClientRect__12wxWindowBaseCFv
       ;wxWindowBase::GetHelpText() const
       GetHelpText__12wxWindowBaseCFv
-      ;wxWindowBase::DoGetClientData() const
-      DoGetClientData__12wxWindowBaseCFv
       ;wxWindowBase::SetFont(const wxFont&)
       SetFont__12wxWindowBaseFRC6wxFont
       ;wxWindowBase::MakeModal(unsigned long)
@@ -10543,19 +10638,23 @@ EXPORTS
       GetLink__22wxHtmlImageMapAreaCellCFiT1
       ;wxHtmlImageMapCell::Find(int,const void*) const
       Find__18wxHtmlImageMapCellCFiPCv
+      ;wxHtmlImageCell::AdvanceAnimation(wxTimer*)
+      AdvanceAnimation__15wxHtmlImageCellFP7wxTimer
+      ;wxHtmlImageCell::SetImage(const wxImage&)
+      SetImage__15wxHtmlImageCellFRC7wxImage
       ;HTML_ModuleImage::sm_classHTML_ModuleImage
       sm_classHTML_ModuleImage__16HTML_ModuleImage
       ;_link_dummy_func_m_image()
       _link_dummy_func_m_image__Fv
       ;CoordArray::DoEmpty()
       DoEmpty__10CoordArrayFv
-      ;wxHtmlImageCell::wxHtmlImageCell(wxFSFile*,int,int,double,int,wxString)
-      __ct__15wxHtmlImageCellFP8wxFSFileiT2dT28wxString
       __vft18wxHtmlImageMapCell8wxObject
       ;CoordArray::DoCopy(const CoordArray&)
       DoCopy__10CoordArrayFRC10CoordArray
       ;CoordArray::CoordArray(const CoordArray&)
       __ct__10CoordArrayFRC10CoordArray
+      ;wxHtmlImageCell::Layout(int)
+      Layout__15wxHtmlImageCellFi
       ;wxHtmlImageMapCell::GetLink(int,int) const
       GetLink__18wxHtmlImageMapCellCFiT1
       ;CoordArray::Index(const int&,unsigned long) const
@@ -10566,6 +10665,10 @@ EXPORTS
       Insert__10CoordArrayFRCiUi
       ;wxHtmlImageCell::GetLink(int,int) const
       GetLink__15wxHtmlImageCellCFiT1
+      ;wxHtmlImageCell::~wxHtmlImageCell()
+      __dt__15wxHtmlImageCellFv
+      ;wxHtmlImageCell::wxHtmlImageCell(wxWindow*,wxFSFile*,int,int,double,int,const wxString&)
+      __ct__15wxHtmlImageCellFP8wxWindowP8wxFSFileiT3dT3RC8wxString
   ;From object file:  ..\html\m_layout.cpp
     ;PUBDEFs (Symbols available from object file):
       ;HTML_ModuleLayout::sm_classHTML_ModuleLayout
