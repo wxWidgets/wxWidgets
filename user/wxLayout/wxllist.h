@@ -20,7 +20,7 @@
 #ifndef   MCONFIG_H
 // for testing only:
 #   define WXLAYOUT_DEBUG
-#   define USE_STD_STRING
+//#   define USE_STD_STRING
 #endif
 
 #ifdef USE_STD_STRING
