@@ -237,7 +237,17 @@ bool wxTestFontEncoding(const wxNativeEncodingInfo& info)
 bool wxGetNativeFontEncoding(wxFontEncoding encoding,
                              wxNativeEncodingInfo *info)
 {
-    return FALSE;
+    // we *must* return true for default encoding as otherwise wxFontMapper
+    // considers that we can't load any font and aborts with wxLogFatalError!
+    if ( encoding == wxFONTENCODING_SYSTEM )
+    {
+        info->facename.clear();
+        info->encoding = wxFONTENCODING_SYSTEM;
+    }
+
+    // pretend that we support everything, it's better than to always return
+    // false as the old code did
+    return true;
 }
 
 #else // GTK+ 1.x
