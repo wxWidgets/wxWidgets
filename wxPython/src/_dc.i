@@ -818,7 +818,7 @@ mode, but mapping mode is currently ignored for PostScript output.
         "Sets the x and y axis orientation (i.e., the direction from lowest to
 highest values on the axis). The default orientation is the natural
 orientation, e.g. x axis from left to right and y axis from bottom up.", "");
-    
+
 
     DocDeclStr(
         int , GetLogicalFunction() const,
@@ -861,6 +861,15 @@ colour.
 ", "");
     
 
+    DocDeclStr(
+        void , ComputeScaleAndOrigin(),
+        "Performs all necessary computations for given platform and context
+type after each change of scale and origin parameters. Usually called
+automatically internally after such changes.
+", "");
+    
+
+    
 //     DocDeclStr(
 //         virtual void , SetOptimization(bool optimize),
 //         "If *optimize* is true this function sets optimization mode on. This
