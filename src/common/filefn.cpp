@@ -1309,7 +1309,8 @@ bool wxRemoveFile(const wxString& file)
  || defined(__BORLANDC__) \
  || defined(__WATCOMC__) \
  || defined(__DMC__) \
- || defined(__GNUWIN32__)
+ || defined(__GNUWIN32__) \
+ || (defined(__MWERKS__) && defined(__MSL__))
   int res = wxRemove(file);
 #elif defined(__WXMAC__)
   int res = unlink(wxFNCONV(file));
