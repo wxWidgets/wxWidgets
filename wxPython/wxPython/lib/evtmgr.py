@@ -132,6 +132,10 @@ class EventManager:
             except AttributeError:
                 pass
 
+    # Some aliases for Register
+    Bind = Register
+    Subscribe = Register
+
 
     def DeregisterWindow(self, win):
         """
@@ -167,8 +171,7 @@ class EventManager:
 
     def GetStats(self):
         """
-        Return a dictionary with data about
-        my state.
+        Return a dictionary with data about my state.
         """
         stats = {}
         stats['Adapters: Message'] = reduce(lambda x,y: x+y, map(len, self.messageAdapterDict.values()))
@@ -352,7 +355,7 @@ class FakeWindow:
     FakeWindow is the most important component of the
     macro-info utility: it implements the Connect()
     protocol of wxWindow, but instead of registering
-    for events, it keeps track of what parameters where
+    for events, it keeps track of what parameters were
     passed to it.
     """
     def __init__(self):

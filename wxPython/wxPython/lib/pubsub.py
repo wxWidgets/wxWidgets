@@ -248,7 +248,7 @@ class Publisher:
 #
 # The only flaw with this approach is that you can't derive a new
 # class from Publisher without jumping through hoops.  If this ever
-# becomes an issue then a new Sing;eton implementaion will need to be
+# becomes an issue then a new Singleton implementaion will need to be
 # employed.
 Publisher = Publisher()
 
