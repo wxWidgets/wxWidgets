@@ -9,6 +9,7 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#include "wx/setup.h"
 #if wxUSE_SLIDER
 
 #include "wx/app.h"
