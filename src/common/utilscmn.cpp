@@ -748,6 +748,27 @@ whereami(name)
 
 #endif
 
+
+// Yield to other apps/messages and disable user input
+bool wxSafeYield(wxWindow *win)
+{
+   wxNode *node;
+   for ( node = wxTopLevelWindows.GetFirst();
+         node;
+         node = node->GetNext() )
+      ((wxWindow*)node->GetData())->Enable(FALSE);
+   
+   // always enable ourselves
+   if(win) win->Enable(true);
+   bool rc = wxYield();
+
+   for ( node = wxTopLevelWindows.GetFirst();
+         node;
+         node = node->GetNext() )
+      ((wxWindow*)node->GetData())->Enable(TRUE);
+   return rc;
+}
+
 /*
  * N.B. these convenience functions must be separate from msgdlgg.cpp, textdlgg.cpp
  * since otherwise the generic code may be pulled in unnecessarily.

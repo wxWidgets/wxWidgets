@@ -171,6 +171,9 @@ WXDLLEXPORT int wxFindMenuItemId(wxFrame *frame, const wxString& menuString, con
 // Yield to other apps/messages
 WXDLLEXPORT bool wxYield();
 
+// Yield to other apps/messages and disable user input
+WXDLLEXPORT bool wxSafeYield(wxWindow *win = NULL);
+
 // Format a message on the standard error (UNIX) or the debugging
 // stream (Windows)
 WXDLLEXPORT void wxDebugMsg(const char *fmt ...) ;
