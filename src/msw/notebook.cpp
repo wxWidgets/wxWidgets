@@ -314,6 +314,9 @@ bool wxNotebook::DeletePage(int nPage)
       // no selection if the notebook became empty
       m_nSelection = -1;
   }
+  else
+      m_nSelection = TabCtrl_GetCurSel(m_hwnd);
+
 
   return TRUE;
 }
@@ -329,6 +332,8 @@ bool wxNotebook::RemovePage(int nPage)
 
   if ( m_aPages.IsEmpty() )
       m_nSelection = -1;
+    else
+      m_nSelection = TabCtrl_GetCurSel(m_hwnd);
 
   return TRUE;
 }
