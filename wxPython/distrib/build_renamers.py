@@ -219,6 +219,7 @@ class Element:
 
     def write(self, moduleName, swigFile, pyFile):
         doRename = False
+        doPtr = False
         addWX = False
         revOnly = False
 
@@ -257,6 +258,7 @@ class Element:
 
         elif self.tagtype == 'class' and self.module == moduleName:
             doRename = True
+            doPtr = True
             if self.sym_name != self.klass:
                 #print self.sym_name
                 self.name = self.sym_name
@@ -287,6 +289,9 @@ class Element:
             if addWX and not old.startswith('wx'):
                 old = 'wx'+old
             pyFile.write("%s = wx.%s.%s\n" % (old, moduleName, new))
+            if doPtr:
+                pyFile.write("%sPtr = wx.%s.%sPtr\n" % (old, moduleName, new))
+                
             
             
         #else:

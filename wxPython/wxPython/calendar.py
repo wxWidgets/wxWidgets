@@ -37,7 +37,9 @@ wxCAL_BORDER_SQUARE = wx.calendar.CAL_BORDER_SQUARE
 wxCAL_BORDER_ROUND = wx.calendar.CAL_BORDER_ROUND
 wxCalendarDateAttrBorder = wx.calendar.CalendarDateAttrBorder
 wxCalendarDateAttr = wx.calendar.CalendarDateAttr
+wxCalendarDateAttrPtr = wx.calendar.CalendarDateAttrPtr
 wxCalendarEvent = wx.calendar.CalendarEvent
+wxCalendarEventPtr = wx.calendar.CalendarEventPtr
 wxEVT_CALENDAR_DOUBLECLICKED = wx.calendar.wxEVT_CALENDAR_DOUBLECLICKED
 wxEVT_CALENDAR_SEL_CHANGED = wx.calendar.wxEVT_CALENDAR_SEL_CHANGED
 wxEVT_CALENDAR_DAY_CHANGED = wx.calendar.wxEVT_CALENDAR_DAY_CHANGED
@@ -46,6 +48,7 @@ wxEVT_CALENDAR_YEAR_CHANGED = wx.calendar.wxEVT_CALENDAR_YEAR_CHANGED
 wxEVT_CALENDAR_WEEKDAY_CLICKED = wx.calendar.wxEVT_CALENDAR_WEEKDAY_CLICKED
 wxPreCalendarCtrl = wx.calendar.PreCalendarCtrl
 wxCalendarCtrl = wx.calendar.CalendarCtrl
+wxCalendarCtrlPtr = wx.calendar.CalendarCtrlPtr
 
 
 d = globals()
