@@ -1118,8 +1118,8 @@ public:
 
     int      GetBatchCount() { return m_batchCount; }
 
-    virtual void Refresh(bool eraseb = true,
-                         const wxRect* rect = (const wxRect *)  NULL); 
+    virtual void Refresh(bool eraseb = TRUE,
+                         const wxRect* rect = (const wxRect *)  NULL);
 
     // Use this, rather than wxWindow::Refresh(), to force an
     // immediate repainting of the grid. Has no effect if you are

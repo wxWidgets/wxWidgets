@@ -31,23 +31,23 @@ IMPLEMENT_CLASS(wxClientBase, wxObject)
 IMPLEMENT_CLASS(wxConnectionBase, wxObject)
 
 wxConnectionBase::wxConnectionBase(wxChar *buffer, int size)
-    : m_connected(true),
-      m_buffer(buffer), 
+    : m_connected(TRUE),
+      m_buffer(buffer),
       m_buffersize(size),
-      m_deletebufferwhendone(false)
+      m_deletebufferwhendone(FALSE)
 {
   if ( buffer == (wxChar *)NULL )
   { // behave like next constructor
     m_buffersize = 0;
-    m_deletebufferwhendone = true;
+    m_deletebufferwhendone = TRUE;
   }
 }
 
 wxConnectionBase::wxConnectionBase()
-    : m_connected(true),
+    : m_connected(TRUE),
       m_buffer(NULL),
       m_buffersize(0),
-      m_deletebufferwhendone(true)
+      m_deletebufferwhendone(TRUE)
 {
 }
 
@@ -55,7 +55,7 @@ wxConnectionBase::wxConnectionBase(wxConnectionBase& copy)
     : m_connected(copy.m_connected),
       m_buffer(copy.m_buffer),
       m_buffersize(copy.m_buffersize),
-      m_deletebufferwhendone(false)
+      m_deletebufferwhendone(FALSE)
 
 {
   // copy constructor would require ref-counted pointer to buffer

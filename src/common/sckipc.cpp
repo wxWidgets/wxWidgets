@@ -383,7 +383,7 @@ bool wxTCPConnection::Disconnect ()
   m_codeco->Write8(IPC_DISCONNECT);
   m_sock->Notify(FALSE);
   m_sock->Close();
-  SetConnected(false);
+  SetConnected(FALSE);
 
   return TRUE;
 }
@@ -660,7 +660,7 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
   {
     sock->Notify(FALSE);
     sock->Close();
-    connection->SetConnected(false);
+    connection->SetConnected(FALSE);
     connection->OnDisconnect();
     break;
   }
