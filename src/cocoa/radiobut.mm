@@ -15,6 +15,7 @@
 
 #import <AppKit/NSButton.h>
 #include "wx/cocoa/string.h"
+#include "wx/cocoa/autorelease.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxRadioButton, wxControl)
 // wxRadioButtonBase == wxControl
@@ -30,6 +31,7 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID winid,
            const wxValidator& validator,
            const wxString& name)
 {
+    wxAutoNSAutoreleasePool pool;
     if(!CreateControl(parent,winid,pos,size,style,validator,name))
         return false;
     m_cocoaNSView = NULL;
