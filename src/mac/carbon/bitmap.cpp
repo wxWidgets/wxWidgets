@@ -366,6 +366,7 @@ wxBitmapRefData::wxBitmapRefData()
     m_hPict = NULL ;
     m_hIcon = NULL ;
     m_bitmapType = kMacBitmapTypeUnknownType ;
+    m_hasAlpha = false;
 }
 
 // TODO move this to a public function of Bitmap Ref
@@ -1051,8 +1052,7 @@ void wxBitmap::SetMask(wxMask *mask)
         m_refData = new wxBitmapRefData;
 
     // Remove existing mask if there is one.
-    if (M_BITMAPDATA->m_bitmapMask)
-        delete M_BITMAPDATA->m_bitmapMask;
+    delete M_BITMAPDATA->m_bitmapMask;
 
     M_BITMAPDATA->m_bitmapMask = mask ;
 }
@@ -1150,7 +1150,7 @@ bool wxMask::Create(const wxBitmap& bitmap)
 
    wxCHECK_MSG( bitmap.Ok(), false, wxT("Invalid bitmap"));
 
-    m_depth = bitmap.GetDepth() ;
+   m_depth = bitmap.GetDepth() ;
    m_maskBitmap = wxMacCreateGWorld(bitmap.GetWidth(), bitmap.GetHeight(), bitmap.GetDepth() );
    Rect rect = { 0,0, bitmap.GetHeight(), bitmap.GetWidth() };
 
@@ -1366,13 +1366,54 @@ void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
    data.m_height = GetHeight();
    data.m_stride = (*hPixMap)->rowBytes & 0x7fff;
 
+   M_BITMAPDATA->m_hasAlpha = false;
+
    return GetPixBaseAddr(hPixMap);
 }
 
-void wxBitmap::UngetRawData(wxPixelDataBase& data)
+void wxBitmap::UngetRawData(wxPixelDataBase& dataBase)
 {
     if ( !Ok() )
         return;
+
+    if ( M_BITMAPDATA->m_hasAlpha )
+    {
+        wxAlphaPixelData& data = (wxAlphaPixelData&)dataBase;
+
+        int w = data.GetWidth(),
+            h = data.GetHeight();
+
+        wxBitmap bmpMask(GetWidth(), GetHeight(), 32);
+        wxAlphaPixelData dataMask(bmpMask, data.GetOrigin(), wxSize(w, h));
+        wxAlphaPixelData::Iterator pMask(dataMask),
+                                   p(data);
+        for ( int y = 0; y < h; y++ )
+        {
+            wxAlphaPixelData::Iterator rowStartMask = pMask,
+                                       rowStart = p;
+
+            for ( int x = 0; x < w; x++ )
+            {
+                const wxAlphaPixelData::Iterator::ChannelType
+                    alpha = p.Alpha();
+
+                pMask.Red() = alpha;
+                pMask.Green() = alpha;
+                pMask.Blue() = alpha;
+
+                ++p;
+                ++pMask;
+            }
+
+            p = rowStart;
+            p.OffsetY(data, 1);
+
+            pMask = rowStartMask;
+            pMask.OffsetY(dataMask, 1);
+        }
+
+        SetMask(new wxMask(bmpMask));
+    }
 
     GWorldPtr gworld = MAC_WXHBITMAP(M_BITMAPDATA->m_hBitmap);
     PixMapHandle hPixMap = GetGWorldPixMap(gworld);
@@ -1384,6 +1425,8 @@ void wxBitmap::UngetRawData(wxPixelDataBase& data)
 
 void wxBitmap::UseAlpha()
 {
-    // nothing to do here so far
+    // remember that we are using alpha channel, we'll need to create a proper
+    // mask in UngetRawData()
+    M_BITMAPDATA->m_hasAlpha = true;
 }
 

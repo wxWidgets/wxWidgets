@@ -196,6 +196,8 @@ public:
     int GetWidth() const { return m_width; }
     int GetHeight() const { return m_height; }
 
+    wxSize GetSize() const { return wxSize(m_width, m_height); }
+
     // the distance between two rows
     int GetRowStride() const { return m_stride; }
 
@@ -567,10 +569,9 @@ struct WXDLLEXPORT wxPixelDataOut<wxBitmap>
 
         // private: -- see comment in the beginning of the file
 
-            // NB: for efficiency reasons this class must *not* have any other
-            //     fields, otherwise it won't be put into a CPU register (as it
-            //     should inside the inner loops) by some compilers, notably
-            //     gcc
+            // for efficiency reasons this class should not have any other
+            // fields, otherwise it won't be put into a CPU register (as it
+            // should inside the inner loops) by some compilers, notably gcc
             ChannelType *m_ptr;
         };
 

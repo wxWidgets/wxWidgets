@@ -94,6 +94,7 @@ public:
   WXHBITMAP     m_hBitmap;
   WXHICON       m_hIcon ;
   wxMask *      m_bitmapMask; // Optional mask
+  bool          m_hasAlpha;
 };
 
 #define M_BITMAPDATA ((wxBitmapRefData *)m_refData)
@@ -199,7 +200,7 @@ public:
 
   static void InitStandardHandlers();
 
-    // raw bitmap access support functions
+    // raw bitmap access support functions, for internal use only
     void *GetRawData(wxPixelDataBase& data, int bpp);
     void UngetRawData(wxPixelDataBase& data);
 
