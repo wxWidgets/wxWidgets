@@ -57,6 +57,16 @@
 
 #endif
 
+#ifdef __WXPM__
+
+#define INCL_BASE
+#include <os2.h>
+#include <direct.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+#endif // __WXPM__
+
 #ifdef __BORLANDC__
 #include "dos.h"
 #endif
@@ -66,7 +76,7 @@
 #undef GetFirstChild
 #endif
 
-#if !defined(__WXMSW__) || wxUSE_XPM_IN_MSW
+#if !defined(__WXMSW__) || wxUSE_XPM_IN_MSW || wxUSE_XPM_IN_OS2
 /* Closed folder */
 static char * icon1_xpm[] = {
 /* width height ncolors chars_per_pixel */
@@ -297,7 +307,7 @@ static const int ID_CANCEL = 1003;
 static const int ID_NEW = 1004;
 //static const int ID_CHECK = 1005;
 
-#if defined(__WXMSW__)
+#if defined(__WXMSW__) || defined(__WXPM__)
 static bool wxIsDriveAvailable(const wxString dirName)
 {
 #ifdef __WIN32__
@@ -448,7 +458,7 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
 
     wxString rootName;
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXPM__)
     rootName = _("Computer");
 #else
     rootName = _("Sections");
@@ -487,8 +497,8 @@ void wxGenericDirCtrl::AddSection(const wxString& path, const wxString& name, in
 {
     wxDirItemDataEx *dir_item = new wxDirItemDataEx(path,name,TRUE);
 
-#ifdef __WXMSW__
-    // Windows: sections are displayed as drives
+#if defined(__WXMSW__) || defined(__WXPM__)
+    // Windows and OS/2: sections are displayed as drives
     wxTreeItemId id = m_treeCtrl->AppendItem( m_rootId, name, imageId, -1, dir_item);
 #else
     // Unix: sections are displayed as folders
@@ -502,7 +512,7 @@ void wxGenericDirCtrl::AddSection(const wxString& path, const wxString& name, in
 
 void wxGenericDirCtrl::SetupSections()
 {
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXPM__)
 
 #ifdef __WIN32__
     wxChar driveBuffer[256];
@@ -559,7 +569,7 @@ void wxGenericDirCtrl::SetupSections()
 
         if (wxIsDriveAvailable(path))
         {
-            
+
             AddSection(path, name);
         }
     }
@@ -686,7 +696,7 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
 
     wxString dirName(data->m_path);
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXPM__)
     // Check if this is a root directory and if so,
     // whether the drive is avaiable.
     if (!wxIsDriveAvailable(dirName))
@@ -700,7 +710,7 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
     // This may take a longish time. Go to busy cursor
     wxBusyCursor busy;
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXPM__)
     if (dirName.Last() == ':')
         dirName += wxString(wxFILE_SEP_PATH);
 #endif
@@ -736,7 +746,7 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
         wxLogNull log;
 
         d.Open(dirName);
-        
+
         if (d.IsOpened())
         {
             if (d.GetFirst(& eachFilename, m_currentFilterStr, wxDIR_FILES))
@@ -767,7 +777,7 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
         wxDirItemDataEx *dir_item = new wxDirItemDataEx(path,eachFilename,TRUE);
         wxTreeItemId id = m_treeCtrl->AppendItem( parentId, eachFilename, 0, -1, dir_item);
         m_treeCtrl->SetItemImage( id, 1, wxTreeItemIcon_Expanded );
-        
+
         // Has this got any children? If so, make it expandable.
         int options = wxDIR_DEFAULT;
         if (GetWindowStyle() & wxDIRCTRL_DIR_ONLY) // If only showing dirs, then we specify dirs only here
@@ -812,36 +822,36 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
 wxTreeItemId wxGenericDirCtrl::FindChild(wxTreeItemId parentId, const wxString& path, bool& done)
 {
     wxString path2(path);
-    
+
     // Make sure all separators are as per the current platform
     path2.Replace(wxT("\\"), wxString(wxFILE_SEP_PATH));
     path2.Replace(wxT("/"), wxString(wxFILE_SEP_PATH));
-    
+
     // Append a separator to foil bogus substring matching
     path2 += wxString(wxFILE_SEP_PATH);
-    
-    // In MSW, case is not significant
-#ifdef __WXMSW__
+
+    // In MSW or PM, case is not significant
+#if defined(__WXMSW__) || defined(__WXPM__)
     path2.MakeLower();
 #endif
-    
+
     long cookie;
     wxTreeItemId childId = m_treeCtrl->GetFirstChild(parentId, cookie);
     while (childId.IsOk())
     {
         wxDirItemDataEx* data = (wxDirItemDataEx*) m_treeCtrl->GetItemData(childId);
-        
+
         if (data && data->m_path != "")
         {
             wxString childPath(data->m_path);
             if (childPath.Last() != wxFILE_SEP_PATH)
                 childPath += wxString(wxFILE_SEP_PATH);
-            
-            // In MSW, case is not significant
-#ifdef __WXMSW__
+
+            // In MSW and PM, case is not significant
+#if defined(__WXMSW__) || defined(__WXPM__)
             childPath.MakeLower();
 #endif
-            
+
             if (childPath.Len() <= path2.Len())
             {
                 wxString path3 = path2.Mid(0, childPath.Len());
@@ -855,7 +865,7 @@ wxTreeItemId wxGenericDirCtrl::FindChild(wxTreeItemId parentId, const wxString& 
                 }
             }
         }
-        
+
         childId = m_treeCtrl->GetNextChild(childId, cookie);
     }
     wxTreeItemId invalid;
@@ -893,7 +903,7 @@ bool wxGenericDirCtrl::ExpandPath(const wxString& path)
             while (childId.IsOk())
             {
                 wxDirItemDataEx* data = (wxDirItemDataEx*) m_treeCtrl->GetItemData(childId);
-                
+
                 if (data && data->m_path != "" && !data->m_isDir)
                 {
                     m_treeCtrl->SelectItem(childId);
@@ -970,7 +980,7 @@ void wxGenericDirCtrl::FindChildFiles(wxTreeItemId id, int dirFlags, wxArrayStri
 
     wxString dirName(data->m_path);
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXPM__)
     if (dirName.Last() == ':')
         dirName += wxString(wxFILE_SEP_PATH);
 #endif
@@ -1131,7 +1141,7 @@ void wxDirFilterListCtrl::OnSelFilter(wxCommandEvent& event)
     int sel = GetSelection();
 
     wxString currentPath = m_dirCtrl->GetPath();
-        
+
     m_dirCtrl->SetFilterIndex(sel);
 
     // If the filter has changed, the view is out of date, so
