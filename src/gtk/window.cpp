@@ -339,6 +339,8 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
     if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
         wxPrintf( win->GetClassInfo()->GetClassName() );
     wxPrintf( _T(".\n") );
+    
+    wxPrintf( _T("keyval: %d.\n"), (int) gdk_event->keyval );
 */
 
     long key_code = 0;
@@ -3331,6 +3333,45 @@ void wxWindow::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
 
     wxCHECK_RET( m_wxwindow != NULL, _T("window needs client area for scrolling") );
 
+    if (!m_scrollGC)
+    {
+        m_scrollGC = gdk_gc_new( m_wxwindow->window );
+        gdk_gc_set_exposures( m_scrollGC, TRUE );
+    }
+
+    int cw = 0;
+    int ch = 0;
+    GetClientSize( &cw, &ch );
+    int w = cw - abs(dx);
+    int h = ch - abs(dy);
+    
+    if ((h < 0) || (w < 0))
+    {
+        Refresh();
+    }
+    else
+    {
+        int s_x = 0;
+        int s_y = 0;
+        if (dx < 0) s_x = -dx;
+        if (dy < 0) s_y = -dy;
+        int d_x = 0;
+        int d_y = 0;
+        if (dx > 0) d_x = dx;
+        if (dy > 0) d_y = dy;
+
+        gdk_window_copy_area( m_wxwindow->window, m_scrollGC, d_x, d_y,
+            m_wxwindow->window, s_x, s_y, w, h );
+
+        wxRect rect;
+        if (dx < 0) rect.x = cw+dx; else rect.x = 0;
+        if (dy < 0) rect.y = ch+dy; else rect.y = 0;
+        if (dy != 0) rect.width = cw; else rect.width = abs(dx);
+        if (dx != 0) rect.height = ch; else rect.height = abs(dy);
+
+        Refresh( TRUE, &rect );
+    }
+    
     wxNode *node = m_children.First();
     while (node)
     {
@@ -3339,42 +3380,6 @@ void wxWindow::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
 	node = node->Next();
     }
 
-    int cw = 0;
-    int ch = 0;
-    GetClientSize( &cw, &ch );
-
-    int w = cw - abs(dx);
-    int h = ch - abs(dy);
-    if ((h < 0) || (w < 0))
-    {
-        Refresh();
-        return;
-    }
-    int s_x = 0;
-    int s_y = 0;
-    if (dx < 0) s_x = -dx;
-    if (dy < 0) s_y = -dy;
-    int d_x = 0;
-    int d_y = 0;
-    if (dx > 0) d_x = dx;
-    if (dy > 0) d_y = dy;
-
-    if (!m_scrollGC)
-    {
-        m_scrollGC = gdk_gc_new( m_wxwindow->window );
-        gdk_gc_set_exposures( m_scrollGC, TRUE );
-    }
-
-    gdk_window_copy_area( m_wxwindow->window, m_scrollGC, d_x, d_y,
-        m_wxwindow->window, s_x, s_y, w, h );
-
-    wxRect rect;
-    if (dx < 0) rect.x = cw+dx; else rect.x = 0;
-    if (dy < 0) rect.y = ch+dy; else rect.y = 0;
-    if (dy != 0) rect.width = cw; else rect.width = abs(dx);
-    if (dx != 0) rect.height = ch; else rect.height = abs(dy);
-
-    Refresh( TRUE, &rect );
 }
 
 //-------------------------------------------------------------------------------------
