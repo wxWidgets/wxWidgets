@@ -6,16 +6,15 @@ FLAGS="USE_SWIG=1 SWIG=$PROJECTS/SWIG-cvs/swig.exe"
 
 #  Use non-default python?
 case $1 in
-    21 | 2.1) VER=21 ;;
-    22 | 2.2) VER=22 ;;
-    23 | 2.3) VER=23 ;;
+    21 | 2.1) VER=21; shift ;;
+    22 | 2.2) VER=22; shift ;;
+    23 | 2.3) VER=23; shift ;;
+    24 | 2.4) VER=24; shift ;;
 
-    *) 	echo You must specify the Python version as first parameter.
-	exit -1
+    *) 	VER=24
 esac
 
 PYTHON=$TOOLS/python$VER/python.exe
-shift
 
 SETUP="$PYTHON -u setup.py"
 $PYTHON -c "import sys;print '\n', sys.version, '\n'"

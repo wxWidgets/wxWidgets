@@ -74,10 +74,7 @@ Name: pthfile;  Description: "Make this install be the default wxPython"; Types:
 ;;------------------------------------------------------------
 
 [Files]
-Source: "distrib\msw\MSVCRT.dll";        DestDir: "{code:GetPythonDir}"; CopyMode: alwaysskipifsameorolder; Flags: uninsneveruninstall; Components: core
-Source: "distrib\msw\MSVCIRT.dll";       DestDir: "{code:GetPythonDir}"; CopyMode: alwaysskipifsameorolder; Flags: uninsneveruninstall; Components: core
-Source: "distrib\msw\MSVCP60.dll";       DestDir: "{code:GetPythonDir}"; CopyMode: alwaysskipifsameorolder; Flags: uninsneveruninstall; Components: core
-
+%(RTDLL)s
 Source: "%(WXDIR)s\lib\vc_dll\wx*%(WXDLLVER)s_*.dll";  DestDir: "{app}\%(PKGDIR)s\wx"; Components: core
 %(MSLU)s
 
@@ -545,6 +542,7 @@ def build_locale_string(pkgdir):
     os.path.walk('wx\\locale', walk_helper, stringlst)
     return '\n'.join(stringlst)
 
+
 def get_system_dir():
     for p in [r"C:\WINNT\SYSTEM32",
               r"C:\WINDOWS\SYSTEM32",
@@ -553,12 +551,28 @@ def get_system_dir():
             return p
     raise IOError, "System dir not found"
 
+
 def get_batch_files():
     globs = {}
     execfile("scripts/CreateBatchFiles.py", globs)
     scripts = globs["scripts"]
     scripts = ['Type: files; Name: "{code:GetPythonDir}\Scripts\%s.bat";' % i[0] for i in scripts]
     return '\n'.join(scripts)
+
+
+runtime_template = 'Source: "%s"; DestDir: "{code:GetPythonDir}"; CopyMode: alwaysskipifsameorolder; Flags: uninsneveruninstall; Components: core'
+
+def get_runtime_dlls(PYVER):
+    if PYVER == "py24":
+        source = [ r"distrib\msw\msvcr71.dll",
+                   r"distrib\msw\msvcp71.dll" ]
+    else:
+        source = [ r"distrib\msw\MSVCRT.dll",
+                   r"distrib\msw\MSVCIRT.dll",
+                   r"distrib\msw\MSVCP60.dll" ]
+    DLLs = [runtime_template % dll for dll in source]    
+    return '\n'.join(DLLs)
+
 
 #----------------------------------------------------------------------
 
@@ -582,7 +596,8 @@ def main():
     UNINSTALL_BATCH = get_batch_files()
     PKGDIR          = open('src/wx.pth').read()
     LOCALE          = build_locale_string(PKGDIR)
-
+    RTDLL           = get_runtime_dlls(PYVER)
+    
     print """Building Win32 installer for wxPython:
     VERSION    = %(VERSION)s
     SHORTVER   = %(SHORTVER)s
@@ -595,7 +610,9 @@ def main():
     SYSDIR     = %(SYSDIR)s
     """ % vars()
 
-    if PYTHONVER >= "2.2":
+    if PYTHONVER >= "2.4":
+        IF22 = r"InstallDir := InstallDir + 'Lib\site-packages';"
+    elif PYTHONVER >= "2.2":
         IF22 = r"InstallDir := InstallDir + '\Lib\site-packages';"
     else:
         IF22 = ""
@@ -622,7 +639,7 @@ def main():
     f = open(ISSDEMOFILE, "w")
     f.write(ISS_DocDemo_Template % vars())
     f.close()
-    
+
     TOOLS = os.environ['TOOLS']
     if TOOLS.startswith('/cygdrive'):
         TOOLS = r"c:\TOOLS"  # temporary hack until I convert everything over to bash
