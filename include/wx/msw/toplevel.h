@@ -70,6 +70,13 @@ public:
     // implementation from now on
     // --------------------------
 
+    // event handlers
+    void OnActivate(wxActivateEvent& event);
+
+    // called by wxWindow whenever it gets focus
+    void SetLastFocus(wxWindow *win) { m_winLastFocused = win; }
+    wxWindow *GetLastFocus() const { return m_winLastFocused; }
+
 protected:
     // common part of all ctors
     void Init();
@@ -88,10 +95,6 @@ protected:
 
     // common part of Iconize(), Maximize() and Restore()
     void DoShowWindow(int nShowCmd);
-
-    // prevent the window from being deactivated sometimes (see comments in the
-    // code)
-    long HandleNcActivate(bool activate);
 
     // translate wxWindows flags to Windows ones
     virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle) const;
@@ -113,9 +116,14 @@ protected:
     bool                  m_fsIsMaximized;
     bool                  m_fsIsShowing;
 
+    // the last focused child: we restore focus to it on activation
+    wxWindow             *m_winLastFocused;
+
     // the hidden parent window for the frames which shouldn't appear in the
     // taskbar
     static wxWindow *ms_hiddenParent;
+
+    DECLARE_EVENT_TABLE()
 };
 
 // list of all frames and modeless dialogs

@@ -348,12 +348,12 @@ wxWindowMSW::~wxWindowMSW()
     // VS: make sure there's no wxFrame with last focus set to us:
     for ( wxWindow *win = GetParent(); win; win = win->GetParent() )
     {
-        wxFrame *frame = wxDynamicCast(win, wxFrame);
+        wxTopLevelWindow *frame = wxDynamicCast(win, wxTopLevelWindow);
         if ( frame )
         {
             if ( frame->GetLastFocus() == this )
             {
-                frame->SetLastFocus((wxWindow*)NULL);
+                frame->SetLastFocus(NULL);
             }
             break;
         }
@@ -2083,15 +2083,27 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
             // ::IsDialogMessage() can enter in an infinite loop when
             // WS_EX_CONTROLPARENT is specified and the currently focused
             // window is disabled or hidden, so don't call it in this case
+            bool canSafelyCallIsDlgMsg = TRUE;
+
             HWND hwndFocus = ::GetFocus();
-            if ( !hwndFocus ||
-                  ::IsWindowEnabled(hwndFocus) && ::IsWindowVisible(hwndFocus) )
+            while ( hwndFocus )
             {
-                if ( ::IsDialogMessage(GetHwnd(), msg) )
+                if ( !::IsWindowEnabled(hwndFocus) ||
+                        !::IsWindowVisible(hwndFocus) )
                 {
-                    // IsDialogMessage() did something...
-                    return TRUE;
+                    // it would enter an infinite loop if we do this!
+                    canSafelyCallIsDlgMsg = FALSE;
+
+                    break;
                 }
+
+                hwndFocus = ::GetParent(hwndFocus);
+            }
+
+            if ( canSafelyCallIsDlgMsg && ::IsDialogMessage(GetHwnd(), msg) )
+            {
+                // IsDialogMessage() did something...
+                return TRUE;
             }
         }
     }

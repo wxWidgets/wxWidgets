@@ -52,7 +52,6 @@ public:
     // -------------------------------
 
     // event handlers
-    void OnActivate(wxActivateEvent& event);
     void OnSysColourChanged(wxSysColourChangedEvent& event);
 
     // Toolbar
@@ -103,10 +102,6 @@ public:
     // current size - this has an effect of refreshing the window layout
     void SendSizeEvent();
 
-    // called by wxWindow whenever it gets focus
-    void SetLastFocus(wxWindow *win) { m_winLastFocused = win; }
-    wxWindow *GetLastFocus() const { return m_winLastFocused; }
-
 protected:
     // common part of all ctors
     void Init();
@@ -142,14 +137,10 @@ protected:
     static bool           m_useNativeStatusBar;
 #endif // wxUSE_STATUSBAR
 
-    // the last focused child: we restore focus to it on activation
-    wxWindow             *m_winLastFocused;
-
     // Data to save/restore when calling ShowFullScreen
     int                   m_fsStatusBarFields; // 0 for no status bar
     int                   m_fsStatusBarHeight;
     int                   m_fsToolBarHeight;
-//    WXHMENU               m_fsMenu;
 
 private:
 #if wxUSE_TOOLTIPS

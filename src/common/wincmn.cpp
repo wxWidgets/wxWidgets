@@ -364,6 +364,17 @@ void wxWindowBase::Centre(int direction)
             }
         }
 
+        // we shouldn't center the dialog on the iconized window: under
+        // Windows, for example, this places it completely off the screen
+        if ( parent )
+        {
+            wxTopLevelWindow *winTop = wxDynamicCast(parent, wxTopLevelWindow);
+            if ( winTop && winTop->IsIconized() )
+            {
+                parent = NULL;
+            }
+        }
+
         // did we find the parent?
         if ( !parent )
         {

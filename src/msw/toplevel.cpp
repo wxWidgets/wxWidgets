@@ -77,6 +77,10 @@ wxWindow *wxTopLevelWindowMSW::ms_hiddenParent = NULL;
 // wxTopLevelWindowMSW implementation
 // ============================================================================
 
+BEGIN_EVENT_TABLE(wxTopLevelWindowMSW, wxTopLevelWindowBase)
+    EVT_ACTIVATE(wxTopLevelWindowMSW::OnActivate)
+END_EVENT_TABLE()
+
 // ----------------------------------------------------------------------------
 // wxDialog helpers
 // ----------------------------------------------------------------------------
@@ -116,6 +120,8 @@ void wxTopLevelWindowMSW::Init()
     m_fsOldWindowStyle = 0;
     m_fsIsMaximized = FALSE;
     m_fsIsShowing = FALSE;
+
+    m_winLastFocused = (wxWindow *)NULL;
 }
 
 WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
@@ -738,5 +744,59 @@ bool wxTopLevelWindowMSW::EnableCloseButton(bool enable)
 #endif // !__WXMICROWIN__
 
     return TRUE;
+}
+
+// ----------------------------------------------------------------------------
+// wxTopLevelWindow event handling
+// ----------------------------------------------------------------------------
+
+// Default activation behaviour - set the focus for the first child
+// subwindow found.
+void wxTopLevelWindowMSW::OnActivate(wxActivateEvent& event)
+{
+    if ( event.GetActive() )
+    {
+        // restore focus to the child which was last focused
+        wxLogTrace(_T("focus"), _T("wxTLW %08x activated."), m_hWnd);
+
+        wxWindow *parent = m_winLastFocused ? m_winLastFocused->GetParent()
+                                            : NULL;
+        if ( !parent )
+        {
+            parent = this;
+        }
+
+        wxSetFocusToChild(parent, &m_winLastFocused);
+    }
+    else // deactivating
+    {
+        // remember the last focused child if it is our child
+        m_winLastFocused = FindFocus();
+
+        // so we NULL it out if it's a child from some other frame
+        wxWindow *win = m_winLastFocused;
+        while ( win )
+        {
+            if ( win->IsTopLevel() )
+            {
+                if ( win != this )
+                {
+                    m_winLastFocused = NULL;
+                }
+
+                break;
+            }
+
+            win = win->GetParent();
+        }
+
+        wxLogTrace(_T("focus"),
+                   _T("wxTLW %08x deactivated, last focused: %08x."),
+                   m_hWnd,
+                   m_winLastFocused ? GetHwndOf(m_winLastFocused)
+                                    : NULL);
+
+        event.Skip();
+    }
 }
 

@@ -72,7 +72,6 @@
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(wxFrame, wxFrameBase)
-    EVT_ACTIVATE(wxFrame::OnActivate)
     EVT_SYS_COLOUR_CHANGED(wxFrame::OnSysColourChanged)
 END_EVENT_TABLE()
 
@@ -108,11 +107,8 @@ void wxFrame::Init()
     m_fsStatusBarFields = 0;
     m_fsStatusBarHeight = 0;
     m_fsToolBarHeight = 0;
-//  m_fsMenu = 0;
 
     m_wasMinimized = FALSE;
-
-    m_winLastFocused = (wxWindow *)NULL;
 }
 
 bool wxFrame::Create(wxWindow *parent,
@@ -324,7 +320,7 @@ void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
 // Pass TRUE to show full screen, FALSE to restore.
 bool wxFrame::ShowFullScreen(bool show, long style)
 {
-    if ( IsFullScreen() == show ) 
+    if ( IsFullScreen() == show )
         return FALSE;
 
     if (show)
@@ -395,58 +391,8 @@ bool wxFrame::ShowFullScreen(bool show, long style)
             SetMenu((HWND)GetHWND(), (HMENU)m_hMenu);
 #endif
     }
-    
+
     return wxFrameBase::ShowFullScreen(show, style);
-}
-
-// Default activation behaviour - set the focus for the first child
-// subwindow found.
-void wxFrame::OnActivate(wxActivateEvent& event)
-{
-    if ( event.GetActive() )
-    {
-        // restore focus to the child which was last focused
-        wxLogTrace(_T("focus"), _T("wxFrame %08x activated."), m_hWnd);
-
-        wxWindow *parent = m_winLastFocused ? m_winLastFocused->GetParent()
-                                            : NULL;
-        if ( !parent )
-        {
-            parent = this;
-        }
-
-        wxSetFocusToChild(parent, &m_winLastFocused);
-    }
-    else // deactivating
-    {
-        // remember the last focused child if it is our child
-        m_winLastFocused = FindFocus();
-
-        // so we NULL it out if it's a child from some other frame
-        wxWindow *win = m_winLastFocused;
-        while ( win )
-        {
-            if ( win->IsTopLevel() )
-            {
-                if ( win != this )
-                {
-                    m_winLastFocused = NULL;
-                }
-
-                break;
-            }
-
-            win = win->GetParent();
-        }
-
-        wxLogTrace(_T("focus"),
-                   _T("wxFrame %08x deactivated, last focused: %08x."),
-                   m_hWnd,
-                   m_winLastFocused ? GetHwndOf(m_winLastFocused)
-                                    : NULL);
-
-        event.Skip();
-    }
 }
 
 // ----------------------------------------------------------------------------
