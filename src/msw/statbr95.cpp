@@ -74,7 +74,6 @@ LRESULT APIENTRY wxStatusBarProc(HWND hwnd,
         case WM_SIZE:
         case WM_MOVE:
         case WM_MOUSEMOVE:
-        case WM_MOUSEMOVE:
         case WM_LBUTTONUP:
         case WM_LBUTTONDBLCLK:
         case WM_RBUTTONDOWN:
