@@ -55,7 +55,7 @@
     #include <print.h>
 #endif
 
-IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
+IMPLEMENT_ABSTRACT_CLASS(wxDC, wxDCBase)
 
 // ---------------------------------------------------------------------------
 // constants
