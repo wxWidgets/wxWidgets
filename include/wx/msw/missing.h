@@ -644,8 +644,12 @@ typedef struct {
     #define VK_OEM_PERIOD   0xBE
 #endif
 
+#ifndef WM_CONTEXTMENU
+    #define WM_CONTEXTMENU      0x007B
+#endif
+
 #ifndef WM_UPDATEUISTATE
-    #define WM_UPDATEUISTATE    0x128
+    #define WM_UPDATEUISTATE    0x0128
 #endif
 
 #ifndef UIS_INITIALIZE

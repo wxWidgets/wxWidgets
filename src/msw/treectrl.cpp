@@ -2243,7 +2243,6 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
     WXLRESULT rc = 0;
     bool isMultiple = HasFlag(wxTR_MULTIPLE);
 
-#ifdef WM_CONTEXTMENU
     if ( nMsg == WM_CONTEXTMENU )
     {
         wxTreeEvent event( wxEVT_COMMAND_TREE_ITEM_MENU, GetId() );
@@ -2256,7 +2255,6 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
             processed = true;
         //else: continue with generating wxEVT_CONTEXT_MENU in base class code
     }
-#endif // WM_CONTEXTMENU
     else if ( (nMsg >= WM_MOUSEFIRST) && (nMsg <= WM_MOUSELAST) )
     {
         // we only process mouse messages here and these parameters have the
