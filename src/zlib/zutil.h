@@ -1,5 +1,5 @@
 /* zutil.h -- internal interface and configuration of the compression library
- * Copyright (C) 1995-1998 Jean-loup Gailly.
+ * Copyright (C) 1995-2003 Jean-loup Gailly.
  * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
@@ -10,10 +10,11 @@
 
 /* @(#) $Id$ */
 
-#ifndef _Z_UTIL_H
-#define _Z_UTIL_H
+#ifndef ZUTIL_H
+#define ZUTIL_H
 
-#include "../zlib/zlib.h"
+#define ZLIB_INTERNAL
+#include "zlib.h"
 
 #ifdef STDC
 #  include <stddef.h>
@@ -37,7 +38,7 @@ typedef unsigned short ush;
 typedef ush FAR ushf;
 typedef unsigned long  ulg;
 
-extern const char *z_errmsg[10]; /* indexed by 2-zlib_error */
+extern const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
 /* (size given to avoid silly warnings with Visual C++) */
 
 #define ERR_MSG(err) z_errmsg[Z_NEED_DICT-(err)]
@@ -73,27 +74,23 @@ extern const char *z_errmsg[10]; /* indexed by 2-zlib_error */
 
         /* target dependencies */
 
-#ifdef MSDOS
+#if defined(MSDOS) || (defined(WINDOWS) && !defined(WIN32))
 #  define OS_CODE  0x00
-#  ifdef __TURBOC__
+#  if defined(__TURBOC__) || defined(__BORLANDC__)
 #    if(__STDC__ == 1) && (defined(__LARGE__) || defined(__COMPACT__))
        /* Allow compilation with ANSI keywords only enabled */
        void _Cdecl farfree( void *block );
        void *_Cdecl farmalloc( unsigned long nbytes );
 #    else
-#     include <alloc.h>
+#      include <alloc.h>
 #    endif
 #  else /* MSC or DJGPP */
 #    include <malloc.h>
 #  endif
 #endif
 
-#ifdef OS2
-#  define OS_CODE  0x06
-#endif
-
-#ifdef WIN32 /* Window 95 & Windows NT */
-#  define OS_CODE  0x0b
+#ifdef AMIGA
+#  define OS_CODE  0x01
 #endif
 
 #if defined(VAXC) || defined(VMS)
@@ -102,44 +99,56 @@ extern const char *z_errmsg[10]; /* indexed by 2-zlib_error */
      fopen((name), (mode), "mbc=60", "ctx=stm", "rfm=fix", "mrs=512")
 #endif
 
-#ifdef AMIGA
-#  define OS_CODE  0x01
-#endif
-
 #if defined(ATARI) || defined(atarist)
 #  define OS_CODE  0x05
 #endif
 
-#if defined(MACOS) || defined(TARGET_OS_MAC)
-#  define OS_CODE  0x07
-#  ifndef fdopen
-#    define fdopen(fd,mode) NULL /* No fdopen() */
-#  endif
-#endif
-#if defined(__MWERKS__) && !defined(fdopen)
-#  if __dest_os != __be_os && __dest_os != __win32_os
-#    define fdopen(fd,mode) NULL
-#  endif
+#ifdef OS2
+#  define OS_CODE  0x06
 #endif
 
-#ifdef __50SERIES /* Prime/PRIMOS */
-#  define OS_CODE  0x0F
+#if defined(MACOS) || defined(TARGET_OS_MAC)
+#  define OS_CODE  0x07
+#  if defined(__MWERKS__) && __dest_os != __be_os && __dest_os != __win32_os
+#    include <unix.h> /* for fdopen */
+#  else
+#    ifndef fdopen
+#      define fdopen(fd,mode) NULL /* No fdopen() */
+#    endif
+#  endif
 #endif
 
 #ifdef TOPS20
 #  define OS_CODE  0x0a
 #endif
 
+#ifdef WIN32
+#  ifndef __CYGWIN__  /* Cygwin is Unix, not Win32 */
+#    define OS_CODE  0x0b
+#  endif
+#endif
+
+#ifdef __50SERIES /* Prime/PRIMOS */
+#  define OS_CODE  0x0f
+#endif
+
 #if defined(_BEOS_) || defined(RISCOS)
 #  define fdopen(fd,mode) NULL /* No fdopen() */
 #endif
 
-#if (defined(_MSC_VER) && (_MSC_VER >= 600))
-#  define fdopen(fd,type)  _fdopen(fd,type)
+#if (defined(_MSC_VER) && (_MSC_VER > 600))
+#  if defined(_WIN32_WCE)
+#    define fdopen(fd,mode) NULL /* No fdopen() */
+#    ifndef _PTRDIFF_T_DEFINED
+       typedef int ptrdiff_t;
+#      define _PTRDIFF_T_DEFINED
+#    endif
+#  else
+#    define fdopen(fd,type)  _fdopen(fd,type)
+#  endif
 #endif
 
-
-        /* Common defaults */
+        /* common defaults */
 
 #ifndef OS_CODE
 #  define OS_CODE  0x03  /* assume Unix */
@@ -150,6 +159,36 @@ extern const char *z_errmsg[10]; /* indexed by 2-zlib_error */
 #endif
 
          /* functions */
+
+#if defined(STDC99) || (defined(__TURBOC__) && __TURBOC__ >= 0x550)
+#  ifndef HAVE_VSNPRINTF
+#    define HAVE_VSNPRINTF
+#  endif
+#endif
+#if defined(__CYGWIN__)
+#  ifndef HAVE_VSNPRINTF
+#    define HAVE_VSNPRINTF
+#  endif
+#endif
+#ifndef HAVE_VSNPRINTF
+#  ifdef MSDOS
+     /* vsnprintf may exist on some MS-DOS compilers (DJGPP?),
+        but for now we just assume it doesn't. */
+#    define NO_vsnprintf
+#  endif
+#  ifdef __TURBOC__
+#    define NO_vsnprintf
+#  endif
+#  ifdef WIN32
+     /* In Win32, vsnprintf is available as the "non-ANSI" _vsnprintf. */
+#    if !defined(vsnprintf) && !defined(NO_vsnprintf)
+#      define vsnprintf _vsnprintf
+#    endif
+#  endif
+#  ifdef __SASC
+#    define NO_vsnprintf
+#  endif
+#endif
 
 #ifdef HAVE_STRERROR
    extern char *strerror OF((int));
@@ -182,13 +221,13 @@ extern const char *z_errmsg[10]; /* indexed by 2-zlib_error */
 #    define zmemzero(dest, len) memset(dest, 0, len)
 #  endif
 #else
-   extern void zmemcpy  OF((Bytef* dest, Bytef* source, uInt len));
-   extern int  zmemcmp  OF((Bytef* s1,   Bytef* s2, uInt len));
+   extern void zmemcpy  OF((Bytef* dest, const Bytef* source, uInt len));
+   extern int  zmemcmp  OF((const Bytef* s1, const Bytef* s2, uInt len));
    extern void zmemzero OF((Bytef* dest, uInt len));
 #endif
 
 /* Diagnostic functions */
-#ifdef __WXDEBUG__
+#ifdef DEBUG
 #  include <stdio.h>
    extern int z_verbose;
    extern void z_error    OF((char *m));
@@ -208,21 +247,12 @@ extern const char *z_errmsg[10]; /* indexed by 2-zlib_error */
 #endif
 
 
-#if defined(__VISAGECPP__)
-typedef uLong (ZEXPORT _Optlink *check_func) OF((uLong check, const Bytef *buf,
-				       uInt len));
-voidpf _Optlink zcalloc OF((voidpf opaque, unsigned items, unsigned size));
-void  _Optlink zcfree OF((voidpf opaque, voidpf ptr));
-#else
-typedef uLong (ZEXPORT *check_func) OF((uLong check, const Bytef *buf,
-				       uInt len));
 voidpf zcalloc OF((voidpf opaque, unsigned items, unsigned size));
 void   zcfree  OF((voidpf opaque, voidpf ptr));
-#endif
 
 #define ZALLOC(strm, items, size) \
            (*((strm)->zalloc))((strm)->opaque, (items), (size))
 #define ZFREE(strm, addr)  (*((strm)->zfree))((strm)->opaque, (voidpf)(addr))
 #define TRY_FREE(s, p) {if (p) ZFREE(s, p);}
 
-#endif /* _Z_UTIL_H */
+#endif /* ZUTIL_H */

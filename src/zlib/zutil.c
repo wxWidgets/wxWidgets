@@ -1,5 +1,5 @@
 /* zutil.c -- target dependent utility functions for the compression library
- * Copyright (C) 1995-1998 Jean-loup Gailly.
+ * Copyright (C) 1995-2003 Jean-loup Gailly.
  * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
@@ -7,13 +7,15 @@
 
 #include "zutil.h"
 
+#ifndef NO_DUMMY_DECL
 struct internal_state      {int dummy;}; /* for buggy compilers */
+#endif
 
 #ifndef STDC
 extern void exit OF((int));
 #endif
 
-const char *z_errmsg[10] = {
+const char * const z_errmsg[10] = {
 "need dictionary",     /* Z_NEED_DICT       2  */
 "stream end",          /* Z_STREAM_END      1  */
 "",                    /* Z_OK              0  */
@@ -31,19 +33,98 @@ const char * ZEXPORT zlibVersion()
     return ZLIB_VERSION;
 }
 
-#ifdef __WXDEBUG__
+uLong ZEXPORT zlibCompileFlags()
+{
+    uLong flags;
+
+    flags = 0;
+    switch (sizeof(uInt)) {
+    case 2:     break;
+    case 4:     flags += 1;     break;
+    case 8:     flags += 2;     break;
+    default:    flags += 3;
+    }
+    switch (sizeof(uLong)) {
+    case 2:     break;
+    case 4:     flags += 1 << 2;        break;
+    case 8:     flags += 2 << 2;        break;
+    default:    flags += 3 << 2;
+    }
+    switch (sizeof(voidpf)) {
+    case 2:     break;
+    case 4:     flags += 1 << 4;        break;
+    case 8:     flags += 2 << 4;        break;
+    default:    flags += 3 << 4;
+    }
+    switch (sizeof(z_off_t)) {
+    case 2:     break;
+    case 4:     flags += 1 << 6;        break;
+    case 8:     flags += 2 << 6;        break;
+    default:    flags += 3 << 6;
+    }
+#ifdef DEBUG
+    flags += 1 << 8;
+#endif
+#if defined(ASMV) || defined(ASMINF)
+    flags += 1 << 9;
+#endif
+#ifdef ZLIB_WINAPI
+    flags += 1 << 10;
+#endif
+#ifdef BUILDFIXED
+    flags += 1 << 12;
+#endif
+#ifdef DYNAMIC_CRC_TABLE
+    flags += 1 << 13;
+#endif
+#ifdef NO_GZCOMPRESS
+    flags += 1 << 16;
+#endif
+#ifdef NO_GZIP
+    flags += 1 << 17;
+#endif
+#ifdef PKZIP_BUG_WORKAROUND
+    flags += 1 << 20;
+#endif
+#ifdef FASTEST
+    flags += 1 << 21;
+#endif
+#ifdef STDC
+#  ifdef NO_vsnprintf
+        flags += 1 << 25;
+#    ifdef HAS_vsprintf_void
+        flags += 1 << 26;
+#    endif
+#  else
+#    ifdef HAS_vsnprintf_void
+        flags += 1 << 26;
+#    endif
+#  endif
+#else
+        flags += 1 << 24;
+#  ifdef NO_snprintf
+        flags += 1 << 25;
+#    ifdef HAS_sprintf_void
+        flags += 1 << 26;
+#    endif
+#  else
+#    ifdef HAS_snprintf_void
+        flags += 1 << 26;
+#    endif
+#  endif
+#endif
+    return flags;
+}
+
+#ifdef DEBUG
 
 #  ifndef verbose
 #    define verbose 0
 #  endif
 int z_verbose = verbose;
 
-#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
-void z_error (char* m)
-#else
 void z_error (m)
     char *m;
-#endif
 {
     fprintf(stderr, "%s\n", m);
     exit(1);
@@ -53,27 +134,23 @@ void z_error (m)
 /* exported to allow conversion of error code to string for compress() and
  * uncompress()
  */
-#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
-const char* ZEXPORT zError(int err)
-#else
 const char * ZEXPORT zError(err)
     int err;
-#endif
 {
     return ERR_MSG(err);
 }
 
+#if defined(_WIN32_WCE)
+    /* does not exist on WCE */
+    int errno = 0;
+#endif
 
 #ifndef HAVE_MEMCPY
 
-#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
-void zmemcpy(Bytef* dest, Bytef* source, Uint len)
-#else
 void zmemcpy(dest, source, len)
     Bytef* dest;
-    Bytef* source;
+    const Bytef* source;
     uInt  len;
-#endif
 {
     if (len == 0) return;
     do {
@@ -81,14 +158,10 @@ void zmemcpy(dest, source, len)
     } while (--len != 0);
 }
 
-#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
-int zmemcmp(Bytef* s1, Bytef* s2, int len)
-#else
 int zmemcmp(s1, s2, len)
-    Bytef* s1;
-    Bytef* s2;
+    const Bytef* s1;
+    const Bytef* s2;
     uInt  len;
-#endif
 {
     uInt j;
 
@@ -98,13 +171,9 @@ int zmemcmp(s1, s2, len)
     return 0;
 }
 
-#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
-void zmemzero(Bytef* dest, uInt len)
-#else
 void zmemzero(dest, len)
     Bytef* dest;
     uInt  len;
-#endif
 {
     if (len == 0) return;
     do {
@@ -113,11 +182,12 @@ void zmemzero(dest, len)
 }
 #endif
 
+
+#ifdef SYS16BIT
+
 #ifdef __TURBOC__
-#if (defined( __BORLANDC__) || !defined(SMALL_MEDIUM)) && !defined(__32BIT__)
-/* Small and medium model in Turbo C are for now limited to near allocation
- * with reduced MAX_WBITS and MAX_MEM_LEVEL
- */
+/* Turbo C in 16-bit mode */
+
 #  define MY_ZCALLOC
 
 /* Turbo C malloc() does not allow dynamic allocation of 64K bytes
@@ -189,16 +259,16 @@ void  zcfree (voidpf opaque, voidpf ptr)
     ptr = opaque; /* just to make some compilers happy */
     Assert(0, "zcfree: ptr not found");
 }
-#endif
+
 #endif /* __TURBOC__ */
 
 
-#if defined(M_I86) && !defined(__32BIT__)
+#ifdef M_I86
 /* Microsoft C in 16-bit mode */
 
 #  define MY_ZCALLOC
 
-#if (!defined(_MSC_VER) || (_MSC_VER < 600))
+#if (!defined(_MSC_VER) || (_MSC_VER <= 600))
 #  define _halloc  halloc
 #  define _hfree   hfree
 #endif
@@ -215,36 +285,32 @@ void  zcfree (voidpf opaque, voidpf ptr)
     _hfree(ptr);
 }
 
-#endif /* MSC */
+#endif /* M_I86 */
+
+#endif /* SYS16BIT */
 
 
 #ifndef MY_ZCALLOC /* Any system without a special alloc function */
 
 #ifndef STDC
+extern voidp  malloc OF((uInt size));
 extern voidp  calloc OF((uInt items, uInt size));
 extern void   free   OF((voidpf ptr));
 #endif
 
-#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
-voidpf zcalloc (voidpf opaque, unsigned items, unsigned size)
-#else
 voidpf zcalloc (opaque, items, size)
     voidpf opaque;
     unsigned items;
     unsigned size;
-#endif
 {
     if (opaque) items += size - size; /* make compiler happy */
-    return (voidpf)calloc(items, size);
+    return sizeof(uInt) > 2 ? (voidpf)malloc(items * size) :
+                              (voidpf)calloc(items, size);
 }
 
-#if defined(__VISAGECPP__) /* Visualage can't handle this antiquated interface */
-void zcfree(voidpf opaque, voidpf ptr)
-#else
 void  zcfree (opaque, ptr)
     voidpf opaque;
     voidpf ptr;
-#endif
 {
     free(ptr);
     if (opaque) return; /* make compiler happy */

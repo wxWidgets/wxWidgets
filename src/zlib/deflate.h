@@ -1,6 +1,6 @@
 /* deflate.h -- internal compression state
  * Copyright (C) 1995-2002 Jean-loup Gailly
- * For conditions of distribution and use, see copyright notice in zlib.h 
+ * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
 /* WARNING: this file should *not* be used by applications. It is
@@ -10,10 +10,18 @@
 
 /* @(#) $Id$ */
 
-#ifndef _DEFLATE_H
-#define _DEFLATE_H
+#ifndef DEFLATE_H
+#define DEFLATE_H
 
 #include "zutil.h"
+
+/* define NO_GZIP when compiling if you want to disable gzip header and
+   trailer creation by deflate().  NO_GZIP would be used to avoid linking in
+   the crc code when it is not needed.  For shared libraries, gzip encoding
+   should be left enabled. */
+#ifndef NO_GZIP
+#  define GZIP
+#endif
 
 /* ===========================================================================
  * Internal compression state.
@@ -86,7 +94,7 @@ typedef struct internal_state {
     ulg   pending_buf_size; /* size of pending_buf */
     Bytef *pending_out;  /* next pending byte to output to the stream */
     int   pending;       /* nb of bytes in the pending buffer */
-    int   noheader;      /* suppress zlib header and adler32 */
+    int   wrap;          /* bit 0 true for zlib, bit 1 true for gzip */
     Byte  data_type;     /* UNKNOWN, BINARY or ASCII */
     Byte  method;        /* STORED (for zip only) or DEFLATED */
     int   last_flush;    /* value of flush param for previous deflate call */
@@ -233,7 +241,7 @@ typedef struct internal_state {
     uInt matches;       /* number of string matches in current block */
     int last_eob_len;   /* bit length of EOB code for last block */
 
-#ifdef __WXDEBUG__
+#ifdef DEBUG
     ulg compressed_len; /* total bit length of compressed file mod 2^32 */
     ulg bits_sent;      /* bit length of compressed data sent mod 2^32 */
 #endif
@@ -269,7 +277,7 @@ typedef struct internal_state {
 void _tr_init         OF((deflate_state *s));
 int  _tr_tally        OF((deflate_state *s, unsigned dist, unsigned lc));
 void _tr_flush_block  OF((deflate_state *s, charf *buf, ulg stored_len,
-			  int eof));
+                          int eof));
 void _tr_align        OF((deflate_state *s));
 void _tr_stored_block OF((deflate_state *s, charf *buf, ulg stored_len,
                           int eof));
@@ -281,7 +289,7 @@ void _tr_stored_block OF((deflate_state *s, charf *buf, ulg stored_len,
  * used.
  */
 
-#ifndef __WXDEBUG__
+#ifndef DEBUG
 /* Inline versions of _tr_tally for speed: */
 
 #if defined(GEN_TREES_H) || !defined(STDC)
@@ -312,7 +320,7 @@ void _tr_stored_block OF((deflate_state *s, charf *buf, ulg stored_len,
 #else
 # define _tr_tally_lit(s, c, flush) flush = _tr_tally(s, 0, c)
 # define _tr_tally_dist(s, distance, length, flush) \
-              flush = _tr_tally(s, distance, length) 
+              flush = _tr_tally(s, distance, length)
 #endif
 
-#endif
+#endif /* DEFLATE_H */
