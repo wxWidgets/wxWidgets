@@ -874,7 +874,7 @@ void wxWindowDC::SetPen( const wxPen &pen )
     {
         // X doesn't allow different width in x and y and so we take
         // the average
-        double w = 0.5 + (abs(XLOG2DEVREL(width)) + abs(YLOG2DEVREL(width))) / 2.0;
+        double w = 0.5 + (abs((double) XLOG2DEVREL(width)) + abs((double) YL2DEVREL(width))) / 2.0;
         width = (int)w;
     }
   
