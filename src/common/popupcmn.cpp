@@ -198,7 +198,8 @@ void wxPopupTransientWindow::PopHandlers()
             m_handlerPopup = NULL;
         }
 
-        m_child->ReleaseMouse();
+        if (m_child->HasCapture())
+            m_child->ReleaseMouse();
         m_child = NULL;
     }
 
