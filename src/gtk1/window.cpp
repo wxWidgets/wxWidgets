@@ -686,10 +686,6 @@ static void gtk_window_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExp
     if (gdk_event->count > 0)
         return;
 
-    wxPaintEvent event( win->GetId() );
-    event.SetEventObject( win );
-    win->GetEventHandler()->ProcessEvent( event );
-
 /*
     wxPrintf( "OnExpose from " );
     if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
@@ -700,6 +696,10 @@ static void gtk_window_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExp
                                 (int)gdk_event->area.height );
 */
 
+    wxPaintEvent event( win->GetId() );
+    event.SetEventObject( win );
+    win->GetEventHandler()->ProcessEvent( event );
+
     win->GetUpdateRegion().Clear();
 }
 
@@ -707,7 +707,7 @@ static void gtk_window_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExp
 // "draw" of m_wxwindow
 //-----------------------------------------------------------------------------
 
-static void gtk_window_draw_callback( GtkWidget *WXUNUSED(widget), GdkRectangle *rect, wxWindow *win )
+static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxWindow *win )
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
@@ -715,11 +715,12 @@ static void gtk_window_draw_callback( GtkWidget *WXUNUSED(widget), GdkRectangle 
     if (!win->m_hasVMT)
         return;
 
+    GtkMyFixed *myfixed = GTK_MYFIXED (widget);
+    if (!myfixed->children) 
+        return; /* mini optimisation */
+	 
     win->GetUpdateRegion().Union( rect->x, rect->y,
                                   rect->width, rect->height );
-
-    wxPaintEvent event( win->GetId() );
-    event.SetEventObject( win );
 
 /*
     wxPrintf( "OnDraw from " );
@@ -730,7 +731,9 @@ static void gtk_window_draw_callback( GtkWidget *WXUNUSED(widget), GdkRectangle 
                                 (int)rect->width,
                                 (int)rect->height );
 */
-
+				
+    wxPaintEvent event( win->GetId() );
+    event.SetEventObject( win );
     win->GetEventHandler()->ProcessEvent( event );
 
     win->GetUpdateRegion().Clear();
@@ -1243,13 +1246,12 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion
 
     if (gdk_event->is_hint)
     {
-       int x = 0;
-       int y = 0;
-       GdkModifierType state;
-       gdk_window_get_pointer(gdk_event->window, &x, &y, &state);
-       gdk_event->x = x;
-       gdk_event->y = y;
-       gdk_event->state = state;
+        int x = 0;
+        int y = 0;
+        GdkModifierType state;
+        gdk_window_get_pointer(gdk_event->window, &x, &y, &state);
+        gdk_event->x = x;
+        gdk_event->y = y;
     }
 
 /*
@@ -2036,9 +2038,9 @@ void wxWindow::PostCreation()
         gtk_signal_connect( GTK_OBJECT(m_wxwindow), "expose_event",
           GTK_SIGNAL_FUNC(gtk_window_expose_callback), (gpointer)this );
 
-        gtk_signal_connect( GTK_OBJECT(m_wxwindow), "draw",
+       gtk_signal_connect( GTK_OBJECT(m_wxwindow), "draw",
           GTK_SIGNAL_FUNC(gtk_window_draw_callback), (gpointer)this );
-
+	  
 #if (GTK_MINOR_VERSION > 0)
         /* these are called when the "sunken", "raised" or "simple" borders are drawn */
         gtk_signal_connect( GTK_OBJECT(m_widget), "expose_event",
@@ -2201,10 +2203,13 @@ void wxWindow::OnInternalIdle()
     wxCursor cursor = m_cursor;
     if (g_globalCursor.Ok()) cursor = g_globalCursor;
 
-    if (cursor.Ok() && m_currentGdkCursor != cursor)
+    if (cursor.Ok())
     {
-        m_currentGdkCursor = cursor;
-	
+        /* I now set the cursor the anew in every OnInternalIdle call
+	   as setting the cursor in a parent window also effects the
+	   windows above so that checking for the current cursor is
+	   not possible. */
+	   
         if (m_wxwindow)
         {
             GdkWindow *window = m_wxwindow->window;
@@ -2671,16 +2676,16 @@ void wxWindow::Refresh( bool eraseBackground, const wxRect *rect )
         if (m_wxwindow)
 	{
 	    /* call the callback directly for preventing GTK from
-	       clearing the bakground */
+	       clearing the background */
 	    int w = 0;
 	    int h = 0;
 	    GetClientSize( &w, &h );
-            GdkRectangle gdk_rect;
-            gdk_rect.x = 0;
-            gdk_rect.y = 0;
-            gdk_rect.width = w;
-            gdk_rect.height = h;
-            gtk_window_draw_callback( m_wxwindow, &gdk_rect, this );
+	    
+            GetUpdateRegion().Union( 0, 0, w, h );
+            wxPaintEvent event( GetId() );
+            event.SetEventObject( this );
+            GetEventHandler()->ProcessEvent( event );
+            GetUpdateRegion().Clear();
 	}
         else
 	{
@@ -2689,20 +2694,25 @@ void wxWindow::Refresh( bool eraseBackground, const wxRect *rect )
     }
     else
     {
-        GdkRectangle gdk_rect;
-        gdk_rect.x = rect->x;
-        gdk_rect.y = rect->y;
-        gdk_rect.width = rect->width;
-        gdk_rect.height = rect->height;
 
         if (m_wxwindow)
 	{
 	    /* call the callback directly for preventing GTK from
-	       clearing the bakground */
-            gtk_window_draw_callback( m_wxwindow, &gdk_rect, this );
+	       clearing the background */
+            GetUpdateRegion().Union( rect->x, rect->y, rect->width, rect->height );
+            wxPaintEvent event( GetId() );
+            event.SetEventObject( this );
+            GetEventHandler()->ProcessEvent( event );
+            GetUpdateRegion().Clear();
 	}
         else
 	{
+            GdkRectangle gdk_rect;
+            gdk_rect.x = rect->x;
+            gdk_rect.y = rect->y;
+            gdk_rect.width = rect->width;
+            gdk_rect.height = rect->height;
+	    
             gtk_widget_draw( m_widget, &gdk_rect );
 	}
     }
@@ -3018,6 +3028,7 @@ void wxWindow::CaptureMouse()
                       (GdkEventMask)
                          (GDK_BUTTON_PRESS_MASK |
                           GDK_BUTTON_RELEASE_MASK |
+                          GDK_POINTER_MOTION_HINT_MASK | 
                           GDK_POINTER_MOTION_MASK),
                       (GdkWindow *) NULL,
                       m_cursor.GetCursor(),

@@ -145,7 +145,7 @@ void TestGLCanvas::OnSize(wxSizeEvent& event)
 {
     int width, height;
     GetClientSize(& width, & height);
-
+    
 #ifndef __WXMOTIF__
     if (GetContext())
 #endif

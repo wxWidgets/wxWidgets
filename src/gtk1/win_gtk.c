@@ -610,9 +610,11 @@ gtk_myfixed_draw (GtkWidget    *widget,
   if (GTK_WIDGET_DRAWABLE (widget))
     {
       myfixed = GTK_MYFIXED (widget);
-      gtk_myfixed_paint (widget, area);
-
+      
       children = myfixed->children;
+      if (children)  /* mini optimisation */
+         gtk_myfixed_paint (widget, area);
+
       while (children)
 	{
 	  child = children->data;

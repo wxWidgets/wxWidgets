@@ -1011,12 +1011,14 @@ void wxListBox::OnInternalIdle()
     wxCursor cursor = m_cursor;
     if (g_globalCursor.Ok()) cursor = g_globalCursor;
 
-    if (GTK_WIDGET(m_list)->window && cursor.Ok() && m_currentGdkCursor != cursor)
+    if (GTK_WIDGET(m_list)->window && cursor.Ok())
     {
-        wxCursor oldGdkCursor = m_currentGdkCursor;
-        m_currentGdkCursor = cursor;
-	
-	gdk_window_set_cursor( GTK_WIDGET(m_list)->window, m_currentGdkCursor.GetCursor() );
+        /* I now set the cursor the anew in every OnInternalIdle call
+	   as setting the cursor in a parent window also effects the
+	   windows above so that checking for the current cursor is
+	   not possible. */
+	   
+	gdk_window_set_cursor( GTK_WIDGET(m_list)->window, cursor.GetCursor() );
 
         GList *child = m_list->children;
         while (child)
@@ -1025,15 +1027,9 @@ void wxListBox::OnInternalIdle()
             GtkWidget *label = GTK_WIDGET( bin->child );
 	    
 	    if (!label->window)
-	    {
-	        /* windows not yet realized. come back later. */
-                m_currentGdkCursor = oldGdkCursor;
 		break;
-	    }
 	    else
-	    {
-	        gdk_window_set_cursor( label->window, m_currentGdkCursor.GetCursor() );
-	    }
+	        gdk_window_set_cursor( label->window, cursor.GetCursor() );
 
             child = child->next;
         }

@@ -137,6 +137,9 @@ gtk_glwindow_realized_callback( GtkWidget * WXUNUSED(widget), wxGLCanvas *win )
 {
     win->m_glContext = new wxGLContext( TRUE, win, wxNullPalette, win->m_glContext );
 
+    XFree( g_vi );
+    g_vi = (XVisualInfo*) NULL;
+
     return FALSE;
 }
 
@@ -241,12 +244,6 @@ bool wxGLCanvas::Create( wxWindow *parent,
     gtk_widget_pop_visual();
     gtk_widget_pop_colormap();
     
-    /* must be realized for OpenGl output */
-    gtk_widget_realize( m_glWidget );
- 
-    XFree( g_vi );
-    g_vi = (XVisualInfo*) NULL;
-
     return TRUE;
 }
 
