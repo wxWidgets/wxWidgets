@@ -520,6 +520,8 @@ bool wxClipboard::AddData( wxDataObject *data )
 #else // !wxUSE_DRAG_AND_DROP
 */
     return FALSE;
+#else
+    return FALSE;
 #endif // wxUSE_DRAG_AND_DROP/!wxUSE_DRAG_AND_DROP
 }
 
@@ -605,6 +607,8 @@ bool wxClipboard::GetData( wxDataObject& data )
     }
 #else
 */
+    return FALSE;
+#else
     return FALSE;
 #endif
 }

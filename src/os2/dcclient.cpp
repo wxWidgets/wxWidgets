@@ -225,7 +225,7 @@ void wxClientDC::InitDC()
     // in wxUniv build we must manually do some DC adjustments usually
     // performed by Windows for us
 #ifdef __WXUNIVERSAL__
-    wxPoint ptOrigin = m_canvas->GetClientAreaOrigin();
+    wxPoint ptOrigin = m_pCanvas->GetClientAreaOrigin();
     if ( ptOrigin.x || ptOrigin.y )
     {
         // no need to shift DC origin if shift is null
@@ -233,7 +233,7 @@ void wxClientDC::InitDC()
     }
 
     // clip the DC to avoid overwriting the non client area
-    SetClippingRegion(wxPoint(0, 0), m_canvas->GetClientSize());
+    SetClippingRegion(wxPoint(0, 0), m_pCanvas->GetClientSize());
 #endif // __WXUNIVERSAL__
 } // end of wxClientDC::InitDC
 

@@ -13,7 +13,7 @@ $Id$
 */
 
 
-
+#include "wx/defs.h"
 #include "wx/setup.h"
 
 #if wxUSE_ZLIB && wxUSE_ZIPSTREAM
@@ -854,11 +854,11 @@ extern int ZEXPORT unzLocateFile (file, szFileName, iCaseSensitivity)
     const char *c;
     char *c2;
     char szFileName2[UNZ_MAXFILENAMEINZIP+1];
-    
+
 	uLong num_fileSaved;
 	uLong pos_in_central_dirSaved;
 
-    for (c = szFileName, c2 = szFileName2; *c != '\0'; c++, c2++) 
+    for (c = szFileName, c2 = szFileName2; *c != '\0'; c++, c2++)
         if (*c == '\\') *c2 = '/';
         else *c2 = *c;
     *c2 = '\0';

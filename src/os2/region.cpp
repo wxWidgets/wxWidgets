@@ -4,7 +4,7 @@
 // Author:    David Webster
 // Modified by:
 // Created:   10/15/99
-// RCS-ID:	  $Id$
+// RCS-ID:    $Id$
 // Copyright: (c) Davdi Webster
 // Licence:   wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -19,8 +19,8 @@
 #include "wx/window.h"
 #include "wx/os2/private.h"
 
-	IMPLEMENT_DYNAMIC_CLASS(wxRegion, wxGDIObject)
-	IMPLEMENT_DYNAMIC_CLASS(wxRegionIterator, wxObject)
+    IMPLEMENT_DYNAMIC_CLASS(wxRegion, wxGDIObject)
+    IMPLEMENT_DYNAMIC_CLASS(wxRegionIterator, wxObject)
 
 //-----------------------------------------------------------------------------
 // wxRegionRefData implementation
@@ -31,6 +31,7 @@ public:
     wxRegionRefData()
     {
         m_hRegion = 0;
+        m_hPS     = 0;
     }
 
     wxRegionRefData(const wxRegionRefData& rData)
@@ -89,11 +90,13 @@ wxRegion::wxRegion()
 } // end of wxRegion::wxRegion
 
 wxRegion::wxRegion(
-  WXHRGN                            hRegion
+  WXHRGN                            hRegion,
+  WXHDC                             hPS
 )
 {
     m_refData = new wxRegionRefData;
     M_REGION = (HRGN) hRegion;
+    (((wxRegionRefData*)m_refData)->m_hPS) = hPS;
 } // end of wxRegion::wxRegion
 
 wxRegion::wxRegion(
@@ -396,8 +399,9 @@ void wxRegion::GetBox(
     if (m_refData)
     {
         RECTL                       vRect;
+        APIRET                      rc;
 
-        ::GpiQueryRegionBox( ((wxRegionRefData*)m_refData)->m_hPS
+        rc = ::GpiQueryRegionBox( ((wxRegionRefData*)m_refData)->m_hPS
                             ,M_REGION
                             ,&vRect
                            );

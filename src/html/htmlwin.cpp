@@ -618,7 +618,7 @@ void wxHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link)
 void wxHtmlWindow::OnCellClicked(wxHtmlCell *cell,
                                  wxCoord x, wxCoord y,
                                  const wxMouseEvent& event)
-{ 
+{
     wxCHECK_RET( cell, _T("can't be called with NULL cell") );
 
     cell->OnMouseClick(this, x, y, event);

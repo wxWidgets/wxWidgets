@@ -12,6 +12,13 @@
 #ifndef _WX_APP_H_
 #define _WX_APP_H_
 
+#ifdef __WATCOMC__
+
+#include <sys/ioctl.h>
+#include <sys/select.h>
+
+#else
+
 #include <sys/time.h>
 #include <sys/types.h>
 
@@ -22,6 +29,8 @@
 #undef BYTE_ORDER
 #include <types.h>
 #define INCL_ORDERS
+#endif
+
 #endif
 
 #include "wx/event.h"

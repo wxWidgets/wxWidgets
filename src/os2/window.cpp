@@ -33,6 +33,7 @@
     #include "wx/listbox.h"
     #include "wx/button.h"
     #include "wx/msgdlg.h"
+    #include "wx/scrolwin.h"
 
     #include <stdio.h>
 #endif
@@ -93,12 +94,14 @@
 // ---------------------------------------------------------------------------
 
 //
-// The last Windows message we got (MT-UNSAFE)
+// The last PM message we got (MT-UNSAFE)
 //
 QMSG                      s_currentMsg;
 
+#if wxUSE_MENUS_NATIVE
 wxMenu*                   wxCurrentPopupMenu = NULL;
-extern wxList WXDLLEXPORT wxPendingDelete;
+#endif // wxUSE_MENUS_NATIVE
+
 #if !defined(__VISAGECPP__) || (__IBMCPP__ < 400)
 extern wxChar             wxCanvasClassName[];
 #endif
@@ -121,9 +124,9 @@ MRESULT EXPENTRY wxWndProc( HWND hWnd
     const char *wxGetMessageName(int message);
 #endif  //__WXDEBUG__
 
-void      wxRemoveHandleAssociation(wxWindow* pWin);
-void      wxAssociateWinWithHandle( HWND      hWnd
-                                   ,wxWindow* pWin
+void      wxRemoveHandleAssociation(wxWindowOS2* pWin);
+void      wxAssociateWinWithHandle( HWND         hWnd
+                                   ,wxWindowOS2* pWin
                                   );
 wxWindow* wxFindWinFromHandle(WXHWND hWnd);
 
@@ -131,12 +134,14 @@ wxWindow* wxFindWinFromHandle(WXHWND hWnd);
 // This magical function is used to translate VK_APPS key presses to right
 // mouse clicks
 //
+// Unused?
+#if 0
 static void TranslateKbdEventToMouse( wxWindow* pWin
                                      ,int*      pX
                                      ,int*      pY
                                      ,MPARAM*   pFlags
                                     );
-
+#endif
 //
 // get the current state of SHIFT/CTRL keys
 //
@@ -146,9 +151,15 @@ static inline bool IsCtrlDown() { return (::WinGetKeyState(HWND_DESKTOP, VK_CTRL
 // event tables
 // ---------------------------------------------------------------------------
 
+// in wxUniv-OS/2 this class is abstract because it doesn't have DoPopupMenu()
+// method
+#ifdef __WXUNIVERSAL__
+    IMPLEMENT_ABSTRACT_CLASS(wxWindowOS2, wxWindowBase)
+#else // __WXPM__
     IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowBase)
+#endif // __WXUNIVERSAL__/__WXPM__
 
-BEGIN_EVENT_TABLE(wxWindow, wxWindowBase)
+BEGIN_EVENT_TABLE(wxWindowOS2, wxWindowBase)
     EVT_ERASE_BACKGROUND(wxWindowOS2::OnEraseBackground)
     EVT_SYS_COLOUR_CHANGED(wxWindowOS2::OnSysColourChanged)
     EVT_INIT_DIALOG(wxWindowOS2::OnInitDialog)
@@ -160,6 +171,10 @@ END_EVENT_TABLE()
 // implementation
 // ===========================================================================
 
+// ---------------------------------------------------------------------------
+// wxWindow utility functions
+// ---------------------------------------------------------------------------
+
 //
 // Find an item given the PM Window id
 //
@@ -167,21 +182,24 @@ wxWindow* wxWindowOS2::FindItem(
   long                              lId
 ) const
 {
-    wxControl*                      pItem = wxDynamicCast( this
-                                                          ,wxControl
-                                                         );
+#if wxUSE_CONTROLS
+    wxControl*                      pItem = wxDynamicCast(this, wxControl);
 
     if (pItem)
     {
         //
         // I it we or one of our "internal" children?
         //
-        if (pItem->GetId() == lId ||
-             (pItem->GetSubcontrols().Index(lId) != wxNOT_FOUND))
+        if (pItem->GetId() == lId
+#ifndef __WXUNIVERSAL__
+            || (pItem->GetSubcontrols().Index(lId) != wxNOT_FOUND)
+#endif
+            )
         {
             return pItem;
         }
     }
+#endif // wxUSE_CONTROLS
 
     wxWindowList::Node*             pCurrent = GetChildren().GetFirst();
 
@@ -220,7 +238,11 @@ wxWindow* wxWindowOS2::FindItemByHWND(
         if (pWnd)
             return(pWnd);
 
-        if (!bControlOnly || pParent->IsKindOf(CLASSINFO(wxControl)))
+        if (!bControlOnly
+#if wxUSE_CONTROLS
+            || pParent->IsKindOf(CLASSINFO(wxControl))
+#endif // wxUSE_CONTROLS
+            )
         {
             wxWindow*               pItem = pCurrent->GetData();
 
@@ -316,9 +338,11 @@ wxWindowOS2::~wxWindowOS2()
                 pFrame->SetLastFocus((wxWindow*)NULL);
         }
     }
+
+    DestroyChildren();
+
     if (m_parent)
         m_parent->RemoveChild(this);
-    DestroyChildren();
 
     if (m_hWnd)
     {
@@ -331,6 +355,7 @@ wxWindowOS2::~wxWindowOS2()
     }
 } // end of wxWindowOS2::~wxWindowOS2
 
+// real construction (Init() must have been called before!)
 bool wxWindowOS2::Create(
   wxWindow*                         pParent
 , wxWindowID                        vId
@@ -342,7 +367,8 @@ bool wxWindowOS2::Create(
 {
     HWND                            hParent = NULLHANDLE;
     wxPoint                         vPos = rPos; // The OS/2 position
-    ULONG                           ulCreateFlags = 0L;
+    ULONG                           ulCreateFlags = 0;
+    WXDWORD                         dwExStyle = 0;
 
     wxCHECK_MSG(pParent, FALSE, wxT("can't create wxWindow without parent"));
 
@@ -402,6 +428,10 @@ bool wxWindowOS2::Create(
     ulCreateFlags |=  WS_VISIBLE;
 
 
+#ifdef __WXUNIVERSAL__
+    // no 3d effects, we draw them ourselves
+    WXDWORD exStyle = 0;
+#else // !wxUniversal
     if (lStyle & wxCLIP_SIBLINGS)
         ulCreateFlags |= WS_CLIPSIBLINGS;
 
@@ -412,15 +442,26 @@ bool wxWindowOS2::Create(
     //
     //
     bool                            bWant3D;
-    WXDWORD                         dwExStyle = Determine3DEffects( WS_EX_CLIENTEDGE
-                                                                   ,&bWant3D
-                                                                  );
+    dwExStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &bWant3D);
+
+#endif
 
     //
     // Add the simple border style as we'll use this to draw borders
     //
     if (lStyle & wxSIMPLE_BORDER)
         dwExStyle |= wxSIMPLE_BORDER;
+
+    if (lStyle & wxPOPUP_WINDOW)
+    {
+        // a popup window floats on top of everything
+//TODO: fix this...
+//        exStyle |= WS_EX_TOPMOST | WS_EX_TOOLWINDOW;
+
+        // it is also created hidden as other top level windows
+        ulCreateFlags &= ~WS_VISIBLE;
+        m_isShown = FALSE;
+    }
 
     //
     // Generic OS/2 Windows are created with no owner, no Z Order, no Control data,
@@ -452,6 +493,7 @@ bool wxWindowOS2::Create(
 void wxWindowOS2::SetFocus()
 {
     HWND                            hWnd = GetHwnd();
+    wxCHECK_RET( hWnd, _T("can't set focus to invalid window") );
 
     if (hWnd)
         ::WinSetFocus(HWND_DESKTOP, hWnd);
@@ -489,7 +531,7 @@ bool wxWindowOS2::Enable(
         pChild->Enable(bEnable);
         pNode = pNode->GetNext();
     }
-    return(TRUE);
+    return TRUE;
 } // end of wxWindowOS2::Enable
 
 bool wxWindowOS2::Show(
@@ -507,7 +549,7 @@ bool wxWindowOS2::Show(
     {
         ::WinSetWindowPos(hWnd, HWND_TOP, 0, 0, 0, 0, SWP_ACTIVATE | SWP_ZORDER);
     }
-    return(TRUE);
+    return TRUE;
 } // end of wxWindowOS2::Show
 
 void wxWindowOS2::Raise()
@@ -575,7 +617,7 @@ bool wxWindowOS2::SetFont(
         wxChar                      zFont[128];
 
         sprintf(zFont, "%d.%s", rFont.GetPointSize(), rFont.GetFaceName().c_str());
-        return(::WinSetPresParam(hWnd, PP_FONTNAMESIZE, strlen(zFont), (PVOID)zFont));
+        return (bool)::WinSetPresParam(hWnd, PP_FONTNAMESIZE, strlen(zFont), (PVOID)zFont);
     }
     return(TRUE);
 }
@@ -590,25 +632,18 @@ bool wxWindowOS2::SetCursor(
         return FALSE;
     }
 
-    wxASSERT_MSG( m_cursor.Ok(),
-                  wxT("cursor must be valid after call to the base version"));
+    if ( m_cursor.Ok() ) {
+        HWND                            hWnd = GetHwnd();
+        POINTL                          vPoint;
+        RECTL                           vRect;
 
-    HWND                            hWnd = GetHwnd();
-    POINTL                          vPoint;
-    RECTL                           vRect;
-    HPS                             hPS;
-    HRGN                            hRGN;
+        ::WinQueryPointerPos(HWND_DESKTOP, &vPoint);
+        ::WinQueryWindowRect(hWnd, &vRect);
 
-    hPS = ::WinGetPS(hWnd);
-
-    ::WinQueryPointerPos(HWND_DESKTOP, &vPoint);
-    ::WinQueryWindowRect(hWnd, &vRect);
-
-    hRGN = ::GpiCreateRegion(hPS, 1L, &vRect);
-
-    if ((::GpiPtInRegion(hPS, hRGN, &vPoint) == PRGN_INSIDE) && !wxIsBusy())
-    {
-        ::WinSetPointer(HWND_DESKTOP, (HPOINTER)m_cursor.GetHCURSOR());
+        if (::WinPtInRect(vHabmain, &vRect, &vPoint) && !wxIsBusy())
+        {
+            ::WinSetPointer(HWND_DESKTOP, (HPOINTER)m_cursor.GetHCURSOR());
+        }
     }
     return TRUE;
 } // end of wxWindowOS2::SetCursor
@@ -740,21 +775,21 @@ int wxWindowOS2::GetScrollThumb(
 void wxWindowOS2::SetScrollPos(
   int                               nOrient
 , int                               nPos
-, bool                              bRefresh
+, bool                              WXUNUSED(bRefresh)
 )
 {
     if (nOrient == wxHORIZONTAL )
         ::WinSendMsg(m_hWndScrollBarHorz, SBM_SETPOS, (MPARAM)nPos, (MPARAM)NULL);
     else
         ::WinSendMsg(m_hWndScrollBarVert, SBM_SETPOS, (MPARAM)nPos, (MPARAM)NULL);
-} // end of wxWindowOS2::SetScrollPos(
+} // end of wxWindowOS2::SetScrollPos
 
 void wxWindowOS2::SetScrollbar(
   int                               nOrient
 , int                               nPos
 , int                               nThumbVisible
 , int                               nRange
-, bool                              bRefresh
+, bool                              WXUNUSED(bRefresh)
 )
 {
     int                             nOldRange = nRange - nThumbVisible;
@@ -1162,7 +1197,7 @@ void wxWindowOS2::SetupColours()
 } // end of wxWindowOS2::SetupColours
 
 void wxWindowOS2::OnIdle(
-  wxIdleEvent&                      rEvent
+  wxIdleEvent&                      WXUNUSED(rEvent)
 )
 {
     //
@@ -1224,7 +1259,7 @@ bool wxWindowOS2::Reparent(
 
 void wxWindowOS2::Clear()
 {
-    wxClientDC                      vDc(this);
+    wxClientDC                      vDc((wxWindow*)this);
     wxBrush                         vBrush( GetBackgroundColour()
                                            ,wxSOLID
                                           );
@@ -1375,10 +1410,12 @@ void wxWindowOS2::DoGetPosition(
         // We may be faking the client origin. So a window that's really at (0,
         // 30) may appear (to wxWin apps) to be at (0, 0).
         //
-        wxPoint                     vPt(pParent->GetClientAreaOrigin());
+        if (pParent) {
+            wxPoint                     vPt(pParent->GetClientAreaOrigin());
 
-        vPoint.x -= vPt.x;
-        vPoint.y -= vPt.y;
+            vPoint.x -= vPt.x;
+            vPoint.y -= vPt.y;
+        }
     }
 
     if (pX)
@@ -1393,14 +1430,18 @@ void wxWindowOS2::DoScreenToClient(
 ) const
 {
     HWND                            hWnd = GetHwnd();
-    SWP                             vSwp;
+    POINTL                          ptl;
 
-    ::WinQueryWindowPos(hWnd, &vSwp);
+    ptl.x = pX ? *pX : 0;
+    ptl.y = pY ? *pY : 0;
+
+    ::WinMapWindowPoints(HWND_DESKTOP, hWnd, &ptl, 1);
 
     if (pX)
-        *pX -= vSwp.x;
+        *pX = ptl.x;
     if (pY)
-        *pY -= vSwp.y;
+        *pY = ptl.y;
+
 } // end of wxWindowOS2::DoScreenToClient
 
 void wxWindowOS2::DoClientToScreen(
@@ -1409,14 +1450,17 @@ void wxWindowOS2::DoClientToScreen(
 ) const
 {
     HWND                            hWnd = GetHwnd();
-    SWP                             vSwp;
+    POINTL                          ptl;
 
-    ::WinQueryWindowPos(hWnd, &vSwp);
+    ptl.x = pX ? *pX : 0;
+    ptl.y = pY ? *pY : 0;
+
+    ::WinMapWindowPoints(hWnd, HWND_DESKTOP, &ptl, 1);
 
     if (pX)
-        *pX += vSwp.x;
+        *pX = ptl.x;
     if (pY)
-        *pY += vSwp.y;
+        *pY = ptl.y;
 } // end of wxWindowOS2::DoClientToScreen
 
 //
@@ -1506,21 +1550,12 @@ void wxWindowOS2::DoSetSize(
     int                             nCurrentHeight;
     wxSize                          vSize(-1, -1);
 
-    GetPosition( &nCurrentX
-                ,&nCurrentY
-               );
-    GetSize( &nCurrentWidth
-            ,&nCurrentHeight
-           );
+    GetPosition(&nCurrentX, &nCurrentY);
+    GetSize(&nCurrentWidth, &nCurrentHeight);
 
-    //
     // ... and don't do anything (avoiding flicker) if it's already ok
-    //
-    if ( nX == nCurrentX &&
-         nY == nCurrentY &&
-         nWidth == nCurrentWidth &&
-         nHeight == nCurrentHeight
-       )
+    if (nX == nCurrentX && nY == nCurrentY &&
+        nWidth == nCurrentWidth && nHeight == nCurrentHeight)
     {
         return;
     }
@@ -1530,10 +1565,7 @@ void wxWindowOS2::DoSetSize(
     if (nY == -1 && !(nSizeFlags & wxSIZE_ALLOW_MINUS_ONE))
         nY = nCurrentY;
 
-    AdjustForParentClientOrigin( nX
-                                ,nY
-                                ,nSizeFlags
-                               );
+    AdjustForParentClientOrigin(nX, nY, nSizeFlags);
 
     if (nWidth == -1)
     {
@@ -1582,6 +1614,7 @@ void wxWindowOS2::DoSetClientSize(
 {
     wxWindow*                       pParent = GetParent();
     HWND                            hWnd = GetHwnd();
+#if 0
     HWND                            hParentWnd = (HWND)0;
     HWND                            hClientWnd = (HWND)0;
     RECTL                           vRect;
@@ -1613,23 +1646,51 @@ void wxWindowOS2::DoSetClientSize(
     vPoint.x = vRect2.xLeft;
     vPoint.y = vRect2.yBottom;
     if (pParent)
-    {
+    {             x
         vPoint.x -= vRect3.xLeft;
         vPoint.y -= vRect3.yBottom;
     }
+#else
+    HWND                            hParentWnd = (HWND)0;
+    HWND                            hClientWnd = (HWND)0;
+    RECTL                           vRect;
+    RECT                            vRect2;
 
-    DoMoveWindow( vPoint.x
-                 ,vPoint.y
-                 ,nActualWidth
-                 ,nActualHeight
-                );
+    hClientWnd = ::WinWindowFromID(GetHwnd(), FID_CLIENT);
+    ::WinQueryWindowRect(hClientWnd, &vRect2);
+    ::WinQueryWindowRect(hWnd, &vRect2);
 
-    wxSizeEvent                     vEvent( wxSize( nWidth
-                                                  ,nHeight
-                                                 )
-                                           ,m_windowId
-                                          );
+    if (pParent)
+        hParentWnd = (HWND) pParent->GetHWND();
 
+    ::WinQueryWindowRect(hWnd, &vRect);
+    //
+    // Find the difference between the entire window (title bar and all)
+    // and the client area; add this to the new client size to move the
+    // window. OS/2 is backward from windows on height
+    //
+    int nActualWidth  = vRect2.xRight - vRect2.xLeft - vRect.xRight + nWidth;
+    int nActualHeight = vRect2.yTop - vRect2.yBottom - vRect.yTop + nHeight;
+
+    nActualWidth  = nWidth;
+    nActualHeight = nHeight;
+    //
+    // If there's a parent, must subtract the parent's bottom left corner
+    // since MoveWindow moves relative to the parent
+    //
+    POINTL                          vPoint;
+
+    vPoint.x = vRect2.xLeft;
+    vPoint.y = vRect2.yBottom;
+    if (pParent)
+    {
+        ::WinMapWindowPoints(hWnd, hParentWnd, &vPoint, 1);
+    }
+#endif
+
+    DoMoveWindow(vPoint.x, vPoint.y, nActualWidth, nActualHeight);
+
+    wxSizeEvent                     vEvent(wxSize(nWidth, nHeight), m_windowId);
     vEvent.SetEventObject(this);
     GetEventHandler()->ProcessEvent(vEvent);
 } // end of wxWindowOS2::DoSetClientSize
@@ -1647,7 +1708,6 @@ int wxWindowOS2::GetCharHeight() const
 {
     HPS                             hPs;
     FONTMETRICS                     vFontMetrics;
-    BOOL                            bRc;
 
     hPs = ::WinGetPS(GetHwnd());
 
@@ -1689,6 +1749,13 @@ void wxWindowOS2::GetTextExtent(
     HPS                             hPs;
 
     hPs = ::WinGetPS(GetHwnd());
+
+    // Just prevent compiler warnings
+    wxString dummy = rString;
+    pX = pX;
+    pY = pY;
+    pDescent = pDescent;
+    pExternalLeading = pExternalLeading;
 /*
 // TODO: Will have to play with fonts later
 
@@ -1793,7 +1860,8 @@ void wxWindowOS2::GetCaretPos(
 // ---------------------------------------------------------------------------
 // popup menu
 // ---------------------------------------------------------------------------
-
+//
+#if wxUSE_MENUS_NATIVE
 static void wxYieldForCommandsOnly()
 {
     //
@@ -1802,18 +1870,15 @@ static void wxYieldForCommandsOnly()
     //
     QMSG                            vMsg;
 
-    while (::WinPeekMsg( vHabmain
-                        ,&vMsg
-                        ,(HWND)0
-                        ,WM_COMMAND
-                        ,WM_COMMAND
-                        ,PM_REMOVE
-                       ) && vMsg.msg != WM_QUIT)
+    while (::WinPeekMsg(vHabmain, &vMsg, (HWND)0, WM_COMMAND,
+           WM_COMMAND,PM_REMOVE) && vMsg.msg != WM_QUIT)
     {
         wxTheApp->DoMessage((WXMSG*)&vMsg);
     }
 }
+#endif // wxUSE_MENUS_NATIVE
 
+#if wxUSE_MENUS_NATIVE
 bool wxWindowOS2::DoPopupMenu(
   wxMenu*                           pMenu
 , int                               nX
@@ -1841,7 +1906,7 @@ bool wxWindowOS2::DoPopupMenu(
                    ,PU_MOUSEBUTTON2DOWN | PU_MOUSEBUTTON2 | PU_KEYBOARD
                   );
     // we need to do it righ now as otherwise the events are never going to be
-    // sent to wxCurrentPopupMenu from HandleCommand()
+    // sent to wxCurrentPopupMenu from ;()
     //
     // note that even eliminating (ugly) wxCurrentPopupMenu global wouldn't
     // help and we'd still need wxYieldForCommandsOnly() as the menu may be
@@ -1853,6 +1918,7 @@ bool wxWindowOS2::DoPopupMenu(
     pMenu->SetInvokingWindow(NULL);
     return TRUE;
 } // end of wxWindowOS2::DoPopupMenu
+#endif // wxUSE_MENUS_NATIVE
 
 // ===========================================================================
 // pre/post message processing
@@ -1865,15 +1931,17 @@ MRESULT wxWindowOS2::OS2DefWindowProc(
 )
 {
     if (m_fnOldWndProc)
-        return (MRESULT)m_fnOldWndProc(GetHWND(), (ULONG)uMsg, (MPARAM)wParam, (MPARAM)lParam);
+        return (MRESULT)m_fnOldWndProc(GetHWND(), uMsg, (MPARAM)wParam, (MPARAM)lParam);
     else
-        return ::WinDefWindowProc(GetHWND(), (ULONG)uMsg, (MPARAM)wParam, (MPARAM)lParam);
+        return ::WinDefWindowProc(GetHWND(), uMsg, (MPARAM)wParam, (MPARAM)lParam);
 } // end of wxWindowOS2::OS2DefWindowProc
 
 bool wxWindowOS2::OS2ProcessMessage(
   WXMSG*                            pMsg
 )
 {
+// wxUniversal implements tab traversal itself
+#ifndef __WXUNIVERSAL__
     QMSG*                           pQMsg = (QMSG*)pMsg;
 
     if (m_hWnd != 0 && (GetWindowStyleFlag() & wxTAB_TRAVERSAL))
@@ -2035,6 +2103,9 @@ bool wxWindowOS2::OS2ProcessMessage(
         if (::WinSendMsg(pQMsg->hwnd, WM_QUERYDLGCODE, pQMsg, 0));
             return TRUE;
     }
+#else
+    pMsg = pMsg; // just shut up the compiler
+#endif // __WXUNIVERSAL__
 
 #if wxUSE_TOOLTIPS
     if ( m_tooltip )
@@ -2054,9 +2125,10 @@ bool wxWindowOS2::OS2TranslateMessage(
   WXMSG*                            pMsg
 )
 {
-#if wxUSE_ACCEL
+#if wxUSE_ACCEL && !defined(__WXUNIVERSAL__)
   return m_acceleratorTable.Translate(m_hWnd, pMsg);
 #else
+  pMsg = pMsg;
   return FALSE;
 #endif //wxUSE_ACCEL
 } // end of wxWindowOS2::OS2TranslateMessage
@@ -2132,7 +2204,7 @@ void wxWindowOS2::UnpackMenuSelect(
 // Hook for new window just as it's being created, when the window isn't yet
 // associated with the handle
 //
-wxWindow*                           wxWndHook = NULL;
+wxWindowOS2*                         wxWndHook = NULL;
 
 //
 // Main window proc
@@ -2152,7 +2224,7 @@ MRESULT EXPENTRY wxWndProc(
                wxGetMessageName(ulMsg), wParam, lParam);
 #endif // __WXDEBUG__
 
-    wxWindow*                       pWnd = wxFindWinFromHandle((WXHWND)hWnd);
+    wxWindowOS2*                    pWnd = wxFindWinFromHandle((WXHWND)hWnd);
 
     //
     // When we get the first message for the HWND we just created, we associate
@@ -2203,10 +2275,7 @@ MRESULT wxWindowOS2::OS2WindowProc(
     // Did we process the uMsg?
     //
     bool                            bProcessed = FALSE;
-    bool                            bAllow;
     MRESULT                         mResult;
-    WXHICON                         hIcon;
-    WXHBRUSH                        hBrush;
 
     //
     // For most messages we should return 0 when we do process the message
@@ -2378,7 +2447,8 @@ MRESULT wxWindowOS2::OS2WindowProc(
 
                 if (uKeyFlags & KC_KEYUP)
                 {
-                    bProcessed = HandleKeyUp((WXDWORD)wParam, lParam);
+                    //TODO: check if the cast to WXWORD isn't causing trouble
+                    bProcessed = HandleKeyUp((WXWORD)wParam, lParam);
                     break;
                 }
                 else // keydown event
@@ -2388,7 +2458,7 @@ MRESULT wxWindowOS2::OS2WindowProc(
                     // return 0 now (we've handled it). DON't RETURN
                     // we still need to process further
                     //
-                    HandleKeyDown((WXDWORD)wParam, lParam);
+                    HandleKeyDown((WXWORD)wParam, lParam);
                     if (uKeyFlags & KC_VIRTUALKEY)
                     {
                         USHORT          uVk = SHORT2FROMMP((MPARAM)lParam);
@@ -2422,13 +2492,13 @@ MRESULT wxWindowOS2::OS2WindowProc(
                             case VK_DOWN:
                             case VK_UP:
                             default:
-                                bProcessed = HandleChar((WXDWORD)wParam, lParam);
+                                bProcessed = HandleChar((WXWORD)wParam, lParam);
                          }
                          break;
                     }
                     else // WM_CHAR -- Always an ASCII character
                     {
-                        bProcessed = HandleChar((WXDWORD)wParam, lParam, TRUE);
+                        bProcessed = HandleChar((WXWORD)wParam, lParam, TRUE);
                         break;
                     }
                 }
@@ -2561,10 +2631,10 @@ MRESULT wxWindowOS2::OS2WindowProc(
 // Dialog window proc
 //
 MRESULT wxDlgProc(
-  HWND                              hWnd
+  HWND                              WXUNUSED(hWnd)
 , UINT                              uMsg
-, MPARAM                            wParam
-, MPARAM                            lParam)
+, MPARAM                            WXUNUSED(wParam)
+, MPARAM                            WXUNUSED(lParam))
 {
     if (uMsg == WM_INITDLG)
     {
@@ -2597,7 +2667,7 @@ wxWindow* wxFindWinFromHandle(
 
 void wxAssociateWinWithHandle(
   HWND                              hWnd
-, wxWindow*                         pWin
+, wxWindowOS2*                      pWin
 )
 {
     //
@@ -2627,7 +2697,7 @@ void wxAssociateWinWithHandle(
 } // end of wxAssociateWinWithHandle
 
 void wxRemoveHandleAssociation(
-  wxWindow*                         pWin
+  wxWindowOS2*                      pWin
 )
 {
     wxWinHandleList->DeleteObject(pWin);
@@ -2643,6 +2713,7 @@ void wxWindowOS2::OS2DestroyWindow()
 
 void wxWindowOS2::OS2DetachWindowMenu()
 {
+#ifndef __WXUNIVERSAL__
     if (m_hMenu)
     {
         HMENU                       hMenu = (HMENU)m_hMenu;
@@ -2671,6 +2742,7 @@ void wxWindowOS2::OS2DetachWindowMenu()
             }
         }
     }
+#endif // __WXUNIVERSAL__
 } // end of wxWindowOS2::OS2DetachWindowMenu
 
 bool wxWindowOS2::OS2Create(
@@ -2683,7 +2755,7 @@ bool wxWindowOS2::OS2Create(
 , long                              lWidth
 , long                              lHeight
 , WXHWND                            hOwner
-, WXHWND                            hZOrder
+, WXHWND                            WXUNUSED(hZOrder)
 , unsigned long                     ulId
 , void*                             pCtlData
 , void*                             pPresParams
@@ -2704,9 +2776,6 @@ bool wxWindowOS2::OS2Create(
     // Find parent's size, if it exists, to set up a possible default
     // panel size the size of the parent window
     //
-    RECTL                           vParentRect;
-    HWND                            hWndClient;
-
     lX1 = lX;
     lY1 = lY;
     if (lWidth > -1L)
@@ -2752,23 +2821,32 @@ bool wxWindowOS2::OS2Create(
         }
     }
 
+   HWND parent;
+   if ( GetWindowStyleFlag() & wxPOPUP_WINDOW )
+   {
+       // popup windows should have desktop as parent because they shouldn't
+       // be limited to the parents client area as child windows usually are
+       parent = HWND_DESKTOP;
+   }
+   else if ( hParent )
+   {
+       parent = hParent;
+   }
+   else
+   {
+       // top level window
+       parent = NULL;
+   }
+
     //
     // We will either have a registered class via string name or a standard PM Class via a long
     //
-    m_hWnd = (WXHWND)::WinCreateWindow( (HWND)hParent
-                                       ,zClass
-                                       ,(PSZ)zTitle ? zTitle : wxT("")
-                                       ,(ULONG)dwStyle
-                                       ,(LONG)lX1
-                                       ,(LONG)lY1
-                                       ,(LONG)lWidth
-                                       ,(LONG)lHeight
-                                       ,hOwner
-                                       ,HWND_TOP
-                                       ,(ULONG)nControlId
-                                       ,pCtlData
-                                       ,pPresParams
-                                      );
+    m_hWnd = (WXHWND)::WinCreateWindow(parent, zClass,
+                                       (PSZ)zTitle ? zTitle : wxT(""),
+                                       dwStyle, lX1, lY1, lWidth, lHeight,
+                                       hOwner, HWND_TOP, (ULONG)nControlId,
+                                       pCtlData, pPresParams);
+
     if (!m_hWnd)
     {
         vError = ::WinGetLastError(vHabmain);
@@ -2820,11 +2898,11 @@ bool wxWindowOS2::OS2Create(
 // ---------------------------------------------------------------------------
 
 bool wxWindowOS2::HandleCreate(
-  WXLPCREATESTRUCT                  vCs
+  WXLPCREATESTRUCT                  WXUNUSED(vCs)
 , bool*                             pbMayCreate
 )
 {
-    wxWindowCreateEvent             vEvent(this);
+    wxWindowCreateEvent             vEvent((wxWindow*)this);
 
     (void)GetEventHandler()->ProcessEvent(vEvent);
     *pbMayCreate = TRUE;
@@ -2833,7 +2911,7 @@ bool wxWindowOS2::HandleCreate(
 
 bool wxWindowOS2::HandleDestroy()
 {
-    wxWindowDestroyEvent            vEvent(this);
+    wxWindowDestroyEvent            vEvent((wxWindow*)this);
 
     (void)GetEventHandler()->ProcessEvent(vEvent);
 
@@ -2935,12 +3013,10 @@ bool wxWindowOS2::HandleKillFocus(
 
 bool wxWindowOS2::HandleShow(
   bool                              bShow
-, int                               nStatus
+, int                               WXUNUSED(nStatus)
 )
 {
-    wxShowEvent                     vEvent( GetId()
-                                           ,bShow
-                                          );
+    wxShowEvent                     vEvent(GetId(), bShow);
 
     vEvent.m_eventObject = this;
     return GetEventHandler()->ProcessEvent(vEvent);
@@ -2956,14 +3032,14 @@ bool wxWindowOS2::HandleInitDialog(
     return GetEventHandler()->ProcessEvent(vEvent);
 } // end of wxWindowOS2::HandleInitDialog
 
-bool wxWindowOS2::HandleEndDrag(WXWPARAM wParam)
+bool wxWindowOS2::HandleEndDrag(WXWPARAM WXUNUSED(wParam))
 {
    // TODO: We'll handle drag and drop later
     return FALSE;
 }
 
 bool wxWindowOS2::HandleSetCursor(
-  USHORT                            vId
+  USHORT                            WXUNUSED(vId)
 , WXHWND                            hPointer
 )
 {
@@ -2983,9 +3059,10 @@ bool wxWindowOS2::OS2OnDrawItem(
 , WXDRAWITEMSTRUCT*                 pItemStruct
 )
 {
+#if wxUSE_OWNER_DRAWN
     wxDC                            vDc;
 
-#if wxUSE_OWNER_DRAWN
+#if wxUSE_MENUS_NATIVE
     //
     // Is it a menu item?
     //
@@ -3120,6 +3197,7 @@ bool wxWindowOS2::OS2OnDrawItem(
         // otherwise, we'd have to do it ourselves.
         //
     }
+#endif // wxUSE_MENUS_NATIVE
 
     wxWindow*                       pItem = FindItem(vId);
 
@@ -3127,6 +3205,9 @@ bool wxWindowOS2::OS2OnDrawItem(
     {
         return ((wxControl *)pItem)->OS2OnDraw(pItemStruct);
     }
+#else
+    vId = vId;
+    pItemStruct = pItemStruct;
 #endif
     return FALSE;
 } // end of wxWindowOS2::OS2OnDrawItem
@@ -3136,6 +3217,7 @@ bool wxWindowOS2::OS2OnMeasureItem(
 , WXMEASUREITEMSTRUCT*              pItemStruct
 )
 {
+#if wxUSE_OWNER_DRAWN
     //
     // Is it a menu item?
     //
@@ -3171,6 +3253,10 @@ bool wxWindowOS2::OS2OnMeasureItem(
     {
         return ((wxControl *)pItem)->OS2OnMeasure(pItemStruct);
     }
+#else
+    lId = lId;
+    pItemStruct = pItemStruct;
+#endif // wxUSE_OWNER_DRAWN
     return FALSE;
 }
 
@@ -3187,7 +3273,7 @@ bool wxWindowOS2::HandleSysColorChange()
 } // end of wxWindowOS2::HandleSysColorChange
 
 bool wxWindowOS2::HandleCtlColor(
-  WXHBRUSH*                         phBrush
+  WXHBRUSH*                         WXUNUSED(phBrush)
 )
 {
     //
@@ -3197,8 +3283,8 @@ bool wxWindowOS2::HandleCtlColor(
 } // end of wxWindowOS2::HandleCtlColor
 
 bool wxWindowOS2::HandleWindowParams(
-  PWNDPARAMS                        pWndParams
-, WXLPARAM                          lParam
+  PWNDPARAMS                        WXUNUSED(pWndParams)
+, WXLPARAM                          WXUNUSED(lParam)
 )
 {
 // TODO: I'll do something here, just not sure what yet
@@ -3206,12 +3292,12 @@ bool wxWindowOS2::HandleWindowParams(
 }
 
 // Define for each class of dialog and control
-WXHBRUSH wxWindowOS2::OnCtlColor(WXHDC hDC,
-                              WXHWND hWnd,
-                              WXUINT nCtlColor,
-                              WXUINT message,
-                              WXWPARAM wParam,
-                              WXLPARAM lParam)
+WXHBRUSH wxWindowOS2::OnCtlColor(WXHDC WXUNUSED(hDC),
+                                 WXHWND WXUNUSED(hWnd),
+                                 WXUINT WXUNUSED(nCtlColor),
+                                 WXUINT WXUNUSED(message),
+                                 WXWPARAM WXUNUSED(wParam),
+                                 WXLPARAM WXUNUSED(lParam))
 {
     return (WXHBRUSH)0;
 }
@@ -3230,7 +3316,7 @@ bool wxWindowOS2::HandlePaletteChanged()
 } // end of wxWindowOS2::HandlePaletteChanged
 
 bool wxWindowOS2::HandlePresParamChanged(
-  WXWPARAM                          wParam
+  WXWPARAM                          WXUNUSED(wParam)
 )
 {
     //
@@ -3277,20 +3363,29 @@ void wxWindowOS2::OnSysColourChanged(
 
 bool wxWindowOS2::HandlePaint()
 {
-    HRGN                            hRgn = NULLHANDLE;
-    wxPaintEvent                    vEvent;
+    HRGN                            hRgn;
+    wxPaintEvent                    vEvent(m_windowId);
     HPS                             hPS;
     RECTL                           vRect;
+    bool                            bProcessed;
 
-    if (::WinQueryUpdateRegion(GetHwnd(), hRgn) == RGN_NULL)
+    // Create empty region
+    // TODO: get HPS somewhere else if possible
+    hPS  = ::WinGetPS(GetHwnd());
+    hRgn = ::GpiCreateRegion(hPS, 0, NULL);
+
+    if (::WinQueryUpdateRegion(GetHwnd(), hRgn) == RGN_ERROR)
     {
          wxLogLastError("CreateRectRgn");
          return FALSE;
     }
 
-    m_updateRegion = wxRegion(hRgn);
+    m_updateRegion = wxRegion(hRgn, hPS);
+
     vEvent.SetEventObject(this);
-    if (!GetEventHandler()->ProcessEvent(vEvent))
+    bProcessed = GetEventHandler()->ProcessEvent(vEvent);
+
+    if (!bProcessed)
     {
         HPS                         hPS;
 
@@ -3300,6 +3395,7 @@ bool wxWindowOS2::HandlePaint()
                              );
         if(hPS)
         {
+#if 0
             ::GpiCreateLogColorTable( hPS
                                      ,0L
                                      ,LCOLF_CONSECRGB
@@ -3307,6 +3403,7 @@ bool wxWindowOS2::HandlePaint()
                                      ,(LONG)wxTheColourDatabase->m_nSize
                                      ,(PLONG)wxTheColourDatabase->m_palTable
                                     );
+#endif
             ::GpiCreateLogColorTable( hPS
                                      ,0L
                                      ,LCOLF_RGB
@@ -3343,7 +3440,11 @@ bool wxWindowOS2::HandlePaint()
             ::WinEndPaint(hPS);
         }
     }
-    return (GetEventHandler()->ProcessEvent(vEvent));
+
+    ::GpiDestroyRegion(hPS, hRgn);
+    ::WinReleasePS(hPS);
+
+    return GetEventHandler()->ProcessEvent(vEvent); //bProcessed;
 } // end of wxWindowOS2::HandlePaint
 
 bool wxWindowOS2::HandleEraseBkgnd(
@@ -3351,6 +3452,7 @@ bool wxWindowOS2::HandleEraseBkgnd(
 )
 {
     SWP                             vSwp;
+    bool                            rc;
 
     ::WinQueryWindowPos(GetHwnd(), &vSwp);
     if (vSwp.fl & SWP_MINIMIZE)
@@ -3359,14 +3461,14 @@ bool wxWindowOS2::HandleEraseBkgnd(
     wxDC                            vDC;
 
     vDC.m_hPS = (HPS)hDC; // this is really a PS
-    vDC.SetWindow(this);
+    vDC.SetWindow((wxWindow*)this);
     vDC.BeginDrawing();
 
     wxEraseEvent                    vEvent(m_windowId, &vDC);
 
     vEvent.SetEventObject(this);
 
-    bool                            rc = GetEventHandler()->ProcessEvent(vEvent);
+    rc = GetEventHandler()->ProcessEvent(vEvent);
 
     vDC.EndDrawing();
     vDC.m_hPS = NULLHANDLE;
@@ -3379,9 +3481,11 @@ void wxWindowOS2::OnEraseBackground(
 {
     RECTL                           vRect;
     HPS                             hPS = rEvent.m_dc->m_hPS;
+    APIRET                          rc;
+    LONG                            lColor = m_backgroundColour.GetPixel();
 
-    ::WinQueryWindowRect(GetHwnd(), &vRect);
-    ::WinFillRect(hPS, &vRect,  m_backgroundColour.GetPixel());
+    rc = ::WinQueryWindowRect(GetHwnd(), &vRect);
+    rc = ::WinFillRect(hPS, &vRect, lColor);
 }  // end of wxWindowOS2::OnEraseBackground
 
 // ---------------------------------------------------------------------------
@@ -3409,11 +3513,7 @@ bool wxWindowOS2::HandleMove(
 , int                               nY
 )
 {
-    wxMoveEvent                     vEvent( wxPoint( nX
-                                                    ,nY
-                                                   )
-                                           ,m_windowId
-                                          );
+    wxMoveEvent                     vEvent(wxPoint(nX, nY), m_windowId);
 
     vEvent.SetEventObject(this);
     return GetEventHandler()->ProcessEvent(vEvent);
@@ -3425,11 +3525,7 @@ bool wxWindowOS2::HandleSize(
 , WXUINT                            WXUNUSED(nFlag)
 )
 {
-    wxSizeEvent                     vEvent( wxSize( nWidth
-                                                   ,nHeight
-                                                  )
-                                           ,m_windowId
-                                          );
+    wxSizeEvent                     vEvent(wxSize(nWidth, nHeight), m_windowId);
 
     vEvent.SetEventObject(this);
     return GetEventHandler()->ProcessEvent(vEvent);
@@ -3471,6 +3567,7 @@ bool wxWindowOS2::HandleCommand(
 , WXHWND                            hControl
 )
 {
+#if wxUSE_MENUS_NATIVE
     if (wxCurrentPopupMenu)
     {
         wxMenu*                     pPopupMenu = wxCurrentPopupMenu;
@@ -3478,6 +3575,7 @@ bool wxWindowOS2::HandleCommand(
         wxCurrentPopupMenu = NULL;
         return pPopupMenu->OS2Command(wCmd, wId);
     }
+#endif // wxUSE_MENUS_NATIVE
 
     wxWindow*                       pWin = FindItem(wId);
 
@@ -3487,15 +3585,14 @@ bool wxWindowOS2::HandleCommand(
     }
 
     if (pWin)
-        return pWin->OS2Command( wCmd
-                                ,wId
-                               );
+        return pWin->OS2Command(wCmd, wId);
+
     return FALSE;
 } // end of wxWindowOS2::HandleCommand
 
 bool wxWindowOS2::HandleSysCommand(
   WXWPARAM                          wParam
-, WXLPARAM                          lParam
+, WXLPARAM                          WXUNUSED(lParam)
 )
 {
     //
@@ -3515,7 +3612,7 @@ bool wxWindowOS2::HandleSysCommand(
 // ---------------------------------------------------------------------------
 // mouse events
 // ---------------------------------------------------------------------------
-
+//TODO!!! check against MSW
 void wxWindowOS2::InitMouseEvent(
   wxMouseEvent&                     rEvent
 , int                               nX
@@ -3849,10 +3946,10 @@ bool wxWindowOS2::OS2OnScroll(
 // ===========================================================================
 
 void wxGetCharSize(
-  WXHWND                            hWnd
-, int*                              pX
-, int*                              pY
-,wxFont*                            pTheFont
+  WXHWND                            WXUNUSED(hWnd)
+, int*                              WXUNUSED(pX)
+, int*                              WXUNUSED(pY)
+,wxFont*                            WXUNUSED(pTheFont)
 )
 {
   // TODO: we'll do this later
@@ -4458,6 +4555,8 @@ const char* wxGetMessageName(
 
 #endif // __WXDEBUG__
 
+// Unused?
+#if 0
 static void TranslateKbdEventToMouse(
   wxWindow*                         pWin
 , int*                              pX
@@ -4486,11 +4585,12 @@ static void TranslateKbdEventToMouse(
 
     pWin->ScreenToClient(pX, pY);
 } // end of TranslateKbdEventToMouse
+#endif
 
 // Find the wxWindow at the current mouse position, returning the mouse
 // position.
 wxWindow* wxFindWindowAtPointer(
-  wxPoint&                          rPt
+  wxPoint&                          WXUNUSED(rPt)
 )
 {
     return wxFindWindowAtPoint(wxGetMousePosition());

@@ -920,6 +920,8 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
     info = CLASSINFO(wxWindowGTK);
 #  elif defined(__WXMGL__)
     info = CLASSINFO(wxWindowMGL);
+#  elif defined(__WXPM__)
+    info = CLASSINFO(wxWindowOS2);
 #  elif defined(__WXMAC__)
     info = CLASSINFO(wxWindowMac);
 #  elif defined(__WXMOTIF__)

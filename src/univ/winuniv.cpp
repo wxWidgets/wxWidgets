@@ -73,6 +73,8 @@
     IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowGTK)
 #elif defined(__WXMGL__)
     IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowMGL)
+#elif defined(__WXPM__)
+    IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowOS2)
 #endif
 
 BEGIN_EVENT_TABLE(wxWindow, wxWindowNative)

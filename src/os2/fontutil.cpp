@@ -332,9 +332,9 @@ void wxFillLogFont(
                                  ,&vInfo
                                 ))
     {
-        if ( !wxTheFontMapper->GetAltForEncoding( vEncoding
-                                                 ,&vInfo
-                                                ))
+#if wxUSE_FONTMAP
+        if (!wxTheFontMapper->GetAltForEncoding(vEncoding, &vInfo))
+#endif // wxUSE_FONTMAP
         {
             //
             // Unsupported encoding, replace with the default

@@ -259,8 +259,10 @@ size_t wxPipeOutputStream::OnSysWrite(const void *buffer, size_t len)
 
 #ifdef __WIN32__
 
-static DWORD wxExecuteThread(wxExecuteData *data)
+static DWORD __stdcall wxExecuteThread(void *arg)
 {
+    wxExecuteData *data = (wxExecuteData*)arg;
+
     WaitForSingleObject(data->hProcess, INFINITE);
 
     // get the exit code
@@ -646,7 +648,7 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
     DWORD tid;
     HANDLE hThread = ::CreateThread(NULL,
                                     0,
-                                    (LPTHREAD_START_ROUTINE)wxExecuteThread,
+                                    wxExecuteThread,
                                     (void *)data,
                                     0,
                                     &tid);

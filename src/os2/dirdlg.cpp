@@ -27,7 +27,6 @@
 #include "wx/os2/private.h"
 #include "wx/cmndata.h"
 
-#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 

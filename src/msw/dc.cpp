@@ -252,7 +252,7 @@ void wxDC::SelectOldObjects(WXHDC dc)
 #if wxUSE_PALETTE
         if (m_oldPalette)
         {
-            ::SelectPalette((HDC) dc, (HPALETTE) m_oldPalette, TRUE);
+            ::SelectPalette((HDC) dc, (HPALETTE) m_oldPalette, FALSE);
         }
         m_oldPalette = 0;
 #endif // wxUSE_PALETTE
@@ -868,6 +868,7 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
         height = bmp.GetHeight();
 
     HBITMAP hbmpMask = 0;
+    HPALETTE oldPal = 0;
 
     if ( useMask )
     {
@@ -896,13 +897,19 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
         if (wxSystemOptions::GetOptionInt(wxT("no-maskblt")) == 0)
 #endif
         {
+            HDC cdc = GetHdc();
             HDC hdcMem = ::CreateCompatibleDC(GetHdc());
             ::SelectObject(hdcMem, GetHbitmapOf(bmp));
-
-            ok = ::MaskBlt(GetHdc(), x, y, width, height,
+            if (bmp.GetPalette() && (::GetDeviceCaps(cdc,BITSPIXEL) <= 8)) {
+                oldPal = ::SelectPalette( hdcMem, (HPALETTE)bmp.GetPalette()->GetHPALETTE(), FALSE);
+                ::RealizePalette(hdcMem);
+                }
+            ok = ::MaskBlt(cdc, x, y, width, height,
                             hdcMem, 0, 0,
                             hbmpMask, 0, 0,
                             MAKEROP4(SRCCOPY, DSTCOPY)) != 0;
+            if (oldPal)
+                ::SelectPalette(hdcMem, oldPal, FALSE);
             ::DeleteDC(hdcMem);
         }
 
@@ -938,8 +945,14 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
             ::SetBkColor(GetHdc(), m_textBackgroundColour.GetPixel() );
         }
 
+        if (bmp.GetPalette() && (::GetDeviceCaps(cdc,BITSPIXEL) <= 8)) {
+            oldPal = ::SelectPalette( memdc, (HPALETTE)bmp.GetPalette()->GetHPALETTE(), FALSE);
+            ::RealizePalette(memdc);
+            }
         ::SelectObject( memdc, hbitmap );
         ::BitBlt( cdc, x, y, width, height, memdc, 0, 0, SRCCOPY);
+        if (oldPal)
+            ::SelectPalette(memdc, oldPal, FALSE);
         ::DeleteDC( memdc );
 
         ::SetTextColor(GetHdc(), old_textground);
@@ -1084,7 +1097,7 @@ void wxDC::SetPalette(const wxPalette& palette)
     // that's not yet selected out.
     if (m_oldPalette)
     {
-        ::SelectPalette(GetHdc(), (HPALETTE) m_oldPalette, TRUE);
+        ::SelectPalette(GetHdc(), (HPALETTE) m_oldPalette, FALSE);
         m_oldPalette = 0;
     }
 
@@ -1096,7 +1109,7 @@ void wxDC::SetPalette(const wxPalette& palette)
         // the original colourmap
         if (m_oldPalette)
         {
-            ::SelectPalette(GetHdc(), (HPALETTE) m_oldPalette, TRUE);
+            ::SelectPalette(GetHdc(), (HPALETTE) m_oldPalette, FALSE);
             m_oldPalette = 0;
         }
 
@@ -1105,7 +1118,7 @@ void wxDC::SetPalette(const wxPalette& palette)
 
     if (m_palette.Ok() && m_palette.GetHPALETTE())
     {
-        HPALETTE oldPal = ::SelectPalette(GetHdc(), (HPALETTE) m_palette.GetHPALETTE(), TRUE);
+        HPALETTE oldPal = ::SelectPalette(GetHdc(), (HPALETTE) m_palette.GetHPALETTE(), FALSE);
         if (!m_oldPalette)
             m_oldPalette = (WXHPALETTE) oldPal;
 

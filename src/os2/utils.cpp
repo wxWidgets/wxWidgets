@@ -105,7 +105,7 @@ bool wxGetUserId(
 , int                               nType
 )
 {
-#ifndef __EMX__
+#if defined(__VISAGECPP__)
     long                            lrc;
     // UPM procs return 0 on success
     lrc = U32ELOCU((unsigned char*)zBuf, (unsigned long *)&nType);
@@ -750,6 +750,7 @@ void wxGetMousePosition(
 // Return TRUE if we have a colour display
 bool wxColourDisplay()
 {
+#if 0
     HPS                             hpsScreen;
     HDC                             hdcScreen;
     LONG                            lColors;
@@ -758,6 +759,11 @@ bool wxColourDisplay()
     hdcScreen = ::GpiQueryDevice(hpsScreen);
     ::DevQueryCaps(hdcScreen, CAPS_COLORS, 1L, &lColors);
     return(lColors > 1L);
+#else
+    // I don't see how the PM display could not be color. Besides, this
+    // was leaking DCs and PSs!!!  MN
+    return true;
+#endif
 }
 
 // Returns depth of screen
@@ -767,15 +773,20 @@ int wxDisplayDepth()
     HDC                             hdcScreen;
     LONG                            lPlanes;
     LONG                            lBitsPerPixel;
-    LONG                            nDepth;
+    static LONG                     nDepth = 0;
 
-    hpsScreen = ::WinGetScreenPS(HWND_DESKTOP);
-    hdcScreen = ::GpiQueryDevice(hpsScreen);
-    ::DevQueryCaps(hdcScreen, CAPS_COLOR_PLANES, 1L, &lPlanes);
-    ::DevQueryCaps(hdcScreen, CAPS_COLOR_BITCOUNT, 1L, &lBitsPerPixel);
+    // The screen colordepth ain't gonna change. No reason to query
+    // it over and over!
+    if (!nDepth) {
+        hpsScreen = ::WinGetScreenPS(HWND_DESKTOP);
+        hdcScreen = ::GpiQueryDevice(hpsScreen);
+        ::DevQueryCaps(hdcScreen, CAPS_COLOR_PLANES, 1L, &lPlanes);
+        ::DevQueryCaps(hdcScreen, CAPS_COLOR_BITCOUNT, 1L, &lBitsPerPixel);
 
-    nDepth = (int)(lPlanes * lBitsPerPixel);
-    DevCloseDC(hdcScreen);
+        nDepth = (int)(lPlanes * lBitsPerPixel);
+        ::DevCloseDC(hdcScreen);
+        ::WinReleasePS(hpsScreen);
+    }
     return (nDepth);
 }
 
@@ -787,14 +798,18 @@ void wxDisplaySize(
 {
     HPS                             hpsScreen;
     HDC                             hdcScreen;
-    LONG                            lWidth;
-    LONG                            lHeight;
+    static LONG                     lWidth  = 0;
+    static LONG                     lHeight = 0;
 
-    hpsScreen = ::WinGetScreenPS(HWND_DESKTOP);
-    hdcScreen = ::GpiQueryDevice(hpsScreen);
-    ::DevQueryCaps(hdcScreen, CAPS_WIDTH, 1L, &lWidth);
-    ::DevQueryCaps(hdcScreen, CAPS_HEIGHT, 1L, &lHeight);
-    DevCloseDC(hdcScreen);
+    // The screen size ain't gonna change either so just cache the values
+    if (!lWidth) {
+        hpsScreen = ::WinGetScreenPS(HWND_DESKTOP);
+        hdcScreen = ::GpiQueryDevice(hpsScreen);
+        ::DevQueryCaps(hdcScreen, CAPS_WIDTH, 1L, &lWidth);
+        ::DevQueryCaps(hdcScreen, CAPS_HEIGHT, 1L, &lHeight);
+        ::DevCloseDC(hdcScreen);
+        ::WinReleasePS(hpsScreen);
+    }
     *pWidth = (int)lWidth;
     *pHeight = (int)lHeight;
 }
@@ -822,6 +837,8 @@ void wxDisplaySizeMM(
                        ,1L
                        ,(PLONG)pHeight
                       );
+    ::DevCloseDC(hdcScreen);
+    ::WinReleasePS(hpsScreen);
 }
 
 void wxClientDisplayRect(int *x, int *y, int *width, int *height)

@@ -5,23 +5,19 @@
 *               Copyright (C) 1991-2001 SciTech Software, Inc.
 *                            All rights reserved.
 *
-*  ======================================================================
-*  |REMOVAL OR MODIFICATION OF THIS HEADER IS STRICTLY PROHIBITED BY LAW|
-*  |                                                                    |
-*  |This copyrighted computer code is a proprietary trade secret of     |
-*  |SciTech Software, Inc., located at 505 Wall Street, Chico, CA 95928 |
-*  |USA (www.scitechsoft.com).  ANY UNAUTHORIZED POSSESSION, USE,       |
-*  |VIEWING, COPYING, MODIFICATION OR DISSEMINATION OF THIS CODE IS     |
-*  |STRICTLY PROHIBITED BY LAW.  Unless you have current, express       |
-*  |written authorization from SciTech to possess or use this code, you |
-*  |may be subject to civil and/or criminal penalties.                  |
-*  |                                                                    |
-*  |If you received this code in error or you would like to report      |
-*  |improper use, please immediately contact SciTech Software, Inc. at  |
-*  |530-894-8400.                                                       |
-*  |                                                                    |
-*  |REMOVAL OR MODIFICATION OF THIS HEADER IS STRICTLY PROHIBITED BY LAW|
-*  ======================================================================
+*  ========================================================================
+*
+*    The contents of this file are subject to the wxWindows License
+*    Version 3.0 (the "License"); you may not use this file except in
+*    compliance with the License. You may obtain a copy of the License at
+*    http://www.wxwindows.org/licence3.txt
+*
+*    Software distributed under the License is distributed on an
+*    "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+*    implied. See the License for the specific language governing
+*    rights and limitations under the License.
+*
+*  ========================================================================
 *
 * Language:     ANSI C++
 * Environment:  Any
@@ -66,6 +62,8 @@ public:
                 wxString& group,
                 wxString& href );
 
+            VirtualData();
+
             // Gets
             wxString GetName(){ return m_name;};
             wxString GetGroup(){ return m_group;};
@@ -88,15 +86,21 @@ private:
     DECLARE_CLASS(wxHtmlAppletWindow);
     DECLARE_EVENT_TABLE();
 
-    bool m_mutexLock;
-    wxIncludePrep *incPreprocessor;  // deleted by list it is added too in constructor
+    bool                m_mutexLock;
+    wxIncludePrep       *incPreprocessor;  // deleted by list it is added too in constructor
+
 protected:
 	wxAppletList		m_AppletList;		
 	static wxHashTable	m_Cookies;
+    bool                m_NavBarEnabled;
     wxToolBarBase       *m_NavBar;
     int                 m_NavBackId;
     int                 m_NavForwardId;
-	wxString            m_DocRoot;	
+    wxPalette           m_globalPalette;
+    	
+            // Override this so we can do proper palette management!!
+    virtual void OnDraw(wxDC& dc);
+
 public:
             // Constructor
             wxHtmlAppletWindow(
@@ -109,7 +113,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxHW_SCROLLBAR_AUTO,
                 const wxString& name = "htmlAppletWindow",
-                const wxString& docroot = "" );
+                const wxPalette& globalPalette = wxNullPalette);
 
             // Destructor
             ~wxHtmlAppletWindow();
@@ -141,6 +145,14 @@ public:
 
             // Handles backwards navigation within the HTML stack
             bool HistoryBack();
+
+            // Disables Nav bars
+            void DisableNavBar();
+
+            // Enables Nav bars
+            void EnableNavBar();
+
+            void SetNavBar(wxToolBarBase *navBar);
 
             // Broadcast a message to all applets on the page
             void SendMessage(wxEvent& msg);

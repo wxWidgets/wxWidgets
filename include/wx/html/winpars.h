@@ -49,7 +49,7 @@ public:
 
     // Set's the DC used for parsing. If SetDC() is not called,
     // parsing won't proceed
-    virtual void SetDC(wxDC *dc, double pixel_scale = 1.0) 
+    virtual void SetDC(wxDC *dc, double pixel_scale = 1.0)
         { m_DC = dc; m_PixelScale = pixel_scale; }
 
     wxDC *GetDC() {return m_DC;}
@@ -61,13 +61,13 @@ public:
     // height/width. They return h/w of default font
     // for this DC. If you want actual values, call
     // GetDC()->GetChar...()
- 
+
     // returns associated wxWindow
     wxWindow *GetWindow() {return m_Window;}
 
     // sets fonts to be used when displaying HTML page.
     void SetFonts(wxString normal_face, wxString fixed_face, const int *sizes);
- 
+
     // Adds tags module. see wxHtmlTagsModule for details.
     static void AddModule(wxHtmlTagsModule *module);
 
@@ -232,6 +232,7 @@ public:
 #endif
 
 #endif // _WX_WINPARS_H_
+
 
 
 

@@ -79,6 +79,8 @@ public:
         // calls layout for layout constraints and sizers
     void OnSize(wxSizeEvent& event);
 
+    virtual void InitDialog();
+
     WX_DECLARE_CONTROL_CONTAINER();
 
 protected:

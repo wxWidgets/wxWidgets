@@ -53,7 +53,9 @@ public:
     virtual void Iconize(bool bIconize = TRUE);
     virtual bool IsIconized(void) const;
     virtual void Restore(void);
+#if wxUSE_MENUS_NATIVE
     virtual void SetMenuBar(wxMenuBar* pMenubar);
+#endif
     virtual void SetIcon(const wxIcon& rIcon);
     virtual bool ShowFullScreen( bool bShow
                                 ,long lStyle = wxFULLSCREEN_ALL
@@ -175,10 +177,9 @@ protected:
                                  ,int nWeight
                                 );
 
+#if wxUSE_MENUS_NATIVE
     // helper
     void         DetachMenuBar(void);
-
-#if wxUSE_MENUS_NATIVE
     // perform MSW-specific action when menubar is changed
     virtual void AttachMenuBar(wxMenuBar* pMenubar);
     // a plug in for MDI frame classes which need to do something special when

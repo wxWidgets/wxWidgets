@@ -115,8 +115,13 @@ wxString wxEchoPrep::Process(
 
             // grab the value from the class, put it in tag since the data is no longer needed
             tag = wxEchoVariable::FindValue(cname, parms.c_str());
-            }
 
+
+            }
+        // remove ampersands and <> chars
+        tag.Replace("&", "&amp;");
+        tag.Replace("<", "&lt;");
+        tag.Replace(">", "&gt;");
 
         output = (output.Mid(0,i) + tag + output.Mid(i));
 		}

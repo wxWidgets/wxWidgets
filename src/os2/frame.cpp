@@ -53,10 +53,13 @@
 extern wxWindowList wxModelessWindows;
 extern wxList WXDLLEXPORT wxPendingDelete;
 extern wxChar wxFrameClassName[];
-extern wxMenu *wxCurrentPopupMenu;
 
-extern void  wxAssociateWinWithHandle( HWND      hWnd
-                                      ,wxWindow* pWin
+#if wxUSE_MENUS_NATIVE
+extern wxMenu *wxCurrentPopupMenu;
+#endif
+
+extern void  wxAssociateWinWithHandle( HWND         hWnd
+                                      ,wxWindowOS2* pWin
                                      );
 
 // ----------------------------------------------------------------------------
@@ -553,6 +556,7 @@ void wxFrameOS2::PositionStatusBar()
 } // end of wxFrameOS2::PositionStatusBar
 #endif // wxUSE_STATUSBAR
 
+#if wxUSE_MENUS_NATIVE
 void wxFrameOS2::DetachMenuBar()
 {
     if (m_frameMenuBar)
@@ -619,6 +623,8 @@ void wxFrameOS2::AttachMenuBar(
   wxMenuBar*                        pMenubar
 )
 {
+    wxFrameBase::AttachMenuBar(pMenubar);
+
     m_frameMenuBar = pMenubar;
 
     if (!pMenubar)
@@ -674,6 +680,7 @@ void wxFrameOS2::InternalSetMenuBar()
     }
     ::WinSendMsg(m_hFrame, WM_UPDATEFRAME, (MPARAM)FCF_MENU, (MPARAM)0);
 } // end of wxFrameOS2::InternalSetMenuBar
+#endif // wxUSE_MENUS_NATIVE
 
 //
 // Responds to colour changes, and passes event on to children
@@ -716,11 +723,11 @@ bool wxFrameOS2::ShowFullScreen(
         m_lFsStyle = lStyle;
 
 #if wxUSE_TOOLBAR
-	    wxToolBar*                  pTheToolBar = GetToolBar();
+        wxToolBar*                  pTheToolBar = GetToolBar();
 #endif //wxUSE_TOOLBAR
 
 #if wxUSE_STATUSBAR
-	    wxStatusBar*                pTheStatusBar = GetStatusBar();
+        wxStatusBar*                pTheStatusBar = GetStatusBar();
 #endif //wxUSE_STATUSBAR
 
         int                         nDummyWidth;
@@ -1293,10 +1300,10 @@ bool wxFrameOS2::OS2TranslateMessage(
     //
     wxMenuBar*                      pMenuBar = GetMenuBar();
 
-    if (!pMenuBar )
+    if (!pMenuBar)
         return FALSE;
 
-#if wxUSE_ACCEL
+#if wxUSE_ACCEL && wxUSE_MENUS_NATIVE
     const wxAcceleratorTable&       rAcceleratorTable = pMenuBar->GetAccelTable();
     return rAcceleratorTable.Translate(GetHWND(), pMsg);
 #else
@@ -1469,6 +1476,7 @@ bool wxFrameOS2::HandleCommand(
     //
     if (nCmd == CMDSRC_MENU || nCmd == CMDSRC_ACCELERATOR)
     {
+#if wxUSE_MENUS_NATIVE
         if (wxCurrentPopupMenu)
         {
             wxMenu*                 pPopupMenu = wxCurrentPopupMenu;
@@ -1478,7 +1486,9 @@ bool wxFrameOS2::HandleCommand(
             return pPopupMenu->OS2Command( nCmd
                                           ,nId
                                          );
+            return TRUE;
         }
+#endif
 
         if (ProcessCommand(nId))
         {

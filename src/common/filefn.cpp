@@ -299,7 +299,7 @@ wxIsAbsolutePath (const wxString& filename)
         // This seems wrong to me, but there is no fix. since
         // "MacOS:MyText.txt" is absolute whereas "MyDir:MyText.txt"
         // is not. Or maybe ":MyDir:MyText.txt" has to be used? RR.
-    
+
         if (filename.Find(':') != wxNOT_FOUND && filename[0] != ':')
             return TRUE ;
     }
@@ -1019,6 +1019,11 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
     //
     // NB: 3rd parameter is bFailIfExists i.e. the inverse of overwrite
     return ::CopyFile(file1, file2, !overwrite) != 0;
+#elif defined(__WXPM__)
+    if (::DosCopy(file2, file2, overwrite ? DCPY_EXISTING : 0) == 0)
+        return TRUE;
+    else
+        return FALSE;
 #else // !Win32
     wxStructStat fbuf;
 
@@ -1145,7 +1150,7 @@ bool wxMkdir(const wxString& dir, int perm)
 #elif defined(__WXPM__)
     if (::DosCreateDir((PSZ)dirname, NULL) != 0) // enhance for EAB's??
 #else  // !MSW and !OS/2 VAC++
-	(void)perm;
+    (void)perm;
     if ( wxMkDir(wxFNSTRINGCAST wxFNCONV(dirname)) != 0 )
 #endif // !MSW/MSW
     {
@@ -1726,41 +1731,41 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
 #ifdef _MSC_VER
   if (_getcwd(buf, sz) == NULL) {
 #elif defined(__WXMAC__) && !defined(__UNIX__)
-	FSSpec cwdSpec ;
-	FCBPBRec pb;
-	OSErr error;
-	Str255	fileName ;
-	pb.ioNamePtr = (StringPtr) &fileName;
-	pb.ioVRefNum = 0;
-	pb.ioRefNum = LMGetCurApRefNum();
-	pb.ioFCBIndx = 0;
-	error = PBGetFCBInfoSync(&pb);
-	if ( error == noErr )
-	{
-		cwdSpec.vRefNum = pb.ioFCBVRefNum;
-		cwdSpec.parID = pb.ioFCBParID;
-		cwdSpec.name[0] = 0 ;
-		wxString res = wxMacFSSpec2MacFilename( &cwdSpec ) ;
-		
-		strcpy( buf , res ) ;
-		buf[res.length()-1]=0 ;
-	}
-	else
-		buf[0] = 0 ;
-	/*
-	this version will not always give back the application directory on mac
-	enum
-	{
-		SFSaveDisk = 0x214, CurDirStore = 0x398
-	};
-	FSSpec cwdSpec ;
-	
-	FSMakeFSSpec( - *(short *) SFSaveDisk , *(long *) CurDirStore , NULL , &cwdSpec ) ;
-	wxString res = wxMacFSSpec2UnixFilename( &cwdSpec ) ;
-	strcpy( buf , res ) ;
-	*/
-	if (0) {
-#elif(__VISAGECPP__)
+    FSSpec cwdSpec ;
+    FCBPBRec pb;
+    OSErr error;
+    Str255  fileName ;
+    pb.ioNamePtr = (StringPtr) &fileName;
+    pb.ioVRefNum = 0;
+    pb.ioRefNum = LMGetCurApRefNum();
+    pb.ioFCBIndx = 0;
+    error = PBGetFCBInfoSync(&pb);
+    if ( error == noErr )
+    {
+        cwdSpec.vRefNum = pb.ioFCBVRefNum;
+        cwdSpec.parID = pb.ioFCBParID;
+        cwdSpec.name[0] = 0 ;
+        wxString res = wxMacFSSpec2MacFilename( &cwdSpec ) ;
+
+        strcpy( buf , res ) ;
+        buf[res.length()-1]=0 ;
+    }
+    else
+        buf[0] = 0 ;
+    /*
+    this version will not always give back the application directory on mac
+    enum
+    {
+        SFSaveDisk = 0x214, CurDirStore = 0x398
+    };
+    FSSpec cwdSpec ;
+
+    FSMakeFSSpec( - *(short *) SFSaveDisk , *(long *) CurDirStore , NULL , &cwdSpec ) ;
+    wxString res = wxMacFSSpec2UnixFilename( &cwdSpec ) ;
+    strcpy( buf , res ) ;
+    */
+    if (0) {
+#elif defined(__VISAGECPP__) || (defined (__OS2__) && defined (__WATCOMC__))
     APIRET rc;
     rc = ::DosQueryCurrentDir( 0 // current drive
                               ,buf

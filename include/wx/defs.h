@@ -219,8 +219,8 @@
 
 // suppress some Watcom C++ warnings
 #ifdef __WATCOMC__
-#   pragma warning 849 9			// Disable 'virtual function hidden'
-#   pragma warning 549 9			// Disable 'operand contains compiler generated information'
+#   pragma warning 849 9            // Disable 'virtual function hidden'
+#   pragma warning 549 9            // Disable 'operand contains compiler generated information'
 #endif // __VISUALC__
 
 // suppress some Salford C++ warnings
@@ -441,7 +441,24 @@ typedef int wxWindowID;
 
 #elif defined(__WXPM__)
 
-#  if (!(defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )))
+#  if defined (__WATCOMC__)
+
+#  ifdef WXMAKINGDLL
+#    define WXDLLEXPORT __declspec( dllexport )
+#    define WXDLLEXPORT_DATA(type) __declspec( dllexport ) type
+#    define WXDLLEXPORT_CTORFN
+// __declspec(dllimport) prepends __imp to imported symbols. We do NOT want that!
+//#  elif defined(WXUSINGDLL)
+//#    define WXDLLEXPORT __declspec( dllimport )
+//#    define WXDLLEXPORT_DATA(type) __declspec( dllimport ) type
+//#    define WXDLLEXPORT_CTORFN
+#  else
+#    define WXDLLEXPORT
+#    define WXDLLEXPORT_DATA(type) type
+#    define WXDLLEXPORT_CTORFN
+#  endif
+
+#  elif (!(defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )))
 
 #    ifdef WXMAKINGDLL
 #      define WXDLLEXPORT _Export
@@ -1902,7 +1919,10 @@ typedef unsigned short  WORD;
 // WIN32 graphics types for OS/2 GPI
 
 // RGB under OS2 is more like a PALETTEENTRY struct under Windows so we need a real RGB def
-#define OS2RGB(r,g,b) ((DWORD ((BYTE) (b) | ((WORD) (g) << 8)) | (((DWORD)(BYTE)(r)) << 16)))
+// WARNING: The OS/2 headers typedef BYTE simply as 'char'; if the default is signed, all
+// hell will break loose!
+//#define OS2RGB(r,g,b) ((DWORD ((BYTE) (b) | ((WORD) (g) << 8)) | (((DWORD)(BYTE)(r)) << 16)))
+#define OS2RGB(r,g,b) ((DWORD)((unsigned char)(b) | ((unsigned char)(g) << 8)) | ((unsigned char)(r) << 16))
 
 typedef unsigned long COLORREF;
 #define GetBValue(rgb) ((BYTE)((rgb) >> 16))
@@ -1931,7 +1951,7 @@ typedef struct tagLOGPALETTE
 #elif defined(__WIN32__)
     typedef int (__stdcall *WXFARPROC)();
 #elif defined(__WXPM__)
-#  if defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )
+#  if (defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )) || defined (__WATCOMC__)
     // VA 3.0 for some reason needs base data types when typedefing a proc proto???
     typedef void* (_System *WXFARPROC)(unsigned long, unsigned long, void*, void*);
 #  else

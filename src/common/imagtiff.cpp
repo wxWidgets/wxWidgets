@@ -37,6 +37,12 @@ extern "C"
 #include "wx/intl.h"
 #include "wx/module.h"
 
+#ifdef __WATCOMC__
+#ifdef LINKAGEMODE
+#undef LINKAGEMODE
+#define LINKAGEMODE __cdecl
+#endif
+#endif
 //-----------------------------------------------------------------------------
 // wxTIFFHandler
 //-----------------------------------------------------------------------------
@@ -45,8 +51,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxTIFFHandler,wxImageHandler)
 
 static tsize_t LINKAGEMODE
 _tiffNullProc(thandle_t WXUNUSED(handle),
-	      tdata_t WXUNUSED(buf),
-	      tsize_t WXUNUSED(size))
+          tdata_t WXUNUSED(buf),
+          tsize_t WXUNUSED(size))
 {
     return (tsize_t) -1;
 }
@@ -329,13 +335,13 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     unsigned char *ptr = image->GetData();
     for (int row = 0; row < image->GetHeight(); row++)
     {
-	    if (buf)
-	        memcpy(buf, ptr, image->GetWidth());
+        if (buf)
+            memcpy(buf, ptr, image->GetWidth());
 
-	    if (TIFFWriteScanline(tif, buf ? buf : ptr, (uint32)row, 0) < 0)
+        if (TIFFWriteScanline(tif, buf ? buf : ptr, (uint32)row, 0) < 0)
         {
-	        if (verbose)
-	            wxLogError( _("TIFF: Error writing image.") );
+            if (verbose)
+                wxLogError( _("TIFF: Error writing image.") );
 
             TIFFClose( tif );
             if (buf)

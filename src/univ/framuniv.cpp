@@ -92,7 +92,12 @@ void wxFrame::PositionMenuBar()
         // the menubar is positioned above the client size, hence the negative
         // y coord
         wxCoord heightMbar = m_frameMenuBar->GetSize().y;
-        m_frameMenuBar->SetSize(0, -heightMbar,
+        m_frameMenuBar->SetSize(0, 
+#ifdef __WXPM__	
+                                GetClientSize().y - heightMbar,
+#else
+                         	-heightMbar,
+#endif				
                                 GetClientSize().x, heightMbar);
     }
 }
@@ -136,7 +141,7 @@ wxPoint wxFrame::GetClientAreaOrigin() const
 {
     wxPoint pt = wxFrameBase::GetClientAreaOrigin();
 
-#if wxUSE_MENUS
+#if wxUSE_MENUS && !defined(__WXPM__)
     if ( m_frameMenuBar )
     {
         pt.y += m_frameMenuBar->GetSize().y;

@@ -45,7 +45,7 @@ public:
              ,const wxPoint& rBottomRight
             );
     wxRegion(const wxRect& rRect);
-    wxRegion(WXHRGN hRegion); // Hangs on to this region
+    wxRegion(WXHRGN hRegion, WXHDC hPS); // Hangs on to this region
 
     wxRegion();
     ~wxRegion();

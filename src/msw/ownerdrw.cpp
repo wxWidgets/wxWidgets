@@ -137,7 +137,7 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
     return TRUE;
 
   // wxColor <-> RGB
-  #define   ToRGB(col)  RGB(col.Red(), col.Green(), col.Blue())
+  #define   ToRGB(col)  PALETTERGB(col.Red(), col.Green(), col.Blue())
   #define   UnRGB(col)  GetRValue(col), GetGValue(col), GetBValue(col)
 
   // set the colors

@@ -473,7 +473,10 @@ bool wxTempFile::Open(const wxString& strName)
     // OS/2 supports that have them (HPFS, FAT32) and security (HPFS386)
     static const wxChar *szMktempSuffix = wxT("XXX");
     m_strTemp << strName << szMktempSuffix;
+    // Temporarily remove - MN
+    #ifndef __WATCOMC__
     ::DosCreateDir(m_strTemp.GetWriteBuf(MAX_PATH), NULL);
+    #endif
 #else // Windows
     wxString strPath;
     wxSplitPath(strName, &strPath, NULL, NULL);

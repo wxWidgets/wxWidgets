@@ -103,6 +103,8 @@ wxThemeInfo::wxThemeInfo(Constructor c,
             nameDefTheme = _T("gtk");
         #elif defined(__WXMGL__)
             nameDefTheme = _T("win32");
+        #elif defined(__WXPM__)
+            nameDefTheme = _T("win32");
         #endif
     }
 

@@ -1,3 +1,4 @@
+#include "wx/defs.h"
 #include "wx/setup.h"
 
 #include <math.h>

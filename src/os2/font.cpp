@@ -161,6 +161,21 @@ wxFontRefData::~wxFontRefData()
 // wxFont
 // ----------------------------------------------------------------------------
 
+wxFont::wxFont(const wxNativeFontInfo& rInfo)
+    {
+        Init();
+
+        (void)Create( rInfo.pointSize
+                     ,rInfo.family
+                     ,rInfo.style
+                     ,rInfo.weight
+                     ,rInfo.underlined
+                     ,rInfo.faceName
+                     ,rInfo.encoding
+                    );
+    }
+
+
 void wxFont::Init()
 {
     if ( wxTheFontList )

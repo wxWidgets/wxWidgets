@@ -35,6 +35,7 @@
 #include <sys/types.h>
 
 #define INCL_DOSFILEMGR
+#define INCL_DOSERRORS
 #include <os2.h>
 
 #ifdef __EMX__

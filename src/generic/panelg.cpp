@@ -81,6 +81,13 @@ wxPanel::~wxPanel()
 {
 }
 
+void wxPanel::InitDialog()
+{
+    wxInitDialogEvent event(GetId());
+    event.SetEventObject(this);
+    GetEventHandler()->ProcessEvent(event);
+}
+
 // ----------------------------------------------------------------------------
 // event handlers
 // ----------------------------------------------------------------------------

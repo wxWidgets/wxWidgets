@@ -41,10 +41,9 @@ wxIncludePrep class Definition
 class wxIncludePrep : public wxHtmlProcessor {
 private:
     //DECLARE_DYNAMIC_CLASS(wxIncludePrep);
-    wxString DOC_ROOT;
-
+    wxFileSystem *m_FS;
 public:
-    wxIncludePrep() : wxHtmlProcessor() {DOC_ROOT = wxString("");}
+    wxIncludePrep() : wxHtmlProcessor() {}
     ~wxIncludePrep() {}
 	
 	// Process input text and return processed result
@@ -54,8 +53,7 @@ public:
     // is the processor applied to the text.
     int GetPriority() const { return wxHTML_PRIORITY_SYSTEM; }
 	
-    void ChangeDirectory(const wxString &dir);
-    wxString GetDirectory() { return DOC_ROOT; }
+    void ChangeDirectory(wxFileSystem *);
     };
 	
 	

@@ -59,8 +59,6 @@ wxString wxIncludePrep::Process(
     int i;
 	char ft[] = "<!--#include virtual=";
 	
-    wxFileSystem *fs = new wxFileSystem;
-    fs->ChangePathTo(DOC_ROOT, true);
 
     int openedcount = 0;
 
@@ -92,11 +90,12 @@ wxString wxIncludePrep::Process(
 		// remove the #include tag
         output.Remove(i, n+21+3);
 
-        wxFSFile * file = fs->OpenFile(DOC_ROOT + fname);
-    			
+        wxFSFile * file;
+        file = m_FS->OpenFile(fname);
+	
         if (!file) {
 #ifdef CHECKED		
-			wxMessageBox(wxString("wxHTML #include error: File not Found ") + DOC_ROOT + fname + wxString("."),"Error",wxICON_ERROR);
+			wxMessageBox(wxString("wxHTML #include error: File not Found ") + fname + wxString("."),"Error",wxICON_ERROR);
 #endif
             delete file;
             continue;
@@ -125,7 +124,6 @@ wxString wxIncludePrep::Process(
         delete file;
         }
 	
-	delete fs;
 	return output;
 }
 
@@ -138,9 +136,8 @@ This function sets the directory to get included HTML files from. The default
 value is the current directory. Directorys may be given as a relative path.
 ****************************************************************************/
 void wxIncludePrep::ChangeDirectory(
-    const wxString &dir)
+    wxFileSystem *fs)
 {
-
-    DOC_ROOT = dir;
+     m_FS = fs;
 }
 

@@ -157,7 +157,7 @@ wxDialog::~wxDialog()
     m_isBeingDeleted = TRUE;
     wxTopLevelWindows.DeleteObject(this);
     Show(FALSE);
-    if (!IsModal)
+    if (!IsModal())
         wxModelessWindows.DeleteObject(this);
 
     //

@@ -18,6 +18,7 @@
 #include "wx/pen.h"
 #include "wx/brush.h"
 #include "wx/gdicmn.h"
+#include "wx/module.h"
 #endif
 
 #include "wx/settings.h"

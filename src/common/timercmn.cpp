@@ -330,11 +330,11 @@ wxLongLong wxGetLocalTimeMillis()
     // do NOT just shut off these warnings, drop me a line instead at
     // <guille@iies.es>
 
-    #if defined(__VISUALC__)
+    #if defined(__VISUALC__) || defined (__WATCOMC__)
         #pragma message("wxStopWatch will be up to second resolution!")
     #elif defined(__BORLANDC__)
         #pragma message "wxStopWatch will be up to second resolution!"
-    #else
+    #elif
         #warning "wxStopWatch will be up to second resolution!"
     #endif // compiler
 #endif

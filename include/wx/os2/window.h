@@ -109,10 +109,12 @@ public:
                                    ,int*            pExternalLeading = (int *)NULL
                                    ,const wxFont*   pTheFont = (const wxFont *)NULL
                                   ) const;
+#if wxUSE_MENUS_NATIVE
     virtual bool     DoPopupMenu( wxMenu* pMenu
                                  ,int     nX
                                  ,int     nY
                                 );
+#endif // wxUSE_MENUS_NATIVE
 
     virtual void     SetScrollbar( int  nOrient
                                   ,int  nPos
@@ -180,6 +182,7 @@ public:
                     ) const;
 #endif // wxUSE_CARET
 
+#ifndef __WXUNIVERSAL__
     // Native resource loading (implemented in src/os2/nativdlg.cpp)
     // FIXME: should they really be all virtual?
     virtual bool LoadNativeDialog( wxWindow*   pParent
@@ -190,6 +193,7 @@ public:
                                  );
     wxWindow*    GetWindowChild1(wxWindowID vId);
     wxWindow*    GetWindowChild(wxWindowID vId);
+#endif //__WXUNIVERSAL__
 
     // implementation from now on
     // --------------------------
@@ -266,6 +270,7 @@ public:
                                    ) const;
 #endif // WXWIN_COMPATIBILITY
 
+#ifndef __WXUNIVERSAL__
     // Create an appropriate wxWindow from a HWND
     virtual wxWindow* CreateWindowFromHWND( wxWindow* pParent
                                            ,WXHWND    hWnd
@@ -273,6 +278,7 @@ public:
 
     // Make sure the window style reflects the HWND style (roughly)
     virtual void AdoptAttributesFromHWND(void);
+#endif
 
     // Setup background and foreground colours correctly
     virtual void SetupColours(void);

@@ -28,7 +28,7 @@
 #define BSD_SELECT /* use Berkley Sockets select */
 
 #include <assert.h>
-#include <sys\types.h>
+#include <sys/types.h>
 
 #ifdef __EMX__
 #include <sys/time.h>
@@ -42,10 +42,11 @@
 
 #else
 
-#include <utils.h>
-#include <sys\time.h>
+#include <string.h>
+
+#include <sys/time.h>
 #include <types.h>
-#include <in.h>
+#include <netinet/in.h>
 #include <netdb.h>
 #include <nerrno.h>
 
@@ -53,7 +54,7 @@
 
 #if defined(__VISAGECPP__) && __IBMCPP__ < 400
 
-#include <machine\endian.h>
+#include <machine/endian.h>
 #include <socket.h>
 #include <ioctl.h>
 #include <select.h>
@@ -63,9 +64,9 @@
 
 #else
 
-#include <sys\socket.h>
-#include <sys\ioctl.h>
-#include <sys\select.h>
+#include <sys/socket.h>
+#include <sys/ioctl.h>
+#include <sys/select.h>
 
 #ifdef __EMX__
 #define soclose(a) close(a)
@@ -80,7 +81,6 @@ int _System soclose(int);
 #endif
 #endif
 
-#include <string.h>
 #include <stdio.h>
 #if (defined(__VISAGECPP__) && __IBMCPP__ < 400) || defined(__EMX__)
 #  ifdef min
@@ -90,6 +90,7 @@ int _System soclose(int);
 #endif
 #include <stddef.h>
 #include <ctype.h>
+#include <stdlib.h>
 
 #include <signal.h>
 
@@ -418,7 +419,7 @@ GSocketError GSocket_SetServer(GSocket *sck)
     return GSOCK_IOERR;
   }
 
-  ioctl(sck->m_fd, FIONBIO, &arg);
+  ioctl(sck->m_fd, FIONBIO, (char*)&arg, sizeof(arg));
   _GSocket_Enable_Events(sck);
 
   /* Bind to the local address,
@@ -524,7 +525,7 @@ GSocket *GSocket_WaitConnection(GSocket *socket)
     return NULL;
   }
 
-  ioctl(connection->m_fd, FIONBIO, &arg);
+  ioctl(connection->m_fd, FIONBIO, (char*)&arg, sizeof(arg));
   _GSocket_Enable_Events(connection);
 
   return connection;
@@ -593,14 +594,14 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
     return GSOCK_IOERR;
   }
 
-  ioctl(sck->m_fd, FIONBIO, &arg);
+  ioctl(sck->m_fd, FIONBIO, (char*)&arg, sizeof(arg));
   _GSocket_Enable_Events(sck);
 
   /* Connect it to the peer address, with a timeout (see below) */
   ret = connect(sck->m_fd, sck->m_peer->m_addr, sck->m_peer->m_len);
 
   printf("connect on %d to %X (%d) returned %d, errno = %d\n",
-	 sck->m_fd, sck->m_peer->m_addr, sck->m_peer->m_len, ret, errno);
+     sck->m_fd, sck->m_peer->m_addr, sck->m_peer->m_len, ret, errno);
   if (ret == -1)
   {
     err = errno;
@@ -701,7 +702,7 @@ GSocketError GSocket_SetNonOriented(GSocket *sck)
     return GSOCK_IOERR;
   }
 
-  ioctl(sck->m_fd, FIONBIO, &arg);
+  ioctl(sck->m_fd, FIONBIO, (char*)&arg, sizeof(arg));
   _GSocket_Enable_Events(sck);
 
   /* Bind to the local address,
@@ -1006,7 +1007,7 @@ void GSocket_SetCallback(GSocket *socket, GSocketEventFlags flags,
     if ((flags & (1 << count)) != 0)
     {
       printf("Setting callback no %d for socket at %X to address %X,data %X\n",
-	     count, socket, callback, cdata);
+         count, socket, callback, cdata);
       socket->m_cbacks[count] = callback;
       socket->m_data[count] = cdata;
     }
@@ -1028,7 +1029,7 @@ void GSocket_UnsetCallback(GSocket *socket, GSocketEventFlags flags)
     if ((flags & (1 << count)) != 0)
     {
       printf("Removing callback no %d for socket at %X",
-	     count, socket);
+         count, socket);
       socket->m_cbacks[count] = NULL;
       socket->m_data[count] = NULL;
     }
@@ -1197,7 +1198,7 @@ int _GSocket_Send_Stream(GSocket *socket, const char *buffer, int size)
   ret = send(socket->m_fd, buffer, size, 0);
   UNMASK_SIGNAL();
 #else
-  ret = send(socket->m_fd, buffer, size, 0);
+  ret = send(socket->m_fd, (char *)buffer, size, 0);
 #endif
   return ret;
 }
@@ -1226,7 +1227,7 @@ int _GSocket_Send_Dgram(GSocket *socket, const char *buffer, int size)
   ret = sendto(socket->m_fd, buffer, size, 0, addr, len);
   UNMASK_SIGNAL();
 #else
-  ret = sendto(socket->m_fd, buffer, size, 0, addr, len);
+  ret = sendto(socket->m_fd, (char *)buffer, size, 0, addr, len);
 #endif
 
   /* Frees memory allocated from _GAddress_translate_to */
@@ -1494,8 +1495,8 @@ GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
   {
 #else
   /* Use gethostbyname by default */
-  int val = 1;  //VA doesn't like constants in conditional expressions at all
-  if (val)
+//  int val = 1;  //VA doesn't like constants in conditional expressions at all
+  if (1)
   {
 #endif
     struct in_addr *array_addr;

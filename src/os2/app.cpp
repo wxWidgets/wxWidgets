@@ -39,26 +39,26 @@
 
 #ifdef __EMX__
 
-#include <sys\ioctl.h>
-#include <sys\select.h>
+#include <sys/ioctl.h>
+#include <sys/select.h>
 
 #else
 
 #include <nerrno.h>
-#include <ioctl.h>
-#include <select.h>
+#include <sys/ioctl.h>
+#include <sys/select.h>
+#include <sys/time.h>
 
-#endif // ndef for __EMX__
+#endif //
 
 #ifndef __EMX__
 
 #define select(a,b,c,d,e) bsdselect(a,b,c,d,e)
-int _System bsdselect(int,
-                      struct fd_set *,
-                      struct fd_set *,
-                      struct fd_set *,
-                      struct timeval *);
-
+extern "C" int _System bsdselect(int,
+                                 struct fd_set *,
+                                 struct fd_set *,
+                                 struct fd_set *,
+                                 struct timeval *);
 #endif
 
 #if wxUSE_THREADS
@@ -326,7 +326,6 @@ bool wxApp::RegisterWindowClasses(
   HAB                               vHab
 )
 {
-    APIRET                          rc;
     ERRORID                         vError = 0L;
     wxString                        sError;
 
@@ -654,6 +653,9 @@ bool wxApp::OnInitGui()
     ERRORID                         vError;
     wxString                        sError;
 
+    if (!wxAppBase::OnInitGui())
+        return FALSE;
+
     m_hMq = ::WinCreateMsgQueue(vHabmain, 0);
     if (!m_hMq)
     {
@@ -662,6 +664,7 @@ bool wxApp::OnInitGui()
         wxLogDebug(sError);
         return FALSE;
     }
+
     return TRUE;
 } // end of wxApp::OnInitGui
 
@@ -998,9 +1001,9 @@ void wxApp::OnIdle(
     // automated DC cache management: clear the cached DCs and bitmap
     // if it's likely that the app has finished with them, that is, we
     // get an idle event and we're not dragging anything.
-    if (!::WinGetKeyState(MK_LBUTTON) &&
-        !::WinGetKeyState(MK_MBUTTON) &&
-        !::WinGetKeyState(MK_RBUTTON))
+    if (!::WinGetKeyState(HWND_DESKTOP, VK_BUTTON1) &&
+        !::WinGetKeyState(HWND_DESKTOP, VK_BUTTON3) &&
+        !::WinGetKeyState(HWND_DESKTOP, VK_BUTTON2))
         wxDC::ClearCache();
 #endif // wxUSE_DC_CACHEING
 

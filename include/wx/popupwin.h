@@ -19,7 +19,6 @@
 #include "wx/window.h"
 
 #if wxUSE_POPUPWIN
-
 // ----------------------------------------------------------------------------
 // wxPopupWindow: a special kind of top level window used for popup menus,
 // combobox popups and such.
@@ -50,9 +49,12 @@ public:
                           const wxSize& size);
 };
 
+
 // include the real class declaration
 #ifdef __WXMSW__
     #include "wx/msw/popupwin.h"
+#elif __WXPM__
+    #include "wx/os2/popupwin.h"
 #elif __WXGTK__
     #include "wx/gtk/popupwin.h"
 #elif __WXMGL__

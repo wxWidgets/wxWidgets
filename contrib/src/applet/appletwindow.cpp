@@ -5,23 +5,19 @@
 *               Copyright (C) 1991-2001 SciTech Software, Inc.
 *                            All rights reserved.
 *
-*  ======================================================================
-*  |REMOVAL OR MODIFICATION OF THIS HEADER IS STRICTLY PROHIBITED BY LAW|
-*  |                                                                    |
-*  |This copyrighted computer code is a proprietary trade secret of     |
-*  |SciTech Software, Inc., located at 505 Wall Street, Chico, CA 95928 |
-*  |USA (www.scitechsoft.com).  ANY UNAUTHORIZED POSSESSION, USE,       |
-*  |VIEWING, COPYING, MODIFICATION OR DISSEMINATION OF THIS CODE IS     |
-*  |STRICTLY PROHIBITED BY LAW.  Unless you have current, express       |
-*  |written authorization from SciTech to possess or use this code, you |
-*  |may be subject to civil and/or criminal penalties.                  |
-*  |                                                                    |
-*  |If you received this code in error or you would like to report      |
-*  |improper use, please immediately contact SciTech Software, Inc. at  |
-*  |530-894-8400.                                                       |
-*  |                                                                    |
-*  |REMOVAL OR MODIFICATION OF THIS HEADER IS STRICTLY PROHIBITED BY LAW|
-*  ======================================================================
+*  ========================================================================
+*
+*    The contents of this file are subject to the wxWindows License
+*    Version 3.0 (the "License"); you may not use this file except in
+*    compliance with the License. You may obtain a copy of the License at
+*    http://www.wxwindows.org/licence3.txt
+*
+*    Software distributed under the License is distributed on an
+*    "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+*    implied. See the License for the specific language governing
+*    rights and limitations under the License.
+*
+*  ========================================================================
 *
 * Language:     ANSI C++
 * Environment:  Any
@@ -88,24 +84,27 @@ wxHtmlAppletWindow::wxHtmlAppletWindow(
     const wxSize& size,
     long style,
     const wxString& name,
-    const wxString& docroot )
-    : wxHtmlWindow(parent,id,pos,size,style,name)
+    const wxPalette& globalPalette)
+    : wxHtmlWindow(parent,id,pos,size,style,name), m_globalPalette(globalPalette)
 {
     // Init our locks
     UnLock();
 
     // setup client navbars
     if (navBar) {
+        m_NavBarEnabled = true;
         m_NavBar = navBar;
         m_NavBackId = navBackId;
         m_NavForwardId = navForwardId;
         }
     else {
+        m_NavBarEnabled = false;
         m_NavBar = NULL;
         }
 
-    // Set up docroot
-    m_DocRoot = docroot;
+    m_NavBackId = navBackId;
+    m_NavForwardId = navForwardId;
+
 
     // Set the key_type for applets
     m_AppletList = wxAppletList(wxKEY_STRING);
@@ -114,7 +113,7 @@ wxHtmlAppletWindow::wxHtmlAppletWindow(
     // deleting preprocessors is done by the code within the window
 
     incPreprocessor = new wxIncludePrep(); // #include preprocessor
-    incPreprocessor->ChangeDirectory(m_DocRoot);
+    incPreprocessor->ChangeDirectory(m_FS); // give it access to our filesys object
 
     wxEchoPrep * echoPreprocessor = new wxEchoPrep(); // #echo preprocessor
     wxIfElsePrep * ifPreprocessor = new wxIfElsePrep();
@@ -130,6 +129,27 @@ Destructor for the applet window class.
 ****************************************************************************/
 wxHtmlAppletWindow::~wxHtmlAppletWindow()
 {
+}
+
+#include "scitech.h"
+
+/****************************************************************************
+PARAMETERS:
+dc  - wxDC object to draw on
+
+REMARKS:
+This function handles drawing the HTML applet window. Because the standard
+wxWindows classes don't properly handle palette management, we add code
+in here to properly select the global palette that we use for all drawing
+into the DC before we allow the regular wxWindows code to finish the
+drawing process.
+****************************************************************************/
+void wxHtmlAppletWindow::OnDraw(
+    wxDC& dc)
+{
+    // TODO: Only do this for <= 8bpp modes!
+    dc.SetPalette(m_globalPalette);
+    wxHtmlWindow::OnDraw(dc);
 }
 
 /****************************************************************************
@@ -263,23 +283,10 @@ True if page loaded successfully, false if not
 REMARKS:
 Remove an applet from the manager. Called during applet destruction
 ****************************************************************************/
-#include "scitech"
 bool wxHtmlAppletWindow::LoadPage(
     const wxString& link)
 {
     wxString href(link);
-
-    // TODO: technically we allow no relative paths
-
-    // Check to see if it is a real url, if not it is a file
-    if (link.Mid(0, 5).CmpNoCase("http:") != 0) {
-
-        // Check for abs path. If it is not then tack on the path
-        // supplied at creation.
-        // TODO: Abs paths are only used in testing (remove this)
-        if (link.GetChar(1) != ':')
-            href = m_DocRoot + href;
-        }
 
     if (link.GetChar(0) == '?'){
         wxString cmd = link.BeforeFirst('=');
@@ -329,11 +336,12 @@ bool wxHtmlAppletWindow::LoadPage(
     for (wxAppletList::Node *node = m_AppletList.GetFirst(); node; node = node->GetNext())
         (node->GetData())->OnLinkClicked(wxHtmlLinkInfo(href));
     Show(false);
+
     bool stat = wxHtmlWindow::LoadPage(href);
     Show(true);
 
     // Enable/Dis the navbar tools
-    if (m_NavBar) {
+    if (m_NavBarEnabled) {
         m_NavBar->EnableTool(m_NavForwardId,HistoryCanForward());
         m_NavBar->EnableTool(m_NavBackId,HistoryCanBack());
         }
@@ -386,6 +394,37 @@ bool wxHtmlAppletWindow::HistoryBack()
         (node->GetData())->OnHistoryBack();
 
     return wxHtmlWindow::HistoryBack();
+}
+
+/****************************************************************************
+REMARKS:
+This function is used to disable the navigation bars. If you want to
+toggle to the navbars off you must call this function.
+****************************************************************************/
+void wxHtmlAppletWindow::DisableNavBar()
+{
+    m_NavBarEnabled = false;
+}
+
+/****************************************************************************
+REMARKS:
+This function is used to enable the nav bars. If you toggle the nav bars on
+you must call this function.
+****************************************************************************/
+void wxHtmlAppletWindow::EnableNavBar()
+{
+    m_NavBarEnabled = true;
+}
+
+/****************************************************************************
+REMARKS:
+This function is used to set the nav bar to a new nav bar if you deleted the
+one that you were useing. Usally this happens when you toggle a nav bar
+on or off.
+****************************************************************************/
+void wxHtmlAppletWindow::SetNavBar(wxToolBarBase *navBar)
+{
+    m_NavBar = navBar;
 }
 
 /****************************************************************************
@@ -568,6 +607,18 @@ VirtualData::VirtualData(
     m_name = name;
     m_group = group;
     m_href = href;
+}
+
+/****************************************************************************
+PARAMETERS:
+REMARKS:
+VirtualData is used to store information on the virtual links.
+****************************************************************************/
+VirtualData::VirtualData()
+{
+    m_name.Empty();
+    m_group.Empty();
+    m_href.Empty();
 }
 
 /****************************************************************************

@@ -36,7 +36,7 @@
 
 #if wxUSE_XPM_IN_OS2
     #define FOR_MSW 1
-    #include "../xpm/xpm.h"
+    #include "xpm.h"
 #endif
 
 #include  "wx/xpmhand.h"

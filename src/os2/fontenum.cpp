@@ -24,6 +24,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_FONTMAP
+
 #ifndef WX_PRECOMP
   #include "wx/font.h"
 #endif
@@ -216,3 +218,4 @@ int CALLBACK wxFontEnumeratorProc(LPLOGFONT lplf, LPTEXTMETRIC lptm,
 }
 */
 
+#endif // wxUSE_FONTMAP

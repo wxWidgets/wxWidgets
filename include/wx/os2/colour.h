@@ -35,6 +35,8 @@ public:
              ,unsigned char cBlue
             );
 
+    wxColour( unsigned long colRGB ) { Set(colRGB); }
+
     //
     // Implicit conversion from the colour name
     //

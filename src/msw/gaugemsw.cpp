@@ -25,7 +25,7 @@
 #include "wx/utils.h"
 #endif
 
-#if wxUSE_GAUGE 
+#if wxUSE_GAUGE
 
 #include "wx/msw/gaugemsw.h"
 #include "wx/msw/private.h"
@@ -128,12 +128,12 @@ bool wxGaugeMSW::Create(wxWindow *parent, wxWindowID id,
     wOrient = ZYZG_ORIENT_LEFTTORIGHT;
   else
     wOrient = ZYZG_ORIENT_BOTTOMTOTOP;
-  
+
   SendMessage(wx_button, ZYZG_SETORIENTATION, wOrient, 0);
   SendMessage(wx_button, ZYZG_SETRANGE, range, 0);
 
-  SendMessage(GetHwnd(), ZYZG_SETFGCOLOR, 0, RGB(GetForegroundColour().Red(), GetForegroundColour().Green(), GetForegroundColour().Blue()));
-  SendMessage(GetHwnd(), ZYZG_SETBKCOLOR, 0, RGB(GetBackgroundColour().Red(), GetBackgroundColour().Green(), GetBackgroundColour().Blue()));
+  SendMessage(GetHwnd(), ZYZG_SETFGCOLOR, 0, PALETTERGB(GetForegroundColour().Red(), GetForegroundColour().Green(), GetForegroundColour().Blue()));
+  SendMessage(GetHwnd(), ZYZG_SETBKCOLOR, 0, PALETTERGB(GetBackgroundColour().Red(), GetBackgroundColour().Green(), GetBackgroundColour().Blue()));
 
   //SetBezelFace(1);
   //SetShadowWidth(1);
@@ -200,7 +200,7 @@ bool wxGaugeMSW::SetForegroundColour(const wxColour& col)
     if ( !wxControl::SetForegroundColour(col) )
         return FALSE;
 
-    SendMessage(GetHwnd(), ZYZG_SETFGCOLOR, 0, RGB(col.Red(), col.Green(), col.Blue()));
+    SendMessage(GetHwnd(), ZYZG_SETFGCOLOR, 0, PALETTERGB(col.Red(), col.Green(), col.Blue()));
 
     return TRUE;
 }
@@ -210,7 +210,7 @@ bool wxGaugeMSW::SetBackgroundColour(const wxColour& col)
     if ( !wxControl::SetBackgroundColour(col) )
         return FALSE;
 
-    SendMessage(GetHwnd(), ZYZG_SETBKCOLOR, 0, RGB(col.Red(), col.Green(), col.Blue()));
+    SendMessage(GetHwnd(), ZYZG_SETBKCOLOR, 0, PALETTERGB(col.Red(), col.Green(), col.Blue()));
 
     return TRUE;
 }
@@ -218,7 +218,7 @@ bool wxGaugeMSW::SetBackgroundColour(const wxColour& col)
 
 /** zyz3d.c
  *
- *  DESCRIPTION: 
+ *  DESCRIPTION:
  *      This module contains functions for creating nifty 3D borders
  *      around controls like zYzGauge.
  *
@@ -260,7 +260,7 @@ void FAR PASCAL Draw3DLine(HDC, WORD, WORD, WORD, WORD, WORD);
 
 /** void FAR PASCAL Draw3DFaceFrame(HDC hdc, LPRECT rc, WORD wWidth)
  *
- *  DESCRIPTION: 
+ *  DESCRIPTION:
  *      This function draws a flat frame with the current button-face
  *      color.
  *
@@ -330,7 +330,7 @@ void FAR PASCAL Draw3DFaceFrame(HDC hdc, LPRECT rc, WORD wWidth)
 
 /** void FAR PASCAL Draw3DRect(HDC, LPRECT, WORD, WORD)
  *
- *  DESCRIPTION: 
+ *  DESCRIPTION:
  *      Draws a 3D rectangle that is shaded.  wFlags can be used to
  *      control how the rectangle looks.
  *
@@ -392,7 +392,7 @@ void FAR PASCAL Draw3DRect(HDC hdc, LPRECT lpRect,
 
 /** void FAR PASCAL Draw3DLine(HDC hdc, WORD x, WORD y, WORD nLen,
  *
- *  DESCRIPTION: 
+ *  DESCRIPTION:
  *      Draws a 3D line that can be used to make a 3D box.
  *
  *  ARGUMENTS:
@@ -431,7 +431,7 @@ void FAR PASCAL Draw3DRect(HDC hdc, LPRECT lpRect,
  ** cjp */
 
 void FAR PASCAL Draw3DLine(HDC hdc, WORD x, WORD y, WORD nLen,
-                               WORD wShadowWidth, WORD wFlags) 
+                               WORD wShadowWidth, WORD wFlags)
 {
     HBRUSH  hOldBrush;
     HPEN    hOldPen;
@@ -446,7 +446,7 @@ void FAR PASCAL Draw3DLine(HDC hdc, WORD x, WORD y, WORD nLen,
     Point[0].x = x;
     Point[0].y = y;
 
-    /*  To do this we'll simply draw a polygon with four sides, using 
+    /*  To do this we'll simply draw a polygon with four sides, using
      *  the appropriate brush.  I dare you to ask me why this isn't a
      *  switch/case!
      */
@@ -505,7 +505,7 @@ void FAR PASCAL Draw3DLine(HDC hdc, WORD x, WORD y, WORD nLen,
         /* select 'dark' brush if 'in'--'light' for 'out' */
         fDark = (wFlags & DRAW3D_IN) ? TRUE : FALSE;
     }
-    
+
     /* well maybe it's for the right side? */
     else if (wFlags & DRAW3D_RIGHTLINE)
     {
@@ -549,7 +549,7 @@ void FAR PASCAL Draw3DLine(HDC hdc, WORD x, WORD y, WORD nLen,
 
 /** zyzgauge.c
  *
- *  DESCRIPTION: 
+ *  DESCRIPTION:
  *      Yet another 'Gas Gauge Custom Control.'  This control gives you
  *      a 'progress bar' class (named zYzGauge) for use in your applications.
  *      You can set the range, position, font, color, orientation, and 3d
@@ -652,7 +652,7 @@ void FAR PASCAL Draw3DLine(HDC hdc, WORD x, WORD y, WORD nLen,
 
 /* static global variables */
 static wxChar gszzYzGaugeClass[] = wxT("zYzGauge");
-    
+
 
 /* window word position definitions */
 #define ZYZG_WW_PZYZGAUGE   0
@@ -692,7 +692,7 @@ static BOOL     fSupport3D;
 #if !defined(APIENTRY)    // NT defines APIENTRY, 3.x not
 #define APIENTRY FAR PASCAL
 #endif
- 
+
 #ifdef __WIN32__
 #define _EXPORT /**/
 #else
@@ -709,7 +709,7 @@ LRESULT APIENTRY _EXPORT gaugeWndProc(HWND, UINT, WPARAM, LPARAM);
 
 /** BOOL FAR PASCAL gaugeInit(HINSTANCE hInstance)
  *
- *  DESCRIPTION: 
+ *  DESCRIPTION:
  *      Registers the window class for the zYzGauge control.  Performs
  *      other initialization for the zYzGauge text control.  This must
  *      be done before the zYzGauge control is used--or it will fail
@@ -733,7 +733,7 @@ BOOL FAR PASCAL gaugeInit(HINSTANCE hInstance)
     static BOOL fRegistered = FALSE;
     WNDCLASS    wc;
     HDC         hdc;
-    
+
     /* assume already registered if not first instance */
     if (fRegistered)
         return (TRUE);
@@ -776,7 +776,7 @@ BOOL FAR PASCAL gaugeInit(HINSTANCE hInstance)
         }
 
         /* good! we have color: blue foreground, white background */
-        else 
+        else
         {
             rgbDefTextColor = RGB(0, 0, 255);
             rgbDefBkColor = RGB(255, 255, 255);
@@ -804,7 +804,7 @@ BOOL FAR PASCAL gaugeInit(HINSTANCE hInstance)
 
 /** static void PASCAL gaugePaint(HWND hwnd, HDC hdc)
  *
- *  DESCRIPTION: 
+ *  DESCRIPTION:
  *      This function is responsible for painting the zYzGauge control.
  *
  *  ARGUMENTS:
@@ -876,7 +876,7 @@ static void PASCAL gaugePaint(HWND hwnd, HDC hdc)
         /* add all the other pixels into the border width */
         Offset += (2 * pgauge->wWidth3D) + pgauge->wWidthBezelFace + 1;
     }
-   
+
     /* dup--one rc for 'how much filled', one rc for 'how much empty' */
     rc2 = rc1;
 
@@ -925,7 +925,7 @@ static void PASCAL gaugePaint(HWND hwnd, HDC hdc)
     dwExtent = size.cx;
 #else
     dwExtent = GetTextExtent(hdc, ach, wGomerX = lstrlen(ach));
-#endif  
+#endif
 
 
     /*  Draw the finished (ie the percent done) side of box.  If
@@ -949,11 +949,11 @@ static void PASCAL gaugePaint(HWND hwnd, HDC hdc)
     /* unselect the font */
     SelectObject(hdc, hFont);
 } /* gaugePaint() */
-  
+
 
 /** LRESULT FAR PASCAL gaugeWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
  *
- *  DESCRIPTION: 
+ *  DESCRIPTION:
  *      This is the control's window procedure.  Its purpose is to handle
  *      special messages for this custom control.
  *
@@ -968,7 +968,7 @@ static void PASCAL gaugePaint(HWND hwnd, HDC hdc)
  *          ZYZG_SETORIENTATION :   Sets the orientation of the gauge.  This
  *                                  can be one of the ZYZG_ORIENT_?? msgs.
  *
- *          ZYZG_GETORIENTATION :   Gets the current orientation of the 
+ *          ZYZG_GETORIENTATION :   Gets the current orientation of the
  *                                  gauge.
  *
  *          ZYZG_SETPOSITION    :   Sets the current position of the gauge.

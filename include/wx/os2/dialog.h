@@ -41,6 +41,7 @@ public:
     {
         long                        lModalStyle = lStyle ? wxDIALOG_MODAL : wxDIALOG_MODELESS ;
 
+        bModal = false;
         Create( pParent
                ,-1
                ,rsTitle

@@ -22,17 +22,17 @@
 #   include <fstream>
 #endif
 
+#define INCL_PM
+#include <os2.h>
+
 #include "wx/palette.h"
 #include "wx/bitmap.h"
 #include "wx/utils.h"
 
-#define INCL_PM
-#include <os2.h>
-
 #include "wx/os2/pngread.h"
 
 extern "C" {
-#include "../png/png.h"
+#include "png.h"
 }
 
 extern "C" void png_read_init PNGARG((png_structp png_ptr));

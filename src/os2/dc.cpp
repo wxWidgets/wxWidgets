@@ -23,6 +23,7 @@
     #include "wx/log.h"
     #include "wx/icon.h"
     #include "wx/msgdlg.h"
+    #include "wx/module.h"
 #endif
 
 #include "wx/dcprint.h"
@@ -204,7 +205,7 @@ wxDCCacheEntry* wxDC::FindBitmapInCache(
 , int                               nHeight
 )
 {
-    int                             nDepth = 24 // we'll fix this later ::GetDeviceCaps((HDC) dc, PLANES) * ::GetDeviceCaps((HDC) dc, BITSPIXEL);
+    int                             nDepth = 24; // we'll fix this later ::GetDeviceCaps((HDC) dc, PLANES) * ::GetDeviceCaps((HDC) dc, BITSPIXEL);
     wxNode*                         pNode = m_svBitmapCache.First();
     BITMAPINFOHEADER2               vBmpHdr;
 
