@@ -1,6 +1,6 @@
 .TH wx\-config 1 "15 Feb 2000" "Debian GNU/Linux" "wxWindows"
 .SH NAME
-wx-config \- generate compile time info for wxWindows
+wx-config \- generate compile time requirements for wxWindows applications
 .SH SYNOPSIS
 .nh
 .B wxbase\-config
@@ -8,7 +8,10 @@ wx-config \- generate compile time info for wxWindows
 .B wxgtk\-config
 .HP
 .B wx\-config
-[\-\-version] [\-\-libs] [\-\-cflags] [\-\-cc] [\-\-cxx] [\-\-ld]
+[\-\-version]
+[\-\-libs] [\-\-gl\-libs]
+[\-\-cppflags] [\-\-cflags] [\-\-cxxflags]
+[\-\-cc] [\-\-cxx] [\-\-ld]
 [\-\-prefix\fI[=DIR]\fP] [\-\-exec\-prefix\fI[=DIR]\fP]
 .SH DESCRIPTION
 \fIwx\-config\fP is a tool to determine the compiler and linker
@@ -26,29 +29,36 @@ mechanism.
 .SH OPTIONS
 .l
 \fIwx\-config\fP accepts the following options:
-.TP 8
+.TP 15
 .B  \-\-version
 What to
 .B ALWAYS
 include in a bug report.
-.br
-( But of course you already knew that ... )
-.TP 8
+.TP 15
 .B  \-\-libs
-Generate linker flags for a \fIwxWindows\fP program.
-.TP 8
+Output linker parameters for a \fIwxWindows\fP application.
+.TP 15
+.B  \-\-gl-libs
+Output linker parameters for a \fIwxWindows\fP application that uses the glcanvas.
+.TP 15
+.B  \-\-cppflags
+Output parameters required by the C preprocessor for wxWindows applications.
+.TP 15
 .B  \-\-cflags
-Generate compiler flags for the same.
-.TP 8
+Output parameters required by the C compiler for wxWindows applications.
+.TP 15
+.B  \-\-cxxflags
+Output parameters required by the C++ compiler for wxWindows applications.
+.TP 15
 .B  \-\-cc
 Output the name of the C compiler \fB$(CC)\fP.
-.TP 8
+.TP 15
 .B  \-\-cxx
 Output the name of the C++ compiler \fB$(CXX)\fP.
-.TP 8
+.TP 15
 .B  \-\-ld
-Output the Linker command \fB$(LD)\fP.
-.TP 8
+Output the linker command \fB$(LD)\fP.
+.TP 15
 .B  \-\-prefix=PREFIX
 If specified, use PREFIX instead of the installation prefix that \fIwxWindows\fP
 was built with when computing the output for the \-\-cflags and
@@ -60,7 +70,7 @@ before any \-\-libs or \-\-cflags options.
 .HP
 (Translation:  this is the root path to the \fIwxWindows\fP headers \-\- [Ron])
 .hy
-.TP 8
+.TP 15
 .B  \-\-exec\-prefix=PREFIX
 If specified, use PREFIX instead of the installation exec prefix that
 \fIwxWindows\fP was built with when computing the output for the \-\-cflags
@@ -77,8 +87,8 @@ and \-\-libs options.  This option must be specified before any
 .SH COPYRIGHT
 This manpage was copied whole\-heartedly from the \fBgtk\-config\fP(1) manpage
 by Brian Bassett <brianb@debian.org> for the Debian GNU/Linux distribution of
-wxGTK.  It was then updated to include new options and otherwise bastardised
-generally by Ron Lee <ron@debian.org>
+wxGTK.  It was subsequently updated to include new options and otherwise
+bastardised generally by Ron Lee <ron@debian.org>
 
 The original gtk\-config manpage copyright:
 

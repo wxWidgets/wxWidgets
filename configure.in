@@ -56,7 +56,7 @@ dnl ------------------------------------------------------------------------
 dnl Check platform (host system)
 dnl ------------------------------------------------------------------------
 
-dnl assume Unix
+dnl OS (assume Unix)
 USE_UNIX=1
 USE_OS2=0
 USE_WIN32=0
@@ -64,26 +64,36 @@ USE_DOS=0
 USE_BEOS=0
 USE_MAC=0
 
-USE_LINUX=
-USE_GNU=
-USE_SGI=
-USE_HPUX=
-USE_SYSV=
-USE_SVR4=
+dnl Unix kind
 USE_AIX=
-USE_SUN=
-USE_SOLARIS=
-USE_SUNOS=
-USE_ALPHA=
-USE_OSF=
+dnl any BSD
 USE_BSD=
+dnl a.k.a. Mac OS X
 USE_DARWIN=
 USE_FREEBSD=
-USE_OPENBSD=
+dnl GNU/Hurd
+USE_GNU=
+USE_HPUX=
+USE_LINUX=
 USE_NETBSD=
+USE_OPENBSD=
+dnl OSF/1 (obsolete?)
+USE_OSF=
+USE_SGI=
+dnl Solaris ("SunOS" >= 5)
+USE_SOLARIS=
+dnl SunOS or Solaris
+USE_SUN=
+dnl old/real SunOS (obsolete)
+USE_SUNOS=
+dnl SysV R4
+USE_SVR4=
+dnl any System V
+USE_SYSV=
 USE_VMS=
 USE_ULTRIX=
 USE_DATA_GENERAL=
+USE_ALPHA=
 
 dnl on some platforms xxx_r() functions are declared inside "#ifdef
 dnl _REENTRANT" and it's easier to just define this symbol for these platforms
@@ -145,9 +155,8 @@ case "${host}" in
     fi
     DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
-  *-*-gnu* )
+  *-*-gnu* | *-*-k*bsd*-gnu )
     USE_GNU=1
-    AC_DEFINE(__GNU__)
     TMP=`uname -m`
     if test "x$TMP" = "xalpha"; then
       USE_ALPHA=1
@@ -1136,7 +1145,7 @@ if test "$wxUSE_GUI" = "yes"; then
           echo "$var=$value" >> ${wx_arg_cache_file}
         fi
         if test "$value" = 1; then
-          toolkit_echo=`echo $toolkit | tr [[A-Z]] [[a-z]]`
+          toolkit_echo=`echo $toolkit | tr "[[A-Z]]" "[[a-z]]"`
           AC_MSG_RESULT($toolkit_echo)
         fi
       fi
@@ -1448,7 +1457,13 @@ esac
 if test "$wxUSE_GUI" = "yes"; then
     if test "$wxUSE_UNIX" = "yes" -a "$wxUSE_PM" != 1; then
         dnl defines HAVE_X11_XKBLIB_H
-        AC_CHECK_HEADERS(X11/XKBlib.h)
+        AC_CHECK_HEADERS(X11/Xlib.h)
+        AC_CHECK_HEADERS([X11/XKBlib.h], [], [], 
+                         [
+                          #if HAVE_X11_XLIB_H
+                            #include <X11/Xlib.h>
+                          #endif
+                         ])
     fi
 fi
 
@@ -1469,6 +1484,7 @@ AC_CHECK_SIZEOF(short, 2)
 AC_CHECK_SIZEOF(void *, 4)
 AC_CHECK_SIZEOF(int, 4)
 AC_CHECK_SIZEOF(long, 4)
+AC_CHECK_SIZEOF(size_t, 4)
 
 case "${host}" in
     arm-*-linux* )
@@ -1649,7 +1665,7 @@ dnl check for glibc version
 dnl
 dnl VZ: I have no idea why had this check been there originally, but now
 dnl     we could probably do without it by just always adding _GNU_SOURCE
-if test "$USE_LINUX" = 1 || test "$USE_GNU" = 1 ; then
+if test "$USE_LINUX" = 1 -o "$USE_GNU" = 1; then
     AC_CACHE_CHECK([for glibc 2.1 or later], wx_cv_lib_glibc21,[
         AC_TRY_COMPILE([#include <features.h>],
             [
@@ -1780,10 +1796,13 @@ if test "$wxUSE_ZLIB" != "no" ; then
                     ],
                     ac_cv_header_zlib_h=`cat conftestval`,
                     ac_cv_header_zlib_h=no,
-                    dnl cross-compiling: test if we have any zlib.h
-                    [AC_CHECK_HEADER(zlib.h)]
+                    dnl cross-compiling: don't have an answer, try later
+                    unset ac_cv_header_zlib_h
                 )]
             )
+            dnl If the test above did not come up with a value (e.g. cross
+            dnl compiling) then this should give a definitive answer
+            AC_CHECK_HEADER(zlib.h)
 
             system_zlib_h_ok=$ac_cv_header_zlib_h
         fi
@@ -1855,10 +1874,11 @@ if test "$wxUSE_LIBPNG" != "no" ; then
                     ],
                     ac_cv_header_png_h=`cat conftestval`,
                     ac_cv_header_png_h=no,
-                    dnl cross-compiling: test if we have any png.h
-                    [AC_CHECK_HEADER(png.h)]
+                    dnl cross-compiling: test (later) if we have any png.h
+                    unset ac_cv_header_png_h
                 )]
             )
+            AC_CHECK_HEADER(png.h)
 
             if test "$ac_cv_header_png_h" = "yes"; then
                 AC_CHECK_LIB(png, png_check_sig, PNG_LINK=" -lpng", , [-lz -lm])
@@ -2547,7 +2567,7 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         libs_found=0
         for libp in "" " -lXp"; do
             if test "$libs_found" = "0"; then
-                for libsm_ice in " -lSM -lICE"; do
+                for libsm_ice in "" " -lSM -lICE"; do
                     if test "$libs_found" = "0"; then
                         save_LIBS="$LIBS"
                         LIBS="$GUI_TK_LIBRARY -lXm${xpm_link} ${libp} -lXmu -lXext -lXt${libsm_ice} -lX11"
@@ -2925,7 +2945,7 @@ if test "$wxUSE_SHARED" = "yes"; then
         fi
       ;;
 
-      *-*-linux* | *-*-gnu* )
+      *-*-linux* )
         if test "$GCC" != "yes"; then
             AC_CACHE_CHECK([for Intel compiler], wx_cv_prog_icc,
             [
@@ -2944,9 +2964,14 @@ if test "$wxUSE_SHARED" = "yes"; then
             fi
         fi
 
+        dnl Building ELF shared libraries without an soname by default and
+        dnl including /usr/lib explicitly in the linker path causes all sorts
+        dnl of grief.  We try to undo at least some of the wrongness that has
+        dnl propagated from that here when sonames are enabled by reinserting
+        dnl the arguments to declare the dependency on symbols in the main lib.
         if test "$wxUSE_SONAME" = "yes" ; then
             SONAME_FLAGS="-Wl,-soname,${WX_LIBRARY_LINK1}"
-            SONAME_FLAGS_GL="-Wl,-soname,${WX_LIBRARY_LINK1_GL}"
+            SONAME_FLAGS_GL="-Wl,-soname,${WX_LIBRARY_LINK1_GL} -L\$(build_libdir) $WXCONFIG_LIBS"
             dnl substitute this in makelib.env for the contrib libs
             WX_TARGET_LIBRARY_SONAME="-Wl,-soname,\$(TARGETLIB_LINK1)"
         fi

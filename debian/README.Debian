@@ -24,7 +24,7 @@ wxwin-examples		wxWindows and wxPython demos and samples (source)
 wxwin-i18n		message catalogs for native language support
 
 
-	The following three can be built from the source package
+	The following binaries can be built from the source package
 	with the mingw32 cross compiler, but are not currently
 	distributed by Debian.  If you feel that should change,
 	please file a bug against the wxwindows2.4 package, or
@@ -44,9 +44,28 @@ libwxbase-msw-dev	mingw32-cross wxBase libs.
 libwxbase-msw-dbg	mingw32-cross wxBase (debug) libs.
 wxwin-headers-msw	extra headers needed for wxMSW.
 
-libwxgtk-univ		wxUniversal for Gtk.  NOTE this package is obsolete
-			and will be replaced by wxX11 and wxX11-univ at
-			some future time.
+	You can build all of these extra packages using the binary-cross
+	target in debian/rules.
+
+
+	It is also possible to build a libwxgtk-dbg-python package.
+	There are some limitations (like this package cannot be installed
+	concurrently with the release version), but some developers may
+	find such a thing useful in any case.  It will transparently
+	replace the release package for installed apps that depend on the
+	release package, but should NEVER be used when preparing packages
+	for upload.  This package may be created from the source using the
+	binary-dbg-py target in debian/rules.  (note that doing this will
+	also destroy any release build that exists in the same tree, they
+	cannot coexist there either yet)
+
+
+	Finally, because all of these packages can take quite some time to
+	build, the source package supports the use of distcc.  The package
+	builds will automatically parallelise to suit the number of hosts
+	you have listed in DISTCC_HOSTS.  This will work for both native
+	and cross builds of the c++ libraries, if you have the relevant
+	compilers on all your build hosts.
 
 
  -- Ron Lee <ron@debian.org>, Sun, 13 Feb 2000 18:40:00 +1030

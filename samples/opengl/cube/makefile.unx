@@ -9,10 +9,6 @@
 #
 # Makefile for cube example (UNIX).
 
-OPENGL_LIBS=-lGL -lGLU
-#if you have old Mesa, try this:
-#OPENGL_LIBS=-lMesaGL -lMesaGLU
-
 PROGRAM=cube
 
 CXX = $(shell wx-config --cxx)
@@ -29,7 +25,7 @@ OBJECTS = $(PROGRAM).o
 all:    $(PROGRAM)
 
 $(PROGRAM):	$(OBJECTS)
-	$(CXX) -o $(PROGRAM) $(OBJECTS) `wx-config --libs` -lwx_gtk_gl $(OPENGL_LIBS)
+	$(CXX) -o $(PROGRAM) $(OBJECTS) `wx-config --gl-libs`
 
 clean: 
 	rm -f *.o $(PROGRAM)

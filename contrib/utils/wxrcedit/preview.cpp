@@ -197,7 +197,7 @@ void PreviewFrame::Preview(wxXmlNode *node, wxXmlDocument *orig_doc)
 
 void PreviewFrame::PreviewMenu()
 {
-    wxMenuBar *mbar;
+    wxMenuBar *mbar = NULL;
 
     if (XmlGetClass(m_Node) == _T("wxMenuBar"))
         mbar = m_RC->LoadMenuBar(m_Node->GetPropVal(_T("name"), _T("-1")));

@@ -1,3 +1,46 @@
+wxwindows2.4 (2.4.2.5) unstable; urgency=medium
+
+  * Medium urgency to keep things moving for the libtiff fudge.
+  * Switch to dhv4, libtiff4.
+  * Fix menu quoting.
+  * Whittled down on some of the build config scripts that weren't
+    really earning their weight.
+  * Check for DISTCC_HOSTS and set the number of make -j jobs according
+    to the number of hosts it contains.
+  * Purge the .pyc from site-packages/wx too.  They are generated on
+    site at install time.
+  * Includes type correctness fix for 64bit arch's.  Closes: #197661
+  * Merged patches from Robert Millan for HURD/K*BSD support back from
+    cvs head.  Closes: #217726
+  * Store the python version we preconfigure virgin source with, then
+    people don't need the default python package installed to build
+    from source, just the packages declared in the build-deps.  Fix
+    the -python postinst to use this when byte compiling too.
+    Closes: #259128  (and fixes #258529)
+  * Added README.examples to explain that these examples are extended
+    documentation for coders, rather than trial apps for users.
+    Closes: #212894
+  * Dropped the examples from the demos subdir, the samples cover a lot
+    more ground than they used to and are generally more up to date,
+    it's also no longer hard to find a broad range of real applications
+    with source.  Provided more external pointers in the README.
+    Closes: #258530 after discussion with the submitter.  This is a bit
+    less c++ for your python, but I'm not convinced yet that either half
+    is such a burden on the other as to warrant an extra package here
+    at this stage.
+  * Fix linking of wxgtk_gl to include the proper dependency on wxgtk.
+    Remove suggestion of libgl1, by declaring the full library dependency
+    we now automatically insist on it.  Closes: #262027
+  * Include wxrc and wxrcedit in contrib-dev.  Added a simple man page
+    and a menu entry for wxrcedit.  Closes: #261811
+  * Update gl sample makefiles to use --gl-libs.  Thanks to Rich Walker
+    for picking this up.  Closes: #246169
+  * Enable the building of a libwxgtk-dbg-python package, but do not
+    build and upload it by default at this stage.  Closes: #220568
+  * Does not fix #239782, sorry.
+
+ -- Ron Lee <ron@debian.org>  Wed, 28 Jul 2004 03:21:42 +0930
+
 wxwindows2.4 (2.4.2.4) unstable; urgency=low
 
   * Modified build scripts to use pythonX.Y instead of python(>=X.Y)

@@ -3,9 +3,5 @@ set -e
 
 update-alternatives --install /usr/bin/wx-config wx-config /usr/bin/wxgtkd-=V-config 50
 
-if [ "$1" = "configure" ]; then
-	ldconfig
-fi
-
 #DEBHELPER#
 

@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """Easy generation of new events classes and binder functions"""
 
 __author__ = "Miki Tebeka <tebeka@cs.bgu.ac.il>"

@@ -321,10 +321,18 @@ $(build_libdir)/@WX_LIBRARY_NAME_SHARED@: $(OBJECTS)
 	$(SHARED_LD) $@ $(SONAME_FLAGS) $(OBJECTS) $(EXTRALIBS)
 
 # NB: we used to have "-L$(build_libdir) @WXCONFIG_LIBS@" in the SHARED_LD line
-#     but this seems to result in problems with libwx_gtk being linked in twice
+#     but this seems to result in problems with libwx_gtk being linked in twice.
+# RL: This is another example of why sonames exist, and what happens when you
+#     ignore them.  Broken linking like this is now an rc bug in Debian, so we
+#     add them back again (to SONAME_FLAGS_GL) in configure if --enable-soname
+#     is used.  Removing the explicit -L /usr/lib from LDFLAGS would probably
+#     help with the above problem, but building without the soname is broken in
+#     so many other ways that I'm not going to touch that case in 2.4 anymore
+#     if I can help it.
+#
 $(build_libdir)/@WX_LIBRARY_NAME_SHARED_GL@: glcanvas.o $(build_libdir)/@WX_LIBRARY_NAME_SHARED@
 	@$(INSTALL) -d $(build_libdir)
-	$(SHARED_LD) $@ $(SONAME_FLAGS_GL) glcanvas.o $(EXTRALIBS) $(LDFLAGS_GL) $(OPENGLLIBS)
+	$(SHARED_LD) $@ glcanvas.o $(SONAME_FLAGS_GL) $(LDFLAGS_GL) $(OPENGLLIBS) $(EXTRALIBS)
 
 $(build_libdir)/@WX_RESOURCES_MACOSX_DATA@: $(MACRESOURCES)
 	@$(INSTALL) -d $(build_libdir)
@@ -1596,14 +1604,20 @@ debian-dist: debian-native-dist debian-msw-dirs MSW_DIST
 	@# in other dist targets.  Ugly and hardly portable but it
 	@# will run on any Debian box and that's enough for now.
 
-	find $(DISTDIR) \( -name "CVS" -o -name ".cvsignore" -o -name "*.dsp" -o -name "*.dsw" -o -name "*.hh*" -o \
-			\( -name "makefile.*" -a ! -name "makefile.unx" \) \) \
-			-print0 | xargs -0 rm -rf
+
+	find $(DISTDIR) \( -name "CVS" -o -name ".cvsignore" -o -name "*.dsp"    \
+			   -o -name "*.dsw" -o -name "*.hh*" -o -name "*.mms"    \
+			   -o -name "*.mcp" -o -name "*M*.xml" -o -name "*.r"    \
+			   -o -name "*.bkl" -o -name "*.pro" -o -name "*.def"    \
+			   -o -name "*.vpj" -o -name "*.sc"                      \
+			   -o \( -name "makefile.*" -a ! -name "makefile.unx" \) \
+			\) -print0 | xargs -0 rm -rf
 
 	rm -rf $(WXDIR)/../wxwindows$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER)-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER)
 	mv $(DISTDIR) $(WXDIR)/../wxwindows$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER)-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER)
 
-debian-native-dist: @GUIDIST@ UNIV_DIST MANUAL_DIST PYTHON_DIST
+#debian-native-dist: @GUIDIST@ UNIV_DIST MANUAL_DIST PYTHON_DIST
+debian-native-dist: $(filter-out DEMOS_DIST,@GUIDIST@) MANUAL_DIST PYTHON_DIST
 	cp $(SRCDIR)/files.lst $(DISTDIR)/src
 
 debian-msw-dirs:

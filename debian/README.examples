@@ -1,5 +1,5 @@
 
-These examples are provided as extended documentation for the wxWidgets
+These examples are provided as extended documentation for the wxWindows
 package.  If you wish to actually run them rather than just browse them
 as documents you should copy them into a working directory elsewhere
 first.  Note that some of them will attempt to write to the current
