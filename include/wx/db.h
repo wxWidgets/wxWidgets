@@ -47,7 +47,6 @@
 	#ifdef __GNUG__
 	#pragma interface "db.h"
 	#endif
-	#include "wx/filefn.h"
 #endif
 
 #if defined(wx_msw) || defined(__WXMSW__) || defined(WIN32)
