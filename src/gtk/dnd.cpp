@@ -500,11 +500,11 @@ source_drag_data_get  (GtkWidget          *WXUNUSED(widget),
     wxDataFormat format( selection_data->target );
 
     wxLogDebug( wxT("Drop source: format requested: %s"), format.GetId().c_str() );
-
+    
     drop_source->m_retValue = wxDragCancel;
 
     wxDataObject *data = drop_source->GetDataObject();
-
+    
     if (!data)
     {
         wxLogDebug( wxT("Drop source: no data object") );
@@ -552,9 +552,6 @@ source_drag_data_get  (GtkWidget          *WXUNUSED(widget),
 #endif
 
     delete[] d;
-
-    /* so far only copy, no moves. TODO. */
-    drop_source->m_retValue = wxDragCopy;
 }
 
 //----------------------------------------------------------------------------
@@ -563,13 +560,12 @@ source_drag_data_get  (GtkWidget          *WXUNUSED(widget),
 
 static void source_drag_data_delete( GtkWidget          *WXUNUSED(widget),
                                      GdkDragContext     *WXUNUSED(context),
-                                     wxDropSource       *drop_source )
+                                     wxDropSource       *WXUNUSED(drop_source) )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
+    if (g_isIdle) 
+        wxapp_install_idle_handler();
 
-//  printf( "Delete the data!\n" );
-
-    drop_source->m_retValue = wxDragMove;
+    // printf( "Drag source: drag_data_delete\n" );
 }
 
 //----------------------------------------------------------------------------
@@ -580,9 +576,10 @@ static void source_drag_begin( GtkWidget          *WXUNUSED(widget),
                                GdkDragContext     *WXUNUSED(context),
                                wxDropSource       *WXUNUSED(drop_source) )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
+    if (g_isIdle) 
+        wxapp_install_idle_handler();
 
-//  printf( "drag_begin.\n" );
+    // printf( "Drag source: drag_begin.\n" );
 }
 
 //----------------------------------------------------------------------------
@@ -595,7 +592,7 @@ static void source_drag_end( GtkWidget          *WXUNUSED(widget),
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
-//  printf( "drag_end.\n" );
+    // printf( "Drag source: drag_end.\n" );
 
     drop_source->m_waiting = FALSE;
 }
@@ -625,7 +622,6 @@ gtk_dnd_window_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigur
 
 wxDropSource::wxDropSource( wxWindow *win, const wxIcon &icon )
 {
-    g_blockEventsOnDrag = TRUE;
     m_waiting = TRUE;
 
     m_iconWindow = (GtkWidget*) NULL;
@@ -660,7 +656,6 @@ wxDropSource::wxDropSource( wxDataObject& data, wxWindow *win, const wxIcon &ico
 
 wxDropSource::~wxDropSource()
 {
-    g_blockEventsOnDrag = FALSE;
 }
 
 void wxDropSource::PrepareIcon( int hot_x, int hot_y, GdkDragContext *context )
@@ -762,12 +757,12 @@ wxDragResult wxDropSource::DoDragDrop( bool allowMove )
 
         PrepareIcon( 0, 0, context );
 
-        while (m_waiting) gtk_main_iteration();;
+        while (m_waiting) gtk_main_iteration();
 	
 	if (context->action == GDK_ACTION_COPY)
-            return m_retValue = wxDragCopy;
+            m_retValue = wxDragCopy;
 	if (context->action == GDK_ACTION_MOVE)
-            return m_retValue = wxDragMove;
+            m_retValue = wxDragMove;
     }
 
 #if wxUSE_THREADS
@@ -785,7 +780,7 @@ wxDragResult wxDropSource::DoDragDrop( bool allowMove )
 void wxDropSource::RegisterWindow()
 {
     if (!m_widget) return;
-
+    
     gtk_signal_connect( GTK_OBJECT(m_widget), "drag_data_get",
                       GTK_SIGNAL_FUNC (source_drag_data_get), (gpointer) this);
     gtk_signal_connect (GTK_OBJECT(m_widget), "drag_data_delete",
@@ -812,5 +807,4 @@ void wxDropSource::UnregisterWindow()
 }
 
 #endif
-
       // wxUSE_DRAG_AND_DROP
