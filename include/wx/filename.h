@@ -96,7 +96,7 @@ public:
     // constructors and assignment
 
         // the usual stuff
-    wxFileName() { }
+    wxFileName() { Clear(); }
     wxFileName( const wxFileName &filepath ) { Assign(filepath); }
 
         // from a full filename: if it terminates with a '/', a directory path
@@ -219,6 +219,7 @@ public:
     // looks up the appropriate type and creator from the registration and then sets
     bool MacSetDefaultTypeAndCreator() ;
 #endif
+
     // various file/dir operations
 
         // retrieve the value of the current working directory

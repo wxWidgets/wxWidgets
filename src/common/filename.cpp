@@ -434,6 +434,9 @@ void wxFileName::Clear()
     m_volume =
     m_name =
     m_ext = wxEmptyString;
+
+    // we don't have any absolute path for now
+    m_relative = TRUE;
 }
 
 /* static */
