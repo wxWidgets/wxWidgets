@@ -6,6 +6,9 @@
 
 from xxx import *                       # xxx imports globals and params
 
+# Constant to define standart window name
+STD_NAME = '_XRCED_T_W'
+
 # Icons
 import images
 
@@ -319,11 +322,10 @@ class HighLightBox:
 ################################################################################
 
 class XML_Tree(wxTreeCtrl):
-    # Constant to define standart window name
-    stdName = '_XRCED_T_W'
     def __init__(self, parent, id):
         wxTreeCtrl.__init__(self, parent, id, style = wxTR_HAS_BUTTONS)
         self.SetBackgroundColour(wxColour(224, 248, 224))
+        # Register events
         EVT_TREE_SEL_CHANGED(self, self.GetId(), self.OnSelChanged)
         # One works on Linux, another on Windows
         if wxPlatform == '__WXGTK__':
@@ -331,7 +333,10 @@ class XML_Tree(wxTreeCtrl):
         else:
             EVT_LEFT_DCLICK(self, self.OnDClick)
         EVT_RIGHT_DOWN(self, self.OnRightDown)
+        EVT_TREE_ITEM_EXPANDED(self, self.GetId(), self.OnItemExpandedCollapsed)
+        EVT_TREE_ITEM_COLLAPSED(self, self.GetId(), self.OnItemExpandedCollapsed)
 
+        self.selection = None
         self.needUpdate = False
         self.pendingHighLight = None
         self.ctrl = self.shift = False
@@ -512,6 +517,7 @@ class XML_Tree(wxTreeCtrl):
         pos = obj.GetPosition()
         if pos == (-1,-1): pos = (0,0)
         return parentPos + pos
+
     # Find window (or sizer) corresponding to a tree item.
     def FindNodeObject(self, item):
         testWin = g.testWin
@@ -534,6 +540,7 @@ class XML_Tree(wxTreeCtrl):
                 if isinstance(child, wxNotebookSizerPtr):
                     child = child.GetNotebook()
         return child
+
     def OnSelChanged(self, evt):
         # Apply changes
         # !!! problem with wxGTK - GetOldItem is Ok if nothing selected
@@ -564,6 +571,7 @@ class XML_Tree(wxTreeCtrl):
         g.tools.UpdateUI()
         # Hightlighting is done in OnIdle
         self.pendingHighLight = self.selection
+
     # Check if item is in testWin subtree
     def IsHighlatable(self, item):
         if item == g.testWin.item: return False
@@ -571,6 +579,7 @@ class XML_Tree(wxTreeCtrl):
             item = self.GetItemParent(item)
             if item == g.testWin.item: return True
         return False
+
     # Highlight selected item
     def HighLight(self, item):
         self.pendingHighLight = None
@@ -592,6 +601,7 @@ class XML_Tree(wxTreeCtrl):
         else:
             g.testWin.highLight = HighLightBox(pos, size)
         g.testWin.highLight.item = item
+
     def ShowTestWindow(self, item):
         xxx = self.GetPyData(item)
         if g.panel.IsModified():
@@ -607,10 +617,12 @@ class XML_Tree(wxTreeCtrl):
         self.CreateTestWin(item)
         # Maybe an error occured, so we need to test
         if g.testWin: self.SetItemBold(g.testWin.item)
+
     # Double-click on Linux
     def OnItemActivated(self, evt):
         if evt.GetItem() != self.root:
             self.ShowTestWindow(evt.GetItem())
+
     # Double-click on Windows
     def OnDClick(self, evt):
         item, flags = self.HitTest(evt.GetPosition())
@@ -618,13 +630,32 @@ class XML_Tree(wxTreeCtrl):
             if item != self.root: self.ShowTestWindow(item)
         else:
             evt.Skip()
+
+    def OnItemExpandedCollapsed(self, evt):
+        # Update tool palette
+        g.tools.UpdateUI()
+        evt.Skip()
+
     # (re)create test window
     def CreateTestWin(self, item):
         testWin = g.testWin
-        wxBeginBusyCursor()
-        wxYield()
         # Create a window with this resource
         xxx = self.GetPyData(item).treeObject()
+        
+        # If frame
+#        if xxx.__class__ == xxxFrame:
+            # Frame can't have many children,
+            # but it's first child possibly can...
+#            child = self.GetFirstChild(item, 0)[0]
+#            if child.IsOk() and self.GetPyData(child).__class__ == xxxPanel:
+#                # Clean-up before recursive call or error
+#                wxMemoryFSHandler_RemoveFile('xxx.xrc')
+#                wxEndBusyCursor()
+#                self.CreateTestWin(child)
+#                return
+
+        wxBeginBusyCursor()
+        wxYield()
         # Close old window, remember where it was
         highLight = None
         if testWin:
@@ -664,7 +695,7 @@ class XML_Tree(wxTreeCtrl):
             name = 'noname'
         else:
             name = xxx.name
-        elem.setAttribute('name', self.stdName)
+        elem.setAttribute('name', STD_NAME)
         parent = elem.parentNode
         next = elem.nextSibling
         parent.replaceChild(self.dummyNode, elem)
@@ -690,55 +721,61 @@ class XML_Tree(wxTreeCtrl):
         if xxx.__class__ == xxxFrame:
             # Frame can't have many children,
             # but it's first child possibly can...
-            child = self.GetFirstChild(item, 0)[0]
-            if child.IsOk() and self.GetPyData(child).__class__ == xxxPanel:
-                # Clean-up before recursive call or error
-                wxMemoryFSHandler_RemoveFile('xxx.xrc')
-                wxEndBusyCursor()
-                self.CreateTestWin(child)
-                return
+#            child = self.GetFirstChild(item, 0)[0]
+#            if child.IsOk() and self.GetPyData(child).__class__ == xxxPanel:
+#                # Clean-up before recursive call or error
+#                wxMemoryFSHandler_RemoveFile('xxx.xrc')
+#                wxEndBusyCursor()
+#                self.CreateTestWin(child)
+#                return
             # This currently works under GTK, but not under MSW
             testWin = g.testWin = wxPreFrame()
-            res.LoadOnFrame(testWin, g.frame, self.stdName)
+            res.LoadOnFrame(testWin, g.frame, STD_NAME)
             # Create status bar
+            testWin.panel = testWin
             testWin.CreateStatusBar()
+            testWin.SetClientSize(testWin.GetBestSize())
             testWin.panel = testWin
             testWin.SetPosition(pos)
             testWin.Show(True)
         elif xxx.__class__ == xxxPanel:
             # Create new frame
             if not testWin:
-                testWin = g.testWin = wxFrame(g.frame, -1, 'Panel: ' + name, pos=pos)
-            testWin.panel = res.LoadPanel(testWin, self.stdName)
-            testWin.SetClientSize(testWin.panel.GetSize())
+                testWin = g.testWin = wxFrame(g.frame, -1, 'Panel: ' + name,
+                                              pos=pos, name=STD_NAME)
+            testWin.panel = res.LoadPanel(testWin, STD_NAME)
+            testWin.SetClientSize(testWin.GetBestSize())
             testWin.Show(True)
         elif xxx.__class__ == xxxDialog:
-            testWin = g.testWin = res.LoadDialog(None, self.stdName)
+            testWin = g.testWin = res.LoadDialog(None, STD_NAME)
             testWin.panel = testWin
             testWin.Layout()
             testWin.SetPosition(pos)
             testWin.Show(True)
+            # Dialog's default code does not produce EVT_CLOSE
+            EVT_BUTTON(testWin, wxID_OK, self.OnCloseTestWin)
+            EVT_BUTTON(testWin, wxID_CANCEL, self.OnCloseTestWin)
         elif xxx.__class__ == xxxMenuBar:
-            testWin = g.testWin = wxFrame(g.frame, -1, 'MenuBar: ' + name, pos=pos)
+            testWin = g.testWin = wxFrame(g.frame, -1, 'MenuBar: ' + name,
+                                          pos=pos, name=STD_NAME)
             testWin.panel = None
             # Set status bar to display help
             testWin.CreateStatusBar()
-            testWin.menuBar = res.LoadMenuBar(self.stdName)
+            testWin.menuBar = res.LoadMenuBar(STD_NAME)
             testWin.SetMenuBar(testWin.menuBar)
             testWin.Show(True)
         elif xxx.__class__ == xxxToolBar:
-            testWin = g.testWin = wxFrame(g.frame, -1, 'ToolBar: ' + name, pos=pos)
+            testWin = g.testWin = wxFrame(g.frame, -1, 'ToolBar: ' + name,
+                                          pos=pos, name=STD_NAME)
             testWin.panel = None
             # Set status bar to display help
             testWin.CreateStatusBar()
-            testWin.toolBar = res.LoadToolBar(testWin, self.stdName)
+            testWin.toolBar = res.LoadToolBar(testWin, STD_NAME)
             testWin.SetToolBar(testWin.toolBar)
             testWin.Show(True)
         wxMemoryFSHandler_RemoveFile('xxx.xrc')
         testWin.item = item
         EVT_CLOSE(testWin, self.OnCloseTestWin)
-        EVT_BUTTON(testWin, wxID_OK, self.OnCloseTestWin)
-        EVT_BUTTON(testWin, wxID_CANCEL, self.OnCloseTestWin)
         testWin.highLight = None
         if highLight and not self.pendingHighLight:
             self.HighLight(highLight)
