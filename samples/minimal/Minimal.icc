@@ -1,0 +1,18 @@
+option ProjectOptions = gen(arch, "pentium2"), gen(manglelinkagekeywordonlyfuncs, "no"), lang(longlong, "yes"), lang(allowtypedefasclassname, "yes"), 
+                        lang(compatmath, "yes"), lang(nokeyword, "const_cast"), lang(nokeyword, "explicit"), lang(nokeyword, "export"), lang(nokeyword, "false"), 
+                        lang(nokeyword, "mutable"), lang(nokeyword, "true"), lang(nokeyword, "typename"), lang(templatedefimpls, "dontparse"), 
+                        lang(trailingenumcommas, "no"), lang(universalcharacternames, "no"), link(debug, "yes"), link(linkwithmultithreadlib, "yes"), 
+                        link(linkwithsharedlib, "yes"), link(defaultlibs, "yes"), link(defaultlibsname, "..\\..\\LIB\\wx40.lib"), link(extdictionary, "no"), 
+                        opt(inline, "yes"), opt(tune, "pentium2"), define("__WXPM__", ), define("__VISAGECPP__", ), incl(searchpath, "..\\..\\src\\png"), 
+                        incl(searchpath, "..\\..\\src\\jpeg"), incl(searchpath, "..\\..\\src\\xpm"), incl(searchpath, "..\\..\\src\\zlib"), 
+                        incl(searchpath, "..\\..\\Include"), macros(redefine, "yes")
+{
+   target "Minimal.exe"
+   {
+      source type(cpp) "MINIMAL.CPP"
+      option res_rc_options("-d __VISAGECPP__ -i ..\\..\\Include")
+      {
+         source type(rc) "MINIMAL.RC"
+      }
+   }
+}
