@@ -792,14 +792,14 @@ occurs retrieving the number of columns, this function will return a -1.
 
 \membersection{wxDb::GetColumns}\label{wxdbgetcolumns}
 
-\func{wxDbColInf *}{GetColumns}{\param{const wxString &}{tableName}, \param{int *}{numCols}, \param{const wxChar *}{userID=NULL}}
+\func{wxDbColInf *}{GetColumns}{\param{const wxString &}{tableName}, \param{UWORD *}{numCols}, \param{const wxChar *}{userID=NULL}}
 
 \func{wxDbColInf *}{GetColumns}{\param{wxChar *}{tableName[]}, \param{const wxChar *}{userID}}
 
 \wxheading{Parameters}
 
 \docparam{tableName}{The table name you wish to obtain column information about.}
-\docparam{numCols}{Pointer to an integer which will hold a count of the number of columns returned by this function}
+\docparam{numCols}{Pointer to a UWORD which will hold a count of the number of columns returned by this function}
 \docparam{tableName[]}{An array of pointers to table names you wish to obtain column information about.  The last element of this array must be a NULL string.}
 \docparam{userID}{Name of the user that owns the table(s) (also referred to as schema).  Required for some datasources for situations where there may be multiple tables with the same name in the datasource, but owned by different users. {\it userID} is evaluated in the following manner:}
 
@@ -945,7 +945,7 @@ Returns the ODBC statement handle associated with this database connection.
 
 \membersection{wxDb::GetKeyFields}\label{wxdbgetkeyfields}
 
-\func{int }{GetKeyFields}{\param{const wxString &}{tableName}, \param{wxDbColInf *}{colInf}, \param{int }{nocols}}
+\func{int }{GetKeyFields}{\param{const wxString &}{tableName}, \param{wxDbColInf *}{colInf}, \param{UWORD }{nocols}}
 
 Used to determine which columns are members of primary or non-primary indexes on the specified table.  If a column is a member of a foreign key for some other table, that information is detected also.
 
@@ -1501,7 +1501,7 @@ Currently there are no member functions for this class.
 \begin{verbatim}
     void   *PtrDataObj;
     int     SzDataObj;
-    int     SqlCtype;
+    SWORD   SqlCtype;
 \end{verbatim}
 
 
@@ -1531,7 +1531,7 @@ public.
     wxChar  ColName[DB_MAX_COLUMN_NAME_LEN+1];  // Column Name
     int     DbDataType;    - Logical Data Type; 
                              e.g. DB_DATA_TYPE_INTEGER
-    int     SqlCtype;      - C data type; e.g. SQL_C_LONG
+    SWORD   SqlCtype;      - C data type; e.g. SQL_C_LONG
     void   *PtrDataObj;    - Address of the data object
     int     SzDataObj;     - Size, in bytes, of the data object
     bool    KeyField;      - Is column part of the PRIMARY KEY for the
@@ -2027,7 +2027,7 @@ with the wxDbTable class.
 \membersection{wxDbTable::wxDbTable}\label{wxdbtableconstr}
 
 \func{}{wxDbTable}{\param{wxDb *}{pwxDb}, \param{const wxString &}{tblName}, 
-  \param{const int }{nCols}, \param{const wxString &}{qryTblName = ""}, 
+  \param{const UWORD }{numColumns}, \param{const wxString &}{qryTblName = ""}, 
   \param{bool }{qryOnly = !wxDB_QUERY_ONLY}, \param{const wxString &}{tblPath = ""}}
 
 Default constructor.
@@ -2037,7 +2037,7 @@ Default constructor.
 \docparam{pwxDb}{Pointer to the wxDb instance to be used by this wxDbTable 
 instance.}
 \docparam{tblName}{The name of the table in the RDBMS.}
-\docparam{nCols}{The number of columns in the table.  (Do NOT include the ROWID
+\docparam{numColumns}{The number of columns in the table.  (Do NOT include the ROWID
 column in the count if using Oracle).}
 \docparam{qryTblName}{{\it OPTIONAL}.  The name of the table or view to base 
 your queries on.  This argument allows you to specify a table/view other than
@@ -2267,7 +2267,7 @@ to an Oracle datasource or not.
 
 \membersection{wxDbTable::ClearMemberVar}\label{wxdbtableclearmembervar}
 
-\func{void}{ClearMemberVar}{\param{int }{colNo}, \param{bool }{setToNull=FALSE}}
+\func{void}{ClearMemberVar}{\param{UWORD }{colNo}, \param{bool }{setToNull=FALSE}}
 
 Same as \helpref{wxDbTable::ClearMemberVars}{wxdbtableclearmembervars} except
 that this function clears only the specified column of its values, and 
@@ -2387,7 +2387,7 @@ this function.
 \membersection{wxDbTable::CreateIndex}\label{wxdbtablecreateindex}
 
 \func{bool}{CreateIndex}{\param{const wxString &}{idxName}, \param{bool }{unique}, 
-\param{int }{noIdxCols}, \param{wxDbIdxDef *}{pIdxDefs}, 
+\param{UWORD }{noIdxCols}, \param{wxDbIdxDef *}{pIdxDefs}, 
 \param{bool }{attemptDrop=TRUE}}
 
 This member function allows you to create secondary (non primary) indexes on 
@@ -2897,7 +2897,7 @@ This function works with both forward and backward scrolling cursors.
 
 \membersection{wxDbTable::GetNumberOfColumns}\label{wxdbtablegetnumberofcolumns}
 
-\func{int }{GetNumberOfColumns}{}
+\func{UWORD }{GetNumberOfColumns}{}
 
 Accessor function that returns the number of columns that are statically 
 bound for access by the wxDbTable instance.
@@ -3061,7 +3061,7 @@ this function to commit or rollback the insertion.
 
 \membersection{wxDbTable::IsColNull}\label{wxdbtableiscolnull}
 
-\func{bool }{IsColNull}{\param{int }{colNo}}
+\func{bool }{IsColNull}{\param{UWORD }{colNo}}
 
 Used primarily in the ODBC class library to determine if a column value is 
 set to "NULL".  Works for all data types supported by the ODBC class library.
@@ -3514,12 +3514,12 @@ table's columns are refreshed to reflect the current data in the database.
 
 \membersection{wxDbTable::SetColDefs}\label{wxdbtablesetcoldefs}
 
-\func{void}{SetColDefs}{\param{int }{index}, \param{const wxString &}{fieldName}, 
-\param{int }{dataType}, \param{void *}{pData}, \param{int }{cType}, 
+\func{void}{SetColDefs}{\param{UWORD }{index}, \param{const wxString &}{fieldName}, 
+\param{int }{dataType}, \param{void *}{pData}, \param{SWORD }{cType}, 
 \param{int }{size}, \param{bool }{keyField = FALSE}, \param{bool }{upd = TRUE}, 
 \param{bool }{insAllow = TRUE}, \param{bool }{derivedCol = FALSE}}
 
-\func{wxDbColDataPtr *}{SetColDefs}{\param{wxDbColInf *}{colInfs}, \param{ULONG }{numCols}}
+\func{wxDbColDataPtr *}{SetColDefs}{\param{wxDbColInf *}{colInfs}, \param{UWORD }{numCols}}
 
 \wxheading{Parameters}
 
@@ -3691,7 +3691,7 @@ the datasource knows on which column values the tables should be joined on.
 
 \membersection{wxDbTable::SetColNull}\label{wxdbtablesetcolnull}
 
-\func{bool}{SetColNull}{\param{int }{colNo}, \param{bool }{set=TRUE}}
+\func{bool}{SetColNull}{\param{UWORD }{colNo}, \param{bool }{set=TRUE}}
 
 \func{bool}{SetColNull}{\param{const wxString &}{colName}, 
 \param{bool }{set=TRUE}}
