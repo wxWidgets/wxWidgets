@@ -48,7 +48,7 @@
 #  define wxDllGetSymbol(handle, modaddr)   DosQueryProcAddr(handle, 1L, NULL, (PFN*)modaddr)
 #  define wxDllClose(handle)                DosFreeModule(handle)
 #elif defined(HAVE_DLOPEN)
-#   define wxDllOpen(lib)                dlopen(lib.fn_str(), RTLD_NOW/*RTLD_LAZY*/)
+#   define wxDllOpen(lib)                dlopen(lib.fn_str(), RTLD_NOW|RTLD_GLOBAL/*RTLD_LAZY*/)
 #   define wxDllGetSymbol(handle, name)  dlsym(handle, name.mb_str())
 #   define wxDllClose                    dlclose
 #elif defined(HAVE_SHL_LOAD)
