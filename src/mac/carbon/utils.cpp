@@ -456,6 +456,18 @@ void wxDisplaySizeMM(int *width, int *height)
 
 void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 {
+#if TARGET_CARBON
+    Rect r ;
+    GetAvailableWindowPositioningBounds( GetMainDevice() , &r ) ;
+    if ( x )
+        *x = r.left ;
+    if ( y )
+        *y = r.top ;
+    if ( width )
+        *width = r.right - r.left ;
+    if ( height )
+        *height = r.bottom - r.top ;
+#else
     BitMap screenBits;
     GetQDGlobalsScreenBits( &screenBits );
 
@@ -480,6 +492,7 @@ void wxClientDisplayRect(int *x, int *y, int *width, int *height)
     }
     if (y)
         *y = mheight ;
+#endif
 }
 
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
