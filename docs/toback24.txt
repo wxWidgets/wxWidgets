@@ -482,3 +482,11 @@ Checking in src/msw/radiobut.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/msw/radiobut.cpp,v  <--  radiobut.cpp
 new revision: 1.32; previous revision: 1.31
 
+42. Implement wxTextCtrl::Remove/Replace() for GTK2
+
+http://sf.net/tracker/index.php?func=detail&aid=705051&group_id=9863&atid=309863
+
+Checking in src/gtk/textctrl.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/gtk/textctrl.cpp,v  <--  textctrl.cpp
+new revision: 1.154; previous revision: 1.153
+
