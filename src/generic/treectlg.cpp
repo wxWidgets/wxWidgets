@@ -1884,7 +1884,7 @@ void wxGenericTreeCtrl::EnsureVisible(const wxTreeItemId& item)
 
     if ( HasFlag(wxTR_HIDE_ROOT) )
     {
-        while ( parent != m_anchor )
+        while ( parent && parent != m_anchor )
         {
             Expand(parent);
             parent = parent->GetParent();
