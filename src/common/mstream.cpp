@@ -52,9 +52,13 @@ char wxMemoryInputStream::Peek()
 }
 
 size_t wxMemoryInputStream::OnSysRead(void *buffer, size_t nbytes)
-{
-  m_lastcount = 0;
-  return m_i_streambuf->Read(buffer, nbytes);
+{ 
+  size_t bufsize = m_i_streambuf->GetBufferEnd() - m_i_streambuf->GetBufferStart();
+  size_t oldpos = m_i_streambuf->GetIntPosition();
+  m_i_streambuf->Read(buffer, nbytes);
+  size_t newpos = m_i_streambuf->GetIntPosition();
+  if (newpos == 0) return bufsize - oldpos;
+  else return newpos - oldpos;
 }
 
 off_t wxMemoryInputStream::OnSysSeek(off_t pos, wxSeekMode mode)
@@ -88,8 +92,12 @@ wxMemoryOutputStream::~wxMemoryOutputStream()
 
 size_t wxMemoryOutputStream::OnSysWrite(const void *buffer, size_t nbytes)
 {
-  m_lastcount = 0;
-  return m_o_streambuf->Write(buffer, nbytes);
+  size_t bufsize = m_o_streambuf->GetBufferEnd() - m_o_streambuf->GetBufferStart();
+  size_t oldpos = m_o_streambuf->GetIntPosition();
+  m_o_streambuf->Write(buffer, nbytes);
+  size_t newpos = m_o_streambuf->GetIntPosition();
+  if (newpos == 0) return bufsize - oldpos;
+  else return newpos - oldpos;
 }
 
 off_t wxMemoryOutputStream::OnSysSeek(off_t pos, wxSeekMode mode)
