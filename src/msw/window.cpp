@@ -458,7 +458,7 @@ void wxWindowMSW::CaptureMouse()
     HWND hWnd = GetHwnd();
     if ( hWnd && !m_winCaptured )
     {
-        SetCapture(hWnd);
+        ::SetCapture(hWnd);
         m_winCaptured = TRUE;
     }
 }
@@ -467,9 +467,19 @@ void wxWindowMSW::ReleaseMouse()
 {
     if ( m_winCaptured )
     {
-        ReleaseCapture();
+        if ( !::ReleaseCapture() )
+        {
+            wxLogLastError(_T("ReleaseCapture"));
+        }
+
         m_winCaptured = FALSE;
     }
+}
+
+/* static */ wxWindow *wxWindowBase::GetCapture()
+{
+    HWND hwnd = ::GetCapture();
+    return hwnd ? wxFindWinFromHandle((WXHWND)hwnd) : (wxWindow *)NULL;
 }
 
 bool wxWindowMSW::SetFont(const wxFont& font)
@@ -1019,9 +1029,9 @@ void wxWindowMSW::OnIdle(wxIdleEvent& event)
             // Generate a LEAVE event
             m_mouseInWindow = FALSE;
 
-            // Unfortunately the mouse button and keyboard state may have changed
-            // by the time the OnIdle function is called, so 'state' may be
-            // meaningless.
+            // Unfortunately the mouse button and keyboard state may have
+            // changed by the time the OnIdle function is called, so 'state'
+            // may be meaningless.
             int state = 0;
             if ( wxIsShiftDown() )
                 state |= MK_SHIFT;
@@ -1035,7 +1045,21 @@ void wxWindowMSW::OnIdle(wxIdleEvent& event)
                 state |= MK_RBUTTON;
 
             POINT pt;
-            ::GetCursorPos(&pt);
+            if ( !::GetCursorPos(&pt) )
+            {
+                wxLogLastError(_T("GetCursorPos"));
+            }
+
+            // we need to have client coordinates here for symmetry with
+            // wxEVT_ENTER_WINDOW
+            RECT rect;
+            if ( !::GetWindowRect(GetHwnd(), &rect) )
+            {
+                wxLogLastError(_T("GetWindowRect"));
+            }
+            pt.x -= rect.left;
+            pt.y -= rect.top;
+
             wxMouseEvent event(wxEVT_LEAVE_WINDOW);
             InitMouseEvent(event, pt.x, pt.y, state);
 

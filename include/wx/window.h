@@ -470,6 +470,9 @@ public:
     virtual void CaptureMouse() = 0;
     virtual void ReleaseMouse() = 0;
 
+        // get the window which currently captures the mouse or NULL
+    static wxWindow *GetCapture();
+
     // painting the window
     // -------------------
 

@@ -12,6 +12,8 @@
 #ifndef _WX_SCROLWIN_H_BASE_
 #define _WX_SCROLWIN_H_BASE_
 
+class WXDLLEXPORT wxTimer;
+
 // ----------------------------------------------------------------------------
 // wxScrollHelper: this class implements the scrolling logic which is used by
 // wxScrolledWindow and wxScrolledControl. It is a mix-in: just derive from it
@@ -92,6 +94,8 @@ public:
     void HandleOnSize(wxSizeEvent& event);
     void HandleOnPaint(wxPaintEvent& event);
     void HandleOnChar(wxKeyEvent& event);
+    void HandleOnMouseEnter(wxMouseEvent& event);
+    void HandleOnMouseLeave(wxMouseEvent& event);
 
 protected:
     // get pointer to our scroll rect if we use it or NULL
@@ -120,6 +124,8 @@ protected:
                          *m_targetWindow;
 
     wxRect                m_rectToScroll;
+
+    wxTimer              *m_timerAutoScroll;
 
     int                   m_xScrollPixelsPerLine;
     int                   m_yScrollPixelsPerLine;

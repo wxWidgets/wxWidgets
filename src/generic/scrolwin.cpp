@@ -34,9 +34,10 @@
 
 #include "wx/scrolwin.h"
 #include "wx/panel.h"
+#include "wx/timer.h"
 
 #ifdef __WXMSW__
-    #include "windows.h"
+    #include <windows.h> // for DLGC_WANTARROWS
 #endif
 
 #ifdef __WXMOTIF__
@@ -64,47 +65,110 @@ public:
         m_scrollHelper = scrollHelper;
     }
 
-    virtual bool ProcessEvent(wxEvent& event)
-    {
-        if ( wxEvtHandler::ProcessEvent(event) )
-            return TRUE;
-
-        switch ( event.GetEventType() )
-        {
-            case wxEVT_SCROLLWIN_TOP:
-            case wxEVT_SCROLLWIN_BOTTOM:
-            case wxEVT_SCROLLWIN_LINEUP:
-            case wxEVT_SCROLLWIN_LINEDOWN:
-            case wxEVT_SCROLLWIN_PAGEUP:
-            case wxEVT_SCROLLWIN_PAGEDOWN:
-            case wxEVT_SCROLLWIN_THUMBTRACK:
-            case wxEVT_SCROLLWIN_THUMBRELEASE:
-                m_scrollHelper->HandleOnScroll((wxScrollWinEvent&)event);
-                return TRUE;
-
-            case wxEVT_PAINT:
-                m_scrollHelper->HandleOnPaint((wxPaintEvent&)event);
-                return TRUE;
-
-            case wxEVT_SIZE:
-                m_scrollHelper->HandleOnSize((wxSizeEvent&)event);
-                return FALSE;
-
-            case wxEVT_CHAR:
-                m_scrollHelper->HandleOnChar((wxKeyEvent&)event);
-                return !event.GetSkipped();
-        }
-
-        return FALSE;
-    }
+    virtual bool ProcessEvent(wxEvent& event);
 
 private:
     wxScrollHelper *m_scrollHelper;
 };
 
+// ----------------------------------------------------------------------------
+// wxAutoScrollTimer: the timer used to generate a stream of scroll events when
+// a captured mouse is held outside the window
+// ----------------------------------------------------------------------------
+
+class wxAutoScrollTimer : public wxTimer
+{
+public:
+    wxAutoScrollTimer(wxWindow *winToScroll, wxEventType eventTypeToSend,
+                      int pos, int orient);
+
+    virtual void Notify();
+
+private:
+    wxWindow *m_win;
+    wxEventType m_eventType;
+    int m_pos,
+        m_orient;
+};
+
 // ============================================================================
 // implementation
 // ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxAutoScrollTimer
+// ----------------------------------------------------------------------------
+
+wxAutoScrollTimer::wxAutoScrollTimer(wxWindow *winToScroll,
+                                     wxEventType eventTypeToSend,
+                                     int pos, int orient)
+{
+    m_win = winToScroll;
+    m_eventType = eventTypeToSend;
+    m_pos = pos;
+    m_orient = orient;
+}
+
+void wxAutoScrollTimer::Notify()
+{
+    // first scroll the window
+    wxScrollWinEvent event1(m_eventType, m_pos, m_orient);
+    m_win->GetEventHandler()->ProcessEvent(event1);
+
+    // and then send a pseudo mouse-move event to refresh the selection
+    wxMouseEvent event2(wxEVT_MOTION);
+    wxGetMousePosition(&event2.m_x, &event2.m_y);
+
+    // FIXME: we don't fill in the other members - ok?
+
+    m_win->GetEventHandler()->ProcessEvent(event2);
+}
+
+// ----------------------------------------------------------------------------
+// wxScrollHelperEvtHandler
+// ----------------------------------------------------------------------------
+
+bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
+{
+    if ( wxEvtHandler::ProcessEvent(event) )
+        return TRUE;
+
+    switch ( event.GetEventType() )
+    {
+        case wxEVT_SCROLLWIN_TOP:
+        case wxEVT_SCROLLWIN_BOTTOM:
+        case wxEVT_SCROLLWIN_LINEUP:
+        case wxEVT_SCROLLWIN_LINEDOWN:
+        case wxEVT_SCROLLWIN_PAGEUP:
+        case wxEVT_SCROLLWIN_PAGEDOWN:
+        case wxEVT_SCROLLWIN_THUMBTRACK:
+        case wxEVT_SCROLLWIN_THUMBRELEASE:
+            m_scrollHelper->HandleOnScroll((wxScrollWinEvent &)event);
+            return TRUE;
+
+        case wxEVT_PAINT:
+            m_scrollHelper->HandleOnPaint((wxPaintEvent &)event);
+            return TRUE;
+
+        case wxEVT_SIZE:
+            m_scrollHelper->HandleOnSize((wxSizeEvent &)event);
+            return FALSE;
+
+        case wxEVT_CHAR:
+            m_scrollHelper->HandleOnChar((wxKeyEvent &)event);
+            return !event.GetSkipped();
+
+        case wxEVT_ENTER_WINDOW:
+            m_scrollHelper->HandleOnMouseEnter((wxMouseEvent &)event);
+            break;
+
+        case wxEVT_LEAVE_WINDOW:
+            m_scrollHelper->HandleOnMouseLeave((wxMouseEvent &)event);
+            break;
+    }
+
+    return FALSE;
+}
 
 // ----------------------------------------------------------------------------
 // wxScrollHelper construction
@@ -130,6 +194,8 @@ wxScrollHelper::wxScrollHelper(wxWindow *win)
     m_win =
     m_targetWindow = (wxWindow *)NULL;
 
+    m_timerAutoScroll = (wxTimer *)NULL;
+
     if ( win )
         SetWindow(win);
 }
@@ -147,6 +213,8 @@ void wxScrollHelper::SetWindow(wxWindow *win)
 
 wxScrollHelper::~wxScrollHelper()
 {
+    delete m_timerAutoScroll;
+
     if ( m_targetWindow )
         m_targetWindow->PopEventHandler(TRUE /* do delete it */);
 }
@@ -733,6 +801,73 @@ void wxScrollHelper::HandleOnChar(wxKeyEvent& event)
             // not for us
             event.Skip();
     }
+}
+
+void wxScrollHelper::HandleOnMouseEnter(wxMouseEvent& event)
+{
+    if ( m_timerAutoScroll )
+    {
+        delete m_timerAutoScroll;
+        m_timerAutoScroll = (wxTimer *)NULL;
+    }
+
+    event.Skip();
+}
+
+void wxScrollHelper::HandleOnMouseLeave(wxMouseEvent& event)
+{
+    // when a captured mouse leave a scrolled window we start generate
+    // scrolling events to allow, for example, extending selection beyond the
+    // visible area in some controls
+    if ( wxWindow::GetCapture() == m_targetWindow )
+    {
+        // where is the mouse leaving?
+        int pos, orient;
+        wxPoint pt = event.GetPosition();
+        if ( pt.x < 0 )
+        {
+            orient = wxHORIZONTAL;
+            pos = 0;
+        }
+        else if ( pt.y < 0 )
+        {
+            orient = wxVERTICAL;
+            pos = 0;
+        }
+        else
+        {
+            wxSize size = m_targetWindow->GetClientSize();
+            if ( pt.x > size.x )
+            {
+                orient = wxHORIZONTAL;
+                pos = m_xScrollLines;
+            }
+            else if ( pt.y > size.y )
+            {
+                orient = wxVERTICAL;
+                pos = m_yScrollLines;
+            }
+            else
+            {
+                wxFAIL_MSG( _T("can't understand where has mouse gone") );
+
+                return;
+            }
+        }
+
+        m_timerAutoScroll = new wxAutoScrollTimer
+                                (
+                                    m_targetWindow,
+                                    pos == 0 ? wxEVT_SCROLLWIN_LINEUP
+                                             : wxEVT_SCROLLWIN_LINEDOWN,
+                                    pos,
+                                    orient
+                                );
+        m_timerAutoScroll->Start(50); // FIXME: make configurable
+    }
+
+    // don't prevent the usual processing of the event from taking place
+    event.Skip();
 }
 
 // ----------------------------------------------------------------------------

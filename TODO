@@ -27,7 +27,6 @@ wxTextCtrl
 *   too much is refreshed when double clicking (word select)
 
 *!  scrolling by dragging mouse outside the window
-*!  vertical cursor movement should remember the original x position
 
 All
 
@@ -65,6 +64,7 @@ All
 +   listbox: horz scrollbar doesn't appear
 +   wxTextCtrl update rect overlaps with horz scrollbar
 +   scrollbars don't disappear after deleting long line
++   vertical cursor movement should remember the original x position
 
 MSW
 
