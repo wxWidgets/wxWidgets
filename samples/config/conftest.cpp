@@ -194,11 +194,11 @@ MyFrame::MyFrame()
   wxString s;
   if ( pConfig->Read("TestValue", &s) )
   {
-      wxLogStatus(this, "TestValue from config is '%s'", s.c_str());
+      wxLogStatus(this, wxT("TestValue from config is '%s'"), s.c_str());
   }
   else
   {
-      wxLogStatus(this, "TestValue not found in the config");
+      wxLogStatus(this, wxT("TestValue not found in the config"));
   }
 }
 

@@ -278,20 +278,20 @@ void MyFrame::LogDialog(wxCommandEvent& event)
     // being flushed -- test it
     {
         wxBusyCursor bc;
-        wxLogMessage("This is some message - everything is ok so far.");
-        wxLogMessage("Another message...\n... this one is on multiple lines");
-        wxLogWarning("And then something went wrong!");
+        wxLogMessage(wxT("This is some message - everything is ok so far."));
+        wxLogMessage(wxT("Another message...\n... this one is on multiple lines"));
+        wxLogWarning(wxT("And then something went wrong!"));
 
         // and if ~wxBusyCursor doesn't do it, then call it manually
         wxYield();
     }
 
-    wxLogError("Intermediary error handler decided to abort.");
-    wxLogError("The top level caller detected an unrecoverable error.");
+    wxLogError(wxT("Intermediary error handler decided to abort."));
+    wxLogError(wxT("The top level caller detected an unrecoverable error."));
 
     wxLog::FlushActive();
 
-    wxLogMessage("And this is the same dialog but with only one message.");
+    wxLogMessage(wxT("And this is the same dialog but with only one message."));
 }
 
 void MyFrame::MessageBox(wxCommandEvent& WXUNUSED(event) )
@@ -333,7 +333,7 @@ void MyFrame::PasswordEntry(wxCommandEvent& WXUNUSED(event))
                                          this);
     if ( !!pwd )
     {
-        wxMessageBox(wxString::Format("Your password is '%s'", pwd.c_str()),
+        wxMessageBox(wxString::Format(wxT("Your password is '%s'"), pwd.c_str()),
                      "Got password", wxOK | wxICON_INFORMATION, this);
     }
 }
@@ -386,10 +386,10 @@ void MyFrame::MultiChoice(wxCommandEvent& WXUNUSED(event) )
     if ( count )
     {
         wxString msg;
-        msg.Printf("You selected %u items:\n", count);
+        msg.Printf(wxT("You selected %u items:\n"), count);
         for ( size_t n = 0; n < count; n++ )
         {
-            msg += wxString::Format("\t%u: %u (%s)\n", n, selections[n],
+            msg += wxString::Format(wxT("\t%u: %u (%s)\n"), n, selections[n],
                                     choices[selections[n]].c_str());
         }
         wxLogMessage(msg);
@@ -515,8 +515,8 @@ void MyFrame::GenericDirChoose(wxCommandEvent& WXUNUSED(event) )
         dialog2.ShowModal();
     }
 #else
-    wxLogError("Sorry, generic dir dialog not available:\n"
-               "set wxUSE_DIRDLGG to 1 and recompile");
+    wxLogError(wxT("Sorry, generic dir dialog not available:\n")
+               wxT("set wxUSE_DIRDLGG to 1 and recompile"));
 #endif
 }
 
@@ -615,11 +615,11 @@ void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
 
     if ( !cont )
     {
-        wxLogStatus("Progress dialog aborted!");
+        wxLogStatus(wxT("Progress dialog aborted!"));
     }
     else
     {
-        wxLogStatus("Countdown from %d finished", max);
+        wxLogStatus(wxT("Countdown from %d finished"), max);
     }
 }
 
@@ -669,7 +669,7 @@ void MyFrame::OnFindDialog(wxFindDialogEvent& event)
 
     if ( type == wxEVT_COMMAND_FIND || type == wxEVT_COMMAND_FIND_NEXT )
     {
-        wxLogMessage("Find %s'%s' (flags: %s)",
+        wxLogMessage(wxT("Find %s'%s' (flags: %s)"),
                      type == wxEVT_COMMAND_FIND_NEXT ? "next " : "",
                      event.GetFindString().c_str(),
                      DecodeFindDialogEventFlags(event.GetFlags()).c_str());
@@ -677,7 +677,7 @@ void MyFrame::OnFindDialog(wxFindDialogEvent& event)
     else if ( type == wxEVT_COMMAND_FIND_REPLACE ||
                 type == wxEVT_COMMAND_FIND_REPLACE_ALL )
     {
-        wxLogMessage("Replace %s'%s' with '%s' (flags: %s)",
+        wxLogMessage(wxT("Replace %s'%s' with '%s' (flags: %s)"),
                      type == wxEVT_COMMAND_FIND_REPLACE_ALL ? "all " : "",
                      event.GetFindString().c_str(),
                      event.GetReplaceString().c_str(),
@@ -685,13 +685,13 @@ void MyFrame::OnFindDialog(wxFindDialogEvent& event)
     }
     else if ( type == wxEVT_COMMAND_FIND_CLOSE )
     {
-        wxLogMessage("Find dialog is being closed.");
+        wxLogMessage(wxT("Find dialog is being closed."));
 
         event.GetDialog()->Destroy();
     }
     else
     {
-        wxLogError("Unknown find dialog event!");
+        wxLogError(wxT("Unknown find dialog event!"));
     }
 }
 

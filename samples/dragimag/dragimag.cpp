@@ -393,7 +393,7 @@ bool MyApp::OnInit()
     for (i = 1; i < 4; i++)
     {
         wxString filename;
-        filename.Printf("%s%d.png", (const char*) rootName, i);
+        filename.Printf(wxT("%s%d.png"), (const wxChar*)rootName, i);
         if (image.LoadFile(filename, wxBITMAP_TYPE_PNG))
         {
             DragShape* newShape = new DragShape(image.ConvertToBitmap());

@@ -353,11 +353,12 @@ void MyFrame::OnSetStatusFields(wxCommandEvent& WXUNUSED(event))
         sb->SetFieldsCount(nFields, widths);
 
         wxLogStatus(this,
-                    wxString::Format("Status bar now has %ld fields", nFields));
+                    wxString::Format(wxT("Status bar now has %ld fields"),
+                                     nFields));
     }
     else
     {
-        wxLogStatus(this, "Cancelled");
+        wxLogStatus(this, wxT("Cancelled"));
     }
 }
 

@@ -475,7 +475,7 @@ void MyChild::OnMove(wxMoveEvent& event)
     //     to be the width of the MDI canvas border)
     wxPoint pos1 = event.GetPosition(),
             pos2 = GetPosition();
-    wxLogStatus("position from event: (%d, %d), from frame (%d, %d)",
+    wxLogStatus(wxT("position from event: (%d, %d), from frame (%d, %d)"),
                 pos1.x, pos1.y, pos2.x, pos2.y);
 
     event.Skip();
@@ -489,7 +489,7 @@ void MyChild::OnSize(wxSizeEvent& event)
     wxSize size1 = event.GetSize(),
            size2 = GetSize(),
            size3 = GetClientSize();
-    wxLogStatus("size from event: %dx%d, from frame %dx%d, client %dx%d",
+    wxLogStatus(wxT("size from event: %dx%d, from frame %dx%d, client %dx%d"),
                 size1.x, size1.y, size2.x, size2.y, size3.x, size3.y);
 
     event.Skip();

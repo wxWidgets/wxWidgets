@@ -712,7 +712,7 @@ void GridFrame::OnLabelLeftClick( wxGridEvent& ev )
 
     if ( ev.ShiftDown() ) logBuf << " (shift down)";
     if ( ev.ControlDown() ) logBuf << " (control down)";
-    wxLogMessage( "%s", logBuf.c_str() );
+    wxLogMessage( wxT("%s"), logBuf.c_str() );
 
     // you must call event skip if you want default grid processing
     //
@@ -725,7 +725,7 @@ void GridFrame::OnCellLeftClick( wxGridEvent& ev )
     logBuf = "";
     logBuf << "Left click at row " << ev.GetRow()
            << " col " << ev.GetCol();
-    wxLogMessage( "%s", logBuf.c_str() );
+    wxLogMessage( wxT("%s"), logBuf.c_str() );
 
     // you must call event skip if you want default grid processing
     // (cell highlighting etc.)
@@ -738,7 +738,7 @@ void GridFrame::OnRowSize( wxGridSizeEvent& ev )
 {
     logBuf = "";
     logBuf << "Resized row " << ev.GetRowOrCol();
-    wxLogMessage( "%s", logBuf.c_str() );
+    wxLogMessage( wxT("%s"), logBuf.c_str() );
 
     ev.Skip();
 }
@@ -748,7 +748,7 @@ void GridFrame::OnColSize( wxGridSizeEvent& ev )
 {
     logBuf = "";
     logBuf << "Resized col " << ev.GetRowOrCol();
-    wxLogMessage( "%s", logBuf.c_str() );
+    wxLogMessage( wxT("%s"), logBuf.c_str() );
 
     ev.Skip();
 }
@@ -767,7 +767,7 @@ void GridFrame::OnSelectCell( wxGridEvent& ev )
            << ", ShiftDown: "<< (ev.ShiftDown() ? 'T':'F')
            << ", AltDown: "<< (ev.AltDown() ? 'T':'F')
            << ", MetaDown: "<< (ev.MetaDown() ? 'T':'F') << " )";
-    wxLogMessage( "%s", logBuf.c_str() );
+    wxLogMessage( wxT("%s"), logBuf.c_str() );
 
     // you must call Skip() if you want the default processing
     // to occur in wxGrid
@@ -789,7 +789,7 @@ void GridFrame::OnRangeSelected( wxGridRangeSelectEvent& ev )
            << ", ShiftDown: "<< (ev.ShiftDown() ? 'T':'F')
            << ", AltDown: "<< (ev.AltDown() ? 'T':'F')
            << ", MetaDown: "<< (ev.MetaDown() ? 'T':'F') << " )";
-    wxLogMessage( "%s", logBuf.c_str() );
+    wxLogMessage( wxT("%s"), logBuf.c_str() );
 
     ev.Skip();
 }
@@ -801,21 +801,21 @@ void GridFrame::OnCellValueChanged( wxGridEvent& ev )
             << " row " << ev.GetRow()
             << " col " << ev.GetCol();
 
-    wxLogMessage( "%s", logBuf.c_str() );
+    wxLogMessage( wxT("%s"), logBuf.c_str() );
 
     ev.Skip();
 }
 
 void GridFrame::OnEditorShown( wxGridEvent& ev )
 {
-    wxLogMessage( "Cell editor shown." );
+    wxLogMessage( wxT("Cell editor shown.") );
 
     ev.Skip();
 }
 
 void GridFrame::OnEditorHidden( wxGridEvent& ev )
 {
-    wxLogMessage( "Cell editor hidden." );
+    wxLogMessage( wxT("Cell editor hidden.") );
 
     ev.Skip();
 }

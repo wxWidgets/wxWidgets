@@ -23,21 +23,21 @@ LINK_DEBUG_FLAGS="/RELEASE"
 
 all:
         cd $(WXDIR)\samples\html\about
-        nmake -f makefile.vc FINAL=$(FINAL)
+        nmake -f makefile.vc FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
         cd $(WXDIR)\samples\html\help
-        nmake -f makefile.vc FINAL=$(FINAL)
+        nmake -f makefile.vc FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
         cd $(WXDIR)\samples\html\helpview
-        nmake -f makefile.vc FINAL=$(FINAL)
+        nmake -f makefile.vc FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
         cd $(WXDIR)\samples\html\printing
-        nmake -f makefile.vc FINAL=$(FINAL)
+        nmake -f makefile.vc FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
         cd $(WXDIR)\samples\html\test
-        nmake -f makefile.vc FINAL=$(FINAL)
+        nmake -f makefile.vc FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
         cd $(WXDIR)\samples\html\virtual
-        nmake -f makefile.vc FINAL=$(FINAL)
+        nmake -f makefile.vc FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
         cd $(WXDIR)\samples\html\widget
-        nmake -f makefile.vc FINAL=$(FINAL)
+        nmake -f makefile.vc FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
         cd $(WXDIR)\samples\html\zip
-        nmake -f makefile.vc FINAL=$(FINAL)
+        nmake -f makefile.vc FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
 
 clean:
         cd $(WXDIR)\samples\html\about

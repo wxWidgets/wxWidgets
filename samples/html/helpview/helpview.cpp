@@ -70,8 +70,8 @@ bool MyApp::OnInit()
     help = new wxHtmlHelpController;
     
     if (argc < 2) {
-        wxLogError("Usage : helpview <helpfile> [<more helpfiles>]");
-        wxLogError("  helpfile may be .hhp, .zip or .htb");
+        wxLogError(wxT("Usage : helpview <helpfile> [<more helpfiles>]"));
+        wxLogError(wxT("  helpfile may be .hhp, .zip or .htb"));
         return FALSE;
     }
 

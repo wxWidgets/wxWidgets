@@ -184,7 +184,7 @@ void *MyThread::Entry()
 {
     wxString text;
 
-    text.Printf("Thread 0x%x started (priority = %d).\n",
+    text.Printf(wxT("Thread 0x%x started (priority = %d).\n"),
                 GetId(), GetPriority());
     WriteText(text);
     // wxLogMessage(text); -- test wxLog thread safeness
@@ -195,14 +195,14 @@ void *MyThread::Entry()
         if ( TestDestroy() )
             break;
 
-        text.Printf("[%u] Thread 0x%x here.\n", m_count, GetId());
+        text.Printf(wxT("[%u] Thread 0x%x here.\n"), m_count, GetId());
         WriteText(text);
 
         // wxSleep() can't be called from non-GUI thread!
         wxThread::Sleep(1000);
     }
 
-    text.Printf("Thread 0x%x finished.\n", GetId());
+    text.Printf(wxT("Thread 0x%x finished.\n"), GetId());
     WriteText(text);
     // wxLogMessage(text); -- test wxLog thread safeness
 
@@ -250,7 +250,7 @@ void *MyWorkerThread::Entry()
             break;
 
         wxString text;
-        text.Printf("[%u] Thread 0x%x here!!", m_count, GetId());
+        text.Printf(wxT("[%u] Thread 0x%x here!!"), m_count, GetId());
 
         // create any type of command event here
         wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, WORKER_EVENT );
@@ -360,7 +360,7 @@ MyThread *MyFrame::CreateThread()
 
     if ( thread->Create() != wxTHREAD_NO_ERROR )
     {
-        wxLogError("Can't create thread!");
+        wxLogError(wxT("Can't create thread!"));
     }
 
     wxCriticalSectionLocker enter(wxGetApp().m_critsect);
@@ -405,7 +405,7 @@ void MyFrame::OnStartThreads(wxCommandEvent& WXUNUSED(event) )
     }
 
     wxString msg;
-    msg.Printf("%d new threads created.", count);
+    msg.Printf(wxT("%d new threads created."), count);
     SetStatusText(msg, 1);
 
     // ...and then start them
@@ -421,7 +421,7 @@ void MyFrame::OnStartThread(wxCommandEvent& WXUNUSED(event) )
 
     if ( thread->Run() != wxTHREAD_NO_ERROR )
     {
-        wxLogError("Can't start thread!");
+        wxLogError(wxT("Can't start thread!"));
     }
 
     SetStatusText("New thread started.", 1);
@@ -434,7 +434,7 @@ void MyFrame::OnStopThread(wxCommandEvent& WXUNUSED(event) )
     // stop the last thread
     if ( wxGetApp().m_threads.IsEmpty() )
     {
-        wxLogError("No thread to stop!");
+        wxLogError(wxT("No thread to stop!"));
 
         wxGetApp().m_critsect.Leave();
     }
@@ -464,7 +464,7 @@ void MyFrame::OnResumeThread(wxCommandEvent& WXUNUSED(event) )
 
     if ( n == count )
     {
-        wxLogError("No thread to resume!");
+        wxLogError(wxT("No thread to resume!"));
     }
     else
     {
@@ -485,7 +485,7 @@ void MyFrame::OnPauseThread(wxCommandEvent& WXUNUSED(event) )
 
     if ( n < 0 )
     {
-        wxLogError("No thread to pause!");
+        wxLogError(wxT("No thread to pause!"));
     }
     else
     {
@@ -512,7 +512,7 @@ void MyFrame::OnIdle(wxIdleEvent &event)
         m_nRunning = nRunning;
         m_nCount = nCount;
 
-        wxLogStatus(this, "%u threads total, %u running.", nCount, nRunning);
+        wxLogStatus(this, wxT("%u threads total, %u running."), nCount, nRunning);
     }
     //else: avoid flicker - don't print anything
 }
@@ -561,7 +561,7 @@ void MyFrame::OnStartWorker(wxCommandEvent& WXUNUSED(event))
 
     if ( thread->Create() != wxTHREAD_NO_ERROR )
     {
-        wxLogError("Can't create thread!");
+        wxLogError(wxT("Can't create thread!"));
     }
 
     m_dlgProgress = new wxProgressDialog

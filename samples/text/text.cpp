@@ -207,7 +207,7 @@ private:
             text->Freeze();
 
         for ( int i = 0; i < 100; i++ )
-            text->AppendText(wxString::Format("Line %i\n", i));
+            text->AppendText(wxString::Format(wxT("Line %i\n"), i));
 
         text->SetInsertionPoint(0);
 
@@ -624,11 +624,7 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
                 long line, column, pos = GetInsertionPoint();
                 PositionToXY(pos, &column, &line);
 
-                wxLogMessage( _T("Current position: %ld\n"
-                        "Current line, column: (%ld, %ld)\n"
-                        "Number of lines: %ld\n"
-                        "Current line length: %ld\n"
-                        "Total text length: %u (%ld)"),
+                wxLogMessage( _T("Current position: %ld\nCurrent line, column: (%ld, %ld)\nNumber of lines: %ld\nCurrent line length: %ld\nTotal text length: %u (%ld)"),
                         pos,
                         line, column,
                         GetNumberOfLines(),
@@ -1058,9 +1054,8 @@ void MyFrame::OnFileSave(wxCommandEvent& event)
     {
 #if wxUSE_FILE
         // verify that the fil length is correct (it wasn't under Win95)
-        wxFile file("dummy.txt");
-        wxLogStatus(this, _T("Successfully saved file "
-                             "(text len = %ld, file size = %ld)"),
+        wxFile file(wxT("dummy.txt"));
+        wxLogStatus(this, _T("Successfully saved file (text len = %ld, file size = %ld)"),
                     m_panel->m_textrich->GetValue().length(),
                     file.Length());
 #endif

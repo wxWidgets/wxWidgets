@@ -164,7 +164,7 @@ bool MyApp::OnInit()
 
     if ( !m_dial->IsOk() )
     {
-        wxLogError("The sample can't run on this system.");
+        wxLogError(wxT("The sample can't run on this system."));
 
         wxLog::GetActiveTarget()->Flush();
 
@@ -189,18 +189,18 @@ int MyApp::OnExit()
 
 void MyApp::OnConnected(wxDialUpEvent& event)
 {
-    const char *msg;
+    const wxChar *msg;
     if ( event.IsOwnEvent() )
     {
-        msg = event.IsConnectedEvent() ? "Successfully connected"
-                                       : "Dialing failed";
+        msg = event.IsConnectedEvent() ? wxT("Successfully connected")
+                                       : wxT("Dialing failed");
 
-        wxLogStatus("");
+        wxLogStatus(wxT(""));
     }
     else
     {
-        msg = event.IsConnectedEvent() ? "Just connected!"
-                                       : "Disconnected";
+        msg = event.IsConnectedEvent() ? wxT("Just connected!")
+                                       : wxT("Disconnected");
     }
 
     wxLogMessage(msg);
@@ -262,27 +262,27 @@ void MyFrame::OnHangUp(wxCommandEvent& WXUNUSED(event))
 {
     if ( wxGetApp().GetDialer()->HangUp() )
     {
-        wxLogStatus(this, "Connection was succesfully terminated.");
+        wxLogStatus(this, wxT("Connection was succesfully terminated."));
     }
     else
     {
-        wxLogStatus(this, "Failed to hang up.");
+        wxLogStatus(this, wxT("Failed to hang up."));
     }
 }
 
 void MyFrame::OnDial(wxCommandEvent& WXUNUSED(event))
 {
-    wxLogStatus(this, "Preparing to dial...");
+    wxLogStatus(this, wxT("Preparing to dial..."));
     wxYield();
     wxBeginBusyCursor();
 
     if ( wxGetApp().GetDialer()->Dial() )
     {
-        wxLogStatus(this, "Dialing...");
+        wxLogStatus(this, wxT("Dialing..."));
     }
     else
     {
-        wxLogStatus(this, "Dialing attempt failed.");
+        wxLogStatus(this, wxT("Dialing attempt failed."));
     }
 
     wxEndBusyCursor();
@@ -291,9 +291,9 @@ void MyFrame::OnDial(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnCheck(wxCommandEvent& WXUNUSED(event))
 {
    if(wxGetApp().GetDialer()->IsOnline())
-      wxLogMessage("Network is online.");
+      wxLogMessage(wxT("Network is online."));
    else
-      wxLogMessage("Network is offline.");
+      wxLogMessage(wxT("Network is offline."));
 }
 
 void MyFrame::OnEnumISPs(wxCommandEvent& WXUNUSED(event))
@@ -302,7 +302,7 @@ void MyFrame::OnEnumISPs(wxCommandEvent& WXUNUSED(event))
     size_t nCount = wxGetApp().GetDialer()->GetISPNames(names);
     if ( nCount == 0 )
     {
-        wxLogWarning("No ISPs found.");
+        wxLogWarning(wxT("No ISPs found."));
     }
     else
     {

@@ -299,7 +299,7 @@ MyPanel::MyPanel(wxFrame *frame)
     SetAutoLayout(TRUE);
 
     wxString date;
-    date.Printf("Selected date: %s",
+    date.Printf(wxT("Selected date: %s"),
                 wxDateTime::Today().FormatISODate().c_str());
     m_date = new wxStaticText(this, -1, date);
     m_calendar = new wxCalendarCtrl(this, Calendar_CalCtrl,
@@ -329,31 +329,31 @@ MyPanel::MyPanel(wxFrame *frame)
 
 void MyPanel::OnCalendar(wxCalendarEvent& event)
 {
-    wxLogMessage("Selected %s from calendar",
+    wxLogMessage(wxT("Selected %s from calendar"),
                  event.GetDate().FormatISODate().c_str());
 }
 
 void MyPanel::OnCalendarChange(wxCalendarEvent& event)
 {
     wxString s;
-    s.Printf("Selected date: %s", event.GetDate().FormatISODate().c_str());
+    s.Printf(wxT("Selected date: %s"), event.GetDate().FormatISODate().c_str());
 
     m_date->SetLabel(s);
 }
 
 void MyPanel::OnCalMonthChange(wxCalendarEvent& WXUNUSED(event))
 {
-    wxLogStatus("Calendar month changed");
+    wxLogStatus(wxT("Calendar month changed"));
 }
 
 void MyPanel::OnCalYearChange(wxCalendarEvent& WXUNUSED(event))
 {
-    wxLogStatus("Calendar year changed");
+    wxLogStatus(wxT("Calendar year changed"));
 }
 
 void MyPanel::OnCalendarWeekDayClick(wxCalendarEvent& event)
 {
-    wxLogMessage("Clicked on %s",
+    wxLogMessage(wxT("Clicked on %s"),
                  wxDateTime::GetWeekDayName(event.GetWeekDay()).c_str());
 }
 
@@ -392,4 +392,3 @@ void MyPanel::HighlightSpecial(bool on)
 
     m_calendar->Refresh();
 }
-

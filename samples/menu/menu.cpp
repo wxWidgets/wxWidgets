@@ -368,7 +368,7 @@ wxMenu *MyFrame::CreateDummyMenu(wxString *title)
 
     if ( title )
     {
-        title->Printf("Dummy menu &%d", ++m_countDummy);
+        title->Printf(wxT("Dummy menu &%d"), ++m_countDummy);
     }
 
     return menu;
@@ -382,7 +382,7 @@ wxMenuItem *MyFrame::GetLastMenuItem() const
     wxMenuItemList::Node *node = menu->GetMenuItems().GetLast();
     if ( !node )
     {
-        wxLogWarning("No last item in the last menu!");
+        wxLogWarning(wxT("No last item in the last menu!"));
 
         return NULL;
     }
@@ -398,10 +398,10 @@ void MyFrame::LogMenuEvent(const wxCommandEvent& event)
     if ( !GetMenuBar()->FindItem(id) )
         return;
 
-    wxString msg = wxString::Format("Menu command %d", id);
+    wxString msg = wxString::Format(wxT("Menu command %d"), id);
     if ( GetMenuBar()->FindItem(id)->IsCheckable() )
     {
-        msg += wxString::Format(" (the item is currently %schecked)",
+        msg += wxString::Format(wxT(" (the item is currently %schecked)"),
                                 event.IsChecked() ? "" : "not ");
     }
 
@@ -437,7 +437,7 @@ void MyFrame::OnDeleteMenu(wxCommandEvent& WXUNUSED(event))
     if ( count == 2 )
     {
         // don't let delete the first 2 menus
-        wxLogError("Can't delete any more menus");
+        wxLogError(wxT("Can't delete any more menus"));
     }
     else
     {
@@ -488,7 +488,7 @@ void MyFrame::OnGetLabelMenu(wxCommandEvent& WXUNUSED(event))
     wxMenuBar *mbar = GetMenuBar();
     size_t count = mbar->GetMenuCount();
 
-    wxLogMessage("The label of the last menu item is '%s'",
+    wxLogMessage(wxT("The label of the last menu item is '%s'"),
                  mbar->GetLabelTop(count - 1).c_str());
 }
 
@@ -502,7 +502,7 @@ void MyFrame::OnSetLabelMenu(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnDummy(wxCommandEvent& event)
 {
-    wxLogMessage("Dummy item #%d", event.GetId() - Menu_Dummy_First + 1);
+    wxLogMessage(wxT("Dummy item #%d"), event.GetId() - Menu_Dummy_First + 1);
 }
 
 void MyFrame::OnAppendMenuItem(wxCommandEvent& WXUNUSED(event))
@@ -533,7 +533,7 @@ void MyFrame::OnDeleteMenuItem(wxCommandEvent& WXUNUSED(event))
     size_t count = menu->GetMenuItemCount();
     if ( !count )
     {
-        wxLogWarning("No items to delete!");
+        wxLogWarning(wxT("No items to delete!"));
     }
     else
     {
@@ -583,7 +583,7 @@ void MyFrame::OnGetLabelMenuItem(wxCommandEvent& WXUNUSED(event))
 
     if ( item )
     {
-        wxLogMessage("The label of the last menu item is '%s'",
+        wxLogMessage(wxT("The label of the last menu item is '%s'"),
                      item->GetLabel().c_str());
     }
 }

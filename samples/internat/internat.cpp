@@ -47,7 +47,7 @@ protected:
 class MyFrame: public wxFrame
 { 
 public:
-  MyFrame(wxFrame *frame, const char *title, int x, int y, int w, int h,
+  MyFrame(wxFrame *frame, const wxChar *title, int x, int y, int w, int h,
           wxLocale& m_locale);
 
 public:
@@ -114,7 +114,7 @@ bool MyApp::OnInit()
   /* not needed any more, done in wxLocale ctor
   m_locale.AddCatalog("wxstd");      // 1) for library messages
   */
-  m_locale.AddCatalog("internat");      // 2) our private one
+  m_locale.AddCatalog(wxT("internat"));      // 2) our private one
   /* this catalog is installed in standard location on Linux systems,
      it might not be installed on yours - just ignore the errrors
      or comment out this line then */
@@ -155,8 +155,8 @@ bool MyApp::OnInit()
 }
 
 // My frame constructor
-MyFrame::MyFrame(wxFrame *frame, const char *title, int x, int y, int w, int h, 
-                 wxLocale& l)
+MyFrame::MyFrame(wxFrame *frame, const wxChar *title, int x, int y,
+                 int w, int h, wxLocale& l)
        : wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h)),
          m_locale(l)
 {
@@ -170,15 +170,12 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
   wxString localeInfo;
-  localeInfo.Printf(_("Language: %s\n"
-                      "System locale name: %s\n"
-                      "Canonical locale name: %s\n"),
+  localeInfo.Printf(_("Language: %s\nSystem locale name: %s\nCanonical locale name: %s\n"),
                       m_locale.GetLocale(),
                       m_locale.GetSysName().c_str(),
                       m_locale.GetCanonicalName().c_str());
 
-  wxMessageDialog(this, wxString(_("I18n sample\n"
-                          "(c) 1998, 1999 Vadim Zeitlin and Julian Smart"))
+  wxMessageDialog(this, wxString(_("I18n sample\n(c) 1998, 1999 Vadim Zeitlin and Julian Smart"))
                           + wxT("\n\n") + localeInfo,
                   _("About Internat"), wxOK | wxICON_INFORMATION).ShowModal();
 }
@@ -192,13 +189,13 @@ void MyFrame::OnPlay(wxCommandEvent& WXUNUSED(event))
       return;
 
   int num;
-  sscanf(str, "%d", &num);
+  wxSscanf(str, wxT("%d"), &num);
   if ( num == 0 )
     str = _("You've probably entered an invalid number.");
   else if ( num == 9 )  // this message is not translated (not in catalog)
     str = "You've found a bug in this program!";
   else if ( num != 17 ) // a more implicit way to write _()
-    str = wxGetTranslation("Bad luck! try again...");
+    str = wxGetTranslation(wxT("Bad luck! try again..."));
   else {
     str.Empty();
     // string must be split in two -- otherwise the translation won't be found
@@ -213,5 +210,5 @@ void MyFrame::OnOpen(wxCommandEvent&)
 {
   // open a bogus file -- the error message should be also translated if you've
   // got wxstd.mo somewhere in the search path
-  wxFile file("NOTEXIST.ING");
+  wxFile file(wxT("NOTEXIST.ING"));
 }

@@ -54,12 +54,12 @@
 #endif
 
 // verify that the item is ok and insult the user if it is not
-#define CHECK_ITEM( item ) if ( !item.IsOk() ) {                            \
-                             wxMessageBox("Please select some item first!", \
-                                          "Tree sample error",              \
-                                          wxOK | wxICON_EXCLAMATION,        \
-                                          this);                            \
-                             return;                                        \
+#define CHECK_ITEM( item ) if ( !item.IsOk() ) {                                 \
+                             wxMessageBox(wxT("Please select some item first!"), \
+                                          wxT("Tree sample error"),              \
+                                          wxOK | wxICON_EXCLAMATION,             \
+                                          this);                                 \
+                             return;                                             \
                            }
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -143,7 +143,7 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
     // Create the main frame window
-    MyFrame *frame = new MyFrame("wxTreeCtrl Test", 50, 50, 450, 600);
+    MyFrame *frame = new MyFrame(wxT("wxTreeCtrl Test"), 50, 50, 450, 600);
 
     // Show the frame
     frame->Show(TRUE);
@@ -173,9 +173,9 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
            *tree_menu = new wxMenu,
            *item_menu = new wxMenu;
 
-    file_menu->Append(TreeTest_About, "&About...");
+    file_menu->Append(TreeTest_About, wxT("&About..."));
     file_menu->AppendSeparator();
-    file_menu->Append(TreeTest_Quit, "E&xit\tAlt-X");
+    file_menu->Append(TreeTest_Quit, wxT("E&xit\tAlt-X"));
 
     style_menu->Append(TreeTest_TogButtons, "Toggle &normal buttons");
     style_menu->Append(TreeTest_TogTwist, "Toggle &twister buttons");
@@ -187,10 +187,10 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     style_menu->Append(TreeTest_TogBorder, "Toggle &item border");
     style_menu->Append(TreeTest_TogEdit, "Toggle &edit mode");
 #ifndef NO_MULTIPLE_SELECTION
-    style_menu->Append(TreeTest_ToggleSel, "Toggle &selection mode");
+    style_menu->Append(TreeTest_ToggleSel, wxT("Toggle &selection mode"));
 #endif // NO_MULTIPLE_SELECTION
-    style_menu->Append(TreeTest_ToggleImages, "Toggle show ima&ges");
-    style_menu->Append(TreeTest_SetImageSize, "Set image si&ze...");
+    style_menu->Append(TreeTest_ToggleImages, wxT("Toggle show ima&ges"));
+    style_menu->Append(TreeTest_SetImageSize, wxT("Set image si&ze..."));
 
     tree_menu->Append(TreeTest_Recreate, "&Recreate the tree");
     tree_menu->Append(TreeTest_CollapseAndReset, "C&ollapse and reset");
@@ -401,7 +401,7 @@ void MyFrame::OnDumpSelected(wxCommandEvent& WXUNUSED(event))
 
     for ( size_t n = 0; n < count; n++ )
     {
-        wxLogMessage("\t%s", m_treeCtrl->GetItemText(array.Item(n)).c_str());
+        wxLogMessage(wxT("\t%s"), m_treeCtrl->GetItemText(array.Item(n)).c_str());
     }
 }
 
@@ -519,7 +519,7 @@ void MyFrame::OnAddItem(wxCommandEvent& WXUNUSED(event))
     static int s_num = 0;
 
     wxString text;
-    text.Printf("Item #%d", ++s_num);
+    text.Printf(wxT("Item #%d"), ++s_num);
 
     m_treeCtrl->AppendItem(m_treeCtrl->GetRootItem(),
                            text /*,
@@ -710,9 +710,9 @@ void MyTreeCtrl::AddItemsRecursively(const wxTreeItemId& idParent,
         {
             // at depth 1 elements won't have any more children
             if ( hasChildren )
-                str.Printf("%s child %d", "Folder", n + 1);
+                str.Printf(wxT("%s child %d"), wxT("Folder"), n + 1);
             else
-                str.Printf("%s child %d.%d", "File", folder, n + 1);
+                str.Printf(wxT("%s child %d.%d"), wxT("File"), folder, n + 1);
 
             // here we pass to AppendItem() normal and selected item images (we
             // suppose that selected image follows the normal one in the enum)
@@ -806,11 +806,11 @@ void MyTreeCtrl::DoToggleIcon(const wxTreeItemId& item)
 
 
 // avoid repetition
-#define TREE_EVENT_HANDLER(name)                            \
-void MyTreeCtrl::name(wxTreeEvent& event)                   \
-{                                                           \
-    wxLogMessage(#name);                                    \
-    event.Skip();                                           \
+#define TREE_EVENT_HANDLER(name)                                 \
+void MyTreeCtrl::name(wxTreeEvent& event)                        \
+{                                                                \
+    wxLogMessage(wxT(#name));                                    \
+    event.Skip();                                                \
 }
 
 TREE_EVENT_HANDLER(OnBeginRDrag)
@@ -833,14 +833,14 @@ void MyTreeCtrl::OnBeginDrag(wxTreeEvent& event)
     {
         m_draggedItem = event.GetItem();
 
-        wxLogMessage("OnBeginDrag: started dragging %s",
+        wxLogMessage(wxT("OnBeginDrag: started dragging %s"),
                      GetItemText(m_draggedItem).c_str());
 
         event.Allow();
     }
     else
     {
-        wxLogMessage("OnBeginDrag: this item can't be dragged.");
+        wxLogMessage(wxT("OnBeginDrag: this item can't be dragged."));
     }
 }
 
@@ -859,13 +859,13 @@ void MyTreeCtrl::OnEndDrag(wxTreeEvent& event)
 
     if ( !itemDst.IsOk() )
     {
-        wxLogMessage("OnEndDrag: can't drop here.");
+        wxLogMessage(wxT("OnEndDrag: can't drop here."));
 
         return;
     }
 
     wxString text = GetItemText(itemSrc);
-    wxLogMessage("OnEndDrag: '%s' copied to '%s'.",
+    wxLogMessage(wxT("OnEndDrag: '%s' copied to '%s'."),
                  text.c_str(), GetItemText(itemDst).c_str());
 
     // just do append here - we could also insert it just before/after the item
@@ -881,13 +881,13 @@ void MyTreeCtrl::OnEndDrag(wxTreeEvent& event)
 
 void MyTreeCtrl::OnBeginLabelEdit(wxTreeEvent& event)
 {
-    wxLogMessage("OnBeginLabelEdit");
+    wxLogMessage(wxT("OnBeginLabelEdit"));
 
     // for testing, prevent this item's label editing
     wxTreeItemId itemId = event.GetItem();
     if ( IsTestItem(itemId) )
     {
-        wxMessageBox("You can't edit this item.");
+        wxMessageBox(wxT("You can't edit this item."));
 
         event.Veto();
     }
@@ -895,12 +895,12 @@ void MyTreeCtrl::OnBeginLabelEdit(wxTreeEvent& event)
 
 void MyTreeCtrl::OnEndLabelEdit(wxTreeEvent& event)
 {
-    wxLogMessage("OnEndLabelEdit");
+    wxLogMessage(wxT("OnEndLabelEdit"));
 
     // don't allow anything except letters in the labels
     if ( !event.GetLabel().IsWord() )
     {
-        wxMessageBox("The label should contain only letters.");
+        wxMessageBox(wxT("The label should contain only letters."));
 
         event.Veto();
     }
@@ -908,13 +908,13 @@ void MyTreeCtrl::OnEndLabelEdit(wxTreeEvent& event)
 
 void MyTreeCtrl::OnItemCollapsing(wxTreeEvent& event)
 {
-    wxLogMessage("OnItemCollapsing");
+    wxLogMessage(wxT("OnItemCollapsing"));
 
     // for testing, prevent the user from collapsing the first child folder
     wxTreeItemId itemId = event.GetItem();
     if ( IsTestItem(itemId) )
     {
-        wxMessageBox("You can't collapse this item.");
+        wxMessageBox(wxT("You can't collapse this item."));
 
         event.Veto();
     }
@@ -931,7 +931,7 @@ void MyTreeCtrl::OnItemActivated(wxTreeEvent& event)
         item->ShowInfo(this);
     }
 
-    wxLogMessage("OnItemActivated");
+    wxLogMessage(wxT("OnItemActivated"));
 }
 
 void MyTreeCtrl::OnItemRightClick(wxTreeEvent& event)
@@ -970,24 +970,24 @@ void MyTreeCtrl::OnRMouseDClick(wxMouseEvent& event)
 {
     wxTreeItemId id = HitTest(event.GetPosition());
     if ( !id )
-        wxLogMessage("No item under mouse");
+        wxLogMessage(wxT("No item under mouse"));
     else
     {
         MyTreeItemData *item = (MyTreeItemData *)GetItemData(id);
         if ( item )
-            wxLogMessage("Item '%s' under mouse", item->GetDesc());
+            wxLogMessage(wxT("Item '%s' under mouse"), item->GetDesc());
     }
 }
 
-static inline const char *Bool2String(bool b)
+static inline const wxChar *Bool2String(bool b)
 {
-    return b ? "" : "not ";
+    return b ? wxT("") : wxT("not ");
 }
 
 void MyTreeItemData::ShowInfo(wxTreeCtrl *tree)
 {
-    wxLogMessage("Item '%s': %sselected, %sexpanded, %sbold,\n"
-                 "%u children (%u immediately under this item).",
+    wxLogMessage(wxT("Item '%s': %sselected, %sexpanded, %sbold,\n")
+                 wxT("%u children (%u immediately under this item)."),
                  m_desc.c_str(),
                  Bool2String(tree->IsSelected(GetId())),
                  Bool2String(tree->IsExpanded(GetId())),

@@ -11,8 +11,8 @@
 !include $(WXWIN)/src/makevc.env
 
 all:
-    nmake -f server.vc FINAL=$(FINAL)
-    nmake -f client.vc FINAL=$(FINAL)
+    nmake -f server.vc FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
+    nmake -f client.vc FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
 
 clean:
     nmake -f server.vc clean

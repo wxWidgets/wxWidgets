@@ -212,7 +212,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnPageOpen(wxCommandEvent& WXUNUSED(event))
 {
-  wxString p = wxFileSelector("Open HTML document", "", "", "", "HTML files|*.htm");
+  wxString p = wxFileSelector(wxT("Open HTML document"), wxT(""), wxT(""), wxT(""), wxT("HTML files|*.htm"));
   if (p != wxEmptyString)
     m_Html -> LoadPage(p);
 }

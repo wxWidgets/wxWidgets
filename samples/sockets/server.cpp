@@ -216,8 +216,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-  wxMessageBox(_("wxSocket demo: Server\n"
-                 "(c) 1999 Guillermo Rodriguez Garcia\n"),
+  wxMessageBox(_("wxSocket demo: Server\n(c) 1999 Guillermo Rodriguez Garcia\n"),
                _("About Server"),
                wxOK | wxICON_INFORMATION, this);
 }
@@ -257,7 +256,7 @@ void MyFrame::Test2(wxSocketBase *sock)
 #define MAX_MSG_SIZE 10000
 
   wxString s;
-  char *buf = new char[MAX_MSG_SIZE];
+  wxChar *buf = new wxChar[MAX_MSG_SIZE];
   wxUint32 len;
 
   m_text->AppendText(_("Test 2 begins\n"));
@@ -266,7 +265,7 @@ void MyFrame::Test2(wxSocketBase *sock)
   // are not affected by them anyway.
 
   // Read the message
-  len = sock->ReadMsg(buf, MAX_MSG_SIZE).LastCount();
+  len = sock->ReadMsg(buf, MAX_MSG_SIZE * sizeof(wxChar)).LastCount();
   s.Printf(_("Client says: %s\n"), buf);
   m_text->AppendText(s);
   m_text->AppendText(_("Sending the data back\n"));

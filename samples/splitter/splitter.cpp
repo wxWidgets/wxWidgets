@@ -245,7 +245,9 @@ void MyFrame::SetMinSize(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::UpdateUIHorizontal(wxUpdateUIEvent& event)
 {
-  event.Enable( ( (!m_splitter->IsSplit()) || (m_splitter->GetSplitMode() != wxSPLIT_HORIZONTAL) ) );
+    bool foo = ( (!m_splitter->IsSplit()) || (m_splitter->GetSplitMode() != wxSPLIT_HORIZONTAL) );
+    if( !foo )
+  event.Enable( foo );
 }
 
 void MyFrame::UpdateUIVertical(wxUpdateUIEvent& event)

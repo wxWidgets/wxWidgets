@@ -308,7 +308,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         // Has the region on screen been exposed?
 	    if (IsExposed(0,0,100,25))
 	    {
-	        wxLogMessage( "Redraw first cell" );
+	        wxLogMessage( wxT("Redraw first cell") );
             dc.DrawRectangle( 0, 0, 100, 25 );
 	        dc.DrawText( "First Cell", 5, 5 );
 	    }
@@ -323,7 +323,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         // Has the region on screen been exposed?
 	    if (IsExposed(200,0,100,25))
 	    {
-	        wxLogMessage( "Redraw second cell" );
+	        wxLogMessage( wxT("Redraw second cell") );
             dc.DrawRectangle( 200, 0, 100, 25 );
 	        dc.DrawText( "Second Cell", 205, 5 );
 	    }

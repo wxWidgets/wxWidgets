@@ -352,5 +352,5 @@ void MyFrame::OnRunWizard(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnWizardCancel(wxWizardEvent& WXUNUSED(event))
 {
-    wxLogStatus(this, "The wizard was cancelled.");
+    wxLogStatus(this, wxT("The wizard was cancelled."));
 }

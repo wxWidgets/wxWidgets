@@ -310,9 +310,9 @@ bool MyApp::OnInit()
 
     if ( !LoadImages() )
     {
-        wxLogError("Can't load one of the bitmap files needed for this sample "
-                   "from the current or parent directory, please copy them "
-                   "there.");
+        wxLogError(wxT("Can't load one of the bitmap files needed ")
+                   wxT("for this sample from the current or parent ")
+                   wxT("directory, please copy them there."));
 
         // stop here
         DeleteBitmaps();
@@ -572,7 +572,7 @@ void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )
 {
     dc.SetPen( wxPen( "black", width, wxSOLID) );
     dc.SetBrush( *wxRED_BRUSH );
-    dc.DrawText(wxString::Format("Testing lines of width %d", width), x + 10, y - 10);
+    dc.DrawText(wxString::Format(wxT("Testing lines of width %d"), width), x + 10, y - 10);
     dc.DrawRectangle( x+10, y+10, 100, 190 );
 
     dc.DrawText("Solid/dot/short dash/long dash/dot dash", x + 150, y + 10);
@@ -833,7 +833,7 @@ void MyCanvas::DrawText(wxDC& dc)
 
     for ( int n = -180; n < 180; n += 30 )
     {
-        text.Printf("     %d rotated text", n);
+        text.Printf(wxT("     %d rotated text"), n);
         dc.DrawRotatedText(text , 400, 400, n);
     }
 
@@ -845,10 +845,10 @@ void MyCanvas::DrawText(wxDC& dc)
     long height;
     long descent;
     dc.GetTextExtent( "This is Swiss 18pt text.", &length, &height, &descent );
-    text.Printf( "Dimensions are length %ld, height %ld, descent %ld", length, height, descent );
+    text.Printf( wxT("Dimensions are length %ld, height %ld, descent %ld"), length, height, descent );
     dc.DrawText( text, 110, 80 );
 
-    text.Printf( "CharHeight() returns: %d", dc.GetCharHeight() );
+    text.Printf( wxT("CharHeight() returns: %d"), dc.GetCharHeight() );
     dc.DrawText( text, 110, 120 );
 
     dc.DrawRectangle( 100, 40, 4, height );
@@ -878,21 +878,21 @@ static const struct
     int           rop;
 } rasterOperations[] =
 {
-    { "wxAND",          wxAND           },
-    { "wxAND_INVERT",   wxAND_INVERT    },
-    { "wxAND_REVERSE",  wxAND_REVERSE   },
-    { "wxCLEAR",        wxCLEAR         },
-    { "wxCOPY",         wxCOPY          },
-    { "wxEQUIV",        wxEQUIV         },
-    { "wxINVERT",       wxINVERT        },
-    { "wxNAND",         wxNAND          },
-    { "wxNO_OP",        wxNO_OP         },
-    { "wxOR",           wxOR            },
-    { "wxOR_INVERT",    wxOR_INVERT     },
-    { "wxOR_REVERSE",   wxOR_REVERSE    },
-    { "wxSET",          wxSET           },
-    { "wxSRC_INVERT",   wxSRC_INVERT    },
-    { "wxXOR",          wxXOR           },
+    { wxT("wxAND"),          wxAND           },
+    { wxT("wxAND_INVERT"),   wxAND_INVERT    },
+    { wxT("wxAND_REVERSE"),  wxAND_REVERSE   },
+    { wxT("wxCLEAR"),        wxCLEAR         },
+    { wxT("wxCOPY"),         wxCOPY          },
+    { wxT("wxEQUIV"),        wxEQUIV         },
+    { wxT("wxINVERT"),       wxINVERT        },
+    { wxT("wxNAND"),         wxNAND          },
+    { wxT("wxNO_OP"),        wxNO_OP         },
+    { wxT("wxOR"),           wxOR            },
+    { wxT("wxOR_INVERT"),    wxOR_INVERT     },
+    { wxT("wxOR_REVERSE"),   wxOR_REVERSE    },
+    { wxT("wxSET"),          wxSET           },
+    { wxT("wxSRC_INVERT"),   wxSRC_INVERT    },
+    { wxT("wxXOR"),          wxXOR           },
 };
 
 void MyCanvas::DrawImages(wxDC& dc)
@@ -1128,7 +1128,7 @@ void MyCanvas::OnMouseMove(wxMouseEvent &event)
     long x = dc.DeviceToLogicalX( pos.x );
     long y = dc.DeviceToLogicalY( pos.y );
     wxString str;
-    str.Printf( "Current mouse position: %d,%d", (int)x, (int)y );
+    str.Printf( wxT("Current mouse position: %d,%d"), (int)x, (int)y );
     m_owner->SetStatusText( str );
 }
 

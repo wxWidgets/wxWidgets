@@ -241,10 +241,10 @@ void MyCanvas::OnMouseDown( wxMouseEvent &event )
         wxPoint pt( event.GetPosition() );
         int x,y;
         CalcUnscrolledPosition( pt.x, pt.y, &x, &y );
-        wxLogMessage( "Mouse down event at: %d %d, scrolled: %d %d", pt.x, pt.y, x, y );
+        wxLogMessage( wxT("Mouse down event at: %d %d, scrolled: %d %d"), pt.x, pt.y, x, y );
 
         if ( !event.LeftIsDown() )
-            wxLogMessage( "Error: LeftIsDown() should be TRUE if for LeftDown()" );
+            wxLogMessage( wxT("Error: LeftIsDown() should be TRUE if for LeftDown()") );
     }
 }
 
@@ -263,43 +263,43 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 void MyCanvas::OnQueryPosition( wxCommandEvent &WXUNUSED(event) )
 {
     wxPoint pt( m_button->GetPosition() );
-    wxLogMessage( "Position of ""Query position"" is %d %d", pt.x, pt.y );
+    wxLogMessage( wxT("Position of \"Query position\" is %d %d"), pt.x, pt.y );
     pt = ClientToScreen( pt );
-    wxLogMessage( "Position of ""Query position"" on screen is %d %d", pt.x, pt.y );
+    wxLogMessage( wxT("Position of \"Query position\" on screen is %d %d"), pt.x, pt.y );
 }
 
 void MyCanvas::OnAddButton( wxCommandEvent &WXUNUSED(event) )
 {
-    wxLogMessage( "Inserting button at position 10,70..." );
+    wxLogMessage( wxT("Inserting button at position 10,70...") );
     wxButton *button = new wxButton( this, ID_NEWBUTTON, "new button", wxPoint(10,70), wxSize(80,25) );
     wxPoint pt( button->GetPosition() );
-    wxLogMessage( "-> Position after inserting %d %d", pt.x, pt.y );
+    wxLogMessage( wxT("-> Position after inserting %d %d"), pt.x, pt.y );
 }
 
 void MyCanvas::OnDeleteButton( wxCommandEvent &event )
 {
-    wxLogMessage( "Deleting button inserted with ""Add button""..." );
+    wxLogMessage( wxT("Deleting button inserted with \"Add button\"...") );
     wxWindow *win = FindWindow( ID_NEWBUTTON );
     if (win)
        win->Destroy();
     else
-       wxLogMessage( "-> No window with id = ID_NEWBUTTON found." );
+       wxLogMessage( wxT("-> No window with id = ID_NEWBUTTON found.") );
 }
 
 void MyCanvas::OnMoveButton( wxCommandEvent &event )
 {
-    wxLogMessage( "Moving button 10 pixels downward.." );
+    wxLogMessage( wxT("Moving button 10 pixels downward..") );
     wxWindow *win = FindWindow( event.GetId() );
     wxPoint pt( win->GetPosition() );
-    wxLogMessage( "-> Position before move is %d %d", pt.x, pt.y );
+    wxLogMessage( wxT("-> Position before move is %d %d"), pt.x, pt.y );
     win->Move( -1, pt.y + 10 );
     pt = win->GetPosition();
-    wxLogMessage( "-> Position after move is %d %d", pt.x, pt.y );
+    wxLogMessage( wxT("-> Position after move is %d %d"), pt.x, pt.y );
 }
 
 void MyCanvas::OnScrollWin( wxCommandEvent &WXUNUSED(event) )
 {
-    wxLogMessage( "Scrolling 2 units up.\nThe white square and the controls should move equally!" );
+    wxLogMessage( wxT("Scrolling 2 units up.\nThe white square and the controls should move equally!") );
     int x,y;
     GetViewStart( &x, &y );
     Scroll( -1, y+2 );

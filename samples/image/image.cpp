@@ -144,18 +144,18 @@ public:
         image.SetOption(wxBMP_FORMAT, bppvalues[bppselection]);
 
         wxString deffilename = bppchoices[bppselection];
-        deffilename.Replace(" ", "_");
-        deffilename += ".bmp";
-        wxString savefilename = wxFileSelector( "Save Image",
-                                                "",
+        deffilename.Replace(wxT(" "), wxT("_"));
+        deffilename += wxT(".bmp");
+        wxString savefilename = wxFileSelector( wxT("Save Image"),
+                                                wxT(""),
                                                 deffilename,
-                                                (const char *)NULL,
-                                                "BMP files (*.bmp)|*.bmp|"
-                                                "PNG files (*.png)|*.png|"
-                                                "JPEG files (*.jpg)|*.jpg|"
-                                                "GIF files (*.gif)|*.gif|"
-                                                "TIFF files (*.tif)|*.tif|"
-                                                "PCX files (*.pcx)|*.pcx",
+                                                (const wxChar *)NULL,
+                                            wxT("BMP files (*.bmp)|*.bmp|")
+                                            wxT("PNG files (*.png)|*.png|")
+                                            wxT("JPEG files (*.jpg)|*.jpg|")
+                                            wxT("GIF files (*.gif)|*.gif|")
+                                            wxT("TIFF files (*.tif)|*.tif|")
+                                            wxT("PCX files (*.pcx)|*.pcx"),
                                                 wxSAVE);
 
         if ( savefilename.empty() )
@@ -259,18 +259,18 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
 
     // try to find the directory with our images
     wxString dir;
-    if ( wxFile::Exists("./horse.png") )
+    if ( wxFile::Exists(wxT("./horse.png")) )
         dir = "./";
-    else if ( wxFile::Exists("../horse.png") )
+    else if ( wxFile::Exists(wxT("../horse.png")) )
         dir = "../";
     else
-        wxLogWarning("Can't find image files in either '.' or '..'!");
+        wxLogWarning(wxT("Can't find image files in either '.' or '..'!"));
 
     wxImage image = bitmap.ConvertToImage();
 
 #if wxUSE_LIBPNG
     if ( !image.SaveFile( dir + wxString("test.png"), wxBITMAP_TYPE_PNG ))
-        wxLogError("Can't save file");
+        wxLogError(wxT("Can't save file"));
 
     image.Destroy();
 
@@ -280,7 +280,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     image.Destroy();
 
     if ( !image.LoadFile( dir + wxString("horse.png")) )
-        wxLogError("Can't load PNG image");
+        wxLogError(wxT("Can't load PNG image"));
     else
         my_horse_png = new wxBitmap( image );
 #endif // wxUSE_LIBPNG
@@ -289,7 +289,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     image.Destroy();
 
     if ( !image.LoadFile( dir + wxString("horse.jpg")) )
-        wxLogError("Can't load JPG image");
+        wxLogError(wxT("Can't load JPG image"));
     else
         my_horse_jpeg = new wxBitmap( image );
 #endif // wxUSE_LIBJPEG
@@ -298,7 +298,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     image.Destroy();
 
     if ( !image.LoadFile( dir + wxString("horse.gif")) )
-        wxLogError("Can't load GIF image");
+        wxLogError(wxT("Can't load GIF image"));
     else
         my_horse_gif = new wxBitmap( image );
 #endif
@@ -307,7 +307,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     image.Destroy();
 
     if ( !image.LoadFile( dir + wxString("horse.pcx"), wxBITMAP_TYPE_PCX ) )
-        wxLogError("Can't load PCX image");
+        wxLogError(wxT("Can't load PCX image"));
     else
         my_horse_pcx = new wxBitmap( image );
 #endif
@@ -315,7 +315,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     image.Destroy();
 
     if ( !image.LoadFile( dir + wxString("horse.bmp"), wxBITMAP_TYPE_BMP ) )
-        wxLogError("Can't load BMP image");
+        wxLogError(wxT("Can't load BMP image"));
     else
         my_horse_bmp = new wxBitmap( image );
 
@@ -323,19 +323,19 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     image.Destroy();
 
     if ( !image.LoadFile( dir + wxString("horse.xpm"), wxBITMAP_TYPE_XPM ) )
-        wxLogError("Can't load XPM image");
+        wxLogError(wxT("Can't load XPM image"));
     else
         my_horse_xpm = new wxBitmap( image );
 
     if ( !image.SaveFile( dir + wxString("test.xpm"), wxBITMAP_TYPE_XPM ))
-        wxLogError("Can't save file");
+        wxLogError(wxT("Can't save file"));
 #endif
 
 #if wxUSE_PNM
     image.Destroy();
 
     if ( !image.LoadFile( dir + wxString("horse.pnm"), wxBITMAP_TYPE_PNM ) )
-        wxLogError("Can't load PNM image");
+        wxLogError(wxT("Can't load PNM image"));
     else
         my_horse_pnm = new wxBitmap( image );
 #endif
@@ -344,7 +344,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     image.Destroy();
 
     if ( !image.LoadFile( dir + wxString("horse.tif"), wxBITMAP_TYPE_TIF ) )
-        wxLogError("Can't load TIFF image");
+        wxLogError(wxT("Can't load TIFF image"));
     else
         my_horse_tiff = new wxBitmap( image );
 #endif

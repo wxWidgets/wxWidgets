@@ -47,8 +47,8 @@ TAG_HANDLER_BEGIN(MYBIND, "MYBIND")
         int ax, ay;
         int fl = 0;
 
-        tag.ScanParam("X", "%i", &ax);
-        tag.ScanParam("Y", "%i", &ay);
+        tag.ScanParam(wxT("X"), wxT("%i"), &ax);
+        tag.ScanParam(wxT("Y"), wxT("%i"), &ay);
         if (tag.HasParam("FLOAT")) fl = ax;
 
         wnd = new wxTextCtrl( m_WParser -> GetWindow(), -1, tag.GetParam("NAME"),

@@ -312,7 +312,7 @@ bool MyApp::OnInit()
     // using HTML help
     if ( !frame->GetHelpController().Initialize("doc") )
     {
-        wxLogError("Cannot initialize the help system, aborting.");
+        wxLogError(wxT("Cannot initialize the help system, aborting."));
 
         return FALSE;
     }
@@ -320,7 +320,7 @@ bool MyApp::OnInit()
 #if wxUSE_MS_HTML_HELP
     if( !frame->GetMSHtmlHelpController().Initialize("doc") )
     {
-        wxLogError("Cannot initialize the MS HTML Help system.");
+        wxLogError(wxT("Cannot initialize the MS HTML Help system."));
     }
 #endif
 
@@ -328,7 +328,7 @@ bool MyApp::OnInit()
     // you need to call Initialize in order to use wxBestHelpController
     if( !frame->GetBestHelpController().Initialize("doc") )
     {
-        wxLogError("Cannot initialize the best help system, aborting.");
+        wxLogError(wxT("Cannot initialize the best help system, aborting."));
     }
 #endif
 
@@ -338,7 +338,7 @@ bool MyApp::OnInit()
 #if USE_OLD_HTML_HELP
     if ( !frame->GetHtmlHelpController().Initialize("doc") )
     {
-        wxLogError("Cannot initialize the HTML help system, aborting.");
+        wxLogError(wxT("Cannot initialize the HTML help system, aborting."));
 
         return FALSE;
     }
@@ -348,7 +348,7 @@ bool MyApp::OnInit()
     // (zipped) form
     if ( !frame->GetAdvancedHtmlHelpController().Initialize("doc") )
     {
-        wxLogError("Cannot initialize the advanced HTML help system, aborting.");
+        wxLogError(wxT("Cannot initialize the advanced HTML help system, aborting."));
 
         return FALSE;
     }
@@ -513,7 +513,7 @@ void MyFrame::OnMSHtmlHelp(wxCommandEvent& event)
 
 void MyFrame::OnBestHelp(wxCommandEvent& event)
 {
-#if wxUSE_MS_HTML_HELP && wxUSE_HTML
+#if wxUSE_MS_HTML_HELP && wxUSE_WXHTML_HELP
     ShowHelp(event.GetId(), m_bestHelp);
 #endif
 }
@@ -691,8 +691,7 @@ MyModalDialog::MyModalDialog(wxWindow *parent)
     wxTextCtrl *text = new wxTextCtrl(this, -1, wxT("A demo text control"),
                                       wxDefaultPosition, wxSize(300, 100),
                                       wxTE_MULTILINE);
-    text->SetHelpText(_("Type text here if you have got nothing more "
-                        "interesting to do"));
+    text->SetHelpText(_("Type text here if you have got nothing more interesting to do"));
     sizerTop->Add(text, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
     sizerTop->Add(sizerRow, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
