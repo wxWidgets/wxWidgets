@@ -149,7 +149,7 @@ import warnings
 warningmsg = r"""\
 
 ##############################################################\
-# THIS MODULE IS DEPRECATED                                   |
+# THIS MODULE IS DEPRECATED and NOT MAINTAINED                |
 ##############################################################/
 
 """
