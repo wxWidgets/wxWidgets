@@ -34,8 +34,17 @@
 #include "wx/evtloop.h"
 #include "wx/window.h"
 #include "wx/app.h"
+#include "wx/tooltip.h"
 
 #include "wx/msw/private.h"
+
+#if wxUSE_THREADS
+    // define the array of MSG strutures
+    WX_DECLARE_OBJARRAY(MSG, wxMsgArray);
+    // VS: this is a bit dirty - it duplicates same declaration in app.cpp
+    //     (and there's no WX_DEFINE_OBJARRAY for that reason - it is already
+    //     defined in app.cpp). 
+#endif
 
 // ----------------------------------------------------------------------------
 // wxEventLoopImpl
@@ -243,9 +252,9 @@ bool wxEventLoop::Dispatch()
         // leave out WM_COMMAND messages: too dangerous, sometimes
         // the message will be processed twice
         if ( !wxIsWaitingForThread() ||
-                s_currentMsg.message != WM_COMMAND )
+                msg.message != WM_COMMAND )
         {
-            s_aSavedMessages.Add(s_currentMsg);
+            s_aSavedMessages.Add(msg);
         }
 
         return TRUE;
