@@ -29,10 +29,14 @@ extern bool   g_blockEventsOnDrag;
 // "select"
 //-----------------------------------------------------------------------------
 
-static void gtk_combo_clicked_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
+static void
+gtk_combo_clicked_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
 {
-    if (!combo->HasVMT()) return;
-    if (g_blockEventsOnDrag) return;
+    if (!combo->HasVMT())
+        return;
+
+    if (g_blockEventsOnDrag)
+        return;
 
     if (combo->m_alreadySent)
     {
@@ -42,12 +46,13 @@ static void gtk_combo_clicked_callback( GtkWidget *WXUNUSED(widget), wxComboBox 
 
     combo->m_alreadySent = TRUE;
 
-    wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_SELECTED, combo->GetId());
+    wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, combo->GetId() );
     event.SetInt( combo->GetSelection() );
-    wxString tmp( combo->GetStringSelection() );
-    event.SetString( WXSTRINGCAST(tmp) );
-    event.SetEventObject(combo);
-    combo->GetEventHandler()->ProcessEvent(event);
+    event.SetString( copystring(combo->GetStringSelection()) );
+    event.SetEventObject( combo );
+    combo->GetEventHandler()->ProcessEvent( event );
+
+    delete [] event.GetString();
 }
 
 //-----------------------------------------------------------------------------
@@ -57,11 +62,12 @@ static void gtk_combo_clicked_callback( GtkWidget *WXUNUSED(widget), wxComboBox 
 static void
 gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
 {
-    wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, combo->m_windowId );
+    wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, combo->GetId() );
     event.SetString( copystring(combo->GetValue()) );
     event.SetEventObject( combo );
     combo->GetEventHandler()->ProcessEvent( event );
-    delete[] event.GetString();
+
+    delete [] event.GetString();
 }
 
 //-----------------------------------------------------------------------------
@@ -72,6 +78,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxComboBox,wxControl)
 
 BEGIN_EVENT_TABLE(wxComboBox, wxControl)
     EVT_SIZE(wxComboBox::OnSize)
+    EVT_CHAR(wxComboBox::OnChar)
 END_EVENT_TABLE()
 
 bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
@@ -90,9 +97,14 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
 
     m_widget = gtk_combo_new();
 
+    // make it more useable
+    gtk_combo_set_use_arrows_always(GTK_COMBO(m_widget), TRUE);
+
     wxSize newSize = size;
-    if (newSize.x == -1) newSize.x = 100;
-    if (newSize.y == -1) newSize.y = 26;
+    if (newSize.x == -1)
+        newSize.x = 100;
+    if (newSize.y == -1)
+        newSize.y = 26;
     SetSize( newSize.x, newSize.y );
 
     GtkWidget *list = GTK_COMBO(m_widget)->list;
@@ -513,6 +525,22 @@ void wxComboBox::SetEditable( bool editable )
 {
     GtkWidget *entry = GTK_COMBO(m_widget)->entry;
     gtk_entry_set_editable( GTK_ENTRY(entry), editable );
+}
+
+void wxComboBox::OnChar( wxKeyEvent &event )
+{
+    // make Enter generate "selected" event if there is only one item in the
+    // combobox - without it, it's impossible to select it at all!
+    if ( (event.KeyCode() == WXK_RETURN) && (Number() == 0) )
+    {
+        wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, GetId() );
+        event.SetInt( 0 );
+        event.SetString( copystring(GetValue()) );
+        event.SetEventObject( this );
+        GetEventHandler()->ProcessEvent( event );
+
+        delete [] event.GetString();
+    }
 }
 
 void wxComboBox::OnSize( wxSizeEvent &event )
