@@ -148,11 +148,18 @@ static void GTK_EndProcessDetector(gpointer data, gint source,
    // generate G_IO_HUP notification even when it simply tries to read from a
    // closed fd and hasn't terminated at all
    int pid = (proc_data->pid > 0) ? proc_data->pid : -(proc_data->pid);
-   if ( waitpid(pid, NULL, WNOHANG) == 0 )
+   int status = 0;
+   int rc = waitpid(pid, &status, WNOHANG);
+
+   if ( rc == 0 )
    {
        // no, it didn't exit yet, continue waiting
        return;
    }
+
+   // set exit code to -1 if something bad happened
+   proc_data->exitcode = rc != -1 && WIFEXITED(status) ? WEXITSTATUS(status)
+                                                      : -1;
 
    // child exited, end waiting
    close(source);

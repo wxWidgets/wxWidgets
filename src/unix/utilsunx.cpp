@@ -288,32 +288,12 @@ bool wxShell(const wxString& command, wxArrayString& output)
 
 void wxHandleProcessTermination(wxEndProcessData *proc_data)
 {
-    int pid = (proc_data->pid > 0) ? proc_data->pid : -(proc_data->pid);
-
-    // waitpid is POSIX so should be available everywhere, however on older
-    // systems wait() might be used instead in a loop (until the right pid
-    // terminates)
-    int status = 0;
-    int rc;
-
-    // wait for child termination and if waitpid() was interrupted, try again
-    do
-    {
-       rc = waitpid(pid, &status, 0);
-    }
-    while ( rc == -1 && errno == EINTR );
-
     // notify user about termination if required
     if ( proc_data->process )
     {
-        proc_data->process->OnTerminate
-                            (
-                                proc_data->pid,
-                                (rc == 0) && WIFEXITED(status)
-                                    ? WEXITSTATUS(status)
-                                    : -1
-                            );
+        proc_data->process->OnTerminate(proc_data->pid, proc_data->exitcode);
     }
+
     // clean up
     if ( proc_data->pid > 0 )
     {
@@ -321,9 +301,7 @@ void wxHandleProcessTermination(wxEndProcessData *proc_data)
     }
     else
     {
-       // wxExecute() will know about it
-       proc_data->exitcode = status;
-
+       // let wxExecute() know that the process has terminated
        proc_data->pid = 0;
     }
 }
