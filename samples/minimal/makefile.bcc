@@ -75,59 +75,59 @@ BCCDIR=$(MAKEDIR)\..
 ### Variables: ###
 
 OBJS = objs_bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-MINIMAL_CXXFLAGS = $(CPPFLAGS) -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I./../../include -I./../../lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -I./../../src/tiff -I./../../src/jpeg -I./../../src/png -I./../../src/zlib  -I./../../src/regex -I. $(__DLLFLAG_p) $(CXXFLAGS)
+MINIMAL_CXXFLAGS = $(CPPFLAGS)  -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I./../../include -I./../../lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -I./../../src/tiff -I./../../src/jpeg -I./../../src/png -I./../../src/zlib  -I./../../src/regex -I. $(__DLLFLAG_p) $(CXXFLAGS)
 
 ### Conditionally set variables: ###
 
-!if $(USE_GUI) == 0
+!if "$(USE_GUI)" == "0"
 PORTNAME = base
 !endif
-!if $(USE_GUI) == 1
+!if "$(USE_GUI)" == "1"
 PORTNAME = msw
 !endif
-!if $(BUILD) == debug
+!if "$(BUILD)" == "debug"
 WXDEBUGFLAG = d
 !endif
-!if $(SHARED) == 1
+!if "$(SHARED)" == "1"
 WXDLLFLAG = dll
 !endif
-!if $(UNICODE) == 1
+!if "$(UNICODE)" == "1"
 WXUNICODEFLAG = u
 !endif
-!if $(WXUNIV) == 1
+!if "$(WXUNIV)" == "1"
 WXUNIVNAME = univ
 !endif
-!if $(BUILD) == debug
+!if "$(BUILD)" == "debug"
 __DEBUG_DEFINE_p = -D__WXDEBUG__
 !endif
-!if $(BUILD) == debug
+!if "$(BUILD)" == "debug"
 __DEBUG_DEFINE_p_1 = -d__WXDEBUG__
 !endif
-!if $(SHARED) == 1
+!if "$(SHARED)" == "1"
 __DLLFLAG_p = -DWXUSINGDLL
 !endif
-!if $(SHARED) == 1
+!if "$(SHARED)" == "1"
 __DLLFLAG_p_1 = -dWXUSINGDLL
 !endif
-!if $(UNICODE) == 1
+!if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p = -DwxUSE_UNICODE=1
 !endif
-!if $(UNICODE) == 1
+!if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p_1 = -dwxUSE_UNICODE=1
 !endif
-!if $(MONOLITHIC) == 0
+!if "$(MONOLITHIC)" == "0"
 __WXLIB_BASE_p = wx25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_base.lib
 !endif
-!if $(MONOLITHIC) == 0
+!if "$(MONOLITHIC)" == "0"
 __WXLIB_CORE_p = wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core.lib
 !endif
-!if $(MONOLITHIC) == 1
+!if "$(MONOLITHIC)" == "1"
 __WXLIB_MONO_p = wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib
 !endif
-!if $(WXUNIV) == 1
+!if "$(WXUNIV)" == "1"
 __WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 !endif
-!if $(WXUNIV) == 1
+!if "$(WXUNIV)" == "1"
 __WXUNIV_DEFINE_p_1 = -d__WXUNIVERSAL__
 !endif
 
@@ -141,7 +141,7 @@ $(OBJS):
 all: $(OBJS)\minimal.exe
 
 $(OBJS)\minimal_minimal.obj: .\minimal.cpp
-	$(CXX) -c -P -o$@  $(MINIMAL_CXXFLAGS) $**
+	$(CXX) -c -P -o$@ $(MINIMAL_CXXFLAGS) $**
 
 $(OBJS)\minimal_minimal.res: .\minimal.rc
 	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) -i./../../include -i./../../lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -i./../../src/tiff -i./../../src/jpeg -i./../../src/png -i./../../src/zlib  -i./../../src/regex -i. $(__DLLFLAG_p_1) $**
@@ -155,7 +155,7 @@ install: all
 
 $(OBJS)\minimal.exe: $(OBJS)\minimal_minimal.obj  $(OBJS)\minimal_minimal.res
 	ilink32 -Tpe $(LDFLAGS) -L.\..\..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)  -aa @&&|
-	c0w32.obj  $(OBJS)\minimal_minimal.obj,$@,, $(__WXLIB_MONO_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) wxtiff$(WXDEBUGFLAG).lib wxjpeg$(WXDEBUGFLAG).lib wxpng$(WXDEBUGFLAG).lib wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib  import32.lib cw32.lib,, $(OBJS)\minimal_minimal.res
+	c0w32.obj  $(OBJS)\minimal_minimal.obj,$@,, $(__WXLIB_MONO_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) wxtiff$(WXDEBUGFLAG).lib wxjpeg$(WXDEBUGFLAG).lib wxpng$(WXDEBUGFLAG).lib wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib  import32.lib ole2w32.lib cw32.lib,, $(OBJS)\minimal_minimal.res
 |
 
 uninstall: 
