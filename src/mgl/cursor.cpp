@@ -69,6 +69,9 @@ wxCursor::wxCursor()
 
 wxCursor::wxCursor(int cursorId)
 {
+    if ( !gs_cursorsHash )
+        gs_cursorsHash = new wxCursorsHash;
+
     if ( gs_cursorsHash->find(cursorId) != gs_cursorsHash->end() )
     {
         wxLogTrace(_T("mglcursor"), _T("cursor id %i fetched from cache"), cursorId);
@@ -286,11 +289,7 @@ bool wxIsBusy()
 class wxCursorModule : public wxModule
 {
 public:
-    virtual bool OnInit()
-    {
-        gs_cursorsHash = new wxCursorsHash;
-        return TRUE;
-    }
+    virtual bool OnInit() { return TRUE; }
     
     virtual void OnExit()
     {

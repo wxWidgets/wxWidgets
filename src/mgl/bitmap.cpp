@@ -2,7 +2,7 @@
 // Name:        bitmap.cpp
 // Author:      Vaclav Slavik
 // RCS-ID:      $Id$
-// Copyright:   (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
+// Copyright:   (c) 2001-2002 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

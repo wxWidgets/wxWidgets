@@ -6,7 +6,7 @@
 // Created:     2001/12/09
 // RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-//              (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
+//              (c) 2001-2002 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 

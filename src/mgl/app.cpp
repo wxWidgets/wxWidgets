@@ -3,7 +3,7 @@
 // Author:      Vaclav Slavik
 //              based on GTK and MSW implementations
 // Id:          $Id$
-// Copyright:   (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
+// Copyright:   (c) 2001-2002 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
