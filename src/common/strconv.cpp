@@ -2591,13 +2591,19 @@ static wxCSConv wxConvISO8859_1Obj(wxFONTENCODING_ISO8859_1);
 static wxMBConvUTF7 wxConvUTF7Obj;
 static wxMBConvUTF8 wxConvUTF8Obj;
 
-
 WXDLLIMPEXP_DATA_BASE(wxMBConv&) wxConvLibc = wxConvLibcObj;
 WXDLLIMPEXP_DATA_BASE(wxCSConv&) wxConvLocal = wxConvLocalObj;
 WXDLLIMPEXP_DATA_BASE(wxCSConv&) wxConvISO8859_1 = wxConvISO8859_1Obj;
 WXDLLIMPEXP_DATA_BASE(wxMBConvUTF7&) wxConvUTF7 = wxConvUTF7Obj;
 WXDLLIMPEXP_DATA_BASE(wxMBConvUTF8&) wxConvUTF8 = wxConvUTF8Obj;
 WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvCurrent = &wxConvLibcObj;
+WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvFileName = &
+#ifdef __WXOSX__
+                                                    wxConvUTF8Obj;
+#else
+                                                    wxConvLibcObj;
+#endif
+
 
 #else // !wxUSE_WCHAR_T
 
