@@ -211,15 +211,7 @@ void wxTopLevelWindow::DoGetClientSize(int *width, int *height) const
     if ( ms_drawDecorations )
     {
         int w, h;
-        // VS: we can't use real client area size in 'rect', because
-        //     wxTLWNative::DoGetClientSize calls GetClientAreaOrigin
-        //     under wxMSW which in turn calls DoGetClientSize... 
-        //     inifinite recursion
-        #if 0
         wxTopLevelWindowNative::DoGetClientSize(&w, &h);
-        #else
-        w = h = 500;
-        #endif
         wxRect rect = wxRect(wxTopLevelWindowNative::GetClientAreaOrigin(),
                              wxSize(w, h));
         rect = m_renderer->GetFrameClientArea(rect,
