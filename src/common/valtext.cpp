@@ -206,6 +206,9 @@ bool wxTextValidator::TransferToWindow(void)
     if( !CheckValidator() )
         return FALSE;
 
+    if (!m_stringValue)
+        return TRUE;
+
     wxTextCtrl *control = (wxTextCtrl *) m_validatorWindow ;
     control->SetValue(* m_stringValue) ;
 
@@ -217,6 +220,9 @@ bool wxTextValidator::TransferFromWindow(void)
 {
     if( !CheckValidator() )
         return FALSE;
+
+    if (!m_stringValue)
+        return TRUE;
 
     wxTextCtrl *control = (wxTextCtrl *) m_validatorWindow ;
     * m_stringValue = control->GetValue() ;
