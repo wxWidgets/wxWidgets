@@ -24,6 +24,12 @@ class WidgetsPageInfo;
 // all source files use wxImageList
 #include "wx/imaglist.h"
 
+#if wxUSE_LOG && !defined(__SMARTPHONE__)
+    #define USE_LOG 1
+#else
+    #define USE_LOG 0
+#endif
+
 // ----------------------------------------------------------------------------
 // WidgetsPage: a book page demonstrating some widget
 // ----------------------------------------------------------------------------

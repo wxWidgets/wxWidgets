@@ -85,9 +85,9 @@ public:
 
 protected:
     // event handlers
-#if wxUSE_LOG
+#if USE_LOG
     void OnButtonClearLog(wxCommandEvent& event);
-#endif // wxUSE_LOG
+#endif // USE_LOG
     void OnExit(wxCommandEvent& event);
 #if wxUSE_MENUS
     void OnSetFgCol(wxCommandEvent& event);
@@ -101,13 +101,13 @@ private:
     // the panel containing everything
     wxPanel *m_panel;
 
-#if wxUSE_LOG
+#if USE_LOG
     // the listbox for logging messages
     wxListBox *m_lboxLog;
 
     // the log target we use to redirect messages to the listbox
     wxLog *m_logTarget;
-#endif // wxUSE_LOG
+#endif // USE_LOG
 
     // the book containing the test pages
     wxBookCtrl *m_book;
@@ -125,7 +125,7 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-#if wxUSE_LOG
+#if USE_LOG
 // A log target which just redirects the messages to a listbox
 class LboxLogger : public wxLog
 {
@@ -182,7 +182,7 @@ private:
     // the old log target
     wxLog *m_logOld;
 };
-#endif // wxUSE_LOG
+#endif // USE_LOG
 
 // array of pages
 WX_DEFINE_ARRAY_PTR(WidgetsPage *, ArrayWidgetsPage);
@@ -198,9 +198,9 @@ IMPLEMENT_APP(WidgetsApp)
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(WidgetsFrame, wxFrame)
-#if wxUSE_LOG
+#if USE_LOG
     EVT_BUTTON(Widgets_ClearLog, WidgetsFrame::OnButtonClearLog)
-#endif // wxUSE_LOG
+#endif // USE_LOG
     EVT_BUTTON(Widgets_Quit, WidgetsFrame::OnExit)
 
     EVT_MENU(wxID_EXIT, WidgetsFrame::OnExit)
@@ -263,10 +263,10 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
                       wxTAB_TRAVERSAL)
 {
     // init everything
-#if wxUSE_LOG
+#if USE_LOG
     m_lboxLog = (wxListBox *)NULL;
     m_logTarget = (wxLog *)NULL;
-#endif // wxUSE_LOG
+#endif // USE_LOG
     m_book = (wxBookCtrl *)NULL;
     m_imaglist = (wxImageList *)NULL;
 
@@ -295,8 +295,9 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
         wxDefaultSize, wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN|wxBC_DEFAULT);
     InitBook();
 
+#ifndef __SMARTPHONE__
     // the lower one only has the log listbox and a button to clear it
-#if wxUSE_LOG
+#if USE_LOG
     wxSizer *sizerDown = new wxStaticBoxSizer(
         new wxStaticBox( m_panel, wxID_ANY, _T("&Log window") ),
         wxVERTICAL);
@@ -306,15 +307,15 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     sizerDown->SetMinSize(100, 150);
 #else
     wxSizer *sizerDown = new wxBoxSizer(wxVERTICAL);
-#endif // wxUSE_LOG
+#endif // USE_LOG
 
     wxBoxSizer *sizerBtns = new wxBoxSizer(wxHORIZONTAL);
     wxButton *btn;
-#if wxUSE_LOG
+#if USE_LOG
     btn = new wxButton(m_panel, Widgets_ClearLog, _T("Clear &log"));
     sizerBtns->Add(btn);
     sizerBtns->Add(10, 0); // spacer
-#endif // wxUSE_LOG
+#endif // USE_LOG
     btn = new wxButton(m_panel, Widgets_Quit, _T("E&xit"));
     sizerBtns->Add(btn);
     sizerDown->Add(sizerBtns, 0, wxALL | wxALIGN_RIGHT, 5);
@@ -324,12 +325,18 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     sizerTop->Add(0, 5, 0, wxGROW); // spacer in between
     sizerTop->Add(sizerDown, 0,  wxGROW | (wxALL & ~wxTOP), 10);
 
+#else // !__SMARTPHONE__/__SMARTPHONE__
+
+    sizerTop->Add(m_book, 1, wxGROW | wxALL );
+
+#endif // __SMARTPHONE__
+
     m_panel->SetSizer(sizerTop);
 
     sizerTop->Fit(this);
     sizerTop->SetSizeHints(this);
 
-#if wxUSE_LOG && !defined(__WXCOCOA__)
+#if USE_LOG && !defined(__WXCOCOA__)
     // wxCocoa's listbox is too flakey to use for logging right now
     // now that everything is created we can redirect the log messages to the
     // listbox
@@ -375,9 +382,9 @@ void WidgetsFrame::InitBook()
 
 WidgetsFrame::~WidgetsFrame()
 {
-#if wxUSE_LOG
+#if USE_LOG
     delete m_logTarget;
-#endif // wxUSE_LOG
+#endif // USE_LOG
     delete m_imaglist;
 }
 
@@ -390,12 +397,12 @@ void WidgetsFrame::OnExit(wxCommandEvent& WXUNUSED(event))
     Close();
 }
 
-#if wxUSE_LOG
+#if USE_LOG
 void WidgetsFrame::OnButtonClearLog(wxCommandEvent& WXUNUSED(event))
 {
     m_lboxLog->Clear();
 }
-#endif // wxUSE_LOG
+#endif // USE_LOG
 
 #if wxUSE_MENUS
 
