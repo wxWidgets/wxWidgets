@@ -12871,6 +12871,8 @@ SWIGEXPORT(void) initoglshapesc() {
 	 SWIG_globals = SWIG_newvarlink();
 	 m = Py_InitModule("oglshapesc", oglshapescMethods);
 	 d = PyModule_GetDict(m);
+	 PyDict_SetItemString(d,"oglMETAFLAGS_OUTLINE", PyInt_FromLong((long) oglMETAFLAGS_OUTLINE));
+	 PyDict_SetItemString(d,"oglMETAFLAGS_ATTACHMENTS", PyInt_FromLong((long) oglMETAFLAGS_ATTACHMENTS));
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

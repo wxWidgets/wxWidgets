@@ -1185,3 +1185,5 @@ class wxPyDivisionShape(wxPyDivisionShapePtr):
 
 #-------------- VARIABLE WRAPPERS ------------------
 
+oglMETAFLAGS_OUTLINE = oglshapesc.oglMETAFLAGS_OUTLINE
+oglMETAFLAGS_ATTACHMENTS = oglshapesc.oglMETAFLAGS_ATTACHMENTS
