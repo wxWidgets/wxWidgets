@@ -40,6 +40,7 @@
 
 #ifdef __WXMSW__
     #include "wx/msw/private.h"
+    #include "wx/msw/missing.h"
 #endif
 
 #ifndef __WXWINCE__
@@ -1151,28 +1152,118 @@ public:
         return len ? len - 1 : (size_t)-1;
     }
 
-    size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const
+    size_t WC2MB(char *buf, const wchar_t *pwz, size_t n) const
     {
+        /*
+            we have a problem here: by default, WideCharToMultiByte() may
+            replace characters unrepresentable in the target code page with bad
+            quality approximations such as turning "1/2" symbol (U+00BD) into
+            "1" for the code pages which don't have it and we, obviously, want
+            to avoid this at any price
+        
+            the trouble is that this function does it _silently_, i.e. it won't
+            even tell us whether it did or not... Win98/2000 and higher provide
+            WC_NO_BEST_FIT_CHARS but it doesn't work for the older systems and
+            we have to resort to a round trip, i.e. check that converting back
+            results in the same string -- this is, of course, expensive but
+            otherwise we simply can't be sure to not garble the data.
+         */
+
+        // determine if we can rely on WC_NO_BEST_FIT_CHARS: according to MSDN
+        // it doesn't work with CJK encodings (which we test for rather roughly
+        // here...) nor with UTF-7/8 nor, of course, with Windows versions not
+        // supporting it
+        BOOL usedDef wxDUMMY_INITIALIZE(false),
+             *pUsedDef;
+        int flags;
+        if ( CanUseNoBestFit() && m_CodePage < 50000 )
+        {
+            // it's our lucky day
+            flags = WC_NO_BEST_FIT_CHARS;
+            pUsedDef = &usedDef;
+        }
+        else // old system or unsupported encoding
+        {
+            flags = 0;
+            pUsedDef = NULL;
+        }
+
         const size_t len = ::WideCharToMultiByte
                              (
                                 m_CodePage,     // code page
-                                0,              // flags (none)
-                                psz,            // input string
+                                flags,          // either none or no best fit
+                                pwz,            // input string
                                 -1,             // it is (wide) NUL-terminated
                                 buf,            // output buffer
                                 buf ? n : 0,    // and its size
                                 NULL,           // default "replacement" char
-                                NULL            // [out] was it used?
+                                pUsedDef        // [out] was it used?
                              );
 
+        if ( !len )
+        {
+            // function totally failed
+            return (size_t)-1;
+        }
+
+        // if we were really converting, check if we succeeded
+        if ( buf )
+        {
+            if ( flags )
+            {
+                // check if the conversion failed, i.e. if any replacements
+                // were done
+                if ( usedDef )
+                    return (size_t)-1;
+            }
+            else // we must resort to double tripping...
+            {
+                wxWCharBuffer wcBuf(n);
+                if ( MB2WC(wcBuf.data(), buf, n) == (size_t)-1 ||
+                        wcscmp(wcBuf, pwz) != 0 )
+                {
+                    // we didn't obtain the same thing we started from, hence
+                    // the conversion was lossy and we consider that it failed
+                    return (size_t)-1;
+                }
+            }
+        }
+
         // see the comment above for the reason of "len - 1"
-        return len ? len - 1 : (size_t)-1;
+        return len - 1;
     }
 
-    bool IsOk() const
-        { return m_CodePage != -1; }
+    bool IsOk() const { return m_CodePage != -1; }
 
-public:
+private:
+    static bool CanUseNoBestFit()
+    {
+        static int s_isWin98Or2k = -1;
+
+        if ( s_isWin98Or2k == -1 )
+        {
+            int verMaj, verMin;
+            switch ( wxGetOsVersion(&verMaj, &verMin) )
+            {
+                case wxWIN95:
+                    s_isWin98Or2k = verMaj >= 4 && verMin >= 10;
+                    break;
+
+                case wxWINDOWS_NT:
+                    s_isWin98Or2k = verMaj >= 5;
+                    break;
+
+                default:
+                    // unknown, be conseravtive by default
+                    s_isWin98Or2k = 0;
+            }
+
+            wxASSERT_MSG( s_isWin98Or2k != -1, _T("should be set above") );
+        }
+
+        return s_isWin98Or2k == 1;
+    }
+
     long m_CodePage;
 };
 
