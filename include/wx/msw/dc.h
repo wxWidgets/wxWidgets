@@ -213,8 +213,7 @@ protected:
     // TRUE => DeleteDC() in dtor, FALSE => only ReleaseDC() it
     bool              m_bOwnsDC:1;
 
-    // our HDC and its usage count: we only free it when the usage count drops
-    // to 0
+    // our HDC
     WXHDC             m_hDC;
 
     // Store all old GDI objects when do a SelectObject, so we can select them
