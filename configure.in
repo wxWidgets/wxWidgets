@@ -1697,13 +1697,49 @@ if test "$wxUSE_ZLIB" != "no" ; then
     AC_DEFINE(wxUSE_ZLIB)
 
     if test "$wxUSE_ZLIB" = "sys" -o "$wxUSE_ZLIB" = "yes" ; then
-        AC_CHECK_HEADER(zlib.h, AC_CHECK_LIB(z, deflate, ZLIB_LINK=" -lz"))
+        dnl we have troubles with ancient zlib versions (e.g. 1.0.4 is known
+        dnl to not work) and although I don't know which is the minimal
+        dnl required version it's safer to test for 1.1.4 as it fixes a
+        dnl security problem in 1.1.3 -- and hopefully nobody has anything
+        dnl more ancient (1.1.3 was released in July 1998) anyow
+        AC_CACHE_CHECK([for zlib.h >= 1.1.4], ac_cv_header_zlib_h,
+            AC_TRY_RUN(
+                [
+                    dnl zlib.h defines ZLIB_VERSION="x.y.z"
+                    #include <zlib.h>
+                    #include <stdio.h>
+
+                    dnl don't use the brackets as quotes, we need them
+                    changequote(,)
+                    int main()
+                    {
+                        FILE *f=fopen("conftestval", "w");
+                        if (!f) exit(1);
+                        fprintf(f, "%s",
+                                ZLIB_VERSION[0] == '1' &&
+                                (ZLIB_VERSION[2] > '1' ||
+                                (ZLIB_VERSION[2] == '1' &&
+                                 ZLIB_VERSION[4] >= '4')) ? "yes" : "no");
+                        exit(0);
+                    }
+                    changequote([,])
+                ],
+                ac_cv_header_zlib_h=`cat conftestval`,
+                ac_cv_header_zlib_h=no,
+                dnl cross-compiling: test if we have any zlib.h
+                AC_CHECK_HEADER(zlib.h)
+            )
+        )
+
+        if test "$ac_cv_header_zlib_h" = "yes"; then
+            AC_CHECK_LIB(z, deflate, ZLIB_LINK=" -lz")
+        fi
 
         if test "x$ZLIB_LINK" = "x" ; then
             if test "$wxUSE_ZLIB" = "sys" ; then
-                AC_MSG_ERROR([system zlib compression library not found! Use --with-zlib=builtin to use built-in version])
+                AC_MSG_ERROR([zlib library not found or too old! Use --with-zlib=builtin to use built-in version])
             else
-                AC_MSG_WARN([system zlib compression library not found, will use built-in instead])
+                AC_MSG_WARN([zlib library not found or too old, will use built-in instead])
                 wxUSE_ZLIB=builtin
             fi
         else
