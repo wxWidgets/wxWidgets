@@ -1,0 +1,22 @@
+/* XPM */
+static char * helpopen_xpm[] = {
+"16 15 4 1",
+" 	c None",
+".	c Black",
+"X	c Gray100",
+"o	c #848484",
+"                ",
+"                ",
+"                ",
+"  ...           ",
+" .XXX.......    ",
+" .XXXXXXXXX.    ",
+" .XXXXXXXXX.    ",
+" .XXXX..........",
+" .XXX.ooooooooo.",
+" .XX.ooooooooo. ",
+" .X.ooooooooo.  ",
+" ..ooooooooo.   ",
+" ...........    ",
+"                ",
+"                "};
