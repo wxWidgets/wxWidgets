@@ -1066,14 +1066,28 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
     if (g_blockEventsOnDrag)
         return FALSE;
 
-    wxKeyEvent event( wxEVT_KEY_DOWN );
+    bool ret = FALSE;
+    
+    wxKeyEvent event( wxEVT_CHAR_HOOK );    
     if ( !wxTranslateGTKKeyEventToWx(event, win, gdk_event) )
     {
         // unknown key pressed, ignore (the event would be useless anyhow)
         return FALSE;
     }
 
-    bool ret = win->GetEventHandler()->ProcessEvent( event );
+    // Implement wxFrame::OnCharHook by checking ancestor.
+    wxWindow *parent = win;
+    while (parent && !parent->IsTopLevel())
+        parent = parent->GetParent();
+    
+    if (parent)
+        ret = parent->GetEventHandler()->ProcessEvent( event );
+
+    if (!ret)
+    {    
+        event.SetEventType(wxEVT_KEY_DOWN);
+        ret = win->GetEventHandler()->ProcessEvent( event );
+    }
 
 #if wxUSE_ACCEL
     if (!ret)
@@ -1097,7 +1111,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
 
     /* Only send wxEVT_CHAR event if not processed yet. Thus, ALT-x
        will only be sent if it is not in an accelerator table. */
-    if ( !ret )
+    if (!ret)
     {
         KeySym keysym = gdk_event->keyval;
         long key_code = wxTranslateKeySymToWXKey(keysym, TRUE /* isChar */);
@@ -1994,6 +2008,16 @@ wxWindow *wxWindowBase::FindFocus()
 }
 
 //-----------------------------------------------------------------------------
+// "destroy" event
+//-----------------------------------------------------------------------------
+
+static void gtk_window_destroy_callback( GtkWidget* widget, wxWindow *win )
+{
+    wxWindowDestroyEvent event(win);
+    win->GetEventHandler()->ProcessEvent(event);
+}
+
+//-----------------------------------------------------------------------------
 // "realize" from m_widget
 //-----------------------------------------------------------------------------
 
@@ -2607,6 +2631,9 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
 
     gtk_signal_connect( GTK_OBJECT(widget), "leave_notify_event",
       GTK_SIGNAL_FUNC(gtk_window_leave_callback), (gpointer)this );
+      
+    gtk_signal_connect( GTK_OBJECT(widget), "destroy",
+      GTK_SIGNAL_FUNC(gtk_window_destroy_callback), (gpointer)this );
 }
 
 bool wxWindowGTK::Destroy()
@@ -4119,7 +4146,7 @@ void wxWindowGTK::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
     wxCHECK_RET( m_widget != NULL, wxT("invalid window") );
 
     wxCHECK_RET( m_wxwindow != NULL, wxT("window needs client area for scrolling") );
-
+    
     // No scrolling requested.
     if ((dx == 0) && (dy == 0)) return;
 
