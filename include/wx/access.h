@@ -349,7 +349,7 @@ public:
 
 // Operations
 
-        // Each wxAccessible implementation must define this
+        // Each platform's implementation must define this
     // static void NotifyEvent(int eventType, wxWindow* window, wxAccObject objectType,
     //                         int objectId);
 

@@ -25,6 +25,7 @@
 #if wxUSE_TEXTCTRL
 
 #include "wx/control.h"         // the base class
+#include "wx/dynarray.h"
 
 // 16-bit Borland 4.0 doesn't seem to allow multiple inheritance with wxWindow
 // and streambuf: it complains about deriving a huge class from the huge class
@@ -103,6 +104,38 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 #define wxTE_RICH2          0x8000
 
 // ----------------------------------------------------------------------------
+// Types for wxTextAttr
+// ----------------------------------------------------------------------------
+
+// Alignment
+
+enum wxTextAttrAlignment
+{
+    wxTEXT_ALIGNMENT_DEFAULT,
+    wxTEXT_ALIGNMENT_LEFT,
+    wxTEXT_ALIGNMENT_CENTRE,
+    wxTEXT_ALIGNMENT_CENTER = wxTEXT_ALIGNMENT_CENTRE,
+    wxTEXT_ALIGNMENT_RIGHT,
+    wxTEXT_ALIGNMENT_JUSTIFIED
+};
+
+// Flags to indicate which attributes are being applied
+
+#define wxTEXT_ATTR_TEXT_COLOUR             0x0001
+#define wxTEXT_ATTR_BACKGROUND_COLOUR       0x0002
+#define wxTEXT_ATTR_FONT_FACE               0x0004
+#define wxTEXT_ATTR_FONT_SIZE               0x0008
+#define wxTEXT_ATTR_FONT_WEIGHT             0x0010
+#define wxTEXT_ATTR_FONT_ITALIC             0x0020
+#define wxTEXT_ATTR_FONT_UNDERLINE          0x0040
+#define wxTEXT_ATTR_FONT \
+  wxTEXT_ATTR_FONT_FACE | wxTEXT_ATTR_FONT_SIZE | wxTEXT_ATTR_FONT_WEIGHT | wxTEXT_ATTR_FONT_ITALIC | wxTEXT_ATTR_FONT_UNDERLINE
+#define wxTEXT_ATTR_ALIGNMENT               0x0080
+#define wxTEXT_ATTR_LEFT_INDENT             0x0100
+#define wxTEXT_ATTR_RIGHT_INDENT            0x0200
+#define wxTEXT_ATTR_TABS                    0x0400
+
+// ----------------------------------------------------------------------------
 // wxTextAttr: a structure containing the visual attributes of a text
 // ----------------------------------------------------------------------------
 
@@ -110,31 +143,52 @@ class WXDLLEXPORT wxTextAttr
 {
 public:
     // ctors
-    wxTextAttr() { }
+    wxTextAttr() { Init(); }
     wxTextAttr(const wxColour& colText,
                const wxColour& colBack = wxNullColour,
-               const wxFont& font = wxNullFont)
-        : m_colText(colText), m_colBack(colBack), m_font(font) { }
+               const wxFont& font = wxNullFont,
+               wxTextAttrAlignment alignment = wxTEXT_ALIGNMENT_DEFAULT);
+
+    // operations
+    void Init();
+
+    // operators
+    void operator= (const wxTextAttr& attr);
 
     // setters
-    void SetTextColour(const wxColour& colText) { m_colText = colText; }
-    void SetBackgroundColour(const wxColour& colBack) { m_colBack = colBack; }
-    void SetFont(const wxFont& font) { m_font = font; }
+    void SetTextColour(const wxColour& colText) { m_colText = colText; m_flags |= wxTEXT_ATTR_TEXT_COLOUR; }
+    void SetBackgroundColour(const wxColour& colBack) { m_colBack = colBack; m_flags |= wxTEXT_ATTR_BACKGROUND_COLOUR; }
+    void SetFont(const wxFont& font, long flags = wxTEXT_ATTR_FONT) { m_font = font; m_flags |= flags; }
+    void SetAlignment(wxTextAttrAlignment alignment) { m_textAlignment = alignment; m_flags |= wxTEXT_ATTR_ALIGNMENT; }
+    void SetTabs(const wxArrayInt& tabs) { m_tabs = tabs; m_flags |= wxTEXT_ATTR_TABS; }
+    void SetLeftIndent(int indent) { m_leftIndent = indent; m_flags |= wxTEXT_ATTR_LEFT_INDENT; }
+    void SetRightIndent(int indent) { m_rightIndent = indent; m_flags |= wxTEXT_ATTR_RIGHT_INDENT; }
+    void SetFlags(long flags) { m_flags = flags; }
 
     // accessors
-    bool HasTextColour() const { return m_colText.Ok(); }
-    bool HasBackgroundColour() const { return m_colBack.Ok(); }
-    bool HasFont() const { return m_font.Ok(); }
+    bool HasTextColour() const { return m_colText.Ok() && HasFlag(wxTEXT_ATTR_TEXT_COLOUR) ; }
+    bool HasBackgroundColour() const { return m_colBack.Ok() && HasFlag(wxTEXT_ATTR_BACKGROUND_COLOUR) ; }
+    bool HasFont() const { return m_font.Ok() && HasFlag(wxTEXT_ATTR_FONT) ; }
+    bool HasAlignment() const { return (m_textAlignment != wxTEXT_ALIGNMENT_DEFAULT) || ((m_flags & wxTEXT_ATTR_ALIGNMENT) != 0) ; }
+    bool HasTabs() const { return (m_flags & wxTEXT_ATTR_TABS) != 0 ; }
+    bool HasLeftIndent() const { return (m_flags & wxTEXT_ATTR_LEFT_INDENT) != 0 ; }
+    bool HasRightIndent() const { return (m_flags & wxTEXT_ATTR_RIGHT_INDENT) != 0 ; }
+    bool HasFlag(long flag) const { return (m_flags & flag) != 0; }
 
-    // setters
     const wxColour& GetTextColour() const { return m_colText; }
     const wxColour& GetBackgroundColour() const { return m_colBack; }
     const wxFont& GetFont() const { return m_font; }
+    wxTextAttrAlignment GetAlignment() const { return m_textAlignment; }
+    const wxArrayInt& GetTabs() const { return m_tabs; }
+    long GetLeftIndent() const { return m_leftIndent; }
+    long GetRightIndent() const { return m_rightIndent; }
+    long GetFlags() const { return m_flags; }
 
     // returns false if we have any attributes set, true otherwise
     bool IsDefault() const
     {
-        return !HasTextColour() && !HasBackgroundColour() && !HasFont();
+        return !HasTextColour() && !HasBackgroundColour() && !HasFont() && !HasAlignment() &&
+               !HasTabs() && !HasLeftIndent() && !HasRightIndent() ;
     }
 
     // return the attribute having the valid font and colours: it uses the
@@ -145,9 +199,14 @@ public:
                               const wxTextCtrlBase *text);
 
 private:
-    wxColour m_colText,
-             m_colBack;
-    wxFont   m_font;
+    long                m_flags;
+    wxColour            m_colText,
+                        m_colBack;
+    wxFont              m_font;
+    wxTextAttrAlignment m_textAlignment;
+    wxArrayInt          m_tabs; // array of int: tab stops in 1/10 mm
+    int                 m_leftIndent; // left indent in 1/10 mm
+    int                 m_rightIndent; // right indent in 1/10 mm
 };
 
 // ----------------------------------------------------------------------------
@@ -224,6 +283,7 @@ public:
     // methods allow to apply the given text style to the given selection or to
     // set/get the style which will be used for all appended text
     virtual bool SetStyle(long start, long end, const wxTextAttr& style);
+    virtual bool GetStyle(long position, wxTextAttr& style);
     virtual bool SetDefaultStyle(const wxTextAttr& style);
     virtual const wxTextAttr& GetDefaultStyle() const;
 

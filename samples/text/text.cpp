@@ -44,6 +44,9 @@
     #define wxUSE_CLIPBOARD 0
 #endif
 
+#include "wx/colordlg.h"
+#include "wx/fontdlg.h"
+
 //----------------------------------------------------------------------
 // class definitions
 //----------------------------------------------------------------------
@@ -199,6 +202,7 @@ public:
     void OnLogClear(wxCommandEvent& event);
     void OnFileSave(wxCommandEvent& event);
     void OnFileLoad(wxCommandEvent& event);
+    void OnRichTextTest(wxCommandEvent& event);
 
     void OnSetEditable(wxCommandEvent& event);
     void OnSetEnabled(wxCommandEvent& event);
@@ -260,6 +264,34 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
+/*
+ * RichTextFrame is used to demonstrate rich text behaviour
+ */
+
+class RichTextFrame: public wxFrame
+{
+public:
+    RichTextFrame(wxWindow* parent, const wxString& title);
+
+// Event handlers
+
+    void OnClose(wxCommandEvent& event);
+    void OnLeftAlign(wxCommandEvent& event);
+    void OnRightAlign(wxCommandEvent& event);
+    void OnJustify(wxCommandEvent& event);
+    void OnCentre(wxCommandEvent& event);
+    void OnChangeFont(wxCommandEvent& event);
+    void OnChangeTextColour(wxCommandEvent& event);
+    void OnChangeBackgroundColour(wxCommandEvent& event);
+    void OnLeftIndent(wxCommandEvent& event);
+    void OnRightIndent(wxCommandEvent& event);
+
+private:
+    wxTextCtrl *m_textCtrl;
+
+    DECLARE_EVENT_TABLE()
+};
+
 //----------------------------------------------------------------------
 // main()
 //----------------------------------------------------------------------
@@ -277,6 +309,7 @@ enum
     TEXT_LOAD,
     TEXT_SAVE,
     TEXT_CLEAR,
+    TEXT_RICH_TEXT_TEST,
 
     // clipboard menu
     TEXT_CLIPBOARD_COPY = 200,
@@ -324,6 +357,8 @@ bool MyApp::OnInit()
                       _T("Save the text control contents to file"));
     file_menu->Append(TEXT_LOAD, _T("&Load file\tCtrl-O"),
                       _T("Load the sample file into text control"));
+    file_menu->AppendSeparator();
+    file_menu->Append(TEXT_RICH_TEXT_TEST, _T("Show Rich Text Editor"));
     file_menu->AppendSeparator();
     file_menu->Append(TEXT_ABOUT, _T("&About\tAlt-A"));
     file_menu->AppendSeparator();
@@ -1065,6 +1100,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TEXT_ABOUT,  MyFrame::OnAbout)
     EVT_MENU(TEXT_SAVE,   MyFrame::OnFileSave)
     EVT_MENU(TEXT_LOAD,   MyFrame::OnFileLoad)
+    EVT_MENU(TEXT_RICH_TEXT_TEST, MyFrame::OnRichTextTest)
 
     EVT_MENU(TEXT_LOG_KEY,  MyFrame::OnLogKey)
     EVT_MENU(TEXT_LOG_CHAR, MyFrame::OnLogChar)
@@ -1223,6 +1259,12 @@ void MyFrame::OnFileLoad(wxCommandEvent& event)
         wxLogStatus(this, _T("Couldn't load the file"));
 }
 
+void MyFrame::OnRichTextTest(wxCommandEvent& event)
+{
+    RichTextFrame* frame = new RichTextFrame(this, _T("Rich Text Editor"));
+    frame->Show(TRUE);
+}
+
 void MyFrame::OnIdle( wxIdleEvent& event )
 {
     // track the window which has the focus in the status bar
@@ -1248,4 +1290,231 @@ void MyFrame::OnIdle( wxIdleEvent& event )
         SetStatusText(msg);
     }
     event.Skip();
+}
+
+/*
+ * RichTextFrame is used to demonstrate rich text behaviour
+ */
+
+enum
+{
+    RICHTEXT_CLOSE = 1000,
+    RICHTEXT_LEFT_ALIGN,
+    RICHTEXT_RIGHT_ALIGN,
+    RICHTEXT_CENTRE,
+    RICHTEXT_JUSTIFY,
+    RICHTEXT_CHANGE_FONT,
+    RICHTEXT_CHANGE_TEXT_COLOUR,
+    RICHTEXT_CHANGE_BACKGROUND_COLOUR,
+    RICHTEXT_LEFT_INDENT,
+    RICHTEXT_RIGHT_INDENT
+};
+
+BEGIN_EVENT_TABLE(RichTextFrame, wxFrame)
+    EVT_MENU(RICHTEXT_CLOSE, RichTextFrame::OnClose)
+    EVT_MENU(RICHTEXT_LEFT_ALIGN, RichTextFrame::OnLeftAlign)
+    EVT_MENU(RICHTEXT_RIGHT_ALIGN, RichTextFrame::OnRightAlign)
+    EVT_MENU(RICHTEXT_CENTRE, RichTextFrame::OnCentre)
+    EVT_MENU(RICHTEXT_JUSTIFY, RichTextFrame::OnJustify)
+    EVT_MENU(RICHTEXT_CHANGE_FONT, RichTextFrame::OnChangeFont)
+    EVT_MENU(RICHTEXT_CHANGE_TEXT_COLOUR, RichTextFrame::OnChangeTextColour)
+    EVT_MENU(RICHTEXT_CHANGE_BACKGROUND_COLOUR, RichTextFrame::OnChangeBackgroundColour)
+    EVT_MENU(RICHTEXT_LEFT_INDENT, RichTextFrame::OnLeftIndent)
+    EVT_MENU(RICHTEXT_RIGHT_INDENT, RichTextFrame::OnRightIndent)
+END_EVENT_TABLE()
+
+RichTextFrame::RichTextFrame(wxWindow* parent, const wxString& title):
+    wxFrame(parent, -1, title, wxDefaultPosition, wxSize(300, 400))
+{
+    m_textCtrl = new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition,
+            wxDefaultSize, wxTE_MULTILINE|wxTE_RICH2);
+
+    wxString value;
+    int i;
+    for (i = 0; i < 10; i++)
+    {
+        int j;
+        for (j = 0; j < 10; j++)
+        {
+            value << wxT("Hello, welcome to a very simple rich text editor. You can set some character and paragraph styles from the Edit menu. ");
+        }
+        value << wxT("\n\n");
+    }
+    m_textCtrl->SetValue(value);
+
+    wxMenuBar* menuBar = new wxMenuBar;
+    wxMenu* fileMenu = new wxMenu;
+    fileMenu->Append(RICHTEXT_CLOSE, _("Close\tCtrl+W"));
+    menuBar->Append(fileMenu, _("File"));
+
+    wxMenu* editMenu = new wxMenu;
+    editMenu->Append(RICHTEXT_LEFT_ALIGN, _("Left Align"));
+    editMenu->Append(RICHTEXT_RIGHT_ALIGN, _("Right Align"));
+    editMenu->Append(RICHTEXT_CENTRE, _("Centre"));
+    editMenu->Append(RICHTEXT_JUSTIFY, _("Justify"));
+    editMenu->AppendSeparator();
+    editMenu->Append(RICHTEXT_CHANGE_FONT, _("Change Font"));
+    editMenu->Append(RICHTEXT_CHANGE_TEXT_COLOUR, _("Change Text Colour"));
+    editMenu->Append(RICHTEXT_CHANGE_BACKGROUND_COLOUR, _("Change Background Colour"));
+    editMenu->AppendSeparator();
+    editMenu->Append(RICHTEXT_LEFT_INDENT, _("Left Indent"));
+    editMenu->Append(RICHTEXT_RIGHT_INDENT, _("Right indent"));
+    menuBar->Append(editMenu, _("Edit"));
+
+    SetMenuBar(menuBar);
+}
+
+// Event handlers
+
+void RichTextFrame::OnClose(wxCommandEvent& event)
+{
+    Close(TRUE);
+}
+
+void RichTextFrame::OnLeftAlign(wxCommandEvent& event)
+{
+    wxTextAttr attr;
+    attr.SetAlignment(wxTEXT_ALIGNMENT_LEFT);
+
+    long start, end;
+    m_textCtrl->GetSelection(& start, & end);
+    m_textCtrl->SetStyle(start, end, attr);
+}
+
+void RichTextFrame::OnRightAlign(wxCommandEvent& event)
+{
+    wxTextAttr attr;
+    attr.SetAlignment(wxTEXT_ALIGNMENT_RIGHT);
+
+    long start, end;
+    m_textCtrl->GetSelection(& start, & end);
+    m_textCtrl->SetStyle(start, end, attr);
+}
+
+void RichTextFrame::OnJustify(wxCommandEvent& event)
+{
+    wxTextAttr attr;
+    attr.SetAlignment(wxTEXT_ALIGNMENT_JUSTIFIED);
+
+    long start, end;
+    m_textCtrl->GetSelection(& start, & end);
+    m_textCtrl->SetStyle(start, end, attr);
+}
+
+void RichTextFrame::OnCentre(wxCommandEvent& event)
+{
+    wxTextAttr attr;
+    attr.SetAlignment(wxTEXT_ALIGNMENT_CENTRE);
+
+    long start, end;
+    m_textCtrl->GetSelection(& start, & end);
+    m_textCtrl->SetStyle(start, end, attr);
+}
+
+void RichTextFrame::OnChangeFont(wxCommandEvent& event)
+{
+    wxFontData data;
+
+    wxFontDialog dialog(this, data);
+
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        wxFontData retData = dialog.GetFontData();
+        wxFont font = retData.GetChosenFont();
+
+        wxTextAttr attr;
+        attr.SetFont(font);
+        
+        long start, end;
+        m_textCtrl->GetSelection(& start, & end);
+        m_textCtrl->SetStyle(start, end, attr);
+    }
+}
+
+void RichTextFrame::OnChangeTextColour(wxCommandEvent& event)
+{
+    wxColourData data;
+    data.SetColour(* wxBLACK);
+    data.SetChooseFull(TRUE);
+    for (int i = 0; i < 16; i++)
+    {
+        wxColour colour(i*16, i*16, i*16);
+        data.SetCustomColour(i, colour);
+    }
+
+    wxColourDialog dialog(this, &data);
+    dialog.SetTitle(_T("Choose the text colour"));
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        wxColourData retData = dialog.GetColourData();
+        wxColour col = retData.GetColour();
+
+        wxTextAttr attr;
+        attr.SetTextColour(col);
+        
+        long start, end;
+        m_textCtrl->GetSelection(& start, & end);
+        m_textCtrl->SetStyle(start, end, attr);
+    }
+}
+
+void RichTextFrame::OnChangeBackgroundColour(wxCommandEvent& event)
+{
+    wxColourData data;
+    data.SetColour(* wxWHITE);
+    data.SetChooseFull(TRUE);
+    for (int i = 0; i < 16; i++)
+    {
+        wxColour colour(i*16, i*16, i*16);
+        data.SetCustomColour(i, colour);
+    }
+
+    wxColourDialog dialog(this, &data);
+    dialog.SetTitle(_T("Choose the text background colour"));
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        wxColourData retData = dialog.GetColourData();
+        wxColour col = retData.GetColour();
+
+        wxTextAttr attr;
+        attr.SetBackgroundColour(col);
+        
+        long start, end;
+        m_textCtrl->GetSelection(& start, & end);
+        m_textCtrl->SetStyle(start, end, attr);
+    }
+}
+
+void RichTextFrame::OnLeftIndent(wxCommandEvent& event)
+{
+    wxString indentStr = wxGetTextFromUser(_("Please enter the left indent in tenths of a millimetre."),
+        _("Left Indent"));
+    if (!indentStr.IsEmpty())
+    {
+        int indent = wxAtoi(indentStr);
+
+        wxTextAttr attr;
+        attr.SetLeftIndent(indent);
+        
+        long start, end;
+        m_textCtrl->GetSelection(& start, & end);
+        m_textCtrl->SetStyle(start, end, attr);
+    }
+}
+
+void RichTextFrame::OnRightIndent(wxCommandEvent& event)
+{
+    wxString indentStr = wxGetTextFromUser(_("Please enter the right indent in tenths of a millimetre."),
+        _("Right Indent"));
+    if (!indentStr.IsEmpty())
+    {
+        int indent = wxAtoi(indentStr);
+
+        wxTextAttr attr;
+        attr.SetRightIndent(indent);
+        
+        long start, end;
+        m_textCtrl->GetSelection(& start, & end);
+        m_textCtrl->SetStyle(start, end, attr);
+    }
 }

@@ -92,6 +92,7 @@ public:
     // controls)
     virtual bool SetStyle(long start, long end, const wxTextAttr& style);
     virtual bool SetDefaultStyle(const wxTextAttr& style);
+    virtual bool GetStyle(long position, wxTextAttr& style);
 #endif // wxUSE_RICHEDIT
 
     // translate between the position (which is just an index in the text ctrl

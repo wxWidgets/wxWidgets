@@ -1918,7 +1918,9 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
 
     // the richedit 1.0 doesn't handle setting background colour, so don't
     // even try to do anything if it's the only thing we want to change
-    if ( m_verRichEdit == 1 && !style.HasFont() && !style.HasTextColour() )
+    if ( m_verRichEdit == 1 && !style.HasFont() && !style.HasTextColour() &&
+        !style.HasLeftIndent() && !style.HasRightIndent() && !style.HasAlignment() &&
+        !style.HasTabs() )
     {
         // nothing to do: return TRUE if there was really nothing to do and
         // FALSE if we failed to set bg colour
@@ -2032,6 +2034,81 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
         wxLogDebug(_T("SendMessage(EM_SETCHARFORMAT, SCF_SELECTION) failed"));
     }
 
+    // now do the paragraph formatting
+    PARAFORMAT2 pf;
+    wxZeroMemory(pf);
+    // we can't use PARAFORMAT2 with RichEdit 1.0, so pretend it is a simple
+    // PARAFORMAT in that case
+#if wxUSE_RICHEDIT2
+    if ( m_verRichEdit == 1 )
+    {
+        // this is the only thing the control is going to grok
+        pf.cbSize = sizeof(PARAFORMAT);
+    }
+    else
+#endif
+    {
+        // PARAFORMAT or PARAFORMAT2
+        pf.cbSize = sizeof(pf);
+    }
+
+    if (style.HasAlignment())
+    {
+        pf.dwMask |= PFM_ALIGNMENT;
+        if (style.GetAlignment() == wxTEXT_ALIGNMENT_RIGHT)
+            pf.wAlignment = PFA_RIGHT;
+        else if (style.GetAlignment() == wxTEXT_ALIGNMENT_CENTRE)
+            pf.wAlignment = PFA_CENTER;
+        else if (style.GetAlignment() == wxTEXT_ALIGNMENT_JUSTIFIED)
+            pf.wAlignment = PFA_JUSTIFY;
+        else
+            pf.wAlignment = PFA_LEFT;
+    }
+
+    if (style.HasLeftIndent())
+    {
+        pf.dwMask |= PFM_STARTINDENT;
+
+        // Convert from 1/10 mm to TWIPS
+        pf.dxStartIndent = (int) (((double) style.GetLeftIndent()) * mm2twips / 10.0) ;
+
+        // TODO: do we need to specify dxOffset?
+    }
+
+    if (style.HasRightIndent())
+    {
+        pf.dwMask |= PFM_RIGHTINDENT;
+
+        // Convert from 1/10 mm to TWIPS
+        pf.dxRightIndent = (int) (((double) style.GetRightIndent()) * mm2twips / 10.0) ;
+    }
+
+    if (style.HasTabs())
+    {
+        pf.dwMask |= PFM_TABSTOPS;
+
+        const wxArrayInt& tabs = style.GetTabs();
+
+        pf.cTabCount = wxMin(tabs.GetCount(), MAX_TAB_STOPS);
+        size_t i;
+        for (i = 0; i < (size_t) pf.cTabCount; i++)
+        {
+            // Convert from 1/10 mm to TWIPS
+            pf.rgxTabs[i] = (int) (((double) tabs[i]) * mm2twips / 10.0) ;
+        }
+    }
+
+    if (pf.dwMask != 0)
+    {
+        // do format the selection
+        bool ok = ::SendMessage(GetHwnd(), EM_SETPARAFORMAT,
+            0, (LPARAM) &pf) != 0;
+        if ( !ok )
+        {
+            wxLogDebug(_T("SendMessage(EM_SETPARAFORMAT, 0) failed"));
+        }
+    }
+
     if ( changeSel )
     {
         // restore the original selection
@@ -2052,6 +2129,12 @@ bool wxTextCtrl::SetDefaultStyle(const wxTextAttr& style)
     SetStyle(posLast, posLast, m_defaultStyle);
 
     return TRUE;
+}
+
+bool wxTextCtrl::GetStyle(long WXUNUSED(position), wxTextAttr& WXUNUSED(style))
+{
+    // TODO
+    return FALSE;
 }
 
 #endif

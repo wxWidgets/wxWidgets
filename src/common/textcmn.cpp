@@ -69,6 +69,30 @@ wxTextCtrlBase::~wxTextCtrlBase()
 // style functions - not implemented here
 // ----------------------------------------------------------------------------
 
+wxTextAttr::wxTextAttr(const wxColour& colText,
+               const wxColour& colBack,
+               const wxFont& font,
+               wxTextAttrAlignment alignment)
+    : m_colText(colText), m_colBack(colBack), m_font(font), m_textAlignment(alignment)
+{
+    m_flags = 0;
+    m_leftIndent = 0;
+    m_rightIndent = 0;
+    if (m_colText.Ok()) m_flags |= wxTEXT_ATTR_TEXT_COLOUR;
+    if (m_colBack.Ok()) m_flags |= wxTEXT_ATTR_BACKGROUND_COLOUR;
+    if (m_font.Ok()) m_flags |= wxTEXT_ATTR_FONT;
+    if (alignment != wxTEXT_ALIGNMENT_DEFAULT)
+        m_flags |= wxTEXT_ATTR_ALIGNMENT;
+}
+
+void wxTextAttr::Init()
+{
+    m_textAlignment = wxTEXT_ALIGNMENT_DEFAULT;
+    m_flags = 0;
+    m_leftIndent = 0;
+    m_rightIndent = 0;
+}
+
 /* static */
 wxTextAttr wxTextAttr::Combine(const wxTextAttr& attr,
                                const wxTextAttr& attrDef,
@@ -101,12 +125,54 @@ wxTextAttr wxTextAttr::Combine(const wxTextAttr& attr,
             colBg = text->GetBackgroundColour();
     }
 
-    return wxTextAttr(colFg, colBg, font);
+    wxTextAttr newAttr(colFg, colBg, font);
+    
+    if (attr.HasAlignment())
+        newAttr.SetAlignment(attr.GetAlignment());
+    else if (attrDef.HasAlignment())
+        newAttr.SetAlignment(attrDef.GetAlignment());
+    
+    if (attr.HasTabs())
+        newAttr.SetTabs(attr.GetTabs());
+    else if (attrDef.HasTabs())
+        newAttr.SetTabs(attrDef.GetTabs());
+    
+    if (attr.HasLeftIndent())
+        newAttr.SetLeftIndent(attr.GetLeftIndent());
+    else if (attrDef.HasLeftIndent())
+        newAttr.SetLeftIndent(attrDef.GetLeftIndent());
+    
+    if (attr.HasRightIndent())
+        newAttr.SetRightIndent(attr.GetRightIndent());
+    else if (attrDef.HasRightIndent())
+        newAttr.SetRightIndent(attrDef.GetRightIndent());    
+    
+    return newAttr;
 }
+
+void wxTextAttr::operator= (const wxTextAttr& attr)
+{
+    m_font = attr.m_font;
+    m_colText = attr.m_colText;
+    m_colBack = attr.m_colBack;
+    m_textAlignment = attr.m_textAlignment;
+    m_leftIndent = attr.m_leftIndent;
+    m_rightIndent = attr.m_rightIndent;
+    m_tabs = attr.m_tabs;
+    m_flags = attr.m_flags;
+}
+
 
 // apply styling to text range
 bool wxTextCtrlBase::SetStyle(long WXUNUSED(start), long WXUNUSED(end),
                               const wxTextAttr& WXUNUSED(style))
+{
+    // to be implemented in derived TextCtrl classes
+    return FALSE;
+}
+
+// get the styling at the given position
+bool wxTextCtrlBase::GetStyle(long WXUNUSED(position), wxTextAttr& WXUNUSED(style))
 {
     // to be implemented in derived TextCtrl classes
     return FALSE;
