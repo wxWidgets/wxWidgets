@@ -1204,39 +1204,39 @@ void wxMimeTypesManagerImpl::GetKDEMimeInfo(const wxString& sExtraDir)
         }
         
         configFile.SetName( wxEmptyString );
+        configFile.AppendDir( wxT("32x32") );
+        configFile.AppendDir( wxT("mimetypes") );
         
         // Just try a few likely icons theme names
-
+        
+        int pos = configFile.GetDirCount()-3;
+        
         if (!wxDir::Exists(configFile.GetPath()))
         {
-            configFile.RemoveDir( configFile.GetDirCount()-1 );
-            configFile.AppendDir( wxT("default.kde") );
+            configFile.RemoveDir( pos );
+            configFile.InsertDir( pos, wxT("default.kde") );
         }
         
         if (!wxDir::Exists(configFile.GetPath()))
         {
-            configFile.RemoveDir( configFile.GetDirCount()-1 );
-            configFile.AppendDir( wxT("default") );
+            configFile.RemoveDir( pos );
+            configFile.InsertDir( pos, wxT("default") );
         }
         
         if (!wxDir::Exists(configFile.GetPath()))
         {
-            configFile.RemoveDir( configFile.GetDirCount()-1 );
-            configFile.AppendDir( wxT("crystalsvg") );
+            configFile.RemoveDir( pos );
+            configFile.InsertDir( pos, wxT("crystalsvg") );
         }
         
         if (!wxDir::Exists(configFile.GetPath()))
         {
-            configFile.RemoveDir( configFile.GetDirCount()-1 );
-            configFile.AppendDir( wxT("crystal") );
+            configFile.RemoveDir( pos );
+            configFile.InsertDir( pos, wxT("crystal") );
         }
         
         if (wxDir::Exists(configFile.GetPath()))
-        {
-            configFile.AppendDir( wxT("32x32") );
-            configFile.AppendDir( wxT("mimetypes") );
             icondirs.Add( configFile.GetFullPath() );
-        }
     }
 
     // settings in ~/.kde have maximal priority
