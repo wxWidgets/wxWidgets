@@ -444,11 +444,16 @@ public:
   wxString& operator=(wxChar ch);
     // from a C string
   wxString& operator=(const wxChar *psz);
-#if !wxUSE_UNICODE
+#if wxUSE_UNICODE
+    // from wxWCharBuffer
+  wxString& operator=(const wxWCharBuffer& psz) { return operator=((const wchar_t *)psz); }
+#else
     // from another kind of C string
   wxString& operator=(const unsigned char* psz);
     // from a wide string
   wxString& operator=(const wchar_t *pwz);
+    // from wxCharBuffer
+  wxString& operator=(const wxCharBuffer& psz) { return operator=((const char *)psz); }
 #endif
 
   // string concatenation
