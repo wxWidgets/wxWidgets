@@ -336,9 +336,33 @@ public :
     
     bool Ok() const { return m_controlRef != NULL ; }
     
-    OSStatus SetData( ControlPartCode inPartCode , ResType inTag , Size inSize , const void * inData ) ;
-    OSStatus GetData( ControlPartCode inPartCode , ResType inTag , Size inBufferSize , void * inOutBuffer , Size * outActualSize ) ;
-    OSStatus GetDataSize( ControlPartCode inPartCode , ResType inTag , Size * outActualSize ) ;
+    void operator= (ControlRef c) { m_controlRef = c ; }
+    operator ControlRef () { return m_controlRef; }   
+    operator ControlRef * () { return &m_controlRef; }   
+
+    // accessing data and values
+
+    virtual OSStatus SetData( ControlPartCode inPartCode , ResType inTag , Size inSize , const void * inData ) ;
+    virtual OSStatus GetData( ControlPartCode inPartCode , ResType inTag , Size inBufferSize , void * inOutBuffer , Size * outActualSize ) ;
+    virtual OSStatus GetDataSize( ControlPartCode inPartCode , ResType inTag , Size * outActualSize ) ;
+    virtual OSStatus SendEvent(  EventRef ref , OptionBits inOptions = 0 ) ;
+    virtual OSStatus SendHICommand( HICommand &command , OptionBits inOptions = 0 ) ;
+
+    OSStatus SendHICommand( UInt32 commandID , OptionBits inOptions = 0 ) ;
+
+    SInt32 GetValue() const ;
+    SInt32 GetMaximum() const ;
+    SInt32 GetMinimum() const ;
+    
+    void SetValue( SInt32 v ) ;
+    void SetMinimum( SInt32 v ) ;
+    void SetMaximum( SInt32 v ) ;
+
+    void SetValueAndRange( SInt32 value , SInt32 minimum , SInt32 maximum ) ;
+    void SetRange( SInt32 minimum , SInt32 maximum ) ;
+    
+    // templated helpers
+
     Size GetDataSize( ControlPartCode inPartCode , ResType inTag )
     {
         Size sz ;
@@ -364,38 +388,11 @@ public :
         verify_noerr( GetData<T>( inPartCode , inTag , &value ) ) ;
         return value ;
     }
-    
-    OSStatus SendEvent(  EventRef ref , OptionBits inOptions = 0 ) ;
-    OSStatus SendHICommand( HICommand &command , OptionBits inOptions = 0 ) ;
-    OSStatus SendHICommand( UInt32 commandID , OptionBits inOptions = 0 ) ;
-    
+       
     // Flash the control for the specified amount of time
     void Flash( ControlPartCode part , UInt32 ticks = 8 ) ;
     
-    SInt32 GetValue() { return ::GetControl32BitValue( m_controlRef ) ; }
-    SInt32 GetMaximum() { return ::GetControl32BitMaximum( m_controlRef ) ; }
-    SInt32 GetMinimum() { return ::GetControl32BitMinimum( m_controlRef ) ; }
-    
-    void SetValue( SInt32 v ) { ::SetControl32BitValue( m_controlRef , v ) ; }
-    void SetMinimum( SInt32 v ) { ::SetControl32BitMinimum( m_controlRef , v ) ; }
-    void SetMaximum( SInt32 v ) { ::SetControl32BitMaximum( m_controlRef , v ) ; }
 
-    void SetValueAndRange( SInt32 value , SInt32 minimum , SInt32 maximum )
-    {
-        ::SetControl32BitMinimum( m_controlRef , minimum ) ;
-        ::SetControl32BitMaximum( m_controlRef , maximum ) ; 
-        ::SetControl32BitValue( m_controlRef , value ) ;
-    }
-    
-    void SetRange( SInt32 minimum , SInt32 maximum )
-    {
-        ::SetControl32BitMinimum( m_controlRef , minimum ) ;
-        ::SetControl32BitMaximum( m_controlRef , maximum ) ; 
-    }
-
-    void operator= (ControlRef c) { m_controlRef = c ; }
-    operator ControlRef () { return m_controlRef; }   
-    operator ControlRef * () { return &m_controlRef; }   
 protected :
     ControlRef m_controlRef ;
 } ;
