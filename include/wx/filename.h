@@ -242,7 +242,7 @@ public:
         // variables will be expanded in it
         //
         // this may be done using another (than current) value of cwd
-    bool Normalize(wxPathNormalize flags = wxPATH_NORM_ALL,
+    bool Normalize(int flags = wxPATH_NORM_ALL,
                    const wxString& cwd = wxEmptyString,
                    wxPathFormat format = wxPATH_NATIVE);
 

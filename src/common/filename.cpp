@@ -732,7 +732,7 @@ bool wxFileName::Rmdir( const wxString &dir )
 // path normalization
 // ----------------------------------------------------------------------------
 
-bool wxFileName::Normalize(wxPathNormalize flags,
+bool wxFileName::Normalize(int flags,
                            const wxString& cwd,
                            wxPathFormat format)
 {
