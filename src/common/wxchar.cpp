@@ -145,7 +145,7 @@ int WXDLLEXPORT wxFprintf(FILE *stream, const wxChar *fmt, ...)
   return ret;
 }
 
-int WXDLLEXPORT wxFvprintf(FILE *stream, const wxChar *fmt, va_list argptr)
+int WXDLLEXPORT wxVfprintf(FILE *stream, const wxChar *fmt, va_list argptr)
 {
   wxString str;
   str.PrintfV(fmt,argptr);
