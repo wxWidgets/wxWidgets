@@ -22,6 +22,7 @@ include demo/bmp_source/*.png
 include demo/bmp_source/*.jpg
 include demo/*.txt
 include demo/*.xml
+include demo/*.ico
 include demo/data/*.png
 include demo/data/*.htm
 include demo/data/*.html
@@ -96,6 +97,7 @@ include tools/XRCed/TODO
 include tools/XRCed/README
 include tools/XRCed/*.py
 include tools/XRCed/*.xrc
+include tools/XRCed/*.ico
 
 include contrib/glcanvas/*.i
 include contrib/glcanvas/*.py

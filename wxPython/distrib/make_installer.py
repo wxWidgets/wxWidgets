@@ -69,6 +69,7 @@ Source: "%(SYSDIR)s\MSVCIRT.dll";           DestDir: "{sys}"; CopyMode: alwayssk
 
 Source: "%(WXDIR)s\lib\%(WXDLL)s";          DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\wxc.pyd";                 DestDir: "{app}\wxPython"; Components: core
+Source: "wxPython\wxc.pyd.manifest";        DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\gridc.pyd";               DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\helpc.pyd";               DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\htmlc.pyd";               DestDir: "{app}\wxPython"; Components: core
@@ -93,6 +94,7 @@ Source: "wxPython\lib\PyCrust\*.ico";       DestDir: "{app}\wxPython\lib\PyCrust
 Source: "demo\*.py";                        DestDir: "{app}\wxPython\demo"; Components: demo
 Source: "demo\*.xml";                       DestDir: "{app}\wxPython\demo"; Components: demo
 Source: "demo\*.txt";                       DestDir: "{app}\wxPython\demo"; Components: demo
+Source: "demo\*.ico";                       DestDir: "{app}\wxPython\demo"; Components: demo
 
 Source: "demo\bitmaps\*.gif";               DestDir: "{app}\wxPython\demo\bitmaps"; Components: demo
 Source: "demo\bitmaps\*.bmp";               DestDir: "{app}\wxPython\demo\bitmaps"; Components: demo
@@ -135,6 +137,7 @@ Source: "tools\XRCed\TODO";                 DestDir: "{app}\wxPython\tools\XRCed
 Source: "tools\XRCed\README";               DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
 Source: "tools\XRCed\*.py";                 DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
 Source: "tools\XRCed\*.xrc";                DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
+Source: "tools\XRCed\*.ico";                DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
 
 Source: "samples\doodle\*.py";              DestDir: "{app}\wxPython\samples\doodle"; Components: samples
 Source: "samples\doodle\*.txt";             DestDir: "{app}\wxPython\samples\doodle"; Components: samples
@@ -162,7 +165,7 @@ Source: "samples\frogedit\*.py";           DestDir: "{app}\wxPython\samples\frog
 ;;------------------------------------------------------------
 
 [Icons]
-Name: "{group}\Run the DEMO";          Filename: "{code:GetPythonDir}\pythonw.exe";   WorkingDir: "{app}\wxPython\demo";   Parameters: "demo.py"; Components: core
+Name: "{group}\Run the DEMO";          Filename: "{code:GetPythonDir}\pythonw.exe";   WorkingDir: "{app}\wxPython\demo";   Parameters: "demo.py"; IconFilename: "{app}\wxPython\demo\wxpdemo.ico"; Components: core
 Name: "{group}\PyCrust";               Filename: "{code:GetPythonDir}\pythonw.exe";   WorkingDir: "c:\";                   Parameters: "{app}\wxPython\lib\PyCrust\PyCrustApp.py";  IconFilename: "{app}\wxPython\lib\PyCrust\PyCrust.ico"; Components: core
 Name: "{group}\wxWindows Reference";   Filename: "{app}\wxPython\docs\wx.chm";                Components: docs
 Name: "{group}\wxOGL Reference";       Filename: "{app}\wxPython\docs\ogl.chm";               Components: docs
@@ -170,6 +173,7 @@ Name: "{group}\licence.txt";           Filename: "{app}\wxPython\docs\licence\li
 Name: "{group}\README.txt";            Filename: "{app}\wxPython\docs\README.txt";            Components: core
 Name: "{group}\CHANGES.txt";           Filename: "{app}\wxPython\docs\CHANGES.txt";           Components: core
 Name: "{group}\Sample Apps";           Filename: "{app}\wxPython\samples"; Components: samples
+Name: "{group}\Resource Editor";       Filename: "{code:GetPythonDir}\pythonw.exe";   WorkingDir: "c:\";   Parameters: "{app}\wxPython\Tools\XRCed\xrced.py"; IconFilename: "{app}\wxPython\Tools\XRCed\xrced.ico"; Components: tools
 
 
 ;;------------------------------------------------------------
