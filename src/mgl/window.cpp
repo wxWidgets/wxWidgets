@@ -178,8 +178,11 @@ static void wxWindowPainter(window_t *wnd, MGLDC *dc)
 static ibool wxWindowMouseHandler(window_t *wnd, event_t *e)
 {
     wxWindowMGL *win = (wxWindowMGL*)MGL_wmGetWindowUserData(wnd);
-    wxPoint where = win->ScreenToClient(wxPoint(e->where_x, e->where_y));
+    wxPoint where;
     
+    MGL_wmCoordGlobalToLocal(win->GetHandle(), 
+                             e->where_x, e->where_y, &where.x, &where.y);
+
     if ( !win->IsEnabled() ) return FALSE;
     
     wxEventType type = wxEVT_NULL;
@@ -225,10 +228,10 @@ static ibool wxWindowMouseHandler(window_t *wnd, event_t *e)
                 if ( g_windowUnderMouse )
                 {
                     wxMouseEvent event2(event);
-                    wxPoint where2 = g_windowUnderMouse->ScreenToClient(
-                                            wxPoint(e->where_x, e->where_y));
-                    event2.m_x = where2.x;
-                    event2.m_y = where2.y;
+                    MGL_wmCoordGlobalToLocal(g_windowUnderMouse->GetHandle(), 
+                                             e->where_x, e->where_y, 
+                                             &event2.m_x, &event2.m_y);
+
                     event2.SetEventObject(g_windowUnderMouse);
                     event2.SetEventType(wxEVT_LEAVE_WINDOW);
                     g_windowUnderMouse->GetEventHandler()->ProcessEvent(event2);
@@ -393,7 +396,9 @@ static ibool wxWindowKeybHandler(window_t *wnd, event_t *e)
 
     if ( !win->IsEnabled() ) return FALSE;
 
-    wxPoint where = win->ScreenToClient(wxPoint(e->where_x, e->where_y));
+    wxPoint where;
+    MGL_wmCoordGlobalToLocal(win->GetHandle(), 
+                             e->where_x, e->where_y, &where.x, &where.y);
     
     wxKeyEvent event;
     event.SetEventObject(win);
@@ -561,7 +566,7 @@ bool wxWindowMGL::Create(wxWindow *parent,
 
     MGL_wmPushWindowEventHandler(m_wnd, wxWindowMouseHandler, EVT_MOUSEEVT, 0);
     MGL_wmPushWindowEventHandler(m_wnd, wxWindowKeybHandler, EVT_KEYEVT, 0);
-
+    
     return TRUE;
 }
 
@@ -793,27 +798,21 @@ void wxWindowMGL::DoGetPosition(int *x, int *y) const
 void wxWindowMGL::DoScreenToClient(int *x, int *y) const
 {
     int ax, ay;
-    wxPoint co = GetClientAreaOrigin();
-
-    MGL_wmCoordGlobalToLocal(m_wnd, m_wnd->x, m_wnd->y, &ax, &ay);
-    ax -= co.x;
-    ay -= co.y;
+    MGL_wmCoordGlobalToLocal(m_wnd, 0, 0, &ax, &ay);
     if (x)
-        *x = ax;
+        (*x) += ax;
     if (y)
-        *y = ay;
+        (*y) += ay;
 }
 
 void wxWindowMGL::DoClientToScreen(int *x, int *y) const
 {
     int ax, ay;
-    wxPoint co = GetClientAreaOrigin();
-
-    MGL_wmCoordGlobalToLocal(m_wnd, m_wnd->x+co.x, m_wnd->y+co.y, &ax, &ay);
+    MGL_wmCoordLocalToGlobal(m_wnd, 0, 0, &ax, &ay);
     if (x)
-        *x = ax;
+        (*x) += ax;
     if (y)
-        *y = ay;
+        (*y) += ay;
 }
 
 // Get size *available for subwindows* i.e. excluding menu bar etc.
