@@ -212,6 +212,18 @@ SOURCE=.\xh_tree.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\xh_stlin.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xh_bmp.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xh_unkwn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\xmlrsall.cpp
 # End Source File
 # End Target

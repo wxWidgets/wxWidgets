@@ -16,7 +16,7 @@ OBJECTS=xml.o xmlbin.o xmlbinz.o xmlpars.o xmlres.o xmlrsall.o \
         xh_bttn.o xh_chckb.o xh_chckl.o xh_choic.o xh_combo.o xh_dlg.o \
         xh_gauge.o xh_html.o xh_menu.o xh_notbk.o xh_panel.o xh_radbt.o \
         xh_radbx.o xh_sizer.o xh_slidr.o xh_spin.o xh_stbmp.o xh_sttxt.o \
-        xh_text.o xh_listb.o xh_toolb.o \
+        xh_text.o xh_listb.o xh_toolb.o xh_stlin.o xh_bmp.o xh_unkwn.o \
         xh_bmpbt.o xh_cald.o xh_listc.o xh_scrol.o xh_stbox.o xh_tree.o
 
 include $(WXDIR)/src/makelib.g95

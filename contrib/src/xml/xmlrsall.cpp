@@ -25,6 +25,8 @@
 
 void wxXmlResource::InitAllHandlers()
 {
+    AddHandler(new wxBitmapXmlHandler);
+    AddHandler(new wxIconXmlHandler);
     AddHandler(new wxMenuXmlHandler);
     AddHandler(new wxMenuBarXmlHandler);
 
@@ -86,7 +88,8 @@ void wxXmlResource::InitAllHandlers()
 #if wxUSE_TOOLBAR
     AddHandler(new wxToolBarXmlHandler);
 #endif
-
-
-
+#if wxUSE_STATLINE
+    AddHandler(new wxStaticLineXmlHandler);
+#endif
+    AddHandler(new wxUnknownWidgetXmlHandler);
 }

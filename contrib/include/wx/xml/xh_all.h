@@ -41,4 +41,7 @@
 #include "wx/xml/xh_tree.h"
 #include "wx/xml/xh_cald.h"
 #include "wx/xml/xh_listc.h"
+#include "wx/xml/xh_stlin.h"
+#include "wx/xml/xh_bmp.h"
+#include "wx/xml/xh_unkwn.h"
 #endif // _WX_XMLRES_H_
