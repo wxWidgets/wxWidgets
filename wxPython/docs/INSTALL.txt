@@ -86,12 +86,12 @@ Installing wxPython on OS X is nearly the same as the Unix
 instructions above, except for a few small, but important details:
 
 1. The --enable-rpath configure option is not needed since the path to
-   the wxWindows dynlibs will automatically be encoded into the
+   the wxWindows dylibs will automatically be encoded into the
    extension modules when they are built.  If you end up moving the
    wxWindows dynlibs to some other location (such as inside the .app
-   bundle of your applicaiton, for distribution to other users,) then
+   bundle of your applicaiton for distribution to other users,) then
    you will need to set DYLD_LIBRARY_PATH to this location so the
-   dynlibs can be found at runtime.
+   dylibs can be found at runtime.
 
 2. Depending on the version of OS X Python may be installed in
    different locations.  On 10.2 (Jaguar) you need to download and
@@ -99,9 +99,14 @@ instructions above, except for a few small, but important details:
    Python Framework will then be installed in /Library/Frameworks.  On
    10.3 (Panther) Apple supplies the Python Framework as part of the
    OS install, but it will be located in /System/Library/Frameworks
-   instead.  To complicate things further, the Jaguar version, or a
-   custom build you do yourself will end up in /Library/Frameworks
-   even on Panther...
+   instead.  However, on Panther the site-pacakges dir is sym-linked
+   to /Library/Python/2.3 so the wxPython pacakges will end up there,
+   although they will still be visible from site-packages.  If you are
+   building distributions of wxPython to be installed on other
+   machines be careful to install to /Library/Python/2.3.  To
+   complicate things further, the Jaguar version, or a custom build
+   you do yourself will end up in /Library/Frameworks even on
+   Panther...
 
 3. You need to use pythonw at the command line or PythonLauncher app
    to run wxPython apps, otherwise the app will not be able to fully
