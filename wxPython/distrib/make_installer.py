@@ -78,7 +78,7 @@ Source: "%(SYSDIR)s\MSVCRT.dll";        DestDir: "{code:GetPythonDir}"; CopyMode
 Source: "%(SYSDIR)s\MSVCIRT.dll";       DestDir: "{code:GetPythonDir}"; CopyMode: alwaysskipifsameorolder; Flags: uninsneveruninstall; Components: core
 Source: "%(SYSDIR)s\MSVCP60.dll";       DestDir: "{code:GetPythonDir}"; CopyMode: alwaysskipifsameorolder; Flags: uninsneveruninstall; Components: core
 
-Source: "%(WXDIR)s\BIN\wx*%(WXDLLVER)s*.dll";  DestDir: "{app}\wx"; Components: core
+Source: "%(WXDIR)s\BIN\wx*%(WXDLLVER)s_*.dll";  DestDir: "{app}\wx"; Components: core
 %(MSLU)s
 Source: "wx\_core.pyd";                        DestDir: "{app}\wx"; Components: core
 Source: "wx\_gdi.pyd";                         DestDir: "{app}\wx"; Components: core
@@ -430,7 +430,9 @@ def find_DLLs():
     proc.close()
     for line in lines:
         if line.startswith("    wxbase"):
-            WXDLLVER = line[10:14]
+            WXDLLVER = line[10:15]
+            if WXDLLVER.endswith('_'):
+                WXDLLVER = WXDLLVER[:-1]
 
         if line.startswith("    python"):
             PYTHONVER = line[10] + '.' + line[11]
