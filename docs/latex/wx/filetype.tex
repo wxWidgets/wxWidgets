@@ -147,7 +147,9 @@ function in the first place.
 If the function returns TRUE, the icon associated with this file type will be
 created and assigned to the {\it icon} parameter.
 
-{\bf Unix:} This function always returns FALSE under Unix.
+{\bf Unix:} MIME manager gathers information about icons from GNOME
+and KDE settings and thus GetIcon's success depends on availability
+of these desktop environments.
 
 \membersection{wxFileType::GetDescription}\label{wxfiletypegetdescription}
 

@@ -19,6 +19,9 @@ additional functions
 \helpref{wxMimeTypesManager::ReadMimeTypes}{wxmimetypesmanagerreadmimetypes} are
 provided to load additional files.
 
+If GNOME or KDE desktop environment is installed, then wxMimeTypesManager 
+gathers MIME information from respective files (e.g. .kdelnk files under KDE).
+
 NB: Currently, wxMimeTypesManager is limited to reading MIME type information
 but it will support modifying it as well in the future versions.
 

@@ -50,6 +50,7 @@
     #include "wx/textfile.h"
     #include "wx/dir.h"
     #include "wx/utils.h"
+    #include "wx/tokenzr.h"
 #endif // OS
 
 #include "wx/mimetype.h"
@@ -354,6 +355,11 @@ class wxMimeTypeIconHandler
 {
 public:
     virtual bool GetIcon(const wxString& mimetype, wxIcon *icon) = 0;
+    
+    // this function fills manager with MIME types information gathered 
+    // (as side effect) when searching for icons. This may be particularly
+    // useful if mime.types is incomplete (e.g. RedHat distributions).
+    virtual void GetMimeInfoRecords(wxMimeTypesManagerImpl *manager) = 0;
 };
 
 WX_DEFINE_ARRAY(wxMimeTypeIconHandler *, ArrayIconHandlers);
@@ -363,7 +369,8 @@ class wxGNOMEIconHandler : public wxMimeTypeIconHandler
 {
 public:
     virtual bool GetIcon(const wxString& mimetype, wxIcon *icon);
-
+    virtual void GetMimeInfoRecords(wxMimeTypesManagerImpl *manager) {}
+    
 private:
     void Init();
     void LoadIconsFromKeyFile(const wxString& filename);
@@ -380,20 +387,28 @@ class wxKDEIconHandler : public wxMimeTypeIconHandler
 {
 public:
     virtual bool GetIcon(const wxString& mimetype, wxIcon *icon);
+    virtual void GetMimeInfoRecords(wxMimeTypesManagerImpl *manager);
 
 private:
     void LoadLinksForMimeSubtype(const wxString& dirbase,
                                  const wxString& subdir,
-                                 const wxString& filename);
+                                 const wxString& filename,
+                                 const wxArrayString& icondirs);
     void LoadLinksForMimeType(const wxString& dirbase,
-                              const wxString& subdir);
-    void LoadLinkFilesFromDir(const wxString& dirbase);
+                              const wxString& subdir,
+                              const wxArrayString& icondirs);
+    void LoadLinkFilesFromDir(const wxString& dirbase, 
+                              const wxArrayString& icondirs);
     void Init();
 
     static bool m_inited;
 
     static wxSortedArrayString ms_mimetypes;
     static wxArrayString       ms_icons;
+
+    static wxArrayString       ms_infoTypes;
+    static wxArrayString       ms_infoDescriptions;
+    static wxArrayString       ms_infoExtensions;
 };
 
 // this is the real wxMimeTypesManager for Unix
@@ -1195,6 +1210,11 @@ bool wxKDEIconHandler::m_inited = FALSE;
 wxSortedArrayString wxKDEIconHandler::ms_mimetypes;
 wxArrayString       wxKDEIconHandler::ms_icons;
 
+wxArrayString       wxKDEIconHandler::ms_infoTypes;
+wxArrayString       wxKDEIconHandler::ms_infoDescriptions;
+wxArrayString       wxKDEIconHandler::ms_infoExtensions;
+
+
 ArrayIconHandlers wxMimeTypesManagerImpl::ms_iconHandlers;
 
 // ----------------------------------------------------------------------------
@@ -1399,18 +1419,71 @@ bool wxGNOMEIconHandler::GetIcon(const wxString& mimetype, wxIcon *icon)
 
 void wxKDEIconHandler::LoadLinksForMimeSubtype(const wxString& dirbase,
                                                const wxString& subdir,
-                                               const wxString& filename)
+                                               const wxString& filename,
+                                               const wxArrayString& icondirs)
 {
     wxFFile file(dirbase + filename);
     if ( !file.IsOpened() )
         return;
+
+    // construct mimetype from the directory name and the basename of the
+    // file (it always has .kdelnk extension)
+    wxString mimetype;
+    mimetype << subdir << _T('/') << filename.BeforeLast(_T('.'));
 
     // these files are small, slurp the entire file at once
     wxString text;
     if ( !file.ReadAll(&text) )
         return;
 
-    int pos = text.Find(_T("Icon="));
+    int pos;
+    const wxChar *pc;
+
+    // before trying to find an icon, grab mimetype information
+    // (because BFU's machine would hardly have well-edited mime.types but (s)he might
+    // have edited it in control panel...)
+
+    wxString mime_extension, mime_desc;
+
+    pos = wxNOT_FOUND;    
+    if (wxGetLocale() != NULL)
+        mime_desc = _T("Comment[") + wxGetLocale()->GetName() + _T("]=");
+    if (pos == wxNOT_FOUND) mime_desc = _T("Comment=");
+    pos = text.Find(mime_desc);
+    if (pos == wxNOT_FOUND) mime_desc = wxEmptyString;
+    else
+    {
+        pc = text.c_str() + pos + mime_desc.Length();
+        mime_desc = wxEmptyString;
+        while ( *pc && *pc != _T('\n') ) mime_desc += *pc++;
+    }
+
+    pos = text.Find(_T("Patterns="));
+    if (pos != wxNOT_FOUND)
+    {
+        wxString exts;
+        pc = text.c_str() + pos + 9;
+        while ( *pc && *pc != _T('\n') ) exts += *pc++;
+        wxStringTokenizer tokenizer(exts, _T(";"));
+        wxString e;
+        
+        while (tokenizer.HasMoreTokens())
+        {
+            e = tokenizer.GetNextToken();
+            if (e.Left(2) != _T("*.")) continue; // don't support too difficult patterns
+            mime_extension << e.Mid(2);
+            mime_extension << _T(' ');
+        }
+        mime_extension.RemoveLast();
+    }
+    
+    ms_infoTypes.Add(mimetype);
+    ms_infoDescriptions.Add(mime_desc);
+    ms_infoExtensions.Add(mime_extension);
+
+    // ok, now we can take care of icon:
+
+    pos = text.Find(_T("Icon="));
     if ( pos == wxNOT_FOUND )
     {
         // no icon info
@@ -1419,7 +1492,7 @@ void wxKDEIconHandler::LoadLinksForMimeSubtype(const wxString& dirbase,
 
     wxString icon;
 
-    const wxChar *pc = text.c_str() + pos + 5;  // 5 == strlen("Icon=")
+    pc = text.c_str() + pos + 5;  // 5 == strlen("Icon=")
     while ( *pc && *pc != _T('\n') )
     {
         icon += *pc++;
@@ -1427,13 +1500,16 @@ void wxKDEIconHandler::LoadLinksForMimeSubtype(const wxString& dirbase,
 
     if ( !!icon )
     {
-        // don't check that the file actually exists - would be too slow
-        icon.Prepend(_T("/usr/share/icons/"));
-
-        // construct mimetype from the directory name and the basename of the
-        // file (it always has .kdelnk extension)
-        wxString mimetype;
-        mimetype << subdir << _T('/') << filename.BeforeLast(_T('.'));
+        // we must check if the file exists because it may be stored
+        // in many locations, at least ~/.kde and $KDEDIR
+        size_t nDir, nDirs = icondirs.GetCount();
+        for ( nDir = 0; nDir < nDirs; nDir++ )
+            if (wxFileExists(icondirs[nDir] + icon))
+            {
+                icon.Prepend(icondirs[nDir]);
+                break;
+            }
+        if (nDir == nDirs) return; //does not exist
 
         // do we already have this MIME type?
         int i = ms_mimetypes.Index(mimetype);
@@ -1452,7 +1528,8 @@ void wxKDEIconHandler::LoadLinksForMimeSubtype(const wxString& dirbase,
 }
 
 void wxKDEIconHandler::LoadLinksForMimeType(const wxString& dirbase,
-                                            const wxString& subdir)
+                                            const wxString& subdir,
+                                            const wxArrayString& icondirs)
 {
     wxString dirname = dirbase;
     dirname += subdir;
@@ -1466,13 +1543,14 @@ void wxKDEIconHandler::LoadLinksForMimeType(const wxString& dirbase,
     bool cont = dir.GetFirst(&filename, _T("*.kdelnk"), wxDIR_FILES);
     while ( cont )
     {
-        LoadLinksForMimeSubtype(dirname, subdir, filename);
+        LoadLinksForMimeSubtype(dirname, subdir, filename, icondirs);
 
         cont = dir.GetNext(&filename);
     }
 }
 
-void wxKDEIconHandler::LoadLinkFilesFromDir(const wxString& dirbase)
+void wxKDEIconHandler::LoadLinkFilesFromDir(const wxString& dirbase,
+                                            const wxArrayString& icondirs)
 {
     wxASSERT_MSG( !!dirbase && !wxEndsWithPathSeparator(dirbase),
                   _T("base directory shouldn't end with a slash") );
@@ -1494,7 +1572,7 @@ void wxKDEIconHandler::LoadLinkFilesFromDir(const wxString& dirbase)
     bool cont = dir.GetFirst(&subdir, wxEmptyString, wxDIR_DIRS);
     while ( cont )
     {
-        LoadLinksForMimeType(dirname, subdir);
+        LoadLinksForMimeType(dirname, subdir, icondirs);
 
         cont = dir.GetNext(&subdir);
     }
@@ -1503,26 +1581,32 @@ void wxKDEIconHandler::LoadLinkFilesFromDir(const wxString& dirbase)
 void wxKDEIconHandler::Init()
 {
     wxArrayString dirs;
+    wxArrayString icondirs;
+
+    // settings in ~/.kde have maximal priority
+    dirs.Add(wxGetHomeDir() + _T("/.kde/share"));
+    icondirs.Add(wxGetHomeDir() + _T("/.kde/share/icons/"));
 
     // the variable KDEDIR is set when KDE is running
     const char *kdedir = getenv("KDEDIR");
     if ( kdedir )
     {
         dirs.Add(wxString(kdedir) + _T("/share"));
+        icondirs.Add(wxString(kdedir) + _T("/share/icons/"));
     }
     else
     {
         // try to guess KDEDIR
         dirs.Add(_T("/usr/share"));
         dirs.Add(_T("/opt/kde/share"));
+        icondirs.Add(_T("/usr/share/icons/"));
+        icondirs.Add(_T("/opt/kde/share/icons/"));
     }
-
-    dirs.Add(wxGetHomeDir() + _T("/.kde/share"));
 
     size_t nDirs = dirs.GetCount();
     for ( size_t nDir = 0; nDir < nDirs; nDir++ )
     {
-        LoadLinkFilesFromDir(dirs[nDir]);
+        LoadLinkFilesFromDir(dirs[nDir], icondirs);
     }
 
     m_inited = TRUE;
@@ -1551,6 +1635,17 @@ bool wxKDEIconHandler::GetIcon(const wxString& mimetype, wxIcon *icon)
 
     return TRUE;
 }
+
+
+void wxKDEIconHandler::GetMimeInfoRecords(wxMimeTypesManagerImpl *manager)
+{
+    if ( !m_inited ) Init();
+    
+    size_t cnt = ms_infoTypes.GetCount();
+    for (unsigned i = 0; i < cnt; i++)
+        manager -> AddMimeTypeInfo(ms_infoTypes[i], ms_infoExtensions[i], ms_infoDescriptions[i]);
+}
+
 
 // ----------------------------------------------------------------------------
 // wxFileTypeImpl (Unix)
@@ -1711,6 +1806,12 @@ wxMimeTypesManagerImpl::wxMimeTypesManagerImpl()
     if ( wxFile::Exists(strUserMimeTypes) ) {
         ReadMimeTypes(strUserMimeTypes);
     }
+    
+    // read KDE/GNOME tables
+    ArrayIconHandlers& handlers = GetIconHandlers();
+    size_t count = handlers.GetCount();
+    for ( size_t n = 0; n < count; n++ )
+        handlers[n]->GetMimeInfoRecords(this);
 }
 
 wxFileType *
