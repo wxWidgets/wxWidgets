@@ -127,7 +127,7 @@ wxChoice::~wxChoice()
 
 int wxChoice::DoAppend( const wxString &item )
 {
-    wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid choice") );
+    wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid choice control") );
 
     GtkWidget *menu = gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) );
 
@@ -136,7 +136,7 @@ int wxChoice::DoAppend( const wxString &item )
 
 void wxChoice::DoSetClientData( int n, void* clientData )
 {
-    wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
+    wxCHECK_RET( m_widget != NULL, wxT("invalid choice control") );
 
     wxNode *node = m_clientList.Nth( n );
     wxCHECK_RET( node, wxT("invalid index in wxChoice::DoSetClientData") );
@@ -146,7 +146,7 @@ void wxChoice::DoSetClientData( int n, void* clientData )
 
 void* wxChoice::DoGetClientData( int n ) const
 {
-    wxCHECK_MSG( m_widget != NULL, NULL, wxT("invalid combobox") );
+    wxCHECK_MSG( m_widget != NULL, NULL, wxT("invalid choice control") );
 
     wxNode *node = m_clientList.Nth( n );
     wxCHECK_MSG( node, NULL, wxT("invalid index in wxChoice::DoGetClientData") );
@@ -156,7 +156,7 @@ void* wxChoice::DoGetClientData( int n ) const
 
 void wxChoice::DoSetClientObject( int n, wxClientData* clientData )
 {
-    wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
+    wxCHECK_RET( m_widget != NULL, wxT("invalid choice control") );
 
     wxNode *node = m_clientList.Nth( n );
     wxCHECK_RET( node, wxT("invalid index in wxChoice::DoSetClientObject") );
@@ -169,7 +169,7 @@ void wxChoice::DoSetClientObject( int n, wxClientData* clientData )
 
 wxClientData* wxChoice::DoGetClientObject( int n ) const
 {
-    wxCHECK_MSG( m_widget != NULL, (wxClientData*) NULL, wxT("invalid combobox") );
+    wxCHECK_MSG( m_widget != NULL, (wxClientData*) NULL, wxT("invalid choice control") );
 
     wxNode *node = m_clientList.Nth( n );
     wxCHECK_MSG( node, (wxClientData *)NULL,
@@ -186,17 +186,12 @@ void wxChoice::Clear()
     GtkWidget *menu = gtk_menu_new();
     gtk_option_menu_set_menu( GTK_OPTION_MENU(m_widget), menu );
 
-    if (m_clientDataItemsType == ClientData_Object)
-    {
-        wxNode *node = m_clientList.First();
-        while (node)
-        {
-            wxClientData *cd = (wxClientData*)node->Data();
-            if (cd) delete cd;
-            node = node->Next();
-        }
-    }
+    if ( m_clientDataItemsType == ClientData_Object )
+        m_clientList.DeleteContents(TRUE);
     m_clientList.Clear();
+
+    if ( m_strings )
+        m_strings->Clear();
 }
 
 void wxChoice::Delete( int WXUNUSED(n) )

@@ -138,6 +138,7 @@ init.cpp	B
 intl.cpp	C	B
 ipcbase.cpp	C
 layout.cpp	C
+lboxcmn.cpp	C
 list.cpp	C	B
 log.cpp	C	B
 memory.cpp	C

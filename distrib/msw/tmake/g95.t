@@ -6,7 +6,6 @@
 #! Created: 14.07.99
 #! Version: $Id$
 #!#############################################################################
-
 #${
     #! include the code which parses filelist.txt file and initializes
     #! %wxCommon, %wxGeneric and %wxMSW hashes.

@@ -15,36 +15,16 @@
 #pragma interface
 #endif
 
-#include "wx/defs.h"
-
-#if wxUSE_LISTBOX
-
-#include "wx/object.h"
 #include "wx/list.h"
-#include "wx/control.h"
-
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class wxListBox;
-class wxArrayInt;
-
-//-----------------------------------------------------------------------------
-// global data
-//-----------------------------------------------------------------------------
-
-extern const char *wxListBoxNameStr;
 
 //-----------------------------------------------------------------------------
 // wxListBox
 //-----------------------------------------------------------------------------
 
-class wxListBox : public wxControl
+class wxListBox : public wxListBoxBase
 {
-DECLARE_DYNAMIC_CLASS(wxListBox)
-
 public:
+    // ctors and such
     wxListBox();
     wxListBox( wxWindow *parent, wxWindowID id,
             const wxPoint& pos = wxDefaultPosition,
@@ -69,49 +49,40 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxListBoxNameStr);
 
-    void Append( const wxString &item );
-    void Append( const wxString &item, void* clientData );
-    void Append( const wxString &item, wxClientData* clientData );
+    // implement base class pure virtuals
+    virtual void Clear();
+    virtual void Delete(int n);
 
-    void InsertItems(int nItems, const wxString items[], int pos);
+    virtual int GetCount() const;
+    virtual wxString GetString(int n) const;
+    virtual void SetString(int n, const wxString& s);
+    virtual int FindString(const wxString& s) const;
 
-    void SetClientData( int n, void* clientData );
-    void* GetClientData( int n );
-    void SetClientObject( int n, wxClientData* clientData );
-    wxClientData* GetClientObject( int n );
+    virtual bool IsSelected(int n) const;
+    virtual void SetSelection(int n, bool select = TRUE);
+    virtual int GetSelection() const;
+    virtual int GetSelections(wxArrayInt& aSelections) const;
 
-    void SetClientObject( wxClientData *data )  { wxControl::SetClientObject( data ); }
-    wxClientData *GetClientObject() const       { return wxControl::GetClientObject(); }
-    void SetClientData( void *data )            { wxControl::SetClientData( data ); }
-    void *GetClientData() const                 { return wxControl::GetClientData(); }
-    
-    void Clear();
-    void Delete( int n );
+    virtual int DoAppend(const wxString& item);
+    virtual void DoInsertItems(const wxArrayString& items, int pos);
+    virtual void DoSetItems(const wxArrayString& items, void **clientData);
 
-    void Deselect( int n );
-    int FindString( const wxString &item ) const;
-    int GetSelection() const;
-    int GetSelections( class wxArrayInt &) const;
-    wxString GetString( int n ) const;
-    wxString GetStringSelection() const;
-    int Number();
-    bool Selected( int n );
-    void Set( int n, const wxString *choices );
-    void SetFirstItem( int n );
-    void SetFirstItem( const wxString &item );
-    void SetSelection( int n, bool select = TRUE );
-    void SetString( int n, const wxString &string );
-    void SetStringSelection( const wxString &string, bool select = TRUE );
+    virtual void DoSetFirstItem(int n);
+
+    virtual void DoSetClientData(int n, void* clientData);
+    virtual void* DoGetClientData(int n) const;
+    virtual void DoSetClientObject(int n, wxClientData* clientData);
+    virtual wxClientData* DoGetClientObject(int n) const;
+
+    // implementation from now on
 
 #if wxUSE_DRAG_AND_DROP
     void SetDropTarget( wxDropTarget *dropTarget );
 #endif
 
-    // implementation
-
     void DisableEvents();
     void EnableEvents();
-    void AppendCommon( const wxString &item );
+    void AppendWithoutSorting( const wxString &item );
     int GetIndex( GtkWidget *item ) const;
     GtkWidget *GetConnectWidget();
     bool IsOwnGtkWindow( GdkWindow *window );
@@ -123,14 +94,18 @@ public:
 #endif // wxUSE_TOOLTIPS
 
     GtkList   *m_list;
-    wxList     m_clientDataList;
-    wxList     m_clientObjectList;
+    wxList     m_clientData;
 
 #if wxUSE_CHECKLISTBOX
     bool       m_hasCheckBoxes;
 #endif // wxUSE_CHECKLISTBOX
-};
 
-#endif
+private:
+    // this array is only used for controls with wxCB_SORT style, so only
+    // allocate it if it's needed (hence using pointer)
+    wxSortedArrayString *m_strings;
+
+    DECLARE_DYNAMIC_CLASS(wxListBox)
+};
 
 #endif // __GTKLISTBOXH__

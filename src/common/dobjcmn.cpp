@@ -97,11 +97,7 @@ wxDataObjectComposite::GetPreferredFormat(Direction WXUNUSED(dir)) const
 {
     wxSimpleDataObjectList::Node *node = m_dataObjects.Item( m_preferred );
 
-#ifdef __WXGTK__
-    wxCHECK_MSG( node, wxDataFormat(wxDF_INVALID), wxT("no preferred format") );
-#else
-    wxCHECK_MSG( node, wxDataFormat((unsigned short) wxDF_INVALID), wxT("no preferred format") );
-#endif
+    wxCHECK_MSG( node, wxFormatInvalid, wxT("no preferred format") );
 
     wxDataObjectSimple* dataObj = node->GetData();
 
