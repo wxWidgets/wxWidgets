@@ -54,7 +54,7 @@ Added Throbber from Cliff Wells to the library and the demo.
 
 Windows installer prompts to uninstall old version first.
 
-Added wxPython.lib.evtmgr by Rob Shecter, which is an easier, more
+Added wxPython.lib.evtmgr by Robb Shecter, which is an easier, more
 "Pythonic" and more OO method of registering handlers for wxWindows
 events using the Publish/Subscribe pattern.
 
@@ -69,6 +69,10 @@ Added wxPython.lib.multisash by Gerrit van Dyk which is a nice
 implementation of allowing the user to split a window any number of
 times either horizontally or vertically, and to close the split off
 windows when desired.
+
+Added helpviewer tool that displays HTML books similarly to how MS
+HTMLHelp viewer does.  Changed how the wxPythonDocs tarball is built
+and added a script to launch the doc viewer.
 
 
 

@@ -26,12 +26,12 @@ import sys, os
 
 #---------------------------------------------------------------------------
 
-def main():
-    if len(sys.argv) < 2:
+def main(args=sys.argv):
+    if len(args) < 2:
         print __doc__
         return
 
-    args = sys.argv[1:]
+    args = args[1:]
     cachedir = None
     if args[0][:7] == '--cache':
         cachedir = os.path.expanduser(args[0].split('=')[1])
