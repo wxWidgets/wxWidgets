@@ -365,7 +365,7 @@ void wxLog::DoLog(wxLogLevel level, const char *szString)
 
 void wxLog::DoLogString(const char *WXUNUSED(szString))
 {
-  wxFAIL_MSG(_("DoLogString must be overrided if it's called."));
+  wxFAIL_MSG("DoLogString must be overriden if it's called.");
 }
 
 void wxLog::Flush()

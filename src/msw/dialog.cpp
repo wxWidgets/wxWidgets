@@ -138,7 +138,7 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
 
     if ( !hwnd )
     {
-        wxLogError(_("Failed to created dialog."));
+        wxLogError(_("Failed to create dialog."));
 
         return FALSE;
     }
