@@ -4,7 +4,7 @@
 
 <!-- ======================================================================
                                        FILES
-         
+
      Files are listed in variables according to this scheme:
      * each group has _SRC and _HDR variable, for sources and headers
        respectively
@@ -17,16 +17,16 @@
 
        BASE_$(platform)              base files used on platform
        BASE_AND_GUI_$(platform)_SRC  base & gui files used on platform
-                               
+
        $(port)LOWLEVEL               low-level GUI classes
        $(port)                       high-level files for a port
-       XWIN_LOWLEVEL                 low-level classes for X Window System 
+       XWIN_LOWLEVEL                 low-level classes for X Window System
                                      ports (wxGTK, wxMotif, wxX11)
 
        HTML                          wxHTML files
-  
+
      * one file may be listed in several groups
-    
+
      ====================================================================== -->
 
 
@@ -48,7 +48,7 @@
     src/unix/utilsunx.cpp
 </set>
 <set var="BASE_UNIX_HDR">
-    wx/unix/gsockunx.h    
+    wx/unix/gsockunx.h
     wx/unix/mimetype.h
 </set>
 
@@ -473,6 +473,125 @@
     wx/generic/timer.h
     wx/generic/wizard.h
     wx/generic/treectlg.h
+
+    <!-- Not sure this is the right list for all of these, but they -->
+    <!-- were missing and this seemed as good of a place as any...  -->
+    wx/accel.h
+    wx/access.h
+    wx/afterstd.h
+    wx/apptrait.h
+    wx/artprov.h
+    wx/beforestd.h
+    wx/bitmap.h
+    wx/busyinfo.h
+    wx/calctrl.h
+    wx/caret.h
+    wx/clipbrd.h
+    wx/cmdproc.h
+    wx/colordlg.h
+    wx/colour.h
+    wx/containr.h
+    wx/cshelp.h
+    wx/dataobj.h
+    wx/dbgrid.h
+    wx/dcbuffer.h
+    wx/dcps.h
+    wx/dialup.h
+    wx/dirctrl.h
+    wx/display.h
+    wx/dnd.h
+    wx/docmdi.h
+    wx/docview.h
+    wx/dragimag.h
+    wx/effects.h
+    wx/evtloop.h
+    wx/fdrepdlg.h
+    wx/fmappriv.h
+    wx/font.h
+    wx/fontdlg.h
+    wx/fontenum.h
+    wx/fontutil.h
+    wx/gdiobj.h
+    wx/geometry.h
+    wx/gifdecod.h
+    wx/glcanvas.h
+    wx/grid.h
+    wx/help.h
+    wx/helpbase.h
+    wx/helpwin.h
+    wx/iconbndl.h
+    wx/iconbndl.h
+    wx/imagbmp.h
+    wx/image.h
+    wx/imaggif.h
+    wx/imagiff.h
+    wx/imagjpeg.h
+    wx/imaglist.h
+    wx/imagpcx.h
+    wx/imagpng.h
+    wx/imagpnm.h
+    wx/imagtiff.h
+    wx/imagxpm.h
+    wx/joystick.h
+    wx/laywin.h
+    wx/listbase.h
+    wx/listbase.h
+    wx/listctrl.h
+    wx/matrix.h
+    wx/menuitem.h
+    wx/metafile.h
+    wx/minifram.h
+    wx/msgout.h
+    wx/notebook.h
+    wx/ownerdrw.h
+    wx/paper.h
+    wx/popupwin.h
+    wx/print.h
+    wx/printdlg.h
+    wx/prntbase.h
+    wx/progdlg.h
+    wx/ptr_scpd.h
+    wx/quantize.h
+    wx/rawbmp.h
+    wx/region.h
+    wx/sashwin.h
+    wx/scopeguard.h
+    wx/spinbutt.h
+    wx/spinctrl.h
+    wx/splash.h
+    wx/splitter.h
+    wx/stack.h
+    wx/statline.h
+    wx/tab.h
+    wx/tabctrl.h
+    wx/taskbar.h
+    wx/tbarbase.h
+    wx/tbarsmpl.h
+    wx/tglbtn.h
+    wx/tipdlg.h
+    wx/tipwin.h
+    wx/tooltip.h
+    wx/toplevel.h
+    wx/treebase.h
+    wx/treectrl.h
+    wx/types.h
+    wx/valgen.h
+    wx/vlbox.h
+    wx/vms_x_fix.h
+    wx/vscroll.h
+    wx/wave.h
+    wx/wizard.h
+    wx/wxhtml.h
+    wx/xpmdecod.h
+    wx/xpmhand.h
+
+    wx/generic/dragimgg.h
+    wx/generic/gridsel.h
+    wx/generic/listctrl.h
+    wx/generic/mdig.h
+    wx/generic/paletteg.h
+    wx/generic/statline.h
+
 </set>
 
 
@@ -1647,7 +1766,7 @@
 <!--                              wxUniversal                               -->
 <!-- ====================================================================== -->
 
-     
+
 <set var="UNIV_THEMES_SRC">
     src/univ/themes/gtk.cpp
     src/univ/themes/win32.cpp
@@ -1843,15 +1962,15 @@
         <if cond="TOOLKIT=='MAC'">$(BASE_MAC_HDR)</if>
         <if cond="TOOLKIT=='COCOA'">$(BASE_DARWIN_HDR)</if>
     </set>
-    
+
     <set var="BASE_SRC">
         $(BASE_CMN_SRC) $(BASE_PLATFORM_SRC)
     </set>
     <set var="BASE_AND_GUI_SRC">
         $(BASE_AND_GUI_CMN_SRC) $(BASE_AND_GUI_PLATFORM_SRC)
     </set>
-    
-    
+
+
     <set var="LOWLEVEL_SRC">
         <if cond="TOOLKIT=='GTK'">$(GTK_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='MOTIF'">$(MOTIF_LOWLEVEL_SRC)</if>
