@@ -13,6 +13,7 @@ wxwindows2.2 (2.2.8) unstable; urgency=low
     removed superfluous library links and generally tweaked things
     so as to make adding new ports easier.
   * added --gl-libs flag to wx-config.
+  * added wx2.4 forward compatible event macros.
 
  -- Ron Lee <ron@debian.org>  Thu, 30 Aug 2001 15:41:49 -0700
 
