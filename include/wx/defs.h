@@ -1370,20 +1370,6 @@ enum wxBorder
 #define wxFRAME_NO_WINDOW_MENU  0x0100
 
 /*
- * wxExtDialog style flags
- */
-#define wxED_CLIENT_MARGIN      0x0004
-#define wxED_BUTTONS_BOTTOM     0x0000  /*  has no effect */
-#define wxED_BUTTONS_RIGHT      0x0002
-#define wxED_STATIC_LINE        0x0001
-
-#if defined(__WXMSW__) || defined(__WXMAC__)
-#   define wxEXT_DIALOG_STYLE  (wxDEFAULT_DIALOG_STYLE|wxED_CLIENT_MARGIN)
-#else
-#   define wxEXT_DIALOG_STYLE  (wxDEFAULT_DIALOG_STYLE|wxED_CLIENT_MARGIN|wxED_STATIC_LINE)
-#endif
-
-/*
  * wxMenuBar style flags
  */
 /*  use native docking */
