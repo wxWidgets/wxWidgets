@@ -189,7 +189,7 @@ void wxClassInfo::InitializeClasses()
     size_t nClass = 0;
 #endif
 
-    wxClassInfo::sm_classTable = new wxHashTable(wxKEY_STRING);
+    sm_classTable = new wxHashTable(wxKEY_STRING);
 
         // Index all class infos by their class name
 
@@ -325,17 +325,17 @@ wxObject::CloneRefData(const wxObjectRefData * WXUNUSED(data)) const
 // misc
 // ----------------------------------------------------------------------------
 
-#if defined(__DARWIN__) && defined(DYLIB_INIT)
+#if defined(__DARWIN__) && defined(WXMAKINGDLL)
 
 extern "C" {
     void __initialize_Cplusplus(void);
     void wxWindowsDylibInit(void);
 };
 
-    // Dynamic shared library (dylib) initialization routine
-    //   required to initialize static C++ objects bacause of lazy dynamic linking
-    //   http://developer.apple.com/techpubs/macosx/Essentials/
-    //          SystemOverview/Frameworks/Dynamic_Shared_Libraries.html
+// Dynamic shared library (dylib) initialization routine
+//   required to initialize static C++ objects bacause of lazy dynamic linking
+//   http://developer.apple.com/techpubs/macosx/Essentials/
+//          SystemOverview/Frameworks/Dynamic_Shared_Libraries.html
 
 void wxWindowsDylibInit()
 {
@@ -343,6 +343,8 @@ void wxWindowsDylibInit()
     // library initialization routine to cause the static C++ objects in
     // the library to be initialized (reference number 2441683).
 
+    // This only seems to be necessary if the library initialization routine
+    // needs to use the static C++ objects
     __initialize_Cplusplus();
 }
 
