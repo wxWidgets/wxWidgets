@@ -33,6 +33,7 @@
 #include "wx/listctrl.h"
 #include "wx/statline.h"
 #include "wx/listbook.h"
+#include "wx/imaglist.h"
 
 // ----------------------------------------------------------------------------
 // constants
