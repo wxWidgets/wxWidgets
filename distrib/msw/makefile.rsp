@@ -62,6 +62,7 @@ samples/wizard/Makefile.in
 samples/dialup/Makefile.in
 samples/font/Makefile.in
 samples/menu/Makefile.in
+samples/memcheck/Makefile.in
 samples/treelay/Makefile.in
 samples/opengl/Makefile.in
 samples/opengl/cube/Makefile.in
@@ -76,10 +77,16 @@ demos/life/Makefile.in
 demos/dbbrowse/Makefile.in
 utils/dialoged/Makefile.in
 utils/dialoged/src/Makefile.in
+utils/makegen/Makefile.in
+utils/HelpGen/Makefile.in
+utils/HelpGen/src/Makefile.in
 utils/Makefile.in
 utils/hhp2cached/Makefile.in
+
 contrib/Makefile.in
 contrib/src/Makefile.in
+contrib/src/applet/Makefile.in
+contrib/src/canvas/Makefile.in
 contrib/src/ogl/Makefile.in
 contrib/src/mmedia/Makefile.in
 contrib/src/stc/Makefile.in
@@ -91,12 +98,20 @@ contrib/samples/canvas/test/Makefile.in
 contrib/samples/canvas/simple/Makefile.in
 contrib/samples/canvas/Makefile.in
 contrib/samples/gizmos/Makefile.in
+contrib/samples/gizmos/multicell/Makefile.in
+contrib/samples/gizmos/splittree/Makefile.in
 contrib/samples/ogl/Makefile.in
 contrib/samples/ogl/ogledit/Makefile.in
 contrib/samples/ogl/studio/Makefile.in
 contrib/samples/mmedia/Makefile.in
 contrib/samples/plot/Makefile.in
 contrib/samples/stc/Makefile.in
+contrib/samples/applet/Makefile.in
+
+contrib/utils/Makefile.in
+contrib/utils/convertrc/Makefile.in
+contrib/utils/wxrc/Makefile.in
+contrib/utils/wxrcedit/Makefile.in
 
 descrip.mms
 lib/vms.opt
