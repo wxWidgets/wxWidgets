@@ -769,6 +769,7 @@ WX_ARG_ENABLE(gtk2,        [  --enable-gtk2           use GTK+ 2.0 if available 
 WX_ARG_SYS_WITH(libpng,    [  --with-libpng           use libpng (PNG image format)], wxUSE_LIBPNG)
 WX_ARG_SYS_WITH(libjpeg,   [  --with-libjpeg          use libjpeg (JPEG file format)], wxUSE_LIBJPEG)
 WX_ARG_SYS_WITH(libtiff,   [  --with-libtiff          use libtiff (TIFF file format)], wxUSE_LIBTIFF)
+WX_ARG_SYS_WITH(libxpm,    [  --with-libxpm           use libxpm (XPM file format)], wxUSE_LIBXPM)
 WX_ARG_WITH(libmspack,     [  --with-libmspack        use libmspack (CHM help files loading)], wxUSE_LIBMSPACK)
 WX_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)], wxUSE_OPENGL)
 
@@ -1213,7 +1214,7 @@ if test "$wxUSE_GUI" = "yes"; then
           echo "$var=$value" >> ${wx_arg_cache_file}
         fi
         if test "$value" = 1; then
-          toolkit_echo=`echo $toolkit | tr [[A-Z]] [[a-z]]`
+          toolkit_echo=`echo $toolkit | tr "[A-Z]" "[a-z]"`
           AC_MSG_RESULT($toolkit_echo)
         fi
       fi
@@ -2522,44 +2523,6 @@ equivalent variable and GTK+ is version 1.2.3 or above.
             fi
         fi
 
-        xpm_link=
-        AC_MSG_CHECKING(for Xpm library)
-        WX_PATH_FIND_LIBRARIES($SEARCH_LIB,Xpm)
-        if test "$ac_find_libraries" != "" ; then
-            WX_LINK_PATH_EXIST($ac_find_libraries,$GUI_TK_LIBRARY)
-            GUI_TK_LIBRARY="$GUI_TK_LIBRARY$ac_path_to_link"
-            xpm_link=" -lXpm"
-            AC_DEFINE(wxHAVE_LIB_XPM)
-            AC_MSG_RESULT(found at $ac_find_libraries)
-        else
-            AC_TRY_COMPILE(
-                [
-                    #include <X11/xpm.h>
-                ],
-                [
-                    int version;
-                    version = XpmLibraryVersion();
-                ],
-                [
-                    xpm_link=" -lXpm"
-                    AC_DEFINE(wxHAVE_LIB_XPM)
-                    AC_MSG_RESULT(found in default search path)
-                    COMPILED_X_PROGRAM=0
-                ],
-                [
-                    AC_MSG_RESULT(no)
-                    AC_MSG_WARN(library will be compiled without support for images in XPM format)
-                ]
-            )
-        fi
-
-        AC_CHECK_LIB([Xext], [XShapeQueryExtension],
-                     [
-                      GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXext"
-                      wxHAVE_XEXT_LIB=1
-                     ],
-                     [], [$GUI_TK_LIBRARY -lX11])
-
         if test "$wxUSE_UNICODE" = "yes"; then
                 PKG_CHECK_MODULES(PANGOX, pangox,
                     [
@@ -2685,43 +2648,6 @@ equivalent variable and GTK+ is version 1.2.3 or above.
             fi
         fi
 
-        xpm_link=
-        AC_MSG_CHECKING(for Xpm library)
-        WX_PATH_FIND_LIBRARIES($SEARCH_LIB,Xpm)
-        if test "$ac_find_libraries" != "" ; then
-            WX_LINK_PATH_EXIST($ac_find_libraries,$GUI_TK_LIBRARY)
-            GUI_TK_LIBRARY="$GUI_TK_LIBRARY$ac_path_to_link"
-
-            xpm_link=" -lXpm"
-            AC_DEFINE(wxHAVE_LIB_XPM)
-            AC_MSG_RESULT(found at $ac_find_libraries)
-        else
-            save_CFLAGS=$CFLAGS
-            CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
-
-            AC_TRY_COMPILE(
-                [
-                    #include <X11/xpm.h>
-                ],
-                [
-                    int version;
-                    version = XpmLibraryVersion();
-                ],
-                [
-                    xpm_link=" -lXpm"
-                    AC_DEFINE(wxHAVE_LIB_XPM)
-                    AC_MSG_RESULT(found in default search path)
-                    COMPILED_X_PROGRAM=0
-                ],
-                [
-                    AC_MSG_RESULT(no)
-                    AC_MSG_WARN(library will be compiled without support for images in XPM format)
-                ]
-            )
-
-            CFLAGS=$save_CFLAGS
-        fi
-
         AC_MSG_CHECKING([if we need -lXp and/or -lSM -lICE])
         libp_link=""
         libsm_ice_link=""
@@ -2792,32 +2718,78 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         TOOLKIT_VPATH="\${top_srcdir}/src/motif${PATH_IFS}\${top_srcdir}/src/motif/xmcombo${PATH_IFS}\${top_srcdir}/src/x11"
         TOOLKIT=MOTIF
         GUIDIST=MOTIF_DIST
-        wxHAVE_XEXT_LIB=1
     fi
 
-    if test "$wxUSE_X11" = 1 -o "$wxUSE_MOTIF" = 1 &&
-       test "$wxHAVE_XEXT_LIB" = 1; then
-        save_CFLAGS="$CFLAGS"
-        CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
+    if test "$wxUSE_X11" = 1 -o "$wxUSE_MOTIF" = 1; then
+        dnl test for external libxpm if we're configured to use it
+        if test "$wxUSE_LIBXPM" = "sys"; then
+            AC_MSG_CHECKING(for Xpm library)
+            WX_PATH_FIND_LIBRARIES($SEARCH_LIB,Xpm)
+            if test "$ac_find_libraries" != "" ; then
+                WX_LINK_PATH_EXIST($ac_find_libraries,$GUI_TK_LIBRARY)
+                GUI_TK_LIBRARY="$GUI_TK_LIBRARY$ac_path_to_link"
+                AC_MSG_RESULT(found at $ac_find_libraries)
 
-        AC_MSG_CHECKING([for X11/extensions/shape.h])
-        AC_TRY_COMPILE([
-                        #include <X11/Xlib.h> 
-                        #include <X11/extensions/shape.h>
-                       ],
-                       [
-                        int dummy1, dummy2;
-                        XShapeQueryExtension((Display*)NULL,
-                                             (int*)NULL, (int*)NULL);
-                       ],
-                       [
-                        AC_DEFINE(HAVE_XSHAPE)
-                        AC_MSG_RESULT([found])
-                       ],
-                       [
-                        AC_MSG_RESULT([not found])
-                       ])
-        CFLAGS="$save_CFLAGS"
+                save_CFLAGS=$CFLAGS
+                CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
+
+                AC_TRY_COMPILE(
+                    [
+                        #include <X11/xpm.h>
+                    ],
+                    [
+                        int version;
+                        version = XpmLibraryVersion();
+                    ],
+                    [
+                        xpm_link=" -lXpm"
+                        AC_DEFINE(wxHAVE_LIB_XPM)
+                        AC_MSG_RESULT(found in default search path)
+                        COMPILED_X_PROGRAM=0
+                    ],
+                    [
+                        AC_MSG_RESULT(no)
+                        AC_MSG_WARN(built-in less efficient XPM decoder will be used)
+                    ]
+                )
+
+                CFLAGS=$save_CFLAGS
+            fi
+
+        fi
+
+        dnl XShapeQueryExtension checks: first the library, then prototype
+        AC_CHECK_LIB([Xext], [XShapeQueryExtension],
+                     [
+                      GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXext"
+                      wxHAVE_XEXT_LIB=1
+                     ],
+                     [], [$GUI_TK_LIBRARY -lX11])
+
+        if test "$wxHAVE_XEXT_LIB" = 1; then
+            save_CFLAGS="$CFLAGS"
+            CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
+
+            AC_MSG_CHECKING([for X11/extensions/shape.h])
+            AC_TRY_COMPILE([
+                            #include <X11/Xlib.h> 
+                            #include <X11/extensions/shape.h>
+                           ],
+                           [
+                            int dummy1, dummy2;
+                            XShapeQueryExtension((Display*)NULL,
+                                                 (int*)NULL, (int*)NULL);
+                           ],
+                           [
+                            AC_DEFINE(HAVE_XSHAPE)
+                            AC_MSG_RESULT([found])
+                           ],
+                           [
+                            AC_MSG_RESULT([not found])
+                           ])
+            CFLAGS="$save_CFLAGS"
+
+        fi
     fi
 
     if test "$wxUSE_MAC" = 1; then
@@ -2858,7 +2830,7 @@ equivalent variable and GTK+ is version 1.2.3 or above.
     if test "$TOOLKIT" = "PM" ; then
         TOOLKIT_DIR="os2"
     else
-        TOOLKIT_DIR=`echo ${TOOLKIT} | tr "[[A-Z]]" "[[a-z]]"`
+        TOOLKIT_DIR=`echo ${TOOLKIT} | tr "[A-Z]" "[a-z]"`
     fi
 
     dnl misc other files depending on the port
@@ -3110,7 +3082,7 @@ if test "$wxUSE_DEBUG_INFO" = "yes"; then
     DEBUG_INFO=1
 fi
 
-WX_VERSION_TAG=`echo WX${lib_unicode_suffix}${lib_debug_suffix}_${WX_RELEASE} | tr "[[a-z]]" "[[A-Z]]"`
+WX_VERSION_TAG=`echo WX${lib_unicode_suffix}${lib_debug_suffix}_${WX_RELEASE} | tr "[a-z]" "[A-Z]"`
 
 TOOLCHAIN_NAME="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}-${WX_RELEASE}"
 TOOLCHAIN_NAME_GL="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}_gl-${WX_RELEASE}"
@@ -5779,7 +5751,7 @@ AC_SUBST(BUILD)
 AC_SUBST(DEBUG_INFO)
 AC_SUBST(DEBUG_FLAG)
 AC_SUBST(SHARED)
-TOOLKIT_LOWERCASE=`echo $TOOLKIT | tr [[A-Z]] [[a-z]]`
+TOOLKIT_LOWERCASE=`echo $TOOLKIT | tr "[A-Z]" "[a-z]"`
 AC_SUBST(TOOLKIT_LOWERCASE)
 AC_SUBST(TOOLKIT_VERSION)
 AC_SUBST(SAMPLES_RPATH_FLAG)
