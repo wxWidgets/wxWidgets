@@ -578,7 +578,8 @@ void ScintillaWX::DoCommand(int ID) {
 
 
 void ScintillaWX::DoContextMenu(Point pt) {
-    ContextMenu(pt);
+    if (displayPopupMenu)
+        ContextMenu(pt);
 }
 
 void ScintillaWX::DoOnListBox() {
