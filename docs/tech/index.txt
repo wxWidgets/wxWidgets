@@ -1,5 +1,6 @@
 TN0001   How to add a new sample
 TN0002   wxWindows translator guide
 TN0003   Adding wxWindows class documentation
+TN0004   Compiling a sample in the C++Builder 1.0 IDE
 
 Version: $Id$
