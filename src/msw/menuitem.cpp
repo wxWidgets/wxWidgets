@@ -177,7 +177,7 @@ void wxMenuItem::Init()
     if ( GetId() != wxID_SEPARATOR )
         SetMarginWidth(GetMarginWidth());
 
-    // tell the owner drawing code to to show the accel string as well
+    // tell the owner drawing code to show the accel string as well
     SetAccelString(m_text.AfterFirst(_T('\t')));
 #endif // wxUSE_OWNER_DRAWN
 }
