@@ -22,5 +22,9 @@
 #define sm_classwxColourDialog sm_classwxGenericColourDialog
 #endif
 
+// get the colour from user and return it
+wxColour WXDLLEXPORT wxGetColourFromUser(wxWindow *parent = (wxWindow *)NULL,
+                                         const wxColour& colInit = wxNullColour);
+
 #endif
     // _WX_COLORDLG_H_BASE_

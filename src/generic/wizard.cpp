@@ -185,7 +185,7 @@ wxWizard::wxWizard(wxWindow *parent,
 
     if ( pos == wxDefaultPosition )
     {
-        Centre();
+        CentreOnScreen();
     }
 }
 

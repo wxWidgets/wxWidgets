@@ -59,6 +59,10 @@
     #endif
 #endif
 
+#if wxUSE_GUI
+    #include "wx/colordlg.h"
+#endif // wxUSE_GUI
+
 #include <time.h>
 
 #ifndef __MWERKS__
@@ -907,6 +911,30 @@ wxString wxGetPasswordFromUser(const wxString& message,
 }
 
 #endif // wxUSE_TEXTDLG
+
+wxColour wxGetColourFromUser(wxWindow *parent, const wxColour& colInit)
+{
+      wxColourData data;
+      data.SetChooseFull(TRUE);
+      if ( colInit.Ok() )
+      {
+          data.SetColour((wxColour &)colInit); // const_cast
+      }
+
+      wxColour colRet;
+      wxColourDialog dialog(parent, &data);
+      if ( dialog.ShowModal() == wxID_OK )
+      {
+          colRet = dialog.GetColourData().GetColour();
+      }
+      //else: leave it invalid
+
+      return colRet;
+}
+
+// ----------------------------------------------------------------------------
+// missing C RTL functions (FIXME shouldn't be here at all)
+// ----------------------------------------------------------------------------
 
 #ifdef __MWERKS__
 char *strdup(const char *s)

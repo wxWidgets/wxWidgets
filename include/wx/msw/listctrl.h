@@ -111,8 +111,8 @@ public:
     // Attributes
     ////////////////////////////////////////////////////////////////////////////
 
-    // Sets the background colour (GetBackgroundColour already implicit in
-    // wxWindow class)
+    // Set the control colours
+    bool SetForegroundColour(const wxColour& col);
     bool SetBackgroundColour(const wxColour& col);
 
     // Gets information about this column
@@ -331,8 +331,8 @@ protected:
     // common part of all ctors
     void Init();
 
-    // free memory taken by all attributes
-    void FreeAllAttrs();
+    // free memory taken by all attributes and recreate the hash table
+    void FreeAllAttrs(bool dontRecreate = FALSE);
 
     wxTextCtrl*       m_textCtrl;        // The control used for editing a label
     wxImageList *     m_imageListNormal; // The image list for normal icons

@@ -657,7 +657,56 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
     int width = bmp.GetWidth(),
         height = bmp.GetHeight();
 
-    if ( !useMask )
+    HBITMAP hbmpMask = 0;
+
+    if ( useMask )
+    {
+        wxMask *mask = bmp.GetMask();
+        if ( mask )
+            hbmpMask = (HBITMAP)mask->GetMaskBitmap();
+
+        if ( !hbmpMask )
+        {
+            // don't give assert here because this would break existing
+            // programs - just silently ignore useMask parameter
+            useMask = FALSE;
+        }
+    }
+
+    if ( useMask )
+    {
+#ifdef __WIN32__
+        HDC hdcMem = ::CreateCompatibleDC(GetHdc());
+        ::SelectObject(hdcMem, GetHbitmapOf(bmp));
+
+        // this will only work if the transparent part of our bitmap is black
+        // because it is combined with the destination rectangle using OR, so
+        // it won't be really transparent otherwise - I don't know what to do
+        // about it, may be use MAKEROP4(SRCCOPY, DSTINVERT) twice? Or create a
+        // copy of the bitmap with the transparent part replaced with black
+        // pixels?
+        bool ok = ::MaskBlt(GetHdc(), x, y, width, height,
+                            hdcMem, 0, 0,
+                            hbmpMask, 0, 0,
+                            MAKEROP4(SRCCOPY, SRCPAINT)) != 0;
+        ::DeleteDC(hdcMem);
+
+        if ( !ok )
+#endif // Win32
+        {
+            // VZ: this is incorrect, Blit() doesn't (and can't) draw
+            //     transparently, but it's still better than nothing at all
+
+            // Rather than reproduce wxDC::Blit, let's do it at the wxWin API level
+            wxMemoryDC memDC;
+            memDC.SelectObject(bmp);
+
+            Blit(x, y, width, height, &memDC, 0, 0, wxCOPY, useMask);
+
+            memDC.SelectObject(wxNullBitmap);
+        }
+    }
+    else // no mask, just use BitBlt()
     {
         HDC cdc = GetHdc();
         HDC memdc = ::CreateCompatibleDC( cdc );
@@ -682,16 +731,6 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
 
         ::SetTextColor(GetHdc(), old_textground);
         ::SetBkColor(GetHdc(), old_background);
-    }
-    else
-    {
-        // Rather than reproduce wxDC::Blit, let's do it at the wxWin API level
-        wxMemoryDC memDC;
-        memDC.SelectObject(bmp);
-
-        Blit(x, y, width, height, &memDC, 0, 0, wxCOPY, useMask);
-
-        memDC.SelectObject(wxNullBitmap);
     }
 }
 
@@ -1304,21 +1343,40 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
     if (useMask)
     {
 #ifdef __WIN32__
+        // prepare the mask bitmap
         HBITMAP hbmpMask = wxInvertMask((HBITMAP)mask->GetMaskBitmap());
+
+        // select the correct brush: the current one by default, background one
+        // if none
+        HBRUSH hbrNew;
+        if ( m_brush.Ok() )
+        {
+            hbrNew = (HBRUSH)m_brush.GetResourceHandle();
+        }
+        else if ( m_backgroundBrush.Ok() )
+        {
+            hbrNew = (HBRUSH)m_backgroundBrush.GetResourceHandle();
+        }
+        else
+        {
+            hbrNew = 0;
+        }
+
+        HGDIOBJ hbrOld = hbrNew ? ::SelectObject(GetHdc(), hbrNew) : 0;
 
         // we want the part of the image corresponding to the mask to be
         // transparent, i.e. do PATCOPY there and apply dwRop elsewhere
-        const wxColour& colBg = m_backgroundBrush.GetColour();
-        HBRUSH hbrBg = (HBRUSH)::CreateSolidBrush(wxColourToRGB(colBg));
-        HBRUSH hbrOld = (HBRUSH)::SelectObject(GetHdc(), hbrBg);
 
         success = ::MaskBlt(GetHdc(), xdest, ydest, width, height,
                             GetHdcOf(*source), xsrc, ysrc,
                             hbmpMask, 0, 0,
                             MAKEROP4(PATCOPY, dwRop)) != 0;
 
-        (void)::SelectObject(GetHdc(), hbrOld);
-        ::DeleteObject(hbrOld);
+        if ( hbrNew )
+        {
+            (void)::SelectObject(GetHdc(), hbrOld);
+        }
+
         ::DeleteObject(hbmpMask);
 
         if ( !success )

@@ -239,7 +239,7 @@ void wxListCtrl::UpdateStyle()
     }
 }
 
-void wxListCtrl::FreeAllAttrs()
+void wxListCtrl::FreeAllAttrs(bool dontRecreate)
 {
     if ( m_hasAnyAttr )
     {
@@ -249,6 +249,10 @@ void wxListCtrl::FreeAllAttrs()
         }
 
         m_attrs.Destroy();
+        if ( !dontRecreate )
+        {
+            m_attrs.Create(wxKEY_INTEGER, 1000);        // just as def ctor
+        }
 
         m_hasAnyAttr = FALSE;
     }
@@ -256,6 +260,8 @@ void wxListCtrl::FreeAllAttrs()
 
 wxListCtrl::~wxListCtrl()
 {
+    FreeAllAttrs(TRUE /* no need to recreate hash any more */);
+
     if ( m_textCtrl )
     {
         m_textCtrl->UnsubclassWin();
@@ -416,14 +422,28 @@ long wxListCtrl::ConvertToMSWStyle(long& oldStyle, long style) const
 // accessors
 // ----------------------------------------------------------------------------
 
-// Sets the background colour (GetBackgroundColour already implicit in
-// wxWindow class)
+// Sets the foreground, i.e. text, colour
+bool wxListCtrl::SetForegroundColour(const wxColour& col)
+{
+    if ( !wxWindow::SetForegroundColour(col) )
+        return FALSE;
+
+    ListView_SetTextColor(GetHwnd(), wxColourToRGB(col));
+
+    return TRUE;
+}
+
+// Sets the background colour
 bool wxListCtrl::SetBackgroundColour(const wxColour& col)
 {
     if ( !wxWindow::SetBackgroundColour(col) )
         return FALSE;
 
-    ListView_SetBkColor(GetHwnd(), PALETTERGB(col.Red(), col.Green(), col.Blue()));
+    // we set the same colour for both the "empty" background and the items
+    // background
+    COLORREF color = wxColourToRGB(col);
+    ListView_SetBkColor(GetHwnd(), color);
+    ListView_SetTextBkColor(GetHwnd(), color);
 
     return TRUE;
 }
