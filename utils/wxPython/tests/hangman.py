@@ -18,52 +18,64 @@ class WordFetcher:
 	return self.words[int(random.random()*len(self.words))]
     builtin_words = [ 'albatros', 'banana', 'electrometer', 'eggshell' ]
 
-class MyFrame(wxFrame):
-    def __init__(self, wf):
-	self.wf = wf
-	wxFrame.__init__(self, NULL, -1, "test threads", wxDefaultPosition, wxSize(300,200))
-	self.panel = wxPanel(self, -1)
-	self.panel.SetBackgroundColour(wxNamedColour('white'))
-	self.panel.SetFocus()
-	menu = wxMenu()
-	menu.Append(1001, "New")
-	menu.Append(1002, "End")
-	menu.AppendSeparator()
-	menu.Append(1003, "Exit")
-	self.cnt = 0;
-	menubar = wxMenuBar()
-	menubar.Append(menu, "Game")
-	self.SetMenuBar(menubar)
-	self.CreateStatusBar(2)
-	EVT_MENU(self, 1001, self.OnGameNew)
-	EVT_MENU(self, 1002, self.OnGameEnd)
-	EVT_MENU(self, 1003, self.OnWindowClose)
-	EVT_CHAR(self.panel, self.OnChar)
-	self.played = 0
-	self.won = 0
-	self.history = []
-	self.average = 0.0
-	self.OnGameNew(None)
+class HangmanWnd(wxWindow):
+    def __init__(self, parent, id):
+	wxWindow.__init__(self, parent, id)
+	self.SetBackgroundColour(wxNamedColour('white'))
+	self.SetFocus()
+	self.frame = parent # ugly
+    def StartGame(self, word):
+	self.word = word
+	self.guess = []
+	self.tries = 0
+	self.misses = 0
+	self.Draw()
+    def EndGame(self):
+	self.misses = 7;
+	self.guess = map(chr, range(ord('a'),ord('z')+1))
+	self.Draw()
+    def HandleKey(self, key):
+	if self.guess.count(key):
+	    self.frame.SetStatusText('Already guessed %s' % (key,),0)
+	    return 0
+	self.guess.append(key)
+	self.guess.sort()
+	self.tries = self.tries+1
+	if not key in self.word:
+	    self.misses = self.misses+1
+	if self.misses == 7:
+	    self.EndGame()
+	    return 1
+	has_won = 1
+	for letter in self.word:
+	    if not self.guess.count(letter):
+		has_won = 0
+		break
+	if has_won:
+	    self.Draw()
+	    return 2
+	self.Draw()
+	return 0
     def Draw(self, dc = None):
 	if not dc:
-	    dc = wxClientDC(self.panel)
+	    dc = wxClientDC(self)
 	dc.Clear()
-	(x,y) = self.panel.GetSizeTuple()
-	x1 = x-150; y1 = 20
+	(x,y) = self.GetSizeTuple()
+	x1 = x-200; y1 = 20
 	for letter in self.word:
 	    if self.guess.count(letter):
 		dc.DrawText(letter, x1, y1)
 	    else:
 		dc.DrawText('.', x1, y1)
 	    x1 = x1 + 10
-	x1 = x-150
-	dc.DrawText("played: %d" % (self.played,), x1, 50)
-	if self.played:
-	    percent = (100.*self.won)/self.played
-	else:
-	    percent = 0.0
-	dc.DrawText("won: %d (%g %%)" % (self.won, percent), x1, 70)
-	dc.DrawText("average: %g" % (self.average,), x1, 90)
+	x1 = x-200
+	dc.DrawText("tries %d misses %d" % (self.tries,self.misses),x1,50)
+	guesses = ""
+	for letter in self.guess: 
+	    guesses = guesses + letter
+	dc.DrawText("guessed:", x1, 70)
+	dc.DrawText(guesses[:13], x1+70, 70)
+	dc.DrawText(guesses[13:], x1+70, 90)
 	dc.SetUserScale(x/1000., y/1000.)
 	self.DrawVictim(dc)
     def DrawVictim(self, dc):
@@ -88,26 +100,59 @@ class MyFrame(wxFrame):
 	if ( self.misses == 6) : return
 	dc.DrawLine(300,600,250,850)
     def OnPaint(self, event):
-	dc = wxPaintDC(self.panel)
+	dc = wxPaintDC(self)
 	self.Draw(dc)
+	
+class MyFrame(wxFrame):
+    def __init__(self, wf):
+	self.wf = wf
+	wxFrame.__init__(self, NULL, -1, "hangman", wxDefaultPosition, wxSize(400,300))
+	self.wnd = HangmanWnd(self, -1)
+	menu = wxMenu()
+	menu.Append(1001, "New")
+	menu.Append(1002, "End")
+	menu.AppendSeparator()
+	menu.Append(1003, "Reset")
+	menu.AppendSeparator()
+	menu.Append(1004, "Exit")
+	menubar = wxMenuBar()
+	menubar.Append(menu, "Game")
+	menu = wxMenu()
+	menu.Append(1010, "Internal", "Use internal dictionary", TRUE)
+	menu.Append(1011, "ASCII File...")
+	menubar.Append(menu, "Dictionary")
+	self.SetMenuBar(menubar)
+	self.CreateStatusBar(2)
+	EVT_MENU(self, 1001, self.OnGameNew)
+	EVT_MENU(self, 1002, self.OnGameEnd)
+	EVT_MENU(self, 1003, self.OnGameReset)
+	EVT_MENU(self, 1004, self.OnWindowClose)
+	EVT_MENU(self, 1011, self.OnDictFile)
+	EVT_CHAR(self.wnd, self.OnChar)
+	self.OnGameReset()
     def OnGameNew(self, event):
-	self.word = self.wf.Get()
-	self.guess = []
-	self.tries = 0
-	self.misses = 0
+	word = self.wf.Get()
 	self.in_progress = 1
-	self.Draw()
+	self.SetStatusText("",0)
+	self.wnd.StartGame(word)
     def OnGameEnd(self, event):
 	self.UpdateAverages(0)
-	self.misses = 7;
-	self.guess = map(chr, range(ord('a'),ord('z')+1))
 	self.in_progress = 0
-	self.Draw()
+	self.SetStatusText("",0)
+	self.wnd.EndGame()
+    def OnGameReset(self, event=None):
+	self.played = 0
+	self.won = 0
+	self.history = []
+	self.average = 0.0
+	self.OnGameNew(None)
+    def OnDictFile(self, event):
+	pass
     def UpdateAverages(self, has_won):
 	if has_won:
 	    self.won = self.won + 1
 	self.played = self.played+1
-	self.history.append(self.misses)
+	self.history.append(self.wnd.misses) # ugly
 	total = 0.0
 	for m in self.history:
 	    total = total + m
@@ -121,38 +166,23 @@ class MyFrame(wxFrame):
 	    key = key + ord('a') - ord('A')
 	key = chr(key)
 	if key < 'a' or key > 'z':
+	    event.Skip()
 	    return
-	if self.guess.count(key):
-	    self.SetStatusText('Already guessed %s' % (key,),0)
-	    return
-	self.guess.append(key)
-	self.guess.sort()
-	guesses = ""
-	for letter in self.guess: 
-	    guesses = guesses + letter
-	self.tries = self.tries+1
-	if not key in self.word:
-	    self.misses = self.misses+1
-	if self.misses == 7:
+	res = self.wnd.HandleKey(key)
+	if res == 1:
+	    self.UpdateAverages(0)
 	    self.SetStatusText("Too bad, you're dead!",0)
-	    self.SetStatusText("Press a key to restart",1)
-	    self.OnGameEnd(None)
-	    return
-	has_won = 1
-	for letter in self.word:
-	    if not self.guess.count(letter):
-		has_won = 0
-		break
-	if has_won:    
 	    self.in_progress = 0
-	    self.UpdateAverages(has_won)
+        elif res == 2:
+	    self.in_progress = 0
+	    self.UpdateAverages(1)
 	    self.SetStatusText("Congratulations!",0)
-	    self.SetStatusText("Press a key to restart",1)
-	    self.Draw()
-	    return
-	self.SetStatusText(guesses,1)
-	self.SetStatusText("tries %d misses %d" % (self.tries,self.misses),0)
-	self.Draw()
+	if self.played:
+	    percent = (100.*self.won)/self.played
+	else:
+	    percent = 0.0
+	self.SetStatusText("p %d, w %d (%g %%), av %g" % (self.played,self.won, percent, self.average),1)
+
     def OnWindowClose(self, event):
 	self.Destroy()
 	
