@@ -355,7 +355,7 @@ void ButtonWidgetsPage::OnButtonReset(wxCommandEvent& WXUNUSED(event))
     CreateButton();
 }
 
-void ButtonWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& event)
+void ButtonWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))
 {
     CreateButton();
 }
@@ -365,7 +365,7 @@ void ButtonWidgetsPage::OnButtonChangeLabel(wxCommandEvent& WXUNUSED(event))
     m_button->SetLabel(m_textLabel->GetValue());
 }
 
-void ButtonWidgetsPage::OnButton(wxCommandEvent& event)
+void ButtonWidgetsPage::OnButton(wxCommandEvent& WXUNUSED(event))
 {
     wxLogMessage(_T("Test button clicked."));
 }

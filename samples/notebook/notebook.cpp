@@ -229,7 +229,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size,
         );
 
     m_panel = new wxPanel(this, -1, wxDefaultPosition, wxDefaultSize,
-        wxTAB_TRAVERSAL | wxCLIP_CHILDREN | wxNO_BORDER);
+        wxTAB_TRAVERSAL | wxCLIP_CHILDREN | wxNO_BORDER | wxNO_FULL_REPAINT_ON_RESIZE);
 
     // Create remaining controls
 
@@ -368,7 +368,7 @@ void MyFrame::ReInitNotebook()
 
     m_notebook = new MyNotebook(m_panel, ID_NOTEBOOK,
                                 wxDefaultPosition, wxDefaultSize,
-                                flags);
+                                flags|wxCLIP_CHILDREN|wxNO_FULL_REPAINT_ON_RESIZE);
 
     if ( m_chkShowImages->IsChecked() )
     {
@@ -429,7 +429,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_IDLE(MyFrame::OnIdle)
 END_EVENT_TABLE()
 
-void MyFrame::OnCheckOrRadioBox(wxCommandEvent& event)
+void MyFrame::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))
 {
         ReInitNotebook();
 }

@@ -735,7 +735,7 @@ void TextWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)
                   (m_chkWrapLines->GetValue() != DEFAULTS.wraplines) );
 }
 
-void TextWidgetsPage::OnText(wxCommandEvent& event)
+void TextWidgetsPage::OnText(wxCommandEvent& WXUNUSED(event))
 {
     // small hack to suppress the very first message: by then the logging is
     // not yet redirected and so initial setting of the text value results in
@@ -755,7 +755,7 @@ void TextWidgetsPage::OnTextEnter(wxCommandEvent& event)
     wxLogMessage(_T("Text entered: '%s'"), event.GetString().c_str());
 }
 
-void TextWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& event)
+void TextWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))
 {
     CreateText();
 }

@@ -422,12 +422,12 @@ void ListboxWidgetsPage::OnButtonDeleteSel(wxCommandEvent& WXUNUSED(event))
     }
 }
 
-void ListboxWidgetsPage::OnButtonClear(wxCommandEvent& event)
+void ListboxWidgetsPage::OnButtonClear(wxCommandEvent& WXUNUSED(event))
 {
     m_lbox->Clear();
 }
 
-void ListboxWidgetsPage::OnButtonAdd(wxCommandEvent& event)
+void ListboxWidgetsPage::OnButtonAdd(wxCommandEvent& WXUNUSED(event))
 {
     static unsigned int s_item = 0;
 
@@ -450,7 +450,7 @@ void ListboxWidgetsPage::OnButtonAddMany(wxCommandEvent& WXUNUSED(event))
     }
 }
 
-void ListboxWidgetsPage::OnButtonAddSeveral(wxCommandEvent& event)
+void ListboxWidgetsPage::OnButtonAddSeveral(wxCommandEvent& WXUNUSED(event))
 {
     wxArrayString items;
     items.Add(_T("First"));
@@ -508,7 +508,7 @@ void ListboxWidgetsPage::OnCheckListbox(wxCommandEvent& event)
     wxLogMessage( _T("Listbox item %ld toggled"), event.GetInt() );
 }
 
-void ListboxWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& event)
+void ListboxWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))
 {
     CreateLbox();
 }

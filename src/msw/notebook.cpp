@@ -485,11 +485,21 @@ bool wxNotebook::InsertPage(int nPage,
                     _T("notebook pages must have notebook as parent") );
 
 #if wxUSE_UXTHEME && wxUSE_UXTHEME_AUTO
+    static bool g_TestedForTheme = FALSE;
+    static bool g_UseTheme = FALSE;
+    if (!g_TestedForTheme)
+    {
+        int commCtrlVersion = wxTheApp->GetComCtl32Version() ;
+        
+        g_UseTheme = (commCtrlVersion >= 600);
+        g_TestedForTheme = TRUE;
+    }
+    
     // Automatically apply the theme background,
     // changing the colour of the panel to match the
     // tab page colour. This won't work well with all
     // themes but it's a start.
-    if (wxUxThemeEngine::Get() && pPage->IsKindOf(CLASSINFO(wxPanel)))
+    if (g_UseTheme && wxUxThemeEngine::Get() && pPage->IsKindOf(CLASSINFO(wxPanel)))
     {
         ApplyThemeBackground(pPage, GetThemeBackgroundColour());
     }
@@ -847,5 +857,32 @@ void wxNotebook::ApplyThemeBackground(wxWindow* window, const wxColour& colour)
     colour;
 #endif
 }
+
+long wxNotebook::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+{
+    static bool g_TestedForTheme = FALSE;
+    static bool g_UseTheme = FALSE;
+    switch ( nMsg )
+    {
+        case WM_ERASEBKGND:
+        {
+            if (!g_TestedForTheme)
+            {
+                int commCtrlVersion = wxTheApp->GetComCtl32Version() ;
+
+                g_UseTheme = (commCtrlVersion >= 600);
+                g_TestedForTheme = TRUE;
+            }
+
+            // If using XP themes, it seems we can get away
+            // with not drawing a background, which reduces flicker.
+            if (g_UseTheme)            
+                return TRUE;
+        }
+    }
+
+    return wxControl::MSWWindowProc(nMsg, wParam, lParam);
+}
+
 
 #endif // wxUSE_NOTEBOOK

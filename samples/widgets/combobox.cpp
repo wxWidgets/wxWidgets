@@ -420,12 +420,12 @@ void ComboboxWidgetsPage::OnButtonDeleteSel(wxCommandEvent& WXUNUSED(event))
     }
 }
 
-void ComboboxWidgetsPage::OnButtonClear(wxCommandEvent& event)
+void ComboboxWidgetsPage::OnButtonClear(wxCommandEvent& WXUNUSED(event))
 {
     m_combobox->Clear();
 }
 
-void ComboboxWidgetsPage::OnButtonInsert(wxCommandEvent& event)
+void ComboboxWidgetsPage::OnButtonInsert(wxCommandEvent& WXUNUSED(event))
 {
     static unsigned int s_item = 0;
 
@@ -440,7 +440,7 @@ void ComboboxWidgetsPage::OnButtonInsert(wxCommandEvent& event)
         m_combobox->Insert(s, m_combobox->GetSelection());
 }
 
-void ComboboxWidgetsPage::OnButtonAdd(wxCommandEvent& event)
+void ComboboxWidgetsPage::OnButtonAdd(wxCommandEvent& WXUNUSED(event))
 {
     static unsigned int s_item = 0;
 
@@ -463,7 +463,7 @@ void ComboboxWidgetsPage::OnButtonAddMany(wxCommandEvent& WXUNUSED(event))
     }
 }
 
-void ComboboxWidgetsPage::OnButtonAddSeveral(wxCommandEvent& event)
+void ComboboxWidgetsPage::OnButtonAddSeveral(wxCommandEvent& WXUNUSED(event))
 {
     m_combobox->Append(_T("First"));
     m_combobox->Append(_T("another one"));
@@ -545,7 +545,7 @@ void ComboboxWidgetsPage::OnComboBox(wxCommandEvent& event)
     wxLogMessage(_T("Combobox item %ld selected"), sel);
 }
 
-void ComboboxWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& event)
+void ComboboxWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))
 {
     CreateCombo();
 }

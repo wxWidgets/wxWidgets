@@ -377,7 +377,7 @@ void RadioWidgetsPage::OnButtonReset(wxCommandEvent& WXUNUSED(event))
     CreateRadio();
 }
 
-void RadioWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& event)
+void RadioWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))
 {
     CreateRadio();
 }

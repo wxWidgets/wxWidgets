@@ -362,7 +362,7 @@ void GaugeWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)
     event.Enable( m_chkVert->GetValue() || m_chkSmooth->GetValue() );
 }
 
-void GaugeWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& event)
+void GaugeWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))
 {
     CreateGauge();
 }

@@ -48,7 +48,7 @@ class MyFrame : public wxFrame
 {
 public:
     MyFrame(const wxString& title, const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize, long style = wxDEFAULT_FRAME_STYLE);
+        const wxSize& size = wxDefaultSize, long style = wxDEFAULT_FRAME_STYLE|wxCLIP_CHILDREN|wxNO_FULL_REPAINT_ON_RESIZE);
 
     virtual ~MyFrame();
 

@@ -94,7 +94,7 @@ public:
     }
 
 protected:
-    void OnMouseEvent(wxMouseEvent& event)
+    void OnMouseEvent(wxMouseEvent& WXUNUSED(event))
     {
         wxLogMessage(wxT("Clicked on static text"));
     }
@@ -116,7 +116,7 @@ public:
     }
 
 protected:
-    void OnMouseEvent(wxMouseEvent& event)
+    void OnMouseEvent(wxMouseEvent& WXUNUSED(event))
     {
         wxLogMessage(wxT("Clicked on static box"));
     }
@@ -413,17 +413,17 @@ void StaticWidgetsPage::OnButtonReset(wxCommandEvent& WXUNUSED(event))
     CreateStatic();
 }
 
-void StaticWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& event)
+void StaticWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))
 {
     CreateStatic();
 }
 
-void StaticWidgetsPage::OnButtonBoxText(wxCommandEvent& event)
+void StaticWidgetsPage::OnButtonBoxText(wxCommandEvent& WXUNUSED(event))
 {
     m_sizerStatBox->GetStaticBox()->SetLabel(m_textBox->GetValue());
 }
 
-void StaticWidgetsPage::OnButtonLabelText(wxCommandEvent& event)
+void StaticWidgetsPage::OnButtonLabelText(wxCommandEvent& WXUNUSED(event))
 {
     m_statText->SetLabel(m_textLabel->GetValue());
 }

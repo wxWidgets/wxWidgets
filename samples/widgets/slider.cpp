@@ -536,7 +536,7 @@ void SliderWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)
                   m_chkBothSides->GetValue() );
 }
 
-void SliderWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& event)
+void SliderWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))
 {
     CreateSlider();
 }

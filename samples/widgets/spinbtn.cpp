@@ -384,7 +384,7 @@ void SpinBtnWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)
     event.Enable( !m_chkVert->GetValue() || m_chkWrap->GetValue() );
 }
 
-void SpinBtnWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& event)
+void SpinBtnWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))
 {
     CreateSpin();
 }
