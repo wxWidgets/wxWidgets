@@ -10,8 +10,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation
-#pragma implementation "utils.h"
+// Note: this is done in utilscmn.cpp now.
+// #pragma implementation
+// #pragma implementation "utils.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".

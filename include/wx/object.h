@@ -218,7 +218,7 @@ class WXDLLEXPORT wxObject
 
 #endif
 
-#if WXDEBUG || USE_WXDEBUG_CONTEXT
+#if WXDEBUG || USE_DEBUG_CONTEXT
   virtual void Dump(ostream& str);
 #endif
 

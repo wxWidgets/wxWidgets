@@ -119,7 +119,7 @@
                                   // wxObject::delete *IF* WXDEBUG is also defined.
                                   // WARNING: this code may not work with all architectures, especially
                                   // if alignment is an issue.
-#define USE_WXDEBUG_CONTEXT       1
+#define USE_DEBUG_CONTEXT       1
                                   // If 1, enables wxDebugContext, for
                                   // writing error messages to file, etc. 
                                   // If WXDEBUG is not defined, will still use

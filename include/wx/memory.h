@@ -23,7 +23,7 @@
   info, or to be a straight call to the new operator.
 */
 
-#if (WXDEBUG && USE_MEMORY_TRACING) || USE_WXDEBUG_CONTEXT
+#if (WXDEBUG && USE_MEMORY_TRACING) || USE_DEBUG_CONTEXT
 
 #include <stddef.h>
 
