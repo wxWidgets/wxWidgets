@@ -205,5 +205,10 @@ wxMiscellaneous
 - Add individual setters to wxScrollBar and other classes
   that use a combined setter.
 - Remove traces of old resource system from wxWizard.
+- Have wxDirCtrl as alias for wxGenericDirCtrl.
+- Allow instant reaction to left-up in a wxGrid cell
+  (extend editor API) to work around bad checkbox
+  behaviour (click, click, click, click away...) and
+  reduce checkbox size on non-Windows platforms.
 
 Version:      $Id$

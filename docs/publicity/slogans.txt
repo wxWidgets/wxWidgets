@@ -72,6 +72,7 @@ maybe stripped down to
 
 "Specialization is for insects."
 
+============================
 The Open-Source, Cross-Platform GUI Framework 
   with Ten Years of Evolution Behind It
 
@@ -93,10 +94,22 @@ people would be bound to stop and ask what it was all about!
 .. and how about a nice silk tie (US: necktie) with the logo on ... 
 Oh, I forgot, we programmers don't wear ties.
 
+============================
 "I can't believe it's not native"
 
+============================
 "Because friends don't let friends use Win32".
 
 (or MFC)
 
+============================
+
+Have a photo of 3 babes wearing Linux, Windows and Mac Logo T-shirt with
+words at the bottom.
+
+"Why choose one when you can have 3?"
+
+(Mohammad Zubair <mzubair@singnet.com.sg>)
+
+============================
 

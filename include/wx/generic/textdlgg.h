@@ -16,6 +16,7 @@
     #pragma interface "textdlgg.h"
 #endif
 
+#if wxUSE_TEXTDLG
 #include "wx/defs.h"
 
 #include "wx/dialog.h"
@@ -88,5 +89,7 @@ wxGetPasswordFromUser(const wxString& message,
                       const wxString& default_value = wxEmptyString,
                       wxWindow *parent = (wxWindow *) NULL);
 
+#endif
+    // wxUSE_TEXTDLG
 #endif
     // __TEXTDLGH_G__

@@ -18,7 +18,7 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_VALIDATORS
+#if wxUSE_VALIDATORS && wxUSE_TEXTCTRL
 
 #include "wx/textctrl.h"
 #include "wx/validate.h"
@@ -106,7 +106,7 @@ private:
 };
 
 #endif
-  // wxUSE_VALIDATORS
+  // wxUSE_VALIDATORS && wxUSE_TEXTCTRL
 
 #endif
   // _WX_VALTEXTH__

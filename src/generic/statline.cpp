@@ -20,6 +20,7 @@
     #pragma implementation "statline.h"
 #endif
 
+#if wxUSE_STATLINE
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
@@ -75,3 +76,6 @@ void wxStaticLine::DoMoveWindow(int x, int y, int width, int height)
 {
     m_statbox->SetSize(x, y, width, height);
 }
+
+#endif
+  // wxUSE_STATLINE

@@ -16,6 +16,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_SPLITTER
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -1093,5 +1094,6 @@ void wxSplitterWindow::OnSetCursor(wxSetCursorEvent& event)
     //else: do nothing, in particular, don't call Skip()
 }
 
+#endif // wxUSE_SPLITTER
 #endif // wxMSW
 

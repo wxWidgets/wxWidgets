@@ -20,7 +20,7 @@
   #pragma hdrstop
 #endif
 
-#if wxUSE_VALIDATORS
+#if wxUSE_VALIDATORS && wxUSE_TEXTCTRL
 
 #ifndef WX_PRECOMP
   #include <stdio.h>
@@ -332,4 +332,4 @@ bool wxTextValidator::IsNotInCharExcludeList(const wxString& val)
 }
 
 #endif
-  // wxUSE_VALIDATORS
+  // wxUSE_VALIDATORS && wxUSE_TEXTCTRL

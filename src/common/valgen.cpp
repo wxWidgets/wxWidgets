@@ -203,6 +203,7 @@ bool wxGenericValidator::TransferToWindow(void)
 #endif
 
     // string controls
+#if wxUSE_BUTTON
     if (m_validatorWindow->IsKindOf(CLASSINFO(wxButton)) )
     {
         wxButton* pControl = (wxButton*) m_validatorWindow;
@@ -212,6 +213,7 @@ bool wxGenericValidator::TransferToWindow(void)
             return TRUE;
         }
     } else
+#endif
 #if wxUSE_COMBOBOX
     if (m_validatorWindow->IsKindOf(CLASSINFO(wxComboBox)) )
     {
@@ -263,6 +265,7 @@ bool wxGenericValidator::TransferToWindow(void)
             return TRUE;
         }
     } else
+#if wxUSE_TEXTCTRL
     if (m_validatorWindow->IsKindOf(CLASSINFO(wxTextCtrl)) )
     {
         wxTextCtrl* pControl = (wxTextCtrl*) m_validatorWindow;
@@ -279,6 +282,7 @@ bool wxGenericValidator::TransferToWindow(void)
             return TRUE;
         }
     } else
+#endif
     // array controls
 #if wxUSE_CHECKLISTBOX && !defined(__WIN16__)
     // NOTE: wxCheckListBox is a wxListBox, so wxCheckListBox MUST come first:
@@ -428,6 +432,7 @@ bool wxGenericValidator::TransferFromWindow(void)
   } else
 #endif
   // string controls
+#if wxUSE_BUTTON
   if (m_validatorWindow->IsKindOf(CLASSINFO(wxButton)) )
   {
     wxButton* pControl = (wxButton*) m_validatorWindow;
@@ -436,8 +441,8 @@ bool wxGenericValidator::TransferFromWindow(void)
       *m_pString = pControl->GetLabel() ;
       return TRUE;
     }
-  }
-  else
+  } else
+#endif
 #if wxUSE_COMBOBOX
   if (m_validatorWindow->IsKindOf(CLASSINFO(wxComboBox)) )
   {
@@ -479,6 +484,7 @@ bool wxGenericValidator::TransferFromWindow(void)
       return TRUE;
     }
   } else
+#if wxUSE_TEXTCTRL
   if (m_validatorWindow->IsKindOf(CLASSINFO(wxTextCtrl)) )
   {
     wxTextCtrl* pControl = (wxTextCtrl*) m_validatorWindow;
@@ -493,6 +499,7 @@ bool wxGenericValidator::TransferFromWindow(void)
         return TRUE;
     }
   } else
+#endif
   // array controls
 #if wxUSE_CHECKLISTBOX
 #ifndef __WIN16__

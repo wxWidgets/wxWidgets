@@ -51,7 +51,9 @@ enum MDI_MENU_ID
 IMPLEMENT_DYNAMIC_CLASS(wxGenericMDIParentFrame, wxFrame)
 
 BEGIN_EVENT_TABLE(wxGenericMDIParentFrame, wxFrame)
+#if wxUSE_MENUS
     EVT_MENU (-1, wxGenericMDIParentFrame::DoHandleMenu)
+#endif
 END_EVENT_TABLE()
 
 wxGenericMDIParentFrame::wxGenericMDIParentFrame()

@@ -99,15 +99,19 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
                 bitmap = wxArtProvider::GetIcon(wxART_QUESTION, wxART_MESSAGE_BOX);
                 break;
         }
+#if wxUSE_STATIC_BITMAP
         wxStaticBitmap *icon = new wxStaticBitmap(this, -1, bitmap);
         if (is_pda)
             topsizer->Add( icon, 0, wxTOP|wxLEFT|wxRIGHT | wxALIGN_LEFT, 10 );
         else
             icon_text->Add( icon, 0, wxCENTER );
+#endif
     }
 
     // 2) text
+#if wxUSE_STATTEXT // && wxUSE_TEXTCTRL
     icon_text->Add( CreateTextSizer( message ), 0, wxCENTER | wxLEFT, 10 );
+#endif
 
     topsizer->Add( icon_text, 1, wxCENTER | wxLEFT|wxRIGHT|wxTOP, 10 );
 
@@ -117,7 +121,9 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
 #endif
 
     // 4) buttons
+#if wxUSE_BUTTON
     topsizer->Add( CreateButtonSizer( style ), 0, wxCENTRE | wxALL, 10 );
+ #endif
 
     SetAutoLayout( TRUE );
     SetSizer( topsizer );
