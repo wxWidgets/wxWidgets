@@ -412,10 +412,12 @@ wxString wxCommandEvent::GetString() const
         return m_cmdString;
     else
     {
+#if wxUSE_TEXTCTRL
         wxTextCtrl *txt = wxDynamicCast(m_eventObject, wxTextCtrl);
         if(txt)
             return txt->GetValue();
         else
+#endif // wxUSE_TEXTCTRL
             return m_cmdString;
     }
 }
