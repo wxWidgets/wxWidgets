@@ -48,7 +48,10 @@ class wxPyAppPtr(wxEvtHandlerPtr):
         self.thisown = 0
     def __del__(self, delfunc=wxc.delete_wxPyApp):
         if self.thisown == 1:
-            delfunc(self)
+            try:
+                delfunc(self)
+            except:
+                pass
     def _setCallbackInfo(self, *_args, **_kwargs):
         val = apply(wxc.wxPyApp__setCallbackInfo,(self,) + _args, _kwargs)
         return val
@@ -1597,6 +1600,12 @@ if wxPlatform == "__WXGTK__":
         locale.setlocale(locale.LC_ALL, "")
     except:
         pass
+
+if wxPlatform == "__WXMSW__":
+    import os
+    localedir = os.path.join(os.path.split(__file__)[0], "locale")
+    wxLocale_AddCatalogLookupPathPrefix(localedir)
+    del os
 
 #----------------------------------------------------------------------
 # wxWindows version numbers.  wxPython version is in __version__.

@@ -49,7 +49,10 @@ class wxGLContextPtr(wxObjectPtr):
         self.thisown = 0
     def __del__(self, delfunc=glcanvasc.delete_wxGLContext):
         if self.thisown == 1:
-            delfunc(self)
+            try:
+                delfunc(self)
+            except:
+                pass
     def SetCurrent(self, *_args, **_kwargs):
         val = apply(glcanvasc.wxGLContext_SetCurrent,(self,) + _args, _kwargs)
         return val

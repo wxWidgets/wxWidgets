@@ -13,7 +13,10 @@ class wxDataFormatPtr :
         self.thisown = 0
     def __del__(self, delfunc=clip_dndc.delete_wxDataFormat):
         if self.thisown == 1:
-            delfunc(self)
+            try:
+                delfunc(self)
+            except:
+                pass
     def SetType(self, *_args, **_kwargs):
         val = apply(clip_dndc.wxDataFormat_SetType,(self,) + _args, _kwargs)
         return val
@@ -45,7 +48,10 @@ class wxDataObjectPtr :
         self.thisown = 0
     def __del__(self, delfunc=clip_dndc.delete_wxDataObject):
         if self.thisown == 1:
-            delfunc(self)
+            try:
+                delfunc(self)
+            except:
+                pass
     def GetPreferredFormat(self, *_args, **_kwargs):
         val = apply(clip_dndc.wxDataObject_GetPreferredFormat,(self,) + _args, _kwargs)
         if val: val = wxDataFormatPtr(val) ; val.thisown = 1
@@ -355,7 +361,10 @@ class wxDropSourcePtr :
         return val
     def __del__(self, delfunc=clip_dndc.delete_wxDropSource):
         if self.thisown == 1:
-            delfunc(self)
+            try:
+                delfunc(self)
+            except:
+                pass
     def SetData(self, *_args, **_kwargs):
         val = apply(clip_dndc.wxDropSource_SetData,(self,) + _args, _kwargs)
         return val
@@ -405,7 +414,10 @@ class wxPyDropTargetPtr(wxDropTargetPtr):
         return val
     def __del__(self, delfunc=clip_dndc.delete_wxPyDropTarget):
         if self.thisown == 1:
-            delfunc(self)
+            try:
+                delfunc(self)
+            except:
+                pass
     def GetDataObject(self, *_args, **_kwargs):
         val = apply(clip_dndc.wxPyDropTarget_GetDataObject,(self,) + _args, _kwargs)
         if val: val = wxDataObjectPtr(val) 

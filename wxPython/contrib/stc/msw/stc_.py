@@ -1048,7 +1048,10 @@ class wxStyledTextEventPtr(wxCommandEventPtr):
         self.thisown = 0
     def __del__(self, delfunc=stc_c.delete_wxStyledTextEvent):
         if self.thisown == 1:
-            delfunc(self)
+            try:
+                delfunc(self)
+            except:
+                pass
     def SetPosition(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextEvent_SetPosition,(self,) + _args, _kwargs)
         return val

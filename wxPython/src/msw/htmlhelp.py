@@ -156,7 +156,10 @@ class wxHtmlHelpDataPtr :
         self.thisown = 0
     def __del__(self, delfunc=htmlhelpc.delete_wxHtmlHelpData):
         if self.thisown == 1:
-            delfunc(self)
+            try:
+                delfunc(self)
+            except:
+                pass
     def SetTempDir(self, *_args, **_kwargs):
         val = apply(htmlhelpc.wxHtmlHelpData_SetTempDir,(self,) + _args, _kwargs)
         return val
@@ -248,7 +251,10 @@ class wxHtmlHelpControllerPtr(wxEvtHandlerPtr):
         self.thisown = 0
     def __del__(self, delfunc=htmlhelpc.delete_wxHtmlHelpController):
         if self.thisown == 1:
-            delfunc(self)
+            try:
+                delfunc(self)
+            except:
+                pass
     def SetTitleFormat(self, *_args, **_kwargs):
         val = apply(htmlhelpc.wxHtmlHelpController_SetTitleFormat,(self,) + _args, _kwargs)
         return val

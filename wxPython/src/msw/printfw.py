@@ -27,7 +27,10 @@ class wxPrintDataPtr(wxObjectPtr):
         self.thisown = 0
     def __del__(self, delfunc=printfwc.delete_wxPrintData):
         if self.thisown == 1:
-            delfunc(self)
+            try:
+                delfunc(self)
+            except:
+                pass
     def GetNoCopies(self, *_args, **_kwargs):
         val = apply(printfwc.wxPrintData_GetNoCopies,(self,) + _args, _kwargs)
         return val
@@ -208,7 +211,10 @@ class wxPageSetupDialogDataPtr(wxObjectPtr):
         self.thisown = 0
     def __del__(self, delfunc=printfwc.delete_wxPageSetupDialogData):
         if self.thisown == 1:
-            delfunc(self)
+            try:
+                delfunc(self)
+            except:
+                pass
     def EnableHelp(self, *_args, **_kwargs):
         val = apply(printfwc.wxPageSetupDialogData_EnableHelp,(self,) + _args, _kwargs)
         return val
@@ -340,7 +346,10 @@ class wxPrintDialogDataPtr(wxObjectPtr):
         self.thisown = 0
     def __del__(self, delfunc=printfwc.delete_wxPrintDialogData):
         if self.thisown == 1:
-            delfunc(self)
+            try:
+                delfunc(self)
+            except:
+                pass
     def EnableHelp(self, *_args, **_kwargs):
         val = apply(printfwc.wxPrintDialogData_EnableHelp,(self,) + _args, _kwargs)
         return val
@@ -512,7 +521,10 @@ class wxPrinterPtr(wxObjectPtr):
         self.thisown = 0
     def __del__(self, delfunc=printfwc.delete_wxPrinter):
         if self.thisown == 1:
-            delfunc(self)
+            try:
+                delfunc(self)
+            except:
+                pass
     def CreateAbortWindow(self, *_args, **_kwargs):
         val = apply(printfwc.wxPrinter_CreateAbortWindow,(self,) + _args, _kwargs)
         return val

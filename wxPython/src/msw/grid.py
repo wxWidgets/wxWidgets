@@ -873,7 +873,10 @@ class wxGridTableMessagePtr :
         self.thisown = 0
     def __del__(self, delfunc=gridc.delete_wxGridTableMessage):
         if self.thisown == 1:
-            delfunc(self)
+            try:
+                delfunc(self)
+            except:
+                pass
     def SetTableObject(self, *_args, **_kwargs):
         val = apply(gridc.wxGridTableMessage_SetTableObject,(self,) + _args, _kwargs)
         return val
@@ -914,7 +917,10 @@ class wxGridCellCoordsPtr :
         self.thisown = 0
     def __del__(self, delfunc=gridc.delete_wxGridCellCoords):
         if self.thisown == 1:
-            delfunc(self)
+            try:
+                delfunc(self)
+            except:
+                pass
     def GetRow(self, *_args, **_kwargs):
         val = apply(gridc.wxGridCellCoords_GetRow,(self,) + _args, _kwargs)
         return val
@@ -1461,6 +1467,15 @@ class wxGridPtr(wxScrolledWindowPtr):
         return val
     def GetSelectedCols(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_GetSelectedCols,(self,) + _args, _kwargs)
+        return val
+    def DeselectRow(self, *_args, **_kwargs):
+        val = apply(gridc.wxGrid_DeselectRow,(self,) + _args, _kwargs)
+        return val
+    def DeselectCol(self, *_args, **_kwargs):
+        val = apply(gridc.wxGrid_DeselectCol,(self,) + _args, _kwargs)
+        return val
+    def DeselectCell(self, *_args, **_kwargs):
+        val = apply(gridc.wxGrid_DeselectCell,(self,) + _args, _kwargs)
         return val
     def BlockToDeviceRect(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_BlockToDeviceRect,(self,) + _args, _kwargs)

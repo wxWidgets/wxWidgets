@@ -82,7 +82,10 @@ class wxFontMapperPtr :
         self.thisown = 0
     def __del__(self, delfunc=fontsc.delete_wxFontMapper):
         if self.thisown == 1:
-            delfunc(self)
+            try:
+                delfunc(self)
+            except:
+                pass
     def GetAltForEncoding(self, *_args, **_kwargs):
         val = apply(fontsc.wxFontMapper_GetAltForEncoding,(self,) + _args, _kwargs)
         return val
@@ -124,7 +127,10 @@ class wxFontPtr(wxObjectPtr):
         return val
     def __del__(self, delfunc=fontsc.delete_wxFont):
         if self.thisown == 1:
-            delfunc(self)
+            try:
+                delfunc(self)
+            except:
+                pass
     def Ok(self, *_args, **_kwargs):
         val = apply(fontsc.wxFont_Ok,(self,) + _args, _kwargs)
         return val
@@ -251,7 +257,10 @@ class wxFontEnumeratorPtr :
         self.thisown = 0
     def __del__(self, delfunc=fontsc.delete_wxFontEnumerator):
         if self.thisown == 1:
-            delfunc(self)
+            try:
+                delfunc(self)
+            except:
+                pass
     def _setCallbackInfo(self, *_args, **_kwargs):
         val = apply(fontsc.wxFontEnumerator__setCallbackInfo,(self,) + _args, _kwargs)
         return val
@@ -316,7 +325,10 @@ class wxLocalePtr :
         self.thisown = 0
     def __del__(self, delfunc=fontsc.delete_wxLocale):
         if self.thisown == 1:
-            delfunc(self)
+            try:
+                delfunc(self)
+            except:
+                pass
     def Init1(self, *_args, **_kwargs):
         val = apply(fontsc.wxLocale_Init1,(self,) + _args, _kwargs)
         return val
@@ -374,7 +386,10 @@ class wxEncodingConverterPtr(wxObjectPtr):
         self.thisown = 0
     def __del__(self, delfunc=fontsc.delete_wxEncodingConverter):
         if self.thisown == 1:
-            delfunc(self)
+            try:
+                delfunc(self)
+            except:
+                pass
     def Init(self, *_args, **_kwargs):
         val = apply(fontsc.wxEncodingConverter_Init,(self,) + _args, _kwargs)
         return val

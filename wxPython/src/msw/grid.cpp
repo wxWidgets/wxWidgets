@@ -12728,6 +12728,94 @@ static PyObject *_wrap_wxGrid_GetSelectedCols(PyObject *self, PyObject *args, Py
     return _resultobj;
 }
 
+#define wxGrid_DeselectRow(_swigobj,_swigarg0)  (_swigobj->DeselectRow(_swigarg0))
+static PyObject *_wrap_wxGrid_DeselectRow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","row", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxGrid_DeselectRow",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_DeselectRow. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxGrid_DeselectRow(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGrid_DeselectCol(_swigobj,_swigarg0)  (_swigobj->DeselectCol(_swigarg0))
+static PyObject *_wrap_wxGrid_DeselectCol(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","col", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxGrid_DeselectCol",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_DeselectCol. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxGrid_DeselectCol(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGrid_DeselectCell(_swigobj,_swigarg0,_swigarg1)  (_swigobj->DeselectCell(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxGrid_DeselectCell(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","row","col", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxGrid_DeselectCell",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_DeselectCell. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxGrid_DeselectCell(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxGrid_BlockToDeviceRect(_swigobj,_swigarg0,_swigarg1)  (_swigobj->BlockToDeviceRect(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxGrid_BlockToDeviceRect(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -14525,6 +14613,9 @@ static PyMethodDef gridcMethods[] = {
 	 { "wxGrid_GetSelectionForeground", (PyCFunction) _wrap_wxGrid_GetSelectionForeground, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_GetSelectionBackground", (PyCFunction) _wrap_wxGrid_GetSelectionBackground, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_BlockToDeviceRect", (PyCFunction) _wrap_wxGrid_BlockToDeviceRect, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_DeselectCell", (PyCFunction) _wrap_wxGrid_DeselectCell, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_DeselectCol", (PyCFunction) _wrap_wxGrid_DeselectCol, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_DeselectRow", (PyCFunction) _wrap_wxGrid_DeselectRow, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_GetSelectedCols", (PyCFunction) _wrap_wxGrid_GetSelectedCols, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_GetSelectedRows", (PyCFunction) _wrap_wxGrid_GetSelectedRows, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_GetSelectionBlockBottomRight", (PyCFunction) _wrap_wxGrid_GetSelectionBlockBottomRight, METH_VARARGS | METH_KEYWORDS },

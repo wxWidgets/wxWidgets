@@ -12,7 +12,10 @@ class wxEventPtr(wxObjectPtr):
         self.thisown = 0
     def __del__(self, delfunc=eventsc.delete_wxEvent):
         if self.thisown == 1:
-            delfunc(self)
+            try:
+                delfunc(self)
+            except:
+                pass
     def GetEventObject(self, *_args, **_kwargs):
         val = apply(eventsc.wxEvent_GetEventObject,(self,) + _args, _kwargs)
         return val
@@ -1097,7 +1100,10 @@ class wxPyEventPtr(wxEventPtr):
         self.thisown = 0
     def __del__(self, delfunc=eventsc.delete_wxPyEvent):
         if self.thisown == 1:
-            delfunc(self)
+            try:
+                delfunc(self)
+            except:
+                pass
     def SetSelf(self, *_args, **_kwargs):
         val = apply(eventsc.wxPyEvent_SetSelf,(self,) + _args, _kwargs)
         return val
@@ -1121,7 +1127,10 @@ class wxPyCommandEventPtr(wxCommandEventPtr):
         self.thisown = 0
     def __del__(self, delfunc=eventsc.delete_wxPyCommandEvent):
         if self.thisown == 1:
-            delfunc(self)
+            try:
+                delfunc(self)
+            except:
+                pass
     def SetSelf(self, *_args, **_kwargs):
         val = apply(eventsc.wxPyCommandEvent_SetSelf,(self,) + _args, _kwargs)
         return val
