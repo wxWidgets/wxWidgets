@@ -92,7 +92,9 @@ bool wxMask::Create( const wxBitmap& bitmap,
     unsigned char green = colour.Green();
     unsigned char blue = colour.Blue();
 
-    GdkVisual *visual = gdk_visual_get_system();
+    GdkVisual *visual = gdk_window_get_visual( wxRootWindow->window );
+    wxASSERT( visual );
+    
     int bpp = visual->depth;
     if ((bpp == 16) && (visual->red_mask != 0xf800)) bpp = 15;
     if (bpp == 15)
@@ -243,9 +245,12 @@ wxBitmap::wxBitmap( int width, int height, int depth )
 {
     wxCHECK_RET( (width > 0) && (height > 0), wxT("invalid bitmap size") )
 
-    if (depth == -1) depth = gdk_window_get_visual( wxRootWindow->window )->depth;
+    GdkVisual *visual = gdk_window_get_visual( wxRootWindow->window );
+    wxASSERT( visual );
 
-    wxCHECK_RET( (depth ==  gdk_window_get_visual( wxRootWindow->window )->depth) ||
+    if (depth == -1) depth = visual->depth;
+
+    wxCHECK_RET( (depth == visual->depth) ||
                  (depth == 1), wxT("invalid bitmap depth") )
 
     m_refData = new wxBitmapRefData();
@@ -260,7 +265,7 @@ wxBitmap::wxBitmap( int width, int height, int depth )
     else
     {
         M_BMPDATA->m_pixmap = gdk_pixmap_new( wxRootWindow->window, width, height, depth );
-        M_BMPDATA->m_bpp = gdk_window_get_visual( wxRootWindow->window )->depth;
+        M_BMPDATA->m_bpp = visual->depth;
     }
 
     if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
@@ -270,6 +275,9 @@ bool wxBitmap::CreateFromXpm( const char **bits )
 {
     wxCHECK_MSG( bits != NULL, FALSE, wxT("invalid bitmap data") )
 
+    GdkVisual *visual = gdk_window_get_visual( wxRootWindow->window );
+    wxASSERT( visual );
+    
     m_refData = new wxBitmapRefData();
 
     GdkBitmap *mask = (GdkBitmap*) NULL;
@@ -286,7 +294,8 @@ bool wxBitmap::CreateFromXpm( const char **bits )
 
     gdk_window_get_size( M_BMPDATA->m_pixmap, &(M_BMPDATA->m_width), &(M_BMPDATA->m_height) );
 
-    M_BMPDATA->m_bpp = gdk_window_get_visual( wxRootWindow->window )->depth;  // ?
+    M_BMPDATA->m_bpp = visual->depth;  // ?
+    
     if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
 
     return TRUE;
@@ -443,6 +452,9 @@ bool wxBitmap::LoadFile( const wxString &name, int type )
 
     if (!wxFileExists(name)) return FALSE;
 
+    GdkVisual *visual = gdk_window_get_visual( wxRootWindow->window );
+    wxASSERT( visual );
+    
     if (type == wxBITMAP_TYPE_XPM)
     {
         m_refData = new wxBitmapRefData();
@@ -458,7 +470,8 @@ bool wxBitmap::LoadFile( const wxString &name, int type )
         }
 
         gdk_window_get_size( M_BMPDATA->m_pixmap, &(M_BMPDATA->m_width), &(M_BMPDATA->m_height) );
-        M_BMPDATA->m_bpp = gdk_window_get_visual( wxRootWindow->window )->depth;
+        
+        M_BMPDATA->m_bpp = visual->depth;
     }
     else // try if wxImage can load it
     {

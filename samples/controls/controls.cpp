@@ -393,7 +393,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     m_text = new wxTextCtrl(this, -1, "This is the log window.\n",
                             wxPoint(0, 250), wxSize(100, 50), wxTE_MULTILINE);
-    //  m_text->SetBackgroundColour("wheat");
+    m_text->SetBackgroundColour("wheat");
 
     wxLog::AddTraceMask(_T("focus"));
     m_logTargetOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_text));
@@ -655,6 +655,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_label = new wxStaticText(panel, -1, "Label with some long text",
                                wxPoint(250, 60), wxDefaultSize,
                                wxALIGN_RIGHT | wxST_NO_AUTORESIZE);
+    m_label->SetForegroundColour( *wxBLUE );
 
     m_notebook->AddPage(panel, "wxBitmapXXX");
 
@@ -750,13 +751,13 @@ void MyPanel::OnChangeColour(wxCommandEvent& WXUNUSED(event))
         SetBackgroundColour(s_colOld);
         s_colOld = wxNullColour;
 
-        m_lbSelectThis->SetForegroundColour("yellow");
-        m_lbSelectThis->SetBackgroundColour("blue");
+        m_lbSelectThis->SetForegroundColour("red");
+        m_lbSelectThis->SetBackgroundColour("white");
     }
     else
     {
-        s_colOld = GetBackgroundColour();
-        SetBackgroundColour("green");
+        s_colOld = wxColour("red");
+        SetBackgroundColour("white");
 
         m_lbSelectThis->SetForegroundColour("white");
         m_lbSelectThis->SetBackgroundColour("red");

@@ -150,7 +150,7 @@ function will find the first top-level window (frame or dialog) and return that.
 
 \constfunc{bool}{GetUseBestVisual}{\void}
 
-Returns TRUE if the application will use the best visual on system that support
+Returns TRUE if the application will use the best visual on systems that support
 different visuals, FALSE otherwise.
 
 \wxheading{See also}
@@ -464,9 +464,9 @@ can be overridden by the user to change the default icons.
 \func{void}{SetUseBestVisual}{\param{bool}{ flag}}
 
 Allows the programmer to specify whether the application will use the best visual
-on system that support several visual on the same display. This is typically the
-case under Solaris and IRIX, where the default visual is only 8-bit but some apps
-are supposed to run in TrueColour mode.
+on systems that support several visual on the same display. This is typically the
+case under Solaris and IRIX, where the default visual is only 8-bit whereas certain
+appications are supposed to run in TrueColour mode.
 
 Note that this function has to be called in the constructor of the {\tt wxApp}
 instance and won't have any effect when called later on.

@@ -127,8 +127,3 @@ HTMLOBJS = \
 HTMLDEPS = \
 		#$ ExpandList("HTMLDEPS");
 
-IODBCOBJS = \
-		#$ ExpandList("IODBCOBJS");
-
-IODBCDEPS = \
-		#$ ExpandList("IODBCDEPS");

@@ -1,4 +1,22 @@
 
+12th January '2000: wxWindows 2.1.14 released
+
+Corrected one more bug in the TIFF handler.
+
+It is now possible to run wxGTK apps in the best visual
+instead of only the default on system that support this
+(typically IRIX).
+
+Added default keyboard handling to wxScrolledWindow.
+
+Fixed slightly overoptimized window colour and style handling.
+
+Fixed bug in drawing code that made GTK pick the wrong pen
+style when using the default.
+
+The L-GPL iODBC library must now be enables explicitly so as
+to not mislead people into reading the license wrong.
+
 24th January '2000: wxWindows 2.1.13 released
 
 Corrections to TAB handling in notebooks.

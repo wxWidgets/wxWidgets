@@ -1663,8 +1663,7 @@ functions so should not be required by the application programmer.
 
 Reparents the window, i.e the window will be removed from its
 current parent window (e.g. a non-standard toolbar in a wxFrame)
-and then re-inserted into another (e.g. a wxMiniFrame for a
-floating toolbar). Available on Windows and GTK+.
+and then re-inserted into another. Available on Windows and GTK.
 
 \wxheading{Parameters}
 
@@ -1709,8 +1708,7 @@ Physically scrolls the pixels in the window and move child windows accordingly.
 
 \docparam{rect}{Rectangle to invalidate. If this is NULL, the whole window is invalidated. If you
 pass a rectangle corresponding to the area of the window exposed by the scroll, your painting handler
-can optimise painting by checking for the invalidated region. This paramter is ignored under GTK,
-instead the regions to be invalidated are calculated automatically. }
+can optimise painting by checking for the invalidated region. This paramter is ignored under GTK.}
 
 \wxheading{Remarks}
 
@@ -1737,14 +1735,6 @@ be called automatically when the window is resized. Use in connection with
 \docparam{autoLayout}{Set this to TRUE if you wish the Layout function to be called
 from within wxWindow::OnSize functions.}
 
-\wxheading{Remarks}
-
-Note that this function is actually disabled for wxWindow. It has
-effect for wxDialog, wxFrame, wxPanel and wxScrolledWindow.  Windows
-of other types that need to invoke the Layout algorithm should provide
-an EVT\_SIZE handler and call
-\helpref{wxWindow::Layout}{wxwindowlayout} from within it.
-
 \wxheading{See also}
 
 \helpref{wxWindow::SetConstraints}{wxwindowsetconstraints}
@@ -1769,9 +1759,9 @@ Note that setting the background colour does not cause an immediate refresh, so 
 may wish to call \helpref{wxWindow::Clear}{wxwindowclear} or \helpref{wxWindow::Refresh}{wxwindowrefresh} after
 calling this function.
 
-Note that when using this functions under GTK, you will disable the so called "themes",
-i.e. the user chosen apperance of windows and controls, including the themes of
-their parent windows.
+Use this function with care under GTK as the new appearance of the window might
+not look equally well when used with "Themes", i.e GTK's ability to change its
+look as the user wishes with run-time loadable modules.
 
 \wxheading{See also}
 

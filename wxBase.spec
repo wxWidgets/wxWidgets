@@ -1,6 +1,6 @@
 # Note that this is NOT a relocatable package
 %define pref /usr
-%define ver 2.1.13
+%define ver 2.1.14
 %define rel 0
 
 Summary: wxBase library - non-GUI support classes of wxWindows toolkit
@@ -33,7 +33,7 @@ Header files for wxBase. You need them to develop programs using wxBase.
 
 %prep
 %setup -n wxBase
-./configure --prefix=%{pref} --disable-gui
+./configure --prefix=%{pref} --disable-gui --disable-std_iostreams
 
 %build
 if [ "$SMP" != "" ]; then

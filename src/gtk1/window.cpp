@@ -2977,12 +2977,10 @@ bool wxWindow::SetBackgroundColour( const wxColour &colour )
         // but it couldn't get applied as the
         // widget hasn't been realized yet.
         m_delayedBackgroundColour = TRUE;
-
-        // pretend we have done something
-        return TRUE;
     }
 
     if ((m_wxwindow) &&
+        (m_wxwindow->window) &&
         (m_backgroundColour != wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BTNFACE)))
     {
         /* wxMSW doesn't clear the window here. I don't do that either to
@@ -3020,9 +3018,6 @@ bool wxWindow::SetForegroundColour( const wxColour &colour )
         // but it couldn't get applied as the
         // widget hasn't been realized yet.
         m_delayedForegroundColour = TRUE;
-
-        // pretend we have done something
-        return TRUE;
     }
 
     ApplyWidgetStyle();
@@ -3032,15 +3027,24 @@ bool wxWindow::SetForegroundColour( const wxColour &colour )
 
 GtkStyle *wxWindow::GetWidgetStyle()
 {
-    if (m_widgetStyle) return m_widgetStyle;
+    if (m_widgetStyle)
+    {
+        GtkStyle *remake = gtk_style_copy( m_widgetStyle );
+        remake->klass = m_widgetStyle->klass;
+        
+        gtk_style_unref( m_widgetStyle );
+        m_widgetStyle = remake;
+    }
+    else
+    {
+        GtkStyle *def = gtk_rc_get_style( m_widget );
 
-    GtkStyle *def = gtk_rc_get_style( m_widget );
+        if (!def)
+            def = gtk_widget_get_default_style();
 
-    if (!def)
-        def = gtk_widget_get_default_style();
-
-    m_widgetStyle = gtk_style_copy( def );
-    m_widgetStyle->klass = def->klass;
+        m_widgetStyle = gtk_style_copy( def );
+        m_widgetStyle->klass = def->klass;
+    }
 
     return m_widgetStyle;
 }

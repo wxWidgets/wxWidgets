@@ -7,9 +7,3 @@
 0 wx.html                  ;wxWindows: Help index; additional keywords like overview
 1 wxwin.htm           ;  wxWindows Class References
 2 wx204.htm#functions         ;  wxWindows Function References; methods
-;
-; Some doc++ generated files:
-;
-4 aindex.html                 ;wxExtHelpController: Table of contents
-3 HIER.html                   ;  Class hierarchy (very small) 
-5 wxExtHelpController.html    ;  The class documentation of wxExtHelpController.;brower viewer

@@ -266,7 +266,7 @@ TIFFOBJS	= \
 		tif_write.o \
 		tif_zip.o
 
-IODBC_OBJS = \
+IODBCOBJS = \
 		catalog.o \
 		connect.o \
 		dlf.o \
@@ -282,6 +282,7 @@ IODBC_OBJS = \
 		misc.o \
 		prepare.o \
 		result.o
+        
 ############################## Rules ##################################
 
 BURNT_LIBRARY_NAME = @BURNT_LIBRARY_NAME@

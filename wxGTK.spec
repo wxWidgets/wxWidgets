@@ -1,6 +1,6 @@
 # Note that this is NOT a relocatable package
 %define pref /usr
-%define ver 2.1.13
+%define ver 2.1.14
 %define rel 0
 
 Summary: The GTK+ 1.2 port of the wxWindows library
@@ -9,7 +9,7 @@ Version: %{ver}
 Release: %{rel}
 Copyright: wxWindows Licence
 Group: X11/Libraries
-Source: ftp://wesley.informatik.uni-freiburg.de/pub/linux/wxxt/source/wxGTK-2.1.13.tgz
+Source: wxGTK-%{ver}.tar.gz
 URL: http://wesley.informatik.uni-freiburg.de/~wxxt/docs.html
 Packager: Robert Roebling <roebling@ruf.uni-freiburg.de>
 BuildRoot: /tmp/wxgtk_root
@@ -37,7 +37,12 @@ Header files for the wxGTK, the GTK+ 1.2 port of the wxWindows library.
 ./configure --prefix=%{pref} --enable-threads --disable-std_iostreams --disable-newgrid
 
 %build
-make
+if [ "$SMP" != "" ]; then
+  export MAKE="make -j$SMP"
+else
+  export MAKE="make"
+fi
+$MAKE
 
 %install
 rm -rf $RPM_BUILD_ROOT
