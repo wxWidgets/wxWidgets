@@ -401,20 +401,20 @@ void DatabaseDemoFrame::BuildEditorDialog()
     pEditorDlg = NULL;
     pEditorDlg = new CeditorDlg(this);
     if (pEditorDlg)
+    {
         pEditorDlg->Initialize();
-    else
-    {
-        wxMessageBox("Unable to create the editor dialog for some reason","Error...",wxOK | wxICON_EXCLAMATION);
-        DemoFrame->Close();
-    }
-
-    if (!pEditorDlg->initialized)
-    {
-        pEditorDlg->Close();
-        pEditorDlg = NULL;
-        wxMessageBox("Unable to initialize the editor dialog for some reason","Error...",wxOK | wxICON_EXCLAMATION);
-        DemoFrame->Close(TRUE);
-    }
+        if (!pEditorDlg->initialized)
+        {
+            pEditorDlg->Close();
+            delete pEditorDlg;
+            wxMessageBox("Unable to initialize the editor dialog for some reason","Error...",wxOK | wxICON_EXCLAMATION);
+            DemoFrame->Close();
+        }
+    } else
+	 {
+       wxMessageBox("Unable to create the editor dialog for some reason","Error...",wxOK | wxICON_EXCLAMATION);
+       DemoFrame->Close();
+	 }
 }  // DatabaseDemoFrame::BuildEditorDialog()
 
 
@@ -921,7 +921,7 @@ bool CeditorDlg::Initialize()
     {
         // Table does exist, or there was some problem opening it.  Currently this should
         // never fail, except in the case of the table not exisiting or the current 
-		// user has insufficent privileges to access the table
+		  // user has insufficent privileges to access the table
 #if 0
 
 // This code is experimenting with a new function that will hopefully be available
@@ -1471,20 +1471,26 @@ void CparameterDlg::OnCloseWindow(wxCloseEvent& event)
     if (!saved)
     {
         bool Ok = (wxMessageBox("No changes have been saved.\n\nAre you sure you wish exit the parameter screen?","Confirm",wxYES_NO|wxICON_QUESTION) == wxYES);
-
+        
         if (!Ok)
         {
             event.Veto();
             return;
         }
-
+        
         wxGetApp().params = savedParamSettings;
     }
 
-//    if (GetParent() != NULL)
-//        GetParent()->SetFocus();
-    this->Destroy();
+    if (GetParent() != NULL)
+        GetParent()->SetFocus();
 
+    while (wxIsBusy())
+        wxEndBusyCursor();
+
+    Show(FALSE);
+	SetReturnCode(0);  // added so BoundsChecker would not report use of uninitialized variable
+
+    this->Destroy();
 }  // CparameterDlg::OnCloseWindow()
 
 
@@ -1641,6 +1647,8 @@ void CparameterDlg::FillDataSourceList()
     int i;
     for (i = 0; wxStrlen(p[i]); i++)
         pParamODBCSourceList->Append(p[i]);
+
+	 delete p;
 }  // CparameterDlg::CparameterDlg::FillDataSourceList()
 
 
@@ -2005,8 +2013,9 @@ void CqueryDlg::OnCloseWindow(wxCloseEvent& event)
         wxEndBusyCursor();
 
     Show(FALSE);
-    this->Destroy();
+	SetReturnCode(1);  // added so BoundsChecker would not report use of uninitialized variable
 
+    this->Destroy();
 }  // CqueryDlg::OnCloseWindow()
 
 
