@@ -46,7 +46,7 @@ Build Instructions
 ------------------
 I used SWIG (http://www.swig.org) to create the source code for the
 extension module.  This enabled me to only have to deal with a small
-amount of code an only have to bother with the exceptional issues.
+amount of code and only have to bother with the exceptional issues.
 SWIG takes care of the rest and generates all the repetative code for
 me.  You don't need SWIG to build the extension module as all the
 generated C++ code is included in the src directory.
@@ -78,7 +78,7 @@ above.
 
 5. If it builds successfully, congratulations!  Move on to the next
 step.  If not then you can try mailing me for help.  Also, I will
-always have a pre-built win32 version of this module at
+always have a pre-built win32 version of this extension module at
 http://starship.skyport.net/crew/robind/python.
 
 6. Change to the $(WXWIN)/utils/wxPython/tests directory.
