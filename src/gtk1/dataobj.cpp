@@ -20,7 +20,7 @@
 #include "wx/mstream.h"
 #include "wx/image.h"
 #include "wx/log.h"
-#include "wx/url.h"
+#include "wx/uri.h"
 
 #include <gdk/gdk.h>
 
@@ -278,11 +278,7 @@ bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *buf)
                     lenPrefix += 2;
                 }
 
-                AddFile(
-#if wxUSE_URL
-                        wxURL::ConvertFromURI
-#endif // wxUSE_URL
-                            (filename.c_str() + lenPrefix));
+                AddFile(wxURI::Unescape(filename.c_str() + lenPrefix));
                 filename.Empty();
             }
             else
