@@ -264,6 +264,11 @@ pascal OSStatus MouseEventHandler( EventHandlerCallRef handler , EventRef event 
     if ( button == 0 || GetEventKind( event ) == kEventMouseUp )
         modifiers += btnState ;
 
+	// temporary hack to support true two button mouse
+	if ( button == kEventMouseButtonSecondary )
+	{
+		modifiers |= controlKey ;
+	}
     WindowRef window ;
     short windowPart = ::FindWindow(point, &window);
 
