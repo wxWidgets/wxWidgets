@@ -2636,6 +2636,8 @@ static void TestFtpUpload()
 
 #ifdef TEST_STACKWALKER
 
+#if wxUSE_STACKWALKER
+
 #include "wx/stackwalk.h"
 
 class StackDump : public wxStackWalker
@@ -2692,6 +2694,8 @@ static void TestStackWalk(const char *argv0)
     StackDump dump(argv0);
     dump.Walk();
 }
+
+#endif // wxUSE_STACKWALKER
 
 #endif // TEST_STACKWALKER
 
