@@ -216,7 +216,7 @@ static pascal void TPPaneDrawProc(ControlRef theControl, ControlPartCode thePart
             InvalWindowRect( GetControlOwner( theControl ) , &oldbounds ) ;
             SetRect(&varsp->fRFocusOutline, bounds.left, bounds.top, bounds.right, bounds.bottom);
             SetRect(&varsp->fRTextOutline, bounds.left, bounds.top, bounds.right, bounds.bottom);
-            SetRect(&varsp->fRTextArea, bounds.left + 2 , bounds.top + (varsp->fMultiline ? 0 : 2) , 
+            SetRect(&varsp->fRTextArea, bounds.left + (varsp->fMultiline ? 0 : 2) , bounds.top + (varsp->fMultiline ? 0 : 2) , 
                 bounds.right - (varsp->fMultiline ? 0 : 2), bounds.bottom - (varsp->fMultiline ? 0 : 2));
             RectRgn(varsp->fTextBackgroundRgn, &varsp->fRTextOutline);
             TXNSetFrameBounds(  varsp->fTXNRec, varsp->fRTextArea.top, varsp->fRTextArea.left, 
@@ -527,7 +527,7 @@ OSStatus mUPOpenControl(ControlHandle theControl, long wxStyle )
     GetControlBounds(theControl, &bounds);
     SetRect(&varsp->fRFocusOutline, bounds.left, bounds.top, bounds.right, bounds.bottom);
     SetRect(&varsp->fRTextOutline, bounds.left, bounds.top, bounds.right, bounds.bottom);
-    SetRect(&varsp->fRTextArea, bounds.left + 2 , bounds.top + (varsp->fMultiline ? 0 : 2) , 
+    SetRect(&varsp->fRTextArea, bounds.left + (varsp->fMultiline ? 0 : 2) , bounds.top + (varsp->fMultiline ? 0 : 2) , 
         bounds.right - (varsp->fMultiline ? 0 : 2), bounds.bottom - (varsp->fMultiline ? 0 : 2));
         /* calculate the background region for the text.  In this case, it's kindof
         and irregular region because we're setting the scroll bar a little ways inside
@@ -550,7 +550,8 @@ OSStatus mUPOpenControl(ControlHandle theControl, long wxStyle )
             frameOptions |= kTXNAlwaysWrapAtViewEdgeMask ;
         else
         {
-            frameOptions |= kTXNAlwaysWrapAtViewEdgeMask ;
+            // in case entry becomes impossible, remove the comment on the line below
+            // frameOptions |= kTXNAlwaysWrapAtViewEdgeMask ;
             frameOptions |= kTXNWantHScrollBarMask ;
         }
             
