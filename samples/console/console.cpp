@@ -45,7 +45,8 @@
 //#define TEST_LOG
 //#define TEST_LONGLONG
 //#define TEST_MIME
-#define TEST_SOCKETS
+#define TEST_INFO_FUNCTIONS
+//#define TEST_SOCKETS
 //#define TEST_STRINGS
 //#define TEST_THREADS
 //#define TEST_TIMER
@@ -455,6 +456,41 @@ static void TestMimeEnum()
 }
 
 #endif // TEST_MIME
+
+// ----------------------------------------------------------------------------
+// misc information functions
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_INFO_FUNCTIONS
+
+#include <wx/utils.h>
+
+static void TestOsInfo()
+{
+    puts("*** Testing OS info functions ***\n");
+
+    int major, minor;
+    wxGetOsVersion(&major, &minor);
+    printf("Running under: %s, version %d.%d\n",
+            wxGetOsDescription().c_str(), major, minor);
+
+    printf("%d free bytes of memory left.\n", wxGetFreeMemory());
+
+    printf("Host name is %s (%s).\n",
+           wxGetHostName().c_str(), wxGetFullHostName().c_str());
+}
+
+static void TestUserInfo()
+{
+    puts("*** Testing user info functions ***\n");
+
+    printf("User id is:\t%s\n", wxGetUserId().c_str());
+    printf("User name is:\t%s\n", wxGetUserName().c_str());
+    printf("Home dir is:\t%s\n", wxGetHomeDir().c_str());
+    printf("Email address:\t%s\n", wxGetEmailAddress().c_str());
+}
+
+#endif // TEST_INFO_FUNCTIONS
 
 // ----------------------------------------------------------------------------
 // long long
@@ -2621,6 +2657,11 @@ int main(int argc, char **argv)
 #ifdef TEST_MIME
     TestMimeEnum();
 #endif // TEST_MIME
+
+#ifdef TEST_INFO_FUNCTIONS
+    TestOsInfo();
+    TestUserInfo();
+#endif // TEST_INFO_FUNCTIONS
 
 #ifdef TEST_SOCKETS
     if ( 1 )
