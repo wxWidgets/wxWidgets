@@ -98,6 +98,7 @@ private:
 
     // Private member variables
     UDWORD cursorType;
+    bool   insertable;
 
     // Private member functions
     bool bindInsertParams(void);

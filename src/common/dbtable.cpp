@@ -623,7 +623,6 @@ bool wxDbTable::Open(void)
         return FALSE;   
     int i;
     wxString sqlStmt;
-   
 
     // Verify that the table exists in the database
     if (!pDb->TableExists(tableName,pDb->GetUsername(),tablePath))
@@ -659,7 +658,6 @@ bool wxDbTable::Open(void)
     if (!bindCols(hstmtInternal))                   // Internal use only
         return(FALSE);
 	
-
     /*
      * Do NOT bind the hstmtCount cursor!!!
      */
@@ -680,6 +678,9 @@ bool wxDbTable::Open(void)
         }
         needComma = FALSE;
         sqlStmt += ") VALUES (";
+
+		  int insertableCount = 0;
+
         for (i = 0; i < noCols; i++)
         {
             if (! colDefs[i].InsertAllowed)
@@ -688,14 +689,20 @@ bool wxDbTable::Open(void)
                 sqlStmt += ",";
             sqlStmt += "?";
             needComma = TRUE;
+		      insertableCount++;
         }
         sqlStmt += ")";
 
 //      pDb->WriteSqlLog(sqlStmt);
 
         // Prepare the insert statement for execution
-        if (SQLPrepare(hstmtInsert, (UCHAR FAR *) sqlStmt.c_str(), SQL_NTS) != SQL_SUCCESS)
-            return(pDb->DispAllErrors(henv, hdbc, hstmtInsert));
+        if (insertableCount)  
+		  {
+            if (SQLPrepare(hstmtInsert, (UCHAR FAR *) sqlStmt.c_str(), SQL_NTS) != SQL_SUCCESS)
+                return(pDb->DispAllErrors(henv, hdbc, hstmtInsert));
+        }
+		  else 
+            insertable= false;
     }
     
     // Completed successfully
@@ -1282,7 +1289,7 @@ bool wxDbTable::DropIndex(const char * idxName)
 int wxDbTable::Insert(void)
 {
     assert(!queryOnly);
-    if (queryOnly)
+    if (queryOnly || !insertable)
         return(DB_FAILURE);
 
     bindInsertParams();
