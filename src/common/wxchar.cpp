@@ -200,9 +200,9 @@ WXDLLEXPORT wxChar * wxStrtok(wxChar *psz, const wxChar *delim, wxChar **save_pt
 #ifndef wxSetlocale
 WXDLLEXPORT wxWCharBuffer wxSetlocale(int category, const wxChar *locale)
 {
-    char *localeOld = setlocale(category, wxConvLibc.cWX2MB(locale));
+    char *localeOld = setlocale(category, wxConvLocal.cWX2MB(locale));
 
-    return wxWCharBuffer(wxConvLibc.cMB2WC(localeOld));
+    return wxWCharBuffer(wxConvLocal.cMB2WC(localeOld));
 }
 #endif
 
@@ -335,7 +335,7 @@ WXDLLEXPORT double wxStrtod(const wxChar *nptr, wxChar **endptr)
   }
 
   wxString data(nptr, nptr-start);
-  wxWX2MBbuf dat = data.mb_str(wxConvLibc);
+  wxWX2MBbuf dat = data.mb_str(wxConvLocal);
   char *rdat = wxMBSTRINGCAST dat;
   double ret = strtod(dat, &rdat);
 
@@ -363,7 +363,7 @@ WXDLLEXPORT long int wxStrtol(const wxChar *nptr, wxChar **endptr, int base)
          (wxIsalpha(*nptr) && (wxToupper(*nptr) - wxT('A') + 10 < base))) nptr++;
 
   wxString data(nptr, nptr-start);
-  wxWX2MBbuf dat = data.mb_str(wxConvLibc);
+  wxWX2MBbuf dat = data.mb_str(wxConvLocal);
   char *rdat = wxMBSTRINGCAST dat;
   long int ret = strtol(dat, &rdat, base);
 
@@ -376,12 +376,20 @@ WXDLLEXPORT long int wxStrtol(const wxChar *nptr, wxChar **endptr, int base)
 #ifdef wxNEED_WX_STDIO_H
 WXDLLEXPORT FILE * wxFopen(const wxChar *path, const wxChar *mode)
 {
-    return fopen( wxConvFile.cWX2MB(path), wxConvLibc.cWX2MB(mode) );
+    char mode_buffer[10];
+    for (size_t i = 0; i < wxStrlen(mode)+1; i++)
+       mode_buffer[i] = (char) mode[i];
+    
+    return fopen( wxConvFile.cWX2MB(path), mode_buffer );
 }
 
 WXDLLEXPORT FILE * wxFreopen(const wxChar *path, const wxChar *mode, FILE *stream)
 {
-    return freopen( wxConvFile.cWX2MB(path), wxConvLibc.cWX2MB(mode), stream );
+    char mode_buffer[10];
+    for (size_t i = 0; i < wxStrlen(mode)+1; i++)
+       mode_buffer[i] = (char) mode[i];
+    
+    return freopen( wxConvFile.cWX2MB(path), mode_buffer, stream );
 }
 
 WXDLLEXPORT int wxRemove(const wxChar *path)
@@ -398,19 +406,19 @@ WXDLLEXPORT int wxRename(const wxChar *oldpath, const wxChar *newpath)
 #ifndef wxAtof
 double   WXDLLEXPORT wxAtof(const wxChar *psz)
 {
-  return atof(wxConvLibc.cWX2MB(psz));
+  return atof(wxConvLocal.cWX2MB(psz));
 }
 #endif
 
 #ifdef wxNEED_WX_STDLIB_H
 int      WXDLLEXPORT wxAtoi(const wxChar *psz)
 {
-  return atoi(wxConvLibc.cWX2MB(psz));
+  return atoi(wxConvLocal.cWX2MB(psz));
 }
 
 long     WXDLLEXPORT wxAtol(const wxChar *psz)
 {
-  return atol(wxConvLibc.cWX2MB(psz));
+  return atol(wxConvLocal.cWX2MB(psz));
 }
 
 wxChar * WXDLLEXPORT wxGetenv(const wxChar *name)
@@ -423,7 +431,7 @@ wxChar * WXDLLEXPORT wxGetenv(const wxChar *name)
   {
     // nope, retrieve it,
 #if wxUSE_UNICODE
-    wxCharBuffer buffer = wxConvLibc.cWX2MB(name);
+    wxCharBuffer buffer = wxConvLocal.cWX2MB(name);
     // printf( "buffer %s\n", (const char*) buffer );
     const char *val = getenv( (const char *)buffer );
 #else
@@ -435,7 +443,7 @@ wxChar * WXDLLEXPORT wxGetenv(const wxChar *name)
     
     // convert it,
 #ifdef wxUSE_UNICODE
-    data = (wxObject *)new wxString(val, wxConvLibc);
+    data = (wxObject *)new wxString(val, wxConvLocal);
 #else
     data = (wxObject *)new wxString(val);
 #endif
@@ -447,9 +455,9 @@ wxChar * WXDLLEXPORT wxGetenv(const wxChar *name)
   return (wxChar *)((wxString *)data)->c_str();
 }
 
-int      WXDLLEXPORT wxSystem(const wxChar *psz)
+int WXDLLEXPORT wxSystem(const wxChar *psz)
 {
-  return system(wxConvLibc.cWX2MB(psz));
+    return system(wxConvLocal.cWX2MB(psz));
 }
 
 #endif
@@ -457,17 +465,21 @@ int      WXDLLEXPORT wxSystem(const wxChar *psz)
 #ifdef wxNEED_WX_TIME_H
 WXDLLEXPORT size_t   wxStrftime(wxChar *s, size_t max, const wxChar *fmt, const struct tm *tm)
 {
-  if (!max) return 0;
-  char *buf = (char *)malloc(max);
-  size_t ret = strftime(buf, max, wxConvLibc.cWX2MB(fmt), tm);
-  if (ret) {
-    wxStrcpy(s, wxConvLibc.cMB2WX(buf));
-    free(buf);
-    return wxStrlen(s);
-  } else {
-    free(buf);
-    *s = 0;
-    return 0;
+    if (!max) return 0;
+    
+    char *buf = (char *)malloc(max);
+    size_t ret = strftime(buf, max, wxConvLocal.cWX2MB(fmt), tm);
+    if (ret)
+    {
+        wxStrcpy(s, wxConvLocal.cMB2WX(buf));
+        free(buf);
+        return wxStrlen(s);
+    } 
+    else
+    {
+        free(buf);
+        *s = 0;
+        return 0;
   }
 }
 #endif

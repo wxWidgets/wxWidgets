@@ -225,7 +225,7 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
 
   wxString buf;
   buf.Printf(wxT("%s %s HTTP/1.0\r\n"), request, path.c_str());
-  const wxWX2MBbuf pathbuf = wxConvLibc.cWX2MB(buf);
+  const wxWX2MBbuf pathbuf = wxConvLocal.cWX2MB(buf);
   Write(pathbuf, strlen(wxMBSTRINGCAST pathbuf));
   SendHeaders();
   Write("\r\n", 2);

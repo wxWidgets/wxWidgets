@@ -59,19 +59,6 @@ public:
 WXDLLEXPORT_DATA(extern wxMBConv) wxConvLibc;
 
 // ----------------------------------------------------------------------------
-// wxMBConvFile (for conversion to filenames)
-// ----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxMBConvFile : public wxMBConv
-{
-public:
-    virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
-    virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
-};
-
-WXDLLEXPORT_DATA(extern wxMBConvFile) wxConvFile;
-
-// ----------------------------------------------------------------------------
 // wxMBConvUTF7 (for conversion using UTF7 encoding)
 // ----------------------------------------------------------------------------
 
@@ -146,6 +133,7 @@ private:
     bool m_deferred;
 };
 
+#define wxConvFile wxConvLocal
 WXDLLEXPORT_DATA(extern wxCSConv) wxConvLocal;
 WXDLLEXPORT_DATA(extern wxMBConv *) wxConvCurrent;
 

@@ -1309,9 +1309,12 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
     wxCHECK_RET( m_ok && m_pstream, wxT("invalid postscript dc") );
 
 #ifdef __WXGTK20__
-    int dpi = GetResolution() * 2;
 
+    int dpi = GetResolution() * 2;
+    dpi = 300;
+    
     PangoContext *context = pango_ft2_get_context ( dpi, dpi );
+    
 
     // What are these for?
     pango_context_set_language (context, pango_language_from_string ("en_US"));
@@ -1329,7 +1332,7 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
 #endif
 	pango_layout_set_text( layout, (const char*) buffer, strlen(buffer) );
 
-#if 1
+#if 0
     double xx = LogicalToDeviceX(x);
     double yy = LogicalToDeviceY(y /*+ bitmap.GetHeight()*/ );
 

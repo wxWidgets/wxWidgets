@@ -186,14 +186,44 @@ static size_t decode_utf16(const wchar_t* input, wxUint32& output)
 // wxMBConv
 // ----------------------------------------------------------------------------
 
+#define IGNORE_LIBC 0
+
 size_t wxMBConv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 {
+#if IGNORE_LIBC
+    if (buf)
+    {
+        for (size_t i = 0; i < strlen( psz )+1; i++)
+            buf[i] = (wchar_t) psz[i];
+        // printf( "libc %s\n", buf );
+        return strlen( psz );
+    }
+    else
+    {
+        return strlen( psz );
+    }
+#else
     return wxMB2WC(buf, psz, n);
+#endif
 }
 
 size_t wxMBConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 {
+#if IGNORE_LIBC
+    if (buf)
+    {
+        for (size_t i = 0; i < wxStrlen( psz )+1; i++)
+            buf[i] = (char) psz[i];
+        // printf( "libc %s\n", buf );
+        return wxStrlen( psz );
+    }
+    else
+    {
+        return wxStrlen( psz );
+    }
+#else
     return wxWC2MB(buf, psz, n);
+#endif
 }
 
 const wxWCharBuffer wxMBConv::cMB2WC(const char *psz) const
@@ -220,27 +250,11 @@ const wxCharBuffer wxMBConv::cWC2MB(const wchar_t *psz) const
             return wxCharBuffer((char *) NULL);
         wxCharBuffer buf(nLen);                      // this allocates nLen+1
         WC2MB((char *)(const char *) buf, psz, nLen+1);
+        // printf( "str %s\n", (const char*) buf );
         return buf;
     }
     else
         return wxCharBuffer((char *) NULL);
-}
-
-// ----------------------------------------------------------------------------
-// standard file conversion
-// ----------------------------------------------------------------------------
-
-WXDLLEXPORT_DATA(wxMBConvFile) wxConvFile;
-
-// just use the libc conversion for now
-size_t wxMBConvFile::MB2WC(wchar_t *buf, const char *psz, size_t n) const
-{
-    return wxMB2WC(buf, psz, n);
-}
-
-size_t wxMBConvFile::WC2MB(char *buf, const wchar_t *psz, size_t n) const
-{
-    return wxWC2MB(buf, psz, n);
 }
 
 // ----------------------------------------------------------------------------
@@ -962,7 +976,9 @@ void wxCSConv::LoadNow()
         {
             wxString name = wxLocale::GetSystemEncodingName();
             if ( !name.empty() )
+            {
                 SetName(name);
+            }
         }
 
         // wxGetCharacterSet() complains about NULL name

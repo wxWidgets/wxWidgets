@@ -826,6 +826,45 @@ wxString operator+(const wxChar *psz, const wxString& str)
 // other common string functions
 // ===========================================================================
 
+#if wxUSE_UNICODE
+wxString wxString::FromAscii( char *ascii )
+{
+    if (!ascii)
+       return wxEmptyString;
+       
+    size_t len = strlen( ascii );
+    wxString res;
+    res.AllocBuffer( len );
+    wchar_t *dest = (wchar_t*)(const wchar_t*) res.c_str();
+    
+    for (size_t i = 0; i < len+1; i++)
+       dest[i] = (wchar_t) ascii[i];
+       
+    return res;
+}
+
+const wxCharBuffer wxString::ToAscii() const
+{
+    if (IsNull())
+       return wxCharBuffer( (const char*)NULL );
+
+    size_t len = Len();
+    wxCharBuffer buffer( len ); // allocates len+1
+    
+    char *dest = (char*)(const char*) buffer;
+    
+    for (size_t i = 0; i < len+1; i++)
+    {
+        if (m_pchData[i] > 127)
+            dest[i] = '_';
+        else
+            dest[i] = (char) m_pchData[i];
+    }
+    
+    return buffer;
+}
+#endif
+
 // ---------------------------------------------------------------------------
 // simple sub-string extraction
 // ---------------------------------------------------------------------------

@@ -1276,7 +1276,7 @@ wxString wxLocale::GetSystemEncodingName()
         }
         else
         {
-            encname = wxConvLibc.cMB2WX(alang);
+            encname = wxString::FromAscii( alang );
         }
     }
     else
@@ -1285,24 +1285,24 @@ wxString wxLocale::GetSystemEncodingName()
         // if we can't get at the character set directly, try to see if it's in
         // the environment variables (in most cases this won't work, but I was
         // out of ideas)
-        wxChar *lang = wxGetenv(wxT("LC_ALL"));
-        wxChar *dot = lang ? wxStrchr(lang, wxT('.')) : (wxChar *)NULL;
+        char *lang = getenv( "LC_ALL");
+        char *dot = lang ? strchr(lang, '.') : (char *)NULL;
         if (!dot)
         {
-            lang = wxGetenv(wxT("LC_CTYPE"));
+            lang = getenv( "LC_CTYPE" );
             if ( lang )
-                dot = wxStrchr(lang, wxT('.'));
+                dot = strchr(lang, '.' );
         }
         if (!dot)
         {
-            lang = wxGetenv(wxT("LANG"));
+            lang = getenv( "LANG");
             if ( lang )
-                dot = wxStrchr(lang, wxT('.'));
+                dot = strchr(lang, '.');
         }
 
         if ( dot )
         {
-            encname = dot+1;
+            encname = wxString::FromAscii( dot+1 );
         }
     }
 #endif // Win32/Unix

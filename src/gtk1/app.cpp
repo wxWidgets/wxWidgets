@@ -25,6 +25,7 @@
 #include "wx/settings.h"
 #include "wx/dialog.h"
 #include "wx/msgdlg.h"
+#include "wx/file.h"
 
 #if wxUSE_WX_RESOURCES
     #include "wx/resource.h"

@@ -153,7 +153,7 @@ int wxEntry(int argc, char **argv)
     int mb_argc = 0;
     while (mb_argc < argc)
     {
-        wxTheApp->argv[mb_argc] = wxStrdup(wxConvLibc.cMB2WX(argv[mb_argc]));
+        wxTheApp->argv[mb_argc] = wxStrdup(wxConvLocal.cMB2WX(argv[mb_argc]));
         mb_argc++;
     }
     wxTheApp->argv[mb_argc] = (wxChar *)NULL;

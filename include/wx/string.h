@@ -480,6 +480,18 @@ public:
     // identical to c_str()
     const wxChar* GetData() const { return m_pchData; }
 
+    // conversion to plain ascii: this is usefull for
+    // converting numbers or strings which are certain
+    // not to contain special chars (typically system
+    // functions, X atoms, environment variables etc.)
+#if wxUSE_UNICODE
+    static wxString FromAscii( char *ascii );
+    const wxCharBuffer ToAscii() const;
+#else
+    static wxString FromAscii( char *ascii ) { return wxString( ascii ); }
+    const char *ToAscii() const { return m_pchData; }
+#endif
+
     // conversions with (possible) format convertions: have to return a
     // buffer with temporary data
     //
