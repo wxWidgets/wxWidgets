@@ -190,11 +190,11 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
     }
 
     HFONT hPrevFont = (HFONT) ::SelectObject(hdc, hfont);
-   
-	DrawState(hdc, NULL, NULL,
-              (LPARAM)m_strName.c_str(), m_strName.length(),
-              x, rc.y, rc.GetWidth(), rc.GetHeight(),
-              DST_PREFIXTEXT | (st & wxODDisabled ? DSS_DISABLED : 0));
+
+    ::DrawState(hdc, NULL, NULL,
+                (LPARAM)m_strName.c_str(), m_strName.length(),
+                x, rc.y, rc.GetWidth(), rc.GetHeight(),
+                DST_PREFIXTEXT | (st & wxODDisabled ? DSS_DISABLED : 0));
 
     if ( !m_strAccel.empty() )
     {
@@ -234,9 +234,7 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
       RECT rect = { 0, 0, GetMarginWidth(), m_nHeight };
       if ( m_nHeight > 0 )
       {
-#ifndef __SC__
-        DrawFrameControl(hdcMem, &rect, DFC_MENU, DFCS_MENUCHECK);
-#endif
+        ::DrawFrameControl(hdcMem, &rect, DFC_MENU, DFCS_MENUCHECK);
       }
 
         // finally copy it to screen DC and clean up
@@ -265,21 +263,22 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
       // there should be enough place!
       wxASSERT((nBmpWidth <= rc.GetWidth()) && (nBmpHeight <= rc.GetHeight()));
 
-      int heightDiff = (m_nHeight - nBmpHeight);
-//      if (heightDiff = -1)
-//        heightDiff = -2;
-
-      //MT: blit with mask enabled.
+      int heightDiff = m_nHeight - nBmpHeight;
       dc.Blit(rc.x + (GetMarginWidth() - nBmpWidth) / 2,
               rc.y + heightDiff / 2,
               nBmpWidth, nBmpHeight,
-              &dcMem, 0, 0, wxCOPY, TRUE);
+              &dcMem, 0, 0, wxCOPY, TRUE /* use mask */);
 
       if ( st & wxODSelected ) {
         #ifdef  O_DRAW_NATIVE_API
-          RECT rectBmp = { rc.GetLeft(), rc.GetTop(),
-                           rc.GetLeft() + GetMarginWidth(),
-                           rc.GetTop() + m_nHeight };
+          RECT rectBmp =
+          {
+              rc.GetLeft(),
+              rc.GetTop(),
+              rc.GetLeft() + GetMarginWidth() - 1,
+              rc.GetTop() + m_nHeight - 1
+          };
+
           SetBkColor(hdc, colBack);
           DrawEdge(hdc, &rectBmp, EDGE_RAISED, BF_SOFT | BF_RECT);
         #else
