@@ -50,7 +50,7 @@ protected:
 
   long EfeWidth;	 	// Efective Width
 
-  GWorldPtr lpbi;
+  void *lpbi;
   int bgindex;
   wxPalette* m_palette;
   bool imageOK;
