@@ -1,0 +1,111 @@
+\section{\class{wxPropertyListView}}\label{wxpropertylistview}
+
+The {\bf wxPropertyListView} class shows a wxPropertySheet as a Visual Basic-style property list.
+
+\wxheading{See also}
+
+\helpref{wxPropertyListView overview}{wxpropertylistviewoverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxPropertyListView::wxPropertyListView}
+
+\func{void}{wxPropertyListView}{ \param{wxPanel*} propPanel = NULL, \param{long}{ flags = wxPROP\_BUTTON\_DEFAULT}}
+
+Constructor.
+
+The {\it flags} argument can be a bit list of the following:
+
+\begin{itemize}\itemsep=0pt
+\item wxPROP\_BUTTON\_CLOSE
+\item wxPROP\_BUTTON\_OK
+\item wxPROP\_BUTTON\_CANCEL
+\item wxPROP\_BUTTON\_CHECK\_CROSS
+\item wxPROP\_BUTTON\_HELP
+\item wxPROP\_DYNAMIC\_VALUE\_FIELD
+\item wxPROP\_PULLDOWN
+\end{itemize}
+
+\membersection{wxPropertyListView::\destruct{wxPropertyListView}}
+
+\func{void}{\destruct{wxPropertyListView}}{\void}
+
+Destructor.
+
+\membersection{wxPropertyListView::AssociatePanel}\label{wxpropertylistviewassociatepanel}
+
+\func{void}{AssociatePanel}{\param{wxPanel *}{panel}}
+
+Associates the window on which the controls will be displayed, with the view (sets an internal pointer to the window).
+
+\membersection{wxPropertyListView::BeginShowingProperty}\label{wxpropertylistviewbeginshowingproperty}
+
+\func{bool}{BeginShowingProperty}{\param{wxProperty *}{property}}
+
+Finds the appropriate validator and loads the property into the controls, by calling
+wxPropertyValidator::OnPrepareControls and then wxPropertyListView::DisplayProperty.
+
+\membersection{wxPropertyListView::DisplayProperty}\label{wxpropertylistviewdisplayproperty}
+
+\func{bool}{DisplayProperty}{\param{wxProperty *}{property}}
+
+Calls wxPropertyValidator::OnDisplayValue for the current property's validator. This function
+gets called by wxPropertyListView::BeginShowingProperty, which is in turn called
+from ShowProperty, called by OnPropertySelect, called by the listbox callback when selected.
+
+\membersection{wxPropertyListView::EndShowingProperty}\label{wxpropertylistviewendshowingproperty}
+
+\func{bool}{EndShowingProperty}{\param{wxProperty *}{property}}
+
+Finds the appropriate validator and unloads the property from the controls, by calling
+wxPropertyListView::RetrieveProperty, wxPropertyValidator::OnClearControls and (if we're in
+detailed editing mode) wxPropertyValidator::OnClearDetailControls.
+
+\membersection{wxPropertyListView::GetPanel}\label{wxpropertylistviewgetpanel}
+
+\func{wxPanel *}{GetPanel}{\void}
+
+Returns the panel associated with the view.
+
+\membersection{wxPropertyListView::GetManagedWindow}\label{wxpropertylistviewgetmanagedwindow}
+
+\func{wxWindow *}{GetManagedWindow}{\void}
+
+Returns the managed window (a frame or dialog) associated with the view.
+
+\membersection{wxPropertyListView::GetWindowCancelButton}\label{wxpropertylistviewgetwindowcancelbutton}
+
+\func{wxButton *}{GetWindowCancelButton}{\void}
+
+Returns the window cancel button, if any.
+
+\membersection{wxPropertyListView::GetWindowCloseButton}\label{wxpropertylistviewgetwindowclosebutton}
+
+\func{wxButton *}{GetWindowCloseButton}{\void}
+
+Returns the window close or OK button, if any.
+
+\membersection{wxPropertyListView::GetWindowHelpButton}\label{wxpropertylistviewgetwindowhelpbutton}
+
+\func{wxButton *}{GetWindowHelpButton}{\void}
+
+Returns the window help button, if any.
+
+\membersection{wxPropertyListView::SetManagedWindow}\label{wxpropertylistviewsetmanagedwindow}
+
+\func{void}{SetManagedWindow}{\param{wxWindow *}{win}}
+
+Sets the managed window (a frame or dialog) associated with the view.
+
+\membersection{wxPropertyListView::UpdatePropertyDisplayInList}\label{wxpropertylistviewupdatepropdisplay}
+
+\func{bool}{UpdatePropertyDisplayInList}{\param{wxProperty *}{property}}
+
+Updates the display for the given changed property.
+
+\membersection{wxPropertyListView::UpdatePropertyList}\label{wxpropertylistviewupdateproplist}
+
+\func{bool}{UpdatePropertyList}{\param{bool }{clearEditArea = true}}
+
+Updates the whole property list display.
+
