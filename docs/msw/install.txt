@@ -298,7 +298,7 @@ Watcom C++ 10.6/11 and OpenWatcom compilation
 
 1. Change directory to build\msw. Type 'wmake -f makefile.wat' to
    make the wxWindows core library.
-2. Change directory to wx\samples\minimal and type 'wmake -f makefile.wat'
+2. Change directory to samples\minimal and type 'wmake -f makefile.wat'
    to make this sample. Repeat for other samples of interest.
 
 
@@ -540,7 +540,7 @@ and can be downloaded from http://www.digitalmars.com/
 
 2. Change directory to build\msw. Type 'make -f makefile.dm' to
    make the wxWindows core library.
-3. Change directory to wx\samples\minimal and type 'make -f makefile.dm'
+3. Change directory to samples\minimal and type 'make -f makefile.dm'
    to make this sample. The mdi and image sample also work; others may give
    linker erros due to missing libraries
 
