@@ -30,13 +30,13 @@
 
 
 MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
-MAKE_CONST_WXSTRING2(UTF8String, "UTF-8");
-MAKE_CONST_WXSTRING2(StyleString, "style");
-MAKE_CONST_WXSTRING2(SizeString, "size");
-MAKE_CONST_WXSTRING2(PosString, "pos");
-MAKE_CONST_WXSTRING2(BitmapString, "bitmap");
-MAKE_CONST_WXSTRING2(IconString, "icon");
-MAKE_CONST_WXSTRING2(FontString, "font");
+MAKE_CONST_WXSTRING2(UTF8String,   wxT("UTF-8"));
+MAKE_CONST_WXSTRING2(StyleString,  wxT("style"));
+MAKE_CONST_WXSTRING2(SizeString,   wxT("size"));
+MAKE_CONST_WXSTRING2(PosString,    wxT("pos"));
+MAKE_CONST_WXSTRING2(BitmapString, wxT("bitmap"));
+MAKE_CONST_WXSTRING2(IconString,   wxT("icon"));
+MAKE_CONST_WXSTRING2(FontString,   wxT("font"));
 
 
 %include _xrc_rename.i

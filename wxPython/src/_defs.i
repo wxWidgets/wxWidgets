@@ -65,7 +65,7 @@ typedef unsigned char   byte;
 %enddef
 
 %define MAKE_CONST_WXSTRING2(strname, val)
-    %{ static const wxString wxPy##strname(wxT(val)); %}
+    %{ static const wxString wxPy##strname(val); %}
     %immutable;
     %name(strname) const wxString wxPy##strname;
     %mutable;

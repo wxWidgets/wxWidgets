@@ -211,7 +211,7 @@ def processXML(xmlfile, modname, swigFile, pyFile):
                 addWX = True
                
 
-        if doRename:
+        if doRename and name:
             old = new = name
             if old.startswith('wx') and not old.startswith('wxEVT_'):
                 # remove all wx prefixes except wxEVT_ and write a %rename directive for it

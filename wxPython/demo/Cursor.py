@@ -56,9 +56,9 @@ class TestPanel(wx.Panel):
         self.tx = wx.StaticText(self, -1,                                
              "This sample allows you to see all the stock cursors \n"
              "available to wxPython.  Simply select a name from the \n"
-             "wx.Choice and then move the mouse into the window below \n"
-             "to see the cursor.  NOTE: not all stock cursors have a \n"
-             "specific representaion on all platforms.")
+             "wx.Choice and then move the mouse into the window \n"
+             "below to see the cursor.  NOTE: not all stock cursors \n"
+             "have a specific representaion on all platforms.")
         
         self.win = wx.Window(self, -1, size=(200,200), style=wx.SIMPLE_BORDER)
         self.win.SetBackgroundColour("white")
@@ -70,8 +70,8 @@ class TestPanel(wx.Panel):
 
         # Setup the layout
         gbs = wx.GridBagSizer()
-        gbs.Add(self.cb, (2,2))
-        gbs.Add(self.tx, (2,4))
+        gbs.Add(self.cb, (2,1))
+        gbs.Add(self.tx, (2,3))
         gbs.Add(self.win, (5,0), (1, 6), wx.ALIGN_CENTER)
         self.SetSizer(gbs)
 

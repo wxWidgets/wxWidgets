@@ -38,9 +38,9 @@
 %pythoncode { wx = core }
 
 
-MAKE_CONST_WXSTRING2(DynamicSashNameStr, "dynamicSashWindow");
-MAKE_CONST_WXSTRING2(EditableListBoxNameStr, "editableListBox");
-MAKE_CONST_WXSTRING2(TreeListCtrlNameStr, "treelistctrl");
+MAKE_CONST_WXSTRING2(DynamicSashNameStr,     wxT("dynamicSashWindow"));
+MAKE_CONST_WXSTRING2(EditableListBoxNameStr, wxT("editableListBox"));
+MAKE_CONST_WXSTRING2(TreeListCtrlNameStr,    wxT("treelistctrl"));
 
 MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
 

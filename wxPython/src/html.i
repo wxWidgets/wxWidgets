@@ -35,9 +35,9 @@
 
 
 MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
-MAKE_CONST_WXSTRING2(HtmlWindowNameStr, "htmlWindow")
-MAKE_CONST_WXSTRING2(HtmlPrintoutTitleStr, "Printout")
-MAKE_CONST_WXSTRING2(HtmlPrintingTitleStr, "Printing")
+MAKE_CONST_WXSTRING2(HtmlWindowNameStr,    wxT("htmlWindow"))
+MAKE_CONST_WXSTRING2(HtmlPrintoutTitleStr, wxT("Printout"))
+MAKE_CONST_WXSTRING2(HtmlPrintingTitleStr, wxT("Printing"))
 
 
 // TODO: Split this file into multiple %included files that coresponds to the

@@ -27,7 +27,7 @@
 %pythoncode { wx = core }
 
 
-MAKE_CONST_WXSTRING2(GLCanvasNameStr, "GLCanvas");
+MAKE_CONST_WXSTRING2(GLCanvasNameStr, wxT("GLCanvas"));
 MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
 
 
