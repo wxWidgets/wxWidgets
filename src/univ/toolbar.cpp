@@ -652,7 +652,7 @@ bool wxStdToolbarInputHandler::HandleMouse(wxInputConsumer *consumer,
     wxToolBar *tbar = wxStaticCast(consumer->GetInputWindow(), wxToolBar);
     wxToolBarToolBase *tool = tbar->FindToolForPosition(event.GetX(), event.GetY());
 
-    if ( tool && !tool->IsEnabled() )
+    if ( !tool || !tool->IsEnabled() )
         return TRUE;
 
     return wxStdButtonInputHandler::HandleMouse(consumer, event);
