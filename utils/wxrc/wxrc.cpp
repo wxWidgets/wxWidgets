@@ -580,7 +580,13 @@ static wxString ConvertText(const wxString& str)
                 case wxT('\n') : str2 << wxT("\\n"); break;
                 case wxT('\t') : str2 << wxT("\\t"); break;
                 case wxT('\r') : str2 << wxT("\\r"); break;
-                case wxT('\\') : str2 << wxT("\\\\"); break;
+                case wxT('\\') : if ((*(dt+1) != 'n') &&
+                                     (*(dt+1) != 't') &&
+                                     (*(dt+1) != 'r'))
+                                     str2 << wxT("\\\\");
+                                 else
+                                     str2 << wxT("\\");    
+                                 break;
                 case wxT('"')  : str2 << wxT("\\\""); break;
                 default        : str2 << *dt; break;
             }
