@@ -253,7 +253,7 @@ bool wxFile::Open(const wxChar *szFileName, OpenMode mode, int accessMode)
 bool wxFile::Close()
 {
     if ( IsOpened() ) {
-        if ( close(m_fd) == -1 ) {
+        if ( wxClose(m_fd) == -1 ) {
             wxLogSysError(_("can't close file descriptor %d"), m_fd);
             m_fd = fd_invalid;
             return FALSE;
@@ -277,7 +277,7 @@ off_t wxFile::Read(void *pBuf, off_t nCount)
 #ifdef __MWERKS__
     int iRc = ::read(m_fd, (char*) pBuf, nCount);
 #else
-    int iRc = ::read(m_fd, pBuf, nCount);
+    int iRc = wxRead(m_fd, pBuf, nCount);
 #endif
     if ( iRc == -1 ) {
         wxLogSysError(_("can't read from file descriptor %d"), m_fd);
@@ -351,7 +351,7 @@ off_t wxFile::Seek(off_t ofs, wxSeekMode mode)
             break;
     }
 
-    int iRc = lseek(m_fd, ofs, origin);
+    int iRc = wxLseek(m_fd, ofs, origin);
     if ( iRc == -1 ) {
         wxLogSysError(_("can't seek on file descriptor %d"), m_fd);
         return wxInvalidOffset;
@@ -422,7 +422,7 @@ bool wxFile::Eof() const
     else
         iRc = ofsCur == ofsMax;
 #else  // Windows and "native" compiler
-    iRc = eof(m_fd);
+    iRc = wxEof(m_fd);
 #endif // Windows/Unix
 
     switch ( iRc ) {
