@@ -1,7 +1,6 @@
 # This file was created automatically by SWIG.
 import streamsc
 import wx
-import string
 class wxInputStreamPtr :
     def __init__(self,this):
         self.this = this

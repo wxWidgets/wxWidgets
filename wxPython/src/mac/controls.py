@@ -200,6 +200,9 @@ class wxCheckBoxPtr(wxControlPtr):
     def GetValue(self, *_args, **_kwargs):
         val = apply(controlsc.wxCheckBox_GetValue,(self,) + _args, _kwargs)
         return val
+    def IsChecked(self, *_args, **_kwargs):
+        val = apply(controlsc.wxCheckBox_IsChecked,(self,) + _args, _kwargs)
+        return val
     def SetValue(self, *_args, **_kwargs):
         val = apply(controlsc.wxCheckBox_SetValue,(self,) + _args, _kwargs)
         return val

@@ -19,6 +19,8 @@
 /* Implementation : PYTHON */
 
 #define SWIGPYTHON
+#include "Python.h"
+
 #include <string.h>
 #include <stdlib.h>
 /* Definitions for Windows/Unix exporting */
@@ -36,12 +38,9 @@
 #   define SWIGEXPORT(a) a
 #endif
 
-#include "Python.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -12675,8 +12674,7 @@ static PyObject *_wrap_wxGrid_GetSelectedRows(PyObject *self, PyObject *args, Py
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    const wxArrayInt & _result_ref = wxGrid_GetSelectedRows(_arg0);
-    _result = (wxArrayInt *) &_result_ref;
+    _result = new wxArrayInt (wxGrid_GetSelectedRows(_arg0));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -12688,6 +12686,7 @@ static PyObject *_wrap_wxGrid_GetSelectedRows(PyObject *self, PyObject *args, Py
         PyList_Append(_resultobj, val);
         Py_DECREF(val);
     }
+    delete _result;
 }
     return _resultobj;
 }
@@ -12712,8 +12711,7 @@ static PyObject *_wrap_wxGrid_GetSelectedCols(PyObject *self, PyObject *args, Py
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    const wxArrayInt & _result_ref = wxGrid_GetSelectedCols(_arg0);
-    _result = (wxArrayInt *) &_result_ref;
+    _result = new wxArrayInt (wxGrid_GetSelectedCols(_arg0));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -12725,6 +12723,7 @@ static PyObject *_wrap_wxGrid_GetSelectedCols(PyObject *self, PyObject *args, Py
         PyList_Append(_resultobj, val);
         Py_DECREF(val);
     }
+    delete _result;
 }
     return _resultobj;
 }

@@ -941,7 +941,7 @@ wxPYAPP_ASSERT_DIALOG = wxc.wxPYAPP_ASSERT_DIALOG
 
 #----------------------------------------------------------------------------
 # Name:         _extra.py
-# Purpose:	This file is appended to the shadow class file generated
+# Purpose:      This file is appended to the shadow class file generated
 #               by SWIG.  We add some unSWIGable things here.
 #
 # Author:       Robin Dunn

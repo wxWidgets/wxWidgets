@@ -19,6 +19,8 @@
 /* Implementation : PYTHON */
 
 #define SWIGPYTHON
+#include "Python.h"
+
 #include <string.h>
 #include <stdlib.h>
 /* Definitions for Windows/Unix exporting */
@@ -36,12 +38,9 @@
 #   define SWIGEXPORT(a) a
 #endif
 
-#include "Python.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -2126,6 +2125,34 @@ static PyObject *_wrap_wxCheckBox_GetValue(PyObject *self, PyObject *args, PyObj
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     _result = (bool )wxCheckBox_GetValue(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxCheckBox_IsChecked(_swigobj)  (_swigobj->IsChecked())
+static PyObject *_wrap_wxCheckBox_IsChecked(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxCheckBox * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxCheckBox_IsChecked",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCheckBox_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCheckBox_IsChecked. Expected _wxCheckBox_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxCheckBox_IsChecked(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -11264,6 +11291,7 @@ static PyMethodDef controlscMethods[] = {
 	 { "new_wxPreChoice", (PyCFunction) _wrap_new_wxPreChoice, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxChoice", (PyCFunction) _wrap_new_wxChoice, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCheckBox_SetValue", (PyCFunction) _wrap_wxCheckBox_SetValue, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCheckBox_IsChecked", (PyCFunction) _wrap_wxCheckBox_IsChecked, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCheckBox_GetValue", (PyCFunction) _wrap_wxCheckBox_GetValue, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCheckBox_Create", (PyCFunction) _wrap_wxCheckBox_Create, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPreCheckBox", (PyCFunction) _wrap_new_wxPreCheckBox, METH_VARARGS | METH_KEYWORDS },

@@ -621,6 +621,9 @@ class wxDCPtr(wxObjectPtr):
     def GetFullTextExtent(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_GetFullTextExtent,(self,) + _args, _kwargs)
         return val
+    def GetMultiLineTextExtent(self, *_args, **_kwargs):
+        val = apply(gdic.wxDC_GetMultiLineTextExtent,(self,) + _args, _kwargs)
+        return val
     def GetTextForeground(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_GetTextForeground,(self,) + _args, _kwargs)
         if val: val = wxColourPtr(val) ; val.thisown = 1
