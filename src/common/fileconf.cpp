@@ -485,7 +485,7 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
       wxString strKey(FilterInEntryName(wxString(pStart, pEnd)));
 
       // skip whitespace
-      while ( isspace(*pEnd) )
+      while ( wxIsspace(*pEnd) )
         pEnd++;
 
       if ( *pEnd++ != wxT('=') ) {
