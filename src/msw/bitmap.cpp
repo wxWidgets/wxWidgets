@@ -827,6 +827,13 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth, WXHDC hdc )
 
 wxImage wxBitmap::ConvertToImage() const
 {
+    // the colour used as transparent one in wxImage and the one it is replaced
+    // with when it really occurs in the bitmap
+    static const int MASK_RED = 1;
+    static const int MASK_GREEN = 2;
+    static const int MASK_BLUE = 3;
+    static const int MASK_BLUE_REPLACEMENT = 2;
+
     wxImage image;
 
     wxCHECK_MSG( Ok(), wxNullImage, wxT("invalid bitmap") );
@@ -918,27 +925,39 @@ wxImage wxBitmap::ConvertToImage() const
         ::SetBkColor( memdc, RGB( 255, 255, 255 ) );
         ::GetDIBits( memdc, hbitmap, 0, height, lpBits, lpDIBh, DIB_RGB_COLORS );
         ::DeleteDC( memdc );
-        // background color set to RGB(16,16,16) in consistent with wxGTK
-        unsigned char r=16, g=16, b=16;
+        // background color set to mask colour
+        unsigned char r=MASK_RED, g=MASK_GREEN, b=MASK_BLUE;
         ptdata = data;
         ptbits = lpBits;
         for( i=0; i<height; i++ )
         {
             for( j=0; j<width; j++ )
             {
-                if( *ptbits != 0 )
-                    ptdata += 3;
-                else
+                // is this pixel transparent?
+                if ( *ptbits != 0 )
                 {
-                    *(ptdata++)  = r;
-                    *(ptdata++)  = g;
-                    *(ptdata++)  = b;
+                    if ( (ptdata[0] == MASK_RED) &&
+                            (ptdata[1] == MASK_GREEN) &&
+                                (ptdata[2] == MASK_BLUE) )
+                    {
+                        // we have to fudge the colour a bit to prevent this
+                        // pixel from appearing transparent
+                        ptdata[2] = MASK_BLUE_REPLACEMENT;
+                    }
+                    ptdata += 3;
+                }
+                else // masked pixel
+                {
+                    *(ptdata++)  = MASK_RED;
+                    *(ptdata++)  = MASK_GREEN;
+                    *(ptdata++)  = MASK_BLUE;
                 }
                 ptbits += 3;
             }
             ptbits += padding;
         }
-        image.SetMaskColour( r, g, b );
+
+        image.SetMaskColour( MASK_RED, MASK_GREEN, MASK_BLUE );
         image.SetMask( TRUE );
     }
     else
