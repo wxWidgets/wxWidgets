@@ -367,10 +367,6 @@ void WXDLLEXPORT wxLogSysError(long lErrCode, const wxChar *szFormat, ...)
 // wxLog class implementation
 // ----------------------------------------------------------------------------
 
-wxLog::wxLog()
-{
-}
-
 wxChar *wxLog::SetLogBuffer( wxChar *buf, size_t size)
 {
     wxChar *oldbuf = s_szBuf;

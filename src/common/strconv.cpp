@@ -166,11 +166,6 @@ static size_t decode_utf16(const wxUint16* input, wxUint32& output)
 // wxMBConv
 // ----------------------------------------------------------------------------
 
-wxMBConv::~wxMBConv()
-{
-    // nothing to do here
-}
-
 const wxWCharBuffer wxMBConv::cMB2WC(const char *psz) const
 {
     if ( psz )
@@ -1292,7 +1287,7 @@ private:
 
 #if defined(__WXCOCOA__)
 
-// RN:  There is no UTF-32 support in either Core Foundation or 
+// RN:  There is no UTF-32 support in either Core Foundation or
 // Cocoa.  Strangely enough, internally Core Foundation uses
 // UTF 32 internally quite a bit - its just not public (yet).
 
@@ -1300,139 +1295,139 @@ private:
 #include <CoreFoundation/CFStringEncodingExt.h>
 
 CFStringEncoding wxCFStringEncFromFontEnc(wxFontEncoding encoding)
-{    	
-	CFStringEncoding enc = 0 ;
-	if ( encoding == wxFONTENCODING_DEFAULT )
-	{
+{
+    CFStringEncoding enc = 0 ;
+    if ( encoding == wxFONTENCODING_DEFAULT )
+    {
 #if wxUSE_GUI
-		encoding = wxFont::GetDefaultEncoding() ;
+        encoding = wxFont::GetDefaultEncoding() ;
 #else
-		encoding = wxLocale::GetSystemEncoding() ;
+        encoding = wxLocale::GetSystemEncoding() ;
 #endif
-	}
-	else switch( encoding)
-	{
-		case wxFONTENCODING_ISO8859_1 :
-    		enc = kCFStringEncodingISOLatin1 ;
-    		break ;
-		case wxFONTENCODING_ISO8859_2 :
-    		enc = kCFStringEncodingISOLatin2;
-    		break ;
-		case wxFONTENCODING_ISO8859_3 :
-    		enc = kCFStringEncodingISOLatin3 ;
-    		break ;
-		case wxFONTENCODING_ISO8859_4 :
-    		enc = kCFStringEncodingISOLatin4;
-    		break ;
-		case wxFONTENCODING_ISO8859_5 :
-    		enc = kCFStringEncodingISOLatinCyrillic;
-    		break ;
-		case wxFONTENCODING_ISO8859_6 :
-    		enc = kCFStringEncodingISOLatinArabic;
-    		break ;
-		case wxFONTENCODING_ISO8859_7 :
-    		enc = kCFStringEncodingISOLatinGreek;
-    		break ;
-		case wxFONTENCODING_ISO8859_8 :
-    		enc = kCFStringEncodingISOLatinHebrew;
-    		break ;
-		case wxFONTENCODING_ISO8859_9 :
-    		enc = kCFStringEncodingISOLatin5;
-    		break ;
-		case wxFONTENCODING_ISO8859_10 :
-    		enc = kCFStringEncodingISOLatin6;
-    		break ;
-		case wxFONTENCODING_ISO8859_11 :
-    		enc = kCFStringEncodingISOLatinThai;
-    		break ;
-		case wxFONTENCODING_ISO8859_13 :
-    		enc = kCFStringEncodingISOLatin7;
-    		break ;
-		case wxFONTENCODING_ISO8859_14 :
-    		enc = kCFStringEncodingISOLatin8;
-    		break ;
-		case wxFONTENCODING_ISO8859_15 :
-    		enc = kCFStringEncodingISOLatin9;
-    		break ;
+    }
+    else switch( encoding)
+    {
+        case wxFONTENCODING_ISO8859_1 :
+            enc = kCFStringEncodingISOLatin1 ;
+            break ;
+        case wxFONTENCODING_ISO8859_2 :
+            enc = kCFStringEncodingISOLatin2;
+            break ;
+        case wxFONTENCODING_ISO8859_3 :
+            enc = kCFStringEncodingISOLatin3 ;
+            break ;
+        case wxFONTENCODING_ISO8859_4 :
+            enc = kCFStringEncodingISOLatin4;
+            break ;
+        case wxFONTENCODING_ISO8859_5 :
+            enc = kCFStringEncodingISOLatinCyrillic;
+            break ;
+        case wxFONTENCODING_ISO8859_6 :
+            enc = kCFStringEncodingISOLatinArabic;
+            break ;
+        case wxFONTENCODING_ISO8859_7 :
+            enc = kCFStringEncodingISOLatinGreek;
+            break ;
+        case wxFONTENCODING_ISO8859_8 :
+            enc = kCFStringEncodingISOLatinHebrew;
+            break ;
+        case wxFONTENCODING_ISO8859_9 :
+            enc = kCFStringEncodingISOLatin5;
+            break ;
+        case wxFONTENCODING_ISO8859_10 :
+            enc = kCFStringEncodingISOLatin6;
+            break ;
+        case wxFONTENCODING_ISO8859_11 :
+            enc = kCFStringEncodingISOLatinThai;
+            break ;
+        case wxFONTENCODING_ISO8859_13 :
+            enc = kCFStringEncodingISOLatin7;
+            break ;
+        case wxFONTENCODING_ISO8859_14 :
+            enc = kCFStringEncodingISOLatin8;
+            break ;
+        case wxFONTENCODING_ISO8859_15 :
+            enc = kCFStringEncodingISOLatin9;
+            break ;
 
-		case wxFONTENCODING_KOI8 :
-    		enc = kCFStringEncodingKOI8_R;
-    		break ;
-		case wxFONTENCODING_ALTERNATIVE : // MS-DOS CP866
-    		enc = kCFStringEncodingDOSRussian;
-    		break ;
+        case wxFONTENCODING_KOI8 :
+            enc = kCFStringEncodingKOI8_R;
+            break ;
+        case wxFONTENCODING_ALTERNATIVE : // MS-DOS CP866
+            enc = kCFStringEncodingDOSRussian;
+            break ;
 
-//		case wxFONTENCODING_BULGARIAN : 
-//    		enc = ;
-//    		break ;
-	    		
-		case wxFONTENCODING_CP437 : 
-    		enc =kCFStringEncodingDOSLatinUS ;
-    		break ;
-		case wxFONTENCODING_CP850 :
-    		enc = kCFStringEncodingDOSLatin1;
-    		break ;
-		case wxFONTENCODING_CP852 : 
-    		enc = kCFStringEncodingDOSLatin2;
-    		break ;
-		case wxFONTENCODING_CP855 :
-    		enc = kCFStringEncodingDOSCyrillic;
-    		break ;
-		case wxFONTENCODING_CP866 :
-    		enc =kCFStringEncodingDOSRussian ;
-    		break ;
-		case wxFONTENCODING_CP874 :
-    		enc = kCFStringEncodingDOSThai;
-    		break ;
-		case wxFONTENCODING_CP932 : 
-    		enc = kCFStringEncodingDOSJapanese;
-    		break ;
-		case wxFONTENCODING_CP936 : 
-    		enc =kCFStringEncodingDOSChineseSimplif ;
-    		break ;
-		case wxFONTENCODING_CP949 : 
-    		enc = kCFStringEncodingDOSKorean;
-    		break ;
-		case wxFONTENCODING_CP950 : 
-    		enc = kCFStringEncodingDOSChineseTrad;
-    		break ;
-    		
-		case wxFONTENCODING_CP1250 : 
-    		enc = kCFStringEncodingWindowsLatin2;
-    		break ;
-		case wxFONTENCODING_CP1251 : 
-    		enc =kCFStringEncodingWindowsCyrillic ;
-    		break ;
-		case wxFONTENCODING_CP1252 : 
-    		enc =kCFStringEncodingWindowsLatin1 ;
-    		break ;
-		case wxFONTENCODING_CP1253 : 
-    		enc = kCFStringEncodingWindowsGreek;
-    		break ;
-		case wxFONTENCODING_CP1254 : 
-    		enc = kCFStringEncodingWindowsLatin5;
-    		break ;
-		case wxFONTENCODING_CP1255 : 
-    		enc =kCFStringEncodingWindowsHebrew ;
-    		break ;
-		case wxFONTENCODING_CP1256 : 
-    		enc =kCFStringEncodingWindowsArabic ;
-    		break ;
-		case wxFONTENCODING_CP1257 : 
-    		enc = kCFStringEncodingWindowsBalticRim;
-    		break ;
-		case wxFONTENCODING_UTF7 : 
-    		enc = kCFStringEncodingNonLossyASCII ;
-    		break ;
-		case wxFONTENCODING_UTF8 : 
-    		enc = kCFStringEncodingUTF8 ;
-    		break ;
-		case wxFONTENCODING_EUC_JP : 
-    		enc = kCFStringEncodingEUC_JP;
-    		break ;
-		case wxFONTENCODING_UTF16 : 
+//      case wxFONTENCODING_BULGARIAN :
+//          enc = ;
+//          break ;
+
+        case wxFONTENCODING_CP437 :
+            enc =kCFStringEncodingDOSLatinUS ;
+            break ;
+        case wxFONTENCODING_CP850 :
+            enc = kCFStringEncodingDOSLatin1;
+            break ;
+        case wxFONTENCODING_CP852 :
+            enc = kCFStringEncodingDOSLatin2;
+            break ;
+        case wxFONTENCODING_CP855 :
+            enc = kCFStringEncodingDOSCyrillic;
+            break ;
+        case wxFONTENCODING_CP866 :
+            enc =kCFStringEncodingDOSRussian ;
+            break ;
+        case wxFONTENCODING_CP874 :
+            enc = kCFStringEncodingDOSThai;
+            break ;
+        case wxFONTENCODING_CP932 :
+            enc = kCFStringEncodingDOSJapanese;
+            break ;
+        case wxFONTENCODING_CP936 :
+            enc =kCFStringEncodingDOSChineseSimplif ;
+            break ;
+        case wxFONTENCODING_CP949 :
+            enc = kCFStringEncodingDOSKorean;
+            break ;
+        case wxFONTENCODING_CP950 :
+            enc = kCFStringEncodingDOSChineseTrad;
+            break ;
+
+        case wxFONTENCODING_CP1250 :
+            enc = kCFStringEncodingWindowsLatin2;
+            break ;
+        case wxFONTENCODING_CP1251 :
+            enc =kCFStringEncodingWindowsCyrillic ;
+            break ;
+        case wxFONTENCODING_CP1252 :
+            enc =kCFStringEncodingWindowsLatin1 ;
+            break ;
+        case wxFONTENCODING_CP1253 :
+            enc = kCFStringEncodingWindowsGreek;
+            break ;
+        case wxFONTENCODING_CP1254 :
+            enc = kCFStringEncodingWindowsLatin5;
+            break ;
+        case wxFONTENCODING_CP1255 :
+            enc =kCFStringEncodingWindowsHebrew ;
+            break ;
+        case wxFONTENCODING_CP1256 :
+            enc =kCFStringEncodingWindowsArabic ;
+            break ;
+        case wxFONTENCODING_CP1257 :
+            enc = kCFStringEncodingWindowsBalticRim;
+            break ;
+        case wxFONTENCODING_UTF7 :
+            enc = kCFStringEncodingNonLossyASCII ;
+            break ;
+        case wxFONTENCODING_UTF8 :
+            enc = kCFStringEncodingUTF8 ;
+            break ;
+        case wxFONTENCODING_EUC_JP :
+            enc = kCFStringEncodingEUC_JP;
+            break ;
+        case wxFONTENCODING_UTF16 :
             enc = kCFStringEncodingUnicode ;
-    		break ;            
+            break ;
         case wxFONTENCODING_MACROMAN :
             enc = kCFStringEncodingMacRoman ;
             break ;
@@ -1550,128 +1545,128 @@ CFStringEncoding wxCFStringEncFromFontEnc(wxFontEncoding encoding)
         case wxFONTENCODING_MACGAELIC :
             enc = kCFStringEncodingMacGaelic ;
             break ;
-//        case wxFONTENCODING_MACKEYBOARD :
-//            enc = kCFStringEncodingMacKeyboardGlyphs ;
-//            break ;    
-		default :
-			// because gcc is picky
-			break ;
-	} ;
-	return enc ;
+//      case wxFONTENCODING_MACKEYBOARD :
+//          enc = kCFStringEncodingMacKeyboardGlyphs ;
+//          break ;
+        default :
+            // because gcc is picky
+            break ;
+    } ;
+    return enc ;
 }
 
 wxFontEncoding wxFontEncFromCFStringEnc(CFStringEncoding encoding)
-{    	
-	wxFontEncoding enc = wxFONTENCODING_DEFAULT ;
+{
+    wxFontEncoding enc = wxFONTENCODING_DEFAULT ;
 
-	switch( encoding)
-	{
-		case kCFStringEncodingISOLatin1  :
-    		enc = wxFONTENCODING_ISO8859_1 ;
-    		break ;
-		case kCFStringEncodingISOLatin2 :
-    		enc = wxFONTENCODING_ISO8859_2;
-    		break ;
-		case kCFStringEncodingISOLatin3 :
-    		enc = wxFONTENCODING_ISO8859_3 ;
-    		break ;
-		case kCFStringEncodingISOLatin4 :
-    		enc = wxFONTENCODING_ISO8859_4;
-    		break ;
-		case kCFStringEncodingISOLatinCyrillic :
-    		enc = wxFONTENCODING_ISO8859_5;
-    		break ;
-		case kCFStringEncodingISOLatinArabic :
-    		enc = wxFONTENCODING_ISO8859_6;
-    		break ;
-		case kCFStringEncodingISOLatinGreek :
-    		enc = wxFONTENCODING_ISO8859_7;
-    		break ;
-		case kCFStringEncodingISOLatinHebrew :
-    		enc = wxFONTENCODING_ISO8859_8;
-    		break ;
-		case kCFStringEncodingISOLatin5 :
-    		enc = wxFONTENCODING_ISO8859_9;
-    		break ;
-		case kCFStringEncodingISOLatin6 :
-    		enc = wxFONTENCODING_ISO8859_10;
-    		break ;
-		case kCFStringEncodingISOLatin7 :
-    		enc = wxFONTENCODING_ISO8859_13;
-    		break ;
-		case kCFStringEncodingISOLatin8 :
-    		enc = wxFONTENCODING_ISO8859_14;
-    		break ;
-		case kCFStringEncodingISOLatin9 :
-    		enc =wxFONTENCODING_ISO8859_15 ;
-    		break ;
+    switch( encoding)
+    {
+        case kCFStringEncodingISOLatin1  :
+            enc = wxFONTENCODING_ISO8859_1 ;
+            break ;
+        case kCFStringEncodingISOLatin2 :
+            enc = wxFONTENCODING_ISO8859_2;
+            break ;
+        case kCFStringEncodingISOLatin3 :
+            enc = wxFONTENCODING_ISO8859_3 ;
+            break ;
+        case kCFStringEncodingISOLatin4 :
+            enc = wxFONTENCODING_ISO8859_4;
+            break ;
+        case kCFStringEncodingISOLatinCyrillic :
+            enc = wxFONTENCODING_ISO8859_5;
+            break ;
+        case kCFStringEncodingISOLatinArabic :
+            enc = wxFONTENCODING_ISO8859_6;
+            break ;
+        case kCFStringEncodingISOLatinGreek :
+            enc = wxFONTENCODING_ISO8859_7;
+            break ;
+        case kCFStringEncodingISOLatinHebrew :
+            enc = wxFONTENCODING_ISO8859_8;
+            break ;
+        case kCFStringEncodingISOLatin5 :
+            enc = wxFONTENCODING_ISO8859_9;
+            break ;
+        case kCFStringEncodingISOLatin6 :
+            enc = wxFONTENCODING_ISO8859_10;
+            break ;
+        case kCFStringEncodingISOLatin7 :
+            enc = wxFONTENCODING_ISO8859_13;
+            break ;
+        case kCFStringEncodingISOLatin8 :
+            enc = wxFONTENCODING_ISO8859_14;
+            break ;
+        case kCFStringEncodingISOLatin9 :
+            enc =wxFONTENCODING_ISO8859_15 ;
+            break ;
 
-		case kCFStringEncodingKOI8_R :
-    		enc = wxFONTENCODING_KOI8;
-    		break ;
+        case kCFStringEncodingKOI8_R :
+            enc = wxFONTENCODING_KOI8;
+            break ;
 
-//		case  : 
-//    		enc = wxFONTENCODING_BULGARIAN;
-//    		break ;
+//      case  :
+//          enc = wxFONTENCODING_BULGARIAN;
+//          break ;
 
-		case kCFStringEncodingDOSLatinUS : 
-    		enc = wxFONTENCODING_CP437;
-    		break ;
-		case kCFStringEncodingDOSLatin1 :
-    		enc = wxFONTENCODING_CP850;
-    		break ;
-		case kCFStringEncodingDOSLatin2 : 
-    		enc =wxFONTENCODING_CP852 ;
-    		break ;
-		case kCFStringEncodingDOSCyrillic :
-    		enc = wxFONTENCODING_CP855;
-    		break ;
-		case kCFStringEncodingDOSRussian :
-    		enc = wxFONTENCODING_CP866;
-    		break ;
-		case kCFStringEncodingDOSThai :
-    		enc =wxFONTENCODING_CP874 ;
-    		break ;
-		case kCFStringEncodingDOSJapanese : 
-    		enc = wxFONTENCODING_CP932;
-    		break ;
-		case kCFStringEncodingDOSChineseSimplif : 
-    		enc = wxFONTENCODING_CP936;
-    		break ;
-		case kCFStringEncodingDOSKorean : 
-    		enc = wxFONTENCODING_CP949;
-    		break ;
-		case kCFStringEncodingDOSChineseTrad : 
-    		enc = wxFONTENCODING_CP950;
-    		break ;
-    		
-		case kCFStringEncodingWindowsLatin2 : 
-    		enc = wxFONTENCODING_CP1250;
-    		break ;
-		case kCFStringEncodingWindowsCyrillic : 
-    		enc = wxFONTENCODING_CP1251;
-    		break ;
-		case kCFStringEncodingWindowsLatin1 : 
-    		enc = wxFONTENCODING_CP1252;
-    		break ;
-		case kCFStringEncodingWindowsGreek : 
-    		enc = wxFONTENCODING_CP1253;
-    		break ;
-		case kCFStringEncodingWindowsLatin5 : 
-    		enc = wxFONTENCODING_CP1254;
-    		break ;
-		case kCFStringEncodingWindowsHebrew : 
-    		enc = wxFONTENCODING_CP1255;
-    		break ;
-		case kCFStringEncodingWindowsArabic : 
-    		enc = wxFONTENCODING_CP1256;
-    		break ;
-		case kCFStringEncodingWindowsBalticRim : 
-    		enc =wxFONTENCODING_CP1257 ;
-    		break ;
-		case kCFStringEncodingEUC_JP : 
-    		enc = wxFONTENCODING_EUC_JP;
-    		break ;
+        case kCFStringEncodingDOSLatinUS :
+            enc = wxFONTENCODING_CP437;
+            break ;
+        case kCFStringEncodingDOSLatin1 :
+            enc = wxFONTENCODING_CP850;
+            break ;
+        case kCFStringEncodingDOSLatin2 :
+            enc =wxFONTENCODING_CP852 ;
+            break ;
+        case kCFStringEncodingDOSCyrillic :
+            enc = wxFONTENCODING_CP855;
+            break ;
+        case kCFStringEncodingDOSRussian :
+            enc = wxFONTENCODING_CP866;
+            break ;
+        case kCFStringEncodingDOSThai :
+            enc =wxFONTENCODING_CP874 ;
+            break ;
+        case kCFStringEncodingDOSJapanese :
+            enc = wxFONTENCODING_CP932;
+            break ;
+        case kCFStringEncodingDOSChineseSimplif :
+            enc = wxFONTENCODING_CP936;
+            break ;
+        case kCFStringEncodingDOSKorean :
+            enc = wxFONTENCODING_CP949;
+            break ;
+        case kCFStringEncodingDOSChineseTrad :
+            enc = wxFONTENCODING_CP950;
+            break ;
+
+        case kCFStringEncodingWindowsLatin2 :
+            enc = wxFONTENCODING_CP1250;
+            break ;
+        case kCFStringEncodingWindowsCyrillic :
+            enc = wxFONTENCODING_CP1251;
+            break ;
+        case kCFStringEncodingWindowsLatin1 :
+            enc = wxFONTENCODING_CP1252;
+            break ;
+        case kCFStringEncodingWindowsGreek :
+            enc = wxFONTENCODING_CP1253;
+            break ;
+        case kCFStringEncodingWindowsLatin5 :
+            enc = wxFONTENCODING_CP1254;
+            break ;
+        case kCFStringEncodingWindowsHebrew :
+            enc = wxFONTENCODING_CP1255;
+            break ;
+        case kCFStringEncodingWindowsArabic :
+            enc = wxFONTENCODING_CP1256;
+            break ;
+        case kCFStringEncodingWindowsBalticRim :
+            enc =wxFONTENCODING_CP1257 ;
+            break ;
+        case kCFStringEncodingEUC_JP :
+            enc = wxFONTENCODING_EUC_JP;
+            break ;
         case kCFStringEncodingUnicode :
             enc = wxFONTENCODING_UTF16;
             break;
@@ -1794,9 +1789,9 @@ wxFontEncoding wxFontEncFromCFStringEnc(CFStringEncoding encoding)
             break ;
 //        case kCFStringEncodingMacKeyboardGlyphs :
 //            enc = wxFONTENCODING_MACKEYBOARD ;
-//            break ;       
-	} ;
-	return enc ;
+//            break ;
+    } ;
+    return enc ;
 }
 
 class wxMBConv_cocoa : public wxMBConv
@@ -1830,13 +1825,13 @@ public:
     size_t MB2WC(wchar_t * szOut, const char * szUnConv, size_t nOutSize) const
     {
         wxASSERT(szUnConv);
-        
+
         size_t nBufSize = strlen(szUnConv) + 1;
         size_t nRealOutSize;
 
-        UniChar* szUniCharBuffer 	= (UniChar*) szOut; 
-        wchar_t* szConvBuffer 		= szOut;
-        
+        UniChar* szUniCharBuffer    = (UniChar*) szOut;
+        wchar_t* szConvBuffer       = szOut;
+
         if (szConvBuffer == NULL && nOutSize != 0)
         {
             szConvBuffer = new wchar_t[nOutSize] ;
@@ -1847,18 +1842,18 @@ public:
 #endif
 
         CFDataRef theData = CFDataCreateWithBytesNoCopy (
-                                            NULL,	//allocator 
-                                            (const UInt8*)szUnConv, 
+                                            NULL,     //allocator
+                                            (const UInt8*)szUnConv,
                                             nBufSize - 1,
-                                            NULL	//deallocator
-                                            ); 
+                                            NULL      //deallocator
+                                            );
 
         wxASSERT(theData);
 
         CFStringRef theString = CFStringCreateFromExternalRepresentation (
                                                 NULL,
                                                 theData,
-                                                m_char_encoding 
+                                                m_char_encoding
                                                 );
 
         wxASSERT(theString);
@@ -1869,16 +1864,16 @@ public:
             CFRelease(theString);
             return nRealOutSize - 1;
         }
-        
+
         CFRange theRange = { 0, CFStringGetLength(theString) };
-        
+
         CFStringGetCharacters(theString, theRange, szUniCharBuffer);
-        
-        
+
+
         nRealOutSize = (CFStringGetLength(theString) + 1);
-        
+
         CFRelease(theString);
-        
+
         szUniCharBuffer[nRealOutSize-1] = '\0' ;
 
 #if SIZEOF_WCHAR_T == 4
@@ -1898,7 +1893,7 @@ public:
         size_t nRealOutSize;
         char* szBuffer = szOut;
         UniChar* szUniBuffer = (UniChar*) szUnConv;
-        
+
         if (szOut == NULL)
         {
             // worst case
@@ -1923,9 +1918,9 @@ public:
                                 nBufSize,
                                 NULL //deallocator
                             );
-        
+
         wxASSERT(theString);
-        
+
         //Note that CER puts a BOM when converting to unicode
         //so we may want to check and use getchars instead in that case
         CFDataRef theData = CFStringCreateExternalRepresentation(
@@ -1938,9 +1933,9 @@ public:
 
         if(!theData)
             return (size_t)-1;
-        
+
         CFRelease(theString);
-        
+
         nRealOutSize = CFDataGetLength(theData);
 
         if ( szOut == NULL )
@@ -1955,12 +1950,12 @@ public:
             CFRelease(theData);
             return nRealOutSize - 1;
         }
-        
+
         CFRange theRange = {0, CFDataGetLength(theData) };
         CFDataGetBytes(theData, theRange, (UInt8*) szBuffer);
-            
-        CFRelease(theData);    
-        
+
+        CFRelease(theData);
+
 //TODO: This gets flagged as a non-malloced address by the debugger...
 //#if SIZEOF_WCHAR_T == 4
 //        delete[] szUniBuffer;
@@ -1969,9 +1964,9 @@ public:
     }
 
     bool IsOk() const
-    { 
+    {
         //TODO: check for invalid en/de/coding
-        return true; 
+        return true;
     }
 
 private:

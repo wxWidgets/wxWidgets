@@ -64,7 +64,7 @@ public:
 #endif // Unicode/ANSI
 
     // virtual dtor for any base class
-    virtual ~wxMBConv();
+    virtual ~wxMBConv(){};
 };
 
 // ----------------------------------------------------------------------------

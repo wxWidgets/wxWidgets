@@ -30,7 +30,7 @@ public:
 #else
     wxDataInputStream(wxInputStream& s);
 #endif
-    ~wxDataInputStream();
+    ~wxDataInputStream(){};
 
     bool IsOk() { return m_input->IsOk(); }
 
@@ -78,7 +78,7 @@ public:
 #else
     wxDataOutputStream(wxOutputStream& s);
 #endif
-    ~wxDataOutputStream();
+    ~wxDataOutputStream(){};
 
     bool IsOk() { return m_output->IsOk(); }
 

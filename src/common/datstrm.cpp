@@ -38,10 +38,6 @@ wxDataInputStream::wxDataInputStream(wxInputStream& s)
 {
 }
 
-wxDataInputStream::~wxDataInputStream()
-{
-}
-
 wxUint64 wxDataInputStream::Read64()
 {
   wxUint64 i64;
@@ -274,10 +270,6 @@ wxDataOutputStream::wxDataOutputStream(wxOutputStream& s, wxMBConv& conv)
 wxDataOutputStream::wxDataOutputStream(wxOutputStream& s)
   : m_output(&s), m_be_order(false)
 #endif
-{
-}
-
-wxDataOutputStream::~wxDataOutputStream()
 {
 }
 
