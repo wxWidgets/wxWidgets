@@ -265,6 +265,21 @@ it.
 \helpref{wxListBox::GetSelections}{wxlistboxgetselections},\rtfsp
 \helpref{wxListBox::SetSelection}{wxlistboxsetselection}
 
+\membersection{wxListBox::InsertItems}\label{wxlistboxinsertitems}
+
+\func{void}{InsertItems}{\param{int}{ nItems}, \param{const wxString}{ items}, \param{int}{ pos}}
+
+Insert the given number of strings before the specified position.
+
+\wxheading{Parameters}
+
+\docparam{nItems}{Number of items in the array {\it items}}
+
+\docparam{items}{Labels of items to be inserted}
+
+\docparam{pos}{Position before which to insert the items: for example, if {\it pos} is 0 the items
+will be inserted in the beginning of the listbox}
+
 \membersection{wxListBox::Number}\label{wxlistboxnumber}
 
 \constfunc{int}{Number}{\void}
