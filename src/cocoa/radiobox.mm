@@ -107,3 +107,8 @@ int wxRadioBox::GetRowCount() const
     return 0;
 }
 
+wxSize wxRadioBox::DoGetBestSize() const
+{
+    return wxSize(50,50);
+}
+

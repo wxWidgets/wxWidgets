@@ -94,6 +94,8 @@ public:
     // layout parameters
     virtual int GetColumnCount() const;
     virtual int GetRowCount() const;
+protected:
+    virtual wxSize DoGetBestSize() const;
 };
 
 #endif // __WX_COCOA_RADIOBOX_H__
