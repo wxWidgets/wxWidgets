@@ -297,7 +297,7 @@ bool wxTaskBarIcon::RegisterWindowClass()
 
 WXHWND wxTaskBarIcon::CreateTaskBarWindow()
 {
-    HINSTANCE hInstance = GetModuleHandle(NULL);
+    HINSTANCE hInstance = wxGetInstance();
 
     HWND hWnd = CreateWindowEx (0, wxTaskBarWindowClass,
             wxT("wxTaskBarWindow"),
