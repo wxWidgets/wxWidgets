@@ -193,13 +193,20 @@
 // Recommended setting: 1 (always)
 #define wxUSE_LOG 1
 
-// Recommended setting: 1 (always)
+// Support for command line parsing using wxCmdLineParser class.
+//
+// Default is 1
+//
+// Recommended setting: 1 (can be set to 0 if you don't use the cmd line)
+#define wxUSE_CMDLINE_PARSER 1
+
+// Recommended setting: 1
 #define wxUSE_LOGWINDOW 1
 
-// Recommended setting: 1 (always)
+// Recommended setting: 1
 #define wxUSE_LOGGUI 1
 
-// Recommended setting: 1 (always)
+// Recommended setting: 1
 #define wxUSE_LOG_DIALOG 1
 
 // Support for multithreaded applications: if 1, compile in thread classes
