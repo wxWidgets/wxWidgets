@@ -280,7 +280,9 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
                             ::sprintf(szScratch, s_szFlags, val);
                         }
                         else if (ilen == -1) {
-                            short int val = va_arg(argptr, short int);
+                            // NB: 'short int' value passed through '...'
+                            //      is promoted to 'int'
+                            short int val = (short int) va_arg(argptr, int);
                             ::sprintf(szScratch, s_szFlags, val);
                         }
                         else if (ilen == 1) {
