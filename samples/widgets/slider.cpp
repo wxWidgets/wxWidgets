@@ -39,7 +39,6 @@
 #include "wx/sizer.h"
 
 #include "widgets.h"
-#if 1
 #include "icons/slider.xpm"
 
 // ----------------------------------------------------------------------------
@@ -49,7 +48,7 @@
 // control ids
 enum
 {
-    SliderPage_Reset = 100,
+    SliderPage_Reset = wxID_HIGHEST,
     SliderPage_Clear,
     SliderPage_SetValue,
     SliderPage_SetMinAndMax,
@@ -83,7 +82,7 @@ protected:
 
     void OnCheckOrRadioBox(wxCommandEvent& event);
 
-    void OnSlider(wxCommandEvent& event);
+    void OnSlider(wxScrollEvent& event);
 
     void OnUpdateUIOtherSide(wxUpdateUIEvent& event);
     void OnUpdateUIValueButton(wxUpdateUIEvent& event);
@@ -155,7 +154,7 @@ BEGIN_EVENT_TABLE(SliderWidgetsPage, WidgetsPage)
 
     EVT_UPDATE_UI(SliderPage_CurValueText, SliderWidgetsPage::OnUpdateUICurValueText)
 
-    EVT_SLIDER(SliderPage_Slider, SliderWidgetsPage::OnSlider)
+    EVT_COMMAND_SCROLL(SliderPage_Slider, SliderWidgetsPage::OnSlider)
 
     EVT_CHECKBOX(-1, SliderWidgetsPage::OnCheckOrRadioBox)
     EVT_RADIOBOX(-1, SliderWidgetsPage::OnCheckOrRadioBox)
@@ -458,14 +457,48 @@ void SliderWidgetsPage::OnUpdateUIOtherSide(wxUpdateUIEvent& event)
     event.Enable( m_chkLabels->GetValue() );
 }
 
-void SliderWidgetsPage::OnSlider(wxCommandEvent& event)
+void SliderWidgetsPage::OnSlider(wxScrollEvent& event)
 {
     int value = event.GetInt();
 
     wxASSERT_MSG( value == m_slider->GetValue(),
-                  _T("slider value should be the same") );
+                  wxT("slider value should be the same") );
 
-    wxLogMessage(_T("Slider value changed, now %d"), value);
+    wxEventType eventType = event.GetEventType();
+
+    /*
+        This array takes the EXACT order of the declarations in
+        include/wx/event.h
+        (section "wxScrollBar and wxSlider event identifiers")
+    */
+    static const wxChar *eventNames[] =
+    {
+        wxT("wxEVT_SCROLL_TOP"),
+        wxT("wxEVT_SCROLL_BOTTOM"),
+        wxT("wxEVT_SCROLL_LINEUP"),
+        wxT("wxEVT_SCROLL_LINEDOWN"),
+        wxT("wxEVT_SCROLL_PAGEUP"),
+        wxT("wxEVT_SCROLL_PAGEDOWN"),
+        wxT("wxEVT_SCROLL_THUMBTRACK"),
+        wxT("wxEVT_SCROLL_THUMBRELEASE"),
+        wxT("wxEVT_SCROLL_ENDSCROLL")
+    };
+
+    int index = eventType - wxEVT_SCROLL_TOP;
+
+    /*
+        If this assert is triggered, there is an unknown slider event which
+        should be added to the above eventNames array.
+    */
+    wxASSERT_MSG(index >= 0 && index < WXSIZEOF(eventNames),
+                 wxT("Unknown slider event") );
+
+
+    static int s_numSliderEvents = 0;
+
+    wxLogMessage(wxT("Slider event #%d: %s (pos = %d)"),
+                 numSliderEvents++,
+                 eventNames[index],
+                 event.GetPosition());
 }
 
-#endif
