@@ -173,6 +173,14 @@ wxSize wxDatePickerCtrl::DoGetBestSize() const
 // wxDatePickerCtrl operations
 // ----------------------------------------------------------------------------
 
+#ifndef DateTime_GetSystemtime
+    #define DateTime_GetSystemtime DateTime_GetSystemTime
+#endif
+
+#ifndef DateTime_SetSystemtime
+    #define DateTime_SetSystemtime DateTime_SetSystemTime
+#endif
+
 void wxDatePickerCtrl::SetValue(const wxDateTime& dt)
 {
     // as we don't support DTS_SHOWNONE style so far, we don't allow setting
