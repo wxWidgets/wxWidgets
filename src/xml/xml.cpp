@@ -287,7 +287,7 @@ wxXmlDocument::wxXmlDocument()
 }
 
 wxXmlDocument::wxXmlDocument(const wxString& filename, const wxString& encoding)
-                          : wxObject(), m_root(NULL)
+              :wxObject(), m_root(NULL)
 {
     if ( !Load(filename, encoding) )
     {
@@ -296,7 +296,7 @@ wxXmlDocument::wxXmlDocument(const wxString& filename, const wxString& encoding)
 }
 
 wxXmlDocument::wxXmlDocument(wxInputStream& stream, const wxString& encoding)
-                          : wxObject(), m_root(NULL)
+              :wxObject(), m_root(NULL)
 {
     if ( !Load(stream, encoding) )
     {
@@ -305,6 +305,7 @@ wxXmlDocument::wxXmlDocument(wxInputStream& stream, const wxString& encoding)
 }
 
 wxXmlDocument::wxXmlDocument(const wxXmlDocument& doc)
+              :wxObject()
 {
     DoCopy(doc);
 }
