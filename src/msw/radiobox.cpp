@@ -32,6 +32,7 @@
     #include "wx/bitmap.h"
     #include "wx/brush.h"
     #include "wx/radiobox.h"
+    #include "wx/settings.h"
     #include "wx/log.h"
 #endif
 

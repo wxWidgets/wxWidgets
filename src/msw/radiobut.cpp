@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include "wx/setup.h"
 #include "wx/radiobut.h"
+#include "wx/settings.h"
 #include "wx/brush.h"
 #endif
 
