@@ -434,7 +434,7 @@ bool Ccontact::CreateIndexes(void)
 
 	bool		Ok = TRUE;
 
-	strcpy(idxDef[0].ColName, "IS_DEVELOPER");
+	strcpy(idxDef[0].ColName, "IS_DEV");
 	idxDef[0].Ascending = TRUE;
 
 	strcpy(idxDef[1].ColName, "NAME");
