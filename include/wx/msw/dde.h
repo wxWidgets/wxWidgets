@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_DDE_H_
@@ -49,8 +49,8 @@ class WXDLLEXPORT wxDDEConnection: public wxConnectionBase
 {
   DECLARE_DYNAMIC_CLASS(wxDDEConnection)
 public:
-  wxDDEConnection(char *buffer, int size);
-  wxDDEConnection(void);
+  wxDDEConnection(char *buffer, int size); // use external buffer
+  wxDDEConnection(); // use internal buffer
   ~wxDDEConnection(void);
 
   // Calls that CLIENT can make
@@ -70,9 +70,7 @@ public:
   virtual bool OnDisconnect(void);
 
  public:
-  char*         m_bufPtr;
   wxString      m_topicName;
-  int           m_bufSize;
   wxDDEServer*  m_server;
   wxDDEClient*  m_client;
 

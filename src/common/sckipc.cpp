@@ -346,12 +346,18 @@ wxTCPConnection::wxTCPConnection () : wxConnectionBase()
   m_codeco   = NULL;
 }
 
-wxTCPConnection::wxTCPConnection(char * WXUNUSED(buffer), int WXUNUSED(size))
+wxTCPConnection::wxTCPConnection(wxChar *buffer, int size)
+       : wxConnectionBase(buffer, size)
 {
+  m_sock     = NULL;
+  m_sockstrm = NULL;
+  m_codeci   = NULL;
+  m_codeco   = NULL;
 }
 
 wxTCPConnection::~wxTCPConnection ()
 {
+  Disconnect();
   wxDELETE(m_codeci);
   wxDELETE(m_codeco);
   wxDELETE(m_sockstrm);
@@ -371,10 +377,13 @@ void wxTCPConnection::Compress(bool WXUNUSED(on))
 // Calls that CLIENT can make.
 bool wxTCPConnection::Disconnect ()
 {
+  if ( !GetConnected() )
+      return TRUE;
   // Send the the disconnect message to the peer.
   m_codeco->Write8(IPC_DISCONNECT);
   m_sock->Notify(FALSE);
   m_sock->Close();
+  SetConnected(false);
 
   return TRUE;
 }
@@ -415,10 +424,11 @@ char *wxTCPConnection::Request (const wxString& item, int *size, wxIPCFormat for
   else
   {
     size_t s;
-    char *data = NULL;
 
     s = m_codeci->Read32();
-    data = new char[s];
+    wxChar *data = GetBufferAtLeast( s );
+    wxASSERT_MSG(data != NULL,
+                 _T("Buffer too small in wxTCPConnection::Request") );
     m_sockstrm->Read(data, s);
 
     if (size)
@@ -552,12 +562,13 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
 
     format = (wxIPCFormat)codeci->Read8();
     size = codeci->Read32();
-    data = new char[size];
+    data = connection->GetBufferAtLeast( size );
+    wxASSERT_MSG(data != NULL,
+                 _T("Buffer too small in wxTCPEventHandler::Client_OnRequest") );
     sockstrm->Read(data, size);
 
     connection->OnExecute (topic_name, data, size, format);
 
-    delete [] data;
     break;
   }
   case IPC_ADVISE:
@@ -569,12 +580,13 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
     item = codeci->ReadString();
     format = (wxIPCFormat)codeci->Read8();
     size = codeci->Read32();
-    data = new char[size];
+    data = connection->GetBufferAtLeast( size );
+    wxASSERT_MSG(data != NULL,
+                 _T("Buffer too small in wxTCPEventHandler::Client_OnRequest") );
     sockstrm->Read(data, size);
 
     connection->OnAdvise (topic_name, item, data, size, format);
 
-    delete [] data;
     break;
   }
   case IPC_ADVISE_START:
@@ -610,12 +622,12 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
     item = codeci->ReadString();
     format = (wxIPCFormat)codeci->Read8();
     size = codeci->Read32();
-    data = new wxChar[size];
+    data = connection->GetBufferAtLeast( size );
+    wxASSERT_MSG(data != NULL,
+                 _T("Buffer too small in wxTCPEventHandler::Client_OnRequest") );
     sockstrm->Read(data, size);
 
     connection->OnPoke (topic_name, item, data, size, format);
-
-    delete [] data;
 
     break;
   }
@@ -648,6 +660,7 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
   {
     sock->Notify(FALSE);
     sock->Close();
+    connection->SetConnected(false);
     connection->OnDisconnect();
     break;
   }
