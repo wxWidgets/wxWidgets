@@ -34,7 +34,7 @@ class MyApp;
 class MyCanvas: public wxScrolledWindow
 {
 public:
-    MyCanvas() {};
+    MyCanvas() {}
     MyCanvas( wxWindow *parent, wxWindowID, const wxPoint &pos, const wxSize &size );
     ~MyCanvas();
     void OnPaint( wxPaintEvent &event );
@@ -44,7 +44,6 @@ public:
     void OnMoveButton( wxCommandEvent &event );
     void OnScrollWin( wxCommandEvent &event );
     void OnMouseDown( wxMouseEvent &event );
-    void OnScroll( wxScrollWinEvent &event );
 
     wxButton *m_button;
 
@@ -52,7 +51,54 @@ public:
     DECLARE_EVENT_TABLE()
 };
 
+// ----------------------------------------------------------------------------
+// MyScrolledWindow classes: examples of wxScrolledWindow usage
+// ----------------------------------------------------------------------------
+
+// base class for both of them
+class MyScrolledWindowBase : public wxScrolledWindow
+{
+public:
+    MyScrolledWindowBase(wxWindow *parent) : wxScrolledWindow(parent)
+    {
+        m_nLines = 100;
+
+        InitScrollbars();
+    }
+
+protected:
+    // set the scrollbar params
+    void InitScrollbars();
+
+    // the height of one line on screen
+    wxCoord m_hLine;
+
+    // the number of lines we draw
+    size_t m_nLines;
+};
+
+// this class does "stupid" redrawing - it redraws everything each time
+class MyScrolledWindowDumb : public MyScrolledWindowBase
+{
+public:
+    MyScrolledWindowDumb(wxWindow *parent) : MyScrolledWindowBase(parent) { }
+
+    virtual void OnDraw(wxDC& dc);
+};
+
+// this class does "smart" redrawing - only redraws the lines which must be
+// redrawn
+class MyScrolledWindowSmart : public MyScrolledWindowBase
+{
+public:
+    MyScrolledWindowSmart(wxWindow *parent) : MyScrolledWindowBase(parent) { }
+
+    virtual void OnDraw(wxDC& dc);
+};
+
+// ----------------------------------------------------------------------------
 // MyFrame
+// ----------------------------------------------------------------------------
 
 class MyFrame: public wxFrame
 {
@@ -105,7 +151,6 @@ BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
   EVT_BUTTON( ID_DELBUTTON,   MyCanvas::OnDeleteButton)
   EVT_BUTTON( ID_MOVEBUTTON,  MyCanvas::OnMoveButton)
   EVT_BUTTON( ID_SCROLLWIN,   MyCanvas::OnScrollWin)
-  EVT_SCROLLWIN(              MyCanvas::OnScroll)
 END_EVENT_TABLE()
 
 MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
@@ -141,8 +186,8 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     (void) new wxRadioBox( this, -1, "This", wxPoint(10,440), wxDefaultSize, 5, choices, 2, wxRA_SPECIFY_ROWS );
 
     wxListCtrl *m_listCtrl = new wxListCtrl(
-	this, -1, wxPoint(200, 110), wxSize(180, 120),
-	wxLC_REPORT | wxSIMPLE_BORDER | wxLC_SINGLE_SEL );
+            this, -1, wxPoint(200, 110), wxSize(180, 120),
+            wxLC_REPORT | wxSIMPLE_BORDER | wxLC_SINGLE_SEL );
 
     m_listCtrl->InsertColumn(0, "First", wxLIST_FORMAT_LEFT, 90);
     m_listCtrl->InsertColumn(1, "Last", wxLIST_FORMAT_LEFT, 90);
@@ -159,7 +204,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
 
 #endif
 
-    wxPanel *test = new wxPanel( this, -1, wxPoint(10, 10), wxSize(130,50), wxSIMPLE_BORDER | wxTAB_TRAVERSAL );
+    wxPanel *test = new wxPanel( this, -1, wxPoint(10, 110), wxSize(130,50), wxSIMPLE_BORDER | wxTAB_TRAVERSAL );
     test->SetBackgroundColour( "WHEAT" );
 
 #if 0
@@ -260,15 +305,6 @@ void MyCanvas::OnScrollWin( wxCommandEvent &WXUNUSED(event) )
     Scroll( -1, y+2 );
 }
 
-void MyCanvas::OnScroll( wxScrollWinEvent &event )
-{
-    if (( event.GetEventType() == wxEVT_SCROLLWIN_THUMBRELEASE ))
-    {
-        wxLogMessage( "Thumb released; position: %u", event.GetPosition() );
-    }
-    event.Skip();
-}
-
 // MyFrame
 
 const int ID_QUIT  = 108;
@@ -306,15 +342,15 @@ MyFrame::MyFrame()
 
     m_canvas = new MyCanvas( this, -1, wxPoint(0,0), wxSize(100,100) );
     m_canvas->SetScrollbars( 10, 10, 50, 100 );
-#if 0
-    m_log = new wxTextCtrl( this, -1, "This is the log window.\n", wxPoint(0,0), wxSize(100,100), wxTE_MULTILINE );
-    wxLog *old_log = wxLog::SetActiveTarget( new wxLogTextCtrl( m_log ) );
-    delete old_log;
-#endif
+
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 
     topsizer->Add( m_canvas, 1, wxEXPAND );
-//  topsizer->Add( m_log, 0, wxEXPAND );
+
+    wxSizer *sizerBtm = new wxBoxSizer(wxHORIZONTAL);
+    sizerBtm->Add( new MyScrolledWindowDumb(this), 1, wxEXPAND );
+    sizerBtm->Add( new MyScrolledWindowSmart(this), 1, wxEXPAND );
+    topsizer->Add( sizerBtm, 1, wxEXPAND );
 
     SetAutoLayout( TRUE );
     SetSizer( topsizer );
@@ -354,3 +390,62 @@ bool MyApp::OnInit()
   return TRUE;
 }
 
+// ----------------------------------------------------------------------------
+// MyScrolledWindowXXX
+// ----------------------------------------------------------------------------
+
+void MyScrolledWindowBase::InitScrollbars()
+{
+    wxClientDC dc(this);
+    dc.GetTextExtent(_T("Line 17"), NULL, &m_hLine);
+
+    // no horz scrolling
+    SetScrollbars(0, m_hLine, 0, m_nLines + 1, 0, 0, TRUE /* no refresh */);
+}
+
+void MyScrolledWindowDumb::OnDraw(wxDC& dc)
+{
+    // this is useful to see which lines are redrawn
+    static size_t s_redrawCount = 0;
+    dc.SetTextForeground(s_redrawCount++ % 2 ? *wxRED : *wxBLUE);
+
+    wxCoord y = 0;
+    for ( size_t line = 0; line < m_nLines; line++ )
+    {
+        wxCoord yPhys;
+        CalcScrolledPosition(0, y, NULL, &yPhys);
+
+        dc.DrawText(wxString::Format(_T("Line %u (logical %d, physical %d)"),
+                                     line, y, yPhys), 0, y);
+        y += m_hLine;
+    }
+}
+
+void MyScrolledWindowSmart::OnDraw(wxDC& dc)
+{
+    // this is useful to see which lines are redrawn
+    static size_t s_redrawCount = 0;
+    dc.SetTextForeground(s_redrawCount++ % 2 ? *wxRED : *wxBLUE);
+
+    // update region is always in device coords, translate to logical ones
+    wxRect rectUpdate = GetUpdateRegion().GetBox();
+    CalcUnscrolledPosition(rectUpdate.x, rectUpdate.y,
+                           &rectUpdate.x, &rectUpdate.y);
+
+    size_t lineFrom = rectUpdate.y / m_hLine,
+           lineTo = rectUpdate.GetBottom() / m_hLine;
+
+    if ( lineTo > m_nLines - 1)
+        lineTo = m_nLines - 1;
+
+    wxCoord y = lineFrom*m_hLine;
+    for ( size_t line = lineFrom; line <= lineTo; line++ )
+    {
+        wxCoord yPhys;
+        CalcScrolledPosition(0, y, NULL, &yPhys);
+
+        dc.DrawText(wxString::Format(_T("Line %u (logical %d, physical %d)"),
+                                     line, y, yPhys), 0, y);
+        y += m_hLine;
+    }
+}
