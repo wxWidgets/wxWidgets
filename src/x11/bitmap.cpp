@@ -435,6 +435,10 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
     // by doing several blits as per the Windows
     // implementation because Nano-X doesn't support
     // XSetClipMask.
+    // TODO: could perhaps speed this function up
+    // by making a buffer of pixel values,
+    // and then calling GrArea to write that to the
+    // pixmap. See demos/nxroach.c.
 
     bool hasMask = image.HasMask();
     
@@ -803,34 +807,8 @@ wxImage wxBitmap::ConvertToImage() const
     int bpp = DefaultDepth( xdisplay, xscreen );
 
 #if wxUSE_NANOX
-    int w = image.GetWidth();
-    int h = image.GetHeight();
-    
-    wxMemoryDC memDC;
-    memDC.SelectObject(*this);
-
-    wxColour pixelCol;
-
-    // Warning: this is very inefficient.
-    // TODO: use GrReadArea to get an array of pixels
-    int i, j;
-    for (i = 0; i < w; i++)
-    {
-        for (j = 0; j < h; j++)
-        {
-            memDC.GetPixel(i, j, & pixelCol);
-
-            // TODO: make wxColour accessors more efficient
-            // by inlining, if possible
-            image.SetRGB(i, j,
-                         pixelCol.Red(), pixelCol.Green(),
-                         pixelCol.Blue());
-        }
-    }
-    memDC.SelectObject(wxNullBitmap);
-
+    wxGetImageFromDrawable((Pixmap) GetPixmap(), 0, 0, GetWidth(), GetHeight(), image);
     return image;
-    
 #else
     // !wxUSE_NANOX
     XImage *x_image = NULL;
@@ -1303,32 +1281,27 @@ WXDisplay *wxBitmap::GetDisplay() const
 // Copy from the drawable to the wxImage
 bool wxGetImageFromDrawable(GR_DRAW_ID drawable, int srcX, int srcY, int width, int height, wxImage& image)
 {
-	GR_SCREEN_INFO sinfo;
+    GR_SCREEN_INFO sinfo;
     int x, y;
     GR_PIXELVAL *pixels;
-    GR_PIXELVAL pixel;
-    GR_COLOR colour;
     GR_PALETTE* palette = NULL;
+    unsigned char rgb[3], *pp;
 
-	GrGetScreenInfo(&sinfo);
+    GrGetScreenInfo(&sinfo);
 
-	if (sinfo.pixtype == MWPF_PALETTE) {
-		if(!(palette = malloc(sizeof(GR_PALETTE)))) {
+    if (sinfo.pixtype == MWPF_PALETTE) {
+		if(!(palette = (GR_PALETTE*) malloc(sizeof(GR_PALETTE)))) {
 			return FALSE;
 		}
 		GrGetSystemPalette(palette);
 	}
 
-	if(!(pixels = (GR_PIXELVAL*) malloc(sizeof(GR_PIXELVAL) * width * height)))
+    if(!(pixels = (GR_PIXELVAL*) malloc(sizeof(GR_PIXELVAL) * width * height)))
     {
         return FALSE;
     }
 
-    if (!image.Create(width, height))
-    {
-        free(pixels);
-        return FALSE;
-    }
+    image.Create(width, height);
 
 	GrReadArea(drawable, srcX, srcY, width, height,
 						pixels);
@@ -1378,11 +1351,10 @@ bool wxGetImageFromDrawable(GR_DRAW_ID drawable, int srcX, int srcY, int width, 
 
             image.SetRGB(x, y, rgb[0], rgb[1], rgb[2]);
 
-		}
 	}
 
     free(pixels);
-	if(palette) free(palette);
+    if(palette) free(palette);
 
     return TRUE;
 }
