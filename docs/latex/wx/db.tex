@@ -305,7 +305,7 @@ other connection(s) for that same datasource.  This cuts down greatly on
 network traffic, database load, and connection creation time.
 
 When the program is done using a connection created through a call to 
-wxDbGetConnection(), the program shoudl call wxDbFreeConnection() to release 
+wxDbGetConnection(), the program should call wxDbFreeConnection() to release 
 the wxDb instance back to the cache.  DO NOT DELETE THE wxDb INSTANCE!  
 Deleting the wxDb instance returned can cause a crash/memory corruption 
 later in the program when the cache is cleaned up.
@@ -482,19 +482,6 @@ closing the database connection.
 
    // Close the wxDb connection when finished with it
    sampleDB.Close();
-
-   // Free Environment Handle that ODBC uses
-   //
-   // Be certain that no wxDb instances still exist 
-   // that were created using this handle!  If you
-   // use wxDbGetConnection() to get all the wxDb
-   // instances, you can use wxDbConnectionsInUse()
-   // to find out if any connections have not been 
-   // closed before calling this
-   if (SQLFreeEnv(Db.Henv) != SQL_SUCCESS)
-   {
-      // Error freeing environment handle
-   }
 \end{verbatim}
 
 
@@ -518,7 +505,7 @@ them by calling this function.
 
 Calling this member function commits ALL open transactions on this ODBC 
 connection.  For example, if three different wxDbTable instances used the 
-same connection to the datasource, commiting changes made on one of those 
+same connection to the datasource, committing changes made on one of those 
 wxDbTable instances commits any pending transactions on all three wxDbTable 
 instances.
 
@@ -722,6 +709,7 @@ If the view does not exist, this function will return TRUE.  Note that views are
 
 \membersection{wxDb::ExecSql}\label{wxdbexecsql}
 
+
 \func{bool}{ExecSql}{\param{const wxString &}{pSqlStmt}}
 
 Allows a native SQL command to be executed directly against the datasource.  In addition to being able to run any standard SQL command, use of this function allows a user to (potentially) utilize features specific to the datasource they are connected to that may not be available through ODBC.  The ODBC driver will pass the specified command directly to the datasource.
@@ -741,6 +729,19 @@ of processing.
 
 \helpref{wxDb::GetData}{wxdbgetdata}, \helpref{wxDb::GetNext}{wxdbgetnext}
 
+
+\membersection{wxDb::FwdOnlyCursors}\label{wxdbfwdonlycursors}
+
+\func{bool}{IsFwdOnlyCursors}{\void}
+
+Older form (pre-2.3/2.4 of wxWindows) of the 
+\helpref{wxDb::IsFwdOnlyCursors}{wxdbisfwdonlycursors}.  This method is 
+provided for backward compatability only.  The method 
+\helpref{wxDb::IsFwdOnlyCursors}{wxdbisfwdonlycursors} should be 
+used in place of this method. 
+
+
+\func{wxDbInf *}{GetCatalog}{\param{const wxChar *}{userID}}
 
 \membersection{wxDb::GetCatalog}\label{wxdbgetcatalog}
 
@@ -773,7 +774,10 @@ The returned catalog will only contain catalog entries for tables to which the u
 
 \docparam{tableName}{The table name you wish to obtain column information about.}
 
-\docparam{userID}{Name of the user that owns the table(s) (also referred to as schema).  Required for some datasources for situations where there may be multiple tables with the same name in the datasource, but owned by different users. {\it userID} is evaluated in the following manner:}
+\docparam{userID}{Name of the user that owns the table(s) (also referred to as schema).  
+Required for some datasources for situations where there may be multiple tables with the 
+same name in the datasource, but owned by different users. {\it userID } is 
+evaluated in the following manner:}
 
 \begin{verbatim}
          userID == NULL  ... UserID is ignored (DEFAULT)
@@ -861,7 +865,7 @@ passed for this parameter, as the API knows the size of the expected return
 value.}
 \docparam{cbReturned}{Pointer to the buffer containing the length of the 
 actual data returned.  If this value comes back as SQL_NULL_DATA, then the 
-wxDb::GetData() call has failed.}
+\helpref{wxDb::GetData}{wxdbgetdata} call has failed.}
 
 \wxheading{See also}
 
@@ -1307,7 +1311,7 @@ use this connection.}
 \func{void}{SetDebugErrorMessages}{\param{bool }{state}}
 
 \docparam{state}{Either TRUE (debug messages are logged) or FALSE (debug
-messages are not logged.}
+messages are not logged).}
 
 \wxheading{Remarks}
 
@@ -1335,7 +1339,7 @@ When compiled in release mode (FINAL=1), this setting has no affect.
 
 \wxheading{Remarks}
 
-When called with {\it sqlLogON}, all commands sent to the datasource engine are logged to the file specified by {\it filename}.  Logging is done by embedded riteSqlLog() calls in the database member functions, or may be manually logged by adding calls to \helpref{wxDb::WriteSqlLog}{wxdbwritesqllog} in your own source code.
+When called with {\it sqlLogON}, all commands sent to the datasource engine are logged to the file specified by {\it filename}.  Logging is done by embedded \helpref{wxDb::WriteSqlLog}{wxdbwritesqllog} calls in the database member functions, or may be manually logged by adding calls to \helpref{wxDb::WriteSqlLog}{wxdbwritesqllog} in your own source code.
 
 When called with {\it sqlLogOFF}, the logging file is closed, and any calls to \helpref{wxDb::WriteSqlLog}{wxdbwritesqllog} are ignored.
 
@@ -1517,10 +1521,11 @@ maintained by the wxDbTable class (and can be retrieved using the
 To access the nth column definition of your wxDbTable object, just reference 
 wxDbColDefs element [n - 1].
 
-Currently there are no member functions for this class.
-
 Typically, \helpref{wxDbTable::SetColDefs}{wxdbtablesetcoldefs} is used to 
 populate an array of these data structures for the wxDbTable instance.
+
+Currently there are no accessor functions for this class, so all members are 
+public.
 
 \begin{verbatim}
     wxChar  ColName[DB_MAX_COLUMN_NAME_LEN+1];  // Column Name
@@ -1543,6 +1548,12 @@ populate an array of these data structures for the wxDbTable instance.
 \wxheading{See also}
 
 \helpref{wxDbTable::GetColDefs}{wxdbtablegetcoldefs}, \helpref{wxDb constructor}{wxdbconstr}
+
+
+\membersection{wxDbColDef::Initialize}\label{wxdbcoldefinitialize}
+
+Simply initializes all member variables to a cleared state.  Called by 
+the constructor automatically.
 
 
 \section{\class{wxDbColInf}}\label{wxdbcolinf}
@@ -1584,6 +1595,13 @@ The constructor for this class initializes all the values to zero, "", or NULL.
 
 The destructor for this class takes care of deleting the pColFor member if 
 it is non-NULL.
+
+
+\membersection{wxDbColInf::Initialize}\label{wxdbcolinfinitialize}
+
+Simply initializes all member variables to a cleared state.  Called by 
+the constructor automatically.
+
 
 
 \section{\class{wxDbColFor}}\label{wxdbcolfor}
@@ -1630,21 +1648,6 @@ Work in progress, and should be inter-related with wxLocale eventually.
 
 Simply initializes all member variables to a cleared state.  Called by 
 the constructor automatically.
-
-
-\section{\class{wxDbIdxDef}}\label{wxdbidxdef}
-
-Used in creation of non-primary indexes.  Currently there are no member 
-functions for this class.
-
-\begin{verbatim}
-        wxChar  ColName[DB_MAX_COLUMN_NAME_LEN+1] 
-                                  // Name of column
-        bool    Ascending         // Is index maintained in 
-                                     ASCENDING sequence?
-\end{verbatim}
-
-There are no constructors/destructors as of this time, and no member functions.
 
 
 \section{\class{wxDbConnectInf}}\label{wxdbconnectinf}
@@ -1926,6 +1929,21 @@ Accessor function to assign the user ID for this class instance.
 
 
 
+\section{\class{wxDbIdxDef}}\label{wxdbidxdef}
+
+Used in creation of non-primary indexes.  Currently there are no member 
+functions for this class.
+
+\begin{verbatim}
+        wxChar  ColName[DB_MAX_COLUMN_NAME_LEN+1] 
+                                  // Name of column
+        bool    Ascending         // Is index maintained in 
+                                     ASCENDING sequence?
+\end{verbatim}
+
+There are no constructors/destructors as of this time, and no member functions.
+
+
 \section{\class{wxDbInf}}\label{wxdbinf}
 
 Contains information regarding the database connection (datasource name, 
@@ -2078,7 +2096,7 @@ this function.
 
 Constructs the full SQL statement that can be used to select all rows matching
 the criteria in the pWhereClause.  This function is called internally in the 
-wxDbTable class whenever the function \helpref{wxDbTable::Query}{wxdbtablequery}
+wxDbTable class whenever the function \helpref{wxDbTable::Query}{wxdbtablequery} 
 is called.
 
 NOTE: Only the columns specified in \helpref{wxDbTable::SetColDefs}{wxdbtablesetcoldefs} 
@@ -2320,7 +2338,7 @@ current query parameters specified in the WHERE and FROM clauses.
 
 \wxheading{Parameters}
 
-\docparam{args}{{\it OPTIONAL}.  This arguement allows the use of the 
+\docparam{args}{{\it OPTIONAL}.  This argument allows the use of the 
 DISTINCT keyword against a column name to cause the returned count to 
 only indicate the number of rows in the result set that have a unique 
 value in the specified column.  An example is shown below.  Default is "*", 
@@ -2789,7 +2807,7 @@ return FALSE, and the data contained in the bound columns will be undefined.
 
 \wxheading{See also}
 
-\helpref{wxDb::FwdOnlyCursors}{wxdbfwdonlycursors}
+\helpref{wxDb::IsFwdOnlyCursors}{wxdbisfwdonlycursors}
 
 
 \membersection{wxDbTable::GetFromClause}\label{wxdbtablegetfromclause}
@@ -2824,7 +2842,7 @@ return FALSE, and the data contained in the bound columns will be undefined.
 
 \wxheading{See also}
 
-\helpref{wxDb::FwdOnlyCursors}{wxdbfwdonlycursors}
+\helpref{wxDb::IsFwdOnlyCursors}{wxdbisfwdonlycursors}
 
 
 \membersection{wxDbTable::GetNewCursor}\label{wxdbtablegetnewcursor}
@@ -2923,7 +2941,7 @@ return FALSE, and the data contained in the bound columns will be undefined.
 
 \wxheading{See also}
 
-\helpref{wxDb::FwdOnlyCursors}{wxdbfwdonlycursors}, 
+\helpref{wxDb::IsFwdOnlyCursors}{wxdbisfwdonlycursors}, 
 \helpref{wxDbTable::--}{wxdbtableminusminus}
 
 
@@ -2951,7 +2969,7 @@ Returns the ODBC row number for performing positioned updates and deletes.
 This function is not being used within the ODBC class library and may be a 
 candidate for removal if no use is found for it.
 
-Row nuumber with some datasources/ODBC drivers is the position in the result set, 
+Row number with some datasources/ODBC drivers is the position in the result set, 
 while in others it may be a physical position in the database.  Check your 
 database documentation to find out which behavior is supported.
 
@@ -3052,7 +3070,7 @@ set to "NULL".  Works for all data types supported by the ODBC class library.
 
 \docparam{colNo}{The column number of the bound column as defined by the 
 \helpref{wxDbTable::SetColDefs}{wxdbtablesetcoldefs} 
-calls which defined the columns accesible to this wxDbTable instance.}
+calls which defined the columns accessible to this wxDbTable instance.}
 
 \wxheading{Remarks}
 
@@ -3065,7 +3083,7 @@ NULL column support is currently not fully implemented as of wxWindows 2.4
 
 Accessor function to return information collected during the opening of the 
 datasource connection that is used by this wxDbTable instance.  The result 
-returned by this function indicates whether an implicit closing of the curosr is 
+returned by this function indicates whether an implicit closing of the cursor is 
 done after a commit on the database connection.
 
 \wxheading{Return value}
@@ -3947,3 +3965,10 @@ A pointer to a wxDbColInf array instance is included so a program can create a
 to maintain all information about the columns of a table in one memory 
 structure.
 
+Eventually, accessor functions will be added for this class
+
+
+\membersection{wxDbTableInf::Initialize}\label{wxdbtableinfinitialize}
+
+Simply initializes all member variables to a cleared state.  Called by 
+the constructor automatically.
