@@ -1497,8 +1497,14 @@ wxTreeItemId wxTreeCtrl::GetFirstChild(const wxTreeItemId& item,
 wxTreeItemId wxTreeCtrl::GetNextChild(const wxTreeItemId& WXUNUSED(item),
                                       wxTreeItemIdValue& cookie) const
 {
-    wxTreeItemId item(TreeView_GetNextSibling(GetHwnd(),
-                                              HITEM(wxTreeItemId(cookie))));
+    wxTreeItemId fromCookie(cookie);
+
+    HTREEITEM hitem = HITEM(fromCookie);
+
+    hitem = TreeView_GetNextSibling(GetHwnd(), hitem);
+
+    wxTreeItemId item(hitem);
+
     cookie = item.m_pItem;
 
     return item;
@@ -1519,11 +1525,14 @@ wxTreeItemId wxTreeCtrl::GetFirstChild(const wxTreeItemId& item,
 wxTreeItemId wxTreeCtrl::GetNextChild(const wxTreeItemId& WXUNUSED(item),
                                       long& cookie) const
 {
-    wxTreeItemId item(TreeView_GetNextSibling
-                      (
-                        GetHwnd(),
-                        HITEM(wxTreeItemId((void *)cookie)
-                      )));
+    wxTreeItemId fromCookie((void *)cookie);
+
+    HTREEITEM hitem = HITEM(fromCookie);
+
+    hitem = TreeView_GetNextSibling(GetHwnd(), hitem);
+
+    wxTreeItemId item(hitem);
+
     cookie = (long)item.m_pItem;
 
     return item;
@@ -1646,7 +1655,7 @@ wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parent,
     }
 
     UINT mask = 0;
-    if ( !text.IsEmpty() )
+    if ( !text.empty() )
     {
         mask |= TVIF_TEXT;
         tvIns.item.pszText = (wxChar *)text.c_str();  // cast is ok

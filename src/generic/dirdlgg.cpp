@@ -278,7 +278,13 @@ void wxGenericDirDialog::OnTreeSelected( wxTreeEvent &event )
     if (!m_dirCtrl)
         return;
 
-    wxDirItemData *data = (wxDirItemData*)m_dirCtrl->GetTreeCtrl()->GetItemData(event.GetItem());
+    wxTreeItemId item = event.GetItem();
+
+    wxDirItemData *data = NULL;
+
+    if(item.IsOk())
+        data = (wxDirItemData*)m_dirCtrl->GetTreeCtrl()->GetItemData(item);
+
     if (data)
        m_input->SetValue( data->m_path );
 };

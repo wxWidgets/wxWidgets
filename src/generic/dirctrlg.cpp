@@ -201,18 +201,18 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
 
     ItemCount volumeIndex = 1;
     OSErr err = noErr ;
-    
+
     while( noErr == err )
     {
         HFSUniStr255 volumeName ;
         FSRef fsRef ;
         FSVolumeInfo volumeInfo ;
-		err = FSGetVolumeInfo(0, volumeIndex, NULL, kFSVolInfoFlags , &volumeInfo , &volumeName, &fsRef);
-		if( noErr == err )
-		{
-		    wxString path = wxMacFSRefToPath( &fsRef ) ;
+        err = FSGetVolumeInfo(0, volumeIndex, NULL, kFSVolInfoFlags , &volumeInfo , &volumeName, &fsRef);
+        if( noErr == err )
+        {
+            wxString path = wxMacFSRefToPath( &fsRef ) ;
             wxString name = wxMacHFSUniStrToString( &volumeName ) ;
-            
+
             if ( (volumeInfo.flags & kFSVolFlagSoftwareLockedMask) || (volumeInfo.flags & kFSVolFlagHardwareLockedMask) )
             {
                 icon_ids.Add(wxFileIconsTable::cdrom);
@@ -222,11 +222,11 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
                 icon_ids.Add(wxFileIconsTable::drive);
             }
             // todo other removable
-            
+
             paths.Add(path);
             names.Add(name);
             volumeIndex++ ;
-		}
+        }
     }
 
 #elif defined(__UNIX__)
@@ -383,7 +383,7 @@ void wxDirItemData::SetNewDirName(const wxString& path)
 
 bool wxDirItemData::HasSubDirs() const
 {
-    if (m_path.IsEmpty())
+    if (m_path.empty())
         return false;
 
     wxDir dir;
@@ -398,7 +398,7 @@ bool wxDirItemData::HasSubDirs() const
 
 bool wxDirItemData::HasFiles(const wxString& WXUNUSED(spec)) const
 {
-    if (m_path.IsEmpty())
+    if (m_path.empty())
         return false;
 
     wxDir dir;
@@ -522,7 +522,7 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
     m_treeCtrl = CreateTreeCtrl(this, wxID_TREECTRL,
                                 wxPoint(0,0), GetClientSize(), treeStyle);
 
-    if (!filter.IsEmpty() && (style & wxDIRCTRL_SHOW_FILTERS))
+    if (!filter.empty() && (style & wxDIRCTRL_SHOW_FILTERS))
         m_filterListCtrl = new wxDirFilterListCtrl(this, wxID_FILTERLISTCTRL, wxDefaultPosition, wxDefaultSize, filterStyle);
 
     m_defaultPath = dir;
@@ -642,7 +642,7 @@ void wxGenericDirCtrl::OnBeginEditItem(wxTreeEvent &event)
 
 void wxGenericDirCtrl::OnEndEditItem(wxTreeEvent &event)
 {
-    if ((event.GetLabel().IsEmpty()) ||
+    if ((event.GetLabel().empty()) ||
         (event.GetLabel() == _(".")) ||
         (event.GetLabel() == _("..")) ||
         (event.GetLabel().Find(wxT('/')) != wxNOT_FOUND) ||
@@ -905,7 +905,7 @@ wxTreeItemId wxGenericDirCtrl::FindChild(wxTreeItemId parentId, const wxString& 
     {
         wxDirItemData* data = (wxDirItemData*) m_treeCtrl->GetItemData(childId);
 
-        if (data && !data->m_path.IsEmpty())
+        if (data && !data->m_path.empty())
         {
             wxString childPath(data->m_path);
             if (!wxEndsWithPathSeparator(childPath))
@@ -1625,13 +1625,13 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
         Create();
 
 #if wxUSE_MIMETYPE
-    if (!extension.IsEmpty())
+    if (!extension.empty())
     {
         wxFileIconEntry *entry = (wxFileIconEntry*) m_HashTable->Get(extension);
         if (entry) return (entry -> id);
     }
 
-    wxFileType *ft = (mime.IsEmpty()) ?
+    wxFileType *ft = (mime.empty()) ?
                    wxTheMimeTypesManager -> GetFileTypeFromExtension(extension) :
                    wxTheMimeTypesManager -> GetFileTypeFromMimeType(mime);
 
