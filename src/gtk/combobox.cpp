@@ -557,13 +557,14 @@ void wxComboBox::SetSelection( int n )
     EnableEvents();
 }
 
-void wxComboBox::SetStringSelection( const wxString &string )
+bool wxComboBox::SetStringSelection( const wxString &string )
 {
-    wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
+    wxCHECK_MSG( m_widget != NULL, false, wxT("invalid combobox") );
 
     int res = FindString( string );
-    if (res == -1) return;
+    if (res == -1) return false;
     SetSelection( res );
+    return true;
 }
 
 wxString wxComboBox::GetValue() const

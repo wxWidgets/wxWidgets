@@ -96,7 +96,7 @@ public:
     int Number() const { return GetCount(); }
     void SetSelection( int n );
     void Select( int n ) { return SetSelection( n ); }
-    void SetStringSelection( const wxString &string );
+    bool SetStringSelection( const wxString &string );
     void SetString(int n, const wxString &text);
 
     wxString GetValue() const;
