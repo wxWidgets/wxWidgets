@@ -1168,6 +1168,9 @@ void wxDC::DoGetTextExtent(
     ERRORID                         vErrorCode; // last error id code
     wxFont*                         pFontToUse = (wxFont*)pTheFont;
 
+    char                            zMsg[128]; // DEBUG
+    wxString                        sError;
+
     if (!pFontToUse)
         pFontToUse = (wxFont*)&m_font;
     l = rsString.length();
@@ -1185,6 +1188,13 @@ void wxDC::DoGetTextExtent(
     if(!bRc)
     {
        vErrorCode = ::WinGetLastError(wxGetInstance());
+       sError = wxPMErrorToStr(vErrorCode);
+       // DEBUG
+       sprintf(zMsg, "GpiQueryTextBox for %s: failed with Error: %x - %s", pStr, vErrorCode, sError.c_str());
+       (void)wxMessageBox( "wxWindows Menu sample"
+                          ,zMsg
+                          ,wxICON_INFORMATION
+                         );
     }
 
     vPtMin.x = avPoint[0].x;
@@ -1198,6 +1208,17 @@ void wxDC::DoGetTextExtent(
         if(vPtMax.x < avPoint[i].x) vPtMax.x = avPoint[i].x;
         if(vPtMax.y < avPoint[i].y) vPtMax.y = avPoint[i].y;
     }
+#if 0
+    sprintf(zMsg, "Extents for %s, are: Minx: %ld, Miny: %ld, Maxx: %ld, Maxy: %ld", vPtMin.x
+                                                                                   , vPtMin.y
+                                                                                   , vPtMax.x
+                                                                                   , vPtMax.y
+                                                                                  );
+    (void)wxMessageBox( "wxWindows Menu sample"
+                       ,zMsg
+                       ,wxICON_INFORMATION
+                      );
+#endif
     ::GpiQueryFontMetrics( m_hPS
                           ,sizeof(FONTMETRICS)
                           ,&vFM
