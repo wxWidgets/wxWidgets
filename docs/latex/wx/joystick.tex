@@ -33,8 +33,11 @@ Destroys the wxJoystick object.
 
 \constfunc{int}{GetButtonState}{\void}
 
-Returns the state of the joystick buttons. A bitlist of wxJOY\_BUTTONn identifiers,
-where n is 1, 2, 3 or 4.
+Returns the state of the joystick buttons. Every button is mapped to a single
+bit in the returned integer, with the first button being mapped to the least
+significant bit, and so on.
+A bitlist of wxJOY\_BUTTONn identifiers, where n is 1, 2, 3 or 4 
+is available for historical reasons.
 
 \membersection{wxJoystick::GetManufacturerId}\label{wxjoystickgetmanufacturerid}
 
@@ -101,13 +104,16 @@ Returns the x, y position of the joystick.
 
 \constfunc{int}{GetPOVPosition}{\void}
 
-Returns the point-of-view position, expressed in discrete units.
+Returns the point-of-view position, expressed in continuous, one-hundredth of a degree units,
+but limited to return 0, 9000, 18000 or 27000.
+Returns -1 on error.
 
 \membersection{wxJoystick::GetPOVCTSPosition}\label{wxjoystickgetpovctsposition}
 
 \constfunc{int}{GetPOVCTSPosition}{\void}
 
 Returns the point-of-view position, expressed in continuous, one-hundredth of a degree units.
+Returns -1 on error.
 
 \membersection{wxJoystick::GetRudderMax}\label{wxjoystickgetruddermax}
 

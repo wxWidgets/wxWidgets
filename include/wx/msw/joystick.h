@@ -26,7 +26,7 @@ class WXDLLEXPORT wxJoystick: public wxObject
    * Public interface
    */
 
-  wxJoystick(int joystick = wxJOYSTICK1) { m_joystick = joystick; };
+  wxJoystick(int joystick = wxJOYSTICK1);
 
   // Attributes
   ////////////////////////////////////////////////////////////////////////////
@@ -45,8 +45,9 @@ class WXDLLEXPORT wxJoystick: public wxObject
   // Capabilities
   ////////////////////////////////////////////////////////////////////////////
 
+  static int GetNumberJoysticks(void);
+
   bool IsOk(void) const; // Checks that the joystick is functioning
-  int GetNumberJoysticks(void) const ;
   int GetManufacturerId(void) const ;
   int GetProductId(void) const ;
   wxString GetProductName(void) const ;

@@ -139,12 +139,12 @@ int wxJoystick::GetButtonState(void) const
 
 int wxJoystick::GetPOVPosition(void) const
 {
-  return 0;
+  return -1;
 }
 
 int wxJoystick::GetPOVCTSPosition(void) const
 {
-  return 0;
+  return -1;
 }
 
 int wxJoystick::GetRudderPosition(void) const
@@ -207,7 +207,11 @@ int wxJoystick::GetProductId(void) const
 
 wxString wxJoystick::GetProductName(void) const
 {
-  return wxT("");
+  wxString dev_name;
+  // 2002-08-20 johan@linkdata.se
+  // Return the device name in lieu of a better one
+  dev_name.Printf( wxT("/dev/js%d"), (m_joystick == wxJOYSTICK1) ? 0 : 1);  // FIXME Unicode?
+  return dev_name;
 }
 
 int wxJoystick::GetXMin(void) const
