@@ -69,6 +69,8 @@ still accepted for compatibility, but this will go away in a future
 release,) SetItemMinSize can now take a wxSize (or 2-tuple) parameter,
 and Spacers can be specified with a wxSize (or 2-tuple) parameter
 
+Added wxCursorFromBits.
+
 
 
 

@@ -303,7 +303,17 @@ public:
 class wxCursor : public wxGDIObject
 {
 public:
-    wxCursor(const wxString& cursorName, long flags, int hotSpotX=0, int hotSpotY=0);
+    %addmethods {
+        wxCursor(const wxString* cursorName, long flags, int hotSpotX=0, int hotSpotY=0) {
+#ifdef __WXGTK__
+            wxCHECK_MSG(FALSE, NULL,
+                        wxT("wxCursor constructor not implemented for wxGTK, use wxStockCursor, wxCursorFromImage, or wxCursorFromBits instead."));
+#else
+            return new wxCursor(*cursorName, flags, hotSpotX, hotSpotY);
+#endif
+        }
+    }
+
     ~wxCursor();
 
     // wxGDIImage methods
@@ -325,16 +335,30 @@ public:
 };
 
 %name(wxStockCursor) %new wxCursor* wxPyStockCursor(int id);
-%{                              // Alternate 'constructor'
+%new wxCursor* wxCursorFromImage(const wxImage& image);
+%new wxCursor* wxCursorFromBits(PyObject* bits, int width, int  height,
+                                int hotSpotX=-1, int hotSpotY=-1,
+                                PyObject* maskBits=0);
+
+%{
     wxCursor* wxPyStockCursor(int id) {
         return new wxCursor(id);
     }
-%}
 
-%new wxCursor* wxCursorFromImage(const wxImage& image);
-%{
     wxCursor* wxCursorFromImage(const wxImage& image) {
         return new wxCursor(image);
+    }
+
+    wxCursor* wxCursorFromBits(PyObject* bits, int width, int  height,
+                               int hotSpotX=-1, int hotSpotY=-1,
+                               PyObject* maskBits=0) {
+        char* bitsbuf;
+        char* maskbuf = NULL;
+        int   length;
+        PyString_AsStringAndSize(bits, &bitsbuf, &length);
+        if (maskBits)
+            PyString_AsStringAndSize(maskBits, &maskbuf, &length);
+        return new wxCursor(bitsbuf, width, height, hotSpotX, hotSpotY, maskbuf);
     }
 %}
 
