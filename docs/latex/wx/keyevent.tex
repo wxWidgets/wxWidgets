@@ -83,31 +83,31 @@ Constructor. Currently, the only valid event types are wxEVT\_CHAR and wxEVT\_CH
 
 \membersection{wxKeyEvent::AltDown}
 
-\func{bool}{AltDown}{\void}
+\constfunc{bool}{AltDown}{\void}
 
 Returns TRUE if the Alt key was down at the time of the key event.
 
 \membersection{wxKeyEvent::ControlDown}
 
-\func{bool}{ControlDown}{\void}
+\constfunc{bool}{ControlDown}{\void}
 
 Returns TRUE if the control key was down at the time of the key event.
 
 \membersection{wxKeyEvent::GetX}
 
-\func{float}{GetX}{\void}
+\constfunc{long}{GetX}{\void}
 
 Returns the X position of the event.
 
 \membersection{wxKeyEvent::GetY}
 
-\func{float}{GetY}{\void}
+\constfunc{long}{GetY}{\void}
 
 Returns the Y position of the event.
 
 \membersection{wxKeyEvent::KeyCode}
 
-\func{long}{KeyCode}{\void}
+\constfunc{long}{KeyCode}{\void}
 
 Returns the virtual key code. ASCII events return normal ASCII values,
 while non-ASCII events return values such as {\bf WXK\_LEFT} for the
@@ -115,19 +115,21 @@ left cursor key. See \helpref{Keycodes}{keycodes} for a full list of the virtual
 
 \membersection{wxKeyEvent::MetaDown}
 
-\func{bool}{MetaDown}{\void}
+\constfunc{bool}{MetaDown}{\void}
 
 Returns TRUE if the Meta key was down at the time of the key event.
 
-\membersection{wxKeyEvent::Position}
+\membersection{wxKeyEvent::GetPosition}
 
-\func{void}{Position}{\param{float *}{x}, \param{float *}{y}}
+\constfunc{wxPoint}{GetPosition}{\void}
+
+\constfunc{void}{GetPosition}{\param{long *}{x}, \param{long *}{y}}
 
 Obtains the position at which the key was pressed.
 
 \membersection{wxKeyEvent::ShiftDown}
 
-\func{bool}{ShiftDown}{\void}
+\constfunc{bool}{ShiftDown}{\void}
 
 Returns TRUE if the shift key was down at the time of the key event.
 
