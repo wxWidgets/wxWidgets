@@ -3207,6 +3207,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_statline2.o \
 	monodll_stattext.o \
 	monodll_textctrl.o \
+	monodll_timer.o \
 	monodll_toolbar.o \
 	monodll_tooltip.o \
 	monodll_toplevel.o \
@@ -3225,8 +3226,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_paletteg.o \
 	monodll_regiong.o \
 	monodll_statusbr.o \
-	monodll_tabg.o \
-	monodll_timer.o
+	monodll_tabg.o
 @COND_TOOLKIT_COCOA@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS)
 COND_TOOLKIT_GTK___GUI_SRC_OBJECTS =  \
 	monodll_accel.o \
@@ -4649,6 +4649,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_statline2.o \
 	monolib_stattext.o \
 	monolib_textctrl.o \
+	monolib_timer.o \
 	monolib_toolbar.o \
 	monolib_tooltip.o \
 	monolib_toplevel.o \
@@ -4667,8 +4668,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_paletteg.o \
 	monolib_regiong.o \
 	monolib_statusbr.o \
-	monolib_tabg.o \
-	monolib_timer.o
+	monolib_tabg.o
 @COND_TOOLKIT_COCOA@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_GTK___GUI_SRC_OBJECTS_1 =  \
 	monolib_accel.o \
@@ -6281,6 +6281,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_statline2.o \
 	coredll_stattext.o \
 	coredll_textctrl.o \
+	coredll_timer.o \
 	coredll_toolbar.o \
 	coredll_tooltip.o \
 	coredll_toplevel.o \
@@ -6299,8 +6300,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_paletteg.o \
 	coredll_regiong.o \
 	coredll_statusbr.o \
-	coredll_tabg.o \
-	coredll_timer.o
+	coredll_tabg.o
 @COND_TOOLKIT_COCOA@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_GTK___GUI_SRC_OBJECTS_2 =  \
 	coredll_accel.o \
@@ -7472,6 +7472,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_statline2.o \
 	corelib_stattext.o \
 	corelib_textctrl.o \
+	corelib_timer.o \
 	corelib_toolbar.o \
 	corelib_tooltip.o \
 	corelib_toplevel.o \
@@ -7490,8 +7491,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_paletteg.o \
 	corelib_regiong.o \
 	corelib_statusbr.o \
-	corelib_tabg.o \
-	corelib_timer.o
+	corelib_tabg.o
 @COND_TOOLKIT_COCOA@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_GTK___GUI_SRC_OBJECTS_3 =  \
 	corelib_accel.o \
@@ -11337,9 +11337,6 @@ monodll_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@monodll_timer.o: $(srcdir)/src/msw/timer.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/timer.cpp
 
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_timer.o: $(srcdir)/src/generic/timer.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
-
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_timer.o: $(srcdir)/src/generic/timer.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
 
@@ -11351,6 +11348,9 @@ monodll_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_timer.o: $(srcdir)/src/mac/carbon/timer.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/timer.cpp
+
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_timer.o: $(srcdir)/src/cocoa/timer.mm $(MONODLL_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/cocoa/timer.mm
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_timer.o: $(srcdir)/src/os2/timer.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/timer.cpp
@@ -14721,9 +14721,6 @@ monolib_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@monolib_timer.o: $(srcdir)/src/msw/timer.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/timer.cpp
 
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_timer.o: $(srcdir)/src/generic/timer.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
-
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_timer.o: $(srcdir)/src/generic/timer.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
 
@@ -14735,6 +14732,9 @@ monolib_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_timer.o: $(srcdir)/src/mac/carbon/timer.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/timer.cpp
+
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_timer.o: $(srcdir)/src/cocoa/timer.mm $(MONOLIB_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/cocoa/timer.mm
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_timer.o: $(srcdir)/src/os2/timer.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/timer.cpp
@@ -18507,9 +18507,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@coredll_timer.o: $(srcdir)/src/msw/timer.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/timer.cpp
 
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_timer.o: $(srcdir)/src/generic/timer.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
-
 @COND_TOOLKIT_X11_USE_GUI_1@coredll_timer.o: $(srcdir)/src/generic/timer.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
 
@@ -18521,6 +18518,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_timer.o: $(srcdir)/src/mac/carbon/timer.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/timer.cpp
+
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_timer.o: $(srcdir)/src/cocoa/timer.mm $(COREDLL_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/cocoa/timer.mm
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_timer.o: $(srcdir)/src/os2/timer.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/os2/timer.cpp
@@ -21000,9 +21000,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@corelib_timer.o: $(srcdir)/src/msw/timer.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/timer.cpp
 
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_timer.o: $(srcdir)/src/generic/timer.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
-
 @COND_TOOLKIT_X11_USE_GUI_1@corelib_timer.o: $(srcdir)/src/generic/timer.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
 
@@ -21014,6 +21011,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_timer.o: $(srcdir)/src/mac/carbon/timer.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/timer.cpp
+
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_timer.o: $(srcdir)/src/cocoa/timer.mm $(CORELIB_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/cocoa/timer.mm
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_timer.o: $(srcdir)/src/os2/timer.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/os2/timer.cpp
