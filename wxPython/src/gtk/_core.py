@@ -9444,7 +9444,7 @@ class Sizer(Object):
         """
         A convenience method for Show(item, False, recursive).
         """
-        return self.Show(item, false, recursive)
+        return self.Show(item, False, recursive)
 
     def ShowItems(*args, **kwargs):
         """
