@@ -684,7 +684,10 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     memdc.SetBrush( *wxWHITE_BRUSH );
     memdc.DrawRectangle( 0,0,60,50 );
     memdc.SetTextForeground( *wxBLACK );
+#ifndef __WXGTK20__
+    // I cannot convince GTK2 to draw into mono bitmaps
     memdc.DrawText( _T("Hi!"), 5, 5 );
+#endif
     memdc.SetBrush( *wxBLACK_BRUSH );
     memdc.DrawRectangle( 33,5,20,20 );
     memdc.SetPen( *wxRED_PEN );
