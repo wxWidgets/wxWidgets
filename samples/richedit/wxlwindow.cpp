@@ -153,7 +153,7 @@ wxLayoutWindow::wxLayoutWindow(wxWindow *parent)
    m_bitmap = new wxBitmap(4,4);
    m_bitmapSize = wxPoint(4,4);
    m_llist = new wxLayoutList();
-
+   SetAutoDeleteSelection(false);
    m_BGbitmap = NULL;
    m_ScrollToCursor = false;
    SetWrapMargin(0);
