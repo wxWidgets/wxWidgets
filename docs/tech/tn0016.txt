@@ -113,8 +113,7 @@ in the sample's bakefile (see e.g. samples/image/image.bkl for an example).
 Make sure to add <wx-lib> statements for all libraries from multilib build
 that are required by the sample.
 
-Run Python script regenMakefile.py in $(wx)/build/bakefiles to update Makefile
-then run "make" in $(wx)/build/bakefiles directories.
+Run bakefile_gen in $(wx)/build/bakefiles to regenerate the bakefiles.
 
 Finally commit $(wx)/build/bakefiles/Makefile and all the other modified files.
 
@@ -133,8 +132,8 @@ the library should use WXDLLIMPEXP_FOO defined in wxFoo's headers analogically
 to WXDLLIMPEXP_{BASE,CORE,HTML,...} in the main library (see 5g below for
 additional details).
 
-Run Python script regenMakefile.py in $(wx)/build/bakefiles to update Makefile
-and commit $(wx)/build/bakefiles/Makefile.
+Run bakefile_gen in $(wx)/build/bakefiles to regenerate makefiles
+then commit $(wx)/build/bakefiles/Makefile.
 
 
 6. Adding new core library
