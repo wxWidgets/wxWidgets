@@ -108,15 +108,19 @@ methodOverrideMap = {
                            0),
 
     'GetCurLine' : (0,
-                    'wxString %s(int* OUTPUT=NULL);',
+                    '#ifdef SWIG\n    wxString %s(int* OUTPUT);\n#else\n    wxString GetCurLine(int* linePos=NULL);\n#endif',
 
                     '''wxString %s(int* linePos) {
                        wxString text;
                        int len = LineLength(GetCurrentLine());
-                       if (!len) return "";
-                       char* buf = text.GetWriteBuf(len);
+                       if (!len) {
+                           if (linePos)  *linePos = 0;
+                           return "";
+                       }
+                       // Need an extra byte because SCI_GETCURLINE writes a null to the string
+                       char* buf = text.GetWriteBuf(len+1);
 
-                       int pos = SendMsg(%s, len, (long)buf);
+                       int pos = SendMsg(%s, len+1, (long)buf);
                        text.UngetWriteBuf(len);
                        if (linePos)  *linePos = pos;
 
@@ -346,11 +350,11 @@ methodOverrideMap = {
 
                  '''wxString %s() {
                         wxString text;
-                        int   len  = GetTextLength()+1;
-                        char* buff = text.GetWriteBuf(len);
+                        int   len  = GetTextLength();
+                        char* buff = text.GetWriteBuf(len+1);  // leave room for the null...
 
-                        SendMsg(%s, len, (long)buff);
-                        text.UngetWriteBuf(len-1);
+                        SendMsg(%s, len+1, (long)buff);
+                        text.UngetWriteBuf(len);
                         return text;''',
 
                  ('Retrieve all the text in the document.', )),
@@ -474,6 +478,9 @@ methodOverrideMap = {
                          0),
 
     'GrabFocus' : (None, 0, 0, 0),
+    'SetFocus'  : ('SetSTCFocus', 0, 0, 0),
+    'GetFocus'  : ('GetSTCFocus', 0, 0, 0),
+
 
     '' : ('', 0, 0, 0),
 

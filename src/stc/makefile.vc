@@ -25,22 +25,30 @@ OBJECTS = \
 	$(D)\Indicator.obj	\
 	$(D)\KeyMap.obj		\
 	$(D)\KeyWords.obj	\
-	$(D)\LexCPP.obj		\
-	$(D)\LexHTML.obj	\
-	$(D)\LexLua.obj		\
-	$(D)\LexOthers.obj	\
-	$(D)\LexPerl.obj	\
-	$(D)\LexPython.obj	\
-	$(D)\LexSQL.obj		\
-	$(D)\LexVB.obj		\
 	$(D)\LineMarker.obj	\
-	$(D)\PosRegExp.obj	\
 	$(D)\PropSet.obj	\
+	$(D)\RESearch.obj	\
 	$(D)\ScintillaBase.obj	\
 	$(D)\Style.obj		\
 	$(D)\UniConversion.obj	\
 	$(D)\ViewStyle.obj	\
 	$(D)\WindowAccessor.obj	\
+				\
+	$(D)\LexAda.obj		\
+	$(D)\LexAVE.obj		\
+	$(D)\LexConf.obj	\
+	$(D)\LexCPP.obj		\
+	$(D)\LexEiffel.obj	\
+	$(D)\LexHTML.obj	\
+	$(D)\LexLisp.obj	\
+	$(D)\LexLua.obj		\
+	$(D)\LexOthers.obj	\
+	$(D)\LexPascal.obj	\
+	$(D)\LexPerl.obj	\
+	$(D)\LexPython.obj	\
+	$(D)\LexRuby.obj	\
+	$(D)\LexSQL.obj		\
+	$(D)\LexVB.obj		\
 				\
 	$(D)\PlatWX.obj		\
 	$(D)\ScintillaWX.obj	\

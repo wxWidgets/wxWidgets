@@ -338,10 +338,14 @@ void wxStyledTextCtrl::SetAnchor(int posAnchor) {
 wxString wxStyledTextCtrl::GetCurLine(int* linePos) {
                        wxString text;
                        int len = LineLength(GetCurrentLine());
-                       if (!len) return "";
-                       char* buf = text.GetWriteBuf(len);
+                       if (!len) {
+                           if (linePos)  *linePos = 0;
+                           return "";
+                       }
+                       // Need an extra byte because SCI_GETCURLINE writes a null to the string
+                       char* buf = text.GetWriteBuf(len+1);
 
-                       int pos = SendMsg(2027, len, (long)buf);
+                       int pos = SendMsg(2027, len+1, (long)buf);
                        text.UngetWriteBuf(len);
                        if (linePos)  *linePos = pos;
 
@@ -1141,11 +1145,11 @@ void wxStyledTextCtrl::SetText(const wxString& text) {
 // Retrieve all the text in the document.
 wxString wxStyledTextCtrl::GetText() {
                         wxString text;
-                        int   len  = GetTextLength()+1;
-                        char* buff = text.GetWriteBuf(len);
+                        int   len  = GetTextLength();
+                        char* buff = text.GetWriteBuf(len+1);  // leave room for the null...
 
-                        SendMsg(2182, len, (long)buff);
-                        text.UngetWriteBuf(len-1);
+                        SendMsg(2182, len+1, (long)buff);
+                        text.UngetWriteBuf(len);
                         return text;
 }
 
@@ -1526,12 +1530,12 @@ int wxStyledTextCtrl::GetModEventMask() {
 }
 
 // Change internal focus flag
-void wxStyledTextCtrl::SetFocus(bool focus) {
+void wxStyledTextCtrl::SetSTCFocus(bool focus) {
     SendMsg(2380, focus, 0);
 }
 
 // Get internal focus flag
-bool wxStyledTextCtrl::GetFocus() {
+bool wxStyledTextCtrl::GetSTCFocus() {
     return SendMsg(2381, 0, 0) != 0;
 }
 

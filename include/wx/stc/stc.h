@@ -734,7 +734,11 @@ public:
 
     // Retrieve the text of the line containing the caret.
     // Returns the index of the caret on the line.
-    wxString GetCurLine(int* OUTPUT=NULL);
+    #ifdef SWIG
+    wxString GetCurLine(int* OUTPUT);
+#else
+    wxString GetCurLine(int* linePos=NULL);
+#endif
 
     // Retrieve the position of the last correctly styled character.
     int GetEndStyled();
@@ -1417,10 +1421,10 @@ public:
     int GetModEventMask();
 
     // Change internal focus flag
-    void SetFocus(bool focus);
+    void SetSTCFocus(bool focus);
 
     // Get internal focus flag
-    bool GetFocus();
+    bool GetSTCFocus();
 
     // Change error status - 0 = OK
     void SetStatus(int statusCode);
