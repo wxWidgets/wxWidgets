@@ -484,7 +484,14 @@ def GetTopLevelParent(*args, **kwargs):
     return _misc_.GetTopLevelParent(*args, **kwargs)
 
 def GetKeyState(*args, **kwargs):
-    """GetKeyState(int key) -> bool"""
+    """
+    GetKeyState(int key) -> bool
+
+    Get the state of a key (true if pressed or toggled on, false if not.)
+    This is generally most useful getting the state of the modifier or
+    toggle keys.  On some platforms those may be the only keys that work.
+
+    """
     return _misc_.GetKeyState(*args, **kwargs)
 
 def WakeUpMainThread(*args, **kwargs):
@@ -4363,13 +4370,17 @@ def CustomDataFormat(*args, **kwargs):
 
 class DataObject(object):
     """
-    A wxDataObject represents data that can be copied to or from the
+    A wx.DataObject represents data that can be copied to or from the
     clipboard, or dragged and dropped. The important thing about
-    wxDataObject is that this is a 'smart' piece of data unlike usual
+    wx.DataObject is that this is a 'smart' piece of data unlike usual
     'dumb' data containers such as memory buffers or files. Being 'smart'
     here means that the data object itself should know what data formats
     it supports and how to render itself in each of supported formats.
 
+    **NOTE**: This class is an abstract base class and can not be used
+    directly from Python.  If you need a custom type of data object then
+    you should instead derive from `wx.PyDataObjectSimple` or use
+    `wx.CustomDataObject`.
 
     """
     def __init__(self): raise RuntimeError, "No constructor defined"
@@ -4385,31 +4396,65 @@ class DataObject(object):
         except: pass
 
     def GetPreferredFormat(*args, **kwargs):
-        """GetPreferredFormat(self, int dir=Get) -> DataFormat"""
+        """
+        GetPreferredFormat(self, int dir=Get) -> DataFormat
+
+        Returns the preferred format for either rendering the data (if dir is
+        Get, its default value) or for setting it. Usually this will be the
+        native format of the wx.DataObject.
+        """
         return _misc_.DataObject_GetPreferredFormat(*args, **kwargs)
 
     def GetFormatCount(*args, **kwargs):
-        """GetFormatCount(self, int dir=Get) -> size_t"""
+        """
+        GetFormatCount(self, int dir=Get) -> size_t
+
+        Returns the number of available formats for rendering or setting the
+        data.
+        """
         return _misc_.DataObject_GetFormatCount(*args, **kwargs)
 
     def IsSupported(*args, **kwargs):
-        """IsSupported(self, DataFormat format, int dir=Get) -> bool"""
+        """
+        IsSupported(self, DataFormat format, int dir=Get) -> bool
+
+        Returns True if this format is supported.
+        """
         return _misc_.DataObject_IsSupported(*args, **kwargs)
 
     def GetDataSize(*args, **kwargs):
-        """GetDataSize(self, DataFormat format) -> size_t"""
+        """
+        GetDataSize(self, DataFormat format) -> size_t
+
+        Get the (total) size of data for the given format
+        """
         return _misc_.DataObject_GetDataSize(*args, **kwargs)
 
     def GetAllFormats(*args, **kwargs):
-        """GetAllFormats(self, DataFormat formats, int dir=Get)"""
+        """
+        GetAllFormats(self, int dir=Get) -> [formats]
+
+        Returns a list of all the wx.DataFormats that this dataobject supports
+        in the given direction.
+        """
         return _misc_.DataObject_GetAllFormats(*args, **kwargs)
 
     def GetDataHere(*args, **kwargs):
-        """GetDataHere(self, DataFormat format, void buf) -> bool"""
+        """
+        GetDataHere(self, DataFormat format) -> String
+
+        Get the data bytes in the specified format, returns None on failure.
+
+        """
         return _misc_.DataObject_GetDataHere(*args, **kwargs)
 
     def SetData(*args, **kwargs):
-        """SetData(self, DataFormat format, size_t len, void buf) -> bool"""
+        """
+        SetData(self, DataFormat format, String data) -> bool
+
+        Set the data in the specified format from the bytes in the the data string.
+
+        """
         return _misc_.DataObject_SetData(*args, **kwargs)
 
 
@@ -4422,21 +4467,72 @@ _misc_.DataObject_swigregister(DataObjectPtr)
 FormatInvalid = cvar.FormatInvalid
 
 class DataObjectSimple(DataObject):
+    """
+    wx.DataObjectSimple is a `wx.DataObject` which only supports one
+    format.  This is the simplest possible `wx.DataObject` implementation.
+
+    This is still an "abstract base class" meaning that you can't use it
+    directly.  You either need to use one of the predefined base classes,
+    or derive your own class from `wx.PyDataObjectSimple`.
+
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDataObjectSimple instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self, DataFormat format=FormatInvalid) -> DataObjectSimple"""
+        """
+        __init__(self, DataFormat format=FormatInvalid) -> DataObjectSimple
+
+        Constructor accepts the supported format (none by default) which may
+        also be set later with `SetFormat`.
+        """
         newobj = _misc_.new_DataObjectSimple(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def GetFormat(*args, **kwargs):
-        """GetFormat(self) -> DataFormat"""
+        """
+        GetFormat(self) -> DataFormat
+
+        Returns the (one and only one) format supported by this object. It is
+        assumed that the format is supported in both directions.
+        """
         return _misc_.DataObjectSimple_GetFormat(*args, **kwargs)
 
     def SetFormat(*args, **kwargs):
-        """SetFormat(self, DataFormat format)"""
+        """
+        SetFormat(self, DataFormat format)
+
+        Sets the supported format.
+        """
         return _misc_.DataObjectSimple_SetFormat(*args, **kwargs)
+
+    def GetDataSize(*args, **kwargs):
+        """
+        GetDataSize(self) -> size_t
+
+        Get the size of our data.
+        """
+        return _misc_.DataObjectSimple_GetDataSize(*args, **kwargs)
+
+    def GetDataHere(*args, **kwargs):
+        """
+        GetDataHere(self) -> String
+
+        Returns the data bytes from the data object as a string, returns None
+        on failure.  Must be implemented in the derived class if the object
+        supports rendering its data.
+        """
+        return _misc_.DataObjectSimple_GetDataHere(*args, **kwargs)
+
+    def SetData(*args, **kwargs):
+        """
+        SetData(self, String data) -> bool
+
+        Copy the data value to the data object.  Must be implemented in the
+        derived class if the object supports setting its data.
+
+        """
+        return _misc_.DataObjectSimple_SetData(*args, **kwargs)
 
 
 class DataObjectSimplePtr(DataObjectSimple):
@@ -4447,10 +4543,27 @@ class DataObjectSimplePtr(DataObjectSimple):
 _misc_.DataObjectSimple_swigregister(DataObjectSimplePtr)
 
 class PyDataObjectSimple(DataObjectSimple):
+    """
+    wx.PyDataObjectSimple is a version of `wx.DataObjectSimple` that is
+    Python-aware and knows how to reflect calls to its C++ virtual methods
+    to methods in the Python derived class.  You should derive from this
+    class and overload `GetDataSize`, `GetDataHere` and `SetData` when you
+    need to create your own simple single-format type of `wx.DataObject`.
+
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyDataObjectSimple instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self, DataFormat format=FormatInvalid) -> PyDataObjectSimple"""
+        """
+        __init__(self, DataFormat format=FormatInvalid) -> PyDataObjectSimple
+
+        wx.PyDataObjectSimple is a version of `wx.DataObjectSimple` that is
+        Python-aware and knows how to reflect calls to its C++ virtual methods
+        to methods in the Python derived class.  You should derive from this
+        class and overload `GetDataSize`, `GetDataHere` and `SetData` when you
+        need to create your own simple single-format type of `wx.DataObject`.
+
+        """
         newobj = _misc_.new_PyDataObjectSimple(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -4470,16 +4583,50 @@ class PyDataObjectSimplePtr(PyDataObjectSimple):
 _misc_.PyDataObjectSimple_swigregister(PyDataObjectSimplePtr)
 
 class DataObjectComposite(DataObject):
+    """
+    wx.DataObjectComposite is the simplest `wx.DataObject` derivation
+    which may be sued to support multiple formats. It contains several
+    'wx.DataObjectSimple` objects and supports any format supported by at
+    least one of them. Only one of these data objects is *preferred* (the
+    first one if not explicitly changed by using the second parameter of
+    `Add`) and its format determines the preferred format of the composite
+    data object as well.
+
+    See `wx.DataObject` documentation for the reasons why you might prefer
+    to use wx.DataObject directly instead of wx.DataObjectComposite for
+    efficiency reasons.
+
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDataObjectComposite instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self) -> DataObjectComposite"""
+        """
+        __init__(self) -> DataObjectComposite
+
+        wx.DataObjectComposite is the simplest `wx.DataObject` derivation
+        which may be sued to support multiple formats. It contains several
+        'wx.DataObjectSimple` objects and supports any format supported by at
+        least one of them. Only one of these data objects is *preferred* (the
+        first one if not explicitly changed by using the second parameter of
+        `Add`) and its format determines the preferred format of the composite
+        data object as well.
+
+        See `wx.DataObject` documentation for the reasons why you might prefer
+        to use wx.DataObject directly instead of wx.DataObjectComposite for
+        efficiency reasons.
+
+        """
         newobj = _misc_.new_DataObjectComposite(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def Add(*args, **kwargs):
-        """Add(self, DataObjectSimple dataObject, int preferred=False)"""
+        """
+        Add(self, DataObjectSimple dataObject, bool preferred=False)
+
+        Adds the dataObject to the list of supported objects and it becomes
+        the preferred object if preferred is True.
+        """
         return _misc_.DataObjectComposite_Add(*args, **kwargs)
 
 
@@ -4491,24 +4638,62 @@ class DataObjectCompositePtr(DataObjectComposite):
 _misc_.DataObjectComposite_swigregister(DataObjectCompositePtr)
 
 class TextDataObject(DataObjectSimple):
+    """
+    wx.TextDataObject is a specialization of `wx.DataObject` for text
+    data. It can be used without change to paste data into the `wx.Clipboard`
+    or a `wx.DropSource`.
+
+    Alternativly, you may wish to derive a new class from the
+    `wx.PyTextDataObject` class for providing text on-demand in order to
+    minimize memory consumption when offering data in several formats,
+    such as plain text and RTF, because by default the text is stored in a
+    string in this class, but it might as well be generated on demand when
+    requested. For this, `GetTextLength` and `GetText` will have to be
+    overridden.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTextDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self, String text=EmptyString) -> TextDataObject"""
+        """
+        __init__(self, String text=EmptyString) -> TextDataObject
+
+        Constructor, may be used to initialise the text (otherwise `SetText`
+        should be used later).
+        """
         newobj = _misc_.new_TextDataObject(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def GetTextLength(*args, **kwargs):
-        """GetTextLength(self) -> size_t"""
+        """
+        GetTextLength(self) -> size_t
+
+        Returns the data size.  By default, returns the size of the text data
+        set in the constructor or using `SetText`.  This can be overridden (via
+        `wx.PyTextDataObject`) to provide text size data on-demand. It is
+        recommended to return the text length plus 1 for a trailing zero, but
+        this is not strictly required.
+        """
         return _misc_.TextDataObject_GetTextLength(*args, **kwargs)
 
     def GetText(*args, **kwargs):
-        """GetText(self) -> String"""
+        """
+        GetText(self) -> String
+
+        Returns the text associated with the data object.
+        """
         return _misc_.TextDataObject_GetText(*args, **kwargs)
 
     def SetText(*args, **kwargs):
-        """SetText(self, String text)"""
+        """
+        SetText(self, String text)
+
+        Sets the text associated with the data object. This method is called
+        when the data object receives the data and, by default, copies the
+        text into the member variable. If you want to process the text on the
+        fly you may wish to override this function (via
+        `wx.PyTextDataObject`.)
+        """
         return _misc_.TextDataObject_SetText(*args, **kwargs)
 
 
@@ -4520,10 +4705,27 @@ class TextDataObjectPtr(TextDataObject):
 _misc_.TextDataObject_swigregister(TextDataObjectPtr)
 
 class PyTextDataObject(TextDataObject):
+    """
+    wx.PyTextDataObject is a version of `wx.TextDataObject` that is
+    Python-aware and knows how to reflect calls to its C++ virtual methods
+    to methods in the Python derived class.  You should derive from this
+    class and overload `GetTextLength`, `GetText`, and `SetText` when you
+    want to be able to provide text on demand instead of preloading it
+    into the data object.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyTextDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self, String text=EmptyString) -> PyTextDataObject"""
+        """
+        __init__(self, String text=EmptyString) -> PyTextDataObject
+
+        wx.PyTextDataObject is a version of `wx.TextDataObject` that is
+        Python-aware and knows how to reflect calls to its C++ virtual methods
+        to methods in the Python derived class.  You should derive from this
+        class and overload `GetTextLength`, `GetText`, and `SetText` when you
+        want to be able to provide text on demand instead of preloading it
+        into the data object.
+        """
         newobj = _misc_.new_PyTextDataObject(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -4543,20 +4745,45 @@ class PyTextDataObjectPtr(PyTextDataObject):
 _misc_.PyTextDataObject_swigregister(PyTextDataObjectPtr)
 
 class BitmapDataObject(DataObjectSimple):
+    """
+    wx.BitmapDataObject is a specialization of wxDataObject for bitmap
+    data. It can be used without change to paste data into the `wx.Clipboard`
+    or a `wx.DropSource`.
+
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBitmapDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self, Bitmap bitmap=wxNullBitmap) -> BitmapDataObject"""
+        """
+        __init__(self, Bitmap bitmap=wxNullBitmap) -> BitmapDataObject
+
+        Constructor, optionally passing a bitmap (otherwise use `SetBitmap`
+        later).
+        """
         newobj = _misc_.new_BitmapDataObject(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def GetBitmap(*args, **kwargs):
-        """GetBitmap(self) -> Bitmap"""
+        """
+        GetBitmap(self) -> Bitmap
+
+        Returns the bitmap associated with the data object.  You may wish to
+        override this method (by deriving from `wx.PyBitmapDataObject`) when
+        offering data on-demand, but this is not required by wxWidgets'
+        internals. Use this method to get data in bitmap form from the
+        `wx.Clipboard`.
+        """
         return _misc_.BitmapDataObject_GetBitmap(*args, **kwargs)
 
     def SetBitmap(*args, **kwargs):
-        """SetBitmap(self, Bitmap bitmap)"""
+        """
+        SetBitmap(self, Bitmap bitmap)
+
+        Sets the bitmap associated with the data object. This method is called
+        when the data object receives data. Usually there will be no reason to
+        override this function.
+        """
         return _misc_.BitmapDataObject_SetBitmap(*args, **kwargs)
 
 
@@ -4568,10 +4795,23 @@ class BitmapDataObjectPtr(BitmapDataObject):
 _misc_.BitmapDataObject_swigregister(BitmapDataObjectPtr)
 
 class PyBitmapDataObject(BitmapDataObject):
+    """
+    wx.PyBitmapDataObject is a version of `wx.BitmapDataObject` that is
+    Python-aware and knows how to reflect calls to its C++ virtual methods
+    to methods in the Python derived class. To be able to provide bitmap
+    data on demand derive from this class and overload `GetBitmap`.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyBitmapDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self, Bitmap bitmap=wxNullBitmap) -> PyBitmapDataObject"""
+        """
+        __init__(self, Bitmap bitmap=wxNullBitmap) -> PyBitmapDataObject
+
+        wx.PyBitmapDataObject is a version of `wx.BitmapDataObject` that is
+        Python-aware and knows how to reflect calls to its C++ virtual methods
+        to methods in the Python derived class. To be able to provide bitmap
+        data on demand derive from this class and overload `GetBitmap`.
+        """
         newobj = _misc_.new_PyBitmapDataObject(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -4591,6 +4831,20 @@ class PyBitmapDataObjectPtr(PyBitmapDataObject):
 _misc_.PyBitmapDataObject_swigregister(PyBitmapDataObjectPtr)
 
 class FileDataObject(DataObjectSimple):
+    """
+    wx.FileDataObject is a specialization of `wx.DataObjectSimple` for
+    file names. The program works with it just as if it were a list of
+    absolute file names, but internally it uses the same format as
+    Explorer and other compatible programs under Windows or GNOME/KDE
+    filemanager under Unix which makes it possible to receive files from
+    them using this class.
+
+    :Warning: Under all non-Windows platforms this class is currently
+        "input-only", i.e. you can receive the files from another
+        application, but copying (or dragging) file(s) from a wxWidgets
+        application is not currently supported.
+
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFileDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4600,11 +4854,15 @@ class FileDataObject(DataObjectSimple):
         self.thisown = 1
         del newobj.thisown
     def GetFilenames(*args, **kwargs):
-        """GetFilenames(self) -> wxArrayString"""
+        """GetFilenames(self) -> [names]"""
         return _misc_.FileDataObject_GetFilenames(*args, **kwargs)
 
     def AddFile(*args, **kwargs):
-        """AddFile(self, String filename)"""
+        """
+        AddFile(self, String filename)
+
+        Adds a file to the list of files represented by this data object.
+        """
         return _misc_.FileDataObject_AddFile(*args, **kwargs)
 
 
@@ -4616,28 +4874,52 @@ class FileDataObjectPtr(FileDataObject):
 _misc_.FileDataObject_swigregister(FileDataObjectPtr)
 
 class CustomDataObject(DataObjectSimple):
+    """
+    wx.CustomDataObject is a specialization of `wx.DataObjectSimple` for
+    some application-specific data in arbitrary format.  Python strings
+    are used for getting and setting data, but any picklable object can
+    easily be transfered via strings.  A copy of the data is stored in the
+    data object.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxCustomDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self, DataFormat format=FormatInvalid) -> CustomDataObject"""
+        """
+        __init__(self, DataFormat format=FormatInvalid) -> CustomDataObject
+
+        wx.CustomDataObject is a specialization of `wx.DataObjectSimple` for
+        some application-specific data in arbitrary format.  Python strings
+        are used for getting and setting data, but any picklable object can
+        easily be transfered via strings.  A copy of the data is stored in the
+        data object.
+        """
         newobj = _misc_.new_CustomDataObject(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
-    def TakeData(*args, **kwargs):
-        """TakeData(self, PyObject data)"""
-        return _misc_.CustomDataObject_TakeData(*args, **kwargs)
-
     def SetData(*args, **kwargs):
-        """SetData(self, PyObject data) -> bool"""
+        """
+        SetData(self, String data) -> bool
+
+        Copy the data value to the data object.
+        """
         return _misc_.CustomDataObject_SetData(*args, **kwargs)
 
+    TakeData = SetData 
     def GetSize(*args, **kwargs):
-        """GetSize(self) -> size_t"""
+        """
+        GetSize(self) -> size_t
+
+        Get the size of the data.
+        """
         return _misc_.CustomDataObject_GetSize(*args, **kwargs)
 
     def GetData(*args, **kwargs):
-        """GetData(self) -> PyObject"""
+        """
+        GetData(self) -> String
+
+        Returns the data bytes from the data object as a string.
+        """
         return _misc_.CustomDataObject_GetData(*args, **kwargs)
 
 
@@ -4649,20 +4931,37 @@ class CustomDataObjectPtr(CustomDataObject):
 _misc_.CustomDataObject_swigregister(CustomDataObjectPtr)
 
 class URLDataObject(DataObjectComposite):
+    """
+    This data object holds a URL in a format that is compatible with some
+    browsers such that it is able to be dragged to or from them.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxURLDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self) -> URLDataObject"""
+        """
+        __init__(self) -> URLDataObject
+
+        This data object holds a URL in a format that is compatible with some
+        browsers such that it is able to be dragged to or from them.
+        """
         newobj = _misc_.new_URLDataObject(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def GetURL(*args, **kwargs):
-        """GetURL(self) -> String"""
+        """
+        GetURL(self) -> String
+
+        Returns a string containing the current URL.
+        """
         return _misc_.URLDataObject_GetURL(*args, **kwargs)
 
     def SetURL(*args, **kwargs):
-        """SetURL(self, String url)"""
+        """
+        SetURL(self, String url)
+
+        Set the URL.
+        """
         return _misc_.URLDataObject_SetURL(*args, **kwargs)
 
 

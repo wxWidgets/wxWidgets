@@ -898,6 +898,7 @@ PyObject *wxPyTreeCtrl_GetSelections(wxPyTreeCtrl *self){
                 wxTreeItemId *tii = new wxTreeItemId(array.Item(x));
                 PyObject* item = wxPyConstructObject((void*)tii, wxT("wxTreeItemId"), True);
                 PyList_Append(rval, item);
+                Py_DECREF(item);
             }
             wxPyEndBlockThreads(blocked);
             return rval;
