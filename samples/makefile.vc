@@ -70,10 +70,8 @@ all:
         nmake -f makefile.vc $(MAKEFLAGS)
         cd $(WXDIR)\samples\newgrid
         nmake -f makefile.vc $(MAKEFLAGS)
-!if "$(COMPIL)"==""
         cd $(WXDIR)\samples\help
         nmake -f makefile.vc $(MAKEFLAGS)
-!endif
 !if "$(PNGSETUP)"==""
         cd $(WXDIR)\samples\html
         nmake -f makefile.vc $(MAKEFLAGS)
@@ -276,10 +274,8 @@ clean:
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\validate
         nmake -f makefile.vc clean
-!if "$(NOMAKE)"==""
         cd $(WXDIR)\samples\wizard
         nmake -f makefile.vc clean
-!endif
         cd $(WXDIR)\samples\sockets
         nmake -f makefile.vc clean
 

@@ -155,18 +155,29 @@ MSWOBJS = #$ ExpandList("WXMSWOBJS");
 HTMLOBJS = #$ ExpandList("WXHTMLOBJS");
 
 OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) $(HTMLOBJS)
+ARCHINCDIR=$(WXDIR)\lib\msw
+ARCHSETUPH=$(ARCHINCDIR)\wx\setup.h
 
 default:	wx
 
-wx:    setuph $(CFG) $(DUMMY).obj $(OBJECTS) $(PERIPH_TARGET) $(LIBTARGET)
+wx:    $(ARCHINCDIR)\wx makesetuph makearchsetuph $(CFG) $(DUMMY).obj $(OBJECTS) $(PERIPH_TARGET) $(LIBTARGET)
 
-# TODO: put the setup.h under lib
-setuph:
+all:	wx
+
+# Copy the in-CVS setup0.h to setup.h if necessary
+makesetuph:
      cd $(WXDIR)\include\wx\msw
      if not exist setup.h copy setup0.h setup.h
      cd $(WXDIR)\src\msw
 
-all:	wx
+# Copy include\wx\msw\setup.h to the architecture-specific location
+makearchsetuph:
+     copy $(WXDIR)\include\wx\msw\setup.h $(ARCHSETUPH)
+     cd $(WXDIR)\src\msw
+
+$(ARCHINCDIR)\wx:
+    mkdir $(ARCHINCDIR)
+    mkdir $(ARCHINCDIR)\wx
 
 !if "$(DLL)" == "0"
 
@@ -347,7 +358,7 @@ $(CFG): makefile.b32
 -w-hid # virtual function A hides virtual function B
 -tWM
 
--I$(WXINC);$(BCCDIR)\include;$(WXDIR)/src/generic;$(WXDIR)/src/png;$(WXDIR)/src/jpeg;$(WXDIR)/src/zlib;$(WXDIR)/src/tiff
+-I$(ARCHINCDIR);-I$(WXINC);$(BCCDIR)\include;$(WXDIR)/src/generic;$(WXDIR)/src/png;$(WXDIR)/src/jpeg;$(WXDIR)/src/zlib;$(WXDIR)/src/tiff
 -I$(WXDIR)\include\wx\msw\gnuwin32
 
 -L$(BCCDIR)\lib;$(BCCDIR)\lib\psdk

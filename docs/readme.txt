@@ -222,5 +222,5 @@ web site.
 
 Have fun!
 
-The wxWindows Team, 10th June, 2001
+The wxWindows Team, April 2002
 
