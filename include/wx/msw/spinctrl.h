@@ -19,6 +19,7 @@
 #include "wx/spinbutt.h"    // the base class
 
 #include "wx/dynarray.h"
+
 class WXDLLEXPORT wxSpinCtrl;
 WX_DEFINE_EXPORTED_ARRAY(wxSpinCtrl *, wxArraySpins);
 
