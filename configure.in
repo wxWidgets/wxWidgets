@@ -690,7 +690,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_HELP=no
   DEFAULT_wxUSE_MS_HTML_HELP=no
   DEFAULT_wxUSE_WXHTML_HELP=no
-  DEFAULT_wxUSE_WXTREE=no
+  DEFAULT_wxUSE_TREELAYOUT=no
   DEFAULT_wxUSE_METAFILE=no
   DEFAULT_wxUSE_MIMETYPE=no
   DEFAULT_wxUSE_SYSTEM_OPTIONS=yes
@@ -734,6 +734,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_LISTBOX=no
   DEFAULT_wxUSE_LISTCTRL=no
   DEFAULT_wxUSE_NOTEBOOK=no
+  DEFAULT_wxUSE_PROPSHEET=no
   DEFAULT_wxUSE_RADIOBOX=no
   DEFAULT_wxUSE_RADIOBTN=no
   DEFAULT_wxUSE_SASH=no
@@ -846,7 +847,7 @@ else
   DEFAULT_wxUSE_HELP=yes
   DEFAULT_wxUSE_MS_HTML_HELP=yes
   DEFAULT_wxUSE_WXHTML_HELP=yes
-  DEFAULT_wxUSE_WXTREE=yes
+  DEFAULT_wxUSE_TREELAYOUT=yes
   DEFAULT_wxUSE_METAFILE=yes
   DEFAULT_wxUSE_MIMETYPE=yes
   DEFAULT_wxUSE_SYSTEM_OPTIONS=yes
@@ -890,6 +891,7 @@ else
   DEFAULT_wxUSE_LISTBOX=yes
   DEFAULT_wxUSE_LISTCTRL=yes
   DEFAULT_wxUSE_NOTEBOOK=yes
+  DEFAULT_wxUSE_PROPSHEET=yes
   DEFAULT_wxUSE_RADIOBOX=yes
   DEFAULT_wxUSE_RADIOBTN=yes
   DEFAULT_wxUSE_SASH=yes
@@ -1108,8 +1110,7 @@ WX_ARG_ENABLE(clipboard,   [  --enable-clipboard      use wxClipboard classes], 
 WX_ARG_ENABLE(dnd,         [  --enable-dnd            use Drag'n'Drop classes], wxUSE_DRAG_AND_DROP)
 WX_ARG_ENABLE(metafile,    [  --enable-metafile       use win32 metafiles], wxUSE_METAFILE)
 
-dnl TODO: doesn't work yet
-WX_ARG_ENABLE(wxtree,      [  --enable-wxtree         make wxTree library], wxUSE_WXTREE)
+WX_ARG_ENABLE(treelayout,  [  --enable-treelayout     use wxTreeLayout classes], wxUSE_TREELAYOUT)
 
 dnl ---------------------------------------------------------------------------
 dnl optional GUI controls (in alphabetical order except the first one)
@@ -1137,6 +1138,7 @@ if test "$wxUSE_CONTROLS" = "yes"; then
   DEFAULT_wxUSE_LISTBOX=yes
   DEFAULT_wxUSE_LISTCTRL=yes
   DEFAULT_wxUSE_NOTEBOOK=yes
+  DEFAULT_wxUSE_PROPSHEET=yes
   DEFAULT_wxUSE_RADIOBOX=yes
   DEFAULT_wxUSE_RADIOBTN=yes
   DEFAULT_wxUSE_SASH=yes
@@ -1174,6 +1176,7 @@ elif test "$wxUSE_CONTROLS" = "no"; then
   DEFAULT_wxUSE_LISTBOX=no
   DEFAULT_wxUSE_LISTCTRL=no
   DEFAULT_wxUSE_NOTEBOOK=no
+  DEFAULT_wxUSE_PROPSHEET=no
   DEFAULT_wxUSE_RADIOBOX=no
   DEFAULT_wxUSE_RADIOBTN=no
   DEFAULT_wxUSE_SASH=no
@@ -1212,6 +1215,7 @@ WX_ARG_ENABLE(imaglist,    [  --enable-imaglist       use wxImageList class], wx
 WX_ARG_ENABLE(listbox,     [  --enable-listbox        use wxListBox class], wxUSE_LISTBOX)
 WX_ARG_ENABLE(listctrl,    [  --enable-listctrl       use wxListCtrl class], wxUSE_LISTCTRL)
 WX_ARG_ENABLE(notebook,    [  --enable-notebook       use wxNotebook class], wxUSE_NOTEBOOK)
+WX_ARG_ENABLE(propsheet,   [  --enable-propsheet      use wxPropertySheet class], wxUSE_PROPSHEET)
 WX_ARG_ENABLE(radiobox,    [  --enable-radiobox       use wxRadioBox class], wxUSE_RADIOBOX)
 WX_ARG_ENABLE(radiobtn,    [  --enable-radiobtn       use wxRadioButton class], wxUSE_RADIOBTN)
 WX_ARG_ENABLE(sash,        [  --enable-sash           use wxSashWindow class], wxUSE_SASH)
@@ -3352,10 +3356,12 @@ if test "$wxUSE_OPENGL" = "yes"; then
     AC_DEFINE(wxUSE_OPENGL)
     AC_DEFINE(wxUSE_GLCANVAS)
     OPENGL_LINK="-framework OpenGL -framework AGL"
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS opengl"
   else
     AC_CHECK_HEADER(GL/gl.h, [
       AC_DEFINE(wxUSE_OPENGL)
       AC_DEFINE(wxUSE_GLCANVAS)
+      SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS opengl"
       AC_CHECK_LIB(GL, glFlush, [
         OPENGL_LINK="-lGL -lGLU"
       ],[
@@ -4147,6 +4153,12 @@ if test "$wxUSE_NOTEBOOK" = "yes"; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS notebook"
 fi
 
+if test "$wxUSE_PROPSHEET" = "yes"; then
+    AC_DEFINE(wxUSE_PROPSHEET)
+    USES_CONTROLS=1
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS proplist"
+fi
+
 if test "$wxUSE_RADIOBOX" = "yes"; then
     AC_DEFINE(wxUSE_RADIOBOX)
     USES_CONTROLS=1
@@ -4304,10 +4316,10 @@ dnl ---------------------------------------------------------------------------
 dnl misc options
 dnl ---------------------------------------------------------------------------
 
-dnl TODO this is unused for now...
-dnl if test "$wxUSE_WXTREE" = "yes"; then
-dnl   AC_DEFINE(wxUSE_WXTREE)
-dnl fi
+if test "$wxUSE_TREELAYOUT" = "yes"; then
+    AC_DEFINE(wxUSE_TREELAYOUT)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS treelay"
+fi
 
 if test "$wxUSE_DRAGIMAGE" = "yes"; then
     AC_DEFINE(wxUSE_DRAGIMAGE)
@@ -4501,10 +4513,10 @@ if test "$wxUSE_GUI" = "yes"; then
     dnl      library features they need are present)
 
     dnl TODO some samples are never built so far:
-    dnl      ipc, mfc, nativdlg, oleauto, ownerdrw, proplist
+    dnl      ipc, mfc, nativdlg, oleauto, ownerdrw
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS controls dialogs \
-                     drawing dynamic event font fractal image \
-                     minimal richedit widgets"
+                     drawing dynamic erase event exec font image \
+                     minimal richedit rotate widgets"
 
     if test "$wxUSE_UNIVERSAL" = "yes" ; then
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS univ"
@@ -4513,7 +4525,7 @@ if test "$wxUSE_GUI" = "yes"; then
     dnl this is needed to be able to find AFM files
     CPPFLAGS="$CPPFLAGS \$(EXTRADEFS) \$(APPEXTRADEFS)"
 else
-    SAMPLES_SUBDIRS=""
+    SAMPLES_SUBDIRS="console"
 fi
 
 dnl for convenience, sort the samples in alphabetical order
