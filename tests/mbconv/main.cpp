@@ -60,7 +60,7 @@ void MBConvTestCase::WC2CP1250()
     } data[] =
     {
         { L"hello", "hello" },  // test that it works in simplest case
-        { L"½ of ½ is ¼", NULL }, // this should fail as cp1250 doesn't have 1/2
+        { L"\xBD of \xBD is \xBC", NULL }, // this should fail as cp1250 doesn't have 1/2
     };
 
     wxCSConv cs1250(wxFONTENCODING_CP1250);
