@@ -259,6 +259,11 @@ wxMSW:
 - fixed enhanced metafiles loading from files (Andreas Goebel)
 - wxRadioButtons no longer have to be consecutive in a group
 
+wxUniv:
+
+- wxBU_... button align flags support
+- vertical notebook orientation support
+
 
 2.5.3
 -----
