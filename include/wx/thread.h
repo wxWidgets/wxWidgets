@@ -114,6 +114,7 @@ enum wxMutexType
 };
 
 // forward declarations
+class WXDLLIMPEXP_BASE wxThreadHelper;
 class WXDLLIMPEXP_BASE wxConditionInternal;
 class WXDLLIMPEXP_BASE wxMutexInternal;
 class WXDLLIMPEXP_BASE wxSemaphoreInternal;
@@ -580,6 +581,84 @@ private:
     // true if the thread is detached, false if it is joinable
     bool m_isDetached;
 };
+
+// wxThreadHelperThread class
+// --------------------------
+
+class WXDLLIMPEXP_BASE wxThreadHelperThread : public wxThread
+{
+public:
+    // constructor only creates the C++ thread object and doesn't create (or
+    // start) the real thread
+    wxThreadHelperThread(wxThreadHelper& owner)
+        : wxThread(wxTHREAD_JOINABLE), m_owner(owner)
+        { }
+
+protected:
+    // entry point for the thread -- calls Entry() in owner.
+    virtual void *Entry();
+
+private:
+    // the owner of the thread
+    wxThreadHelper& m_owner;
+
+    // no copy ctor/assignment operator
+    wxThreadHelperThread(const wxThreadHelperThread&);
+    wxThreadHelperThread& operator=(const wxThreadHelperThread&);
+};
+
+// ----------------------------------------------------------------------------
+// wxThreadHelper: this class implements the threading logic to run a
+// background task in another object (such as a window).  It is a mix-in: just
+// derive from it to implement a threading background task in your class.
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_BASE wxThreadHelper
+{
+private:
+    void KillThread()
+    {
+        if ( m_thread )
+        {
+            m_thread->Kill();
+            delete m_thread;
+        }
+    }
+
+public:
+    // constructor only initializes m_thread to NULL
+    wxThreadHelper() : m_thread(NULL) { }
+
+    // destructor deletes m_thread
+    virtual ~wxThreadHelper() { KillThread(); }
+
+    // create a new thread (and optionally set the stack size on platforms that
+    // support/need that), call Run() to start it
+    wxThreadError Create(unsigned int stackSize = 0)
+    {
+        KillThread();
+
+        m_thread = new wxThreadHelperThread(*this);
+
+        return m_thread->Create(stackSize);
+    }
+
+    // entry point for the thread - called by Run() and executes in the context
+    // of this thread.
+    virtual void *Entry() = 0;
+
+    // returns a pointer to the thread which can be used to call Run()
+    wxThread *GetThread() const { return m_thread; }
+
+protected:
+    wxThread *m_thread;
+};
+
+// call Entry() in owner, put it down here to avoid circular declarations
+inline void *wxThreadHelperThread::Entry()
+{
+    return m_owner.Entry();
+}
 
 // ----------------------------------------------------------------------------
 // Automatic initialization
