@@ -75,6 +75,7 @@ public:
    virtual void 	 MacSuperShown( bool show ) ;
    virtual bool		 MacCanFocus() const ;
    virtual void		 MacUpdateDimensions() ;
+   void*             MacGetControlAction() { return m_macControlAction ; }
    
    virtual void  	 DoSetSize(int x, int y,int width, int height,int sizeFlags = wxSIZE_AUTO ) ;
    void 	         OnKeyDown( wxKeyEvent &event ) ;
@@ -104,6 +105,7 @@ protected:
 protected:
    // For controls like radiobuttons which are really composite
    WXWidget m_macControl ;
+   void*    m_macControlAction ;
    bool     m_macControlIsShown ;
    wxList   m_subControls;
    int      m_macHorizontalBorder ;
