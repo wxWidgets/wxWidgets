@@ -362,11 +362,11 @@ $(OUTPUTDIR):
 $(SETUP_H): $(WXDIR)\include\wx\msw\setup.h $(ARCHINCDIR)\wx
 	copy $(WXDIR)\include\wx\msw\setup.h $@
 
-LBCFILE=wx$(TOOLKIT).lbc
+LBCFILE=$(OUTPUTDIR)wx$(TOOLKIT).lbc
 $(LIBTARGET) : $(OBJECTS)
     %create $(LBCFILE)
     @for %i in ( $(OBJECTS) ) do @%append $(LBCFILE) +%i
-    wlib /b /c /n /p=512 $^@ @$(LBCFILE)
+    $(LIB) /b /c /n $(LIBPAGESIZE) $^@ @$(LBCFILE)
 
 
 clean:   .SYMBOLIC $(EXTRATARGETSCLEAN)
