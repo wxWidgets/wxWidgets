@@ -691,7 +691,7 @@ AC_ARG_WITH(mac,           [  --with-mac              use Mac OS X], [wxUSE_MAC=
 AC_ARG_WITH(wine,          [  --with-wine             use WINE], [wxUSE_WINE="$withval" CACHE_WINE=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(msw,           [  --with-msw              use MS-Windows], [wxUSE_MSW="$withval" CACHE_MSW=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(pm,            [  --with-pm               use OS/2 Presentation Manager], [wxUSE_PM="$withval" CACHE_PM=1 TOOLKIT_GIVEN=1])
-AC_ARG_WITH(mgl,           [  --with-mgl              use SciTech MGL], [wxUSE_MGL="$withval" CACHE_MGL=1 TOOLKIT_GIVEN=1])
+AC_ARG_WITH(mgl,           [  --with-mgl              use SciTech MGL], [wxUSE_MGL="$withval" wxUSE_UNIVERSAL="yes" CACHE_MGL=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(microwin,      [  --with-microwin         use MicroWindows], [wxUSE_MICROWIN="$withval" CACHE_MICROWIN=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(x11,           [  --with-x11              use X11], [wxUSE_X11="$withval" wxUSE_UNIVERSAL="yes" CACHE_X11=1 TOOLKIT_GIVEN=1])
 WX_ARG_ENABLE(nanox,       [  --enable-nanox          use NanoX], wxUSE_NANOX)
@@ -3856,8 +3856,13 @@ dnl ------------------------------------------------------------------------
 
 dnl VZ: the GUI hooks wxSocket needs are not implemented yet in wxX11
 if test "$wxUSE_SOCKETS" = "yes"; then
-    if test "$TOOLKIT" = "X11"; then
+    if test "$wxUSE_X11" = "1"; then
         AC_MSG_WARN([wxSocket not yet supported under X11... disabled])
+        wxUSE_SOCKETS="no"
+    fi
+
+    if test "$wxUSE_MGL" = "1"; then
+        AC_MSG_WARN([wxSocket not yet supported under MGL... disabled])
         wxUSE_SOCKETS="no"
     fi
 fi
@@ -4232,10 +4237,17 @@ if test "$wxUSE_IPC" = "yes"; then
 fi
 
 if test "$wxUSE_CLIPBOARD" = "yes"; then
-    AC_DEFINE(wxUSE_CLIPBOARD)
+    if test "$wxUSE_MGL" = 1; then
+        AC_MSG_WARN([Clipboard not yet supported under MGL... disabled])
+        wxUSE_CLIPBOARD=no
+    fi
 
-    dnl required by clipboard code in configuration check
-    AC_DEFINE(wxUSE_DATAOBJ)
+    if test "$wxUSE_CLIPBOARD" = "yes"; then
+        AC_DEFINE(wxUSE_CLIPBOARD)
+
+        dnl required by clipboard code in configuration check
+        AC_DEFINE(wxUSE_DATAOBJ)
+    fi
 fi
 
 if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
@@ -4253,6 +4265,11 @@ if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
 
     if test "$wxUSE_X11" = 1; then
         AC_MSG_WARN([Drag and drop not yet supported under X11... disabled])
+        wxUSE_DRAG_AND_DROP=no
+    fi
+
+    if test "$wxUSE_MGL" = 1; then
+        AC_MSG_WARN([Drag and drop not yet supported under MGL... disabled])
         wxUSE_DRAG_AND_DROP=no
     fi
 
