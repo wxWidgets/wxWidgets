@@ -2714,29 +2714,57 @@ fi
 dnl if !MSW
 
 if test "$wxUSE_SOCKETS" = "yes" ; then
-    AC_LANG_SAVE
-    AC_LANG_CPLUSPLUS
     dnl determine the type of third argument for getsockname
-    dnl TODO cache it!!
-    AC_MSG_CHECKING(the type of the third argument of getsockname)
-    AC_TRY_COMPILE(
-        [#include <sys/socket.h>],
-        [socklen_t len; getsockname(0, 0, &len);],
-        AC_DEFINE(SOCKLEN_T, socklen_t) AC_MSG_RESULT(socklen_t),
-           AC_TRY_COMPILE(
-            [#include <sys/socket.h>],
-            [size_t len; getsockname(0, 0, &len);],
-            AC_DEFINE(SOCKLEN_T, size_t) AC_MSG_RESULT(size_t),
-            AC_TRY_COMPILE(
-                [#include <sys/socket.h>],
-                [int len; getsockname(0, 0, &len);],
-                AC_DEFINE(SOCKLEN_T, int) AC_MSG_RESULT(int),
-                AC_MSG_RESULT(unknown)
-            )
-        )
-    )
-    AC_LANG_RESTORE
+    AC_CACHE_CHECK([what is the type of the third argument of getsockname],
+                   wx_cv_type_getsockname3,
+        [
+            AC_LANG_SAVE
+            AC_LANG_CPLUSPLUS
 
+            AC_TRY_COMPILE(
+                [
+                    #include <sys/socket.h>
+                ],
+                [
+                    socklen_t len;
+                    getsockname(0, 0, &len);
+                ],
+                wx_cv_type_getsockname3=socklen_t,
+                AC_TRY_COMPILE(
+                    [
+                        #include <sys/socket.h>
+                    ],
+                    [
+                        size_t len;
+                        getsockname(0, 0, &len);
+                    ],
+                    wx_cv_type_getsockname3=size_t,
+                    AC_TRY_COMPILE(
+                        [
+                            #include <sys/socket.h>
+                        ],
+                        [
+                            int len;
+                            getsockname(0, 0, &len);
+                        ],
+                        wx_cv_type_getsockname3=int
+                        wx_cv_type_getsockname3=unknown
+                    )
+                )
+            )
+
+            AC_LANG_RESTORE
+        ])
+
+    if test "$wx_cv_type_getsockname3" = "unknown"; then
+        wxUSE_SOCKETS=no
+        AC_MSG_WARN([Couldn't find socklen_t synonym for this system])
+    else
+        AC_DEFINE_UNQUOTED(SOCKLEN_T, $wx_cv_type_getsockname3)
+    fi
+fi
+
+if test "$wxUSE_SOCKETS" = "yes" ; then
     AC_DEFINE(wxUSE_SOCKETS)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS sockets"
     INCLUDE_SUBDIRS="$INCLUDE_SUBDIRS protocol"

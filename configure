@@ -12091,88 +12091,115 @@ fi
 fi
 
 if test "$wxUSE_SOCKETS" = "yes" ; then
-    
-    ac_ext=C
+        echo $ac_n "checking what is the type of the third argument of getsockname""... $ac_c" 1>&6
+echo "configure:12096: checking what is the type of the third argument of getsockname" >&5
+if eval "test \"`echo '$''{'wx_cv_type_getsockname3'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  
+            
+            ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='${CXX-g++} -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext 1>&5'
 ac_link='${CXX-g++} -o conftest${ac_exeext} $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&5'
 cross_compiling=$ac_cv_prog_cxx_cross
 
-            echo $ac_n "checking the type of the third argument of getsockname""... $ac_c" 1>&6
-echo "configure:12104: checking the type of the third argument of getsockname" >&5
-    cat > conftest.$ac_ext <<EOF
-#line 12106 "configure"
+
+            cat > conftest.$ac_ext <<EOF
+#line 12111 "configure"
 #include "confdefs.h"
-#include <sys/socket.h>
+
+                    #include <sys/socket.h>
+                
 int main() {
-socklen_t len; getsockname(0, 0, &len);
+
+                    socklen_t len;
+                    getsockname(0, 0, &len);
+                
 ; return 0; }
 EOF
-if { (eval echo configure:12113: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:12123: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
-  cat >> confdefs.h <<\EOF
-#define SOCKLEN_T socklen_t
-EOF
- echo "$ac_t""socklen_t" 1>&6
+  wx_cv_type_getsockname3=socklen_t
 else
   echo "configure: failed program was:" >&5
   cat conftest.$ac_ext >&5
   rm -rf conftest*
   cat > conftest.$ac_ext <<EOF
-#line 12124 "configure"
+#line 12131 "configure"
 #include "confdefs.h"
-#include <sys/socket.h>
+
+                        #include <sys/socket.h>
+                    
 int main() {
-size_t len; getsockname(0, 0, &len);
+
+                        size_t len;
+                        getsockname(0, 0, &len);
+                    
 ; return 0; }
 EOF
-if { (eval echo configure:12131: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:12143: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
-  cat >> confdefs.h <<\EOF
-#define SOCKLEN_T size_t
-EOF
- echo "$ac_t""size_t" 1>&6
+  wx_cv_type_getsockname3=size_t
 else
   echo "configure: failed program was:" >&5
   cat conftest.$ac_ext >&5
   rm -rf conftest*
   cat > conftest.$ac_ext <<EOF
-#line 12142 "configure"
+#line 12151 "configure"
 #include "confdefs.h"
-#include <sys/socket.h>
+
+                            #include <sys/socket.h>
+                        
 int main() {
-int len; getsockname(0, 0, &len);
+
+                            int len;
+                            getsockname(0, 0, &len);
+                        
 ; return 0; }
 EOF
-if { (eval echo configure:12149: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:12163: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
-  cat >> confdefs.h <<\EOF
-#define SOCKLEN_T int
-EOF
- echo "$ac_t""int" 1>&6
+  wx_cv_type_getsockname3=int
+                        wx_cv_type_getsockname3=unknown
+                    
 else
   echo "configure: failed program was:" >&5
   cat conftest.$ac_ext >&5
-  rm -rf conftest*
-  echo "$ac_t""unknown" 1>&6
+fi
+rm -f conftest*
+                
+fi
+rm -f conftest*
             
 fi
 rm -f conftest*
-        
-fi
-rm -f conftest*
-    
-fi
-rm -f conftest*
-    ac_ext=c
+
+            ac_ext=c
 # CFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='${CC-cc} -c $CFLAGS $CPPFLAGS conftest.$ac_ext 1>&5'
 ac_link='${CC-cc} -o conftest${ac_exeext} $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&5'
 cross_compiling=$ac_cv_prog_cc_cross
 
+        
+fi
 
+echo "$ac_t""$wx_cv_type_getsockname3" 1>&6
+
+    if test "$wx_cv_type_getsockname3" = "unknown"; then
+        wxUSE_SOCKETS=no
+        echo "configure: warning: Couldn't find socklen_t synonym for this system" 1>&2
+    else
+        cat >> confdefs.h <<EOF
+#define SOCKLEN_T $wx_cv_type_getsockname3
+EOF
+
+    fi
+fi
+
+if test "$wxUSE_SOCKETS" = "yes" ; then
     cat >> confdefs.h <<\EOF
 #define wxUSE_SOCKETS 1
 EOF
@@ -12189,17 +12216,17 @@ if test "$wxUSE_JOYSTICK" = 1; then
 do
 ac_safe=`echo "$ac_hdr" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for $ac_hdr""... $ac_c" 1>&6
-echo "configure:12193: checking for $ac_hdr" >&5
+echo "configure:12220: checking for $ac_hdr" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 12198 "configure"
+#line 12225 "configure"
 #include "confdefs.h"
 #include <$ac_hdr>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:12203: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:12230: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -12250,12 +12277,12 @@ if test "$wxUSE_DYNLIB_CLASS" = "yes"; then
                 for ac_func in dlopen
 do
 echo $ac_n "checking for $ac_func""... $ac_c" 1>&6
-echo "configure:12254: checking for $ac_func" >&5
+echo "configure:12281: checking for $ac_func" >&5
 if eval "test \"`echo '$''{'ac_cv_func_$ac_func'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 12259 "configure"
+#line 12286 "configure"
 #include "confdefs.h"
 /* System header to define __stub macros and hopefully few prototypes,
     which can conflict with char $ac_func(); below.  */
@@ -12278,7 +12305,7 @@ $ac_func();
 
 ; return 0; }
 EOF
-if { (eval echo configure:12282: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:12309: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_func_$ac_func=yes"
 else
@@ -12306,7 +12333,7 @@ EOF
 else
   echo "$ac_t""no" 1>&6
 echo $ac_n "checking for dlopen in -ldl""... $ac_c" 1>&6
-echo "configure:12310: checking for dlopen in -ldl" >&5
+echo "configure:12337: checking for dlopen in -ldl" >&5
 ac_lib_var=`echo dl'_'dlopen | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -12314,7 +12341,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-ldl  $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 12318 "configure"
+#line 12345 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -12325,7 +12352,7 @@ int main() {
 dlopen()
 ; return 0; }
 EOF
-if { (eval echo configure:12329: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:12356: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -12354,12 +12381,12 @@ else
                             for ac_func in shl_load
 do
 echo $ac_n "checking for $ac_func""... $ac_c" 1>&6
-echo "configure:12358: checking for $ac_func" >&5
+echo "configure:12385: checking for $ac_func" >&5
 if eval "test \"`echo '$''{'ac_cv_func_$ac_func'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 12363 "configure"
+#line 12390 "configure"
 #include "confdefs.h"
 /* System header to define __stub macros and hopefully few prototypes,
     which can conflict with char $ac_func(); below.  */
@@ -12382,7 +12409,7 @@ $ac_func();
 
 ; return 0; }
 EOF
-if { (eval echo configure:12386: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:12413: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_func_$ac_func=yes"
 else
@@ -12613,17 +12640,17 @@ if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
 do
 ac_safe=`echo "$ac_hdr" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for $ac_hdr""... $ac_c" 1>&6
-echo "configure:12617: checking for $ac_hdr" >&5
+echo "configure:12644: checking for $ac_hdr" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 12622 "configure"
+#line 12649 "configure"
 #include "confdefs.h"
 #include <$ac_hdr>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:12627: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:12654: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -13145,7 +13172,7 @@ SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq 
 
 
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:13149: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:13176: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -13176,7 +13203,7 @@ fi
 
 if test "$wxUSE_GUI" = "yes"; then
     echo $ac_n "checking glcanvas subdirectory to use""... $ac_c" 1>&6
-echo "configure:13180: checking glcanvas subdirectory to use" >&5
+echo "configure:13207: checking glcanvas subdirectory to use" >&5
 if eval "test \"`echo '$''{'wx_cv_path_glcanvas'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
