@@ -10,7 +10,7 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-%module stc
+%module stc_
 
 
 %{
@@ -29,9 +29,15 @@
 %extern events.i
 %extern controls.i
 
-//----------------------------------------------------------------------
-// constants and stuff
+// Get all our defs from the real header file.  This is a trial...
+%include stc.h
 
+
+//----------------------------------------------------------------------
+#ifdef THE_OLD_WAY
+
+
+// constants and stuff
 
 enum wxSTC_UndoType {
     wxSTC_UndoCollectNone,
@@ -69,6 +75,12 @@ enum {
     wxSTC_MARK_SMALLRECT,
     wxSTC_MARK_SHORTARROW,
     wxSTC_MARK_EMPTY,
+    wxSTC_MARK_ARROWDOWN,
+    wxSTC_MARK_MINUS,
+    wxSTC_MARK_PLUS,
+    wxSTC_MARKNUM_FOLDER,
+    wxSTC_MARKNUM_FOLDEROPEN,
+    wxSTC_MASK_FOLDERS,
 
     wxSTC_INDIC_PLAIN,
     wxSTC_INDIC_SQUIGGLE,
@@ -77,6 +89,12 @@ enum {
     wxSTC_INDIC1_MASK,
     wxSTC_INDIC2_MASK,
     wxSTC_INDICS_MASK,
+
+    wxSTC_FOLDLEVELBASE,
+    wxSTC_FOLDLEVELWHITEFLAG,
+    wxSTC_FOLDLEVELHEADERFLAG,
+    wxSTC_FOLDLEVELNUMBERMASK,
+
 };
 
 // key commands
@@ -408,10 +426,11 @@ public:
     void     ShowLines(int lineStart, int lineEnd);
     void     HideLines(int lineStart, int lineEnd);
     bool     GetLineVisible(int line);
-    void     SetFoldExpanded(int line);
+    void     SetFoldExpanded(int line, bool expanded);
     bool     GetFoldExpanded(int line);
     void     ToggleFold(int line);
     void     EnsureVisible(int line);
+    void     SetFoldFlags(int flags);
 
 
     // Long Lines
@@ -493,6 +512,12 @@ enum {
     wxEVT_STC_MARGINCLICK,
     wxEVT_STC_NEEDSHOWN
 };
+
+
+
+// End of THE_OLD_WAY
+#endif
+
 
 
 %pragma(python) code = "
