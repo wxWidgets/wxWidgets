@@ -1,8 +1,32 @@
 
+25th October: wxWindows 2.2.3 released
+
+Fixed bugs in HTTP code.
+
+Implemented wxNO_FULL_REPAINT_ON_RESIZE whenever possible
+and reduced flicker a little (no longer diables GTK's own
+anti-flicker code).
+
+Always have a clipping region equivalent to the update
+region in OnPaint events (such as under wxMSW and wxMac).
+
+Implemented wxListBox::SetFirstItem().
+
+Fixed some minor problems in HTML code, wxListCtrl,
+wxListBox.
+
+Fixed compilation on RedHat 7.0.
+
+Updated many translations, added Swedish.
+
+Changed default screenpixels-per-inch from 100 to 75 in
+printing code. This seems to cause problems in program 
+using the former value somewhere.
+
 20th September: wxWindows 2.2.2 released
 
 Fixed wxSizer bug that made items with option
-flags greater than 1 report a wrongn size.
+flags greater than 1 report a wrong size.
 
 Fixed many incompatibilties with GTK themes -
 essentially a backport from the 2.3 branch.

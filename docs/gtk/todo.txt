@@ -1,7 +1,7 @@
 
 -------------------- High priority ---------------------
 
-Improve, update translations. Install *.mo files somewhere.
+Improve, update translations. Mostly done.
 
 -------------------- Medium priority ---------------------
 

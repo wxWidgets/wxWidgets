@@ -254,9 +254,7 @@ The following options handle the kind of library you want to build.
 
 	--disable-threads       Compile without thread support.
 
-	--disable-shared        Do not create shared libraries.
-
-	--enable-static         Create static libraries.
+	--disable-shared        Create static libraries.
 
 	--disable-optimise	    Do not optimise the code. Can
 	                        sometimes be useful for debugging
