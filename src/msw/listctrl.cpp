@@ -1780,7 +1780,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     // there's a GPF in Windows.
                     // By returning TRUE here, we avoid further processing
                     // of this strange message.
-                    if ( info->iItem >= GetColumnCount() )
+                    if ( (unsigned)info->iItem >= (unsigned)GetColumnCount() )
                         return TRUE;
                 }
                 // fall through
