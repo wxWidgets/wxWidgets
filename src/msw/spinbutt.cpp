@@ -221,6 +221,9 @@ bool wxSpinButton::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     LPNMUPDOWN lpnmud = (LPNMUPDOWN)lParam;
 #endif
 
+    if (lpnmud->hdr.hwndFrom != GetHwnd()) // make sure it is the right control
+        return FALSE;
+
     wxSpinEvent event(lpnmud->iDelta > 0 ? wxEVT_SCROLL_LINEUP
                                          : wxEVT_SCROLL_LINEDOWN,
                       m_windowId);
