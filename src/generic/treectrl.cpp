@@ -27,6 +27,7 @@
 #include "wx/intl.h"
 #include "wx/dynarray.h"
 #include "wx/dcclient.h"
+#include "wx/imaglist.h"
 
 // -----------------------------------------------------------------------------
 // array types
@@ -165,6 +166,7 @@ wxGenericTreeItem::wxGenericTreeItem(wxGenericTreeItem *parent,
 
   m_isCollapsed = TRUE;
   m_hasHilight = FALSE;
+  m_hasPlus = FALSE;
 
   m_parent = parent;
 
@@ -227,14 +229,17 @@ void wxGenericTreeItem::SetCross( int x, int y )
 void wxGenericTreeItem::GetSize( int &x, int &y )
 {
   // FIXME what does this all mean??
-  if ( y < m_y + 10 ) y = m_y +10;
+  if ( y < m_y ) y = m_y;
   int width = m_x +  m_width;
   if (width > x) x = width;
 
-  size_t count = m_children.Count();
-  for ( size_t n = 0; n < count; n++ )
+  if (IsExpanded())
   {
-    m_children[n]->GetSize( x, y );
+    size_t count = m_children.Count();
+    for ( size_t n = 0; n < count; n++ )
+    { 
+      m_children[n]->GetSize( x, y );
+    }
   }
 }
 
@@ -402,7 +407,7 @@ void wxTreeCtrl::SetItemHasChildren(const wxTreeItemId& item, bool has)
 // item status inquiries
 // -----------------------------------------------------------------------------
 
-bool wxTreeCtrl::IsVisible(const wxTreeItemId& item) const
+bool wxTreeCtrl::IsVisible(const wxTreeItemId& WXUNUSED(item)) const
 {
   wxFAIL_MSG("not implemented");
 
@@ -767,18 +772,18 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& itemId)
   }
 }
 
-void wxTreeCtrl::EnsureVisible(const wxTreeItemId& item)
+void wxTreeCtrl::EnsureVisible(const wxTreeItemId& WXUNUSED(item))
 {
   wxFAIL_MSG("not implemented");
 }
 
-void wxTreeCtrl::ScrollTo(const wxTreeItemId& item)
+void wxTreeCtrl::ScrollTo(const wxTreeItemId& WXUNUSED(item))
 {
   wxFAIL_MSG("not implemented");
 }
 
-wxTextCtrl *wxTreeCtrl::EditLabel(const wxTreeItemId& item,
-                      wxClassInfo* textCtrlClass)
+wxTextCtrl *wxTreeCtrl::EditLabel( const wxTreeItemId& WXUNUSED(item),
+                                   wxClassInfo* WXUNUSED(textCtrlClass) )
 {
   wxFAIL_MSG("not implemented");
 
@@ -792,13 +797,13 @@ wxTextCtrl *wxTreeCtrl::GetEditControl() const
   return NULL;
 }
 
-void wxTreeCtrl::EndEditLabel(const wxTreeItemId& item, bool discardChanges)
+void wxTreeCtrl::EndEditLabel(const wxTreeItemId& WXUNUSED(item), bool WXUNUSED(discardChanges))
 {
   wxFAIL_MSG("not implemented");
 }
 
-void wxTreeCtrl::SortChildren(const wxTreeItemId& item,
-                              wxTreeItemCmpFunc *cmpFunction)
+void wxTreeCtrl::SortChildren( const wxTreeItemId& WXUNUSED(item),
+                               wxTreeItemCmpFunc *WXUNUSED(cmpFunction))
 {
   wxFAIL_MSG("not implemented");
 }
@@ -863,7 +868,7 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &
   int exposed_x = dc.LogicalToDeviceX( 0 );
   int exposed_y = dc.LogicalToDeviceY( item->GetY()-2 );
   
-  if (IsExposed( exposed_x, exposed_y, 1000, m_lineHeight+4 ))
+  if (IsExposed( exposed_x, exposed_y, 10000, m_lineHeight+4 ))  // 10000 = very much
   {
     int startX = horizX;
     int endX = horizX + 10;
@@ -888,19 +893,33 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &
     {
       dc.SetTextForeground( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
       dc.SetBrush( *m_hilightBrush );
-      long tw, th;
-      dc.GetTextExtent( item->GetText(), &tw, &th );
+      
+      long text_w = 0;
+      long text_h = 0;
+      dc.GetTextExtent( item->GetText(), &text_w, &text_h );
+      
+      int image_h = 0;
+      int image_w = 0;
+      if (item->GetImage() != -1)
+      {
+        m_imageListNormal->GetSize( item->GetImage(), image_w, image_h );
+        image_w += 4;
+      }
+      
       if (m_hasFocus)
-      {
         dc.SetPen( *wxBLACK_PEN );
-        dc.DrawRectangle( item->GetX()-2, item->GetY()-2, tw+4, th+4 );
-      }
       else
-      {
         dc.SetPen( *wxTRANSPARENT_PEN );
-        dc.DrawRectangle( item->GetX()-2, item->GetY()-2, tw+4, th+4 );
+	
+      dc.DrawRectangle( item->GetX()-2, item->GetY()-2, image_w+text_w+4, text_h+4 );
+      
+      if (item->GetImage() != -1)
+      {
+        dc.SetClippingRegion( item->GetX(), item->GetY(), image_w-2, text_h );
+	m_imageListNormal->Draw( item->GetImage(), dc, item->GetX(), item->GetY()-1, wxIMAGELIST_DRAW_TRANSPARENT );
+        dc.DestroyClippingRegion();
       }
-      dc.DrawText( item->GetText(), item->GetX(), item->GetY() );
+      dc.DrawText( item->GetText(), image_w+item->GetX(), item->GetY() );
 
       dc.SetPen( *wxBLACK_PEN );
       dc.SetTextForeground( *wxBLACK );
@@ -910,10 +929,29 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &
     {
       dc.SetBrush( *wxWHITE_BRUSH );
       dc.SetPen( *wxTRANSPARENT_PEN );
-      long tw, th;
-      dc.GetTextExtent( item->GetText(), &tw, &th );
-      dc.DrawRectangle( item->GetX()-2, item->GetY()-2, tw+4, th+4 );
-      dc.DrawText( item->GetText(), item->GetX(), item->GetY() );
+      
+      long text_w = 0;
+      long text_h = 0;
+      dc.GetTextExtent( item->GetText(), &text_w, &text_h );
+      
+      int image_h = 0;
+      int image_w = 0;
+      if (item->GetImage() != -1)
+      {
+        m_imageListNormal->GetSize( item->GetImage(), image_w, image_h );
+        image_w += 4;
+      }
+      
+      dc.DrawRectangle( item->GetX()-2, item->GetY()-2, image_w+text_w+4, text_h+4 );
+      
+      if (item->GetImage() != -1)
+      {
+        dc.SetClippingRegion( item->GetX(), item->GetY(), image_w-2, text_h );
+	m_imageListNormal->Draw( item->GetImage(), dc, item->GetX(), item->GetY()-1, wxIMAGELIST_DRAW_TRANSPARENT );
+        dc.DestroyClippingRegion();
+      }
+      
+      dc.DrawText( item->GetText(), image_w+item->GetX(), item->GetY() );
       dc.SetPen( *wxBLACK_PEN );
     }
   }

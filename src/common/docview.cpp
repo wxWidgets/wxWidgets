@@ -1130,8 +1130,14 @@ wxDocTemplate *wxDocManager::FindTemplateForPath(const wxString& path)
 // How to implement in wxWindows? Must extend the file selector
 // dialog or implement own; OR match the extension to the
 // template extension.
+
+#ifdef __WXMSW__
 wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
     int noTemplates, wxString& path, long WXUNUSED(flags), bool WXUNUSED(save))
+#else
+wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **WXUNUSED(templates),
+    int WXUNUSED(noTemplates), wxString& path, long WXUNUSED(flags), bool WXUNUSED(save))
+#endif    
 {
   // We can only have multiple filters in Windows
 #ifdef __WXMSW__

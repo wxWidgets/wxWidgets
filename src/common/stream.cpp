@@ -420,17 +420,17 @@ wxStreamBase::~wxStreamBase()
 {
 }
 
-size_t wxStreamBase::OnSysRead(void *buffer, size_t size)
+size_t wxStreamBase::OnSysRead(void *WXUNUSED(buffer), size_t WXUNUSED(size))
 {
   return 0;
 }
 
-size_t wxStreamBase::OnSysWrite(const void *buffer, size_t bufsize)
+size_t wxStreamBase::OnSysWrite(const void *WXUNUSED(buffer), size_t WXUNUSED(bufsize))
 {
   return 0;
 }
 
-off_t wxStreamBase::OnSysSeek(off_t seek, wxSeekMode mode)
+off_t wxStreamBase::OnSysSeek(off_t WXUNUSED(seek), wxSeekMode WXUNUSED(mode))
 {
   return wxInvalidOffset;
 }

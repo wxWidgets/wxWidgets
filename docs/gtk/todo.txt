@@ -2,17 +2,23 @@
 -------------------- High priority ---------------------
 
 wxTreeCtrl
-  -> Make it compile. Keyboard handling, icon support.
+  -> Keyboard handling.
 
 wxClipboard
-  -> Urgh.
+  -> On the way, but not functional yet.
   
 wxHelpController
   -> Karsten ?
   
 Fix printing of bitmaps
   -> No idea.
+
+OwnerDraw for wxListCtrl and others
+  -> That is a big one.
   
+DnD
+  -> Must be rewritten for GTK+ 1.1.3  
+ 
 -------------------- Low priority ---------------------
     
 wxDebugContext <-> wxLogXXX functions
@@ -31,5 +37,5 @@ Correct tab navigation
   -> seems to be broken in GTK. Postponed.
   
 Cooperation with Qt
-  
+  -> Would be nice.
   

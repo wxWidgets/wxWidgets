@@ -476,7 +476,7 @@ void wxPaintDC::DrawIcon( const wxIcon &icon, long x, long y, bool useMask )
 }
 
 bool wxPaintDC::Blit( long xdest, long ydest, long width, long height,
-       wxDC *source, long xsrc, long ysrc, int WXUNUSED(logical_func), bool WXUNUSED(useMask) )
+       wxDC *source, long xsrc, long ysrc, int WXUNUSED(logical_func), bool useMask )
 {
   if (!Ok()) return FALSE;
   
@@ -485,16 +485,35 @@ bool wxPaintDC::Blit( long xdest, long ydest, long width, long height,
   if (csrc->m_isMemDC)
   {
     wxMemoryDC* srcDC = (wxMemoryDC*)source;
-    GdkBitmap* bmap = srcDC->m_selected.GetBitmap();
+    GdkPixmap* bmap = srcDC->m_selected.GetPixmap();
     if (bmap)
     {
-      gdk_draw_bitmap( m_window, m_textGC, bmap,
+      long xx = XLOG2DEV(xdest);
+      long yy = YLOG2DEV(ydest);
+    
+      GdkBitmap *mask = (GdkBitmap *) NULL;
+      if (srcDC->m_selected.GetMask()) mask = srcDC->m_selected.GetMask()->GetBitmap();
+    
+      if (useMask && mask) 
+      {
+        gdk_gc_set_clip_mask( m_penGC, mask );
+        gdk_gc_set_clip_origin( m_penGC, xx, yy );
+      }
+  
+      gdk_draw_pixmap( m_window, m_penGC, bmap,
           source->DeviceToLogicalX(xsrc), 
 	  source->DeviceToLogicalY(ysrc),
-          XLOG2DEV(xdest), 
-	  YLOG2DEV(ydest),
+          xx, 
+	  yy,
           source->DeviceToLogicalXRel(width), 
 	  source->DeviceToLogicalYRel(height) );
+	  
+      if (useMask && mask) 
+      {
+         gdk_gc_set_clip_mask( m_penGC, (GdkBitmap *) NULL );
+         gdk_gc_set_clip_origin( m_penGC, 0, 0 );
+      }
+      
       return TRUE;
     }
   }

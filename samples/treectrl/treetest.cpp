@@ -158,8 +158,8 @@ MyTreeCtrl::MyTreeCtrl(wxWindow *parent, const wxWindowID id,
   m_imageListNormal = new wxImageList(16, 16, TRUE);
 
   // should correspond to TreeCtrlIcon_xxx enum
-  m_imageListNormal->Add(wxICON(icon1));
   m_imageListNormal->Add(wxICON(icon2));
+  m_imageListNormal->Add(wxICON(icon1));
 
   SetImageList(m_imageListNormal);
 

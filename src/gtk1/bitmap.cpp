@@ -452,10 +452,10 @@ wxBitmap::wxBitmap( const wxImage &image )
 	
 	    if (image.HasMask())
 	    {
-	        if ((r == r_mask) && (b = b_mask) && (g = g_mask))
-	            gdk_image_put_pixel( mask_image, x, y, 0 );
-	        else
+	        if ((r == r_mask) && (b == b_mask) && (g == g_mask))
 	            gdk_image_put_pixel( mask_image, x, y, 1 );
+	        else
+	            gdk_image_put_pixel( mask_image, x, y, 0 );
 	    }
 	
 	    switch (render_depth)

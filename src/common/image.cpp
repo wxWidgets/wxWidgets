@@ -834,7 +834,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, const wxString& name )
 
 				      for (i = 0; i < absolute; i++)
 					{
-					   +linepos++;
+					   linepos++;
 					   byte = getc(file);
 					   ptr[poffset] = cmap[byte].r;
 					   ptr[poffset + 1] = cmap[byte].g;
