@@ -505,7 +505,7 @@ class wxTablesInUse : public wxObject
 wxDB  WXDLLEXPORT *wxDbGetConnection(wxDbConnectInf *pDbConfig, bool FwdOnlyCursors=(bool)wxODBC_FWD_ONLY_CURSORS);
 bool  WXDLLEXPORT  wxDbFreeConnection(wxDB *pDb);
 void  WXDLLEXPORT  wxDbCloseConnections(void);
-int   WXDLLEXPORT  wxDbNumberConnectionsInUse(void);
+int   WXDLLEXPORT  wxDbConnectionsInUse(void);
 
 
 // This function sets the sql log state for all open wxDB objects
