@@ -63,6 +63,7 @@ GENERICOBJS= accel.obj &
 	laywin.obj &
 	listctrl.obj &
 	logg.obj &
+	mdig.obj &
 	msgdlgg.obj &
 	numdlgg.obj &
 	panelg.obj &
@@ -171,6 +172,7 @@ COMMONOBJS = &
 	menucmn.obj &
 	mimecmn.obj &
 	module.obj &
+	msgout.obj &
 	mstream.obj &
 	nbkbase.obj &
 	object.obj &
@@ -779,6 +781,9 @@ mimecmn.obj:     $(COMMDIR)\mimecmn.cpp
 module.obj:     $(COMMDIR)\module.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
+msgout.obj:     $(COMMDIR)\msgout.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
 mstream.obj:     $(COMMDIR)\mstream.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
@@ -1007,6 +1012,9 @@ listctrl.obj:     $(GENDIR)\listctrl.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 logg.obj:     $(GENDIR)\logg.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+mdig.obj:     $(GENDIR)\mdig.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 msgdlgg.obj:     $(GENDIR)\msgdlgg.cpp
