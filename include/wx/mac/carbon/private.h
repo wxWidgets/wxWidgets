@@ -378,8 +378,6 @@ CIconHandle     wxMacCreateCIcon(GWorldPtr image , GWorldPtr mask , short dstDep
 void                 wxMacSetColorTableEntry( CTabHandle newColors , int index , int red , int green ,  int blue ) ;
 CTabHandle         wxMacCreateColorTable( int numColors ) ;
 */
-PicHandle wxMacCreatePicHandle( const wxBitmap &bmp ) ;
-IconRef wxMacCreateIconRef(const wxBitmap& bmp) ;
 void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bitmap , int forceType = 0 ) ;
 void wxMacReleaseBitmapButton( ControlButtonContentInfo*info ) ;
 
@@ -665,6 +663,20 @@ public:
 #if wxMAC_USE_CORE_GRAPHICS
     CGImageRef    CGImageCreate() const ;
 #endif
+     
+    // returns true if the bitmap has a size that
+    // can be natively transferred into a true icon
+    // if no is returned GetIconRef will still produce
+    // an icon but it will be generated via a PICT and
+    // rescaled to 16 x 16   
+    bool          HasNativeSize() ;
+    
+    // caller should increase ref count if needed longer
+    // than the bitmap exists
+    IconRef       GetIconRef() ;
+    
+    // returns a Pict from the bitmap content
+    PicHandle     GetPictHandle() ;
     GWorldPtr     GetHBITMAP(GWorldPtr * mask = NULL ) const ;
     void          UpdateAlphaMask() const ;
 
@@ -683,6 +695,8 @@ private :
 #if wxMAC_USE_CORE_GRAPHICS
     mutable CGImageRef    m_cgImageRef ;
 #endif
+    IconRef       m_iconRef ;
+    PicHandle     m_pictHandle ;
     GWorldPtr     m_hBitmap;
     GWorldPtr     m_hMaskBitmap ;
     wxMemoryBuffer m_maskMemBuf ;
