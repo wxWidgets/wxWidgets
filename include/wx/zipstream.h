@@ -43,7 +43,7 @@ class WXDLLEXPORT wxZipInputStream : public wxInputStream
         ~wxZipInputStream();
 
     protected:
-        virtual size_t StreamSize() const {return m_Size;}
+        virtual size_t GetSize() const {return m_Size;}
         virtual size_t OnSysRead(void *buffer, size_t bufsize);
         virtual off_t OnSysSeek(off_t seek, wxSeekMode mode);
         virtual off_t OnSysTell() const {return m_Pos;}
