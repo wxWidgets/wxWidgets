@@ -1052,7 +1052,7 @@ class HtmlWindow(windows.ScrolledWindow):
         return _html.HtmlWindow_HasAnchor(*args, **kwargs)
 
     def AddFilter(*args, **kwargs):
-        """HtmlWindow.AddFilter(HtmlFilter filter)"""
+        """AddFilter(HtmlFilter filter)"""
         return _html.HtmlWindow_AddFilter(*args, **kwargs)
 
     AddFilter = staticmethod(AddFilter)
@@ -1182,12 +1182,12 @@ class HtmlPrintout(windows.Printout):
         return _html.HtmlPrintout_SetMargins(*args, **kwargs)
 
     def AddFilter(*args, **kwargs):
-        """HtmlPrintout.AddFilter(wxHtmlFilter filter)"""
+        """AddFilter(wxHtmlFilter filter)"""
         return _html.HtmlPrintout_AddFilter(*args, **kwargs)
 
     AddFilter = staticmethod(AddFilter)
     def CleanUpStatics(*args, **kwargs):
-        """HtmlPrintout.CleanUpStatics()"""
+        """CleanUpStatics()"""
         return _html.HtmlPrintout_CleanUpStatics(*args, **kwargs)
 
     CleanUpStatics = staticmethod(CleanUpStatics)

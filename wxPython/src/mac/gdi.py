@@ -1066,6 +1066,48 @@ FONTENCODING_UTF16BE = _gdi.FONTENCODING_UTF16BE
 FONTENCODING_UTF16LE = _gdi.FONTENCODING_UTF16LE
 FONTENCODING_UTF32BE = _gdi.FONTENCODING_UTF32BE
 FONTENCODING_UTF32LE = _gdi.FONTENCODING_UTF32LE
+FONTENCODING_MACROMAN = _gdi.FONTENCODING_MACROMAN
+FONTENCODING_MACJAPANESE = _gdi.FONTENCODING_MACJAPANESE
+FONTENCODING_MACCHINESETRAD = _gdi.FONTENCODING_MACCHINESETRAD
+FONTENCODING_MACKOREAN = _gdi.FONTENCODING_MACKOREAN
+FONTENCODING_MACARABIC = _gdi.FONTENCODING_MACARABIC
+FONTENCODING_MACHEBREW = _gdi.FONTENCODING_MACHEBREW
+FONTENCODING_MACGREEK = _gdi.FONTENCODING_MACGREEK
+FONTENCODING_MACCYRILLIC = _gdi.FONTENCODING_MACCYRILLIC
+FONTENCODING_MACDEVANAGARI = _gdi.FONTENCODING_MACDEVANAGARI
+FONTENCODING_MACGURMUKHI = _gdi.FONTENCODING_MACGURMUKHI
+FONTENCODING_MACGUJARATI = _gdi.FONTENCODING_MACGUJARATI
+FONTENCODING_MACORIYA = _gdi.FONTENCODING_MACORIYA
+FONTENCODING_MACBENGALI = _gdi.FONTENCODING_MACBENGALI
+FONTENCODING_MACTAMIL = _gdi.FONTENCODING_MACTAMIL
+FONTENCODING_MACTELUGU = _gdi.FONTENCODING_MACTELUGU
+FONTENCODING_MACKANNADA = _gdi.FONTENCODING_MACKANNADA
+FONTENCODING_MACMALAJALAM = _gdi.FONTENCODING_MACMALAJALAM
+FONTENCODING_MACSINHALESE = _gdi.FONTENCODING_MACSINHALESE
+FONTENCODING_MACBURMESE = _gdi.FONTENCODING_MACBURMESE
+FONTENCODING_MACKHMER = _gdi.FONTENCODING_MACKHMER
+FONTENCODING_MACTHAI = _gdi.FONTENCODING_MACTHAI
+FONTENCODING_MACLAOTIAN = _gdi.FONTENCODING_MACLAOTIAN
+FONTENCODING_MACGEORGIAN = _gdi.FONTENCODING_MACGEORGIAN
+FONTENCODING_MACARMENIAN = _gdi.FONTENCODING_MACARMENIAN
+FONTENCODING_MACCHINESESIMP = _gdi.FONTENCODING_MACCHINESESIMP
+FONTENCODING_MACTIBETAN = _gdi.FONTENCODING_MACTIBETAN
+FONTENCODING_MACMONGOLIAN = _gdi.FONTENCODING_MACMONGOLIAN
+FONTENCODING_MACETHIOPIC = _gdi.FONTENCODING_MACETHIOPIC
+FONTENCODING_MACCENTRALEUR = _gdi.FONTENCODING_MACCENTRALEUR
+FONTENCODING_MACVIATNAMESE = _gdi.FONTENCODING_MACVIATNAMESE
+FONTENCODING_MACARABICEXT = _gdi.FONTENCODING_MACARABICEXT
+FONTENCODING_MACSYMBOL = _gdi.FONTENCODING_MACSYMBOL
+FONTENCODING_MACDINGBATS = _gdi.FONTENCODING_MACDINGBATS
+FONTENCODING_MACTURKISH = _gdi.FONTENCODING_MACTURKISH
+FONTENCODING_MACCROATIAN = _gdi.FONTENCODING_MACCROATIAN
+FONTENCODING_MACICELANDIC = _gdi.FONTENCODING_MACICELANDIC
+FONTENCODING_MACROMANIAN = _gdi.FONTENCODING_MACROMANIAN
+FONTENCODING_MACCELTIC = _gdi.FONTENCODING_MACCELTIC
+FONTENCODING_MACGAELIC = _gdi.FONTENCODING_MACGAELIC
+FONTENCODING_MACKEYBOARD = _gdi.FONTENCODING_MACKEYBOARD
+FONTENCODING_MACMIN = _gdi.FONTENCODING_MACMIN
+FONTENCODING_MACMAX = _gdi.FONTENCODING_MACMAX
 FONTENCODING_MAX = _gdi.FONTENCODING_MAX
 FONTENCODING_UTF16 = _gdi.FONTENCODING_UTF16
 FONTENCODING_UTF32 = _gdi.FONTENCODING_UTF32
@@ -1241,12 +1283,12 @@ class FontMapper(object):
         except: pass
 
     def Get(*args, **kwargs):
-        """FontMapper.Get() -> FontMapper"""
+        """Get() -> FontMapper"""
         return _gdi.FontMapper_Get(*args, **kwargs)
 
     Get = staticmethod(Get)
     def Set(*args, **kwargs):
-        """FontMapper.Set(FontMapper mapper) -> FontMapper"""
+        """Set(FontMapper mapper) -> FontMapper"""
         return _gdi.FontMapper_Set(*args, **kwargs)
 
     Set = staticmethod(Set)
@@ -1255,22 +1297,22 @@ class FontMapper(object):
         return _gdi.FontMapper_CharsetToEncoding(*args, **kwargs)
 
     def GetSupportedEncodingsCount(*args, **kwargs):
-        """FontMapper.GetSupportedEncodingsCount() -> size_t"""
+        """GetSupportedEncodingsCount() -> size_t"""
         return _gdi.FontMapper_GetSupportedEncodingsCount(*args, **kwargs)
 
     GetSupportedEncodingsCount = staticmethod(GetSupportedEncodingsCount)
     def GetEncoding(*args, **kwargs):
-        """FontMapper.GetEncoding(size_t n) -> int"""
+        """GetEncoding(size_t n) -> int"""
         return _gdi.FontMapper_GetEncoding(*args, **kwargs)
 
     GetEncoding = staticmethod(GetEncoding)
     def GetEncodingName(*args, **kwargs):
-        """FontMapper.GetEncodingName(int encoding) -> String"""
+        """GetEncodingName(int encoding) -> String"""
         return _gdi.FontMapper_GetEncodingName(*args, **kwargs)
 
     GetEncodingName = staticmethod(GetEncodingName)
     def GetEncodingDescription(*args, **kwargs):
-        """FontMapper.GetEncodingDescription(int encoding) -> String"""
+        """GetEncodingDescription(int encoding) -> String"""
         return _gdi.FontMapper_GetEncodingDescription(*args, **kwargs)
 
     GetEncodingDescription = staticmethod(GetEncodingDescription)
@@ -1283,7 +1325,7 @@ class FontMapper(object):
         return _gdi.FontMapper_SetConfigPath(*args, **kwargs)
 
     def GetDefaultConfigPath(*args, **kwargs):
-        """FontMapper.GetDefaultConfigPath() -> String"""
+        """GetDefaultConfigPath() -> String"""
         return _gdi.FontMapper_GetDefaultConfigPath(*args, **kwargs)
 
     GetDefaultConfigPath = staticmethod(GetDefaultConfigPath)
@@ -1478,12 +1520,12 @@ class Font(GDIObject):
         return _gdi.Font_GetNoAntiAliasing(*args, **kwargs)
 
     def GetDefaultEncoding(*args, **kwargs):
-        """Font.GetDefaultEncoding() -> int"""
+        """GetDefaultEncoding() -> int"""
         return _gdi.Font_GetDefaultEncoding(*args, **kwargs)
 
     GetDefaultEncoding = staticmethod(GetDefaultEncoding)
     def SetDefaultEncoding(*args, **kwargs):
-        """Font.SetDefaultEncoding(int encoding)"""
+        """SetDefaultEncoding(int encoding)"""
         return _gdi.Font_SetDefaultEncoding(*args, **kwargs)
 
     SetDefaultEncoding = staticmethod(SetDefaultEncoding)
@@ -1862,17 +1904,17 @@ class Locale(object):
         return val
 
     def GetSystemLanguage(*args, **kwargs):
-        """Locale.GetSystemLanguage() -> int"""
+        """GetSystemLanguage() -> int"""
         return _gdi.Locale_GetSystemLanguage(*args, **kwargs)
 
     GetSystemLanguage = staticmethod(GetSystemLanguage)
     def GetSystemEncoding(*args, **kwargs):
-        """Locale.GetSystemEncoding() -> int"""
+        """GetSystemEncoding() -> int"""
         return _gdi.Locale_GetSystemEncoding(*args, **kwargs)
 
     GetSystemEncoding = staticmethod(GetSystemEncoding)
     def GetSystemEncodingName(*args, **kwargs):
-        """Locale.GetSystemEncodingName() -> String"""
+        """GetSystemEncodingName() -> String"""
         return _gdi.Locale_GetSystemEncodingName(*args, **kwargs)
 
     GetSystemEncodingName = staticmethod(GetSystemEncodingName)
@@ -1898,7 +1940,7 @@ class Locale(object):
         return _gdi.Locale_GetCanonicalName(*args, **kwargs)
 
     def AddCatalogLookupPathPrefix(*args, **kwargs):
-        """Locale.AddCatalogLookupPathPrefix(String prefix)"""
+        """AddCatalogLookupPathPrefix(String prefix)"""
         return _gdi.Locale_AddCatalogLookupPathPrefix(*args, **kwargs)
 
     AddCatalogLookupPathPrefix = staticmethod(AddCatalogLookupPathPrefix)
@@ -1911,22 +1953,22 @@ class Locale(object):
         return _gdi.Locale_IsLoaded(*args, **kwargs)
 
     def GetLanguageInfo(*args, **kwargs):
-        """Locale.GetLanguageInfo(int lang) -> LanguageInfo"""
+        """GetLanguageInfo(int lang) -> LanguageInfo"""
         return _gdi.Locale_GetLanguageInfo(*args, **kwargs)
 
     GetLanguageInfo = staticmethod(GetLanguageInfo)
     def GetLanguageName(*args, **kwargs):
-        """Locale.GetLanguageName(int lang) -> String"""
+        """GetLanguageName(int lang) -> String"""
         return _gdi.Locale_GetLanguageName(*args, **kwargs)
 
     GetLanguageName = staticmethod(GetLanguageName)
     def FindLanguageInfo(*args, **kwargs):
-        """Locale.FindLanguageInfo(String locale) -> LanguageInfo"""
+        """FindLanguageInfo(String locale) -> LanguageInfo"""
         return _gdi.Locale_FindLanguageInfo(*args, **kwargs)
 
     FindLanguageInfo = staticmethod(FindLanguageInfo)
     def AddLanguage(*args, **kwargs):
-        """Locale.AddLanguage(LanguageInfo info)"""
+        """AddLanguage(LanguageInfo info)"""
         return _gdi.Locale_AddLanguage(*args, **kwargs)
 
     AddLanguage = staticmethod(AddLanguage)
@@ -2015,17 +2057,17 @@ class EncodingConverter(core.Object):
         return _gdi.EncodingConverter_Convert(*args, **kwargs)
 
     def GetPlatformEquivalents(*args, **kwargs):
-        """EncodingConverter.GetPlatformEquivalents(int enc, int platform=PLATFORM_CURRENT) -> wxFontEncodingArray"""
+        """GetPlatformEquivalents(int enc, int platform=PLATFORM_CURRENT) -> wxFontEncodingArray"""
         return _gdi.EncodingConverter_GetPlatformEquivalents(*args, **kwargs)
 
     GetPlatformEquivalents = staticmethod(GetPlatformEquivalents)
     def GetAllEquivalents(*args, **kwargs):
-        """EncodingConverter.GetAllEquivalents(int enc) -> wxFontEncodingArray"""
+        """GetAllEquivalents(int enc) -> wxFontEncodingArray"""
         return _gdi.EncodingConverter_GetAllEquivalents(*args, **kwargs)
 
     GetAllEquivalents = staticmethod(GetAllEquivalents)
     def CanConvert(*args, **kwargs):
-        """EncodingConverter.CanConvert(int encIn, int encOut) -> bool"""
+        """CanConvert(int encIn, int encOut) -> bool"""
         return _gdi.EncodingConverter_CanConvert(*args, **kwargs)
 
     CanConvert = staticmethod(CanConvert)
@@ -2939,12 +2981,12 @@ class PostScriptDC(DC):
         return _gdi.PostScriptDC_SetPrintData(*args, **kwargs)
 
     def SetResolution(*args, **kwargs):
-        """PostScriptDC.SetResolution(int ppi)"""
+        """SetResolution(int ppi)"""
         return _gdi.PostScriptDC_SetResolution(*args, **kwargs)
 
     SetResolution = staticmethod(SetResolution)
     def GetResolution(*args, **kwargs):
-        """PostScriptDC.GetResolution() -> int"""
+        """GetResolution() -> int"""
         return _gdi.PostScriptDC_GetResolution(*args, **kwargs)
 
     GetResolution = staticmethod(GetResolution)

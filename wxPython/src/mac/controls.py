@@ -54,7 +54,7 @@ class Button(core.Control):
         return _controls.Button_SetDefault(*args, **kwargs)
 
     def GetDefaultSize(*args, **kwargs):
-        """Button.GetDefaultSize() -> Size"""
+        """GetDefaultSize() -> Size"""
         return _controls.Button_GetDefaultSize(*args, **kwargs)
 
     GetDefaultSize = staticmethod(GetDefaultSize)
@@ -597,7 +597,7 @@ class StaticLine(core.Control):
         return _controls.StaticLine_IsVertical(*args, **kwargs)
 
     def GetDefaultSize(*args, **kwargs):
-        """StaticLine.GetDefaultSize() -> int"""
+        """GetDefaultSize() -> int"""
         return _controls.StaticLine_GetDefaultSize(*args, **kwargs)
 
     GetDefaultSize = staticmethod(GetDefaultSize)
@@ -1022,7 +1022,7 @@ class TextAttr(object):
         return _controls.TextAttr_IsDefault(*args, **kwargs)
 
     def Combine(*args, **kwargs):
-        """TextAttr.Combine(TextAttr attr, TextAttr attrDef, TextCtrl text) -> TextAttr"""
+        """Combine(TextAttr attr, TextAttr attrDef, TextCtrl text) -> TextAttr"""
         return _controls.TextAttr_Combine(*args, **kwargs)
 
     Combine = staticmethod(Combine)
@@ -2051,7 +2051,7 @@ class Notebook(BookCtrl):
         """
         HitTest(Point pt) -> (tab, where)
 
-        Returns the tab which is hit, and flags indicating where using wxNB_HITTEST_ flags.
+        Returns the tab which is hit, and flags indicating where using wx.NB_HITTEST_ flags.
         """
         return _controls.Notebook_HitTest(*args, **kwargs)
 
@@ -4579,12 +4579,12 @@ class HelpProvider(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHelpProvider instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def Set(*args, **kwargs):
-        """HelpProvider.Set(HelpProvider helpProvider) -> HelpProvider"""
+        """Set(HelpProvider helpProvider) -> HelpProvider"""
         return _controls.HelpProvider_Set(*args, **kwargs)
 
     Set = staticmethod(Set)
     def Get(*args, **kwargs):
-        """HelpProvider.Get() -> HelpProvider"""
+        """Get() -> HelpProvider"""
         return _controls.HelpProvider_Get(*args, **kwargs)
 
     Get = staticmethod(Get)
