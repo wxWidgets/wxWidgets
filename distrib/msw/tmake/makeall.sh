@@ -62,6 +62,10 @@ do
 	    echo "Generating $topdir/src/msw/files.lst for MSW and Configure..."
 	    tmake -t msw wxwin.pro -o $topdir/src/msw/files.lst;;
 
+	mac.t)
+	    echo "Generating $topdir/src/mac/files.lst for Mac and Configure..."
+	    tmake -t mac wxwin.pro -o $topdir/src/mac/files.lst;;
+
 	motif.t)
 	    echo "Generating $topdir/src/motif/files.lst for Motif and Configure..."
 	    tmake -t motif wxwin.pro -o $topdir/src/motif/files.lst;;

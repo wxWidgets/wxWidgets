@@ -10,43 +10,50 @@
 #  BaseOnly	/src/common but only needed for the wxBase compilation
 #  Generic	/src/generic
 #  Common	/src/common
-#  MSW	/src/msw
+#  MSW		/src/msw
+#  Mac		/src/mac for Mac OS X with Apple Developer Tools
 #  Motif	/src/motif
-#  Univ	/src/univ or src/univ/themes
-#  Unix	/src/unix
-#  GTK	/src/gtk
-#  MGL	/src/mgl
-#  OS2	/src/os2
-#  HTML	/src/html
+#  Univ		/src/univ or src/univ/themes
+#  Unix		/src/unix
+#  GTK		/src/gtk
+#  MGL		/src/mgl
+#  OS2		/src/os2
+#  HTML		/src/html
 #
 # 'H' suffix means these are headers, not .cpp files
 #
-#  WXH	/include/wx
-#  GTKH	/include/wx/gtk
+#  WXH		/include/wx
+#  GTKH		/include/wx/gtk
+#  MacH		/include/wx/mac
 #  MotifH	/include/wx/motif
-#  MSWH	/include/wx/msw
-#  OS2H	/include/wx/os2
+#  MSWH		/include/wx/msw
+#  OS2H		/include/wx/os2
 #  GenericH	/include/wx/generic
 #  HtmlH	/include/wx/html
 #  ProtoH	/include/wx/protocol
 #  UnivH	/include/wx/univ
 #  UnixH	/include/wx/unix
 #
+# 'R' suffix means these are resource files
+#
+#  MacR		/src/mac
+#
 # The third column may be empty or contain some additional info about this
 # file (only compile it in 16bit mode, don't compile it with this or that
 # compiler, &c)
 #
 # Known flags:
-#  Base	makes part of the base library too
+#  Base		makes part of the base library too
 #  NotWin32	not used under Win32, but used under Win16
 #  Win32Only	only can be compiled under Win32
 #  Generic	generic code which might be used instead of native one
-#  OLE	OLE file (needs Win32 and a decent compiler)
+#  OLE		OLE file (needs Win32 and a decent compiler)
 #  Socket	Socket file (currently doesn't compile under Win16)
 #  NotMSW	Not required for the MSW port
+#  NotMac	Not required for the MAC port under Mac OS X
 #  NotMGL	Not required for the MGL port
 #  NotGTK	Not required for the GTK port
-#  NotX	Not required for the Motif port
+#  NotX		Not required for the Motif port
 #  NotOS2	Not required for the os2Pm port
 #  LowLevel	Low level GUI toolkit file, used by wxUniversal as well
 #  Theme        implements a wxUniv theme
@@ -54,7 +61,7 @@
 
 # File name 	Type	Flags
 
-accel.cpp	Generic	NotMSW,NotX,NotOS2
+accel.cpp	Generic	NotMSW,NotX,NotOS2,NotMac
 busyinfo.cpp	Generic
 calctrl.cpp	Generic
 caret.cpp	Generic	NotMSW
@@ -65,8 +72,8 @@ dirctrlg.cpp	Generic
 dirdlgg.cpp	Generic	NotWin32,NotOS2
 dragimgg.cpp	Generic	NotOS2
 fdrepdlg.cpp	Generic	NotMSW
-fontdlgg.cpp	Generic	Generic,NotOS2
 filedlgg.cpp	Generic	NotMSW,NotX,NotOS2
+fontdlgg.cpp	Generic	Generic,NotOS2
 grid.cpp	Generic
 gridctrl.cpp	Generic
 gridsel.cpp	Generic
@@ -78,8 +85,9 @@ laywin.cpp	Generic
 listctrl.cpp	Generic	NotWin32
 logg.cpp	Generic
 msgdlgg.cpp	Generic	Generic
-notebook.cpp	Generic	NotWin32,NotGTK,NotOS2,NotMGL
-paletteg.cpp	Generic	NotMSW,NotX,NotOS2,NotMGL
+notebook.cpp	Generic	NotWin32,NotGTK,NotOS2,NotMGL,NotMac
+numdlgg.cpp	Generic
+paletteg.cpp	Generic	NotMSW,NotX,NotOS2,NotMGL,NotMac
 panelg.cpp	Generic
 printps.cpp	Generic	NotMSW
 prntdlgg.cpp	Generic	NotMSW
@@ -92,10 +100,9 @@ scrlwing.cpp	Generic
 spinctlg.cpp	Generic
 splash.cpp	Generic
 splitter.cpp	Generic
-statline.cpp	Generic	NotMSW,NotGTK,NotOS2,NotMGL
+statline.cpp	Generic	NotMSW,NotGTK,NotOS2,NotMGL,NotMac
 statusbr.cpp	Generic
 tabg.cpp	Generic	NotWin32,NotOS2
-numdlgg.cpp	Generic
 tbarsmpl.cpp	Generic
 textdlgg.cpp	Generic
 tipdlg.cpp	Generic
@@ -106,10 +113,10 @@ wizard.cpp	Generic
 
 appcmn.cpp	Common	Base
 choiccmn.cpp	Common
+clipcmn.cpp	Common
 cmdline.cpp	Common	Base
 cmdproc.cpp	Common
 cmndata.cpp	Common
-clipcmn.cpp	Common
 config.cpp	Common	Base
 containr.cpp	Common
 cshelp.cpp	Common
@@ -118,13 +125,13 @@ ctrlsub.cpp	Common
 datetime.cpp	Common	Base
 datstrm.cpp	Common	Base
 db.cpp	Common	Win32Only,Base
-dbgrid.cpp	Common	Win32Only
+dbgrid.cpp	Common	Win32Only,NotMac
 dbtable.cpp	Common	Win32Only,Base
 dcbase.cpp	Common
 dircmn.cpp	Common	Base
 dlgcmn.cpp	Common
-dobjcmn.cpp	Common
 dndcmn.cpp	Common
+dobjcmn.cpp	Common
 docmdi.cpp	Common
 docview.cpp	Common
 dynarray.cpp	Common	Base
@@ -145,27 +152,25 @@ fontmap.cpp	Common	Base
 framecmn.cpp	Common
 toplvcmn.cpp	Common
 fs_inet.cpp	Common	Base
-fs_zip.cpp	Common	Base
 fs_mem.cpp	Common	Base
+fs_zip.cpp	Common	Base
 ftp.cpp	Common	Socket,Base
 gaugecmn.cpp	Common
 gdicmn.cpp	Common
 geometry.cpp	Common
 gifdecod.cpp	Common
-xpmdecod.cpp	Common
 hash.cpp	Common	Base
 helpbase.cpp	Common
 http.cpp	Common	Socket,Base
+imagall.cpp	Common
 imagbmp.cpp	Common
 image.cpp	Common
-imagall.cpp	Common
 imaggif.cpp	Common
-imagxpm.cpp	Common
 imagjpeg.cpp	Common	Win32Only
-imagtiff.cpp	Common	Win32Only
 imagpcx.cpp	Common	Win32Only
 imagpng.cpp	Common	Win32Only
 imagpnm.cpp	Common	Win32Only
+imagtiff.cpp	Common	Win32Only
 imagxpm.cpp	Common
 init.cpp	BaseOnly
 intl.cpp	Common	Base
@@ -191,7 +196,7 @@ prntbase.cpp	Common
 process.cpp	Common	Win32Only,Base
 protocol.cpp	Common	Socket,Base
 quantize.cpp	Common
-radiocmn.cpp	Common
+radiocmn.cpp	Common	NotMac
 regex.cpp	Common	Base
 resource.cpp	Common
 sckaddr.cpp	Common	Socket,Base
@@ -201,14 +206,15 @@ sckstrm.cpp	Common	Socket,Base
 serbase.cpp	Common	Base
 sizer.cpp	Common
 socket.cpp	Common	Socket,Base
-stream.cpp	Common	Base
 strconv.cpp	Common	Base
+stream.cpp	Common	Base
 string.cpp	Common	Base
 sysopt.cpp	Common	Base
 tbarbase.cpp	Common
 textcmn.cpp	Common
 textfile.cpp	Common	Base
 timercmn.cpp	Common	Base
+toplvcmn.cpp	Common
 tokenzr.cpp	Common	Base
 treebase.cpp	Common
 txtstrm.cpp	Common	Base
@@ -223,6 +229,7 @@ wfstream.cpp	Common	Base
 wincmn.cpp	Common
 wxchar.cpp	Common	Base
 wxexpr.cpp	Common
+xpmdecod.cpp	Common
 zipstrm.cpp	Common	Base
 zstream.cpp	Common	Base
 
@@ -337,16 +344,15 @@ uuid.cpp	MSW	OLE
 wave.cpp	MSW
 window.cpp	MSW	LowLevel
 
-dialup.cpp	Unix
+dialup.cpp	Unix	NotMac
 dir.cpp	Unix	Base
-fontenum.cpp	Unix
-fontutil.cpp	Unix
-mimetype.cpp	Unix	Base
+fontenum.cpp	Unix	NotMac
+fontutil.cpp	Unix	NotMac
+gsocket.c	Unix	Base,NotMac
+mimetype.cpp	Unix	Base,NotMac
 snglinst.cpp	Unix	Base
-threadpsx.cpp	Unix	Base
+threadpsx.cpp	Unix	Base,NotMac
 utilsunx.cpp	Unix	Base
-gsocket.c	Unix	Base
-mimetype.cpp	Unix	Base
 
 bmpbuttn.cpp	Univ
 button.cpp	Univ
@@ -445,6 +451,84 @@ utilsgtk.cpp	GTK	LowLevel
 utilsres.cpp	GTK
 wave.cpp	GTK
 window.cpp	GTK	LowLevel
+
+gsocket.c	Mac	Socket
+accel.cpp	Mac
+aga.cpp	Mac
+app.cpp	Mac
+bitmap.cpp	Mac
+bmpbuttn.cpp	Mac
+brush.cpp	Mac
+button.cpp	Mac
+checkbox.cpp	Mac
+checklst.cpp	Mac
+choice.cpp	Mac
+clipbrd.cpp	Mac
+colordlg.cpp	Mac
+colour.cpp	Mac
+combobox.cpp	Mac
+control.cpp	Mac
+cursor.cpp	Mac
+data.cpp	Mac
+dataobj.cpp	Mac
+dc.cpp	Mac
+dcclient.cpp	Mac
+dcmemory.cpp	Mac
+dcprint.cpp	Mac
+dcscreen.cpp	Mac
+dialog.cpp	Mac
+dnd.cpp	Mac
+font.cpp	Mac
+fontdlg.cpp	Mac
+fontenum.cpp	Mac
+fontutil.cpp	Mac
+frame.cpp	Mac
+gauge.cpp	Mac
+gdiobj.cpp	Mac
+icon.cpp	Mac
+joystick.cpp	Mac
+listbox.cpp	Mac
+macnotfy.cpp	Mac
+main.cpp	Mac
+mdi.cpp	Mac
+menu.cpp	Mac
+menuitem.cpp	Mac
+metafile.cpp	Mac
+mimetmac.cpp	Mac
+minifram.cpp	Mac
+msgdlg.cpp	Mac
+notebmac.cpp	Mac
+palette.cpp	Mac
+pen.cpp	Mac
+pnghand.cpp	Mac
+print.cpp	Mac
+printdlg.cpp	Mac
+printmac.cpp	Mac
+radiobox.cpp	Mac
+radiobut.cpp	Mac
+region.cpp	Mac
+scrolbar.cpp	Mac
+settings.cpp	Mac
+slider.cpp	Mac
+spinbutt.cpp	Mac
+statbmp.cpp	Mac
+statbox.cpp	Mac
+statbrma.cpp	Mac
+statlmac.cpp	Mac
+stattext.cpp	Mac
+tabctrl.cpp	Mac
+taskbar.cpp	Mac
+textctrl.cpp	Mac
+thread.cpp	Mac
+timer.cpp	Mac
+toplevel.cpp	Mac
+toolbar.cpp	Mac
+tooltip.cpp	Mac
+uma.cpp	Mac
+utils.cpp	Mac
+utilsexc.cpp	Mac
+wave.cpp	Mac
+window.cpp	Mac
 
 gsockmot.c	Motif	Socket
 accel.cpp	Motif
@@ -620,6 +704,7 @@ choicdlg.h	WXH
 choice.h	WXH
 clipbrd.h	WXH
 cmdline.h	WXH	Base
+cmdproc.h	WXH
 cmndata.h	WXH
 colordlg.h	WXH
 colour.h	WXH
@@ -889,6 +974,90 @@ treectrl.h	GTKH
 wave.h	GTKH
 win_gtk.h	GTKH
 window.h	GTKH
+
+accel.h	MacH
+aga.h	MacH
+app.h	MacH
+bitmap.h	MacH
+bmpbuttn.h	MacH
+brush.h	MacH
+button.h	MacH
+checkbox.h	MacH
+checklst.h	MacH
+choice.h	MacH
+clipbrd.h	MacH
+colordlg.h	MacH
+colour.h	MacH
+combobox.h	MacH
+control.h	MacH
+cursor.h	MacH
+dataform.h	MacH
+dataobj.h	MacH
+dataobj2.h	MacH
+dc.h	MacH
+dcclient.h	MacH
+dcmemory.h	MacH
+dcprint.h	MacH
+dcscreen.h	MacH
+dialog.h	MacH
+dirdlg.h	MacH
+dnd.h	MacH
+filedlg.h	MacH
+font.h	MacH
+fontdlg.h	MacH
+frame.h	MacH
+gauge.h	MacH
+gdiobj.h	MacH
+glcanvas.h	MacH
+gsockmac.h	MacH
+helpxxxx.h	MacH
+icon.h	MacH
+imaglist.h	MacH
+joystick.h	MacH
+listbox.h	MacH
+listctrl.h	MacH
+macnotfy.h	MacH
+macsock.h	MacH
+mdi.h	MacH
+menu.h	MacH
+menuitem.h	MacH
+metafile.h	MacH
+mimetype.h	MacH
+minifram.h	MacH
+msgdlg.h	MacH
+notebook.h	MacH
+palette.h	MacH
+pen.h	MacH
+pnghand.h	MacH
+pngread.h	MacH
+print.h	MacH
+printdlg.h	MacH
+printmac.h	MacH
+private.h	MacH
+radiobox.h	MacH
+radiobut.h	MacH
+region.h	MacH
+scrolbar.h	MacH
+settings.h	MacH
+setup.h	MacH
+slider.h	MacH
+spinbutt.h	MacH
+statbmp.h	MacH
+statbox.h	MacH
+statline.h	MacH
+stattext.h	MacH
+statusbr.h	MacH
+tabctrl.h	MacH
+taskbar.h	MacH
+textctrl.h	MacH
+timer.h	MacH
+toolbar.h	MacH
+tooltip.h	MacH
+toplevel.h	MacH
+treectrl.h	MacH
+uma.h	MacH
+wave.h	MacH
+window.h	MacH
 
 accel.h	MotifH
 app.h	MotifH
@@ -1267,5 +1436,9 @@ timer.cpp	MGL	LowLevel
 window.cpp	MGL	LowLevel
 utils.cpp	MGL	LowLevel
 bmpbase.cpp	MGL	LowLevel
+
+apprsrc.r	MacR
+carbrsrc.r	MacR
+corersrc.r	MacR
 
 # vi: set noet ts=16 nolist:

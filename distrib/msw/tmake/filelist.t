@@ -58,6 +58,8 @@
             $wxGeneric{$filename} = $fileflags;
         } elsif ( $filetype eq "MSW" ) {
             $wxMSW{$filename} = $fileflags;
+        } elsif ( $filetype eq "Mac" ) {
+            $wxMAC{$filename} = $fileflags;
         } elsif ( $filetype eq "Motif" ) {
             $wxMOTIF{$filename} = $fileflags;
         } elsif ( $filetype eq "GTK" ) {
@@ -80,6 +82,8 @@
             $wxPROTOCOLINCLUDE{$filename} = $fileflags;
         } elsif ( $filetype eq "HtmlH" ) {
             $wxHTMLINCLUDE{$filename} = $fileflags;
+        } elsif ( $filetype eq "MacH" ) {
+            $wxMACINCLUDE{$filename} = $fileflags;
         } elsif ( $filetype eq "MotifH" ) {
             $wxMOTIFINCLUDE{$filename} = $fileflags;
         } elsif ( $filetype eq "MSWH" ) {
@@ -94,6 +98,8 @@
             $wxUNIXINCLUDE{$filename} = $fileflags;
         } elsif ( $filetype eq "GenericH" ) {
             $wxGENERICINCLUDE{$filename} = $fileflags;
+        } elsif ( $filetype eq "MacR" ) {
+            $wxMACRESOURCE{$filename} = $fileflags;
         } else {
             warn "Unknown file type $filetype for $filename, ignoring.\n";
             next line;
