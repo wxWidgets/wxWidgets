@@ -99,11 +99,16 @@ bool MyApp::OnInit(void)
     menu_bar->Append(edit_menu, _T("&Edit"));
   menu_bar->Append(help_menu, _T("&Help"));
 
+#ifdef __WXMAC__
+  wxMenuBar::MacSetCommonMenuBar(menu_bar);
+#endif //def __WXMAC__
   //// Associate the menu bar with the frame
   frame->SetMenuBar(menu_bar);
 
   frame->Centre(wxBOTH);
+#ifndef __WXMAC__
   frame->Show(TRUE);
+#endif //ndef __WXMAC__
 
   SetTopWindow(frame);
   return TRUE;
