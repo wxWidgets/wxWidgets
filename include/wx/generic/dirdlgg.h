@@ -64,6 +64,7 @@ protected:
     void OnTreeSelected(wxTreeEvent &event);
     void OnTreeKeyDown(wxTreeEvent &event);
     void OnNew(wxCommandEvent& event);
+    void OnShowHidden(wxCommandEvent& event);
 
     wxString          m_message;
     long              m_dialogStyle;

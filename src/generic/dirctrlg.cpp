@@ -572,6 +572,13 @@ void wxGenericDirCtrl::Init()
     m_filterListCtrl = NULL;
 }
 
+void wxGenericDirCtrl::ShowHidden( bool show )
+{
+    m_showHidden = show;
+    
+    // reparse FIXME 
+}
+
 void wxGenericDirCtrl::AddSection(const wxString& path, const wxString& name, int imageId)
 {
     wxDirItemData *dir_item = new wxDirItemData(path,name,TRUE);
@@ -806,7 +813,9 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
 
     if (d.IsOpened())
     {
-        if (d.GetFirst(& eachFilename, wxEmptyString, wxDIR_DIRS | wxDIR_HIDDEN))
+        int style = wxDIR_DIRS;
+        if (m_showHidden) style |= wxDIR_HIDDEN;
+        if (d.GetFirst(& eachFilename, wxEmptyString, style))
         {
             do
             {

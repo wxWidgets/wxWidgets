@@ -28,6 +28,7 @@
 #ifndef WX_PRECOMP
     #include "wx/textctrl.h"
     #include "wx/button.h"
+    #include "wx/checkbox.h"
     #include "wx/sizer.h"
     #include "wx/intl.h"
     #include "wx/log.h"
@@ -47,15 +48,16 @@ static const int ID_TEXTCTRL = 1001;
 static const int ID_OK = 1002;
 static const int ID_CANCEL = 1003;
 static const int ID_NEW = 1004;
-//static const int ID_CHECK = 1005;
+static const int ID_SHOW_HIDDEN = 1005;
 
 BEGIN_EVENT_TABLE(wxGenericDirDialog, wxDialog)
-    EVT_BUTTON               (wxID_OK,  wxGenericDirDialog::OnOK)
-    EVT_BUTTON               (wxID_NEW,     wxGenericDirDialog::OnNew)
     EVT_CLOSE                (wxGenericDirDialog::OnCloseWindow)
-    EVT_TREE_KEY_DOWN        (-1,   wxGenericDirDialog::OnTreeKeyDown)
-    EVT_TREE_SEL_CHANGED     (-1,   wxGenericDirDialog::OnTreeSelected)
-    EVT_TEXT_ENTER           (ID_TEXTCTRL,  wxGenericDirDialog::OnOK)
+    EVT_BUTTON               (wxID_OK,        wxGenericDirDialog::OnOK)
+    EVT_BUTTON               (ID_NEW,         wxGenericDirDialog::OnNew)
+    EVT_TREE_KEY_DOWN        (-1,             wxGenericDirDialog::OnTreeKeyDown)
+    EVT_TREE_SEL_CHANGED     (-1,             wxGenericDirDialog::OnTreeSelected)
+    EVT_TEXT_ENTER           (ID_TEXTCTRL,    wxGenericDirDialog::OnOK)
+    EVT_CHECKBOX             (ID_SHOW_HIDDEN, wxGenericDirDialog::OnShowHidden)
 END_EVENT_TABLE()
 
 wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
@@ -95,15 +97,21 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
 
     // 4) Buttons
     wxSizer* buttonsizer = new wxBoxSizer( wxHORIZONTAL );
+    
+    // Make the an option depending on a flag?
+    wxCheckBox* check = new wxCheckBox( this, ID_SHOW_HIDDEN, _("Show hidden directories") );
+    buttonsizer->Add( check, 0, wxLEFT|wxRIGHT, 10 );
+
+    // I'm not convinced we need a New button, and we tend to get annoying
+    // accidental-editing with label editing enabled.
+    wxButton* newButton = new wxButton( this, ID_NEW, _("New...") );
+    buttonsizer->Add( newButton, 0, wxLEFT|wxRIGHT, 10 );
+
+    // OK and Cancel button should be at the right bottom
     wxButton* okButton = new wxButton(this, wxID_OK, _("OK"));
     buttonsizer->Add( okButton, 0, wxLEFT|wxRIGHT, 10 );
     wxButton* cancelButton = new wxButton(this, wxID_CANCEL, _("Cancel"));
     buttonsizer->Add( cancelButton, 0, wxLEFT|wxRIGHT, 10 );
-
-    // I'm not convinced we need a New button, and we tend to get annoying
-    // accidental-editing with label editing enabled.
-    wxButton* newButton = new wxButton( this, wxID_NEW, _("New...") );
-    buttonsizer->Add( newButton, 0, wxLEFT|wxRIGHT, 10 );
 
     topsizer->Add( buttonsizer, 0, wxALL | wxCENTER, 10 );
 
@@ -196,6 +204,14 @@ void wxGenericDirDialog::OnTreeKeyDown( wxTreeEvent &WXUNUSED(event) )
     if (data)
         m_input->SetValue( data->m_path );
 };
+
+void wxGenericDirDialog::OnShowHidden( wxCommandEvent& event )
+{
+    if (!m_dirCtrl)
+        return;
+
+    m_dirCtrl->ShowHidden( event.GetInt() );
+}
 
 void wxGenericDirDialog::OnNew( wxCommandEvent& WXUNUSED(event) )
 {

@@ -119,27 +119,33 @@ public:
     void SetDefaultPath(const wxString& path) { m_defaultPath = path; }
 
     // Get dir or filename
-    wxString GetPath() const ;
+    wxString GetPath() const;
+    
     // Get selected filename path only (else empty string).
     // I.e. don't count a directory as a selection
-    wxString GetFilePath() const ;
-    void SetPath(const wxString& path) ;
+    wxString GetFilePath() const;
+    void SetPath(const wxString& path);
+    
+    void ShowHidden( bool show );
+    bool GetShowHidden() { return m_showHidden; }
 
     wxString GetFilter() const { return m_filter; }
     void SetFilter(const wxString& filter);
 
     int GetFilterIndex() const { return m_currentFilter; }
-    void SetFilterIndex(int n) ;
+    void SetFilterIndex(int n);
 
     wxTreeItemId GetRootId() { return m_rootId; }
 
     wxTreeCtrl* GetTreeCtrl() const { return m_treeCtrl; }
     wxDirFilterListCtrl* GetFilterListCtrl() const { return m_filterListCtrl; }
 
-    //// Helpers
+    // Helper
     void SetupSections();
+    
     // Parse the filter into an array of filters and an array of descriptions
     int ParseFilter(const wxString& filterStr, wxArrayString& filters, wxArrayString& descriptions);
+    
     // Find the child that matches the first part of 'path'.
     // E.g. if a child path is "/usr" and 'path' is "/usr/include"
     // then the child for /usr is returned.
@@ -148,6 +154,7 @@ public:
     
     // Resize the components of the control
     void DoResize();
+    
 protected:
     void ExpandDir(wxTreeItemId parentId);
     void AddSection(const wxString& path, const wxString& name, int imageId = 0);
