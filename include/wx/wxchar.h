@@ -93,8 +93,10 @@
     #ifdef HAVE_WCHAR_H
         // the current (as of Nov 2002) version of cygwin has a bug in its
         // wchar.h -- there is no extern "C" around the declarations in it and
-        // this results in linking errors later
+        // this results in linking errors later; also, at least on some
+        // Cygwin versions, wchar.h requires sys/types.h
         #ifdef __CYGWIN__
+            #include <sys/types.h>
             extern "C" {
         #endif // Cygwin
                 #include <wchar.h>
