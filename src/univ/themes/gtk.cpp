@@ -53,7 +53,7 @@
 // constants (to be removed, for testing only)
 // ----------------------------------------------------------------------------
 
-static const size_t BORDER_THICKNESS = 1;
+static const wxCoord BORDER_THICKNESS = 1;
 
 // ----------------------------------------------------------------------------
 // wxGTKRenderer: draw the GUI elements in GTK style
@@ -2379,7 +2379,7 @@ void wxGTKRenderer::DrawFrameTitleBar(wxDC& dc,
                                       const wxString& title,
                                       const wxIcon& icon,
                                       int flags,
-                                      int pressedButtons = 0)
+                                      int pressedButtons)
 {
 }
 
@@ -2412,7 +2412,7 @@ void wxGTKRenderer::DrawFrameIcon(wxDC& dc,
 void wxGTKRenderer::DrawFrameButton(wxDC& dc,
                                     wxCoord x, wxCoord y,
                                     int button,
-                                    int flags = 0)
+                                    int flags)
 {
 }
 

@@ -49,7 +49,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\lib\wx_univ.lib"
+# ADD LIB32 /nologo /out:"..\lib\wxuniv.lib"
 
 !ELSEIF  "$(CFG)" == "wxvc_universal - Win32 Debug"
 
@@ -60,11 +60,11 @@ LIB32=link.exe -lib
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "msw/UnivDebug"
-# PROP Intermediate_Dir "msw/UnivDebug"
+# PROP Output_Dir "../UnivDebug"
+# PROP Intermediate_Dir "../UnivDebug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /Z7 /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MDd /W3 /GX /Zi /Od /I "../include" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /Yu"wx/wxprec.h" /FD /c
+# ADD CPP /nologo /MDd /W4 /Zi /Od /I "../include" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /Yu"wx/wxprec.h" /FD /c
 # ADD BASE RSC /l 0x809
 # ADD RSC /l 0x809
 BSC32=bscmake.exe
@@ -72,7 +72,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\lib\wx_univd.lib"
+# ADD LIB32 /nologo /out:"..\lib\wxunivd.lib"
 
 !ENDIF 
 
@@ -170,12 +170,6 @@ SOURCE=.\common\docmdi.cpp
 # Begin Source File
 
 SOURCE=.\common\docview.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\dosyacc.c
-# ADD CPP /D "USE_DEFINE" /D "YY_USE_PROTOS" /D "IDE_INVOKED"
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -492,6 +486,10 @@ SOURCE=.\common\tokenzr.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\toplvcmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\treebase.cpp
 # End Source File
 # Begin Source File
@@ -737,82 +735,262 @@ SOURCE=.\generic\wizard.cpp
 # Begin Source File
 
 SOURCE=.\html\helpctrl.cpp
+
+!IF  "$(CFG)" == "wxvc_universal - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "wxvc_universal - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\html\helpdata.cpp
+
+!IF  "$(CFG)" == "wxvc_universal - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "wxvc_universal - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\html\helpfrm.cpp
+
+!IF  "$(CFG)" == "wxvc_universal - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "wxvc_universal - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\html\htmlcell.cpp
+
+!IF  "$(CFG)" == "wxvc_universal - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "wxvc_universal - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\html\htmlfilt.cpp
+
+!IF  "$(CFG)" == "wxvc_universal - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "wxvc_universal - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\html\htmlpars.cpp
+
+!IF  "$(CFG)" == "wxvc_universal - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "wxvc_universal - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\html\htmltag.cpp
+
+!IF  "$(CFG)" == "wxvc_universal - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "wxvc_universal - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\html\htmlwin.cpp
+
+!IF  "$(CFG)" == "wxvc_universal - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "wxvc_universal - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\html\htmprint.cpp
+
+!IF  "$(CFG)" == "wxvc_universal - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "wxvc_universal - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\html\m_dflist.cpp
+
+!IF  "$(CFG)" == "wxvc_universal - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "wxvc_universal - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\html\m_fonts.cpp
+
+!IF  "$(CFG)" == "wxvc_universal - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "wxvc_universal - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\html\m_hline.cpp
+
+!IF  "$(CFG)" == "wxvc_universal - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "wxvc_universal - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\html\m_image.cpp
+
+!IF  "$(CFG)" == "wxvc_universal - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "wxvc_universal - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\html\m_layout.cpp
+
+!IF  "$(CFG)" == "wxvc_universal - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "wxvc_universal - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\html\m_links.cpp
+
+!IF  "$(CFG)" == "wxvc_universal - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "wxvc_universal - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\html\m_list.cpp
+
+!IF  "$(CFG)" == "wxvc_universal - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "wxvc_universal - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\html\m_meta.cpp
+
+!IF  "$(CFG)" == "wxvc_universal - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "wxvc_universal - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\html\m_pre.cpp
+
+!IF  "$(CFG)" == "wxvc_universal - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "wxvc_universal - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\html\m_tables.cpp
+
+!IF  "$(CFG)" == "wxvc_universal - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "wxvc_universal - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\html\winpars.cpp
+
+!IF  "$(CFG)" == "wxvc_universal - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "wxvc_universal - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # End Group
 # Begin Group "MSW Files"
@@ -877,10 +1055,6 @@ SOURCE=.\msw\dcscreen.cpp
 # Begin Source File
 
 SOURCE=.\msw\dde.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\msw\dialog.cpp
 # End Source File
 # Begin Source File
 
@@ -1055,6 +1229,10 @@ SOURCE=.\msw\timer.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\toplevel.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\utils.cpp
 # End Source File
 # Begin Source File
@@ -1068,34 +1246,6 @@ SOURCE=.\msw\wave.cpp
 # Begin Source File
 
 SOURCE=.\msw\window.cpp
-# End Source File
-# End Group
-# Begin Group "OLE Files"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=.\msw\ole\automtn.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\msw\ole\dataobj.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\msw\ole\dropsrc.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\msw\ole\droptgt.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\msw\ole\oleutils.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\msw\ole\uuid.cpp
 # End Source File
 # End Group
 # Begin Group "Setup"
@@ -1139,6 +1289,10 @@ SOURCE=.\univ\control.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\univ\dialog.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\univ\framuniv.cpp
 # End Source File
 # Begin Source File
@@ -1148,6 +1302,10 @@ SOURCE=.\univ\gauge.cpp
 # Begin Source File
 
 SOURCE=.\univ\themes\gtk.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\univ\inpcons.cpp
 # End Source File
 # Begin Source File
 
@@ -1220,6 +1378,10 @@ SOURCE=.\univ\textctrl.cpp
 # Begin Source File
 
 SOURCE=.\univ\theme.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\univ\topluniv.cpp
 # End Source File
 # Begin Source File
 

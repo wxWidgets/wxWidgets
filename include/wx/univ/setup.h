@@ -127,6 +127,7 @@
 #define wxUSE_SPLITTER     1
 #define wxUSE_TAB_DIALOG   0
 
+#define wxUSE_JOYSTICK 0
 #define wxUSE_METAFILE              0
 #define wxUSE_ENH_METAFILE          0
 #define wxUSE_WIN_METAFILES_ALWAYS  0
@@ -184,6 +185,7 @@
 #define wxUSE_GLOBAL_MEMORY_OPERATORS 0
 #define wxUSE_DEBUG_NEW_ALWAYS 0
 #define wxUSE_ON_FATAL_EXCEPTION 0
+#define wxUSE_REGEX 0
 
 #define wxUSE_UNICODE 0
 #define wxUSE_WCHAR_T 0
@@ -279,6 +281,7 @@
 #define wxUSE_SPLITTER     1
 #define wxUSE_TAB_DIALOG   0
 
+#define wxUSE_JOYSTICK 0
 #define wxUSE_METAFILE              0
 #define wxUSE_ENH_METAFILE          0
 #define wxUSE_WIN_METAFILES_ALWAYS  0

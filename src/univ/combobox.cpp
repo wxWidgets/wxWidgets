@@ -775,7 +775,7 @@ wxClientData* wxComboBox::DoGetItemClientObject(int n) const
 // input handling
 // ----------------------------------------------------------------------------
 
-void wxComboControl::OnKey(wxCommandEvent& event)
+void wxComboControl::OnKey(wxKeyEvent& event)
 {
     if ( m_isPopupShown )
     {

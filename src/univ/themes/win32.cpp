@@ -3102,7 +3102,7 @@ void wxWin32Renderer::DrawFrameTitleBar(wxDC& dc,
                                         const wxString& title,
                                         const wxIcon& icon,
                                         int flags,
-                                        int pressedButtons = 0)
+                                        int pressedButtons)
 {
     if ( (flags & wxTOPLEVEL_BORDER) && !(flags & wxTOPLEVEL_MAXIMIZED) )
     {
@@ -3208,7 +3208,7 @@ void wxWin32Renderer::DrawFrameIcon(wxDC& dc,
 void wxWin32Renderer::DrawFrameButton(wxDC& dc,
                                       wxCoord x, wxCoord y,
                                       int button,
-                                      int flags = 0)
+                                      int flags)
 {
     wxRect r(x, y, FRAME_BUTTON_WIDTH, FRAME_BUTTON_HEIGHT);
     

@@ -323,17 +323,21 @@ wxWindowMSW::~wxWindowMSW()
 
     MSWDetachWindowMenu();
 
+#ifndef __WXUNIVERSAL__
     // VS: make sure there's no wxFrame with last focus set to us:
-    for (wxWindow *win = GetParent(); win; win = win->GetParent())
+    for ( wxWindow *win = GetParent(); win; win = win->GetParent() )
     {
         wxFrame *frame = wxDynamicCast(win, wxFrame);
         if ( frame )
         {
-            if ( frame->GetLastFocus() == this )
-                frame->SetLastFocus((wxWindow*)NULL);
+            if ( frameMSW->GetLastFocus() == this )
+            {
+                frameMSW->SetLastFocus((wxWindow*)NULL);
+            }
             break;
         }
     }
+#endif // __WXUNIVERSAL__
 
     // VS: destroy children first and _then_ detach *this from its parent.
     //     If we'd do it the other way around, children wouldn't be able
@@ -1642,6 +1646,8 @@ void wxWindowMSW::GetCaretPos(int *x, int *y) const
 // popup menu
 // ---------------------------------------------------------------------------
 
+#if wxUSE_MENUS_NATIVE
+
 // yield for WM_COMMAND events only, i.e. process all WM_COMMANDs in the queue
 // immediately, without waiting for the next event loop iteration
 //
@@ -1658,8 +1664,6 @@ static void wxYieldForCommandsOnly()
         wxTheApp->DoMessage((WXMSG *)&msg);
     }
 }
-
-#if wxUSE_MENUS_NATIVE
 
 bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
 {

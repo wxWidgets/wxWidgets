@@ -6,14 +6,32 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
-#pragma implementation "univdialog.h"
+    #pragma implementation "univdialog.h"
 #endif
 
-#include "wx/dialog.h"
-#include "wx/utils.h"
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+    #include "wx/dialog.h"
+    #include "wx/utils.h"
+    #include "wx/app.h"
+#endif
+
 #include "wx/evtloop.h"
-#include "wx/app.h"
 
 //-----------------------------------------------------------------------------
 // wxDialog

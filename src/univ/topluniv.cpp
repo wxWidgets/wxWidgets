@@ -61,7 +61,9 @@ bool wxTopLevelWindow::Create(wxWindow *parent,
                               long style,
                               const wxString &name)
 {
-    long styleOrig, exstyleOrig;
+    // init them to avoid compiler warnings
+    long styleOrig = 0,
+         exstyleOrig = 0;
 
     if ( ms_drawDecorations == -1 )
         ms_drawDecorations = TRUE;
@@ -95,12 +97,17 @@ bool wxTopLevelWindow::Create(wxWindow *parent,
 
 bool wxTopLevelWindow::ShowFullScreen(bool show, long style)
 {
+    // VZ: doesn't compile
+#if 0
     if ( show == IsFullScreen() ) return FALSE;
     
     return wxTopLevelWindowNative::ShowFullScreen(show, style);
     
     // FIXME_MGL -- must handle caption hiding here if not in
     //              native decorations mode
+#endif // 0
+
+    return FALSE;
 }
 
 long wxTopLevelWindow::GetDecorationsStyle() const

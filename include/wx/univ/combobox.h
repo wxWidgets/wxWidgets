@@ -174,7 +174,7 @@ protected:
                                const wxString& strArg = wxEmptyString);
 
     // event handlers
-    void OnKey(wxCommandEvent& event);
+    void OnKey(wxKeyEvent& event);
 
     // common part of all ctors
     void Init();

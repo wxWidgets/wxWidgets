@@ -1049,13 +1049,41 @@ bool wxListCtrl::Arrange(int flag)
 // Deletes an item
 bool wxListCtrl::DeleteItem(long item)
 {
-    return (ListView_DeleteItem(GetHwnd(), (int) item) != 0);
+    if ( !ListView_DeleteItem(GetHwnd(), (int) item) )
+    {
+        wxLogLastError(_T("ListView_DeleteItem"));
+        return FALSE;
+    }
+
+    // the virtual list control doesn't refresh itself correctly, help it
+    if ( IsVirtual() )
+    {
+        // we need to refresh all the lines below the one which was deleted
+        wxRect rectItem;
+        if ( item > 0 && GetItemCount() )
+        {
+            GetItemRect(item - 1, rectItem);
+        }
+        else
+        {
+            rectItem.y =
+            rectItem.height = 0;
+        }
+
+        wxRect rectWin = GetRect();
+        rectWin.height = rectWin.GetBottom() - rectItem.GetBottom();
+        rectWin.y = rectItem.GetBottom();
+
+        RefreshRect(rectWin);
+    }
+
+    return TRUE;
 }
 
 // Deletes all items
 bool wxListCtrl::DeleteAllItems()
 {
-    return (ListView_DeleteAllItems(GetHwnd()) != 0);
+    return ListView_DeleteAllItems(GetHwnd()) != 0;
 }
 
 // Deletes all items
