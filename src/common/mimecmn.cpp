@@ -328,6 +328,18 @@ wxFileType::GetOpenCommand(wxString *openCmd,
     return m_impl->GetOpenCommand(openCmd, params);
 }
 
+wxString wxFileType::GetOpenCommand(const wxString& filename) const
+{
+    wxString cmd;
+    if ( !GetOpenCommand(&cmd, filename) )
+    {
+        // return empty string to indicate an error
+        cmd.clear();
+    }
+
+    return cmd;
+}
+
 bool
 wxFileType::GetPrintCommand(wxString *printCmd,
                             const wxFileType::MessageParameters& params) const

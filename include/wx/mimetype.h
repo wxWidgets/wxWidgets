@@ -176,7 +176,8 @@ public:
     public:
         // ctors
         MessageParameters() { }
-        MessageParameters(const wxString& filename, const wxString& mimetype)
+        MessageParameters(const wxString& filename,
+                          const wxString& mimetype = _T(""))
             : m_filename(filename), m_mimetype(mimetype) { }
 
         // accessors (called by GetOpenCommand)
@@ -221,6 +222,9 @@ public:
         // get the command to execute the file of given type
     bool GetOpenCommand(wxString *openCmd,
                         const MessageParameters& params) const;
+        // a simpler to use version of GetOpenCommand() -- it only takes the
+        // filename and returns an empty string on failure
+    wxString GetOpenCommand(const wxString& filename) const;
         // get the command to print the file of given type
     bool GetPrintCommand(wxString *printCmd,
                          const MessageParameters& params) const;
