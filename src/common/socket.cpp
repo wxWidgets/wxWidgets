@@ -539,7 +539,7 @@ void wxSocketBase::Discard()
     #if wxHAVE_GLIBC2
         typedef socklen_t SOCKLEN_T;
     #else
-        typedef int SOCKET_INT;
+        typedef int SOCKET_T;
     #endif
 #endif // SOCKLEN_T
 
