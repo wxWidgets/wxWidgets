@@ -64,4 +64,25 @@ private:
 	FortyCanvas*	m_canvas;
 };
 
+//----------------------------------------------------------------------------
+// stAboutDialog
+//----------------------------------------------------------------------------
+
+class FortyAboutDialog: public wxDialog
+{
+public:
+    // constructors and destructors
+    FortyAboutDialog( wxWindow *parent, wxWindowID id, const wxString &title,
+        const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize,
+        long style = wxDEFAULT_DIALOG_STYLE );
+    
+    bool AddControls(wxWindow* parent);
+
+private:
+    DECLARE_EVENT_TABLE()
+};
+
+#define ID_ABOUT_HTML_WINDOW    1000
+
 #endif

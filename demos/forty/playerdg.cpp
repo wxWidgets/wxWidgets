@@ -52,7 +52,7 @@ PlayerSelectionDialog::PlayerSelectionDialog(
 	// enable constraints
 	SetAutoLayout (TRUE);
 
-	wxStaticText* msg = new wxStaticText(this, -1, "Please select a name from the list");
+	wxStaticText* msg = new wxStaticText(this, -1, "Please select a name or type a new one:");
 
 	wxListBox* list = new wxListBox(
 						this, ID_LISTBOX,
@@ -121,6 +121,8 @@ PlayerSelectionDialog::PlayerSelectionDialog(
 		list->SetStringSelection(prevPlayer);
 		m_textField->SetValue(prevPlayer);
 	}
+
+    m_textField->SetFocus();
 
 	Layout();
     

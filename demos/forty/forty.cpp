@@ -32,6 +32,11 @@
 #include "card.h"
 #include "scoredg.h"
 
+#if wxUSE_HTML
+#include "wx/file.h"
+#include "wx/html/htmlwin.h"
+#endif
+
 BEGIN_EVENT_TABLE(FortyFrame, wxFrame)
 	EVT_MENU(NEW_GAME, FortyFrame::NewGame)
 	EVT_MENU(EXIT, FortyFrame::Exit)
@@ -169,7 +174,7 @@ FortyFrame::FortyFrame(wxFrame* frame, char* title, int x, int y, int w, int h,b
         optionsMenu->Check(LARGE_CARDS, largecards ? TRUE : FALSE);
 
 	wxMenu* helpMenu = new wxMenu;
-	helpMenu->Append(ABOUT, "&About", "Displays program version information");
+	helpMenu->Append(ABOUT, "&About...", "Displays information about the game");
 
 	m_menuBar = new wxMenuBar;
 	m_menuBar->Append(gameMenu,    "&Game");
@@ -226,17 +231,29 @@ FortyFrame::Exit(wxCommandEvent&)
 void
 FortyFrame::About(wxCommandEvent&)
 {
-	wxMessageBox(
-		"Forty Thieves\n\n"
-		"A freeware program using the wxWindows\n"
-		"portable C++ GUI toolkit.\n"
-		"http://www.wxwindows.org\n"
-		"http://www.freiburg.linux.de/~wxxt\n\n"
-		"Author: Chris Breeze (c) 1992-1998\n"
-		"email: chris.breeze@iname.com",
-		"About Forty Thieves",
-		wxOK, this
-		);
+#if wxUSE_HTML
+    if (wxFileExists(wxT("about.htm")))
+    {
+        FortyAboutDialog dialog(this, -1, wxT("About Forty Thieves"));
+        if (dialog.ShowModal() == wxID_OK)
+        {
+        }
+    }
+    else
+#endif
+    {
+        wxMessageBox(
+            "Forty Thieves\n\n"
+            "A freeware program using the wxWindows\n"
+            "portable C++ GUI toolkit.\n"
+            "http://www.wxwindows.org\n"
+            "http://www.freiburg.linux.de/~wxxt\n\n"
+            "Author: Chris Breeze (c) 1992-1998\n"
+            "email: chris.breeze@iname.com",
+            "About Forty Thieves",
+            wxOK, this
+            );
+    }
 }
 
 void
@@ -282,4 +299,93 @@ FortyFrame::ToggleCardSize(wxCommandEvent& event)
         m_canvas->Refresh();
 }
 
+//----------------------------------------------------------------------------
+// stAboutDialog
+//----------------------------------------------------------------------------
+
+BEGIN_EVENT_TABLE(FortyAboutDialog,wxDialog)
+END_EVENT_TABLE()
+
+FortyAboutDialog::FortyAboutDialog( wxWindow *parent, wxWindowID id, const wxString &title,
+    const wxPoint &position, const wxSize& size, long style ) :
+    wxDialog( parent, id, title, position, size, style )
+{
+    AddControls(this);
+
+    Centre(wxBOTH);
+}
+
+bool FortyAboutDialog::AddControls(wxWindow* parent)
+{
+#if wxUSE_HTML
+    wxString htmlText;
+    wxString htmlFile(wxT("about.htm"));
+
+    //if (!wxGetApp().GetMemoryTextResource(wxT("about.htm"), htmlText))
+    {
+//        wxSetWorkingDirectory(wxGetApp().GetAppDir());
+//        wxString htmlFile(wxGetApp().GetFullAppPath(wxT("about.htm")));
+        
+        if (wxFileExists(htmlFile))
+        {
+            wxFile file;
+            file.Open(htmlFile, wxFile::read);
+            long len = file.Length();
+            char* buf = htmlText.GetWriteBuf(len + 1);
+            file.Read(buf, len);
+            buf[len] = 0;
+            htmlText.UngetWriteBuf();
+        }
+    }
+
+    if (htmlText.IsEmpty())
+    {
+        htmlText.Printf(wxT("<html><head><title>Warning</title></head><body><P>Sorry, could not find resource for About dialog<P></body></html>"));
+    }
+
+    // Customize the HTML
+#if 0
+    wxString verString;
+    verString.Printf("%.2f", stVERSION_NUMBER);
+    htmlText.Replace(wxT("$VERSION$"), verString);
+#endif
+    htmlText.Replace(wxT("$DATE$"), __DATE__);
+
+    wxSize htmlSize(400, 290);
+
+    // Note: in later versions of wxWin this will be fixed so wxRAISED_BORDER
+    // does the right thing. Meanwhile, this is a workaround.
+#ifdef __WXMSW__
+    long borderStyle = wxDOUBLE_BORDER;
+#else
+    long borderStyle = wxRAISED_BORDER;
+#endif
+
+    wxHtmlWindow* html = new wxHtmlWindow(this, ID_ABOUT_HTML_WINDOW, wxDefaultPosition, htmlSize, borderStyle);
+    html -> SetBorders(10);
+    html -> SetPage(htmlText);
+        
+    //// Start of sizer-based control creation
+
+    wxSizer *item0 = new wxBoxSizer( wxVERTICAL );
+
+    wxWindow *item1 = parent->FindWindow( ID_ABOUT_HTML_WINDOW );
+    wxASSERT( item1 );
+    item0->Add( item1, 0, wxALIGN_CENTRE|wxALL, 5 );
+
+    wxButton *item2 = new wxButton( parent, wxID_CANCEL, "&Close", wxDefaultPosition, wxDefaultSize, 0 );
+    item2->SetDefault();
+    item2->SetFocus();
+
+    item0->Add( item2, 0, wxALIGN_RIGHT|wxALL, 5 );
+
+    parent->SetAutoLayout( TRUE );
+    parent->SetSizer( item0 );
+    parent->Layout();
+    item0->Fit( parent );
+    item0->SetSizeHints( parent );
+#endif
+
+    return TRUE;
+}
 
