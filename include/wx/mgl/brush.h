@@ -36,7 +36,7 @@ class WXDLLEXPORT wxBrush: public wxGDIObject
 {
 public:
     wxBrush() {}
-    wxBrush(const wxColour &colour, int style);
+    wxBrush(const wxColour &colour, int style = wxSOLID);
     wxBrush(const wxBitmap &stippleBitmap);
     wxBrush(const wxBrush &brush);
     ~wxBrush() {}
