@@ -39,6 +39,9 @@
 #include "wx/mimetype.h"
 
 #include "wx/statline.h"
+#include "wx/stattext.h"
+#include "wx/filedlg.h"
+#include "wx/valtext.h"
 
 // ----------------------------------------------------------------------------
 // wxDumpPreviewDlg: simple class for showing ASCII preview of dump files
