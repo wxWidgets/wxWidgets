@@ -202,7 +202,7 @@ wxString wxChoice::GetString(int n) const
 {
     size_t len = (size_t)::SendMessage(GetHwnd(), CB_GETLBTEXTLEN, n, 0);
     wxString str;
-    if (len) {
+    if (len != CB_ERR && len > 0) {
         if ( ::SendMessage(GetHwnd(), CB_GETLBTEXT, n,
                            (LPARAM)str.GetWriteBuf(len)) == CB_ERR ) {
             wxLogLastError(wxT("SendMessage(CB_GETLBTEXT)"));
