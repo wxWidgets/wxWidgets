@@ -23,7 +23,7 @@ is_monolithic=@MONOLITHIC@
 CORE_BASE_LIBS="xml net base"
 CORE_GUI_LIBS="html core"
 
-ldlibs_base="@LIBS@"
+ldlibs_base="@WXCONFIG_EXTRALIBS@"
 ldlibs_core="@EXTRALIBS_GUI@"
 ldlibs_xml="@EXTRALIBS_XML@"
 
@@ -47,10 +47,14 @@ isinlist()
 # (does not handle monolithic/multilib):
 output_libs()
 {
+    if test "$cross_compiling" = "yes" ; then
+        target_tag="-${target}"
+    fi
+
     all_libs=""
     all_ldflags=""
     wxlibs=""
-      
+
     for lib in $* ; do
         eval xlibs=\$ldlibs_$lib
         eval xflags=\$ldflags_$lib
@@ -67,10 +71,10 @@ output_libs()
 
         all_ldflags="$all_ldflags $xflags"
         if test $static_flag = yes ; then
-            wxlibs="$wxlibs @libdir@/lib${libname}-${release}.a"
+            wxlibs="$wxlibs @libdir@/lib${libname}-${release}${target_tag}.a"
             all_libs="$all_libs $xlibs"
         else
-            wxlibs="$wxlibs -l${libname}-${release}"
+            wxlibs="$wxlibs -l${libname}-${release}${target_tag}"
         fi
     done
 
@@ -124,6 +128,8 @@ specification for it to take effect.
 --libs can take optional argument that contains comma-separated list of
 wxWindows libraries to link against. This list can include both core
 and contrib libraries.
+
+--gl-libs option is deprecated, used --libs=gl instead.
 
 EOF
 
@@ -235,6 +241,8 @@ while test $# -gt 0; do
           fi
       else
           libs_list=`echo "$optarg" | tr ',' ' '`
+          # always add wxBase, any wxApp needs it:
+          libs_list="$libs_list base"
       fi
 
       # include install directory only if it is not default:

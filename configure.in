@@ -5514,6 +5514,36 @@ else
     WXCONFIG_INCLUDE="$TOOLKIT_INCLUDE"
 fi
 
+WXCONFIG_EXTRALIBS="$LIBS"
+
+dnl wx-config must output builtin 3rd party libs in --libs in static build:
+if test "$wxUSE_REGEX" = "builtin" ; then
+    wxconfig_3rdparty="$wxconfig_3rdparty regex"
+fi
+if test "$wxUSE_EXPAT" = "builtin" ; then
+    wxconfig_3rdparty="$wxconfig_3rdparty expat"
+fi
+if test "$wxUSE_ODBC" = "builtin" ; then
+    wxconfig_3rdparty="$wxconfig_3rdparty odbc"
+fi
+if test "$wxUSE_LIBTIFF" = "builtin" ; then
+    wxconfig_3rdparty="$wxconfig_3rdparty tiff"
+fi
+if test "$wxUSE_LIBJPEG" = "builtin" ; then
+    wxconfig_3rdparty="$wxconfig_3rdparty jpeg"
+fi
+if test "$wxUSE_LIBPNG" = "builtin" ; then
+    wxconfig_3rdparty="$wxconfig_3rdparty png"
+fi
+if test "$wxUSE_ZLIB" = "builtin" ; then
+    wxconfig_3rdparty="$wxconfig_3rdparty zlib"
+fi
+
+for i in $wxconfig_3rdparty ; do
+    WXCONFIG_EXTRALIBS="$WXCONFIG_EXTRALIBS -lwx${i}${lib_debug_suffix}${HOST_SUFFIX}"
+done
+
+
 if test "x$wxUSE_UNIVERSAL" = "xyes" ; then
     WXUNIV=1
 else
@@ -5627,6 +5657,7 @@ dnl wx-config options
 AC_SUBST(top_builddir_wxconfig)
 AC_SUBST(host_alias)
 AC_SUBST(cross_compiling)
+AC_SUBST(WXCONFIG_EXTRALIBS)
 AC_SUBST(WXCONFIG_LIBS)
 AC_SUBST(WXCONFIG_LIBS_GL)
 AC_SUBST(WXCONFIG_LIBS_STATIC)
