@@ -185,7 +185,8 @@ bool wxHtmlWindow::Create(wxWindow *parent, wxWindowID id,
                           long style, const wxString& name)
 {
     if (!wxScrolledWindow::Create(parent, id, pos, size,
-                                  style | wxVSCROLL | wxHSCROLL, name))
+                                  style | wxVSCROLL | wxHSCROLL,
+                                  name))
         return FALSE;
 
     m_Style = style;
@@ -1243,69 +1244,87 @@ void wxHtmlWindow::OnDoubleClick(wxMouseEvent& event)
 
 void wxHtmlWindow::SelectWord(const wxPoint& pos)
 {
-    wxHtmlCell *cell = m_Cell->FindCellByPos(pos.x, pos.y);
-    if ( cell )
+    if ( m_Cell )
     {
-        delete m_selection;
-        m_selection = new wxHtmlSelection();
-        m_selection->Set(cell, cell);
-        RefreshRect(wxRect(CalcScrolledPosition(cell->GetAbsPos()),
-                           wxSize(cell->GetWidth(), cell->GetHeight())));
+        wxHtmlCell *cell = m_Cell->FindCellByPos(pos.x, pos.y);
+        if ( cell )
+        {
+            delete m_selection;
+            m_selection = new wxHtmlSelection();
+            m_selection->Set(cell, cell);
+            RefreshRect(wxRect(CalcScrolledPosition(cell->GetAbsPos()),
+                               wxSize(cell->GetWidth(), cell->GetHeight())));
+        }
     }
 }
 
 void wxHtmlWindow::SelectLine(const wxPoint& pos)
 {
-    wxHtmlCell *cell = m_Cell->FindCellByPos(pos.x, pos.y);
-    if ( cell )
+    if ( m_Cell )
     {
-        // We use following heuristic to find a "line": let the line be all
-        // cells in same container as the cell under mouse cursor that are
-        // neither completely above nor completely bellow the clicked cell
-        // (i.e. are likely to be words positioned on same line of text).
-
-        int y1 = cell->GetAbsPos().y;
-        int y2 = y1 + cell->GetHeight();
-        int y;
-        const wxHtmlCell *c;
-        const wxHtmlCell *before = NULL;
-        const wxHtmlCell *after = NULL;
-
-        // find last cell of line:
-        for ( c = cell->GetNext(); c; c = c->GetNext())
+        wxHtmlCell *cell = m_Cell->FindCellByPos(pos.x, pos.y);
+        if ( cell )
         {
-            y = c->GetAbsPos().y;
-            if ( y + c->GetHeight() > y1 && y < y2 )
-                after = c;
-            else
-                break;
-        }
-        if ( !after )
-            after = cell;
+            // We use following heuristic to find a "line": let the line be all
+            // cells in same container as the cell under mouse cursor that are
+            // neither completely above nor completely bellow the clicked cell
+            // (i.e. are likely to be words positioned on same line of text).
 
-        // find first cell of line:
-        for ( c = cell->GetParent()->GetFirstChild();
-                c && c != cell; c = c->GetNext())
-        {
-            y = c->GetAbsPos().y;
-            if ( y + c->GetHeight() > y1 && y < y2 )
+            int y1 = cell->GetAbsPos().y;
+            int y2 = y1 + cell->GetHeight();
+            int y;
+            const wxHtmlCell *c;
+            const wxHtmlCell *before = NULL;
+            const wxHtmlCell *after = NULL;
+
+            // find last cell of line:
+            for ( c = cell->GetNext(); c; c = c->GetNext())
             {
-                if ( ! before )
-                    before = c;
+                y = c->GetAbsPos().y;
+                if ( y + c->GetHeight() > y1 && y < y2 )
+                    after = c;
+                else
+                    break;
             }
-            else
-                before = NULL;
-        }
-        if ( !before )
-            before = cell;
+            if ( !after )
+                after = cell;
 
+            // find first cell of line:
+            for ( c = cell->GetParent()->GetFirstChild();
+                    c && c != cell; c = c->GetNext())
+            {
+                y = c->GetAbsPos().y;
+                if ( y + c->GetHeight() > y1 && y < y2 )
+                {
+                    if ( ! before )
+                        before = c;
+                }
+                else
+                    before = NULL;
+            }
+            if ( !before )
+                before = cell;
+
+            delete m_selection;
+            m_selection = new wxHtmlSelection();
+            m_selection->Set(before, after);
+
+            Refresh();
+        }
+    }
+}
+
+void wxHtmlWindow::SelectAll()
+{
+    if ( m_Cell )
+    {
         delete m_selection;
         m_selection = new wxHtmlSelection();
-        m_selection->Set(before, after);
-
+        m_selection->Set(m_Cell->GetFirstTerminal(), m_Cell->GetLastTerminal());
         Refresh();
     }
 }
+
 #endif // wxUSE_CLIPBOARD
 
 
