@@ -1804,7 +1804,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
 
     int offset = HasFlag(wxTR_ROW_LINES) ? 1 : 0;
 
-    if ( paintBg && image != NO_IMAGE)
+    if ( item->IsSelected() && image != NO_IMAGE)
     {
         // If it's selected, and there's an image, then we should
         // take care to leave the area under the image painted in the
