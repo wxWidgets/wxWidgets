@@ -157,7 +157,11 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 
 	columnDesc.propertyDesc.propertyID = 1024;
 	columnDesc.propertyDesc.propertyType = kDataBrowserTextType;
-	columnDesc.propertyDesc.propertyFlags = kDataBrowserListViewTypeSelectColumn | kDataBrowserTableViewSelectionColumn ;
+	columnDesc.propertyDesc.propertyFlags =
+#ifdef MAC_OS_X_VERSION_10_3
+	 kDataBrowserListViewTypeSelectColumn | 
+#endif
+	 kDataBrowserTableViewSelectionColumn ;
 
 	
 	verify_noerr(::AddDataBrowserListViewColumn(browser, &columnDesc, kDataBrowserListViewAppendColumn) ) ;

@@ -102,6 +102,12 @@ END_EVENT_TABLE()
 extern long wxMacTranslateKey(unsigned char key, unsigned char code) ;
 pascal OSStatus wxMacSetupControlBackground( ControlRef iControl , SInt16 iMessage , SInt16 iDepth , Boolean iIsColor ) ;
 
+#ifndef MAC_OS_X_VERSION_10_3
+enum {
+  kEventControlVisibilityChanged = 157
+};
+#endif
+
 static const EventTypeSpec eventList[] =
 {
 #if TARGET_API_MAC_OSX
