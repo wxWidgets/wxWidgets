@@ -41,29 +41,36 @@ static wxFileTypeInfo *gs_FSMimeFallbacks = NULL;
 
 wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
 {
-#if wxUSE_MIMETYPE
-    wxString ext = wxEmptyString, mime = wxEmptyString;
+    wxString ext, mime;
     wxString loc = GetRightLocation(location);
     char c;
     int l = loc.Length(), l2;
-    wxFileType *ft;
 
     l2 = l;
-    for (int i = l-1; i >= 0; i--) {
+    for (int i = l-1; i >= 0; i--) 
+    {
         c = loc[(unsigned int) i];
-        if (c == wxT('#')) l2 = i + 1;
-        if (c == wxT('.')) {ext = loc.Right(l2-i-1); break;}
-        if ((c == wxT('/')) || (c == wxT('\\')) || (c == wxT(':'))) {return wxEmptyString;}
+        if ( c == wxT('#') )
+            l2 = i + 1;
+        if ( c == wxT('.') )
+        {
+            ext = loc.Right(l2-i-1); 
+            break;
+        }
+        if ( (c == wxT('/')) || (c == wxT('\\')) || (c == wxT(':')) )
+            return wxEmptyString;
     }
 
+#if wxUSE_MIMETYPE
     static bool s_MinimalMimeEnsured = FALSE;
     if (!s_MinimalMimeEnsured) {
-        wxTheMimeTypesManager -> AddFallbacks(gs_FSMimeFallbacks);
+        wxTheMimeTypesManager->AddFallbacks(gs_FSMimeFallbacks);
         s_MinimalMimeEnsured = TRUE;
     }
 
-    ft = wxTheMimeTypesManager -> GetFileTypeFromExtension(ext);
-    if ( !ft || !ft -> GetMimeType(&mime) ) {
+    wxFileType *ft = wxTheMimeTypesManager->GetFileTypeFromExtension(ext);
+    if ( !ft || !ft -> GetMimeType(&mime) )
+    {
         mime = wxEmptyString;
     }
 
@@ -71,6 +78,16 @@ wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
 
     return mime;
 #else
+    if ( ext.IsSameAs(wxT("htm"), FALSE) || ext.IsSameAs(_T("html"), FALSE) )
+        return wxT("text/html");
+    if ( ext.IsSameAs(wxT("jpg"), FALSE) || ext.IsSameAs(_T("jpeg"), FALSE) )
+        return wxT("image/jpeg");
+    if ( ext.IsSameAs(wxT("gif"), FALSE) )
+        return wxT("image/gif");
+    if ( ext.IsSameAs(wxT("png"), FALSE) )
+        return wxT("image/png");
+    if ( ext.IsSameAs(wxT("bmp"), FALSE) )
+        return wxT("image/bmp");
     return wxEmptyString;
 #endif
 }
