@@ -9,6 +9,7 @@ __WXXT__        Xt; mutually exclusive with WX_MOTIF (?)
 __WXGTK__       GTK
 __WXGTK12__     GTK 1.2 or higher
 __WXMSW__       Any Windows
+__WXWINE__      WINE (i.e. Win32 on Unix)
 __WXMAC__       MacOS
 __UNIX__        any Unix
 __WINDOWS__     any Windows

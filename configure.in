@@ -88,6 +88,7 @@ dnl     which are either yes or no
 DEFAULT_wxUSE_GTK=0
 DEFAULT_wxUSE_MOTIF=0
 DEFAULT_wxUSE_MSW=0
+DEFAULT_wxUSE_WINE=0
 
 dnl these are the values which are really default for the given platform -
 dnl they're not cached and are only used if no --with-toolkit was given *and*
@@ -95,6 +96,7 @@ dnl nothing was found in the cache
 DEFAULT_DEFAULT_wxUSE_GTK=0
 DEFAULT_DEFAULT_wxUSE_MOTIF=0
 DEFAULT_DEFAULT_wxUSE_MSW=0
+DEFAULT_DEFAULT_wxUSE_WINE=0
 
 case "${host}" in
   *-hp-hpux* )
@@ -426,6 +428,7 @@ done
 
 AC_ARG_WITH(gtk,           [  --with-gtk              use GTK+], [wxUSE_GTK="$withval" TOOLKIT_GIVEN=1])
 AC_ARG_WITH(motif,         [  --with-motif            use Motif/Lesstif], [wxUSE_MOTIF="$withval" TOOLKIT_GIVEN=1])
+AC_ARG_WITH(wine,          [  --with-wine             use WINE], [wxUSE_WINE="$withval" TOOLKIT_GIVEN=1])
 AC_ARG_WITH(cygwin,        [  --with-cygwin           use Cygwin for MS-Windows], [wxUSE_CYGWIN="$withval" TOOLKIT_GIVEN=1])
 AC_ARG_WITH(mingw,         [  --with-mingw            use GCC Minimal MS-Windows], [wxUSE_MINGW="$withval" TOOLKIT_GIVEN=1])
 
@@ -652,14 +655,14 @@ AC_MSG_CHECKING(for toolkit)
 
 if test "$TOOLKIT_GIVEN" = 1; then
   dnl convert "yes" to 1 and "no" to 0
-  for toolkit in GTK MOTIF MSW; do
+  for toolkit in GTK MOTIF MSW WINE; do
     var=wxUSE_$toolkit
     eval "value=\$${var}"
     eval "$var=`echo \$value | sed -e "s/yes/1/" -e "s/no/0/"`"
   done
 else
   dnl try to guess the most apropriate toolkit for this platform
-  for toolkit in GTK MOTIF MSW; do
+  for toolkit in GTK MOTIF MSW WINE; do
     if test "$has_toolkit_in_cache" != 1; then
       var=DEFAULT_DEFAULT_wxUSE_$toolkit
     else
@@ -671,7 +674,7 @@ fi
 
 dnl NB: this supposes that the shell is able to handle arithmetic expansion and
 dnl     the ${VAR:-VALUE} construction. It does simplify our life though...
-NUM_TOOLKITS="$((${wxUSE_GTK:-0}+${wxUSE_MOTIF:-0}+${wxUSE_MSW:-0}))"
+NUM_TOOLKITS="$((${wxUSE_GTK:-0}+${wxUSE_MOTIF:-0}+${wxUSE_WINE:-0}+${wxUSE_MSW:-0}))"
 
 case "$NUM_TOOLKITS" in
   1)
@@ -684,7 +687,7 @@ case "$NUM_TOOLKITS" in
 esac
 
 dnl cache the wxUSE_<TOOLKIT> values too
-for toolkit in GTK MOTIF MSW; do
+for toolkit in GTK MOTIF MSW WINE; do
   var=wxUSE_$toolkit
   eval "value=\$${var}"
   if test "x$value" != x; then
@@ -864,18 +867,23 @@ SEARCH_INCLUDE="\
     /usr/XFree86/include/X11  \
                               \
     /usr/include              \
-    /usr/include/gtk          \
-    /usr/include/gdk          \
-    /usr/include/glib         \
     /usr/local/include        \
+                              \
+    /usr/include/gtk          \
+    /usr/local/include/gtk    \
+    /usr/include/glib         \
+    /usr/local/include/glib   \
+                              \
+    /usr/include/qt           \
+    /usr/local/include/qt     \
+                              \
+    /usr/include/wine         \
+    /usr/local/include/wine   \
+                              \
     /usr/unsupported/include  \
     /usr/athena/include       \
     /usr/local/x11r5/include  \
     /usr/lpp/Xamples/include  \
-                              \
-    /usr/local/include/gtk    \
-    /usr/local/include/qt     \
-    /usr/include/qt           \
                               \
     /usr/openwin/include      \
     /usr/openwin/share/include \
@@ -904,6 +912,8 @@ GUI_TK_LINK=
 
 WXGTK12=
 
+WXWINE=
+
 if test "$wxUSE_GTK" = 1; then
   dnl avoid calling AM_PATH_GTK twice, so check first for the newer version and
   dnl only then, if it wasn't found, for an older one
@@ -915,6 +925,36 @@ if test "$wxUSE_GTK" = 1; then
   TOOLKIT_INCLUDE="$GTK_CFLAGS"
   GUI_TK_LIBRARY="$GTK_LIBS"
   TOOLKIT=GTK
+fi
+
+if test "$wxUSE_WINE" = 1; then
+    AC_MSG_CHECKING(for WINE includes)
+    WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, windows.h)
+    if test "$ac_find_includes" != "" ; then
+        AC_MSG_RESULT(found $ac_find_includes)
+    else
+        AC_MSG_RESULT(no)
+        AC_MSG_ERROR(please set CFLAGS to contain the location of windows.h)
+    fi
+
+    XPM_LINK=""
+    AC_MSG_CHECKING(for Xpm library)
+    WX_PATH_FIND_LIBRARIES($SEARCH_LIB,Xpm)
+    if test "$ac_find_libraries" != "" ; then
+        WX_LINK_PATH_EXIST($ac_find_libraries,$GUI_TK_LIBRARY)
+        CHECK_LINK="$GUI_TK_LIBRARY $ac_path_to_link"
+        XPM_LINK="-lXpm "
+        AC_DEFINE(wxHAVE_LIB_XPM)
+        AC_MSG_RESULT(found at $ac_find_libraries)
+    else
+        AC_MSG_RESULT(no)
+        AC_MSG_WARN(library will be compiled without support for images in XPM format)
+    fi
+
+    GUI_TK_LINK="-lwine $XPM_LINK -lXmu -lX11 -lm"
+    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $GUI_TK_LINK"
+    WXWINE=1
+    TOOLKIT=MSW
 fi
 
 if test "$wxUSE_MOTIF" = 1; then
@@ -1226,6 +1266,10 @@ fi
 
 if test "$WXGTK12" = 1 ; then
   AC_DEFINE_UNQUOTED(__WXGTK12__,$WXGTK12)
+fi
+
+if test "$WXWINE" = 1 ; then
+  TOOLKIT_DEF="${TOOLKIT_DEF} -D__WXWINE__"
 fi
 
 WXDEBUG=
@@ -1620,6 +1664,9 @@ if test "$wxUSE_DRAG_AND_DROP" = "yes"; then
   else
     AC_MSG_WARN(drag and drop is only supported under GTK 1.2)
   fi
+  if test "$WXWINE" = 1 ; then
+    AC_MSG_WARN(drag and drop is only supported under WINE)
+  fi
 fi
 
 if test "$wxUSE_SPLINES" = "yes" ; then
@@ -1915,6 +1962,7 @@ AC_OUTPUT([
             src/Makefile
             src/gtk/Makefile
             src/motif/Makefile
+            src/msw/Makefile
             include/Makefile
             include/wx/Makefile
             include/wx/generic/Makefile
