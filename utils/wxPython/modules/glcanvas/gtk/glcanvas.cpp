@@ -124,12 +124,13 @@ static char* wxStringErrorMsg = "string type is required for parameter";
 #ifdef __cplusplus
 extern "C" {
 #endif
-static PyObject *_wrap_glArrayElementEXT(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glArrayElementEXT(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint  _arg0;
+    char *_kwnames[] = { "i", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"i:glArrayElementEXT",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:glArrayElementEXT",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -141,7 +142,7 @@ static PyObject *_wrap_glArrayElementEXT(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColorPointerEXT(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColorPointerEXT(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint  _arg0;
     GLenum  _arg1;
@@ -149,9 +150,10 @@ static PyObject *_wrap_glColorPointerEXT(PyObject *self, PyObject *args) {
     GLsizei  _arg3;
     GLvoid * _arg4;
     PyObject * _argo4 = 0;
+    char *_kwnames[] = { "size","type","stride","count","pointer", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiiiO:glColorPointerEXT",&_arg0,&_arg1,&_arg2,&_arg3,&_argo4)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiiiO:glColorPointerEXT",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3,&_argo4)) 
         return NULL;
     if (_argo4) {
         if (_argo4 == Py_None) { _arg4 = NULL; }
@@ -170,14 +172,15 @@ static PyObject *_wrap_glColorPointerEXT(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glDrawArraysEXT(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glDrawArraysEXT(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLint  _arg1;
     GLsizei  _arg2;
+    char *_kwnames[] = { "mode","first","count", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iii:glDrawArraysEXT",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iii:glDrawArraysEXT",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -189,15 +192,16 @@ static PyObject *_wrap_glDrawArraysEXT(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glEdgeFlagPointerEXT(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glEdgeFlagPointerEXT(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLsizei  _arg0;
     GLsizei  _arg1;
     GLboolean * _arg2;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "stride","count","pointer", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiO:glEdgeFlagPointerEXT",&_arg0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiO:glEdgeFlagPointerEXT",_kwnames,&_arg0,&_arg1,&_argo2)) 
         return NULL;
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
@@ -216,14 +220,15 @@ static PyObject *_wrap_glEdgeFlagPointerEXT(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glGetPointervEXT(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glGetPointervEXT(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLvoid ** _arg1;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "pname","params", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iO:glGetPointervEXT",&_arg0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iO:glGetPointervEXT",_kwnames,&_arg0,&_argo1)) 
         return NULL;
     if (_argo1) {
         if (_argo1 == Py_None) { _arg1 = NULL; }
@@ -242,16 +247,17 @@ static PyObject *_wrap_glGetPointervEXT(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glIndexPointerEXT(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glIndexPointerEXT(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLsizei  _arg1;
     GLsizei  _arg2;
     GLvoid * _arg3;
     PyObject * _argo3 = 0;
+    char *_kwnames[] = { "type","stride","count","pointer", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiiO:glIndexPointerEXT",&_arg0,&_arg1,&_arg2,&_argo3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiiO:glIndexPointerEXT",_kwnames,&_arg0,&_arg1,&_arg2,&_argo3)) 
         return NULL;
     if (_argo3) {
         if (_argo3 == Py_None) { _arg3 = NULL; }
@@ -270,16 +276,17 @@ static PyObject *_wrap_glIndexPointerEXT(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glNormalPointerEXT(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glNormalPointerEXT(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLsizei  _arg1;
     GLsizei  _arg2;
     GLvoid * _arg3;
     PyObject * _argo3 = 0;
+    char *_kwnames[] = { "type","stride","count","pointer", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiiO:glNormalPointerEXT",&_arg0,&_arg1,&_arg2,&_argo3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiiO:glNormalPointerEXT",_kwnames,&_arg0,&_arg1,&_arg2,&_argo3)) 
         return NULL;
     if (_argo3) {
         if (_argo3 == Py_None) { _arg3 = NULL; }
@@ -298,7 +305,7 @@ static PyObject *_wrap_glNormalPointerEXT(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexCoordPointerEXT(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexCoordPointerEXT(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint  _arg0;
     GLenum  _arg1;
@@ -306,9 +313,10 @@ static PyObject *_wrap_glTexCoordPointerEXT(PyObject *self, PyObject *args) {
     GLsizei  _arg3;
     GLvoid * _arg4;
     PyObject * _argo4 = 0;
+    char *_kwnames[] = { "size","type","stride","count","pointer", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiiiO:glTexCoordPointerEXT",&_arg0,&_arg1,&_arg2,&_arg3,&_argo4)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiiiO:glTexCoordPointerEXT",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3,&_argo4)) 
         return NULL;
     if (_argo4) {
         if (_argo4 == Py_None) { _arg4 = NULL; }
@@ -327,7 +335,7 @@ static PyObject *_wrap_glTexCoordPointerEXT(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glVertexPointerEXT(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glVertexPointerEXT(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint  _arg0;
     GLenum  _arg1;
@@ -335,9 +343,10 @@ static PyObject *_wrap_glVertexPointerEXT(PyObject *self, PyObject *args) {
     GLsizei  _arg3;
     GLvoid * _arg4;
     PyObject * _argo4 = 0;
+    char *_kwnames[] = { "size","type","stride","count","pointer", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiiiO:glVertexPointerEXT",&_arg0,&_arg1,&_arg2,&_arg3,&_argo4)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiiiO:glVertexPointerEXT",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3,&_argo4)) 
         return NULL;
     if (_argo4) {
         if (_argo4 == Py_None) { _arg4 = NULL; }
@@ -356,7 +365,7 @@ static PyObject *_wrap_glVertexPointerEXT(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColorTableEXT(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColorTableEXT(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
@@ -365,9 +374,10 @@ static PyObject *_wrap_glColorTableEXT(PyObject *self, PyObject *args) {
     GLenum  _arg4;
     GLvoid * _arg5;
     PyObject * _argo5 = 0;
+    char *_kwnames[] = { "target","internalformat","width","format","type","table", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiiiiO:glColorTableEXT",&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_argo5)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiiiiO:glColorTableEXT",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_argo5)) 
         return NULL;
     if (_argo5) {
         if (_argo5 == Py_None) { _arg5 = NULL; }
@@ -386,16 +396,17 @@ static PyObject *_wrap_glColorTableEXT(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glGetColorTableEXT(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glGetColorTableEXT(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLenum  _arg2;
     GLvoid * _arg3;
     PyObject * _argo3 = 0;
+    char *_kwnames[] = { "target","format","type","table", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiiO:glGetColorTableEXT",&_arg0,&_arg1,&_arg2,&_argo3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiiO:glGetColorTableEXT",_kwnames,&_arg0,&_arg1,&_arg2,&_argo3)) 
         return NULL;
     if (_argo3) {
         if (_argo3 == Py_None) { _arg3 = NULL; }
@@ -414,13 +425,14 @@ static PyObject *_wrap_glGetColorTableEXT(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glAccum(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glAccum(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLfloat  _arg1;
+    char *_kwnames[] = { "op","value", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"if:glAccum",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"if:glAccum",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -432,13 +444,14 @@ static PyObject *_wrap_glAccum(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glAlphaFunc(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glAlphaFunc(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLclampf  _arg1;
+    char *_kwnames[] = { "func","ref", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"if:glAlphaFunc",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"if:glAlphaFunc",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -450,7 +463,7 @@ static PyObject *_wrap_glAlphaFunc(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glAreTexturesResident(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glAreTexturesResident(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLboolean  _result;
     GLsizei  _arg0;
@@ -458,9 +471,10 @@ static PyObject *_wrap_glAreTexturesResident(PyObject *self, PyObject *args) {
     GLboolean * _arg2;
     PyObject * _argo1 = 0;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "n","textures","residences", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iOO:glAreTexturesResident",&_arg0,&_argo1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iOO:glAreTexturesResident",_kwnames,&_arg0,&_argo1,&_argo2)) 
         return NULL;
     if (_argo1) {
         if (_argo1 == Py_None) { _arg1 = NULL; }
@@ -485,12 +499,13 @@ static PyObject *_wrap_glAreTexturesResident(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glArrayElement(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glArrayElement(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint  _arg0;
+    char *_kwnames[] = { "i", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"i:glArrayElement",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:glArrayElement",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -502,12 +517,13 @@ static PyObject *_wrap_glArrayElement(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glBegin(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glBegin(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
+    char *_kwnames[] = { "mode", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"i:glBegin",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:glBegin",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -519,13 +535,14 @@ static PyObject *_wrap_glBegin(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glBindTexture(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glBindTexture(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLuint  _arg1;
+    char *_kwnames[] = { "target","texture", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ii:glBindTexture",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ii:glBindTexture",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -537,7 +554,7 @@ static PyObject *_wrap_glBindTexture(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glBitmap(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLsizei  _arg0;
     GLsizei  _arg1;
@@ -547,9 +564,10 @@ static PyObject *_wrap_glBitmap(PyObject *self, PyObject *args) {
     GLfloat  _arg5;
     GLubyte * _arg6;
     PyObject * _argo6 = 0;
+    char *_kwnames[] = { "width","height","xorig","yorig","xmove","ymove","bitmap", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiffffO:glBitmap",&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_argo6)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiffffO:glBitmap",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_argo6)) 
         return NULL;
     if (_argo6) {
         if (_argo6 == Py_None) { _arg6 = NULL; }
@@ -568,13 +586,14 @@ static PyObject *_wrap_glBitmap(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glBlendFunc(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glBlendFunc(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
+    char *_kwnames[] = { "sfactor","dfactor", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ii:glBlendFunc",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ii:glBlendFunc",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -586,12 +605,13 @@ static PyObject *_wrap_glBlendFunc(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glCallList(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glCallList(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLuint  _arg0;
+    char *_kwnames[] = { "list", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"i:glCallList",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:glCallList",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -603,15 +623,16 @@ static PyObject *_wrap_glCallList(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glCallLists(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glCallLists(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLsizei  _arg0;
     GLenum  _arg1;
     GLvoid * _arg2;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "n","type","lists", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiO:glCallLists",&_arg0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiO:glCallLists",_kwnames,&_arg0,&_arg1,&_argo2)) 
         return NULL;
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
@@ -630,12 +651,13 @@ static PyObject *_wrap_glCallLists(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glClear(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glClear(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLbitfield  _arg0;
+    char *_kwnames[] = { "mask", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"i:glClear",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:glClear",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -647,15 +669,16 @@ static PyObject *_wrap_glClear(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glClearAccum(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glClearAccum(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat  _arg0;
     GLfloat  _arg1;
     GLfloat  _arg2;
     GLfloat  _arg3;
+    char *_kwnames[] = { "red","green","blue","alpha", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ffff:glClearAccum",&_arg0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ffff:glClearAccum",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -667,15 +690,16 @@ static PyObject *_wrap_glClearAccum(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glClearColor(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glClearColor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLclampf  _arg0;
     GLclampf  _arg1;
     GLclampf  _arg2;
     GLclampf  _arg3;
+    char *_kwnames[] = { "red","green","blue","alpha", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ffff:glClearColor",&_arg0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ffff:glClearColor",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -687,12 +711,13 @@ static PyObject *_wrap_glClearColor(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glClearDepth(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glClearDepth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLclampd  _arg0;
+    char *_kwnames[] = { "depth", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"d:glClearDepth",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"d:glClearDepth",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -704,12 +729,13 @@ static PyObject *_wrap_glClearDepth(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glClearIndex(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glClearIndex(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat  _arg0;
+    char *_kwnames[] = { "c", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"f:glClearIndex",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"f:glClearIndex",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -721,12 +747,13 @@ static PyObject *_wrap_glClearIndex(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glClearStencil(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glClearStencil(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint  _arg0;
+    char *_kwnames[] = { "s", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"i:glClearStencil",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:glClearStencil",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -738,14 +765,15 @@ static PyObject *_wrap_glClearStencil(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glClipPlane(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glClipPlane(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLdouble * _arg1;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "plane","equation", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iO:glClipPlane",&_arg0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iO:glClipPlane",_kwnames,&_arg0,&_argo1)) 
         return NULL;
     if (_argo1) {
         if (_argo1 == Py_None) { _arg1 = NULL; }
@@ -764,14 +792,15 @@ static PyObject *_wrap_glClipPlane(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColor3b(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColor3b(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLbyte  _arg0;
     GLbyte  _arg1;
     GLbyte  _arg2;
+    char *_kwnames[] = { "red","green","blue", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"bbb:glColor3b",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"bbb:glColor3b",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -783,13 +812,14 @@ static PyObject *_wrap_glColor3b(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColor3bv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColor3bv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLbyte * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glColor3bv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glColor3bv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -808,14 +838,15 @@ static PyObject *_wrap_glColor3bv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColor3d(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColor3d(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble  _arg0;
     GLdouble  _arg1;
     GLdouble  _arg2;
+    char *_kwnames[] = { "red","green","blue", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ddd:glColor3d",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ddd:glColor3d",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -827,13 +858,14 @@ static PyObject *_wrap_glColor3d(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColor3dv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColor3dv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glColor3dv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glColor3dv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -852,14 +884,15 @@ static PyObject *_wrap_glColor3dv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColor3f(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColor3f(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat  _arg0;
     GLfloat  _arg1;
     GLfloat  _arg2;
+    char *_kwnames[] = { "red","green","blue", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"fff:glColor3f",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"fff:glColor3f",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -871,13 +904,14 @@ static PyObject *_wrap_glColor3f(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColor3fv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColor3fv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glColor3fv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glColor3fv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -896,14 +930,15 @@ static PyObject *_wrap_glColor3fv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColor3i(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColor3i(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint  _arg0;
     GLint  _arg1;
     GLint  _arg2;
+    char *_kwnames[] = { "red","green","blue", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iii:glColor3i",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iii:glColor3i",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -915,13 +950,14 @@ static PyObject *_wrap_glColor3i(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColor3iv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColor3iv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glColor3iv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glColor3iv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -940,14 +976,15 @@ static PyObject *_wrap_glColor3iv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColor3s(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColor3s(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLshort  _arg0;
     GLshort  _arg1;
     GLshort  _arg2;
+    char *_kwnames[] = { "red","green","blue", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"hhh:glColor3s",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"hhh:glColor3s",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -959,13 +996,14 @@ static PyObject *_wrap_glColor3s(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColor3sv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColor3sv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLshort * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glColor3sv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glColor3sv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -984,14 +1022,15 @@ static PyObject *_wrap_glColor3sv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColor3ub(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColor3ub(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLubyte  _arg0;
     GLubyte  _arg1;
     GLubyte  _arg2;
+    char *_kwnames[] = { "red","green","blue", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"bbb:glColor3ub",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"bbb:glColor3ub",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1003,13 +1042,14 @@ static PyObject *_wrap_glColor3ub(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColor3ubv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColor3ubv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLubyte * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glColor3ubv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glColor3ubv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1028,14 +1068,15 @@ static PyObject *_wrap_glColor3ubv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColor3ui(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColor3ui(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLuint  _arg0;
     GLuint  _arg1;
     GLuint  _arg2;
+    char *_kwnames[] = { "red","green","blue", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iii:glColor3ui",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iii:glColor3ui",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1047,13 +1088,14 @@ static PyObject *_wrap_glColor3ui(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColor3uiv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColor3uiv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLuint * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glColor3uiv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glColor3uiv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1072,14 +1114,15 @@ static PyObject *_wrap_glColor3uiv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColor3us(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColor3us(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLushort  _arg0;
     GLushort  _arg1;
     GLushort  _arg2;
+    char *_kwnames[] = { "red","green","blue", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"hhh:glColor3us",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"hhh:glColor3us",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1091,13 +1134,14 @@ static PyObject *_wrap_glColor3us(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColor3usv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColor3usv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLushort * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glColor3usv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glColor3usv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1116,15 +1160,16 @@ static PyObject *_wrap_glColor3usv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColor4b(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColor4b(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLbyte  _arg0;
     GLbyte  _arg1;
     GLbyte  _arg2;
     GLbyte  _arg3;
+    char *_kwnames[] = { "red","green","blue","alpha", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"bbbb:glColor4b",&_arg0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"bbbb:glColor4b",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1136,13 +1181,14 @@ static PyObject *_wrap_glColor4b(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColor4bv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColor4bv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLbyte * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glColor4bv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glColor4bv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1161,15 +1207,16 @@ static PyObject *_wrap_glColor4bv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColor4d(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColor4d(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble  _arg0;
     GLdouble  _arg1;
     GLdouble  _arg2;
     GLdouble  _arg3;
+    char *_kwnames[] = { "red","green","blue","alpha", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"dddd:glColor4d",&_arg0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"dddd:glColor4d",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1181,13 +1228,14 @@ static PyObject *_wrap_glColor4d(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColor4dv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColor4dv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glColor4dv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glColor4dv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1206,15 +1254,16 @@ static PyObject *_wrap_glColor4dv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColor4f(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColor4f(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat  _arg0;
     GLfloat  _arg1;
     GLfloat  _arg2;
     GLfloat  _arg3;
+    char *_kwnames[] = { "red","green","blue","alpha", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ffff:glColor4f",&_arg0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ffff:glColor4f",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1226,13 +1275,14 @@ static PyObject *_wrap_glColor4f(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColor4fv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColor4fv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glColor4fv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glColor4fv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1251,15 +1301,16 @@ static PyObject *_wrap_glColor4fv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColor4i(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColor4i(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint  _arg0;
     GLint  _arg1;
     GLint  _arg2;
     GLint  _arg3;
+    char *_kwnames[] = { "red","green","blue","alpha", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiii:glColor4i",&_arg0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiii:glColor4i",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1271,13 +1322,14 @@ static PyObject *_wrap_glColor4i(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColor4iv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColor4iv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glColor4iv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glColor4iv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1296,15 +1348,16 @@ static PyObject *_wrap_glColor4iv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColor4s(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColor4s(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLshort  _arg0;
     GLshort  _arg1;
     GLshort  _arg2;
     GLshort  _arg3;
+    char *_kwnames[] = { "red","green","blue","alpha", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"hhhh:glColor4s",&_arg0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"hhhh:glColor4s",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1316,13 +1369,14 @@ static PyObject *_wrap_glColor4s(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColor4sv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColor4sv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLshort * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glColor4sv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glColor4sv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1341,15 +1395,16 @@ static PyObject *_wrap_glColor4sv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColor4ub(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColor4ub(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLubyte  _arg0;
     GLubyte  _arg1;
     GLubyte  _arg2;
     GLubyte  _arg3;
+    char *_kwnames[] = { "red","green","blue","alpha", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"bbbb:glColor4ub",&_arg0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"bbbb:glColor4ub",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1361,13 +1416,14 @@ static PyObject *_wrap_glColor4ub(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColor4ubv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColor4ubv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLubyte * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glColor4ubv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glColor4ubv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1386,15 +1442,16 @@ static PyObject *_wrap_glColor4ubv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColor4ui(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColor4ui(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLuint  _arg0;
     GLuint  _arg1;
     GLuint  _arg2;
     GLuint  _arg3;
+    char *_kwnames[] = { "red","green","blue","alpha", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiii:glColor4ui",&_arg0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiii:glColor4ui",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1406,13 +1463,14 @@ static PyObject *_wrap_glColor4ui(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColor4uiv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColor4uiv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLuint * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glColor4uiv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glColor4uiv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1431,15 +1489,16 @@ static PyObject *_wrap_glColor4uiv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColor4us(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColor4us(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLushort  _arg0;
     GLushort  _arg1;
     GLushort  _arg2;
     GLushort  _arg3;
+    char *_kwnames[] = { "red","green","blue","alpha", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"hhhh:glColor4us",&_arg0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"hhhh:glColor4us",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1451,13 +1510,14 @@ static PyObject *_wrap_glColor4us(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColor4usv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColor4usv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLushort * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glColor4usv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glColor4usv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1476,15 +1536,16 @@ static PyObject *_wrap_glColor4usv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColorMask(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColorMask(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLboolean  _arg0;
     GLboolean  _arg1;
     GLboolean  _arg2;
     GLboolean  _arg3;
+    char *_kwnames[] = { "red","green","blue","alpha", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"bbbb:glColorMask",&_arg0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"bbbb:glColorMask",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1496,13 +1557,14 @@ static PyObject *_wrap_glColorMask(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColorMaterial(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColorMaterial(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
+    char *_kwnames[] = { "face","mode", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ii:glColorMaterial",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ii:glColorMaterial",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1514,16 +1576,17 @@ static PyObject *_wrap_glColorMaterial(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glColorPointer(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glColorPointer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint  _arg0;
     GLenum  _arg1;
     GLsizei  _arg2;
     GLvoid * _arg3;
     PyObject * _argo3 = 0;
+    char *_kwnames[] = { "size","type","stride","pointer", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiiO:glColorPointer",&_arg0,&_arg1,&_arg2,&_argo3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiiO:glColorPointer",_kwnames,&_arg0,&_arg1,&_arg2,&_argo3)) 
         return NULL;
     if (_argo3) {
         if (_argo3 == Py_None) { _arg3 = NULL; }
@@ -1542,16 +1605,17 @@ static PyObject *_wrap_glColorPointer(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glCopyPixels(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glCopyPixels(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint  _arg0;
     GLint  _arg1;
     GLsizei  _arg2;
     GLsizei  _arg3;
     GLenum  _arg4;
+    char *_kwnames[] = { "x","y","width","height","type", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiiii:glCopyPixels",&_arg0,&_arg1,&_arg2,&_arg3,&_arg4)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiiii:glCopyPixels",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3,&_arg4)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1563,7 +1627,7 @@ static PyObject *_wrap_glCopyPixels(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glCopyTexImage1D(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glCopyTexImage1D(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLint  _arg1;
@@ -1572,9 +1636,10 @@ static PyObject *_wrap_glCopyTexImage1D(PyObject *self, PyObject *args) {
     GLint  _arg4;
     GLsizei  _arg5;
     GLint  _arg6;
+    char *_kwnames[] = { "target","level","internalFormat","x","y","width","border", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiiiiii:glCopyTexImage1D",&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_arg6)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiiiiii:glCopyTexImage1D",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_arg6)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1586,7 +1651,7 @@ static PyObject *_wrap_glCopyTexImage1D(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glCopyTexImage2D(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glCopyTexImage2D(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLint  _arg1;
@@ -1596,9 +1661,10 @@ static PyObject *_wrap_glCopyTexImage2D(PyObject *self, PyObject *args) {
     GLsizei  _arg5;
     GLsizei  _arg6;
     GLint  _arg7;
+    char *_kwnames[] = { "target","level","internalFormat","x","y","width","height","border", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiiiiiii:glCopyTexImage2D",&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_arg6,&_arg7)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiiiiiii:glCopyTexImage2D",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_arg6,&_arg7)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1610,7 +1676,7 @@ static PyObject *_wrap_glCopyTexImage2D(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glCopyTexSubImage1D(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glCopyTexSubImage1D(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLint  _arg1;
@@ -1618,9 +1684,10 @@ static PyObject *_wrap_glCopyTexSubImage1D(PyObject *self, PyObject *args) {
     GLint  _arg3;
     GLint  _arg4;
     GLsizei  _arg5;
+    char *_kwnames[] = { "target","level","xoffset","x","y","width", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiiiii:glCopyTexSubImage1D",&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiiiii:glCopyTexSubImage1D",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1632,7 +1699,7 @@ static PyObject *_wrap_glCopyTexSubImage1D(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glCopyTexSubImage2D(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glCopyTexSubImage2D(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLint  _arg1;
@@ -1642,9 +1709,10 @@ static PyObject *_wrap_glCopyTexSubImage2D(PyObject *self, PyObject *args) {
     GLint  _arg5;
     GLsizei  _arg6;
     GLsizei  _arg7;
+    char *_kwnames[] = { "target","level","xoffset","yoffset","x","y","width","height", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiiiiiii:glCopyTexSubImage2D",&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_arg6,&_arg7)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiiiiiii:glCopyTexSubImage2D",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_arg6,&_arg7)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1656,12 +1724,13 @@ static PyObject *_wrap_glCopyTexSubImage2D(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glCullFace(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glCullFace(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
+    char *_kwnames[] = { "mode", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"i:glCullFace",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:glCullFace",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1673,13 +1742,14 @@ static PyObject *_wrap_glCullFace(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glDeleteLists(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glDeleteLists(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLuint  _arg0;
     GLsizei  _arg1;
+    char *_kwnames[] = { "list","range", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ii:glDeleteLists",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ii:glDeleteLists",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1691,14 +1761,15 @@ static PyObject *_wrap_glDeleteLists(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glDeleteTextures(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glDeleteTextures(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLsizei  _arg0;
     GLuint * _arg1;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "n","textures", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iO:glDeleteTextures",&_arg0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iO:glDeleteTextures",_kwnames,&_arg0,&_argo1)) 
         return NULL;
     if (_argo1) {
         if (_argo1 == Py_None) { _arg1 = NULL; }
@@ -1717,12 +1788,13 @@ static PyObject *_wrap_glDeleteTextures(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glDepthFunc(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glDepthFunc(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
+    char *_kwnames[] = { "func", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"i:glDepthFunc",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:glDepthFunc",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1734,12 +1806,13 @@ static PyObject *_wrap_glDepthFunc(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glDepthMask(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glDepthMask(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLboolean  _arg0;
+    char *_kwnames[] = { "flag", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"b:glDepthMask",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"b:glDepthMask",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1751,13 +1824,14 @@ static PyObject *_wrap_glDepthMask(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glDepthRange(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glDepthRange(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLclampd  _arg0;
     GLclampd  _arg1;
+    char *_kwnames[] = { "zNear","zFar", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"dd:glDepthRange",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"dd:glDepthRange",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1769,12 +1843,13 @@ static PyObject *_wrap_glDepthRange(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glDisable(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glDisable(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
+    char *_kwnames[] = { "cap", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"i:glDisable",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:glDisable",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1786,12 +1861,13 @@ static PyObject *_wrap_glDisable(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glDisableClientState(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glDisableClientState(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
+    char *_kwnames[] = { "array", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"i:glDisableClientState",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:glDisableClientState",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1803,14 +1879,15 @@ static PyObject *_wrap_glDisableClientState(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glDrawArrays(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glDrawArrays(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLint  _arg1;
     GLsizei  _arg2;
+    char *_kwnames[] = { "mode","first","count", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iii:glDrawArrays",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iii:glDrawArrays",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1822,12 +1899,13 @@ static PyObject *_wrap_glDrawArrays(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glDrawBuffer(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glDrawBuffer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
+    char *_kwnames[] = { "mode", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"i:glDrawBuffer",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:glDrawBuffer",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1839,16 +1917,17 @@ static PyObject *_wrap_glDrawBuffer(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glDrawElements(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glDrawElements(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLsizei  _arg1;
     GLenum  _arg2;
     GLvoid * _arg3;
     PyObject * _argo3 = 0;
+    char *_kwnames[] = { "mode","count","type","indices", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiiO:glDrawElements",&_arg0,&_arg1,&_arg2,&_argo3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiiO:glDrawElements",_kwnames,&_arg0,&_arg1,&_arg2,&_argo3)) 
         return NULL;
     if (_argo3) {
         if (_argo3 == Py_None) { _arg3 = NULL; }
@@ -1867,7 +1946,7 @@ static PyObject *_wrap_glDrawElements(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glDrawPixels(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glDrawPixels(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLsizei  _arg0;
     GLsizei  _arg1;
@@ -1875,9 +1954,10 @@ static PyObject *_wrap_glDrawPixels(PyObject *self, PyObject *args) {
     GLenum  _arg3;
     GLvoid * _arg4;
     PyObject * _argo4 = 0;
+    char *_kwnames[] = { "width","height","format","type","pixels", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiiiO:glDrawPixels",&_arg0,&_arg1,&_arg2,&_arg3,&_argo4)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiiiO:glDrawPixels",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3,&_argo4)) 
         return NULL;
     if (_argo4) {
         if (_argo4 == Py_None) { _arg4 = NULL; }
@@ -1896,12 +1976,13 @@ static PyObject *_wrap_glDrawPixels(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glEdgeFlag(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glEdgeFlag(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLboolean  _arg0;
+    char *_kwnames[] = { "flag", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"b:glEdgeFlag",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"b:glEdgeFlag",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1913,14 +1994,15 @@ static PyObject *_wrap_glEdgeFlag(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glEdgeFlagPointer(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glEdgeFlagPointer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLsizei  _arg0;
     GLboolean * _arg1;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "stride","pointer", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iO:glEdgeFlagPointer",&_arg0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iO:glEdgeFlagPointer",_kwnames,&_arg0,&_argo1)) 
         return NULL;
     if (_argo1) {
         if (_argo1 == Py_None) { _arg1 = NULL; }
@@ -1939,13 +2021,14 @@ static PyObject *_wrap_glEdgeFlagPointer(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glEdgeFlagv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glEdgeFlagv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLboolean * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "flag", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glEdgeFlagv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glEdgeFlagv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1964,12 +2047,13 @@ static PyObject *_wrap_glEdgeFlagv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glEnable(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glEnable(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
+    char *_kwnames[] = { "cap", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"i:glEnable",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:glEnable",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1981,12 +2065,13 @@ static PyObject *_wrap_glEnable(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glEnableClientState(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glEnableClientState(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
+    char *_kwnames[] = { "array", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"i:glEnableClientState",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:glEnableClientState",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1998,11 +2083,12 @@ static PyObject *_wrap_glEnableClientState(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glEnd(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glEnd(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
+    char *_kwnames[] = {  NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,":glEnd")) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":glEnd",_kwnames)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -2014,11 +2100,12 @@ static PyObject *_wrap_glEnd(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glEndList(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glEndList(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
+    char *_kwnames[] = {  NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,":glEndList")) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":glEndList",_kwnames)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -2030,12 +2117,13 @@ static PyObject *_wrap_glEndList(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glEvalCoord1d(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glEvalCoord1d(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble  _arg0;
+    char *_kwnames[] = { "u", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"d:glEvalCoord1d",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"d:glEvalCoord1d",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -2047,13 +2135,14 @@ static PyObject *_wrap_glEvalCoord1d(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glEvalCoord1dv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glEvalCoord1dv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "u", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glEvalCoord1dv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glEvalCoord1dv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2072,12 +2161,13 @@ static PyObject *_wrap_glEvalCoord1dv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glEvalCoord1f(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glEvalCoord1f(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat  _arg0;
+    char *_kwnames[] = { "u", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"f:glEvalCoord1f",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"f:glEvalCoord1f",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -2089,13 +2179,14 @@ static PyObject *_wrap_glEvalCoord1f(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glEvalCoord1fv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glEvalCoord1fv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "u", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glEvalCoord1fv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glEvalCoord1fv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2114,13 +2205,14 @@ static PyObject *_wrap_glEvalCoord1fv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glEvalCoord2d(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glEvalCoord2d(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble  _arg0;
     GLdouble  _arg1;
+    char *_kwnames[] = { "u","v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"dd:glEvalCoord2d",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"dd:glEvalCoord2d",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -2132,13 +2224,14 @@ static PyObject *_wrap_glEvalCoord2d(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glEvalCoord2dv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glEvalCoord2dv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "u", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glEvalCoord2dv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glEvalCoord2dv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2157,13 +2250,14 @@ static PyObject *_wrap_glEvalCoord2dv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glEvalCoord2f(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glEvalCoord2f(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat  _arg0;
     GLfloat  _arg1;
+    char *_kwnames[] = { "u","v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ff:glEvalCoord2f",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ff:glEvalCoord2f",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -2175,13 +2269,14 @@ static PyObject *_wrap_glEvalCoord2f(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glEvalCoord2fv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glEvalCoord2fv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "u", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glEvalCoord2fv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glEvalCoord2fv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2200,14 +2295,15 @@ static PyObject *_wrap_glEvalCoord2fv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glEvalMesh1(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glEvalMesh1(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLint  _arg1;
     GLint  _arg2;
+    char *_kwnames[] = { "mode","i1","i2", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iii:glEvalMesh1",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iii:glEvalMesh1",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -2219,16 +2315,17 @@ static PyObject *_wrap_glEvalMesh1(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glEvalMesh2(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glEvalMesh2(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLint  _arg1;
     GLint  _arg2;
     GLint  _arg3;
     GLint  _arg4;
+    char *_kwnames[] = { "mode","i1","i2","j1","j2", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiiii:glEvalMesh2",&_arg0,&_arg1,&_arg2,&_arg3,&_arg4)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiiii:glEvalMesh2",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3,&_arg4)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -2240,12 +2337,13 @@ static PyObject *_wrap_glEvalMesh2(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glEvalPoint1(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glEvalPoint1(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint  _arg0;
+    char *_kwnames[] = { "i", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"i:glEvalPoint1",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:glEvalPoint1",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -2257,13 +2355,14 @@ static PyObject *_wrap_glEvalPoint1(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glEvalPoint2(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glEvalPoint2(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint  _arg0;
     GLint  _arg1;
+    char *_kwnames[] = { "i","j", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ii:glEvalPoint2",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ii:glEvalPoint2",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -2275,15 +2374,16 @@ static PyObject *_wrap_glEvalPoint2(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glFeedbackBuffer(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glFeedbackBuffer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLsizei  _arg0;
     GLenum  _arg1;
     GLfloat * _arg2;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "size","type","buffer", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiO:glFeedbackBuffer",&_arg0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiO:glFeedbackBuffer",_kwnames,&_arg0,&_arg1,&_argo2)) 
         return NULL;
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
@@ -2302,11 +2402,12 @@ static PyObject *_wrap_glFeedbackBuffer(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glFinish(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glFinish(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
+    char *_kwnames[] = {  NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,":glFinish")) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":glFinish",_kwnames)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -2318,11 +2419,12 @@ static PyObject *_wrap_glFinish(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glFlush(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glFlush(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
+    char *_kwnames[] = {  NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,":glFlush")) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":glFlush",_kwnames)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -2334,13 +2436,14 @@ static PyObject *_wrap_glFlush(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glFogf(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glFogf(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLfloat  _arg1;
+    char *_kwnames[] = { "pname","param", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"if:glFogf",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"if:glFogf",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -2352,14 +2455,15 @@ static PyObject *_wrap_glFogf(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glFogfv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glFogfv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLfloat * _arg1;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "pname","params", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iO:glFogfv",&_arg0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iO:glFogfv",_kwnames,&_arg0,&_argo1)) 
         return NULL;
     if (_argo1) {
         if (_argo1 == Py_None) { _arg1 = NULL; }
@@ -2378,13 +2482,14 @@ static PyObject *_wrap_glFogfv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glFogi(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glFogi(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLint  _arg1;
+    char *_kwnames[] = { "pname","param", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ii:glFogi",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ii:glFogi",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -2396,14 +2501,15 @@ static PyObject *_wrap_glFogi(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glFogiv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glFogiv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLint * _arg1;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "pname","params", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iO:glFogiv",&_arg0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iO:glFogiv",_kwnames,&_arg0,&_argo1)) 
         return NULL;
     if (_argo1) {
         if (_argo1 == Py_None) { _arg1 = NULL; }
@@ -2422,12 +2528,13 @@ static PyObject *_wrap_glFogiv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glFrontFace(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glFrontFace(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
+    char *_kwnames[] = { "mode", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"i:glFrontFace",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:glFrontFace",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -2439,7 +2546,7 @@ static PyObject *_wrap_glFrontFace(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glFrustum(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glFrustum(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble  _arg0;
     GLdouble  _arg1;
@@ -2447,9 +2554,10 @@ static PyObject *_wrap_glFrustum(PyObject *self, PyObject *args) {
     GLdouble  _arg3;
     GLdouble  _arg4;
     GLdouble  _arg5;
+    char *_kwnames[] = { "left","right","bottom","top","zNear","zFar", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"dddddd:glFrustum",&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"dddddd:glFrustum",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -2461,13 +2569,14 @@ static PyObject *_wrap_glFrustum(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glGenLists(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glGenLists(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLuint  _result;
     GLsizei  _arg0;
+    char *_kwnames[] = { "range", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"i:glGenLists",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:glGenLists",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -2478,14 +2587,15 @@ static PyObject *_wrap_glGenLists(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glGenTextures(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glGenTextures(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLsizei  _arg0;
     GLuint * _arg1;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "n","textures", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iO:glGenTextures",&_arg0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iO:glGenTextures",_kwnames,&_arg0,&_argo1)) 
         return NULL;
     if (_argo1) {
         if (_argo1 == Py_None) { _arg1 = NULL; }
@@ -2504,14 +2614,15 @@ static PyObject *_wrap_glGenTextures(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glGetBooleanv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glGetBooleanv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLboolean * _arg1;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "pname","params", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iO:glGetBooleanv",&_arg0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iO:glGetBooleanv",_kwnames,&_arg0,&_argo1)) 
         return NULL;
     if (_argo1) {
         if (_argo1 == Py_None) { _arg1 = NULL; }
@@ -2530,14 +2641,15 @@ static PyObject *_wrap_glGetBooleanv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glGetClipPlane(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glGetClipPlane(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLdouble * _arg1;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "plane","equation", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iO:glGetClipPlane",&_arg0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iO:glGetClipPlane",_kwnames,&_arg0,&_argo1)) 
         return NULL;
     if (_argo1) {
         if (_argo1 == Py_None) { _arg1 = NULL; }
@@ -2556,14 +2668,15 @@ static PyObject *_wrap_glGetClipPlane(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glGetDoublev(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glGetDoublev(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLdouble * _arg1;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "pname","params", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iO:glGetDoublev",&_arg0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iO:glGetDoublev",_kwnames,&_arg0,&_argo1)) 
         return NULL;
     if (_argo1) {
         if (_argo1 == Py_None) { _arg1 = NULL; }
@@ -2582,12 +2695,13 @@ static PyObject *_wrap_glGetDoublev(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glGetError(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glGetError(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _result;
+    char *_kwnames[] = {  NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,":glGetError")) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":glGetError",_kwnames)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -2598,14 +2712,15 @@ static PyObject *_wrap_glGetError(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glGetFloatv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glGetFloatv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLfloat * _arg1;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "pname","params", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iO:glGetFloatv",&_arg0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iO:glGetFloatv",_kwnames,&_arg0,&_argo1)) 
         return NULL;
     if (_argo1) {
         if (_argo1 == Py_None) { _arg1 = NULL; }
@@ -2624,14 +2739,15 @@ static PyObject *_wrap_glGetFloatv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glGetIntegerv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glGetIntegerv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLint * _arg1;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "pname","params", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iO:glGetIntegerv",&_arg0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iO:glGetIntegerv",_kwnames,&_arg0,&_argo1)) 
         return NULL;
     if (_argo1) {
         if (_argo1 == Py_None) { _arg1 = NULL; }
@@ -2650,15 +2766,16 @@ static PyObject *_wrap_glGetIntegerv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glGetLightfv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glGetLightfv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLfloat * _arg2;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "light","pname","params", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiO:glGetLightfv",&_arg0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiO:glGetLightfv",_kwnames,&_arg0,&_arg1,&_argo2)) 
         return NULL;
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
@@ -2677,15 +2794,16 @@ static PyObject *_wrap_glGetLightfv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glGetLightiv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glGetLightiv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLint * _arg2;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "light","pname","params", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiO:glGetLightiv",&_arg0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiO:glGetLightiv",_kwnames,&_arg0,&_arg1,&_argo2)) 
         return NULL;
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
@@ -2704,15 +2822,16 @@ static PyObject *_wrap_glGetLightiv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glGetMapdv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glGetMapdv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLdouble * _arg2;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "target","query","v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiO:glGetMapdv",&_arg0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiO:glGetMapdv",_kwnames,&_arg0,&_arg1,&_argo2)) 
         return NULL;
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
@@ -2731,15 +2850,16 @@ static PyObject *_wrap_glGetMapdv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glGetMapfv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glGetMapfv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLfloat * _arg2;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "target","query","v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiO:glGetMapfv",&_arg0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiO:glGetMapfv",_kwnames,&_arg0,&_arg1,&_argo2)) 
         return NULL;
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
@@ -2758,15 +2878,16 @@ static PyObject *_wrap_glGetMapfv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glGetMapiv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glGetMapiv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLint * _arg2;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "target","query","v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiO:glGetMapiv",&_arg0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiO:glGetMapiv",_kwnames,&_arg0,&_arg1,&_argo2)) 
         return NULL;
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
@@ -2785,15 +2906,16 @@ static PyObject *_wrap_glGetMapiv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glGetMaterialfv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glGetMaterialfv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLfloat * _arg2;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "face","pname","params", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiO:glGetMaterialfv",&_arg0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiO:glGetMaterialfv",_kwnames,&_arg0,&_arg1,&_argo2)) 
         return NULL;
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
@@ -2812,15 +2934,16 @@ static PyObject *_wrap_glGetMaterialfv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glGetMaterialiv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glGetMaterialiv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLint * _arg2;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "face","pname","params", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiO:glGetMaterialiv",&_arg0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiO:glGetMaterialiv",_kwnames,&_arg0,&_arg1,&_argo2)) 
         return NULL;
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
@@ -2839,14 +2962,15 @@ static PyObject *_wrap_glGetMaterialiv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glGetPixelMapfv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glGetPixelMapfv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLfloat * _arg1;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "map","values", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iO:glGetPixelMapfv",&_arg0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iO:glGetPixelMapfv",_kwnames,&_arg0,&_argo1)) 
         return NULL;
     if (_argo1) {
         if (_argo1 == Py_None) { _arg1 = NULL; }
@@ -2865,14 +2989,15 @@ static PyObject *_wrap_glGetPixelMapfv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glGetPixelMapuiv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glGetPixelMapuiv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLuint * _arg1;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "map","values", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iO:glGetPixelMapuiv",&_arg0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iO:glGetPixelMapuiv",_kwnames,&_arg0,&_argo1)) 
         return NULL;
     if (_argo1) {
         if (_argo1 == Py_None) { _arg1 = NULL; }
@@ -2891,14 +3016,15 @@ static PyObject *_wrap_glGetPixelMapuiv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glGetPixelMapusv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glGetPixelMapusv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLushort * _arg1;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "map","values", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iO:glGetPixelMapusv",&_arg0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iO:glGetPixelMapusv",_kwnames,&_arg0,&_argo1)) 
         return NULL;
     if (_argo1) {
         if (_argo1 == Py_None) { _arg1 = NULL; }
@@ -2917,14 +3043,15 @@ static PyObject *_wrap_glGetPixelMapusv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glGetPointerv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glGetPointerv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLvoid ** _arg1;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "pname","params", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iO:glGetPointerv",&_arg0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iO:glGetPointerv",_kwnames,&_arg0,&_argo1)) 
         return NULL;
     if (_argo1) {
         if (_argo1 == Py_None) { _arg1 = NULL; }
@@ -2943,13 +3070,14 @@ static PyObject *_wrap_glGetPointerv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glGetPolygonStipple(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glGetPolygonStipple(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLubyte * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "mask", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glGetPolygonStipple",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glGetPolygonStipple",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2968,14 +3096,15 @@ static PyObject *_wrap_glGetPolygonStipple(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glGetString(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glGetString(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLubyte * _result;
     GLenum  _arg0;
+    char *_kwnames[] = { "name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"i:glGetString",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:glGetString",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -2992,15 +3121,16 @@ static PyObject *_wrap_glGetString(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glGetTexEnvfv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glGetTexEnvfv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLfloat * _arg2;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "target","pname","params", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiO:glGetTexEnvfv",&_arg0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiO:glGetTexEnvfv",_kwnames,&_arg0,&_arg1,&_argo2)) 
         return NULL;
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
@@ -3019,15 +3149,16 @@ static PyObject *_wrap_glGetTexEnvfv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glGetTexEnviv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glGetTexEnviv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLint * _arg2;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "target","pname","params", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiO:glGetTexEnviv",&_arg0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiO:glGetTexEnviv",_kwnames,&_arg0,&_arg1,&_argo2)) 
         return NULL;
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
@@ -3046,15 +3177,16 @@ static PyObject *_wrap_glGetTexEnviv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glGetTexGendv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glGetTexGendv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLdouble * _arg2;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "coord","pname","params", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiO:glGetTexGendv",&_arg0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiO:glGetTexGendv",_kwnames,&_arg0,&_arg1,&_argo2)) 
         return NULL;
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
@@ -3073,15 +3205,16 @@ static PyObject *_wrap_glGetTexGendv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glGetTexGenfv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glGetTexGenfv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLfloat * _arg2;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "coord","pname","params", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiO:glGetTexGenfv",&_arg0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiO:glGetTexGenfv",_kwnames,&_arg0,&_arg1,&_argo2)) 
         return NULL;
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
@@ -3100,15 +3233,16 @@ static PyObject *_wrap_glGetTexGenfv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glGetTexGeniv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glGetTexGeniv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLint * _arg2;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "coord","pname","params", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiO:glGetTexGeniv",&_arg0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiO:glGetTexGeniv",_kwnames,&_arg0,&_arg1,&_argo2)) 
         return NULL;
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
@@ -3127,7 +3261,7 @@ static PyObject *_wrap_glGetTexGeniv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glGetTexImage(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glGetTexImage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLint  _arg1;
@@ -3135,9 +3269,10 @@ static PyObject *_wrap_glGetTexImage(PyObject *self, PyObject *args) {
     GLenum  _arg3;
     GLvoid * _arg4;
     PyObject * _argo4 = 0;
+    char *_kwnames[] = { "target","level","format","type","pixels", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiiiO:glGetTexImage",&_arg0,&_arg1,&_arg2,&_arg3,&_argo4)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiiiO:glGetTexImage",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3,&_argo4)) 
         return NULL;
     if (_argo4) {
         if (_argo4 == Py_None) { _arg4 = NULL; }
@@ -3156,16 +3291,17 @@ static PyObject *_wrap_glGetTexImage(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glGetTexLevelParameterfv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glGetTexLevelParameterfv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLint  _arg1;
     GLenum  _arg2;
     GLfloat * _arg3;
     PyObject * _argo3 = 0;
+    char *_kwnames[] = { "target","level","pname","params", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiiO:glGetTexLevelParameterfv",&_arg0,&_arg1,&_arg2,&_argo3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiiO:glGetTexLevelParameterfv",_kwnames,&_arg0,&_arg1,&_arg2,&_argo3)) 
         return NULL;
     if (_argo3) {
         if (_argo3 == Py_None) { _arg3 = NULL; }
@@ -3184,16 +3320,17 @@ static PyObject *_wrap_glGetTexLevelParameterfv(PyObject *self, PyObject *args) 
     return _resultobj;
 }
 
-static PyObject *_wrap_glGetTexLevelParameteriv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glGetTexLevelParameteriv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLint  _arg1;
     GLenum  _arg2;
     GLint * _arg3;
     PyObject * _argo3 = 0;
+    char *_kwnames[] = { "target","level","pname","params", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiiO:glGetTexLevelParameteriv",&_arg0,&_arg1,&_arg2,&_argo3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiiO:glGetTexLevelParameteriv",_kwnames,&_arg0,&_arg1,&_arg2,&_argo3)) 
         return NULL;
     if (_argo3) {
         if (_argo3 == Py_None) { _arg3 = NULL; }
@@ -3212,15 +3349,16 @@ static PyObject *_wrap_glGetTexLevelParameteriv(PyObject *self, PyObject *args) 
     return _resultobj;
 }
 
-static PyObject *_wrap_glGetTexParameterfv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glGetTexParameterfv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLfloat * _arg2;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "target","pname","params", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiO:glGetTexParameterfv",&_arg0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiO:glGetTexParameterfv",_kwnames,&_arg0,&_arg1,&_argo2)) 
         return NULL;
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
@@ -3239,15 +3377,16 @@ static PyObject *_wrap_glGetTexParameterfv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glGetTexParameteriv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glGetTexParameteriv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLint * _arg2;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "target","pname","params", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiO:glGetTexParameteriv",&_arg0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiO:glGetTexParameteriv",_kwnames,&_arg0,&_arg1,&_argo2)) 
         return NULL;
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
@@ -3266,13 +3405,14 @@ static PyObject *_wrap_glGetTexParameteriv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glHint(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glHint(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
+    char *_kwnames[] = { "target","mode", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ii:glHint",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ii:glHint",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -3284,12 +3424,13 @@ static PyObject *_wrap_glHint(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glIndexMask(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glIndexMask(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLuint  _arg0;
+    char *_kwnames[] = { "mask", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"i:glIndexMask",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:glIndexMask",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -3301,15 +3442,16 @@ static PyObject *_wrap_glIndexMask(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glIndexPointer(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glIndexPointer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLsizei  _arg1;
     GLvoid * _arg2;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "type","stride","pointer", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiO:glIndexPointer",&_arg0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiO:glIndexPointer",_kwnames,&_arg0,&_arg1,&_argo2)) 
         return NULL;
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
@@ -3328,12 +3470,13 @@ static PyObject *_wrap_glIndexPointer(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glIndexd(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glIndexd(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble  _arg0;
+    char *_kwnames[] = { "c", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"d:glIndexd",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"d:glIndexd",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -3345,13 +3488,14 @@ static PyObject *_wrap_glIndexd(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glIndexdv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glIndexdv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "c", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glIndexdv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glIndexdv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3370,12 +3514,13 @@ static PyObject *_wrap_glIndexdv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glIndexf(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glIndexf(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat  _arg0;
+    char *_kwnames[] = { "c", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"f:glIndexf",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"f:glIndexf",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -3387,13 +3532,14 @@ static PyObject *_wrap_glIndexf(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glIndexfv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glIndexfv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "c", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glIndexfv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glIndexfv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3412,12 +3558,13 @@ static PyObject *_wrap_glIndexfv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glIndexi(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glIndexi(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint  _arg0;
+    char *_kwnames[] = { "c", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"i:glIndexi",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:glIndexi",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -3429,13 +3576,14 @@ static PyObject *_wrap_glIndexi(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glIndexiv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glIndexiv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "c", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glIndexiv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glIndexiv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3454,12 +3602,13 @@ static PyObject *_wrap_glIndexiv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glIndexs(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glIndexs(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLshort  _arg0;
+    char *_kwnames[] = { "c", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"h:glIndexs",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"h:glIndexs",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -3471,13 +3620,14 @@ static PyObject *_wrap_glIndexs(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glIndexsv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glIndexsv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLshort * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "c", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glIndexsv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glIndexsv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3496,12 +3646,13 @@ static PyObject *_wrap_glIndexsv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glIndexub(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glIndexub(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLubyte  _arg0;
+    char *_kwnames[] = { "c", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"b:glIndexub",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"b:glIndexub",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -3513,13 +3664,14 @@ static PyObject *_wrap_glIndexub(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glIndexubv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glIndexubv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLubyte * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "c", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glIndexubv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glIndexubv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3538,11 +3690,12 @@ static PyObject *_wrap_glIndexubv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glInitNames(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glInitNames(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
+    char *_kwnames[] = {  NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,":glInitNames")) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":glInitNames",_kwnames)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -3554,15 +3707,16 @@ static PyObject *_wrap_glInitNames(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glInterleavedArrays(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glInterleavedArrays(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLsizei  _arg1;
     GLvoid * _arg2;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "format","stride","pointer", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiO:glInterleavedArrays",&_arg0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiO:glInterleavedArrays",_kwnames,&_arg0,&_arg1,&_argo2)) 
         return NULL;
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
@@ -3581,13 +3735,14 @@ static PyObject *_wrap_glInterleavedArrays(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glIsEnabled(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glIsEnabled(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLboolean  _result;
     GLenum  _arg0;
+    char *_kwnames[] = { "cap", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"i:glIsEnabled",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:glIsEnabled",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -3598,13 +3753,14 @@ static PyObject *_wrap_glIsEnabled(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glIsList(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glIsList(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLboolean  _result;
     GLuint  _arg0;
+    char *_kwnames[] = { "list", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"i:glIsList",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:glIsList",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -3615,13 +3771,14 @@ static PyObject *_wrap_glIsList(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glIsTexture(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glIsTexture(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLboolean  _result;
     GLuint  _arg0;
+    char *_kwnames[] = { "texture", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"i:glIsTexture",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:glIsTexture",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -3632,13 +3789,14 @@ static PyObject *_wrap_glIsTexture(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glLightModelf(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glLightModelf(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLfloat  _arg1;
+    char *_kwnames[] = { "pname","param", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"if:glLightModelf",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"if:glLightModelf",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -3650,14 +3808,15 @@ static PyObject *_wrap_glLightModelf(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glLightModelfv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glLightModelfv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLfloat * _arg1;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "pname","params", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iO:glLightModelfv",&_arg0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iO:glLightModelfv",_kwnames,&_arg0,&_argo1)) 
         return NULL;
     if (_argo1) {
         if (_argo1 == Py_None) { _arg1 = NULL; }
@@ -3676,13 +3835,14 @@ static PyObject *_wrap_glLightModelfv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glLightModeli(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glLightModeli(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLint  _arg1;
+    char *_kwnames[] = { "pname","param", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ii:glLightModeli",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ii:glLightModeli",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -3694,14 +3854,15 @@ static PyObject *_wrap_glLightModeli(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glLightModeliv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glLightModeliv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLint * _arg1;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "pname","params", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iO:glLightModeliv",&_arg0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iO:glLightModeliv",_kwnames,&_arg0,&_argo1)) 
         return NULL;
     if (_argo1) {
         if (_argo1 == Py_None) { _arg1 = NULL; }
@@ -3720,14 +3881,15 @@ static PyObject *_wrap_glLightModeliv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glLightf(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glLightf(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLfloat  _arg2;
+    char *_kwnames[] = { "light","pname","param", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iif:glLightf",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iif:glLightf",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -3739,15 +3901,16 @@ static PyObject *_wrap_glLightf(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glLightfv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glLightfv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLfloat * _arg2;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "light","pname","params", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiO:glLightfv",&_arg0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiO:glLightfv",_kwnames,&_arg0,&_arg1,&_argo2)) 
         return NULL;
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
@@ -3766,14 +3929,15 @@ static PyObject *_wrap_glLightfv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glLighti(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glLighti(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLint  _arg2;
+    char *_kwnames[] = { "light","pname","param", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iii:glLighti",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iii:glLighti",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -3785,15 +3949,16 @@ static PyObject *_wrap_glLighti(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glLightiv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glLightiv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLint * _arg2;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "light","pname","params", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiO:glLightiv",&_arg0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiO:glLightiv",_kwnames,&_arg0,&_arg1,&_argo2)) 
         return NULL;
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
@@ -3812,13 +3977,14 @@ static PyObject *_wrap_glLightiv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glLineStipple(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glLineStipple(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint  _arg0;
     GLushort  _arg1;
+    char *_kwnames[] = { "factor","pattern", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ih:glLineStipple",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ih:glLineStipple",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -3830,12 +3996,13 @@ static PyObject *_wrap_glLineStipple(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glLineWidth(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glLineWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat  _arg0;
+    char *_kwnames[] = { "width", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"f:glLineWidth",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"f:glLineWidth",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -3847,12 +4014,13 @@ static PyObject *_wrap_glLineWidth(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glListBase(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glListBase(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLuint  _arg0;
+    char *_kwnames[] = { "base", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"i:glListBase",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:glListBase",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -3864,11 +4032,12 @@ static PyObject *_wrap_glListBase(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glLoadIdentity(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glLoadIdentity(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
+    char *_kwnames[] = {  NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,":glLoadIdentity")) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":glLoadIdentity",_kwnames)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -3880,13 +4049,14 @@ static PyObject *_wrap_glLoadIdentity(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glLoadMatrixd(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glLoadMatrixd(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "m", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glLoadMatrixd",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glLoadMatrixd",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3905,13 +4075,14 @@ static PyObject *_wrap_glLoadMatrixd(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glLoadMatrixf(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glLoadMatrixf(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "m", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glLoadMatrixf",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glLoadMatrixf",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3930,12 +4101,13 @@ static PyObject *_wrap_glLoadMatrixf(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glLoadName(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glLoadName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLuint  _arg0;
+    char *_kwnames[] = { "name", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"i:glLoadName",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:glLoadName",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -3947,12 +4119,13 @@ static PyObject *_wrap_glLoadName(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glLogicOp(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glLogicOp(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
+    char *_kwnames[] = { "opcode", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"i:glLogicOp",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:glLogicOp",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -3964,7 +4137,7 @@ static PyObject *_wrap_glLogicOp(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glMap1d(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glMap1d(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLdouble  _arg1;
@@ -3973,9 +4146,10 @@ static PyObject *_wrap_glMap1d(PyObject *self, PyObject *args) {
     GLint  _arg4;
     GLdouble * _arg5;
     PyObject * _argo5 = 0;
+    char *_kwnames[] = { "target","u1","u2","stride","order","points", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iddiiO:glMap1d",&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_argo5)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iddiiO:glMap1d",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_argo5)) 
         return NULL;
     if (_argo5) {
         if (_argo5 == Py_None) { _arg5 = NULL; }
@@ -3994,7 +4168,7 @@ static PyObject *_wrap_glMap1d(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glMap1f(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glMap1f(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLfloat  _arg1;
@@ -4003,9 +4177,10 @@ static PyObject *_wrap_glMap1f(PyObject *self, PyObject *args) {
     GLint  _arg4;
     GLfloat * _arg5;
     PyObject * _argo5 = 0;
+    char *_kwnames[] = { "target","u1","u2","stride","order","points", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iffiiO:glMap1f",&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_argo5)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iffiiO:glMap1f",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_argo5)) 
         return NULL;
     if (_argo5) {
         if (_argo5 == Py_None) { _arg5 = NULL; }
@@ -4024,7 +4199,7 @@ static PyObject *_wrap_glMap1f(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glMap2d(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glMap2d(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLdouble  _arg1;
@@ -4037,9 +4212,10 @@ static PyObject *_wrap_glMap2d(PyObject *self, PyObject *args) {
     GLint  _arg8;
     GLdouble * _arg9;
     PyObject * _argo9 = 0;
+    char *_kwnames[] = { "target","u1","u2","ustride","uorder","v1","v2","vstride","vorder","points", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iddiiddiiO:glMap2d",&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_arg6,&_arg7,&_arg8,&_argo9)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iddiiddiiO:glMap2d",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_arg6,&_arg7,&_arg8,&_argo9)) 
         return NULL;
     if (_argo9) {
         if (_argo9 == Py_None) { _arg9 = NULL; }
@@ -4058,7 +4234,7 @@ static PyObject *_wrap_glMap2d(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glMap2f(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glMap2f(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLfloat  _arg1;
@@ -4071,9 +4247,10 @@ static PyObject *_wrap_glMap2f(PyObject *self, PyObject *args) {
     GLint  _arg8;
     GLfloat * _arg9;
     PyObject * _argo9 = 0;
+    char *_kwnames[] = { "target","u1","u2","ustride","uorder","v1","v2","vstride","vorder","points", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iffiiffiiO:glMap2f",&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_arg6,&_arg7,&_arg8,&_argo9)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iffiiffiiO:glMap2f",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_arg6,&_arg7,&_arg8,&_argo9)) 
         return NULL;
     if (_argo9) {
         if (_argo9 == Py_None) { _arg9 = NULL; }
@@ -4092,14 +4269,15 @@ static PyObject *_wrap_glMap2f(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glMapGrid1d(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glMapGrid1d(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint  _arg0;
     GLdouble  _arg1;
     GLdouble  _arg2;
+    char *_kwnames[] = { "un","u1","u2", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"idd:glMapGrid1d",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"idd:glMapGrid1d",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -4111,14 +4289,15 @@ static PyObject *_wrap_glMapGrid1d(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glMapGrid1f(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glMapGrid1f(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint  _arg0;
     GLfloat  _arg1;
     GLfloat  _arg2;
+    char *_kwnames[] = { "un","u1","u2", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iff:glMapGrid1f",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iff:glMapGrid1f",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -4130,7 +4309,7 @@ static PyObject *_wrap_glMapGrid1f(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glMapGrid2d(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glMapGrid2d(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint  _arg0;
     GLdouble  _arg1;
@@ -4138,9 +4317,10 @@ static PyObject *_wrap_glMapGrid2d(PyObject *self, PyObject *args) {
     GLint  _arg3;
     GLdouble  _arg4;
     GLdouble  _arg5;
+    char *_kwnames[] = { "un","u1","u2","vn","v1","v2", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iddidd:glMapGrid2d",&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iddidd:glMapGrid2d",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -4152,7 +4332,7 @@ static PyObject *_wrap_glMapGrid2d(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glMapGrid2f(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glMapGrid2f(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint  _arg0;
     GLfloat  _arg1;
@@ -4160,9 +4340,10 @@ static PyObject *_wrap_glMapGrid2f(PyObject *self, PyObject *args) {
     GLint  _arg3;
     GLfloat  _arg4;
     GLfloat  _arg5;
+    char *_kwnames[] = { "un","u1","u2","vn","v1","v2", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iffiff:glMapGrid2f",&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iffiff:glMapGrid2f",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -4174,14 +4355,15 @@ static PyObject *_wrap_glMapGrid2f(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glMaterialf(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glMaterialf(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLfloat  _arg2;
+    char *_kwnames[] = { "face","pname","param", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iif:glMaterialf",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iif:glMaterialf",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -4193,15 +4375,16 @@ static PyObject *_wrap_glMaterialf(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glMaterialfv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glMaterialfv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLfloat * _arg2;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "face","pname","params", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiO:glMaterialfv",&_arg0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiO:glMaterialfv",_kwnames,&_arg0,&_arg1,&_argo2)) 
         return NULL;
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
@@ -4220,14 +4403,15 @@ static PyObject *_wrap_glMaterialfv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glMateriali(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glMateriali(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLint  _arg2;
+    char *_kwnames[] = { "face","pname","param", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iii:glMateriali",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iii:glMateriali",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -4239,15 +4423,16 @@ static PyObject *_wrap_glMateriali(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glMaterialiv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glMaterialiv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLint * _arg2;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "face","pname","params", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiO:glMaterialiv",&_arg0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiO:glMaterialiv",_kwnames,&_arg0,&_arg1,&_argo2)) 
         return NULL;
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
@@ -4266,12 +4451,13 @@ static PyObject *_wrap_glMaterialiv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glMatrixMode(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glMatrixMode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
+    char *_kwnames[] = { "mode", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"i:glMatrixMode",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:glMatrixMode",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -4283,13 +4469,14 @@ static PyObject *_wrap_glMatrixMode(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glMultMatrixd(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glMultMatrixd(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "m", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glMultMatrixd",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glMultMatrixd",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4308,13 +4495,14 @@ static PyObject *_wrap_glMultMatrixd(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glMultMatrixf(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glMultMatrixf(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "m", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glMultMatrixf",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glMultMatrixf",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4333,13 +4521,14 @@ static PyObject *_wrap_glMultMatrixf(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glNewList(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glNewList(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLuint  _arg0;
     GLenum  _arg1;
+    char *_kwnames[] = { "list","mode", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ii:glNewList",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ii:glNewList",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -4351,14 +4540,15 @@ static PyObject *_wrap_glNewList(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glNormal3b(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glNormal3b(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLbyte  _arg0;
     GLbyte  _arg1;
     GLbyte  _arg2;
+    char *_kwnames[] = { "nx","ny","nz", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"bbb:glNormal3b",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"bbb:glNormal3b",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -4370,13 +4560,14 @@ static PyObject *_wrap_glNormal3b(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glNormal3bv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glNormal3bv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLbyte * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glNormal3bv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glNormal3bv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4395,14 +4586,15 @@ static PyObject *_wrap_glNormal3bv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glNormal3d(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glNormal3d(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble  _arg0;
     GLdouble  _arg1;
     GLdouble  _arg2;
+    char *_kwnames[] = { "nx","ny","nz", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ddd:glNormal3d",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ddd:glNormal3d",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -4414,13 +4606,14 @@ static PyObject *_wrap_glNormal3d(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glNormal3dv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glNormal3dv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glNormal3dv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glNormal3dv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4439,14 +4632,15 @@ static PyObject *_wrap_glNormal3dv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glNormal3f(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glNormal3f(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat  _arg0;
     GLfloat  _arg1;
     GLfloat  _arg2;
+    char *_kwnames[] = { "nx","ny","nz", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"fff:glNormal3f",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"fff:glNormal3f",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -4458,13 +4652,14 @@ static PyObject *_wrap_glNormal3f(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glNormal3fv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glNormal3fv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glNormal3fv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glNormal3fv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4483,14 +4678,15 @@ static PyObject *_wrap_glNormal3fv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glNormal3i(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glNormal3i(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint  _arg0;
     GLint  _arg1;
     GLint  _arg2;
+    char *_kwnames[] = { "nx","ny","nz", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iii:glNormal3i",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iii:glNormal3i",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -4502,13 +4698,14 @@ static PyObject *_wrap_glNormal3i(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glNormal3iv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glNormal3iv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glNormal3iv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glNormal3iv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4527,14 +4724,15 @@ static PyObject *_wrap_glNormal3iv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glNormal3s(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glNormal3s(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLshort  _arg0;
     GLshort  _arg1;
     GLshort  _arg2;
+    char *_kwnames[] = { "nx","ny","nz", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"hhh:glNormal3s",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"hhh:glNormal3s",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -4546,13 +4744,14 @@ static PyObject *_wrap_glNormal3s(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glNormal3sv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glNormal3sv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLshort * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glNormal3sv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glNormal3sv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4571,15 +4770,16 @@ static PyObject *_wrap_glNormal3sv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glNormalPointer(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glNormalPointer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLsizei  _arg1;
     GLvoid * _arg2;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "type","stride","pointer", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiO:glNormalPointer",&_arg0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiO:glNormalPointer",_kwnames,&_arg0,&_arg1,&_argo2)) 
         return NULL;
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
@@ -4598,7 +4798,7 @@ static PyObject *_wrap_glNormalPointer(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glOrtho(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glOrtho(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble  _arg0;
     GLdouble  _arg1;
@@ -4606,9 +4806,10 @@ static PyObject *_wrap_glOrtho(PyObject *self, PyObject *args) {
     GLdouble  _arg3;
     GLdouble  _arg4;
     GLdouble  _arg5;
+    char *_kwnames[] = { "left","right","bottom","top","zNear","zFar", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"dddddd:glOrtho",&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"dddddd:glOrtho",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -4620,12 +4821,13 @@ static PyObject *_wrap_glOrtho(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glPassThrough(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glPassThrough(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat  _arg0;
+    char *_kwnames[] = { "token", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"f:glPassThrough",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"f:glPassThrough",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -4637,15 +4839,16 @@ static PyObject *_wrap_glPassThrough(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glPixelMapfv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glPixelMapfv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLsizei  _arg1;
     GLfloat * _arg2;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "map","mapsize","values", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiO:glPixelMapfv",&_arg0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiO:glPixelMapfv",_kwnames,&_arg0,&_arg1,&_argo2)) 
         return NULL;
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
@@ -4664,15 +4867,16 @@ static PyObject *_wrap_glPixelMapfv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glPixelMapuiv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glPixelMapuiv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLsizei  _arg1;
     GLuint * _arg2;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "map","mapsize","values", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiO:glPixelMapuiv",&_arg0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiO:glPixelMapuiv",_kwnames,&_arg0,&_arg1,&_argo2)) 
         return NULL;
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
@@ -4691,15 +4895,16 @@ static PyObject *_wrap_glPixelMapuiv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glPixelMapusv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glPixelMapusv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLsizei  _arg1;
     GLushort * _arg2;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "map","mapsize","values", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiO:glPixelMapusv",&_arg0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiO:glPixelMapusv",_kwnames,&_arg0,&_arg1,&_argo2)) 
         return NULL;
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
@@ -4718,13 +4923,14 @@ static PyObject *_wrap_glPixelMapusv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glPixelStoref(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glPixelStoref(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLfloat  _arg1;
+    char *_kwnames[] = { "pname","param", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"if:glPixelStoref",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"if:glPixelStoref",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -4736,13 +4942,14 @@ static PyObject *_wrap_glPixelStoref(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glPixelStorei(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glPixelStorei(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLint  _arg1;
+    char *_kwnames[] = { "pname","param", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ii:glPixelStorei",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ii:glPixelStorei",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -4754,13 +4961,14 @@ static PyObject *_wrap_glPixelStorei(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glPixelTransferf(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glPixelTransferf(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLfloat  _arg1;
+    char *_kwnames[] = { "pname","param", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"if:glPixelTransferf",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"if:glPixelTransferf",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -4772,13 +4980,14 @@ static PyObject *_wrap_glPixelTransferf(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glPixelTransferi(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glPixelTransferi(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLint  _arg1;
+    char *_kwnames[] = { "pname","param", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ii:glPixelTransferi",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ii:glPixelTransferi",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -4790,13 +4999,14 @@ static PyObject *_wrap_glPixelTransferi(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glPixelZoom(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glPixelZoom(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat  _arg0;
     GLfloat  _arg1;
+    char *_kwnames[] = { "xfactor","yfactor", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ff:glPixelZoom",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ff:glPixelZoom",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -4808,12 +5018,13 @@ static PyObject *_wrap_glPixelZoom(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glPointSize(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glPointSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat  _arg0;
+    char *_kwnames[] = { "size", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"f:glPointSize",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"f:glPointSize",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -4825,13 +5036,14 @@ static PyObject *_wrap_glPointSize(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glPolygonMode(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glPolygonMode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
+    char *_kwnames[] = { "face","mode", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ii:glPolygonMode",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ii:glPolygonMode",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -4843,13 +5055,14 @@ static PyObject *_wrap_glPolygonMode(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glPolygonOffset(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glPolygonOffset(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat  _arg0;
     GLfloat  _arg1;
+    char *_kwnames[] = { "factor","units", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ff:glPolygonOffset",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ff:glPolygonOffset",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -4861,13 +5074,14 @@ static PyObject *_wrap_glPolygonOffset(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glPolygonStipple(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glPolygonStipple(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLubyte * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "mask", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glPolygonStipple",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glPolygonStipple",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4886,11 +5100,12 @@ static PyObject *_wrap_glPolygonStipple(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glPopAttrib(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glPopAttrib(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
+    char *_kwnames[] = {  NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,":glPopAttrib")) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":glPopAttrib",_kwnames)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -4902,11 +5117,12 @@ static PyObject *_wrap_glPopAttrib(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glPopClientAttrib(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glPopClientAttrib(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
+    char *_kwnames[] = {  NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,":glPopClientAttrib")) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":glPopClientAttrib",_kwnames)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -4918,11 +5134,12 @@ static PyObject *_wrap_glPopClientAttrib(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glPopMatrix(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glPopMatrix(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
+    char *_kwnames[] = {  NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,":glPopMatrix")) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":glPopMatrix",_kwnames)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -4934,11 +5151,12 @@ static PyObject *_wrap_glPopMatrix(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glPopName(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glPopName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
+    char *_kwnames[] = {  NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,":glPopName")) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":glPopName",_kwnames)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -4950,16 +5168,17 @@ static PyObject *_wrap_glPopName(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glPrioritizeTextures(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glPrioritizeTextures(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLsizei  _arg0;
     GLuint * _arg1;
     GLclampf * _arg2;
     PyObject * _argo1 = 0;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "n","textures","priorities", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iOO:glPrioritizeTextures",&_arg0,&_argo1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iOO:glPrioritizeTextures",_kwnames,&_arg0,&_argo1,&_argo2)) 
         return NULL;
     if (_argo1) {
         if (_argo1 == Py_None) { _arg1 = NULL; }
@@ -4985,12 +5204,13 @@ static PyObject *_wrap_glPrioritizeTextures(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glPushAttrib(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glPushAttrib(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLbitfield  _arg0;
+    char *_kwnames[] = { "mask", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"i:glPushAttrib",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:glPushAttrib",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -5002,12 +5222,13 @@ static PyObject *_wrap_glPushAttrib(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glPushClientAttrib(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glPushClientAttrib(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLbitfield  _arg0;
+    char *_kwnames[] = { "mask", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"i:glPushClientAttrib",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:glPushClientAttrib",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -5019,11 +5240,12 @@ static PyObject *_wrap_glPushClientAttrib(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glPushMatrix(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glPushMatrix(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
+    char *_kwnames[] = {  NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,":glPushMatrix")) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":glPushMatrix",_kwnames)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -5035,12 +5257,13 @@ static PyObject *_wrap_glPushMatrix(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glPushName(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glPushName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLuint  _arg0;
+    char *_kwnames[] = { "name", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"i:glPushName",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:glPushName",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -5052,13 +5275,14 @@ static PyObject *_wrap_glPushName(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glRasterPos2d(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glRasterPos2d(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble  _arg0;
     GLdouble  _arg1;
+    char *_kwnames[] = { "x","y", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"dd:glRasterPos2d",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"dd:glRasterPos2d",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -5070,13 +5294,14 @@ static PyObject *_wrap_glRasterPos2d(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glRasterPos2dv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glRasterPos2dv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glRasterPos2dv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glRasterPos2dv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5095,13 +5320,14 @@ static PyObject *_wrap_glRasterPos2dv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glRasterPos2f(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glRasterPos2f(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat  _arg0;
     GLfloat  _arg1;
+    char *_kwnames[] = { "x","y", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ff:glRasterPos2f",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ff:glRasterPos2f",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -5113,13 +5339,14 @@ static PyObject *_wrap_glRasterPos2f(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glRasterPos2fv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glRasterPos2fv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glRasterPos2fv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glRasterPos2fv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5138,13 +5365,14 @@ static PyObject *_wrap_glRasterPos2fv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glRasterPos2i(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glRasterPos2i(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint  _arg0;
     GLint  _arg1;
+    char *_kwnames[] = { "x","y", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ii:glRasterPos2i",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ii:glRasterPos2i",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -5156,13 +5384,14 @@ static PyObject *_wrap_glRasterPos2i(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glRasterPos2iv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glRasterPos2iv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glRasterPos2iv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glRasterPos2iv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5181,13 +5410,14 @@ static PyObject *_wrap_glRasterPos2iv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glRasterPos2s(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glRasterPos2s(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLshort  _arg0;
     GLshort  _arg1;
+    char *_kwnames[] = { "x","y", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"hh:glRasterPos2s",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"hh:glRasterPos2s",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -5199,13 +5429,14 @@ static PyObject *_wrap_glRasterPos2s(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glRasterPos2sv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glRasterPos2sv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLshort * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glRasterPos2sv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glRasterPos2sv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5224,14 +5455,15 @@ static PyObject *_wrap_glRasterPos2sv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glRasterPos3d(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glRasterPos3d(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble  _arg0;
     GLdouble  _arg1;
     GLdouble  _arg2;
+    char *_kwnames[] = { "x","y","z", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ddd:glRasterPos3d",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ddd:glRasterPos3d",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -5243,13 +5475,14 @@ static PyObject *_wrap_glRasterPos3d(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glRasterPos3dv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glRasterPos3dv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glRasterPos3dv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glRasterPos3dv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5268,14 +5501,15 @@ static PyObject *_wrap_glRasterPos3dv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glRasterPos3f(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glRasterPos3f(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat  _arg0;
     GLfloat  _arg1;
     GLfloat  _arg2;
+    char *_kwnames[] = { "x","y","z", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"fff:glRasterPos3f",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"fff:glRasterPos3f",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -5287,13 +5521,14 @@ static PyObject *_wrap_glRasterPos3f(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glRasterPos3fv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glRasterPos3fv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glRasterPos3fv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glRasterPos3fv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5312,14 +5547,15 @@ static PyObject *_wrap_glRasterPos3fv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glRasterPos3i(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glRasterPos3i(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint  _arg0;
     GLint  _arg1;
     GLint  _arg2;
+    char *_kwnames[] = { "x","y","z", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iii:glRasterPos3i",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iii:glRasterPos3i",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -5331,13 +5567,14 @@ static PyObject *_wrap_glRasterPos3i(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glRasterPos3iv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glRasterPos3iv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glRasterPos3iv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glRasterPos3iv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5356,14 +5593,15 @@ static PyObject *_wrap_glRasterPos3iv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glRasterPos3s(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glRasterPos3s(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLshort  _arg0;
     GLshort  _arg1;
     GLshort  _arg2;
+    char *_kwnames[] = { "x","y","z", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"hhh:glRasterPos3s",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"hhh:glRasterPos3s",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -5375,13 +5613,14 @@ static PyObject *_wrap_glRasterPos3s(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glRasterPos3sv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glRasterPos3sv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLshort * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glRasterPos3sv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glRasterPos3sv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5400,15 +5639,16 @@ static PyObject *_wrap_glRasterPos3sv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glRasterPos4d(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glRasterPos4d(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble  _arg0;
     GLdouble  _arg1;
     GLdouble  _arg2;
     GLdouble  _arg3;
+    char *_kwnames[] = { "x","y","z","w", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"dddd:glRasterPos4d",&_arg0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"dddd:glRasterPos4d",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -5420,13 +5660,14 @@ static PyObject *_wrap_glRasterPos4d(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glRasterPos4dv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glRasterPos4dv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glRasterPos4dv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glRasterPos4dv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5445,15 +5686,16 @@ static PyObject *_wrap_glRasterPos4dv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glRasterPos4f(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glRasterPos4f(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat  _arg0;
     GLfloat  _arg1;
     GLfloat  _arg2;
     GLfloat  _arg3;
+    char *_kwnames[] = { "x","y","z","w", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ffff:glRasterPos4f",&_arg0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ffff:glRasterPos4f",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -5465,13 +5707,14 @@ static PyObject *_wrap_glRasterPos4f(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glRasterPos4fv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glRasterPos4fv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glRasterPos4fv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glRasterPos4fv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5490,15 +5733,16 @@ static PyObject *_wrap_glRasterPos4fv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glRasterPos4i(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glRasterPos4i(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint  _arg0;
     GLint  _arg1;
     GLint  _arg2;
     GLint  _arg3;
+    char *_kwnames[] = { "x","y","z","w", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiii:glRasterPos4i",&_arg0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiii:glRasterPos4i",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -5510,13 +5754,14 @@ static PyObject *_wrap_glRasterPos4i(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glRasterPos4iv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glRasterPos4iv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glRasterPos4iv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glRasterPos4iv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5535,15 +5780,16 @@ static PyObject *_wrap_glRasterPos4iv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glRasterPos4s(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glRasterPos4s(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLshort  _arg0;
     GLshort  _arg1;
     GLshort  _arg2;
     GLshort  _arg3;
+    char *_kwnames[] = { "x","y","z","w", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"hhhh:glRasterPos4s",&_arg0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"hhhh:glRasterPos4s",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -5555,13 +5801,14 @@ static PyObject *_wrap_glRasterPos4s(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glRasterPos4sv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glRasterPos4sv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLshort * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glRasterPos4sv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glRasterPos4sv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5580,12 +5827,13 @@ static PyObject *_wrap_glRasterPos4sv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glReadBuffer(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glReadBuffer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
+    char *_kwnames[] = { "mode", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"i:glReadBuffer",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:glReadBuffer",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -5597,7 +5845,7 @@ static PyObject *_wrap_glReadBuffer(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glReadPixels(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glReadPixels(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint  _arg0;
     GLint  _arg1;
@@ -5607,9 +5855,10 @@ static PyObject *_wrap_glReadPixels(PyObject *self, PyObject *args) {
     GLenum  _arg5;
     GLvoid * _arg6;
     PyObject * _argo6 = 0;
+    char *_kwnames[] = { "x","y","width","height","format","type","pixels", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiiiiiO:glReadPixels",&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_argo6)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiiiiiO:glReadPixels",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_argo6)) 
         return NULL;
     if (_argo6) {
         if (_argo6 == Py_None) { _arg6 = NULL; }
@@ -5628,15 +5877,16 @@ static PyObject *_wrap_glReadPixels(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glRectd(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glRectd(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble  _arg0;
     GLdouble  _arg1;
     GLdouble  _arg2;
     GLdouble  _arg3;
+    char *_kwnames[] = { "x1","y1","x2","y2", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"dddd:glRectd",&_arg0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"dddd:glRectd",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -5648,15 +5898,16 @@ static PyObject *_wrap_glRectd(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glRectdv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glRectdv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble * _arg0;
     GLdouble * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "v1","v2", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:glRectdv",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:glRectdv",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5682,15 +5933,16 @@ static PyObject *_wrap_glRectdv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glRectf(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glRectf(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat  _arg0;
     GLfloat  _arg1;
     GLfloat  _arg2;
     GLfloat  _arg3;
+    char *_kwnames[] = { "x1","y1","x2","y2", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ffff:glRectf",&_arg0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ffff:glRectf",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -5702,15 +5954,16 @@ static PyObject *_wrap_glRectf(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glRectfv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glRectfv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat * _arg0;
     GLfloat * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "v1","v2", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:glRectfv",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:glRectfv",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5736,15 +5989,16 @@ static PyObject *_wrap_glRectfv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glRecti(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glRecti(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint  _arg0;
     GLint  _arg1;
     GLint  _arg2;
     GLint  _arg3;
+    char *_kwnames[] = { "x1","y1","x2","y2", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiii:glRecti",&_arg0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiii:glRecti",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -5756,15 +6010,16 @@ static PyObject *_wrap_glRecti(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glRectiv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glRectiv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint * _arg0;
     GLint * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "v1","v2", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:glRectiv",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:glRectiv",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5790,15 +6045,16 @@ static PyObject *_wrap_glRectiv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glRects(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glRects(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLshort  _arg0;
     GLshort  _arg1;
     GLshort  _arg2;
     GLshort  _arg3;
+    char *_kwnames[] = { "x1","y1","x2","y2", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"hhhh:glRects",&_arg0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"hhhh:glRects",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -5810,15 +6066,16 @@ static PyObject *_wrap_glRects(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glRectsv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glRectsv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLshort * _arg0;
     GLshort * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "v1","v2", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:glRectsv",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:glRectsv",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5844,13 +6101,14 @@ static PyObject *_wrap_glRectsv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glRenderMode(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glRenderMode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint  _result;
     GLenum  _arg0;
+    char *_kwnames[] = { "mode", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"i:glRenderMode",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:glRenderMode",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -5861,15 +6119,16 @@ static PyObject *_wrap_glRenderMode(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glRotated(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glRotated(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble  _arg0;
     GLdouble  _arg1;
     GLdouble  _arg2;
     GLdouble  _arg3;
+    char *_kwnames[] = { "angle","x","y","z", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"dddd:glRotated",&_arg0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"dddd:glRotated",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -5881,15 +6140,16 @@ static PyObject *_wrap_glRotated(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glRotatef(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glRotatef(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat  _arg0;
     GLfloat  _arg1;
     GLfloat  _arg2;
     GLfloat  _arg3;
+    char *_kwnames[] = { "angle","x","y","z", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ffff:glRotatef",&_arg0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ffff:glRotatef",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -5901,14 +6161,15 @@ static PyObject *_wrap_glRotatef(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glScaled(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glScaled(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble  _arg0;
     GLdouble  _arg1;
     GLdouble  _arg2;
+    char *_kwnames[] = { "x","y","z", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ddd:glScaled",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ddd:glScaled",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -5920,14 +6181,15 @@ static PyObject *_wrap_glScaled(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glScalef(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glScalef(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat  _arg0;
     GLfloat  _arg1;
     GLfloat  _arg2;
+    char *_kwnames[] = { "x","y","z", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"fff:glScalef",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"fff:glScalef",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -5939,15 +6201,16 @@ static PyObject *_wrap_glScalef(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glScissor(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glScissor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint  _arg0;
     GLint  _arg1;
     GLsizei  _arg2;
     GLsizei  _arg3;
+    char *_kwnames[] = { "x","y","width","height", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiii:glScissor",&_arg0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiii:glScissor",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -5959,14 +6222,15 @@ static PyObject *_wrap_glScissor(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glSelectBuffer(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glSelectBuffer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLsizei  _arg0;
     GLuint * _arg1;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "size","buffer", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iO:glSelectBuffer",&_arg0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iO:glSelectBuffer",_kwnames,&_arg0,&_argo1)) 
         return NULL;
     if (_argo1) {
         if (_argo1 == Py_None) { _arg1 = NULL; }
@@ -5985,12 +6249,13 @@ static PyObject *_wrap_glSelectBuffer(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glShadeModel(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glShadeModel(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
+    char *_kwnames[] = { "mode", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"i:glShadeModel",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:glShadeModel",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -6002,14 +6267,15 @@ static PyObject *_wrap_glShadeModel(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glStencilFunc(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glStencilFunc(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLint  _arg1;
     GLuint  _arg2;
+    char *_kwnames[] = { "func","ref","mask", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iii:glStencilFunc",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iii:glStencilFunc",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -6021,12 +6287,13 @@ static PyObject *_wrap_glStencilFunc(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glStencilMask(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glStencilMask(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLuint  _arg0;
+    char *_kwnames[] = { "mask", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"i:glStencilMask",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:glStencilMask",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -6038,14 +6305,15 @@ static PyObject *_wrap_glStencilMask(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glStencilOp(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glStencilOp(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLenum  _arg2;
+    char *_kwnames[] = { "fail","zfail","zpass", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iii:glStencilOp",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iii:glStencilOp",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -6057,12 +6325,13 @@ static PyObject *_wrap_glStencilOp(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexCoord1d(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexCoord1d(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble  _arg0;
+    char *_kwnames[] = { "s", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"d:glTexCoord1d",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"d:glTexCoord1d",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -6074,13 +6343,14 @@ static PyObject *_wrap_glTexCoord1d(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexCoord1dv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexCoord1dv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glTexCoord1dv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glTexCoord1dv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -6099,12 +6369,13 @@ static PyObject *_wrap_glTexCoord1dv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexCoord1f(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexCoord1f(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat  _arg0;
+    char *_kwnames[] = { "s", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"f:glTexCoord1f",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"f:glTexCoord1f",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -6116,13 +6387,14 @@ static PyObject *_wrap_glTexCoord1f(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexCoord1fv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexCoord1fv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glTexCoord1fv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glTexCoord1fv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -6141,12 +6413,13 @@ static PyObject *_wrap_glTexCoord1fv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexCoord1i(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexCoord1i(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint  _arg0;
+    char *_kwnames[] = { "s", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"i:glTexCoord1i",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:glTexCoord1i",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -6158,13 +6431,14 @@ static PyObject *_wrap_glTexCoord1i(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexCoord1iv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexCoord1iv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glTexCoord1iv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glTexCoord1iv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -6183,12 +6457,13 @@ static PyObject *_wrap_glTexCoord1iv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexCoord1s(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexCoord1s(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLshort  _arg0;
+    char *_kwnames[] = { "s", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"h:glTexCoord1s",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"h:glTexCoord1s",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -6200,13 +6475,14 @@ static PyObject *_wrap_glTexCoord1s(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexCoord1sv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexCoord1sv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLshort * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glTexCoord1sv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glTexCoord1sv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -6225,13 +6501,14 @@ static PyObject *_wrap_glTexCoord1sv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexCoord2d(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexCoord2d(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble  _arg0;
     GLdouble  _arg1;
+    char *_kwnames[] = { "s","t", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"dd:glTexCoord2d",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"dd:glTexCoord2d",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -6243,13 +6520,14 @@ static PyObject *_wrap_glTexCoord2d(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexCoord2dv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexCoord2dv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glTexCoord2dv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glTexCoord2dv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -6268,13 +6546,14 @@ static PyObject *_wrap_glTexCoord2dv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexCoord2f(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexCoord2f(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat  _arg0;
     GLfloat  _arg1;
+    char *_kwnames[] = { "s","t", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ff:glTexCoord2f",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ff:glTexCoord2f",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -6286,13 +6565,14 @@ static PyObject *_wrap_glTexCoord2f(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexCoord2fv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexCoord2fv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glTexCoord2fv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glTexCoord2fv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -6311,13 +6591,14 @@ static PyObject *_wrap_glTexCoord2fv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexCoord2i(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexCoord2i(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint  _arg0;
     GLint  _arg1;
+    char *_kwnames[] = { "s","t", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ii:glTexCoord2i",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ii:glTexCoord2i",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -6329,13 +6610,14 @@ static PyObject *_wrap_glTexCoord2i(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexCoord2iv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexCoord2iv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glTexCoord2iv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glTexCoord2iv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -6354,13 +6636,14 @@ static PyObject *_wrap_glTexCoord2iv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexCoord2s(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexCoord2s(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLshort  _arg0;
     GLshort  _arg1;
+    char *_kwnames[] = { "s","t", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"hh:glTexCoord2s",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"hh:glTexCoord2s",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -6372,13 +6655,14 @@ static PyObject *_wrap_glTexCoord2s(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexCoord2sv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexCoord2sv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLshort * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glTexCoord2sv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glTexCoord2sv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -6397,14 +6681,15 @@ static PyObject *_wrap_glTexCoord2sv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexCoord3d(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexCoord3d(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble  _arg0;
     GLdouble  _arg1;
     GLdouble  _arg2;
+    char *_kwnames[] = { "s","t","r", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ddd:glTexCoord3d",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ddd:glTexCoord3d",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -6416,13 +6701,14 @@ static PyObject *_wrap_glTexCoord3d(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexCoord3dv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexCoord3dv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glTexCoord3dv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glTexCoord3dv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -6441,14 +6727,15 @@ static PyObject *_wrap_glTexCoord3dv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexCoord3f(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexCoord3f(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat  _arg0;
     GLfloat  _arg1;
     GLfloat  _arg2;
+    char *_kwnames[] = { "s","t","r", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"fff:glTexCoord3f",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"fff:glTexCoord3f",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -6460,13 +6747,14 @@ static PyObject *_wrap_glTexCoord3f(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexCoord3fv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexCoord3fv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glTexCoord3fv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glTexCoord3fv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -6485,14 +6773,15 @@ static PyObject *_wrap_glTexCoord3fv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexCoord3i(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexCoord3i(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint  _arg0;
     GLint  _arg1;
     GLint  _arg2;
+    char *_kwnames[] = { "s","t","r", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iii:glTexCoord3i",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iii:glTexCoord3i",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -6504,13 +6793,14 @@ static PyObject *_wrap_glTexCoord3i(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexCoord3iv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexCoord3iv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glTexCoord3iv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glTexCoord3iv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -6529,14 +6819,15 @@ static PyObject *_wrap_glTexCoord3iv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexCoord3s(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexCoord3s(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLshort  _arg0;
     GLshort  _arg1;
     GLshort  _arg2;
+    char *_kwnames[] = { "s","t","r", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"hhh:glTexCoord3s",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"hhh:glTexCoord3s",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -6548,13 +6839,14 @@ static PyObject *_wrap_glTexCoord3s(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexCoord3sv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexCoord3sv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLshort * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glTexCoord3sv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glTexCoord3sv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -6573,15 +6865,16 @@ static PyObject *_wrap_glTexCoord3sv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexCoord4d(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexCoord4d(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble  _arg0;
     GLdouble  _arg1;
     GLdouble  _arg2;
     GLdouble  _arg3;
+    char *_kwnames[] = { "s","t","r","q", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"dddd:glTexCoord4d",&_arg0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"dddd:glTexCoord4d",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -6593,13 +6886,14 @@ static PyObject *_wrap_glTexCoord4d(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexCoord4dv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexCoord4dv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glTexCoord4dv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glTexCoord4dv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -6618,15 +6912,16 @@ static PyObject *_wrap_glTexCoord4dv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexCoord4f(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexCoord4f(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat  _arg0;
     GLfloat  _arg1;
     GLfloat  _arg2;
     GLfloat  _arg3;
+    char *_kwnames[] = { "s","t","r","q", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ffff:glTexCoord4f",&_arg0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ffff:glTexCoord4f",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -6638,13 +6933,14 @@ static PyObject *_wrap_glTexCoord4f(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexCoord4fv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexCoord4fv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glTexCoord4fv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glTexCoord4fv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -6663,15 +6959,16 @@ static PyObject *_wrap_glTexCoord4fv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexCoord4i(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexCoord4i(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint  _arg0;
     GLint  _arg1;
     GLint  _arg2;
     GLint  _arg3;
+    char *_kwnames[] = { "s","t","r","q", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiii:glTexCoord4i",&_arg0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiii:glTexCoord4i",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -6683,13 +6980,14 @@ static PyObject *_wrap_glTexCoord4i(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexCoord4iv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexCoord4iv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glTexCoord4iv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glTexCoord4iv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -6708,15 +7006,16 @@ static PyObject *_wrap_glTexCoord4iv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexCoord4s(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexCoord4s(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLshort  _arg0;
     GLshort  _arg1;
     GLshort  _arg2;
     GLshort  _arg3;
+    char *_kwnames[] = { "s","t","r","q", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"hhhh:glTexCoord4s",&_arg0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"hhhh:glTexCoord4s",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -6728,13 +7027,14 @@ static PyObject *_wrap_glTexCoord4s(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexCoord4sv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexCoord4sv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLshort * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glTexCoord4sv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glTexCoord4sv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -6753,16 +7053,17 @@ static PyObject *_wrap_glTexCoord4sv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexCoordPointer(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexCoordPointer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint  _arg0;
     GLenum  _arg1;
     GLsizei  _arg2;
     GLvoid * _arg3;
     PyObject * _argo3 = 0;
+    char *_kwnames[] = { "size","type","stride","pointer", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiiO:glTexCoordPointer",&_arg0,&_arg1,&_arg2,&_argo3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiiO:glTexCoordPointer",_kwnames,&_arg0,&_arg1,&_arg2,&_argo3)) 
         return NULL;
     if (_argo3) {
         if (_argo3 == Py_None) { _arg3 = NULL; }
@@ -6781,14 +7082,15 @@ static PyObject *_wrap_glTexCoordPointer(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexEnvf(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexEnvf(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLfloat  _arg2;
+    char *_kwnames[] = { "target","pname","param", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iif:glTexEnvf",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iif:glTexEnvf",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -6800,15 +7102,16 @@ static PyObject *_wrap_glTexEnvf(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexEnvfv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexEnvfv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLfloat * _arg2;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "target","pname","params", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiO:glTexEnvfv",&_arg0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiO:glTexEnvfv",_kwnames,&_arg0,&_arg1,&_argo2)) 
         return NULL;
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
@@ -6827,14 +7130,15 @@ static PyObject *_wrap_glTexEnvfv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexEnvi(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexEnvi(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLint  _arg2;
+    char *_kwnames[] = { "target","pname","param", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iii:glTexEnvi",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iii:glTexEnvi",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -6846,15 +7150,16 @@ static PyObject *_wrap_glTexEnvi(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexEnviv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexEnviv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLint * _arg2;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "target","pname","params", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiO:glTexEnviv",&_arg0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiO:glTexEnviv",_kwnames,&_arg0,&_arg1,&_argo2)) 
         return NULL;
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
@@ -6873,14 +7178,15 @@ static PyObject *_wrap_glTexEnviv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexGend(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexGend(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLdouble  _arg2;
+    char *_kwnames[] = { "coord","pname","param", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iid:glTexGend",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iid:glTexGend",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -6892,15 +7198,16 @@ static PyObject *_wrap_glTexGend(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexGendv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexGendv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLdouble * _arg2;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "coord","pname","params", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiO:glTexGendv",&_arg0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiO:glTexGendv",_kwnames,&_arg0,&_arg1,&_argo2)) 
         return NULL;
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
@@ -6919,14 +7226,15 @@ static PyObject *_wrap_glTexGendv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexGenf(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexGenf(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLfloat  _arg2;
+    char *_kwnames[] = { "coord","pname","param", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iif:glTexGenf",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iif:glTexGenf",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -6938,15 +7246,16 @@ static PyObject *_wrap_glTexGenf(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexGenfv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexGenfv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLfloat * _arg2;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "coord","pname","params", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiO:glTexGenfv",&_arg0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiO:glTexGenfv",_kwnames,&_arg0,&_arg1,&_argo2)) 
         return NULL;
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
@@ -6965,14 +7274,15 @@ static PyObject *_wrap_glTexGenfv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexGeni(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexGeni(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLint  _arg2;
+    char *_kwnames[] = { "coord","pname","param", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iii:glTexGeni",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iii:glTexGeni",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -6984,15 +7294,16 @@ static PyObject *_wrap_glTexGeni(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexGeniv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexGeniv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLint * _arg2;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "coord","pname","params", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiO:glTexGeniv",&_arg0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiO:glTexGeniv",_kwnames,&_arg0,&_arg1,&_argo2)) 
         return NULL;
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
@@ -7011,7 +7322,7 @@ static PyObject *_wrap_glTexGeniv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexImage1D(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexImage1D(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLint  _arg1;
@@ -7022,9 +7333,10 @@ static PyObject *_wrap_glTexImage1D(PyObject *self, PyObject *args) {
     GLenum  _arg6;
     GLvoid * _arg7;
     PyObject * _argo7 = 0;
+    char *_kwnames[] = { "target","level","internalformat","width","border","format","type","pixels", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiiiiiiO:glTexImage1D",&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_arg6,&_argo7)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiiiiiiO:glTexImage1D",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_arg6,&_argo7)) 
         return NULL;
     if (_argo7) {
         if (_argo7 == Py_None) { _arg7 = NULL; }
@@ -7043,7 +7355,7 @@ static PyObject *_wrap_glTexImage1D(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexImage2D(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexImage2D(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLint  _arg1;
@@ -7055,9 +7367,10 @@ static PyObject *_wrap_glTexImage2D(PyObject *self, PyObject *args) {
     GLenum  _arg7;
     GLvoid * _arg8;
     PyObject * _argo8 = 0;
+    char *_kwnames[] = { "target","level","internalformat","width","height","border","format","type","pixels", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiiiiiiiO:glTexImage2D",&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_arg6,&_arg7,&_argo8)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiiiiiiiO:glTexImage2D",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_arg6,&_arg7,&_argo8)) 
         return NULL;
     if (_argo8) {
         if (_argo8 == Py_None) { _arg8 = NULL; }
@@ -7076,14 +7389,15 @@ static PyObject *_wrap_glTexImage2D(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexParameterf(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexParameterf(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLfloat  _arg2;
+    char *_kwnames[] = { "target","pname","param", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iif:glTexParameterf",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iif:glTexParameterf",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -7095,15 +7409,16 @@ static PyObject *_wrap_glTexParameterf(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexParameterfv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexParameterfv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLfloat * _arg2;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "target","pname","params", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiO:glTexParameterfv",&_arg0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiO:glTexParameterfv",_kwnames,&_arg0,&_arg1,&_argo2)) 
         return NULL;
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
@@ -7122,14 +7437,15 @@ static PyObject *_wrap_glTexParameterfv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexParameteri(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexParameteri(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLint  _arg2;
+    char *_kwnames[] = { "target","pname","param", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iii:glTexParameteri",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iii:glTexParameteri",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -7141,15 +7457,16 @@ static PyObject *_wrap_glTexParameteri(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexParameteriv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexParameteriv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLenum  _arg1;
     GLint * _arg2;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "target","pname","params", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiO:glTexParameteriv",&_arg0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiO:glTexParameteriv",_kwnames,&_arg0,&_arg1,&_argo2)) 
         return NULL;
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
@@ -7168,7 +7485,7 @@ static PyObject *_wrap_glTexParameteriv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexSubImage1D(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexSubImage1D(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLint  _arg1;
@@ -7178,9 +7495,10 @@ static PyObject *_wrap_glTexSubImage1D(PyObject *self, PyObject *args) {
     GLenum  _arg5;
     GLvoid * _arg6;
     PyObject * _argo6 = 0;
+    char *_kwnames[] = { "target","level","xoffset","width","format","type","pixels", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiiiiiO:glTexSubImage1D",&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_argo6)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiiiiiO:glTexSubImage1D",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_argo6)) 
         return NULL;
     if (_argo6) {
         if (_argo6 == Py_None) { _arg6 = NULL; }
@@ -7199,7 +7517,7 @@ static PyObject *_wrap_glTexSubImage1D(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTexSubImage2D(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTexSubImage2D(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLenum  _arg0;
     GLint  _arg1;
@@ -7211,9 +7529,10 @@ static PyObject *_wrap_glTexSubImage2D(PyObject *self, PyObject *args) {
     GLenum  _arg7;
     GLvoid * _arg8;
     PyObject * _argo8 = 0;
+    char *_kwnames[] = { "target","level","xoffset","yoffset","width","height","format","type","pixels", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiiiiiiiO:glTexSubImage2D",&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_arg6,&_arg7,&_argo8)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiiiiiiiO:glTexSubImage2D",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_arg6,&_arg7,&_argo8)) 
         return NULL;
     if (_argo8) {
         if (_argo8 == Py_None) { _arg8 = NULL; }
@@ -7232,14 +7551,15 @@ static PyObject *_wrap_glTexSubImage2D(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTranslated(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTranslated(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble  _arg0;
     GLdouble  _arg1;
     GLdouble  _arg2;
+    char *_kwnames[] = { "x","y","z", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ddd:glTranslated",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ddd:glTranslated",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -7251,14 +7571,15 @@ static PyObject *_wrap_glTranslated(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glTranslatef(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glTranslatef(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat  _arg0;
     GLfloat  _arg1;
     GLfloat  _arg2;
+    char *_kwnames[] = { "x","y","z", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"fff:glTranslatef",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"fff:glTranslatef",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -7270,13 +7591,14 @@ static PyObject *_wrap_glTranslatef(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glVertex2d(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glVertex2d(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble  _arg0;
     GLdouble  _arg1;
+    char *_kwnames[] = { "x","y", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"dd:glVertex2d",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"dd:glVertex2d",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -7288,13 +7610,14 @@ static PyObject *_wrap_glVertex2d(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glVertex2dv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glVertex2dv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glVertex2dv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glVertex2dv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -7313,13 +7636,14 @@ static PyObject *_wrap_glVertex2dv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glVertex2f(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glVertex2f(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat  _arg0;
     GLfloat  _arg1;
+    char *_kwnames[] = { "x","y", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ff:glVertex2f",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ff:glVertex2f",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -7331,13 +7655,14 @@ static PyObject *_wrap_glVertex2f(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glVertex2fv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glVertex2fv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glVertex2fv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glVertex2fv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -7356,13 +7681,14 @@ static PyObject *_wrap_glVertex2fv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glVertex2i(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glVertex2i(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint  _arg0;
     GLint  _arg1;
+    char *_kwnames[] = { "x","y", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ii:glVertex2i",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ii:glVertex2i",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -7374,13 +7700,14 @@ static PyObject *_wrap_glVertex2i(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glVertex2iv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glVertex2iv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glVertex2iv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glVertex2iv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -7399,13 +7726,14 @@ static PyObject *_wrap_glVertex2iv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glVertex2s(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glVertex2s(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLshort  _arg0;
     GLshort  _arg1;
+    char *_kwnames[] = { "x","y", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"hh:glVertex2s",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"hh:glVertex2s",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -7417,13 +7745,14 @@ static PyObject *_wrap_glVertex2s(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glVertex2sv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glVertex2sv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLshort * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glVertex2sv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glVertex2sv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -7442,14 +7771,15 @@ static PyObject *_wrap_glVertex2sv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glVertex3d(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glVertex3d(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble  _arg0;
     GLdouble  _arg1;
     GLdouble  _arg2;
+    char *_kwnames[] = { "x","y","z", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ddd:glVertex3d",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ddd:glVertex3d",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -7461,13 +7791,14 @@ static PyObject *_wrap_glVertex3d(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glVertex3dv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glVertex3dv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glVertex3dv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glVertex3dv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -7486,14 +7817,15 @@ static PyObject *_wrap_glVertex3dv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glVertex3f(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glVertex3f(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat  _arg0;
     GLfloat  _arg1;
     GLfloat  _arg2;
+    char *_kwnames[] = { "x","y","z", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"fff:glVertex3f",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"fff:glVertex3f",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -7505,13 +7837,14 @@ static PyObject *_wrap_glVertex3f(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glVertex3fv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glVertex3fv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glVertex3fv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glVertex3fv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -7530,14 +7863,15 @@ static PyObject *_wrap_glVertex3fv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glVertex3i(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glVertex3i(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint  _arg0;
     GLint  _arg1;
     GLint  _arg2;
+    char *_kwnames[] = { "x","y","z", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iii:glVertex3i",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iii:glVertex3i",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -7549,13 +7883,14 @@ static PyObject *_wrap_glVertex3i(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glVertex3iv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glVertex3iv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glVertex3iv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glVertex3iv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -7574,14 +7909,15 @@ static PyObject *_wrap_glVertex3iv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glVertex3s(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glVertex3s(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLshort  _arg0;
     GLshort  _arg1;
     GLshort  _arg2;
+    char *_kwnames[] = { "x","y","z", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"hhh:glVertex3s",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"hhh:glVertex3s",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -7593,13 +7929,14 @@ static PyObject *_wrap_glVertex3s(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glVertex3sv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glVertex3sv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLshort * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glVertex3sv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glVertex3sv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -7618,15 +7955,16 @@ static PyObject *_wrap_glVertex3sv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glVertex4d(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glVertex4d(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble  _arg0;
     GLdouble  _arg1;
     GLdouble  _arg2;
     GLdouble  _arg3;
+    char *_kwnames[] = { "x","y","z","w", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"dddd:glVertex4d",&_arg0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"dddd:glVertex4d",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -7638,13 +7976,14 @@ static PyObject *_wrap_glVertex4d(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glVertex4dv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glVertex4dv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLdouble * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glVertex4dv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glVertex4dv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -7663,15 +8002,16 @@ static PyObject *_wrap_glVertex4dv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glVertex4f(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glVertex4f(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat  _arg0;
     GLfloat  _arg1;
     GLfloat  _arg2;
     GLfloat  _arg3;
+    char *_kwnames[] = { "x","y","z","w", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ffff:glVertex4f",&_arg0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ffff:glVertex4f",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -7683,13 +8023,14 @@ static PyObject *_wrap_glVertex4f(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glVertex4fv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glVertex4fv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLfloat * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glVertex4fv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glVertex4fv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -7708,15 +8049,16 @@ static PyObject *_wrap_glVertex4fv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glVertex4i(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glVertex4i(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint  _arg0;
     GLint  _arg1;
     GLint  _arg2;
     GLint  _arg3;
+    char *_kwnames[] = { "x","y","z","w", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiii:glVertex4i",&_arg0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiii:glVertex4i",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -7728,13 +8070,14 @@ static PyObject *_wrap_glVertex4i(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glVertex4iv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glVertex4iv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glVertex4iv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glVertex4iv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -7753,15 +8096,16 @@ static PyObject *_wrap_glVertex4iv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glVertex4s(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glVertex4s(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLshort  _arg0;
     GLshort  _arg1;
     GLshort  _arg2;
     GLshort  _arg3;
+    char *_kwnames[] = { "x","y","z","w", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"hhhh:glVertex4s",&_arg0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"hhhh:glVertex4s",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -7773,13 +8117,14 @@ static PyObject *_wrap_glVertex4s(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glVertex4sv(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glVertex4sv(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLshort * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:glVertex4sv",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:glVertex4sv",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -7798,16 +8143,17 @@ static PyObject *_wrap_glVertex4sv(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glVertexPointer(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glVertexPointer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint  _arg0;
     GLenum  _arg1;
     GLsizei  _arg2;
     GLvoid * _arg3;
     PyObject * _argo3 = 0;
+    char *_kwnames[] = { "size","type","stride","pointer", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiiO:glVertexPointer",&_arg0,&_arg1,&_arg2,&_argo3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiiO:glVertexPointer",_kwnames,&_arg0,&_arg1,&_arg2,&_argo3)) 
         return NULL;
     if (_argo3) {
         if (_argo3 == Py_None) { _arg3 = NULL; }
@@ -7826,15 +8172,16 @@ static PyObject *_wrap_glVertexPointer(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_glViewport(PyObject *self, PyObject *args) {
+static PyObject *_wrap_glViewport(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     GLint  _arg0;
     GLint  _arg1;
     GLsizei  _arg2;
     GLsizei  _arg3;
+    char *_kwnames[] = { "x","y","width","height", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiii:glViewport",&_arg0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiii:glViewport",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -7847,7 +8194,7 @@ static PyObject *_wrap_glViewport(PyObject *self, PyObject *args) {
 }
 
 #define new_wxGLContext(_swigarg0,_swigarg1,_swigarg2) (new wxGLContext(_swigarg0,_swigarg1,_swigarg2))
-static PyObject *_wrap_new_wxGLContext(PyObject *self, PyObject *args) {
+static PyObject *_wrap_new_wxGLContext(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxGLContext * _result;
     bool  _arg0;
@@ -7856,10 +8203,11 @@ static PyObject *_wrap_new_wxGLContext(PyObject *self, PyObject *args) {
     int tempbool0;
     PyObject * _argo1 = 0;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "isRGB","win","palette", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iO|O:new_wxGLContext",&tempbool0,&_argo1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iO|O:new_wxGLContext",_kwnames,&tempbool0,&_argo1,&_argo2)) 
         return NULL;
     _arg0 = (bool ) tempbool0;
     if (_argo1) {
@@ -7892,13 +8240,14 @@ static PyObject *_wrap_new_wxGLContext(PyObject *self, PyObject *args) {
 }
 
 #define delete_wxGLContext(_swigobj) (delete _swigobj)
-static PyObject *_wrap_delete_wxGLContext(PyObject *self, PyObject *args) {
+static PyObject *_wrap_delete_wxGLContext(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxGLContext * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:delete_wxGLContext",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxGLContext",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -7918,13 +8267,14 @@ static PyObject *_wrap_delete_wxGLContext(PyObject *self, PyObject *args) {
 }
 
 #define wxGLContext_SetCurrent(_swigobj)  (_swigobj->SetCurrent())
-static PyObject *_wrap_wxGLContext_SetCurrent(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxGLContext_SetCurrent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxGLContext * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxGLContext_SetCurrent",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGLContext_SetCurrent",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -7944,14 +8294,15 @@ static PyObject *_wrap_wxGLContext_SetCurrent(PyObject *self, PyObject *args) {
 }
 
 #define wxGLContext_SetColour(_swigobj,_swigarg0)  (_swigobj->SetColour(_swigarg0))
-static PyObject *_wrap_wxGLContext_SetColour(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxGLContext_SetColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxGLContext * _arg0;
     char * _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","colour", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Os:wxGLContext_SetColour",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Os:wxGLContext_SetColour",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -7971,13 +8322,14 @@ static PyObject *_wrap_wxGLContext_SetColour(PyObject *self, PyObject *args) {
 }
 
 #define wxGLContext_SwapBuffers(_swigobj)  (_swigobj->SwapBuffers())
-static PyObject *_wrap_wxGLContext_SwapBuffers(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxGLContext_SwapBuffers(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxGLContext * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxGLContext_SwapBuffers",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGLContext_SwapBuffers",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -7997,13 +8349,14 @@ static PyObject *_wrap_wxGLContext_SwapBuffers(PyObject *self, PyObject *args) {
 }
 
 #define wxGLContext_SetupPixelFormat(_swigobj)  (_swigobj->SetupPixelFormat())
-static PyObject *_wrap_wxGLContext_SetupPixelFormat(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxGLContext_SetupPixelFormat(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxGLContext * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxGLContext_SetupPixelFormat",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGLContext_SetupPixelFormat",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -8023,15 +8376,16 @@ static PyObject *_wrap_wxGLContext_SetupPixelFormat(PyObject *self, PyObject *ar
 }
 
 #define wxGLContext_SetupPalette(_swigobj,_swigarg0)  (_swigobj->SetupPalette(_swigarg0))
-static PyObject *_wrap_wxGLContext_SetupPalette(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxGLContext_SetupPalette(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxGLContext * _arg0;
     wxPalette * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","palette", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxGLContext_SetupPalette",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGLContext_SetupPalette",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -8058,15 +8412,16 @@ static PyObject *_wrap_wxGLContext_SetupPalette(PyObject *self, PyObject *args) 
 }
 
 #define wxGLContext_CreateDefaultPalette(_swigobj)  (_swigobj->CreateDefaultPalette())
-static PyObject *_wrap_wxGLContext_CreateDefaultPalette(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxGLContext_CreateDefaultPalette(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPalette * _result;
     wxGLContext * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxGLContext_CreateDefaultPalette",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGLContext_CreateDefaultPalette",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -8086,15 +8441,16 @@ static PyObject *_wrap_wxGLContext_CreateDefaultPalette(PyObject *self, PyObject
 }
 
 #define wxGLContext_GetPalette(_swigobj)  (_swigobj->GetPalette())
-static PyObject *_wrap_wxGLContext_GetPalette(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxGLContext_GetPalette(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPalette * _result;
     wxGLContext * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxGLContext_GetPalette",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGLContext_GetPalette",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -8119,15 +8475,16 @@ static PyObject *_wrap_wxGLContext_GetPalette(PyObject *self, PyObject *args) {
 }
 
 #define wxGLContext_GetWindow(_swigobj)  (_swigobj->GetWindow())
-static PyObject *_wrap_wxGLContext_GetWindow(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxGLContext_GetWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxWindow * _result;
     wxGLContext * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxGLContext_GetWindow",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGLContext_GetWindow",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -8184,7 +8541,7 @@ static void *SwigwxGLCanvasTowxEvtHandler(void *ptr) {
 }
 
 #define new_wxGLCanvas(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6,_swigarg7) (new wxGLCanvas(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6,_swigarg7))
-static PyObject *_wrap_new_wxGLCanvas(PyObject *self, PyObject *args) {
+static PyObject *_wrap_new_wxGLCanvas(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxGLCanvas * _result;
     wxWindow * _arg0;
@@ -8200,10 +8557,11 @@ static PyObject *_wrap_new_wxGLCanvas(PyObject *self, PyObject *args) {
     PyObject * _argo3 = 0;
     PyObject * _argo6 = 0;
     PyObject * _argo7 = 0;
+    char *_kwnames[] = { "parent","id","pos","size","style","name","attribList","palette", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O|iOOlsOO:new_wxGLCanvas",&_argo0,&_arg1,&_argo2,&_argo3,&_arg4,&_arg5,&_argo6,&_argo7)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|iOOlsOO:new_wxGLCanvas",_kwnames,&_argo0,&_arg1,&_argo2,&_argo3,&_arg4,&_arg5,&_argo6,&_argo7)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -8256,13 +8614,14 @@ static PyObject *_wrap_new_wxGLCanvas(PyObject *self, PyObject *args) {
 }
 
 #define wxGLCanvas_SetCurrent(_swigobj)  (_swigobj->SetCurrent())
-static PyObject *_wrap_wxGLCanvas_SetCurrent(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxGLCanvas_SetCurrent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxGLCanvas * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxGLCanvas_SetCurrent",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGLCanvas_SetCurrent",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -8282,14 +8641,15 @@ static PyObject *_wrap_wxGLCanvas_SetCurrent(PyObject *self, PyObject *args) {
 }
 
 #define wxGLCanvas_SetColour(_swigobj,_swigarg0)  (_swigobj->SetColour(_swigarg0))
-static PyObject *_wrap_wxGLCanvas_SetColour(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxGLCanvas_SetColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxGLCanvas * _arg0;
     char * _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","colour", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Os:wxGLCanvas_SetColour",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Os:wxGLCanvas_SetColour",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -8309,13 +8669,14 @@ static PyObject *_wrap_wxGLCanvas_SetColour(PyObject *self, PyObject *args) {
 }
 
 #define wxGLCanvas_SwapBuffers(_swigobj)  (_swigobj->SwapBuffers())
-static PyObject *_wrap_wxGLCanvas_SwapBuffers(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxGLCanvas_SwapBuffers(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxGLCanvas * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxGLCanvas_SwapBuffers",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGLCanvas_SwapBuffers",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -8335,15 +8696,16 @@ static PyObject *_wrap_wxGLCanvas_SwapBuffers(PyObject *self, PyObject *args) {
 }
 
 #define wxGLCanvas_GetContext(_swigobj)  (_swigobj->GetContext())
-static PyObject *_wrap_wxGLCanvas_GetContext(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxGLCanvas_GetContext(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxGLContext * _result;
     wxGLCanvas * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxGLCanvas_GetContext",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGLCanvas_GetContext",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -8368,368 +8730,368 @@ static PyObject *_wrap_wxGLCanvas_GetContext(PyObject *self, PyObject *args) {
 }
 
 static PyMethodDef glcanvascMethods[] = {
-	 { "wxGLCanvas_GetContext", _wrap_wxGLCanvas_GetContext, METH_VARARGS },
-	 { "wxGLCanvas_SwapBuffers", _wrap_wxGLCanvas_SwapBuffers, METH_VARARGS },
-	 { "wxGLCanvas_SetColour", _wrap_wxGLCanvas_SetColour, METH_VARARGS },
-	 { "wxGLCanvas_SetCurrent", _wrap_wxGLCanvas_SetCurrent, METH_VARARGS },
-	 { "new_wxGLCanvas", _wrap_new_wxGLCanvas, METH_VARARGS },
-	 { "wxGLContext_GetWindow", _wrap_wxGLContext_GetWindow, METH_VARARGS },
-	 { "wxGLContext_GetPalette", _wrap_wxGLContext_GetPalette, METH_VARARGS },
-	 { "wxGLContext_CreateDefaultPalette", _wrap_wxGLContext_CreateDefaultPalette, METH_VARARGS },
-	 { "wxGLContext_SetupPalette", _wrap_wxGLContext_SetupPalette, METH_VARARGS },
-	 { "wxGLContext_SetupPixelFormat", _wrap_wxGLContext_SetupPixelFormat, METH_VARARGS },
-	 { "wxGLContext_SwapBuffers", _wrap_wxGLContext_SwapBuffers, METH_VARARGS },
-	 { "wxGLContext_SetColour", _wrap_wxGLContext_SetColour, METH_VARARGS },
-	 { "wxGLContext_SetCurrent", _wrap_wxGLContext_SetCurrent, METH_VARARGS },
-	 { "delete_wxGLContext", _wrap_delete_wxGLContext, METH_VARARGS },
-	 { "new_wxGLContext", _wrap_new_wxGLContext, METH_VARARGS },
-	 { "glViewport", _wrap_glViewport, METH_VARARGS },
-	 { "glVertexPointer", _wrap_glVertexPointer, METH_VARARGS },
-	 { "glVertex4sv", _wrap_glVertex4sv, METH_VARARGS },
-	 { "glVertex4s", _wrap_glVertex4s, METH_VARARGS },
-	 { "glVertex4iv", _wrap_glVertex4iv, METH_VARARGS },
-	 { "glVertex4i", _wrap_glVertex4i, METH_VARARGS },
-	 { "glVertex4fv", _wrap_glVertex4fv, METH_VARARGS },
-	 { "glVertex4f", _wrap_glVertex4f, METH_VARARGS },
-	 { "glVertex4dv", _wrap_glVertex4dv, METH_VARARGS },
-	 { "glVertex4d", _wrap_glVertex4d, METH_VARARGS },
-	 { "glVertex3sv", _wrap_glVertex3sv, METH_VARARGS },
-	 { "glVertex3s", _wrap_glVertex3s, METH_VARARGS },
-	 { "glVertex3iv", _wrap_glVertex3iv, METH_VARARGS },
-	 { "glVertex3i", _wrap_glVertex3i, METH_VARARGS },
-	 { "glVertex3fv", _wrap_glVertex3fv, METH_VARARGS },
-	 { "glVertex3f", _wrap_glVertex3f, METH_VARARGS },
-	 { "glVertex3dv", _wrap_glVertex3dv, METH_VARARGS },
-	 { "glVertex3d", _wrap_glVertex3d, METH_VARARGS },
-	 { "glVertex2sv", _wrap_glVertex2sv, METH_VARARGS },
-	 { "glVertex2s", _wrap_glVertex2s, METH_VARARGS },
-	 { "glVertex2iv", _wrap_glVertex2iv, METH_VARARGS },
-	 { "glVertex2i", _wrap_glVertex2i, METH_VARARGS },
-	 { "glVertex2fv", _wrap_glVertex2fv, METH_VARARGS },
-	 { "glVertex2f", _wrap_glVertex2f, METH_VARARGS },
-	 { "glVertex2dv", _wrap_glVertex2dv, METH_VARARGS },
-	 { "glVertex2d", _wrap_glVertex2d, METH_VARARGS },
-	 { "glTranslatef", _wrap_glTranslatef, METH_VARARGS },
-	 { "glTranslated", _wrap_glTranslated, METH_VARARGS },
-	 { "glTexSubImage2D", _wrap_glTexSubImage2D, METH_VARARGS },
-	 { "glTexSubImage1D", _wrap_glTexSubImage1D, METH_VARARGS },
-	 { "glTexParameteriv", _wrap_glTexParameteriv, METH_VARARGS },
-	 { "glTexParameteri", _wrap_glTexParameteri, METH_VARARGS },
-	 { "glTexParameterfv", _wrap_glTexParameterfv, METH_VARARGS },
-	 { "glTexParameterf", _wrap_glTexParameterf, METH_VARARGS },
-	 { "glTexImage2D", _wrap_glTexImage2D, METH_VARARGS },
-	 { "glTexImage1D", _wrap_glTexImage1D, METH_VARARGS },
-	 { "glTexGeniv", _wrap_glTexGeniv, METH_VARARGS },
-	 { "glTexGeni", _wrap_glTexGeni, METH_VARARGS },
-	 { "glTexGenfv", _wrap_glTexGenfv, METH_VARARGS },
-	 { "glTexGenf", _wrap_glTexGenf, METH_VARARGS },
-	 { "glTexGendv", _wrap_glTexGendv, METH_VARARGS },
-	 { "glTexGend", _wrap_glTexGend, METH_VARARGS },
-	 { "glTexEnviv", _wrap_glTexEnviv, METH_VARARGS },
-	 { "glTexEnvi", _wrap_glTexEnvi, METH_VARARGS },
-	 { "glTexEnvfv", _wrap_glTexEnvfv, METH_VARARGS },
-	 { "glTexEnvf", _wrap_glTexEnvf, METH_VARARGS },
-	 { "glTexCoordPointer", _wrap_glTexCoordPointer, METH_VARARGS },
-	 { "glTexCoord4sv", _wrap_glTexCoord4sv, METH_VARARGS },
-	 { "glTexCoord4s", _wrap_glTexCoord4s, METH_VARARGS },
-	 { "glTexCoord4iv", _wrap_glTexCoord4iv, METH_VARARGS },
-	 { "glTexCoord4i", _wrap_glTexCoord4i, METH_VARARGS },
-	 { "glTexCoord4fv", _wrap_glTexCoord4fv, METH_VARARGS },
-	 { "glTexCoord4f", _wrap_glTexCoord4f, METH_VARARGS },
-	 { "glTexCoord4dv", _wrap_glTexCoord4dv, METH_VARARGS },
-	 { "glTexCoord4d", _wrap_glTexCoord4d, METH_VARARGS },
-	 { "glTexCoord3sv", _wrap_glTexCoord3sv, METH_VARARGS },
-	 { "glTexCoord3s", _wrap_glTexCoord3s, METH_VARARGS },
-	 { "glTexCoord3iv", _wrap_glTexCoord3iv, METH_VARARGS },
-	 { "glTexCoord3i", _wrap_glTexCoord3i, METH_VARARGS },
-	 { "glTexCoord3fv", _wrap_glTexCoord3fv, METH_VARARGS },
-	 { "glTexCoord3f", _wrap_glTexCoord3f, METH_VARARGS },
-	 { "glTexCoord3dv", _wrap_glTexCoord3dv, METH_VARARGS },
-	 { "glTexCoord3d", _wrap_glTexCoord3d, METH_VARARGS },
-	 { "glTexCoord2sv", _wrap_glTexCoord2sv, METH_VARARGS },
-	 { "glTexCoord2s", _wrap_glTexCoord2s, METH_VARARGS },
-	 { "glTexCoord2iv", _wrap_glTexCoord2iv, METH_VARARGS },
-	 { "glTexCoord2i", _wrap_glTexCoord2i, METH_VARARGS },
-	 { "glTexCoord2fv", _wrap_glTexCoord2fv, METH_VARARGS },
-	 { "glTexCoord2f", _wrap_glTexCoord2f, METH_VARARGS },
-	 { "glTexCoord2dv", _wrap_glTexCoord2dv, METH_VARARGS },
-	 { "glTexCoord2d", _wrap_glTexCoord2d, METH_VARARGS },
-	 { "glTexCoord1sv", _wrap_glTexCoord1sv, METH_VARARGS },
-	 { "glTexCoord1s", _wrap_glTexCoord1s, METH_VARARGS },
-	 { "glTexCoord1iv", _wrap_glTexCoord1iv, METH_VARARGS },
-	 { "glTexCoord1i", _wrap_glTexCoord1i, METH_VARARGS },
-	 { "glTexCoord1fv", _wrap_glTexCoord1fv, METH_VARARGS },
-	 { "glTexCoord1f", _wrap_glTexCoord1f, METH_VARARGS },
-	 { "glTexCoord1dv", _wrap_glTexCoord1dv, METH_VARARGS },
-	 { "glTexCoord1d", _wrap_glTexCoord1d, METH_VARARGS },
-	 { "glStencilOp", _wrap_glStencilOp, METH_VARARGS },
-	 { "glStencilMask", _wrap_glStencilMask, METH_VARARGS },
-	 { "glStencilFunc", _wrap_glStencilFunc, METH_VARARGS },
-	 { "glShadeModel", _wrap_glShadeModel, METH_VARARGS },
-	 { "glSelectBuffer", _wrap_glSelectBuffer, METH_VARARGS },
-	 { "glScissor", _wrap_glScissor, METH_VARARGS },
-	 { "glScalef", _wrap_glScalef, METH_VARARGS },
-	 { "glScaled", _wrap_glScaled, METH_VARARGS },
-	 { "glRotatef", _wrap_glRotatef, METH_VARARGS },
-	 { "glRotated", _wrap_glRotated, METH_VARARGS },
-	 { "glRenderMode", _wrap_glRenderMode, METH_VARARGS },
-	 { "glRectsv", _wrap_glRectsv, METH_VARARGS },
-	 { "glRects", _wrap_glRects, METH_VARARGS },
-	 { "glRectiv", _wrap_glRectiv, METH_VARARGS },
-	 { "glRecti", _wrap_glRecti, METH_VARARGS },
-	 { "glRectfv", _wrap_glRectfv, METH_VARARGS },
-	 { "glRectf", _wrap_glRectf, METH_VARARGS },
-	 { "glRectdv", _wrap_glRectdv, METH_VARARGS },
-	 { "glRectd", _wrap_glRectd, METH_VARARGS },
-	 { "glReadPixels", _wrap_glReadPixels, METH_VARARGS },
-	 { "glReadBuffer", _wrap_glReadBuffer, METH_VARARGS },
-	 { "glRasterPos4sv", _wrap_glRasterPos4sv, METH_VARARGS },
-	 { "glRasterPos4s", _wrap_glRasterPos4s, METH_VARARGS },
-	 { "glRasterPos4iv", _wrap_glRasterPos4iv, METH_VARARGS },
-	 { "glRasterPos4i", _wrap_glRasterPos4i, METH_VARARGS },
-	 { "glRasterPos4fv", _wrap_glRasterPos4fv, METH_VARARGS },
-	 { "glRasterPos4f", _wrap_glRasterPos4f, METH_VARARGS },
-	 { "glRasterPos4dv", _wrap_glRasterPos4dv, METH_VARARGS },
-	 { "glRasterPos4d", _wrap_glRasterPos4d, METH_VARARGS },
-	 { "glRasterPos3sv", _wrap_glRasterPos3sv, METH_VARARGS },
-	 { "glRasterPos3s", _wrap_glRasterPos3s, METH_VARARGS },
-	 { "glRasterPos3iv", _wrap_glRasterPos3iv, METH_VARARGS },
-	 { "glRasterPos3i", _wrap_glRasterPos3i, METH_VARARGS },
-	 { "glRasterPos3fv", _wrap_glRasterPos3fv, METH_VARARGS },
-	 { "glRasterPos3f", _wrap_glRasterPos3f, METH_VARARGS },
-	 { "glRasterPos3dv", _wrap_glRasterPos3dv, METH_VARARGS },
-	 { "glRasterPos3d", _wrap_glRasterPos3d, METH_VARARGS },
-	 { "glRasterPos2sv", _wrap_glRasterPos2sv, METH_VARARGS },
-	 { "glRasterPos2s", _wrap_glRasterPos2s, METH_VARARGS },
-	 { "glRasterPos2iv", _wrap_glRasterPos2iv, METH_VARARGS },
-	 { "glRasterPos2i", _wrap_glRasterPos2i, METH_VARARGS },
-	 { "glRasterPos2fv", _wrap_glRasterPos2fv, METH_VARARGS },
-	 { "glRasterPos2f", _wrap_glRasterPos2f, METH_VARARGS },
-	 { "glRasterPos2dv", _wrap_glRasterPos2dv, METH_VARARGS },
-	 { "glRasterPos2d", _wrap_glRasterPos2d, METH_VARARGS },
-	 { "glPushName", _wrap_glPushName, METH_VARARGS },
-	 { "glPushMatrix", _wrap_glPushMatrix, METH_VARARGS },
-	 { "glPushClientAttrib", _wrap_glPushClientAttrib, METH_VARARGS },
-	 { "glPushAttrib", _wrap_glPushAttrib, METH_VARARGS },
-	 { "glPrioritizeTextures", _wrap_glPrioritizeTextures, METH_VARARGS },
-	 { "glPopName", _wrap_glPopName, METH_VARARGS },
-	 { "glPopMatrix", _wrap_glPopMatrix, METH_VARARGS },
-	 { "glPopClientAttrib", _wrap_glPopClientAttrib, METH_VARARGS },
-	 { "glPopAttrib", _wrap_glPopAttrib, METH_VARARGS },
-	 { "glPolygonStipple", _wrap_glPolygonStipple, METH_VARARGS },
-	 { "glPolygonOffset", _wrap_glPolygonOffset, METH_VARARGS },
-	 { "glPolygonMode", _wrap_glPolygonMode, METH_VARARGS },
-	 { "glPointSize", _wrap_glPointSize, METH_VARARGS },
-	 { "glPixelZoom", _wrap_glPixelZoom, METH_VARARGS },
-	 { "glPixelTransferi", _wrap_glPixelTransferi, METH_VARARGS },
-	 { "glPixelTransferf", _wrap_glPixelTransferf, METH_VARARGS },
-	 { "glPixelStorei", _wrap_glPixelStorei, METH_VARARGS },
-	 { "glPixelStoref", _wrap_glPixelStoref, METH_VARARGS },
-	 { "glPixelMapusv", _wrap_glPixelMapusv, METH_VARARGS },
-	 { "glPixelMapuiv", _wrap_glPixelMapuiv, METH_VARARGS },
-	 { "glPixelMapfv", _wrap_glPixelMapfv, METH_VARARGS },
-	 { "glPassThrough", _wrap_glPassThrough, METH_VARARGS },
-	 { "glOrtho", _wrap_glOrtho, METH_VARARGS },
-	 { "glNormalPointer", _wrap_glNormalPointer, METH_VARARGS },
-	 { "glNormal3sv", _wrap_glNormal3sv, METH_VARARGS },
-	 { "glNormal3s", _wrap_glNormal3s, METH_VARARGS },
-	 { "glNormal3iv", _wrap_glNormal3iv, METH_VARARGS },
-	 { "glNormal3i", _wrap_glNormal3i, METH_VARARGS },
-	 { "glNormal3fv", _wrap_glNormal3fv, METH_VARARGS },
-	 { "glNormal3f", _wrap_glNormal3f, METH_VARARGS },
-	 { "glNormal3dv", _wrap_glNormal3dv, METH_VARARGS },
-	 { "glNormal3d", _wrap_glNormal3d, METH_VARARGS },
-	 { "glNormal3bv", _wrap_glNormal3bv, METH_VARARGS },
-	 { "glNormal3b", _wrap_glNormal3b, METH_VARARGS },
-	 { "glNewList", _wrap_glNewList, METH_VARARGS },
-	 { "glMultMatrixf", _wrap_glMultMatrixf, METH_VARARGS },
-	 { "glMultMatrixd", _wrap_glMultMatrixd, METH_VARARGS },
-	 { "glMatrixMode", _wrap_glMatrixMode, METH_VARARGS },
-	 { "glMaterialiv", _wrap_glMaterialiv, METH_VARARGS },
-	 { "glMateriali", _wrap_glMateriali, METH_VARARGS },
-	 { "glMaterialfv", _wrap_glMaterialfv, METH_VARARGS },
-	 { "glMaterialf", _wrap_glMaterialf, METH_VARARGS },
-	 { "glMapGrid2f", _wrap_glMapGrid2f, METH_VARARGS },
-	 { "glMapGrid2d", _wrap_glMapGrid2d, METH_VARARGS },
-	 { "glMapGrid1f", _wrap_glMapGrid1f, METH_VARARGS },
-	 { "glMapGrid1d", _wrap_glMapGrid1d, METH_VARARGS },
-	 { "glMap2f", _wrap_glMap2f, METH_VARARGS },
-	 { "glMap2d", _wrap_glMap2d, METH_VARARGS },
-	 { "glMap1f", _wrap_glMap1f, METH_VARARGS },
-	 { "glMap1d", _wrap_glMap1d, METH_VARARGS },
-	 { "glLogicOp", _wrap_glLogicOp, METH_VARARGS },
-	 { "glLoadName", _wrap_glLoadName, METH_VARARGS },
-	 { "glLoadMatrixf", _wrap_glLoadMatrixf, METH_VARARGS },
-	 { "glLoadMatrixd", _wrap_glLoadMatrixd, METH_VARARGS },
-	 { "glLoadIdentity", _wrap_glLoadIdentity, METH_VARARGS },
-	 { "glListBase", _wrap_glListBase, METH_VARARGS },
-	 { "glLineWidth", _wrap_glLineWidth, METH_VARARGS },
-	 { "glLineStipple", _wrap_glLineStipple, METH_VARARGS },
-	 { "glLightiv", _wrap_glLightiv, METH_VARARGS },
-	 { "glLighti", _wrap_glLighti, METH_VARARGS },
-	 { "glLightfv", _wrap_glLightfv, METH_VARARGS },
-	 { "glLightf", _wrap_glLightf, METH_VARARGS },
-	 { "glLightModeliv", _wrap_glLightModeliv, METH_VARARGS },
-	 { "glLightModeli", _wrap_glLightModeli, METH_VARARGS },
-	 { "glLightModelfv", _wrap_glLightModelfv, METH_VARARGS },
-	 { "glLightModelf", _wrap_glLightModelf, METH_VARARGS },
-	 { "glIsTexture", _wrap_glIsTexture, METH_VARARGS },
-	 { "glIsList", _wrap_glIsList, METH_VARARGS },
-	 { "glIsEnabled", _wrap_glIsEnabled, METH_VARARGS },
-	 { "glInterleavedArrays", _wrap_glInterleavedArrays, METH_VARARGS },
-	 { "glInitNames", _wrap_glInitNames, METH_VARARGS },
-	 { "glIndexubv", _wrap_glIndexubv, METH_VARARGS },
-	 { "glIndexub", _wrap_glIndexub, METH_VARARGS },
-	 { "glIndexsv", _wrap_glIndexsv, METH_VARARGS },
-	 { "glIndexs", _wrap_glIndexs, METH_VARARGS },
-	 { "glIndexiv", _wrap_glIndexiv, METH_VARARGS },
-	 { "glIndexi", _wrap_glIndexi, METH_VARARGS },
-	 { "glIndexfv", _wrap_glIndexfv, METH_VARARGS },
-	 { "glIndexf", _wrap_glIndexf, METH_VARARGS },
-	 { "glIndexdv", _wrap_glIndexdv, METH_VARARGS },
-	 { "glIndexd", _wrap_glIndexd, METH_VARARGS },
-	 { "glIndexPointer", _wrap_glIndexPointer, METH_VARARGS },
-	 { "glIndexMask", _wrap_glIndexMask, METH_VARARGS },
-	 { "glHint", _wrap_glHint, METH_VARARGS },
-	 { "glGetTexParameteriv", _wrap_glGetTexParameteriv, METH_VARARGS },
-	 { "glGetTexParameterfv", _wrap_glGetTexParameterfv, METH_VARARGS },
-	 { "glGetTexLevelParameteriv", _wrap_glGetTexLevelParameteriv, METH_VARARGS },
-	 { "glGetTexLevelParameterfv", _wrap_glGetTexLevelParameterfv, METH_VARARGS },
-	 { "glGetTexImage", _wrap_glGetTexImage, METH_VARARGS },
-	 { "glGetTexGeniv", _wrap_glGetTexGeniv, METH_VARARGS },
-	 { "glGetTexGenfv", _wrap_glGetTexGenfv, METH_VARARGS },
-	 { "glGetTexGendv", _wrap_glGetTexGendv, METH_VARARGS },
-	 { "glGetTexEnviv", _wrap_glGetTexEnviv, METH_VARARGS },
-	 { "glGetTexEnvfv", _wrap_glGetTexEnvfv, METH_VARARGS },
-	 { "glGetString", _wrap_glGetString, METH_VARARGS },
-	 { "glGetPolygonStipple", _wrap_glGetPolygonStipple, METH_VARARGS },
-	 { "glGetPointerv", _wrap_glGetPointerv, METH_VARARGS },
-	 { "glGetPixelMapusv", _wrap_glGetPixelMapusv, METH_VARARGS },
-	 { "glGetPixelMapuiv", _wrap_glGetPixelMapuiv, METH_VARARGS },
-	 { "glGetPixelMapfv", _wrap_glGetPixelMapfv, METH_VARARGS },
-	 { "glGetMaterialiv", _wrap_glGetMaterialiv, METH_VARARGS },
-	 { "glGetMaterialfv", _wrap_glGetMaterialfv, METH_VARARGS },
-	 { "glGetMapiv", _wrap_glGetMapiv, METH_VARARGS },
-	 { "glGetMapfv", _wrap_glGetMapfv, METH_VARARGS },
-	 { "glGetMapdv", _wrap_glGetMapdv, METH_VARARGS },
-	 { "glGetLightiv", _wrap_glGetLightiv, METH_VARARGS },
-	 { "glGetLightfv", _wrap_glGetLightfv, METH_VARARGS },
-	 { "glGetIntegerv", _wrap_glGetIntegerv, METH_VARARGS },
-	 { "glGetFloatv", _wrap_glGetFloatv, METH_VARARGS },
-	 { "glGetError", _wrap_glGetError, METH_VARARGS },
-	 { "glGetDoublev", _wrap_glGetDoublev, METH_VARARGS },
-	 { "glGetClipPlane", _wrap_glGetClipPlane, METH_VARARGS },
-	 { "glGetBooleanv", _wrap_glGetBooleanv, METH_VARARGS },
-	 { "glGenTextures", _wrap_glGenTextures, METH_VARARGS },
-	 { "glGenLists", _wrap_glGenLists, METH_VARARGS },
-	 { "glFrustum", _wrap_glFrustum, METH_VARARGS },
-	 { "glFrontFace", _wrap_glFrontFace, METH_VARARGS },
-	 { "glFogiv", _wrap_glFogiv, METH_VARARGS },
-	 { "glFogi", _wrap_glFogi, METH_VARARGS },
-	 { "glFogfv", _wrap_glFogfv, METH_VARARGS },
-	 { "glFogf", _wrap_glFogf, METH_VARARGS },
-	 { "glFlush", _wrap_glFlush, METH_VARARGS },
-	 { "glFinish", _wrap_glFinish, METH_VARARGS },
-	 { "glFeedbackBuffer", _wrap_glFeedbackBuffer, METH_VARARGS },
-	 { "glEvalPoint2", _wrap_glEvalPoint2, METH_VARARGS },
-	 { "glEvalPoint1", _wrap_glEvalPoint1, METH_VARARGS },
-	 { "glEvalMesh2", _wrap_glEvalMesh2, METH_VARARGS },
-	 { "glEvalMesh1", _wrap_glEvalMesh1, METH_VARARGS },
-	 { "glEvalCoord2fv", _wrap_glEvalCoord2fv, METH_VARARGS },
-	 { "glEvalCoord2f", _wrap_glEvalCoord2f, METH_VARARGS },
-	 { "glEvalCoord2dv", _wrap_glEvalCoord2dv, METH_VARARGS },
-	 { "glEvalCoord2d", _wrap_glEvalCoord2d, METH_VARARGS },
-	 { "glEvalCoord1fv", _wrap_glEvalCoord1fv, METH_VARARGS },
-	 { "glEvalCoord1f", _wrap_glEvalCoord1f, METH_VARARGS },
-	 { "glEvalCoord1dv", _wrap_glEvalCoord1dv, METH_VARARGS },
-	 { "glEvalCoord1d", _wrap_glEvalCoord1d, METH_VARARGS },
-	 { "glEndList", _wrap_glEndList, METH_VARARGS },
-	 { "glEnd", _wrap_glEnd, METH_VARARGS },
-	 { "glEnableClientState", _wrap_glEnableClientState, METH_VARARGS },
-	 { "glEnable", _wrap_glEnable, METH_VARARGS },
-	 { "glEdgeFlagv", _wrap_glEdgeFlagv, METH_VARARGS },
-	 { "glEdgeFlagPointer", _wrap_glEdgeFlagPointer, METH_VARARGS },
-	 { "glEdgeFlag", _wrap_glEdgeFlag, METH_VARARGS },
-	 { "glDrawPixels", _wrap_glDrawPixels, METH_VARARGS },
-	 { "glDrawElements", _wrap_glDrawElements, METH_VARARGS },
-	 { "glDrawBuffer", _wrap_glDrawBuffer, METH_VARARGS },
-	 { "glDrawArrays", _wrap_glDrawArrays, METH_VARARGS },
-	 { "glDisableClientState", _wrap_glDisableClientState, METH_VARARGS },
-	 { "glDisable", _wrap_glDisable, METH_VARARGS },
-	 { "glDepthRange", _wrap_glDepthRange, METH_VARARGS },
-	 { "glDepthMask", _wrap_glDepthMask, METH_VARARGS },
-	 { "glDepthFunc", _wrap_glDepthFunc, METH_VARARGS },
-	 { "glDeleteTextures", _wrap_glDeleteTextures, METH_VARARGS },
-	 { "glDeleteLists", _wrap_glDeleteLists, METH_VARARGS },
-	 { "glCullFace", _wrap_glCullFace, METH_VARARGS },
-	 { "glCopyTexSubImage2D", _wrap_glCopyTexSubImage2D, METH_VARARGS },
-	 { "glCopyTexSubImage1D", _wrap_glCopyTexSubImage1D, METH_VARARGS },
-	 { "glCopyTexImage2D", _wrap_glCopyTexImage2D, METH_VARARGS },
-	 { "glCopyTexImage1D", _wrap_glCopyTexImage1D, METH_VARARGS },
-	 { "glCopyPixels", _wrap_glCopyPixels, METH_VARARGS },
-	 { "glColorPointer", _wrap_glColorPointer, METH_VARARGS },
-	 { "glColorMaterial", _wrap_glColorMaterial, METH_VARARGS },
-	 { "glColorMask", _wrap_glColorMask, METH_VARARGS },
-	 { "glColor4usv", _wrap_glColor4usv, METH_VARARGS },
-	 { "glColor4us", _wrap_glColor4us, METH_VARARGS },
-	 { "glColor4uiv", _wrap_glColor4uiv, METH_VARARGS },
-	 { "glColor4ui", _wrap_glColor4ui, METH_VARARGS },
-	 { "glColor4ubv", _wrap_glColor4ubv, METH_VARARGS },
-	 { "glColor4ub", _wrap_glColor4ub, METH_VARARGS },
-	 { "glColor4sv", _wrap_glColor4sv, METH_VARARGS },
-	 { "glColor4s", _wrap_glColor4s, METH_VARARGS },
-	 { "glColor4iv", _wrap_glColor4iv, METH_VARARGS },
-	 { "glColor4i", _wrap_glColor4i, METH_VARARGS },
-	 { "glColor4fv", _wrap_glColor4fv, METH_VARARGS },
-	 { "glColor4f", _wrap_glColor4f, METH_VARARGS },
-	 { "glColor4dv", _wrap_glColor4dv, METH_VARARGS },
-	 { "glColor4d", _wrap_glColor4d, METH_VARARGS },
-	 { "glColor4bv", _wrap_glColor4bv, METH_VARARGS },
-	 { "glColor4b", _wrap_glColor4b, METH_VARARGS },
-	 { "glColor3usv", _wrap_glColor3usv, METH_VARARGS },
-	 { "glColor3us", _wrap_glColor3us, METH_VARARGS },
-	 { "glColor3uiv", _wrap_glColor3uiv, METH_VARARGS },
-	 { "glColor3ui", _wrap_glColor3ui, METH_VARARGS },
-	 { "glColor3ubv", _wrap_glColor3ubv, METH_VARARGS },
-	 { "glColor3ub", _wrap_glColor3ub, METH_VARARGS },
-	 { "glColor3sv", _wrap_glColor3sv, METH_VARARGS },
-	 { "glColor3s", _wrap_glColor3s, METH_VARARGS },
-	 { "glColor3iv", _wrap_glColor3iv, METH_VARARGS },
-	 { "glColor3i", _wrap_glColor3i, METH_VARARGS },
-	 { "glColor3fv", _wrap_glColor3fv, METH_VARARGS },
-	 { "glColor3f", _wrap_glColor3f, METH_VARARGS },
-	 { "glColor3dv", _wrap_glColor3dv, METH_VARARGS },
-	 { "glColor3d", _wrap_glColor3d, METH_VARARGS },
-	 { "glColor3bv", _wrap_glColor3bv, METH_VARARGS },
-	 { "glColor3b", _wrap_glColor3b, METH_VARARGS },
-	 { "glClipPlane", _wrap_glClipPlane, METH_VARARGS },
-	 { "glClearStencil", _wrap_glClearStencil, METH_VARARGS },
-	 { "glClearIndex", _wrap_glClearIndex, METH_VARARGS },
-	 { "glClearDepth", _wrap_glClearDepth, METH_VARARGS },
-	 { "glClearColor", _wrap_glClearColor, METH_VARARGS },
-	 { "glClearAccum", _wrap_glClearAccum, METH_VARARGS },
-	 { "glClear", _wrap_glClear, METH_VARARGS },
-	 { "glCallLists", _wrap_glCallLists, METH_VARARGS },
-	 { "glCallList", _wrap_glCallList, METH_VARARGS },
-	 { "glBlendFunc", _wrap_glBlendFunc, METH_VARARGS },
-	 { "glBitmap", _wrap_glBitmap, METH_VARARGS },
-	 { "glBindTexture", _wrap_glBindTexture, METH_VARARGS },
-	 { "glBegin", _wrap_glBegin, METH_VARARGS },
-	 { "glArrayElement", _wrap_glArrayElement, METH_VARARGS },
-	 { "glAreTexturesResident", _wrap_glAreTexturesResident, METH_VARARGS },
-	 { "glAlphaFunc", _wrap_glAlphaFunc, METH_VARARGS },
-	 { "glAccum", _wrap_glAccum, METH_VARARGS },
-	 { "glGetColorTableEXT", _wrap_glGetColorTableEXT, METH_VARARGS },
-	 { "glColorTableEXT", _wrap_glColorTableEXT, METH_VARARGS },
-	 { "glVertexPointerEXT", _wrap_glVertexPointerEXT, METH_VARARGS },
-	 { "glTexCoordPointerEXT", _wrap_glTexCoordPointerEXT, METH_VARARGS },
-	 { "glNormalPointerEXT", _wrap_glNormalPointerEXT, METH_VARARGS },
-	 { "glIndexPointerEXT", _wrap_glIndexPointerEXT, METH_VARARGS },
-	 { "glGetPointervEXT", _wrap_glGetPointervEXT, METH_VARARGS },
-	 { "glEdgeFlagPointerEXT", _wrap_glEdgeFlagPointerEXT, METH_VARARGS },
-	 { "glDrawArraysEXT", _wrap_glDrawArraysEXT, METH_VARARGS },
-	 { "glColorPointerEXT", _wrap_glColorPointerEXT, METH_VARARGS },
-	 { "glArrayElementEXT", _wrap_glArrayElementEXT, METH_VARARGS },
+	 { "wxGLCanvas_GetContext", (PyCFunction) _wrap_wxGLCanvas_GetContext, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGLCanvas_SwapBuffers", (PyCFunction) _wrap_wxGLCanvas_SwapBuffers, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGLCanvas_SetColour", (PyCFunction) _wrap_wxGLCanvas_SetColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGLCanvas_SetCurrent", (PyCFunction) _wrap_wxGLCanvas_SetCurrent, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxGLCanvas", (PyCFunction) _wrap_new_wxGLCanvas, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGLContext_GetWindow", (PyCFunction) _wrap_wxGLContext_GetWindow, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGLContext_GetPalette", (PyCFunction) _wrap_wxGLContext_GetPalette, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGLContext_CreateDefaultPalette", (PyCFunction) _wrap_wxGLContext_CreateDefaultPalette, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGLContext_SetupPalette", (PyCFunction) _wrap_wxGLContext_SetupPalette, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGLContext_SetupPixelFormat", (PyCFunction) _wrap_wxGLContext_SetupPixelFormat, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGLContext_SwapBuffers", (PyCFunction) _wrap_wxGLContext_SwapBuffers, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGLContext_SetColour", (PyCFunction) _wrap_wxGLContext_SetColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGLContext_SetCurrent", (PyCFunction) _wrap_wxGLContext_SetCurrent, METH_VARARGS | METH_KEYWORDS },
+	 { "delete_wxGLContext", (PyCFunction) _wrap_delete_wxGLContext, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxGLContext", (PyCFunction) _wrap_new_wxGLContext, METH_VARARGS | METH_KEYWORDS },
+	 { "glViewport", (PyCFunction) _wrap_glViewport, METH_VARARGS | METH_KEYWORDS },
+	 { "glVertexPointer", (PyCFunction) _wrap_glVertexPointer, METH_VARARGS | METH_KEYWORDS },
+	 { "glVertex4sv", (PyCFunction) _wrap_glVertex4sv, METH_VARARGS | METH_KEYWORDS },
+	 { "glVertex4s", (PyCFunction) _wrap_glVertex4s, METH_VARARGS | METH_KEYWORDS },
+	 { "glVertex4iv", (PyCFunction) _wrap_glVertex4iv, METH_VARARGS | METH_KEYWORDS },
+	 { "glVertex4i", (PyCFunction) _wrap_glVertex4i, METH_VARARGS | METH_KEYWORDS },
+	 { "glVertex4fv", (PyCFunction) _wrap_glVertex4fv, METH_VARARGS | METH_KEYWORDS },
+	 { "glVertex4f", (PyCFunction) _wrap_glVertex4f, METH_VARARGS | METH_KEYWORDS },
+	 { "glVertex4dv", (PyCFunction) _wrap_glVertex4dv, METH_VARARGS | METH_KEYWORDS },
+	 { "glVertex4d", (PyCFunction) _wrap_glVertex4d, METH_VARARGS | METH_KEYWORDS },
+	 { "glVertex3sv", (PyCFunction) _wrap_glVertex3sv, METH_VARARGS | METH_KEYWORDS },
+	 { "glVertex3s", (PyCFunction) _wrap_glVertex3s, METH_VARARGS | METH_KEYWORDS },
+	 { "glVertex3iv", (PyCFunction) _wrap_glVertex3iv, METH_VARARGS | METH_KEYWORDS },
+	 { "glVertex3i", (PyCFunction) _wrap_glVertex3i, METH_VARARGS | METH_KEYWORDS },
+	 { "glVertex3fv", (PyCFunction) _wrap_glVertex3fv, METH_VARARGS | METH_KEYWORDS },
+	 { "glVertex3f", (PyCFunction) _wrap_glVertex3f, METH_VARARGS | METH_KEYWORDS },
+	 { "glVertex3dv", (PyCFunction) _wrap_glVertex3dv, METH_VARARGS | METH_KEYWORDS },
+	 { "glVertex3d", (PyCFunction) _wrap_glVertex3d, METH_VARARGS | METH_KEYWORDS },
+	 { "glVertex2sv", (PyCFunction) _wrap_glVertex2sv, METH_VARARGS | METH_KEYWORDS },
+	 { "glVertex2s", (PyCFunction) _wrap_glVertex2s, METH_VARARGS | METH_KEYWORDS },
+	 { "glVertex2iv", (PyCFunction) _wrap_glVertex2iv, METH_VARARGS | METH_KEYWORDS },
+	 { "glVertex2i", (PyCFunction) _wrap_glVertex2i, METH_VARARGS | METH_KEYWORDS },
+	 { "glVertex2fv", (PyCFunction) _wrap_glVertex2fv, METH_VARARGS | METH_KEYWORDS },
+	 { "glVertex2f", (PyCFunction) _wrap_glVertex2f, METH_VARARGS | METH_KEYWORDS },
+	 { "glVertex2dv", (PyCFunction) _wrap_glVertex2dv, METH_VARARGS | METH_KEYWORDS },
+	 { "glVertex2d", (PyCFunction) _wrap_glVertex2d, METH_VARARGS | METH_KEYWORDS },
+	 { "glTranslatef", (PyCFunction) _wrap_glTranslatef, METH_VARARGS | METH_KEYWORDS },
+	 { "glTranslated", (PyCFunction) _wrap_glTranslated, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexSubImage2D", (PyCFunction) _wrap_glTexSubImage2D, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexSubImage1D", (PyCFunction) _wrap_glTexSubImage1D, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexParameteriv", (PyCFunction) _wrap_glTexParameteriv, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexParameteri", (PyCFunction) _wrap_glTexParameteri, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexParameterfv", (PyCFunction) _wrap_glTexParameterfv, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexParameterf", (PyCFunction) _wrap_glTexParameterf, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexImage2D", (PyCFunction) _wrap_glTexImage2D, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexImage1D", (PyCFunction) _wrap_glTexImage1D, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexGeniv", (PyCFunction) _wrap_glTexGeniv, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexGeni", (PyCFunction) _wrap_glTexGeni, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexGenfv", (PyCFunction) _wrap_glTexGenfv, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexGenf", (PyCFunction) _wrap_glTexGenf, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexGendv", (PyCFunction) _wrap_glTexGendv, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexGend", (PyCFunction) _wrap_glTexGend, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexEnviv", (PyCFunction) _wrap_glTexEnviv, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexEnvi", (PyCFunction) _wrap_glTexEnvi, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexEnvfv", (PyCFunction) _wrap_glTexEnvfv, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexEnvf", (PyCFunction) _wrap_glTexEnvf, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexCoordPointer", (PyCFunction) _wrap_glTexCoordPointer, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexCoord4sv", (PyCFunction) _wrap_glTexCoord4sv, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexCoord4s", (PyCFunction) _wrap_glTexCoord4s, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexCoord4iv", (PyCFunction) _wrap_glTexCoord4iv, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexCoord4i", (PyCFunction) _wrap_glTexCoord4i, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexCoord4fv", (PyCFunction) _wrap_glTexCoord4fv, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexCoord4f", (PyCFunction) _wrap_glTexCoord4f, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexCoord4dv", (PyCFunction) _wrap_glTexCoord4dv, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexCoord4d", (PyCFunction) _wrap_glTexCoord4d, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexCoord3sv", (PyCFunction) _wrap_glTexCoord3sv, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexCoord3s", (PyCFunction) _wrap_glTexCoord3s, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexCoord3iv", (PyCFunction) _wrap_glTexCoord3iv, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexCoord3i", (PyCFunction) _wrap_glTexCoord3i, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexCoord3fv", (PyCFunction) _wrap_glTexCoord3fv, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexCoord3f", (PyCFunction) _wrap_glTexCoord3f, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexCoord3dv", (PyCFunction) _wrap_glTexCoord3dv, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexCoord3d", (PyCFunction) _wrap_glTexCoord3d, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexCoord2sv", (PyCFunction) _wrap_glTexCoord2sv, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexCoord2s", (PyCFunction) _wrap_glTexCoord2s, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexCoord2iv", (PyCFunction) _wrap_glTexCoord2iv, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexCoord2i", (PyCFunction) _wrap_glTexCoord2i, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexCoord2fv", (PyCFunction) _wrap_glTexCoord2fv, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexCoord2f", (PyCFunction) _wrap_glTexCoord2f, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexCoord2dv", (PyCFunction) _wrap_glTexCoord2dv, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexCoord2d", (PyCFunction) _wrap_glTexCoord2d, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexCoord1sv", (PyCFunction) _wrap_glTexCoord1sv, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexCoord1s", (PyCFunction) _wrap_glTexCoord1s, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexCoord1iv", (PyCFunction) _wrap_glTexCoord1iv, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexCoord1i", (PyCFunction) _wrap_glTexCoord1i, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexCoord1fv", (PyCFunction) _wrap_glTexCoord1fv, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexCoord1f", (PyCFunction) _wrap_glTexCoord1f, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexCoord1dv", (PyCFunction) _wrap_glTexCoord1dv, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexCoord1d", (PyCFunction) _wrap_glTexCoord1d, METH_VARARGS | METH_KEYWORDS },
+	 { "glStencilOp", (PyCFunction) _wrap_glStencilOp, METH_VARARGS | METH_KEYWORDS },
+	 { "glStencilMask", (PyCFunction) _wrap_glStencilMask, METH_VARARGS | METH_KEYWORDS },
+	 { "glStencilFunc", (PyCFunction) _wrap_glStencilFunc, METH_VARARGS | METH_KEYWORDS },
+	 { "glShadeModel", (PyCFunction) _wrap_glShadeModel, METH_VARARGS | METH_KEYWORDS },
+	 { "glSelectBuffer", (PyCFunction) _wrap_glSelectBuffer, METH_VARARGS | METH_KEYWORDS },
+	 { "glScissor", (PyCFunction) _wrap_glScissor, METH_VARARGS | METH_KEYWORDS },
+	 { "glScalef", (PyCFunction) _wrap_glScalef, METH_VARARGS | METH_KEYWORDS },
+	 { "glScaled", (PyCFunction) _wrap_glScaled, METH_VARARGS | METH_KEYWORDS },
+	 { "glRotatef", (PyCFunction) _wrap_glRotatef, METH_VARARGS | METH_KEYWORDS },
+	 { "glRotated", (PyCFunction) _wrap_glRotated, METH_VARARGS | METH_KEYWORDS },
+	 { "glRenderMode", (PyCFunction) _wrap_glRenderMode, METH_VARARGS | METH_KEYWORDS },
+	 { "glRectsv", (PyCFunction) _wrap_glRectsv, METH_VARARGS | METH_KEYWORDS },
+	 { "glRects", (PyCFunction) _wrap_glRects, METH_VARARGS | METH_KEYWORDS },
+	 { "glRectiv", (PyCFunction) _wrap_glRectiv, METH_VARARGS | METH_KEYWORDS },
+	 { "glRecti", (PyCFunction) _wrap_glRecti, METH_VARARGS | METH_KEYWORDS },
+	 { "glRectfv", (PyCFunction) _wrap_glRectfv, METH_VARARGS | METH_KEYWORDS },
+	 { "glRectf", (PyCFunction) _wrap_glRectf, METH_VARARGS | METH_KEYWORDS },
+	 { "glRectdv", (PyCFunction) _wrap_glRectdv, METH_VARARGS | METH_KEYWORDS },
+	 { "glRectd", (PyCFunction) _wrap_glRectd, METH_VARARGS | METH_KEYWORDS },
+	 { "glReadPixels", (PyCFunction) _wrap_glReadPixels, METH_VARARGS | METH_KEYWORDS },
+	 { "glReadBuffer", (PyCFunction) _wrap_glReadBuffer, METH_VARARGS | METH_KEYWORDS },
+	 { "glRasterPos4sv", (PyCFunction) _wrap_glRasterPos4sv, METH_VARARGS | METH_KEYWORDS },
+	 { "glRasterPos4s", (PyCFunction) _wrap_glRasterPos4s, METH_VARARGS | METH_KEYWORDS },
+	 { "glRasterPos4iv", (PyCFunction) _wrap_glRasterPos4iv, METH_VARARGS | METH_KEYWORDS },
+	 { "glRasterPos4i", (PyCFunction) _wrap_glRasterPos4i, METH_VARARGS | METH_KEYWORDS },
+	 { "glRasterPos4fv", (PyCFunction) _wrap_glRasterPos4fv, METH_VARARGS | METH_KEYWORDS },
+	 { "glRasterPos4f", (PyCFunction) _wrap_glRasterPos4f, METH_VARARGS | METH_KEYWORDS },
+	 { "glRasterPos4dv", (PyCFunction) _wrap_glRasterPos4dv, METH_VARARGS | METH_KEYWORDS },
+	 { "glRasterPos4d", (PyCFunction) _wrap_glRasterPos4d, METH_VARARGS | METH_KEYWORDS },
+	 { "glRasterPos3sv", (PyCFunction) _wrap_glRasterPos3sv, METH_VARARGS | METH_KEYWORDS },
+	 { "glRasterPos3s", (PyCFunction) _wrap_glRasterPos3s, METH_VARARGS | METH_KEYWORDS },
+	 { "glRasterPos3iv", (PyCFunction) _wrap_glRasterPos3iv, METH_VARARGS | METH_KEYWORDS },
+	 { "glRasterPos3i", (PyCFunction) _wrap_glRasterPos3i, METH_VARARGS | METH_KEYWORDS },
+	 { "glRasterPos3fv", (PyCFunction) _wrap_glRasterPos3fv, METH_VARARGS | METH_KEYWORDS },
+	 { "glRasterPos3f", (PyCFunction) _wrap_glRasterPos3f, METH_VARARGS | METH_KEYWORDS },
+	 { "glRasterPos3dv", (PyCFunction) _wrap_glRasterPos3dv, METH_VARARGS | METH_KEYWORDS },
+	 { "glRasterPos3d", (PyCFunction) _wrap_glRasterPos3d, METH_VARARGS | METH_KEYWORDS },
+	 { "glRasterPos2sv", (PyCFunction) _wrap_glRasterPos2sv, METH_VARARGS | METH_KEYWORDS },
+	 { "glRasterPos2s", (PyCFunction) _wrap_glRasterPos2s, METH_VARARGS | METH_KEYWORDS },
+	 { "glRasterPos2iv", (PyCFunction) _wrap_glRasterPos2iv, METH_VARARGS | METH_KEYWORDS },
+	 { "glRasterPos2i", (PyCFunction) _wrap_glRasterPos2i, METH_VARARGS | METH_KEYWORDS },
+	 { "glRasterPos2fv", (PyCFunction) _wrap_glRasterPos2fv, METH_VARARGS | METH_KEYWORDS },
+	 { "glRasterPos2f", (PyCFunction) _wrap_glRasterPos2f, METH_VARARGS | METH_KEYWORDS },
+	 { "glRasterPos2dv", (PyCFunction) _wrap_glRasterPos2dv, METH_VARARGS | METH_KEYWORDS },
+	 { "glRasterPos2d", (PyCFunction) _wrap_glRasterPos2d, METH_VARARGS | METH_KEYWORDS },
+	 { "glPushName", (PyCFunction) _wrap_glPushName, METH_VARARGS | METH_KEYWORDS },
+	 { "glPushMatrix", (PyCFunction) _wrap_glPushMatrix, METH_VARARGS | METH_KEYWORDS },
+	 { "glPushClientAttrib", (PyCFunction) _wrap_glPushClientAttrib, METH_VARARGS | METH_KEYWORDS },
+	 { "glPushAttrib", (PyCFunction) _wrap_glPushAttrib, METH_VARARGS | METH_KEYWORDS },
+	 { "glPrioritizeTextures", (PyCFunction) _wrap_glPrioritizeTextures, METH_VARARGS | METH_KEYWORDS },
+	 { "glPopName", (PyCFunction) _wrap_glPopName, METH_VARARGS | METH_KEYWORDS },
+	 { "glPopMatrix", (PyCFunction) _wrap_glPopMatrix, METH_VARARGS | METH_KEYWORDS },
+	 { "glPopClientAttrib", (PyCFunction) _wrap_glPopClientAttrib, METH_VARARGS | METH_KEYWORDS },
+	 { "glPopAttrib", (PyCFunction) _wrap_glPopAttrib, METH_VARARGS | METH_KEYWORDS },
+	 { "glPolygonStipple", (PyCFunction) _wrap_glPolygonStipple, METH_VARARGS | METH_KEYWORDS },
+	 { "glPolygonOffset", (PyCFunction) _wrap_glPolygonOffset, METH_VARARGS | METH_KEYWORDS },
+	 { "glPolygonMode", (PyCFunction) _wrap_glPolygonMode, METH_VARARGS | METH_KEYWORDS },
+	 { "glPointSize", (PyCFunction) _wrap_glPointSize, METH_VARARGS | METH_KEYWORDS },
+	 { "glPixelZoom", (PyCFunction) _wrap_glPixelZoom, METH_VARARGS | METH_KEYWORDS },
+	 { "glPixelTransferi", (PyCFunction) _wrap_glPixelTransferi, METH_VARARGS | METH_KEYWORDS },
+	 { "glPixelTransferf", (PyCFunction) _wrap_glPixelTransferf, METH_VARARGS | METH_KEYWORDS },
+	 { "glPixelStorei", (PyCFunction) _wrap_glPixelStorei, METH_VARARGS | METH_KEYWORDS },
+	 { "glPixelStoref", (PyCFunction) _wrap_glPixelStoref, METH_VARARGS | METH_KEYWORDS },
+	 { "glPixelMapusv", (PyCFunction) _wrap_glPixelMapusv, METH_VARARGS | METH_KEYWORDS },
+	 { "glPixelMapuiv", (PyCFunction) _wrap_glPixelMapuiv, METH_VARARGS | METH_KEYWORDS },
+	 { "glPixelMapfv", (PyCFunction) _wrap_glPixelMapfv, METH_VARARGS | METH_KEYWORDS },
+	 { "glPassThrough", (PyCFunction) _wrap_glPassThrough, METH_VARARGS | METH_KEYWORDS },
+	 { "glOrtho", (PyCFunction) _wrap_glOrtho, METH_VARARGS | METH_KEYWORDS },
+	 { "glNormalPointer", (PyCFunction) _wrap_glNormalPointer, METH_VARARGS | METH_KEYWORDS },
+	 { "glNormal3sv", (PyCFunction) _wrap_glNormal3sv, METH_VARARGS | METH_KEYWORDS },
+	 { "glNormal3s", (PyCFunction) _wrap_glNormal3s, METH_VARARGS | METH_KEYWORDS },
+	 { "glNormal3iv", (PyCFunction) _wrap_glNormal3iv, METH_VARARGS | METH_KEYWORDS },
+	 { "glNormal3i", (PyCFunction) _wrap_glNormal3i, METH_VARARGS | METH_KEYWORDS },
+	 { "glNormal3fv", (PyCFunction) _wrap_glNormal3fv, METH_VARARGS | METH_KEYWORDS },
+	 { "glNormal3f", (PyCFunction) _wrap_glNormal3f, METH_VARARGS | METH_KEYWORDS },
+	 { "glNormal3dv", (PyCFunction) _wrap_glNormal3dv, METH_VARARGS | METH_KEYWORDS },
+	 { "glNormal3d", (PyCFunction) _wrap_glNormal3d, METH_VARARGS | METH_KEYWORDS },
+	 { "glNormal3bv", (PyCFunction) _wrap_glNormal3bv, METH_VARARGS | METH_KEYWORDS },
+	 { "glNormal3b", (PyCFunction) _wrap_glNormal3b, METH_VARARGS | METH_KEYWORDS },
+	 { "glNewList", (PyCFunction) _wrap_glNewList, METH_VARARGS | METH_KEYWORDS },
+	 { "glMultMatrixf", (PyCFunction) _wrap_glMultMatrixf, METH_VARARGS | METH_KEYWORDS },
+	 { "glMultMatrixd", (PyCFunction) _wrap_glMultMatrixd, METH_VARARGS | METH_KEYWORDS },
+	 { "glMatrixMode", (PyCFunction) _wrap_glMatrixMode, METH_VARARGS | METH_KEYWORDS },
+	 { "glMaterialiv", (PyCFunction) _wrap_glMaterialiv, METH_VARARGS | METH_KEYWORDS },
+	 { "glMateriali", (PyCFunction) _wrap_glMateriali, METH_VARARGS | METH_KEYWORDS },
+	 { "glMaterialfv", (PyCFunction) _wrap_glMaterialfv, METH_VARARGS | METH_KEYWORDS },
+	 { "glMaterialf", (PyCFunction) _wrap_glMaterialf, METH_VARARGS | METH_KEYWORDS },
+	 { "glMapGrid2f", (PyCFunction) _wrap_glMapGrid2f, METH_VARARGS | METH_KEYWORDS },
+	 { "glMapGrid2d", (PyCFunction) _wrap_glMapGrid2d, METH_VARARGS | METH_KEYWORDS },
+	 { "glMapGrid1f", (PyCFunction) _wrap_glMapGrid1f, METH_VARARGS | METH_KEYWORDS },
+	 { "glMapGrid1d", (PyCFunction) _wrap_glMapGrid1d, METH_VARARGS | METH_KEYWORDS },
+	 { "glMap2f", (PyCFunction) _wrap_glMap2f, METH_VARARGS | METH_KEYWORDS },
+	 { "glMap2d", (PyCFunction) _wrap_glMap2d, METH_VARARGS | METH_KEYWORDS },
+	 { "glMap1f", (PyCFunction) _wrap_glMap1f, METH_VARARGS | METH_KEYWORDS },
+	 { "glMap1d", (PyCFunction) _wrap_glMap1d, METH_VARARGS | METH_KEYWORDS },
+	 { "glLogicOp", (PyCFunction) _wrap_glLogicOp, METH_VARARGS | METH_KEYWORDS },
+	 { "glLoadName", (PyCFunction) _wrap_glLoadName, METH_VARARGS | METH_KEYWORDS },
+	 { "glLoadMatrixf", (PyCFunction) _wrap_glLoadMatrixf, METH_VARARGS | METH_KEYWORDS },
+	 { "glLoadMatrixd", (PyCFunction) _wrap_glLoadMatrixd, METH_VARARGS | METH_KEYWORDS },
+	 { "glLoadIdentity", (PyCFunction) _wrap_glLoadIdentity, METH_VARARGS | METH_KEYWORDS },
+	 { "glListBase", (PyCFunction) _wrap_glListBase, METH_VARARGS | METH_KEYWORDS },
+	 { "glLineWidth", (PyCFunction) _wrap_glLineWidth, METH_VARARGS | METH_KEYWORDS },
+	 { "glLineStipple", (PyCFunction) _wrap_glLineStipple, METH_VARARGS | METH_KEYWORDS },
+	 { "glLightiv", (PyCFunction) _wrap_glLightiv, METH_VARARGS | METH_KEYWORDS },
+	 { "glLighti", (PyCFunction) _wrap_glLighti, METH_VARARGS | METH_KEYWORDS },
+	 { "glLightfv", (PyCFunction) _wrap_glLightfv, METH_VARARGS | METH_KEYWORDS },
+	 { "glLightf", (PyCFunction) _wrap_glLightf, METH_VARARGS | METH_KEYWORDS },
+	 { "glLightModeliv", (PyCFunction) _wrap_glLightModeliv, METH_VARARGS | METH_KEYWORDS },
+	 { "glLightModeli", (PyCFunction) _wrap_glLightModeli, METH_VARARGS | METH_KEYWORDS },
+	 { "glLightModelfv", (PyCFunction) _wrap_glLightModelfv, METH_VARARGS | METH_KEYWORDS },
+	 { "glLightModelf", (PyCFunction) _wrap_glLightModelf, METH_VARARGS | METH_KEYWORDS },
+	 { "glIsTexture", (PyCFunction) _wrap_glIsTexture, METH_VARARGS | METH_KEYWORDS },
+	 { "glIsList", (PyCFunction) _wrap_glIsList, METH_VARARGS | METH_KEYWORDS },
+	 { "glIsEnabled", (PyCFunction) _wrap_glIsEnabled, METH_VARARGS | METH_KEYWORDS },
+	 { "glInterleavedArrays", (PyCFunction) _wrap_glInterleavedArrays, METH_VARARGS | METH_KEYWORDS },
+	 { "glInitNames", (PyCFunction) _wrap_glInitNames, METH_VARARGS | METH_KEYWORDS },
+	 { "glIndexubv", (PyCFunction) _wrap_glIndexubv, METH_VARARGS | METH_KEYWORDS },
+	 { "glIndexub", (PyCFunction) _wrap_glIndexub, METH_VARARGS | METH_KEYWORDS },
+	 { "glIndexsv", (PyCFunction) _wrap_glIndexsv, METH_VARARGS | METH_KEYWORDS },
+	 { "glIndexs", (PyCFunction) _wrap_glIndexs, METH_VARARGS | METH_KEYWORDS },
+	 { "glIndexiv", (PyCFunction) _wrap_glIndexiv, METH_VARARGS | METH_KEYWORDS },
+	 { "glIndexi", (PyCFunction) _wrap_glIndexi, METH_VARARGS | METH_KEYWORDS },
+	 { "glIndexfv", (PyCFunction) _wrap_glIndexfv, METH_VARARGS | METH_KEYWORDS },
+	 { "glIndexf", (PyCFunction) _wrap_glIndexf, METH_VARARGS | METH_KEYWORDS },
+	 { "glIndexdv", (PyCFunction) _wrap_glIndexdv, METH_VARARGS | METH_KEYWORDS },
+	 { "glIndexd", (PyCFunction) _wrap_glIndexd, METH_VARARGS | METH_KEYWORDS },
+	 { "glIndexPointer", (PyCFunction) _wrap_glIndexPointer, METH_VARARGS | METH_KEYWORDS },
+	 { "glIndexMask", (PyCFunction) _wrap_glIndexMask, METH_VARARGS | METH_KEYWORDS },
+	 { "glHint", (PyCFunction) _wrap_glHint, METH_VARARGS | METH_KEYWORDS },
+	 { "glGetTexParameteriv", (PyCFunction) _wrap_glGetTexParameteriv, METH_VARARGS | METH_KEYWORDS },
+	 { "glGetTexParameterfv", (PyCFunction) _wrap_glGetTexParameterfv, METH_VARARGS | METH_KEYWORDS },
+	 { "glGetTexLevelParameteriv", (PyCFunction) _wrap_glGetTexLevelParameteriv, METH_VARARGS | METH_KEYWORDS },
+	 { "glGetTexLevelParameterfv", (PyCFunction) _wrap_glGetTexLevelParameterfv, METH_VARARGS | METH_KEYWORDS },
+	 { "glGetTexImage", (PyCFunction) _wrap_glGetTexImage, METH_VARARGS | METH_KEYWORDS },
+	 { "glGetTexGeniv", (PyCFunction) _wrap_glGetTexGeniv, METH_VARARGS | METH_KEYWORDS },
+	 { "glGetTexGenfv", (PyCFunction) _wrap_glGetTexGenfv, METH_VARARGS | METH_KEYWORDS },
+	 { "glGetTexGendv", (PyCFunction) _wrap_glGetTexGendv, METH_VARARGS | METH_KEYWORDS },
+	 { "glGetTexEnviv", (PyCFunction) _wrap_glGetTexEnviv, METH_VARARGS | METH_KEYWORDS },
+	 { "glGetTexEnvfv", (PyCFunction) _wrap_glGetTexEnvfv, METH_VARARGS | METH_KEYWORDS },
+	 { "glGetString", (PyCFunction) _wrap_glGetString, METH_VARARGS | METH_KEYWORDS },
+	 { "glGetPolygonStipple", (PyCFunction) _wrap_glGetPolygonStipple, METH_VARARGS | METH_KEYWORDS },
+	 { "glGetPointerv", (PyCFunction) _wrap_glGetPointerv, METH_VARARGS | METH_KEYWORDS },
+	 { "glGetPixelMapusv", (PyCFunction) _wrap_glGetPixelMapusv, METH_VARARGS | METH_KEYWORDS },
+	 { "glGetPixelMapuiv", (PyCFunction) _wrap_glGetPixelMapuiv, METH_VARARGS | METH_KEYWORDS },
+	 { "glGetPixelMapfv", (PyCFunction) _wrap_glGetPixelMapfv, METH_VARARGS | METH_KEYWORDS },
+	 { "glGetMaterialiv", (PyCFunction) _wrap_glGetMaterialiv, METH_VARARGS | METH_KEYWORDS },
+	 { "glGetMaterialfv", (PyCFunction) _wrap_glGetMaterialfv, METH_VARARGS | METH_KEYWORDS },
+	 { "glGetMapiv", (PyCFunction) _wrap_glGetMapiv, METH_VARARGS | METH_KEYWORDS },
+	 { "glGetMapfv", (PyCFunction) _wrap_glGetMapfv, METH_VARARGS | METH_KEYWORDS },
+	 { "glGetMapdv", (PyCFunction) _wrap_glGetMapdv, METH_VARARGS | METH_KEYWORDS },
+	 { "glGetLightiv", (PyCFunction) _wrap_glGetLightiv, METH_VARARGS | METH_KEYWORDS },
+	 { "glGetLightfv", (PyCFunction) _wrap_glGetLightfv, METH_VARARGS | METH_KEYWORDS },
+	 { "glGetIntegerv", (PyCFunction) _wrap_glGetIntegerv, METH_VARARGS | METH_KEYWORDS },
+	 { "glGetFloatv", (PyCFunction) _wrap_glGetFloatv, METH_VARARGS | METH_KEYWORDS },
+	 { "glGetError", (PyCFunction) _wrap_glGetError, METH_VARARGS | METH_KEYWORDS },
+	 { "glGetDoublev", (PyCFunction) _wrap_glGetDoublev, METH_VARARGS | METH_KEYWORDS },
+	 { "glGetClipPlane", (PyCFunction) _wrap_glGetClipPlane, METH_VARARGS | METH_KEYWORDS },
+	 { "glGetBooleanv", (PyCFunction) _wrap_glGetBooleanv, METH_VARARGS | METH_KEYWORDS },
+	 { "glGenTextures", (PyCFunction) _wrap_glGenTextures, METH_VARARGS | METH_KEYWORDS },
+	 { "glGenLists", (PyCFunction) _wrap_glGenLists, METH_VARARGS | METH_KEYWORDS },
+	 { "glFrustum", (PyCFunction) _wrap_glFrustum, METH_VARARGS | METH_KEYWORDS },
+	 { "glFrontFace", (PyCFunction) _wrap_glFrontFace, METH_VARARGS | METH_KEYWORDS },
+	 { "glFogiv", (PyCFunction) _wrap_glFogiv, METH_VARARGS | METH_KEYWORDS },
+	 { "glFogi", (PyCFunction) _wrap_glFogi, METH_VARARGS | METH_KEYWORDS },
+	 { "glFogfv", (PyCFunction) _wrap_glFogfv, METH_VARARGS | METH_KEYWORDS },
+	 { "glFogf", (PyCFunction) _wrap_glFogf, METH_VARARGS | METH_KEYWORDS },
+	 { "glFlush", (PyCFunction) _wrap_glFlush, METH_VARARGS | METH_KEYWORDS },
+	 { "glFinish", (PyCFunction) _wrap_glFinish, METH_VARARGS | METH_KEYWORDS },
+	 { "glFeedbackBuffer", (PyCFunction) _wrap_glFeedbackBuffer, METH_VARARGS | METH_KEYWORDS },
+	 { "glEvalPoint2", (PyCFunction) _wrap_glEvalPoint2, METH_VARARGS | METH_KEYWORDS },
+	 { "glEvalPoint1", (PyCFunction) _wrap_glEvalPoint1, METH_VARARGS | METH_KEYWORDS },
+	 { "glEvalMesh2", (PyCFunction) _wrap_glEvalMesh2, METH_VARARGS | METH_KEYWORDS },
+	 { "glEvalMesh1", (PyCFunction) _wrap_glEvalMesh1, METH_VARARGS | METH_KEYWORDS },
+	 { "glEvalCoord2fv", (PyCFunction) _wrap_glEvalCoord2fv, METH_VARARGS | METH_KEYWORDS },
+	 { "glEvalCoord2f", (PyCFunction) _wrap_glEvalCoord2f, METH_VARARGS | METH_KEYWORDS },
+	 { "glEvalCoord2dv", (PyCFunction) _wrap_glEvalCoord2dv, METH_VARARGS | METH_KEYWORDS },
+	 { "glEvalCoord2d", (PyCFunction) _wrap_glEvalCoord2d, METH_VARARGS | METH_KEYWORDS },
+	 { "glEvalCoord1fv", (PyCFunction) _wrap_glEvalCoord1fv, METH_VARARGS | METH_KEYWORDS },
+	 { "glEvalCoord1f", (PyCFunction) _wrap_glEvalCoord1f, METH_VARARGS | METH_KEYWORDS },
+	 { "glEvalCoord1dv", (PyCFunction) _wrap_glEvalCoord1dv, METH_VARARGS | METH_KEYWORDS },
+	 { "glEvalCoord1d", (PyCFunction) _wrap_glEvalCoord1d, METH_VARARGS | METH_KEYWORDS },
+	 { "glEndList", (PyCFunction) _wrap_glEndList, METH_VARARGS | METH_KEYWORDS },
+	 { "glEnd", (PyCFunction) _wrap_glEnd, METH_VARARGS | METH_KEYWORDS },
+	 { "glEnableClientState", (PyCFunction) _wrap_glEnableClientState, METH_VARARGS | METH_KEYWORDS },
+	 { "glEnable", (PyCFunction) _wrap_glEnable, METH_VARARGS | METH_KEYWORDS },
+	 { "glEdgeFlagv", (PyCFunction) _wrap_glEdgeFlagv, METH_VARARGS | METH_KEYWORDS },
+	 { "glEdgeFlagPointer", (PyCFunction) _wrap_glEdgeFlagPointer, METH_VARARGS | METH_KEYWORDS },
+	 { "glEdgeFlag", (PyCFunction) _wrap_glEdgeFlag, METH_VARARGS | METH_KEYWORDS },
+	 { "glDrawPixels", (PyCFunction) _wrap_glDrawPixels, METH_VARARGS | METH_KEYWORDS },
+	 { "glDrawElements", (PyCFunction) _wrap_glDrawElements, METH_VARARGS | METH_KEYWORDS },
+	 { "glDrawBuffer", (PyCFunction) _wrap_glDrawBuffer, METH_VARARGS | METH_KEYWORDS },
+	 { "glDrawArrays", (PyCFunction) _wrap_glDrawArrays, METH_VARARGS | METH_KEYWORDS },
+	 { "glDisableClientState", (PyCFunction) _wrap_glDisableClientState, METH_VARARGS | METH_KEYWORDS },
+	 { "glDisable", (PyCFunction) _wrap_glDisable, METH_VARARGS | METH_KEYWORDS },
+	 { "glDepthRange", (PyCFunction) _wrap_glDepthRange, METH_VARARGS | METH_KEYWORDS },
+	 { "glDepthMask", (PyCFunction) _wrap_glDepthMask, METH_VARARGS | METH_KEYWORDS },
+	 { "glDepthFunc", (PyCFunction) _wrap_glDepthFunc, METH_VARARGS | METH_KEYWORDS },
+	 { "glDeleteTextures", (PyCFunction) _wrap_glDeleteTextures, METH_VARARGS | METH_KEYWORDS },
+	 { "glDeleteLists", (PyCFunction) _wrap_glDeleteLists, METH_VARARGS | METH_KEYWORDS },
+	 { "glCullFace", (PyCFunction) _wrap_glCullFace, METH_VARARGS | METH_KEYWORDS },
+	 { "glCopyTexSubImage2D", (PyCFunction) _wrap_glCopyTexSubImage2D, METH_VARARGS | METH_KEYWORDS },
+	 { "glCopyTexSubImage1D", (PyCFunction) _wrap_glCopyTexSubImage1D, METH_VARARGS | METH_KEYWORDS },
+	 { "glCopyTexImage2D", (PyCFunction) _wrap_glCopyTexImage2D, METH_VARARGS | METH_KEYWORDS },
+	 { "glCopyTexImage1D", (PyCFunction) _wrap_glCopyTexImage1D, METH_VARARGS | METH_KEYWORDS },
+	 { "glCopyPixels", (PyCFunction) _wrap_glCopyPixels, METH_VARARGS | METH_KEYWORDS },
+	 { "glColorPointer", (PyCFunction) _wrap_glColorPointer, METH_VARARGS | METH_KEYWORDS },
+	 { "glColorMaterial", (PyCFunction) _wrap_glColorMaterial, METH_VARARGS | METH_KEYWORDS },
+	 { "glColorMask", (PyCFunction) _wrap_glColorMask, METH_VARARGS | METH_KEYWORDS },
+	 { "glColor4usv", (PyCFunction) _wrap_glColor4usv, METH_VARARGS | METH_KEYWORDS },
+	 { "glColor4us", (PyCFunction) _wrap_glColor4us, METH_VARARGS | METH_KEYWORDS },
+	 { "glColor4uiv", (PyCFunction) _wrap_glColor4uiv, METH_VARARGS | METH_KEYWORDS },
+	 { "glColor4ui", (PyCFunction) _wrap_glColor4ui, METH_VARARGS | METH_KEYWORDS },
+	 { "glColor4ubv", (PyCFunction) _wrap_glColor4ubv, METH_VARARGS | METH_KEYWORDS },
+	 { "glColor4ub", (PyCFunction) _wrap_glColor4ub, METH_VARARGS | METH_KEYWORDS },
+	 { "glColor4sv", (PyCFunction) _wrap_glColor4sv, METH_VARARGS | METH_KEYWORDS },
+	 { "glColor4s", (PyCFunction) _wrap_glColor4s, METH_VARARGS | METH_KEYWORDS },
+	 { "glColor4iv", (PyCFunction) _wrap_glColor4iv, METH_VARARGS | METH_KEYWORDS },
+	 { "glColor4i", (PyCFunction) _wrap_glColor4i, METH_VARARGS | METH_KEYWORDS },
+	 { "glColor4fv", (PyCFunction) _wrap_glColor4fv, METH_VARARGS | METH_KEYWORDS },
+	 { "glColor4f", (PyCFunction) _wrap_glColor4f, METH_VARARGS | METH_KEYWORDS },
+	 { "glColor4dv", (PyCFunction) _wrap_glColor4dv, METH_VARARGS | METH_KEYWORDS },
+	 { "glColor4d", (PyCFunction) _wrap_glColor4d, METH_VARARGS | METH_KEYWORDS },
+	 { "glColor4bv", (PyCFunction) _wrap_glColor4bv, METH_VARARGS | METH_KEYWORDS },
+	 { "glColor4b", (PyCFunction) _wrap_glColor4b, METH_VARARGS | METH_KEYWORDS },
+	 { "glColor3usv", (PyCFunction) _wrap_glColor3usv, METH_VARARGS | METH_KEYWORDS },
+	 { "glColor3us", (PyCFunction) _wrap_glColor3us, METH_VARARGS | METH_KEYWORDS },
+	 { "glColor3uiv", (PyCFunction) _wrap_glColor3uiv, METH_VARARGS | METH_KEYWORDS },
+	 { "glColor3ui", (PyCFunction) _wrap_glColor3ui, METH_VARARGS | METH_KEYWORDS },
+	 { "glColor3ubv", (PyCFunction) _wrap_glColor3ubv, METH_VARARGS | METH_KEYWORDS },
+	 { "glColor3ub", (PyCFunction) _wrap_glColor3ub, METH_VARARGS | METH_KEYWORDS },
+	 { "glColor3sv", (PyCFunction) _wrap_glColor3sv, METH_VARARGS | METH_KEYWORDS },
+	 { "glColor3s", (PyCFunction) _wrap_glColor3s, METH_VARARGS | METH_KEYWORDS },
+	 { "glColor3iv", (PyCFunction) _wrap_glColor3iv, METH_VARARGS | METH_KEYWORDS },
+	 { "glColor3i", (PyCFunction) _wrap_glColor3i, METH_VARARGS | METH_KEYWORDS },
+	 { "glColor3fv", (PyCFunction) _wrap_glColor3fv, METH_VARARGS | METH_KEYWORDS },
+	 { "glColor3f", (PyCFunction) _wrap_glColor3f, METH_VARARGS | METH_KEYWORDS },
+	 { "glColor3dv", (PyCFunction) _wrap_glColor3dv, METH_VARARGS | METH_KEYWORDS },
+	 { "glColor3d", (PyCFunction) _wrap_glColor3d, METH_VARARGS | METH_KEYWORDS },
+	 { "glColor3bv", (PyCFunction) _wrap_glColor3bv, METH_VARARGS | METH_KEYWORDS },
+	 { "glColor3b", (PyCFunction) _wrap_glColor3b, METH_VARARGS | METH_KEYWORDS },
+	 { "glClipPlane", (PyCFunction) _wrap_glClipPlane, METH_VARARGS | METH_KEYWORDS },
+	 { "glClearStencil", (PyCFunction) _wrap_glClearStencil, METH_VARARGS | METH_KEYWORDS },
+	 { "glClearIndex", (PyCFunction) _wrap_glClearIndex, METH_VARARGS | METH_KEYWORDS },
+	 { "glClearDepth", (PyCFunction) _wrap_glClearDepth, METH_VARARGS | METH_KEYWORDS },
+	 { "glClearColor", (PyCFunction) _wrap_glClearColor, METH_VARARGS | METH_KEYWORDS },
+	 { "glClearAccum", (PyCFunction) _wrap_glClearAccum, METH_VARARGS | METH_KEYWORDS },
+	 { "glClear", (PyCFunction) _wrap_glClear, METH_VARARGS | METH_KEYWORDS },
+	 { "glCallLists", (PyCFunction) _wrap_glCallLists, METH_VARARGS | METH_KEYWORDS },
+	 { "glCallList", (PyCFunction) _wrap_glCallList, METH_VARARGS | METH_KEYWORDS },
+	 { "glBlendFunc", (PyCFunction) _wrap_glBlendFunc, METH_VARARGS | METH_KEYWORDS },
+	 { "glBitmap", (PyCFunction) _wrap_glBitmap, METH_VARARGS | METH_KEYWORDS },
+	 { "glBindTexture", (PyCFunction) _wrap_glBindTexture, METH_VARARGS | METH_KEYWORDS },
+	 { "glBegin", (PyCFunction) _wrap_glBegin, METH_VARARGS | METH_KEYWORDS },
+	 { "glArrayElement", (PyCFunction) _wrap_glArrayElement, METH_VARARGS | METH_KEYWORDS },
+	 { "glAreTexturesResident", (PyCFunction) _wrap_glAreTexturesResident, METH_VARARGS | METH_KEYWORDS },
+	 { "glAlphaFunc", (PyCFunction) _wrap_glAlphaFunc, METH_VARARGS | METH_KEYWORDS },
+	 { "glAccum", (PyCFunction) _wrap_glAccum, METH_VARARGS | METH_KEYWORDS },
+	 { "glGetColorTableEXT", (PyCFunction) _wrap_glGetColorTableEXT, METH_VARARGS | METH_KEYWORDS },
+	 { "glColorTableEXT", (PyCFunction) _wrap_glColorTableEXT, METH_VARARGS | METH_KEYWORDS },
+	 { "glVertexPointerEXT", (PyCFunction) _wrap_glVertexPointerEXT, METH_VARARGS | METH_KEYWORDS },
+	 { "glTexCoordPointerEXT", (PyCFunction) _wrap_glTexCoordPointerEXT, METH_VARARGS | METH_KEYWORDS },
+	 { "glNormalPointerEXT", (PyCFunction) _wrap_glNormalPointerEXT, METH_VARARGS | METH_KEYWORDS },
+	 { "glIndexPointerEXT", (PyCFunction) _wrap_glIndexPointerEXT, METH_VARARGS | METH_KEYWORDS },
+	 { "glGetPointervEXT", (PyCFunction) _wrap_glGetPointervEXT, METH_VARARGS | METH_KEYWORDS },
+	 { "glEdgeFlagPointerEXT", (PyCFunction) _wrap_glEdgeFlagPointerEXT, METH_VARARGS | METH_KEYWORDS },
+	 { "glDrawArraysEXT", (PyCFunction) _wrap_glDrawArraysEXT, METH_VARARGS | METH_KEYWORDS },
+	 { "glColorPointerEXT", (PyCFunction) _wrap_glColorPointerEXT, METH_VARARGS | METH_KEYWORDS },
+	 { "glArrayElementEXT", (PyCFunction) _wrap_glArrayElementEXT, METH_VARARGS | METH_KEYWORDS },
 	 { NULL, NULL }
 };
 #ifdef __cplusplus

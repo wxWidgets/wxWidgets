@@ -538,6 +538,9 @@ class wxMenuPtr(wxEvtHandlerPtr):
     def UpdateUI(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenu_UpdateUI,(self,) + _args, _kwargs)
         return val
+    def Destroy(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenu_Destroy,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxMenu instance at %s>" % (self.this,)
 class wxMenu(wxMenuPtr):

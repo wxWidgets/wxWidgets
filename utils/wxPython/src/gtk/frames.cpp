@@ -135,7 +135,7 @@ static void *SwigwxFrameTowxEvtHandler(void *ptr) {
 }
 
 #define new_wxFrame(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6) (new wxFrame(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6))
-static PyObject *_wrap_new_wxFrame(PyObject *self, PyObject *args) {
+static PyObject *_wrap_new_wxFrame(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxFrame * _result;
     wxWindow * _arg0;
@@ -149,10 +149,11 @@ static PyObject *_wrap_new_wxFrame(PyObject *self, PyObject *args) {
     PyObject * _obj2 = 0;
     PyObject * _argo3 = 0;
     PyObject * _argo4 = 0;
+    char *_kwnames[] = { "parent","id","title","pos","size","style","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OiO|OOls:new_wxFrame",&_argo0,&_arg1,&_obj2,&_argo3,&_argo4,&_arg5,&_arg6)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|OOls:new_wxFrame",_kwnames,&_argo0,&_arg1,&_obj2,&_argo3,&_argo4,&_arg5,&_arg6)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -202,14 +203,15 @@ static PyObject *_wrap_new_wxFrame(PyObject *self, PyObject *args) {
 }
 
 #define wxFrame_Centre(_swigobj,_swigarg0)  (_swigobj->Centre(_swigarg0))
-static PyObject *_wrap_wxFrame_Centre(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxFrame_Centre(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxFrame * _arg0;
     int  _arg1 = (int ) wxBOTH;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","direction", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O|i:wxFrame_Centre",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|i:wxFrame_Centre",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -229,7 +231,7 @@ static PyObject *_wrap_wxFrame_Centre(PyObject *self, PyObject *args) {
 }
 
 #define wxFrame_CreateStatusBar(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->CreateStatusBar(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
-static PyObject *_wrap_wxFrame_CreateStatusBar(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxFrame_CreateStatusBar(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxStatusBar * _result;
     wxFrame * _arg0;
@@ -238,10 +240,11 @@ static PyObject *_wrap_wxFrame_CreateStatusBar(PyObject *self, PyObject *args) {
     wxWindowID  _arg3 = (wxWindowID ) -1;
     char * _arg4 = (char *) "statusBar";
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","number","style","id","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O|ilis:wxFrame_CreateStatusBar",&_argo0,&_arg1,&_arg2,&_arg3,&_arg4)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|ilis:wxFrame_CreateStatusBar",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_arg4)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -266,7 +269,7 @@ static PyObject *_wrap_wxFrame_CreateStatusBar(PyObject *self, PyObject *args) {
 }
 
 #define wxFrame_CreateToolBar(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->CreateToolBar(_swigarg0,_swigarg1,_swigarg2))
-static PyObject *_wrap_wxFrame_CreateToolBar(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxFrame_CreateToolBar(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxToolBar * _result;
     wxFrame * _arg0;
@@ -274,10 +277,11 @@ static PyObject *_wrap_wxFrame_CreateToolBar(PyObject *self, PyObject *args) {
     wxWindowID  _arg2 = (wxWindowID ) -1;
     char * _arg3 = (char *) "toolBar";
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","style","id","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O|lis:wxFrame_CreateToolBar",&_argo0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|lis:wxFrame_CreateToolBar",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -302,15 +306,16 @@ static PyObject *_wrap_wxFrame_CreateToolBar(PyObject *self, PyObject *args) {
 }
 
 #define wxFrame_GetMenuBar(_swigobj)  (_swigobj->GetMenuBar())
-static PyObject *_wrap_wxFrame_GetMenuBar(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxFrame_GetMenuBar(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxMenuBar * _result;
     wxFrame * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxFrame_GetMenuBar",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFrame_GetMenuBar",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -335,15 +340,16 @@ static PyObject *_wrap_wxFrame_GetMenuBar(PyObject *self, PyObject *args) {
 }
 
 #define wxFrame_GetStatusBar(_swigobj)  (_swigobj->GetStatusBar())
-static PyObject *_wrap_wxFrame_GetStatusBar(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxFrame_GetStatusBar(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxStatusBar * _result;
     wxFrame * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxFrame_GetStatusBar",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFrame_GetStatusBar",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -368,14 +374,15 @@ static PyObject *_wrap_wxFrame_GetStatusBar(PyObject *self, PyObject *args) {
 }
 
 #define wxFrame_GetTitle(_swigobj)  (_swigobj->GetTitle())
-static PyObject *_wrap_wxFrame_GetTitle(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxFrame_GetTitle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxString * _result;
     wxFrame * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxFrame_GetTitle",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFrame_GetTitle",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -399,15 +406,16 @@ static PyObject *_wrap_wxFrame_GetTitle(PyObject *self, PyObject *args) {
 }
 
 #define wxFrame_GetToolBar(_swigobj)  (_swigobj->GetToolBar())
-static PyObject *_wrap_wxFrame_GetToolBar(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxFrame_GetToolBar(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxToolBar * _result;
     wxFrame * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxFrame_GetToolBar",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFrame_GetToolBar",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -432,15 +440,16 @@ static PyObject *_wrap_wxFrame_GetToolBar(PyObject *self, PyObject *args) {
 }
 
 #define wxFrame_Iconize(_swigobj,_swigarg0)  (_swigobj->Iconize(_swigarg0))
-static PyObject *_wrap_wxFrame_Iconize(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxFrame_Iconize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxFrame * _arg0;
     bool  _arg1;
     PyObject * _argo0 = 0;
     int tempbool1;
+    char *_kwnames[] = { "self","iconize", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxFrame_Iconize",&_argo0,&tempbool1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxFrame_Iconize",_kwnames,&_argo0,&tempbool1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -461,14 +470,15 @@ static PyObject *_wrap_wxFrame_Iconize(PyObject *self, PyObject *args) {
 }
 
 #define wxFrame_IsIconized(_swigobj)  (_swigobj->IsIconized())
-static PyObject *_wrap_wxFrame_IsIconized(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxFrame_IsIconized(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxFrame * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxFrame_IsIconized",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFrame_IsIconized",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -487,15 +497,16 @@ static PyObject *_wrap_wxFrame_IsIconized(PyObject *self, PyObject *args) {
 }
 
 #define wxFrame_Maximize(_swigobj,_swigarg0)  (_swigobj->Maximize(_swigarg0))
-static PyObject *_wrap_wxFrame_Maximize(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxFrame_Maximize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxFrame * _arg0;
     bool  _arg1;
     PyObject * _argo0 = 0;
     int tempbool1;
+    char *_kwnames[] = { "self","maximize", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxFrame_Maximize",&_argo0,&tempbool1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxFrame_Maximize",_kwnames,&_argo0,&tempbool1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -516,15 +527,16 @@ static PyObject *_wrap_wxFrame_Maximize(PyObject *self, PyObject *args) {
 }
 
 #define wxFrame_SetAcceleratorTable(_swigobj,_swigarg0)  (_swigobj->SetAcceleratorTable(_swigarg0))
-static PyObject *_wrap_wxFrame_SetAcceleratorTable(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxFrame_SetAcceleratorTable(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxFrame * _arg0;
     wxAcceleratorTable * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","accel", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxFrame_SetAcceleratorTable",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxFrame_SetAcceleratorTable",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -551,15 +563,16 @@ static PyObject *_wrap_wxFrame_SetAcceleratorTable(PyObject *self, PyObject *arg
 }
 
 #define wxFrame_SetIcon(_swigobj,_swigarg0)  (_swigobj->SetIcon(_swigarg0))
-static PyObject *_wrap_wxFrame_SetIcon(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxFrame_SetIcon(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxFrame * _arg0;
     wxIcon * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","icon", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxFrame_SetIcon",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxFrame_SetIcon",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -586,15 +599,16 @@ static PyObject *_wrap_wxFrame_SetIcon(PyObject *self, PyObject *args) {
 }
 
 #define wxFrame_SetMenuBar(_swigobj,_swigarg0)  (_swigobj->SetMenuBar(_swigarg0))
-static PyObject *_wrap_wxFrame_SetMenuBar(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxFrame_SetMenuBar(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxFrame * _arg0;
     wxMenuBar * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","menuBar", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxFrame_SetMenuBar",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxFrame_SetMenuBar",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -621,15 +635,16 @@ static PyObject *_wrap_wxFrame_SetMenuBar(PyObject *self, PyObject *args) {
 }
 
 #define wxFrame_SetStatusBar(_swigobj,_swigarg0)  (_swigobj->SetStatusBar(_swigarg0))
-static PyObject *_wrap_wxFrame_SetStatusBar(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxFrame_SetStatusBar(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxFrame * _arg0;
     wxStatusBar * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","statusBar", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxFrame_SetStatusBar",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxFrame_SetStatusBar",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -656,16 +671,17 @@ static PyObject *_wrap_wxFrame_SetStatusBar(PyObject *self, PyObject *args) {
 }
 
 #define wxFrame_SetStatusText(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetStatusText(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxFrame_SetStatusText(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxFrame_SetStatusText(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxFrame * _arg0;
     wxString * _arg1;
     int  _arg2 = (int ) 0;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","text","number", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO|i:wxFrame_SetStatusText",&_argo0,&_obj1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|i:wxFrame_SetStatusText",_kwnames,&_argo0,&_obj1,&_arg2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -696,16 +712,17 @@ static PyObject *_wrap_wxFrame_SetStatusText(PyObject *self, PyObject *args) {
 }
 
 #define wxFrame_SetStatusWidths(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetStatusWidths(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxFrame_SetStatusWidths(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxFrame_SetStatusWidths(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxFrame * _arg0;
     int  _arg1;
     int * _arg2;
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","LIST", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxFrame_SetStatusWidths",&_argo0,&_obj2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxFrame_SetStatusWidths",_kwnames,&_argo0,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -743,15 +760,16 @@ static PyObject *_wrap_wxFrame_SetStatusWidths(PyObject *self, PyObject *args) {
 }
 
 #define wxFrame_SetTitle(_swigobj,_swigarg0)  (_swigobj->SetTitle(_swigarg0))
-static PyObject *_wrap_wxFrame_SetTitle(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxFrame_SetTitle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxFrame * _arg0;
     wxString * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","title", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxFrame_SetTitle",&_argo0,&_obj1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxFrame_SetTitle",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -782,15 +800,16 @@ static PyObject *_wrap_wxFrame_SetTitle(PyObject *self, PyObject *args) {
 }
 
 #define wxFrame_SetToolBar(_swigobj,_swigarg0)  (_swigobj->SetToolBar(_swigarg0))
-static PyObject *_wrap_wxFrame_SetToolBar(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxFrame_SetToolBar(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxFrame * _arg0;
     wxToolBar * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","toolbar", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxFrame_SetToolBar",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxFrame_SetToolBar",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -841,7 +860,7 @@ static void *SwigwxMiniFrameTowxEvtHandler(void *ptr) {
 }
 
 #define new_wxMiniFrame(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6) (new wxMiniFrame(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6))
-static PyObject *_wrap_new_wxMiniFrame(PyObject *self, PyObject *args) {
+static PyObject *_wrap_new_wxMiniFrame(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxMiniFrame * _result;
     wxWindow * _arg0;
@@ -855,10 +874,11 @@ static PyObject *_wrap_new_wxMiniFrame(PyObject *self, PyObject *args) {
     PyObject * _obj2 = 0;
     PyObject * _argo3 = 0;
     PyObject * _argo4 = 0;
+    char *_kwnames[] = { "parent","id","title","pos","size","style","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OiO|OOls:new_wxMiniFrame",&_argo0,&_arg1,&_obj2,&_argo3,&_argo4,&_arg5,&_arg6)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|OOls:new_wxMiniFrame",_kwnames,&_argo0,&_arg1,&_obj2,&_argo3,&_argo4,&_arg5,&_arg6)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -908,26 +928,26 @@ static PyObject *_wrap_new_wxMiniFrame(PyObject *self, PyObject *args) {
 }
 
 static PyMethodDef framescMethods[] = {
-	 { "new_wxMiniFrame", _wrap_new_wxMiniFrame, METH_VARARGS },
-	 { "wxFrame_SetToolBar", _wrap_wxFrame_SetToolBar, METH_VARARGS },
-	 { "wxFrame_SetTitle", _wrap_wxFrame_SetTitle, METH_VARARGS },
-	 { "wxFrame_SetStatusWidths", _wrap_wxFrame_SetStatusWidths, METH_VARARGS },
-	 { "wxFrame_SetStatusText", _wrap_wxFrame_SetStatusText, METH_VARARGS },
-	 { "wxFrame_SetStatusBar", _wrap_wxFrame_SetStatusBar, METH_VARARGS },
-	 { "wxFrame_SetMenuBar", _wrap_wxFrame_SetMenuBar, METH_VARARGS },
-	 { "wxFrame_SetIcon", _wrap_wxFrame_SetIcon, METH_VARARGS },
-	 { "wxFrame_SetAcceleratorTable", _wrap_wxFrame_SetAcceleratorTable, METH_VARARGS },
-	 { "wxFrame_Maximize", _wrap_wxFrame_Maximize, METH_VARARGS },
-	 { "wxFrame_IsIconized", _wrap_wxFrame_IsIconized, METH_VARARGS },
-	 { "wxFrame_Iconize", _wrap_wxFrame_Iconize, METH_VARARGS },
-	 { "wxFrame_GetToolBar", _wrap_wxFrame_GetToolBar, METH_VARARGS },
-	 { "wxFrame_GetTitle", _wrap_wxFrame_GetTitle, METH_VARARGS },
-	 { "wxFrame_GetStatusBar", _wrap_wxFrame_GetStatusBar, METH_VARARGS },
-	 { "wxFrame_GetMenuBar", _wrap_wxFrame_GetMenuBar, METH_VARARGS },
-	 { "wxFrame_CreateToolBar", _wrap_wxFrame_CreateToolBar, METH_VARARGS },
-	 { "wxFrame_CreateStatusBar", _wrap_wxFrame_CreateStatusBar, METH_VARARGS },
-	 { "wxFrame_Centre", _wrap_wxFrame_Centre, METH_VARARGS },
-	 { "new_wxFrame", _wrap_new_wxFrame, METH_VARARGS },
+	 { "new_wxMiniFrame", (PyCFunction) _wrap_new_wxMiniFrame, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFrame_SetToolBar", (PyCFunction) _wrap_wxFrame_SetToolBar, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFrame_SetTitle", (PyCFunction) _wrap_wxFrame_SetTitle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFrame_SetStatusWidths", (PyCFunction) _wrap_wxFrame_SetStatusWidths, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFrame_SetStatusText", (PyCFunction) _wrap_wxFrame_SetStatusText, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFrame_SetStatusBar", (PyCFunction) _wrap_wxFrame_SetStatusBar, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFrame_SetMenuBar", (PyCFunction) _wrap_wxFrame_SetMenuBar, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFrame_SetIcon", (PyCFunction) _wrap_wxFrame_SetIcon, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFrame_SetAcceleratorTable", (PyCFunction) _wrap_wxFrame_SetAcceleratorTable, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFrame_Maximize", (PyCFunction) _wrap_wxFrame_Maximize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFrame_IsIconized", (PyCFunction) _wrap_wxFrame_IsIconized, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFrame_Iconize", (PyCFunction) _wrap_wxFrame_Iconize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFrame_GetToolBar", (PyCFunction) _wrap_wxFrame_GetToolBar, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFrame_GetTitle", (PyCFunction) _wrap_wxFrame_GetTitle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFrame_GetStatusBar", (PyCFunction) _wrap_wxFrame_GetStatusBar, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFrame_GetMenuBar", (PyCFunction) _wrap_wxFrame_GetMenuBar, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFrame_CreateToolBar", (PyCFunction) _wrap_wxFrame_CreateToolBar, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFrame_CreateStatusBar", (PyCFunction) _wrap_wxFrame_CreateStatusBar, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFrame_Centre", (PyCFunction) _wrap_wxFrame_Centre, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxFrame", (PyCFunction) _wrap_new_wxFrame, METH_VARARGS | METH_KEYWORDS },
 	 { NULL, NULL }
 };
 #ifdef __cplusplus

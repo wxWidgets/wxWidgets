@@ -74,6 +74,12 @@ class wxRealPointPtr :
     def __del__(self,miscc=miscc):
         if self.thisown == 1 :
             miscc.delete_wxRealPoint(self)
+    def Set(self, *_args, **_kwargs):
+        val = apply(miscc.wxRealPoint_Set,(self,) + _args, _kwargs)
+        return val
+    def asTuple(self, *_args, **_kwargs):
+        val = apply(miscc.wxRealPoint_asTuple,(self,) + _args, _kwargs)
+        return val
     def __setattr__(self,name,value):
         if name == "x" :
             miscc.wxRealPoint_x_set(self,value)
@@ -90,6 +96,8 @@ class wxRealPointPtr :
         raise AttributeError,name
     def __repr__(self):
         return "<C wxRealPoint instance at %s>" % (self.this,)
+    def __str__(self): return str(self.asTuple())
+    def __repr__(self): return str(self.asTuple())
 class wxRealPoint(wxRealPointPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(miscc.new_wxRealPoint,_args,_kwargs)

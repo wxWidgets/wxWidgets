@@ -203,16 +203,17 @@ extern wxColour  wxNullColour;
 #ifdef __cplusplus
 extern "C" {
 #endif
-static PyObject *_wrap_wxEmptyBitmap(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxEmptyBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxBitmap * _result;
     int  _arg0;
     int  _arg1;
     int  _arg2 = (int ) -1;
+    char *_kwnames[] = { "width","height","depth", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ii|i:wxEmptyBitmap",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ii|i:wxEmptyBitmap",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -229,15 +230,16 @@ static PyObject *_wrap_wxEmptyBitmap(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_wxNoRefBitmap(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxNoRefBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxBitmap * _result;
     char * _arg0;
     long  _arg1;
+    char *_kwnames[] = { "name","flags", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"sl:wxNoRefBitmap",&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"sl:wxNoRefBitmap",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -254,17 +256,18 @@ static PyObject *_wrap_wxNoRefBitmap(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_wxMaskColour(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxMaskColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxMask * _result;
     wxBitmap * _arg0;
     wxColour * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "bitmap","colour", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxMaskColour",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxMaskColour",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -295,14 +298,15 @@ static PyObject *_wrap_wxMaskColour(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_wxStockCursor(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxStockCursor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxCursor * _result;
     int  _arg0;
+    char *_kwnames[] = { "id", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"i:wxStockCursor",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:wxStockCursor",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -319,15 +323,16 @@ static PyObject *_wrap_wxStockCursor(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_wxNamedColour(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxNamedColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxColour * _result;
     wxString * _arg0;
     PyObject * _obj0 = 0;
+    char *_kwnames[] = { "colorName", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxNamedColour",&_obj0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxNamedColour",_kwnames,&_obj0)) 
         return NULL;
 {
     if (!PyString_Check(_obj0)) {
@@ -355,15 +360,16 @@ static PyObject *_wrap_wxNamedColour(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_wxMemoryDCFromDC(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxMemoryDCFromDC(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxMemoryDC * _result;
     wxDC * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "oldDC", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxMemoryDCFromDC",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxMemoryDCFromDC",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1018,16 +1024,17 @@ static PyObject *_wrap_wxNullColour_get() {
 }
 
 #define new_wxBitmap(_swigarg0,_swigarg1) (new wxBitmap(_swigarg0,_swigarg1))
-static PyObject *_wrap_new_wxBitmap(PyObject *self, PyObject *args) {
+static PyObject *_wrap_new_wxBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxBitmap * _result;
     wxString * _arg0;
     long  _arg1;
     PyObject * _obj0 = 0;
+    char *_kwnames[] = { "name","type", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Ol:new_wxBitmap",&_obj0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:new_wxBitmap",_kwnames,&_obj0,&_arg1)) 
         return NULL;
 {
     if (!PyString_Check(_obj0)) {
@@ -1056,13 +1063,14 @@ static PyObject *_wrap_new_wxBitmap(PyObject *self, PyObject *args) {
 }
 
 #define delete_wxBitmap(_swigobj) (delete _swigobj)
-static PyObject *_wrap_delete_wxBitmap(PyObject *self, PyObject *args) {
+static PyObject *_wrap_delete_wxBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxBitmap * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:delete_wxBitmap",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxBitmap",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1082,14 +1090,15 @@ static PyObject *_wrap_delete_wxBitmap(PyObject *self, PyObject *args) {
 }
 
 #define wxBitmap_GetDepth(_swigobj)  (_swigobj->GetDepth())
-static PyObject *_wrap_wxBitmap_GetDepth(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxBitmap_GetDepth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxBitmap * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxBitmap_GetDepth",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxBitmap_GetDepth",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1108,14 +1117,15 @@ static PyObject *_wrap_wxBitmap_GetDepth(PyObject *self, PyObject *args) {
 }
 
 #define wxBitmap_GetHeight(_swigobj)  (_swigobj->GetHeight())
-static PyObject *_wrap_wxBitmap_GetHeight(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxBitmap_GetHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxBitmap * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxBitmap_GetHeight",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxBitmap_GetHeight",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1134,15 +1144,16 @@ static PyObject *_wrap_wxBitmap_GetHeight(PyObject *self, PyObject *args) {
 }
 
 #define wxBitmap_GetPalette(_swigobj)  (_swigobj->GetPalette())
-static PyObject *_wrap_wxBitmap_GetPalette(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxBitmap_GetPalette(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPalette * _result;
     wxBitmap * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxBitmap_GetPalette",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxBitmap_GetPalette",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1167,15 +1178,16 @@ static PyObject *_wrap_wxBitmap_GetPalette(PyObject *self, PyObject *args) {
 }
 
 #define wxBitmap_GetMask(_swigobj)  (_swigobj->GetMask())
-static PyObject *_wrap_wxBitmap_GetMask(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxBitmap_GetMask(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxMask * _result;
     wxBitmap * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxBitmap_GetMask",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxBitmap_GetMask",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1200,14 +1212,15 @@ static PyObject *_wrap_wxBitmap_GetMask(PyObject *self, PyObject *args) {
 }
 
 #define wxBitmap_GetWidth(_swigobj)  (_swigobj->GetWidth())
-static PyObject *_wrap_wxBitmap_GetWidth(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxBitmap_GetWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxBitmap * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxBitmap_GetWidth",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxBitmap_GetWidth",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1226,7 +1239,7 @@ static PyObject *_wrap_wxBitmap_GetWidth(PyObject *self, PyObject *args) {
 }
 
 #define wxBitmap_LoadFile(_swigobj,_swigarg0,_swigarg1)  (_swigobj->LoadFile(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxBitmap_LoadFile(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxBitmap_LoadFile(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxBitmap * _arg0;
@@ -1234,9 +1247,10 @@ static PyObject *_wrap_wxBitmap_LoadFile(PyObject *self, PyObject *args) {
     long  _arg2;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","name","flags", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OOl:wxBitmap_LoadFile",&_argo0,&_obj1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOl:wxBitmap_LoadFile",_kwnames,&_argo0,&_obj1,&_arg2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1266,14 +1280,15 @@ static PyObject *_wrap_wxBitmap_LoadFile(PyObject *self, PyObject *args) {
 }
 
 #define wxBitmap_Ok(_swigobj)  (_swigobj->Ok())
-static PyObject *_wrap_wxBitmap_Ok(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxBitmap_Ok(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxBitmap * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxBitmap_Ok",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxBitmap_Ok",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1292,7 +1307,7 @@ static PyObject *_wrap_wxBitmap_Ok(PyObject *self, PyObject *args) {
 }
 
 #define wxBitmap_SaveFile(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->SaveFile(_swigarg0,_swigarg1,_swigarg2))
-static PyObject *_wrap_wxBitmap_SaveFile(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxBitmap_SaveFile(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxBitmap * _arg0;
@@ -1302,9 +1317,10 @@ static PyObject *_wrap_wxBitmap_SaveFile(PyObject *self, PyObject *args) {
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
     PyObject * _argo3 = 0;
+    char *_kwnames[] = { "self","name","type","palette", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OOi|O:wxBitmap_SaveFile",&_argo0,&_obj1,&_arg2,&_argo3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOi|O:wxBitmap_SaveFile",_kwnames,&_argo0,&_obj1,&_arg2,&_argo3)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1341,14 +1357,15 @@ static PyObject *_wrap_wxBitmap_SaveFile(PyObject *self, PyObject *args) {
 }
 
 #define wxBitmap_SetDepth(_swigobj,_swigarg0)  (_swigobj->SetDepth(_swigarg0))
-static PyObject *_wrap_wxBitmap_SetDepth(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxBitmap_SetDepth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxBitmap * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","depth", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxBitmap_SetDepth",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxBitmap_SetDepth",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1368,14 +1385,15 @@ static PyObject *_wrap_wxBitmap_SetDepth(PyObject *self, PyObject *args) {
 }
 
 #define wxBitmap_SetHeight(_swigobj,_swigarg0)  (_swigobj->SetHeight(_swigarg0))
-static PyObject *_wrap_wxBitmap_SetHeight(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxBitmap_SetHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxBitmap * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","height", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxBitmap_SetHeight",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxBitmap_SetHeight",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1395,15 +1413,16 @@ static PyObject *_wrap_wxBitmap_SetHeight(PyObject *self, PyObject *args) {
 }
 
 #define wxBitmap_SetMask(_swigobj,_swigarg0)  (_swigobj->SetMask(_swigarg0))
-static PyObject *_wrap_wxBitmap_SetMask(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxBitmap_SetMask(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxBitmap * _arg0;
     wxMask * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","mask", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxBitmap_SetMask",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxBitmap_SetMask",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1430,14 +1449,15 @@ static PyObject *_wrap_wxBitmap_SetMask(PyObject *self, PyObject *args) {
 }
 
 #define wxBitmap_SetWidth(_swigobj,_swigarg0)  (_swigobj->SetWidth(_swigarg0))
-static PyObject *_wrap_wxBitmap_SetWidth(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxBitmap_SetWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxBitmap * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","width", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxBitmap_SetWidth",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxBitmap_SetWidth",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1457,15 +1477,16 @@ static PyObject *_wrap_wxBitmap_SetWidth(PyObject *self, PyObject *args) {
 }
 
 #define new_wxMask(_swigarg0) (new wxMask(_swigarg0))
-static PyObject *_wrap_new_wxMask(PyObject *self, PyObject *args) {
+static PyObject *_wrap_new_wxMask(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxMask * _result;
     wxBitmap * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "bitmap", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:new_wxMask",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:new_wxMask",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1490,13 +1511,14 @@ static PyObject *_wrap_new_wxMask(PyObject *self, PyObject *args) {
 }
 
 #define delete_wxMask(_swigobj) (delete _swigobj)
-static PyObject *_wrap_delete_wxMask(PyObject *self, PyObject *args) {
+static PyObject *_wrap_delete_wxMask(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxMask * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:delete_wxMask",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxMask",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1524,7 +1546,7 @@ static void *SwigwxIconTowxBitmap(void *ptr) {
 }
 
 #define new_wxIcon(_swigarg0,_swigarg1,_swigarg2,_swigarg3) (new wxIcon(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
-static PyObject *_wrap_new_wxIcon(PyObject *self, PyObject *args) {
+static PyObject *_wrap_new_wxIcon(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxIcon * _result;
     wxString * _arg0;
@@ -1532,10 +1554,11 @@ static PyObject *_wrap_new_wxIcon(PyObject *self, PyObject *args) {
     int  _arg2 = (int ) -1;
     int  _arg3 = (int ) -1;
     PyObject * _obj0 = 0;
+    char *_kwnames[] = { "name","flags","desiredWidth","desiredHeight", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Ol|ii:new_wxIcon",&_obj0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol|ii:new_wxIcon",_kwnames,&_obj0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
 {
     if (!PyString_Check(_obj0)) {
@@ -1564,13 +1587,14 @@ static PyObject *_wrap_new_wxIcon(PyObject *self, PyObject *args) {
 }
 
 #define delete_wxIcon(_swigobj) (delete _swigobj)
-static PyObject *_wrap_delete_wxIcon(PyObject *self, PyObject *args) {
+static PyObject *_wrap_delete_wxIcon(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxIcon * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:delete_wxIcon",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxIcon",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1590,14 +1614,15 @@ static PyObject *_wrap_delete_wxIcon(PyObject *self, PyObject *args) {
 }
 
 #define wxIcon_GetDepth(_swigobj)  (_swigobj->GetDepth())
-static PyObject *_wrap_wxIcon_GetDepth(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxIcon_GetDepth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxIcon * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxIcon_GetDepth",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxIcon_GetDepth",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1616,14 +1641,15 @@ static PyObject *_wrap_wxIcon_GetDepth(PyObject *self, PyObject *args) {
 }
 
 #define wxIcon_GetHeight(_swigobj)  (_swigobj->GetHeight())
-static PyObject *_wrap_wxIcon_GetHeight(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxIcon_GetHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxIcon * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxIcon_GetHeight",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxIcon_GetHeight",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1642,14 +1668,15 @@ static PyObject *_wrap_wxIcon_GetHeight(PyObject *self, PyObject *args) {
 }
 
 #define wxIcon_GetWidth(_swigobj)  (_swigobj->GetWidth())
-static PyObject *_wrap_wxIcon_GetWidth(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxIcon_GetWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxIcon * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxIcon_GetWidth",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxIcon_GetWidth",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1668,7 +1695,7 @@ static PyObject *_wrap_wxIcon_GetWidth(PyObject *self, PyObject *args) {
 }
 
 #define wxIcon_LoadFile(_swigobj,_swigarg0,_swigarg1)  (_swigobj->LoadFile(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxIcon_LoadFile(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxIcon_LoadFile(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxIcon * _arg0;
@@ -1676,9 +1703,10 @@ static PyObject *_wrap_wxIcon_LoadFile(PyObject *self, PyObject *args) {
     long  _arg2;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","name","flags", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OOl:wxIcon_LoadFile",&_argo0,&_obj1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOl:wxIcon_LoadFile",_kwnames,&_argo0,&_obj1,&_arg2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1708,14 +1736,15 @@ static PyObject *_wrap_wxIcon_LoadFile(PyObject *self, PyObject *args) {
 }
 
 #define wxIcon_Ok(_swigobj)  (_swigobj->Ok())
-static PyObject *_wrap_wxIcon_Ok(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxIcon_Ok(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxIcon * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxIcon_Ok",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxIcon_Ok",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1734,14 +1763,15 @@ static PyObject *_wrap_wxIcon_Ok(PyObject *self, PyObject *args) {
 }
 
 #define wxIcon_SetDepth(_swigobj,_swigarg0)  (_swigobj->SetDepth(_swigarg0))
-static PyObject *_wrap_wxIcon_SetDepth(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxIcon_SetDepth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxIcon * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","depth", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxIcon_SetDepth",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxIcon_SetDepth",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1761,14 +1791,15 @@ static PyObject *_wrap_wxIcon_SetDepth(PyObject *self, PyObject *args) {
 }
 
 #define wxIcon_SetHeight(_swigobj,_swigarg0)  (_swigobj->SetHeight(_swigarg0))
-static PyObject *_wrap_wxIcon_SetHeight(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxIcon_SetHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxIcon * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","height", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxIcon_SetHeight",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxIcon_SetHeight",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1788,14 +1819,15 @@ static PyObject *_wrap_wxIcon_SetHeight(PyObject *self, PyObject *args) {
 }
 
 #define wxIcon_SetWidth(_swigobj,_swigarg0)  (_swigobj->SetWidth(_swigarg0))
-static PyObject *_wrap_wxIcon_SetWidth(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxIcon_SetWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxIcon * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","width", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxIcon_SetWidth",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxIcon_SetWidth",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1823,13 +1855,14 @@ static void *SwigwxCursorTowxBitmap(void *ptr) {
 }
 
 #define delete_wxCursor(_swigobj) (delete _swigobj)
-static PyObject *_wrap_delete_wxCursor(PyObject *self, PyObject *args) {
+static PyObject *_wrap_delete_wxCursor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxCursor * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:delete_wxCursor",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxCursor",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1849,14 +1882,15 @@ static PyObject *_wrap_delete_wxCursor(PyObject *self, PyObject *args) {
 }
 
 #define wxCursor_Ok(_swigobj)  (_swigobj->Ok())
-static PyObject *_wrap_wxCursor_Ok(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxCursor_Ok(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxCursor * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxCursor_Ok",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxCursor_Ok",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1880,7 +1914,7 @@ static wxFont *new_wxFont(int pointSize,int family,int style,int weight,int unde
                                                    underline, faceName);
         }
 
-static PyObject *_wrap_new_wxFont(PyObject *self, PyObject *args) {
+static PyObject *_wrap_new_wxFont(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxFont * _result;
     int  _arg0;
@@ -1889,10 +1923,11 @@ static PyObject *_wrap_new_wxFont(PyObject *self, PyObject *args) {
     int  _arg3;
     int  _arg4 = (int ) FALSE;
     char * _arg5 = (char *) "";
+    char *_kwnames[] = { "pointSize","family","style","weight","underline","faceName", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"iiii|is:new_wxFont",&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiii|is:new_wxFont",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1910,14 +1945,15 @@ static PyObject *_wrap_new_wxFont(PyObject *self, PyObject *args) {
 }
 
 #define wxFont_GetFaceName(_swigobj)  (_swigobj->GetFaceName())
-static PyObject *_wrap_wxFont_GetFaceName(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxFont_GetFaceName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxString * _result;
     wxFont * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxFont_GetFaceName",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFont_GetFaceName",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1941,14 +1977,15 @@ static PyObject *_wrap_wxFont_GetFaceName(PyObject *self, PyObject *args) {
 }
 
 #define wxFont_GetFamily(_swigobj)  (_swigobj->GetFamily())
-static PyObject *_wrap_wxFont_GetFamily(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxFont_GetFamily(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxFont * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxFont_GetFamily",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFont_GetFamily",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1967,14 +2004,15 @@ static PyObject *_wrap_wxFont_GetFamily(PyObject *self, PyObject *args) {
 }
 
 #define wxFont_GetPointSize(_swigobj)  (_swigobj->GetPointSize())
-static PyObject *_wrap_wxFont_GetPointSize(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxFont_GetPointSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxFont * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxFont_GetPointSize",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFont_GetPointSize",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1993,14 +2031,15 @@ static PyObject *_wrap_wxFont_GetPointSize(PyObject *self, PyObject *args) {
 }
 
 #define wxFont_GetStyle(_swigobj)  (_swigobj->GetStyle())
-static PyObject *_wrap_wxFont_GetStyle(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxFont_GetStyle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxFont * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxFont_GetStyle",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFont_GetStyle",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2019,14 +2058,15 @@ static PyObject *_wrap_wxFont_GetStyle(PyObject *self, PyObject *args) {
 }
 
 #define wxFont_GetUnderlined(_swigobj)  (_swigobj->GetUnderlined())
-static PyObject *_wrap_wxFont_GetUnderlined(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxFont_GetUnderlined(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxFont * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxFont_GetUnderlined",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFont_GetUnderlined",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2045,14 +2085,15 @@ static PyObject *_wrap_wxFont_GetUnderlined(PyObject *self, PyObject *args) {
 }
 
 #define wxFont_GetWeight(_swigobj)  (_swigobj->GetWeight())
-static PyObject *_wrap_wxFont_GetWeight(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxFont_GetWeight(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxFont * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxFont_GetWeight",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFont_GetWeight",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2071,15 +2112,16 @@ static PyObject *_wrap_wxFont_GetWeight(PyObject *self, PyObject *args) {
 }
 
 #define wxFont_SetFaceName(_swigobj,_swigarg0)  (_swigobj->SetFaceName(_swigarg0))
-static PyObject *_wrap_wxFont_SetFaceName(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxFont_SetFaceName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxFont * _arg0;
     wxString * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","faceName", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxFont_SetFaceName",&_argo0,&_obj1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxFont_SetFaceName",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2110,14 +2152,15 @@ static PyObject *_wrap_wxFont_SetFaceName(PyObject *self, PyObject *args) {
 }
 
 #define wxFont_SetFamily(_swigobj,_swigarg0)  (_swigobj->SetFamily(_swigarg0))
-static PyObject *_wrap_wxFont_SetFamily(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxFont_SetFamily(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxFont * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","family", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxFont_SetFamily",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxFont_SetFamily",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2137,14 +2180,15 @@ static PyObject *_wrap_wxFont_SetFamily(PyObject *self, PyObject *args) {
 }
 
 #define wxFont_SetPointSize(_swigobj,_swigarg0)  (_swigobj->SetPointSize(_swigarg0))
-static PyObject *_wrap_wxFont_SetPointSize(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxFont_SetPointSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxFont * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","pointSize", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxFont_SetPointSize",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxFont_SetPointSize",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2164,14 +2208,15 @@ static PyObject *_wrap_wxFont_SetPointSize(PyObject *self, PyObject *args) {
 }
 
 #define wxFont_SetStyle(_swigobj,_swigarg0)  (_swigobj->SetStyle(_swigarg0))
-static PyObject *_wrap_wxFont_SetStyle(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxFont_SetStyle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxFont * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","style", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxFont_SetStyle",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxFont_SetStyle",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2191,15 +2236,16 @@ static PyObject *_wrap_wxFont_SetStyle(PyObject *self, PyObject *args) {
 }
 
 #define wxFont_SetUnderlined(_swigobj,_swigarg0)  (_swigobj->SetUnderlined(_swigarg0))
-static PyObject *_wrap_wxFont_SetUnderlined(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxFont_SetUnderlined(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxFont * _arg0;
     bool  _arg1;
     PyObject * _argo0 = 0;
     int tempbool1;
+    char *_kwnames[] = { "self","underlined", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxFont_SetUnderlined",&_argo0,&tempbool1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxFont_SetUnderlined",_kwnames,&_argo0,&tempbool1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2220,14 +2266,15 @@ static PyObject *_wrap_wxFont_SetUnderlined(PyObject *self, PyObject *args) {
 }
 
 #define wxFont_SetWeight(_swigobj,_swigarg0)  (_swigobj->SetWeight(_swigarg0))
-static PyObject *_wrap_wxFont_SetWeight(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxFont_SetWeight(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxFont * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","weight", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxFont_SetWeight",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxFont_SetWeight",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2247,16 +2294,17 @@ static PyObject *_wrap_wxFont_SetWeight(PyObject *self, PyObject *args) {
 }
 
 #define new_wxColour(_swigarg0,_swigarg1,_swigarg2) (new wxColour(_swigarg0,_swigarg1,_swigarg2))
-static PyObject *_wrap_new_wxColour(PyObject *self, PyObject *args) {
+static PyObject *_wrap_new_wxColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxColour * _result;
     unsigned char  _arg0 = (unsigned char ) 0;
     unsigned char  _arg1 = (unsigned char ) 0;
     unsigned char  _arg2 = (unsigned char ) 0;
+    char *_kwnames[] = { "red","green","blue", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"|bbb:new_wxColour",&_arg0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|bbb:new_wxColour",_kwnames,&_arg0,&_arg1,&_arg2)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -2274,13 +2322,14 @@ static PyObject *_wrap_new_wxColour(PyObject *self, PyObject *args) {
 }
 
 #define delete_wxColour(_swigobj) (delete _swigobj)
-static PyObject *_wrap_delete_wxColour(PyObject *self, PyObject *args) {
+static PyObject *_wrap_delete_wxColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxColour * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:delete_wxColour",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxColour",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2300,14 +2349,15 @@ static PyObject *_wrap_delete_wxColour(PyObject *self, PyObject *args) {
 }
 
 #define wxColour_Red(_swigobj)  (_swigobj->Red())
-static PyObject *_wrap_wxColour_Red(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxColour_Red(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     unsigned char  _result;
     wxColour * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxColour_Red",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxColour_Red",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2326,14 +2376,15 @@ static PyObject *_wrap_wxColour_Red(PyObject *self, PyObject *args) {
 }
 
 #define wxColour_Green(_swigobj)  (_swigobj->Green())
-static PyObject *_wrap_wxColour_Green(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxColour_Green(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     unsigned char  _result;
     wxColour * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxColour_Green",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxColour_Green",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2352,14 +2403,15 @@ static PyObject *_wrap_wxColour_Green(PyObject *self, PyObject *args) {
 }
 
 #define wxColour_Blue(_swigobj)  (_swigobj->Blue())
-static PyObject *_wrap_wxColour_Blue(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxColour_Blue(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     unsigned char  _result;
     wxColour * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxColour_Blue",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxColour_Blue",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2378,14 +2430,15 @@ static PyObject *_wrap_wxColour_Blue(PyObject *self, PyObject *args) {
 }
 
 #define wxColour_Ok(_swigobj)  (_swigobj->Ok())
-static PyObject *_wrap_wxColour_Ok(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxColour_Ok(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxColour * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxColour_Ok",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxColour_Ok",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2404,16 +2457,17 @@ static PyObject *_wrap_wxColour_Ok(PyObject *self, PyObject *args) {
 }
 
 #define wxColour_Set(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->Set(_swigarg0,_swigarg1,_swigarg2))
-static PyObject *_wrap_wxColour_Set(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxColour_Set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxColour * _arg0;
     unsigned char  _arg1;
     unsigned char  _arg2;
     unsigned char  _arg3;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","red","green","blue", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Obbb:wxColour_Set",&_argo0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Obbb:wxColour_Set",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2439,14 +2493,15 @@ static PyObject * wxColour_Get(wxColour *self) {
             PyTuple_SetItem(rv, 2, PyInt_FromLong(self->Blue()));
             return rv;
         }
-static PyObject *_wrap_wxColour_Get(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxColour_Get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     PyObject * _result;
     wxColour * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxColour_Get",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxColour_Get",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2470,17 +2525,18 @@ static wxPen *new_wxPen(wxColour *colour,int width,int style) {
             return wxThePenList->FindOrCreatePen(*colour, width, style);
         }
 
-static PyObject *_wrap_new_wxPen(PyObject *self, PyObject *args) {
+static PyObject *_wrap_new_wxPen(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPen * _result;
     wxColour * _arg0;
     int  _arg1 = (int ) 1;
     int  _arg2 = (int ) wxSOLID;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "colour","width","style", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O|ii:new_wxPen",&_argo0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|ii:new_wxPen",_kwnames,&_argo0,&_arg1,&_arg2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2505,14 +2561,15 @@ static PyObject *_wrap_new_wxPen(PyObject *self, PyObject *args) {
 }
 
 #define wxPen_GetCap(_swigobj)  (_swigobj->GetCap())
-static PyObject *_wrap_wxPen_GetCap(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPen_GetCap(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxPen * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPen_GetCap",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPen_GetCap",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2531,15 +2588,16 @@ static PyObject *_wrap_wxPen_GetCap(PyObject *self, PyObject *args) {
 }
 
 #define wxPen_GetColour(_swigobj)  (_swigobj->GetColour())
-static PyObject *_wrap_wxPen_GetColour(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPen_GetColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxColour * _result;
     wxPen * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPen_GetColour",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPen_GetColour",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2565,14 +2623,15 @@ static PyObject *_wrap_wxPen_GetColour(PyObject *self, PyObject *args) {
 }
 
 #define wxPen_GetJoin(_swigobj)  (_swigobj->GetJoin())
-static PyObject *_wrap_wxPen_GetJoin(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPen_GetJoin(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxPen * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPen_GetJoin",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPen_GetJoin",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2591,14 +2650,15 @@ static PyObject *_wrap_wxPen_GetJoin(PyObject *self, PyObject *args) {
 }
 
 #define wxPen_GetStyle(_swigobj)  (_swigobj->GetStyle())
-static PyObject *_wrap_wxPen_GetStyle(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPen_GetStyle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxPen * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPen_GetStyle",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPen_GetStyle",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2617,14 +2677,15 @@ static PyObject *_wrap_wxPen_GetStyle(PyObject *self, PyObject *args) {
 }
 
 #define wxPen_GetWidth(_swigobj)  (_swigobj->GetWidth())
-static PyObject *_wrap_wxPen_GetWidth(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPen_GetWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxPen * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPen_GetWidth",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPen_GetWidth",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2643,14 +2704,15 @@ static PyObject *_wrap_wxPen_GetWidth(PyObject *self, PyObject *args) {
 }
 
 #define wxPen_Ok(_swigobj)  (_swigobj->Ok())
-static PyObject *_wrap_wxPen_Ok(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPen_Ok(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxPen * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPen_Ok",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPen_Ok",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2669,14 +2731,15 @@ static PyObject *_wrap_wxPen_Ok(PyObject *self, PyObject *args) {
 }
 
 #define wxPen_SetCap(_swigobj,_swigarg0)  (_swigobj->SetCap(_swigarg0))
-static PyObject *_wrap_wxPen_SetCap(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPen_SetCap(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPen * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","cap_style", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxPen_SetCap",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPen_SetCap",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2696,15 +2759,16 @@ static PyObject *_wrap_wxPen_SetCap(PyObject *self, PyObject *args) {
 }
 
 #define wxPen_SetColour(_swigobj,_swigarg0)  (_swigobj->SetColour(_swigarg0))
-static PyObject *_wrap_wxPen_SetColour(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPen_SetColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPen * _arg0;
     wxColour * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","colour", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxPen_SetColour",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPen_SetColour",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2731,14 +2795,15 @@ static PyObject *_wrap_wxPen_SetColour(PyObject *self, PyObject *args) {
 }
 
 #define wxPen_SetJoin(_swigobj,_swigarg0)  (_swigobj->SetJoin(_swigarg0))
-static PyObject *_wrap_wxPen_SetJoin(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPen_SetJoin(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPen * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","join_style", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxPen_SetJoin",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPen_SetJoin",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2758,14 +2823,15 @@ static PyObject *_wrap_wxPen_SetJoin(PyObject *self, PyObject *args) {
 }
 
 #define wxPen_SetStyle(_swigobj,_swigarg0)  (_swigobj->SetStyle(_swigarg0))
-static PyObject *_wrap_wxPen_SetStyle(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPen_SetStyle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPen * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","style", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxPen_SetStyle",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPen_SetStyle",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2785,14 +2851,15 @@ static PyObject *_wrap_wxPen_SetStyle(PyObject *self, PyObject *args) {
 }
 
 #define wxPen_SetWidth(_swigobj,_swigarg0)  (_swigobj->SetWidth(_swigarg0))
-static PyObject *_wrap_wxPen_SetWidth(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPen_SetWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPen * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","width", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxPen_SetWidth",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPen_SetWidth",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2815,16 +2882,17 @@ static wxBrush *new_wxBrush(wxColour *colour,int style) {
             return wxTheBrushList->FindOrCreateBrush(*colour, style);
         }
 
-static PyObject *_wrap_new_wxBrush(PyObject *self, PyObject *args) {
+static PyObject *_wrap_new_wxBrush(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxBrush * _result;
     wxColour * _arg0;
     int  _arg1 = (int ) wxSOLID;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "colour","style", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O|i:new_wxBrush",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|i:new_wxBrush",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2849,15 +2917,16 @@ static PyObject *_wrap_new_wxBrush(PyObject *self, PyObject *args) {
 }
 
 #define wxBrush_GetColour(_swigobj)  (_swigobj->GetColour())
-static PyObject *_wrap_wxBrush_GetColour(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxBrush_GetColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxColour * _result;
     wxBrush * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxBrush_GetColour",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxBrush_GetColour",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2883,15 +2952,16 @@ static PyObject *_wrap_wxBrush_GetColour(PyObject *self, PyObject *args) {
 }
 
 #define wxBrush_GetStipple(_swigobj)  (_swigobj->GetStipple())
-static PyObject *_wrap_wxBrush_GetStipple(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxBrush_GetStipple(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxBitmap * _result;
     wxBrush * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxBrush_GetStipple",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxBrush_GetStipple",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2916,14 +2986,15 @@ static PyObject *_wrap_wxBrush_GetStipple(PyObject *self, PyObject *args) {
 }
 
 #define wxBrush_GetStyle(_swigobj)  (_swigobj->GetStyle())
-static PyObject *_wrap_wxBrush_GetStyle(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxBrush_GetStyle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxBrush * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxBrush_GetStyle",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxBrush_GetStyle",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2942,14 +3013,15 @@ static PyObject *_wrap_wxBrush_GetStyle(PyObject *self, PyObject *args) {
 }
 
 #define wxBrush_Ok(_swigobj)  (_swigobj->Ok())
-static PyObject *_wrap_wxBrush_Ok(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxBrush_Ok(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxBrush * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxBrush_Ok",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxBrush_Ok",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2968,15 +3040,16 @@ static PyObject *_wrap_wxBrush_Ok(PyObject *self, PyObject *args) {
 }
 
 #define wxBrush_SetColour(_swigobj,_swigarg0)  (_swigobj->SetColour(_swigarg0))
-static PyObject *_wrap_wxBrush_SetColour(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxBrush_SetColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxBrush * _arg0;
     wxColour * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","colour", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxBrush_SetColour",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxBrush_SetColour",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3003,15 +3076,16 @@ static PyObject *_wrap_wxBrush_SetColour(PyObject *self, PyObject *args) {
 }
 
 #define wxBrush_SetStipple(_swigobj,_swigarg0)  (_swigobj->SetStipple(_swigarg0))
-static PyObject *_wrap_wxBrush_SetStipple(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxBrush_SetStipple(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxBrush * _arg0;
     wxBitmap * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","bitmap", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxBrush_SetStipple",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxBrush_SetStipple",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3038,14 +3112,15 @@ static PyObject *_wrap_wxBrush_SetStipple(PyObject *self, PyObject *args) {
 }
 
 #define wxBrush_SetStyle(_swigobj,_swigarg0)  (_swigobj->SetStyle(_swigarg0))
-static PyObject *_wrap_wxBrush_SetStyle(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxBrush_SetStyle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxBrush * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","style", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxBrush_SetStyle",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxBrush_SetStyle",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3065,13 +3140,14 @@ static PyObject *_wrap_wxBrush_SetStyle(PyObject *self, PyObject *args) {
 }
 
 #define delete_wxDC(_swigobj) (delete _swigobj)
-static PyObject *_wrap_delete_wxDC(PyObject *self, PyObject *args) {
+static PyObject *_wrap_delete_wxDC(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:delete_wxDC",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxDC",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3091,13 +3167,14 @@ static PyObject *_wrap_delete_wxDC(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_BeginDrawing(_swigobj)  (_swigobj->BeginDrawing())
-static PyObject *_wrap_wxDC_BeginDrawing(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_BeginDrawing(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxDC_BeginDrawing",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDC_BeginDrawing",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3116,8 +3193,8 @@ static PyObject *_wrap_wxDC_BeginDrawing(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-#define wxDC_Blit(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6,_swigarg7)  (_swigobj->Blit(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6,_swigarg7))
-static PyObject *_wrap_wxDC_Blit(PyObject *self, PyObject *args) {
+#define wxDC_Blit(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6,_swigarg7,_swigarg8)  (_swigobj->Blit(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6,_swigarg7,_swigarg8))
+static PyObject *_wrap_wxDC_Blit(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxDC * _arg0;
@@ -3128,12 +3205,14 @@ static PyObject *_wrap_wxDC_Blit(PyObject *self, PyObject *args) {
     wxDC * _arg5;
     long  _arg6;
     long  _arg7;
-    long  _arg8;
+    int  _arg8 = (int ) wxCOPY;
+    int  _arg9 = (int ) FALSE;
     PyObject * _argo0 = 0;
     PyObject * _argo5 = 0;
+    char *_kwnames[] = { "self","xdest","ydest","width","height","source","xsrc","ysrc","logicalFunc","useMask", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OllllOlll:wxDC_Blit",&_argo0,&_arg1,&_arg2,&_arg3,&_arg4,&_argo5,&_arg6,&_arg7,&_arg8)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OllllOll|ii:wxDC_Blit",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_arg4,&_argo5,&_arg6,&_arg7,&_arg8,&_arg9)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3151,7 +3230,7 @@ static PyObject *_wrap_wxDC_Blit(PyObject *self, PyObject *args) {
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxDC_Blit(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5,_arg6,_arg7,_arg8);
+        _result = (bool )wxDC_Blit(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5,_arg6,_arg7,_arg8,_arg9);
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);
@@ -3159,13 +3238,14 @@ static PyObject *_wrap_wxDC_Blit(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_Clear(_swigobj)  (_swigobj->Clear())
-static PyObject *_wrap_wxDC_Clear(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_Clear(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxDC_Clear",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDC_Clear",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3185,15 +3265,16 @@ static PyObject *_wrap_wxDC_Clear(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_CrossHair(_swigobj,_swigarg0,_swigarg1)  (_swigobj->CrossHair(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxDC_CrossHair(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_CrossHair(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     long  _arg1;
     long  _arg2;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","x","y", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oll:wxDC_CrossHair",&_argo0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oll:wxDC_CrossHair",_kwnames,&_argo0,&_arg1,&_arg2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3213,13 +3294,14 @@ static PyObject *_wrap_wxDC_CrossHair(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_DestroyClippingRegion(_swigobj)  (_swigobj->DestroyClippingRegion())
-static PyObject *_wrap_wxDC_DestroyClippingRegion(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_DestroyClippingRegion(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxDC_DestroyClippingRegion",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDC_DestroyClippingRegion",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3239,15 +3321,16 @@ static PyObject *_wrap_wxDC_DestroyClippingRegion(PyObject *self, PyObject *args
 }
 
 #define wxDC_DeviceToLogicalX(_swigobj,_swigarg0)  (_swigobj->DeviceToLogicalX(_swigarg0))
-static PyObject *_wrap_wxDC_DeviceToLogicalX(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_DeviceToLogicalX(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     long  _result;
     wxDC * _arg0;
     long  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","x", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Ol:wxDC_DeviceToLogicalX",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxDC_DeviceToLogicalX",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3266,15 +3349,16 @@ static PyObject *_wrap_wxDC_DeviceToLogicalX(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_DeviceToLogicalXRel(_swigobj,_swigarg0)  (_swigobj->DeviceToLogicalXRel(_swigarg0))
-static PyObject *_wrap_wxDC_DeviceToLogicalXRel(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_DeviceToLogicalXRel(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     long  _result;
     wxDC * _arg0;
     long  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","x", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Ol:wxDC_DeviceToLogicalXRel",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxDC_DeviceToLogicalXRel",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3293,15 +3377,16 @@ static PyObject *_wrap_wxDC_DeviceToLogicalXRel(PyObject *self, PyObject *args) 
 }
 
 #define wxDC_DeviceToLogicalY(_swigobj,_swigarg0)  (_swigobj->DeviceToLogicalY(_swigarg0))
-static PyObject *_wrap_wxDC_DeviceToLogicalY(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_DeviceToLogicalY(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     long  _result;
     wxDC * _arg0;
     long  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","y", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Ol:wxDC_DeviceToLogicalY",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxDC_DeviceToLogicalY",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3320,15 +3405,16 @@ static PyObject *_wrap_wxDC_DeviceToLogicalY(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_DeviceToLogicalYRel(_swigobj,_swigarg0)  (_swigobj->DeviceToLogicalYRel(_swigarg0))
-static PyObject *_wrap_wxDC_DeviceToLogicalYRel(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_DeviceToLogicalYRel(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     long  _result;
     wxDC * _arg0;
     long  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","y", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Ol:wxDC_DeviceToLogicalYRel",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxDC_DeviceToLogicalYRel",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3347,7 +3433,7 @@ static PyObject *_wrap_wxDC_DeviceToLogicalYRel(PyObject *self, PyObject *args) 
 }
 
 #define wxDC_DrawArc(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5)  (_swigobj->DrawArc(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
-static PyObject *_wrap_wxDC_DrawArc(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_DrawArc(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     long  _arg1;
@@ -3357,9 +3443,10 @@ static PyObject *_wrap_wxDC_DrawArc(PyObject *self, PyObject *args) {
     long  _arg5;
     long  _arg6;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","x1","y1","x2","y2","xc","yc", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Ollllll:wxDC_DrawArc",&_argo0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_arg6)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ollllll:wxDC_DrawArc",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_arg6)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3379,16 +3466,17 @@ static PyObject *_wrap_wxDC_DrawArc(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_DrawCircle(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->DrawCircle(_swigarg0,_swigarg1,_swigarg2))
-static PyObject *_wrap_wxDC_DrawCircle(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_DrawCircle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     long  _arg1;
     long  _arg2;
     long  _arg3;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","x","y","radius", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Olll:wxDC_DrawCircle",&_argo0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Olll:wxDC_DrawCircle",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3408,7 +3496,7 @@ static PyObject *_wrap_wxDC_DrawCircle(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_DrawEllipse(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->DrawEllipse(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
-static PyObject *_wrap_wxDC_DrawEllipse(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_DrawEllipse(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     long  _arg1;
@@ -3416,9 +3504,10 @@ static PyObject *_wrap_wxDC_DrawEllipse(PyObject *self, PyObject *args) {
     long  _arg3;
     long  _arg4;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","x","y","width","height", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Ollll:wxDC_DrawEllipse",&_argo0,&_arg1,&_arg2,&_arg3,&_arg4)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ollll:wxDC_DrawEllipse",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_arg4)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3438,7 +3527,7 @@ static PyObject *_wrap_wxDC_DrawEllipse(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_DrawEllipticArc(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5)  (_swigobj->DrawEllipticArc(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
-static PyObject *_wrap_wxDC_DrawEllipticArc(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_DrawEllipticArc(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     long  _arg1;
@@ -3448,9 +3537,10 @@ static PyObject *_wrap_wxDC_DrawEllipticArc(PyObject *self, PyObject *args) {
     long  _arg5;
     long  _arg6;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","x","y","width","height","start","end", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Ollllll:wxDC_DrawEllipticArc",&_argo0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_arg6)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ollllll:wxDC_DrawEllipticArc",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_arg6)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3470,7 +3560,7 @@ static PyObject *_wrap_wxDC_DrawEllipticArc(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_DrawIcon(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->DrawIcon(_swigarg0,_swigarg1,_swigarg2))
-static PyObject *_wrap_wxDC_DrawIcon(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_DrawIcon(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     wxIcon * _arg1;
@@ -3478,9 +3568,10 @@ static PyObject *_wrap_wxDC_DrawIcon(PyObject *self, PyObject *args) {
     long  _arg3;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","icon","x","y", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OOll:wxDC_DrawIcon",&_argo0,&_argo1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOll:wxDC_DrawIcon",_kwnames,&_argo0,&_argo1,&_arg2,&_arg3)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3507,7 +3598,7 @@ static PyObject *_wrap_wxDC_DrawIcon(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_DrawLine(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->DrawLine(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
-static PyObject *_wrap_wxDC_DrawLine(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_DrawLine(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     long  _arg1;
@@ -3515,9 +3606,10 @@ static PyObject *_wrap_wxDC_DrawLine(PyObject *self, PyObject *args) {
     long  _arg3;
     long  _arg4;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","x1","y1","x2","y2", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Ollll:wxDC_DrawLine",&_argo0,&_arg1,&_arg2,&_arg3,&_arg4)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ollll:wxDC_DrawLine",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_arg4)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3537,7 +3629,7 @@ static PyObject *_wrap_wxDC_DrawLine(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_DrawLines(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->DrawLines(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
-static PyObject *_wrap_wxDC_DrawLines(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_DrawLines(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     int  _arg1;
@@ -3546,9 +3638,10 @@ static PyObject *_wrap_wxDC_DrawLines(PyObject *self, PyObject *args) {
     long  _arg4 = (long ) 0;
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","LIST","xoffset","yoffset", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO|ll:wxDC_DrawLines",&_argo0,&_obj2,&_arg3,&_arg4)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|ll:wxDC_DrawLines",_kwnames,&_argo0,&_obj2,&_arg3,&_arg4)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3586,7 +3679,7 @@ static PyObject *_wrap_wxDC_DrawLines(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_DrawPolygon(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4)  (_swigobj->DrawPolygon(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4))
-static PyObject *_wrap_wxDC_DrawPolygon(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_DrawPolygon(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     int  _arg1;
@@ -3596,9 +3689,10 @@ static PyObject *_wrap_wxDC_DrawPolygon(PyObject *self, PyObject *args) {
     int  _arg5 = (int ) wxODDEVEN_RULE;
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","LIST","xoffset","yoffset","fill_style", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO|lli:wxDC_DrawPolygon",&_argo0,&_obj2,&_arg3,&_arg4,&_arg5)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|lli:wxDC_DrawPolygon",_kwnames,&_argo0,&_obj2,&_arg3,&_arg4,&_arg5)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3636,15 +3730,16 @@ static PyObject *_wrap_wxDC_DrawPolygon(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_DrawPoint(_swigobj,_swigarg0,_swigarg1)  (_swigobj->DrawPoint(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxDC_DrawPoint(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_DrawPoint(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     long  _arg1;
     long  _arg2;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","x","y", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oll:wxDC_DrawPoint",&_argo0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oll:wxDC_DrawPoint",_kwnames,&_argo0,&_arg1,&_arg2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3664,7 +3759,7 @@ static PyObject *_wrap_wxDC_DrawPoint(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_DrawRectangle(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->DrawRectangle(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
-static PyObject *_wrap_wxDC_DrawRectangle(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_DrawRectangle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     long  _arg1;
@@ -3672,9 +3767,10 @@ static PyObject *_wrap_wxDC_DrawRectangle(PyObject *self, PyObject *args) {
     long  _arg3;
     long  _arg4;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","x","y","width","height", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Ollll:wxDC_DrawRectangle",&_argo0,&_arg1,&_arg2,&_arg3,&_arg4)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ollll:wxDC_DrawRectangle",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_arg4)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3694,7 +3790,7 @@ static PyObject *_wrap_wxDC_DrawRectangle(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_DrawRoundedRectangle(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4)  (_swigobj->DrawRoundedRectangle(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4))
-static PyObject *_wrap_wxDC_DrawRoundedRectangle(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_DrawRoundedRectangle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     long  _arg1;
@@ -3703,9 +3799,10 @@ static PyObject *_wrap_wxDC_DrawRoundedRectangle(PyObject *self, PyObject *args)
     long  _arg4;
     long  _arg5 = (long ) 20;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","x","y","width","height","radius", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Ollll|l:wxDC_DrawRoundedRectangle",&_argo0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ollll|l:wxDC_DrawRoundedRectangle",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3725,16 +3822,17 @@ static PyObject *_wrap_wxDC_DrawRoundedRectangle(PyObject *self, PyObject *args)
 }
 
 #define wxDC_DrawSpline(_swigobj,_swigarg0,_swigarg1)  (_swigobj->DrawSpline(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxDC_DrawSpline(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_DrawSpline(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     int  _arg1;
     wxPoint * _arg2;
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","LIST", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxDC_DrawSpline",&_argo0,&_obj2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxDC_DrawSpline",_kwnames,&_argo0,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3772,7 +3870,7 @@ static PyObject *_wrap_wxDC_DrawSpline(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_DrawText(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->DrawText(_swigarg0,_swigarg1,_swigarg2))
-static PyObject *_wrap_wxDC_DrawText(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_DrawText(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     wxString * _arg1;
@@ -3780,9 +3878,10 @@ static PyObject *_wrap_wxDC_DrawText(PyObject *self, PyObject *args) {
     long  _arg3;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","text","x","y", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OOll:wxDC_DrawText",&_argo0,&_obj1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOll:wxDC_DrawText",_kwnames,&_argo0,&_obj1,&_arg2,&_arg3)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3813,13 +3912,14 @@ static PyObject *_wrap_wxDC_DrawText(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_EndDoc(_swigobj)  (_swigobj->EndDoc())
-static PyObject *_wrap_wxDC_EndDoc(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_EndDoc(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxDC_EndDoc",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDC_EndDoc",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3839,13 +3939,14 @@ static PyObject *_wrap_wxDC_EndDoc(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_EndDrawing(_swigobj)  (_swigobj->EndDrawing())
-static PyObject *_wrap_wxDC_EndDrawing(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_EndDrawing(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxDC_EndDrawing",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDC_EndDrawing",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3865,13 +3966,14 @@ static PyObject *_wrap_wxDC_EndDrawing(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_EndPage(_swigobj)  (_swigobj->EndPage())
-static PyObject *_wrap_wxDC_EndPage(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_EndPage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxDC_EndPage",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDC_EndPage",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3891,7 +3993,7 @@ static PyObject *_wrap_wxDC_EndPage(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_FloodFill(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->FloodFill(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
-static PyObject *_wrap_wxDC_FloodFill(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_FloodFill(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     long  _arg1;
@@ -3900,9 +4002,10 @@ static PyObject *_wrap_wxDC_FloodFill(PyObject *self, PyObject *args) {
     int  _arg4 = (int ) wxFLOOD_SURFACE;
     PyObject * _argo0 = 0;
     PyObject * _argo3 = 0;
+    char *_kwnames[] = { "self","x","y","colour","style", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OllO|i:wxDC_FloodFill",&_argo0,&_arg1,&_arg2,&_argo3,&_arg4)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OllO|i:wxDC_FloodFill",_kwnames,&_argo0,&_arg1,&_arg2,&_argo3,&_arg4)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3929,15 +4032,16 @@ static PyObject *_wrap_wxDC_FloodFill(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_GetBackground(_swigobj)  (_swigobj->GetBackground())
-static PyObject *_wrap_wxDC_GetBackground(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_GetBackground(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxBrush * _result;
     wxDC * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxDC_GetBackground",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDC_GetBackground",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3963,15 +4067,16 @@ static PyObject *_wrap_wxDC_GetBackground(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_GetBrush(_swigobj)  (_swigobj->GetBrush())
-static PyObject *_wrap_wxDC_GetBrush(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_GetBrush(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxBrush * _result;
     wxDC * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxDC_GetBrush",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDC_GetBrush",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3997,14 +4102,15 @@ static PyObject *_wrap_wxDC_GetBrush(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_GetCharHeight(_swigobj)  (_swigobj->GetCharHeight())
-static PyObject *_wrap_wxDC_GetCharHeight(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_GetCharHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     long  _result;
     wxDC * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxDC_GetCharHeight",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDC_GetCharHeight",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4023,14 +4129,15 @@ static PyObject *_wrap_wxDC_GetCharHeight(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_GetCharWidth(_swigobj)  (_swigobj->GetCharWidth())
-static PyObject *_wrap_wxDC_GetCharWidth(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_GetCharWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     long  _result;
     wxDC * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxDC_GetCharWidth",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDC_GetCharWidth",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4049,7 +4156,7 @@ static PyObject *_wrap_wxDC_GetCharWidth(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_GetClippingBox(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->GetClippingBox(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
-static PyObject *_wrap_wxDC_GetClippingBox(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_GetClippingBox(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     long * _arg1;
@@ -4061,6 +4168,7 @@ static PyObject *_wrap_wxDC_GetClippingBox(PyObject *self, PyObject *args) {
     long * _arg4;
     long  temp2;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
 {
@@ -4075,7 +4183,7 @@ static PyObject *_wrap_wxDC_GetClippingBox(PyObject *self, PyObject *args) {
 {
   _arg4 = &temp2;
 }
-    if(!PyArg_ParseTuple(args,"O:wxDC_GetClippingBox",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDC_GetClippingBox",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4115,15 +4223,16 @@ static PyObject *_wrap_wxDC_GetClippingBox(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_GetFont(_swigobj)  (_swigobj->GetFont())
-static PyObject *_wrap_wxDC_GetFont(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_GetFont(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxFont * _result;
     wxDC * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxDC_GetFont",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDC_GetFont",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4149,14 +4258,15 @@ static PyObject *_wrap_wxDC_GetFont(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_GetLogicalFunction(_swigobj)  (_swigobj->GetLogicalFunction())
-static PyObject *_wrap_wxDC_GetLogicalFunction(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_GetLogicalFunction(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxDC * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxDC_GetLogicalFunction",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDC_GetLogicalFunction",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4175,14 +4285,15 @@ static PyObject *_wrap_wxDC_GetLogicalFunction(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_GetMapMode(_swigobj)  (_swigobj->GetMapMode())
-static PyObject *_wrap_wxDC_GetMapMode(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_GetMapMode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxDC * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxDC_GetMapMode",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDC_GetMapMode",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4201,14 +4312,15 @@ static PyObject *_wrap_wxDC_GetMapMode(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_GetOptimization(_swigobj)  (_swigobj->GetOptimization())
-static PyObject *_wrap_wxDC_GetOptimization(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_GetOptimization(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxDC * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxDC_GetOptimization",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDC_GetOptimization",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4227,15 +4339,16 @@ static PyObject *_wrap_wxDC_GetOptimization(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_GetPen(_swigobj)  (_swigobj->GetPen())
-static PyObject *_wrap_wxDC_GetPen(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_GetPen(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPen * _result;
     wxDC * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxDC_GetPen",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDC_GetPen",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4265,17 +4378,18 @@ static wxColour * wxDC_GetPixel(wxDC *self,long  x,long  y) {
             self->GetPixel(x, y, wc);
             return wc;
         }
-static PyObject *_wrap_wxDC_GetPixel(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_GetPixel(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxColour * _result;
     wxDC * _arg0;
     long  _arg1;
     long  _arg2;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","x","y", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oll:wxDC_GetPixel",&_argo0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oll:wxDC_GetPixel",_kwnames,&_argo0,&_arg1,&_arg2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4300,7 +4414,7 @@ static PyObject *_wrap_wxDC_GetPixel(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_GetSizeTuple(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetSize(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxDC_GetSizeTuple(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_GetSizeTuple(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     int * _arg1;
@@ -4308,6 +4422,7 @@ static PyObject *_wrap_wxDC_GetSizeTuple(PyObject *self, PyObject *args) {
     int * _arg2;
     int  temp0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
 {
@@ -4316,7 +4431,7 @@ static PyObject *_wrap_wxDC_GetSizeTuple(PyObject *self, PyObject *args) {
 {
   _arg2 = &temp0;
 }
-    if(!PyArg_ParseTuple(args,"O:wxDC_GetSizeTuple",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDC_GetSizeTuple",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4346,15 +4461,16 @@ static PyObject *_wrap_wxDC_GetSizeTuple(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_GetSize(_swigobj)  (_swigobj->GetSize())
-static PyObject *_wrap_wxDC_GetSize(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_GetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxSize * _result;
     wxDC * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxDC_GetSize",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDC_GetSize",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4374,15 +4490,16 @@ static PyObject *_wrap_wxDC_GetSize(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_GetTextBackground(_swigobj)  (_swigobj->GetTextBackground())
-static PyObject *_wrap_wxDC_GetTextBackground(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_GetTextBackground(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxColour * _result;
     wxDC * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxDC_GetTextBackground",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDC_GetTextBackground",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4408,7 +4525,7 @@ static PyObject *_wrap_wxDC_GetTextBackground(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_GetTextExtent(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->GetTextExtent(_swigarg0,_swigarg1,_swigarg2))
-static PyObject *_wrap_wxDC_GetTextExtent(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_GetTextExtent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     wxString * _arg1;
@@ -4418,6 +4535,7 @@ static PyObject *_wrap_wxDC_GetTextExtent(PyObject *self, PyObject *args) {
     long  temp0;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","string", NULL };
 
     self = self;
 {
@@ -4426,7 +4544,7 @@ static PyObject *_wrap_wxDC_GetTextExtent(PyObject *self, PyObject *args) {
 {
   _arg3 = &temp0;
 }
-    if(!PyArg_ParseTuple(args,"OO:wxDC_GetTextExtent",&_argo0,&_obj1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxDC_GetTextExtent",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4467,7 +4585,7 @@ static PyObject *_wrap_wxDC_GetTextExtent(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_GetFullTextExtent(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5)  (_swigobj->GetTextExtent(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
-static PyObject *_wrap_wxDC_GetFullTextExtent(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_GetFullTextExtent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     wxString * _arg1;
@@ -4483,6 +4601,7 @@ static PyObject *_wrap_wxDC_GetFullTextExtent(PyObject *self, PyObject *args) {
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
     PyObject * _argo6 = 0;
+    char *_kwnames[] = { "self","string","font", NULL };
 
     self = self;
 {
@@ -4497,7 +4616,7 @@ static PyObject *_wrap_wxDC_GetFullTextExtent(PyObject *self, PyObject *args) {
 {
   _arg5 = &temp2;
 }
-    if(!PyArg_ParseTuple(args,"OO|O:wxDC_GetFullTextExtent",&_argo0,&_obj1,&_argo6)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|O:wxDC_GetFullTextExtent",_kwnames,&_argo0,&_obj1,&_argo6)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4555,15 +4674,16 @@ static PyObject *_wrap_wxDC_GetFullTextExtent(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_GetTextForeground(_swigobj)  (_swigobj->GetTextForeground())
-static PyObject *_wrap_wxDC_GetTextForeground(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_GetTextForeground(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxColour * _result;
     wxDC * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxDC_GetTextForeground",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDC_GetTextForeground",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4589,15 +4709,16 @@ static PyObject *_wrap_wxDC_GetTextForeground(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_LogicalToDeviceX(_swigobj,_swigarg0)  (_swigobj->LogicalToDeviceX(_swigarg0))
-static PyObject *_wrap_wxDC_LogicalToDeviceX(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_LogicalToDeviceX(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     long  _result;
     wxDC * _arg0;
     long  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","x", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Ol:wxDC_LogicalToDeviceX",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxDC_LogicalToDeviceX",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4616,15 +4737,16 @@ static PyObject *_wrap_wxDC_LogicalToDeviceX(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_LogicalToDeviceXRel(_swigobj,_swigarg0)  (_swigobj->LogicalToDeviceXRel(_swigarg0))
-static PyObject *_wrap_wxDC_LogicalToDeviceXRel(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_LogicalToDeviceXRel(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     long  _result;
     wxDC * _arg0;
     long  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","x", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Ol:wxDC_LogicalToDeviceXRel",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxDC_LogicalToDeviceXRel",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4643,15 +4765,16 @@ static PyObject *_wrap_wxDC_LogicalToDeviceXRel(PyObject *self, PyObject *args) 
 }
 
 #define wxDC_LogicalToDeviceY(_swigobj,_swigarg0)  (_swigobj->LogicalToDeviceY(_swigarg0))
-static PyObject *_wrap_wxDC_LogicalToDeviceY(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_LogicalToDeviceY(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     long  _result;
     wxDC * _arg0;
     long  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","y", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Ol:wxDC_LogicalToDeviceY",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxDC_LogicalToDeviceY",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4670,15 +4793,16 @@ static PyObject *_wrap_wxDC_LogicalToDeviceY(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_LogicalToDeviceYRel(_swigobj,_swigarg0)  (_swigobj->LogicalToDeviceYRel(_swigarg0))
-static PyObject *_wrap_wxDC_LogicalToDeviceYRel(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_LogicalToDeviceYRel(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     long  _result;
     wxDC * _arg0;
     long  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","y", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Ol:wxDC_LogicalToDeviceYRel",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxDC_LogicalToDeviceYRel",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4697,14 +4821,15 @@ static PyObject *_wrap_wxDC_LogicalToDeviceYRel(PyObject *self, PyObject *args) 
 }
 
 #define wxDC_MaxX(_swigobj)  (_swigobj->MaxX())
-static PyObject *_wrap_wxDC_MaxX(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_MaxX(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     long  _result;
     wxDC * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxDC_MaxX",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDC_MaxX",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4723,14 +4848,15 @@ static PyObject *_wrap_wxDC_MaxX(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_MaxY(_swigobj)  (_swigobj->MaxY())
-static PyObject *_wrap_wxDC_MaxY(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_MaxY(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     long  _result;
     wxDC * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxDC_MaxY",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDC_MaxY",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4749,14 +4875,15 @@ static PyObject *_wrap_wxDC_MaxY(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_MinX(_swigobj)  (_swigobj->MinX())
-static PyObject *_wrap_wxDC_MinX(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_MinX(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     long  _result;
     wxDC * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxDC_MinX",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDC_MinX",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4775,14 +4902,15 @@ static PyObject *_wrap_wxDC_MinX(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_MinY(_swigobj)  (_swigobj->MinY())
-static PyObject *_wrap_wxDC_MinY(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_MinY(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     long  _result;
     wxDC * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxDC_MinY",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDC_MinY",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4801,14 +4929,15 @@ static PyObject *_wrap_wxDC_MinY(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_Ok(_swigobj)  (_swigobj->Ok())
-static PyObject *_wrap_wxDC_Ok(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_Ok(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxDC * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxDC_Ok",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDC_Ok",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4827,15 +4956,16 @@ static PyObject *_wrap_wxDC_Ok(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_SetDeviceOrigin(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetDeviceOrigin(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxDC_SetDeviceOrigin(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_SetDeviceOrigin(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     long  _arg1;
     long  _arg2;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","x","y", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oll:wxDC_SetDeviceOrigin",&_argo0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oll:wxDC_SetDeviceOrigin",_kwnames,&_argo0,&_arg1,&_arg2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4855,15 +4985,16 @@ static PyObject *_wrap_wxDC_SetDeviceOrigin(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_SetBackground(_swigobj,_swigarg0)  (_swigobj->SetBackground(_swigarg0))
-static PyObject *_wrap_wxDC_SetBackground(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_SetBackground(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     wxBrush * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","brush", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxDC_SetBackground",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxDC_SetBackground",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4890,14 +5021,15 @@ static PyObject *_wrap_wxDC_SetBackground(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_SetBackgroundMode(_swigobj,_swigarg0)  (_swigobj->SetBackgroundMode(_swigarg0))
-static PyObject *_wrap_wxDC_SetBackgroundMode(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_SetBackgroundMode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","mode", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxDC_SetBackgroundMode",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxDC_SetBackgroundMode",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4917,7 +5049,7 @@ static PyObject *_wrap_wxDC_SetBackgroundMode(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_SetClippingRegion(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->SetClippingRegion(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
-static PyObject *_wrap_wxDC_SetClippingRegion(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_SetClippingRegion(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     long  _arg1;
@@ -4925,9 +5057,10 @@ static PyObject *_wrap_wxDC_SetClippingRegion(PyObject *self, PyObject *args) {
     long  _arg3;
     long  _arg4;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","x","y","width","height", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Ollll:wxDC_SetClippingRegion",&_argo0,&_arg1,&_arg2,&_arg3,&_arg4)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ollll:wxDC_SetClippingRegion",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_arg4)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4947,15 +5080,16 @@ static PyObject *_wrap_wxDC_SetClippingRegion(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_SetPalette(_swigobj,_swigarg0)  (_swigobj->SetPalette(_swigarg0))
-static PyObject *_wrap_wxDC_SetPalette(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_SetPalette(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     wxPalette * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","colourMap", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxDC_SetPalette",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxDC_SetPalette",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4982,15 +5116,16 @@ static PyObject *_wrap_wxDC_SetPalette(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_SetBrush(_swigobj,_swigarg0)  (_swigobj->SetBrush(_swigarg0))
-static PyObject *_wrap_wxDC_SetBrush(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_SetBrush(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     wxBrush * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","brush", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxDC_SetBrush",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxDC_SetBrush",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5017,15 +5152,16 @@ static PyObject *_wrap_wxDC_SetBrush(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_SetFont(_swigobj,_swigarg0)  (_swigobj->SetFont(_swigarg0))
-static PyObject *_wrap_wxDC_SetFont(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_SetFont(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     wxFont * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","font", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxDC_SetFont",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxDC_SetFont",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5052,14 +5188,15 @@ static PyObject *_wrap_wxDC_SetFont(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_SetLogicalFunction(_swigobj,_swigarg0)  (_swigobj->SetLogicalFunction(_swigarg0))
-static PyObject *_wrap_wxDC_SetLogicalFunction(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_SetLogicalFunction(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","function", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxDC_SetLogicalFunction",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxDC_SetLogicalFunction",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5079,14 +5216,15 @@ static PyObject *_wrap_wxDC_SetLogicalFunction(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_SetMapMode(_swigobj,_swigarg0)  (_swigobj->SetMapMode(_swigarg0))
-static PyObject *_wrap_wxDC_SetMapMode(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_SetMapMode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","mode", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxDC_SetMapMode",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxDC_SetMapMode",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5106,15 +5244,16 @@ static PyObject *_wrap_wxDC_SetMapMode(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_SetOptimization(_swigobj,_swigarg0)  (_swigobj->SetOptimization(_swigarg0))
-static PyObject *_wrap_wxDC_SetOptimization(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_SetOptimization(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     bool  _arg1;
     PyObject * _argo0 = 0;
     int tempbool1;
+    char *_kwnames[] = { "self","optimize", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxDC_SetOptimization",&_argo0,&tempbool1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxDC_SetOptimization",_kwnames,&_argo0,&tempbool1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5135,15 +5274,16 @@ static PyObject *_wrap_wxDC_SetOptimization(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_SetPen(_swigobj,_swigarg0)  (_swigobj->SetPen(_swigarg0))
-static PyObject *_wrap_wxDC_SetPen(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_SetPen(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     wxPen * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","pen", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxDC_SetPen",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxDC_SetPen",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5170,15 +5310,16 @@ static PyObject *_wrap_wxDC_SetPen(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_SetTextBackground(_swigobj,_swigarg0)  (_swigobj->SetTextBackground(_swigarg0))
-static PyObject *_wrap_wxDC_SetTextBackground(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_SetTextBackground(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     wxColour * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","colour", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxDC_SetTextBackground",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxDC_SetTextBackground",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5205,15 +5346,16 @@ static PyObject *_wrap_wxDC_SetTextBackground(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_SetTextForeground(_swigobj,_swigarg0)  (_swigobj->SetTextForeground(_swigarg0))
-static PyObject *_wrap_wxDC_SetTextForeground(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_SetTextForeground(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     wxColour * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","colour", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxDC_SetTextForeground",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxDC_SetTextForeground",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5240,15 +5382,16 @@ static PyObject *_wrap_wxDC_SetTextForeground(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_SetUserScale(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetUserScale(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxDC_SetUserScale(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_SetUserScale(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     double  _arg1;
     double  _arg2;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","x_scale","y_scale", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Odd:wxDC_SetUserScale",&_argo0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Odd:wxDC_SetUserScale",_kwnames,&_argo0,&_arg1,&_arg2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5268,16 +5411,17 @@ static PyObject *_wrap_wxDC_SetUserScale(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_StartDoc(_swigobj,_swigarg0)  (_swigobj->StartDoc(_swigarg0))
-static PyObject *_wrap_wxDC_StartDoc(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_StartDoc(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxDC * _arg0;
     wxString * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","message", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxDC_StartDoc",&_argo0,&_obj1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxDC_StartDoc",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5307,13 +5451,14 @@ static PyObject *_wrap_wxDC_StartDoc(PyObject *self, PyObject *args) {
 }
 
 #define wxDC_StartPage(_swigobj)  (_swigobj->StartPage())
-static PyObject *_wrap_wxDC_StartPage(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxDC_StartPage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxDC_StartPage",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDC_StartPage",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5332,31 +5477,20 @@ static PyObject *_wrap_wxDC_StartPage(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static void  wxDC_DrawBitmap(wxDC *self,wxBitmap & bitmap,long  x,long  y,bool  swapPalette) {
-            wxMemoryDC* memDC = new wxMemoryDC;
-            memDC->SelectObject(bitmap);
-#ifdef __WXMSW__
-            if (swapPalette)
-                self->SetPalette(*bitmap.GetPalette());
-#endif
-            self->Blit(x, y, bitmap.GetWidth(), bitmap.GetHeight(), memDC,
-                    0, 0, self->GetLogicalFunction());
-            memDC->SelectObject(wxNullBitmap);
-            delete memDC;
-        }
-static PyObject *_wrap_wxDC_DrawBitmap(PyObject *self, PyObject *args) {
+#define wxDC_DrawBitmap(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->DrawBitmap(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
+static PyObject *_wrap_wxDC_DrawBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _arg0;
     wxBitmap * _arg1;
     long  _arg2;
     long  _arg3;
-    bool  _arg4 = (bool ) TRUE;
+    int  _arg4 = (int ) FALSE;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
-    int tempbool4 = (int) TRUE;
+    char *_kwnames[] = { "self","bitmap","x","y","useMask", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OOll|i:wxDC_DrawBitmap",&_argo0,&_argo1,&_arg2,&_arg3,&tempbool4)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOll|i:wxDC_DrawBitmap",_kwnames,&_argo0,&_argo1,&_arg2,&_arg3,&_arg4)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5372,7 +5506,6 @@ static PyObject *_wrap_wxDC_DrawBitmap(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _arg4 = (bool ) tempbool4;
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxDC_DrawBitmap(_arg0,*_arg1,_arg2,_arg3,_arg4);
@@ -5392,13 +5525,14 @@ static void *SwigwxMemoryDCTowxDC(void *ptr) {
 }
 
 #define new_wxMemoryDC() (new wxMemoryDC())
-static PyObject *_wrap_new_wxMemoryDC(PyObject *self, PyObject *args) {
+static PyObject *_wrap_new_wxMemoryDC(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxMemoryDC * _result;
+    char *_kwnames[] = {  NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,":new_wxMemoryDC")) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxMemoryDC",_kwnames)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -5416,15 +5550,16 @@ static PyObject *_wrap_new_wxMemoryDC(PyObject *self, PyObject *args) {
 }
 
 #define wxMemoryDC_SelectObject(_swigobj,_swigarg0)  (_swigobj->SelectObject(_swigarg0))
-static PyObject *_wrap_wxMemoryDC_SelectObject(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxMemoryDC_SelectObject(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxMemoryDC * _arg0;
     wxBitmap * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","bitmap", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxMemoryDC_SelectObject",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxMemoryDC_SelectObject",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5459,13 +5594,14 @@ static void *SwigwxScreenDCTowxDC(void *ptr) {
 }
 
 #define new_wxScreenDC() (new wxScreenDC())
-static PyObject *_wrap_new_wxScreenDC(PyObject *self, PyObject *args) {
+static PyObject *_wrap_new_wxScreenDC(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxScreenDC * _result;
+    char *_kwnames[] = {  NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,":new_wxScreenDC")) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxScreenDC",_kwnames)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -5483,16 +5619,17 @@ static PyObject *_wrap_new_wxScreenDC(PyObject *self, PyObject *args) {
 }
 
 #define wxScreenDC_StartDrawingOnTop(_swigobj,_swigarg0)  (_swigobj->StartDrawingOnTop(_swigarg0))
-static PyObject *_wrap_wxScreenDC_StartDrawingOnTop(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxScreenDC_StartDrawingOnTop(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxScreenDC * _arg0;
     wxWindow * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","window", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxScreenDC_StartDrawingOnTop",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxScreenDC_StartDrawingOnTop",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5518,16 +5655,17 @@ static PyObject *_wrap_wxScreenDC_StartDrawingOnTop(PyObject *self, PyObject *ar
 }
 
 #define wxScreenDC_StartDrawingOnTopRect(_swigobj,_swigarg0)  (_swigobj->StartDrawingOnTop(_swigarg0))
-static PyObject *_wrap_wxScreenDC_StartDrawingOnTopRect(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxScreenDC_StartDrawingOnTopRect(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxScreenDC * _arg0;
     wxRect * _arg1 = (wxRect *) NULL;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","rect", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O|O:wxScreenDC_StartDrawingOnTopRect",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|O:wxScreenDC_StartDrawingOnTopRect",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5553,14 +5691,15 @@ static PyObject *_wrap_wxScreenDC_StartDrawingOnTopRect(PyObject *self, PyObject
 }
 
 #define wxScreenDC_EndDrawingOnTop(_swigobj)  (_swigobj->EndDrawingOnTop())
-static PyObject *_wrap_wxScreenDC_EndDrawingOnTop(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxScreenDC_EndDrawingOnTop(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxScreenDC * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxScreenDC_EndDrawingOnTop",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxScreenDC_EndDrawingOnTop",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5587,15 +5726,16 @@ static void *SwigwxClientDCTowxDC(void *ptr) {
 }
 
 #define new_wxClientDC(_swigarg0) (new wxClientDC(_swigarg0))
-static PyObject *_wrap_new_wxClientDC(PyObject *self, PyObject *args) {
+static PyObject *_wrap_new_wxClientDC(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxClientDC * _result;
     wxWindow * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "win", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:new_wxClientDC",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:new_wxClientDC",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5628,15 +5768,16 @@ static void *SwigwxPaintDCTowxDC(void *ptr) {
 }
 
 #define new_wxPaintDC(_swigarg0) (new wxPaintDC(_swigarg0))
-static PyObject *_wrap_new_wxPaintDC(PyObject *self, PyObject *args) {
+static PyObject *_wrap_new_wxPaintDC(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPaintDC * _result;
     wxWindow * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "win", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:new_wxPaintDC",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:new_wxPaintDC",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5669,15 +5810,16 @@ static void *SwigwxWindowDCTowxDC(void *ptr) {
 }
 
 #define new_wxWindowDC(_swigarg0) (new wxWindowDC(_swigarg0))
-static PyObject *_wrap_new_wxWindowDC(PyObject *self, PyObject *args) {
+static PyObject *_wrap_new_wxWindowDC(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxWindowDC * _result;
     wxWindow * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "win", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:new_wxWindowDC",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:new_wxWindowDC",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5710,7 +5852,7 @@ static void *SwigwxPostScriptDCTowxDC(void *ptr) {
 }
 
 #define new_wxPostScriptDC(_swigarg0,_swigarg1,_swigarg2) (new wxPostScriptDC(_swigarg0,_swigarg1,_swigarg2))
-static PyObject *_wrap_new_wxPostScriptDC(PyObject *self, PyObject *args) {
+static PyObject *_wrap_new_wxPostScriptDC(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPostScriptDC * _result;
     wxString * _arg0;
@@ -5719,10 +5861,11 @@ static PyObject *_wrap_new_wxPostScriptDC(PyObject *self, PyObject *args) {
     PyObject * _obj0 = 0;
     int tempbool1 = (int) TRUE;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "output","interactive","win", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O|iO:new_wxPostScriptDC",&_obj0,&tempbool1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|iO:new_wxPostScriptDC",_kwnames,&_obj0,&tempbool1,&_argo2)) 
         return NULL;
 {
     if (!PyString_Check(_obj0)) {
@@ -5759,7 +5902,7 @@ static PyObject *_wrap_new_wxPostScriptDC(PyObject *self, PyObject *args) {
 }
 
 #define new_wxPalette(_swigarg0,_swigarg1,_swigarg2,_swigarg3) (new wxPalette(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
-static PyObject *_wrap_new_wxPalette(PyObject *self, PyObject *args) {
+static PyObject *_wrap_new_wxPalette(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPalette * _result;
     int  _arg0;
@@ -5769,10 +5912,11 @@ static PyObject *_wrap_new_wxPalette(PyObject *self, PyObject *args) {
     PyObject * _obj1 = 0;
     PyObject * _obj2 = 0;
     PyObject * _obj3 = 0;
+    char *_kwnames[] = { "LIST","LIST","LIST", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OOO:new_wxPalette",&_obj1,&_obj2,&_obj3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:new_wxPalette",_kwnames,&_obj1,&_obj2,&_obj3)) 
         return NULL;
 {
     _arg1 = byte_LIST_helper(_obj1);
@@ -5826,13 +5970,14 @@ static PyObject *_wrap_new_wxPalette(PyObject *self, PyObject *args) {
 }
 
 #define delete_wxPalette(_swigobj) (delete _swigobj)
-static PyObject *_wrap_delete_wxPalette(PyObject *self, PyObject *args) {
+static PyObject *_wrap_delete_wxPalette(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPalette * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:delete_wxPalette",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxPalette",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5852,7 +5997,7 @@ static PyObject *_wrap_delete_wxPalette(PyObject *self, PyObject *args) {
 }
 
 #define wxPalette_GetPixel(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->GetPixel(_swigarg0,_swigarg1,_swigarg2))
-static PyObject *_wrap_wxPalette_GetPixel(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPalette_GetPixel(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxPalette * _arg0;
@@ -5860,9 +6005,10 @@ static PyObject *_wrap_wxPalette_GetPixel(PyObject *self, PyObject *args) {
     byte  _arg2;
     byte  _arg3;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","red","green","blue", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Obbb:wxPalette_GetPixel",&_argo0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Obbb:wxPalette_GetPixel",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5881,7 +6027,7 @@ static PyObject *_wrap_wxPalette_GetPixel(PyObject *self, PyObject *args) {
 }
 
 #define wxPalette_GetRGB(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->GetRGB(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
-static PyObject *_wrap_wxPalette_GetRGB(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPalette_GetRGB(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxPalette * _arg0;
@@ -5893,9 +6039,10 @@ static PyObject *_wrap_wxPalette_GetRGB(PyObject *self, PyObject *args) {
     PyObject * _argo2 = 0;
     PyObject * _argo3 = 0;
     PyObject * _argo4 = 0;
+    char *_kwnames[] = { "self","pixel","OUTPUT","OUTPUT","OUTPUT", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OiOOO:wxPalette_GetRGB",&_argo0,&_arg1,&_argo2,&_argo3,&_argo4)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiOOO:wxPalette_GetRGB",_kwnames,&_argo0,&_arg1,&_argo2,&_argo3,&_argo4)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5935,14 +6082,15 @@ static PyObject *_wrap_wxPalette_GetRGB(PyObject *self, PyObject *args) {
 }
 
 #define wxPalette_Ok(_swigobj)  (_swigobj->Ok())
-static PyObject *_wrap_wxPalette_Ok(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPalette_Ok(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxPalette * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPalette_Ok",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPalette_Ok",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5961,7 +6109,7 @@ static PyObject *_wrap_wxPalette_Ok(PyObject *self, PyObject *args) {
 }
 
 #define new_wxImageList(_swigarg0,_swigarg1,_swigarg2,_swigarg3) (new wxImageList(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
-static PyObject *_wrap_new_wxImageList(PyObject *self, PyObject *args) {
+static PyObject *_wrap_new_wxImageList(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxImageList * _result;
     int  _arg0;
@@ -5969,10 +6117,11 @@ static PyObject *_wrap_new_wxImageList(PyObject *self, PyObject *args) {
     bool  _arg2 = (bool ) TRUE;
     int  _arg3 = (int ) 1;
     int tempbool2 = (int) TRUE;
+    char *_kwnames[] = { "width","height","mask","initialCount", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ii|ii:new_wxImageList",&_arg0,&_arg1,&tempbool2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ii|ii:new_wxImageList",_kwnames,&_arg0,&_arg1,&tempbool2,&_arg3)) 
         return NULL;
     _arg2 = (bool ) tempbool2;
 {
@@ -5991,13 +6140,14 @@ static PyObject *_wrap_new_wxImageList(PyObject *self, PyObject *args) {
 }
 
 #define delete_wxImageList(_swigobj) (delete _swigobj)
-static PyObject *_wrap_delete_wxImageList(PyObject *self, PyObject *args) {
+static PyObject *_wrap_delete_wxImageList(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxImageList * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:delete_wxImageList",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxImageList",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -6017,16 +6167,17 @@ static PyObject *_wrap_delete_wxImageList(PyObject *self, PyObject *args) {
 }
 
 #define wxImageList_Add(_swigobj,_swigarg0)  (_swigobj->Add(_swigarg0))
-static PyObject *_wrap_wxImageList_Add(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxImageList_Add(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxImageList * _arg0;
     wxBitmap * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","bitmap", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxImageList_Add",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxImageList_Add",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -6052,7 +6203,7 @@ static PyObject *_wrap_wxImageList_Add(PyObject *self, PyObject *args) {
 }
 
 #define wxImageList_Replace(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Replace(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxImageList_Replace(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxImageList_Replace(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxImageList * _arg0;
@@ -6060,9 +6211,10 @@ static PyObject *_wrap_wxImageList_Replace(PyObject *self, PyObject *args) {
     wxBitmap * _arg2;
     PyObject * _argo0 = 0;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "self","index","bitmap", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OiO:wxImageList_Replace",&_argo0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxImageList_Replace",_kwnames,&_argo0,&_arg1,&_argo2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -6088,7 +6240,7 @@ static PyObject *_wrap_wxImageList_Replace(PyObject *self, PyObject *args) {
 }
 
 #define wxImageList_Draw(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5)  (_swigobj->Draw(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
-static PyObject *_wrap_wxImageList_Draw(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxImageList_Draw(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxImageList * _arg0;
@@ -6101,9 +6253,10 @@ static PyObject *_wrap_wxImageList_Draw(PyObject *self, PyObject *args) {
     PyObject * _argo0 = 0;
     PyObject * _argo2 = 0;
     int tempbool6 = (int) FALSE;
+    char *_kwnames[] = { "self","index","dc","x","x","flags","solidBackground", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OiOii|ii:wxImageList_Draw",&_argo0,&_arg1,&_argo2,&_arg3,&_arg4,&_arg5,&tempbool6)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiOii|ii:wxImageList_Draw",_kwnames,&_argo0,&_arg1,&_argo2,&_arg3,&_arg4,&_arg5,&tempbool6)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -6130,14 +6283,15 @@ static PyObject *_wrap_wxImageList_Draw(PyObject *self, PyObject *args) {
 }
 
 #define wxImageList_GetImageCount(_swigobj)  (_swigobj->GetImageCount())
-static PyObject *_wrap_wxImageList_GetImageCount(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxImageList_GetImageCount(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxImageList * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxImageList_GetImageCount",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxImageList_GetImageCount",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -6156,15 +6310,16 @@ static PyObject *_wrap_wxImageList_GetImageCount(PyObject *self, PyObject *args)
 }
 
 #define wxImageList_Remove(_swigobj,_swigarg0)  (_swigobj->Remove(_swigarg0))
-static PyObject *_wrap_wxImageList_Remove(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxImageList_Remove(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxImageList * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","index", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxImageList_Remove",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxImageList_Remove",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -6183,14 +6338,15 @@ static PyObject *_wrap_wxImageList_Remove(PyObject *self, PyObject *args) {
 }
 
 #define wxImageList_RemoveAll(_swigobj)  (_swigobj->RemoveAll())
-static PyObject *_wrap_wxImageList_RemoveAll(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxImageList_RemoveAll(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxImageList * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxImageList_RemoveAll",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxImageList_RemoveAll",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -6209,174 +6365,174 @@ static PyObject *_wrap_wxImageList_RemoveAll(PyObject *self, PyObject *args) {
 }
 
 static PyMethodDef gdicMethods[] = {
-	 { "wxImageList_RemoveAll", _wrap_wxImageList_RemoveAll, METH_VARARGS },
-	 { "wxImageList_Remove", _wrap_wxImageList_Remove, METH_VARARGS },
-	 { "wxImageList_GetImageCount", _wrap_wxImageList_GetImageCount, METH_VARARGS },
-	 { "wxImageList_Draw", _wrap_wxImageList_Draw, METH_VARARGS },
-	 { "wxImageList_Replace", _wrap_wxImageList_Replace, METH_VARARGS },
-	 { "wxImageList_Add", _wrap_wxImageList_Add, METH_VARARGS },
-	 { "delete_wxImageList", _wrap_delete_wxImageList, METH_VARARGS },
-	 { "new_wxImageList", _wrap_new_wxImageList, METH_VARARGS },
-	 { "wxPalette_Ok", _wrap_wxPalette_Ok, METH_VARARGS },
-	 { "wxPalette_GetRGB", _wrap_wxPalette_GetRGB, METH_VARARGS },
-	 { "wxPalette_GetPixel", _wrap_wxPalette_GetPixel, METH_VARARGS },
-	 { "delete_wxPalette", _wrap_delete_wxPalette, METH_VARARGS },
-	 { "new_wxPalette", _wrap_new_wxPalette, METH_VARARGS },
-	 { "new_wxPostScriptDC", _wrap_new_wxPostScriptDC, METH_VARARGS },
-	 { "new_wxWindowDC", _wrap_new_wxWindowDC, METH_VARARGS },
-	 { "new_wxPaintDC", _wrap_new_wxPaintDC, METH_VARARGS },
-	 { "new_wxClientDC", _wrap_new_wxClientDC, METH_VARARGS },
-	 { "wxScreenDC_EndDrawingOnTop", _wrap_wxScreenDC_EndDrawingOnTop, METH_VARARGS },
-	 { "wxScreenDC_StartDrawingOnTopRect", _wrap_wxScreenDC_StartDrawingOnTopRect, METH_VARARGS },
-	 { "wxScreenDC_StartDrawingOnTop", _wrap_wxScreenDC_StartDrawingOnTop, METH_VARARGS },
-	 { "new_wxScreenDC", _wrap_new_wxScreenDC, METH_VARARGS },
-	 { "wxMemoryDC_SelectObject", _wrap_wxMemoryDC_SelectObject, METH_VARARGS },
-	 { "new_wxMemoryDC", _wrap_new_wxMemoryDC, METH_VARARGS },
-	 { "wxDC_DrawBitmap", _wrap_wxDC_DrawBitmap, METH_VARARGS },
-	 { "wxDC_StartPage", _wrap_wxDC_StartPage, METH_VARARGS },
-	 { "wxDC_StartDoc", _wrap_wxDC_StartDoc, METH_VARARGS },
-	 { "wxDC_SetUserScale", _wrap_wxDC_SetUserScale, METH_VARARGS },
-	 { "wxDC_SetTextForeground", _wrap_wxDC_SetTextForeground, METH_VARARGS },
-	 { "wxDC_SetTextBackground", _wrap_wxDC_SetTextBackground, METH_VARARGS },
-	 { "wxDC_SetPen", _wrap_wxDC_SetPen, METH_VARARGS },
-	 { "wxDC_SetOptimization", _wrap_wxDC_SetOptimization, METH_VARARGS },
-	 { "wxDC_SetMapMode", _wrap_wxDC_SetMapMode, METH_VARARGS },
-	 { "wxDC_SetLogicalFunction", _wrap_wxDC_SetLogicalFunction, METH_VARARGS },
-	 { "wxDC_SetFont", _wrap_wxDC_SetFont, METH_VARARGS },
-	 { "wxDC_SetBrush", _wrap_wxDC_SetBrush, METH_VARARGS },
-	 { "wxDC_SetPalette", _wrap_wxDC_SetPalette, METH_VARARGS },
-	 { "wxDC_SetClippingRegion", _wrap_wxDC_SetClippingRegion, METH_VARARGS },
-	 { "wxDC_SetBackgroundMode", _wrap_wxDC_SetBackgroundMode, METH_VARARGS },
-	 { "wxDC_SetBackground", _wrap_wxDC_SetBackground, METH_VARARGS },
-	 { "wxDC_SetDeviceOrigin", _wrap_wxDC_SetDeviceOrigin, METH_VARARGS },
-	 { "wxDC_Ok", _wrap_wxDC_Ok, METH_VARARGS },
-	 { "wxDC_MinY", _wrap_wxDC_MinY, METH_VARARGS },
-	 { "wxDC_MinX", _wrap_wxDC_MinX, METH_VARARGS },
-	 { "wxDC_MaxY", _wrap_wxDC_MaxY, METH_VARARGS },
-	 { "wxDC_MaxX", _wrap_wxDC_MaxX, METH_VARARGS },
-	 { "wxDC_LogicalToDeviceYRel", _wrap_wxDC_LogicalToDeviceYRel, METH_VARARGS },
-	 { "wxDC_LogicalToDeviceY", _wrap_wxDC_LogicalToDeviceY, METH_VARARGS },
-	 { "wxDC_LogicalToDeviceXRel", _wrap_wxDC_LogicalToDeviceXRel, METH_VARARGS },
-	 { "wxDC_LogicalToDeviceX", _wrap_wxDC_LogicalToDeviceX, METH_VARARGS },
-	 { "wxDC_GetTextForeground", _wrap_wxDC_GetTextForeground, METH_VARARGS },
-	 { "wxDC_GetFullTextExtent", _wrap_wxDC_GetFullTextExtent, METH_VARARGS },
-	 { "wxDC_GetTextExtent", _wrap_wxDC_GetTextExtent, METH_VARARGS },
-	 { "wxDC_GetTextBackground", _wrap_wxDC_GetTextBackground, METH_VARARGS },
-	 { "wxDC_GetSize", _wrap_wxDC_GetSize, METH_VARARGS },
-	 { "wxDC_GetSizeTuple", _wrap_wxDC_GetSizeTuple, METH_VARARGS },
-	 { "wxDC_GetPixel", _wrap_wxDC_GetPixel, METH_VARARGS },
-	 { "wxDC_GetPen", _wrap_wxDC_GetPen, METH_VARARGS },
-	 { "wxDC_GetOptimization", _wrap_wxDC_GetOptimization, METH_VARARGS },
-	 { "wxDC_GetMapMode", _wrap_wxDC_GetMapMode, METH_VARARGS },
-	 { "wxDC_GetLogicalFunction", _wrap_wxDC_GetLogicalFunction, METH_VARARGS },
-	 { "wxDC_GetFont", _wrap_wxDC_GetFont, METH_VARARGS },
-	 { "wxDC_GetClippingBox", _wrap_wxDC_GetClippingBox, METH_VARARGS },
-	 { "wxDC_GetCharWidth", _wrap_wxDC_GetCharWidth, METH_VARARGS },
-	 { "wxDC_GetCharHeight", _wrap_wxDC_GetCharHeight, METH_VARARGS },
-	 { "wxDC_GetBrush", _wrap_wxDC_GetBrush, METH_VARARGS },
-	 { "wxDC_GetBackground", _wrap_wxDC_GetBackground, METH_VARARGS },
-	 { "wxDC_FloodFill", _wrap_wxDC_FloodFill, METH_VARARGS },
-	 { "wxDC_EndPage", _wrap_wxDC_EndPage, METH_VARARGS },
-	 { "wxDC_EndDrawing", _wrap_wxDC_EndDrawing, METH_VARARGS },
-	 { "wxDC_EndDoc", _wrap_wxDC_EndDoc, METH_VARARGS },
-	 { "wxDC_DrawText", _wrap_wxDC_DrawText, METH_VARARGS },
-	 { "wxDC_DrawSpline", _wrap_wxDC_DrawSpline, METH_VARARGS },
-	 { "wxDC_DrawRoundedRectangle", _wrap_wxDC_DrawRoundedRectangle, METH_VARARGS },
-	 { "wxDC_DrawRectangle", _wrap_wxDC_DrawRectangle, METH_VARARGS },
-	 { "wxDC_DrawPoint", _wrap_wxDC_DrawPoint, METH_VARARGS },
-	 { "wxDC_DrawPolygon", _wrap_wxDC_DrawPolygon, METH_VARARGS },
-	 { "wxDC_DrawLines", _wrap_wxDC_DrawLines, METH_VARARGS },
-	 { "wxDC_DrawLine", _wrap_wxDC_DrawLine, METH_VARARGS },
-	 { "wxDC_DrawIcon", _wrap_wxDC_DrawIcon, METH_VARARGS },
-	 { "wxDC_DrawEllipticArc", _wrap_wxDC_DrawEllipticArc, METH_VARARGS },
-	 { "wxDC_DrawEllipse", _wrap_wxDC_DrawEllipse, METH_VARARGS },
-	 { "wxDC_DrawCircle", _wrap_wxDC_DrawCircle, METH_VARARGS },
-	 { "wxDC_DrawArc", _wrap_wxDC_DrawArc, METH_VARARGS },
-	 { "wxDC_DeviceToLogicalYRel", _wrap_wxDC_DeviceToLogicalYRel, METH_VARARGS },
-	 { "wxDC_DeviceToLogicalY", _wrap_wxDC_DeviceToLogicalY, METH_VARARGS },
-	 { "wxDC_DeviceToLogicalXRel", _wrap_wxDC_DeviceToLogicalXRel, METH_VARARGS },
-	 { "wxDC_DeviceToLogicalX", _wrap_wxDC_DeviceToLogicalX, METH_VARARGS },
-	 { "wxDC_DestroyClippingRegion", _wrap_wxDC_DestroyClippingRegion, METH_VARARGS },
-	 { "wxDC_CrossHair", _wrap_wxDC_CrossHair, METH_VARARGS },
-	 { "wxDC_Clear", _wrap_wxDC_Clear, METH_VARARGS },
-	 { "wxDC_Blit", _wrap_wxDC_Blit, METH_VARARGS },
-	 { "wxDC_BeginDrawing", _wrap_wxDC_BeginDrawing, METH_VARARGS },
-	 { "delete_wxDC", _wrap_delete_wxDC, METH_VARARGS },
-	 { "wxBrush_SetStyle", _wrap_wxBrush_SetStyle, METH_VARARGS },
-	 { "wxBrush_SetStipple", _wrap_wxBrush_SetStipple, METH_VARARGS },
-	 { "wxBrush_SetColour", _wrap_wxBrush_SetColour, METH_VARARGS },
-	 { "wxBrush_Ok", _wrap_wxBrush_Ok, METH_VARARGS },
-	 { "wxBrush_GetStyle", _wrap_wxBrush_GetStyle, METH_VARARGS },
-	 { "wxBrush_GetStipple", _wrap_wxBrush_GetStipple, METH_VARARGS },
-	 { "wxBrush_GetColour", _wrap_wxBrush_GetColour, METH_VARARGS },
-	 { "new_wxBrush", _wrap_new_wxBrush, METH_VARARGS },
-	 { "wxPen_SetWidth", _wrap_wxPen_SetWidth, METH_VARARGS },
-	 { "wxPen_SetStyle", _wrap_wxPen_SetStyle, METH_VARARGS },
-	 { "wxPen_SetJoin", _wrap_wxPen_SetJoin, METH_VARARGS },
-	 { "wxPen_SetColour", _wrap_wxPen_SetColour, METH_VARARGS },
-	 { "wxPen_SetCap", _wrap_wxPen_SetCap, METH_VARARGS },
-	 { "wxPen_Ok", _wrap_wxPen_Ok, METH_VARARGS },
-	 { "wxPen_GetWidth", _wrap_wxPen_GetWidth, METH_VARARGS },
-	 { "wxPen_GetStyle", _wrap_wxPen_GetStyle, METH_VARARGS },
-	 { "wxPen_GetJoin", _wrap_wxPen_GetJoin, METH_VARARGS },
-	 { "wxPen_GetColour", _wrap_wxPen_GetColour, METH_VARARGS },
-	 { "wxPen_GetCap", _wrap_wxPen_GetCap, METH_VARARGS },
-	 { "new_wxPen", _wrap_new_wxPen, METH_VARARGS },
-	 { "wxColour_Get", _wrap_wxColour_Get, METH_VARARGS },
-	 { "wxColour_Set", _wrap_wxColour_Set, METH_VARARGS },
-	 { "wxColour_Ok", _wrap_wxColour_Ok, METH_VARARGS },
-	 { "wxColour_Blue", _wrap_wxColour_Blue, METH_VARARGS },
-	 { "wxColour_Green", _wrap_wxColour_Green, METH_VARARGS },
-	 { "wxColour_Red", _wrap_wxColour_Red, METH_VARARGS },
-	 { "delete_wxColour", _wrap_delete_wxColour, METH_VARARGS },
-	 { "new_wxColour", _wrap_new_wxColour, METH_VARARGS },
-	 { "wxFont_SetWeight", _wrap_wxFont_SetWeight, METH_VARARGS },
-	 { "wxFont_SetUnderlined", _wrap_wxFont_SetUnderlined, METH_VARARGS },
-	 { "wxFont_SetStyle", _wrap_wxFont_SetStyle, METH_VARARGS },
-	 { "wxFont_SetPointSize", _wrap_wxFont_SetPointSize, METH_VARARGS },
-	 { "wxFont_SetFamily", _wrap_wxFont_SetFamily, METH_VARARGS },
-	 { "wxFont_SetFaceName", _wrap_wxFont_SetFaceName, METH_VARARGS },
-	 { "wxFont_GetWeight", _wrap_wxFont_GetWeight, METH_VARARGS },
-	 { "wxFont_GetUnderlined", _wrap_wxFont_GetUnderlined, METH_VARARGS },
-	 { "wxFont_GetStyle", _wrap_wxFont_GetStyle, METH_VARARGS },
-	 { "wxFont_GetPointSize", _wrap_wxFont_GetPointSize, METH_VARARGS },
-	 { "wxFont_GetFamily", _wrap_wxFont_GetFamily, METH_VARARGS },
-	 { "wxFont_GetFaceName", _wrap_wxFont_GetFaceName, METH_VARARGS },
-	 { "new_wxFont", _wrap_new_wxFont, METH_VARARGS },
-	 { "wxCursor_Ok", _wrap_wxCursor_Ok, METH_VARARGS },
-	 { "delete_wxCursor", _wrap_delete_wxCursor, METH_VARARGS },
-	 { "wxIcon_SetWidth", _wrap_wxIcon_SetWidth, METH_VARARGS },
-	 { "wxIcon_SetHeight", _wrap_wxIcon_SetHeight, METH_VARARGS },
-	 { "wxIcon_SetDepth", _wrap_wxIcon_SetDepth, METH_VARARGS },
-	 { "wxIcon_Ok", _wrap_wxIcon_Ok, METH_VARARGS },
-	 { "wxIcon_LoadFile", _wrap_wxIcon_LoadFile, METH_VARARGS },
-	 { "wxIcon_GetWidth", _wrap_wxIcon_GetWidth, METH_VARARGS },
-	 { "wxIcon_GetHeight", _wrap_wxIcon_GetHeight, METH_VARARGS },
-	 { "wxIcon_GetDepth", _wrap_wxIcon_GetDepth, METH_VARARGS },
-	 { "delete_wxIcon", _wrap_delete_wxIcon, METH_VARARGS },
-	 { "new_wxIcon", _wrap_new_wxIcon, METH_VARARGS },
-	 { "delete_wxMask", _wrap_delete_wxMask, METH_VARARGS },
-	 { "new_wxMask", _wrap_new_wxMask, METH_VARARGS },
-	 { "wxBitmap_SetWidth", _wrap_wxBitmap_SetWidth, METH_VARARGS },
-	 { "wxBitmap_SetMask", _wrap_wxBitmap_SetMask, METH_VARARGS },
-	 { "wxBitmap_SetHeight", _wrap_wxBitmap_SetHeight, METH_VARARGS },
-	 { "wxBitmap_SetDepth", _wrap_wxBitmap_SetDepth, METH_VARARGS },
-	 { "wxBitmap_SaveFile", _wrap_wxBitmap_SaveFile, METH_VARARGS },
-	 { "wxBitmap_Ok", _wrap_wxBitmap_Ok, METH_VARARGS },
-	 { "wxBitmap_LoadFile", _wrap_wxBitmap_LoadFile, METH_VARARGS },
-	 { "wxBitmap_GetWidth", _wrap_wxBitmap_GetWidth, METH_VARARGS },
-	 { "wxBitmap_GetMask", _wrap_wxBitmap_GetMask, METH_VARARGS },
-	 { "wxBitmap_GetPalette", _wrap_wxBitmap_GetPalette, METH_VARARGS },
-	 { "wxBitmap_GetHeight", _wrap_wxBitmap_GetHeight, METH_VARARGS },
-	 { "wxBitmap_GetDepth", _wrap_wxBitmap_GetDepth, METH_VARARGS },
-	 { "delete_wxBitmap", _wrap_delete_wxBitmap, METH_VARARGS },
-	 { "new_wxBitmap", _wrap_new_wxBitmap, METH_VARARGS },
-	 { "wxMemoryDCFromDC", _wrap_wxMemoryDCFromDC, METH_VARARGS },
-	 { "wxNamedColour", _wrap_wxNamedColour, METH_VARARGS },
-	 { "wxStockCursor", _wrap_wxStockCursor, METH_VARARGS },
-	 { "wxMaskColour", _wrap_wxMaskColour, METH_VARARGS },
-	 { "wxNoRefBitmap", _wrap_wxNoRefBitmap, METH_VARARGS },
-	 { "wxEmptyBitmap", _wrap_wxEmptyBitmap, METH_VARARGS },
+	 { "wxImageList_RemoveAll", (PyCFunction) _wrap_wxImageList_RemoveAll, METH_VARARGS | METH_KEYWORDS },
+	 { "wxImageList_Remove", (PyCFunction) _wrap_wxImageList_Remove, METH_VARARGS | METH_KEYWORDS },
+	 { "wxImageList_GetImageCount", (PyCFunction) _wrap_wxImageList_GetImageCount, METH_VARARGS | METH_KEYWORDS },
+	 { "wxImageList_Draw", (PyCFunction) _wrap_wxImageList_Draw, METH_VARARGS | METH_KEYWORDS },
+	 { "wxImageList_Replace", (PyCFunction) _wrap_wxImageList_Replace, METH_VARARGS | METH_KEYWORDS },
+	 { "wxImageList_Add", (PyCFunction) _wrap_wxImageList_Add, METH_VARARGS | METH_KEYWORDS },
+	 { "delete_wxImageList", (PyCFunction) _wrap_delete_wxImageList, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxImageList", (PyCFunction) _wrap_new_wxImageList, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPalette_Ok", (PyCFunction) _wrap_wxPalette_Ok, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPalette_GetRGB", (PyCFunction) _wrap_wxPalette_GetRGB, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPalette_GetPixel", (PyCFunction) _wrap_wxPalette_GetPixel, METH_VARARGS | METH_KEYWORDS },
+	 { "delete_wxPalette", (PyCFunction) _wrap_delete_wxPalette, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxPalette", (PyCFunction) _wrap_new_wxPalette, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxPostScriptDC", (PyCFunction) _wrap_new_wxPostScriptDC, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxWindowDC", (PyCFunction) _wrap_new_wxWindowDC, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxPaintDC", (PyCFunction) _wrap_new_wxPaintDC, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxClientDC", (PyCFunction) _wrap_new_wxClientDC, METH_VARARGS | METH_KEYWORDS },
+	 { "wxScreenDC_EndDrawingOnTop", (PyCFunction) _wrap_wxScreenDC_EndDrawingOnTop, METH_VARARGS | METH_KEYWORDS },
+	 { "wxScreenDC_StartDrawingOnTopRect", (PyCFunction) _wrap_wxScreenDC_StartDrawingOnTopRect, METH_VARARGS | METH_KEYWORDS },
+	 { "wxScreenDC_StartDrawingOnTop", (PyCFunction) _wrap_wxScreenDC_StartDrawingOnTop, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxScreenDC", (PyCFunction) _wrap_new_wxScreenDC, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMemoryDC_SelectObject", (PyCFunction) _wrap_wxMemoryDC_SelectObject, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxMemoryDC", (PyCFunction) _wrap_new_wxMemoryDC, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_DrawBitmap", (PyCFunction) _wrap_wxDC_DrawBitmap, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_StartPage", (PyCFunction) _wrap_wxDC_StartPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_StartDoc", (PyCFunction) _wrap_wxDC_StartDoc, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_SetUserScale", (PyCFunction) _wrap_wxDC_SetUserScale, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_SetTextForeground", (PyCFunction) _wrap_wxDC_SetTextForeground, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_SetTextBackground", (PyCFunction) _wrap_wxDC_SetTextBackground, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_SetPen", (PyCFunction) _wrap_wxDC_SetPen, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_SetOptimization", (PyCFunction) _wrap_wxDC_SetOptimization, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_SetMapMode", (PyCFunction) _wrap_wxDC_SetMapMode, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_SetLogicalFunction", (PyCFunction) _wrap_wxDC_SetLogicalFunction, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_SetFont", (PyCFunction) _wrap_wxDC_SetFont, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_SetBrush", (PyCFunction) _wrap_wxDC_SetBrush, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_SetPalette", (PyCFunction) _wrap_wxDC_SetPalette, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_SetClippingRegion", (PyCFunction) _wrap_wxDC_SetClippingRegion, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_SetBackgroundMode", (PyCFunction) _wrap_wxDC_SetBackgroundMode, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_SetBackground", (PyCFunction) _wrap_wxDC_SetBackground, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_SetDeviceOrigin", (PyCFunction) _wrap_wxDC_SetDeviceOrigin, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_Ok", (PyCFunction) _wrap_wxDC_Ok, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_MinY", (PyCFunction) _wrap_wxDC_MinY, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_MinX", (PyCFunction) _wrap_wxDC_MinX, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_MaxY", (PyCFunction) _wrap_wxDC_MaxY, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_MaxX", (PyCFunction) _wrap_wxDC_MaxX, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_LogicalToDeviceYRel", (PyCFunction) _wrap_wxDC_LogicalToDeviceYRel, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_LogicalToDeviceY", (PyCFunction) _wrap_wxDC_LogicalToDeviceY, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_LogicalToDeviceXRel", (PyCFunction) _wrap_wxDC_LogicalToDeviceXRel, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_LogicalToDeviceX", (PyCFunction) _wrap_wxDC_LogicalToDeviceX, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_GetTextForeground", (PyCFunction) _wrap_wxDC_GetTextForeground, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_GetFullTextExtent", (PyCFunction) _wrap_wxDC_GetFullTextExtent, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_GetTextExtent", (PyCFunction) _wrap_wxDC_GetTextExtent, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_GetTextBackground", (PyCFunction) _wrap_wxDC_GetTextBackground, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_GetSize", (PyCFunction) _wrap_wxDC_GetSize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_GetSizeTuple", (PyCFunction) _wrap_wxDC_GetSizeTuple, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_GetPixel", (PyCFunction) _wrap_wxDC_GetPixel, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_GetPen", (PyCFunction) _wrap_wxDC_GetPen, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_GetOptimization", (PyCFunction) _wrap_wxDC_GetOptimization, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_GetMapMode", (PyCFunction) _wrap_wxDC_GetMapMode, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_GetLogicalFunction", (PyCFunction) _wrap_wxDC_GetLogicalFunction, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_GetFont", (PyCFunction) _wrap_wxDC_GetFont, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_GetClippingBox", (PyCFunction) _wrap_wxDC_GetClippingBox, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_GetCharWidth", (PyCFunction) _wrap_wxDC_GetCharWidth, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_GetCharHeight", (PyCFunction) _wrap_wxDC_GetCharHeight, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_GetBrush", (PyCFunction) _wrap_wxDC_GetBrush, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_GetBackground", (PyCFunction) _wrap_wxDC_GetBackground, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_FloodFill", (PyCFunction) _wrap_wxDC_FloodFill, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_EndPage", (PyCFunction) _wrap_wxDC_EndPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_EndDrawing", (PyCFunction) _wrap_wxDC_EndDrawing, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_EndDoc", (PyCFunction) _wrap_wxDC_EndDoc, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_DrawText", (PyCFunction) _wrap_wxDC_DrawText, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_DrawSpline", (PyCFunction) _wrap_wxDC_DrawSpline, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_DrawRoundedRectangle", (PyCFunction) _wrap_wxDC_DrawRoundedRectangle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_DrawRectangle", (PyCFunction) _wrap_wxDC_DrawRectangle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_DrawPoint", (PyCFunction) _wrap_wxDC_DrawPoint, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_DrawPolygon", (PyCFunction) _wrap_wxDC_DrawPolygon, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_DrawLines", (PyCFunction) _wrap_wxDC_DrawLines, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_DrawLine", (PyCFunction) _wrap_wxDC_DrawLine, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_DrawIcon", (PyCFunction) _wrap_wxDC_DrawIcon, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_DrawEllipticArc", (PyCFunction) _wrap_wxDC_DrawEllipticArc, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_DrawEllipse", (PyCFunction) _wrap_wxDC_DrawEllipse, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_DrawCircle", (PyCFunction) _wrap_wxDC_DrawCircle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_DrawArc", (PyCFunction) _wrap_wxDC_DrawArc, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_DeviceToLogicalYRel", (PyCFunction) _wrap_wxDC_DeviceToLogicalYRel, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_DeviceToLogicalY", (PyCFunction) _wrap_wxDC_DeviceToLogicalY, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_DeviceToLogicalXRel", (PyCFunction) _wrap_wxDC_DeviceToLogicalXRel, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_DeviceToLogicalX", (PyCFunction) _wrap_wxDC_DeviceToLogicalX, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_DestroyClippingRegion", (PyCFunction) _wrap_wxDC_DestroyClippingRegion, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_CrossHair", (PyCFunction) _wrap_wxDC_CrossHair, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_Clear", (PyCFunction) _wrap_wxDC_Clear, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_Blit", (PyCFunction) _wrap_wxDC_Blit, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_BeginDrawing", (PyCFunction) _wrap_wxDC_BeginDrawing, METH_VARARGS | METH_KEYWORDS },
+	 { "delete_wxDC", (PyCFunction) _wrap_delete_wxDC, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBrush_SetStyle", (PyCFunction) _wrap_wxBrush_SetStyle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBrush_SetStipple", (PyCFunction) _wrap_wxBrush_SetStipple, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBrush_SetColour", (PyCFunction) _wrap_wxBrush_SetColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBrush_Ok", (PyCFunction) _wrap_wxBrush_Ok, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBrush_GetStyle", (PyCFunction) _wrap_wxBrush_GetStyle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBrush_GetStipple", (PyCFunction) _wrap_wxBrush_GetStipple, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBrush_GetColour", (PyCFunction) _wrap_wxBrush_GetColour, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxBrush", (PyCFunction) _wrap_new_wxBrush, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPen_SetWidth", (PyCFunction) _wrap_wxPen_SetWidth, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPen_SetStyle", (PyCFunction) _wrap_wxPen_SetStyle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPen_SetJoin", (PyCFunction) _wrap_wxPen_SetJoin, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPen_SetColour", (PyCFunction) _wrap_wxPen_SetColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPen_SetCap", (PyCFunction) _wrap_wxPen_SetCap, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPen_Ok", (PyCFunction) _wrap_wxPen_Ok, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPen_GetWidth", (PyCFunction) _wrap_wxPen_GetWidth, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPen_GetStyle", (PyCFunction) _wrap_wxPen_GetStyle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPen_GetJoin", (PyCFunction) _wrap_wxPen_GetJoin, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPen_GetColour", (PyCFunction) _wrap_wxPen_GetColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPen_GetCap", (PyCFunction) _wrap_wxPen_GetCap, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxPen", (PyCFunction) _wrap_new_wxPen, METH_VARARGS | METH_KEYWORDS },
+	 { "wxColour_Get", (PyCFunction) _wrap_wxColour_Get, METH_VARARGS | METH_KEYWORDS },
+	 { "wxColour_Set", (PyCFunction) _wrap_wxColour_Set, METH_VARARGS | METH_KEYWORDS },
+	 { "wxColour_Ok", (PyCFunction) _wrap_wxColour_Ok, METH_VARARGS | METH_KEYWORDS },
+	 { "wxColour_Blue", (PyCFunction) _wrap_wxColour_Blue, METH_VARARGS | METH_KEYWORDS },
+	 { "wxColour_Green", (PyCFunction) _wrap_wxColour_Green, METH_VARARGS | METH_KEYWORDS },
+	 { "wxColour_Red", (PyCFunction) _wrap_wxColour_Red, METH_VARARGS | METH_KEYWORDS },
+	 { "delete_wxColour", (PyCFunction) _wrap_delete_wxColour, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxColour", (PyCFunction) _wrap_new_wxColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFont_SetWeight", (PyCFunction) _wrap_wxFont_SetWeight, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFont_SetUnderlined", (PyCFunction) _wrap_wxFont_SetUnderlined, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFont_SetStyle", (PyCFunction) _wrap_wxFont_SetStyle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFont_SetPointSize", (PyCFunction) _wrap_wxFont_SetPointSize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFont_SetFamily", (PyCFunction) _wrap_wxFont_SetFamily, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFont_SetFaceName", (PyCFunction) _wrap_wxFont_SetFaceName, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFont_GetWeight", (PyCFunction) _wrap_wxFont_GetWeight, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFont_GetUnderlined", (PyCFunction) _wrap_wxFont_GetUnderlined, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFont_GetStyle", (PyCFunction) _wrap_wxFont_GetStyle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFont_GetPointSize", (PyCFunction) _wrap_wxFont_GetPointSize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFont_GetFamily", (PyCFunction) _wrap_wxFont_GetFamily, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFont_GetFaceName", (PyCFunction) _wrap_wxFont_GetFaceName, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxFont", (PyCFunction) _wrap_new_wxFont, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCursor_Ok", (PyCFunction) _wrap_wxCursor_Ok, METH_VARARGS | METH_KEYWORDS },
+	 { "delete_wxCursor", (PyCFunction) _wrap_delete_wxCursor, METH_VARARGS | METH_KEYWORDS },
+	 { "wxIcon_SetWidth", (PyCFunction) _wrap_wxIcon_SetWidth, METH_VARARGS | METH_KEYWORDS },
+	 { "wxIcon_SetHeight", (PyCFunction) _wrap_wxIcon_SetHeight, METH_VARARGS | METH_KEYWORDS },
+	 { "wxIcon_SetDepth", (PyCFunction) _wrap_wxIcon_SetDepth, METH_VARARGS | METH_KEYWORDS },
+	 { "wxIcon_Ok", (PyCFunction) _wrap_wxIcon_Ok, METH_VARARGS | METH_KEYWORDS },
+	 { "wxIcon_LoadFile", (PyCFunction) _wrap_wxIcon_LoadFile, METH_VARARGS | METH_KEYWORDS },
+	 { "wxIcon_GetWidth", (PyCFunction) _wrap_wxIcon_GetWidth, METH_VARARGS | METH_KEYWORDS },
+	 { "wxIcon_GetHeight", (PyCFunction) _wrap_wxIcon_GetHeight, METH_VARARGS | METH_KEYWORDS },
+	 { "wxIcon_GetDepth", (PyCFunction) _wrap_wxIcon_GetDepth, METH_VARARGS | METH_KEYWORDS },
+	 { "delete_wxIcon", (PyCFunction) _wrap_delete_wxIcon, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxIcon", (PyCFunction) _wrap_new_wxIcon, METH_VARARGS | METH_KEYWORDS },
+	 { "delete_wxMask", (PyCFunction) _wrap_delete_wxMask, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxMask", (PyCFunction) _wrap_new_wxMask, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBitmap_SetWidth", (PyCFunction) _wrap_wxBitmap_SetWidth, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBitmap_SetMask", (PyCFunction) _wrap_wxBitmap_SetMask, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBitmap_SetHeight", (PyCFunction) _wrap_wxBitmap_SetHeight, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBitmap_SetDepth", (PyCFunction) _wrap_wxBitmap_SetDepth, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBitmap_SaveFile", (PyCFunction) _wrap_wxBitmap_SaveFile, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBitmap_Ok", (PyCFunction) _wrap_wxBitmap_Ok, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBitmap_LoadFile", (PyCFunction) _wrap_wxBitmap_LoadFile, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBitmap_GetWidth", (PyCFunction) _wrap_wxBitmap_GetWidth, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBitmap_GetMask", (PyCFunction) _wrap_wxBitmap_GetMask, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBitmap_GetPalette", (PyCFunction) _wrap_wxBitmap_GetPalette, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBitmap_GetHeight", (PyCFunction) _wrap_wxBitmap_GetHeight, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBitmap_GetDepth", (PyCFunction) _wrap_wxBitmap_GetDepth, METH_VARARGS | METH_KEYWORDS },
+	 { "delete_wxBitmap", (PyCFunction) _wrap_delete_wxBitmap, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxBitmap", (PyCFunction) _wrap_new_wxBitmap, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMemoryDCFromDC", (PyCFunction) _wrap_wxMemoryDCFromDC, METH_VARARGS | METH_KEYWORDS },
+	 { "wxNamedColour", (PyCFunction) _wrap_wxNamedColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStockCursor", (PyCFunction) _wrap_wxStockCursor, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMaskColour", (PyCFunction) _wrap_wxMaskColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxNoRefBitmap", (PyCFunction) _wrap_wxNoRefBitmap, METH_VARARGS | METH_KEYWORDS },
+	 { "wxEmptyBitmap", (PyCFunction) _wrap_wxEmptyBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { NULL, NULL }
 };
 #ifdef __cplusplus

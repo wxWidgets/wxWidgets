@@ -180,13 +180,14 @@ public:
 extern "C" {
 #endif
 #define new_wxPrintData() (new wxPrintData())
-static PyObject *_wrap_new_wxPrintData(PyObject *self, PyObject *args) {
+static PyObject *_wrap_new_wxPrintData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintData * _result;
+    char *_kwnames[] = {  NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,":new_wxPrintData")) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxPrintData",_kwnames)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -204,13 +205,14 @@ static PyObject *_wrap_new_wxPrintData(PyObject *self, PyObject *args) {
 }
 
 #define delete_wxPrintData(_swigobj) (delete _swigobj)
-static PyObject *_wrap_delete_wxPrintData(PyObject *self, PyObject *args) {
+static PyObject *_wrap_delete_wxPrintData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintData * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:delete_wxPrintData",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxPrintData",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -230,14 +232,15 @@ static PyObject *_wrap_delete_wxPrintData(PyObject *self, PyObject *args) {
 }
 
 #define wxPrintData_GetNoCopies(_swigobj)  (_swigobj->GetNoCopies())
-static PyObject *_wrap_wxPrintData_GetNoCopies(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintData_GetNoCopies(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxPrintData * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintData_GetNoCopies",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintData_GetNoCopies",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -256,14 +259,15 @@ static PyObject *_wrap_wxPrintData_GetNoCopies(PyObject *self, PyObject *args) {
 }
 
 #define wxPrintData_GetCollate(_swigobj)  (_swigobj->GetCollate())
-static PyObject *_wrap_wxPrintData_GetCollate(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintData_GetCollate(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxPrintData * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintData_GetCollate",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintData_GetCollate",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -282,14 +286,15 @@ static PyObject *_wrap_wxPrintData_GetCollate(PyObject *self, PyObject *args) {
 }
 
 #define wxPrintData_GetOrientation(_swigobj)  (_swigobj->GetOrientation())
-static PyObject *_wrap_wxPrintData_GetOrientation(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintData_GetOrientation(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxPrintData * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintData_GetOrientation",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintData_GetOrientation",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -308,14 +313,15 @@ static PyObject *_wrap_wxPrintData_GetOrientation(PyObject *self, PyObject *args
 }
 
 #define wxPrintData_GetPrinterName(_swigobj)  (_swigobj->GetPrinterName())
-static PyObject *_wrap_wxPrintData_GetPrinterName(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintData_GetPrinterName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxString * _result;
     wxPrintData * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintData_GetPrinterName",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintData_GetPrinterName",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -337,14 +343,15 @@ static PyObject *_wrap_wxPrintData_GetPrinterName(PyObject *self, PyObject *args
 }
 
 #define wxPrintData_GetColour(_swigobj)  (_swigobj->GetColour())
-static PyObject *_wrap_wxPrintData_GetColour(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintData_GetColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxPrintData * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintData_GetColour",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintData_GetColour",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -363,14 +370,15 @@ static PyObject *_wrap_wxPrintData_GetColour(PyObject *self, PyObject *args) {
 }
 
 #define wxPrintData_GetDuplex(_swigobj)  (_swigobj->GetDuplex())
-static PyObject *_wrap_wxPrintData_GetDuplex(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintData_GetDuplex(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDuplexMode  _result;
     wxPrintData * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintData_GetDuplex",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintData_GetDuplex",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -389,14 +397,15 @@ static PyObject *_wrap_wxPrintData_GetDuplex(PyObject *self, PyObject *args) {
 }
 
 #define wxPrintData_GetPaperId(_swigobj)  (_swigobj->GetPaperId())
-static PyObject *_wrap_wxPrintData_GetPaperId(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintData_GetPaperId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPaperSize  _result;
     wxPrintData * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintData_GetPaperId",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintData_GetPaperId",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -415,15 +424,16 @@ static PyObject *_wrap_wxPrintData_GetPaperId(PyObject *self, PyObject *args) {
 }
 
 #define wxPrintData_GetPaperSize(_swigobj)  (_swigobj->GetPaperSize())
-static PyObject *_wrap_wxPrintData_GetPaperSize(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintData_GetPaperSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxSize * _result;
     wxPrintData * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintData_GetPaperSize",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintData_GetPaperSize",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -449,14 +459,15 @@ static PyObject *_wrap_wxPrintData_GetPaperSize(PyObject *self, PyObject *args) 
 }
 
 #define wxPrintData_GetQuality(_swigobj)  (_swigobj->GetQuality())
-static PyObject *_wrap_wxPrintData_GetQuality(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintData_GetQuality(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintQuality  _result;
     wxPrintData * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintData_GetQuality",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintData_GetQuality",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -475,14 +486,15 @@ static PyObject *_wrap_wxPrintData_GetQuality(PyObject *self, PyObject *args) {
 }
 
 #define wxPrintData_SetNoCopies(_swigobj,_swigarg0)  (_swigobj->SetNoCopies(_swigarg0))
-static PyObject *_wrap_wxPrintData_SetNoCopies(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintData_SetNoCopies(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintData * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","v", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxPrintData_SetNoCopies",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintData_SetNoCopies",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -502,15 +514,16 @@ static PyObject *_wrap_wxPrintData_SetNoCopies(PyObject *self, PyObject *args) {
 }
 
 #define wxPrintData_SetCollate(_swigobj,_swigarg0)  (_swigobj->SetCollate(_swigarg0))
-static PyObject *_wrap_wxPrintData_SetCollate(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintData_SetCollate(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintData * _arg0;
     bool  _arg1;
     PyObject * _argo0 = 0;
     int tempbool1;
+    char *_kwnames[] = { "self","flag", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxPrintData_SetCollate",&_argo0,&tempbool1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintData_SetCollate",_kwnames,&_argo0,&tempbool1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -531,14 +544,15 @@ static PyObject *_wrap_wxPrintData_SetCollate(PyObject *self, PyObject *args) {
 }
 
 #define wxPrintData_SetOrientation(_swigobj,_swigarg0)  (_swigobj->SetOrientation(_swigarg0))
-static PyObject *_wrap_wxPrintData_SetOrientation(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintData_SetOrientation(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintData * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","orient", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxPrintData_SetOrientation",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintData_SetOrientation",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -558,15 +572,16 @@ static PyObject *_wrap_wxPrintData_SetOrientation(PyObject *self, PyObject *args
 }
 
 #define wxPrintData_SetPrinterName(_swigobj,_swigarg0)  (_swigobj->SetPrinterName(_swigarg0))
-static PyObject *_wrap_wxPrintData_SetPrinterName(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintData_SetPrinterName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintData * _arg0;
     wxString * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","name", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxPrintData_SetPrinterName",&_argo0,&_obj1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPrintData_SetPrinterName",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -597,15 +612,16 @@ static PyObject *_wrap_wxPrintData_SetPrinterName(PyObject *self, PyObject *args
 }
 
 #define wxPrintData_SetColour(_swigobj,_swigarg0)  (_swigobj->SetColour(_swigarg0))
-static PyObject *_wrap_wxPrintData_SetColour(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintData_SetColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintData * _arg0;
     bool  _arg1;
     PyObject * _argo0 = 0;
     int tempbool1;
+    char *_kwnames[] = { "self","colour", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxPrintData_SetColour",&_argo0,&tempbool1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintData_SetColour",_kwnames,&_argo0,&tempbool1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -626,14 +642,15 @@ static PyObject *_wrap_wxPrintData_SetColour(PyObject *self, PyObject *args) {
 }
 
 #define wxPrintData_SetDuplex(_swigobj,_swigarg0)  (_swigobj->SetDuplex(_swigarg0))
-static PyObject *_wrap_wxPrintData_SetDuplex(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintData_SetDuplex(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintData * _arg0;
     wxDuplexMode  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","duplex", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxPrintData_SetDuplex",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintData_SetDuplex",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -653,14 +670,15 @@ static PyObject *_wrap_wxPrintData_SetDuplex(PyObject *self, PyObject *args) {
 }
 
 #define wxPrintData_SetPaperId(_swigobj,_swigarg0)  (_swigobj->SetPaperId(_swigarg0))
-static PyObject *_wrap_wxPrintData_SetPaperId(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintData_SetPaperId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintData * _arg0;
     wxPaperSize  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","sizeId", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxPrintData_SetPaperId",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintData_SetPaperId",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -680,15 +698,16 @@ static PyObject *_wrap_wxPrintData_SetPaperId(PyObject *self, PyObject *args) {
 }
 
 #define wxPrintData_SetPaperSize(_swigobj,_swigarg0)  (_swigobj->SetPaperSize(_swigarg0))
-static PyObject *_wrap_wxPrintData_SetPaperSize(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintData_SetPaperSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintData * _arg0;
     wxSize * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","sz", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxPrintData_SetPaperSize",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPrintData_SetPaperSize",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -715,14 +734,15 @@ static PyObject *_wrap_wxPrintData_SetPaperSize(PyObject *self, PyObject *args) 
 }
 
 #define wxPrintData_SetQuality(_swigobj,_swigarg0)  (_swigobj->SetQuality(_swigarg0))
-static PyObject *_wrap_wxPrintData_SetQuality(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintData_SetQuality(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintData * _arg0;
     wxPrintQuality  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","quality", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxPrintData_SetQuality",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintData_SetQuality",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -742,13 +762,14 @@ static PyObject *_wrap_wxPrintData_SetQuality(PyObject *self, PyObject *args) {
 }
 
 #define new_wxPageSetupDialogData() (new wxPageSetupDialogData())
-static PyObject *_wrap_new_wxPageSetupDialogData(PyObject *self, PyObject *args) {
+static PyObject *_wrap_new_wxPageSetupDialogData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPageSetupDialogData * _result;
+    char *_kwnames[] = {  NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,":new_wxPageSetupDialogData")) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxPageSetupDialogData",_kwnames)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -766,13 +787,14 @@ static PyObject *_wrap_new_wxPageSetupDialogData(PyObject *self, PyObject *args)
 }
 
 #define delete_wxPageSetupDialogData(_swigobj) (delete _swigobj)
-static PyObject *_wrap_delete_wxPageSetupDialogData(PyObject *self, PyObject *args) {
+static PyObject *_wrap_delete_wxPageSetupDialogData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPageSetupDialogData * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:delete_wxPageSetupDialogData",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxPageSetupDialogData",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -792,15 +814,16 @@ static PyObject *_wrap_delete_wxPageSetupDialogData(PyObject *self, PyObject *ar
 }
 
 #define wxPageSetupDialogData_EnableHelp(_swigobj,_swigarg0)  (_swigobj->EnableHelp(_swigarg0))
-static PyObject *_wrap_wxPageSetupDialogData_EnableHelp(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPageSetupDialogData_EnableHelp(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPageSetupDialogData * _arg0;
     bool  _arg1;
     PyObject * _argo0 = 0;
     int tempbool1;
+    char *_kwnames[] = { "self","flag", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxPageSetupDialogData_EnableHelp",&_argo0,&tempbool1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPageSetupDialogData_EnableHelp",_kwnames,&_argo0,&tempbool1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -821,15 +844,16 @@ static PyObject *_wrap_wxPageSetupDialogData_EnableHelp(PyObject *self, PyObject
 }
 
 #define wxPageSetupDialogData_EnableMargins(_swigobj,_swigarg0)  (_swigobj->EnableMargins(_swigarg0))
-static PyObject *_wrap_wxPageSetupDialogData_EnableMargins(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPageSetupDialogData_EnableMargins(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPageSetupDialogData * _arg0;
     bool  _arg1;
     PyObject * _argo0 = 0;
     int tempbool1;
+    char *_kwnames[] = { "self","flag", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxPageSetupDialogData_EnableMargins",&_argo0,&tempbool1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPageSetupDialogData_EnableMargins",_kwnames,&_argo0,&tempbool1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -850,15 +874,16 @@ static PyObject *_wrap_wxPageSetupDialogData_EnableMargins(PyObject *self, PyObj
 }
 
 #define wxPageSetupDialogData_EnableOrientation(_swigobj,_swigarg0)  (_swigobj->EnableOrientation(_swigarg0))
-static PyObject *_wrap_wxPageSetupDialogData_EnableOrientation(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPageSetupDialogData_EnableOrientation(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPageSetupDialogData * _arg0;
     bool  _arg1;
     PyObject * _argo0 = 0;
     int tempbool1;
+    char *_kwnames[] = { "self","flag", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxPageSetupDialogData_EnableOrientation",&_argo0,&tempbool1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPageSetupDialogData_EnableOrientation",_kwnames,&_argo0,&tempbool1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -879,15 +904,16 @@ static PyObject *_wrap_wxPageSetupDialogData_EnableOrientation(PyObject *self, P
 }
 
 #define wxPageSetupDialogData_EnablePaper(_swigobj,_swigarg0)  (_swigobj->EnablePaper(_swigarg0))
-static PyObject *_wrap_wxPageSetupDialogData_EnablePaper(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPageSetupDialogData_EnablePaper(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPageSetupDialogData * _arg0;
     bool  _arg1;
     PyObject * _argo0 = 0;
     int tempbool1;
+    char *_kwnames[] = { "self","flag", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxPageSetupDialogData_EnablePaper",&_argo0,&tempbool1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPageSetupDialogData_EnablePaper",_kwnames,&_argo0,&tempbool1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -908,15 +934,16 @@ static PyObject *_wrap_wxPageSetupDialogData_EnablePaper(PyObject *self, PyObjec
 }
 
 #define wxPageSetupDialogData_EnablePrinter(_swigobj,_swigarg0)  (_swigobj->EnablePrinter(_swigarg0))
-static PyObject *_wrap_wxPageSetupDialogData_EnablePrinter(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPageSetupDialogData_EnablePrinter(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPageSetupDialogData * _arg0;
     bool  _arg1;
     PyObject * _argo0 = 0;
     int tempbool1;
+    char *_kwnames[] = { "self","flag", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxPageSetupDialogData_EnablePrinter",&_argo0,&tempbool1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPageSetupDialogData_EnablePrinter",_kwnames,&_argo0,&tempbool1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -937,14 +964,15 @@ static PyObject *_wrap_wxPageSetupDialogData_EnablePrinter(PyObject *self, PyObj
 }
 
 #define wxPageSetupDialogData_GetDefaultMinMargins(_swigobj)  (_swigobj->GetDefaultMinMargins())
-static PyObject *_wrap_wxPageSetupDialogData_GetDefaultMinMargins(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPageSetupDialogData_GetDefaultMinMargins(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxPageSetupDialogData * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPageSetupDialogData_GetDefaultMinMargins",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPageSetupDialogData_GetDefaultMinMargins",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -963,14 +991,15 @@ static PyObject *_wrap_wxPageSetupDialogData_GetDefaultMinMargins(PyObject *self
 }
 
 #define wxPageSetupDialogData_GetEnableMargins(_swigobj)  (_swigobj->GetEnableMargins())
-static PyObject *_wrap_wxPageSetupDialogData_GetEnableMargins(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPageSetupDialogData_GetEnableMargins(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxPageSetupDialogData * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPageSetupDialogData_GetEnableMargins",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPageSetupDialogData_GetEnableMargins",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -989,14 +1018,15 @@ static PyObject *_wrap_wxPageSetupDialogData_GetEnableMargins(PyObject *self, Py
 }
 
 #define wxPageSetupDialogData_GetEnableOrientation(_swigobj)  (_swigobj->GetEnableOrientation())
-static PyObject *_wrap_wxPageSetupDialogData_GetEnableOrientation(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPageSetupDialogData_GetEnableOrientation(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxPageSetupDialogData * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPageSetupDialogData_GetEnableOrientation",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPageSetupDialogData_GetEnableOrientation",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1015,14 +1045,15 @@ static PyObject *_wrap_wxPageSetupDialogData_GetEnableOrientation(PyObject *self
 }
 
 #define wxPageSetupDialogData_GetEnablePaper(_swigobj)  (_swigobj->GetEnablePaper())
-static PyObject *_wrap_wxPageSetupDialogData_GetEnablePaper(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPageSetupDialogData_GetEnablePaper(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxPageSetupDialogData * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPageSetupDialogData_GetEnablePaper",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPageSetupDialogData_GetEnablePaper",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1041,14 +1072,15 @@ static PyObject *_wrap_wxPageSetupDialogData_GetEnablePaper(PyObject *self, PyOb
 }
 
 #define wxPageSetupDialogData_GetEnablePrinter(_swigobj)  (_swigobj->GetEnablePrinter())
-static PyObject *_wrap_wxPageSetupDialogData_GetEnablePrinter(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPageSetupDialogData_GetEnablePrinter(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxPageSetupDialogData * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPageSetupDialogData_GetEnablePrinter",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPageSetupDialogData_GetEnablePrinter",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1067,14 +1099,15 @@ static PyObject *_wrap_wxPageSetupDialogData_GetEnablePrinter(PyObject *self, Py
 }
 
 #define wxPageSetupDialogData_GetEnableHelp(_swigobj)  (_swigobj->GetEnableHelp())
-static PyObject *_wrap_wxPageSetupDialogData_GetEnableHelp(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPageSetupDialogData_GetEnableHelp(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxPageSetupDialogData * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPageSetupDialogData_GetEnableHelp",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPageSetupDialogData_GetEnableHelp",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1093,14 +1126,15 @@ static PyObject *_wrap_wxPageSetupDialogData_GetEnableHelp(PyObject *self, PyObj
 }
 
 #define wxPageSetupDialogData_GetDefaultInfo(_swigobj)  (_swigobj->GetDefaultInfo())
-static PyObject *_wrap_wxPageSetupDialogData_GetDefaultInfo(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPageSetupDialogData_GetDefaultInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxPageSetupDialogData * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPageSetupDialogData_GetDefaultInfo",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPageSetupDialogData_GetDefaultInfo",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1119,15 +1153,16 @@ static PyObject *_wrap_wxPageSetupDialogData_GetDefaultInfo(PyObject *self, PyOb
 }
 
 #define wxPageSetupDialogData_GetMarginTopLeft(_swigobj)  (_swigobj->GetMarginTopLeft())
-static PyObject *_wrap_wxPageSetupDialogData_GetMarginTopLeft(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPageSetupDialogData_GetMarginTopLeft(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPoint * _result;
     wxPageSetupDialogData * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPageSetupDialogData_GetMarginTopLeft",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPageSetupDialogData_GetMarginTopLeft",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1147,15 +1182,16 @@ static PyObject *_wrap_wxPageSetupDialogData_GetMarginTopLeft(PyObject *self, Py
 }
 
 #define wxPageSetupDialogData_GetMarginBottomRight(_swigobj)  (_swigobj->GetMarginBottomRight())
-static PyObject *_wrap_wxPageSetupDialogData_GetMarginBottomRight(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPageSetupDialogData_GetMarginBottomRight(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPoint * _result;
     wxPageSetupDialogData * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPageSetupDialogData_GetMarginBottomRight",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPageSetupDialogData_GetMarginBottomRight",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1175,15 +1211,16 @@ static PyObject *_wrap_wxPageSetupDialogData_GetMarginBottomRight(PyObject *self
 }
 
 #define wxPageSetupDialogData_GetMinMarginTopLeft(_swigobj)  (_swigobj->GetMinMarginTopLeft())
-static PyObject *_wrap_wxPageSetupDialogData_GetMinMarginTopLeft(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPageSetupDialogData_GetMinMarginTopLeft(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPoint * _result;
     wxPageSetupDialogData * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPageSetupDialogData_GetMinMarginTopLeft",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPageSetupDialogData_GetMinMarginTopLeft",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1203,15 +1240,16 @@ static PyObject *_wrap_wxPageSetupDialogData_GetMinMarginTopLeft(PyObject *self,
 }
 
 #define wxPageSetupDialogData_GetMinMarginBottomRight(_swigobj)  (_swigobj->GetMinMarginBottomRight())
-static PyObject *_wrap_wxPageSetupDialogData_GetMinMarginBottomRight(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPageSetupDialogData_GetMinMarginBottomRight(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPoint * _result;
     wxPageSetupDialogData * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPageSetupDialogData_GetMinMarginBottomRight",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPageSetupDialogData_GetMinMarginBottomRight",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1231,14 +1269,15 @@ static PyObject *_wrap_wxPageSetupDialogData_GetMinMarginBottomRight(PyObject *s
 }
 
 #define wxPageSetupDialogData_GetPaperId(_swigobj)  (_swigobj->GetPaperId())
-static PyObject *_wrap_wxPageSetupDialogData_GetPaperId(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPageSetupDialogData_GetPaperId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPaperSize  _result;
     wxPageSetupDialogData * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPageSetupDialogData_GetPaperId",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPageSetupDialogData_GetPaperId",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1257,15 +1296,16 @@ static PyObject *_wrap_wxPageSetupDialogData_GetPaperId(PyObject *self, PyObject
 }
 
 #define wxPageSetupDialogData_GetPaperSize(_swigobj)  (_swigobj->GetPaperSize())
-static PyObject *_wrap_wxPageSetupDialogData_GetPaperSize(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPageSetupDialogData_GetPaperSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxSize * _result;
     wxPageSetupDialogData * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPageSetupDialogData_GetPaperSize",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPageSetupDialogData_GetPaperSize",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1287,15 +1327,16 @@ static PyObject *_wrap_wxPageSetupDialogData_GetPaperSize(PyObject *self, PyObje
 static wxPrintData * wxPageSetupDialogData_GetPrintData(wxPageSetupDialogData *self) {
             return new wxPrintData(self->GetPrintData());  // force a copy
         }
-static PyObject *_wrap_wxPageSetupDialogData_GetPrintData(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPageSetupDialogData_GetPrintData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintData * _result;
     wxPageSetupDialogData * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPageSetupDialogData_GetPrintData",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPageSetupDialogData_GetPrintData",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1320,15 +1361,16 @@ static PyObject *_wrap_wxPageSetupDialogData_GetPrintData(PyObject *self, PyObje
 }
 
 #define wxPageSetupDialogData_SetDefaultInfo(_swigobj,_swigarg0)  (_swigobj->SetDefaultInfo(_swigarg0))
-static PyObject *_wrap_wxPageSetupDialogData_SetDefaultInfo(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPageSetupDialogData_SetDefaultInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPageSetupDialogData * _arg0;
     bool  _arg1;
     PyObject * _argo0 = 0;
     int tempbool1;
+    char *_kwnames[] = { "self","flag", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxPageSetupDialogData_SetDefaultInfo",&_argo0,&tempbool1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPageSetupDialogData_SetDefaultInfo",_kwnames,&_argo0,&tempbool1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1349,15 +1391,16 @@ static PyObject *_wrap_wxPageSetupDialogData_SetDefaultInfo(PyObject *self, PyOb
 }
 
 #define wxPageSetupDialogData_SetDefaultMinMargins(_swigobj,_swigarg0)  (_swigobj->SetDefaultMinMargins(_swigarg0))
-static PyObject *_wrap_wxPageSetupDialogData_SetDefaultMinMargins(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPageSetupDialogData_SetDefaultMinMargins(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPageSetupDialogData * _arg0;
     bool  _arg1;
     PyObject * _argo0 = 0;
     int tempbool1;
+    char *_kwnames[] = { "self","flag", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxPageSetupDialogData_SetDefaultMinMargins",&_argo0,&tempbool1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPageSetupDialogData_SetDefaultMinMargins",_kwnames,&_argo0,&tempbool1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1378,15 +1421,16 @@ static PyObject *_wrap_wxPageSetupDialogData_SetDefaultMinMargins(PyObject *self
 }
 
 #define wxPageSetupDialogData_SetMarginTopLeft(_swigobj,_swigarg0)  (_swigobj->SetMarginTopLeft(_swigarg0))
-static PyObject *_wrap_wxPageSetupDialogData_SetMarginTopLeft(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPageSetupDialogData_SetMarginTopLeft(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPageSetupDialogData * _arg0;
     wxPoint * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","pt", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxPageSetupDialogData_SetMarginTopLeft",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPageSetupDialogData_SetMarginTopLeft",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1413,15 +1457,16 @@ static PyObject *_wrap_wxPageSetupDialogData_SetMarginTopLeft(PyObject *self, Py
 }
 
 #define wxPageSetupDialogData_SetMarginBottomRight(_swigobj,_swigarg0)  (_swigobj->SetMarginBottomRight(_swigarg0))
-static PyObject *_wrap_wxPageSetupDialogData_SetMarginBottomRight(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPageSetupDialogData_SetMarginBottomRight(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPageSetupDialogData * _arg0;
     wxPoint * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","pt", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxPageSetupDialogData_SetMarginBottomRight",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPageSetupDialogData_SetMarginBottomRight",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1448,15 +1493,16 @@ static PyObject *_wrap_wxPageSetupDialogData_SetMarginBottomRight(PyObject *self
 }
 
 #define wxPageSetupDialogData_SetMinMarginTopLeft(_swigobj,_swigarg0)  (_swigobj->SetMinMarginTopLeft(_swigarg0))
-static PyObject *_wrap_wxPageSetupDialogData_SetMinMarginTopLeft(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPageSetupDialogData_SetMinMarginTopLeft(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPageSetupDialogData * _arg0;
     wxPoint * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","pt", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxPageSetupDialogData_SetMinMarginTopLeft",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPageSetupDialogData_SetMinMarginTopLeft",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1483,15 +1529,16 @@ static PyObject *_wrap_wxPageSetupDialogData_SetMinMarginTopLeft(PyObject *self,
 }
 
 #define wxPageSetupDialogData_SetMinMarginBottomRight(_swigobj,_swigarg0)  (_swigobj->SetMinMarginBottomRight(_swigarg0))
-static PyObject *_wrap_wxPageSetupDialogData_SetMinMarginBottomRight(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPageSetupDialogData_SetMinMarginBottomRight(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPageSetupDialogData * _arg0;
     wxPoint * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","pt", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxPageSetupDialogData_SetMinMarginBottomRight",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPageSetupDialogData_SetMinMarginBottomRight",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1518,15 +1565,16 @@ static PyObject *_wrap_wxPageSetupDialogData_SetMinMarginBottomRight(PyObject *s
 }
 
 #define wxPageSetupDialogData_SetPaperId(_swigobj,_swigarg0)  (_swigobj->SetPaperId(_swigarg0))
-static PyObject *_wrap_wxPageSetupDialogData_SetPaperId(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPageSetupDialogData_SetPaperId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPageSetupDialogData * _arg0;
     wxPaperSize * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","id", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxPageSetupDialogData_SetPaperId",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPageSetupDialogData_SetPaperId",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1553,15 +1601,16 @@ static PyObject *_wrap_wxPageSetupDialogData_SetPaperId(PyObject *self, PyObject
 }
 
 #define wxPageSetupDialogData_SetPaperSize(_swigobj,_swigarg0)  (_swigobj->SetPaperSize(_swigarg0))
-static PyObject *_wrap_wxPageSetupDialogData_SetPaperSize(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPageSetupDialogData_SetPaperSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPageSetupDialogData * _arg0;
     wxSize * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","size", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxPageSetupDialogData_SetPaperSize",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPageSetupDialogData_SetPaperSize",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1588,15 +1637,16 @@ static PyObject *_wrap_wxPageSetupDialogData_SetPaperSize(PyObject *self, PyObje
 }
 
 #define wxPageSetupDialogData_SetPrintData(_swigobj,_swigarg0)  (_swigobj->SetPrintData(_swigarg0))
-static PyObject *_wrap_wxPageSetupDialogData_SetPrintData(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPageSetupDialogData_SetPrintData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPageSetupDialogData * _arg0;
     wxPrintData * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","printData", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxPageSetupDialogData_SetPrintData",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPageSetupDialogData_SetPrintData",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1655,17 +1705,18 @@ static void *SwigwxPageSetupDialogTowxEvtHandler(void *ptr) {
 }
 
 #define new_wxPageSetupDialog(_swigarg0,_swigarg1) (new wxPageSetupDialog(_swigarg0,_swigarg1))
-static PyObject *_wrap_new_wxPageSetupDialog(PyObject *self, PyObject *args) {
+static PyObject *_wrap_new_wxPageSetupDialog(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPageSetupDialog * _result;
     wxWindow * _arg0;
     wxPageSetupDialogData * _arg1 = (wxPageSetupDialogData *) NULL;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "parent","data", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O|O:new_wxPageSetupDialog",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|O:new_wxPageSetupDialog",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1697,15 +1748,16 @@ static PyObject *_wrap_new_wxPageSetupDialog(PyObject *self, PyObject *args) {
 }
 
 #define wxPageSetupDialog_GetPageSetupData(_swigobj)  (_swigobj->GetPageSetupData())
-static PyObject *_wrap_wxPageSetupDialog_GetPageSetupData(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPageSetupDialog_GetPageSetupData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPageSetupDialogData * _result;
     wxPageSetupDialog * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPageSetupDialog_GetPageSetupData",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPageSetupDialog_GetPageSetupData",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1731,14 +1783,15 @@ static PyObject *_wrap_wxPageSetupDialog_GetPageSetupData(PyObject *self, PyObje
 }
 
 #define wxPageSetupDialog_ShowModal(_swigobj)  (_swigobj->ShowModal())
-static PyObject *_wrap_wxPageSetupDialog_ShowModal(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPageSetupDialog_ShowModal(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxPageSetupDialog * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPageSetupDialog_ShowModal",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPageSetupDialog_ShowModal",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1757,13 +1810,14 @@ static PyObject *_wrap_wxPageSetupDialog_ShowModal(PyObject *self, PyObject *arg
 }
 
 #define new_wxPrintDialogData() (new wxPrintDialogData())
-static PyObject *_wrap_new_wxPrintDialogData(PyObject *self, PyObject *args) {
+static PyObject *_wrap_new_wxPrintDialogData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintDialogData * _result;
+    char *_kwnames[] = {  NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,":new_wxPrintDialogData")) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxPrintDialogData",_kwnames)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1781,13 +1835,14 @@ static PyObject *_wrap_new_wxPrintDialogData(PyObject *self, PyObject *args) {
 }
 
 #define delete_wxPrintDialogData(_swigobj) (delete _swigobj)
-static PyObject *_wrap_delete_wxPrintDialogData(PyObject *self, PyObject *args) {
+static PyObject *_wrap_delete_wxPrintDialogData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintDialogData * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:delete_wxPrintDialogData",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxPrintDialogData",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1807,15 +1862,16 @@ static PyObject *_wrap_delete_wxPrintDialogData(PyObject *self, PyObject *args) 
 }
 
 #define wxPrintDialogData_EnableHelp(_swigobj,_swigarg0)  (_swigobj->EnableHelp(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_EnableHelp(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintDialogData_EnableHelp(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintDialogData * _arg0;
     bool  _arg1;
     PyObject * _argo0 = 0;
     int tempbool1;
+    char *_kwnames[] = { "self","flag", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxPrintDialogData_EnableHelp",&_argo0,&tempbool1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_EnableHelp",_kwnames,&_argo0,&tempbool1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1836,15 +1892,16 @@ static PyObject *_wrap_wxPrintDialogData_EnableHelp(PyObject *self, PyObject *ar
 }
 
 #define wxPrintDialogData_EnablePageNumbers(_swigobj,_swigarg0)  (_swigobj->EnablePageNumbers(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_EnablePageNumbers(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintDialogData_EnablePageNumbers(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintDialogData * _arg0;
     bool  _arg1;
     PyObject * _argo0 = 0;
     int tempbool1;
+    char *_kwnames[] = { "self","flag", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxPrintDialogData_EnablePageNumbers",&_argo0,&tempbool1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_EnablePageNumbers",_kwnames,&_argo0,&tempbool1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1865,15 +1922,16 @@ static PyObject *_wrap_wxPrintDialogData_EnablePageNumbers(PyObject *self, PyObj
 }
 
 #define wxPrintDialogData_EnablePrintToFile(_swigobj,_swigarg0)  (_swigobj->EnablePrintToFile(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_EnablePrintToFile(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintDialogData_EnablePrintToFile(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintDialogData * _arg0;
     bool  _arg1;
     PyObject * _argo0 = 0;
     int tempbool1;
+    char *_kwnames[] = { "self","flag", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxPrintDialogData_EnablePrintToFile",&_argo0,&tempbool1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_EnablePrintToFile",_kwnames,&_argo0,&tempbool1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1894,15 +1952,16 @@ static PyObject *_wrap_wxPrintDialogData_EnablePrintToFile(PyObject *self, PyObj
 }
 
 #define wxPrintDialogData_EnableSelection(_swigobj,_swigarg0)  (_swigobj->EnableSelection(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_EnableSelection(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintDialogData_EnableSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintDialogData * _arg0;
     bool  _arg1;
     PyObject * _argo0 = 0;
     int tempbool1;
+    char *_kwnames[] = { "self","flag", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxPrintDialogData_EnableSelection",&_argo0,&tempbool1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_EnableSelection",_kwnames,&_argo0,&tempbool1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1923,14 +1982,15 @@ static PyObject *_wrap_wxPrintDialogData_EnableSelection(PyObject *self, PyObjec
 }
 
 #define wxPrintDialogData_GetAllPages(_swigobj)  (_swigobj->GetAllPages())
-static PyObject *_wrap_wxPrintDialogData_GetAllPages(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintDialogData_GetAllPages(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxPrintDialogData * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintDialogData_GetAllPages",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetAllPages",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1949,14 +2009,15 @@ static PyObject *_wrap_wxPrintDialogData_GetAllPages(PyObject *self, PyObject *a
 }
 
 #define wxPrintDialogData_GetCollate(_swigobj)  (_swigobj->GetCollate())
-static PyObject *_wrap_wxPrintDialogData_GetCollate(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintDialogData_GetCollate(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxPrintDialogData * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintDialogData_GetCollate",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetCollate",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1975,14 +2036,15 @@ static PyObject *_wrap_wxPrintDialogData_GetCollate(PyObject *self, PyObject *ar
 }
 
 #define wxPrintDialogData_GetFromPage(_swigobj)  (_swigobj->GetFromPage())
-static PyObject *_wrap_wxPrintDialogData_GetFromPage(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintDialogData_GetFromPage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxPrintDialogData * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintDialogData_GetFromPage",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetFromPage",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2001,14 +2063,15 @@ static PyObject *_wrap_wxPrintDialogData_GetFromPage(PyObject *self, PyObject *a
 }
 
 #define wxPrintDialogData_GetMaxPage(_swigobj)  (_swigobj->GetMaxPage())
-static PyObject *_wrap_wxPrintDialogData_GetMaxPage(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintDialogData_GetMaxPage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxPrintDialogData * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintDialogData_GetMaxPage",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetMaxPage",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2027,14 +2090,15 @@ static PyObject *_wrap_wxPrintDialogData_GetMaxPage(PyObject *self, PyObject *ar
 }
 
 #define wxPrintDialogData_GetMinPage(_swigobj)  (_swigobj->GetMinPage())
-static PyObject *_wrap_wxPrintDialogData_GetMinPage(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintDialogData_GetMinPage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxPrintDialogData * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintDialogData_GetMinPage",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetMinPage",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2053,14 +2117,15 @@ static PyObject *_wrap_wxPrintDialogData_GetMinPage(PyObject *self, PyObject *ar
 }
 
 #define wxPrintDialogData_GetNoCopies(_swigobj)  (_swigobj->GetNoCopies())
-static PyObject *_wrap_wxPrintDialogData_GetNoCopies(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintDialogData_GetNoCopies(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxPrintDialogData * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintDialogData_GetNoCopies",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetNoCopies",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2081,15 +2146,16 @@ static PyObject *_wrap_wxPrintDialogData_GetNoCopies(PyObject *self, PyObject *a
 static wxPrintData * wxPrintDialogData_GetPrintData(wxPrintDialogData *self) {
             return new wxPrintData(self->GetPrintData());  // force a copy
         }
-static PyObject *_wrap_wxPrintDialogData_GetPrintData(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintDialogData_GetPrintData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintData * _result;
     wxPrintDialogData * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintDialogData_GetPrintData",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetPrintData",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2114,14 +2180,15 @@ static PyObject *_wrap_wxPrintDialogData_GetPrintData(PyObject *self, PyObject *
 }
 
 #define wxPrintDialogData_GetPrintToFile(_swigobj)  (_swigobj->GetPrintToFile())
-static PyObject *_wrap_wxPrintDialogData_GetPrintToFile(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintDialogData_GetPrintToFile(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxPrintDialogData * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintDialogData_GetPrintToFile",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetPrintToFile",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2140,14 +2207,15 @@ static PyObject *_wrap_wxPrintDialogData_GetPrintToFile(PyObject *self, PyObject
 }
 
 #define wxPrintDialogData_GetToPage(_swigobj)  (_swigobj->GetToPage())
-static PyObject *_wrap_wxPrintDialogData_GetToPage(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintDialogData_GetToPage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxPrintDialogData * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintDialogData_GetToPage",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetToPage",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2166,15 +2234,16 @@ static PyObject *_wrap_wxPrintDialogData_GetToPage(PyObject *self, PyObject *arg
 }
 
 #define wxPrintDialogData_SetCollate(_swigobj,_swigarg0)  (_swigobj->SetCollate(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_SetCollate(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintDialogData_SetCollate(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintDialogData * _arg0;
     bool  _arg1;
     PyObject * _argo0 = 0;
     int tempbool1;
+    char *_kwnames[] = { "self","flag", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxPrintDialogData_SetCollate",&_argo0,&tempbool1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetCollate",_kwnames,&_argo0,&tempbool1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2195,14 +2264,15 @@ static PyObject *_wrap_wxPrintDialogData_SetCollate(PyObject *self, PyObject *ar
 }
 
 #define wxPrintDialogData_SetFromPage(_swigobj,_swigarg0)  (_swigobj->SetFromPage(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_SetFromPage(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintDialogData_SetFromPage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintDialogData * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","page", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxPrintDialogData_SetFromPage",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetFromPage",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2222,14 +2292,15 @@ static PyObject *_wrap_wxPrintDialogData_SetFromPage(PyObject *self, PyObject *a
 }
 
 #define wxPrintDialogData_SetMaxPage(_swigobj,_swigarg0)  (_swigobj->SetMaxPage(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_SetMaxPage(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintDialogData_SetMaxPage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintDialogData * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","page", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxPrintDialogData_SetMaxPage",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetMaxPage",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2249,14 +2320,15 @@ static PyObject *_wrap_wxPrintDialogData_SetMaxPage(PyObject *self, PyObject *ar
 }
 
 #define wxPrintDialogData_SetMinPage(_swigobj,_swigarg0)  (_swigobj->SetMinPage(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_SetMinPage(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintDialogData_SetMinPage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintDialogData * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","page", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxPrintDialogData_SetMinPage",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetMinPage",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2276,14 +2348,15 @@ static PyObject *_wrap_wxPrintDialogData_SetMinPage(PyObject *self, PyObject *ar
 }
 
 #define wxPrintDialogData_SetNoCopies(_swigobj,_swigarg0)  (_swigobj->SetNoCopies(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_SetNoCopies(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintDialogData_SetNoCopies(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintDialogData * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","n", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxPrintDialogData_SetNoCopies",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetNoCopies",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2303,15 +2376,16 @@ static PyObject *_wrap_wxPrintDialogData_SetNoCopies(PyObject *self, PyObject *a
 }
 
 #define wxPrintDialogData_SetPrintData(_swigobj,_swigarg0)  (_swigobj->SetPrintData(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_SetPrintData(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintDialogData_SetPrintData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintDialogData * _arg0;
     wxPrintData * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","printData", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxPrintDialogData_SetPrintData",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPrintDialogData_SetPrintData",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2338,15 +2412,16 @@ static PyObject *_wrap_wxPrintDialogData_SetPrintData(PyObject *self, PyObject *
 }
 
 #define wxPrintDialogData_SetPrintToFile(_swigobj,_swigarg0)  (_swigobj->SetPrintToFile(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_SetPrintToFile(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintDialogData_SetPrintToFile(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintDialogData * _arg0;
     bool  _arg1;
     PyObject * _argo0 = 0;
     int tempbool1;
+    char *_kwnames[] = { "self","flag", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxPrintDialogData_SetPrintToFile",&_argo0,&tempbool1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetPrintToFile",_kwnames,&_argo0,&tempbool1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2367,15 +2442,16 @@ static PyObject *_wrap_wxPrintDialogData_SetPrintToFile(PyObject *self, PyObject
 }
 
 #define wxPrintDialogData_SetSetupDialog(_swigobj,_swigarg0)  (_swigobj->SetSetupDialog(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_SetSetupDialog(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintDialogData_SetSetupDialog(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintDialogData * _arg0;
     bool  _arg1;
     PyObject * _argo0 = 0;
     int tempbool1;
+    char *_kwnames[] = { "self","flag", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxPrintDialogData_SetSetupDialog",&_argo0,&tempbool1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetSetupDialog",_kwnames,&_argo0,&tempbool1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2396,14 +2472,15 @@ static PyObject *_wrap_wxPrintDialogData_SetSetupDialog(PyObject *self, PyObject
 }
 
 #define wxPrintDialogData_SetToPage(_swigobj,_swigarg0)  (_swigobj->SetToPage(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_SetToPage(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintDialogData_SetToPage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintDialogData * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","page", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxPrintDialogData_SetToPage",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetToPage",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2455,17 +2532,18 @@ static void *SwigwxPrintDialogTowxEvtHandler(void *ptr) {
 }
 
 #define new_wxPrintDialog(_swigarg0,_swigarg1) (new wxPrintDialog(_swigarg0,_swigarg1))
-static PyObject *_wrap_new_wxPrintDialog(PyObject *self, PyObject *args) {
+static PyObject *_wrap_new_wxPrintDialog(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintDialog * _result;
     wxWindow * _arg0;
     wxPrintDialogData * _arg1 = (wxPrintDialogData *) NULL;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "parent","data", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O|O:new_wxPrintDialog",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|O:new_wxPrintDialog",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2497,15 +2575,16 @@ static PyObject *_wrap_new_wxPrintDialog(PyObject *self, PyObject *args) {
 }
 
 #define wxPrintDialog_GetPrintDialogData(_swigobj)  (_swigobj->GetPrintDialogData())
-static PyObject *_wrap_wxPrintDialog_GetPrintDialogData(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintDialog_GetPrintDialogData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintDialogData * _result;
     wxPrintDialog * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintDialog_GetPrintDialogData",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialog_GetPrintDialogData",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2531,15 +2610,16 @@ static PyObject *_wrap_wxPrintDialog_GetPrintDialogData(PyObject *self, PyObject
 }
 
 #define wxPrintDialog_GetPrintDC(_swigobj)  (_swigobj->GetPrintDC())
-static PyObject *_wrap_wxPrintDialog_GetPrintDC(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintDialog_GetPrintDC(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _result;
     wxPrintDialog * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintDialog_GetPrintDC",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialog_GetPrintDC",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2564,14 +2644,15 @@ static PyObject *_wrap_wxPrintDialog_GetPrintDC(PyObject *self, PyObject *args) 
 }
 
 #define wxPrintDialog_ShowModal(_swigobj)  (_swigobj->ShowModal())
-static PyObject *_wrap_wxPrintDialog_ShowModal(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintDialog_ShowModal(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxPrintDialog * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintDialog_ShowModal",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialog_ShowModal",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2590,14 +2671,15 @@ static PyObject *_wrap_wxPrintDialog_ShowModal(PyObject *self, PyObject *args) {
 }
 
 #define new_wxPrintout(_swigarg0) (new wxPyPrintout(_swigarg0))
-static PyObject *_wrap_new_wxPrintout(PyObject *self, PyObject *args) {
+static PyObject *_wrap_new_wxPrintout(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyPrintout * _result;
     char * _arg0 = (char *) "Printout";
+    char *_kwnames[] = { "title", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"|s:new_wxPrintout",&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|s:new_wxPrintout",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -2615,15 +2697,16 @@ static PyObject *_wrap_new_wxPrintout(PyObject *self, PyObject *args) {
 }
 
 #define wxPrintout__setSelf(_swigobj,_swigarg0)  (_swigobj->_setSelf(_swigarg0))
-static PyObject *_wrap_wxPrintout__setSelf(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintout__setSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyPrintout * _arg0;
     PyObject * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxPrintout__setSelf",&_argo0,&_obj1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPrintout__setSelf",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2645,16 +2728,15 @@ static PyObject *_wrap_wxPrintout__setSelf(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static void  wxPyPrintout_Destroy(wxPyPrintout *self) {
-            delete self;
-        }
-static PyObject *_wrap_wxPrintout_Destroy(PyObject *self, PyObject *args) {
+static void  wxPyPrintout_Destroy(wxPyPrintout *self) { delete self; }
+static PyObject *_wrap_wxPrintout_Destroy(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyPrintout * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintout_Destroy",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintout_Destroy",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2674,15 +2756,16 @@ static PyObject *_wrap_wxPrintout_Destroy(PyObject *self, PyObject *args) {
 }
 
 #define wxPrintout_GetDC(_swigobj)  (_swigobj->GetDC())
-static PyObject *_wrap_wxPrintout_GetDC(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintout_GetDC(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _result;
     wxPyPrintout * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintout_GetDC",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintout_GetDC",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2707,7 +2790,7 @@ static PyObject *_wrap_wxPrintout_GetDC(PyObject *self, PyObject *args) {
 }
 
 #define wxPrintout_GetPageSizeMM(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetPageSizeMM(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxPrintout_GetPageSizeMM(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintout_GetPageSizeMM(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyPrintout * _arg0;
     int * _arg1;
@@ -2715,6 +2798,7 @@ static PyObject *_wrap_wxPrintout_GetPageSizeMM(PyObject *self, PyObject *args) 
     int * _arg2;
     int  temp0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
 {
@@ -2723,7 +2807,7 @@ static PyObject *_wrap_wxPrintout_GetPageSizeMM(PyObject *self, PyObject *args) 
 {
   _arg2 = &temp0;
 }
-    if(!PyArg_ParseTuple(args,"O:wxPrintout_GetPageSizeMM",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintout_GetPageSizeMM",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2753,7 +2837,7 @@ static PyObject *_wrap_wxPrintout_GetPageSizeMM(PyObject *self, PyObject *args) 
 }
 
 #define wxPrintout_GetPageSizePixels(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetPageSizePixels(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxPrintout_GetPageSizePixels(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintout_GetPageSizePixels(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyPrintout * _arg0;
     int * _arg1;
@@ -2761,6 +2845,7 @@ static PyObject *_wrap_wxPrintout_GetPageSizePixels(PyObject *self, PyObject *ar
     int * _arg2;
     int  temp0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
 {
@@ -2769,7 +2854,7 @@ static PyObject *_wrap_wxPrintout_GetPageSizePixels(PyObject *self, PyObject *ar
 {
   _arg2 = &temp0;
 }
-    if(!PyArg_ParseTuple(args,"O:wxPrintout_GetPageSizePixels",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintout_GetPageSizePixels",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2799,7 +2884,7 @@ static PyObject *_wrap_wxPrintout_GetPageSizePixels(PyObject *self, PyObject *ar
 }
 
 #define wxPrintout_GetPPIPrinter(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetPPIPrinter(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxPrintout_GetPPIPrinter(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintout_GetPPIPrinter(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyPrintout * _arg0;
     int * _arg1;
@@ -2807,6 +2892,7 @@ static PyObject *_wrap_wxPrintout_GetPPIPrinter(PyObject *self, PyObject *args) 
     int * _arg2;
     int  temp0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
 {
@@ -2815,7 +2901,7 @@ static PyObject *_wrap_wxPrintout_GetPPIPrinter(PyObject *self, PyObject *args) 
 {
   _arg2 = &temp0;
 }
-    if(!PyArg_ParseTuple(args,"O:wxPrintout_GetPPIPrinter",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintout_GetPPIPrinter",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2845,7 +2931,7 @@ static PyObject *_wrap_wxPrintout_GetPPIPrinter(PyObject *self, PyObject *args) 
 }
 
 #define wxPrintout_GetPPIScreen(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetPPIScreen(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxPrintout_GetPPIScreen(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintout_GetPPIScreen(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyPrintout * _arg0;
     int * _arg1;
@@ -2853,6 +2939,7 @@ static PyObject *_wrap_wxPrintout_GetPPIScreen(PyObject *self, PyObject *args) {
     int * _arg2;
     int  temp0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
 {
@@ -2861,7 +2948,7 @@ static PyObject *_wrap_wxPrintout_GetPPIScreen(PyObject *self, PyObject *args) {
 {
   _arg2 = &temp0;
 }
-    if(!PyArg_ParseTuple(args,"O:wxPrintout_GetPPIScreen",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintout_GetPPIScreen",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2891,14 +2978,15 @@ static PyObject *_wrap_wxPrintout_GetPPIScreen(PyObject *self, PyObject *args) {
 }
 
 #define wxPrintout_IsPreview(_swigobj)  (_swigobj->IsPreview())
-static PyObject *_wrap_wxPrintout_IsPreview(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintout_IsPreview(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxPyPrintout * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintout_IsPreview",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintout_IsPreview",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2917,16 +3005,17 @@ static PyObject *_wrap_wxPrintout_IsPreview(PyObject *self, PyObject *args) {
 }
 
 #define wxPrintout_base_OnBeginDocument(_swigobj,_swigarg0,_swigarg1)  (_swigobj->base_OnBeginDocument(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxPrintout_base_OnBeginDocument(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintout_base_OnBeginDocument(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxPyPrintout * _arg0;
     int  _arg1;
     int  _arg2;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","startPage","endPage", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oii:wxPrintout_base_OnBeginDocument",&_argo0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxPrintout_base_OnBeginDocument",_kwnames,&_argo0,&_arg1,&_arg2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2945,13 +3034,14 @@ static PyObject *_wrap_wxPrintout_base_OnBeginDocument(PyObject *self, PyObject 
 }
 
 #define wxPrintout_base_OnEndDocument(_swigobj)  (_swigobj->base_OnEndDocument())
-static PyObject *_wrap_wxPrintout_base_OnEndDocument(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintout_base_OnEndDocument(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyPrintout * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintout_base_OnEndDocument",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintout_base_OnEndDocument",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2971,13 +3061,14 @@ static PyObject *_wrap_wxPrintout_base_OnEndDocument(PyObject *self, PyObject *a
 }
 
 #define wxPrintout_base_OnBeginPrinting(_swigobj)  (_swigobj->base_OnBeginPrinting())
-static PyObject *_wrap_wxPrintout_base_OnBeginPrinting(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintout_base_OnBeginPrinting(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyPrintout * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintout_base_OnBeginPrinting",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintout_base_OnBeginPrinting",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2997,13 +3088,14 @@ static PyObject *_wrap_wxPrintout_base_OnBeginPrinting(PyObject *self, PyObject 
 }
 
 #define wxPrintout_base_OnEndPrinting(_swigobj)  (_swigobj->base_OnEndPrinting())
-static PyObject *_wrap_wxPrintout_base_OnEndPrinting(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintout_base_OnEndPrinting(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyPrintout * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintout_base_OnEndPrinting",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintout_base_OnEndPrinting",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3023,13 +3115,14 @@ static PyObject *_wrap_wxPrintout_base_OnEndPrinting(PyObject *self, PyObject *a
 }
 
 #define wxPrintout_base_OnPreparePrinting(_swigobj)  (_swigobj->base_OnPreparePrinting())
-static PyObject *_wrap_wxPrintout_base_OnPreparePrinting(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintout_base_OnPreparePrinting(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyPrintout * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintout_base_OnPreparePrinting",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintout_base_OnPreparePrinting",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3049,7 +3142,7 @@ static PyObject *_wrap_wxPrintout_base_OnPreparePrinting(PyObject *self, PyObjec
 }
 
 #define wxPrintout_base_GetPageInfo(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->base_GetPageInfo(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
-static PyObject *_wrap_wxPrintout_base_GetPageInfo(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintout_base_GetPageInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyPrintout * _arg0;
     int * _arg1;
@@ -3061,6 +3154,7 @@ static PyObject *_wrap_wxPrintout_base_GetPageInfo(PyObject *self, PyObject *arg
     int * _arg4;
     int  temp2;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
 {
@@ -3075,7 +3169,7 @@ static PyObject *_wrap_wxPrintout_base_GetPageInfo(PyObject *self, PyObject *arg
 {
   _arg4 = &temp2;
 }
-    if(!PyArg_ParseTuple(args,"O:wxPrintout_base_GetPageInfo",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintout_base_GetPageInfo",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3115,15 +3209,16 @@ static PyObject *_wrap_wxPrintout_base_GetPageInfo(PyObject *self, PyObject *arg
 }
 
 #define wxPrintout_base_HasPage(_swigobj,_swigarg0)  (_swigobj->base_HasPage(_swigarg0))
-static PyObject *_wrap_wxPrintout_base_HasPage(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintout_base_HasPage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxPyPrintout * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","page", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxPrintout_base_HasPage",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintout_base_HasPage",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3142,15 +3237,16 @@ static PyObject *_wrap_wxPrintout_base_HasPage(PyObject *self, PyObject *args) {
 }
 
 #define new_wxPrinter(_swigarg0) (new wxPrinter(_swigarg0))
-static PyObject *_wrap_new_wxPrinter(PyObject *self, PyObject *args) {
+static PyObject *_wrap_new_wxPrinter(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrinter * _result;
     wxPrintDialogData * _arg0 = (wxPrintDialogData *) NULL;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "data", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"|O:new_wxPrinter",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|O:new_wxPrinter",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3175,13 +3271,14 @@ static PyObject *_wrap_new_wxPrinter(PyObject *self, PyObject *args) {
 }
 
 #define delete_wxPrinter(_swigobj) (delete _swigobj)
-static PyObject *_wrap_delete_wxPrinter(PyObject *self, PyObject *args) {
+static PyObject *_wrap_delete_wxPrinter(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrinter * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:delete_wxPrinter",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxPrinter",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3201,7 +3298,7 @@ static PyObject *_wrap_delete_wxPrinter(PyObject *self, PyObject *args) {
 }
 
 #define wxPrinter_CreateAbortWindow(_swigobj,_swigarg0,_swigarg1)  (_swigobj->CreateAbortWindow(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxPrinter_CreateAbortWindow(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrinter_CreateAbortWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrinter * _arg0;
     wxWindow * _arg1;
@@ -3209,9 +3306,10 @@ static PyObject *_wrap_wxPrinter_CreateAbortWindow(PyObject *self, PyObject *arg
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "self","parent","printout", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OOO:wxPrinter_CreateAbortWindow",&_argo0,&_argo1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPrinter_CreateAbortWindow",_kwnames,&_argo0,&_argo1,&_argo2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3245,15 +3343,16 @@ static PyObject *_wrap_wxPrinter_CreateAbortWindow(PyObject *self, PyObject *arg
 }
 
 #define wxPrinter_GetPrintDialogData(_swigobj)  (_swigobj->GetPrintDialogData())
-static PyObject *_wrap_wxPrinter_GetPrintDialogData(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrinter_GetPrintDialogData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintDialogData * _result;
     wxPrinter * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrinter_GetPrintDialogData",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrinter_GetPrintDialogData",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3279,7 +3378,7 @@ static PyObject *_wrap_wxPrinter_GetPrintDialogData(PyObject *self, PyObject *ar
 }
 
 #define wxPrinter_Print(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->Print(_swigarg0,_swigarg1,_swigarg2))
-static PyObject *_wrap_wxPrinter_Print(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrinter_Print(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxPrinter * _arg0;
@@ -3289,9 +3388,10 @@ static PyObject *_wrap_wxPrinter_Print(PyObject *self, PyObject *args) {
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "self","parent","printout","prompt", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OOO|i:wxPrinter_Print",&_argo0,&_argo1,&_argo2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO|i:wxPrinter_Print",_kwnames,&_argo0,&_argo1,&_argo2,&_arg3)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3324,17 +3424,18 @@ static PyObject *_wrap_wxPrinter_Print(PyObject *self, PyObject *args) {
 }
 
 #define wxPrinter_PrintDialog(_swigobj,_swigarg0)  (_swigobj->PrintDialog(_swigarg0))
-static PyObject *_wrap_wxPrinter_PrintDialog(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrinter_PrintDialog(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDC * _result;
     wxPrinter * _arg0;
     wxWindow * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","parent", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxPrinter_PrintDialog",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPrinter_PrintDialog",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3366,7 +3467,7 @@ static PyObject *_wrap_wxPrinter_PrintDialog(PyObject *self, PyObject *args) {
 }
 
 #define wxPrinter_ReportError(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->ReportError(_swigarg0,_swigarg1,_swigarg2))
-static PyObject *_wrap_wxPrinter_ReportError(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrinter_ReportError(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrinter * _arg0;
     wxWindow * _arg1;
@@ -3375,9 +3476,10 @@ static PyObject *_wrap_wxPrinter_ReportError(PyObject *self, PyObject *args) {
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "self","parent","printout","message", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OOOs:wxPrinter_ReportError",&_argo0,&_argo1,&_argo2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOOs:wxPrinter_ReportError",_kwnames,&_argo0,&_argo1,&_argo2,&_arg3)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3411,16 +3513,17 @@ static PyObject *_wrap_wxPrinter_ReportError(PyObject *self, PyObject *args) {
 }
 
 #define wxPrinter_Setup(_swigobj,_swigarg0)  (_swigobj->Setup(_swigarg0))
-static PyObject *_wrap_wxPrinter_Setup(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrinter_Setup(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxPrinter * _arg0;
     wxWindow * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","parent", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxPrinter_Setup",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPrinter_Setup",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3446,7 +3549,7 @@ static PyObject *_wrap_wxPrinter_Setup(PyObject *self, PyObject *args) {
 }
 
 #define new_wxPrintPreview(_swigarg0,_swigarg1,_swigarg2) (new wxPrintPreview(_swigarg0,_swigarg1,_swigarg2))
-static PyObject *_wrap_new_wxPrintPreview(PyObject *self, PyObject *args) {
+static PyObject *_wrap_new_wxPrintPreview(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintPreview * _result;
     wxPyPrintout * _arg0;
@@ -3455,10 +3558,11 @@ static PyObject *_wrap_new_wxPrintPreview(PyObject *self, PyObject *args) {
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     PyObject * _argo2 = 0;
+    char *_kwnames[] = { "printout","printoutForPrinting","data", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO|O:new_wxPrintPreview",&_argo0,&_argo1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|O:new_wxPrintPreview",_kwnames,&_argo0,&_argo1,&_argo2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3497,15 +3601,16 @@ static PyObject *_wrap_new_wxPrintPreview(PyObject *self, PyObject *args) {
 }
 
 #define wxPrintPreview_GetCanvas(_swigobj)  (_swigobj->GetCanvas())
-static PyObject *_wrap_wxPrintPreview_GetCanvas(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintPreview_GetCanvas(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxWindow * _result;
     wxPrintPreview * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintPreview_GetCanvas",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintPreview_GetCanvas",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3530,14 +3635,15 @@ static PyObject *_wrap_wxPrintPreview_GetCanvas(PyObject *self, PyObject *args) 
 }
 
 #define wxPrintPreview_GetCurrentPage(_swigobj)  (_swigobj->GetCurrentPage())
-static PyObject *_wrap_wxPrintPreview_GetCurrentPage(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintPreview_GetCurrentPage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxPrintPreview * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintPreview_GetCurrentPage",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintPreview_GetCurrentPage",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3556,15 +3662,16 @@ static PyObject *_wrap_wxPrintPreview_GetCurrentPage(PyObject *self, PyObject *a
 }
 
 #define wxPrintPreview_GetFrame(_swigobj)  (_swigobj->GetFrame())
-static PyObject *_wrap_wxPrintPreview_GetFrame(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintPreview_GetFrame(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxFrame * _result;
     wxPrintPreview * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintPreview_GetFrame",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintPreview_GetFrame",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3589,14 +3696,15 @@ static PyObject *_wrap_wxPrintPreview_GetFrame(PyObject *self, PyObject *args) {
 }
 
 #define wxPrintPreview_GetMaxPage(_swigobj)  (_swigobj->GetMaxPage())
-static PyObject *_wrap_wxPrintPreview_GetMaxPage(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintPreview_GetMaxPage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxPrintPreview * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintPreview_GetMaxPage",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintPreview_GetMaxPage",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3615,14 +3723,15 @@ static PyObject *_wrap_wxPrintPreview_GetMaxPage(PyObject *self, PyObject *args)
 }
 
 #define wxPrintPreview_GetMinPage(_swigobj)  (_swigobj->GetMinPage())
-static PyObject *_wrap_wxPrintPreview_GetMinPage(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintPreview_GetMinPage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxPrintPreview * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintPreview_GetMinPage",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintPreview_GetMinPage",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3641,15 +3750,16 @@ static PyObject *_wrap_wxPrintPreview_GetMinPage(PyObject *self, PyObject *args)
 }
 
 #define wxPrintPreview_GetPrintDialogData(_swigobj)  (_swigobj->GetPrintDialogData())
-static PyObject *_wrap_wxPrintPreview_GetPrintDialogData(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintPreview_GetPrintDialogData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintDialogData * _result;
     wxPrintPreview * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintPreview_GetPrintDialogData",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintPreview_GetPrintDialogData",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3675,15 +3785,16 @@ static PyObject *_wrap_wxPrintPreview_GetPrintDialogData(PyObject *self, PyObjec
 }
 
 #define wxPrintPreview_GetPrintout(_swigobj)  (_swigobj->GetPrintout())
-static PyObject *_wrap_wxPrintPreview_GetPrintout(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintPreview_GetPrintout(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyPrintout * _result;
     wxPrintPreview * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintPreview_GetPrintout",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintPreview_GetPrintout",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3708,15 +3819,16 @@ static PyObject *_wrap_wxPrintPreview_GetPrintout(PyObject *self, PyObject *args
 }
 
 #define wxPrintPreview_GetPrintoutForPrinting(_swigobj)  (_swigobj->GetPrintoutForPrinting())
-static PyObject *_wrap_wxPrintPreview_GetPrintoutForPrinting(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintPreview_GetPrintoutForPrinting(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyPrintout * _result;
     wxPrintPreview * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintPreview_GetPrintoutForPrinting",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintPreview_GetPrintoutForPrinting",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3741,14 +3853,15 @@ static PyObject *_wrap_wxPrintPreview_GetPrintoutForPrinting(PyObject *self, PyO
 }
 
 #define wxPrintPreview_GetZoom(_swigobj)  (_swigobj->GetZoom())
-static PyObject *_wrap_wxPrintPreview_GetZoom(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintPreview_GetZoom(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxPrintPreview * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintPreview_GetZoom",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintPreview_GetZoom",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3767,14 +3880,15 @@ static PyObject *_wrap_wxPrintPreview_GetZoom(PyObject *self, PyObject *args) {
 }
 
 #define wxPrintPreview_Ok(_swigobj)  (_swigobj->Ok())
-static PyObject *_wrap_wxPrintPreview_Ok(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintPreview_Ok(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxPrintPreview * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPrintPreview_Ok",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintPreview_Ok",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3793,16 +3907,17 @@ static PyObject *_wrap_wxPrintPreview_Ok(PyObject *self, PyObject *args) {
 }
 
 #define wxPrintPreview_Print(_swigobj,_swigarg0)  (_swigobj->Print(_swigarg0))
-static PyObject *_wrap_wxPrintPreview_Print(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintPreview_Print(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxPrintPreview * _arg0;
     bool  _arg1;
     PyObject * _argo0 = 0;
     int tempbool1;
+    char *_kwnames[] = { "self","prompt", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxPrintPreview_Print",&_argo0,&tempbool1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintPreview_Print",_kwnames,&_argo0,&tempbool1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3822,15 +3937,16 @@ static PyObject *_wrap_wxPrintPreview_Print(PyObject *self, PyObject *args) {
 }
 
 #define wxPrintPreview_SetCanvas(_swigobj,_swigarg0)  (_swigobj->SetCanvas(_swigarg0))
-static PyObject *_wrap_wxPrintPreview_SetCanvas(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintPreview_SetCanvas(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintPreview * _arg0;
     wxWindow * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","window", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxPrintPreview_SetCanvas",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPrintPreview_SetCanvas",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3857,14 +3973,15 @@ static PyObject *_wrap_wxPrintPreview_SetCanvas(PyObject *self, PyObject *args) 
 }
 
 #define wxPrintPreview_SetCurrentPage(_swigobj,_swigarg0)  (_swigobj->SetCurrentPage(_swigarg0))
-static PyObject *_wrap_wxPrintPreview_SetCurrentPage(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintPreview_SetCurrentPage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintPreview * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","pageNum", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxPrintPreview_SetCurrentPage",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintPreview_SetCurrentPage",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3884,15 +4001,16 @@ static PyObject *_wrap_wxPrintPreview_SetCurrentPage(PyObject *self, PyObject *a
 }
 
 #define wxPrintPreview_SetFrame(_swigobj,_swigarg0)  (_swigobj->SetFrame(_swigarg0))
-static PyObject *_wrap_wxPrintPreview_SetFrame(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintPreview_SetFrame(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintPreview * _arg0;
     wxFrame * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","frame", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxPrintPreview_SetFrame",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPrintPreview_SetFrame",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3919,15 +4037,16 @@ static PyObject *_wrap_wxPrintPreview_SetFrame(PyObject *self, PyObject *args) {
 }
 
 #define wxPrintPreview_SetPrintout(_swigobj,_swigarg0)  (_swigobj->SetPrintout(_swigarg0))
-static PyObject *_wrap_wxPrintPreview_SetPrintout(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintPreview_SetPrintout(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintPreview * _arg0;
     wxPyPrintout * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","printout", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OO:wxPrintPreview_SetPrintout",&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPrintPreview_SetPrintout",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3954,14 +4073,15 @@ static PyObject *_wrap_wxPrintPreview_SetPrintout(PyObject *self, PyObject *args
 }
 
 #define wxPrintPreview_SetZoom(_swigobj,_swigarg0)  (_swigobj->SetZoom(_swigarg0))
-static PyObject *_wrap_wxPrintPreview_SetZoom(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPrintPreview_SetZoom(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintPreview * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","percent", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"Oi:wxPrintPreview_SetZoom",&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintPreview_SetZoom",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4005,7 +4125,7 @@ static void *SwigwxPreviewFrameTowxEvtHandler(void *ptr) {
 }
 
 #define new_wxPreviewFrame(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6) (new wxPreviewFrame(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6))
-static PyObject *_wrap_new_wxPreviewFrame(PyObject *self, PyObject *args) {
+static PyObject *_wrap_new_wxPreviewFrame(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPreviewFrame * _result;
     wxPrintPreview * _arg0;
@@ -4020,10 +4140,11 @@ static PyObject *_wrap_new_wxPreviewFrame(PyObject *self, PyObject *args) {
     PyObject * _obj2 = 0;
     PyObject * _argo3 = 0;
     PyObject * _argo4 = 0;
+    char *_kwnames[] = { "preview","parent","title","pos","size","style","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"OOO|OOls:new_wxPreviewFrame",&_argo0,&_argo1,&_obj2,&_argo3,&_argo4,&_arg5,&_arg6)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO|OOls:new_wxPreviewFrame",_kwnames,&_argo0,&_argo1,&_obj2,&_argo3,&_argo4,&_arg5,&_arg6)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4080,13 +4201,14 @@ static PyObject *_wrap_new_wxPreviewFrame(PyObject *self, PyObject *args) {
 }
 
 #define wxPreviewFrame_Initialize(_swigobj)  (_swigobj->Initialize())
-static PyObject *_wrap_wxPreviewFrame_Initialize(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPreviewFrame_Initialize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPreviewFrame * _arg0;
     PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTuple(args,"O:wxPreviewFrame_Initialize",&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPreviewFrame_Initialize",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4106,130 +4228,130 @@ static PyObject *_wrap_wxPreviewFrame_Initialize(PyObject *self, PyObject *args)
 }
 
 static PyMethodDef printfwcMethods[] = {
-	 { "wxPreviewFrame_Initialize", _wrap_wxPreviewFrame_Initialize, METH_VARARGS },
-	 { "new_wxPreviewFrame", _wrap_new_wxPreviewFrame, METH_VARARGS },
-	 { "wxPrintPreview_SetZoom", _wrap_wxPrintPreview_SetZoom, METH_VARARGS },
-	 { "wxPrintPreview_SetPrintout", _wrap_wxPrintPreview_SetPrintout, METH_VARARGS },
-	 { "wxPrintPreview_SetFrame", _wrap_wxPrintPreview_SetFrame, METH_VARARGS },
-	 { "wxPrintPreview_SetCurrentPage", _wrap_wxPrintPreview_SetCurrentPage, METH_VARARGS },
-	 { "wxPrintPreview_SetCanvas", _wrap_wxPrintPreview_SetCanvas, METH_VARARGS },
-	 { "wxPrintPreview_Print", _wrap_wxPrintPreview_Print, METH_VARARGS },
-	 { "wxPrintPreview_Ok", _wrap_wxPrintPreview_Ok, METH_VARARGS },
-	 { "wxPrintPreview_GetZoom", _wrap_wxPrintPreview_GetZoom, METH_VARARGS },
-	 { "wxPrintPreview_GetPrintoutForPrinting", _wrap_wxPrintPreview_GetPrintoutForPrinting, METH_VARARGS },
-	 { "wxPrintPreview_GetPrintout", _wrap_wxPrintPreview_GetPrintout, METH_VARARGS },
-	 { "wxPrintPreview_GetPrintDialogData", _wrap_wxPrintPreview_GetPrintDialogData, METH_VARARGS },
-	 { "wxPrintPreview_GetMinPage", _wrap_wxPrintPreview_GetMinPage, METH_VARARGS },
-	 { "wxPrintPreview_GetMaxPage", _wrap_wxPrintPreview_GetMaxPage, METH_VARARGS },
-	 { "wxPrintPreview_GetFrame", _wrap_wxPrintPreview_GetFrame, METH_VARARGS },
-	 { "wxPrintPreview_GetCurrentPage", _wrap_wxPrintPreview_GetCurrentPage, METH_VARARGS },
-	 { "wxPrintPreview_GetCanvas", _wrap_wxPrintPreview_GetCanvas, METH_VARARGS },
-	 { "new_wxPrintPreview", _wrap_new_wxPrintPreview, METH_VARARGS },
-	 { "wxPrinter_Setup", _wrap_wxPrinter_Setup, METH_VARARGS },
-	 { "wxPrinter_ReportError", _wrap_wxPrinter_ReportError, METH_VARARGS },
-	 { "wxPrinter_PrintDialog", _wrap_wxPrinter_PrintDialog, METH_VARARGS },
-	 { "wxPrinter_Print", _wrap_wxPrinter_Print, METH_VARARGS },
-	 { "wxPrinter_GetPrintDialogData", _wrap_wxPrinter_GetPrintDialogData, METH_VARARGS },
-	 { "wxPrinter_CreateAbortWindow", _wrap_wxPrinter_CreateAbortWindow, METH_VARARGS },
-	 { "delete_wxPrinter", _wrap_delete_wxPrinter, METH_VARARGS },
-	 { "new_wxPrinter", _wrap_new_wxPrinter, METH_VARARGS },
-	 { "wxPrintout_base_HasPage", _wrap_wxPrintout_base_HasPage, METH_VARARGS },
-	 { "wxPrintout_base_GetPageInfo", _wrap_wxPrintout_base_GetPageInfo, METH_VARARGS },
-	 { "wxPrintout_base_OnPreparePrinting", _wrap_wxPrintout_base_OnPreparePrinting, METH_VARARGS },
-	 { "wxPrintout_base_OnEndPrinting", _wrap_wxPrintout_base_OnEndPrinting, METH_VARARGS },
-	 { "wxPrintout_base_OnBeginPrinting", _wrap_wxPrintout_base_OnBeginPrinting, METH_VARARGS },
-	 { "wxPrintout_base_OnEndDocument", _wrap_wxPrintout_base_OnEndDocument, METH_VARARGS },
-	 { "wxPrintout_base_OnBeginDocument", _wrap_wxPrintout_base_OnBeginDocument, METH_VARARGS },
-	 { "wxPrintout_IsPreview", _wrap_wxPrintout_IsPreview, METH_VARARGS },
-	 { "wxPrintout_GetPPIScreen", _wrap_wxPrintout_GetPPIScreen, METH_VARARGS },
-	 { "wxPrintout_GetPPIPrinter", _wrap_wxPrintout_GetPPIPrinter, METH_VARARGS },
-	 { "wxPrintout_GetPageSizePixels", _wrap_wxPrintout_GetPageSizePixels, METH_VARARGS },
-	 { "wxPrintout_GetPageSizeMM", _wrap_wxPrintout_GetPageSizeMM, METH_VARARGS },
-	 { "wxPrintout_GetDC", _wrap_wxPrintout_GetDC, METH_VARARGS },
-	 { "wxPrintout_Destroy", _wrap_wxPrintout_Destroy, METH_VARARGS },
-	 { "wxPrintout__setSelf", _wrap_wxPrintout__setSelf, METH_VARARGS },
-	 { "new_wxPrintout", _wrap_new_wxPrintout, METH_VARARGS },
-	 { "wxPrintDialog_ShowModal", _wrap_wxPrintDialog_ShowModal, METH_VARARGS },
-	 { "wxPrintDialog_GetPrintDC", _wrap_wxPrintDialog_GetPrintDC, METH_VARARGS },
-	 { "wxPrintDialog_GetPrintDialogData", _wrap_wxPrintDialog_GetPrintDialogData, METH_VARARGS },
-	 { "new_wxPrintDialog", _wrap_new_wxPrintDialog, METH_VARARGS },
-	 { "wxPrintDialogData_SetToPage", _wrap_wxPrintDialogData_SetToPage, METH_VARARGS },
-	 { "wxPrintDialogData_SetSetupDialog", _wrap_wxPrintDialogData_SetSetupDialog, METH_VARARGS },
-	 { "wxPrintDialogData_SetPrintToFile", _wrap_wxPrintDialogData_SetPrintToFile, METH_VARARGS },
-	 { "wxPrintDialogData_SetPrintData", _wrap_wxPrintDialogData_SetPrintData, METH_VARARGS },
-	 { "wxPrintDialogData_SetNoCopies", _wrap_wxPrintDialogData_SetNoCopies, METH_VARARGS },
-	 { "wxPrintDialogData_SetMinPage", _wrap_wxPrintDialogData_SetMinPage, METH_VARARGS },
-	 { "wxPrintDialogData_SetMaxPage", _wrap_wxPrintDialogData_SetMaxPage, METH_VARARGS },
-	 { "wxPrintDialogData_SetFromPage", _wrap_wxPrintDialogData_SetFromPage, METH_VARARGS },
-	 { "wxPrintDialogData_SetCollate", _wrap_wxPrintDialogData_SetCollate, METH_VARARGS },
-	 { "wxPrintDialogData_GetToPage", _wrap_wxPrintDialogData_GetToPage, METH_VARARGS },
-	 { "wxPrintDialogData_GetPrintToFile", _wrap_wxPrintDialogData_GetPrintToFile, METH_VARARGS },
-	 { "wxPrintDialogData_GetPrintData", _wrap_wxPrintDialogData_GetPrintData, METH_VARARGS },
-	 { "wxPrintDialogData_GetNoCopies", _wrap_wxPrintDialogData_GetNoCopies, METH_VARARGS },
-	 { "wxPrintDialogData_GetMinPage", _wrap_wxPrintDialogData_GetMinPage, METH_VARARGS },
-	 { "wxPrintDialogData_GetMaxPage", _wrap_wxPrintDialogData_GetMaxPage, METH_VARARGS },
-	 { "wxPrintDialogData_GetFromPage", _wrap_wxPrintDialogData_GetFromPage, METH_VARARGS },
-	 { "wxPrintDialogData_GetCollate", _wrap_wxPrintDialogData_GetCollate, METH_VARARGS },
-	 { "wxPrintDialogData_GetAllPages", _wrap_wxPrintDialogData_GetAllPages, METH_VARARGS },
-	 { "wxPrintDialogData_EnableSelection", _wrap_wxPrintDialogData_EnableSelection, METH_VARARGS },
-	 { "wxPrintDialogData_EnablePrintToFile", _wrap_wxPrintDialogData_EnablePrintToFile, METH_VARARGS },
-	 { "wxPrintDialogData_EnablePageNumbers", _wrap_wxPrintDialogData_EnablePageNumbers, METH_VARARGS },
-	 { "wxPrintDialogData_EnableHelp", _wrap_wxPrintDialogData_EnableHelp, METH_VARARGS },
-	 { "delete_wxPrintDialogData", _wrap_delete_wxPrintDialogData, METH_VARARGS },
-	 { "new_wxPrintDialogData", _wrap_new_wxPrintDialogData, METH_VARARGS },
-	 { "wxPageSetupDialog_ShowModal", _wrap_wxPageSetupDialog_ShowModal, METH_VARARGS },
-	 { "wxPageSetupDialog_GetPageSetupData", _wrap_wxPageSetupDialog_GetPageSetupData, METH_VARARGS },
-	 { "new_wxPageSetupDialog", _wrap_new_wxPageSetupDialog, METH_VARARGS },
-	 { "wxPageSetupDialogData_SetPrintData", _wrap_wxPageSetupDialogData_SetPrintData, METH_VARARGS },
-	 { "wxPageSetupDialogData_SetPaperSize", _wrap_wxPageSetupDialogData_SetPaperSize, METH_VARARGS },
-	 { "wxPageSetupDialogData_SetPaperId", _wrap_wxPageSetupDialogData_SetPaperId, METH_VARARGS },
-	 { "wxPageSetupDialogData_SetMinMarginBottomRight", _wrap_wxPageSetupDialogData_SetMinMarginBottomRight, METH_VARARGS },
-	 { "wxPageSetupDialogData_SetMinMarginTopLeft", _wrap_wxPageSetupDialogData_SetMinMarginTopLeft, METH_VARARGS },
-	 { "wxPageSetupDialogData_SetMarginBottomRight", _wrap_wxPageSetupDialogData_SetMarginBottomRight, METH_VARARGS },
-	 { "wxPageSetupDialogData_SetMarginTopLeft", _wrap_wxPageSetupDialogData_SetMarginTopLeft, METH_VARARGS },
-	 { "wxPageSetupDialogData_SetDefaultMinMargins", _wrap_wxPageSetupDialogData_SetDefaultMinMargins, METH_VARARGS },
-	 { "wxPageSetupDialogData_SetDefaultInfo", _wrap_wxPageSetupDialogData_SetDefaultInfo, METH_VARARGS },
-	 { "wxPageSetupDialogData_GetPrintData", _wrap_wxPageSetupDialogData_GetPrintData, METH_VARARGS },
-	 { "wxPageSetupDialogData_GetPaperSize", _wrap_wxPageSetupDialogData_GetPaperSize, METH_VARARGS },
-	 { "wxPageSetupDialogData_GetPaperId", _wrap_wxPageSetupDialogData_GetPaperId, METH_VARARGS },
-	 { "wxPageSetupDialogData_GetMinMarginBottomRight", _wrap_wxPageSetupDialogData_GetMinMarginBottomRight, METH_VARARGS },
-	 { "wxPageSetupDialogData_GetMinMarginTopLeft", _wrap_wxPageSetupDialogData_GetMinMarginTopLeft, METH_VARARGS },
-	 { "wxPageSetupDialogData_GetMarginBottomRight", _wrap_wxPageSetupDialogData_GetMarginBottomRight, METH_VARARGS },
-	 { "wxPageSetupDialogData_GetMarginTopLeft", _wrap_wxPageSetupDialogData_GetMarginTopLeft, METH_VARARGS },
-	 { "wxPageSetupDialogData_GetDefaultInfo", _wrap_wxPageSetupDialogData_GetDefaultInfo, METH_VARARGS },
-	 { "wxPageSetupDialogData_GetEnableHelp", _wrap_wxPageSetupDialogData_GetEnableHelp, METH_VARARGS },
-	 { "wxPageSetupDialogData_GetEnablePrinter", _wrap_wxPageSetupDialogData_GetEnablePrinter, METH_VARARGS },
-	 { "wxPageSetupDialogData_GetEnablePaper", _wrap_wxPageSetupDialogData_GetEnablePaper, METH_VARARGS },
-	 { "wxPageSetupDialogData_GetEnableOrientation", _wrap_wxPageSetupDialogData_GetEnableOrientation, METH_VARARGS },
-	 { "wxPageSetupDialogData_GetEnableMargins", _wrap_wxPageSetupDialogData_GetEnableMargins, METH_VARARGS },
-	 { "wxPageSetupDialogData_GetDefaultMinMargins", _wrap_wxPageSetupDialogData_GetDefaultMinMargins, METH_VARARGS },
-	 { "wxPageSetupDialogData_EnablePrinter", _wrap_wxPageSetupDialogData_EnablePrinter, METH_VARARGS },
-	 { "wxPageSetupDialogData_EnablePaper", _wrap_wxPageSetupDialogData_EnablePaper, METH_VARARGS },
-	 { "wxPageSetupDialogData_EnableOrientation", _wrap_wxPageSetupDialogData_EnableOrientation, METH_VARARGS },
-	 { "wxPageSetupDialogData_EnableMargins", _wrap_wxPageSetupDialogData_EnableMargins, METH_VARARGS },
-	 { "wxPageSetupDialogData_EnableHelp", _wrap_wxPageSetupDialogData_EnableHelp, METH_VARARGS },
-	 { "delete_wxPageSetupDialogData", _wrap_delete_wxPageSetupDialogData, METH_VARARGS },
-	 { "new_wxPageSetupDialogData", _wrap_new_wxPageSetupDialogData, METH_VARARGS },
-	 { "wxPrintData_SetQuality", _wrap_wxPrintData_SetQuality, METH_VARARGS },
-	 { "wxPrintData_SetPaperSize", _wrap_wxPrintData_SetPaperSize, METH_VARARGS },
-	 { "wxPrintData_SetPaperId", _wrap_wxPrintData_SetPaperId, METH_VARARGS },
-	 { "wxPrintData_SetDuplex", _wrap_wxPrintData_SetDuplex, METH_VARARGS },
-	 { "wxPrintData_SetColour", _wrap_wxPrintData_SetColour, METH_VARARGS },
-	 { "wxPrintData_SetPrinterName", _wrap_wxPrintData_SetPrinterName, METH_VARARGS },
-	 { "wxPrintData_SetOrientation", _wrap_wxPrintData_SetOrientation, METH_VARARGS },
-	 { "wxPrintData_SetCollate", _wrap_wxPrintData_SetCollate, METH_VARARGS },
-	 { "wxPrintData_SetNoCopies", _wrap_wxPrintData_SetNoCopies, METH_VARARGS },
-	 { "wxPrintData_GetQuality", _wrap_wxPrintData_GetQuality, METH_VARARGS },
-	 { "wxPrintData_GetPaperSize", _wrap_wxPrintData_GetPaperSize, METH_VARARGS },
-	 { "wxPrintData_GetPaperId", _wrap_wxPrintData_GetPaperId, METH_VARARGS },
-	 { "wxPrintData_GetDuplex", _wrap_wxPrintData_GetDuplex, METH_VARARGS },
-	 { "wxPrintData_GetColour", _wrap_wxPrintData_GetColour, METH_VARARGS },
-	 { "wxPrintData_GetPrinterName", _wrap_wxPrintData_GetPrinterName, METH_VARARGS },
-	 { "wxPrintData_GetOrientation", _wrap_wxPrintData_GetOrientation, METH_VARARGS },
-	 { "wxPrintData_GetCollate", _wrap_wxPrintData_GetCollate, METH_VARARGS },
-	 { "wxPrintData_GetNoCopies", _wrap_wxPrintData_GetNoCopies, METH_VARARGS },
-	 { "delete_wxPrintData", _wrap_delete_wxPrintData, METH_VARARGS },
-	 { "new_wxPrintData", _wrap_new_wxPrintData, METH_VARARGS },
+	 { "wxPreviewFrame_Initialize", (PyCFunction) _wrap_wxPreviewFrame_Initialize, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxPreviewFrame", (PyCFunction) _wrap_new_wxPreviewFrame, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintPreview_SetZoom", (PyCFunction) _wrap_wxPrintPreview_SetZoom, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintPreview_SetPrintout", (PyCFunction) _wrap_wxPrintPreview_SetPrintout, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintPreview_SetFrame", (PyCFunction) _wrap_wxPrintPreview_SetFrame, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintPreview_SetCurrentPage", (PyCFunction) _wrap_wxPrintPreview_SetCurrentPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintPreview_SetCanvas", (PyCFunction) _wrap_wxPrintPreview_SetCanvas, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintPreview_Print", (PyCFunction) _wrap_wxPrintPreview_Print, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintPreview_Ok", (PyCFunction) _wrap_wxPrintPreview_Ok, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintPreview_GetZoom", (PyCFunction) _wrap_wxPrintPreview_GetZoom, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintPreview_GetPrintoutForPrinting", (PyCFunction) _wrap_wxPrintPreview_GetPrintoutForPrinting, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintPreview_GetPrintout", (PyCFunction) _wrap_wxPrintPreview_GetPrintout, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintPreview_GetPrintDialogData", (PyCFunction) _wrap_wxPrintPreview_GetPrintDialogData, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintPreview_GetMinPage", (PyCFunction) _wrap_wxPrintPreview_GetMinPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintPreview_GetMaxPage", (PyCFunction) _wrap_wxPrintPreview_GetMaxPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintPreview_GetFrame", (PyCFunction) _wrap_wxPrintPreview_GetFrame, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintPreview_GetCurrentPage", (PyCFunction) _wrap_wxPrintPreview_GetCurrentPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintPreview_GetCanvas", (PyCFunction) _wrap_wxPrintPreview_GetCanvas, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxPrintPreview", (PyCFunction) _wrap_new_wxPrintPreview, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrinter_Setup", (PyCFunction) _wrap_wxPrinter_Setup, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrinter_ReportError", (PyCFunction) _wrap_wxPrinter_ReportError, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrinter_PrintDialog", (PyCFunction) _wrap_wxPrinter_PrintDialog, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrinter_Print", (PyCFunction) _wrap_wxPrinter_Print, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrinter_GetPrintDialogData", (PyCFunction) _wrap_wxPrinter_GetPrintDialogData, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrinter_CreateAbortWindow", (PyCFunction) _wrap_wxPrinter_CreateAbortWindow, METH_VARARGS | METH_KEYWORDS },
+	 { "delete_wxPrinter", (PyCFunction) _wrap_delete_wxPrinter, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxPrinter", (PyCFunction) _wrap_new_wxPrinter, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintout_base_HasPage", (PyCFunction) _wrap_wxPrintout_base_HasPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintout_base_GetPageInfo", (PyCFunction) _wrap_wxPrintout_base_GetPageInfo, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintout_base_OnPreparePrinting", (PyCFunction) _wrap_wxPrintout_base_OnPreparePrinting, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintout_base_OnEndPrinting", (PyCFunction) _wrap_wxPrintout_base_OnEndPrinting, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintout_base_OnBeginPrinting", (PyCFunction) _wrap_wxPrintout_base_OnBeginPrinting, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintout_base_OnEndDocument", (PyCFunction) _wrap_wxPrintout_base_OnEndDocument, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintout_base_OnBeginDocument", (PyCFunction) _wrap_wxPrintout_base_OnBeginDocument, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintout_IsPreview", (PyCFunction) _wrap_wxPrintout_IsPreview, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintout_GetPPIScreen", (PyCFunction) _wrap_wxPrintout_GetPPIScreen, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintout_GetPPIPrinter", (PyCFunction) _wrap_wxPrintout_GetPPIPrinter, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintout_GetPageSizePixels", (PyCFunction) _wrap_wxPrintout_GetPageSizePixels, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintout_GetPageSizeMM", (PyCFunction) _wrap_wxPrintout_GetPageSizeMM, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintout_GetDC", (PyCFunction) _wrap_wxPrintout_GetDC, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintout_Destroy", (PyCFunction) _wrap_wxPrintout_Destroy, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintout__setSelf", (PyCFunction) _wrap_wxPrintout__setSelf, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxPrintout", (PyCFunction) _wrap_new_wxPrintout, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialog_ShowModal", (PyCFunction) _wrap_wxPrintDialog_ShowModal, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialog_GetPrintDC", (PyCFunction) _wrap_wxPrintDialog_GetPrintDC, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialog_GetPrintDialogData", (PyCFunction) _wrap_wxPrintDialog_GetPrintDialogData, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxPrintDialog", (PyCFunction) _wrap_new_wxPrintDialog, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_SetToPage", (PyCFunction) _wrap_wxPrintDialogData_SetToPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_SetSetupDialog", (PyCFunction) _wrap_wxPrintDialogData_SetSetupDialog, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_SetPrintToFile", (PyCFunction) _wrap_wxPrintDialogData_SetPrintToFile, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_SetPrintData", (PyCFunction) _wrap_wxPrintDialogData_SetPrintData, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_SetNoCopies", (PyCFunction) _wrap_wxPrintDialogData_SetNoCopies, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_SetMinPage", (PyCFunction) _wrap_wxPrintDialogData_SetMinPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_SetMaxPage", (PyCFunction) _wrap_wxPrintDialogData_SetMaxPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_SetFromPage", (PyCFunction) _wrap_wxPrintDialogData_SetFromPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_SetCollate", (PyCFunction) _wrap_wxPrintDialogData_SetCollate, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetToPage", (PyCFunction) _wrap_wxPrintDialogData_GetToPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetPrintToFile", (PyCFunction) _wrap_wxPrintDialogData_GetPrintToFile, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetPrintData", (PyCFunction) _wrap_wxPrintDialogData_GetPrintData, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetNoCopies", (PyCFunction) _wrap_wxPrintDialogData_GetNoCopies, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetMinPage", (PyCFunction) _wrap_wxPrintDialogData_GetMinPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetMaxPage", (PyCFunction) _wrap_wxPrintDialogData_GetMaxPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetFromPage", (PyCFunction) _wrap_wxPrintDialogData_GetFromPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetCollate", (PyCFunction) _wrap_wxPrintDialogData_GetCollate, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetAllPages", (PyCFunction) _wrap_wxPrintDialogData_GetAllPages, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_EnableSelection", (PyCFunction) _wrap_wxPrintDialogData_EnableSelection, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_EnablePrintToFile", (PyCFunction) _wrap_wxPrintDialogData_EnablePrintToFile, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_EnablePageNumbers", (PyCFunction) _wrap_wxPrintDialogData_EnablePageNumbers, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_EnableHelp", (PyCFunction) _wrap_wxPrintDialogData_EnableHelp, METH_VARARGS | METH_KEYWORDS },
+	 { "delete_wxPrintDialogData", (PyCFunction) _wrap_delete_wxPrintDialogData, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxPrintDialogData", (PyCFunction) _wrap_new_wxPrintDialogData, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPageSetupDialog_ShowModal", (PyCFunction) _wrap_wxPageSetupDialog_ShowModal, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPageSetupDialog_GetPageSetupData", (PyCFunction) _wrap_wxPageSetupDialog_GetPageSetupData, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxPageSetupDialog", (PyCFunction) _wrap_new_wxPageSetupDialog, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPageSetupDialogData_SetPrintData", (PyCFunction) _wrap_wxPageSetupDialogData_SetPrintData, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPageSetupDialogData_SetPaperSize", (PyCFunction) _wrap_wxPageSetupDialogData_SetPaperSize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPageSetupDialogData_SetPaperId", (PyCFunction) _wrap_wxPageSetupDialogData_SetPaperId, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPageSetupDialogData_SetMinMarginBottomRight", (PyCFunction) _wrap_wxPageSetupDialogData_SetMinMarginBottomRight, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPageSetupDialogData_SetMinMarginTopLeft", (PyCFunction) _wrap_wxPageSetupDialogData_SetMinMarginTopLeft, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPageSetupDialogData_SetMarginBottomRight", (PyCFunction) _wrap_wxPageSetupDialogData_SetMarginBottomRight, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPageSetupDialogData_SetMarginTopLeft", (PyCFunction) _wrap_wxPageSetupDialogData_SetMarginTopLeft, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPageSetupDialogData_SetDefaultMinMargins", (PyCFunction) _wrap_wxPageSetupDialogData_SetDefaultMinMargins, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPageSetupDialogData_SetDefaultInfo", (PyCFunction) _wrap_wxPageSetupDialogData_SetDefaultInfo, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPageSetupDialogData_GetPrintData", (PyCFunction) _wrap_wxPageSetupDialogData_GetPrintData, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPageSetupDialogData_GetPaperSize", (PyCFunction) _wrap_wxPageSetupDialogData_GetPaperSize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPageSetupDialogData_GetPaperId", (PyCFunction) _wrap_wxPageSetupDialogData_GetPaperId, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPageSetupDialogData_GetMinMarginBottomRight", (PyCFunction) _wrap_wxPageSetupDialogData_GetMinMarginBottomRight, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPageSetupDialogData_GetMinMarginTopLeft", (PyCFunction) _wrap_wxPageSetupDialogData_GetMinMarginTopLeft, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPageSetupDialogData_GetMarginBottomRight", (PyCFunction) _wrap_wxPageSetupDialogData_GetMarginBottomRight, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPageSetupDialogData_GetMarginTopLeft", (PyCFunction) _wrap_wxPageSetupDialogData_GetMarginTopLeft, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPageSetupDialogData_GetDefaultInfo", (PyCFunction) _wrap_wxPageSetupDialogData_GetDefaultInfo, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPageSetupDialogData_GetEnableHelp", (PyCFunction) _wrap_wxPageSetupDialogData_GetEnableHelp, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPageSetupDialogData_GetEnablePrinter", (PyCFunction) _wrap_wxPageSetupDialogData_GetEnablePrinter, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPageSetupDialogData_GetEnablePaper", (PyCFunction) _wrap_wxPageSetupDialogData_GetEnablePaper, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPageSetupDialogData_GetEnableOrientation", (PyCFunction) _wrap_wxPageSetupDialogData_GetEnableOrientation, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPageSetupDialogData_GetEnableMargins", (PyCFunction) _wrap_wxPageSetupDialogData_GetEnableMargins, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPageSetupDialogData_GetDefaultMinMargins", (PyCFunction) _wrap_wxPageSetupDialogData_GetDefaultMinMargins, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPageSetupDialogData_EnablePrinter", (PyCFunction) _wrap_wxPageSetupDialogData_EnablePrinter, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPageSetupDialogData_EnablePaper", (PyCFunction) _wrap_wxPageSetupDialogData_EnablePaper, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPageSetupDialogData_EnableOrientation", (PyCFunction) _wrap_wxPageSetupDialogData_EnableOrientation, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPageSetupDialogData_EnableMargins", (PyCFunction) _wrap_wxPageSetupDialogData_EnableMargins, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPageSetupDialogData_EnableHelp", (PyCFunction) _wrap_wxPageSetupDialogData_EnableHelp, METH_VARARGS | METH_KEYWORDS },
+	 { "delete_wxPageSetupDialogData", (PyCFunction) _wrap_delete_wxPageSetupDialogData, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxPageSetupDialogData", (PyCFunction) _wrap_new_wxPageSetupDialogData, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintData_SetQuality", (PyCFunction) _wrap_wxPrintData_SetQuality, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintData_SetPaperSize", (PyCFunction) _wrap_wxPrintData_SetPaperSize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintData_SetPaperId", (PyCFunction) _wrap_wxPrintData_SetPaperId, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintData_SetDuplex", (PyCFunction) _wrap_wxPrintData_SetDuplex, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintData_SetColour", (PyCFunction) _wrap_wxPrintData_SetColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintData_SetPrinterName", (PyCFunction) _wrap_wxPrintData_SetPrinterName, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintData_SetOrientation", (PyCFunction) _wrap_wxPrintData_SetOrientation, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintData_SetCollate", (PyCFunction) _wrap_wxPrintData_SetCollate, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintData_SetNoCopies", (PyCFunction) _wrap_wxPrintData_SetNoCopies, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintData_GetQuality", (PyCFunction) _wrap_wxPrintData_GetQuality, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintData_GetPaperSize", (PyCFunction) _wrap_wxPrintData_GetPaperSize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintData_GetPaperId", (PyCFunction) _wrap_wxPrintData_GetPaperId, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintData_GetDuplex", (PyCFunction) _wrap_wxPrintData_GetDuplex, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintData_GetColour", (PyCFunction) _wrap_wxPrintData_GetColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintData_GetPrinterName", (PyCFunction) _wrap_wxPrintData_GetPrinterName, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintData_GetOrientation", (PyCFunction) _wrap_wxPrintData_GetOrientation, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintData_GetCollate", (PyCFunction) _wrap_wxPrintData_GetCollate, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintData_GetNoCopies", (PyCFunction) _wrap_wxPrintData_GetNoCopies, METH_VARARGS | METH_KEYWORDS },
+	 { "delete_wxPrintData", (PyCFunction) _wrap_delete_wxPrintData, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxPrintData", (PyCFunction) _wrap_new_wxPrintData, METH_VARARGS | METH_KEYWORDS },
 	 { NULL, NULL }
 };
 #ifdef __cplusplus
