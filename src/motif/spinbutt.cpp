@@ -208,6 +208,7 @@ bool wxArrowButton::Create( wxSpinButton* parent, wxWindowID id,
         xmArrowButtonWidgetClass,
         parentWidget,
         XmNarrowDirection, arrow_dir,
+        XmNborderWidth, 0,
         NULL );
 
     XtAddCallback( (Widget) m_mainWidget,
@@ -307,10 +308,6 @@ void wxSpinButton::DoMoveWindow(int x, int y, int width, int height)
 void wxSpinButton::DoSetSize(int x, int y, int width, int height,
                              int sizeFlags)
 {
-    if( sizeFlags & wxSIZE_AUTO_WIDTH && width == -1 )
-        width = 30;
-    if( sizeFlags & wxSIZE_AUTO_HEIGHT && height == -1 )
-        height = 30;
     if( sizeFlags & wxSIZE_USE_EXISTING && width == -1 )
         width = GetSize().x;
     if( sizeFlags & wxSIZE_USE_EXISTING && height == -1 )
@@ -326,8 +323,20 @@ void wxSpinButton::Increment( int delta )
 
     int npos = m_pos + delta;
 
-    if( npos < m_min ) npos = m_min;
-    if( npos > m_max ) npos = m_max;
+    if( npos < m_min )
+    {
+        if( GetWindowStyle() && wxSP_WRAP )
+            npos = m_max;
+        else
+            npos = m_min;
+    }
+    if( npos > m_max )
+    {
+        if( GetWindowStyle() && wxSP_WRAP )
+            npos = m_min;
+        else
+            npos = m_max;
+    }
     if( npos == m_pos ) return;
 
     wxSpinEvent event( delta > 0 ? wxEVT_SCROLL_LINEUP : wxEVT_SCROLL_LINEDOWN,
