@@ -192,6 +192,7 @@ Unix:
 
 - fixed build problems with OpenGL when libGL(U) were in different directories
 - added --basename and --release flags to wx-config (Robert O'Connor)
+- added support for GNU/Hurd in configure
 
 wxMSW:
 
