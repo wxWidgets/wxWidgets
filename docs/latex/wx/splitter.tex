@@ -189,9 +189,25 @@ programmatically or using the wxSplitterWindow user interface.
 The default implementation of this function simply hides {\it removed}. You
 may wish to delete the window.
 
+\membersection{wxSplitterWindow::OnSashPositionChange}\label{wxsplitterwindowonsashpositionchange}
+
+\func{virtual bool}{OnSashPositionChange}{\param{int }{newSashPosition}
+
+Application-overridable function called when the sash position is changed by 
+user. It may return FALSE to prevent the change or TRUE to allow it.
+
+\wxheading{Parameters}
+
+\docparam{newSashPosition}{The new sash position (always positive or zero)}
+
+\wxheading{Remarks}
+
+The default implementation of this function verifies that the sizes of both 
+panes of the splitter are greater than minimum pane size.
+
 \wxheading{See also}
 
-\helpref{wxSplitterWindow::Unsplit}{wxsplitterwindowunsplit}
+\helpref{wxSplitterWindow::GetMinimumPaneSize}{wxsplitterwindowgetminimumpanesize}
 
 \membersection{wxSplitterWindow::SetSashPosition}\label{wxsplitterwindowsetsashposition}
 
@@ -255,7 +271,7 @@ Only sets the internal variable; does not update the display.
 \membersection{wxSplitterWindow::SplitHorizontally}\label{wxsplitterwindowsplithorizontally}
 
 \func{bool}{SplitHorizontally}{\param{wxWindow* }{window1}, \param{wxWindow* }{window2},
- \param{int}{ sashPosition = -1}}
+ \param{int}{ sashPosition = 0}}
 
 Initializes the top and bottom panes of the splitter window.
 
@@ -265,8 +281,10 @@ Initializes the top and bottom panes of the splitter window.
 
 \docparam{window2}{The bottom pane.}
 
-\docparam{sashPosition}{The initial position of the sash. If the value is -1, a default position
-is chosen.}
+\docparam{sashPosition}{The initial position of the sash. If this value is
+positive, it specifies the size of the upper pane. If it's negative, it's
+absolute value gives the size of the lower pane. Finally, specify 0 (default)
+to choose the default position (half of the total window height).}
 
 \wxheading{Return value}
 
@@ -274,8 +292,9 @@ TRUE if successful, FALSE otherwise (the window was already split).
 
 \wxheading{Remarks}
 
-This should be called if you wish to initially view two panes. It can also be called at any subsequent time,
-but the application should check that the window is not currently split using \helpref{IsSplit}{wxsplitterwindowissplit}.
+This should be called if you wish to initially view two panes. It can also be
+called at any subsequent time, but the application should check that the
+window is not currently split using \helpref{IsSplit}{wxsplitterwindowissplit}.
 
 \wxheading{See also}
 
@@ -285,7 +304,7 @@ but the application should check that the window is not currently split using \h
 \membersection{wxSplitterWindow::SplitVertically}\label{wxsplitterwindowsplitvertically}
 
 \func{bool}{SplitVertically}{\param{wxWindow* }{window1}, \param{wxWindow* }{window2},
- \param{int}{ sashPosition = -1}}
+ \param{int}{ sashPosition = 0}}
 
 Initializes the left and right panes of the splitter window.
 
@@ -295,8 +314,10 @@ Initializes the left and right panes of the splitter window.
 
 \docparam{window2}{The right pane.}
 
-\docparam{sashPosition}{The initial position of the sash. If the value is -1, a default position
-is chosen.}
+\docparam{sashPosition}{The initial position of the sash. If this value is
+positive, it specifies the size of the left pane. If it's negative, it's
+absolute value gives the size of the right pane. Finally, specify 0 (default)
+to choose the default position (half of the total window width).}
 
 \wxheading{Return value}
 

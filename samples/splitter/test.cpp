@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        splitter.cpp
+// Name:        m_splitter.cpp
 // Purpose:     wxSplitterWindow sample
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -29,36 +29,61 @@ class MyCanvas;
 class MyApp: public wxApp
 {
 public:
-	bool OnInit();
+  bool OnInit();
+};
+
+class MySplitterWindow : public wxSplitterWindow
+{
+public:
+  MySplitterWindow(wxFrame *parent, wxWindowID id) : wxSplitterWindow(parent, id)
+  {
+    m_frame = parent;
+  }
+
+  virtual bool OnSashPositionChange(int newSashPosition)
+  {
+    if ( !wxSplitterWindow::OnSashPositionChange(newSashPosition) )
+      return FALSE;
+    
+    wxString str;
+    str.Printf("Sash position = %d", newSashPosition);
+    m_frame->SetStatusText(str);
+
+    return TRUE;
+  }
+  
+private:
+  wxFrame *m_frame;
 };
 
 class MyFrame: public wxFrame
 {
 public:
-	MyFrame(wxFrame* frame, const wxString& title, const wxPoint& pos, const wxSize& size);
-	virtual ~MyFrame();
+  MyFrame(wxFrame* frame, const wxString& title, const wxPoint& pos, const wxSize& size);
+  virtual ~MyFrame();
 
-	bool OnClose();
+  bool OnClose();
 
-	// Menu commands
-	void SplitHorizontal(wxCommandEvent& event);
-	void SplitVertical(wxCommandEvent& event);
-	void Unsplit(wxCommandEvent& event);
-	void Quit(wxCommandEvent& event);
+  // Menu commands
+  void SplitHorizontal(wxCommandEvent& event);
+  void SplitVertical(wxCommandEvent& event);
+  void Unsplit(wxCommandEvent& event);
+  void SetMinSize(wxCommandEvent& event);
+  void Quit(wxCommandEvent& event);
 
-	// Menu command update functions
-	void UpdateUIHorizontal(wxUpdateUIEvent& event);
-	void UpdateUIVertical(wxUpdateUIEvent& event);
-	void UpdateUIUnsplit(wxUpdateUIEvent& event);
-
-    void OnIdle(wxIdleEvent& event);
+  // Menu command update functions
+  void UpdateUIHorizontal(wxUpdateUIEvent& event);
+  void UpdateUIVertical(wxUpdateUIEvent& event);
+  void UpdateUIUnsplit(wxUpdateUIEvent& event);
 
 private:
-	wxMenu*		fileMenu;
-	wxMenuBar*	menuBar;
-	MyCanvas*	leftCanvas;
-	MyCanvas*	rightCanvas;
-    wxSplitterWindow* splitter;
+  void UpdatePosition();
+
+  wxMenu*    fileMenu;
+  wxMenuBar*  menuBar;
+  MyCanvas*  m_leftCanvas;
+  MyCanvas*  m_rightCanvas;
+  MySplitterWindow* m_splitter;
 
 DECLARE_EVENT_TABLE()
 };
@@ -69,7 +94,7 @@ public:
 	MyCanvas(wxWindow* parent, wxWindowID id, int x, int y, int w, int h);
 	virtual ~MyCanvas();
 
-	virtual void OnDraw(wxDC& dc);
+  virtual void OnDraw(wxDC& dc);
 
 DECLARE_EVENT_TABLE()
 };
@@ -77,11 +102,15 @@ DECLARE_EVENT_TABLE()
 BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
 END_EVENT_TABLE()
 
-// ID for the menu quit command
-#define SPLIT_QUIT          1
-#define SPLIT_HORIZONTAL    2
-#define SPLIT_VERTICAL      3
-#define SPLIT_UNSPLIT       4
+// ID for the menu commands
+enum
+{
+  SPLIT_QUIT,
+  SPLIT_HORIZONTAL,
+  SPLIT_VERTICAL,
+  SPLIT_UNSPLIT,
+  SPLIT_SETMINSIZE
+};
 
 // Window ids
 #define SPLITTER_WINDOW     100
@@ -93,68 +122,63 @@ IMPLEMENT_APP(MyApp)
 
 bool MyApp::OnInit(void)
 {
-	MyFrame* frame = new MyFrame((wxFrame *) NULL, (char *) "wxSplitterWindow Example", wxPoint(50, 50), wxSize(400, 300));
+  MyFrame* frame = new MyFrame((wxFrame *) NULL, "wxSplitterWindow Example",
+                               wxPoint(50, 50), wxSize(420, 300));
 
-	// Show the frame
-	frame->Show(TRUE);
+  // Show the frame
+  frame->Show(TRUE);
   
-	SetTopWindow(frame);
+  SetTopWindow(frame);
 
-	return TRUE;
+  return TRUE;
 }
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-	EVT_MENU(SPLIT_VERTICAL, MyFrame::SplitVertical)
-	EVT_MENU(SPLIT_HORIZONTAL, MyFrame::SplitHorizontal)
-	EVT_MENU(SPLIT_UNSPLIT, MyFrame::Unsplit)
-	EVT_MENU(SPLIT_QUIT, MyFrame::Quit)
-	EVT_UPDATE_UI(SPLIT_VERTICAL, MyFrame::UpdateUIVertical)
-	EVT_UPDATE_UI(SPLIT_HORIZONTAL, MyFrame::UpdateUIHorizontal)
-	EVT_UPDATE_UI(SPLIT_UNSPLIT, MyFrame::UpdateUIUnsplit)
-	EVT_IDLE(MyFrame::OnIdle)
+  EVT_MENU(SPLIT_VERTICAL, MyFrame::SplitVertical)
+  EVT_MENU(SPLIT_HORIZONTAL, MyFrame::SplitHorizontal)
+  EVT_MENU(SPLIT_UNSPLIT, MyFrame::Unsplit)
+  EVT_MENU(SPLIT_QUIT, MyFrame::Quit)
+  EVT_MENU(SPLIT_SETMINSIZE, MyFrame::SetMinSize)
+
+  EVT_UPDATE_UI(SPLIT_VERTICAL, MyFrame::UpdateUIVertical)
+  EVT_UPDATE_UI(SPLIT_HORIZONTAL, MyFrame::UpdateUIHorizontal)
+  EVT_UPDATE_UI(SPLIT_UNSPLIT, MyFrame::UpdateUIUnsplit)
 END_EVENT_TABLE()
 
 // My frame constructor
 MyFrame::MyFrame(wxFrame* frame, const wxString& title, const wxPoint& pos, const wxSize& size):
 	wxFrame(frame, SPLITTER_FRAME, title, pos, size)
 {
-	// set the icon
-#ifdef __WXMSW__
-	SetIcon(wxIcon("mondrian"));
-#endif
+  CreateStatusBar(2);
 
-	CreateStatusBar(1);
+  // Make a menubar
+  fileMenu = new wxMenu;
+  fileMenu->Append(SPLIT_VERTICAL, "Split &Vertically", "Split vertically");
+  fileMenu->Append(SPLIT_HORIZONTAL, "Split &Horizontally", "Split horizontally");
+  fileMenu->Append(SPLIT_UNSPLIT, "&Unsplit", "Unsplit");
+  fileMenu->AppendSeparator();
+  fileMenu->Append(SPLIT_SETMINSIZE, "Set &min size", "Set minimum pane size");
+  fileMenu->AppendSeparator();
+  fileMenu->Append(SPLIT_QUIT, "E&xit", "Exit");
 
-	// Make a menubar
-	fileMenu = new wxMenu;
-	fileMenu->Append(SPLIT_VERTICAL, "Split &Vertically", "Split vertically");
-	fileMenu->Append(SPLIT_HORIZONTAL, "Split &Horizontally", "Split horizontally");
-	fileMenu->Append(SPLIT_UNSPLIT, "&Unsplit", "Unsplit");
-	fileMenu->Append(SPLIT_QUIT, "E&xit", "Exit");
+  menuBar = new wxMenuBar;
+  menuBar->Append(fileMenu, "&File");
 
-	menuBar = new wxMenuBar;
-	menuBar->Append(fileMenu, "&File");
+  SetMenuBar(menuBar);
 
-	SetMenuBar(menuBar);
+  m_splitter = new MySplitterWindow(this, SPLITTER_WINDOW);
 
-    splitter = new wxSplitterWindow(this, SPLITTER_WINDOW, wxPoint(0, 0), wxSize(400, 400),
-//            wxSP_BORDER);
-            wxSP_3D);
-//            wxSP_NOBORDER);
+  m_leftCanvas = new MyCanvas(m_splitter, CANVAS1, 0, 0, 400, 400);
+  m_leftCanvas->SetBackgroundColour(*wxRED);
+  m_leftCanvas->SetScrollbars(20, 20, 50, 50);
 
-    leftCanvas = new MyCanvas(splitter, CANVAS1, 0, 0, 400, 400);
-    leftCanvas->SetBackgroundColour(*wxRED);
-    leftCanvas->SetScrollbars(20, 20, 50, 50);
+  m_rightCanvas = new MyCanvas(m_splitter, CANVAS2, 0, 0, 400, 400);
+  m_rightCanvas->SetBackgroundColour(*wxCYAN);
+  m_rightCanvas->SetScrollbars(20, 20, 50, 50);
+  m_rightCanvas->Show(FALSE);
 
-    rightCanvas = new MyCanvas(splitter, CANVAS2, 0, 0, 400, 400);
-    rightCanvas->SetBackgroundColour(*wxCYAN);
-    rightCanvas->SetScrollbars(20, 20, 50, 50);
-    rightCanvas->Show(FALSE);
-
-    splitter->Initialize(leftCanvas);
-
-    // Set this to prevent unsplitting
-//    splitter->SetMinimumPaneSize(20);
+  m_splitter->Initialize(m_leftCanvas);
+  SetStatusText("Min pane size = 0", 1);
 }
 
 MyFrame::~MyFrame()
@@ -163,59 +187,75 @@ MyFrame::~MyFrame()
 
 bool MyFrame::OnClose()
 {
-	return TRUE;
+  return TRUE;
 }
 
 void MyFrame::Quit(wxCommandEvent& WXUNUSED(event) )
 {
-	Close(TRUE);
+  Close(TRUE);
 }
 
 void MyFrame::SplitHorizontal(wxCommandEvent& WXUNUSED(event) )
 {
-    if ( splitter->IsSplit() )
-        splitter->Unsplit();
-    leftCanvas->Show(TRUE);
-    rightCanvas->Show(TRUE);
-    splitter->SplitHorizontally( leftCanvas, rightCanvas );
+  if ( m_splitter->IsSplit() )
+    m_splitter->Unsplit();
+  m_leftCanvas->Show(TRUE);
+  m_rightCanvas->Show(TRUE);
+  m_splitter->SplitHorizontally( m_leftCanvas, m_rightCanvas );
+  UpdatePosition();
 }
 
 void MyFrame::SplitVertical(wxCommandEvent& WXUNUSED(event) )
 {
-    if ( splitter->IsSplit() )
-        splitter->Unsplit();
-    leftCanvas->Show(TRUE);
-    rightCanvas->Show(TRUE);
-    splitter->SplitVertically( leftCanvas, rightCanvas );
+  if ( m_splitter->IsSplit() )
+    m_splitter->Unsplit();
+  m_leftCanvas->Show(TRUE);
+  m_rightCanvas->Show(TRUE);
+  m_splitter->SplitVertically( m_leftCanvas, m_rightCanvas );
+  UpdatePosition();
 }
 
 void MyFrame::Unsplit(wxCommandEvent& WXUNUSED(event) )
 {
-    if ( splitter->IsSplit() )
-        splitter->Unsplit();
+  if ( m_splitter->IsSplit() )
+    m_splitter->Unsplit();
+  SetStatusText("No splitter");
+}
+
+void MyFrame::SetMinSize(wxCommandEvent& WXUNUSED(event) )
+{
+  wxString str;
+  str.Printf("%d", m_splitter->GetMinimumPaneSize());
+  str = wxGetTextFromUser("Enter minimal size for panes:", "", str, this);
+  if ( str.IsEmpty() )
+    return;
+
+  int minsize = atoi(str);
+  m_splitter->SetMinimumPaneSize(minsize);
+  str.Printf("Min pane size = %d", minsize);
+  SetStatusText(str, 1);
 }
 
 void MyFrame::UpdateUIHorizontal(wxUpdateUIEvent& event)
 {
-	event.Enable( ( (!splitter->IsSplit()) || (splitter->GetSplitMode() != wxSPLIT_HORIZONTAL) ) );
+  event.Enable( ( (!m_splitter->IsSplit()) || (m_splitter->GetSplitMode() != wxSPLIT_HORIZONTAL) ) );
 }
 
 void MyFrame::UpdateUIVertical(wxUpdateUIEvent& event)
 {
-	event.Enable( ( (!splitter->IsSplit()) || (splitter->GetSplitMode() != wxSPLIT_VERTICAL) ) );
+  event.Enable( ( (!m_splitter->IsSplit()) || (m_splitter->GetSplitMode() != wxSPLIT_VERTICAL) ) );
 }
 
 void MyFrame::UpdateUIUnsplit(wxUpdateUIEvent& event)
 {
-	event.Enable( splitter->IsSplit() );
+  event.Enable( m_splitter->IsSplit() );
 }
 
-void MyFrame::OnIdle(wxIdleEvent& event)
+void MyFrame::UpdatePosition()
 {
-    if ( GetStatusBar()->GetStatusText(0) != "Ready" )
-        SetStatusText("Ready");
-	
-	wxFrame::OnIdle(event);
+  wxString str;
+  str.Printf("Sash position = %d", m_splitter->GetSashPosition());
+  SetStatusText(str);
 }
 
 MyCanvas::MyCanvas(wxWindow* parent, wxWindowID id, int x, int y, int w, int h) :
@@ -229,13 +269,13 @@ MyCanvas::~MyCanvas()
 
 void MyCanvas::OnDraw(wxDC& dc)
 {
-	dc.SetPen(*wxBLACK_PEN);
-	dc.DrawLine(0, 0, 100, 100);
+  dc.SetPen(*wxBLACK_PEN);
+  dc.DrawLine(0, 0, 100, 100);
 
-    dc.SetBackgroundMode(wxTRANSPARENT);
-	dc.DrawText("Testing", 50, 50);
+  dc.SetBackgroundMode(wxTRANSPARENT);
+  dc.DrawText("Testing", 50, 50);
 
-    dc.SetPen(*wxRED_PEN);
-    dc.SetBrush(*wxGREEN_BRUSH);
-    dc.DrawRectangle(120, 120, 100, 80);
+  dc.SetPen(*wxRED_PEN);
+  dc.SetBrush(*wxGREEN_BRUSH);
+  dc.DrawRectangle(120, 120, 100, 80);
 }
