@@ -859,10 +859,10 @@ private:
             { return const_reverse_iterator(NULL, GetFirst()); }            \
         void resize(size_type n, value_type v = value_type())               \
         {                                                                   \
-            if(n < size())                                                  \
-                for(; n < size(); pop_back());                              \
-            else if(n > size())                                             \
-                for(; n > size(); push_back(v));                            \
+            while (n < size())                                              \
+                pop_back();                                                 \
+            while (n > size())                                              \
+                push_back();                                                \
         }                                                                   \
         size_type size() const { return GetCount(); }                       \
         size_type max_size() const { return INT_MAX; }                      \
