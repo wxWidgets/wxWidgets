@@ -940,6 +940,16 @@ wxGrid::~wxGrid()
 
 void wxGrid::Create()
 {
+    m_created = FALSE;    // set to TRUE by CreateGrid
+    m_displayed = FALSE;  // set to TRUE by OnPaint
+
+    m_table        = (wxGridTableBase *) NULL;
+    m_cellEditCtrl = (wxWindow *) NULL;
+
+    m_numRows = 0;
+    m_numCols = 0;
+    m_currentCellCoords = wxGridNoCellCoords;
+    
     int colLblH = WXGRID_DEFAULT_COL_LABEL_HEIGHT;
     int rowLblW = WXGRID_DEFAULT_ROW_LABEL_WIDTH;
 
@@ -1119,6 +1129,10 @@ void wxGrid::Init()
 
 void wxGrid::CalcDimensions()
 {
+    // This avoids a crash in SetScrollbars
+    //
+    if ( !m_displayed ) return;
+    
     int cw, ch;
     GetClientSize( &cw, &ch );
 
@@ -2381,6 +2395,8 @@ void wxGrid::OnPaint( wxPaintEvent& WXUNUSED(event) )
         SetEditControlValue();
         ShowCellEditControl();
     }
+
+    m_displayed = TRUE;
 }
 
 
@@ -2540,10 +2556,8 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
         return;
     }
 
-    wxClientDC dc( m_gridWin );
-    PrepareDC( dc );
-
-    if ( m_currentCellCoords != wxGridNoCellCoords )
+    if ( m_displayed  &&
+         m_currentCellCoords != wxGridNoCellCoords )
     {
         HideCellEditControl();
         SaveEditControlValue();
@@ -2552,13 +2566,17 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
     m_currentCellCoords = coords;
 
     SetEditControlValue();
-    ShowCellEditControl();
 
-    if ( IsSelection() )
+    if ( m_displayed )
     {
-        wxRect r( SelectionToDeviceRect() );
-        ClearSelection();
-        if ( !GetBatchCount() ) m_gridWin->Refresh( FALSE, &r );
+        ShowCellEditControl();
+
+        if ( IsSelection() )
+        {
+            wxRect r( SelectionToDeviceRect() );
+            ClearSelection();
+            if ( !GetBatchCount() ) m_gridWin->Refresh( FALSE, &r );
+        }
     }
 }
 

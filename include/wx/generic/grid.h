@@ -449,7 +449,7 @@ public:
 
     void DrawGridCellArea( wxDC& dc );
     void DrawCellBorder( wxDC& dc, const wxGridCellCoords& );
-    void DrawAllGridLines( wxDC& dc, const wxRegion & reg = wxRegion() );
+    void DrawAllGridLines( wxDC& dc, const wxRegion & reg );
     void DrawCell( wxDC& dc, const wxGridCellCoords& );
     void DrawCellBackground( wxDC& dc, const wxGridCellCoords& );
     void DrawCellValue( wxDC& dc, const wxGridCellCoords& );
@@ -859,6 +859,7 @@ public:
 
 protected:
     bool m_created;
+    bool m_displayed;
 
     wxGridWindow             *m_gridWin;
     wxGridRowLabelWindow     *m_rowLabelWin;
