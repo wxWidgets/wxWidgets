@@ -43,14 +43,6 @@ Constructor. Don't use the default one, use constructor with
 
 Adds \helpref{module}{handlers} to the list of wxHtmlWinParser tag handler.
 
-\membersection{wxHtmlWinParser::CanOpenURL}\label{wxhtmlwinparsercanopenurl}
-
-\func{virtual bool}{CanOpenURL}{\param{const wxString\& }{url}}
-
-Call this function to determine whether you are allowed to open given URL. 
-Default behaviour is to call \helpref{wxHtmlWindow::OnOpeningURL}{wxhtmlwindowonopeningurl}
-of the associated wxHtmlWindow object.
-
 \membersection{wxHtmlWinParser::CloseContainer}\label{wxhtmlwinparserclosecontainer}
 
 \func{wxHtmlContainerCell*}{CloseContainer}{\void}

@@ -31,6 +31,14 @@ class WXDLLEXPORT wxHtmlEntitiesParser;
 class wxHtmlTextPieces;
 class wxHtmlParserState;
 
+
+enum wxHtmlURLType
+{
+    wxHTML_URL_PAGE,
+    wxHTML_URL_IMAGE,
+    wxHTML_URL_OTHER
+};
+
 // This class handles generic parsing of HTML document : it scans
 // the document and divide it into blocks of tags (where one block
 // consists of starting and ending tag and of text between these
@@ -48,9 +56,9 @@ public:
 
     wxFileSystem* GetFS() const { return m_FS; }
 
-    // Returns TRUE if the parser is allowed to open given URL (may be forbidden
+    // Opens file if the parser is allowed to open given URL (may be forbidden
     // for security reasons)    
-    virtual bool CanOpenURL(const wxString& url) const { return TRUE; }
+    virtual wxFSFile *OpenURL(wxHtmlURLType type, const wxString& url) const;
 
     // You can simply call this method when you need parsed output.
     // This method does these things:

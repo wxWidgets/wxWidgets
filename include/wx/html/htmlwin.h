@@ -32,6 +32,19 @@ class wxHtmlWinModule;
 class wxHtmlHistoryArray;
 class wxHtmlProcessorList;
 
+
+// wxHtmlWindow flags:
+#define wxHW_SCROLLBAR_NEVER    0x0002
+#define wxHW_SCROLLBAR_AUTO     0x0004
+
+// enums for wxHtmlWindow::OnOpeningURL
+enum wxHtmlOpeningStatus
+{
+    wxHTML_OPEN,
+    wxHTML_BLOCK,
+    wxHTML_REDIRECT
+};
+
 //--------------------------------------------------------------------------------
 // wxHtmlWindow
 //                  (This is probably the only class you will directly use.)
@@ -106,10 +119,6 @@ public:
     // Sets fonts to be used when displaying HTML page.
     void SetFonts(wxString normal_face, wxString fixed_face, const int *sizes);
 
-    // Sets the title of the window
-    // (depending on the information passed to SetRelatedFrame() method)
-    virtual void OnSetTitle(const wxString& title);
-
     // Sets space between text and window borders.
     void SetBorders(int b) {m_Borders = b;}
 
@@ -136,8 +145,24 @@ public:
     // Adds input filter
     static void AddFilter(wxHtmlFilter *filter);
 
+    // Returns a pointer to the parser.
+    wxHtmlWinParser *GetParser() const { return m_Parser; }
+
+    // Adds HTML processor to this instance of wxHtmlWindow:
+    void AddProcessor(wxHtmlProcessor *processor);
+    // Adds HTML processor to wxHtmlWindow class as whole:
+    static void AddGlobalProcessor(wxHtmlProcessor *processor);
+
+    // what would we do with it?
+    virtual bool AcceptsFocusFromKeyboard() const { return FALSE; }
+
+    // -- Callbacks --
+
+    // Sets the title of the window
+    // (depending on the information passed to SetRelatedFrame() method)
+    virtual void OnSetTitle(const wxString& title);
+
     // Called when the mouse hovers over a cell: (x, y) are logical coords
-    //
     // Default behaviour is to do nothing at all
     virtual void OnCellMouseHover(wxHtmlCell *cell, wxCoord x, wxCoord y);
 
@@ -151,21 +176,14 @@ public:
     // call LoadPage(loc)
     virtual void OnLinkClicked(const wxHtmlLinkInfo& link);
     
-    // Called when wxHtmlWindow wants to fetch data from an URL (e.g. when loading
-    // a page or loading an image). The data are downloaded if and only if 
-    // OnOpeningURL returns TRUE.
-    virtual bool OnOpeningURL(const wxString& url) const { return TRUE; }
-
-    // Returns a pointer to the parser.
-    wxHtmlWinParser *GetParser() const { return m_Parser; }
-
-    // Adds HTML processor to this instance of wxHtmlWindow:
-    void AddProcessor(wxHtmlProcessor *processor);
-    // Adds HTML processor to wxHtmlWindow class as whole:
-    static void AddGlobalProcessor(wxHtmlProcessor *processor);
-
-    // what would we do with it?
-    virtual bool AcceptsFocusFromKeyboard() const { return FALSE; }
+    // Called when wxHtmlWindow wants to fetch data from an URL (e.g. when 
+    // loading a page or loading an image). The data are downloaded if and only if 
+    // OnOpeningURL returns TRUE. If OnOpeningURL returns wxHTML_REDIRECT,
+    // it must set *redirect to the new URL
+    virtual wxHtmlOpeningStatus OnOpeningURL(wxHtmlURLType type,
+                                             const wxString& url,
+                                             wxString *redirect) const 
+        { return wxHTML_OPEN; }
 
 protected:
     void Init();

@@ -812,4 +812,10 @@ wxChar wxHtmlEntitiesParser::GetEntityChar(const wxString& entity)
         return GetCharForCode(code);
 }
 
+wxFSFile *wxHtmlParser::OpenURL(wxHtmlURLType WXUNUSED(type), 
+                                const wxString& url) const
+{
+    return GetFS()->OpenFile(url);
+}
+
 #endif

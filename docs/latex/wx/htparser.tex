@@ -134,6 +134,40 @@ Returns pointer to the source being parsed.
 Setups the parser for parsing the {\it source} string. (Should be overridden
 in derived class)
 
+\membersection{wxHtmlParser::OpenURL}\label{wxhtmlparseropenurl}
+
+\func{virtual wxFSFile*}{OpenURL}{\param{wxHtmlURLType }{type}, \param{const wxString\& }{url}}
+
+Opens given URL and returns {\tt wxFSFile} object that can be used to read data
+from it. This method may return NULL in one of two cases: either the URL doesn't
+point to any valid resource or the URL is blocked by overriden implementation
+of {\it OpenURL} in derived class.
+
+\wxheading{Parameters}
+
+\docparam{type}{Indicates type of the resource. Is one of
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxHTML\_URL\_PAGE}}{Opening a HTML page.}
+\twocolitem{{\bf wxHTML\_URL\_IMAGE}}{Opening an image.}
+\twocolitem{{\bf wxHTML\_URL\_OTHER}}{Opening a resource that doesn't fall into
+any other category.}
+\end{twocollist}}
+
+\docparam{url}{URL being opened.}
+
+\wxheading{Notes}
+
+Always use this method in tag handlers instead of {\tt GetFS()->OpenFile()} 
+because it can block the URL and is thus more secure.
+
+Default behaviour is to call \helpref{wxHtmlWindow::OnOpeningURL}{wxhtmlwindowonopeningurl}
+of the associated wxHtmlWindow object (which may decide to block the URL or
+redirect it to another one),if there's any, and always open the URL if the 
+parser is not used with wxHtmlWindow.
+
+Returned {\tt wxFSFile} object is not guaranteed to point to {\it url}, it might
+have been redirected!
+
 \membersection{wxHtmlParser::Parse}\label{wxhtmlparserparse}
 
 \func{wxObject*}{Parse}{\param{const wxString\& }{source}}

@@ -263,13 +263,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
             Refresh(FALSE);
         }
         
-        if ( !m_Parser->CanOpenURL(location) )
-        {
-            wxLogError(_("Access denied to document '%s'!"), location.c_str());
-            return FALSE;
-        }
-
-        f = m_FS->OpenFile(location);
+        f = m_Parser->OpenURL(wxHTML_URL_PAGE, location);
 
         if (f == NULL)
         {

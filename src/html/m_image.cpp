@@ -292,6 +292,7 @@ public:
 private:
     wxBitmap           *m_bitmap;
     int                 m_bmpW, m_bmpH;
+    bool                m_showFrame:1;
     wxScrolledWindow   *m_window;
 #if wxUSE_GIF && wxUSE_TIMER
     wxGIFDecoder       *m_gifDecoder;
@@ -323,12 +324,55 @@ class wxGIFTimer : public wxTimer
 // wxHtmlImageCell
 //--------------------------------------------------------------------------------
 
+/* XPM */
+static const char * broken_image_xpm[] = {
+"29 31 7 1",
+" 	c None",
+".	c #808080",
+"+	c #FFFFFF",
+"@	c #C0C0C0",
+"#	c #000000",
+"$	c #333366",
+"%	c #B2B2B2",
+".....................        ",
+".+++++++++++++++++++..       ",
+".+++++++++++++++++++.@.      ",
+".++@@@@@@@@@@@@@@@@@.+@.     ",
+".++@@@@@@@@@@@@@@@@@.++@.    ",
+".++@@@@@.@@@@.@@@@@@.+++@.   ",
+".++@@@@@@@@@@@@@@@@@.++++@.  ",
+".++@@@@@@@@@@@@@@@@@.+++++@. ",
+".++@@.@@@@@@@@@@.@@@######## ",
+".++@@@@@@@@@@@@@@@@@@$$$$$$#.",
+".######@@@@@@@@@@@@@@@.....#.",
+"       ###@@@@@@@@@@@@@@@++#.",
+"          #####@@@@@@@@@@++#.",
+"              #@.@@@@@@@@++#.",
+"..             ###@@@@@@@++#.",
+".+....            #@@@@@@++#.",
+".++@@@...          ####@@++#.",
+".++@@@@@@..            #####.",
+".++@@@@@@@@...               ",
+".++@@@@@@%%%%@.              ",
+".++@@@@@@%%%%@@....          ",
+".++@@@@@@%%%%@@@@@@....      ",
+".++@@@@@@%%%%@@@@@@@@@@....  ",
+".++@@@@@@@@@@@@@@@@@@@@@@++#.",
+".++@@@@@@@@@@@@@@@@@@@@@@++#.",
+".++@@@@@@@@@@@@@@@@@@@@@@++#.",
+".++@@@@@@@@@@@@@@@@@@@@@@++#.",
+".++@@@@@@@@@@@@@@@@@@@@@@++#.",
+".++++++++++++++++++++++++++#.",
+".++++++++++++++++++++++++++#.",
+"############################."};
+
 wxHtmlImageCell::wxHtmlImageCell(wxWindow *window, wxFSFile *input, 
                                  int w, int h, double scale, int align, 
                                  const wxString& mapname) : wxHtmlCell()
 {
     m_window = window ? wxStaticCast(window, wxScrolledWindow) : NULL;
     m_scale = scale;
+    m_showFrame = FALSE;
     m_bitmap = NULL;
     m_bmpW = w;
     m_bmpH = h;
@@ -341,46 +385,63 @@ wxHtmlImageCell::wxHtmlImageCell(wxWindow *window, wxFSFile *input,
     m_physX = m_physY = -1;
 #endif
 
-    wxInputStream *s = input->GetStream();
-    
-    if ( s )
+    if ( input )
     {
-        bool readImg = TRUE;
-        
-#if wxUSE_GIF && wxUSE_TIMER
-        if ( (input->GetLocation().Matches(wxT("*.gif")) ||
-              input->GetLocation().Matches(wxT("*.GIF"))) && m_window )
+        wxInputStream *s = input->GetStream();
+
+        if ( s )
         {
-            m_gifDecoder = new wxGIFDecoder(s, TRUE);
-            if ( m_gifDecoder->ReadGIF() == wxGIF_OK )
+            bool readImg = TRUE;
+
+#if wxUSE_GIF && wxUSE_TIMER
+            if ( (input->GetLocation().Matches(wxT("*.gif")) ||
+                  input->GetLocation().Matches(wxT("*.GIF"))) && m_window )
             {
-                wxImage img;
-                if ( m_gifDecoder->ConvertToImage(&img) )
-                    SetImage(img);
-
-                readImg = FALSE;
-
-                if ( m_gifDecoder->IsAnimation() )
+                m_gifDecoder = new wxGIFDecoder(s, TRUE);
+                if ( m_gifDecoder->ReadGIF() == wxGIF_OK )
                 {
-                    m_gifTimer = new wxGIFTimer(this);
-                    m_gifTimer->Start(m_gifDecoder->GetDelay(), TRUE);
+                    wxImage img;
+                    if ( m_gifDecoder->ConvertToImage(&img) )
+                        SetImage(img);
+
+                    readImg = FALSE;
+
+                    if ( m_gifDecoder->IsAnimation() )
+                    {
+                        m_gifTimer = new wxGIFTimer(this);
+                        m_gifTimer->Start(m_gifDecoder->GetDelay(), TRUE);
+                    }
+                    else
+                    {
+                        wxDELETE(m_gifDecoder);
+                    }
                 }
                 else
                 {
                     wxDELETE(m_gifDecoder);
                 }
             }
-            else
+
+            if ( readImg )
+#endif
             {
-                wxDELETE(m_gifDecoder);
+                SetImage(wxImage(*s, wxBITMAP_TYPE_ANY));
             }
         }
-
-        if ( readImg )
-#endif
+    }
+    else // input==NULL, use "broken image" bitmap
+    {
+        if ( m_bmpW == -1 && m_bmpH == -1 )
         {
-            SetImage(wxImage(*s, wxBITMAP_TYPE_ANY));
+            m_bmpW == 29, m_bmpH = 31;            
         }
+        else
+        {
+            m_showFrame = TRUE;
+            if ( m_bmpW == -1 ) m_bmpW = 31;
+            if ( m_bmpH == -1 ) m_bmpH = 33;
+        }
+        m_bitmap = new wxBitmap(broken_image_xpm);
     }
 
     m_Width = (int)(scale * (double)m_bmpW);
@@ -487,7 +548,14 @@ wxHtmlImageCell::~wxHtmlImageCell()
 
 void wxHtmlImageCell::Draw(wxDC& dc, int x, int y, int WXUNUSED(view_y1), int WXUNUSED(view_y2))
 {
-    if (m_bitmap)
+    if ( m_showFrame )
+    {
+        dc.SetBrush(*wxTRANSPARENT_BRUSH);
+        dc.SetPen(*wxBLACK_PEN);
+        dc.DrawRectangle(x + m_PosX, y + m_PosY, m_Width, m_Height);
+        x++, y++;
+    }
+    if ( m_bitmap )
     {
         double us_x, us_y;
         dc.GetUserScale(&us_x, &us_y);
@@ -549,10 +617,8 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
                 wxString tmp = tag.GetParam(wxT("SRC"));
                 wxString mn = wxEmptyString;
                 
-                if ( !m_WParser->CanOpenURL(tmp) )
-                    return FALSE;
-
-                str = m_WParser->GetFS()->OpenFile(tmp);
+                str = m_WParser->OpenURL(wxHTML_URL_IMAGE, tmp);
+                
                 if (tag.HasParam(wxT("WIDTH")))
                     tag.GetParamAsInt(wxT("WIDTH"), &w);
                 if (tag.HasParam(wxT("HEIGHT")))
@@ -575,18 +641,16 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
                         mn = mn.Mid( 1 );
                     }
                 }
-                wxHtmlImageCell *cel = NULL;
+                wxHtmlImageCell *cel = new wxHtmlImageCell(
+                                          m_WParser->GetWindow(),
+                                          str, w, h, 
+                                          m_WParser->GetPixelScale(), 
+                                          al, mn);
+                cel->SetLink(m_WParser->GetLink());
+                cel->SetId(tag.GetParam(wxT("id"))); // may be empty
+                m_WParser->GetContainer()->InsertCell(cel);
                 if (str)
-                {
-                    cel = new wxHtmlImageCell(m_WParser->GetWindow(),
-                                              str, w, h, 
-                                              m_WParser->GetPixelScale(), 
-                                              al, mn);
-                    cel->SetLink(m_WParser->GetLink());
-                    cel->SetId(tag.GetParam(wxT("id"))); // may be empty
-                    m_WParser->GetContainer()->InsertCell(cel);
                     delete str;
-                }
             }
         }
         if (tag.GetName() == wxT("MAP"))

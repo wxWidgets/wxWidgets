@@ -48,7 +48,7 @@ public:
     virtual void DoneParser();
     virtual wxObject* GetProduct();
 
-    virtual bool CanOpenURL(const wxString& url) const;
+    virtual wxFSFile *OpenURL(wxHtmlURLType type, const wxString& url) const;
 
     // Set's the DC used for parsing. If SetDC() is not called,
     // parsing won't proceed

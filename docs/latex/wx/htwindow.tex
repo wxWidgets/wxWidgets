@@ -200,13 +200,39 @@ Also see \helpref{wxHtmlLinkInfo}{wxhtmllinkinfo}.
 
 \membersection{wxHtmlWindow::OnOpeningURL}\label{wxhtmlwindowonopeningurl}
 
-\func{virtual bool}{OnOpeningURL}{\param{const wxString\& }{url}}
+\func{virtual wxHtmlOpeningStatus}{OnOpeningURL}{\param{wxHtmlURLType }{type},\param{const wxString\& }{url}, \param{wxString *}{redirect}}
 
 Called when an URL is being opened (either when the user clicks on a link or
-an image is loaded). If the function returns FALSE, the URL won't be fetched.
-Default behaviour is to return TRUE.
+an image is loaded). The URL will be opened only if OnOpeningURL returns 
+{\tt wxHTML\_OPEN}. This method is called by
+\helpref{wxHtmlParser::OpenURL}{wxhtmlparseropenurl}.
+You can override OnOpeningURL to selectively block some
+URLs (e.g. for security reasons) or to redirect them elsewhere. Default
+behaviour is to always return {\tt wxHTML\_OPEN}.
 
-Also see \helpref{wxHtmlWinParser::CanOpenURL}{wxhtmlwinparsercanopenurl}.
+\wxheading{Parameters}
+
+\docparam{type}{Indicates type of the resource. Is one of
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxHTML\_URL\_PAGE}}{Opening a HTML page.}
+\twocolitem{{\bf wxHTML\_URL\_IMAGE}}{Opening an image.}
+\twocolitem{{\bf wxHTML\_URL\_OTHER}}{Opening a resource that doesn't fall into
+any other category.}
+\end{twocollist}}
+
+\docparam{url}{URL being opened.}
+
+\docparam{redirect}{Pointer to wxString variable that must be filled with an
+URL if OnOpeningURL returns {\tt wxHTML\_REDIRECT}.}
+
+\wxheading{Return value}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxHTML\_OPEN}}{Open the URL.}
+\twocolitem{{\bf wxHTML\_BLOCK}}{Deny access to the URL, \helpref{wxHtmlParser::OpenURL}{wxhtmlparseropenurl} will return NULL.}
+\twocolitem{{\bf wxHTML\_REDIRECT}}{Don't open {\it url}, redirect to another
+URL. OnOpeningURL must fill {\it *redirect} with the new URL. OnOpeningURL will
+be called again on returned URL.}
+\end{twocollist}
 
 \membersection{wxHtmlWindow::OnSetTitle}\label{wxhtmlwindowonsettitle}
 
