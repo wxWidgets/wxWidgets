@@ -457,7 +457,11 @@ void MyFrame::FileOpen(wxCommandEvent& WXUNUSED(event) )
                     _T("Testing open file dialog"),
                     _T(""),
                     _T(""),
+#ifdef __WXMOTIF__
+                    _T("C++ files (*.cpp)|*.cpp")
+#else
                     _T("C++ files (*.h;*.cpp)|*.h;*.cpp")
+#endif
                  );
 
     dialog.SetDirectory(wxGetHomeDir());

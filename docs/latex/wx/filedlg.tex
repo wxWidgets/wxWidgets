@@ -38,6 +38,13 @@ types of file with a description for each, such as:
  "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif"
 \end{verbatim}
 
+It must be noted that wildcard support in the native Motif file
+dialog is quite limited: only one alternative is supported,
+and it is displayed without the descriptive test; ``BMP files (*.bmp)|*.bmp''
+is displayed as ``*.bmp'', and both
+``BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif'' and
+``Image files|*.bmp;*.gif'' are errors.
+
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 \membersection{wxFileDialog::wxFileDialog}\label{wxfiledialogconstr}
@@ -58,7 +65,10 @@ Constructor. Use \helpref{wxFileDialog::ShowModal}{wxfiledialogshowmodal} to sho
 
 \docparam{defaultFile}{The default filename, or the empty string.}
 
-\docparam{wildcard}{A wildcard, such as ``*.*" or ``BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif".}
+\docparam{wildcard}{A wildcard, such as ``*.*" or ``BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif".
+
+Note that the native Motif dialog has some limitations with respect to
+wildcards; see the Remarks section above.}
 
 \docparam{style}{A dialog style. A bitlist of:
 
@@ -191,6 +201,9 @@ Sets the dialog style. See \helpref{wxFileDialog::wxFileDialog}{wxfiledialogcons
 Sets the wildcard, which can contain multiple file types, for example:
 
 ``BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif"
+
+Note that the native Motif dialog has some limitations with respect to
+wildcards; see the Remarks section above.
 
 \membersection{wxFileDialog::ShowModal}\label{wxfiledialogshowmodal}
 
