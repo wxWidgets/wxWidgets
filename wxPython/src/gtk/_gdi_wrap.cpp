@@ -4654,8 +4654,39 @@ static PyObject *_wrap_new_Region(PyObject *self, PyObject *args, PyObject *kwar
 static PyObject *_wrap_new_RegionFromBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxBitmap *arg1 = 0 ;
-    wxColour const &arg2_defvalue = wxNullColour ;
-    wxColour *arg2 = (wxColour *) &arg2_defvalue ;
+    wxRegion *result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "bmp", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:new_RegionFromBitmap",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxBitmap,
+    SWIG_POINTER_EXCEPTION | 0)) == -1)
+    SWIG_fail;
+    if (arg1 == NULL) {
+        PyErr_SetString(PyExc_TypeError,"null reference");
+        SWIG_fail;
+    }
+    {
+        if (!wxPyCheckForApp()) SWIG_fail;
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxRegion *)new wxRegion((wxBitmap const &)*arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;    
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxRegion, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_new_RegionFromBitmapColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxBitmap *arg1 = 0 ;
+    wxColour *arg2 = 0 ;
     int arg3 = (int) 0 ;
     wxRegion *result;
     wxColour temp2 ;
@@ -4666,7 +4697,7 @@ static PyObject *_wrap_new_RegionFromBitmap(PyObject *self, PyObject *args, PyOb
         (char *) "bmp",(char *) "transColour",(char *) "tolerance", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OO:new_RegionFromBitmap",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:new_RegionFromBitmapColour",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxBitmap,
     SWIG_POINTER_EXCEPTION | 0)) == -1)
     SWIG_fail;
@@ -4674,11 +4705,9 @@ static PyObject *_wrap_new_RegionFromBitmap(PyObject *self, PyObject *args, PyOb
         PyErr_SetString(PyExc_TypeError,"null reference");
         SWIG_fail;
     }
-    if (obj1) {
-        {
-            arg2 = &temp2;
-            if ( ! wxColour_helper(obj1, &arg2)) SWIG_fail;
-        }
+    {
+        arg2 = &temp2;
+        if ( ! wxColour_helper(obj1, &arg2)) SWIG_fail;
     }
     if (obj2) {
         arg3 = (int) SWIG_AsInt(obj2); 
@@ -5525,8 +5554,44 @@ static PyObject *_wrap_Region_UnionBitmap(PyObject *self, PyObject *args, PyObje
     PyObject *resultobj;
     wxRegion *arg1 = (wxRegion *) 0 ;
     wxBitmap *arg2 = 0 ;
-    wxColour const &arg3_defvalue = wxNullColour ;
-    wxColour *arg3 = (wxColour *) &arg3_defvalue ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "bmp", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Region_UnionBitmap",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxRegion,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxBitmap,
+    SWIG_POINTER_EXCEPTION | 0)) == -1)
+    SWIG_fail;
+    if (arg2 == NULL) {
+        PyErr_SetString(PyExc_TypeError,"null reference");
+        SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->Union((wxBitmap const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Region_UnionBitmapColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxRegion *arg1 = (wxRegion *) 0 ;
+    wxBitmap *arg2 = 0 ;
+    wxColour *arg3 = 0 ;
     int arg4 = (int) 0 ;
     bool result;
     wxColour temp3 ;
@@ -5538,7 +5603,7 @@ static PyObject *_wrap_Region_UnionBitmap(PyObject *self, PyObject *args, PyObje
         (char *) "self",(char *) "bmp",(char *) "transColour",(char *) "tolerance", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OO:Region_UnionBitmap",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|O:Region_UnionBitmapColour",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxRegion,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxBitmap,
@@ -5548,11 +5613,9 @@ static PyObject *_wrap_Region_UnionBitmap(PyObject *self, PyObject *args, PyObje
         PyErr_SetString(PyExc_TypeError,"null reference");
         SWIG_fail;
     }
-    if (obj2) {
-        {
-            arg3 = &temp3;
-            if ( ! wxColour_helper(obj2, &arg3)) SWIG_fail;
-        }
+    {
+        arg3 = &temp3;
+        if ( ! wxColour_helper(obj2, &arg3)) SWIG_fail;
     }
     if (obj3) {
         arg4 = (int) SWIG_AsInt(obj3); 
@@ -18297,6 +18360,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Cursor_swigregister", Cursor_swigregister, METH_VARARGS },
 	 { (char *)"new_Region", (PyCFunction) _wrap_new_Region, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_RegionFromBitmap", (PyCFunction) _wrap_new_RegionFromBitmap, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_RegionFromBitmapColour", (PyCFunction) _wrap_new_RegionFromBitmapColour, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_RegionFromPoints", (PyCFunction) _wrap_new_RegionFromPoints, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"delete_Region", (PyCFunction) _wrap_delete_Region, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Region_Clear", (PyCFunction) _wrap_Region_Clear, METH_VARARGS | METH_KEYWORDS },
@@ -18321,6 +18385,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Region_XorRegion", (PyCFunction) _wrap_Region_XorRegion, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Region_ConvertToBitmap", (PyCFunction) _wrap_Region_ConvertToBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Region_UnionBitmap", (PyCFunction) _wrap_Region_UnionBitmap, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Region_UnionBitmapColour", (PyCFunction) _wrap_Region_UnionBitmapColour, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Region_swigregister", Region_swigregister, METH_VARARGS },
 	 { (char *)"new_RegionIterator", (PyCFunction) _wrap_new_RegionIterator, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"delete_RegionIterator", (PyCFunction) _wrap_delete_RegionIterator, METH_VARARGS | METH_KEYWORDS },

@@ -62,6 +62,7 @@ wxInRegion = wx._gdi.InRegion
 wxRegion = wx._gdi.Region
 wxRegionPtr = wx._gdi.RegionPtr
 wxRegionFromBitmap = wx._gdi.RegionFromBitmap
+wxRegionFromBitmapColour = wx._gdi.RegionFromBitmapColour
 wxRegionFromPoints = wx._gdi.RegionFromPoints
 wxRegionIterator = wx._gdi.RegionIterator
 wxRegionIteratorPtr = wx._gdi.RegionIteratorPtr
