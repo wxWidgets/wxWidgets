@@ -284,7 +284,7 @@ bool wxDoFloodFill(wxDC *dc, wxCoord x, wxCoord y,
     dc->GetSize(&width, &height);
 
     //it would be nice to fail if we don't get a sensible size...
-    wxCHECK_RET(width >= 1 && height >= 1, wxT("In FloodFill, dc.GetSize routine failed, method not supported by this DC"));
+    wxASSERT_MSG(width >= 1 && height >= 1, wxT("In FloodFill, dc.GetSize routine failed, method not supported by this DC"));
     
     if (width <= 1 || height <= 1)
         return FALSE;
