@@ -849,7 +849,7 @@ void MyFrame::CreateLayout( int layoutNo )
     {
         pLayout->PushDefaultPlugins();
         pLayout->AddPlugin( CLASSINFO( cbBarHintsPlugin ) ); // facny "X"es and beveal for bars
-#if defined(__WXGTK__) || || defined(__WXX11__) 
+#if defined(__WXGTK__) || defined(__WXX11__) 
         pLayout->AddPlugin( CLASSINFO( cbHintAnimationPlugin ) );
 #endif
         pLayout->AddPlugin( CLASSINFO( cbRowDragPlugin ) ); 
