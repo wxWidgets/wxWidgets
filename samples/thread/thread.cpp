@@ -563,10 +563,10 @@ void MyFrame::OnIdle(wxIdleEvent &event)
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
 {
-    size_t count = wxGetApp().m_threads.Count();
-    for ( size_t i = 0; i < count; i++ )
+    const wxArrayThread& threads = wxGetApp().m_threads;
+    while ( !threads.IsEmpty() )
     {
-        wxGetApp().m_threads[0]->Delete();
+        threads[0]->Delete();
     }
 
     Close(TRUE);
