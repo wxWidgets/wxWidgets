@@ -48,8 +48,6 @@ wxColourScheme::~wxColourScheme()
 {
 }
 
-#ifdef wxHAS_SS_NATIVE
-
 // ----------------------------------------------------------------------------
 // wxSystemSettings
 // ----------------------------------------------------------------------------
@@ -99,6 +97,4 @@ wxColour wxSystemSettings::GetColour(wxSystemColour index)
 
     return wxTheme::Get()->GetColourScheme()->Get(col);
 }
-
-#endif // wxHAS_SS_NATIVE
 

@@ -127,6 +127,7 @@ class WXDLLEXPORT wxComboControl;
 class WXDLLEXPORT wxPopupComboWindow : public wxPopupTransientWindow
 {
 public:
+    wxPopupComboWindow() { m_combo = NULL; }
     wxPopupComboWindow(wxComboControl *parent);
 
     bool Create(wxComboControl *parent);
