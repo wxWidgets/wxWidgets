@@ -93,6 +93,8 @@ public:
     #include "wx/msw/apptbase.h"
 #elif defined(__UNIX__)
     #include "wx/unix/apptbase.h"
+#elif defined(__WXMAC__)
+    #include "wx/mac/apptbase.h"
 #else // no platform-specific methods to add to wxAppTraits
     typedef 
     // wxAppTraits must be a class because it was forward declared as class
@@ -165,6 +167,8 @@ public:
     #include "wx/msw/apptrait.h"
 #elif defined(__UNIX__)
     #include "wx/unix/apptrait.h"
+#elif defined(__WXMAC__)
+    #include "wx/mac/apptrait.h"
 #else // no platform-specific methods to add to wxAppTraits
     #if wxUSE_GUI
         typedef wxGUIAppTraitsBase wxGUIAppTraits;
