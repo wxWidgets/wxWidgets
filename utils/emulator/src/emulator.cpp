@@ -37,6 +37,7 @@
 #include "wx/confbase.h"
 #include "wx/fileconf.h"
 #include "wx/cmdline.h"
+#include "wx/image.h"
 
 #ifdef __WXX11__    
 #include "wx/x11/reparent.h"
@@ -487,8 +488,8 @@ bool wxEmulatorInfo::Load(const wxString& appDir)
             return FALSE;
         }
         
-        int type = wxDetermineImageType(m_emulatorBackgroundBitmapName);
-        if (type == -1)
+        wxBitmapType type = wxDetermineImageType(m_emulatorBackgroundBitmapName);
+        if (type == wxBITMAP_TYPE_INVALID)
             return FALSE;
         
         if (!m_emulatorBackgroundBitmap.LoadFile(m_emulatorBackgroundBitmapName, type))
@@ -505,7 +506,7 @@ bool wxEmulatorInfo::Load(const wxString& appDir)
 }
 
 // Returns the image type, or -1, determined from the extension.
-int wxDetermineImageType(const wxString& filename)
+wxBitmapType wxDetermineImageType(const wxString& filename)
 {
     wxString path, name, ext;
 
@@ -514,18 +515,18 @@ int wxDetermineImageType(const wxString& filename)
     ext.MakeLower();
     if (ext == "jpg" || ext == "jpeg")
         return wxBITMAP_TYPE_JPEG;
-    else if (ext == "gif")
+    if (ext == "gif")
         return wxBITMAP_TYPE_GIF;
-    else if (ext == "bmp")
+    if (ext == "bmp")
         return wxBITMAP_TYPE_BMP;
-    else if (ext == "png")
+    if (ext == "png")
         return wxBITMAP_TYPE_PNG;
-    else if (ext == "pcx")
+    if (ext == "pcx")
         return wxBITMAP_TYPE_PCX;
-    else if (ext == "tif" || ext == "tiff")
+    if (ext == "tif" || ext == "tiff")
         return wxBITMAP_TYPE_TIF;
-    else
-        return -1;
+    
+    return wxBITMAP_TYPE_INVALID;
 }
 
 // Convert a colour to a 6-digit hex string

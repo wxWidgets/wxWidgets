@@ -152,7 +152,7 @@ enum
 };
 
 // Returns the image type, or -1, determined from the extension.
-int wxDetermineImageType(const wxString& filename);
+wxBitmapType wxDetermineImageType(const wxString& filename);
 
 // Convert a colour to a 6-digit hex string
 wxString wxColourToHexString(const wxColour& col);
