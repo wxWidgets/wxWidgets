@@ -1012,6 +1012,8 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& itemId,
 			    bool unselect_others,
 			    bool extended_select)
 {
+    wxCHECK_RET( itemId.IsOk(), _T("invalid tree item") );
+
     bool is_single=!(GetWindowStyleFlag() & wxTR_MULTIPLE);
 
     //wxCHECK_RET( ( (!unselect_others) && is_single),
