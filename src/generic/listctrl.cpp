@@ -20,7 +20,7 @@
 
 #include "wx/dcscreen.h"
 #include "wx/app.h"
-#include "wx/generic/listctrl.h"
+#include "wx/listctrl.h"
 #include "wx/generic/imaglist.h"
 
 //-----------------------------------------------------------------------------
@@ -1142,7 +1142,7 @@ void wxListMainWindow::DeleteLine( wxListLineData *line )
 wxTextCtrl *wxListMainWindow::EditLabel( long item )
 {
     wxNode *node = m_lines.Nth( item );
-    wxCHECK_RET( node, _T("wrong index in wxListCtrl::Edit()") );
+    wxCHECK_MSG( node, (wxTextCtrl *)NULL, _T("wrong index in wxListCtrl::Edit()") );
     
     m_currentEdit = (wxListLineData*) node->Data();
 
