@@ -566,7 +566,7 @@ wxSize wxSizer::Fit( wxWindow *window )
     wxSize size(window->IsTopLevel() ? FitSize(window)
                                      : GetMinWindowSize(window));
 
-    window->SetClientSize( size );
+    window->SetSize( size );
 
     return size;
 }
