@@ -31,6 +31,7 @@ DATAFILES = rc/artprov.xrc \
 	rc/toolbar.xrc \
 	rc/uncenter.xrc \
 	rc/variable.xrc \
+	rc/appicon.xpm \
 	rc/artprov.xpm \
 	rc/basicdlg.xpm \
 	rc/controls.xpm \
