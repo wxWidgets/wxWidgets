@@ -201,6 +201,10 @@ void MyFrame::LogDialog(wxCommandEvent& event)
     wxLogWarning("And then something went wrong!");
     wxLogError("Intermediary error handler decided to abort.");
     wxLogError("The top level caller detected an error.");
+
+    wxLog::FlushActive();
+
+    wxLogMessage("And this is the same dialog but with onle one message");
 }
 
 void MyFrame::MessageBox(wxCommandEvent& WXUNUSED(event) )
