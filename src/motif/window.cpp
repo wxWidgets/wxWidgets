@@ -1189,6 +1189,34 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
     XmMenuPosition (menuWidget, &event);
     XtManageChild (menuWidget);
 
+	XEvent x_event;
+	// The ID of a pop-up menu is 1 when active, and is set to 0 by the
+    // idle-time destroy routine.
+	// Waiting until this ID changes causes this function to block until
+    // the menu has been dismissed and the widgets cleaned up.
+    // In other words, once this routine returns, it is safe to delete
+    // the menu object.
+    // Ian Brown <ian.brown@printsoft.de>
+	while (menu->GetId() == 1)
+    {
+        XtAppNextEvent( (XtAppContext) wxTheApp->GetAppContext(), &x_event);
+
+        wxTheApp->ProcessXEvent((WXEvent*) & x_event);
+
+        if (XtAppPending( (XtAppContext) wxTheApp->GetAppContext() ) == 0)
+        {
+            if (!wxTheApp->ProcessIdle())
+            {
+#if wxUSE_THREADS
+                // leave the main loop to give other threads a chance to
+                // perform their GUI work
+                wxMutexGuiLeave();
+                wxUsleep(20);
+                wxMutexGuiEnter();
+#endif
+            }
+        }
+    }
     return TRUE;
 }
 
