@@ -97,10 +97,16 @@ void wxMessageOutputMessageBox::Printf(const wxChar* format, ...)
     out.PrintfV(format, args);
     va_end(args);
 
+    // the native MSW msg box understands the TABs, others don't
 #ifndef __WXMSW__
-    out.Replace(wxT("\t"),wxT("        "));
+    out.Replace(wxT("\t"), wxT("        "));
 #endif
-    ::wxMessageBox(out);
+
+    wxString title;
+    if ( wxTheApp )
+        title.Printf(_("%s message"), wxTheApp->GetAppName().c_str());
+
+    ::wxMessageBox(out, title);
 }
 
 #endif // wxUSE_GUI
@@ -119,7 +125,7 @@ void wxMessageOutputLog::Printf(const wxChar* format, ...)
     out.PrintfV(format, args);
     va_end(args);
 
-    out.Replace(wxT("\t"),wxT("        "));
+    out.Replace(wxT("\t"), wxT("        "));
 
     ::wxLogMessage(wxT("%s"), out.c_str());
 }
