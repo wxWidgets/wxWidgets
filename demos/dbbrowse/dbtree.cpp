@@ -355,7 +355,7 @@ void DBTree::OnRightSelect(wxTreeEvent& WXUNUSED(event))
 }
 
 //----------------------------------------------------------------------------------------
-void DBTree::OnDBGrid(wxCommandEvent& event)
+void DBTree::OnDBGrid(wxCommandEvent& WXUNUSED(event))
 {
     int i;
     // Get the Information that we need
@@ -378,7 +378,7 @@ void DBTree::OnDBGrid(wxCommandEvent& event)
 }
 
 //----------------------------------------------------------------------------------------
-void DBTree::OnDBClass(wxCommandEvent& event)
+void DBTree::OnDBClass(wxCommandEvent& WXUNUSED(event))
 {
     // int i;
     // Get the Information that we need
@@ -392,7 +392,7 @@ void DBTree::OnDBClass(wxCommandEvent& event)
 }
 
 //----------------------------------------------------------------------------------------
-void DBTree::OnTableClass(wxCommandEvent& event)
+void DBTree::OnTableClass(wxCommandEvent& WXUNUSED(event))
 {
     int i;
     // Get the Information that we need
@@ -414,7 +414,7 @@ void DBTree::OnTableClass(wxCommandEvent& event)
 }
 
 //----------------------------------------------------------------------------------------
-void DBTree::OnTableClassAll(wxCommandEvent& event)
+void DBTree::OnTableClassAll(wxCommandEvent& WXUNUSED(event))
 {
     // int i;
     // Get the Information that we need

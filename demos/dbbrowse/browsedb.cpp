@@ -201,7 +201,7 @@ bool BrowserDB::OnCloseDB(int Quiet)
 }
 
 //----------------------------------------------------------------------------------------
-bool BrowserDB::OnGetNext(int Cols,int Quiet)
+bool BrowserDB::OnGetNext(int Cols,int WXUNUSED(Quiet))
 {
     SDWORD cb;
     int 	 i_dbDataType;
@@ -215,11 +215,13 @@ bool BrowserDB::OnGetNext(int Cols,int Quiet)
     //-----------------------------
     if (!db_BrowserDB->GetNext())
     {
-        return FALSE;
+#ifdef __WXDEBUG__
         Temp0.Printf(_("\n-E-> BrowserDB::OnGetNext - ODBC-Error with GetNext \n-E-> "));
         Temp0 += GetExtendedDBErrorMsg(__TFILE__,__LINE__);
         wxLogMessage(Temp0);
         wxMessageBox(Temp0);
+#endif
+        return FALSE;
     }
     else
     {
@@ -344,7 +346,8 @@ bool BrowserDB::OnSelect(wxString tb_Name, int Quiet)
     wxString SQLStmt;
     i_Records = 0;
     //---------------------------------------------------------------------------------------
-    SQLStmt.sprintf(_T("SELECT * FROM %s"),db_BrowserDB->SQLTableName(tb_Name.c_str()));
+    wxString tablename = db_BrowserDB->SQLTableName(tb_Name.c_str());
+    SQLStmt.sprintf(_T("SELECT * FROM %s"),tablename.c_str());
     if (!db_BrowserDB->ExecSql((wxChar *)(SQLStmt.GetData())))
     {
         Temp0.Printf(_("\n-E-> BrowserDB::OnSelect - ODBC-Error with ExecSql of >%s<.\n-E-> "),tb_Name.c_str());
@@ -398,7 +401,7 @@ bool BrowserDB::OnExecSql(wxString SQLStmt, int Quiet)
 }
 
 //----------------------------------------------------------------------------------------
-wxDbInf* BrowserDB::OnGetCatalog(int Quiet)
+wxDbInf* BrowserDB::OnGetCatalog(int WXUNUSED(Quiet))
 {
     wxChar UName[255];
     wxStrcpy(UName,UserName);
@@ -407,7 +410,7 @@ wxDbInf* BrowserDB::OnGetCatalog(int Quiet)
 }
 
 //----------------------------------------------------------------------------------------
-wxDbColInf* BrowserDB::OnGetColumns(wxChar *tableName, UWORD numCols, int Quiet)
+wxDbColInf* BrowserDB::OnGetColumns(wxChar *tableName, UWORD numCols, int WXUNUSED(Quiet))
 {
     wxChar UName[255];
     int i;

@@ -83,7 +83,7 @@ public:
  wxPen  mDarkPen;         // default: RGB(128,128,128)
  wxPen  mBlackPen;        // default: RGB(  0,  0,  0)
 
- int    mActiveTab;
+ size_t mActiveTab;
  int    mTitleHeight;
  int    mLayoutType;
 

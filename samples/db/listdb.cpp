@@ -89,7 +89,7 @@ extern wxApp *DatabaseDemoApp;
  * NOTE: The value returned by this function is for temporary use only and
  *       should be copied for long term use
  */
-const char *GetExtendedDBErrorMsg2(wxDb *pDb, char *ErrFile, int ErrLine)
+const wxChar *GetExtendedDBErrorMsg2(wxDb *pDb, wxChar *ErrFile, int ErrLine)
 {
     static wxString msg;
     msg = wxT("");
@@ -307,7 +307,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
     {
         wxString tStr;
         tStr.Printf(wxT("Unable to open the table '%s'."),tableName);
-        tStr += GetExtendedDBErrorMsg2(pDb,__FILE__,__LINE__);
+        tStr += GetExtendedDBErrorMsg2(pDb,__TFILE__,__LINE__);
         wxMessageBox(tStr,wxT("ODBC Error..."));
         Close();
         return;
@@ -339,7 +339,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
                 return;
             }
             if (lookup2->GetNext())
-                maxColLen = col1Len = atoi(lookup2->lookupCol1);
+                maxColLen = col1Len = wxAtoi(lookup2->lookupCol1);
             else
                 wxMessageBox(wxT("ODBC error during GetNext()"),wxT("ODBC Error..."));
         }
@@ -430,7 +430,7 @@ void ClookUpDlg::OnButton( wxCommandEvent &event )
 }
 
 
-void ClookUpDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
+void ClookUpDlg::OnCommand(wxWindow& win, wxCommandEvent& WXUNUSED(event))
 {
     wxString widgetName = win.GetName();
 

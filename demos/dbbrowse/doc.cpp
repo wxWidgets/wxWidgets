@@ -114,6 +114,7 @@ bool MainDoc::OnInitView()
     p_TabArea->AddTab(p_PgmCtrl,_T("PgmCtrl"),p_FolderClose);
     delete p_FolderClose;      // Memory leak
     p_FolderClose = NULL;
+    wxUnusedVar(p_FolderClose);
     //---------------------------------------------------------------------------------------
     // now create "output" window
     //---------------------------------------------------------------------------------------
@@ -156,7 +157,7 @@ bool MainDoc::OnInitODBC()
     wxChar DsDesc[255]; // BJO20002501 instead of 512
     Temp0 = _T("");
     i_DSN = 0;       // Counter
-    int i = 0;
+    int i;
     //---------------------------------------------------------------------------------------
     // Initialize the ODBC Environment for Database Operations
 
@@ -200,7 +201,6 @@ bool MainDoc::OnInitODBC()
         Temp0.Printf(_T("%02d) Dsn(%s) DsDesc(%s)"),i,(p_DSN+i)->Dsn.c_str(),(p_DSN+i)->Drv.c_str());
         wxLogMessage(Temp0);
     }
-    i = 0;
     //---------------------------------------------------------------------------------------
     // Allocate n wxDatabase objects to hold the column information
     db_Br = new BrowserDB[i_DSN];

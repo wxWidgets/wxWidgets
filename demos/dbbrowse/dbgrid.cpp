@@ -85,7 +85,7 @@ int  DBGrid::OnTableView(wxString Table)
 {
     wxStopWatch sw;
     //---------------------------------------------------------------------------------------
-    int  i=0,x,y,z, ValidTable=0;
+    int  x,y,z;
     wxString Temp0;
     wxBeginBusyCursor();
     SetDefaultCellFont(* pDoc->ft_Doc);
@@ -98,13 +98,13 @@ int  DBGrid::OnTableView(wxString Table)
         {
             if (!wxStrcmp((ct_BrowserDB->pTableInf+x)->tableName,Table))      // is this our Table ?
             {    // Yes, the Data of this Table shall be put into the Grid
-                ValidTable = x;                                                  // Save the Tablenumber
+                int ValidTable = x;                                              // Save the Tablenumber
                 (db_Br+i_Which)->OnSelect(Table,FALSE);                          // Select * from "table"
                 // Set the local Pointer to the Column Information we are going to use
                 (db_Br+i_Which)->cl_BrowserDB = (ct_BrowserDB->pTableInf+x)->pColInf;
                 if ((ct_BrowserDB->pTableInf+x)->pColInf)                        // Valid pointer (!= NULL) ?
                 {   // Pointer is Valid, Column Informationen sind Vorhanden
-                    i = (db_Br+i_Which)->i_Records;                                 // How many Records are there
+                    int i = (db_Br+i_Which)->i_Records;                             // How many Records are there
                     (db_Br+i_Which)->i_Which = ValidTable;                          // Still used ???? mj10777
                     if (i == 0)     // If the Table is empty, then show one empty row
                         i++;
@@ -154,7 +154,7 @@ Weiter:
 }
 
 //----------------------------------------------------------------------------------------
-void DBGrid::OnModusEdit(wxCommandEvent& event)
+void DBGrid::OnModusEdit(wxCommandEvent& WXUNUSED(event))
 {
     b_EditModus = TRUE;             // Needed by PopupMenu
     EnableEditing(b_EditModus);     // Activate in-place Editing
@@ -163,7 +163,7 @@ void DBGrid::OnModusEdit(wxCommandEvent& event)
 }
 
 //----------------------------------------------------------------------------------------
-void DBGrid::OnModusBrowse(wxCommandEvent& event)
+void DBGrid::OnModusBrowse(wxCommandEvent& WXUNUSED(event))
 {
     b_EditModus = FALSE;            // Needed by PopupMenu
     EnableEditing(b_EditModus);     // Deactivate in-place Editing

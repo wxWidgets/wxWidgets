@@ -91,324 +91,324 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
 {
     wxString nativeDataTypeName;
 
-    wxLogMessage("\nThe following datatypes are supported by the\ndatabase you are currently connected to:");
+    wxLogMessage(wxT("\nThe following datatypes are supported by the\ndatabase you are currently connected to:"));
 #ifdef SQL_C_BINARY
     if (DataTypeSupported(pDb,SQL_C_BINARY, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_BINARY (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_BINARY (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_BIT
     if (DataTypeSupported(pDb,SQL_C_BIT, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_BIT (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_BIT (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_BOOKMARK
     if (DataTypeSupported(pDb,SQL_C_BOOKMARK, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_BOOKMARK (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_BOOKMARK (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_CHAR
     if (DataTypeSupported(pDb,SQL_C_CHAR, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_CHAR (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_CHAR (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_DATE
     if (DataTypeSupported(pDb,SQL_C_DATE, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_DATE (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_DATE (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_DEFAULT
     if (DataTypeSupported(pDb,SQL_C_DEFAULT, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_DEFAULT (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_DEFAULT (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_DOUBLE
     if (DataTypeSupported(pDb,SQL_C_DOUBLE, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_DOUBLE (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_DOUBLE (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_FLOAT
     if (DataTypeSupported(pDb,SQL_C_FLOAT, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_FLOAT (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_FLOAT (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_GUID
     if (DataTypeSupported(pDb,SQL_C_GUID, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_GUID (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_GUID (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_INTERVAL_DAY
     if (DataTypeSupported(pDb,SQL_C_INTERVAL_DAY, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_INTERVAL_DAY (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_INTERVAL_DAY (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_INTERVAL_DAY_TO_HOUR
     if (DataTypeSupported(pDb,SQL_C_INTERVAL_DAY_TO_HOUR, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_INTERVAL_DAY_TO_HOUR (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_INTERVAL_DAY_TO_HOUR (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_INTERVAL_DAY_TO_MINUTE
     if (DataTypeSupported(pDb,SQL_C_INTERVAL_DAY_TO_MINUTE, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_INTERVAL_DAY_TO_MINUTE (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_INTERVAL_DAY_TO_MINUTE (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_INTERVAL_DAY_TO_SECOND
     if (DataTypeSupported(pDb,SQL_C_INTERVAL_DAY_TO_SECOND, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_INTERVAL_DAY_TO_SECOND (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_INTERVAL_DAY_TO_SECOND (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_INTERVAL_HOUR
     if (DataTypeSupported(pDb,SQL_C_INTERVAL_HOUR, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_INTERVAL_HOUR (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_INTERVAL_HOUR (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_INTERVAL_HOUR_TO_MINUTE
     if (DataTypeSupported(pDb,SQL_C_INTERVAL_HOUR_TO_MINUTE, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_INTERVAL_HOUR_TO_MINUTE (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_INTERVAL_HOUR_TO_MINUTE (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_INTERVAL_HOUR_TO_SECOND
     if (DataTypeSupported(pDb,SQL_C_INTERVAL_HOUR_TO_SECOND, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_INTERVAL_HOUR_TO_SECOND (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_INTERVAL_HOUR_TO_SECOND (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_INTERVAL_MINUTE
     if (DataTypeSupported(pDb,SQL_C_INTERVAL_MINUTE, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_INTERVAL_MINUTE (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_INTERVAL_MINUTE (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_INTERVAL_MINUTE_TO_SECOND
     if (DataTypeSupported(pDb,SQL_C_INTERVAL_MINUTE_TO_SECOND, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_INTERVAL_MINUTE_TO_SECOND (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_INTERVAL_MINUTE_TO_SECOND (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_INTERVAL_MONTH
     if (DataTypeSupported(pDb,SQL_C_INTERVAL_MONTH, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_INTERVAL_MONTH (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_INTERVAL_MONTH (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_INTERVAL_SECOND
     if (DataTypeSupported(pDb,SQL_C_INTERVAL_SECOND, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_INTERVAL_SECOND (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_INTERVAL_SECOND (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_INTERVAL_YEAR
     if (DataTypeSupported(pDb,SQL_C_INTERVAL_YEAR, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_INTERVAL_YEAR (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_INTERVAL_YEAR (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_INTERVAL_YEAR_TO_MONTH
     if (DataTypeSupported(pDb,SQL_C_INTERVAL_YEAR_TO_MONTH, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_INTERVAL_YEAR_TO_MONTH (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_INTERVAL_YEAR_TO_MONTH (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_LONG
     if (DataTypeSupported(pDb,SQL_C_LONG, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_LONG (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_LONG (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_NUMERIC
     if (DataTypeSupported(pDb,SQL_C_NUMERIC, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_NUMERIC (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_NUMERIC (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_SBIGINT
     if (DataTypeSupported(pDb,SQL_C_SBIGINT, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_SBIGINT (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_SBIGINT (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_SHORT
     if (DataTypeSupported(pDb,SQL_C_SHORT, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_SHORT (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_SHORT (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_SLONG
     if (DataTypeSupported(pDb,SQL_C_SLONG, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_SLONG (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_SLONG (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_SSHORT
     if (DataTypeSupported(pDb,SQL_C_SSHORT, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_SSHORT (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_SSHORT (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_STINYINT
     if (DataTypeSupported(pDb,SQL_C_STINYINT, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_STINYINT (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_STINYINT (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_TIME
     if (DataTypeSupported(pDb,SQL_C_TIME, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_TIME (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_TIME (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_TIMESTAMP
     if (DataTypeSupported(pDb,SQL_C_TIMESTAMP, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_TIMESTAMP (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_TIMESTAMP (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_TINYINT
     if (DataTypeSupported(pDb,SQL_C_TINYINT, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_TINYINT (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_TINYINT (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_TYPE_DATE
     if (DataTypeSupported(pDb,SQL_C_TYPE_DATE, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_TYPE_DATE (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_TYPE_DATE (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_TYPE_TIME
     if (DataTypeSupported(pDb,SQL_C_TYPE_TIME, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_TYPE_TIME (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_TYPE_TIME (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_TYPE_TIMESTAMP
     if (DataTypeSupported(pDb,SQL_C_TYPE_TIMESTAMP, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_TYPE_TIMESTAMP (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_TYPE_TIMESTAMP (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_UBIGINT
     if (DataTypeSupported(pDb,SQL_C_UBIGINT, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_UBIGINT (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_UBIGINT (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_ULONG
     if (DataTypeSupported(pDb,SQL_C_ULONG, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_ULONG (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_ULONG (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_USHORT
     if (DataTypeSupported(pDb,SQL_C_USHORT, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_USHORT (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_USHORT (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_UTINYINT
     if (DataTypeSupported(pDb,SQL_C_UTINYINT, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_UTINYINT (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_UTINYINT (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_C_VARBOOKMARK
     if (DataTypeSupported(pDb,SQL_C_VARBOOKMARK, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_VARBOOKMARK (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_VARBOOKMARK (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -417,96 +417,96 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
 #ifdef SQL_DATE
     if (DataTypeSupported(pDb,SQL_DATE, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_DATE (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_DATE (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_INTERVAL
     if (DataTypeSupported(pDb,SQL_INTERVAL, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_INTERVAL (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_INTERVAL (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_TIME
     if (DataTypeSupported(pDb,SQL_TIME, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_TIME (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_TIME (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_TIMESTAMP
     if (DataTypeSupported(pDb,SQL_TIMESTAMP, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_TIMESTAMP (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_TIMESTAMP (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_LONGVARCHAR
     if (DataTypeSupported(pDb,SQL_LONGVARCHAR, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_LONGVARCHAR (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_LONGVARCHAR (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_BINARY
     if (DataTypeSupported(pDb,SQL_BINARY, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_BINARY (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_BINARY (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_VARBINARY
     if (DataTypeSupported(pDb,SQL_VARBINARY, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_VARBINARY (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_VARBINARY (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_LONGVARBINARY
     if (DataTypeSupported(pDb,SQL_LONGVARBINARY, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_LOGVARBINARY (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_LOGVARBINARY (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_BIGINT
     if (DataTypeSupported(pDb,SQL_BIGINT, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_BIGINT (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_BIGINT (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_TINYINT
     if (DataTypeSupported(pDb,SQL_TINYINT, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_TINYINT (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_TINYINT (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_BIT
     if (DataTypeSupported(pDb,SQL_BIT, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_BIT (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_BIT (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_GUID
     if (DataTypeSupported(pDb,SQL_GUID, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_GUID (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_GUID (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -514,80 +514,80 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
 #ifdef SQL_CHAR
     if (DataTypeSupported(pDb,SQL_CHAR, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_CHAR (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_CHAR (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_INTEGER
     if (DataTypeSupported(pDb,SQL_INTEGER, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_INTEGER (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_INTEGER (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_SMALLINT
     if (DataTypeSupported(pDb,SQL_SMALLINT, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_SAMLLINT (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_SAMLLINT (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_REAL
     if (DataTypeSupported(pDb,SQL_REAL, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_REAL (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_REAL (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_DOUBLE
     if (DataTypeSupported(pDb,SQL_DOUBLE, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_DOUBLE (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_DOUBLE (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_NUMERIC
     if (DataTypeSupported(pDb,SQL_NUMERIC, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_NUMERIC (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_NUMERIC (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_DATE
     if (DataTypeSupported(pDb,SQL_DATE, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_DATE (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_DATE (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_TIME
     if (DataTypeSupported(pDb,SQL_TIME, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_TIME (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_TIME (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_TIMESTAMP
     if (DataTypeSupported(pDb,SQL_TIMESTAMP, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_TIMESTAMP (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_TIMESTAMP (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 #ifdef SQL_VARCHAR
     if (DataTypeSupported(pDb,SQL_VARCHAR, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_VARCHAR (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_VARCHAR (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
@@ -596,13 +596,13 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
 #ifdef SQL_C_TCHAR
     if (DataTypeSupported(pDb,SQL_C_TCHAR, &nativeDataTypeName))
     {
-        nativeDataTypeName = "SQL_C_TCHAR (" + nativeDataTypeName;
-        nativeDataTypeName += ")";
+        nativeDataTypeName = wxT("SQL_C_TCHAR (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")");
         wxLogMessage(nativeDataTypeName);
     }
 #endif
 
-    wxLogMessage("\n");
+    wxLogMessage(wxT("\n"));
 }  // CheckSupportForAllDataTypes()
 
 
@@ -619,7 +619,7 @@ bool DatabaseDemoApp::OnInit()
 
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
-    file_menu->Append(FILE_CREATE, wxT("&Create CONTACT table"));
+    file_menu->Append(FILE_CREATE_ID, wxT("&Create CONTACT table"));
     file_menu->Append(FILE_RECREATE_TABLE, wxT("&Recreate CONTACT table"));
     file_menu->Append(FILE_RECREATE_INDEXES, wxT("&Recreate CONTACT indexes"));
 #if wxUSE_NEW_GRID
@@ -699,11 +699,11 @@ bool DatabaseDemoApp::OnInit()
 /*
 * Remove CR or CR/LF from a character string.
 */
-char* wxRemoveLineTerminator(char* aString)
+wxChar* wxRemoveLineTerminator(wxChar* aString)
 {
-    int len = strlen(aString);
-    while (len > 0 && (aString[len-1] == '\r' || aString[len-1] == '\n')) {
-        aString[len-1] = '\0';
+    int len = wxStrlen(aString);
+    while (len > 0 && (aString[len-1] == wxT('\r') || aString[len-1] == wxT('\n'))) {
+        aString[len-1] = wxT('\0');
         len--;
     }
     return aString;
@@ -713,7 +713,7 @@ char* wxRemoveLineTerminator(char* aString)
 bool DatabaseDemoApp::ReadParamFile(Cparameters &params)
 {
     FILE *paramFile;
-    if ((paramFile = fopen(PARAM_FILENAME, wxT("r"))) == NULL)
+    if ((paramFile = wxFopen(PARAM_FILENAME, wxT("r"))) == NULL)
     {
         wxString tStr;
         tStr.Printf(wxT("Unable to open the parameter file '%s' for reading.\n\nYou must specify the data source, user name, and\npassword that will be used and save those settings."),PARAM_FILENAME);
@@ -723,19 +723,19 @@ bool DatabaseDemoApp::ReadParamFile(Cparameters &params)
     }
 
     wxChar buffer[1000+1];
-    fgets(buffer, sizeof(params.ODBCSource), paramFile);
+    wxFgets(buffer, sizeof(params.ODBCSource), paramFile);
     wxRemoveLineTerminator(buffer);
     wxStrcpy(params.ODBCSource,buffer);
 
-    fgets(buffer, sizeof(params.UserName), paramFile);
+    wxFgets(buffer, sizeof(params.UserName), paramFile);
     wxRemoveLineTerminator(buffer);
     wxStrcpy(params.UserName,buffer);
 
-    fgets(buffer, sizeof(params.Password), paramFile);
+    wxFgets(buffer, sizeof(params.Password), paramFile);
     wxRemoveLineTerminator(buffer);
     wxStrcpy(params.Password,buffer);
 
-    fgets(buffer, sizeof(params.DirPath), paramFile);
+    wxFgets(buffer, sizeof(params.DirPath), paramFile);
     wxRemoveLineTerminator(buffer);
     wxStrcpy(params.DirPath,buffer);
 
@@ -745,10 +745,10 @@ bool DatabaseDemoApp::ReadParamFile(Cparameters &params)
 }  // DatabaseDemoApp::ReadParamFile()
 
 
-bool DatabaseDemoApp::WriteParamFile(Cparameters &params)
+bool DatabaseDemoApp::WriteParamFile(Cparameters &WXUNUSED(params))
 {
     FILE *paramFile;
-    if ((paramFile = fopen(PARAM_FILENAME, wxT("wt"))) == NULL)
+    if ((paramFile = wxFopen(PARAM_FILENAME, wxT("wt"))) == NULL)
     {
         wxString tStr;
         tStr.Printf(wxT("Unable to write/overwrite '%s'."),PARAM_FILENAME);
@@ -756,14 +756,14 @@ bool DatabaseDemoApp::WriteParamFile(Cparameters &params)
         return FALSE;
     }
 
-    fputs(wxGetApp().params.ODBCSource, paramFile);
-    fputc(wxT('\n'), paramFile);
-    fputs(wxGetApp().params.UserName, paramFile);
-    fputc(wxT('\n'), paramFile);
-    fputs(wxGetApp().params.Password, paramFile);
-    fputc(wxT('\n'), paramFile);
-    fputs(wxGetApp().params.DirPath, paramFile);
-    fputc(wxT('\n'), paramFile);
+    wxFputs(wxGetApp().params.ODBCSource, paramFile);
+    wxFputc(wxT('\n'), paramFile);
+    wxFputs(wxGetApp().params.UserName, paramFile);
+    wxFputc(wxT('\n'), paramFile);
+    wxFputs(wxGetApp().params.Password, paramFile);
+    wxFputc(wxT('\n'), paramFile);
+    wxFputs(wxGetApp().params.DirPath, paramFile);
+    wxFputc(wxT('\n'), paramFile);
     fclose(paramFile);
 
     return TRUE;
@@ -790,7 +790,7 @@ void DatabaseDemoApp::CreateDataTable(bool recreate)
         wxEndBusyCursor();
         wxString tStr;
         tStr = wxT("Error creating CONTACTS table.\nTable was not created.\n\n");
-        wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),Contact->GetDb(),__FILE__,__LINE__),
+        wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),Contact->GetDb(),__TFILE__,__LINE__),
                      wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
 
         success = FALSE;
@@ -802,7 +802,7 @@ void DatabaseDemoApp::CreateDataTable(bool recreate)
             wxEndBusyCursor();
             wxString tStr;
             tStr = wxT("Error creating CONTACTS indexes.\nIndexes will be unavailable.\n\n");
-            wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),Contact->GetDb(),__FILE__,__LINE__),
+            wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),Contact->GetDb(),__TFILE__,__LINE__),
                          wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
 
             success = FALSE;
@@ -817,7 +817,7 @@ void DatabaseDemoApp::CreateDataTable(bool recreate)
 
 
 BEGIN_EVENT_TABLE(DatabaseDemoFrame, wxFrame)
-    EVT_MENU(FILE_CREATE, DatabaseDemoFrame::OnCreate)
+    EVT_MENU(FILE_CREATE_ID, DatabaseDemoFrame::OnCreate)
     EVT_MENU(FILE_RECREATE_TABLE, DatabaseDemoFrame::OnRecreateTable)
     EVT_MENU(FILE_RECREATE_INDEXES, DatabaseDemoFrame::OnRecreateIndexes)
 #if wxUSE_NEW_GRID
@@ -849,19 +849,19 @@ DatabaseDemoFrame::~DatabaseDemoFrame()
 }  // DatabaseDemoFrame destructor
 
 
-void DatabaseDemoFrame::OnCreate(wxCommandEvent& event)
+void DatabaseDemoFrame::OnCreate(wxCommandEvent& WXUNUSED(event))
 {
     wxGetApp().CreateDataTable(FALSE);
 }  // DatabaseDemoFrame::OnCreate()
 
 
-void DatabaseDemoFrame::OnRecreateTable(wxCommandEvent& event)
+void DatabaseDemoFrame::OnRecreateTable(wxCommandEvent& WXUNUSED(event))
 {
     wxGetApp().CreateDataTable(TRUE);
 }  // DatabaseDemoFrame::OnRecreate()
 
 
-void DatabaseDemoFrame::OnRecreateIndexes(wxCommandEvent& event)
+void DatabaseDemoFrame::OnRecreateIndexes(wxCommandEvent& WXUNUSED(event))
 {
     wxGetApp().Contact->GetDb()->RollbackTrans();  // Make sure the current cursor is in a known/stable state
 
@@ -871,7 +871,7 @@ void DatabaseDemoFrame::OnRecreateIndexes(wxCommandEvent& event)
             wxEndBusyCursor();
         wxString tStr;
         tStr = wxT("Error creating CONTACTS indexes.\nNew indexes will be unavailable.\n\n");
-        wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__FILE__,__LINE__),
+        wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__TFILE__,__LINE__),
                      wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
 
     }
@@ -882,7 +882,7 @@ void DatabaseDemoFrame::OnRecreateIndexes(wxCommandEvent& event)
 
 
 #if wxUSE_NEW_GRID
-void DatabaseDemoFrame::OnDbGridTable(wxCommandEvent& )
+void DatabaseDemoFrame::OnDbGridTable(wxCommandEvent& WXUNUSED(event))
 {
     DbGridFrame *frame = new DbGridFrame(this);
     if (frame->Initialize())
@@ -892,13 +892,13 @@ void DatabaseDemoFrame::OnDbGridTable(wxCommandEvent& )
 }
 #endif
 
-void DatabaseDemoFrame::OnExit(wxCommandEvent& event)
+void DatabaseDemoFrame::OnExit(wxCommandEvent& WXUNUSED(event))
 {
     Close();
 }  // DatabaseDemoFrame::OnExit()
 
 
-void DatabaseDemoFrame::OnEditParameters(wxCommandEvent& event)
+void DatabaseDemoFrame::OnEditParameters(wxCommandEvent& WXUNUSED(event))
 {
     if ((pEditorDlg->mode != mCreate) && (pEditorDlg->mode != mEdit))
         BuildParameterDialog(this);
@@ -907,7 +907,7 @@ void DatabaseDemoFrame::OnEditParameters(wxCommandEvent& event)
 }  // DatabaseDemoFrame::OnEditParameters()
 
 
-void DatabaseDemoFrame::OnAbout(wxCommandEvent& event)
+void DatabaseDemoFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxMessageBox(wxT("wxWindows sample program for database classes\n\nContributed on 27 July 1998"),wxT("About..."),wxOK | wxICON_INFORMATION);
 }  // DatabaseDemoFrame::OnAbout()
@@ -1039,7 +1039,7 @@ Ccontact::~Ccontact()
             wxString tStr;
             tStr = wxT("Unable to Free the Ccontact data table handle\n\n");
 
-            wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__FILE__,__LINE__),
+            wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__TFILE__,__LINE__),
                          wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
         }
     }
@@ -1082,14 +1082,14 @@ bool Ccontact::CreateIndexes(bool recreate)
 
     bool        Ok = TRUE;
 
-    wxStrcpy(idxDef[0].ColName, "IS_DEV");
+    wxStrcpy(idxDef[0].ColName, wxT("IS_DEV"));
     idxDef[0].Ascending = TRUE;
 
-    wxStrcpy(idxDef[1].ColName, "NAME");
+    wxStrcpy(idxDef[1].ColName, wxT("NAME"));
     idxDef[1].Ascending = TRUE;
 
     indexName = GetTableName();
-    indexName += "_IDX1";
+    indexName += wxT("_IDX1");
     Ok = CreateIndex(indexName.c_str(), TRUE, 2, idxDef, recreate);
 
     return Ok;
@@ -1174,7 +1174,7 @@ void CeditorDlg::OnButton(wxCommandEvent &event)
 }  // CeditorDlg::OnButton()
 
 
-void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
+void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& WXUNUSED(event))
 {
     wxString widgetName;
     
@@ -1295,7 +1295,7 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
         {
             wxString tStr;
             tStr = wxT("ODBC error during Query()\n\n");
-            wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__FILE__,__LINE__),
+            wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__TFILE__,__LINE__),
                          wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
             
             SetMode(mView);
@@ -1341,7 +1341,7 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
         if (wxStrcmp(qryWhere, (const wxChar*) wxGetApp().Contact->qryWhereStr))
         {
             wxGetApp().Contact->whereStr.Empty();
-            wxGetApp().Contact->SetOrderByClause("NAME");
+            wxGetApp().Contact->SetOrderByClause(wxT("NAME"));
 
             if (wxGetApp().Contact->GetDb()->Dbms() != dbmsPOSTGRES &&
                 wxGetApp().Contact->GetDb()->Dbms() != dbmsMY_SQL)
@@ -1365,7 +1365,7 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
             {
                 wxString tStr;
                 tStr = wxT("ODBC error during Query()\n\n");
-                wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__FILE__,__LINE__),
+                wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__TFILE__,__LINE__),
                              wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
 
                 return;
@@ -1402,7 +1402,7 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
         {
             wxString tStr;
             tStr = wxT("ODBC error during Query()\n\n");
-            wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__FILE__,__LINE__),
+            wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__TFILE__,__LINE__),
                          wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
             return;
         }
@@ -1442,23 +1442,23 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
     if (widgetName == pDataTypesBtn->GetName())
     {
         CheckSupportForAllDataTypes(wxGetApp().READONLY_DB);
-        wxMessageBox("Support datatypes was dumped to stdout.");
+        wxMessageBox(wxT("Support datatypes was dumped to stdout."));
         return;
     }  // Data types Button
 
     if (widgetName == pDbDiagsBtn->GetName())
     {
         DisplayDbDiagnostics(wxGetApp().READONLY_DB);
-        wxMessageBox("Diagnostics info was dumped to stdout.");
+        wxMessageBox(wxT("Diagnostics info was dumped to stdout."));
         return;
     }
 
     if (widgetName == pCatalogBtn->GetName())
     {
-        if (wxGetApp().Contact->GetDb()->Catalog("","catalog.txt"))
-            wxMessageBox("The file 'catalog.txt' was created.");
+        if (wxGetApp().Contact->GetDb()->Catalog(wxT(""),wxT("catalog.txt")))
+            wxMessageBox(wxT("The file 'catalog.txt' was created."));
         else
-            wxMessageBox("Creation of the file 'catalog.txt' was failed.");
+            wxMessageBox(wxT("Creation of the file 'catalog.txt' was failed."));
         return;
     }
 
@@ -1516,7 +1516,7 @@ bool CeditorDlg::Initialize()
             wxString tStr;
             tStr.Printf(wxT("Unable to open the table '%s' (likely due to\ninsufficient privileges of the logged in user).\n\n"),CONTACT_TABLE_NAME);
 
-            wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__FILE__,__LINE__),
+            wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__TFILE__,__LINE__),
                          wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
         }
         else 
@@ -1527,7 +1527,7 @@ bool CeditorDlg::Initialize()
         {
             wxString tStr;
             tStr.Printf(wxT("Unable to open the table '%s' as the table\ndoes not appear to exist in the tablespace available\nto the currently logged in user.\n\n"),CONTACT_TABLE_NAME);
-            wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__FILE__,__LINE__),
+            wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__TFILE__,__LINE__),
                          wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
         }
 
@@ -1626,7 +1626,7 @@ bool CeditorDlg::Initialize()
     {
         wxString tStr;
         tStr = wxT("ODBC error during Query()\n\n");
-        wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__FILE__,__LINE__),
+        wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__TFILE__,__LINE__),
                      wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
         return FALSE;
     }
@@ -1773,9 +1773,9 @@ bool CeditorDlg::GetData()
         first   = tStr.First(wxT('/'));
         second  = tStr.Last(wxT('/'));
 
-        mm      = atoi(tStr.SubString(0,first));
-        dd      = atoi(tStr.SubString(first+1,second));
-        yyyy    = atoi(tStr.SubString(second+1,tStr.Length()-1));
+        mm      = wxAtoi(tStr.SubString(0,first));
+        dd      = wxAtoi(tStr.SubString(first+1,second));
+        yyyy    = wxAtoi(tStr.SubString(second+1,tStr.Length()-1));
 
         invalid = !(mm && dd && yyyy);
     }
@@ -1833,8 +1833,8 @@ bool CeditorDlg::GetData()
     wxStrcpy(wxGetApp().Contact->Country,pCountryTxt->GetValue());
     wxStrcpy(wxGetApp().Contact->PostalCode,pPostalCodeTxt->GetValue());
 
-    wxGetApp().Contact->Contributions = atoi(pContribTxt->GetValue());
-    wxGetApp().Contact->LinesOfCode = atol(pLinesTxt->GetValue());
+    wxGetApp().Contact->Contributions = wxAtoi(pContribTxt->GetValue());
+    wxGetApp().Contact->LinesOfCode = wxAtol(pLinesTxt->GetValue());
 
     wxGetApp().Contact->NativeLanguage = (enum Language) pNativeLangChoice->GetSelection();
     wxGetApp().Contact->IsDeveloper = pDeveloperRadio->GetSelection() > 0;
@@ -1878,7 +1878,7 @@ bool CeditorDlg::Save()
                 {
                     wxString tStr;
                     tStr = wxT("A duplicate key value already exists in the table.\nUnable to save record\n\n");
-                    wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__FILE__,__LINE__),
+                    wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__TFILE__,__LINE__),
                                  wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
                 }
                 else
@@ -1886,7 +1886,7 @@ bool CeditorDlg::Save()
                     // Some other unexpected error occurred
                     wxString tStr;
                     tStr = wxT("Database insert failed\n\n");
-                    wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__FILE__,__LINE__),
+                    wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__TFILE__,__LINE__),
                                  wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
                 }
             }
@@ -1894,12 +1894,12 @@ bool CeditorDlg::Save()
         else  // mode == mEdit
         {
             wxGetApp().Contact->GetDb()->RollbackTrans();
-            wxGetApp().Contact->whereStr.Printf("NAME = '%s'",saveName.c_str());
+            wxGetApp().Contact->whereStr.Printf(wxT("NAME = '%s'"),saveName.c_str());
             if (!wxGetApp().Contact->UpdateWhere(wxGetApp().Contact->whereStr))
             {
                 wxString tStr;
                 tStr = wxT("Database update failed\n\n");
-                wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__FILE__,__LINE__),
+                wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__TFILE__,__LINE__),
                              wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
                 failed = TRUE;
             }
@@ -2006,7 +2006,7 @@ bool CeditorDlg::GetRec(const wxString &whereStr)
     {
         wxString tStr;
         tStr = wxT("ODBC error during Query()\n\n");
-        wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__FILE__,__LINE__),
+        wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__TFILE__,__LINE__),
                      wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
 
         return(FALSE);
@@ -2101,7 +2101,7 @@ void CparameterDlg::OnButton( wxCommandEvent &event )
 }
 
 
-void CparameterDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
+void CparameterDlg::OnCommand(wxWindow& win, wxCommandEvent& WXUNUSED(event))
 {
     wxString widgetName;
     
@@ -2320,7 +2320,7 @@ CqueryDlg::CqueryDlg(wxWindow *parent, wxDb *pDb, wxChar *tblName[],
         wxEndBusyCursor();
         wxString tStr;
         tStr = wxT("ODBC error during GetColumns()\n\n");
-        wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__FILE__,__LINE__),
+        wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__TFILE__,__LINE__),
                      wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
         return;
     }
@@ -2374,7 +2374,7 @@ void CqueryDlg::OnButton(wxCommandEvent &event)
 }  // CqueryDlg::OnButton()
 
 
-void CqueryDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
+void CqueryDlg::OnCommand(wxWindow& win, wxCommandEvent& WXUNUSED(event))
 {
     // Widget pointers won't be set when the dialog is constructed.
     // Control is passed through this function once for each widget on
@@ -2577,7 +2577,7 @@ void CqueryDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
 }  // CqueryDlg::OnCommand
 
 
-void CqueryDlg::OnCloseWindow(wxCloseEvent& event)
+void CqueryDlg::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
     // Clean up
     wxDELETEA(colInf);
@@ -2723,7 +2723,7 @@ void CqueryDlg::ProcessCountBtn()
         {
             wxString tStr;
             tStr = wxT("ODBC error during Open()\n\n");
-            wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__FILE__,__LINE__),
+            wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__TFILE__,__LINE__),
                          wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
             return;
         }
@@ -2789,54 +2789,54 @@ void DisplayDbDiagnostics(wxDb *pDb)
 
     s = langDBINF_DB_NAME;
     s += pDb->dbInf.dbmsName;
-    s += "\n";
+    s += wxT("\n");
 
     s += langDBINF_DB_VER;
     s += pDb->dbInf.dbmsVer;
-    s += "\n";
+    s += wxT("\n");
 
     s += langDBINF_DRIVER_NAME;
     s += pDb->dbInf.driverName;
-    s += "\n";
+    s += wxT("\n");
 
     s += langDBINF_DRIVER_ODBC_VER;
     s += pDb->dbInf.odbcVer;
-    s += "\n";
+    s += wxT("\n");
 
     s += langDBINF_DRIVER_MGR_ODBC_VER;
     s += pDb->dbInf.drvMgrOdbcVer;
-    s += "\n";
+    s += wxT("\n");
 
     s += langDBINF_DRIVER_VER;
     s += pDb->dbInf.driverVer;
-    s += "\n";
+    s += wxT("\n");
 
     s += langDBINF_SERVER_NAME;
     s += pDb->dbInf.serverName;
-    s += "\n";
+    s += wxT("\n");
 
     s += langDBINF_FILENAME;
     s += pDb->dbInf.databaseName;
-    s += "\n";
+    s += wxT("\n");
 
     s += langDBINF_OUTER_JOINS;
     s += pDb->dbInf.outerJoins;
-    s += "\n";
+    s += wxT("\n");
 
     s += langDBINF_STORED_PROC;
     s += pDb->dbInf.procedureSupport;
-    s += "\n";
+    s += wxT("\n");
 
     if (pDb->dbInf.maxConnections)
-        t.sprintf("%s%d\n", langDBINF_MAX_HDBC, pDb->dbInf.maxConnections);
+        t.sprintf(wxT("%s%d\n"), langDBINF_MAX_HDBC, pDb->dbInf.maxConnections);
     else
-        t.sprintf("%s%s\n", langDBINF_MAX_HDBC, langDBINF_UNLIMITED);
+        t.sprintf(wxT("%s%s\n"), langDBINF_MAX_HDBC, langDBINF_UNLIMITED);
     s += t;
 
     if (pDb->dbInf.maxStmts)
-        t.sprintf("%s%d\n", langDBINF_MAX_HSTMT, pDb->dbInf.maxStmts);
+        t.sprintf(wxT("%s%d\n"), langDBINF_MAX_HSTMT, pDb->dbInf.maxStmts);
     else
-        t.sprintf("%s%s\n", langDBINF_MAX_HSTMT, langDBINF_UNLIMITED);
+        t.sprintf(wxT("%s%s\n"), langDBINF_MAX_HSTMT, langDBINF_UNLIMITED);
     s += t;
 
     s += langDBINF_API_LVL;
@@ -2846,7 +2846,7 @@ void DisplayDbDiagnostics(wxDb *pDb)
         case SQL_OAC_LEVEL1:    s += langDBINF_LEVEL1;  break;
         case SQL_OAC_LEVEL2:    s += langDBINF_LEVEL2;  break;
     }
-    s += "\n";
+    s += wxT("\n");
 
     s += langDBINF_CLI_LVL;
     switch(pDb->dbInf.cliConfLvl)
@@ -2854,7 +2854,7 @@ void DisplayDbDiagnostics(wxDb *pDb)
         case SQL_OSCC_NOT_COMPLIANT:    s += langDBINF_NOT_COMPLIANT;   break;
         case SQL_OSCC_COMPLIANT:        s += langDBINF_COMPLIANT;           break;
     }
-    s += "\n";
+    s += wxT("\n");
 
     s += langDBINF_SQL_LVL;
     switch(pDb->dbInf.sqlConfLvl)
@@ -2863,7 +2863,7 @@ void DisplayDbDiagnostics(wxDb *pDb)
         case SQL_OSC_CORE:      s += langDBINF_CORE_GRAMMAR;    break;
         case SQL_OSC_EXTENDED:  s += langDBINF_EXT_GRAMMAR; break;
     }
-    s += "\n";
+    s += wxT("\n");
 
     s += langDBINF_COMMIT_BEHAVIOR;
     switch(pDb->dbInf.cursorCommitBehavior)
@@ -2872,7 +2872,7 @@ void DisplayDbDiagnostics(wxDb *pDb)
         case SQL_CB_CLOSE:      s += langDBINF_CLOSE_CURSORS;       break;
         case SQL_CB_PRESERVE:   s += langDBINF_PRESERVE_CURSORS;    break;
     }
-    s += "\n";
+    s += wxT("\n");
 
     s += langDBINF_ROLLBACK_BEHAVIOR;
     switch(pDb->dbInf.cursorRollbackBehavior)
@@ -2881,7 +2881,7 @@ void DisplayDbDiagnostics(wxDb *pDb)
         case SQL_CB_CLOSE:      s += langDBINF_CLOSE_CURSORS;       break;
         case SQL_CB_PRESERVE:   s += langDBINF_PRESERVE_CURSORS;    break;
     }
-    s += "\n";
+    s += wxT("\n");
 
     s += langDBINF_SUPP_NOT_NULL;
     switch(pDb->dbInf.supportNotNullClause)
@@ -2889,11 +2889,11 @@ void DisplayDbDiagnostics(wxDb *pDb)
         case SQL_NNC_NULL:      s += langNO;    break;
         case SQL_NNC_NON_NULL:  s += langYES;   break;
     }
-    s += "\n";
+    s += wxT("\n");
 
     s += langDBINF_SUPP_IEF;
     s += pDb->dbInf.supportIEF;
-    s += "\n";
+    s += wxT("\n");
 
     // DEFAULT setting for "Transaction Isolation Level"
     s += langDBINF_TXN_ISOLATION;
@@ -2907,7 +2907,7 @@ void DisplayDbDiagnostics(wxDb *pDb)
         case SQL_TXN_VERSIONING:            s += langDBINF_VERSIONING;          break;
 #endif
     }
-    s += "\n";
+    s += wxT("\n");
 
     // CURRENT setting for "Transaction Isolation Level"
     long txnIsoLvl;
@@ -2925,7 +2925,7 @@ void DisplayDbDiagnostics(wxDb *pDb)
 #endif
         }
     }
-    s += "\n";
+    s += wxT("\n");
 
 #ifdef __VMS__
 #pragma message disable incboodep
@@ -2935,108 +2935,108 @@ void DisplayDbDiagnostics(wxDb *pDb)
     if (pDb->dbInf.txnIsolationOptions & SQL_TXN_READ_UNCOMMITTED)
         {s += langDBINF_READ_UNCOMMITTED; comma++;}
     if (pDb->dbInf.txnIsolationOptions & SQL_TXN_READ_COMMITTED)
-        {if (comma++) s += ", "; s += langDBINF_READ_COMMITTED;}
+        {if (comma++) s += wxT(", "); s += langDBINF_READ_COMMITTED;}
     if (pDb->dbInf.txnIsolationOptions & SQL_TXN_REPEATABLE_READ)
-        {if (comma++) s += ", "; s += langDBINF_REPEATABLE_READ;}
+        {if (comma++) s += wxT(", "); s += langDBINF_REPEATABLE_READ;}
     if (pDb->dbInf.txnIsolationOptions & SQL_TXN_SERIALIZABLE)
-        {if (comma++) s += ", "; s += langDBINF_SERIALIZABLE;}
+        {if (comma++) s += wxT(", "); s += langDBINF_SERIALIZABLE;}
 #ifdef ODBC_V20
     if (pDb->dbInf.txnIsolationOptions & SQL_TXN_VERSIONING)
-        {if (comma++) s += ", "; s += langDBINF_VERSIONING;}
+        {if (comma++) s += wxT(", "); s += langDBINF_VERSIONING;}
 #endif
-    s += "\n";
+    s += wxT("\n");
 
     comma = FALSE;
     s += langDBINF_FETCH_DIRS;
     if (pDb->dbInf.fetchDirections & SQL_FD_FETCH_NEXT)
         {s += langDBINF_NEXT; comma++;}
     if (pDb->dbInf.fetchDirections & SQL_FD_FETCH_PRIOR)
-        {if (comma++) s += ", "; s += langDBINF_PREV;}
+        {if (comma++) s += wxT(", "); s += langDBINF_PREV;}
     if (pDb->dbInf.fetchDirections & SQL_FD_FETCH_FIRST)
-        {if (comma++) s += ", "; s += langDBINF_FIRST;}
+        {if (comma++) s += wxT(", "); s += langDBINF_FIRST;}
     if (pDb->dbInf.fetchDirections & SQL_FD_FETCH_LAST)
-        {if (comma++) s += ", "; s += langDBINF_LAST;}
+        {if (comma++) s += wxT(", "); s += langDBINF_LAST;}
     if (pDb->dbInf.fetchDirections & SQL_FD_FETCH_ABSOLUTE)
-        {if (comma++) s += ", "; s += langDBINF_ABSOLUTE;}
+        {if (comma++) s += wxT(", "); s += langDBINF_ABSOLUTE;}
     if (pDb->dbInf.fetchDirections & SQL_FD_FETCH_RELATIVE)
-        {if (comma++) s += ", "; s += langDBINF_RELATIVE;}
+        {if (comma++) s += wxT(", "); s += langDBINF_RELATIVE;}
 #ifdef ODBC_V20
     if (pDb->dbInf.fetchDirections & SQL_FD_FETCH_RESUME)
-        {if (comma++) s += ", "; s += langDBINF_RESUME;}
+        {if (comma++) s += wxT(", "); s += langDBINF_RESUME;}
 #endif
     if (pDb->dbInf.fetchDirections & SQL_FD_FETCH_BOOKMARK)
-        {if (comma++) s += ", "; s += langDBINF_BOOKMARK;}
-    s += "\n";
+        {if (comma++) s += wxT(", "); s += langDBINF_BOOKMARK;}
+    s += wxT("\n");
 
     comma = FALSE;
     s += langDBINF_LOCK_TYPES;
     if (pDb->dbInf.lockTypes & SQL_LCK_NO_CHANGE)
         {s += langDBINF_NO_CHANGE; comma++;}
     if (pDb->dbInf.lockTypes & SQL_LCK_EXCLUSIVE)
-        {if (comma++) s += ", "; s += langDBINF_EXCLUSIVE;}
+        {if (comma++) s += wxT(", "); s += langDBINF_EXCLUSIVE;}
     if (pDb->dbInf.lockTypes & SQL_LCK_UNLOCK)
-        {if (comma++) s += ", "; s += langDBINF_UNLOCK;}
-    s += "\n";
+        {if (comma++) s += wxT(", "); s += langDBINF_UNLOCK;}
+    s += wxT("\n");
 
     comma = FALSE;
     s += langDBINF_POS_OPERS;
     if (pDb->dbInf.posOperations & SQL_POS_POSITION)
         {s += langDBINF_POSITION; comma++;}
     if (pDb->dbInf.posOperations & SQL_POS_REFRESH)
-        {if (comma++) s += ", "; s += langDBINF_REFRESH;}
+        {if (comma++) s += wxT(", "); s += langDBINF_REFRESH;}
     if (pDb->dbInf.posOperations & SQL_POS_UPDATE)
-        {if (comma++) s += ", "; s += langDBINF_UPD;}
+        {if (comma++) s += wxT(", "); s += langDBINF_UPD;}
     if (pDb->dbInf.posOperations & SQL_POS_DELETE)
-        {if (comma++) s += ", "; s += langDBINF_DEL;}
+        {if (comma++) s += wxT(", "); s += langDBINF_DEL;}
     if (pDb->dbInf.posOperations & SQL_POS_ADD)
-        {if (comma++) s += ", "; s += langDBINF_ADD;}
-    s += "\n";
+        {if (comma++) s += wxT(", "); s += langDBINF_ADD;}
+    s += wxT("\n");
 
     comma = FALSE;
     s += langDBINF_POS_STMTS;
     if (pDb->dbInf.posStmts & SQL_PS_POSITIONED_DELETE)
         {s += langDBINF_POS_DEL; comma++;}
     if (pDb->dbInf.posStmts & SQL_PS_POSITIONED_UPDATE)
-        {if (comma++) s += ", "; s += langDBINF_POS_UPD;}
+        {if (comma++) s += wxT(", "); s += langDBINF_POS_UPD;}
     if (pDb->dbInf.posStmts & SQL_PS_SELECT_FOR_UPDATE)
-        {if (comma++) s += ", "; s += langDBINF_SELECT_FOR_UPD;}
-    s += "\n";
+        {if (comma++) s += wxT(", "); s += langDBINF_SELECT_FOR_UPD;}
+    s += wxT("\n");
 
     comma = FALSE;
     s += langDBINF_SCROLL_CONCURR;
     if (pDb->dbInf.scrollConcurrency & SQL_SCCO_READ_ONLY)
         {s += langDBINF_READ_ONLY; comma++;}
     if (pDb->dbInf.scrollConcurrency & SQL_SCCO_LOCK)
-        {if (comma++) s += ", "; s += langDBINF_LOCK;}
+        {if (comma++) s += wxT(", "); s += langDBINF_LOCK;}
     if (pDb->dbInf.scrollConcurrency & SQL_SCCO_OPT_ROWVER)
-        {if (comma++) s += ", "; s += langDBINF_OPT_ROWVER;}
+        {if (comma++) s += wxT(", "); s += langDBINF_OPT_ROWVER;}
     if (pDb->dbInf.scrollConcurrency & SQL_SCCO_OPT_VALUES)
-        {if (comma++) s += ", "; s += langDBINF_OPT_VALUES;}
-    s += "\n";
+        {if (comma++) s += wxT(", "); s += langDBINF_OPT_VALUES;}
+    s += wxT("\n");
 
     comma = FALSE;
     s += langDBINF_SCROLL_OPTS;
     if (pDb->dbInf.scrollOptions & SQL_SO_FORWARD_ONLY)
         {s += langDBINF_FWD_ONLY; comma++;}
     if (pDb->dbInf.scrollOptions & SQL_SO_STATIC)
-        {if (comma++) s += ", "; s += langDBINF_STATIC;}
+        {if (comma++) s += wxT(", "); s += langDBINF_STATIC;}
     if (pDb->dbInf.scrollOptions & SQL_SO_KEYSET_DRIVEN)
-        {if (comma++) s += ", "; s += langDBINF_KEYSET_DRIVEN;}
+        {if (comma++) s += wxT(", "); s += langDBINF_KEYSET_DRIVEN;}
     if (pDb->dbInf.scrollOptions & SQL_SO_DYNAMIC)
-        {if (comma++) s += ", "; s += langDBINF_DYNAMIC;}
+        {if (comma++) s += wxT(", "); s += langDBINF_DYNAMIC;}
     if (pDb->dbInf.scrollOptions & SQL_SO_MIXED)
-        {if (comma++) s += ", "; s += langDBINF_MIXED;}
-    s += "\n";
+        {if (comma++) s += wxT(", "); s += langDBINF_MIXED;}
+    s += wxT("\n");
 
     comma = FALSE;
     s += langDBINF_STATIC_SENS;
     if (pDb->dbInf.staticSensitivity & SQL_SS_ADDITIONS)
         {s += langDBINF_ADDITIONS; comma++;}
     if (pDb->dbInf.staticSensitivity & SQL_SS_DELETIONS)
-        {if (comma++) s += ", "; s += langDBINF_DELETIONS;}
+        {if (comma++) s += wxT(", "); s += langDBINF_DELETIONS;}
     if (pDb->dbInf.staticSensitivity & SQL_SS_UPDATES)
-        {if (comma++) s += ", "; s += langDBINF_UPDATES;}
-    s += "\n";
+        {if (comma++) s += wxT(", "); s += langDBINF_UPDATES;}
+    s += wxT("\n");
 #ifdef __VMS__
 #pragma message enable incboodep
 #endif
@@ -3051,69 +3051,69 @@ void DisplayDbDiagnostics(wxDb *pDb)
         case SQL_TC_DDL_IGNORE: s += langDBINF_DDL_IGNORE;      break;
         case SQL_TC_ALL:            s += langDBINF_DDL_AND_DML; break;
     }
-    s += "\n";
+    s += wxT("\n");
 
-    t.sprintf("%s%d\n", langDBINF_LOGIN_TIMEOUT, pDb->dbInf.loginTimeout);
+    t.sprintf(wxT("%s%lu\n"), langDBINF_LOGIN_TIMEOUT, pDb->dbInf.loginTimeout);
     s += t;
 
     // Oracle specific information
     if (pDb->Dbms() == dbmsORACLE)
     {
-        s += "\n";
+        s += wxT("\n");
         s += langDBINF_ORACLE_BANNER;
-        s += "\n";
+        s += wxT("\n");
 
         // Oracle cache hit ratio
         SDWORD cb;
         ULONG dbBlockGets;
-        pDb->ExecSql("SELECT VALUE FROM V$SYSSTAT WHERE NAME = 'db block gets'");
+        pDb->ExecSql(wxT("SELECT VALUE FROM V$SYSSTAT WHERE NAME = 'db block gets'"));
         pDb->GetNext();
         if (pDb->GetData(1, SQL_C_ULONG, &dbBlockGets, 0, &cb))
         {
-            t.sprintf("%s: %lu\n", langDBINF_DB_BLOCK_GETS, dbBlockGets);
+            t.sprintf(wxT("%s: %lu\n"), langDBINF_DB_BLOCK_GETS, dbBlockGets);
             s += t;
         }
 
         ULONG consistentGets;
-        pDb->ExecSql("SELECT VALUE FROM V$SYSSTAT WHERE NAME = 'consistent gets'");
+        pDb->ExecSql(wxT("SELECT VALUE FROM V$SYSSTAT WHERE NAME = 'consistent gets'"));
         pDb->GetNext();
         if (pDb->GetData(1, SQL_C_ULONG, &consistentGets, 0, &cb))
         {
-            t.sprintf("%s: %lu\n", langDBINF_CONSISTENT_GETS, consistentGets);
+            t.sprintf(wxT("%s: %lu\n"), langDBINF_CONSISTENT_GETS, consistentGets);
             s += t;
         }
 
         ULONG physReads;
-        pDb->ExecSql("SELECT VALUE FROM V$SYSSTAT WHERE NAME = 'physical reads'");
+        pDb->ExecSql(wxT("SELECT VALUE FROM V$SYSSTAT WHERE NAME = 'physical reads'"));
         pDb->GetNext();
         if (pDb->GetData(1, SQL_C_ULONG, &physReads, 0, &cb))
         {
-            t.sprintf("%s: %lu\n", langDBINF_PHYSICAL_READS, physReads);
+            t.sprintf(wxT("%s: %lu\n"), langDBINF_PHYSICAL_READS, physReads);
             s += t;
         }
 
         ULONG hitRatio = (ULONG)((1.00 - ((float)physReads / (float)(dbBlockGets + consistentGets))) * 100.00);
-        t.sprintf("*** %s: %lu%%\n", langDBINF_CACHE_HIT_RATIO, hitRatio);
+        t.sprintf(wxT("*** %s: %lu%%\n"), langDBINF_CACHE_HIT_RATIO, hitRatio);
         s += t;
 
         // Tablespace information
-        s += "\n";
+        s += wxT("\n");
         s += langDBINF_TABLESPACE_IO;
-        s += "\n";
+        s += wxT("\n");
         ULONG physWrites;
         char tablespaceName[257];
-        pDb->ExecSql("SELECT NAME,PHYRDS,PHYWRTS FROM V$DATAFILE, V$FILESTAT WHERE V$DATAFILE.FILE# = V$FILESTAT.FILE#");
+        pDb->ExecSql(wxT("SELECT NAME,PHYRDS,PHYWRTS FROM V$DATAFILE, V$FILESTAT WHERE V$DATAFILE.FILE# = V$FILESTAT.FILE#"));
         while (pDb->GetNext())
         {
             pDb->GetData(1, SQL_C_CHAR,  tablespaceName, 257, &cb);
             pDb->GetData(2, SQL_C_ULONG, &physReads,     0,   &cb);
             pDb->GetData(3, SQL_C_ULONG, &physWrites,    0,   &cb);
-            t.sprintf("%s\n\t%s: %lu\t%s: %lu\n", tablespaceName,
+            t.sprintf(wxT("%s\n\t%s: %lu\t%s: %lu\n"), tablespaceName,
                 langDBINF_PHYSICAL_READS, physReads, langDBINF_PHYSICAL_WRITES, physWrites);
             s += t;
         }
 
-        s += "\n";
+        s += wxT("\n");
     }
 
     wxLogMessage(s);
@@ -3146,7 +3146,7 @@ bool DbGridFrame::Initialize()
     wxGrid *grid = new wxGrid(this, -1, wxDefaultPosition);
 
     grid->RegisterDataType(wxGRID_VALUE_DATETIME,
-                             new wxGridCellDateTimeRenderer(_T("%d %b %Y")),
+                             new wxGridCellDateTimeRenderer(wxT("%d %b %Y")),
                              new wxGridCellTextEditor);
 #ifdef CHOICEINT
     grid->RegisterDataType(wxGRID_VALUE_CHOICEINT,
@@ -3196,7 +3196,7 @@ bool DbGridFrame::Initialize()
         {
             wxString tStr;
             tStr.Printf(wxT("Unable to open the table '%s'.\n\n"),CONTACT_TABLE_NAME);
-            wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__FILE__,__LINE__),
+            wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__TFILE__,__LINE__),
                          wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
         }
 
@@ -3211,7 +3211,7 @@ bool DbGridFrame::Initialize()
     {
         wxString tStr;
         tStr = wxT("ODBC error during Query()\n\n");
-        wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__FILE__,__LINE__),
+        wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__TFILE__,__LINE__),
                      wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
         return FALSE;
     }
