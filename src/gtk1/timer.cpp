@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -45,9 +45,9 @@ long wxGetElapsedTime( bool resetTimer )
     if (g_timer)
     {
         g_timer_elapsed( g_timer, &res );
-	if (resetTimer) g_timer_reset( g_timer );
+        if (resetTimer) g_timer_reset( g_timer );
     }
-    
+
     return res;
 }
 
@@ -70,14 +70,14 @@ IMPLEMENT_ABSTRACT_CLASS(wxTimer,wxObject)
 static gint timeout_callback( gpointer data )
 {
     wxTimer *timer = (wxTimer*)data;
-    
+
 #if (GTK_MINOR_VERSION > 0)
     /* when getting called from GDK's timer handler we
        are no longer within GDK's grab on the GUI
        thread so we must lock it here ourselves */
     GDK_THREADS_ENTER ();
 #endif
-    
+
     timer->Notify();
 
 #if (GTK_MINOR_VERSION > 0)
@@ -86,7 +86,7 @@ static gint timeout_callback( gpointer data )
 #endif
 
     if (timer->OneShot())
-        timer->Stop();
+        return FALSE;
 
     return TRUE;
 }
