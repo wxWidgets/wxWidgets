@@ -557,15 +557,19 @@ public:
     #define IMPLEMENT_WXWIN_MAIN                                              \
         int main(int argc, char **argv) { return wxEntry(argc, argv); }
 #elif defined(__WXMSW__) && defined(WXUSINGDLL)
+    // we need HINSTANCE declaration to define WinMain()
+    #include <windows.h>
+    #include "wx/msw/winundef.h"
+
     #define IMPLEMENT_WXWIN_MAIN \
-        extern int wxEntry(WXHINSTANCE hInstance,                             \
-                           WXHINSTANCE hPrevInstance,                         \
-                           char *pCmdLine,                                    \
-                           int nCmdShow);                                     \
-        extern "C" int wxSTDCALL WinMain(WXHINSTANCE hInstance,               \
-                                         WXHINSTANCE hPrevInstance,           \
-                                         char *lpCmdLine,                     \
-                                         int nCmdShow)                        \
+        extern int wxEntry(HINSTANCE hInstance,                               \
+                           HINSTANCE hPrevInstance = NULL,                    \
+                           char *pCmdLine = NULL,                             \
+                           int nCmdShow = SW_NORMAL);                         \
+        extern "C" int WINAPI WinMain(HINSTANCE hInstance,                    \
+                                      HINSTANCE hPrevInstance,                \
+                                      char *lpCmdLine,                        \
+                                      int nCmdShow)                           \
         {                                                                     \
             return wxEntry(hInstance, hPrevInstance, lpCmdLine, nCmdShow);    \
         }

@@ -28,7 +28,6 @@
     #pragma hdrstop
 #endif
 
-#include "wx/init.h"
 #include "wx/event.h"
 #include "wx/app.h"
 #include "wx/cmdline.h"
@@ -69,13 +68,13 @@ static wxChar **ConvertToStandardCommandArgs(const wxChar *p, int& argc);
 // Windows-specific wxEntry
 // ----------------------------------------------------------------------------
 
-int wxEntry(WXHINSTANCE hInstance,
-            WXHINSTANCE WXUNUSED(hPrevInstance),
+int wxEntry(HINSTANCE hInstance,
+            HINSTANCE WXUNUSED(hPrevInstance),
             char *pCmdLine,
             int nCmdShow)
 {
     // remember the parameters Windows gave us
-    wxSetInstance((HINSTANCE)hInstance);
+    wxSetInstance(hInstance);
     wxApp::m_nCmdShow = nCmdShow;
 
     // parse the command line
@@ -106,10 +105,7 @@ int PASCAL WinMain(HINSTANCE hInstance,
                    LPSTR lpCmdLine,
                    int nCmdShow)
 {
-    return wxEntry((WXHINSTANCE) hInstance,
-                   (WXHINSTANCE) hPrevInstance,
-                   lpCmdLine,
-                   nCmdShow);
+    return wxEntry(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
 }
 
 #else // _WINDLL
@@ -127,7 +123,7 @@ DllMain(HANDLE hModule, DWORD fdwReason, LPVOID WXUNUSED(lpReserved))
     switch (fdwReason)
     {
         case DLL_PROCESS_ATTACH:
-            return wxEntry((WXHINSTANCE) hModule);
+            return wxEntry(hModule);
 
         case DLL_PROCESS_DETACH:
             wxEntryCleanup();
