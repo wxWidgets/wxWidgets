@@ -757,7 +757,7 @@ import  wx
 from wx.tools.dbg import Logger
 
 dbg = Logger()
-##dbg(enable=0)
+##dbg(enable=1)
 
 ## ---------- ---------- ---------- ---------- ---------- ---------- ----------
 
@@ -1914,9 +1914,13 @@ class MaskedEditMixin:
                         self._prevValue = newvalue  # disallow undo of sign type
 
             if self._autofit:
-##                dbg('setting client size to:', self._CalcSize())
+##                dbg('calculated size:', self._CalcSize())
                 self.SetClientSize(self._CalcSize())
-                self.SetSizeHints(self.GetSize())
+                width = self.GetSize().width
+                height = self.GetBestSize().height
+##                dbg('setting client size to:', (width, height))
+                self.SetSize((width, height))
+                self.SetSizeHints((width, height))
 
             # Set value/type-specific formatting
             self._applyFormatting()
@@ -1991,8 +1995,24 @@ class MaskedEditMixin:
                 self._SetInitialValue()
 
                 if self._autofit:
+                    # this is tricky, because, as Robin explains:
+                    # "Basically there are two sizes to deal with, that are potentially 
+                    #  different.  The client size is the inside size and may, depending
+                    #  on platform, exclude the borders and such.  The normal size is
+                    #  the outside size that does include the borders.  What you are
+                    #  calculating (in _CalcSize) is the client size, but the sizers
+                    #  deal with the full size and so that is the minimum size that
+                    #  we need to set with SetSizeHints.  The root of the problem is
+                    #  that in _calcSize the current client size height is returned,
+                    #  instead of a height based on the current font.  So I suggest using
+                    #  _calcSize to just get the width, and then use GetBestSize to
+                    #  get the height."
                     self.SetClientSize(self._CalcSize())
-                    self.SetSizeHints(self.GetSize())
+                    width = self.GetSize().width
+                    height = self.GetBestSize().height
+                    self.SetSize((width, height))
+                    self.SetSizeHints((width, height))
+
 
             # Set value/type-specific formatting
             self._applyFormatting()
@@ -2642,7 +2662,7 @@ class MaskedEditMixin:
                 sizing_text += 'M'
 ####            dbg('len(sizing_text):', len(sizing_text), 'sizing_text: "%s"' % sizing_text)
             w, h = self.GetTextExtent(sizing_text)
-            size = (w+4, self.GetClientSize().height)
+            size = (w+4, self.GetSize().height)
 ####            dbg('size:', size, indent=0)
         return size
 
@@ -2690,7 +2710,7 @@ class MaskedEditMixin:
 ##            dbg('ignoring bogus text change event', indent=0)
             pass
         else:
-##            dbg('curvalue: "%s", newvalue: "%s"' % (self._curValue, newvalue))
+##            dbg('curvalue: "%s", newvalue: "%s", len(newvalue): %d' % (self._curValue, newvalue, len(newvalue)))
             if self._Change():
                 if self._signOk and self._isNeg and newvalue.find('-') == -1 and newvalue.find('(') == -1:
 ##                    dbg('clearing self._isNeg')
@@ -2864,6 +2884,8 @@ class MaskedEditMixin:
                         if newfield != field and newfield._selectOnFieldEntry:
 ##                            dbg('queuing selection: (%d, %d)' % (newfield._extent[0], newfield._extent[1]))
                             wx.CallAfter(self._SetSelection, newfield._extent[0], newfield._extent[1])
+                        else:
+                            wx.CallAfter(self._SetSelection, newpos, new_select_to)
                     keep_processing = False
 
             elif keep_processing:
@@ -3400,12 +3422,12 @@ class MaskedEditMixin:
 
     def _OnReturn(self, event):
          """
-         Changes the event to look like a tab event, so we can then call
-         event.Skip() on it, and have the parent form "do the right thing."
+         Swallows the return, issues a Navigate event instead, since
+         masked controls are "single line" by defn.
          """
 ##         dbg('MaskedEditMixin::OnReturn')
-         event.m_keyCode = wx.WXK_TAB
-         event.Skip()
+         self.Navigate(True)
+         return False
 
 
     def _OnHome(self,event):
@@ -3486,9 +3508,6 @@ class MaskedEditMixin:
         """
         Primarily handles TAB events, but can be used for any key that
         designer wants to change fields within a masked edit control.
-        NOTE: at the moment, although coded to handle shift-TAB and
-        control-shift-TAB, these events are not sent to the controls
-        by the framework.
         """
 ##        dbg('MaskedEditMixin::_OnChangeField', indent = 1)
         # determine end of current field:
@@ -3500,7 +3519,10 @@ class MaskedEditMixin:
             self._AdjustField(pos)
             if event.GetKeyCode() == wx.WXK_TAB:
 ##                dbg('tab to next ctrl')
-                event.Skip()
+                # As of 2.5.2, you don't call event.Skip() to do
+                # this, but instead force explicit navigation, if
+                # wx.TE_PROCESS_TAB is used (like in the masked edits)
+                self.Navigate(True)
             #else: do nothing
 ##            dbg(indent=0)
             return False
@@ -3534,7 +3556,10 @@ class MaskedEditMixin:
                 self._AdjustField(pos)
                 if event.GetKeyCode() == wx.WXK_TAB:
 ##                    dbg('tab to previous ctrl')
-                    event.Skip()
+                    # As of 2.5.2, you don't call event.Skip() to do
+                    # this, but instead force explicit navigation, if
+                    # wx.TE_PROCESS_TAB is used (like in the masked edits)
+                    self.Navigate(False)
                 else:
 ##                    dbg('position at beginning')
                     wx.CallAfter(self._SetInsertionPoint, field_start)
@@ -3580,7 +3605,10 @@ class MaskedEditMixin:
                     self._AdjustField(pos)
                     if event.GetKeyCode() == wx.WXK_TAB:
 ##                        dbg('tab to next ctrl')
-                        event.Skip()
+                        # As of 2.5.2, you don't call event.Skip() to do
+                        # this, but instead force explicit navigation, if
+                        # wx.TE_PROCESS_TAB is used (like in the masked edits)
+                        self.Navigate(True)
                     else:
 ##                        dbg('position at end')
                         wx.CallAfter(self._SetInsertionPoint, field_end)
@@ -3594,7 +3622,10 @@ class MaskedEditMixin:
                         self._AdjustField(pos)
                         if event.GetKeyCode() == wx.WXK_TAB:
 ##                            dbg('tab to next ctrl')
-                            event.Skip()
+                            # As of 2.5.2, you don't call event.Skip() to do
+                            # this, but instead force explicit navigation, if
+                            # wx.TE_PROCESS_TAB is used (like in the masked edits)
+                            self.Navigate(True)
                         #else: do nothing
 ##                        dbg(indent=0)
                         return False
@@ -3640,6 +3671,8 @@ class MaskedEditMixin:
             if fraction._selectOnFieldEntry:
 ##                dbg('queuing selection after decimal point to:', (start, end))
                 wx.CallAfter(self._SetSelection, start, end)
+            else:
+                wx.CallAfter(self._SetSelection, start, start)
             keep_processing = False
 
         if self._isInt:      ## handle integer value, truncate from current position
@@ -3654,6 +3687,7 @@ class MaskedEditMixin:
             if newstr.find(')') != -1:
                 newpos -= 1     # (don't move past right paren)
             wx.CallAfter(self._SetInsertionPoint, newpos)
+            wx.CallAfter(self._SetSelection, newpos, newpos)
             keep_processing = False
 ##        dbg(indent=0)
 
@@ -3949,6 +3983,7 @@ class MaskedEditMixin:
                     pos = pos+2
 
         if newvalue != value:
+##            dbg('old value: "%s"\nnew value: "%s"' % (value, newvalue))
             self._SetValue(newvalue)
             self._SetInsertionPoint(pos)
 
@@ -4042,6 +4077,8 @@ class MaskedEditMixin:
                     self._SetInsertionPoint(pos)
                     if pos < sel_to:    # restore selection
                         self._SetSelection(pos, sel_to)
+                    else:
+                        self._SetSelection(pos, pos)
 ##        dbg('adjusted pos:', pos, indent=0)
         return pos
 
@@ -5182,7 +5219,10 @@ class MaskedEditMixin:
         the control, and deselect.
         """
 ##        dbg('MaskedEditMixin::_fixSelection', indent=1)
-        if not self._mask or not self._IsEditable():
+        # can get here if called with wx.CallAfter after underlying 
+        # control has been destroyed on close, but after focus
+        # events
+        if not self or not self._mask or not self._IsEditable():
 ##            dbg(indent=0)
             return
 
@@ -6396,6 +6436,8 @@ i=1
 ##     chars properly.)
 ##  4. Fixed autoselect behavior to work similarly to (2) above, so that combobox
 ##     selection will only select the non-empty text, as per request.
+##  5. Fixed tabbing to work with 2.5.2 semantics.
+##  6. Fixed size calculation to handle changing fonts
 ##
 ##  Version 1.6
 ##  1. Reorganized masked controls into separate package, renamed things accordingly

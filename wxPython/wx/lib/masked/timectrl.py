@@ -59,7 +59,7 @@ Here's the API for TimeCtrl:
 <DL><PRE>
     <B>TimeCtrl</B>(
          parent, id = -1,
-         <B>value</B> = '12:00:00 AM',
+         <B>value</B> = '00:00:00',
          pos = wx.DefaultPosition,
          size = wx.DefaultSize,
          <B>style</B> = wxTE_PROCESS_TAB,
@@ -82,7 +82,10 @@ Here's the API for TimeCtrl:
     with SetValue() after instantiation of the control.)
     <DL><B>size</B>
     <DD>The size of the control will be automatically adjusted for 12/24 hour format
-    if wx.DefaultSize is specified.
+    if wx.DefaultSize is specified.  NOTE: due to a problem with wx.DateTime, if the
+    locale does not use 'AM/PM' for its values, the default format will automatically
+    change to 24 hour format, and an AttributeError will be thrown if a non-24 format
+    is specified.
     <DT><B>style</B>
     <DD>By default, TimeCtrl will process TAB events, by allowing tab to the
     different cells within the control.
@@ -95,7 +98,7 @@ Here's the API for TimeCtrl:
     <DD>This parameter can be used instead of the fmt24hr and displaySeconds
     parameters, respectively; it provides a shorthand way to specify the time
     format you want.  Accepted values are 'HHMMSS', 'HHMM', '24HHMMSS', and
-    '24HHMM'.  If the format is specified, the other two  arguments will be ignored.
+    '24HHMM'.  If the format is specified, the other two arguments will be ignored.
     <BR>
     <DT><B>fmt24hr</B>
     <DD>If True, control will display time in 24 hour time format; if False, it will
@@ -337,7 +340,7 @@ class TimeCtrl(BaseMaskedTextCtrl):
         }
 
     def __init__ (
-                self, parent, id=-1, value = '12:00:00 AM',
+                self, parent, id=-1, value = '00:00:00',
                 pos = wx.DefaultPosition, size = wx.DefaultSize,
                 fmt24hr=False,
                 spinButton = None,
@@ -348,6 +351,15 @@ class TimeCtrl(BaseMaskedTextCtrl):
 
         # set defaults for control:
 ##        dbg('setting defaults:')
+
+        self.__fmt24hr = False
+        wxdt = wx.DateTimeFromDMY(1, 0, 1970)
+        if wxdt.Format('%p') != 'AM':
+            TimeCtrl.valid_ctrl_params['format'] = '24HHMMSS'
+            self.__fmt24hr = True
+            fmt24hr = True  # force/change default positional argument
+                            # (will countermand explicit set to False too.)
+
         for key, param_value in TimeCtrl.valid_ctrl_params.items():
             # This is done this way to make setattr behave consistently with
             # "private attribute" name mangling
@@ -367,7 +379,6 @@ class TimeCtrl(BaseMaskedTextCtrl):
             kwargs['displaySeconds'] = True
 
         # (handle positional arg (from original release) differently from rest of kwargs:)
-        self.__fmt24hr = False
         if not kwargs.has_key('format'):
             if fmt24hr:
                 if kwargs.has_key('displaySeconds') and kwargs['displaySeconds']:
@@ -449,7 +460,7 @@ class TimeCtrl(BaseMaskedTextCtrl):
             self.SetLimited(limited)
             self.SetValue(value)
         except:
-            self.SetValue('12:00:00 AM')
+            self.SetValue('00:00:00')
 
         if spinButton:
             self.BindSpinButton(spinButton)     # bind spin button up/down events to this control
@@ -472,6 +483,12 @@ class TimeCtrl(BaseMaskedTextCtrl):
                 raise AttributeError('invalid keyword argument "%s"' % key)
 
             if key == 'format':
+                wxdt = wx.DateTimeFromDMY(1, 0, 1970)
+                if wxdt.Format('%p') != 'AM':
+                    require24hr = True
+                else:
+                    require24hr = False
+
                 # handle both local or generic 'maskededit' autoformat codes:
                 if param_value == 'HHMMSS' or param_value == 'TIMEHHMMSS':
                     self.__displaySeconds = True
@@ -487,6 +504,10 @@ class TimeCtrl(BaseMaskedTextCtrl):
                     self.__fmt24hr = True
                 else:
                     raise AttributeError('"%s" is not a valid format' % param_value)
+
+                if require24hr and not self.__fmt24hr:
+                    raise AttributeError('"%s" is an unsupported time format for the current locale' % param_value)
+
                 reset_format = True
 
             elif key in ("displaySeconds",  "display_seconds") and not kwargs.has_key('format'):
@@ -552,7 +573,7 @@ class TimeCtrl(BaseMaskedTextCtrl):
                 self.SetLimited(limited)
                 self.SetValue(value)
             except:
-                self.SetValue('12:00:00 AM')
+                self.SetValue('00:00:00')
 ##            dbg(indent=0)
             return {}   # no arguments to return
         else:
@@ -663,8 +684,13 @@ class TimeCtrl(BaseMaskedTextCtrl):
 ##            dbg('checkTime == len(value)?', valid)
 
             if not valid:
+                # deal with bug/deficiency in wx.DateTime:
+                if wxdt.Format('%p') not in ('AM', 'PM') and checkTime in (5,8):
+                    # couldn't parse the AM/PM field
+                    raise ValueError('cannot convert string "%s" to valid time for the current locale; please use 24hr time instead' % value)
+                else:
 ##                dbg(indent=0, suspend=0)
-                raise ValueError('cannot convert string "%s" to valid time' % value)
+                    raise ValueError('cannot convert string "%s" to valid time' % value)
 
         else:
             if isinstance(value, wx.DateTime):

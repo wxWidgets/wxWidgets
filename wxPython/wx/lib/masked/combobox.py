@@ -54,11 +54,6 @@ class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
                   **kwargs):
 
 
-        # This is necessary, because wxComboBox currently provides no
-        # method for determining later if this was specified in the
-        # constructor for the control...
-        self.__readonly = style & wx.CB_READONLY == wx.CB_READONLY
-
         kwargs['choices'] = choices                 ## set up maskededit to work with choice list too
 
         ## Since combobox completion is case-insensitive, always validate same way
@@ -80,15 +75,56 @@ class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
                             choices=choices, style=style|wx.WANTS_CHARS,
                             validator=validator,
                             name=name)
-
         self.controlInitialized = True
+
+        self._PostInit(style=style, setupEventHandling=setupEventHandling,
+                       name=name, value=value, **kwargs)
+        
+
+    def _PostInit(self, style=wx.CB_DROPDOWN,
+                  setupEventHandling = True,        ## setup event handling by default):
+                  name = "maskedComboBox", value='', **kwargs):
+
+        # This is necessary, because wxComboBox currently provides no
+        # method for determining later if this was specified in the
+        # constructor for the control...
+        self.__readonly = style & wx.CB_READONLY == wx.CB_READONLY
+
+        if not hasattr(self, 'controlInitialized'):
+            
+            self.controlInitialized = True          ## must have been called via XRC, therefore base class is constructed
+            if not kwargs.has_key('choices'):
+                choices=[]
+                kwargs['choices'] = choices         ## set up maskededit to work with choice list too
+            self._choices = []
+
+            ## Since combobox completion is case-insensitive, always validate same way
+            if not kwargs.has_key('compareNoCase'):
+                kwargs['compareNoCase'] = True
+
+            MaskedEditMixin.__init__( self, name, **kwargs )
+
+            self._choices = self._ctrl_constraints._choices
+##        dbg('self._choices:', self._choices)
+
+            if self._ctrl_constraints._alignRight:
+                choices = [choice.rjust(self._masklength) for choice in choices]
+            else:
+                choices = [choice.ljust(self._masklength) for choice in choices]
+            wx.ComboBox.Clear(self)
+            wx.ComboBox.AppendItems(self, choices)
+
 
         # Set control font - fixed width by default
         self._setFont()
 
         if self._autofit:
             self.SetClientSize(self._CalcSize())
-            self.SetSizeHints(self.GetSize())
+            width = self.GetSize().width
+            height = self.GetBestSize().height
+            self.SetSize((width, height))
+            self.SetSizeHints((width, height))
+
 
         if value:
             # ensure value is width of the mask of the control:
@@ -132,6 +168,19 @@ class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
         """
         size = self._calcSize(size)
         return (size[0]+20, size[1])
+
+
+    def SetFont(self, *args, **kwargs):
+        """ Set the font, then recalculate control size, if appropriate. """
+        wx.ComboBox.SetFont(self, *args, **kwargs)
+        if self._autofit:
+            dbg('calculated size:', self._CalcSize())            
+            self.SetClientSize(self._CalcSize())
+            width = self.GetSize().width
+            height = self.GetBestSize().height
+            dbg('setting client size to:', (width, height))
+            self.SetSize((width, height))
+            self.SetSizeHints((width, height))
 
 
     def _GetSelection(self):
@@ -306,7 +355,6 @@ class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
         else:
             wx.ComboBox.Undo()       # else revert to base control behavior
 
-
     def Append( self, choice, clientData=None ):
         """
         This function override is necessary so we can keep track of any additions to the list
@@ -351,6 +399,13 @@ class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
 
         wx.ComboBox.Append(self, choice, clientData)
 
+
+    def AppendItems( self, choices ):
+        """
+        AppendItems() is handled in terms of Append, to avoid code replication.
+        """
+        for choice in choices:
+            self.Append(choice)
 
 
     def Clear( self ):
@@ -544,3 +599,30 @@ class ComboBox( BaseMaskedComboBox, MaskedEditAccessorsMixin ):
     pass
 
 
+class PreMaskedComboBox( BaseMaskedComboBox, MaskedEditAccessorsMixin ):
+    """
+    This allows us to use XRC subclassing.
+    """
+    # This should really be wx.EVT_WINDOW_CREATE but it is not
+    # currently delivered for native controls on all platforms, so
+    # we'll use EVT_SIZE instead.  It should happen shortly after the
+    # control is created as the control is set to its "best" size.
+    _firstEventType = wx.EVT_SIZE
+
+    def __init__(self):
+        pre = wx.PreComboBox()
+        self.PostCreate(pre)
+        self.Bind(self._firstEventType, self.OnCreate)
+
+
+    def OnCreate(self, evt):
+        self.Unbind(self._firstEventType)
+        self._PostInit()
+
+i=0
+## CHANGELOG:
+## ====================
+##  Version 1.1
+##  1. Added .SetFont() method that properly resizes control
+##  2. Modified control to support construction via XRC mechanism.
+##  3. Added AppendItems() to conform with latest combobox.

@@ -386,7 +386,7 @@ MININT = -maxint-1
 from wx.tools.dbg import Logger
 from wx.lib.masked import MaskedEditMixin, Field, BaseMaskedTextCtrl
 dbg = Logger()
-##dbg(enable=0)
+##dbg(enable=1)
 
 #----------------------------------------------------------------------------
 
@@ -654,14 +654,26 @@ class NumCtrl(BaseMaskedTextCtrl, NumCtrlAccessorsMixin):
 
             maskededit_kwargs['mask'] = intmask+fracmask
 
-        if kwargs.has_key('groupChar'):
+        if kwargs.has_key('groupChar') or kwargs.has_key('decimalChar'):
             old_groupchar = self._groupChar     # save so we can reformat properly
-##            dbg("old_groupchar: '%s'" % old_groupchar)
-            maskededit_kwargs['groupChar'] = kwargs['groupChar']
-        if kwargs.has_key('decimalChar'):
             old_decimalchar = self._decimalChar
+##            dbg("old_groupchar: '%s'" % old_groupchar)
 ##            dbg("old_decimalchar: '%s'" % old_decimalchar)
-            maskededit_kwargs['decimalChar'] = kwargs['decimalChar']
+            groupchar = old_groupchar
+            decimalchar = old_decimalchar
+
+            if kwargs.has_key('groupChar'):
+                maskededit_kwargs['groupChar'] = kwargs['groupChar']
+                groupchar = kwargs['groupChar']
+            if kwargs.has_key('decimalChar'):
+                maskededit_kwargs['decimalChar'] = kwargs['decimalChar']
+                decimalchar = kwargs['decimalChar']
+
+            # Add sanity check to make sure these are distinct, and if not,
+            # raise attribute error
+            if groupchar == decimalchar:
+                raise AttributeError('groupChar and decimalChar must be distinct')
+
 
         # for all other parameters, assign keyword args as appropriate:
         for key, param_value in kwargs.items():
@@ -1089,9 +1101,8 @@ class NumCtrl(BaseMaskedTextCtrl, NumCtrlAccessorsMixin):
                            and value[sel_start:sel_to] == self._groupChar ):
                     self.SetInsertionPoint(sel_start)
                     self.SetSelection(sel_start, sel_to+1)
-
-        return BaseMaskedTextCtrl._OnErase(self, event, just_return_value)
 ##        dbg(indent=0)
+        return BaseMaskedTextCtrl._OnErase(self, event, just_return_value)
 
 
     def OnTextChange( self, event ):
@@ -1146,7 +1157,9 @@ class NumCtrl(BaseMaskedTextCtrl, NumCtrlAccessorsMixin):
         A ValueError exception will be raised if an invalid value
         is specified.
         """
+##        dbg('NumCtrl::SetValue(%s)' % value, indent=1)
         BaseMaskedTextCtrl.SetValue( self, self._toGUI(value) )
+##        dbg(indent=0)
 
 
     def SetIntegerWidth(self, value):
@@ -1519,7 +1532,7 @@ class NumCtrl(BaseMaskedTextCtrl, NumCtrlAccessorsMixin):
         Preprocessor for base control paste; if value needs to be right-justified
         to fit in control, do so prior to paste:
         """
-##        dbg('NumCtrl::_Paste (value = "%s")' % value)
+##        dbg('NumCtrl::_Paste (value = "%s")' % value, indent=1)
         if value is None:
             paste_text = self._getClipboardContents()
         else:
@@ -1533,7 +1546,7 @@ class NumCtrl(BaseMaskedTextCtrl, NumCtrlAccessorsMixin):
         #
         field = self._FindField(sel_start)
         edit_start, edit_end = field._extent
-        paste_text = paste_text.replace(self._groupChar, '').replace(self._decimalChar, '.').replace('(', '-').replace(')','')
+        paste_text = paste_text.replace(self._groupChar, '').replace('(', '-').replace(')','')
         if field._insertRight and self._groupDigits:
             # want to paste to the left; see if it will fit:
             left_text = old_value[edit_start:sel_start].lstrip()
@@ -1547,8 +1560,8 @@ class NumCtrl(BaseMaskedTextCtrl, NumCtrlAccessorsMixin):
                 sel_start += sel_to - orig_sel_start    # decrease by amount selected
             else:
 ##                dbg("won't fit left;", 'paste text remains: "%s"' % paste_text)
-##            dbg('adjusted start before accounting for grouping:', sel_start)
-##            dbg('adjusted paste_text before accounting for grouping: "%s"' % paste_text)
+##                dbg('adjusted start before accounting for grouping:', sel_start)
+##                dbg('adjusted paste_text before accounting for grouping: "%s"' % paste_text)
                 pass
             if self._groupDigits and sel_start != orig_sel_start:
                 left_len = len(old_value[:sel_to].lstrip())
@@ -1563,12 +1576,6 @@ class NumCtrl(BaseMaskedTextCtrl, NumCtrlAccessorsMixin):
 ##                dbg('adjusted paste_text after accounting for grouping: "%s"' % paste_text)
             self.SetInsertionPoint(sel_to)
             self.SetSelection(sel_start, sel_to)
-
-##        # treat paste as "replace number", if appropriate:
-##        sel_start, sel_to = self._GetSelection()
-##        if sel_start == sel_to or self._selectOnEntry and (sel_start, sel_to) == self._fields[0]._extent:
-##            paste_text = self._toGUI(paste_text)
-##            self._SetSelection(0, len(self._mask))
 
         new_text, replace_to = MaskedEditMixin._Paste(self,
                                         paste_text,

@@ -22,7 +22,7 @@ from wx.lib.masked import *
 # be a good place to implement the 2.3 logger class
 from wx.tools.dbg import Logger
 dbg = Logger()
-##dbg(enable=0)
+##dbg(enable=1)
 
 # ## TRICKY BIT: to avoid a ton of boiler-plate, and to
 # ## automate the getter/setter generation for each valid
@@ -75,6 +75,13 @@ class BaseMaskedTextCtrl( wx.TextCtrl, MaskedEditMixin ):
                             pos=pos, size = size,
                             style=style, validator=validator,
                             name=name)
+
+        self._PostInit(setupEventHandling = setupEventHandling,
+                      name=name, value=value,**kwargs )
+
+
+    def _PostInit(self,setupEventHandling=True,
+                 name='maskedTextCtrl' , value='', **kwargs):
 
         self.controlInitialized = True
         MaskedEditMixin.__init__( self, name, **kwargs )
@@ -219,6 +226,18 @@ class BaseMaskedTextCtrl( wx.TextCtrl, MaskedEditMixin ):
         wx.CallAfter(self._SetSelection, replace_to, replace_to)
 ##        dbg(indent=0)
 
+    def SetFont(self, *args, **kwargs):
+        """ Set the font, then recalculate control size, if appropriate. """
+        wx.TextCtrl.SetFont(self, *args, **kwargs)
+        if self._autofit:
+##            dbg('calculated size:', self._CalcSize())            
+            self.SetClientSize(self._CalcSize())
+            width = self.GetSize().width
+            height = self.GetBestSize().height
+##            dbg('setting client size to:', (width, height))
+            self.SetSize((width, height))
+            self.SetSizeHints((width, height))
+
 
     def Clear(self):
         """ Blanks the current control value by replacing it with the default value."""
@@ -324,3 +343,29 @@ class TextCtrl( BaseMaskedTextCtrl, MaskedEditAccessorsMixin ):
     pass
 
 
+class PreMaskedTextCtrl( BaseMaskedTextCtrl, MaskedEditAccessorsMixin ):
+    """
+    This allows us to use XRC subclassing.
+    """
+    # This should really be wx.EVT_WINDOW_CREATE but it is not
+    # currently delivered for native controls on all platforms, so
+    # we'll use EVT_SIZE instead.  It should happen shortly after the
+    # control is created as the control is set to its "best" size.
+    _firstEventType = wx.EVT_SIZE
+
+    def __init__(self):
+        pre = wx.PreTextCtrl()
+        self.PostCreate(pre)
+        self.Bind(self._firstEventType, self.OnCreate)
+
+
+    def OnCreate(self, evt):
+        self.Unbind(self._firstEventType)
+        self._PostInit()
+
+i=0
+## CHANGELOG:
+## ====================
+##  Version 1.1
+##  1. Added .SetFont() method that properly resizes control
+##  2. Modified control to support construction via XRC mechanism.
