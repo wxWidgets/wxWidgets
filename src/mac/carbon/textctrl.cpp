@@ -600,7 +600,7 @@ OSStatus mUPOpenControl(STPTextPaneVars* &handle, ControlRef theControl, long wx
         &varsp->fTXNRec, &varsp->fTXNFrame, (TXNObjectRefcon) varsp));
 
     TXNControlTag iControlTags[3] = { kTXNDoFontSubstitution, kTXNWordWrapStateTag };
-    TXNControlData iControlData[3] = { {false}, {kTXNAutoWrap} };
+    TXNControlData iControlData[3] = { {false}, {kTXNNoAutoWrap} };
     int toptag = 2 ;
 #if TARGET_API_MAC_OSX
     iControlTags[2] = kTXNVisibilityTag ;
@@ -608,9 +608,14 @@ OSStatus mUPOpenControl(STPTextPaneVars* &handle, ControlRef theControl, long wx
     toptag++ ;
 #endif        
     
-    if ( (wxStyle & wxTE_MULTILINE) && (wxStyle & wxTE_DONTWRAP) )
-        iControlData[1].uValue = kTXNNoAutoWrap ;
-
+    if ( wxStyle & wxTE_MULTILINE )
+    {
+        if (wxStyle & wxTE_DONTWRAP)
+            iControlData[1].uValue = kTXNNoAutoWrap ;
+        else
+            iControlData[1].uValue = kTXNAutoWrap ;
+        
+    }
     verify_noerr( TXNSetTXNObjectControls( varsp->fTXNRec, false, toptag,
                                         iControlTags, iControlData )) ;
 
@@ -618,7 +623,7 @@ OSStatus mUPOpenControl(STPTextPaneVars* &handle, ControlRef theControl, long wx
     SInt16 fontSize ;
     Style fontStyle ;
 
-    GetThemeFont(kThemeSmallSystemFont , GetApplicationScript() , fontName , &fontSize , &fontStyle ) ;
+    GetThemeFont(kThemeSystemFont , GetApplicationScript() , fontName , &fontSize , &fontStyle ) ;
 
     TXNTypeAttributes typeAttr[] =
     {
