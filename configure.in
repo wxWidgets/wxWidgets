@@ -1406,6 +1406,9 @@ WX_CPP_NEW_HEADERS(, AC_DEFINE(wxUSE_IOSTREAMH))
 dnl check whether C++ compiler supports bool built-in type
 WX_CPP_BOOL
 
+dnl check whether C++ compiler supports explicit keyword
+WX_CPP_EXPLICIT
+
 dnl ---------------------------------------------------------------------------
 dnl Define search path for includes and libraries: all headers and libs will be
 dnl looked for in all directories of this path

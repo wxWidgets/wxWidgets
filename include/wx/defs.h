@@ -210,7 +210,7 @@ typedef short int WXTYPE;
 // window id is unsigned, so we must always do the cast before comparing them
 // (or else they would be always different!). Usign wxGetWindowId() which does
 // the cast itself is recommended. Note that this type can't be unsigned
-// because -1 is a valid (and largely used) value for window id.
+// because wxID_ANY == -1 is a valid (and largely used) value for window id.
 typedef int wxWindowID;
 
 // ----------------------------------------------------------------------------
@@ -228,6 +228,20 @@ typedef int wxWindowID;
 #else
     #define wxUSE_NESTED_CLASSES    0
 #endif
+
+// check for explicit keyword support
+#ifndef HAVE_EXPLICIT
+    // TODO: add more compiler tests here
+    #if defined(__VISUALC__) && (__VISUALC__ > 1020)
+        #define HAVE_EXPLICIT
+    #endif
+#endif // !HAVE_EXPLICIT
+
+#ifdef HAVE_EXPLICIT
+    #define wxEXPLICIT explicit
+#else // !HAVE_EXPLICIT
+    #define wxEXPLICIT
+#endif // HAVE_EXPLICIT/!HAVE_EXPLICIT
 
 // ----------------------------------------------------------------------------
 // portable calling conventions macros

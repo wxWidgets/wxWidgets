@@ -171,6 +171,7 @@ wxBase:
 - added static wxFontMapper::Get() accessor (use of wxTheFontMapper is now
   deprecated)
 - added wxShutdown() function (Marco Cavallini)
+- added wxEXPLICIT macro
 
 Unix (Base/GUI):
 
