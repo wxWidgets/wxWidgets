@@ -1517,6 +1517,7 @@ bool wxTextCtrl::MSWOnNotify(int WXUNUSED(idCtrl), WXLPARAM lParam, WXLPARAM *re
                 ::SetCursor(GetHcursorOf(wxCursor(wxCURSOR_HAND)));
                 *result = TRUE;
                 break;
+
             case WM_MOUSEMOVE:
             case WM_LBUTTONDOWN:
             case WM_LBUTTONUP:
@@ -1560,8 +1561,8 @@ bool wxTextCtrl::MSWOnNotify(int WXUNUSED(idCtrl), WXLPARAM lParam, WXLPARAM *re
         return TRUE;
     }
 
-    // not processed
-    return FALSE;
+    // not processed, leave it to the base class
+    return wxTextCtrlBase::MSWOnNotify(idCtrl, lParam, result);
 }
 
 // ----------------------------------------------------------------------------
