@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        filedlg.cpp
+// Name:        src/msw/filedlg.cpp
 // Purpose:     wxFileDialog
 // Author:      Julian Smart
 // Modified by:
@@ -9,13 +9,20 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
     #pragma implementation "filedlg.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
-#include "wx/msw/private.h"
 
 #ifdef __BORLANDC__
     #pragma hdrstop
@@ -28,9 +35,9 @@
     #include "wx/filedlg.h"
     #include "wx/intl.h"
     #include "wx/log.h"
-
-//    #include "wx/msw/private.h"
 #endif
+
+#include "wx/msw/private.h"
 
 #if !defined(__WIN32__) || defined(__SALFORDC__) || defined(__WXWINE__)
     #include <commdlg.h>
@@ -42,7 +49,33 @@
 
 #include "wx/tokenzr.h"
 
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+#ifdef __WIN32__
+# define wxMAXPATH   4096
+#else
+# define wxMAXPATH   1024
+#endif
+
+# define wxMAXFILE   1024
+
+# define wxMAXEXT    5
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxWin macros
+// ----------------------------------------------------------------------------
+
 IMPLEMENT_CLASS(wxFileDialog, wxDialog)
+
+// ----------------------------------------------------------------------------
+// global functions
+// ----------------------------------------------------------------------------
 
 wxString wxFileSelector(const wxChar *title,
                         const wxChar *defaultDir,
@@ -126,40 +159,6 @@ wxString wxFileSelector(const wxChar *title,
         return wxGetEmptyString();
 }
 
-/*
-# if __BORLANDC__
-#   include <dir.h>  // for MAXPATH etc. ( Borland 3.1 )
-# endif
-*/
-
-/* These numbers are too small.
-# ifndef MAXPATH
-# define MAXPATH   400
-# endif
-
-# ifndef MAXDRIVE
-# define MAXDRIVE  3
-# endif
-
-# ifndef MAXFILE
-# define MAXFILE   9
-# endif
-
-# ifndef MAXEXT
-# define MAXEXT    5
-# endif
-*/
-
-#if __WIN32__
-# define wxMAXPATH   4096
-#else
-# define wxMAXPATH   1024
-#endif
-
-# define wxMAXFILE   1024
-
-# define wxMAXEXT    5
-
 
 wxString wxFileSelectorEx(const wxChar *title,
                        const wxChar *defaultDir,
@@ -242,20 +241,21 @@ int wxFileDialog::ShowModal()
         OFN_ALLOWMULTISELECT;
 
     OPENFILENAME of;
-    memset(&of, 0, sizeof(OPENFILENAME));
+    wxZeroMemory(of);
 
-    of.lpstrCustomFilter = NULL;   // system should not save custom filter
-    of.nMaxCustFilter    = 0L;
-
-    of.nFileOffset       = 0;      // 0-based pointer to filname in lpstFile
-    of.nFileExtension    = 0;      // 0-based pointer to extension in lpstrFile
-    of.lpstrDefExt       = NULL;   // no default extension
-
+    // the OPENFILENAME struct has been extended in newer version of
+    // comcdlg32.dll, but as we don't use the extended fields anyhow, set
+    // the struct size to the old value - otherwise, the programs compiled
+    // with new headers will not work with the old libraries
+#if defined(_WIN32_WINNT) && (_WIN32_WINNT >= 0x0500)
+    of.lStructSize       = sizeof(OPENFILENAME) -
+                           (sizeof(void *) + 2*sizeof(DWORD));
+#else // old headers
     of.lStructSize       = sizeof(OPENFILENAME);
+#endif
+
     of.hwndOwner         = hWnd;
     of.lpstrTitle        = WXSTRINGCAST m_message;
-
-
     of.lpstrFileTitle    = titleBuffer;
     of.nMaxFileTitle     = wxMAXFILE + 1 + wxMAXEXT;    // Windows 3.0 and 3.1
 
