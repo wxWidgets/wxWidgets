@@ -662,7 +662,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_MEM_TRACING=no
   DEFAULT_wxUSE_DEBUG_CONTEXT=no
   DEFAULT_wxUSE_DMALLOC=no
-  DEFAULT_wxUSE_PRECOMP=yes
+  DEFAULT_wxUSE_PRECOMP=no
   DEFAULT_wxUSE_APPLE_IEEE=no
 
   DEFAULT_wxUSE_LOG=yes
@@ -833,7 +833,7 @@ else
   DEFAULT_wxUSE_MEM_TRACING=no
   DEFAULT_wxUSE_DEBUG_CONTEXT=no
   DEFAULT_wxUSE_DMALLOC=no
-  DEFAULT_wxUSE_PRECOMP=yes
+  DEFAULT_wxUSE_PRECOMP=no
   DEFAULT_wxUSE_APPLE_IEEE=yes
 
   DEFAULT_wxUSE_LOG=yes
@@ -2291,7 +2291,6 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         CPPFLAGS="$CPPFLAGS -I/Developer/Headers/FlatCarbon -I\${top_srcdir}/src/mac/morefile"
         CFLAGS="$CFLAGS -fpascal-strings"
         CXXFLAGS="$CXXFLAGS -fpascal-strings"
-        TOOLCHAIN_DEFS="$TOOLCHAIN_DEFS -DTARGET_CARBON"
 
         TOOLKIT_VPATH="\${top_srcdir}/src/mac${PATH_IFS}\${top_srcdir}/src/mac/morefile"
         TOOLKIT=MAC
