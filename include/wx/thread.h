@@ -139,7 +139,7 @@ private:
     #define WXCRITICAL_INLINE
 #elif defined(__WXMAC__)
     class WXDLLEXPORT wxCriticalSectionInternal;
-    #define WXCRITICAL_INLINE   
+    #define WXCRITICAL_INLINE
 #else // !MSW && !PM
     #define WXCRITICAL_INLINE   inline
 #endif // MSW/!MSW
@@ -422,6 +422,9 @@ public:
 
     // returns TRUE if the main thread has GUI lock
     extern bool WXDLLEXPORT wxGuiOwnedByMainThread();
+    // return TRUE if the main thread is waiting for some other to terminate:
+    // wxApp then should block all "dangerous" messages
+    extern bool WXDLLEXPORT wxIsWaitingForThread();
 #else // !MSW && !PM
     // implement wxCriticalSection using mutexes
     inline wxCriticalSection::wxCriticalSection() { }
