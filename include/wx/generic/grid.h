@@ -328,9 +328,18 @@ public:
     // Reset the value in the control back to its starting value
     virtual void Reset() = 0;
 
-    // If the editor is enabled by pressing keys on the grid,
-    // this will be called to let the editor do something about
-    // that first key if desired.
+    // return TRUE to allow the given key to start editing: the base class
+    // version only checks that the event has no modifiers. The derived
+    // classes are supposed to do "if ( base::IsAcceptedKey() && ... )" in
+    // their IsAcceptedKey() implementation, although, of course, it is not a
+    // mandatory requirment.
+    //
+    // NB: if the key is F2 (special), editing will always start and this
+    //     method will not be called at all (but StartingKey() will)
+    virtual bool IsAcceptedKey(wxKeyEvent& event);
+
+    // If the editor is enabled by pressing keys on the grid, this will be
+    // called to let the editor do something about that first key if desired
     virtual void StartingKey(wxKeyEvent& event);
 
     // if the editor is enabled by clicking on the cell, this method will be
@@ -379,6 +388,7 @@ public:
 
     virtual void PaintBackground(const wxRect& rectCell, wxGridCellAttr *attr);
 
+    virtual bool IsAcceptedKey(wxKeyEvent& event);
     virtual void BeginEdit(int row, int col, wxGrid* grid);
     virtual bool EndEdit(int row, int col, wxGrid* grid);
 
@@ -416,6 +426,7 @@ public:
                         wxWindowID id,
                         wxEvtHandler* evtHandler);
 
+    virtual bool IsAcceptedKey(wxKeyEvent& event);
     virtual void BeginEdit(int row, int col, wxGrid* grid);
     virtual bool EndEdit(int row, int col, wxGrid* grid);
 
@@ -455,6 +466,7 @@ public:
                         wxWindowID id,
                         wxEvtHandler* evtHandler);
 
+    virtual bool IsAcceptedKey(wxKeyEvent& event);
     virtual void BeginEdit(int row, int col, wxGrid* grid);
     virtual bool EndEdit(int row, int col, wxGrid* grid);
 
@@ -488,6 +500,7 @@ public:
     virtual void SetSize(const wxRect& rect);
     virtual void Show(bool show, wxGridCellAttr *attr = (wxGridCellAttr *)NULL);
 
+    virtual bool IsAcceptedKey(wxKeyEvent& event);
     virtual void BeginEdit(int row, int col, wxGrid* grid);
     virtual bool EndEdit(int row, int col, wxGrid* grid);
 

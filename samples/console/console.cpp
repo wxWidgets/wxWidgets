@@ -37,7 +37,7 @@
 
 //#define TEST_ARRAYS
 //#define TEST_CMDLINE
-//#define TEST_DATETIME
+#define TEST_DATETIME
 //#define TEST_DIR
 //#define TEST_DLLLOADER
 //#define TEST_EXECUTE
@@ -55,7 +55,7 @@
 //#define TEST_TIMER
 //#define TEST_VCARD
 //#define TEST_WCHAR
-#define TEST_ZIP
+//#define TEST_ZIP
 
 // ----------------------------------------------------------------------------
 // test class for container objects
@@ -2263,6 +2263,7 @@ static void TestTimeFormat()
        { CompareBoth, "Date is %x, time is %X" },
        { CompareTime, "Time is %H:%M:%S or %I:%M:%S %p" },
        { CompareNone, "The day of year: %j, the week of year: %W" },
+       { CompareDate, "ISO date without separators: %4Y%2m%2d" },
     };
 
     static const Date formatTestDates[] =
@@ -3462,13 +3463,13 @@ int main(int argc, char **argv)
         TestTimeWDays();
         TestTimeWNumber();
         TestTimeParse();
-        TestTimeFormat();
         TestTimeArithmetics();
         TestTimeHolidays();
 
         TestTimeZoneBug();
     }
-    if ( 1 )
+        TestTimeFormat();
+    if ( 0 )
         TestInteractive();
 #endif // TEST_DATETIME
 

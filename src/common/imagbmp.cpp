@@ -109,6 +109,7 @@ bool wxBMPHandler::SaveFile(wxImage *image,
 
     if (// VS: looks ugly but compilers tend to do ugly things with structs,
         //     like aligning hdr.filesize's ofset to dword :(
+        // VZ: we should add padding then...
         !stream.Write(&hdr.magic, 2) ||
         !stream.Write(&hdr.filesize, 4) ||
         !stream.Write(&hdr.reserved, 4) ||

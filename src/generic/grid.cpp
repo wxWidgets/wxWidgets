@@ -471,6 +471,11 @@ void wxGridCellEditor::HandleReturn(wxKeyEvent& event)
     event.Skip();
 }
 
+bool wxGridCellEditor::IsAcceptedKey(wxKeyEvent& event)
+{
+    // accept the simple key presses, not anything with Ctrl/Alt/Meta
+    return !event.HasModifiers();
+}
 
 void wxGridCellEditor::StartingKey(wxKeyEvent& event)
 {
@@ -599,13 +604,11 @@ void wxGridCellTextEditor::DoReset(const wxString& startValue)
     Text()->SetInsertionPointEnd();
 }
 
-void wxGridCellTextEditor::StartingKey(wxKeyEvent& event)
+bool wxGridCellTextEditor::IsAcceptedKey(wxKeyEvent& event)
 {
-    if ( !event.AltDown() && !event.MetaDown() && !event.ControlDown() )
+    if ( wxGridCellEditor::IsAcceptedKey(event) )
     {
-        // insert the key in the control
-        wxChar ch;
-        int keycode = (int)event.KeyCode();
+        int keycode = event.GetKeyCode();
         switch ( keycode )
         {
             case WXK_NUMPAD0:
@@ -618,61 +621,99 @@ void wxGridCellTextEditor::StartingKey(wxKeyEvent& event)
             case WXK_NUMPAD7:
             case WXK_NUMPAD8:
             case WXK_NUMPAD9:
-                ch = _T('0') + keycode - WXK_NUMPAD0;
-                break;
-
             case WXK_MULTIPLY:
             case WXK_NUMPAD_MULTIPLY:
-                ch = _T('*');
-                break;
-
             case WXK_ADD:
             case WXK_NUMPAD_ADD:
-                ch = _T('+');
-                break;
-
             case WXK_SUBTRACT:
             case WXK_NUMPAD_SUBTRACT:
-                ch = _T('-');
-                break;
-
             case WXK_DECIMAL:
             case WXK_NUMPAD_DECIMAL:
-                ch = _T('.');
-                break;
-
             case WXK_DIVIDE:
             case WXK_NUMPAD_DIVIDE:
-                ch = _T('/');
-                break;
+                return TRUE;
 
             default:
-                if ( keycode < 256 && keycode >= 0 && isprint(keycode) )
-                {
-                    // FIXME this is not going to work for non letters...
-                    if ( !event.ShiftDown() )
-                    {
-                        keycode = tolower(keycode);
-                    }
-
-                    ch = (wxChar)keycode;
-                }
-                else
-                {
-                    ch = _T('\0');
-                }
-        }
-
-        if ( ch )
-        {
-            Text()->AppendText(ch);
-
-            // skip event.Skip() below
-            return;
+                if ( isprint(keycode) )
+                    return TRUE;
         }
     }
 
-    event.Skip();
+    return FALSE;
+}
+
+void wxGridCellTextEditor::StartingKey(wxKeyEvent& event)
+{
+    // we don't check for !HasModifiers() because IsAcceptedKey() did it
+
+    // insert the key in the control
+    wxChar ch;
+    int keycode = event.GetKeyCode();
+    switch ( keycode )
+    {
+        case WXK_NUMPAD0:
+        case WXK_NUMPAD1:
+        case WXK_NUMPAD2:
+        case WXK_NUMPAD3:
+        case WXK_NUMPAD4:
+        case WXK_NUMPAD5:
+        case WXK_NUMPAD6:
+        case WXK_NUMPAD7:
+        case WXK_NUMPAD8:
+        case WXK_NUMPAD9:
+            ch = _T('0') + keycode - WXK_NUMPAD0;
+            break;
+
+        case WXK_MULTIPLY:
+        case WXK_NUMPAD_MULTIPLY:
+            ch = _T('*');
+            break;
+
+        case WXK_ADD:
+        case WXK_NUMPAD_ADD:
+            ch = _T('+');
+            break;
+
+        case WXK_SUBTRACT:
+        case WXK_NUMPAD_SUBTRACT:
+            ch = _T('-');
+            break;
+
+        case WXK_DECIMAL:
+        case WXK_NUMPAD_DECIMAL:
+            ch = _T('.');
+            break;
+
+        case WXK_DIVIDE:
+        case WXK_NUMPAD_DIVIDE:
+            ch = _T('/');
+            break;
+
+        default:
+            if ( keycode < 256 && keycode >= 0 && isprint(keycode) )
+            {
+                // FIXME this is not going to work for non letters...
+                if ( !event.ShiftDown() )
+                {
+                    keycode = tolower(keycode);
+                }
+
+                ch = (wxChar)keycode;
+            }
+            else
+            {
+                ch = _T('\0');
+            }
+    }
+
+    if ( ch )
+    {
+        Text()->AppendText(ch);
+    }
+    else
+    {
+        event.Skip();
+    }
 }
 
 void wxGridCellTextEditor::HandleReturn( wxKeyEvent&
@@ -814,6 +855,40 @@ void wxGridCellNumberEditor::Reset()
     {
         DoReset(GetString());
     }
+}
+
+bool wxGridCellNumberEditor::IsAcceptedKey(wxKeyEvent& event)
+{
+    if ( wxGridCellEditor::IsAcceptedKey(event) )
+    {
+        int keycode = event.GetKeyCode();
+        switch ( keycode )
+        {
+            case WXK_NUMPAD0:
+            case WXK_NUMPAD1:
+            case WXK_NUMPAD2:
+            case WXK_NUMPAD3:
+            case WXK_NUMPAD4:
+            case WXK_NUMPAD5:
+            case WXK_NUMPAD6:
+            case WXK_NUMPAD7:
+            case WXK_NUMPAD8:
+            case WXK_NUMPAD9:
+            case WXK_ADD:
+            case WXK_NUMPAD_ADD:
+            case WXK_SUBTRACT:
+            case WXK_NUMPAD_SUBTRACT:
+            case WXK_UP:
+            case WXK_DOWN:
+                return TRUE;
+
+            default:
+                if ( isdigit(keycode) )
+                    return TRUE;
+        }
+    }
+
+    return FALSE;
 }
 
 void wxGridCellNumberEditor::StartingKey(wxKeyEvent& event)
@@ -991,6 +1066,41 @@ wxString wxGridCellFloatEditor::GetString() const
     return wxString::Format(fmt, m_valueOld);
 }
 
+bool wxGridCellFloatEditor::IsAcceptedKey(wxKeyEvent& event)
+{
+    if ( wxGridCellEditor::IsAcceptedKey(event) )
+    {
+        int keycode = event.GetKeyCode();
+        switch ( keycode )
+        {
+            case WXK_NUMPAD0:
+            case WXK_NUMPAD1:
+            case WXK_NUMPAD2:
+            case WXK_NUMPAD3:
+            case WXK_NUMPAD4:
+            case WXK_NUMPAD5:
+            case WXK_NUMPAD6:
+            case WXK_NUMPAD7:
+            case WXK_NUMPAD8:
+            case WXK_NUMPAD9:
+            case WXK_ADD:
+            case WXK_NUMPAD_ADD:
+            case WXK_SUBTRACT:
+            case WXK_NUMPAD_SUBTRACT:
+            case WXK_DECIMAL:
+            case WXK_NUMPAD_DECIMAL:
+                return TRUE;
+
+            default:
+                // additionally accept 'e' as in '1e+6'
+                if ( isdigit(keycode) || tolower(keycode) == 'e' )
+                    return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
 // ----------------------------------------------------------------------------
 // wxGridCellBoolEditor
 // ----------------------------------------------------------------------------
@@ -1107,6 +1217,29 @@ void wxGridCellBoolEditor::Reset()
 void wxGridCellBoolEditor::StartingClick()
 {
     CBox()->SetValue(!CBox()->GetValue());
+}
+
+bool wxGridCellBoolEditor::IsAcceptedKey(wxKeyEvent& event)
+{
+    if ( wxGridCellEditor::IsAcceptedKey(event) )
+    {
+        int keycode = event.GetKeyCode();
+        switch ( keycode )
+        {
+            case WXK_MULTIPLY:
+            case WXK_NUMPAD_MULTIPLY:
+            case WXK_ADD:
+            case WXK_NUMPAD_ADD:
+            case WXK_SUBTRACT:
+            case WXK_NUMPAD_SUBTRACT:
+            case WXK_SPACE:
+            case '+':
+            case '-':
+                return TRUE;
+        }
+    }
+
+    return FALSE;
 }
 
 // ----------------------------------------------------------------------------
@@ -5365,20 +5498,28 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 // Otherwise fall through to default
 
             default:
-                // alphanumeric keys or F2 (special key just for this) enable
-                // the cell edit control
-                if ( !(event.AltDown() ||
-                       event.MetaDown() ||
-                       event.ControlDown()) &&
-                     !IsCellEditControlEnabled() &&
-                     CanEnableCellControl() )
+                // is it possible to edit the current cell at all?
+                if ( !IsCellEditControlEnabled() && CanEnableCellControl() )
                 {
-                    EnableCellEditControl();
+                    // yes, now check whether the cells editor accepts the key
                     int row = m_currentCellCoords.GetRow();
                     int col = m_currentCellCoords.GetCol();
                     wxGridCellAttr* attr = GetCellAttr(row, col);
                     wxGridCellEditor *editor = attr->GetEditor(this, row, col);
-                    editor->StartingKey(event);
+
+                    // <F2> is special and will always start editing, for
+                    // other keys - ask the editor itself
+                    if ( (event.KeyCode() == WXK_F2 && !event.HasModifiers())
+                         || editor->IsAcceptedKey(event) )
+                    {
+                        EnableCellEditControl();
+                        editor->StartingKey(event);
+                    }
+                    else
+                    {
+                        event.Skip();
+                    }
+
                     editor->DecRef();
                     attr->DecRef();
                 }
