@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -59,7 +59,7 @@ END_EVENT_TABLE()
 
 long wxDialog::MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
-  return ::CallWindowProc(CASTWNDPROC (FARPROC) m_oldWndProc, (HWND) GetHWND(), (UINT) nMsg, (WPARAM) wParam, (LPARAM) lParam);
+  return ::CallWindowProc((FARPROC)m_oldWndProc, (HWND) GetHWND(), (UINT) nMsg, (WPARAM) wParam, (LPARAM) lParam);
 }
 
 bool wxDialog::MSWProcessMessage(WXMSG* pMsg)
@@ -100,9 +100,9 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
   if (parent) parent->AddChild(this);
 
   if ( id == -1 )
-  	m_windowId = (int)NewControlId();
+    m_windowId = (int)NewControlId();
   else
-	m_windowId = id;
+  m_windowId = id;
 
   int x = pos.x;
   int y = pos.y;
@@ -129,11 +129,11 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
   // Allows creation of dialogs with & without captions under MSWindows
   if(style & wxCAPTION){
     MSWCreate(m_windowId, (wxWindow *)parent, NULL, this, NULL, x, y, width, height, 0, "wxCaptionDialog",
-	  extendedStyle);
+    extendedStyle);
   }
   else{
     MSWCreate(m_windowId, (wxWindow *)parent, NULL, this, NULL, x, y, width, height, 0, "wxNoCaptionDialog",
-	  extendedStyle);
+    extendedStyle);
   }
 
   SubclassWin(GetHWND());
@@ -146,11 +146,11 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
 
 void wxDialog::SetModal(bool flag)
 {
-	if ( flag )
-		m_windowStyle |= wxDIALOG_MODAL ;
-	else
-		if ( m_windowStyle & wxDIALOG_MODAL )
-  			m_windowStyle -= wxDIALOG_MODAL ;
+  if ( flag )
+    m_windowStyle |= wxDIALOG_MODAL ;
+  else
+    if ( m_windowStyle & wxDIALOG_MODAL )
+        m_windowStyle -= wxDIALOG_MODAL ;
   
   wxModelessWindows.DeleteObject(this);
   if (!flag)
@@ -204,13 +204,13 @@ void wxDialog::OnCharHook(wxKeyEvent& event)
   {
     if (event.m_keyCode == WXK_ESCAPE)
     {
-		// Behaviour changed in 2.0: we'll send a Cancel message
-		// to the dialog instead of Close.
-		wxCommandEvent cancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
-		cancelEvent.SetEventObject( this );
-		GetEventHandler()->ProcessEvent(cancelEvent);
+    // Behaviour changed in 2.0: we'll send a Cancel message
+    // to the dialog instead of Close.
+    wxCommandEvent cancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
+    cancelEvent.SetEventObject( this );
+    GetEventHandler()->ProcessEvent(cancelEvent);
 
-		return;
+    return;
     }
   }
   // We didn't process this event.
@@ -219,9 +219,9 @@ void wxDialog::OnCharHook(wxKeyEvent& event)
 
 void wxDialog::OnPaint(wxPaintEvent& event)
 {
-	// No: if you call the default procedure, it makes
-	// the following painting code not work.
-//	wxWindow::OnPaint(event);
+  // No: if you call the default procedure, it makes
+  // the following painting code not work.
+//  wxWindow::OnPaint(event);
 }
 
 void wxDialog::Fit(void)
@@ -294,7 +294,7 @@ bool wxDialog::Show(bool show)
   if (!modal) {
     if (show) {
       if (!wxModelessWindows.Member(this))
-	wxModelessWindows.Append(this);
+  wxModelessWindows.Append(this);
     } else
       wxModelessWindows.DeleteObject(this);
   }
@@ -309,6 +309,8 @@ bool wxDialog::Show(bool show)
   {
     if (show)
     {
+      m_hwndOldFocus = (WXHWND)::GetFocus();
+
       wxList DisabledWindows;
       if (m_modalShowing)
       {
@@ -329,11 +331,11 @@ bool wxDialog::Show(bool show)
       while (node)
       {
         wxWindow *win = (wxWindow *)node->Data();
-		if (::IsWindowEnabled((HWND) win->GetHWND()))
-		{
+        if (::IsWindowEnabled((HWND) win->GetHWND()))
+        {
           ::EnableWindow((HWND) win->GetHWND(), FALSE);
           DisabledWindows.Append(win);
-		}
+        }
         node = node->Next();
       }
 
@@ -355,9 +357,9 @@ bool wxDialog::Show(bool show)
           DispatchMessage(&msg);
         }
         if (m_modalShowing && !::PeekMessage(&msg, 0, 0, 0, PM_NOREMOVE))
-				// dfgg: NB MUST test m_modalShowing again as the message loop could have triggered
-				//       a Show(FALSE) in the mean time!!!
-				// Without the test, we might delete the dialog before the end of modal showing.
+        // dfgg: NB MUST test m_modalShowing again as the message loop could have triggered
+        //       a Show(FALSE) in the mean time!!!
+        // Without the test, we might delete the dialog before the end of modal showing.
         {
                 while (wxTheApp->ProcessIdle() && m_modalShowing)
                 {
@@ -368,15 +370,17 @@ bool wxDialog::Show(bool show)
       // dfgg: now must specifically re-enable all other app windows that we disabled earlier
       node=DisabledWindows.First();
       while(node) {
-		wxWindow* win = (wxWindow*) node->Data();
+        wxWindow* win = (wxWindow*) node->Data();
         HWND hWnd = (HWND) win->GetHWND();
         if (::IsWindow(hWnd) && (wxModalDialogs.Member(win) || wxModelessWindows.Member(win) ))
           ::EnableWindow(hWnd,TRUE);
         node=node->Next();
       }
     }
-    else
+    else // !show
     {
+      ::SetFocus((HWND)m_hwndOldFocus);
+
       wxModalDialogs.DeleteObject(this);
 
       wxNode *last = wxModalDialogs.Last();
@@ -416,7 +420,7 @@ bool wxDialog::Show(bool show)
       m_modalShowing = FALSE;
     }
   }
-  else
+  else // !modal
   {
     if (show)
     {
@@ -490,20 +494,20 @@ void wxDialog::Centre(int direction)
 // Replacement for Show(TRUE) for modal dialogs - returns return code
 int wxDialog::ShowModal(void)
 {
-    m_windowStyle |= wxDIALOG_MODAL;
-	Show(TRUE);
-	return GetReturnCode();
+  m_windowStyle |= wxDIALOG_MODAL;
+  Show(TRUE);
+  return GetReturnCode();
 }
 
 void wxDialog::EndModal(int retCode)
 {
-	SetReturnCode(retCode);
-	Show(FALSE);
+  SetReturnCode(retCode);
+  Show(FALSE);
 }
 
 // Define for each class of dialog and control
 WXHBRUSH wxDialog::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-			WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
+      WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
 #if CTL3D
   HBRUSH hbrush = Ctl3dCtlColorEx(message, wParam, lParam);
@@ -516,23 +520,23 @@ WXHBRUSH wxDialog::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 // Standard buttons
 void wxDialog::OnOK(wxCommandEvent& event)
 {
-	if ( Validate() && TransferDataFromWindow() )
-	{
+  if ( Validate() && TransferDataFromWindow() )
+  {
         if ( IsModal() )
             EndModal(wxID_OK);
         else
         {
-		    SetReturnCode(wxID_OK);
-		    this->Show(FALSE);
+        SetReturnCode(wxID_OK);
+        this->Show(FALSE);
         }
-	}
+  }
 }
 
 void wxDialog::OnApply(wxCommandEvent& event)
 {
-	if (Validate())
-		TransferDataFromWindow();
-	// TODO probably need to disable the Apply button until things change again
+  if (Validate())
+    TransferDataFromWindow();
+  // TODO probably need to disable the Apply button until things change again
 }
 
 void wxDialog::OnCancel(wxCommandEvent& event)
@@ -542,13 +546,13 @@ void wxDialog::OnCancel(wxCommandEvent& event)
     else
     {
         SetReturnCode(wxID_CANCEL);
-		this->Show(FALSE);
+    this->Show(FALSE);
     }
 }
 
 bool wxDialog::OnClose(void)
 {
-	// Behaviour changed in 2.0: we'll send a Cancel message by default,
+  // Behaviour changed in 2.0: we'll send a Cancel message by default,
     // which may close the dialog.
     // Check for looping if the Cancel event handler calls Close()
 
@@ -559,13 +563,13 @@ bool wxDialog::OnClose(void)
 
     closing.Append(this);
 
-	wxCommandEvent cancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
-	cancelEvent.SetEventObject( this );
-	GetEventHandler()->ProcessEvent(cancelEvent);
+  wxCommandEvent cancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
+  cancelEvent.SetEventObject( this );
+  GetEventHandler()->ProcessEvent(cancelEvent);
 
     closing.DeleteObject(this);
 
-	return FALSE;
+  return FALSE;
 }
 
 void wxDialog::OnCloseWindow(wxCloseEvent& event)
@@ -598,6 +602,6 @@ void wxDialog::OnSysColourChanged(wxSysColourChangedEvent& event)
 
 long wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
-	return wxWindow::MSWWindowProc(message, wParam, lParam);
+  return wxWindow::MSWWindowProc(message, wParam, lParam);
 }
 

@@ -111,6 +111,9 @@ public:
   virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
   			WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
+protected:
+  WXHWND m_hwndOldFocus;  // the window which had focus before we were shown
+
 DECLARE_EVENT_TABLE()
 };
 
