@@ -10,7 +10,8 @@
 #include <wx/encconv.h>
 #include <wx/listctrl.h>
 #include <wx/mstream.h>
-
+#include <wx/image.h>
+#include <wx/imaglist.h>
 
 #include "Platform.h"
 #include "PlatWX.h"
