@@ -84,7 +84,9 @@
 #ifdef __WINDOWS__
     #include "wx/msw/wrapwin.h"
     #include <winnls.h>
-    #include <locale.h>
+    #ifndef __WXWINCE__
+        #include <locale.h>
+    #endif
 #endif
 
 #include "wx/datetime.h"
@@ -357,6 +359,7 @@ static long GetTruncatedJDN(wxDateTime::wxDateTime_t day,
             - JDN_OFFSET;
 }
 
+#ifndef __WXWINCE__
 // this function is a wrapper around strftime(3) adding error checking
 static wxString CallStrftime(const wxChar *format, const tm* tm)
 {
@@ -369,6 +372,7 @@ static wxString CallStrftime(const wxChar *format, const tm* tm)
 
     return wxString(buf);
 }
+#endif
 
 #ifdef HAVE_STRPTIME
 
