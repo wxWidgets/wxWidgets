@@ -300,6 +300,7 @@ public :
                              const wxSize& size, long style ) ;
     ~wxMacMLTEClassicControl() ;
     virtual void VisibilityChanged(bool shown) ;
+    virtual bool NeedsFocusRect() const;
 protected :
     OSStatus                 DoCreate();
 public :
@@ -1527,7 +1528,7 @@ void wxMacMLTEControl::TXNSetAttribute( const wxTextAttr& style , long from , lo
             fontStyle |= bold ;
         if ( font.GetStyle() == wxITALIC )
             fontStyle |= italic ;
-        
+
         typeAttr[attrCounter].tag = kTXNQDFontNameAttribute ;
         typeAttr[attrCounter].size = kTXNQDFontNameAttributeSize ;
         typeAttr[attrCounter].data.dataPtr = (void*) fontName ;
@@ -2067,7 +2068,7 @@ static void TPRedrawFocusOutline(STPTextPaneVars *varsp) {
 	if (varsp->fFocusDrawState != (varsp->fIsActive && varsp->fInFocus)) 
 	{ 
 		varsp->fFocusDrawState = (varsp->fIsActive && varsp->fInFocus);
-		DrawThemeFocusRect(&varsp->fRFocusOutline, varsp->fFocusDrawState);
+		// DrawThemeFocusRect(&varsp->fRFocusOutline, varsp->fFocusDrawState);
 	}
 }
 
@@ -2409,6 +2410,11 @@ void wxMacMLTEClassicControl::VisibilityChanged(bool shown)
     MLTESetObjectVisibility((STPTextPaneVars*) m_macTXNvars , shown , m_windowStyle ) ;
     if ( !shown )
         InvalWindowRect( GetControlOwner( m_controlRef ) , &((STPTextPaneVars *)m_macTXNvars)->fRBounds ) ;
+}
+
+bool wxMacMLTEClassicControl::NeedsFocusRect() const 
+{
+    return true;
 }
 
 OSStatus wxMacMLTEClassicControl::DoCreate()
