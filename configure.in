@@ -2781,7 +2781,12 @@ if test "$WCHAR_OK" = 1; then
     dnl libc versions if possible
     AC_CHECK_FUNCS(wcsrtombs)
 else
-    AC_MSG_WARN([Wide character support is unavailable])
+    dnl use built-in wcslen for Darwin (what about other BSD based systems?)
+    if test "$USE_DARWIN" = 1; then
+        AC_DEFINE(wxUSE_WCHAR_T)
+    else
+        AC_MSG_WARN([Wide character support is unavailable])
+    fi
 fi
 
 dnl check for vprintf/vsprintf() which are GNU extensions
