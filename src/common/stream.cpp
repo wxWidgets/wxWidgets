@@ -580,7 +580,9 @@ wxFileOffset wxStreamBuffer::Seek(wxFileOffset pos, wxSeekMode mode)
         }
         if (diff < 0 || diff > last_access)
             return wxInvalidOffset;
-        SetIntPosition(diff);
+        size_t int_diff = (size_t)diff;
+        wxCHECK_MSG( (wxFileOffset)int_diff == diff, wxInvalidOffset, wxT("huge file not supported") );
+        SetIntPosition(int_diff);
         return diff;
     }
 
@@ -605,7 +607,9 @@ wxFileOffset wxStreamBuffer::Seek(wxFileOffset pos, wxSeekMode mode)
             }
             else
             {
-                SetIntPosition(diff);
+                size_t int_diff = (size_t)diff;
+                wxCHECK_MSG( (wxFileOffset)int_diff == diff, wxInvalidOffset, wxT("huge file not supported") );
+                SetIntPosition(int_diff);
                 return pos;
             }
 
@@ -994,24 +998,30 @@ size_t wxCountingOutputStream::OnSysWrite(const void *WXUNUSED(buffer),
 
 wxFileOffset wxCountingOutputStream::OnSysSeek(wxFileOffset pos, wxSeekMode mode)
 {
+    ssize_t new_pos = (ssize_t)pos;
+
     switch ( mode )
     {
         case wxFromStart:
-            m_currentPos = pos;
+            wxCHECK_MSG( (wxFileOffset)new_pos == pos, wxInvalidOffset, wxT("huge position not supported") );
             break;
 
         case wxFromEnd:
-            m_currentPos = m_lastcount + pos;
+            new_pos = m_lastcount + new_pos;
+            wxCHECK_MSG( (wxFileOffset)new_pos == (wxFileOffset)(m_lastcount + pos), wxInvalidOffset, wxT("huge position not supported") );
             break;
 
         case wxFromCurrent:
-            m_currentPos += pos;
+            new_pos = m_currentPos + new_pos;
+            wxCHECK_MSG( (wxFileOffset)new_pos == (wxFileOffset)(m_currentPos + pos), wxInvalidOffset, wxT("huge position not supported") );
             break;
 
         default:
             wxFAIL_MSG( _T("invalid seek mode") );
             return wxInvalidOffset;
     }
+
+    m_currentPos = new_pos;
 
     if (m_currentPos > m_lastcount)
         m_lastcount = m_currentPos;
