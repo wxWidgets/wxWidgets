@@ -61,7 +61,7 @@ public:
        the program decided to continue the operation (e.g., user didn't
        confirm it)
    */
-   void Resume() { m_state = Continue; }
+   void Resume();
 
 protected:
    // callback for optional abort button

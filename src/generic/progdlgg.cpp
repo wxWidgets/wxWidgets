@@ -73,11 +73,11 @@ END_EVENT_TABLE()
 IMPLEMENT_CLASS(wxProgressDialog, wxDialog)
 
 // ============================================================================
-// implementation
+// wxProgressDialog implementation
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// wxProgressDialog
+// wxProgressDialog creation
 // ----------------------------------------------------------------------------
 
 wxProgressDialog::wxProgressDialog(wxString const &title,
@@ -308,6 +308,10 @@ wxStaticText *wxProgressDialog::CreateLabel(const wxString& text,
     return label;
 }
 
+// ----------------------------------------------------------------------------
+// wxProgressDialog operations
+// ----------------------------------------------------------------------------
+
 bool
 wxProgressDialog::Update(int value, const wxString& newmsg)
 {
@@ -391,6 +395,15 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
 #endif
 
     return m_state != Canceled;
+}
+
+void wxProgressDialog::Resume()
+{
+    m_state = Continue;
+
+    // it may have been disabled by OnCancel(), so enable it back to let the
+    // user interrupt us again if needed
+    m_btnAbort->Enable();
 }
 
 // ----------------------------------------------------------------------------
