@@ -1297,7 +1297,7 @@ wxColour wxWin32ColourScheme::Get(wxWin32ColourScheme::StdColour col) const
 #if defined(COLOR_3DDKSHADOW)
         case SHADOW_DARK:       return wxColour(GetSysColor(COLOR_3DDKSHADOW));
 #else
-        case SHADOW_DARK:       return *wxBLACK;
+        case SHADOW_DARK:       return wxColour(GetSysColor(COLOR_3DHADOW));
 #endif
 
         case CONTROL_TEXT_DISABLED:
@@ -1347,6 +1347,8 @@ wxColour wxWin32ColourScheme::Get(wxWin32ColourScheme::StdColour col) const
 
         case DESKTOP:           return wxColour(0x808000);
 #endif // __WXMSW__
+
+        case GAUGE:             return Get(HIGHLIGHT);
 
         case MAX:
         default:

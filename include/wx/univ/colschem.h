@@ -66,6 +66,9 @@ public:
         TITLEBAR_TEXT,
         TITLEBAR_ACTIVE_TEXT,
         
+        // the default gauge fill colour
+        GAUGE,
+
         // desktop background colour (only used by framebuffer ports)
         DESKTOP,
 

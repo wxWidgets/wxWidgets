@@ -763,6 +763,8 @@ wxColour wxGTKColourScheme::Get(wxGTKColourScheme::StdColour col) const
         case HIGHLIGHT:         return wxColour(0x9c0000);
         case HIGHLIGHT_TEXT:    return wxColour(0xffffff);
 
+        case GAUGE:             return Get(CONTROL_CURRENT);
+
         case MAX:
         default:
             wxFAIL_MSG(_T("invalid standard colour"));

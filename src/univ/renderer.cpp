@@ -771,7 +771,9 @@ void wxControlRenderer::DrawProgressBar(const wxGauge *gauge)
     wxRect rect = m_rect;
     rect.Deflate(1); // FIXME this depends on the border width
 
-    m_dc.SetBrush(wxBrush(m_window->GetForegroundColour(), wxSOLID));
+    wxColour col = m_window->UseFgCol() ? m_window->GetForegroundColour()
+                                        : wxTHEME_COLOUR(GAUGE);
+    m_dc.SetBrush(wxBrush(col, wxSOLID));
 
     if ( gauge->IsSmooth() )
     {
