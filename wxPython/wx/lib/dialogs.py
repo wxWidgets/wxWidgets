@@ -69,17 +69,19 @@ class MultipleChoiceDialog(wx.Dialog):
         ok = wx.Button(self, wx.ID_OK, "OK")
         ok.SetDefault()
         cancel = wx.Button(self, wx.ID_CANCEL, "Cancel")
-        lc = layoutf.Layoutf('t=t10#1;l=l5#1;r=r5#1;h!%d' % (height,), (self,)) 
-        stat.SetConstraints(lc)
-
-        lc = layoutf.Layoutf('t=b10#2;l=l5#1;r=r5#1;b=t5#3', (self, stat, ok)) 
-        self.lbox.SetConstraints(lc)
-
-        lc = layoutf.Layoutf('b=b5#1;x%w25#1;w!80;h*', (self,))
-        ok.SetConstraints(lc)
-
-        lc = layoutf.Layoutf('b=b5#1;x%w75#1;w!80;h*', (self,))
-        cancel.SetConstraints(lc)
+        
+        dlgsizer = wx.BoxSizer(wx.VERTICAL)
+        dlgsizer.Add(stat, 0, wx.ALL, 4)
+        dlgsizer.Add(self.lbox, 1, wx.EXPAND | wx.ALL, 4)
+        
+        btnsizer = wx.StdDialogButtonSizer()
+        btnsizer.AddButton(ok)
+        btnsizer.AddButton(cancel)
+        btnsizer.Finalise()
+        
+        dlgsizer.Add(btnsizer, 0, wx.ALL | wx.ALIGN_RIGHT, 4)
+        
+        self.SetSizer(dlgsizer)
         
         self.SetAutoLayout(1)
         self.lst = lst

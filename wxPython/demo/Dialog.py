@@ -63,22 +63,22 @@ class TestDialog(wx.Dialog):
         line = wx.StaticLine(self, -1, size=(20,-1), style=wx.LI_HORIZONTAL)
         sizer.Add(line, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, 5)
 
-        box = wx.BoxSizer(wx.HORIZONTAL)
-
+        btnsizer = wx.StdDialogButtonSizer()
+        
         if wx.Platform != "__WXMSW__":
             btn = wx.ContextHelpButton(self)
-            box.Add(btn, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
-
-        btn = wx.Button(self, wx.ID_OK, " OK ")
-        btn.SetDefault()
+            btnsizer.AddButton(btn)
+        
+        btn = wx.Button(self, wx.ID_OK)
         btn.SetHelpText("The OK button completes the dialog")
-        box.Add(btn, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+        btnsizer.AddButton(btn)
 
-        btn = wx.Button(self, wx.ID_CANCEL, " Cancel ")
+        btn = wx.Button(self, wx.ID_CANCEL)
         btn.SetHelpText("The Cancel button cnacels the dialog. (Cool, huh?)")
-        box.Add(btn, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+        btnsizer.AddButton(btn)
+        btnsizer.Finalise()
 
-        sizer.Add(box, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+        sizer.Add(btnsizer, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
 
         self.SetSizer(sizer)
         self.SetAutoLayout(True)

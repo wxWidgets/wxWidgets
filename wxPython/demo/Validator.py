@@ -188,11 +188,12 @@ class TestValidateDialog(wx.Dialog):
         fgs.Add(wx.TextCtrl(self, -1, "", validator = TextObjectValidator()))
 
 
-        buttons = wx.BoxSizer(wx.HORIZONTAL)
-        b = wx.Button(self, wx.ID_OK, "Okay")
+        buttons = wx.StdDialogButtonSizer() #wx.BoxSizer(wx.HORIZONTAL)
+        b = wx.Button(self, wx.ID_OK, "OK")
         b.SetDefault()
-        buttons.Add(b, 0, wx.ALL, 10)
-        buttons.Add(wx.Button(self, wx.ID_CANCEL, "Cancel"), 0, wx.ALL, 10)
+        buttons.AddButton(b)
+        buttons.AddButton(wx.Button(self, wx.ID_CANCEL, "Cancel"))
+        buttons.Finalise()
 
         border = wx.BoxSizer(wx.VERTICAL)
         border.Add(fgs, 1, wx.GROW|wx.ALL, 25)
