@@ -171,16 +171,12 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxString localeInfo;
-#if 0
-    localeInfo.Printf( _("Language: %s\nSystem locale name: %s\nCanonical locale name: %s\n"),
-        m_locale.GetLocale(),
-        m_locale.GetSysName().c_str(),
-        m_locale.GetCanonicalName().c_str() );
-#endif
+    wxString locale = m_locale.GetLocale();
+    wxString sysname = m_locale.GetSysName();
+    wxString canname = m_locale.GetCanonicalName();
 
-    localeInfo.Printf( _("Language: %s\nCanonical locale name: %s\n"),
-        m_locale.GetLocale(),
-        m_locale.GetCanonicalName().c_str() );
+    localeInfo.Printf( _("Language: %s\nSystem locale name: %s\nCanonical locale name: %s\n"),
+        locale.c_str(), sysname.c_str(), canname.c_str() );
 
     wxMessageDialog(this, wxString(_("I18n sample\n(c) 1998, 1999 Vadim Zeitlin and Julian Smart"))
         + wxT("\n\n") + localeInfo,
