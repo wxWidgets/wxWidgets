@@ -36,6 +36,7 @@
     #include "wx/intl.h"
     #include "wx/frame.h"
     #include "wx/containr.h"        // wxSetFocusToChild()
+    #include "wx/module.h"
 #endif //WX_PRECOMP
 
 #include "wx/msw/private.h"
@@ -100,6 +101,8 @@ private:
 
     DECLARE_DYNAMIC_CLASS(wxTLWHiddenParentModule)
 };
+
+IMPLEMENT_DYNAMIC_CLASS(wxTLWHiddenParentModule, wxModule)
 
 // ============================================================================
 // wxTopLevelWindowMSW implementation

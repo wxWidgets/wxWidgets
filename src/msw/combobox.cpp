@@ -33,6 +33,8 @@
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
     #include "wx/log.h"
+    // for wxEVT_COMMAND_TEXT_ENTER
+    #include "wx/textctrl.h"
 #endif
 
 #include "wx/combobox.h"
