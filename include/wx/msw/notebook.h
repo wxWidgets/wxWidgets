@@ -181,7 +181,7 @@ public:
   // base class virtuals
   // -------------------
   virtual void Command(wxCommandEvent& event);
-  virtual bool MSWNotify(WXWPARAM wParam, WXLPARAM lParam, WXLPARAM *result);
+  virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
   virtual void SetConstraintSizes(bool recurse = TRUE);
   virtual bool DoPhase(int nPhase);
 

@@ -107,8 +107,9 @@ public:
     // Responds to colour changes
     void OnSysColourChanged(wxSysColourChangedEvent& event);
 
-    // IMPLEMENTATION
-    virtual bool MSWOnClose();
+    // implementation
+    // --------------
+
     virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
                                 WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
@@ -124,6 +125,7 @@ protected:
     bool   m_modalShowing;
     WXHWND m_hwndOldFocus;  // the window which had focus before we were shown
 
+private:
 #if wxUSE_TOOLTIPS
     WXHWND                m_hwndToolTip;
 #endif // tooltips

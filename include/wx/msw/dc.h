@@ -6,397 +6,185 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_DC_H_
 #define _WX_DC_H_
 
 #ifdef __GNUG__
-#pragma interface "dc.h"
+    #pragma interface "dc.h"
 #endif
 
-#include "wx/pen.h"
-#include "wx/brush.h"
-#include "wx/icon.h"
-#include "wx/font.h"
-#include "wx/gdicmn.h"
-#include "wx/window.h"
-
-// Clash with Windows header files
-#ifdef StartDoc
-#undef StartDoc
-#endif
-
-#ifdef DrawText
-#undef DrawText
-#endif
-
-#ifdef GetCharWidth
-#undef GetCharWidth
-#endif
-
-class WXDLLEXPORT wxDC: public wxObject
+class WXDLLEXPORT wxDC : public wxDCBase
 {
-  DECLARE_ABSTRACT_CLASS(wxDC)
- protected:
+    DECLARE_DYNAMIC_CLASS(wxDC)
+
 public:
-  wxDC(void);
-  ~wxDC(void);
+    wxDC();
+    ~wxDC();
 
-#ifdef WX_COMP_INLINE_NO_CLASS
-  inline void BeginDrawing(void) {}
-  inline void EndDrawing(void) {}
-#else
-  inline void wxDC::BeginDrawing(void) {}
-  inline void wxDC::EndDrawing(void) {}
-#endif
+    // implement base class pure virtuals
+    // ----------------------------------
 
-  virtual void FloodFill(long x1, long y1, const wxColour& col, int style=wxFLOOD_SURFACE) ;
-  inline void FloodFill(const wxPoint& pt, const wxColour& col, int style=wxFLOOD_SURFACE)
-  {
-    FloodFill(pt.x, pt.y, col, style);
-  }
+    virtual void Clear();
 
-  virtual bool GetPixel(long x1, long y1, wxColour *col) const ;
-  inline bool GetPixel(const wxPoint& pt, wxColour *col) const
-  {
-    return GetPixel(pt.x, pt.y, col);
-  }
+    virtual bool StartDoc(const wxString& message);
+    virtual void EndDoc();
 
-  virtual void DrawLine(long x1, long y1, long x2, long y2);
-  inline void DrawLine(const wxPoint& pt1, const wxPoint& pt2)
-  {
-    DrawLine(pt1.x, pt1.y, pt2.x, pt2.y);
-  }
+    virtual void StartPage();
+    virtual void EndPage();
 
-  virtual void CrossHair(long x, long y) ;
-  inline void CrossHair(const wxPoint& pt)
-  {
-    CrossHair(pt.x, pt.y);
-  }
+    virtual void SetFont(const wxFont& font);
+    virtual void SetPen(const wxPen& pen);
+    virtual void SetBrush(const wxBrush& brush);
+    virtual void SetBackground(const wxBrush& brush);
+    virtual void SetBackgroundMode(int mode);
+    virtual void SetPalette(const wxPalette& palette);
 
-  virtual void DrawArc(long x1,long y1,long x2,long y2,long xc, long yc);
-  inline void DrawArc(const wxPoint& pt1, const wxPoint& pt2, const wxPoint& centre)
-  {
-    DrawArc(pt1.x, pt1.y, pt2.x, pt2.y, centre.x, centre.y);
-  }
+    virtual void DestroyClippingRegion();
 
-  virtual void DrawEllipticArc (long x, long y, long w, long h, double sa, double ea);
-  virtual void DrawEllipticArc (const wxPoint& pt, const wxSize& sz, double sa, double ea)
-  {
-    DrawEllipticArc(pt.x, pt.y, sz.x, sz.y, sa, ea);
-  }
+    virtual long GetCharHeight() const;
+    virtual long GetCharWidth() const;
+    virtual void GetTextExtent(const wxString& string,
+                               long *x, long *y,
+                               long *descent = NULL,
+                               long *externalLeading = NULL,
+                               wxFont *theFont = NULL) const;
 
-  virtual void DrawPoint(long x, long y);
-  inline void DrawPoint(const wxPoint& pt)
-  {
-    DrawPoint(pt.x, pt.y);
-  }
+    virtual bool CanDrawBitmap() const;
+    virtual bool CanGetTextExtent() const;
+    virtual int GetDepth() const;
+    virtual wxSize GetPPI() const;
 
-  virtual void DrawLines(int n, wxPoint points[], long xoffset = 0, long yoffset = 0);
+    virtual void SetMapMode(int mode);
+    virtual void SetUserScale(double x, double y);
+    virtual void SetSystemScale(double x, double y);
+    virtual void SetLogicalScale(double x, double y);
+    virtual void SetLogicalOrigin(long x, long y);
+    virtual void SetDeviceOrigin(long x, long y);
+    virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
+    virtual void SetLogicalFunction(int function);
 
-  virtual void DrawPolygon(int n, wxPoint points[], long xoffset = 0, long yoffset = 0, int fillStyle=wxODDEVEN_RULE);
+    // implementation from now on
+    // --------------------------
 
-  virtual void DrawRectangle(long x, long y, long width, long height);
-  inline void DrawRectangle(const wxPoint& pt, const wxSize& sz)
-  {
-    DrawRectangle(pt.x, pt.y, sz.x, sz.y);
-  }
-  inline void DrawRectangle(const wxRect& rect)
-  {
-    DrawRectangle(rect.x, rect.y, rect.width, rect.height);
-  }
+    virtual void SetRop(WXHDC cdc);
+    virtual void DoClipping(WXHDC cdc);
+    virtual void SelectOldObjects(WXHDC dc);
 
-  virtual void DrawRoundedRectangle(long x, long y, long width, long height, double radius = 20.0);
-  inline void DrawRoundedRectangle(const wxPoint& pt, const wxSize& sz, double radius = 20.0)
-  {
-    DrawRoundedRectangle(pt.x, pt.y, sz.x, sz.y, radius);
-  }
-  inline void DrawRoundedRectangle(const wxRect& rect, double radius = 20.0)
-  {
-    DrawRoundedRectangle(rect.x, rect.y, rect.width, rect.height, radius);
-  }
+    wxWindow *GetWindow() const { return m_canvas; }
+    void SetWindow(wxWindow *win) { m_canvas = win; }
 
-  virtual void DrawEllipse(long x, long y, long width, long height);
-  inline void DrawEllipse(const wxPoint& pt, const wxSize& sz)
-  {
-    DrawEllipse(pt.x, pt.y, sz.x, sz.y);
-  }
-  inline void DrawEllipse(const wxRect& rect)
-  {
-    DrawEllipse(rect.x, rect.y, rect.width, rect.height);
-  }
-
-  virtual void DrawIcon(const wxIcon& icon, long x, long y);
-  inline void DrawIcon(const wxIcon& icon, const wxPoint& pt)
-  {
-    DrawIcon(icon, pt.x, pt.y);
-  }
-
-  virtual void DrawBitmap( const wxBitmap &bmp, long x, long y, bool useMask=FALSE );
-
-  inline void DrawPoint(wxPoint& point) { DrawPoint(point.x, point.y); }
-  virtual void DrawLines(wxList *list, long xoffset = 0, long yoffset = 0);
-  virtual void DrawPolygon(wxList *list, long xoffset = 0, long yoffset = 0, int fillStyle=wxODDEVEN_RULE);
-
-  virtual void DrawText(const wxString& text, long x, long y, bool use16bit = FALSE);
-  inline void DrawText(const wxString& text, const wxPoint& pt, bool use16bit = FALSE)
-  {
-    DrawText(text, pt.x, pt.y, use16bit);
-  }
-
-  virtual bool Blit(long xdest, long ydest, long width, long height,
-            wxDC *source, long xsrc, long ysrc, int rop = wxCOPY, bool useMask = FALSE);
-  inline bool Blit(const wxPoint& destPt, const wxSize& sz,
-            wxDC *source, const wxPoint& srcPt, int rop = wxCOPY, bool useMask = FALSE)
-  {
-    return Blit(destPt.x, destPt.y, sz.x, sz.y, source, srcPt.x, srcPt.y, rop, useMask);
-  }
-
-#if wxUSE_SPLINES
-  // Splines
-  // 3-point spline
-  virtual void DrawSpline(long x1, long y1, long x2, long y2, long x3, long y3);
-  // Any number of control points - a list of pointers to wxPoints
-  virtual void DrawSpline(wxList *points);
-  virtual void DrawSpline(int n, wxPoint points[]);
-#endif
-  virtual void Clear(void);
-  virtual void SetFont(const wxFont& font);
-  virtual void SetPen(const wxPen& pen);
-  virtual void SetBrush(const wxBrush& brush);
-  virtual void SetLogicalFunction(int function);
-  virtual void SetBackground(const wxBrush& brush);
-  virtual void SetBackgroundMode(int mode);
-
-  virtual void SetClippingRegion(long x, long y, long width, long height);
-  inline void SetClippingRegion(const wxPoint& pt, const wxSize& sz)
-  {
-    SetClippingRegion(pt.x, pt.y, sz.x, sz.y);
-  }
-  inline void SetClippingRegion(const wxRect& rect)
-  {
-    SetClippingRegion(rect.x, rect.y, rect.width, rect.height);
-  }
-  virtual void SetClippingRegion(const wxRegion& region);
-
-  virtual void SetPalette(const wxPalette& palette);
-#if WXWIN_COMPATIBILITY
-  virtual inline void SetColourMap(const wxPalette& palette) { SetPalette(palette); };
-#endif
-  virtual void DestroyClippingRegion(void);
-  virtual long GetCharHeight(void) const;
-  virtual long GetCharWidth(void) const;
-  virtual void GetTextExtent(const wxString& string, long *x, long *y,
-                     long *descent = NULL, long *externalLeading = NULL,
-                     wxFont *theFont = NULL, bool use16bit = FALSE) const;
-#if WXWIN_COMPATIBILITY
-  void GetTextExtent(const wxString& string, float *x, float *y,
-                     float *descent = NULL, float *externalLeading = NULL,
-                     wxFont *theFont = NULL, bool use16bit = FALSE) const ;
-#endif
-
-  // Size in device units
-  virtual void GetSize(int* width, int* height) const;
-  inline wxSize GetSize() const { int w, h; GetSize(&w, &h); return wxSize(w, h); }
-
-  // Size in mm
-  virtual void GetSizeMM(int* width, int* height) const ;
-  inline wxSize GetSizeMM() const { int w, h; GetSizeMM(&w, &h); return wxSize(w, h); }
-
-  // Resolution in Pixels per inch
-  virtual wxSize GetPPI(void) const ;
-
-  // Compatibility
-#if WXWIN_COMPATIBILITY
-  inline void GetSize(float* width, float* height) const { int w, h; GetSize(& w, & h); *width = w; *height = h; }
-  inline void GetSizeMM(float *width, float *height) const { long w, h; GetSizeMM(& w, & h); *width = (float) w; *height = (float) h; }
-#endif
-
-  virtual bool StartDoc(const wxString& message);
-  virtual void EndDoc(void);
-  virtual void StartPage(void);
-  virtual void EndPage(void);
-  virtual void SetMapMode(int mode);
-  virtual void SetUserScale(double x, double y);
-  virtual void SetSystemScale(double x, double y);
-  virtual void SetLogicalOrigin(long x, long y);
-  virtual void SetDeviceOrigin(long x, long y);
-  virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
-
-  // This group of functions does actual conversion
-  // of the input, as you'd expect.
-
-  long DeviceToLogicalX(long x) const;
-  long DeviceToLogicalY(long y) const;
-  long DeviceToLogicalXRel(long x) const;
-  long DeviceToLogicalYRel(long y) const;
-  long LogicalToDeviceX(long x) const;
-  long LogicalToDeviceY(long y) const;
-  long LogicalToDeviceXRel(long x) const;
-  long LogicalToDeviceYRel(long y) const;
-
-  // This group of functions may not do any conversion
-  // if m_scaleGDI is TRUE, since the HDC does the
-  // conversion automatically.
-  // m_scaleGDI NOW OBSOLETE
-  long ImplDeviceToLogicalX(long x) const;
-  long ImplDeviceToLogicalY(long y) const;
-  long ImplDeviceToLogicalXRel(long x) const;
-  long ImplDeviceToLogicalYRel(long y) const;
-  long ImplLogicalToDeviceX(long x) const;
-  long ImplLogicalToDeviceY(long y) const;
-  long ImplLogicalToDeviceXRel(long x) const;
-  long ImplLogicalToDeviceYRel(long y) const;
-
-  virtual bool CanDrawBitmap(void) const;
-  virtual bool CanGetTextExtent(void) const;
-
-  virtual void SetTextForeground(const wxColour& colour);
-  virtual void SetTextBackground(const wxColour& colour);
-  inline virtual bool Ok(void) const {return m_ok;};
-  inline virtual int  GetMapMode(void) const {return m_mappingMode;};
-
-  inline virtual wxBrush& GetBackground(void) const { return (wxBrush&) m_backgroundBrush ;}
-  inline virtual wxBrush& GetBrush(void) const { return (wxBrush&) m_brush ;}
-  inline virtual wxFont& GetFont(void) const { return (wxFont&) m_font ;}
-  inline virtual int      GetLogicalFunction(void) const { return m_logicalFunction ;}
-  inline virtual wxPen&   GetPen(void) const { return (wxPen&) m_pen ;}
-  inline virtual wxColour&GetTextBackground(void) const { return (wxColour&) m_textBackgroundColour ;}
-  inline virtual wxColour&GetTextForeground(void) const { return (wxColour&) m_textForegroundColour ;}
-
-  virtual void SetLogicalScale(double x, double y);
-  virtual inline  void GetUserScale(double* x, double *y) const { *x = m_userScaleX; *y = m_userScaleY; }
-  virtual void CalcBoundingBox(long x, long y);
-  // Get the final bounding box of the PostScript or Metafile picture.
-  virtual inline long MinX(void) const { return m_minX; }
-  virtual inline long MaxX(void) const { return m_maxX; }
-  virtual inline long MinY(void) const { return m_minY; }
-  virtual inline long MaxY(void) const { return m_maxY; }
-  // Sometimes we need to override optimization, e.g.
-  // if other software is drawing onto our surface and we
-  // can't be sure of who's done what.
-  virtual inline void SetOptimization(bool WXUNUSED(opt)) { }
-  virtual inline bool GetOptimization(void) { return FALSE; }
-
-  virtual void GetClippingBox(long *x,long *y,long *w,long *h) const ;
-  inline void GetClippingBox(wxRect& rect) const
-  {
-    long x, y, w, h;
-    GetClippingBox(&x, &y, &w, &h); rect.x = x; rect.y = y; rect.width = w; rect.height = h;
-  }
-
-  // This should probably be made available on other platforms
-#ifdef WX_COMP_INLINE_NO_CLASS
-  int GetDepth(void) const ;
-#else
-  int wxDC::GetDepth(void) const ;
-#endif
-
-// Implementation
-  virtual void SetRop(WXHDC cdc);
-  virtual void DoClipping(WXHDC cdc);
-  virtual void SelectOldObjects(WXHDC dc);
-
-  inline wxWindow *GetWindow(void) const { return m_canvas; }
-  inline void SetWindow(wxWindow *win) { m_canvas = win; }
-  inline WXHDC GetHDC(void) const { return m_hDC; }
-  inline void SetHDC(WXHDC dc, bool bOwnsDC = FALSE) { m_hDC = dc; m_bOwnsDC = bOwnsDC; }
+    WXHDC GetHDC() const { return m_hDC; }
+    void SetHDC(WXHDC dc, bool bOwnsDC = FALSE)
+    {
+        m_hDC = dc;
+        m_bOwnsDC = bOwnsDC;
+    }
 
 protected:
-  bool              m_colour;
-  bool              m_ok;
-  bool              m_clipping;
-  bool              m_isInteractive;
+    virtual void DoFloodFill(long x, long y, const wxColour& col,
+                             int style = wxFLOOD_SURFACE);
 
-  // Coordinate system variables
-  long             m_logicalOriginX;
-  long             m_logicalOriginY;
+    virtual bool DoGetPixel(long x, long y, wxColour *col) const;
 
-  long             m_deviceOriginX;
-  long             m_deviceOriginY;
+    virtual void DoDrawPoint(long x, long y);
+    virtual void DoDrawLine(long x1, long y1, long x2, long y2);
 
-  double             m_logicalScaleX;
-  double             m_logicalScaleY;
+    virtual void DoDrawArc(long x1, long y1,
+                           long x2, long y2,
+                           long xc, long yc);
+    virtual void DoDrawEllipticArc(long x, long y, long w, long h,
+                                   double sa, double ea);
 
-  double             m_userScaleX;
-  double             m_userScaleY;
+    virtual void DoDrawRectangle(long x, long y, long width, long height);
+    virtual void DoDrawRoundedRectangle(long x, long y,
+                                        long width, long height,
+                                        double radius);
+    virtual void DoDrawEllipse(long x, long y, long width, long height);
 
-  int                m_signX;		// Used by SetAxisOrientation() to
-  int                m_signY;		// invert the axes
+    virtual void DoCrossHair(long x, long y);
 
-  int               m_mappingMode;
+    virtual void DoDrawIcon(const wxIcon& icon, long x, long y);
+    virtual void DoDrawBitmap(const wxBitmap &bmp, long x, long y,
+                              bool useMask = FALSE);
 
-  long             m_minX;          // bounding box
-  long             m_minY;
-  long             m_maxX;
-  long             m_maxY;
+    virtual void DoDrawText(const wxString& text, long x, long y);
 
-  int               m_logicalFunction;
-  int               m_backgroundMode;
+    virtual bool DoBlit(long xdest, long ydest, long width, long height,
+                        wxDC *source, long xsrc, long ysrc,
+                        int rop = wxCOPY, bool useMask = FALSE);
 
-  wxPen             m_pen;
-  wxBrush           m_brush;
-  wxBrush           m_backgroundBrush;
-  wxColour          m_textForegroundColour;
-  wxColour          m_textBackgroundColour;
-  wxFont            m_font;
-  wxPalette         m_palette;
-  int               m_clipX1;
-  int               m_clipY1;
-  int               m_clipX2;
-  int               m_clipY2;
-//  bool              m_dontDelete;
-  int               m_windowExtX;
-  int               m_windowExtY;
-  double            m_systemScaleX;
-  double            m_systemScaleY;
+    // this is gnarly - we can't even call this function DoSetClippingRegion()
+    // because of virtual function hiding
+    virtual void DoSetClippingRegionAsRegion(const wxRegion& region);
+    virtual void DoSetClippingRegion(long x, long y,
+                                     long width, long height);
+    virtual void DoGetClippingRegion(long *x, long *y,
+                                     long *width, long *height)
+    {
+        GetClippingBox(x, y, width, height);
+    }
 
-  wxWindow *        m_canvas;
-  wxBitmap          m_selectedBitmap;
+    virtual void DoGetSize(int *width, int *height) const;
+    virtual void DoGetSizeMM(int* width, int* height) const;
 
-  // TRUE => DeleteDC() in dtor, FALSE => only ReleaseDC() it
-  bool              m_bOwnsDC;
+    virtual void DoDrawLines(int n, wxPoint points[],
+                             long xoffset, long yoffset);
+    virtual void DoDrawPolygon(int n, wxPoint points[],
+                               long xoffset, long yoffset,
+                               int fillStyle = wxODDEVEN_RULE);
 
-  WXHDC             m_hDC;
-  int               m_hDCCount;
+#if wxUSE_SPLINES
+    virtual void DoDrawSpline(wxList *points);
+#endif // wxUSE_SPLINES
 
-  // Store all old GDI objects when do a SelectObject,
-  // so we can select them back in (this unselecting user's
-  // objects) so we can safely delete the DC.
-  WXHBITMAP         m_oldBitmap;
-  WXHPEN            m_oldPen;
-  WXHBRUSH          m_oldBrush;
-  WXHFONT           m_oldFont;
-  WXHPALETTE        m_oldPalette;
+    // MSW-specific member variables
+    int               m_windowExtX;
+    int               m_windowExtY;
 
-  // Stores scaling, translation, rotation
-//  wxTransformMatrix	m_transformMatrix;
+    // the window associated with this DC (may be NULL)
+    wxWindow         *m_canvas;
 
-  // Do we wish to scale GDI objects too, e.g. pen width?
-//  bool				m_scaleGDI;
+    wxBitmap          m_selectedBitmap;
+
+    // TRUE => DeleteDC() in dtor, FALSE => only ReleaseDC() it
+    bool              m_bOwnsDC:1;
+
+    // our HDC and its usage count: we only free it when the usage count drops
+    // to 0
+    WXHDC             m_hDC;
+    int               m_hDCCount;
+
+    // Store all old GDI objects when do a SelectObject, so we can select them
+    // back in (this unselecting user's objects) so we can safely delete the
+    // DC.
+    WXHBITMAP         m_oldBitmap;
+    WXHPEN            m_oldPen;
+    WXHBRUSH          m_oldBrush;
+    WXHFONT           m_oldFont;
+    WXHPALETTE        m_oldPalette;
 };
 
 // Logical to device
 // Absolute
-#define XLOG2DEV(x) ImplLogicalToDeviceX(x)
-
-#define YLOG2DEV(y) ImplLogicalToDeviceY(y)
+#define XLOG2DEV(x) (x)
+#define YLOG2DEV(y) (y)
 
 // Relative
-#define XLOG2DEVREL(x) ImplLogicalToDeviceXRel(x)
-#define YLOG2DEVREL(y) ImplLogicalToDeviceYRel(y)
+#define XLOG2DEVREL(x) (x)
+#define YLOG2DEVREL(y) (y)
 
 // Device to logical
 // Absolute
-#define XDEV2LOG(x) ImplDeviceToLogicalX(x)
+#define XDEV2LOG(x) (x)
 
-#define YDEV2LOG(y) ImplDeviceToLogicalY(y)
+#define YDEV2LOG(y) (y)
 
 // Relative
-#define XDEV2LOGREL(x) ImplDeviceToLogicalXRel(x)
-#define YDEV2LOGREL(y) ImplDeviceToLogicalYRel(y)
+#define XDEV2LOGREL(x) (x)
+#define YDEV2LOGREL(y) (y)
 
 /*
  * Have the same macros as for XView but not for every operation:
@@ -426,8 +214,6 @@ protected:
 #define MM_POINTS      9
 #define MM_METRIC     10
 
-extern int wxPageNumber;
-
 // Conversion
 #define METRIC_CONVERSION_CONSTANT  0.0393700787
 
@@ -442,7 +228,6 @@ extern int wxPageNumber;
 #define pt2mm (1/(METRIC_CONVERSION_CONSTANT*72))
 
 #define     wx_round(a)    (int)((a)+.5)
-
 
 #endif
     // _WX_DC_H_

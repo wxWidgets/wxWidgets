@@ -44,6 +44,8 @@
 // Windows (VC++) has broad TCHAR support
 #if defined(__VISUALC__) && defined(__WIN32__)
 
+#define HAVE_WCSLEN 1
+
 #include <tchar.h>
 #if wxUSE_UNICODE // temporary - preserve binary compatibility
 typedef  _TCHAR      wxChar;

@@ -29,6 +29,13 @@
     #undef FindWindow
 #endif
 
+// VZ: apparently some version of Windows send extra mouse move messages after
+//     a mouse click. My tests under NT 4.0 and 95 didn't show it so I'm
+//     tempted to think that it was just an effect of a poor mouse and so the
+//     code to work around this is currently disabled - just define this as 1
+//     to reenable it
+#define wxUSE_MOUSEEVENT_HACK 0
+
 // ---------------------------------------------------------------------------
 // forward declarations
 // ---------------------------------------------------------------------------
@@ -176,10 +183,6 @@ public:
     // event handlers
     // --------------
     void OnEraseBackground(wxEraseEvent& event);
-    void OnKeyDown(wxKeyEvent& event);
-    void OnKeyUp(wxKeyEvent& event);
-    void OnPaint(wxPaintEvent& event);
-    void OnChar(wxKeyEvent& event);
     void OnIdle(wxIdleEvent& event);
 
     // a window may have a default button
@@ -199,11 +202,10 @@ public:
     // Windows subclassing
     void SubclassWin(WXHWND hWnd);
     void UnsubclassWin();
-    virtual long Default();
     virtual bool MSWCommand(WXUINT param, WXWORD id);
 
-    // returns TRUE if the event was processed
-    virtual bool MSWNotify(WXWPARAM wParam, WXLPARAM lParam, WXLPARAM *result);
+    WXFARPROC MSWGetOldWndProc() const { return m_oldWndProc; }
+    void MSWSetOldWndProc(WXFARPROC proc) { m_oldWndProc = proc; }
 
     virtual wxWindow *FindItem(int id) const;
     virtual wxWindow *FindItemByHWND(WXHWND hWnd, bool controlOnly = FALSE) const ;
@@ -219,10 +221,16 @@ public:
 
     wxObject *GetChild(int number) const ;
 
-    void MSWCreate(int id, wxWindow *parent, const char *wclass, wxWindow *wx_win, const char *title,
-            int x, int y, int width, int height,
-            WXDWORD style, const char *dialog_template = NULL,
-            WXDWORD exendedStyle = 0);
+    // returns TRUE if the window has been created
+    bool MSWCreate(int id,
+                   wxWindow *parent,
+                   const char *wclass,
+                   wxWindow *wx_win,
+                   const char *title,
+                   int x, int y, int width, int height,
+                   WXDWORD style,
+                   const char *dialog_template = NULL,
+                   WXDWORD exendedStyle = 0);
 
     // Actually defined in wx_canvs.cc since requires wxCanvas declaration
     virtual void MSWDeviceToLogical(float *x, float *y) const ;
@@ -236,74 +244,65 @@ public:
     // Setup background and foreground colours correctly
     virtual void SetupColours();
 
-    // Saves the last message information before calling base version
-    virtual bool ProcessEvent(wxEvent& event);
+    // ------------------------------------------------------------------------
+    // internal handlers for MSW messages: all handlers return a boolen value:
+    // TRUE means that the handler processed the event and FALSE that it didn't
+    // ------------------------------------------------------------------------
 
-    // Handlers
-    virtual void MSWOnCreate(WXLPCREATESTRUCT cs);
+    // TODO: all this should go away, overriding MSWWindowProc() is enough to
+    //       implement this functionality
+    virtual bool MSWOnCreate(WXLPCREATESTRUCT cs, bool *mayCreate);
     virtual bool MSWOnPaint();
-    virtual WXHICON MSWOnQueryDragIcon() { return 0; }
-    virtual void MSWOnSize(int x, int y, WXUINT flag);
-    virtual void MSWOnWindowPosChanging(void *lpPos);
-    virtual void MSWOnHScroll(WXWORD nSBCode, WXWORD pos, WXHWND control);
-    virtual void MSWOnVScroll(WXWORD nSBCode, WXWORD pos, WXHWND control);
-    virtual bool MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control);
-    virtual long MSWOnSysCommand(WXWPARAM wParam, WXLPARAM lParam);
-    virtual long MSWOnNotify(WXWPARAM wParam, WXLPARAM lParam);
-    virtual WXHBRUSH MSWOnCtlColor(WXHDC dc, WXHWND pWnd, WXUINT nCtlColor,
-            WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
-    virtual bool MSWOnColorChange(WXHWND hWnd, WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
-    virtual long MSWOnPaletteChanged(WXHWND hWndPalChange);
-    virtual long MSWOnQueryNewPalette();
     virtual bool MSWOnEraseBkgnd(WXHDC pDC);
-    virtual void MSWOnMenuHighlight(WXWORD item, WXWORD flags, WXHMENU sysmenu);
-    virtual void MSWOnInitMenuPopup(WXHMENU menu, int pos, bool isSystem);
-    virtual bool MSWOnClose();
-    // Return TRUE to end session, FALSE to veto end session.
-    virtual bool MSWOnQueryEndSession(long logOff);
+    virtual bool MSWOnSize(int x, int y, WXUINT flag);
+
+    virtual bool MSWOnQueryDragIcon(WXHICON *hIcon);
+    virtual bool MSWOnWindowPosChanging(void *lpPos);
+
+    // both horizontal and vertical
+    virtual bool MSWOnScroll(int orientation, WXWORD nSBCode,
+                             WXWORD pos, WXHWND control);
+
+    virtual bool MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control);
+    virtual bool MSWOnSysCommand(WXWPARAM wParam, WXLPARAM lParam);
+
+#ifdef __WIN95__
+    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
+#endif // __WIN95__
+
+    virtual bool MSWOnCtlColor(WXHBRUSH *hBrush,
+                               WXHDC hdc,
+                               WXHWND hWnd,
+                               WXUINT nCtlColor,
+                               WXUINT message,
+                               WXWPARAM wParam,
+                               WXLPARAM lParam);
+
+    virtual bool MSWOnPaletteChanged(WXHWND hWndPalChange);
+    virtual bool MSWOnQueryNewPalette();
+
+    virtual bool MSWOnQueryEndSession(long logOff, bool *mayEnd);
     virtual bool MSWOnEndSession(bool endSession, long logOff);
+
     virtual bool MSWOnDestroy();
     virtual bool MSWOnSetFocus(WXHWND wnd);
     virtual bool MSWOnKillFocus(WXHWND wnd);
-    virtual void MSWOnDropFiles(WXWPARAM wParam);
+    virtual bool MSWOnDropFiles(WXWPARAM wParam);
     virtual bool MSWOnInitDialog(WXHWND hWndFocus);
-    virtual void MSWOnShow(bool show, int status);
+    virtual bool MSWOnShow(bool show, int status);
 
-    // TODO: rationalise these functions into 1 or 2 which take the
-    // event type as argument.
-    virtual void MSWOnLButtonDown(int x, int y, WXUINT flags);
-    virtual void MSWOnLButtonUp(int x, int y, WXUINT flags);
-    virtual void MSWOnLButtonDClick(int x, int y, WXUINT flags);
+    virtual bool MSWOnMouseEvent(WXUINT msg, int x, int y, WXUINT flags);
+    virtual bool MSWOnMouseMove(int x, int y, WXUINT flags);
 
-    virtual void MSWOnMButtonDown(int x, int y, WXUINT flags);
-    virtual void MSWOnMButtonUp(int x, int y, WXUINT flags);
-    virtual void MSWOnMButtonDClick(int x, int y, WXUINT flags);
-
-    virtual void MSWOnRButtonDown(int x, int y, WXUINT flags);
-    virtual void MSWOnRButtonUp(int x, int y, WXUINT flags);
-    virtual void MSWOnRButtonDClick(int x, int y, WXUINT flags);
-
-    virtual void MSWOnMouseMove(int x, int y, WXUINT flags);
-    virtual void MSWOnMouseEnter(int x, int y, WXUINT flags);
-    virtual void MSWOnMouseLeave(int x, int y, WXUINT flags);
-
-    // These return TRUE if an event handler was found, FALSE otherwise (not processed)
     virtual bool MSWOnChar(WXWORD wParam, WXLPARAM lParam, bool isASCII = FALSE);
     virtual bool MSWOnKeyDown(WXWORD wParam, WXLPARAM lParam);
     virtual bool MSWOnKeyUp(WXWORD wParam, WXLPARAM lParam);
 
     virtual bool MSWOnActivate(int flag, bool minimized, WXHWND activate);
-    virtual long MSWOnMDIActivate(long flag, WXHWND activate, WXHWND deactivate);
+    virtual bool MSWOnMDIActivate(long flag, WXHWND activate, WXHWND deactivate);
 
     virtual bool MSWOnDrawItem(int id, WXDRAWITEMSTRUCT *item);
     virtual bool MSWOnMeasureItem(int id, WXMEASUREITEMSTRUCT *item);
-
-    virtual void MSWOnJoyDown(int joystick, int x, int y, WXUINT flags);
-    virtual void MSWOnJoyUp(int joystick, int x, int y, WXUINT flags);
-    virtual void MSWOnJoyMove(int joystick, int x, int y, WXUINT flags);
-    virtual void MSWOnJoyZMove(int joystick, int z, WXUINT flags);
-
-    virtual long MSWGetDlgCode();
 
     // Window procedure
     virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
@@ -317,12 +316,14 @@ public:
     // Detach "Window" menu from menu bar so it doesn't get deleted
     void MSWDetachWindowMenu();
 
-    inline WXFARPROC MSWGetOldWndProc() const;
-    inline void MSWSetOldWndProc(WXFARPROC proc);
-
-    // Define for each class of dialog and control
-    virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-            WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+    // this function should return the brush to paint the window background
+    // with or 0 for the default brush
+    virtual WXHBRUSH OnCtlColor(WXHDC hDC,
+                                WXHWND hWnd,
+                                WXUINT nCtlColor,
+                                WXUINT message,
+                                WXWPARAM wParam,
+                                WXLPARAM lParam);
 
 #if WXWIN_COMPATIBILITY
     void SetShowing(bool show) { (void)Show(show); }
@@ -332,13 +333,8 @@ public:
     // Responds to colour changes: passes event on to children.
     void OnSysColourChanged(wxSysColourChangedEvent& event);
 
-    // remember the parameters of the last message
-    void PushLastMessage(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam)
-    {
-        m_lastMsg = msg;
-        m_lastWParam = wParam;
-        m_lastLParam = lParam;
-    }
+    // initialize various fields of wxMouseEvent (common part of MSWOnMouseXXX)
+    void InitMouseEvent(wxMouseEvent& event, int x, int y, WXUINT flags);
 
 protected:
     // the window handle
@@ -365,15 +361,12 @@ protected:
     int                   m_xThumbSize;
     int                   m_yThumbSize;
 
-    // the coordinates of the last mouse event and the typoe of it
+#if wxUSE_MOUSEEVENT_HACK
+    // the coordinates of the last mouse event and the type of it
     long                  m_lastMouseX,
                           m_lastMouseY;
     int                   m_lastMouseEvent;
-
-    // the parameters of the last message used in Default()
-    WXUINT                m_lastMsg;
-    WXWPARAM              m_lastWParam;
-    WXLPARAM              m_lastLParam;
+#endif // wxUSE_MOUSEEVENT_HACK
 
     WXHMENU               m_hMenu; // Menu, if any
 
@@ -396,6 +389,15 @@ private:
     // common part of all ctors
     void Init();
 
+    // the (non-virtual) handlers for the events
+    bool HandleMove(int x, int y);
+    bool HandleJoystickEvent(WXUINT msg, int x, int y, WXUINT flags);
+
+#ifdef __WIN95__
+    bool HandleNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
+#endif // __WIN95__
+
+    DECLARE_NO_COPY_CLASS(wxWindow);
     DECLARE_EVENT_TABLE()
 };
 

@@ -1157,7 +1157,7 @@ bool wxListCtrl::MSWCommand(WXUINT cmd, WXWORD id)
     else return FALSE;
 }
 
-bool wxListCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam, WXLPARAM *result)
+bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 {
     wxListEvent event(wxEVT_NULL, m_windowId);
     wxEventType eventType = wxEVT_NULL;
@@ -1275,7 +1275,7 @@ bool wxListCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam, WXLPARAM *result)
             }
 
         default :
-            return wxControl::MSWNotify(wParam, lParam, result);
+            return wxControl::MSWOnNotify(idCtrl, lParam, result);
     }
 
     event.SetEventObject( this );

@@ -20,6 +20,8 @@
 
 #include "wx/image.h"
 
+#include "wx/file.h"
+
 // derived classes
 
 class MyFrame;
@@ -103,23 +105,33 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
   dc.DrawRectangle( 0, 0, 100, 100 );
   dc.SelectObject( wxNullBitmap );
 
-  wxString dir("");
-
-#ifdef __WXGTK__
-  dir = wxString("../");
-#endif
+  // try to find the directory with our images
+  wxString dir;
+  if ( wxFile::Exists("./horse.png") )
+      dir = "./";
+  else if ( wxFile::Exists("../horse.png") )
+      dir = "../";
+  else
+      wxLogWarning("Can't find image files in either '.' or '..'!");
 
   wxImage image( bitmap );
-  image.SaveFile( dir + wxString("test.png"), wxBITMAP_TYPE_PNG );
+  if ( !image.SaveFile( dir + wxString("test.png"), wxBITMAP_TYPE_PNG ) )
+      wxLogError("Can't save file");
   
-  image.LoadFile( dir + wxString("horse.png"), wxBITMAP_TYPE_PNG );
-  my_horse_png = new wxBitmap( image.ConvertToBitmap() );
+  if ( !image.LoadFile( dir + wxString("horse.png"), wxBITMAP_TYPE_PNG ) )
+      wxLogError("Can't load PNG image");
+  else
+    my_horse_png = new wxBitmap( image.ConvertToBitmap() );
   
-  image.LoadFile( dir + wxString("horse.jpg"), wxBITMAP_TYPE_JPEG );
-  my_horse_jpeg = new wxBitmap( image.ConvertToBitmap() );
+  if ( !image.LoadFile( dir + wxString("horse.jpg"), wxBITMAP_TYPE_JPEG ) )
+      wxLogError("Can't load JPG image");
+  else
+      my_horse_jpeg = new wxBitmap( image.ConvertToBitmap() );
   
-  image.LoadFile( dir + wxString("horse.gif"), wxBITMAP_TYPE_GIF );
-  my_horse_gif = new wxBitmap( image.ConvertToBitmap() );
+  if ( !image.LoadFile( dir + wxString("horse.gif"), wxBITMAP_TYPE_GIF ) )
+      wxLogError("Can't load GIF image");
+  else
+    my_horse_gif = new wxBitmap( image.ConvertToBitmap() );
   
   image.LoadFile( dir + wxString("test.png"), wxBITMAP_TYPE_PNG );
   my_square = new wxBitmap( image.ConvertToBitmap() );

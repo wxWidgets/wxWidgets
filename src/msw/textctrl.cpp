@@ -1234,7 +1234,7 @@ bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 // For Rich Edit controls. Do we need it?
 #if 0
 #if wxUSE_RICHEDIT
-bool wxTextCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
+bool wxTextCtrl::MSWOnNotify(WXWPARAM wParam, WXLPARAM lParam)
 {
   wxCommandEvent event(0, m_windowId);
   int eventType = 0;
@@ -1243,7 +1243,7 @@ bool wxTextCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
   {
     // Insert case code here
     default :
-      return wxControl::MSWNotify(wParam, lParam);
+      return wxControl::MSWOnNotify(wParam, lParam);
       break;
   }
 

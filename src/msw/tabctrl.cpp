@@ -148,7 +148,7 @@ bool wxTabCtrl::MSWCommand(WXUINT cmd, WXWORD id)
   return FALSE;
 }
 
-bool wxTabCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam, WXLPARAM *result)
+bool wxTabCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 {
 	wxTabEvent event(wxEVT_NULL, m_windowId);
 	wxEventType eventType = wxEVT_NULL;
@@ -171,12 +171,12 @@ bool wxTabCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam, WXLPARAM *result)
         }
 
 		default :
-			return wxControl::MSWNotify(wParam, lParam, result);
+			return wxControl::MSWOnNotify(idCtrl, lParam, result);
 	}
 
 	event.SetEventObject( this );
 	event.SetEventType(eventType);
-	event.SetInt( (int) LOWORD(wParam) ) ;
+	event.SetInt(idCtrl) ;
 
 	return ProcessEvent(event);
 }

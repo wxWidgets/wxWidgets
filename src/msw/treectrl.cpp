@@ -914,7 +914,7 @@ bool wxTreeCtrl::MSWCommand(WXUINT cmd, WXWORD id)
 }
 
 // process WM_NOTIFY Windows message
-bool wxTreeCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam, WXLPARAM *result)
+bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 {
     wxTreeEvent event(wxEVT_NULL, m_windowId);
     wxEventType eventType = wxEVT_NULL;
@@ -1050,7 +1050,7 @@ bool wxTreeCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam, WXLPARAM *result)
             }
 
         default:
-            return wxControl::MSWNotify(wParam, lParam, result);
+            return wxControl::MSWOnNotify(idCtrl, lParam, result);
     }
 
     event.SetEventObject(this);

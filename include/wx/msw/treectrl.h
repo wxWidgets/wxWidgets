@@ -449,7 +449,7 @@ public:
     // --------------
     void Command(wxCommandEvent& event) { ProcessCommand(event); };
     virtual bool MSWCommand(WXUINT param, WXWORD id);
-    virtual bool MSWNotify(WXWPARAM wParam, WXLPARAM lParam, WXLPARAM *result);
+    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
 
 protected:
     // SetImageList helper

@@ -464,7 +464,7 @@ void wxNotebook::Command(wxCommandEvent& event)
   wxFAIL_MSG("wxNotebook::Command not implemented");
 }
 
-bool wxNotebook::MSWNotify(WXWPARAM wParam, WXLPARAM lParam, WXLPARAM* result)
+bool wxNotebook::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result)
 {
   wxNotebookEvent event(wxEVT_NULL, m_windowId);
 
@@ -479,13 +479,13 @@ bool wxNotebook::MSWNotify(WXWPARAM wParam, WXLPARAM lParam, WXLPARAM* result)
       break;
 
     default:
-      return wxControl::MSWNotify(wParam, lParam, result);
+      return wxControl::MSWOnNotify(idCtrl, lParam, result);
   }
 
   event.SetSelection(TabCtrl_GetCurSel(m_hwnd));
   event.SetOldSelection(m_nSelection);
   event.SetEventObject(this);
-  event.SetInt(LOWORD(wParam)); // ctrl id
+  event.SetInt(idCtrl);
 
   bool processed = GetEventHandler()->ProcessEvent(event);
   *result = !event.IsAllowed();

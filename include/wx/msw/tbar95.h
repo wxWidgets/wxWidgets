@@ -83,7 +83,7 @@ class WXDLLEXPORT wxToolBar95: public wxToolBarBase
 
   // IMPLEMENTATION
   virtual bool MSWCommand(WXUINT param, WXWORD id);
-  virtual bool MSWNotify(WXWPARAM wParam, WXLPARAM lParam, WXLPARAM *result);
+  virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
 
   // Responds to colour changes
   void OnSysColourChanged(wxSysColourChangedEvent& event);

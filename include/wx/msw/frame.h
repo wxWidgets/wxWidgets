@@ -157,29 +157,39 @@ public:
         // event handlers
     bool MSWOnPaint();
     WXHICON MSWOnQueryDragIcon();
-    void MSWOnSize(int x, int y, WXUINT flag);
+    bool MSWOnSize(int x, int y, WXUINT flag);
     bool MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control);
-    bool MSWOnClose();
-    void MSWOnMenuHighlight(WXWORD item, WXWORD flags, WXHMENU sysmenu);
+    bool MSWOnMenuHighlight(WXWORD item, WXWORD flags, WXHMENU sysmenu);
     bool MSWProcessMessage(WXMSG *msg);
     bool MSWTranslateMessage(WXMSG *msg);
-    void MSWCreate(int id, wxWindow *parent, const char *wclass,
+    bool MSWCreate(int id, wxWindow *parent, const char *wclass,
                    wxWindow *wx_win, const char *title,
                    int x, int y, int width, int height, long style);
 
+    bool HandleMenuSelect(WXWORD nItem, WXWORD nFlags, WXHMENU hMenu);
+
   // tooltip management
 #if wxUSE_TOOLTIPS
-  WXHWND GetToolTipCtrl() const { return m_hwndToolTip; }
-  void SetToolTipCtrl(WXHWND hwndTT) { m_hwndToolTip = hwndTT; }
+    WXHWND GetToolTipCtrl() const { return m_hwndToolTip; }
+    void SetToolTipCtrl(WXHWND hwndTT) { m_hwndToolTip = hwndTT; }
 #endif // tooltips
 
 protected:
-    void DoGetClientSize(int *width, int *height) const;
-    void DoGetSize(int *width, int *height) const ;
-    void DoGetPosition(int *x, int *y) const ;
+    // override base class virtuals
+    virtual void DoGetClientSize(int *width, int *height) const;
+    virtual void DoGetSize(int *width, int *height) const ;
+    virtual void DoGetPosition(int *x, int *y) const ;
+
+    virtual void DoSetSize(int x, int y,
+                           int width, int height,
+                           int sizeFlags = wxSIZE_AUTO);
+    virtual void DoSetClientSize(int width, int height);
 
     // propagate our state change to all child frames
     void IconizeChildFrames(bool bIconize);
+
+    // window proc for the frames
+    long MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
     wxMenuBar *           m_frameMenuBar;
     wxStatusBar *         m_frameStatusBar;
@@ -190,16 +200,11 @@ protected:
 
     static bool           m_useNativeStatusBar;
 
+private:
 #if wxUSE_TOOLTIPS
     WXHWND                m_hwndToolTip;
 #endif // tooltips
 
-    virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO);
-    virtual void DoSetClientSize(int width, int height);
-
-private:
     DECLARE_EVENT_TABLE()
 };
 

@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:       wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -75,9 +75,9 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
   m_tickFreq = 0;
 
   if ( id == -1 )
-  	m_windowId = (int)NewControlId();
+      m_windowId = (int)NewControlId();
   else
-	m_windowId = id;
+    m_windowId = id;
 
   int x = pos.x;
   int y = pos.y;
@@ -113,23 +113,23 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
     msStyle = TBS_HORZ | WS_CHILD | WS_VISIBLE | WS_TABSTOP ;
 
   if ( m_windowStyle & wxSL_AUTOTICKS )
-	msStyle |= TBS_AUTOTICKS ;
+    msStyle |= TBS_AUTOTICKS ;
 
   if ( m_windowStyle & wxSL_LEFT )
-	msStyle |= TBS_LEFT;
+    msStyle |= TBS_LEFT;
   else if ( m_windowStyle & wxSL_RIGHT )
-  	msStyle |= TBS_RIGHT;
+      msStyle |= TBS_RIGHT;
   else if ( m_windowStyle & wxSL_TOP )
-	msStyle |= TBS_TOP;
+    msStyle |= TBS_TOP;
   else if ( m_windowStyle & wxSL_BOTTOM )
-	msStyle |= TBS_BOTTOM;
+    msStyle |= TBS_BOTTOM;
   else if ( m_windowStyle & wxSL_BOTH )
-	msStyle |= TBS_BOTH;
+    msStyle |= TBS_BOTH;
   else if ( ! (m_windowStyle & wxSL_AUTOTICKS) )
-	msStyle |= TBS_NOTICKS;
+    msStyle |= TBS_NOTICKS;
 
   if ( m_windowStyle & wxSL_SELRANGE )
-	msStyle |= TBS_ENABLESELRANGE ;
+    msStyle |= TBS_ENABLESELRANGE ;
 
   HWND scroll_bar = CreateWindowEx(MakeExtendedStyle(m_windowStyle), TRACKBAR_CLASS, wxBuffer,
                          msStyle,
@@ -167,14 +167,14 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
       {
         if (GetFont().GetResourceHandle())
         {
-		    if ( m_staticMin )
-      		    SendMessage((HWND)m_staticMin,WM_SETFONT,
-                  	    (WPARAM)GetFont().GetResourceHandle(),0L);
-		    if ( m_staticMax )
-      		    SendMessage((HWND)m_staticMax,WM_SETFONT,
+            if ( m_staticMin )
+                  SendMessage((HWND)m_staticMin,WM_SETFONT,
+                          (WPARAM)GetFont().GetResourceHandle(),0L);
+            if ( m_staticMax )
+                  SendMessage((HWND)m_staticMax,WM_SETFONT,
                       (WPARAM)GetFont().GetResourceHandle(),0L);
-      	    if (m_staticValue)
-        	    SendMessage((HWND)m_staticValue,WM_SETFONT,
+              if (m_staticValue)
+                SendMessage((HWND)m_staticValue,WM_SETFONT,
                         (WPARAM)GetFont().GetResourceHandle(),0L);
         }
       }
@@ -186,7 +186,8 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
   return TRUE;
 }
 
-void wxSlider95::MSWOnVScroll(WXWORD wParam, WXWORD pos, WXHWND control)
+bool wxSlider95::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
+                             WXWORD pos, WXHWND control)
 {
     int position = 0; // Dummy - not used in this mode
 
@@ -194,74 +195,74 @@ void wxSlider95::MSWOnVScroll(WXWORD wParam, WXWORD pos, WXHWND control)
     wxEventType scrollEvent = wxEVT_NULL;
     switch ( wParam )
     {
-            case SB_TOP:
-                    nScrollInc = m_rangeMax - position;
-                    scrollEvent = wxEVT_SCROLL_TOP;
-                    break;
+        case SB_TOP:
+            nScrollInc = m_rangeMax - position;
+            scrollEvent = wxEVT_SCROLL_TOP;
+            break;
 
-            case SB_BOTTOM:
-                    nScrollInc = - position;
-                    scrollEvent = wxEVT_SCROLL_BOTTOM;
-                    break;
+        case SB_BOTTOM:
+            nScrollInc = - position;
+            scrollEvent = wxEVT_SCROLL_BOTTOM;
+            break;
 
-            case SB_LINEUP:
-                    nScrollInc = - GetLineSize();
-                    scrollEvent = wxEVT_SCROLL_LINEUP;
-                    break;
+        case SB_LINEUP:
+            nScrollInc = - GetLineSize();
+            scrollEvent = wxEVT_SCROLL_LINEUP;
+            break;
 
-            case SB_LINEDOWN:
-                    nScrollInc = GetLineSize();
-                    scrollEvent = wxEVT_SCROLL_LINEDOWN;
-                    break;
+        case SB_LINEDOWN:
+            nScrollInc = GetLineSize();
+            scrollEvent = wxEVT_SCROLL_LINEDOWN;
+            break;
 
-            case SB_PAGEUP:
-                    nScrollInc = -GetPageSize();
-                    scrollEvent = wxEVT_SCROLL_PAGEUP;
-                    break;
+        case SB_PAGEUP:
+            nScrollInc = -GetPageSize();
+            scrollEvent = wxEVT_SCROLL_PAGEUP;
+            break;
 
-            case SB_PAGEDOWN:
-                    nScrollInc = GetPageSize();
-                    scrollEvent = wxEVT_SCROLL_PAGEDOWN;
-                    break;
+        case SB_PAGEDOWN:
+            nScrollInc = GetPageSize();
+            scrollEvent = wxEVT_SCROLL_PAGEDOWN;
+            break;
 
-            case SB_THUMBTRACK:
-            case SB_THUMBPOSITION:
+        case SB_THUMBTRACK:
+        case SB_THUMBPOSITION:
 #ifdef __WIN32__
-                    nScrollInc = (signed short)pos - position;
-#else
-                    nScrollInc = pos - position;
-#endif
-                    scrollEvent = wxEVT_SCROLL_THUMBTRACK;
-                    break;
+            nScrollInc = (signed short)pos - position;
+#else // Win16
+            nScrollInc = pos - position;
+#endif // Win32/16
+            scrollEvent = wxEVT_SCROLL_THUMBTRACK;
+            break;
 
-            default:
-                    nScrollInc = 0;
-                    return;
+        default:
+            nScrollInc = 0;
     }
 
+    if ( nScrollInc == 0 )
     {
-
-      int newPos = (int)::SendMessage((HWND) control, TBM_GETPOS, 0, 0);
-      if (!(newPos < GetMin() || newPos > GetMax()))
-      {
-        SetValue(newPos);
-
-        wxScrollEvent event(scrollEvent, m_windowId);
-        event.SetPosition(newPos);
-        event.SetEventObject( this );
-        GetEventHandler()->ProcessEvent(event);
-
-        wxCommandEvent cevent( wxEVT_COMMAND_SLIDER_UPDATED, GetId() );
-        cevent.SetEventObject( this );
-        GetEventHandler()->ProcessEvent( cevent );
-
-      }
+        // no event...
+        return FALSE;
     }
-}
 
-void wxSlider95::MSWOnHScroll(WXWORD wParam, WXWORD pos, WXHWND control)
-{
-	MSWOnVScroll(wParam, pos, control);
+    int newPos = (int)::SendMessage((HWND) control, TBM_GETPOS, 0, 0);
+    if ( (newPos < GetMin()) || (newPos > GetMax()) )
+    {
+        // out of range - but we did process it
+        return TRUE;
+    }
+
+    SetValue(newPos);
+
+    wxScrollEvent event(scrollEvent, m_windowId);
+    event.SetPosition(newPos);
+    event.SetEventObject( this );
+    GetEventHandler()->ProcessEvent(event);
+
+    wxCommandEvent cevent( wxEVT_COMMAND_SLIDER_UPDATED, GetId() );
+    cevent.SetEventObject( this );
+
+    return GetEventHandler()->ProcessEvent( cevent );
 }
 
 wxSlider95::~wxSlider95()
@@ -372,8 +373,8 @@ void wxSlider95::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 
   if ((m_windowStyle & wxSL_VERTICAL) != wxSL_VERTICAL)
   {
-	if ( m_windowStyle & wxSL_LABELS )
-	{
+    if ( m_windowStyle & wxSL_LABELS )
+    {
     int min_len = 0;
 
     GetWindowText((HWND) m_staticMin, buf, 300);
@@ -386,15 +387,15 @@ void wxSlider95::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     if (m_staticValue)
     {
       int new_width = (int)(wxMax(min_len, max_len));
-	  int valueHeight = (int)cyf;
+      int valueHeight = (int)cyf;
 #ifdef __WIN32__
       // For some reason, under Win95, the text edit control has
       // a lot of space before the first character
       new_width += 3*cx;
 #endif
       // The height needs to be a bit bigger under Win95 if using native
-	  // 3D effects.
-	  valueHeight = (int) (valueHeight * 1.5) ;
+      // 3D effects.
+      valueHeight = (int) (valueHeight * 1.5) ;
       MoveWindow((HWND) m_staticValue, x_offset, y_offset, new_width, valueHeight, TRUE);
       x_offset += new_width + cx;
     }
@@ -405,8 +406,8 @@ void wxSlider95::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     int slider_length = (int)(w1 - x_offset - max_len - cx);
 
     int slider_height = h1;
-	if (slider_height < 0 )
-		slider_height = 20;
+    if (slider_height < 0 )
+        slider_height = 20;
 
     // Slider must have a minimum/default length/height
     if (slider_length < 100)
@@ -417,25 +418,25 @@ void wxSlider95::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 
     MoveWindow((HWND) m_staticMax, x_offset, y_offset, (int)max_len, cy, TRUE);
     }
-	else
-	{
-		// No labels
-		// If we're prepared to use the existing size, then...
-		if (width == -1 && height == -1 && ((sizeFlags & wxSIZE_AUTO) != wxSIZE_AUTO))
-		{
-			GetSize(&w1, &h1);
-		}
-		if ( w1 < 0 )
-			w1 = 200;
-		if ( h1 < 0 )
-			h1 = 20;
-    	MoveWindow((HWND) GetHWND(), x1, y1, w1, h1, TRUE);
-	}
+    else
+    {
+        // No labels
+        // If we're prepared to use the existing size, then...
+        if (width == -1 && height == -1 && ((sizeFlags & wxSIZE_AUTO) != wxSIZE_AUTO))
+        {
+            GetSize(&w1, &h1);
+        }
+        if ( w1 < 0 )
+            w1 = 200;
+        if ( h1 < 0 )
+            h1 = 20;
+        MoveWindow((HWND) GetHWND(), x1, y1, w1, h1, TRUE);
+    }
   }
   else
   {
-	if ( m_windowStyle & wxSL_LABELS )
-	{
+    if ( m_windowStyle & wxSL_LABELS )
+    {
     int min_len;
     GetWindowText((HWND) m_staticMin, buf, 300);
     GetTextExtent(buf, &min_len, &cyf,NULL,NULL, & this->GetFont());
@@ -447,7 +448,7 @@ void wxSlider95::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     if (m_staticValue)
     {
       int new_width = (int)(wxMax(min_len, max_len));
-	  int valueHeight = (int)cyf;
+      int valueHeight = (int)cyf;
 /*** Suggested change by George Tasker - remove this block...
 #ifdef __WIN32__
       // For some reason, under Win95, the text edit control has
@@ -458,8 +459,8 @@ void wxSlider95::DoSetSize(int x, int y, int width, int height, int sizeFlags)
       new_width += cx;
 
       // The height needs to be a bit bigger under Win95 if using native
-	  // 3D effects.
-	  valueHeight = (int) (valueHeight * 1.5) ;
+      // 3D effects.
+      valueHeight = (int) (valueHeight * 1.5) ;
 
       MoveWindow((HWND) m_staticValue, x_offset, y_offset, new_width, valueHeight, TRUE);
       y_offset += valueHeight;
@@ -471,8 +472,8 @@ void wxSlider95::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     int slider_length = (int)(h1 - y_offset - cy - cy);
 
     int slider_width = w1;
-	if (slider_width < 0 )
-		slider_width = 20;
+    if (slider_width < 0 )
+        slider_width = 20;
 
     // Slider must have a minimum/default length
     if (slider_length < 100)
@@ -483,20 +484,20 @@ void wxSlider95::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 
     MoveWindow((HWND) m_staticMax, x_offset, y_offset, (int)max_len, cy, TRUE);
     }
-	else
-	{
-		// No labels
-		// If we're prepared to use the existing size, then...
-		if (width == -1 && height == -1 && ((sizeFlags & wxSIZE_AUTO) != wxSIZE_AUTO))
-		{
-			GetSize(&w1, &h1);
-		}
-		if ( w1 < 0 )
-			w1 = 20;
-		if ( h1 < 0 )
-			h1 = 200;
-    	MoveWindow((HWND) GetHWND(), x1, y1, w1, h1, TRUE);
-	}
+    else
+    {
+        // No labels
+        // If we're prepared to use the existing size, then...
+        if (width == -1 && height == -1 && ((sizeFlags & wxSIZE_AUTO) != wxSIZE_AUTO))
+        {
+            GetSize(&w1, &h1);
+        }
+        if ( w1 < 0 )
+            w1 = 20;
+        if ( h1 < 0 )
+            h1 = 200;
+        MoveWindow((HWND) GetHWND(), x1, y1, w1, h1, TRUE);
+    }
   }
 }
 
@@ -510,8 +511,8 @@ void wxSlider95::SetRange(int minValue, int maxValue)
   char buf[40];
   if ( m_staticMin )
   {
-  	sprintf(buf, "%d", m_rangeMin);
-  	SetWindowText((HWND) m_staticMin, buf);
+      sprintf(buf, "%d", m_rangeMin);
+      SetWindowText((HWND) m_staticMin, buf);
   }
 
   if ( m_staticMax )
@@ -522,10 +523,10 @@ void wxSlider95::SetRange(int minValue, int maxValue)
 }
 
 WXHBRUSH wxSlider95::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-			WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
+            WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
   if ( nCtlColor == CTLCOLOR_SCROLLBAR )
-	return 0;
+    return 0;
 
   // Otherwise, it's a static
   if (GetParent()->GetTransparentBackground())
@@ -611,7 +612,7 @@ void wxSlider95::SetTick(int tickPos)
 
 bool wxSlider95::ContainsHWND(WXHWND hWnd) const
 {
-	return ( hWnd == GetStaticMin() || hWnd == GetStaticMax() || hWnd == GetEditValue() );
+    return ( hWnd == GetStaticMin() || hWnd == GetStaticMax() || hWnd == GetEditValue() );
 }
 
 void wxSlider95::Command (wxCommandEvent & event)
@@ -622,7 +623,7 @@ void wxSlider95::Command (wxCommandEvent & event)
 
 bool wxSlider95::Show(bool show)
 {
-	wxWindow::Show(show);
+    wxWindow::Show(show);
 
     int cshow;
     if (show)
@@ -631,11 +632,11 @@ bool wxSlider95::Show(bool show)
         cshow = SW_HIDE;
 
     if(m_staticValue)
-		ShowWindow((HWND) m_staticValue, (BOOL)cshow);
+        ShowWindow((HWND) m_staticValue, (BOOL)cshow);
     if(m_staticMin)
-	    ShowWindow((HWND) m_staticMin, (BOOL)cshow);
+        ShowWindow((HWND) m_staticMin, (BOOL)cshow);
     if(m_staticMax)
-		ShowWindow((HWND) m_staticMax, (BOOL)cshow);
+        ShowWindow((HWND) m_staticMax, (BOOL)cshow);
     return TRUE;
 }
 

@@ -1,6 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        private.h
-// Purpose:     Private declarations
+// Purpose:     Private declarations: as this header is only included by
+//              wxWindows itself, it may contain identifiers which don't start
+//              with "wx".
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
@@ -12,18 +14,13 @@
 #ifndef _WX_PRIVATE_H_
 #define _WX_PRIVATE_H_
 
-#include "wx/defs.h"
-
 #include <windows.h>
 
-#define VIEWPORT_EXTENT 1000
+class WXDLLEXPORT wxFont;
 
-class WXDLLEXPORT wxFont ;
-
-WXDLLEXPORT void wxGetCharSize(WXHWND wnd, int *x, int *y,wxFont *the_font);
-WXDLLEXPORT void wxSliderEvent(WXHWND control, WXWORD wParam, WXWORD pos);
-WXDLLEXPORT wxWindow* wxFindWinFromHandle(WXHWND hWnd);
-WXDLLEXPORT void wxScrollBarEvent(WXHWND hbar, WXWORD wParam, WXWORD pos);
+// ---------------------------------------------------------------------------
+// standard icons from the resources
+// ---------------------------------------------------------------------------
 
 WXDLLEXPORT_DATA(extern HICON) wxSTD_FRAME_ICON;
 WXDLLEXPORT_DATA(extern HICON) wxSTD_MDIPARENTFRAME_ICON;
@@ -33,11 +30,10 @@ WXDLLEXPORT_DATA(extern HICON) wxDEFAULT_MDIPARENTFRAME_ICON;
 WXDLLEXPORT_DATA(extern HICON) wxDEFAULT_MDICHILDFRAME_ICON;
 WXDLLEXPORT_DATA(extern HFONT) wxSTATUS_LINE_FONT;
 
-WXDLLEXPORT HINSTANCE wxGetInstance();
-WXDLLEXPORT void wxSetInstance(HINSTANCE hInst);
-WXDLLEXPORT void wxFillLogFont(LOGFONT *logFont, wxFont *font);
-WXDLLEXPORT wxFont wxCreateFontFromLogFont(LOGFONT *logFont); // , bool createNew = TRUE);
-
+// ---------------------------------------------------------------------------
+// this defines a CASTWNDPROC macro which casts a pointer to the type of a
+// window proc
+// ---------------------------------------------------------------------------
 #ifdef __GNUWIN32__
 #  define CASTWNDPROC (long unsigned)
 #else
@@ -68,19 +64,26 @@ WXDLLEXPORT wxFont wxCreateFontFromLogFont(LOGFONT *logFont); // , bool createNe
 #  endif
 #endif
 
+// ---------------------------------------------------------------------------
+// some stuff for old Windows versions (FIXME: what does it do here??)
+// ---------------------------------------------------------------------------
+
 #if !defined(APIENTRY)  // NT defines APIENTRY, 3.x not
-#define APIENTRY FAR PASCAL
+    #define APIENTRY FAR PASCAL
 #endif
 
 #ifdef __WIN32__
-#define _EXPORT /**/
+    #define _EXPORT
 #else
-#define _EXPORT _export
-typedef signed short int SHORT ;
+    #define _EXPORT _export
+#endif
+
+#ifndef __WIN32__
+    typedef signed short int SHORT;
 #endif
 
 #if !defined(__WIN32__)  // 3.x uses FARPROC for dialogs
-#define DLGPROC FARPROC
+    #define DLGPROC FARPROC
 #endif
 
 #if wxUSE_PENWIN
@@ -90,31 +93,18 @@ typedef signed short int SHORT ;
 #endif // wxUSE_PENWIN
 
 #if wxUSE_ITSY_BITSY
-#define IBS_HORZCAPTION    0x4000L
-#define IBS_VERTCAPTION    0x8000L
+    #define IBS_HORZCAPTION    0x4000L
+    #define IBS_VERTCAPTION    0x8000L
 
-UINT    WINAPI ibGetCaptionSize( HWND hWnd  ) ;
-UINT    WINAPI ibSetCaptionSize( HWND hWnd, UINT nSize ) ;
-LRESULT WINAPI ibDefWindowProc( HWND hWnd, UINT uiMsg, WPARAM wParam, LPARAM lParam ) ;
-VOID    WINAPI ibAdjustWindowRect( HWND hWnd, LPRECT lprc ) ;
-#endif
-
-/* When implementing a new item, be sure to:
- *
- * - add the item to the parent panel
- * - set window_parent to the parent
- * - NULL any extra child window pointers not created for this item
- *   (e.g. label control that wasn't needed)
- * - delete any extra child windows in the destructor (e.g. label control)
- * - implement DoSetSize
- * - to find panel position if coordinates are (-1, -1), use GetPosition
- * - call AdvanceCursor after creation, for panel layout mechanism.
- *
- */
+    UINT    WINAPI ibGetCaptionSize( HWND hWnd  ) ;
+    UINT    WINAPI ibSetCaptionSize( HWND hWnd, UINT nSize ) ;
+    LRESULT WINAPI ibDefWindowProc( HWND hWnd, UINT uiMsg, WPARAM wParam, LPARAM lParam ) ;
+    VOID    WINAPI ibAdjustWindowRect( HWND hWnd, LPRECT lprc ) ;
+#endif // wxUSE_ITSY_BITSY
 
 #if wxUSE_CTL3D
-#include <wx/msw/ctl3d/ctl3d.h>
-#endif
+    #include "wx/msw/ctl3d/ctl3d.h"
+#endif // wxUSE_CTL3D
 
 /*
  * Decide what window classes we're going to use
@@ -139,6 +129,10 @@ VOID    WINAPI ibAdjustWindowRect( HWND hWnd, LPRECT lprc ) ;
 #define BITRADIO_FLAGS   (FC_BUTTONDRAW|FB_BITMAP|FC_RADIO|WS_CHILD|WS_VISIBLE)
 */
 
+// ---------------------------------------------------------------------------
+// misc macros
+// ---------------------------------------------------------------------------
+
 #define MEANING_CHARACTER '0'
 #define DEFAULT_ITEM_WIDTH  200
 #define DEFAULT_ITEM_HEIGHT 80
@@ -151,15 +145,77 @@ VOID    WINAPI ibAdjustWindowRect( HWND hWnd, LPRECT lprc ) ;
 extern LONG APIENTRY _EXPORT
   wxSubclassedGenericControlProc(WXHWND hWnd, WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
-// Find maximum size of window/rectangle
-WXDLLEXPORT extern void wxFindMaxSize(WXHWND hwnd, RECT *rect);
+// ---------------------------------------------------------------------------
+// constants which might miss from some compilers' headers
+// ---------------------------------------------------------------------------
 
-// List of scrollbar controls
-WXDLLEXPORT_DATA(extern wxList) wxScrollBarList;
+#if !defined(__WIN32__) && !defined(WS_EX_CLIENTEDGE)
+    #define WS_EX_CLIENTEDGE 0
+#endif
+
+#if defined(__WIN32__) && !defined(WS_EX_CLIENTEDGE)
+    #define WS_EX_CLIENTEDGE 0x00000200L
+#endif
+
+#ifndef ENDSESSION_LOGOFF
+    #define ENDSESSION_LOGOFF    0x80000000
+#endif
+
+// ---------------------------------------------------------------------------
+// debug messages
+// ---------------------------------------------------------------------------
+#if defined(__WIN95__) && defined(__WXDEBUG__) && wxUSE_DBWIN32
+
+    #ifndef __TWIN32__
+        #ifdef OutputDebugString
+            #undef OutputDebugString
+        #endif
+
+        #define OutputDebugString OutputDebugStringW95
+    #endif // __TWIN32__
+
+    extern void OutputDebugStringW95(const wxChar*, ...);
+#endif // USE_DBWIN32
+
+// ---------------------------------------------------------------------------
+// macros to make casting between WXFOO and FOO a bit easier
+// ---------------------------------------------------------------------------
+
+#define GetHwnd()               ((HWND)GetHWND())
+#define GetWinHwnd(win)         ((HWND)((win)->GetHWND()))
+
+#define GetHdc()                ((HDC)GetHDC())
+
+#define GetHaccel()             ((HACCEL)GetHACCEL())
+#define GetTableHaccel(table)   ((HACCEL)((table)->GetHACCEL()))
+
+// ---------------------------------------------------------------------------
+// global data
+// ---------------------------------------------------------------------------
+
 // The MakeProcInstance version of the function wxSubclassedGenericControlProc
 WXDLLEXPORT_DATA(extern FARPROC) wxGenericControlSubClassProc;
 WXDLLEXPORT_DATA(extern wxChar*) wxBuffer;
 WXDLLEXPORT_DATA(extern HINSTANCE) wxhInstance;
+
+// ---------------------------------------------------------------------------
+// global functions
+// ---------------------------------------------------------------------------
+
+WXDLLEXPORT HINSTANCE wxGetInstance();
+WXDLLEXPORT void wxSetInstance(HINSTANCE hInst);
+
+WXDLLEXPORT wxWindow* wxFindWinFromHandle(WXHWND hWnd);
+
+WXDLLEXPORT void wxGetCharSize(WXHWND wnd, int *x, int *y,wxFont *the_font);
+WXDLLEXPORT void wxFillLogFont(LOGFONT *logFont, wxFont *font);
+WXDLLEXPORT wxFont wxCreateFontFromLogFont(LOGFONT *logFont);
+
+WXDLLEXPORT void wxSliderEvent(WXHWND control, WXWORD wParam, WXWORD pos);
+WXDLLEXPORT void wxScrollBarEvent(WXHWND hbar, WXWORD wParam, WXWORD pos);
+
+// Find maximum size of window/rectangle
+WXDLLEXPORT extern void wxFindMaxSize(WXHWND hwnd, RECT *rect);
 
 WXDLLEXPORT wxWindow* wxFindControlFromHandle(WXHWND hWnd);
 WXDLLEXPORT void wxAddControlHandle(WXHWND hWnd, wxWindow *item);
@@ -179,30 +235,6 @@ inline bool wxStyleHasBorder(long style)
   return (style & (wxSIMPLE_BORDER | wxRAISED_BORDER |
                    wxSUNKEN_BORDER | wxDOUBLE_BORDER)) != 0;
 }
-
-#if !defined(__WIN32__) && !defined(WS_EX_CLIENTEDGE)
-  #define WS_EX_CLIENTEDGE 0
-#endif
-
-#if defined(__WIN32__) && !defined(WS_EX_CLIENTEDGE)
-  #define WS_EX_CLIENTEDGE 0x00000200L
-#endif
-
-// ---------------------------------------------------------------------------
-// debug messages
-// ---------------------------------------------------------------------------
-#if defined(__WIN95__) && defined(__WXDEBUG__) && wxUSE_DBWIN32
-
-    #ifndef __TWIN32__
-        #ifdef OutputDebugString
-            #undef OutputDebugString
-        #endif
-
-        #define OutputDebugString OutputDebugStringW95
-    #endif // __TWIN32__
-
-    extern void OutputDebugStringW95(const wxChar*, ...);
-#endif // USE_DBWIN32
 
 #endif
     // _WX_PRIVATE_H_

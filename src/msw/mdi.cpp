@@ -9,73 +9,102 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+// ===========================================================================
+// declarations
+// ===========================================================================
+
+// ---------------------------------------------------------------------------
+// headers
+// ---------------------------------------------------------------------------
+
 #ifdef __GNUG__
-#pragma implementation "mdi.h"
+    #pragma implementation "mdi.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/setup.h"
-#include "wx/frame.h"
-#include "wx/menu.h"
-#include "wx/app.h"
-#include "wx/utils.h"
-#include "wx/dialog.h"
-#include "wx/statusbr.h"
-#include "wx/settings.h"
+    #include "wx/setup.h"
+    #include "wx/frame.h"
+    #include "wx/menu.h"
+    #include "wx/app.h"
+    #include "wx/utils.h"
+    #include "wx/dialog.h"
+    #include "wx/statusbr.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/mdi.h"
 #include "wx/msw/private.h"
 
 #if wxUSE_NATIVE_STATUSBAR
-#include <wx/msw/statbr95.h>
+    #include <wx/msw/statbr95.h>
 #endif
 
 #include <string.h>
 
-extern wxList wxModelessWindows;
+// ---------------------------------------------------------------------------
+// global variables
+// ---------------------------------------------------------------------------
+
+extern wxWindowList wxModelessWindows;      // from dialog.cpp
 extern wxMenu *wxCurrentPopupMenu;
-
-#define IDM_WINDOWTILE  4001
-#define IDM_WINDOWCASCADE 4002
-#define IDM_WINDOWICONS 4003
-#define IDM_WINDOWNEXT 4004
-// This range gives a maximum of 500
-// MDI children. Should be enough :-)
-#define wxFIRST_MDI_CHILD 4100
-#define wxLAST_MDI_CHILD 4600
-
-// Status border dimensions
-#define         wxTHICK_LINE_BORDER 3
-#define         wxTHICK_LINE_WIDTH  1
 
 extern char wxMDIFrameClassName[];
 extern char wxMDIChildFrameClassName[];
-extern wxWindow *wxWndHook;
+extern wxWindow *wxWndHook;                 // from window.cpp
+
+extern wxList *wxWinHandleList;
+
+// ---------------------------------------------------------------------------
+// constants
+// ---------------------------------------------------------------------------
+
+static const int IDM_WINDOWTILE  = 4001;
+static const int IDM_WINDOWCASCADE = 4002;
+static const int IDM_WINDOWICONS = 4003;
+static const int IDM_WINDOWNEXT = 4004;
+
+// This range gives a maximum of 500 MDI children. Should be enough :-)
+static const int wxFIRST_MDI_CHILD = 4100;
+static const int wxLAST_MDI_CHILD = 4600;
+
+// Status border dimensions
+static const int wxTHICK_LINE_BORDER = 3;
+static const int wxTHICK_LINE_WIDTH  = 1;
+
+// ===========================================================================
+// implementation
+// ===========================================================================
+
+// ---------------------------------------------------------------------------
+// wxWin macros
+// ---------------------------------------------------------------------------
 
 #if !USE_SHARED_LIBRARY
-IMPLEMENT_DYNAMIC_CLASS(wxMDIParentFrame, wxFrame)
-IMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame, wxFrame)
-IMPLEMENT_DYNAMIC_CLASS(wxMDIClientWindow, wxWindow)
+    IMPLEMENT_DYNAMIC_CLASS(wxMDIParentFrame, wxFrame)
+    IMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame, wxFrame)
+    IMPLEMENT_DYNAMIC_CLASS(wxMDIClientWindow, wxWindow)
+#endif // USE_SHARED_LIBRARY
 
 BEGIN_EVENT_TABLE(wxMDIParentFrame, wxFrame)
-  EVT_SIZE(wxMDIParentFrame::OnSize)
-  EVT_ACTIVATE(wxMDIParentFrame::OnActivate)
-  EVT_SYS_COLOUR_CHANGED(wxMDIParentFrame::OnSysColourChanged)
+    EVT_SIZE(wxMDIParentFrame::OnSize)
+    EVT_ACTIVATE(wxMDIParentFrame::OnActivate)
+    EVT_SYS_COLOUR_CHANGED(wxMDIParentFrame::OnSysColourChanged)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxMDIClientWindow, wxWindow)
-  EVT_SCROLL(wxMDIClientWindow::OnScroll)
+    EVT_SCROLL(wxMDIClientWindow::OnScroll)
 END_EVENT_TABLE()
 
-#endif
+// ---------------------------------------------------------------------------
+// wxMDIParentFrame
+// ---------------------------------------------------------------------------
 
 wxMDIParentFrame::wxMDIParentFrame()
 {
@@ -86,12 +115,12 @@ wxMDIParentFrame::wxMDIParentFrame()
 }
 
 bool wxMDIParentFrame::Create(wxWindow *parent,
-           wxWindowID id,
-           const wxString& title,
-           const wxPoint& pos,
-           const wxSize& size,
-           long style,
-           const wxString& name)
+                              wxWindowID id,
+                              const wxString& title,
+                              const wxPoint& pos,
+                              const wxSize& size,
+                              long style,
+                              const wxString& name)
 {
   m_defaultIcon = (WXHICON) (wxSTD_MDIPARENTFRAME_ICON ? wxSTD_MDIPARENTFRAME_ICON : wxDEFAULT_MDIPARENTFRAME_ICON);
 
@@ -163,30 +192,6 @@ wxMDIParentFrame::~wxMDIParentFrame()
   delete m_clientWindow;
 }
 
-// Get size *available for subwindows* i.e. excluding menu bar.
-void wxMDIParentFrame::DoGetClientSize(int *x, int *y) const
-{
-  RECT rect;
-  ::GetClientRect((HWND) GetHWND(), &rect);
-
-  int cwidth = rect.right;
-  int cheight = rect.bottom;
-
-  if ( GetStatusBar() )
-  {
-    int sw, sh;
-    GetStatusBar()->GetSize(&sw, &sh);
-    cheight -= sh;
-  }
-
-  wxPoint pt(GetClientAreaOrigin());
-  cheight -= pt.y;
-  cwidth -= pt.x;
-
-  *x = cwidth;
-  *y = cheight;
-}
-
 void wxMDIParentFrame::SetMenuBar(wxMenuBar *menu_bar)
 {
   if (!menu_bar)
@@ -246,9 +251,13 @@ void wxMDIParentFrame::SetMenuBar(wxMenuBar *menu_bar)
 void wxMDIParentFrame::OnSize(wxSizeEvent& event)
 {
 #if wxUSE_CONSTRAINTS
-    if (GetAutoLayout())
-      Layout();
-#endif
+    if ( GetAutoLayout() )
+    {
+        Layout();
+        return;
+    }
+#endif // wxUSE_CONSTRAINTS
+
     int x = 0;
     int y = 0;
     int width, height;
@@ -256,15 +265,6 @@ void wxMDIParentFrame::OnSize(wxSizeEvent& event)
 
     if ( GetClientWindow() )
         GetClientWindow()->SetSize(x, y, width, height);
-
-/* Already done in MSWOnSize
-  // forward WM_SIZE to status bar control
-#if wxUSE_NATIVE_STATUSBAR
-  if (m_frameStatusBar && m_frameStatusBar->IsKindOf(CLASSINFO(wxStatusBar95)))
-    ((wxStatusBar95 *)m_frameStatusBar)->OnSize(event);
-#endif
-*/
-
 }
 
 void wxMDIParentFrame::OnActivate(wxActivateEvent& event)
@@ -275,19 +275,19 @@ void wxMDIParentFrame::OnActivate(wxActivateEvent& event)
 // Returns the active MDI child window
 wxMDIChildFrame *wxMDIParentFrame::GetActiveChild() const
 {
-//  HWND hWnd = (HWND)LOWORD(SendMessage((HWND) GetClientWindow()->GetHWND(), WM_MDIGETACTIVE, 0, 0L));
-  HWND hWnd = (HWND)SendMessage((HWND) GetClientWindow()->GetHWND(), WM_MDIGETACTIVE, 0, 0L);
-  if (hWnd == 0)
-    return NULL;
-  else
-    return (wxMDIChildFrame *)wxFindWinFromHandle((WXHWND) hWnd);
+    HWND hWnd = (HWND)::SendMessage(GetWinHwnd(GetClientWindow()),
+                                    WM_MDIGETACTIVE, 0, 0L);
+    if ( hWnd == 0 )
+        return NULL;
+    else
+        return (wxMDIChildFrame *)wxFindWinFromHandle((WXHWND) hWnd);
 }
 
-// Create the client window class (don't Create the window,
-// just return a new class)
+// Create the client window class (don't Create the window, just return a new
+// class)
 wxMDIClientWindow *wxMDIParentFrame::OnCreateClient()
 {
-    return new wxMDIClientWindow ;
+    return new wxMDIClientWindow;
 }
 
 // Responds to colour changes, and passes event on to children.
@@ -314,100 +314,110 @@ void wxMDIParentFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
 // MDI operations
 void wxMDIParentFrame::Cascade()
 {
-    ::SendMessage( (HWND) GetClientWindow()->GetHWND(), WM_MDICASCADE, 0, 0);
+    ::SendMessage(GetWinHwnd(GetClientWindow()), WM_MDICASCADE, 0, 0);
 }
 
 void wxMDIParentFrame::Tile()
 {
-    ::SendMessage( (HWND) GetClientWindow()->GetHWND(), WM_MDITILE, MDITILE_HORIZONTAL, 0);
+    ::SendMessage(GetWinHwnd(GetClientWindow()), WM_MDITILE, MDITILE_HORIZONTAL, 0);
 }
 
 void wxMDIParentFrame::ArrangeIcons()
 {
-    ::SendMessage( (HWND) GetClientWindow()->GetHWND(), WM_MDIICONARRANGE, 0, 0);
+    ::SendMessage(GetWinHwnd(GetClientWindow()), WM_MDIICONARRANGE, 0, 0);
 }
 
 void wxMDIParentFrame::ActivateNext()
 {
-    ::SendMessage( (HWND) GetClientWindow()->GetHWND(), WM_MDINEXT, 0, 0);
+    ::SendMessage(GetWinHwnd(GetClientWindow()), WM_MDINEXT, 0, 0);
 }
 
 void wxMDIParentFrame::ActivatePrevious()
 {
-    ::SendMessage( (HWND) GetClientWindow()->GetHWND(), WM_MDINEXT, 0, 1);
+    ::SendMessage(GetWinHwnd(GetClientWindow()), WM_MDINEXT, 0, 1);
 }
 
-
-/*
-// Returns a style for the client window - usually 0
-// or, for example, wxHSCROLL | wxVSCROLL
-long wxMDIParentFrame::GetClientStyle() const
+// the MDI parent frame window proc
+long wxMDIParentFrame::MSWWindowProc(WXUINT message,
+                                     WXWPARAM wParam,
+                                     WXLPARAM lParam)
 {
-    return wxHSCROLL | wxVSCROLL ;
-}
-*/
+    long rc = 0;
+    bool processed = FALSE;
 
-bool wxMDIParentFrame::MSWOnDestroy()
-{
-  return FALSE;
-}
+    switch ( message )
+    {
+        case WM_CREATE:
+            m_clientWindow = OnCreateClient();
+            // Uses own style for client style
+            if ( !m_clientWindow->CreateClient(this, GetWindowStyleFlag()) )
+            {
+                wxLogMessage(_("Failed to create MDI parent frame."));
 
-void wxMDIParentFrame::MSWOnCreate(WXLPCREATESTRUCT WXUNUSED(cs))
-{
-    m_clientWindow = OnCreateClient();
-    // Uses own style for client style
-    m_clientWindow->CreateClient(this, GetWindowStyleFlag());
-}
+                rc = -1;
+            }
 
-void wxMDIParentFrame::MSWOnSize(int x, int y, WXUINT id)
-{
-  switch (id)
-  {
-    case SIZEFULLSCREEN:
-    case SIZENORMAL:
-      m_iconized = FALSE;
-    break;
-    case SIZEICONIC:
-      m_iconized = TRUE;
-    break;
-  }
+            processed = TRUE;
+            break;
 
- if (!m_iconized)
- {
-  // forward WM_SIZE to status bar control
-#if wxUSE_NATIVE_STATUSBAR
-  if (m_frameStatusBar && m_frameStatusBar->IsKindOf(CLASSINFO(wxStatusBar95)))
-  {
-    wxSizeEvent event(wxSize(x, y), m_frameStatusBar->GetId());
-    event.SetEventObject( m_frameStatusBar );
+        case WM_ERASEBKGND:
+            processed = TRUE;
 
-    ((wxStatusBar95 *)m_frameStatusBar)->OnSize(event);
-  }
+            // we erase background ourselves
+            rc = TRUE;
+            break;
+
+        case WM_MENUSELECT:
+            {
+                WORD item = (WORD)wParam;
+#ifdef __WIN32__
+                WORD flags = HIWORD(wParam);
+                HMENU menu = (HMENU)lParam;
+#else
+                WORD flags = LOWORD(lParam);
+                HMENU menu = (HMENU)HIWORD(lParam);
 #endif
+                if ( m_parentFrameActive )
+                {
+                    processed = HandleMenuSelect(item, flags, (WXHMENU)menu);
+                }
+                else if (m_currentChild)
+                {
+                    processed = m_currentChild->
+                        HandleMenuSelect(item, flags, (WXHMENU)menu);
+                }
+            }
+            break;
+    }
 
-    PositionStatusBar();
-    PositionToolBar();
+    if ( !processed )
+        rc = wxFrame::MSWWindowProc(message, wParam, lParam);
 
-    wxSizeEvent event(wxSize(x, y), m_windowId);
-    event.SetEventObject( this );
-    if (!GetEventHandler()->ProcessEvent(event))
-        Default();
-  }
+    return rc;
 }
 
 bool wxMDIParentFrame::MSWOnActivate(int state, bool minimized, WXHWND activate)
 {
-    wxWindow::MSWOnActivate(state, minimized, activate);
+    bool processed = FALSE;
+
+    if ( wxWindow::MSWOnActivate(state, minimized, activate) )
+    {
+        // already processed
+        processed = TRUE;
+    }
 
     // If this window is an MDI parent, we must also send an OnActivate message
     // to the current child.
-    if ((m_currentChild != NULL) && ((state == WA_ACTIVE) || (state == WA_CLICKACTIVE)))
+    if ( (m_currentChild != NULL) && 
+         ((state == WA_ACTIVE) || (state == WA_CLICKACTIVE)) )
     {
         wxActivateEvent event(wxEVT_ACTIVATE, TRUE, m_currentChild->GetId());
         event.SetEventObject( m_currentChild );
-        m_currentChild->GetEventHandler()->ProcessEvent(event);
+        if ( m_currentChild->GetEventHandler()->ProcessEvent(event) )
+            processed = TRUE;
     }
-    return 0;
+
+    return processed;
 }
 
 bool wxMDIParentFrame::MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control)
@@ -495,29 +505,6 @@ bool wxMDIParentFrame::MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control)
   return wxWindow::MSWOnCommand(id, cmd, control);
 }
 
-void wxMDIParentFrame::MSWOnMenuHighlight(WXWORD nItem, WXWORD nFlags, WXHMENU hSysMenu)
-{
-  if (m_parentFrameActive)
-  {
-    if (nFlags == 0xFFFF && hSysMenu == (WXHMENU) NULL)
-    {
-        wxMenuEvent event(wxEVT_MENU_HIGHLIGHT, -1);
-        event.SetEventObject( this );
-        GetEventHandler()->ProcessEvent(event);
-    }
-    else if (nFlags != MF_SEPARATOR)
-    {
-        wxMenuEvent event(wxEVT_MENU_HIGHLIGHT, nItem);
-        event.SetEventObject( this );
-        GetEventHandler()->ProcessEvent(event);
-    }
-  }
-  else if (m_currentChild)
-  {
-    m_currentChild->MSWOnMenuHighlight(nItem, nFlags, hSysMenu);
-  }
-}
-
 long wxMDIParentFrame::MSWDefWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
     WXHWND clientWnd;
@@ -526,45 +513,45 @@ long wxMDIParentFrame::MSWDefWindowProc(WXUINT message, WXWPARAM wParam, WXLPARA
     else
         clientWnd = 0;
 
-  return DefFrameProc((HWND) GetHWND(), (HWND) clientWnd, message, wParam, lParam);
+    return DefFrameProc(GetHwnd(), (HWND)clientWnd, message, wParam, lParam);
 }
 
 bool wxMDIParentFrame::MSWProcessMessage(WXMSG* msg)
 {
-  if ((m_currentChild != (wxWindow *)NULL) && (m_currentChild->GetHWND() != (WXHWND) NULL) && m_currentChild->MSWProcessMessage(msg))
-     return TRUE;
-
-  return FALSE;
+    return m_currentChild && m_currentChild->GetHWND() &&
+           m_currentChild->MSWProcessMessage(msg);
 }
 
 bool wxMDIParentFrame::MSWTranslateMessage(WXMSG* msg)
 {
-  MSG *pMsg = (MSG *)msg;
+    MSG *pMsg = (MSG *)msg;
 
-  if ((m_currentChild != (wxWindow *)NULL) && (m_currentChild->GetHWND() != (WXHWND) NULL) && m_currentChild->MSWTranslateMessage(msg))
-     return TRUE;
+    if ( m_currentChild && m_currentChild->GetHWND() &&
+         m_currentChild->MSWTranslateMessage(msg) )
+    {
+        return TRUE;
+    }
 
-  if (m_acceleratorTable.Ok() &&
-          ::TranslateAccelerator((HWND) GetHWND(), (HACCEL) m_acceleratorTable.GetHACCEL(), pMsg))
-    return TRUE;
+    if ( m_acceleratorTable.Ok() &&
+         ::TranslateAccelerator(GetHwnd(),
+                                GetTableHaccel(&m_acceleratorTable),
+                                pMsg) )
+    {
+        return TRUE;
+    }
 
-  if (pMsg->message == WM_KEYDOWN || pMsg->message == WM_SYSKEYDOWN)
-  {
-    if (::TranslateMDISysAccel((HWND) GetClientWindow()->GetHWND(), pMsg))
-      return TRUE;
-  }
+    if ( pMsg->message == WM_KEYDOWN || pMsg->message == WM_SYSKEYDOWN )
+    {
+        if ( ::TranslateMDISysAccel(GetWinHwnd(GetClientWindow()), pMsg))
+            return TRUE;
+    }
 
-  return FALSE;
+    return FALSE;
 }
 
-
-bool wxMDIParentFrame::MSWOnEraseBkgnd(WXHDC WXUNUSED(pDC))
-{
-  return TRUE;
-}
-
-extern wxWindow *wxWndHook;
-extern wxList *wxWinHandleList;
+// ---------------------------------------------------------------------------
+// wxMDIChildFrame
+// ---------------------------------------------------------------------------
 
 wxMDIChildFrame::wxMDIChildFrame()
 {
@@ -572,12 +559,12 @@ wxMDIChildFrame::wxMDIChildFrame()
 }
 
 bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
-           wxWindowID id,
-           const wxString& title,
-           const wxPoint& pos,
-           const wxSize& size,
-           long style,
-           const wxString& name)
+                             wxWindowID id,
+                             const wxString& title,
+                             const wxPoint& pos,
+                             const wxSize& size,
+                             long style,
+                             const wxString& name)
 {
   m_defaultIcon = (WXHICON) (wxSTD_MDICHILDFRAME_ICON ? wxSTD_MDICHILDFRAME_ICON : wxDEFAULT_MDICHILDFRAME_ICON);
 
@@ -797,46 +784,49 @@ void wxMDIChildFrame::Activate()
 }
 
 static HWND invalidHandle = 0;
-void wxMDIChildFrame::MSWOnSize(int x, int y, WXUINT id)
+bool wxMDIChildFrame::MSWOnSize(int x, int y, WXUINT id)
 {
-  if (!GetHWND()) return;
-
-  if (invalidHandle == (HWND) GetHWND())
-  {
-    return;
-  }
-
-  (void)MSWDefWindowProc(m_lastMsg, m_lastWParam, m_lastLParam);
-
-  switch (id)
-  {
-    case SIZEFULLSCREEN:
-    case SIZENORMAL:
-      m_iconized = FALSE;
-    break;
-    case SIZEICONIC:
-      m_iconized = TRUE;
-    break;
-  }
-
-  if (!m_iconized)
-  {
-    // forward WM_SIZE to status bar control
-#if wxUSE_NATIVE_STATUSBAR
-    if (m_frameStatusBar && m_frameStatusBar->IsKindOf(CLASSINFO(wxStatusBar95)))
+    HWND hwnd = GetHwnd();
+    
+    if ( !hwnd || hwnd == invalidHandle )
     {
-      wxSizeEvent event(wxSize(x, y), m_frameStatusBar->GetId());
-      event.SetEventObject( m_frameStatusBar );
-
-      ((wxStatusBar95 *)m_frameStatusBar)->OnSize(event);
+        return FALSE;
     }
+    
+    switch (id)
+    {
+        case SIZEFULLSCREEN:
+        case SIZENORMAL:
+            m_iconized = FALSE;
+            break;
+
+        case SIZEICONIC:
+            m_iconized = TRUE;
+            break;
+    }
+    
+    if (!m_iconized)
+    {
+        // forward WM_SIZE to status bar control
+#if wxUSE_NATIVE_STATUSBAR
+        if (m_frameStatusBar && m_frameStatusBar->IsKindOf(CLASSINFO(wxStatusBar95)))
+        {
+            wxSizeEvent event(wxSize(x, y), m_frameStatusBar->GetId());
+            event.SetEventObject( m_frameStatusBar );
+            
+            ((wxStatusBar95 *)m_frameStatusBar)->OnSize(event);
+        }
 #endif
-
-    PositionStatusBar();
-    PositionToolBar();
-
-    wxWindow::MSWOnSize(x, y, id);
-  }
+        
+        PositionStatusBar();
+        PositionToolBar();
+        
+        return wxWindow::MSWOnSize(x, y, id);
+    }
+    else
+    {
+        return FALSE;
+    }
 }
 
 bool wxMDIChildFrame::MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control)
@@ -895,7 +885,7 @@ bool wxMDIChildFrame::MSWTranslateMessage(WXMSG* msg)
   return FALSE;
 }
 
-long wxMDIChildFrame::MSWOnMDIActivate(long activate, WXHWND WXUNUSED(one), WXHWND WXUNUSED(two))
+bool wxMDIChildFrame::MSWOnMDIActivate(long activate, WXHWND WXUNUSED(one), WXHWND WXUNUSED(two))
 {
   wxMDIParentFrame *parent = (wxMDIParentFrame *)GetParent();
   HMENU parent_menu = (HMENU) parent->GetWinMenu();
@@ -922,7 +912,7 @@ long wxMDIChildFrame::MSWOnMDIActivate(long activate, WXHWND WXUNUSED(one), WXHW
     }
     wxActivateEvent event(wxEVT_ACTIVATE, TRUE, m_windowId);
     event.SetEventObject( this );
-    GetEventHandler()->ProcessEvent(event);
+    return GetEventHandler()->ProcessEvent(event);
   }
   else
   {
@@ -931,7 +921,8 @@ long wxMDIChildFrame::MSWOnMDIActivate(long activate, WXHWND WXUNUSED(one), WXHW
 
     wxActivateEvent event(wxEVT_ACTIVATE, FALSE, m_windowId);
     event.SetEventObject( this );
-    GetEventHandler()->ProcessEvent(event);
+    if ( GetEventHandler()->ProcessEvent(event) )
+        return TRUE;
 
 //    m_active = FALSE;
     if (parent_menu)
@@ -953,8 +944,7 @@ long wxMDIChildFrame::MSWOnMDIActivate(long activate, WXHWND WXUNUSED(one), WXHW
   bool flag = (activate != 0);
   wxActivateEvent event(wxEVT_ACTIVATE, flag, m_windowId);
   event.SetEventObject( this );
-  GetEventHandler()->ProcessEvent(event);
-  return 0;
+  return GetEventHandler()->ProcessEvent(event);
 }
 
 void wxMDIChildFrame::MSWDestroyWindow()
@@ -1021,7 +1011,7 @@ bool wxMDIChildFrame::ResetWindowStyle(void *vrect)
 #endif
 }
 
-void wxMDIChildFrame::MSWOnWindowPosChanging(void *pos)
+bool wxMDIChildFrame::MSWOnWindowPosChanging(void *pos)
 {
     WINDOWPOS *lpPos = (WINDOWPOS *)pos;
 #if defined(__WIN95__)
@@ -1045,7 +1035,8 @@ void wxMDIChildFrame::MSWOnWindowPosChanging(void *pos)
         }
     }
 #endif
-    Default();
+
+    return FALSE;
 }
 
 // Client window
@@ -1123,10 +1114,3 @@ void wxMDIClientWindow::OnScroll(wxScrollEvent& event)
 
     Default();
 }
-
-// Should hand the message to the default proc
-long wxMDIClientWindow::MSWOnMDIActivate(long bActivate, WXHWND, WXHWND)
-{
-    return Default();
-}
-

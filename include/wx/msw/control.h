@@ -57,11 +57,9 @@ public:
 
    // MSW-specific
    
-   // Window procedure
-   virtual void MSWOnMouseMove(int x, int y, WXUINT flags);
-   virtual bool MSWNotify(WXWPARAM wParam, WXLPARAM lParam, WXLPARAM *result);
-
-   void OnEraseBackground(wxEraseEvent& event);
+#ifdef __WIN95__
+   virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
+#endif // Win95
 
    // For ownerdraw items
    virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *WXUNUSED(item)) { return FALSE; };
@@ -69,6 +67,8 @@ public:
 
    wxFunction GetCallback() { return m_callback; }
    wxList& GetSubcontrols() { return m_subControls; }
+
+   void OnEraseBackground(wxEraseEvent& event);
 
 protected:
    wxFunction       m_callback;     // Callback associated with the window

@@ -45,7 +45,7 @@
     #include <wx/msw/statbr95.h>
 #endif
 
-extern wxList wxModelessWindows;
+extern wxWindowList wxModelessWindows;
 extern wxList WXDLLEXPORT wxPendingDelete;
 extern char wxFrameClassName[];
 extern wxMenu *wxCurrentPopupMenu;
@@ -552,7 +552,7 @@ void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
  *
  */
 
-void wxFrame::MSWCreate(int id, wxWindow *parent, const char *wclass, wxWindow *wx_win, const char *title,
+bool wxFrame::MSWCreate(int id, wxWindow *parent, const char *wclass, wxWindow *wx_win, const char *title,
                    int x, int y, int width, int height, long style)
 
 {
@@ -611,12 +611,16 @@ void wxFrame::MSWCreate(int id, wxWindow *parent, const char *wclass, wxWindow *
     extendedStyle |= WS_EX_TOPMOST;
 
   m_iconized = FALSE;
-  wxWindow::MSWCreate(id, parent, wclass, wx_win, title, x, y, width, height,
-         msflags, NULL, extendedStyle);
+  if ( !wxWindow::MSWCreate(id, parent, wclass, wx_win, title, x, y, width, height,
+         msflags, NULL, extendedStyle) )
+         return FALSE;
+
   // Seems to be necessary if we use WS_POPUP
   // style instead of WS_OVERLAPPED
   if (width > -1 && height > -1)
     ::PostMessage((HWND) GetHWND(), WM_SIZE, SIZE_RESTORED, MAKELPARAM(width, height));
+
+  return TRUE;
 }
 
 bool wxFrame::MSWOnPaint()
@@ -673,60 +677,58 @@ WXHICON wxFrame::MSWOnQueryDragIcon()
     return m_defaultIcon;
 }
 
-void wxFrame::MSWOnSize(int x, int y, WXUINT id)
+bool wxFrame::MSWOnSize(int x, int y, WXUINT id)
 {
-  switch (id)
-  {
-    case SIZENORMAL:
-      // only do it it if we were iconized before, otherwise resizing the
-      // parent frame has a curious side effect of bringing it under it's
-      // children
-      if ( !m_iconized )
-        break;
+    bool processed = FALSE;
 
-      // restore all child frames too
-      IconizeChildFrames(FALSE);
+    switch ( id )
+    {
+        case SIZENORMAL:
+            // only do it it if we were iconized before, otherwise resizing the
+            // parent frame has a curious side effect of bringing it under it's
+            // children
+            if ( !m_iconized )
+                break;
 
-      // fall through
+            // restore all child frames too
+            IconizeChildFrames(FALSE);
 
-    case SIZEFULLSCREEN:
-      m_iconized = FALSE;
-      break;
+            // fall through
 
-    case SIZEICONIC:
-      // iconize all child frames too
-      IconizeChildFrames(TRUE);
+        case SIZEFULLSCREEN:
+            m_iconized = FALSE;
+            break;
 
-      m_iconized = TRUE;
-      break;
-  }
+        case SIZEICONIC:
+            // iconize all child frames too
+            IconizeChildFrames(TRUE);
 
- if (!m_iconized)
- {
-  // forward WM_SIZE to status bar control
+            m_iconized = TRUE;
+            break;
+    }
+
+    if ( !m_iconized )
+    {
+        // forward WM_SIZE to status bar control
 #if wxUSE_NATIVE_STATUSBAR
-  if (m_frameStatusBar && m_frameStatusBar->IsKindOf(CLASSINFO(wxStatusBar95)))
-  {
-    wxSizeEvent event(wxSize(x, y), m_frameStatusBar->GetId());
-    event.SetEventObject( m_frameStatusBar );
+        if (m_frameStatusBar && m_frameStatusBar->IsKindOf(CLASSINFO(wxStatusBar95)))
+        {
+            wxSizeEvent event(wxSize(x, y), m_frameStatusBar->GetId());
+            event.SetEventObject( m_frameStatusBar );
 
-    ((wxStatusBar95 *)m_frameStatusBar)->OnSize(event);
-  }
-#endif
+            ((wxStatusBar95 *)m_frameStatusBar)->OnSize(event);
+        }
+#endif // wxUSE_NATIVE_STATUSBAR
 
-  PositionStatusBar();
-  PositionToolBar();
+        PositionStatusBar();
+        PositionToolBar();
 
-  wxSizeEvent event(wxSize(x, y), m_windowId);
-  event.SetEventObject( this );
-  if (!GetEventHandler()->ProcessEvent(event))
-    Default();
- }
-}
+        wxSizeEvent event(wxSize(x, y), m_windowId);
+        event.SetEventObject( this );
+        processed = GetEventHandler()->ProcessEvent(event);
+    }
 
-bool wxFrame::MSWOnClose()
-{
-    return Close();
+    return processed;
 }
 
 bool wxFrame::MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control)
@@ -758,22 +760,6 @@ bool wxFrame::MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control)
     return wxWindow::MSWOnCommand(id, cmd, control);
 }
 
-void wxFrame::MSWOnMenuHighlight(WXWORD nItem, WXWORD nFlags, WXHMENU hSysMenu)
-{
-  if (nFlags == 0xFFFF && hSysMenu == 0)
-  {
-    wxMenuEvent event(wxEVT_MENU_HIGHLIGHT, -1);
-    event.SetEventObject( this );
-    GetEventHandler()->ProcessEvent(event);
-  }
-  else if ((nFlags != MF_SEPARATOR) && (nItem != 0) && (nItem != 65535))
-  {
-    wxMenuEvent event(wxEVT_MENU_HIGHLIGHT, nItem);
-    event.SetEventObject( this );
-    GetEventHandler()->ProcessEvent(event);
-  }
-}
-
 bool wxFrame::MSWProcessMessage(WXMSG* pMsg)
 {
   return FALSE;
@@ -788,44 +774,45 @@ bool wxFrame::MSWTranslateMessage(WXMSG* pMsg)
   return FALSE;
 }
 
-// Default resizing behaviour - if only ONE subwindow,
-// resize to client rectangle size
+// Default resizing behaviour - if only ONE subwindow, resize to client
+// rectangle size
 void wxFrame::OnSize(wxSizeEvent& event)
 {
-  // if we're using constraints - do use them
-  #if wxUSE_CONSTRAINTS
-    if ( GetAutoLayout() ) {
-      Layout();
-      return;
-    }
-  #endif
-
-  // do we have _exactly_ one child?
-  wxWindow *child = NULL;
-  for ( wxNode *node = GetChildren().First(); node; node = node->Next() )
-  {
-    wxWindow *win = (wxWindow *)node->Data();
-    if ( !win->IsKindOf(CLASSINFO(wxFrame))  &&
-         !win->IsKindOf(CLASSINFO(wxDialog)) &&
-         (win != GetStatusBar()) &&
-         (win != GetToolBar()) )
+    // if we're using constraints - do use them
+#if wxUSE_CONSTRAINTS
+    if ( GetAutoLayout() )
     {
-      if ( child )
-        return;     // it's our second subwindow - nothing to do
-      child = win;
+        Layout();
+        return;
     }
-  }
+#endif
 
-  if ( child ) {
-    // we have exactly one child - set it's size to fill the whole frame
-    int clientW, clientH;
-    GetClientSize(&clientW, &clientH);
+    // do we have _exactly_ one child?
+    wxWindow *child = NULL;
+    for ( wxNode *node = GetChildren().First(); node; node = node->Next() )
+    {
+        wxWindow *win = (wxWindow *)node->Data();
+        if ( !win->IsKindOf(CLASSINFO(wxFrame))  &&
+                !win->IsKindOf(CLASSINFO(wxDialog)) &&
+                (win != GetStatusBar()) &&
+                (win != GetToolBar()) )
+        {
+            if ( child )
+                return;     // it's our second subwindow - nothing to do
+            child = win;
+        }
+    }
 
-    int x = 0;
-    int y = 0;
+    if ( child ) {
+        // we have exactly one child - set it's size to fill the whole frame
+        int clientW, clientH;
+        GetClientSize(&clientW, &clientH);
 
-    child->SetSize(x, y, clientW, clientH);
-  }
+        int x = 0;
+        int y = 0;
+
+        child->SetSize(x, y, clientW, clientH);
+    }
 }
 
 // Default activation behaviour - set the focus for the first child
@@ -1031,14 +1018,79 @@ void wxFrame::PositionToolBar()
     }
 }
 
-// propagate our state change to all child frames
+// propagate our state change to all child frames: this allows us to emulate X
+// Windows behaviour where child frames float independently of the parent one
+// on the desktop, but are iconized/restored with it
 void wxFrame::IconizeChildFrames(bool bIconize)
 {
-  for ( wxNode *node = GetChildren().First(); node; node = node->Next() ) {
-    wxWindow *win = (wxWindow *)node->Data();
-    if ( win->IsKindOf(CLASSINFO(wxFrame)) ) {
-      ((wxFrame *)win)->Iconize(bIconize);
+    for ( wxWindowList::Node *node = GetChildren().GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        wxWindow *win = node->GetData();
+
+        if ( win->IsKindOf(CLASSINFO(wxFrame)) )
+        {
+            ((wxFrame *)win)->Iconize(bIconize);
+        }
     }
-  }
 }
 
+// ===========================================================================
+// our private (non virtual) message handlers
+// ===========================================================================
+
+bool wxFrame::HandleMenuSelect(WXWORD nItem, WXWORD nFlags, WXHMENU hMenu)
+{
+    int item;
+    if ( nFlags == 0xFFFF && hMenu == 0 )
+    {
+        // FIXME: what does this do? does it ever happen?
+        item = -1;
+    }
+    else if ((nFlags != MF_SEPARATOR) && (nItem != 0) && (nItem != 65535))
+    {
+        item = nItem;
+    }
+    else
+    {
+        return FALSE;
+    }
+
+    wxMenuEvent event(wxEVT_MENU_HIGHLIGHT, item);
+    event.SetEventObject( this );
+
+    return GetEventHandler()->ProcessEvent(event);
+}
+
+// ---------------------------------------------------------------------------
+// the window proc for wxFrame
+// ---------------------------------------------------------------------------
+
+long wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
+{
+    long rc = 0;
+    bool processed = FALSE;
+
+    switch ( message )
+    {
+        case WM_MENUSELECT:
+            {
+                WORD item = (WORD)wParam;
+#ifdef __WIN32__
+                WORD flags = HIWORD(wParam);
+                HMENU sysmenu = (HMENU)lParam;
+#else
+                WORD flags = LOWORD(lParam);
+                HMENU sysmenu = (HMENU)HIWORD(lParam);
+#endif
+                processed = HandleMenuSelect(item, flags, (WXHMENU)sysmenu);
+            }
+            break;
+    }
+
+    if ( !processed )
+        rc = wxWindow::MSWWindowProc(message, wParam, lParam);
+
+    return rc;
+}

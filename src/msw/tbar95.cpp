@@ -346,7 +346,7 @@ bool wxToolBar95::MSWCommand(WXUINT cmd, WXWORD id)
   return TRUE;
 }
 
-bool wxToolBar95::MSWNotify(WXWPARAM WXUNUSED(wParam),
+bool wxToolBar95::MSWOnNotify(int WXUNUSED(idCtrl),
                             WXLPARAM lParam,
                             WXLPARAM *result)
 {

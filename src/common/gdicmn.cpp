@@ -43,28 +43,15 @@
 #endif
 
 #if !USE_SHARED_LIBRARY
-IMPLEMENT_CLASS(wxColourDatabase, wxList)
-IMPLEMENT_DYNAMIC_CLASS(wxFontList, wxList)
-IMPLEMENT_DYNAMIC_CLASS(wxPenList, wxList)
-IMPLEMENT_DYNAMIC_CLASS(wxBrushList, wxList)
-IMPLEMENT_DYNAMIC_CLASS(wxBitmapList, wxList)
-IMPLEMENT_DYNAMIC_CLASS(wxResourceCache, wxList)
-/*
-IMPLEMENT_DYNAMIC_CLASS(wxRect, wxObject)
-IMPLEMENT_DYNAMIC_CLASS(wxPoint, wxObject)
-IMPLEMENT_DYNAMIC_CLASS(wxRealPoint, wxObject)
-*/
+    IMPLEMENT_CLASS(wxColourDatabase, wxList)
+    IMPLEMENT_DYNAMIC_CLASS(wxFontList, wxList)
+    IMPLEMENT_DYNAMIC_CLASS(wxPenList, wxList)
+    IMPLEMENT_DYNAMIC_CLASS(wxBrushList, wxList)
+    IMPLEMENT_DYNAMIC_CLASS(wxBitmapList, wxList)
+    IMPLEMENT_DYNAMIC_CLASS(wxResourceCache, wxList)
+
+    IMPLEMENT_ABSTRACT_CLASS(wxDCBase, wxObject)
 #endif
-
-wxRect::wxRect()
-{
-    x = 0; y = 0; width = 0; height = 0;
-}
-
-wxRect::wxRect(long xx, long yy, long w, long h)
-{
-    x = xx; y = yy; width = w; height = h;
-}
 
 wxRect::wxRect(const wxPoint& topLeft, const wxPoint& bottomRight)
 {
@@ -92,21 +79,7 @@ wxRect::wxRect(const wxPoint& point, const wxSize& size)
     width = size.x; height = size.y;
 }
 
-wxRect::wxRect(const wxRect& rect)
-{
-    x = rect.x;
-    y = rect.y;
-    width = rect.width;
-    height = rect.height;
-}
-
-wxRect& wxRect::operator = (const wxRect& rect)
-{
-    x = rect.x; y = rect.y; width = rect.width; height = rect.height;
-    return *this;
-}
-
-bool wxRect::operator == (const wxRect& rect)
+bool wxRect::operator==(const wxRect& rect) const
 {
   return ((x == rect.x) &&
           (y == rect.y) &&
@@ -114,16 +87,7 @@ bool wxRect::operator == (const wxRect& rect)
           (height == rect.height));
 }
 
-bool wxRect::operator != (const wxRect& rect)
-{
-  return ((x != rect.x) ||
-          (y != rect.y) ||
-          (width != rect.width) ||
-          (height != rect.height));
-}
-
-wxColourDatabase::wxColourDatabase (int type):
-wxList (type)
+wxColourDatabase::wxColourDatabase (int type) : wxList (type)
 {
 }
 
@@ -321,23 +285,29 @@ wxColour *wxColourDatabase::FindColour(const wxString& colour)
 
 wxString wxColourDatabase::FindName (const wxColour& colour) const
 {
-  unsigned char red = colour.Red ();
-  unsigned char green = colour.Green ();
-  unsigned char blue = colour.Blue ();
+    wxString name;
 
-  for (wxNode * node = First (); node; node = node->Next ())
-  {
-      wxColour *col = (wxColour *) node->Data ();
+    unsigned char red = colour.Red ();
+    unsigned char green = colour.Green ();
+    unsigned char blue = colour.Blue ();
 
-      if (col->Red () == red && col->Green () == green && col->Blue () == blue)
+    for (wxNode * node = First (); node; node = node->Next ())
+    {
+        wxColour *col = (wxColour *) node->Data ();
+
+        if (col->Red () == red && col->Green () == green && col->Blue () == blue)
         {
-          const wxChar *found = node->GetKeyString();
-          if (found)
-            return wxString(found);
-        }
-  }
-  return wxString("");                        // Not Found
+            const wxChar *found = node->GetKeyString();
+            if ( found )
+            {
+                name = found;
 
+                break;
+            }
+        }
+    }
+
+    return name;
 }
 
 void wxInitializeStockLists () {

@@ -365,7 +365,7 @@ void wxCheckListBox::OnChar(wxKeyEvent& event)
   if ( event.KeyCode() == WXK_SPACE )
     GetItem(GetSelection())->Toggle();
   else
-    wxListBox::OnChar(event);
+    event.Skip();
 }
 
 void wxCheckListBox::OnLeftClick(wxMouseEvent& event)

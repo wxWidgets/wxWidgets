@@ -223,11 +223,13 @@ public:
 class WXDLLEXPORT wxRect
 {
 public:
-    wxRect();
-    wxRect(long x, long y, long w, long h);
+    wxRect() { x = y = width = height = 0; }
+    wxRect(long xx, long yy, long ww, long hh)
+        { x = xx; y = yy; width = ww; height = hh; }
     wxRect(const wxPoint& topLeft, const wxPoint& bottomRight);
     wxRect(const wxPoint& pos, const wxSize& size);
-    wxRect(const wxRect& rect);
+
+    // default copy ctor and assignment operators ok
 
     long GetX() const { return x; }
     void SetX(long xx) { x = xx; }
@@ -249,9 +251,8 @@ public:
     long GetBottom() const { return y + height; }
     long GetRight()  const { return x + width; }
 
-    wxRect& operator = (const wxRect& rect);
-    bool operator == (const wxRect& rect);
-    bool operator != (const wxRect& rect);
+    bool operator == (const wxRect& rect) const;
+    bool operator != (const wxRect& rect) const { return !(*this == rect); }
 
 public:
     long x, y, width, height;

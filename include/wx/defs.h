@@ -81,6 +81,8 @@
 #ifdef __VISUALC__
 #   pragma warning(disable:4244)    // conversion from double to float
 #   pragma warning(disable:4100)    // unreferenced formal parameter
+#   pragma warning(disable:4511)    // copy ctor couldn't be generated
+#   pragma warning(disable:4512)    // operator=() couldn't be generated
 #endif // __VISUALC__
 
 // suppress some Salford C++ warnings
@@ -1066,8 +1068,7 @@ typedef enum {
 
 
 #ifdef __WXMSW__
-/* Stand-ins for Windows types, to avoid
- * #including all of windows.h */
+// Stand-ins for Windows types, to avoid #including all of windows.h
 typedef unsigned long   WXHWND;
 typedef unsigned long   WXHANDLE;
 typedef unsigned long   WXHICON;
@@ -1095,15 +1096,17 @@ typedef void *          WXMSG;
 typedef unsigned long   WXHCONV;
 typedef unsigned long   WXHKEY;
 typedef unsigned long   WXHTREEITEM;
+
 typedef void *          WXDRAWITEMSTRUCT;
 typedef void *          WXMEASUREITEMSTRUCT;
 typedef void *          WXLPCREATESTRUCT;
+
 #ifdef __GNUWIN32__
-typedef int (*WXFARPROC)();
+    typedef int (*WXFARPROC)();
 #elif defined(__WIN32__)
-typedef int (__stdcall *WXFARPROC)();
+    typedef int (__stdcall *WXFARPROC)();
 #else
-typedef int (*WXFARPROC)();
+    typedef int (*WXFARPROC)();
 #endif
 
 typedef WXHWND WXWidget;
@@ -1197,6 +1200,15 @@ typedef GtkWidget *WXWidget;
 #endif
 #endif
   // __WXMSW__
+
+// ---------------------------------------------------------------------------
+// macro to define a class without copy ctor nor assignment operator
+// ---------------------------------------------------------------------------
+
+#define DECLARE_NO_COPY_CLASS(classname)        \
+    private:                                    \
+        classname(const classname&);            \
+        classname& operator=(const classname&)
 
 #endif
     // _WX_DEFS_H_

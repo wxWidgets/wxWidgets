@@ -208,11 +208,6 @@ class WXDLLEXPORT wxToolBarBase : public wxControl
   void OnSize(wxSizeEvent& event);
   void OnIdle(wxIdleEvent& event);
 
-  // Required to force normal cursor-setting behaviour in Windows
-#ifdef __WXMSW__
-  virtual void MSWOnMouseMove(int x, int y, WXUINT flags);
-#endif
-
  protected:
   wxList                m_tools;
 //  int                   m_tilingDirection;

@@ -87,8 +87,8 @@ public:
     void Command(wxCommandEvent& event);
     virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
             WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
-    void MSWOnVScroll(WXWORD wParam, WXWORD pos, WXHWND control);
-    void MSWOnHScroll(WXWORD wParam, WXWORD pos, WXHWND control);
+    virtual bool MSWOnScroll(int orientation, WXWORD wParam,
+                             WXWORD pos, WXHWND control);
 
 protected:
     WXHWND        m_staticMin;

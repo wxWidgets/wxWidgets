@@ -419,7 +419,7 @@ class WXDLLEXPORT wxListCtrl: public wxControl
 
   // IMPLEMENTATION
   virtual bool MSWCommand(WXUINT param, WXWORD id);
-  virtual bool MSWNotify(WXWPARAM wParam, WXLPARAM lParam, WXLPARAM *result);
+  virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
 
   // Recreate window - seems to be necessary when changing a style.
   void RecreateWindow();

@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -43,7 +43,7 @@
 IMPLEMENT_ABSTRACT_CLASS(wxControl, wxWindow)
 
 BEGIN_EVENT_TABLE(wxControl, wxWindow)
-	EVT_ERASE_BACKGROUND(wxControl::OnEraseBackground)
+    EVT_ERASE_BACKGROUND(wxControl::OnEraseBackground)
 END_EVENT_TABLE()
 #endif
 
@@ -119,136 +119,54 @@ void wxFindMaxSize(WXHWND wnd, RECT *rect)
 
 }
 
-/*
-// Not currently used
-void wxConvertDialogToPixels(wxWindow *control, int *x, int *y)
+#ifdef __WIN95__
+bool wxControl::MSWOnNotify(int idCtrl,
+                            WXLPARAM lParam,
+                            WXLPARAM* result)
 {
-  if (control->m_windowParent && control->m_windowParent->is_dialog)
-  {
-    DWORD word = GetDialogBaseUnits();
-    int xs = LOWORD(word);
-    int ys = HIWORD(word);
-    *x = (int)(*x * xs/4);
-    *y = (int)(*y * ys/8);
-  }
-  else
-  {
-    *x = *x;
-    *y = *y;
-  }
-}
-*/
+    wxCommandEvent event(wxEVT_NULL, m_windowId);
+    wxEventType eventType = wxEVT_NULL;
+    NMHDR *hdr1 = (NMHDR*) lParam;
+    switch ( hdr1->code )
+    {
+        case NM_CLICK:
+            eventType = wxEVT_COMMAND_LEFT_CLICK;
+            break;
 
-void wxControl::MSWOnMouseMove(int x, int y, WXUINT flags)
-{
-/*
-  // Trouble with this is that it sets the cursor for controls too :-(
-  if (m_windowCursor.Ok() && !wxIsBusy())
-    ::SetCursor(m_windowCursor.GetHCURSOR());
-*/
+        case NM_DBLCLK:
+            eventType = wxEVT_COMMAND_LEFT_DCLICK;
+            break;
 
-  if (!m_mouseInWindow)
-  {
-    // Generate an ENTER event
-    m_mouseInWindow = TRUE;
-    MSWOnMouseEnter(x, y, flags);
-  }
+        case NM_RCLICK:
+            eventType = wxEVT_COMMAND_RIGHT_CLICK;
+            break;
 
-  wxMouseEvent event(wxEVT_MOTION);
+        case NM_RDBLCLK:
+            eventType = wxEVT_COMMAND_RIGHT_DCLICK;
+            break;
 
-  event.m_x = x; event.m_y = y;
-  event.m_shiftDown = ((flags & MK_SHIFT) != 0);
-  event.m_controlDown = ((flags & MK_CONTROL) != 0);
-  event.m_leftDown = ((flags & MK_LBUTTON) != 0);
-  event.m_middleDown = ((flags & MK_MBUTTON) != 0);
-  event.m_rightDown = ((flags & MK_RBUTTON) != 0);
-  event.SetTimestamp(wxApp::sm_lastMessageTime);
-  event.SetEventObject( this );
+        case NM_SETFOCUS:
+            eventType = wxEVT_COMMAND_SET_FOCUS;
+            break;
 
-  // Window gets a click down message followed by a mouse move
-  // message even if position isn't changed!  We want to discard
-  // the trailing move event if x and y are the same.
-  if ((m_lastMouseEvent == wxEVT_RIGHT_DOWN || m_lastMouseEvent == wxEVT_LEFT_DOWN ||
-       m_lastMouseEvent == wxEVT_MIDDLE_DOWN) &&
-      (m_lastMouseX == event.GetX() && m_lastMouseY == event.GetY()))
-  {
-    m_lastMouseX = event.GetX(); m_lastMouseY = event.GetY();
-    m_lastMouseEvent = wxEVT_MOTION;
-    return;
-  }
+        case NM_KILLFOCUS:
+            eventType = wxEVT_COMMAND_KILL_FOCUS;
+            break;
 
-  m_lastMouseEvent = wxEVT_MOTION;
-  m_lastMouseX = event.GetX(); m_lastMouseY = event.GetY();
+        case NM_RETURN:
+            eventType = wxEVT_COMMAND_ENTER;
+            break;
 
-  if (!GetEventHandler()->ProcessEvent(event))
-    Default();
-}
-
-bool wxControl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam,
-                          WXLPARAM* result)
-{
-#if defined(__WIN95__)
-	wxCommandEvent event(wxEVT_NULL, m_windowId);
-	wxEventType eventType = wxEVT_NULL;
-	NMHDR *hdr1 = (NMHDR*) lParam;
-	switch ( hdr1->code )
-	{
-		case NM_CLICK:
-		{
-			eventType = wxEVT_COMMAND_LEFT_CLICK;
-			break;
-		}
-		case NM_DBLCLK:
-		{
-			eventType = wxEVT_COMMAND_LEFT_DCLICK;
-			break;
-		}
-		case NM_RCLICK:
-		{
-			eventType = wxEVT_COMMAND_RIGHT_CLICK;
-			break;
-		}
-		case NM_RDBLCLK:
-		{
-			eventType = wxEVT_COMMAND_RIGHT_DCLICK;
-			break;
-		}
-		case NM_SETFOCUS:
-		{
-			eventType = wxEVT_COMMAND_SET_FOCUS;
-			break;
-		}
-		case NM_KILLFOCUS:
-		{
-			eventType = wxEVT_COMMAND_KILL_FOCUS;
-			break;
-		}
-		case NM_RETURN:
-		{
-			eventType = wxEVT_COMMAND_ENTER;
-			break;
-		}
-/* Not implemented
-		case NM_OUTOFMEMORY:
-		{
-			eventType = wxEVT_COMMAND_OUT_OF_MEMORY;
-			break;
-		}
-*/
-		default:
-            return wxWindow::MSWNotify(wParam, lParam, result);
-	}
+        default:
+            return wxWindow::MSWOnNotify(idCtrl, lParam, result);
+    }
 
     event.SetEventType(eventType);
-	event.SetEventObject(this);
+    event.SetEventObject(this);
 
-	if ( !GetEventHandler()->ProcessEvent(event) )
-		return FALSE;
-	return TRUE;
-#else   // !Win95
-    return FALSE;
-#endif
+    return GetEventHandler()->ProcessEvent(event);
 }
+#endif // Win95
 
 void wxControl::ProcessCommand (wxCommandEvent & event)
 {

@@ -178,7 +178,7 @@ wxWindowBase::~wxWindowBase()
     // Just in case we've loaded a top-level window via LoadNativeDialog but
     // we weren't a dialog class
     wxTopLevelWindows.DeleteObject(this);
-    
+
     wxASSERT_MSG( GetChildren().GetCount() == 0, "children not destroyed" );
 
     if ( m_windowValidator )
@@ -244,15 +244,21 @@ bool wxWindowBase::Close(bool force)
 bool wxWindowBase::DestroyChildren()
 {
     wxWindowList::Node *node;
-    while ( (node = GetChildren().GetFirst()) )
+    for ( ;; )
     {
+        // we iterate until the list becomes empty
+        node = GetChildren().GetFirst();
+        if ( !node )
+            break;
+
         wxWindow *child = node->GetData();
-	
-	wxASSERT_MSG( child, "m_children contains empty nodes" );
-	
+
+        wxASSERT_MSG( child, "children list contains empty nodes" );
+
         delete child;
-	
-        wxASSERT_MSG( !GetChildren().Find(child), "child didn't remove itself using RemoveChild()" );
+
+        wxASSERT_MSG( !GetChildren().Find(child),
+                      "child didn't remove itself using RemoveChild()" );
     }
 
     return TRUE;

@@ -40,8 +40,8 @@
 
 // Lists to keep track of windows, so we can disable/enable them
 // for modal dialogs
-wxList wxModalDialogs;
-wxList wxModelessWindows;  // Frames and modeless dialogs
+wxWindowList wxModalDialogs;
+wxWindowList wxModelessWindows;  // Frames and modeless dialogs
 extern wxList WXDLLEXPORT wxPendingDelete;
 
 #if !USE_SHARED_LIBRARY
@@ -58,12 +58,7 @@ extern wxList WXDLLEXPORT wxPendingDelete;
     END_EVENT_TABLE()
 #endif
 
-bool wxDialog::MSWOnClose(void)
-{
-    return Close();
-}
-
-wxDialog::wxDialog(void)
+wxDialog::wxDialog()
 {
   m_isShown = FALSE;
   m_modalShowing = FALSE;
@@ -235,7 +230,7 @@ void wxDialog::OnPaint(wxPaintEvent& event)
 //  wxWindow::OnPaint(event);
 }
 
-void wxDialog::Fit(void)
+void wxDialog::Fit()
 {
   wxWindow::Fit();
 }
@@ -245,7 +240,7 @@ void wxDialog::Iconize(bool WXUNUSED(iconize))
   // Windows dialog boxes can't be iconized
 }
 
-bool wxDialog::IsIconized(void) const
+bool wxDialog::IsIconized() const
 {
   return FALSE;
 }
@@ -282,7 +277,7 @@ void wxDialog::GetPosition(int *x, int *y) const
   *y = rect.top;
 }
 
-bool wxDialog::IsShown(void) const
+bool wxDialog::IsShown() const
 {
   return m_isShown;
 }
@@ -299,13 +294,13 @@ bool wxDialog::Show(bool show)
 #if WXGARBAGE_COLLECTION_ON /* MATTHEW: GC */
   if (!modal) {
     if (show) {
-      if (!wxModelessWindows.Member(this))
-  wxModelessWindows.Append(this);
+      if (!wxModelessWindows.Find(this))
+        wxModelessWindows.Append(this);
     } else
       wxModelessWindows.DeleteObject(this);
   }
   if (show) {
-    if (!wxTopLevelWindows.Member(this))
+    if (!wxTopLevelWindows.Find(this))
       wxTopLevelWindows.Append(this);
   } else
     wxTopLevelWindows.DeleteObject(this);
@@ -355,13 +350,13 @@ bool wxDialog::Show(bool show)
       EnableWindow((HWND) GetHWND(), TRUE);
       BringWindowToTop((HWND) GetHWND());
 
-      if (!wxModalDialogs.Member(this))
+      if ( !wxModalDialogs.Find(this) )
         wxModalDialogs.Append(this);
 
       MSG msg;
       // Must test whether this dialog still exists: we may not process
       // a message before the deletion.
-      while (wxModalDialogs.Member(this) && m_modalShowing && GetMessage(&msg, NULL, 0, 0))
+      while (wxModalDialogs.Find(this) && m_modalShowing && GetMessage(&msg, NULL, 0, 0))
       {
         if ( m_acceleratorTable.Ok() &&
              ::TranslateAccelerator((HWND)GetHWND(),
@@ -394,7 +389,7 @@ bool wxDialog::Show(bool show)
       node=disabledWindows.First();
       while(node) {
         wxWindow* win = (wxWindow*) node->Data();
-        if (wxModalDialogs.Member(win) || wxModelessWindows.Member(win))
+        if (wxModalDialogs.Find(win) || wxModelessWindows.Find(win))
         {
           HWND hWnd = (HWND) win->GetHWND();
           if (::IsWindow(hWnd))
@@ -480,7 +475,7 @@ void wxDialog::SetTitle(const wxString& title)
   SetWindowText((HWND) GetHWND(), (const char *)title);
 }
 
-wxString wxDialog::GetTitle(void) const
+wxString wxDialog::GetTitle() const
 {
   GetWindowText((HWND) GetHWND(), wxBuffer, 1000);
   return wxString(wxBuffer);
@@ -516,7 +511,7 @@ void wxDialog::Centre(int direction)
 }
 
 // Replacement for Show(TRUE) for modal dialogs - returns return code
-int wxDialog::ShowModal(void)
+int wxDialog::ShowModal()
 {
   m_windowStyle |= wxDIALOG_MODAL;
   Show(TRUE);
@@ -605,7 +600,7 @@ void wxDialog::OnCloseWindow(wxCloseEvent& event)
 }
 
 // Destroy the window (delayed, if a managed window)
-bool wxDialog::Destroy(void)
+bool wxDialog::Destroy()
 {
   if (!wxPendingDelete.Member(this))
     wxPendingDelete.Append(this);
@@ -616,7 +611,8 @@ void wxDialog::OnSize(wxSizeEvent& WXUNUSED(event))
 {
   // if we're using constraints - do use them
   #if wxUSE_CONSTRAINTS
-    if ( GetAutoLayout() ) {
+    if ( GetAutoLayout() )
+    {
       Layout();
     }
   #endif

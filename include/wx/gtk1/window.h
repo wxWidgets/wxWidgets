@@ -230,6 +230,7 @@ public:
     void Init();
 
 private:
+    DECLARE_NO_COPY_CLASS(wxWindow);
     DECLARE_EVENT_TABLE()
 };
 

@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -27,9 +27,6 @@
 
 #include "wx/scrolbar.h"
 #include "wx/msw/private.h"
-
-// extern wxList wxScrollBarList;
-extern void wxFindMaxSize(HWND hwnd, RECT *rect);
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxScrollBar, wxControl)
@@ -53,16 +50,16 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
         return FALSE;
     parent->AddChild(this);
     SetName(name);
-	SetValidator(validator);
+    SetValidator(validator);
     
     SetBackgroundColour(parent->GetBackgroundColour()) ;
     SetForegroundColour(parent->GetForegroundColour()) ;
     m_windowStyle = style;
 
   if ( id == -1 )
-  	m_windowId = (int)NewControlId();
+      m_windowId = (int)NewControlId();
   else
-	m_windowId = id;
+    m_windowId = id;
 
   int x = pos.x;
   int y = pos.y;
@@ -116,84 +113,85 @@ wxScrollBar::~wxScrollBar(void)
 {
 }
 
-void wxScrollBar::MSWOnVScroll(WXWORD wParam, WXWORD pos, WXHWND control)
+bool wxScrollBar::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
+                              WXWORD pos, WXHWND control)
 {
     int position = ::GetScrollPos((HWND) control, SB_CTL);
     int minPos, maxPos;
     ::GetScrollRange((HWND) control, SB_CTL, &minPos, &maxPos);
+
 #if defined(__WIN95__)
-    // A page size greater than one has the effect of reducing the
-	// effective range, therefore the range has already been
-	// boosted artificially - so reduce it again.
-	if ( m_pageSize > 1 )
-		maxPos -= (m_pageSize - 1);
-#endif
+    // A page size greater than one has the effect of reducing the effective
+    // range, therefore the range has already been boosted artificially - so
+    // reduce it again.
+    if ( m_pageSize > 1 )
+        maxPos -= (m_pageSize - 1);
+#endif // __WIN95__
 
     wxEventType scrollEvent = wxEVT_NULL;
 
     int nScrollInc;
     switch ( wParam )
     {
-            case SB_TOP:
-                    nScrollInc = maxPos - position;
-                    scrollEvent = wxEVT_SCROLL_TOP;
-                    break;
+        case SB_TOP:
+            nScrollInc = maxPos - position;
+            scrollEvent = wxEVT_SCROLL_TOP;
+            break;
 
-            case SB_BOTTOM:
-                    nScrollInc = - position;
-                    scrollEvent = wxEVT_SCROLL_BOTTOM;
-                    break;
+        case SB_BOTTOM:
+            nScrollInc = - position;
+            scrollEvent = wxEVT_SCROLL_BOTTOM;
+            break;
 
-            case SB_LINEUP:
-                    nScrollInc = -1;
-                    scrollEvent = wxEVT_SCROLL_LINEUP;
-                    break;
+        case SB_LINEUP:
+            nScrollInc = -1;
+            scrollEvent = wxEVT_SCROLL_LINEUP;
+            break;
 
-            case SB_LINEDOWN:
-                    nScrollInc = 1;
-                    scrollEvent = wxEVT_SCROLL_LINEDOWN;
-                    break;
+        case SB_LINEDOWN:
+            nScrollInc = 1;
+            scrollEvent = wxEVT_SCROLL_LINEDOWN;
+            break;
 
-            case SB_PAGEUP:
-                    nScrollInc = -GetPageSize();
-                    scrollEvent = wxEVT_SCROLL_PAGEUP;
-                    break;
+        case SB_PAGEUP:
+            nScrollInc = -GetPageSize();
+            scrollEvent = wxEVT_SCROLL_PAGEUP;
+            break;
 
-            case SB_PAGEDOWN:
-                    nScrollInc = GetPageSize();
-                    scrollEvent = wxEVT_SCROLL_PAGEDOWN;
-                    break;
+        case SB_PAGEDOWN:
+            nScrollInc = GetPageSize();
+            scrollEvent = wxEVT_SCROLL_PAGEDOWN;
+            break;
 
-            case SB_THUMBTRACK:
-            case SB_THUMBPOSITION:
-                    nScrollInc = pos - position;
-                    scrollEvent = wxEVT_SCROLL_THUMBTRACK;
-                    break;
+        case SB_THUMBTRACK:
+        case SB_THUMBPOSITION:
+            nScrollInc = pos - position;
+            scrollEvent = wxEVT_SCROLL_THUMBTRACK;
+            break;
 
-            default:
-                    nScrollInc = 0;
+        default:
+            nScrollInc = 0;
     }
 
-    if (nScrollInc != 0)
+    if ( nScrollInc == 0 )
     {
-        int new_pos = position + nScrollInc;
-
-        if (new_pos < 0)
-            new_pos = 0;
-        if (new_pos > maxPos)
-            new_pos = maxPos;
-
-        SetThumbPosition(new_pos);
-        wxScrollEvent event(scrollEvent, m_windowId);
-        event.SetPosition(new_pos);
-        event.SetEventObject( this );
-        GetEventHandler()->ProcessEvent(event);
+        // no event to process, so don't process it
+        return FALSE;
     }
-}
 
-void wxScrollBar::MSWOnHScroll(WXWORD wParam, WXWORD pos, WXHWND control)
-{
-	MSWOnVScroll(wParam, pos, control);
+    int new_pos = position + nScrollInc;
+
+    if (new_pos < 0)
+        new_pos = 0;
+    if (new_pos > maxPos)
+        new_pos = maxPos;
+
+    SetThumbPosition(new_pos);
+    wxScrollEvent event(scrollEvent, m_windowId);
+    event.SetPosition(new_pos);
+    event.SetEventObject( this );
+
+    return GetEventHandler()->ProcessEvent(event);
 }
 
 void wxScrollBar::SetThumbPosition(int viewStart)
@@ -233,7 +231,7 @@ void wxScrollBar::SetScrollbar(int position, int thumbSize, int range, int pageS
   // (see comment for SetPageLength)
   if ( m_pageSize > 1 )
   {
-	range1 += (m_pageSize - 1);
+    range1 += (m_pageSize - 1);
   }
 
   SCROLLINFO info;
@@ -291,7 +289,7 @@ void wxScrollBar::SetObjectLength(int objectLength)
   // (see comment for SetPageLength)
   if ( m_pageSize > 1 )
   {
-	range += (m_pageSize - 1);
+    range += (m_pageSize - 1);
   }
 
   SCROLLINFO info;
@@ -324,7 +322,7 @@ void wxScrollBar::GetValues(int *viewStart, int *viewLength, int *objectLength,
 #endif
 
 WXHBRUSH wxScrollBar::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-			WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
+            WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
   return 0;
 }
