@@ -221,9 +221,12 @@ void wxStackWalker::Walk(size_t skip)
 
     char **symbols = backtrace_symbols(addresses, depth);
 
-    for ( int n = 0; n < depth; n++ )
+    if (skip > (size_t) depth)
+        skip = (size_t) depth;
+
+    for ( int n = skip; n < depth; n++ )
     {
-        wxStackFrame frame(n, addresses[n], symbols[n]);
+        wxStackFrame frame(n, addresses[n-skip], symbols[n-skip]);
         OnStackFrame(frame);
     }
 }

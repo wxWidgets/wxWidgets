@@ -772,7 +772,17 @@ void ShowAssertDialog(const wxChar *szFile,
 
     StackDump dump;
     dump.Walk(5); // don't show OnAssert() call itself
-    const wxString& stackTrace = dump.GetStackTrace();
+    wxString stackTrace = dump.GetStackTrace();
+
+    const int maxLines = 10;
+    // Don't show more than maxLines or we could get an enormous dialog
+    int count = stackTrace.Freq(wxT('\n'));
+    if (count > maxLines)
+    {
+        int i;
+        for (i = 0; i < count - maxLines; i++)
+            stackTrace = stackTrace.BeforeLast(wxT('\n'));
+    }
     if ( !stackTrace.empty() )
     {
         msg << _T("\n\nCall stack:\n")
