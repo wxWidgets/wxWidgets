@@ -115,22 +115,31 @@ void wxMacProcessNotifierEvents()
 //  	return ;
   	
   gInProcessing = true ;
-  while ( gMacNotificationEvents.top != gMacNotificationEvents.bottom )
+  if ( gMacNotificationEvents.top != gMacNotificationEvents.bottom )
   {
-    // consume event at bottom
-	short index = gMacNotificationEvents.bottom++ ;
-    if ( gMacNotificationEvents.bottom == kMaxEvents )
-      gMacNotificationEvents.bottom = 0 ;
-    void* data = gMacNotificationEvents.data[index] ;
-    unsigned long event = gMacNotificationEvents.events[index] ;
-	wxMacNotificationProcPtr handler =  gMacNotificationEvents.proc[index] ;
-	
-	gMacNotificationEvents.data[index] = NULL ;
-	gMacNotificationEvents.events[index] = NULL ;
-	gMacNotificationEvents.proc[index]  = NULL ;
-    
-    if ( handler )
-	    handler( event , data  ) ;
+    // we only should process the notifiers that were here when we entered it
+    // otherwise we might never get out...  
+	short count = gMacNotificationEvents.top - gMacNotificationEvents.bottom ;
+	if ( count < 0 )
+        count += kMaxEvents ;
+        
+    while ( count-- )
+    {
+        // consume event at bottom
+    	short index = gMacNotificationEvents.bottom++ ;
+        if ( gMacNotificationEvents.bottom == kMaxEvents )
+          gMacNotificationEvents.bottom = 0 ;
+        void* data = gMacNotificationEvents.data[index] ;
+        unsigned long event = gMacNotificationEvents.events[index] ;
+    	wxMacNotificationProcPtr handler =  gMacNotificationEvents.proc[index] ;
+    	
+    	gMacNotificationEvents.data[index] = NULL ;
+    	gMacNotificationEvents.events[index] = NULL ;
+    	gMacNotificationEvents.proc[index]  = NULL ;
+        
+        if ( handler )
+    	    handler( event , data  ) ;
+	}
   }
   gInProcessing = false ;
 }
