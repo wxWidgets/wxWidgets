@@ -21,7 +21,7 @@
 #if wxUSE_SOCKETS
 
 #include "wx/string.h"
-#include "gsocket.h"
+#include "wx/gsocket.h"
 
 
 class WXDLLEXPORT wxSockAddress : public wxObject {
@@ -109,6 +109,6 @@ public:
 
 #endif
   // wxUSE_SOCKETS
-  
+
 #endif
   // _WX_NETWORK_ADDRESS_H

@@ -31,7 +31,7 @@
 #endif
 
 #include "wx/sckaddr.h"
-#include "gsocket.h"
+#include "wx/gsocket.h"
 
 class WXDLLEXPORT wxSocketEvent;
 class WXDLLEXPORT wxSocketBase : public wxEvtHandler
@@ -43,7 +43,7 @@ public:
   typedef int wxSockFlags;
   // Type of request
 
-  enum wxSockType { SOCK_CLIENT, SOCK_SERVER, SOCK_INTERNAL, SOCK_UNINIT }; 
+  enum wxSockType { SOCK_CLIENT, SOCK_SERVER, SOCK_INTERNAL, SOCK_UNINIT };
   typedef void (*wxSockCbk)(wxSocketBase& sock,GSocketEvent evt,char *cdata);
 
 protected:
@@ -72,7 +72,7 @@ protected:
   size_t m_defer_nbytes;                // Defering buffer size
 
   wxList m_states;			// Stack of states
-  
+
 public:
   wxSocketBase();
   virtual ~wxSocketBase();
@@ -102,7 +102,7 @@ public:
   inline size_t LastCount() const { return m_lcount; }
   inline GSocketError LastError() const { return GSocket_GetError(m_socket); }
   inline wxSockType GetType() const { return m_type; }
-  
+
   void SetFlags(wxSockFlags _flags);
   wxSockFlags GetFlags() const;
   inline void SetTimeout(unsigned long sec) { m_timeout = sec; }
@@ -114,7 +114,7 @@ public:
   bool WaitForRead(long seconds = -1, long microseconds = 0);
   bool WaitForWrite(long seconds = -1, long microseconds = 0);
   bool WaitForLost(long seconds = -1, long microseconds = 0);
-  
+
   // Save the current state of Socket
   void SaveState();
   void RestoreState();
@@ -125,7 +125,7 @@ public:
 
   // Setup event handler
   void SetEventHandler(wxEvtHandler& evt_hdlr, int id = -1);
-  
+
   // Method called when it happens something on the socket
   void SetNotify(GSocketEventFlags flags);
   virtual void OnRequest(GSocketEvent req_evt);
@@ -159,13 +159,13 @@ public:
 #ifdef __SALFORDC__
 protected:
 #endif
-  
+
   bool _Wait(long seconds, long microseconds, int type);
 
   int DeferRead(char *buffer, size_t nbytes);
   int DeferWrite(const char *buffer, size_t nbytes);
   void DoDefer(GSocketEvent evt);
-  
+
   // Pushback library
   size_t GetPushback(char *buffer, size_t size, bool peek);
 };
