@@ -276,7 +276,7 @@ wxString wxDbGridTableBase::GetTypeName(int WXUNUSED(row), int col)
             switch(m_data->GetColDefs()[(m_ColInfo[col].DbCol)].SqlCtype)
             {
                 case SQL_C_CHAR:
-#ifndef __UNIX__
+#ifdef SQL_C_WCHAR
                 case SQL_C_WCHAR:
 #endif                 
                     return wxGRID_VALUE_STRING;
