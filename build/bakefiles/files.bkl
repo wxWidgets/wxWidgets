@@ -1344,6 +1344,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/dirdlgg.cpp
     src/generic/fdrepdlg.cpp
     src/generic/imaglist.cpp
+    src/generic/mdig.cpp
     src/generic/msgdlgg.cpp
     src/generic/prntdlgg.cpp
     src/generic/statusbr.cpp
@@ -1424,6 +1425,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/colrdlgg.h
     wx/generic/dirdlgg.h
     wx/generic/fdrepdlg.h
+    wx/generic/mdig.h
     wx/generic/statusbr.h
     wx/os2/accel.h
     wx/os2/app.h
