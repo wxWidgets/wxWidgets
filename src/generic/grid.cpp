@@ -753,9 +753,9 @@ void wxGridCellTextEditor::StartingKey(wxKeyEvent& event)
 #if wxUSE_UNICODE
     ch = event.GetUnicodeKey();
     if (ch <= 127)
-        ch = event.GetKeyCode();
+        ch = (wxChar)event.GetKeyCode();
 #else
-    ch = event.GetKeyCode();
+    ch = (wxChar)event.GetKeyCode();
 #endif
     switch (ch)
     {
