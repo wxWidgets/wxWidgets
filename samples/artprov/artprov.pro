@@ -12,6 +12,6 @@ CONFIG  = wx
 #WXCONFIGS = Debug Release DebugDll ReleaseDll
 
 # project files
-SOURCES = arttest.cpp
+SOURCES = arttest.cpp artbrows.cpp
 RC_FILE = arttest.rc
 TARGET  = artprov

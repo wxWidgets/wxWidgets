@@ -17,7 +17,7 @@ CXX = $(shell wx-config --cxx)
 
 PROGRAM = arttest
 
-OBJECTS = $(PROGRAM).o
+OBJECTS = $(PROGRAM).o artbrows.o
 
 # implementation
 

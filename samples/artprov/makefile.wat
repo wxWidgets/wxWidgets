@@ -8,7 +8,7 @@
 WXDIR = $(%WXWIN)
 
 PROGRAM = arttest
-OBJECTS = $(PROGRAM).obj
+OBJECTS = $(PROGRAM).obj artbrows.obj
 
 !include $(WXDIR)\src\makeprog.wat
 

@@ -15,8 +15,8 @@ program_dir = samples/artprov
 
 PROGRAM=arttest
 
-OBJECTS =$(PROGRAM).o
-DEPFILES=$(PROGRAM).d
+OBJECTS =$(PROGRAM).o artbrows.o
+DEPFILES=$(PROGRAM).d artbrows.d
 
 include ../../src/makeprog.env
 

@@ -148,6 +148,10 @@ SOURCE=.\arttest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\artbrows.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\arttest.rc
 # End Source File
 # End Target

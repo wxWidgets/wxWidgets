@@ -10,7 +10,7 @@
 WXDIR = ../..
 
 TARGET=arttest
-OBJECTS = $(TARGET).o
+OBJECTS = $(TARGET).o artbrows.o
 
 include $(WXDIR)/src/makeprog.g95
 

@@ -25,6 +25,7 @@
 #endif
 
 #include "wx/artprov.h"
+#include "artbrows.h"
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -47,7 +48,9 @@ private:
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
     void OnLogs(wxCommandEvent& event);
-
+    void OnBrowser(wxCommandEvent& event);
+    void OnPlugProvider(wxCommandEvent& event);
+    
     DECLARE_EVENT_TABLE()
 };
 
@@ -59,7 +62,9 @@ private:
 enum
 {
     ID_Quit = wxID_HIGHEST,
-    ID_Logs
+    ID_Logs,
+    ID_Browser,
+    ID_PlugProvider
 };
 
 // ----------------------------------------------------------------------------
@@ -67,9 +72,11 @@ enum
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_MENU(ID_Quit,    MyFrame::OnQuit)
-    EVT_MENU(ID_Logs,    MyFrame::OnLogs)
-    EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
+    EVT_MENU(ID_Quit,         MyFrame::OnQuit)
+    EVT_MENU(ID_Logs,         MyFrame::OnLogs)
+    EVT_MENU(wxID_ABOUT,      MyFrame::OnAbout)
+    EVT_MENU(ID_Browser,      MyFrame::OnBrowser)
+    EVT_MENU(ID_PlugProvider, MyFrame::OnPlugProvider)
 END_EVENT_TABLE()
 
 IMPLEMENT_APP(MyApp)
@@ -93,6 +100,42 @@ bool MyApp::OnInit()
 }
 
 // ----------------------------------------------------------------------------
+// custom art provider
+// ----------------------------------------------------------------------------
+
+class MyArtProvider : public wxArtProvider
+{
+protected:
+    virtual wxBitmap CreateBitmap(const wxArtID& id, const wxArtClient& client,
+                                  const wxSize& size);
+};
+
+#include "info.xpm"
+#include "error.xpm"
+#include "warning.xpm"
+#include "question.xpm"
+
+wxBitmap MyArtProvider::CreateBitmap(const wxArtID& id,
+                                     const wxArtClient& client,
+                                     const wxSize& WXUNUSED(size))
+{
+    if ( client == wxART_MESSAGE_BOX )
+    {
+        if ( id == wxART_INFORMATION )
+            return wxBitmap(info_xpm);
+        if ( id == wxART_ERROR )
+            return wxBitmap(error_xpm);
+        if ( id == wxART_WARNING )
+            return wxBitmap(warning_xpm);
+        if ( id == wxART_QUESTION )
+            return wxBitmap(question_xpm);
+    }
+    return wxNullBitmap;
+}
+
+
+
+// ----------------------------------------------------------------------------
 // main frame
 // ----------------------------------------------------------------------------
 
@@ -109,9 +152,13 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     wxMenu *helpMenu = new wxMenu;
     helpMenu->Append(wxID_ABOUT, _T("&About...\tF1"), _T("Show about dialog"));
 
-    menuFile->Append(ID_Logs, _T("&Logging test"), _T("Show some logging output"));
+    menuFile->AppendCheckItem(ID_PlugProvider, _T("&Plug-in art provider"), _T("Enable custom art provider"));   
     menuFile->AppendSeparator();
-    
+
+    menuFile->Append(ID_Logs, _T("&Logging test"), _T("Show some logging output"));
+    menuFile->Append(ID_Browser, _T("&Resources browser"), _T("Browse all available icons"));
+    menuFile->AppendSeparator();
+
     menuFile->Append(ID_Quit, _T("E&xit\tAlt-X"), _T("Quit this program"));
 
     // now append the freshly created menu to the menu bar...
@@ -139,7 +186,7 @@ void MyFrame::OnLogs(wxCommandEvent& WXUNUSED(event))
     wxLogWarning(_T("A warning."));
     wxLogError(_T("Yet another error."));
     wxLog::GetActiveTarget()->Flush();
-    wxLogMessage(_T("Check/uncheck 'File/Plug-in provider' and try again."));
+    wxLogMessage(_T("Check/uncheck 'File/Plug-in art provider' and try again."));
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
@@ -149,4 +196,18 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
                 _T("Welcome to %s"), wxVERSION_STRING);
 
     wxMessageBox(msg, _T("About Minimal"), wxOK | wxICON_INFORMATION, this);
+}
+
+void MyFrame::OnBrowser(wxCommandEvent& WXUNUSED(event))
+{
+    wxArtBrowserDialog dlg(this);
+    dlg.ShowModal();
+}
+
+void MyFrame::OnPlugProvider(wxCommandEvent& event)
+{
+    if ( event.IsChecked() )
+        wxArtProvider::PushProvider(new MyArtProvider);
+    else
+        wxArtProvider::PopProvider();
 }
