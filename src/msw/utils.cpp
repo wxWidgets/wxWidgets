@@ -1285,65 +1285,74 @@ extern WXDLLIMPEXP_BASE long wxEncodingToCodepage(wxFontEncoding encoding)
     // There don't seem to be symbolic names for
     // these under Windows so I just copied the
     // values from MSDN.
+    
+    unsigned int ret;
+    
     switch (encoding)
     {
-        case wxFONTENCODING_ISO8859_1:      return 28591;
-        case wxFONTENCODING_ISO8859_2:      return 28592;
-        case wxFONTENCODING_ISO8859_3:      return 28593;
-        case wxFONTENCODING_ISO8859_4:      return 28594;
-        case wxFONTENCODING_ISO8859_5:      return 28595;
-        case wxFONTENCODING_ISO8859_6:      return 28596;
-        case wxFONTENCODING_ISO8859_7:      return 28597;
-        case wxFONTENCODING_ISO8859_8:      return 28598;
-        case wxFONTENCODING_ISO8859_9:      return 28599;
-        // case wxFONTENCODING_ISO8859_10:
-        case wxFONTENCODING_ISO8859_11:     return 874; // Thai?
+        case wxFONTENCODING_ISO8859_1:      ret = 28591; break;
+        case wxFONTENCODING_ISO8859_2:      ret = 28592; break;
+        case wxFONTENCODING_ISO8859_3:      ret = 28593; break;
+        case wxFONTENCODING_ISO8859_4:      ret = 28594; break;
+        case wxFONTENCODING_ISO8859_5:      ret = 28595; break;
+        case wxFONTENCODING_ISO8859_6:      ret = 28596; break;
+        case wxFONTENCODING_ISO8859_7:      ret = 28597; break;
+        case wxFONTENCODING_ISO8859_8:      ret = 28598; break;
+        case wxFONTENCODING_ISO8859_9:      ret = 28599; break;
+        case wxFONTENCODING_ISO8859_10:     ret = 28600; break;
+        case wxFONTENCODING_ISO8859_11:     ret = 28601; break;
         // case wxFONTENCODING_ISO8859_12,      // doesn't exist currently, but put it
-        // case wxFONTENCODING_ISO8859_13,      // Baltic (Latin7)
-        // case wxFONTENCODING_ISO8859_14,      // Latin8
-        case wxFONTENCODING_ISO8859_15:     return 28605;
-        case wxFONTENCODING_KOI8:           return 20866;
-        case wxFONTENCODING_KOI8_U:         return 21866;
-        case wxFONTENCODING_CP437:          return 437;
-        case wxFONTENCODING_CP850:          return 850;
-        case wxFONTENCODING_CP852:          return 852;
-        case wxFONTENCODING_CP855:          return 855;
-        case wxFONTENCODING_CP866:          return 866;
-        case wxFONTENCODING_CP874:          return 874;
-        case wxFONTENCODING_CP932:          return 932;
-        case wxFONTENCODING_CP936:          return 936;
-        case wxFONTENCODING_CP949:          return 949;
-        case wxFONTENCODING_CP950:          return 950;
-        case wxFONTENCODING_CP1250:         return 1250;
-        case wxFONTENCODING_CP1251:         return 1251;
-        case wxFONTENCODING_CP1252:         return 1252;
-        case wxFONTENCODING_CP1253:         return 1253;
-        case wxFONTENCODING_CP1254:         return 1254;
-        case wxFONTENCODING_CP1255:         return 1255;
-        case wxFONTENCODING_CP1256:         return 1256;
-        case wxFONTENCODING_CP1257:         return 1257;
-        case wxFONTENCODING_EUC_JP:         return 51932;
-        case wxFONTENCODING_MACROMAN:       return 10000;
-        case wxFONTENCODING_MACJAPANESE:    return 10001;
-        case wxFONTENCODING_MACCHINESETRAD: return 10002;
-        case wxFONTENCODING_MACKOREAN:      return 10003;
-        case wxFONTENCODING_MACARABIC:      return 10004;
-        case wxFONTENCODING_MACHEBREW:      return 10005;
-        case wxFONTENCODING_MACGREEK:       return 10006;
-        case wxFONTENCODING_MACCYRILLIC:    return 10007;
-        case wxFONTENCODING_MACTHAI:        return 10021;
-        case wxFONTENCODING_MACCHINESESIMP: return 10008;
-        case wxFONTENCODING_MACCENTRALEUR:  return 10029;
-        case wxFONTENCODING_MACCROATIAN:    return 10082;
-        case wxFONTENCODING_MACICELANDIC:   return 10079;
-        case wxFONTENCODING_MACROMANIAN:    return 10009;
-        case wxFONTENCODING_UTF7:           return 65000;
-        case wxFONTENCODING_UTF8:           return 65001;
-        /* to avoid warnings just do nothing and pass to return at the end */
-        default:                            break;
+        case wxFONTENCODING_ISO8859_13:     ret = 28603; break;      
+        case wxFONTENCODING_ISO8859_14:     ret = 28604; break;
+        case wxFONTENCODING_ISO8859_15:     ret = 28605; break;
+        case wxFONTENCODING_KOI8:           ret = 20866; break;
+        case wxFONTENCODING_KOI8_U:         ret = 21866; break;
+        case wxFONTENCODING_CP437:          ret = 437; break;
+        case wxFONTENCODING_CP850:          ret = 850; break;
+        case wxFONTENCODING_CP852:          ret = 852; break;
+        case wxFONTENCODING_CP855:          ret = 855; break;
+        case wxFONTENCODING_CP866:          ret = 866; break;
+        case wxFONTENCODING_CP874:          ret = 874; break;
+        case wxFONTENCODING_CP932:          ret = 932; break;
+        case wxFONTENCODING_CP936:          ret = 936; break;
+        case wxFONTENCODING_CP949:          ret = 949; break;
+        case wxFONTENCODING_CP950:          ret = 950; break;
+        case wxFONTENCODING_CP1250:         ret = 1250; break;
+        case wxFONTENCODING_CP1251:         ret = 1251; break;
+        case wxFONTENCODING_CP1252:         ret = 1252; break;
+        case wxFONTENCODING_CP1253:         ret = 1253; break;
+        case wxFONTENCODING_CP1254:         ret = 1254; break;
+        case wxFONTENCODING_CP1255:         ret = 1255; break;
+        case wxFONTENCODING_CP1256:         ret = 1256; break;
+        case wxFONTENCODING_CP1257:         ret = 1257; break;
+        case wxFONTENCODING_EUC_JP:         ret = 51932; break;
+        case wxFONTENCODING_MACROMAN:       ret = 10000; break;
+        case wxFONTENCODING_MACJAPANESE:    ret = 10001; break;
+        case wxFONTENCODING_MACCHINESETRAD: ret = 10002; break;
+        case wxFONTENCODING_MACKOREAN:      ret = 10003; break;
+        case wxFONTENCODING_MACARABIC:      ret = 10004; break;
+        case wxFONTENCODING_MACHEBREW:      ret = 10005; break;
+        case wxFONTENCODING_MACGREEK:       ret = 10006; break;
+        case wxFONTENCODING_MACCYRILLIC:    ret = 10007; break;
+        case wxFONTENCODING_MACTHAI:        ret = 10021; break;
+        case wxFONTENCODING_MACCHINESESIMP: ret = 10008; break;
+        case wxFONTENCODING_MACCENTRALEUR:  ret = 10029; break;
+        case wxFONTENCODING_MACCROATIAN:    ret = 10082; break;
+        case wxFONTENCODING_MACICELANDIC:   ret = 10079; break;
+        case wxFONTENCODING_MACROMANIAN:    ret = 10009; break;
+        case wxFONTENCODING_UTF7:           ret = 65000; break;
+        case wxFONTENCODING_UTF8:           ret = 65001; break;
+        default:                            return -1;
     }
+    
+    if (::IsValidCodePage(ret) == 0)
+        return -1;
+    
+    CPINFO info;
+    if (::GetCPInfo(ret, &info) == 0)
+        return -1;
 
-    return -1;
+    return (long) ret;
 }
 
 extern long wxCharsetToCodepage(const wxChar *name)
