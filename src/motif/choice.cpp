@@ -85,7 +85,6 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
     m_menuWidget = (WXWidget) XmCreatePulldownMenu ((Widget) m_formWidget,
                                                     "choiceMenu", NULL, 0);
 
-    //    int i;
     if (n > 0)
     {
         int i;
@@ -125,12 +124,16 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
 #endif
 #endif
 
+    wxSize bestSize = GetBestSize();
+    if( size.x > 0 ) bestSize.x = size.x;
+    if( size.y > 0 ) bestSize.y = size.y;
+
     XtVaSetValues((Widget) m_formWidget, XmNresizePolicy, XmRESIZE_NONE, NULL);
 
     ChangeFont(FALSE);
 
     AttachWidget (parent, m_buttonWidget, m_formWidget,
-                  pos.x, pos.y, size.x, size.y);
+                  pos.x, pos.y, bestSize.x, bestSize.y);
 
     ChangeBackgroundColour();
 
