@@ -1037,6 +1037,18 @@ inline bool operator>=(const wxString& s1, const wxChar  * s2) { return (s1.Cmp(
 //
 inline bool operator>=(const wxChar  * s1, const wxString& s2) { return (s2.Cmp(s1) <= 0); }
 
+#if wxUSE_UNICODE
+inline bool operator==(const wxString& s1, const wxWCharBuffer& s2)
+{ return (s1.Cmp((const wchar_t *)s2) == 0); }
+inline bool operator==(const wxWCharBuffer& s1, const wxString& s2)
+{ return (s2.Cmp((const wchar_t *)s1) == 0); }
+#else
+inline bool operator==(const wxString& s1, const wxCharBuffer& s2)
+{ return (s1.Cmp((const char *)s2) == 0); }
+inline bool operator==(const wxCharBuffer& s1, const wxString& s2)
+{ return (s2.Cmp((const char *)s1) == 0); }
+#endif
+
 wxString WXDLLEXPORT operator+(const wxString& string1,  const wxString& string2);
 wxString WXDLLEXPORT operator+(const wxString& string, wxChar ch);
 wxString WXDLLEXPORT operator+(wxChar ch, const wxString& string);
