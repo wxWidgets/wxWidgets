@@ -94,11 +94,11 @@ bool wxIcon::LoadFile(
 , int                               nDesiredHeight
 )
 {
-    wxGDIImageHandler*              pHandler = FindHandler(lType);
     HPS                             hPs = NULLHANDLE;
 
     UnRef();
-    m_refData = new wxIconRefData;
+
+    wxGDIImageHandler*              pHandler = FindHandler(lType);
 
     if (pHandler)
         return(pHandler->Load( this
