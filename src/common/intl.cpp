@@ -706,7 +706,7 @@ bool wxLocale::Init(int language, int flags)
         return FALSE;
     }
 #elif defined(__WIN32__)
-    wxMB2WXbuf retloc = wxT("C");
+    wxMB2WXbuf retloc(wxT("C"));
     if (language != wxLANGUAGE_DEFAULT)
     {
         if (info->WinLang == 0)
@@ -720,7 +720,7 @@ bool wxLocale::Init(int language, int flags)
                                      SORT_DEFAULT);
             if (SetThreadLocale(lcid))
             {
-                wxMB2WXbuf tmp = wxSetlocale(LC_ALL, wxEmptyString);
+                wxMB2WXbuf tmp(wxSetlocale(LC_ALL, wxEmptyString));
                 retloc = tmp;
             }
             else
@@ -745,7 +745,7 @@ bool wxLocale::Init(int language, int flags)
                 }
                 else
                 {
-                    wxMB2WXbuf tmp = wxSetlocale(LC_ALL, locale);
+                    wxMB2WXbuf tmp(wxSetlocale(LC_ALL, locale));
                     retloc = tmp;
                 }
             }
@@ -753,7 +753,7 @@ bool wxLocale::Init(int language, int flags)
     }
     else
     {
-        wxMB2WXbuf tmp = wxSetlocale(LC_ALL, wxEmptyString);
+        wxMB2WXbuf tmp(wxSetlocale(LC_ALL, wxEmptyString));
         retloc = tmp;
     }
 
