@@ -415,6 +415,31 @@ Insert, Prepend, and etc.) methods any longer.  Just use Add and the
 wrappers will figure out what to do.
 
 
+PlatformInfo
+------------
+
+Added wx.PlatformInfo which is a tuple containing strings that
+describe the platform and build options of wxPython.  This lets you
+know more about the build than just the __WXPORT__ value that
+wx.Platform contains, such as if it is a GTK2 build.  For example,
+instead of::
+
+     if wx.Platform == "__WXGTK__":
+         ...
+
+you should do this::
+
+    if "__WXGTK__" in wx.PlatformInfo:
+         ...
+
+and you can specifically check for a wxGTK2 build by looking for
+"gtk2" in wx.PlatformInfo.  Unicode builds are also detectable this
+way.  If there are any other platform/toolkit/build flags that make
+sense to add to this tuple please let me know.
+
+BTW, wx.Platform will probably be deprecated in the future.
+
+
 
 Other Stuff
 -----------

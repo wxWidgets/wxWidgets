@@ -83,6 +83,10 @@ Added wx.Display and wx.VideoMode.
 AppleEvents can be handled by overriding wx.App methods MacOpenFile,
 MacPrintFile, MacNewFile, and MacReopenApp.
 
+Added wx.PlatformInfo which is a tuple containing strings that
+describe the platform and build options of wxPython.  See the
+MigrationGuide for more details.
+
 
 
 

@@ -561,18 +561,23 @@ PyObject* __wxPySetDictionary(PyObject* /* self */, PyObject* args)
 
 #ifdef __WXMOTIF__
 #define wxPlatform "__WXMOTIF__"
+#define wxPlatName "wxMotif"
 #endif
 #ifdef __WXX11__
 #define wxPlatform "__WXX11__"
+#define wxPlatName "wxX11"
 #endif
 #ifdef __WXGTK__
 #define wxPlatform "__WXGTK__"
+#define wxPlatName "wxGTK"
 #endif
-#if defined(__WIN32__) || defined(__WXMSW__)
+#ifdef __WXMSW__
 #define wxPlatform "__WXMSW__"
+#define wxPlatName "wxMSW"
 #endif
 #ifdef __WXMAC__
 #define wxPlatform "__WXMAC__"
+#define wxPlatName "wxMac"
 #endif
 
 #ifdef __WXDEBUG__
@@ -581,10 +586,41 @@ PyObject* __wxPySetDictionary(PyObject* /* self */, PyObject* args)
     int wxdebug = 0;
 #endif
 
+    // These should be deprecated in favor of the PlatformInfo tuple built below...
     PyDict_SetItemString(wxPython_dict, "Platform", PyString_FromString(wxPlatform));
     PyDict_SetItemString(wxPython_dict, "USE_UNICODE", PyInt_FromLong(wxUSE_UNICODE));
     PyDict_SetItemString(wxPython_dict, "__WXDEBUG__", PyInt_FromLong(wxdebug));
 
+    
+    PyObject* PlatInfo = PyList_New(0);
+    PyObject* obj;
+
+#define _AddInfoString(st) \
+    obj = PyString_FromString(st); \
+    PyList_Append(PlatInfo, obj); \
+    Py_DECREF(obj)
+
+    _AddInfoString(wxPlatform);
+    _AddInfoString(wxPlatName);
+#if wxUSE_UNICODE
+    _AddInfoString("unicode");
+#else
+    _AddInfoString("ascii");
+#endif
+#ifdef __WXGTK__
+#ifdef __WXGTK20__
+    _AddInfoString("gtk2");
+#else
+    _AddInfoString("gtk1");
+#endif
+#endif
+
+#undef _AddInfoString
+
+    PyObject* PlatInfoTuple = PyList_AsTuple(PlatInfo);
+    Py_DECREF(PlatInfo);
+    PyDict_SetItemString(wxPython_dict, "PlatformInfo", PlatInfoTuple);
+    
     RETURN_NONE();
 }
 
