@@ -751,6 +751,11 @@ public:
     }
     wxColour GetForegroundColour() const;
 
+        // Set/get the background style.
+        // Pass one of wxBG_STYLE_SYSTEM, wxBG_STYLE_COLOUR, wxBG_STYLE_CUSTOM
+    virtual bool SetBackgroundStyle(wxBackgroundStyle style) { m_backgroundStyle = style; return true; }
+    virtual wxBackgroundStyle GetBackgroundStyle() const { return m_backgroundStyle; }
+
         // set/retrieve the font for the window (SetFont() returns true if the
         // font really changed)
     virtual bool SetFont(const wxFont& font) = 0;
@@ -1150,7 +1155,7 @@ protected:
                          m_exStyle;
     wxString             m_windowName;
     bool                 m_themeEnabled;
-
+    wxBackgroundStyle    m_backgroundStyle;
 #if wxUSE_PALETTE
     wxPalette            m_palette;
     bool                 m_hasCustomPalette;

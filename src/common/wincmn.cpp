@@ -152,6 +152,8 @@ wxWindowBase::wxWindowBase()
     // no style bits
     m_exStyle =
     m_windowStyle = 0;
+    
+    m_backgroundStyle = wxBG_STYLE_SYSTEM;
 
 #if wxUSE_CONSTRAINTS
     // no constraints whatsoever

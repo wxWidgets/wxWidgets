@@ -1405,6 +1405,17 @@ enum wxBorder
 #define  wxMORE                 0x00010000
 #define  wxSETUP                0x00020000
 
+/*
+ * Background styles. See wxWindow::SetBackgroundStyle
+ */
+
+enum wxBackgroundStyle
+{
+  wxBG_STYLE_SYSTEM,
+  wxBG_STYLE_COLOUR,
+  wxBG_STYLE_CUSTOM
+};
+
 /*  ---------------------------------------------------------------------------- */
 /*  standard IDs */
 /*  ---------------------------------------------------------------------------- */

@@ -700,6 +700,23 @@ Returns the background colour of the window.
 \helpref{wxWindow::SetForegroundColour}{wxwindowsetforegroundcolour},\rtfsp
 \helpref{wxWindow::GetForegroundColour}{wxwindowgetforegroundcolour}
 
+\membersection{wxWindow::GetBackgroundStyle}\label{wxwindowgetbackgroundstyle}
+
+\constfunc{virtual wxBackgroundStyle}{GetBackgroundStyle}{\void}
+
+Returns the background style of the window. The background style indicates
+whether background colour should be determined by the system (wxBG\_STYLE\_SYSTEM),
+be set to a specific colour (wxBG\_STYLE\_COLOUR), or should be left to the
+application to implement (wxBG\_STYLE\_CUSTOM).
+
+On GTK+, use of wxBG\_STYLE\_CUSTOM allows the flicker-free drawing of a custom
+background, such as a tiled bitmap. Currently the style has no effect on other platforms.
+
+\wxheading{See also}
+
+\helpref{wxWindow::SetBackgroundColour}{wxwindowsetbackgroundcolour},\rtfsp
+\helpref{wxWindow::GetForegroundColour}{wxwindowgetforegroundcolour},\rtfsp
+\helpref{wxWindow::SetBackgroundStyle}{wxwindowsetbackgroundstyle}
 
 \membersection{wxWindow::GetBestFittingSize}\label{wxwindowgetbestfittingsize}
 
@@ -2430,6 +2447,24 @@ applications on the system.
 \helpref{wxWindow::ClearBackground}{wxwindowclearbackground},\rtfsp
 \helpref{wxWindow::Refresh}{wxwindowrefresh},\rtfsp
 \helpref{wxEraseEvent}{wxeraseevent}
+
+\membersection{wxWindow::SetBackgroundStyle}\label{wxwindowsetbackgroundstyle}
+
+\func{virtual void}{SetBackgroundStyle}{\param{wxBackgroundStyle}{ style}}
+
+Sets the background style of the window. The background style indicates
+whether background colour should be determined by the system (wxBG\_STYLE\_SYSTEM),
+be set to a specific colour (wxBG\_STYLE\_COLOUR), or should be left to the
+application to implement (wxBG\_STYLE\_CUSTOM).
+
+On GTK+, use of wxBG\_STYLE\_CUSTOM allows the flicker-free drawing of a custom
+background, such as a tiled bitmap. Currently the style has no effect on other platforms.
+
+\wxheading{See also}
+
+\helpref{wxWindow::SetBackgroundColour}{wxwindowsetbackgroundcolour},\rtfsp
+\helpref{wxWindow::GetForegroundColour}{wxwindowgetforegroundcolour},\rtfsp
+\helpref{wxWindow::GetBackgroundStyle}{wxwindowgetbackgroundstyle}
 
 
 \membersection{wxWindow::SetBestFittingSize}\label{wxwindowsetbestfittingsize}
