@@ -900,6 +900,24 @@ class wxTreeEventPtr(wxNotifyEventPtr):
     def IsEditCancelled(self, *_args, **_kwargs):
         val = controls2c.wxTreeEvent_IsEditCancelled(self, *_args, **_kwargs)
         return val
+    def SetItem(self, *_args, **_kwargs):
+        val = controls2c.wxTreeEvent_SetItem(self, *_args, **_kwargs)
+        return val
+    def SetOldItem(self, *_args, **_kwargs):
+        val = controls2c.wxTreeEvent_SetOldItem(self, *_args, **_kwargs)
+        return val
+    def SetPoint(self, *_args, **_kwargs):
+        val = controls2c.wxTreeEvent_SetPoint(self, *_args, **_kwargs)
+        return val
+    def SetKeyEvent(self, *_args, **_kwargs):
+        val = controls2c.wxTreeEvent_SetKeyEvent(self, *_args, **_kwargs)
+        return val
+    def SetLabel(self, *_args, **_kwargs):
+        val = controls2c.wxTreeEvent_SetLabel(self, *_args, **_kwargs)
+        return val
+    def SetEditCanceled(self, *_args, **_kwargs):
+        val = controls2c.wxTreeEvent_SetEditCanceled(self, *_args, **_kwargs)
+        return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxTreeEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
     GetCode = GetKeyCode
