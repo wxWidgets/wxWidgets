@@ -17,11 +17,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __GNUG__
-//    #pragma implementation "minimal.cpp"
-//    #pragma interface "minimal.cpp"
-#endif
-
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
@@ -35,14 +30,11 @@
     #include "wx/wx.h"
 #endif
 
-#include "wx/dynarray.h"
-
-WX_DEFINE_ARRAY(wxWindow *, wxArrayLboxes);
-
 // ----------------------------------------------------------------------------
 // resources
 // ----------------------------------------------------------------------------
-// the application icon
+
+// the application icon (under Windows and OS/2 it is in resources)
 #if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__)
     #include "mondrian.xpm"
 #endif
@@ -74,13 +66,8 @@ public:
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
-    void OnCreateLbox(wxCommandEvent& event);
-    void OnDeleteLbox(wxCommandEvent& event);
 
 private:
-    wxArrayLboxes m_lboxes;
-    wxCoord m_pos;
-
     // any class wishing to process wxWindows events must use this macro
     DECLARE_EVENT_TABLE()
 };
@@ -94,13 +81,12 @@ enum
 {
     // menu items
     Minimal_Quit = 1,
-    Minimal_About,
-    Minimal_CreateLbox,
-    Minimal_DeleteLbox,
-};
 
-static const size_t NUM_LBOXES = 10;
-static const wxCoord POS_STEP = 5;
+    // it is important for the id corresponding to the "About" command to have
+    // this standard value as otherwise it won't be handled properly under Mac
+    // (where it is special and put into the "Apple" menu)
+    Minimal_About = wxID_ABOUT
+};
 
 // ----------------------------------------------------------------------------
 // event tables and other macros for wxWindows
@@ -112,8 +98,6 @@ static const wxCoord POS_STEP = 5;
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Minimal_Quit,  MyFrame::OnQuit)
     EVT_MENU(Minimal_About, MyFrame::OnAbout)
-    EVT_MENU(Minimal_CreateLbox, MyFrame::OnCreateLbox)
-    EVT_MENU(Minimal_DeleteLbox, MyFrame::OnDeleteLbox)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWindows to create
@@ -135,7 +119,7 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
     // create the main application window
-    MyFrame *frame = new MyFrame("Minimal wxWindows App",
+    MyFrame *frame = new MyFrame(_T("Minimal wxWindows App"),
                                  wxPoint(50, 50), wxSize(450, 340));
 
     // and show it (the frames, unlike simple controls, are not shown when
@@ -154,35 +138,25 @@ bool MyApp::OnInit()
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-       : wxFrame((wxFrame *)NULL, -1, title, pos, size)
+       : wxFrame(NULL, -1, title, pos, size)
 {
-    m_pos = 0;
-
-#ifdef __WXMAC__
-    // we need this in order to allow the about menu relocation, since ABOUT is
-    // not the default id of the about menu
-    wxApp::s_macAboutMenuItemId = Minimal_About;
-#endif
-
     // set the frame icon
     SetIcon(wxICON(mondrian));
 
 #if wxUSE_MENUS
     // create a menu bar
-    wxMenu *menuFile = new wxMenu("", wxMENU_TEAROFF);
+    wxMenu *menuFile = new wxMenu;
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(Minimal_About, "&About...\tCtrl-A", "Show about dialog");
-    helpMenu->Append(Minimal_CreateLbox, "&Create 10 listboxes\tCtrl-C");
-    helpMenu->Append(Minimal_DeleteLbox, "&Delete 10 listboxes\tCtrl-D");
+    helpMenu->Append(Minimal_About, _T("&About...\tF1"), _T("Show about dialog"));
 
-    menuFile->Append(Minimal_Quit, "E&xit\tAlt-X", "Quit this program");
+    menuFile->Append(Minimal_Quit, _T("E&xit\tAlt-X"), _T("Quit this program"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
-    menuBar->Append(menuFile, "&File");
-    menuBar->Append(helpMenu, "&Help");
+    menuBar->Append(menuFile, _T("&File"));
+    menuBar->Append(helpMenu, _T("&Help"));
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
@@ -191,7 +165,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);
-    SetStatusText("Welcome to wxWindows!");
+    SetStatusText(_T("Welcome to wxWindows!"));
 #endif // wxUSE_STATUSBAR
 }
 
@@ -210,30 +184,5 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     msg.Printf( _T("This is the about dialog of minimal sample.\n")
                 _T("Welcome to %s"), wxVERSION_STRING);
 
-    wxMessageBox(msg, "About Minimal", wxOK | wxICON_INFORMATION, this);
+    wxMessageBox(msg, _T("About Minimal"), wxOK | wxICON_INFORMATION, this);
 }
-
-void MyFrame::OnCreateLbox(wxCommandEvent& WXUNUSED(event))
-{
-    for ( size_t n = 0; n < NUM_LBOXES; n++ )
-    {
-        m_lboxes.Add(new wxListBox(this, -1, wxPoint(m_pos, m_pos)));
-        m_pos += POS_STEP;
-    }
-}
-
-void MyFrame::OnDeleteLbox(wxCommandEvent& WXUNUSED(event))
-{
-    size_t count = m_lboxes.GetCount();
-    if ( count < NUM_LBOXES )
-        return;
-
-    for ( size_t n = 0; n < NUM_LBOXES; n++ )
-    {
-        delete m_lboxes[--count];
-        m_lboxes.RemoveAt(count);
-
-        m_pos -= POS_STEP;
-    }
-}
-
