@@ -9,6 +9,7 @@
 WX_MAJOR_VERSION_NUMBER="@WX_MAJOR_VERSION_NUMBER@"
 WX_MINOR_VERSION_NUMBER="@WX_MINOR_VERSION_NUMBER@"
 WX_RELEASE_NUMBER="@WX_RELEASE_NUMBER@"
+WX_SUBRELEASE_NUMBER="@WX_SUBRELEASE_NUMBER@"
 release="@WX_MAJOR_VERSION_NUMBER@.@WX_MINOR_VERSION_NUMBER@"
 is_monolithic="@MONOLITHIC@"
 cross_compiling="@cross_compiling@"
@@ -149,7 +150,7 @@ usage()
 Usage: wx-config [--prefix[=DIR]] [--exec-prefix[=DIR]] [--inplace]
                  [--toolkit=TOOLKIT] [--unicode[=yes|no]] [--debug[=yes|no]]
                  [--universal[=yes|no]] [--host=HOST]
-                 [--version[=VERSION]] [--release]
+                 [--version[=VERSION]] [--version-full] [--release]
                  [--list] [--basename] [--static] [--libs] [--gl-libs]
                  [--cppflags] [--cflags] [--cxxflags] [--ldflags] [--rezflags]
                  [--cc] [--cxx] [--ld] [LIBRARIES]
@@ -291,6 +292,9 @@ while test $# -gt 0; do
       ;;
     --version)
       echo ${WX_MAJOR_VERSION_NUMBER}.${WX_MINOR_VERSION_NUMBER}.${WX_RELEASE_NUMBER}
+      ;;
+    --version-full)
+      echo ${WX_MAJOR_VERSION_NUMBER}.${WX_MINOR_VERSION_NUMBER}.${WX_RELEASE_NUMBER}.${WX_SUBRELEASE_NUMBER}
       ;;
     --release)
       echo $release
