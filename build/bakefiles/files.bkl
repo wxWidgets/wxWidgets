@@ -1939,7 +1939,6 @@
     wx/univ/scrolbar.h
     wx/univ/scrthumb.h
     wx/univ/scrtimer.h
-    wx/univ/setup.h
     wx/univ/slider.h
     wx/univ/spinbutt.h
     wx/univ/statbmp.h
