@@ -71,7 +71,7 @@ bool wxCheckBox::Create(wxWindow *parent,
                         const wxValidator& validator,
                         const wxString& name)
 {
-    if ( !CreateControl(parent, id, pos, size, style, wxDefaultValidator, name) )
+    if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return FALSE;
 
     long msStyle = BS_AUTOCHECKBOX | WS_TABSTOP;
