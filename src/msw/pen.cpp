@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        pen.cpp
+// Name:        msw/pen.cpp
 // Purpose:     wxPen
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -59,8 +59,8 @@ wxPenRefData::wxPenRefData(const wxPenRefData& data)
 
 wxPenRefData::~wxPenRefData()
 {
-	if ( m_hPen )
-		::DeleteObject((HPEN) m_hPen);
+        if ( m_hPen )
+                ::DeleteObject((HPEN) m_hPen);
 }
 
 // Pens
@@ -114,7 +114,7 @@ wxPen::wxPen(const wxColour& col, int Width, int Style)
         (Style == wxUSER_DASH))
       M_PENDATA->m_width = 1;
   }
-#endif 
+#endif
   RealizeResource();
 
   if ( wxThePenList )
@@ -162,18 +162,18 @@ bool wxPen::RealizeResource()
            M_PENDATA->m_cap==wxCAP_ROUND          &&
            M_PENDATA->m_style!=wxUSER_DASH        &&
            M_PENDATA->m_style!=wxSTIPPLE          &&
-	   M_PENDATA->m_width <= 1)
+           M_PENDATA->m_width <= 1)
        {
-	   M_PENDATA->m_hPen =
-	     (WXHPEN) CreatePen( wx2msPenStyle(M_PENDATA->m_style),
-				 M_PENDATA->m_width,
-				 ms_colour );
+           M_PENDATA->m_hPen =
+             (WXHPEN) CreatePen( wx2msPenStyle(M_PENDATA->m_style),
+                                 M_PENDATA->m_width,
+                                 ms_colour );
        }
        else
        {
-	   DWORD ms_style = PS_GEOMETRIC | wx2msPenStyle(M_PENDATA->m_style);
+           DWORD ms_style = PS_GEOMETRIC | wx2msPenStyle(M_PENDATA->m_style);
 
-	   switch(M_PENDATA->m_join)
+           switch(M_PENDATA->m_join)
            {
                case wxJOIN_BEVEL: ms_style |= PS_JOIN_BEVEL; break;
                case wxJOIN_MITER: ms_style |= PS_JOIN_MITER; break;
@@ -189,9 +189,9 @@ bool wxPen::RealizeResource()
                case wxCAP_ROUND:      ms_style |= PS_ENDCAP_ROUND;   break;
            }
 
-	   LOGBRUSH logb;
+           LOGBRUSH logb;
 
-	   switch(M_PENDATA->m_style)
+           switch(M_PENDATA->m_style)
            {
                case wxSTIPPLE:
                    logb.lbStyle = BS_PATTERN ;
@@ -201,72 +201,72 @@ bool wxPen::RealizeResource()
                        logb.lbHatch = (LONG)0;
                    break;
                case wxBDIAGONAL_HATCH:
-		   logb.lbStyle = BS_HATCHED;
-		   logb.lbHatch = HS_BDIAGONAL;
-		   break;
-	       case wxCROSSDIAG_HATCH:
-		   logb.lbStyle = BS_HATCHED;
-		   logb.lbHatch = HS_DIAGCROSS;
-		   break;
-	       case wxFDIAGONAL_HATCH:
-		   logb.lbStyle = BS_HATCHED;
-		   logb.lbHatch = HS_FDIAGONAL;
-		   break;
-	       case wxCROSS_HATCH:
-		   logb.lbStyle = BS_HATCHED;
-		   logb.lbHatch = HS_CROSS;
-		   break;
-	       case wxHORIZONTAL_HATCH:
-		   logb.lbStyle = BS_HATCHED;
-		   logb.lbHatch = HS_HORIZONTAL;
-		   break;
-	       case wxVERTICAL_HATCH:
-		   logb.lbStyle = BS_HATCHED;
-		   logb.lbHatch = HS_VERTICAL;
-		   break;
-	       default:
+                   logb.lbStyle = BS_HATCHED;
+                   logb.lbHatch = HS_BDIAGONAL;
+                   break;
+               case wxCROSSDIAG_HATCH:
+                   logb.lbStyle = BS_HATCHED;
+                   logb.lbHatch = HS_DIAGCROSS;
+                   break;
+               case wxFDIAGONAL_HATCH:
+                   logb.lbStyle = BS_HATCHED;
+                   logb.lbHatch = HS_FDIAGONAL;
+                   break;
+               case wxCROSS_HATCH:
+                   logb.lbStyle = BS_HATCHED;
+                   logb.lbHatch = HS_CROSS;
+                   break;
+               case wxHORIZONTAL_HATCH:
+                   logb.lbStyle = BS_HATCHED;
+                   logb.lbHatch = HS_HORIZONTAL;
+                   break;
+               case wxVERTICAL_HATCH:
+                   logb.lbStyle = BS_HATCHED;
+                   logb.lbHatch = HS_VERTICAL;
+                   break;
+               default:
                    logb.lbStyle = BS_SOLID;
 #ifdef __WXDEBUG__
-		   // this should be unnecessary (it's unused) but suppresses the Purigy
+                   // this should be unnecessary (it's unused) but suppresses the Purigy
                    // messages about uninitialized memory read
-		   logb.lbHatch = 0;
+                   logb.lbHatch = 0;
 #endif
-		   break;
-	   }
+                   break;
+           }
 
-	   logb.lbColor = ms_colour;
+           logb.lbColor = ms_colour;
 
-	   wxMSWDash *real_dash;
+           wxMSWDash *real_dash;
            if (M_PENDATA->m_style==wxUSER_DASH && M_PENDATA->m_nbDash && M_PENDATA->m_dash)
-	   {
-	       real_dash = new wxMSWDash[M_PENDATA->m_nbDash];
+           {
+               real_dash = new wxMSWDash[M_PENDATA->m_nbDash];
                int i;
                for (i=0; i<M_PENDATA->m_nbDash; i++)
                    real_dash[i] = M_PENDATA->m_dash[i] * M_PENDATA->m_width;
            }
-	   else
+           else
            {
-	       real_dash = (wxMSWDash*)NULL;
+               real_dash = (wxMSWDash*)NULL;
            }
 
            // Win32s doesn't have ExtCreatePen function...
-	   if (wxGetOsVersion()==wxWINDOWS_NT || wxGetOsVersion()==wxWIN95)
-	   {
-	       M_PENDATA->m_hPen =
-		 (WXHPEN) ExtCreatePen( ms_style,
-		                        M_PENDATA->m_width,
-		                        &logb,
-					M_PENDATA->m_style==wxUSER_DASH
-					  ? M_PENDATA->m_nbDash
-					  : 0,
-					real_dash );
-	   }
-	   else
+           if (wxGetOsVersion()==wxWINDOWS_NT || wxGetOsVersion()==wxWIN95)
            {
-	       M_PENDATA->m_hPen =
-		  (WXHPEN) CreatePen( wx2msPenStyle(M_PENDATA->m_style),
-				      M_PENDATA->m_width,
-				      ms_colour );
+               M_PENDATA->m_hPen =
+                 (WXHPEN) ExtCreatePen( ms_style,
+                                        M_PENDATA->m_width,
+                                        &logb,
+                                        M_PENDATA->m_style == wxUSER_DASH
+                                          ? M_PENDATA->m_nbDash
+                                          : 0,
+                                        (LPDWORD)real_dash );
+           }
+           else
+           {
+               M_PENDATA->m_hPen =
+                  (WXHPEN) CreatePen( wx2msPenStyle(M_PENDATA->m_style),
+                                      M_PENDATA->m_width,
+                                      ms_colour );
            }
 
            if (real_dash)
@@ -274,9 +274,9 @@ bool wxPen::RealizeResource()
        }
 #else
        M_PENDATA->m_hPen =
-	 (WXHPEN) CreatePen( wx2msPenStyle(M_PENDATA->m_style),
-			     M_PENDATA->m_width,
-			     ms_colour );
+         (WXHPEN) CreatePen( wx2msPenStyle(M_PENDATA->m_style),
+                             M_PENDATA->m_width,
+                             ms_colour );
 #endif
 #ifdef WXDEBUG_CREATE
        if (M_PENDATA->m_hPen==0)
@@ -289,10 +289,10 @@ bool wxPen::RealizeResource()
 
 WXHANDLE wxPen::GetResourceHandle()
 {
-	if ( !M_PENDATA )
-		return 0;
-	else
-		return (WXHANDLE)M_PENDATA->m_hPen;
+        if ( !M_PENDATA )
+                return 0;
+        else
+                return (WXHANDLE)M_PENDATA->m_hPen;
 }
 
 bool wxPen::FreeResource(bool force)
@@ -313,17 +313,17 @@ bool wxPen::IsFree() const
 
 void wxPen::Unshare()
 {
-	// Don't change shared data
-	if (!m_refData)
+        // Don't change shared data
+        if (!m_refData)
     {
-		m_refData = new wxPenRefData();
-	}
+                m_refData = new wxPenRefData();
+        }
     else
     {
-		wxPenRefData* ref = new wxPenRefData(*(wxPenRefData*)m_refData);
-		UnRef();
-		m_refData = ref;
-	}
+                wxPenRefData* ref = new wxPenRefData(*(wxPenRefData*)m_refData);
+                UnRef();
+                m_refData = ref;
+        }
 }
 
 void wxPen::SetColour(const wxColour& col)
@@ -331,7 +331,7 @@ void wxPen::SetColour(const wxColour& col)
     Unshare();
 
     M_PENDATA->m_colour = col;
-  
+
     RealizeResource();
 }
 
@@ -340,7 +340,7 @@ void wxPen::SetColour(unsigned char r, unsigned char g, unsigned char b)
     Unshare();
 
     M_PENDATA->m_colour.Set(r, g, b);
-  
+
     RealizeResource();
 }
 
@@ -368,7 +368,7 @@ void wxPen::SetStipple(const wxBitmap& Stipple)
 
     M_PENDATA->m_stipple = Stipple;
     M_PENDATA->m_style = wxSTIPPLE;
-  
+
     RealizeResource();
 }
 
@@ -378,7 +378,7 @@ void wxPen::SetDashes(int nb_dashes, const wxDash *Dash)
 
     M_PENDATA->m_nbDash = nb_dashes;
     M_PENDATA->m_dash = (wxMSWDash *)Dash;
-  
+
     RealizeResource();
 }
 
@@ -404,30 +404,30 @@ int wx2msPenStyle(int wx_style)
 {
     int cstyle;
     switch (wx_style)
-    { 
+    {
        case wxDOT:
            cstyle = PS_DOT;
-	   break;
+           break;
 
        case wxDOT_DASH:
-	   cstyle = PS_DASHDOT;
-	   break;
+           cstyle = PS_DASHDOT;
+           break;
 
        case wxSHORT_DASH:
        case wxLONG_DASH:
            cstyle = PS_DASH;
-	   break;
+           break;
 
        case wxTRANSPARENT:
            cstyle = PS_NULL;
-	   break;
+           break;
 
        case wxUSER_DASH:
 #ifdef __WIN32__
            // Win32s doesn't have PS_USERSTYLE
-	   if (wxGetOsVersion()==wxWINDOWS_NT || wxGetOsVersion()==wxWIN95)
-	       cstyle = PS_USERSTYLE;
-	   else
+           if (wxGetOsVersion()==wxWINDOWS_NT || wxGetOsVersion()==wxWIN95)
+               cstyle = PS_USERSTYLE;
+           else
                cstyle = PS_DOT; // We must make a choice... This is mine!
 #else
            cstyle = PS_DASH;
