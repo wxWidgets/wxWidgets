@@ -157,6 +157,14 @@ different visuals, FALSE otherwise.
 
 \helpref{SetUseBestVisual}{wxappsetusebestvisual}
 
+
+\membersection{wxApp::GetVendorName}\label{wxappvendorappname}
+
+\constfunc{wxString}{GetVendorName}{\void}
+
+Returns the application's vendor name.
+
+
 \membersection{wxApp::ExitMainLoop}\label{wxappexitmainloop}
 
 \func{void}{ExitMainLoop}{\void}
@@ -446,6 +454,20 @@ needs to use the top window.
 \wxheading{See also}
 
 \helpref{wxApp::GetTopWindow}{wxappgettopwindow}, \helpref{wxApp::OnInit}{wxapponinit}
+
+
+\membersection{wxApp::SetVendorName}\label{wxappsetvendorname}
+
+\func{void}{SetVendorName}{\param{const wxString\& }{name}}
+
+Sets the name of application's vendor. The name will be used
+in registry access. A default name is set by
+wxWindows.
+
+\wxheading{See also}
+
+\helpref{wxApp::GetVendorName}{wxappgetvendorname}
+
 
 \membersection{wxApp::GetStdIcon}\label{wxappgetstdicon}
 
