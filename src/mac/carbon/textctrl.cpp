@@ -817,8 +817,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
                 | kControlGetsFocusOnClick | kControlSupportsLiveFeedback;
             /* create the control */
         m_peer = new wxMacControl() ;
-        verify_noerr( CreateUserPaneControl( MAC_WXHWND(GetParent()->MacGetTopLevelWindowRef()) , &bounds, featurSet , , *m_peer ) );
-    ) ) ;
+        verify_noerr( ::CreateUserPaneControl( MAC_WXHWND(GetParent()->MacGetTopLevelWindowRef()), &bounds, featurSet, *m_peer ) );
         
         wxMacWindowClipper c(this) ;
         STPTextPaneVars *varsp ;
