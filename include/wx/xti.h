@@ -106,24 +106,24 @@ public :
     // returns true if the member has been found and sets the int value
     // pointed to accordingly (if ptr != null )
     // if not found returns false, value left unchanged
-    bool HasEnumMemberValue( const wxChar *name , int *value = NULL ) ;
+    bool HasEnumMemberValue( const wxChar *name , int *value = NULL ) const ;
 
     // returns the value of the member, if not found in debug mode an
     // assert is issued, in release 0 is returned
-    int GetEnumMemberValue(const wxChar *name );
+    int GetEnumMemberValue(const wxChar *name ) const ;
 
     // returns the name of the enum member having the passed in value
     // returns an emtpy string if not found
-    const wxChar *GetEnumMemberName(int value);
+    const wxChar *GetEnumMemberName(int value) const ;
 
     // returns the number of members in this enum
-    int GetEnumCount() { return m_count ; }
+    int GetEnumCount() const { return m_count ; }
 
     // returns the value of the nth member
-    int GetEnumMemberValueByIndex( int n ) ;
+    int GetEnumMemberValueByIndex( int n ) const ;
 
     // returns the value of the nth member
-    const wxChar *GetEnumMemberNameByIndex( int n ) ;
+    const wxChar *GetEnumMemberNameByIndex( int n ) const ;
 private :
     wxEnumMemberData *m_members;
     int m_count ;
@@ -517,6 +517,7 @@ class WXDLLIMPEXP_BASE wxDelegateTypeInfo : public wxTypeInfo
 public :
     wxDelegateTypeInfo( int eventType , wxClassInfo* eventClass , converterToString_t to = NULL , converterFromString_t from = NULL ) ;
     int GetEventType() const { return m_eventType ; }
+    const wxClassInfo* GetEventClass() const { return m_eventClass ; }
 private :
     const wxClassInfo *m_eventClass; // (extended will merge into classinfo)
     int m_eventType ;
