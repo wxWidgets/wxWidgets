@@ -3019,7 +3019,7 @@ void wxListMainWindow::InsertItem( wxListItem &item )
     else
     {
         m_lines.Add( line );
-        item.m_itemId = m_lines.GetCount();
+        item.m_itemId = m_lines.GetCount()-1;
     }
 }
 
