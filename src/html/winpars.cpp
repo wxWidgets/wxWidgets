@@ -31,6 +31,7 @@
 #include "wx/html/htmlwin.h"
 #include "wx/fontmap.h"
 #include "wx/log.h"
+#include "wx/settings.h"
 
 
 //-----------------------------------------------------------------------------
@@ -188,7 +189,9 @@ void wxHtmlWinParser::InitParser(const wxString& source)
 
     m_Container->InsertCell(new wxHtmlColourCell(m_ActualColor));
     m_Container->InsertCell(
-            new wxHtmlColourCell(GetWindow() ? GetWindow()->GetBackgroundColour() : *wxWHITE,
+            new wxHtmlColourCell(GetWindow() ?
+                                     GetWindow()->GetBackgroundColour() :
+                                     wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW),
                                  wxHTML_CLR_BACKGROUND));
     m_Container->InsertCell(new wxHtmlFontCell(CreateCurrentFont()));
 }
