@@ -1,0 +1,89 @@
+include *.txt
+include my_distutils.py
+include licence/*.txt
+
+include demo/*.py
+include demo/bitmaps/*.bmp
+include demo/bitmaps/*.ico
+include demo/bitmaps/*.gif
+include demo/bitmaps/*.png
+include demo/bitmaps/*.jpg
+include demo/README.txt
+include demo/*.xml
+include demo/data/*.png
+include demo/data/*.htm
+include demo/data/*.html
+include demo/data/*.bmp
+include demo/data/*.txt
+include demo/data/*.i
+include demo/data/*.h
+
+include wxPython/lib/*.py
+include wxPython/lib/*.txt
+include wxPython/lib/sizers/*.py
+include wxPython/lib/sizers/*.txt
+include wxPython/lib/editor/*.py
+include wxPython/lib/editor/*.txt
+
+exclude wxPython/*
+
+include src/*.i
+include src/*.py
+include src/*.cpp
+include src/*.c
+include src/*.h
+include src/*.ico
+include src/*.rc
+
+include src/msw/*.cpp
+include src/msw/*.h
+include src/msw/*.py
+
+include src/gtk/*.cpp
+include src/gtk/*.h
+include src/gtk/*.py
+
+# src/motif/*.cpp
+# src/motif/*.h
+# src/motif/*.py
+
+
+include contrib/glcanvas/*.i
+include contrib/glcanvas/*.py
+include contrib/glcanvas/*.cpp
+include contrib/glcanvas/*.c
+include contrib/glcanvas/*.h
+include contrib/glcanvas/msw/*.cpp
+include contrib/glcanvas/msw/*.h
+include contrib/glcanvas/msw/*.py
+include contrib/glcanvas/gtk/*.cpp
+include contrib/glcanvas/gtk/*.h
+include contrib/glcanvas/gtk/*.py
+
+include contrib/ogl/*.txt
+include contrib/ogl/*.i
+include contrib/ogl/*.py
+include contrib/ogl/*.cpp
+include contrib/ogl/*.c
+include contrib/ogl/*.h
+include contrib/ogl/contrib/include/wx/ogl/*.h
+include contrib/ogl/contrib/src/ogl/*.cpp
+
+include contrib/stc/*.txt
+include contrib/stc/*.i
+include contrib/stc/*.py
+include contrib/stc/*.cpp
+include contrib/stc/*.c
+include contrib/stc/*.h
+include contrib/stc/*.cpp
+include contrib/stc/*.py
+include contrib/stc/contrib/include/wx/stc/*.h
+include contrib/stc/contrib/src/stc/*.h
+include contrib/stc/contrib/src/stc/*.cpp
+include contrib/stc/contrib/src/stc/*.txt
+include contrib/stc/contrib/src/stc/*.py
+include contrib/stc/contrib/src/stc/scintilla/include/*.h
+include contrib/stc/contrib/src/stc/scintilla/include/*.iface
+include contrib/stc/contrib/src/stc/scintilla/src/*.h
+include contrib/stc/contrib/src/stc/scintilla/src/*.cxx
+
