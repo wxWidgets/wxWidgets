@@ -626,6 +626,8 @@ public:
     // suspend/resume redrawing the control
     void Freeze();
     void Thaw();
+    
+    void SetFocus();
 
     void OnRenameTimer();
     void OnRenameAccept();
@@ -2158,7 +2160,7 @@ void wxListTextCtrl::OnChar( wxKeyEvent &event )
             m_owner->OnRenameAccept();
 
         m_finished = TRUE;
-        m_owner->SetFocus(); // This doesn't work. TODO.
+        m_owner->SetFocus();
 
         return;
     }
@@ -2171,7 +2173,7 @@ void wxListTextCtrl::OnChar( wxKeyEvent &event )
             wxPendingDelete.Append(this);
 
         m_finished = TRUE;
-        m_owner->SetFocus(); // This doesn't work. TODO.
+        m_owner->SetFocus();
 
         return;
     }
@@ -2192,7 +2194,7 @@ void wxListTextCtrl::OnKeyUp( wxKeyEvent &event )
     wxPoint myPos = GetPosition();
     wxSize mySize = GetSize();
     int sx, sy;
-    GetTextExtent(GetValue() + _T("M"), &sx, &sy); // FIXME: MM??
+    GetTextExtent(GetValue() + _T("MM"), &sx, &sy);
     if (myPos.x + sx > parentSize.x)
         sx = parentSize.x - myPos.x;
     if (mySize.x > sx)
@@ -3427,6 +3429,26 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
 #ifdef __WXGTK__
 extern wxWindow *g_focusWindow;
 #endif
+
+void wxListMainWindow::SetFocus()
+{
+    // VS: wxListMainWindow derives from wxPanel (via wxScrolledWindow) and wxPanel
+    //     overrides SetFocus in such way that it does never change focus from 
+    //     panel's child to the panel itself. Unfortunately, we must be able to change
+    //     focus to the panel from wxListTextCtrl because the text control should 
+    //     disappear when the user clicks outside it.
+
+    wxWindow *oldFocus = FindFocus();
+    
+    if ( oldFocus->GetParent() == this )
+    {
+        wxWindow::SetFocus();
+    }
+    else
+    {
+        wxScrolledWindow::SetFocus();
+    }
+}
 
 void wxListMainWindow::OnSetFocus( wxFocusEvent &WXUNUSED(event) )
 {
