@@ -124,6 +124,12 @@ class Throbber(wxPanel):
         self.event.set() # we start out in the "resting" state
 
 
+    def __del__(self):
+        # make sure it's stopped, since EVT_WINDOW_DESTROY may not be sent
+        # on all platforms
+        self.Stop()
+
+
     def OnDestroyWindow(self, event):
         # this is currently broken due to a bug in wxWindows... hopefully
         # it'll be fixed soon.  Meanwhile be sure to explicitly call Stop()

@@ -1,11 +1,11 @@
 #---------------------------------------------------------------------------
 # Name:        EventManager.py
-# Purpose:     A module to demonstrate the wxPython.lib.EventManager.
+# Purpose:     A module to demonstrate wxPython.lib.evtmgr.EventManager.
 #
-# Author:      Robb Shecter <robb@acm.org>
+# Author:      Robb Shecter (robb@acm.org)
 #
 # Created:     16-December-2002
-# Copyright:   (c) 2002 by Robb Shecter <robb@acm.org>
+# Copyright:   (c) 2002 by Robb Shecter (robb@acm.org)
 # Licence:     wxWindows license
 #---------------------------------------------------------------------------
 
@@ -58,8 +58,10 @@ class TestPanel(wxPanel):
         target      = targetPanel.tile
 
         sizer.Add(0,0,1)
-        for factor in [0.2, 0.3, 0.35, 0.4, 0.5, 0.6, 0.7]:
-            sizer.Add(Tile(buttonPanel, log, factor, target), 0, 0)
+        for factor in [0.2, 0.3, 0.4, 0.5, 0.6, 0.7]:
+            sizer.Add(Tile(buttonPanel, log, factor-0.05, target), 0, wxALIGN_CENTER)
+            sizer.Add(0,0,1)
+            sizer.Add(Tile(buttonPanel, log, factor,      target), 0, wxALIGN_CENTER)
             sizer.Add(0,0,1)
 
         buttonPanel.SetAutoLayout(1)
@@ -87,15 +89,15 @@ class Tile(wxPanel):
     events over its contained 'InnerTile'.
     """
     normal = wxColor(150,150,150)
-    bright = wxColor(230,115,115)
-    active = wxColor(255,240,240)
+    active = wxColor(250,245,245)
+    hover  = wxColor(210,220,210)
 
-    def __init__(self, parent, log, factor=1, thingToWatch=None, bgColor=None, active=1):
-        wxPanel.__init__(self, parent, -1, size=(45,45))
+    def __init__(self, parent, log, factor=1, thingToWatch=None, bgColor=None, active=1, size=(38,38), borderWidth=3):
+        wxPanel.__init__(self, parent, -1, size=size, style=wxCLIP_CHILDREN)
         self.tile = InnerTile(self, log, factor, thingToWatch, bgColor)
         self.log  = log
         sizer = wxBoxSizer(wxHORIZONTAL)
-        sizer.Add(self.tile, 1, wxEXPAND | wxALL, 4)
+        sizer.Add(self.tile, 1, wxEXPAND | wxALL, borderWidth)
         self.SetAutoLayout(1)
         self.SetSizer(sizer)
         self.Layout()
@@ -103,14 +105,14 @@ class Tile(wxPanel):
         if active:
             # Register myself for mouse events over self.tile in order to
             # create typical button/hyperlink visual effects.
-            eventManager.Register(self.setBright, EVT_ENTER_WINDOW, self.tile)
+            eventManager.Register(self.setHover,  EVT_ENTER_WINDOW, self.tile)
             eventManager.Register(self.setNormal, EVT_LEAVE_WINDOW, self.tile)
             eventManager.Register(self.setActive, EVT_LEFT_DOWN,    self.tile)
-            eventManager.Register(self.setBright, EVT_LEFT_UP,      self.tile)
+            eventManager.Register(self.setHover,  EVT_LEFT_UP,      self.tile)
 
 
-    def setBright(self, event):
-        self.SetBackgroundColour(Tile.bright)
+    def setHover(self, event):
+        self.SetBackgroundColour(Tile.hover)
         self.Refresh()
 
 
@@ -126,10 +128,13 @@ class Tile(wxPanel):
 
 
 class InnerTile(wxPanel):
-    START_COLOR = wxColor(200, 70, 70)
-    FINAL_COLOR = wxColor(50, 80, 220)
-    OFF_COLOR   = wxColor(180, 185, 180)
-    DELTAS      = map(lambda a,b: b-a, START_COLOR.Get(), FINAL_COLOR.Get())
+    IDLE_COLOR  = wxColor( 80, 10, 10)
+    START_COLOR = wxColor(200, 70, 50)
+    FINAL_COLOR = wxColor( 20, 80,240)
+    OFF_COLOR   = wxColor(185,190,185)
+    # Some pre-computation.
+    DELTAS            = map(lambda a,b: b-a, START_COLOR.Get(), FINAL_COLOR.Get())
+    START_COLOR_TUPLE = START_COLOR.Get()
 
     """
     This inner panel changes its color in reaction to mouse
@@ -145,10 +150,8 @@ class InnerTile(wxPanel):
             self.thingToWatch = thingToWatch
             self.state        = 0
             self.toggleOnOff()
-            # Watch for the mouse click to enable/disable myself, and
-            # reset my color when the mouse leaves the watched window.
-            eventManager.Register(self.toggleOnOff, EVT_LEFT_UP,      self)
-            eventManager.Register(self.resetColor,  EVT_LEAVE_WINDOW, thingToWatch)
+            # Watch for the mouse click to enable/disable myself.
+            eventManager.Register(self.toggleOnOff, EVT_LEFT_UP, self)
 
 
     def toggleOnOff(self, event=None):
@@ -164,7 +167,7 @@ class InnerTile(wxPanel):
 
     def resetColor(self, event=None):
         if self.state:
-            self.setColor(InnerTile.START_COLOR)
+            self.setColor(InnerTile.IDLE_COLOR)
         else:
             self.setColor(InnerTile.OFF_COLOR)
 
@@ -175,13 +178,16 @@ class InnerTile(wxPanel):
 
 
     def makeColor(self, mouseEvent):
-        z = 250.0
-        (x, y) = mouseEvent.GetPositionTuple()
-        a = (x + y) * self.factor
-        percent = min(a, z) / z
-        r, g, b = map(lambda start, delta, pct=percent: start+(delta*pct),
-                      InnerTile.START_COLOR.Get(),
-                      InnerTile.DELTAS)
+        self.makeColorFromTuple(mouseEvent.GetPositionTuple())
+
+
+    def makeColorFromTuple(self, (x, y)):
+        MAX     = 180.0
+        scaled  = min((x + y) * self.factor, MAX)  # In range [0..MAX]
+        percent = scaled / MAX
+        r = InnerTile.START_COLOR_TUPLE[0] + (InnerTile.DELTAS[0] * percent)
+        g = InnerTile.START_COLOR_TUPLE[1] + (InnerTile.DELTAS[1] * percent)
+        b = InnerTile.START_COLOR_TUPLE[2] + (InnerTile.DELTAS[2] * percent)
         self.setColor(wxColor(r,g,b))
 
 

@@ -28,7 +28,7 @@ There's also a new object-oriented way to register for events.  This
 invocation is equivalent to the one above, but does not require the
 programmer to declare or track control ids or parent containers:
 
-    eventManager.register(handleEvents, EVT_BUTTON, myButton)
+    eventManager.Register(handleEvents, EVT_BUTTON, myButton)
 
 This module is Python 2.1+ compatible.
 
