@@ -28,9 +28,6 @@
 #include "wx/html/htmlwin.h"
 #include "wx/html/forcelnk.h"
 
-#ifdef __WXMSW__
-#include <windows.h>
-#endif
 
 //-----------------------------------------------------------------------------
 // wxHtmlWindow
@@ -436,8 +433,12 @@ void wxHtmlWindow::OnDraw(wxDC& dc)
 
     if (m_tmpCanDrawLocks > 0) return;
     dc.SetMapMode(wxMM_TEXT);
+#if 0
+/* VS - I don't think this is neccessary any longer 
+        MSC_VER 1200 means MSVC 6.0 and it works fine */
 #if defined(_MSC_VER) && (_MSC_VER == 1200)
     ::SetMapMode((HDC)dc.GetHDC(), MM_TEXT);
+#endif
 #endif
     dc.SetBackgroundMode(wxTRANSPARENT);
     ViewStart(&x, &y);
