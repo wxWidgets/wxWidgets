@@ -5,8 +5,43 @@
 I) Windows using plain makefiles
 ----------------------------------------
 
-No idea, never did it.
+a) Using the GNU MingW32 or GNU Cygwin32 compilers
 
+You'll need the compiler itself which is available from
+
+  http://www.cygwin.com
+
+When using MingW32 you'll need a few of the tools that
+are either shipped separately or only as part of the
+Cygwin32 toolchain. First and foremost, you'll need
+
+make.exe
+byacc.exe
+
+make.exe is also available from 
+  http://agnes.dida.physik.uni-essen.de/~janjaap/mingw32
+
+-> Set your path so that it includes the directory
+   where your compiler and tools reside
+-> Assume that you installed the wxWindows sources
+   into c:\wxWin
+-> Copy c:\wxWin\include\wx\msw\setup0.h 
+   to   c:\wxWin\include\wx\msw\setup.h
+-> Edit c:\wxWin\include\wx\msw\setup.h so that
+   most features are enabled (i.e. defined to 1) with
+   #define wxUSE_SOCKETS       1
+   #define wxUSE_HTML          1
+   #define wxUSE_THREADS       1
+   #define wxUSE_FS_INET       1
+   #define wxUSE_FS_ZIP        1
+   #define wxUSE_BUSYINFO      1
+   #define wxUSE_DYNLIB_CLASS  1
+   #define wxUSE_ZIPSTREAM     1
+
+   and disbale iostreams with
+   #define wxUSE_STD_IOSTREAM   0
+-> type: cd c:\wxWin\src\msw
+-> type: make -f makefile.g95
 
 II) Unix using plain makefiles.
 ----------------------------------------

@@ -27,6 +27,9 @@
 #include "wx/setup.h"
 #include "wx/window.h"
 #include "wx/dcclient.h"
+#include "wx/dcscreen.h"
+#include "wx/dcmemory.h"
+#include "wx/settings.h"
 #endif
 
 #include "wx/log.h"

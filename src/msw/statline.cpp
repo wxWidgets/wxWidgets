@@ -32,6 +32,7 @@
 #if wxUSE_STATLINE
 
 #include "wx/msw/private.h"
+#include "wx/log.h"
 
 // ============================================================================
 // implementation

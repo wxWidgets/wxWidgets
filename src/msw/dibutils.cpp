@@ -21,9 +21,9 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include <stdio.h>
 #include "wx/setup.h"
 #include "wx/defs.h"
+#include "wx/string.h"
 #endif
 
 #include <windows.h>
@@ -50,10 +50,31 @@
 #define BFT_BITMAP 0x4d42   /* 'BM' */
 #define BFT_CURSOR 0x5450   /* 'PT' */
 
+#ifndef SEEK_CUR
 /* flags for _lseek */
 #define  SEEK_CUR 1
 #define  SEEK_END 2
 #define  SEEK_SET 0
+#endif
+
+/* Copied from PNGhandler for coompilation with MingW32, RR */
+
+#ifndef GlobalAllocPtr
+#define     GlobalPtrHandle(lp)         \
+                ((HGLOBAL)GlobalHandle(lp))
+
+#define     GlobalLockPtr(lp)                \
+                ((BOOL)GlobalLock(GlobalPtrHandle(lp)))
+#define     GlobalUnlockPtr(lp)      \
+                GlobalUnlock(GlobalPtrHandle(lp))
+
+#define     GlobalAllocPtr(flags, cb)        \
+                (GlobalLock(GlobalAlloc((flags), (cb))))
+#define     GlobalReAllocPtr(lp, cbNew, flags)       \
+                (GlobalUnlockPtr(lp), GlobalLock(GlobalReAlloc(GlobalPtrHandle(lp) , (cbNew), (flags))))
+#define     GlobalFreePtr(lp)                \
+                (GlobalUnlockPtr(lp), (BOOL)GlobalFree(GlobalPtrHandle(lp)))
+#endif
 
 
 /*
@@ -145,7 +166,7 @@ int DibWriteFile(LPTSTR szFile, LPBITMAPINFOHEADER lpbi)
   bmf.bfSize = sizeof(bmf) + size;
   bmf.bfReserved1 = 0;
   bmf.bfReserved2 = 0;
-  bmf.bfOffBits = sizeof(bmf) + (char far*)(DibPtr(lpbi)) - (char far*)lpbi;
+  bmf.bfOffBits = sizeof(bmf) + (char FAR*)(DibPtr(lpbi)) - (char FAR*)lpbi;
 #if defined( __WATCOMC__) || defined(__VISUALC__) || defined(__SC__) || defined(__SALFORDC__) || defined(__MWERKS__)
   if (_hwrite(fh, (LPCSTR)(&bmf), sizeof(bmf))<0 ||
   _hwrite(fh, (LPCSTR)lpbi, size)<0) {
@@ -686,7 +707,7 @@ BOOL DibMapToPalette(PDIB pdib, HPALETTE hpal)
 HPALETTE MakePalette(const BITMAPINFO FAR* Info, UINT flags)
 {
   HPALETTE hPalette;
-  const RGBQUAD far* rgb = Info->bmiColors;
+  const RGBQUAD FAR* rgb = Info->bmiColors;
 
   WORD nColors = Info->bmiHeader.biClrUsed;
   if (nColors) {

@@ -28,6 +28,7 @@
     #include "wx/dialog.h"
     #include "wx/filedlg.h"
     #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
 
 #include <windows.h>

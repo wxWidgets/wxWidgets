@@ -16,29 +16,31 @@
     foreach $file (sort keys %wxGeneric) {
         #! native wxDirDlg can't be compiled due to GnuWin32/OLE limitations,
         #! so take the generic version
-        if ( $wxGeneric{$file} =~ /\b(PS|G|U)\b/ ) {
+        if ( $wxGeneric{$file} =~ /\b(PS|G|U|16)\b/ ) {
             next unless $file =~ /^dirdlgg\./;
         }
 
         $file =~ s/cp?p?$/\$(OBJSUFF)/;
-        $project{"WXGENERICOBJS"} .= '$(GENDIR)\\' . $file . " "
+        $project{"WXGENERICOBJS"} .= '$(GENDIR)/' . $file . " "
     }
 
     foreach $file (sort keys %wxCommon) {
-        #! socket files don't compile under Win16 currently
-        next if $wxCommon{$file} =~ /\b(32|S)\b/;
+        next if $wxCommon{$file} =~ /\b(16)\b/;
 
         #! needs extra files (sql*.h) so not compiled by default.
         next if $file =~ /^odbc\./;
 
         $file =~ s/cp?p?$/\$(OBJSUFF)/;
-        $project{"WXCOMMONOBJS"} .= '$(COMMDIR)\\' . $file . " "
+        $project{"WXCOMMONOBJS"} .= '$(COMMDIR)/' . $file . " "
     }
 
     foreach $file (sort keys %wxMSW) {
         #! Mingw32 doesn't have the OLE headers and has some troubles with
         #! socket code
-        next if $wxMSW{$file} =~ /\b(O|S|16)\b/;
+        next if $wxMSW{$file} =~ /\b(O|16)\b/;
+
+        #! native wxDirDlg can't be compiled due to GnuWin32/OLE limitations,
+        next if $file =~ /^dirdlg\./;
 
         $file =~ s/cp?p?$/\$(OBJSUFF)/;
         $project{"WXMSWOBJS"} .= $file . " "
@@ -181,7 +183,11 @@ clean_rcp:
 	cd $(WXDIR)/src/msw
 
 clean:
-	rm -f $(OBJECTS) $(EXTRAOBJS) ../common/y_tab.c ../common/lex_yy.c $(WXDIR)/lib/libwx$(GUISUFFIX).a core
+	erase *.o
+	erase ../common/y_tab.c
+	erase ../common/lex_yy.c
+	erase $(WXDIR)/lib/libwx$(GUISUFFIX).a
+	erase core
 
 cleanall: clean
 

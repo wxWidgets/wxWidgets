@@ -30,9 +30,9 @@
 #endif
 #endif
 
+#include "wx/wxchar.h"
 #include "wx/msw/curicop.h"
 #include "wx/msw/curico.h"
-#include "wx/wxchar.h"
 #include "wx/string.h"
 
 //*****************************************************************************
