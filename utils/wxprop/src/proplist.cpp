@@ -80,7 +80,7 @@ BEGIN_EVENT_TABLE(wxPropertyListView, wxPropertyView)
 	EVT_TEXT_ENTER(wxID_PROP_TEXT,	wxPropertyListView::OnText)
 	EVT_LISTBOX(wxID_PROP_SELECT,	wxPropertyListView::OnPropertySelect)
     EVT_COMMAND(wxID_PROP_SELECT, wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxPropertyListView::OnPropertyDoubleClick)
-	EVT_TEXT(wxID_PROP_VALUE_SELECT,	wxPropertyListView::OnValueListSelect)
+	EVT_LISTBOX(wxID_PROP_VALUE_SELECT,	wxPropertyListView::OnValueListSelect)
 END_EVENT_TABLE()
 
 bool wxPropertyListView::dialogCancelled = FALSE;
@@ -425,9 +425,9 @@ bool wxPropertyListView::CreateControls(void)
   wxFont guiFont = settings.GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
 
 #ifdef __WXMSW__
-  wxFont *boringFont = wxTheFontList->FindOrCreateFont(guiFont.GetPointSize(), wxDEFAULT, wxNORMAL, wxNORMAL, FALSE, "Courier New");
+  wxFont *boringFont = wxTheFontList->FindOrCreateFont(guiFont.GetPointSize(), wxMODERN, wxNORMAL, wxNORMAL, FALSE, "Courier New");
 #else
-  wxFont *boringFont = wxTheFontList->FindOrCreateFont(guiFont.GetPointSize(), wxMODERN, wxNORMAL, wxNORMAL);
+  wxFont *boringFont = wxTheFontList->FindOrCreateFont(guiFont.GetPointSize(), wxTELETYPE, wxNORMAL, wxNORMAL);
 #endif
 
   // May need to be changed in future to eliminate clashes with app.
@@ -661,9 +661,17 @@ void wxPropertyListView::ShowListBoxControl(bool show)
       if (constraints)
       {
         if (show)
+        {
           constraints->top.Below(valueList, 2);
+          // Maintain back-pointer so when valueList is deleted,
+          // any reference to it from this window is removed.
+          valueList->AddConstraintReference(propertyScrollingList);
+        }
         else
+        {
           constraints->top.Below(valueText, 2);
+          valueText->AddConstraintReference(propertyScrollingList);
+        }
         propertyWindow->Layout();
       }
     }
@@ -847,6 +855,10 @@ IMPLEMENT_CLASS(wxPropertyListPanel, wxPanel)
 BEGIN_EVENT_TABLE(wxPropertyListPanel, wxPanel)
     EVT_SIZE(wxPropertyListPanel::OnSize)
 END_EVENT_TABLE()
+
+wxPropertyListPanel::~wxPropertyListPanel()
+{
+}
 
 void wxPropertyListPanel::OnDefaultAction(wxControl *item)
 {
@@ -1263,7 +1275,7 @@ bool wxStringListValidator::OnDisplayValue(wxProperty *property, wxPropertyListV
     return FALSE;
   wxString str(property->GetValue().GetStringRepresentation());
   view->GetValueText()->SetValue(str.GetData());
-  if (strings)
+  if (strings && view->GetValueList() && view->GetValueList()->Number() > 0)
   {
     view->GetValueList()->SetStringSelection(str.GetData());
   }

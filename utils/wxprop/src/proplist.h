@@ -300,6 +300,7 @@ class wxPropertyListPanel: public wxPanel
   {
     view = v;
   }
+  ~wxPropertyListPanel();
   void OnDefaultAction(wxControl *item);
 
   inline void SetView(wxPropertyListView* v) { view = v; }
