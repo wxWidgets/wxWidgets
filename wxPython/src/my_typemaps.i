@@ -350,9 +350,25 @@
     $target = t_output_helper($target, o);
 }
 
-
 %typemap(python,ignore) bool  *OUTPUT = bool *T_OUTPUT;
 %typemap(python,argout) bool  *OUTPUT = bool *T_OUTPUT;
+
+
+
+%typemap(python,ignore) byte *T_OUTPUT(int temp)
+{
+  $target = (byte*)&temp;
+}
+
+%typemap(python,argout) byte *T_OUTPUT
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*$source));
+    $target = t_output_helper($target, o);
+}
+
+%typemap(python,ignore) byte  *OUTPUT = byte *T_OUTPUT;
+%typemap(python,argout) byte  *OUTPUT = byte *T_OUTPUT;
 
 //---------------------------------------------------------------------------
 // Typemaps to convert return values that are base class pointers

@@ -11517,42 +11517,30 @@ static PyObject *_wrap_wxPalette_GetRGB(PyObject *self, PyObject *args, PyObject
     wxPalette * _arg0;
     int  _arg1;
     byte * _arg2;
+    int  temp;
     byte * _arg3;
+    int  temp0;
     byte * _arg4;
+    int  temp1;
     PyObject * _argo0 = 0;
-    PyObject * _argo2 = 0;
-    PyObject * _argo3 = 0;
-    PyObject * _argo4 = 0;
-    char *_kwnames[] = { "self","pixel","OUTPUT","OUTPUT","OUTPUT", NULL };
+    char *_kwnames[] = { "self","pixel", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiOOO:wxPalette_GetRGB",_kwnames,&_argo0,&_arg1,&_argo2,&_argo3,&_argo4)) 
+{
+  _arg2 = (byte*)&temp;
+}
+{
+  _arg3 = (byte*)&temp0;
+}
+{
+  _arg4 = (byte*)&temp1;
+}
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPalette_GetRGB",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPalette_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPalette_GetRGB. Expected _wxPalette_p.");
-        return NULL;
-        }
-    }
-    if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_byte_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxPalette_GetRGB. Expected _byte_p.");
-        return NULL;
-        }
-    }
-    if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_byte_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxPalette_GetRGB. Expected _byte_p.");
-        return NULL;
-        }
-    }
-    if (_argo4) {
-        if (_argo4 == Py_None) { _arg4 = NULL; }
-        else if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_byte_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of wxPalette_GetRGB. Expected _byte_p.");
         return NULL;
         }
     }
@@ -11563,6 +11551,21 @@ static PyObject *_wrap_wxPalette_GetRGB(PyObject *self, PyObject *args, PyObject
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg2));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg3));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg4));
+    _resultobj = t_output_helper(_resultobj, o);
+}
     return _resultobj;
 }
 
