@@ -1335,7 +1335,7 @@ void wxWindow::Fit(void)
 
 void wxWindow::OnSize( wxSizeEvent &WXUNUSED(event) )
 {
-  if (GetAutoLayout()) Layout();
+  //if (GetAutoLayout()) Layout();
 };
 
 bool wxWindow::Show( bool show )
