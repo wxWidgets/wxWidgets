@@ -95,6 +95,8 @@ WXHRGN    wxApp::s_macCursorRgn = NULL;
 wxWindow* wxApp::s_captureWindow = NULL ;
 int       wxApp::s_lastMouseDown = 0 ;
 long      wxApp::sm_lastMessageTime = 0;
+long      wxApp::s_lastModifiers = 0 ;
+
 
 bool      wxApp::s_macDefaultEncodingIsPC = true ;
 bool      wxApp::s_macSupportPCMenuShortcuts = true ;
@@ -1007,6 +1009,7 @@ pascal OSStatus wxMacApplicationEventHandler( EventHandlerCallRef handler , Even
         case kEventClassKeyboard :
             if ( wxMacConvertEventToRecord( event , &rec ) )
             {
+                wxTheApp->MacHandleModifierEvents( &rec ) ;
                 wxTheApp->MacHandleOneEvent( &rec ) ;
                 result = noErr ;
             }
@@ -1014,6 +1017,7 @@ pascal OSStatus wxMacApplicationEventHandler( EventHandlerCallRef handler , Even
         case kEventClassTextInput :
             if ( wxMacConvertEventToRecord( event , &rec ) )
             {
+                wxTheApp->MacHandleModifierEvents( &rec ) ;
                 wxTheApp->MacHandleOneEvent( &rec ) ;
                 result = noErr ;
             }
@@ -1270,10 +1274,12 @@ bool wxApp::Yield(bool onlyIfNeeded)
 
     while ( !wxTheApp->IsExiting() && WaitNextEvent(everyEvent, &event,sleepTime, (RgnHandle) wxApp::s_macCursorRgn))
     {
+        wxTheApp->MacHandleModifierEvents( &event ) ;
         wxTheApp->MacHandleOneEvent( &event );
         if ( event.what != kHighLevelEvent )
             SetRectRgn( (RgnHandle) wxApp::s_macCursorRgn , event.where.h , event.where.v ,  event.where.h + 1 , event.where.v + 1 ) ;
     }
+    wxTheApp->MacHandleModifierEvents( &event ) ;
 
     wxMacProcessNotifierAndPendingEvents() ;
 
@@ -1346,10 +1352,12 @@ void wxApp::MacDoOneEvent()
 
     if (WaitNextEvent(everyEvent, &event, sleepTime, (RgnHandle) s_macCursorRgn))
     {
+        MacHandleModifierEvents( &event ) ;
         MacHandleOneEvent( &event );
     }
     else
     {
+        MacHandleModifierEvents( &event ) ;
         // idlers
         WindowPtr window = ::FrontWindow() ;
         if ( window )
@@ -1364,6 +1372,46 @@ void wxApp::MacDoOneEvent()
 
     DeletePendingObjects() ;
     wxMacProcessNotifierAndPendingEvents() ;
+}
+
+void wxApp::MacHandleModifierEvents( WXEVENTREF evr )
+{
+    EventRecord* ev = (EventRecord*) evr ;
+    if ( ev->modifiers != s_lastModifiers && wxWindow::FindFocus() != NULL )
+    {
+        wxKeyEvent event(wxEVT_KEY_DOWN);
+
+        event.m_shiftDown = ev->modifiers & shiftKey;
+        event.m_controlDown = ev->modifiers & controlKey;
+        event.m_altDown = ev->modifiers & optionKey;
+        event.m_metaDown = ev->modifiers & cmdKey;
+
+        event.m_x = ev->where.h;
+        event.m_y = ev->where.v;
+        event.m_timeStamp = ev->when;
+        wxWindow* focus = wxWindow::FindFocus() ;
+        event.SetEventObject(focus);
+        
+        if ( (ev->modifiers ^ s_lastModifiers ) & controlKey )
+        {
+            event.m_keyCode = WXK_CONTROL ;
+            event.SetEventType( ( ev->modifiers & controlKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;  
+            focus->GetEventHandler()->ProcessEvent( event ) ;
+        }
+        if ( (ev->modifiers ^ s_lastModifiers ) & shiftKey )
+        {
+            event.m_keyCode = WXK_SHIFT ;
+            event.SetEventType( ( ev->modifiers & shiftKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;  
+            focus->GetEventHandler()->ProcessEvent( event ) ;
+        }
+        if ( (ev->modifiers ^ s_lastModifiers ) & optionKey )
+        {
+            event.m_keyCode = WXK_ALT ;
+            event.SetEventType( ( ev->modifiers & optionKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;  
+            focus->GetEventHandler()->ProcessEvent( event ) ;
+        }
+        s_lastModifiers = ev->modifiers ;
+    }
 }
 
 void wxApp::MacHandleOneEvent( WXEVENTREF evr )
@@ -1745,8 +1793,13 @@ void wxApp::MacHandleKeyDownEvent( WXEVENTREF evr )
         short keychar ;
         keychar = short(ev->message & charCodeMask);
         keycode = short(ev->message & keyCodeMask) >> 8 ;
-        long keyval = wxMacTranslateKey(keychar, keycode) ;
         wxWindow* focus = wxWindow::FindFocus() ;
+        // it is wxWindows Convention to have Ctrl Key Combinations at ASCII char value
+        if ( (ev->modifiers & controlKey) && keychar >= 0 && keychar < 0x20 )
+        {
+            keychar += 0x40 ;
+        }
+        long keyval = wxMacTranslateKey(keychar, keycode) ;
 
         if ( MacSendKeyDownEvent( focus , keyval , ev->modifiers , ev->when , ev->where.h , ev->where.v ) == false )
         {
@@ -1762,18 +1815,13 @@ void wxApp::MacHandleKeyDownEvent( WXEVENTREF evr )
 
 bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keyval , long modifiers , long when , short wherex , short wherey )
 {
-    bool handled = false ;
-    // it is wxWindows Convention to have Ctrl Key Combinations at ASCII char value
-    if ( modifiers & controlKey && keyval >= 0 && keyval < 0x20 )
-    {
-        keyval += 0x40 ;
-    }
     wxKeyEvent event(wxEVT_KEY_DOWN);
+    bool handled = false ;
     event.m_shiftDown = modifiers & shiftKey;
     event.m_controlDown = modifiers & controlKey;
     event.m_altDown = modifiers & optionKey;
     event.m_metaDown = modifiers & cmdKey;
-    event.m_keyCode = keyval;
+    event.m_keyCode = wxToupper(keyval );
 
     event.m_x = wherex;
     event.m_y = wherey;
@@ -1808,6 +1856,7 @@ bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keyval , long modifiers 
     {
         event.Skip( FALSE ) ;
         event.SetEventType( wxEVT_CHAR ) ;
+        event.m_keyCode = keyval ;
 
         handled = focus->GetEventHandler()->ProcessEvent( event ) ;
         if ( handled && event.GetSkipped() )
@@ -1883,6 +1932,11 @@ void wxApp::MacHandleKeyUpEvent( WXEVENTREF evr )
         short keychar ;
         keychar = short(ev->message & charCodeMask);
         keycode = short(ev->message & keyCodeMask) >> 8 ;
+        // it is wxWindows Convention to have Ctrl Key Combinations at ASCII char value
+        if ( (ev->modifiers & controlKey) && keychar >= 0 && keychar < 0x20 )
+        {
+            keychar += 0x40 ;
+        }
         long keyval = wxMacTranslateKey(keychar, keycode) ;
 
         wxWindow* focus = wxWindow::FindFocus() ;
@@ -1894,11 +1948,6 @@ void wxApp::MacHandleKeyUpEvent( WXEVENTREF evr )
 bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keyval , long modifiers , long when , short wherex , short wherey )
 {
     bool handled = false ;
-    // it is wxWindows Convention to have Ctrl Key Combinations at ASCII char value
-    if ( modifiers & controlKey && keyval >= 0 && keyval < 0x20 )
-    {
-        keyval += 0x40 ;
-    }
     if ( focus )
     {
         wxKeyEvent event(wxEVT_KEY_UP);
@@ -1906,7 +1955,7 @@ bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keyval , long modifiers , 
         event.m_controlDown = modifiers & controlKey;
         event.m_altDown = modifiers & optionKey;
         event.m_metaDown = modifiers & cmdKey;
-        event.m_keyCode = keyval;
+        event.m_keyCode = wxToupper(keyval );
 
         event.m_x = wherex;
         event.m_y = wherey;

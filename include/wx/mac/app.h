@@ -95,6 +95,7 @@ public:
     static wxWindow*      s_captureWindow ;
     static int            s_lastMouseDown ; // 0 = none , 1 = left , 2 = right
     static WXHRGN         s_macCursorRgn ;
+    static long           s_lastModifiers ;
     WXEVENTREF            m_macCurrentEvent ;
     
     int                   m_nCmdShow;
@@ -135,6 +136,7 @@ public:
 
     void                  MacDoOneEvent() ;
     void                  MacHandleOneEvent( WXEVENTREF ev ) ;
+    void                  MacHandleModifierEvents( WXEVENTREF ev ) ;
     WXEVENTREF            MacGetCurrentEvent() { return m_macCurrentEvent ; }
   
     // primary events
