@@ -92,7 +92,7 @@ void wxXmlRcEditDocument::Upgrade()
         UpgradeNode(node);
     }
     node->DeleteProperty(wxT("version"));
-    node->AddProperty(wxT("version"), wxT(WX_XMLRES_CURRENT_VERSION_STRING));
+    node->AddProperty(wxT("version"), WX_XMLRES_CURRENT_VERSION_STRING);
 }
 
 
@@ -341,6 +341,12 @@ void EditorFrame::NewFile()
     m_FileName = "";
     m_Resource = new wxXmlRcEditDocument;
     m_Resource->SetRoot(new wxXmlNode(wxXML_ELEMENT_NODE, _("resource")));
+	m_Resource->SetFileEncoding("utf-8");
+#if !wxUSE_UNICODE
+    m_Resource->SetEncoding(wxLocale::GetSystemEncodingName());
+#endif
+	m_Resource->GetRoot()->AddProperty(_T("version"),
+                                       WX_XMLRES_CURRENT_VERSION_STRING);
     
     m_Modified = FALSE;
     RefreshTree();
