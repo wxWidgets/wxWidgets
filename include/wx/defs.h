@@ -133,7 +133,7 @@
 // Mingw32 gcc-2.95 uses new windows headers which are more ms-like
 // we are setting this define because of the complex check
 // using NORLANDER as Cygwin may follow. (header author is Anders Norlander)
-#if defined(__MINGW32__) && (__GNUC__>=2) && (__GNUC_MINOR__>=95)
+#if defined(__MINGW32__) && ((__GNUC__>2) ||((__GNUC__==2) && (__GNUC_MINOR__>=95)))
 #   define wxUSE_NORLANDER_HEADERS 1
 #endif
 
