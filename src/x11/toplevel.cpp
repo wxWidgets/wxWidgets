@@ -65,6 +65,11 @@ void wxTopLevelWindowX11::Init()
     m_fsIsShowing = FALSE;
     
     m_needResizeInIdle = FALSE;
+    
+    m_x = -1;
+    m_y = -1;
+    m_width = 20;
+    m_height = 20;
 }
 
 bool wxTopLevelWindowX11::Create(wxWindow *parent,
@@ -103,21 +108,24 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     m_backgroundColour.CalcPixel( (WXColormap) cm );
     m_hasBgCol = TRUE;
 	
-    wxSize size2(size);
-    if (size2.x == -1)
-	size2.x = 100;
-    if (size2.y == -1)
-	size2.y = 100;
-
-    wxPoint pos2(pos);
-    if (pos2.x == -1)
-	pos2.x = 100;
-    if (pos2.y == -1)
-	pos2.y = 100;
+    m_x = pos.x;
+    if (m_x < -1)
+        m_x = 10;
+        
+    m_y = pos.y;
+    if (m_y < 0)
+        m_y = 10;
+        
+    m_width = size.x;
+    if (m_width < 0)
+        m_width = 500;
+        
+    m_height = size.y;
+    if (m_height < 0)
+        m_height = 380;
     
 #if !wxUSE_NANOX
     XSetWindowAttributes xattributes;
-    XSizeHints size_hints;
     
     long xattributes_mask =
         CWBorderPixel | CWBackPixel;
@@ -144,14 +152,14 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
         KeymapStateMask | FocusChangeMask | ColormapChangeMask | StructureNotifyMask |
         PropertyChangeMask;
         
-    Window xwindow = XCreateWindow( xdisplay, xparent, pos2.x, pos2.y, size2.x, size2.y, 
+    Window xwindow = XCreateWindow( xdisplay, xparent, m_x, m_y, m_width, m_height,
                                     0, DefaultDepth(xdisplay,xscreen), InputOutput, xvisual, xattributes_mask, &xattributes );
 #else
     long backColor, foreColor;
     backColor = GR_RGB(m_backgroundColour.Red(), m_backgroundColour.Green(), m_backgroundColour.Blue());
     foreColor = GR_RGB(m_foregroundColour.Red(), m_foregroundColour.Green(), m_foregroundColour.Blue());
     
-    Window xwindow = XCreateWindowWithColor( xdisplay, xparent, pos2.x, pos2.y, size2.x, size2.y, 
+    Window xwindow = XCreateWindowWithColor( xdisplay, xparent, m_x, m_y, m_width, m_height,
                                     0, 0, InputOutput, xvisual, backColor, foreColor);
 #endif
 
@@ -201,11 +209,12 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
         }
     }
 
+    XSizeHints size_hints;
     size_hints.flags = PSize | PPosition | PWinGravity;
-    size_hints.x = pos2.x;
-    size_hints.y = pos2.y;
-    size_hints.width = size2.x;
-    size_hints.height = size2.y;
+    size_hints.x = m_x;
+    size_hints.y = m_y;
+    size_hints.width = m_width;
+    size_hints.height = m_height;
     size_hints.win_gravity = NorthWestGravity;
     XSetWMNormalHints( xdisplay, xwindow, &size_hints);
     
@@ -224,23 +233,6 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     wm_protocols[0] = XInternAtom( xdisplay, "WM_DELETE_WINDOW", False );
     wm_protocols[1] = XInternAtom( xdisplay, "WM_TAKE_FOCUS", False );
     XSetWMProtocols( xdisplay, xwindow, wm_protocols, 2);
-
-#if 0 // TODO
-    // You will need a compliant window manager for this to work
-    // (e.g. sawfish/enlightenment/kde/icewm/windowmaker)
-    if (style & wxSTAY_ON_TOP)
-    {
-        CARD32 data = 4; // or should this be 6? According to http://developer.gnome.org/doc/standards/wm/c44.html
-        XChangeProperty (xdisplay,
-                    xwindow,
-                    XInternAtom (xdisplay, "_WIN_LAYER", False),
-                    XA_CARDINAL,
-                    32,
-                    PropModeReplace,
-                    (unsigned char *)&data,
-                    1);
-    }
-#endif
 
 #endif
     
@@ -288,8 +280,6 @@ void wxTopLevelWindowX11::OnInternalIdle()
 
 bool wxTopLevelWindowX11::Show(bool show)
 {
-    XSync( wxGlobalDisplay(), False );
-    
     // Nano-X has to force a size event,
     // else there's no initial size.
 #if wxUSE_NANOX
@@ -315,9 +305,9 @@ bool wxTopLevelWindowX11::Show(bool show)
             Layout();
         }
     }
-    wxYield();
 
     bool ret = wxWindowX11::Show(show);
+    
     return ret;
 }
 
@@ -430,24 +420,13 @@ void wxTopLevelWindowX11::SetIcons(const wxIconBundle& icons )
 void wxTopLevelWindowX11::SetTitle(const wxString& title)
 {
     m_title = title;
+    
     if (GetMainWindow())
     {
         XStoreName(wxGlobalDisplay(), (Window) GetMainWindow(),
             (const char*) title);
         XSetIconName(wxGlobalDisplay(), (Window) GetMainWindow(),
             (const char*) title);
-
-        // Use this if the platform doesn't supply the above functions.
-#if 0
-        XTextProperty textProperty;
-        textProperty.value = (unsigned char*) title;
-        textProperty.encoding = XA_STRING;
-        textProperty.format = 8;
-        textProperty.nitems = 1;
-
-        XSetTextProperty(wxGlobalDisplay(), (Window) GetMainWindow(),
-            & textProperty, WM_NAME);
-#endif
     }
 }
 
@@ -455,6 +434,172 @@ wxString wxTopLevelWindowX11::GetTitle() const
 {
     return m_title;
 }
+
+// For implementation purposes - sometimes decorations make the client area
+// smaller
+wxPoint wxTopLevelWindowX11::GetClientAreaOrigin() const
+{
+    // wxFrame::GetClientAreaOrigin
+    // does the required calculation already.
+    return wxPoint(0, 0);
+}
+
+void wxTopLevelWindowX11::DoGetClientSize( int *width, int *height ) const
+{
+    if (width)
+       *width = m_width;
+    if (height)
+       *height = m_height;
+}
+
+void wxTopLevelWindowX11::DoSetClientSize(int width, int height)
+{
+    // wxLogDebug("DoSetClientSize: %s (%ld) %dx%d", GetClassInfo()->GetClassName(), GetId(), width, height);
+    
+    m_width = width;
+    m_height = height;
+    
+#if !wxUSE_NANOX
+    XSizeHints size_hints;
+    size_hints.flags = PSize;
+    size_hints.width = width;
+    size_hints.height = height;
+    XSetWMNormalHints( wxGlobalDisplay(), (Window) GetMainWindow(), &size_hints );
+#endif
+    
+    wxWindowX11::DoSetClientSize(width, height);
+}
+
+void wxTopLevelWindowX11::DoSetSize(int x, int y, int width, int height, int sizeFlags)
+{
+    // wxLogDebug("DoSetSize: %s (%ld) %d, %d %dx%d", GetClassInfo()->GetClassName(), GetId(), x, y, width, height);
+
+    if (x != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+        m_x = x;
+        
+    if (y != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+        m_y = y;
+        
+    if (width != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+        m_width = width;
+        
+    if (height != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+        m_height = height;
+    
+#if !wxUSE_NANOX    
+    XSizeHints size_hints;
+    size_hints.flags = 0;
+    size_hints.flags |= PPosition;
+    size_hints.flags |= PSize;
+    size_hints.x = m_x;
+    size_hints.y = m_y;
+    size_hints.width = m_width;
+    size_hints.height = m_height;
+    XSetWMNormalHints( wxGlobalDisplay(), (Window) GetMainWindow(), &size_hints);
+#endif
+
+    wxWindowX11::DoSetSize(x, y, width, height, sizeFlags);
+    
+#if 0
+    Display *display = wxGlobalDisplay();
+    Window root = RootWindowOfScreen(DefaultScreenOfDisplay(display));
+    Window parent_window = window,
+        next_parent   = window;
+
+    // search for the parent that is child of ROOT, because the WM may
+    // reparent twice and notify only the next parent (like FVWM)
+    while (next_parent != root) {
+        Window *theChildren;
+#if wxUSE_NANOX
+        GR_COUNT n;
+#else
+        unsigned int n;
+#endif
+        parent_window = next_parent;
+        XQueryTree(display, parent_window, &root,
+            &next_parent, &theChildren, &n);
+        XFree(theChildren); // not needed
+    }
+
+    XWindowChanges windowChanges;
+    windowChanges.x = x;
+    windowChanges.y = y;
+    windowChanges.width = width;
+    windowChanges.height = height;
+    windowChanges.stack_mode = 0;
+    int valueMask = CWX | CWY | CWWidth | CWHeight;
+
+    if (x != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+    {
+        valueMask |= CWX;
+    }
+    if (y != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+    {
+        valueMask |= CWY;
+    }
+    if (width != -1)
+    {
+        windowChanges.width = wxMax(1, width);
+        valueMask |= CWWidth;
+    }
+    if (height != -1)
+    {
+        windowChanges.height = wxMax(1, height);
+        valueMask |= CWHeight;
+    }
+
+    XConfigureWindow( display, parent_window, valueMask, &windowChanges );
+#endif
+}
+
+void wxTopLevelWindowX11::DoGetPosition(int *x, int *y) const
+{
+    XSync(wxGlobalDisplay(), False);
+    Window window = (Window) m_mainWindow;
+    if (!window)
+        return ;
+
+    Display *display = wxGlobalDisplay();
+    Window root = RootWindowOfScreen(DefaultScreenOfDisplay(display));
+    Window parent_window = window,
+        next_parent   = window;
+
+    // search for the parent that is child of ROOT, because the WM may
+    // reparent twice and notify only the next parent (like FVWM)
+    while (next_parent != root) {
+        Window *theChildren;
+#if wxUSE_NANOX
+        GR_COUNT n;
+#else
+        unsigned int n;
+#endif
+        parent_window = next_parent;
+        XQueryTree(display, parent_window, &root,
+            &next_parent, &theChildren, &n);
+        XFree(theChildren); // not needed
+    }
+#if 0
+    int xx, yy; unsigned int dummy;
+    XGetGeometry(display, parent_window, &root,
+                 &xx, &yy, &dummy, &dummy, &dummy, &dummy);
+    if (x) *x = xx;
+    if (y) *y = yy;
+#else
+    XWindowAttributes attr;
+    Status status = XGetWindowAttributes( wxGlobalDisplay(), parent_window, & attr);
+    if (status)
+    {
+        if (x) *x = attr.x;
+        if (y) *y = attr.y;
+    }
+    else
+    {
+        if (x) *x = 0;
+        if (y) *y = 0;
+    }
+#endif
+}
+
 
 #ifndef MWM_DECOR_BORDER
 
@@ -621,183 +766,4 @@ bool wxSetWMDecorations(Window w, long style)
     return TRUE;
 }
 
-// For implementation purposes - sometimes decorations make the client area
-// smaller
-wxPoint wxTopLevelWindowX11::GetClientAreaOrigin() const
-{
-    // wxFrame::GetClientAreaOrigin
-    // does the required calculation already.
-    return wxPoint(0, 0);
-}
 
-void wxTopLevelWindowX11::DoGetClientSize( int *width, int *height ) const
-{
-    XSync(wxGlobalDisplay(), False);
-    wxWindowX11::DoGetClientSize(width, height);
-}
-
-void wxTopLevelWindowX11::DoSetClientSize(int width, int height)
-{
-    wxWindowX11::DoSetClientSize(width, height);
-
-#if !wxUSE_NANOX
-    // Set the top-level window size
-    XSizeHints size_hints;
-    wxSize oldSize = GetSize();
-    wxSize oldClientSize = GetClientSize();
-
-    size_hints.flags = PSize;
-    size_hints.width = width + (oldSize.x - oldClientSize.x);
-    size_hints.height = height + (oldSize.y - oldClientSize.y);
-    XSetWMNormalHints( wxGlobalDisplay(), (Window) GetMainWindow(),
-                       &size_hints);
-
-    // This seems to be necessary or resizes don't get performed
-    XSync(wxGlobalDisplay(), False);
-    XSync(wxGlobalDisplay(), False);
-
-#if 0
-    wxLogDebug("DoSetClientSize: Tried to set size to %d, %d", (int) size_hints.width, (int) size_hints.height);
-
-    XSync(wxGlobalDisplay(), False);
-    wxSize newSize = GetSize();
-    wxLogDebug("New size is %d, %d", (int) newSize.x, (int) newSize.y);
-#endif
-#endif
-}
-
-void wxTopLevelWindowX11::DoSetSize(int x, int y, int width, int height, int sizeFlags)
-{
-    //    wxLogDebug("DoSetSize: %s (%ld) %d, %d %dx%d", GetClassInfo()->GetClassName(), GetId(), x, y, width, height);
-
-#if 0
-    wxWindowX11::DoSetSize(x, y, width, height, sizeFlags);
-#endif
-    XSync(wxGlobalDisplay(), False);
-    Window window = (Window) m_mainWindow;
-    if (!window)
-        return ;
-
-    Display *display = wxGlobalDisplay();
-    Window root = RootWindowOfScreen(DefaultScreenOfDisplay(display));
-    Window parent_window = window,
-        next_parent   = window;
-
-    // search for the parent that is child of ROOT, because the WM may
-    // reparent twice and notify only the next parent (like FVWM)
-    while (next_parent != root) {
-        Window *theChildren;
-#if wxUSE_NANOX
-        GR_COUNT n;
-#else
-        unsigned int n;
-#endif
-        parent_window = next_parent;
-        XQueryTree(display, parent_window, &root,
-            &next_parent, &theChildren, &n);
-        XFree(theChildren); // not needed
-    }
-
-    XWindowChanges windowChanges;
-    windowChanges.x = x;
-    windowChanges.y = y;
-    windowChanges.width = width;
-    windowChanges.height = height;
-    windowChanges.stack_mode = 0;
-    int valueMask = CWX | CWY | CWWidth | CWHeight;
-
-    if (x != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-    {
-        valueMask |= CWX;
-    }
-    if (y != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-    {
-        valueMask |= CWY;
-    }
-    if (width != -1)
-    {
-        windowChanges.width = wxMax(1, width);
-        valueMask |= CWWidth;
-    }
-    if (height != -1)
-    {
-        windowChanges.height = wxMax(1, height);
-        valueMask |= CWHeight;
-    }
-
-    XConfigureWindow( display, parent_window, valueMask, &windowChanges );
-
-#if !wxUSE_NANOX    
-    XSizeHints size_hints;
-    size_hints.flags = 0;
-    if (x > -1 && y > -1)
-        size_hints.flags |= PPosition;
-    if (width > -1 && height > -1)
-        size_hints.flags |= PSize;
-    size_hints.width = width;
-    size_hints.height = height;
-    size_hints.x = x;
-    size_hints.y = y;
-    XSetWMNormalHints( wxGlobalDisplay(), (Window) GetMainWindow(),
-                       &size_hints);
-
-    // This seems to be necessary or resizes don't get performed.
-    // Take them out (or even just one of them), and the About
-    // box of the minimal sample probably won't be resized right.
-    XSync(wxGlobalDisplay(), False);
-    XSync(wxGlobalDisplay(), False);
-#endif
-#if 1
-    wxSizeEvent event(wxSize(width, height), GetId());
-    event.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(event);
-#endif
-}
-
-void wxTopLevelWindowX11::DoGetPosition(int *x, int *y) const
-{
-    XSync(wxGlobalDisplay(), False);
-    Window window = (Window) m_mainWindow;
-    if (!window)
-        return ;
-
-    Display *display = wxGlobalDisplay();
-    Window root = RootWindowOfScreen(DefaultScreenOfDisplay(display));
-    Window parent_window = window,
-        next_parent   = window;
-
-    // search for the parent that is child of ROOT, because the WM may
-    // reparent twice and notify only the next parent (like FVWM)
-    while (next_parent != root) {
-        Window *theChildren;
-#if wxUSE_NANOX
-        GR_COUNT n;
-#else
-        unsigned int n;
-#endif
-        parent_window = next_parent;
-        XQueryTree(display, parent_window, &root,
-            &next_parent, &theChildren, &n);
-        XFree(theChildren); // not needed
-    }
-#if 0
-    int xx, yy; unsigned int dummy;
-    XGetGeometry(display, parent_window, &root,
-                 &xx, &yy, &dummy, &dummy, &dummy, &dummy);
-    if (x) *x = xx;
-    if (y) *y = yy;
-#else
-    XWindowAttributes attr;
-    Status status = XGetWindowAttributes( wxGlobalDisplay(), parent_window, & attr);
-    if (status)
-    {
-        if (x) *x = attr.x;
-        if (y) *y = attr.y;
-    }
-    else
-    {
-        if (x) *x = 0;
-        if (y) *y = 0;
-    }
-#endif
-}

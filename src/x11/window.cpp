@@ -62,6 +62,7 @@
 extern wxHashTable *wxWidgetHashTable;
 extern wxHashTable *wxClientWidgetHashTable;
 static wxWindow* g_captureWindow = NULL;
+static GC g_eraseGC;
 
 // ----------------------------------------------------------------------------
 // macros
@@ -816,12 +817,6 @@ void wxWindowX11::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     }
     
     DoMoveWindow( new_x, new_y, new_w, new_h );
-
-#if 0
-    wxSizeEvent event(wxSize(new_w, new_h), GetId());
-    event.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(event);
-#endif
 }
 
 void wxWindowX11::DoSetClientSize(int width, int height)
@@ -1105,21 +1100,19 @@ void wxWindowX11::SendEraseEvents()
     wxEraseEvent erase_event( GetId(), &dc );
     erase_event.SetEventObject( this );
 
-    if (!GetEventHandler()->ProcessEvent(erase_event))
+    if (!GetEventHandler()->ProcessEvent(erase_event) )
     {
-        Window xwindow = (Window) m_clientWindow;
         Display *xdisplay = wxGlobalDisplay();
-        GC xgc = XCreateGC( xdisplay, xwindow, 0, NULL );
-        XSetFillStyle( xdisplay, xgc, FillSolid );
-        XSetForeground( xdisplay, xgc, m_backgroundColour.GetPixel() );
+        Window xwindow = (Window) GetClientWindow();
+        XSetForeground( xdisplay, g_eraseGC, m_backgroundColour.GetPixel() );
+        
         wxRegionIterator upd( m_clearRegion );
         while (upd)
         {
-            XFillRectangle( xdisplay, xwindow, xgc,
+            XFillRectangle( xdisplay, xwindow, g_eraseGC,
                             upd.GetX(), upd.GetY(), upd.GetWidth(), upd.GetHeight() );
             upd ++;
         }
-        XFreeGC( xdisplay, xgc );
     }
     
     m_clearRegion.Clear();
@@ -1449,19 +1442,10 @@ bool wxWindowX11::SetBackgroundColour(const wxColour& col)
 
     m_backgroundColour.CalcPixel( (WXColormap) cm );
     
-    if (!GetMainWindow())
-        return FALSE;
-
-/*
-    XSetWindowAttributes attrib;
-    attrib.background_pixel = colour.GetPixel();
-
-    XChangeWindowAttributes(wxGlobalDisplay(),
-        (Window) GetMainWindow(),
-        CWBackPixel,
-        & attrib);
-*/
-
+    // We don't set the background colour as we paint
+    // the background ourselves.
+    // XSetWindowBackground( xdisplay, (Window) m_clientWindow, m_backgroundColour.GetPixel() );
+    
     return TRUE;
 }
 
@@ -1526,4 +1510,39 @@ wxPoint wxGetMousePosition()
 // ----------------------------------------------------------------------------
 
 int wxNoOptimize::ms_count = 0;
+
+
+// ----------------------------------------------------------------------------
+// wxDCModule
+// ----------------------------------------------------------------------------
+
+class wxWinModule : public wxModule
+{
+public:
+    bool OnInit();
+    void OnExit();
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxWinModule)
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxWinModule, wxModule)
+
+bool wxWinModule::OnInit()
+{
+    Display *xdisplay = wxGlobalDisplay();
+    int xscreen = DefaultScreen( xdisplay );
+    Window xroot = RootWindow( xdisplay, xscreen );
+    g_eraseGC = XCreateGC( xdisplay, xroot, 0, NULL );
+    XSetFillStyle( xdisplay, g_eraseGC, FillSolid );
+    
+    return TRUE;
+}
+
+void wxWinModule::OnExit()
+{
+    Display *xdisplay = wxGlobalDisplay();
+    XFreeGC( xdisplay, g_eraseGC );
+}
+
 

@@ -111,7 +111,8 @@ private:
 class MyCanvas: public wxScrolledWindow
 {
 public:
-    MyCanvas(wxWindow *parent) : wxScrolledWindow(parent) { }
+    MyCanvas(wxWindow *parent) : 
+       wxScrolledWindow(parent,-1,wxDefaultPosition,wxDefaultSize,wxNO_FULL_REPAINT_ON_RESIZE) { }
 
     void OnPaint(wxPaintEvent& event);
 

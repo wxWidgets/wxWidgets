@@ -67,7 +67,10 @@ public:
     virtual wxString GetTitle() const;
     
     // implementation
-    void SetNeedResizeInIdle( bool set = TRUE ) { m_needResizeInIdle = set; }
+    void SetNeedResizeInIdle( bool set = TRUE )
+        { m_needResizeInIdle = set; }
+    void SetConfigureGeometry( int x, int y, int width, int height )
+        { m_x = x; m_y = y; m_width = width; m_height = height; }
     
 protected:
     // common part of all ctors
@@ -104,6 +107,9 @@ protected:
     bool                  m_fsIsMaximized;
     bool                  m_fsIsShowing;
     wxString              m_title;
+    
+    // Geometry
+    int                   m_x,m_y,m_width,m_height;
 };
 
 // list of all frames and modeless dialogs

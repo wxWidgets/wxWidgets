@@ -22,8 +22,16 @@
 
 wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 {
-    // Overridden by wxSystemSettings::GetColour in wxUniversal
-    // to do the Right Thing
+    switch (index)
+    {
+        case wxSYS_COLOUR_APPWORKSPACE:
+            return wxColour( 0xc0c0c0 );
+            
+        default:
+            break;
+    }
+    
+    // Overridden mostly by wxSystemSettings::GetColour in wxUniversal
     return *wxWHITE;
 }
 

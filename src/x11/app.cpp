@@ -507,7 +507,6 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
             {
                 win->GetUpdateRegion().Union( XExposeEventGetX(event), XExposeEventGetY(event),
                                               XExposeEventGetWidth(event), XExposeEventGetHeight(event));
-                                              
                 win->GetClearRegion().Union( XExposeEventGetX(event), XExposeEventGetY(event),
                                          XExposeEventGetWidth(event), XExposeEventGetHeight(event));
 
@@ -525,6 +524,14 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
                                                  tmp_event.xexpose.width, tmp_event.xexpose.height );
                 }
 #endif
+
+                // This simplifies the expose and clear areas to simple
+                // rectangles.
+                win->GetUpdateRegion() = win->GetUpdateRegion().GetBox();
+                win->GetClearRegion() = win->GetClearRegion().GetBox();
+                
+                // If we only have one X11 window, always indicate
+                // that borders might have to be redrawn.                
                 if (win->GetMainWindow() == win->GetClientWindow())
                     win->NeedUpdateNcAreaInIdle();
 
@@ -553,7 +560,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
             {
                 // Only erase background, paint in idle time.
                 win->SendEraseEvents();
-                //win->Update();
+                // win->Update();
             }
 
             return TRUE;
@@ -609,6 +616,13 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
             if (event->update.utype == GR_UPDATE_SIZE)
 #endif
             {
+                if (win->IsTopLevel())
+                {
+                    wxTopLevelWindow *tlw = (wxTopLevelWindow*) win;
+                    tlw->SetConfigureGeometry( XConfigureEventGetX(event), XConfigureEventGetY(event),
+                        XConfigureEventGetWidth(event), XConfigureEventGetHeight(event) );
+                }
+                
                 if (win->IsTopLevel() && win->IsShown())
                 {
                     wxTopLevelWindowX11 *tlw = (wxTopLevelWindowX11 *) win;

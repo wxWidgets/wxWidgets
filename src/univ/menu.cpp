@@ -1515,7 +1515,7 @@ void wxMenuBar::Init()
 
     m_shouldShowMenu = FALSE;
     
-    // m_windowStyle |= wxNO_FULL_REPAINT_ON_RESIZE;
+    m_windowStyle |= wxNO_FULL_REPAINT_ON_RESIZE;
 }
 
 void wxMenuBar::Attach(wxFrame *frame)
