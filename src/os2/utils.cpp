@@ -46,7 +46,6 @@
 #include <netcons.h>
 #include <netbios.h>
 
-// In the WIN.INI file
 static const wxChar WX_SECTION[] = _T("wxWindows");
 static const wxChar eHOSTNAME[]  = _T("HostName");
 static const wxChar eUSERID[]    = _T("UserId");
@@ -58,87 +57,117 @@ static const wxChar eUSERNAME[]  = _T("UserName");
 // functions beyond those provided by WinSock
 
 // Get full hostname (eg. DoDo.BSn-Germany.crg.de)
-bool wxGetHostName(wxChar *buf, int maxSize)
+bool wxGetHostName(
+  wxChar*                           zBuf
+, int                               nMaxSize
+)
 {
 #if wxUSE_NET_API
-  char                               server[256];
-  char                               computer[256];
-  unsigned long                      ulLevel;
-  unsigned char*                     pbBuffer;
-  unsigned long                      ulBuffer;
-  unsigned long*                     pulTotalAvail;
+    char                            zServer[256];
+    char                            zComputer[256];
+    unsigned long                   ulLevel;
+    unsigned char*                  zBuffer;
+    unsigned long                   ulBuffer;
+    unsigned long*                  pulTotalAvail;
 
-  NetBios32GetInfo( (const unsigned char*)server
-                   ,(const unsigned char*)computer
-                   ,ulLevel
-                   ,pbBuffer
-                   ,ulBuffer
-                   ,pulTotalAvail
-                  );
-  strcpy(buf, server);
+    NetBios32GetInfo( (const unsigned char*)zServer
+                     ,(const unsigned char*)zComputer
+                     ,ulLevel
+                     ,zBuffer
+                     ,ulBuffer
+                     ,pulTotalAvail
+                    );
+    strcpy(zBuf, zServer);
 #else
-  wxChar *sysname;
-  const wxChar *default_host = _T("noname");
+    wxChar*                         zSysname;
+    const wxChar*                   zDefaultHost = _T("noname");
 
-  if ((sysname = wxGetenv(_T("SYSTEM_NAME"))) == NULL)
-  {
-      // GetProfileString(WX_SECTION, eHOSTNAME, default_host, buf, maxSize - 1);
-  }
-  else
-      wxStrncpy(buf, sysname, maxSize - 1);
-  buf[maxSize] = _T('\0');
+    if ((zSysname = wxGetenv(_T("SYSTEM_NAME"))) == NULL)
+    {
+        ULONG n = ::PrfQueryProfileString( HINI_PROFILE
+                                          ,(PSZ)WX_SECTION
+                                          ,(PSZ)eHOSTNAME
+                                          ,(PSZ)zDefaultHost
+                                          ,(void*)zBuf
+                                          ,(ULONG)nMaxSize - 1
+                                         );
+    }
+    else
+        wxStrncpy(zBuf, zSysname, nMaxSize - 1);
+    zBuf[nMaxSize] = _T('\0');
 #endif
-  return *buf ? TRUE : FALSE;
+    return *zBuf ? TRUE : FALSE;
 }
 
 // Get user ID e.g. jacs
-bool wxGetUserId(wxChar *buf, int maxSize)
+bool wxGetUserId(
+  wxChar*                           zBuf
+, int                               nMaxSize
+)
 {
-  return(U32ELOCL((unsigned char*)buf, (unsigned long *)&maxSize));
+   return(U32ELOCL((unsigned char*)zBuf, (unsigned long *)&nMaxSize));
 }
 
-bool wxGetUserName(wxChar *buf, int maxSize)
+bool wxGetUserName(
+  wxChar*                           zBuf
+, int                               nMaxSize
+)
 {
 #ifdef USE_NET_API
-    wxGetUserId(buf, maxSize);
+    wxGetUserId( zBuf
+                ,nMaxSize
+               );
 #else
-    wxStrncpy(buf, _T("Unknown User"), maxSize);
+    wxStrncpy(zBuf, _T("Unknown User"), nMaxSize);
 #endif
-  return TRUE;
+    return TRUE;
 }
 
-int wxKill(long pid, int sig)
+int wxKill(
+  long                              lPid
+, int                               nSig
+)
 {
-  return 0;
+    return((int)::DosKillProcess(0, (PID)lPid));
 }
 
 //
 // Execute a program in an Interactive Shell
 //
-bool wxShell(const wxString& command)
+bool wxShell(
+  const wxString&                   rCommand
+)
 {
-  wxChar *shell;
-  if ((shell = wxGetenv(_T("COMSPEC"))) == NULL)
-    shell = _T("\\CMD.EXE");
+    wxChar*                         zShell;
 
-  wxChar tmp[255];
-  if (command != "")
-    wxSprintf(tmp, "%s /c %s", shell, WXSTRINGCAST command);
-  else
-    wxStrcpy(tmp, shell);
+    if ((zShell = wxGetenv(_T("COMSPEC"))) == NULL)
+        zShell = _T("\\CMD.EXE");
 
-  return (wxExecute((wxChar *)tmp, FALSE) != 0);
+    wxChar                          zTmp[255];
+
+    if (rCommand != "")
+        wxSprintf( zTmp
+                  ,"%s /c %s"
+                  ,zShell
+                  ,WXSTRINGCAST rCommand
+                 );
+    else
+        wxStrcpy(zTmp, zShell);
+
+    return (wxExecute((wxChar*)zTmp, FALSE) != 0);
 }
 
 // Get free memory in bytes, or -1 if cannot determine amount (e.g. on UNIX)
-long wxGetFreeMemory(void *memptr)
+long wxGetFreeMemory(
+  void*                             pMemptr
+)
 {
     ULONG                           lSize;
     ULONG                           lMemFlags;
     APIRET                          rc;
 
     lMemFlags = PAG_FREE;
-    rc = ::DosQueryMem(memptr, &lSize, &lMemFlags);
+    rc = ::DosQueryMem(pMemptr, &lSize, &lMemFlags);
     if (rc != 0)
         return -1L;
     return (long)lSize;
@@ -149,24 +178,28 @@ static bool inTimer = FALSE;
 
 class wxSleepTimer: public wxTimer
 {
- public:
-  inline void Notify()
-  {
-    inTimer = FALSE;
-    Stop();
-  }
+public:
+    inline void Notify()
+    {
+        inTimer = FALSE;
+        Stop();
+    }
 };
 
-static wxTimer *wxTheSleepTimer = NULL;
+static wxTimer*                     wxTheSleepTimer = NULL;
 
-void wxUsleep(unsigned long milliseconds)
+void wxUsleep(
+  unsigned long                     ulMilliseconds
+)
 {
-    ::DosSleep(milliseconds);
+    ::DosSleep(ulMilliseconds);
 }
 
-void wxSleep(int nSecs)
+void wxSleep(
+  int                               nSecs
+)
 {
-    ::DosSleep( 1000*nSecs );
+    ::DosSleep(1000 * nSecs);
 }
 
 // Consume all events until no more left
@@ -176,48 +209,53 @@ void wxFlushEvents()
 }
 
 // Output a debug mess., in a system dependent fashion.
-void wxDebugMsg(const wxChar *fmt ...)
+void wxDebugMsg(
+  const wxChar*                     zFmt ...
+)
 {
-  va_list ap;
-  static wxChar buffer[512];
+    va_list                         vAp;
+    static wxChar                   zBuffer[512];
 
-  if (!wxTheApp->GetWantDebugOutput())
-    return ;
-
-  va_start(ap, fmt);
-
-   sprintf(buffer,fmt,ap) ;
-
-  va_end(ap);
+    if (!wxTheApp->GetWantDebugOutput())
+        return ;
+    va_start(vAp, zFmt);
+    sprintf(zBuffer, zFmt, vAp) ;
+    va_end(vAp);
 }
 
 // Non-fatal error: pop up message box and (possibly) continue
-void wxError(const wxString& msg, const wxString& title)
+void wxError(
+  const wxString&                   rMsg
+, const wxString&                   rTitle
+)
 {
-  wxSprintf(wxBuffer, "%s\nContinue?", WXSTRINGCAST msg);
-  if (::WinMessageBox( HWND_DESKTOP
-                      ,NULL
-                      ,(PSZ)wxBuffer
-                      ,(PSZ)WXSTRINGCAST title
-                      ,0
-                      ,MB_ICONEXCLAMATION | MB_YESNO
-                     ) == MBID_YES)
+    wxSprintf(wxBuffer, "%s\nContinue?", WXSTRINGCAST rMsg);
+    if (::WinMessageBox( HWND_DESKTOP
+                        ,NULL
+                        ,(PSZ)wxBuffer
+                        ,(PSZ)WXSTRINGCAST rTitle
+                        ,0
+                        ,MB_ICONEXCLAMATION | MB_YESNO
+                       ) == MBID_YES)
     wxExit();
 }
 
 // Fatal error: pop up message box and abort
-void wxFatalError(const wxString& rMsg, const wxString& rTitle)
+void wxFatalError(
+  const wxString&                   rMsg
+, const wxString&                   rTitle
+)
 {
-    unsigned long                   rc;
+    unsigned long                   ulRc;
 
-    rc = ::WinMessageBox( HWND_DESKTOP
-                         ,NULL
-                         ,WXSTRINGCAST rMsg
-                         ,WXSTRINGCAST rTitle
-                         ,0
-                         ,MB_NOICON | MB_OK
-                        );
-    DosExit(EXIT_PROCESS, rc);
+    ulRc = ::WinMessageBox( HWND_DESKTOP
+                           ,NULL
+                           ,WXSTRINGCAST rMsg
+                           ,WXSTRINGCAST rTitle
+                           ,0
+                           ,MB_NOICON | MB_OK
+                          );
+    DosExit(EXIT_PROCESS, ulRc);
 }
 
 // Emit a beeeeeep
@@ -228,58 +266,74 @@ void wxBell()
 
 // Chris Breeze 27/5/98: revised WIN32 code to
 // detect WindowsNT correctly
-int wxGetOsVersion(int *majorVsn, int *minorVsn)
+int wxGetOsVersion(
+  int*                              pMajorVsn
+, int*                              pMinorVsn
+)
 {
-  ULONG                 aulSysInfo[QSV_MAX] = {0};
+    ULONG                           ulSysInfo[QSV_MAX] = {0};
 
-  if (DosQuerySysInfo( 1L
-                      ,QSV_MAX
-                      ,(PVOID)aulSysInfo
-                      ,sizeof(ULONG) * QSV_MAX
-                     ))
-  {
-     *majorVsn = aulSysInfo[QSV_VERSION_MAJOR];
-     *minorVsn = aulSysInfo[QSV_VERSION_MINOR];
-     return wxWINDOWS_OS2;
-  }
-  return wxWINDOWS; // error if we get here, return generic value
+    if (::DosQuerySysInfo( 1L
+                          ,QSV_MAX
+                          ,(PVOID)ulSysInfo
+                          ,sizeof(ULONG) * QSV_MAX
+                         ))
+    {
+        *pMajorVsn = ulSysInfo[QSV_VERSION_MAJOR];
+        *pMinorVsn = ulSysInfo[QSV_VERSION_MINOR];
+        return wxWINDOWS_OS2;
+    }
+    return wxWINDOWS; // error if we get here, return generic value
 }
 
 // Reading and writing resources (eg WIN.INI, .Xdefaults)
-// TODO: Ability to read and write to an INI file
-
 #if wxUSE_RESOURCES
-bool wxWriteResource(const wxString& section, const wxString& entry, const wxString& value, const wxString& file)
+bool wxWriteResource(
+  const wxString&                   rSection
+, const wxString&                   rEntry
+, const wxString&                   rValue
+, const wxString&                   rFile
+)
 {
     HAB                             hab;
     HINI                            hIni;
 
-    if (file != "")
+    if (rFile != "")
     {
-        hIni = ::PrfOpenProfile(hab, (PSZ)WXSTRINGCAST file);
+        hIni = ::PrfOpenProfile(hab, (PSZ)WXSTRINGCAST rFile);
         if (hIni != 0L)
         {
             return (::PrfWriteProfileString( hIni
-                                            ,(PSZ)WXSTRINGCAST section
-                                            ,(PSZ)WXSTRINGCAST entry
-                                            ,(PSZ)WXSTRINGCAST value
+                                            ,(PSZ)WXSTRINGCAST rSection
+                                            ,(PSZ)WXSTRINGCAST rEntry
+                                            ,(PSZ)WXSTRINGCAST rValue
                                            ));
         }
     }
     else
         return (::PrfWriteProfileString( HINI_PROFILE
-                                        ,(PSZ)WXSTRINGCAST section
-                                        ,(PSZ)WXSTRINGCAST entry
-                                        ,(PSZ)WXSTRINGCAST value
+                                        ,(PSZ)WXSTRINGCAST rSection
+                                        ,(PSZ)WXSTRINGCAST rEntry
+                                        ,(PSZ)WXSTRINGCAST rValue
                                        ));
     return FALSE;
 }
 
-bool wxWriteResource(const wxString& section, const wxString& entry, float value, const wxString& file)
+bool wxWriteResource(
+  const wxString&                   rSection
+, const wxString&                   rEntry
+, float                             fValue
+, const wxString&                   rFile
+)
 {
-    wxChar buf[50];
-    wxSprintf(buf, "%.4f", value);
-    return wxWriteResource(section, entry, buf, file);
+    wxChar                          zBuf[50];
+
+    wxSprintf(zBuf, "%.4f", fValue);
+    return wxWriteResource( rSection
+                           ,rEntry
+                           ,zBuf
+                           ,rFile
+                          );
 }
 
 bool wxWriteResource(const wxString& section, const wxString& entry, long value, const wxString& file)
@@ -438,7 +492,7 @@ const wxChar* wxGetHomeDir(wxString *pstr)
   return strDir.c_str();
 }
 
-// Hack for MS-DOS
+// Hack for OS/2
 wxChar *wxGetUserHome (const wxString& user)
 {
   wxChar *home;
@@ -489,37 +543,6 @@ bool wxCheckForInterrupt(wxWindow *wnd)
 
     return FALSE;//*** temporary?
   }
-}
-
-wxChar *wxLoadUserResource(const wxString& resourceName, const wxString& resourceType)
-{
-  wxChar *s = NULL;
-
-/*
-*  How to in PM?
-*
-* #if !defined(__WIN32__) || defined(__TWIN32__)
-*   HRSRC hResource = ::FindResource(wxGetInstance(), WXSTRINGCAST resourceName, WXSTRINGCAST resourceType);
-* #else
-* #ifdef UNICODE
-*   HRSRC hResource = ::FindResourceW(wxGetInstance(), WXSTRINGCAST resourceName, WXSTRINGCAST resourceType);
-* #else
-*   HRSRC hResource = ::FindResourceA(wxGetInstance(), WXSTRINGCAST resourceName, WXSTRINGCAST resourceType);
-* #endif
-* #endif
-*
-*   if (hResource == 0)
-*     return NULL;
-*   HGLOBAL hData = ::LoadResource(wxGetInstance(), hResource);
-*   if (hData == 0)
-*     return NULL;
-*   wxChar *theText = (wxChar *)LockResource(hData);
-*   if (!theText)
-*     return NULL;
-*
-* s = copystring(theText);
-*/
-  return s;
 }
 
 void wxGetMousePosition( int* x, int* y )
