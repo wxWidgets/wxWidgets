@@ -75,6 +75,11 @@ public:
     // hide the window
     virtual void Dismiss();
 
+    // called when a mouse is pressed while the popup is shown: return TRUE
+    // from here to prevent its normal processing by the popup (which consists
+    // in dismissing it if the mouse is cilcked outside it)
+    virtual bool ProcessLeftDown(wxMouseEvent& event);
+
 protected:
     // common part of all ctors
     void Init();

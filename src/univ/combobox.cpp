@@ -419,6 +419,12 @@ void wxComboTextCtrl::OnText(wxCommandEvent& event)
         m_combo->GetPopupControl()->SetSelection(GetValue());
     }
 
+    // we need to make a copy of the event to have the correct originating
+    // object and id
+    wxCommandEvent event2 = event;
+    event2.SetEventObject(m_combo);
+    event2.SetId(m_combo->GetId());
+
     // there is a small incompatibility with wxMSW here: the combobox gets the
     // event before the text control in our case which corresponds to SMW
     // CBN_EDITUPDATE notification and not CBN_EDITCHANGE one wxMSW currently
@@ -426,7 +432,7 @@ void wxComboTextCtrl::OnText(wxCommandEvent& event)
     //
     // if this is really a problem, we can play games with the event handlers
     // to circumvent this
-    (void)m_combo->ProcessEvent(event);
+    (void)m_combo->ProcessEvent(event2);
 
     event.Skip();
 }
@@ -502,8 +508,10 @@ void wxComboListBox::OnSelect(wxCommandEvent& event)
 
     // all fields are already filled by the listbox, just change the event
     // type and send it to the combo
-    wxCommandEvent event2 = (wxCommandEvent &)event;
+    wxCommandEvent event2 = event;
     event2.SetEventType(wxEVT_COMMAND_COMBOBOX_SELECTED);
+    event2.SetEventObject(m_combo);
+    event2.SetId(m_combo->GetId());
     m_combo->ProcessEvent(event2);
 
     // next update the combo and close the listbox
@@ -608,6 +616,16 @@ wxComboBox::~wxComboBox()
 // ----------------------------------------------------------------------------
 // wxComboBox methods forwarded to wxTextCtrl
 // ----------------------------------------------------------------------------
+
+wxString wxComboBox::GetValue() const
+{
+    return GetText()->GetValue();
+}
+
+void wxComboBox::SetValue(const wxString& value)
+{
+    GetText()->SetValue(value);
+}
 
 void wxComboBox::Copy()
 {

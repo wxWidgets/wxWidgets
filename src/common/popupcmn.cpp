@@ -216,6 +216,12 @@ void wxPopupTransientWindow::OnDismiss()
     // nothing to do here - but it may be interesting for derived class
 }
 
+bool wxPopupTransientWindow::ProcessLeftDown(wxMouseEvent& WXUNUSED(event))
+{
+    // no special processing here
+    return FALSE;
+}
+
 #if wxUSE_COMBOBOX
 
 // ----------------------------------------------------------------------------
@@ -269,8 +275,7 @@ void wxPopupWindowHandler::OnLeftDown(wxMouseEvent& event)
 {
     // let the window have it first (we're the first event handler in the chain
     // of handlers for this window)
-    wxEvtHandler *handler = GetNextHandler();
-    if ( handler && handler->ProcessEvent(event) )
+    if ( m_popup->ProcessLeftDown(event) )
     {
         return;
     }
@@ -306,9 +311,8 @@ void wxPopupWindowHandler::OnLeftDown(wxMouseEvent& event)
             // pass just in case
 
         case wxHT_WINDOW_INSIDE:
-            // as we had also passed it to the next handler above, there is no
-            // need to skip it now
-            //event.Skip();
+            // let the normal processing take place
+            event.Skip();
             break;
     }
 

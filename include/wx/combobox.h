@@ -28,6 +28,9 @@ class WXDLLEXPORT wxComboBoxBase : public wxItemContainer
 {
 public:
     // wxTextCtrl-like methods wxComboBox must implement
+    virtual wxString GetValue() const = 0;
+    virtual void SetValue(const wxString& value) = 0;
+
     virtual void Copy() = 0;
     virtual void Cut() = 0;
     virtual void Paste() = 0;

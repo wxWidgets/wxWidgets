@@ -244,6 +244,8 @@ public:
     // implement the combobox interface
 
     // wxTextCtrl methods
+    virtual wxString GetValue() const;
+    virtual void SetValue(const wxString& value);
     virtual void Copy();
     virtual void Cut();
     virtual void Paste();

@@ -155,6 +155,9 @@ public:
     // process mouse move event
     void ProcessMouseMove(const wxPoint& pt);
 
+    // don't dismiss the popup window if the parent menu was clicked
+    virtual bool ProcessLeftDown(wxMouseEvent& event);
+
 protected:
     // how did we perform this operation?
     enum InputMethod
@@ -167,7 +170,6 @@ protected:
     virtual void DoDraw(wxControlRenderer *renderer);
 
     // event handlers
-    void OnLeftDown(wxMouseEvent& event);
     void OnLeftUp(wxMouseEvent& event);
     void OnMouseMove(wxMouseEvent& event);
     void OnMouseLeave(wxMouseEvent& event);
@@ -270,7 +272,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
 BEGIN_EVENT_TABLE(wxPopupMenuWindow, wxPopupTransientWindow)
     EVT_KEY_DOWN(wxPopupMenuWindow::OnKeyDown)
 
-    EVT_LEFT_DOWN(wxPopupMenuWindow::OnLeftDown)
     EVT_LEFT_UP(wxPopupMenuWindow::OnLeftUp)
     EVT_MOTION(wxPopupMenuWindow::OnMouseMove)
     EVT_LEAVE_WINDOW(wxPopupMenuWindow::OnMouseLeave)
@@ -649,7 +650,7 @@ bool wxPopupMenuWindow::ActivateItem(wxMenuItem *item, InputMethod how)
 // wxPopupMenuWindow input handling
 // ----------------------------------------------------------------------------
 
-void wxPopupMenuWindow::OnLeftDown(wxMouseEvent& event)
+bool wxPopupMenuWindow::ProcessLeftDown(wxMouseEvent& event)
 {
     // wxPopupWindowHandler dismisses the window when the mouse is clicked
     // outside it which is usually just fine, but there is one case when we
@@ -664,19 +665,19 @@ void wxPopupMenuWindow::OnLeftDown(wxMouseEvent& event)
         {
             wxPopupMenuWindow *win = menu->m_popupMenu;
 
-            wxCHECK_RET( win, _T("parent menu not shown?") );
+            wxCHECK_MSG( win, FALSE, _T("parent menu not shown?") );
 
             pos = ClientToScreen(pos);
             if ( win->GetMenuItemFromPoint(win->ScreenToClient(pos)) )
             {
                 // eat the event
-                return;
+                return TRUE;
             }
             //else: it is outside the parent menu as well, do dismiss this one
         }
     }
 
-    event.Skip();
+    return FALSE;
 }
 
 void wxPopupMenuWindow::OnLeftUp(wxMouseEvent& event)

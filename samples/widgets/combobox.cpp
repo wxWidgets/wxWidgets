@@ -88,6 +88,7 @@ protected:
     void OnButtonAddMany(wxCommandEvent& event);
 
     void OnComboBox(wxCommandEvent& event);
+    void OnComboText(wxCommandEvent& event);
 
     void OnCheckOrRadioBox(wxCommandEvent& event);
 
@@ -158,6 +159,7 @@ BEGIN_EVENT_TABLE(ComboboxWidgetsPage, WidgetsPage)
     EVT_UPDATE_UI(ComboPage_DeleteSel, ComboboxWidgetsPage::OnUpdateUIDeleteSelButton)
 
     EVT_COMBOBOX(ComboPage_Combo, ComboboxWidgetsPage::OnComboBox)
+    EVT_TEXT(ComboPage_Combo, ComboboxWidgetsPage::OnComboText)
 
     EVT_CHECKBOX(-1, ComboboxWidgetsPage::OnCheckOrRadioBox)
     EVT_RADIOBOX(-1, ComboboxWidgetsPage::OnCheckOrRadioBox)
@@ -456,6 +458,16 @@ void ComboboxWidgetsPage::OnUpdateUIClearButton(wxUpdateUIEvent& event)
 void ComboboxWidgetsPage::OnUpdateUIAddSeveral(wxUpdateUIEvent& event)
 {
     event.Enable(!(m_combobox->GetWindowStyle() & wxCB_SORT));
+}
+
+void ComboboxWidgetsPage::OnComboText(wxCommandEvent& event)
+{
+    wxString s = event.GetString();
+
+    wxASSERT_MSG( s == m_combobox->GetValue(),
+                  _T("event and combobox values should be the same") );
+
+    wxLogMessage(_T("Combobox text changed (now '%s')"), s.c_str());
 }
 
 void ComboboxWidgetsPage::OnComboBox(wxCommandEvent& event)

@@ -381,9 +381,6 @@ wxNotebookPage *wxNotebook::DoRemovePage(int nPage)
     int count = GetPageCount();
     if ( count )
     {
-        // some tabs are still left, just redraw them
-        RefreshAllTabs();
-
         if ( m_sel == (size_t)nPage )
         {
             // avoid sending event to this page which doesn't exist in the
@@ -401,10 +398,10 @@ wxNotebookPage *wxNotebook::DoRemovePage(int nPage)
     else // no more tabs left
     {
         m_sel = INVALID_PAGE;
-
-        // have to refresh everything
-        Relayout();
     }
+
+    // have to refresh everything
+    Relayout();
 
     return page;
 }
@@ -429,31 +426,7 @@ void wxNotebook::RefreshTab(int page)
     if ( (size_t)page == m_sel )
     {
         const wxSize indent = GetRenderer()->GetTabIndent();
-
-        switch ( GetTabOrientation() )
-        {
-            default:
-                wxFAIL_MSG(_T("unknown tab orientation"));
-                // fall through
-
-            case wxTOP:
-                rect.Inflate(indent.x, indent.y);
-                break;
-
-            case wxBOTTOM:
-                rect.Inflate(indent.x, 0);
-                rect.height += indent.y;
-                break;
-
-            case wxLEFT:
-                rect.Inflate(indent.x, indent.y);
-                break;
-
-            case wxRIGHT:
-                rect.Inflate(0, indent.y);
-                rect.width += indent.x;
-                break;
-        }
+        rect.Inflate(indent.x, indent.y);
     }
 
     RefreshRect(rect);
