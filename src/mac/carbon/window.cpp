@@ -220,7 +220,7 @@ bool wxWindowMac::Create(wxWindowMac *parent, wxWindowID id,
 #endif
 
     wxWindowCreateEvent event(this);
-    GetEventHandler()->ProcessEvent(event);
+    GetEventHandler()->AddPendingEvent(event);
 
     return TRUE;
 }
