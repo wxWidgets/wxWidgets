@@ -29,7 +29,7 @@ class wxDialog;
 // global data
 //-----------------------------------------------------------------------------
 
-extern const char *wxDialogNameStr;
+extern const wxChar *wxDialogNameStr;
 
 //-----------------------------------------------------------------------------
 // wxDialog

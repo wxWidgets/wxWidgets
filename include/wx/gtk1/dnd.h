@@ -225,7 +225,7 @@ public:
   virtual bool OnData( int x, int y );
   
   /* you have to override OnDropFiles to get at the file names */
-  virtual bool OnDropFiles( int x, int y, size_t nFiles, const char * const aszFiles[] ) = 0;
+  virtual bool OnDropFiles( int x, int y, size_t nFiles, const wxChar * const aszFiles[] ) = 0;
 
 };
 
