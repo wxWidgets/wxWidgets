@@ -3297,7 +3297,7 @@ else
                         ],
                         [
                             long l;
-                            statvfs_t fs;
+                            struct statvfs fs;
                             statvfs("/", &fs);
                             l = fs.f_bsize;
                             l += fs.f_blocks;
