@@ -20,6 +20,7 @@ mkdir %DEST%\src\msw
 mkdir %DEST%\src\regex
 mkdir %DEST%\src\unix
 mkdir %DEST%\src\zlib
+mkdir %DEST%\lib
 
 chdir %WXWIN%
 
@@ -34,13 +35,16 @@ rem Copy the project/make files
 copy /q src\wxBase.dsp %DEST%\src\wxBase.dsp
 copy /q src\wxBase.dsw %DEST%\src\wxBase.dsw
 copy /q include\wx\msw\setup0.h %DEST%\include\wx\msw\setup.h
-copy /q src\msw\makebase.b32 %DEST%\src\msw\makebase.b32
 copy /q src\makeb32.env %DEST%\src\makeb32.env
+copy /q src\makelib.b32 %DEST%\src\makelib.b32
+copy /q src\makeprog.b32 %DEST%\src\makeprog.b32
+copy /q src\msw\makebase.b32 %DEST%\src\msw\makebase.b32
 
 rem Copy the sample
 
 copy /q samples\console\console.cpp %DEST%\samples\console\console.cpp
 copy /q samples\console\console.dsp %DEST%\samples\console\console.dsp
+copy /q samples\console\makefile.b32 %DEST%\samples\console\makefile.b32
 copy /q samples\console\testdata.fc %DEST%\samples\console\testdata.fc
 
 rem Copy regex and zlib files
