@@ -175,25 +175,22 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
 {
   wxPaintDC dc(this);
 
-#ifdef __WXPM__
-    RECTL wrectl;
-
-    ::WinQueryWindowRect(GetHWND(), &wrectl);
-    ::WinFillRect(dc.GetHDC(), &wrectl, CLR_BLACK);
-#else
 
   int i;
   if ( GetFont().Ok() )
     dc.SetFont(GetFont());
   dc.SetBackgroundMode(wxTRANSPARENT);
 
+#ifdef __WXPM__
+  ::WinFillRect(vDC.m_hPS, &vDC.m_rclPaint, CLR_GREEN);
+#endif
+
   for ( i = 0; i < m_nFields; i ++ )
     DrawField(dc, i);
 
-#   ifdef __WXMSW__
-        dc.SetFont(wxNullFont);
-#   endif // MSW
-#endif
+#ifdef __WXMSW__
+  dc.SetFont(wxNullFont);
+#endif // MSW
 }
 
 void wxStatusBarGeneric::DrawFieldText(wxDC& dc, int i)
@@ -207,10 +204,20 @@ void wxStatusBarGeneric::DrawFieldText(wxDC& dc, int i)
 
   long x, y;
 
+#if defined(__WXPM__)
+  long decsent;
+
+  dc.GetTextExtent(text, &x, &y,&decsent);
+  int xpos = rect.x + leftMargin;
+  int ypos = (int) (((rect.height - y + 1) / 2 ) + rect.y + decsent ) ;
+
+#else
   dc.GetTextExtent(text, &x, &y);
 
   int xpos = rect.x + leftMargin;
   int ypos = (int) (((rect.height - y) / 2 ) + rect.y + 0.5) ;
+
+#endif // __WXPM__
 
 #if defined( __WXGTK__ ) || defined(__WXMAC__)
   xpos++;
@@ -261,7 +268,11 @@ bool wxStatusBarGeneric::GetFieldRect(int n, wxRect& rect) const
                _T("invalid status bar field index") );
 
   int width, height;
+#ifdef __WXPM__
+  GetSize(&width, &height);
+#else
   GetClientSize(&width, &height);
+#endif
 
   int i;
   int sum_of_nonvar = 0;
