@@ -577,6 +577,16 @@ private:
     bool m_isOnGrip;
 };
 
+class wxWin32FrameInputHandler : public wxStdFrameInputHandler
+{
+public:
+    wxWin32FrameInputHandler(wxInputHandler *handler)
+        : wxStdFrameInputHandler(handler) { }
+
+    virtual bool HandleMouse(wxInputConsumer *control,
+                             const wxMouseEvent& event);
+};
+
 // ----------------------------------------------------------------------------
 // wxWin32ColourScheme: uses (default) Win32 colours
 // ----------------------------------------------------------------------------
@@ -1202,7 +1212,7 @@ wxInputHandler *wxWin32Theme::GetInputHandler(const wxString& control)
             handler = new wxWin32StatusBarInputHandler(GetDefaultInputHandler());
 #endif // wxUSE_STATUSBAR
         else if ( control == wxINP_HANDLER_TOPLEVEL )
-            handler = new wxStdFrameInputHandler(GetDefaultInputHandler());
+            handler = new wxWin32FrameInputHandler(GetDefaultInputHandler());
         else
             handler = GetDefaultInputHandler();
 
@@ -4151,5 +4161,32 @@ bool wxWin32StatusBarInputHandler::HandleMouseMove(wxInputConsumer *consumer,
     }
 
     return wxStdInputHandler::HandleMouseMove(consumer, event);
+}
+
+// ----------------------------------------------------------------------------
+// wxWin32FrameInputHandler
+// ----------------------------------------------------------------------------
+
+bool wxWin32FrameInputHandler::HandleMouse(wxInputConsumer *consumer,
+                                           const wxMouseEvent& event)
+{
+    if ( event.LeftDClick() )
+    {
+        wxTopLevelWindow *tlw = 
+            wxStaticCast(consumer->GetInputWindow(), wxTopLevelWindow);
+
+        long hit = tlw->HitTest(event.GetPosition());
+
+        if ( hit == wxHT_TOPLEVEL_TITLEBAR )
+        {
+            tlw->PerformAction(wxACTION_TOPLEVEL_BUTTON_CLICK, 
+                               tlw->IsMaximized() ? 
+                                   wxTOPLEVEL_BUTTON_RESTORE : 
+                                   wxTOPLEVEL_BUTTON_MAXIMIZE);
+            return TRUE;
+        }
+    }
+
+    return wxStdFrameInputHandler::HandleMouse(consumer, event);
 }
 
