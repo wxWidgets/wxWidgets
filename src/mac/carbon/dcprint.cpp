@@ -66,7 +66,7 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
 		wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
 		dialog.ShowModal();
 #if TARGET_CARBON && PM_USE_SESSION_APIS
-		PMRelease( m_macPrintSessionPort ) ;
+		PMRelease(m_macPrintSessionPort) ;
 #else
 		UMAPrClose(NULL) ;
 #endif
@@ -109,7 +109,7 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
 		wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
 		dialog.ShowModal();
   #if TARGET_CARBON && PM_USE_SESSION_APIS
-		PMRelease(&m_macPrintSessionPort) ;
+		PMRelease(m_macPrintSessionPort) ;
   #else
 		UMAPrClose(NULL) ;
   #endif
@@ -138,7 +138,7 @@ wxPrinterDC::~wxPrinterDC(void)
 	if ( m_ok ) 
 	{
   #if TARGET_CARBON && PM_USE_SESSION_APIS
-	    PMRelease(&m_macPrintSessionPort) ;
+	    PMRelease(m_macPrintSessionPort) ;
   #else
 	    UMAPrClose(NULL) ;
   #endif
@@ -184,7 +184,7 @@ bool wxPrinterDC::StartDoc( const wxString& WXUNUSED(message) )
 		wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
 		dialog.ShowModal();
   #if TARGET_CARBON && PM_USE_SESSION_APIS
-		PMRelease(&m_macPrintSessionPort) ;
+		PMRelease(m_macPrintSessionPort) ;
   #else
 		UMAPrClose(NULL) ;
   #endif
@@ -206,7 +206,7 @@ bool wxPrinterDC::StartDoc( const wxString& WXUNUSED(message) )
 		wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
 		dialog.ShowModal();
   #if TARGET_CARBON && PM_USE_SESSION_APIS
-		PMRelease(&m_macPrintSessionPort) ;
+		PMRelease(m_macPrintSessionPort) ;
   #else
 		UMAPrClose(NULL) ;
   #endif
