@@ -1695,7 +1695,44 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
 
     m_dirty = TRUE;
 
-    wxNode *node = m_columns.Nth( col );
+    wxNode *node = (wxNode*) NULL;
+
+    if (width == wxLIST_AUTOSIZE_USEHEADER) width = 80;
+    if (width == wxLIST_AUTOSIZE)
+    {
+        wxClientDC dc(this);
+        dc.SetFont( GetFont() );
+        int max = 10;
+        node = m_lines.First();
+        while (node)
+        {
+            wxListLineData *line = (wxListLineData*)node->Data();
+            wxNode *n = line->m_items.Nth( col );
+            if (n)
+            {
+                wxListItemData *item = (wxListItemData*)n->Data();
+		int current = 0, ix = 0, iy = 0;
+		long lx = 0, ly = 0;
+		if (item->HasImage())
+		{
+                    GetImageSize( item->GetImage(), ix, iy );
+		    current = ix + 5;
+		}
+		if (item->HasText())
+		{
+		    wxString str;
+		    item->GetText( str );
+		    dc.GetTextExtent( str, &lx, &ly );
+		    current += lx;
+		}
+		if (current > max) max = current;
+            }
+            node = node->Next();
+        }
+	width = max+10;
+    }
+
+    node = m_columns.Nth( col );
     if (node)
     {
         wxListHeaderData *column = (wxListHeaderData*)node->Data();

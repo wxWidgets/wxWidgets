@@ -1586,6 +1586,55 @@ function.
 
 These macros are defined in wxWindows.
 
+\membersection{wxINTXX\_SWAP\_ALWAYS}\label{intswapalways}
+
+\func{wxInt32}{wxINT32\_SWAP\_ALWAYS}{\param{wxInt32 }{value}}
+
+\func{wxUint32}{wxUINT32\_SWAP\_ALWAYS}{\param{wxUint32 }{value}}
+
+\func{wxInt16}{wxINT16\_SWAP\_ALWAYS}{\param{wxInt16 }{value}}
+
+\func{wxUint16}{wxUINT16\_SWAP\_ALWAYS}{\param{wxUint16 }{value}}
+
+This macro will swap the bytes of the {\it value} variable from little
+endian to big endian or vice versa.
+
+\membersection{wxINTXX\_SWAP\_ON\_BE}\label{intswaponbe}
+
+\func{wxInt32}{wxINT32\_SWAP\_ON\_BE}{\param{wxInt32 }{value}}
+
+\func{wxUint32}{wxUINT32\_SWAP\_ON\_BE}{\param{wxUint32 }{value}}
+
+\func{wxInt16}{wxINT16\_SWAP\_ON\_BE}{\param{wxInt16 }{value}}
+
+\func{wxUint16}{wxUINT16\_SWAP\_ON\_BE}{\param{wxUint16 }{value}}
+
+This macro will swap the bytes of the {\it value} variable from little
+endian to big endian or vice versa if the program is compiled on a
+big-endian architecture (such as Sun work stations). If the program has 
+been compiled on a little-endian architecture, the value will be unchanged.
+
+Use these macros to read data from and write data to a file that stores 
+data in little endian (Intel i386) format.
+
+\membersection{wxINTXX\_SWAP\_ON\_LE}\label{intswaponle}
+
+\func{wxInt32}{wxINT32\_SWAP\_ON\_LE}{\param{wxInt32 }{value}}
+
+\func{wxUint32}{wxUINT32\_SWAP\_ON\_LE}{\param{wxUint32 }{value}}
+
+\func{wxInt16}{wxINT16\_SWAP\_ON\_LE}{\param{wxInt16 }{value}}
+
+\func{wxUint16}{wxUINT16\_SWAP\_ON\_LE}{\param{wxUint16 }{value}}
+
+This macro will swap the bytes of the {\it value} variable from little
+endian to big endian or vice versa if the program is compiled on a
+little-endian architecture (such as Intel PCs). If the program has 
+been compiled on a big-endian architecture, the value will be unchanged.
+
+Use these macros to read data from and write data to a file that stores 
+data in big endian format.
+
 \membersection{CLASSINFO}\label{classinfo}
 
 \func{wxClassInfo *}{CLASSINFO}{className}

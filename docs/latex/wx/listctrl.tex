@@ -26,12 +26,12 @@ the list wraps, unlike a wxListBox.}
 \twocolitem{\windowstyle{wxLC\_REPORT}}{single or multicolumn report view, with optional header.}
 \twocolitem{\windowstyle{wxLC\_ICON}}{Large icon view, with optional labels.}
 \twocolitem{\windowstyle{wxLC\_SMALL\_ICON}}{Small icon view, with optional labels.}
-\twocolitem{\windowstyle{wxLC\_ALIGN\_TOP}}{Icons align to the top (default).}
-\twocolitem{\windowstyle{wxLC\_ALIGN\_LEFT}}{Icons align to the left.}
-\twocolitem{\windowstyle{wxLC\_AUTOARRANGE}}{Icons arrange themselves.}
-\twocolitem{\windowstyle{wxLC\_USER\_TEXT}}{The application provides label text on demand, except for column headers.}
+\twocolitem{\windowstyle{wxLC\_ALIGN\_TOP}}{Icons align to the top. Win32 default, Win32 only. }
+\twocolitem{\windowstyle{wxLC\_ALIGN\_LEFT}}{Icons align to the left. }
+\twocolitem{\windowstyle{wxLC\_AUTOARRANGE}}{Icons arrange themselves. Win32 only. }
+\twocolitem{\windowstyle{wxLC\_USER\_TEXT}}{The application provides label text on demand, except for column headers. Win32 only. }
 \twocolitem{\windowstyle{wxLC\_EDIT\_LABELS}}{Labels are editable: the application will be notified when editing starts.}
-\twocolitem{\windowstyle{wxLC\_NO\_HEADER}}{No header in report mode.}
+\twocolitem{\windowstyle{wxLC\_NO\_HEADER}}{No header in report mode. Win32 only. }
 \twocolitem{\windowstyle{wxLC\_SINGLE\_SEL}}{Single selection.}
 \twocolitem{\windowstyle{wxLC\_SORT\_ASCENDING}}{Sort in ascending order (must still supply a comparison callback in SortItems.}
 \twocolitem{\windowstyle{wxLC\_SORT\_DESCENDING}}{Sort in descending order (must still supply a comparison callback in SortItems.}
@@ -111,7 +111,7 @@ Destructor, destroying the list control.
 
 \func{bool}{Arrange}{\param{int }{flag = wxLIST\_ALIGN\_DEFAULT}}
 
-Arranges the items in icon or small icon view. {\it flag} is one of:
+Arranges the items in icon or small icon view. This only has effect on Win32. {\it flag} is one of:
 
 \twocolwidtha{5cm}
 \begin{twocollist}\itemsep=0pt
@@ -455,6 +455,8 @@ information.
 Sets the column width.
 
 {\it width} can be a width in pixels or wxLIST\_AUTOSIZE (-1) or wxLIST\_AUTOSIZE\_USEHEADER (-2).
+wxLIST\_AUTOSIZE will resize the column to the length of its longest item. wxLIST\_AUTOSIZE\_USEHEADER
+will resize the column to the length of the header (Win32) or 80 pixels (other platforms).
 
 In small or normal icon view, {\it col} must be -1, and the column width is set for all columns.
 
@@ -504,11 +506,11 @@ The {\bf m\_stateMask} and {\bf m\_state} members take flags from the following:
 
 \twocolwidtha{5cm}
 \begin{twocollist}\itemsep=0pt
-\twocolitem{wxLIST\_STATE\_DONTCARE}{Don't care what the state is.}
-\twocolitem{wxLIST\_STATE\_DROPHILITED}{The item is highlighted to receive a drop event.}
+\twocolitem{wxLIST\_STATE\_DONTCARE}{Don't care what the state is. Win32 only. }
+\twocolitem{wxLIST\_STATE\_DROPHILITED}{The item is highlighted to receive a drop event. Win32 only. }
 \twocolitem{wxLIST\_STATE\_FOCUSED}{The item has the focus.}
 \twocolitem{wxLIST\_STATE\_SELECTED}{The item is selected.}
-\twocolitem{wxLIST\_STATE\_CUT}{The item is in the cut state.}
+\twocolitem{wxLIST\_STATE\_CUT}{The item is in the cut state. Win32 only. }
 \end{twocollist}
 
 \func{long}{SetItem}{\param{long }{index}, \param{int }{col}, \param{const wxString\& }{label}, \param{int }{imageId = -1}}

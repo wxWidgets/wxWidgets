@@ -28,7 +28,7 @@ dnl WX_BINARY_AGE += 1
 dnl
 dnl if any functions have been added, do:
 dnl
-dnl WX_INTERFACE_AGE = 1
+dnl WX_INTERFACE_AGE = 0
 
 WX_MAJOR_VERSION_NUMBER=2
 WX_MINOR_VERSION_NUMBER=1

@@ -145,8 +145,8 @@ enum {
 
 // Autosize values for SetColumnWidth
 enum {
-    wxLIST_AUTOSIZE = -1,          // always 80 in wxGLC (what else?)
-    wxLIST_AUTOSIZE_USEHEADER = -2
+    wxLIST_AUTOSIZE = -1,           // width of longest item
+    wxLIST_AUTOSIZE_USEHEADER = -2  // always 80 in wxGLC
 };
 
 // Flag values for GetItemRect

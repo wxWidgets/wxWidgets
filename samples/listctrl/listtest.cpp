@@ -205,55 +205,62 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnDeselectAll(wxCommandEvent& WXUNUSED(event))
 {
    int n = m_listCtrl->GetItemCount();
-   int i;
-   for(i = 0; i < n; i++)
+   for (int i = 0; i < n; i++)
       m_listCtrl->SetItemState(i,0,wxLIST_STATE_SELECTED);
 }
 
 void MyFrame::OnSelectAll(wxCommandEvent& WXUNUSED(event))
 {
    int n = m_listCtrl->GetItemCount();
-   int i;
-   for(i = 0; i < n; i++)
+   for (int i = 0; i < n; i++)
       m_listCtrl->SetItemState(i,wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
 }
 
 void MyFrame::OnListView(wxCommandEvent& WXUNUSED(event))
 {
-	m_listCtrl->DeleteAllItems();
-	m_logWindow->Clear();
-	m_listCtrl->SetSingleStyle(wxLC_LIST);
+    m_listCtrl->DeleteAllItems();
+    m_logWindow->Clear();
+    m_listCtrl->SetSingleStyle(wxLC_LIST);
     m_listCtrl->SetImageList((wxImageList *) NULL, wxIMAGE_LIST_NORMAL);
     m_listCtrl->SetImageList((wxImageList *) NULL, wxIMAGE_LIST_SMALL);
 
-	for ( int i=0; i < 30; i++)
-	{
-		wxChar buf[20];
-		wxSprintf(buf, _T("Item %d"), i);
-		m_listCtrl->InsertItem(i, buf);
-	}
+    for ( int i=0; i < 30; i++)
+    {
+	wxChar buf[20];
+	wxSprintf(buf, _T("Item %d"), i);
+	m_listCtrl->InsertItem(i, buf);
+    }
 }
 
 void MyFrame::OnReportView(wxCommandEvent& WXUNUSED(event))
 {
-	m_listCtrl->DeleteAllItems();
-	m_logWindow->Clear();
-	m_listCtrl->SetSingleStyle(wxLC_REPORT);
+    m_listCtrl->DeleteAllItems();
+    m_logWindow->Clear();
+   
+    m_listCtrl->SetSingleStyle(wxLC_REPORT);
     m_listCtrl->SetImageList((wxImageList *) NULL, wxIMAGE_LIST_NORMAL);
     m_listCtrl->SetImageList(wxGetApp().m_imageListSmall, wxIMAGE_LIST_SMALL);
 
-	m_listCtrl->InsertColumn(0, "Column 1", wxLIST_FORMAT_LEFT, 140);
-	m_listCtrl->InsertColumn(1, "Column 2", wxLIST_FORMAT_LEFT, 140);
+    m_listCtrl->InsertColumn(0, "Column 1"); // , wxLIST_FORMAT_LEFT, 140);
+    m_listCtrl->InsertColumn(1, "Column 2"); // , wxLIST_FORMAT_LEFT, 140);
+    m_listCtrl->InsertColumn(2, "One More Column (2)"); // , wxLIST_FORMAT_LEFT, 140);
 
-	for ( int i=0; i < 30; i++)
-	{
-		wxChar buf[50];
-		wxSprintf(buf, _T("Item %d, col 1"), i);
-		long tmp = m_listCtrl->InsertItem(i, buf, 0);
+    for ( int i=0; i < 30; i++)
+    {
+	wxChar buf[50];
+	wxSprintf(buf, _T("This is item %d"), i);
+	long tmp = m_listCtrl->InsertItem(i, buf, 0);
 
-		wxSprintf(buf, _T("Item %d, broad column 2"), i);
-		tmp = m_listCtrl->SetItem(i, 1, buf);
-	}
+	wxSprintf(buf, _T("Col 1, item %d"), i);
+	tmp = m_listCtrl->SetItem(i, 1, buf);
+	
+	wxSprintf(buf, _T("Item %d in column 2"), i);
+	tmp = m_listCtrl->SetItem(i, 2, buf);
+    }
+    
+    m_listCtrl->SetColumnWidth( 0, wxLIST_AUTOSIZE );
+    m_listCtrl->SetColumnWidth( 1, wxLIST_AUTOSIZE );
+    m_listCtrl->SetColumnWidth( 2, wxLIST_AUTOSIZE );
 }
 
 void MyFrame::OnIconView(wxCommandEvent& WXUNUSED(event))
