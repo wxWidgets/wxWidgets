@@ -441,6 +441,7 @@ ALL_HEADERS = \
 		variant.h \
 		vector.h \
 		version.h \
+		volume.h \
 		wave.h \
 		wfstream.h \
 		window.h \
@@ -585,6 +586,7 @@ ALL_HEADERS = \
 		generic/statusbr.h \
 		generic/tabg.h \
 		generic/textdlgg.h \
+		generic/timer.h \
 		generic/treectlg.h \
 		generic/wizard.h \
 		unix/execute.h \

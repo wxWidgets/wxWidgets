@@ -80,6 +80,7 @@ GENERICOBJS= accel.obj &
 	tabg.obj &
 	tbarsmpl.obj &
 	textdlgg.obj &
+	timer.obj &
 	tipdlg.obj &
 	tipwin.obj &
 	treectlg.obj &
@@ -236,7 +237,6 @@ MGLOBJS = app.obj &
 	pen.obj &
 	region.obj &
 	settings.obj &
-	timer.obj &
 	toplevel.obj &
 	utils.obj &
 	window.obj
@@ -392,9 +392,6 @@ region.obj:     $(MGLDIR)\region.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 settings.obj:     $(MGLDIR)\settings.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
-
-timer.obj:     $(MGLDIR)\timer.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 toplevel.obj:     $(MGLDIR)\toplevel.cpp
@@ -1033,6 +1030,9 @@ tbarsmpl.obj:     $(GENDIR)\tbarsmpl.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 textdlgg.obj:     $(GENDIR)\textdlgg.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+timer.obj:     $(GENDIR)\timer.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 tipdlg.obj:     $(GENDIR)\tipdlg.cpp

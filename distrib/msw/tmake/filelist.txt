@@ -111,6 +111,7 @@ statusbr.cpp	Generic	NotMGL,NotX11,NotMicro
 tabg.cpp	Generic	NotWin32,NotOS2
 tbarsmpl.cpp	Generic
 textdlgg.cpp	Generic
+timer.cpp	Generic	LowLevel,NotMSW,NotX,NotGTK,NotOS2,NotMac,NotMicro
 tipdlg.cpp	Generic
 tipwin.cpp	Generic
 treectlg.cpp	Generic
@@ -630,7 +631,6 @@ popupwin.cpp	X11
 region.cpp	X11
 settings.cpp	X11
 toplevel.cpp	X11
-timer.cpp	X11
 utils.cpp	X11
 window.cpp	X11
 
@@ -1203,7 +1203,6 @@ print.h	X11H
 private.h	X11H
 region.h	X11H
 settings.h	X11H
-timer.h	X11H
 toolbar.h	X11H
 toplevel.h	X11H
 window.h	X11H
@@ -1472,6 +1471,7 @@ splitter.h	GenericH
 statusbr.h	GenericH
 tabg.h	GenericH	NotWin32
 textdlgg.h	GenericH
+timer.h	GenericH
 treectlg.h	GenericH	NotWin32
 wizard.h	GenericH
 
@@ -1537,7 +1537,6 @@ dcscreen.cpp	MGL	LowLevel
 toplevel.cpp	MGL	LowLevel
 icon.cpp	MGL	LowLevel
 settings.cpp	MGL	LowLevel
-timer.cpp	MGL	LowLevel
 window.cpp	MGL	LowLevel
 utils.cpp	MGL	LowLevel
 

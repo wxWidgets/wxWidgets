@@ -47,6 +47,7 @@ UNIV_HEADERS = \
 		univ/colschem.h \
 		univ/combobox.h \
 		univ/control.h \
+		univ/dialog.h \
 		univ/frame.h \
 		univ/gauge.h \
 		univ/inpcons.h \

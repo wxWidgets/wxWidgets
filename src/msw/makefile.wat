@@ -92,7 +92,8 @@ NONESSENTIALOBJS= accel.obj &
 	printps.obj &
 	prntdlgg.obj &
 	statline.obj &
-	tabg.obj
+	tabg.obj &
+	timer.obj
 
 COMMONOBJS = &
 	y_tab.obj &
@@ -329,6 +330,7 @@ MSWOBJS = accel.obj &
 	utils.obj &
 	utilsexc.obj &
 	uuid.obj &
+	volume.obj &
 	wave.obj &
 	window.obj
 
@@ -711,6 +713,9 @@ utilsexc.obj:     $(MSWDIR)\utilsexc.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 uuid.obj:     $(OLEDIR)\uuid.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+volume.obj:     $(MSWDIR)\volume.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 wave.obj:     $(MSWDIR)\wave.cpp

@@ -22,12 +22,12 @@ ALL_SOURCES = \
 		x11/joystick.cpp \
 		x11/main.cpp \
 		x11/minifram.cpp \
+		x11/nanox.c \
 		x11/palette.cpp \
 		x11/pen.cpp \
 		x11/popupwin.cpp \
 		x11/region.cpp \
 		x11/settings.cpp \
-		x11/timer.cpp \
 		x11/toplevel.cpp \
 		x11/utils.cpp \
 		x11/window.cpp \
@@ -71,6 +71,7 @@ ALL_SOURCES = \
 		generic/tabg.cpp \
 		generic/tbarsmpl.cpp \
 		generic/textdlgg.cpp \
+		generic/timer.cpp \
 		generic/tipdlg.cpp \
 		generic/tipwin.cpp \
 		generic/treectlg.cpp \
@@ -447,6 +448,7 @@ ALL_HEADERS = \
 		variant.h \
 		vector.h \
 		version.h \
+		volume.h \
 		wave.h \
 		wfstream.h \
 		window.h \
@@ -490,7 +492,6 @@ ALL_HEADERS = \
 		x11/private.h \
 		x11/region.h \
 		x11/settings.h \
-		x11/timer.h \
 		x11/toolbar.h \
 		x11/toplevel.h \
 		x11/window.h \
@@ -567,6 +568,7 @@ ALL_HEADERS = \
 		generic/statusbr.h \
 		generic/tabg.h \
 		generic/textdlgg.h \
+		generic/timer.h \
 		generic/treectlg.h \
 		generic/wizard.h \
 		unix/execute.h \
@@ -613,12 +615,12 @@ GUI_LOWLEVEL_OBJS = \
 		joystick.o \
 		main.o \
 		minifram.o \
+		nanox.o \
 		palette.o \
 		pen.o \
 		popupwin.o \
 		region.o \
 		settings.o \
-		timer.o \
 		toplevel.o \
 		utils.o \
 		window.o
@@ -792,6 +794,7 @@ GENERICOBJS = \
 		tabg.o \
 		tbarsmpl.o \
 		textdlgg.o \
+		timer.o \
 		tipdlg.o \
 		tipwin.o \
 		treectlg.o \

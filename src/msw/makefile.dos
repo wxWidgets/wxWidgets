@@ -283,6 +283,7 @@ MSWOBJS2 = $(MSWDIR)\palette.obj \
 		$(MSWDIR)\toplevel.obj \
 		$(MSWDIR)\utils.obj \
 		$(MSWDIR)\utilsexc.obj \
+		$(MSWDIR)\volume.obj \
 		$(MSWDIR)\wave.obj \
 		$(MSWDIR)\window.obj
 
@@ -768,6 +769,11 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(MSWDIR)/utilsexc.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(MSWDIR)/volume.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<

@@ -287,6 +287,7 @@ MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\utils.obj \
 		$(MSWDIR)\utilsexc.obj \
 		$(MSWDIR)\ole\uuid.obj \
+		$(MSWDIR)\volume.obj \
 		$(MSWDIR)\wave.obj \
 		$(MSWDIR)\window.obj
 

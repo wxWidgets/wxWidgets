@@ -1016,6 +1016,10 @@ SOURCE=.\msw\utilsexc.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\volume.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\window.cpp
 # End Source File
 
@@ -2062,6 +2066,10 @@ SOURCE=..\include\wx\version.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\volume.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\wave.h
 # End Source File
 # Begin Source File
@@ -2272,6 +2280,10 @@ SOURCE=..\include\wx\generic\tabg.h
 # Begin Source File
 
 SOURCE=..\include\wx\generic\textdlgg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\generic\timer.h
 # End Source File
 # Begin Source File
 

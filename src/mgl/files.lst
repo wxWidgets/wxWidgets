@@ -41,6 +41,7 @@ ALL_SOURCES = \
 		generic/tabg.cpp \
 		generic/tbarsmpl.cpp \
 		generic/textdlgg.cpp \
+		generic/timer.cpp \
 		generic/tipdlg.cpp \
 		generic/tipwin.cpp \
 		generic/treectlg.cpp \
@@ -193,7 +194,6 @@ ALL_SOURCES = \
 		mgl/pen.cpp \
 		mgl/region.cpp \
 		mgl/settings.cpp \
-		mgl/timer.cpp \
 		mgl/toplevel.cpp \
 		mgl/utils.cpp \
 		mgl/window.cpp \
@@ -441,6 +441,7 @@ ALL_HEADERS = \
 		variant.h \
 		vector.h \
 		version.h \
+		volume.h \
 		wave.h \
 		wfstream.h \
 		window.h \
@@ -492,6 +493,7 @@ ALL_HEADERS = \
 		generic/statusbr.h \
 		generic/tabg.h \
 		generic/textdlgg.h \
+		generic/timer.h \
 		generic/treectlg.h \
 		generic/wizard.h \
 		unix/execute.h \
@@ -685,6 +687,7 @@ GENERICOBJS = \
 		tabg.o \
 		tbarsmpl.o \
 		textdlgg.o \
+		timer.o \
 		tipdlg.o \
 		tipwin.o \
 		treectlg.o \
@@ -714,7 +717,6 @@ GUI_LOWLEVEL_OBJS = \
 		pen.o \
 		region.o \
 		settings.o \
-		timer.o \
 		toplevel.o \
 		utils.o \
 		window.o

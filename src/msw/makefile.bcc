@@ -294,6 +294,7 @@ MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\toplevel.obj \
 		$(MSWDIR)\utils.obj \
 		$(MSWDIR)\utilsexc.obj \
+		$(MSWDIR)\volume.obj \
 		$(MSWDIR)\wave.obj \
 		$(MSWDIR)\window.obj
 
@@ -494,6 +495,8 @@ $(MSWDIR)\toplevel.obj: $(MSWDIR)\toplevel.$(SRCSUFF)
 $(MSWDIR)\utils.obj: $(MSWDIR)\utils.$(SRCSUFF)
 
 $(MSWDIR)\utilsexc.obj: $(MSWDIR)\utilsexc.$(SRCSUFF)
+
+$(MSWDIR)\volume.obj: $(MSWDIR)\volume.$(SRCSUFF)
 
 $(MSWDIR)\wave.obj: $(MSWDIR)\wave.$(SRCSUFF)
 

@@ -7,7 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
 #ifdef __GNUG__
 #pragma implementation "timer.h"
 #endif
@@ -19,15 +18,33 @@
     #pragma hdrstop
 #endif
 
+// ----------------------------------------------------------------------------
+// NB: when using generic wxTimer implementation in your port, you *must* call 
+//     wxTimer::NotifyTimers() often enough. The ideal place for this 
+//     is in wxEventLoop::Dispatch().
+// ----------------------------------------------------------------------------
+
 #include "wx/timer.h"
 
 #if wxUSE_TIMER
 
 #include "wx/log.h"
 #include "wx/module.h"
-#include "wx/mgl/private.h"
 
-extern "C" ulong _EVT_getTicks();
+// ----------------------------------------------------------------------------
+// Time input function
+// ----------------------------------------------------------------------------
+
+#ifdef __WXMGL__
+    // We take advantage of wxMGL's _EVT_getTicks because it is faster
+    // (especially under MS-DOS!) and more precise than wxGetLocalTimeMillis
+    // if we are unlucky and the latter combines information from two sources.
+    #include "wx/mgl/private.h"
+    extern "C" ulong _EVT_getTicks();
+    #define GetMillisecondsTime() _EVT_getTicks()
+#else
+    #define GetMillisecondsTime() wxGetLocalTimeMillis().ToLong()
+#endif
 
 // ----------------------------------------------------------------------------
 // helper structures and wxTimerScheduler
@@ -66,11 +83,11 @@ void wxTimerScheduler::QueueTimer(wxTimerDesc *desc, unsigned long when)
         return; // already scheduled
         
     if ( when == 0 )
-        when = _EVT_getTicks() + desc->timer->GetInterval();
+        when = GetMillisecondsTime() + desc->timer->GetInterval();
     desc->shotTime = when;
     desc->running = TRUE;
 
-    wxLogTrace("mgl_timer", "queued timer %p at tick %i", 
+    wxLogTrace("timer", "queued timer %p at tick %i", 
                desc->timer, when);
 
     if ( m_timers )
@@ -108,7 +125,7 @@ void wxTimerScheduler::NotifyTimers()
     {
         bool oneShot;
         volatile bool timerDeleted;
-        unsigned long now = _EVT_getTicks();
+        unsigned long now = GetMillisecondsTime();
         wxTimerDesc *desc;
 
         while ( m_timers && m_timers->shotTime <= now )
@@ -123,7 +140,7 @@ void wxTimerScheduler::NotifyTimers()
             
             if ( !timerDeleted )
             {
-                wxLogTrace("mgl_timer", "notified timer %p sheduled for %i", 
+                wxLogTrace("timer", "notified timer %p sheduled for %i", 
                            desc->timer, desc->shotTime);
 
                 desc->deleteFlag = NULL;
@@ -133,7 +150,6 @@ void wxTimerScheduler::NotifyTimers()
         }
     }
 }
-
 
 
 // ----------------------------------------------------------------------------
@@ -153,7 +169,7 @@ void wxTimer::Init()
 
 wxTimer::~wxTimer()
 {
-    wxLogTrace("mgl_timer", "destroying timer %p...", this);
+    wxLogTrace("timer", "destroying timer %p...", this);
     if ( IsRunning() )
         Stop();
 
@@ -165,7 +181,7 @@ wxTimer::~wxTimer()
         *m_desc->deleteFlag = TRUE;
 
     delete m_desc;
-    wxLogTrace("mgl_timer", "    ...done destroying timer %p...", this);
+    wxLogTrace("timer", "    ...done destroying timer %p...", this);
 }
 
 bool wxTimer::IsRunning() const
@@ -175,7 +191,7 @@ bool wxTimer::IsRunning() const
 
 bool wxTimer::Start(int millisecs, bool oneShot)
 {
-    wxLogTrace("mgl_timer", "started timer %p: %i ms, oneshot=%i", 
+    wxLogTrace("timer", "started timer %p: %i ms, oneshot=%i", 
                this, millisecs, oneShot);
 
     if ( !wxTimerBase::Start(millisecs, oneShot) )

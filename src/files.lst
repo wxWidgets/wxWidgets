@@ -83,7 +83,8 @@ ALL_SOURCES = \
 		msw/snglinst.cpp \
 		msw/thread.cpp \
 		msw/utils.cpp \
-		msw/utilsexc.cpp
+		msw/utilsexc.cpp \
+		msw/volume.cpp
 
 ALL_HEADERS = \
 		app.h \
@@ -163,6 +164,7 @@ ALL_HEADERS = \
 		variant.h \
 		vector.h \
 		version.h \
+		volume.h \
 		wfstream.h \
 		wx.h \
 		wxchar.h \
@@ -266,6 +268,7 @@ BASE_MSW_OBJS = \
 		snglinst.o \
 		thread.o \
 		utils.o \
-		utilsexc.o
+		utilsexc.o \
+		volume.o
 
 

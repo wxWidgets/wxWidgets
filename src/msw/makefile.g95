@@ -277,7 +277,8 @@ MSWOBJS_BASE = \
 		$(MSWDIR)/snglinst.$(OBJSUFF) \
 		$(MSWDIR)/thread.$(OBJSUFF) \
 		$(MSWDIR)/utils.$(OBJSUFF) \
-		$(MSWDIR)/utilsexc.$(OBJSUFF)
+		$(MSWDIR)/utilsexc.$(OBJSUFF) \
+		$(MSWDIR)/volume.$(OBJSUFF)
 
 MSWOBJS     = \
                 $(MSWOBJS_BASE) \

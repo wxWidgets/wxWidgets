@@ -560,6 +560,10 @@ SOURCE=.\msw\utils.cpp
 
 SOURCE=.\msw\utilsexc.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=.\msw\volume.cpp
+# End Source File
 
 # Begin Source File
 
@@ -950,6 +954,10 @@ SOURCE=..\include\wx\vector.h
 # Begin Source File
 
 SOURCE=..\include\wx\version.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\volume.h
 # End Source File
 # Begin Source File
 
