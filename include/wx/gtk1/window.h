@@ -204,7 +204,7 @@ public:
 #ifdef __WXGTK20__
     wxGtkIMData         *m_imData;
 #else
-#if HAVE_XIM
+#if HAVE_XIM && !defined(__WXGTK20__)
     // XIM support for wxWidgets
     GdkIC               *m_ic;
     GdkICAttr           *m_icattr;
