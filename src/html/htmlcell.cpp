@@ -427,12 +427,18 @@ void wxHtmlContainerCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
             wxPen mypen1(m_BorderColour1, 1, wxSOLID);
             wxPen mypen2(m_BorderColour2, 1, wxSOLID);
 
+            int subtractMe = 1;
+            // Check on other platforms whether we should be subtracting
+            // 1. On wxMSW, we get a notch if we do.
+#ifdef __WXMSW__
+            subtractMe = 0;
+#endif
             dc.SetPen(mypen1);
             dc.DrawLine(x + m_PosX, y + m_PosY, x + m_PosX, y + m_PosY + m_Height - 1);
-            dc.DrawLine(x + m_PosX, y + m_PosY, x + m_PosX + m_Width - 1, y + m_PosY);
+            dc.DrawLine(x + m_PosX, y + m_PosY, x + m_PosX + m_Width - subtractMe, y + m_PosY);
             dc.SetPen(mypen2);
             dc.DrawLine(x + m_PosX + m_Width - 1, y + m_PosY, x + m_PosX +  m_Width - 1, y + m_PosY + m_Height - 1);
-            dc.DrawLine(x + m_PosX, y + m_PosY + m_Height - 1, x + m_PosX + m_Width - 1, y + m_PosY + m_Height - 1);
+            dc.DrawLine(x + m_PosX, y + m_PosY + m_Height - 1, x + m_PosX + m_Width - subtractMe, y + m_PosY + m_Height - 1);
         }
 
         if (m_Cells)
