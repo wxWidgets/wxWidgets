@@ -197,8 +197,12 @@ wxHTMLHelpControllerBase::DisplayContents()
 {
    if(! m_NumOfEntries)
       return FALSE;
-   wxBusyCursor b; // display a busy cursor
-   return KeywordSearch("");
+
+   // use ID 0 for contents
+   if(! DisplaySection(0))
+      return KeywordSearch("");
+   else
+      return TRUE;
 }
 
 bool

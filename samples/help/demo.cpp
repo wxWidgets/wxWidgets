@@ -32,7 +32,7 @@
 
 // define this to 1 to use HTML help even under Windows (by default, Windows
 // version will HLP-based help)
-#define USE_HTML_HELP 1
+//#define USE_HTML_HELP 1
 #if USE_HTML_HELP
 #   include "wx/helpbase.h"
 #else

@@ -57,11 +57,11 @@ wxString wxHtmlFilterPlainText::ReadFile(const wxFSFile& file)
     wxString doc, doc2;
 
     if (s == NULL) return wxEmptyString;
-    src = (char*) malloc(s -> StreamSize());
+    src = new char[s -> StreamSize()+1];
     src[s -> StreamSize()] = 0;
     s -> Read(src, s -> StreamSize());
     doc = src;
-    free(src);
+    delete [] src;
 
     doc.Replace("<", "&lt;", TRUE);
     doc.Replace(">", "&gt;", TRUE);
