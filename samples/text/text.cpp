@@ -116,8 +116,6 @@ public:
     void DoMoveToEndOfText();
     void DoMoveToEndOfEntry();
 
-    void OnSize( wxSizeEvent &event );
-
     MyTextCtrl    *m_text;
     MyTextCtrl    *m_password;
     MyTextCtrl    *m_enter;
@@ -139,8 +137,6 @@ private:
     // get the currently focused text control or return the default one is no
     // text ctrl has focus
     wxTextCtrl *GetFocusedText(wxTextCtrl *textDef);
-
-    DECLARE_EVENT_TABLE()
 };
 
 class MyFrame: public wxFrame
@@ -450,17 +446,17 @@ bool MyApp::OnInit()
     menuLog->AppendCheckItem(TEXT_LOG_TEXT, _T("Log &text events"));
     menuLog->AppendCheckItem(TEXT_LOG_FOCUS, _T("Log &focus events"));
     menuLog->AppendSeparator();
-    menuLog->Append(TEXT_CLEAR, _T("&Clear the log\tCtrl-C"),
+    menuLog->Append(TEXT_CLEAR, _T("&Clear the log\tCtrl-L"),
                     _T("Clear the log window contents"));
 
     // select only the interesting events by default
-    menuLog->Check(TEXT_LOG_KEY, true);
-    menuLog->Check(TEXT_LOG_CHAR, true);
-    menuLog->Check(TEXT_LOG_TEXT, true);
-
     MyTextCtrl::ms_logKey =
-    MyTextCtrl::ms_logChar =
+    MyTextCtrl::ms_logChar = false;
     MyTextCtrl::ms_logText = true;
+
+    menuLog->Check(TEXT_LOG_KEY, MyTextCtrl::ms_logKey);
+    menuLog->Check(TEXT_LOG_CHAR, MyTextCtrl::ms_logChar);
+    menuLog->Check(TEXT_LOG_TEXT, MyTextCtrl::ms_logText);
 
     menu_bar->Append(menuLog, _T("&Log"));
 #endif // wxUSE_LOG
@@ -883,10 +879,6 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
 // MyPanel
 //----------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyPanel, wxPanel)
-    EVT_SIZE(MyPanel::OnSize)
-END_EVENT_TABLE()
-
 MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
        : wxPanel( frame, wxID_ANY, wxPoint(x, y), wxSize(w, h) )
 {
@@ -1002,11 +994,13 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_textrich->AppendText(_T("And this should be in blue and the text you ")
                            _T("type should be in blue as well"));
 
+
+    // lay out the controls
     wxBoxSizer *column1 = new wxBoxSizer(wxVERTICAL);
-    column1->Add( m_text, 0, wxALL, 10 );
-    column1->Add( m_password, 0, wxALL, 10 );
-    column1->Add( m_readonly, 0, wxALL, 10 );
-    column1->Add( m_limited, 0, wxALL, 10 );
+    column1->Add( m_text, 0, wxALL | wxEXPAND, 10 );
+    column1->Add( m_password, 0, wxALL | wxEXPAND, 10 );
+    column1->Add( m_readonly, 0, wxALL | wxEXPAND, 10 );
+    column1->Add( m_limited, 0, wxALL | wxEXPAND, 10 );
     column1->Add( m_horizontal, 1, wxALL | wxEXPAND, 10 );
 
     wxBoxSizer *column2 = new wxBoxSizer(wxVERTICAL);
@@ -1014,35 +1008,20 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     column2->Add( m_tab, 1, wxALL | wxEXPAND, 10 );
     column2->Add( m_enter, 1, wxALL | wxEXPAND, 10 );
 
-    wxBoxSizer *column3 = new wxBoxSizer(wxVERTICAL);
-    column3->Add( m_textrich, 1, wxALL | wxEXPAND, 10 );
-
     wxBoxSizer *row1 = new wxBoxSizer(wxHORIZONTAL);
     row1->Add( column1, 0, wxALL | wxEXPAND, 10 );
     row1->Add( column2, 1, wxALL | wxEXPAND, 10 );
-    row1->Add( column3, 1, wxALL | wxEXPAND, 10 );
+    row1->Add( m_textrich, 1, wxALL | wxEXPAND, 10 );
 
     wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
     topSizer->Add( row1, 2, wxALL | wxEXPAND, 10 );
 
 #if wxUSE_LOG
-    wxBoxSizer *row2 = new wxBoxSizer(wxHORIZONTAL);
-    row2->Add( m_log, 1, wxALL | wxEXPAND, 10 );
-    topSizer->Add( row2, 1, wxALL | wxEXPAND, 10 );
+    topSizer->Add( m_log, 1, wxALL | wxEXPAND, 10 );
 #endif
 
     SetAutoLayout( true );
     SetSizer(topSizer);
-}
-
-void MyPanel::OnSize( wxSizeEvent &event )
-{
-#if wxUSE_LOG
-    wxSize client_area( GetClientSize() );
-    if (m_log)
-      m_log->SetSize( 0, 260, client_area.x, client_area.y - 260 );
-#endif // wxUSE_LOG
-    event.Skip();
 }
 
 wxTextCtrl *MyPanel::GetFocusedText(wxTextCtrl *textDef)
