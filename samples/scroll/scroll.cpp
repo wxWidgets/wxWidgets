@@ -217,7 +217,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
 
     m_button = new wxButton( this, ID_QUERYPOS, "Query position", wxPoint(10,110) );
 
-    (void) new wxTextCtrl( this, wxID_ANY, "wxTextCtrl", wxPoint(10,150), wxSize(80,wxDefaultSize.y) );
+    (void) new wxTextCtrl( this, wxID_ANY, "wxTextCtrl", wxPoint(10,150), wxSize(80,wxDefaultCoord) );
 
     (void) new wxRadioButton( this, wxID_ANY, "Disable", wxPoint(10,190) );
 
@@ -334,7 +334,7 @@ void MyCanvas::OnMoveButton( wxCommandEvent &event )
     wxWindow *win = FindWindow( event.GetId() );
     wxPoint pt( win->GetPosition() );
     wxLogMessage( wxT("-> Position before move is %d %d"), pt.x, pt.y );
-    win->Move( wxDefaultPosition.x, pt.y + 10 );
+    win->Move( wxDefaultCoord, pt.y + 10 );
     pt = win->GetPosition();
     wxLogMessage( wxT("-> Position after move is %d %d"), pt.x, pt.y );
 }

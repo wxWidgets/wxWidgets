@@ -1176,15 +1176,15 @@ void wxGenericDirCtrl::DoResize()
             // correct control height to always be returned, rather
             // than the drop-down list height which is sometimes returned.
             wxSize oldSize = m_filterListCtrl->GetSize();
-            m_filterListCtrl->SetSize(wxDefaultPosition.x,
-                                      wxDefaultPosition.y,
+            m_filterListCtrl->SetSize(wxDefaultCoord,
+                                      wxDefaultCoord,
                                       oldSize.x+10,
-                                      wxDefaultSize.y,
+                                      wxDefaultCoord,
                                       wxSIZE_USE_EXISTING);
-            m_filterListCtrl->SetSize(wxDefaultPosition.x,
-                                      wxDefaultPosition.y,
+            m_filterListCtrl->SetSize(wxDefaultCoord,
+                                      wxDefaultCoord,
                                       oldSize.x,
-                                      wxDefaultSize.y,
+                                      wxDefaultCoord,
                                       wxSIZE_USE_EXISTING);
 #endif
             filterSz = m_filterListCtrl->GetSize();

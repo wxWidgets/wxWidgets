@@ -187,8 +187,8 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
         wxSashDragStatus status = wxSASH_STATUS_OK;
 
         // the new height and width of the window - if -1, it didn't change
-        int newHeight = wxDefaultSize.y,
-            newWidth = wxDefaultSize.x;
+        int newHeight = wxDefaultCoord,
+            newWidth = wxDefaultCoord;
 
         // NB: x and y may be negative and they're relative to the sash window
         //     upper left corner, while xp and yp are expressed in the parent
@@ -253,7 +253,7 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
                 break;
         }
 
-        if ( newHeight == wxDefaultSize.y )
+        if ( newHeight == wxDefaultCoord )
         {
             // didn't change
             newHeight = h;
@@ -265,7 +265,7 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
             newHeight = wxMin(newHeight, m_maximumPaneSizeY);
         }
 
-        if ( newWidth == wxDefaultSize.x )
+        if ( newWidth == wxDefaultCoord )
         {
             // didn't change
             newWidth = w;

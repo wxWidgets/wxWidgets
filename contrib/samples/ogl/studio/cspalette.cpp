@@ -134,8 +134,8 @@ bool csApp::CreatePalette(wxFrame *parent)
 
   palette->SetToolBitmapSize(toolBitmapSize);
 
-  palette->AddTool(PALETTE_ARROW, PaletteArrow, wxNullBitmap, true, 0, wxDefaultPosition.y, NULL, _T("Pointer"));
-  palette->AddTool(PALETTE_TEXT_TOOL, TextTool, wxNullBitmap, true, 0, wxDefaultPosition.y, NULL, _T("Text"));
+  palette->AddTool(PALETTE_ARROW, PaletteArrow, wxNullBitmap, true, 0, wxDefaultCoord, NULL, _T("Pointer"));
+  palette->AddTool(PALETTE_TEXT_TOOL, TextTool, wxNullBitmap, true, 0, wxDefaultCoord, NULL, _T("Text"));
 
   wxChar** symbols = new wxChar*[20];
   int noSymbols = 0;
@@ -175,7 +175,7 @@ bool csApp::CreatePalette(wxFrame *parent)
       if (symbol)
       {
            wxBitmap* bitmap = GetSymbolDatabase()->CreateToolBitmap(symbol, toolBitmapSize);
-           palette->AddTool(symbol->GetToolId(), *bitmap, wxNullBitmap, true, 0, wxDefaultPosition.y, NULL, symbol->GetName());
+           palette->AddTool(symbol->GetToolId(), *bitmap, wxNullBitmap, true, 0, wxDefaultCoord, NULL, symbol->GetName());
 
            delete bitmap;
       }
@@ -189,7 +189,7 @@ bool csApp::CreatePalette(wxFrame *parent)
     csSymbol* symbol = (csSymbol*) node->Data();
 
     wxBitmap* bitmap = GetSymbolDatabase()->CreateToolBitmap(symbol, toolBitmapSize);
-    palette->AddTool(symbol->GetToolId(), *bitmap, wxNullBitmap, true, 0, wxDefaultPosition.y, NULL, symbol->GetName());
+    palette->AddTool(symbol->GetToolId(), *bitmap, wxNullBitmap, true, 0, wxDefaultCoord, NULL, symbol->GetName());
 
     delete bitmap;
 

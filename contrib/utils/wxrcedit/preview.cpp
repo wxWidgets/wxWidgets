@@ -80,7 +80,7 @@ PreviewFrame::PreviewFrame()
     ResetResource();
 
     wxConfigBase *cfg = wxConfigBase::Get();
-    SetSize(wxRect(wxPoint(cfg->Read(_T("previewframe_x"), wxDefaultPosition.x), cfg->Read(_T("previewframe_y"), wxDefaultPosition.y)),
+    SetSize(wxRect(wxPoint(cfg->Read(_T("previewframe_x"), wxDefaultCoord), cfg->Read(_T("previewframe_y"), wxDefaultCoord)),
             wxSize(cfg->Read(_T("previewframe_w"), 400), cfg->Read(_T("previewframe_h"), 400))));
 
     m_Splitter = new wxSplitterWindow(this, wxID_ANY);

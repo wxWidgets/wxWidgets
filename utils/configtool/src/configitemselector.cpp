@@ -102,7 +102,7 @@ void ctConfigItemsSelector::CreateControls()
     item3->Add(item5, 0, wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE, 5);
 
     wxString* item6Strings = NULL;
-    wxListBox* item6 = new wxListBox(item1, ID_AVAILABLE_CONFIG_ITEMS, wxDefaultPosition, wxSize(wxDefaultSize.x, 150), 0, item6Strings, wxLB_SINGLE|wxLB_SORT);
+    wxListBox* item6 = new wxListBox(item1, ID_AVAILABLE_CONFIG_ITEMS, wxDefaultPosition, wxSize(wxDefaultCoord, 150), 0, item6Strings, wxLB_SINGLE|wxLB_SORT);
     item3->Add(item6, 1, wxGROW|wxALL, 5);
 
     wxStaticText* item7 = new wxStaticText(item1, wxID_STATIC, _("&List of configuration items:"), wxDefaultPosition, wxDefaultSize, 0);
@@ -112,7 +112,7 @@ void ctConfigItemsSelector::CreateControls()
     item3->Add(item8, 0, wxGROW, 5);
 
     wxString* item9Strings = NULL;
-    wxListBox* item9 = new wxListBox(item1, ID_CONFIG_ITEMS, wxDefaultPosition, wxSize(wxDefaultSize.x, 100), 0, item9Strings, wxLB_SINGLE);
+    wxListBox* item9 = new wxListBox(item1, ID_CONFIG_ITEMS, wxDefaultPosition, wxSize(wxDefaultCoord, 100), 0, item9Strings, wxLB_SINGLE);
     item8->Add(item9, 1, wxGROW|wxALL, 5);
 
     wxBoxSizer* item10 = new wxBoxSizer(wxVERTICAL);

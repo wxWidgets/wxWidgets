@@ -103,7 +103,7 @@ wxNumberEntryDialog::wxNumberEntryDialog(wxWindow *parent,
     // spin ctrl
     wxString valStr;
     valStr.Printf(wxT("%ld"), m_value);
-    m_spinctrl = new wxSpinCtrl(this, wxID_ANY, valStr, wxDefaultPosition, wxSize( 140, wxDefaultSize.y ) );
+    m_spinctrl = new wxSpinCtrl(this, wxID_ANY, valStr, wxDefaultPosition, wxSize( 140, wxDefaultCoord ) );
 #if wxUSE_SPINCTRL
     m_spinctrl->SetRange((int)m_min, (int)m_max);
 #endif

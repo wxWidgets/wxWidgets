@@ -129,7 +129,7 @@ class PropsTree: public wxRemotelyScrolledTreeCtrl
             wxRect bounding;
             GetBoundingRect(id, bounding);
 
-            m_EditCtrl->Move(wxDefaultPosition.x, bounding.y);
+            m_EditCtrl->Move(wxDefaultCoord, bounding.y);
         }
 
         PropEditCtrl *m_EditCtrl;
@@ -245,7 +245,7 @@ PropertiesFrame::PropertiesFrame()
     m_tree->SetCompanionWindow(m_valueWindow);
 
     wxConfigBase *cfg = wxConfigBase::Get();
-    SetSize(wxRect(wxPoint(cfg->Read(_T("propertiesframe_x"), wxDefaultPosition.x), cfg->Read(_T("propertiesframe_y"), wxDefaultPosition.y)),
+    SetSize(wxRect(wxPoint(cfg->Read(_T("propertiesframe_x"), wxDefaultCoord), cfg->Read(_T("propertiesframe_y"), wxDefaultCoord)),
             wxSize(cfg->Read(_T("propertiesframe_w"), 200), cfg->Read(_T("propertiesframe_h"), 200))));
 
 

@@ -43,9 +43,9 @@ bool wxStaticPicture::Create(wxWindow *parent, wxWindowID id,
     wxSize size = s ;
     if ( bitmap.Ok() )
     {
-        if ( size.x == wxDefaultSize.x )
+        if ( size.x == wxDefaultCoord )
             size.x = bitmap.GetWidth() ;
-        if ( size.y == wxDefaultSize.y )
+        if ( size.y == wxDefaultCoord )
             size.y = bitmap.GetHeight() ;
     }
 

@@ -465,7 +465,7 @@ bool wxPropertyListView::CreateControls()
     }
 
     m_valueText = new wxPropertyTextEdit(this, panel, wxID_PROP_TEXT, wxEmptyString,
-       wxDefaultPosition, wxSize(wxDefaultSize.x, smallButtonSize.y), wxPROCESS_ENTER);
+       wxDefaultPosition, wxSize(wxDefaultCoord, smallButtonSize.y), wxPROCESS_ENTER);
     m_valueText->Disable();
     topsizer->Add( m_valueText, 1, wxALL | wxEXPAND, buttonborder );
 
@@ -482,7 +482,7 @@ bool wxPropertyListView::CreateControls()
 
     m_middleSizer = new wxBoxSizer( wxVERTICAL );
 
-    m_valueList = new wxListBox(panel, wxID_PROP_VALUE_SELECT, wxDefaultPosition, wxSize(wxDefaultSize.x, 60));
+    m_valueList = new wxListBox(panel, wxID_PROP_VALUE_SELECT, wxDefaultPosition, wxSize(wxDefaultCoord, 60));
     m_valueList->Show(false);
 
     m_propertyScrollingList = new wxListBox(panel, wxID_PROP_SELECT, wxDefaultPosition, wxSize(100, 100));
@@ -1656,7 +1656,7 @@ bool wxListOfStringsListValidator::EditStringList(wxWindow *parent, wxStringList
 
   dialog->m_stringText = new wxPropertyStringListEditorText(dialog,
        wxID_PROP_SL_TEXT, wxEmptyString, wxPoint(5, 240),
-       wxSize(300, wxDefaultSize.y), wxPROCESS_ENTER);
+       wxSize(300, wxDefaultCoord), wxPROCESS_ENTER);
   dialog->m_stringText->Disable();
 
   wxButton *addButton = new wxButton(dialog, wxID_PROP_SL_ADD, wxT("Add"), wxDefaultPosition, wxSize(largeButtonWidth, largeButtonHeight));

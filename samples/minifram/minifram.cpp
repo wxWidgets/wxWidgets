@@ -100,24 +100,24 @@ bool MyApp::InitToolbar(wxToolBar* toolBar)
   int width = 16;
   int currentX = 5;
 
-  toolBar->AddTool(wxID_NEW, *(toolBarBitmaps[0]), wxNullBitmap, false, currentX, wxDefaultPosition.y, (wxObject *) NULL, _T("New file"));
+  toolBar->AddTool(wxID_NEW, *(toolBarBitmaps[0]), wxNullBitmap, false, currentX, wxDefaultCoord, (wxObject *) NULL, _T("New file"));
   currentX += width + 5;
-  toolBar->AddTool(wxID_OPEN, *(toolBarBitmaps[1]), wxNullBitmap, false, currentX, wxDefaultPosition.y, (wxObject *) NULL, _T("Open file"));
+  toolBar->AddTool(wxID_OPEN, *(toolBarBitmaps[1]), wxNullBitmap, false, currentX, wxDefaultCoord, (wxObject *) NULL, _T("Open file"));
   currentX += width + 5;
-  toolBar->AddTool(wxID_SAVE, *(toolBarBitmaps[2]), wxNullBitmap, false, currentX, wxDefaultPosition.y, (wxObject *) NULL, _T("Save file"));
-  currentX += width + 5;
-  toolBar->AddSeparator();
-  toolBar->AddTool(wxID_COPY, *(toolBarBitmaps[3]), wxNullBitmap, false, currentX, wxDefaultPosition.y, (wxObject *) NULL, _T("Copy"));
-  currentX += width + 5;
-  toolBar->AddTool(wxID_CUT, *(toolBarBitmaps[4]), wxNullBitmap, false, currentX, wxDefaultPosition.y, (wxObject *) NULL, _T("Cut"));
-  currentX += width + 5;
-  toolBar->AddTool(wxID_PASTE, *(toolBarBitmaps[5]), wxNullBitmap, false, currentX, wxDefaultPosition.y, (wxObject *) NULL, _T("Paste"));
+  toolBar->AddTool(wxID_SAVE, *(toolBarBitmaps[2]), wxNullBitmap, false, currentX, wxDefaultCoord, (wxObject *) NULL, _T("Save file"));
   currentX += width + 5;
   toolBar->AddSeparator();
-  toolBar->AddTool(wxID_PRINT, *(toolBarBitmaps[6]), wxNullBitmap, false, currentX, wxDefaultPosition.y, (wxObject *) NULL, _T("Reparent the button"));
+  toolBar->AddTool(wxID_COPY, *(toolBarBitmaps[3]), wxNullBitmap, false, currentX, wxDefaultCoord, (wxObject *) NULL, _T("Copy"));
+  currentX += width + 5;
+  toolBar->AddTool(wxID_CUT, *(toolBarBitmaps[4]), wxNullBitmap, false, currentX, wxDefaultCoord, (wxObject *) NULL, _T("Cut"));
+  currentX += width + 5;
+  toolBar->AddTool(wxID_PASTE, *(toolBarBitmaps[5]), wxNullBitmap, false, currentX, wxDefaultCoord, (wxObject *) NULL, _T("Paste"));
   currentX += width + 5;
   toolBar->AddSeparator();
-  toolBar->AddTool(wxID_HELP, *(toolBarBitmaps[7]), wxNullBitmap, false, currentX, wxDefaultPosition.y, (wxObject *) NULL, _T("Help"));
+  toolBar->AddTool(wxID_PRINT, *(toolBarBitmaps[6]), wxNullBitmap, false, currentX, wxDefaultCoord, (wxObject *) NULL, _T("Reparent the button"));
+  currentX += width + 5;
+  toolBar->AddSeparator();
+  toolBar->AddTool(wxID_HELP, *(toolBarBitmaps[7]), wxNullBitmap, false, currentX, wxDefaultCoord, (wxObject *) NULL, _T("Help"));
 
   toolBar->Realize();
 

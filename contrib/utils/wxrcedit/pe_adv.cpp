@@ -151,7 +151,7 @@ void PropEditCtrlFlags::OnDetails()
     wxConfigBase *cfg = wxConfigBase::Get();
 
     wxDialog dlg(m_PropFrame, wxID_ANY, _("Flags"),
-            wxPoint(cfg->Read(_T("flagsdlg_x"), wxDefaultPosition.x), cfg->Read(_T("flagsdlg_y"), wxDefaultPosition.y)),
+            wxPoint(cfg->Read(_T("flagsdlg_x"), wxDefaultCoord), cfg->Read(_T("flagsdlg_y"), wxDefaultCoord)),
             wxSize(cfg->Read(_T("flagsdlg_w"), 300), cfg->Read(_T("flagsdlg_h"), 300)),
             wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER);
     wxSizer *sz = new wxBoxSizer(wxVERTICAL);

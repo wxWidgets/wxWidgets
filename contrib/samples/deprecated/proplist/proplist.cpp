@@ -307,7 +307,7 @@ void MyApp::PropertyFormTest(bool useDialog)
 
     // The name of this text item matches the "fred" property
     wxTextCtrl *text = new wxTextCtrl(panel, wxID_ANY, _T("Fred"), wxDefaultPosition,
-        wxSize( 200, wxDefaultSize.y), 0, wxDefaultValidator, _T("fred"));
+        wxSize( 200, wxDefaultCoord), 0, wxDefaultValidator, _T("fred"));
 
     c = new wxLayoutConstraints;
     c->left.SameAs(panel, wxLeft, 4);

@@ -520,7 +520,7 @@ void wxNewBitmapButton::RenderLabelImage( wxBitmap*& destBmp, wxBitmap* srcBmp,
     if ( !mSizeIsSet && 0 )
     {
         mSizeIsSet = true;
-        SetSize( wxDefaultPosition.x,wxDefaultPosition.y,
+        SetSize( wxDefaultCoord, wxDefaultCoord,
                  destBmp->GetWidth()  + mMarginX*2,
                  destBmp->GetHeight() + mMarginY*2, 0
             );

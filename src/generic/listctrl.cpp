@@ -2105,7 +2105,7 @@ void wxListTextCtrl::OnKeyUp( wxKeyEvent &event )
         sx = parentSize.x - myPos.x;
     if (mySize.x > sx)
         sx = mySize.x;
-    SetSize(sx, wxDefaultSize.y);
+    SetSize(sx, wxDefaultCoord);
 
     event.Skip();
 }

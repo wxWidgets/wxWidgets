@@ -104,7 +104,7 @@ bool wxStatusBarGeneric::Create(wxWindow *parent,
 
   int height = (int)( (11*y)/10 + 2*GetBorderY());
 
-  SetSize(wxDefaultPosition.x, wxDefaultPosition.y, wxDefaultSize.x, height);
+  SetSize(wxDefaultCoord, wxDefaultCoord, wxDefaultCoord, height);
 
   SetFieldsCount(1);
 
@@ -395,7 +395,7 @@ void wxStatusBarGeneric::SetMinHeight(int height)
 
     if ( height > (11*y)/10 )
     {
-        SetSize(wxDefaultPosition.x, wxDefaultPosition.y, wxDefaultSize.x, height + 2*m_borderY);
+        SetSize(wxDefaultCoord, wxDefaultCoord, wxDefaultCoord, height + 2*m_borderY);
     }
 }
 

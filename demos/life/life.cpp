@@ -154,7 +154,7 @@ IMPLEMENT_APP(LifeApp)
 
 // some shortcuts
 #define ADD_TOOL(id, bmp, tooltip, help) \
-    toolBar->AddTool(id, bmp, wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, (wxObject *)NULL, tooltip, help)
+    toolBar->AddTool(id, bmp, wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, (wxObject *)NULL, tooltip, help)
 
 
 // --------------------------------------------------------------------------
@@ -296,7 +296,7 @@ LifeFrame::LifeFrame() : wxFrame( (wxFrame *) NULL, wxID_ANY,
     wxSlider *slider = new wxSlider(panel2, ID_SLIDER,
         5, 1, 10,
         wxDefaultPosition,
-        wxSize(200, wxDefaultSize.y),
+        wxSize(200, wxDefaultCoord),
         wxSL_HORIZONTAL | wxSL_AUTOTICKS);
 
     UpdateInfoText();

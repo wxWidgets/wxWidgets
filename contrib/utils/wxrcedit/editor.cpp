@@ -192,7 +192,7 @@ EditorFrame::EditorFrame(wxFrame *parent, const wxString& filename)
 
     wxConfigBase *cfg = wxConfigBase::Get();
 
-    SetSize(wxRect(wxPoint(cfg->Read(_T("editor_x"), wxDefaultPosition.x), cfg->Read(_T("editor_y"), wxDefaultPosition.y)),
+    SetSize(wxRect(wxPoint(cfg->Read(_T("editor_x"), wxDefaultCoord), cfg->Read(_T("editor_y"), wxDefaultCoord)),
             wxSize(cfg->Read(_T("editor_w"), 400), cfg->Read(_T("editor_h"), 400))));
 
     m_SelectedNode = NULL;
@@ -228,16 +228,16 @@ EditorFrame::EditorFrame(wxFrame *parent, const wxString& filename)
     toolBar->SetMargins(2, 2);
     toolBar->SetToolBitmapSize(wxSize(24, 24));
     toolBar -> AddTool(ID_EXIT, wxBITMAP(close), wxNullBitmap,
-                       false, wxDefaultPosition.x, wxDefaultPosition.y, (wxObject *) NULL,
+                       false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL,
                        _("Quit the editor"));
     toolBar -> AddTool(ID_OPEN, wxBITMAP(open), wxNullBitmap,
-                       false, wxDefaultPosition.x, wxDefaultPosition.y, (wxObject *) NULL,
+                       false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL,
                        _("Open XML resource file"));
     toolBar -> AddTool(ID_SAVE, wxBITMAP(save), wxNullBitmap,
-                       false, wxDefaultPosition.x, wxDefaultPosition.y, (wxObject *) NULL,
+                       false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL,
                        _("Save XML file"));
     toolBar -> AddTool(ID_PREVIEW, wxBITMAP(preview), wxNullBitmap,
-                       false, wxDefaultPosition.x, wxDefaultPosition.y, (wxObject *) NULL,
+                       false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL,
                        _("Preview"));
     toolBar -> Realize();
 

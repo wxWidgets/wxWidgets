@@ -102,11 +102,11 @@ EditorToolPalette *MyApp::CreatePalette(wxFrame *parent)
   palette->SetMargins(2, 2);
   palette->SetToolBitmapSize(wxSize(22, 22));
 
-  palette->AddTool(PALETTE_ARROW, PaletteArrow, wxNullBitmap, true, 0, wxDefaultPosition.y, NULL, _T("Pointer"));
-  palette->AddTool(PALETTE_TOOL1, PaletteTool1, wxNullBitmap, true, 0, wxDefaultPosition.y, NULL, _T("Tool 1"));
-  palette->AddTool(PALETTE_TOOL2, PaletteTool2, wxNullBitmap, true, 0, wxDefaultPosition.y, NULL, _T("Tool 2"));
-  palette->AddTool(PALETTE_TOOL3, PaletteTool3, wxNullBitmap, true, 0, wxDefaultPosition.y, NULL, _T("Tool 3"));
-  palette->AddTool(PALETTE_TOOL4, PaletteTool4, wxNullBitmap, true, 0, wxDefaultPosition.y, NULL, _T("Tool 4"));
+  palette->AddTool(PALETTE_ARROW, PaletteArrow, wxNullBitmap, true, 0, wxDefaultCoord, NULL, _T("Pointer"));
+  palette->AddTool(PALETTE_TOOL1, PaletteTool1, wxNullBitmap, true, 0, wxDefaultCoord, NULL, _T("Tool 1"));
+  palette->AddTool(PALETTE_TOOL2, PaletteTool2, wxNullBitmap, true, 0, wxDefaultCoord, NULL, _T("Tool 2"));
+  palette->AddTool(PALETTE_TOOL3, PaletteTool3, wxNullBitmap, true, 0, wxDefaultCoord, NULL, _T("Tool 3"));
+  palette->AddTool(PALETTE_TOOL4, PaletteTool4, wxNullBitmap, true, 0, wxDefaultCoord, NULL, _T("Tool 4"));
 
   palette->Realize();
 

@@ -314,8 +314,8 @@ void wxMultiCellSizer::RecalcSizes()
 
             c_size = rect->GetLocalSize();
             wxSize minSize( item->CalcMin() );
-            if (c_size.GetHeight() != wxDefaultSize.GetHeight() ||
-                c_size.GetWidth() != wxDefaultSize.GetWidth())
+            if (c_size.GetHeight() != wxDefaultCoord ||
+                c_size.GetWidth() != wxDefaultCoord)
             {
                 minSize.SetHeight(wxMax(minSize.GetHeight(), c_size.GetHeight()));
                 minSize.SetWidth(wxMax(minSize.GetWidth(), c_size.GetWidth()));
@@ -454,8 +454,8 @@ void wxMultiCellSizer :: GetMinimums()
 
             wxSize minSize( item->CalcMin() );
             wxSize c_size = rect->GetLocalSize();
-            if (c_size.GetHeight() != wxDefaultSize.GetHeight() ||
-                c_size.GetWidth() != wxDefaultSize.GetWidth())
+            if (c_size.GetHeight() != wxDefaultCoord ||
+                c_size.GetWidth() != wxDefaultCoord)
             {
                 minSize.SetHeight(wxMax(minSize.GetHeight(), c_size.GetHeight()));
                 minSize.SetWidth(wxMax(minSize.GetWidth(), c_size.GetWidth()));

@@ -62,10 +62,10 @@ void PropEditCtrl::BeginEdit(const wxRect& rect, wxTreeItemId ti)
         sz->Add(m_TheCtrl, 1);
         if (HasDetails())
             sz->Add(new wxButton(this, ID_DETAILS, _T("..."), wxDefaultPosition,
-                    wxSize(16,wxDefaultSize.y)));
+                    wxSize(16,wxDefaultCoord)));
         if (HasClearButton())
             sz->Add(new wxButton(this, ID_CLEAR, _T("X"), wxDefaultPosition,
-                    wxSize(16,wxDefaultSize.y)));
+                    wxSize(16,wxDefaultCoord)));
         SetSizer(sz);
         m_Created = true;
     }

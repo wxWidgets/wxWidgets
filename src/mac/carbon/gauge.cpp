@@ -36,7 +36,7 @@ bool wxGauge::Create(wxWindow *parent, wxWindowID id,
 
     wxSize size = s ;
     /*
-    if ( size.x == wxDefaultSize.x && size.y == wxDefaultSize.y)
+    if ( size.x == wxDefaultCoord && size.y == wxDefaultCoord)
     {
         size = wxSize( 200 , 16 ) ;
     }

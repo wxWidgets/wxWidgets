@@ -146,8 +146,8 @@ MyScrolledWindow::MyScrolledWindow( wxWindow *parent, wxWindowID id,
                     const wxPoint &pos, const wxSize &size )
         : wxScrolledWindow( parent, id, pos, size, wxSUNKEN_BORDER, _T("test canvas") )
 {
-    MyTopLabels *top = new MyTopLabels( this, wxID_ANY, wxDefaultPosition, wxSize(wxDefaultSize.x,25) );
-    MyRightLabels *right = new MyRightLabels( this, wxID_ANY, wxDefaultPosition, wxSize(60,wxDefaultSize.y) );
+    MyTopLabels *top = new MyTopLabels( this, wxID_ANY, wxDefaultPosition, wxSize(wxDefaultCoord,25) );
+    MyRightLabels *right = new MyRightLabels( this, wxID_ANY, wxDefaultPosition, wxSize(60,wxDefaultCoord) );
 
     m_canvas = new MyCanvas( this, top, right, wxID_ANY, wxDefaultPosition, wxDefaultSize );
 

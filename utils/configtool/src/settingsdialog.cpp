@@ -100,7 +100,7 @@ void ctSettingsDialog::CreateControls()
     item21->Add(item25, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 #if defined(__WXGTK__) || defined(__WXMAC__)
-    wxContextHelpButton* item26 = new wxContextHelpButton(item1, wxID_CONTEXT_HELP, wxDefaultPosition, wxSize(20, wxDefaultSize.y), wxBU_AUTODRAW);
+    wxContextHelpButton* item26 = new wxContextHelpButton(item1, wxID_CONTEXT_HELP, wxDefaultPosition, wxSize(20, wxDefaultCoord), wxBU_AUTODRAW);
     item21->Add(item26, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 #endif
 
@@ -239,7 +239,7 @@ void ctGeneralSettingsDialog::CreateControls()
         _("Setup file"),
         _("Configure script")
     };
-    wxChoice* item10 = new wxChoice(item4, ID_DEFAULT_FILE_KIND, wxDefaultPosition, wxSize(200, wxDefaultSize.y), 2, item10Strings, 0);
+    wxChoice* item10 = new wxChoice(item4, ID_DEFAULT_FILE_KIND, wxDefaultPosition, wxSize(200, wxDefaultCoord), 2, item10Strings, 0);
     item10->SetStringSelection(_("Setup file"));
     item10->SetHelpText(_("Select the default kind of file to save using Go"));
 #if wxUSE_TOOLTIPS
@@ -321,7 +321,7 @@ void ctLocationSettingsDialog::CreateControls()
     wxBoxSizer* item15 = new wxBoxSizer(wxHORIZONTAL);
     item13->Add(item15, 0, wxGROW, 5);
 
-    wxTextCtrl* item16 = new wxTextCtrl(item11, ID_WXWIN_HIERARCHY, wxEmptyString, wxDefaultPosition, wxSize(200, wxDefaultSize.y), 0);
+    wxTextCtrl* item16 = new wxTextCtrl(item11, ID_WXWIN_HIERARCHY, wxEmptyString, wxDefaultPosition, wxSize(200, wxDefaultCoord), 0);
     item16->SetHelpText(_("Enter the root path of the wxWidgets hierarchy"));
 #if wxUSE_TOOLTIPS
     if (ShowToolTips())

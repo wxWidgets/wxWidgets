@@ -343,7 +343,7 @@ void MyFrame::RecreateToolbar()
     // adding a combo to a vertical toolbar is not very smart
     if ( m_horzToolbar )
     {
-        wxComboBox *combo = new wxComboBox(toolBar, ID_COMBO, _T(""), wxDefaultPosition, wxSize(200,wxDefaultSize.y) );
+        wxComboBox *combo = new wxComboBox(toolBar, ID_COMBO, _T(""), wxDefaultPosition, wxSize(200,wxDefaultCoord) );
         combo->Append(_T("This"));
         combo->Append(_T("is a"));
         combo->Append(_T("combobox"));
@@ -483,7 +483,7 @@ void MyFrame::LayoutChildren()
     int offset;
     if ( m_tbar )
     {
-        m_tbar->SetSize(wxDefaultSize.x, size.y);
+        m_tbar->SetSize(wxDefaultCoord, size.y);
         m_tbar->Move(0, 0);
 
         offset = m_tbar->GetSize().x;

@@ -849,7 +849,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     // single line text controls
 
     m_text = new MyTextCtrl( this, wxID_ANY, _T("Single line."),
-                             wxPoint(10,10), wxSize(140,wxDefaultSize.y),
+                             wxPoint(10,10), wxSize(140,wxDefaultCoord),
                              wxTE_PROCESS_ENTER);
     m_text->SetForegroundColour(*wxBLUE);
     m_text->SetBackgroundColour(*wxLIGHT_GREY);
@@ -858,13 +858,13 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_text->WriteText( _T("Prepended. ") );
 
     m_password = new MyTextCtrl( this, wxID_ANY, _T(""),
-      wxPoint(10,50), wxSize(140,wxDefaultSize.y), wxTE_PASSWORD );
+      wxPoint(10,50), wxSize(140,wxDefaultCoord), wxTE_PASSWORD );
 
     m_readonly = new MyTextCtrl( this, wxID_ANY, _T("Read only"),
-      wxPoint(10,90), wxSize(140,wxDefaultSize.y), wxTE_READONLY );
+      wxPoint(10,90), wxSize(140,wxDefaultCoord), wxTE_READONLY );
 
     m_limited = new MyTextCtrl(this, wxID_ANY, _T("Max 8 ch"),
-                              wxPoint(10, 130), wxSize(140, wxDefaultSize.y));
+                              wxPoint(10, 130), wxSize(140, wxDefaultCoord));
     m_limited->SetMaxLength(8);
 
     // multi line text controls

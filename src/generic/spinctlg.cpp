@@ -62,7 +62,7 @@ public:
         m_spin = spin;
 
         // remove the default minsize, the spinctrl will have one instead
-        SetSizeHints(wxDefaultSize.x,wxDefaultSize.y);
+        SetSizeHints(wxDefaultCoord,wxDefaultCoord);
     }
 
 protected:
@@ -111,7 +111,7 @@ public:
         SetWindowStyle(style | wxSP_VERTICAL);
 
         // remove the default minsize, the spinctrl will have one instead
-        SetSizeHints(wxDefaultSize.x,wxDefaultSize.y);
+        SetSizeHints(wxDefaultCoord,wxDefaultCoord);
     }
 
 protected:
@@ -234,7 +234,7 @@ void wxSpinCtrl::DoMoveWindow(int x, int y, int width, int height)
 
     wxCoord wText = width - sizeBtn.x;
     m_text->SetSize(x, y, wText, height);
-    m_btn->SetSize(x + wText + MARGIN, y, wxDefaultSize.x, height);
+    m_btn->SetSize(x + wText + MARGIN, y, wxDefaultCoord, height);
 }
 
 // ----------------------------------------------------------------------------

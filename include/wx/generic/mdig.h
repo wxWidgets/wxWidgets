@@ -160,10 +160,10 @@ public:
     // no size hints
     virtual void SetSizeHints( int WXUNUSED(minW),
                                int WXUNUSED(minH),
-                               int WXUNUSED(maxW) = wxDefaultSize.x,
-                               int WXUNUSED(maxH) = wxDefaultSize.y,
-                               int WXUNUSED(incW) = wxDefaultSize.x,
-                               int WXUNUSED(incH) = wxDefaultSize.y) {}
+                               int WXUNUSED(maxW) = wxDefaultCoord,
+                               int WXUNUSED(maxH) = wxDefaultCoord,
+                               int WXUNUSED(incW) = wxDefaultCoord,
+                               int WXUNUSED(incH) = wxDefaultCoord) {}
 
 #if wxUSE_TOOLBAR
     // no toolbar bars

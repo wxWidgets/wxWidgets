@@ -1535,15 +1535,15 @@ void wxWindowMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
         return;
     }
 
-    if ( x == wxDefaultPosition.x && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE) )
+    if ( x == wxDefaultCoord && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE) )
         x = currentX;
-    if ( y == wxDefaultPosition.y && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE) )
+    if ( y == wxDefaultCoord && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE) )
         y = currentY;
 
     AdjustForParentClientOrigin(x, y, sizeFlags);
 
     wxSize size = wxDefaultSize;
-    if ( width == wxDefaultSize.x )
+    if ( width == wxDefaultCoord )
     {
         if ( sizeFlags & wxSIZE_AUTO_WIDTH )
         {
@@ -1557,11 +1557,11 @@ void wxWindowMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
         }
     }
 
-    if ( height == wxDefaultSize.y )
+    if ( height == wxDefaultCoord )
     {
         if ( sizeFlags & wxSIZE_AUTO_HEIGHT )
         {
-            if ( size.x == wxDefaultSize.x )
+            if ( size.x == wxDefaultCoord )
             {
                 size = DoGetBestSize();
             }
@@ -1599,8 +1599,8 @@ void wxWindowMSW::DoSetClientSize(int width, int height)
         ::GetClientRect(GetHwnd(), &rectClient);
 
         // if the size is already ok, stop here (rectClient.left = top = 0)
-        if ( (rectClient.right == width || width == wxDefaultSize.x) &&
-             (rectClient.bottom == height || height == wxDefaultSize.y) )
+        if ( (rectClient.right == width || width == wxDefaultCoord) &&
+             (rectClient.bottom == height || height == wxDefaultCoord) )
         {
             break;
         }
@@ -3010,7 +3010,7 @@ bool wxWindowMSW::MSWGetCreateWindowCoords(const wxPoint& pos,
 
     bool nonDefault = false;
 
-    if ( pos.x == wxDefaultPosition.x )
+    if ( pos.x == wxDefaultCoord )
     {
         // if x is set to CW_USEDEFAULT, y parameter is ignored anyhow so we
         // can just as well set it to CW_USEDEFAULT as well
@@ -3023,7 +3023,7 @@ bool wxWindowMSW::MSWGetCreateWindowCoords(const wxPoint& pos,
         // neither because it is not handled as a special value by Windows then
         // and so we have to choose some default value for it
         x = pos.x;
-        y = pos.y == wxDefaultPosition.y ? DEFAULT_Y : pos.y;
+        y = pos.y == wxDefaultCoord ? DEFAULT_Y : pos.y;
 
         nonDefault = true;
     }
@@ -3067,16 +3067,16 @@ bool wxWindowMSW::MSWGetCreateWindowCoords(const wxPoint& pos,
     // However, on PocketPC devices, we must use the default
     // size if possible.
 #ifdef _WIN32_WCE
-    if (size.x == wxDefaultSize.x)
+    if (size.x == wxDefaultCoord)
         w = CW_USEDEFAULT;
     else
         w = size.x;
-    if (size.y == wxDefaultSize.y)
+    if (size.y == wxDefaultCoord)
         h = CW_USEDEFAULT;
     else
         h = size.y;
 #else
-    if ( size.x == wxDefaultSize.x || size.y == wxDefaultSize.y)
+    if ( size.x == wxDefaultCoord || size.y == wxDefaultCoord)
     {
         nonDefault = true;
     }
@@ -4191,25 +4191,25 @@ bool wxWindowMSW::HandleGetMinMaxInfo(void *mmInfo)
         maxWidth = GetMaxWidth(),
         maxHeight = GetMaxHeight();
 
-    if ( minWidth != wxDefaultSize.x )
+    if ( minWidth != wxDefaultCoord )
     {
         info->ptMinTrackSize.x = minWidth;
         rc = true;
     }
 
-    if ( minHeight != wxDefaultSize.y )
+    if ( minHeight != wxDefaultCoord )
     {
         info->ptMinTrackSize.y = minHeight;
         rc = true;
     }
 
-    if ( maxWidth != wxDefaultSize.x )
+    if ( maxWidth != wxDefaultCoord )
     {
         info->ptMaxTrackSize.x = maxWidth;
         rc = true;
     }
 
-    if ( maxHeight != wxDefaultSize.y )
+    if ( maxHeight != wxDefaultCoord )
     {
         info->ptMaxTrackSize.y = maxHeight;
         rc = true;

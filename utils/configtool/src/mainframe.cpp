@@ -248,22 +248,22 @@ void ctMainFrame::InitToolBar(wxToolBar* toolBar)
     toolBarBitmaps[12] = wxBitmap(help_xpm);
     toolBarBitmaps[13] = wxBitmap(helpcs_xpm);
 
-    toolBar->AddTool(wxID_NEW, toolBarBitmaps[0], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, (wxObject *) NULL, wxT("New project"));
-    toolBar->AddTool(wxID_OPEN, toolBarBitmaps[1], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, (wxObject *) NULL, wxT("Open project"));
-    toolBar->AddTool(wxID_SAVE, toolBarBitmaps[2], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, (wxObject *) NULL, wxT("Save project"));
+    toolBar->AddTool(wxID_NEW, toolBarBitmaps[0], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL, wxT("New project"));
+    toolBar->AddTool(wxID_OPEN, toolBarBitmaps[1], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL, wxT("Open project"));
+    toolBar->AddTool(wxID_SAVE, toolBarBitmaps[2], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL, wxT("Save project"));
 
     toolBar->AddSeparator();
-    toolBar->AddTool(wxID_CUT, toolBarBitmaps[4], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, (wxObject *) NULL, wxT("Cut"));
-    toolBar->AddTool(wxID_COPY, toolBarBitmaps[3], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, (wxObject *) NULL, wxT("Copy"));
-    toolBar->AddTool(wxID_PASTE, toolBarBitmaps[5], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, (wxObject *) NULL, wxT("Paste"));
+    toolBar->AddTool(wxID_CUT, toolBarBitmaps[4], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL, wxT("Cut"));
+    toolBar->AddTool(wxID_COPY, toolBarBitmaps[3], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL, wxT("Copy"));
+    toolBar->AddTool(wxID_PASTE, toolBarBitmaps[5], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL, wxT("Paste"));
     toolBar->AddSeparator();
-    toolBar->AddTool(wxID_UNDO, toolBarBitmaps[10], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, (wxObject *) NULL, wxT("Undo"));
-    toolBar->AddTool(wxID_REDO, toolBarBitmaps[11], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, (wxObject *) NULL, wxT("Redo"));
+    toolBar->AddTool(wxID_UNDO, toolBarBitmaps[10], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL, wxT("Undo"));
+    toolBar->AddTool(wxID_REDO, toolBarBitmaps[11], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL, wxT("Redo"));
     toolBar->AddSeparator();
-    toolBar->AddTool(ctID_GO, toolBarBitmaps[6], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, (wxObject *) NULL, wxT("Save setup.h or configurewx.sh"));
+    toolBar->AddTool(ctID_GO, toolBarBitmaps[6], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL, wxT("Save setup.h or configurewx.sh"));
     toolBar->AddSeparator();
-    toolBar->AddTool(ctID_ITEM_HELP, toolBarBitmaps[12], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, (wxObject *) NULL, wxT("Show help for this option"));
-    toolBar->AddTool(wxID_HELP_CONTEXT, toolBarBitmaps[13], wxNullBitmap, false, wxDefaultPosition.x, wxDefaultPosition.y, (wxObject *) NULL, wxT("Show help on the clicked item"));
+    toolBar->AddTool(ctID_ITEM_HELP, toolBarBitmaps[12], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL, wxT("Show help for this option"));
+    toolBar->AddTool(wxID_HELP_CONTEXT, toolBarBitmaps[13], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL, wxT("Show help on the clicked item"));
 
     // after adding the buttons to the toolbar, must call Realize() to reflect
     // the changes

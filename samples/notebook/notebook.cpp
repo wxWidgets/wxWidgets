@@ -36,7 +36,7 @@ bool MyApp::OnInit()
 #if defined(__WXMOTIF__)
     int width, height;
     frame->GetSize(& width, & height);
-    frame->SetSize(wxDefaultPosition.x, wxDefaultPosition.y, width, height);
+    frame->SetSize(wxDefaultCoord, wxDefaultCoord, width, height);
 #endif
 
     frame->Show();

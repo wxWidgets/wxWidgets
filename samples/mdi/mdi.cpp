@@ -318,24 +318,24 @@ void MyFrame::InitToolBar(wxToolBar* toolBar)
     int width = 24;
     int currentX = 5;
 
-    toolBar->AddTool( MDI_NEW_WINDOW, *(bitmaps[0]), wxNullBitmap, false, currentX, wxDefaultPosition.y, (wxObject *) NULL, _T("New file"));
+    toolBar->AddTool( MDI_NEW_WINDOW, *(bitmaps[0]), wxNullBitmap, false, currentX, wxDefaultCoord, (wxObject *) NULL, _T("New file"));
     currentX += width + 5;
-    toolBar->AddTool(1, *bitmaps[1], wxNullBitmap, false, currentX, wxDefaultPosition.y, (wxObject *) NULL, _T("Open file"));
+    toolBar->AddTool(1, *bitmaps[1], wxNullBitmap, false, currentX, wxDefaultCoord, (wxObject *) NULL, _T("Open file"));
     currentX += width + 5;
-    toolBar->AddTool(2, *bitmaps[2], wxNullBitmap, false, currentX, wxDefaultPosition.y, (wxObject *) NULL, _T("Save file"));
-    currentX += width + 5;
-    toolBar->AddSeparator();
-    toolBar->AddTool(3, *bitmaps[3], wxNullBitmap, false, currentX, wxDefaultPosition.y, (wxObject *) NULL, _T("Copy"));
-    currentX += width + 5;
-    toolBar->AddTool(4, *bitmaps[4], wxNullBitmap, false, currentX, wxDefaultPosition.y, (wxObject *) NULL, _T("Cut"));
-    currentX += width + 5;
-    toolBar->AddTool(5, *bitmaps[5], wxNullBitmap, false, currentX, wxDefaultPosition.y, (wxObject *) NULL, _T("Paste"));
+    toolBar->AddTool(2, *bitmaps[2], wxNullBitmap, false, currentX, wxDefaultCoord, (wxObject *) NULL, _T("Save file"));
     currentX += width + 5;
     toolBar->AddSeparator();
-    toolBar->AddTool(6, *bitmaps[6], wxNullBitmap, false, currentX, wxDefaultPosition.y, (wxObject *) NULL, _T("Print"));
+    toolBar->AddTool(3, *bitmaps[3], wxNullBitmap, false, currentX, wxDefaultCoord, (wxObject *) NULL, _T("Copy"));
+    currentX += width + 5;
+    toolBar->AddTool(4, *bitmaps[4], wxNullBitmap, false, currentX, wxDefaultCoord, (wxObject *) NULL, _T("Cut"));
+    currentX += width + 5;
+    toolBar->AddTool(5, *bitmaps[5], wxNullBitmap, false, currentX, wxDefaultCoord, (wxObject *) NULL, _T("Paste"));
     currentX += width + 5;
     toolBar->AddSeparator();
-    toolBar->AddTool( MDI_ABOUT, *bitmaps[7], wxNullBitmap, true, currentX, wxDefaultPosition.y, (wxObject *) NULL, _T("Help"));
+    toolBar->AddTool(6, *bitmaps[6], wxNullBitmap, false, currentX, wxDefaultCoord, (wxObject *) NULL, _T("Print"));
+    currentX += width + 5;
+    toolBar->AddSeparator();
+    toolBar->AddTool( MDI_ABOUT, *bitmaps[7], wxNullBitmap, true, currentX, wxDefaultCoord, (wxObject *) NULL, _T("Help"));
 
     toolBar->Realize();
 

@@ -200,10 +200,10 @@ wxMonthComboBox::wxMonthComboBox(wxCalendarCtrl *cal)
     }
 
     SetSelection(m_cal->GetDate().GetMonth());
-    SetSize(wxDefaultPosition.x,
-            wxDefaultPosition.y,
-            wxDefaultSize.x,
-            wxDefaultSize.y,
+    SetSize(wxDefaultCoord,
+            wxDefaultCoord,
+            wxDefaultCoord,
+            wxDefaultCoord,
             wxSIZE_AUTO_WIDTH|wxSIZE_AUTO_HEIGHT);
 }
 

@@ -88,7 +88,7 @@ wxTextEntryDialog::wxTextEntryDialog(wxWindow *parent,
 
     // 2) text ctrl
     m_textctrl = new wxTextCtrl(this, wxID_TEXT, value,
-                                wxDefaultPosition, wxSize(300, wxDefaultSize.y),
+                                wxDefaultPosition, wxSize(300, wxDefaultCoord),
                                 style & ~wxTextEntryDialogStyle);
     topsizer->Add( m_textctrl, 1, wxEXPAND | wxLEFT|wxRIGHT, 15 );
 

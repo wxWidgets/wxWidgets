@@ -76,7 +76,7 @@ public:
 
   bool DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
             wxDC *source, wxCoord xsrc, wxCoord ysrc, int rop = wxCOPY, bool useMask = false,
-            wxCoord xsrcMask = wxDefaultPosition.x, wxCoord ysrcMask = wxDefaultPosition.y);
+            wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord);
   bool CanDrawBitmap() const { return true; }
 
   void DoDrawIcon( const wxIcon& icon, wxCoord x, wxCoord y );

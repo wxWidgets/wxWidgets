@@ -1571,7 +1571,7 @@ bool CeditorDlg::Initialize()
     choice_strings[3] = wxT("Spanish");
     choice_strings[4] = wxT("Other");
 
-    pNativeLangChoice = new wxChoice(this, EDITOR_DIALOG_LANG_CHOICE,                             wxPoint( 17, 346), wxSize(277,  wxDefaultSize.y), 5, choice_strings);
+    pNativeLangChoice = new wxChoice(this, EDITOR_DIALOG_LANG_CHOICE,                             wxPoint( 17, 346), wxSize(277,  wxDefaultCoord), 5, choice_strings);
     pNativeLangMsg    = new wxStaticText(this, EDITOR_DIALOG_LANG_MSG,   wxT("Native language:"), wxPoint( 17, 330), wxDefaultSize, 0, wxT("NativeLangMsg"));
 
     wxString radio_strings[2];

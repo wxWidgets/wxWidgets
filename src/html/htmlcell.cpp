@@ -283,7 +283,7 @@ void wxHtmlWordCell::Split(wxDC& dc,
     wxPoint pt1 = (selFrom == wxDefaultPosition) ?
                    wxDefaultPosition : selFrom - GetAbsPos();
     wxPoint pt2 = (selTo == wxDefaultPosition) ?
-                   wxPoint(m_Width, wxDefaultPosition.y) : selTo - GetAbsPos();
+                   wxPoint(m_Width, wxDefaultCoord) : selTo - GetAbsPos();
 
     wxCoord charW, charH;
     unsigned len = m_Word.length();

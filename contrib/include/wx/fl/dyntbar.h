@@ -166,7 +166,7 @@ public:
     // See the documentation for wxToolBar for details.
 
     virtual wxToolBarToolBase *AddTool(const int toolIndex, const wxBitmap& bitmap, const wxBitmap& pushedBitmap = wxNullBitmap,
-               const bool toggle = false, const long xPos = wxDefaultPosition.x, const long yPos = wxDefaultPosition.y, wxObject *clientData = NULL,
+               const bool toggle = false, const long xPos = wxDefaultCoord, const long yPos = wxDefaultCoord, wxObject *clientData = NULL,
                const wxString& helpString1 = wxT(""), const wxString& helpString2 = wxT(""));
 
         // Adds a separator. See the documentation for wxToolBar for details.
