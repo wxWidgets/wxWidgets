@@ -3878,15 +3878,156 @@ wxString wxGrid::GetColLabelValue( int col )
     }
 }
 
+
 void wxGrid::SetRowLabelSize( int width )
 {
-    // TODO: how to do this with the box sizers ?
+    wxSize sz;
+    
+    width = wxMax( width, 0 );
+    if ( width != m_rowLabelWidth )
+    {
+        // Hiding the row labels (and possible the corner label)
+        //
+        if ( width == 0 )
+        {
+            m_rowLabelWin->Show( FALSE );
+
+            // If the col labels are on display we need to hide the
+            // corner label and remove it from the top sizer
+            //
+            if ( m_colLabelHeight > 0 )
+            {
+                m_cornerLabelWin->Show( FALSE );
+                m_topSizer->Remove( m_cornerLabelWin );
+            }
+            
+            m_middleSizer->Remove( m_rowLabelWin );
+        }
+        else
+        {
+            // Displaying the row labels (and possibly the corner
+            // label) after being hidden
+            //
+            if ( m_rowLabelWidth == 0 )
+            {
+                m_rowLabelWin->Show( TRUE );
+                
+                if ( m_colLabelHeight > 0 )
+                {
+                    m_cornerLabelWin->Show( TRUE );
+                    m_topSizer->Prepend( m_cornerLabelWin, 0 );
+                }
+
+                m_middleSizer->Prepend( m_rowLabelWin, 0, wxEXPAND );
+            }
+
+
+            // set the width of the corner label if it is on display
+            //
+            if ( m_colLabelHeight > 0 )
+            {
+                wxList& childList = m_topSizer->GetChildren();
+                wxNode *node = childList.First();
+                while (node)
+                {
+                    wxSizerItem *item = (wxSizerItem*)node->Data();
+                    if ( item->GetWindow() == m_cornerLabelWin )
+                    {
+                        item->SetInitSize( width, m_colLabelHeight );
+                        break;
+                    }
+                    node = node->Next();
+                }
+            }
+
+            // set the width of the row labels
+            //
+            wxList& childList = m_middleSizer->GetChildren();
+            wxNode *node = childList.First();
+            while (node)
+            {
+                wxSizerItem *item = (wxSizerItem*)node->Data();
+                if ( item->GetWindow() == m_rowLabelWin )
+                {
+                    sz = item->GetWindow()->GetSize();
+                    item->SetInitSize( width, sz.GetHeight() );
+                    break;
+                }
+                node = node->Next();
+            }            
+        }
+    
+        m_rowLabelWidth = width;
+        m_mainSizer->Layout();
+    }
 }
+
 
 void wxGrid::SetColLabelSize( int height )
 {
-    // TODO: how to do this with the box sizers ?
+    wxSize sz;
+
+    if ( height < 0 ) height = 0;
+    if ( height != m_colLabelHeight )
+    {
+        // hiding the column labels
+        //
+        if ( height == 0 )
+        {
+            m_cornerLabelWin->Show( FALSE );
+            m_colLabelWin->Show( FALSE );
+
+            // Note: this call will actually delete the sizer
+            //
+            m_mainSizer->Remove( m_topSizer );
+            m_topSizer = (wxBoxSizer *)NULL;
+        }
+        else
+        {
+            // column labels to be displayed after being hidden
+            //
+            if ( m_colLabelHeight == 0 )
+            {
+                // recreate the top sizer
+                //
+                m_topSizer = new wxBoxSizer( wxHORIZONTAL );
+
+                if ( m_rowLabelWidth > 0 )
+                    m_topSizer->Add( m_cornerLabelWin, 0 );
+
+                m_topSizer->Add( m_colLabelWin, 1 );
+                m_mainSizer->Prepend( m_topSizer, 0, wxEXPAND );
+
+                // only show the corner label if the row labels are
+                // also displayed
+                //
+                if ( m_rowLabelWidth > 0 )
+                    m_cornerLabelWin->Show( TRUE );
+                
+                m_colLabelWin->Show( TRUE );
+            }
+            
+            wxList& childList = m_topSizer->GetChildren();
+            wxNode *node = childList.First();
+            while (node)
+            {
+                wxSizerItem *item = (wxSizerItem*)node->Data();
+
+                if ( (item->GetWindow() == m_cornerLabelWin && m_rowLabelWidth > 0) ||
+                     item->GetWindow() == m_colLabelWin )
+                {
+                    sz = item->GetWindow()->GetSize();
+                    item->SetInitSize( sz.GetWidth(), height );
+                }
+                node = node->Next();
+            }
+        }
+    
+        m_colLabelHeight = height;
+        m_mainSizer->Layout();
+    }
 }
+
 
 void wxGrid::SetLabelBackgroundColour( const wxColour& colour )
 {
