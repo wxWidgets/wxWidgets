@@ -48,8 +48,9 @@ wxSplashScreen::wxSplashScreen(const wxBitmap& bitmap, long splashStyle, int mil
 
     // For some reason, we need to make the client size a couple of pixels
     // bigger for all of the bitmap to show.
+    // Or do we?
 #ifdef __WXMSW__
-    int fudge = 2;
+    int fudge = 0;
 #else
     int fudge = 0;
 #endif
@@ -78,8 +79,7 @@ wxSplashScreen::~wxSplashScreen()
 
 void wxSplashScreen::OnNotify(wxTimerEvent& event)
 {
-    m_timer.Stop();
-    this->Destroy();
+    Close(TRUE);
 }
 
 void wxSplashScreen::OnCloseWindow(wxCloseEvent& event)

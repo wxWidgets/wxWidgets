@@ -682,7 +682,8 @@ void wxToolBarSimple::SpringUpButton(int id)
 
     if ( tool && tool->CanBeToggled() )
     {
-        tool->Toggle();
+        if (tool->IsToggled())
+            tool->Toggle();
 
         DrawTool(tool);
     }

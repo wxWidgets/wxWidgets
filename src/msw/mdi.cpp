@@ -1149,7 +1149,7 @@ bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long style)
         ccs.hWindowMenu = (HMENU) parent->GetWindowMenu()->GetHMenu();
     ccs.idFirstChild = wxFIRST_MDI_CHILD;
 
-    DWORD msStyle = MDIS_ALLCHILDSTYLES | WS_VISIBLE | WS_CHILD | WS_CLIPCHILDREN;
+    DWORD msStyle = /* MDIS_ALLCHILDSTYLES | */ WS_VISIBLE | WS_CHILD | WS_CLIPCHILDREN;
     if ( style & wxHSCROLL )
         msStyle |= WS_HSCROLL;
     if ( style & wxVSCROLL )
