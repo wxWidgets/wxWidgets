@@ -569,8 +569,8 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
                  charset = wxEmptyString;
 
 #ifdef __WXMAC__
-        // wxIsAbsolutePath is broken
-        bookFull = wxGetCwd() + ":" + book;
+        if (wxIsAbsolutePath(book)) bookFull = book;
+        else bookFull = wxGetCwd() + book; // no slash or dot
         wxFileName fn( bookFull );
         bookFull = fn.GetFullPath( wxPATH_UNIX );
 #else
