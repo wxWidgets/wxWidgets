@@ -990,8 +990,8 @@ int STRINGCLASS::compare(size_t nStart, size_t nLen,
 
 #if wxUSE_WCHAR_T
 
-//Convert a wide character string to a multi-byte character string of 
-//a specified length, ignoring intermittent null characters
+//Convert a wide character string of a specified length
+//to a multi-byte character string, ignoring intermittent null characters
 inline wxCharBuffer wxMbstr(const wchar_t* szString, size_t nStringLen, wxMBConv& conv)
 {
     const wchar_t* szEnd = szString + nStringLen + 1;
@@ -1031,8 +1031,8 @@ inline wxCharBuffer wxMbstr(const wchar_t* szString, size_t nStringLen, wxMBConv
     return buffer;  //success - return converted string
 }
 
-//Convert a multi-byte character string to a wide character string of 
-//a specified length, ignoring intermittent null characters
+//Convert a multi-byte character string of a specified length
+//to a wide character string, ignoring intermittent null characters
 inline wxWCharBuffer wxWcstr(const char* szString, size_t nStringLen, wxMBConv& conv)
 {
     const char* szEnd = szString + nStringLen + 1;
