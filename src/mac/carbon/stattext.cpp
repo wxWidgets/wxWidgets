@@ -15,6 +15,8 @@
 
 #include "wx/app.h"
 #include "wx/stattext.h"
+#include "wx/notebook.h"
+#include "wx/tabctrl.h"
 #include "wx/dc.h"
 #include "wx/dcclient.h"
 
@@ -61,8 +63,40 @@ void wxStaticText::OnDraw( wxDC &dc )
         return;
 
     PrepareDC(dc);
-    dc.Clear() ;
     
+    bool doClear = true ;
+	WindowRef window = GetMacRootWindow() ;
+	if ( window )
+	{
+		wxWindow* win = wxFindWinFromMacWindow( window ) ;
+		if ( win )
+		{
+			wxWindow* parent = GetParent() ;
+			while ( parent )
+			{
+				if( parent->MacGetWindowData() )
+				{
+					break ;
+				}
+				
+				if( parent->IsKindOf( CLASSINFO( wxNotebook ) ) ||  parent->IsKindOf( CLASSINFO( wxTabCtrl ) ))
+				{
+					if ( ((wxControl*)parent)->GetMacControl() ) {
+						Rect rect = { -32767 , -32767 , 32767 , 32767 } ;
+						if ( DrawThemeTabPane != (void*)kUnresolvedCFragSymbolAddress )
+						  DrawThemeTabPane ( &rect, kThemeStateActive);
+						doClear = false ;
+					}
+					break ;
+				}
+				
+				parent = parent->GetParent() ;
+			} 
+		}
+	}
+	if ( doClear )
+		dc.Clear() ;
+		
     int x = 0 ;
     int y = 0 ;
     wxString text = m_label ;

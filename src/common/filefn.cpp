@@ -142,11 +142,7 @@ const off_t wxInvalidOffset = (off_t)-1;
 // ----------------------------------------------------------------------------
 
 // we need to translate Mac filenames before passing them to OS functions
-#ifdef __MAC__
-    #define OS_FILENAME(s) (wxUnix2MacFilename(s))
-#else
     #define OS_FILENAME(s) (s.fn_str())
-#endif
 
 // ============================================================================
 // implementation
@@ -652,11 +648,15 @@ wxChar *wxFileNameFromPath (wxChar *path)
       tcp = path + wxStrlen (path);
       while (--tcp >= path)
         {
+#ifdef __WXMAC__
+          if (*tcp == wxT(':') )
+#else
           if (*tcp == wxT('/') || *tcp == wxT('\\')
 #ifdef __VMS__
      || *tcp == wxT(':') || *tcp == wxT(']'))
 #else
      )
+#endif
 #endif
             return tcp + 1;
         }                        /* while */
@@ -679,11 +679,15 @@ wxString wxFileNameFromPath (const wxString& path1)
       tcp = path + wxStrlen (path);
       while (--tcp >= path)
           {
+#ifdef __WXMAC__
+           if (*tcp == wxT(':') )
+#else
             if (*tcp == wxT('/') || *tcp == wxT('\\')
 #ifdef __VMS__
         || *tcp == wxT(':') || *tcp == wxT(']'))
 #else
         )
+#endif
 #endif
                 return wxString(tcp + 1);
             }                        /* while */
@@ -717,7 +721,11 @@ wxPathOnly (wxChar *path)
       while (!done && i > -1)
       {
         // ] is for VMS
+#ifdef __WXMAC__
+        if (path[i] == wxT(':') )
+#else
         if (path[i] == wxT('/') || path[i] == wxT('\\') || path[i] == wxT(']'))
+#endif
         {
           done = TRUE;
 #ifdef __VMS__
@@ -766,7 +774,11 @@ wxString wxPathOnly (const wxString& path)
       while (!done && i > -1)
       {
         // ] is for VMS
+#ifdef __WXMAC__
+        if (path[i] == wxT(':') )
+#else
         if (path[i] == wxT('/') || path[i] == wxT('\\') || path[i] == wxT(']'))
+#endif
         {
           done = TRUE;
 #ifdef __VMS__
@@ -801,7 +813,30 @@ wxString wxPathOnly (const wxString& path)
 // Also, convert to lower case, since case is significant in UNIX.
 
 #if defined(__WXMAC__) && !defined(__UNIX__)
+wxString wxMacFSSpec2MacFilename( const FSSpec *spec )
+{
+    Handle    myPath ;
+    short     length ;
 
+    FSpGetFullPath( spec , &length , &myPath ) ;
+    ::SetHandleSize( myPath , length + 1 ) ;
+    ::HLock( myPath ) ;
+    (*myPath)[length] = 0 ;
+    if ( length > 0 && (*myPath)[length-1] ==':' )
+        (*myPath)[length-1] = 0 ;
+
+    wxString result(     (char*) *myPath ) ;
+    ::HUnlock( myPath ) ;
+    ::DisposeHandle( myPath ) ;
+    return result ;
+}
+
+void wxMacFilename2FSSpec( const char *path , FSSpec *spec )
+{
+    FSpLocationFromFullPath( strlen(path ) , path , spec ) ;
+}
+
+/*
 static char sMacFileNameConversion[ 1000 ] ;
 
 wxString wxMac2UnixFilename (const char *str)
@@ -868,24 +903,6 @@ wxString wxUnix2MacFilename (const char *str)
   return wxString (sMacFileNameConversion) ;
 }
 
-wxString wxMacFSSpec2MacFilename( const FSSpec *spec )
-{
-    Handle    myPath ;
-    short     length ;
-
-    FSpGetFullPath( spec , &length , &myPath ) ;
-    ::SetHandleSize( myPath , length + 1 ) ;
-    ::HLock( myPath ) ;
-    (*myPath)[length] = 0 ;
-    if ( length > 0 && (*myPath)[length-1] ==':' )
-        (*myPath)[length-1] = 0 ;
-
-    wxString result(     (char*) *myPath ) ;
-    ::HUnlock( myPath ) ;
-    ::DisposeHandle( myPath ) ;
-    return result ;
-}
-
 wxString wxMacFSSpec2UnixFilename( const FSSpec *spec )
 {
     return wxMac2UnixFilename( wxMacFSSpec2MacFilename( spec) ) ;
@@ -901,7 +918,7 @@ void wxUnixFilename2FSSpec( const char *path , FSSpec *spec )
     wxString var = wxUnix2MacFilename( path ) ;
     wxMacFilename2FSSpec( var , spec ) ;
 }
-
+*/
 #endif
 void
 wxDos2UnixFilename (char *s)
@@ -1099,7 +1116,7 @@ bool wxRemoveFile(const wxString& file)
 bool wxMkdir(const wxString& dir, int perm)
 {
 #if defined(__WXMAC__) && !defined(__UNIX__)
-  return (mkdir(wxUnix2MacFilename( dir ) , 0 ) == 0);
+  return (mkdir( dir , 0 ) == 0);
 #else // !Mac
     const wxChar *dirname = dir.c_str();
 
@@ -1395,7 +1412,7 @@ wxString wxFindFirstFile(const wxChar *spec, int flags)
 
     FSSpec fsspec ;
 
-    wxUnixFilename2FSSpec( result , &fsspec ) ;
+    wxMacFilename2FSSpec( result , &fsspec ) ;
     g_iter.m_CPB.hFileInfo.ioVRefNum = fsspec.vRefNum ;
     g_iter.m_CPB.hFileInfo.ioNamePtr = g_iter.m_name ;
     g_iter.m_index = 0 ;
@@ -1443,7 +1460,7 @@ wxString wxFindNextFile()
                                    g_iter.m_name,
                                    &spec) ;
 
-    return wxMacFSSpec2UnixFilename( &spec ) ;
+    return wxMacFSSpec2MacFilename( &spec ) ;
 }
 
 #elif defined(__WXMSW__)
@@ -1697,7 +1714,7 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
 		cwdSpec.vRefNum = pb.ioFCBVRefNum;
 		cwdSpec.parID = pb.ioFCBParID;
 		cwdSpec.name[0] = 0 ;
-		wxString res = wxMacFSSpec2UnixFilename( &cwdSpec ) ;
+		wxString res = wxMacFSSpec2MacFilename( &cwdSpec ) ;
 		
 		strcpy( buf , res ) ;
 		buf[res.length()-1]=0 ;

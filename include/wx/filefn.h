@@ -169,11 +169,13 @@ WXDLLEXPORT void wxUnix2DosFilename(wxChar *s);
 
 #if defined(__WXMAC__) && !defined(__UNIX__)
   WXDLLEXPORT wxString wxMacFSSpec2MacFilename( const FSSpec *spec ) ;
+  WXDLLEXPORT void wxMacFilename2FSSpec( const char *path , FSSpec *spec ) ;
+ /*
   WXDLLEXPORT wxString wxMacFSSpec2UnixFilename( const FSSpec *spec ) ;
   WXDLLEXPORT void wxUnixFilename2FSSpec( const char *path , FSSpec *spec ) ;
-  WXDLLEXPORT void wxMacFilename2FSSpec( const char *path , FSSpec *spec ) ;
   WXDLLEXPORT wxString wxMac2UnixFilename( const char *s) ;
   WXDLLEXPORT wxString wxUnix2MacFilename( const char *s);
+*/
 #endif
 
 // Strip the extension, in situ
@@ -268,10 +270,7 @@ WXDLLEXPORT bool wxRmdir(const wxString& dir, int flags = 0);
   #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_UNIX
   #define wxPATH_SEP          wxPATH_SEP_UNIX
 #elif defined(__MAC__)
-// TODO find out whether we can really switch back to native file names
-// previously this mac was emulating unix/win filename structures
-//  #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_MAC
-  #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_DOS
+  #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_MAC
   #define wxPATH_SEP          wxPATH_SEP_DOS
 #else   // Windows and OS/2
   #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_DOS

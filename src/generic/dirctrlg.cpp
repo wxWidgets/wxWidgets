@@ -67,6 +67,10 @@
 
 #endif // __WXPM__
 
+#ifdef __WXMAC__
+#include "moreextr.h"
+#endif
+
 #ifdef __BORLANDC__
 #include "dos.h"
 #endif
@@ -593,7 +597,17 @@ void wxGenericDirCtrl::SetupSections()
         }
     }
 #endif
+#elif defined(__WXMAC__)
+    FSSpec volume ;
+    short index = 1 ;
+    while(1) {
+      short actualCount = 0 ;
+      if ( OnLine( &volume , 1 , &actualCount , &index ) != noErr || actualCount == 0 )
+        break ;
 
+      wxString name = wxMacFSSpec2MacFilename( &volume ) ;
+      AddSection(name+":", name, 0);
+    }
 #else
   AddSection(wxT("/"), _("The Computer"), 0);
   AddSection(wxGetHomeDir(), _("My Home"), 0 );

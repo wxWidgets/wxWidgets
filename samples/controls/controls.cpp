@@ -794,6 +794,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     (void)new wxToggleButton(panel, ID_BUTTON_LABEL,
                              "&Toggle label", wxPoint(250, 20));
 #endif // wxUSE_TOGGLEBTN
+
     m_label = new wxStaticText(panel, -1, "Label with some long text",
                                wxPoint(250, 60), wxDefaultSize,
                                wxALIGN_RIGHT /*| wxST_NO_AUTORESIZE*/);

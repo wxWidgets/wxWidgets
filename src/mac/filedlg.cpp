@@ -533,7 +533,7 @@ int wxFileDialog::ShowModal()
 		}
 		else
 		{
-			m_path = wxMacFSSpec2UnixFilename( &reply.sfFile ) ;
+			m_path = wxMacFSSpec2MacFilename( &reply.sfFile ) ;
 			return wxID_OK ;
 		}
 	}
@@ -574,7 +574,7 @@ int wxFileDialog::ShowModal()
 		}
 		else
 		{
-			m_path = wxMacFSSpec2UnixFilename( &reply.sfFile ) ;
+			m_path = wxMacFSSpec2MacFilename( &reply.sfFile ) ;
 			return wxID_OK ;
 		}
 	}
@@ -609,7 +609,7 @@ int wxFileDialog::ShowModal()
 		//   first appears
 		
 		FSSpec location ;
-		wxUnixFilename2FSSpec( m_dir , &location ) ;
+		wxMacFilename2FSSpec( m_dir , &location ) ;
 		OSErr err = noErr ;
 		
 		mDefaultLocation.descriptorType = typeNull;
@@ -704,7 +704,7 @@ int wxFileDialog::ShowModal()
 
 								
 				// outFolderDirID = thePB.dirInfo.ioDrDirID;
-				m_path = wxMacFSSpec2UnixFilename( &outFileSpec ) ;
+				m_path = wxMacFSSpec2MacFilename( &outFileSpec ) ;
 				m_paths.Add( m_path ) ;
 	            m_fileNames.Add(m_fileName);
 	         }

@@ -414,11 +414,8 @@ bool wxPNGReader::ReadFile(char * ImageFileName)
   wxPNGReaderIter iter(this);
 
   /* open the file */
-#ifndef __UNIX__
-  fp = fopen(wxUnix2MacFilename( ImageFileName ), "rb");
-#else
   fp = fopen( ImageFileName , "rb" );
-#endif
+
   if (!fp)
     return FALSE;
 

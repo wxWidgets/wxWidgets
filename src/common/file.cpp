@@ -136,21 +136,14 @@ bool wxFile::Exists(const wxChar *name)
 #if wxUSE_UNICODE && wxMBFILES
     wxCharBuffer fname = wxConvFile.cWC2MB(name);
 
-#if defined(__WXMAC__) && !defined(__UNIX__)
-  return !access(wxUnix2MacFilename( name ) , 0) && !stat(wxUnix2MacFilename( name ), &st) && (st.st_mode & S_IFREG);
-#else
     return !wxAccess(fname, 0) &&
            !wxStat(wxMBSTRINGCAST fname, &st) &&
            (st.st_mode & S_IFREG);
-#endif
-#else
-#if defined(__WXMAC__) && !defined(__UNIX__)
-  return !access(wxUnix2MacFilename( name ) , 0) && !stat(wxUnix2MacFilename( name ), &st) && (st.st_mode & S_IFREG);
+
 #else
     return !wxAccess(name, 0) &&
            !wxStat(name, &st) &&
            (st.st_mode & S_IFREG);
-#endif
 #endif
 }
 
@@ -195,7 +188,7 @@ bool wxFile::Create(const wxChar *szFileName, bool bOverwrite, int accessMode)
 #if defined(__WXMAC__) && !defined(__UNIX__)
   // Dominic Mazzoni [dmazzoni+@cs.cmu.edu] reports that open is still broken on the mac, so we replace
   // int fd = open(wxUnix2MacFilename( szFileName ), O_CREAT | (bOverwrite ? O_TRUNC : O_EXCL), access);
-  int fd = creat(wxUnix2MacFilename( szFileName ), accessMode);
+  int fd = creat( szFileName , accessMode);
 #else
     int fd = wxOpen(wxFNCONV(szFileName),
                     O_BINARY | O_WRONLY | O_CREAT |
@@ -240,11 +233,7 @@ bool wxFile::Open(const wxChar *szFileName, OpenMode mode, int accessMode)
             break;
     }
 
-#if defined(__WXMAC__) && !defined(__UNIX__)
-    int fd = open(wxUnix2MacFilename( szFileName ), flags, access);
-#else
     int fd = wxOpen(wxFNCONV(szFileName), flags ACCESS(accessMode));
-#endif
     if ( fd == -1 ) {
         wxLogSysError(_("can't open file '%s'"), szFileName);
         return FALSE;
@@ -555,7 +544,6 @@ bool wxTempFile::Commit()
 {
     m_file.Close();
 
-#if !defined(__WXMAC__) || defined(__UNIX__)
     if ( wxFile::Exists(m_strName) && wxRemove(m_strName) != 0 ) {
         wxLogSysError(_("can't remove file '%s'"), m_strName.c_str());
         return FALSE;
@@ -565,17 +553,6 @@ bool wxTempFile::Commit()
         wxLogSysError(_("can't commit changes to file '%s'"), m_strName.c_str());
         return FALSE;
     }
-#else
-  if ( wxFile::Exists(m_strName) && remove(wxUnix2MacFilename( m_strName )) != 0 ) {
-    wxLogSysError(_("can't remove file '%s'"), m_strName.c_str());
-    return FALSE;
-  }
-
-  if ( rename(wxUnix2MacFilename( m_strTemp ), wxUnix2MacFilename( m_strName )) != 0 ) {
-    wxLogSysError(_("can't commit changes to file '%s'"), m_strName.c_str());
-    return FALSE;
-  }
-#endif
 
     return TRUE;
 }
@@ -583,13 +560,8 @@ bool wxTempFile::Commit()
 void wxTempFile::Discard()
 {
     m_file.Close();
-#if !defined(__WXMAC__) || defined(__UNIX__)
     if ( wxRemove(m_strTemp) != 0 )
         wxLogSysError(_("can't remove temporary file '%s'"), m_strTemp.c_str());
-#else
-    if ( remove( wxUnix2MacFilename(m_strTemp.fn_str())) != 0 )
-        wxLogSysError(_("can't remove temporary file '%s'"), m_strTemp.c_str());
-#endif
 }
 
 #endif

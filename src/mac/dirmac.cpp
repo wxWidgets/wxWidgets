@@ -113,7 +113,7 @@ wxDirData::wxDirData(const wxString& dirname)
 
 	FSSpec fsspec ;
 
-	wxUnixFilename2FSSpec( m_dirname , &fsspec ) ;
+	wxMacFilename2FSSpec( m_dirname , &fsspec ) ;
 	m_CPB.hFileInfo.ioVRefNum = fsspec.vRefNum ;
 	m_CPB.hFileInfo.ioNamePtr = m_name ;
 	m_index = 0 ;
