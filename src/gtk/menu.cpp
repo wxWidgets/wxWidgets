@@ -117,14 +117,25 @@ static wxString wxReplaceUnderscore( const wxString& title )
     {
         if (*pc == wxT('&'))
         {
-#if GTK_CHECK_VERSION(1, 2, 1)
+#if GTK_CHECK_VERSION(1, 2, 0)
             str << wxT('_');
+#endif
         }
+#if GTK_CHECK_VERSION(2, 0, 0)
+        else if (*pc == wxT('/'))
+        {
+            str << wxT("\\/");
+        }
+        else if (*pc == wxT('\\'))
+        {
+            str << wxT("\\\\");
+        }
+#elif GTK_CHECK_VERSION(1, 2, 0)
         else if (*pc == wxT('/'))
         {
             str << wxT('\\');
-#endif
         }
+#endif
         else
         {
 #if __WXGTK12__
@@ -810,20 +821,35 @@ void wxMenuItem::DoSetText( const wxString& str )
     const wxChar *pc = str;
     for (; (*pc != wxT('\0')) && (*pc != wxT('\t')); pc++ )
     {
+#if GTK_CHECK_VERSION(1, 2, 0)
         if (*pc == wxT('&'))
         {
-#if GTK_CHECK_VERSION(1, 2, 0)
             m_text << wxT('_');
         }
         else if ( *pc == wxT('_') )    // escape underscores
         {
             m_text << wxT("__");
         }
+#else // GTK+ < 1.2.0
+        if (*pc == wxT('&'))
+        {
+        }
+#endif
+#if GTK_CHECK_VERSION(2, 0, 0)
+        else if (*pc == wxT('/'))      // we have to escape slashes
+        {
+            m_text << wxT("\\/");
+        }
+        else if (*pc == wxT('\\'))     // we have to double backslashes
+        {
+            m_text << wxT("\\\\");
+        }
+#elif GTK_CHECK_VERSION(1, 2, 0)
         else if (*pc == wxT('/'))      /* we have to filter out slashes ... */
         {
             m_text << wxT('\\');  /* ... and replace them with back slashes */
-#endif // GTK+ 1.2.0+
         }
+#endif
         else
             m_text << *pc;
     }
