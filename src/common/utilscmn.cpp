@@ -504,23 +504,23 @@ wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
                 else {
                     // several special cases
                     current.MakeUpper();
-                    if ( current == wxT("DEL") ) {
+                    if ( current == _("DEL") ) {
                         keyCode = WXK_DELETE;
                     }
-                    else if ( current == wxT("DELETE") ) {
+                    else if ( current == _("DELETE") ) {
                         keyCode = WXK_DELETE;
                     }
-                    else if ( current == wxT("INS") ) {
+                    else if ( current == _("INS") ) {
                         keyCode = WXK_INSERT;
                     }
-                    else if ( current == wxT("INSERT") ) {
+                    else if ( current == _("INSERT") ) {
                         keyCode = WXK_INSERT;
                     }
 #if 0
-                    else if ( current == wxT("PGUP") ) {
+                    else if ( current == _("PGUP") ) {
                         keyCode = VK_PRIOR;
                     }
-                    else if ( current == wxT("PGDN") ) {
+                    else if ( current == _("PGDN") ) {
                         keyCode = VK_NEXT;
                     }
 #endif
