@@ -811,10 +811,17 @@ void wxWindowBase::DoSetVirtualSize( int x, int y )
 
 wxSize wxWindowBase::DoGetVirtualSize() const
 {
-    if (m_virtualSize == wxDefaultSize)
-        return GetClientSize();
+    if ( m_virtualSize.IsFullySpecified() )
+        return m_virtualSize;
 
-    return m_virtualSize;
+    wxSize size = GetClientSize();
+    if ( m_virtualSize.x != wxDefaultCoord )
+        size.x = m_virtualSize.x;
+
+    if ( m_virtualSize.y != wxDefaultCoord )
+        size.y = m_virtualSize.y;
+
+    return size;
 }
 
 // ----------------------------------------------------------------------------
