@@ -17,6 +17,7 @@ class TestWindow(wxScrolledWindow):
         wxScrolledWindow.__init__(self, parent, -1)
 
         self.clrList = colourdb.getColourList()
+        #self.clrList.sort()
         self.bg_bmp = images.getGridBGBitmap()
 
         EVT_PAINT(self, self.OnPaint)
