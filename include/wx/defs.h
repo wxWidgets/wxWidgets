@@ -760,7 +760,7 @@ typedef wxUint16 wxWord;
 
             typedef long wxInt32;
             typedef unsigned long wxUint32;
-        #elif
+        #else
             /*  wxWidgets is not ready for 128bit systems yet... */
             #error "Unknown sizeof(int) value, what are you compiling for?"
         #endif
