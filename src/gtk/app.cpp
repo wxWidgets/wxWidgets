@@ -581,39 +581,45 @@ int wxEntry( int argc, char *argv[] )
     wxStripExtension( name );
     wxTheApp->SetAppName( name );
 
-    if (!wxTheApp->OnInitGui())
-        return 0;
+    int retValue = 0;
+
+    if ( !wxTheApp->OnInitGui() )
+        retValue = -1;
 
     // Here frames insert themselves automatically into wxTopLevelWindows by
     // getting created in OnInit().
-    if (!wxTheApp->OnInit())
-        return 0;
-
-    wxTheApp->m_initialized = wxTopLevelWindows.GetCount() != 0;
-
-    int retValue = 0;
-
-    if (wxTheApp->Initialized())
-        retValue = wxTheApp->OnRun();
-
-    wxWindow *topWindow = wxTheApp->GetTopWindow();
-    if (topWindow)
+    if ( retValue == 0 )
     {
-        // Forcibly delete the window.
-        if (topWindow->IsKindOf(CLASSINFO(wxFrame)) ||
-            topWindow->IsKindOf(CLASSINFO(wxDialog)) )
-        {
-            topWindow->Close( TRUE );
-            wxTheApp->DeletePendingObjects();
-        }
-        else
-        {
-            delete topWindow;
-            wxTheApp->SetTopWindow( (wxWindow*) NULL );
-        }
+        if ( !wxTheApp->OnInit() )
+            retValue = -1;
     }
 
-    wxTheApp->OnExit();
+    if ( retValue == 0 )
+    {
+        wxTheApp->m_initialized = wxTopLevelWindows.GetCount() != 0;
+
+        if (wxTheApp->Initialized())
+            retValue = wxTheApp->OnRun();
+
+        wxWindow *topWindow = wxTheApp->GetTopWindow();
+        if (topWindow)
+        {
+            // Forcibly delete the window.
+            if (topWindow->IsKindOf(CLASSINFO(wxFrame)) ||
+                topWindow->IsKindOf(CLASSINFO(wxDialog)) )
+            {
+                topWindow->Close( TRUE );
+                wxTheApp->DeletePendingObjects();
+            }
+            else
+            {
+                delete topWindow;
+                wxTheApp->SetTopWindow( (wxWindow*) NULL );
+            }
+        }
+
+        wxTheApp->OnExit();
+    }
 
     // flush the logged messages if any
     wxLog *log = wxLog::GetActiveTarget();
