@@ -85,6 +85,31 @@ wxRegion::wxRegion(const wxRect& rect)
     SetRectRgn( (RgnHandle) M_REGION , rect.x , rect.y , rect.x+rect.width , rect.y+rect.height ) ;
 }
 
+wxRegion::wxRegion(size_t n, const wxPoint *points, int WXUNUSED(fillStyle))
+{
+    m_refData = new wxRegionRefData;
+
+    OpenRgn();
+
+    wxCoord x1, x2 , y1 , y2 ;
+    x2 = x1 = points[0].x ;
+    y2 = y1 = points[0].y ;
+    ::MoveTo(x1,y1);
+    for (int i = 1; i < n; i++)
+    {
+        x2 = points[i].x ;
+        y2 = points[i].y ;
+        ::LineTo(x2, y2);
+    }
+    // close the polyline if necessary
+    if ( x1 != x2 || y1 != y2 )
+    {
+        ::LineTo(x1,y1 ) ;
+    }
+    ClosePoly();
+    CloseRgn( M_REGION ) ;
+}
+
 /*!
  * Destroy the region.
  */
