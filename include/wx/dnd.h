@@ -45,8 +45,10 @@ public:
 
     // set the data which is transfered by drag and drop
     void SetData(wxDataObject& data) 
-      { if (m_data) delete m_data; 
-        m_data = &data; }
+      { m_data = &data; }
+      
+    wxDataObject *GetDataObject()
+      { return m_data; }
 
     // start drag action, see enum wxDragResult for return value description
     //

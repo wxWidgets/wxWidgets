@@ -73,15 +73,6 @@ public:
     // X11 has two clipboards which get selected by this call. Empty on MSW.
     virtual void UsePrimarySelection( bool WXUNUSED(primary) = FALSE ) { }
 
-#ifdef WXWIN_COMPATIBILITY_2
-    // deprecated version
-    bool GetData(wxDataObject *data)
-    {
-        wxCHECK_MSG(data, FALSE, wxT("NULL pointer in wxClipboard"));
-
-        return GetData(*data);
-    }
-#endif // WXWIN_COMPATIBILITY_2
 };
 
 // ----------------------------------------------------------------------------

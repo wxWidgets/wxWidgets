@@ -42,12 +42,13 @@ wxClipboardBase::wxClipboardBase()
 // wxClipboardModule: module responsible for initializing the global clipboard
 // object
 //
-// NB: IMPLEMENT_DYNAMIC_CLASS() for it is in common/appcmn.cpp
 // ----------------------------------------------------------------------------
 
 class wxClipboardModule : public wxModule
 {
 public:
+    wxClipboardModule() { }
+
     bool OnInit()
         { wxTheClipboard = new wxClipboard; return TRUE; }
     void OnExit()
@@ -56,4 +57,6 @@ public:
 private:
     DECLARE_DYNAMIC_CLASS(wxClipboardModule)
 };
+
+IMPLEMENT_DYNAMIC_CLASS(wxClipboardModule,wxModule)
 

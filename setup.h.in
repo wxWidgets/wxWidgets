@@ -479,7 +479,10 @@
  * Use Apple Ieee-double converter
  */
 #define wxUSE_APPLE_IEEE 0
-
+/*
+ * Compatibility with 2.0 API.
+ */
+#define WXWIN_COMPATIBILITY_2 1
 /*
  * Enables debugging: memory tracing, assert, etc., contains debug level
  */

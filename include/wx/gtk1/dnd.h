@@ -33,7 +33,6 @@ class wxWindow;
 class wxDropTarget;
 class wxTextDropTarget;
 class wxFileDropTarget;
-class wxPrivateDropTarget;
 
 class wxDropSource;
 
@@ -70,6 +69,37 @@ public:
     void SetDragTime( guint time ) { m_dragTime = time; }
 };
 
+// ----------------------------------------------------------------------------
+// A simple wxDropTarget derived class for text data: you only need to
+// override OnDropText() to get something working
+// ----------------------------------------------------------------------------
+
+class wxTextDropTarget : public wxDropTarget
+{
+public:
+    wxTextDropTarget();
+
+    virtual bool OnDropText(wxCoord x, wxCoord y, const wxString& text) = 0;
+
+    virtual bool OnData(wxCoord x, wxCoord y);
+};
+
+// ----------------------------------------------------------------------------
+// A drop target which accepts files (dragged from File Manager or Explorer)
+// ----------------------------------------------------------------------------
+
+class wxFileDropTarget : public wxDropTarget
+{
+public:
+    wxFileDropTarget();
+
+    // parameters are the number of files and the array of file names
+    virtual bool OnDropFiles(wxCoord x, wxCoord y,
+                             const wxArrayString& filenames) = 0;
+
+    virtual bool OnData(wxCoord x, wxCoord y);
+};
+
 //-------------------------------------------------------------------------
 // wxDropSource
 //-------------------------------------------------------------------------
@@ -100,7 +130,6 @@ public:
     GtkWidget     *m_widget;
     wxWindow      *m_window;
     wxDragResult   m_retValue;
-    wxDataObject  *m_data;
 
     wxCursor      m_defaultCursor;
     wxCursor      m_goaheadCursor;
