@@ -108,7 +108,6 @@ public:
     wxGenericTreeItem() { m_data = NULL; }
     wxGenericTreeItem( wxGenericTreeItem *parent,
                        const wxString& text,
-                       wxDC& dc,
                        int image,
                        int selImage,
                        wxTreeItemData *data );
@@ -366,7 +365,6 @@ void wxTreeTextCtrl::OnKillFocus( wxFocusEvent &WXUNUSED(event) )
 
 wxGenericTreeItem::wxGenericTreeItem(wxGenericTreeItem *parent,
                                      const wxString& text,
-                                     wxDC& WXUNUSED(dc),
                                      int image, int selImage,
                                      wxTreeItemData *data)
                  : m_text(text)
@@ -1077,9 +1075,8 @@ wxTreeItemId wxGenericTreeCtrl::DoInsertItem(const wxTreeItemId& parentId,
 
     m_dirty = TRUE;     // do this first so stuff below doesn't cause flicker
 
-    wxClientDC dc(this);
     wxGenericTreeItem *item =
-        new wxGenericTreeItem( parent, text, dc, image, selImage, data );
+        new wxGenericTreeItem( parent, text, image, selImage, data );
 
     if ( data != NULL )
     {
@@ -1099,8 +1096,7 @@ wxTreeItemId wxGenericTreeCtrl::AddRoot(const wxString& text,
 
     m_dirty = TRUE;     // do this first so stuff below doesn't cause flicker
 
-    wxClientDC dc(this);
-    m_anchor = new wxGenericTreeItem((wxGenericTreeItem *)NULL, text, dc,
+    m_anchor = new wxGenericTreeItem((wxGenericTreeItem *)NULL, text,
                                    image, selImage, data);
     if (HasFlag(wxTR_HIDE_ROOT))
     {
@@ -1889,10 +1885,26 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
     }
     else if (level == 0)
     {
+        // always expand hidden root
+        int origY = y;
         wxArrayGenericTreeItems& children = item->GetChildren();
-        size_t n, count = children.Count();
-        for (n = 0; n < count; ++n)
-            PaintLevel(children[n], dc, 1, y);
+        int count = children.Count();
+        if (count > 0)
+        {
+            int n = 0, oldY;
+            do {
+                oldY = y;
+                PaintLevel(children[n], dc, 1, y);
+            } while (++n < count);
+
+            if (!HasFlag(wxTR_NO_LINES) && HasFlag(wxTR_LINES_AT_ROOT) && count > 1)
+            {
+                // draw line down to last child
+                origY += GetLineHeight(children[0])>>1;
+                oldY += GetLineHeight(children[n-1])>>1;
+                dc.DrawLine(3, origY, 3, oldY);
+            }
+        }
         return;
     }
 
@@ -1913,18 +1925,20 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
         {
             if (!HasFlag(wxTR_NO_LINES))
             {
-                if (x > (signed)m_indent || HasFlag(wxTR_LINES_AT_ROOT))
+                if (x > (signed)m_indent)
                     dc.DrawLine(x - m_indent, y_mid, x - 5, y_mid);
+                else if (HasFlag(wxTR_LINES_AT_ROOT))
+                    dc.DrawLine(3, y_mid, x - 5, y_mid);
                 dc.DrawLine(x + 5, y_mid, x + m_spacing, y_mid);
             }
 
             if (m_imageListButtons != NULL)
             {
                 // draw the image button here
-                int image_h = 0, image_w = 0, image = wxCLOSED_BUTTON;
-                if (item->IsExpanded()) image = wxOPEN_BUTTON;
+                int image_h = 0, image_w = 0, image = wxTreeItemIcon_Normal;
+                if (item->IsExpanded()) image = wxTreeItemIcon_Expanded;
                 if (item->IsSelected())
-                    image += wxOPEN_BUTTON_SELECTED - wxOPEN_BUTTON;
+                    image += wxTreeItemIcon_Selected - wxTreeItemIcon_Normal;
                 m_imageListButtons->GetSize(image, image_w, image_h);
                 int xx = x - (image_w>>1);
                 int yy = y_mid - (image_h>>1);
@@ -1980,8 +1994,10 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
         {
             // draw the horizontal line here
             int x_start = x;
-            if (x > (signed)m_indent || HasFlag(wxTR_LINES_AT_ROOT))
+            if (x > (signed)m_indent)
                 x_start -= m_indent;
+            else if (HasFlag(wxTR_LINES_AT_ROOT))
+                x_start = 3;
             dc.DrawLine(x_start, y_mid, x + m_spacing, y_mid);
         }
 
@@ -2016,7 +2032,10 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
 
         if (HasFlag(wxTR_ROW_LINES))
         {
-            dc.SetPen(*wxWHITE_PEN);
+            // if the background colour is white, choose a
+            // contrasting color for the lines
+            dc.SetPen(*((GetBackgroundColour() == *wxWHITE)
+                         ? wxMEDIUM_GREY_PEN : wxWHITE_PEN));
             dc.DrawLine(0, y_top, 10000, y_top);
             dc.DrawLine(0, y, 10000, y);
         }
@@ -2040,10 +2059,10 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
                 PaintLevel(children[n], dc, level, y);
             } while (++n < count);
 
-            if (!HasFlag(wxTR_NO_LINES))
+            if (!HasFlag(wxTR_NO_LINES) && count > 1)
             {
                 // draw line down to last child
-                oldY += GetLineHeight(children[n-1])/2;
+                oldY += GetLineHeight(children[n-1])>>1;
                 if (HasButtons()) y_mid += 5;
                 dc.DrawLine(x, y_mid, x, oldY);
             }

@@ -110,22 +110,15 @@ enum wxTreeItemIcon
     wxTreeItemIcon_Max
 };
 
-enum wxButtonImage              // effectively the same as wxTreeItemIcon
-{
-    wxCLOSED_BUTTON = 0,                // closed, not selected
-    wxCLOSED_BUTTON_SELECTED,           // closed,     selected
-    wxOPEN_BUTTON,                      // open,   not selected
-    wxOPEN_BUTTON_SELECTED              // open,       selected
-};
-
 /*
  * wxTreeCtrl flags
  */
 // TODO: maybe renumber these?
 #define wxTR_NO_BUTTONS      0x0000     // for convenience
-#define wxTR_HAS_BUTTONS     0x0004     // generates a +/- button
-#define wxTR_TWIST_BUTTONS   0x0008     // twister buttons
-#define wxTR_NO_LINES        0x0100     // don't generate level connectors
+#define wxTR_HAS_BUTTONS     0x0001     // generates a +/- button
+#define wxTR_TWIST_BUTTONS   0x0002     // generates a twister button
+#define wxTR_NO_LINES        0x0004     // don't generate level connectors
+#define wxTR_LINES_AT_ROOT   0x0008     // connect top-level nodes
 #define wxTR_MAC_BUTTONS     wxTR_TWIST_BUTTONS  // backward compatibility
 
 #define wxTR_SINGLE          0x0000     // for convenience
@@ -133,9 +126,8 @@ enum wxButtonImage              // effectively the same as wxTreeItemIcon
 #define wxTR_EXTENDED        0x0040     // TODO: allow extended selection
 
 #define wxTR_EDIT_LABELS     0x0200     // can edit item labels
-#define wxTR_LINES_AT_ROOT   0x0010     // specific to wxMSW
-#define wxTR_HIDE_ROOT       0x0800     // don't display root node
 #define wxTR_ROW_LINES       0x0400     // put border around items
+#define wxTR_HIDE_ROOT       0x0800     // don't display root node
 #define wxTR_HAS_VARIABLE_ROW_HEIGHT 0x0080 // what it says
 
 // TODO: different default styles for wxGTK, wxMotif, whatever?
