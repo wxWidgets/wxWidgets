@@ -1645,9 +1645,13 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
 
     wxIconLocation iconLoc;
     wxIcon ic;
-    if ( ft && ft->GetIcon(&iconLoc) )
+
     {
-        ic = wxIcon(iconLoc);
+        wxLogNull logNull;
+        if ( ft && ft->GetIcon(&iconLoc) )
+        {
+            ic = wxIcon(iconLoc);
+        }
     }
 
     delete ft;
