@@ -16,148 +16,260 @@ WXDIR = $(WXWIN)
 
 THISDIR=$(WXDIR)\samples
 
+#
+# Indicates kind of pb with samples
+#
+# No makefile.vc file
+NOMAKE=1
+# No 16 bit version
+#ONLY32=1
+# Misc. compilation errors
+COMPIL=1
+# Need PNG
+PNGSETUP=
+
+#
+# Please keep samples list up-to-date, in alphabetical order
+#
 all:
-        cd $(WXDIR)\samples\splitter
+        cd $(WXDIR)\samples\calendar
         make -f makefile.b32 FINAL=$(FINAL)
-        cd $(WXDIR)\samples\resource
+        cd $(WXDIR)\samples\caret
+        make -f makefile.b32 FINAL=$(FINAL)
+        cd $(WXDIR)\samples\checklst
+        make -f makefile.b32 FINAL=$(FINAL)
+        cd $(WXDIR)\samples\config
         make -f makefile.b32 FINAL=$(FINAL)
         cd $(WXDIR)\samples\controls
         make -f makefile.b32 FINAL=$(FINAL)
-        cd $(WXDIR)\samples\listctrl
+        cd $(WXDIR)\samples\db
         make -f makefile.b32 FINAL=$(FINAL)
-        cd $(WXDIR)\samples\treectrl
-        make -f makefile.b32 FINAL=$(FINAL)
-        cd $(WXDIR)\samples\validate
-        make -f makefile.b32 FINAL=$(FINAL)
-        cd $(WXDIR)\samples\mdi
-        make -f makefile.b32 FINAL=$(FINAL)
-        cd $(WXDIR)\samples\minimal
-        make -f makefile.b32 FINAL=$(FINAL)
-        cd $(WXDIR)\samples\layout
-        make -f makefile.b32 FINAL=$(FINAL)
-        cd $(WXDIR)\samples\printing
-        make -f makefile.b32 FINAL=$(FINAL)
-        cd $(WXDIR)\samples\toolbar
+        cd $(WXDIR)\samples\ipc
         make -f makefile.b32 FINAL=$(FINAL)
         cd $(WXDIR)\samples\dialogs
+        make -f makefile.b32 FINAL=$(FINAL)
+        cd $(WXDIR)\samples\dnd
         make -f makefile.b32 FINAL=$(FINAL)
         cd $(WXDIR)\samples\docview
         make -f makefile.b32 FINAL=$(FINAL)
         cd $(WXDIR)\samples\docvwmdi
         make -f makefile.b32 FINAL=$(FINAL)
-        cd $(WXDIR)\samples\controls
+        cd $(WXDIR)\samples\drawing
         make -f makefile.b32 FINAL=$(FINAL)
-        cd $(WXDIR)\samples\nativdlg
+        cd $(WXDIR)\samples\dynamic
+        make -f makefile.b32 FINAL=$(FINAL)
+        cd $(WXDIR)\samples\font
         make -f makefile.b32 FINAL=$(FINAL)
         cd $(WXDIR)\samples\grid
         make -f makefile.b32 FINAL=$(FINAL)
-        cd $(WXDIR)\samples\internat
+        cd $(WXDIR)\samples\newgrid
         make -f makefile.b32 FINAL=$(FINAL)
-        cd $(WXDIR)\samples\dnd
+!if "$(COMPIL)"==""
+        cd $(WXDIR)\samples\help
+        make -f makefile.b32 FINAL=$(FINAL)
+!endif
+!if "$(PNGSETUP)"==""
+        cd $(WXDIR)\samples\html
+        make -f makefile.b32 FINAL=$(FINAL)
+!endif
+        cd $(WXDIR)\samples\image
+        make -f makefile.b32 FINAL=$(FINAL)
+        cd $(WXDIR)\samples\internat
         make -f makefile.b32 FINAL=$(FINAL)
         cd $(WXDIR)\samples\joytest
         make -f makefile.b32 FINAL=$(FINAL)
-        cd $(WXDIR)\samples\taskbar
+        cd $(WXDIR)\samples\layout
         make -f makefile.b32 FINAL=$(FINAL)
-        cd $(WXDIR)\samples\sashtest
+        cd $(WXDIR)\samples\listctrl
+        make -f makefile.b32 FINAL=$(FINAL)
+        cd $(WXDIR)\samples\mdi
+        make -f makefile.b32 FINAL=$(FINAL)
+        cd $(WXDIR)\samples\menu
         make -f makefile.b32 FINAL=$(FINAL)
 !if "$(FINAL)" == "0"
         cd $(WXDIR)\samples\memcheck
+        make -f makefile.b32 FINAL=$(FINAL)
 !endif
+!if "$(COMPIL)"==""
+        cd $(WXDIR)\samples\mfc
+        make -f makefile.b32 FINAL=$(FINAL)
+!endif
+        cd $(WXDIR)\samples\minifram
+        make -f makefile.b32 FINAL=$(FINAL)
+        cd $(WXDIR)\samples\minimal
+        make -f makefile.b32 FINAL=$(FINAL)
+        cd $(WXDIR)\samples\nativdlg
+        make -f makefile.b32 FINAL=$(FINAL)
+!if "$(COMPIL)"==""
+        cd $(WXDIR)\samples\dialup
+        make -f makefile.b32 FINAL=$(FINAL)
+!endif
+        cd $(WXDIR)\samples\notebook
+        make -f makefile.b32 FINAL=$(FINAL)
+        cd $(WXDIR)\samples\oleauto
         make -f makefile.b32 FINAL=$(FINAL)
         cd $(WXDIR)\samples\ownerdrw
         make -f makefile.b32 FINAL=$(FINAL)
-        cd $(WXDIR)\samples\checklst
+        cd $(WXDIR)\samples\png
         make -f makefile.b32 FINAL=$(FINAL)
-        cd $(WXDIR)\samples\minifram
-        make -f makefile.b32 FINAL=$(FINAL)
-        cd $(WXDIR)\samples\bombs
-        make -f makefile.b32 FINAL=$(FINAL)
-        cd $(WXDIR)\samples\fractal
-        make -f makefile.b32 FINAL=$(FINAL)
-        cd $(WXDIR)\samples\wxpoem
-        make -f makefile.b32 FINAL=$(FINAL)
-        cd $(WXDIR)\samples\typetest
+        cd $(WXDIR)\samples\printing
         make -f makefile.b32 FINAL=$(FINAL)
         cd $(WXDIR)\samples\proplist
         make -f makefile.b32 FINAL=$(FINAL)
-        cd $(WXDIR)\samples\image
+        cd $(WXDIR)\samples\regtest
         make -f makefile.b32 FINAL=$(FINAL)
+        cd $(WXDIR)\samples\resource
+        make -f makefile.b32 FINAL=$(FINAL)
+!if "$(COMPIL)"==""
+        cd $(WXDIR)\samples\richedit
+        make -f makefile.b32 FINAL=$(FINAL)
+!endif
         cd $(WXDIR)\samples\rotate
         make -f makefile.b32 FINAL=$(FINAL)
-        cd $(WXDIR)\samples\dde
+        cd $(WXDIR)\samples\sashtest
         make -f makefile.b32 FINAL=$(FINAL)
-#        cd $(WXDIR)\samples\regtest
-#        make -f makefile.b32 FINAL=$(FINAL)
+        cd $(WXDIR)\samples\scroll
+        make -f makefile.b32 FINAL=$(FINAL)
+        cd $(WXDIR)\samples\scrollsub
+        make -f makefile.b32 FINAL=$(FINAL)
+        cd $(WXDIR)\samples\splitter
+        make -f makefile.b32 FINAL=$(FINAL)
+!if "$(COMPIL)"==""
+        cd $(WXDIR)\samples\tab
+        make -f makefile.b32 FINAL=$(FINAL)
+!endif
+        cd $(WXDIR)\samples\taskbar
+        make -f makefile.b32 FINAL=$(FINAL)
+        cd $(WXDIR)\samples\text
+        make -f makefile.b32 FINAL=$(FINAL)
+        cd $(WXDIR)\samples\thread
+        make -f makefile.b32 FINAL=$(FINAL)
+        cd $(WXDIR)\samples\toolbar
+        make -f makefile.b32 FINAL=$(FINAL)
+        cd $(WXDIR)\samples\treectrl
+        make -f makefile.b32 FINAL=$(FINAL)
+        cd $(WXDIR)\samples\typetest
+        make -f makefile.b32 FINAL=$(FINAL)
+        cd $(WXDIR)\samples\validate
+        make -f makefile.b32 FINAL=$(FINAL)
+        cd $(WXDIR)\samples\wizard
+        make -f makefile.b32 FINAL=$(FINAL)
+        cd $(WXDIR)\samples\sockets
+        make -f makefile.b32 FINAL=$(FINAL)
 
 clean:
-        cd $(WXDIR)\samples\splitter
+        cd $(WXDIR)\samples\calendar
         make -f makefile.b32 clean
-        cd $(WXDIR)\samples\mdi
+        cd $(WXDIR)\samples\caret
         make -f makefile.b32 clean
-        cd $(WXDIR)\samples\minimal
+        cd $(WXDIR)\samples\checklst
         make -f makefile.b32 clean
-        cd $(WXDIR)\samples\layout
+        cd $(WXDIR)\samples\config
         make -f makefile.b32 clean
-        cd $(WXDIR)\samples\printing
+        cd $(WXDIR)\samples\controls
         make -f makefile.b32 clean
-        cd $(WXDIR)\samples\toolbar
+        cd $(WXDIR)\samples\db
+        make -f makefile.b32 clean
+        cd $(WXDIR)\samples\ipc
         make -f makefile.b32 clean
         cd $(WXDIR)\samples\dialogs
         make -f makefile.b32 clean
-        cd $(WXDIR)\samples\resource
-        make -f makefile.b32 clean
-        cd $(WXDIR)\samples\listctrl
-        make -f makefile.b32 clean
-        cd $(WXDIR)\samples\treectrl
-        make -f makefile.b32 clean
-        cd $(WXDIR)\samples\validate
+        cd $(WXDIR)\samples\dnd
         make -f makefile.b32 clean
         cd $(WXDIR)\samples\docview
         make -f makefile.b32 clean
         cd $(WXDIR)\samples\docvwmdi
         make -f makefile.b32 clean
-        cd $(WXDIR)\samples\controls
+        cd $(WXDIR)\samples\drawing
         make -f makefile.b32 clean
-        cd $(WXDIR)\samples\nativdlg
+        cd $(WXDIR)\samples\dynamic
+        make -f makefile.b32 clean
+        cd $(WXDIR)\samples\font
         make -f makefile.b32 clean
         cd $(WXDIR)\samples\grid
         make -f makefile.b32 clean
-        cd $(WXDIR)\samples\internat
+        cd $(WXDIR)\samples\newgrid
         make -f makefile.b32 clean
-        cd $(WXDIR)\samples\checklst
+        cd $(WXDIR)\samples\help
         make -f makefile.b32 clean
-        cd $(WXDIR)\samples\ownerdrw
-        make -f makefile.b32 clean
-        cd $(WXDIR)\samples\dnd
-        make -f makefile.b32 clean
-        cd $(WXDIR)\samples\joytest
-        make -f makefile.b32 clean
-        cd $(WXDIR)\samples\regtest
-        make -f makefile.b32 clean
-        cd $(WXDIR)\samples\taskbar
-        make -f makefile.b32 clean
-        cd $(WXDIR)\samples\sashtest
-        make -f makefile.b32 clean
-        cd $(WXDIR)\samples\memcheck
-        make -f makefile.b32 clean
-        cd $(WXDIR)\samples\minifram
-        make -f makefile.b32 clean
-        cd $(WXDIR)\samples\bombs
-        make -f makefile.b32 clean
-        cd $(WXDIR)\samples\fractal
-        make -f makefile.b32 clean
-        cd $(WXDIR)\samples\wxpoem
-        make -f makefile.b32 clean
-        cd $(WXDIR)\samples\typetest
-        make -f makefile.b32 clean
-        cd $(WXDIR)\samples\proplist
+        cd $(WXDIR)\samples\html
         make -f makefile.b32 clean
         cd $(WXDIR)\samples\image
         make -f makefile.b32 clean
+        cd $(WXDIR)\samples\internat
+        make -f makefile.b32 clean
+        cd $(WXDIR)\samples\joytest
+        make -f makefile.b32 clean
+        cd $(WXDIR)\samples\layout
+        make -f makefile.b32 clean
+        cd $(WXDIR)\samples\listctrl
+        make -f makefile.b32 clean
+        cd $(WXDIR)\samples\mdi
+        make -f makefile.b32 clean
+!if "$(FINAL)" == "0"
+        cd $(WXDIR)\samples\memcheck
+        make -f makefile.b32 clean
+!endif
+        cd $(WXDIR)\samples\mfc
+        make -f makefile.b32 clean
+        cd $(WXDIR)\samples\menu
+        make -f makefile.b32 clean
+        cd $(WXDIR)\samples\minifram
+        make -f makefile.b32 clean
+        cd $(WXDIR)\samples\minimal
+        make -f makefile.b32 clean
+        cd $(WXDIR)\samples\nativdlg
+        make -f makefile.b32 clean
+        cd $(WXDIR)\samples\dialup
+        make -f makefile.b32 clean
+        cd $(WXDIR)\samples\notebook
+        make -f makefile.b32 clean
+        cd $(WXDIR)\samples\oleauto
+        make -f makefile.b32 clean
+        cd $(WXDIR)\samples\ownerdrw
+        make -f makefile.b32 clean
+        cd $(WXDIR)\samples\png
+        make -f makefile.b32 clean
+        cd $(WXDIR)\samples\printing
+        make -f makefile.b32 clean
+        cd $(WXDIR)\samples\proplist
+        make -f makefile.b32 clean
+        cd $(WXDIR)\samples\regtest
+        make -f makefile.b32 clean
+        cd $(WXDIR)\samples\resource
+        make -f makefile.b32 clean
+        cd $(WXDIR)\samples\richedit
+        make -f makefile.b32 clean
         cd $(WXDIR)\samples\rotate
         make -f makefile.b32 clean
-        cd $(WXDIR)\samples\dde
+        cd $(WXDIR)\samples\sashtest
         make -f makefile.b32 clean
-        cd $(WXDIR)\samples
+        cd $(WXDIR)\samples\scroll
+        make -f makefile.b32 clean
+        cd $(WXDIR)\samples\scrollsub
+        make -f makefile.b32 clean
+        cd $(WXDIR)\samples\splitter
+        make -f makefile.b32 clean
+        cd $(WXDIR)\samples\tab
+        make -f makefile.b32 clean
+        cd $(WXDIR)\samples\taskbar
+        make -f makefile.b32 clean
+        cd $(WXDIR)\samples\text
+        make -f makefile.b32 clean
+        cd $(WXDIR)\samples\thread
+        make -f makefile.b32 clean
+        cd $(WXDIR)\samples\toolbar
+        make -f makefile.b32 clean
+        cd $(WXDIR)\samples\treectrl
+        make -f makefile.b32 clean
+        cd $(WXDIR)\samples\typetest
+        make -f makefile.b32 clean
+        cd $(WXDIR)\samples\validate
+        make -f makefile.b32 clean
+!if "$(NOMAKE)"==""
+        cd $(WXDIR)\samples\wizard
+        make -f makefile.b32 clean
+!endif
+        cd $(WXDIR)\samples\sockets
+        make -f makefile.b32 clean
 
