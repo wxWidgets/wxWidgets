@@ -40,7 +40,7 @@
 //#define TEST_DATETIME
 //#define TEST_DIR
 //#define TEST_DLLLOADER
-#define TEST_ENVIRON
+//#define TEST_ENVIRON
 //#define TEST_EXECUTE
 //#define TEST_FILE
 //#define TEST_FILECONF
@@ -48,7 +48,7 @@
 //#define TEST_LIST
 //#define TEST_LOG
 //#define TEST_LONGLONG
-//#define TEST_MIME
+#define TEST_MIME
 //#define TEST_INFO_FUNCTIONS
 //#define TEST_REGISTRY
 //#define TEST_SOCKETS
@@ -760,6 +760,32 @@ static void TestMimeFilename()
 
             delete ft;
         }
+    }
+}
+
+static void TestMimeAssociate()
+{
+    wxPuts(_T("*** Testing creation of filetype association ***\n"));
+
+    wxFileType *ft = g_mimeManager.Associate
+                     (
+                        _T(".xyz"),
+                        _T("application/x-xyz"),
+                        _T("XYZFile"), // filetype (MSW only)
+                        _T("XYZ File") // description (Unix only)
+                     );
+    if ( !ft )
+    {
+        wxPuts(_T("ERROR: failed to create association!"));
+    }
+    else
+    {
+        if ( !ft->SetOpenCommand(_T("myprogram")) )
+        {
+            wxPuts(_T("ERROR: failed to set open command!"));
+        }
+
+        delete ft;
     }
 }
 
@@ -3809,9 +3835,12 @@ int main(int argc, char **argv)
 #ifdef TEST_MIME
     wxLog::AddTraceMask(_T("mime"));
     if ( 0 )
+    {
         TestMimeEnum();
-    TestMimeOverride();
-    TestMimeFilename();
+        TestMimeOverride();
+        TestMimeFilename();
+    }
+    TestMimeAssociate();
 #endif // TEST_MIME
 
 #ifdef TEST_INFO_FUNCTIONS

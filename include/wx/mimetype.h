@@ -3,6 +3,7 @@
 // Purpose:     classes and functions to manage MIME types
 // Author:      Vadim Zeitlin
 // Modified by:
+//  Chris Elliott (biol75@york.ac.uk) 5 Dec 00: write support for Win32
 // Created:     23.09.98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
@@ -81,8 +82,12 @@ public:
         // fill passed in array with all extensions associated with this file
         // type
     bool GetExtensions(wxArrayString& extensions);
-        // get the icon corresponding to this file type
-    bool GetIcon(wxIcon *icon) const;
+        // get the icon corresponding to this file type, the name of the file
+        // where the icon resides is return in iconfile if !NULL and its index
+        // in this file (Win-only) is in iconIndex
+    bool GetIcon(wxIcon *icon,
+                 wxString *iconFile = NULL,
+                 int *iconIndex = NULL) const;
         // get a brief file type description ("*.txt" => "text document")
     bool GetDescription(wxString *desc) const;
 
@@ -93,6 +98,39 @@ public:
         // get the command to print the file of given type
     bool GetPrintCommand(wxString *printCmd,
                          const MessageParameters& params) const;
+
+
+        // return the number of commands defined for this file type, 0 if none
+    size_t GetAllCommands(wxArrayString *verbs, wxArrayString *commands,
+                          const wxFileType::MessageParameters& params) const;
+
+    // the methods which modify the system database are only implemented under
+    // Win32 so far (on other platforms they will just return FALSE)
+    //
+    // also, they should only be used with the objects created using
+    // wxMimeTypesManager::Associate()
+
+        // set the command to be used for opening the file
+    bool SetOpenCommand(const wxString& cmd, bool overwriteprompt = TRUE);
+
+        // set an arbitrary command, ask confirmation if it already exists and
+        // overwriteprompt is TRUE
+    bool SetCommand(const wxString& cmd, const wxString& verb,
+                    bool overwriteprompt = TRUE);
+
+        // set the MIME type for this filetype
+    bool SetMimeType(const wxString& mimeType);
+        // set the default icon for this filetype
+    bool SetDefaultIcon(const wxString& cmd = wxEmptyString, int index = 0);
+
+        // remove the association from the system database
+    bool Unassociate();
+
+        // delete registration info
+    bool RemoveOpenCommand();
+    bool RemoveCommand(const wxString& verb);
+    bool RemoveMimeType();
+    bool RemoveDefaultIcon();
 
     // operations
         // expand a string in the format of GetOpenCommand (which may contain
@@ -186,6 +224,7 @@ public:
     // deleting it.
         // get file type from file extension
     wxFileType *GetFileTypeFromExtension(const wxString& ext);
+    wxFileType *GetOrAllocateFileTypeFromExtension(const wxString& ext);
         // get file type from MIME type (in format <category>/<format>)
     wxFileType *GetFileTypeFromMimeType(const wxString& mimeType);
 
@@ -218,6 +257,14 @@ public:
     // The filetypes array should be terminated by a NULL entry
     void AddFallbacks(const wxFileTypeInfo *filetypes);
 
+    // create a new association between the given extension and MIME type and
+    // return the wxFileType object corresponding (which should be deleted by
+    // caller) or NULL if something went wrong
+    wxFileType *Associate(const wxString& ext,
+                          const wxString& mimeType,
+                          const wxString& filetype = wxEmptyString,
+                          const wxString& desc = wxEmptyString);
+
     // dtor (not virtual, shouldn't be derived from)
     ~wxMimeTypesManager();
 
@@ -227,10 +274,10 @@ private:
     wxMimeTypesManager& operator=(const wxMimeTypesManager&);
 
     wxMimeTypesManagerImpl *m_impl;
-    
+
     // if m_impl is NULL, create one
     void EnsureImpl();
-    
+
     friend class wxMimeTypeCmnModule;
 };
 
