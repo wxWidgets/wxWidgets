@@ -43,6 +43,8 @@ class WXDLLEXPORT wxSplashScreenWindow;
 class WXDLLEXPORT wxSplashScreen: public wxFrame
 {
 public:
+    // for RTTI macros obly
+    wxSplashScreen() {};
     wxSplashScreen(const wxBitmap& bitmap, long splashStyle, int milliseconds, wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxSIMPLE_BORDER|wxFRAME_FLOAT_ON_PARENT);
     ~wxSplashScreen();
 
@@ -59,6 +61,7 @@ protected:
     int                     m_milliseconds;
     wxTimer                 m_timer;
 
+DECLARE_DYNAMIC_CLASS(wxSplashScreen)
 DECLARE_EVENT_TABLE()
 };
 

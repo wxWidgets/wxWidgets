@@ -34,6 +34,8 @@
 
 #define wxSPLASH_TIMER_ID 9999
 
+IMPLEMENT_DYNAMIC_CLASS(wxSplashScreen, wxFrame);
+
 BEGIN_EVENT_TABLE(wxSplashScreen, wxFrame)
     EVT_TIMER(wxSPLASH_TIMER_ID, wxSplashScreen::OnNotify)
     EVT_CLOSE(wxSplashScreen::OnCloseWindow)
