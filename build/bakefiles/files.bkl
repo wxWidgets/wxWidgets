@@ -113,6 +113,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="BASE_AND_GUI_MAC_SRC" hints="files">
     src/mac/utils.cpp
+<<<<<<< files.bkl
+    <!-- src/mac/utilsexc.cpp -->
+=======
+>>>>>>> 1.74
 </set>
 
 <set var="BASE_MAC_HDR" hints="files">
@@ -181,6 +185,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/zstream.cpp
 </set>
 <set var="BASE_AND_GUI_CMN_SRC" hints="files">
+    src/common/bookctrl.cpp
     src/common/event.cpp
     src/common/fs_mem.cpp
     src/common/msgout.cpp
