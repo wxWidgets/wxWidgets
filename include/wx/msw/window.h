@@ -78,7 +78,7 @@ class WXDLLEXPORT wxResourceTable;
 class WXDLLEXPORT wxItemResource;
 #endif
 
-WXDLLEXPORT_DATA(extern const char*) wxPanelNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxPanelNameStr;
 
 WXDLLEXPORT_DATA(extern const wxSize) wxDefaultSize;
 WXDLLEXPORT_DATA(extern const wxPoint) wxDefaultPosition;

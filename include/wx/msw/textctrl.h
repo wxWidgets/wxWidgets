@@ -31,8 +31,8 @@
     #define wxUSE_RICHEDIT 0
 #endif
 
-WXDLLEXPORT_DATA(extern const char*) wxTextCtrlNameStr;
-WXDLLEXPORT_DATA(extern const char*) wxEmptyString;
+WXDLLEXPORT_DATA(extern const wxChar*) wxTextCtrlNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 
 // Single-line text item
 class WXDLLEXPORT wxTextCtrl : public wxControl

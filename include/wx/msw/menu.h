@@ -24,7 +24,7 @@ class WXDLLEXPORT wxMenuBar;
 class WXDLLEXPORT wxMenu;
 class WXDLLEXPORT wxFrame;
 
-WXDLLEXPORT_DATA(extern const char*) wxEmptyString;
+WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 
 // ----------------------------------------------------------------------------
 // Menu
@@ -237,7 +237,7 @@ public:
         // attach to a frame
     void Attach(wxFrame *frame)
     {
-        wxASSERT_MSG( !m_menuBarFrame, "menubar already attached!" );
+        wxASSERT_MSG( !m_menuBarFrame, _T("menubar already attached!") );
 
         m_menuBarFrame = frame;
     }

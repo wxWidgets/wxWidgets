@@ -20,8 +20,8 @@
 
 #if wxUSE_COMBOBOX
 
-WXDLLEXPORT_DATA(extern const char*) wxComboBoxNameStr;
-WXDLLEXPORT_DATA(extern const char*) wxEmptyString;
+WXDLLEXPORT_DATA(extern const wxChar*) wxComboBoxNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 
 // Combobox item
 class WXDLLEXPORT wxComboBox: public wxChoice

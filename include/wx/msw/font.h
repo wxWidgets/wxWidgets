@@ -44,7 +44,7 @@ protected:
 
 #define M_FONTDATA ((wxFontRefData *)m_refData)
 
-WXDLLEXPORT_DATA(extern const char*) wxEmptyString;
+WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 
 // Font
 class WXDLLEXPORT wxFont: public wxGDIObject

@@ -79,7 +79,7 @@ class WXDLLEXPORT wxApp: public wxEvtHandler
   inline bool GetExitOnFrameDelete() const { return m_exitOnFrameDelete; }
 
   inline const wxString& GetAppName() const {
-      if (m_appName != "")
+      if (m_appName != _T(""))
         return m_appName;
       else return m_className;
     }

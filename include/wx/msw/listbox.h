@@ -37,7 +37,7 @@ WXDLLEXPORT_DATA(extern const char*) wxListBoxNameStr;
 // forward decl for GetSelections()
 class wxArrayInt;
 
-WXDLLEXPORT_DATA(extern const char*) wxEmptyString;
+WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 
 // List box item
 class WXDLLEXPORT wxListBox : public wxControl

@@ -20,9 +20,9 @@
 #include "wx/toolbar.h"
 #include "wx/msw/accel.h"
 
-WXDLLEXPORT_DATA(extern const char*) wxFrameNameStr;
-WXDLLEXPORT_DATA(extern const char*) wxToolBarNameStr;
-WXDLLEXPORT_DATA(extern const char*) wxStatusLineNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxFrameNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxToolBarNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxStatusLineNameStr;
 
 class WXDLLEXPORT wxMenuBar;
 class WXDLLEXPORT wxStatusBar;

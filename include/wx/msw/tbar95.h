@@ -19,7 +19,7 @@
 #if wxUSE_BUTTONBAR && wxUSE_TOOLBAR
 #include "wx/tbarbase.h"
 
-WXDLLEXPORT_DATA(extern const char*) wxToolBarNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxToolBarNameStr;
 
 class WXDLLEXPORT wxToolBar95: public wxToolBarBase
 {
