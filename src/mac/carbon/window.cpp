@@ -638,12 +638,40 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
                 oldRgn = NewRgn() ;
                 newRgn = NewRgn() ;
                 diffRgn = NewRgn() ;
+                
+                // invalidate the differences between the old and the new area
+                
                 SetRectRgn(oldRgn , oldPos.x , oldPos.y , oldPos.x + m_width , oldPos.y + m_height ) ;
                 SetRectRgn(newRgn , newPos.x , newPos.y , newPos.x + actualWidth , newPos.y + actualHeight ) ;
                 DiffRgn( newRgn , oldRgn , diffRgn ) ;
                 InvalWindowRgn( (WindowRef) MacGetRootWindow() , diffRgn ) ;
                 DiffRgn( oldRgn , newRgn , diffRgn ) ;
                 InvalWindowRgn( (WindowRef) MacGetRootWindow() , diffRgn ) ;
+                
+                // we also must invalidate the border areas, someone might optimize this one day to invalidate only the really
+                // changing pixels...
+                
+                if ( MacGetLeftBorderSize() != 0 || MacGetRightBorderSize() != 0 || 
+                	MacGetTopBorderSize() != 0 || MacGetBottomBorderSize() != 0 )
+                {
+                	RgnHandle innerOldRgn, innerNewRgn ;
+                	innerOldRgn = NewRgn() ;
+                	innerNewRgn = NewRgn() ;
+                	
+                	SetRectRgn(innerOldRgn , oldPos.x + MacGetLeftBorderSize()  , oldPos.y + MacGetTopBorderSize() , 
+                		oldPos.x + m_width - MacGetRightBorderSize() , oldPos.y + m_height - MacGetBottomBorderSize() ) ;
+    	            DiffRgn( oldRgn , innerOldRgn , diffRgn ) ;
+	                InvalWindowRgn( (WindowRef) MacGetRootWindow() , diffRgn ) ;
+
+                	SetRectRgn(innerNewRgn , newPos.x + MacGetLeftBorderSize()  , newPos.y + MacGetTopBorderSize() , 
+                		newPos.x + actualWidth - MacGetRightBorderSize() , newPos.y + actualHeight - MacGetBottomBorderSize() ) ;
+    	            DiffRgn( newRgn , innerNewRgn , diffRgn ) ;
+	                InvalWindowRgn( (WindowRef) MacGetRootWindow() , diffRgn ) ;
+	                
+                	DisposeRgn( innerOldRgn ) ;
+                	DisposeRgn( innerNewRgn ) ;
+                }
+                
                 DisposeRgn(oldRgn) ;
                 DisposeRgn(newRgn) ;
                 DisposeRgn(diffRgn) ;
