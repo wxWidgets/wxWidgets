@@ -475,7 +475,7 @@ void MyFrame::OnKill(wxCommandEvent& WXUNUSED(event))
 void MyFrame::DoAsyncExec(const wxString& cmd)
 {
     wxProcess *process = new MyProcess(this, cmd);
-    m_pidLast = wxExecute(cmd, FALSE /* async */, process);
+    m_pidLast = wxExecute(cmd, wxEXEC_ASYNC, process);
     if ( !m_pidLast )
     {
         wxLogError(_T("Execution of '%s' failed."), cmd.c_str());
@@ -501,7 +501,7 @@ void MyFrame::OnSyncExec(wxCommandEvent& WXUNUSED(event))
 
     wxLogStatus(_T("'%s' is running please wait..."), cmd.c_str());
 
-    int code = wxExecute(cmd, TRUE /* sync */);
+    int code = wxExecute(cmd, wxEXEC_SYNC);
 
     wxLogStatus(_T("Process '%s' terminated with exit code %d."),
                 cmd.c_str(), code);
@@ -577,7 +577,7 @@ void MyFrame::OnExecWithRedirect(wxCommandEvent& WXUNUSED(event))
     else // async exec
     {
         MyPipedProcess *process = new MyPipedProcess(this, cmd);
-        if ( !wxExecute(cmd, FALSE /* async */, process) )
+        if ( !wxExecute(cmd, wxEXEC_ASYNC, process) )
         {
             wxLogError(_T("Execution of '%s' failed."), cmd.c_str());
 
@@ -611,7 +611,7 @@ void MyFrame::OnExecWithPipe(wxCommandEvent& WXUNUSED(event))
 
     // always execute the filter asynchronously
     MyPipedProcess2 *process = new MyPipedProcess2(this, cmd, input);
-    int pid = wxExecute(cmd, FALSE /* async */, process);
+    int pid = wxExecute(cmd, wxEXEC_ASYNC, process);
     if ( pid )
     {
         wxLogStatus(_T("Process %ld (%s) launched."), pid, cmd.c_str());
