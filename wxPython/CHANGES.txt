@@ -13,7 +13,7 @@ and dtors.
 
 Exposed the wxThe[Font|Pen|Brush]List to wxPython.
 
-Also wxTheColourDatabase and added a library module (in the
+Also added wxTheColourDatabase and added a library module (in the
 wxPython.lib.colourdb module) to load LOTS more colour names into the
 colour database.
 
@@ -21,8 +21,8 @@ Added wxWakeUpMainThread, wxMutexGuiEnter, wxMutexGuiLeave,
 wxMutexGuiLocker and wxThread_IsMain to assist with dealing with GUI
 access from non-GUI threads.
 
-wxPyOnDemandOutputWindow is now thread safe if non-GUI threads use
-print, sys.stdout.write, etc.
+wxPyOnDemandOutputWindow is now (more) thread safe if non-GUI threads
+use print, sys.stdout.write, etc.
 
 Added CreateTextSizer and CreateButtonSizer to wxDialog
 
@@ -34,6 +34,28 @@ wxPython/lib from Lorne White.
 
 Added patch to wxPoint_LIST_helper from Tim Hochberg that should make
 it gobs faster in certain situations.
+
+Added tools that will take an image file in a wx supported format and
+convert it to data embedded in a Python source file.  The image is
+converted to XPM format (with its transparency mask intact, if there
+is one) which is essentially a list of strings containing info about
+each pixel.  It is then pickled and optionally compressed and written
+to a Python source file along with functions to convert it to either a
+wxBitmap or a wxImage.  See wxPython/demo/images.py for examples, and
+wxPython/Tools/img2py.py for the implementation.  Unfortunatly, there
+is no SaveFile implemented for the XPM image type in wxGTK so the
+tools to create the embedded image files don't work on wxGTK, only on
+wxMSW.  The img2xpm.py tool could probably be hacked to use external
+tools, or PIL, to do the XPM conversion on wxGTK.  If somebody does
+this please send me a patch.
+
+Fixed wxStyledTextCtrl to be much faster on wxGTK.  There was some
+experimental code that got left in place that ended up causing way too
+many refreshes.
+
+A couple hacks in my_distutils.py so wxPython can be built with the
+distutils that comes with Python 2.1.
+
 
 
 
