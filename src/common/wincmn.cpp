@@ -1872,27 +1872,27 @@ void wxWindowBase::OnMiddleClick( wxMouseEvent& event )
 
         switch ( wxGetOsVersion() )
         {
-            case wxMOTIF_X:     port = _T("Motif"); break;
+            case wxMOTIF_X:     port += _T("Motif"); break;
             case wxMAC:
-            case wxMAC_DARWIN:  port = _T("Mac"); break;
-            case wxBEOS:        port = _T("BeOS"); break;
+            case wxMAC_DARWIN:  port += _T("Mac"); break;
+            case wxBEOS:        port += _T("BeOS"); break;
             case wxGTK:
             case wxGTK_WIN32:
             case wxGTK_OS2:
-            case wxGTK_BEOS:    port = _T("GTK"); break;
+            case wxGTK_BEOS:    port += _T("GTK"); break;
             case wxWINDOWS:
             case wxPENWINDOWS:
             case wxWINDOWS_NT:
             case wxWIN32S:
             case wxWIN95:
-            case wxWIN386:      port = _T("MS Windows"); break;
+            case wxWIN386:      port += _T("MS Windows"); break;
             case wxMGL_UNIX:
             case wxMGL_X:
             case wxMGL_WIN32:
-            case wxMGL_OS2:     port = _T("MGL"); break;
+            case wxMGL_OS2:     port += _T("MGL"); break;
             case wxWINDOWS_OS2:
-            case wxOS2_PM:      port = _T("OS/2"); break;
-            default:            port = _T("unknown"); break;
+            case wxOS2_PM:      port += _T("OS/2"); break;
+            default:            port += _T("unknown"); break;
         }
 
         wxMessageBox(wxString::Format(
