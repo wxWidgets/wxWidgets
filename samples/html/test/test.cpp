@@ -33,6 +33,8 @@
 #include "wx/fs_inet.h"
 #include "wx/filedlg.h"
 
+#include "../../sample.xpm"
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
@@ -188,6 +190,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
 
+    SetIcon(wxIcon(sample_xpm));
+    
 #if wxUSE_ACCEL
     // Create convenient accelerators for Back and Forward navigation
     wxAcceleratorEntry entries[2];

@@ -32,6 +32,8 @@
 #include "wx/splitter.h"
 #include "wx/textfile.h"
 
+#include "../sample.xpm"
+
 #ifdef __WXMAC__
 #undef wxFontDialog
 #include "wx/mac/fontdlg.h"
@@ -234,6 +236,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 {
     m_fontSize = 12;
 
+    SetIcon(wxIcon(sample_xpm));
+    
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
 
