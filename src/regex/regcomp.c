@@ -51,7 +51,7 @@ static char nuls[10];		/* place to point scanner in event of error */
 #define	NEXTn(n)	(p->next += (n))
 #define	GETNEXT()	(*p->next++)
 #define	SETERROR(e)	seterr(p, (e))
-#define	REQUIRE(co, e)	((co) || SETERROR(e))
+#define	REQUIRE(co, e)	((void)((co) || SETERROR(e)))
 #define	MUSTSEE(c, e)	(REQUIRE(MORE() && PEEK() == (c), e))
 #define	MUSTEAT(c, e)	(REQUIRE(MORE() && GETNEXT() == (c), e))
 #define	MUSTNOTSEE(c, e)	(REQUIRE(!MORE() || PEEK() != (c), e))
@@ -1169,6 +1169,8 @@ register char *cp;
 	cs->multis[cs->smultis - 1] = '\0';
 }
 
+/* these functions don't seem to be used (yet?), suppress warnings */
+#if 0
 /*
  - mcsub - subtract a collating element from a cset
  == static void mcsub(register cset *cs, register char *cp);
@@ -1226,6 +1228,7 @@ register char *cp;
 			return(p);
 	return(NULL);
 }
+#endif /* 0 */
 
 /*
  - mcinvert - invert the list of collating elements in a cset
