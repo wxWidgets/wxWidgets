@@ -32,12 +32,13 @@
 #endif
 #include "wx/dcclient.h"
 
-#include "glib.h"
-#include "gdk/gdk.h"
-#include "gtk/gtk.h"
+#include <glib.h>
+#include <gdk/gdk.h>
+#include <gtk/gtk.h>
+#include <gdk/gdkkeysyms.h>
+#include <gdk/gdkx.h>
+
 #include "wx/gtk/win_gtk.h"
-#include "gdk/gdkkeysyms.h"
-#include "gdk/gdkx.h"
 
 // ----------------------------------------------------------------------------
 // constants
