@@ -165,7 +165,7 @@ bool wxDirData::Read(wxString *filename)
 			continue ;
 
 		wxString file( m_name ) ;
-		if ( m_filespec.IsEmpty() || m_filespec == "*.*" )
+		if ( m_filespec.IsEmpty() || m_filespec == "*.*" || m_filespec == "*" )
 		{
 		}
 		else if ( m_filespec.Length() > 1 && m_filespec.Left(1) =="*" )
