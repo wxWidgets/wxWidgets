@@ -150,12 +150,12 @@ bool wxFTP::GetResult(char exp)
 {
   if ((m_lastError = GetLine(this, m_lastResult)))
     return FALSE;
-  if (m_lastResult[0UL] != exp) {
+  if (m_lastResult[0] != exp) {
     m_lastError = wxPROTO_PROTERR;
     return FALSE;
   }
 
-  if (m_lastResult[3UL] == '-') {
+  if (m_lastResult[3] == '-') {
     wxString key = m_lastResult.Left((size_t)3);
 
     key += ' ';
