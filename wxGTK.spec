@@ -1,6 +1,6 @@
 # Note that this is NOT a relocatable package
 %define pref /usr
-%define ver 2.2.5
+%define ver 2.2.6
 %define rel 0
 
 Summary: The GTK+ 1.2 port of the wxWindows library
@@ -10,8 +10,9 @@ Release: %{rel}
 Copyright: wxWindows Licence
 Group: X11/Libraries
 Source: wxGTK-%{ver}.tar.gz
-URL: http://wxwindows.org
-Packager: Robert Roebling <robert@roebling.de>
+URL: http://www.wxwindows.org/
+BuildRoot: /var/tmp/%{name}-root
+Packager: Vadim Zeitlin <vadim@wxwindows.org>
 
 # all packages providing an implementation of wxWindows library (regardless of
 # the toolkit used) should provide the (virtual) wxwin package, this makes it
@@ -40,7 +41,9 @@ Requires: wxGTK
 OpenGl add-on library for wxGTK, the GTK+ 1.2 port of the wxWindows library.
 
 %prep
-%setup -n wxGTK
+%setup -n wxGTK-%{ver}
+export CPPFLAGS=-I/usr/X11R6/include
+export LDFLAGS=-L/usr/X11R6/lib
 ./configure --prefix=%{pref} --enable-burnt_name --with-odbc --with-opengl
 
 %build
@@ -52,7 +55,7 @@ fi
 $MAKE
 
 %install
-make install
+make prefix=$RPM_BUILD_ROOT%{pref} install
 
 %post
 /sbin/ldconfig
@@ -61,6 +64,7 @@ make install
 /sbin/ldconfig
 
 %files
+%defattr(-, root, root)
 %defattr (644, root, root, 755)
 %doc COPYING.LIB INSTALL.txt LICENCE.txt README.txt SYMBOLS.txt TODO.txt
 %dir %{pref}/share/wx
@@ -69,6 +73,7 @@ make install
 %attr(755, -, -) %{pref}/lib/libwx_gtk-2.2.*
 
 %files devel
+%defattr(-, root, root)
 %defattr (644, root, root, 755)
 %dir %{pref}/include/wx
 %{pref}/include/wx/*
@@ -78,4 +83,5 @@ make install
 %attr(755, -, -) %{pref}/bin/wx-config
 
 %files gl
+%defattr(-, root, root)
 %attr(755, -, -) %{pref}/lib/libwx_gtk_gl*
