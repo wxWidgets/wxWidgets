@@ -1898,9 +1898,24 @@ void wxGridCellBoolRenderer::Draw(wxGrid& grid,
 // wxGridCellAttr
 // ----------------------------------------------------------------------------
 
+void wxGridCellAttr::Init(wxGridCellAttr *attrDefault)
+{
+    m_nRef = 1;
+
+    m_isReadOnly = Unset;
+
+    m_renderer = NULL;
+    m_editor = NULL;
+
+    m_attrkind = wxGridCellAttr::Cell;
+
+    SetDefAttr(attrDefault);
+}
+
 wxGridCellAttr *wxGridCellAttr::Clone() const
 {
-    wxGridCellAttr *attr = new wxGridCellAttr;
+    wxGridCellAttr *attr = new wxGridCellAttr(m_defGridAttr);
+
     if ( HasTextColour() )
         attr->SetTextColour(GetTextColour());
     if ( HasBackgroundColour() )
@@ -1925,8 +1940,6 @@ wxGridCellAttr *wxGridCellAttr::Clone() const
         attr->SetReadOnly();
 
     attr->SetKind( m_attrkind );
-
-    attr->SetDefAttr(m_defGridAttr);
 
     return attr;
 }
@@ -3616,8 +3629,7 @@ void wxGrid::Create()
 
     m_cellEditCtrlEnabled = FALSE;
 
-    m_defaultCellAttr = new wxGridCellAttr;
-    m_defaultCellAttr->SetDefAttr(m_defaultCellAttr);
+    m_defaultCellAttr = new wxGridCellAttr(m_defaultCellAttr);
 
     // Set default cell attributes
     m_defaultCellAttr->SetKind(wxGridCellAttr::Default);
@@ -8101,19 +8113,20 @@ wxGridCellAttr *wxGrid::GetCellAttr(int row, int col) const
 wxGridCellAttr *wxGrid::GetOrCreateCellAttr(int row, int col) const
 {
     wxGridCellAttr *attr = (wxGridCellAttr *)NULL;
-        wxASSERT_MSG( m_table,
-                      _T("we may only be called if CanHaveAttributes() returned TRUE and then m_table should be !NULL") );
 
-    attr = m_table->GetAttr(row, col, wxGridCellAttr::Cell );
-        if ( !attr )
-        {
-            attr = new wxGridCellAttr;
+    wxCHECK_MSG( m_table, attr,
+                  _T("we may only be called if CanHaveAttributes() returned TRUE and then m_table should be !NULL") );
 
-            // artificially inc the ref count to match DecRef() in caller
-            attr->IncRef();
-            m_table->SetAttr(attr, row, col);
-        }
-    attr->SetDefAttr(m_defaultCellAttr);
+    attr = m_table->GetAttr(row, col, wxGridCellAttr::Cell);
+    if ( !attr )
+    {
+        attr = new wxGridCellAttr(m_defaultCellAttr);
+
+        // artificially inc the ref count to match DecRef() in caller
+        attr->IncRef();
+        m_table->SetAttr(attr, row, col);
+    }
+
     return attr;
 }
 

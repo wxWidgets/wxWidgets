@@ -583,9 +583,10 @@ public:
     };
 
     // ctors
-    wxGridCellAttr()
+    wxGridCellAttr(wxGridCellAttr *attrDefault = NULL)
     {
-        Init();
+        Init(attrDefault);
+
         // MB: args used to be 0,0 here but wxALIGN_LEFT is 0
         SetAlignment(-1, -1);
     }
@@ -664,17 +665,7 @@ private:
     };
 
     // the common part of all ctors
-    void Init()
-    {
-        m_nRef = 1;
-
-        m_isReadOnly = Unset;
-
-        m_renderer = NULL;
-        m_editor = NULL;
-
-        m_attrkind = wxGridCellAttr::Cell;
-    }
+    void Init(wxGridCellAttr *attrDefault = NULL);
 
     // the dtor is private because only DecRef() can delete us
     ~wxGridCellAttr()
