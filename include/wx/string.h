@@ -575,7 +575,7 @@ public:
     // case-sensitive comparison (returns a value < 0, = 0 or > 0)
   int  Cmp(const wxChar *psz) const { return wxStrcmp(c_str(), psz); }
     // same as Cmp() but not case-sensitive
-  int  CmpNoCase(const wxChar *psz) const { return Stricmp(c_str(), psz); }
+  int  CmpNoCase(const wxChar *psz) const { return wxStricmp(c_str(), psz); }
     // test for the string equality, either considering case or not
     // (if compareWithCase then the case matters)
   bool IsSameAs(const wxChar *psz, bool compareWithCase = TRUE) const
