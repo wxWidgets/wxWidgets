@@ -772,6 +772,17 @@
 #   endif
 #endif /* wxUSE_FILESYSTEM */
 
+#if wxUSE_FS_INET
+#   if !wxUSE_PROTOCOL
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_FS_INET requires wxUSE_PROTOCOL"
+#       else
+#           undef wxUSE_PROTOCOL
+#           define wxUSE_PROTOCOL 1
+#       endif
+#   endif
+#endif /* wxUSE_FS_INET */
+
 #if wxUSE_STOPWATCH || wxUSE_DATETIME
 #    if !wxUSE_LONGLONG
 #        ifdef wxABORT_ON_CONFIG_ERROR
