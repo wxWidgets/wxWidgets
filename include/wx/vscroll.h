@@ -95,10 +95,10 @@ public:
     virtual bool ScrollPages(int pages);
 
     // redraw the specified line
-    void RefreshLine(size_t line);
+    virtual void RefreshLine(size_t line);
 
     // redraw all lines in the specified range (inclusive)
-    void RefreshLines(size_t from, size_t to);
+    virtual void RefreshLines(size_t from, size_t to);
 
     // return the item at the specified (in physical coordinates) position or.
 
