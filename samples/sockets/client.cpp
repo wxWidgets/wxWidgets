@@ -571,7 +571,8 @@ void MyFrame::OnTestURL(wxCommandEvent& WXUNUSED(event))
   wxYield();
 
   // Get the data
-  wxFileOutputStream sout( wxT("test.url") );
+  wxFile fileTest(wxT("test.url"));
+  wxFileOutputStream sout(fileTest);
   if (!sout.Ok())
   {
     m_text->AppendText(_("Error: couldn't open file for output\n"));

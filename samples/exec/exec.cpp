@@ -83,7 +83,7 @@ public:
 
 // Define an array of process pointers used by MyFrame
 class MyPipedProcess;
-WX_DEFINE_ARRAY(MyPipedProcess *, MyProcessesArray);
+WX_DEFINE_ARRAY_NO_PTR(MyPipedProcess *, MyProcessesArray);
 
 // Define a new frame type: this is going to be our main frame
 class MyFrame : public wxFrame

@@ -39,7 +39,7 @@
 #endif
 
 class MyThread;
-WX_DEFINE_ARRAY(wxThread *, wxArrayThread);
+WX_DEFINE_ARRAY_NO_PTR(wxThread *, wxArrayThread);
 
 // Define a new application type
 class MyApp : public wxApp

@@ -164,7 +164,7 @@ private:
 };
 
 // array of pages
-WX_DEFINE_ARRAY(WidgetsPage *, ArrayWidgetsPage);
+WX_DEFINE_ARRAY_NO_PTR(WidgetsPage *, ArrayWidgetsPage);
 
 // ----------------------------------------------------------------------------
 // misc macros

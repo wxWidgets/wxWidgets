@@ -83,10 +83,10 @@ protected:
 
     void OnCheckOrRadioBox(wxCommandEvent& event);
 
-    void OnSpinBtn(wxCommandEvent& event);
-    void OnSpinBtnUp(wxCommandEvent& event);
-    void OnSpinBtnDown(wxCommandEvent& event);
-    void OnSpinCtrl(wxCommandEvent& event);
+    void OnSpinBtn(wxSpinEvent& event);
+    void OnSpinBtnUp(wxSpinEvent& event);
+    void OnSpinBtnDown(wxSpinEvent& event);
+    void OnSpinCtrl(wxSpinEvent& event);
 
     void OnUpdateUIValueButton(wxUpdateUIEvent& event);
     void OnUpdateUIMinMaxButton(wxUpdateUIEvent& event);
@@ -394,7 +394,7 @@ void SpinBtnWidgetsPage::OnUpdateUICurValueText(wxUpdateUIEvent& event)
     event.SetText( wxString::Format(_T("%d"), m_spinbtn->GetValue()));
 }
 
-void SpinBtnWidgetsPage::OnSpinBtn(wxCommandEvent& event)
+void SpinBtnWidgetsPage::OnSpinBtn(wxSpinEvent& event)
 {
     int value = event.GetInt();
 
@@ -404,19 +404,19 @@ void SpinBtnWidgetsPage::OnSpinBtn(wxCommandEvent& event)
     wxLogMessage(_T("Spin button value changed, now %d"), value);
 }
 
-void SpinBtnWidgetsPage::OnSpinBtnUp(wxCommandEvent& event)
+void SpinBtnWidgetsPage::OnSpinBtnUp(wxSpinEvent& event)
 {
     wxLogMessage( _T("Spin button value incremented, will be %ld (was %d)"),
                   event.GetInt(), m_spinbtn->GetValue() );
 }
 
-void SpinBtnWidgetsPage::OnSpinBtnDown(wxCommandEvent& event)
+void SpinBtnWidgetsPage::OnSpinBtnDown(wxSpinEvent& event)
 {
     wxLogMessage( _T("Spin button value decremented, will be %ld (was %d)"),
                   event.GetInt(), m_spinbtn->GetValue() );
 }
 
-void SpinBtnWidgetsPage::OnSpinCtrl(wxCommandEvent& event)
+void SpinBtnWidgetsPage::OnSpinCtrl(wxSpinEvent& event)
 {
     if (!m_spinctrl)
         return;
