@@ -1,0 +1,42 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1998
+# Updated:	
+# Copyright:	(c) 1998
+#
+#
+# Makefile for OGL library, Unix
+
+include ../../../src/make.env
+
+OGLLIB=$(WXDIR)/lib/libogl$(GUISUFFIX).a
+
+LIB_CPP_SRC=\
+\
+  basic.o\
+  basic2.o\
+  canvas.o\
+  ogldiag.o\
+  lines.o\
+  misc.o\
+  divided.o\
+  constrnt.o\
+  composit.o\
+  drawn.o\
+  bmpshape.o\
+  mfutils.o
+
+all:    $(OGLLIB)
+
+# Define library objects
+OBJECTS=\
+ $(LIB_CPP_SRC:.cpp=.o)
+
+$(OGLLIB) : $(OBJECTS)
+	ar $(AROPTIONS) $@ $(OBJECTS)
+	$(RANLIB) $@
+
+clean:
+	rm -f $(OBJECTS) $(OGLLIB)
+
