@@ -215,9 +215,11 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Exec_Redirect, MyFrame::OnExecWithRedirect)
     EVT_MENU(Exec_Pipe, MyFrame::OnExecWithPipe)
 
+#ifdef __WINDOWS__
     EVT_MENU(Exec_DDEExec, MyFrame::OnDDEExec)
     EVT_MENU(Exec_DDERequest, MyFrame::OnDDERequest)
-
+#endif // __WINDOWS__
+    
     EVT_MENU(Exec_About, MyFrame::OnAbout)
 
     EVT_IDLE(MyFrame::OnIdle)
