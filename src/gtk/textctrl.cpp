@@ -325,10 +325,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
 
     m_cursor = wxCursor( wxCURSOR_IBEAM );
 
-    // FIXME: is the bg colour correct here?
-    wxTextAttr attrDef( colFg,
-                        wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW),
-                        parent->GetFont() );
+    wxTextAttr attrDef( colFg, m_backgroundColour, parent->GetFont() );
     SetDefaultStyle( attrDef );
 
     Show( TRUE );
