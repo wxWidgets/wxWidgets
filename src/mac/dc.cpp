@@ -239,7 +239,7 @@ void wxDC::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y )
  
      wxCHECK_RET(icon.Ok(), wxT("Invalid icon wxDC::DoDrawIcon"));
  
-    DoDrawBitmap( icon , x , y ) ;
+    DoDrawBitmap( icon , x , y , icon.GetMask() != NULL ) ;
 }
 void wxDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
 {
