@@ -467,7 +467,7 @@ void wxPreviewControlBar::CreateButtons()
 
     if (m_buttonFlags & wxPREVIEW_GOTO)
     {
-        m_gotoPageButton = new wxButton(this, wxID_PREVIEW_GOTO, wxT("Goto..."), wxPoint(x, y),
+        m_gotoPageButton = new wxButton(this, wxID_PREVIEW_GOTO, _("Goto..."), wxPoint(x, y),
             wxSize(buttonWidth, buttonHeight));
         x += gap + buttonWidth;
     }
