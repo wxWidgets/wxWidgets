@@ -216,7 +216,8 @@ public:
     wxSize operator+(const wxSize& sz) { return wxSize(x + sz.x, y + sz.y); }
     wxSize operator-(const wxSize& sz) { return wxSize(x - sz.x, y - sz.y); }
 
-    // accessors    void Set(int xx, int yy) { x = xx; y = yy; }
+    // accessors
+    void Set(int xx, int yy) { x = xx; y = yy; }
     void SetWidth(int w) { x = w; }
     void SetHeight(int h) { y = h; }
 
