@@ -668,7 +668,8 @@ bool wxGridCellTextEditor::EndEdit(int row, int col,
         grid->GetTable()->SetValue(row, col, value);
 
     m_startValue = wxEmptyString;
-    Text()->SetValue(m_startValue);
+    // No point in setting the text of the hidden control
+    //Text()->SetValue(m_startValue);
 
     return changed;
 }
@@ -4240,9 +4241,9 @@ void wxGrid::CalcDimensions()
     GetViewStart( &x, &y );
 
     // ensure the position is valid for the new scroll ranges
-        if ( x >= w )
+    if ( x >= w )
         x = wxMax( w - 1, 0 );
-        if ( y >= h )
+    if ( y >= h )
         y = wxMax( h - 1, 0 );
 
     // do set scrollbar parameters
