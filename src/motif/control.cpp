@@ -43,7 +43,7 @@ wxControl::wxControl()
     m_backgroundColour = *wxWHITE;
     m_foregroundColour = *wxBLACK;
 
-    m_inSetValue = FALSE;
+    m_inSetValue = false;
 }
 
 bool wxControl::Create( wxWindow *parent,
@@ -73,13 +73,13 @@ bool wxControl::CreateControl(wxWindow *parent,
 {
     if( !wxControlBase::CreateControl( parent, id, pos, size, style,
                                        validator, name ) )
-        return FALSE;
+        return false;
 
     m_backgroundColour = parent->GetBackgroundColour();
     m_foregroundColour = parent->GetForegroundColour();
     m_font = parent->GetFont();
 
-    return TRUE;
+    return true;
 }
 
 void wxControl::SetLabel(const wxString& label)
@@ -113,4 +113,17 @@ wxString wxControl::GetLabel() const
 bool wxControl::ProcessCommand(wxCommandEvent & event)
 {
     return GetEventHandler()->ProcessEvent(event);
+}
+
+wxSize wxControl::DoGetBestSize() const
+{
+    Widget w = (Widget)GetTopWidget();
+
+    // Do not return any arbitrary default value...
+    wxASSERT_MSG (w, wxT("DoGetBestSize called before creation"));
+
+    XtWidgetGeometry preferred;
+    XtQueryGeometry (w, NULL, &preferred);
+
+    return wxSize(preferred.width, preferred.height);
 }

@@ -44,10 +44,10 @@ public:
         const wxValidator& validator = wxDefaultValidator,
         const wxString& name = wxControlNameStr);
     
-    // simulates the event, returns TRUE if the event was processed
+    // simulates the event, returns true if the event was processed
     virtual void Command(wxCommandEvent& WXUNUSED(event)) { }
     
-    // calls the callback and appropriate event handlers, returns TRUE if
+    // calls the callback and appropriate event handlers, returns true if
     // event was processed
     virtual bool ProcessCommand(wxCommandEvent& event);
     
@@ -66,6 +66,9 @@ protected:
                        long style,
                        const wxValidator& validator,
                        const wxString& name);
+
+    // native implementation using XtQueryGeometry
+    virtual wxSize DoGetBestSize() const;
 
     // Motif: prevent callbacks being called while in SetValue
     bool m_inSetValue;
