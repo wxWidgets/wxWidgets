@@ -207,3 +207,80 @@ makefile.$(MFTYPE) : $(WXWIN)\distrib\msw\tmake\filelist.txt $(WXWIN)\distrib\ms
 	tmake -t $(MFTYPE) wxwin.pro -o makefile.$(MFTYPE)
 	copy makefile.$(MFTYPE) $(WXWIN)\src\msw
 
+######################
+# Tex2RTF
+######################
+
+TEX2RTFDOCDIR=$(WXDIR)\utils\tex2rtf\docs
+
+tex2rtfhtml: $(DOCDIR)\html\tex2rtf\t2rtf.htm
+tex2rtfhtmlhelp: $(DOCDIR)\htmlhelp\tex2rtf.chm
+tex2rtfhtb:	$(DOCDIR)\htb\tex2rtf.htb
+tex2rtfhlp: $(DOCDIR)\winhelp\tex2rtf.hlp
+tex2rtfpdfrtf: $(DOCDIR)\pdf\tex2rtf.rtf
+tex2rtfps: $(WXDIR)\docs\ps\tex2rtf.ps
+
+$(DOCDIR)\winhelp\tex2rtf.hlp:         $(TEX2RTFDOCDIR)\tex2rtf.rtf $(TEX2RTFDOCDIR)\tex2rtf.hpj
+        cd $(TEX2RTFDOCDIR)
+        -erase tex2rtf.ph
+        hc tex2rtf
+        copy tex2rtf.hlp $(DOCDIR)\winhelp\tex2rtf.hlp
+        copy tex2rtf.cnt $(DOCDIR)\winhelp\tex2rtf.cnt
+        cd $(THISDIR)
+
+$(TEX2RTFDOCDIR)\tex2rtf.rtf: $(DOCSOURCES)
+        cd $(TEX2RTFDOCDIR)
+        -start /w tex2rtf $(TEX2RTFDOCDIR)\tex2rtf.tex $(TEX2RTFDOCDIR)\tex2rtf.rtf -twice -winhelp
+        cd $(THISDIR)
+
+$(DOCDIR)\pdf\tex2rtf.rtf: $(DOCSOURCES)
+        cd $(TEX2RTFDOCDIR)
+        -copy *.wmf $(DOCDIR)\pdf
+        -copy *.bmp $(DOCDIR)\pdf
+        -start /w tex2rtf $(TEX2RTFDOCDIR)\tex2rtf.tex $(DOCDIR)\pdf\tex2rtf.rtf -twice -rtf
+        cd $(THISDIR)
+
+$(DOCDIR)\html\tex2rtf\t2rtf.htm:         $(DOCSOURCES)
+        cd $(TEX2RTFDOCDIR)
+        -mkdir $(DOCDIR)\html\tex2rtf
+        -copy *.gif $(DOCDIR)\html\tex2rtf
+        -start /w tex2rtf $(TEX2RTFDOCDIR)\tex2rtf.tex $(DOCDIR)\html\tex2rtf\t2rtf.htm -twice -html
+        -erase $(DOCDIR)\html\tex2rtf\*.con
+        -erase $(DOCDIR)\html\tex2rtf\*.ref
+        cd $(THISDIR)
+
+$(DOCDIR)\htmlhelp\tex2rtf.chm : $(DOCDIR)\html\tex2rtf\t2rtf.htm $(DOCDIR)\html\tex2rtf\t2rtf.hhp
+	cd $(DOCDIR)\html\tex2rtf
+	-hhc t2rtf.hhp
+    move t2rtf.chm $(DOCDIR)\htmlhelp\tex2rtf.chm
+	cd $(THISDIR)
+
+# An htb file is a zip file containing the .htm, .gif, .hhp, .hhc and .hhk
+# files, renamed to htb.
+# This can then be used with e.g. helpview.
+# Optionally, a cached version of the .hhp file can be generated with hhp2cached.
+$(DOCDIR)\htb\tex2rtf.htb: $(DOCDIR)\html\tex2rtf\t2rtf.htm
+	cd $(DOCDIR)\html\tex2rtf
+    -erase tex2rtf.zip tex2rtf.htb
+    zip tex2rtf.zip *.htm *.gif *.hhp *.hhc *.hhk
+    -mkdir $(DOCDIR)\htb
+    move tex2rtf.zip $(DOCDIR)\htb\tex2rtf.htb
+    cd $(THISDIR)
+
+$(TEX2RTFDOCDIR)\tex2rtf.dvi:	$(DOCSOURCES)
+	cd $(TEX2RTFDOCDIR)
+        -latex tex2rtf
+        -latex tex2rtf
+        -makeindx tex2rtf
+        -bibtex tex2rtf
+        -latex tex2rtf
+        -latex tex2rtf
+        cd $(THISDIR)
+
+$(WXDIR)\docs\ps\tex2rtf.ps:	$(TEX2RTFDOCDIR)\tex2rtf.dvi
+	cd $(TEX2RTFDOCDIR)
+        -dvips32 -o tex2rtf.ps tex2rtf
+        copy tex2rtf.ps $(WXDIR)\docs\ps\tex2rtf.ps
+        cd $(THISDIR)
+
+
