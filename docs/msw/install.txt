@@ -492,6 +492,10 @@ already downloaded rm, cp, mv from elsewhere, you won't need this.
 Using makefiles
 ===============
 
+NOTE: The makefile are for compilation under Cygwin, MSYS, or
+      command.com/cmd.exe, they won't work in other environments
+      (such as UNIX)
+
 Here are the steps required using the provided makefiles:
 
 - Set your WXWIN variable to where wxWindows is installed.
@@ -504,26 +508,34 @@ Here are the steps required using the provided makefiles:
 - Use the makefile.g95 files for compiling wxWindows and samples,
   e.g. to compile a debugging version of wxWindows:
   > cd c:\wx\src\msw
+  > make -f makefile.g95 clean
   > make -f makefile.g95
   > cd c:\wx\samples\minimal
+  > make -f makefile.g95 cleanall
   > make -f makefile.g95
 
   to compile with optimizations:
   > cd c:\wx\src\msw
+  > make -f makefile.g95 clean
   > make -f makefile.g95 FINAL=1
   > cd c:\wx\samples\minimal
+  > make -f makefile.g95 cleanall
   > make -f makefile.g95 FINAL=1
 
   to compile a DLL:
   > cd c:\wx\src\msw
+  > make -f makefile.g95 clean
   > make -f makefile.g95 WXMAKINGDLL=1
   > cd c:\wx\samples\minimal
+  > make -f makefile.g95 cleanall
   > make -f makefile.g95 WXUSINGDLL=1
 
   to compile the Unicode version:
   > cd c:\wx\src\msw
+  > make -f makefile.g95 clean
   > make -f makefile.g95 UNICODE=1
   > cd c:\wx\samples\minimal
+  > make -f makefile.g95 cleanall
   > make -f makefile.g95 UNICODE=1
 
   Options can be combined ( e.g.: UNICODE=1 FINAL=1 )
