@@ -789,15 +789,33 @@ IMPLEMENT_DYNAMIC_CLASS( wxGridCornerLabelWindow, wxWindow )
 
 BEGIN_EVENT_TABLE( wxGridCornerLabelWindow, wxWindow )
     EVT_MOUSE_EVENTS( wxGridCornerLabelWindow::OnMouseEvent )
+    EVT_PAINT( wxGridCornerLabelWindow::OnPaint)
     EVT_KEY_DOWN( wxGridCornerLabelWindow::OnKeyDown )
 END_EVENT_TABLE()
 
 wxGridCornerLabelWindow::wxGridCornerLabelWindow( wxGrid *parent,
                                                   wxWindowID id,
                                                   const wxPoint &pos, const wxSize &size )
-  : wxWindow( parent, id, pos, size, wxRAISED_BORDER )
+  : wxWindow( parent, id, pos, size )
 {
     m_owner = parent;
+}
+
+void wxGridCornerLabelWindow::OnPaint( wxPaintEvent& WXUNUSED(event) )
+{
+    wxPaintDC dc(this);
+    
+    int client_height = 0;
+    int client_width = 0;
+    GetClientSize( &client_width, &client_height );
+    
+    dc.SetPen( *wxBLACK_PEN );
+    dc.DrawLine( client_width-1, client_height-1, client_width-1, 0 );
+    dc.DrawLine( client_width-1, client_height-1, 0, client_height-1 );
+    
+    dc.SetPen( *wxWHITE_PEN );
+    dc.DrawLine( 0, 0, client_width, 0 );
+    dc.DrawLine( 0, 0, 0, client_height );
 }
 
 
@@ -1021,7 +1039,7 @@ void wxGrid::Init()
     m_defaultColWidth  = WXGRID_DEFAULT_COL_WIDTH;
     m_defaultRowHeight = m_gridWin->GetCharHeight();
 
-#if defined (__WXMOTIF__)  // see also text ctrl sizing in ShowCellEditControl()
+#if defined(__WXMOTIF__) || defined(__WXGTK__)  // see also text ctrl sizing in ShowCellEditControl()
     m_defaultRowHeight += 8;
 #else
     m_defaultRowHeight += 4;
@@ -1081,7 +1099,7 @@ void wxGrid::Init()
                                          "",
                                          wxPoint(1,1),
                                          wxSize(1,1)
-#ifdef __WXMSW__
+#if defined(__WXMSW__)
                                          , wxTE_MULTILINE | wxTE_NO_VSCROLL
 #endif
                                          );
@@ -1475,8 +1493,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
 
                     wxClientDC dc( m_gridWin );
                     PrepareDC( dc );
-                    dc.SetPen(*wxRED_PEN);  // FIXME should be bg col dependent
-                    dc.SetLogicalFunction(wxXOR);
+                    dc.SetLogicalFunction(wxINVERT);
                     if ( m_dragLastPos >= 0 )
                     {
                         dc.DrawLine( left, m_dragLastPos, left+cw, m_dragLastPos );
@@ -1657,8 +1674,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
 
                     wxClientDC dc( m_gridWin );
                     PrepareDC( dc );
-                    dc.SetPen(*wxRED_PEN);  // FIXME should be bg col dependent
-                    dc.SetLogicalFunction(wxXOR);
+                    dc.SetLogicalFunction(wxINVERT);
                     if ( m_dragLastPos >= 0 )
                     {
                         dc.DrawLine( m_dragLastPos, top, m_dragLastPos, top+ch );
@@ -3018,7 +3034,7 @@ void wxGrid::ShowCellEditControl()
             // TODO: remove this if the text ctrl sizing is improved esp. for unix
             //
             int extra;
-#if defined (__WXMOTIF__)
+#if defined(__WXMOTIF__)
             if ( m_currentCellCoords.GetRow() == 0  ||
                  m_currentCellCoords.GetCol() == 0 )
             {
@@ -3039,11 +3055,22 @@ void wxGrid::ShowCellEditControl()
                 extra = 2;
             }
 #endif
+
+#if defined(__WXGTK__)
+            int top_diff = 0;
+            int left_diff = 0;
+            if (left != 0) left_diff++;
+            if (top != 0) top_diff++;
+            rect.SetLeft( left + left_diff );
+            rect.SetTop( top + top_diff );
+            rect.SetRight( rect.GetRight() - left_diff );
+            rect.SetBottom( rect.GetBottom() - top_diff );
+#else
             rect.SetLeft( wxMax(0, left - extra) );
             rect.SetTop( wxMax(0, top - extra) );
             rect.SetRight( rect.GetRight() + 2*extra );
             rect.SetBottom( rect.GetBottom() + 2*extra );
-
+#endif
 
             m_cellEditCtrl->SetSize( rect );
             m_cellEditCtrl->Show( TRUE );

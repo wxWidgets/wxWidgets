@@ -347,6 +347,7 @@ private:
 
     void OnMouseEvent( wxMouseEvent& event );
     void OnKeyDown( wxKeyEvent& event );
+    void OnPaint( wxPaintEvent& event );
 
     DECLARE_DYNAMIC_CLASS(wxGridCornerLabelWindow)
     DECLARE_EVENT_TABLE()
