@@ -725,13 +725,13 @@ public:
 
         // set/retrieve the window colours (system defaults are used by
         // default): SetXXX() functions return true if colour was changed,
-        // SetDefaultXXX() reset the "m_hasXXX" flag after setting the value
-        // to prevent it from being inherited by our children
+        // SetDefaultXXX() reset the "m_inheritXXX" flag after setting the
+        // value to prevent it from being inherited by our children
     virtual bool SetBackgroundColour(const wxColour& colour);
     void SetDefaultBackgroundColour(const wxColour& colour)
     {
         if ( SetBackgroundColour(colour) )
-            m_hasBgCol = false;
+            m_inheritBgCol = false;
     }
     wxColour GetBackgroundColour() const;
 
@@ -739,7 +739,7 @@ public:
     void SetDefaultForegroundColour(const wxColour& colour)
     {
         if ( SetForegroundColour(colour) )
-            m_hasFgCol = false;
+            m_inheritFgCol = false;
     }
     wxColour GetForegroundColour() const;
 
@@ -749,7 +749,7 @@ public:
     void SetDefaultFont(const wxFont& font)
     {
         if ( SetFont(font) )
-            m_hasFont = false;
+            m_inheritFont = false;
     }
     wxFont GetFont() const;
 
@@ -1120,6 +1120,11 @@ protected:
     bool                 m_hasBgCol:1;
     bool                 m_hasFgCol:1;
     bool                 m_hasFont:1;
+    
+    // and should it be inherited by children?
+    bool                 m_inheritBgCol:1;
+    bool                 m_inheritFgCol:1;
+    bool                 m_inheritFont:1;
 
     // window attributes
     long                 m_windowStyle,

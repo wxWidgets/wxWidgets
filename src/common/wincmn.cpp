@@ -145,6 +145,9 @@ wxWindowBase::wxWindowBase()
     m_hasBgCol =
     m_hasFgCol =
     m_hasFont = false;
+    m_inheritBgCol =
+    m_inheritFgCol =
+    m_inheritFont = false;
 
     // no style bits
     m_exStyle =
@@ -942,17 +945,17 @@ void wxWindowBase::InheritAttributes()
     // which ensures that this only happens if the user really wants it and
     // not by default which wouldn't make any sense in modern GUIs where the
     // controls don't all use the same fonts (nor colours)
-    if ( parent->m_hasFont && !m_hasFont )
+    if ( parent->m_inheritFont && !m_hasFont )
         SetFont(parent->GetFont());
 
     // in addition, there is a possibility to explicitly forbid inheriting
     // colours at each class level by overriding ShouldInheritColours()
     if ( ShouldInheritColours() )
     {
-        if ( parent->m_hasFgCol && !m_hasFgCol )
+        if ( parent->m_inheritFgCol && !m_hasFgCol )
             SetForegroundColour(parent->GetForegroundColour());
 
-        if ( parent->m_hasBgCol && !m_hasBgCol )
+        if ( parent->m_inheritBgCol && !m_hasBgCol )
             SetBackgroundColour(parent->GetBackgroundColour());
     }
 }
@@ -1017,6 +1020,7 @@ bool wxWindowBase::SetBackgroundColour( const wxColour &colour )
         return false;
 
     m_hasBgCol = colour.Ok();
+    m_inheritBgCol = m_hasBgCol;
     m_backgroundColour = colour;
     SetThemeEnabled( !m_hasBgCol && !m_foregroundColour.Ok() );
     return true;
@@ -1028,6 +1032,7 @@ bool wxWindowBase::SetForegroundColour( const wxColour &colour )
         return false;
 
     m_hasFgCol = colour.Ok();
+    m_inheritFgCol = m_hasFgCol;
     m_foregroundColour = colour;
     SetThemeEnabled( !m_hasFgCol && !m_backgroundColour.Ok() );
     return true;
@@ -1075,6 +1080,7 @@ bool wxWindowBase::SetFont(const wxFont& font)
 
     m_font = font;
     m_hasFont = font.Ok();
+    m_inheritFont = m_hasFont;
 
     return true;
 }
