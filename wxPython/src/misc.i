@@ -106,7 +106,10 @@ public:
         if index == 0: self.width = val
         elif index == 1: self.height = val
         else: raise IndexError
-    def __nonzero__(self):      return self.asTuple() != (0,0)
+    def __nonzero__(self):               return self.asTuple() != (0,0)
+    def __getinitargs__(self):           return ()
+    def __getstate__(self):              return self.asTuple()
+    def __setstate__(self, state):       self.Set(*state)
 "
 
 };
@@ -168,6 +171,9 @@ public:
         elif index == 1: self.height = val
         else: raise IndexError
     def __nonzero__(self):      return self.asTuple() != (0.0, 0.0)
+    def __getinitargs__(self):           return ()
+    def __getstate__(self):              return self.asTuple()
+    def __setstate__(self, state):       self.Set(*state)
 "
 };
 
@@ -227,6 +233,9 @@ public:
         elif index == 1: self.y = val
         else: raise IndexError
     def __nonzero__(self):      return self.asTuple() != (0,0)
+    def __getinitargs__(self):           return ()
+    def __getstate__(self):              return self.asTuple()
+    def __setstate__(self, state):       self.Set(*state)
 "
 };
 
@@ -234,7 +243,7 @@ public:
 
 class wxRect {
 public:
-    wxRect(int x=0, int y=0, int w=0, int h=0);
+    wxRect(int x=0, int y=0, int width=0, int height=0);
     // TODO: do this one too... wxRect(const wxPoint& pos, const wxSize& size);
     ~wxRect();
 
@@ -269,6 +278,13 @@ public:
     int x, y, width, height;
 
     %addmethods {
+        void Set(int x=0, int y=0, int width=0, int height=0) {
+            self->x = x;
+            self->y = y;
+            self->width = width;
+            self->height = height;
+        }
+
         PyObject* asTuple() {
             wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(4);
@@ -311,7 +327,10 @@ public:
         elif index == 2: self.width = val
         elif index == 3: self.height = val
         else: raise IndexError
-    def __nonzero__(self):      return self.asTuple() != (0,0,0,0)
+    def __nonzero__(self):               return self.asTuple() != (0,0,0,0)
+    def __getinitargs__(self):           return ()
+    def __getstate__(self):              return self.asTuple()
+    def __setstate__(self, state):       self.Set(*state)
 
     # override the __getattr__ made by SWIG
     def __getattr__(self, name):
@@ -421,6 +440,11 @@ public:
     double GetCrossProduct( const wxPoint2DDouble &vec ) const;
 
     %addmethods {
+        void Set( double x=0 , double y=0 ) {
+            self->m_x = x;
+            self->m_y = y;
+        }
+
         // the reflection of this point
         wxPoint2DDouble __neg__() { return -(*self); }
 
@@ -469,7 +493,10 @@ public:
         if index == 0: self.m_x = val
         elif index == 1: self.m_yt = val
         else: raise IndexError
-    def __nonzero__(self):      return self.asTuple() != (0.0, 0.0)
+    def __nonzero__(self):               return self.asTuple() != (0.0, 0.0)
+    def __getinitargs__(self):           return ()
+    def __getstate__(self):              return self.asTuple()
+    def __setstate__(self, state):       self.Set(*state)
 "
 };
 
