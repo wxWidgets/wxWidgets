@@ -182,9 +182,11 @@ public:
     
     virtual void        MacVisibilityChanged() ;
     virtual void        MacEnabledStateChanged() ;
+    virtual void        MacHiliteChanged() ;
     
     bool                MacIsReallyShown() ;
     bool                MacIsReallyEnabled() ;
+    bool                MacIsReallyHilited() ;
     
     bool		        MacIsUserPane() { return m_macIsUserPane; }
 
@@ -241,8 +243,10 @@ protected:
     void                MacCreateScrollBars( long style ) ;
     void                MacRepositionScrollBars() ;
     void                MacUpdateControlFont() ;
+
     void                MacPropagateVisibilityChanged() ;
     void                MacPropagateEnabledStateChanged() ;
+    void                MacPropagateHiliteChanged() ;
  
 
 #if WXWIN_COMPATIBILITY_2_4

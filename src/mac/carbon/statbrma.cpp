@@ -67,7 +67,7 @@ void wxStatusBarMac::DrawFieldText(wxDC& dc, int i)
     wxRect rect;
     GetFieldRect(i, rect);
     
-    if ( !MacGetTopLevelWindow()->MacGetMetalAppearance() && !IsWindowHilited( MAC_WXHWND( MacGetTopLevelWindowRef() ) ) )
+    if ( !MacIsReallyHilited()  )
     {
         dc.SetTextForeground( wxColour( 0x80 , 0x80 , 0x80 ) ) ;
     }
@@ -79,8 +79,11 @@ void wxStatusBarMac::DrawFieldText(wxDC& dc, int i)
     dc.GetTextExtent(text, &x, &y);
     
     int xpos = rect.x + leftMargin + 1 ;
-    int ypos = 2 ;
+    int ypos = 1 ;
     
+    if ( MacGetTopLevelWindow()->MacGetMetalAppearance()  )
+        ypos++ ;
+        
     dc.SetClippingRegion(rect.x, 0, rect.width, h);
     
     dc.DrawText(text, xpos, ypos);
@@ -119,7 +122,7 @@ void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event) )
     int w, h ;
     GetSize( &w , &h ) ;
 
-	if ( IsWindowHilited( MAC_WXHWND( MacGetTopLevelWindowRef() ) ) || MacGetTopLevelWindow()->MacGetMetalAppearance() )
+	if ( MacIsReallyHilited() )
 	{
 		wxPen white( wxWHITE , 1 , wxSOLID ) ;
         if (major >= 10 ) 
@@ -160,4 +163,10 @@ void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event) )
 
 	for ( i = 0; i < m_nFields; i ++ )
 		DrawField(dc, i);
+}
+
+void wxStatusBarMac::MacHiliteChanged()
+{
+    Refresh() ;
+    Update() ;
 }

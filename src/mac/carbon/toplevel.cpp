@@ -1013,6 +1013,7 @@ void wxTopLevelWindowMac::MacActivate( long timestamp , bool inIsActivating )
     if(s_macDeactivateWindow==this)
         s_macDeactivateWindow=NULL;
     MacDelayedDeactivation(timestamp);
+    MacPropagateHiliteChanged() ;
 }
 
 void wxTopLevelWindowMac::SetTitle(const wxString& title)

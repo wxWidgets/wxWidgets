@@ -1503,6 +1503,41 @@ wxString wxWindowMac::GetTitle() const
     return m_label ;
 }
 
+bool wxWindowMac::Show(bool show)
+{
+    if ( !wxWindowBase::Show(show) )
+        return FALSE;
+    
+    // TODO use visibilityChanged Carbon Event for OSX
+    bool former = MacIsReallyShown() ;
+    
+    SetControlVisibility( (ControlRef) m_macControl , show , true ) ;
+    if ( former != MacIsReallyShown() )
+        MacPropagateVisibilityChanged() ;
+    return TRUE;
+}
+
+bool wxWindowMac::Enable(bool enable)
+{
+    wxASSERT( m_macControl != NULL ) ;
+    if ( !wxWindowBase::Enable(enable) )
+        return FALSE;
+
+    bool former = MacIsReallyEnabled() ;
+    if ( enable )
+        EnableControl( (ControlRef) m_macControl ) ;
+    else
+        DisableControl( (ControlRef) m_macControl ) ;
+
+    if ( former != MacIsReallyEnabled() )
+        MacPropagateEnabledStateChanged() ;
+    return TRUE;
+}
+
+//  
+// status change propagations (will be not necessary for OSX later )
+//
+
 void wxWindowMac::MacPropagateVisibilityChanged()
 {
     MacVisibilityChanged() ;
@@ -1517,19 +1552,53 @@ void wxWindowMac::MacPropagateVisibilityChanged()
     }
 }
 
-bool wxWindowMac::Show(bool show)
+void wxWindowMac::MacPropagateEnabledStateChanged( )
 {
-    if ( !wxWindowBase::Show(show) )
-        return FALSE;
+    MacEnabledStateChanged() ;
     
-    // TODO use visibilityChanged Carbon Event for OSX
-    bool former = MacIsReallyShown() ;
-    
-    SetControlVisibility( (ControlRef) m_macControl , show , true ) ;
-    if ( former != MacIsReallyShown() )
-        MacPropagateVisibilityChanged() ;
-    return TRUE;
+    wxWindowListNode *node = GetChildren().GetFirst();
+    while ( node )
+    {
+        wxWindowMac *child = node->GetData();
+        if ( child->IsEnabled() )
+            child->MacPropagateEnabledStateChanged() ;
+        node = node->GetNext();
+    }
 }
+
+void wxWindowMac::MacPropagateHiliteChanged( )
+{
+    MacHiliteChanged() ;
+    
+    wxWindowListNode *node = GetChildren().GetFirst();
+    while ( node )
+    {
+        wxWindowMac *child = node->GetData();
+        // if ( child->IsEnabled() )
+            child->MacPropagateHiliteChanged() ;
+        node = node->GetNext();
+    }
+}
+
+//
+// status change notifications
+// 
+
+void wxWindowMac::MacVisibilityChanged() 
+{
+}
+
+void wxWindowMac::MacHiliteChanged() 
+{
+}
+
+void wxWindowMac::MacEnabledStateChanged() 
+{
+}
+
+//
+// status queries on the inherited window's state
+//
 
 bool wxWindowMac::MacIsReallyShown() 
 {
@@ -1552,49 +1621,19 @@ bool wxWindowMac::MacIsReallyShown()
 #endif
 }
 
-void wxWindowMac::MacVisibilityChanged() 
-{
-}
-
-void wxWindowMac::MacPropagateEnabledStateChanged( )
-{
-    MacEnabledStateChanged() ;
-    
-    wxWindowListNode *node = GetChildren().GetFirst();
-    while ( node )
-    {
-        wxWindowMac *child = node->GetData();
-        if ( child->IsEnabled() )
-            child->MacPropagateEnabledStateChanged() ;
-        node = node->GetNext();
-    }
-}
-
-bool wxWindowMac::Enable(bool enable)
-{
-    wxASSERT( m_macControl != NULL ) ;
-    if ( !wxWindowBase::Enable(enable) )
-        return FALSE;
-
-    bool former = MacIsReallyEnabled() ;
-    if ( enable )
-        UMAActivateControl( (ControlRef) m_macControl ) ;
-    else
-        UMADeactivateControl( (ControlRef) m_macControl ) ;
-
-    if ( former != MacIsReallyEnabled() )
-        MacPropagateEnabledStateChanged() ;
-    return TRUE;
-}
-
 bool wxWindowMac::MacIsReallyEnabled() 
 {
     return IsControlEnabled( (ControlRef) m_macControl ) ;
 }
 
-void wxWindowMac::MacEnabledStateChanged() 
+bool wxWindowMac::MacIsReallyHilited() 
 {
+    return IsControlActive( (ControlRef) m_macControl ) ;
 }
+
+//
+//
+//
 
 int wxWindowMac::GetCharHeight() const
 {
