@@ -17,7 +17,7 @@
 class WXDLLEXPORT wxRadioButton: public wxControl
 {
 public:
-    inline wxRadioButton() {}
+    inline wxRadioButton() { Init(); }
     inline wxRadioButton( wxWindow*          pParent
                          ,wxWindowID         vId
                          ,const wxString&    rsLabel
@@ -30,6 +30,8 @@ public:
                          ,const wxString&    rsName = wxRadioButtonNameStr
                          )
     {
+        Init();
+
         Create( pParent
                ,vId
                ,rsLabel
@@ -54,15 +56,24 @@ public:
 #endif
                 ,const wxString&    rsName = wxRadioButtonNameStr
                );
+
     virtual void SetLabel(const wxString& rsLabel);
     virtual void SetValue(bool bVal);
     virtual bool GetValue(void) const ;
 
-    bool OS2Command( WXUINT wParam
-                    ,WXWORD wId
-                   );
-    void Command(wxCommandEvent& rEvent);
+    bool         OS2Command( WXUINT wParam
+                            ,WXWORD wId
+                           );
+    void         Command(wxCommandEvent& rEvent);
+    virtual void SetFocus(void);
+protected:
+    virtual wxSize DoGetBestSize() const;
+
 private:
+    void Init(void);
+
+    bool                            m_bFocusJustSet;
+
     DECLARE_DYNAMIC_CLASS(wxRadioButton)
 }; // end of wxRadioButton
 

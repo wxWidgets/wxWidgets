@@ -426,9 +426,6 @@ public:
     virtual bool    OS2TranslateMessage(WXMSG* pMsg);
     virtual void    OS2DestroyWindow(void);
 
-    // Detach "Window" menu from menu bar so it doesn't get deleted
-    void OS2DetachWindowMenu(void);
-
     // this function should return the brush to paint the window background
     // with or 0 for the default brush
     virtual WXHBRUSH OnCtlColor( WXHDC    hDC
