@@ -24,7 +24,6 @@
 #endif
 
 #include "wx/socket.h"
-#include "wx/thread.h"
 
 #if defined(__WXMOTIF__) || defined(__WXGTK__)
 #include "mondrian.xpm"
@@ -89,7 +88,7 @@ bool MyApp::OnInit(void)
 
   // Show the frame
   frame->Show(TRUE);
-  
+
   // Return the main frame window
   return TRUE;
 }
@@ -98,14 +97,6 @@ extern wxList wxPendingDelete;
 
 void MyFrame::OnSockRequest(wxSocketEvent& evt)
 {
-  /* this routine gets called from within the
-     waiting socket thread, i.e. here we are
-     not in the main GUI thread and thus we
-     must not call any GUI function here. */
-  /* Wrong ! This routine is called by the main GUI thread
-     because the main GUI thread received a signal from the other
-     thread using wxEvent::ProcessThreadEvent */
-
   wxSocketBase *sock = evt.Socket();
 
   wxPrintf(_T("OnSockRequest OK\n"));
@@ -133,21 +124,13 @@ void MyFrame::OnSockRequest(wxSocketEvent& evt)
 
 void MyFrame::OnSockRequestServer(wxSocketEvent& evt)
 {
-  /* this routine gets called from within the
-     waiting socket thread, i.e. here we are
-     not in the main GUI thread and thus we
-     must not call any GUI function here. */
-  /* Wrong ! This routine is called by the main GUI thread
-     because the main GUI thread received a signal from the other
-     thread using wxEvent::ProcessThreadEvent */
-
   wxSocketBase *sock2;
   wxSocketServer *server = (wxSocketServer *) evt.Socket();
 
   wxPrintf(_T("OnSockRequestServer OK\n"));
-  wxPrintf(_T("OnSockRequest (Main = %d) (event = %d)\n"),wxThread::IsMain(), evt.SocketEvent());
+  wxPrintf(_T("OnSockRequest (event = %d)\n"), evt.SocketEvent());
 
-  sock2 = server->Accept();
+  sock2 = server->Accept(FALSE);
   if (sock2 == NULL)
     return;
 
@@ -174,7 +157,6 @@ MyFrame::MyFrame(wxFrame *frame):
   sock->SetFlags(wxSocketBase::SPEED);
   sock->Notify(TRUE);
   nb_clients = 0;
-
   CreateStatusBar(1);
   UpdateStatus(0);
 }
