@@ -33,19 +33,28 @@ class wxControl;
 
 class wxControl: public wxWindow
 {
-  DECLARE_DYNAMIC_CLASS(wxControl)
+DECLARE_DYNAMIC_CLASS(wxControl)
 
-  public:
-
-    wxControl(void);
-    wxControl( wxWindow *parent, wxWindowID id, 
+public:
+  // construction
+  wxControl();
+  wxControl( wxWindow *parent, wxWindowID id, 
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
       long style = 0, const wxString &name = wxPanelNameStr  );
-    virtual void Command( wxCommandEvent &event );
-    virtual void SetLabel( const wxString &label );
-    virtual wxString GetLabel(void) const;
-    
-    wxString   m_label;
+  
+  // overridables
+  virtual void Command( wxCommandEvent &event );
+
+  // accessors
+    // this function will filter out '&' characters and will put the accelerator
+    // char (the one immediately after '&') into m_chAccel (@@ not yet)
+  virtual void SetLabel( const wxString &label );
+  virtual wxString GetLabel() const;
+
+protected:
+  wxString   m_label;
+  // when we implement keyboard interface we will make use of this, but not yet
+  //char       m_chAccel;
 };
 
 #endif // __GTKCONTROLH__
