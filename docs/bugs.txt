@@ -12,7 +12,10 @@ wxGTK:
 wxMSW:
 ------
 
-- TODO
+- wxListCtrl: the sort function needs to be have return type
+  CALLBACK or it GPFs. Suggestion: make the comparison function a
+  member function of wxListCtrl, or simply a normal,
+  non-CALLBACK function.
 
 wxMotif:
 --------

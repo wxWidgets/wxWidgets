@@ -521,6 +521,13 @@ wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parent,
     TV_INSERTSTRUCT tvIns;
     tvIns.hParent = (HTREEITEM) (WXHTREEITEM)parent;
     tvIns.hInsertAfter = (HTREEITEM) (WXHTREEITEM) hInsertAfter;
+
+    // This is how we insert the item as the first child: supply a NULL hInsertAfter
+    if (tvIns.hInsertAfter == (HTREEITEM) 0)
+    {
+        tvIns.hInsertAfter = TVI_FIRST;
+    }
+
     UINT mask = 0;
     if ( !text.IsEmpty() )
     {

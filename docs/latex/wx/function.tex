@@ -746,8 +746,8 @@ Gets data from the clipboard.
 {\it dataFormat} may be one of:
 
 \begin{itemize}\itemsep=0pt
-\item wxCF\_TEXT or wxCF\_OEMTEXT: returns a pointer to new memory containing a null-terminated text string.
-\item wxCF\_BITMAP: returns a new wxBitmap.
+\item wxDF\_TEXT or wxDF\_OEMTEXT: returns a pointer to new memory containing a null-terminated text string.
+\item wxDF\_BITMAP: returns a new wxBitmap.
 \end{itemize}
 
 The clipboard must have previously been opened for this call to succeed.
@@ -786,10 +786,10 @@ Passes data to the clipboard.
 {\it dataFormat} may be one of:
 
 \begin{itemize}\itemsep=0pt
-\item wxCF\_TEXT or wxCF\_OEMTEXT: {\it data} is a null-terminated text string.
-\item wxCF\_BITMAP: {\it data} is a wxBitmap.
-\item wxCF\_DIB: {\it data} is a wxBitmap. The bitmap is converted to a DIB (device independent bitmap).
-\item wxCF\_METAFILE: {\it data} is a wxMetafile. {\it width} and {\it height} are used to give recommended dimensions.
+\item wxDF\_TEXT or wxDF\_OEMTEXT: {\it data} is a null-terminated text string.
+\item wxDF\_BITMAP: {\it data} is a wxBitmap.
+\item wxDF\_DIB: {\it data} is a wxBitmap. The bitmap is converted to a DIB (device independent bitmap).
+\item wxDF\_METAFILE: {\it data} is a wxMetafile. {\it width} and {\it height} are used to give recommended dimensions.
 \end{itemize}
 
 The clipboard must have previously been opened for this call to succeed.
@@ -2035,7 +2035,7 @@ to further restrict the amount of messages generated. The value of {\it mask} ca
 
 \section{Debugging macros and functions}\label{debugmacros}
 
-Useful macros and functins for error checking and defensive programming. ASSERTs are only
+Useful macros and functions for error checking and defensive programming. ASSERTs are only
 compiled if \_\_WXDEBUG\_\_ is defined, whereas CHECK macros stay in release
 builds.
 
