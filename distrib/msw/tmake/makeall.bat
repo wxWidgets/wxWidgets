@@ -27,7 +27,7 @@ goto end
 :ok
 rem Let's assume that you have tmake in your PATH but let override it with
 rem TMAKE env var
-set TM=tmake
+set TM=call tmake
 if "x%TMAKE%" == "x" goto skip2
 set TM=%TMAKE%
 
