@@ -91,6 +91,7 @@ static const EventTypeSpec eventList[] =
     { kEventClassKeyboard, kEventRawKeyUp } ,
     { kEventClassKeyboard, kEventRawKeyModifiersChanged } ,
 
+    { kEventClassWindow , kEventWindowShown } ,
     { kEventClassWindow , kEventWindowUpdate } ,
     { kEventClassWindow , kEventWindowActivated } ,
     { kEventClassWindow , kEventWindowDeactivated } ,
@@ -368,6 +369,10 @@ static pascal OSStatus WindowEventHandler( EventHandlerCallRef handler , EventRe
                 toplevelWindow->MacActivate( EventTimeToTicks( GetEventTime( event ) ) , false) ;
             result = noErr ;
             break ;
+    	case kEventWindowShown :
+    		toplevelWindow->Refresh() ;
+    		result = noErr ;
+    		break ;
         case kEventWindowClose :
                 toplevelWindow->Close() ;
             result = noErr ;
@@ -774,7 +779,7 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
 
     wxCHECK_RET( err == noErr, wxT("Mac OS error when trying to create new window") );
     wxAssociateWinWithMacWindow( m_macWindow , this ) ;
-    UMASetWTitle( (WindowRef)m_macWindow , title ) ;
+    UMASetWTitle( (WindowRef)m_macWindow , title , m_font.GetEncoding() ) ;
     if ( wxTopLevelWindowMac::s_macWindowCompositing )
     {
         ::GetRootControl( (WindowRef)m_macWindow, (ControlHandle*)&m_macRootControl ) ;
@@ -1082,7 +1087,7 @@ void wxTopLevelWindowMac::MacKeyDown( WXEVENTREF ev )
 void wxTopLevelWindowMac::SetTitle(const wxString& title)
 {
     wxWindow::SetTitle( title ) ;
-    UMASetWTitle( (WindowRef)m_macWindow , title ) ;
+    UMASetWTitle( (WindowRef)m_macWindow , title , m_font.GetEncoding() ) ;
 }
 
 bool wxTopLevelWindowMac::Show(bool show)
