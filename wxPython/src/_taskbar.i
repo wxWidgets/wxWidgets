@@ -82,15 +82,15 @@ public:
 };
 
 
-enum {
-    wxEVT_TASKBAR_MOVE,
-    wxEVT_TASKBAR_LEFT_DOWN,
-    wxEVT_TASKBAR_LEFT_UP,
-    wxEVT_TASKBAR_RIGHT_DOWN,
-    wxEVT_TASKBAR_RIGHT_UP,
-    wxEVT_TASKBAR_LEFT_DCLICK,
-    wxEVT_TASKBAR_RIGHT_DCLICK,
-};
+
+%constant wxEventType wxEVT_TASKBAR_MOVE;
+%constant wxEventType wxEVT_TASKBAR_LEFT_DOWN;
+%constant wxEventType wxEVT_TASKBAR_LEFT_UP;
+%constant wxEventType wxEVT_TASKBAR_RIGHT_DOWN;
+%constant wxEventType wxEVT_TASKBAR_RIGHT_UP;
+%constant wxEventType wxEVT_TASKBAR_LEFT_DCLICK;
+%constant wxEventType wxEVT_TASKBAR_RIGHT_DCLICK;
+
 
 %pythoncode {
 EVT_TASKBAR_MOVE = wx.PyEventBinder (         wxEVT_TASKBAR_MOVE )

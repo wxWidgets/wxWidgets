@@ -113,14 +113,14 @@ public:
 
 };
 
-enum {
-    wxEVT_CALENDAR_DOUBLECLICKED,
-    wxEVT_CALENDAR_SEL_CHANGED,
-    wxEVT_CALENDAR_DAY_CHANGED,
-    wxEVT_CALENDAR_MONTH_CHANGED,
-    wxEVT_CALENDAR_YEAR_CHANGED,
-    wxEVT_CALENDAR_WEEKDAY_CLICKED,
-};
+
+%constant wxEventType wxEVT_CALENDAR_DOUBLECLICKED;
+%constant wxEventType wxEVT_CALENDAR_SEL_CHANGED;
+%constant wxEventType wxEVT_CALENDAR_DAY_CHANGED;
+%constant wxEventType wxEVT_CALENDAR_MONTH_CHANGED;
+%constant wxEventType wxEVT_CALENDAR_YEAR_CHANGED;
+%constant wxEventType wxEVT_CALENDAR_WEEKDAY_CLICKED;
+
 
 %pythoncode {
 EVT_CALENDAR =                 wx.PyEventBinder( wxEVT_CALENDAR_DOUBLECLICKED, 1)

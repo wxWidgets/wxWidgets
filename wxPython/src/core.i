@@ -86,7 +86,9 @@ wx = _sys.modules[__name__]
 // This code gets added to the module initialization function
 
 %init %{
-    __wxPyPreStart(d);     // initialize threading and some globals and such
+    // Initialize threading, some globals and such
+    __wxPyPreStart(d);
+    
 
     // Although these are defined in __version__ they need to be here too so
     // that an assert can be done to ensure that the wxPython and the wxWindows

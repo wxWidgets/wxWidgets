@@ -33,13 +33,14 @@
 
 enum {
     wxWIZARD_EX_HELPBUTTON,
-
-    wxEVT_WIZARD_PAGE_CHANGED,
-    wxEVT_WIZARD_PAGE_CHANGING,
-    wxEVT_WIZARD_CANCEL,
-    wxEVT_WIZARD_HELP,
-    wxEVT_WIZARD_FINISHED
 };
+
+%constant wxEventType wxEVT_WIZARD_PAGE_CHANGED;
+%constant wxEventType wxEVT_WIZARD_PAGE_CHANGING;
+%constant wxEventType wxEVT_WIZARD_CANCEL;
+%constant wxEventType wxEVT_WIZARD_HELP;
+%constant wxEventType wxEVT_WIZARD_FINISHED;
+
 
 
 %pythoncode {

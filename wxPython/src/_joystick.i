@@ -160,12 +160,10 @@ public:
 
 //---------------------------------------------------------------------------
 
-enum {
-    wxEVT_JOY_BUTTON_DOWN,
-    wxEVT_JOY_BUTTON_UP,
-    wxEVT_JOY_MOVE,
-    wxEVT_JOY_ZMOVE,
-};
+%constant wxEventType wxEVT_JOY_BUTTON_DOWN;
+%constant wxEventType wxEVT_JOY_BUTTON_UP;
+%constant wxEventType wxEVT_JOY_MOVE;
+%constant wxEventType wxEVT_JOY_ZMOVE;
 
 
 class wxJoystickEvent : public wxEvent

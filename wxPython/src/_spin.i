@@ -122,9 +122,8 @@ public:
 #endif
 };
 
-enum {
-    wxEVT_COMMAND_SPINCTRL_UPDATED
-};
+
+%constant wxEventType wxEVT_COMMAND_SPINCTRL_UPDATED;
 
 
 %pythoncode {

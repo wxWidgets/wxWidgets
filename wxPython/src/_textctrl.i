@@ -290,12 +290,11 @@ public:
 
 //---------------------------------------------------------------------------
 
-enum {
-    wxEVT_COMMAND_TEXT_UPDATED,
-    wxEVT_COMMAND_TEXT_ENTER, 
-    wxEVT_COMMAND_TEXT_URL,    
-    wxEVT_COMMAND_TEXT_MAXLEN,
-};
+
+%constant wxEventType wxEVT_COMMAND_TEXT_UPDATED;
+%constant wxEventType wxEVT_COMMAND_TEXT_ENTER;
+%constant wxEventType wxEVT_COMMAND_TEXT_URL;
+%constant wxEventType wxEVT_COMMAND_TEXT_MAXLEN;
 
 
 class wxTextUrlEvent : public wxCommandEvent

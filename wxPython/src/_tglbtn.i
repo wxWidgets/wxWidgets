@@ -29,6 +29,7 @@
 // implement dummy classes and such for wxMac
 
 #define wxEVT_COMMAND_TOGGLEBUTTON_CLICKED 0
+    
 class wxToggleButton : public wxControl
 {
 public:
@@ -45,7 +46,7 @@ public:
 
 
 
-enum { wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, };
+%constant wxEventType wxEVT_COMMAND_TOGGLEBUTTON_CLICKED;
 
 %pythoncode {
     EVT_TOGGLEBUTTON = wx.PyEventBinder( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, 1)

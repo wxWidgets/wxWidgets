@@ -140,10 +140,6 @@ public:
 %newgroup
 
 enum {
-    // notebook control event types
-    wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,
-    wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING,
-
     // styles
     wxNB_FIXEDWIDTH,
     wxNB_TOP,
@@ -216,6 +212,11 @@ public:
 
 };
 
+// notebook control event types
+%constant wxEventType wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED;
+%constant wxEventType wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING;
+
+
 %pythoncode {
     %# wxNotebook events
     EVT_NOTEBOOK_PAGE_CHANGED  = wx.PyEventBinder( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, 1 )
@@ -272,10 +273,6 @@ enum
 
     // the mask which can be used to extract the alignment from the style
     wxLB_ALIGN_MASK = 0xf,
-
-
-    wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED,
-    wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING,
 };
 
 
@@ -315,6 +312,10 @@ public:
     wxListbookEvent(wxEventType commandType = wxEVT_NULL, int id = 0,
                     int nSel = -1, int nOldSel = -1);
 };
+
+
+%constant wxEventType wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED;
+%constant wxEventType wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING;
 
 %pythoncode {
     EVT_LISTBOOK_PAGE_CHANGED  = wx.PyEventBinder( wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED, 1 )

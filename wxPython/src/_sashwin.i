@@ -144,9 +144,7 @@ public:
 
 
 
-enum {
-    wxEVT_SASH_DRAGGED
-};
+%constant wxEventType wxEVT_SASH_DRAGGED;
 
 %pythoncode {
     EVT_SASH_DRAGGED = wx.PyEventBinder( wxEVT_SASH_DRAGGED, 1 )
@@ -184,11 +182,8 @@ enum {
 };
 
 
-enum {
-    wxEVT_QUERY_LAYOUT_INFO,
-    wxEVT_CALCULATE_LAYOUT,
-};
-
+%constant wxEventType wxEVT_QUERY_LAYOUT_INFO;
+%constant wxEventType wxEVT_CALCULATE_LAYOUT;
 
 
 // This event is used to get information about window alignment,

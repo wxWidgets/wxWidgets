@@ -124,13 +124,6 @@ public:
 //---------------------------------------------------------------------------
 
 
-enum {
-    /* event type */
-    wxEVT_END_PROCESS
-};
-
-
-
 class wxProcessEvent : public wxEvent {
 public:
     wxProcessEvent(int id = 0, int pid = 0, int exitcode = 0);
@@ -139,6 +132,8 @@ public:
     int m_pid, m_exitcode;
 };
 
+
+%constant wxEventType wxEVT_END_PROCESS;
 
 %pythoncode {
 EVT_END_PROCESS = wx.PyEventBinder( wxEVT_END_PROCESS, 1 )

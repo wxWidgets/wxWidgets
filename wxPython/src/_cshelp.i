@@ -23,9 +23,9 @@
 enum {
     wxFRAME_EX_CONTEXTHELP,
     wxDIALOG_EX_CONTEXTHELP,
-    wxEVT_HELP,
-    wxEVT_DETAILED_HELP,
 };
+%constant wxEventType wxEVT_HELP;
+%constant wxEventType wxEVT_DETAILED_HELP;
 
 
 %pythoncode { 

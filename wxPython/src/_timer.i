@@ -22,11 +22,10 @@ enum {
 
     // only send the notification once and then stop the timer
     wxTIMER_ONE_SHOT,
-
-    // Timer event type
-    wxEVT_TIMER, 
-
 };
+
+// Timer event type
+%constant wxEventType wxEVT_TIMER;
    
 
 //---------------------------------------------------------------------------

@@ -33,12 +33,6 @@ enum {
     wxSP_3DBORDER,
     wxSP_BORDER,
     wxSP_3D,
-
-
-    wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED,
-    wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING,
-    wxEVT_COMMAND_SPLITTER_DOUBLECLICKED,
-    wxEVT_COMMAND_SPLITTER_UNSPLIT,
 };
 
 
@@ -180,6 +174,13 @@ public:
     int GetX() const;
     int GetY() const;
 };
+
+
+
+%constant wxEventType wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED;
+%constant wxEventType wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING;
+%constant wxEventType wxEVT_COMMAND_SPLITTER_DOUBLECLICKED;
+%constant wxEventType wxEVT_COMMAND_SPLITTER_UNSPLIT;
 
 
 %pythoncode {

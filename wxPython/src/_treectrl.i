@@ -176,28 +176,27 @@ public:
 //---------------------------------------------------------------------------
 %newgroup
 
-enum {
-    /* Tree control event types */
-    wxEVT_COMMAND_TREE_BEGIN_DRAG,
-    wxEVT_COMMAND_TREE_BEGIN_RDRAG,
-    wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT,
-    wxEVT_COMMAND_TREE_END_LABEL_EDIT,
-    wxEVT_COMMAND_TREE_DELETE_ITEM,
-    wxEVT_COMMAND_TREE_GET_INFO,
-    wxEVT_COMMAND_TREE_SET_INFO,
-    wxEVT_COMMAND_TREE_ITEM_EXPANDED,
-    wxEVT_COMMAND_TREE_ITEM_EXPANDING,
-    wxEVT_COMMAND_TREE_ITEM_COLLAPSED,
-    wxEVT_COMMAND_TREE_ITEM_COLLAPSING,
-    wxEVT_COMMAND_TREE_SEL_CHANGED,
-    wxEVT_COMMAND_TREE_SEL_CHANGING,
-    wxEVT_COMMAND_TREE_KEY_DOWN,
-    wxEVT_COMMAND_TREE_ITEM_ACTIVATED,
-    wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK,
-    wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK,
-    wxEVT_COMMAND_TREE_END_DRAG,
-    wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK,
-};
+/* Tree control event types */
+%constant wxEventType wxEVT_COMMAND_TREE_BEGIN_DRAG;
+%constant wxEventType wxEVT_COMMAND_TREE_BEGIN_RDRAG;
+%constant wxEventType wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT;
+%constant wxEventType wxEVT_COMMAND_TREE_END_LABEL_EDIT;
+%constant wxEventType wxEVT_COMMAND_TREE_DELETE_ITEM;
+%constant wxEventType wxEVT_COMMAND_TREE_GET_INFO;
+%constant wxEventType wxEVT_COMMAND_TREE_SET_INFO;
+%constant wxEventType wxEVT_COMMAND_TREE_ITEM_EXPANDED;
+%constant wxEventType wxEVT_COMMAND_TREE_ITEM_EXPANDING;
+%constant wxEventType wxEVT_COMMAND_TREE_ITEM_COLLAPSED;
+%constant wxEventType wxEVT_COMMAND_TREE_ITEM_COLLAPSING;
+%constant wxEventType wxEVT_COMMAND_TREE_SEL_CHANGED;
+%constant wxEventType wxEVT_COMMAND_TREE_SEL_CHANGING;
+%constant wxEventType wxEVT_COMMAND_TREE_KEY_DOWN;
+%constant wxEventType wxEVT_COMMAND_TREE_ITEM_ACTIVATED;
+%constant wxEventType wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK;
+%constant wxEventType wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK;
+%constant wxEventType wxEVT_COMMAND_TREE_END_DRAG;
+%constant wxEventType wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK;
+
 
 
 %pythoncode {

@@ -316,13 +316,12 @@ enum wxFindReplaceDialogStyles
 };
 
 
-enum {
-    wxEVT_COMMAND_FIND,
-    wxEVT_COMMAND_FIND_NEXT,
-    wxEVT_COMMAND_FIND_REPLACE,
-    wxEVT_COMMAND_FIND_REPLACE_ALL,
-    wxEVT_COMMAND_FIND_CLOSE,
-};
+
+%constant wxEventType wxEVT_COMMAND_FIND;
+%constant wxEventType wxEVT_COMMAND_FIND_NEXT;
+%constant wxEventType wxEVT_COMMAND_FIND_REPLACE;
+%constant wxEventType wxEVT_COMMAND_FIND_REPLACE_ALL;
+%constant wxEventType wxEVT_COMMAND_FIND_CLOSE;
 
 
 %pythoncode {

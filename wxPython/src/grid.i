@@ -1978,24 +1978,22 @@ public:
 
 
 
-enum {
-    wxEVT_GRID_CELL_LEFT_CLICK,
-    wxEVT_GRID_CELL_RIGHT_CLICK,
-    wxEVT_GRID_CELL_LEFT_DCLICK,
-    wxEVT_GRID_CELL_RIGHT_DCLICK,
-    wxEVT_GRID_LABEL_LEFT_CLICK,
-    wxEVT_GRID_LABEL_RIGHT_CLICK,
-    wxEVT_GRID_LABEL_LEFT_DCLICK,
-    wxEVT_GRID_LABEL_RIGHT_DCLICK,
-    wxEVT_GRID_ROW_SIZE,
-    wxEVT_GRID_COL_SIZE,
-    wxEVT_GRID_RANGE_SELECT,
-    wxEVT_GRID_CELL_CHANGE,
-    wxEVT_GRID_SELECT_CELL,
-    wxEVT_GRID_EDITOR_SHOWN,
-    wxEVT_GRID_EDITOR_HIDDEN,
-    wxEVT_GRID_EDITOR_CREATED,
-};
+%constant wxEventType wxEVT_GRID_CELL_LEFT_CLICK;
+%constant wxEventType wxEVT_GRID_CELL_RIGHT_CLICK;
+%constant wxEventType wxEVT_GRID_CELL_LEFT_DCLICK;
+%constant wxEventType wxEVT_GRID_CELL_RIGHT_DCLICK;
+%constant wxEventType wxEVT_GRID_LABEL_LEFT_CLICK;
+%constant wxEventType wxEVT_GRID_LABEL_RIGHT_CLICK;
+%constant wxEventType wxEVT_GRID_LABEL_LEFT_DCLICK;
+%constant wxEventType wxEVT_GRID_LABEL_RIGHT_DCLICK;
+%constant wxEventType wxEVT_GRID_ROW_SIZE;
+%constant wxEventType wxEVT_GRID_COL_SIZE;
+%constant wxEventType wxEVT_GRID_RANGE_SELECT;
+%constant wxEventType wxEVT_GRID_CELL_CHANGE;
+%constant wxEventType wxEVT_GRID_SELECT_CELL;
+%constant wxEventType wxEVT_GRID_EDITOR_SHOWN;
+%constant wxEventType wxEVT_GRID_EDITOR_HIDDEN;
+%constant wxEventType wxEVT_GRID_EDITOR_CREATED;
 
 
 
