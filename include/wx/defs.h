@@ -1232,6 +1232,13 @@ enum wxBorder
     wxBORDER_MASK   = 0x1f200000
 };
 
+/* This makes it easier to specify a 'normal' border for a control */
+#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
+#define wxDEFAULT_CONTROL_BORDER    wxBORDER_SIMPLE
+#else
+#define wxDEFAULT_CONTROL_BORDER    wxBORDER_SUNKEN
+#endif
+
 /*  ---------------------------------------------------------------------------- */
 /*  Window style flags */
 /*  ---------------------------------------------------------------------------- */
