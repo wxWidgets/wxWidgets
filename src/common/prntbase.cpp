@@ -397,109 +397,66 @@ void wxPreviewControlBar::CreateButtons()
 {
     SetSize(0, 0, 400, 40);
 
-    /*
-    #ifdef __WXMSW__
-    int fontSize = 9;
-    #else
-    int fontSize = 10;
-    #endif
-
-      wxFont buttonFont(fontSize, wxSWISS, wxNORMAL, wxBOLD);
-      SetFont(buttonFont);
-    */
-
-    int buttonWidth = 60;
-    int buttonNavigation = 30;
-#ifdef __WXGTK__
-    int buttonHeight = -1;
-#else
-    int buttonHeight = 24;
-#endif
-
-    int x = 5;
-    int y = 5;
-
-#ifdef __WXMOTIF__
-    int gap = 15;
-#else
-    int gap = 5;
-#endif
-
-    m_closeButton = new wxButton(this, wxID_PREVIEW_CLOSE, _("Close"),
-        wxPoint(x, y), wxSize(buttonWidth, buttonHeight));
-
-    x += gap + buttonWidth;
-
+    wxBoxSizer *item0 = new wxBoxSizer( wxHORIZONTAL );
+    
+    int smallButtonWidth = 45;
+    
+    m_closeButton = new wxButton( this, wxID_PREVIEW_CLOSE, _("&Close"), wxDefaultPosition, wxDefaultSize, 0 );
+    item0->Add( m_closeButton, 0, wxALIGN_CENTRE|wxALL, 5 );
+    
     if (m_buttonFlags & wxPREVIEW_PRINT)
     {
-        m_printButton =  new wxButton(this, wxID_PREVIEW_PRINT, _("Print..."), wxPoint(x, y),
-            wxSize(buttonWidth, buttonHeight));
-        x += gap + buttonWidth;
+        m_printButton = new wxButton( this, wxID_PREVIEW_PRINT, _("&Print..."), wxDefaultPosition, wxDefaultSize, 0 );
+        item0->Add( m_printButton, 0, wxALIGN_CENTRE|wxALL, 5 );
     }
-
+    
     if (m_buttonFlags & wxPREVIEW_FIRST)
     {
-        m_firstPageButton = new wxButton(this, wxID_PREVIEW_FIRST, wxT("|<<"), wxPoint(x, y),
-            wxSize(buttonNavigation, buttonHeight));
-        x += gap + buttonNavigation;
+        m_firstPageButton = new wxButton( this, wxID_PREVIEW_FIRST, _("|<<"), wxDefaultPosition, wxSize(smallButtonWidth,-1), 0 );
+        item0->Add( m_firstPageButton, 0, wxALIGN_CENTRE|wxALL, 5 );
     }
-
+    
     if (m_buttonFlags & wxPREVIEW_PREVIOUS)
     {
-        m_previousPageButton = new wxButton(this, wxID_PREVIEW_PREVIOUS, wxT("<<"), wxPoint(x, y),
-            wxSize(buttonNavigation, buttonHeight));
-        x += gap + buttonNavigation;
+        m_previousPageButton = new wxButton( this, wxID_PREVIEW_PREVIOUS, _("<<"), wxDefaultPosition, wxSize(smallButtonWidth,-1), 0 );
+        item0->Add( m_previousPageButton, 0, wxALIGN_CENTRE|wxRIGHT|wxTOP|wxBOTTOM, 5 );
     }
-
+    
     if (m_buttonFlags & wxPREVIEW_NEXT)
     {
-        m_nextPageButton = new wxButton(this, wxID_PREVIEW_NEXT, wxT(">>"),
-            wxPoint(x, y), wxSize(buttonNavigation, buttonHeight));
-        x += gap + buttonNavigation;
+        m_nextPageButton = new wxButton( this, wxID_PREVIEW_NEXT, _(">>"), wxDefaultPosition, wxSize(smallButtonWidth,-1), 0 );
+        item0->Add( m_nextPageButton, 0, wxALIGN_CENTRE|wxRIGHT|wxTOP|wxBOTTOM, 5 );
     }
-
+    
     if (m_buttonFlags & wxPREVIEW_LAST)
     {
-        m_lastPageButton = new wxButton(this, wxID_PREVIEW_LAST, wxT(">>|"), wxPoint(x, y),
-            wxSize(buttonNavigation, buttonHeight));
-        x += gap + buttonNavigation;
+        m_lastPageButton = new wxButton( this, wxID_PREVIEW_LAST, _(">>|"), wxDefaultPosition, wxSize(smallButtonWidth,-1), 0 );
+        item0->Add( m_lastPageButton, 0, wxALIGN_CENTRE|wxRIGHT|wxTOP|wxBOTTOM, 5 );
     }
-
+    
     if (m_buttonFlags & wxPREVIEW_GOTO)
     {
-        m_gotoPageButton = new wxButton(this, wxID_PREVIEW_GOTO, _("Goto..."), wxPoint(x, y),
-            wxSize(buttonWidth, buttonHeight));
-        x += gap + buttonWidth;
+        m_gotoPageButton = new wxButton( this, wxID_PREVIEW_GOTO, _("&Goto..."), wxDefaultPosition, wxDefaultSize, 0 );
+        item0->Add( m_gotoPageButton, 0, wxALIGN_CENTRE|wxALL, 5 );
     }
-
+    
     if (m_buttonFlags & wxPREVIEW_ZOOM)
     {
-        static const wxChar *choices[] =
+        wxString choices[] = 
         {
             wxT("10%"), wxT("15%"), wxT("20%"), wxT("25%"), wxT("30%"), wxT("35%"), wxT("40%"), wxT("45%"), wxT("50%"), wxT("55%"),
-            wxT("60%"), wxT("65%"), wxT("70%"), wxT("75%"), wxT("80%"), wxT("85%"), wxT("90%"), wxT("95%"), wxT("100%"), wxT("110%"),
-            wxT("120%"), wxT("150%"), wxT("200%")
+                wxT("60%"), wxT("65%"), wxT("70%"), wxT("75%"), wxT("80%"), wxT("85%"), wxT("90%"), wxT("95%"), wxT("100%"), wxT("110%"),
+                wxT("120%"), wxT("150%"), wxT("200%")
         };
-
         int n = WXSIZEOF(choices);
-
-        wxString* strings = new wxString[n];
-        int i;
-        for (i = 0; i < n; i++ )
-           strings[i] = choices[i];
-
-        m_zoomControl = new wxChoice(this, wxID_PREVIEW_ZOOM,
-                                     wxPoint(x, y),
-                                     wxSize(100, -1),
-                                     n,
-                                     strings
-                                    );
-        delete[] strings;
-
+        
+        m_zoomControl = new wxChoice( this, wxID_PREVIEW_ZOOM, wxDefaultPosition, wxSize(70,-1), n, choices, 0 );
+        item0->Add( m_zoomControl, 0, wxALIGN_CENTRE|wxALL, 5 );
         SetZoomControl(m_printPreview->GetZoom());
     }
 
-    //  m_closeButton->SetDefault();
+    SetSizer(item0);
+    item0->Fit(this);
 }
 
 void wxPreviewControlBar::SetZoomControl(int zoom)
@@ -566,44 +523,19 @@ void wxPreviewFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 void wxPreviewFrame::Initialize()
 {
     CreateStatusBar();
-
     CreateCanvas();
     CreateControlBar();
 
     m_printPreview->SetCanvas(m_previewCanvas);
     m_printPreview->SetFrame(this);
 
-    // Set layout constraints here
+    wxBoxSizer *item0 = new wxBoxSizer( wxVERTICAL );
 
-    // Control bar constraints
-    wxLayoutConstraints *c1 = new wxLayoutConstraints;
-    //  int w, h;
-    //  m_controlBar->GetSize(&w, &h);
-    int h;
-#if (defined(__WXMSW__) || defined(__WXGTK__))
-    h = 40;
-#else
-    h = 60;
-#endif
+    item0->Add( m_controlBar, 0, wxGROW|wxALIGN_CENTER_VERTICAL, 5 );
+    item0->Add( m_previewCanvas, 1, wxGROW|wxALIGN_CENTER_VERTICAL, 5 );
 
-    c1->left.SameAs       (this, wxLeft);
-    c1->top.SameAs        (this, wxTop);
-    c1->right.SameAs      (this, wxRight);
-    c1->height.Absolute   (h);
-
-    m_controlBar->SetConstraints(c1);
-
-    // Canvas constraints
-    wxLayoutConstraints *c2 = new wxLayoutConstraints;
-
-    c2->left.SameAs       (this, wxLeft);
-    c2->top.Below         (m_controlBar);
-    c2->right.SameAs      (this, wxRight);
-    c2->bottom.SameAs     (this, wxBottom);
-
-    m_previewCanvas->SetConstraints(c2);
-
-    SetAutoLayout(TRUE);
+    SetAutoLayout( TRUE );
+    SetSizer( item0 );
 
     MakeModal(TRUE);
 
