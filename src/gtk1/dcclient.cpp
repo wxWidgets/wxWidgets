@@ -1690,29 +1690,42 @@ void wxWindowDC::DoGetTextExtent(const wxString &string,
     // Set layout's text
 #if wxUSE_UNICODE
     const wxCharBuffer data = wxConvUTF8.cWC2MB( string );
-    pango_layout_set_text( m_layout, (const char*) data, strlen( (const char*) data ));
+    const char *dataUTF8 = (const char *)data;
 #else
     const wxWCharBuffer wdata = wxConvLocal.cMB2WC( string );
+    if ( !wdata )
+        return;
     const wxCharBuffer data = wxConvUTF8.cWC2MB( wdata );
-    pango_layout_set_text( m_layout, (const char*) data, strlen( (const char*) data ));
+    const char *dataUTF8 = (const char *)data;
 #endif
+
+    if ( !dataUTF8 )
+    {
+        // hardly ideal, but what else can we do if conversion failed?
+        return;
+    }
+
+    pango_layout_set_text( m_layout, dataUTF8, strlen(dataUTF8) );
  
     int w,h;
     pango_layout_get_pixel_size( m_layout, &w, &h );
     
-    if (width) (*width) = (wxCoord) w; 
-    if (height) (*height) = (wxCoord) h;
+    if (width)
+        *width = (wxCoord) w; 
+    if (height)
+        *height = (wxCoord) h;
     if (descent)
     {
         // Do something about metrics here. TODO.
-        (*descent) = 0;
+        *descent = 0;
     }
-    if (externalLeading) (*externalLeading) = 0;  // ??
+    if (externalLeading)
+        *externalLeading = 0;  // ??
     
     // Reset old font description
     if (theFont)
         pango_layout_set_font_description( m_layout, m_fontdesc );
-#else
+#else // GTK+ 1.x
     wxFont fontToUse = m_font;
     if (theFont) fontToUse = *theFont;
     
@@ -1721,7 +1734,7 @@ void wxWindowDC::DoGetTextExtent(const wxString &string,
     if (height) (*height) = wxCoord((font->ascent + font->descent) / m_scaleY);
     if (descent) (*descent) = wxCoord(font->descent / m_scaleY);
     if (externalLeading) (*externalLeading) = 0;  // ??
-#endif
+#endif // GTK+ 2/1
 }
 
 wxCoord wxWindowDC::GetCharWidth() const
