@@ -217,7 +217,7 @@ WXDWORD wxButton::MSWGetStyle(long style, WXDWORD *exstyle) const
 wxSize wxButton::DoGetBestSize() const
 {
     wxClientDC dc(wx_const_cast(wxButton *, this));
-    dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
+    dc.SetFont(GetFont());
 
     wxCoord wBtn,
             hBtn;
