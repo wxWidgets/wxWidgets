@@ -17,6 +17,7 @@
 #endif
 
 #include "wx/control.h"
+#include "wx/icon.h"
 
 WXDLLEXPORT_DATA(extern const char*) wxStaticBitmapNameStr;
 
@@ -53,6 +54,19 @@ public:
     }
 
     wxBitmap& GetBitmap() const { return (wxBitmap&) m_messageBitmap; }
+
+    // for compatibility with wxMSW
+    const wxIcon& GetIcon() const
+    {
+        // don't use wxDynamicCast, icons and bitmaps are really the same thing
+        return (const wxIcon &)m_messageBitmap;
+    }
+
+    // for compatibility with wxMSW
+    void  SetIcon(const wxIcon& icon)
+    {
+        SetBitmap( icon );
+    }
 
     // overriden base class virtuals
     virtual bool AcceptsFocus() const { return FALSE; }
