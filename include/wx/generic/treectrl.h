@@ -56,7 +56,7 @@ public:
     wxTreeItemId(long itemId) { m_pItem = (wxGenericTreeItem *)itemId; }
     operator long() const { return (long)m_pItem; }
 
-protected:
+//protected:
     // for wxTreeCtrl usage only
     wxTreeItemId(wxGenericTreeItem *pItem) { m_pItem = pItem; }
     

@@ -104,7 +104,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
        
       gtk_myfixed_put( GTK_MYFIXED(m_parent->m_wxwindow), GTK_WIDGET(m_radio), x, y );
       
-      int tmp = 22+gdk_string_measure( GTK_WIDGET(m_radio)->style->font, choices[i] );
+      int tmp = 25+gdk_string_measure( GTK_WIDGET(m_radio)->style->font, choices[i] );
       if (tmp > maxLen) maxLen = tmp;
       
       width = m_width-10;

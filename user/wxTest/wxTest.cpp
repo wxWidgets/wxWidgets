@@ -445,6 +445,7 @@ END_EVENT_TABLE()
 MyFrame::MyFrame(void) :
   wxFrame( (wxFrame *) NULL, -1, (char *) "Robert's Test application", wxPoint(20,20), wxSize(470,360) )
 {
+/*
   wxMenu *file_menu = new wxMenu( "Test" );
   file_menu->Append( ID_OPEN, "Open..");
   file_menu->Append( ID_MSG,  "MessageBox..");
@@ -460,6 +461,7 @@ MyFrame::MyFrame(void) :
   menu_bar->Show( TRUE );
   
   SetMenuBar( menu_bar );
+*/
   
   CreateStatusBar( 2 );
   
@@ -470,7 +472,6 @@ MyFrame::MyFrame(void) :
   m_canvas->SetScrollbars( 10, 10, 50, 50 );
   
   m_tb = CreateToolBar();
-  m_tb->SetMargins( 2, 2 );
   m_tb->AddTool( 0, wxBitmap( list_xpm ), wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, "This is a button" );
   m_tb->AddTool( 0, wxBitmap( folder_xpm ), wxNullBitmap, TRUE, -1, -1, (wxObject *) NULL, "This is a toggle" );
   m_tb->Realize();

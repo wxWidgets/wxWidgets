@@ -337,7 +337,9 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
 
   if (m_frameToolBar)
   {
-    gtk_myfixed_move( GTK_MYFIXED(m_mainWindow), m_frameToolBar->m_widget, 1, wxMENU_HEIGHT );
+    int y = 0;
+    if (m_frameMenuBar) y = wxMENU_HEIGHT;
+    gtk_myfixed_move( GTK_MYFIXED(m_mainWindow), m_frameToolBar->m_widget, 1, y );
     gtk_widget_set_usize( m_frameToolBar->m_widget, width-2, toolbar_height );
   }
   

@@ -102,6 +102,9 @@ wxFont::wxFont(int PointSize, int FontIdOrFamily, int Style, int Weight,
 {
   m_refData = new wxFontRefData();
   
+  if (FontIdOrFamily == wxDEFAULT) FontIdOrFamily = wxSWISS;
+  M_FONTDATA->m_family = FontIdOrFamily;
+  
   if ((M_FONTDATA->m_faceName = (Face) ? copystring(Face) : (char*)NULL) ) 
   {
     M_FONTDATA->m_fontId = wxTheFontNameDirectory->FindOrCreateFontId( Face, FontIdOrFamily );
@@ -112,11 +115,12 @@ wxFont::wxFont(int PointSize, int FontIdOrFamily, int Style, int Weight,
     M_FONTDATA->m_fontId = FontIdOrFamily;
     M_FONTDATA->m_family  = wxTheFontNameDirectory->GetFamily( FontIdOrFamily );
   }
-  if (Style == wxDEFAULT) Style = wxSWISS;
+
+  if (Style == wxDEFAULT) Style = wxNORMAL;
   M_FONTDATA->m_style = Style;
   if (Weight == wxDEFAULT) Weight = wxNORMAL;
   M_FONTDATA->m_weight = Weight;
-  if (PointSize == wxDEFAULT) PointSize = 10;
+  if (PointSize == wxDEFAULT) PointSize = 12;
   M_FONTDATA->m_pointSize = PointSize;
   M_FONTDATA->m_underlined = Underlined;
 
@@ -361,12 +365,19 @@ GdkFont *wxFont::GetInternalFont(float scale) const
   } 
   else 
   {
+/*
+     if (int_scale == 100) printf( "int_scale.\n" );
+     if (M_FONTDATA->m_style == wxSWISS) printf( "swiss.\n" );
+     if (M_FONTDATA->m_pointSize == 12) printf( "12.\n" );
+     if (M_FONTDATA->m_weight == wxNORMAL) printf( "normal.\n" );
+     if (M_FONTDATA->m_underlined == FALSE) printf( "false.\n" );
+*/     
      if ((int_scale == 100) &&
-         (M_FONTDATA->m_style == wxSWISS) &&
+         (M_FONTDATA->m_family == wxSWISS) &&
+         (M_FONTDATA->m_style == wxNORMAL) &&
          (M_FONTDATA->m_pointSize == 12) &&
          (M_FONTDATA->m_weight == wxNORMAL) &&
-         (M_FONTDATA->m_underlined == FALSE) &&
-         (M_FONTDATA->m_style == wxNORMAL))
+         (M_FONTDATA->m_underlined == FALSE))
      {
        font = gdk_font_load( "-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*" );
      }

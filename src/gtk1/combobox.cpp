@@ -136,8 +136,6 @@ void wxComboBox::Append( const wxString &item, char *clientData )
   
   GtkWidget *list_item = gtk_list_item_new_with_label( item ); 
   
-  if (m_widgetStyle) ApplyWidgetStyle();
-  
   gtk_signal_connect( GTK_OBJECT(list_item), "select", 
     GTK_SIGNAL_FUNC(gtk_combo_clicked_callback), (gpointer)this );
   
@@ -145,6 +143,8 @@ void wxComboBox::Append( const wxString &item, char *clientData )
   
   gtk_container_add( GTK_CONTAINER(list), list_item );
     
+  if (m_widgetStyle) ApplyWidgetStyle();
+  
   gtk_widget_show( list_item );
 }
 

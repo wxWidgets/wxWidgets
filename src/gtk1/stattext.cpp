@@ -54,37 +54,40 @@ bool wxStaticText::Create( wxWindow *parent, wxWindowID id, const wxString &labe
   gtk_label_set_justify(GTK_LABEL(m_widget), justify);
   
    int y = 1;
-   if (newSize.x == -1) {
+   if (newSize.x == -1) 
+   {
      char *s = WXSTRINGCAST m_label;
      char *nl = strchr(s, '\n');
-     if (nl) {
-       do {
+     if (nl) 
+     {
+       do 
+       {
          *nl = 0;
-         int x = gdk_string_measure( m_widget->style->font, s );
-         if (x > newSize.x) {
-           newSize.x = x;
-         }
+         int x = gdk_string_measure( m_widget->style->font, s ) + 4;
+         if (x > newSize.x) newSize.x = x;
          *nl++ = '\n';
-         if ((nl = strchr(s = nl, '\n'))) {
+         if ((nl = strchr(s = nl, '\n'))) 
+	 {
            ++y;
-         } else {
-           int x = gdk_string_measure( m_widget->style->font, s );
-           if (x > newSize.x) {
-             newSize.x = x;
-           }
+         } 
+	 else 
+	 {
+           int x = gdk_string_measure( m_widget->style->font, s ) + 4;
+           if (x > newSize.x) newSize.x = x;
          }
        } while (nl);
-     } else {
-       newSize.x = gdk_string_measure( m_widget->style->font, label );
+     } 
+     else 
+     {
+       newSize.x = gdk_string_measure( m_widget->style->font, label ) + 4;
      }
    }
-   if (newSize.y == -1) {
-     if (y == 1) {
+   if (newSize.y == -1) 
+   {
+     if (y == 1) 
        newSize.y = 26;
-     } else {
-       newSize.y
-         = y * (m_widget->style->font->ascent +m_widget->style->font->descent);
-     }
+     else
+       newSize.y = 4 + y * (m_widget->style->font->ascent + 2*m_widget->style->font->descent);
    }
   
   SetSize( newSize.x, newSize.y );
