@@ -1163,6 +1163,16 @@ int GSocket::Send_Dgram(const char *buffer, int size)
   return ret;
 }
 
+/* Compatibility functions for GSocket */
+GSocket *GSocket_new(void)
+{
+    GSocket *newsocket = new GSocket();
+    if(newsocket->IsOk())
+        return newsocket;
+    delete newsocket;
+    return NULL;
+}
+
 
 /*
  * -------------------------------------------------------------------------
