@@ -244,7 +244,7 @@ int wxPostScriptDC::GetResolution()
 {
     return (int)(ms_PSScaleFactor * 72.0);
 }
-  
+
 
 
 wxPostScriptDC::wxPostScriptDC ()
@@ -649,7 +649,7 @@ void wxPostScriptDC::DoDrawPolygon (int n, wxPoint points[], wxCoord xoffset, wx
 
         wxCoord xx = XLOG2DEV(points[0].x + xoffset);
         wxCoord yy = YLOG2DEV(points[0].y + yoffset);
-        
+
         fprintf( m_pstream, "%d %d moveto\n", xx, yy );
 
         CalcBoundingBox( points[0].x + xoffset, points[0].y + yoffset );
@@ -1562,7 +1562,7 @@ void wxPostScriptDC::DoGetSizeMM(int *width, int *height) const
 // Resolution in pixels per logical inch
 wxSize wxPostScriptDC::GetPPI(void) const
 {
-    return wxSize((int)(72 * ms_PSScaleFactor), 
+    return wxSize((int)(72 * ms_PSScaleFactor),
                   (int)(72 * ms_PSScaleFactor));
 }
 
@@ -1666,10 +1666,26 @@ void wxPostScriptDC::EndDoc ()
 
     // Compute the bounding box.  Note that it is in the default user
     // coordinate system, thus we have to convert the values.
-    wxCoord llx = (wxCoord) ((XLOG2DEV(m_minX)+wx_printer_translate_x)*wx_printer_scale_x);
-    wxCoord lly = (wxCoord) ((YLOG2DEV(m_minY)+wx_printer_translate_y)*wx_printer_scale_y);
-    wxCoord urx = (wxCoord) ((XLOG2DEV(m_maxX)+wx_printer_translate_x)*wx_printer_scale_x);
-    wxCoord ury = (wxCoord) ((YLOG2DEV(m_maxY)+wx_printer_translate_y)*wx_printer_scale_y);
+    wxCoord minX = (wxCoord) XLOG2DEV(m_minX);
+    wxCoord minY = (wxCoord) YLOG2DEV(m_minY);
+    wxCoord maxX = (wxCoord) XLOG2DEV(m_maxX);
+    wxCoord maxY = (wxCoord) YLOG2DEV(m_maxY);
+
+    // LOG2DEV may have changed the minimum to maximum vice versa
+    if ( minX > maxX ) { wxCoord tmp = minX; minX = maxX; maxX = tmp; }
+    if ( minY > maxY ) { wxCoord tmp = minY; minY = maxY; maxY = tmp; }
+
+    // account for used scaling (boundingbox is before scaling in ps-file)
+    double scale_x = m_printData.GetPrinterScaleX() / ms_PSScaleFactor;
+    double scale_y = m_printData.GetPrinterScaleY() / ms_PSScaleFactor;
+
+    wxCoord llx, lly, urx, ury;
+    llx = (wxCoord) ((minX+wx_printer_translate_x)*scale_x);
+    lly = (wxCoord) ((minY+wx_printer_translate_y)*scale_y);
+    urx = (wxCoord) ((maxX+wx_printer_translate_x)*scale_x);
+    ury = (wxCoord) ((maxY+wx_printer_translate_y)*scale_y);
+    // (end of bounding box computation)
+
 
     // If we're landscape, our sense of "x" and "y" is reversed.
     if (m_printData.GetOrientation() == wxLANDSCAPE)
@@ -1799,7 +1815,7 @@ void wxPostScriptDC::StartPage()
     }
 
     char buffer[100];
-    sprintf( buffer, "%.8f %.8f scale\n", scale_x / ms_PSScaleFactor, 
+    sprintf( buffer, "%.8f %.8f scale\n", scale_x / ms_PSScaleFactor,
                                           scale_y / ms_PSScaleFactor);
     for (int i = 0; i < 100; i++)
         if (buffer[i] == ',') buffer[i] = '.';
@@ -2004,7 +2020,7 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
 
         afmName << name;
         FILE *afmFile = wxFopen(afmName,wxT("r"));
-        
+
         if (afmFile==NULL)
         {
            afmName = wxThePrintSetupData->GetAFMPath();
@@ -2161,11 +2177,11 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
             sum += lastWidths[*p];
         }
     }
-    
+
     double widthSum = sum;
     widthSum *= Size;
     widthSum /= 1000.0F;
-    
+
     /* add descender to height (it is usually a negative value) */
     //if (lastDescender != INT_MIN)
     //{
