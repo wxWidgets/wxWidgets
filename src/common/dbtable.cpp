@@ -102,7 +102,7 @@ ULONG lastTableID = 0;
 
 /********** wxTable::wxTable() **********/
 wxTable::wxTable(wxDB *pwxDB, const char *tblName, const int nCols,
-					const char *qryTblName, bool qryOnly, char *tblPath)
+					const char *qryTblName, bool qryOnly, const char *tblPath)
 {
 	pDb					= pwxDB;					// Pointer to the wxDB object
 	henv					= 0;
@@ -309,308 +309,7 @@ wxTable::~wxTable()
 
 }  // wxTable::~wxTable()
 
-/********** wxTable::Open() **********/
-bool wxTable::Open(void)
-{
-	if (!pDb)
-		return FALSE;
-
-	int i;
-	char sqlStmt[DB_MAX_STATEMENT_LEN];
-
-	// Verify that the table exists in the database
-	if (!pDb->TableExists(tableName,NULL,tablePath))
-	{
-		char s[128];
-		sprintf(s, "Error opening '%s', table/view does not exist in the database.", tableName);
-		pDb->LogError(s);
-		return(FALSE);
-	}
-
-	// Bind the member variables for field exchange between
-	// the wxTable object and the ODBC record.
-	if (!queryOnly)
-	{
-		if (!bindInsertParams())					// Inserts
-			return(FALSE);
-		if (!bindUpdateParams())					// Updates
-			return(FALSE);
-	}
-	if (!bindCols(*hstmtDefault))					// Selects
-		return(FALSE);
-	if (!bindCols(hstmtInternal))					// Internal use only
-		return(FALSE);
-	/*
-	 * Do NOT bind the hstmtCount cursor!!!
-	 */
-
-	// Build an insert statement using parameter markers
-	if (!queryOnly && noCols > 0)
-	{
-		bool needComma = FALSE;
-		sprintf(sqlStmt, "INSERT INTO %s (", tableName);
-		for (i = 0; i < noCols; i++)
-		{
-			if (! colDefs[i].InsertAllowed)
-				continue;
-			if (needComma)
-				wxStrcat(sqlStmt, ",");
-			wxStrcat(sqlStmt, colDefs[i].ColName);
-			needComma = TRUE;
-		}
-		needComma = FALSE;
-		wxStrcat(sqlStmt, ") VALUES (");
-		for (i = 0; i < noCols; i++)
-		{
-			if (! colDefs[i].InsertAllowed)
-				continue;
-			if (needComma)
-				wxStrcat(sqlStmt, ",");
-			wxStrcat(sqlStmt, "?");
-			needComma = TRUE;
-		}
-		wxStrcat(sqlStmt, ")");
-
-//		pDb->WriteSqlLog(sqlStmt);
-
-		// Prepare the insert statement for execution
-		if (SQLPrepare(hstmtInsert, (UCHAR FAR *) sqlStmt, SQL_NTS) != SQL_SUCCESS)
-			return(pDb->DispAllErrors(henv, hdbc, hstmtInsert));
-	}
-	
-	// Completed successfully
-	return(TRUE);
-
-}  // wxTable::Open()
-
-/********** wxTable::Query() **********/
-bool wxTable::Query(bool forUpdate, bool distinct)
-{
-
-	return(query(DB_SELECT_WHERE, forUpdate, distinct));
-
-}  // wxTable::Query()
-
-/********** wxTable::QueryBySqlStmt() **********/
-bool wxTable::QueryBySqlStmt(char *pSqlStmt)
-{
-	pDb->WriteSqlLog(pSqlStmt);
-
-	return(query(DB_SELECT_STATEMENT, FALSE, FALSE, pSqlStmt));
-
-}  // wxTable::QueryBySqlStmt()
-
-/********** wxTable::QueryMatching() **********/
-bool wxTable::QueryMatching(bool forUpdate, bool distinct)
-{
-
-	return(query(DB_SELECT_MATCHING, forUpdate, distinct));
-
-}  // wxTable::QueryMatching()
-
-/********** wxTable::QueryOnKeyFields() **********/
-bool wxTable::QueryOnKeyFields(bool forUpdate, bool distinct)
-{
-
-	return(query(DB_SELECT_KEYFIELDS, forUpdate, distinct));
-
-}  // wxTable::QueryOnKeyFields()
-
-/********** wxTable::query() **********/
-bool wxTable::query(int queryType, bool forUpdate, bool distinct, char *pSqlStmt)
-{
-	char sqlStmt[DB_MAX_STATEMENT_LEN];
-
-	// Set the selectForUpdate member variable
-	if (forUpdate)
-		// The user may wish to select for update, but the DBMS may not be capable
-		selectForUpdate = CanSelectForUpdate();
-	else
-		selectForUpdate = FALSE;
-
-	// Set the SQL SELECT string
-	if (queryType != DB_SELECT_STATEMENT)				// A select statement was not passed in,
-	{																// so generate a select statement.
-		GetSelectStmt(sqlStmt, queryType, distinct);
-		pDb->WriteSqlLog(sqlStmt);
-	}
-
-	// Make sure the cursor is closed first
-	if (! CloseCursor(hstmt))
-		return(FALSE);
-
-	// Execute the SQL SELECT statement
-	int retcode;
-
-	retcode = SQLExecDirect(hstmt, (UCHAR FAR *) (queryType == DB_SELECT_STATEMENT ? pSqlStmt : sqlStmt), SQL_NTS);
-	if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO)
-		return(pDb->DispAllErrors(henv, hdbc, hstmt));
-
-	// Completed successfully
-	return(TRUE);
-
-}  // wxTable::query()
-
-/********** wxTable::GetSelectStmt() **********/
-void wxTable::GetSelectStmt(char *pSqlStmt, int typeOfSelect, bool distinct)
-{
-	char whereClause[DB_MAX_WHERE_CLAUSE_LEN];
-
-	whereClause[0] = 0;
-
-	// Build a select statement to query the database
-	wxStrcpy(pSqlStmt, "SELECT ");
-
-	// SELECT DISTINCT values only?
-	if (distinct)
-		wxStrcat(pSqlStmt, "DISTINCT ");
-
-	// Was a FROM clause specified to join tables to the base table?
-	// Available for ::Query() only!!!
-	bool appendFromClause = FALSE;
-	if (typeOfSelect == DB_SELECT_WHERE && from && wxStrlen(from))
-		appendFromClause = TRUE;
-
-	// Add the column list
-	int i;
-	for (i = 0; i < noCols; i++)
-	{
-		// If joining tables, the base table column names must be qualified to avoid ambiguity
-		if (appendFromClause)
-		{
-			wxStrcat(pSqlStmt, queryTableName);
-			wxStrcat(pSqlStmt, ".");
-		}
-		wxStrcat(pSqlStmt, colDefs[i].ColName);
-		if (i + 1 < noCols)
-			wxStrcat(pSqlStmt, ",");
-	}
-
-	// If the datasource supports ROWID, get this column as well.  Exception: Don't retrieve
-	// the ROWID if querying distinct records.  The rowid will always be unique.
-	if (!distinct && CanUpdByROWID())
-	{
-		// If joining tables, the base table column names must be qualified to avoid ambiguity
-		if (appendFromClause)
-		{
-			wxStrcat(pSqlStmt, ",");
-			wxStrcat(pSqlStmt, queryTableName);
-			wxStrcat(pSqlStmt, ".ROWID");
-		}
-		else
-			wxStrcat(pSqlStmt, ",ROWID");
-	}
-
-	// Append the FROM tablename portion
-	wxStrcat(pSqlStmt, " FROM ");
-	wxStrcat(pSqlStmt, queryTableName);
-
-	// Sybase uses the HOLDLOCK keyword to lock a record during query.
-	// The HOLDLOCK keyword follows the table name in the from clause.
-	// Each table in the from clause must specify HOLDLOCK or
-	// NOHOLDLOCK (the default).  Note: The "FOR UPDATE" clause
-	// is parsed but ignored in SYBASE Transact-SQL.
-	if (selectForUpdate && (pDb->Dbms() == dbmsSYBASE_ASA || pDb->Dbms() == dbmsSYBASE_ASE))
-		wxStrcat(pSqlStmt, " HOLDLOCK");
-
-	if (appendFromClause)
-		wxStrcat(pSqlStmt, from);
-
-	// Append the WHERE clause.  Either append the where clause for the class
-	// or build a where clause.  The typeOfSelect determines this.
-	switch(typeOfSelect)
-	{
-	case DB_SELECT_WHERE:
-		if (where && wxStrlen(where))	// May not want a where clause!!!
-		{
-			wxStrcat(pSqlStmt, " WHERE ");
-			wxStrcat(pSqlStmt, where);
-		}
-		break;
-	case DB_SELECT_KEYFIELDS:
-		GetWhereClause(whereClause, DB_WHERE_KEYFIELDS);
-		if (wxStrlen(whereClause))
-		{
-			wxStrcat(pSqlStmt, " WHERE ");
-			wxStrcat(pSqlStmt, whereClause);
-		}
-		break;
-	case DB_SELECT_MATCHING:
-		GetWhereClause(whereClause, DB_WHERE_MATCHING);
-		if (wxStrlen(whereClause))
-		{
-			wxStrcat(pSqlStmt, " WHERE ");
-			wxStrcat(pSqlStmt, whereClause);
-		}
-		break;
-	}
-
-	// Append the ORDER BY clause
-	if (orderBy && wxStrlen(orderBy))
-	{
-		wxStrcat(pSqlStmt, " ORDER BY ");
-		wxStrcat(pSqlStmt, orderBy);
-	}
-
-	// SELECT FOR UPDATE if told to do so and the datasource is capable.  Sybase
-	// parses the FOR UPDATE clause but ignores it.  See the comment above on the
-	// HOLDLOCK for Sybase.
-	if (selectForUpdate && CanSelectForUpdate())
-		wxStrcat(pSqlStmt, " FOR UPDATE");
-
-}  // wxTable::GetSelectStmt()
-
-/********** wxTable::getRec() **********/
-bool wxTable::getRec(UWORD fetchType)
-{
-	RETCODE retcode;
-
-#if !wxODBC_FWD_ONLY_CURSORS
-
-	// Fetch the NEXT, PREV, FIRST or LAST record, depending on fetchType
-	UDWORD  cRowsFetched;
-	UWORD   rowStatus;
-
-//	if ((retcode = SQLExtendedFetch(hstmt, fetchType, 0, &cRowsFetched, &rowStatus)) != SQL_SUCCESS)
-   retcode = SQLExtendedFetch(hstmt, fetchType, 0, &cRowsFetched, &rowStatus);
-   if (retcode  != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO)
-		if (retcode == SQL_NO_DATA_FOUND)
-			return(FALSE);
-		else
-			return(pDb->DispAllErrors(henv, hdbc, hstmt));
-#else
-
-	// Fetch the next record from the record set
-	retcode = SQLFetch(hstmt);
-	if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO)
-	{
-		if (retcode == SQL_NO_DATA_FOUND)
-			return(FALSE);
-		else
-			return(pDb->DispAllErrors(henv, hdbc, hstmt));
-	}
-#endif
-
-	// Completed successfully
-	return(TRUE);
-
-}  // wxTable::getRec()
-
-/********** wxTable::GetRowNum() **********/
-UWORD wxTable::GetRowNum(void)
-{
-	UDWORD rowNum;
-
-	if (SQLGetStmtOption(hstmt, SQL_ROW_NUMBER, (UCHAR*) &rowNum) != SQL_SUCCESS)
-	{
-		pDb->DispAllErrors(henv, hdbc, hstmt);
-		return(0);
-	}
-
-	// Completed successfully
-	return((UWORD) rowNum);
-
-}  // wxTable::GetRowNum()
+/***************************** PRIVATE FUNCTIONS *****************************/
 
 /********** wxTable::bindInsertParams() **********/
 bool wxTable::bindInsertParams(void)
@@ -756,6 +455,335 @@ bool wxTable::bindCols(HSTMT cursor)
 	return(TRUE);
 
 }  // wxTable::bindCols()
+
+/********** wxTable::getRec() **********/
+bool wxTable::getRec(UWORD fetchType)
+{
+	RETCODE retcode;
+
+#if !wxODBC_FWD_ONLY_CURSORS
+
+	// Fetch the NEXT, PREV, FIRST or LAST record, depending on fetchType
+	UDWORD  cRowsFetched;
+	UWORD   rowStatus;
+
+//	if ((retcode = SQLExtendedFetch(hstmt, fetchType, 0, &cRowsFetched, &rowStatus)) != SQL_SUCCESS)
+   retcode = SQLExtendedFetch(hstmt, fetchType, 0, &cRowsFetched, &rowStatus);
+   if (retcode  != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO)
+		if (retcode == SQL_NO_DATA_FOUND)
+			return(FALSE);
+		else
+			return(pDb->DispAllErrors(henv, hdbc, hstmt));
+#else
+
+	// Fetch the next record from the record set
+	retcode = SQLFetch(hstmt);
+	if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO)
+	{
+		if (retcode == SQL_NO_DATA_FOUND)
+			return(FALSE);
+		else
+			return(pDb->DispAllErrors(henv, hdbc, hstmt));
+	}
+#endif
+
+	// Completed successfully
+	return(TRUE);
+
+}  // wxTable::getRec()
+
+/********** wxTable::execDelete() **********/
+bool wxTable::execDelete(const char *pSqlStmt)
+{
+	// Execute the DELETE statement
+	if (SQLExecDirect(hstmtDelete, (UCHAR FAR *) pSqlStmt, SQL_NTS) != SQL_SUCCESS)
+		return(pDb->DispAllErrors(henv, hdbc, hstmtDelete));
+
+	// Record deleted successfully
+	return(TRUE);
+
+}  // wxTable::execDelete()
+
+/********** wxTable::execUpdate() **********/
+bool wxTable::execUpdate(const char *pSqlStmt)
+{
+	// Execute the UPDATE statement
+	if (SQLExecDirect(hstmtUpdate, (UCHAR FAR *) pSqlStmt, SQL_NTS) != SQL_SUCCESS)
+		return(pDb->DispAllErrors(henv, hdbc, hstmtUpdate));
+
+	// Record deleted successfully
+	return(TRUE);
+
+}  // wxTable::execUpdate()
+
+/********** wxTable::query() **********/
+bool wxTable::query(int queryType, bool forUpdate, bool distinct, char *pSqlStmt)
+{
+	char sqlStmt[DB_MAX_STATEMENT_LEN];
+
+	// Set the selectForUpdate member variable
+	if (forUpdate)
+		// The user may wish to select for update, but the DBMS may not be capable
+		selectForUpdate = CanSelectForUpdate();
+	else
+		selectForUpdate = FALSE;
+
+	// Set the SQL SELECT string
+	if (queryType != DB_SELECT_STATEMENT)				// A select statement was not passed in,
+	{																// so generate a select statement.
+		GetSelectStmt(sqlStmt, queryType, distinct);
+		pDb->WriteSqlLog(sqlStmt);
+	}
+
+	// Make sure the cursor is closed first
+	if (! CloseCursor(hstmt))
+		return(FALSE);
+
+	// Execute the SQL SELECT statement
+	int retcode;
+
+	retcode = SQLExecDirect(hstmt, (UCHAR FAR *) (queryType == DB_SELECT_STATEMENT ? pSqlStmt : sqlStmt), SQL_NTS);
+	if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO)
+		return(pDb->DispAllErrors(henv, hdbc, hstmt));
+
+	// Completed successfully
+	return(TRUE);
+
+}  // wxTable::query()
+
+
+
+/********** wxTable::Open() **********/
+bool wxTable::Open(void)
+{
+	if (!pDb)
+		return FALSE;
+
+	int i;
+	char sqlStmt[DB_MAX_STATEMENT_LEN];
+
+	// Verify that the table exists in the database
+	if (!pDb->TableExists(tableName,NULL,tablePath))
+	{
+		char s[128];
+		sprintf(s, "Error opening '%s', table/view does not exist in the database.", tableName);
+		pDb->LogError(s);
+		return(FALSE);
+	}
+
+	// Bind the member variables for field exchange between
+	// the wxTable object and the ODBC record.
+	if (!queryOnly)
+	{
+		if (!bindInsertParams())					// Inserts
+			return(FALSE);
+		if (!bindUpdateParams())					// Updates
+			return(FALSE);
+	}
+	if (!bindCols(*hstmtDefault))					// Selects
+		return(FALSE);
+	if (!bindCols(hstmtInternal))					// Internal use only
+		return(FALSE);
+	/*
+	 * Do NOT bind the hstmtCount cursor!!!
+	 */
+
+	// Build an insert statement using parameter markers
+	if (!queryOnly && noCols > 0)
+	{
+		bool needComma = FALSE;
+		sprintf(sqlStmt, "INSERT INTO %s (", tableName);
+		for (i = 0; i < noCols; i++)
+		{
+			if (! colDefs[i].InsertAllowed)
+				continue;
+			if (needComma)
+				wxStrcat(sqlStmt, ",");
+			wxStrcat(sqlStmt, colDefs[i].ColName);
+			needComma = TRUE;
+		}
+		needComma = FALSE;
+		wxStrcat(sqlStmt, ") VALUES (");
+		for (i = 0; i < noCols; i++)
+		{
+			if (! colDefs[i].InsertAllowed)
+				continue;
+			if (needComma)
+				wxStrcat(sqlStmt, ",");
+			wxStrcat(sqlStmt, "?");
+			needComma = TRUE;
+		}
+		wxStrcat(sqlStmt, ")");
+
+//		pDb->WriteSqlLog(sqlStmt);
+
+		// Prepare the insert statement for execution
+		if (SQLPrepare(hstmtInsert, (UCHAR FAR *) sqlStmt, SQL_NTS) != SQL_SUCCESS)
+			return(pDb->DispAllErrors(henv, hdbc, hstmtInsert));
+	}
+	
+	// Completed successfully
+	return(TRUE);
+
+}  // wxTable::Open()
+
+/********** wxTable::Query() **********/
+bool wxTable::Query(bool forUpdate, bool distinct)
+{
+
+	return(query(DB_SELECT_WHERE, forUpdate, distinct));
+
+}  // wxTable::Query()
+
+/********** wxTable::QueryBySqlStmt() **********/
+bool wxTable::QueryBySqlStmt(char *pSqlStmt)
+{
+	pDb->WriteSqlLog(pSqlStmt);
+
+	return(query(DB_SELECT_STATEMENT, FALSE, FALSE, pSqlStmt));
+
+}  // wxTable::QueryBySqlStmt()
+
+/********** wxTable::QueryMatching() **********/
+bool wxTable::QueryMatching(bool forUpdate, bool distinct)
+{
+
+	return(query(DB_SELECT_MATCHING, forUpdate, distinct));
+
+}  // wxTable::QueryMatching()
+
+/********** wxTable::QueryOnKeyFields() **********/
+bool wxTable::QueryOnKeyFields(bool forUpdate, bool distinct)
+{
+
+	return(query(DB_SELECT_KEYFIELDS, forUpdate, distinct));
+
+}  // wxTable::QueryOnKeyFields()
+
+/********** wxTable::GetSelectStmt() **********/
+void wxTable::GetSelectStmt(char *pSqlStmt, int typeOfSelect, bool distinct)
+{
+	char whereClause[DB_MAX_WHERE_CLAUSE_LEN];
+
+	whereClause[0] = 0;
+
+	// Build a select statement to query the database
+	wxStrcpy(pSqlStmt, "SELECT ");
+
+	// SELECT DISTINCT values only?
+	if (distinct)
+		wxStrcat(pSqlStmt, "DISTINCT ");
+
+	// Was a FROM clause specified to join tables to the base table?
+	// Available for ::Query() only!!!
+	bool appendFromClause = FALSE;
+	if (typeOfSelect == DB_SELECT_WHERE && from && wxStrlen(from))
+		appendFromClause = TRUE;
+
+	// Add the column list
+	int i;
+	for (i = 0; i < noCols; i++)
+	{
+		// If joining tables, the base table column names must be qualified to avoid ambiguity
+		if (appendFromClause)
+		{
+			wxStrcat(pSqlStmt, queryTableName);
+			wxStrcat(pSqlStmt, ".");
+		}
+		wxStrcat(pSqlStmt, colDefs[i].ColName);
+		if (i + 1 < noCols)
+			wxStrcat(pSqlStmt, ",");
+	}
+
+	// If the datasource supports ROWID, get this column as well.  Exception: Don't retrieve
+	// the ROWID if querying distinct records.  The rowid will always be unique.
+	if (!distinct && CanUpdByROWID())
+	{
+		// If joining tables, the base table column names must be qualified to avoid ambiguity
+		if (appendFromClause)
+		{
+			wxStrcat(pSqlStmt, ",");
+			wxStrcat(pSqlStmt, queryTableName);
+			wxStrcat(pSqlStmt, ".ROWID");
+		}
+		else
+			wxStrcat(pSqlStmt, ",ROWID");
+	}
+
+	// Append the FROM tablename portion
+	wxStrcat(pSqlStmt, " FROM ");
+	wxStrcat(pSqlStmt, queryTableName);
+
+	// Sybase uses the HOLDLOCK keyword to lock a record during query.
+	// The HOLDLOCK keyword follows the table name in the from clause.
+	// Each table in the from clause must specify HOLDLOCK or
+	// NOHOLDLOCK (the default).  Note: The "FOR UPDATE" clause
+	// is parsed but ignored in SYBASE Transact-SQL.
+	if (selectForUpdate && (pDb->Dbms() == dbmsSYBASE_ASA || pDb->Dbms() == dbmsSYBASE_ASE))
+		wxStrcat(pSqlStmt, " HOLDLOCK");
+
+	if (appendFromClause)
+		wxStrcat(pSqlStmt, from);
+
+	// Append the WHERE clause.  Either append the where clause for the class
+	// or build a where clause.  The typeOfSelect determines this.
+	switch(typeOfSelect)
+	{
+	case DB_SELECT_WHERE:
+		if (where && wxStrlen(where))	// May not want a where clause!!!
+		{
+			wxStrcat(pSqlStmt, " WHERE ");
+			wxStrcat(pSqlStmt, where);
+		}
+		break;
+	case DB_SELECT_KEYFIELDS:
+		GetWhereClause(whereClause, DB_WHERE_KEYFIELDS);
+		if (wxStrlen(whereClause))
+		{
+			wxStrcat(pSqlStmt, " WHERE ");
+			wxStrcat(pSqlStmt, whereClause);
+		}
+		break;
+	case DB_SELECT_MATCHING:
+		GetWhereClause(whereClause, DB_WHERE_MATCHING);
+		if (wxStrlen(whereClause))
+		{
+			wxStrcat(pSqlStmt, " WHERE ");
+			wxStrcat(pSqlStmt, whereClause);
+		}
+		break;
+	}
+
+	// Append the ORDER BY clause
+	if (orderBy && wxStrlen(orderBy))
+	{
+		wxStrcat(pSqlStmt, " ORDER BY ");
+		wxStrcat(pSqlStmt, orderBy);
+	}
+
+	// SELECT FOR UPDATE if told to do so and the datasource is capable.  Sybase
+	// parses the FOR UPDATE clause but ignores it.  See the comment above on the
+	// HOLDLOCK for Sybase.
+	if (selectForUpdate && CanSelectForUpdate())
+		wxStrcat(pSqlStmt, " FOR UPDATE");
+
+}  // wxTable::GetSelectStmt()
+
+/********** wxTable::GetRowNum() **********/
+UWORD wxTable::GetRowNum(void)
+{
+	UDWORD rowNum;
+
+	if (SQLGetStmtOption(hstmt, SQL_ROW_NUMBER, (UCHAR*) &rowNum) != SQL_SUCCESS)
+	{
+		pDb->DispAllErrors(henv, hdbc, hstmt);
+		return(0);
+	}
+
+	// Completed successfully
+	return((UWORD) rowNum);
+
+}  // wxTable::GetRowNum()
 
 /********** wxTable::CloseCursor() **********/
 bool wxTable::CloseCursor(HSTMT cursor)
@@ -971,7 +999,7 @@ bool wxTable::DropTable()
 }  // wxTable::DropTable()
 
 /********** wxTable::CreateIndex() **********/
-bool wxTable::CreateIndex(char * idxName, bool unique, int noIdxCols, CidxDef *pIdxDefs, bool attemptDrop)
+bool wxTable::CreateIndex(const char * idxName, bool unique, int noIdxCols, CidxDef *pIdxDefs, bool attemptDrop)
 {
 	char sqlStmt[DB_MAX_STATEMENT_LEN];
 
@@ -1038,7 +1066,7 @@ bool wxTable::CreateIndex(char * idxName, bool unique, int noIdxCols, CidxDef *p
 }  // wxTable::CreateIndex()
 
 /********** wxTable::DropIndex() **********/
-bool wxTable::DropIndex(char * idxName)
+bool wxTable::DropIndex(const char * idxName)
 {
 	// NOTE: This function returns TRUE if the Index does not exist, but
 	//       only for identified databases.  Code will need to be added
@@ -1121,19 +1149,6 @@ int wxTable::Insert(void)
 
 }  // wxTable::Insert()
 
-/********** wxTable::Update(pSqlStmt) **********/
-bool wxTable::Update(char *pSqlStmt)
-{
-	assert(!queryOnly);
-	if (queryOnly)
-		return(FALSE);
-
-	pDb->WriteSqlLog(pSqlStmt);
-
-	return(execUpdate(pSqlStmt));
-
-}  // wxTable::Update(pSqlStmt)
-
 /********** wxTable::Update() **********/
 bool wxTable::Update(void)
 {
@@ -1157,8 +1172,21 @@ bool wxTable::Update(void)
 
 }  // wxTable::Update()
 
+/********** wxTable::Update(pSqlStmt) **********/
+bool wxTable::Update(const char *pSqlStmt)
+{
+	assert(!queryOnly);
+	if (queryOnly)
+		return(FALSE);
+
+	pDb->WriteSqlLog(pSqlStmt);
+
+	return(execUpdate(pSqlStmt));
+
+}  // wxTable::Update(pSqlStmt)
+
 /********** wxTable::UpdateWhere() **********/
-bool wxTable::UpdateWhere(char *pWhereClause)
+bool wxTable::UpdateWhere(const char *pWhereClause)
 {
 	assert(!queryOnly);
 	if (queryOnly)
@@ -1200,7 +1228,7 @@ bool wxTable::Delete(void)
 }  // wxTable::Delete()
 
 /********** wxTable::DeleteWhere() **********/
-bool wxTable::DeleteWhere(char *pWhereClause)
+bool wxTable::DeleteWhere(const char *pWhereClause)
 {
 	assert(!queryOnly);
 	if (queryOnly)
@@ -1237,32 +1265,8 @@ bool wxTable::DeleteMatching(void)
 
 }  // wxTable::DeleteMatching()
 
-/********** wxTable::execDelete() **********/
-bool wxTable::execDelete(char *pSqlStmt)
-{
-	// Execute the DELETE statement
-	if (SQLExecDirect(hstmtDelete, (UCHAR FAR *) pSqlStmt, SQL_NTS) != SQL_SUCCESS)
-		return(pDb->DispAllErrors(henv, hdbc, hstmtDelete));
-
-	// Record deleted successfully
-	return(TRUE);
-
-}  // wxTable::execDelete()
-
-/********** wxTable::execUpdate() **********/
-bool wxTable::execUpdate(char *pSqlStmt)
-{
-	// Execute the UPDATE statement
-	if (SQLExecDirect(hstmtUpdate, (UCHAR FAR *) pSqlStmt, SQL_NTS) != SQL_SUCCESS)
-		return(pDb->DispAllErrors(henv, hdbc, hstmtUpdate));
-
-	// Record deleted successfully
-	return(TRUE);
-
-}  // wxTable::execUpdate()
-
 /********** wxTable::GetUpdateStmt() **********/
-void wxTable::GetUpdateStmt(char *pSqlStmt, int typeOfUpd, char *pWhereClause)
+void wxTable::GetUpdateStmt(char *pSqlStmt, int typeOfUpd, const char *pWhereClause)
 {
 	assert(!queryOnly);
 	if (queryOnly)
@@ -1323,11 +1327,10 @@ void wxTable::GetUpdateStmt(char *pSqlStmt, int typeOfUpd, char *pWhereClause)
 		wxStrcat(pSqlStmt, pWhereClause);
 		break;
 	}
-
 }  // GetUpdateStmt()
 
 /********** wxTable::GetDeleteStmt() **********/
-void wxTable::GetDeleteStmt(char *pSqlStmt, int typeOfDel, char *pWhereClause)
+void wxTable::GetDeleteStmt(char *pSqlStmt, int typeOfDel, const char *pWhereClause)
 {
 	assert(!queryOnly);
 	if (queryOnly)
@@ -1392,7 +1395,7 @@ void wxTable::GetDeleteStmt(char *pSqlStmt, int typeOfDel, char *pWhereClause)
  *       They are not included as part of the where clause.
  */
 
-void wxTable::GetWhereClause(char *pWhereClause, int typeOfWhere, char *qualTableName)
+void wxTable::GetWhereClause(char *pWhereClause, int typeOfWhere, const char *qualTableName)
 {
 	bool moreThanOneColumn = FALSE;
 	char colValue[255];
@@ -1585,7 +1588,7 @@ bool wxTable::SetQueryTimeout(UDWORD nSeconds)
 }  // wxTable::SetQueryTimeout()
 
 /********** wxTable::SetColDefs() **********/
-void wxTable::SetColDefs (int index, char *fieldName, int dataType, void *pData,
+void wxTable::SetColDefs (int index, const char *fieldName, int dataType, void *pData,
 								 int cType, int size, bool keyField, bool upd,
 								 bool insAllow, bool derivedCol)
 {
@@ -1769,7 +1772,7 @@ bool wxTable::SetNull(int colNo)
 }  // wxTable::SetNull(UINT colNo)
 
 /********** wxTable::SetNull(char *colName) **********/
-bool wxTable::SetNull(char *colName)
+bool wxTable::SetNull(const char *colName)
 {
 	int i;
 	for (i = 0; i < noCols; i++)

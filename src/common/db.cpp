@@ -184,12 +184,12 @@ bool wxDB::Open(char *Dsn, char *Uid, char *AuthStr)
 	// specified before the connection is made.
 	retcode = SQLSetConnectOption(hdbc, SQL_ODBC_CURSORS, SQL_CUR_USE_IF_NEEDED);
 
-	#ifdef DBDEBUG_CONSOLE
+#ifdef DBDEBUG_CONSOLE
 		if (retcode == SQL_SUCCESS)
 			cout << "SQLSetConnectOption(CURSOR_LIB) successful" << endl;
 		else
 			cout << "SQLSetConnectOption(CURSOR_LIB) failed" << endl;
-	#endif
+#endif
 
 #endif
 
@@ -875,7 +875,7 @@ void wxDB::DispNextError(void)
 } // wxDB::DispNextError()
 
 /********** wxDB::logError() **********/
-void wxDB::logError(char *errMsg, char *SQLState)
+void wxDB::logError(const char *errMsg, const char *SQLState)
 {
 	assert(errMsg && wxStrlen(errMsg));
 
@@ -902,7 +902,7 @@ void wxDB::logError(char *errMsg, char *SQLState)
 }  // wxDB::logError()
 
 /**********wxDB::TranslateSqlState()  **********/
-int wxDB::TranslateSqlState(char *SQLState)
+int wxDB::TranslateSqlState(const char *SQLState)
 {
 	if (!wxStrcmp(SQLState, "01000"))
 		return(DB_ERR_GENERAL_WARNING);
@@ -1089,7 +1089,7 @@ int wxDB::TranslateSqlState(char *SQLState)
 }  // wxDB::TranslateSqlState()
 	
 /**********  wxDB::Grant() **********/
-bool wxDB::Grant(int privileges, char *tableName, char *userList)
+bool wxDB::Grant(int privileges, const char *tableName, const char *userList)
 {
 	char sqlStmt[DB_MAX_STATEMENT_LEN];
 
@@ -1141,7 +1141,7 @@ bool wxDB::Grant(int privileges, char *tableName, char *userList)
 }  // wxDB::Grant()
 
 /********** wxDB::CreateView() **********/
-bool wxDB::CreateView(char *viewName, char *colList, char *pSqlStmt, bool attemptDrop)
+bool wxDB::CreateView(const char *viewName, const char *colList, const char *pSqlStmt, bool attemptDrop)
 {
 	char sqlStmt[DB_MAX_STATEMENT_LEN];
 
@@ -1174,7 +1174,7 @@ bool wxDB::CreateView(char *viewName, char *colList, char *pSqlStmt, bool attemp
 }  // wxDB::CreateView()
 
 /********** wxDB::DropView()  **********/
-bool wxDB::DropView(char *viewName)
+bool wxDB::DropView(const char *viewName)
 {
 	// NOTE: This function returns TRUE if the View does not exist, but
 	//       only for identified databases.  Code will need to be added
@@ -1218,7 +1218,7 @@ bool wxDB::DropView(char *viewName)
 
 
 /********** wxDB::ExecSql()  **********/
-bool wxDB::ExecSql(char *pSqlStmt)
+bool wxDB::ExecSql(const char *pSqlStmt)
 {
 	SQLFreeStmt(hstmt, SQL_CLOSE);
 	if (SQLExecDirect(hstmt, (UCHAR FAR *) pSqlStmt, SQL_NTS) == SQL_SUCCESS)
@@ -1278,36 +1278,34 @@ bool wxDB::GetData(UWORD colNo, SWORD cType, PTR pData, SDWORD maxLen, SDWORD FA
  *				delete [] colInf;
  *			}
  */
-CcolInf *wxDB::GetColumns(char *tableName[], char *userID)
+CcolInf *wxDB::GetColumns(char *tableName[], const char *userID)
 {
-	UINT noCols = 0;
-	UINT colNo = 0;
+	UINT     noCols = 0;
+	UINT     colNo  = 0;
 	CcolInf *colInf = 0;
-	RETCODE retcode;
-	SDWORD cb;
-	char tblName[DB_MAX_TABLE_NAME_LEN+1];
-	char colName[DB_MAX_COLUMN_NAME_LEN+1];
-	SWORD sqlDataType;
-	char userIdUC[80+1];
-	char tableNameUC[DB_MAX_TABLE_NAME_LEN+1];
+
+	RETCODE  retcode;
+	SDWORD   cb;
+	char     tblName[DB_MAX_TABLE_NAME_LEN+1];
+	char     colName[DB_MAX_COLUMN_NAME_LEN+1];
+	SWORD    sqlDataType;
+
+	wxString UserID;
+	wxString TableName;
 
 	if (!userID || !wxStrlen(userID))
-		userID = uid;
+		UserID = uid;
+	else
+		UserID = userID;
 
 	// dBase does not use user names, and some drivers fail if you try to pass one
 	if (Dbms() == dbmsDBASE)
-		userID = "";
+		UserID = "";
 
 	// Oracle user names may only be in uppercase, so force 
 	// the name to uppercase
 	if (Dbms() == dbmsORACLE)
-	{
-		int i = 0;
-		for (char *p = userID; *p; p++)
-			userIdUC[i++] = toupper(*p);
-		userIdUC[i] = 0;
-		userID = userIdUC;
-	}
+		UserID = UserID.Upper();
 
 	// Pass 1 - Determine how many columns there are.
 	// Pass 2 - Allocate the CcolInf array and fill in
@@ -1332,30 +1330,24 @@ CcolInf *wxDB::GetColumns(char *tableName[], char *userID)
 		int tbl;
 		for (tbl = 0; tableName[tbl]; tbl++)
 		{
+			TableName = tableName[tbl];
 			// Oracle table names are uppercase only, so force 
 			// the name to uppercase just in case programmer forgot to do this
 			if (Dbms() == dbmsORACLE)
-			{
-				int i = 0;
-				for (char *p = tableName[tbl]; *p; p++)
-					tableNameUC[i++] = toupper(*p);
-				tableNameUC[i] = 0;
-			}
-			else
-				sprintf(tableNameUC,tableName[tbl]);
+				TableName = TableName.Upper();
 
 			SQLFreeStmt(hstmt, SQL_CLOSE);
 
 			// MySQL and Access cannot accept a user name when looking up column names, so we
 			// use the call below that leaves out the user name
-			if (wxStrcmp(userID,"") &&
+			if (wxStrcmp(UserID.GetData(),"") &&
 				 Dbms() != dbmsMY_SQL &&
 				 Dbms() != dbmsACCESS)
 			{
 				retcode = SQLColumns(hstmt,
 											NULL, 0,											// All qualifiers
-											(UCHAR *) userID, SQL_NTS,					// Owner
-											(UCHAR *) tableNameUC, SQL_NTS,
+											(UCHAR *) UserID.GetData(), SQL_NTS,	// Owner
+											(UCHAR *) TableName.GetData(), SQL_NTS,
 											NULL, 0);										// All columns
 			}
 			else
@@ -1363,7 +1355,7 @@ CcolInf *wxDB::GetColumns(char *tableName[], char *userID)
 				retcode = SQLColumns(hstmt,
 											NULL, 0,											// All qualifiers
 											NULL, 0,											// Owner
-											(UCHAR *) tableNameUC, SQL_NTS,
+											(UCHAR *) TableName.GetData(), SQL_NTS,
 											NULL, 0);										// All columns
 			}
 			if (retcode != SQL_SUCCESS)
@@ -1375,8 +1367,8 @@ CcolInf *wxDB::GetColumns(char *tableName[], char *userID)
 				SQLFreeStmt(hstmt, SQL_CLOSE);
 				return(0);
 			}
-			SQLBindCol(hstmt, 3, SQL_C_CHAR,   (UCHAR*) tblName,      DB_MAX_TABLE_NAME_LEN+1,  &cb);
-			SQLBindCol(hstmt, 4, SQL_C_CHAR,   (UCHAR*) colName,      DB_MAX_COLUMN_NAME_LEN+1, &cb);
+			SQLBindCol(hstmt, 3, SQL_C_CHAR,   (UCHAR*)  tblName,      DB_MAX_TABLE_NAME_LEN+1,  &cb);
+			SQLBindCol(hstmt, 4, SQL_C_CHAR,   (UCHAR*)  colName,      DB_MAX_COLUMN_NAME_LEN+1, &cb);
 			SQLBindCol(hstmt, 5, SQL_C_SSHORT, (UCHAR*) &sqlDataType, 0,                        &cb);
 			while ((retcode = SQLFetch(hstmt)) == SQL_SUCCESS)
 			{
@@ -1413,7 +1405,7 @@ CcolInf *wxDB::GetColumns(char *tableName[], char *userID)
 
 
 /********** wxDB::Catalog() **********/
-bool wxDB::Catalog(char *userID, char *fileName)
+bool wxDB::Catalog(const char *userID, const char *fileName)
 {
 	assert(fileName && wxStrlen(fileName));
 
@@ -1426,6 +1418,8 @@ bool wxDB::Catalog(char *userID, char *fileName)
 	char		typeName[30+1];
 	SWORD		precision, length;
 
+	wxString UserID;
+
 	FILE *fp = fopen(fileName,"wt");
 	if (fp == NULL)
 		return(FALSE);
@@ -1433,25 +1427,20 @@ bool wxDB::Catalog(char *userID, char *fileName)
 	SQLFreeStmt(hstmt, SQL_CLOSE);
 
 	if (!userID || !wxStrlen(userID))
-		userID = uid;
+		UserID = uid;
+	else
+		UserID = userID;
 
-	char userIdUC[80+1];
 	// Oracle user names may only be in uppercase, so force 
 	// the name to uppercase
 	if (Dbms() == dbmsORACLE)
-	{
-		int i = 0;
-		for (char *p = userID; *p; p++)
-			userIdUC[i++] = toupper(*p);
-		userIdUC[i] = 0;
-		userID = userIdUC;
-	}
+		UserID = UserID.Upper();
 
-	if (wxStrcmp(userID,""))
+	if (wxStrcmp(UserID.GetData(),""))
 	{
 		retcode = SQLColumns(hstmt,
 									NULL, 0,											// All qualifiers
-									(UCHAR *) userID, SQL_NTS,					// User specified
+									(UCHAR *) UserID.GetData(), SQL_NTS,	// User specified
 									NULL, 0,											// All tables
 									NULL, 0);										// All columns
 	}
@@ -1530,8 +1519,11 @@ bool wxDB::Catalog(char *userID, char *fileName)
 // if the object exists in the database.  This function does not indicate
 // whether or not the user has privleges to query or perform other functions
 // on the table.
-bool wxDB::TableExists(char *tableName, char *userID, char *tablePath)
+bool wxDB::TableExists(const char *tableName, const char *userID, const char *tablePath)
 {
+	wxString UserID;
+	wxString TableName;
+
 	assert(tableName && wxStrlen(tableName));
 
 	if (Dbms() == dbmsDBASE)
@@ -1541,61 +1533,50 @@ bool wxDB::TableExists(char *tableName, char *userID, char *tablePath)
 			dbName.sprintf("%s/%s.dbf",tablePath,tableName);
 		else
 			dbName.sprintf("%s.dbf",tableName);
-		bool glt;
-		glt = wxFileExists(dbName.GetData());
-		return glt;
+
+		bool exists;
+		exists = wxFileExists(dbName.GetData());
+		return exists;
 	}
 
 	if (!userID || !wxStrlen(userID))
-		userID = uid;
+		UserID = uid;
+	else
+		UserID = userID;
 
-	char userIdUC[80+1];
 	// Oracle user names may only be in uppercase, so force 
 	// the name to uppercase
 	if (Dbms() == dbmsORACLE)
-	{
-		int i = 0;
-		for (char *p = userID; *p; p++)
-			userIdUC[i++] = toupper(*p);
-		userIdUC[i] = 0;
-		userID = userIdUC;
-	}
+		UserID = UserID.Upper();
 
-	char tableNameUC[DB_MAX_TABLE_NAME_LEN+1];
+	TableName = tableName;
 	// Oracle table names are uppercase only, so force 
 	// the name to uppercase just in case programmer forgot to do this
 	if (Dbms() == dbmsORACLE)
-	{
-		int i = 0;
-		for (char *p = tableName; *p; p++)
-			tableNameUC[i++] = toupper(*p);
-		tableNameUC[i] = 0;
-	}
-	else
-		sprintf(tableNameUC,tableName);
+		TableName = TableName.Upper();
 
 	SQLFreeStmt(hstmt, SQL_CLOSE);
 	RETCODE retcode;
 
 	// MySQL and Access cannot accept a user name when looking up table names, so we
 	// use the call below that leaves out the user name
-	if (wxStrcmp(userID,"") &&
+	if (wxStrcmp(UserID,"") &&
 		 Dbms() != dbmsMY_SQL &&
 		 Dbms() != dbmsACCESS)
 	{
 		retcode = SQLTables(hstmt,
-								  NULL, 0,										// All qualifiers
-								  (UCHAR *) userID, SQL_NTS,				// All owners
-								  (UCHAR FAR *)tableNameUC, SQL_NTS,
-								  NULL, 0);										// All table types
+								  NULL, 0,												// All qualifiers
+								  (UCHAR *) UserID.GetData(), SQL_NTS,			// All owners
+								  (UCHAR FAR *)TableName.GetData(), SQL_NTS,
+								  NULL, 0);												// All table types
 	}
 	else
 	{
 		retcode = SQLTables(hstmt,
-								  NULL, 0,										// All qualifiers
-								  NULL, 0,										// All owners
-								  (UCHAR FAR *)tableNameUC, SQL_NTS,
-								  NULL, 0);										// All table types
+								  NULL, 0,												// All qualifiers
+								  NULL, 0,												// All owners
+								  (UCHAR FAR *)TableName.GetData(), SQL_NTS,
+								  NULL, 0);												// All table types
 	}
 	if (retcode != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc, hstmt));
@@ -1614,7 +1595,7 @@ bool wxDB::TableExists(char *tableName, char *userID, char *tablePath)
 
 
 /********** wxDB::SqlLog() **********/
-bool wxDB::SqlLog(enum sqlLog state, char *filename, bool append)
+bool wxDB::SqlLog(enum sqlLog state, const char *filename, bool append)
 {
 	assert(state == sqlLogON  || state == sqlLogOFF);
 	assert(state == sqlLogOFF || filename);
@@ -1645,7 +1626,7 @@ bool wxDB::SqlLog(enum sqlLog state, char *filename, bool append)
 
 
 /********** wxDB::WriteSqlLog() **********/
-bool wxDB::WriteSqlLog(char *logMsg)
+bool wxDB::WriteSqlLog(const char *logMsg)
 {
 	assert(logMsg);
 
@@ -1877,7 +1858,7 @@ bool SqlLog(enum sqlLog state, char *filename)
 }  // SqlLog()
 
 /********** GetDataSource() **********/
-bool GetDataSource(HENV henv, char *Dsn, SWORD DsnMax, char *DsDesc, SWORD DsDescMax,
+bool GetDataSource(HENV henv, const char *Dsn, SWORD DsnMax, const char *DsDesc, SWORD DsDescMax,
 						 UWORD direction)
 {
 	SWORD cb;
