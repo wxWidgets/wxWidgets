@@ -116,6 +116,7 @@ wxWindowDC::wxWindowDC( wxWindow *window )
         
     SetUpDC();
     
+/*
     wxRegion update = window->GetUpdateRegion();
     if (update.Empty()) return;
     
@@ -123,6 +124,7 @@ wxWindowDC::wxWindowDC( wxWindow *window )
     gdk_gc_set_clip_region( m_brushGC, update.GetRegion() );
     gdk_gc_set_clip_region( m_textGC, update.GetRegion() );
     gdk_gc_set_clip_region( m_bgGC, update.GetRegion() );
+*/
 }
 
 wxWindowDC::~wxWindowDC(void)

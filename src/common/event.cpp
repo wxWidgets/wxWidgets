@@ -370,17 +370,9 @@ bool wxEvtHandler::SearchEventTable(wxEventTable& table, wxEvent& event)
 {
   int i = 0;
   int commandId = event.GetId();
-  
-  while (table.entries[i].m_fn != 
-#ifdef __SGI_CC__
-								0L
-#else
-								NULL
-#endif
-		)
-  {
-//    wxEventType eventType = (wxEventType) table.entries[i].m_eventType;
 
+  while (table.entries[i].m_fn)
+  {
     if ((event.GetEventType() == table.entries[i].m_eventType) &&
         (table.entries[i].m_id == -1 || // Match, if event spec says any id will do (id == -1)
           (table.entries[i].m_lastId == -1 && commandId == table.entries[i].m_id) ||
@@ -431,8 +423,6 @@ bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
   {
     wxEventTableEntry *entry = (wxEventTableEntry*)node->Data();
     
-//    wxEventType eventType = (wxEventType) entry->m_eventType;
-  
     if (entry->m_fn)
     {
     if ((event.GetEventType() == entry->m_eventType) &&
@@ -451,7 +441,7 @@ bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
       else
             return TRUE;
        }
-    };
+    }
     node = node->Next();
   }
   return FALSE;

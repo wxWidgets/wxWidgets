@@ -1533,9 +1533,6 @@ void wxWindow::GetClientSize( int *width, int *height ) const
 
       GtkStyleClass *viewport_class = viewport->style->klass;
 
-      GtkWidget *hscrollbar = scroll_window->hscrollbar;
-      GtkWidget *vscrollbar = scroll_window->vscrollbar;
-
       if ((m_windowStyle & wxRAISED_BORDER) ||
           (m_windowStyle & wxSUNKEN_BORDER))
       {
@@ -1692,7 +1689,7 @@ void wxWindow::SetSizeHints( int minW, int minH, int maxW, int maxH, int WXUNUSE
 
 void wxWindow::OnSize( wxSizeEvent &WXUNUSED(event) )
 {
-  //if (GetAutoLayout()) Layout();
+  if (GetAutoLayout()) Layout();
 }
 
 bool wxWindow::Show( bool show )
