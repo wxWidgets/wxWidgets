@@ -36,7 +36,12 @@ pascal OSStatus wxDockEventHandler( EventHandlerCallRef inHandlerCallRef,
     {
         //TODO:	This is a complete copy of 
         //static pascal OSStatus wxMacAppCommandEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
-	
+
+        if (! pTB->GetCurrentMenu() )
+        {
+            return eventNotHandledErr;
+        }
+                
         MenuRef hMenu = MAC_WXHMENU(pTB->GetCurrentMenu()->GetHMenu());
         OSStatus result = eventNotHandledErr ;
 
