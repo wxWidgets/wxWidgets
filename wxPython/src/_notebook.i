@@ -163,7 +163,7 @@ public:
     %pythonAppend wxNotebook()       ""
 
     wxNotebook(wxWindow *parent,
-               wxWindowID id,
+               wxWindowID id=-1,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = 0,
@@ -287,7 +287,7 @@ public:
     %pythonAppend wxListbook()       ""
 
     wxListbook(wxWindow *parent,
-               wxWindowID id,
+               wxWindowID id=-1,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = 0,
