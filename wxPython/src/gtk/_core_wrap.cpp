@@ -1352,120 +1352,121 @@ SWIG_Python_GetTypeList() {
 #define  SWIGTYPE_p_wxAcceleratorEntry swig_types[11] 
 #define  SWIGTYPE_p_wxUpdateUIEvent swig_types[12] 
 #define  SWIGTYPE_p_wxEvent swig_types[13] 
-#define  SWIGTYPE_p_wxMenu swig_types[14] 
-#define  SWIGTYPE_p_wxGridSizer swig_types[15] 
-#define  SWIGTYPE_p_wxFlexGridSizer swig_types[16] 
-#define  SWIGTYPE_p_wxInitDialogEvent swig_types[17] 
-#define  SWIGTYPE_p_wxItemContainer swig_types[18] 
-#define  SWIGTYPE_p_wxNcPaintEvent swig_types[19] 
-#define  SWIGTYPE_p_wxPaintEvent swig_types[20] 
-#define  SWIGTYPE_p_wxSysColourChangedEvent swig_types[21] 
-#define  SWIGTYPE_p_wxMouseCaptureChangedEvent swig_types[22] 
-#define  SWIGTYPE_p_wxDisplayChangedEvent swig_types[23] 
-#define  SWIGTYPE_p_wxPaletteChangedEvent swig_types[24] 
-#define  SWIGTYPE_p_wxControl swig_types[25] 
-#define  SWIGTYPE_p_wxFont swig_types[26] 
-#define  SWIGTYPE_p_wxMenuBarBase swig_types[27] 
-#define  SWIGTYPE_p_wxSetCursorEvent swig_types[28] 
-#define  SWIGTYPE_p_wxFSFile swig_types[29] 
-#define  SWIGTYPE_p_wxCaret swig_types[30] 
-#define  SWIGTYPE_ptrdiff_t swig_types[31] 
-#define  SWIGTYPE_std__ptrdiff_t swig_types[32] 
-#define  SWIGTYPE_p_wxRegion swig_types[33] 
-#define  SWIGTYPE_p_wxPoint2D swig_types[34] 
-#define  SWIGTYPE_p_int swig_types[35] 
-#define  SWIGTYPE_p_wxSize swig_types[36] 
-#define  SWIGTYPE_p_wxDC swig_types[37] 
-#define  SWIGTYPE_p_wxPySizer swig_types[38] 
-#define  SWIGTYPE_p_wxVisualAttributes swig_types[39] 
-#define  SWIGTYPE_p_wxNotifyEvent swig_types[40] 
-#define  SWIGTYPE_p_wxPyEvent swig_types[41] 
-#define  SWIGTYPE_p_wxPropagationDisabler swig_types[42] 
-#define  SWIGTYPE_p_form_ops_t swig_types[43] 
-#define  SWIGTYPE_p_wxAppTraits swig_types[44] 
-#define  SWIGTYPE_p_wxArrayString swig_types[45] 
-#define  SWIGTYPE_p_wxShowEvent swig_types[46] 
-#define  SWIGTYPE_p_wxToolTip swig_types[47] 
-#define  SWIGTYPE_p_wxMoveEvent swig_types[48] 
-#define  SWIGTYPE_p_wxSizeEvent swig_types[49] 
-#define  SWIGTYPE_p_wxActivateEvent swig_types[50] 
-#define  SWIGTYPE_p_wxIconizeEvent swig_types[51] 
-#define  SWIGTYPE_p_wxMaximizeEvent swig_types[52] 
-#define  SWIGTYPE_p_wxQueryNewPaletteEvent swig_types[53] 
-#define  SWIGTYPE_p_wxWindowCreateEvent swig_types[54] 
-#define  SWIGTYPE_p_wxIdleEvent swig_types[55] 
-#define  SWIGTYPE_p_wxDateEvent swig_types[56] 
-#define  SWIGTYPE_p_wxMenuItem swig_types[57] 
-#define  SWIGTYPE_p_wxStaticBox swig_types[58] 
-#define  SWIGTYPE_p_long swig_types[59] 
-#define  SWIGTYPE_p_wxDuplexMode swig_types[60] 
-#define  SWIGTYPE_p_wxTIFFHandler swig_types[61] 
-#define  SWIGTYPE_p_wxXPMHandler swig_types[62] 
-#define  SWIGTYPE_p_wxPNMHandler swig_types[63] 
-#define  SWIGTYPE_p_wxJPEGHandler swig_types[64] 
-#define  SWIGTYPE_p_wxPCXHandler swig_types[65] 
-#define  SWIGTYPE_p_wxGIFHandler swig_types[66] 
-#define  SWIGTYPE_p_wxPNGHandler swig_types[67] 
-#define  SWIGTYPE_p_wxANIHandler swig_types[68] 
-#define  SWIGTYPE_p_wxMemoryFSHandler swig_types[69] 
-#define  SWIGTYPE_p_wxZipFSHandler swig_types[70] 
-#define  SWIGTYPE_p_wxInternetFSHandler swig_types[71] 
-#define  SWIGTYPE_p_wxPyFileSystemHandler swig_types[72] 
-#define  SWIGTYPE_p_wxEvtHandler swig_types[73] 
-#define  SWIGTYPE_p_wxCURHandler swig_types[74] 
-#define  SWIGTYPE_p_wxICOHandler swig_types[75] 
-#define  SWIGTYPE_p_wxBMPHandler swig_types[76] 
-#define  SWIGTYPE_p_wxImageHandler swig_types[77] 
-#define  SWIGTYPE_p_wxFileSystemHandler swig_types[78] 
-#define  SWIGTYPE_p_wxRect swig_types[79] 
-#define  SWIGTYPE_p_wxButton swig_types[80] 
-#define  SWIGTYPE_p_wxGBSpan swig_types[81] 
-#define  SWIGTYPE_p_wxPropagateOnce swig_types[82] 
-#define  SWIGTYPE_p_wxAcceleratorTable swig_types[83] 
-#define  SWIGTYPE_p_wxStdDialogButtonSizer swig_types[84] 
-#define  SWIGTYPE_p_char swig_types[85] 
-#define  SWIGTYPE_p_wxGBPosition swig_types[86] 
-#define  SWIGTYPE_p_wxImage swig_types[87] 
-#define  SWIGTYPE_p_wxFrame swig_types[88] 
-#define  SWIGTYPE_p_wxScrollWinEvent swig_types[89] 
-#define  SWIGTYPE_p_wxPaperSize swig_types[90] 
-#define  SWIGTYPE_p_wxImageHistogram swig_types[91] 
-#define  SWIGTYPE_p_wxPoint swig_types[92] 
-#define  SWIGTYPE_p_wxCursor swig_types[93] 
-#define  SWIGTYPE_p_wxObject swig_types[94] 
-#define  SWIGTYPE_p_wxInputStream swig_types[95] 
-#define  SWIGTYPE_p_wxOutputStream swig_types[96] 
-#define  SWIGTYPE_p_wxPyInputStream swig_types[97] 
-#define  SWIGTYPE_p_wxDateTime swig_types[98] 
-#define  SWIGTYPE_p_wxKeyEvent swig_types[99] 
-#define  SWIGTYPE_p_wxNavigationKeyEvent swig_types[100] 
-#define  SWIGTYPE_p_wxWindowDestroyEvent swig_types[101] 
-#define  SWIGTYPE_p_unsigned_long swig_types[102] 
-#define  SWIGTYPE_p_wxWindow swig_types[103] 
-#define  SWIGTYPE_p_wxMenuBar swig_types[104] 
-#define  SWIGTYPE_p_wxFileSystem swig_types[105] 
-#define  SWIGTYPE_p_wxBitmap swig_types[106] 
-#define  SWIGTYPE_unsigned_int swig_types[107] 
-#define  SWIGTYPE_p_unsigned_int swig_types[108] 
-#define  SWIGTYPE_p_wxMenuEvent swig_types[109] 
-#define  SWIGTYPE_p_wxContextMenuEvent swig_types[110] 
-#define  SWIGTYPE_p_unsigned_char swig_types[111] 
-#define  SWIGTYPE_p_wxEraseEvent swig_types[112] 
-#define  SWIGTYPE_p_wxMouseEvent swig_types[113] 
-#define  SWIGTYPE_p_wxCloseEvent swig_types[114] 
-#define  SWIGTYPE_p_wxPyApp swig_types[115] 
-#define  SWIGTYPE_p_wxCommandEvent swig_types[116] 
-#define  SWIGTYPE_p_wxPyCommandEvent swig_types[117] 
-#define  SWIGTYPE_p_wxPyDropTarget swig_types[118] 
-#define  SWIGTYPE_p_wxQuantize swig_types[119] 
-#define  SWIGTYPE_p_wxChildFocusEvent swig_types[120] 
+#define  SWIGTYPE_p_buffer swig_types[14] 
+#define  SWIGTYPE_p_wxMenu swig_types[15] 
+#define  SWIGTYPE_p_wxGridSizer swig_types[16] 
+#define  SWIGTYPE_p_wxFlexGridSizer swig_types[17] 
+#define  SWIGTYPE_p_wxInitDialogEvent swig_types[18] 
+#define  SWIGTYPE_p_wxItemContainer swig_types[19] 
+#define  SWIGTYPE_p_wxNcPaintEvent swig_types[20] 
+#define  SWIGTYPE_p_wxPaintEvent swig_types[21] 
+#define  SWIGTYPE_p_wxSysColourChangedEvent swig_types[22] 
+#define  SWIGTYPE_p_wxMouseCaptureChangedEvent swig_types[23] 
+#define  SWIGTYPE_p_wxDisplayChangedEvent swig_types[24] 
+#define  SWIGTYPE_p_wxPaletteChangedEvent swig_types[25] 
+#define  SWIGTYPE_p_wxControl swig_types[26] 
+#define  SWIGTYPE_p_wxFont swig_types[27] 
+#define  SWIGTYPE_p_wxMenuBarBase swig_types[28] 
+#define  SWIGTYPE_p_wxSetCursorEvent swig_types[29] 
+#define  SWIGTYPE_p_wxFSFile swig_types[30] 
+#define  SWIGTYPE_p_wxCaret swig_types[31] 
+#define  SWIGTYPE_ptrdiff_t swig_types[32] 
+#define  SWIGTYPE_std__ptrdiff_t swig_types[33] 
+#define  SWIGTYPE_p_wxRegion swig_types[34] 
+#define  SWIGTYPE_p_wxPoint2D swig_types[35] 
+#define  SWIGTYPE_p_int swig_types[36] 
+#define  SWIGTYPE_p_wxSize swig_types[37] 
+#define  SWIGTYPE_p_wxDC swig_types[38] 
+#define  SWIGTYPE_p_wxPySizer swig_types[39] 
+#define  SWIGTYPE_p_wxVisualAttributes swig_types[40] 
+#define  SWIGTYPE_p_wxNotifyEvent swig_types[41] 
+#define  SWIGTYPE_p_wxPyEvent swig_types[42] 
+#define  SWIGTYPE_p_wxPropagationDisabler swig_types[43] 
+#define  SWIGTYPE_p_form_ops_t swig_types[44] 
+#define  SWIGTYPE_p_wxAppTraits swig_types[45] 
+#define  SWIGTYPE_p_wxArrayString swig_types[46] 
+#define  SWIGTYPE_p_wxShowEvent swig_types[47] 
+#define  SWIGTYPE_p_wxToolTip swig_types[48] 
+#define  SWIGTYPE_p_wxMoveEvent swig_types[49] 
+#define  SWIGTYPE_p_wxSizeEvent swig_types[50] 
+#define  SWIGTYPE_p_wxActivateEvent swig_types[51] 
+#define  SWIGTYPE_p_wxIconizeEvent swig_types[52] 
+#define  SWIGTYPE_p_wxMaximizeEvent swig_types[53] 
+#define  SWIGTYPE_p_wxQueryNewPaletteEvent swig_types[54] 
+#define  SWIGTYPE_p_wxWindowCreateEvent swig_types[55] 
+#define  SWIGTYPE_p_wxIdleEvent swig_types[56] 
+#define  SWIGTYPE_p_wxDateEvent swig_types[57] 
+#define  SWIGTYPE_p_wxMenuItem swig_types[58] 
+#define  SWIGTYPE_p_wxStaticBox swig_types[59] 
+#define  SWIGTYPE_p_long swig_types[60] 
+#define  SWIGTYPE_p_wxDuplexMode swig_types[61] 
+#define  SWIGTYPE_p_wxTIFFHandler swig_types[62] 
+#define  SWIGTYPE_p_wxXPMHandler swig_types[63] 
+#define  SWIGTYPE_p_wxPNMHandler swig_types[64] 
+#define  SWIGTYPE_p_wxJPEGHandler swig_types[65] 
+#define  SWIGTYPE_p_wxPCXHandler swig_types[66] 
+#define  SWIGTYPE_p_wxGIFHandler swig_types[67] 
+#define  SWIGTYPE_p_wxPNGHandler swig_types[68] 
+#define  SWIGTYPE_p_wxANIHandler swig_types[69] 
+#define  SWIGTYPE_p_wxMemoryFSHandler swig_types[70] 
+#define  SWIGTYPE_p_wxZipFSHandler swig_types[71] 
+#define  SWIGTYPE_p_wxInternetFSHandler swig_types[72] 
+#define  SWIGTYPE_p_wxPyFileSystemHandler swig_types[73] 
+#define  SWIGTYPE_p_wxEvtHandler swig_types[74] 
+#define  SWIGTYPE_p_wxCURHandler swig_types[75] 
+#define  SWIGTYPE_p_wxICOHandler swig_types[76] 
+#define  SWIGTYPE_p_wxBMPHandler swig_types[77] 
+#define  SWIGTYPE_p_wxImageHandler swig_types[78] 
+#define  SWIGTYPE_p_wxFileSystemHandler swig_types[79] 
+#define  SWIGTYPE_p_wxRect swig_types[80] 
+#define  SWIGTYPE_p_wxButton swig_types[81] 
+#define  SWIGTYPE_p_wxGBSpan swig_types[82] 
+#define  SWIGTYPE_p_wxPropagateOnce swig_types[83] 
+#define  SWIGTYPE_p_wxAcceleratorTable swig_types[84] 
+#define  SWIGTYPE_p_wxStdDialogButtonSizer swig_types[85] 
+#define  SWIGTYPE_p_char swig_types[86] 
+#define  SWIGTYPE_p_wxGBPosition swig_types[87] 
+#define  SWIGTYPE_p_wxImage swig_types[88] 
+#define  SWIGTYPE_p_wxFrame swig_types[89] 
+#define  SWIGTYPE_p_wxScrollWinEvent swig_types[90] 
+#define  SWIGTYPE_p_wxPaperSize swig_types[91] 
+#define  SWIGTYPE_p_wxImageHistogram swig_types[92] 
+#define  SWIGTYPE_p_wxPoint swig_types[93] 
+#define  SWIGTYPE_p_wxCursor swig_types[94] 
+#define  SWIGTYPE_p_wxObject swig_types[95] 
+#define  SWIGTYPE_p_wxInputStream swig_types[96] 
+#define  SWIGTYPE_p_wxOutputStream swig_types[97] 
+#define  SWIGTYPE_p_wxPyInputStream swig_types[98] 
+#define  SWIGTYPE_p_wxDateTime swig_types[99] 
+#define  SWIGTYPE_p_wxKeyEvent swig_types[100] 
+#define  SWIGTYPE_p_wxNavigationKeyEvent swig_types[101] 
+#define  SWIGTYPE_p_wxWindowDestroyEvent swig_types[102] 
+#define  SWIGTYPE_p_unsigned_long swig_types[103] 
+#define  SWIGTYPE_p_wxWindow swig_types[104] 
+#define  SWIGTYPE_p_wxMenuBar swig_types[105] 
+#define  SWIGTYPE_p_wxFileSystem swig_types[106] 
+#define  SWIGTYPE_p_wxBitmap swig_types[107] 
+#define  SWIGTYPE_unsigned_int swig_types[108] 
+#define  SWIGTYPE_p_unsigned_int swig_types[109] 
+#define  SWIGTYPE_p_wxMenuEvent swig_types[110] 
+#define  SWIGTYPE_p_wxContextMenuEvent swig_types[111] 
+#define  SWIGTYPE_p_unsigned_char swig_types[112] 
+#define  SWIGTYPE_p_wxEraseEvent swig_types[113] 
+#define  SWIGTYPE_p_wxMouseEvent swig_types[114] 
+#define  SWIGTYPE_p_wxCloseEvent swig_types[115] 
+#define  SWIGTYPE_p_wxPyApp swig_types[116] 
+#define  SWIGTYPE_p_wxCommandEvent swig_types[117] 
+#define  SWIGTYPE_p_wxPyCommandEvent swig_types[118] 
+#define  SWIGTYPE_p_wxPyDropTarget swig_types[119] 
+#define  SWIGTYPE_p_wxQuantize swig_types[120] 
 #define  SWIGTYPE_p_wxFocusEvent swig_types[121] 
-#define  SWIGTYPE_p_wxDropFilesEvent swig_types[122] 
-#define  SWIGTYPE_p_wxControlWithItems swig_types[123] 
-#define  SWIGTYPE_p_wxColour swig_types[124] 
-#define  SWIGTYPE_p_wxValidator swig_types[125] 
-#define  SWIGTYPE_p_wxPyValidator swig_types[126] 
-static swig_type_info *swig_types[128];
+#define  SWIGTYPE_p_wxChildFocusEvent swig_types[122] 
+#define  SWIGTYPE_p_wxDropFilesEvent swig_types[123] 
+#define  SWIGTYPE_p_wxControlWithItems swig_types[124] 
+#define  SWIGTYPE_p_wxColour swig_types[125] 
+#define  SWIGTYPE_p_wxValidator swig_types[126] 
+#define  SWIGTYPE_p_wxPyValidator swig_types[127] 
+static swig_type_info *swig_types[129];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -2338,93 +2339,101 @@ static unsigned long wxImageHistogram_GetCountColour(wxImageHistogram *self,wxCo
             wxImageHistogramEntry e = (*self)[key];
             return e.value;
         }
+
+    typedef unsigned char* buffer;
+
 static wxImage *new_wxImage(int width=0,int height=0,bool clear=true){
-            if (width > 0 && height > 0)
-                return new wxImage(width, height, clear);
-            else
-                return new wxImage;
-        }
+                if (width > 0 && height > 0)
+                    return new wxImage(width, height, clear);
+                else
+                    return new wxImage;
+            }
 static wxImage *new_wxImage(wxBitmap const &bitmap){
-            return new wxImage(bitmap.ConvertToImage());
-        }
-static wxImage *new_wxImage(int width,int height,unsigned char *data){
-            // Copy the source data so the wxImage can clean it up later
-            unsigned char* copy = (unsigned char*)malloc(width*height*3);
-            if (copy == NULL) {
-                PyErr_NoMemory();
-                return NULL;
+                return new wxImage(bitmap.ConvertToImage());
             }
-            memcpy(copy, data, width*height*3);
-            return new wxImage(width, height, copy, false);
-        }
-static wxImage *new_wxImage(int width,int height,unsigned char *data,unsigned char *alpha){
-            // Copy the source data so the wxImage can clean it up later
-            unsigned char* dcopy = (unsigned char*)malloc(width*height*3);
-            if (dcopy == NULL) {
-                PyErr_NoMemory();
-                return NULL;
-            }
-            memcpy(dcopy, data, width*height*3);
-            unsigned char* acopy = (unsigned char*)malloc(width*height);
-            if (acopy == NULL) {
-                PyErr_NoMemory();
-                return NULL;
-            }
-            memcpy(acopy, alpha, width*height);
+static wxImage *new_wxImage(int width,int height,buffer data,int DATASIZE){
+                if (DATASIZE != width*height*3) {
+                    wxPyErr_SetString(PyExc_ValueError, "Invalid data buffer size.");
+                    return NULL;
+                }
             
-            return new wxImage(width, height, dcopy, acopy, false);
-        }
+                // Copy the source data so the wxImage can clean it up later
+                buffer copy = (buffer)malloc(DATASIZE);
+                if (copy == NULL) {
+                    wxPyBLOCK_THREADS(PyErr_NoMemory());
+                    return NULL;
+                }            
+                memcpy(copy, data, DATASIZE);
+                return new wxImage(width, height, copy, false);
+            }
+static wxImage *new_wxImage(int width,int height,buffer data,int DATASIZE,buffer alpha,int ALPHASIZE){
+                if (DATASIZE != width*height*3) {
+                    wxPyErr_SetString(PyExc_ValueError, "Invalid data buffer size.");
+                    return NULL;
+                }
+                if (ALPHASIZE != width*height) {
+                    wxPyErr_SetString(PyExc_ValueError, "Invalid alpha buffer size.");
+                    return NULL;
+                }
+
+                // Copy the source data so the wxImage can clean it up later
+                buffer dcopy = (buffer)malloc(DATASIZE);
+                if (dcopy == NULL) {
+                    wxPyBLOCK_THREADS(PyErr_NoMemory());
+                    return NULL;
+                }
+                memcpy(dcopy, data, DATASIZE);
+            
+                buffer acopy = (buffer)malloc(ALPHASIZE);
+                if (acopy == NULL) {
+                    wxPyBLOCK_THREADS(PyErr_NoMemory());
+                    return NULL;
+                }
+                memcpy(acopy, alpha, ALPHASIZE);
+            
+                return new wxImage(width, height, dcopy, acopy, false);
+            }
 static wxSize wxImage_GetSize(wxImage *self){
             wxSize size(self->GetWidth(), self->GetHeight());
             return size;
         }
 static PyObject *wxImage_GetData(wxImage *self){
-            unsigned char* data = self->GetData();
+            buffer data = self->GetData();
             int len = self->GetWidth() * self->GetHeight() * 3;
             PyObject* rv;
             wxPyBLOCK_THREADS( rv = PyString_FromStringAndSize((char*)data, len));
             return rv;
         }
-static void wxImage_SetData(wxImage *self,PyObject *data){
-            unsigned char* dataPtr;
-
-            if (! PyString_Check(data)) {
-                wxPyBLOCK_THREADS(PyErr_SetString(PyExc_TypeError,
-                                                  "Expected string object"));
-                return /* NULL */ ;
-            }
-
-            size_t len = self->GetWidth() * self->GetHeight() * 3;
-            dataPtr = (unsigned char*) malloc(len);
-            wxPyBLOCK_THREADS( memcpy(dataPtr, PyString_AsString(data), len) );
-            self->SetData(dataPtr);
-            // wxImage takes ownership of dataPtr...
+static void wxImage_SetData(wxImage *self,buffer data,int DATASIZE){
+            if (DATASIZE != self->GetWidth() * self->GetHeight() * 3) {
+                wxPyErr_SetString(PyExc_ValueError, "Invalid data buffer size.");
+                return;
+            }            
+            buffer copy = (buffer)malloc(DATASIZE);
+            if (copy == NULL) {
+                wxPyBLOCK_THREADS(PyErr_NoMemory());
+                return;
+            }            
+            memcpy(copy, data, DATASIZE);
+            self->SetData(copy, false);
+            // wxImage takes ownership of copy...
         }
 static PyObject *wxImage_GetDataBuffer(wxImage *self){
-            unsigned char* data = self->GetData();
+            buffer data = self->GetData();
             int len = self->GetWidth() * self->GetHeight() * 3;
             PyObject* rv;
             wxPyBLOCK_THREADS( rv = PyBuffer_FromReadWriteMemory(data, len) );
             return rv;
         }
-static void wxImage_SetDataBuffer(wxImage *self,PyObject *data){
-            unsigned char* buffer;
-            int size;
-
-            wxPyBlock_t blocked = wxPyBeginBlockThreads();
-            if (!PyArg_Parse(data, "t#", &buffer, &size))
-                goto done;
-
-            if (size != self->GetWidth() * self->GetHeight() * 3) {
-                PyErr_SetString(PyExc_TypeError, "Incorrect buffer size");
-                goto done;
+static void wxImage_SetDataBuffer(wxImage *self,buffer data,int DATASIZE){
+            if (DATASIZE != self->GetWidth() * self->GetHeight() * 3) {
+                wxPyErr_SetString(PyExc_ValueError, "Invalid data buffer size.");
+                return;
             }
-            self->SetData(buffer);
-        done:
-            wxPyEndBlockThreads(blocked);
+            self->SetData(data, true);
         }
 static PyObject *wxImage_GetAlphaData(wxImage *self){
-            unsigned char* data = self->GetAlpha();
+            buffer data = self->GetAlpha();
             if (! data) {
                 RETURN_NONE();
             } else {
@@ -2434,42 +2443,33 @@ static PyObject *wxImage_GetAlphaData(wxImage *self){
                 return rv;
             }
         }
-static void wxImage_SetAlphaData(wxImage *self,PyObject *data){
-            unsigned char* dataPtr;
-
-            if (! PyString_Check(data)) {
-                PyErr_SetString(PyExc_TypeError, "Expected string object");
-                return /* NULL */ ;
+static void wxImage_SetAlphaData(wxImage *self,buffer alpha,int ALPHASIZE){
+            if (ALPHASIZE != self->GetWidth() * self->GetHeight()) {
+                wxPyErr_SetString(PyExc_ValueError, "Invalid alpha buffer size.");
+                return;
             }
-
-            size_t len = self->GetWidth() * self->GetHeight();
-            dataPtr = (unsigned char*) malloc(len);
-            wxPyBLOCK_THREADS( memcpy(dataPtr, PyString_AsString(data), len) );
-            self->SetAlpha(dataPtr);
-            // wxImage takes ownership of dataPtr...
+            buffer acopy = (buffer)malloc(ALPHASIZE);
+            if (acopy == NULL) {
+                wxPyBLOCK_THREADS(PyErr_NoMemory());
+                return;
+            }
+            memcpy(acopy, alpha, ALPHASIZE);
+            self->SetAlpha(acopy, false);
+            // wxImage takes ownership of acopy...
         }
 static PyObject *wxImage_GetAlphaBuffer(wxImage *self){
-            unsigned char* data = self->GetAlpha();
+            buffer data = self->GetAlpha();
             int len = self->GetWidth() * self->GetHeight();
             PyObject* rv;
             wxPyBLOCK_THREADS( rv = PyBuffer_FromReadWriteMemory(data, len) );
             return rv;
         }
-static void wxImage_SetAlphaBuffer(wxImage *self,PyObject *data){
-            unsigned char* buffer;
-            int size;
-
-            wxPyBlock_t blocked = wxPyBeginBlockThreads();
-            if (!PyArg_Parse(data, "t#", &buffer, &size))
-                goto done;
-
-            if (size != self->GetWidth() * self->GetHeight()) {
-                PyErr_SetString(PyExc_TypeError, "Incorrect buffer size");
-                goto done;
+static void wxImage_SetAlphaBuffer(wxImage *self,buffer alpha,int ALPHASIZE){
+            if (ALPHASIZE != self->GetWidth() * self->GetHeight()) {
+                wxPyErr_SetString(PyExc_ValueError, "Invalid alpha buffer size.");
+                return;
             }
-            self->SetAlpha(buffer);
-        done:
-            wxPyEndBlockThreads(blocked);
+            self->SetAlpha(alpha, true);
         }
 static wxBitmap wxImage_ConvertToBitmap(wxImage *self,int depth=-1){
             wxBitmap bitmap(*self, depth);
@@ -10825,7 +10825,8 @@ static PyObject *_wrap_new_ImageFromData(PyObject *, PyObject *args, PyObject *k
     PyObject *resultobj;
     int arg1 ;
     int arg2 ;
-    unsigned char *arg3 = (unsigned char *) 0 ;
+    buffer arg3 ;
+    int arg4 ;
     wxImage *result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -10843,11 +10844,12 @@ static PyObject *_wrap_new_ImageFromData(PyObject *, PyObject *args, PyObject *k
         arg2 = (int)(SWIG_As_int(obj1)); 
         if (SWIG_arg_fail(2)) SWIG_fail;
     }
-    SWIG_Python_ConvertPtr(obj2, (void **)&arg3, SWIGTYPE_p_unsigned_char, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(3)) SWIG_fail;
+    {
+        if (!PyArg_Parse(obj2, "t#", &arg3, &arg4)) SWIG_fail; 
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxImage *)new_wxImage(arg1,arg2,arg3);
+        result = (wxImage *)new_wxImage(arg1,arg2,arg3,arg4);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -10863,8 +10865,10 @@ static PyObject *_wrap_new_ImageFromDataWithAlpha(PyObject *, PyObject *args, Py
     PyObject *resultobj;
     int arg1 ;
     int arg2 ;
-    unsigned char *arg3 = (unsigned char *) 0 ;
-    unsigned char *arg4 = (unsigned char *) 0 ;
+    buffer arg3 ;
+    int arg4 ;
+    buffer arg5 ;
+    int arg6 ;
     wxImage *result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -10883,13 +10887,15 @@ static PyObject *_wrap_new_ImageFromDataWithAlpha(PyObject *, PyObject *args, Py
         arg2 = (int)(SWIG_As_int(obj1)); 
         if (SWIG_arg_fail(2)) SWIG_fail;
     }
-    SWIG_Python_ConvertPtr(obj2, (void **)&arg3, SWIGTYPE_p_unsigned_char, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(3)) SWIG_fail;
-    SWIG_Python_ConvertPtr(obj3, (void **)&arg4, SWIGTYPE_p_unsigned_char, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(4)) SWIG_fail;
+    {
+        if (!PyArg_Parse(obj2, "t#", &arg3, &arg4)) SWIG_fail; 
+    }
+    {
+        if (!PyArg_Parse(obj3, "t#", &arg5, &arg6)) SWIG_fail; 
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxImage *)new_wxImage(arg1,arg2,arg3,arg4);
+        result = (wxImage *)new_wxImage(arg1,arg2,arg3,arg4,arg5,arg6);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -12567,7 +12573,8 @@ static PyObject *_wrap_Image_GetData(PyObject *, PyObject *args, PyObject *kwarg
 static PyObject *_wrap_Image_SetData(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
-    PyObject *arg2 = (PyObject *) 0 ;
+    buffer arg2 ;
+    int arg3 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -12577,10 +12584,12 @@ static PyObject *_wrap_Image_SetData(PyObject *, PyObject *args, PyObject *kwarg
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Image_SetData",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxImage, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
-    arg2 = obj1;
+    {
+        if (!PyArg_Parse(obj1, "t#", &arg2, &arg3)) SWIG_fail; 
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxImage_SetData(arg1,arg2);
+        wxImage_SetData(arg1,arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -12621,7 +12630,8 @@ static PyObject *_wrap_Image_GetDataBuffer(PyObject *, PyObject *args, PyObject 
 static PyObject *_wrap_Image_SetDataBuffer(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
-    PyObject *arg2 = (PyObject *) 0 ;
+    buffer arg2 ;
+    int arg3 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -12631,10 +12641,12 @@ static PyObject *_wrap_Image_SetDataBuffer(PyObject *, PyObject *args, PyObject 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Image_SetDataBuffer",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxImage, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
-    arg2 = obj1;
+    {
+        if (!PyArg_Parse(obj1, "t#", &arg2, &arg3)) SWIG_fail; 
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxImage_SetDataBuffer(arg1,arg2);
+        wxImage_SetDataBuffer(arg1,arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -12675,20 +12687,23 @@ static PyObject *_wrap_Image_GetAlphaData(PyObject *, PyObject *args, PyObject *
 static PyObject *_wrap_Image_SetAlphaData(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
-    PyObject *arg2 = (PyObject *) 0 ;
+    buffer arg2 ;
+    int arg3 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "data", NULL 
+        (char *) "self",(char *) "alpha", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Image_SetAlphaData",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxImage, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
-    arg2 = obj1;
+    {
+        if (!PyArg_Parse(obj1, "t#", &arg2, &arg3)) SWIG_fail; 
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxImage_SetAlphaData(arg1,arg2);
+        wxImage_SetAlphaData(arg1,arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -12729,20 +12744,23 @@ static PyObject *_wrap_Image_GetAlphaBuffer(PyObject *, PyObject *args, PyObject
 static PyObject *_wrap_Image_SetAlphaBuffer(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
-    PyObject *arg2 = (PyObject *) 0 ;
+    buffer arg2 ;
+    int arg3 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "data", NULL 
+        (char *) "self",(char *) "alpha", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Image_SetAlphaBuffer",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxImage, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
-    arg2 = obj1;
+    {
+        if (!PyArg_Parse(obj1, "t#", &arg2, &arg3)) SWIG_fail; 
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxImage_SetAlphaBuffer(arg1,arg2);
+        wxImage_SetAlphaBuffer(arg1,arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -47018,6 +47036,7 @@ static swig_type_info _swigt__p_wxGridBagSizer[] = {{"_p_wxGridBagSizer", 0, "wx
 static swig_type_info _swigt__p_wxAcceleratorEntry[] = {{"_p_wxAcceleratorEntry", 0, "wxAcceleratorEntry *", 0, 0, 0, 0},{"_p_wxAcceleratorEntry", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxUpdateUIEvent[] = {{"_p_wxUpdateUIEvent", 0, "wxUpdateUIEvent *", 0, 0, 0, 0},{"_p_wxUpdateUIEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxEvent[] = {{"_p_wxEvent", 0, "wxEvent *", 0, 0, 0, 0},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxMenuEvent", _p_wxMenuEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxCloseEvent", _p_wxCloseEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxMouseEvent", _p_wxMouseEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxEraseEvent", _p_wxEraseEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxSetCursorEvent", _p_wxSetCursorEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxInitDialogEvent", _p_wxInitDialogEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxPyEvent", _p_wxPyEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxEvent", 0, 0, 0, 0, 0, 0},{"_p_wxQueryNewPaletteEvent", _p_wxQueryNewPaletteEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxIdleEvent", _p_wxIdleEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxMaximizeEvent", _p_wxMaximizeEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxIconizeEvent", _p_wxIconizeEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxActivateEvent", _p_wxActivateEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxDateEvent", _p_wxDateEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxMoveEvent", _p_wxMoveEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxSizeEvent", _p_wxSizeEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxPaintEvent", _p_wxPaintEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxNcPaintEvent", _p_wxNcPaintEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxPaletteChangedEvent", _p_wxPaletteChangedEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxDisplayChangedEvent", _p_wxDisplayChangedEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxMouseCaptureChangedEvent", _p_wxMouseCaptureChangedEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxSysColourChangedEvent", _p_wxSysColourChangedEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxDropFilesEvent", _p_wxDropFilesEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxFocusEvent", _p_wxFocusEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxShowEvent", _p_wxShowEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxCommandEvent", _p_wxCommandEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxNavigationKeyEvent", _p_wxNavigationKeyEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxKeyEvent", _p_wxKeyEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxScrollWinEvent", _p_wxScrollWinEventTo_p_wxEvent, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_buffer[] = {{"_p_buffer", 0, "buffer *", 0, 0, 0, 0},{"_p_buffer", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxMenu[] = {{"_p_wxMenu", 0, "wxMenu *", 0, 0, 0, 0},{"_p_wxMenu", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxGridSizer[] = {{"_p_wxGridSizer", 0, "wxGridSizer *", 0, 0, 0, 0},{"_p_wxGridBagSizer", _p_wxGridBagSizerTo_p_wxGridSizer, 0, 0, 0, 0, 0},{"_p_wxGridSizer", 0, 0, 0, 0, 0, 0},{"_p_wxFlexGridSizer", _p_wxFlexGridSizerTo_p_wxGridSizer, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxFlexGridSizer[] = {{"_p_wxFlexGridSizer", 0, "wxFlexGridSizer *", 0, 0, 0, 0},{"_p_wxGridBagSizer", _p_wxGridBagSizerTo_p_wxFlexGridSizer, 0, 0, 0, 0, 0},{"_p_wxFlexGridSizer", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
@@ -47124,8 +47143,8 @@ static swig_type_info _swigt__p_wxCommandEvent[] = {{"_p_wxCommandEvent", 0, "wx
 static swig_type_info _swigt__p_wxPyCommandEvent[] = {{"_p_wxPyCommandEvent", 0, "wxPyCommandEvent *", 0, 0, 0, 0},{"_p_wxPyCommandEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPyDropTarget[] = {{"_p_wxPyDropTarget", 0, "wxPyDropTarget *", 0, 0, 0, 0},{"_p_wxPyDropTarget", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxQuantize[] = {{"_p_wxQuantize", 0, "wxQuantize *", 0, 0, 0, 0},{"_p_wxQuantize", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
-static swig_type_info _swigt__p_wxChildFocusEvent[] = {{"_p_wxChildFocusEvent", 0, "wxChildFocusEvent *", 0, 0, 0, 0},{"_p_wxChildFocusEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxFocusEvent[] = {{"_p_wxFocusEvent", 0, "wxFocusEvent *", 0, 0, 0, 0},{"_p_wxFocusEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxChildFocusEvent[] = {{"_p_wxChildFocusEvent", 0, "wxChildFocusEvent *", 0, 0, 0, 0},{"_p_wxChildFocusEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxDropFilesEvent[] = {{"_p_wxDropFilesEvent", 0, "wxDropFilesEvent *", 0, 0, 0, 0},{"_p_wxDropFilesEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxControlWithItems[] = {{"_p_wxControlWithItems", 0, "wxControlWithItems *", 0, 0, 0, 0},{"_p_wxControlWithItems", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxColour[] = {{"_p_wxColour", 0, "wxColour *", 0, 0, 0, 0},{"_p_wxColour", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
@@ -47147,6 +47166,7 @@ _swigt__p_wxGridBagSizer,
 _swigt__p_wxAcceleratorEntry, 
 _swigt__p_wxUpdateUIEvent, 
 _swigt__p_wxEvent, 
+_swigt__p_buffer, 
 _swigt__p_wxMenu, 
 _swigt__p_wxGridSizer, 
 _swigt__p_wxFlexGridSizer, 
@@ -47253,8 +47273,8 @@ _swigt__p_wxCommandEvent,
 _swigt__p_wxPyCommandEvent, 
 _swigt__p_wxPyDropTarget, 
 _swigt__p_wxQuantize, 
-_swigt__p_wxChildFocusEvent, 
 _swigt__p_wxFocusEvent, 
+_swigt__p_wxChildFocusEvent, 
 _swigt__p_wxDropFilesEvent, 
 _swigt__p_wxControlWithItems, 
 _swigt__p_wxColour, 

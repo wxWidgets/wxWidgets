@@ -2355,27 +2355,58 @@ class Image(Object):
         return _core_.Image_Paste(*args, **kwargs)
 
     def GetData(*args, **kwargs):
-        """GetData(self) -> PyObject"""
+        """
+        GetData(self) -> PyObject
+
+        Returns a string containing a copy of the RGB bytes of the image.
+        """
         return _core_.Image_GetData(*args, **kwargs)
 
     def SetData(*args, **kwargs):
-        """SetData(self, PyObject data)"""
+        """
+        SetData(self, buffer data)
+
+        Resets the Image's RGB data from a buffer of RGB bytes.  Accepts
+        either a string or a buffer object holding the data and the length of
+        the data must be width*height*3.
+        """
         return _core_.Image_SetData(*args, **kwargs)
 
     def GetDataBuffer(*args, **kwargs):
-        """GetDataBuffer(self) -> PyObject"""
+        """
+        GetDataBuffer(self) -> PyObject
+
+        Returns a writable Python buffer object that is pointing at the RGB
+        image data buffer inside the wx.Image.
+        """
         return _core_.Image_GetDataBuffer(*args, **kwargs)
 
     def SetDataBuffer(*args, **kwargs):
-        """SetDataBuffer(self, PyObject data)"""
+        """
+        SetDataBuffer(self, buffer data)
+
+        Sets the internal image data pointer to point at a Python buffer
+        object.  This can save a copy of the data but you must ensure that the
+        buffer object lives longer than the wx.Image does.
+        """
         return _core_.Image_SetDataBuffer(*args, **kwargs)
 
     def GetAlphaData(*args, **kwargs):
-        """GetAlphaData(self) -> PyObject"""
+        """
+        GetAlphaData(self) -> PyObject
+
+        Returns a string containing a copy of the alpha bytes of the image.
+        """
         return _core_.Image_GetAlphaData(*args, **kwargs)
 
     def SetAlphaData(*args, **kwargs):
-        """SetAlphaData(self, PyObject data)"""
+        """
+        SetAlphaData(self, buffer alpha)
+
+        Resets the Image's alpha data from a buffer of bytes.  Accepts either
+        a string or a buffer object holding the data and the length of the
+        data must be width*height.
+        """
         return _core_.Image_SetAlphaData(*args, **kwargs)
 
     def GetAlphaBuffer(*args, **kwargs):
@@ -2383,7 +2414,7 @@ class Image(Object):
         return _core_.Image_GetAlphaBuffer(*args, **kwargs)
 
     def SetAlphaBuffer(*args, **kwargs):
-        """SetAlphaBuffer(self, PyObject data)"""
+        """SetAlphaBuffer(self, buffer alpha)"""
         return _core_.Image_SetAlphaBuffer(*args, **kwargs)
 
     def SetMaskColour(*args, **kwargs):
@@ -2528,25 +2559,46 @@ def ImageFromStreamMime(*args, **kwargs):
     return val
 
 def EmptyImage(*args, **kwargs):
-    """EmptyImage(int width=0, int height=0, bool clear=True) -> Image"""
+    """
+    EmptyImage(int width=0, int height=0, bool clear=True) -> Image
+
+    Construct an empty image of a given size, optionally setting all
+    pixels to black.
+    """
     val = _core_.new_EmptyImage(*args, **kwargs)
     val.thisown = 1
     return val
 
 def ImageFromBitmap(*args, **kwargs):
-    """ImageFromBitmap(Bitmap bitmap) -> Image"""
+    """
+    ImageFromBitmap(Bitmap bitmap) -> Image
+
+    Construct an Image from a `wx.Bitmap`.
+    """
     val = _core_.new_ImageFromBitmap(*args, **kwargs)
     val.thisown = 1
     return val
 
 def ImageFromData(*args, **kwargs):
-    """ImageFromData(int width, int height, unsigned char data) -> Image"""
+    """
+    ImageFromData(int width, int height, buffer data) -> Image
+
+    Construct an Image from a buffer of RGB bytes.  Accepts either a
+    string or a buffer object holding the data and the length of the data
+    must be width*height*3.
+    """
     val = _core_.new_ImageFromData(*args, **kwargs)
     val.thisown = 1
     return val
 
 def ImageFromDataWithAlpha(*args, **kwargs):
-    """ImageFromDataWithAlpha(int width, int height, unsigned char data, unsigned char alpha) -> Image"""
+    """
+    ImageFromDataWithAlpha(int width, int height, buffer data, buffer alpha) -> Image
+
+    Construct an Image from a buffer of RGB bytes with an Alpha channel.
+    Accepts either a string or a buffer object holding the data and the
+    length of the data must be width*height*3.
+    """
     val = _core_.new_ImageFromDataWithAlpha(*args, **kwargs)
     val.thisown = 1
     return val

@@ -4558,7 +4558,7 @@ class BrushList(_core.Object):
         return _gdi_.BrushList_AddBrush(*args, **kwargs)
 
     def FindOrCreateBrush(*args, **kwargs):
-        """FindOrCreateBrush(self, Colour colour, int style) -> Brush"""
+        """FindOrCreateBrush(self, Colour colour, int style=SOLID) -> Brush"""
         return _gdi_.BrushList_FindOrCreateBrush(*args, **kwargs)
 
     def RemoveBrush(*args, **kwargs):
