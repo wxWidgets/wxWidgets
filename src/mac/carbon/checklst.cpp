@@ -19,6 +19,8 @@
 
 #include "wx/checklst.h"
 
+#if wxUSE_CHECKLISTBOX
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -71,4 +73,5 @@ void wxCheckListBox::Check(size_t uiIndex, bool bCheck)
     // TODO
 }
 
+#endif // wxUSE_CHECKLISTBOX
 
