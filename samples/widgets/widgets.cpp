@@ -196,7 +196,7 @@ bool WidgetsApp::OnInit()
     // this sample side by side and it is useful to see which one is which
     wxString title;
 #if defined(__WXUNIVERSAL__)
-    title = _T("wxUniv/")
+    title = _T("wxUniv/");
 #endif
 
 #if defined(__WXMSW__)
