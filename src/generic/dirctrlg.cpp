@@ -190,7 +190,7 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
                 continue;
             }
             // add path separator at end if necessary
-            wxString path( thePath ) ;
+            wxString path( thePath , wxConvLocal) ;
             if (path.Last() != wxFILE_SEP_PATH) {
                 path += wxFILE_SEP_PATH;
             }
@@ -218,7 +218,7 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
                 CFRelease( cstr );
                 continue;
             }
-            wxString name( cstr );
+            wxString name( cstr , wxConvLocal );
             DisposePtr( cstr );
             CFRelease( cfstr );
 
