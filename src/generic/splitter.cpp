@@ -200,8 +200,11 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
     // following the mouse movement while it drags the sash, without it we only
     // draw the sash at the new position but only resize the windows when the
     // dragging is finished
+#ifdef __WXMAC__ && TARGET_API_MAC_OSX == 1
+    bool isLive = true ;
+#else
     bool isLive = (GetWindowStyleFlag() & wxSP_LIVE_UPDATE) != 0;
-
+#endif
     if (event.LeftDown())
     {
         if ( SashHitTest(x, y) )
