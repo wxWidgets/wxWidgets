@@ -25,6 +25,7 @@
 #ifndef WX_PRECOMP
    #include "wx/dynarray.h"
    #include "wx/log.h"
+   #include "wx/msgdlg.h"
 #endif
 
 #ifdef __DARWIN__
