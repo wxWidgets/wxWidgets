@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        fileconf.h
+// Name:        wx/fileconf.h
 // Purpose:     wxFileConfig derivation of wxConfigBase
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -92,34 +92,9 @@
   (it's on by default, the current status can be retrieved with
    IsExpandingEnvVars function).
 */
-class wxFileConfig;
-class ConfigGroup;
-class ConfigEntry;
-
-// we store all lines of the local config file as a linked list in memory
-class LineList
-{
-public:
-  void      SetNext(LineList *pNext)  { m_pNext = pNext; }
-  void      SetPrev(LineList *pPrev)  { m_pPrev = pPrev; }
-
-  // ctor
-  LineList(const wxString& str, LineList *pNext = (LineList *) NULL) : m_strLine(str)
-    { SetNext(pNext); SetPrev((LineList *) NULL); }
-
-  //
-  LineList *Next() const              { return m_pNext;  }
-  LineList *Prev() const              { return m_pPrev;  }
-
-  //
-  void SetText(const wxString& str) { m_strLine = str;  }
-  const wxString& Text() const      { return m_strLine; }
-
-private:
-  wxString  m_strLine;      // line contents
-  LineList *m_pNext,        // next node
-           *m_pPrev;        // previous one
-};
+class WXDLLEXPORT wxFileConfigGroup;
+class WXDLLEXPORT wxFileConfigEntry;
+class WXDLLEXPORT wxFileConfigLineList;
 
 class WXDLLEXPORT wxFileConfig : public wxConfigBase
 {
@@ -216,10 +191,10 @@ public:
 
 public:
   // functions to work with this list
-  LineList *LineListAppend(const wxString& str);
-  LineList *LineListInsert(const wxString& str,
-                           LineList *pLine);    // NULL => Prepend()
-  void      LineListRemove(LineList *pLine);
+  wxFileConfigLineList *LineListAppend(const wxString& str);
+  wxFileConfigLineList *LineListInsert(const wxString& str,
+                           wxFileConfigLineList *pLine);    // NULL => Prepend()
+  void      LineListRemove(wxFileConfigLineList *pLine);
   bool      LineListIsEmpty();
 
 private:
@@ -242,119 +217,19 @@ private:
 
   // member variables
   // ----------------
-  LineList   *m_linesHead,        // head of the linked list
-             *m_linesTail;        // tail
+  wxFileConfigLineList *m_linesHead,        // head of the linked list
+                       *m_linesTail;        // tail
 
   wxString    m_strLocalFile,     // local  file name passed to ctor
               m_strGlobalFile;    // global
   wxString    m_strPath;          // current path (not '/' terminated)
 
-  ConfigGroup *m_pRootGroup,      // the top (unnamed) group
-              *m_pCurrentGroup;   // the current group
+  wxFileConfigGroup *m_pRootGroup,      // the top (unnamed) group
+                    *m_pCurrentGroup;   // the current group
 
 #ifdef __UNIX__
   int m_umask;                    // the umask to use for file creation
 #endif // __UNIX__
-
-public:
-  WX_DEFINE_SORTED_ARRAY(ConfigEntry *, ArrayEntries);
-  WX_DEFINE_SORTED_ARRAY(ConfigGroup *, ArrayGroups);
-};
-
-class ConfigEntry
-{
-private:
-  ConfigGroup  *m_pParent;      // group that contains us
-  wxString      m_strName,      // entry name
-                m_strValue;     //       value
-  bool          m_bDirty,       // changed since last read?
-                m_bImmutable;   // can be overriden locally?
-  int           m_nLine;        // used if m_pLine == NULL only
-  LineList     *m_pLine;        // pointer to our line in the linked list
-                                // or NULL if it was found in global file
-
-public:
-  ConfigEntry(ConfigGroup *pParent, const wxString& strName, int nLine);
-
-  // simple accessors
-  const wxString& Name()        const { return m_strName;    }
-  const wxString& Value()       const { return m_strValue;   }
-  ConfigGroup    *Group()       const { return m_pParent;    }
-  bool            IsDirty()     const { return m_bDirty;     }
-  bool            IsImmutable() const { return m_bImmutable; }
-  bool            IsLocal()     const { return m_pLine != 0; }
-  int             Line()        const { return m_nLine;      }
-  LineList       *GetLine()     const { return m_pLine;      }
-
-  // modify entry attributes
-  void SetValue(const wxString& strValue, bool bUser = TRUE);
-  void SetDirty();
-  void SetLine(LineList *pLine);
-};
-
-class ConfigGroup
-{
-private:
-  wxFileConfig *m_pConfig;        // config object we belong to
-  ConfigGroup  *m_pParent;        // parent group (NULL for root group)
-  wxFileConfig::ArrayEntries  m_aEntries;       // entries in this group
-  wxFileConfig::ArrayGroups   m_aSubgroups;     // subgroups
-  wxString      m_strName;        // group's name
-  bool          m_bDirty;         // if FALSE => all subgroups are not dirty
-  LineList     *m_pLine;          // pointer to our line in the linked list
-  ConfigEntry  *m_pLastEntry;     // last entry/subgroup of this group in the
-  ConfigGroup  *m_pLastGroup;     // local file (we insert new ones after it)
-
-  // DeleteSubgroupByName helper
-  bool DeleteSubgroup(ConfigGroup *pGroup);
-
-public:
-  // ctor
-  ConfigGroup(ConfigGroup *pParent, const wxString& strName, wxFileConfig *);
-
-  // dtor deletes all entries and subgroups also
-  ~ConfigGroup();
-
-  // simple accessors
-  const wxString& Name()    const { return m_strName; }
-  ConfigGroup    *Parent()  const { return m_pParent; }
-  wxFileConfig   *Config()  const { return m_pConfig; }
-  bool            IsDirty() const { return m_bDirty;  }
-
-  const wxFileConfig::ArrayEntries& Entries() const { return m_aEntries;   }
-  const wxFileConfig::ArrayGroups&  Groups()  const { return m_aSubgroups; }
-  bool  IsEmpty() const { return Entries().IsEmpty() && Groups().IsEmpty(); }
-
-  // find entry/subgroup (NULL if not found)
-  ConfigGroup *FindSubgroup(const wxChar *szName) const;
-  ConfigEntry *FindEntry   (const wxChar *szName) const;
-
-  // delete entry/subgroup, return FALSE if doesn't exist
-  bool DeleteSubgroupByName(const wxChar *szName);
-  bool DeleteEntry(const wxChar *szName);
-
-  // create new entry/subgroup returning pointer to newly created element
-  ConfigGroup *AddSubgroup(const wxString& strName);
-  ConfigEntry *AddEntry   (const wxString& strName, int nLine = wxNOT_FOUND);
-
-  // will also recursively set parent's dirty flag
-  void SetDirty();
-  void SetLine(LineList *pLine);
-
-  // rename: no checks are done to ensure that the name is unique!
-  void Rename(const wxString& newName);
-
-  //
-  wxString GetFullName() const;
-
-  // get the last line belonging to an entry/subgroup of this group
-  LineList *GetGroupLine();     // line which contains [group]
-  LineList *GetLastEntryLine(); // after which our subgroups start
-  LineList *GetLastGroupLine(); // after which the next group starts
-
-  // called by entries/subgroups when they're created/deleted
-  void SetLastEntry(ConfigEntry *pEntry) { m_pLastEntry = pEntry; }
-  void SetLastGroup(ConfigGroup *pGroup) { m_pLastGroup = pGroup; }
 };
 
 #endif
