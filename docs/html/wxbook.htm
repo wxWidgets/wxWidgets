@@ -24,20 +24,30 @@ wxWindows Book
 <a href="#about">About</a> |
 <a href="#participants">Participants</a> |
 <a href="#publication">Publication</a> |
-<a href="#suggestions">Suggestions</a> |
+<!-- <a href="#suggestions">Suggestions</a> | -->
 <a href="#format">Format</a> |
+<a href="#style">Style guide</a> |
+<a href="#titles">Titles</a> |
 <a href="#contents">Contents</a>
 </center>
 
+<p>
 <hr>
+<p>
 
 <H3><a name="about">About the wxWindows book</a></H3>
 
-Discussions have been taking place on the wxwin-developers list
-about collaboratively writing a wxWindows book. The book will
+August 2000: the 'wxBook' project is getting going again,
+with a good response from potential contributors.<P>
+
+Robin Dunn has set up a <a href="http://wxwindows.org/mailman/listinfo/wxbook">wxBook mailing list</a>.<P>
+
+The book will comprise 30 or so chapters dealing with progressively
+more advanced areas of wxWindows; each chapter will be as stand-alone as
+possible. The book will
 not include the API reference, though this could be a
 separate project. The book will be accompanied by a CD-ROM with
-wxWindows and its documentation. The book will initially be
+wxWindows and its documentation. It will initially be
 available on-line, and when enough is done we will look for a
 publisher.<P>
 
@@ -66,7 +76,9 @@ knowledge.<P>
 It is suggested that any financial return from the book be allocated on a points system,
 with a predefined number of points for chapters, indexing, editing, proof-reading etc.<P>
 
+<p>
 <hr>
+<p>
 
 <H3><a name="participants">Participants</a></H3>
 
@@ -80,7 +92,8 @@ chapters.
 communication classes (wxSocket, wxXXXServer, some protocol stuff); timing and timers.
 <li><a href="mailto:robin@alldunn.com">Robin Dunn</a> - wxPython chapter.
 </i>
-<li><a href="mailto:zeitlin@dptmaths.ens-cachan.fr">Vadim Zeitlin</a> - drag and drop chapter?
+<li><a href="mailto:zeitlin@dptmaths.ens-cachan.fr">Vadim Zeitlin</a> - drag and drop, several other chapters.
+<li><a href="mailto:roebling@uni-freiburg.de">Robert Roebling</a> - not known.
 <li><a href="mailto:slavik2@czn.cz">Vaclav Slavik</a> - wxHTML section.
 <li><a href="mailto:gtasker@fastpicsystems.com">George Tasker</a> - database chapter.
 <li><a href="mailto:moreno@mochima.com">Carlos Moreno</a> - wxImage, wxBitmap.
@@ -112,12 +125,19 @@ strategies, etc.
 -->
 </ul>
 
+<P>
+Others welcome! Please contact <a href="mailto:julian.smart@ukonline.co.uk">Julian Smart</a>
+if you would like to contribute.
+
+<p>
 <hr>
+<p>
 
 <H3><a name="publication">Publication</a></H3>
 
-We should have a substantial chunk of wxBook done before we approach a publisher,
-because with the risks of multiple author
+We wll investigate publishers, especially O'Reilly. We will have to get together
+several sample chapters to convince a publisher that the many-author approach will
+work.<P>
 
 <!--
 Tom Ryan originally wrote:<P>
@@ -154,7 +174,12 @@ of guidance for style, formatting, etc.<P>
 is published both as a PDF for internet (by the author) and in print by Prentice Hall."<P>
 
 -->
+
+<P>
 <hr>
+<P>
+
+<!--
 
 <H3><a name="suggestions">Suggestions and comments</a></H3>
 
@@ -172,24 +197,115 @@ by a small team, led by an editor that will wind up doing about half
 of the total amount of work." (Tom Ryan)
 </ul>
 
+<P>
 <hr>
+<P>
+-->
 
-<H3><a name="format">Text format</a></H3>
+<H3><a name="format">File format</a></H3>
 
-This depends partly on the publisher, but one possibility is to target Word but have
-submissions in a number of formats including Latex. We should eventually write a style
-and formatting guide.<P>
+Possible formats:
 
+<ul>
+<li>Word
+<li><a href="http://www.abisource.com" target=_top>Abiword</a>: possibly not developed enough yet, but
+it can output Latex which would make conversion to Tex2RTF format quite simple
+<li>Latex: favoured format so far. The LyX near-WYSIWYG word processor (Unix only) can output Latex.
+See also <a href="http://www.esat.kuleuven.ac.be/~minten/NTTeXing/NTTeXing.html" target=_top>NTTex</a>
+which uses EMACS as an editor. For an introduction to Latex, see <a href="ftp://ftp.tex.ac.uk/tex-archive/info/lshort" target=_top>here</a>.
+A free TeX for Windows: see <a href="http://www.miktex.org/" target=_top>MikTex</a>. More TeX info: <a href="http://www.tug.org/" target=_top>TUG</a>.
+<li>XML: hard to read/write
+<li>SGML: ditto
+<li>DocBook: don't have any information about this, but <a href="http://www.LinuxNinja.com/linux-admin/" target=_top>Linux Admin Made Easy</a>
+uses it.
+<li><a href="http://www.zope.org//Members/jim/StructuredTextWiki/StructuredTextNG" target=_top>Structured text</a> -
+plain text with indentation and other elements to provide structure. The tools seem under-developed and there
+doesn't seem to be a simple way of getting them without using the CVS Zope archive.
+<li>troff - favoured by O'Reilly
+</ul>
+
+<P>
 <hr>
+<P>
+
+<H3><a name="style">Style guide</a></H3>
+
+We should write a style and formatting guide.<P>
+
+<P>
+<hr>
+<P>
+
+<H3><a name="titles">Book Titles</a></H3>
+
+It would be good to include certain buzzwords such as Linux and open source, to get
+a publisher's (and the potential reader's) attention. The trick is to do that and
+not narrow the scope unduly.<P>
+
+Suggestions for the main book:<P>
+
+<ul>
+<li>Multiplatform GUI development with wxWindows
+<li>wxWindows: an open source multiplatform toolkit
+<li>wxWindows: GUI development for Linux and other platforms
+</ul>
+
+<P>
+Other book titles that a publisher might be interested (but would be distinct projects):<P>
+
+<ul>
+<li>Writing GTK+ Application Using wxWindows
+<li>Migrating MFC Apps to Linux Using wxWindows
+</ul>
+
+<P>
+<hr>
+<P>
 
 <H3><a name="contents">Contents</a></H3>
 
-This is open to suggestion.<P>
+The following is open to discussion.<P>
 
-Last year, <a href="mailto:mlorenz@visionx.com">Mike Lorenz</a> of <a href="http://www.visionx.com">VisionX</a>
-suggested this
-<a href="http://www.visionx.com/wx/tutorial_outline.htm">tutorial outline</a>, which could
-be a good starting point.<P>
+<ul>
+<li>Chapter 01: Introduction to wxWindows: history, advocacy, future developments
+<li>Chapter 02: Installing wxWindows (and what tools to use)
+<li>Chapter 03: C++ and wxWindows. Summarises the sorts of constructs used/not used, plus wxString class,
+some conventions. Vadim suggests putting it in 1st chapter but I think it deserves a chapter of its own.
+<li>Chapter 04: Getting started: Hello World. Introduces app class, frames, menus, status bar, message box
+<li>Chapter 05: Basic event handling
+<li>Chapter 06: Frames and menubars. The components of a frame, menubars.
+<li>Chapter 07: Toolbars and status bars
+<li>Chapter 08: Basic controls
+<li>Chapter 09: Common dialogs
+<li>Chapter 10: Custom dialogs and resources (XML + WXR)
+<li>Chapter 11: Drawing on device contexts
+<li>Chapter 12: Handling input (mouse, keyboard, joystick)
+<li>Chapter 14: Sizers
+<li>Chapter 15: Images and bitmaps
+<li>Chapter 16: Clipboard and drag and drop
+<li>Chapter 17: Advanced controls (list,tree,notebook,splitter,wxWizard,wxCalCtrl...)
+<li>Chapter 18: Document/view classes
+<li>Chapter 19: Scrolling
+<li>Chapter 20: MDI
+<li>Chapter 21: Printing
+<li>Chapter 22: Providing help in your applications
+<li>Chapter 23: Strings and internationalization
+<li>Chapter 24: Memory management and debugging (including wxLog)
+<li>Chapter 25: Run-time class information
+<li>Chapter 26: Advanced event handling (user-defined events, ...)
+<li>Chapter 27: Communication classes, including wxSocket
+<li>Chapter 28: Database classes
+<li>Chapter 29: File and stream classes
+<li>Chapter 30: Configuration classes
+<li>Chapter 31: Time, timers and idle processing
+<li>Chapter 32: Writing multithreading applications
+<li>Chapter 33: Perfecting your UI (Adapting to system settings, accelerators, ...)
+<li>Chapter 34: Platform-specific programming (metafiles, OLE automation, taskbar, ...)
+<li>Chapter 35: Using wxHTML
+<li>Chapter 36: Using wxPython
+<li>Chapter 37: wxBase?
+<li>Appendix: Comparison with other toolkits: MFC, Qt etc.
+</ul>
 
 </font>
 
