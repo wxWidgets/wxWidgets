@@ -237,6 +237,9 @@ wxString wxFileTypeImpl::GetCommand(const wxChar *verb) const
                 wxRegKey(wxRegKey::HKCR, strKey + _T("\\Topic")).
                     QueryValue(_T(""), ddeTopic);
 
+                if (ddeTopic.IsEmpty())
+                    ddeTopic = wxT("System");
+
                 // HACK: we use a special feature of wxExecute which exists
                 //       just because we need it here: it will establish DDE
                 //       conversation with the program it just launched
