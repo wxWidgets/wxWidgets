@@ -58,6 +58,9 @@ protected:
 public:
     virtual void SetValue(bool);
     virtual bool GetValue() const;
+protected:
+    virtual void DoSet3StateValue(wxCheckBoxState state);
+    virtual wxCheckBoxState DoGet3StateValue() const;
 };
 
 #endif // __WX_COCOA_CHECKBOX_H__

@@ -42,6 +42,7 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID winid,
     SetNSButton([[NSButton alloc] initWithFrame: MakeDefaultNSRect(size)]);
     [m_cocoaNSView release];
     [GetNSButton() setButtonType: NSSwitchButton];
+    [GetNSButton() setAllowsMixedState: Is3State()];
     [GetNSButton() setTitle:wxNSStringWithWxString(wxStripMenuCodes(label))];
     [GetNSControl() sizeToFit];
 
@@ -59,25 +60,74 @@ wxCheckBox::~wxCheckBox()
 
 void wxCheckBox::SetValue(bool value)
 {
-    if(value)
-        [GetNSButton() setState: NSOnState];
-    else
-        [GetNSButton() setState: NSOffState];
+    [GetNSButton() setState: value?NSOnState:NSOffState];
+}
+
+void wxCheckBox::DoSet3StateValue(wxCheckBoxState state)
+{
+    int cocoaState;
+    switch(state)
+    {
+    case wxCHK_UNCHECKED:
+        cocoaState = NSOffState;
+        break;
+    case wxCHK_CHECKED:
+        cocoaState = NSOnState;
+        break;
+    case wxCHK_UNDETERMINED:
+        wxASSERT_MSG(Is3State(),"Use the wxCHK_3STATE style flag");
+        cocoaState = NSMixedState;
+        break;
+    default:
+        wxFAIL_MSG(wxT("Invalid state in wxCheckBox::DoSet3StateValue"));
+        return;
+    }
+    [GetNSButton() setState:cocoaState];
 }
 
 bool wxCheckBox::GetValue() const
 {
     int state = [GetNSButton() state];
-    wxASSERT(state!=NSMixedState);
+    wxASSERT_MSG(state!=NSMixedState || Is3State(),
+        wxT("NSMixedState returned from a 2-state checkbox"));
     return state==NSOnState;
+}
+
+wxCheckBoxState wxCheckBox::DoGet3StateValue() const
+{
+    switch([GetNSButton() state])
+    {
+    case NSOffState:
+        return wxCHK_UNCHECKED;
+    case NSOnState:
+        return wxCHK_CHECKED;
+    default:
+        wxFAIL_MSG(wxT("[NSButton -state] returned an invalid state!"));
+    case NSMixedState:
+        wxASSERT_MSG(Is3State(),wxT("NSMixedState returned from a 2-state checkbox"));
+        return wxCHK_UNDETERMINED;
+    }
 }
 
 void wxCheckBox::Cocoa_wxNSButtonAction(void)
 {
     wxLogDebug(wxT("Checkbox"));
+    // What we really want to do is override [NSCell -nextState] to return
+    // NSOnState in lieu of NSMixedState but this works (aside from the
+    // very slightly noticeable drawing of - and then a check) -DE
+
+    // Cocoa always allows a 3-state button to transition into
+    // the mixed/undetermined state by clicking, we don't
+    if ( !Is3rdStateAllowedForUser()
+         && [GetNSButton() state] == NSMixedState )
+    {
+        // Cocoa's sequence is on/off/mixed
+        // skip mixed, go right back to on
+        [GetNSButton() setState: NSOnState];
+    }
     wxCommandEvent event(wxEVT_COMMAND_CHECKBOX_CLICKED, GetId());
     InitCommandEvent(event); //    event.SetEventObject(this);
-    event.SetInt(GetValue());
+    event.SetInt(Get3StateValue());
     Command(event);
 }
 
