@@ -247,9 +247,9 @@ protected:
     int m_verRichEdit;
 #endif // wxUSE_RICHEDIT
 
-    // if true, SendUpdateEvent() will eat the next event (see comments in the
-    // code as to why this is needed)
-    bool m_suppressNextUpdate;
+    // number of EN_UPDATE events sent by Windows when we change the controls
+    // text ourselves: we want this to be exactly 1
+    int m_updatesCount;
 
     virtual wxVisualAttributes GetDefaultAttributes() const;
 

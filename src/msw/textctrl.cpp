@@ -102,6 +102,36 @@ IMPLEMENT_DYNAMIC_CLASS(wxRichEditModule, wxModule)
 
 #endif // wxUSE_RICHEDIT
 
+// a small class used to set m_updatesCount to 0 (to filter duplicate events if
+// necessary) and to reset it back to -1 afterwards
+class UpdatesCountFilter
+{
+public:
+    UpdatesCountFilter(int& count)
+        : m_count(count)
+    {
+        wxASSERT_MSG( m_count == -1, _T("wrong initial m_updatesCount value") );
+
+        m_count = 0;
+    }
+
+    ~UpdatesCountFilter()
+    {
+        m_count = -1;
+    }
+
+    // return true if an event has been received
+    bool GotUpdate() const
+    {
+        return m_count == 1;
+    }
+
+private:
+    int& m_count;
+
+    DECLARE_NO_COPY_CLASS(UpdatesCountFilter)
+};
+
 // ----------------------------------------------------------------------------
 // event tables and other macros
 // ----------------------------------------------------------------------------
@@ -218,7 +248,7 @@ void wxTextCtrl::Init()
 #endif // wxUSE_RICHEDIT
 
     m_privateContextMenu = NULL;
-    m_suppressNextUpdate = false;
+    m_updatesCount = -1;
     m_isNativeCaretShown = true;
     m_isCaretAtEnd = true;
 }
@@ -751,19 +781,16 @@ wxTextCtrl::StreamIn(const wxString& value,
     // the cast below is needed for broken (very) old mingw32 headers
     eds.pfnCallback = (EDITSTREAMCALLBACK)wxRichEditStreamIn;
 
-    // we're going to receive 2 EN_CHANGE notifications if we got any selection
-    // (same problem as in DoWriteText())
-    if ( selectionOnly && HasSelection() )
-    {
-        // so suppress one of them
-        m_suppressNextUpdate = true;
-    }
+    // same problem as in DoWriteText(): we can get multiple events here
+    UpdatesCountFilter ucf(m_updatesCount);
 
     ::SendMessage(GetHwnd(), EM_STREAMIN,
                   SF_TEXT |
                   SF_UNICODE |
                   (selectionOnly ? SFF_SELECTION : 0),
                   (LPARAM)&eds);
+
+    wxASSERT_MSG( ucf.GotUpdate(), _T("EM_STREAMIN didn't send EN_UPDATE?") );
 
     if ( eds.dwError )
     {
@@ -906,36 +933,20 @@ void wxTextCtrl::DoWriteText(const wxString& value, bool selectionOnly)
 #endif // wxUSE_RICHEDIT
     {
         // in some cases we get 2 EN_CHANGE notifications after the SendMessage
-        // call below which is confusing for the client code and so should be
-        // avoided
-        //
-        // these cases are: (a) plain EDIT controls if EM_REPLACESEL is used
-        // and there is a non empty selection currently and (b) rich text
-        // controls in any case
-        if (
-#if wxUSE_RICHEDIT
-            IsRich() ||
-#endif // wxUSE_RICHEDIT
-            (selectionOnly && HasSelection()) )
-        {
-            m_suppressNextUpdate = true;
-        }
+        // call (this happens for plain EDITs with EM_REPLACESEL and under some
+        // -- undetermined -- conditions with rich edit) and sometimes we don't
+        // get any events at all (plain EDIT with WM_SETTEXT), so ensure that
+        // we generate exactly one of them by ignoring all but the first one in
+        // SendUpdateEvent() and generating one ourselves if we hadn't got any
+        // notifications from Windows
+        UpdatesCountFilter ucf(m_updatesCount);
 
         ::SendMessage(GetHwnd(), selectionOnly ? EM_REPLACESEL : WM_SETTEXT,
                       0, (LPARAM)valueDos.c_str());
 
-        // OTOH, non rich text controls don't generate any events at all when
-        // we use WM_SETTEXT -- have to emulate them here
-        if ( !selectionOnly
-#if wxUSE_RICHEDIT
-                && !IsRich()
-#endif // wxUSE_RICHEDIT
-           )
+        if ( !ucf.GotUpdate() )
         {
-            // Windows already sends an update event for single-line
-            // controls.
-            if ( m_windowStyle & wxTE_MULTILINE )
-                SendUpdateEvent();
+            SendUpdateEvent();
         }
     }
 }
@@ -1801,13 +1812,25 @@ WXLRESULT wxTextCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
 
 bool wxTextCtrl::SendUpdateEvent()
 {
-    // is event reporting suspended?
-    if ( m_suppressNextUpdate )
+    switch ( m_updatesCount )
     {
-        // do process the next one
-        m_suppressNextUpdate = false;
+        case 0:
+            // remember that we've got an update
+            m_updatesCount++;
+            break;
 
-        return false;
+        case 1:
+            // we had already sent one event since the last control modification
+            return false;
+
+        default:
+            wxFAIL_MSG( _T("unexpected wxTextCtrl::m_updatesCount value") );
+            // fall through
+
+        case -1:
+            // we hadn't updated the control ourselves, this event comes from
+            // the user, don't need to ignore it nor update the count
+            break;
     }
 
     wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, GetId());
