@@ -162,7 +162,7 @@ ROTATE_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
 	$(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(LIBDIRNAME) &
 	-i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png &
 	-i=.\..\..\src\zlib -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. &
-	$(__DLLFLAG_p) -i=..\..\samples $(CXXFLAGS)
+	$(__DLLFLAG_p) -i=.\..\..\samples $(CXXFLAGS)
 ROTATE_OBJECTS =  &
 	$(OBJS)\rotate_rotate.obj
 
@@ -173,13 +173,13 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\rotate.exe
+all : .SYMBOLIC $(OBJS)\rotate.exe data
 
 $(OBJS)\rotate_rotate.obj :  .AUTODEPEND .\rotate.cpp
 	$(CXX) -zq -fo=$^@ $(ROTATE_CXXFLAGS) $<
 
 $(OBJS)\rotate_rotate.res :  .AUTODEPEND .\rotate.rc
-	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(LIBDIRNAME) -i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png -i=.\..\..\src\zlib  -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. $(__DLLFLAG_p) -i=..\..\samples $<
+	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(LIBDIRNAME) -i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png -i=.\..\..\src\zlib  -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. $(__DLLFLAG_p) -i=.\..\..\samples $<
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -187,6 +187,10 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.lbc del $(OBJS)\*.lbc
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
 	-if exist $(OBJS)\rotate.exe del $(OBJS)\rotate.exe
+
+data : .SYMBOLIC 
+	if not exist $(OBJS) mkdir $(OBJS)
+	for %f in (kclub.bmp) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\rotate.exe :  $(ROTATE_OBJECTS) $(OBJS)\rotate_rotate.res
 	@%create $(OBJS)\rotate.lbc

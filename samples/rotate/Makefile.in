@@ -127,13 +127,21 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 
 ### Targets: ###
 
-all: rotate$(EXEEXT) $(__rotate_bundle___depname)
+all: rotate$(EXEEXT) $(__rotate_bundle___depname) data
 
 clean: 
 	rm -rf ./.deps ./.pch
 	rm -f ./*.o
 	rm -f rotate$(EXEEXT)
 	rm -rf rotate.app
+
+data: 
+	@mkdir -p .
+	@for f in kclub.bmp; do \
+	if test \( ! -s ./$$f \) -o \( $(srcdir)/$$f -nt ./$$f  \) ; then \
+	cp -pRf $(srcdir)/$$f . ; \
+	fi; \
+	done
 
 distclean: clean
 	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
@@ -183,4 +191,4 @@ uninstall:
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all clean distclean install rotate_bundle uninstall
+.PHONY: all clean data distclean install rotate_bundle uninstall
