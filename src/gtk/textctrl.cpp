@@ -98,6 +98,8 @@ END_EVENT_TABLE()
 wxTextCtrl::wxTextCtrl()
 {
     m_modified = FALSE;
+    m_text =
+    m_vScrollbar = (GtkWidget *)NULL;
 }
 
 wxTextCtrl::wxTextCtrl( wxWindow *parent,
