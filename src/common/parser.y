@@ -169,6 +169,8 @@ void yyerror(char *s)
 #endif
 #elif !defined(__alpha___) && !defined(__alpha) && !defined(__ultrix)
 int yywrap() { return 1; }
+#elif defined(__VMS__)
+int yywrap() { return 1; }
 #endif
 #elif defined(__WX_SETUP_H__)
 int yywrap() { return 1; }
