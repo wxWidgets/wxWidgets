@@ -33,7 +33,7 @@
 //#include <gdk/gdkx.h>
 //#include <gtk/gtkwindow.h>
 
-extern GtkWidget *wxRootWindow;
+//extern GtkWidget *wxRootWindow;
 
 #endif
 

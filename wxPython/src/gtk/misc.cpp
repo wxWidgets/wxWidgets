@@ -134,7 +134,7 @@ static char* wxStringErrorMsg = "string type is required for parameter";
         return retval;
     }
 
-#if 0  // we want to use the definition from the header, no the
+#if 0  // we want to use the definition from the header, not the
        // one SWIG will generate.
 extern wxAcceleratorTable  wxNullAcceleratorTable; 
 
