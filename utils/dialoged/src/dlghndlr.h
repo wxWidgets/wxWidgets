@@ -52,6 +52,8 @@ public:
     void OnPaint(wxPaintEvent& event);
     void OnMouseEvent(wxMouseEvent& event);
     void OnSize(wxSizeEvent& event);
+	void OnObjectEdit(wxCommandEvent& event);
+	void OnObjectDelete(wxCommandEvent& event);
     
     virtual void OnItemEvent(wxControl *win, wxMouseEvent& event);
     virtual void OnLeftClick(int x, int y, int keys);

@@ -2397,51 +2397,6 @@ void wxResourceEditorScrolledWindow::DrawTitle(wxDC& dc)
     }
 }
 
-// Popup menu callback
-void ObjectMenuProc(wxMenu *menu, wxCommandEvent& event)
-{
-    wxWindow *data = (wxWindow *)menu->GetClientData();
-    if (!data)
-        return;
-    
-    switch (event.GetId())
-    {
-    case OBJECT_MENU_TITLE:
-        {
-            event.Skip();
-            break;
-        }
-    case OBJECT_MENU_EDIT:
-        {
-            wxResourceManager::GetCurrentResourceManager()->EditWindow(data);
-            break;
-        }
-    case OBJECT_MENU_DELETE:
-        {
-            // Before deleting a dialog, give the user a last chance
-            // change their mind, in case they accidentally right
-            // clicked the dialog rather than the widget they were
-            // aiming for.
-            if (data->IsKindOf(CLASSINFO(wxPanel)))
-            {
-                wxString str(wxT("Deleting dialog : "));
-                str += data->GetName();
-                if (wxMessageBox(wxT("Are you sure?"), str, wxYES_NO | wxCENTRE) == wxNO)
-                    return;
-            }
-
-            wxResourceManager::GetCurrentResourceManager()->DeselectItemIfNecessary(data);
-
-            wxResourceManager::GetCurrentResourceManager()->SaveInfoAndDeleteHandler(data);
-            wxResourceManager::GetCurrentResourceManager()->DeleteResource(data);
-            wxResourceManager::GetCurrentResourceManager()->DeleteWindow(data);
-            break;
-        }
-    default:
-        break;
-    }
-}
-
 /*
 * Main toolbar
 *
