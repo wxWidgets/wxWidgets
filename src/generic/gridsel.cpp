@@ -517,12 +517,14 @@ void wxGridSelection::SelectCell( int row, int col,
 {
     if ( m_selectionMode == wxGrid::wxGridSelectRows )
     {
-        SelectBlock(row, 0, row, m_grid->GetNumberCols() - 1 );
+        SelectBlock(row, 0, row, m_grid->GetNumberCols() - 1,
+		    ControlDown, ShiftDown, AltDown, MetaDown);
         return;
     }
     else if ( m_selectionMode == wxGrid::wxGridSelectColumns )
     {
-        SelectBlock(0, col, m_grid->GetNumberRows() - 1, col );
+        SelectBlock(0, col, m_grid->GetNumberRows() - 1, col,
+		    ControlDown, ShiftDown, AltDown, MetaDown);
         return;
     }
     else if ( IsInSelection ( row, col ) )
