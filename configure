@@ -21992,7 +21992,7 @@ if test "$wxUSE_HTML" = "yes"; then
 #define wxUSE_HTML 1
 EOF
 
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS html"
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS html htlbox"
 fi
 
 if test "$wxUSE_VALIDATORS" = "yes"; then

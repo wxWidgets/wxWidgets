@@ -5232,7 +5232,7 @@ fi
 
 if test "$wxUSE_HTML" = "yes"; then
     AC_DEFINE(wxUSE_HTML)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS html"
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS html htlbox"
 fi
 
 if test "$wxUSE_VALIDATORS" = "yes"; then
