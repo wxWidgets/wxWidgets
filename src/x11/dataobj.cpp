@@ -17,6 +17,7 @@
 #include "wx/mstream.h"
 #include "wx/app.h"
 #include "wx/image.h"
+#include "wx/log.h"
 
 #include "wx/utils.h"
 #include "wx/x11/private.h"
