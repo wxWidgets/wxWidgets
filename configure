@@ -11207,7 +11207,7 @@ echo "${ECHO_T}$ac_cv_c_compiler_gnu" >&6
 GCC=`test $ac_compiler_gnu = yes && echo yes`
 ac_test_CFLAGS=${CFLAGS+set}
 ac_save_CFLAGS=$CFLAGS
-CFLAGS="$CFLAGS -g"
+CFLAGS="-g"
 echo "$as_me:$LINENO: checking whether $CC accepts -g" >&5
 echo $ECHO_N "checking whether $CC accepts -g... $ECHO_C" >&6
 if test "${ac_cv_prog_cc_g+set}" = set; then
@@ -11597,7 +11597,7 @@ fi
         unset ac_cv_prog_cc_g
         ac_test_CFLAGS=${CFLAGS+set}
 ac_save_CFLAGS=$CFLAGS
-CFLAGS="$CFLAGS -g"
+CFLAGS="-g"
 echo "$as_me:$LINENO: checking whether $CC accepts -g" >&5
 echo $ECHO_N "checking whether $CC accepts -g... $ECHO_C" >&6
 if test "${ac_cv_prog_cc_g+set}" = set; then
@@ -12355,9 +12355,9 @@ if test "$ac_test_CXXFLAGS" = set; then
   CXXFLAGS=$ac_save_CXXFLAGS
 elif test $ac_cv_prog_cxx_g = yes; then
   if test "$GXX" = yes; then
-    CXXFLAGS="$CXXFLAGS -g -O2"
+    CXXFLAGS="-g -O2"
   else
-    CXXFLAGS="$CXXFLAGS -g"
+    CXXFLAGS="-g"
   fi
 else
   if test "$GXX" = yes; then
@@ -12595,9 +12595,9 @@ if test "$ac_test_CXXFLAGS" = set; then
   CXXFLAGS=$ac_save_CXXFLAGS
 elif test $ac_cv_prog_cxx_g = yes; then
   if test "$GXX" = yes; then
-    CXXFLAGS="$CXXFLAGS -g -O2"
+    CXXFLAGS="-g -O2"
   else
-    CXXFLAGS="$CXXFLAGS -g"
+    CXXFLAGS="-g"
   fi
 else
   if test "$GXX" = yes; then
@@ -40419,32 +40419,29 @@ fi
 WXCONFIG_EXTRALIBS="$LIBS"
 
 if test "$wxUSE_REGEX" = "builtin" ; then
-    wxconfig_3rdparty="$wxconfig_3rdparty regex${lib_unicode_suffix}"
+    wxconfig_3rdparty="regex${lib_unicode_suffix} $wxconfig_3rdparty"
 fi
 if test "$wxUSE_EXPAT" = "builtin" ; then
-    wxconfig_3rdparty="$wxconfig_3rdparty expat"
+    wxconfig_3rdparty="expat $wxconfig_3rdparty"
 fi
 if test "$wxUSE_ODBC" = "builtin" ; then
-    wxconfig_3rdparty="$wxconfig_3rdparty odbc"
+    wxconfig_3rdparty="odbc $wxconfig_3rdparty"
 fi
 if test "$wxUSE_LIBTIFF" = "builtin" ; then
-    wxconfig_3rdparty="$wxconfig_3rdparty tiff"
+    wxconfig_3rdparty="tiff $wxconfig_3rdparty"
 fi
 if test "$wxUSE_LIBJPEG" = "builtin" ; then
-    wxconfig_3rdparty="$wxconfig_3rdparty jpeg"
+    wxconfig_3rdparty="jpeg $wxconfig_3rdparty"
 fi
 if test "$wxUSE_LIBPNG" = "builtin" ; then
-    wxconfig_3rdparty="$wxconfig_3rdparty png"
+    wxconfig_3rdparty="png $wxconfig_3rdparty"
 fi
 if test "$wxUSE_ZLIB" = "builtin" ; then
-    wxconfig_3rdparty="$wxconfig_3rdparty zlib"
-fi
-if test "$wxUSE_ODBC" = "builtin" ; then
-    wxconfig_3rdparty="$wxconfig_3rdparty odbc"
+    wxconfig_3rdparty="zlib $wxconfig_3rdparty"
 fi
 
 for i in $wxconfig_3rdparty ; do
-    WXCONFIG_EXTRALIBS="$WXCONFIG_EXTRALIBS -lwx${i}${lib_debug_suffix}${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
+    WXCONFIG_EXTRALIBS="-lwx${i}${lib_debug_suffix}${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX} $WXCONFIG_EXTRALIBS"
 done
 
 
