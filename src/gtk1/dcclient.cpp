@@ -1557,7 +1557,7 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, 
                 // don't use DrawPoint() because it uses the current pen
                 // colour, and we don't need it here
                 gdk_draw_point( m_window, m_textGC,
-                                XLOG2DEV(x + dstX), YLOG2DEV(y + dstY) );
+                                XLOG2DEV(x) + dstX, YLOG2DEV(y) + dstY );
             }
         }
     }
