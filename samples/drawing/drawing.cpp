@@ -61,7 +61,8 @@ enum ScreenToShow
     Show_Polygons,
     Show_Mask,
     Show_Ops,
-    Show_Regions
+    Show_Regions,
+    Show_Circles
 };
 
 // ----------------------------------------------------------------------------
@@ -155,6 +156,7 @@ protected:
     void DrawImages(wxDC& dc);
     void DrawWithLogicalOps(wxDC& dc);
     void DrawRegions(wxDC& dc);
+    void DrawCircles(wxDC& dc);
     void DrawDefault(wxDC& dc);
 
 private:
@@ -186,7 +188,8 @@ enum
     File_ShowMask,
     File_ShowOps,
     File_ShowRegions,
-    MenuShow_Last = File_ShowRegions,
+    File_ShowCircles,
+    MenuShow_Last = File_ShowCircles,
 
     MenuOption_First,
 
@@ -943,6 +946,35 @@ void MyCanvas::DrawWithLogicalOps(wxDC& dc)
     }
 }
 
+void MyCanvas::DrawCircles(wxDC& dc)
+{
+    int x = 100,
+        y = 100,
+        r = 20;
+
+    dc.DrawText("Some circles", 0, y);
+    dc.DrawCircle(x, y, r);
+    dc.DrawCircle(x + 2*r, y, r);
+    dc.DrawCircle(x + 4*r, y, r);
+
+    y += 2*r;
+    dc.DrawText("And ellipses", 0, y);
+    dc.DrawEllipse(x - r, y, 2*r, r);
+    dc.DrawEllipse(x + r, y, 2*r, r);
+    dc.DrawEllipse(x + 3*r, y, 2*r, r);
+
+    y += 2*r;
+    dc.DrawText("And arcs", 0, y);
+    dc.DrawArc(x - r, y, x + r, y, x, y);
+    dc.DrawArc(x + 4*r, y, x + 2*r, y, x + 3*r, y);
+
+    y += 2*r;
+    dc.DrawEllipticArc(x - r, y, 2*r, r, 0, 90);
+    dc.DrawEllipticArc(x + r, y, 2*r, r, 90, 180);
+    dc.DrawEllipticArc(x + 3*r, y, 2*r, r, 180, 270);
+    dc.DrawEllipticArc(x + 5*r, y, 2*r, r, 270, 360);
+}
+
 void MyCanvas::DrawRegions(wxDC& dc)
 {
     dc.SetBrush( *wxWHITE_BRUSH );
@@ -1007,6 +1039,10 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
     {
         case Show_Default:
             DrawDefault(dc);
+            break;
+
+        case Show_Circles:
+            DrawCircles(dc);
             break;
 
         case Show_Regions:
@@ -1086,7 +1122,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(File_ShowPolygons, "&Polygons screen\tF4");
     menuFile->Append(File_ShowMask, "wx&Mask screen\tF5");
     menuFile->Append(File_ShowOps, "&ROP screen\tF6");
-    menuFile->Append(File_ShowRegions, "Re&gions screen\tF6");
+    menuFile->Append(File_ShowRegions, "Re&gions screen\tF7");
+    menuFile->Append(File_ShowCircles, "&Circles&gions screen\tF8");
     menuFile->AppendSeparator();
     menuFile->Append(File_About, "&About...\tCtrl-A", "Show about dialog");
     menuFile->AppendSeparator();
