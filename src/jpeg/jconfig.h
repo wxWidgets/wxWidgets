@@ -2,12 +2,25 @@
 /* jconfig.cfg --- source file edited by configure script */
 /* see jconfig.doc for explanations */
 
+/* use wxWindows' configure */
+#include "wx/setup.h"
+
 #define HAVE_PROTOTYPES 
 #define HAVE_UNSIGNED_CHAR 
 #define HAVE_UNSIGNED_SHORT 
 #undef void
 #undef const
-#undef CHAR_IS_UNSIGNED
+
+/* use wxWindows' configure */
+/* #undef CHAR_IS_UNSIGNED */
+#ifdef __CHAR_UNSIGNED__
+  #ifndef CHAR_IS_UNSIGNED
+    #define CHAR_IS_UNSIGNED
+  #endif
+#else
+  #undef CHAR_IS_UNSIGNED
+#endif
+
 #define HAVE_STDDEF_H 
 #define HAVE_STDLIB_H 
 #undef NEED_BSD_STRINGS
@@ -20,7 +33,11 @@
 #ifdef JPEG_INTERNALS
 
 #undef RIGHT_SHIFT_IS_UNSIGNED
-#define INLINE __inline__
+
+/* use wxWindows' configure */
+/* #define INLINE __inline__ */
+#define INLINE inline
+
 /* These are for configuring the JPEG memory manager. */
 #undef DEFAULT_MAX_MEM
 #undef NO_MKTEMP
