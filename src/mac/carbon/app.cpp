@@ -1232,14 +1232,14 @@ void wxWakeUpIdle()
 bool wxApp::SendIdleEvents()
 {
     bool needMore = FALSE;
-    wxNode* node = wxTopLevelWindows.First();
+    wxWindowListNode* node = wxTopLevelWindows.GetFirst();
     while (node)
     {
-        wxWindow* win = (wxWindow*) node->Data();
+        wxWindow* win = node->GetData();
         if (SendIdleEvents(win))
             needMore = TRUE;
 
-        node = node->Next();
+        node = node->GetNext();
     }
     return needMore;
 }
@@ -1256,24 +1256,24 @@ bool wxApp::SendIdleEvents(wxWindow* win)
     if (event.MoreRequested())
         needMore = TRUE;
 
-    wxNode* node = win->GetChildren().First();
+    wxWindowListNode* node = win->GetChildren().GetFirst();
     while (node)
     {
-        wxWindow* win = (wxWindow*) node->Data();
+        wxWindow* win = node->GetData();
         if (SendIdleEvents(win))
             needMore = TRUE;
 
-        node = node->Next();
+        node = node->GetNext();
     }
     return needMore ;
 }
 
 void wxApp::DeletePendingObjects()
 {
-  wxNode *node = wxPendingDelete.First();
+  wxNode *node = wxPendingDelete.GetFirst();
   while (node)
   {
-    wxObject *obj = (wxObject *)node->Data();
+    wxObject *obj = (wxObject *)node->GetData();
 
     delete obj;
 
@@ -1282,7 +1282,7 @@ void wxApp::DeletePendingObjects()
 
     // Deleting one object may have deleted other pending
     // objects, so start from beginning of list again.
-    node = wxPendingDelete.First();
+    node = wxPendingDelete.GetFirst();
   }
 }
 
@@ -1394,13 +1394,13 @@ void wxApp::MacSuspend( bool convertClipboard )
 #if !TARGET_CARBON
     // we have to deactive the top level windows manually
 
-    wxNode* node = wxTopLevelWindows.First();
+    wxWindowListNode* node = wxTopLevelWindows.GetFirst();
     while (node)
     {
         wxTopLevelWindow* win = (wxTopLevelWindow*) node->Data();
         win->MacActivate( ((EventRecord*) MacGetCurrentEvent())->when , false ) ;
 
-        node = node->Next();
+        node = node->GetNext();
     }
 
     ::HideFloatingWindows() ;
@@ -1427,13 +1427,13 @@ void wxApp::MacResume( bool convertClipboard )
     ::ShowFloatingWindows() ;
     // raise modal dialogs in case a non modal window was selected to activate the app
 
-    wxNode* node = wxModalDialogs.First();
+    wxNode* node = wxModalDialogs.GetFirst();
     while (node)
     {
-        wxDialog* dialog = (wxDialog *) node->Data();
+        wxDialog* dialog = (wxDialog *) node->GetData();
         dialog->Raise();
 
-        node = node->Next();
+        node = node->GetNext();
     }
 #endif
 }
