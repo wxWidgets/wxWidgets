@@ -624,6 +624,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_ZLIB=no
   DEFAULT_wxUSE_LIBPNG=no
   DEFAULT_wxUSE_LIBJPEG=no
+  DEFAULT_wxUSE_LIBTIFF=no
   DEFAULT_wxUSE_ODBC=no
 
   DEFAULT_wxUSE_STD_IOSTREAM=no
@@ -737,6 +738,7 @@ else
   DEFAULT_wxUSE_ZLIB=yes
   DEFAULT_wxUSE_LIBPNG=yes
   DEFAULT_wxUSE_LIBJPEG=yes
+  DEFAULT_wxUSE_LIBTIFF=no
   DEFAULT_wxUSE_ODBC=yes
 
   DEFAULT_wxUSE_STD_IOSTREAM=no
@@ -861,6 +863,7 @@ if test "$wxUSE_GUI" = "no"; then
   DEFAULT_wxUSE_ZLIB=no
   DEFAULT_wxUSE_LIBPNG=no
   DEFAULT_wxUSE_LIBJPEG=no
+  DEFAULT_wxUSE_LIBTIFF=no
   DEFAULT_wxUSE_SOCKETS=no
   DEFAULT_wxUSE_JOYSTICK=no
   DEFAULT_wxUSE_AFM_FOR_POSTSCRIPT=no
@@ -942,6 +945,7 @@ WX_ARG_WITH(dmalloc,       [  --with-dmalloc          use dmalloc library (www.l
 WX_ARG_WITH(zlib,          [  --with-zlib             use zlib for LZW compression], wxUSE_ZLIB)
 WX_ARG_WITH(libpng,        [  --with-libpng           use libpng (PNG image format)], wxUSE_LIBPNG)
 WX_ARG_WITH(libjpeg,       [  --with-libjpeg          use libjpeg (JPEG file format)], wxUSE_LIBJPEG)
+WX_ARG_WITH(libtiff,       [  --with-libtiff          use libtiff (TIFF file format)], wxUSE_LIBTIFF)
 WX_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)], wxUSE_OPENGL)
 WX_ARG_WITH(odbc,          [  --with-odbc             use the IODBC and wxODBC classes], wxUSE_ODBC)
 
@@ -2255,6 +2259,12 @@ if test "$wxUSE_LIBJPEG" = "yes" ; then
   JPEG_INCLUDE="-I\${top_srcdir}/src/jpeg"
 fi
 
+TIFF_INCLUDE=
+if test "$wxUSE_LIBTIFF" = "yes" ; then
+  AC_DEFINE(wxUSE_LIBTIFF)
+  TIFF_INCLUDE="-I\${top_srcdir}/src/tiff"
+fi
+
 if test "$wxUSE_OPENGL" = "yes"; then
   AC_CHECK_HEADER(GL/gl.h, [
     AC_CHECK_LIB(GL, glInitNames, [
@@ -2949,7 +2959,7 @@ dnl makefile system without libtool
 LD_LIBS="\${top_builddir}/lib/${WX_LIBRARY_NAME_STATIC} $EXTRA_LIBS"
 
 dnl all -I options we must pass to the compiler
-INCLUDES="-I. -I\${top_builddir}/include -I\${top_srcdir}/include $ZLIB_INCLUDE $PNG_INCLUDE $JPEG_INCLUDE $TOOLKIT_INCLUDE"
+INCLUDES="-I. -I\${top_builddir}/include -I\${top_srcdir}/include $ZLIB_INCLUDE $PNG_INCLUDE $JPEG_INCLUDE $TIFF_INCLUDE $TOOLKIT_INCLUDE"
 
 dnl C/C++ compiler options used to compile wxWindows
 if test "$GXX" = yes ; then
