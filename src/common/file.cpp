@@ -10,6 +10,11 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+/*
+    TODO: remove all the WinCE ugliness from here, implement the wxOpen(),
+          wxSeek(), ... functions in a separate file for WinCE instead!!!
+ */
+
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
