@@ -50,6 +50,7 @@ samples/font/Makefile.in
 samples/menu/Makefile.in
 samples/console/Makefile.in
 samples/life/Makefile.in
+samples/calendar/Makefile.in
 utils/glcanvas/motif/Makefile.in
 utils/Makefile.in
 utils/wxMMedia2/Makefile.in

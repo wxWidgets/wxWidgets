@@ -1051,3 +1051,12 @@ samples/life/*.txt
 samples/life/bitmaps/*.xpm
 samples/life/bitmaps/*.bmp
 
+samples/calendar/*.cpp
+samples/calendar/*.h
+samples/calendar/makefile*
+samples/calendar/*.rc
+samples/calendar/*.def
+samples/calendar/*.ico
+samples/calendar/*.xpm
+samples/calendar/*.txt
+

@@ -884,7 +884,7 @@ void wxShape::FindRegionNames(wxStringList& list)
 void wxShape::AssignNewIds()
 {
 //  if (m_id == 0)
-  m_id = NewId();
+  m_id = wxNewId();
   wxNode *node = m_children.First();
   while (node)
   {
@@ -1878,7 +1878,7 @@ void wxShape::WriteRegions(wxExpr *clause)
 void wxShape::ReadAttributes(wxExpr *clause)
 {
   clause->GetAttributeValue("id", m_id);
-  RegisterId(m_id);
+  wxRegisterId(m_id);
 
   clause->GetAttributeValue("x", m_xpos);
   clause->GetAttributeValue("y", m_ypos);

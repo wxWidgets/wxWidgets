@@ -1566,9 +1566,9 @@ void wxLineShape::ReadAttributes(wxExpr *clause)
         arrowId = id_expr->IntegerValue();
 
       if (arrowId == -1)
-        arrowId = NewId();
+        arrowId = wxNewId();
       else
-        RegisterId(arrowId);
+        wxRegisterId(arrowId);
 
       wxArrowHead *arrowHead = AddArrow(arrowType, arrowEnd, arrowSize, xOffset, (char*) (const char*) arrowName, NULL, arrowId);
       if (yOffsetExpr)
@@ -2356,7 +2356,7 @@ wxArrowHead::wxArrowHead(WXTYPE type, int end, double size, double dist, const w
   m_metaFile = mf;
   m_id = arrowId;
   if (m_id == -1)
-    m_id = NewId();
+    m_id = wxNewId();
 }
 
 wxArrowHead::wxArrowHead(wxArrowHead& toCopy)
@@ -2371,7 +2371,7 @@ wxArrowHead::wxArrowHead(wxArrowHead& toCopy)
     m_metaFile = new wxPseudoMetaFile(*(toCopy.m_metaFile));
   else
     m_metaFile = NULL;
-  m_id = NewId();
+  m_id = wxNewId();
 }
 
 wxArrowHead::~wxArrowHead()

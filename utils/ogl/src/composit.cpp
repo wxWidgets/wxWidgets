@@ -374,7 +374,7 @@ void wxCompositeShape::Copy(wxShape& copy)
     wxShape *object = (wxShape *)node->Data();
     wxShape *newObject = object->CreateNewCopy(FALSE, FALSE);
     if (newObject->GetId() == 0)
-      newObject->SetId(NewId());
+      newObject->SetId(wxNewId());
 
     newObject->SetParent(&compositeCopy);
     compositeCopy.m_children.Append(newObject);
@@ -457,7 +457,7 @@ wxOGLConstraint *wxCompositeShape::AddConstraint(wxOGLConstraint *constraint)
 {
   m_constraints.Append(constraint);
   if (constraint->m_constraintId == 0)
-    constraint->m_constraintId = NewId();
+    constraint->m_constraintId = wxNewId();
   return constraint;
 }
 
@@ -465,7 +465,7 @@ wxOGLConstraint *wxCompositeShape::AddConstraint(int type, wxShape *constraining
 {
   wxOGLConstraint *constraint = new wxOGLConstraint(type, constraining, constrained);
   if (constraint->m_constraintId == 0)
-    constraint->m_constraintId = NewId();
+    constraint->m_constraintId = wxNewId();
   m_constraints.Append(constraint);
   return constraint;
 }
@@ -476,7 +476,7 @@ wxOGLConstraint *wxCompositeShape::AddConstraint(int type, wxShape *constraining
   l.Append(constrained);
   wxOGLConstraint *constraint = new wxOGLConstraint(type, constraining, l);
   if (constraint->m_constraintId == 0)
-    constraint->m_constraintId = NewId();
+    constraint->m_constraintId = wxNewId();
   m_constraints.Append(constraint);
   return constraint;
 }
@@ -1582,7 +1582,7 @@ public:
 
     void OnMenu(wxCommandEvent& event);
 
-    DECLARE_EVENT_TABLE();
+    DECLARE_EVENT_TABLE()
 };
 
 BEGIN_EVENT_TABLE(OGLPopupDivisionMenu, wxMenu)

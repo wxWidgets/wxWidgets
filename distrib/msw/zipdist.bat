@@ -5,7 +5,7 @@ set dest=%src\deliver
 set wise=0
 
 Rem Set this to the required version
-set version=2_1_11
+set version=2_1_12
 
 if "%src" == "" goto usage
 if "%dest" == "" goto usage

@@ -324,7 +324,7 @@ bool wxDiagram::LoadFile(const wxString& filename)
     wxExpr *clause = (wxExpr *)node->Data();
     long id = -1;
     clause->GetAttributeValue("id", id);
-    RegisterId(id);
+    wxRegisterId(id);
     node = node->Next();
   }
 

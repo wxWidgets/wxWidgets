@@ -64,6 +64,20 @@ Constructor.
 
 Destructor.
 
+\membersection{wxClipboard::AddData}\label{wxclipboardadddata}
+
+\func{bool}{AddData}{\param{wxDataObject*}{ data}}
+
+Call this function to add the data object to the clipboard. You may call
+this function repeatedly after having cleared the clipboard using \helpref{wxClipboard::Clear}{wxclipboardclear}.
+
+After this function has been called, the clipboard owns the data, so do not delete
+the data explicitly.
+
+\wxheading{See also}
+
+\helpref{wxClipboard::SetData}{wxclipboardsetdata}
+
 \membersection{wxClipboard::Clear}\label{wxclipboardclear}
 
 \func{void}{Clear}{\void}
@@ -82,6 +96,12 @@ Call this function to close the clipboard, having opened it with \helpref{wxClip
 
 Call this function to fill {\it data} with data on the clipboard, if available in the required
 format. Returns TRUE on success.
+
+\membersection{wxClipboard::IsOpened}\label{wxclipboardisopened}
+
+\constfunc{bool}{IsOpened}{\void}
+
+Returns TRUE if the clipboard has been opened.
 
 \membersection{wxClipboard::IsSupported}\label{wxclipboardissupported}
 
@@ -108,6 +128,13 @@ Returns TRUE on success. This should be tested (as in the sample shown above).
 Call this function to set the data object to the clipboard. This function will
 clear all previous contents in the clipboard, so calling it several times
 does not make any sense.
+
+After this function has been called, the clipboard owns the data, so do not delete
+the data explicitly.
+
+\wxheading{See also}
+
+\helpref{wxClipboard::AddData}{wxclipboardadddata}
 
 \membersection{wxClipboard::UsePrimarySelection}\label{wxclipboarduseprimary}
 
