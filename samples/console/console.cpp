@@ -90,6 +90,7 @@
     #define TEST_WCHAR
     #define TEST_ZIP
     #define TEST_ZLIB
+    #define TEST_GZIP
 
     #undef TEST_ALL
     static const bool TEST_ALL = true;
@@ -4576,6 +4577,137 @@ static void TestZlibStreamRead()
 #endif // TEST_ZLIB
 
 // ----------------------------------------------------------------------------
+// Gzip streams
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_GZIP
+
+#include "wx/wfstream.h"
+#include "wx/gzstream.h"
+#include "wx/filename.h"
+#include "wx/txtstrm.h"
+
+// Reads two input streams and verifies that they are the same (and non-emtpy)
+//
+void GzipVerify(wxInputStream &in1, wxInputStream &in2)
+{
+    if (!in1 || !in2) {
+        wxPuts(_T("    Can't verify"));
+        return;
+    }
+
+    const int BUFSIZE = 8192;
+    wxCharBuffer buf1(BUFSIZE);
+    wxCharBuffer buf2(BUFSIZE);
+    bool none = true;
+    
+    for (;;) {
+        int n1 = in1.Read(buf1.data(), BUFSIZE).LastRead();
+        int n2 = in2.Read(buf2.data(), BUFSIZE).LastRead();
+
+        if (n1 != n2 || (n1 && memcmp(buf1, buf2, n1) != 0) || (!n1 && none)) {
+            wxPuts(_T("    Failure"));
+            break;
+        }
+
+        if (!n1) {
+            wxPuts(_T("    Success"));
+            break;
+        }
+
+        none = false;
+    }
+
+    while (in1.IsOk())
+        in1.Read(buf1.data(), BUFSIZE);
+    while (in2.IsOk())
+        in2.Read(buf2.data(), BUFSIZE);
+}
+
+// Write a gzip file and read it back.
+//
+void TestGzip()
+{
+    wxPuts(_T("*** Testing gzip streams ***\n"));
+
+    const wxString testname = _T("gziptest");
+    const wxString gzipname = testname + _T(".gz");
+
+    // write some random test data to a testfile
+    wxPuts(_T("Writing random test data to ") + testname + _T("..."));
+    {
+        wxFFileOutputStream outstream(testname);
+        wxTextOutputStream textout(outstream);
+
+        for (int i = 0; i < 1000 && outstream.Ok(); i++)
+            textout << rand() << rand() << rand() << rand() << endl;
+
+        wxPuts(_T("    Done"));
+    }
+
+    wxFileName fn(testname);
+    wxDateTime dt = fn.GetModificationTime();
+    wxFFileInputStream instream(testname);
+
+    // try writing a gzip file
+    wxPuts(_T("Writing ") + gzipname + _T(" using wxGzipOutputStream..."));
+    {
+        wxFFileOutputStream outstream(gzipname);
+        wxGzipOutputStream gzip(outstream, testname, dt);
+
+        if (!gzip.Write(instream))
+            wxPuts(_T("    Failure"));
+        else
+            wxPuts(_T("    Success"));
+    }
+
+    // try reading the gzip file
+    wxPuts(_T("Reading ") + gzipname + _T(" using wxGzipInputStream..."));
+    {
+        instream.SeekI(0);
+        wxFFileInputStream instream2(gzipname);
+        wxGzipInputStream gzip(instream2);
+        GzipVerify(instream, gzip);
+
+        if (gzip.GetName() != fn.GetFullName())
+            wxPuts(gzipname + _T(" contains incorrect filename: ")
+                    + gzip.GetName());
+        if (dt.IsValid() && gzip.GetDateTime() != dt)
+            wxPuts(gzipname + _T(" contains incorrect timestamp: ")
+                    + gzip.GetDateTime().Format());
+    }
+
+#ifdef __UNIX__
+    // then verify it using gzip program if it is in the path
+    wxPuts(_T("Reading ") + gzipname + _T(" using gzip program..."));
+    wxFFile file(popen((_T("gzip -d -c ") + gzipname).mb_str(), "r"));
+    if (file.fp()) {
+        wxFFileInputStream instream2(file);
+        instream.SeekI(0);
+        GzipVerify(instream, instream2);
+        pclose(file.fp());
+        file.Detach();
+    }
+
+    // try reading a gzip created by gzip program
+    wxPuts(_T("Reading output of gzip program using wxGzipInputStream..."));
+    file.Attach(popen((_T("gzip -c ") + testname).mb_str(), "r"));
+    if (file.fp()) {
+        wxFFileInputStream instream2(file);
+        wxGzipInputStream gzip(instream2);
+        instream.SeekI(0);
+        GzipVerify(instream, gzip);
+        pclose(file.fp());
+        file.Detach();
+    }
+#endif
+
+    wxPuts(_T("\n--- Done gzip streams ---"));
+}
+
+#endif // TEST_GZIP
+
+// ----------------------------------------------------------------------------
 // date time
 // ----------------------------------------------------------------------------
 
@@ -7493,6 +7625,10 @@ int main(int argc, char **argv)
     TestZlibStreamWrite();
     TestZlibStreamRead();
 #endif // TEST_ZLIB
+
+#ifdef TEST_GZIP
+    TestGzip();
+#endif
 
     return 0;
 }
