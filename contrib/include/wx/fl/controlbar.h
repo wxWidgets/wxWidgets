@@ -1026,6 +1026,14 @@ class cbCommonPaneProperties : public wxObject
         // Default constructor.
 
     cbCommonPaneProperties(void);
+
+        // Copy constructor
+    
+    cbCommonPaneProperties(const cbCommonPaneProperties&);
+
+        // Assignment operator
+    
+    cbCommonPaneProperties& operator=(const cbCommonPaneProperties&);
 };
 
 /*

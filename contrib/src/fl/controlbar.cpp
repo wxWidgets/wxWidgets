@@ -2060,6 +2060,30 @@ cbCommonPaneProperties::cbCommonPaneProperties(void)
       mResizeHandleSize( 4 )
 {}
 
+cbCommonPaneProperties::cbCommonPaneProperties(const cbCommonPaneProperties& props)
+
+    : wxObject(),
+      mRealTimeUpdatesOn    (props.mRealTimeUpdatesOn),
+      mOutOfPaneDragOn      (props.mOutOfPaneDragOn),
+      mExactDockPredictionOn(props.mExactDockPredictionOn),
+      mNonDestructFrictionOn(props.mNonDestructFrictionOn),
+      mShow3DPaneBorderOn   (props.mShow3DPaneBorderOn),
+      mBarFloatingOn        (props.mBarFloatingOn),
+      mRowProportionsOn     (props.mRowProportionsOn),
+      mColProportionsOn     (props.mColProportionsOn),
+      mBarCollapseIconsOn   (props.mBarCollapseIconsOn),
+      mBarDragHintsOn       (props.mBarDragHintsOn),
+
+      mMinCBarDim(props.mMinCBarDim),
+      mResizeHandleSize(props.mResizeHandleSize)
+{}
+
+cbCommonPaneProperties& cbCommonPaneProperties::operator=(const cbCommonPaneProperties& props)
+{
+    (*this) = props;
+    return *this;
+}
+
 /***** Implementation for class cbRowInfo *****/
 
 IMPLEMENT_DYNAMIC_CLASS( cbRowInfo, wxObject )
