@@ -35,12 +35,13 @@
 
 // what to test (in alphabetic order)?
 
-//#define TEST_ARRAYS
+#define TEST_ARRAYS
 //#define TEST_CMDLINE
-#define TEST_DATETIME
+//#define TEST_DATETIME
 //#define TEST_DIR
 //#define TEST_DLLLOADER
 //#define TEST_EXECUTE
+//#define TEST_FILE
 //#define TEST_FILECONF
 //#define TEST_HASH
 //#define TEST_LOG
@@ -314,6 +315,73 @@ static void TestExecute()
 }
 
 #endif // TEST_EXECUTE
+
+// ----------------------------------------------------------------------------
+// file
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_FILE
+
+#include <wx/file.h>
+#include <wx/textfile.h>
+
+static void TestFileRead()
+{
+    puts("*** wxFile read test ***");
+
+    wxFile file(_T("testdata.fc"));
+    if ( file.IsOpened() )
+    {
+        printf("File length: %lu\n", file.Length());
+
+        puts("File dump:\n----------");
+
+        static const size_t len = 1024;
+        char buf[len];
+        for ( ;; )
+        {
+            off_t nRead = file.Read(buf, len);
+            if ( nRead == wxInvalidOffset )
+            {
+                printf("Failed to read the file.");
+                break;
+            }
+
+            fwrite(buf, nRead, 1, stdout);
+
+            if ( nRead < len )
+                break;
+        }
+
+        puts("----------");
+    }
+    else
+    {
+        printf("ERROR: can't open test file.\n");
+    }
+
+    puts("");
+}
+
+static void TestTextFileRead()
+{
+    puts("*** wxTextFile read test ***");
+
+    wxTextFile file(_T("testdata.fc"));
+    if ( file.Open() )
+    {
+        printf("Number of lines: %u\n", file.GetLineCount());
+        printf("Last line: '%s'\n", file.GetLastLine().c_str());
+    }
+    else
+    {
+        printf("ERROR: can't open '%s'\n", file.GetName());
+    }
+
+    puts("");
+}
+
+#endif // TEST_FILE
 
 // ----------------------------------------------------------------------------
 // wxFileConfig
@@ -2310,7 +2378,7 @@ void TestThreadDelete()
 
 #ifdef TEST_ARRAYS
 
-void PrintArray(const char* name, const wxArrayString& array)
+static void PrintArray(const char* name, const wxArrayString& array)
 {
     printf("Dump of the array '%s'\n", name);
 
@@ -2319,6 +2387,11 @@ void PrintArray(const char* name, const wxArrayString& array)
     {
         printf("\t%s[%u] = '%s'\n", name, n, array[n].c_str());
     }
+}
+
+static int StringLenCompare(const wxString& first, const wxString& second)
+{
+    return first.length() - second.length();
 }
 
 #endif // TEST_ARRAYS
@@ -2772,6 +2845,18 @@ int main(int argc, char **argv)
     a3 = a2 = a1;
     PrintArray("a2", a2);
     PrintArray("a3", a3);
+
+    puts("*** After sorting a1");
+    a1.Sort();
+    PrintArray("a1", a1);
+
+    puts("*** After sorting a1 in reverse order");
+    a1.Sort(TRUE);
+    PrintArray("a1", a1);
+
+    puts("*** After sorting a1 by the string length");
+    a1.Sort(StringLenCompare);
+    PrintArray("a1", a1);
 #endif // TEST_ARRAYS
 
 #ifdef TEST_DIR
@@ -2808,6 +2893,11 @@ int main(int argc, char **argv)
     //  by wxLog anyhow)
     wxLogMessage("A very very long message 2: '%s', the end!", s.c_str());
 #endif // TEST_LOG
+
+#ifdef TEST_FILE
+    TestFileRead();
+    TestTextFileRead();
+#endif // TEST_FILE
 
 #ifdef TEST_THREADS
     int nCPUs = wxThread::GetCPUCount();
