@@ -30,7 +30,7 @@ class WXDLLEXPORT wxCommand : public wxObject
 {
 public:
     wxCommand(bool canUndoIt = false, const wxString& name = wxEmptyString);
-    ~wxCommand(){};
+    ~wxCommand(){}
 
     // Override this to perform a command
     virtual bool Do() = 0;
