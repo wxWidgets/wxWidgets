@@ -68,7 +68,7 @@ int wxMessageDialog::ShowModal()
 	short result ;
 	Str255 pascalTitle ;
 	Str255 pascalText ;
-	char   cText[256] ;
+	char   cText[2048] ;
 
 	Str255 yesPString ;
 	Str255 noPString ;
