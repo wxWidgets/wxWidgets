@@ -34,8 +34,9 @@
 // private functions
 // ----------------------------------------------------------------------------
 
-// create the list of all fonts with the given spacing
-static char **CreateFontList(wxChar spacing, int *nFonts);
+// create the list of all fonts with the given spacing and encoding
+static char **CreateFontList(wxChar spacing, wxFontEncoding encoding,
+                             int *nFonts);
 
 // extract all font families from the given font list and call our
 // OnFontFamily() for each of them
@@ -56,10 +57,16 @@ static bool ProcessFamiliesFromFontList(wxFontEnumerator *This,
 // helpers
 // ----------------------------------------------------------------------------
 
-static char **CreateFontList(wxChar spacing, int *nFonts)
+static char **CreateFontList(wxChar spacing,
+                             wxFontEncoding encoding,
+                             int *nFonts)
 {
+    wxString xencoding, xregistry;
+    wxGetXFontEncoding(encoding, &xencoding, &xregistry);
+
     wxString pattern;
-    pattern.Printf(wxT("-*-*-*-*-*-*-*-*-*-*-%c-*-*-*"), spacing);
+    pattern.Printf(wxT("-*-*-*-*-*-*-*-*-*-*-%c-*-%s-%s"),
+                   spacing, xregistry.c_str(), xencoding.c_str());
 
     // get the list of all fonts
     return XListFonts((Display *)wxGetDisplay(), pattern.mb_str(), 32767, nFonts);
@@ -106,7 +113,8 @@ static bool ProcessFamiliesFromFontList(wxFontEnumerator *This,
 // wxFontEnumerator
 // ----------------------------------------------------------------------------
 
-bool wxFontEnumerator::EnumerateFamilies(bool fixedWidthOnly)
+bool wxFontEnumerator::EnumerateFamilies(wxFontEncoding encoding,
+                                         bool fixedWidthOnly)
 {
     int nFonts;
     char **fonts;
@@ -114,7 +122,7 @@ bool wxFontEnumerator::EnumerateFamilies(bool fixedWidthOnly)
     if ( fixedWidthOnly )
     {
         bool cont = TRUE;
-        fonts = CreateFontList(wxT('m'), &nFonts);
+        fonts = CreateFontList(wxT('m'), encoding, &nFonts);
         if ( fonts )
         {
             cont = ProcessFamiliesFromFontList(this, fonts, nFonts);
@@ -127,7 +135,7 @@ bool wxFontEnumerator::EnumerateFamilies(bool fixedWidthOnly)
             return TRUE;
         }
 
-        fonts = CreateFontList(wxT('c'), &nFonts);
+        fonts = CreateFontList(wxT('c'), encoding, &nFonts);
         if ( !fonts )
         {
             return TRUE;
@@ -135,11 +143,14 @@ bool wxFontEnumerator::EnumerateFamilies(bool fixedWidthOnly)
     }
     else
     {
-        fonts = CreateFontList(wxT('*'), &nFonts);
+        fonts = CreateFontList(wxT('*'), encoding, &nFonts);
 
         if ( !fonts )
         {
-            wxFAIL_MSG(wxT("No fonts at all on this system?"));
+            // it's ok if there are no fonts in given encoding - but it's not
+            // ok if there are no fonts at all
+            wxASSERT_MSG(encoding != wxFONTENCODING_SYSTEM,
+                         wxT("No fonts at all on this system?"));
 
             return FALSE;
         }

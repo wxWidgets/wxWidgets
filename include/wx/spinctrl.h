@@ -34,6 +34,7 @@ public:
     virtual int GetMax() const { return m_max; }
 
     // operations
+    virtual void SetValue(const wxString& value) = 0;
     virtual void SetValue(int val) = 0;
     virtual void SetRange(int minVal, int maxVal) = 0;
 
@@ -57,7 +58,7 @@ protected:
 #elif defined(__WXGTK__)
     #include "wx/gtk/spinctrl.h"
 #else // Win16 || !Win
-    #include "wx/generic/spinctrl.h"
+    #include "wx/generic/spinctlg.h"
 #endif // platform
 
 #endif // _WX_SPINCTRL_H_

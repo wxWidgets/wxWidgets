@@ -5,7 +5,7 @@
 // Modified by:
 // Created:     30.09.99
 // RCS-ID:      $Id$
-// Copyright:   (c) Vadim Zeitlin
+// Copyright:   (c) 1999 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -24,6 +24,7 @@
     #include <wx/log.h>
 #endif
 
+#include <wx/choicdlg.h>
 #include <wx/fontdlg.h>
 #include <wx/fontenum.h>
 
@@ -81,39 +82,27 @@ public:
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
     void OnSelectFont(wxCommandEvent& event);
-    void OnCreateFont(wxCommandEvent& event);
+    void OnEnumerateFamiliesForEncoding(wxCommandEvent& event);
     void OnEnumerateFamilies(wxCommandEvent& WXUNUSED(event))
         { DoEnumerateFamilies(FALSE); }
     void OnEnumerateFixedFamilies(wxCommandEvent& WXUNUSED(event))
         { DoEnumerateFamilies(TRUE); }
     void OnEnumerateEncodings(wxCommandEvent& event);
 
-protected:
-    void DoEnumerateFamilies(bool fixedWidthOnly);
+    void OnSize(wxSizeEvent& event);
 
-    MyCanvas *m_canvas;
+protected:
+    void DoEnumerateFamilies(bool fixedWidthOnly,
+                             wxFontEncoding encoding = wxFONTENCODING_SYSTEM);
+
+    void Resize(const wxSize& size, const wxFont& font = wxNullFont);
+
+    wxTextCtrl *m_textctrl;
+    MyCanvas   *m_canvas;
 
 private:
     // any class wishing to process wxWindows events must use this macro
     DECLARE_EVENT_TABLE()
-};
-
-// A custom font dialog which allows to directly edit wxFont proprieties
-class MyFontDialog : public wxDialog
-{
-public:
-    MyFontDialog(MyFrame *frame);
-
-    // event handlers
-    void OnApply(wxCommandEvent& WXUNUSED(event)) { DoApply(); }
-
-protected:
-    void DoApply();
-
-    MyCanvas *m_canvas;
-
-private:
-    //DECLARE_EVENT_TABLE() TODO
 };
 
 // ----------------------------------------------------------------------------
@@ -127,7 +116,7 @@ enum
     Font_Quit = 1,
     Font_About,
     Font_Choose = 100,
-    Font_Create,
+    Font_EnumFamiliesForEncoding,
     Font_EnumFamilies,
     Font_EnumFixedFamilies,
     Font_EnumEncodings,
@@ -145,10 +134,12 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Font_Quit,  MyFrame::OnQuit)
     EVT_MENU(Font_About, MyFrame::OnAbout)
     EVT_MENU(Font_Choose, MyFrame::OnSelectFont)
-    EVT_MENU(Font_Create, MyFrame::OnCreateFont)
+    EVT_MENU(Font_EnumFamiliesForEncoding, MyFrame::OnEnumerateFamiliesForEncoding)
     EVT_MENU(Font_EnumFamilies, MyFrame::OnEnumerateFamilies)
     EVT_MENU(Font_EnumFixedFamilies, MyFrame::OnEnumerateFixedFamilies)
     EVT_MENU(Font_EnumEncodings, MyFrame::OnEnumerateEncodings)
+
+    EVT_SIZE(MyFrame::OnSize)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWindows to create
@@ -201,14 +192,15 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     wxMenu *menuFont = new wxMenu;
     menuFont->Append(Font_Choose, "&Select font...\tCtrl-S",
                      "Select a standard font");
-    menuFont->Append(Font_Create, "&Create font...\tCtrl-C",
-                     "Create a custom font");
     menuFont->AppendSeparator();
     menuFont->Append(Font_EnumFamilies, "Enumerate font &families\tCtrl-F");
     menuFont->Append(Font_EnumFixedFamilies,
                      "Enumerate f&ixed font families\tCtrl-I");
     menuFont->Append(Font_EnumEncodings,
                      "Enumerate &encodings\tCtrl-E");
+    menuFont->Append(Font_EnumFamiliesForEncoding,
+                     "Find font for en&coding...\tCtrl-C",
+                     "Find font families for given encoding");
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar;
@@ -217,6 +209,12 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
+
+    m_textctrl = new wxTextCtrl(this, -1,
+                                "Paste text here to see how it looks\n"
+                                "like in the given font",
+                                wxDefaultPosition, wxDefaultSize,
+                                wxTE_MULTILINE);
 
     m_canvas = new MyCanvas(this);
 
@@ -260,12 +258,14 @@ void MyFrame::OnEnumerateEncodings(wxCommandEvent& WXUNUSED(event))
                  fontEnumerator.GetText().c_str());
 }
 
-void MyFrame::DoEnumerateFamilies(bool fixedWidthOnly)
+void MyFrame::DoEnumerateFamilies(bool fixedWidthOnly, wxFontEncoding encoding)
 {
     class MyFontEnumerator : public wxFontEnumerator
     {
     public:
         MyFontEnumerator() { m_n = 0; }
+
+        bool GotAny() const { return m_n; }
 
         const wxString& GetText() const { return m_text; }
 
@@ -285,18 +285,56 @@ void MyFrame::DoEnumerateFamilies(bool fixedWidthOnly)
         wxString m_text;
     } fontEnumerator;
 
-    fontEnumerator.EnumerateFamilies(fixedWidthOnly);
+    fontEnumerator.EnumerateFamilies(encoding, fixedWidthOnly);
 
-    wxLogMessage("Enumerating %s font families:\n%s",
-                 fixedWidthOnly ? "fixed width" : "all",
-                 fontEnumerator.GetText().c_str());
+    if ( fontEnumerator.GotAny() )
+    {
+        wxLogMessage("Enumerating %s font families:\n%s",
+                     fixedWidthOnly ? "fixed width" : "all",
+                     fontEnumerator.GetText().c_str());
+    }
+    else
+    {
+        wxLogWarning("No such fonts found.");
+    }
 }
 
-void MyFrame::OnCreateFont(wxCommandEvent& WXUNUSED(event))
+void MyFrame::OnEnumerateFamiliesForEncoding(wxCommandEvent& WXUNUSED(event))
 {
-    MyFontDialog dialog(this);
+    static wxFontEncoding encodings[] =
+    {
+        wxFONTENCODING_ISO8859_1,
+        wxFONTENCODING_ISO8859_2,
+        wxFONTENCODING_ISO8859_5,
+        wxFONTENCODING_ISO8859_7,
+        wxFONTENCODING_ISO8859_15,
+        wxFONTENCODING_KOI8,
+        wxFONTENCODING_CP1250,
+        wxFONTENCODING_CP1251,
+        wxFONTENCODING_CP1252,
+    };
 
-    (void)dialog.ShowModal();
+    static const char *encodingNames[] =
+    {
+        "West European (Latin 1)",
+        "Central European (Latin 2)",
+        "Cyrillic (Latin 5)",
+        "Greek (Latin 7)",
+        "West European new (Latin 0)",
+        "KOI8-R",
+        "Windows Latin 2",
+        "Windows Cyrillic",
+        "Windows Latin 1",
+    };
+
+    int n = wxGetSingleChoiceIndex("Choose an encoding", "Font demo",
+                                   WXSIZEOF(encodingNames), encodingNames,
+                                   this);
+
+    if ( n != -1 )
+    {
+        DoEnumerateFamilies(FALSE, encodings[n]);
+    }
 }
 
 void MyFrame::OnSelectFont(wxCommandEvent& WXUNUSED(event))
@@ -309,9 +347,17 @@ void MyFrame::OnSelectFont(wxCommandEvent& WXUNUSED(event))
     if ( dialog.ShowModal() == wxID_OK )
     {
         wxFontData retData = dialog.GetFontData();
-        m_canvas->SetTextFont(retData.GetChosenFont());
-        m_canvas->SetColour(retData.GetColour());
+        wxFont font = retData.GetChosenFont();
+        wxColour colour = retData.GetColour();
+
+        Resize(GetSize(), font);
+
+        m_canvas->SetTextFont(font);
+        m_canvas->SetColour(colour);
         m_canvas->Refresh();
+
+        m_textctrl->SetFont(font);
+        m_textctrl->SetForegroundColour(colour);
     }
 }
 
@@ -323,10 +369,37 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox("wxWindows font demo.", "About Font",
+    wxMessageBox("wxWindows font demo\n"
+                 "(c) 1999 Vadim Zeitlin",
+                 "About Font",
                  wxOK | wxICON_INFORMATION, this);
 }
 
+void MyFrame::OnSize(wxSizeEvent& event)
+{
+    wxSize size = event.GetSize();
+
+    Resize(size);
+}
+
+void MyFrame::Resize(const wxSize& size, const wxFont& font)
+{
+    wxCoord h;
+    if ( font.Ok() )
+    {
+        wxClientDC dc(this);
+        dc.SetFont(font);
+
+        h = 4*dc.GetCharHeight() + 4;
+    }
+    else
+    {
+        h = m_textctrl->GetSize().y;
+    }
+
+    m_textctrl->SetSize(0, 0, size.x, h);
+    m_canvas->SetSize(0, h, size.x, size.y - h);
+}
 
 // ----------------------------------------------------------------------------
 // MyCanvas
@@ -375,7 +448,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     // the origin for our table
     int x = 5,
-        y = 2*h + 5;
+        y = 2*h;
 
     // print all font symbols from 32 to 256 in 7 rows of 32 chars each
     for ( int i = 1; i < 8; i++ )
@@ -403,38 +476,5 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     {
         int xl = x + w*l - 2;
         dc.DrawLine(xl, y, xl, y + 7*h - 2);
-    }
-}
-
-// ----------------------------------------------------------------------------
-// MyFontDialog
-// ----------------------------------------------------------------------------
-
-MyFontDialog::MyFontDialog(MyFrame *frame)
-            : wxDialog(frame, -1, wxString("Edit font attributes"))
-{
-    m_canvas = frame->GetCanvas();
-
-    // create controls
-    wxSize sizeBtn = wxButton::GetDefaultSize();
-
-    // TODO
-
-    // position and size the dialog
-    SetClientSize(4*sizeBtn.x, 10*sizeBtn.y);
-    Centre();
-}
-
-void MyFontDialog::DoApply()
-{
-    wxFont font; //(size, family, style, weight, underlined, face, encoding);
-    if ( !font.Ok() )
-    {
-        wxLogError("Font creation failed.");
-    }
-    else
-    {
-        m_canvas->SetTextFont(font);
-        m_canvas->Refresh();
     }
 }

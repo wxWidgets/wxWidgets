@@ -25,9 +25,15 @@
 class WXDLLEXPORT wxFontEnumerator
 {
 public:
-    // start enumerating font families - will result in OnFontFamily() being
-    // called for each available font family (unless it returns FALSE)
-    virtual bool EnumerateFamilies(bool fixedWidthOnly = FALSE);
+    // start enumerating font families (either all of them or those which
+    // support the given encoding) - will result in OnFontFamily() being
+    // called for each available font family (until they are exhausted or
+    // OnFontFamily returns FALSE)
+    virtual bool EnumerateFamilies
+                 (
+                    wxFontEncoding encoding = wxFONTENCODING_SYSTEM, // all
+                    bool fixedWidthOnly = FALSE
+                 );
 
     // enumerate the different encodings either for given font family or for
     // all font families - will result in OnFontEncoding() being called for
@@ -46,6 +52,9 @@ public:
     virtual bool OnFontEncoding(const wxString& WXUNUSED(family),
                                 const wxString& WXUNUSED(encoding))
         { return FALSE; }
+
+    // virtual dtor for the base class
+    virtual ~wxFontEnumerator() { }
 };
 
 #endif // _WX_FONTENUM_H_

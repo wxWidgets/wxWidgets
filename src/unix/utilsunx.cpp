@@ -780,6 +780,34 @@ static wxNativeFont wxLoadQueryFont(int pointSize,
     }
 
     wxString xregistry, xencoding;
+    if ( !wxGetXFontEncoding(encoding, &xregistry, &xencoding) )
+    {
+        fontSpec.Printf(wxT("-*-*-*-*-*-*-*-*-*-*-*-*-%s-%s"),
+                        xregistry.c_str(), xencoding.c_str());
+        if ( !wxTestFontSpec(fontSpec) )
+        {
+            // this encoding isn't available - what to do?
+            xregistry =
+            xencoding = wxT("*");
+        }
+    }
+
+    // construct the X font spec from our data
+    fontSpec.Printf(wxT("-*-%s-%s-%s-normal-*-*-%d-*-*-*-*-%s-%s"),
+                    xfamily.c_str(), xweight.c_str(), xstyle.c_str(),
+                    pointSize, xregistry.c_str(), xencoding.c_str());
+
+    return wxLoadFont(fontSpec);
+}
+
+bool wxGetXFontEncoding(wxFontEncoding encoding,
+                        wxString *pregistry, wxString *pencoding)
+{
+    wxCHECK_MSG( pencoding && pregistry, FALSE, wxT("bad pointer") );
+
+    wxString& xencoding = *pencoding;
+    wxString& xregistry = *pregistry;
+
     if ( encoding == wxFONTENCODING_DEFAULT )
     {
         // use the apps default
@@ -830,6 +858,7 @@ static wxNativeFont wxLoadQueryFont(int pointSize,
         case wxFONTENCODING_CP1252:
             {
                 int cp = encoding - wxFONTENCODING_CP1250 + 1250;
+                wxString fontSpec;
                 fontSpec.Printf(wxT("-*-*-*-*-*-*-*-*-*-*-*-*-microsoft-cp%d"),
                                 cp);
                 if ( wxTestFontSpec(fontSpec) )
@@ -856,24 +885,7 @@ static wxNativeFont wxLoadQueryFont(int pointSize,
             xencoding = wxT("*");
     }
 
-    if ( test )
-    {
-        fontSpec.Printf(wxT("-*-*-*-*-*-*-*-*-*-*-*-*-%s-%s"),
-                        xregistry.c_str(), xencoding.c_str());
-        if ( !wxTestFontSpec(fontSpec) )
-        {
-            // this encoding isn't available - what to do?
-            xregistry =
-            xencoding = wxT("*");
-        }
-    }
-
-    // construct the X font spec from our data
-    fontSpec.Printf(wxT("-*-%s-%s-%s-normal-*-*-%d-*-*-*-*-%s-%s"),
-                    xfamily.c_str(), xweight.c_str(), xstyle.c_str(),
-                    pointSize, xregistry.c_str(), xencoding.c_str());
-
-    return wxLoadFont(fontSpec);
+    return !test;
 }
 
 wxNativeFont wxLoadQueryNearestFont(int pointSize,

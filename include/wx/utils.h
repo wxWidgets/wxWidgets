@@ -400,6 +400,13 @@ extern wxNativeFont wxLoadQueryNearestFont(int pointSize,
                                            const wxString &facename,
                                            wxFontEncoding encoding);
 
+// fills xencoding and xregistry with the X font spec parts for the given
+// encoding ('*' if encoding == wxFONTENCODING_SYSTEM) and returns TRUE if any
+// fonts with this encoding exist or FALSE if it's unknown (it does *not* mean
+// that they don't exist!)
+extern bool wxGetXFontEncoding(wxFontEncoding encoding,
+                               wxString *xencoding, wxString *xregistry);
+
 #endif // X || GTK
 
 #endif // wxUSE_GUI

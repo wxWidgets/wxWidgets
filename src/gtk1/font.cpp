@@ -166,9 +166,9 @@ wxFont::wxFont( GdkFont *WXUNUSED(font), char *xFontName )
 
     tn.GetNextToken();                           // foundry
 
-    M_FONTDATA->m_faceName = tn.GetNextToken();  // courier
+    M_FONTDATA->m_faceName = tn.GetNextToken();  // family
 
-    tmp = tn.GetNextToken().MakeUpper();
+    tmp = tn.GetNextToken().MakeUpper();         // weight
     if (tmp == wxT("BOLD")) M_FONTDATA->m_weight = wxBOLD;
     if (tmp == wxT("BLACK")) M_FONTDATA->m_weight = wxBOLD;
     if (tmp == wxT("EXTRABOLD")) M_FONTDATA->m_weight = wxBOLD;
@@ -178,12 +178,12 @@ wxFont::wxFont( GdkFont *WXUNUSED(font), char *xFontName )
     if (tmp == wxT("LIGHT")) M_FONTDATA->m_weight = wxLIGHT;
     if (tmp == wxT("THIN")) M_FONTDATA->m_weight = wxLIGHT;
     
-    tmp = tn.GetNextToken().MakeUpper();
+    tmp = tn.GetNextToken().MakeUpper();        // slant
     if (tmp == wxT("I")) M_FONTDATA->m_style = wxITALIC;
     if (tmp == wxT("O")) M_FONTDATA->m_style = wxITALIC;
 
     tn.GetNextToken();                           // set width
-    tn.GetNextToken();                           // ?
+    tn.GetNextToken();                           // add. style
     tn.GetNextToken();                           // pixel size
 
     tmp = tn.GetNextToken();                     // pointsize
@@ -193,13 +193,50 @@ wxFont::wxFont( GdkFont *WXUNUSED(font), char *xFontName )
     tn.GetNextToken();                           // x-res
     tn.GetNextToken();                           // y-res
 
-    tmp = tn.GetNextToken().MakeUpper();
-    if (tmp == wxT("M")) M_FONTDATA->m_family = wxMODERN;
-    else if (M_FONTDATA->m_faceName == wxT("TIMES")) M_FONTDATA->m_family = wxROMAN;
-    else if (M_FONTDATA->m_faceName == wxT("HELVETICA")) M_FONTDATA->m_family = wxSWISS;
-    else if (M_FONTDATA->m_faceName == wxT("LUCIDATYPEWRITER")) M_FONTDATA->m_family = wxTELETYPE;
-    else if (M_FONTDATA->m_faceName == wxT("LUCIDA")) M_FONTDATA->m_family = wxDECORATIVE;
-    else if (M_FONTDATA->m_faceName == wxT("UTOPIA")) M_FONTDATA->m_family = wxSCRIPT;
+    tmp = tn.GetNextToken().MakeUpper();         // spacing
+
+    if (tmp == wxT("M"))
+        M_FONTDATA->m_family = wxMODERN;
+    else if (M_FONTDATA->m_faceName == wxT("TIMES"))
+        M_FONTDATA->m_family = wxROMAN;
+    else if (M_FONTDATA->m_faceName == wxT("HELVETICA"))
+        M_FONTDATA->m_family = wxSWISS;
+    else if (M_FONTDATA->m_faceName == wxT("LUCIDATYPEWRITER"))
+        M_FONTDATA->m_family = wxTELETYPE;
+    else if (M_FONTDATA->m_faceName == wxT("LUCIDA"))
+        M_FONTDATA->m_family = wxDECORATIVE;
+    else if (M_FONTDATA->m_faceName == wxT("UTOPIA"))
+        M_FONTDATA->m_family = wxSCRIPT;
+
+    tn.GetNextToken();                           // avg width
+
+    // deal with font encoding
+    wxString registry = tn.GetNextToken().MakeUpper(),
+             encoding = tn.GetNextToken().MakeUpper();
+
+    if ( registry == _T("ISO8859") )
+    {
+        int cp;
+        if ( wxSscanf(encoding, "%d", &cp) == 1 )
+        {
+            M_FONTDATA->m_encoding =
+                (wxFontEncoding)(wxFONTENCODING_ISO8859_1 + cp - 1);
+        }
+    }
+    else if ( registry == _T("MICROSOFT") )
+    {
+        int cp;
+        if ( wxSscanf(encoding, "cp125%d", &cp) == 1 )
+        {
+            M_FONTDATA->m_encoding =
+                (wxFontEncoding)(wxFONTENCODING_CP1250 + cp);
+        }
+    }
+    else if ( registry == _T("KOI8") )
+    {
+        M_FONTDATA->m_encoding = wxFONTENCODING_KOI8;
+    }
+    //else: unknown encoding - may be give a warning here?
 }
 
 bool wxFont::Create( int pointSize,
