@@ -158,7 +158,7 @@ public:
                                        const wxString& WXUNUSED(name) )
         { return (wxToolBar*)NULL; }
     virtual wxToolBar *GetToolBar() const { return (wxToolBar*)NULL; }
-#endif
+#endif // wxUSE_TOOLBAR
 
     // no icon
     void SetIcon( const wxIcon &icon ) { m_icons = wxIconBundle( icon ); }
@@ -169,10 +169,15 @@ public:
     wxString GetTitle() const { return m_title; }
 
     // no maximize etc
-    virtual void Maximize( bool WXUNUSED(maximize) ) {}
+    virtual void Maximize( bool WXUNUSED(maximize) = true ) { }
+    virtual bool IsMaximized() const { return true; }
+    virtual void Iconize(bool WXUNUSED(iconize) = true) { }
+    virtual bool IsIconized() const { return false; }
+    virtual void SetIcon(const wxIcon& WXUNUSED(icon)) { }
+    virtual void SetIcons(const wxIconBundle& WXUNUSED(icons)) { }
     virtual void Restore() {}
 
-    virtual bool IsTopLevel() const { return FALSE; }
+    virtual bool IsTopLevel() const { return false; }
 
     void OnActivate( wxActivateEvent& event );
     void OnMenuHighlight( wxMenuEvent& event );
