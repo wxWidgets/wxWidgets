@@ -18,7 +18,9 @@
 #endif
 
 // don't define min() and max() as macros, they conflict with standard C++ ones
-#define NOMINMAX
+#ifndef NOMINMAX
+    #define NOMINMAX
+#endif // NOMINMAX
 
 #include <windows.h>
 
