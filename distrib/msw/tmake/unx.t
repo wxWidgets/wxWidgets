@@ -93,6 +93,20 @@
 
 include ../make.env
 
+############## override make.env for PIC ##########################
+
+# Clears all default suffixes
+.SUFFIXES:	.o .cpp .c .cxx
+
+.c.o :
+	$(CCC) -c $(CFLAGS) $(PICFLAGS) -o $@ $<
+
+.cpp.o :
+	$(CC) -c $(CPPFLAGS) $(PICFLAGS) -o $@ $<
+
+.cxx.o :
+	$(CC) -c $(CPPFLAGS) $(PICFLAGS) -o $@ $<
+
 ########################### Paths #################################
 
 srcdir = @srcdir@
@@ -282,7 +296,7 @@ REQUIRED_DIRS = ../../lib ../../src ../../src/common ../../src/gtk ../../src/mot
                 ../../src/generic ../../src/unix ../../src/motif/xmombo ../../src/html \
 		../../src/zlib ../../src/jpeg ../../src/png
 
-all:    $(REQUIRED_DIRS) $(OBJECTS) $(WXLIB)
+all:    $(REQUIRED_DIRS) $(OBJECTS) @WX_TARGET_LIBRARY@ @WX_CREATE_LINKS@
 
 $(REQUIRED_DIRS):	$(WXDIR)/include/wx/defs.h $(WXDIR)/include/wx/object.h $(WXDIR)/include/wx/setup.h
 	@if test ! -d ../../lib; then mkdir ../../lib; fi
@@ -298,13 +312,21 @@ $(REQUIRED_DIRS):	$(WXDIR)/include/wx/defs.h $(WXDIR)/include/wx/object.h $(WXDI
 	@if test ! -d ../../src/jpeg; then mkdir ../../src/jpeg; fi
 	@if test ! -d ../../src/zlib; then mkdir ../../src/zlib; fi
 
-$(WXLIB):  $(OBJECTS)
-	@if test ! ../../samples/dialog.cpp; \
-	    then cp -f -r $(WXDIR)/samples ../..;  \
-	fi
+@WX_LIBRARY_NAME_STATIC@:  $(OBJECTS)
 	$(AR) $(AROPTIONS) ../../lib/$@ $(OBJECTS)
 	$(RANLIB) ../../lib/$@
 
+@WX_LIBRARY_NAME_SHARED@:  $(OBJECTS)
+	$(SHARED_LD) ../../lib/$@ $(OBJECTS) $(EXTRALIBS)
+	
+CREATE_LINKS:  $(OBJECTS)
+	@if test -e ../../lib/@WX_LIBRARY_LINK1@; then rm -f ../../lib/@WX_LIBRARY_LINK1@; fi
+	@if test -e ../../lib/@WX_LIBRARY_LINK2@; then rm -f ../../lib/@WX_LIBRARY_LINK2@; fi
+	@if test -e ../../lib/@WX_LIBRARY_LINK3@; then rm -f ../../lib/@WX_LIBRARY_LINK3@; fi
+	$(LN_S) @WX_TARGET_LIBRARY@ ../../lib/@WX_LIBRARY_LINK1@
+	$(LN_S) @WX_TARGET_LIBRARY@ ../../lib/@WX_LIBRARY_LINK2@
+	$(LN_S) @WX_TARGET_LIBRARY@ ../../lib/@WX_LIBRARY_LINK3@
+	
 $(OBJECTS):	$(WXDIR)/include/wx/defs.h $(WXDIR)/include/wx/object.h $(WXDIR)/include/wx/setup.h
 
 parser.o:    parser.c lexer.c
@@ -328,7 +350,12 @@ lexer.c:	$(COMMDIR)/lexer.l
 	sed -e "s/unput/PROIO_unput/g"      > lexer.c
 	@$(RM) lex.yy.c
 
-install: $(WXLIB)
+samples: $(OBJECTS)
+	@if test ! -e ../../samples/dialog/dialog.cpp; \
+	    then cp -f -r $(WXDIR)/samples ../..;  \
+	fi
+
+install: @WX_TARGET_LIBRARY@
 	#$ ExpandList("WXINSTALLWX");
 
 clean:

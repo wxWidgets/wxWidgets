@@ -29,6 +29,7 @@ and its make.exe).
    to   c:\wxWin\include\wx\msw\setup.h
 -> Edit c:\wxWin\include\wx\msw\setup.h so that
    most features are enabled (i.e. defined to 1) with
+   #define wxUSE_ODBC          0
    #define wxUSE_SOCKETS       0
    #define wxUSE_HTML          1
    #define wxUSE_THREADS       1
@@ -37,8 +38,8 @@ and its make.exe).
    #define wxUSE_BUSYINFO      1
    #define wxUSE_DYNLIB_CLASS  1
    #define wxUSE_ZIPSTREAM     1
-   #define wxUSE_JPEGLIB       1
-   #define wxUSE_PNGLIB        1
+   #define wxUSE_LIBJPEG       1
+   #define wxUSE_LIBPNG        1
 
    and iostreams ares disabled with
    #define wxUSE_STD_IOSTREAM   0
@@ -51,7 +52,7 @@ II) Unix ports using plain makefiles.
 Building wxGTK or wxMotif completely without configure
 won't ever work, but there is now a new makefile system
 that works without libtool and automake, using only
-configure to create what is needed. So far, no shared
+configure to create what is needed. So far, only shared
 libraries can be build with this system.
 
 Set WXWIN environment variable to the base directory such
@@ -65,6 +66,17 @@ or type: ../configure --with-gtk
 -> type: cd src/gtk
 or type: cd src/motif
 -> type: make -f makefile.unx
+
+You will then find the shared library in in the lib path of
+the build directory. There is currently no install method,
+so you'll have to create a symlink to /usr/local/lib and run
+ldconfig or whatever is needed to make that library known
+to your system.
+
+In order to test the sample, go to mybuild/src/gtk again and
+type: make -f makefile.unx samples
+which will copy the entire samples directory to the build
+directory, such as mybuild/samples
 
 
 III) Windows using configure

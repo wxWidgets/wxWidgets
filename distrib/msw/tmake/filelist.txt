@@ -48,6 +48,7 @@ busyinfo.cpp	G
 caret.cpp	G	U
 choicdgg.cpp	G
 colrdlgg.cpp	G	G
+dcpsg.cpp	G	U
 dirdlgg.cpp	G	16
 fontdlgg.cpp	G	G
 gridg.cpp	G
