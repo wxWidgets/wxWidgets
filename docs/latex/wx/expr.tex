@@ -46,8 +46,8 @@ Construct a floating point expression.
 Construct a list expression. The list's nodes' data should
 themselves be {\bf wxExpr}s.
 
-The current version of this library no longer uses the {\bf wxList}
-internally, so this constructor turns the list into its internal
+wxExpr no longer uses the {\bf wxList} internally,
+so this constructor turns the list into its internal
 format (assuming a non-nested list) and then deletes the supplied
 list.
 
@@ -375,7 +375,6 @@ bool myErrorHandler(int err, chat *msg)
 
 wxExprDatabase database(myErrorHandler);
 \end{verbatim}
-
 
 \func{}{wxExprDatabase}{\param{wxExprType}{ type}, \param{const wxString\&}{attribute},
 \rtfsp\param{int}{ size = 500}, \param{proioErrorHandler}{ handler = 0}}

@@ -18,6 +18,8 @@ A wxPropertyValue has one of the following types:
 \item wxPropertyValueStringPtr
 \end{itemize}
 
+\latexignore{\rtfignore{\wxheading{Members}}}
+
 \membersection{wxPropertyValue::wxPropertyValue}
 
 \func{void}{wxPropertyValue}{\void}
@@ -35,9 +37,9 @@ Construction from a string value.
 \func{void}{wxPropertyValue}{\param{long}{ val}}
 
 Construction from an integer value. You may need to cast to (long) to
-avoid confusion with other constructors (such as the Bool constructor).
+avoid confusion with other constructors (such as the bool constructor).
 
-\func{void}{wxPropertyValue}{\param{Bool}{ val}}
+\func{void}{wxPropertyValue}{\param{bool}{ val}}
 
 Construction from a boolean value.
 
@@ -71,7 +73,7 @@ Construction from a string pointer.
 
 Construction from an integer pointer.
 
-\func{void}{wxPropertyValue}{\param{Bool *}{val}}
+\func{void}{wxPropertyValue}{\param{bool *}{val}}
 
 Construction from an boolean pointer.
 
@@ -97,13 +99,13 @@ Appends a property value to the list.
 
 \membersection{wxPropertyValue::BoolValue}
 
-\func{Bool}{BoolValue}{\void}
+\func{bool}{BoolValue}{\void}
 
 Returns the boolean value.
 
 \membersection{wxPropertyValue::BoolValuePtr}
 
-\func{Bool *}{BoolValuePtr}{\void}
+\func{bool *}{BoolValuePtr}{\void}
 
 Returns the pointer to the boolean value.
 
@@ -133,7 +135,7 @@ Gets the last value in the list.
 
 \membersection{wxPropertyValue::GetModified}
 
-\func{Bool}{GetModified}{\void}
+\func{bool}{GetModified}{\void}
 
 Returns TRUE if the value was modified since being created
 (or since SetModified was called).
@@ -194,7 +196,7 @@ Returns the pointer to the floating point value.
 
 \membersection{wxPropertyValue::SetModified}
 
-\func{void}{SetModified}{\param{Bool}{ flag}}
+\func{void}{SetModified}{\param{bool}{ flag}}
 
 Sets the `modified' flag.
 
@@ -224,7 +226,7 @@ Returns the value type.
 
 \func{void}{operator $=$}{\param{const long }{val}}
 
-\func{void}{operator $=$}{\param{const Bool }{val}}
+\func{void}{operator $=$}{\param{const bool }{val}}
 
 \func{void}{operator $=$}{\param{const float }{val}}
 
@@ -232,11 +234,9 @@ Returns the value type.
 
 \func{void}{operator $=$}{\param{const long *}{val}}
 
-\func{void}{operator $=$}{\param{const Bool *}{val}}
+\func{void}{operator $=$}{\param{const bool *}{val}}
 
 \func{void}{operator $=$}{\param{const float *}{val}}
 
 Assignment operators.
-
-
 

@@ -27,7 +27,7 @@ the expected result.
 
 \wxheading{Return value}
 
-TRUE, if the command has been sent successfully, else FALSE.
+TRUE if the command has been sent successfully, else FALSE.
 
 % ----------------------------------------------------------------------------
 
@@ -172,10 +172,10 @@ An initialized write-only stream.
 
 \func{wxInputStream *}{GetInputStream}{\param{const wxString\&}{ path}}
 
-Creates a new input stream on the the specified path. You can use all but seek
-functionnality of wxStream. Seek isn't available on all stream. For example,
-http or ftp streams doesn't deal with it. Other functions like Tell
-aren't available for the moment for this sort of stream.
+Creates a new input stream on the the specified path. You can use all but the seek
+functionality of wxStream. Seek isn't available on all streams. For example,
+http or ftp streams do not deal with it. Other functions like Tell
+are not available for this sort of stream, at present.
 You will be notified when the EOF is reached by an error.
 
 \wxheading{Return value}
@@ -183,10 +183,10 @@ You will be notified when the EOF is reached by an error.
 Returns NULL if an error occured (it could be a network failure or the fact
 that the file doesn't exist).
 
-Returns the initialized stream. You will have to delete it yourself once you
-don't use it anymore. The destructor close the DATA stream connection but
-will leave the COMMAND stream connection opened. It means that you still
-can send new commands without reconnecting.
+Returns the initialized stream. You will have to delete it yourself when you
+don't need it anymore. The destructor closes the DATA stream connection but
+will leave the COMMAND stream connection opened. It means that you can still
+send new commands without reconnecting.
 
 \wxheading{Example of a standalone connection (without wxURL)}
 

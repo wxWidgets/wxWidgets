@@ -1,8 +1,12 @@
 \section{\class{wxPropertyListView}}\label{wxpropertylistview}
 
-\overview{wxPropertyListView overview}{wxpropertylistviewoverview}
-
 The {\bf wxPropertyListView} class shows a wxPropertySheet as a Visual Basic-style property list.
+
+\wxheading{See also}
+
+\helpref{wxPropertyListView overview}{wxpropertylistviewoverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
 
 \membersection{wxPropertyListView::wxPropertyListView}
 
@@ -36,14 +40,14 @@ Associates the window on which the controls will be displayed, with the view (se
 
 \membersection{wxPropertyListView::BeginShowingProperty}\label{wxpropertylistviewbeginshowingproperty}
 
-\func{Bool}{BeginShowingProperty}{\param{wxProperty *}{property}}
+\func{bool}{BeginShowingProperty}{\param{wxProperty *}{property}}
 
 Finds the appropriate validator and loads the property into the controls, by calling
 wxPropertyValidator::OnPrepareControls and then wxPropertyListView::DisplayProperty.
 
 \membersection{wxPropertyListView::DisplayProperty}\label{wxpropertylistviewdisplayproperty}
 
-\func{Bool}{DisplayProperty}{\param{wxProperty *}{property}}
+\func{bool}{DisplayProperty}{\param{wxProperty *}{property}}
 
 Calls wxPropertyValidator::OnDisplayValue for the current property's validator. This function
 gets called by wxPropertyListView::BeginShowingProperty, which is in turn called
@@ -51,7 +55,7 @@ from ShowProperty, called by OnPropertySelect, called by the listbox callback wh
 
 \membersection{wxPropertyListView::EndShowingProperty}\label{wxpropertylistviewendshowingproperty}
 
-\func{Bool}{EndShowingProperty}{\param{wxProperty *}{property}}
+\func{bool}{EndShowingProperty}{\param{wxProperty *}{property}}
 
 Finds the appropriate validator and unloads the property from the controls, by calling
 wxPropertyListView::RetrieveProperty, wxPropertyValidator::OnClearControls and (if we're in
@@ -95,14 +99,13 @@ Sets the managed window (a frame or dialog) associated with the view.
 
 \membersection{wxPropertyListView::UpdatePropertyDisplayInList}\label{wxpropertylistviewupdatepropdisplay}
 
-\func{Bool}{UpdatePropertyDisplayInList}{\param{wxProperty *}{property}}
+\func{bool}{UpdatePropertyDisplayInList}{\param{wxProperty *}{property}}
 
 Updates the display for the given changed property.
 
 \membersection{wxPropertyListView::UpdatePropertyList}\label{wxpropertylistviewupdateproplist}
 
-\func{Bool}{UpdatePropertyList}{\param{Bool }{clearEditArea = TRUE}}
+\func{bool}{UpdatePropertyList}{\param{bool }{clearEditArea = TRUE}}
 
 Updates the whole property list display.
-
 

@@ -246,7 +246,7 @@ wxWindows' strategy for OnIdle processing is as follows. After pending user inte
 application have all been processed, wxWindows sends an OnIdle event to the application object. wxApp::OnIdle itself
 sends an OnIdle event to each application window, allowing windows to do idle processing such as updating
 their appearance. If either wxApp::OnIdle or a window OnIdle function requested more time, by
-caling \helpref{wxIdleEvent::ReqestMore}{wxidleeventrequestmore}, wxWindows will send another OnIdle
+caling \helpref{wxIdleEvent::RequestMore}{wxidleeventrequestmore}, wxWindows will send another OnIdle
 event to the application object. This will occur in a loop until either a user event is found to be
 pending, or OnIdle requests no more time. Then all pending user events are processed until the system
 goes idle again, when OnIdle is called, and so on.
@@ -476,7 +476,9 @@ can be overridden by the user to change the default icons.
 
 \wxheading{Parameters}
 
-\docparam{which}{One of the wxICON\_XXX defines and chooses which icon to return.}
+\docparam{which}{One of the wxICON\_XXX specifies which icon to return.}
+
+See \helpref{wxMessageBox}{wxmessagebox} for a list of icon identifiers.
 
 \membersection{wxApp::SetUseBestVisual}\label{wxappsetusebestvisual}
 
@@ -487,7 +489,7 @@ on systems that support several visual on the same display. This is typically th
 case under Solaris and IRIX, where the default visual is only 8-bit whereas certain
 appications are supposed to run in TrueColour mode.
 
-Note that this function has to be called in the constructor of the {\tt wxApp}
+Note that this function has to be called in the constructor of the {\tt wxApp} 
 instance and won't have any effect when called later on.
 
 This function currently only has effect under GTK.

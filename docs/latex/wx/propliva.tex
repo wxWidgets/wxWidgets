@@ -1,9 +1,13 @@
 \section{\class{wxPropertyListValidator}}\label{wxpropertylistvalidator}
 
-\overview{wxPropertyListValidator overview}{wxpropertylistvalidatoroverview}
-
 The {\bf wxPropertyListValidator} abstract class is the base class for
 deriving validators for property lists.
+
+\wxheading{See also}
+
+\helpref{wxPropertyListValidator overview}{wxpropertylistvalidatoroverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
 
 \membersection{wxPropertyListValidator::wxPropertyListValidator}
 
@@ -19,7 +23,7 @@ Destructor.
 
 \membersection{wxPropertyListValidator::OnCheckValue}
 
-\func{Bool}{OnCheckValue}{\param{wxProperty *}{property}, \param{wxPropertyListView *}{view},
+\func{bool}{OnCheckValue}{\param{wxProperty *}{property}, \param{wxPropertyListView *}{view},
  \param{wxWindow *}{parentWindow}}
  
 Called when the Tick (Confirm) button is pressed or focus is list. Return FALSE if the value
@@ -27,21 +31,21 @@ was invalid, which is a signal restores the old value. Return TRUE if the value 
 
 \membersection{wxPropertyListValidator::OnClearControls}
 
-\func{Bool}{OnClearControls}{\param{wxProperty *}{property}, \param{wxPropertyListView *}{view},
+\func{bool}{OnClearControls}{\param{wxProperty *}{property}, \param{wxPropertyListView *}{view},
  \param{wxWindow *}{parentWindow}}
  
 Allows the clearing (enabling, disabling) of property list controls, when the focus leaves the current property.
 
 \membersection{wxPropertyListValidator::OnClearDetailControls}
 
-\func{Bool}{OnClearDetailControls}{\param{wxProperty *}{property}, \param{wxPropertyListView *}{view},
+\func{bool}{OnClearDetailControls}{\param{wxProperty *}{property}, \param{wxPropertyListView *}{view},
  \param{wxWindow *}{parentWindow}}
  
 Called when the focus is lost, if the validator is in detailed editing mode.
 
 \membersection{wxPropertyListValidator::OnDisplayValue}
 
-\func{Bool}{OnDisplayValue}{\param{wxProperty *}{property}, \param{wxPropertyListView *}{view},
+\func{bool}{OnDisplayValue}{\param{wxProperty *}{property}, \param{wxPropertyListView *}{view},
  \param{wxWindow *}{parentWindow}}
 
 Should display the value in the appropriate controls. The default implementation gets the
@@ -49,7 +53,7 @@ textual value from the property and inserts it into the text edit control.
  
 \membersection{wxPropertyListValidator::OnDoubleClick}
 
-\func{Bool}{OnDoubleClick}{\param{wxProperty *}{property}, \param{wxPropertyListView *}{view},
+\func{bool}{OnDoubleClick}{\param{wxProperty *}{property}, \param{wxPropertyListView *}{view},
  \param{wxWindow *}{parentWindow}}
 
 Called when the property is double clicked. Extra functionality can be provided,
@@ -57,7 +61,7 @@ such as cycling through possible values.
 
 \membersection{wxPropertyListValidator::OnEdit}
 
-\func{Bool}{OnEdit}{\param{wxProperty *}{property}, \param{wxPropertyListView *}{view},
+\func{bool}{OnEdit}{\param{wxProperty *}{property}, \param{wxPropertyListView *}{view},
  \param{wxWindow *}{parentWindow}}
  
 Called when the Edit (detailed editing) button is pressed. The default implementation
@@ -66,7 +70,7 @@ this function to show the file selector.
 
 \membersection{wxPropertyListValidator::OnPrepareControls}
 
-\func{Bool}{OnPrepareControls}{\param{wxProperty *}{property}, \param{wxPropertyListView *}{view},
+\func{bool}{OnPrepareControls}{\param{wxProperty *}{property}, \param{wxPropertyListView *}{view},
  \param{wxWindow *}{parentWindow}}
 
 Called to allow the validator to setup the display, such enabling or disabling buttons, and
@@ -75,14 +79,14 @@ value options).
 
 \membersection{wxPropertyListValidator::OnPrepareDetailControls}
 
-\func{Bool}{OnPrepareDetailControls}{\param{wxProperty *}{property}, \param{wxPropertyListView *}{view},
+\func{bool}{OnPrepareDetailControls}{\param{wxProperty *}{property}, \param{wxPropertyListView *}{view},
  \param{wxWindow *}{parentWindow}}
  
 Called when the property is edited `in detail', i.e. when the Edit button is pressed.
 
 \membersection{wxPropertyListValidator::OnRetrieveValue}
 
-\func{Bool}{OnRetrieveValue}{\param{wxProperty *}{property}, \param{wxPropertyListView *}{view},
+\func{bool}{OnRetrieveValue}{\param{wxProperty *}{property}, \param{wxPropertyListView *}{view},
  \param{wxWindow *}{parentWindow}}
 
 Called when Tick (Confirm) is pressed or focus is lost or view wants to update
@@ -90,7 +94,7 @@ the property list. Should do the transfer from the property editing area to the 
 
 \membersection{wxPropertyListValidator::OnSelect}
 
-\func{Bool}{OnSelect}{\param{Bool}{ select}, \param{wxProperty *}{property}, \param{wxPropertyListView *}{view},
+\func{bool}{OnSelect}{\param{bool}{ select}, \param{wxProperty *}{property}, \param{wxPropertyListView *}{view},
  \param{wxWindow *}{parentWindow}}
 
 Called when the property is selected or deselected: typically displays the value
@@ -98,11 +102,9 @@ in the edit control (having chosen a suitable control to display: (non)editable 
 
 \membersection{wxPropertyListValidator::OnValueListSelect}
 
-\func{Bool}{OnValueListSelect}{\param{wxProperty *}{property}, \param{wxPropertyListView *}{view},
+\func{bool}{OnValueListSelect}{\param{wxProperty *}{property}, \param{wxPropertyListView *}{view},
  \param{wxWindow *}{parentWindow}}
 
 Called when the value listbox is selected. The default behaviour is to copy
 string to text control, and retrieve the value into the property.
-
-
 

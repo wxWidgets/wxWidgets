@@ -235,7 +235,7 @@ Returns a pointer to the menubar currently associated with the frame (if any).
 
 \membersection{wxFrame::GetStatusBar}\label{wxframegetstatusbar}
 
-\func{wxStatusBar*}{GetStatusBar}{\void}
+\constfunc{wxStatusBar*}{GetStatusBar}{\void}
 
 Returns a pointer to the status bar currently associated with the frame (if any).
 
@@ -245,14 +245,13 @@ Returns a pointer to the status bar currently associated with the frame (if any)
 
 \membersection{wxFrame::GetTitle}\label{wxframegettitle}
 
-\func{wxString\&}{GetTitle}{\void}
+\constfunc{wxString}{GetTitle}{\void}
 
-Gets a temporary pointer to the frame title. See
-\helpref{wxFrame::SetTitle}{wxframesettitle}.
+Gets a string containing the frame title. See \helpref{wxFrame::SetTitle}{wxframesettitle}.
 
 \membersection{wxFrame::GetToolBar}\label{wxframegettoolbar}
 
-\func{wxToolBar*}{GetToolBar}{\void}
+\constfunc{wxToolBar*}{GetToolBar}{\void}
 
 Returns a pointer to the toolbar currently associated with the frame (if any).
 
@@ -263,7 +262,7 @@ Returns a pointer to the toolbar currently associated with the frame (if any).
 
 \membersection{wxFrame::Iconize}\label{wxframeiconize}
 
-\func{void}{Iconize}{\param{const bool}{ iconize}}
+\func{void}{Iconize}{\param{bool}{ iconize}}
 
 Iconizes or restores the frame. Windows only.
 
@@ -289,13 +288,13 @@ Returns TRUE if the frame is maximized.
 
 \membersection{wxFrame::Maximize}\label{wxframemaximize}
 
-\func{void}{Maximize}{\param{const bool }{maximize}}
+\func{void}{Maximize}{\param{bool }{maximize}}
 
 Maximizes or restores the frame.
 
 \wxheading{Parameters}
 
-\docparam{maximize}{If TRUE, maximizes the frame, otherwise it restores it}.
+\docparam{maximize}{If TRUE, maximizes the frame, otherwise it restores it.}
 
 \wxheading{Remarks}
 

@@ -73,8 +73,6 @@ also get deleted, so beware of holding onto invalid pointers.
 
 \subsection{wxDatabase overview}\label{wxdatabaseoverview}
 
-\overview{Database classes overview}{odbcoverview}
-
 Class: \helpref{wxDatabase}{wxdatabase}
 
 Every database object represents an ODBC connection. To do anything useful
@@ -82,9 +80,11 @@ with a database object you need to bind a wxRecordSet object to it. All you
 can do with wxDatabase is opening/closing connections and getting some info
 about it (users, passwords, and so on).
 
-\subsection{wxQueryCol overview}\label{wxquerycoloverview}
+\wxheading{See also}
 
-\overview{Database classes overview}{odbcoverview}
+\helpref{Database classes overview}{odbcoverview}
+
+\subsection{wxQueryCol overview}\label{wxquerycoloverview}
 
 Class: \helpref{wxQueryCol}{wxquerycol}
 
@@ -93,9 +93,11 @@ It contains the name and type of a column and a list of wxQueryFields where
 the real data is stored. The links to user-defined variables are stored
 here, as well.
 
-\subsection{wxQueryField overview}\label{wxqueryfieldoverview}
+\wxheading{See also}
 
-\overview{Database classes overview}{odbcoverview}
+\helpref{Database classes overview}{odbcoverview}
+
+\subsection{wxQueryField overview}\label{wxqueryfieldoverview}
 
 Class: \helpref{wxQueryField}{wxqueryfield}
 
@@ -108,9 +110,11 @@ or wxRecordSet::GoTo. If wxRecordSet is of the type wxOPEN\_TYPE\_SNAPSHOT,
 all data returned by an ODBC function will be loaded at once and the number
 of wxQueryField instances for each column will depend on the number of records.
 
-\subsection{wxRecordSet overview}\label{wxrecordsetoverview}
+\wxheading{See also}
 
-\overview{Database classes overview}{odbcoverview}
+\helpref{Database classes overview}{odbcoverview}
+
+\subsection{wxRecordSet overview}\label{wxrecordsetoverview}
 
 Class: \helpref{wxRecordSet}{wxrecordset}
 
@@ -118,9 +122,11 @@ Each wxRecordSet represents a database query. You can make multiple queries
 at a time by using multiple wxRecordSets with a wxDatabase or you can make
 your queries in sequential order using the same wxRecordSet.
 
-\subsection{ODBC SQL data types}\label{sqltypes}
+\wxheading{See also}
 
-\overview{Database classes overview}{odbcoverview}
+\helpref{Database classes overview}{odbcoverview}
+
+\subsection{ODBC SQL data types}\label{sqltypes}
 
 These are the data types supported in ODBC SQL. Note that there are other, extended level conformance
 types, not currently supported in wxWindows.
@@ -153,12 +159,18 @@ These data types correspond to the following ODBC identifiers:
 \twocolitem{SQL\_DOUBLE}{Same as SQL\_FLOAT.}
 \end{twocollist}
 
-\subsection{A selection of SQL commands}\label{sqlcommands}
+\wxheading{See also}
 
-\overview{Database classes overview}{odbcoverview}
+\helpref{Database classes overview}{odbcoverview}
+
+\subsection{A selection of SQL commands}\label{sqlcommands}
 
 The following is a very brief description of some common SQL commands, with
 examples.
+
+\wxheading{See also}
+
+\helpref{Database classes overview}{odbcoverview}
 
 \subsubsection{Create}
 
@@ -233,6 +245,4 @@ Example:
 
 This example sets a field in column `X' to the number 123, for the record
 where the column ASSET has the value `BD34'.
-
-
 

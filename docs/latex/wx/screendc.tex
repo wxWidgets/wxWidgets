@@ -49,6 +49,13 @@ to implement this feature.
 You might use this pair of functions when implementing a drag feature, for example
 as in the \helpref{wxSplitterWindow}{wxsplitterwindow} implementation.
 
+\wxheading{Remarks}
+
+This function is probably obsolete since the X implementations
+allow drawing directly on the screen now. However, the fact that this
+function allows the screen to be refreshed afterwards, may be useful to
+some applications.
+
 \membersection{wxScreenDC::EndDrawingOnTop}\label{wxscreendcenddrawingontop}
 
 \func{bool}{EndDrawingOnTop}{\void}

@@ -7,6 +7,8 @@ will pass OnClose messages to the view class for processing.
 Call Initialize to create the panel and associate the view; override OnCreatePanel
 if you wish to use a panel class other than the default wxPropertyFormPanel.
 
+\latexignore{\rtfignore{\wxheading{Members}}}
+
 \membersection{wxPropertyFormFrame::wxPropertyFormFrame}
 
 \func{void}{wxPropertyFormFrame}{\param{wxPropertyFormView *}{view}, \param{wxFrame *}{parent}, \param{char *}{title},
@@ -29,7 +31,7 @@ Returns the panel associated with the frame.
 
 \membersection{wxPropertyFormFrame::Initialize}
 
-\func{Bool}{Initialize}{\void}
+\func{bool}{Initialize}{\void}
 
 Must be called to create the panel and associate the view with the panel and frame.
 
@@ -38,5 +40,4 @@ Must be called to create the panel and associate the view with the panel and fra
 \func{wxPanel *}{OnCreatePanel}{\param{wxFrame *}{parent}, \param{wxPropertyFormView *}{view}}
 
 Creates a panel. Override this to create a panel type other than wxPropertyFormPanel.
-
 

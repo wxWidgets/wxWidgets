@@ -186,10 +186,10 @@ Returns width of the cell (m\_Width member).
 
 \func{virtual void}{Layout}{\param{int }{w}}
 
-This method performs 2 actions:
+This method performs two actions:
 
 \begin{enumerate}\itemsep=0pt
-\item adjusts cell's width according to the fact that maximal possible width is {\it w}.
+\item adjusts the cell's width according to the fact that maximal possible width is {\it w}.
 (this has sense when working with horizontal lines, tables etc.)
 \item prepares layout (=fill-in m\_PosX, m\_PosY (and sometimes m\_Height) members)
 based on actual width {\it w}
@@ -203,7 +203,7 @@ before calling Layout.
 
 \func{virtual void}{OnMouseClick}{\param{wxWindow* }{parent}, \param{int}{x}, \param{int }{y}, \param{const wxMouseEvent\& }{event}}
 
-This function is simple event handler. Each time user clicks mouse button over a cell
+This function is simple event handler. Each time the user clicks mouse button over a cell
 within \helpref{wxHtmlWindow}{wxhtmlwindow} this method of that cell is called. Default behavior is
 that it calls \helpref{wxHtmlWindow::LoadPage}{wxhtmlwindowloadpage}.
 
@@ -233,7 +233,7 @@ is \helpref{wxHtmlLinkInfo}{wxhtmllinkinfo}("", "") (no link))
 \func{void}{SetNext}{\param{wxHtmlCell }{*cell}}
 
 Sets the next cell in the list. This shouldn't be called by user - it is
-to be used only by \helpref{wxHtmlContainerCell::InsertCell}{wxhtmlcontainercellinsertcell}
+to be used only by \helpref{wxHtmlContainerCell::InsertCell}{wxhtmlcontainercellinsertcell}.
 
 \membersection{wxHtmlCell::SetParent}\label{wxhtmlcellsetparent}
 

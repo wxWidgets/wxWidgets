@@ -33,11 +33,10 @@ There are currently the following help controller classes defined:
 \item wxWinHelpController, for controlling Windows Help.
 \item wxExtHelpController, for controlling external browsers under Unix.
 The default browser is Netscape Navigator. The 'help' sample shows its use.
-\item wxHelpControllerHtml, using \helpref{wxHTML}{wxhtml} to display help. The API for this class
-is reasonably close to the wxWindows help controller API; see {\tt wx/helpwxht.h} for
+\item wxHelpControllerHtml, using \helpref{wxHTML}{wxhtml} to display help. See {\tt wx/helpwxht.h} for
 details of use.
 \item \helpref{wxHtmlHelpController}{wxhtmlhelpcontroller}, a more sophisticated help controller using \helpref{wxHTML}{wxhtml}, in
-a similar style to the Windows HTML Help viewer and using some of the same files.
+a similar style to the Microsoft HTML Help viewer and using some of the same files.
 Although it has an API compatible with other help controllers, it has more advanced features, so it is
 recommended that you use the specific API for this class instead.
 \end{itemize}
@@ -80,8 +79,8 @@ Destroys the help instance, closing down the viewer if it is running.
 
 \func{virtual void}{Initialize}{\param{const wxString\& }{file}, \param{int}{ server}}
 
-Initializes the help instance with a help filename, and optionally a server (socket)
-number if using wxHelp. Does not invoke the help viewer.
+Initializes the help instance with a help filename, and optionally a server socket
+number if using wxHelp (now obsolete). Does not invoke the help viewer.
 This must be called directly after the help instance object is created and before
 any attempts to communicate with the viewer.
 

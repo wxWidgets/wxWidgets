@@ -10,7 +10,7 @@ It provides more information than wxWindow's input stream
 (stream, filename, mime type, anchor).
 
 {\bf Note:} Any pointer returned by wxFSFile's member is valid
-only as long as wxFSFile object exits. For example call to GetStream()
+only as long as wxFSFile object exists. For example a call to GetStream()
 doesn't {\it create} the stream but only returns the pointer to it. In
 other words after 10 calls to GetStream() you'll obtain ten identical
 pointers.
@@ -26,7 +26,7 @@ pointers.
 \wxheading{See Also}
 
 \helpref{wxFileSystemHandler}{wxfilesystemhandler}, 
-\helpref{wxFileSystem}{wxfilesystem},
+\helpref{wxFileSystem}{wxfilesystem}, 
 \helpref{Overview}{fs}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
@@ -47,17 +47,17 @@ Constructor. You probably won't use it. See Notes for details.
 
 \docparam{anchor}{Anchor. See \helpref{GetAnchor()}{wxfsfilegetanchor} for details.}
 
-If you aren't sure what do these params mean see description of GetXXXX()
+If you are not sure of the meaning of these params, see the description of the GetXXXX()
 functions.
 
 \wxheading{Notes}
 
-It is never used by end user but you'll need it if
-you're writing own virtual FS. For example you may need something
-similar to wxMemoryInputStream but because wxMemoryInputStream
-doesn't free the memory when destroyed and thus passing memory stream
+It is seldom used by the application programmer but you'll need it if
+you are writing your own virtual FS. For example you may need something
+similar to wxMemoryInputStream, but because wxMemoryInputStream
+doesn't free the memory when destroyed and thus passing a memory stream
 pointer into wxFSFile constructor would lead to memory leaks, you
-can write your own class derived from wxFSFile :
+can write your own class derived from wxFSFile:
 
 \begin{verbatim}
 class wxMyFSFile : public wxFSFile
@@ -85,10 +85,10 @@ archive/main.zip#zip:index.htm#global /* 'global'           */
 archive/main.zip#zip:index.htm        /* NO anchor here!    */
 \end{verbatim}
 
-Usually anchor is presented only if mime type is 'text/html'.
-But it may have some meaning with other files
-(for example myanim.avi\#200 may refer to position in animation
-or reality.wrl\#MyView may refer to predefined view in VRML)
+Usually an anchor is presented only if the MIME type is 'text/html'.
+But it may have some meaning with other files;
+for example myanim.avi\#200 may refer to position in animation
+or reality.wrl\#MyView may refer to a predefined view in VRML.
 
 \membersection{wxFSFile::GetLocation}\label{wxfsfilegetlocation}
 
@@ -108,7 +108,7 @@ relative-file.htm
 
 \constfunc{const wxString\&}{GetMimeType}{\void}
 
-Returns MIME type of the content of this file. It is either
+Returns the MIME type of the content of this file. It is either
 extension-based (see wxMimeTypesManager) or extracted from
 HTTP protocol Content-Type header.
 
@@ -125,7 +125,7 @@ Returns time when this file was modified.
 Returns pointer to the stream. You can use the returned
 stream to directly access data. You may suppose
 that the stream provide Seek and GetSize functionality
-(even in case of HTTP protocol which doesn't provide
-this by default. wxHtml is using local cache to workaround
-this and to speed up connection)
+(even in the case of the HTTP protocol which doesn't provide
+this by default. wxHtml uses local cache to work around
+this and to speed up the connection).
 

@@ -191,9 +191,14 @@ See also \helpref{Modify}{wxdocumentmodify}.
 
 \func{virtual istream\&}{LoadObject}{\param{istream\& }{stream}}
 
+\func{virtual wxInputStream\&}{LoadObject}{\param{wxInputStream\& }{stream}}
+
 Override this function and call it from your own LoadObject before
 streaming your own data. LoadObject is called by the framework
 automatically when the document contents need to be loaded.
+
+Note that only one of these forms exists, depending on how wxWindows
+was configured.
 
 \membersection{wxDocument::Modify}\label{wxdocumentmodify}
 
@@ -297,9 +302,14 @@ Prompts the user for a file to save to, and then calls OnSaveDocument.
 
 \func{virtual ostream\&}{SaveObject}{\param{ostream\& }{stream}}
 
+\func{virtual wxOutputStream\&}{SaveObject}{\param{wxOutputStream\& }{stream}}
+
 Override this function and call it from your own SaveObject before
 streaming your own data. SaveObject is called by the framework
 automatically when the document contents need to be saved.
+
+Note that only one of these forms exists, depending on how wxWindows
+was configured.
 
 \membersection{wxDocument::SetCommandProcessor}
 

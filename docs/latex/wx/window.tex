@@ -1403,9 +1403,12 @@ Sent to the event handler when the window must be refreshed.
 
 \wxheading{Remarks}
 
+
+
 Use the EVT\_PAINT macro in an event table definition to intercept paint events.
 
-In a paint event handler, the application should always create a \helpref{wxPaintDC}{wxpaintdc} object.
+Note that In a paint event handler, the application must {\it always} create a \helpref{wxPaintDC}{wxpaintdc} object,
+even if you do not use it. Otherwise, under MS Windows, refreshing for this and other windows will go wrong.
 
 For example:
 

@@ -80,17 +80,21 @@ current mask while a message using string mask will be logged simply if the
 mask had been added before to the list of allowed ones.
 
 For example,
+
 \begin{verbatim}
 // wxTraceOleCalls is one of standard bit masks
 wxLogTrace(wxTraceRefCount | wxTraceOleCalls, "Active object ref count: %d", nRef);
 \end{verbatim}
 will do something only if the current trace mask contains both 
 {\tt wxTraceRefCount} and {\tt wxTraceOle}, but
+
 \begin{verbatim}
 // wxTRACE_OleCalls is one of standard string masks
 wxLogTrace(wxTRACE_OleCalls, "IFoo::Bar() called");
 \end{verbatim}
+
 will log the message if it was preceded by
+
 \begin{verbatim}
 wxLog::AddTraceMask(wxTRACE_OleCalls);
 \end{verbatim}

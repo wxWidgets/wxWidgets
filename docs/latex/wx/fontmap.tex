@@ -20,7 +20,7 @@ never TRUE, the config file is never created anyhow.
 
 In case everything else fails (i.e. there is no record in config file
 and "interactive" is FALSE or user denied to choose any replacement), 
-the class queries \helpref{wxEncodingConverter}{wxencodingconverter}
+the class queries \helpref{wxEncodingConverter}{wxencodingconverter} 
 for "equivalent" encodings (e.g. iso8859-2 and cp1250) and tries them.
 
 \wxheading{Global variables}
@@ -72,7 +72,6 @@ No base class
 \helpref{wxEncodingConverter}{wxencodingconverter}, 
 \helpref{Writing non-English applications}{nonenglishoverview}
 
-
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 \membersection{wxFontMapper::wxFontMapper}\label{wxfontmapperwxfontmapper}
@@ -81,13 +80,11 @@ No base class
 
 Default ctor.
 
-
 \membersection{wxFontMapper::\destruct{wxFontMapper}}\label{wxfontmapperdtor}
 
 \func{}{\destruct{wxFontMapper}}{\void}
 
 Virtual dtor for a base class.
-
 
 \membersection{wxFontMapper::GetAltForEncoding}\label{wxfontmappergetaltforencoding}
 
@@ -104,14 +101,12 @@ The first form is for wxWindows' internal use while the second one
 is better suitable for general use -- it returns wxFontEncoding which
 can consequently be passed to wxFont constructor.
 
-
 \membersection{wxFontMapper::IsEncodingAvailable}\label{wxfontmapperisencodingavailable}
 
 \func{bool}{IsEncodingAvailable}{\param{wxFontEncoding }{encoding}, \param{const wxString\& }{facename = wxEmptyString}}
 
 Check whether given encoding is available in given face or not.
 If no facename is given, find {\it any} font in this encoding.
-
 
 \membersection{wxFontMapper::CharsetToEncoding}\label{wxfontmappercharsettoencoding}
 
@@ -120,14 +115,12 @@ If no facename is given, find {\it any} font in this encoding.
 Returns the encoding for the given charset (in the form of RFC 2046) or
 wxFONTENCODING\_SYSTEM if couldn't decode it.
 
-
 \membersection{wxFontMapper::GetEncodingName}\label{wxfontmappergetencodingname}
 
 \func{static wxString}{GetEncodingName}{\param{wxFontEncoding }{encoding}}
 
-Return internal string identifier for the encoding (see also
+Return internal string identifier for the encoding (see also 
 \helpref{GetEncodingDescription()}{wxfontmappergetencodingdescription})
-
 
 \membersection{wxFontMapper::GetEncodingDescription}\label{wxfontmappergetencodingdescription}
 
@@ -135,20 +128,17 @@ Return internal string identifier for the encoding (see also
 
 Return user-readable string describing the given encoding.
 
-
 \membersection{wxFontMapper::SetDialogParent}\label{wxfontmappersetdialogparent}
 
 \func{void}{SetDialogParent}{\param{wxWindow* }{parent}}
 
 The parent window for modal dialogs.
 
-
 \membersection{wxFontMapper::SetDialogTitle}\label{wxfontmappersetdialogtitle}
 
 \func{void}{SetDialogTitle}{\param{const wxString\& }{title}}
 
 The title for the dialogs (note that default is quite reasonable).
-
 
 \membersection{wxFontMapper::SetConfig}\label{wxfontmappersetconfig}
 

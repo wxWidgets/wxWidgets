@@ -2,6 +2,10 @@
 
 wxGrid is a class for displaying and editing tabular information.
 
+{\bf Note:} there is a new grid implementation from wxWindows 2.1.14,
+with an API that is backwardly compatible with the one documented here.
+This documentation is awaiting updates for the new and improved API.
+
 \wxheading{Derived from}
 
 \helpref{wxPanel}{wxpanel}\\
@@ -338,7 +342,7 @@ Returns the row scroll position.
 
 \membersection{wxGrid::GetTextItem}\label{wxgridgettextitem}
 
-\constfunc{wxText *}{GetTextItem}{\void}
+\constfunc{wxTextCtrl *}{GetTextItem}{\void}
 
 Returns a pointer to the text item used for entering text into a cell.
 
@@ -382,7 +386,7 @@ and rows numerically.
 \func{void}{OnChangeSelectionLabel}{\void}
 
 Called when a cell is selected, to allow the application an
-opportunity to update the selection label (the label of the wxText item
+opportunity to update the selection label (the label of the wxTextCtrl
 used for entering cell text). By default, the cell column letter and row
 number are concatenated to form the selection label.
 

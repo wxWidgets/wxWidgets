@@ -59,7 +59,7 @@ instead.
 
 Returns the indentation. {\it ind} is one of the {\bf wxHTML\_INDENT\_*} constants.
 
-{\bf Note:} You must call \helpref{GetIndentUnits}{wxhtmlcontainercellgetindentunits}
+{\bf Note:} You must call \helpref{GetIndentUnits}{wxhtmlcontainercellgetindentunits} 
 with same {\it ind} parameter in order to correctly interpret the returned integer value.
 It is NOT always in pixels!
 
@@ -82,14 +82,14 @@ Inserts new cell into the container.
 
 Sets the container's alignment (both horizontal and vertical) according to
 the values stored in {\it tag}. (Tags {\tt ALIGN} parameter is extracted.) In fact
-it is only a front-end to \helpref{SetAlignHor}{wxhtmlcontainercellsetalignhor}
+it is only a front-end to \helpref{SetAlignHor}{wxhtmlcontainercellsetalignhor} 
 and \helpref{SetAlignVer}{wxhtmlcontainercellsetalignver}.
 
 \membersection{wxHtmlContainerCell::SetAlignHor}\label{wxhtmlcontainercellsetalignhor}
 
 \func{void}{SetAlignHor}{\param{int }{al}}
 
-Sets the container's {\it horizontal alignment}. During \helpref{Layout}{wxhtmlcelllayout}
+Sets the container's {\it horizontal alignment}. During \helpref{Layout}{wxhtmlcelllayout} 
 each line is aligned according to {\it al} value.
 
 \wxheading{Parameters}
@@ -127,19 +127,19 @@ Sets the container's {\it vertical alignment}. This is per-line alignment!
 
 \func{void}{SetBackgroundColour}{\param{const wxColour\& }{clr}}
 
-Sets the background color for this container.
+Sets the background colour for this container.
 
 \membersection{wxHtmlContainerCell::SetBorder}\label{wxhtmlcontainercellsetborder}
 
 \func{void}{SetBorder}{\param{const wxColour\& }{clr1}, \param{const wxColour\& }{clr2}}
 
-Sets the border (frame) colours. Border is rectangle around the container.
+Sets the border (frame) colours. A border is a rectangle around the container.
 
 \wxheading{Parameters}
 
-\docparam{clr1}{Color of top and left lines}
+\docparam{clr1}{Colour of top and left lines}
 
-\docparam{clr2}{Color of bottom and right lines}
+\docparam{clr2}{Colour of bottom and right lines}
 
 \membersection{wxHtmlContainerCell::SetIndent}\label{wxhtmlcontainercellsetindent}
 
@@ -194,8 +194,8 @@ much smaller area.
 
 \docparam{align}{If height of the container is lower than the minimum height, empty space must be inserted
 somewhere in order to ensure minimal height. This parameter is one of {\bf wxHTML\_ALIGN\_TOP,
-wxHTML\_ALIGN\_BOTTOM, wxHTML\_ALIGN\_CENTER} constants. It refers to the {\it contents}, not to the
-empty place!}
+wxHTML\_ALIGN\_BOTTOM, wxHTML\_ALIGN\_CENTER}. It refers to the {\it contents}, not to the
+empty place.}
 
 \membersection{wxHtmlContainerCell::SetWidthFloat}\label{wxhtmlcontainercellsetwidthfloat}
 

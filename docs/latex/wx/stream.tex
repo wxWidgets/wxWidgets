@@ -28,7 +28,6 @@ Constructor, creates a new stream buffer using {\it stream} as a parent stream
 and {\it mode} as the IO mode. {\it mode} can be: wxStreamBuffer::read,
 wxStreamBuffer::write, wxStreamBuffer::read\_write.
 
-
 One stream can have many stream buffers but only one is used internally to
 pass IO call (e.g. wxInputStream::Read() -> wxStreamBuffer::Read()), but you
 can call directly wxStreamBuffer::Read without any problems. Note that

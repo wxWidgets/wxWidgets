@@ -3,24 +3,20 @@
 % htmlwinparser.tex at 14/Mar/99 20:13:37
 %
 
-
 \section{\class{wxHtmlWinParser}}\label{wxhtmlwinparser}
 
 This class is derived from \helpref{wxHtmlParser}{wxhtmlparser} and
 its mail goal is to parse HTML input so that it can be displayed in
-\helpref{wxHtmlWindow}{wxhtmlwindow}. It uses special
+\helpref{wxHtmlWindow}{wxhtmlwindow}. It uses a special 
 \helpref{wxHtmlWinTagHandler}{wxhtmlwintaghandler}.
 
 \wxheading{Notes}
 
-\begin{enumerate}
-\item Product of parsing is wxHtmlCell (resp. wxHtmlContainer) object.
-\end{enumerate}
+The product of parsing is a wxHtmlCell (resp. wxHtmlContainer) object.
 
 \wxheading{Derived from}
 
 \helpref{wxHtmlParser}{wxhtmlparser}
-
 
 \wxheading{Include files}
 
@@ -58,21 +54,21 @@ and returns pointer to it (see \helpref{Overview}{cells}).
 
 \func{virtual wxFont*}{CreateCurrentFont}{\void}
 
-Creates font based on current setting (see
-\helpref{SetFontSize}{wxhtmlwinparsersetfontsize},
-\helpref{SetFontBold}{wxhtmlwinparsersetfontbold},
-\helpref{SetFontItalic}{wxhtmlwinparsersetfontitalic},
-\helpref{SetFontFixed}{wxhtmlwinparsersetfontfixed},
+Creates font based on current setting (see 
+\helpref{SetFontSize}{wxhtmlwinparsersetfontsize}, 
+\helpref{SetFontBold}{wxhtmlwinparsersetfontbold}, 
+\helpref{SetFontItalic}{wxhtmlwinparsersetfontitalic}, 
+\helpref{SetFontFixed}{wxhtmlwinparsersetfontfixed}, 
 \helpref{SetFontUnderlined}{wxhtmlwinparsersetfontunderlined})
 and returns pointer to it.
-(If the font was already created only a pointer is returned.)
+If the font was already created only a pointer is returned.
 
 
 \membersection{wxHtmlWinParser::GetActualColor}\label{wxhtmlwinparsergetactualcolor}
 
 \constfunc{const wxColour\&}{GetActualColor}{\void}
 
-Returns actual text color.
+Returns actual text colour.
 
 \membersection{wxHtmlWinParser::GetAlign}\label{wxhtmlwinparsergetalign}
 
@@ -86,7 +82,7 @@ Returns default horizontal alignment.
 
 Returns (average) char height in standard font. It's used as DC-independent metrics.
 
-{\bf Note:} This function doesn't return {\it actual} height. If you want to
+{\bf Note:} This function doesn't return the {\it actual} height. If you want to
 know the height of the current font, call {\tt GetDC -> GetCharHeight()}.
 
 \membersection{wxHtmlWinParser::GetCharWidth}\label{wxhtmlwinparsergetcharwidth}
@@ -95,7 +91,7 @@ know the height of the current font, call {\tt GetDC -> GetCharHeight()}.
 
 Returns average char width in standard font. It's used as DC-independent metrics.
 
-{\bf Note:} This function doesn't return {\it actual} width. If you want to
+{\bf Note:} This function doesn't return the {\it actual} width. If you want to
 know the height of the current font, call {\tt GetDC -> GetCharWidth()}
 
 \membersection{wxHtmlWinParser::GetContainer}\label{wxhtmlwinparsergetcontainer}
@@ -115,13 +111,12 @@ m_WParser -> GetContainer() -> InsertCell(new ...);
 
 Returns pointer to the DC used during parsing.
 
-
 \membersection{wxHtmlWinParser::GetEncodingConverter}\label{wxhtmlwinparsergetencodingconverter}
 
 \constfunc{wxEncodingConverter *}{GetEncodingConverter}{\void}
 
 Returns \helpref{wxEncodingConverter}{wxencodingconverter} class used
-to do conversion between \helpref{input encoding}{wxhtmlwinparsergetinputencoding}
+to do conversion between \helpref{input encoding}{wxhtmlwinparsergetinputencoding} 
 and \helpref{output encoding}{wxhtmlwinparsergetoutputencoding}.
 
 \membersection{wxHtmlWinParser::GetFontBold}\label{wxhtmlwinparsergetfontbold}
@@ -136,7 +131,6 @@ Returns TRUE if actual font is bold, FALSE otherwise.
 
 Returns actual font face name.
 
-
 \membersection{wxHtmlWinParser::GetFontFixed}\label{wxhtmlwinparsergetfontfixed}
 
 \constfunc{int}{GetFontFixed}{\void}
@@ -148,7 +142,6 @@ Returns TRUE if actual font is fixed face, FALSE otherwise.
 \constfunc{int}{GetFontItalic}{\void}
 
 Returns TRUE if actual font is italic, FALSE otherwise.
-
 
 \membersection{wxHtmlWinParser::GetFontSize}\label{wxhtmlwinparsergetfontsize}
 
@@ -168,23 +161,20 @@ Returns TRUE if actual font is underlined, FALSE otherwise.
 
 Returns input encoding.
 
-
 \membersection{wxHtmlWinParser::GetLink}\label{wxhtmlwinparsergetlink}
 
 \constfunc{const wxHtmlLinkInfo\&}{GetLink}{\void}
 
-Returns actual hypertext link. (This value has non-empty
+Returns actual hypertext link. (This value has a non-empty 
 \helpref{Href}{wxhtmllinkinfogethref} string
 if the parser is between {\tt <A>} and {\tt </A>} tags,
 wxEmptyString otherwise.)
-
 
 \membersection{wxHtmlWinParser::GetLinkColor}\label{wxhtmlwinparsergetlinkcolor}
 
 \constfunc{const wxColour\&}{GetLinkColor}{\void}
 
-Returns color of hypertext link text.
-
+Returns the colour of hypertext link text.
 
 \membersection{wxHtmlWinParser::GetOutputEncoding}\label{wxhtmlwinparsergetoutputencoding}
 
@@ -201,37 +191,33 @@ Returns associated window (wxHtmlWindow). This may be NULL! (You should always
 test if it is non-NULL. For example {\tt TITLE} handler sets window
 title only if some window is associated, otherwise it does nothing)
 
-
 \membersection{wxHtmlWinParser::OpenContainer}\label{wxhtmlwinparseropencontainer}
 
 \func{wxHtmlContainerCell*}{OpenContainer}{\void}
 
 Opens new container and returns pointer to it (see \helpref{Overview}{cells}).
 
-
 \membersection{wxHtmlWinParser::SetActualColor}\label{wxhtmlwinparsersetactualcolor}
 
 \func{void}{SetActualColor}{\param{const wxColour\& }{clr}}
 
-Sets actual text color. Note: this DOESN'T change the color!
+Sets actual text colour. Note: this DOESN'T change the colour!
 You must create \helpref{wxHtmlColourCell}{wxhtmlcolourcell} yourself.
 
 \membersection{wxHtmlWinParser::SetAlign}\label{wxhtmlwinparsersetalign}
 
 \func{void}{SetAlign}{\param{int }{a}}
 
-Sets default horizontal alignment (see
+Sets default horizontal alignment (see 
 \helpref{wxHtmlContainerCell::SetAlignHor}{wxhtmlcontainercellsetalignhor}.)
 Alignment of newly opened container is set to this value.
-
 
 \membersection{wxHtmlWinParser::SetContainer}\label{wxhtmlwinparsersetcontainer}
 
 \func{wxHtmlContainerCell*}{SetContainer}{\param{wxHtmlContainerCell *}{c}}
 
 Allows you to directly set opened container. This is not recommended - you should use OpenContainer
-whereever possible.
-
+wherever possible.
 
 \membersection{wxHtmlWinParser::SetDC}\label{wxhtmlwinparsersetdc}
 
@@ -242,7 +228,6 @@ Sets the DC. This must be called before \helpref{Parse}{wxhtmlparserparse}!
 DCs (e.g. printer) to adjust size of pixel metrics. (Many dimensions in 
 HTML are given in pixels -- e.g. image sizes. 300x300 image would be only one
 inch wide on typical printer. With pixel\_scale = 3.0 it would be 3 inches.)
-
 
 \membersection{wxHtmlWinParser::SetFontBold}\label{wxhtmlwinparsersetfontbold}
 
@@ -270,7 +255,6 @@ Sets fixed face flag of actualfont. {\it x} is either TRUE of FALSE.
 
 Sets italic flag of actualfont. {\it x} is either TRUE of FALSE.
 
-
 \membersection{wxHtmlWinParser::SetFontSize}\label{wxhtmlwinparsersetfontsize}
 
 \func{void}{SetFontSize}{\param{int }{s}}
@@ -289,7 +273,6 @@ Sets underlined flag of actualfont. {\it x} is either TRUE of FALSE.
 
 Sets fonts. This method is identical to \helpref{wxHtmlWindow::SetFonts}{wxhtmlwindowsetfonts}
 
-
 \membersection{wxHtmlWinParser::SetInputEncoding}\label{wxhtmlwinparsersetinputencoding}
 
 \func{void}{SetInputEncoding}{\param{wxFontEncoding }{enc}}
@@ -297,7 +280,6 @@ Sets fonts. This method is identical to \helpref{wxHtmlWindow::SetFonts}{wxhtmlw
 Sets input encoding. The parser uses this information to build conversion
 tables from document's encoding to some encoding supported by operating
 system.
-
 
 \membersection{wxHtmlWinParser::SetLink}\label{wxhtmlwinparsersetlink}
 
@@ -311,6 +293,5 @@ to wxEmptyString.
 
 \func{void}{SetLinkColor}{\param{const wxColour\& }{clr}}
 
-Sets color of hypertext link.
-
+Sets colour of hypertext link.
 

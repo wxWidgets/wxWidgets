@@ -1,10 +1,14 @@
 \section{\class{wxPropertyView}}\label{wxpropertyview}
 
-\overview{wxPropertyView overview}{wxpropertyviewoverview}
-
 The {\bf wxPropertyView} abstract class is the base class for views
 of property sheets, acting as intermediaries between properties and
 actual windows.
+
+\wxheading{See also}
+
+\helpref{wxPropertyView overview}{wxpropertyviewoverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
 
 \membersection{wxPropertyView::wxPropertyView}
 
@@ -68,7 +72,7 @@ Virtual function that will be called when the Cancel button on the physical wind
 
 \membersection{wxPropertyView::OnClose}\label{wxpropertyviewonclose}
 
-\func{Bool}{OnClose}{\void}
+\func{bool}{OnClose}{\void}
 
 Virtual function that will be called when the physical window is closed. The default implementation returns FALSE.
 
@@ -88,7 +92,7 @@ to respond immediately to property value changes.
 
 \membersection{wxPropertyView::OnUpdateView}\label{wxpropertyviewonupdateview}
 
-\func{Bool}{OnUpdateView}{\void}
+\func{bool}{OnUpdateView}{\void}
 
 Called by the viewed object to update the view. The default implementation just returns
 FALSE.

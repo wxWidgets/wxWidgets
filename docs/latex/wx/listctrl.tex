@@ -157,8 +157,7 @@ Deletes all the items in the list control.
 
 {\bf NB:} This function does {\it not} send the 
 {\tt wxEVT\_COMMAND\_LIST\_DELETE\_ITEM} event because deleting many items
-from the control would be too slow then (unlike 
-        \helpref{DeleteItem}{wxlistctrldeleteitem})
+from the control would be too slow then (unlike \helpref{DeleteItem}{wxlistctrldeleteitem}).
 
 \membersection{wxListCtrl::DeleteColumn}\label{wxlistctrldeletecolumn}
 
@@ -331,6 +330,7 @@ Returns the first item with given state following {\it item} or -1 if
 no such item found.
 
 This function may be used to find all selected items in the control like this:
+
 \begin{verbatim}
     long item = -1;
     for ( ;; )
@@ -413,7 +413,7 @@ wxLIST\_HITTEST\_ONITEMSTATEICON.}
 \end{twocollist}
 
 \pythonnote{A tuple of values is returned in the wxPython version of
-thsi method.  The first value is the item id and the second is the
+this method. The first value is the item id and the second is the
 flags value mentioned above.}
 
 \membersection{wxListCtrl::InsertColumn}\label{wxlistctrlinsertcolumn}

@@ -45,20 +45,20 @@ bitmask constants defined in wx/defs.h:
 
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
-\twocolitem{wxPD\_APP\_MODAL}{Make the progress dialog modal. If this flag is
+\twocolitem{{\bf wxPD\_APP\_MODAL}}{Make the progress dialog modal. If this flag is
 not given, it is only "locally" modal - that is the input to the parent
 window is disabled, but not to the other ones.}
-\twocolitem{wxPD\_AUTO\_HIDE}{By default, the progress dialog will disappear
+\twocolitem{{\bf wxPD\_AUTO\_HIDE}}{By default, the progress dialog will disappear
 from screen as soon as the maximum value of the progress meter has been
 reached. This flag prevents it from doing it - instead the dialog will wait
 until the user closes it.}
-\twocolitem{wxPD\_CAN\_ABORT}{This flag tells the dialog that it should have a
+\twocolitem{{\bf wxPD\_CAN\_ABORT}}{This flag tells the dialog that it should have a
 "Cancel" button which the user may press. If this happens, the next call to 
  \helpref{Update()}{wxprogressdialogupdate} will return FALSE.}
-\twocolitem{wxPD\_ELAPSED\_TIME}{This flag tells the dialog that it should show elapsed time (since creating the dialog).}
-\twocolitem{wxPD\_ESTIMATED\_TIME}{This flag tells the dialog that it should show estimated time.}
-\twocolitem{wxPD\_REMAINING\_TIME}{This flag tells the dialog that it should show remaining time.}
-\twocolitem{wxGA\_SMOOTH}{This flag tells the dialog that it should use
+\twocolitem{{\bf wxPD\_ELAPSED\_TIME}}{This flag tells the dialog that it should show elapsed time (since creating the dialog).}
+\twocolitem{{\bf wxPD\_ESTIMATED\_TIME}}{This flag tells the dialog that it should show estimated time.}
+\twocolitem{{\bf wxPD\_REMAINING\_TIME}}{This flag tells the dialog that it should show remaining time.}
+\twocolitem{{\bf wxPD\_SMOOTH}}{This flag tells the dialog that it should use
 smooth gauge (has effect only under 32bit Windows).}
 \end{twocollist}%
 }

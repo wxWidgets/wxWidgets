@@ -175,9 +175,9 @@ Insert("foo", 0);
 If {\it nIndex} is equal to {\it GetCount() + 1} this function behaves as 
 \helpref{Add}{wxarraystringadd}.
 
-{\bf Warning:} this function should not be used with sorted array because it
+{\bf Warning:} this function should not be used with sorted arrays because it
 could break the order of items and, for example, subsequent calls to 
-\helpref{Index()}{wxarraystringindex} would not work then!
+\helpref{Index()}{wxarraystringindex} would then not work!
 
 \membersection{wxArrayString::IsEmpty}\label{wxarraystringisempty}
 
@@ -235,12 +235,12 @@ See also: \helpref{Alloc}{wxarraystringalloc}, \helpref{Dynamic array memory man
 
 \func{void}{Sort}{\param{bool}{ reverseOrder = FALSE}}
 
-Sorts the array in alphabetical order or in reverse alphabetical order if
+Sorts the array in alphabetical order or in reverse alphabetical order if 
 {\it reverseOrder} is TRUE.
 
 {\bf Warning:} this function should not be used with sorted array because it
 could break the order of items and, for example, subsequent calls to 
-\helpref{Index()}{wxarraystringindex} would not work then!
+\helpref{Index()}{wxarraystringindex} would then not work!
 
 See also: \helpref{Sort}{wxarraystringsortcallback}
 
@@ -250,7 +250,7 @@ See also: \helpref{Sort}{wxarraystringsortcallback}
 
 Sorts the array using the specified {\it compareFunction} for item comparison.
 {\it CompareFunction} is defined as a function taking two {\it const
-wxString\&} parameters and returning {\it int} value less than, equal to or
+wxString\&} parameters and returning an {\it int} value less than, equal to or
 greater than 0 if the first string is less than, equal to or greater than the
 second one.
 
@@ -278,7 +278,7 @@ array.Sort(CompareStringLen);
 
 {\bf Warning:} this function should not be used with sorted array because it
 could break the order of items and, for example, subsequent calls to 
-\helpref{Index()}{wxarraystringindex} would not work then!
+\helpref{Index()}{wxarraystringindex} would then not work!
 
 See also: \helpref{Sort}{wxarraystringsort}
 

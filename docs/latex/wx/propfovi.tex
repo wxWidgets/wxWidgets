@@ -1,9 +1,13 @@
 \section{\class{wxPropertyFormView}}\label{wxpropertyformview}
 
-\overview{wxPropertyFormView overview}{wxpropertyformviewoverview}
-
 The {\bf wxPropertyFormView} class shows a wxPropertySheet as a view onto a panel or dialog
 box which has already been created.
+
+\wxheading{See also}
+
+\helpref{wxPropertyFormView overview}{wxpropertyformviewoverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
 
 \membersection{wxPropertyFormView::wxPropertyFormView}
 
@@ -28,7 +32,7 @@ association manually.
 
 \membersection{wxPropertyFormView::Check}\label{wxpropertyformviewcheck}
 
-\func{Bool}{Check}{\void}
+\func{bool}{Check}{\void}
 
 Checks all properties by calling the appropriate validators; returns FALSE if a validation failed.
 
@@ -88,14 +92,13 @@ Sets the managed window (a frame or dialog) associated with the view.
 
 \membersection{wxPropertyFormView::TransferToDialog}\label{wxpropertyformviewtransfertodialog}
 
-\func{Bool}{TransferToDialog}{\void}
+\func{bool}{TransferToDialog}{\void}
 
 Transfers property values to the controls in the dialog.
 
 \membersection{wxPropertyFormView::TransferToPropertySheet}\label{wxpropertyformviewtransfertopropertysheet}
 
-\func{Bool}{TransferToPropertySheet}{\void}
+\func{bool}{TransferToPropertySheet}{\void}
 
 Transfers property values from the controls in the dialog to the property sheet.
-
 
