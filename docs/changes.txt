@@ -163,6 +163,7 @@ wxMSW:
 - support for accelerator keys in the owner drawn menus (Derry Bryson)
 - wxCaret::SetSize() doesn't hide the caret any longer as it used to
 - wxCheckListBox::Check() doesn't send CHECKLISTBOX_TOGGLE event any more
+- fixed bugs in wxThread::Wait() and IsAlive()
 - fixed bug with wxTR_EDIT_LABELS not working with wxTR_MULTIPLE
 - fixes for compilation with OpenWatcom and DigitalMars compilers
 - fixed wxStaticText best size calculation (was wrong by '&' width)
