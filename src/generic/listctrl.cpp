@@ -41,6 +41,10 @@
             ... we have it ourselves ...
         else
             line->GetFoo();
+
+   => done
+
+   5. attributes support: we need OnGetItemAttr() as well!
  */
 
 // ============================================================================
@@ -54,7 +58,7 @@
 #ifdef __GNUG__
     #pragma implementation "listctrl.h"
     #pragma implementation "listctrlbase.h"
-#endif                                                  
+#endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
@@ -2414,6 +2418,12 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     if ( IsEmpty() )
     {
         // empty control. nothing to draw
+        return;
+    }
+
+    if ( m_dirty )
+    {
+        // delay the repainting until we calculate all the items positions
         return;
     }
 
