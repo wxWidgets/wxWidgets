@@ -3242,7 +3242,8 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
         nevent.SetDirection( !event.ShiftDown() );
         nevent.SetEventObject( GetParent()->GetParent() );
         nevent.SetCurrentFocus( m_parent );
-        if (GetParent()->GetParent()->GetEventHandler()->ProcessEvent( nevent )) return;
+        if (GetParent()->GetParent()->GetEventHandler()->ProcessEvent( nevent ))
+            return;
     }
 
     /* no item -> nothing to do */
@@ -3342,12 +3343,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
         case WXK_SPACE:
             if ( IsSingleSel() )
             {
-                wxListEvent le( wxEVT_COMMAND_LIST_ITEM_ACTIVATED,
-                                GetParent()->GetId() );
-                le.SetEventObject( GetParent() );
-                le.m_itemIndex = m_current;
-                GetLine(m_current)->GetItem( 0, le.m_item );
-                GetParent()->GetEventHandler()->ProcessEvent( le );
+                SendNotify( m_current, wxEVT_COMMAND_LIST_ITEM_ACTIVATED );
 
                 if ( IsHighlighted(m_current) )
                 {
@@ -3362,14 +3358,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
 
         case WXK_RETURN:
         case WXK_EXECUTE:
-            {
-                wxListEvent le( wxEVT_COMMAND_LIST_ITEM_ACTIVATED,
-                                GetParent()->GetId() );
-                le.SetEventObject( GetParent() );
-                le.m_itemIndex = m_current;
-                GetLine(m_current)->GetItem( 0, le.m_item );
-                GetParent()->GetEventHandler()->ProcessEvent( le );
-            }
+            SendNotify( m_current, wxEVT_COMMAND_LIST_ITEM_ACTIVATED );
             break;
 
         default:
