@@ -251,12 +251,19 @@ static gint gtk_notebook_key_press_callback( GtkWidget *widget, GdkEventKey *gdk
 
 static void wxInsertChildInNotebook( wxNotebook* parent, wxWindow* child )
 {
-    // Hack alert! We manually set the child window
-    // parent field so that GTK can query the 
-    // notebook's style and font. Without that, GetBestSize could return
-    // incorrect size, see bug #901694 for details
+    // Hack Alert! (Part I): This sets the notebook as the parent of the child
+    // widget, and takes care of some details such as updating the state and
+    // style of the child to reflect its new location.  We do this early
+    // because without it GetBestSize (which is used to set the initial size
+    // of controls if an explicit size is not given) will often report
+    // incorrect sizes since the widget's style context is not fully known.
+    // See bug #901694 for details
     // (http://sourceforge.net/tracker/?func=detail&aid=901694&group_id=9863&atid=109863)
-    child->m_widget->parent = parent->m_widget;
+    gtk_widget_set_parent(child->m_widget, parent->m_widget);
+
+    // NOTE: This should be considered a temporary workaround until we can
+    // work out the details and implement delaying the setting of the initial
+    // size of widgets until the size is really needed.
 }
 
 //-----------------------------------------------------------------------------
@@ -612,8 +619,11 @@ bool wxNotebook::InsertPage( size_t position,
     wxCHECK_MSG( position <= GetPageCount(), FALSE,
                  _T("invalid page index in wxNotebookPage::InsertPage()") );
 
-    // Hack alert part II! See above in InsertChildInNotebook
-    // callback why this has to be done.
+    // Hack Alert! (Part II): See above in wxInsertChildInNotebook callback
+    // why this has to be done.  NOTE: using gtk_widget_unparent here does not
+    // work as it seems to undo too much and will cause errors in the
+    // gtk_notebook_insert_page below, so instead just clear the parent by
+    // hand here.
     win->m_widget->parent = NULL;
 
     // don't receive switch page during addition
