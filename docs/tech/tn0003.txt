@@ -253,3 +253,18 @@ Note the use of \docparam to document parameters; and the fact
 that several overloaded forms of the same member function are
 documented within the same \membersection.
 
+
+Special forms:
+
+- for a const member function use \constfunc{} instead of \const
+
+- for a function without parameters use \func{...}{Function}{\void}
+
+- but do NOT use \void for functions without return value, just "void"
+
+- for a virtual/static member function use \func{virtual/static ...}
+
+- omit the return type for constructors: \func{}{MyClass}{...}
+
+- use \destruct macro for the destructors \func{}{\destruct{MyClass}}{\void}
+
