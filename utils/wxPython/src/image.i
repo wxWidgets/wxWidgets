@@ -110,6 +110,8 @@ public:
     int GetWidth();
     int GetHeight();
 
+    wxImage GetSubImage(const wxRect& rect);
+
     //unsigned char *GetData();
     //void SetData( unsigned char *data );
 
@@ -127,7 +129,10 @@ public:
                 PyErr_SetString(PyExc_TypeError, "Expected string object");
                 return /* NULL */ ;
             }
-            dataPtr = (unsigned char*)PyString_AsString(data);
+
+            size_t len = self->GetWidth() * self->GetHeight() * 3;
+            dataPtr = new unsigned char[len];
+            memcpy(dataPtr, PyString_AsString(data), len);
             self->SetData(dataPtr);
         }
     }

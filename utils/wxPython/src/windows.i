@@ -426,6 +426,10 @@ public:
                        int noUnitsX, int noUnitsY,
                        int xPos = 0, int yPos = 0);
     void ViewStart(int* OUTPUT, int* OUTPUT);
+
+    void CalcScrolledPosition( int x, int y, int *OUTPUT, int *OUTPUT);
+    void CalcUnscrolledPosition( int x, int y, int *OUTPUT, int *OUTPUT);
+
 };
 
 //----------------------------------------------------------------------

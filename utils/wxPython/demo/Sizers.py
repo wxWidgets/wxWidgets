@@ -88,6 +88,20 @@ def makeSimpleBox7(win):
     return box
 
 #----------------------------------------------------------------------
+
+def makeSimpleBox8(win):
+    box = wxBoxSizer(wxVERTICAL)
+    box.Add(wxButton(win, 1010, "one"), 0, wxEXPAND)
+    box.Add(0,0, 1)
+    box.Add(wxButton(win, 1010, "two"), 0, wxCENTER)
+    box.Add(0,0, 1)
+    box.Add(wxButton(win, 1010, "three"), 0, wxEXPAND)
+    box.Add(wxButton(win, 1010, "four"), 0, wxEXPAND)
+#    box.Add(wxButton(win, 1010, "five"), 1, wxEXPAND)
+
+    return box
+
+#----------------------------------------------------------------------
 #----------------------------------------------------------------------
 
 def makeSimpleBorder1(win):
@@ -299,6 +313,11 @@ theTests = [
     ("Spacer", makeSimpleBox7,
      "You can add empty space to be managed by a Sizer just as if it were a "
      "window or another Sizer."
+     ),
+
+    ("Centering in available space", makeSimpleBox8,
+     "This one shows an item that does not expand to fill it's space, but rather"
+     "stays centered within it."
      ),
 
 #    ("Percent Sizer", makeSimpleBox6,

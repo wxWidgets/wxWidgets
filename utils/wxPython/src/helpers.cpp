@@ -121,6 +121,10 @@ int  wxPyApp::MainLoop(void) {
 // wxcmodule is imported.  (Before there is a wxApp object.)
 void __wxPreStart()
 {
+#ifdef WXP_WITH_THREAD
+    PyEval_InitThreads();
+#endif
+
     // Bail out if there is already windows created.  This means that the
     // toolkit has already been initialized, as in embedding wxPython in
     // a C++ wxWindows app.
@@ -279,7 +283,7 @@ PyObject* wxPyConstructObject(void* ptr, char* className) {
 //---------------------------------------------------------------------------
 
 //static bool _wxPyInEvent = false;
-static unsigned int _wxPyNestCount = 0;
+//static unsigned int _wxPyNestCount = 0;
 
 HELPEREXPORT bool wxPyRestoreThread() {
 //  #ifdef WXP_WITH_THREAD
@@ -305,10 +309,10 @@ HELPEREXPORT bool wxPyRestoreThread() {
     // until I know better, this is how I am doing it instead:
 #ifdef WXP_WITH_THREAD
     PyEval_RestoreThread(wxPyEventThreadState);
-    _wxPyNestCount += 1;
-    if (_wxPyNestCount == 1)
-        return TRUE;
-    else
+//    _wxPyNestCount += 1;
+//    if (_wxPyNestCount == 1)
+//        return TRUE;
+//    else
 #endif
         return FALSE;
 }
@@ -316,11 +320,11 @@ HELPEREXPORT bool wxPyRestoreThread() {
 
 HELPEREXPORT void wxPySaveThread(bool doSave) {
 #ifdef WXP_WITH_THREAD
-    if (doSave) {
-        PyEval_SaveThread();
-        //_wxPyInEvent = false;
-    }
-    _wxPyNestCount -= 1;
+//    if (doSave) {
+        wxPyEventThreadState = PyEval_SaveThread();
+//        _wxPyInEvent = false;
+//    }
+//    _wxPyNestCount -= 1;
 #endif
 }
 

@@ -3,7 +3,7 @@
 <!ENTITY footprint SYSTEM "footprint.tif" NDATA tiff >
 <!ENTITY footprint SYSTEM "footprint.eps" NDATA eps >
 <!ENTITY shoes SYSTEM "shoes.tif" NDATA tiff >
-<!ENTITY super1 "&#90;"> 
+<!ENTITY super1 "&#90;">
 ]>
 
 <gcapaper><front><title>Using SGML to make footprints in the sand

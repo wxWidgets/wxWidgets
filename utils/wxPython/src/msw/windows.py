@@ -331,6 +331,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def SetAutoLayout(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_SetAutoLayout,(self,) + _args, _kwargs)
         return val
+    def GetAutoLayout(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_GetAutoLayout,(self,) + _args, _kwargs)
+        return val
     def SetBackgroundColour(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_SetBackgroundColour,(self,) + _args, _kwargs)
         return val
@@ -571,6 +574,12 @@ class wxScrolledWindowPtr(wxPanelPtr):
         return val
     def ViewStart(self, *_args, **_kwargs):
         val = apply(windowsc.wxScrolledWindow_ViewStart,(self,) + _args, _kwargs)
+        return val
+    def CalcScrolledPosition(self, *_args, **_kwargs):
+        val = apply(windowsc.wxScrolledWindow_CalcScrolledPosition,(self,) + _args, _kwargs)
+        return val
+    def CalcUnscrolledPosition(self, *_args, **_kwargs):
+        val = apply(windowsc.wxScrolledWindow_CalcUnscrolledPosition,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxScrolledWindow instance at %s>" % (self.this,)

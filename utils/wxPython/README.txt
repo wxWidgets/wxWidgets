@@ -45,6 +45,28 @@ Or you can send mail directly to the list using this address:
 
 ----------------------------------------------------------------------
 
+What's new in 2.1.6
+-------------------
+wxImage.SetData now makes a copy of the image data before giving it to
+wxImage.  I mistakenly thought that wxImage would copy the data
+itself.
+
+Fixed wxMSW's notebook so the pages get their size set as they are
+being added.  This should remove the need for our
+wxNotebook.ResizeChildren hack.
+
+wxPanels now support AutoLayout, and wxNotebooks and wxSplitterWindows
+no longer tell their children to Layout() themselves.  This will
+probably only effect you if you have a wxWindow with AutoLayout inside
+a notebook or splitter.  If so, either change it to a wxPanel or add
+an EVT_SIZE handler that calls Layout().
+
+Fixed deadlock problem that happened when using threads.
+
+
+
+
+
 What's new in 2.1.5
 -------------------
 This is a quick bug-fix release to take care of a few nasties that

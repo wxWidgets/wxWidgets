@@ -303,31 +303,6 @@ static PyObject *_wrap_wxInitAllImageHandlers(PyObject *self, PyObject *args, Py
     return _resultobj;
 }
 
-#define new_wxImageHandler() (new wxImageHandler())
-static PyObject *_wrap_new_wxImageHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxImageHandler * _result;
-    char *_kwnames[] = {  NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxImageHandler",_kwnames)) 
-        return NULL;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxImageHandler *)new_wxImageHandler();
-
-    wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxImageHandler_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
-    return _resultobj;
-}
-
 #define wxImageHandler_GetName(_swigobj)  (_swigobj->GetName())
 static PyObject *_wrap_wxImageHandler_GetName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1396,6 +1371,43 @@ static PyObject *_wrap_wxImage_GetHeight(PyObject *self, PyObject *args, PyObjec
     return _resultobj;
 }
 
+#define wxImage_GetSubImage(_swigobj,_swigarg0)  (_swigobj->GetSubImage(_swigarg0))
+static PyObject *_wrap_wxImage_GetSubImage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxImage * _result;
+    wxImage * _arg0;
+    wxRect * _arg1;
+    PyObject * _argo0 = 0;
+    wxRect  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","rect", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxImage_GetSubImage",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxImage_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxImage_GetSubImage. Expected _wxImage_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxRect_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxImage (wxImage_GetSubImage(_arg0,*_arg1));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxImage_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
 static PyObject * wxImage_GetData(wxImage *self) {
             unsigned char* data = self->GetData();
             int len = self->GetWidth() * self->GetHeight() * 3;
@@ -1436,7 +1448,10 @@ static void  wxImage_SetData(wxImage *self,PyObject * data) {
                 PyErr_SetString(PyExc_TypeError, "Expected string object");
                 return /* NULL */ ;
             }
-            dataPtr = (unsigned char*)PyString_AsString(data);
+
+            size_t len = self->GetWidth() * self->GetHeight() * 3;
+            dataPtr = new unsigned char[len];
+            memcpy(dataPtr, PyString_AsString(data), len);
             self->SetData(dataPtr);
         }
 static PyObject *_wrap_wxImage_SetData(PyObject *self, PyObject *args, PyObject *kwargs) {
@@ -1647,6 +1662,7 @@ static PyMethodDef imagecMethods[] = {
 	 { "wxImage_SetMaskColour", (PyCFunction) _wrap_wxImage_SetMaskColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_SetData", (PyCFunction) _wrap_wxImage_SetData, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_GetData", (PyCFunction) _wrap_wxImage_GetData, METH_VARARGS | METH_KEYWORDS },
+	 { "wxImage_GetSubImage", (PyCFunction) _wrap_wxImage_GetSubImage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_GetHeight", (PyCFunction) _wrap_wxImage_GetHeight, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_GetWidth", (PyCFunction) _wrap_wxImage_GetWidth, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_Ok", (PyCFunction) _wrap_wxImage_Ok, METH_VARARGS | METH_KEYWORDS },
@@ -1679,7 +1695,6 @@ static PyMethodDef imagecMethods[] = {
 	 { "wxImageHandler_GetType", (PyCFunction) _wrap_wxImageHandler_GetType, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImageHandler_GetExtension", (PyCFunction) _wrap_wxImageHandler_GetExtension, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImageHandler_GetName", (PyCFunction) _wrap_wxImageHandler_GetName, METH_VARARGS | METH_KEYWORDS },
-	 { "new_wxImageHandler", (PyCFunction) _wrap_new_wxImageHandler, METH_VARARGS | METH_KEYWORDS },
 	 { "wxInitAllImageHandlers", (PyCFunction) _wrap_wxInitAllImageHandlers, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_AddHandler", (PyCFunction) _wrap_wxImage_AddHandler, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImageFromBitmap", (PyCFunction) _wrap_wxImageFromBitmap, METH_VARARGS | METH_KEYWORDS },

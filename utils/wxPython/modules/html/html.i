@@ -135,30 +135,30 @@ TAGS_MODULE_END(PythonTag)
 //---------------------------------------------------------------------------
 
 enum {
-    HTML_ALIGN_LEFT,
-    HTML_ALIGN_CENTER,
-    HTML_ALIGN_RIGHT,
-    HTML_ALIGN_BOTTOM,
-    HTML_ALIGN_TOP,
+    wxHTML_ALIGN_LEFT,
+    wxHTML_ALIGN_CENTER,
+    wxHTML_ALIGN_RIGHT,
+    wxHTML_ALIGN_BOTTOM,
+    wxHTML_ALIGN_TOP,
 
-    HTML_CLR_FOREGROUND,
-    HTML_CLR_BACKGROUND,
+    wxHTML_CLR_FOREGROUND,
+    wxHTML_CLR_BACKGROUND,
 
-    HTML_UNITS_PIXELS,
-    HTML_UNITS_PERCENT,
+    wxHTML_UNITS_PIXELS,
+    wxHTML_UNITS_PERCENT,
 
-    HTML_INDENT_LEFT,
-    HTML_INDENT_RIGHT,
-    HTML_INDENT_TOP,
-    HTML_INDENT_BOTTOM,
+    wxHTML_INDENT_LEFT,
+    wxHTML_INDENT_RIGHT,
+    wxHTML_INDENT_TOP,
+    wxHTML_INDENT_BOTTOM,
 
-    HTML_INDENT_HORIZONTAL,
-    HTML_INDENT_VERTICAL,
-    HTML_INDENT_ALL,
+    wxHTML_INDENT_HORIZONTAL,
+    wxHTML_INDENT_VERTICAL,
+    wxHTML_INDENT_ALL,
 
-    HTML_COND_ISANCHOR,
-    HTML_COND_ISIMAGEMAP,
-    HTML_COND_USER,
+    wxHTML_COND_ISANCHOR,
+    wxHTML_COND_ISIMAGEMAP,
+    wxHTML_COND_USER,
 };
 
 
@@ -412,13 +412,13 @@ public:
     int GetAlignHor();
     void SetAlignVer(int al);
     int GetAlignVer();
-    void SetIndent(int i, int what, int units = HTML_UNITS_PIXELS);
+    void SetIndent(int i, int what, int units = wxHTML_UNITS_PIXELS);
     int GetIndent(int ind);
     int GetIndentUnits(int ind);
     void SetAlign(const wxHtmlTag& tag);
     void SetWidthFloat(int w, int units);
     %name(SetWidthFloatFromTag)void SetWidthFloat(const wxHtmlTag& tag);
-    void SetMinHeight(int h, int align = HTML_ALIGN_TOP);
+    void SetMinHeight(int h, int align = wxHTML_ALIGN_TOP);
     int GetMaxLineWidth();
     void SetBackgroundColour(const wxColour& clr);
     void SetBorder(const wxColour& clr1, const wxColour& clr2);

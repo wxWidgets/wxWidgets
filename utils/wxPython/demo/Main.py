@@ -243,9 +243,11 @@ class wxPythonDemo(wxFrame):
 
         else:
             if os.path.exists(itemText + '.py'):
+                wxBeginBusyCursor()
                 self.GetDemoFile(itemText + '.py')
                 module = __import__(itemText, globals())
                 self.SetOverview(itemText, module.overview)
+                wxEndBusyCursor()
 
                 # in case runTest is modal, make sure things look right...
                 self.nb.Refresh();
@@ -256,7 +258,7 @@ class wxPythonDemo(wxFrame):
                     self.nb.AddPage(self.window, 'Demo')
                     #self.nb.ResizeChildren()
                     self.nb.SetSelection(2)
-                    self.nb.ResizeChildren()
+                    #self.nb.ResizeChildren()
                     #if self.window.GetAutoLayout():
                     #    self.window.Layout()
 

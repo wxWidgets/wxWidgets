@@ -26,7 +26,8 @@ else:
 
         # Define a handler for start element events
         def StartElement(self, name, attrs ):
-            self.nodeStack.append(self.AppendItem(self.nodeStack[-1], name))
+            id = self.AppendItem(self.nodeStack[-1], name)
+            self.nodeStack.append(id)
 
         def EndElement(self,  name ):
             self.nodeStack = self.nodeStack[:-1]

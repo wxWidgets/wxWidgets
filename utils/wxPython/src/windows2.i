@@ -333,7 +333,7 @@ public:
     void Initialize(wxWindow* window);
     bool IsSplit();
 
-
+    bool ReplaceWindow(wxWindow * winOld, wxWindow * winNew);
     void SetBorderSize(int width);
     void SetSashPosition(int position, int redraw = TRUE);
     void SetSashSize(int width);

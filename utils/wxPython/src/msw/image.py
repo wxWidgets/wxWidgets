@@ -35,9 +35,8 @@ class wxImageHandlerPtr :
     def __repr__(self):
         return "<C wxImageHandler instance at %s>" % (self.this,)
 class wxImageHandler(wxImageHandlerPtr):
-    def __init__(self,*_args,**_kwargs):
-        self.this = apply(imagec.new_wxImageHandler,_args,_kwargs)
-        self.thisown = 1
+    def __init__(self,this):
+        self.this = this
 
 
 
@@ -182,6 +181,10 @@ class wxImagePtr :
         return val
     def GetHeight(self, *_args, **_kwargs):
         val = apply(imagec.wxImage_GetHeight,(self,) + _args, _kwargs)
+        return val
+    def GetSubImage(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_GetSubImage,(self,) + _args, _kwargs)
+        if val: val = wxImagePtr(val) ; val.thisown = 1
         return val
     def GetData(self, *_args, **_kwargs):
         val = apply(imagec.wxImage_GetData,(self,) + _args, _kwargs)

@@ -4738,6 +4738,51 @@ static PyObject *_wrap_wxSplitterWindow_IsSplit(PyObject *self, PyObject *args, 
     return _resultobj;
 }
 
+#define wxSplitterWindow_ReplaceWindow(_swigobj,_swigarg0,_swigarg1)  (_swigobj->ReplaceWindow(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxSplitterWindow_ReplaceWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxSplitterWindow * _arg0;
+    wxWindow * _arg1;
+    wxWindow * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    PyObject * _argo2 = 0;
+    char *_kwnames[] = { "self","winOld","winNew", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxSplitterWindow_ReplaceWindow",_kwnames,&_argo0,&_argo1,&_argo2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSplitterWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSplitterWindow_ReplaceWindow. Expected _wxSplitterWindow_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxSplitterWindow_ReplaceWindow. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_argo2) {
+        if (_argo2 == Py_None) { _arg2 = NULL; }
+        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxSplitterWindow_ReplaceWindow. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxSplitterWindow_ReplaceWindow(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxSplitterWindow_SetBorderSize(_swigobj,_swigarg0)  (_swigobj->SetBorderSize(_swigarg0))
 static PyObject *_wrap_wxSplitterWindow_SetBorderSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -5181,6 +5226,7 @@ static PyMethodDef windows2cMethods[] = {
 	 { "wxSplitterWindow_SetSashSize", (PyCFunction) _wrap_wxSplitterWindow_SetSashSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSplitterWindow_SetSashPosition", (PyCFunction) _wrap_wxSplitterWindow_SetSashPosition, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSplitterWindow_SetBorderSize", (PyCFunction) _wrap_wxSplitterWindow_SetBorderSize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSplitterWindow_ReplaceWindow", (PyCFunction) _wrap_wxSplitterWindow_ReplaceWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSplitterWindow_IsSplit", (PyCFunction) _wrap_wxSplitterWindow_IsSplit, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSplitterWindow_Initialize", (PyCFunction) _wrap_wxSplitterWindow_Initialize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSplitterWindow_GetWindow2", (PyCFunction) _wrap_wxSplitterWindow_GetWindow2, METH_VARARGS | METH_KEYWORDS },

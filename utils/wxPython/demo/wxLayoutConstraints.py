@@ -3,9 +3,9 @@ from wxPython.wx import *
 
 #---------------------------------------------------------------------------
 
-class TestLayoutConstraints(wxWindow):
+class TestLayoutConstraints(wxPanel):
     def __init__(self, parent):
-        wxWindow.__init__(self, parent, -1)
+        wxPanel.__init__(self, parent, -1)
         self.SetAutoLayout(true)
         EVT_BUTTON(self, 100, self.OnButton)
 

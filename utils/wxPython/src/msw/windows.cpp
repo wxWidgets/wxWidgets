@@ -3177,6 +3177,33 @@ static PyObject *_wrap_wxWindow_SetAutoLayout(PyObject *self, PyObject *args, Py
     return _resultobj;
 }
 
+#define wxWindow_GetAutoLayout(_swigobj)  (_swigobj->GetAutoLayout())
+static PyObject *_wrap_wxWindow_GetAutoLayout(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxWindow_GetAutoLayout",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_GetAutoLayout. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxWindow_GetAutoLayout(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxWindow_SetBackgroundColour(_swigobj,_swigarg0)  (_swigobj->SetBackgroundColour(_swigarg0))
 static PyObject *_wrap_wxWindow_SetBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -5351,6 +5378,104 @@ static PyObject *_wrap_wxScrolledWindow_ViewStart(PyObject *self, PyObject *args
 {
     PyObject *o;
     o = PyInt_FromLong((long) (*_arg2));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+    return _resultobj;
+}
+
+#define wxScrolledWindow_CalcScrolledPosition(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->CalcScrolledPosition(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
+static PyObject *_wrap_wxScrolledWindow_CalcScrolledPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxScrolledWindow * _arg0;
+    int  _arg1;
+    int  _arg2;
+    int * _arg3;
+    int  temp;
+    int * _arg4;
+    int  temp0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","x","y", NULL };
+
+    self = self;
+{
+  _arg3 = &temp;
+}
+{
+  _arg4 = &temp0;
+}
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxScrolledWindow_CalcScrolledPosition",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxScrolledWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxScrolledWindow_CalcScrolledPosition. Expected _wxScrolledWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxScrolledWindow_CalcScrolledPosition(_arg0,_arg1,_arg2,_arg3,_arg4);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg3));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg4));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+    return _resultobj;
+}
+
+#define wxScrolledWindow_CalcUnscrolledPosition(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->CalcUnscrolledPosition(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
+static PyObject *_wrap_wxScrolledWindow_CalcUnscrolledPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxScrolledWindow * _arg0;
+    int  _arg1;
+    int  _arg2;
+    int * _arg3;
+    int  temp;
+    int * _arg4;
+    int  temp0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","x","y", NULL };
+
+    self = self;
+{
+  _arg3 = &temp;
+}
+{
+  _arg4 = &temp0;
+}
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxScrolledWindow_CalcUnscrolledPosition",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxScrolledWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxScrolledWindow_CalcUnscrolledPosition. Expected _wxScrolledWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxScrolledWindow_CalcUnscrolledPosition(_arg0,_arg1,_arg2,_arg3,_arg4);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg3));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg4));
     _resultobj = t_output_helper(_resultobj, o);
 }
     return _resultobj;
@@ -7605,6 +7730,8 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxMenu_AppendMenu", (PyCFunction) _wrap_wxMenu_AppendMenu, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenu_Append", (PyCFunction) _wrap_wxMenu_Append, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxMenu", (PyCFunction) _wrap_new_wxMenu, METH_VARARGS | METH_KEYWORDS },
+	 { "wxScrolledWindow_CalcUnscrolledPosition", (PyCFunction) _wrap_wxScrolledWindow_CalcUnscrolledPosition, METH_VARARGS | METH_KEYWORDS },
+	 { "wxScrolledWindow_CalcScrolledPosition", (PyCFunction) _wrap_wxScrolledWindow_CalcScrolledPosition, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrolledWindow_ViewStart", (PyCFunction) _wrap_wxScrolledWindow_ViewStart, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrolledWindow_SetScrollbars", (PyCFunction) _wrap_wxScrolledWindow_SetScrollbars, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrolledWindow_Scroll", (PyCFunction) _wrap_wxScrolledWindow_Scroll, METH_VARARGS | METH_KEYWORDS },
@@ -7668,6 +7795,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxWindow_UnsetConstraints", (PyCFunction) _wrap_wxWindow_UnsetConstraints, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_SetConstraints", (PyCFunction) _wrap_wxWindow_SetConstraints, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_SetBackgroundColour", (PyCFunction) _wrap_wxWindow_SetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_GetAutoLayout", (PyCFunction) _wrap_wxWindow_GetAutoLayout, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_SetAutoLayout", (PyCFunction) _wrap_wxWindow_SetAutoLayout, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_SetAcceleratorTable", (PyCFunction) _wrap_wxWindow_SetAcceleratorTable, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_ScrollWindow", (PyCFunction) _wrap_wxWindow_ScrollWindow, METH_VARARGS | METH_KEYWORDS },

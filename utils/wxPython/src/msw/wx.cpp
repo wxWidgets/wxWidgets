@@ -2197,6 +2197,8 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxSP_NOBORDER", PyInt_FromLong((long) wxSP_NOBORDER));
 	 PyDict_SetItemString(d,"wxSP_3D", PyInt_FromLong((long) wxSP_3D));
 	 PyDict_SetItemString(d,"wxSP_BORDER", PyInt_FromLong((long) wxSP_BORDER));
+	 PyDict_SetItemString(d,"wxSP_LIVE_UPDATE", PyInt_FromLong((long) wxSP_LIVE_UPDATE));
+	 PyDict_SetItemString(d,"wxSP_PERMIT_UNSPLIT", PyInt_FromLong((long) wxSP_PERMIT_UNSPLIT));
 	 PyDict_SetItemString(d,"wxFLOOD_SURFACE", PyInt_FromLong((long) wxFLOOD_SURFACE));
 	 PyDict_SetItemString(d,"wxFLOOD_BORDER", PyInt_FromLong((long) wxFLOOD_BORDER));
 	 PyDict_SetItemString(d,"wxODDEVEN_RULE", PyInt_FromLong((long) wxODDEVEN_RULE));
