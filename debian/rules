@@ -78,9 +78,11 @@ objdirs=$(objdir_wxbase_shared) $(objdir_wxbase_static) $(objdir_wxbase_debug) \
 build_arch_stamps=build-wxbase-shared-stamp build-wxbase-static-stamp \
                   build-wxbase-debug-stamp build-gtk-shared-stamp \
                   build-gtk-static-stamp build-gtk-debug-stamp \
-                  build-gtk-univ-stamp \
                   build-contrib-shared-stamp build-contrib-static-stamp \
                   build-gtk-py-stamp build-i18n-stamp
+
+# disable gtk-univ build, we'll  replace it with x11-univ later.
+#		  build-gtk-univ-stamp
 
 build_indep_stamps=build-examples-stamp build-doc-stamp
 
@@ -95,9 +97,11 @@ build_stamps=$(build_stamps_native) $(build_cross_stamps)
 # Install targets:
 install_all_arch=install-wxbase-lib install-wxbase-dev install-wxbase-dbg \
                  install-gtk-lib install-gtk-dev install-gtk-dbg \
-                 install-gtk-univ \
                  install-gtk-contrib install-gtk-contrib-dev install-gtk-py \
                  install-headers install-i18n
+
+# disable gtk-univ build, we'll  replace it with x11-univ later.
+#                install-gtk-univ
 
 install_all_indep=install-examples install-doc
 
@@ -484,7 +488,6 @@ clean: debian/control
 	rm -f $(objdir_i18n)/*.mo
 
 	cd wxPython \
-		&& ./setup.py clean \
 		&& rm -rf licence \
 		&& rm -rf build \
 		&& rm -rf contrib/gizmos/contrib \
@@ -492,6 +495,10 @@ clean: debian/control
 		&& rm -rf contrib/stc/contrib \
 		&& rm -rf contrib/xrc/contrib \
 		&& rm -rf *.pyc
+
+# We do the equivalent of this above by removing build, unfortunately
+# its not enough by itself to get the tree properly clean again.
+#		&& ./setup.py clean
 
 	dh_clean
 	rm -f debian/$(package_wxbase_lib).*
@@ -613,9 +620,20 @@ install-gtk-py: build-gtk-py-stamp
 	dh_clean -k
 	dh_installdirs
 	cd wxPython \
-		&& ./setup.py install --prefix=`pwd`/../debian/$(package_gtk_py)/usr
+		&& ./setup.py install \
+			      --prefix=`pwd`/../debian/$(package_gtk_py)/usr \
+			      WX_CONFIG='$(wxconfig)'
 	find debian/$(package_gtk_py)/usr/lib/$(python_dir)/site-packages/wxPython \
 		-name '*.py?' -exec rm '{}' ';'
+
+	dh_installman debian/wxPython-tools.1
+	dh_link usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/img2py.1  \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/img2xpm.1 \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/img2png.1 \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/pycrust.1 \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/pyshell.1 \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/xrced.1   \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/helpviewer.1
 
 install-headers: DH_OPTIONS=-p$(package_headers)
 install-headers: install-gtk-lib
@@ -628,19 +646,13 @@ install-headers: install-gtk-lib
 # them.  Do that in a scratch dirs, and move the gtk ones last, so at least
 # they win in the result of any uncaught conflict.
 
-	cd $(objdir_gtk_univ) \
-		&& $(MAKE) install prefix=`pwd`/../$(objdir_univ_install)/usr
+#	cd $(objdir_gtk_univ) \
+#		&& $(MAKE) install prefix=`pwd`/../$(objdir_univ_install)/usr
 
-	dh_movefiles --sourcedir=$(objdir_univ_install)
+#	dh_movefiles --sourcedir=$(objdir_univ_install)
 	dh_movefiles --sourcedir=debian/$(package_gtk_lib)
 
-	dh_installmanpages \
-		ansi2knr.1 \
-		jpegtran.1 \
-		libpng.3   \
-		libpngpf.3 \
-		zlib.3     \
-		png.5
+	dh_installman debian/wx-config.1
 
 install-i18n: DH_OPTIONS=-p$(package_i18n)
 install-i18n: build-i18n-stamp install-gtk-lib
@@ -756,13 +768,13 @@ binary-common:
 # building the arch specific package files needed to create them.
 binary-indep: build_all install
 	$(MAKE) -f debian/rules \
-		DH_OPTIONS="-i -N$(package_wxbase_msw_dev) -N$(package_wxbase_msw_dbg) -N$(package_msw_dev) -N$(package_msw_dbg) -N$(package_headers_msw)" \
+		DH_OPTIONS="-i -N$(package_wxbase_msw_dev) -N$(package_wxbase_msw_dbg) -N$(package_msw_dev) -N$(package_msw_dbg) -N$(package_headers_msw) -N$(package_gtk_univ)" \
 		binary-common
 
 # Build just the architecture-dependent files here.
 binary-arch: build_arch install_arch
 	$(MAKE) -f debian/rules \
-		DH_OPTIONS="-a -N$(package_wxbase_msw_dev) -N$(package_wxbase_msw_dbg) -N$(package_msw_dev) -N$(package_msw_dbg) -N$(package_headers_msw)" \
+		DH_OPTIONS="-a -N$(package_wxbase_msw_dev) -N$(package_wxbase_msw_dbg) -N$(package_msw_dev) -N$(package_msw_dbg) -N$(package_headers_msw) -N$(package_gtk_univ)" \
 		binary-common
 
 # Build all packages target.

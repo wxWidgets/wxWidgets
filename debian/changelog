@@ -7,6 +7,11 @@ wxwindows2.5 (2.5.0) unstable; urgency=low
 wxwindows2.4 (2.4.0) unstable; urgency=low
 
   * The fingers crossed release.
+  * de.po typo fix.  Closes: #174084
+  * tr.po stable tree patch.  Closes: #174667
+  * Add a manpage for the wxPython scripts pointing to the pydoc docs.
+  * Disabled generation of gtk-univ, it is a rather insensible combination
+    now and should be replaced by x11-univ instead.
 
  -- Ron Lee <ron@debian.org>  Thu, 19 Dec 2002 00:50:48 -0800
 
