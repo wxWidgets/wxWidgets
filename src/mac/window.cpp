@@ -197,6 +197,17 @@ bool wxWindowMac::Create(wxWindowMac *parent, wxWindowID id,
 {
     wxCHECK_MSG( parent, FALSE, wxT("can't create wxWindowMac without parent") );
 
+#if wxUSE_STATBOX
+    // wxGTK doesn't allow to create controls with static box as the parent so
+    // this will result in a crash when the program is ported to wxGTK - warn
+    // about it
+    //
+    // the correct solution is to create the controls as siblings of the
+    // static box
+    wxASSERT_MSG( !wxDynamicCast(parent, wxStaticBox),
+                  _T("wxStaticBox can't be used as a window parent!") );
+#endif // wxUSE_STATBOX
+
     if ( !CreateBase(parent, id, pos, size, style, wxDefaultValidator, name) )
         return FALSE;
 
