@@ -144,7 +144,14 @@ bool wxReparenter::Reparent(wxWindow* newParent, wxAdoptedWindow* toReparent)
 
     if (numchildren > 0)
     {
-        fprintf(stderr, "Reparenting %d children.\n", numchildren);
+        // TEST: see if we can get away with reparenting just
+        // first one
+        if (numchildren > 1)
+        {
+            wxLogDebug(wxT("Found %d, but only reparenting 1 child."), numchildren);
+            numchildren = 1;
+        }
+        wxLogDebug(wxT("Reparenting %d children."), numchildren);
         /* Stacking order is preserved since XQueryTree returns its children in
            bottommost to topmost order
          */
