@@ -2,8 +2,8 @@
 // Name:        gifdecod.h
 // Purpose:     wxGIFDecoder, GIF reader for wxImage and wxAnimation
 // Author:      Guillermo Rodriguez Garcia <guille@iies.es>
-// Version:     3.0
-// Last rev:    1999/08/10
+// Version:     3.02
+// Last rev:    1999/08/18
 // Copyright:   (c) Guillermo Rodriguez Garcia
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -29,7 +29,7 @@ typedef struct _IMAGEN
     unsigned int left;              /* x coord (in logical screen) */
     unsigned int top;               /* y coord (in logical screen) */
     int transparent;                /* transparent color (-1 = none) */
-    int disposal;                   /* disposal method */
+    int disposal;                   /* disposal method (-1 = unspecified) */
     long delay;                     /* delay in ms (-1 = unused) */
     unsigned char *p;               /* bitmap */
     unsigned char *pal;             /* palette */
@@ -82,6 +82,7 @@ public:
     // constructor, destructor, etc.
     wxGIFDecoder(wxInputStream *s, bool anim = FALSE);
     ~wxGIFDecoder();
+    bool CanRead();
     int ReadGIF();
     void Destroy();
 

@@ -2,8 +2,8 @@
 // Name:        gifdecod.cpp
 // Purpose:     wxGIFDecoder, GIF reader for wxImage and wxAnimation
 // Author:      Guillermo Rodriguez Garcia <guille@iies.es>
-// Version:     3.01
-// Last rev:    1999/08/14
+// Version:     3.02
+// Last rev:    1999/08/18
 // Copyright:   (c) Guillermo Rodriguez Garcia
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -84,6 +84,9 @@ bool wxGIFDecoder::ConvertToImage(wxImage *image) const
     unsigned char *src, *dst, *pal;
     unsigned long i;
     int      transparent;
+
+    /* just in case... */
+    image->Destroy();
 
     /* create the image */
     image->Create(GetWidth(), GetHeight());
@@ -436,6 +439,20 @@ int wxGIFDecoder::dgif(IMAGEN *img, int interl, int bits)
 }
 
 
+// CanRead:
+//  Returns TRUE if the file looks like a valid GIF, FALSE otherwise.
+//
+bool wxGIFDecoder::CanRead()
+{
+    unsigned char buf[3];
+
+    m_f->SeekI(0, wxFromStart);
+    m_f->Read(buf, 3);
+
+    return (memcmp(buf, "GIF", 3) == 0);
+}
+
+
 // ReadGIF:
 //  Reads and decodes one or more GIF images, depending on whether
 //  animated GIF support is enabled. Can read GIFs with any bit
@@ -455,12 +472,13 @@ int wxGIFDecoder::ReadGIF()
     unsigned char buf[16];
     IMAGEN        **ppimg, *pimg, *pprev;
 
-
-    /* check GIF signature and animated GIF support (ver. >= 89a) */
-    m_f->Read(buf, 6);
-
-    if (memcmp(buf, "GIF", 3) != 0)
+    /* check GIF signature */
+    if (!CanRead())
         return E_FORMATO;
+
+    /* check for and animated GIF support (ver. >= 89a) */
+    m_f->SeekI(0, wxFromStart);
+    m_f->Read(buf, 6);
 
     if (memcmp(buf + 3, "89a", 3) < 0)
         m_anim = FALSE;
