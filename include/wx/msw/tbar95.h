@@ -18,6 +18,8 @@
 
 #if wxUSE_TOOLBAR
 
+#include "wx/dynarray.h"
+
 #include "wx/tbarbase.h"
 
 class WXDLLEXPORT wxToolBar95 : public wxToolBarBase
@@ -58,6 +60,7 @@ public:
                                    const wxString& helpString2 = wxEmptyString);
     virtual bool AddControl(wxControl *control);
 
+    virtual bool DeleteTool(int toolIndex);
     virtual void ClearTools();
 
     virtual bool Realize() { return CreateTools(); };
@@ -85,6 +88,13 @@ protected:
     // common part of all ctors
     void Init();
 
+    // the array storing the id for each index
+    wxArrayInt m_ids;
+
+    // get index from id (returns wxNOT_FOUND if no such button)
+    int GetIndexFromId(int id) const;
+
+    // the big bitmap containing all bitmaps of the toolbar buttons
     WXHBITMAP m_hBitmap;
 
     DECLARE_EVENT_TABLE()

@@ -45,6 +45,11 @@
     #include <commctrl.h>
 #endif
 
+#ifndef LVHT_ONITEM
+    #define LVHT_ONITEM \
+                (LVHT_ONITEMICON | LVHT_ONITEMLABEL | LVHT_ONITEMSTATEICON)
+#endif
+
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
@@ -69,7 +74,7 @@ static void wxConvertFromMSWListItem(const wxListCtrl *ctrl, wxListItem& info, L
 // wxListCtrl construction
 // ----------------------------------------------------------------------------
 
-wxListCtrl::wxListCtrl()
+void wxListCtrl::Init()
 {
     m_imageListNormal = NULL;
     m_imageListSmall = NULL;
@@ -77,6 +82,7 @@ wxListCtrl::wxListCtrl()
     m_baseStyle = 0;
     m_colCount = 0;
     m_textCtrl = NULL;
+    m_hasAnyAttr = FALSE;
 }
 
 bool wxListCtrl::Create(wxWindow *parent,
@@ -87,12 +93,6 @@ bool wxListCtrl::Create(wxWindow *parent,
                         const wxValidator& validator,
                         const wxString& name)
 {
-    m_imageListNormal = NULL;
-    m_imageListSmall = NULL;
-    m_imageListState = NULL;
-    m_textCtrl = NULL;
-    m_colCount = 0;
-
     SetValidator(validator);
     SetName(name);
 
@@ -545,6 +545,25 @@ bool wxListCtrl::SetItem(wxListItem& info)
 {
     LV_ITEM item;
     wxConvertToMSWListItem(this, info, item);
+
+    // check whether it has any custom attributes
+    if ( info.HasAttributes() )
+    {
+        // FIXME it should be...
+        wxASSERT_MSG( !info.GetData(),
+                      _T("can't have custom attributes and client data") );
+
+        item.mask |= LVIF_PARAM;
+        item.lParam = (long)info.GetAttributes();
+
+        m_hasAnyAttr = TRUE;
+    }
+    else if ( m_hasAnyAttr )
+    {
+        item.mask |= LVIF_PARAM;
+        item.lParam = 0;
+    }
+
     item.cchTextMax = 0;
     bool ok = ListView_SetItem(GetHwnd(), &item) != 0;
     if ( ok && (info.m_mask & wxLIST_MASK_IMAGE) )
@@ -1026,6 +1045,24 @@ long wxListCtrl::InsertItem(wxListItem& info)
     LV_ITEM item;
     wxConvertToMSWListItem(this, info, item);
 
+    // check whether it has any custom attributes
+    if ( info.HasAttributes() )
+    {
+        // FIXME it should be...
+        wxASSERT_MSG( !info.GetData(),
+                      _T("can't have custom attributes and client data") );
+
+        item.mask |= LVIF_PARAM;
+        item.lParam = (long)info.GetAttributes();
+
+        m_hasAnyAttr = TRUE;
+    }
+    else if ( m_hasAnyAttr )
+    {
+        item.mask |= LVIF_PARAM;
+        item.lParam = 0;
+    }
+
     return (long) ListView_InsertItem(GetHwnd(), & item);
 }
 
@@ -1119,8 +1156,10 @@ long wxListCtrl::InsertColumn(long col, wxListItem& item)
     return success;
 }
 
-long wxListCtrl::InsertColumn(long col, const wxString& heading, int format,
-        int width)
+long wxListCtrl::InsertColumn(long col,
+                              const wxString& heading,
+                              int format,
+                              int width)
 {
     wxListItem item;
     item.m_mask = wxLIST_MASK_TEXT | wxLIST_MASK_FORMAT;
@@ -1187,13 +1226,16 @@ bool wxListCtrl::MSWCommand(WXUINT cmd, WXWORD id)
 
 bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 {
+    // prepare the event
+    // -----------------
+
     wxListEvent event(wxEVT_NULL, m_windowId);
     wxEventType eventType = wxEVT_NULL;
-    NMHDR *hdr1 = (NMHDR *) lParam;
-    switch ( hdr1->code )
+    NMHDR *nmhdr = (NMHDR *)lParam;
+    switch ( nmhdr->code )
     {
         case LVN_BEGINRDRAG:
-        eventType = wxEVT_COMMAND_LIST_BEGIN_RDRAG;
+            eventType = wxEVT_COMMAND_LIST_BEGIN_RDRAG;
             // fall through
 
         case LVN_BEGINDRAG:
@@ -1237,17 +1279,31 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
             // return TRUE to suppress all additional LVN_DELETEITEM
             // notifications - this makes deleting all items from a list ctrl
-            // much faster
-            *result = TRUE;
-            return TRUE;
+            // much faster (but we can't do it if we have any custom drawn
+            // items because we need to delete their attributes in
+            // LVN_DELETEITEM below)
+            if ( !m_hasAnyAttr )
+            {
+                *result = TRUE;
+
+                return TRUE;
+            }
+            break;
 
         case LVN_DELETEITEM:
             {
                 eventType = wxEVT_COMMAND_LIST_DELETE_ITEM;
                 NM_LISTVIEW* hdr = (NM_LISTVIEW*)lParam;
                 event.m_itemIndex = hdr->iItem;
-                break;
+
+                if ( m_hasAnyAttr )
+                {
+                    wxListItemAttr *attr = (wxListItemAttr *)hdr->lParam;
+                    delete attr;
+                }
             }
+            break;
+
         case LVN_ENDLABELEDIT:
             {
                 eventType = wxEVT_COMMAND_LIST_END_LABEL_EDIT;
@@ -1255,11 +1311,18 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 wxConvertFromMSWListItem(this, event.m_item, info->item);
                 if ( info->item.pszText == NULL || info->item.iItem == -1 )
                     return FALSE;
-                break;
             }
-        case LVN_GETDISPINFO:
-                return FALSE;
+            break;
 
+        case LVN_SETDISPINFO:
+            {
+                eventType = wxEVT_COMMAND_LIST_SET_INFO;
+                LV_DISPINFO *info = (LV_DISPINFO *)lParam;
+                wxConvertFromMSWListItem(this, event.m_item, info->item, GetHwnd());
+            }
+            break;
+
+        case LVN_GETDISPINFO:
                 // this provokes stack overflow: indeed, wxConvertFromMSWListItem()
                 // sends us WM_NOTIFY! As it doesn't do anything for now, just leave
                 // it out.
@@ -1274,6 +1337,8 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 break;
             }
 #endif // 0
+                return FALSE;
+
 
         case LVN_INSERTITEM:
             {
@@ -1282,6 +1347,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 event.m_itemIndex = hdr->iItem;
                 break;
             }
+
         case LVN_ITEMCHANGED:
             {
                 // This needs to be sent to wxListCtrl as a rather more
@@ -1364,11 +1430,6 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             ::ScreenToClient(GetHwnd(),&(lvhti.pt));
             if ( ListView_HitTest(GetHwnd(),&lvhti) != -1 )
             {
-                // older headers don't have this symbol
-#ifndef LVHT_ONITEM
-    #define LVHT_ONITEM \
-                (LVHT_ONITEMICON | LVHT_ONITEMLABEL | LVHT_ONITEMSTATEICON)
-#endif
                 if ( lvhti.flags & LVHT_ONITEM )
                 {
                     eventType = wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK;
@@ -1378,35 +1439,75 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         }
             break;
 
-        /*
-          case NM_MCLICK: // ***** THERE IS NO NM_MCLICK. Subclass anyone? ******
-          {
-          // if the user processes it in wxEVT_COMMAND_MIDDLE_CLICK(), don't do
-          // anything else
-          if ( wxControl::MSWOnNotify(idCtrl, lParam, result) )
-          {
-          return TRUE;
-          }
-
-          // else translate it into wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK event
-          eventType = wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK;
-          NMITEMACTIVATE* hdr = (NMITEMACTIVATE*)lParam;
-          event.m_itemIndex = hdr->iItem;
-          }
-          break;
-        */
-
-        case LVN_SETDISPINFO:
+#if 0
+        case NM_MCLICK: // ***** THERE IS NO NM_MCLICK. Subclass anyone? ******
             {
-                eventType = wxEVT_COMMAND_LIST_SET_INFO;
-                LV_DISPINFO *info = (LV_DISPINFO *)lParam;
-                wxConvertFromMSWListItem(this, event.m_item, info->item, GetHwnd());
-                break;
+                // if the user processes it in wxEVT_COMMAND_MIDDLE_CLICK(), don't do
+                // anything else
+                if ( wxControl::MSWOnNotify(idCtrl, lParam, result) )
+                {
+                    return TRUE;
+                }
+
+                // else translate it into wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK event
+                eventType = wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK;
+                NMITEMACTIVATE* hdr = (NMITEMACTIVATE*)lParam;
+                event.m_itemIndex = hdr->iItem;
             }
+            break;
+#endif // 0
+
+#ifdef NM_CUSTOMDRAW
+        case NM_CUSTOMDRAW:
+            {
+                LPNMLVCUSTOMDRAW lplvcd = (LPNMLVCUSTOMDRAW)lParam;
+                NMCUSTOMDRAW& nmcd = lplvcd->nmcd;
+                switch( nmcd.dwDrawStage )
+                {
+                    case CDDS_PREPAINT :
+                        // if we've got any items with non standard attributes,
+                        // notify us before painting each item
+                        *result = m_hasAnyAttr ? CDRF_NOTIFYITEMDRAW
+                                               : CDRF_DODEFAULT;
+                        return TRUE;
+
+                    case CDDS_ITEMPREPAINT:
+                        {
+                            if ( !nmcd.lItemlParam )
+                            {
+                                // nothing to do for this item
+                                return CDRF_DODEFAULT;
+                            }
+
+                            wxListItemAttr *attr =
+                                (wxListItemAttr *)nmcd.lItemlParam;
+
+                            ::SelectObject(nmcd.hdc,
+                                (HFONT)((wxFont &)attr->GetFont()).
+                                    GetResourceHandle());
+                            lplvcd->clrText =
+                                wxColourToRGB(attr->GetTextColour());
+                            lplvcd->clrTextBk =
+                                wxColourToRGB(attr->GetBackgroundColour());
+
+                            // if we wanted to set colours for individual
+                            // columns (subitems), we would have returned
+                            // CDRF_NOTIFYSUBITEMREDRAW from here
+                            *result = CDRF_NEWFONT;
+
+                            return TRUE;
+                        }
+                }
+            }
+            break;
+#endif // NM_CUSTOMDRAW
 
         default:
             return wxControl::MSWOnNotify(idCtrl, lParam, result);
     }
+
+    // process the event
+    // -----------------
 
     event.SetEventObject( this );
     event.SetEventType(eventType);
@@ -1414,7 +1515,10 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     if ( !GetEventHandler()->ProcessEvent(event) )
         return FALSE;
 
-    switch ((int)hdr1->code)
+    // post processing
+    // ---------------
+
+    switch ( (int)nmhdr->code )
     {
         case LVN_GETDISPINFO:
             {
@@ -1474,6 +1578,8 @@ wxListItem::wxListItem()
 
     m_format = wxLIST_FORMAT_CENTRE;
     m_width = 0;
+
+    m_attr = NULL;
 }
 
 static void wxConvertFromMSWListItem(const wxListCtrl *ctrl, wxListItem& info, LV_ITEM& lvItem, HWND getFullInfo)

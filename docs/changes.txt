@@ -19,6 +19,7 @@ all (GUI):
 
 wxMSW:
 
+- wxTreeCtrl::IsVisible() bug fixed (thanks to Gary Chessun)
 - tooltips work with wxRadioBox
 - arbitrary controls (and not only buttons) can be put into a toolbar
 

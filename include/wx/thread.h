@@ -406,6 +406,7 @@ void WXDLLEXPORT wxMutexGuiLeave();
 // having to take them inside "#if wxUSE_THREADS"
 #define wxENTER_CRIT_SECT(cs)   (cs).Enter()
 #define wxLEAVE_CRIT_SECT(cs)   (cs).Leave()
+#define wxCRIT_SECT_DECLARE(cs) static wxCriticalSection cs
 #define wxCRIT_SECT_LOCKER(name, cs)  wxCriticalSectionLocker name(cs)
 
 #else // !wxUSE_THREADS
@@ -420,6 +421,7 @@ inline void WXDLLEXPORT wxMutexGuiLeave() { }
 // having to take them inside "#if wxUSE_THREADS"
 #define wxENTER_CRIT_SECT(cs)
 #define wxLEAVE_CRIT_SECT(cs)
+#define wxCRIT_SECT_DECLARE(cs)
 #define wxCRIT_SECT_LOCKER(name, cs)
 
 #endif // wxUSE_THREADS

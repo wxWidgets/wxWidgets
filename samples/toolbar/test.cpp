@@ -77,6 +77,7 @@ public:
     void OnToggleToolbar(wxCommandEvent& event);
     void OnEnablePrint(wxCommandEvent& event) { DoEnablePrint(); }
     void OnDeletePrint(wxCommandEvent& event) { DoDeletePrint(); }
+    void OnInsertPrint(wxCommandEvent& event);
     void OnToggleHelp(wxCommandEvent& event) { DoToggleHelp(); }
 
     void OnToolLeftClick(wxCommandEvent& event);
@@ -106,6 +107,7 @@ enum
     IDM_TOOLBAR_TOGGLETOOLBAR = 200,
     IDM_TOOLBAR_ENABLEPRINT,
     IDM_TOOLBAR_DELETEPRINT,
+    IDM_TOOLBAR_INSERTPRINT,
     IDM_TOOLBAR_TOGGLEHELP,
 
     ID_COMBO = 1000
@@ -125,6 +127,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(IDM_TOOLBAR_TOGGLETOOLBAR, MyFrame::OnToggleToolbar)
     EVT_MENU(IDM_TOOLBAR_ENABLEPRINT, MyFrame::OnEnablePrint)
     EVT_MENU(IDM_TOOLBAR_DELETEPRINT, MyFrame::OnDeletePrint)
+    EVT_MENU(IDM_TOOLBAR_INSERTPRINT, MyFrame::OnInsertPrint)
     EVT_MENU(IDM_TOOLBAR_TOGGLEHELP, MyFrame::OnToggleHelp)
 
     EVT_MENU(-1, MyFrame::OnToolLeftClick)
@@ -274,6 +277,7 @@ MyFrame::MyFrame(wxFrame* parent,
     tbarMenu->Append(IDM_TOOLBAR_TOGGLETOOLBAR, "&Toggle toolbar", "Change the toolbar kind");
     tbarMenu->Append(IDM_TOOLBAR_ENABLEPRINT, "&Enable print button", "");
     tbarMenu->Append(IDM_TOOLBAR_DELETEPRINT, "&Delete print button", "");
+    tbarMenu->Append(IDM_TOOLBAR_INSERTPRINT, "&Insert print button", "");
     tbarMenu->Append(IDM_TOOLBAR_TOGGLEHELP, "Toggle &help button", "");
 
     wxMenu *fileMenu = new wxMenu;
@@ -374,9 +378,9 @@ void MyFrame::DoDeletePrint()
 {
     wxToolBar *tb = GetToolBar();
 
-    // only implemented in wxGTK for now
-#ifndef __WXGTK__
-    wxMessageBox("Sorry, wxToolBar::DeleteTool is not implemented under Windows.");
+    // only implemented in wxGTK and wxMSW for now
+#if !defined(__WXGTK__) && !defined(__WXMSW__)
+    wxMessageBox("Sorry, wxToolBar::DeleteTool is not implemented.");
 #else
     tb->DeleteTool( wxID_PRINT );
 #endif
@@ -386,6 +390,21 @@ void MyFrame::DoToggleHelp()
 {
     wxToolBar *tb = GetToolBar();
     tb->ToggleTool( wxID_HELP, !tb->GetToolState( wxID_HELP ) );
+}
+
+void MyFrame::OnInsertPrint(wxCommandEvent& WXUNUSED(event))
+{
+#ifdef __WXMSW__
+    wxBitmap bmp("icon7");
+#else
+    wxBitmap bmp(print_xpm);
+#endif
+
+    GetToolBar()->AddTool(wxID_PRINT, bmp, wxNullBitmap,
+                          FALSE, 0, -1,
+                          (wxObject *) NULL, "Delete this tool");
+
+    GetToolBar()->Realize();
 }
 
 void MyFrame::OnToolEnter(wxCommandEvent& event)

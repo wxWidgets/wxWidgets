@@ -85,9 +85,31 @@
 
 #if (defined(__WIN95__) && !defined(__GNUWIN32__)) || defined(__TWIN32__) || defined(wxUSE_NORLANDER_HEADERS)
     #include <commctrl.h>
+    #include <shlwapi.h>
 #endif
 
 #include "wx/msw/msvcrt.h"
+
+// ----------------------------------------------------------------------------
+// conditional compilation
+// ----------------------------------------------------------------------------
+
+// The macro _WIN32_IE is defined by commctrl.h (unless it had already been
+// defined before) and shows us what common control features are available
+// during the compile time (it doesn't mean that they will be available during
+// the run-time, use GetComCtl32Version() to test for them!). The possible
+// values are:
+//
+// 0x0200     for comctl32.dll 4.00 shipped with Win95/NT 4.0
+// 0x0300                      4.70              IE 3.x
+// 0x0400                      4.71              IE 4.0
+// 0x0401                      4.72              IE 4.01 and Win98
+// 0x0500                      5.00              IE 5.x and NT 5.0 (Win2000)
+
+#ifndef _WIN32_IE
+    // minimal set of features by default
+    #define _WIN32_IE 0x0200
+#endif
 
 // ---------------------------------------------------------------------------
 // global variables
@@ -1139,52 +1161,84 @@ bool wxApp::InitRichEdit(int version)
 /* static */
 int wxApp::GetComCtl32Version()
 {
-    // TODO should use DllGetVersion() instead of this hack
-
     // cache the result
-    static int s_verComCtl32 = -1;      // MT-FIXME
+    static int s_verComCtl32 = -1;
+
+    wxCRIT_SECT_DECLARE(csComCtl32);
+    wxCRIT_SECT_LOCKER(lock, csComCtl32);
 
     if ( s_verComCtl32 == -1 )
     {
+        // initally assume no comctl32.dll at all
         s_verComCtl32 = 0;
 
-        // have we loaded COMCTL32 yet?
-        HMODULE theModule = ::GetModuleHandle(wxT("COMCTL32"));
+        // do we have it?
+        HMODULE hModuleComCtl32 = ::GetModuleHandle(wxT("COMCTL32"));
 
         // if so, then we can check for the version
-        if (theModule)
+        if ( hModuleComCtl32 )
         {
-            // InitCommonControlsEx is unique to 4.7 and later
-            FARPROC theProc = ::GetProcAddress(theModule,
-                                               _T("InitCommonControlsEx"));
-
-            if ( !theProc )
-            {                    // not found, must be 4.00
-                s_verComCtl32 = 400;
-            }
-            else
-            {
-                // The following symbol are unique to 4.71
-                //   DllInstall
-                //   FlatSB_EnableScrollBar FlatSB_GetScrollInfo FlatSB_GetScrollPos
-                //   FlatSB_GetScrollProp FlatSB_GetScrollRange FlatSB_SetScrollInfo
-                //   FlatSB_SetScrollPos FlatSB_SetScrollProp FlatSB_SetScrollRange
-                //   FlatSB_ShowScrollBar
-                //   _DrawIndirectImageList _DuplicateImageList
-                //   InitializeFlatSB
-                //   UninitializeFlatSB
-                // we could check for any of these - I chose DllInstall
-                FARPROC theProc = ::GetProcAddress(theModule, _T("DllInstall"));
-                if ( !theProc )
+            // try to use DllGetVersion() if available in _headers_
+            #ifdef DLLVER_PLATFORM_WINDOWS // defined in shlwapi.h
+                DLLGETVERSIONPROC pfnDllGetVersion = (DLLGETVERSIONPROC)
+                    ::GetProcAddress(hModuleComCtl32, _T("DllGetVersion"));
+                if ( pfnDllGetVersion )
                 {
-                    // not found, must be 4.70
-                    s_verComCtl32 = 470;
+                    DLLVERSIONINFO dvi;
+                    dvi.cbSize = sizeof(dvi);
+
+                    HRESULT hr = (*pfnDllGetVersion)(&dvi);
+                    if ( FAILED(hr) )
+                    {
+                        wxLogApiError(_T("DllGetVersion"), hr);
+                    }
+                    else
+                    {
+                        // this is incompatible with _WIN32_IE values, but
+                        // compatible with the other values returned by
+                        // GetComCtl32Version()
+                        s_verComCtl32 = 100*dvi.dwMajorVersion +
+                                            dvi.dwMinorVersion;
+                    }
                 }
-                else
-                {                         // found, must be 4.71
-                    s_verComCtl32 = 471;
+            #endif
+                // DllGetVersion() unavailable either during compile or
+                // run-time, try to guess the version otherwise
+                if ( !s_verComCtl32 )
+                {
+                    // InitCommonControlsEx is unique to 4.70 and later
+                    FARPROC theProc = ::GetProcAddress
+                                        (
+                                         hModuleComCtl32,
+                                         _T("InitCommonControlsEx")
+                                        );
+
+                    if ( !theProc )
+                    {
+                        // not found, must be 4.00
+                        s_verComCtl32 = 400;
+                    }
+                    else
+                    {
+                        // many symbols appeared in comctl32 4.71, could use
+                        // any of them except may be DllInstall
+                        theProc = ::GetProcAddress
+                                    (
+                                     hModuleComCtl32,
+                                     _T("InitializeFlatSB")
+                                    );
+                        if ( !theProc )
+                        {
+                            // not found, must be 4.70
+                            s_verComCtl32 = 470;
+                        }
+                        else
+                        {
+                            // found, must be 4.71
+                            s_verComCtl32 = 471;
+                        }
+                    }
                 }
-            }
         }
     }
 

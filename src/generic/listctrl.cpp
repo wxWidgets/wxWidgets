@@ -1302,7 +1302,7 @@ void wxListMainWindow::OnRenameAccept()
     info.m_mask = wxLIST_MASK_TEXT;
     info.m_itemId = le.m_itemIndex;
     info.m_text = m_renameRes;
-    info.m_colour = le.m_item.m_colour;
+    info.m_colour = le.m_item.GetTextColour();
     SetItem( info );
 }
 

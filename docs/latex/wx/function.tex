@@ -1344,7 +1344,23 @@ Returns the mouse position in screen coordinates.
 
 <wx/utils.h>
 
-\membersection{::wxGetOsVersion}
+\membersection{::wxGetOsDescription}\label{wxgetosdescription}
+
+\func{wxString}{wxGetOsDescription}{\void}
+
+Returns the string containing the description of the current platform in a
+user-readable form. For example, this function may return strings like
+{\tt Windows NT Version 4.0} or {\tt Linux 2.2.2 i386}.
+
+\wxheading{See also}
+
+\helpref{::wxGetOsVersion}{wxgetosversion}
+
+\wxheading{Include files}
+
+<wx/utils.h>
+
+\membersection{::wxGetOsVersion}\label{wxgetosversion}
 
 \func{int}{wxGetOsVersion}{\param{int *}{major = NULL}, \param{int *}{minor = NULL}}
 
@@ -1353,15 +1369,20 @@ Gets operating system version information.
 \begin{twocollist}\itemsep=0pt
 \twocolitemruled{Platform}{Return tyes}
 \twocolitem{Macintosh}{Return value is wxMACINTOSH.}
-\twocolitem{GTK}{Return value is wxGTK, {\it major} is 1, {\it minor} is 0. (for GTK 1.0.X) }
+\twocolitem{GTK}{Return value is wxGTK, For GTK 1.0, {\it major} is 1, {\it minor} is 0. }
 \twocolitem{Motif}{Return value is wxMOTIF\_X, {\it major} is X version, {\it minor} is X revision.}
 \twocolitem{OS/2}{Return value is wxOS2\_PM.}
 \twocolitem{Windows 3.1}{Return value is wxWINDOWS, {\it major} is 3, {\it minor} is 1.}
-\twocolitem{Windows NT}{Return value is wxWINDOWS\_NT, {\it major} is 3, {\it minor} is 1.}
-\twocolitem{Windows 95}{Return value is wxWIN95, {\it major} is 3, {\it minor} is 1.}
+\twocolitem{Windows NT/2000}{Return value is wxWINDOWS\_NT, version is returned in {\it major} and {\it minor}}
+\twocolitem{Windows 98}{Return value is wxWIN95, {\it major} is 4, {\it minor} is 1 or greater.}
+\twocolitem{Windows 95}{Return value is wxWIN95, {\it major} is 4, {\it minor} is 0.}
 \twocolitem{Win32s (Windows 3.1)}{Return value is wxWIN32S, {\it major} is 3, {\it minor} is 1.}
 \twocolitem{Watcom C++ 386 supervisor mode (Windows 3.1)}{Return value is wxWIN386, {\it major} is 3, {\it minor} is 1.}
 \end{twocollist}
+
+\wxheading{See also}
+
+\helpref{::wxGetOsDescription}{wxgetosdescription}
 
 \wxheading{Include files}
 

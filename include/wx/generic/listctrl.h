@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        listctrl.h
+// Name:        wx/generic/listctrl.h
 // Purpose:     Generic list control
 // Author:      Robert Roebling
 // Created:     01/02/97
 // Id:
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __LISTCTRLH_G__
@@ -50,146 +50,6 @@ class WXDLLEXPORT wxListMainWindow;
 
 class WXDLLEXPORT wxListRenameTimer;
 class WXDLLEXPORT wxListTextCtrl;
-
-//-----------------------------------------------------------------------------
-// types
-//-----------------------------------------------------------------------------
-
-// type of compare function for wxListCtrl sort operation
-typedef int (*wxListCtrlCompare)(long item1, long item2, long sortData);
-
-//-----------------------------------------------------------------------------
-// wxListCtrl flags
-//-----------------------------------------------------------------------------
-
-#define wxLC_ICON            0x0004
-#define wxLC_SMALL_ICON      0x0008
-#define wxLC_LIST            0x0010
-#define wxLC_REPORT          0x0020
-#define wxLC_ALIGN_TOP       0x0040
-#define wxLC_ALIGN_LEFT      0x0080
-#define wxLC_AUTOARRANGE     0x0100  // not supported in wxGLC
-#define wxLC_USER_TEXT       0x0200  // not supported in wxGLC (how does it work?)
-#define wxLC_EDIT_LABELS     0x0400
-#define wxLC_NO_HEADER       0x0800
-#define wxLC_NO_SORT_HEADER  0x1000  // not supported in wxGLC
-#define wxLC_SINGLE_SEL      0x2000
-#define wxLC_SORT_ASCENDING  0x4000
-#define wxLC_SORT_DESCENDING 0x8000  // not supported in wxGLC
-
-#define wxLC_MASK_TYPE       (wxLC_ICON | wxLC_SMALL_ICON | wxLC_LIST | wxLC_REPORT)
-#define wxLC_MASK_ALIGN      (wxLC_ALIGN_TOP | wxLC_ALIGN_LEFT)
-#define wxLC_MASK_SORT       (wxLC_SORT_ASCENDING | wxLC_SORT_DESCENDING)
-
-// Omitted because (a) too much detail (b) not enough style flags
-// #define wxLC_NO_SCROLL
-// #define wxLC_NO_LABEL_WRAP
-// #define wxLC_OWNERDRAW_FIXED
-// #define wxLC_SHOW_SEL_ALWAYS
-
-// Mask flags to tell app/GUI what fields of wxListItem are valid
-#define wxLIST_MASK_STATE           0x0001
-#define wxLIST_MASK_TEXT            0x0002
-#define wxLIST_MASK_IMAGE           0x0004
-#define wxLIST_MASK_DATA            0x0008
-#define wxLIST_SET_ITEM             0x0010
-#define wxLIST_MASK_WIDTH           0x0020
-#define wxLIST_MASK_FORMAT          0x0040
-
-// State flags for indicating the state of an item
-#define wxLIST_STATE_DONTCARE       0x0000
-#define wxLIST_STATE_DROPHILITED    0x0001  // not supported in wxGLC
-#define wxLIST_STATE_FOCUSED        0x0002
-#define wxLIST_STATE_SELECTED       0x0004
-#define wxLIST_STATE_CUT            0x0008  // not supported in wxGLC
-
-// Hit test flags, used in HitTest // wxGLC suppots 20 and 80
-#define wxLIST_HITTEST_ABOVE            0x0001  // Above the client area.
-#define wxLIST_HITTEST_BELOW            0x0002  // Below the client area.
-#define wxLIST_HITTEST_NOWHERE          0x0004  // In the client area but below the last item.
-#define wxLIST_HITTEST_ONITEMICON       0x0020  // On the bitmap associated with an item.
-#define wxLIST_HITTEST_ONITEMLABEL      0x0080  // On the label (string) associated with an item.
-#define wxLIST_HITTEST_ONITEMRIGHT      0x0100  // In the area to the right of an item.
-#define wxLIST_HITTEST_ONITEMSTATEICON  0x0200  // On the state icon for a tree view item that is in a user-defined state.
-#define wxLIST_HITTEST_TOLEFT           0x0400  // To the right of the client area.
-#define wxLIST_HITTEST_TORIGHT          0x0800  // To the left of the client area.
-
-#define wxLIST_HITTEST_ONITEM (wxLIST_HITTEST_ONITEMICON | wxLIST_HITTEST_ONITEMLABEL | wxLIST_HITTEST_ONITEMSTATEICON)
-
-
-
-// Flags for GetNextItem  // always wxLIST_NEXT_ALL in wxGLC
-enum {
-    wxLIST_NEXT_ABOVE,          // Searches for an item above the specified item
-    wxLIST_NEXT_ALL,            // Searches for subsequent item by index
-    wxLIST_NEXT_BELOW,          // Searches for an item below the specified item
-    wxLIST_NEXT_LEFT,           // Searches for an item to the left of the specified item
-    wxLIST_NEXT_RIGHT           // Searches for an item to the right of the specified item
-};
-
-// Alignment flags for Arrange  // always wxLIST_ALIGN_LEFT in wxGLC
-enum {
-    wxLIST_ALIGN_DEFAULT,
-    wxLIST_ALIGN_LEFT,
-    wxLIST_ALIGN_TOP,
-    wxLIST_ALIGN_SNAP_TO_GRID
-};
-
-// Column format  // always wxLIST_FORMAT_LEFT in wxGLC
-enum {
-    wxLIST_FORMAT_LEFT,
-    wxLIST_FORMAT_RIGHT,
-    wxLIST_FORMAT_CENTRE,
-    wxLIST_FORMAT_CENTER = wxLIST_FORMAT_CENTRE
-};
-
-// Autosize values for SetColumnWidth
-enum {
-    wxLIST_AUTOSIZE = -1,           // width of longest item
-    wxLIST_AUTOSIZE_USEHEADER = -2  // always 80 in wxGLC
-};
-
-// Flag values for GetItemRect
-enum {
-    wxLIST_RECT_BOUNDS,
-    wxLIST_RECT_ICON,
-    wxLIST_RECT_LABEL
-};
-
-// Flag values for FindItem  // not supported by wxGLC
-enum {
-    wxLIST_FIND_UP,
-    wxLIST_FIND_DOWN,
-    wxLIST_FIND_LEFT,
-    wxLIST_FIND_RIGHT
-};
-
-//-----------------------------------------------------------------------------
-// wxListItem
-//-----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxListItem: public wxObject
-{
-public:
-    long            m_mask;     // Indicates what fields are valid
-    long            m_itemId;   // The zero-based item position
-    int             m_col;      // Zero-based column, if in report mode
-    long            m_state;    // The state of the item
-    long            m_stateMask; // Which flags of m_state are valid (uses same flags)
-    wxString        m_text;     // The label/header text
-    int             m_image;    // The zero-based index into an image list
-    long            m_data;     // App-defined data
-    wxColour       *m_colour;   // only wxGLC, not supported by Windows ;->
-
-    // For columns only
-    int             m_format;   // left, right, centre
-    int             m_width;    // width of column
-
-    wxListItem();
-    
-private:
-    DECLARE_DYNAMIC_CLASS(wxListItem)
-};
 
 //-----------------------------------------------------------------------------
 //  wxListItemData (internal)

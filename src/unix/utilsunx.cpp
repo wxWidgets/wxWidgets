@@ -23,6 +23,7 @@
 
 #include "wx/utils.h"
 #include "wx/process.h"
+#include "wx/thread.h"
 
 #include "wx/unix/execute.h"
 
@@ -64,20 +65,21 @@
         #ifdef __SUN__
             int usleep(unsigned int usec);
         #else // !Sun
-        #ifdef __EMX__
-            /* I copied this from the XFree86 diffs. AV. */
-            #define INCL_DOSPROCESS
-            #include <os2.h>
-            void usleep(unsigned long delay)
-            {
-                DosSleep(delay ? (delay/1000l) : 1l);
-            }
-        #else
-            void usleep(unsigned long usec);
-        #endif
+            #ifdef __EMX__
+                /* I copied this from the XFree86 diffs. AV. */
+                #define INCL_DOSPROCESS
+                #include <os2.h>
+                inline void usleep(unsigned long delay)
+                {
+                    DosSleep(delay ? (delay/1000l) : 1l);
+                }
+            #else // !Sun && !EMX
+                void usleep(unsigned long usec);
+            #endif
         #endif // Sun/EMX/Something else
     };
-#define HAVE_USLEEP 1
+
+    #define HAVE_USLEEP 1
 #endif // Unices without usleep()
 
 // ============================================================================
@@ -219,17 +221,19 @@ void wxHandleProcessTermination(wxEndProcessData *proc_data)
     int status = 0;
     int rc;
 
+    // wait for child termination and if waitpid() was interrupted, try again
     do
+    {
        rc = waitpid(pid, &status, 0);
-    while(rc == -1 && ( /* errno == ERESTARTSYS || */ errno == EINTR) );
-    // waitpid() was interrupted, try again
+    }
+    while ( rc == -1 && errno == EINTR );
 
-       
+
     if( rc == -1 || ! (WIFEXITED(status) || WIFSIGNALED(status)) )
     {
        wxLogSysError(_("Waiting for subprocess termination failed"));
        /* AFAIK, this can only happen if something went wrong within
-          wxGTK, i.e. due to a racecondition or some serious bug.
+          wxGTK, i.e. due to a race condition or some serious bug.
           After having fixed the order of statements in
           GTK_EndProcessDetector(). (KB)
        */
@@ -251,7 +255,7 @@ void wxHandleProcessTermination(wxEndProcessData *proc_data)
         {
            // wxExecute() will know about it
            proc_data->exitcode = status;
-           
+
            proc_data->pid = 0;
         }
     }
@@ -578,6 +582,15 @@ bool wxGetUserName(wxChar *buf, int sz)
     }
 
     return FALSE;
+}
+
+wxString wxGetOsDescription()
+{
+#ifndef WXWIN_OS_DESCRIPTION
+    #error WXWIN_OS_DESCRIPTION should be defined in config.h by configure
+#else
+    return WXWIN_OS_DESCRIPTION;
+#endif
 }
 
 // ----------------------------------------------------------------------------

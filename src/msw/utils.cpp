@@ -480,50 +480,101 @@ void wxBell()
     ::MessageBeep((UINT)-1);        // default sound
 }
 
-// Chris Breeze 27/5/98: revised WIN32 code to
-// detect WindowsNT correctly
+wxString wxGetOsDescription()
+{
+#ifdef __WIN32__
+    wxString str;
+
+    OSVERSIONINFO info;
+    wxZeroMemory(info);
+
+    info.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+    if ( ::GetVersionEx(&info) )
+    {
+        switch ( info.dwPlatformId )
+        {
+            case VER_PLATFORM_WIN32s:
+                str = _("Win32s on Windows 3.1");
+                break;
+
+            case VER_PLATFORM_WIN32_WINDOWS:
+                str.Printf(_("Windows 9%c"),
+                           info.dwMinorVersion == 0 ? _T('5') : _T('9'));
+                if ( !wxIsEmpty(info.szCSDVersion) )
+                {
+                    str << _T(" (") << info.szCSDVersion << _T(')');
+                }
+                break;
+
+            case VER_PLATFORM_WIN32_NT:
+                str.Printf(_T("Windows NT %lu.%lu (build %lu"),
+                           info.dwMajorVersion,
+                           info.dwMinorVersion,
+                           info.dwBuildNumber);
+                if ( !wxIsEmpty(info.szCSDVersion) )
+                {
+                    str << _T(", ") << info.szCSDVersion;
+                }
+                str << _T(')');
+                break;
+        }
+    }
+    else
+    {
+        wxFAIL_MSG( _T("GetVersionEx() failed") ); // should never happen
+    }
+
+    return str;
+#else // Win16
+    return _("Windows 3.1");
+#endif // Win32/16
+}
+
 int wxGetOsVersion(int *majorVsn, int *minorVsn)
 {
-  if (majorVsn) *majorVsn = 0;
-  if (minorVsn) *minorVsn = 0;
-
 #if defined(__WIN32__) && !defined(__SC__)
-  OSVERSIONINFO info;
-  memset(&info, 0, sizeof(OSVERSIONINFO));
-  info.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-  if (GetVersionEx(&info))
-  {
-    if (majorVsn) *majorVsn = info.dwMajorVersion;
-    if (minorVsn) *minorVsn = info.dwMinorVersion;
-    switch (info.dwPlatformId)
-  {
-  case VER_PLATFORM_WIN32s:
-    return wxWIN32S;
-    break;
-  case VER_PLATFORM_WIN32_WINDOWS:
-    return wxWIN95;
-    break;
-  case VER_PLATFORM_WIN32_NT:
-    return wxWINDOWS_NT;
-    break;
-  }
-  }
-  return wxWINDOWS; // error if we get here, return generic value
-#else
-  // Win16 code...
-  int retValue = 0;
-#  ifdef __WINDOWS_386__
-  retValue = wxWIN386;
-#  else
-#    if !defined(__WATCOMC__) && !defined(GNUWIN32) && wxUSE_PENWINDOWS
-  extern HANDLE g_hPenWin;
-  retValue = g_hPenWin ? wxPENWINDOWS : wxWINDOWS ;
-#    endif
-#  endif
-  // @@@@ To be completed. I don't have the manual here...
-  if (majorVsn) *majorVsn = 3 ;
-  if (minorVsn) *minorVsn = 1 ;
-  return retValue ;
+    OSVERSIONINFO info;
+    wxZeroMemory(info);
+
+    info.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+    if ( ::GetVersionEx(&info) )
+    {
+        if (majorVsn)
+            *majorVsn = info.dwMajorVersion;
+        if (minorVsn)
+            *minorVsn = info.dwMinorVersion;
+
+        switch ( info.dwPlatformId )
+        {
+            case VER_PLATFORM_WIN32s:
+                return wxWIN32S;
+
+            case VER_PLATFORM_WIN32_WINDOWS:
+                return wxWIN95;
+
+            case VER_PLATFORM_WIN32_NT:
+                return wxWINDOWS_NT;
+        }
+    }
+
+    return wxWINDOWS; // error if we get here, return generic value
+#else // Win16
+    int retValue = wxWINDOWS;
+    #ifdef __WINDOWS_386__
+        retValue = wxWIN386;
+    #else
+        #if !defined(__WATCOMC__) && !defined(GNUWIN32) && wxUSE_PENWINDOWS
+            extern HANDLE g_hPenWin;
+            retValue = g_hPenWin ? wxPENWINDOWS : wxWINDOWS;
+        #endif
+    #endif
+
+    if (majorVsn)
+        *majorVsn = 3;
+    if (minorVsn)
+        *minorVsn = 1;
+
+    return retValue;
 #endif
 }
 

@@ -76,8 +76,12 @@ WXDLLEXPORT bool StringMatch(wxChar *one, wxChar *two, bool subString = TRUE, bo
 // Sound the bell
 WXDLLEXPORT void wxBell();
 
+// Get OS description as a user-readable string
+WXDLLEXPORT wxString wxGetOsDescription();
+
 // Get OS version
-WXDLLEXPORT int wxGetOsVersion(int *majorVsn= (int *) NULL,int *minorVsn= (int *) NULL) ;
+WXDLLEXPORT int wxGetOsVersion(int *majorVsn = (int *) NULL,
+                               int *minorVsn = (int *) NULL);
 
 // Return a string with the current date/time
 WXDLLEXPORT wxString wxNow();
@@ -298,7 +302,7 @@ public:
 
 // Format a message on the standard error (UNIX) or the debugging
 // stream (Windows)
-WXDLLEXPORT void wxDebugMsg(const wxChar *fmt ...) ;
+WXDLLEXPORT void wxDebugMsg(const wxChar *fmt ...);
 
 // Non-fatal error (continues)
 WXDLLEXPORT_DATA(extern const wxChar*) wxInternalErrorStr;

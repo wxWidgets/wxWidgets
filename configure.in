@@ -2963,6 +2963,14 @@ if test "$wxUSE_PNM" = "yes" ; then
 fi
 
 dnl ---------------------------------------------------------------------------
+dnl get the string with OS info - used by wxGetOsDescription()
+dnl ---------------------------------------------------------------------------
+
+OSINFO=`uname -s -r -m`
+OSINFO="\"$OSINFO\""
+AC_DEFINE_UNQUOTED(WXWIN_OS_DESCRIPTION, $OSINFO)
+
+dnl ---------------------------------------------------------------------------
 dnl Output the makefiles and such from the results found above
 dnl ---------------------------------------------------------------------------
 

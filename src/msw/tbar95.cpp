@@ -191,12 +191,37 @@ wxToolBar95::~wxToolBar95()
     }
 }
 
+// ----------------------------------------------------------------------------
+// adding/removing buttons
+// ----------------------------------------------------------------------------
+
 void wxToolBar95::ClearTools()
 {
     // TODO: Don't know how to reset the toolbar bitmap, as yet.
     // But adding tools and calling CreateTools should probably
     // recreate a buttonbar OK.
     wxToolBarBase::ClearTools();
+}
+
+bool wxToolBar95::DeleteTool(int id)
+{
+    int index = GetIndexFromId(id);
+    wxASSERT_MSG( index != wxNOT_FOUND, _T("invalid toolbar button id") );
+
+    if ( !SendMessage(GetHwnd(), TB_DELETEBUTTON, index, 0) )
+    {
+        wxLogLastError("TB_DELETEBUTTON");
+
+        return FALSE;
+    }
+
+    wxNode *node = m_tools.Nth(index);
+    delete (wxToolBarTool *)node->Data();
+    m_tools.DeleteNode(node);
+
+    m_ids.RemoveAt(index);
+
+    return TRUE;
 }
 
 bool wxToolBar95::AddControl(wxControl *control)
@@ -209,6 +234,7 @@ bool wxToolBar95::AddControl(wxControl *control)
     wxToolBarTool *tool = new wxToolBarTool(control);
 
     m_tools.Append(control->GetId(), tool);
+    m_ids.Add(control->GetId());
 
     return TRUE;
 }
@@ -240,6 +266,7 @@ wxToolBarTool *wxToolBar95::AddTool(int index,
     tool->SetSize(GetToolSize().x, GetToolSize().y);
 
     m_tools.Append((long)index, tool);
+    m_ids.Add(index);
 
     return tool;
 }
@@ -399,8 +426,6 @@ bool wxToolBar95::CreateTools()
 
     delete [] buttons;
 
-    // TBBUTTONINFO struct declaration is new (comctl32.dll 4.70+)
-#if !defined(__GNUWIN32__) && !defined(__WATCOMC__) && !defined(__BORLANDC__)
     // adjust the controls size to fit nicely in the toolbar
     size_t nControls = controlIds.GetCount();
     for ( size_t nCtrl = 0; nCtrl < nControls; nCtrl++ )
@@ -411,17 +436,69 @@ bool wxToolBar95::CreateTools()
 
         wxSize size = control->GetSize();
 
-        // set the (underlying) separators width to be that of the control
-        TBBUTTONINFO tbbi;
-        tbbi.cbSize = sizeof(tbbi);
-        tbbi.dwMask = TBIF_SIZE;
-        tbbi.cx = size.x;
-        if ( !SendMessage(GetHwnd(), TB_SETBUTTONINFO,
-                          tool->m_index, (LPARAM)&tbbi) )
-        {
-            // the index is probably invalid
-            wxLogLastError("TB_SETBUTTONINFO");
-        }
+        // the position of the leftmost controls corner
+        int left = -1;
+
+        // TB_SETBUTTONINFO message is only supported by comctl32.dll 4.71+
+        #if defined(_WIN32_IE) && (_WIN32_IE >= 0x400 )
+            // available in headers, now check whether it is available now
+            // (during run-time)
+            if ( wxTheApp->GetComCtl32Version() >= 471 )
+            {
+                // set the (underlying) separators width to be that of the
+                // control
+                TBBUTTONINFO tbbi;
+                tbbi.cbSize = sizeof(tbbi);
+                tbbi.dwMask = TBIF_SIZE;
+                tbbi.cx = size.x;
+                if ( !SendMessage(GetHwnd(), TB_SETBUTTONINFO,
+                                  tool->m_index, (LPARAM)&tbbi) )
+                {
+                    // the index is probably invalid
+                    wxLogLastError("TB_SETBUTTONINFO");
+                }
+
+            }
+            else
+        #endif // comctl32.dll 4.71
+            // TB_SETBUTTONINFO unavailable
+            {
+                int index = GetIndexFromId(tool->m_index);
+                wxASSERT_MSG( index != wxNOT_FOUND,
+                              _T("control wasn't added to the tbar?") );
+
+                // try adding several separators to fit the controls width
+                RECT r;
+                if ( !SendMessage(GetHwnd(), TB_GETRECT,
+                                  tool->m_index, (LPARAM)(LPRECT)&r) )
+                {
+                    wxLogLastError("TB_GETITEMRECT");
+                }
+
+                int widthSep = r.right - r.left;
+                left = r.left;
+
+                TBBUTTON tbb;
+                wxZeroMemory(tbb);
+                tbb.idCommand = 0;
+                tbb.fsState = TBSTATE_ENABLED;
+                tbb.fsStyle = TBSTYLE_SEP;
+
+                size_t nSeparators = size.x / widthSep;
+                for ( size_t nSep = 0; nSep < nSeparators; nSep++ )
+                {
+                    m_ids.Insert(0, (size_t)index);
+
+                    if ( !SendMessage(GetHwnd(), TB_INSERTBUTTON,
+                                      index, (LPARAM)&tbb) )
+                    {
+                        wxLogLastError("TB_INSERTBUTTON");
+                    }
+                }
+
+                // adjust the controls width to exactly cover the separators
+                control->SetSize((nSeparators + 1)*widthSep, -1);
+            }
 
         // and position the control itself correctly vertically
         RECT r;
@@ -441,9 +518,8 @@ bool wxToolBar95::CreateTools()
             diff = 2;
         }
 
-        control->Move(r.left, r.top + diff / 2);
+        control->Move(left == -1 ? r.left : left, r.top + diff / 2);
     }
-#endif // __GNUWIN32__
 
     (void)::SendMessage(GetHwnd(), TB_AUTOSIZE, (WPARAM)0, (LPARAM) 0);
 
@@ -623,7 +699,11 @@ void wxToolBar95::ToggleTool(int toolIndex, bool toggle)
 
 bool wxToolBar95::GetToolState(int toolIndex) const
 {
-    return (::SendMessage(GetHwnd(), TB_ISBUTTONCHECKED, (WPARAM)toolIndex, (LPARAM)0) != 0);
+    wxASSERT_MSG( GetIndexFromId(toolIndex) != wxNOT_FOUND,
+                  _T("invalid toolbar button id") );
+
+    return ::SendMessage(GetHwnd(), TB_ISBUTTONCHECKED,
+                         (WPARAM)toolIndex, (LPARAM)0) != 0;
 }
 
 // ----------------------------------------------------------------------------
@@ -659,15 +739,31 @@ void wxToolBar95::OnMouseEvent(wxMouseEvent& event)
     }
 }
 
+
+// ----------------------------------------------------------------------------
+// helpers
+// ----------------------------------------------------------------------------
+
+int wxToolBar95::GetIndexFromId(int id) const
+{
+    size_t count = m_ids.GetCount();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        if ( m_ids[n] == id )
+            return n;
+    }
+
+    return wxNOT_FOUND;
+}
+
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
 
-// These are the default colors used to map the bitmap colors
-// to the current system colors
+// These are the default colors used to map the bitmap colors to the current
+// system colors. Note that they are in BGR format because this is what Windows
+// wants (and not RGB)
 
-// VZ: why are they BGR and not RGB? just to confuse the people or is there a
-//     deeper reason?
 #define BGR_BUTTONTEXT      (RGB(000,000,000))  // black
 #define BGR_BUTTONSHADOW    (RGB(128,128,128))  // dark grey
 #define BGR_BUTTONFACE      (RGB(192,192,192))  // bright grey

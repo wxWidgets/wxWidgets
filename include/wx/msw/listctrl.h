@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        listctrl.h
+// Name:        wx/msw/listctrl.h
 // Purpose:     wxListCtrl class
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_LISTCTRL_H_
@@ -74,362 +74,279 @@
 
  */
 
-// Mask flags to tell app/GUI what fields of wxListItem are valid
-#define wxLIST_MASK_STATE           0x0001
-#define wxLIST_MASK_TEXT            0x0002
-#define wxLIST_MASK_IMAGE           0x0004
-#define wxLIST_MASK_DATA            0x0008
-#define wxLIST_SET_ITEM             0x0010
-#define wxLIST_MASK_WIDTH           0x0020
-#define wxLIST_MASK_FORMAT          0x0040
-
-// State flags for indicating the state of an item
-#define wxLIST_STATE_DONTCARE       0x0000
-#define wxLIST_STATE_DROPHILITED    0x0001
-#define wxLIST_STATE_FOCUSED        0x0002
-#define wxLIST_STATE_SELECTED       0x0004
-#define wxLIST_STATE_CUT            0x0008
-
-// Hit test flags, used in HitTest
-#define wxLIST_HITTEST_ABOVE            0x0001  // Above the client area.
-#define wxLIST_HITTEST_BELOW            0x0002  // Below the client area.
-#define wxLIST_HITTEST_NOWHERE          0x0004  // In the client area but below the last item.
-#define wxLIST_HITTEST_ONITEMICON       0x0020  // On the bitmap associated with an item.
-#define wxLIST_HITTEST_ONITEMLABEL      0x0080  // On the label (string) associated with an item.
-#define wxLIST_HITTEST_ONITEMRIGHT      0x0100  // In the area to the right of an item.
-#define wxLIST_HITTEST_ONITEMSTATEICON  0x0200  // On the state icon for a tree view item that is in a user-defined state.
-#define wxLIST_HITTEST_TOLEFT           0x0400  // To the left of the client area.
-#define wxLIST_HITTEST_TORIGHT          0x0800  // To the right of the client area.
-
-#define wxLIST_HITTEST_ONITEM (wxLIST_HITTEST_ONITEMICON | wxLIST_HITTEST_ONITEMLABEL | wxLIST_HITTEST_ONITEMSTATEICON)
-
-// Flags for GetNextItem
-enum {
-    wxLIST_NEXT_ABOVE,          // Searches for an item above the specified item
-    wxLIST_NEXT_ALL,            // Searches for subsequent item by index
-    wxLIST_NEXT_BELOW,          // Searches for an item below the specified item
-    wxLIST_NEXT_LEFT,           // Searches for an item to the left of the specified item
-    wxLIST_NEXT_RIGHT,          // Searches for an item to the right of the specified item
-};
-
-// Alignment flags for Arrange
-enum {
-    wxLIST_ALIGN_DEFAULT,
-    wxLIST_ALIGN_LEFT,
-    wxLIST_ALIGN_TOP,
-    wxLIST_ALIGN_SNAP_TO_GRID
-};
-
-// Column format
-enum {
-    wxLIST_FORMAT_LEFT,
-    wxLIST_FORMAT_RIGHT,
-    wxLIST_FORMAT_CENTRE,
-    wxLIST_FORMAT_CENTER = wxLIST_FORMAT_CENTRE
-};
-
-// Autosize values for SetColumnWidth
-enum {
-    wxLIST_AUTOSIZE = -1,
-    wxLIST_AUTOSIZE_USEHEADER = -2
-};
-
-// Flag values for GetItemRect
-enum {
-    wxLIST_RECT_BOUNDS,
-    wxLIST_RECT_ICON,
-    wxLIST_RECT_LABEL
-};
-
-// Flag values for FindItem
-enum {
-    wxLIST_FIND_UP,
-    wxLIST_FIND_DOWN,
-    wxLIST_FIND_LEFT,
-    wxLIST_FIND_RIGHT
-};
-
-// wxListItem: data representing an item, or report field.
-// It also doubles up to represent entire column information
-// when inserting or setting a column.
-class WXDLLEXPORT wxListItem: public wxObject
-{
- DECLARE_DYNAMIC_CLASS(wxListItem)
-public:
-    long            m_mask;     // Indicates what fields are valid
-    long            m_itemId;   // The zero-based item position
-    int             m_col;      // Zero-based column, if in report mode
-    long            m_state;    // The state of the item
-    long            m_stateMask; // Which flags of m_state are valid (uses same flags)
-    wxString        m_text;     // The label/header text
-    int             m_image;    // The zero-based index into an image list
-    long            m_data;     // App-defined data
-
-    // For columns only
-    int             m_format;   // left, right, centre
-    int             m_width;    // width of column
-
-    wxListItem();
-};
-
-// type of compare function for wxListCtrl sort operation
-typedef int (wxCALLBACK *wxListCtrlCompare)(long item1, long item2, long sortData);
-
 class WXDLLEXPORT wxListCtrl: public wxControl
 {
-  DECLARE_DYNAMIC_CLASS(wxListCtrl)
- public:
-  /*
-   * Public interface
-   */
+public:
+    /*
+     * Public interface
+     */
 
-  wxListCtrl();
+    wxListCtrl() { Init(); }
 
-  inline wxListCtrl(wxWindow *parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-            long style = wxLC_ICON, const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = "listCtrl")
-  {
-    Create(parent, id, pos, size, style, validator, name);
-  }
-  ~wxListCtrl();
+    wxListCtrl(wxWindow *parent,
+               wxWindowID id = -1,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               long style = wxLC_ICON,
+               const wxValidator& validator = wxDefaultValidator,
+               const wxString& name = _T("wxListCtrl"))
+    {
+        Init();
 
-  bool Create(wxWindow *parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-            long style = wxLC_ICON, const wxValidator& validator = wxDefaultValidator, const wxString& name = "wxListCtrl");
+        Create(parent, id, pos, size, style, validator, name);
+    }
 
+    virtual ~wxListCtrl();
 
-  // Attributes
-  ////////////////////////////////////////////////////////////////////////////
+    bool Create(wxWindow *parent,
+                wxWindowID id = -1,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxLC_ICON,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = _T("wxListCtrl"));
 
-  // Sets the background colour (GetBackgroundColour already implicit in
-  // wxWindow class)
-  bool SetBackgroundColour(const wxColour& col);
 
-  // Gets information about this column
-  bool GetColumn(int col, wxListItem& item) const;
+    // Attributes
+    ////////////////////////////////////////////////////////////////////////////
 
-  // Sets information about this column
-  bool SetColumn(int col, wxListItem& item) ;
+    // Sets the background colour (GetBackgroundColour already implicit in
+    // wxWindow class)
+    bool SetBackgroundColour(const wxColour& col);
 
-  // Gets the column width
-  int GetColumnWidth(int col) const;
+    // Gets information about this column
+    bool GetColumn(int col, wxListItem& item) const;
 
-  // Sets the column width
-  bool SetColumnWidth(int col, int width) ;
+    // Sets information about this column
+    bool SetColumn(int col, wxListItem& item) ;
 
-  // Gets the number of items that can fit vertically in the
-  // visible area of the list control (list or report view)
-  // or the total number of items in the list control (icon
-  // or small icon view)
-  int GetCountPerPage() const;
+    // Gets the column width
+    int GetColumnWidth(int col) const;
 
-  // Gets the edit control for editing labels.
-  wxTextCtrl* GetEditControl() const;
+    // Sets the column width
+    bool SetColumnWidth(int col, int width) ;
 
-  // Gets information about the item
-  bool GetItem(wxListItem& info) const ;
+    // Gets the number of items that can fit vertically in the
+    // visible area of the list control (list or report view)
+    // or the total number of items in the list control (icon
+    // or small icon view)
+    int GetCountPerPage() const;
 
-  // Sets information about the item
-  bool SetItem(wxListItem& info) ;
+    // Gets the edit control for editing labels.
+    wxTextCtrl* GetEditControl() const;
 
-  // Sets a string field at a particular column
-  long SetItem(long index, int col, const wxString& label, int imageId = -1);
+    // Gets information about the item
+    bool GetItem(wxListItem& info) const ;
 
-  // Gets the item state
-  int  GetItemState(long item, long stateMask) const ;
+    // Sets information about the item
+    bool SetItem(wxListItem& info) ;
 
-  // Sets the item state
-  bool SetItemState(long item, long state, long stateMask) ;
+    // Sets a string field at a particular column
+    long SetItem(long index, int col, const wxString& label, int imageId = -1);
 
-  // Sets the item image
-  bool SetItemImage(long item, int image, int selImage) ;
+    // Gets the item state
+    int  GetItemState(long item, long stateMask) const ;
 
-  // Gets the item text
-  wxString GetItemText(long item) const ;
+    // Sets the item state
+    bool SetItemState(long item, long state, long stateMask) ;
 
-  // Sets the item text
-  void SetItemText(long item, const wxString& str) ;
+    // Sets the item image
+    bool SetItemImage(long item, int image, int selImage) ;
 
-  // Gets the item data
-  long GetItemData(long item) const ;
+    // Gets the item text
+    wxString GetItemText(long item) const ;
 
-  // Sets the item data
-  bool SetItemData(long item, long data) ;
+    // Sets the item text
+    void SetItemText(long item, const wxString& str) ;
 
-  // Gets the item rectangle
-  bool GetItemRect(long item, wxRect& rect, int code = wxLIST_RECT_BOUNDS) const ;
+    // Gets the item data
+    long GetItemData(long item) const ;
 
-  // Gets the item position
-  bool GetItemPosition(long item, wxPoint& pos) const ;
+    // Sets the item data
+    bool SetItemData(long item, long data) ;
 
-  // Sets the item position
-  bool SetItemPosition(long item, const wxPoint& pos) ;
+    // Gets the item rectangle
+    bool GetItemRect(long item, wxRect& rect, int code = wxLIST_RECT_BOUNDS) const ;
 
-  // Gets the number of items in the list control
-  int GetItemCount() const;
+    // Gets the item position
+    bool GetItemPosition(long item, wxPoint& pos) const ;
 
-  // Gets the number of columns in the list control
-  int GetColumnCount() const { return m_colCount; }
+    // Sets the item position
+    bool SetItemPosition(long item, const wxPoint& pos) ;
 
-  // Retrieves the spacing between icons in pixels.
-  // If small is TRUE, gets the spacing for the small icon
-  // view, otherwise the large icon view.
-  int GetItemSpacing(bool isSmall) const;
+    // Gets the number of items in the list control
+    int GetItemCount() const;
 
-  // Gets the number of selected items in the list control
-  int GetSelectedItemCount() const;
+    // Gets the number of columns in the list control
+    int GetColumnCount() const { return m_colCount; }
 
-  // Gets the text colour of the listview
-  wxColour GetTextColour() const;
+    // Retrieves the spacing between icons in pixels.
+    // If small is TRUE, gets the spacing for the small icon
+    // view, otherwise the large icon view.
+    int GetItemSpacing(bool isSmall) const;
 
-  // Sets the text colour of the listview
-  void SetTextColour(const wxColour& col);
+    // Gets the number of selected items in the list control
+    int GetSelectedItemCount() const;
 
-  // Gets the index of the topmost visible item when in
-  // list or report view
-  long GetTopItem() const ;
+    // Gets the text colour of the listview
+    wxColour GetTextColour() const;
 
-  // Add or remove a single window style
-  void SetSingleStyle(long style, bool add = TRUE) ;
+    // Sets the text colour of the listview
+    void SetTextColour(const wxColour& col);
 
-  // Set the whole window style
-  void SetWindowStyleFlag(long style) ;
+    // Gets the index of the topmost visible item when in
+    // list or report view
+    long GetTopItem() const ;
 
-  // Searches for an item, starting from 'item'.
-  // item can be -1 to find the first item that matches the
-  // specified flags.
-  // Returns the item or -1 if unsuccessful.
-  long GetNextItem(long item, int geometry = wxLIST_NEXT_ALL, int state = wxLIST_STATE_DONTCARE) const ;
+    // Add or remove a single window style
+    void SetSingleStyle(long style, bool add = TRUE) ;
 
-  // Implementation: converts wxWindows style to MSW style.
-  // Can be a single style flag or a bit list.
-  // oldStyle is 'normalised' so that it doesn't contain
-  // conflicting styles.
-  long ConvertToMSWStyle(long& oldStyle, long style) const;
+    // Set the whole window style
+    void SetWindowStyleFlag(long style) ;
 
-  // Gets one of the three image lists
-  wxImageList *GetImageList(int which) const ;
+    // Searches for an item, starting from 'item'.
+    // item can be -1 to find the first item that matches the
+    // specified flags.
+    // Returns the item or -1 if unsuccessful.
+    long GetNextItem(long item, int geometry = wxLIST_NEXT_ALL, int state = wxLIST_STATE_DONTCARE) const ;
 
-  // Sets the image list
-  // N.B. There's a quirk in the Win95 list view implementation.
-  // If in wxLC_LIST mode, it'll *still* display images by the labels if
-  // there's a small-icon image list set for the control - even though you
-  // haven't specified wxLIST_MASK_IMAGE when inserting.
-  // So you have to set a NULL small-icon image list to be sure that
-  // the wxLC_LIST mode works without icons. Of course, you may want icons...
-  void SetImageList(wxImageList *imageList, int which) ;
+    // Implementation: converts wxWindows style to MSW style.
+    // Can be a single style flag or a bit list.
+    // oldStyle is 'normalised' so that it doesn't contain
+    // conflicting styles.
+    long ConvertToMSWStyle(long& oldStyle, long style) const;
 
-  // Operations
-  ////////////////////////////////////////////////////////////////////////////
+    // Gets one of the three image lists
+    wxImageList *GetImageList(int which) const ;
 
-  // Arranges the items
-  bool Arrange(int flag = wxLIST_ALIGN_DEFAULT);
+    // Sets the image list
+    // N.B. There's a quirk in the Win95 list view implementation.
+    // If in wxLC_LIST mode, it'll *still* display images by the labels if
+    // there's a small-icon image list set for the control - even though you
+    // haven't specified wxLIST_MASK_IMAGE when inserting.
+    // So you have to set a NULL small-icon image list to be sure that
+    // the wxLC_LIST mode works without icons. Of course, you may want icons...
+    void SetImageList(wxImageList *imageList, int which) ;
 
-  // Deletes an item
-  bool DeleteItem(long item);
+    // Operations
+    ////////////////////////////////////////////////////////////////////////////
 
-  // Deletes all items
-  bool DeleteAllItems() ;
+    // Arranges the items
+    bool Arrange(int flag = wxLIST_ALIGN_DEFAULT);
 
-  // Deletes a column
-  bool DeleteColumn(int col);
+    // Deletes an item
+    bool DeleteItem(long item);
 
-  // Deletes all columns
-  bool DeleteAllColumns();
+    // Deletes all items
+    bool DeleteAllItems() ;
 
-  // Clears items, and columns if there are any.
-  void ClearAll();
+    // Deletes a column
+    bool DeleteColumn(int col);
 
-  // Edit the label
-  wxTextCtrl* EditLabel(long item, wxClassInfo* textControlClass = CLASSINFO(wxTextCtrl));
+    // Deletes all columns
+    bool DeleteAllColumns();
 
-  // End label editing, optionally cancelling the edit
-  bool EndEditLabel(bool cancel);
+    // Clears items, and columns if there are any.
+    void ClearAll();
 
-  // Ensures this item is visible
-  bool EnsureVisible(long item) ;
+    // Edit the label
+    wxTextCtrl* EditLabel(long item, wxClassInfo* textControlClass = CLASSINFO(wxTextCtrl));
 
-  // Find an item whose label matches this string, starting from the item after 'start'
-  // or the beginning if 'start' is -1.
-  long FindItem(long start, const wxString& str, bool partial = FALSE);
+    // End label editing, optionally cancelling the edit
+    bool EndEditLabel(bool cancel);
 
-  // Find an item whose data matches this data, starting from the item after 'start'
-  // or the beginning if 'start' is -1.
-  long FindItem(long start, long data);
+    // Ensures this item is visible
+    bool EnsureVisible(long item) ;
 
-  // Find an item nearest this position in the specified direction, starting from
-  // the item after 'start' or the beginning if 'start' is -1.
-  long FindItem(long start, const wxPoint& pt, int direction);
+    // Find an item whose label matches this string, starting from the item after 'start'
+    // or the beginning if 'start' is -1.
+    long FindItem(long start, const wxString& str, bool partial = FALSE);
 
-  // Determines which item (if any) is at the specified point,
-  // giving details in 'flags' (see wxLIST_HITTEST_... flags above)
-  long HitTest(const wxPoint& point, int& flags);
+    // Find an item whose data matches this data, starting from the item after 'start'
+    // or the beginning if 'start' is -1.
+    long FindItem(long start, long data);
 
-  // Inserts an item, returning the index of the new item if successful,
-  // -1 otherwise.
-  // TOD: Should also have some further convenience functions
-  // which don't require setting a wxListItem object
-  long InsertItem(wxListItem& info);
+    // Find an item nearest this position in the specified direction, starting from
+    // the item after 'start' or the beginning if 'start' is -1.
+    long FindItem(long start, const wxPoint& pt, int direction);
 
-  // Insert a string item
-  long InsertItem(long index, const wxString& label);
+    // Determines which item (if any) is at the specified point,
+    // giving details in 'flags' (see wxLIST_HITTEST_... flags above)
+    long HitTest(const wxPoint& point, int& flags);
 
-  // Insert an image item
-  long InsertItem(long index, int imageIndex);
+    // Inserts an item, returning the index of the new item if successful,
+    // -1 otherwise.
+    long InsertItem(wxListItem& info);
 
-  // Insert an image/string item
-  long InsertItem(long index, const wxString& label, int imageIndex);
+    // Insert a string item
+    long InsertItem(long index, const wxString& label);
 
-  // For list view mode (only), inserts a column.
-  long InsertColumn(long col, wxListItem& info);
+    // Insert an image item
+    long InsertItem(long index, int imageIndex);
 
-  long InsertColumn(long col, const wxString& heading, int format = wxLIST_FORMAT_LEFT,
-    int width = -1);
+    // Insert an image/string item
+    long InsertItem(long index, const wxString& label, int imageIndex);
 
-  // Scrolls the list control. If in icon, small icon or report view mode,
-  // x specifies the number of pixels to scroll. If in list view mode, x
-  // specifies the number of columns to scroll.
-  // If in icon, small icon or list view mode, y specifies the number of pixels
-  // to scroll. If in report view mode, y specifies the number of lines to scroll.
-  bool ScrollList(int dx, int dy);
+    // For list view mode (only), inserts a column.
+    long InsertColumn(long col, wxListItem& info);
 
-  // Sort items.
+    long InsertColumn(long col,
+                      const wxString& heading,
+                      int format = wxLIST_FORMAT_LEFT,
+                      int width = -1);
 
-  // fn is a function which takes 3 long arguments: item1, item2, data.
-  // item1 is the long data associated with a first item (NOT the index).
-  // item2 is the long data associated with a second item (NOT the index).
-  // data is the same value as passed to SortItems.
-  // The return value is a negative number if the first item should precede the second
-  // item, a positive number of the second item should precede the first,
-  // or zero if the two items are equivalent.
+    // Scrolls the list control. If in icon, small icon or report view mode,
+    // x specifies the number of pixels to scroll. If in list view mode, x
+    // specifies the number of columns to scroll.
+    // If in icon, small icon or list view mode, y specifies the number of pixels
+    // to scroll. If in report view mode, y specifies the number of lines to scroll.
+    bool ScrollList(int dx, int dy);
 
-  // data is arbitrary data to be passed to the sort function.
-  bool SortItems(wxListCtrlCompare fn, long data);
+    // Sort items.
 
-  // IMPLEMENTATION
-  virtual bool MSWCommand(WXUINT param, WXWORD id);
-  virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
+    // fn is a function which takes 3 long arguments: item1, item2, data.
+    // item1 is the long data associated with a first item (NOT the index).
+    // item2 is the long data associated with a second item (NOT the index).
+    // data is the same value as passed to SortItems.
+    // The return value is a negative number if the first item should precede the second
+    // item, a positive number of the second item should precede the first,
+    // or zero if the two items are equivalent.
 
-  // bring the control in sync with current m_windowStyle value
-  void UpdateStyle();
+    // data is arbitrary data to be passed to the sort function.
+    bool SortItems(wxListCtrlCompare fn, long data);
 
-  // Add to pool: necessary because Windows needs to have a string
-  // still exist across 3 callbacks.
-  wxChar *AddPool(const wxString& str);
+    // IMPLEMENTATION
+    virtual bool MSWCommand(WXUINT param, WXWORD id);
+    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
+
+    // bring the control in sync with current m_windowStyle value
+    void UpdateStyle();
+
+    // Add to pool: necessary because Windows needs to have a string
+    // still exist across 3 callbacks.
+    wxChar *AddPool(const wxString& str);
 
 protected:
-  wxTextCtrl*       m_textCtrl;        // The control used for editing a label
-  wxImageList *     m_imageListNormal; // The image list for normal icons
-  wxImageList *     m_imageListSmall;  // The image list for small icons
-  wxImageList *     m_imageListState;  // The image list state icons (not implemented yet)
+    // common part of all ctors
+    void Init();
 
-  long              m_baseStyle;  // Basic Windows style flags, for recreation purposes
-  wxStringList      m_stringPool; // Pool of 3 strings to satisfy Windows callback
-                                  // requirements
-  int               m_colCount;   // Windows doesn't have GetColumnCount so must
-                                  // keep track of inserted/deleted columns
+    wxTextCtrl*       m_textCtrl;        // The control used for editing a label
+    wxImageList *     m_imageListNormal; // The image list for normal icons
+    wxImageList *     m_imageListSmall;  // The image list for small icons
+    wxImageList *     m_imageListState;  // The image list state icons (not implemented yet)
+
+    long              m_baseStyle;  // Basic Windows style flags, for recreation purposes
+    wxStringList      m_stringPool; // Pool of 3 strings to satisfy Windows callback requirements
+    int               m_colCount;   // Windows doesn't have GetColumnCount so must
+                                    // keep track of inserted/deleted columns
+
+    // TRUE fi we have any items with custom attributes
+    bool m_hasAnyAttr;
 
 private:
-  bool DoCreateControl(int x, int y, int w, int h);
+    bool DoCreateControl(int x, int y, int w, int h);
+
+    DECLARE_DYNAMIC_CLASS(wxListCtrl)
 };
 
 #endif
