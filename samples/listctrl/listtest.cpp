@@ -462,7 +462,7 @@ void MyListCtrl::OnActivated(wxListEvent& WXUNUSED(event))
 	text->WriteText("OnActivated\n");
 }
 
-void MyListCtrl::OnListKeyDown(wxListEvent& WXUNUSED(event))
+void MyListCtrl::OnListKeyDown(wxListEvent& event)
 {
 	if ( !wxGetApp().GetTopWindow() )
 		return;

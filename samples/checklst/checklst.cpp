@@ -147,7 +147,7 @@ CheckListBoxFrame::CheckListBoxFrame(wxFrame *frame,
          panel,                 // parent
          Control_Listbox,       // control id
          wxPoint(10, 10),       // listbox poistion
-         wxSize(400, 200),      // listbox size
+         wxSize(400, 100),      // listbox size
          WXSIZEOF(aszChoices),  // number of strings
          astrChoices            // array of strings
         );
