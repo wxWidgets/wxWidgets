@@ -53,8 +53,9 @@ protected:
     wxTaskBarIconType m_nType;
     void* m_pEventHandlerRef;
     wxMenu* m_pMenu;
+    WXHMENU m_theLastMenu;
     bool m_iconAdded;
-        
+            
     DECLARE_DYNAMIC_CLASS(wxTaskBarIcon)
 };
 #endif
