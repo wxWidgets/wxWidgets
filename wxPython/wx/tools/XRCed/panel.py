@@ -201,7 +201,10 @@ class ParamPage(wxPanel):
                 xxx.params[param] = xxxParam(elem)
             # Find place to put new element: first present element after param
             found = False
-            paramStyles = xxx.allParams + xxx.styles
+            if xxx.hasStyle: 
+                paramStyles = xxx.allParams + xxx.styles
+            else:
+                paramStyles = xxx.allParams 
             for p in paramStyles[paramStyles.index(param) + 1:]:
                 # Content params don't have same type
                 if xxx.params.has_key(p) and p != 'content':
