@@ -63,7 +63,11 @@
 #define TE_UNLIMITED_LENGTH 0xFFFFFFFFUL
 #if TARGET_API_MAC_OSX
  #define wxMAC_USE_MLTE 1
+ #if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
  #define wxMAC_USE_MLTE_HIVIEW 1
+ #else
+ #define wxMAC_USE_MLTE_HIVIEW 0
+ #endif
 #else
  // there is no unicodetextctrl on classic, and hopefully MLTE works better there
  #define wxMAC_USE_MLTE 1
