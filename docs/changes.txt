@@ -285,6 +285,7 @@ wxMSW:
   provided in wxFontData
 - Added wxTE_LEFT, wxTE_CENTRE and wxTE_RIGHT flags for text
   control alignment.
+- Bitmap printing uses 24 bits now, not 8.
 
 wxGTK:
 

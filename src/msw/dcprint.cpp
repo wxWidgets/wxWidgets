@@ -416,6 +416,10 @@ WXHDC WXDLLEXPORT wxGetPrinterDC(const wxPrintData& printDataConst)
 #define GDI_ERROR -1
 #endif
 
+// Just in case we want to go back to using 8 bits for
+// any reason: set this to 0 for 8 bits.
+#define wxUSE_DRAWBITMAP_24BITS 1
+
 void wxPrinterDC::DoDrawBitmap(const wxBitmap &bmp,
                                wxCoord x, wxCoord y,
                                bool useMask)
@@ -430,7 +434,11 @@ void wxPrinterDC::DoDrawBitmap(const wxBitmap &bmp,
         BITMAPINFO *info = (BITMAPINFO *) malloc( sizeof( BITMAPINFOHEADER ) + 256 * sizeof(RGBQUAD ) );
         memset( info, 0, sizeof( BITMAPINFOHEADER ) );
 
-        int iBitsSize = ((width + 3 ) & ~3 ) * height;
+#if wxUSE_DRAWBITMAP_24BITS
+        int iBitsSize = ((width + 3 ) & ~3 ) * height * 3;
+#else
+        int iBitsSize = ((width + 3 ) & ~3 ) * height ;
+#endif
 
         void* bits = malloc( iBitsSize );
 
@@ -438,7 +446,11 @@ void wxPrinterDC::DoDrawBitmap(const wxBitmap &bmp,
         info->bmiHeader.biWidth = width;
         info->bmiHeader.biHeight = height;
         info->bmiHeader.biPlanes = 1;
+#if wxUSE_DRAWBITMAP_24BITS
+        info->bmiHeader.biBitCount = 24;
+#else
         info->bmiHeader.biBitCount = 8;
+#endif        
         info->bmiHeader.biCompression = BI_RGB;
 
         ScreenHDC display;
