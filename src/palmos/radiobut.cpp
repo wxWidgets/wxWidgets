@@ -115,7 +115,7 @@ bool wxRadioButton::Create(wxWindow *parent,
                            const wxString& name)
 {
     // replace native push button with native checkbox
-    if ( style & wxRB_USE_SUBSTITUTE )
+    if ( style & wxRB_USE_CHECKBOX )
         m_radioStyle = checkboxCtl;
 
     if(!wxControl::Create(parent, id, pos, size, style, validator, name))
