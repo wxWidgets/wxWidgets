@@ -781,41 +781,38 @@ void wxHtmlContainerCell::Layout(int w)
                     // first count the cells which will get extra space
                     int total = 0;
 
-                    const wxHtmlCell *c,
-                                     *prev = NULL,
-                                     *next wxDUMMY_INITIALIZE(NULL);
-                    for ( c = line; c != cell; prev = c, c = next )
+                    const wxHtmlCell *c;
+                    if ( line != cell )
                     {
-                        next = c->GetNext();
-                        if ( c->IsLinebreakAllowed() &&
-                                (next == cell || next->IsLinebreakAllowed()) &&
-                                    (!prev || prev->IsLinebreakAllowed()) )
+                        for ( c = line->GetNext(); c != cell; c = c->GetNext() )
                         {
-                            total++;
+                            if ( c->IsLinebreakAllowed() )
+                            {
+                                total++;
+                            }
                         }
                     }
 
                     // and now extra space to those cells which merit it
                     if ( total )
                     {
-                        prev =
-                        next = NULL;
-                        for ( int n = 0; line != cell; prev = line, line = line->GetNext() )
+                        // first cell on line is not moved:
+                        line->SetPos(line->GetPosX() + s_indent,
+                                     line->GetPosY() + ypos);
+                        
+                        line = line->GetNext();
+                        for ( int n = 0; line != cell; line = line->GetNext() )
                         {
-                            line->SetPos(line->GetPosX() + s_indent +
-                                           ((n * step) / total),
-                                           line->GetPosY() + ypos);
-
-                            next = line->GetNext();
-                            if ( line->IsLinebreakAllowed() &&
-                                    (next == cell ||
-                                        next->IsLinebreakAllowed()) &&
-                                        (!prev || prev->IsLinebreakAllowed()) )
+                            if ( line->IsLinebreakAllowed() )
                             {
                                 // offset the next cell relative to this one
                                 // thus increasing our size
                                 n++;
                             }
+                            
+                            line->SetPos(line->GetPosX() + s_indent +
+                                           ((n * step) / total),
+                                           line->GetPosY() + ypos);
                         }
                     }
                     else
