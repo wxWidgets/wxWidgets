@@ -1027,6 +1027,7 @@ void Ccontact::Initialize()
     IsDeveloper        = FALSE;
     Contributions      = 0;
     LinesOfCode        = 0L;
+    wxStrcpy(Picture,"\xff\x01\xff\x02\xff\x03\xff\x04\xff\x05");
 }  // Ccontact::Initialize
 
 
@@ -1067,8 +1068,8 @@ void Ccontact::SetupColumns()
     SetColDefs ( 9,wxT("CONTRIBS"),   DB_DATA_TYPE_INTEGER,    &Contributions,  SQL_C_UTINYINT,             sizeof(Contributions),  FALSE,TRUE);
     SetColDefs (10,wxT("LINE_CNT"),   DB_DATA_TYPE_INTEGER,    &LinesOfCode,    SQL_C_ULONG,                sizeof(LinesOfCode),    FALSE,TRUE);
     SetColDefs (11,wxT("LANGUAGE"),   DB_DATA_TYPE_INTEGER,    &NativeLanguage, SQL_C_ENUM,                 sizeof(NativeLanguage), FALSE,TRUE);
-#if wxODBC_BLOB_EXPERIMENT > 0
-    SetColDefs (12,wxT("PICTURE"),    DB_DATA_TYPE_BLOB,        Picture,        SQL_C_BINARY,          sizeof(Picture),        FALSE,TRUE);
+#ifdef wxODBC_BLOB_SUPPORT
+    SetColDefs (12,wxT("PICTURE"),    DB_DATA_TYPE_BLOB,        Picture,        SQL_C_BINARY,               sizeof(Picture),        FALSE,TRUE);
 #endif
 }  // Ccontact::SetupColumns
 

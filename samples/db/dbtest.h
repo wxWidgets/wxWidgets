@@ -41,14 +41,13 @@ enum    DialogModes {mView,mCreate,mEdit,mSearch};
 // Name of the table to be created/opened
 const wxChar     CONTACT_TABLE_NAME[]       = wxT("contacts");
 
-
-#define wxODBC_BLOB_EXPERIMENT 1
+#define wxODBC_BLOB_SUPPORT
 
 // Number of columns in the CONTACT table
-#if wxODBC_BLOB_EXPERIMENT > 0
-const int        CONTACT_NO_COLS            = 13;        // 0-12
+#ifdef wxODBC_BLOB_SUPPORT
+    const int        CONTACT_NO_COLS            = 13;        // 0-12
 #else
-const int        CONTACT_NO_COLS            = 12;        // 0-11
+    const int        CONTACT_NO_COLS            = 12;        // 0-11
 #endif
 
 const wxChar     PARAM_FILENAME[]           = wxT("dbtest.cfg");
@@ -85,9 +84,7 @@ class CstructContact : public wxObject
         wxChar             Country[20+1];
         TIMESTAMP_STRUCT   JoinDate;            // Date on which this person joined the wxWindows project
         Language           NativeLanguage;      // Enumerated type indicating person's native language
-#if wxODBC_BLOB_EXPERIMENT > 0
         wxChar             Picture[50000];
-#endif
         bool               IsDeveloper;         // Is this person a developer for wxWindows, or just a subscriber
         UCHAR              Contributions;       // Something to show off an integer field
         ULONG              LinesOfCode;         // Something to show off a 'long' field
