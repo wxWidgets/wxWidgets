@@ -69,10 +69,6 @@
 #pragma message enable nosimpint
 #endif
 
-// ----------------------------------------------------------------------------
-// private functions
-// ----------------------------------------------------------------------------
-
 // Yuck this is really BOTH site and platform dependent
 // so we should use some other strategy!
 #ifdef sun
@@ -80,8 +76,6 @@
 #else
     #define DEFAULT_XRESOURCE_DIR "/usr/lib/X11/app-defaults"
 #endif
-
-static char *GetIniFile (char *dest, const char *filename);
 
 // ============================================================================
 // implementation
@@ -226,6 +220,8 @@ int wxGetOsVersion(int *majorVsn, int *minorVsn)
 // Reading and writing resources (eg WIN.INI, .Xdefaults)
 // ----------------------------------------------------------------------------
 
+#if wxUSE_RESOURCES
+
 // Read $HOME for what it says is home, if not
 // read $USER or $LOGNAME for user name else determine
 // the Real User, then determine the Real home dir.
@@ -255,8 +251,6 @@ static char * GetIniFile (char *dest, const char *filename)
     }
     return dest;
 }
-
-#if wxUSE_RESOURCES
 
 static char *GetResourcePath(char *buf, const char *name, bool create = FALSE)
 {

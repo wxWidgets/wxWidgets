@@ -1820,7 +1820,7 @@ bool wxAddWindowToTable(Widget w, wxWindow *win)
     wxWidgetHashTable->Put((long) w, win);
 
     wxLogTrace("widget", "Widget 0x%08x <-> window %p (%s)",
-               w, win, win->GetClassInfo()->GetClassName());
+               (unsigned)w, win, win->GetClassInfo()->GetClassName());
 
     return TRUE;
 }
