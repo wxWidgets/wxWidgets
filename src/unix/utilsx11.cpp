@@ -762,7 +762,7 @@ KeySym wxCharCodeWXToX(int id)
 
 #include <wx/app.h>
 
-bool wxGetKeyState(const wxKeyCode& key)
+bool wxGetKeyState(wxKeyCode key)
 {
 #if defined(__WXX11__)
     Display *pDisplay = (Display*) wxApp::GetDisplay();

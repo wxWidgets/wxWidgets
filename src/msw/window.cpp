@@ -5123,7 +5123,7 @@ int wxCharCodeWXToMSW(int id, bool *isVirtual)
     return keySym;
 }
 
-bool wxGetKeyState(const wxKeyCode& key)
+bool wxGetKeyState(wxKeyCode key)
 {
     bool bVirtual;
     int vkey = wxCharCodeWXToMSW(key, &bVirtual);

@@ -101,7 +101,7 @@ WXDLLIMPEXP_BASE wxString wxGetDataDir();
 // Get the state of a key (true if pressed, false if not)
 // This is generally most useful getting the state of
 // the modifier or toggle keys.
-WXDLLEXPORT bool wxGetKeyState(const wxKeyCode& key);
+WXDLLEXPORT bool wxGetKeyState(wxKeyCode key);
 
 
 // Don't synthesize KeyUp events holding down a key and producing

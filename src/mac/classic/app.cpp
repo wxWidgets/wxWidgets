@@ -1851,7 +1851,7 @@ int wxKeyCodeToMacModifier(wxKeyCode key)
     }
 }
 
-bool wxGetKeyState(const wxKeyCode& key) //virtual key code if < 10.2.x, else see below
+bool wxGetKeyState(wxKeyCode key) //virtual key code if < 10.2.x, else see below
 {
 #if __WXMAC_CARBON__
 //TODO: Low get map...
