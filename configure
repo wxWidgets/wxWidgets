@@ -34967,15 +34967,15 @@ exit 0
 EOF
             chmod +x shared-ld-sh
 
-                        SHARED_LD_CC="`pwd`/shared-ld-sh -dynamiclib -o"
-            SHARED_LD_MODULE_CC="`pwd`/shared-ld-sh -bundle -o"
+                        SHARED_LD_CC="`pwd`/shared-ld-sh -dynamiclib -headerpad_max_install_names -o"
+            SHARED_LD_MODULE_CC="`pwd`/shared-ld-sh -bundle -headerpad_max_install_names -o"
             SHARED_LD_CXX="$SHARED_LD_CC"
             SHARED_LD_MODULE_CXX="$SHARED_LD_MODULE_CC"
         else
-                        SHARED_LD_CC="\${CC} -dynamiclib -single_module -o"
-            SHARED_LD_MODULE_CC="\${CC} -bundle -single_module -o"
-            SHARED_LD_CXX="\${CXX} -dynamiclib -single_module -o"
-            SHARED_LD_MODULE_CXX="\${CXX} -bundle -single_module -o"
+                        SHARED_LD_CC="\${CC} -dynamiclib -single_module -headerpad_max_install_names -o"
+            SHARED_LD_MODULE_CC="\${CC} -bundle -single_module -headerpad_max_install_names -o"
+            SHARED_LD_CXX="\${CXX} -dynamiclib -single_module -headerpad_max_install_names -o"
+            SHARED_LD_MODULE_CXX="\${CXX} -bundle -single_module -headerpad_max_install_names -o"
         fi
 
         PIC_FLAG="-dynamic -fPIC"
@@ -35308,8 +35308,6 @@ fi
 
         ;;
     esac
-
-
 
 
 

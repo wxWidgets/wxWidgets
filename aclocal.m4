@@ -1388,16 +1388,16 @@ EOF
             chmod +x shared-ld-sh
 
             dnl Use the shared-ld-sh helper script
-            SHARED_LD_CC="`pwd`/shared-ld-sh -dynamiclib -o"
-            SHARED_LD_MODULE_CC="`pwd`/shared-ld-sh -bundle -o"
+            SHARED_LD_CC="`pwd`/shared-ld-sh -dynamiclib -headerpad_max_install_names -o"
+            SHARED_LD_MODULE_CC="`pwd`/shared-ld-sh -bundle -headerpad_max_install_names -o"
             SHARED_LD_CXX="$SHARED_LD_CC"
             SHARED_LD_MODULE_CXX="$SHARED_LD_MODULE_CC"
         else
             dnl Use the -single_module flag and let the linker do it for us
-            SHARED_LD_CC="\${CC} -dynamiclib -single_module -o"
-            SHARED_LD_MODULE_CC="\${CC} -bundle -single_module -o"
-            SHARED_LD_CXX="\${CXX} -dynamiclib -single_module -o"
-            SHARED_LD_MODULE_CXX="\${CXX} -bundle -single_module -o"
+            SHARED_LD_CC="\${CC} -dynamiclib -single_module -headerpad_max_install_names -o"
+            SHARED_LD_MODULE_CC="\${CC} -bundle -single_module -headerpad_max_install_names -o"
+            SHARED_LD_CXX="\${CXX} -dynamiclib -single_module -headerpad_max_install_names -o"
+            SHARED_LD_MODULE_CXX="\${CXX} -bundle -single_module -headerpad_max_install_names -o"
         fi
 
         PIC_FLAG="-dynamic -fPIC"
