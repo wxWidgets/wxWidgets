@@ -4,7 +4,7 @@ wxGLContext is a class for sharing opengl data resources, such as display lists,
 
 By sharing data resources, you can prevent code duplication, save memory, and ultimately help optimize your application.
 
-As an example, let's say you want to draw a ball on two different windows that is identical on each one, but the dimensions of one is slightly different than the other one.  What you would do is create your display lists in the shared canvas, and then translate each ball on the individual canvas's context.  This way the actual data for the ball is only created once (in the shared context), and you won't have to duplicate your development efforts on the second ball.
+As an example, let's say you want to draw a ball on two different windows that is identical on each one, but the dimensions of one is slightly different than the other one.  What you would do is create your display lists in the shared context, and then translate each ball on the individual canvas's context.  This way the actual data for the ball is only created once (in the shared context), and you won't have to duplicate your development efforts on the second ball.
 
 Note that some wxGLContext features are extremely platform-specific - its best to check your native platform's glcanvas header (on windows include/wx/msw/glcanvas.h) to see what features your native platform provides.
 
