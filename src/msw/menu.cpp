@@ -135,35 +135,50 @@ int wxMenu::FindAccel(int id) const
 
 void wxMenu::UpdateAccel(wxMenuItem *item)
 {
-    // find the (new) accel for this item
-    wxAcceleratorEntry *accel = wxGetAccelFromString(item->GetText());
-    if ( accel )
-        accel->m_command = item->GetId();
+    if ( item->IsSubMenu() )
+    {
+        wxMenu *submenu = item->GetSubMenu();
+        wxMenuItemList::Node *node = submenu->GetMenuItems().GetFirst();
+        while ( node )
+        {
+            UpdateAccel(node->GetData());
 
-    // find the old one
-    int n = FindAccel(item->GetId());
-    if ( n == wxNOT_FOUND )
-    {
-        // no old, add new if any
-        if ( accel )
-            m_accels.Add(accel);
-        else
-            return;     // skipping RebuildAccelTable() below
+            node = node->GetNext();
+        }
     }
-    else
+    else if ( !item->IsSeparator() )
     {
-        // replace old with new or just remove the old one if no new
-        delete m_accels[n];
+        // find the (new) accel for this item
+        wxAcceleratorEntry *accel = wxGetAccelFromString(item->GetText());
         if ( accel )
-            m_accels[n] = accel;
-        else
-            m_accels.Remove(n);
-    }
+            accel->m_command = item->GetId();
 
-    if ( IsAttached() )
-    {
-        m_menuBar->RebuildAccelTable();
+        // find the old one
+        int n = FindAccel(item->GetId());
+        if ( n == wxNOT_FOUND )
+        {
+            // no old, add new if any
+            if ( accel )
+                m_accels.Add(accel);
+            else
+                return;     // skipping RebuildAccelTable() below
+        }
+        else
+        {
+            // replace old with new or just remove the old one if no new
+            delete m_accels[n];
+            if ( accel )
+                m_accels[n] = accel;
+            else
+                m_accels.Remove(n);
+        }
+
+        if ( IsAttached() )
+        {
+            m_menuBar->RebuildAccelTable();
+        }
     }
+    //else: it is a separator, they can't have accels, nothing to do
 }
 
 #endif // wxUSE_ACCEL

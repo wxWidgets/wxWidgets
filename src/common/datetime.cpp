@@ -78,6 +78,7 @@
 #include <ctype.h>
 
 #include "wx/datetime.h"
+#include "wx/timer.h"           // for wxGetLocalTimeMillis()
 
 // ----------------------------------------------------------------------------
 // conditional compilation
@@ -98,8 +99,8 @@
     #if defined(__BORLANDC__) || defined(__MINGW32__) || defined(__VISAGECPP__)
         #define WX_TIMEZONE _timezone
     #elif defined(__MWERKS__)
-    	long wxmw_timezone = 28800;
-    	#define WX_TIMEZONE wxmw_timezone ;
+        long wxmw_timezone = 28800;
+        #define WX_TIMEZONE wxmw_timezone;
     #else // unknown platform - try timezone
         #define WX_TIMEZONE timezone
     #endif
@@ -1036,6 +1037,12 @@ wxDateTime wxDateTime::GetEndDST(int year, Country country)
 // constructors and assignment operators
 // ----------------------------------------------------------------------------
 
+// return the current time with ms precision
+/* static */ wxDateTime wxDateTime::UNow()
+{
+    return wxDateTime(wxGetLocalTimeMillis());
+}
+
 // the values in the tm structure contain the local time
 wxDateTime& wxDateTime::Set(const struct tm& tm)
 {
@@ -1211,7 +1218,7 @@ wxDateTime::Tm wxDateTime::GetTm(const TimeZone& tz) const
             tm = localtime(&time);
 
             // should never happen
-            wxCHECK_MSG( tm, Tm(), _T("gmtime() failed") );
+            wxCHECK_MSG( tm, Tm(), _T("localtime() failed") );
         }
         else
         {
@@ -1236,7 +1243,11 @@ wxDateTime::Tm wxDateTime::GetTm(const TimeZone& tz) const
 
         if ( tm )
         {
-            return Tm(*tm, tz);
+            // adjust the milliseconds
+            Tm tm2(*tm, tz);
+            long timeOnly = (m_time % MILLISECONDS_PER_DAY).ToLong();
+            tm2.msec = (wxDateTime_t)(timeOnly % 1000);
+            return tm2;
         }
         //else: use generic code below
     }
@@ -1760,8 +1771,10 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
 {
     wxCHECK_MSG( format, _T(""), _T("NULL format in wxDateTime::Format") );
 
+    // we have to use our own implementation if the date is out of range of
+    // strftime() or if we use non standard specificators
     time_t time = GetTicks();
-    if ( time != (time_t)-1 )
+    if ( (time != (time_t)-1) && !wxStrstr(format, _T("%l")) )
     {
         // use strftime()
         tm *tm;
@@ -1803,7 +1816,8 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
     }
 
     // we only parse ANSI C format specifications here, no POSIX 2
-    // complications, no GNU extensions
+    // complications, no GNU extensions but we do add support for a "%l" format
+    // specifier allowing to get the number of milliseconds
     Tm tm = GetTm(tz);
 
     // used for calls to strftime() when we only deal with time
@@ -2021,6 +2035,10 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
 
                 case _T('j'):       // day of the year
                     res += wxString::Format(fmt, GetDayOfYear(tz));
+                    break;
+
+                case _T('l'):       // milliseconds (NOT STANDARD)
+                    res += wxString::Format(fmt, GetMillisecond(tz));
                     break;
 
                 case _T('m'):       // month as a number (01-12)
@@ -3452,46 +3470,46 @@ wxString wxTimeSpan::Format(const wxChar *format) const
     wxString str;
     str.Alloc(wxStrlen(format));
 
-    for ( const wxChar *pch = format; pch; pch++ )
+    for ( const wxChar *pch = format; *pch; pch++ )
     {
         wxChar ch = *pch;
 
-        if ( ch == '%' )
+        if ( ch == _T('%') )
         {
             wxString tmp;
 
-            ch = *pch++;
+            ch = *++pch;    // get the format spec char
             switch ( ch )
             {
                 default:
                     wxFAIL_MSG( _T("invalid format character") );
                     // fall through
 
-                case '%':
+                case _T('%'):
                     // will get to str << ch below
                     break;
 
-                case 'D':
+                case _T('D'):
                     tmp.Printf(_T("%d"), GetDays());
                     break;
 
-                case 'E':
+                case _T('E'):
                     tmp.Printf(_T("%d"), GetWeeks());
                     break;
 
-                case 'H':
+                case _T('H'):
                     tmp.Printf(_T("%02d"), GetHours());
                     break;
 
-                case 'l':
+                case _T('l'):
                     tmp.Printf(_T("%03ld"), GetMilliseconds().ToLong());
                     break;
 
-                case 'M':
+                case _T('M'):
                     tmp.Printf(_T("%02d"), GetMinutes());
                     break;
 
-                case 'S':
+                case _T('S'):
                     tmp.Printf(_T("%02ld"), GetSeconds().ToLong());
                     break;
             }

@@ -512,6 +512,10 @@ public:
         // return the wxDateTime object for the current time
     static inline wxDateTime Now();
 
+        // return the wxDateTime object for the current time with millisecond
+        // precision (if available on this platform)
+    static wxDateTime UNow();
+
         // return the wxDateTime object for today midnight: i.e. as Now() but
         // with time set to 0
     static inline wxDateTime Today();
@@ -1096,11 +1100,7 @@ public:
         // resulting text representation. Notice that only some of format
         // specifiers valid for wxDateTime are valid for wxTimeSpan: hours,
         // minutes and seconds make sense, but not "PM/AM" string for example.
-    wxString Format(const wxChar *format = _T("%c")) const;
-        // preferred date representation for the current locale
-    wxString FormatDate() const { return Format(_T("%x")); }
-        // preferred time representation for the current locale
-    wxString FormatTime() const { return Format(_T("%X")); }
+    wxString Format(const wxChar *format = _T("%H:%M:%S")) const;
 
     // implementation
     // ------------------------------------------------------------------------

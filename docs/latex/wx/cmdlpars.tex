@@ -85,7 +85,8 @@ enum wxCmdLineEntryType
 
 The field {\tt shortName} is the usual, short, name of the switch or the option.
 {\tt longName} is the corresponding long name or NULL if the option has no long
-name. Both of these fields are unused for the parameters.
+name. Both of these fields are unused for the parameters. Both the short and
+long option names can contain only letters, digits and the underscores.
 
 {\tt description} is used by the \helpref{Usage()}{wxcmdlineparserusage} method
 to construct a help message explaining the syntax of the program.
@@ -109,7 +110,8 @@ enum
     wxCMD\_LINE\_OPTION\_MANDATORY = 0x01, // this option must be given
     wxCMD\_LINE\_PARAM\_OPTIONAL   = 0x02, // the parameter may be omitted
     wxCMD\_LINE\_PARAM\_MULTIPLE   = 0x04, // the parameter may be repeated
-    wxCMD\_LINE\_OPTION\_HELP      = 0x08  // this option is a help request
+    wxCMD\_LINE\_OPTION\_HELP      = 0x08, // this option is a help request
+    wxCMD\_LINE\_NEEDS\_SEPARATOR  = 0x10, // must have sep before the value
 }
 \end{verbatim}}
 
@@ -124,6 +126,10 @@ in the command line description. If you use this flag, you will probably need to
 use \helpref{GetParamCount}{wxcmdlineparsergetparamcount} to retrieve the number
 of parameters effectively specified after calling 
 \helpref{Parse}{wxcmdlineparserparse}.
+
+The last flag {\tt wxCMD\_LINE\_NEEDS\_SEPARATOR} can be specified to require a
+separator (either a colon, an equal sign or white space) between the option
+name and its value. By default, no separator is required.
 
 \wxheading{See also}
 

@@ -324,7 +324,7 @@ inline wxTimeSpan wxDateTime::Subtract(const wxDateTime& datetime) const
 {
     wxASSERT_MSG( IsValid() && datetime.IsValid(), _T("invalid wxDateTime"));
 
-    return wxTimeSpan(datetime.GetValue() - GetValue());
+    return wxTimeSpan(GetValue() - datetime.GetValue());
 }
 
 inline wxDateTime wxDateTime::Add(const wxDateSpan& diff) const

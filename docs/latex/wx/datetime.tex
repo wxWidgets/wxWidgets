@@ -212,6 +212,7 @@ supported. Future versions will support other calendars.
 \helpref{GetBeginDST}{wxdatetimegetbegindst}\\
 \helpref{GetEndDST}{wxdatetimegetenddst}\\
 \helpref{Now}{wxdatetimenow}\\
+\helpref{UNow}{wxdatetimeunow}\\
 \helpref{Today}{wxdatetimetoday}
 
 \membersection{Constructors, assignment operators and setters}
@@ -562,6 +563,10 @@ Example:
     printf("Current time in Paris:\t%s\n", now.Format("%c", wxDateTime::CET).c_str());
 \end{verbatim}
 
+Note that this function is accurate up to second: 
+\helpref{wxDateTime::UNow}{wxdatetimeunow} should be used for better precision
+(but it is less efficient and might not be availabel on all platforms).
+
 \wxheading{See also}
 
 \helpref{Today}{wxdatetimetoday}
@@ -586,6 +591,18 @@ The possible values for {\it country} parameter are enumerated in
 
 Returns the object corresponding to the midnight of the current day (i.e. the
 same as \helpref{Now()}{wxdatetimenow}, but the time part is set to $0$).
+
+\wxheading{See also}
+
+\helpref{Now}{wxdatetimenow}
+
+\membersection{wxDateTime::UNow}\label{wxdatetimeunow}
+
+\func{static wxDateTime}{UNow}{\void}
+
+Returns the object corresopnding to the current time including the
+milliseconds if a function to get time with such precision is available on the
+current platform (supported under most Unices and Win32).
 
 \wxheading{See also}
 
@@ -1068,6 +1085,10 @@ the character which stopped the scan.
 
 This function does the same as the standard ANSI C {\tt strftime(3)} function.
 Please see its description for the meaning of {\it format} parameter.
+
+It also accepts a few wxWindows-specific extensions: you can optionally specify
+the width of the field to follow using {\tt printf(3)}-like syntax and the
+format specificator {\tt \%l} can be used to get the number of milliseconds.
 
 \wxheading{See also}
 

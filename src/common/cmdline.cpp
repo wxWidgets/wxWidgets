@@ -485,7 +485,7 @@ int wxCmdLineParser::Parse()
                 isLong = TRUE;
 
                 const wxChar *p = arg.c_str() + 2;
-                while ( wxIsalpha(*p) || (*p == _T('-')) )
+                while ( wxIsalnum(*p) || (*p == _T('_')) || (*p == _T('-')) )
                 {
                     name += *p++;
                 }
@@ -503,7 +503,7 @@ int wxCmdLineParser::Parse()
                 // a short one: as they can be cumulated, we try to find the
                 // longest substring which is a valid option
                 const wxChar *p = arg.c_str() + 1;
-                while ( wxIsalpha(*p) )
+                while ( wxIsalnum(*p) || (*p == _T('_')) )
                 {
                     name += *p++;
                 }
@@ -596,6 +596,7 @@ int wxCmdLineParser::Parse()
                 {
                     switch ( *p )
                     {
+                        case _T('='):
                         case _T(':'):
                             // the value follows
                             p++;
@@ -619,8 +620,15 @@ int wxCmdLineParser::Parse()
                             break;
 
                         default:
-                            // the value is right here
-                            ;
+                            // the value is right here: this may be legal or
+                            // not depending on the option style
+                            if ( opt.flags & wxCMD_LINE_NEEDS_SEPARATOR )
+                            {
+                                wxLogError(_("Separator expected after the option '%s'."),
+                                           name.c_str());
+
+                                ok = FALSE;
+                            }
                     }
                 }
 
@@ -781,12 +789,17 @@ void wxCmdLineParser::Usage()
         wxStripExtension(appname);
     }
 
-    // we ocnstruct the brief cmd line desc on the fly, but not the detailed
+    // we construct the brief cmd line desc on the fly, but not the detailed
     // help message below because we want to align the options descriptions
     // and for this we must first know the longest one of them
     wxString brief;
     wxArrayString namesOptions, descOptions;
     brief.Printf(_("Usage: %s"), appname.c_str());
+
+    // the switch char is usually '-' but this can be changed with
+    // SetSwitchChars() and then the first one of possible chars is used
+    wxChar chSwitch = !m_data->m_switchChars ? _T('-')
+                                             : m_data->m_switchChars[0u];
 
     size_t n, count = m_data->m_options.GetCount();
     for ( n = 0; n < count; n++ )
@@ -799,10 +812,10 @@ void wxCmdLineParser::Usage()
             brief << _T('[');
         }
 
-        brief << _T('-') << opt.shortName;
+        brief << chSwitch << opt.shortName;
 
         wxString option;
-        option << _T("  -") << opt.shortName;
+        option << _T("  ") << chSwitch << opt.shortName;
         if ( !!opt.longName )
         {
             option << _T("  --") << opt.longName;

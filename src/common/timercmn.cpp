@@ -88,12 +88,6 @@
     #endif
 #endif // HAVE_GETTIMEOFDAY
 
-// ----------------------------------------------------------------------------
-// prototypes
-// ----------------------------------------------------------------------------
-
-wxLongLong wxGetLocalTimeMillis();
-
 // ============================================================================
 // implementation
 // ============================================================================
@@ -274,7 +268,7 @@ wxLongLong wxGetLocalTimeMillis()
     (void)ftime(&tp);
     val *= tp.time;
     return (val + tp.millitm);
-#else
+#else // no gettimeofday() nor ftime()
     // We use wxGetLocalTime() to get the seconds since
     // 00:00:00 Jan 1st 1970 and then whatever is available
     // to get millisecond resolution.
@@ -290,17 +284,17 @@ wxLongLong wxGetLocalTimeMillis()
     ::DosGetDateTime(&dt);
     val += (dt.hundredths*10);
 #elif defined (__WIN32__)
-#warning "Possible clock skew bug in wxStopWatch!"
+    #warning "Possible clock skew bug in wxGetLocalTimeMillis()!"
     SYSTEMTIME st;
     ::GetLocalTime(&st);
     val += st.wMilliseconds;
-#else
-#if !defined(__VISUALC__) && !defined(__BORLANDC__)
-#warning "wxStopWatch will be up to second resolution!"
-#endif
+#else // !Win32
+    #if !defined(__VISUALC__) && !defined(__BORLANDC__)
+        #warning "wxStopWatch will be up to second resolution!"
+    #endif
 #endif
 
     return val;
 
-#endif
+#endif // time functions
 }
