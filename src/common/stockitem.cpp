@@ -116,7 +116,7 @@ const char *wxStockItemToGTK(wxStockItemID item)
     
     #define STOCKITEM_MISSING(stockid)    \
         case wx##stockid:                 \
-            return wxEmptyString;         \
+            return NULL;                  \
             break;
 
     #if GTK_CHECK_VERSION(2,4,0)
