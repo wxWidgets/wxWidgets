@@ -787,7 +787,6 @@ wxMenu *wxMenuBarBase::Remove(size_t pos)
     wxCHECK_MSG( node, NULL, wxT("bad index in wxMenuBar::Remove()") );
 
     wxMenu *menu = node->GetData();
-    wxCHECK( node, NULL );  // unexpected
     m_menus.Erase(node);
     menu->Detach();
 
