@@ -187,14 +187,14 @@ public:
     int GetCharHeight();
     int GetCharWidth();
     wxHtmlWindow* GetWindow();
-    //void SetFonts(wxString normal_face, wxString fixed_face, int *LIST);
+    // Sets fonts to be used when displaying HTML page. (if size null then default sizes used).
     %addmethods {
-        void SetFonts(wxString normal_face, wxString fixed_face, PyObject* sizes) {
-            int* temp = int_LIST_helper(sizes);
-            if (temp) {
-                self->SetFonts(normal_face, fixed_face, temp);
+        void SetFonts(wxString normal_face, wxString fixed_face, PyObject* sizes=NULL) {
+            int* temp = NULL;
+            if (sizes) temp = int_LIST_helper(sizes);
+            self->SetFonts(normal_face, fixed_face, temp);
+            if (temp)
                 delete [] temp;
-            }
         }
     }
 
@@ -651,6 +651,9 @@ public:
     // Return value : same as SetPage
     bool LoadPage(const wxString& location);
 
+    // Loads HTML page from file
+//TODO    bool LoadFile(const wxString& filename);
+
     // Append to current page
     bool AppendToPage(const wxString& source);
 
@@ -674,12 +677,12 @@ public:
 
     // Sets fonts to be used when displaying HTML page.
     %addmethods {
-        void SetFonts(wxString normal_face, wxString fixed_face, PyObject* sizes) {
-            int* temp = int_LIST_helper(sizes);
-            if (temp) {
-                self->SetFonts(normal_face, fixed_face, temp);
+        void SetFonts(wxString normal_face, wxString fixed_face, PyObject* sizes=NULL) {
+            int* temp = NULL;
+            if (sizes) temp = int_LIST_helper(sizes);
+            self->SetFonts(normal_face, fixed_face, temp);
+            if (temp)
                 delete [] temp;
-            }
         }
     }
 
@@ -741,6 +744,16 @@ public:
     void SetHtmlText(const wxString& html,
                      const wxString& basepath = wxPyEmptyString,
                      bool isdir = TRUE);
+    // Sets fonts to be used when displaying HTML page. (if size null then default sizes used).
+    %addmethods {
+        void SetFonts(wxString normal_face, wxString fixed_face, PyObject* sizes=NULL) {
+            int* temp = NULL;
+            if (sizes) temp = int_LIST_helper(sizes);
+            self->SetFonts(normal_face, fixed_face, temp);
+            if (temp)
+                delete [] temp;
+        }
+    }
     int Render(int x, int y, int from = 0, int dont_render = FALSE);
     int GetTotalHeight();
                 // returns total height of the html document
@@ -765,6 +778,16 @@ public:
     void SetHtmlFile(const wxString &htmlfile);
     void SetHeader(const wxString& header, int pg = wxPAGE_ALL);
     void SetFooter(const wxString& footer, int pg = wxPAGE_ALL);
+    // Sets fonts to be used when displaying HTML page. (if size null then default sizes used).
+    %addmethods {
+        void SetFonts(wxString normal_face, wxString fixed_face, PyObject* sizes=NULL) {
+            int* temp = NULL;
+            if (sizes) temp = int_LIST_helper(sizes);
+            self->SetFonts(normal_face, fixed_face, temp);
+            if (temp)
+                delete [] temp;
+        }
+    }
     void SetMargins(float top = 25.2, float bottom = 25.2,
                     float left = 25.2, float right = 25.2,
                     float spaces = 5);

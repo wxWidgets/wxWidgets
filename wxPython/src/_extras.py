@@ -647,6 +647,8 @@ if wxPlatform == "__WXGTK__":
     except:
         pass
 
+# On MSW add the directory where the wxWindows catalogs were installed
+# to the default catalog path.
 if wxPlatform == "__WXMSW__":
     import os
     localedir = os.path.join(os.path.split(__file__)[0], "locale")
