@@ -504,6 +504,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_ACCESSIBILITY=no
   
   DEFAULT_wxUSE_MONOLITHIC=yes
+  DEFAULT_wxUSE_OFFICIAL_BUILD=no
 else
   DEFAULT_wxUSE_UNIVERSAL=no
   DEFAULT_wxUSE_STL=no
@@ -679,6 +680,7 @@ else
   DEFAULT_wxUSE_ACCESSIBILITY=no
   
   DEFAULT_wxUSE_MONOLITHIC=yes
+  DEFAULT_wxUSE_OFFICIAL_BUILD=no
 fi
 
 dnl WX_ARG_WITH should be used to select whether an external package will be
@@ -1074,6 +1076,16 @@ WX_ARG_ENABLE(pnm,         [  --enable-pnm            use pnm images (PNM file f
 WX_ARG_ENABLE(xpm,         [  --enable-xpm            use xpm images (XPM file format)], wxUSE_XPM)
 WX_ARG_ENABLE(ico_cur,     [  --enable-icocur         use Windows ICO and CUR formats], wxUSE_ICO_CUR)
 
+fi
+
+dnl ---------------------------------------------------------------------------
+dnl some win32 settings
+dnl ---------------------------------------------------------------------------
+
+WX_ARG_ENABLE(official_build,  [  --enable-official_build official build of wxWindows (win32 DLL only)], wxUSE_OFFICIAL_BUILD)
+AC_ARG_ENABLE(vendor,  [  --enable-vendor=VENDOR  vendor name (win32 DLL only)], [VENDOR="$enableval"])
+if test "x$VENDOR" = "x"; then
+    VENDOR="custom"
 fi
 
 dnl General settings (needed for GUI and non-GUI compilations alike).
@@ -5518,9 +5530,12 @@ else
     MONOLITHIC=0
 fi
 
-dnl FIXME -- make configurable!
-VENDOR="custom"
-OFFICIAL_BUILD=0
+if test $wxUSE_OFFICIAL_BUILD = "yes" ; then
+    OFFICIAL_BUILD=1
+else
+    OFFICIAL_BUILD=0
+fi
+
 AC_SUBST(VENDOR)
 AC_SUBST(OFFICIAL_BUILD)
 
