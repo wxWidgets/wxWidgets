@@ -530,8 +530,44 @@ wxString wxFileName::GetPath( bool add_separator, wxPathFormat format ) const
 
 wxString wxFileName::GetFullPath( wxPathFormat format ) const
 {
-	(void)format;
-    return GetPathWithSep() + GetFullName();
+    format = GetFormat( format );
+    
+    wxString ret;
+    if (format == wxPATH_DOS)
+    {
+        for (size_t i = 0; i < m_dirs.GetCount(); i++)
+        {
+            ret += m_dirs[i];
+            ret += '\\';
+        }
+    }
+    else
+    if (format == wxPATH_UNIX)
+    {
+        for (size_t i = 0; i < m_dirs.GetCount(); i++)
+        {
+            ret += m_dirs[i];
+            ret += '/';
+        }
+    }
+    else
+    {
+        for (size_t i = 0; i < m_dirs.GetCount(); i++)
+        {
+            ret += m_dirs[i];
+            ret += ':';
+        }
+    }
+    
+    ret += m_name;
+    
+    if (!m_ext.IsEmpty())
+    {
+        ret += '.';
+        ret += m_ext;
+    }
+    
+    return ret;
 }
 
 // Return the short form of the path (returns identity on non-Windows platforms)
