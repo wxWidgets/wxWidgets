@@ -54,6 +54,8 @@ protected:
     #include "wx/gtk/statbmp.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/statbmp.h"
+#elif defined(__WXCOCOA__)
+    #include "wx/cocoa/statbmp.h"
 #elif defined(__WXPM__)
     #include "wx/os2/statbmp.h"
 #endif

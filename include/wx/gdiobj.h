@@ -13,6 +13,8 @@
 #include "wx/mgl/gdiobj.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/gdiobj.h"
+#elif defined(__WXCOCOA__)
+#include "wx/cocoa/gdiobj.h"
 #elif defined(__WXPM__)
 #include "wx/os2/gdiobj.h"
 #endif

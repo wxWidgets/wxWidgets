@@ -13,6 +13,8 @@
 #include "wx/mgl/cursor.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/cursor.h"
+#elif defined(__WXCOCOA__)
+#include "wx/cocoa/cursor.h"
 #elif defined(__WXPM__)
 #include "wx/os2/cursor.h"
 #endif

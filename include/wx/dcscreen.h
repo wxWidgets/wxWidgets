@@ -13,6 +13,8 @@
 #include "wx/mgl/dcscreen.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/dcscreen.h"
+#elif defined(__WXCOCOA__)
+#include "wx/cocoa/dcscreen.h"
 #elif defined(__WXPM__)
 #include "wx/os2/dcscreen.h"
 #endif

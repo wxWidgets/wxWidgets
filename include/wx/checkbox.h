@@ -42,6 +42,8 @@ public:
     #include "wx/gtk/checkbox.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/checkbox.h"
+#elif defined(__WXCOCOA__)
+    #include "wx/cocoa/checkbox.h"
 #elif defined(__WXPM__)
     #include "wx/os2/checkbox.h"
 #endif

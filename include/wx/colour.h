@@ -13,6 +13,8 @@
 #include "wx/x11/colour.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/colour.h"
+#elif defined(__WXCOCOA__)
+#include "wx/cocoa/colour.h"
 #elif defined(__WXPM__)
 #include "wx/os2/colour.h"
 #endif

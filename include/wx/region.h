@@ -13,6 +13,8 @@
 #include "wx/mgl/region.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/region.h"
+#elif defined(__WXCOCOA__)
+#include "wx/cocoa/region.h"
 #elif defined(__WXPM__)
 #include "wx/os2/region.h"
 #endif

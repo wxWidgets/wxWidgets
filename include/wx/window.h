@@ -1155,6 +1155,14 @@ private:
         #define sm_classwxWindowMac sm_classwxWindow
     #endif // wxUniv
     #include "wx/mac/window.h"
+#elif defined(__WXCOCOA__)
+    #ifdef __WXUNIVERSAL__
+        #define wxWindowNative wxWindowCocoa
+    #else // !wxUniv
+        #define wxWindowCocoa wxWindow
+        #define sm_classwxWindowCocoa sm_classwxWindow
+    #endif // wxUniv
+    #include "wx/cocoa/window.h"
 #elif defined(__WXPM__)
     #ifdef __WXUNIVERSAL__
         #define wxWindowNative wxWindowOS2

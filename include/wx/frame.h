@@ -230,6 +230,8 @@ protected:
         #include "wx/motif/frame.h"
     #elif defined(__WXMAC__)
         #include "wx/mac/frame.h"
+    #elif defined(__WXCOCOA__)
+        #include "wx/cocoa/frame.h"
     #elif defined(__WXPM__)
         #include "wx/os2/frame.h"
     #endif

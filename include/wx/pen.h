@@ -13,6 +13,8 @@
 #include "wx/mgl/pen.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/pen.h"
+#elif defined(__WXCOCOA__)
+#include "wx/cocoa/pen.h"
 #elif defined(__WXPM__)
 #include "wx/os2/pen.h"
 #endif

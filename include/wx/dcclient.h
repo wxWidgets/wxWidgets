@@ -13,6 +13,8 @@
 #include "wx/mgl/dcclient.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/dcclient.h"
+#elif defined(__WXCOCOA__)
+#include "wx/cocoa/dcclient.h"
 #elif defined(__WXPM__)
 #include "wx/os2/dcclient.h"
 #endif

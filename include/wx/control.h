@@ -82,6 +82,8 @@ protected:
     #include "wx/gtk/control.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/control.h"
+#elif defined(__WXCOCOA__)
+    #include "wx/cocoa/control.h"
 #elif defined(__WXPM__)
     #include "wx/os2/control.h"
 #endif

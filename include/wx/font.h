@@ -221,6 +221,8 @@ private:
     #include "wx/mgl/font.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/font.h"
+#elif defined(__WXCOCOA__)
+    #include "wx/cocoa/font.h"
 #elif defined(__WXPM__)
     #include "wx/os2/font.h"
 #endif

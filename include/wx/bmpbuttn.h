@@ -88,6 +88,8 @@ private:
     #include "wx/gtk/bmpbuttn.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/bmpbuttn.h"
+#elif defined(__WXCOCOA__)
+    #include "wx/cocoa/bmpbuttn.h"
 #elif defined(__WXPM__)
     #include "wx/os2/bmpbuttn.h"
 #endif

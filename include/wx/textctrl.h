@@ -305,6 +305,8 @@ protected:
     #include "wx/gtk/textctrl.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/textctrl.h"
+#elif defined(__WXCOCOA__)
+    #include "wx/cocoa/textctrl.h"
 #elif defined(__WXPM__)
     #include "wx/os2/textctrl.h"
 #endif

@@ -135,6 +135,8 @@ protected:
     #include "wx/mac/listbox.h"
 #elif defined(__WXPM__)
     #include "wx/os2/listbox.h"
+#elif defined(__WXCOCOA__)
+    #include "wx/cocoa/listbox.h"
 #endif
 
 #endif // wxUSE_LISTBOX

@@ -28,6 +28,8 @@ public:
 #include "wx/gtk/statbox.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/statbox.h"
+#elif defined(__WXCOCOA__)
+#include "wx/cocoa/statbox.h"
 #elif defined(__WXPM__)
 #include "wx/os2/statbox.h"
 #endif

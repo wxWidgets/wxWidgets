@@ -24,6 +24,8 @@ public:
     #include "wx/gtk/stattext.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/stattext.h"
+#elif defined(__WXCOCOA__)
+    #include "wx/cocoa/stattext.h"
 #elif defined(__WXPM__)
     #include "wx/os2/stattext.h"
 #endif
