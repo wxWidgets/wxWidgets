@@ -316,9 +316,9 @@ bool wxPathList::Member (const wxString& path)
           path.CompareTo (path2) == 0
 #endif
         )
-        return TRUE;
+        return true;
   }
-  return FALSE;
+  return false;
 }
 
 wxString wxPathList::FindValidPath (const wxString& file)
@@ -397,23 +397,23 @@ wxIsAbsolutePath (const wxString& filename)
         // "MacOS:MyText.txt" is absolute whereas "MyDir:MyText.txt"
         // is not. Or maybe ":MyDir:MyText.txt" has to be used? RR.
         if (filename.Find(':') != wxNOT_FOUND && filename[0] != ':')
-            return TRUE ;
+            return true ;
 #else
         // Unix like or Windows
         if (filename[0] == wxT('/'))
-            return TRUE;
+            return true;
 #endif
 #ifdef __VMS__
         if ((filename[0] == wxT('[') && filename[1] != wxT('.')))
-            return TRUE;
+            return true;
 #endif
 #if defined(__WINDOWS__) || defined(__OS2__)
         // MSDOS like
         if (filename[0] == wxT('\\') || (wxIsalpha (filename[0]) && filename[1] == wxT(':')))
-            return TRUE;
+            return true;
 #endif
     }
-    return FALSE ;
+    return false ;
 }
 
 /*
@@ -1172,7 +1172,7 @@ wxConcatFiles (const wxString& file1, const wxString& file2, const wxString& fil
 {
   wxString outfile;
   if ( !wxGetTempFileName( wxT("cat"), outfile) )
-      return FALSE;
+      return false;
 
   FILE *fp1 wxDUMMY_INITIALIZE(NULL);
   FILE *fp2 = NULL;
@@ -1188,7 +1188,7 @@ wxConcatFiles (const wxString& file1, const wxString& file2, const wxString& fil
         fclose (fp2);
       if (fp3)
         fclose (fp3);
-      return FALSE;
+      return false;
     }
 
   int ch;
@@ -1219,11 +1219,11 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
         wxLogSysError(_("Failed to copy the file '%s' to '%s'"),
                       file1.c_str(), file2.c_str());
 
-        return FALSE;
+        return false;
     }
 #elif defined(__OS2__)
     if ( ::DosCopy(file2, file2, overwrite ? DCPY_EXISTING : 0) != 0 )
-        return FALSE;
+        return false;
 #else // !Win32
 
     wxStructStat fbuf;
@@ -1234,13 +1234,13 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
         // from it anyhow
         wxLogSysError(_("Impossible to get permissions for file '%s'"),
                       file1.c_str());
-        return FALSE;
+        return false;
     }
 
     // open file1 for reading
     wxFile fileIn(file1, wxFile::read);
     if ( !fileIn.IsOpened() )
-        return FALSE;
+        return false;
 
     // remove file2, if it exists. This is needed for creating
     // file2 with the correct permissions in the next step
@@ -1248,7 +1248,7 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
     {
         wxLogSysError(_("Impossible to overwrite the file '%s'"),
                       file2.c_str());
-        return FALSE;
+        return false;
     }
 
 #ifdef __UNIX__
@@ -1262,7 +1262,7 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
 
     wxFile fileOut;
     if ( !fileOut.Create(file2, overwrite, fbuf.st_mode & 0777) )
-        return FALSE;
+        return false;
 
 #ifdef __UNIX__
     /// restore the old umask
@@ -1276,21 +1276,21 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
     {
         count = fileIn.Read(buf, WXSIZEOF(buf));
         if ( fileIn.Error() )
-            return FALSE;
+            return false;
 
         // end of file?
         if ( !count )
             break;
 
         if ( fileOut.Write(buf, count) < count )
-            return FALSE;
+            return false;
     }
 
     // we can expect fileIn to be closed successfully, but we should ensure
     // that fileOut was closed as some write errors (disk full) might not be
     // detected before doing this
     if ( !fileIn.Close() || !fileOut.Close() )
-        return FALSE;
+        return false;
 
 #if !defined(__VISAGECPP__) && !defined(__WXMAC__) || defined(__UNIX__)
     // no chmod in VA.  Should be some permission API for HPFS386 partitions
@@ -1299,12 +1299,12 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
     {
         wxLogSysError(_("Impossible to set permissions for the file '%s'"),
                       file2.c_str());
-        return FALSE;
+        return false;
     }
 #endif // OS/2 || Mac
 #endif // __WXMSW__ && __WIN32__
 
-    return TRUE;
+    return true;
 }
 
 bool
@@ -1313,16 +1313,16 @@ wxRenameFile (const wxString& file1, const wxString& file2)
 #ifndef __WXWINCE__
     // Normal system call
   if ( wxRename (file1, file2) == 0 )
-    return TRUE;
+    return true;
 #endif
 
   // Try to copy
   if (wxCopyFile(file1, file2)) {
     wxRemoveFile(file1);
-    return TRUE;
+    return true;
   }
   // Give up
-  return FALSE;
+  return false;
 }
 
 bool wxRemoveFile(const wxString& file)
@@ -1354,6 +1354,7 @@ bool wxMkdir(const wxString& dir, int perm)
     // for the GNU compiler
 #if (!(defined(__WXMSW__) || defined(__OS2__) || defined(__DOS__))) || (defined(__GNUWIN32__) && !defined(__MINGW32__)) || defined(__WINE__) || defined(__WXMICROWIN__)
   #if defined(MSVCRT)
+    wxUnusedVar(perm);
     if ( mkdir(wxFNCONV(dirname)) != 0 )
   #else
     if ( mkdir(wxFNCONV(dirname), perm) != 0 )
@@ -1380,17 +1381,17 @@ bool wxMkdir(const wxString& dir, int perm)
     {
         wxLogSysError(_("Directory '%s' couldn't be created"), dirname);
 
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 #endif // Mac/!Mac
 }
 
 bool wxRmdir(const wxString& dir, int WXUNUSED(flags))
 {
 #ifdef __VMS__
-    return FALSE; //to be changed since rmdir exists in VMS7.x
+    return false; //to be changed since rmdir exists in VMS7.x
 #elif defined(__OS2__)
     return (::DosDeleteDir((PSZ)dir.c_str()) == 0);
 #else
@@ -1541,14 +1542,14 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
         buf = new wxChar[sz + 1];
     }
 
-    bool ok wxDUMMY_INITIALIZE(FALSE);
+    bool ok wxDUMMY_INITIALIZE(false);
 
     // for the compilers which have Unicode version of _getcwd(), call it
     // directly, for the others call the ANSI version and do the translation
 #if !wxUSE_UNICODE
     #define cbuf buf
 #else // wxUSE_UNICODE
-    bool needsANSI = TRUE;
+    bool needsANSI = true;
 
     #if !defined(HAVE_WGETCWD) || wxUSE_UNICODE_MSLU
         // This is not legal code as the compiler
@@ -1562,11 +1563,11 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
         #if wxUSE_UNICODE_MSLU
             if ( wxGetOsVersion() != wxWIN95 )
         #else
-            char *cbuf = NULL; // never really used because needsANSI will always be FALSE
+            char *cbuf = NULL; // never really used because needsANSI will always be false
         #endif
             {
                 ok = _wgetcwd(buf, sz) != NULL;
-                needsANSI = FALSE;
+                needsANSI = false;
             }
     #endif
 
@@ -1592,11 +1593,11 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
             cwdSpec.name[0] = 0 ;
             wxString res = wxMacFSSpec2MacFilename( &cwdSpec ) ;
 			wxStrcpy( buf , res ) ;			
-            ok = TRUE;
+            ok = true;
         }
         else
         {
-            ok = FALSE;
+            ok = false;
         }
     #elif defined(__OS2__)
         APIRET rc;
@@ -1688,7 +1689,7 @@ bool wxSetWorkingDirectory(const wxString& d)
 #ifdef __WIN32__
 #ifdef __WXWINCE__
     // No equivalent in WinCE
-    return FALSE;
+    return false;
 #else
     return (bool)(SetCurrentDirectory(d) != 0);
 #endif
@@ -1743,11 +1744,11 @@ bool wxEndsWithPathSeparator(const wxChar *pszFileName)
     return len && wxIsPathSeparator(pszFileName[len - 1]);
 }
 
-// find a file in a list of directories, returns FALSE if not found
+// find a file in a list of directories, returns false if not found
 bool wxFindFileInPath(wxString *pStr, const wxChar *pszPath, const wxChar *pszFile)
 {
     // we assume that it's not empty
-    wxCHECK_MSG( !wxIsEmpty(pszFile), FALSE,
+    wxCHECK_MSG( !wxIsEmpty(pszFile), false,
                  _T("empty file name in wxFindFileInPath"));
 
     // skip path separator in the beginning of the file name if present
@@ -1782,7 +1783,7 @@ bool wxFindFileInPath(wxString *pStr, const wxChar *pszPath, const wxChar *pszFi
 
     delete [] szPath;
 
-    return pc != NULL;  // if TRUE => we breaked from the loop
+    return pc != NULL;  // if true => we breaked from the loop
 }
 
 void WXDLLEXPORT wxSplitPath(const wxChar *pszFileName,
@@ -1962,13 +1963,13 @@ bool wxIsWild( const wxString& pattern )
         switch (*pat++)
         {
         case wxT('?'): case wxT('*'): case wxT('['): case wxT('{'):
-            return TRUE;
+            return true;
         case wxT('\\'):
             if (!*pat++)
-                return FALSE;
+                return false;
         }
     }
-    return FALSE;
+    return false;
 }
 
 /*
@@ -2000,7 +2001,7 @@ bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
         {
                 /* Never match so that hidden Unix files
                  * are never found. */
-                return FALSE;
+                return false;
         }
 
         for (;;)
@@ -2017,7 +2018,7 @@ bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
                 {
                         m++;
                         if (!*n++)
-                        return FALSE;
+                        return false;
                 }
                 else
                 {
@@ -2026,7 +2027,7 @@ bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
                                 m++;
                                 /* Quoting "nothing" is a bad thing */
                                 if (!*m)
-                                return FALSE;
+                                return false;
                         }
                         if (!*m)
                         {
@@ -2036,9 +2037,9 @@ bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
                                 * match
                                 */
                                 if (!*n)
-                                return TRUE;
+                                return true;
                                 if (just)
-                                return TRUE;
+                                return true;
                                 just = 0;
                                 goto not_matched;
                         }
@@ -2070,7 +2071,7 @@ bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
                                 * impossible to match it
                                 */
                                 if (!*n)
-                                return FALSE;
+                                return false;
                                 if (mp)
                                 {
                                         m = mp;
@@ -2092,7 +2093,7 @@ bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
                                         count = acount;
                                 }
                                 else
-                                return FALSE;
+                                return false;
                         }
                 }
         }

@@ -1723,6 +1723,7 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
 
 #else // !wxUSE_MIMETYPE
 
+    wxUnusedVar(mime);
     if (extension == wxT("exe"))
         return executable;
     else
