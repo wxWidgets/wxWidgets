@@ -163,6 +163,12 @@ GridFrame::GridFrame()
     grid->SetRowSize( 99, 60 );
     grid->SetCellValue( 99, 99, "Ctrl+End\nwill go to\nthis cell" );
 
+    grid->SetCellValue(2, 2, "red");
+    grid->SetCellTextColour(2, 2, *wxRED);
+    grid->SetCellValue(3, 3, "green on white");
+    grid->SetCellTextColour(3, 3, *wxGREEN);
+    grid->SetCellBackgroundColour(3, 3, *wxWHITE);
+
     wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
     topSizer->Add( grid,
                    1,

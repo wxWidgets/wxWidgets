@@ -50,9 +50,100 @@
 #define WXGRID_MIN_COL_WIDTH                  15
 #define WXGRID_DEFAULT_SCROLLBAR_WIDTH        16
 
+// ----------------------------------------------------------------------------
+// forward declarations
+// ----------------------------------------------------------------------------
 
+class WXDLLEXPORT wxGridCellAttrProviderData;
+class WXDLLEXPORT wxGridRowLabelWindow;
+class WXDLLEXPORT wxGridColLabelWindow;
+class WXDLLEXPORT wxGridCornerLabelWindow;
+class WXDLLEXPORT wxGridWindow;
 class WXDLLEXPORT wxGrid;
 
+// ----------------------------------------------------------------------------
+// wxGridCellAttr: this class can be used to alter the cells appearance in
+// the grid by changing their colour/font/... from default. An object of this
+// class may be returned by wxGridTable::GetAttr().
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxGridCellAttr
+{
+public:
+    // ctors
+    wxGridCellAttr()
+    {
+        SetAlignment(0, 0);
+    }
+
+    wxGridCellAttr(const wxColour& colText,
+                   const wxColour& colBack,
+                   const wxFont& font,
+                   int hAlign,
+                   int vAlign)
+        : m_colText(colText), m_colBack(colBack), m_font(font)
+    {
+        SetAlignment(hAlign, vAlign);
+    }
+
+    // default copy ctor ok
+
+    // setters
+    void SetTextColour(const wxColour& colText) { m_colText = colText; }
+    void SetBackgroundColour(const wxColour& colBack) { m_colBack = colBack; }
+    void SetFont(const wxFont& font) { m_font = font; }
+    void SetAlignment(int hAlign, int vAlign)
+    {
+        m_hAlign = hAlign;
+        m_vAlign = vAlign;
+    }
+
+    // accessors
+    bool HasTextColour() const { return m_colText.Ok(); }
+    bool HasBackgroundColour() const { return m_colBack.Ok(); }
+    bool HasFont() const { return m_font.Ok(); }
+    bool HasAlignment() const { return m_hAlign || m_vAlign; }
+
+    const wxColour& GetTextColour() const { return m_colText; }
+    const wxColour& GetBackgroundColour() const { return m_colBack; }
+    const wxFont& GetFont() const { return m_font; }
+    void GetAlignment(int *hAlign, int *vAlign)
+    {
+        if ( hAlign ) *hAlign = m_hAlign;
+        if ( vAlign ) *vAlign = m_vAlign;
+    }
+
+private:
+    wxColour m_colText,
+             m_colBack;
+    wxFont   m_font;
+    int      m_hAlign,
+             m_vAlign;
+};
+
+// ----------------------------------------------------------------------------
+// wxGridCellAttrProvider: class used by wxGridTableBase to retrieve/store the
+// cell attributes.
+// ----------------------------------------------------------------------------
+
+// implementation note: we separate it from wxGridTableBase because we wish to
+// avoid deriving a new table class if possible, and sometimes it will be
+// enough to just derive another wxGridCellAttrProvider instead
+
+class WXDLLEXPORT wxGridCellAttrProvider
+{
+public:
+    wxGridCellAttrProvider();
+    virtual ~wxGridCellAttrProvider();
+
+    virtual wxGridCellAttr *GetAttr(int row, int col) const;
+    virtual void SetAttr(const wxGridCellAttr *attr, int row, int col);
+
+private:
+    void InitData();
+
+    wxGridCellAttrProviderData *m_data;
+};
 
 //////////////////////////////////////////////////////////////////////
 //
@@ -93,13 +184,33 @@ public:
     virtual void SetRowLabelValue( int WXUNUSED(row), const wxString& ) {}
     virtual void SetColLabelValue( int WXUNUSED(col), const wxString& ) {}
 
+    // Attribute handling
+    //
+
+    // give us the attr provider to use - we take ownership of the pointer
+    void SetAttrProvider(wxGridCellAttrProvider *attrProvider);
+
+    // get the currently used attr provider (may be NULL)
+    wxGridCellAttrProvider *GetAttrProvider() const { return m_attrProvider; }
+
+    // by default forwarded to wxGridCellAttrProvider if any. May be
+    // overridden to handle attributes directly in this class.
+    virtual wxGridCellAttr *GetAttr( int row, int col );
+
+    // takes ownership of the pointer
+    virtual void SetAttr(const wxGridCellAttr *attr, int row, int col );
+
 private:
     wxGrid * m_view;
+    wxGridCellAttrProvider *m_attrProvider;
 
     DECLARE_ABSTRACT_CLASS( wxGridTableBase );
 };
 
 
+// ----------------------------------------------------------------------------
+// wxGridTableMessage
+// ----------------------------------------------------------------------------
 
 // IDs for messages sent from grid table to view
 //
@@ -296,103 +407,15 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-
-class WXDLLEXPORT wxGridRowLabelWindow : public wxWindow
-{
-public:
-    wxGridRowLabelWindow() { m_owner = (wxGrid *)NULL; }
-    wxGridRowLabelWindow( wxGrid *parent, wxWindowID id,
-                          const wxPoint &pos, const wxSize &size );
-
-private:
-    wxGrid   *m_owner;
-
-    void OnPaint( wxPaintEvent& event );
-    void OnMouseEvent( wxMouseEvent& event );
-    void OnKeyDown( wxKeyEvent& event );
-
-    DECLARE_DYNAMIC_CLASS(wxGridRowLabelWindow)
-    DECLARE_EVENT_TABLE()
-};
-
-
-class WXDLLEXPORT wxGridColLabelWindow : public wxWindow
-{
-public:
-    wxGridColLabelWindow() { m_owner = (wxGrid *)NULL; }
-    wxGridColLabelWindow( wxGrid *parent, wxWindowID id,
-                          const wxPoint &pos, const wxSize &size );
-
-private:
-    wxGrid   *m_owner;
-
-    void OnPaint( wxPaintEvent &event );
-    void OnMouseEvent( wxMouseEvent& event );
-    void OnKeyDown( wxKeyEvent& event );
-
-    DECLARE_DYNAMIC_CLASS(wxGridColLabelWindow)
-    DECLARE_EVENT_TABLE()
-};
-
-
-class WXDLLEXPORT wxGridCornerLabelWindow : public wxWindow
-{
-public:
-    wxGridCornerLabelWindow() { m_owner = (wxGrid *)NULL; }
-    wxGridCornerLabelWindow( wxGrid *parent, wxWindowID id,
-                             const wxPoint &pos, const wxSize &size );
-
-private:
-    wxGrid *m_owner;
-
-    void OnMouseEvent( wxMouseEvent& event );
-    void OnKeyDown( wxKeyEvent& event );
-    void OnPaint( wxPaintEvent& event );
-
-    DECLARE_DYNAMIC_CLASS(wxGridCornerLabelWindow)
-    DECLARE_EVENT_TABLE()
-};
-
-
-
-class WXDLLEXPORT wxGridWindow : public wxPanel
-{
-public:
-    wxGridWindow()
-    {
-        m_owner = (wxGrid *)NULL;
-        m_rowLabelWin = (wxGridRowLabelWindow *)NULL;
-        m_colLabelWin = (wxGridColLabelWindow *)NULL;
-    }
-
-    wxGridWindow( wxGrid *parent,
-                  wxGridRowLabelWindow *rowLblWin,
-                  wxGridColLabelWindow *colLblWin,
-                  wxWindowID id, const wxPoint &pos, const wxSize &size );
-    ~wxGridWindow();
-
-    void ScrollWindow( int dx, int dy, const wxRect *rect );
-
-private:
-    wxGrid                   *m_owner;
-    wxGridRowLabelWindow     *m_rowLabelWin;
-    wxGridColLabelWindow     *m_colLabelWin;
-
-    void OnPaint( wxPaintEvent &event );
-    void OnMouseEvent( wxMouseEvent& event );
-    void OnKeyDown( wxKeyEvent& );
-
-    DECLARE_DYNAMIC_CLASS(wxGridWindow)
-    DECLARE_EVENT_TABLE()
-};
-
-
+// ----------------------------------------------------------------------------
+// wxGrid
+// ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxGrid : public wxScrolledWindow
 {
 public:
     wxGrid()
-        { 
+        {
             m_table          = (wxGridTableBase *) NULL;
             m_gridWin        = (wxGridWindow *) NULL;
             m_rowLabelWin    = (wxGridRowLabelWindow *) NULL;
@@ -684,16 +707,16 @@ public:
     //  to the client size of the grid window.
     //
     wxRect BlockToDeviceRect( const wxGridCellCoords & topLeft,
-			      const wxGridCellCoords & bottomRight );
+                              const wxGridCellCoords & bottomRight );
 
     // This function returns the rectangle that encloses the selected cells
     // in device coords and clipped to the client size of the grid window.
     //
     wxRect SelectionToDeviceRect()
         {
-	    return BlockToDeviceRect( m_selectedTopLeft,
-				      m_selectedBottomRight );
-	}
+            return BlockToDeviceRect( m_selectedTopLeft,
+                                      m_selectedBottomRight );
+        }
 
 
     // ------ For compatibility with previous wxGrid only...
@@ -907,7 +930,13 @@ protected:
     wxColour   m_gridLineColour;
     bool       m_gridLinesEnabled;
 
+    // default cell attributes
     wxFont     m_defaultCellFont;
+    int        m_defaultCellHAlign,
+               m_defaultCellVAlign;
+
+    // do we have some place to store attributes in?
+    bool CanHaveAttributes();
 
     wxGridCellCoordsArray  m_cellsExposed;
     wxArrayInt             m_rowsExposed;

@@ -12,6 +12,9 @@
 #ifndef griddemo_h
 #define griddemo_h
 
+#if !defined(wxUSE_NEW_GRID) || !(wxUSE_NEW_GRID)
+    #error "This sample requires the new wxGrid class."
+#endif
 
 class wxGrid;
 
@@ -42,10 +45,10 @@ class GridFrame : public wxFrame
     void SetColLabelVertAlignment( wxCommandEvent& );
     void SetGridLineColour( wxCommandEvent& );
 
-    void InsertRow( wxCommandEvent& );    
-    void InsertCol( wxCommandEvent& );    
-    void DeleteSelectedRows( wxCommandEvent& );    
-    void DeleteSelectedCols( wxCommandEvent& );    
+    void InsertRow( wxCommandEvent& );
+    void InsertCol( wxCommandEvent& );
+    void DeleteSelectedRows( wxCommandEvent& );
+    void DeleteSelectedCols( wxCommandEvent& );
     void ClearGrid( wxCommandEvent& );
 
     void OnLabelLeftClick( wxGridEvent& );
@@ -55,7 +58,7 @@ class GridFrame : public wxFrame
     void OnSelectCell( wxGridEvent& );
     void OnRangeSelected( wxGridRangeSelectEvent& );
     void OnCellValueChanged( wxGridEvent& );
-    
+
   public:
     GridFrame();
     ~GridFrame();
@@ -83,7 +86,7 @@ class GridFrame : public wxFrame
            ID_ABOUT,
 
            ID_TESTFUNC };
-        
+
     DECLARE_EVENT_TABLE()
 };
 
