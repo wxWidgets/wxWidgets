@@ -30,29 +30,29 @@ NOTE: In a future release, all ODBC class constants will be prefaced with 'wx'.
 
 \begin{verbatim}
     wxDB_PATH_MAX           Maximum path length allowed to be passed to
-                            the ODBC driver to indicate where the data 
+                            the ODBC driver to indicate where the data
                             file(s) are located.
 
-    DB_MAX_COLUMN_NAME_LEN  Maximum supported length for the name of a 
+    DB_MAX_COLUMN_NAME_LEN  Maximum supported length for the name of a
                             column
 
-    DB_MAX_ERROR_HISTORY    Maximum number of error messages retained in 
-                            the queue before being overwritten by new 
+    DB_MAX_ERROR_HISTORY    Maximum number of error messages retained in
+                            the queue before being overwritten by new
                             errors.
 
-    DB_MAX_ERROR_MSG_LEN    Maximum supported length of an error message 
+    DB_MAX_ERROR_MSG_LEN    Maximum supported length of an error message
                             returned by the ODBC classes
 
-    DB_MAX_STATEMENT_LEN    Maximum supported length for a complete SQL 
+    DB_MAX_STATEMENT_LEN    Maximum supported length for a complete SQL
                             statement to be passed to the ODBC driver
 
-    DB_MAX_TABLE_NAME_LEN   Maximum supported length for the name of a 
+    DB_MAX_TABLE_NAME_LEN   Maximum supported length for the name of a
                             table
 
-    DB_MAX_WHERE_CLAUSE_LEN Maximum supported WHERE clause length that 
+    DB_MAX_WHERE_CLAUSE_LEN Maximum supported WHERE clause length that
                             can be passed to the ODBC driver
 
-    DB_TYPE_NAME_LEN        Maximum length of the name of a column's 
+    DB_TYPE_NAME_LEN        Maximum length of the name of a column's
                             data type
 \end{verbatim}
 
@@ -182,15 +182,15 @@ See the remarks in \helpref{wxDb::Dbms}{wxdbdbms} for exceptions/issues with eac
    DB_ERR_TIMEOUT_EXPIRED                     // SqlState = 'S1T00'
 \end{verbatim}
 
-\docparam{struct {\bf wxDb::dbInf}}{This structure is internal to the 
-wxDb class and contains details of the ODBC datasource that the current 
-instance of the wxDb is connected to in its members.  When the datasource 
-is opened, all of the information contained in the dbInf structure is 
-queried from the datasource.  This information is used almost exclusively 
-within the ODBC class library.  Where there may be a need for particular 
-portions of this information outside of the class library, member 
-functions (e.g. 
-\helpref{wxDbTable::IsCursorClosedOnCommit}{wxdbtableiscursorclosedoncommit}) 
+\docparam{struct {\bf wxDb::dbInf}}{This structure is internal to the
+wxDb class and contains details of the ODBC datasource that the current
+instance of the wxDb is connected to in its members.  When the datasource
+is opened, all of the information contained in the dbInf structure is
+queried from the datasource.  This information is used almost exclusively
+within the ODBC class library.  Where there may be a need for particular
+portions of this information outside of the class library, member
+functions (e.g.
+\helpref{wxDbTable::IsCursorClosedOnCommit}{wxdbtableiscursorclosedoncommit})
 have been added for ease of use.}
 
 \begin{verbatim}
@@ -203,38 +203,38 @@ have been added for ease of use.}
    wxChar serverName[80]      - Server Name, typically a connect string
    wxChar databaseName[128]   - Database filename
    wxChar outerJoins[2]       - Does datasource support outer joins
-   wxChar procedureSupport[2] - Does datasource support stored 
+   wxChar procedureSupport[2] - Does datasource support stored
                                 procedures
-   UWORD  maxConnections      - Maximum # of connections datasource 
+   UWORD  maxConnections      - Maximum # of connections datasource
                                 supports
    UWORD  maxStmts            - Maximum # of HSTMTs per HDBC
    UWORD  apiConfLvl          - ODBC API conformance level
    UWORD  cliConfLvl          - Is datasource SAG compliant
    UWORD  sqlConfLvl          - SQL conformance level
    UWORD  cursorCommitBehavior   - How cursors are affected on db commit
-   UWORD  cursorRollbackBehavior - How cursors are affected on db 
+   UWORD  cursorRollbackBehavior - How cursors are affected on db
                                    rollback
-   UWORD  supportNotNullClause   - Does datasource support NOT NULL 
+   UWORD  supportNotNullClause   - Does datasource support NOT NULL
                                    clause
-   wxChar supportIEF[2]       - Integrity Enhancement Facility (Ref. 
+   wxChar supportIEF[2]       - Integrity Enhancement Facility (Ref.
                                 Integrity)
    UDWORD txnIsolation        - Transaction isolation level supported by
                                 driver
-   UDWORD txnIsolationOptions - Transaction isolation level options 
+   UDWORD txnIsolationOptions - Transaction isolation level options
                                 available
    UDWORD fetchDirections     - Fetch directions supported
    UDWORD lockTypes           - Lock types supported in SQLSetPos
-   UDWORD posOperations       - Position operations supported in 
+   UDWORD posOperations       - Position operations supported in
                                 SQLSetPos
    UDWORD posStmts            - Position statements supported
-   UDWORD scrollConcurrency   - Scrollable cursor concurrency options 
+   UDWORD scrollConcurrency   - Scrollable cursor concurrency options
                                 supported
    UDWORD scrollOptions       - Scrollable cursor options supported
-   UDWORD staticSensitivity   - Can additions/deletions/updates be 
+   UDWORD staticSensitivity   - Can additions/deletions/updates be
                                 detected
-   UWORD  txnCapable          - Indicates if datasource supports 
+   UWORD  txnCapable          - Indicates if datasource supports
                                 transactions
-   UDWORD loginTimeout        - Number seconds to wait for a login 
+   UDWORD loginTimeout        - Number seconds to wait for a login
                                 request
 \end{verbatim}
 
@@ -242,27 +242,27 @@ have been added for ease of use.}
 
 \docparam{wxChar {\bf wxDb::errorMsg}[SQL\_MAX\_MESSAGE\_LENGTH]}{This member variable is populated as a result of calling \helpref{wxDb::GetNextError}{wxdbgetnexterror}.  It contains the ODBC error message text.}
 
-\docparam{SDWORD {\bf wxDb::nativeError}}{Set by wxDb::DispAllErrors, 
-wxDb::GetNextError, and wxDb::DispNextError.  It contains the 
-datasource-specific error code returned by the datasource to the ODBC driver.  
+\docparam{SDWORD {\bf wxDb::nativeError}}{Set by wxDb::DispAllErrors,
+wxDb::GetNextError, and wxDb::DispNextError.  It contains the
+datasource-specific error code returned by the datasource to the ODBC driver.
 Used for reporting ODBC errors.}
 
-\docparam{wxChar {\bf wxDb::sqlState}[20]}{Set by wxDb::TranslateSqlState().  
-Indicates the error state after a failed ODBC operation.  Used for reporting 
+\docparam{wxChar {\bf wxDb::sqlState}[20]}{Set by wxDb::TranslateSqlState().
+Indicates the error state after a failed ODBC operation.  Used for reporting
 ODBC errors.}
 
 \wxheading{Remarks}
 
 Default cursor scrolling is defined by wxODBC\_FWD\_ONLY\_CURSORS in setup.h
-when the wxWindows library is built.  This behavior can be overridden when 
-an instance of a wxDb is created (see \helpref{wxDb constructor}{wxdbconstr}).  
-Default setting of this value TRUE, as not all databases/drivers support 
+when the wxWindows library is built.  This behavior can be overridden when
+an instance of a wxDb is created (see \helpref{wxDb constructor}{wxdbconstr}).
+Default setting of this value TRUE, as not all databases/drivers support
 both types of cursors.
 
 \wxheading{See also}
 
-\helpref{wxDbColFor}{wxdbcolfor}, \helpref{wxDbColInf}{wxdbcolinf}, 
-\helpref{wxDbTable}{wxdbtable}, \helpref{wxDbTableInf}{wxdbtableinf}, 
+\helpref{wxDbColFor}{wxdbcolfor}, \helpref{wxDbColInf}{wxdbcolinf},
+\helpref{wxDbTable}{wxdbtable}, \helpref{wxDbTableInf}{wxdbtableinf},
 \helpref{wxDbInf}{wxdbinf}
 
 \subsection{Associated non-class functions}\label{wxdbfunctions}
@@ -273,17 +273,17 @@ The following functions are used in conjunction with the wxDb class.
 
 \wxheading{Remarks}
 
-Closes all cached connections that have been made through use of the 
-\helpref{wxDbGetConnection}{wxdbfunctions} function.  
+Closes all cached connections that have been made through use of the
+\helpref{wxDbGetConnection}{wxdbfunctions} function.
 
-NOTE: These connections are closed regardless of whether they are in use 
-or not.  This function should only be called after the program has 
-finished using the connections and all wxDbTable instances that use any of 
+NOTE: These connections are closed regardless of whether they are in use
+or not.  This function should only be called after the program has
+finished using the connections and all wxDbTable instances that use any of
 the connections have been closed.
 
-This function performs a \helpref{wxDb::CommitTrans}{wxdbcommittrans} 
-on the connection before closing it to commit any changes that are still 
-pending, as well as to avoid any function sequence errors upon closing 
+This function performs a \helpref{wxDb::CommitTrans}{wxdbcommittrans}
+on the connection before closing it to commit any changes that are still
+pending, as well as to avoid any function sequence errors upon closing
 each connection.
 
 
@@ -291,8 +291,8 @@ each connection.
 
 \wxheading{Remarks}
 
-Returns a count of how many database connections are currently free ( not 
-being used) that have been cached through use of the \helpref{wxDbGetConnection}{wxdbfunctions} 
+Returns a count of how many database connections are currently free ( not
+being used) that have been cached through use of the \helpref{wxDbGetConnection}{wxdbfunctions}
 function.
 
 
@@ -300,61 +300,61 @@ function.
 
 \wxheading{Remarks}
 
-Searches the list of cached database connections connection for one matching 
+Searches the list of cached database connections connection for one matching
 the passed in wxDb instance.  If found, that cached connection is freed.
 
-Freeing a connection means that it is marked as available (free) in the 
-cache of connections, so that a call to \helpref{wxDbGetConnection}{wxdbfunctions} 
-is able to return a pointer to the wxDb instance for use.  Freeing a 
-connection does NOT close the connection, it only makes the connection 
+Freeing a connection means that it is marked as available (free) in the
+cache of connections, so that a call to \helpref{wxDbGetConnection}{wxdbfunctions}
+is able to return a pointer to the wxDb instance for use.  Freeing a
+connection does NOT close the connection, it only makes the connection
 available again.
- 
 
-\func{wxDb *}{wxDbGetConnection}{\param{wxDbConnectInf *}{pDbConfig}, 
+
+\func{wxDb *}{wxDbGetConnection}{\param{wxDbConnectInf *}{pDbConfig},
 \param{bool }{FwdOnlyCursors=(bool)wxODBC\_FWD\_ONLY\_CURSORS}}
 
 \wxheading{Remarks}
 
-This function is used to request a "new" wxDb instance for use by the program. 
-The wxDb instance returned is also opened (see \helpref{wxDb::Open}{wxdbopen}).  
+This function is used to request a "new" wxDb instance for use by the program.
+The wxDb instance returned is also opened (see \helpref{wxDb::Open}{wxdbopen}).
 
-This function (along with wxDbFreeConnection() and wxDbCloseConnection()) 
-maintain a cached of wxDb instances for user/re-use by a program.  When a 
-program needs a wxDb instance, it may call this function to obtain a wxDb 
-instance.  If there is a wxDb instance in the cache that is currently unused 
-that matches the connection requirements specified in {\it'pDbConfig'} then 
-that cached connection is marked as no longer being free, and a pointer to 
+This function (along with wxDbFreeConnection() and wxDbCloseConnection())
+maintain a cached of wxDb instances for user/re-use by a program.  When a
+program needs a wxDb instance, it may call this function to obtain a wxDb
+instance.  If there is a wxDb instance in the cache that is currently unused
+that matches the connection requirements specified in {\it'pDbConfig'} then
+that cached connection is marked as no longer being free, and a pointer to
 the wxDb instance is returned.
 
-If there are no connections available in the cache that meet the requirements 
-given in {\it'pDbConfig'}, then a new wxDb instance is created to connect 
-to the datasource specified in {\it'pDbConfig'} using the userID and password 
+If there are no connections available in the cache that meet the requirements
+given in {\it'pDbConfig'}, then a new wxDb instance is created to connect
+to the datasource specified in {\it'pDbConfig'} using the userID and password
 given in {\it'pDbConfig'}.
 
-NOTE: The caching routine also uses the \helpref{wxDb::Open}{wxdbopen} 
-connection datatype copying code.  If the call to wxDbGetConnection() 
-requests a connection to a datasource, and there is not one available in the 
-cache, a new connection is created.  But when the connection is opened, 
-instead of polling the datasource over again for its datatypes, if a 
-connection to the same datasource (using the same userID/password) has already 
-been done previously, the new connection skips querying the datasource for 
-its datatypes, and uses the same datatypes determined previously by the 
-other connection(s) for that same datasource.  This cuts down greatly on 
+NOTE: The caching routine also uses the \helpref{wxDb::Open}{wxdbopen}
+connection datatype copying code.  If the call to wxDbGetConnection()
+requests a connection to a datasource, and there is not one available in the
+cache, a new connection is created.  But when the connection is opened,
+instead of polling the datasource over again for its datatypes, if a
+connection to the same datasource (using the same userID/password) has already
+been done previously, the new connection skips querying the datasource for
+its datatypes, and uses the same datatypes determined previously by the
+other connection(s) for that same datasource.  This cuts down greatly on
 network traffic, database load, and connection creation time.
 
-When the program is done using a connection created through a call to 
-wxDbGetConnection(), the program should call wxDbFreeConnection() to release 
-the wxDb instance back to the cache.  DO NOT DELETE THE wxDb INSTANCE!  
-Deleting the wxDb instance returned can cause a crash/memory corruption 
+When the program is done using a connection created through a call to
+wxDbGetConnection(), the program should call wxDbFreeConnection() to release
+the wxDb instance back to the cache.  DO NOT DELETE THE wxDb INSTANCE!
+Deleting the wxDb instance returned can cause a crash/memory corruption
 later in the program when the cache is cleaned up.
 
-When exiting the program, call wxDbCloseConnections() to close all the 
+When exiting the program, call wxDbCloseConnections() to close all the
 cached connections created by calls to wxDbGetConnection().
 
 
 \func{const wxChar *}{wxDbLogExtendedErrorMsg}{\param{const wxChar *}{userText}, \param{wxDb *}{pDb}, \param{wxChar *}{ErrFile}, \param{int }{ErrLine}}
 
-Writes a message to the wxLog window (stdout usually) when an internal 
+Writes a message to the wxLog window (stdout usually) when an internal
 error situation occurs.  This function only works in DEBUG builds
 
 \func{bool}{wxDbSqlLog}{\param{wxDbSqlLogState }{state}, \param{const wxString \&}{filename = SQL\_LOG\_FILENAME}}
@@ -367,14 +367,14 @@ This function sets the sql log state for all open wxDb objects
 
 \wxheading{Remarks}
 
-This routine queries the ODBC driver manager for a list of available 
-datasources.  Repeatedly call this function to obtain all the datasources 
+This routine queries the ODBC driver manager for a list of available
+datasources.  Repeatedly call this function to obtain all the datasources
 available through the ODBC driver manager on the current workstation.
 
 \begin{verbatim}
     wxStringList strList;
 
-    while (wxDbGetDataSource(DbConnectInf.GetHenv(), Dsn, SQL\_MAX\_DSN\_LENGTH+1, DsDesc, 255))
+    while (wxDbGetDataSource(DbConnectInf.GetHenv(), Dsn, SQL_MAX_DSN_LENGTH+1, DsDesc, 255))
         strList.Add(Dsn);
 \end{verbatim}
 
@@ -392,10 +392,10 @@ Constructor, used to create an ODBC connection to a datasource.
 
 \wxheading{Parameters}
 
-\docparam{aHenv}{Environment handle used for this connection.  See 
+\docparam{aHenv}{Environment handle used for this connection.  See
 \helpref{wxDConnectInf::AllocHenv}{wxdbconnectinfallochenv}}
 
-\docparam{FwdOnlyCursors}{Will cursors created for use with this datasource 
+\docparam{FwdOnlyCursors}{Will cursors created for use with this datasource
 connection only allow forward scrolling cursors.}
 
 \wxheading{Remarks}
@@ -423,24 +423,24 @@ be created and opened before any database activity can occur.
 
 \membersection{wxDb::Catalog}\label{wxdbcatalog}
 
-\func{bool}{Catalog}{\param{wxChar *}{ userID}, \param{const wxString \&}{fileName = 
+\func{bool}{Catalog}{\param{wxChar *}{ userID}, \param{const wxString \&}{fileName =
 SQL\_CATALOG\_FILENAME}}
 
-Allows a data "dictionary" of the datasource to be created, dumping pertinent 
-information about all data tables to which the user specified in userID has 
-access. 
+Allows a data "dictionary" of the datasource to be created, dumping pertinent
+information about all data tables to which the user specified in userID has
+access.
 
 \wxheading{Parameters}
 
-\docparam{userID}{Database user name to use in accessing the database.  All 
+\docparam{userID}{Database user name to use in accessing the database.  All
 tables to which this user has rights will be evaluated in the catalog.}
 
-\docparam{fileName}{{\it OPTIONAL}.  Name of the text file to create and write 
+\docparam{fileName}{{\it OPTIONAL}.  Name of the text file to create and write
 the DB catalog to.  Default is SQL\_CATALOG\_FILENAME.}
 
 \wxheading{Return value}
 
-Returns TRUE if the catalog request was successful, or FALSE if there was some 
+Returns TRUE if the catalog request was successful, or FALSE if there was some
 reason that the catalog could not be generated.
 
 \wxheading{Example}
@@ -465,11 +465,11 @@ Closes the database connection.
 
 \wxheading{Remarks}
 
-At the end of your program, when you have finished all of your database work, 
-you must close the ODBC connection to the datasource.  There are actually 
-four steps involved in doing this as illustrated in the example.  
+At the end of your program, when you have finished all of your database work,
+you must close the ODBC connection to the datasource.  There are actually
+four steps involved in doing this as illustrated in the example.
 
-Any wxDbTable instances which use this connection must be deleted before 
+Any wxDbTable instances which use this connection must be deleted before
 closing the database connection.
 
 \wxheading{Example}
@@ -490,7 +490,7 @@ closing the database connection.
 
 \func{bool}{CommitTrans}{\void}
 
-Permanently "commits" changes (insertions/deletions/updates) to the database.  
+Permanently "commits" changes (insertions/deletions/updates) to the database.
 
 \wxheading{Return value}
 
@@ -498,79 +498,79 @@ Returns TRUE if the commit was successful, or FALSE if the commit failed.
 
 \wxheading{Remarks}
 
-Transactions begin implicitly as soon as you make a change to the database 
-with an insert/update/delete, or any other direct SQL command that performs 
-one of these operations against the datasource.  
-At any time thereafter, to save the changes to disk permanently, "commit" 
+Transactions begin implicitly as soon as you make a change to the database
+with an insert/update/delete, or any other direct SQL command that performs
+one of these operations against the datasource.
+At any time thereafter, to save the changes to disk permanently, "commit"
 them by calling this function.
 
-Calling this member function commits ALL open transactions on this ODBC 
-connection.  For example, if three different wxDbTable instances used the 
-same connection to the datasource, committing changes made on one of those 
-wxDbTable instances commits any pending transactions on all three wxDbTable 
+Calling this member function commits ALL open transactions on this ODBC
+connection.  For example, if three different wxDbTable instances used the
+same connection to the datasource, committing changes made on one of those
+wxDbTable instances commits any pending transactions on all three wxDbTable
 instances.
 
-Until a call to wxDb::CommitTrans() is made, no other user or cursor is able 
+Until a call to wxDb::CommitTrans() is made, no other user or cursor is able
 to see any changes made to the row(s) that have been inserted/modified/deleted.
 
 
 \wxheading{Special Note : {\it Cursors} }
 
-\normalbox{It is important to understand that different database/ODBC driver 
-combinations handle transactions differently.  One thing in particular that 
-you must pay attention to is cursors, in regard to transactions.  Cursors are 
-what allow you to scroll through records forward and backward and to 
-manipulate records as you scroll through them.  When you issue a query, a 
-cursor is created behind the scenes.  The cursor keeps track of the query and 
-keeps track of the current record pointer.  After you commit or rollback a 
-transaction, the cursor may be closed automatically.  This is database 
-dependent, and with some databases this behavior can be controlled through 
-management functions.  This means you would need to requery the datasource 
-before you can perform any additional work using this cursor.  This is only 
-necessary however if the datasource closes the cursor after a commit or 
-rollback.  Use the 
-\helpref{wxDbTable::IsCursorClosedOnCommit}{wxdbtableiscursorclosedoncommit} 
-member function to determine the datasource's transaction behavior.  Note, in 
-many situations it is very inefficient to assume the cursor is closed and 
-always requery.  This could put a significant, unnecessary load on datasources 
+\normalbox{It is important to understand that different database/ODBC driver
+combinations handle transactions differently.  One thing in particular that
+you must pay attention to is cursors, in regard to transactions.  Cursors are
+what allow you to scroll through records forward and backward and to
+manipulate records as you scroll through them.  When you issue a query, a
+cursor is created behind the scenes.  The cursor keeps track of the query and
+keeps track of the current record pointer.  After you commit or rollback a
+transaction, the cursor may be closed automatically.  This is database
+dependent, and with some databases this behavior can be controlled through
+management functions.  This means you would need to requery the datasource
+before you can perform any additional work using this cursor.  This is only
+necessary however if the datasource closes the cursor after a commit or
+rollback.  Use the
+\helpref{wxDbTable::IsCursorClosedOnCommit}{wxdbtableiscursorclosedoncommit}
+member function to determine the datasource's transaction behavior.  Note, in
+many situations it is very inefficient to assume the cursor is closed and
+always requery.  This could put a significant, unnecessary load on datasources
 that leave the cursors open after a transaction.}
 
 
 \membersection{wxDb::CreateView}\label{wxdbcreateviews}
 
-\func{bool}{CreateView}{\param{const wxString \&}{ viewName}, 
+\func{bool}{CreateView}{\param{const wxString \&}{ viewName},
 \param{const wxString \&}{ colList}, \param{const wxString \&}{pSqlStmt}}
 
-Creates a SQL VIEW of one or more tables in a single datasource.  Note that 
-this function will only work against databases which support views (currently 
+Creates a SQL VIEW of one or more tables in a single datasource.  Note that
+this function will only work against databases which support views (currently
 only Oracle as of November 21 2000).
 
 \wxheading{Parameters}
 
 \docparam{viewName}{The name of the view.  e.g. PARTS\_V}
 
-\docparam{colList}{{\it OPTIONAL} Pass in a comma delimited list of column 
-names if you wish to explicitly name each column in the result set.  If not 
-desired, pass in an empty string and the column names from the associated 
+\docparam{colList}{{\it OPTIONAL} Pass in a comma delimited list of column
+names if you wish to explicitly name each column in the result set.  If not
+desired, pass in an empty string and the column names from the associated
 table(s) will be used.}
 
-\docparam{pSqlStmt}{Pointer to the select statement portion of the CREATE 
+\docparam{pSqlStmt}{Pointer to the select statement portion of the CREATE
 VIEW statement.  Must be a complete, valid SQL SELECT statement.}
 
 \wxheading{Remarks}
 
-A 'view' is a logical table that derives columns from one or more other 
-tables or views.  Once the view is created, it can be queried exactly like 
+A 'view' is a logical table that derives columns from one or more other
+tables or views.  Once the view is created, it can be queried exactly like
 any other table in the database.
 
-NOTE: Views are not available with all datasources.  Oracle is one example 
+NOTE: Views are not available with all datasources.  Oracle is one example
 of a datasource which does support views.
 
 \wxheading{Example}
 
 \begin{verbatim}
    // Incomplete code sample
-   db.CreateView("PARTS_SD1", "PN, PD, QTY",  
+   db.CreateView("PARTS_SD1", "PN, PD, QTY",
                  "SELECT PART_NO, PART_DESC, QTY_ON_HAND * 1.1 FROM PARTS \
                   WHERE STORAGE_DEVICE = 1");
 
@@ -589,19 +589,19 @@ The return value will be of the enumerated type wxDBMS.  This enumerated
 type contains a list of all the currently tested and supported databases.
 
 Additional databases may work with these classes, but the databases
-returned by this function have been tested and confirmed to work with 
+returned by this function have been tested and confirmed to work with
 these ODBC classes.
 
-Possible values returned by this function can be viewed in the 
+Possible values returned by this function can be viewed in the
 \helpref{Enumerated types}{wxdbenumeratedtypes} section of wxDb.
 
 There are known issues with conformance to the ODBC standards with several
-datasources supported by the wxWindows ODBC classes.  Please see the overview 
+datasources supported by the wxWindows ODBC classes.  Please see the overview
 for specific details on which datasource have which issues.
 
 \wxheading{Return value}
 
-The return value will indicate which of the supported datasources is 
+The return value will indicate which of the supported datasources is
 currently connected to by this connection.  In the event that the
 datasource is not recognized, a value of 'dbmsUNIDENTIFIED' is returned.
 
@@ -610,33 +610,33 @@ datasource is not recognized, a value of 'dbmsUNIDENTIFIED' is returned.
 
 \func{bool}{DispAllErrors}{\param{HENV}{ aHenv}, \param{HDBC}{ aHdbc = SQL\_NULL\_HDBC}, \param{HSTMT}{ aHstmt = SQL\_NULL\_HSTMT}}
 
-Used to log all database errors that occurred as a result of an executed 
-database command.  This logging is automatic and also includes debug logging 
-when compiled in debug mode via \helpref{wxLogDebug}{wxlogdebug}.  If logging 
-is turned on via \helpref{wxDb::SetSqlLogging}{wxdbsetsqllogging}, then an 
+Used to log all database errors that occurred as a result of an executed
+database command.  This logging is automatic and also includes debug logging
+when compiled in debug mode via \helpref{wxLogDebug}{wxlogdebug}.  If logging
+is turned on via \helpref{wxDb::SetSqlLogging}{wxdbsetsqllogging}, then an
 entry is also logged to the defined log file.
 
 \wxheading{Parameters}
 
 \docparam{aHenv}{Handle to the ODBC environment.}
 
-\docparam{aHdbc}{Handle to the ODBC connection.  Pass this in if the ODBC 
+\docparam{aHdbc}{Handle to the ODBC connection.  Pass this in if the ODBC
 function call that erred required a hdbc or hstmt argument.}
 
-\docparam{aHstmt}{Handle to the ODBC statement being executed against.  Pass 
+\docparam{aHstmt}{Handle to the ODBC statement being executed against.  Pass
 this in if the ODBC function call that erred out required a hstmt argument.}
 
 \wxheading{Remarks}
 
-This member function will log all of the ODBC error messages for the last 
-ODBC function call that was made.  This function is normally used internally 
-within the ODBC class library, but can be used programmatically after calling 
+This member function will log all of the ODBC error messages for the last
+ODBC function call that was made.  This function is normally used internally
+within the ODBC class library, but can be used programmatically after calling
 ODBC functions directly (i.e. SQLFreeEnv()).
 
 \wxheading{Return value}
 
-The function always returns FALSE, so a call to this function can be made 
-in the return statement of a code block in the event of a failure to 
+The function always returns FALSE, so a call to this function can be made
+in the return statement of a code block in the event of a failure to
 perform an action (see the example below).
 
 \wxheading{See also}
@@ -719,7 +719,7 @@ Allows a native SQL command to be executed directly against the datasource.  In 
 \wxheading{Remarks}
 
 This member extends the wxDb class and allows you to build and execute ANY VALID
-SQL statement against the datasource.  This allows you to extend the class 
+SQL statement against the datasource.  This allows you to extend the class
 library by being able to issue any SQL statement that the datasource is capable
 of processing.
 
@@ -731,11 +731,11 @@ of processing.
 
 \func{bool}{IsFwdOnlyCursors}{\void}
 
-Older form (pre-2.3/2.4 of wxWindows) of the 
-\helpref{wxDb::IsFwdOnlyCursors}{wxdbisfwdonlycursors}.  This method is 
-provided for backward compatability only.  The method 
-\helpref{wxDb::IsFwdOnlyCursors}{wxdbisfwdonlycursors} should be 
-used in place of this method. 
+Older form (pre-2.3/2.4 of wxWindows) of the
+\helpref{wxDb::IsFwdOnlyCursors}{wxdbisfwdonlycursors}.  This method is
+provided for backward compatability only.  The method
+\helpref{wxDb::IsFwdOnlyCursors}{wxdbisfwdonlycursors} should be
+used in place of this method.
 
 
 \func{wxDbInf *}{GetCatalog}{\param{const wxChar *}{userID}}
@@ -744,9 +744,9 @@ used in place of this method.
 
 \func{wxDbInf *}{GetCatalog}{\param{const wxChar *}{userID}}
 
-Returns a \helpref{wxDbInf}{wxdbinf} pointer that points to the catalog 
-(datasource) name, schema, number of tables accessible to the current user, 
-and a wxDbTableInf pointer to all data pertaining to all tables in the users 
+Returns a \helpref{wxDbInf}{wxdbinf} pointer that points to the catalog
+(datasource) name, schema, number of tables accessible to the current user,
+and a wxDbTableInf pointer to all data pertaining to all tables in the users
 catalog.
 
 \wxheading{Parameters}
@@ -771,9 +771,9 @@ The returned catalog will only contain catalog entries for tables to which the u
 
 \docparam{tableName}{The table name you wish to obtain column information about.}
 
-\docparam{userID}{Name of the user that owns the table(s) (also referred to as schema).  
-Required for some datasources for situations where there may be multiple tables with the 
-same name in the datasource, but owned by different users. {\it userID } is 
+\docparam{userID}{Name of the user that owns the table(s) (also referred to as schema).
+Required for some datasources for situations where there may be multiple tables with the
+same name in the datasource, but owned by different users. {\it userID } is
 evaluated in the following manner:}
 
 \begin{verbatim}
@@ -784,7 +784,7 @@ evaluated in the following manner:}
 
 \wxheading{Return value}
 
-Returns a count of how many columns are in the specified table.  If an error 
+Returns a count of how many columns are in the specified table.  If an error
 occurs retrieving the number of columns, this function will return a -1.
 
 \membersection{wxDb::GetColumns}\label{wxdbgetcolumns}
@@ -808,16 +808,16 @@ occurs retrieving the number of columns, this function will return a -1.
 
 \wxheading{Return value}
 
-This function returns a pointer to an array of \helpref{wxDbColInf}{wxdbcolinf} 
-structures, allowing you to obtain information regarding the columns of the 
-named table(s).  If no columns were found, or an error occurred, this pointer 
+This function returns a pointer to an array of \helpref{wxDbColInf}{wxdbcolinf}
+structures, allowing you to obtain information regarding the columns of the
+named table(s).  If no columns were found, or an error occurred, this pointer
 will be NULL.
 
 THE CALLING FUNCTION IS RESPONSIBLE FOR DELETING THE {\it wxDbColInf} MEMORY WHEN IT IS
 FINISHED WITH IT.
 
 \normalbox{ALL column bindings associated with this wxDb instance are unbound
-by this function, including those used by any wxDbTable instances that use 
+by this function, including those used by any wxDbTable instances that use
 this wxDb instance.  This function should use its own wxDb instance
 to avoid undesired unbinding of columns.}
 
@@ -841,33 +841,33 @@ to avoid undesired unbinding of columns.}
 
 \membersection{wxDb::GetData}\label{wxdbgetdata}
 
-\func{bool}{GetData}{\param{UWORD}{ colNo}, \param{SWORD}{ cType}, 
+\func{bool}{GetData}{\param{UWORD}{ colNo}, \param{SWORD}{ cType},
 \param{PTR}{ pData}, \param{SDWORD}{ maxLen}, \param{SDWORD FAR *}{ cbReturned} }
 
-Used to retrieve result set data without binding column values to memory 
+Used to retrieve result set data without binding column values to memory
 variables (i.e. not using a wxDbTable instance to access table data).
 
 \wxheading{Parameters}
 
-\docparam{colNo}{Ordinal number of the desired column in the result set to be 
+\docparam{colNo}{Ordinal number of the desired column in the result set to be
 returned.}
-\docparam{cType}{The C data type that is to be returned.  See a partial list 
+\docparam{cType}{The C data type that is to be returned.  See a partial list
 in \helpref{wxDbTable::SetColDefs}{wxdbtablesetcoldefs}}
-\docparam{pData}{Memory buffer which will hold the data returned by the call 
+\docparam{pData}{Memory buffer which will hold the data returned by the call
 to this function.}
-\docparam{maxLen}{Maximum size of the buffer {\it 'pData'} in characters. 
-NOTE: Not UNICODE safe.  If this is a numeric field, a value of 0 may be 
-passed for this parameter, as the API knows the size of the expected return 
+\docparam{maxLen}{Maximum size of the buffer {\it 'pData'} in characters.
+NOTE: Not UNICODE safe.  If this is a numeric field, a value of 0 may be
+passed for this parameter, as the API knows the size of the expected return
 value.}
-\docparam{cbReturned}{Pointer to the buffer containing the length of the 
-actual data returned.  If this value comes back as SQL\_NULL\_DATA, then the 
+\docparam{cbReturned}{Pointer to the buffer containing the length of the
+actual data returned.  If this value comes back as SQL\_NULL\_DATA, then the
 \helpref{wxDb::GetData}{wxdbgetdata} call has failed.}
 
 \wxheading{See also}
 
 \helpref{wxDb::GetNext}{wxdbgetnext}, \helpref{wxDb::ExecSql}{wxdbexecsql}
 
-\wxheading{Example} 
+\wxheading{Example}
 
 \begin{verbatim}
     SDWORD cb;
@@ -890,7 +890,7 @@ actual data returned.  If this value comes back as SQL\_NULL\_DATA, then the
         return(0);
     }
 
-    // Read column #1 of the row returned by the call to ::GetNext() 
+    // Read column #1 of the row returned by the call to ::GetNext()
     // and return the value in 'reqQty'
     if (!pDb->GetData(1, SQL_C_ULONG, &reqQty, 0, &cb))
     {
@@ -907,7 +907,7 @@ actual data returned.  If this value comes back as SQL\_NULL\_DATA, then the
 
 When requesting multiple columns to be returned from the result set (for example, the SQL query
 requested 3 columns be returned), the calls to this function must request the columns in ordinal
-sequence (1,2,3 or 1,3 or 2,3).  
+sequence (1,2,3 or 1,3 or 2,3).
 
 \membersection{wxDb::GetDatabaseName}\label{wxdbgetdatabasename}
 
@@ -965,7 +965,7 @@ Currently always returns TRUE.
 
 \func{bool}{GetNext}{\void}
 
-Called after executing a query, this function requests the next row 
+Called after executing a query, this function requests the next row
 in the result set after the current position of the cursor.
 
 \wxheading{See also}
@@ -974,19 +974,19 @@ in the result set after the current position of the cursor.
 
 \membersection{wxDb::GetNextError}\label{wxdbgetnexterror}
 
-\func{bool}{GetNextError}{\param{HENV}{ aHenv}, 
+\func{bool}{GetNextError}{\param{HENV}{ aHenv},
 \param{HDBC}{ aHdbc = SQL\_NULL\_HDBC}, \param{HSTMT}{ aHstmt = SQL\_NULL\_HSTMT}}
 
 \wxheading{Parameters}
 
 \docparam{aHenv}{A handle to the ODBC environment.}
-\docparam{aHdbc}{{\it OPTIONAL.}  A handle to the ODBC connection.  Pass this 
+\docparam{aHdbc}{{\it OPTIONAL.}  A handle to the ODBC connection.  Pass this
 in if the ODBC function call that erred out required a hdbc or hstmt argument.}
-\docparam{AHstmt}{{\it OPTIONAL.}A handle to the ODBC statement being executed 
-against.  Pass this in if the ODBC function call that erred out requires a 
+\docparam{AHstmt}{{\it OPTIONAL.}A handle to the ODBC statement being executed
+against.  Pass this in if the ODBC function call that erred out requires a
 hstmt argument.}
 
-\wxheading{Example} 
+\wxheading{Example}
 
 \begin{verbatim}
    if (SQLExecDirect(hstmt, (UCHAR FAR *) pSqlStmt, SQL_NTS) != SQL_SUCCESS)
@@ -998,7 +998,7 @@ hstmt argument.}
 
 \wxheading{See also}
 
-\helpref{wxDb::DispNextError}{wxdbdispnexterror}, 
+\helpref{wxDb::DispNextError}{wxdbdispnexterror},
 \helpref{wxDb::DispAllErrors}{wxdbdispallerrors}
 
 
@@ -1013,7 +1013,7 @@ Returns the password used to establish this connection to the datasource.
 
 \func{int }{GetTableCount}{\void}
 
-Returns the number of wxDbTable() instances currently using this datasource 
+Returns the number of wxDbTable() instances currently using this datasource
 connection.
 
 
@@ -1021,22 +1021,22 @@ connection.
 
 \func{const wxString \&}{GetUsername}{\void}
 
-Returns the user name (uid) used to establish this connection to the 
+Returns the user name (uid) used to establish this connection to the
 datasource.
 
 
 \membersection{wxDb::Grant}\label{wxdbgrant}
 
-\func{bool}{Grant}{\param{int }{privileges}, \param{const wxString \&}{tableName}, 
+\func{bool}{Grant}{\param{int }{privileges}, \param{const wxString \&}{tableName},
 \param{const wxString \&}{userList = "PUBLIC"}}
 
-Use this member function to GRANT privileges to users for accessing tables in 
+Use this member function to GRANT privileges to users for accessing tables in
 the datasource.
 
 \wxheading{Parameters}
 
-\docparam{privileges}{Use this argument to select which privileges you want to 
-grant.  Pass DB\_GRANT\_ALL to grant all privileges.  To grant individual 
+\docparam{privileges}{Use this argument to select which privileges you want to
+grant.  Pass DB\_GRANT\_ALL to grant all privileges.  To grant individual
 privileges pass one or more of the following OR'd together:}
 
 \begin{verbatim}
@@ -1055,10 +1055,10 @@ privileges pass one or more of the following OR'd together:}
 
 Some databases require user names to be specified in all capital letters (i.e. Oracle).  This function does not automatically capitalize the user names passed in the comma-separated list.  This is the responsibility of the calling routine.
 
-The currently logged in user must have sufficient grantor privileges for this 
+The currently logged in user must have sufficient grantor privileges for this
 function to be able to successfully grant the indicated privileges.
 
-\wxheading{Example} 
+\wxheading{Example}
 
 \begin{verbatim}
    db.Grant(DB_GRANT_SELECT | DB_GRANT_INSERT, "PARTS", "mary, sue");
@@ -1069,37 +1069,37 @@ function to be able to successfully grant the indicated privileges.
 \func{bool}{IsFwdOnlyCursors}{\void}
 
 This setting indicates whether this database connection was created
-as being capable of using only forward scrolling cursors.  
+as being capable of using only forward scrolling cursors.
 
-This function does NOT indicate if the ODBC driver or datasource supports 
-backward scrolling cursors.  There is no standard way of detecting if the 
+This function does NOT indicate if the ODBC driver or datasource supports
+backward scrolling cursors.  There is no standard way of detecting if the
 driver or datasource can support backward scrolling cursors.
 
-If a wxDb instance was created as being capable of only forward scrolling 
-cursors, then even if the datasource and ODBC driver support backward 
-scrolling cursors, tables using this database connection would only be able 
+If a wxDb instance was created as being capable of only forward scrolling
+cursors, then even if the datasource and ODBC driver support backward
+scrolling cursors, tables using this database connection would only be able
 to use forward scrolling cursors.
 
 The default setting of whether a wxDb connection to a database allows
-forward-only or also backward scrolling cursors is defined in setup.h by the 
+forward-only or also backward scrolling cursors is defined in setup.h by the
 value of wxODBC\_FWD\_ONLY\_CURSORS.  This default setting can be overridden
-when the wxDb connection is initially created (see 
+when the wxDb connection is initially created (see
 \helpref{wxDb constructor}{wxdbconstr} and \helpref{wxDbGetConnection}{wxdbfunctions}).
 
 \wxheading{Return value}
 
 Returns TRUE if this datasource connection is defined as using only forward
-scrolling cursors, or FALSE if the connection is defined as being allowed to 
+scrolling cursors, or FALSE if the connection is defined as being allowed to
 use backward scrolling cursors and their associated functions (see note above).
 
 \wxheading{Remarks}
 
-Added as of wxWindows v2.4 release, this function is a renamed version of 
-wxDb::FwdOnlyCursors() to match the normal wxWindows naming conventions for 
+Added as of wxWindows v2.4 release, this function is a renamed version of
+wxDb::FwdOnlyCursors() to match the normal wxWindows naming conventions for
 class member functions.
 
-This function is not available in versions prior to v2.4.  You should 
-use \helpref{wxDb::FwdOnlyCursors}{wxdbfwdonlycursors} for wxWindows 
+This function is not available in versions prior to v2.4.  You should
+use \helpref{wxDb::FwdOnlyCursors}{wxdbfwdonlycursors} for wxWindows
 versions prior to 2.4.
 
 \wxheading{See also}
@@ -1110,20 +1110,20 @@ versions prior to 2.4.
 
 \func{bool}{IsOpen}{\void}
 
-Indicates whether the database connection to the datasource is currently 
+Indicates whether the database connection to the datasource is currently
 opened.
 
 \wxheading{Remarks}
 
-This function may indicate that the database connection is open, even if 
-the call to \helpref{wxDb::Open}{wxdbopen} may have failed to fully 
-initialize the connection correctly.  The connection to the database 
-{\it is} open and can be used via the direct SQL commands, if this 
-function returns TRUE.  Other functions which depend on the 
-\helpref{wxDb::Open}{wxdbopen} to have completed correctly may not function 
-as expected.  The return result from \helpref{wxDb::Open}{wxdbopen} is the 
-only way to know if complete initialization of this wxDb connection was 
-successful or not.  See \helpref{wxDb::Open}{wxdbopen} for more details on 
+This function may indicate that the database connection is open, even if
+the call to \helpref{wxDb::Open}{wxdbopen} may have failed to fully
+initialize the connection correctly.  The connection to the database
+{\it is} open and can be used via the direct SQL commands, if this
+function returns TRUE.  Other functions which depend on the
+\helpref{wxDb::Open}{wxdbopen} to have completed correctly may not function
+as expected.  The return result from \helpref{wxDb::Open}{wxdbopen} is the
+only way to know if complete initialization of this wxDb connection was
+successful or not.  See \helpref{wxDb::Open}{wxdbopen} for more details on
 partial failures to open a connection instance.
 
 \membersection{wxDb::LogError}\label{wxdblogerror}
@@ -1148,30 +1148,30 @@ text into the SQL log file.
 
 \membersection{wxDb::ModifyColumn}\label{wxdbmodifycolumn}
 
-\func{void}{ModifyColumn}{\param{const wxString \&}{tableName} \param{const wxString \&}{ColumnName} 
+\func{void}{ModifyColumn}{\param{const wxString \&}{tableName} \param{const wxString \&}{ColumnName}
 \param{int }{dataType} \param{ULONG }{columnLength=0} \param{const wxString \&}{optionalParam=""}}
 
-Used to change certain properties of a column such as the length, or whether a column 
+Used to change certain properties of a column such as the length, or whether a column
 allows NULLs or not.
 
 \docparam{tableName}{Name of the table that the column to be modified is in.}
-\docparam{columnName}{Name of the column to be modified.  NOTE: Name of column cannot 
+\docparam{columnName}{Name of the column to be modified.  NOTE: Name of column cannot
 be changed with this function.}
-\docparam{dataType}{Any one of DB\_DATA\_TYPE\_VARCHAR, DB\_DATA\_TYPE\_INTEGER, 
+\docparam{dataType}{Any one of DB\_DATA\_TYPE\_VARCHAR, DB\_DATA\_TYPE\_INTEGER,
 DB\_DATA\_TYPE\_FLOAT, DB\_DATA\_TYPE\_DATE.}
-\docparam{columnLength}{New size of the column.  Valid only for DB\_DATA\_TYPE\_VARCHAR 
+\docparam{columnLength}{New size of the column.  Valid only for DB\_DATA\_TYPE\_VARCHAR
 dataType fields.  Default is 0.}
 \docparam{optionalParam}{Default is "".}
 
 \wxheading{Remarks}
 
-Cannot be used to modify the precision of a numeric column, therefore 'columnLength' 
+Cannot be used to modify the precision of a numeric column, therefore 'columnLength'
 is ignored unless the dataType is DB\_DATA\_TYPE\_VARCHAR.
 
-Some datasources do not allow certain properties of a column to be changed if any rows 
-currently have data stored in that column.  Those datasources that do allow columns 
-to be changed with data in the rows many handle truncation and/or expansion in 
-different ways.  Please refer to the reference material for the datasource being 
+Some datasources do not allow certain properties of a column to be changed if any rows
+currently have data stored in that column.  Those datasources that do allow columns
+to be changed with data in the rows many handle truncation and/or expansion in
+different ways.  Please refer to the reference material for the datasource being
 used for behavioral descriptions.
 
 \wxheading{Example}
@@ -1185,36 +1185,36 @@ used for behavioral descriptions.
 
 \membersection{wxDb::Open}\label{wxdbopen}
 
-\func{bool}{Open}{\param{const wxString \&}{Dsn}, \param{const wxString \&}{Uid}, 
+\func{bool}{Open}{\param{const wxString \&}{Dsn}, \param{const wxString \&}{Uid},
 \param{const wxString \&}{AuthStr}}
 
 \func{bool}{Open}{\param{wxDb *}{copyDb}}
 
-Opens a connection to the datasource, sets certain behaviors of the datasource 
-to confirm to the accepted behaviors (e.g. cursor position maintained on 
-commits), and queries the datasource for its representations of the basic 
-datatypes to determine the form in which the data going to/from columns in 
+Opens a connection to the datasource, sets certain behaviors of the datasource
+to confirm to the accepted behaviors (e.g. cursor position maintained on
+commits), and queries the datasource for its representations of the basic
+datatypes to determine the form in which the data going to/from columns in
 the data tables are to be handled.
 
-The second form of this function, which accepts a "wxDb *" as a parameter, 
-can be used to avoid the overhead (execution time, database load, network 
-traffic) which are needed to determine the data types and representations 
-of data that are necessary for cross-datasource support by these classes.  
+The second form of this function, which accepts a "wxDb *" as a parameter,
+can be used to avoid the overhead (execution time, database load, network
+traffic) which are needed to determine the data types and representations
+of data that are necessary for cross-datasource support by these classes.
 
-Normally the first form of the wxDb::Open() function will open the connection 
-and then send a series of queries to the datasource asking it for its 
-representation of data types, and all the features it supports.  If one 
-connection to the datasource has already been made previously, the information 
-gathered when that connection was created can just be copied to any new 
-connections to the same datasource by passing a pointer to the first 
-connection in as a parameter to the wxDb::Open() function.  Note that this 
-new connection created from the first connections information will use the 
+Normally the first form of the wxDb::Open() function will open the connection
+and then send a series of queries to the datasource asking it for its
+representation of data types, and all the features it supports.  If one
+connection to the datasource has already been made previously, the information
+gathered when that connection was created can just be copied to any new
+connections to the same datasource by passing a pointer to the first
+connection in as a parameter to the wxDb::Open() function.  Note that this
+new connection created from the first connections information will use the
 same Dsn/Uid/AuthStr as the first connection used.
 
 \wxheading{Parameters}
 
-\docparam{Dsn}{datasource name.  The name of the ODBC datasource as 
-assigned when the datasource is initially set up through the ODBC data 
+\docparam{Dsn}{datasource name.  The name of the ODBC datasource as
+assigned when the datasource is initially set up through the ODBC data
 source manager.}
 \docparam{Uid}{User ID.  The name (ID) of the user you wish to connect as
 to the datasource.  The user name (ID) determines what objects you
@@ -1223,37 +1223,37 @@ Privileges include being able to create new objects, update objects, delete
 objects and so on.  Users and privileges are normally administered by the
 database administrator.}
 \docparam{AuthStr}{The password associated with the Uid.}
-\docparam{copyDb}{Already completely configured and opened datasource connection 
-from which all Dsn, Uid, AuthStr, and data typing information is to be copied 
+\docparam{copyDb}{Already completely configured and opened datasource connection
+from which all Dsn, Uid, AuthStr, and data typing information is to be copied
 from for use by this datasource connection.}
 
 \wxheading{Remarks}
 
-After a wxDb instance is created, it must then be opened.  When opening a 
-datasource, there must be three pieces of information passed.  The data 
-source name, user name (ID) and the password for the user.  No database 
-activity on the datasource can be performed until the connection is opened.  
-This is normally done at program startup and the datasource remains 
-open for the duration of the program/module run.  
+After a wxDb instance is created, it must then be opened.  When opening a
+datasource, there must be three pieces of information passed.  The data
+source name, user name (ID) and the password for the user.  No database
+activity on the datasource can be performed until the connection is opened.
+This is normally done at program startup and the datasource remains
+open for the duration of the program/module run.
 
-It is possible to have connections to multiple datasources open at the same 
-time to support distributed database connections by having separate instances 
+It is possible to have connections to multiple datasources open at the same
+time to support distributed database connections by having separate instances
 of wxDb objects that use either the same or different Dsn/Uid/AuthStr settings.
 
-If this function returns a value of FALSE, it does not necessarily mean that 
-the connection to the datasource was not opened.  It may mean that some 
-portion of the initialization of the connection failed (such as a datatype not 
-being able to be determined how the datasource represents it).  To determine 
-if the connection to the database failed, use the \helpref{wxDb::IsOpen}{wxdbisopen} 
-function after receiving a FALSE result back from this function to determine if 
-the connection was opened or not.  If this function returns FALSE, but \helpref{wxDb::IsOpen}{wxdbisopen} 
-returns TRUE, then direct SQL commands may be passed to the database 
-connection and can be successfully executed, but use of the datatypes (such as 
-by a wxDbTable instance) that are normally determined during open will not be 
+If this function returns a value of FALSE, it does not necessarily mean that
+the connection to the datasource was not opened.  It may mean that some
+portion of the initialization of the connection failed (such as a datatype not
+being able to be determined how the datasource represents it).  To determine
+if the connection to the database failed, use the \helpref{wxDb::IsOpen}{wxdbisopen}
+function after receiving a FALSE result back from this function to determine if
+the connection was opened or not.  If this function returns FALSE, but \helpref{wxDb::IsOpen}{wxdbisopen}
+returns TRUE, then direct SQL commands may be passed to the database
+connection and can be successfully executed, but use of the datatypes (such as
+by a wxDbTable instance) that are normally determined during open will not be
 possible.
 
-\normalbox{The {\it Dsn}, {\it Uid}, and {\it AuthStr} string pointers that are passed in 
-are copied.  NOT the strings themselves, only the pointers.  The calling routine 
+\normalbox{The {\it Dsn}, {\it Uid}, and {\it AuthStr} string pointers that are passed in
+are copied.  NOT the strings themselves, only the pointers.  The calling routine
 must maintain the memory for these three strings for the life of the wxDb instance.}
 
 \wxheading{Example}
@@ -1264,7 +1264,7 @@ must maintain the memory for these three strings for the life of the wxDb instan
    {
       if (sampleDb.IsOpen())
       {
-        // Connection is open, but the initialization of 
+        // Connection is open, but the initialization of
         // datatypes and parameter settings failed
       }
       else
@@ -1282,14 +1282,14 @@ Function to "undo" changes made to the database.  After an insert/update/delete,
 
 \wxheading{Remarks}
 
-Transactions begin implicitly as soon as you make a change to the database.  The 
-transaction continues until either a commit or rollback is executed.  Calling 
-wxDb::RollbackTrans() will result in ALL changes done using this database 
-connection that have not already been committed to be "undone" back to the last 
+Transactions begin implicitly as soon as you make a change to the database.  The
+transaction continues until either a commit or rollback is executed.  Calling
+wxDb::RollbackTrans() will result in ALL changes done using this database
+connection that have not already been committed to be "undone" back to the last
 commit/rollback that was successfully executed.
 
-\normalbox{Calling this member function rolls back ALL open (uncommitted) 
-transactions on this ODBC connection, including all wxDbTable instances that 
+\normalbox{Calling this member function rolls back ALL open (uncommitted)
+transactions on this ODBC connection, including all wxDbTable instances that
 use this connection.}
 
 \wxheading{See also}
@@ -1336,18 +1336,18 @@ When called with {\it sqlLogOFF}, the logging file is closed, and any calls to \
 
 \func{const wxString}{SQLColumnName}{\param{const char *}{ colName}}
 
-Returns the column name in a form ready for use in SQL statements.  
+Returns the column name in a form ready for use in SQL statements.
 In most cases, the column name is returned verbatim.  But some databases
-(e.g. MS Access, SQL Server, MSDE) allow for spaces in column names, which 
+(e.g. MS Access, SQL Server, MSDE) allow for spaces in column names, which
 must be specially quoted.  For example, if the datasource allows spaces
-in the column name, the returned string will have the correct enclosing 
-marks around the name to allow it to be properly included in a SQL statement 
+in the column name, the returned string will have the correct enclosing
+marks around the name to allow it to be properly included in a SQL statement
 for the DBMS that is currently connected to with this connection.
 
 \wxheading{Parameters}
 
-\docparam{colName}{Native name of the column in the table that is to be 
-evaluated to determine if any special quoting marks needed to be added to it 
+\docparam{colName}{Native name of the column in the table that is to be
+evaluated to determine if any special quoting marks needed to be added to it
 before including the column name in a SQL statement}
 
 \wxheading{See also}
@@ -1358,18 +1358,18 @@ before including the column name in a SQL statement}
 
 \func{const wxString}{SQLTableName}{\param{const char *}{ tableName}}
 
-Returns the table name in a form ready for use in SQL statements.  
+Returns the table name in a form ready for use in SQL statements.
 In most cases, the table name is returned verbatim.  But some databases
-(e.g. MS Access, SQL Server, MSDE) allow for spaces in table names, which 
+(e.g. MS Access, SQL Server, MSDE) allow for spaces in table names, which
 must be specially quoted.  For example, if the datasource allows spaces
-in the table name, the returned string will have the correct enclosing 
-marks around the name to allow it to be properly included in a SQL statement 
+in the table name, the returned string will have the correct enclosing
+marks around the name to allow it to be properly included in a SQL statement
 for the data source that is currently connected to with this connection.
 
 \wxheading{Parameters}
 
-\docparam{tableName}{Native name of the table that is to be evaluated to 
-determine if any special quoting marks needed to be added to it 
+\docparam{tableName}{Native name of the table that is to be evaluated to
+determine if any special quoting marks needed to be added to it
 before including the table name in a SQL statement}
 
 \wxheading{See also}
@@ -1380,8 +1380,8 @@ before including the table name in a SQL statement}
 
 \func{bool}{TableExists}{\param{const wxString \&}{tableName}, \param{const wxChar *}{userID=NULL}, \param{const wxString \&}{path=""}}
 
-Checks the ODBC datasource for the existence of a table.  If a {\it userID} 
-is specified, then the table must be accessible by that user (user must have 
+Checks the ODBC datasource for the existence of a table.  If a {\it userID}
+is specified, then the table must be accessible by that user (user must have
 at least minimal privileges to the table).
 
 \wxheading{Parameters}
@@ -1409,41 +1409,41 @@ This function does not indicate whether or not the user has privileges to query 
 
 \membersection{wxDb::TablePrivileges}\label{wxdbtableprivileges}
 
-\func{bool}{TablePrivileges}{\param{const wxString \&}{tableName}, \param{const wxString \&}{priv}, 
-\param{const wxChar *}{userID=NULL}, \param{const wxChar *}{schema=NULL}, 
+\func{bool}{TablePrivileges}{\param{const wxString \&}{tableName}, \param{const wxString \&}{priv},
+\param{const wxChar *}{userID=NULL}, \param{const wxChar *}{schema=NULL},
 \param{const wxString \&}{path=""}}
 
-Checks the ODBC datasource for the existence of a table.  If a {\it userID} 
-is specified, then the table must be accessible by that user (user must have 
+Checks the ODBC datasource for the existence of a table.  If a {\it userID}
+is specified, then the table must be accessible by that user (user must have
 at least minimal privileges to the table).
 
 \wxheading{Parameters}
 
-\docparam{tableName}{Name of the table on which to check privileges.  
+\docparam{tableName}{Name of the table on which to check privileges.
 {\it tableName} may refer to a table, view, alias or synonym.}
-\docparam{priv}{The table privilege being evaluated. May be one of the 
+\docparam{priv}{The table privilege being evaluated. May be one of the
 following (or a datasource specific privilege):}
 \begin{verbatim}
-    SELECT      : The connected user is permitted to retrieve data for 
+    SELECT      : The connected user is permitted to retrieve data for
                   one or more columns of the table.
 
-    INSERT      : The connected user is permitted to insert new rows 
-                  containing data for one or more columns into the 
+    INSERT      : The connected user is permitted to insert new rows
+                  containing data for one or more columns into the
                   table.
 
-    UPDATE      : The connected user is permitted to update the data in 
+    UPDATE      : The connected user is permitted to update the data in
                   one or more columns of the table.
 
-    DELETE      : The connected user is permitted to delete rows of 
+    DELETE      : The connected user is permitted to delete rows of
                   data from the table.
 
-    REFERENCES  : Is the connected user permitted to refer to one or 
-                  more columns of the table within a constraint (for 
-                  example, a unique, referential, or table check 
+    REFERENCES  : Is the connected user permitted to refer to one or
+                  more columns of the table within a constraint (for
+                  example, a unique, referential, or table check
                   constraint).
 \end{verbatim}
-\docparam{userID}{{\it OPTIONAL.}  User for which to determine if the privilege 
-specified to be checked is granted or not.  Default is "".  
+\docparam{userID}{{\it OPTIONAL.}  User for which to determine if the privilege
+specified to be checked is granted or not.  Default is "".
 {\it userID} is evaluated as follows:}
 \begin{verbatim}
          userID == NULL  ... NOT ALLOWED!
@@ -1451,9 +1451,9 @@ specified to be checked is granted or not.  Default is "".
          userID != ""    ... UserID set equal to 'userID'
 \end{verbatim}
 
-\docparam{schema}{{\it OPTIONAL.}  Owner of the table.  Specify a userID when the datasource 
-you are connected to allows multiple unique tables with the same name to be 
-owned by different users.  Specifying the table owner makes determination of the 
+\docparam{schema}{{\it OPTIONAL.}  Owner of the table.  Specify a userID when the datasource
+you are connected to allows multiple unique tables with the same name to be
+owned by different users.  Specifying the table owner makes determination of the
 users privileges MUCH faster.  Default is NULL.  {\it userID} is evaluated as follows:}
 \begin{verbatim}
          schema == NULL  ... Any owner (DEFAULT)
@@ -1461,22 +1461,22 @@ users privileges MUCH faster.  Default is NULL.  {\it userID} is evaluated as fo
          schema != ""    ... Owned by userID specified in 'schema'
 \end{verbatim}
 
-\docparam{path}{{\it OPTIONAL.}  Path to the table.  Default is "".  
+\docparam{path}{{\it OPTIONAL.}  Path to the table.  Default is "".
 Currently unused.}
 
 \wxheading{Remarks}
 
-The scope of privilege allowed to the connected user by a given table 
-privilege is datasource dependent. 
+The scope of privilege allowed to the connected user by a given table
+privilege is datasource dependent.
 
-For example, the privilege UPDATE might allow the connected user to update 
-all columns in a table on one datasource, but only those columns for 
-which the grantor (the user that granted the connected user) has the UPDATE 
+For example, the privilege UPDATE might allow the connected user to update
+all columns in a table on one datasource, but only those columns for
+which the grantor (the user that granted the connected user) has the UPDATE
 privilege on another datasource.
 
-Looking up a user's privileges to a table can be time consuming depending on the 
-datasource and ODBC driver.  This time can be minimized by passing a {\it schema} 
-as a parameter.  With some datasources/drivers, the difference can be several 
+Looking up a user's privileges to a table can be time consuming depending on the
+datasource and ODBC driver.  This time can be minimized by passing a {\it schema}
+as a parameter.  With some datasources/drivers, the difference can be several
 seconds of time difference.
 
 
@@ -1504,9 +1504,9 @@ Returns the internal class DB\_ERR code.  See \helpref{wxDb::DB\_STATUS}{wxdb} d
 
 \wxheading{Remarks}
 
-Very useful debugging tool that may be turned on/off during run time (see 
-(see \helpref{wxDb::SetSqlLogging}{wxdbsetsqllogging} for details on 
-turning logging on/off).  The passed in string {\it logMsg} will be written to 
+Very useful debugging tool that may be turned on/off during run time (see
+(see \helpref{wxDb::SetSqlLogging}{wxdbsetsqllogging} for details on
+turning logging on/off).  The passed in string {\it logMsg} will be written to
 a log file if SQL logging is turned on.
 
 \wxheading{Return value}
@@ -1521,7 +1521,7 @@ FALSE without performing the requested log, otherwise TRUE is returned.
 
 \section{\class{wxDbColDataPtr}}\label{wxdbcoldataptr}
 
-Pointer to dynamic column definitions for use with a wxDbTable instance.  
+Pointer to dynamic column definitions for use with a wxDbTable instance.
 Currently there are no member functions for this class.
 
 See the \helpref{database classes overview}{odbcoverview} for
@@ -1535,35 +1535,35 @@ an introduction to using the ODBC classes.
 
 \section{\class{wxDbColDef}}\label{wxdbcoldef}
 
-This class is used to hold information about the columns bound to an 
-instance of a wxDbTable object.  
+This class is used to hold information about the columns bound to an
+instance of a wxDbTable object.
 
-Each instance of this class describes one column in the wxDbTable 
-object.  When calling the \helpref{wxDb constructor}{wxdbconstr}, a 
-parameter passed in indicates the number of columns that will be defined for 
-the wxDbTable object.  The constructor uses this information to allocate 
-adequate memory for all of the column descriptions in your wxDbTable object.  
-Private member wxDbTable::colDefs is a pointer to this chunk of memory 
-maintained by the wxDbTable class (and can be retrieved using the 
-\helpref{wxDbTable::GetColDefs}{wxdbtablegetcoldefs} function).  
-To access the nth column definition of your wxDbTable object, just reference 
+Each instance of this class describes one column in the wxDbTable
+object.  When calling the \helpref{wxDb constructor}{wxdbconstr}, a
+parameter passed in indicates the number of columns that will be defined for
+the wxDbTable object.  The constructor uses this information to allocate
+adequate memory for all of the column descriptions in your wxDbTable object.
+Private member wxDbTable::colDefs is a pointer to this chunk of memory
+maintained by the wxDbTable class (and can be retrieved using the
+\helpref{wxDbTable::GetColDefs}{wxdbtablegetcoldefs} function).
+To access the nth column definition of your wxDbTable object, just reference
 wxDbColDefs element [n - 1].
 
-Typically, \helpref{wxDbTable::SetColDefs}{wxdbtablesetcoldefs} is used to 
+Typically, \helpref{wxDbTable::SetColDefs}{wxdbtablesetcoldefs} is used to
 populate an array of these data structures for the wxDbTable instance.
 
-Currently there are no accessor functions for this class, so all members are 
+Currently there are no accessor functions for this class, so all members are
 public.
 
 \begin{verbatim}
     wxChar  ColName[DB_MAX_COLUMN_NAME_LEN+1];  // Column Name
-    int     DbDataType;    - Logical Data Type; 
+    int     DbDataType;    - Logical Data Type;
                              e.g. DB_DATA_TYPE_INTEGER
     SWORD   SqlCtype;      - C data type; e.g. SQL_C_LONG
     void   *PtrDataObj;    - Address of the data object
     int     SzDataObj;     - Size, in bytes, of the data object
     bool    KeyField;      - Is column part of the PRIMARY KEY for the
-                             table? -- Date fields should NOT be 
+                             table? -- Date fields should NOT be
                              KeyFields
     bool    Updateable;    - Column is updateable?
     bool    InsertAllowed; - Column included in INSERT statements?
@@ -1575,26 +1575,26 @@ public.
 
 \wxheading{See also}
 
-\helpref{database classes overview}{odbcoverview}, 
+\helpref{database classes overview}{odbcoverview},
 \helpref{wxDbTable::GetColDefs}{wxdbtablegetcoldefs}, \helpref{wxDb constructor}{wxdbconstr}
 
 \membersection{wxDbColDef::Initialize}\label{wxdbcoldefinitialize}
 
-Simply initializes all member variables to a cleared state.  Called by 
+Simply initializes all member variables to a cleared state.  Called by
 the constructor automatically.
 
 \section{\class{wxDbColFor}}\label{wxdbcolfor}
 
-Beginning support for handling international formatting specifically on dates 
-and floats.  
+Beginning support for handling international formatting specifically on dates
+and floats.
 
 \begin{verbatim}
     wxString       s_Field;       // Formated String for Output
-    wxString       s_Format[7];   // Formated Objects - TIMESTAMP has 
+    wxString       s_Format[7];   // Formated Objects - TIMESTAMP has
                                      the biggest (7)
-    wxString       s_Amount[7];   // Formated Objects - amount of 
+    wxString       s_Amount[7];   // Formated Objects - amount of
                                      things that can be formatted
-    int            i_Amount[7];   // Formated Objects - 
+    int            i_Amount[7];   // Formated Objects -
                                         TT MM YYYY HH MM SS m
     int            i_Nation;      // 0 = timestamp
                                      1 = EU
@@ -1618,15 +1618,15 @@ an introduction to using the ODBC classes.
 
 \membersection{wxDbColFor::Format}\label{wxdbcolforformat}
 
-\func{int }{Format}{\param{int }{Nation}, \param{int }{dbDataType}, 
-\param{SWORD }{sqlDataType}, \param{short }{columnSize}, 
+\func{int }{Format}{\param{int }{Nation}, \param{int }{dbDataType},
+\param{SWORD }{sqlDataType}, \param{short }{columnSize},
 \param{short }{decimalDigits}}\label{wxdbcolforformat}
 
 Work in progress, and should be inter-related with wxLocale eventually.
 
 \membersection{wxDbColFor::Initialize}\label{wxdbcolforinitialize}
 
-Simply initializes all member variables to a cleared state.  Called by 
+Simply initializes all member variables to a cleared state.  Called by
 the constructor automatically.
 
 \section{\class{wxDbColInf}}\label{wxdbcolinf}
@@ -1646,8 +1646,8 @@ Used with the \helpref{wxDb::GetColumns}{wxdbgetcolumns} functions for obtaining
     short        numPrecRadix;
     short        nullable;
     wxChar       remarks[254+1];
-    int          dbDataType;  // conversion of the 'sqlDataType' 
-                              // to the generic data type used by 
+    int          dbDataType;  // conversion of the 'sqlDataType'
+                              // to the generic data type used by
                               // these classes
     int          PkCol;       // Primary key column
                                     0 = No
@@ -1659,14 +1659,14 @@ Used with the \helpref{wxDb::GetColumns}{wxdbgetcolumns} functions for obtaining
                                     0 = No
                                     1 = First Key
                                     2 = Second Key, etc...
-    wxChar       FkTableName[DB_MAX_TABLE_NAME_LEN+1]; 
+    wxChar       FkTableName[DB_MAX_TABLE_NAME_LEN+1];
                               // Foreign key table name
     wxDbColFor  *pColFor;     // How should this column be formatted
 \end{verbatim}
 
 The constructor for this class initializes all the values to zero, "", or NULL.
 
-The destructor for this class takes care of deleting the pColFor member if 
+The destructor for this class takes care of deleting the pColFor member if
 it is non-NULL.
 
 See the \helpref{database classes overview}{odbcoverview} for
@@ -1674,15 +1674,15 @@ an introduction to using the ODBC classes.
 
 \membersection{wxDbColInf::Initialize}\label{wxdbcolinfinitialize}
 
-Simply initializes all member variables to a cleared state.  Called by 
+Simply initializes all member variables to a cleared state.  Called by
 the constructor automatically.
 
 \section{\class{wxDbConnectInf}}\label{wxdbconnectinf}
 
-This class is used for holding the data necessary for connecting to the ODBC 
-datasource.  That information includes: SQL environment handle, datasource 
-name, user ID, password and default directory path (used with dBase).  Other 
-optional fields held in this class are and file type, both for future 
+This class is used for holding the data necessary for connecting to the ODBC
+datasource.  That information includes: SQL environment handle, datasource
+name, user ID, password and default directory path (used with dBase).  Other
+optional fields held in this class are and file type, both for future
 functions planned to be added for creating/manipulating datasource definitions.
 
 \membersection{wxDbConnectInf::wxDbConnectInfo}
@@ -1691,46 +1691,46 @@ functions planned to be added for creating/manipulating datasource definitions.
 
 Default constructor.
 
-\func{}{wxDb}{\param{HENV }{henv}, \param{const wxString \&}{dsn}, 
-\param{const wxString \&}{userID=""}, \param{const wxString \&}{password}, 
-\param{const wxString \&}{defaultDir=""}, \param{const wxString \&}{description=""}, 
+\func{}{wxDb}{\param{HENV }{henv}, \param{const wxString \&}{dsn},
+\param{const wxString \&}{userID=""}, \param{const wxString \&}{password},
+\param{const wxString \&}{defaultDir=""}, \param{const wxString \&}{description=""},
 \param{const wxString \&}{fileType=""}}
 
 Constructor which allows initial settings of all the classes member variables.
 
-See the special note below on the henv parameter for forcing this constructor 
-to create a SQL environment handle automatically, rather than needing to pass 
+See the special note below on the henv parameter for forcing this constructor
+to create a SQL environment handle automatically, rather than needing to pass
 one in to the function.
 
 \wxheading{Parameters}
 
-\docparam{henv}{Environment handle used for this connection.  See 
-\helpref{wxDConnectInf::AllocHenv}{wxdbconnectinfallochenv} for how to create 
-an SQL environment handle.  NOTE: Passing in a NULL for this parameter will 
-inform the constructor that it should create its own SQL environment handle.  
-If NULL is passed for this parameter, the constructor will call 
-\helpref{wxDConnectInf::AllocHenv}{wxdbconnectinfallochenv} internally.  A 
-flag is set internally also to indicate that the HENV was created by the 
-constructor so that when the default class destructor is called, the 
-destructor will call \helpref{wxDConnectInf::FreeHenv}{wxdbconnectinffreehenv} 
+\docparam{henv}{Environment handle used for this connection.  See
+\helpref{wxDConnectInf::AllocHenv}{wxdbconnectinfallochenv} for how to create
+an SQL environment handle.  NOTE: Passing in a NULL for this parameter will
+inform the constructor that it should create its own SQL environment handle.
+If NULL is passed for this parameter, the constructor will call
+\helpref{wxDConnectInf::AllocHenv}{wxdbconnectinfallochenv} internally.  A
+flag is set internally also to indicate that the HENV was created by the
+constructor so that when the default class destructor is called, the
+destructor will call \helpref{wxDConnectInf::FreeHenv}{wxdbconnectinffreehenv}
 to free the environment handle automatically.}
-\docparam{dsn}{Name of the datasource to be used in creating wxDb instances 
+\docparam{dsn}{Name of the datasource to be used in creating wxDb instances
 for creating connection(s) to a datasource.}
-\docparam{userID}{{\it OPTIONAL} Many datasources allow (or even require) 
-use of a username to determine privileges that connecting user is allowed 
+\docparam{userID}{{\it OPTIONAL} Many datasources allow (or even require)
+use of a username to determine privileges that connecting user is allowed
 to have when accessing the datasource or the data tables.  Default is "".}
-\docparam{password}{{\it OPTIONAL} Password to be associated with the user 
+\docparam{password}{{\it OPTIONAL} Password to be associated with the user
 ID specified in 'userID'.  Default is "".}
-\docparam{defaultDir}{{\it OPTIONAL} Used for datasources which require the 
-path to where the data file is stored to be specified.  dBase is one example 
+\docparam{defaultDir}{{\it OPTIONAL} Used for datasources which require the
+path to where the data file is stored to be specified.  dBase is one example
 of the type of datasource which requires this information.  Default is "".}
 \docparam{description}{{\it OPTIONAL} {\bf FUTURE USE} Default is "".}
 \docparam{fileType}{{\it OPTIONAL} {\bf FUTURE USE} Default is "".}
 
 \wxheading{Remarks}
 
-It is strongly recommended that programs use the longer form of the 
-constructor and allow the constructor to create the SQL environment handle 
+It is strongly recommended that programs use the longer form of the
+constructor and allow the constructor to create the SQL environment handle
 automatically, and manage the destruction of the handle.
 
 \wxheading{Example}
@@ -1747,29 +1747,29 @@ automatically, and manage the destruction of the handle.
 
 \wxheading{See also}
 
-\helpref{wxDConnectInf::AllocHenv}{wxdbconnectinfallochenv}, 
+\helpref{wxDConnectInf::AllocHenv}{wxdbconnectinfallochenv},
 \helpref{wxDConnectInf::FreeHenv}{wxdbconnectinffreehenv}
 
 \membersection{wxDbConnectInf::\destruct{wxDbConnectInf}}\label{wxdbconnectinfdestr}
 
 \func{}{\destruct{wxDbConnectInf}}{}
 
-Handles the default destruction of the instance of the class.  If the long form 
-of the \helpref{wxDConnectInf}{wxdbconnectinf} was used, then this destructor 
-also takes care of calling 
-\helpref{wxDConnectInf::FreeHenv}{wxdbconnectinffreehenv} to free the 
+Handles the default destruction of the instance of the class.  If the long form
+of the \helpref{wxDConnectInf}{wxdbconnectinf} was used, then this destructor
+also takes care of calling
+\helpref{wxDConnectInf::FreeHenv}{wxdbconnectinffreehenv} to free the
 SQL environment handle.
 
 \membersection{wxDbConnectInf::AllocHenv}\label{wxdbconnectinfallochenv}
 
 \func{bool }{AllocHenv}{\void}
 
-Allocates a SQL environment handle that will be used to interface with 
+Allocates a SQL environment handle that will be used to interface with
 an ODBC datasource.
 
 \wxheading{Remarks}
 
-This function can be automatically called by the long from of the 
+This function can be automatically called by the long from of the
 \helpref{wxDbConnectInf}{wxdbconnectinf} constructor.
 
 \membersection{wxDbConnectInf::FreeHenv}\label{wxdbconnectinffreehenv}
@@ -1780,23 +1780,23 @@ Frees the SQL environment handle being managed by the instance of this class.
 
 \wxheading{Remarks}
 
-If the SQL environment handle was created using the long form of the 
-\helpref{wxDbConnectInf}{wxdbconnectinf} constructor, then the flag indicating 
-that the HENV should be destroyed when the classes destructor is called 
-is reset to be FALSE, so that any future handles created using the 
-\helpref{wxDbConnectInf::AllocHenv}{wxdbconnectinfallochenv} function 
+If the SQL environment handle was created using the long form of the
+\helpref{wxDbConnectInf}{wxdbconnectinf} constructor, then the flag indicating
+that the HENV should be destroyed when the classes destructor is called
+is reset to be FALSE, so that any future handles created using the
+\helpref{wxDbConnectInf::AllocHenv}{wxdbconnectinfallochenv} function
 must be manually released with a call to this function.
 
 \membersection{wxDbConnectInf::Initialize}\label{wxdbconnectinfinitialize}
 
-Simply initializes all member variables to a cleared state.  Called by 
+Simply initializes all member variables to a cleared state.  Called by
 the constructor automatically.
 
 \membersection{wxDbConnectInf::GetAuthStr}\label{wxdbconnectinfgetauthstr}
 
 \func{const wxChar *}{GetAuthStr}{\void}
 
-Accessor function to return the password assigned for this class 
+Accessor function to return the password assigned for this class
 instance that will be used with the user ID.
 
 Synonymous with \helpref{wxDbConnectInf::GetPassword}{wxdbconnectinfgetpassword}
@@ -1805,16 +1805,16 @@ Synonymous with \helpref{wxDbConnectInf::GetPassword}{wxdbconnectinfgetpassword}
 
 \func{const wxChar *}{GetDefaultDir}{\void}
 
-Accessor function to return the default directory in which the datasource's data 
-table is stored.  This directory is only used for file based datasources like 
-dBase.  MS-Access does not require this to be set, as the path is set in the 
+Accessor function to return the default directory in which the datasource's data
+table is stored.  This directory is only used for file based datasources like
+dBase.  MS-Access does not require this to be set, as the path is set in the
 ODBC Administrator for MS-Access.
 
 \membersection{wxDbConnectInf::GetDescription}\label{wxdbconnectinfgetdescription}
 
 \func{const wxChar *}{GetDescription}{\void}
 
-Accessor function to return the description assigned for this class 
+Accessor function to return the description assigned for this class
 instance.
 
 NOTE: Description is a FUTURE USE item and is unused currently.
@@ -1823,14 +1823,14 @@ NOTE: Description is a FUTURE USE item and is unused currently.
 
 \func{const wxChar *}{GetDsn}{\void}
 
-Accessor function to return the datasource name assigned for this class 
+Accessor function to return the datasource name assigned for this class
 instance.
 
 \membersection{wxDbConnectInf::GetFileType}\label{wxdbconnectinfgetfiletype}
 
 \func{const wxChar *}{GetFileType}{\void}
 
-Accessor function to return the filetype of the ODBC datasource assigned for 
+Accessor function to return the filetype of the ODBC datasource assigned for
 this class instance.
 
 NOTE: FileType is a FUTURE USE item and is unused currently.
@@ -1839,14 +1839,14 @@ NOTE: FileType is a FUTURE USE item and is unused currently.
 
 \func{const HENV}{GetHenv}{\void}
 
-Accessor function to return the SQL environment handle being managed 
+Accessor function to return the SQL environment handle being managed
 by this class instance.
 
 \membersection{wxDbConnectInf::GetPassword}\label{wxdbconnectinfgetpassword}
 
 \func{const wxChar *}{GetPassword}{\void}
 
-Accessor function to return the password assigned for this class 
+Accessor function to return the password assigned for this class
 instance that will be used with the user ID.
 
 Synonymous with \helpref{wxDbConnectInf::GetAuthStr}{wxdbconnectinfgetauthstr}
@@ -1855,21 +1855,21 @@ Synonymous with \helpref{wxDbConnectInf::GetAuthStr}{wxdbconnectinfgetauthstr}
 
 \func{const wxChar *}{GetUid}{\void}
 
-Accessor function to return the user ID assigned for this class 
+Accessor function to return the user ID assigned for this class
 instance.
 
 \membersection{wxDbConnectInf::GetUserID}\label{wxdbconnectinfgetuserid}
 
 \func{const wxChar *}{GetUserID}{\void}
 
-Accessor function to return the user ID assigned for this class 
+Accessor function to return the user ID assigned for this class
 instance.
 
 \membersection{wxDbConnectInf::SetAuthStr}\label{wxdbconnectinfsetauthstr}
 
 \func{\void}{SetAuthStr}{const wxString \&authstr}
 
-Accessor function to assign the password for this class 
+Accessor function to assign the password for this class
 instance that will be used with the user ID.
 
 Synonymous with \helpref{wxDbConnectInf::SetPassword}{wxdbconnectinfsetpassword}
@@ -1878,16 +1878,16 @@ Synonymous with \helpref{wxDbConnectInf::SetPassword}{wxdbconnectinfsetpassword}
 
 \func{\void}{SetDefaultDir}{const wxString \&defDir}
 
-Accessor function to assign the default directory in which the datasource's data 
-table is stored.  This directory is only used for file based datasources like 
-dBase.  MS-Access does not require this to be set, as the path is set in the 
+Accessor function to assign the default directory in which the datasource's data
+table is stored.  This directory is only used for file based datasources like
+dBase.  MS-Access does not require this to be set, as the path is set in the
 ODBC Administrator for MS-Access.
 
 \membersection{wxDbConnectInf::SetDescription}\label{wxdbconnectinfsetdescription}
 
 \func{\void}{SetDescription}{const wxString \&desc}
 
-Accessor function to assign the description assigned for this class 
+Accessor function to assign the description assigned for this class
 instance.
 
 NOTE: Description is a FUTURE USE item and is unused currently.
@@ -1902,7 +1902,7 @@ Accessor function to assign the datasource name for this class instance.
 
 \func{\void}{SetFileType}{const wxString \&}
 
-Accessor function to return the filetype of the ODBC datasource assigned for 
+Accessor function to return the filetype of the ODBC datasource assigned for
 this class instance.
 
 NOTE: FileType is a FUTURE USE item and is unused currently.
@@ -1917,7 +1917,7 @@ Accessor function to set the SQL environment handle for this class instance.
 
 \func{\void}{SetPassword}{const wxString \&password}
 
-Accessor function to assign the password for this class 
+Accessor function to assign the password for this class
 instance that will be used with the user ID.
 
 Synonymous with \helpref{wxDbConnectInf::SetAuthStr}{wxdbconnectinfsetauthstr}
@@ -1936,13 +1936,13 @@ Accessor function to assign the user ID for this class instance.
 
 \section{\class{wxDbIdxDef}}\label{wxdbidxdef}
 
-Used in creation of non-primary indexes.  Currently there are no member 
+Used in creation of non-primary indexes.  Currently there are no member
 functions for this class.
 
 \begin{verbatim}
-        wxChar  ColName[DB_MAX_COLUMN_NAME_LEN+1] 
+        wxChar  ColName[DB_MAX_COLUMN_NAME_LEN+1]
                                   // Name of column
-        bool    Ascending         // Is index maintained in 
+        bool    Ascending         // Is index maintained in
                                      ASCENDING sequence?
 \end{verbatim}
 
@@ -1953,8 +1953,8 @@ an introduction to using the ODBC classes.
 
 \section{\class{wxDbInf}}\label{wxdbinf}
 
-Contains information regarding the database connection (datasource name, 
-number of tables, etc).  A pointer to a wxDbTableInf is included in this 
+Contains information regarding the database connection (datasource name,
+number of tables, etc).  A pointer to a wxDbTableInf is included in this
 class so a program can create a wxDbTableInf array instance to maintain all
 information about all tables in the datasource to have all the datasource's
 information in one memory structure.
@@ -1964,15 +1964,15 @@ Primarily, this class is used internally by the wxWindows ODBC classes.
 \begin{verbatim}
     wxChar        catalog[128+1];
     wxChar        schema[128+1];  // typically means owner of table(s)
-    int           numTables;      // How many tables does this 
+    int           numTables;      // How many tables does this
                                      datasource have
-    wxDbTableInf *pTableInf;      // Equals a new 
+    wxDbTableInf *pTableInf;      // Equals a new
                                      wxDbTableInf[numTables];
 \end{verbatim}
 
 The constructor for this class initializes all the values to zero, "", or NULL.
 
-The destructor for this class takes care of deleting the pTableInf member if 
+The destructor for this class takes care of deleting the pTableInf member if
 it is non-NULL.
 
 See the \helpref{database classes overview}{odbcoverview} for
@@ -1980,7 +1980,7 @@ an introduction to using the ODBC classes.
 
 \membersection{wxDbInf::Initialize}\label{wxdbinfinitialize}
 
-Simply initializes all member variables to a cleared state.  Called by 
+Simply initializes all member variables to a cleared state.  Called by
 the constructor automatically.
 
 \section{\class{wxDbTable}}\label{wxdbtable}
@@ -1999,7 +1999,7 @@ an introduction to using the ODBC classes.
 \latexignore{\rtfignore{\wxheading{Members}}}
 \wxheading{Helper classes and data structures}
 
-The following classes and structs are defined in dbtable.cpp/.h for use 
+The following classes and structs are defined in dbtable.cpp/.h for use
 with the wxDbTable class.
 
 \begin{itemize}\itemsep=0pt
@@ -2017,7 +2017,7 @@ with the wxDbTable class.
     wxDB_QUERY_ONLY      Used to indicate whether a table that is opened
                          is for query only, or if insert/update/deletes
                          will be performed on the table.  Less overhead
-                         (cursors and memory) are allocated for query 
+                         (cursors and memory) are allocated for query
                          only tables, plus read access times are faster
                          with some datasources.
 
@@ -2028,7 +2028,7 @@ with the wxDbTable class.
 
 
     wxDB_DISABLE_VIEW    Use to indicate when a database view should not
-                         be if a table is normally set up to use a view.  
+                         be if a table is normally set up to use a view.
                          [Currently unsupported.]
 
 \end{verbatim}
@@ -2038,31 +2038,31 @@ with the wxDbTable class.
 
 \membersection{wxDbTable::wxDbTable}\label{wxdbtableconstr}
 
-\func{}{wxDbTable}{\param{wxDb *}{pwxDb}, \param{const wxString \&}{tblName}, 
-  \param{const UWORD }{numColumns}, \param{const wxString \&}{qryTblName = ""}, 
+\func{}{wxDbTable}{\param{wxDb *}{pwxDb}, \param{const wxString \&}{tblName},
+  \param{const UWORD }{numColumns}, \param{const wxString \&}{qryTblName = ""},
   \param{bool }{qryOnly = !wxDB\_QUERY\_ONLY}, \param{const wxString \&}{tblPath = ""}}
 
 Default constructor.
 
 \wxheading{Parameters}
 
-\docparam{pwxDb}{Pointer to the wxDb instance to be used by this wxDbTable 
+\docparam{pwxDb}{Pointer to the wxDb instance to be used by this wxDbTable
 instance.}
 \docparam{tblName}{The name of the table in the RDBMS.}
 \docparam{numColumns}{The number of columns in the table.  (Do NOT include the ROWID
 column in the count if using Oracle).}
-\docparam{qryTblName}{{\it OPTIONAL}.  The name of the table or view to base 
+\docparam{qryTblName}{{\it OPTIONAL}.  The name of the table or view to base
 your queries on.  This argument allows you to specify a table/view other than
-the base table for this object to base your queries on.  This allows you to 
-query on a view for example, but all of the INSERT, UPDATE and DELETES will 
-still be performed on the base table for this wxDbTable object.  Basing your 
+the base table for this object to base your queries on.  This allows you to
+query on a view for example, but all of the INSERT, UPDATE and DELETES will
+still be performed on the base table for this wxDbTable object.  Basing your
 queries on a view can provide a substantial performance increase in cases where
 your queries involve many tables with multiple joins.  Default is "".}
-\docparam{qryOnly}{{\it OPTIONAL}.  Indicates whether the table will be 
+\docparam{qryOnly}{{\it OPTIONAL}.  Indicates whether the table will be
 accessible for query purposes only, or should the table create the necessary
-cursors to be able to insert, update, and delete data from the table.  
+cursors to be able to insert, update, and delete data from the table.
 Default is !wxDB\_QUERY\_ONLY.}
-\docparam{tblPath}{{\it OPTIONAL}.  Some datasources (such as dBase) 
+\docparam{tblPath}{{\it OPTIONAL}.  Some datasources (such as dBase)
 require a path to where the table is stored on the system.  Default is "".}
 
 \membersection{wxDbTable::wxDbTable}\label{wxdbtabledestr}
@@ -2073,7 +2073,7 @@ Virtual default destructor.
 
 \membersection{wxDbTable::BuildDeleteStmt}\label{wxdbtablebuilddeletestmt}
 
-\func{void}{BuildDeleteStmt}{\param{wxString \&}{pSqlStmt}, 
+\func{void}{BuildDeleteStmt}{\param{wxString \&}{pSqlStmt},
 \param{int }{typeOfDel}, \param{const wxString \&}{pWhereClause=""}}
 
 Constructs the full SQL statement that can be used to delete all rows matching
@@ -2086,31 +2086,31 @@ sure you have adequate space allocated for the SQL statement, allocate
 DB\_MAX\_STATEMENT\_LEN bytes.}
 \docparam{typeOfDel}{The type of delete statement being performed.  Can be one
 of three values: DB\_DEL\_KEYFIELDS, DB\_DEL\_WHERE or DB\_DEL\_MATCHING}
-\docparam{pWhereClause}{{\it OPTIONAL}.  If the typeOfDel is DB\_DEL\_WHERE, 
-then you must also pass in a SQL WHERE clause in this argument.  Default 
+\docparam{pWhereClause}{{\it OPTIONAL}.  If the typeOfDel is DB\_DEL\_WHERE,
+then you must also pass in a SQL WHERE clause in this argument.  Default
 is "".}
 
 \wxheading{Remarks}
 
-This member function constructs a SQL DELETE statement.  This can be used for 
+This member function constructs a SQL DELETE statement.  This can be used for
 debugging purposes if you are having problems executing your SQL statement.
 
-WHERE and FROM clauses specified using \helpref{wxDbTable::SetWhereClause}{wxdbtablesetwhereclause} 
-and \helpref{wxDbTable::SetFromClause}{wxdbtablesetfromclause} are ignored by 
+WHERE and FROM clauses specified using \helpref{wxDbTable::SetWhereClause}{wxdbtablesetwhereclause}
+and \helpref{wxDbTable::SetFromClause}{wxdbtablesetfromclause} are ignored by
 this function.
 
 \membersection{wxDbTable::BuildSelectStmt}\label{wxdbtablebuildselectstmt}
 
-\func{void}{BuildSelectStmt}{\param{wxString \&}{pSqlStmt}, 
+\func{void}{BuildSelectStmt}{\param{wxString \&}{pSqlStmt},
 \param{int }{typeOfSelect}, \param{bool }{distinct}}
 
 Constructs the full SQL statement that can be used to select all rows matching
-the criteria in the pWhereClause.  This function is called internally in the 
-wxDbTable class whenever the function \helpref{wxDbTable::Query}{wxdbtablequery} 
+the criteria in the pWhereClause.  This function is called internally in the
+wxDbTable class whenever the function \helpref{wxDbTable::Query}{wxdbtablequery}
 is called.
 
-NOTE: Only the columns specified in \helpref{wxDbTable::SetColDefs}{wxdbtablesetcoldefs} 
-statements are included in the list of columns returned by the SQL statement 
+NOTE: Only the columns specified in \helpref{wxDbTable::SetColDefs}{wxdbtablesetcoldefs}
+statements are included in the list of columns returned by the SQL statement
 created by a call to this function.
 
 \wxheading{Parameters}
@@ -2125,29 +2125,29 @@ or DB\_SELECT\_STATEMENT.}
 
 \wxheading{Remarks}
 
-This member function constructs a SQL SELECT statement.  This can be used for 
+This member function constructs a SQL SELECT statement.  This can be used for
 debugging purposes if you are having problems executing your SQL statement.
 
-WHERE and FROM clauses specified using 
-\helpref{wxDbTable::SetWhereClause}{wxdbtablesetwhereclause} 
-and \helpref{wxDbTable::SetFromClause}{wxdbtablesetfromclause} are ignored by 
+WHERE and FROM clauses specified using
+\helpref{wxDbTable::SetWhereClause}{wxdbtablesetwhereclause}
+and \helpref{wxDbTable::SetFromClause}{wxdbtablesetfromclause} are ignored by
 this function.
 
 \membersection{wxDbTable::BuildUpdateStmt}\label{wxdbtablebuildupdatestmt}
 
-\func{void}{BuildUpdateStmt}{\param{wxString \&}{pSqlStmt}, \param{int }{typeOfUpd}, 
+\func{void}{BuildUpdateStmt}{\param{wxString \&}{pSqlStmt}, \param{int }{typeOfUpd},
 \param{const wxString \&}{pWhereClause=""}}
 
 Constructs the full SQL statement that can be used to update all rows matching
 the criteria in the pWhereClause.
 
 If typeOfUpd is DB\_UPD\_KEYFIELDS, then the current values in the bound columns
-are used to determine which row(s) in the table are to be updated. The 
+are used to determine which row(s) in the table are to be updated. The
 exception to this is when a datasource supports ROW IDs (Oracle).  The ROW ID
 column is used for efficiency purposes when available.
 
-NOTE: Only the columns specified in \helpref{wxDbTable::SetColDefs}{wxdbtablesetcoldefs} 
-statements are included in the list of columns updated by the SQL statement 
+NOTE: Only the columns specified in \helpref{wxDbTable::SetColDefs}{wxdbtablesetcoldefs}
+statements are included in the list of columns updated by the SQL statement
 created by a call to this function.  Any column definitions that were defined
 as being non-updateable will be excluded from the SQL UPDATE statement created
 by this function.
@@ -2159,7 +2159,7 @@ sure you have adequate space allocated for the SQL statement, allocate
 DB\_MAX\_STATEMENT\_LEN bytes.}
 \docparam{typeOfUpd}{The type of update statement being performed.  Can be one
 of two values: DB\_UPD\_KEYFIELDS or DB\_UPD\_WHERE.}
-\docparam{pWhereClause}{{\it OPTIONAL}.  If the typeOfUpd is DB\_UPD\_WHERE, 
+\docparam{pWhereClause}{{\it OPTIONAL}.  If the typeOfUpd is DB\_UPD\_WHERE,
 then you must also pass in a SQL WHERE clause in this argument. Default is "".}
 
 \wxheading{Remarks}
@@ -2168,14 +2168,14 @@ This member function allows you to see what the SQL UPDATE statement looks like
 that the ODBC class library builds.  This can be used for debugging purposes if
 you are having problems executing your SQL statement.
 
-WHERE and FROM clauses specified using \helpref{wxDbTable::SetWhereClause}{wxdbtablesetwhereclause} 
-and \helpref{wxDbTable::SetFromClause}{wxdbtablesetfromclause} are ignored by 
+WHERE and FROM clauses specified using \helpref{wxDbTable::SetWhereClause}{wxdbtablesetwhereclause}
+and \helpref{wxDbTable::SetFromClause}{wxdbtablesetfromclause} are ignored by
 this function.
 
 \membersection{wxDbTable::BuildWhereStmt}\label{wxdbtablebuildwherestmt}
 
-\func{void}{BuildSelectStmt}{\param{wxString \&}{pWhereClause}, 
-\param{int }{typeOfWhere}, \param{const wxString \&}{qualTableName=""}, 
+\func{void}{BuildSelectStmt}{\param{wxString \&}{pWhereClause},
+\param{int }{typeOfWhere}, \param{const wxString \&}{qualTableName=""},
 \param{bool }{useLikeComparison=FALSE}}
 
 Constructs the portion of a SQL statement which would follow the word 'WHERE'
@@ -2184,22 +2184,22 @@ does NOT include the word 'WHERE'.
 
 \wxheading{Parameters}
 
-\docparam{pWhereClause}{Pointer to storage for the SQL statement retrieved.  
+\docparam{pWhereClause}{Pointer to storage for the SQL statement retrieved.
 To be sure you have adequate space allocated for the SQL statement, allocate
 DB\_MAX\_STATEMENT\_LEN bytes.}
-\docparam{typeOfWhere}{The type of where clause to generate.  Can be one of 
+\docparam{typeOfWhere}{The type of where clause to generate.  Can be one of
 two values:  DB\_WHERE\_KEYFIELDS or DB\_WHERE\_MATCHING.}
-\docparam{qualTableName}{{\it OPTIONAL}.  Prepended to all base table 
-column names.  For use when a FROM clause has been specified with the 
-\helpref{wxDbTable::SetFromClause}{wxdbtablesetfromclause}, 
+\docparam{qualTableName}{{\it OPTIONAL}.  Prepended to all base table
+column names.  For use when a FROM clause has been specified with the
+\helpref{wxDbTable::SetFromClause}{wxdbtablesetfromclause},
 to clarify which table a column name reference belongs to.  Default is "".}
-\docparam{useLikeComparison}{{\it OPTIONAL}.  Should the constructed WHERE 
-clause utilize the LIKE comparison operator.  If FALSE, then the '=' 
+\docparam{useLikeComparison}{{\it OPTIONAL}.  Should the constructed WHERE
+clause utilize the LIKE comparison operator.  If FALSE, then the '='
 operator is used.  Default is FALSE.}
 
 \wxheading{Remarks}
 
-This member function allows you to see what the SQL WHERE clause looks like 
+This member function allows you to see what the SQL WHERE clause looks like
 that the ODBC class library builds.  This can be used for debugging purposes
 if you are having problems executing your own SQL statements.
 
@@ -2213,9 +2213,9 @@ columns to use in the comparison.
 
 Use this function to determine if the datasource supports SELECT ... FOR UPDATE.
 When the keywords "FOR UPDATE" are included as part of your SQL SELECT statement,
-all records {\it retrieved} (not just queried, but actually retrieved using 
-\helpref{wxDbTable::GetNext}{wxdbtablegetnext}, etc) from the result set are 
-locked.  
+all records {\it retrieved} (not just queried, but actually retrieved using
+\helpref{wxDbTable::GetNext}{wxdbtablegetnext}, etc) from the result set are
+locked.
 
 \wxheading{Remarks}
 
@@ -2223,36 +2223,36 @@ Not all datasources support the "FOR UPDATE" clause, so you must use this
 member function to determine if the datasource currently connected to supports
 this behavior or not before trying to select using "FOR UPDATE".
 
-If the wxDbTable instance was created with the parameter wxDB\_QUERY\_ONLY, then 
-this function will return FALSE.  For all known databases which do not support 
+If the wxDbTable instance was created with the parameter wxDB\_QUERY\_ONLY, then
+this function will return FALSE.  For all known databases which do not support
 the FOR UPDATE clause, this function will return FALSE also.
 
 \membersection{wxDbTable::CanUpdateByROWID}\label{wxdbtablecanupdatebyrowid}
 
 \func{bool}{CanUpdateByROWID}{\void}
 
-CURRENTLY ONLY POSSIBLE IF USING ORACLE.  
+CURRENTLY ONLY POSSIBLE IF USING ORACLE.
 
 --- CURRENTLY DISABLED FOR *ALL* DATASOURCES --- NOV 1 2000 - gt
 
 Every Oracle table has a hidden column named ROWID.  This is a pointer to the
-physical location of the record in the datasource and allows for very fast 
+physical location of the record in the datasource and allows for very fast
 updates and deletes.  The key is to retrieve this ROWID during your query so
-it is available during an update or delete operation. 
+it is available during an update or delete operation.
 
-Use of the ROWID feature is always handled by the class library except in the 
-case of \helpref{wxDbTable::QueryBySqlStmt}{wxdbtablequerybysqlstmt}.  Since 
-you are passing in the SQL SELECT statement, 
-it is up to you to include the ROWID column in your query.  If you do not, 
-the application will still work, but may not be as optimized.  The ROWID is 
-always the last column in the column list in your SQL SELECT statement.  
-The ROWID is not a column in the normal sense and should not be considered 
+Use of the ROWID feature is always handled by the class library except in the
+case of \helpref{wxDbTable::QueryBySqlStmt}{wxdbtablequerybysqlstmt}.  Since
+you are passing in the SQL SELECT statement,
+it is up to you to include the ROWID column in your query.  If you do not,
+the application will still work, but may not be as optimized.  The ROWID is
+always the last column in the column list in your SQL SELECT statement.
+The ROWID is not a column in the normal sense and should not be considered
 part of the column definitions for the wxDbTable object.
 
 \wxheading{Remarks}
 
-The decision to include the ROWID in your SQL SELECT statement must be 
-deferred until runtime since it depends on whether you are connected 
+The decision to include the ROWID in your SQL SELECT statement must be
+deferred until runtime since it depends on whether you are connected
 to an Oracle datasource or not.
 
 \wxheading{Example}
@@ -2276,36 +2276,36 @@ to an Oracle datasource or not.
 \func{void}{ClearMemberVar}{\param{UWORD }{colNo}, \param{bool }{setToNull=FALSE}}
 
 Same as \helpref{wxDbTable::ClearMemberVars}{wxdbtableclearmembervars} except
-that this function clears only the specified column of its values, and 
+that this function clears only the specified column of its values, and
 optionally sets the column to be a NULL column.
 
-\docparam{colNo}{Column number that is to be cleared.  This number (between 0 
-and (noCols-1)) is the index of the column definition created using the 
+\docparam{colNo}{Column number that is to be cleared.  This number (between 0
+and (noCols-1)) is the index of the column definition created using the
 \helpref{wxDbTable::SetColDefs}{wxdbtablesetcoldefs} function.}
-\docparam{setToNull}{{\it OPTIONAL}.  Indicates whether the column should be 
-flagged as being a NULL value stored in the bound memory variable.  If TRUE, 
-then any value stored in the bound member variable is cleared.  Default is 
+\docparam{setToNull}{{\it OPTIONAL}.  Indicates whether the column should be
+flagged as being a NULL value stored in the bound memory variable.  If TRUE,
+then any value stored in the bound member variable is cleared.  Default is
 FALSE.}
 
 \membersection{wxDbTable::ClearMemberVars}\label{wxdbtableclearmembervars}
 
 \func{void}{ClearMemberVars}{\param{bool }{setToNull=FALSE}}
 
-Initializes all bound columns of the wxDbTable instance to zero.  In the case 
-of a string, zero is copied to the first byte of the string.  
+Initializes all bound columns of the wxDbTable instance to zero.  In the case
+of a string, zero is copied to the first byte of the string.
 
-\docparam{setToNull}{{\it OPTIONAL}.  Indicates whether all columns should be 
-flagged as having a NULL value stored in the bound memory variable.  If TRUE, 
-then any value stored in the bound member variable is cleared.  Default is 
+\docparam{setToNull}{{\it OPTIONAL}.  Indicates whether all columns should be
+flagged as having a NULL value stored in the bound memory variable.  If TRUE,
+then any value stored in the bound member variable is cleared.  Default is
 FALSE.}
 
 \wxheading{Remarks}
 
-This is useful before calling functions such as 
-\helpref{wxDbTable::QueryMatching}{wxdbtablequerymatching} or 
-\helpref{wxDbTable::DeleteMatching}{wxdbtabledeletematching} since these 
-functions build their WHERE clauses from non-zero columns.  To call either 
-\helpref{wxDbTable::QueryMatching}{wxdbtablequerymatching} or 
+This is useful before calling functions such as
+\helpref{wxDbTable::QueryMatching}{wxdbtablequerymatching} or
+\helpref{wxDbTable::DeleteMatching}{wxdbtabledeletematching} since these
+functions build their WHERE clauses from non-zero columns.  To call either
+\helpref{wxDbTable::QueryMatching}{wxdbtablequerymatching} or
 \helpref{wxDbTable::DeleteMatching}{wxdbtabledeletematching} use this sequence:
 
 \begin{verbatim}
@@ -2326,7 +2326,7 @@ Closes the specified cursor associated with the wxDbTable object.
 
 \wxheading{Remarks}
 
-Typically handled internally by the ODBC class library, but may be used by the 
+Typically handled internally by the ODBC class library, but may be used by the
 programmer if desired.
 
 \normalbox{DO NOT CLOSE THE wxDB\_DEFAULT\_CURSOR!}
@@ -2340,22 +2340,22 @@ current query parameters specified in the WHERE and FROM clauses.
 
 \wxheading{Parameters}
 
-\docparam{args}{{\it OPTIONAL}.  This argument allows the use of the 
-DISTINCT keyword against a column name to cause the returned count to 
-only indicate the number of rows in the result set that have a unique 
-value in the specified column.  An example is shown below.  Default is "*", 
-meaning a count of the total number of rows matching is returned, regardless 
+\docparam{args}{{\it OPTIONAL}.  This argument allows the use of the
+DISTINCT keyword against a column name to cause the returned count to
+only indicate the number of rows in the result set that have a unique
+value in the specified column.  An example is shown below.  Default is "*",
+meaning a count of the total number of rows matching is returned, regardless
 of uniqueness.}
 
 \wxheading{Remarks}
 
-This function can be called before or after an actual query to obtain the 
+This function can be called before or after an actual query to obtain the
 count of records in the result set.  Count() uses its own cursor, so result
 set cursor positioning is not affected by calls to Count().
 
-WHERE and FROM clauses specified using 
-\helpref{wxDbTable::SetWhereClause}{wxdbtablesetwhereclause} 
-and \helpref{wxDbTable::SetFromClause}{wxdbtablesetfromclause} ARE used by 
+WHERE and FROM clauses specified using
+\helpref{wxDbTable::SetWhereClause}{wxdbtablesetwhereclause}
+and \helpref{wxDbTable::SetFromClause}{wxdbtablesetfromclause} ARE used by
 this function.
 
 \wxheading{Example}
@@ -2366,7 +2366,7 @@ this function.
 
     FIRST_NAME      LAST_NAME
     -----------     ----------
-    John            Doe    
+    John            Doe
     Richard         Smith
     Michael         Jones
     John            Carpenter
@@ -2387,69 +2387,69 @@ this function.
 
 \membersection{wxDbTable::CreateIndex}\label{wxdbtablecreateindex}
 
-\func{bool}{CreateIndex}{\param{const wxString \&}{idxName}, \param{bool }{unique}, 
-\param{UWORD }{noIdxCols}, \param{wxDbIdxDef *}{pIdxDefs}, 
+\func{bool}{CreateIndex}{\param{const wxString \&}{idxName}, \param{bool }{unique},
+\param{UWORD }{noIdxCols}, \param{wxDbIdxDef *}{pIdxDefs},
 \param{bool }{attemptDrop=TRUE}}
 
-This member function allows you to create secondary (non primary) indexes on 
-your tables.  You first create your table, normally specifying a primary 
-index, and then create any secondary indexes on the table.  Indexes in 
-relational model are not required.  You do not need indexes to look up records 
-in a table or to join two tables together.  In the relational model, indexes, 
-if available, provide a quicker means to look up data in a table.  To enjoy 
-the performance benefits of indexes, the indexes must be defined on the 
-appropriate columns and your SQL code must be written in such a way as to 
+This member function allows you to create secondary (non primary) indexes on
+your tables.  You first create your table, normally specifying a primary
+index, and then create any secondary indexes on the table.  Indexes in
+relational model are not required.  You do not need indexes to look up records
+in a table or to join two tables together.  In the relational model, indexes,
+if available, provide a quicker means to look up data in a table.  To enjoy
+the performance benefits of indexes, the indexes must be defined on the
+appropriate columns and your SQL code must be written in such a way as to
 take advantage of those indexes.
 
 \wxheading{Parameters}
 
-\docparam{idxName}{Name of the Index.  Name must be unique within the table 
+\docparam{idxName}{Name of the Index.  Name must be unique within the table
 space of the datasource.}
 \docparam{unique}{Indicates if this index is unique.}
 \docparam{noIdxCols}{Number of columns in the index.}
 \docparam{pIdxDefs}{A pointer to an array wxDbIdxDef structures. }
-\docparam{attemptDrop}{{\it OPTIONAL}.  Indicates if the function should try 
-to execute a \helpref{wxDbTable::DropIndex}{wxdbtabledropindex} on the index 
+\docparam{attemptDrop}{{\it OPTIONAL}.  Indicates if the function should try
+to execute a \helpref{wxDbTable::DropIndex}{wxdbtabledropindex} on the index
 name provided before trying to create the index name.  Default is TRUE.}
 
 \wxheading{Remarks}
 
-The first parameter, index name, must be unique and should be given a 
-meaningful name.  Common practice is to include the table name as a prefix 
-in the index name (e.g. For table PARTS, you might want to call your index 
-PARTS\_IDX1).  This will allow you to easily view all 
+The first parameter, index name, must be unique and should be given a
+meaningful name.  Common practice is to include the table name as a prefix
+in the index name (e.g. For table PARTS, you might want to call your index
+PARTS\_IDX1).  This will allow you to easily view all
 of the indexes defined for a given table grouped together alphabetically.
 
-The second parameter indicates if the index is unique or not.  Uniqueness 
+The second parameter indicates if the index is unique or not.  Uniqueness
 is enforced at the RDBMS level preventing rows which would have duplicate
-indexes from being inserted into the table when violating a unique index's 
+indexes from being inserted into the table when violating a unique index's
 uniqueness.
 
-In the third parameter, specify how many columns are in your index.  This 
+In the third parameter, specify how many columns are in your index.  This
 number must match the number of columns defined in the 'pIdxDefs' parameter.
 
-The fourth parameter specifies which columns make up the index using the 
-wxDbIdxDef structure.  For each column in the index, you must specify two 
-things, the column name and the sort order (ascending / descending).  See 
+The fourth parameter specifies which columns make up the index using the
+wxDbIdxDef structure.  For each column in the index, you must specify two
+things, the column name and the sort order (ascending / descending).  See
 the example below to see how to build and pass in the wxDbIdxDef structure.
 
-The fifth parameter is provided to handle the differences in datasources as 
-to whether they will automatically overwrite existing indexes with the same 
-name or not.  Some datasources require that the existing index must be dropped 
+The fifth parameter is provided to handle the differences in datasources as
+to whether they will automatically overwrite existing indexes with the same
+name or not.  Some datasources require that the existing index must be dropped
 first, so this is the default behavior.
 
-Some datasources (MySQL, and possibly others) require columns which are to be 
-part of an index to be defined as NOT NULL.  When this function is called, if 
-a column is not defined to be NOT NULL, a call to this function will modify 
-the column definition to change any columns included in the index to be 
-NOT NULL.  In this situation, if a NULL value already exists in one of the 
+Some datasources (MySQL, and possibly others) require columns which are to be
+part of an index to be defined as NOT NULL.  When this function is called, if
+a column is not defined to be NOT NULL, a call to this function will modify
+the column definition to change any columns included in the index to be
+NOT NULL.  In this situation, if a NULL value already exists in one of the
 columns that is being modified, creation of the index will fail.
 
-PostGres is unable to handle index definitions which specify whether the index 
-is ascending or descending, and defaults to the system default when the index 
+PostGres is unable to handle index definitions which specify whether the index
+is ascending or descending, and defaults to the system default when the index
 is created.
 
-It is not necessary to call \helpref{wxDb::CommitTrans}{wxdbcommittrans} 
+It is not necessary to call \helpref{wxDb::CommitTrans}{wxdbcommittrans}
 after executing this function.
 
 \wxheading{Example}
@@ -2479,33 +2479,33 @@ wxDbTable instance.
 
 \wxheading{Parameters}
 
-\docparam{attemptDrop}{{\it OPTIONAL}.  Indicates whether the driver should 
-attempt to drop the table before trying to create it.  Some datasources will 
-not allow creation of a table if the table already exists in the table space 
+\docparam{attemptDrop}{{\it OPTIONAL}.  Indicates whether the driver should
+attempt to drop the table before trying to create it.  Some datasources will
+not allow creation of a table if the table already exists in the table space
 being used.  Default is TRUE.}
 
 \wxheading{Remarks}
 
-This function creates the table and primary index (if any) in the table space 
-associated with the connected datasource.  The owner of these objects will 
-be the user id that was given when \helpref{wxDb::Open}{wxdbopen} was called.  
+This function creates the table and primary index (if any) in the table space
+associated with the connected datasource.  The owner of these objects will
+be the user id that was given when \helpref{wxDb::Open}{wxdbopen} was called.
 The objects will be created in the default schema/table space for that user.
 
-In your derived wxDbTable object constructor, the columns and primary index 
-of the table are described through the \helpref{wxDbColDef}{wxdbcoldef} structure.  
-\helpref{wxDbTable::CreateTable}{wxdbtablecreatetable} uses this information 
-to create the table and to add the primary index.  See 
-\helpref{wxDbTable}{wxdbtable} ctor and wxDbColDef description for additional 
+In your derived wxDbTable object constructor, the columns and primary index
+of the table are described through the \helpref{wxDbColDef}{wxdbcoldef} structure.
+\helpref{wxDbTable::CreateTable}{wxdbtablecreatetable} uses this information
+to create the table and to add the primary index.  See
+\helpref{wxDbTable}{wxdbtable} ctor and wxDbColDef description for additional
 information on describing the columns of the table.
 
-It is not necessary to call \helpref{wxDb::CommitTrans}{wxdbcommittrans} 
+It is not necessary to call \helpref{wxDb::CommitTrans}{wxdbcommittrans}
 after executing this function.
 
 \membersection{wxDbTable::DB\_STATUS}\label{wxdbtabledbstatus}
 
 \func{bool}{DB\_STATUS}{\void}
 
-Accessor function that returns the wxDb private member variable DB\_STATUS for 
+Accessor function that returns the wxDb private member variable DB\_STATUS for
 the database connection used by this instance of wxDbTable.
 
 \membersection{wxDbTable::Delete}\label{wxdbtabledelete}
@@ -2516,24 +2516,24 @@ Deletes the row from the table indicated by the current cursor.
 
 \wxheading{Remarks}
 
-Use \helpref{wxDbTable::GetFirst}{wxdbtablegetfirst}, 
-\helpref{wxDbTable::GetLast}{wxdbtablegetlast}, 
+Use \helpref{wxDbTable::GetFirst}{wxdbtablegetfirst},
+\helpref{wxDbTable::GetLast}{wxdbtablegetlast},
 \helpref{wxDbTable::GetNext}{wxdbtablegetnext} or
-\helpref{wxDbTable::GetPrev}{wxdbtablegetprev} to position the cursor to 
-a valid record.  Once positioned on a record, call this function to delete 
+\helpref{wxDbTable::GetPrev}{wxdbtablegetprev} to position the cursor to
+a valid record.  Once positioned on a record, call this function to delete
 the row from the table.
 
-A \helpref{wxDb::CommitTrans}{wxdbcommittrans} or 
-\helpref{wxDb::RollbackTrans}{wxdbrollbacktrans} must be called after use of 
+A \helpref{wxDb::CommitTrans}{wxdbcommittrans} or
+\helpref{wxDb::RollbackTrans}{wxdbrollbacktrans} must be called after use of
 this function to commit or rollback the deletion.
 
-NOTE: Most datasources have a limited size "rollback" segment.  This means 
-that it is only possible to insert/update/delete a finite number of rows 
-without performing a \helpref{wxDb::CommitTrans}{wxdbcommittrans} or 
-\helpref{wxDb::RollbackTrans}{wxdbrollbacktrans}.  Size of the rollback 
-segment varies from database to database, and is user configurable in 
-most databases.  Therefore it is usually best to try to perform a commit 
-or rollback at relatively small intervals when processing a larger number 
+NOTE: Most datasources have a limited size "rollback" segment.  This means
+that it is only possible to insert/update/delete a finite number of rows
+without performing a \helpref{wxDb::CommitTrans}{wxdbcommittrans} or
+\helpref{wxDb::RollbackTrans}{wxdbrollbacktrans}.  Size of the rollback
+segment varies from database to database, and is user configurable in
+most databases.  Therefore it is usually best to try to perform a commit
+or rollback at relatively small intervals when processing a larger number
 of actions that insert/update/delete rows in a table.
 
 \membersection{wxDbTable::DeleteCursor}\label{wxdbtabledeletecursor}
@@ -2548,12 +2548,12 @@ Allows a program to delete a cursor.
 
 \wxheading{Remarks}
 
-For default cursors associated with the instance of wxDbTable, it is not 
-necessary to specifically delete the cursors.  This is automatically done 
+For default cursors associated with the instance of wxDbTable, it is not
+necessary to specifically delete the cursors.  This is automatically done
 in the wxDbTable destructor.
 
-NOTE: If the cursor could not be deleted for some reason, an error is logged 
-indicating the reason.  Even if the cursor could not be deleted, the HSTMT 
+NOTE: If the cursor could not be deleted for some reason, an error is logged
+indicating the reason.  Even if the cursor could not be deleted, the HSTMT
 that is passed in is deleted, and the pointer is set to NULL.
 
 \normalbox{DO NOT DELETE THE wxDB\_DEFAULT\_CURSOR!}
@@ -2562,8 +2562,8 @@ that is passed in is deleted, and the pointer is set to NULL.
 
 \func{bool}{DeleteMatching}{\void}
 
-This member function allows you to delete records from your wxDbTable object 
-by specifying the data in the columns to match on.  
+This member function allows you to delete records from your wxDbTable object
+by specifying the data in the columns to match on.
 
 \wxheading{Remarks}
 
@@ -2575,28 +2575,28 @@ To delete all users with a first name of "JOHN", do the following:
     3)  Call wxDbTable::DeleteMatching().
 \end{verbatim}
 
-The WHERE clause is built by the ODBC class library based on all non-NULL 
-columns.  This allows deletion of records by matching on any column(s) in 
+The WHERE clause is built by the ODBC class library based on all non-NULL
+columns.  This allows deletion of records by matching on any column(s) in
 your wxDbTable instance, without having to write the SQL WHERE clause.
 
-A \helpref{wxDb::CommitTrans}{wxdbcommittrans} or 
-\helpref{wxDb::RollbackTrans}{wxdbrollbacktrans} must be called after use of 
+A \helpref{wxDb::CommitTrans}{wxdbcommittrans} or
+\helpref{wxDb::RollbackTrans}{wxdbrollbacktrans} must be called after use of
 this function to commit or rollback the deletion.
 
-NOTE: Row(s) should be locked before deleting them to make sure they are 
-not already in use.  This can be achieved by calling 
-\helpref{wxDbTable::QueryMatching}{wxdbtablequerymatching}, 
-and then retrieving the records, locking each as you go (assuming FOR UPDATE 
-is allowed on the datasource).  After the row(s) have been successfully locked, 
+NOTE: Row(s) should be locked before deleting them to make sure they are
+not already in use.  This can be achieved by calling
+\helpref{wxDbTable::QueryMatching}{wxdbtablequerymatching},
+and then retrieving the records, locking each as you go (assuming FOR UPDATE
+is allowed on the datasource).  After the row(s) have been successfully locked,
 call this function.
 
-NOTE: Most datasources have a limited "rollback" segment.  This means 
-that it is only possible to insert/update/delete a finite number of rows 
-without performing a \helpref{wxDb::CommitTrans}{wxdbcommittrans} or 
-\helpref{wxDb::RollbackTrans}{wxdbrollbacktrans}.  Size of the rollback 
-segment varies from database to database, and is user configurable in 
-most databases.  Therefore it is usually best to try to perform a commit 
-or rollback at relatively small intervals when processing a larger number 
+NOTE: Most datasources have a limited "rollback" segment.  This means
+that it is only possible to insert/update/delete a finite number of rows
+without performing a \helpref{wxDb::CommitTrans}{wxdbcommittrans} or
+\helpref{wxDb::RollbackTrans}{wxdbrollbacktrans}.  Size of the rollback
+segment varies from database to database, and is user configurable in
+most databases.  Therefore it is usually best to try to perform a commit
+or rollback at relatively small intervals when processing a larger number
 of actions that insert/update/delete rows in a table.
 
 \wxheading{Example}
@@ -2614,48 +2614,48 @@ of actions that insert/update/delete rows in a table.
 
 \func{bool}{DeleteWhere}{\param{const wxString \&}{pWhereClause}}
 
-Deletes all rows from the table which match the criteria specified in the 
+Deletes all rows from the table which match the criteria specified in the
 WHERE clause that is passed in.
 
 \wxheading{Parameters}
 
-\docparam{pWhereClause}{SQL WHERE clause.  This WHERE clause determines which 
-records will be deleted from the table interfaced through the wxDbTable 
-instance.  The WHERE clause passed in must be compliant with the SQL 92 
+\docparam{pWhereClause}{SQL WHERE clause.  This WHERE clause determines which
+records will be deleted from the table interfaced through the wxDbTable
+instance.  The WHERE clause passed in must be compliant with the SQL 92
 grammar.  Do not include the keyword 'WHERE'
 }
 
 \wxheading{Remarks}
 
-This is the most powerful form of the wxDbTable delete functions.  This 
-function gives access to the full power of SQL.  This function can be used 
-to delete records by passing a valid SQL WHERE clause.  Sophisticated 
-deletions can be performed based on multiple criteria using the full 
-functionality of the SQL language.  
+This is the most powerful form of the wxDbTable delete functions.  This
+function gives access to the full power of SQL.  This function can be used
+to delete records by passing a valid SQL WHERE clause.  Sophisticated
+deletions can be performed based on multiple criteria using the full
+functionality of the SQL language.
 
-A \helpref{wxDb::CommitTrans}{wxdbcommittrans} must be called after use of 
+A \helpref{wxDb::CommitTrans}{wxdbcommittrans} must be called after use of
 this function to commit the deletions.
 
-Note: This function is limited to deleting records from the table associated 
+Note: This function is limited to deleting records from the table associated
 with this wxDbTable object only.  Deletions on joined tables is not possible.
 
-NOTE: Most datasources have a limited size "rollback" segment.  This means 
-that it is only possible to insert/update/delete a finite number of rows 
-without performing a \helpref{wxDb::CommitTrans}{wxdbcommittrans} or 
-\helpref{wxDb::RollbackTrans}{wxdbrollbacktrans}.  Size of the rollback 
-segment varies from database to database, and is user configurable in 
-most databases.  Therefore it is usually best to try to perform a commit 
-or rollback at relatively small intervals when processing a larger number 
+NOTE: Most datasources have a limited size "rollback" segment.  This means
+that it is only possible to insert/update/delete a finite number of rows
+without performing a \helpref{wxDb::CommitTrans}{wxdbcommittrans} or
+\helpref{wxDb::RollbackTrans}{wxdbrollbacktrans}.  Size of the rollback
+segment varies from database to database, and is user configurable in
+most databases.  Therefore it is usually best to try to perform a commit
+or rollback at relatively small intervals when processing a larger number
 of actions that insert/update/delete rows in a table.
 
-WHERE and FROM clauses specified using \helpref{wxDbTable::SetWhereClause}{wxdbtablesetwhereclause} 
-and \helpref{wxDbTable::SetFromClause}{wxdbtablesetfromclause} are ignored by 
+WHERE and FROM clauses specified using \helpref{wxDbTable::SetWhereClause}{wxdbtablesetwhereclause}
+and \helpref{wxDbTable::SetFromClause}{wxdbtablesetfromclause} are ignored by
 this function.
 
 \wxheading{Example}
 
 \begin{verbatim}
-    // Delete parts 1 thru 10 from containers 'X', 'Y' and 'Z' that 
+    // Delete parts 1 thru 10 from containers 'X', 'Y' and 'Z' that
     // are magenta in color
     parts.DeleteWhere("(PART_NUMBER BETWEEN 1 AND 10) AND \
                         CONTAINER IN ('X', 'Y', 'Z') AND \
@@ -2667,7 +2667,7 @@ this function.
 
 \func{bool}{DropIndex}{\param{const wxString \&}{idxName}}
 
-Allows an index on the associated table to be dropped (deleted) if the user 
+Allows an index on the associated table to be dropped (deleted) if the user
 login has sufficient privileges to do so.
 
 \wxheading{Parameters}
@@ -2676,10 +2676,10 @@ login has sufficient privileges to do so.
 
 \wxheading{Remarks}
 
-If the index specified in the 'idxName' parameter does not exist, an error 
+If the index specified in the 'idxName' parameter does not exist, an error
 will be logged, and the function will return a result of FALSE.
 
-It is not necessary to call \helpref{wxDb::CommitTrans}{wxdbcommittrans} 
+It is not necessary to call \helpref{wxDb::CommitTrans}{wxdbcommittrans}
 after executing this function.
 
 \membersection{wxDbTable::DropTable}\label{wxdbtabledroptable}
@@ -2690,16 +2690,16 @@ Deletes the associated table if the user has sufficient privileges to do so.
 
 \wxheading{Remarks}
 
-This function returns TRUE if the table does not exist, but only for 
-supported databases (see \helpref{wxDb::Dbms}{wxdbdbms}).  If a datasource 
-is not specifically supported, and this function is called, the function 
+This function returns TRUE if the table does not exist, but only for
+supported databases (see \helpref{wxDb::Dbms}{wxdbdbms}).  If a datasource
+is not specifically supported, and this function is called, the function
 will return FALSE.
 
-Most datasources/ODBC drivers will delete any indexes associated with the 
-table automatically, and others may not.  Check the documentation for your 
+Most datasources/ODBC drivers will delete any indexes associated with the
+table automatically, and others may not.  Check the documentation for your
 database to determine the behavior.
 
-It is not necessary to call \helpref{wxDb::CommitTrans}{wxdbcommittrans} 
+It is not necessary to call \helpref{wxDb::CommitTrans}{wxdbcommittrans}
 after executing this function.
 
 \membersection{wxDbTable::From}\label{wxdbtablefrom}
@@ -2708,32 +2708,32 @@ after executing this function.
 
 \func{void}{From}{\param{const wxString \&}{From}}
 
-Accessor function for the private class member wxDbTable::from.  Can be used 
-as a synonym for \helpref{wxDbTable::GetFromClause}{wxdbtablegetfromclause} 
-(the first form of this function) or  
-\helpref{wxDbTable::SetFromClause}{wxdbtablesetfromclause} (the second form 
+Accessor function for the private class member wxDbTable::from.  Can be used
+as a synonym for \helpref{wxDbTable::GetFromClause}{wxdbtablegetfromclause}
+(the first form of this function) or
+\helpref{wxDbTable::SetFromClause}{wxdbtablesetfromclause} (the second form
 of this function).
 
 \wxheading{Parameters}
 
-\docparam{From}{A comma separated list of table names that are to be outer 
-joined with the base table's columns so that the joined table's columns 
-may be returned in the result set or used as a portion of a comparison with 
-the base table's columns.  NOTE that the base tables name must NOT be included 
-in the FROM clause, as it is automatically included by the wxDbTable class 
+\docparam{From}{A comma separated list of table names that are to be outer
+joined with the base table's columns so that the joined table's columns
+may be returned in the result set or used as a portion of a comparison with
+the base table's columns.  NOTE that the base tables name must NOT be included
+in the FROM clause, as it is automatically included by the wxDbTable class
 in constructing query statements.}
 
 \wxheading{Return value}
 
-The first form of this function returns the current value of the wxDbTable 
-member variable ::from.  
+The first form of this function returns the current value of the wxDbTable
+member variable ::from.
 
-The second form of the function has no return value, as it will always set 
-the from clause successfully. 
+The second form of the function has no return value, as it will always set
+the from clause successfully.
 
 \wxheading{See also}
 
-\helpref{wxDbTable::GetFromClause}{wxdbtablegetfromclause}, 
+\helpref{wxDbTable::GetFromClause}{wxdbtablegetfromclause},
 \helpref{wxDbTable::SetFromClause}{wxdbtablesetfromclause}
 
 
@@ -2741,29 +2741,29 @@ the from clause successfully.
 
 \func{wxDbColDef *}{GetColDefs}{}
 
-Accessor function that returns a pointer to the array of column definitions 
-that are bound to the columns that this wxDbTable instance is associated 
+Accessor function that returns a pointer to the array of column definitions
+that are bound to the columns that this wxDbTable instance is associated
 with.
 
-To determine the number of elements pointed to by the returned 
-\helpref{wxDbColDef}{wxdbcoldef} pointer, use the 
+To determine the number of elements pointed to by the returned
+\helpref{wxDbColDef}{wxdbcoldef} pointer, use the
 \helpref{wxDbTable::GetNumberOfColumns}{wxdbtablegetnumberofcolumns} function.
 
 \wxheading{Remarks}
 
-These column definitions must not be manually redefined after they have been 
+These column definitions must not be manually redefined after they have been
 set.
 
 \membersection{wxDbTable::GetCursor}\label{wxdbtablegetcursor}
 
 \func{HSTMT}{GetCursor}{\void}
 
-Returns the HSTMT value of the current cursor for this wxDbTable object.  
+Returns the HSTMT value of the current cursor for this wxDbTable object.
 
 \wxheading{Remarks}
 
-This function is typically used just before changing to use a different cursor 
-so that after the program is finished using the other cursor, the current 
+This function is typically used just before changing to use a different cursor
+so that after the program is finished using the other cursor, the current
 cursor can be set back to being the cursor in use.
 
 \wxheading{See also}
@@ -2774,25 +2774,25 @@ cursor can be set back to being the cursor in use.
 
 \func{wxDb *}{GetDb}{}
 
-Accessor function for the private member variable pDb which is a pointer to 
+Accessor function for the private member variable pDb which is a pointer to
 the datasource connection that this wxDbTable instance uses.
 
 \membersection{wxDbTable::GetFirst}\label{wxdbtablegetfirst}
 
 \func{bool}{GetFirst}{\void}
 
-Retrieves the FIRST row in the record set as defined by the current query.  
-Before retrieving records, a query must be performed using 
-\helpref{wxDbTable::Query}{wxdbtablequery}, 
-\helpref{wxDbTable::QueryOnKeyFields}{wxdbtablequeryonkeyfields}, 
-\helpref{wxDbTable::QueryMatching}{wxdbtablequerymatching} or 
+Retrieves the FIRST row in the record set as defined by the current query.
+Before retrieving records, a query must be performed using
+\helpref{wxDbTable::Query}{wxdbtablequery},
+\helpref{wxDbTable::QueryOnKeyFields}{wxdbtablequeryonkeyfields},
+\helpref{wxDbTable::QueryMatching}{wxdbtablequerymatching} or
 \helpref{wxDbTable::QueryBySqlStmt}{wxdbtablequerybysqlstmt}.
 
 \wxheading{Remarks}
 
-This function can only be used if the datasource connection used by the 
-wxDbTable instance was created with FwdOnlyCursors set to FALSE.  If the 
-connection does not allow backward scrolling cursors, this function will 
+This function can only be used if the datasource connection used by the
+wxDbTable instance was created with FwdOnlyCursors set to FALSE.  If the
+connection does not allow backward scrolling cursors, this function will
 return FALSE, and the data contained in the bound columns will be undefined.
 
 \wxheading{See also}
@@ -2803,7 +2803,7 @@ return FALSE, and the data contained in the bound columns will be undefined.
 
 \func{const wxString \&}{GetFromClause}{}
 
-Accessor function that returns the current FROM setting assigned with the 
+Accessor function that returns the current FROM setting assigned with the
 \helpref{wxDbTable::SetFromClause}{wxdbtablesetfromclause}.
 
 \wxheading{See also}
@@ -2814,18 +2814,18 @@ Accessor function that returns the current FROM setting assigned with the
 
 \func{bool}{GetLast}{\void}
 
-Retrieves the LAST row in the record set as defined by the current query.  
-Before retrieving records, a query must be performed using 
-\helpref{wxDbTable::Query}{wxdbtablequery}, 
-\helpref{wxDbTable::QueryOnKeyFields}{wxdbtablequeryonkeyfields}, 
-\helpref{wxDbTable::QueryMatching}{wxdbtablequerymatching} or 
+Retrieves the LAST row in the record set as defined by the current query.
+Before retrieving records, a query must be performed using
+\helpref{wxDbTable::Query}{wxdbtablequery},
+\helpref{wxDbTable::QueryOnKeyFields}{wxdbtablequeryonkeyfields},
+\helpref{wxDbTable::QueryMatching}{wxdbtablequerymatching} or
 \helpref{wxDbTable::QueryBySqlStmt}{wxdbtablequerybysqlstmt}.
 
 \wxheading{Remarks}
 
-This function can only be used if the datasource connection used by the 
-wxDbTable instance was created with FwdOnlyCursors set to FALSE.  If the 
-connection does not allow backward scrolling cursors, this function will 
+This function can only be used if the datasource connection used by the
+wxDbTable instance was created with FwdOnlyCursors set to FALSE.  If the
+connection does not allow backward scrolling cursors, this function will
 return FALSE, and the data contained in the bound columns will be undefined.
 
 \wxheading{See also}
@@ -2834,43 +2834,43 @@ return FALSE, and the data contained in the bound columns will be undefined.
 
 \membersection{wxDbTable::GetNewCursor}\label{wxdbtablegetnewcursor}
 
-\func{HSTMT *}{GetNewCursor}{\param{bool }{setCursor=FALSE}, 
+\func{HSTMT *}{GetNewCursor}{\param{bool }{setCursor=FALSE},
 \param{bool }{bindColumns=TRUE}}
 
-This function will create a new cursor that can be used to access the table 
-being referenced by this wxDbTable instance, or to execute direct SQL commands 
-on without affecting the cursors that are already defined and possibly 
+This function will create a new cursor that can be used to access the table
+being referenced by this wxDbTable instance, or to execute direct SQL commands
+on without affecting the cursors that are already defined and possibly
 positioned.
 
 \wxheading{Parameters}
 
-\docparam{setCursor}{{\it OPTIONAL}.  Should this new cursor be set to be the 
+\docparam{setCursor}{{\it OPTIONAL}.  Should this new cursor be set to be the
 current cursor after successfully creating the new cursor.  Default is FALSE.}
-\docparam{bindColumns}{{\it OPTIONAL}.  Should this new cursor be bound to all 
+\docparam{bindColumns}{{\it OPTIONAL}.  Should this new cursor be bound to all
 the memory variables that the default cursor is bound to.  Default is TRUE.}
 
 \wxheading{Remarks}
 
-This new cursor must be closed using 
-\helpref{wxDbTable::DeleteCursor}{wxdbtabledeletecursor} 
-by the calling program before the wxDbTable instance is deleted, or both 
+This new cursor must be closed using
+\helpref{wxDbTable::DeleteCursor}{wxdbtabledeletecursor}
+by the calling program before the wxDbTable instance is deleted, or both
 memory and resource leaks will occur.
 
 \membersection{wxDbTable::GetNext}\label{wxdbtablegetnext}
 
 \func{bool}{GetNext}{\void}
 
-Retrieves the NEXT row in the record set after the current cursor position 
-as defined by the current query.  Before retrieving records, a query must be 
-performed using \helpref{wxDbTable::Query}{wxdbtablequery}, 
-\helpref{wxDbTable::QueryOnKeyFields}{wxdbtablequeryonkeyfields}, 
-\helpref{wxDbTable::QueryMatching}{wxdbtablequerymatching} or 
+Retrieves the NEXT row in the record set after the current cursor position
+as defined by the current query.  Before retrieving records, a query must be
+performed using \helpref{wxDbTable::Query}{wxdbtablequery},
+\helpref{wxDbTable::QueryOnKeyFields}{wxdbtablequeryonkeyfields},
+\helpref{wxDbTable::QueryMatching}{wxdbtablequerymatching} or
 \helpref{wxDbTable::QueryBySqlStmt}{wxdbtablequerybysqlstmt}.
 
 \wxheading{Return value}
 
-This function returns FALSE when the current cursor has reached the end of 
-the result set.  When FALSE is returned, data in the bound columns is 
+This function returns FALSE when the current cursor has reached the end of
+the result set.  When FALSE is returned, data in the bound columns is
 undefined.
 
 \wxheading{Remarks}
@@ -2884,14 +2884,14 @@ This function works with both forward and backward scrolling cursors.
 
 \func{UWORD }{GetNumberOfColumns}{}
 
-Accessor function that returns the number of columns that are statically 
+Accessor function that returns the number of columns that are statically
 bound for access by the wxDbTable instance.
 
 \membersection{wxDbTable::GetOrderByClause}\label{wxdbtablegetorderbyclause}
 
 \func{const wxString \&}{GetOrderByClause}{}
 
-Accessor function that returns the current ORDER BY setting assigned with 
+Accessor function that returns the current ORDER BY setting assigned with
 the \helpref{wxDbTable::SetOrderByClause}{wxdbtablesetorderbyclause}.
 
 \wxheading{See also}
@@ -2902,37 +2902,37 @@ the \helpref{wxDbTable::SetOrderByClause}{wxdbtablesetorderbyclause}.
 
 \func{bool}{GetPrev}{\void}
 
-Retrieves the PREVIOUS row in the record set before the current cursor 
-position as defined by the current query.  Before retrieving records, a 
-query must be performed using \helpref{wxDbTable::Query}{wxdbtablequery}, 
-\helpref{wxDbTable::QueryOnKeyFields}{wxdbtablequeryonkeyfields}, 
-\helpref{wxDbTable::QueryMatching}{wxdbtablequerymatching} or 
+Retrieves the PREVIOUS row in the record set before the current cursor
+position as defined by the current query.  Before retrieving records, a
+query must be performed using \helpref{wxDbTable::Query}{wxdbtablequery},
+\helpref{wxDbTable::QueryOnKeyFields}{wxdbtablequeryonkeyfields},
+\helpref{wxDbTable::QueryMatching}{wxdbtablequerymatching} or
 \helpref{wxDbTable::QueryBySqlStmt}{wxdbtablequerybysqlstmt}.
 
 \wxheading{Return value}
 
-This function returns FALSE when the current cursor has reached the beginning 
-of the result set and there are now other rows prior to the cursors current 
+This function returns FALSE when the current cursor has reached the beginning
+of the result set and there are now other rows prior to the cursors current
 position.  When FALSE is returned, data in the bound columns is undefined.
 
 \wxheading{Remarks}
 
-This function can only be used if the datasource connection used by the 
-wxDbTable instance was created with FwdOnlyCursors set to FALSE.  If the 
-connection does not allow backward scrolling cursors, this function will 
+This function can only be used if the datasource connection used by the
+wxDbTable instance was created with FwdOnlyCursors set to FALSE.  If the
+connection does not allow backward scrolling cursors, this function will
 return FALSE, and the data contained in the bound columns will be undefined.
 
 \wxheading{See also}
 
-\helpref{wxDb::IsFwdOnlyCursors}{wxdbisfwdonlycursors}, 
+\helpref{wxDb::IsFwdOnlyCursors}{wxdbisfwdonlycursors},
 \helpref{wxDbTable::--}{wxdbtableminusminus}
 
 \membersection{wxDbTable::GetQueryTableName}\label{wxdbtablegetquerytablename}
 
 \func{const wxString \&}{GetQueryTableName}{}
 
-Accessor function that returns the name of the table/view that was indicated 
-as being the table/view to query against when this wxDbTable instance was 
+Accessor function that returns the name of the table/view that was indicated
+as being the table/view to query against when this wxDbTable instance was
 created.
 
 \wxheading{See also}
@@ -2943,29 +2943,29 @@ created.
 
 \func{UWORD}{GetRowNum}{\void}
 
-Returns the ODBC row number for performing positioned updates and deletes.  
+Returns the ODBC row number for performing positioned updates and deletes.
 
 \wxheading{Remarks}
 
-This function is not being used within the ODBC class library and may be a 
+This function is not being used within the ODBC class library and may be a
 candidate for removal if no use is found for it.
 
-Row number with some datasources/ODBC drivers is the position in the result set, 
-while in others it may be a physical position in the database.  Check your 
+Row number with some datasources/ODBC drivers is the position in the result set,
+while in others it may be a physical position in the database.  Check your
 database documentation to find out which behavior is supported.
 
 \membersection{wxDbTable::GetTableName}\label{wxdbtablegettablename}
 
 \func{const wxString \&}{GetTableName}{}
 
-Accessor function that returns the name of the table that was indicated 
+Accessor function that returns the name of the table that was indicated
 as being the table that this wxDbTable instance was associated with.
 
 \membersection{wxDbTable::GetTablePath}\label{wxdbtablegettablepath}
 
 \func{const wxString \&}{GetTablePath}{}
 
-Accessor function that returns the path to the data table that was indicated 
+Accessor function that returns the path to the data table that was indicated
 during creation of this wxDbTable instance.
 
 \wxheading{Remarks}
@@ -2976,7 +2976,7 @@ Currently only applicable to dBase and MS-Access datasources.
 
 \func{const wxString \&}{GetWhereClause}{}
 
-Accessor function that returns the current WHERE setting assigned with the 
+Accessor function that returns the current WHERE setting assigned with the
 \helpref{wxDbTable::SetWhereClause}{wxdbtablesetwhereclause}
 
 \wxheading{See also}
@@ -2987,10 +2987,10 @@ Accessor function that returns the current WHERE setting assigned with the
 
 \func{int }{Insert}{\void}
 
-Inserts a new record into the table being referenced by this wxDbTable 
-instance.  The values in the member variables of the wxDbTable instance are 
+Inserts a new record into the table being referenced by this wxDbTable
+instance.  The values in the member variables of the wxDbTable instance are
 inserted into the columns of the new row in the database.
- 
+
 \wxheading{Return value}
 
 \begin{verbatim}
@@ -2998,7 +2998,7 @@ inserted into the columns of the new row in the database.
 
     DB_FAILURE              Insert failed (value = 0)
 
-    DB_ERR_INTEGRITY_CONSTRAINT_VIOL    
+    DB_ERR_INTEGRITY_CONSTRAINT_VIOL
                             The insert failed due to an integrity
                             constraint violation (duplicate non-unique
                             index entry) is attempted.
@@ -3006,8 +3006,8 @@ inserted into the columns of the new row in the database.
 
 \wxheading{Remarks}
 
-A \helpref{wxDb::CommitTrans}{wxdbcommittrans} or 
-\helpref{wxDb::RollbackTrans}{wxdbrollbacktrans} must be called after use of 
+A \helpref{wxDb::CommitTrans}{wxdbcommittrans} or
+\helpref{wxDb::RollbackTrans}{wxdbrollbacktrans} must be called after use of
 this function to commit or rollback the insertion.
 
 \wxheading{Example}
@@ -3039,13 +3039,13 @@ this function to commit or rollback the insertion.
 
 \func{bool }{IsColNull}{\param{UWORD }{colNo}} const
 
-Used primarily in the ODBC class library to determine if a column value is 
+Used primarily in the ODBC class library to determine if a column value is
 set to "NULL".  Works for all data types supported by the ODBC class library.
 
 \wxheading{Parameters}
 
-\docparam{colNo}{The column number of the bound column as defined by the 
-\helpref{wxDbTable::SetColDefs}{wxdbtablesetcoldefs} 
+\docparam{colNo}{The column number of the bound column as defined by the
+\helpref{wxDbTable::SetColDefs}{wxdbtablesetcoldefs}
 calls which defined the columns accessible to this wxDbTable instance.}
 
 \wxheading{Remarks}
@@ -3056,73 +3056,73 @@ NULL column support is currently not fully implemented as of wxWindows 2.4.
 
 \func{bool }{IsCursorClosedOnCommit}{\void}
 
-Accessor function to return information collected during the opening of the 
-datasource connection that is used by this wxDbTable instance.  The result 
-returned by this function indicates whether an implicit closing of the cursor is 
+Accessor function to return information collected during the opening of the
+datasource connection that is used by this wxDbTable instance.  The result
+returned by this function indicates whether an implicit closing of the cursor is
 done after a commit on the database connection.
 
 \wxheading{Return value}
 
-Returns TRUE if the cursor associated with this wxDbTable object is closed 
+Returns TRUE if the cursor associated with this wxDbTable object is closed
 after a commit or rollback operation.  Returns FALSE otherwise.
 
 \wxheading{Remarks}
 
-If more than one wxDbTable instance used the same database connection, all cursors 
-which use the database connection are closed on the commit if this function 
+If more than one wxDbTable instance used the same database connection, all cursors
+which use the database connection are closed on the commit if this function
 indicates TRUE.
 
 \membersection{wxDbTable::IsQueryOnly}\label{wxdbtableisqueryonly}
 
 \func{bool }{IsQueryOnly}{}
 
-Accessor function that returns a value indicating if this wxDbTable instance 
-was created to allow only queries to be performed on the bound columns.  If 
-this function returns TRUE, then no actions may be performed using this 
+Accessor function that returns a value indicating if this wxDbTable instance
+was created to allow only queries to be performed on the bound columns.  If
+this function returns TRUE, then no actions may be performed using this
 wxDbTable instance that would modify (insert/delete/update) the table's data.
 
 \membersection{wxDbTable::Open}\label{wxdbtableopen}
 
 \func{bool }{Open}{\param{bool }{checkPrivileges=FALSE}, \param{bool }{checkTableExists=TRUE}}
 
-Every wxDbTable instance must be opened before it can be used.  This function 
-checks for the existence of the requested table, binds columns, creates required 
-cursors, (insert/select and update if connection is not wxDB\_QUERY\_ONLY) and 
-constructs the insert statement that is to be used for inserting data as a new 
+Every wxDbTable instance must be opened before it can be used.  This function
+checks for the existence of the requested table, binds columns, creates required
+cursors, (insert/select and update if connection is not wxDB\_QUERY\_ONLY) and
+constructs the insert statement that is to be used for inserting data as a new
 row in the datasource.
 
 \wxheading{Parameters}
 
-\docparam{checkPrivileges}{Indicates whether the Open() function should check 
-whether the current connected user has at least SELECT privileges to access the 
+\docparam{checkPrivileges}{Indicates whether the Open() function should check
+whether the current connected user has at least SELECT privileges to access the
 table to which they are trying to open.  Default is FALSE.}
 
-\docparam{checkTableExists}{Indicates whether the Open() function should check 
+\docparam{checkTableExists}{Indicates whether the Open() function should check
 whether the table exists in the database or not before opening it.  Default is TRUE.}
 
 \wxheading{Remarks}
 
-If the function returns a FALSE value due to the table not existing, a log 
-entry is recorded for the datasource connection indicating the problem 
-that was detected when checking for table existence.  Note that it is usually 
-best for the calling routine to check for the existence of the table and for 
-sufficent user privileges to access the table in the mode (wxDB\_QUERY\_ONLY or 
-!wxDB\_QUERY\_ONLY) before trying to open the table for the best possible 
+If the function returns a FALSE value due to the table not existing, a log
+entry is recorded for the datasource connection indicating the problem
+that was detected when checking for table existence.  Note that it is usually
+best for the calling routine to check for the existence of the table and for
+sufficent user privileges to access the table in the mode (wxDB\_QUERY\_ONLY or
+!wxDB\_QUERY\_ONLY) before trying to open the table for the best possible
 explanation as to why a table cannot be opened.
 
-Checking the user's privileges on a table can be quite time consuming during 
-the open phase.  With most applications, the programmer already knows that the 
-user has sufficient privileges to access the table, so this check is normally 
+Checking the user's privileges on a table can be quite time consuming during
+the open phase.  With most applications, the programmer already knows that the
+user has sufficient privileges to access the table, so this check is normally
 not required.
 
-For best performance, open the table, and then use the 
-\helpref{wxDb::TablePrivileges}{wxdbtableprivileges} function 
-to check the users privileges.  Passing a schema to the TablePrivileges() 
+For best performance, open the table, and then use the
+\helpref{wxDb::TablePrivileges}{wxdbtableprivileges} function
+to check the users privileges.  Passing a schema to the TablePrivileges()
 function can significantly speed up the privileges checks.
 
 \wxheading{See also}
 
-\helpref{wxDb::TableExists}{wxdbtableexists}, 
+\helpref{wxDb::TableExists}{wxdbtableexists},
 \helpref{wxDb::TablePrivileges}{wxdbtableprivileges}
 
 \membersection{wxDbTable::OrderBy}\label{wxdbtableorderby}
@@ -3131,31 +3131,31 @@ function can significantly speed up the privileges checks.
 
 \func{void}{OrderBy}{\param{const wxString \&}{OrderBy}}
 
-Accessor function for the private class member wxDbTable::orderBy.  Can be 
-used as a synonym for 
-\helpref{wxDbTable::GetOrderByClause}{wxdbtablegetorderbyclause} 
-(the first form of this function) or 
-\helpref{wxDbTable::SetOrderByClause}{wxdbtablesetorderbyclause} 
+Accessor function for the private class member wxDbTable::orderBy.  Can be
+used as a synonym for
+\helpref{wxDbTable::GetOrderByClause}{wxdbtablegetorderbyclause}
+(the first form of this function) or
+\helpref{wxDbTable::SetOrderByClause}{wxdbtablesetorderbyclause}
 (the second form of this function).
 
 \wxheading{Parameters}
 
-\docparam{OrderBy}{A comma separated list of column names that indicate the 
-alphabetized/numeric sorting sequence that the result set is to be returned 
-in.  If a FROM clause has also been specified, each column name specified in 
-the ORDER BY clause should be prefaced with the table name to which the column 
+\docparam{OrderBy}{A comma separated list of column names that indicate the
+alphabetized/numeric sorting sequence that the result set is to be returned
+in.  If a FROM clause has also been specified, each column name specified in
+the ORDER BY clause should be prefaced with the table name to which the column
 belongs using DOT notation (TABLE\_NAME.COLUMN\_NAME).}
 
 \wxheading{Return value}
 
-The first form of this function returns the current value of the wxDbTable 
-member variable ::orderBy.  
+The first form of this function returns the current value of the wxDbTable
+member variable ::orderBy.
 
 The second form of the function has no return value.
 
 \wxheading{See also}
 
-\helpref{wxDbTable::GetOrderByClause}{wxdbtablegetorderbyclause}, 
+\helpref{wxDbTable::GetOrderByClause}{wxdbtablegetorderbyclause},
 \helpref{wxDbTable::SetFromClause}{wxdbtablesetfromclause}
 
 \membersection{wxDbTable::Query}\label{wxdbtablequery}
@@ -3164,68 +3164,68 @@ The second form of the function has no return value.
 
 \wxheading{Parameters}
 
-\docparam{forUpdate}{{\it OPTIONAL}.  Gives you the option of locking records 
-as they are retrieved.  If the RDBMS is not capable of the FOR UPDATE clause, 
-this argument is ignored.  See 
-\helpref{wxDbTable::CanSelectForUpdate}{wxdbtablecanselectforupdate} for 
+\docparam{forUpdate}{{\it OPTIONAL}.  Gives you the option of locking records
+as they are retrieved.  If the RDBMS is not capable of the FOR UPDATE clause,
+this argument is ignored.  See
+\helpref{wxDbTable::CanSelectForUpdate}{wxdbtablecanselectforupdate} for
 additional information regarding this argument.  Default is FALSE.}
-\docparam{distinct}{{\it OPTIONAL}.  Allows selection of only distinct values 
-from the query (SELECT DISTINCT ... FROM ...).  The notion of DISTINCT 
-applies to all columns returned in the result set, not individual columns.  
+\docparam{distinct}{{\it OPTIONAL}.  Allows selection of only distinct values
+from the query (SELECT DISTINCT ... FROM ...).  The notion of DISTINCT
+applies to all columns returned in the result set, not individual columns.
 Default is FALSE.}
 
 \wxheading{Remarks}
 
-This function queries records from the datasource based on the three 
-wxDbTable members: "where", "orderBy", and "from".  Use 
-\helpref{wxDbTable::SetWhereClause}{wxdbtablesetwhereclause} to filter on 
-records to be retrieved (e.g. All users with a first name of "JOHN").  
-Use \helpref{wxDbTable::SetOrderByClause}{wxdbtablesetorderbyclause} to 
-change the sequence in which records are returned in the result set from 
-the datasource (e.g. Ordered by LAST\_NAME).  Use 
-\helpref{wxDbTable::SetFromClause}{wxdbtablesetfromclause} to allow outer 
-joining of the base table (the one being associated with this instance of 
-wxDbTable) with other tables which share a related field.  
+This function queries records from the datasource based on the three
+wxDbTable members: "where", "orderBy", and "from".  Use
+\helpref{wxDbTable::SetWhereClause}{wxdbtablesetwhereclause} to filter on
+records to be retrieved (e.g. All users with a first name of "JOHN").
+Use \helpref{wxDbTable::SetOrderByClause}{wxdbtablesetorderbyclause} to
+change the sequence in which records are returned in the result set from
+the datasource (e.g. Ordered by LAST\_NAME).  Use
+\helpref{wxDbTable::SetFromClause}{wxdbtablesetfromclause} to allow outer
+joining of the base table (the one being associated with this instance of
+wxDbTable) with other tables which share a related field.
 
-After each of these clauses are set/cleared, call wxDbTable::Query() to 
-fetch the result set from the datasource.  
+After each of these clauses are set/cleared, call wxDbTable::Query() to
+fetch the result set from the datasource.
 
-This scheme has an advantage if you have to requery your record set 
-frequently in that you only have to set your WHERE, ORDER BY, and FROM 
-clauses once.  Then to refresh the record set, simply call wxDbTable::Query() 
-as frequently as needed.  
+This scheme has an advantage if you have to requery your record set
+frequently in that you only have to set your WHERE, ORDER BY, and FROM
+clauses once.  Then to refresh the record set, simply call wxDbTable::Query()
+as frequently as needed.
 
-Note that repeated calls to wxDbTable::Query() may tax the database 
-server and make your application sluggish if done too frequently or 
-unnecessarily.  
+Note that repeated calls to wxDbTable::Query() may tax the database
+server and make your application sluggish if done too frequently or
+unnecessarily.
 
-The base table name is automatically prepended to the base column names in 
-the event that the FROM clause has been set (is non-null) using 
+The base table name is automatically prepended to the base column names in
+the event that the FROM clause has been set (is non-null) using
 \helpref{wxDbTable::SetFromClause}{wxdbtablesetfromclause}.
 
-The cursor for the result set is positioned {\it before} the first record in 
-the result set after the query.  To retrieve the first record, call either 
-\helpref{wxDbTable::GetFirst}{wxdbtablegetfirst} (only if backward scrolling 
-cursors are available) or 
-\helpref{wxDbTable::GetNext}{wxdbtablegetnext}.  Typically, no data from the 
-result set is returned to the client driver until a request such as 
-\helpref{wxDbTable::GetNext}{wxdbtablegetnext} is performed, so network 
-traffic and database load are not overwhelmed transmitting data until the 
-data is actually requested by the client.  This behavior is solely dependent 
-on the ODBC driver though, so refer to the ODBC driver's reference material 
+The cursor for the result set is positioned {\it before} the first record in
+the result set after the query.  To retrieve the first record, call either
+\helpref{wxDbTable::GetFirst}{wxdbtablegetfirst} (only if backward scrolling
+cursors are available) or
+\helpref{wxDbTable::GetNext}{wxdbtablegetnext}.  Typically, no data from the
+result set is returned to the client driver until a request such as
+\helpref{wxDbTable::GetNext}{wxdbtablegetnext} is performed, so network
+traffic and database load are not overwhelmed transmitting data until the
+data is actually requested by the client.  This behavior is solely dependent
+on the ODBC driver though, so refer to the ODBC driver's reference material
 for information on its behaviors.
 
-Values in the bound columns' memory variables are undefined after executing a 
-call to this function and remain that way until a row in the result set is 
+Values in the bound columns' memory variables are undefined after executing a
+call to this function and remain that way until a row in the result set is
 requested to be returned.
 
-The wxDbTable::Query() function is defined as "virtual" so that it may be 
+The wxDbTable::Query() function is defined as "virtual" so that it may be
 overridden for application specific purposes.
 
-\normalbox{Be sure to set the wxDbTable's "where", "orderBy", and "from" 
-member variables to "" if they are not to be used in the query.  Otherwise, 
-the results returned may have unexpected results (or no results) due to 
-improper or incorrect query parameters constructed from the uninitialized 
+\normalbox{Be sure to set the wxDbTable's "where", "orderBy", and "from"
+member variables to "" if they are not to be used in the query.  Otherwise,
+the results returned may have unexpected results (or no results) due to
+improper or incorrect query parameters constructed from the uninitialized
 clauses.}
 
 \wxheading{Example}
@@ -3235,7 +3235,7 @@ clauses.}
     parts->SetWhereClause("DESCRIPTION = 'FOOD'");
     parts->SetOrderByClause("EXPIRATION_DATE");
     parts->SetFromClause("");
-    // Query the records based on the where, orderBy and from clauses 
+    // Query the records based on the where, orderBy and from clauses
     // specified above
     parts->Query();
     // Display all records queried
@@ -3247,7 +3247,7 @@ clauses.}
 
 \func{bool}{QueryBySqlStmt}{\param{const wxString \&}{pSqlStmt}}
 
-Performs a query against the datasource by accepting and passing verbatim the 
+Performs a query against the datasource by accepting and passing verbatim the
 SQL SELECT statement passed to the function.
 
 \wxheading{Parameters}
@@ -3256,52 +3256,52 @@ SQL SELECT statement passed to the function.
 
 \wxheading{Remarks}
 
-This is the most powerful form of the query functions available.  This member 
-function allows a programmer to write their own custom SQL SELECT statement 
-for requesting data from the datasource.  This gives the programmer access 
-to the full power of SQL for performing operations such as scalar functions, 
-aggregate functions, table joins, and sub-queries, as well as datasource 
-specific function calls.  
+This is the most powerful form of the query functions available.  This member
+function allows a programmer to write their own custom SQL SELECT statement
+for requesting data from the datasource.  This gives the programmer access
+to the full power of SQL for performing operations such as scalar functions,
+aggregate functions, table joins, and sub-queries, as well as datasource
+specific function calls.
 
 The requirements of the SELECT statement are the following:
 
 \begin{verbatim}
-    1. Must return the correct number of columns.  In the derived 
-       wxDbTable constructor, it is specified how many columns are in 
-       the wxDbTable object.  The SELECT statement must return exactly 
+    1. Must return the correct number of columns.  In the derived
+       wxDbTable constructor, it is specified how many columns are in
+       the wxDbTable object.  The SELECT statement must return exactly
        that many columns.
 
-    2. The columns must be returned in the same sequence as specified 
-       when defining the bounds columns using wxDbTable::SetColDefs(), 
-       and the columns returned must be of the proper data type.  For 
-       example, if column 3 is defined in the wxDbTable bound column 
-       definitions to be a float, the SELECT statement must return a 
-       float for column 3 (e.g. PRICE * 1.10 to increase the price by 
+    2. The columns must be returned in the same sequence as specified
+       when defining the bounds columns using wxDbTable::SetColDefs(),
+       and the columns returned must be of the proper data type.  For
+       example, if column 3 is defined in the wxDbTable bound column
+       definitions to be a float, the SELECT statement must return a
+       float for column 3 (e.g. PRICE * 1.10 to increase the price by
        10%).
 
-    3. The ROWID can be included in your SELECT statement as the {\bf last} 
-       column selected, if the datasource supports it.  Use 
-       wxDbTable::CanUpdByROWID() to determine if the ROWID can be 
-       selected from the datasource.  If it can, much better 
+    3. The ROWID can be included in your SELECT statement as the {\bf last}
+       column selected, if the datasource supports it.  Use
+       wxDbTable::CanUpdByROWID() to determine if the ROWID can be
+       selected from the datasource.  If it can, much better
        performance can be achieved on updates and deletes by including
        the ROWID in the SELECT statement.
 \end{verbatim}
 
-Even though data can be selected from multiple tables (joins) in your select 
+Even though data can be selected from multiple tables (joins) in your select
 statement, only the base table associated with this wxDbTable object
-is automatically updated through the ODBC class library.  Data from multiple 
-tables can be selected for display purposes however.  Include columns in 
-the wxDbTable object and mark them as non-updateable (See 
-\helpref{wxDbColDef}{wxdbcoldef} for details).  This way columns can be 
-selected and displayed from other tables, but only the base table will be 
-updated automatically when performed through the 
-\helpref{wxDbTable::Update}{wxdbtableupdate} function after using this type of 
-query.  To update tables other than the base table, use the 
+is automatically updated through the ODBC class library.  Data from multiple
+tables can be selected for display purposes however.  Include columns in
+the wxDbTable object and mark them as non-updateable (See
+\helpref{wxDbColDef}{wxdbcoldef} for details).  This way columns can be
+selected and displayed from other tables, but only the base table will be
+updated automatically when performed through the
+\helpref{wxDbTable::Update}{wxdbtableupdate} function after using this type of
+query.  To update tables other than the base table, use the
 \helpref{wxDbTable::Update}{wxdbtableupdate} function passing a SQL statement.
 
-After this function has been called, the cursor is positioned before the 
-first record in the record set.  To retrieve the first record, call 
-either \helpref{wxDbTable::GetFirst}{wxdbtablegetfirst} or 
+After this function has been called, the cursor is positioned before the
+first record in the record set.  To retrieve the first record, call
+either \helpref{wxDbTable::GetFirst}{wxdbtablegetfirst} or
 \helpref{wxDbTable::GetNext}{wxdbtablegetnext}.
 
 \wxheading{Example}
@@ -3323,10 +3323,10 @@ either \helpref{wxDbTable::GetFirst}{wxdbtablegetfirst} or
     // Table Join returning 3 columns
     SELECT part_no, part_desc, sd_name
         from parts, storage_devices
-        where parts.storage_device_id = 
+        where parts.storage_device_id =
               storage_devices.storage_device_id
 
-    // Aggregate function returning total number of 
+    // Aggregate function returning total number of
     // parts in container 99
     SELECT count(*) from PARTS where container = 99
 
@@ -3345,53 +3345,53 @@ either \helpref{wxDbTable::GetFirst}{wxdbtablegetfirst} or
 
 \membersection{wxDbTable::QueryMatching}\label{wxdbtablequerymatching}
 
-\func{virtual bool }{QueryMatching}{\param{bool }{forUpdate=FALSE}, 
+\func{virtual bool }{QueryMatching}{\param{bool }{forUpdate=FALSE},
 \param{bool }{distinct=FALSE}}
 
-QueryMatching allows querying of records from the table associated with 
-the wxDbTable object by matching "columns" to values.  
+QueryMatching allows querying of records from the table associated with
+the wxDbTable object by matching "columns" to values.
 
-For example: To query the datasource for the row with a PART\_NUMBER column 
-value of "32", clear all column variables of the wxDbTable object, set the 
-PartNumber variable that is bound to the PART\_NUMBER column in the wxDbTable 
+For example: To query the datasource for the row with a PART\_NUMBER column
+value of "32", clear all column variables of the wxDbTable object, set the
+PartNumber variable that is bound to the PART\_NUMBER column in the wxDbTable
 object to "32", and then call wxDbTable::QueryMatching().
 
 \wxheading{Parameters}
 
-\docparam{forUpdate}{{\it OPTIONAL}.  Gives you the option of locking records 
-as they are queried (SELECT ... FOR UPDATE).  If the RDBMS is not capable of 
-the FOR UPDATE clause, this argument is ignored.  See 
-\helpref{wxDbTable::CanSelectForUpdate}{wxdbtablecanselectforupdate} for 
+\docparam{forUpdate}{{\it OPTIONAL}.  Gives you the option of locking records
+as they are queried (SELECT ... FOR UPDATE).  If the RDBMS is not capable of
+the FOR UPDATE clause, this argument is ignored.  See
+\helpref{wxDbTable::CanSelectForUpdate}{wxdbtablecanselectforupdate} for
 additional information regarding this argument.  Default is FALSE.}
-\docparam{distinct}{{\it OPTIONAL}.  Allows selection of only distinct values 
-from the query (SELECT DISTINCT ... FROM ...).  The notion of DISTINCT 
-applies to all columns returned in the result set, not individual columns.  
+\docparam{distinct}{{\it OPTIONAL}.  Allows selection of only distinct values
+from the query (SELECT DISTINCT ... FROM ...).  The notion of DISTINCT
+applies to all columns returned in the result set, not individual columns.
 Default is FALSE.}
 
 \wxheading{Remarks}
 
-The SQL WHERE clause is built by the ODBC class library based on all 
-non-zero/non-NULL columns in your wxDbTable object.  Matches can be on one, 
-many or all of the wxDbTable's columns.  The base table name is prepended 
+The SQL WHERE clause is built by the ODBC class library based on all
+non-zero/non-NULL columns in your wxDbTable object.  Matches can be on one,
+many or all of the wxDbTable's columns.  The base table name is prepended
 to the column names in the event that the wxDbTable's FROM clause is non-null.
 
-This function cannot be used to perform queries which will check for 
-columns that are 0 or NULL, as the automatically constructed WHERE clause 
-only will contain comparisons on column member variables that are 
+This function cannot be used to perform queries which will check for
+columns that are 0 or NULL, as the automatically constructed WHERE clause
+only will contain comparisons on column member variables that are
 non-zero/non-NULL.
 
-The primary difference between this function and \helpref{wxDbTable::QueryOnKeyFields}{wxdbtablequeryonkeyfields} 
-is that this function can query on any column(s) in the wxDbTable object.  
-Note however that this may not always be very efficient.  Searching on 
+The primary difference between this function and \helpref{wxDbTable::QueryOnKeyFields}{wxdbtablequeryonkeyfields}
+is that this function can query on any column(s) in the wxDbTable object.
+Note however that this may not always be very efficient.  Searching on
 non-indexed columns will always require a full table scan.
 
-The cursor is positioned before the first record in the record set after 
-the query is performed.  To retrieve the first record, the program must call 
-either \helpref{wxDbTable::GetFirst}{wxdbtablegetfirst} or 
+The cursor is positioned before the first record in the record set after
+the query is performed.  To retrieve the first record, the program must call
+either \helpref{wxDbTable::GetFirst}{wxdbtablegetfirst} or
 \helpref{wxDbTable::GetNext}{wxdbtablegetnext}.
 
-WHERE and FROM clauses specified using \helpref{wxDbTable::SetWhereClause}{wxdbtablesetwhereclause} 
-and \helpref{wxDbTable::SetFromClause}{wxdbtablesetfromclause} are ignored by 
+WHERE and FROM clauses specified using \helpref{wxDbTable::SetWhereClause}{wxdbtablesetwhereclause}
+and \helpref{wxDbTable::SetFromClause}{wxdbtablesetfromclause} are ignored by
 this function.
 
 \wxheading{Example}
@@ -3409,40 +3409,40 @@ this function.
 
 \membersection{wxDbTable::QueryOnKeyFields}\label{wxdbtablequeryonkeyfields}
 
-\func{bool }{QueryOnKeyFields}{\param{bool }{forUpdate=FALSE}, 
+\func{bool }{QueryOnKeyFields}{\param{bool }{forUpdate=FALSE},
 \param{bool }{distinct=FALSE}}
 
-QueryOnKeyFields provides an easy mechanism to query records in the table 
-associated with the wxDbTable object by the primary index column(s).  Simply 
-assign the primary index column(s) values and then call this member function 
-to retrieve the record.  
+QueryOnKeyFields provides an easy mechanism to query records in the table
+associated with the wxDbTable object by the primary index column(s).  Simply
+assign the primary index column(s) values and then call this member function
+to retrieve the record.
 
-Note that since primary indexes are always unique, this function implicitly 
-always returns a single record from the database. The base table name is 
-prepended to the column names in the event that the wxDbTable's FROM clause 
+Note that since primary indexes are always unique, this function implicitly
+always returns a single record from the database. The base table name is
+prepended to the column names in the event that the wxDbTable's FROM clause
 is non-null.
 
 \wxheading{Parameters}
 
-\docparam{forUpdate}{{\it OPTIONAL}.  Gives you the option of locking records 
-as they are queried (SELECT ... FOR UPDATE).  If the RDBMS is not capable of 
-the FOR UPDATE clause, this argument is ignored.  See 
-\helpref{wxDbTable::CanSelectForUpdate}{wxdbtablecanselectforupdate} for 
+\docparam{forUpdate}{{\it OPTIONAL}.  Gives you the option of locking records
+as they are queried (SELECT ... FOR UPDATE).  If the RDBMS is not capable of
+the FOR UPDATE clause, this argument is ignored.  See
+\helpref{wxDbTable::CanSelectForUpdate}{wxdbtablecanselectforupdate} for
 additional information regarding this argument.  Default is FALSE.}
-\docparam{distinct}{{\it OPTIONAL}.  Allows selection of only distinct values 
-from the query (SELECT DISTINCT ... FROM ...).  The notion of DISTINCT 
-applies to all columns returned in the result set, not individual columns.  
+\docparam{distinct}{{\it OPTIONAL}.  Allows selection of only distinct values
+from the query (SELECT DISTINCT ... FROM ...).  The notion of DISTINCT
+applies to all columns returned in the result set, not individual columns.
 Default is FALSE.}
 
 \wxheading{Remarks}
 
-The cursor is positioned before the first record in the record set after 
-the query is performed.  To retrieve the first record, the program must call 
-either \helpref{wxDbTable::GetFirst}{wxdbtablegetfirst} or 
+The cursor is positioned before the first record in the record set after
+the query is performed.  To retrieve the first record, the program must call
+either \helpref{wxDbTable::GetFirst}{wxdbtablegetfirst} or
 \helpref{wxDbTable::GetNext}{wxdbtablegetnext}.
 
-WHERE and FROM clauses specified using \helpref{wxDbTable::SetWhereClause}{wxdbtablesetwhereclause} 
-and \helpref{wxDbTable::SetFromClause}{wxdbtablesetfromclause} are ignored by 
+WHERE and FROM clauses specified using \helpref{wxDbTable::SetWhereClause}{wxdbtablesetwhereclause}
+and \helpref{wxDbTable::SetFromClause}{wxdbtablesetfromclause} are ignored by
 this function.
 
 \wxheading{Example}
@@ -3460,37 +3460,37 @@ this function.
 
 \func{bool}{Refresh}{\void}
 
-This function re-reads the bound columns into the memory variables, setting 
+This function re-reads the bound columns into the memory variables, setting
 them to the current values stored on the disk.
 
 The cursor position and result set are unaffected by calls to this function.
-(The one exception is in the case where the record to be refreshed has been 
-deleted by some other user or transaction since it was originally retrieved 
-as part of the result set.  For most datasources, the default behavior in 
-this situation is to return the value that was originally queried for the 
-result set, even though it has been deleted from the database.  But this is 
+(The one exception is in the case where the record to be refreshed has been
+deleted by some other user or transaction since it was originally retrieved
+as part of the result set.  For most datasources, the default behavior in
+this situation is to return the value that was originally queried for the
+result set, even though it has been deleted from the database.  But this is
 datasource dependent, and should be tested before relying on this behavior.)
 
 \wxheading{Remarks}
 
-This routine is only guaranteed to work if the table has a unique primary 
-index defined for it.  Otherwise, more than one record may be fetched and 
-there is no guarantee that the correct record will be refreshed.  The 
+This routine is only guaranteed to work if the table has a unique primary
+index defined for it.  Otherwise, more than one record may be fetched and
+there is no guarantee that the correct record will be refreshed.  The
 table's columns are refreshed to reflect the current data in the database.
 
 \membersection{wxDbTable::SetColDefs}\label{wxdbtablesetcoldefs}
 
-\func{void}{SetColDefs}{\param{UWORD }{index}, \param{const wxString \&}{fieldName}, 
-\param{int }{dataType}, \param{void *}{pData}, \param{SWORD }{cType}, 
-\param{int }{size}, \param{bool }{keyField = FALSE}, \param{bool }{upd = TRUE}, 
+\func{void}{SetColDefs}{\param{UWORD }{index}, \param{const wxString \&}{fieldName},
+\param{int }{dataType}, \param{void *}{pData}, \param{SWORD }{cType},
+\param{int }{size}, \param{bool }{keyField = FALSE}, \param{bool }{upd = TRUE},
 \param{bool }{insAllow = TRUE}, \param{bool }{derivedCol = FALSE}}
 
 \func{wxDbColDataPtr *}{SetColDefs}{\param{wxDbColInf *}{colInfs}, \param{UWORD }{numCols}}
 
 \wxheading{Parameters}
 
-\docparam{index}{Column number (0 to n-1, where n is the number of columns 
-specified as being defined for this wxDbTable instance when the 
+\docparam{index}{Column number (0 to n-1, where n is the number of columns
+specified as being defined for this wxDbTable instance when the
 wxDbTable constructor was called.}
 \docparam{fieldName}{Column name from the associated data table.}
 \docparam{dataType}{Logical data type.  Valid logical types include:}
@@ -3502,9 +3502,9 @@ wxDbTable constructor was called.}
     DB_DATA_TYPE_DATE           : dates
 \end{verbatim}
 
-\docparam{pData}{Pointer to the data object that will hold the column's 
+\docparam{pData}{Pointer to the data object that will hold the column's
 value when a row of data is returned from the datasource.}
-\docparam{cType}{SQL C Type.  This defines the data type that the SQL 
+\docparam{cType}{SQL C Type.  This defines the data type that the SQL
 representation of the data is converted to to be stored in {\it pData}.
 Other valid types are available also, but these are the most common ones:}
 
@@ -3516,7 +3516,7 @@ Other valid types are available also, but these are the most common ones:}
     SQL_C_USHORT
     SQL_C_FLOAT
     SQL_C_DOUBLE
-    SQL_C_NUMERIC   
+    SQL_C_NUMERIC
     SQL_C_TIMESTAMP
 
     SQL_C_BOOLEAN   // defined in db.h
@@ -3524,35 +3524,35 @@ Other valid types are available also, but these are the most common ones:}
 \end{verbatim}
 
 \docparam{size}{Maximum size in bytes of the {\it pData} object.}
-\docparam{keyField}{{\it OPTIONAL}.  Indicates if this column is part of the 
+\docparam{keyField}{{\it OPTIONAL}.  Indicates if this column is part of the
 primary index.  Default is FALSE.}
-\docparam{upd}{{\it OPTIONAL}.  Are updates allowed on this column?  
+\docparam{upd}{{\it OPTIONAL}.  Are updates allowed on this column?
 Default is TRUE.}
-\docparam{insAllow}{{\it OPTIONAL}.  Inserts allowed on this column?  
+\docparam{insAllow}{{\it OPTIONAL}.  Inserts allowed on this column?
 Default is TRUE.}
-\docparam{derivedCol}{{\it OPTIONAL}.  Is this a derived column (non-base 
+\docparam{derivedCol}{{\it OPTIONAL}.  Is this a derived column (non-base
 table column for query only)?  Default is FALSE.}
 
-\docparam{colInfs}{Pointer to an array of wxDbColInf instances which contains 
+\docparam{colInfs}{Pointer to an array of wxDbColInf instances which contains
 all the information necessary to create {\it numCols} column definitions.}
-\docparam{numCols}{Number of elements of wxDbColInf type that are pointed 
+\docparam{numCols}{Number of elements of wxDbColInf type that are pointed
 to by {\it colInfs}, which are to have column definitions created from them.}
 
 \wxheading{Remarks}
 
-If {\it pData} is to hold a string of characters, be sure to include enough 
+If {\it pData} is to hold a string of characters, be sure to include enough
 space for the NULL terminator in pData and in the byte count of {\it size}.
 
-Both forms of this function provide a shortcut for defining the columns in 
-your wxDbTable object.  Use this function in any derived wxDbTable 
+Both forms of this function provide a shortcut for defining the columns in
+your wxDbTable object.  Use this function in any derived wxDbTable
 constructor when describing the column/columns in the wxDbTable object.
 
-The second form of this function is primarily used when the 
-\helpref{wxDb::GetColumns}{wxdbgetcolumns} function was used to query the 
-datasource for the column definitions, so that the column definitions are 
-already stored in wxDbColInf form.  One example use of using 
-\helpref{wxDb::GetColumns}{wxdbgetcolumns} then using this function is if 
-a data table existed in one datasource, and the table's column definitions 
+The second form of this function is primarily used when the
+\helpref{wxDb::GetColumns}{wxdbgetcolumns} function was used to query the
+datasource for the column definitions, so that the column definitions are
+already stored in wxDbColInf form.  One example use of using
+\helpref{wxDb::GetColumns}{wxdbgetcolumns} then using this function is if
+a data table existed in one datasource, and the table's column definitions
 were to be copied over to another datasource or table.
 
 \wxheading{Example}
@@ -3580,59 +3580,59 @@ were to be copied over to another datasource or table.
 
 \wxheading{Parameters}
 
-\docparam{hstmtActivate}{{\it OPTIONAL}.  Pointer to the cursor that is to 
-become the current cursor.  Passing no cursor handle will reset the cursor 
-back to the wxDbTable's default (original) cursor that was created when the 
+\docparam{hstmtActivate}{{\it OPTIONAL}.  Pointer to the cursor that is to
+become the current cursor.  Passing no cursor handle will reset the cursor
+back to the wxDbTable's default (original) cursor that was created when the
 wxDbTable instance was first created.  Default is wxDB\_DEFAULT\_CURSOR.}
 
 \wxheading{Remarks}
 
-When swapping between cursors, the member variables of the wxDbTable object 
-are automatically refreshed with the column values of the row that the 
-current cursor is positioned at (if any).  If the cursor is not positioned, 
+When swapping between cursors, the member variables of the wxDbTable object
+are automatically refreshed with the column values of the row that the
+current cursor is positioned at (if any).  If the cursor is not positioned,
 then the data in member variables is undefined.
 
-The only way to return back to the cursor that was in use before this 
-function was called is to programmatically determine the current cursor's HSTMT 
-{\bf BEFORE} calling this function using \helpref{wxDbTable::GetCursor}{wxdbtablegetcursor} 
+The only way to return back to the cursor that was in use before this
+function was called is to programmatically determine the current cursor's HSTMT
+{\bf BEFORE} calling this function using \helpref{wxDbTable::GetCursor}{wxdbtablegetcursor}
 and saving a pointer to that cursor.
 
 \wxheading{See also}
 
-\helpref{wxDbTable::GetNewCursor}{wxdbtablegetnewcursor}, 
-\helpref{wxDbTable::GetCursor}{wxdbtablegetcursor}, 
+\helpref{wxDbTable::GetNewCursor}{wxdbtablegetnewcursor},
+\helpref{wxDbTable::GetCursor}{wxdbtablegetcursor},
 \helpref{wxDbTable::SetCursor}{wxdbtablesetcursor}
 
 \membersection{wxDbTable::SetFromClause}\label{wxdbtablesetfromclause}
 
 \func{void}{SetFromClause}{\param{const wxString \&}{From}}
 
-Accessor function for setting the private class member wxDbTable::from 
+Accessor function for setting the private class member wxDbTable::from
 that indicates what other tables should be outer joined with the wxDbTable's
-base table for access to the columns in those other tables. 
+base table for access to the columns in those other tables.
 
 Synonym to this function is one form of \helpref{wxDbTable::From}{wxdbtablefrom}
 
 \wxheading{Parameters}
 
-\docparam{From}{A comma separated list of table names that are to be outer 
-joined with the base table's columns so that the joined table's columns 
-may be returned in the result set or used as a portion of a comparison with 
-the base table's columns.  NOTE that the base tables name must NOT be included 
-in the FROM clause, as it is automatically included by the wxDbTable class 
+\docparam{From}{A comma separated list of table names that are to be outer
+joined with the base table's columns so that the joined table's columns
+may be returned in the result set or used as a portion of a comparison with
+the base table's columns.  NOTE that the base tables name must NOT be included
+in the FROM clause, as it is automatically included by the wxDbTable class
 in constructing query statements.}
 
 \wxheading{Remarks}
 
-Used by the \helpref{wxDbTable::Query}{wxdbtablequery} and 
-\helpref{wxDbTable::Count}{wxdbtablecount} member functions to allow outer 
-joining of records from multiple tables.  
+Used by the \helpref{wxDbTable::Query}{wxdbtablequery} and
+\helpref{wxDbTable::Count}{wxdbtablecount} member functions to allow outer
+joining of records from multiple tables.
 
 Do {\bf not} include the keyword "FROM" when setting the FROM clause.
 
-If using the FROM clause when performing a query, be certain to include in 
-the corresponding WHERE clause a comparison of a column from either the base 
-table or one of the other joined tables to each other joined table to ensure 
+If using the FROM clause when performing a query, be certain to include in
+the corresponding WHERE clause a comparison of a column from either the base
+table or one of the other joined tables to each other joined table to ensure
 the datasource knows on which column values the tables should be joined on.
 
 \wxheading{Example}
@@ -3649,54 +3649,54 @@ the datasource knows on which column values the tables should be joined on.
 
 \wxheading{See also}
 
-\helpref{wxDbTable::From}{wxdbtablefrom}, 
+\helpref{wxDbTable::From}{wxdbtablefrom},
 \helpref{wxDbTable::GetFromClause}{wxdbtablegetfromclause}
 
 \membersection{wxDbTable::SetColNull}\label{wxdbtablesetcolnull}
 
 \func{bool}{SetColNull}{\param{UWORD }{colNo}, \param{bool }{set=TRUE}}
 
-\func{bool}{SetColNull}{\param{const wxString \&}{colName}, 
+\func{bool}{SetColNull}{\param{const wxString \&}{colName},
 \param{bool }{set=TRUE}}
 
-Both forms of this function allow a member variable representing a column 
+Both forms of this function allow a member variable representing a column
 in the table associated with this wxDbTable object to be set to NULL.
 
-The first form allows the column to be set by the index into the column 
-definitions used to create the wxDbTable instance, while the second allows 
+The first form allows the column to be set by the index into the column
+definitions used to create the wxDbTable instance, while the second allows
 the actual column name to be specified.
 
 \wxheading{Parameters}
 
-\docparam{colNo}{Index into the column definitions used when first defining 
+\docparam{colNo}{Index into the column definitions used when first defining
 this wxDbTable object.}
 \docparam{colName}{Actual data table column name that is to be set to NULL.}
-\docparam{set}{Whether the column is set to NULL or not.  Passing TRUE sets 
-the column to NULL, passing FALSE sets the column to be non-NULL.  Default is 
+\docparam{set}{Whether the column is set to NULL or not.  Passing TRUE sets
+the column to NULL, passing FALSE sets the column to be non-NULL.  Default is
 TRUE.}
 
 \wxheading{Remarks}
 
-No database updates are done by this function.  It only operates on the 
-member variables in memory.  Use and insert or update function to store this 
+No database updates are done by this function.  It only operates on the
+member variables in memory.  Use and insert or update function to store this
 value to disk.
 
 \membersection{wxDbTable::SetOrderByClause}\label{wxdbtablesetorderbyclause}
 
 \func{void}{SetOrderByClause}{\param{const wxString \&}{OrderBy}}
 
-Accessor function for setting the private class member wxDbTable::orderBy 
-which determines sequence/ordering of the rows returned in the result set 
+Accessor function for setting the private class member wxDbTable::orderBy
+which determines sequence/ordering of the rows returned in the result set
 of a query.
 
 A synonym to this function is one form of the function \helpref{wxDbTable::OrderBy}{wxdbtableorderby}
 
 \wxheading{Parameters}
 
-\docparam{OrderBy}{A comma separated list of column names that indicate the 
-alphabetized sorting sequence that the result set is to be returned in.  If 
-a FROM clause has also been specified, each column name specified in the 
-ORDER BY clause should be prefaced with the table name to which the column 
+\docparam{OrderBy}{A comma separated list of column names that indicate the
+alphabetized sorting sequence that the result set is to be returned in.  If
+a FROM clause has also been specified, each column name specified in the
+ORDER BY clause should be prefaced with the table name to which the column
 belongs using DOT notation (TABLE\_NAME.COLUMN\_NAME).}
 
 \wxheading{Remarks}
@@ -3717,7 +3717,7 @@ Do {\bf not} include the keywords "ORDER BY" when setting the ORDER BY clause.
 
 \wxheading{See also}
 
-\helpref{wxDbTable::OrderBy}{wxdbtableorderby}, 
+\helpref{wxDbTable::OrderBy}{wxdbtableorderby},
 \helpref{wxDbTable::GetOrderByClause}{wxdbtablegetorderbyclause}
 
 \membersection{wxDbTable::SetQueryTimeout}\label{wxdbtablesetquerytimeout}
@@ -3728,30 +3728,30 @@ Allows a time period to be set as the timeout period for queries.
 
 \wxheading{Parameters}
 
-\docparam{nSeconds}{The number of seconds to wait for the query to complete 
+\docparam{nSeconds}{The number of seconds to wait for the query to complete
 before timing out.}
 
 \wxheading{Remarks}
 
-Neither Oracle or Access support this function as of yet.  Other databases 
-should be evaluated for support before depending on this function working 
+Neither Oracle or Access support this function as of yet.  Other databases
+should be evaluated for support before depending on this function working
 correctly.
 
 \membersection{wxDbTable::SetWhereClause}\label{wxdbtablesetwhereclause}
 
 \func{void}{SetWhereClause}{\param{const wxString \&}{Where}}
 
-Accessor function for setting the private class member wxDbTable::where 
+Accessor function for setting the private class member wxDbTable::where
 that determines which rows are returned in the result set by the datasource.
 
 A synonym to this function is one form of the function \helpref{wxDbTable::Where}{wxdbtablewhere}
 
 \wxheading{Parameters}
 
-\docparam{Where}{SQL "where" clause.  This clause can contain any SQL language 
-that is legal in standard where clauses.  If a FROM clause has also been 
-specified, each column name specified in the ORDER BY clause should be 
-prefaced with the table name to which the column belongs using DOT notation 
+\docparam{Where}{SQL "where" clause.  This clause can contain any SQL language
+that is legal in standard where clauses.  If a FROM clause has also been
+specified, each column name specified in the ORDER BY clause should be
+prefaced with the table name to which the column belongs using DOT notation
 (TABLE\_NAME.COLUMN\_NAME).}
 
 \wxheading{Remarks}
@@ -3784,7 +3784,7 @@ Do {\bf not} include the keywords "WHERE" when setting the WHERE clause.
 
 \wxheading{See also}
 
-\helpref{wxDbTable::Where}{wxdbtablewhere}, 
+\helpref{wxDbTable::Where}{wxdbtablewhere},
 \helpref{wxDbTable::GetWhereClause}{wxdbtablegetwhereclause}
 
 \membersection{wxDbTable::Update}\label{wxdbtableupdate}
@@ -3793,16 +3793,16 @@ Do {\bf not} include the keywords "WHERE" when setting the WHERE clause.
 
 \func{bool }{Update}{\param{const wxString \&}{pSqlStmt}}
 
-The first form of this function will update the row that the current cursor 
-is currently positioned at with the values in the memory variables that 
-are bound to the columns.  The actual SQL statement to perform the update 
+The first form of this function will update the row that the current cursor
+is currently positioned at with the values in the memory variables that
+are bound to the columns.  The actual SQL statement to perform the update
 is automatically created by the ODBC class, and then executed.
 
-The second form of the function allows full access through SQL statements for 
-updating records in the database.  Write any valid SQL UPDATE statement and 
-submit it to this function for execution.  Sophisticated updates can be 
-performed using the full power of the SQL dialect. The full SQL statement 
-must have  the exact syntax required by the driver/datasource for performing 
+The second form of the function allows full access through SQL statements for
+updating records in the database.  Write any valid SQL UPDATE statement and
+submit it to this function for execution.  Sophisticated updates can be
+performed using the full power of the SQL dialect. The full SQL statement
+must have  the exact syntax required by the driver/datasource for performing
 the update.  This usually is in the form of:
 
 \begin{verbatim}
@@ -3815,8 +3815,8 @@ the update.  This usually is in the form of:
 
 \wxheading{Remarks}
 
-A \helpref{wxDb::CommitTrans}{wxdbcommittrans} or 
-\helpref{wxDb::RollbackTrans}{wxdbrollbacktrans} must be called after use of 
+A \helpref{wxDb::CommitTrans}{wxdbcommittrans} or
+\helpref{wxDb::RollbackTrans}{wxdbrollbacktrans} must be called after use of
 this function to commit or rollback the update.
 
 \wxheading{Example}
@@ -3830,25 +3830,25 @@ this function to commit or rollback the update.
 
 \func{bool}{UpdateWhere}{\param{const wxString \&}{pWhereClause}}
 
-Performs updates to the base table of the wxDbTable object, updating only the 
+Performs updates to the base table of the wxDbTable object, updating only the
 rows which match the criteria specified in the {\it pWhereClause}.
 
-All columns that are bound to member variables for this wxDbTable instance 
-that were defined with the "updateable" parameter set to TRUE will be updated 
-with the information currently held in the memory variable.  
+All columns that are bound to member variables for this wxDbTable instance
+that were defined with the "updateable" parameter set to TRUE will be updated
+with the information currently held in the memory variable.
 
 \wxheading{Parameters}
 
-\docparam{pWhereClause}{Pointer to a valid SQL WHERE clause.  Do not 
+\docparam{pWhereClause}{Pointer to a valid SQL WHERE clause.  Do not
 include the keyword 'WHERE'.}
 
 \wxheading{Remarks}
 
-Care should be used when updating columns that are part of indexes with 
+Care should be used when updating columns that are part of indexes with
 this function so as not to violate an unique key constraints.
 
-A \helpref{wxDb::CommitTrans}{wxdbcommittrans} or 
-\helpref{wxDb::RollbackTrans}{wxdbrollbacktrans} must be called after use of 
+A \helpref{wxDb::CommitTrans}{wxdbcommittrans} or
+\helpref{wxDb::RollbackTrans}{wxdbrollbacktrans} must be called after use of
 this function to commit or rollback the update(s).
 
 \membersection{wxDbTable::Where}\label{wxdbtablewhere}
@@ -3857,10 +3857,10 @@ this function to commit or rollback the update(s).
 
 \func{void}{Where}{\param{const wxString\& }{Where}}
 
-Accessor function for the private class member wxDbTable::where.  Can be used 
-as a synonym for \helpref{wxDbTable::GetWhereClause}{wxdbtablegetwhereclause} 
-(the first form of this function) to return the current where clause or  
-\helpref{wxDbTable::SetWhereClause}{wxdbtablesetwhereclause} (the second form 
+Accessor function for the private class member wxDbTable::where.  Can be used
+as a synonym for \helpref{wxDbTable::GetWhereClause}{wxdbtablegetwhereclause}
+(the first form of this function) to return the current where clause or
+\helpref{wxDbTable::SetWhereClause}{wxdbtablesetwhereclause} (the second form
 of this function) to set the where clause for this table instance.
 
 \wxheading{Parameters}
@@ -3869,15 +3869,15 @@ of this function) to set the where clause for this table instance.
 
 \wxheading{Return value}
 
-The first form of this function returns the current value of the wxDbTable 
-member variable ::where.  
+The first form of this function returns the current value of the wxDbTable
+member variable ::where.
 
-The second form of the function has no return value, as it will always set 
-the where clause successfully. 
+The second form of the function has no return value, as it will always set
+the where clause successfully.
 
 \wxheading{See also}
 
-\helpref{wxDbTable::GetWhereClause}{wxdbtablegetwhereclause}, 
+\helpref{wxDbTable::GetWhereClause}{wxdbtablegetwhereclause},
 \helpref{wxDbTable::SetWhereClause}{wxdbtablesetwhereclause}
 
 \membersection{wxDbTable::operator $++$}\label{wxdbtableplusplus}
@@ -3910,13 +3910,13 @@ Synonym for \helpref{wxDbTable::GetPrev}{wxdbtablegetprev}
     pColInf         = NULL;
 \end{verbatim}
 
-Currently only used by \helpref{wxDb::GetCatalog}{wxdbgetcatalog} internally 
-and \helpref{wxDbInf}{wxdbinf} class, but may be used in future releases for 
-user functions.  Contains information describing the table (Name, type, etc). 
-A pointer to a wxDbColInf array instance is included so a program can create a 
-\helpref{wxDbColInf}{wxdbcolinf} array instance (using 
-\helpref{wxDb::GetColumns}{wxdbgetcolumns}) 
-to maintain all information about the columns of a table in one memory 
+Currently only used by \helpref{wxDb::GetCatalog}{wxdbgetcatalog} internally
+and \helpref{wxDbInf}{wxdbinf} class, but may be used in future releases for
+user functions.  Contains information describing the table (Name, type, etc).
+A pointer to a wxDbColInf array instance is included so a program can create a
+\helpref{wxDbColInf}{wxdbcolinf} array instance (using
+\helpref{wxDb::GetColumns}{wxdbgetcolumns})
+to maintain all information about the columns of a table in one memory
 structure.
 
 Eventually, accessor functions will be added for this class
@@ -3926,6 +3926,6 @@ an introduction to using the ODBC classes.
 
 \membersection{wxDbTableInf::Initialize}\label{wxdbtableinfinitialize}
 
-Simply initializes all member variables to a cleared state.  Called by 
+Simply initializes all member variables to a cleared state.  Called by
 the constructor automatically.
 
