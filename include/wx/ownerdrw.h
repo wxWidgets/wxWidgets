@@ -12,13 +12,15 @@
 #ifndef   _OWNERDRW_H
 #define   _OWNERDRW_H
 
-#include "wx/setup.h"
-
 #if wxUSE_OWNER_DRAWN
 
 #ifdef    __GNUG__
     #pragma interface "ownerdrw.h"
 #endif
+
+#include "wx/bitmap.h"
+#include "wx/colour.h"
+#include "wx/font.h"
 
 // ----------------------------------------------------------------------------
 // wxOwnerDrawn - a mix-in base class, derive from it to implement owner-drawn

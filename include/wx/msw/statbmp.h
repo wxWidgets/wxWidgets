@@ -18,6 +18,7 @@
 
 #include "wx/control.h"
 #include "wx/icon.h"
+#include "wx/bitmap.h"
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxStaticBitmapNameStr;
 
