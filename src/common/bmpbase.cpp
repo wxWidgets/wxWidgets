@@ -12,6 +12,13 @@
 #pragma implementation "bitmapbase.h"
 #endif
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
 #include "wx/wx.h"
 #include "wx/setup.h"
 #include "wx/utils.h"
