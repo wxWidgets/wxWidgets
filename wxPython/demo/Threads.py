@@ -33,9 +33,8 @@ class CalcBarThread:
     def Run(self):
         while self.keepGoing:
             evt = UpdateBarEvent(barNum = self.barNum, value = int(self.val))
-            wx.PostEvent(self.win.GetEventHandler(), evt)
-            #del evt
-
+            wx.PostEvent(self.win, evt)
+ 
             sleeptime = (random.random() * 2) + 0.5
             time.sleep(sleeptime/4)
 
