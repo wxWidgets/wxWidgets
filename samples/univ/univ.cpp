@@ -397,6 +397,7 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
     text = new wxTextCtrl(this, -1, _T("Hello,\nMultiverse!"),
                           wxPoint(10, 10), wxDefaultSize,
                           wxTE_MULTILINE);
+    text->SetFocus();
 #endif // !TEST_TEXT_ONLY/TEST_TEXT_ONLY
 }
 

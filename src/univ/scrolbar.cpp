@@ -116,6 +116,9 @@ bool wxScrollBar::Create(wxWindow *parent,
 
     SetBestSize(size);
 
+    // override the cursor of the target window (if any)
+    SetCursor(wxCURSOR_ARROW);
+
     return TRUE;
 }
 

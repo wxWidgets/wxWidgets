@@ -84,7 +84,10 @@ static inline void OrderPositions(long& from, long& to)
 
 BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
     EVT_CHAR(OnChar)
+
     EVT_SIZE(OnSize)
+
+    EVT_IDLE(OnIdle)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxControl)
@@ -112,6 +115,17 @@ void wxTextCtrl::Init()
     m_curPos =
     m_curCol =
     m_curRow = 0;
+
+    m_scrollRangeX =
+    m_scrollRangeY = 0;
+
+    m_updateScrollbarX =
+    m_updateScrollbarY = FALSE;
+
+    m_widthMax = -1;
+
+    // init wxScrollHelper
+    SetWindow(this);
 }
 
 bool wxTextCtrl::Create(wxWindow *parent,
@@ -131,10 +145,25 @@ bool wxTextCtrl::Create(wxWindow *parent,
 
     SetCursor(wxCURSOR_IBEAM);
 
-    // we should always have at least one line in a multiline control
     if ( style & wxTE_MULTILINE )
     {
+        // we should always have at least one line in a multiline control
         m_lines.Add(wxEmptyString);
+
+        // we might support it but it's quite useless and other ports don't
+        // support it anyhow
+        wxASSERT_MSG( !(style & wxTE_PASSWORD),
+                      _T("wxTE_PASSWORD can't be used with multiline ctrls") );
+
+        // create vertical scrollbar if necessary (on by default)
+        if ( !(style & wxTE_NO_VSCROLL) )
+        {
+        }
+
+        // and the horizontal one
+        if ( style & wxHSCROLL )
+        {
+        }
     }
 
     SetValue(value);
@@ -161,6 +190,9 @@ bool wxTextCtrl::SetFont(const wxFont& font)
     // and refresh everything, of course
     InitInsertionPoint();
     ClearSelection();
+
+    m_widthMax = -1;
+
     Refresh();
 
     return TRUE;
@@ -523,6 +555,8 @@ void wxTextCtrl::Replace(long from, long to, const wxString& text)
         {
             // we have the replacement line for this one
             m_lines[line] = lines[nReplaceLine];
+
+            UpdateMaxWidth(line);
         }
         else // no more replacement lines
         {
@@ -538,6 +572,8 @@ void wxTextCtrl::Replace(long from, long to, const wxString& text)
     while ( nReplaceLine < nReplaceCount )
     {
         m_lines.Insert(lines[nReplaceLine++], ++lineEnd);
+
+        UpdateMaxWidth(lineEnd);
     }
 
     // (5) now refresh the changed area
@@ -554,6 +590,9 @@ void wxTextCtrl::Replace(long from, long to, const wxString& text)
         // number of lines did change, we need to refresh everything below the
         // start line
         RefreshLineRange(lineStart + 1);
+
+        // the vert scrollbar might [dis]appear
+        m_updateScrollbarY = TRUE;
     }
 #endif // 0/1
 
@@ -1043,10 +1082,37 @@ void wxTextCtrl::ShowPosition(long pos)
     {
         ShowHorzPosition(GetCaretPosition(pos));
     }
-    else // multiline
+    else if ( m_scrollRangeX || m_scrollRangeY ) // multiline with scrollbars
     {
-        // TODO
+        int xStart, yStart;
+        GetViewStart(&xStart, &yStart);
+
+        if ( m_scrollRangeY )
+        {
+            // scroll the position vertically into view: if it is currently
+            // above it, make it the first one, otherwise the last one
+            if ( m_curRow < yStart )
+            {
+                Scroll(0, m_curRow);
+            }
+            else
+            {
+                int yEnd = yStart + GetClientSize().y / GetCharHeight() - 1;
+                if ( yEnd < m_curRow )
+                {
+                    // scroll down: the current item should appear at the
+                    // bottom of the view
+                    Scroll(0, m_curRow - (yEnd - yStart));
+                }
+            }
+        }
+
+        if ( m_scrollRangeX )
+        {
+            // TODO
+        }
     }
+    //else: multiline but no scrollbars, hence nothing to do
 
     ShowCaret();
 }
@@ -1305,6 +1371,9 @@ void wxTextCtrl::UpdateLastVisible()
 void wxTextCtrl::OnSize(wxSizeEvent& event)
 {
     UpdateTextRect();
+
+    m_updateScrollbarX =
+    m_updateScrollbarY = TRUE;
 
     event.Skip();
 }
@@ -1668,6 +1737,103 @@ void wxTextCtrl::DoPrepareDC(wxDC& dc)
     {
         wxPoint pt = dc.GetDeviceOrigin();
         dc.SetDeviceOrigin(pt.x - m_ofsHorz, pt.y);
+    }
+}
+
+void wxTextCtrl::UpdateMaxWidth(long line)
+{
+    wxCoord width;
+    GetTextExtent(GetLineText(line), &width, NULL);
+
+    // GetMaxWidth() and not m_widthMax as it might be not calculated yet
+    if ( width > GetMaxWidth() )
+    {
+        m_widthMax = width;
+
+        m_updateScrollbarX = TRUE;
+    }
+}
+
+wxCoord wxTextCtrl::GetMaxWidth() const
+{
+    if ( m_widthMax == -1 )
+    {
+        // recalculate it
+
+        // OPT: should we remember the widths of all the lines?
+
+        wxTextCtrl *self = wxConstCast(this, wxTextCtrl);
+        wxClientDC dc(self);
+        dc.SetFont(GetFont());
+
+        size_t count = m_lines.GetCount();
+        for ( size_t n = 0; n < count; n++ )
+        {
+            wxCoord width;
+            dc.GetTextExtent(m_lines[n], &width, NULL);
+            if ( width > m_widthMax )
+            {
+                self->m_widthMax = width;
+            }
+        }
+    }
+
+    return m_widthMax;
+}
+
+void wxTextCtrl::UpdateScrollbars()
+{
+    wxSize size = GetClientSize();
+
+    // is our height enough to show all items?
+    int nLines = GetNumberOfLines();
+    wxCoord lineHeight = GetCharHeight();
+    bool showScrollbarY = nLines*lineHeight > size.y;
+
+    // is our width enough to show the longest line?
+    wxCoord charWidth, maxWidth;
+    bool showScrollbarX;
+    if ( GetWindowStyle() && wxHSCROLL )
+    {
+        charWidth = GetCharWidth();
+        maxWidth = GetMaxWidth();
+        showScrollbarX = maxWidth > size.x;
+    }
+    else // never show the horz scrollbar
+    {
+        // just to suppress compiler warnings about using uninit vars below
+        charWidth = maxWidth = 0;
+
+        showScrollbarX = FALSE;
+    }
+
+    // calc the scrollbars ranges
+    int scrollRangeX = showScrollbarX
+                        ? (maxWidth + 2*charWidth - 1) / charWidth
+                        : 0;
+    int scrollRangeY = showScrollbarY ? nLines : 0;
+
+    if ( (scrollRangeY != m_scrollRangeY) || (scrollRangeX != m_scrollRangeX) )
+    {
+        int x, y;
+        GetViewStart(&x, &y);
+        SetScrollbars(charWidth, lineHeight,
+                      scrollRangeX, scrollRangeY,
+                      x, y);
+
+        m_scrollRangeX = scrollRangeX;
+        m_scrollRangeY = scrollRangeY;
+    }
+}
+
+void wxTextCtrl::OnIdle(wxIdleEvent& event)
+{
+    if ( m_updateScrollbarX || m_updateScrollbarY )
+    {
+        UpdateScrollbars();
+
+        m_updateScrollbarX =
+        m_updateScrollbarY = FALSE;
     }
 }
 

@@ -296,7 +296,14 @@ protected:
     // set the caret to its initial (default) position
     void InitInsertionPoint();
 
+    // get the width of the longest line in pixels
+    wxCoord GetMaxWidth() const;
+
+    // update the max width if the width of this line is greater than it
+    void UpdateMaxWidth(long line);
+
     // event handlers
+    void OnIdle(wxIdleEvent& event);
     void OnChar(wxKeyEvent& event);
     void OnSize(wxSizeEvent& event);
 
@@ -315,6 +322,9 @@ protected:
     }
 
 private:
+    // update the scrollbars (only called from OnIdle)
+    void UpdateScrollbars();
+
     // the initially specified control size
     wxSize m_sizeInitial;
 
@@ -328,6 +338,9 @@ private:
     long m_curPos,
          m_curCol,
          m_curRow;
+
+    // last position (only used by GetLastPosition())
+    long m_posLast;
 
     // selection
     long m_selAnchor,
@@ -352,6 +365,19 @@ private:
     // is an absolute value)
     wxCoord m_posLastVisible;
     long m_colLastVisible;
+
+    // this section is for the controls with scrollbar(s)
+
+    // the current ranges of the scrollbars
+    int m_scrollRangeX,
+        m_scrollRangeY;
+
+    // should we adjust the horz/vert scrollbar?
+    bool m_updateScrollbarX,
+         m_updateScrollbarY;
+
+    // the max line length in pixels
+    wxCoord m_widthMax;
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxTextCtrl)

@@ -85,6 +85,8 @@ bool wxWindow::Create(wxWindow *parent,
                       long style,
                       const wxString& name)
 {
+    // we add wxCLIP_CHILDREN and wxNO_FULL_REPAINT_ON_RESIZE because without
+    // these styles we can't get rid of flicker on wxMSW
     if ( !wxWindowNative::Create(parent, id, pos, size,
                                  style | wxCLIP_CHILDREN, name) )
     {

@@ -540,7 +540,7 @@ void wxListBox::OnIdle(wxIdleEvent& event)
     {
         UpdateScrollbars();
 
-        m_updateScrollbarX = FALSE;
+        m_updateScrollbarX =
         m_updateScrollbarY = FALSE;
     }
 
@@ -677,6 +677,10 @@ void wxListBox::OnSize(wxSizeEvent& event)
 {
     // recalculate the number of items per page
     CalcItemsPerPage();
+
+    // the scrollbars might [dis]appear
+    m_updateScrollbarX =
+    m_updateScrollbarY = TRUE;
 
     event.Skip();
 }
