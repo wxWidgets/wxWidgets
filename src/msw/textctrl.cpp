@@ -1312,8 +1312,14 @@ long wxTextCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
         else // !editable
         {
             // when the control can't be edited by user, it doesn't need any
-            // extra keys at all
-            lRc = 0;
+            // extra keys changing its contents at all -- but it still needs
+            // the arrows to allow navigating in it
+            //
+            // NB: use "=", not "|=" as the base class version returns the
+            //     same flags is this state as usual (i.e. including
+            //     DLGC_WANTMESSAGE). This is strange (how does it work in the
+            //     native Win32 apps?) but for now live with it.
+            lRc = DLGC_WANTARROWS;
         }
     }
 
