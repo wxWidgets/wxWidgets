@@ -637,7 +637,7 @@ const wxHtmlCell* wxHtmlContainerCell::Find(int condition, const void* param) co
 wxHtmlCell *wxHtmlContainerCell::FindCellByPos(wxCoord x, wxCoord y,
                                                unsigned flags) const
 {
-    if (flags & wxHTML_FIND_EXACT)
+    if ( flags & wxHTML_FIND_EXACT )
     {
         for ( const wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext() )
         {
@@ -650,10 +650,8 @@ wxHtmlCell *wxHtmlContainerCell::FindCellByPos(wxCoord x, wxCoord y,
                 return cell->FindCellByPos(x - cx, y - cy, flags);
             }
         }
-        return NULL;
     }
-
-    if ( flags & wxHTML_FIND_NEAREST_AFTER )
+    else if ( flags & wxHTML_FIND_NEAREST_AFTER )
     {
         wxHtmlCell *c;
         int y2;
@@ -666,24 +664,22 @@ wxHtmlCell *wxHtmlContainerCell::FindCellByPos(wxCoord x, wxCoord y,
                                     flags);
             if (c) return c;
         }
-        return NULL;
     }
-
-    if ( flags & wxHTML_FIND_NEAREST_BEFORE )
+    else if ( flags & wxHTML_FIND_NEAREST_BEFORE )
     {
-        wxHtmlCell *c = NULL;
-        wxHtmlCell *cx;
+        wxHtmlCell *c;
         for ( const wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext() )
         {
             if (cell->GetPosY() > y || 
                     (cell->GetPosY() == y && cell->GetPosX() > x))
                 break;
-            cx = cell->FindCellByPos(x - cell->GetPosX(), y - cell->GetPosY(),
-                                     flags);
-            if (cx) c = cx;
+            c = cell->FindCellByPos(x - cell->GetPosX(), y - cell->GetPosY(),
+                                    flags);
+            if (c) return c;
         }
-        return c;
     }
+
+    return NULL;
 }
 
 
