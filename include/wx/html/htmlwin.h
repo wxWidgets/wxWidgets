@@ -221,7 +221,7 @@ protected:
     void OnCopy(wxCommandEvent& event);
     void OnMouseEnter(wxMouseEvent& event);
     void OnMouseLeave(wxMouseEvent& event);
-#endif
+#endif // wxUSE_CLIPBOARD
 
     // Returns new filter (will be stored into m_DefaultFilter variable)
     virtual wxHtmlFilter *GetDefaultFilter() {return new wxHtmlFilterPlainText;}
@@ -233,18 +233,18 @@ protected:
     // and wxHW_NO_SELECTION not used)
     bool IsSelectionEnabled() const;
 
-#if wxUSE_CLIPBOARD
-    // Convert selection to text:
-    wxString SelectionToText();
-
     enum ClipboardType
     {
         Primary,
         Secondary
     };
-    
-    // Copies selection to clipboard:
+
+    // Copies selection to clipboard if the clipboard support is available
     void CopySelection(ClipboardType t = Secondary);
+
+#if wxUSE_CLIPBOARD
+    // Convert selection to text:
+    wxString SelectionToText();
 
     // Helper functions to select parts of page:
     void SelectWord(const wxPoint& pos);
@@ -252,7 +252,7 @@ protected:
 
     // Automatic scrolling during selection:
     void StopAutoScrolling();
-#endif
+#endif // wxUSE_CLIPBOARD
 
 protected:
     // This is pointer to the first cell in parsed data.  (Note: the first cell
@@ -297,16 +297,16 @@ protected:
     // helper class to automatically scroll the window if the user is selecting
     // text and the mouse leaves wxHtmlWindow:
     wxHtmlWinAutoScrollTimer *m_timerAutoScroll;
-#endif
+#endif // wxUSE_CLIPBOARD
 
 private:
     // window content for double buffered rendering:
     wxBitmap *m_backBuffer;
-    
+
     // variables used when user is selecting text
     wxPoint     m_tmpSelFromPos;
     wxHtmlCell *m_tmpSelFromCell;
-    
+
     // a flag indicated if mouse moved
     // (if TRUE we will try to change cursor in last call to OnIdle)
     bool m_tmpMouseMoved;
@@ -338,7 +338,7 @@ private:
 };
 
 
-#endif
+#endif // wxUSE_HTML
 
 #endif // _WX_HTMLWIN_H_
 

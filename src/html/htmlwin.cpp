@@ -110,7 +110,8 @@ void wxHtmlWinAutoScrollTimer::Notify()
         }
     }
 }
-#endif
+
+#endif // wxUSE_CLIPBOARD
 
 
 
@@ -175,7 +176,7 @@ void wxHtmlWindow::Init()
 #if wxUSE_CLIPBOARD
     m_timerAutoScroll = NULL;
     m_lastDoubleClick = 0;
-#endif
+#endif // wxUSE_CLIPBOARD
     m_backBuffer = NULL;
 }
 
@@ -197,7 +198,7 @@ wxHtmlWindow::~wxHtmlWindow()
 {
 #if wxUSE_CLIPBOARD
     StopAutoScrolling();
-#endif
+#endif // wxUSE_CLIPBOARD
     HistoryClear();
 
     if (m_Cell) delete m_Cell;
@@ -717,7 +718,7 @@ bool wxHtmlWindow::IsSelectionEnabled() const
     return false;
 #endif
 }
-    
+
 
 #if wxUSE_CLIPBOARD
 wxString wxHtmlWindow::SelectionToText()
@@ -747,22 +748,35 @@ wxString wxHtmlWindow::SelectionToText()
     return text;
 }
 
+#endif // wxUSE_CLIPBOARD
+
 void wxHtmlWindow::CopySelection(ClipboardType t)
 {
+#if wxUSE_CLIPBOARD
     if ( m_selection )
     {
+#ifdef __UNIX__
         wxTheClipboard->UsePrimarySelection(t == Primary);
-        wxString txt(SelectionToText());
+#else // !__UNIX__
+        // Primary selection exists only under X11, so don't do anything under
+        // the other platforms when we try to access it
+        //
+        // TODO: this should be abstracted at wxClipboard level!
+        if ( t == Primary )
+            return;
+#endif // __UNIX__/!__UNIX__
+
         if ( wxTheClipboard->Open() )
         {
+            const wxString txt(SelectionToText());
             wxTheClipboard->SetData(new wxTextDataObject(txt));
             wxTheClipboard->Close();
             wxLogTrace(_T("wxhtmlselection"),
                        _("Copied to clipboard:\"%s\""), txt.c_str());
         }
     }
+#endif // wxUSE_CLIPBOARD
 }
-#endif
 
 
 void wxHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link)
@@ -805,13 +819,13 @@ void wxHtmlWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
     wxMemoryDC dcm;
     if ( !m_backBuffer )
         m_backBuffer = new wxBitmap(sz.x, sz.y);
-    dcm.SelectObject(*m_backBuffer);    
+    dcm.SelectObject(*m_backBuffer);
     dcm.SetBackground(wxBrush(GetBackgroundColour(), wxSOLID));
     dcm.Clear();
     PrepareDC(dcm);
     dcm.SetMapMode(wxMM_TEXT);
     dcm.SetBackgroundMode(wxTRANSPARENT);
-    
+
     wxHtmlRenderingInfo rinfo;
     wxDefaultHtmlRenderingStyle rstyle;
     rinfo.SetSelection(m_selection);
@@ -845,7 +859,7 @@ void wxHtmlWindow::OnSize(wxSizeEvent& event)
                          m_selection->GetToCell());
         m_selection->ClearPrivPos();
     }
-    
+
     Refresh();
 }
 
@@ -864,11 +878,13 @@ void wxHtmlWindow::OnMouseDown(wxMouseEvent& event)
         if ( wxGetLocalTimeMillis() - m_lastDoubleClick <= TRIPLECLICK_LEN )
         {
             SelectLine(CalcUnscrolledPosition(event.GetPosition()));
+
+            CopySelection();
         }
         else
-        {            
+        {
             m_makingSelection = true;
-                
+
             if ( m_selection )
             {
                 wxDELETE(m_selection);
@@ -880,7 +896,7 @@ void wxHtmlWindow::OnMouseDown(wxMouseEvent& event)
             CaptureMouse();
         }
     }
-#endif
+#endif // wxUSE_CLIPBOARD
 }
 
 void wxHtmlWindow::OnMouseUp(wxMouseEvent& event)
@@ -894,25 +910,24 @@ void wxHtmlWindow::OnMouseUp(wxMouseEvent& event)
         // did the user move the mouse far enough from starting point?
         if ( m_selection )
         {
-#ifdef __UNIX__
             CopySelection(Primary);
-#endif
+
             // we don't want mouse up event that ended selecting to be
             // handled as mouse click and e.g. follow hyperlink:
             return;
         }
     }
-#endif
-    
+#endif // wxUSE_CLIPBOARD
+
     SetFocus();
     if ( m_Cell )
     {
         wxPoint pos = CalcUnscrolledPosition(event.GetPosition());
         wxHtmlCell *cell = m_Cell->FindCellByPos(pos.x, pos.y);
 
-        // VZ: is it possible that we don't find anything at all?
-        // VS: yes. FindCellByPos returns terminal cell and
-        //     containers may have empty borders
+        // check is needed because FindCellByPos returns terminal cell and
+        // containers may have empty borders -- in this case NULL will be
+        // returned
         if ( cell )
             OnCellClicked(cell, pos.x, pos.y, event);
     }
@@ -978,9 +993,9 @@ void wxHtmlWindow::OnIdle(wxIdleEvent& WXUNUSED(event))
 
             // NB: it may *rarely* happen that the code above didn't find one
             //     of the cells, e.g. if wxHtmlWindow doesn't contain any
-            //     visible cells. 
+            //     visible cells.
             if ( selcell && m_tmpSelFromCell )
-            {                
+            {
                 if ( !m_selection )
                 {
                     // start selecting only if mouse movement was big enough
@@ -1008,7 +1023,7 @@ void wxHtmlWindow::OnIdle(wxIdleEvent& WXUNUSED(event))
                 }
             }
         }
-        
+
         // handle cursor and status bar text changes:
         if ( cell != m_tmpLastCell )
         {
@@ -1144,13 +1159,16 @@ void wxHtmlWindow::OnCopy(wxCommandEvent& event)
     if ( m_selection )
         CopySelection();
 }
-    
+
 void wxHtmlWindow::OnDoubleClick(wxMouseEvent& event)
 {
     // select word under cursor:
     if ( IsSelectionEnabled() )
     {
         SelectWord(CalcUnscrolledPosition(event.GetPosition()));
+
+        CopySelection(Primary);
+
         m_lastDoubleClick = wxGetLocalTimeMillis();
     }
     else
@@ -1179,7 +1197,7 @@ void wxHtmlWindow::SelectLine(const wxPoint& pos)
         // cells in same container as the cell under mouse cursor that are
         // neither completely above nor completely bellow the clicked cell
         // (i.e. are likely to be words positioned on same line of text).
-                
+
         int y1 = cell->GetAbsPos().y;
         int y2 = y1 + cell->GetHeight();
         int y;
@@ -1214,15 +1232,15 @@ void wxHtmlWindow::SelectLine(const wxPoint& pos)
         }
         if ( !before )
             before = cell;
-       
+
         delete m_selection;
         m_selection = new wxHtmlSelection();
         m_selection->Set(before, after);
-        
+
         Refresh();
     }
 }
-#endif
+#endif // wxUSE_CLIPBOARD
 
 
 
@@ -1245,7 +1263,7 @@ BEGIN_EVENT_TABLE(wxHtmlWindow, wxScrolledWindow)
     EVT_LEAVE_WINDOW(wxHtmlWindow::OnMouseLeave)
     EVT_KEY_UP(wxHtmlWindow::OnKeyUp)
     EVT_MENU(wxID_COPY, wxHtmlWindow::OnCopy)
-#endif
+#endif // wxUSE_CLIPBOARD
 END_EVENT_TABLE()
 
 
@@ -1273,4 +1291,5 @@ IMPLEMENT_DYNAMIC_CLASS(wxHtmlWinModule, wxModule)
 #include "wx/html/forcelnk.h"
 FORCE_WXHTML_MODULES()
 
-#endif
+#endif // wxUSE_HTML
+
