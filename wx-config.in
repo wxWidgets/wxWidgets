@@ -250,7 +250,7 @@ while test $# -gt 0; do
       echo $release
       ;;
     --basename)
-      echo $basename
+      echo $basename_gui
       ;;
     --static)
       static_flag=yes
@@ -304,7 +304,7 @@ while test $# -gt 0; do
               fi
           done
           libs_list="$newlist"
-          
+
           # output link flags:
           contrib_libs=`output_libs $libs_list`
           if test $static_flag = yes ; then
