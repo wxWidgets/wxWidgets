@@ -145,6 +145,24 @@ if the file is not opened.
 Flushes the file and returns \true on success.
 
 
+\membersection{wxFFile::GetFileType}\label{wxffilegetfiletype}
+
+\constfunc{wxFileTypeEnum}{GetFileType}{\void}
+
+Returns the type of the file. Possible return values are:
+
+\begin{verbatim}
+enum wxFileTypeEnum
+{
+  wxFILE_TYPE_UNKNOWN,
+  wxFILE_TYPE_DISK,     // a file supporting seeking to arbitrary offsets
+  wxFILE_TYPE_TERMINAL, // a tty
+  wxFILE_TYPE_PIPE      // a pipe
+};
+
+\end{verbatim}
+
+
 \membersection{wxFFile::IsOpened}\label{wxffileisopened}
 
 \constfunc{bool}{IsOpened}{\void}

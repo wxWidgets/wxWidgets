@@ -22,8 +22,9 @@ TEST_CXXFLAGS = /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) /DWIN32 $(__DEBUGINFO) \
 	/Fd$(OBJS)\test.pdb $(____DEBUGRUNTIME_2_p) $(__OPTIMIZEFLAG) \
 	$(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) /I.\..\include /I$(SETUPHDIR) /W4 /I. $(__DLLFLAG_p) \
-	/D_CONSOLE $(CPPUNIT_CFLAGS) $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0) \
-	/Yu"testprec.h" /Fp"$(OBJS)\testprec_test.pch" $(CPPFLAGS) $(CXXFLAGS)
+	/D_CONSOLE /DwxUSE_GUI=0 $(CPPUNIT_CFLAGS) $(__EXCEPTIONSFLAG) \
+	$(__EXCEPTIONSFLAG_0) /Yu"testprec.h" /Fp"$(OBJS)\testprec_test.pch" \
+	$(CPPFLAGS) $(CXXFLAGS)
 TEST_OBJECTS =  \
 	$(OBJS)\test_dummy.obj \
 	$(OBJS)\test_test.obj \
@@ -34,6 +35,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_fileconftest.obj \
 	$(OBJS)\test_filenametest.obj \
 	$(OBJS)\test_filesystest.obj \
+	$(OBJS)\test_filetype.obj \
 	$(OBJS)\test_fontmaptest.obj \
 	$(OBJS)\test_formatconvertertest.obj \
 	$(OBJS)\test_hashes.obj \
@@ -370,6 +372,9 @@ $(OBJS)\test_filenametest.obj: .\filename\filenametest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_filesystest.obj: .\filesys\filesystest.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
+
+$(OBJS)\test_filetype.obj: .\filetype\filetype.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_fontmaptest.obj: .\fontmap\fontmaptest.cpp

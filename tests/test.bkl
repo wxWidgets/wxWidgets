@@ -31,6 +31,7 @@
             fileconf/fileconftest.cpp
             filename/filenametest.cpp
             filesys/filesystest.cpp
+            filetype/filetype.cpp
             fontmap/fontmaptest.cpp
             formatconverter/formatconvertertest.cpp
             hashes/hashes.cpp

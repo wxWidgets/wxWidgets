@@ -200,8 +200,9 @@ SETUPHDIR = &
 TEST_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
 	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
 	-i=.\..\include -i=$(SETUPHDIR) -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 -i=. &
-	$(__DLLFLAG_p) $(CPPUNIT_CFLAGS) /fh=$(OBJS)\testprec_test.pch &
-	$(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0) $(CPPFLAGS) $(CXXFLAGS)
+	$(__DLLFLAG_p) -dwxUSE_GUI=0 $(CPPUNIT_CFLAGS) &
+	/fh=$(OBJS)\testprec_test.pch $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0) &
+	$(CPPFLAGS) $(CXXFLAGS)
 TEST_OBJECTS =  &
 	$(OBJS)\test_dummy.obj &
 	$(OBJS)\test_test.obj &
@@ -212,6 +213,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_fileconftest.obj &
 	$(OBJS)\test_filenametest.obj &
 	$(OBJS)\test_filesystest.obj &
+	$(OBJS)\test_filetype.obj &
 	$(OBJS)\test_fontmaptest.obj &
 	$(OBJS)\test_formatconvertertest.obj &
 	$(OBJS)\test_hashes.obj &
@@ -318,6 +320,9 @@ $(OBJS)\test_filenametest.obj :  .AUTODEPEND .\filename\filenametest.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_filesystest.obj :  .AUTODEPEND .\filesys\filesystest.cpp
+	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_filetype.obj :  .AUTODEPEND .\filetype\filetype.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_fontmaptest.obj :  .AUTODEPEND .\fontmap\fontmaptest.cpp

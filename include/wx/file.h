@@ -125,6 +125,8 @@ public:
   bool Eof() const;
     // has an error occured?
   bool Error() const { return m_error; }
+    // type such as disk or pipe
+  wxFileTypeEnum GetFileType() const { return wxGetFileType(m_fd); }
 
   // dtor closes the file if opened
   ~wxFile() { Close(); }

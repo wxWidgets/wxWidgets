@@ -75,6 +75,10 @@
     #endif // __GNUWIN32__
 #endif // __WINDOWS__
 
+#if defined __VMS__
+    #include <fab.h>
+#endif
+
 // TODO: Borland probably has _wgetcwd as well?
 #ifdef _MSC_VER
     #define HAVE_WGETCWD
@@ -1852,6 +1856,47 @@ bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
         }
 }
 
+// Return the type of an open file
+//
+wxFileTypeEnum wxGetFileType(int fd)
+{
+    if (isatty(fd))
+        return wxFILE_TYPE_TERMINAL;
+
+#if defined __WXMSW__
+    switch (::GetFileType(wxGetOSFHandle(fd)) & ~FILE_TYPE_REMOTE)
+    {
+        case FILE_TYPE_DISK:
+            return wxFILE_TYPE_DISK;
+        case FILE_TYPE_PIPE:
+            return wxFILE_TYPE_PIPE;
+    }
+
+    return wxFILE_TYPE_UNKNOWN;
+
+#elif defined __UNIX__
+    struct stat st;
+    fstat(fd, &st);
+
+    if (S_ISFIFO(st.st_mode))
+        return wxFILE_TYPE_PIPE;
+    if (!S_ISREG(st.st_mode))
+        return wxFILE_TYPE_UNKNOWN;
+
+    #if defined __VMS__
+        if (st.st_fab_rfm != FAB$C_STMLF)
+            return wxFILE_TYPE_UNKNOWN;
+    #endif
+
+    return wxFILE_TYPE_DISK;
+
+#else
+    if (lseek(fd, 0, SEEK_CUR) != -1)
+        return wxFILE_TYPE_DISK;
+    else
+        return wxFILE_TYPE_UNKNOWN;
+#endif
+}
 
 #ifdef __VISUALC__
     #pragma warning(default:4706)   // assignment within conditional expression

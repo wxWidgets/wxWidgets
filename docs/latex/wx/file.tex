@@ -200,6 +200,23 @@ Note that wxFile::Flush is not implemented on some Windows compilers
 due to a missing fsync function, which reduces the usefulness of this function
 (it can still be called but it will do nothing on unsupported compilers).
 
+\membersection{wxFile::GetFileType}\label{wxfilegetfiletype}
+
+\constfunc{wxFileTypeEnum}{GetFileType}{\void}
+
+Returns the type of the file. Possible return values are:
+
+\begin{verbatim}
+enum wxFileTypeEnum
+{
+  wxFILE_TYPE_UNKNOWN,
+  wxFILE_TYPE_DISK,     // a file supporting seeking to arbitrary offsets
+  wxFILE_TYPE_TERMINAL, // a tty
+  wxFILE_TYPE_PIPE      // a pipe
+};
+
+\end{verbatim}
+
 \membersection{wxFile::IsOpened}\label{wxfileisopened}
 
 \constfunc{bool}{IsOpened}{\void}

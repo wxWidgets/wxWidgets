@@ -85,6 +85,9 @@ public:
     virtual size_t GetSize() const;
     virtual wxFileOffset GetLength() const { return wxInvalidOffset; }
 
+    // returns true if the streams supports seeking to arbitrary offsets
+    virtual bool IsSeekable() const { return false; }
+
 #if WXWIN_COMPATIBILITY_2_2
     // deprecated, for compatibility only
     wxDEPRECATED( wxStreamError LastError() const );
@@ -479,6 +482,7 @@ public:
     // Position functions
     wxFileOffset SeekI(wxFileOffset pos, wxSeekMode mode = wxFromStart);
     wxFileOffset TellI() const;
+    bool IsSeekable() const { return m_parent_i_stream->IsSeekable(); }
 
     // the buffer given to the stream will be deleted by it
     void SetInputStreamBuffer(wxStreamBuffer *buffer);
@@ -514,6 +518,7 @@ public:
     // Position functions
     wxFileOffset SeekO(wxFileOffset pos, wxSeekMode mode = wxFromStart);
     wxFileOffset TellO() const;
+    bool IsSeekable() const { return m_parent_o_stream->IsSeekable(); }
 
     void Sync();
     bool Close();

@@ -1351,6 +1351,9 @@ bool wxZipInputStream::LoadEndRecord()
 //
 bool wxZipInputStream::FindEndRecord()
 {
+    if (!m_parent_i_stream->IsSeekable())
+        return false;
+
     // usually it's 22 bytes in size and the last thing in the file
     { 
         wxLogNull nolog;
@@ -1917,7 +1920,7 @@ bool wxZipOutputStream::DoCreate(wxZipEntry *entry, bool raw /*=false*/)
     ds << LOCAL_MAGIC;
 
     // and if this is the first entry test for seekability
-    if (m_headerOffset == 0) {
+    if (m_headerOffset == 0 && m_parent_o_stream->IsSeekable()) {
         bool logging = wxLog::IsEnabled();
         wxLogNull nolog;
         wxFileOffset here = m_parent_o_stream->TellO();

@@ -20,9 +20,9 @@ SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 TEST_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H \
 	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	-I.\..\include -I$(SETUPHDIR) -W -Wall -I. $(__DLLFLAG_p) $(CPPUNIT_CFLAGS) \
-	$(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0) -Wno-ctor-dtor-privacy \
-	$(CPPFLAGS) $(CXXFLAGS)
+	-I.\..\include -I$(SETUPHDIR) -W -Wall -I. $(__DLLFLAG_p) -DwxUSE_GUI=0 \
+	$(CPPUNIT_CFLAGS) $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0) \
+	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 TEST_OBJECTS =  \
 	$(OBJS)\test_dummy.o \
 	$(OBJS)\test_test.o \
@@ -33,6 +33,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_fileconftest.o \
 	$(OBJS)\test_filenametest.o \
 	$(OBJS)\test_filesystest.o \
+	$(OBJS)\test_filetype.o \
 	$(OBJS)\test_fontmaptest.o \
 	$(OBJS)\test_formatconvertertest.o \
 	$(OBJS)\test_hashes.o \
@@ -259,6 +260,9 @@ $(OBJS)\test_filenametest.o: ./filename/filenametest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_filesystest.o: ./filesys/filesystest.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_filetype.o: ./filetype/filetype.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_fontmaptest.o: ./fontmap/fontmaptest.cpp

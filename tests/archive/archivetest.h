@@ -38,6 +38,7 @@ public:
 
     int GetOptions() const { return m_options; }
     wxFileOffset GetLength() const { return m_size; }
+    bool IsSeekable() const { return (m_options & PipeOut) == 0; }
 
     // gives away the data, this stream is then empty, and can be reused
     void GetData(char*& data, size_t& size);
@@ -67,6 +68,7 @@ public:
 
     void Rewind();
     wxFileOffset GetLength() const { return m_size; }
+    bool IsSeekable() const { return (m_options & PipeIn) == 0; }
     void SetData(TestOutputStream& out);
 
 private:

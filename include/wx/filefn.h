@@ -122,6 +122,14 @@ enum wxSeekMode
   wxFromEnd
 };
 
+enum wxFileTypeEnum
+{
+  wxFILE_TYPE_UNKNOWN,
+  wxFILE_TYPE_DISK,     // a file supporting seeking to arbitrary offsets
+  wxFILE_TYPE_TERMINAL, // a tty
+  wxFILE_TYPE_PIPE      // a pipe
+};
+
 // ----------------------------------------------------------------------------
 // declare our versions of low level file functions: some compilers prepend
 // underscores to the usual names, some also have Unicode versions of them
@@ -140,6 +148,7 @@ enum wxSeekMode
     int wxWrite(int fd, const void *buf, unsigned int count);
     int wxEof(int fd);
     wxFileOffset wxSeek(int fd, wxFileOffset offset, int origin);
+    inline HANDLE wxGetOSFHandle(int fd) { return (HANDLE)fd; }
     #define wxLSeek wxSeek
     wxFileOffset wxTell(int fd);
     
@@ -343,6 +352,11 @@ enum wxSeekMode
     #endif
 #endif // platforms
 
+#if defined __WXMSW__ && !defined __WXWINCE__ 
+    // get the HANDLE associated with a file descriptor
+    inline HANDLE wxGetOSFHandle(int fd) { return (HANDLE)_get_osfhandle(fd); }
+#endif
+
 #if defined(__VISAGECPP__) && __IBMCPP__ >= 400
 //
 // VisualAge C++ V4.0 cannot have any external linkage const decs
@@ -448,6 +462,10 @@ WXDLLIMPEXP_BASE bool wxMkdir(const wxString& dir, int perm = 0777);
 
 // Remove directory. Flags reserved for future use.
 WXDLLIMPEXP_BASE bool wxRmdir(const wxString& dir, int flags = 0);
+
+// Return the type of an open file
+WXDLLIMPEXP_BASE wxFileTypeEnum wxGetFileType(int fd);
+inline wxFileTypeEnum wxGetFileType(FILE *fp) { return wxGetFileType(fileno(fp)); }
 
 // compatibility defines, don't use in new code
 #define wxDirExists wxPathExists

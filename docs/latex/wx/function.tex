@@ -108,6 +108,7 @@ the corresponding topic.
 \helpref{wxGetElapsedTime}{wxgetelapsedtime}\\
 \helpref{wxGetEmailAddress}{wxgetemailaddress}\\
 \helpref{wxGetEnv}{wxgetenv}\\
+\helpref{wxGetFileType}{wxgetfiletype}\\
 \helpref{wxGetFontFromUser}{wxgetfontfromuser}\\
 \helpref{wxGetFreeMemory}{wxgetfreememory}\\
 \helpref{wxGetFullHostName}{wxgetfullhostname}\\
@@ -1013,6 +1014,30 @@ This function is implemented for Win32,
 Mac OS and generic Unix provided the system has {\tt statfs()} function.
 
 This function first appeared in wxWidgets 2.3.2.
+
+
+\membersection{::wxGetFileType}\label{wxgetfiletype}
+
+\func{wxFileTypeEnum}{wxGetFileType}{\param{int }{fd}}
+
+\func{wxFileTypeEnum}{wxGetFileType}{\param{FILE *}{fp}}
+
+Returns the type of an open file. Possible return values are:
+
+\begin{verbatim}
+enum wxFileTypeEnum
+{
+  wxFILE_TYPE_UNKNOWN,
+  wxFILE_TYPE_DISK,     // a file supporting seeking to arbitrary offsets
+  wxFILE_TYPE_TERMINAL, // a tty
+  wxFILE_TYPE_PIPE      // a pipe
+};
+
+\end{verbatim}
+
+\wxheading{Include files}
+
+<wx/filefn.h>
 
 
 \membersection{::wxGetOSDirectory}\label{wxgetosdirectory}

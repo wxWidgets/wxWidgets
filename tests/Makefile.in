@@ -51,6 +51,7 @@ TEST_OBJECTS =  \
 	test_fileconftest.o \
 	test_filenametest.o \
 	test_filesystest.o \
+	test_filetype.o \
 	test_fontmaptest.o \
 	test_formatconvertertest.o \
 	test_hashes.o \
@@ -259,6 +260,9 @@ test_filenametest.o: $(srcdir)/filename/filenametest.cpp $(TEST_ODEP)
 
 test_filesystest.o: $(srcdir)/filesys/filesystest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/filesys/filesystest.cpp
+
+test_filetype.o: $(srcdir)/filetype/filetype.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/filetype/filetype.cpp
 
 test_fontmaptest.o: $(srcdir)/fontmap/fontmaptest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/fontmap/fontmaptest.cpp

@@ -30,7 +30,8 @@ SETUPHDIR = \
 TEST_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I.\..\include -I$(SETUPHDIR) -I. $(__DLLFLAG_p) \
-	$(CPPUNIT_CFLAGS) -Hu -H=$(OBJS)\testprec_test.csm $(CPPFLAGS) $(CXXFLAGS)
+	-DwxUSE_GUI=0 $(CPPUNIT_CFLAGS) -Hu -H=$(OBJS)\testprec_test.csm $(CPPFLAGS) \
+	$(CXXFLAGS)
 TEST_OBJECTS =  \
 	$(OBJS)\test_dummy.obj \
 	$(OBJS)\test_test.obj \
@@ -41,6 +42,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_fileconftest.obj \
 	$(OBJS)\test_filenametest.obj \
 	$(OBJS)\test_filesystest.obj \
+	$(OBJS)\test_filetype.obj \
 	$(OBJS)\test_fontmaptest.obj \
 	$(OBJS)\test_formatconvertertest.obj \
 	$(OBJS)\test_hashes.obj \
@@ -269,6 +271,9 @@ $(OBJS)\test_filenametest.obj: .\filename\filenametest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_filesystest.obj: .\filesys\filesystest.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
+
+$(OBJS)\test_filetype.obj: .\filetype\filetype.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_fontmaptest.obj: .\fontmap\fontmaptest.cpp

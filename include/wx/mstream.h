@@ -23,6 +23,7 @@ public:
     virtual ~wxMemoryInputStream();
     virtual wxFileOffset GetLength() const { return m_length; }
     virtual bool Eof() const;
+    virtual bool IsSeekable() const { return true; }
 
     char Peek();
 
@@ -51,6 +52,7 @@ public:
     wxMemoryOutputStream(void *data = NULL, size_t length = 0);
     virtual ~wxMemoryOutputStream();
     virtual wxFileOffset GetLength() const { return m_o_streambuf->GetLastAccess(); }
+    virtual bool IsSeekable() const { return true; }
 
     size_t CopyTo(void *buffer, size_t len) const;
 
