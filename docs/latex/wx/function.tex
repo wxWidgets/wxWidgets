@@ -2954,9 +2954,9 @@ wxWindows errors. See also \helpref{wxError}{wxerror}.
 
 \membersection{::wxLogError}\label{wxlogerror}
 
-\func{void}{wxLogError}{\param{const char *}{formatString}, \param{va\_list }{argPtr}}
-
 \func{void}{wxLogError}{\param{const char *}{formatString}, \param{...}{}}
+
+\func{void}{wxVLogError}{\param{const char *}{formatString}, \param{va\_list }{argPtr}}
 
 The functions to use for error messages, i.e. the messages that must be shown
 to the user. The default processing is to pop up a message box to inform the
@@ -2964,9 +2964,9 @@ user about it.
 
 \membersection{::wxLogFatalError}\label{wxlogfatalerror}
 
-\func{void}{wxLogFatalError}{\param{const char *}{formatString}, \param{va\_list }{argPtr}}
-
 \func{void}{wxLogFatalError}{\param{const char *}{formatString}, \param{...}{}}
+
+\func{void}{wxVLogFatalError}{\param{const char *}{formatString}, \param{va\_list }{argPtr}}
 
 Like \helpref{wxLogError}{wxlogerror}, but also
 terminates the program with the exit code 3. Using {\it abort()} standard
@@ -2974,18 +2974,18 @@ function also terminates the program with this exit code.
 
 \membersection{::wxLogWarning}\label{wxlogwarning}
 
-\func{void}{wxLogWarning}{\param{const char *}{formatString}, \param{va\_list }{argPtr}}
-
 \func{void}{wxLogWarning}{\param{const char *}{formatString}, \param{...}{}}
+
+\func{void}{wxVLogWarning}{\param{const char *}{formatString}, \param{va\_list }{argPtr}}
 
 For warnings - they are also normally shown to the user, but don't interrupt
 the program work.
 
 \membersection{::wxLogMessage}\label{wxlogmessage}
 
-\func{void}{wxLogMessage}{\param{const char *}{formatString}, \param{va\_list }{argPtr}}
-
 \func{void}{wxLogMessage}{\param{const char *}{formatString}, \param{...}{}}
+
+\func{void}{wxVLogMessage}{\param{const char *}{formatString}, \param{va\_list }{argPtr}}
 
 For all normal, informational messages. They also appear in a message box by
 default (but it can be changed). Notice that the standard behaviour is to not
@@ -2997,7 +2997,7 @@ meaningless.
 
 \func{void}{wxLogVerbose}{\param{const char *}{formatString}, \param{...}{}}
 
-\func{void}{wxLogVerbose}{\param{const char *}{formatString}, \param{va\_list }{argPtr}}
+\func{void}{wxVLogVerbose}{\param{const char *}{formatString}, \param{va\_list }{argPtr}}
 
 For verbose output. Normally, it is suppressed, but
 might be activated if the user wishes to know more details about the program
@@ -3005,13 +3005,13 @@ progress (another, but possibly confusing name for the same function is {\bf wxL
 
 \membersection{::wxLogStatus}\label{wxlogstatus}
 
-\func{void}{wxLogStatus}{\param{wxFrame *}{frame}, \param{const char *}{formatString}, \param{va\_list }{argPtr}}
-
 \func{void}{wxLogStatus}{\param{wxFrame *}{frame}, \param{const char *}{formatString}, \param{...}{}}
 
-\func{void}{wxLogStatus}{\param{const char *}{formatString}, \param{va\_list }{argPtr}}
+\func{void}{wxVLogStatus}{\param{wxFrame *}{frame}, \param{const char *}{formatString}, \param{va\_list }{argPtr}}
 
 \func{void}{wxLogStatus}{\param{const char *}{formatString}, \param{...}{}}
+
+\func{void}{wxVLogStatus}{\param{const char *}{formatString}, \param{va\_list }{argPtr}}
 
 Messages logged by these functions will appear in the statusbar of the {\it
 frame} or of the top level application window by default (i.e. when using
@@ -3023,7 +3023,7 @@ If the target frame doesn't have a statusbar, the message will be lost.
 
 \func{void}{wxLogSysError}{\param{const char *}{formatString}, \param{...}{}}
 
-\func{void}{wxLogSysError}{\param{const char *}{formatString}, \param{va\_list }{argPtr}}
+\func{void}{wxVLogSysError}{\param{const char *}{formatString}, \param{va\_list }{argPtr}}
 
 Mostly used by wxWindows itself, but might be handy for logging errors after
 system call (API function) failure. It logs the specified message text as well
@@ -3040,7 +3040,7 @@ of this function takes the error code explicitly as the first argument.
 
 \func{void}{wxLogDebug}{\param{const char *}{formatString}, \param{...}{}}
 
-\func{void}{wxLogDebug}{\param{const char *}{formatString}, \param{va\_list }{argPtr}}
+\func{void}{wxVLogDebug}{\param{const char *}{formatString}, \param{va\_list }{argPtr}}
 
 The right functions for debug output. They only do something in debug
 mode (when the preprocessor symbol \_\_WXDEBUG\_\_ is defined) and expand to
@@ -3049,15 +3049,16 @@ nothing in release mode (otherwise).
 \membersection{::wxLogTrace}\label{wxlogtrace}
 
 \func{void}{wxLogTrace}{\param{const char *}{formatString}, \param{...}{}}
-\func{void}{wxLogTrace}{\param{const char *}{formatString}, \param{va\_list }{argPtr}}
+
+\func{void}{wxVLogTrace}{\param{const char *}{formatString}, \param{va\_list }{argPtr}}
 
 \func{void}{wxLogTrace}{\param{const char *}{mask}, \param{const char *}{formatString}, \param{...}{}}
 
-\func{void}{wxLogTrace}{\param{const char *}{mask}, \param{const char *}{formatString}, \param{va\_list }{argPtr}}
+\func{void}{wxVLogTrace}{\param{const char *}{mask}, \param{const char *}{formatString}, \param{va\_list }{argPtr}}
 
 \func{void}{wxLogTrace}{\param{wxTraceMask}{ mask}, \param{const char *}{formatString}, \param{...}{}}
 
-\func{void}{wxLogTrace}{\param{wxTraceMask}{ mask}, \param{const char *}{formatString}, \param{va\_list }{argPtr}}
+\func{void}{wxVLogTrace}{\param{wxTraceMask}{ mask}, \param{const char *}{formatString}, \param{va\_list }{argPtr}}
 
 As {\bf wxLogDebug}, trace functions only do something in debug build and
 expand to nothing in the release one. The reason for making

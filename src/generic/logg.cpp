@@ -177,7 +177,7 @@ static wxFrame *gs_pFrame = NULL; // FIXME MT-unsafe
 
 // accepts an additional argument which tells to which frame the output should
 // be directed
-void wxLogStatus(wxFrame *pFrame, const wxChar *szFormat, va_list argptr)
+void wxVLogStatus(wxFrame *pFrame, const wxChar *szFormat, va_list argptr)
 {
   wxString msg;
 
@@ -196,7 +196,7 @@ void wxLogStatus(wxFrame *pFrame, const wxChar *szFormat, ...)
 {
     va_list argptr;
     va_start(argptr, szFormat);
-    wxLogStatus(pFrame, szFormat, argptr);
+    wxVLogStatus(pFrame, szFormat, argptr);
     va_end(argptr);
 }
 
