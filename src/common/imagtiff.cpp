@@ -423,13 +423,7 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
                         bitmask <<= 1;
                     }
 
-                    // FIXME: what's this??
-#ifdef __WXGTK__
-                    buf[column]=~reverse;
-
-#else
-                    buf[column]=reverse;
-#endif
+                    buf[column] = reverse;
                 }
             }
         }
