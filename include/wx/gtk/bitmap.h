@@ -20,11 +20,12 @@
 #include "wx/string.h"
 #include "wx/palette.h"
 #include "wx/gdiobj.h"
-#include "wx/rawbmp.h"
 
 #ifdef __WXGTK20__
 typedef struct _GdkPixbuf GdkPixbuf;
 #endif
+
+class WXDLLEXPORT wxPixelDataBase;
 
 //-----------------------------------------------------------------------------
 // classes
