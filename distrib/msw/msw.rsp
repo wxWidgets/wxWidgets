@@ -25,6 +25,8 @@ tools/gettext/*.sed
 src/makeb32.env
 src/makeprog.b32
 src/makelib.b32
+src/makelib.sc
+src/makeprog.sc
 src/makebcc.env
 src/makeprog.bcc
 src/makelib.bcc
