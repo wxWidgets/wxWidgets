@@ -146,18 +146,18 @@ GridFrame::GridFrame()
     fileMenu->Append( wxID_EXIT, _T("E&xit\tAlt-X") );
 
     wxMenu *viewMenu = new wxMenu;
-    viewMenu->Append( ID_TOGGLEROWLABELS,  _T("&Row labels"), _T(""), wxITEM_CHECK );
-    viewMenu->Append( ID_TOGGLECOLLABELS,  _T("&Col labels"), _T(""), wxITEM_CHECK );
-    viewMenu->Append( ID_TOGGLEEDIT,  _T("&Editable"), _T(""), wxITEM_CHECK );
-    viewMenu->Append( ID_TOGGLEROWSIZING, _T("Ro&w drag-resize"), _T(""), wxITEM_CHECK );
-    viewMenu->Append( ID_TOGGLECOLSIZING, _T("C&ol drag-resize"), _T(""), wxITEM_CHECK );
-    viewMenu->Append( ID_TOGGLEGRIDSIZING, _T("&Grid drag-resize"), _T(""), wxITEM_CHECK );
-    viewMenu->Append( ID_TOGGLEGRIDLINES, _T("&Grid Lines"), _T(""), wxITEM_CHECK );
-    viewMenu->Append( ID_SET_HIGHLIGHT_WIDTH, _T("&Set Cell Highlight Width..."), _T("") );
-    viewMenu->Append( ID_SET_RO_HIGHLIGHT_WIDTH, _T("&Set Cell RO Highlight Width..."), _T("") );
+    viewMenu->Append( ID_TOGGLEROWLABELS,  _T("&Row labels"), wxEmptyString, wxITEM_CHECK );
+    viewMenu->Append( ID_TOGGLECOLLABELS,  _T("&Col labels"), wxEmptyString, wxITEM_CHECK );
+    viewMenu->Append( ID_TOGGLEEDIT,  _T("&Editable"), wxEmptyString, wxITEM_CHECK );
+    viewMenu->Append( ID_TOGGLEROWSIZING, _T("Ro&w drag-resize"), wxEmptyString, wxITEM_CHECK );
+    viewMenu->Append( ID_TOGGLECOLSIZING, _T("C&ol drag-resize"), wxEmptyString, wxITEM_CHECK );
+    viewMenu->Append( ID_TOGGLEGRIDSIZING, _T("&Grid drag-resize"), wxEmptyString, wxITEM_CHECK );
+    viewMenu->Append( ID_TOGGLEGRIDLINES, _T("&Grid Lines"), wxEmptyString, wxITEM_CHECK );
+    viewMenu->Append( ID_SET_HIGHLIGHT_WIDTH, _T("&Set Cell Highlight Width...") );
+    viewMenu->Append( ID_SET_RO_HIGHLIGHT_WIDTH, _T("&Set Cell RO Highlight Width...") );
     viewMenu->Append( ID_AUTOSIZECOLS, _T("&Auto-size cols") );
-    viewMenu->Append( ID_CELLOVERFLOW, _T("&Overflow cells"), _T(""), wxITEM_CHECK );
-    viewMenu->Append( ID_RESIZECELL, _T("&Resize cell (7,1)"), _T(""), wxITEM_CHECK );
+    viewMenu->Append( ID_CELLOVERFLOW, _T("&Overflow cells"), wxEmptyString, wxITEM_CHECK );
+    viewMenu->Append( ID_RESIZECELL, _T("&Resize cell (7,1)"), wxEmptyString, wxITEM_CHECK );
 
     wxMenu *rowLabelMenu = new wxMenu;
 
@@ -344,7 +344,6 @@ GridFrame::GridFrame()
                    0,
                    wxEXPAND );
 
-    SetAutoLayout(true);
     SetSizer( topSizer );
 
     topSizer->Fit( this );
@@ -761,7 +760,7 @@ void GridFrame::OnAddToSelectToggle(wxCommandEvent& event)
 
 void GridFrame::OnLabelLeftClick( wxGridEvent& ev )
 {
-    logBuf = _T("");
+    logBuf = wxEmptyString;
     if ( ev.GetRow() != -1 )
     {
         logBuf << _T("Left click on row label ") << ev.GetRow();
@@ -787,7 +786,7 @@ void GridFrame::OnLabelLeftClick( wxGridEvent& ev )
 
 void GridFrame::OnCellLeftClick( wxGridEvent& ev )
 {
-    logBuf = _T("");
+    logBuf = wxEmptyString;
     logBuf << _T("Left click at row ") << ev.GetRow()
            << _T(" col ") << ev.GetCol();
     wxLogMessage( wxT("%s"), logBuf.c_str() );
@@ -801,7 +800,7 @@ void GridFrame::OnCellLeftClick( wxGridEvent& ev )
 
 void GridFrame::OnRowSize( wxGridSizeEvent& ev )
 {
-    logBuf = _T("");
+    logBuf = wxEmptyString;
     logBuf << _T("Resized row ") << ev.GetRowOrCol();
     wxLogMessage( wxT("%s"), logBuf.c_str() );
 
@@ -811,7 +810,7 @@ void GridFrame::OnRowSize( wxGridSizeEvent& ev )
 
 void GridFrame::OnColSize( wxGridSizeEvent& ev )
 {
-    logBuf = _T("");
+    logBuf = wxEmptyString;
     logBuf << _T("Resized col ") << ev.GetRowOrCol();
     wxLogMessage( wxT("%s"), logBuf.c_str() );
 
@@ -821,7 +820,7 @@ void GridFrame::OnColSize( wxGridSizeEvent& ev )
 
 void GridFrame::OnSelectCell( wxGridEvent& ev )
 {
-    logBuf = _T("");
+    logBuf = wxEmptyString;
     if ( ev.Selecting() )
         logBuf << _T("Selected ");
     else
@@ -841,7 +840,7 @@ void GridFrame::OnSelectCell( wxGridEvent& ev )
 
 void GridFrame::OnRangeSelected( wxGridRangeSelectEvent& ev )
 {
-    logBuf = _T("");
+    logBuf = wxEmptyString;
     if ( ev.Selecting() )
         logBuf << _T("Selected ");
     else
@@ -861,7 +860,7 @@ void GridFrame::OnRangeSelected( wxGridRangeSelectEvent& ev )
 
 void GridFrame::OnCellValueChanged( wxGridEvent& ev )
 {
-    logBuf = _T("");
+    logBuf = wxEmptyString;
     logBuf  << _T("Value changed for cell at")
             << _T(" row ") << ev.GetRow()
             << _T(" col ") << ev.GetCol();

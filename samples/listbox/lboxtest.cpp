@@ -400,14 +400,14 @@ LboxTestFrame::LboxTestFrame(const wxString& title)
 
     sizerRow = new wxBoxSizer(wxHORIZONTAL);
     btn = new wxButton(panel, LboxTest_Change, _T("C&hange current"));
-    m_textChange = new wxTextCtrl(panel, LboxTest_ChangeText, _T(""));
+    m_textChange = new wxTextCtrl(panel, LboxTest_ChangeText, wxEmptyString);
     sizerRow->Add(btn, 0, wxRIGHT, 5);
     sizerRow->Add(m_textChange, 1, wxLEFT, 5);
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
     sizerRow = new wxBoxSizer(wxHORIZONTAL);
     btn = new wxButton(panel, LboxTest_Delete, _T("&Delete this item"));
-    m_textDelete = new wxTextCtrl(panel, LboxTest_DeleteText, _T(""));
+    m_textDelete = new wxTextCtrl(panel, LboxTest_DeleteText, wxEmptyString);
     sizerRow->Add(btn, 0, wxRIGHT, 5);
     sizerRow->Add(m_textDelete, 1, wxLEFT, 5);
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
@@ -457,7 +457,6 @@ LboxTestFrame::LboxTestFrame(const wxString& title)
     Reset();
     m_dirty = false;
 
-    panel->SetAutoLayout(true);
     panel->SetSizer(sizerTop);
 
     sizerTop->Fit(this);

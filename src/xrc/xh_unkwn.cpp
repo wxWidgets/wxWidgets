@@ -68,7 +68,6 @@ void wxUnknownControlContainer::AddChild(wxWindowBase *child)
     wxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
     sizer->Add((wxWindow*)child, 1, wxEXPAND);
     SetSizer(sizer);
-    SetAutoLayout(true);
     Layout();
 }
 

@@ -223,7 +223,6 @@ wxObject* wxSizerXmlHandler::Handle_sizer()
 
     if (m_parentSizer == NULL) // setup window:
     {
-        m_parentAsWindow->SetAutoLayout(true);
         m_parentAsWindow->SetSizer(sizer);
 
         wxXmlNode *nd = m_node;

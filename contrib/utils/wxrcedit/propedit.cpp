@@ -66,7 +66,6 @@ void PropEditCtrl::BeginEdit(const wxRect& rect, wxTreeItemId ti)
         if (HasClearButton())
             sz->Add(new wxButton(this, ID_CLEAR, _T("X"), wxDefaultPosition,
                     wxSize(16,wxDefaultSize.y)));
-        SetAutoLayout(true);
         SetSizer(sz);
         m_Created = true;
     }

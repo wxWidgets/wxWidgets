@@ -218,7 +218,7 @@ void wxPropertyFormView::OnCommand(wxWindow& win, wxCommandEvent& event)
     if (!m_propertySheet)
         return;
 
-    if (win.GetName() == wxT(""))
+    if (win.GetName().empty())
         return;
 
     if (wxStrcmp(win.GetName(), wxT("ok")) == 0)

@@ -492,7 +492,6 @@ MyAboutDialog::MyAboutDialog(wxWindow *parent)
     sizerTop->Add(-1, 10, 1, wxGROW);
     sizerTop->Add(statbarBottom, 0, wxGROW);
 
-    SetAutoLayout(true);
     SetSizer(sizerTop);
 
     sizerTop->Fit(this);
@@ -620,7 +619,7 @@ void MyStatusBar::DoToggle()
         m_statbmp->Refresh();
 #endif
 
-        SetStatusText(_T(""), Field_Clock);
+        SetStatusText(wxEmptyString, Field_Clock);
     }
 }
 

@@ -176,11 +176,11 @@ void wxHtmlHelpFrame::Init(wxHtmlHelpData* data)
     if (data)
     {
         m_Data = data;
-        m_DataCreated = FALSE;
+        m_DataCreated = false;
     } else
     {
         m_Data = new wxHtmlHelpData();
-        m_DataCreated = TRUE;
+        m_DataCreated = true;
     }
 
     m_ContentsBox = NULL;
@@ -208,7 +208,7 @@ void wxHtmlHelpFrame::Init(wxHtmlHelpData* data)
     m_Cfg.w = 700;
     m_Cfg.h = 480;
     m_Cfg.sashpos = 240;
-    m_Cfg.navig_on = TRUE;
+    m_Cfg.navig_on = true;
 
     m_NormalFonts = m_FixedFonts = NULL;
     m_NormalFace = m_FixedFace = wxEmptyString;
@@ -223,7 +223,7 @@ void wxHtmlHelpFrame::Init(wxHtmlHelpData* data)
 #endif
 
     m_PagesHash = NULL;
-    m_UpdateContents = TRUE;
+    m_UpdateContents = true;
     m_helpController = (wxHelpControllerBase*) NULL;
 }
 
@@ -251,8 +251,8 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
     if (m_Config)
         ReadCustomization(m_Config, m_ConfigRoot);
 
-    wxFrame::Create(parent, id, _("Help"), 
-                    wxPoint(m_Cfg.x, m_Cfg.y), wxSize(m_Cfg.w, m_Cfg.h), 
+    wxFrame::Create(parent, id, _("Help"),
+                    wxPoint(m_Cfg.x, m_Cfg.y), wxSize(m_Cfg.w, m_Cfg.h),
                     wxDEFAULT_FRAME_STYLE, wxT("wxHtmlHelp"));
 
     GetPosition(&m_Cfg.x, &m_Cfg.y);
@@ -304,15 +304,14 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
         m_Splitter = new wxSplitterWindow(this);
 
         m_HtmlWin = new wxHtmlHelpHtmlWindow(this, m_Splitter);
-        m_NavigPan = new wxPanel(m_Splitter, -1);
+        m_NavigPan = new wxPanel(m_Splitter, wxID_ANY);
         m_NavigNotebook = new wxNotebook(m_NavigPan, wxID_HTML_NOTEBOOK,
                                          wxDefaultPosition, wxDefaultSize);
         wxNotebookSizer *nbs = new wxNotebookSizer(m_NavigNotebook);
-        
+
         navigSizer = new wxBoxSizer(wxVERTICAL);
         navigSizer->Add(nbs, 1, wxEXPAND);
 
-        m_NavigPan->SetAutoLayout(TRUE);
         m_NavigPan->SetSizer(navigSizer);
     }
     else
@@ -330,17 +329,16 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
     {
         wxWindow *dummy = new wxPanel(m_NavigNotebook, wxID_HTML_INDEXPAGE);
         wxSizer *topsizer = new wxBoxSizer(wxVERTICAL);
-        
+
         topsizer->Add(0, 10);
-        
-        dummy->SetAutoLayout(TRUE);
+
         dummy->SetSizer(topsizer);
 
         if ( style & wxHF_BOOKMARKS )
         {
-            m_Bookmarks = new wxComboBox(dummy, wxID_HTML_BOOKMARKSLIST, 
+            m_Bookmarks = new wxComboBox(dummy, wxID_HTML_BOOKMARKSLIST,
                                          wxEmptyString,
-                                         wxDefaultPosition, wxDefaultSize, 
+                                         wxDefaultPosition, wxDefaultSize,
                                          0, NULL, wxCB_READONLY | wxCB_SORT);
             m_Bookmarks->Append(_("(bookmarks)"));
             for (unsigned i = 0; i < m_BookmarksNames.GetCount(); i++)
@@ -348,11 +346,11 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
             m_Bookmarks->SetSelection(0);
 
             wxBitmapButton *bmpbt1, *bmpbt2;
-            bmpbt1 = new wxBitmapButton(dummy, wxID_HTML_BOOKMARKSADD, 
-                                 wxArtProvider::GetBitmap(wxART_ADD_BOOKMARK, 
+            bmpbt1 = new wxBitmapButton(dummy, wxID_HTML_BOOKMARKSADD,
+                                 wxArtProvider::GetBitmap(wxART_ADD_BOOKMARK,
                                                           wxART_HELP_BROWSER));
-            bmpbt2 = new wxBitmapButton(dummy, wxID_HTML_BOOKMARKSREMOVE, 
-                                 wxArtProvider::GetBitmap(wxART_DEL_BOOKMARK, 
+            bmpbt2 = new wxBitmapButton(dummy, wxID_HTML_BOOKMARKSREMOVE,
+                                 wxArtProvider::GetBitmap(wxART_DEL_BOOKMARK,
                                                           wxART_HELP_BROWSER));
 #if wxUSE_TOOLTIPS
             bmpbt1->SetToolTip(_("Add current page to bookmarks"));
@@ -360,22 +358,22 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
 #endif // wxUSE_TOOLTIPS
 
             wxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
-            
+
             sizer->Add(m_Bookmarks, 1, wxALIGN_CENTRE_VERTICAL | wxRIGHT, 5);
             sizer->Add(bmpbt1, 0, wxALIGN_CENTRE_VERTICAL | wxRIGHT, 2);
             sizer->Add(bmpbt2, 0, wxALIGN_CENTRE_VERTICAL, 0);
-            
+
             topsizer->Add(sizer, 0, wxEXPAND | wxLEFT | wxBOTTOM | wxRIGHT, 10);
         }
 
         m_ContentsBox = new wxTreeCtrl(dummy, wxID_HTML_TREECTRL,
                                        wxDefaultPosition, wxDefaultSize,
-                                       wxSUNKEN_BORDER | 
+                                       wxSUNKEN_BORDER |
                                        wxTR_HAS_BUTTONS | wxTR_HIDE_ROOT |
                                        wxTR_LINES_AT_ROOT);
 
         m_ContentsBox->AssignImageList(ContentsImageList);
-        
+
         topsizer->Add(m_ContentsBox, 1,
                       wxEXPAND | wxLEFT | wxBOTTOM | wxRIGHT,
                       2);
@@ -387,24 +385,23 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
     // index listbox panel?
     if ( style & wxHF_INDEX )
     {
-        wxWindow *dummy = new wxPanel(m_NavigNotebook, wxID_HTML_INDEXPAGE);       
+        wxWindow *dummy = new wxPanel(m_NavigNotebook, wxID_HTML_INDEXPAGE);
         wxSizer *topsizer = new wxBoxSizer(wxVERTICAL);
 
-        dummy->SetAutoLayout(TRUE);
         dummy->SetSizer(topsizer);
 
-        m_IndexText = new wxTextCtrl(dummy, wxID_HTML_INDEXTEXT, wxEmptyString, 
-                                     wxDefaultPosition, wxDefaultSize, 
+        m_IndexText = new wxTextCtrl(dummy, wxID_HTML_INDEXTEXT, wxEmptyString,
+                                     wxDefaultPosition, wxDefaultSize,
                                      wxTE_PROCESS_ENTER);
         m_IndexButton = new wxButton(dummy, wxID_HTML_INDEXBUTTON, _("Find"));
-        m_IndexButtonAll = new wxButton(dummy, wxID_HTML_INDEXBUTTONALL, 
+        m_IndexButtonAll = new wxButton(dummy, wxID_HTML_INDEXBUTTONALL,
                                         _("Show all"));
-        m_IndexCountInfo = new wxStaticText(dummy, wxID_HTML_COUNTINFO, 
+        m_IndexCountInfo = new wxStaticText(dummy, wxID_HTML_COUNTINFO,
                                             wxEmptyString, wxDefaultPosition,
-                                            wxDefaultSize, 
+                                            wxDefaultSize,
                                             wxALIGN_RIGHT | wxST_NO_AUTORESIZE);
-        m_IndexList = new wxListBox(dummy, wxID_HTML_INDEXLIST, 
-                                    wxDefaultPosition, wxDefaultSize, 
+        m_IndexList = new wxListBox(dummy, wxID_HTML_INDEXLIST,
+                                    wxDefaultPosition, wxDefaultSize,
                                     0, NULL, wxLB_SINGLE);
 
 #if wxUSE_TOOLTIPS
@@ -416,7 +413,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
         wxSizer *btsizer = new wxBoxSizer(wxHORIZONTAL);
         btsizer->Add(m_IndexButton, 0, wxRIGHT, 2);
         btsizer->Add(m_IndexButtonAll);
-        topsizer->Add(btsizer, 0, 
+        topsizer->Add(btsizer, 0,
                       wxALIGN_RIGHT | wxLEFT | wxRIGHT | wxBOTTOM, 10);
         topsizer->Add(m_IndexCountInfo, 0, wxEXPAND | wxLEFT | wxRIGHT, 2);
         topsizer->Add(m_IndexList, 1, wxEXPAND | wxALL, 2);
@@ -428,28 +425,27 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
     // search list panel?
     if ( style & wxHF_SEARCH )
     {
-        wxWindow *dummy = new wxPanel(m_NavigNotebook, wxID_HTML_INDEXPAGE);       
+        wxWindow *dummy = new wxPanel(m_NavigNotebook, wxID_HTML_INDEXPAGE);
         wxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 
-        dummy->SetAutoLayout(TRUE);
         dummy->SetSizer(sizer);
 
-        m_SearchText = new wxTextCtrl(dummy, wxID_HTML_SEARCHTEXT, 
-                                      wxEmptyString, 
-                                      wxDefaultPosition, wxDefaultSize, 
+        m_SearchText = new wxTextCtrl(dummy, wxID_HTML_SEARCHTEXT,
+                                      wxEmptyString,
+                                      wxDefaultPosition, wxDefaultSize,
                                       wxTE_PROCESS_ENTER);
-        m_SearchChoice = new wxChoice(dummy, wxID_HTML_SEARCHCHOICE, 
+        m_SearchChoice = new wxChoice(dummy, wxID_HTML_SEARCHCHOICE,
                                       wxDefaultPosition, wxDefaultSize);
-        m_SearchCaseSensitive = new wxCheckBox(dummy, -1, _("Case sensitive"));
-        m_SearchWholeWords = new wxCheckBox(dummy, -1, _("Whole words only"));
+        m_SearchCaseSensitive = new wxCheckBox(dummy, wxID_ANY, _("Case sensitive"));
+        m_SearchWholeWords = new wxCheckBox(dummy, wxID_ANY, _("Whole words only"));
         m_SearchButton = new wxButton(dummy, wxID_HTML_SEARCHBUTTON, _("Search"));
 #if wxUSE_TOOLTIPS
         m_SearchButton->SetToolTip(_("Search contents of help book(s) for all occurences of the text you typed above"));
 #endif //wxUSE_TOOLTIPS
-        m_SearchList = new wxListBox(dummy, wxID_HTML_SEARCHLIST, 
-                                     wxDefaultPosition, wxDefaultSize, 
+        m_SearchList = new wxListBox(dummy, wxID_HTML_SEARCHLIST,
+                                     wxDefaultPosition, wxDefaultSize,
                                      0, NULL, wxLB_SINGLE);
-                                     
+
         sizer->Add(m_SearchText, 0, wxEXPAND | wxALL, 10);
         sizer->Add(m_SearchChoice, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 10);
         sizer->Add(m_SearchCaseSensitive, 0, wxLEFT | wxRIGHT, 10);
@@ -461,7 +457,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
         m_SearchPage = notebook_page;
     }
 
-    m_HtmlWin->Show(TRUE);
+    m_HtmlWin->Show();
 
     RefreshLists();
 
@@ -480,24 +476,24 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
 
         if ( m_Cfg.navig_on )
         {
-            m_NavigPan->Show(TRUE);
+            m_NavigPan->Show();
             m_Splitter->SplitVertically(m_NavigPan, m_HtmlWin, m_Cfg.sashpos);
         }
         else
         {
-            m_NavigPan->Show(FALSE);
+            m_NavigPan->Show(false);
             m_Splitter->Initialize(m_HtmlWin);
         }
     }
-    
+
     // Reduce flicker by updating the splitter pane sizes before the
     // frame is shown
     wxSizeEvent sizeEvent(GetSize(), GetId());
     ProcessEvent(sizeEvent);
-    
+
     m_Splitter->UpdateSize();
-    
-    return TRUE;
+
+    return true;
 }
 
 wxHtmlHelpFrame::~wxHtmlHelpFrame()
@@ -507,7 +503,7 @@ wxHtmlHelpFrame::~wxHtmlHelpFrame()
         delete m_Data;
     if (m_NormalFonts) delete m_NormalFonts;
     if (m_FixedFonts) delete m_FixedFonts;
-    if (m_PagesHash) 
+    if (m_PagesHash)
     {
         WX_CLEAR_HASH_TABLE(*m_PagesHash);
         delete m_PagesHash;
@@ -521,23 +517,23 @@ wxHtmlHelpFrame::~wxHtmlHelpFrame()
 #if wxUSE_TOOLBAR
 void wxHtmlHelpFrame::AddToolbarButtons(wxToolBar *toolBar, int style)
 {
-    wxBitmap wpanelBitmap = 
+    wxBitmap wpanelBitmap =
         wxArtProvider::GetBitmap(wxART_HELP_SIDE_PANEL, wxART_HELP_BROWSER);
-    wxBitmap wbackBitmap = 
+    wxBitmap wbackBitmap =
         wxArtProvider::GetBitmap(wxART_GO_BACK, wxART_HELP_BROWSER);
-    wxBitmap wforwardBitmap = 
+    wxBitmap wforwardBitmap =
         wxArtProvider::GetBitmap(wxART_GO_FORWARD, wxART_HELP_BROWSER);
-    wxBitmap wupnodeBitmap = 
+    wxBitmap wupnodeBitmap =
         wxArtProvider::GetBitmap(wxART_GO_TO_PARENT, wxART_HELP_BROWSER);
-    wxBitmap wupBitmap = 
+    wxBitmap wupBitmap =
         wxArtProvider::GetBitmap(wxART_GO_UP, wxART_HELP_BROWSER);
-    wxBitmap wdownBitmap = 
+    wxBitmap wdownBitmap =
         wxArtProvider::GetBitmap(wxART_GO_DOWN, wxART_HELP_BROWSER);
-    wxBitmap wopenBitmap = 
+    wxBitmap wopenBitmap =
         wxArtProvider::GetBitmap(wxART_FILE_OPEN, wxART_HELP_BROWSER);
-    wxBitmap wprintBitmap = 
+    wxBitmap wprintBitmap =
         wxArtProvider::GetBitmap(wxART_PRINT, wxART_HELP_BROWSER);
-    wxBitmap woptionsBitmap = 
+    wxBitmap woptionsBitmap =
         wxArtProvider::GetBitmap(wxART_HELP_SETTINGS, wxART_HELP_BROWSER);
 
     wxASSERT_MSG( (wpanelBitmap.Ok() && wbackBitmap.Ok() &&
@@ -549,26 +545,26 @@ void wxHtmlHelpFrame::AddToolbarButtons(wxToolBar *toolBar, int style)
 
 
     toolBar->AddTool(wxID_HTML_PANEL, wpanelBitmap, wxNullBitmap,
-                       FALSE, -1, -1, (wxObject *) NULL,
+                       false, -1, -1, (wxObject *) NULL,
                        _("Show/hide navigation panel"));
 
     toolBar->AddSeparator();
     toolBar->AddTool(wxID_HTML_BACK, wbackBitmap, wxNullBitmap,
-                       FALSE, -1, -1, (wxObject *) NULL,
+                       false, -1, -1, (wxObject *) NULL,
                        _("Go back"));
     toolBar->AddTool(wxID_HTML_FORWARD, wforwardBitmap, wxNullBitmap,
-                       FALSE, -1, -1, (wxObject *) NULL,
+                       false, -1, -1, (wxObject *) NULL,
                        _("Go forward"));
     toolBar->AddSeparator();
 
     toolBar->AddTool(wxID_HTML_UPNODE, wupnodeBitmap, wxNullBitmap,
-                       FALSE, -1, -1, (wxObject *) NULL,
+                       false, -1, -1, (wxObject *) NULL,
                        _("Go one level up in document hierarchy"));
     toolBar->AddTool(wxID_HTML_UP, wupBitmap, wxNullBitmap,
-                       FALSE, -1, -1, (wxObject *) NULL,
+                       false, -1, -1, (wxObject *) NULL,
                        _("Previous page"));
     toolBar->AddTool(wxID_HTML_DOWN, wdownBitmap, wxNullBitmap,
-                       FALSE, -1, -1, (wxObject *) NULL,
+                       false, -1, -1, (wxObject *) NULL,
                        _("Next page"));
 
     if ((style & wxHF_PRINT) || (style & wxHF_OPEN_FILES))
@@ -576,19 +572,19 @@ void wxHtmlHelpFrame::AddToolbarButtons(wxToolBar *toolBar, int style)
 
     if (style & wxHF_OPEN_FILES)
         toolBar->AddTool(wxID_HTML_OPENFILE, wopenBitmap, wxNullBitmap,
-                           FALSE, -1, -1, (wxObject *) NULL,
+                           false, -1, -1, (wxObject *) NULL,
                            _("Open HTML document"));
 
 #if wxUSE_PRINTING_ARCHITECTURE
     if (style & wxHF_PRINT)
         toolBar->AddTool(wxID_HTML_PRINT, wprintBitmap, wxNullBitmap,
-                           FALSE, -1, -1, (wxObject *) NULL,
+                           false, -1, -1, (wxObject *) NULL,
                            _("Print this page"));
 #endif
 
     toolBar->AddSeparator();
     toolBar->AddTool(wxID_HTML_OPTIONS, woptionsBitmap, wxNullBitmap,
-                       FALSE, -1, -1, (wxObject *) NULL,
+                       false, -1, -1, (wxObject *) NULL,
                        _("Display options dialog"));
 }
 #endif //wxUSE_TOOLBAR
@@ -609,9 +605,10 @@ bool wxHtmlHelpFrame::Display(const wxString& x)
     {
         m_HtmlWin->LoadPage(url);
         NotifyPageChanged();
-        return TRUE;
+        return true;
     }
-    return FALSE;
+
+    return false;
 }
 
 bool wxHtmlHelpFrame::Display(const int id)
@@ -621,9 +618,10 @@ bool wxHtmlHelpFrame::Display(const int id)
     {
         m_HtmlWin->LoadPage(url);
         NotifyPageChanged();
-        return TRUE;
+        return true;
     }
-    return FALSE;
+
+    return false;
 }
 
 
@@ -631,22 +629,26 @@ bool wxHtmlHelpFrame::Display(const int id)
 bool wxHtmlHelpFrame::DisplayContents()
 {
     if (! m_ContentsBox)
-        return FALSE;
+        return false;
+
     if (!m_Splitter->IsSplit())
     {
-        m_NavigPan->Show(TRUE);
-        m_HtmlWin->Show(TRUE);
+        m_NavigPan->Show();
+        m_HtmlWin->Show();
         m_Splitter->SplitVertically(m_NavigPan, m_HtmlWin, m_Cfg.sashpos);
-        m_Cfg.navig_on = TRUE;
+        m_Cfg.navig_on = true;
     }
+
     m_NavigNotebook->SetSelection(0);
+
     if (m_Data->GetBookRecArray().GetCount() > 0)
     {
         wxHtmlBookRecord& book = m_Data->GetBookRecArray()[0];
         if (!book.GetStart().IsEmpty())
             m_HtmlWin->LoadPage(book.GetFullPath(book.GetStart()));
     }
-    return TRUE;
+
+    return true;
 }
 
 
@@ -654,21 +656,25 @@ bool wxHtmlHelpFrame::DisplayContents()
 bool wxHtmlHelpFrame::DisplayIndex()
 {
     if (! m_IndexList)
-        return FALSE;
+        return false;
+
     if (!m_Splitter->IsSplit())
     {
-        m_NavigPan->Show(TRUE);
-        m_HtmlWin->Show(TRUE);
+        m_NavigPan->Show();
+        m_HtmlWin->Show();
         m_Splitter->SplitVertically(m_NavigPan, m_HtmlWin, m_Cfg.sashpos);
     }
+
     m_NavigNotebook->SetSelection(1);
+
     if (m_Data->GetBookRecArray().GetCount() > 0)
     {
         wxHtmlBookRecord& book = m_Data->GetBookRecArray()[0];
         if (!book.GetStart().IsEmpty())
             m_HtmlWin->LoadPage(book.GetFullPath(book.GetStart()));
     }
-    return TRUE;
+
+    return true;
 }
 
 
@@ -695,8 +701,8 @@ bool wxHtmlHelpFrame::KeywordSearch(const wxString& keyword,
 
     if (!m_Splitter->IsSplit())
     {
-        m_NavigPan->Show(TRUE);
-        m_HtmlWin->Show(TRUE);
+        m_NavigPan->Show();
+        m_HtmlWin->Show();
         m_Splitter->SplitVertically(m_NavigPan, m_HtmlWin, m_Cfg.sashpos);
     }
 
@@ -705,7 +711,7 @@ bool wxHtmlHelpFrame::KeywordSearch(const wxString& keyword,
         m_NavigNotebook->SetSelection(m_SearchPage);
         m_SearchList->Clear();
         m_SearchText->SetValue(keyword);
-        m_SearchButton->Enable(false);
+        m_SearchButton->Disable();
 
         if (m_SearchChoice->GetSelection() != 0)
             book = m_SearchChoice->GetStringSelection();
@@ -726,9 +732,9 @@ bool wxHtmlHelpFrame::KeywordSearch(const wxString& keyword,
         while (status.IsActive())
         {
             curi = status.GetCurIndex();
-            if (curi % 32 == 0 
+            if (curi % 32 == 0
 #if wxUSE_PROGRESSDLG
-                && progress.Update(curi) == FALSE
+                && !progress.Update(curi)
 #endif
                )
                 break;
@@ -742,7 +748,7 @@ bool wxHtmlHelpFrame::KeywordSearch(const wxString& keyword,
             }
         }
 
-        m_SearchButton->Enable(TRUE);
+        m_SearchButton->Enable();
         m_SearchText->SetSelection(0, keyword.Length());
         m_SearchText->SetFocus();
     }
@@ -750,14 +756,14 @@ bool wxHtmlHelpFrame::KeywordSearch(const wxString& keyword,
     {
         m_NavigNotebook->SetSelection(m_IndexPage);
         m_IndexList->Clear();
-        m_IndexButton->Enable(false);
-        m_IndexButtonAll->Enable(false);
+        m_IndexButton->Disable();
+        m_IndexButtonAll->Disable();
         m_IndexText->SetValue(keyword);
 
         wxCommandEvent dummy;
         OnIndexFind(dummy); // what a hack...
-        m_IndexButton->Enable(true);
-        m_IndexButtonAll->Enable(true);
+        m_IndexButton->Enable();
+        m_IndexButtonAll->Enable();
         foundcnt = m_IndexList->GetCount();
     }
 
@@ -816,9 +822,9 @@ void wxHtmlHelpFrame::CreateContents()
     //     set its icon accordingly
     bool imaged[MAX_ROOTS];
     m_ContentsBox->DeleteAllItems();
-    
+
     roots[0] = m_ContentsBox->AddRoot(_("(Help)"));
-    imaged[0] = TRUE;
+    imaged[0] = true;
 
     for (it = m_Data->GetContents(), i = 0; i < cnt; i++, it++)
     {
@@ -837,9 +843,9 @@ void wxHtmlHelpFrame::CreateContents()
                 roots[1] = m_ContentsBox->AppendItem(roots[0],
                                          it->m_Name, IMG_Book, -1,
                                          new wxHtmlHelpTreeItemData(i));
-                m_ContentsBox->SetItemBold(roots[1], TRUE);
+                m_ContentsBox->SetItemBold(roots[1], true);
             }
-            imaged[1] = TRUE;
+            imaged[1] = true;
         }
         // ...and their contents:
         else
@@ -847,7 +853,7 @@ void wxHtmlHelpFrame::CreateContents()
             roots[it->m_Level + 1] = m_ContentsBox->AppendItem(
                                      roots[it->m_Level], it->m_Name, IMG_Page,
                                      -1, new wxHtmlHelpTreeItemData(i));
-            imaged[it->m_Level + 1] = FALSE;
+            imaged[it->m_Level + 1] = false;
         }
 
         m_PagesHash->Put(it->GetFullPath(),
@@ -865,7 +871,7 @@ void wxHtmlHelpFrame::CreateContents()
             m_ContentsBox->SetItemImage(roots[it->m_Level], image);
             m_ContentsBox->SetItemImage(roots[it->m_Level], image,
                                         wxTreeItemIcon_Selected);
-            imaged[it->m_Level] = TRUE;
+            imaged[it->m_Level] = true;
         }
     }
 }
@@ -1047,32 +1053,32 @@ public:
     wxSpinCtrl *FontSize;
     wxHtmlWindow *TestWin;
 
-    wxHtmlHelpFrameOptionsDialog(wxWindow *parent) 
-        : wxDialog(parent, -1, wxString(_("Help Browser Options")))
+    wxHtmlHelpFrameOptionsDialog(wxWindow *parent)
+        : wxDialog(parent, wxID_ANY, wxString(_("Help Browser Options")))
     {
         wxBoxSizer *topsizer = new wxBoxSizer(wxVERTICAL);
         wxFlexGridSizer *sizer = new wxFlexGridSizer(2, 3, 2, 5);
 
-        sizer->Add(new wxStaticText(this, -1, _("Normal font:")));
-        sizer->Add(new wxStaticText(this, -1, _("Fixed font:")));
-        sizer->Add(new wxStaticText(this, -1, _("Font size:")));
+        sizer->Add(new wxStaticText(this, wxID_ANY, _("Normal font:")));
+        sizer->Add(new wxStaticText(this, wxID_ANY, _("Fixed font:")));
+        sizer->Add(new wxStaticText(this, wxID_ANY, _("Font size:")));
 
-        sizer->Add(NormalFont = new wxComboBox(this, -1, wxEmptyString, wxDefaultPosition,
+        sizer->Add(NormalFont = new wxComboBox(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
                       wxSize(200, 200),
                       0, NULL, wxCB_DROPDOWN | wxCB_READONLY));
 
-        sizer->Add(FixedFont = new wxComboBox(this, -1, wxEmptyString, wxDefaultPosition,
+        sizer->Add(FixedFont = new wxComboBox(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
                       wxSize(200, 200),
                       0, NULL, wxCB_DROPDOWN | wxCB_READONLY));
 
-        sizer->Add(FontSize = new wxSpinCtrl(this, -1));
+        sizer->Add(FontSize = new wxSpinCtrl(this, wxID_ANY));
         FontSize->SetRange(2, 100);
 
         topsizer->Add(sizer, 0, wxLEFT|wxRIGHT|wxTOP, 10);
 
-        topsizer->Add(new wxStaticText(this, -1, _("Preview:")),
+        topsizer->Add(new wxStaticText(this, wxID_ANY, _("Preview:")),
                         0, wxLEFT | wxTOP, 10);
-        topsizer->Add(TestWin = new wxHtmlWindow(this, -1, wxDefaultPosition, wxSize(20, 150),
+        topsizer->Add(TestWin = new wxHtmlWindow(this, wxID_ANY, wxDefaultPosition, wxSize(20, 150),
                                                  wxHW_SCROLLBAR_AUTO | wxSUNKEN_BORDER),
                         1, wxEXPAND | wxLEFT|wxTOP|wxRIGHT, 10);
 
@@ -1083,7 +1089,6 @@ public:
         sizer2->Add(new wxButton(this, wxID_CANCEL, _("Cancel")), 0, wxALL, 10);
         topsizer->Add(sizer2, 0, wxALIGN_RIGHT);
 
-        SetAutoLayout(TRUE);
         SetSizer(topsizer);
         topsizer->Fit(this);
         Centre(wxBOTH);
@@ -1137,8 +1142,8 @@ public:
 };
 
 BEGIN_EVENT_TABLE(wxHtmlHelpFrameOptionsDialog, wxDialog)
-    EVT_COMBOBOX(-1, wxHtmlHelpFrameOptionsDialog::OnUpdate)
-    EVT_SPINCTRL(-1, wxHtmlHelpFrameOptionsDialog::OnUpdateSpin)
+    EVT_COMBOBOX(wxID_ANY, wxHtmlHelpFrameOptionsDialog::OnUpdate)
+    EVT_SPINCTRL(wxID_ANY, wxHtmlHelpFrameOptionsDialog::OnUpdateSpin)
 END_EVENT_TABLE()
 
 void wxHtmlHelpFrame::OptionsDialog()
@@ -1157,24 +1162,24 @@ void wxHtmlHelpFrame::OptionsDialog()
     if (m_FixedFonts == NULL)
     {
         wxFontEnumerator enu;
-        enu.EnumerateFacenames(wxFONTENCODING_SYSTEM, TRUE);
+        enu.EnumerateFacenames(wxFONTENCODING_SYSTEM, true /*enum fixed width only*/);
         m_FixedFonts = new wxArrayString;
         *m_FixedFonts = *enu.GetFacenames();
         m_FixedFonts->Sort(wxStringSortAscending);
     }
-    
+
     // VS: We want to show the font that is actually used by wxHtmlWindow.
     //     If customization dialog wasn't used yet, facenames are empty and
     //     wxHtmlWindow uses default fonts -- let's find out what they
     //     are so that we can pass them to the dialog:
     if (m_NormalFace.empty())
     {
-        wxFont fnt(m_FontSize, wxSWISS, wxNORMAL, wxNORMAL, FALSE);
+        wxFont fnt(m_FontSize, wxSWISS, wxNORMAL, wxNORMAL, false);
         m_NormalFace = fnt.GetFaceName();
     }
     if (m_FixedFace.empty())
     {
-        wxFont fnt(m_FontSize, wxMODERN, wxNORMAL, wxNORMAL, FALSE);
+        wxFont fnt(m_FontSize, wxMODERN, wxNORMAL, wxNORMAL, false);
         m_FixedFace = fnt.GetFaceName();
     }
 
@@ -1217,7 +1222,7 @@ void wxHtmlHelpFrame::NotifyPageChanged()
         if (ha)
         {
             bool olduc = m_UpdateContents;
-            m_UpdateContents = FALSE;
+            m_UpdateContents = false;
             m_ContentsBox->SelectItem(ha->m_Id);
             m_ContentsBox->EnsureVisible(ha->m_Id);
             m_UpdateContents = olduc;
@@ -1345,14 +1350,14 @@ void wxHtmlHelpFrame::OnToolbar(wxCommandEvent& event)
                 {
                     m_Cfg.sashpos = m_Splitter->GetSashPosition();
                     m_Splitter->Unsplit(m_NavigPan);
-                    m_Cfg.navig_on = FALSE;
+                    m_Cfg.navig_on = false;
                 }
                 else
                 {
-                    m_NavigPan->Show(TRUE);
-                    m_HtmlWin->Show(TRUE);
+                    m_NavigPan->Show();
+                    m_HtmlWin->Show();
                     m_Splitter->SplitVertically(m_NavigPan, m_HtmlWin, m_Cfg.sashpos);
-                    m_Cfg.navig_on = TRUE;
+                    m_Cfg.navig_on = true;
                 }
             }
             break;
@@ -1458,10 +1463,10 @@ void wxHtmlHelpFrame::OnContentsSel(wxTreeEvent& event)
     if (pg && m_UpdateContents)
     {
         it = m_Data->GetContents() + (pg->m_Id);
-        m_UpdateContents = FALSE;
+        m_UpdateContents = false;
         if (it->m_Page[0] != 0)
             m_HtmlWin->LoadPage(it->GetFullPath());
-        m_UpdateContents = TRUE;
+        m_UpdateContents = true;
     }
 }
 
@@ -1490,7 +1495,7 @@ void wxHtmlHelpFrame::OnIndexFind(wxCommandEvent& event)
         const wxChar *cstr = sr.c_str();
         wxChar mybuff[512];
         wxChar *ptr;
-        bool first = TRUE;
+        bool first = true;
 
         m_IndexList->Clear();
         int cnt = m_Data->GetIndexCnt();
@@ -1513,7 +1518,7 @@ void wxHtmlHelpFrame::OnIndexFind(wxCommandEvent& event)
                     if (index[i].m_Page[0] != 0)
                         m_HtmlWin->LoadPage(index[i].GetFullPath());
                     NotifyPageChanged();
-                    first = FALSE;
+                    first = false;
                 }
             }
         }
@@ -1533,7 +1538,7 @@ void wxHtmlHelpFrame::OnIndexAll(wxCommandEvent& WXUNUSED(event))
 
     m_IndexList->Clear();
     int cnt = m_Data->GetIndexCnt();
-    bool first = TRUE;
+    bool first = true;
     wxHtmlContentsItem* index = m_Data->GetIndex();
 
     for (int i = 0; i < cnt; i++)
@@ -1544,7 +1549,7 @@ void wxHtmlHelpFrame::OnIndexAll(wxCommandEvent& WXUNUSED(event))
             if (index[i].m_Page[0] != 0)
                 m_HtmlWin->LoadPage(index[i].GetFullPath());
             NotifyPageChanged();
-            first = FALSE;
+            first = false;
         }
     }
 
@@ -1595,7 +1600,7 @@ void wxHtmlHelpFrame::OnCloseWindow(wxCloseEvent& evt)
         RemoveGrab();
     }
 #endif
-    
+
     if (m_Splitter && m_Cfg.navig_on) m_Cfg.sashpos = m_Splitter->GetSashPosition();
 
     if (m_Config)
@@ -1612,7 +1617,7 @@ void wxHtmlHelpFrame::OnCloseWindow(wxCloseEvent& evt)
 #ifdef __WXMAC__
 void wxHtmlHelpFrame::OnClose(wxCommandEvent& event)
 {
-    Close(TRUE);
+    Close(true);
 }
 
 void wxHtmlHelpFrame::OnAbout(wxCommandEvent& event)

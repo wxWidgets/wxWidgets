@@ -112,28 +112,28 @@ BEGIN_EVENT_TABLE(wxArtBrowserDialog, wxDialog)
 END_EVENT_TABLE()
 
 wxArtBrowserDialog::wxArtBrowserDialog(wxWindow *parent)
-    : wxDialog(parent, wxID_ANY, _T("Art resources browser"), 
-               wxDefaultPosition, wxDefaultSize, 
+    : wxDialog(parent, wxID_ANY, _T("Art resources browser"),
+               wxDefaultPosition, wxDefaultSize,
                wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER)
 {
     wxSizer *sizer = new wxBoxSizer(wxVERTICAL);
     wxSizer *subsizer;
-    
+
     wxChoice *choice = new wxChoice(this, wxID_ANY);
     FillClients(choice);
-    
+
     subsizer = new wxBoxSizer(wxHORIZONTAL);
     subsizer->Add(new wxStaticText(this, wxID_ANY, _T("Client:")), 0, wxALIGN_CENTER_VERTICAL);
     subsizer->Add(choice, 1, wxLEFT, 5);
     sizer->Add(subsizer, 0, wxALL | wxEXPAND, 10);
 
     subsizer = new wxBoxSizer(wxHORIZONTAL);
-    
+
     m_list = new wxListCtrl(this, wxID_ANY, wxDefaultPosition, wxSize(250, 300),
                             wxLC_REPORT | wxSUNKEN_BORDER);
     m_list->InsertColumn(0, _T("wxArtID"));
     subsizer->Add(m_list, 1, wxEXPAND | wxRIGHT, 10);
-    
+
     wxSizer *subsub = new wxBoxSizer(wxVERTICAL);
     m_canvas = new wxStaticBitmap(this, wxID_ANY, wxBitmap(null_xpm));
     subsub->Add(m_canvas);
@@ -141,13 +141,12 @@ wxArtBrowserDialog::wxArtBrowserDialog(wxWindow *parent)
     subsizer->Add(subsub);
 
     sizer->Add(subsizer, 1, wxEXPAND | wxLEFT|wxRIGHT, 10);
-    
+
     wxButton *ok = new wxButton(this, wxID_OK, _T("Close"));
     ok->SetDefault();
     sizer->Add(ok, 0, wxALIGN_RIGHT | wxALL, 10);
-    
+
     SetSizer(sizer);
-    SetAutoLayout(true);
     sizer->Fit(this);
 
     choice->SetSelection(6/*wxART_MESSAGE_BOX*/);
@@ -158,7 +157,7 @@ wxArtBrowserDialog::wxArtBrowserDialog(wxWindow *parent)
 void wxArtBrowserDialog::SetArtClient(const wxArtClient& client)
 {
     wxBusyCursor bcur;
-    
+
     wxImageList *img = new wxImageList(16, 16);
     img->Add(wxIcon(null_xpm));
     int index = 0;

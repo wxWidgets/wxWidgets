@@ -182,7 +182,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
     // Make a panel
     m_panel = new wxPanel(this );
 
-    m_modalbutton = new wxButton( this, BUTTON_MODAL, "Modal Dialog", 
+    m_modalbutton = new wxButton( this, BUTTON_MODAL, "Modal Dialog",
     wxPoint(10,10), wxDefaultSize );
 }
 
@@ -266,7 +266,6 @@ MyModalDialog::MyModalDialog(wxWindow *parent)
     sizerTop->Add(m_book1, 0, wxALIGN_CENTER | wxALL, 5);
     sizerTop->Add(m_book2, 0, wxALIGN_CENTER | wxALL, 5);
 
-    SetAutoLayout(true);
     SetSizer(sizerTop);
 
     sizerTop->SetSizeHints(this);

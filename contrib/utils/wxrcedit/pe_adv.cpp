@@ -36,7 +36,7 @@
 wxWindow* PropEditCtrlFont::CreateEditCtrl()
 {
     PropEditCtrlTxt::CreateEditCtrl();
-    m_TextCtrl->Enable(false);
+    m_TextCtrl->Disable();
     return m_TextCtrl;
 }
 
@@ -165,7 +165,6 @@ void PropEditCtrlFlags::OnDetails()
     sz->Add(sz2, 0, wxALIGN_RIGHT | wxRIGHT | wxBOTTOM, 10);
 
     dlg.SetSizer(sz);
-    dlg.SetAutoLayout(true);
     dlg.Layout();
 
     for (i = 0; i < arr.GetCount(); i++)
@@ -219,7 +218,7 @@ void PropEditCtrlFile::OnDetails()
     wxString name = wxFileSelector(_("Choose file"),
                                    wxPathOnly(txt),
                                    wxFileNameFromPath(txt),
-                                   _T(""),
+                                   wxEmptyString,
                                    GetFileTypes(),
                                    wxOPEN | wxFILE_MUST_EXIST);
     if (!name) return;

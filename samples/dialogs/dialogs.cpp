@@ -207,7 +207,7 @@ bool MyApp::OnInit()
 
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
-  
+
     file_menu->Append(DIALOGS_MESSAGE_BOX, _T("&Message box\tCtrl-M"));
 
 
@@ -312,15 +312,15 @@ bool MyApp::OnInit()
 
     #if wxUSE_FINDREPLDLG
         wxMenu *find_menu = new wxMenu;
-        find_menu->Append(DIALOGS_FIND, _T("&Find dialog\tCtrl-F"), _T(""), true);
-        find_menu->Append(DIALOGS_REPLACE, _T("Find and &replace dialog\tShift-Ctrl-F"), _T(""), true);
+        find_menu->Append(DIALOGS_FIND, _T("&Find dialog\tCtrl-F"), wxEmptyString, true);
+        find_menu->Append(DIALOGS_REPLACE, _T("Find and &replace dialog\tShift-Ctrl-F"), wxEmptyString, true);
         file_menu->Append(wxID_ANY,_T("Searching"),find_menu);
     #endif // wxUSE_FINDREPLDLG
 
     #if USE_MODAL_PRESENTATION
         wxMenu *modal_menu = new wxMenu;
         modal_menu->Append(DIALOGS_MODAL, _T("Mo&dal dialog\tCtrl-W"));
-        modal_menu->Append(DIALOGS_MODELESS, _T("Modeless &dialog\tCtrl-Z"), _T(""), true);
+        modal_menu->Append(DIALOGS_MODELESS, _T("Modeless &dialog\tCtrl-Z"), wxEmptyString, true);
         file_menu->Append(wxID_ANY,_T("Modal/Modeless"),modal_menu);
     #endif // USE_MODAL_PRESENTATION
 
@@ -357,15 +357,15 @@ MyFrame::MyFrame(wxWindow *parent,
     m_dlgFind =
     m_dlgReplace = NULL;
 #endif
-    
-#if wxUSE_COLOURDLG 
+
+#if wxUSE_COLOURDLG
     m_clrData.SetChooseFull(true);
     for (int i = 0; i < 16; i++)
     {
         m_clrData.SetCustomColour(i, wxColour(i*16, i*16, i*16));
     }
 #endif // wxUSE_COLOURDLG
-   
+
     CreateStatusBar();
 }
 
@@ -531,7 +531,7 @@ void MyFrame::PasswordEntry(wxCommandEvent& WXUNUSED(event))
 {
     wxString pwd = wxGetPasswordFromUser(_T("Enter password:"),
                                          _T("Password entry dialog"),
-                                         _T(""),
+                                         wxEmptyString,
                                          this);
     if ( !!pwd )
     {
@@ -616,8 +616,8 @@ void MyFrame::FileOpen(wxCommandEvent& WXUNUSED(event) )
                  (
                     this,
                     _T("Testing open file dialog"),
-                    _T(""),
-                    _T(""),
+                    wxEmptyString,
+                    wxEmptyString,
 #ifdef __WXMOTIF__
                     _T("C++ files (*.cpp)|*.cpp")
 #else
@@ -649,7 +649,7 @@ void MyFrame::FileOpen2(wxCommandEvent& WXUNUSED(event) )
     static wxString s_extDef;
     wxString path = wxFileSelector(
                                     _T("Select the file to load"),
-                                    _T(""), _T(""),
+                                    wxEmptyString, wxEmptyString,
                                     s_extDef,
                                     _T("Waveform (*.wav)|*.wav|Plain text (*.txt)|*.txt|All files (*.*)|*.*"),
                                     wxCHANGE_DIR,
@@ -668,14 +668,14 @@ void MyFrame::FileOpen2(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::FilesOpen(wxCommandEvent& WXUNUSED(event) )
 {
-    wxString wildcards = 
+    wxString wildcards =
 #ifdef __WXMOTIF__
                     _T("C++ files (*.cpp)|*.cpp");
 #else
                     _T("All files (*.*)|*.*|C++ files (*.h;*.cpp)|*.h;*.cpp");
 #endif
     wxFileDialog dialog(this, _T("Testing open multiple file dialog"),
-                        _T(""), _T(""), wildcards,
+                        wxEmptyString, wxEmptyString, wildcards,
                         wxMULTIPLE);
 
     if (dialog.ShowModal() == wxID_OK)
@@ -706,7 +706,7 @@ void MyFrame::FileSave(wxCommandEvent& WXUNUSED(event) )
 {
     wxFileDialog dialog(this,
                         _T("Testing save file dialog"),
-                        _T(""),
+                        wxEmptyString,
                         _T("myletter.doc"),
                         _T("Text files (*.txt)|*.txt|Document files (*.doc)|*.doc"),
                         wxSAVE|wxOVERWRITE_PROMPT);
@@ -1050,7 +1050,6 @@ MyModelessDialog::MyModelessDialog(wxWindow *parent)
     sizerTop->Add(btn, 1, wxEXPAND | wxALL, 5);
     sizerTop->Add(check, 1, wxEXPAND | wxALL, 5);
 
-    SetAutoLayout(true);
     SetSizer(sizerTop);
 
     sizerTop->SetSizeHints(this);
@@ -1094,7 +1093,6 @@ MyModalDialog::MyModalDialog(wxWindow *parent)
     sizerTop->Add(m_btnDelete, 0, wxALIGN_CENTER | wxALL, 5);
     sizerTop->Add(btnOk, 0, wxALIGN_CENTER | wxALL, 5);
 
-    SetAutoLayout(true);
     SetSizer(sizerTop);
 
     sizerTop->SetSizeHints(this);
@@ -1118,7 +1116,7 @@ void MyModalDialog::OnButton(wxCommandEvent& event)
 #if wxUSE_TEXTDLG
         wxGetTextFromUser(_T("Dummy prompt"),
                           _T("Modal dialog called from dialog"),
-                          _T(""), this);
+                          wxEmptyString, this);
 #else
         wxMessageBox(_T("Modal dialog called from dialog"));
 #endif // wxUSE_TEXTDLG

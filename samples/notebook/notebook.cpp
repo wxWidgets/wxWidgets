@@ -315,8 +315,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size,
 
     m_panel->SetSizer(m_sizerFrame);
 
-    m_panel->SetAutoLayout(true);
-
     m_sizerFrame->Fit(this);
     m_sizerFrame->SetSizeHints(this);
 

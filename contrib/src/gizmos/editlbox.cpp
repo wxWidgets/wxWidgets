@@ -115,7 +115,7 @@ wxEditableListBox::wxEditableListBox(wxWindow *parent, wxWindowID id,
    : wxPanel(parent, id, pos, size, wxTAB_TRAVERSAL, name)
 {
     m_style = style;
-    m_bEdit = m_bNew = m_bDel = m_bUp = m_bDown = NULL;    
+    m_bEdit = m_bNew = m_bDel = m_bUp = m_bDown = NULL;
 
     wxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 
@@ -165,7 +165,6 @@ wxEditableListBox::wxEditableListBox(wxWindow *parent, wxWindowID id,
     m_bDown->SetToolTip(_("Move down"));
 #endif
 
-    subp->SetAutoLayout(true);
     subp->SetSizer(subsizer);
     subsizer->Fit(subp);
 
@@ -181,7 +180,6 @@ wxEditableListBox::wxEditableListBox(wxWindow *parent, wxWindowID id,
 
     sizer->Add(m_listCtrl, 1, wxEXPAND);
 
-    SetAutoLayout(true);
     SetSizer(sizer);
     Layout();
 }
@@ -194,7 +192,7 @@ void wxEditableListBox::SetStrings(const wxArrayString& strings)
     for (i = 0; i < strings.GetCount(); i++)
         m_listCtrl->InsertItem(i, strings[i]);
 
-    m_listCtrl->InsertItem(strings.GetCount(), _T(""));
+    m_listCtrl->InsertItem(strings.GetCount(), wxEmptyString);
     m_listCtrl->SetItemState(0, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
 }
 
@@ -226,13 +224,13 @@ void wxEditableListBox::OnNewItem(wxCommandEvent& WXUNUSED(event))
 
 void wxEditableListBox::OnEndLabelEdit(wxListEvent& event)
 {
-    if ( event.GetIndex() == m_listCtrl->GetItemCount()-1 && 
+    if ( event.GetIndex() == m_listCtrl->GetItemCount()-1 &&
          !event.GetText().IsEmpty() )
     {
         // The user edited last (empty) line, i.e. added new entry. We have to
         // add new empty line here so that adding one more line is still
         // possible:
-        m_listCtrl->InsertItem(m_listCtrl->GetItemCount(), _T(""));
+        m_listCtrl->InsertItem(m_listCtrl->GetItemCount(), wxEmptyString);
     }
 }
 

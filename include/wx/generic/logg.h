@@ -90,14 +90,14 @@ class WXDLLEXPORT wxLogWindow : public wxLogPassThrough
 public:
     wxLogWindow(wxFrame *pParent,         // the parent frame (can be NULL)
                 const wxChar *szTitle,    // the title of the frame
-                bool bShow = TRUE,        // show window immediately?
-                bool bPassToOld = TRUE);  // pass messages to the old target?
+                bool bShow = true,        // show window immediately?
+                bool bPassToOld = true);  // pass messages to the old target?
 
     ~wxLogWindow();
 
     // window operations
         // show/hide the log window
-    void Show(bool bShow = TRUE);
+    void Show(bool bShow = true);
         // retrieve the pointer to the frame
     wxFrame *GetFrame() const;
 
@@ -107,7 +107,7 @@ public:
     virtual void OnFrameCreate(wxFrame *frame);
         // called if the user closes the window interactively, will not be
         // called if it is destroyed for another reason (such as when program
-        // exits) - return TRUE from here to allow the frame to close, FALSE
+        // exits) - return true from here to allow the frame to close, false
         // to prevent this from happening
     virtual bool OnFrameClose(wxFrame *frame);
         // called right before the log frame is going to be deleted: will

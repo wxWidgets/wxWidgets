@@ -85,7 +85,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
                                    int maximum,
                                    wxWindow *parent,
                                    int style)
-                : wxDialog(parent, -1, title)
+                : wxDialog(parent, wxID_ANY, title)
 {
     // we may disappear at any moment, let the others know about it
     SetExtraStyle(GetExtraStyle() | wxWS_EX_TRANSIENT);
@@ -101,7 +101,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
     // FIXME: should probably have a (extended?) window style for this
     if ( !hasAbortButton )
     {
-        EnableCloseButton(FALSE);
+        EnableCloseButton(false);
     }
 #endif // wxMSW
 
@@ -124,7 +124,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
     long widthText;
     dc.GetTextExtent(message, &widthText, NULL, NULL, NULL, NULL);
 
-    m_msg = new wxStaticText(this, -1, message);
+    m_msg = new wxStaticText(this, wxID_ANY, message);
     c = new wxLayoutConstraints;
     c->left.SameAs(this, wxLeft, 2*LAYOUT_X_MARGIN);
     c->top.SameAs(this, wxTop, 2*LAYOUT_Y_MARGIN);
@@ -143,7 +143,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
         // note that we can't use wxGA_SMOOTH because it happens to
         // cause the dialog to be modal. Have an extra
         // style argument to wxProgressDialog, perhaps.
-        m_gauge = new wxGauge(this, -1, m_maximum,
+        m_gauge = new wxGauge(this, wxID_ANY, m_maximum,
                               wxDefaultPosition, wxDefaultSize,
                               wxGA_HORIZONTAL);
 
@@ -227,7 +227,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
         m_btnAbort = (wxButton *)NULL;
     }
 
-    SetAutoLayout(TRUE);
+    SetAutoLayout(true);
     Layout();
 
     sizeDlg.y += 2*LAYOUT_Y_MARGIN;
@@ -247,12 +247,12 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
     else
     {
         if ( m_parentTop )
-            m_parentTop->Enable(FALSE);
+            m_parentTop->Disable();
         m_winDisabler = NULL;
     }
 
-    Show(TRUE);
-    Enable(TRUE); // enable this window
+    Show();
+    Enable();
 
     // this one can be initialized even if the others are unknown for now
     //
@@ -270,7 +270,7 @@ wxStaticText *wxProgressDialog::CreateLabel(const wxString& text,
 {
     wxLayoutConstraints *c;
 
-    wxStaticText *label = new wxStaticText(this, -1, _("unknown"));
+    wxStaticText *label = new wxStaticText(this, wxID_ANY, _("unknown"));
     c = new wxLayoutConstraints;
 
     // VZ: I like the labels be centered - if the others don't mind, you may
@@ -285,7 +285,7 @@ wxStaticText *wxProgressDialog::CreateLabel(const wxString& text,
     c->height.AsIs();
     label->SetConstraints(c);
 
-    wxStaticText *dummy = new wxStaticText(this, -1, text);
+    wxStaticText *dummy = new wxStaticText(this, wxID_ANY, text);
     c = new wxLayoutConstraints;
     c->right.LeftOf(label);
     c->top.SameAs(label, wxTop, 0);
@@ -338,7 +338,7 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
 
     if ( value == m_maximum )
     {
-        // so that we return TRUE below and that out [Cancel] handler knew what
+        // so that we return true below and that out [Cancel] handler knew what
         // to do
         m_state = Finished;
         if( !(GetWindowStyle() & wxPD_AUTO_HIDE) )
@@ -351,7 +351,7 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
             else // enable the button to give the user a way to close the dlg
             {
-                EnableCloseButton(TRUE);
+                EnableCloseButton();
             }
 #endif // __WXMSW__
 
@@ -437,7 +437,7 @@ void wxProgressDialog::OnClose(wxCloseEvent& event)
     if ( m_state == Uncancelable )
     {
         // can't close this dialog
-        event.Veto(TRUE);
+        event.Veto();
     }
     else if ( m_state == Finished )
     {
@@ -471,7 +471,7 @@ void wxProgressDialog::ReenableOtherWindows()
     else
     {
         if ( m_parentTop )
-            m_parentTop->Enable(TRUE);
+            m_parentTop->Enable();
     }
 }
 

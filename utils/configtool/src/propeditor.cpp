@@ -99,7 +99,6 @@ void ctPropertyEditor::CreateControls(wxWindow* parent)
 
     item0->Add( m_splitterWindow, 1, wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxBOTTOM, 5 );
 
-    this->SetAutoLayout(true);
     this->SetSizer( item0 );
 
     /// Add help text
@@ -159,7 +158,7 @@ void ctPropertyEditor::ClearEditor()
 {
     m_attributeEditorGrid->ClearAttributes();
     m_propertyDescriptionWindow->SetPage(WrapDescription(wxEmptyString));
-    m_elementTitleTextCtrl->SetValue(_T(""));
+    m_elementTitleTextCtrl->SetValue(wxEmptyString);
 }
 
 /// Handles detailed editing event.
@@ -294,13 +293,13 @@ bool ctPropertyEditor::DisplayProperty(int row, ctProperty* prop, bool valueOnly
     if (!m_item->CanEditProperty(prop->GetName()))
     {
         m_attributeEditorGrid->SetReadOnly(row, 1);
-        
+
         wxColour col(wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
         m_attributeEditorGrid->SetCellTextColour(row, 1, col);
     }
     else
     {
-        m_attributeEditorGrid->SetReadOnly(row, 1, false);        
+        m_attributeEditorGrid->SetReadOnly(row, 1, false);
         m_attributeEditorGrid->SetCellTextColour(row, 1, * wxBLACK);
     }
 
@@ -346,7 +345,7 @@ bool ctPropertyEditor::DisplayProperty(int row, ctProperty* prop, bool valueOnly
         m_attributeEditorGrid->SetCellEditor(row, 1,
                 new ctGridCellTextEditor);
     }
-    
+
     return true;
 }
 
@@ -411,7 +410,7 @@ ctProperty* ctPropertyEditor::FindSelectedProperty(int& row)
     if (selRow > -1)
     {
         row = selRow;
-        
+
         if (selRow < (int) m_item->GetProperties().GetCount())
         {
             ctProperty* prop = m_item->GetProperties().GetNth(selRow);
@@ -536,7 +535,7 @@ void ctPropertyEditor::UpdateDescription(int row)
     }
     if (row == -1)
     {
-        wxString str = WrapDescription(wxEmptyString);        
+        wxString str = WrapDescription(wxEmptyString);
         m_propertyDescriptionWindow->SetPage(str);
     }
     else
@@ -544,7 +543,7 @@ void ctPropertyEditor::UpdateDescription(int row)
         ctProperty* prop = FindProperty(row);
         if (prop)
         {
-            wxString str = WrapDescription(m_item->GetDescription(prop));        
+            wxString str = WrapDescription(m_item->GetDescription(prop));
             m_propertyDescriptionWindow->SetPage(str);
         }
     }
@@ -557,13 +556,13 @@ wxString ctPropertyEditor::WrapDescription(const wxString& s)
     wxColour col = ctDESCRIPTION_BACKGROUND_COLOUR;
     wxString colStr = apColourToHexString(col);
     colStr = wxT("#") + colStr;
-    
+
     wxString str;
     str << _T("<HTML><BODY BGCOLOR=\"") << colStr << wxT("\"><FONT SIZE=-1>") ;
     str << s;
     str << _T("</FONT></BODY></HTML>");
-    
-    return str;        
+
+    return str;
 }
 
 /// Intercept cell data change event.
@@ -655,13 +654,13 @@ void ctPropertyEditor::ApplyPropertyValue(ctConfigItem* item, ctProperty* proper
 
     // Apply the new value
     property->GetVariant() = variant;
-    item->ApplyProperty(property, oldValue);    
+    item->ApplyProperty(property, oldValue);
     item->Modify();
-    
+
     UpdateItem();
 
     wxString menuLabel(_T("Change ") + property->GetName());
-    
+
     // This won't do anything first time Do is applied,
     // since we've already done the action for this property.
     // But when we Undo or Redo, the changed properties will be applied.
@@ -791,7 +790,7 @@ ctMultiLineTextEditor::ctMultiLineTextEditor( wxWindow *parent, wxWindowID id, c
     AddControls(this, msg);
     Centre();
 }
-    
+
 bool ctMultiLineTextEditor::AddControls(wxWindow* parent, const wxString& msg)
 {
     wxBoxSizer *item0 = new wxBoxSizer( wxVERTICAL );
@@ -801,7 +800,7 @@ bool ctMultiLineTextEditor::AddControls(wxWindow* parent, const wxString& msg)
     wxStaticText *item2 = new wxStaticText( parent, wxID_STATIC, msg, wxDefaultPosition, wxDefaultSize, 0 );
     item1->Add( item2, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT|wxRIGHT, 5 );
 
-    wxTextCtrl *item3 = new wxTextCtrl( parent, wxID_ANY, wxT(""), wxDefaultPosition, wxSize(330,180), wxTE_MULTILINE|wxTE_RICH );
+    wxTextCtrl *item3 = new wxTextCtrl( parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(330,180), wxTE_MULTILINE|wxTE_RICH );
     item1->Add( item3, 1, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
     wxBoxSizer *item4 = new wxBoxSizer( wxHORIZONTAL );
@@ -826,7 +825,6 @@ bool ctMultiLineTextEditor::AddControls(wxWindow* parent, const wxString& msg)
     item3->SetFocus();
     ((wxButton*) FindWindow(wxID_OK))->SetDefault();
 
-    parent->SetAutoLayout( true );
     parent->SetSizer(item0);
     item0->Fit(parent);
 

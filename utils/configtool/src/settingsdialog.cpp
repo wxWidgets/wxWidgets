@@ -69,14 +69,13 @@ ctSettingsDialog::ctSettingsDialog( wxWindow* parent, wxWindowID id, const wxStr
  */
 
 void ctSettingsDialog::CreateControls()
-{    
+{
 ////@begin ctSettingsDialog content construction
 
     ctSettingsDialog* item1 = this;
 
     wxBoxSizer* item2 = new wxBoxSizer(wxVERTICAL);
     item1->SetSizer(item2);
-    item1->SetAutoLayout(true);
 
     wxNotebook* item3 = new wxNotebook(item1, ID_NOTEBOOK, wxDefaultPosition, wxSize(200, 200), wxNB_TOP);
     wxNotebookSizer* item3Sizer = new wxNotebookSizer(item3);
@@ -204,14 +203,13 @@ ctGeneralSettingsDialog::ctGeneralSettingsDialog( wxWindow* parent, wxWindowID i
  */
 
 void ctGeneralSettingsDialog::CreateControls()
-{    
+{
 ////@begin ctGeneralSettingsDialog content construction
 
     ctGeneralSettingsDialog* item4 = this;
 
     wxBoxSizer* item5 = new wxBoxSizer(wxVERTICAL);
     item4->SetSizer(item5);
-    item4->SetAutoLayout(true);
 
     wxStaticBox* item6Static = new wxStaticBox(item4, wxID_ANY, _("General settings"));
     wxStaticBoxSizer* item6 = new wxStaticBoxSizer(item6Static, wxVERTICAL);
@@ -306,14 +304,13 @@ ctLocationSettingsDialog::ctLocationSettingsDialog( wxWindow* parent, wxWindowID
  */
 
 void ctLocationSettingsDialog::CreateControls()
-{    
+{
 ////@begin ctLocationSettingsDialog content construction
 
     ctLocationSettingsDialog* item11 = this;
 
     wxBoxSizer* item12 = new wxBoxSizer(wxVERTICAL);
     item11->SetSizer(item12);
-    item11->SetAutoLayout(true);
 
     wxStaticBox* item13Static = new wxStaticBox(item11, wxID_ANY, _("Locations"));
     wxStaticBoxSizer* item13 = new wxStaticBoxSizer(item13Static, wxVERTICAL);
@@ -325,7 +322,7 @@ void ctLocationSettingsDialog::CreateControls()
     wxBoxSizer* item15 = new wxBoxSizer(wxHORIZONTAL);
     item13->Add(item15, 0, wxGROW, 5);
 
-    wxTextCtrl* item16 = new wxTextCtrl(item11, ID_WXWIN_HIERARCHY, _(""), wxDefaultPosition, wxSize(200, wxDefaultSize.y), 0);
+    wxTextCtrl* item16 = new wxTextCtrl(item11, ID_WXWIN_HIERARCHY, wxEmptyString, wxDefaultPosition, wxSize(200, wxDefaultSize.y), 0);
     item16->SetHelpText(_("Enter the root path of the wxWidgets hierarchy"));
 #if wxUSE_TOOLTIPS
     if (ShowToolTips())

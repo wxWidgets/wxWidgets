@@ -70,14 +70,13 @@ ctCustomPropertyDialog::ctCustomPropertyDialog( wxWindow* parent, wxWindowID id,
  */
 
 void ctCustomPropertyDialog::CreateControls()
-{    
+{
 ////@begin ctCustomPropertyDialog content construction
 
     ctCustomPropertyDialog* item1 = this;
 
     wxBoxSizer* item2 = new wxBoxSizer(wxVERTICAL);
     item1->SetSizer(item2);
-    item1->SetAutoLayout(true);
 
     wxBoxSizer* item3 = new wxBoxSizer(wxVERTICAL);
     item2->Add(item3, 1, wxGROW|wxALL, 5);
@@ -88,7 +87,7 @@ void ctCustomPropertyDialog::CreateControls()
     wxStaticText* item5 = new wxStaticText(item1, wxID_STATIC, _("&Name:"), wxDefaultPosition, wxDefaultSize, 0);
     item3->Add(item5, 0, wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE, 5);
 
-    wxTextCtrl* item6 = new wxTextCtrl(item1, ID_CUSTOMPROPERTYNAME, _(""), wxDefaultPosition, wxDefaultSize, 0);
+    wxTextCtrl* item6 = new wxTextCtrl(item1, ID_CUSTOMPROPERTYNAME, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0);
     item3->Add(item6, 0, wxGROW|wxALL, 5);
 
     wxBoxSizer* item7 = new wxBoxSizer(wxHORIZONTAL);
@@ -148,7 +147,7 @@ void ctCustomPropertyDialog::CreateControls()
     wxStaticText* item19 = new wxStaticText(item1, wxID_STATIC, _("&Description:"), wxDefaultPosition, wxDefaultSize, 0);
     item3->Add(item19, 0, wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE, 5);
 
-    wxTextCtrl* item20 = new wxTextCtrl(item1, ID_CUSTOMPROPERTYDESCRIPTION, _(""), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_RICH);
+    wxTextCtrl* item20 = new wxTextCtrl(item1, ID_CUSTOMPROPERTYDESCRIPTION, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_RICH);
     item3->Add(item20, 1, wxGROW|wxALL, 5);
 
     wxBoxSizer* item21 = new wxBoxSizer(wxHORIZONTAL);

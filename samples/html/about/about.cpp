@@ -166,19 +166,18 @@
         html = new wxHtmlWindow(&dlg, wxID_ANY, wxDefaultPosition, wxSize(380, 160), wxHW_SCROLLBAR_NEVER);
         html -> SetBorders(0);
         html -> LoadPage(wxT("data/about.htm"));
-        html -> SetSize(html -> GetInternalRepresentation() -> GetWidth(), 
+        html -> SetSize(html -> GetInternalRepresentation() -> GetWidth(),
                         html -> GetInternalRepresentation() -> GetHeight());
 
         topsizer -> Add(html, 1, wxALL, 10);
 
         topsizer -> Add(new wxStaticLine(&dlg, wxID_ANY), 0, wxEXPAND | wxLEFT | wxRIGHT, 10);
-                        
+
         wxButton *bu1 = new wxButton(&dlg, wxID_OK, _("OK"));
         bu1 -> SetDefault();
 
         topsizer -> Add(bu1, 0, wxALL | wxALIGN_RIGHT, 15);
 
-        dlg.SetAutoLayout(true);
         dlg.SetSizer(topsizer);
         topsizer -> Fit(&dlg);
 

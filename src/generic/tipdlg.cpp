@@ -100,7 +100,7 @@ public:
                 wxTipProvider *tipProvider,
                 bool showAtStartup);
 
-    // the tip dialog has "Show tips on startup" checkbox - return TRUE if it
+    // the tip dialog has "Show tips on startup" checkbox - return true if it
     // was checked (or wasn't unchecked)
     bool ShowTipsOnStartup() const { return m_checkbox->GetValue(); }
 
@@ -142,34 +142,34 @@ wxString wxFileTipProvider::GetTip()
     {
         return _("Tips not available, sorry!");
     }
-    
+
     wxString tip;
 
     // Comments start with a # symbol.
     // Loop reading lines until get the first one that isn't a comment.
-    // The max number of loop executions is the number of lines in the 
-    // textfile so that can't go into an eternal loop in the [oddball] 
-    // case of a comment-only tips file, or the developer has vetoed 
+    // The max number of loop executions is the number of lines in the
+    // textfile so that can't go into an eternal loop in the [oddball]
+    // case of a comment-only tips file, or the developer has vetoed
     // them all via PreprecessTip().
     for ( size_t i=0; i < count; i++ )
-    {    
-        // The current tip may be at the last line of the textfile, (or 
-        // past it, if the number of lines in the textfile changed, such 
+    {
+        // The current tip may be at the last line of the textfile, (or
+        // past it, if the number of lines in the textfile changed, such
         // as changing to a different textfile, with less tips). So check
         // to see at last line of text file, (or past it)...
         if ( m_currentTip >= count )
         {
             // .. and if so, wrap back to line 0.
             m_currentTip = 0;
-        }  
-        
+        }
+
         // Read the tip, and increment the current tip counter.
         tip = m_textfile.GetLine(m_currentTip++);
-        
-        // Allow a derived class's overrided virtual to modify the tip 
+
+        // Allow a derived class's overrided virtual to modify the tip
         // now if so desired.
-        tip = PreprocessTip(tip); 
-        
+        tip = PreprocessTip(tip);
+
         // Break if tip isn't a comment, and isn't an empty string
         // (or only stray space characters).
         if ( !tip.StartsWith(wxT("#")) && (tip.Trim() != wxEmptyString) )
@@ -177,18 +177,18 @@ wxString wxFileTipProvider::GetTip()
             break;
         }
     }
-        
+
     // If tip starts with '_(', then it is a gettext string of format
     // _("My \"global\" tip text") so first strip off the leading '_("'...
     if ( tip.StartsWith(wxT("_(\"" ), &tip))
     {
         //...and strip off the trailing '")'...
         tip = tip.BeforeLast(wxT('\"'));
-        // ...and replace escaped quotes     
-        tip.Replace(wxT("\\\""), wxT("\"")); 
-    } 
-    
-    return tip;    
+        // ...and replace escaped quotes
+        tip.Replace(wxT("\\\""), wxT("\""));
+    }
+
+    return tip;
 }
 
 // ----------------------------------------------------------------------------
@@ -202,7 +202,7 @@ END_EVENT_TABLE()
 wxTipDialog::wxTipDialog(wxWindow *parent,
                          wxTipProvider *tipProvider,
                          bool showAtStartup)
-           : wxDialog(parent, -1, _("Tip of the Day"),
+           : wxDialog(parent, wxID_ANY, _("Tip of the Day"),
                       wxDefaultPosition, wxDefaultSize,
                       wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
 {
@@ -212,12 +212,12 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
 
     wxButton *btnClose = new wxButton(this, wxID_CANCEL, _("&Close"));
 
-    m_checkbox = new wxCheckBox(this, -1, _("&Show tips at startup"));
+    m_checkbox = new wxCheckBox(this, wxID_ANY, _("&Show tips at startup"));
     m_checkbox->SetValue(showAtStartup);
 
     wxButton *btnNext = new wxButton(this, wxID_NEXT_TIP, _("&Next Tip"));
 
-    wxStaticText *text = new wxStaticText(this, -1, _("Did you know..."), wxDefaultPosition, wxSize(-1,30) );
+    wxStaticText *text = new wxStaticText(this, wxID_ANY, _("Did you know..."), wxDefaultPosition, wxSize(-1,30) );
 #if defined(__WXMSW__) || defined(__WXPM__)
     text->SetFont(wxFont(16, wxSWISS, wxNORMAL, wxBOLD));
 #else
@@ -226,7 +226,7 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
 //
 //    text->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
 
-    m_text = new wxTextCtrl(this, -1, wxT(""),
+    m_text = new wxTextCtrl(this, wxID_ANY, wxEmptyString,
                             wxDefaultPosition, wxSize(200, 160),
                             wxTE_MULTILINE |
                             wxTE_READONLY |
@@ -248,12 +248,12 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
 //    vBitmap.SetId(wxICON_TIP); // OS/2 specific bitmap method--OS/2 wxBitmaps all have an ID.
 //                               // and for StatBmp's under OS/2 it MUST be a valid resource ID.
 //
-//    wxStaticBitmap*                 bmp = new wxStaticBitmap(this, -1, vBitmap);
+//    wxStaticBitmap*                 bmp = new wxStaticBitmap(this, wxID_ANY, vBitmap);
 //
 //#else
 
     wxIcon icon = wxArtProvider::GetIcon(wxART_TIP, wxART_CMN_DIALOG);
-    wxStaticBitmap *bmp = new wxStaticBitmap(this, -1, icon);
+    wxStaticBitmap *bmp = new wxStaticBitmap(this, wxID_ANY, icon);
 
 //#endif
 
@@ -277,7 +277,6 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
 
     SetTipText();
 
-    SetAutoLayout(TRUE);
     SetSizer( topsizer );
 
     topsizer->SetSizeHints( this );

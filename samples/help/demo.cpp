@@ -595,7 +595,7 @@ void MyFrame::ShowHelp(int commandId, wxHelpControllerBase& helpController)
        {
           wxString key = wxGetTextFromUser(_T("Search for?"),
                                            _T("Search help for keyword"),
-                                           _T(""),
+                                           wxEmptyString,
                                            this);
           if(! key.IsEmpty())
              helpController.KeywordSearch(key);
@@ -666,7 +666,6 @@ MyModalDialog::MyModalDialog(wxWindow *parent)
     sizerTop->Add(text, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
     sizerTop->Add(sizerRow, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-    SetAutoLayout(true);
     SetSizer(sizerTop);
 
     sizerTop->SetSizeHints(this);

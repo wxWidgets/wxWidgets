@@ -75,7 +75,7 @@ bool MyApp::OnInit(void)
   m_mainFrame->Show(true);
 
   SetTopWindow(m_mainFrame);
-    
+
   return true;
 }
 
@@ -266,7 +266,7 @@ void MyApp::PropertyFormTest(bool useDialog)
         panel->SetConstraints(c);
     }
 #endif
- 
+
     // Add items to the panel
     wxButton *okButton = new wxButton(panel, wxID_OK, _T("OK"), wxDefaultPosition,
         wxSize(80, 26), 0, wxDefaultValidator, _T("ok"));
@@ -306,7 +306,7 @@ void MyApp::PropertyFormTest(bool useDialog)
     okButton->SetConstraints(c);
 
     // The name of this text item matches the "fred" property
-    wxTextCtrl *text = new wxTextCtrl(panel, wxID_ANY, _T("Fred"), wxDefaultPosition, 
+    wxTextCtrl *text = new wxTextCtrl(panel, wxID_ANY, _T("Fred"), wxDefaultPosition,
         wxSize( 200, wxDefaultSize.y), 0, wxDefaultValidator, _T("fred"));
 
     c = new wxLayoutConstraints;

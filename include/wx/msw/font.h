@@ -31,7 +31,7 @@ public:
            int family,
            int style,
            int weight,
-           bool underlined = FALSE,
+           bool underlined = false,
            const wxString& face = wxEmptyString,
            wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
     {
@@ -53,7 +53,7 @@ public:
                 int family,
                 int style,
                 int weight,
-                bool underlined = FALSE,
+                bool underlined = false,
                 const wxString& face = wxEmptyString,
                 wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
@@ -90,7 +90,7 @@ public:
     virtual bool IsFree() const;
     virtual bool RealizeResource();
     virtual WXHANDLE GetResourceHandle() const;
-    virtual bool FreeResource(bool force = FALSE);
+    virtual bool FreeResource(bool force = false);
 
     // for consistency with other wxMSW classes
     WXHFONT GetHFONT() const;

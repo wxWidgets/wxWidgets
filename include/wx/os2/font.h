@@ -32,7 +32,7 @@ public:
            ,int             nFamily
            ,int             nStyle
            ,int             nWeight
-           ,bool            bUnderlined = FALSE
+           ,bool            bUnderlined = false
            ,const wxString& rsFace = wxEmptyString
            ,wxFontEncoding  vEncoding = wxFONTENCODING_DEFAULT
           )
@@ -67,7 +67,7 @@ public:
                 ,int             nFamily
                 ,int             nStyle
                 ,int             nWeight
-                ,bool            bUnderlined = FALSE
+                ,bool            bUnderlined = false
                 ,const wxString& rsFace = wxEmptyString
                 ,wxFontEncoding  vEncoding = wxFONTENCODING_DEFAULT
                );
@@ -116,7 +116,7 @@ public:
     virtual bool     IsFree(void) const;
     virtual bool     RealizeResource(void);
     virtual WXHANDLE GetResourceHandle(void);
-    virtual bool     FreeResource(bool bForce = FALSE);
+    virtual bool     FreeResource(bool bForce = false);
 
     WXHFONT GetHFONT(void) const;
 

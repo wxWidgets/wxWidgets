@@ -74,14 +74,13 @@ ctConfigItemsSelector::ctConfigItemsSelector( wxWindow* parent, wxWindowID id, c
  */
 
 void ctConfigItemsSelector::CreateControls()
-{    
+{
 ////@begin ctConfigItemsSelector content construction
 
     ctConfigItemsSelector* item1 = this;
 
     wxBoxSizer* item2 = new wxBoxSizer(wxVERTICAL);
     item1->SetSizer(item2);
-    item1->SetAutoLayout(true);
 
     wxBoxSizer* item3 = new wxBoxSizer(wxVERTICAL);
     item2->Add(item3, 1, wxGROW|wxALL, 5);

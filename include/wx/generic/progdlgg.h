@@ -55,7 +55,7 @@ public:
        @param newmsg if used, new message to display
        @returns true if ABORT button has not been pressed
    */
-   virtual bool Update(int value, const wxString& newmsg = wxT(""));
+   virtual bool Update(int value, const wxString& newmsg = wxEmptyString);
 
    /* Can be called to continue after the cancel button has been pressed, but
        the program decided to continue the operation (e.g., user didn't
@@ -63,7 +63,7 @@ public:
    */
    void Resume();
 
-   bool Show( bool show = TRUE );
+   bool Show( bool show = true );
 
 protected:
    // callback for optional abort button

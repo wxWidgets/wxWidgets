@@ -43,7 +43,7 @@ public:
 
     virtual ~wxFrame();
 
-    virtual bool Show(bool show = TRUE);
+    virtual bool Show(bool show = true);
 
     // Set menu bar
     void SetMenuBar(wxMenuBar *menu_bar);
@@ -62,7 +62,7 @@ public:
     // Create toolbar
 #if wxUSE_TOOLBAR
     virtual wxToolBar* CreateToolBar(long style = -1,
-                                     wxWindowID id = -1,
+                                     wxWindowID id = wxID_ANY,
                                      const wxString& name = wxToolBarNameStr);
     virtual void SetToolBar(wxToolBar *toolbar);
     virtual void PositionToolBar();
@@ -74,7 +74,7 @@ public:
     void OnSysColourChanged(wxSysColourChangedEvent& event);
     void OnActivate(wxActivateEvent& event);
 
-    virtual void ChangeFont(bool keepOriginalSize = TRUE);
+    virtual void ChangeFont(bool keepOriginalSize = true);
     virtual void ChangeBackgroundColour();
     virtual void ChangeForegroundColour();
     WXWidget GetMenuBarWidget() const;

@@ -113,8 +113,8 @@ public:
     // Displays help window and focuses index.
     bool DisplayIndex();
 
-    // Searches for keyword. Returns TRUE and display page if found, return
-    // FALSE otherwise
+    // Searches for keyword. Returns true and display page if found, return
+    // false otherwise
     // Syntax of keyword is Altavista-like:
     // * words are separated by spaces
     //   (but "\"hello world\"" is only one world "hello world")
@@ -139,10 +139,10 @@ public:
 
     // call this to let wxHtmlHelpFrame know page changed
     void NotifyPageChanged();
-    
+
     // Refreshes Contents and Index tabs
     void RefreshLists();
-    
+
 protected:
     void Init(wxHtmlHelpData* data = NULL);
 

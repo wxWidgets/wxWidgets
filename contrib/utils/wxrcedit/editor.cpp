@@ -255,7 +255,6 @@ EditorFrame::EditorFrame(wxFrame *parent, const wxString& filename)
     m_TreeCtrl->AssignImageList(imgList);
     sizer->Add(m_TreeCtrl, 1, wxEXPAND);
 
-    SetAutoLayout(true);
     SetSizer(sizer);
 
     // Load file:
@@ -533,7 +532,7 @@ void EditorFrame::OnToolbar(wxCommandEvent& event)
         case ID_OPEN :
             {
             wxString cwd = wxGetCwd(); // workaround for 2.2
-            wxString name = wxFileSelector(_("Open XML resource"), _T(""), _T(""), _T(""), _("XML resources (*.xrc)|*.xrc"), wxOPEN | wxFILE_MUST_EXIST);
+            wxString name = wxFileSelector(_("Open XML resource"), wxEmptyString, wxEmptyString, wxEmptyString, _("XML resources (*.xrc)|*.xrc"), wxOPEN | wxFILE_MUST_EXIST);
             wxSetWorkingDirectory(cwd);
             if (!name.IsEmpty())
                 LoadFile(name);
@@ -547,7 +546,7 @@ void EditorFrame::OnToolbar(wxCommandEvent& event)
         case ID_SAVEAS :
             {
             wxString cwd = wxGetCwd(); // workaround for 2.2
-            wxString name = wxFileSelector(_("Save as"), _T(""), m_FileName, _T(""), _("XML resources (*.xrc)|*.xrc"), wxSAVE | wxOVERWRITE_PROMPT);
+            wxString name = wxFileSelector(_("Save as"), wxEmptyString, m_FileName, wxEmptyString, _("XML resources (*.xrc)|*.xrc"), wxSAVE | wxOVERWRITE_PROMPT);
             wxSetWorkingDirectory(cwd);
             if (!name.IsEmpty())
                 SaveFile((m_FileName = name));
