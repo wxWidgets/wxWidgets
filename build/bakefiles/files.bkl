@@ -336,7 +336,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="NET_OS2_SRC" hints="files">
-    src/unix/gsocket.c
+    src/unix/gsocket.cpp
 </set>
 <set var="NET_OS2_HDR" hints="files">
     wx/unix/gsockunx.h

@@ -428,8 +428,8 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
             <precomp-headers-exclude>
                 src/common/unzip.c
                 src/common/extended.c
-                src/msw/gsocket.c
-                src/msw/gsockmsw.c
+                src/msw/gsocket.cpp
+                src/msw/gsockmsw.cpp
             </precomp-headers-exclude>
         </if>
         
