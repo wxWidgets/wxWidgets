@@ -476,16 +476,15 @@ bool wxApp::Initialize()
     wxPendingEventsLocker = new wxCriticalSection();
 #endif
 
-/*
-    wxTheFontNameDirectory =  new wxFontNameDirectory;
-    wxTheFontNameDirectory->Initialize();
-*/
-
     wxTheColourDatabase = new wxColourDatabase( wxKEY_STRING );
     wxTheColourDatabase->Initialize();
 
     wxInitializeStockLists();
     wxInitializeStockObjects();
+
+#if wxUSE_WX_RESOURCES
+    wxInitializeResourceSystem();
+#endif
 
     wxModule::RegisterModules();
     if (!wxModule::InitializeModules()) return FALSE;
@@ -497,14 +496,14 @@ void wxApp::CleanUp()
 {
     wxModule::CleanUpModules();
 
+#if wxUSE_WX_RESOURCES
+    wxCleanUpResourceSystem();
+#endif
+
     if (wxTheColourDatabase)
         delete wxTheColourDatabase;
+        
     wxTheColourDatabase = (wxColourDatabase*) NULL;
-
-/*
-    if (wxTheFontNameDirectory) delete wxTheFontNameDirectory;
-    wxTheFontNameDirectory = (wxFontNameDirectory*) NULL;
-*/
 
     wxDeleteStockObjects();
 

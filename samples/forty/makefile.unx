@@ -13,9 +13,9 @@
 # under Linux.
 #
 
-CC = gcc
+CC = g++
 
-PROGRAM = drawing
+PROGRAM = forty
 
 OBJECTS = $(PROGRAM).o canvas.o card.o game.o pile.o playerdg.o scoredg.o scorefil.o
 
