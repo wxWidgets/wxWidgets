@@ -484,15 +484,51 @@ public:
 
     DocDeclStr(
         wxRect&, Inflate(wxCoord dx, wxCoord dy),
-        "Increase the rectangle size by dx in x direction and dy in y
-direction. Both (or one of) parameters may be negative to decrease the
-rectangle size.", "");
+        "Increases the size of the rectangle.
+
+The left border is moved farther left and the right border is moved
+farther right by ``dx``. The upper border is moved farther up and the
+bottom border is moved farther down by ``dy``. (Note the the width and
+height of the rectangle thus change by ``2*dx`` and ``2*dy``,
+respectively.) If one or both of ``dx`` and ``dy`` are negative, the
+opposite happens: the rectangle size decreases in the respective
+direction.
+
+The change is made to the rectangle inplace, if instead you need a
+copy that is inflated, preserving the original then make the copy
+first::
+
+    copy = wx.Rect(*original)
+    copy.Inflate(10,15)
+
+", "
+Inflating and deflating behaves *naturally*. Defined more precisely,
+that means:
+
+    * Real inflates (that is, ``dx`` and/or ``dy`` >= 0) are not
+      constrained. Thus inflating a rectangle can cause its upper left
+      corner to move into the negative numbers. (The versions prior to
+      2.5.4 forced the top left coordinate to not fall below (0, 0),
+      which implied a forced move of the rectangle.)
+
+    * Deflates are clamped to not reduce the width or height of the
+      rectangle below zero. In such cases, the top-left corner is
+      nonetheless handled properly. For example, a rectangle at (10,
+      10) with size (20, 40) that is inflated by (-15, -15) will
+      become located at (20, 25) at size (0, 10). Finally, observe
+      that the width and height are treated independently. In the
+      above example, the width is reduced by 20, whereas the height is
+      reduced by the full 30 (rather than also stopping at 20, when
+      the width reached zero).
+
+:see: `Deflate`
+");
 
     DocDeclStr(
         wxRect&, Deflate(wxCoord dx, wxCoord dy),
-        "Decrease the rectangle size by dx in x direction and dy in y
-direction. Both (or one of) parameters may be negative to increase the
-rectngle size. This method is the opposite of Inflate.", "");
+        "Decrease the rectangle size. This method is the opposite of `Inflate`
+in that Deflate(a,b) is equivalent to Inflate(-a,-b).  Please refer to
+`Inflate` for a full description.", "");
 
     DocDeclStrName(
         void, Offset(wxCoord dx, wxCoord dy),
