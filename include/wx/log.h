@@ -85,9 +85,10 @@ public:
     // get current log target, will call wxApp::CreateLogTarget() to create one
     // if 
   static wxLog *GetActiveTarget();
-    // change log target, pLogger = NULL disables logging,
+    // change log target, pLogger = NULL disables logging. if bNoFlashOld is true, 
+    // the old log target isn't flashed which might lead to loss of messages!
     // returns the previous log target
-  static wxLog *SetActiveTarget(wxLog *pLogger);
+  static wxLog *SetActiveTarget(wxLog *pLogger, bool bNoFlashOld = FALSE);
 
   // functions controlling the default wxLog behaviour
     // verbose mode is activated by standard command-line '-verbose' option
@@ -276,7 +277,7 @@ class WXDLLEXPORT wxLogNull
 {
 public:
   // ctor saves old log target, dtor restores it
-  wxLogNull() { m_pPrevLogger = wxLog::SetActiveTarget((wxLog *) NULL); }
+  wxLogNull() { m_pPrevLogger = wxLog::SetActiveTarget((wxLog *)NULL, TRUE); }
  ~wxLogNull() { (void)wxLog::SetActiveTarget(m_pPrevLogger);  }
 
 private:
