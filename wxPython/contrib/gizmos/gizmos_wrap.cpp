@@ -5977,7 +5977,7 @@ static void *_p_wxPyPopupTransientWindowTo_p_wxWindow(void *x) {
     return (void *)((wxWindow *) (wxPopupWindow *) ((wxPyPopupTransientWindow *) x));
 }
 static void *_p_wxTipWindowTo_p_wxWindow(void *x) {
-    return (void *)((wxWindow *) (wxPopupWindow *)(wxPyPopupTransientWindow *) ((wxTipWindow *) x));
+    return (void *)((wxWindow *) (wxTopLevelWindow *)(wxFrame *) ((wxTipWindow *) x));
 }
 static void *_p_wxPyVScrolledWindowTo_p_wxWindow(void *x) {
     return (void *)((wxWindow *) (wxPanel *) ((wxPyVScrolledWindow *) x));
@@ -6715,7 +6715,7 @@ static void *_p_wxPyVScrolledWindowTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvtHandler *)(wxWindow *)(wxPanel *) ((wxPyVScrolledWindow *) x));
 }
 static void *_p_wxTipWindowTo_p_wxObject(void *x) {
-    return (void *)((wxObject *) (wxEvtHandler *)(wxWindow *)(wxPopupWindow *)(wxPyPopupTransientWindow *) ((wxTipWindow *) x));
+    return (void *)((wxObject *) (wxEvtHandler *)(wxWindow *)(wxTopLevelWindow *)(wxFrame *) ((wxTipWindow *) x));
 }
 static void *_p_wxPyPopupTransientWindowTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvtHandler *)(wxWindow *)(wxPopupWindow *) ((wxPyPopupTransientWindow *) x));
@@ -7060,7 +7060,7 @@ static void *_p_wxPyPopupTransientWindowTo_p_wxEvtHandler(void *x) {
     return (void *)((wxEvtHandler *) (wxWindow *)(wxPopupWindow *) ((wxPyPopupTransientWindow *) x));
 }
 static void *_p_wxTipWindowTo_p_wxEvtHandler(void *x) {
-    return (void *)((wxEvtHandler *) (wxWindow *)(wxPopupWindow *)(wxPyPopupTransientWindow *) ((wxTipWindow *) x));
+    return (void *)((wxEvtHandler *) (wxWindow *)(wxTopLevelWindow *)(wxFrame *) ((wxTipWindow *) x));
 }
 static void *_p_wxPyVScrolledWindowTo_p_wxEvtHandler(void *x) {
     return (void *)((wxEvtHandler *) (wxWindow *)(wxPanel *) ((wxPyVScrolledWindow *) x));

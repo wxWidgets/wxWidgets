@@ -1745,6 +1745,7 @@ class ColourDatabase(core.Object):
         except: pass
     def Find(*args, **kwargs): return _gdi.ColourDatabase_Find(*args, **kwargs)
     def FindName(*args, **kwargs): return _gdi.ColourDatabase_FindName(*args, **kwargs)
+    FindColour = Find 
     def AddColour(*args, **kwargs): return _gdi.ColourDatabase_AddColour(*args, **kwargs)
     def Append(*args, **kwargs): return _gdi.ColourDatabase_Append(*args, **kwargs)
     def __repr__(self):
