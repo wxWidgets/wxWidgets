@@ -579,6 +579,8 @@ bool wxTextCtrl::Create( wxWindow *parent,
         if (!HasFlag(wxNO_BORDER))
             gtk_scrolled_window_set_shadow_type( GTK_SCROLLED_WINDOW(m_widget), GTK_SHADOW_IN );
 
+        gtk_widget_add_events( GTK_WIDGET(m_text), GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK );
+
         GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
 #else
         // create our control ...
