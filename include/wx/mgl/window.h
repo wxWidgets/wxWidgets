@@ -143,8 +143,8 @@ private:
     MGLDevCtx *m_paintMGLDC;
     friend class wxPaintDC;
 
-    DECLARE_DYNAMIC_CLASS(wxWindowMGL);
-    DECLARE_NO_COPY_CLASS(wxWindowMGL);
+    DECLARE_DYNAMIC_CLASS(wxWindowMGL)
+    DECLARE_NO_COPY_CLASS(wxWindowMGL)
     DECLARE_EVENT_TABLE()
 
 public:
