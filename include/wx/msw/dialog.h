@@ -63,7 +63,7 @@ public:
     // -------------------------------
 
     // override some base class virtuals
-    virtual bool Show(bool show = TRUE);
+    virtual bool Show(bool show = true);
 
     virtual void Raise();
 
@@ -93,7 +93,7 @@ public:
     // use the other ctor
     wxDEPRECATED( wxDialog(wxWindow *parent,
              const wxString& title, bool modal,
-             int x = -1, int y= -1, int width = 500, int height = 500,
+             int x = wxDefaultCoord, int y = wxDefaultCoord, int width = 500, int height = 500,
              long style = wxDEFAULT_DIALOG_STYLE,
              const wxString& name = wxDialogNameStr) );
 

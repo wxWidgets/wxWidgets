@@ -175,7 +175,7 @@ void wxDirData::Rewind()
 
 bool wxDirData::Read(wxString *filename)
 {
-    bool first = FALSE;
+    bool first = false;
 
     WIN32_FIND_DATA finddata;
     #define PTR_TO_FINDDATA (&finddata)
@@ -192,7 +192,7 @@ bool wxDirData::Read(wxString *filename)
 
         m_finddata = FindFirst(filespec, PTR_TO_FINDDATA);
 
-        first = TRUE;
+        first = true;
     }
 
     if ( !IsFindDataOk(m_finddata) )
@@ -208,7 +208,7 @@ bool wxDirData::Read(wxString *filename)
 #endif // __WIN32__
         //else: not an error, just no (such) files
 
-        return FALSE;
+        return false;
     }
 
     const wxChar *name;
@@ -218,7 +218,7 @@ bool wxDirData::Read(wxString *filename)
     {
         if ( first )
         {
-            first = FALSE;
+            first = false;
         }
         else
         {
@@ -234,7 +234,7 @@ bool wxDirData::Read(wxString *filename)
 #endif // __WIN32__
                 //else: not an error, just no more (such) files
 
-                return FALSE;
+                return false;
             }
         }
 
@@ -277,7 +277,7 @@ bool wxDirData::Read(wxString *filename)
         break;
     }
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -306,7 +306,7 @@ bool wxDir::Open(const wxString& dirname)
     delete M_DIR;
     m_data = new wxDirData(dirname);
 
-    return TRUE;
+    return true;
 }
 
 bool wxDir::IsOpened() const
@@ -349,7 +349,7 @@ bool wxDir::GetFirst(wxString *filename,
                      const wxString& filespec,
                      int flags) const
 {
-    wxCHECK_MSG( IsOpened(), FALSE, _T("must wxDir::Open() first") );
+    wxCHECK_MSG( IsOpened(), false, _T("must wxDir::Open() first") );
 
     M_DIR->Rewind();
 
@@ -361,9 +361,9 @@ bool wxDir::GetFirst(wxString *filename,
 
 bool wxDir::GetNext(wxString *filename) const
 {
-    wxCHECK_MSG( IsOpened(), FALSE, _T("must wxDir::Open() first") );
+    wxCHECK_MSG( IsOpened(), false, _T("must wxDir::Open() first") );
 
-    wxCHECK_MSG( filename, FALSE, _T("bad pointer in wxDir::GetNext()") );
+    wxCHECK_MSG( filename, false, _T("bad pointer in wxDir::GetNext()") );
 
     return M_DIR->Read(filename);
 }
@@ -386,7 +386,7 @@ wxGetDirectoryTimes(const wxString& dirname,
     FIND_DATA fd = FindFirst(dirname, &fs);
     if ( !IsFindDataOk(fd) )
     {
-        return FALSE;
+        return false;
     }
 
     *ftAccess = fs.ftLastAccessTime;
@@ -395,7 +395,7 @@ wxGetDirectoryTimes(const wxString& dirname,
 
     FindClose(fd);
 
-    return TRUE;
+    return true;
 }
 
 #endif // __WIN32__

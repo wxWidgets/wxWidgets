@@ -312,7 +312,7 @@ WXHDC wxPaintDC::FindDCInCache(wxWindow* win)
 /*
  * wxPaintDCEx
  */
- 
+
 // TODO: don't duplicate wxPaintDC code here!!
 
 wxPaintDCEx::wxPaintDCEx(wxWindow *canvas, WXHDC dc) : saveState(0)

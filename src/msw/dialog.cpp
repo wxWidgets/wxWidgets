@@ -206,7 +206,7 @@ wxDialog::wxDialog(wxWindow *parent,
 {
     Init();
 
-    Create(parent, -1, title, wxPoint(x, y), wxSize(w, h), style, name);
+    Create(parent, wxID_ANY, title, wxPoint(x, y), wxSize(w, h), style, name);
 }
 
 void wxDialog::SetModal(bool WXUNUSED(flag))

@@ -216,7 +216,7 @@ wxDDEnumExCallback(GUID *pGuid,
     return true;
 }
 
-HRESULT WINAPI wxDDEnumModesCallback(LPDDSURFACEDESC lpDDSurfaceDesc,  
+HRESULT WINAPI wxDDEnumModesCallback(LPDDSURFACEDESC lpDDSurfaceDesc,
                                      LPVOID lpContext)
 {
     // we need at least the mode size
@@ -658,7 +658,7 @@ bool wxDisplay::DoChangeModeDirectX(const wxVideoMode& mode)
         return false;
     }
 
-         
+
     return true;
 }
 

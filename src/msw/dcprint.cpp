@@ -123,10 +123,10 @@ wxPrinterDC::wxPrinterDC(const wxString& driver_name,
             m_hDC = wxGetPrinterDC(printData);
         }
 
-        m_ok = m_hDC ? TRUE: FALSE;
+        m_ok = m_hDC ? true: false;
 
         // as we created it, we must delete it as well
-        m_bOwnsDC = TRUE;
+        m_bOwnsDC = true;
     }
 
     Init();
@@ -136,11 +136,11 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printData)
 {
     m_printData = printData;
 
-    m_isInteractive = FALSE;
+    m_isInteractive = false;
 
     m_hDC = wxGetPrinterDC(printData);
     m_ok = m_hDC != 0;
-    m_bOwnsDC = TRUE;
+    m_bOwnsDC = true;
 
     Init();
 }
@@ -148,11 +148,11 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printData)
 
 wxPrinterDC::wxPrinterDC(WXHDC dc)
 {
-    m_isInteractive = FALSE;
+    m_isInteractive = false;
 
     m_hDC = dc;
-    m_bOwnsDC = TRUE;
-    m_ok = TRUE;
+    m_bOwnsDC = true;
+    m_ok = true;
 }
 
 void wxPrinterDC::Init()
@@ -191,7 +191,7 @@ bool wxPrinterDC::StartDoc(const wxString& message)
 #endif
 
     if (!m_hDC)
-        return FALSE;
+        return false;
 
     int ret = ::StartDoc(GetHdc(), &docinfo);
 
@@ -254,7 +254,7 @@ static bool wxGetDefaultDeviceName(wxString& deviceName, wxString& portName)
         if (pd.hDevNames)
             GlobalFree(pd.hDevNames);
 
-        return FALSE;
+        return false;
     }
 
     if (pd.hDevNames)
@@ -340,14 +340,14 @@ bool DrawBitmapUsingStretchDIBits(HDC hdc,
     wxDIB dib(bmp);
     bool ok = dib.IsOk();
     if ( !ok )
-        return FALSE;
+        return false;
 
     DIBSECTION ds;
     if ( !::GetObject(dib.GetHandle(), sizeof(ds), &ds) )
     {
         wxLogLastError(_T("GetObject(DIBSECTION)"));
 
-        return FALSE;
+        return false;
     }
 
     // ok, we've got all data we need, do blit it
@@ -366,12 +366,12 @@ bool DrawBitmapUsingStretchDIBits(HDC hdc,
     {
         wxLogLastError(wxT("StretchDIBits"));
 
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 #else
-    return FALSE;
+    return false;
 #endif
 }
 
@@ -468,7 +468,7 @@ bool wxPrinterDC::DoBlit(wxCoord xdest, wxCoord ydest,
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 #endif

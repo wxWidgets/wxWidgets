@@ -103,7 +103,7 @@ void wxDragImage::Init()
     m_hCursorImageList = 0;
 #endif
     m_window = (wxWindow*) NULL;
-    m_fullScreen = FALSE;
+    m_fullScreen = false;
 }
 
 // Attributes
@@ -192,7 +192,7 @@ bool wxDragImage::Create(const wxIcon& image, const wxCursor& cursor)
     else
         flags = ILC_COLOR32;
 #endif
-    bool mask = TRUE;
+    bool mask = true;
     if ( mask )
         flags |= ILC_MASK;
 
@@ -270,7 +270,7 @@ bool wxDragImage::Create(const wxListCtrl& listCtrl, long id)
     POINT pt;
     pt.x = 0; pt.y = 0;
     m_hImageList = (WXHIMAGELIST) ListView_CreateDragImage((HWND) listCtrl.GetHWND(), id, & pt);
-    return TRUE;
+    return true;
 }
 #endif
 
@@ -290,20 +290,20 @@ bool wxDragImage::BeginDrag(const wxPoint& hotspot, wxWindow* window, bool fullS
     {
         wxFAIL_MSG( _T("BeginDrag failed.") );
 
-        return FALSE;
+        return false;
     }
 
     if (m_cursor.Ok())
     {
 #if wxUSE_SIMPLER_DRAGIMAGE
-	    m_oldCursor = window->GetCursor();
-	    window->SetCursor(m_cursor);
+        m_oldCursor = window->GetCursor();
+        window->SetCursor(m_cursor);
 #else
         if (!m_hCursorImageList)
-        {           
-            int cxCursor = GetSystemMetrics(SM_CXCURSOR); 
-            int cyCursor = GetSystemMetrics(SM_CYCURSOR); 
- 
+        {
+            int cxCursor = GetSystemMetrics(SM_CXCURSOR);
+            int cyCursor = GetSystemMetrics(SM_CYCURSOR);
+
             m_hCursorImageList = (WXHIMAGELIST) ImageList_Create(cxCursor, cyCursor, ILC_MASK, 1, 1);
         }
 
@@ -347,7 +347,7 @@ bool wxDragImage::BeginDrag(const wxPoint& hotspot, wxWindow* window, bool fullS
 
     ::SetCapture(GetHwndOf(window));
 
-    return TRUE;
+    return true;
 }
 
 // Begin drag. hotspot is the location of the drag position relative to the upper-left
@@ -359,7 +359,7 @@ bool wxDragImage::BeginDrag(const wxPoint& hotspot, wxWindow* window, wxWindow* 
 
     int x = fullScreenRect->GetPosition().x;
     int y = fullScreenRect->GetPosition().y;
-    
+
     wxSize sz = fullScreenRect->GetSize();
 
     if (fullScreenRect->GetParent() && !fullScreenRect->IsKindOf(CLASSINFO(wxFrame)))
@@ -368,7 +368,7 @@ bool wxDragImage::BeginDrag(const wxPoint& hotspot, wxWindow* window, wxWindow* 
     rect.x = x; rect.y = y;
     rect.width = sz.x; rect.height = sz.y;
 
-    return BeginDrag(hotspot, window, TRUE, & rect);
+    return BeginDrag(hotspot, window, true, & rect);
 }
 
 // End drag
@@ -385,14 +385,14 @@ bool wxDragImage::EndDrag()
 
 #if wxUSE_SIMPLER_DRAGIMAGE
     if (m_cursor.Ok() && m_oldCursor.Ok())
-	    m_window->SetCursor(m_oldCursor);
+        m_window->SetCursor(m_oldCursor);
 #else
     ::ShowCursor(TRUE);
 #endif
 
     m_window = (wxWindow*) NULL;
 
-    return TRUE;
+    return true;
 }
 
 // Move the image: call from OnMouseMove. Pt is in window client coordinates if window

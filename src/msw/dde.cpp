@@ -308,7 +308,7 @@ bool wxDDEServer::Create(const wxString& server)
 
 wxDDEServer::~wxDDEServer()
 {
-    if ( !!m_serviceName )
+    if ( !m_serviceName.IsEmpty() )
     {
         HSZ hsz = DDEAtomFromString(m_serviceName);
 
@@ -561,7 +561,7 @@ bool wxDDEConnection::Execute(const wxChar *data, int size, wxIPCFormat format)
         size = wxStrlen(data) + 1;
     }
 
-    bool ok = DdeClientTransaction((LPBYTE)data, 
+    bool ok = DdeClientTransaction((LPBYTE)data,
                                     size * sizeof(wxChar),
                                     GetHConv(),
                                     NULL,
@@ -621,7 +621,7 @@ bool wxDDEConnection::Poke(const wxString& item, wxChar *data, int size, wxIPCFo
     }
 
     HSZ item_atom = DDEGetAtom(item);
-    bool ok = DdeClientTransaction((LPBYTE)data, 
+    bool ok = DdeClientTransaction((LPBYTE)data,
                                    size * sizeof(wxChar),
                                    GetHConv(),
                                    item_atom, format,

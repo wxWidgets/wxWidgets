@@ -67,7 +67,7 @@ public:
   // Calls that both can make
   virtual bool Disconnect(void);
 
-  // Default behaviour is to delete connection and return TRUE
+  // Default behaviour is to delete connection and return true
   virtual bool OnDisconnect(void);
 
  public:
@@ -90,7 +90,7 @@ class WXDLLIMPEXP_BASE wxDDEServer: public wxServerBase
 
   wxDDEServer(void);
   ~wxDDEServer(void);
-  bool Create(const wxString& server_name); // Returns FALSE if can't create server (e.g. port
+  bool Create(const wxString& server_name); // Returns false if can't create server (e.g. port
                                   // number is already in use)
   virtual wxConnectionBase *OnAcceptConnection(const wxString& topic);
 

@@ -89,7 +89,7 @@ bool wxMemoryDC::CreateCompatible(wxDC *dc)
     m_hDC = (WXHDC)::CreateCompatibleDC(dc ? GetHdcOf(*dc) : NULL);
 
     // as we created the DC, we must delete it in the dtor
-    m_bOwnsDC = TRUE;
+    m_bOwnsDC = true;
 
     m_ok = m_hDC != 0;
 

@@ -226,7 +226,7 @@ BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp, LPARAM pData)
             //
             // wParam = TRUE => lParam is a string and not a PIDL
 #ifndef __WXWINCE__
-            SendMessage(hwnd, BFFM_SETSELECTION, TRUE, pData);
+            ::SendMessage(hwnd, BFFM_SETSELECTION, TRUE, pData);
 #endif
             break;
 
