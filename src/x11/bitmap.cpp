@@ -1316,7 +1316,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxBitmapHandler, wxBitmapHandlerBase);
 
 class wxXPMFileHandler : public wxBitmapHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxXPMFileHandler);
+    DECLARE_DYNAMIC_CLASS(wxXPMFileHandler)
 public:
     wxXPMFileHandler()
     {
@@ -1424,7 +1424,7 @@ bool wxXPMFileHandler::SaveFile(const wxBitmap *bitmap, const wxString& name,
 
 class wxXPMDataHandler : public wxBitmapHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxXPMDataHandler);
+    DECLARE_DYNAMIC_CLASS(wxXPMDataHandler)
 public:
     wxXPMDataHandler()
     {

@@ -409,7 +409,7 @@ public:
         close( idleFds[1] );
     }
 private:
-    DECLARE_DYNAMIC_CLASS(wxIdlePipeModule);
+    DECLARE_DYNAMIC_CLASS(wxIdlePipeModule)
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxIdlePipeModule, wxModule);

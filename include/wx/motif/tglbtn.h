@@ -38,7 +38,7 @@ public:
                  const wxValidator& val = wxDefaultValidator,
                  const wxString &name = wxCheckBoxNameStr );
 private:
-    DECLARE_DYNAMIC_CLASS(wxToggleButton);
+    DECLARE_DYNAMIC_CLASS(wxToggleButton)
 
     // common part of all constructors
     void Init()
