@@ -58,6 +58,8 @@
 #define wxSYS_COLOUR_INFOTEXT          23
 #define wxSYS_COLOUR_INFOBK            24
 
+#define wxSYS_COLOUR_LISTBOX           25
+
 #define wxSYS_COLOUR_DESKTOP           wxSYS_COLOUR_BACKGROUND
 #define wxSYS_COLOUR_3DFACE            wxSYS_COLOUR_BTNFACE
 #define wxSYS_COLOUR_3DSHADOW          wxSYS_COLOUR_BTNSHADOW

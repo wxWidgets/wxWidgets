@@ -51,6 +51,7 @@ wxColour wxSystemSettings::GetSystemColour(int index)
     }
     case wxSYS_COLOUR_HIGHLIGHT:
     case wxSYS_COLOUR_BTNHIGHLIGHT:
+	case wxSYS_COLOUR_LISTBOX:
       //    case wxSYS_COLOUR_3DHIGHLIGHT:      // Same as wxSYS_COLOUR_BTNHIGHLIGHT
     {
         return *wxWHITE;
