@@ -281,13 +281,14 @@ that are affected are listed here::
     SetClippingRegionAsRegion(region);
 
 	
-If you have code that draws on a DC you **will** get errors because of
-these changes, but it should be easy to fix the code.  You can either
-change the name of the *Type B* method called to the names shown
-above, or just add parentheses around the parameters as needed to turn
-them into tuples and let the SWIG typemaps turn them into the wx.Point
-or wx.Size object that is expected.  Then you will be calling the new
-*Type A* method.  For example, if you had this code before::
+If you have code that draws on a DC and you are using the new wx
+namespace then you **will** get errors because of these changes, but
+it should be easy to fix the code.  You can either change the name of
+the *Type B* method called to the names shown above, or just add
+parentheses around the parameters as needed to turn them into tuples
+and let the SWIG typemaps turn them into the wx.Point or wx.Size
+object that is expected.  Then you will be calling the new *Type A*
+method.  For example, if you had this code before::
 
     dc.DrawRectangle(x, y, width, height)
 
@@ -305,6 +306,14 @@ Then you can just simplify it like this::
 
     dc.DrawRectangle(p, s)
 
+Now before you start yelling and screaming at me for breaking all your
+code, take note that I said above "...using the new wx namespace..."
+That's because if you are still importing from wxPython.wx then there
+are some classes defined there with Draw and etc. methods that have
+2.4 compatible signatures.  However if/when the old wxPython.wx
+namespace is removed then these classes will be removed too so you
+should plam on migrating to the new namespace and new DC Draw methods
+before that time.
 
 
 

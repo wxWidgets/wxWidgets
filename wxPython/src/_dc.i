@@ -13,6 +13,7 @@
 // Not a %module
 
 
+
 //---------------------------------------------------------------------------
 
 %{
@@ -52,7 +53,7 @@ public:
 
 
 
-#if 0  // The old way
+#if defined(wxUSE_DC_OLD_METHODS)
 
     bool FloodFill(wxCoord x, wxCoord y, const wxColour& col, int style = wxFLOOD_SURFACE);
     //bool GetPixel(wxCoord x, wxCoord y, wxColour *col) const;
@@ -86,7 +87,7 @@ public:
 
 
 #else  // The new way
-    
+
     %name(FloodFillXY) bool FloodFill(wxCoord x, wxCoord y, const wxColour& col, int style = wxFLOOD_SURFACE);
     bool FloodFill(const wxPoint& pt, const wxColour& col, int style = wxFLOOD_SURFACE);
 
@@ -149,18 +150,18 @@ public:
     %name(DrawRotatedTextXY) void DrawRotatedText(const wxString& text, wxCoord x, wxCoord y, double angle);
     void DrawRotatedText(const wxString& text, const wxPoint& pt, double angle);
 
-    
+
     %name(BlitXY) bool Blit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
                             wxDC *source, wxCoord xsrc, wxCoord ysrc,
                             int rop = wxCOPY, bool useMask = False,
                             wxCoord xsrcMask = -1, wxCoord ysrcMask = -1);
-    bool Blit(const wxPoint& destPt, const wxSize& sz,  
+    bool Blit(const wxPoint& destPt, const wxSize& sz,
               wxDC *source, const wxPoint& srcPt,
               int rop = wxCOPY, bool useMask = False,
               const wxPoint& srcPtMask = wxDefaultPosition);
 
 #endif
-    
+
     void DrawLines(int points, wxPoint* points_array, wxCoord xoffset = 0, wxCoord yoffset = 0);
 
     void DrawPolygon(int points, wxPoint* points_array,
@@ -192,7 +193,7 @@ public:
     void DrawSpline(int points, wxPoint* points_array);
 
 
-    
+
     // global DC operations
     // --------------------
 
@@ -204,7 +205,7 @@ public:
     virtual void StartPage();
     virtual void EndPage();
 
-    
+
     // set objects to use for drawing
     // ------------------------------
 
@@ -215,7 +216,7 @@ public:
     virtual void SetBackgroundMode(int mode);
     virtual void SetPalette(const wxPalette& palette);
 
-    
+
     // clipping region
     // ---------------
 
@@ -229,7 +230,7 @@ public:
     DocDeclA(
         void, GetClippingBox(wxCoord *OUTPUT, wxCoord *OUTPUT, wxCoord *OUTPUT, wxCoord *OUTPUT) const,
         "GetClippingBox() -> (x, y, width, height)");
-    
+
     %extend {
         wxRect GetClippingRect() {
             wxRect rect;
@@ -237,9 +238,9 @@ public:
             return rect;
         }
     }
-    
 
-    
+
+
     // text extent
     // -----------
 
@@ -254,14 +255,14 @@ public:
         "Only works for single line strings.");
     DocDeclAStrName(
         void, GetTextExtent(const wxString& string,
-                            wxCoord *OUTPUT, wxCoord *OUTPUT, wxCoord *OUTPUT, wxCoord* OUTPUT, 
+                            wxCoord *OUTPUT, wxCoord *OUTPUT, wxCoord *OUTPUT, wxCoord* OUTPUT,
                             wxFont* font = NULL),
         "GetFullTextExtent(wxString string, Font font=None) ->\n   (width, height, descent, externalLeading)",
         "Get the width, height, decent and leading of the text using the current or specified font.\n"
         "Only works for single line strings.",
         GetFullTextExtent);
 
-    
+
     // works for single as well as multi-line strings
     DocDeclAStr(
         void, GetMultiLineTextExtent(const wxString& text,
@@ -281,7 +282,7 @@ public:
         void, GetSize( int *OUTPUT, int *OUTPUT ),
         "GetSizeTuple() -> (width, height)",
         GetSizeTuple);
-    
+
 
     DocStr(GetSizeMM, "Get the DC size in milimeters.");
     wxSize GetSizeMM() const;
@@ -289,8 +290,8 @@ public:
         void, GetSizeMM( int *OUTPUT, int *OUTPUT ) const,
         "GetSizeMMTuple() -> (width, height)",
         GetSizeMMTuple);
-    
-    
+
+
 
     // coordinates conversions
     // -----------------------
@@ -320,7 +321,7 @@ public:
 
     virtual bool Ok() const;
 
-    
+
 
     int GetBackgroundMode() const;
     const wxBrush&  GetBackground() const;
@@ -336,14 +337,14 @@ public:
     int GetMapMode() const;
     virtual void SetMapMode(int mode);
 
-    
+
     DocDeclA(
         virtual void, GetUserScale(double *OUTPUT, double *OUTPUT) const,
         "GetUserScale() -> (xScale, yScale)");
-    
+
     virtual void SetUserScale(double x, double y);
 
-    
+
     DocDeclA(
         virtual void, GetLogicalScale(double *OUTPUT, double *OUTPUT),
         "GetLogicalScale() -> (xScale, yScale)");
@@ -356,16 +357,16 @@ public:
         void, GetLogicalOrigin(wxCoord *OUTPUT, wxCoord *OUTPUT) const,
         "GetLogicalOriginTuple() -> (x,y)",
         GetLogicalOriginTuple);
-        
+
     virtual void SetLogicalOrigin(wxCoord x, wxCoord y);
 
-    
+
     wxPoint GetDeviceOrigin() const;
     DocDeclAName(
         void, GetDeviceOrigin(wxCoord *OUTPUT, wxCoord *OUTPUT) const,
         "GetDeviceOriginTuple() -> (x,y)",
         GetDeviceOriginTuple);
-    
+
     virtual void SetDeviceOrigin(wxCoord x, wxCoord y);
 
     virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
@@ -375,7 +376,7 @@ public:
 
     virtual void SetOptimization(bool opt);
     virtual bool GetOptimization();
-    
+
 
     // bounding box
     // ------------
@@ -395,7 +396,7 @@ public:
     %extend {
         void GetBoundingBox(int* OUTPUT, int* OUTPUT, int* OUTPUT, int* OUTPUT);
         // See below for implementation
-    }    
+    }
     %pythoncode { def __nonzero__(self): return self.Ok() };
 
 
@@ -486,8 +487,8 @@ public:
 
 
     def DrawPolygonList(self, polygons, pens=None, brushes=None):
-        ## Note: This does not currently support fill style or offset
-        ## you can always use the non-List version if need be.
+        %## Note: This does not currently support fill style or offset
+        %## you can always use the non-List version if need be.
         if pens is None:
            pens = []
         elif isinstance(pens, wx.Pen):
@@ -504,9 +505,9 @@ public:
 
 
     def DrawTextList(self, textList, coords, foregrounds = None, backgrounds = None, fonts = None):
-        ## NOTE: this does not currently support changing the font
-        ##       Make sure you set Background mode to wxSolid (DC.SetBackgroundMode)
-        ##       If you want backgounds to do anything.
+        %## NOTE: this does not currently support changing the font
+        %##       Make sure you set Background mode to wxSolid (DC.SetBackgroundMode)
+        %##       If you want backgounds to do anything.
         if type(textList) == type(''):
            textList = [textList]
         elif len(textList) != len(coords):
@@ -547,7 +548,7 @@ class wxMemoryDC : public wxDC {
 public:
     wxMemoryDC();
     %name(MemoryDCFromDC) wxMemoryDC(wxDC* oldDC);
-        
+
     void SelectObject(const wxBitmap& bitmap);
 };
 
@@ -557,9 +558,9 @@ public:
 class wxBufferedDC : public wxMemoryDC
 {
 public:
-    %addtofunc wxBufferedDC( wxDC *dc, const wxBitmap &buffer ) 
+    %addtofunc wxBufferedDC( wxDC *dc, const wxBitmap &buffer )
         "self._dc = args[0] # save a ref so the other dc will not be deleted before self";
-    %addtofunc wxBufferedDC( wxDC *dc, const wxSize &area ) 
+    %addtofunc wxBufferedDC( wxDC *dc, const wxSize &area )
         "val._dc = args[0] # save a ref so the other dc will not be deleted before self";
 
     // Construct a wxBufferedDC using a user supplied buffer.
@@ -752,12 +753,12 @@ class  wxPrinterDC : public wxClientDC {
 public:
     wxPrinterDC(const wxPrintData&)
         { wxPyRaiseNotImplemented(); }
-    
+
 //     wxPrinterDC(const wxString&, const wxString&, const wxString&, bool, int)
 //         { wxPyRaiseNotImplemented(); }
 };
 %}
- 
+
 class  wxPrinterDC : public wxDC {
 public:
     wxPrinterDC(const wxPrintData& printData);
@@ -768,5 +769,50 @@ public:
 //                                     int orientation = wxPORTRAIT);
 };
 #endif
+
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+
+// Now define some Python classes that rename the Draw methods to be
+// compatible with the DC Draw methods in 2.4.  See also wxPython/_wx.py.
+
+
+%define MAKE_OLD_DC_CLASS(classname)
+    %pythoncode {
+    class classname##_old(classname):
+        """DC class that has methods with 2.4 compatible parameters."""
+        FloodFill = classname.FloodFillXY
+        GetPixel = classname.GetPixelXY
+        DrawLine = classname.DrawLineXY
+        CrossHair = classname.CrossHairXY
+        DrawArc = classname.DrawArcXY
+        DrawCheckMark = classname.DrawCheckMarkXY
+        DrawEllipticArc = classname.DrawEllipticArcXY
+        DrawPoint = classname.DrawPointXY
+        DrawRectangle = classname.DrawRectangleXY
+        DrawRoundedRectangle = classname.DrawRoundedRectangleXY
+        DrawCircle = classname.DrawCircleXY
+        DrawEllipse = classname.DrawEllipseXY
+        DrawIcon = classname.DrawIconXY
+        DrawBitmap = classname.DrawBitmapXY
+        DrawText = classname.DrawTextXY
+        DrawRotatedText = classname.DrawRotatedTextXY
+        Blit = classname.BlitXY
+    }
+%enddef
+
+MAKE_OLD_DC_CLASS(DC);
+MAKE_OLD_DC_CLASS(MemoryDC);
+MAKE_OLD_DC_CLASS(BufferedDC);
+MAKE_OLD_DC_CLASS(BufferedPaintDC);
+MAKE_OLD_DC_CLASS(ScreenDC);
+MAKE_OLD_DC_CLASS(ClientDC);
+MAKE_OLD_DC_CLASS(PaintDC);
+MAKE_OLD_DC_CLASS(WindowDC);
+MAKE_OLD_DC_CLASS(MirrorDC);
+MAKE_OLD_DC_CLASS(PostScriptDC);
+MAKE_OLD_DC_CLASS(MetaFileDC);
+MAKE_OLD_DC_CLASS(PrinterDC);
+
 
 //---------------------------------------------------------------------------
