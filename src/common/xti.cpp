@@ -271,12 +271,12 @@ template<> void wxCollectionToVariantArray( wxArrayString const &theArray, wxxVa
     wxArrayCollectionToVariantArray( theArray , value ) ;
 }
 
-wxTypeInfoMap *wxTypeInfo::sm_typeTable = NULL ;
+wxTypeInfoMap *wxTypeInfo::ms_typeTable = NULL ;
 
 wxTypeInfo *wxTypeInfo::FindType(const wxChar *typeName)
 {
-    wxTypeInfoMap::iterator iter = sm_typeTable->find(typeName) ;
-    wxASSERT_MSG( iter != sm_typeTable->end() , wxT("lookup for a non-existent type-info") ) ;
+    wxTypeInfoMap::iterator iter = ms_typeTable->find(typeName) ;
+    wxASSERT_MSG( iter != ms_typeTable->end() , wxT("lookup for a non-existent type-info") ) ;
     return (wxTypeInfo *)iter->second;
 }
 
@@ -300,17 +300,17 @@ wxTypeInfo ( wxT_DELEGATE , to , from , wxEmptyString )
 
 void wxTypeInfo::Register()
 {    
-    if ( sm_typeTable == NULL )
-        sm_typeTable = new wxTypeInfoMap() ;
+    if ( ms_typeTable == NULL )
+        ms_typeTable = new wxTypeInfoMap() ;
 
     if( !m_name.IsEmpty() )
-        (*sm_typeTable)[m_name] = this ;
+        (*ms_typeTable)[m_name] = this ;
 }
 
 void wxTypeInfo::Unregister()
 {
     if( !m_name.IsEmpty() )
-        sm_typeTable->erase(m_name);
+        ms_typeTable->erase(m_name);
 }
 
 // removing header dependancy on string tokenizer
