@@ -311,7 +311,7 @@ void wxButton::SetDefaultStyle(
         if ((lStyle & BS_USERBUTTON) != BS_USERBUTTON)
         {
             if (bOn)
-                lStyle | BS_DEFAULT;
+                lStyle |= BS_DEFAULT;
             else
                 lStyle &= ~BS_DEFAULT;
             ::WinSetWindowULong(GetHwndOf(pBtn), QWL_STYLE, lStyle);
