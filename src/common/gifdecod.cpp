@@ -36,7 +36,7 @@
 
 wxGIFDecoder::wxGIFDecoder(wxInputStream *s, bool anim)
 {
-    m_f = s;
+    m_f    = s;
     m_anim = anim;
 
     m_background = -1;
@@ -69,6 +69,12 @@ void wxGIFDecoder::Destroy()
         delete pimg;
         pimg = paux;
     }
+
+    m_pimage  = NULL;
+    m_pfirst  = NULL;
+    m_plast   = NULL;
+    m_image   = 0;
+    m_nimages = 0;
 }
 
 
@@ -643,7 +649,7 @@ int wxGIFDecoder::ReadGIF()
             if ((buf[8] & 0x80) == 0x80)
             {
                 ncolors = 2 << (buf[8] & 0x07);
-                m_f->Read(pal, 3 * ncolors);
+                m_f->SeekI(3 * ncolors, wxFromCurrent);
             }
 
             /* initial code size */
@@ -655,7 +661,7 @@ int wxGIFDecoder::ReadGIF()
                 m_f->SeekI(i, wxFromCurrent);
             }
         }
-        else if (type != 0x3B)
+        else if ((type != 0x3B) && (type != 00)) /* testing */
         {
             /* images are OK, but couldn't read to the end of the stream */
             return wxGIF_TRUNCATED;
