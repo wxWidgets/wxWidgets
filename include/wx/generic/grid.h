@@ -891,7 +891,7 @@ class WXDLLEXPORT wxGridStringTable : public wxGridTableBase
 public:
     wxGridStringTable();
     wxGridStringTable( int numRows, int numCols );
-    ~wxGridStringTable();
+    virtual ~wxGridStringTable();
 
     // these are pure virtual in wxGridTableBase
     //
@@ -1011,7 +1011,7 @@ public:
             long style = wxWANTS_CHARS,
             const wxString& name = wxPanelNameStr );
 
-    ~wxGrid();
+    virtual ~wxGrid();
 
     enum wxGridSelectionModes {wxGridSelectCells,
                                wxGridSelectRows,
