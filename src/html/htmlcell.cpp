@@ -58,7 +58,7 @@ void wxHtmlSelection::Set(wxHtmlCell *fromCell, wxHtmlCell *toCell)
 }
 
 wxColour wxDefaultHtmlRenderingStyle::GetSelectedTextColour(
-                                        const wxColour& WXUNUSED(clr))
+                                        const wxColour& clr)
 {
     return wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
 }
@@ -353,7 +353,7 @@ void wxHtmlWordCell::Draw(wxDC& dc, int x, int y,
         wxString txt;
         int w, h;
         int ofs = 0;
-        
+       
         wxPoint priv = (this == s->GetFromCell()) ? 
                            s->GetFromPrivPos() : s->GetToPrivPos();
         int part1 = priv.x;
@@ -1003,13 +1003,19 @@ void wxHtmlColourCell::DrawInvisible(wxDC& dc,
     {
         state.SetFgColour(m_Colour);
         if (state.GetSelectionState() != wxHTML_SEL_IN)
-            dc.SetTextForeground(m_Colour);        
+            dc.SetTextForeground(m_Colour);
+        else
+            dc.SetTextForeground(
+                    info.GetStyle().GetSelectedTextColour(m_Colour));
     }
     if (m_Flags & wxHTML_CLR_BACKGROUND)
     {
         state.SetBgColour(m_Colour);
         if (state.GetSelectionState() != wxHTML_SEL_IN)
             dc.SetTextBackground(m_Colour);
+        else
+            dc.SetTextBackground(
+                    info.GetStyle().GetSelectedTextBgColour(m_Colour));
         dc.SetBackground(wxBrush(m_Colour, wxSOLID));
     }
 }
