@@ -341,7 +341,7 @@ class DirBrowseButton(FileBrowseButton):
         dialog = self.dialogClass(self,
                                   message = self.dialogTitle,
                                   defaultPath = self.startDirectory)
-        if dialog.ShowModal() == wx.ID_OK:
+        if dialog.ShowModal() == wxID_OK:
             self.SetValue(dialog.GetPath())
         dialog.Destroy()
     #
