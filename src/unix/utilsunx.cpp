@@ -263,7 +263,7 @@ long wxExecute( wxChar **argv, bool sync, wxProcess *process )
 
     // this macro will free memory we used above
     #define ARGS_CLEANUP                                 \
-        for ( mb_argc = 0; mb_argb[mb_argc]; mb_argc++ ) \
+        for ( mb_argc = 0; mb_argv[mb_argc]; mb_argc++ ) \
             free(mb_argv[mb_argc])
 #else // ANSI
     // no need for cleanup
