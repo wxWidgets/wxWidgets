@@ -50,7 +50,6 @@ GENERICOBJS= $(GENDIR)\busyinfo.obj \
 		$(GENDIR)\splash.obj \
 		$(GENDIR)\splitter.obj \
 		$(GENDIR)\statusbr.obj \
-		$(GENDIR)\tbarsmpl.obj \
 		$(GENDIR)\textdlgg.obj \
 		$(GENDIR)\tipdlg.obj \
 		$(GENDIR)\tipwin.obj \
