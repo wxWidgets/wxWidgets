@@ -171,7 +171,7 @@ enum wxPrintBin
     wxPRINTBIN_CASSETTE,
     wxPRINTBIN_FORMSOURCE,
 
-    wxPRINTBIN_USER,
+    wxPRINTBIN_USER
 };
 
 
