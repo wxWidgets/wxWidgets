@@ -282,7 +282,7 @@ void VScrollFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxMessageBox(_T("VScroll shows how to implement scrolling with\n")
                  _T("variable line heights.\n")
-                 _T("© 2003 Vadim Zeitlin"),
+                 _T("(c) 2003 Vadim Zeitlin"),
                  _T("About VScroll"),
                  wxOK | wxICON_INFORMATION,
                  this);

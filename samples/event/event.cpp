@@ -295,7 +295,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxMessageBox( wxT("Event sample shows different ways of using events\n")
-                  wxT("© 2001 Vadim Zeitlin"),
+                  wxT("(c) 2001 Vadim Zeitlin"),
                   wxT("About Event Sample"), wxOK | wxICON_INFORMATION, this );
 }
 

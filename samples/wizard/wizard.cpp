@@ -345,7 +345,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxMessageBox(_T("Demo of wxWizard class\n")
-                 _T("© 1999, 2000 Vadim Zeitlin"),
+                 _T("(c) 1999, 2000 Vadim Zeitlin"),
                  _T("About wxWizard sample"), wxOK | wxICON_INFORMATION, this);
 }
 

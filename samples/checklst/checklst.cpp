@@ -254,7 +254,7 @@ void CheckListBoxFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void CheckListBoxFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox(wxT("Demo of wxCheckListBox control\n© Vadim Zeitlin 1998-2002"),
+    wxMessageBox(wxT("Demo of wxCheckListBox control\n(c) Vadim Zeitlin 1998-2002"),
                  wxT("About wxCheckListBox"),
                  wxICON_INFORMATION, this);
 }

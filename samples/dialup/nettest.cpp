@@ -263,7 +263,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxString msg;
     msg.Printf( wxT("This is the network functions test sample.\n")
-                wxT("© 1999 Vadim Zeitlin") );
+                wxT("(c) 1999 Vadim Zeitlin") );
 
     wxMessageBox(msg, wxT("About NetTest"), wxOK | wxICON_INFORMATION, this);
 }

@@ -319,7 +319,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxString msg = _T("Demonstrates keyboard event processing in wxWidgets\n")
-                   _T("© 2002 Vadim Zeitlin");
+                   _T("(c) 2002 Vadim Zeitlin");
 
     wxMessageBox(msg, _T("About wxKeyboard"), wxOK | wxICON_INFORMATION, this);
 }

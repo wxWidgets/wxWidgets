@@ -285,7 +285,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox(_T("wxCalendarCtrl sample\n© 2000 Vadim Zeitlin"),
+    wxMessageBox(_T("wxCalendarCtrl sample\n(c) 2000 Vadim Zeitlin"),
                  _T("About Calendar"), wxOK | wxICON_INFORMATION, this);
 }
 

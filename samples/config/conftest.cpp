@@ -216,7 +216,7 @@ void MyFrame::OnQuit(wxCommandEvent&)
 
 void MyFrame::OnAbout(wxCommandEvent&)
 {
-  wxMessageBox(_T("wxConfig demo\n© 1998-2001 Vadim Zeitlin"), _T("About"),
+  wxMessageBox(_T("wxConfig demo\n(c) 1998-2001 Vadim Zeitlin"), _T("About"),
                wxICON_INFORMATION | wxOK);
 }
 

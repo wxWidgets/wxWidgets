@@ -243,7 +243,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox(_T("The caret wxWidgets sample.\n© 1999 Vadim Zeitlin"),
+    wxMessageBox(_T("The caret wxWidgets sample.\n(c) 1999 Vadim Zeitlin"),
                  _T("About Caret"), wxOK | wxICON_INFORMATION, this);
 }
 

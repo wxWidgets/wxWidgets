@@ -313,7 +313,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxMessageBox(_T("Render sample shows how to use custom renderers.\n")
                  _T("\n")
-                 _T("© 2003 Vadim Zeitlin"),
+                 _T("(c) 2003 Vadim Zeitlin"),
                  _T("About Render wxWidgets Sample"),
                  wxOK | wxICON_INFORMATION, this);
 }

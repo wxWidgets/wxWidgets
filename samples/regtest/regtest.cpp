@@ -385,7 +385,7 @@ void RegFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxMessageDialog dialog(this,
         _T("wxRegistry sample\n")
-        _T("© 1998, 2000 Vadim Zeitlin"),
+        _T("(c) 1998, 2000 Vadim Zeitlin"),
         _T("About wxRegTest"), wxOK);
 
     dialog.ShowModal();

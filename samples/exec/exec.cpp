@@ -499,7 +499,7 @@ void MyFrame::OnClear(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox(_T("Exec wxWidgets Sample\n© 2000-2002 Vadim Zeitlin"),
+    wxMessageBox(_T("Exec wxWidgets Sample\n(c) 2000-2002 Vadim Zeitlin"),
                  _T("About Exec"), wxOK | wxICON_INFORMATION, this);
 }
 
