@@ -1181,6 +1181,42 @@ void wxTreeCtrl::RefreshItem(const wxTreeItemId& item)
     }
 }
 
+wxColour wxTreeCtrl::GetItemTextColour(const wxTreeItemId& item) const
+{
+    long id = (long)(WXHTREEITEM)item;
+    wxTreeItemAttr *attr = (wxTreeItemAttr *)m_attrs.Get(id);
+    if ( !attr )
+    {
+        return wxNullColour;
+    }
+
+    return attr->GetTextColour();
+}
+
+wxColour wxTreeCtrl::GetItemBackgroundColour(const wxTreeItemId& item) const
+{
+    long id = (long)(WXHTREEITEM)item;
+    wxTreeItemAttr *attr = (wxTreeItemAttr *)m_attrs.Get(id);
+    if ( !attr )
+    {
+        return wxNullColour;
+    }
+
+    return attr->GetBackgroundColour();
+}
+
+wxFont wxTreeCtrl::GetItemFont(const wxTreeItemId& item) const
+{
+    long id = (long)(WXHTREEITEM)item;
+    wxTreeItemAttr *attr = (wxTreeItemAttr *)m_attrs.Get(id);
+    if ( !attr )
+    {
+        return wxNullFont;
+    }
+
+    return attr->GetFont();
+}
+
 void wxTreeCtrl::SetItemTextColour(const wxTreeItemId& item,
                                    const wxColour& col)
 {

@@ -921,6 +921,30 @@ wxTreeItemData *wxGenericTreeCtrl::GetItemData(const wxTreeItemId& item) const
     return ((wxGenericTreeItem*) item.m_pItem)->GetData();
 }
 
+wxColour wxGenericTreeCtrl::GetItemTextColour(const wxTreeItemId& item) const
+{
+    wxCHECK_MSG( item.IsOk(), wxNullColour, wxT("invalid tree item") );
+
+    wxGenericTreeItem *pItem = (wxGenericTreeItem*) item.m_pItem;
+    return pItem->Attr().GetTextColour();
+}
+
+wxColour wxGenericTreeCtrl::GetItemBackgroundColour(const wxTreeItemId& item) const
+{
+    wxCHECK_MSG( item.IsOk(), wxNullColour, wxT("invalid tree item") );
+
+    wxGenericTreeItem *pItem = (wxGenericTreeItem*) item.m_pItem;
+    return pItem->Attr().GetBackgroundColour();
+}
+
+wxFont wxGenericTreeCtrl::GetItemFont(const wxTreeItemId& item) const
+{
+    wxCHECK_MSG( item.IsOk(), wxNullFont, wxT("invalid tree item") );
+
+    wxGenericTreeItem *pItem = (wxGenericTreeItem*) item.m_pItem;
+    return pItem->Attr().GetFont();
+}
+
 void wxGenericTreeCtrl::SetItemText(const wxTreeItemId& item, const wxString& text)
 {
     wxCHECK_RET( item.IsOk(), wxT("invalid tree item") );

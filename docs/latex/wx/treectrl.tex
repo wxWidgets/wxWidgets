@@ -381,6 +381,12 @@ Returns the normal image list.
 
 Returns the current tree control indentation.
 
+\membersection{wxTreeCtrl::GetItemBackgroundColour}\label{wxtreectrlgetitembackgroundcolour}
+
+\constfunc{wxColour}{GetItemBackgroundColour}{\param{const wxTreeItemId\&}{ item}}
+
+Returns the background colour of the item.
+
 \membersection{wxTreeCtrl::GetItemData}\label{wxtreectrlgetitemdata}
 
 \constfunc{wxTreeItemData*}{GetItemData}{\param{const wxTreeItemId\&}{ item}}
@@ -408,6 +414,12 @@ tree->GetItemData( item )->GetData(); ).}
 \end{twocollist}}
 }
 
+\membersection{wxTreeCtrl::GetItemFont}\label{wxtreectrlgetitemfont}
+
+\constfunc{wxFont}{GetItemFont}{\param{const wxTreeItemId\&}{ item}}
+
+Returns the font of the item label.
+
 \membersection{wxTreeCtrl::GetItemImage}\label{wxtreectrlgetitemimage}
 
 \constfunc{int}{GetItemImage}{\param{const wxTreeItemId\& }{item},
@@ -431,6 +443,12 @@ item is expanded and the normal image is shown when it is collapsed)
 \constfunc{wxString}{GetItemText}{\param{const wxTreeItemId\&}{ item}}
 
 Returns the item label.
+
+\membersection{wxTreeCtrl::GetItemTextColour}\label{wxtreectrlgetitemtextcolour}
+
+\constfunc{wxColour}{GetItemTextColour}{\param{const wxTreeItemId\&}{ item}}
+
+Returns the colour of the item label.
 
 \membersection{wxTreeCtrl::GetLastChild}\label{wxtreectrlgetlastchild}
 
