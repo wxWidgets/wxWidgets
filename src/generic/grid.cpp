@@ -3181,23 +3181,20 @@ void wxGrid::Create()
 bool wxGrid::CreateGrid( int numRows, int numCols,
                          wxGrid::wxGridSelectionModes selmode )
 {
-    if ( m_created )
-    {
-        wxFAIL_MSG( wxT("wxGrid::CreateGrid or wxGrid::SetTable called more than once") );
-        return FALSE;
-    }
-    else
-    {
-        m_numRows = numRows;
-        m_numCols = numCols;
+    wxCHECK_MSG( !m_created,
+                 FALSE,
+                 wxT("wxGrid::CreateGrid or wxGrid::SetTable called more than once") );
 
-        m_table = new wxGridStringTable( m_numRows, m_numCols );
-        m_table->SetView( this );
-        m_ownTable = TRUE;
-        m_selection = new wxGridSelection( this, selmode );
-        Init();
-        m_created = TRUE;
-    }
+    m_numRows = numRows;
+    m_numCols = numCols;
+
+    m_table = new wxGridStringTable( m_numRows, m_numCols );
+    m_table->SetView( this );
+    m_ownTable = TRUE;
+    m_selection = new wxGridSelection( this, selmode );
+    Init();
+    m_created = TRUE;
+
     return m_created;
 }
 

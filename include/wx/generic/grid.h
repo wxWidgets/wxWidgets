@@ -465,7 +465,7 @@ public:
 protected:
     // string representation of m_valueOld
     wxString GetString() const
-        { return wxString::Format(_T("%f"), m_valueOld); }
+        { return wxString::Format(_T("%g"), m_valueOld); }
 
 private:
     double m_valueOld;
