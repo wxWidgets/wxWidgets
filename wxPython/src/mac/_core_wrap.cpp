@@ -2463,11 +2463,18 @@ static wxBitmap wxImage_ConvertToMonoBitmap(wxImage *self,unsigned char red,unsi
             wxBitmap bitmap( mono, 1 );
             return bitmap;
         }
+ static const wxString wxPyIMAGE_OPTION_FILENAME(wxIMAGE_OPTION_FILENAME); 
  static const wxString wxPyIMAGE_OPTION_BMP_FORMAT(wxIMAGE_OPTION_BMP_FORMAT); 
  static const wxString wxPyIMAGE_OPTION_CUR_HOTSPOT_X(wxIMAGE_OPTION_CUR_HOTSPOT_X); 
  static const wxString wxPyIMAGE_OPTION_CUR_HOTSPOT_Y(wxIMAGE_OPTION_CUR_HOTSPOT_Y); 
  static const wxString wxPyIMAGE_OPTION_RESOLUTION(wxIMAGE_OPTION_RESOLUTION); 
+ static const wxString wxPyIMAGE_OPTION_RESOLUTIONX(wxIMAGE_OPTION_RESOLUTIONX); 
+ static const wxString wxPyIMAGE_OPTION_RESOLUTIONY(wxIMAGE_OPTION_RESOLUTIONY); 
  static const wxString wxPyIMAGE_OPTION_RESOLUTIONUNIT(wxIMAGE_OPTION_RESOLUTIONUNIT); 
+ static const wxString wxPyIMAGE_OPTION_BITSPERSAMPLE(wxIMAGE_OPTION_BITSPERSAMPLE); 
+ static const wxString wxPyIMAGE_OPTION_SAMPLESPERPIXEL(wxIMAGE_OPTION_SAMPLESPERPIXEL); 
+ static const wxString wxPyIMAGE_OPTION_COMPRESSION(wxIMAGE_OPTION_COMPRESSION); 
+ static const wxString wxPyIMAGE_OPTION_IMAGEDESCRIPTOR(wxIMAGE_OPTION_IMAGEDESCRIPTOR); 
 
 #include <wx/quantize.h>
 
@@ -11205,6 +11212,31 @@ static PyObject *_wrap_Image_HasAlpha(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
+static PyObject *_wrap_Image_InitAlpha(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxImage *arg1 = (wxImage *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Image_InitAlpha",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxImage, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->InitAlpha();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_Image_FindFirstUnusedColour(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
@@ -13352,6 +13384,26 @@ static PyObject *_wrap_NullImage_get(void) {
 }
 
 
+static int _wrap_IMAGE_OPTION_FILENAME_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable IMAGE_OPTION_FILENAME is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_IMAGE_OPTION_FILENAME_get(void) {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyIMAGE_OPTION_FILENAME)->c_str(), (&wxPyIMAGE_OPTION_FILENAME)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyIMAGE_OPTION_FILENAME)->c_str(), (&wxPyIMAGE_OPTION_FILENAME)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static int _wrap_IMAGE_OPTION_BMP_FORMAT_set(PyObject *) {
     PyErr_SetString(PyExc_TypeError,"Variable IMAGE_OPTION_BMP_FORMAT is read-only.");
     return 1;
@@ -13432,6 +13484,46 @@ static PyObject *_wrap_IMAGE_OPTION_RESOLUTION_get(void) {
 }
 
 
+static int _wrap_IMAGE_OPTION_RESOLUTIONX_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable IMAGE_OPTION_RESOLUTIONX is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_IMAGE_OPTION_RESOLUTIONX_get(void) {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyIMAGE_OPTION_RESOLUTIONX)->c_str(), (&wxPyIMAGE_OPTION_RESOLUTIONX)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyIMAGE_OPTION_RESOLUTIONX)->c_str(), (&wxPyIMAGE_OPTION_RESOLUTIONX)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_IMAGE_OPTION_RESOLUTIONY_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable IMAGE_OPTION_RESOLUTIONY is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_IMAGE_OPTION_RESOLUTIONY_get(void) {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyIMAGE_OPTION_RESOLUTIONY)->c_str(), (&wxPyIMAGE_OPTION_RESOLUTIONY)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyIMAGE_OPTION_RESOLUTIONY)->c_str(), (&wxPyIMAGE_OPTION_RESOLUTIONY)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static int _wrap_IMAGE_OPTION_RESOLUTIONUNIT_set(PyObject *) {
     PyErr_SetString(PyExc_TypeError,"Variable IMAGE_OPTION_RESOLUTIONUNIT is read-only.");
     return 1;
@@ -13446,6 +13538,86 @@ static PyObject *_wrap_IMAGE_OPTION_RESOLUTIONUNIT_get(void) {
         pyobj = PyUnicode_FromWideChar((&wxPyIMAGE_OPTION_RESOLUTIONUNIT)->c_str(), (&wxPyIMAGE_OPTION_RESOLUTIONUNIT)->Len());
 #else
         pyobj = PyString_FromStringAndSize((&wxPyIMAGE_OPTION_RESOLUTIONUNIT)->c_str(), (&wxPyIMAGE_OPTION_RESOLUTIONUNIT)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_IMAGE_OPTION_BITSPERSAMPLE_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable IMAGE_OPTION_BITSPERSAMPLE is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_IMAGE_OPTION_BITSPERSAMPLE_get(void) {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyIMAGE_OPTION_BITSPERSAMPLE)->c_str(), (&wxPyIMAGE_OPTION_BITSPERSAMPLE)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyIMAGE_OPTION_BITSPERSAMPLE)->c_str(), (&wxPyIMAGE_OPTION_BITSPERSAMPLE)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_IMAGE_OPTION_SAMPLESPERPIXEL_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable IMAGE_OPTION_SAMPLESPERPIXEL is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_IMAGE_OPTION_SAMPLESPERPIXEL_get(void) {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyIMAGE_OPTION_SAMPLESPERPIXEL)->c_str(), (&wxPyIMAGE_OPTION_SAMPLESPERPIXEL)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyIMAGE_OPTION_SAMPLESPERPIXEL)->c_str(), (&wxPyIMAGE_OPTION_SAMPLESPERPIXEL)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_IMAGE_OPTION_COMPRESSION_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable IMAGE_OPTION_COMPRESSION is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_IMAGE_OPTION_COMPRESSION_get(void) {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyIMAGE_OPTION_COMPRESSION)->c_str(), (&wxPyIMAGE_OPTION_COMPRESSION)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyIMAGE_OPTION_COMPRESSION)->c_str(), (&wxPyIMAGE_OPTION_COMPRESSION)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_IMAGE_OPTION_IMAGEDESCRIPTOR_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable IMAGE_OPTION_IMAGEDESCRIPTOR is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_IMAGE_OPTION_IMAGEDESCRIPTOR_get(void) {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyIMAGE_OPTION_IMAGEDESCRIPTOR)->c_str(), (&wxPyIMAGE_OPTION_IMAGEDESCRIPTOR)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyIMAGE_OPTION_IMAGEDESCRIPTOR)->c_str(), (&wxPyIMAGE_OPTION_IMAGEDESCRIPTOR)->Len());
 #endif
     }
     return pyobj;
@@ -21002,6 +21174,65 @@ static PyObject *_wrap_NavigationKeyEvent_SetWindowChange(PyObject *, PyObject *
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetWindowChange(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_NavigationKeyEvent_IsFromTab(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxNavigationKeyEvent *arg1 = (wxNavigationKeyEvent *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:NavigationKeyEvent_IsFromTab",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxNavigationKeyEvent, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)((wxNavigationKeyEvent const *)arg1)->IsFromTab();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_NavigationKeyEvent_SetFromTab(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxNavigationKeyEvent *arg1 = (wxNavigationKeyEvent *) 0 ;
+    bool arg2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "bIs", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:NavigationKeyEvent_SetFromTab",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxNavigationKeyEvent, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = (bool)(SWIG_As_bool(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetFromTab(arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -44256,6 +44487,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Image_SetAlpha", (PyCFunction) _wrap_Image_SetAlpha, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_GetAlpha", (PyCFunction) _wrap_Image_GetAlpha, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_HasAlpha", (PyCFunction) _wrap_Image_HasAlpha, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Image_InitAlpha", (PyCFunction) _wrap_Image_InitAlpha, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_FindFirstUnusedColour", (PyCFunction) _wrap_Image_FindFirstUnusedColour, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_ConvertAlphaToMask", (PyCFunction) _wrap_Image_ConvertAlphaToMask, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_ConvertColourToAlpha", (PyCFunction) _wrap_Image_ConvertColourToAlpha, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -44604,6 +44836,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"NavigationKeyEvent_SetDirection", (PyCFunction) _wrap_NavigationKeyEvent_SetDirection, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"NavigationKeyEvent_IsWindowChange", (PyCFunction) _wrap_NavigationKeyEvent_IsWindowChange, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"NavigationKeyEvent_SetWindowChange", (PyCFunction) _wrap_NavigationKeyEvent_SetWindowChange, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"NavigationKeyEvent_IsFromTab", (PyCFunction) _wrap_NavigationKeyEvent_IsFromTab, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"NavigationKeyEvent_SetFromTab", (PyCFunction) _wrap_NavigationKeyEvent_SetFromTab, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"NavigationKeyEvent_SetFlags", (PyCFunction) _wrap_NavigationKeyEvent_SetFlags, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"NavigationKeyEvent_GetCurrentFocus", (PyCFunction) _wrap_NavigationKeyEvent_GetCurrentFocus, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"NavigationKeyEvent_SetCurrentFocus", (PyCFunction) _wrap_NavigationKeyEvent_SetCurrentFocus, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -48195,10 +48429,13 @@ SWIGEXPORT(void) SWIG_init(void) {
     wxPyPtrTypeMap_Add("wxFileSystemHandler", "wxPyFileSystemHandler");
     
     SWIG_addvarlink(SWIG_globals,(char*)"NullImage",_wrap_NullImage_get, _wrap_NullImage_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_FILENAME",_wrap_IMAGE_OPTION_FILENAME_get, _wrap_IMAGE_OPTION_FILENAME_set);
     SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_BMP_FORMAT",_wrap_IMAGE_OPTION_BMP_FORMAT_get, _wrap_IMAGE_OPTION_BMP_FORMAT_set);
     SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_CUR_HOTSPOT_X",_wrap_IMAGE_OPTION_CUR_HOTSPOT_X_get, _wrap_IMAGE_OPTION_CUR_HOTSPOT_X_set);
     SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_CUR_HOTSPOT_Y",_wrap_IMAGE_OPTION_CUR_HOTSPOT_Y_get, _wrap_IMAGE_OPTION_CUR_HOTSPOT_Y_set);
     SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_RESOLUTION",_wrap_IMAGE_OPTION_RESOLUTION_get, _wrap_IMAGE_OPTION_RESOLUTION_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_RESOLUTIONX",_wrap_IMAGE_OPTION_RESOLUTIONX_get, _wrap_IMAGE_OPTION_RESOLUTIONX_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_RESOLUTIONY",_wrap_IMAGE_OPTION_RESOLUTIONY_get, _wrap_IMAGE_OPTION_RESOLUTIONY_set);
     SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_RESOLUTIONUNIT",_wrap_IMAGE_OPTION_RESOLUTIONUNIT_get, _wrap_IMAGE_OPTION_RESOLUTIONUNIT_set);
     {
         PyDict_SetItemString(d,"IMAGE_RESOLUTION_INCHES", SWIG_From_int((int)(wxIMAGE_RESOLUTION_INCHES))); 
@@ -48206,6 +48443,10 @@ SWIGEXPORT(void) SWIG_init(void) {
     {
         PyDict_SetItemString(d,"IMAGE_RESOLUTION_CM", SWIG_From_int((int)(wxIMAGE_RESOLUTION_CM))); 
     }
+    SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_BITSPERSAMPLE",_wrap_IMAGE_OPTION_BITSPERSAMPLE_get, _wrap_IMAGE_OPTION_BITSPERSAMPLE_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_SAMPLESPERPIXEL",_wrap_IMAGE_OPTION_SAMPLESPERPIXEL_get, _wrap_IMAGE_OPTION_SAMPLESPERPIXEL_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_COMPRESSION",_wrap_IMAGE_OPTION_COMPRESSION_get, _wrap_IMAGE_OPTION_COMPRESSION_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_IMAGEDESCRIPTOR",_wrap_IMAGE_OPTION_IMAGEDESCRIPTOR_get, _wrap_IMAGE_OPTION_IMAGEDESCRIPTOR_set);
     {
         PyDict_SetItemString(d,"BMP_24BPP", SWIG_From_int((int)(wxBMP_24BPP))); 
     }
@@ -48388,6 +48629,9 @@ SWIGEXPORT(void) SWIG_init(void) {
     }
     {
         PyDict_SetItemString(d,"NavigationKeyEvent_WinChange", SWIG_From_int((int)(wxNavigationKeyEvent::WinChange))); 
+    }
+    {
+        PyDict_SetItemString(d,"NavigationKeyEvent_FromTab", SWIG_From_int((int)(wxNavigationKeyEvent::FromTab))); 
     }
     {
         PyDict_SetItemString(d,"IDLE_PROCESS_ALL", SWIG_From_int((int)(wxIDLE_PROCESS_ALL))); 

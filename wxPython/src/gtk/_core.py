@@ -2177,6 +2177,17 @@ class Image(Object):
         """HasAlpha(self) -> bool"""
         return _core_.Image_HasAlpha(*args, **kwargs)
 
+    def InitAlpha(*args, **kwargs):
+        """
+        InitAlpha(self)
+
+        Initializes the image alpha channel data. It is an error to call it if
+        the image already has alpha data. If it doesn't, alpha data will be by
+        default initialized to all pixels being fully opaque. But if the image
+        has a a mask colour, all mask pixels will be completely transparent.
+        """
+        return _core_.Image_InitAlpha(*args, **kwargs)
+
     def FindFirstUnusedColour(*args, **kwargs):
         """
         FindFirstUnusedColour(int startR=1, int startG=0, int startB=0) -> (success, r, g, b)
@@ -4571,6 +4582,14 @@ class NavigationKeyEvent(Event):
         """SetWindowChange(self, bool ischange)"""
         return _core_.NavigationKeyEvent_SetWindowChange(*args, **kwargs)
 
+    def IsFromTab(*args, **kwargs):
+        """IsFromTab(self) -> bool"""
+        return _core_.NavigationKeyEvent_IsFromTab(*args, **kwargs)
+
+    def SetFromTab(*args, **kwargs):
+        """SetFromTab(self, bool bIs)"""
+        return _core_.NavigationKeyEvent_SetFromTab(*args, **kwargs)
+
     def SetFlags(*args, **kwargs):
         """SetFlags(self, long flags)"""
         return _core_.NavigationKeyEvent_SetFlags(*args, **kwargs)
@@ -4586,6 +4605,7 @@ class NavigationKeyEvent(Event):
     IsBackward = _core_.NavigationKeyEvent_IsBackward
     IsForward = _core_.NavigationKeyEvent_IsForward
     WinChange = _core_.NavigationKeyEvent_WinChange
+    FromTab = _core_.NavigationKeyEvent_FromTab
 
 class NavigationKeyEventPtr(NavigationKeyEvent):
     def __init__(self, this):

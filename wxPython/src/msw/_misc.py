@@ -958,6 +958,10 @@ def PreSingleInstanceChecker(*args, **kwargs):
     val.thisown = 1
     return val
 
+
+def DrawWindowOnDC(*args, **kwargs):
+    """DrawWindowOnDC(Window window, DC dc) -> bool"""
+    return _misc_.DrawWindowOnDC(*args, **kwargs)
 #---------------------------------------------------------------------------
 
 class TipProvider(object):
@@ -2577,6 +2581,8 @@ ART_GO_DOWN = cvar.ART_GO_DOWN
 ART_GO_TO_PARENT = cvar.ART_GO_TO_PARENT
 ART_GO_HOME = cvar.ART_GO_HOME
 ART_FILE_OPEN = cvar.ART_FILE_OPEN
+ART_FILE_SAVE = cvar.ART_FILE_SAVE
+ART_FILE_SAVE_AS = cvar.ART_FILE_SAVE_AS
 ART_PRINT = cvar.ART_PRINT
 ART_HELP = cvar.ART_HELP
 ART_TIP = cvar.ART_TIP
@@ -2599,6 +2605,15 @@ ART_QUESTION = cvar.ART_QUESTION
 ART_WARNING = cvar.ART_WARNING
 ART_INFORMATION = cvar.ART_INFORMATION
 ART_MISSING_IMAGE = cvar.ART_MISSING_IMAGE
+ART_COPY = cvar.ART_COPY
+ART_CUT = cvar.ART_CUT
+ART_PASTE = cvar.ART_PASTE
+ART_DELETE = cvar.ART_DELETE
+ART_UNDO = cvar.ART_UNDO
+ART_REDO = cvar.ART_REDO
+ART_QUIT = cvar.ART_QUIT
+ART_FIND = cvar.ART_FIND
+ART_FIND_AND_REPLACE = cvar.ART_FIND_AND_REPLACE
 
 def ArtProvider_PushProvider(*args, **kwargs):
     """

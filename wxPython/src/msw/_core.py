@@ -2177,6 +2177,17 @@ class Image(Object):
         """HasAlpha(self) -> bool"""
         return _core_.Image_HasAlpha(*args, **kwargs)
 
+    def InitAlpha(*args, **kwargs):
+        """
+        InitAlpha(self)
+
+        Initializes the image alpha channel data. It is an error to call it if
+        the image already has alpha data. If it doesn't, alpha data will be by
+        default initialized to all pixels being fully opaque. But if the image
+        has a a mask colour, all mask pixels will be completely transparent.
+        """
+        return _core_.Image_InitAlpha(*args, **kwargs)
+
     def FindFirstUnusedColour(*args, **kwargs):
         """
         FindFirstUnusedColour(int startR=1, int startG=0, int startB=0) -> (success, r, g, b)
@@ -2539,11 +2550,18 @@ class BMPHandlerPtr(BMPHandler):
         self.__class__ = BMPHandler
 _core_.BMPHandler_swigregister(BMPHandlerPtr)
 NullImage = cvar.NullImage
+IMAGE_OPTION_FILENAME = cvar.IMAGE_OPTION_FILENAME
 IMAGE_OPTION_BMP_FORMAT = cvar.IMAGE_OPTION_BMP_FORMAT
 IMAGE_OPTION_CUR_HOTSPOT_X = cvar.IMAGE_OPTION_CUR_HOTSPOT_X
 IMAGE_OPTION_CUR_HOTSPOT_Y = cvar.IMAGE_OPTION_CUR_HOTSPOT_Y
 IMAGE_OPTION_RESOLUTION = cvar.IMAGE_OPTION_RESOLUTION
+IMAGE_OPTION_RESOLUTIONX = cvar.IMAGE_OPTION_RESOLUTIONX
+IMAGE_OPTION_RESOLUTIONY = cvar.IMAGE_OPTION_RESOLUTIONY
 IMAGE_OPTION_RESOLUTIONUNIT = cvar.IMAGE_OPTION_RESOLUTIONUNIT
+IMAGE_OPTION_BITSPERSAMPLE = cvar.IMAGE_OPTION_BITSPERSAMPLE
+IMAGE_OPTION_SAMPLESPERPIXEL = cvar.IMAGE_OPTION_SAMPLESPERPIXEL
+IMAGE_OPTION_COMPRESSION = cvar.IMAGE_OPTION_COMPRESSION
+IMAGE_OPTION_IMAGEDESCRIPTOR = cvar.IMAGE_OPTION_IMAGEDESCRIPTOR
 
 class ICOHandler(BMPHandler):
     """Proxy of C++ ICOHandler class"""
@@ -4564,6 +4582,14 @@ class NavigationKeyEvent(Event):
         """SetWindowChange(self, bool ischange)"""
         return _core_.NavigationKeyEvent_SetWindowChange(*args, **kwargs)
 
+    def IsFromTab(*args, **kwargs):
+        """IsFromTab(self) -> bool"""
+        return _core_.NavigationKeyEvent_IsFromTab(*args, **kwargs)
+
+    def SetFromTab(*args, **kwargs):
+        """SetFromTab(self, bool bIs)"""
+        return _core_.NavigationKeyEvent_SetFromTab(*args, **kwargs)
+
     def SetFlags(*args, **kwargs):
         """SetFlags(self, long flags)"""
         return _core_.NavigationKeyEvent_SetFlags(*args, **kwargs)
@@ -4579,6 +4605,7 @@ class NavigationKeyEvent(Event):
     IsBackward = _core_.NavigationKeyEvent_IsBackward
     IsForward = _core_.NavigationKeyEvent_IsForward
     WinChange = _core_.NavigationKeyEvent_WinChange
+    FromTab = _core_.NavigationKeyEvent_FromTab
 
 class NavigationKeyEventPtr(NavigationKeyEvent):
     def __init__(self, this):

@@ -11212,6 +11212,31 @@ static PyObject *_wrap_Image_HasAlpha(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
+static PyObject *_wrap_Image_InitAlpha(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxImage *arg1 = (wxImage *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Image_InitAlpha",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxImage, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->InitAlpha();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_Image_FindFirstUnusedColour(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
@@ -21149,6 +21174,65 @@ static PyObject *_wrap_NavigationKeyEvent_SetWindowChange(PyObject *, PyObject *
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetWindowChange(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_NavigationKeyEvent_IsFromTab(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxNavigationKeyEvent *arg1 = (wxNavigationKeyEvent *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:NavigationKeyEvent_IsFromTab",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxNavigationKeyEvent, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)((wxNavigationKeyEvent const *)arg1)->IsFromTab();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_NavigationKeyEvent_SetFromTab(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxNavigationKeyEvent *arg1 = (wxNavigationKeyEvent *) 0 ;
+    bool arg2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "bIs", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:NavigationKeyEvent_SetFromTab",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxNavigationKeyEvent, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = (bool)(SWIG_As_bool(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetFromTab(arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -44403,6 +44487,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Image_SetAlpha", (PyCFunction) _wrap_Image_SetAlpha, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_GetAlpha", (PyCFunction) _wrap_Image_GetAlpha, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_HasAlpha", (PyCFunction) _wrap_Image_HasAlpha, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Image_InitAlpha", (PyCFunction) _wrap_Image_InitAlpha, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_FindFirstUnusedColour", (PyCFunction) _wrap_Image_FindFirstUnusedColour, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_ConvertAlphaToMask", (PyCFunction) _wrap_Image_ConvertAlphaToMask, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_ConvertColourToAlpha", (PyCFunction) _wrap_Image_ConvertColourToAlpha, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -44751,6 +44836,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"NavigationKeyEvent_SetDirection", (PyCFunction) _wrap_NavigationKeyEvent_SetDirection, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"NavigationKeyEvent_IsWindowChange", (PyCFunction) _wrap_NavigationKeyEvent_IsWindowChange, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"NavigationKeyEvent_SetWindowChange", (PyCFunction) _wrap_NavigationKeyEvent_SetWindowChange, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"NavigationKeyEvent_IsFromTab", (PyCFunction) _wrap_NavigationKeyEvent_IsFromTab, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"NavigationKeyEvent_SetFromTab", (PyCFunction) _wrap_NavigationKeyEvent_SetFromTab, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"NavigationKeyEvent_SetFlags", (PyCFunction) _wrap_NavigationKeyEvent_SetFlags, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"NavigationKeyEvent_GetCurrentFocus", (PyCFunction) _wrap_NavigationKeyEvent_GetCurrentFocus, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"NavigationKeyEvent_SetCurrentFocus", (PyCFunction) _wrap_NavigationKeyEvent_SetCurrentFocus, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -48542,6 +48629,9 @@ SWIGEXPORT(void) SWIG_init(void) {
     }
     {
         PyDict_SetItemString(d,"NavigationKeyEvent_WinChange", SWIG_From_int((int)(wxNavigationKeyEvent::WinChange))); 
+    }
+    {
+        PyDict_SetItemString(d,"NavigationKeyEvent_FromTab", SWIG_From_int((int)(wxNavigationKeyEvent::FromTab))); 
     }
     {
         PyDict_SetItemString(d,"IDLE_PROCESS_ALL", SWIG_From_int((int)(wxIDLE_PROCESS_ALL))); 
