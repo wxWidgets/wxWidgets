@@ -2862,6 +2862,35 @@ static PyObject *_wrap_wxRect_SetBottom(PyObject *self, PyObject *args, PyObject
     return _resultobj;
 }
 
+#define wxRect_Deflate(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Deflate(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxRect_Deflate(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxRect * _arg0;
+    int  _arg1;
+    int  _arg2;
+    wxRect  temp;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "self","dx","dy", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxRect_Deflate",_kwnames,&_obj0,&_arg1,&_arg2)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxRect_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxRect_Deflate(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxRect_Inflate(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Inflate(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxRect_Inflate(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -2891,8 +2920,8 @@ static PyObject *_wrap_wxRect_Inflate(PyObject *self, PyObject *args, PyObject *
     return _resultobj;
 }
 
-#define wxRect_Inside(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Inside(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxRect_Inside(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxRect_InsideXY(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Inside(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxRect_InsideXY(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxRect * _arg0;
@@ -2903,7 +2932,7 @@ static PyObject *_wrap_wxRect_Inside(PyObject *self, PyObject *args, PyObject *k
     char *_kwnames[] = { "self","cx","cy", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxRect_Inside",_kwnames,&_obj0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxRect_InsideXY",_kwnames,&_obj0,&_arg1,&_arg2)) 
         return NULL;
 {
     _arg0 = &temp;
@@ -2912,11 +2941,145 @@ static PyObject *_wrap_wxRect_Inside(PyObject *self, PyObject *args, PyObject *k
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxRect_Inside(_arg0,_arg1,_arg2);
+    _result = (bool )wxRect_InsideXY(_arg0,_arg1,_arg2);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxRect_Inside(_swigobj,_swigarg0)  (_swigobj->Inside(_swigarg0))
+static PyObject *_wrap_wxRect_Inside(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxRect * _arg0;
+    wxPoint * _arg1;
+    wxRect  temp;
+    PyObject * _obj0 = 0;
+    wxPoint  temp0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","pt", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxRect_Inside",_kwnames,&_obj0,&_obj1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxRect_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    _arg1 = &temp0;
+    if (! wxPoint_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxRect_Inside(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxRect_Intersects(_swigobj,_swigarg0)  (_swigobj->Intersects(_swigarg0))
+static PyObject *_wrap_wxRect_Intersects(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxRect * _arg0;
+    wxRect * _arg1;
+    wxRect  temp;
+    PyObject * _obj0 = 0;
+    wxRect  temp0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","rect", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxRect_Intersects",_kwnames,&_obj0,&_obj1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxRect_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    _arg1 = &temp0;
+    if (! wxRect_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxRect_Intersects(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxRect_OffsetXY(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Offset(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxRect_OffsetXY(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxRect * _arg0;
+    int  _arg1;
+    int  _arg2;
+    wxRect  temp;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "self","dx","dy", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxRect_OffsetXY",_kwnames,&_obj0,&_arg1,&_arg2)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxRect_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxRect_OffsetXY(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxRect_Offset(_swigobj,_swigarg0)  (_swigobj->Offset(_swigarg0))
+static PyObject *_wrap_wxRect_Offset(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxRect * _arg0;
+    wxPoint * _arg1;
+    wxRect  temp;
+    PyObject * _obj0 = 0;
+    wxPoint  temp0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","pt", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxRect_Offset",_kwnames,&_obj0,&_obj1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxRect_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    _arg1 = &temp0;
+    if (! wxPoint_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxRect_Offset(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -5303,8 +5466,13 @@ static PyMethodDef misccMethods[] = {
 	 { "wxRect_y_set", (PyCFunction) _wrap_wxRect_y_set, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRect_x_get", (PyCFunction) _wrap_wxRect_x_get, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRect_x_set", (PyCFunction) _wrap_wxRect_x_set, METH_VARARGS | METH_KEYWORDS },
+	 { "wxRect_Offset", (PyCFunction) _wrap_wxRect_Offset, METH_VARARGS | METH_KEYWORDS },
+	 { "wxRect_OffsetXY", (PyCFunction) _wrap_wxRect_OffsetXY, METH_VARARGS | METH_KEYWORDS },
+	 { "wxRect_Intersects", (PyCFunction) _wrap_wxRect_Intersects, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRect_Inside", (PyCFunction) _wrap_wxRect_Inside, METH_VARARGS | METH_KEYWORDS },
+	 { "wxRect_InsideXY", (PyCFunction) _wrap_wxRect_InsideXY, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRect_Inflate", (PyCFunction) _wrap_wxRect_Inflate, METH_VARARGS | METH_KEYWORDS },
+	 { "wxRect_Deflate", (PyCFunction) _wrap_wxRect_Deflate, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRect_SetBottom", (PyCFunction) _wrap_wxRect_SetBottom, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRect_SetTop", (PyCFunction) _wrap_wxRect_SetTop, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRect_SetRight", (PyCFunction) _wrap_wxRect_SetRight, METH_VARARGS | METH_KEYWORDS },

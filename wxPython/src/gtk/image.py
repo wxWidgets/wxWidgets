@@ -271,6 +271,9 @@ class wxImagePtr(wxObjectPtr):
     def GetData(self, *_args, **_kwargs):
         val = apply(imagec.wxImage_GetData,(self,) + _args, _kwargs)
         return val
+    def SetDataBuffer(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_SetDataBuffer,(self,) + _args, _kwargs)
+        return val
     def SetData(self, *_args, **_kwargs):
         val = apply(imagec.wxImage_SetData,(self,) + _args, _kwargs)
         return val

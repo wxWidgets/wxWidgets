@@ -183,6 +183,10 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     wxCursor* wxPyStockCursor(int id) {
         return new wxCursor(id);
     }
+
+    wxCursor* wxCursorFromImage(const wxImage& image) {
+        return new wxCursor(image);
+    }
                                       // Alternate 'constructor'
     wxColour* wxNamedColour(const wxString& colorName) {
         return new wxColour(colorName);
@@ -541,6 +545,39 @@ static PyObject *_wrap_wxStockCursor(PyObject *self, PyObject *args, PyObject *k
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     _result = (wxCursor *)wxPyStockCursor(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxCursor_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxCursorFromImage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxCursor * _result;
+    wxImage * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "image", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxCursorFromImage",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxImage_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCursorFromImage. Expected _wxImage_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxCursor *)wxCursorFromImage(*_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -10628,6 +10665,7 @@ static PyMethodDef gdicMethods[] = {
 	 { "new_wxGDIObject", (PyCFunction) _wrap_new_wxGDIObject, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMemoryDCFromDC", (PyCFunction) _wrap_wxMemoryDCFromDC, METH_VARARGS | METH_KEYWORDS },
 	 { "wxNamedColour", (PyCFunction) _wrap_wxNamedColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCursorFromImage", (PyCFunction) _wrap_wxCursorFromImage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStockCursor", (PyCFunction) _wrap_wxStockCursor, METH_VARARGS | METH_KEYWORDS },
 	 { "wxIconFromBitmap", (PyCFunction) _wrap_wxIconFromBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { "wxIconFromXPMData", (PyCFunction) _wrap_wxIconFromXPMData, METH_VARARGS | METH_KEYWORDS },
