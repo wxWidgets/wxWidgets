@@ -64,7 +64,7 @@ public:
     wxTimer         *timer;
     bool             running;
     wxTimerDesc     *next, *prev;
-    unsigned long    shotTime;  
+    wxTimerTick_t    shotTime;  
     volatile bool   *deleteFlag; // see comment in ~wxTimer
 };
 
@@ -144,8 +144,9 @@ void wxTimerScheduler::NotifyTimers()
             
             if ( !timerDeleted )
             {
-                wxLogTrace( wxT("timer"), wxT("notified timer %p sheduled for %ld"), 
-                           desc->timer, (long) desc->shotTime);
+                wxLogTrace( wxT("timer"),
+                            wxT("notified timer %p sheduled for %" wxLongLongFmtSpec), 
+                            desc->timer, desc->shotTime );
 
                 desc->deleteFlag = NULL;
                 if ( !oneShot )
