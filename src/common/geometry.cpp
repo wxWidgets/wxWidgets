@@ -187,6 +187,42 @@ wxDouble wxPoint2DInt::GetVectorAngle()
 }
 
 
+void wxPoint2DInt::SetVectorAngle( wxDouble degrees ) {
+	wxDouble length = this->GetVectorLength() ;
+	m_x = length * cos( degrees / 180 * 3.14159265359 ) ;
+	m_y = length * sin( degrees / 180 * 3.14159265359 ) ;
+}
+	
+wxDouble wxPoint2DDouble::GetVectorAngle() const
+{
+	if ( m_x == 0 )
+	{
+		if ( m_y >= 0 )
+			return 90 ;
+		else
+			return 270 ;
+	}
+	if ( m_y == 0 )
+	{
+		if ( m_x >= 0 )
+			return 0 ;
+		else
+			return 180 ;
+	}
+	wxDouble deg = atan2( m_y , m_x ) * 180 / 3.14159265359 ;
+	if ( deg < 0 )
+	{
+		deg += 360 ;
+	}
+	return deg ;
+}
+
+void wxPoint2DDouble::SetVectorAngle( wxDouble degrees ) {
+	wxDouble length = this->GetVectorLength() ;
+	m_x = length * cos( degrees / 180 * 3.14159265359 ) ;
+	m_y = length * sin( degrees / 180 * 3.14159265359 ) ;
+}
+
 // wxRect2D
 
 bool wxRect2DInt::Intersects( const wxRect2DInt &rect ) const
