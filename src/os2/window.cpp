@@ -3302,7 +3302,7 @@ bool wxWindowOS2::OS2Create(
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
-        wxLogError("Error creating frame. Error: %s\n", sError);
+        wxLogError("Error creating frame. Error: %s\n", sError.c_str());
         return FALSE;
     }
     SetSize( nX
@@ -3553,7 +3553,7 @@ bool wxWindowOS2::OS2OnDrawItem(
         {
             vError = ::WinGetLastError(vHabmain);
             sError = wxPMErrorToStr(vError);
-            wxLogError("Unable to set current color table. Error: %s\n", sError);
+            wxLogError("Unable to set current color table. Error: %s\n", sError.c_str());
         }
         //
         // Set the color table to RGB mode
@@ -3568,7 +3568,7 @@ bool wxWindowOS2::OS2OnDrawItem(
         {
             vError = ::WinGetLastError(vHabmain);
             sError = wxPMErrorToStr(vError);
-            wxLogError("Unable to set current color table. Error: %s\n", sError);
+            wxLogError("Unable to set current color table. Error: %s\n", sError.c_str());
         }
 
         wxCHECK( pMenuItem->IsKindOf(CLASSINFO(wxMenuItem)), FALSE );

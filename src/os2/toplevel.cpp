@@ -501,7 +501,7 @@ bool wxTopLevelWindowOS2::CreateFrame(
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
-        wxLogError("Error creating frame. Error: %s\n", sError);
+        wxLogError("Error creating frame. Error: %s\n", sError.c_str());
         return FALSE;
     }
 
@@ -525,7 +525,7 @@ bool wxTopLevelWindowOS2::CreateFrame(
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
-        wxLogError("Error creating frame. Error: %s\n", sError);
+        wxLogError("Error creating frame. Error: %s\n", sError.c_str());
         return FALSE;
     }
 
@@ -562,7 +562,7 @@ bool wxTopLevelWindowOS2::CreateFrame(
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
-        wxLogError("Error sizing frame. Error: %s\n", sError);
+        wxLogError("Error sizing frame. Error: %s\n", sError.c_str());
         return FALSE;
     }
     lStyle =  ::WinQueryWindowULong( m_hWnd
