@@ -1774,17 +1774,30 @@ void wxListLineData::DrawTextFormatted(wxDC *dc,
 
     // determine if the string can fit inside the current width
     dc->GetTextExtent(text, &w, &h);
-
-    // if it can, draw it
     if (w <= width)
     {
+        // it can, draw it using the items alignment
         m_owner->GetColumn(col, item);
-        if (item.m_format == wxLIST_FORMAT_LEFT)
-            dc->DrawText(text, x, y);
-        else if (item.m_format == wxLIST_FORMAT_RIGHT)
-            dc->DrawText(text, x + width - w, y);
-        else if (item.m_format == wxLIST_FORMAT_CENTER)
-            dc->DrawText(text, x + ((width - w) / 2), y);
+        switch ( item.GetAlign() )
+        {
+            default:
+                wxFAIL_MSG( _T("unknown list item format") );
+                // fall through
+
+            case wxLIST_FORMAT_LEFT:
+                // nothing to do
+                break;
+
+            case wxLIST_FORMAT_RIGHT:
+                x += width - w;
+                break;
+
+            case wxLIST_FORMAT_CENTER:
+                x += (width - w) / 2;
+                break;
+        }
+
+        dc->DrawText(text, x, y);
     }
     else // otherwise, truncate and add an ellipsis if possible
     {
@@ -2005,28 +2018,67 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
         DoDrawRect( &dc, x, HEADER_OFFSET_Y, cw, h-2 );
 
-        // if we have an image, draw it on the right of the label
-        int image = item.m_image;
+        // see if we have enough space for the column label
+
+        // for this we need the width of the text
+        wxCoord wLabel;
+        dc.GetTextExtent(item.GetText(), &wLabel, NULL);
+        wLabel += 2*EXTRA_WIDTH;
+
+        // and the width of the icon, if any
+        static const int MARGIN_BETWEEN_TEXT_AND_ICON = 2;
+        int ix, iy;
+        const int image = item.m_image;
+        wxImageListType *imageList;
         if ( image != -1 )
         {
-            wxImageListType *imageList = m_owner->m_small_image_list;
+            imageList = m_owner->m_small_image_list;
             if ( imageList )
             {
-                int ix, iy;
                 imageList->GetSize(image, ix, iy);
-
-                imageList->Draw
-                           (
-                            image,
-                            dc,
-                            x + cw - ix - 1,
-                            HEADER_OFFSET_Y + (h - 4 - iy)/2,
-                            wxIMAGELIST_DRAW_TRANSPARENT
-                           );
-
-                cw -= ix + 2;
+                wLabel += ix + MARGIN_BETWEEN_TEXT_AND_ICON;
             }
-            //else: ignore the column image
+        }
+        else
+        {
+            imageList = NULL;
+        }
+
+        // ignore alignment if there is not enough space anyhow
+        int xAligned;
+        switch ( wLabel < cw ? item.GetAlign() : wxLIST_FORMAT_LEFT )
+        {
+            default:
+                wxFAIL_MSG( _T("unknown list item format") );
+                // fall through
+
+            case wxLIST_FORMAT_LEFT:
+                xAligned = x;
+                break;
+
+            case wxLIST_FORMAT_RIGHT:
+                xAligned = x + cw - wLabel;
+                break;
+
+            case wxLIST_FORMAT_CENTER:
+                xAligned = x + (cw - wLabel) / 2;
+                break;
+        }
+
+
+        // if we have an image, draw it on the right of the label
+        if ( imageList )
+        {
+            imageList->Draw
+                       (
+                        image,
+                        dc,
+                        xAligned + wLabel - ix - MARGIN_BETWEEN_TEXT_AND_ICON,
+                        HEADER_OFFSET_Y + (h - 4 - iy)/2,
+                        wxIMAGELIST_DRAW_TRANSPARENT
+                       );
+
+            cw -= ix + MARGIN_BETWEEN_TEXT_AND_ICON;
         }
 
         // draw the text clipping it so that it doesn't overwrite the column
@@ -2034,7 +2086,7 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         wxDCClipper clipper(dc, x, HEADER_OFFSET_Y, cw, h - 4 );
 
         dc.DrawText( item.GetText(),
-                     x + EXTRA_WIDTH, HEADER_OFFSET_Y + EXTRA_HEIGHT );
+                     xAligned + EXTRA_WIDTH, HEADER_OFFSET_Y + EXTRA_HEIGHT );
 
         x += wCol;
     }

@@ -34,6 +34,7 @@ All:
 - Improved contrib/utils/convertrc parsing (David J. Cooke)
 - Fixed handling of URLs and filenames in wxFileSystem
 - Implemented alignment for wxGrid bool editor and renderer
+- Support wxListCtrl columns alignment for all platforms and not just MSW
 
 OLD CHANGES
 ===========
