@@ -1,0 +1,14 @@
+# File:		makefile.vc  For stectrl
+# Author:	Robin Dunn
+# Created:	1-Feb-2000
+# Updated:
+
+WXDIR = $(WXWIN)
+PROGRAM = stctest
+
+OBJECTS = $(PROGRAM).obj
+EXTRALIBS = $(WXDIR)\contrib\lib\stc$(LIBEXT).lib
+EXTRAINC = -I$(WXDIR)\contrib\include
+
+!include $(WXDIR)\src\makeprog.vc
+

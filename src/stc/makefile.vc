@@ -1,0 +1,106 @@
+# File:		makefile.vc  For stectrl
+# Author:	Robin Dunn
+# Created:	1-Feb-2000
+# Updated:
+
+
+
+# Set WXDIR for your system
+WXDIR = $(WXWIN)
+SCINTILLA=.\scintilla
+S=$(SCINTILLA)\src
+EXTRAINC=-D__WX__ -DSCI_LEXER -I$(SCINTILLA)/include -I$(S) -I. -I$(WXDIR)\contrib\include
+NOPCH=1
+
+!include $(WXDIR)\src\makevc.env
+
+OBJECTS = \
+	$(D)\Accessor.obj	\
+	$(D)\AutoComplete.obj	\
+	$(D)\CallTip.obj	\
+	$(D)\CellBuffer.obj	\
+	$(D)\ContractionState.obj\
+	$(D)\Document.obj	\
+	$(D)\Editor.obj		\
+	$(D)\Indicator.obj	\
+	$(D)\KeyMap.obj		\
+	$(D)\KeyWords.obj	\
+	$(D)\LineMarker.obj	\
+	$(D)\PropSet.obj	\
+	$(D)\ScintillaBase.obj	\
+	$(D)\Style.obj		\
+	$(D)\ViewStyle.obj	\
+				\
+	$(D)\PlatWX.obj		\
+	$(D)\ScintillaWX.obj	\
+	$(D)\stc.obj		\
+
+
+
+
+LIBTARGET = $(WXDIR)\contrib\lib\stc$(LIBEXT).lib
+
+all:    $(D) $(LIBTARGET)
+
+$(D) :
+	mkdir $(D)
+
+wx:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(THISDIR)
+
+wxclean:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.vc clean
+        cd $(THISDIR)
+
+
+
+
+$(LIBTARGET): $(OBJECTS)
+	-erase $(LIBTARGET)
+	$(implib) @<<
+-out:$(LIBTARGET)
+-machine:$(CPU)
+$(OBJECTS)
+<<
+
+
+$(PROGRAM).exe: $(D)\$(PROGRAM).obj  $(DUMMYOBJ) $(WXLIB) $(LIBTARGET) $(PROGRAM).res
+	$(link) @<<
+-out:$(PROGRAM).exe
+$(LINKFLAGS)
+$(DUMMYOBJ) $(D)\$(PROGRAM).obj $(LIBTARGET) $(PROGRAM).res
+$(LIBS)
+<<
+
+$(PROGRAM).res :      $(PROGRAM).rc $(WXDIR)\include\wx\msw\wx.rc
+    $(rc) -r /i$(WXDIR)\include -fo$@ $(PROGRAM).rc
+
+
+
+{$(S)}.cxx{$(D)}.obj:
+	$(cc) @<<
+$(CPPFLAGS) /c /Fo$@ /Tp $<
+<<
+
+{}.cpp{$(D)}.obj:
+	$(cc) @<<
+$(CPPFLAGS) /c /Fo$@ /Tp $<
+<<
+
+
+show:
+	@echo $(CPPFLAGS)
+
+
+clean:
+        -erase $(D)\*.obj
+        -erase *.sbr
+        -erase *.exe
+        -erase *.res
+        -erase *.map
+        -erase *.pdb
+        -erase $(LIBTARGET)
+
