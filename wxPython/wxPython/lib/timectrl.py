@@ -138,7 +138,7 @@ class wxTimeCtrl(wxTextCtrl):
         # Validate initial value and set if appropriate
         try:
             self.SetValue(value)
-        except ValueError:
+        except:
             self.SetValue('12:00:00 AM')
 
         # set initial position and selection state
