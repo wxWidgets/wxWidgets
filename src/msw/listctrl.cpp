@@ -1928,10 +1928,14 @@ void wxListCtrl::RefreshItem(long item)
 
 void wxListCtrl::RefreshItems(long itemFrom, long itemTo)
 {
-    for ( long item = itemFrom; item <= itemTo; item++ )
-    {
-        RefreshItem(item);
-    }
+    wxRect rect1, rect2;
+    GetItemRect(itemFrom, rect1);
+    GetItemRect(itemTo, rect2);
+
+    wxRect rect = rect1;
+    rect.height = rect2.GetBottom() - rect1.GetTop();
+
+    RefreshRect(rect);
 }
 
 // ----------------------------------------------------------------------------
