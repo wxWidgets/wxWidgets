@@ -40,6 +40,7 @@
 #include "wx/memory.h"
 #include "wx/set.h"
 #include "wx/string.h"
+#include "wx/arrstr.h"
 
 class WXDLLIMPEXP_BASE wxObject;
 class WXDLLIMPEXP_BASE wxClassInfo;
@@ -691,7 +692,7 @@ class wxHandlerInfo
 {
 public :
 	wxHandlerInfo( wxHandlerInfo* &iter , const wxChar *name , wxObjectEventFunction address , const wxClassInfo* eventClassInfo ) :
-	   m_name( name ) , m_eventClassInfo( eventClassInfo ) , m_eventFunction( address )
+	   m_eventFunction( address ) , m_name( name ) , m_eventClassInfo( eventClassInfo )
 	{
 		m_next = NULL ;
 		if ( iter == NULL )
@@ -918,16 +919,21 @@ public:
 			const int _ConstructorPropertiesCount ,
 			wxVariantToObjectConverter _Converter1 ,
 			wxObjectToVariantConverter _Converter2
-			) : m_parents(_Parents) , m_unitName(_UnitName) ,m_className(_ClassName),
-			m_objectSize(size), m_objectConstructor(ctor) , m_firstProperty(_Props ) , m_firstHandler(_Handlers ) , m_constructor( _Constructor ) ,
-			m_constructorProperties(_ConstructorProperties) , m_constructorPropertiesCount(_ConstructorPropertiesCount),
-			m_variantToObjectConverter( _Converter1 ) , m_objectToVariantConverter( _Converter2 ) , m_next(sm_first)
+			) : m_className(_ClassName), m_objectSize(size),
+                            m_objectConstructor(ctor), m_next(sm_first),
+                            m_parents(_Parents), m_firstProperty(_Props ),
+                            m_firstHandler(_Handlers), m_unitName(_UnitName),
+			    m_constructor( _Constructor ),
+			    m_constructorProperties(_ConstructorProperties),
+                            m_constructorPropertiesCount(_ConstructorPropertiesCount),
+                            m_variantToObjectConverter( _Converter1 ),
+                            m_objectToVariantConverter( _Converter2 ) 
 	{
 		sm_first = this;
 		Register( m_className , this ) ;
 	}
 
-    ~wxClassInfo() ;
+    virtual ~wxClassInfo() ;
 
     wxObject *CreateObject() { return m_objectConstructor ? (*m_objectConstructor)() : 0; }
 
