@@ -10,34 +10,16 @@ the data source to which the user has sufficient privileges.
 
 <wx/db.h>
 
-\latexignore{\rtfignore{\wxheading{Members}}}
-
 \wxheading{Helper classes and data structures}
 
 The following classes and structs are defined in db.cpp/.h for use with the wxDb class.
 
 \begin{itemize}\itemsep=0pt
-\helpref{wxDbColFor}{wxdbcolfor}
-\helpref{wxDbColInf}{wxdbcolinf}
-\helpref{wxDbTableInf}{wxdbtableinf}
-\helpref{wxDbInf}{wxdbinf}
+\item \helpref{wxDbColFor}{wxdbcolfor}
+\item \helpref{wxDbColInf}{wxdbcolinf}
+\item \helpref{wxDbTableInf}{wxdbtableinf}
+\item \helpref{wxDbInf}{wxdbinf}
 \end{itemize}
-
-\subsection{Associated non-class functions}\label{wxdbfunctions}
-
-The following functions are used in conjunction with the wxDb class.
-
-\func{wxDb *}{wxDbGetConnection}{\param{wxDbConnectInf *}{pDbConfig}, \param{bool }{FwdOnlyCursors=(bool)wxODBC_FWD_ONLY_CURSORS}}
-
-\func{bool}{wxDbFreeConnection}{\param{wxDb *}{pDb}}
-
-\func{void}{wxDbCloseConnections}{\void}
-
-\func{int}{wxDbConnectionsInUse}{\void}
-
-\func{bool}{wxDbSqlLog}{\param{wxDbSqlLogState }{state}, \param{const wxChar *}{filename = SQL_LOG_FILENAME}}
-
-\func{bool}{wxDbGetDataSource}{\param{HENV }{henv}, \param{char *}{Dsn}, \param{SWORD }{DsnMax}, \param{char *}{DsDesc}, \param{SWORD }{DsDescMax}, \param{UWORD }{direction = SQL_FETCH_NEXT}}
 
 \wxheading{Constants}
 
@@ -242,6 +224,24 @@ an instance of a wxDb is created (see \helpref{wxDb constructor}{wxdbconstr}).
 
 \helpref{wxDbColFor}{wxdbcolfor}, \helpref{wxDbColInf}{wxdbcolinf}, \helpref{wxDbTable}{wxdbtable}, \helpref{wxDbTableInf}{wxdbtableinf}, \helpref{wxDbInf}{wxdbinf}
 
+\subsection{Associated non-class functions}\label{wxdbfunctions}
+
+The following functions are used in conjunction with the wxDb class.
+
+\func{wxDb *}{wxDbGetConnection}{\param{wxDbConnectInf *}{pDbConfig}, \param{bool }{FwdOnlyCursors=(bool)wxODBC_FWD_ONLY_CURSORS}}
+
+\func{bool}{wxDbFreeConnection}{\param{wxDb *}{pDb}}
+
+\func{void}{wxDbCloseConnections}{\void}
+
+\func{int}{wxDbConnectionsInUse}{\void}
+
+\func{bool}{wxDbSqlLog}{\param{wxDbSqlLogState }{state}, \param{const wxChar *}{filename = SQL_LOG_FILENAME}}
+
+\func{bool}{wxDbGetDataSource}{\param{HENV }{henv}, \param{char *}{Dsn}, \param{SWORD }{DsnMax}, \param{char *}{DsDesc}, \param{SWORD }{DsDescMax}, \param{UWORD }{direction = SQL_FETCH_NEXT}}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
 \membersection{wxDb::wxDb}\label{wxdbconstr}
 
 \func{}{wxDb}{\void}
@@ -264,6 +264,7 @@ This is the constructor for the wxDb class.  The wxDb object must
 be created and opened before any database activity can occur.
 
 \wxheading{Example}
+
 \begin{verbatim}
    wxDbConnectInf ConnectInf;
    ....Set values for member variables of ConnectInf here
@@ -319,6 +320,7 @@ At the end of your program, when you have finished all of your database work, yo
 Any wxDbTable instances which use this connection must be deleted before closing the database connection.
 
 \wxheading{Example}
+
 \begin{verbatim}
    // Commit any open transactions on the data source
    sampleDB.CommitTrans();
@@ -425,6 +427,7 @@ This member function will display all of the ODBC error messages for the last OD
 \helpref{wxDb::SetSqlLogging}{wxdbsetsqllogging}, wxDbSqlLog
 
 \wxheading{Example}
+
 \begin{verbatim}
    if (SQLExecDirect(hstmt, (UCHAR FAR *) pSqlStmt, SQL_NTS) != SQL_SUCCESS)
       // Display all ODBC errors for this stmt
@@ -599,6 +602,7 @@ to avoid undesired unbinding of columns.}
 \helpref{wxDbColInf}{wxdbcolinf}
 
 \wxheading{Example}
+
 \begin{verbatim}
    char *tableList[] = {"PARTS", 0};
    wxDbColInf *colInf = pDb->GetColumns(tableList);
@@ -631,6 +635,7 @@ Used to retrieve result set data without binding column values to memory variabl
 \helpref{wxDb::GetNext}{wxdbgetnext}, \helpref{wxDb::ExecSql}{wxdbexecsql}
 
 \wxheading{Example} 
+
 \begin{verbatim}
 	SDWORD cb;
 	ULONG reqQty;
@@ -749,6 +754,7 @@ ODBC function call that erred out requires a hstmt argument.}
 \helpref{wxDb::DispNextError}{wxdbdispnexterror}, \helpref{wxDb::DispAllErrors}{wxdbdispallerrors}
 
 \wxheading{Example} 
+
 \begin{verbatim}
    if (SQLExecDirect(hstmt, (UCHAR FAR *) pSqlStmt, SQL_NTS) != SQL_SUCCESS)
    {
@@ -800,6 +806,7 @@ Use this member function to GRANT privileges to users for accessing tables in th
 Some databases require user names to be specified in all capital letters (i.e. Oracle).  This function does not automatically capitalize the user names passed in the comma-separated list.  This is the responsibility of the calling routine.
 
 \wxheading{Example} 
+
 \begin{verbatim}
    db.Grant(DB_GRANT_SELECT | DB_GRANT_INSERT, "PARTS", "mary, sue");
 \end{verbatim}
@@ -849,6 +856,7 @@ database administrator.}
 After a wxDb instance is created, it must then be opened.  When opening a data source, there must be hree pieces of information passed.  The data source name, user name (ID) and the password for the user.  No database activity on the data source can be performed until it is opened.  This would normally be done at program startup and the data source would remain open for the duration of the program run.  Note: It is possible to have multiple data sources open at the same time to support distributed database connections. 
 
 \wxheading{Example}
+
 \begin{verbatim}
    wxDb sampleDB(Db.Henv);
    if (!sampleDB.Open("Oracle 7.1 HP/UX", "gtasker", "myPassword"))
