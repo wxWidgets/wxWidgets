@@ -348,11 +348,13 @@ classes, functions and macros.
 \twocolwidtha{6cm}
 \begin{twocollist}\itemsep=0pt
 \twocolitem{\helpref{wxDebugContext}{wxdebugcontext}}{Provides memory-checking facilities}
-%\twocolitem{\helpref{wxDebugStreamBuf}{wxdebugstreambuf}}{A stream buffer writing to the debug stream}
 \twocolitem{\helpref{Debugging macros}{debugmacros}}{Debug macros for assertion and checking}
 \twocolitem{\helpref{WXDEBUG\_NEW}{debugnew}}{Use this macro to give further debugging information}
-%\twocolitem{\helpref{WXTRACE}{trace}}{Trace macro}
-%\twocolitem{\helpref{WXTRACELEVEL}{tracelevel}}{Trace macro with levels}
+\twocolitem{\helpref{wxDebugReport}{wxdebugreport}}{Base class for creating debug reports in case of a program crash.}
+\twocolitem{\helpref{wxDebugReportCompress}{wxdebugreportcompress}}{Class for creating compressed debug reports.}
+\twocolitem{\helpref{wxDebugReportUpload}{wxdebugreportupload}}{Class for uploading compressed debug reports via HTTP.}
+\twocolitem{\helpref{wxDebugReportPreview}{wxdebugreportpreview}}{Abstract base class for previewing the contents of a debug report.}
+\twocolitem{\helpref{wxDebugReportPreviewStd}{wxdebugreportpreviewstd}}{Standard implementation of wxDebugReportPreview.}
 \end{twocollist}
 
 {\large {\bf Networking classes}}
