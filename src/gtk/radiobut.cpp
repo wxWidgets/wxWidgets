@@ -154,7 +154,12 @@ void wxRadioButton::SetLabel( const wxString& label )
   
     wxControl::SetLabel( label );
     GtkLabel *g_label = GTK_LABEL( BUTTON_CHILD(m_widget) );
+#ifdef __WXGTK20__
+    wxString label2 = PrepareLabelMnemonics( label );
+    gtk_label_set_text_with_mnemonic( g_label, wxGTK_CONV( label2 ) );
+#else
     gtk_label_set( g_label, wxGTK_CONV( GetLabel() ) );
+#endif
 }
 
 void wxRadioButton::SetValue( bool val )

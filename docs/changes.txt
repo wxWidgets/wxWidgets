@@ -69,6 +69,7 @@ Unix:
 
 wxGTK:
 
+- added support for label mnemonics to GTK+2 build (Michael Moss)
 - added native wxMessageDialog implementation for GTK+2 build
 - fixed wxMenu::Remove (John Skiff and Benjamin Williams)
 - made wxTextCtrl::EmulateKeyPress() work for Delete and Backspace

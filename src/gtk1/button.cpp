@@ -175,7 +175,12 @@ void wxButton::SetLabel( const wxString &label )
 
     wxControl::SetLabel( label );
 
+#ifdef __WXGTK20__
+    wxString label2 = PrepareLabelMnemonics( label );
+    gtk_label_set_text_with_mnemonic( GTK_LABEL( BUTTON_CHILD(m_widget) ), wxGTK_CONV( label2 ) );
+#else
     gtk_label_set( GTK_LABEL( BUTTON_CHILD(m_widget) ), wxGTK_CONV( GetLabel() ) );
+#endif
 }
 
 bool wxButton::Enable( bool enable )
