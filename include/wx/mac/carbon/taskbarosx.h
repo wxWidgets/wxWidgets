@@ -55,7 +55,9 @@ protected:
     wxMenu* m_pMenu;
     WXHMENU m_theLastMenu;
     bool m_iconAdded;
-            
+    
+    void OnRightDown(wxTaskBarIconEvent& evt);
+    
     DECLARE_DYNAMIC_CLASS(wxTaskBarIcon)
 };
 #endif

@@ -143,6 +143,8 @@ wxTaskBarIcon::wxTaskBarIcon(const wxTaskBarIconType& nType)
             this, (&(EventHandlerRef&)m_pEventHandlerRef));
             
     wxASSERT(err == noErr);
+    
+    Connect(wxEVT_TASKBAR_RIGHT_DOWN, wxTaskBarIconEventHandler(wxTaskBarIcon::OnRightDown));
 }
 
 wxTaskBarIcon::~wxTaskBarIcon()
@@ -181,7 +183,7 @@ bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
 
     CGImageRef pImage;
     
-#if 1 // is always available under OSX now       
+#if 0 // is always available under OSX now -- crashes on 10.2 in CFRetain() - RN
     pImage = (CGImageRef) bmp.CGImageCreate() ;
 #else
     WXHBITMAP iconport ;
@@ -287,6 +289,12 @@ bool wxTaskBarIcon::PopupMenu(wxMenu *menu)
     
     m_pMenu->SetEventHandler(this);
     return true;
+}
+
+//Skip the event so that popupmenu isn't called in parent, avoiding double-creation of the menus
+void wxTaskBarIcon::OnRightDown(wxTaskBarIconEvent& evt)
+{
+    evt.Skip();
 }
 
 #endif //wxHAS_TASK_BAR_ICON
