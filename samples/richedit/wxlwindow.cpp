@@ -88,8 +88,6 @@ static const int Y_SCROLL_PAGE = 20;
 
 
 
-#define wxUSE_PRIVATE_CLIPBOARD_FORMAT 0
-
 // ----------------------------------------------------------------------------
 // event tables
 // ----------------------------------------------------------------------------
@@ -564,7 +562,7 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
          {
          case 'c':
             // this should work even in read-only mode
-            Copy();
+            Copy(TRUE, TRUE);
             break;
          case 's': // search
             Find("");
@@ -629,11 +627,10 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
                SetDirty();
                break;
             case 'c':
-               Copy();
+               Copy(TRUE, TRUE);
                break;
             case 'v':
-               // if SHIFT is down, use primary selection
-               Paste( event.ShiftDown() );
+               Paste( TRUE );
                break;
             case 'x':
                Cut();
@@ -717,8 +714,15 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
                   )
                {
                   if(m_WrapMargin > 0 && isspace(keyCode))
-                     m_llist->WrapLine(m_WrapMargin);
-                  m_llist->Insert((char)keyCode);
+                  {
+                     bool wrapped = m_llist->WrapLine(m_WrapMargin);
+                     // don´t insert space as first thing in line
+                     // after wrapping:
+                     if(! wrapped || m_llist->GetCursorPos().x != 0)
+                        m_llist->Insert((char)keyCode);
+                  }
+                  else
+                     m_llist->Insert((char)keyCode);
                   SetDirty();
                }
                else
@@ -1071,26 +1075,47 @@ wxLayoutWindow::ResizeScrollbars(bool exact)
 // ----------------------------------------------------------------------------
 
 void
-wxLayoutWindow::Paste(bool primary)
+wxLayoutWindow::Paste(bool usePrivate, bool primary)
 {
    // this only has an effect under X11:
-   if(primary) wxTheClipboard->UsePrimarySelection();
+   wxTheClipboard->UsePrimarySelection(primary);
    // Read some text
    if (wxTheClipboard->Open())
    {
-#if wxUSE_PRIVATE_CLIPBOARD_FORMAT
-      wxLayoutDataObject wxldo;
-      if (wxTheClipboard->IsSupported( wxldo.GetFormat() ))
+      if(usePrivate)
       {
-         if(wxTheClipboard->GetData(wxldo))
+         wxLayoutDataObject wxldo;
+         if (wxTheClipboard->IsSupported( wxldo.GetFormat() ))
          {
-            wxString str = wxldo.GetLayoutData();
-            m_llist->Read(str);
-            RequestUpdate();
+            if(wxTheClipboard->GetData(wxldo))
+            {
+               wxTheClipboard->Close();
+               wxString str = wxldo.GetLayoutData();
+               m_llist->Read(str);
+               SetDirty();
+               RequestUpdate();
+               return;
+            }
          }
       }
-      else
-#endif
+      wxTextDataObject data;
+      if (wxTheClipboard->IsSupported( data.GetFormat() )
+          && wxTheClipboard->GetData(data) )
+      {
+         wxTheClipboard->Close();
+         wxString text = data.GetText();
+         wxLayoutImportText( m_llist, text);
+         SetDirty();
+         RequestUpdate();
+         return;
+      }
+   }
+   // if everything failed we can still try the primary:
+   wxTheClipboard->Close();
+   if(! primary) // not tried before
+   {
+      wxTheClipboard->UsePrimarySelection();
+      if (wxTheClipboard->Open())
       {
          wxTextDataObject data;
          if (wxTheClipboard->IsSupported( data.GetFormat() )
@@ -1099,14 +1124,15 @@ wxLayoutWindow::Paste(bool primary)
             wxString text = data.GetText();
             wxLayoutImportText( m_llist, text);
             SetDirty();
+            RequestUpdate();
          }
+         wxTheClipboard->Close();
       }
-      wxTheClipboard->Close();
    }
 }
 
 bool
-wxLayoutWindow::Copy(bool invalidate)
+wxLayoutWindow::Copy(bool invalidate, bool privateFormat, bool primary)
 {
    // Calling GetSelection() will automatically do an EndSelection()
    // on the list, but we need to take a note of it, too:
@@ -1142,15 +1168,28 @@ wxLayoutWindow::Copy(bool invalidate)
          text = text.Mid(0,len-1);
    }
 
+#if 0
+if(! primary) // always copy as text-only to primary selection
+   {
+      wxTheClipboard->UsePrimarySelection();
+      if (wxTheClipboard->Open())
+      {
+         wxTextDataObject *data = new wxTextDataObject( text );
+         wxTheClipboard->SetData( data );
+         wxTheClipboard->Close();
+      }
+   }
+#endif
+
+   wxTheClipboard->UsePrimarySelection(primary);
    if (wxTheClipboard->Open())
    {
       wxTextDataObject *data = new wxTextDataObject( text );
       bool rc;
 
-      rc = wxTheClipboard->SetData( data );
-#if wxUSE_PRIVATE_CLIPBOARD_FORMAT
-      rc |= wxTheClipboard->SetData( wldo );
-#endif
+         rc = wxTheClipboard->SetData( data );
+      if(privateFormat)
+         rc |= wxTheClipboard->SetData( wldo );
       wxTheClipboard->Close();
       return rc;
    }
@@ -1161,9 +1200,9 @@ wxLayoutWindow::Copy(bool invalidate)
 }
 
 bool
-wxLayoutWindow::Cut(void)
+wxLayoutWindow::Cut(bool privateFormat, bool usePrimary)
 {
-   if(Copy(false)) // do not invalidate selection after copy
+   if(Copy(false, privateFormat, usePrimary)) // do not invalidate selection after copy
    {
       m_llist->DeleteSelection();
       SetDirty();

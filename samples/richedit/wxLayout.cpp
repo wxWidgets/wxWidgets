@@ -18,6 +18,7 @@
 
 #include "wxLayout.h"
 #include <wx/textfile.h>
+#include <wx/image.h>
 
 #include <iostream.h>
 
@@ -40,7 +41,7 @@ enum ids
     ID_PRINT_SETUP, ID_PAGE_SETUP, ID_PREVIEW, ID_PRINT_PS,
     ID_PRINT_SETUP_PS, ID_PAGE_SETUP_PS,ID_PREVIEW_PS,
     ID_WRAP, ID_NOWRAP, ID_PASTE, ID_COPY, ID_CUT,
-    ID_PASTE_PRIMARY,
+    ID_COPY_PRIMARY, ID_PASTE_PRIMARY,
     ID_FIND,
     ID_WXLAYOUT_DEBUG, ID_QUIT, ID_CLICK, ID_HTML, ID_TEXT,
     ID_TEST, ID_LINEBREAKS_TEST, ID_LONG_TEST, ID_URL_TEST
@@ -105,10 +106,11 @@ MyFrame::MyFrame(void) :
    edit_menu->AppendSeparator();
    edit_menu->Append(ID_COPY, "&Copy", "Copy text to clipboard.");
    edit_menu->Append(ID_CUT, "Cu&t", "Cut text to clipboard.");
-#ifdef __WXGTK__
    edit_menu->Append(ID_PASTE,"&Paste", "Paste text from clipboard.");
-#endif
+#ifdef __WXGTK__
+   edit_menu->Append(ID_COPY_PRIMARY, "C&opy primary", "Copy text to primary selecton.");
    edit_menu->Append(ID_PASTE_PRIMARY,"&Paste primary", "Paste text from primary selection.");
+#endif
    edit_menu->Append(ID_FIND, "&Find", "Find text.");
    menu_bar->Append(edit_menu, "&Edit" );
 
@@ -283,17 +285,23 @@ void MyFrame::OnCommand( wxCommandEvent &event )
       cerr << "Received click event." << endl;
       break;
    case ID_PASTE:
-      m_lwin->Paste();
+      m_lwin->Paste(TRUE);
       m_lwin->Refresh(FALSE);
       break;
 #ifdef __WXGTK__
    case ID_PASTE_PRIMARY:
-      m_lwin->Paste(TRUE);
+      // text only from primary:
+      m_lwin->Paste(FALSE, TRUE);
+      m_lwin->Refresh(FALSE);
+      break;
+   case ID_COPY_PRIMARY:
+      // copy text-only to primary selection:
+      m_lwin->Copy(FALSE,FALSE,TRUE);
       m_lwin->Refresh(FALSE);
       break;
 #endif
    case ID_COPY:
-      m_lwin->Copy();
+      m_lwin->Copy(TRUE,TRUE,FALSE);
       m_lwin->Refresh(FALSE);
       break;
    case ID_CUT:
@@ -311,13 +319,14 @@ void MyFrame::OnCommand( wxCommandEvent &event )
       wxLayoutExportObject *export0;
       wxLayoutExportStatus status(m_lwin->GetLayoutList());
 
+      cout << "<HTML>" << endl;
       while((export0 = wxLayoutExport( &status,
                                       WXLO_EXPORT_AS_HTML)) != NULL)
       {
          if(export0->type == WXLO_EXPORT_HTML)
             cout << *(export0->content.text);
          else
-            cout << "<!--UNKNOWN OBJECT>";
+            ; // ignore itcout << "<!--UNKNOWN OBJECT>";
          delete export0;
       }
    }
@@ -506,6 +515,7 @@ MyApp::MyApp(void) :
 bool MyApp::OnInit(void)
 {
    wxFrame *frame = new MyFrame();
+   wxInitAllImageHandlers();
    frame->Show( TRUE );
 //   wxSetAFMPath("/usr/local/src/wxWindows/misc/afm/");
    return TRUE;

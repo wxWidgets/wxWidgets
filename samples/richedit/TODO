@@ -2,9 +2,6 @@
 BUGS
 =====================================================================
 
-- dmalloc shows duplicate deletion after merging two lines and
-  deleting the second half
-
 - word wrap for objects with lots of non-space needs to search in positive
   direction if begin of first object is reached
 
@@ -13,26 +10,14 @@ TODO
 
 - use printsetup margins
 
-- merge RecalulateXXX and Layout() into one
-
   - UNDO!!
   - replacement of llist in window
 
-Improve speed! (See layout problem below!)
-
-  - wxlwindow needs to shrink scrollbar range when window contents get removed
-  - When selecting with the mouse, scroll window if pointer is outside.
-
-
-
-- The import of a private data object does not work yet, we need to get
-  the objects back from the string.
-  
 - update rectangle (needs support in wxllist and wxWindows)
   --> needs a bit of fixing still
       some code bits are commented out in wxlwindow.cpp
       offset handling seems a bit dodgy, white shadow to top/left of cursor
 
-  - DragNDrop
-  - Update docs, do full rtf/html editing. 
-  - Verify/fix html export.
+- add wxHTML parser to import HTML
+- add some kind of callback for objects with userdata
+- use wxTempFile to get rid of temporary image files

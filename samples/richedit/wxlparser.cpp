@@ -73,7 +73,8 @@ void wxLayoutImportText(wxLayoutList *list, wxString const &str)
 
 static
 wxString wxLayoutExportCmdAsHTML(wxLayoutObjectCmd const & cmd,
-                                 wxLayoutStyleInfo *styleInfo)
+                                 wxLayoutStyleInfo *styleInfo,
+                                 bool firstTime)
 {
    static char buffer[20];
    wxString html;
@@ -128,7 +129,7 @@ wxString wxLayoutExportCmdAsHTML(wxLayoutObjectCmd const & cmd,
 
    html +=">";
 
-   if(styleInfo != NULL)
+   if(styleInfo != NULL && ! firstTime)
       html ="</font>"+html; // terminate any previous font command
 
    if((si->weight == wxBOLD) && ( (!styleInfo) || (styleInfo->weight != wxBOLD)))
@@ -164,6 +165,7 @@ wxLayoutExportStatus::wxLayoutExportStatus(wxLayoutList *list)
    m_si = list->GetDefaultStyleInfo();
    m_line = list->GetFirstLine();
    m_iterator = m_line->GetFirstObject();
+   m_FirstTime = TRUE;
 }
 
 
@@ -220,7 +222,7 @@ wxLayoutExportObject *wxLayoutExport(wxLayoutExportStatus *status,
    {
       while(status->m_iterator == NULLIT)
       {
-         if(flags & WXLO_EXPORT_AS_HTML)
+         if(mode & WXLO_EXPORT_AS_HTML)
             *str += "<br>";
          if(flags & WXLO_EXPORT_WITH_CRLF)
             *str += "\r\n";
@@ -245,15 +247,16 @@ wxLayoutExportObject *wxLayoutExport(wxLayoutExportStatus *status,
          break;
       case WXLO_TYPE_CMD:
          if(mode == WXLO_EXPORT_AS_HTML)
-            *str += wxLayoutExportCmdAsHTML(*(wxLayoutObjectCmd const
-                                              *)*status->m_iterator, & status->m_si);
+            *str += wxLayoutExportCmdAsHTML(
+               *(wxLayoutObjectCmd const *)*status->m_iterator,
+               & status->m_si, status->m_FirstTime);
+         status->m_FirstTime = FALSE;
          break;
       default:  // ignore icons
          ;
       }
       status->m_iterator++;
    }
-
    exp->type = (mode == WXLO_EXPORT_AS_HTML)
       ?  WXLO_EXPORT_HTML : WXLO_EXPORT_TEXT;
    exp->content.text = str;

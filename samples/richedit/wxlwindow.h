@@ -95,13 +95,13 @@ public:
       m_CursorVisibility = visibility; return v;}
 
    /// Pastes text from clipboard.
-   void Paste(bool usePrimarySelection = FALSE);
+   void Paste(bool privateFormat = FALSE, bool usePrimarySelection = FALSE);
    /** Copies selection to clipboard.
        @param invalidate used internally, see wxllist.h for details
    */
-   bool Copy(bool invalidate = true);
+   bool Copy(bool invalidate = true, bool privateFormat = FALSE, bool primary = FALSE);
    /// Copies selection to clipboard and deletes it.
-   bool Cut(void);
+   bool Cut(bool privateFormat = FALSE, bool usePrimary = FALSE);
    //@}
 
    /// find string in buffer

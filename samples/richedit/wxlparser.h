@@ -59,12 +59,13 @@ struct wxLayoutExportStatus
    wxLayoutLine      * m_line;
    wxLOiterator        m_iterator;
    wxLayoutStyleInfo   m_si;
+   bool                m_FirstTime;
 };
 
 #ifdef OS_WIN
-    #define WXLO_DEFAULT_EXPORT_MODE WXLO_EXPORT_WITH_CRLF
+#   define WXLO_DEFAULT_EXPORT_MODE WXLO_EXPORT_WITH_CRLF
 #else // Unix
-    #define WXLO_DEFAULT_EXPORT_MODE WXLO_EXPORT_WITH_LF_ONLY
+#   define WXLO_DEFAULT_EXPORT_MODE WXLO_EXPORT_WITH_LF_ONLY
 #endif // Win/Unix
 
 /// import text into a wxLayoutList (including linefeeds):

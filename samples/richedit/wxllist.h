@@ -421,6 +421,7 @@ public:
                      int underline = -1,
                      wxColour *fg = NULL,
                      wxColour *bg = NULL);
+   wxLayoutObjectCmd(const wxLayoutStyleInfo &si);
    ~wxLayoutObjectCmd();
    /** Stores the current style in the styleinfo structure */
    wxLayoutStyleInfo * GetStyle(void) const;

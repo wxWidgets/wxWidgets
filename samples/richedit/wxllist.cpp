@@ -448,6 +448,8 @@ wxLayoutObjectIcon::Copy(void)
 wxLayoutObjectIcon::wxLayoutObjectIcon(wxBitmap *icon)
 {
    m_Icon = icon;
+   if(! m_Icon)
+      m_Icon = new wxIcon;
 }
 
 void
@@ -524,12 +526,19 @@ wxLayoutObjectCmd::wxLayoutObjectCmd(int family, int size, int style, int
    m_StyleInfo = new wxLayoutStyleInfo(family, size,style,weight,underline,fg,bg);
 }
 
+wxLayoutObjectCmd::wxLayoutObjectCmd(const wxLayoutStyleInfo &si)
+
+{
+   m_StyleInfo = new wxLayoutStyleInfo;
+   *m_StyleInfo = si;
+}
+
 wxLayoutObject *
 wxLayoutObjectCmd::Copy(void)
 {
    wxLayoutObjectCmd *obj = new wxLayoutObjectCmd(
-      m_StyleInfo->size,
       m_StyleInfo->family,
+      m_StyleInfo->size,
       m_StyleInfo->style,
       m_StyleInfo->weight,
       m_StyleInfo->underline,
@@ -545,8 +554,8 @@ void
 wxLayoutObjectCmd::Write(wxString &ostr)
 {
    ostr << WXLO_TYPE_CMD << '\n'
-        << m_StyleInfo->size << '\n'
         << m_StyleInfo->family << '\n'
+        << m_StyleInfo->size << '\n'
         << m_StyleInfo->style << '\n'
         << m_StyleInfo->weight << '\n'
         << m_StyleInfo->underline << '\n'
@@ -573,9 +582,9 @@ wxLayoutObjectCmd::Read(wxString &istr)
 
    wxString tmp;
    ReadString(tmp, istr);
-   sscanf(tmp.c_str(),"%d", &obj->m_StyleInfo->size);
-   ReadString(tmp, istr);
    sscanf(tmp.c_str(),"%d", &obj->m_StyleInfo->family);
+   ReadString(tmp, istr);
+   sscanf(tmp.c_str(),"%d", &obj->m_StyleInfo->size);
    ReadString(tmp, istr);
    sscanf(tmp.c_str(),"%d", &obj->m_StyleInfo->style);
    ReadString(tmp, istr);
@@ -1571,12 +1580,20 @@ wxLayoutList::InternalClear(void)
 void
 wxLayoutList::Read(wxString &istr)
 {
+   /* In order to handle input of formatted string "nicely", we need
+      to restore our current font settings after the string. So first
+      of all, we create a StyleInfo structure with our current
+      settings. */
+   wxLayoutStyleInfo current_si = GetStyleInfo();
+
    while(istr.Length())
    {
       wxLayoutObject *obj = wxLayoutObject::Read(istr);
       if(obj)
          Insert(obj);
    }
+   /* Now we use the current_si to restore our last font settings: */
+   Insert(new wxLayoutObjectCmd(current_si));
 }
 
 
@@ -2891,11 +2908,13 @@ wxLayoutList::ApplyStyle(wxLayoutStyleInfo const &si, wxDC &dc)
    if(si.m_fg_valid)
    {
       m_CurrentStyleInfo.m_fg = si.m_fg;
+      m_CurrentStyleInfo.m_fg_valid = true;
       dc.SetTextForeground(m_CurrentStyleInfo.m_fg);
    }
    if(si.m_bg_valid)
    {
       m_CurrentStyleInfo.m_bg = si.m_bg;
+      m_CurrentStyleInfo.m_bg_valid = true;
       dc.SetTextBackground(m_CurrentStyleInfo.m_bg);
    }
 }
