@@ -5774,22 +5774,22 @@ class MaskedEditMixin:
 
     def _OnContextMenu(self, event):
 ##        dbg('MaskedEditMixin::OnContextMenu()', indent=1)
-        menu = wxMenu()
-        menu.Append(wxID_UNDO, "Undo", "")
+        menu = wx.Menu()
+        menu.Append(wx.ID_UNDO, "Undo", "")
         menu.AppendSeparator()
-        menu.Append(wxID_CUT, "Cut", "")
-        menu.Append(wxID_COPY, "Copy", "")
-        menu.Append(wxID_PASTE, "Paste", "")
-        menu.Append(wxID_CLEAR, "Delete", "")
+        menu.Append(wx.ID_CUT, "Cut", "")
+        menu.Append(wx.ID_COPY, "Copy", "")
+        menu.Append(wx.ID_PASTE, "Paste", "")
+        menu.Append(wx.ID_CLEAR, "Delete", "")
         menu.AppendSeparator()
-        menu.Append(wxID_SELECTALL, "Select All", "")
+        menu.Append(wx.ID_SELECTALL, "Select All", "")
 
-        EVT_MENU(menu, wxID_UNDO, self._OnCtrl_Z)
-        EVT_MENU(menu, wxID_CUT, self._OnCtrl_X)
-        EVT_MENU(menu, wxID_COPY, self._OnCtrl_C)
-        EVT_MENU(menu, wxID_PASTE, self._OnCtrl_V)
-        EVT_MENU(menu, wxID_CLEAR, self._OnClear)
-        EVT_MENU(menu, wxID_SELECTALL, self._OnCtrl_A)
+        wx.EVT_MENU(menu, wx.ID_UNDO, self._OnCtrl_Z)
+        wx.EVT_MENU(menu, wx.ID_CUT, self._OnCtrl_X)
+        wx.EVT_MENU(menu, wx.ID_COPY, self._OnCtrl_C)
+        wx.EVT_MENU(menu, wx.ID_PASTE, self._OnCtrl_V)
+        wx.EVT_MENU(menu, wx.ID_CLEAR, self._OnClear)
+        wx.EVT_MENU(menu, wx.ID_SELECTALL, self._OnCtrl_A)
 
         # ## WSS: The base control apparently handles
         # enable/disable of wID_CUT, wxID_COPY, wxID_PASTE
@@ -5798,7 +5798,7 @@ class MaskedEditMixin:
         # so we're keeping track of previous values ourselves.
         # Therefore, we have to override the default update for
         # that item on the menu:
-        EVT_UPDATE_UI(self, wxID_UNDO, self._UndoUpdateUI)
+        wx.EVT_UPDATE_UI(self, wx.ID_UNDO, self._UndoUpdateUI)
         self._contextMenu = menu
 
         self.PopupMenu(menu, event.GetPosition())
@@ -5808,9 +5808,9 @@ class MaskedEditMixin:
 
     def _UndoUpdateUI(self, event):
         if self._prevValue is None or self._prevValue == self._curValue:
-            self._contextMenu.Enable(wxID_UNDO, False)
+            self._contextMenu.Enable(wx.ID_UNDO, False)
         else:
-            self._contextMenu.Enable(wxID_UNDO, True)
+            self._contextMenu.Enable(wx.ID_UNDO, True)
 
 
     def _OnCtrlParametersChanged(self):
