@@ -170,7 +170,7 @@ struct wxColWidthInfo
     }
 };
 
-WX_DEFINE_ARRAY(wxColWidthInfo *, ColWidthArray);
+WX_DEFINE_ARRAY_PTR(wxColWidthInfo *, ColWidthArray);
 
 //-----------------------------------------------------------------------------
 //  wxListItemData (internal)
@@ -4501,9 +4501,7 @@ void wxListMainWindow::InsertItem( wxListItem &item )
 
         // calculate the width of the item and adjust the max column width
         wxColWidthInfo *pWidthInfo = m_aColWidths.Item(item.GetColumn());
-        int width = 0;
-
-        width = GetItemWidthWithImage(&item);
+        int width = GetItemWidthWithImage(&item);
         item.SetWidth(width);
         if (width > pWidthInfo->nMaxWidth)
             pWidthInfo->nMaxWidth = width;

@@ -194,7 +194,7 @@ void wxDropdownButton::DoMoveWindow(int x, int y, int w, int h)
 
         wxRect r(0,0,bw, bh);
         wxRendererNative& renderer = wxRendererNative::Get();
-        
+
 #ifdef __WXGTK__
         wxColour magic(255,0,255);
         dc.SetBrush( wxBrush( magic ) );
@@ -210,7 +210,7 @@ void wxDropdownButton::DoMoveWindow(int x, int y, int w, int h)
 
         wxBitmap bmpSel(bw, bh);
         dc.SelectObject(bmpSel);
-        
+
 #ifdef __WXGTK__
         dc.SetBrush( wxBrush( magic ) );
         dc.SetPen( *wxTRANSPARENT_PEN );
@@ -220,7 +220,7 @@ void wxDropdownButton::DoMoveWindow(int x, int y, int w, int h)
         bmpSel.SetMask( mask );
 #else
         renderer.DrawComboBoxDropButton(this, dc, r, wxCONTROL_PRESSED);
-#endif        
+#endif
         SetBitmapSelected(bmpSel);
     }
 
@@ -567,10 +567,11 @@ bool wxDatePickerCtrlGeneric::SetFormat(const wxChar *fmt)
                 allowedChars.Add(wxString(*p++, 1));
         }
 
+#if wxUSE_VALIDATORS
         wxTextValidator tv(wxFILTER_INCLUDE_CHAR_LIST);
         tv.SetIncludes(allowedChars);
-
         m_txt->SetValidator(tv);
+#endif
 
         if (m_currentDate.IsValid())
             m_txt->SetValue(m_currentDate.Format(m_format));

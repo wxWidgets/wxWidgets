@@ -168,9 +168,11 @@ wxDumpOpenExternalDlg::wxDumpOpenExternalDlg(wxWindow *parent,
                                 wxID_ANY,
                                 wxEmptyString,
                                 wxDefaultPosition,
-                                wxSize(250, -1),
-                                0,
-                                wxTextValidator(wxFILTER_NONE, &m_command)
+                                wxSize(250, wxDefaultCoord),
+                                0
+#if wxUSE_VALIDATORS
+                                ,wxTextValidator(wxFILTER_NONE, &m_command)
+#endif
                               );
     sizerH->Add(command,
                     wxSizerFlags(1).Align(wxALIGN_CENTER_VERTICAL));
