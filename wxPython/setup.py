@@ -13,7 +13,7 @@ from my_distutils import run_swig, contrib_copy_tree
 # flags and values that affect this script
 #----------------------------------------------------------------------
 
-VERSION          = "2.2.7"
+VERSION          = "2.2.8"
 DESCRIPTION      = "Cross platform GUI toolkit for Python"
 AUTHOR           = "Robin Dunn"
 AUTHOR_EMAIL     = "robin@alldunn.com"
@@ -60,7 +60,7 @@ HYBRID = 0         # If set and not debug or FINAL, then build a
                    # wxWindows must have been built with /MD, not /MDd
                    # (using FINAL=hybrid will do it.)
 
-WXDLLVER = '22_7'  # Version part of DLL name
+WXDLLVER = '22_8'  # Version part of DLL name
 
 
 #----------------------------------------------------------------------
