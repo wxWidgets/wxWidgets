@@ -3393,15 +3393,15 @@ void wxListMainWindow::OnSetFocus( wxFocusEvent &WXUNUSED(event) )
     // EVT_KILL_FOCUS before which means that we finish by redrawing the items
     // which are already drawn correctly resulting in horrible flicker - avoid
     // it
-    if ( m_hasFocus )
+    if ( !m_hasFocus )
+    {
+        m_hasFocus = TRUE;
+
+        RefreshSelected();
+    }
+
+    if ( !GetParent() )
         return;
-
-    m_hasFocus = TRUE;
-
-    if (!GetParent())
-        return;
-
-    RefreshSelected();
 
 #ifdef __WXGTK__
     g_focusWindow = GetParent();
