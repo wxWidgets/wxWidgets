@@ -1217,6 +1217,8 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
 
 long wxTextCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
+    long lRc = wxTextCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
+
     if ( nMsg == WM_GETDLGCODE )
     {
         // we always want the chars and the arrows
@@ -1238,24 +1240,10 @@ long wxTextCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
         if ( HasFlag(wxTE_PROCESS_TAB) )
             lDlgCode |= DLGC_WANTTAB;
 
-        return lDlgCode;
+        lRc |= lDlgCode;
     }
 
-    return wxTextCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
-}
-
-void wxTextCtrl::SetFocus()
-{
-    wxTextCtrlBase::SetFocus();
-
-    // to be consistent with the standard Windows behaviour we select all text
-    // in the single line edit controls when the user TABs to them and also, to
-    // be consistent with this behaviour in turn, do it whenever SetFocus() is
-    // called as well
-    if ( !HasFlag(wxTE_MULTILINE) )
-    {
-        SetSelection(-1, -1);
-    }
+    return lRc;
 }
 
 // ----------------------------------------------------------------------------

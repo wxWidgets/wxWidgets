@@ -128,7 +128,6 @@ public:
     // Implementation from now on
     // --------------------------
 
-    virtual void SetFocus();
     virtual void SetWindowStyleFlag(long style);
 
     virtual void Command(wxCommandEvent& event);
