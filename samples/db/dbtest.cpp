@@ -32,7 +32,7 @@
 #endif  //__BORLANDC__
 
 #ifndef WX_PRECOMP
-#include  <wx/wx.h>
+#include  "wx/wx.h"
 #endif //WX_PRECOMP
 
 #if defined(__WXGTK__) || defined(__WXX11__)
@@ -41,15 +41,15 @@
 
 #include <stdio.h>                  /* Included strictly for reading the text file with the database parameters */
 
-//#include <wx/db.h>                  /* Required in the file which will get the data source connection */
-//#include <wx/dbtable.h>             /* Has the wxDbTable object from which all data objects will inherit their data table functionality */
+//#include "wx/db.h"                  /* Required in the file which will get the data source connection */
+//#include "wx/dbtable.h"             /* Has the wxDbTable object from which all data objects will inherit their data table functionality */
 
 //extern wxDbList WXDLLEXPORT *PtrBegDbList;    /* from db.cpp, used in getting back error results from db connections */
 
 #if wxUSE_NEW_GRID
-#include <wx/grid.h>
-#include <wx/generic/gridctrl.h>
-#include <wx/dbgrid.h>
+#include "wx/grid.h"
+#include "wx/generic/gridctrl.h"
+#include "wx/dbgrid.h"
 
 #define CHOICEINT
 #endif

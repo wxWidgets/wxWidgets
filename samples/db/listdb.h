@@ -21,7 +21,7 @@
 #define LISTDB_DOT_H
 
 
-#include <wx/dbtable.h>
+#include "wx/dbtable.h"
 
 const int LOOKUP_COL_LEN = 250;
 

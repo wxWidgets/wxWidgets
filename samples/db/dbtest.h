@@ -13,8 +13,8 @@
 #pragma interface "dbtest.h"
 #endif
 
-#include <wx/string.h>
-#include <wx/dbtable.h>
+#include "wx/string.h"
+#include "wx/dbtable.h"
 
 enum    DialogModes {mView,mCreate,mEdit,mSearch};
 
