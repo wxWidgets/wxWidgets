@@ -182,9 +182,6 @@ gint wxapp_idle_callback( gpointer WXUNUSED(data) )
     // thread so we must lock it here ourselves
     gdk_threads_enter();
 
-    // Sent idle event to all who request them
-    while (wxTheApp->ProcessIdle()) { }
-
     /* Indicate that we are now in idle mode - even so deeply
        in idle mode that we don't get any idle events anymore.
        this is like wxMSW where an idle event is sent only
@@ -192,6 +189,9 @@ gint wxapp_idle_callback( gpointer WXUNUSED(data) )
        emptied */
     g_isIdle = TRUE;
     wxTheApp->m_idleTag = 0;
+
+    // Sent idle event to all who request them
+    while (wxTheApp->ProcessIdle()) { }
 
     // Release lock again
     gdk_threads_leave();
