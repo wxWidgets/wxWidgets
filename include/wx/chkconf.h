@@ -1177,15 +1177,6 @@
 #           define wxUSE_COMBOBOX 1
 #       endif
 #   endif
-
-#   if !wxUSE_DOC_VIEW_ARCHITECTURE
-#       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "Print architecture requires wxUSE_DOC_VIEW_ARCHITECTURE"
-#       else
-#           undef wxUSE_DOC_VIEW_ARCHITECTURE
-#           define wxUSE_DOC_VIEW_ARCHITECTURE 1
-#       endif
-#   endif
 #endif /* wxUSE_PRINTING_ARCHITECTURE */
 
 #if wxUSE_MDI_ARCHITECTURE
