@@ -184,7 +184,7 @@
 
    void MyFrame::OnHelp(wxCommandEvent& WXUNUSED(event))
    {
-       help.Display("Main page");
+       help.Display("Test HELPFILE");
    }
 
    void MyFrame::OnClose(wxCloseEvent& event)
