@@ -669,6 +669,7 @@ timer.cpp	OS2
 thread.cpp	OS2
 toolbar.cpp	OS2
 tooltip.cpp	OS2
+toplevel.cpp	OS2
 utils.cpp	OS2	Base
 utilsexc.cpp	OS2	Base
 wave.cpp	OS2
@@ -1336,6 +1337,7 @@ statbmp.h	OS2H
 dataform.h	OS2H
 pnghand.h	OS2H
 statbox.h	OS2H
+toplevel.h	OS2H
 
 execute.h	UnixH
 fontutil.h	UnixH
