@@ -646,14 +646,11 @@ void wxListBox::SetHorizontalExtent(const wxString& s)
 
         GetTextMetrics(dc, &lpTextMetric);
 
-        // FIXME: buffer overflow!!
-        wxChar buf[1024];
         for (int i = 0; i < m_noItems; i++)
         {
-            int len = (int)SendMessage(GetHwnd(), LB_GETTEXT, i, (LPARAM)buf);
-            buf[len] = 0;
+            wxString str = GetString(i);
             SIZE extentXY;
-            ::GetTextExtentPoint(dc, buf, len, &extentXY);
+            ::GetTextExtentPoint(dc, str.c_str(), str.length(), &extentXY);
             int extentX = (int)(extentXY.cx + lpTextMetric.tmAveCharWidth);
             if (extentX > largestExtent)
                 largestExtent = extentX;
