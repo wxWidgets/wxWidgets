@@ -25,7 +25,7 @@
     #include "wx/gtk/win_gtk.h"
 #endif
 
-#define USE_FREETYPE 0
+#define USE_FREETYPE 1
 
 #if USE_FREETYPE
 #include <freetype/freetype.h>
@@ -162,39 +162,38 @@ public:
 #endif    
 };
 
-wxCanvasText::wxCanvasText( const wxString &text, int x, int y )
+wxCanvasText::wxCanvasText( const wxString &text, int x, int y, const wxString &fontFile, int size )
    : wxCanvasObject( x, y, -1, -1 )
 {
     m_text = text;
-    m_alpha = NULL;
+    m_fontFileName = fontFile;
+    m_size = size;
     
-    m_red = 255;
+    m_red = 0;
     m_green = 0;
     m_blue = 0;
     
     // test
-    m_area.width = 128;
-    m_area.height = 128;
-    m_alpha = new unsigned char[128*128];
-    for (int y = 0; y < m_area.height; y++)
-        for (int x = 0; x < m_area.width; x++)
-            m_alpha[y*m_area.width + x] = x;
+    m_area.width = 100;
+    m_area.height = m_size;
+    m_alpha = new unsigned char[100*m_size];
+    memset( m_alpha, 0, m_area.width*m_area.height );
     
 #if USE_FREETYPE    
-    CreateBuffer();
     wxFaceData *data = new wxFaceData;
     m_faceData = data;
     
     int error = FT_New_Face( g_freetypeLibrary,
-                             "~/TrueType/times.ttf",
+                             m_fontFileName,
                              0,
                              &(data->m_face) );
                              
     error = FT_Set_Char_Size( data->m_face,
                               0,
-                              16*64,
-                              96,
+                              m_size*64,
+                              96,    // screen dpi
                               96 );
+    CreateBuffer();
 #endif
 }
 
@@ -239,22 +238,22 @@ void wxCanvasText::Render( int clip_x, int clip_y, int clip_width, int clip_heig
             {
                 int image_x = m_area.x+x;
                 int image_y = m_area.y+y;
-                if (alpha == 128)
+                if (alpha == 255)
                 {
                     image->SetRGB( image_x, image_y, m_red, m_green, m_blue );
                     continue;
                 }
-                int red1 = (m_red * alpha) / 128;
-                int green1 = (m_green * alpha) / 128;
-                int blue1 = (m_blue * alpha) / 128;
+                int red1 = (m_red * alpha) / 255;
+                int green1 = (m_green * alpha) / 255;
+                int blue1 = (m_blue * alpha) / 255;
                 
-                alpha = 128-alpha;
+                alpha = 255-alpha;
                 int red2 = image->GetRed( image_x, image_y );
                 int green2 = image->GetGreen( image_x, image_y );
                 int blue2 = image->GetBlue( image_x, image_y );
-                red2 = (red2 * alpha) / 128;
-                green2 = (green2 * alpha) / 128;
-                blue2 = (blue2 * alpha) / 128;
+                red2 = (red2 * alpha) / 255;
+                green2 = (green2 * alpha) / 255;
+                blue2 = (blue2 * alpha) / 255;
                 
                 image->SetRGB( image_x, image_y, red1+red2, green1+green2, blue1+blue2 );
             }
@@ -271,17 +270,30 @@ void wxCanvasText::CreateBuffer()
     FT_Face face = ((wxFaceData*)m_faceData)->m_face;
     FT_GlyphSlot slot = face->glyph;
     int pen_x = 0;
-    int pen_y = 0;
+    int pen_y = m_size;
     
-    for (int n = 0; n < m_text.Len(); n++)
+    for (int n = 0; n < (int)m_text.Len(); n++)
     {
         FT_UInt index = FT_Get_Char_Index( face, m_text[n] );
         
         int error = FT_Load_Glyph( face, index, FT_LOAD_DEFAULT );
         if (error) continue;
         
-        error = FT_Render_Glyph( face->glyph, ft_render_antialias );
+        error = FT_Render_Glyph( face->glyph, ft_render_mode_normal );
         if (error) continue;
+        
+        FT_Bitmap *bitmap = &slot->bitmap;
+        unsigned char* buffer = bitmap->buffer;
+        for (int y = 0; y < bitmap->rows; y++)
+            for (int x = 0; x < bitmap->width; x++)
+            {
+                unsigned char alpha = buffer[ y*bitmap->pitch + x ];
+                if (alpha == 0) continue;
+                
+                int xx = pen_x + slot->bitmap_left + x;
+                int yy = pen_y - slot->bitmap_top + y;
+                m_alpha[ yy * m_area.width + xx ] = alpha;
+            }
         
         pen_x += slot->advance.x >> 6;
         pen_y += slot->advance.y >> 6;
@@ -311,6 +323,9 @@ wxCanvas::wxCanvas( wxWindow *parent, wxWindowID id,
 {
     m_needUpdate = FALSE;
     m_objects.DeleteContents( TRUE );
+    m_red = 0;
+    m_green = 0;
+    m_blue = 0;
 }
 
 wxCanvas::~wxCanvas()
@@ -331,6 +346,26 @@ void wxCanvas::SetArea( int width, int height )
     SetScrollbars( 10, 10, width/10, height/10 );
 }
 
+void wxCanvas::SetColour( unsigned char red, unsigned char green, unsigned char blue )
+{
+    m_red = red;
+    m_green = green;
+    m_blue = blue;
+    
+    unsigned char *data = m_buffer.GetData();
+    
+    for (int y = 0; y < m_buffer.GetHeight(); y++)
+        for (int x = 0; x < m_buffer.GetWidth(); x++)
+        {
+            data[0] = red;
+            data++;
+            data[0] = green;
+            data++;
+            data[0] = blue;
+            data++;
+        }
+}
+
 void wxCanvas::Update( int x, int y, int width, int height )
 {
     m_needUpdate = TRUE;
@@ -342,7 +377,7 @@ void wxCanvas::Update( int x, int y, int width, int height )
     int xx,yy,ww,hh;
     for (yy = y; yy < y+height; yy++)
         for (xx = x; xx < x+width; xx++)
-            m_buffer.SetRGB( xx, yy, 0, 0, 0 );
+            m_buffer.SetRGB( xx, yy, m_red, m_green, m_blue );
 
     wxNode *node = m_objects.First();
     while (node)
@@ -558,6 +593,6 @@ bool wxCanvasModule::OnInit()
 void wxCanvasModule::OnExit()
 {
 #if USE_FREETYPE
-   // Close FreeType
+    FT_Done_FreeType( g_freetypeLibrary );
 #endif
 }

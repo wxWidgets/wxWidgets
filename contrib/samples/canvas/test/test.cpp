@@ -98,18 +98,19 @@ MyFrame::MyFrame()
   m_canvas = new wxCanvas( this, -1, wxPoint(0,0), wxSize(10,10) );
 
   m_canvas->SetArea( 400, 600 );
+  m_canvas->SetColour( 255, 255, 255 );
   
   wxBitmap bitmap( smile_xpm );
   wxImage image( bitmap );
   m_co = new wxCanvasImage( image, 10, 50 );
   m_canvas->Append( m_co );
   
-  m_canvas->Append( new wxCanvasImage( image, 80, 50 ) );
+  m_canvas->Append( new wxCanvasImage( image, 40, 50 ) );
   
-  wxButton *button = new wxButton( m_canvas, -1, "Hello", wxPoint(130,50) );
+  wxButton *button = new wxButton( m_canvas, -1, "Hello", wxPoint(80,50) );
   m_canvas->Append( new wxCanvasControl( button ) );
 
-  m_canvas->Append( new wxCanvasText( "Hello", 180, 50 ) );
+  m_canvas->Append( new wxCanvasText( "Hello", 180, 50, "/home/robert/TrueType/times.ttf", 20 ) );
   
   m_timer = new wxTimer( this );
   m_timer->Start( 100, FALSE );

@@ -17,7 +17,7 @@ PROGRAM=test
 
 OBJECTS=test.o
 
-APPEXTRALIBS=$(top_builddir)/lib/libcanvas.@WX_TARGET_LIBRARY_TYPE@
+APPEXTRALIBS=$(top_builddir)/lib/libcanvas.@WX_TARGET_LIBRARY_TYPE@ -lfreetype
 APPEXTRADEFS=-I$(top_srcdir)/contrib/include
 
 include $(top_builddir)/src/makeprog.env

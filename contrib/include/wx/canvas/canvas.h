@@ -98,7 +98,7 @@ private:
 class wxCanvasText: public wxCanvasObject
 {
 public:
-    wxCanvasText( const wxString &text, int x, int y );
+    wxCanvasText( const wxString &text, int x, int y, const wxString &foneFile, int size );
     ~wxCanvasText();
     
     virtual void Render( int clip_x, int clip_y, int clip_width, int clip_height );
@@ -116,6 +116,8 @@ private:
     int             m_red;
     int             m_green;
     int             m_blue;
+    wxString        m_fontFileName;
+    int             m_size;
 };
 
 //----------------------------------------------------------------------------
@@ -133,6 +135,7 @@ public:
     virtual ~wxCanvas();
     
     virtual void SetArea( int width, int height );
+    virtual void SetColour( unsigned char red, unsigned char green, unsigned char blue );
     virtual void Update( int x, int y, int width, int height );
     virtual void UpdateNow();
     
@@ -147,10 +150,11 @@ public:
     void BlitBuffer( wxDC &dc );
     
 private:
-    wxImage     m_buffer;
-    bool        m_needUpdate;
-    wxList      m_updateRects;
-    wxList      m_objects;
+    wxImage        m_buffer;
+    bool           m_needUpdate;
+    wxList         m_updateRects;
+    wxList         m_objects;
+    unsigned char  m_green,m_red,m_blue;
     
     friend class wxCanvasObject;
     

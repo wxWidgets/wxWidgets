@@ -17,7 +17,7 @@ HEADERS=canvas.h
 
 OBJECTS=canvas.o
 
-APPEXTRADEFS=-I$(top_srcdir)/contrib/include
+APPEXTRADEFS=-I$(top_srcdir)/contrib/include -I/usr/local/include
 
 include $(top_builddir)/src/makelib.env
 
