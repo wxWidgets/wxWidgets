@@ -45,6 +45,12 @@ $(MSW_MAKEFILES_DIR)/makefile.g95: g95.t filelist.txt wxwin.pro
 $(WXDIR)/src/msw/files.lst: msw.t filelist.txt wxwin.pro
 	$(TMAKE) -t msw wxwin.pro -o $@
 
+$(WXDIR)/src/gtk/files.lst: mgl.t filelist.txt wxwin.pro
+	$(TMAKE) -t mgl wxwin.pro -o $@
+
+$(WXDIR)/src/gtk/files.lst: micro.t filelist.txt wxwin.pro
+	$(TMAKE) -t micro wxwin.pro -o $@
+
 $(WXDIR)/src/gtk/files.lst: gtk.t filelist.txt wxwin.pro
 	$(TMAKE) -t gtk wxwin.pro -o $@
 

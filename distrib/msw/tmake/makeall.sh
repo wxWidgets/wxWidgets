@@ -67,6 +67,14 @@ do
 	    echo "Generating $topdir/src/gtk/files.lst for GTK and Configure..."
 	    tmake -t gtk wxwin.pro -o $topdir/src/gtk/files.lst;;
 
+	mgl.t)
+	    echo "Generating $topdir/src/mgl/files.lst for MGL and Configure..."
+	    tmake -t mgl wxwin.pro -o $topdir/src/mgl/files.lst;;
+
+	micro.t)
+	    echo "Generating $topdir/src/micro/files.lst for MicroWindows and Configure..."
+	    tmake -t micro wxwin.pro -o $topdir/src/micro/files.lst;;
+
 	msw.t)
 	    echo "Generating $topdir/src/msw/files.lst for MSW and Configure..."
 	    tmake -t msw wxwin.pro -o $topdir/src/msw/files.lst;;

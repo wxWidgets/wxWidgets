@@ -62,6 +62,8 @@ echo Generating for Watcom C++...
 %tmakecmd% -t wat wxwin.pro -o %WXDIR%\src\msw\makefile.wat
 echo Generating for Unix and Configure...
 %tmakecmd% -t gtk wxwin.pro -o %WXDIR%\src\gtk\files.lst
+%tmakecmd% -t mgl wxwin.pro -o %WXDIR%\src\mgl\files.lst
+%tmakecmd% -t micro wxwin.pro -o %WXDIR%\src\micro\files.lst
 %tmakecmd% -t univ wxwin.pro -o %WXDIR%\src\univ\files.lst
 %tmakecmd% -t msw wxwin.pro -o %WXDIR%\src\msw\files.lst
 %tmakecmd% -t mac wxwin.pro -o %WXDIR%\src\mac\files.lst

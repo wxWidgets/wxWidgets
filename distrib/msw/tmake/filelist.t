@@ -68,6 +68,8 @@
             $wxUNIV{$filename} = $fileflags;
         } elsif ( $filetype eq "MGL" ) {
             $wxMGL{$filename} = $fileflags;
+        } elsif ( $filetype eq "Micro" ) {
+            $wxMICRO{$filename} = $fileflags;
         } elsif ( $filetype eq "OS2" ) {
             $wxOS2PM{$filename} = $fileflags;
         } elsif ( $filetype eq "HTML" ) {

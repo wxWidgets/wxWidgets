@@ -17,6 +17,7 @@
 #  Unix	/src/unix
 #  GTK	/src/gtk
 #  MGL	/src/mgl
+#  Micro	/src/msw for MicroWindows
 #  OS2	/src/os2
 #  HTML	/src/html
 #
@@ -52,6 +53,7 @@
 #  NotMSW	Not required for the MSW port
 #  NotMac	Not required for the MAC port under Mac OS X
 #  NotMGL	Not required for the MGL port
+#  NotMicro	Not required for the MicroWindows port
 #  NotGTK	Not required for the GTK port
 #  NotX	Not required for the Motif port
 #  NotOS2	Not required for the os2Pm port
@@ -86,9 +88,9 @@ laywin.cpp	Generic
 listctrl.cpp	Generic	NotWin32
 logg.cpp	Generic
 msgdlgg.cpp	Generic	Generic
-notebook.cpp	Generic	NotWin32,NotGTK,NotOS2,NotMGL,NotMac
+notebook.cpp	Generic	NotWin32,NotGTK,NotOS2,NotMGL,NotMac,NotMicro
 numdlgg.cpp	Generic
-paletteg.cpp	Generic	NotMSW,NotX,NotOS2,NotMGL,NotMac
+paletteg.cpp	Generic	NotMSW,NotX,NotOS2,NotMGL,NotMac,NotMicro
 panelg.cpp	Generic
 printps.cpp	Generic	NotMSW
 prntdlgg.cpp	Generic	NotMSW
@@ -101,8 +103,8 @@ scrlwing.cpp	Generic
 spinctlg.cpp	Generic
 splash.cpp	Generic
 splitter.cpp	Generic
-statline.cpp	Generic	NotMSW,NotGTK,NotOS2,NotMGL,NotMac
-statusbr.cpp	Generic	NotMGL
+statline.cpp	Generic	NotMSW,NotGTK,NotOS2,NotMGL,NotMac,NotMicro
+statusbr.cpp	Generic	NotMGL,NotMicro
 tabg.cpp	Generic	NotWin32,NotOS2
 tbarsmpl.cpp	Generic
 textdlgg.cpp	Generic
@@ -350,8 +352,8 @@ window.cpp	MSW	LowLevel
 
 dialup.cpp	Unix	NotMac
 dir.cpp	Unix	Base,NotMac,NotMGL
-fontenum.cpp	Unix	NotMac,NotMGL
-fontutil.cpp	Unix	NotMac,NotMGL
+fontenum.cpp	Unix	NotMac,NotMGL,NotMicro
+fontutil.cpp	Unix	NotMac,NotMGL,NotMicro
 gsocket.c	Unix	Base,NotMac
 mimetype.cpp	Unix	Base,NotMac
 snglinst.cpp	Unix	Base
@@ -1460,6 +1462,37 @@ timer.cpp	MGL	LowLevel
 window.cpp	MGL	LowLevel
 utils.cpp	MGL	LowLevel
 bmpbase.cpp	MGL	LowLevel
+
+#wxMicroWindows
+app.cpp	Micro	LowLevel
+bitmap.cpp	Micro	LowLevel
+brush.cpp	Micro	LowLevel
+caret.cpp	Micro	LowLevel
+colour.cpp	Micro	LowLevel
+cursor.cpp	Micro	LowLevel
+data.cpp	Micro	LowLevel
+dc.cpp	Micro	LowLevel
+dcclient.cpp	Micro	LowLevel
+dcmemory.cpp	Micro	LowLevel
+dcprint.cpp	Micro	LowLevel
+dcscreen.cpp	Micro	LowLevel
+evtloop.cpp	Micro	LowLevel
+font.cpp	Micro	LowLevel
+fontenum.cpp	Micro	LowLevel
+fontutil.cpp	Micro	LowLevel
+gdiimage.cpp	Micro	LowLevel
+gdiobj.cpp	Micro	LowLevel
+icon.cpp	Micro	LowLevel
+main.cpp	Micro	LowLevel
+microwin.cpp	Micro	LowLevel
+pen.cpp	Micro	LowLevel
+region.cpp	Micro	LowLevel
+settings.cpp	Micro	LowLevel
+snglinst.cpp	Micro	LowLevel
+timer.cpp	Micro	LowLevel
+toplevel.cpp	Micro	LowLevel
+utils.cpp	Micro	LowLevel
+window.cpp	Micro	LowLevel
 
 apprsrc.r	MacR
 carbrsrc.r	MacR
