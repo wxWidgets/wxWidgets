@@ -150,7 +150,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                 {
                     // unfortunately this update region may be incorrect (tree ctrl sample )
                     // so we have to reset it
-                    updateRgn = (RgnHandle) visRegion.GetWXHRGN() ;
+                    // updateRgn = (RgnHandle) visRegion.GetWXHRGN() ;
                 }
                 // GrafPtr myport = cEvent.GetParameter<GrafPtr>(kEventParamGrafPort,typeGrafPtr) ;
 
