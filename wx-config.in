@@ -10,7 +10,6 @@ LD="@SHARED_LD@"
 cross_compiling=@cross_compiling@
 target=@host_alias@
 static_flag=@STATIC_FLAG@
-inplace_flag=no
 
 usage()
 {
@@ -19,7 +18,6 @@ Usage: wx-config [--prefix[=DIR]] [--exec-prefix[=DIR]] [--version] [--static]
                  [--libs] [--gl-libs]
                  [--cppflags] [--cflags] [--cxxflags] [--ldflags] [--rezflags]
                  [--cc] [--cxx] [--ld]
-                 [--inplace]
 
 wx-config returns configuration information about the installed
 version of wxWindows. It may be used to query its version and
@@ -27,10 +25,17 @@ installation directories and also retrieve the C and C++ compilers
 and linker which were used for its building and the corresponding
 flags.
 
-The --inplace flag allows wx-config to be used from the wxWindows
-build directory and output flags to use the uninstalled version of
-the headers and libs in the build directory.  (Currently configure
-must be invoked via a full path name for this to work correctly.)
+Ordinarily it should be installed to the appropriate system location
+along with the headers and library files, but it is also possible to
+use it to enable builds with an uninstalled wxWindows version for
+package building and bleeding edge developers.  To do so, use it like
+this:
+
+${wx_builddir}/wx-config --prefix=${wx_srcdir} --exec-prefix=${wx_builddir}
+
+Note that any other options supplied must come *after* the prefix
+specification for it to take effect.
+
 EOF
 
     exit $1
@@ -63,11 +68,7 @@ cppflags()
         includes=" -I@includedir@"
     fi
 
-    if test $inplace_flag = yes ; then
-	includes="-I$inplace_builddir/lib/wx/include/@TOOLCHAIN_NAME@ -I$inplace_include"
-    else
-	includes="-I@libdir@/wx/include/@TOOLCHAIN_NAME@$includes"
-    fi
+    includes="-I@libdir@/wx/include/@TOOLCHAIN_NAME@$includes"
 
     if test $static_flag = yes ; then
         echo $includes @WXDEBUG_DEFINE@ @TOOLCHAIN_DEFS@ @WXCONFIG_INCLUDE@ @WX_LARGEFILE_FLAGS@
@@ -132,10 +133,6 @@ while test $# -gt 0; do
           libs="-L@libdir@"
       fi
 
-      if test $inplace_flag = yes ; then
-	  libs="-L$inplace_builddir/lib"
-      fi
-
       if test $static_flag = yes ; then
           echo "$libs @LDFLAGS@ @WXCONFIG_RPATH@ @libdir@/@WXCONFIG_LIBS_STATIC@ @LIBS@ @DMALLOC_LIBS@"
       else
@@ -149,10 +146,7 @@ while test $# -gt 0; do
       else
           gllibs="@WXCONFIG_LIBS_GL@"
       fi
-      if test $inplace_flag = yes ; then
-	  libdir="-L$inplace_builddir/lib"
-      fi
-      echo @LDFLAGS_GL@ $libdir $gllibs
+      echo @LDFLAGS_GL@ $gllibs
       ;;
     --cc)
       echo $CC
@@ -162,11 +156,6 @@ while test $# -gt 0; do
       ;;
     --ld)
       echo $LD
-      ;;
-    --inplace)
-      inplace_flag=yes
-      inplace_builddir=`dirname $0`
-      inplace_include=@top_srcdir@/include
       ;;
     *)
       usage 1 1>&2
