@@ -225,16 +225,16 @@ if [ $skipbuild != yes ]; then
 
     # Make wxWidgets and some contribs
 
-    # For some reason Rez and DeRez have started locking up if run as
-    # root, figure out why, but in the meantime...
-    if [ "$UID" = "0" ]; then
-	chmod a+w lib
-	if [ "$CHARTYPE" = "ansi" ]; then
-	    su robind -c "make lib/libwx_macd-2.5.4.r"
-	else
-	    su robind -c "make lib/libwx_macud-2.5.4.r"
-	fi
+    # For some reason Rez and DeRez have started locking up if run via
+    # an ssh terminal.  Figure out why, but in the meantime...
+    if [ "$CHARTYPE" = "ansi" ]; then
+	echo cp /projects/wx2.5/bld/lib/libwx_macd-2.5.?.r* lib
+	     cp /projects/wx2.5/bld/lib/libwx_macd-2.5.?.r* lib
+    else
+	echo cp /projects/wx2.5/bld-unicode/lib/libwx_macud-2.5.?.r* lib
+             cp /projects/wx2.5/bld-unicode/lib/libwx_macud-2.5.?.r* lib
     fi
+    touch lib/libwx*.r*
 
     make $MAKEJOBS
     make $MAKEJOBS -C contrib/src/gizmos
