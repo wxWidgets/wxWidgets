@@ -112,7 +112,7 @@ bool wxXmlResource::Load(const wxString& filemask)
             wxFileName fn(fnd);
             if (fn.IsRelative())
             {
-                fn.Normalize(wxPATH_NORM_DOTS | wxPATH_NORM_ABSOLUTE);
+                fn.MakeAbsolute();
                 fnd = fn.GetFullPath();
             }
         }
