@@ -85,7 +85,6 @@
 
 #if (defined(__WIN95__) && !defined(__GNUWIN32__)) || defined(__TWIN32__) || defined(wxUSE_NORLANDER_HEADERS)
     #include <commctrl.h>
-    #include <shlwapi.h>
 #endif
 
 #include "wx/msw/msvcrt.h"
@@ -109,6 +108,10 @@
 #ifndef _WIN32_IE
     // minimal set of features by default
     #define _WIN32_IE 0x0200
+#endif
+
+#if _WIN32_IE >= 0x0300
+    #include <shlwapi.h>
 #endif
 
 // ---------------------------------------------------------------------------
