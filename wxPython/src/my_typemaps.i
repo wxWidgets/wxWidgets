@@ -388,6 +388,11 @@ $function
 %typemap(python,ignore) byte  *OUTPUT = byte *T_OUTPUT;
 %typemap(python,argout) byte  *OUTPUT = byte *T_OUTPUT;
 
+
+%typemap(python,ignore) wxCoord *OUTPUT = int *OUTPUT;
+%typemap(python,argout) wxCoord *OUTPUT = int *OUTPUT;
+
+
 //---------------------------------------------------------------------------
 // Typemaps to convert return values that are base class pointers
 // to the real derived type, if possible.  See wxPyMake_wxObject in

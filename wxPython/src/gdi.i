@@ -561,34 +561,34 @@ public:
 //----------------------------------------------------------------------
 
 
-
 class wxDC : public wxObject {
 public:
 //    wxDC(); **** abstract base class, can't instantiate.
     ~wxDC();
 
     void BeginDrawing();
+
 //  %name(BlitXY)
-    bool Blit(long xdest, long ydest,
-              long width, long height,
-              wxDC *source, long xsrc, long ysrc,
+    bool Blit(wxCoord xdest, wxCoord ydest,
+              wxCoord width, wxCoord height,
+              wxDC *source, wxCoord xsrc, wxCoord ysrc,
               int logicalFunc = wxCOPY, int useMask = FALSE);
 //      bool Blit(const wxPoint& destPt, const wxSize& sz,
 //                wxDC *source, const wxPoint& srcPt,
 //                int logicalFunc = wxCOPY, int useMask = FALSE);
 
     void Clear();
-    void CrossHair(long x, long y);
+    void CrossHair(wxCoord x, wxCoord y);
     void DestroyClippingRegion();
-    long DeviceToLogicalX(long x);
-    long DeviceToLogicalXRel(long x);
-    long DeviceToLogicalY(long y);
-    long DeviceToLogicalYRel(long y);
-    void DrawArc(long x1, long y1, long x2, long y2, long xc, long yc);
-    void DrawCircle(long x, long y, long radius);
-    void DrawEllipse(long x, long y, long width, long height);
-    void DrawEllipticArc(long x, long y, long width, long height, long start, long end);
-    void DrawIcon(const wxIcon& icon, long x, long y);
+    wxCoord DeviceToLogicalX(wxCoord x);
+    wxCoord DeviceToLogicalXRel(wxCoord x);
+    wxCoord DeviceToLogicalY(wxCoord y);
+    wxCoord DeviceToLogicalYRel(wxCoord y);
+    void DrawArc(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, wxCoord xc, wxCoord yc);
+    void DrawCircle(wxCoord x, wxCoord y, wxCoord radius);
+    void DrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
+    void DrawEllipticArc(wxCoord x, wxCoord y, wxCoord width, wxCoord height, wxCoord start, wxCoord end);
+    void DrawIcon(const wxIcon& icon, wxCoord x, wxCoord y);
 
     void DrawLabel(const wxString& text, const wxRect& rect,
                    int alignment = wxALIGN_LEFT | wxALIGN_TOP,
@@ -606,27 +606,27 @@ public:
         }
     }
 
-    void DrawLine(long x1, long y1, long x2, long y2);
-    void DrawLines(int PCOUNT, wxPoint* points, long xoffset=0, long yoffset=0);
-    void DrawPolygon(int PCOUNT, wxPoint* points, long xoffset=0, long yoffset=0,
+    void DrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2);
+    void DrawLines(int PCOUNT, wxPoint* points, wxCoord xoffset=0, wxCoord yoffset=0);
+    void DrawPolygon(int PCOUNT, wxPoint* points, wxCoord xoffset=0, wxCoord yoffset=0,
                      int fill_style=wxODDEVEN_RULE);
-    void DrawPoint(long x, long y);
-    void DrawRectangle(long x, long y, long width, long height);
+    void DrawPoint(wxCoord x, wxCoord y);
+    void DrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
     %name(DrawRectangleRect)void DrawRectangle(const wxRect& rect);
     void DrawRotatedText(const wxString& text, wxCoord x, wxCoord y, double angle);
-    void DrawRoundedRectangle(long x, long y, long width, long height, long radius=20);
+    void DrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, wxCoord radius=20);
     void DrawSpline(int PCOUNT, wxPoint* points);
-    void DrawText(const wxString& text, long x, long y);
+    void DrawText(const wxString& text, wxCoord x, wxCoord y);
     void EndDoc();
     void EndDrawing();
     void EndPage();
-    bool FloodFill(long x, long y, const wxColour& colour, int style=wxFLOOD_SURFACE);
+    bool FloodFill(wxCoord x, wxCoord y, const wxColour& colour, int style=wxFLOOD_SURFACE);
     wxBrush  GetBackground();
     wxBrush  GetBrush();
-    long GetCharHeight();
-    long GetCharWidth();
-    void GetClippingBox(long *OUTPUT, long *OUTPUT,
-                        long *OUTPUT, long *OUTPUT);
+    wxCoord GetCharHeight();
+    wxCoord GetCharWidth();
+    void GetClippingBox(wxCoord *OUTPUT, wxCoord *OUTPUT,
+                        wxCoord *OUTPUT, wxCoord *OUTPUT);
     wxFont GetFont();
     int GetLogicalFunction();
     void GetLogicalScale(double *OUTPUT, double *OUTPUT);
@@ -634,7 +634,7 @@ public:
     bool GetOptimization();
     wxPen GetPen();
     %addmethods {
-        %new wxColour* GetPixel(long x, long y) {
+        %new wxColour* GetPixel(wxCoord x, wxCoord y) {
             wxColour* wc = new wxColour();
             self->GetPixel(x, y, wc);
             return wc;
@@ -644,25 +644,27 @@ public:
     wxSize GetSize();
     wxSize GetSizeMM();
     wxColour GetTextBackground();
-    void GetTextExtent(const wxString& string, long *OUTPUT, long *OUTPUT);
+    void GetTextExtent(const wxString& string, wxCoord *OUTPUT, wxCoord *OUTPUT);
     %name(GetFullTextExtent)void GetTextExtent(const wxString& string,
-                       long *OUTPUT, long *OUTPUT, long *OUTPUT, long* OUTPUT,
+                       wxCoord *OUTPUT, wxCoord *OUTPUT, wxCoord *OUTPUT, wxCoord* OUTPUT,
                        const wxFont* font = NULL);
+    void GetMultiLineTextExtent(const wxString& text, wxCoord *OUTPUT, wxCoord *OUTPUT, wxCoord *OUTPUT,
+                                wxFont *font = NULL);
     wxColour GetTextForeground();
     void GetUserScale(double *OUTPUT, double *OUTPUT);
-    long LogicalToDeviceX(long x);
-    long LogicalToDeviceXRel(long x);
-    long LogicalToDeviceY(long y);
-    long LogicalToDeviceYRel(long y);
-    long MaxX();
-    long MaxY();
-    long MinX();
-    long MinY();
+    wxCoord LogicalToDeviceX(wxCoord x);
+    wxCoord LogicalToDeviceXRel(wxCoord x);
+    wxCoord LogicalToDeviceY(wxCoord y);
+    wxCoord LogicalToDeviceYRel(wxCoord y);
+    wxCoord MaxX();
+    wxCoord MaxY();
+    wxCoord MinX();
+    wxCoord MinY();
     bool Ok();
-    void SetDeviceOrigin(long x, long y);
+    void SetDeviceOrigin(wxCoord x, wxCoord y);
     void SetBackground(const wxBrush& brush);
     void SetBackgroundMode(int mode);
-    void SetClippingRegion(long x, long y, long width, long height);
+    void SetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
     %name(SetClippingRegionAsRegion) void SetClippingRegion(const wxRegion& region);
     %name(SetClippingRect) void SetClippingRegion(const wxRect& rect);
     void SetPalette(const wxPalette& colourMap);
@@ -681,7 +683,7 @@ public:
 
 
 
-    void DrawBitmap(const wxBitmap& bitmap, long x, long y,
+    void DrawBitmap(const wxBitmap& bitmap, wxCoord x, wxCoord y,
                     int useMask = FALSE);
 
     bool CanDrawBitmap();
@@ -1108,7 +1110,7 @@ enum wxRegionContain {
 
 class wxRegion : public wxGDIObject {
 public:
-    wxRegion(long x=0, long y=0, long width=0, long height=0);
+    wxRegion(wxCoord x=0, wxCoord y=0, wxCoord width=0, wxCoord height=0);
 #ifndef __WXMAC__
     %name(wxRegionFromPoints)wxRegion(int PCOUNT, wxPoint* points, int fillStyle = wxWINDING_RULE);
 #endif
@@ -1119,28 +1121,28 @@ public:
     bool Offset(wxCoord x, wxCoord y);
 #endif
 
-    wxRegionContain Contains(long x, long y);
+    wxRegionContain Contains(wxCoord x, wxCoord y);
     %name(ContainsPoint)wxRegionContain Contains(const wxPoint& pt);
     %name(ContainsRect)wxRegionContain Contains(const wxRect& rect);
-    %name(ContainsRectDim)wxRegionContain Contains(long x, long y, long w, long h);
+    %name(ContainsRectDim)wxRegionContain Contains(wxCoord x, wxCoord y, wxCoord w, wxCoord h);
 
     wxRect GetBox();
 
-    bool Intersect(long x, long y, long width, long height);
+    bool Intersect(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
     %name(IntersectRect)bool Intersect(const wxRect& rect);
     %name(IntersectRegion)bool Intersect(const wxRegion& region);
 
     bool IsEmpty();
 
-    bool Union(long x, long y, long width, long height);
+    bool Union(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
     %name(UnionRect)bool Union(const wxRect& rect);
     %name(UnionRegion)bool Union(const wxRegion& region);
 
-    bool Subtract(long x, long y, long width, long height);
+    bool Subtract(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
     %name(SubtractRect)bool Subtract(const wxRect& rect);
     %name(SubtractRegion)bool Subtract(const wxRegion& region);
 
-    bool Xor(long x, long y, long width, long height);
+    bool Xor(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
     %name(XorRect)bool Xor(const wxRect& rect);
     %name(XorRegion)bool Xor(const wxRegion& region);
 };
@@ -1152,12 +1154,12 @@ public:
     wxRegionIterator(const wxRegion& region);
     ~wxRegionIterator();
 
-    long GetX();
-    long GetY();
-    long GetW();
-    long GetWidth();
-    long GetH();
-    long GetHeight();
+    wxCoord GetX();
+    wxCoord GetY();
+    wxCoord GetW();
+    wxCoord GetWidth();
+    wxCoord GetH();
+    wxCoord GetHeight();
     wxRect GetRect();
     bool HaveRects();
     void Reset();
