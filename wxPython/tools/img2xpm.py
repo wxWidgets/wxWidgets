@@ -24,6 +24,10 @@ Options:
 
 import sys, os, glob, getopt, string
 from wxPython.wx import *
+
+if wxPlatform == "__WXGTK__":
+    raise SystemExit, "This tool can not be used on wxGTK until wxGTK can save XPM files."
+
 wxInitAllImageHandlers()
 
 
@@ -50,7 +54,11 @@ def convert(file, maskClr, outputDir, outputName):
         if img.SaveFile(newname, wxBITMAP_TYPE_XPM):
             return 1, file + " converted to " + newname
         else:
-            return 0, file + " failed to save!"
+            img = wxImageFromBitmap(img)
+            if img.SaveFile(newname, wxBITMAP_TYPE_XPM):
+                return 1, "ok"
+            else:
+                return 0, file + " failed to save!"
 
 
 
@@ -91,6 +99,9 @@ def main(args):
 
 
 if __name__ == "__main__":
+    if wxPlatform == "__WXGTK__":
+        app = wxPySimpleApp()     # Blech!  the GUI needs initialized before
+                                  # bitmaps can be created...
     main(sys.argv[1:])
 
 
