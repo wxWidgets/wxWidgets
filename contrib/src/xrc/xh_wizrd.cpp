@@ -31,6 +31,7 @@ wxWizardXmlHandler::wxWizardXmlHandler() : wxXmlResourceHandler()
     m_wizard = NULL;
     m_lastSimplePage = NULL;
     XRC_ADD_STYLE(wxWIZARD_EX_HELPBUTTON);
+    XRC_ADD_STYLE(wxWS_EX_BLOCK_EVENTS);
 }
 
 wxObject *wxWizardXmlHandler::DoCreateResource()
