@@ -90,23 +90,22 @@ class AGAPortHelper
 public :
 	AGAPortHelper( GrafPtr newport) ; 
 	AGAPortHelper() ;
-	void Setup( GrafPtr newport ) ;
-	void Clear() ;
-	bool IsCleared() { return clip == NULL ; }
-	GrafPtr GetCurrentPort() { return nport ; }
 	~AGAPortHelper() ;
 
+	void Setup( GrafPtr newport ) ;
+	void Clear() ;
+	bool IsCleared() { return m_clip == NULL ; }
+	GrafPtr GetCurrentPort() { return m_currentPort ; }
+
 private :
-				GrafPtr			nport ;
-				GrafPtr			port ;
-				PenState		oldPenState ;
-				RGBColor		oldForeColor ;
-				RGBColor		oldBackColor ;
-				RgnHandle		clip ;
-				short			font ;
-				short			size ;
-				short			style ;
-				short 			mode ;
+	GrafPtr			m_currentPort ;
+	GrafPtr			m_oldPort ;
+	RgnHandle		m_clip ;
+	ThemeDrawingState m_drawingState ;
+	short			m_textFont ;
+	short			m_textSize ;
+	short			m_textStyle ;
+	short 		m_textMode ;
 } ;
 
 
