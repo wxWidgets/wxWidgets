@@ -356,22 +356,8 @@ Authorization string (password).  A fourth piece of information, a default
 directory indicating where the data file is stored, is required for Text and 
 dBase drivers for ODBC.
 
-The wxWindows data structure "wxDbConnectInf" exists for holding all of these 
+The wxWindows data class wxDbConnectInf exists for holding all of these 
 values, plus some others that may be desired.
-
-\begin{verbatim}
-    wxDbConnectInf
-        HENV Henv;
-        char Dsn[SQL_MAX_DSN_LENGTH+1]      // DataSource Name
-        char Uid[20+1]                      // User ID
-        char AuthStr[20+1]                  // Authorization (password)
-
-        // Optional needed for some databases like dBase, FoxPro and TEXT files
-        char defaultDir[wxDB_PATH_MAX]      // Directory that db file resides in
-
-        char description[SQL_MAX_DSN_LENGTH+1];
-        char fileType[SQL_MAX_DSN_LENGTH+1];
-\end{verbatim}
 
 The 'Henv' member is the environment handle used to access memory for use by the 
 ODBC driver.  Use of this member is described below in the "Getting a Connection 
@@ -424,17 +410,17 @@ member.
 
 \begin{verbatim}
     wxDbConnectInf DbConnectInf;
-    wxStrcpy(DbConnectInf.Dsn,        "Your DSN");
-    wxStrcpy(DbConnectInf.Uid,        "YourUserName");
-    wxStrcpy(DbConnectInf.AuthStr,    "YourUserPassword");
-    wxStrcpy(DbConnectInf.defaultDir, "");
+    DbConnectInf.SetDsn,"MyDSN");
+    DbConnectInf.SetUserID,"MyUserName");
+    DbConnectInf.SetPassword("MyPassword");
+    DbConnectInf.SetDefaultDir("");
 \end{verbatim}
 
 To allocate an environment handle for the ODBC connection to use, the 
 standard SQLAllocEnv() function is used.  
 
 \begin{verbatim}
-    if (SQLAllocEnv(&DbConnectInf.Henv) != SQL_SUCCESS)
+    if (DbConnectInf.AllocHenv())
     {
         wxMessageBox("Unable to allocate an ODBC environment handle",
                      "DB CONNECTION ERROR", wxOK | wxICON_EXCLAMATION);
@@ -442,23 +428,39 @@ standard SQLAllocEnv() function is used.
     } 
 \end{verbatim}
 
-When the SQLAllocEnv() function is called successfully, a value of 
-SQL_SUCCESS will be returned.  Anything other return value is a failure 
-to create the handle, and the handle will be undefined.
+When the ::AllocHenv() function is called successfully, a value of 
+TRUE will be returned.  A value of FALSE means allocation failed, and 
+the handle will be undefined.
 
-Once the members of the wxDbConnectInf structure are initialized, you are 
-now ready to connect to the datasource.
+A shorter form of doing the above steps is encapsulated into the 
+long form of the constructor for wxDbConnectInf.
+
+
+\begin{verbatim}
+    wxDbConnectInf *DbConnectInf;
+
+	 DbConnectInf = new wxDbConnectInf(NULL, "MyDSN", "MyUserName",
+	                                   "MyPassword", "");
+\end{verbatim}
+
+This shorthand form of initializing the constructor passes a NULL for the SQL 
+environment handle, telling the constructor to allocate a handle during 
+construction.  This handle is also managed for the life of wxDbConnectInf 
+instance, and is freed automatically upon destruction of the instance.
+
+Once the wxDbConnectInf instance is initialized, you are ready to 
+connect to the datasource.
 
 To manually create datasource connections, you must create a wxDb 
 instance, and then open it.
 
 \begin{verbatim}
-    wxDb *db = new wxDb(DbConnectInf.Henv);
-    opened = db->Open(DbConnectInf.Dsn, DbConnectInf.Uid,
-                      DbConnectInf.AuthStr);
+    wxDb *db = new wxDb(DbConnectInf->GetHenv());
+
+    opened = db->Open(DbConnectInf);
 \end{verbatim}
 
-The first line does the house keeping needed to initialize everything all 
+The first line does the house keeping needed to initialize all 
 the members of the wxDb class.  The second line actually sends the request 
 to the ODBC driver to open a connection to its associated datasource using 
 the parameters supplied in the call to \helpref{wxDb::Open}{wxdbopen}.
@@ -475,7 +477,7 @@ a connection to a datasource, simply call it with a single parameter of the
 type wxDbConnectInf:
 
 \begin{verbatim}
-    db = wxDbGetConnection(&DbConnectInf);
+    db = wxDbGetConnection(DbConnectInf);
 \end{verbatim}
 
 The wxDb pointer that is returned is both initialized and opened.  If 
@@ -546,8 +548,8 @@ The first step in accessing data in a datasource's tables via the wxDbTable
 class is to create a wxDbTable instance.
 
 \begin{verbatim}
-    table = new wxDbTable(db, tableName, numTableColumns, 0, 
-                          !wxDB_QUERY_ONLY, NULL);
+    table = new wxDbTable(db, tableName, numTableColumns, "", 
+                          !wxDB_QUERY_ONLY, "");
 \end{verbatim}
 
 When you create the instance, you indicate the previously established 
@@ -843,8 +845,15 @@ this example it was stored in "DbConnectInf.Henv") have been closed, then
 it is safe to release the environment handle:
 
 \begin{verbatim}
-    SQLFreeEnv(DbConnectInf.Henv);
+    DbConnectInf->FreeHenv());
+\end{verbatim}
 
+Or, if the long form of the constructor was used and the constructor was allowed 
+to allocate its own SQL environment handle, leaving scope or destruction of the 
+wxDbConnectInf will free the handle automatically.
+
+\begin{verbatim}
+    delete DbConnectInf;
 \end{verbatim}
 
 \normalbox{Remember to never release this environment handle if there are any 
@@ -959,42 +968,37 @@ NOTE: Not all error trapping is shown here, to reduce the size of the
 code and to make it more easily readable.
 
 \begin{verbatim}
-struct wxDbConnectInf  DbConnectInf;
+wxDbConnectInf  *DbConnectInf = NULL;
 
 wxDb        *db    = NULL;       // The database connection
 wxDbTable   *table = NULL;       // The data table to access
 
-char         FirstName[50+1];    // buffer for data from column "FIRST_NAME"
-char         LastName[50+1];     // buffer for data from column "LAST_NAME"
+wxChar       FirstName[50+1];    // buffer for data from column "FIRST_NAME"
+wxChar       LastName[50+1];     // buffer for data from column "LAST_NAME"
 
 bool         errorOccured = FALSE;
 
-const char   tableName[]          = "CONTACTS";
+const wxChar tableName[]          = "CONTACTS";
 const int    numTableColumns      = 2;           // Number of bound columns
 
 FirstName[0] = 0;
 LastName[0]  = 0;
 
-// Initialize the ODBC Environment for database operations
-// and store the handle in 'DbConnectInf.Henv'
-if (SQLAllocEnv(&DbConnectInf.Henv) != SQL_SUCCESS)
+DbConnectInf = new wxDbConnectInf(NULL,"MyDSN","MyUserName", "MyPassword");
+
+if (!DbConnectInf || !DbConnectInf->GetHenv())
 {
-wxMessageBox("Unable to allocate an ODBC environment handle",
- "DB CONNECTION ERROR", wxOK | wxICON_EXCLAMATION);
-return;
+  wxMessageBox("Unable to allocate an ODBC environment handle",
+            "DB CONNECTION ERROR", wxOK | wxICON_EXCLAMATION);
+  return;
 } 
 
-wxStrcpy(DbConnectInf.Dsn,        "Your DSN");
-wxStrcpy(DbConnectInf.Uid,        "YourUserName");
-wxStrcpy(DbConnectInf.AuthStr,    "YourUserPassword");
-wxStrcpy(DbConnectInf.defaultDir, "");
-
 // Get a database connection from the cached connections
-db = wxDbGetConnection(&DbConnectInf);
+db = wxDbGetConnection(DbConnectInf);
 
 // Create the table connection
-table = new wxDbTable(db, tableName, numTableColumns, 0, 
-                      !wxDB_QUERY_ONLY, NULL);
+table = new wxDbTable(db, tableName, numTableColumns, "", 
+                      !wxDB_QUERY_ONLY, "");
 
 //
 // Bind the columns that you wish to retrieve.  Note that there must be
@@ -1068,7 +1072,7 @@ wxDbCloseConnections();
 
 // Release the environment handle that was created
 // for use with the ODBC datasource connections
-SQLFreeEnv(DbConnectInf.Henv);
+delete DbConnectInf;
 
 \end{verbatim}
 
