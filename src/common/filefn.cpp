@@ -302,14 +302,8 @@ wxFileExists (const wxString& filename)
 #if defined(__WIN32__) && !defined(__WXMICROWIN__)
     // GetFileAttributes can copy with network paths unlike stat()
     DWORD ret = ::GetFileAttributes(filename);
-    if ( ret == (DWORD)-1 )
-    {
-        wxLogLastError(_T("GetFileAttributes"));
 
-        return FALSE;
-    }
-
-    return !(ret & FILE_ATTRIBUTE_DIRECTORY);
+    return (ret != (DWORD)-1) && !(ret & FILE_ATTRIBUTE_DIRECTORY);
 #else
     wxStructStat stbuf;
     if ( !filename.empty() && wxStat (OS_FILENAME(filename), &stbuf) == 0 )
@@ -1284,14 +1278,8 @@ bool wxPathExists(const wxChar *pszPathName)
 #if defined(__WIN32__) && !defined(__WXMICROWIN__)
     // stat() can't cope with network paths
     DWORD ret = ::GetFileAttributes(strPath);
-    if ( ret == (DWORD)-1 )
-    {
-        wxLogLastError(_T("GetFileAttributes"));
 
-        return FALSE;
-    }
-
-    return (ret & FILE_ATTRIBUTE_DIRECTORY) != 0;
+    return (ret != (DWORD)-1) && (ret & FILE_ATTRIBUTE_DIRECTORY);
 #else // !__WIN32__
 
     wxStructStat st;
