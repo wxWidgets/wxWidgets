@@ -505,11 +505,9 @@ public:
   size_t find(const wxChar* sz, size_t nStart = 0, size_t n = npos) const;
 #endif // VC++ 1.5
 
-  // Gives a duplicate symbol (presumably a case-insensitivity problem)
-#if !defined(__BORLANDC__)
     // find the first occurence of character ch after nStart
   size_t find(wxChar ch, size_t nStart = 0) const;
-#endif
+
     // rfind() family is exactly like find() but works right to left
 
     // as find, but from the end
