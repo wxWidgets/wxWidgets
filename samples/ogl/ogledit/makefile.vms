@@ -1,0 +1,44 @@
+#************************************************************************
+# Makefile for DOCVIEW under VMS
+# by Stefan Hammes
+# (incomplete) update history:
+# 09.06.95
+#************************************************************************
+
+#************************************************************************
+# Definition section
+# (cave: definitions and includes must begin with ',')
+#************************************************************************
+
+APPOPTS = 
+APPDEFS = 
+APPINCS = 
+
+#************************************************************************
+# Module section
+#************************************************************************
+
+# Name of main module
+MAIN = docview
+
+# Object modules of the application.
+OBJS = docview.obj view.obj doc.obj
+OBJLIST =docview.obj,view.obj,doc.obj
+
+.include [--.src]makevms.env
+
+# main dependency
+$(MAIN).exe : $(OBJS)
+    $(LINK) $(LINKFLAGS) /exec=$(MAIN).exe $(OBJLIST),$(WXLIB)/lib,$(OPTSFILE)/option
+    - purge *.exe
+
+#************************************************************************
+# Header file depedencies following
+#************************************************************************
+
+docview.$(OBJSUFF) :        docview.$(SRCSUFF) docview.h doc.h view.h
+
+doc.$(OBJSUFF) :        doc.$(SRCSUFF) doc.h
+
+view.$(OBJSUFF) :        view.$(SRCSUFF) view.h
+

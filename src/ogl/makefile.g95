@@ -1,0 +1,17 @@
+#
+# File:         makefile.g95
+# Author:       Julian Smart
+# Created:      1999
+# Updated:
+# Copyright:    (c) Julian Smart, 1999
+#
+# Makefile for wxWindows OGL library Cygwin/Mingw32).
+
+WXDIR = ../..
+
+LIBTARGET=$(WXDIR)/lib/libogl.a
+OBJECTS = basic.o basic2.o canvas.o ogldiag.o lines.o misc.o divided.o constrnt.o\
+ composit.o drawn.o bmpshape.o mfutils.o
+
+include $(WXDIR)/src/makelib.g95
+

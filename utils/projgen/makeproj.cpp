@@ -451,19 +451,19 @@ void MyApp::GenerateSamples(const wxString& dir)
         wxMessageBox(msg);
     }
 
-    // OGLEdit
+    // OGLEdit. We have to do it the long way because we need to add the extra ogl.lib.
 
-    project.SetIncludeDirs(wxStringList("../../../../include", "../../src", 0));
-    project.SetResourceIncludeDirs(wxStringList("../../../../include", 0));
-    project.SetLibDirs(wxStringList("../../../../lib", 0));
-    project.SetDebugLibDirs(wxStringList("../../../../src/Debug", "../../src/Debug", "../../../../src/jpeg/Debug", "../../../../src/tiff/Debug", 0));
-    project.SetReleaseLibDirs(wxStringList("../../../../src/Release", "../../src/Release", "../../../../src/jpeg/Release", "../../../../src/tiff/Release", 0));
+    project.SetIncludeDirs(wxStringList("../../../include", 0));
+    project.SetResourceIncludeDirs(wxStringList("../../../include", 0));
+    project.SetLibDirs(wxStringList("../../../lib", 0));
+    project.SetDebugLibDirs(wxStringList("../../../src/Debug", "../../../src/ogl/Debug", "../../../src/jpeg/Debug", "../../../src/tiff/Debug", 0));
+    project.SetReleaseLibDirs(wxStringList("../../../src/Release", "../../../src/ogl/Release", "../../../src/jpeg/Release", "../../../src/tiff/Release", 0));
 
     project.SetExtraLibs(wxStringList("ogl.lib", 0));
 
     project.SetProjectName("OGLEditVC");
     project.SetTargetName("ogledit");
-    project.SetProjectPath(dir + wxString("/utils/ogl/samples/ogledit"));
+    project.SetProjectPath(dir + wxString("/samples/ogl/ogledit"));
     project.SetSourceFiles(wxStringList("ogledit.cpp", "doc.cpp", "palette.cpp", "view.cpp",
         "doc.h", "ogledit.h", "palette.h", "view.h",
         0));
@@ -476,16 +476,17 @@ void MyApp::GenerateSamples(const wxString& dir)
 
     // OGL Studio
 
-    project.SetIncludeDirs(wxStringList("../../../../include", "../../src", 0));
-    project.SetResourceIncludeDirs(wxStringList("../../../../include", 0));
-    project.SetLibDirs(wxStringList("../../../../lib", 0));
-    project.SetDebugLibDirs(wxStringList("../../../../src/Debug", "../../src/Debug", "../../../../src/jpeg/Debug", "../../../../src/tiff/Debug", 0));
-    project.SetReleaseLibDirs(wxStringList("../../../../src/Release", "../../src/Release", "../../../../src/jpeg/Release", "../../../../src/tiff/Release", 0));
+    project.SetIncludeDirs(wxStringList("../../../include", 0));
+    project.SetResourceIncludeDirs(wxStringList("../../../include", 0));
+    project.SetLibDirs(wxStringList("../../../lib", 0));
+    project.SetDebugLibDirs(wxStringList("../../../src/Debug", "../../../src/ogl/Debug", "../../../src/jpeg/Debug", "../../../src/tiff/Debug", 0));
+    project.SetReleaseLibDirs(wxStringList("../../../src/Release", "../../../src/ogl/Release", "../../../src/jpeg/Release", "../../../src/tiff/Release", 0));
+
     project.SetExtraLibs(wxStringList("ogl.lib", 0));
 
     project.SetProjectName("StudioVC");
     project.SetTargetName("studio");
-    project.SetProjectPath(dir + wxString("/utils/ogl/samples/studio"));
+    project.SetProjectPath(dir + wxString("/samples/ogl/studio"));
     project.SetSourceFiles(wxStringList("studio.cpp", "cspalette.cpp", "dialogs.cpp", "view.cpp",
         "doc.cpp", "mainfrm.cpp", "project.cpp", "shapes.cpp", "symbols.cpp", "csprint.cpp",
         "studio.h", "cspalette.h", "dialogs.h", "view.h",

@@ -1,0 +1,191 @@
+static char *semi_circle = "dialog(name = 'semi_circle',\
+  style = 'wxNO_BORDER',\
+  title = 'SemiCircle',\
+  id = 100,\
+  x = 10, y = 40, width = 365, height = 405,\
+  background_colour = 'C0C0C0',\
+  use_dialog_units = 0,\
+  use_system_defaults = 0,\
+  font = [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif'],\
+  control = [106, wxStaticText, 'Segment Id', '0', 'statictext7', 14, 163, 64, 13, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [107, wxTextCtrl, '', '0', 'textctrl8', 108, 162, 120, 19, ''],\
+  control = [108, wxStaticText, 'Num Channels', '0', 'statictext9', 14, 208, 79, 13, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [109, wxTextCtrl, '1', '0', 'textctrl10', 108, 206, 30, 19, '1'],\
+  control = [110, wxStaticText, 'Attributes', '0', 'statictext11', 14, 245, 54, 13, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [111, wxTextCtrl, '', '0', 'textctrl12', 108, 245, 120, 19, ''],\
+  control = [5106, wxRadioBox, 'Scope', 'wxRA_SPECIFY_COLS', 'radiobox1', 12, 13, 236, 44, ['Process', 'Application', 'Project'], 3],\
+  control = [5108, wxRadioBox, 'Resource', 'wxRA_SPECIFY_ROWS', 'radiobox3', 174, 68, 72, 82, ['Heap', 'Segment', 'Any'], 3],\
+  control = [5109, wxRadioBox, 'Volatility', 'wxRA_SPECIFY_ROWS', 'radiobox4', 12, 69, 81, 63, ['Permanent', 'Temporary'], 2],\
+  control = [5111, wxStaticText, 'Num Events', '0', 'statictext1', 154, 208, 68, 13, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [5112, wxTextCtrl, '1', '0', 'textctrl2', 230, 205, 40, 19, '1']).";
+
+static char *general_shape_properties_dialog = "panel(name = 'general_shape_properties_dialog',\
+  style = 'wxNO_BORDER',\
+  title = 'General',\
+  id = 100,\
+  x = 10, y = 40, width = 400, height = 400,\
+  background_colour = 'C0C0C0',\
+  use_dialog_units = 0,\
+  use_system_defaults = 0,\
+  font = [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif'],\
+  control = [101, wxTextCtrl, '', '0', 'textctrl3', 8, 31, 203, 24, ''],\
+  control = [300, wxStaticText, 'Name:', '0', 'message4', 8, 11, 41, 13, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [5115, wxTextCtrl, '', 'wxTE_MULTILINE', 'textctrl1', 8, 101, 204, 100, ''],\
+  control = [5116, wxStaticText, 'Description:', '0', 'statictext2', 9, 79, 66, 13, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']]).";
+
+static char *diagram_settings_dialog = "dialog(name = 'diagram_settings_dialog',\
+  style = 'wxNO_BORDER',\
+  title = 'Diagram settings',\
+  id = 6001,\
+  x = 10, y = 40, width = 400, height = 300,\
+  background_colour = 'C0C0C0',\
+  use_dialog_units = 0,\
+  use_system_defaults = 0,\
+  font = [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif'],\
+  control = [6004, wxChoice, '', '0', 'choice4', 13, 31, 85, 21, ['None', 'Invisible', 'Dotted', 'Dotted', 'Dotted', 'Dotted', 'Dotted', 'Dotted', 'Dotted', 'Dotted', 'Dotted', 'Dotted', 'Dotted', 'Dotted', 'Dotted', 'Dotted', 'Dotted', 'Dotted', 'Dotted', 'Dotted', 'Dotted', 'Dotted', 'Dotted', 'Dotted']],\
+  control = [6005, wxStaticText, 'Grid style:', '0', 'statictext5', 13, 11, 56, 13, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [6006, wxStaticText, 'Grid spacing:', '0', 'statictext6', 137, 11, 72, 13, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [6007, wxTextCtrl, '', '0', 'textctrl7', 136, 31, 66, 21, '']).";
+
+static char *general_settings_dialog = "dialog(name = 'general_settings_dialog',\
+  style = 'wxNO_BORDER | wxCAPTION | wxSYSTEM_MENU',\
+  title = '',\
+  id = 2000,\
+  x = 10, y = 40, width = 375, height = 325,\
+  background_colour = 'C0C0C0',\
+  use_dialog_units = 0,\
+  use_system_defaults = 0,\
+  font = [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif'],\
+  control = [300, wxStaticText, 'Project path:', '0', 'statictext3', 12, 15, 70, 13, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [5107, wxTextCtrl, '', '0', 'textctrl4', 12, 34, 183, 24, '']).";
+
+static char *wide_rectangle = "dialog(name = 'wide_rectangle',\
+  style = 'wxNO_BORDER',\
+  title = 'Wide Rectangle',\
+  id = 100,\
+  x = 10, y = 40, width = 355, height = 405,\
+  background_colour = 'C0C0C0',\
+  use_dialog_units = 0,\
+  use_system_defaults = 0,\
+  font = [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif'],\
+  control = [106, wxStaticText, 'Segment Id', '0', 'statictext7', 13, 184, 64, 13, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [107, wxTextCtrl, '', '0', 'textctrl8', 13, 184, 120, 19, ''],\
+  control = [108, wxStaticText, 'Num Channels', '0', 'statictext9', 13, 184, 79, 13, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [109, wxTextCtrl, '', '0', 'textctrl10', 13, 184, 30, 19, ''],\
+  control = [110, wxStaticText, 'Attributes', '0', 'statictext11', 13, 184, 54, 13, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [111, wxTextCtrl, '', '0', 'textctrl12', 13, 184, 120, 19, ''],\
+  control = [5106, wxRadioBox, 'Scope', 'wxRA_SPECIFY_COLS', 'radiobox1', 13, 11, 313, 46, ['Process', 'Application', 'Project'], 3],\
+  control = [5108, wxRadioBox, 'Resource', 'wxRA_SPECIFY_ROWS', 'radiobox3', 166, 70, 72, 82, ['Heap', 'Segment', 'Any'], 3],\
+  control = [5109, wxRadioBox, 'Volatility', 'wxRA_SPECIFY_ROWS', 'radiobox4', 14, 73, 81, 63, ['Permanent', 'Temporary'], 2]).";
+
+static char *thin_rectangle = "dialog(name = 'thin_rectangle',\
+  style = 'wxNO_BORDER',\
+  title = 'Thin Rectangle',\
+  id = 100,\
+  x = 10, y = 40, width = 361, height = 405,\
+  background_colour = 'C0C0C0',\
+  use_dialog_units = 0,\
+  use_system_defaults = 0,\
+  font = [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif'],\
+  control = [106, wxStaticText, 'Segment Id', '0', 'statictext7', 12, 169, 64, 13, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [107, wxTextCtrl, '', '0', 'textctrl8', 106, 168, 120, 19, ''],\
+  control = [108, wxStaticText, 'Num Channels', '0', 'statictext9', 12, 204, 79, 13, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [109, wxTextCtrl, '1', '0', 'textctrl10', 106, 202, 30, 19, '1'],\
+  control = [110, wxStaticText, 'Attributes', '0', 'statictext11', 12, 267, 54, 13, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [111, wxTextCtrl, '', '0', 'textctrl12', 106, 265, 120, 19, ''],\
+  control = [5106, wxRadioBox, 'Scope', 'wxRA_SPECIFY_COLS', 'radiobox1', 13, 16, 236, 44, ['Process', 'Application', 'Project'], 3],\
+  control = [5108, wxRadioBox, 'Resource', 'wxRA_SPECIFY_ROWS', 'radiobox3', 176, 73, 72, 82, ['Heap', 'Segment', 'Any'], 3],\
+  control = [5109, wxRadioBox, 'Volatility', 'wxRA_SPECIFY_ROWS', 'radiobox4', 14, 73, 81, 63, ['Permanent', 'Temporary'], 2],\
+  control = [5111, wxStaticText, 'Num Events', '0', 'statictext1', 156, 205, 68, 13, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [5112, wxTextCtrl, '1', '0', 'textctrl2', 228, 202, 40, 19, '1'],\
+  control = [5113, wxStaticText, 'Num Fields', '0', 'statictext3', 12, 234, 62, 13, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [5114, wxTextCtrl, '1', '0', 'textctrl4', 106, 234, 40, 19, '1']).";
+
+static char *circle = "dialog(name = 'circle',\
+  style = 'wxNO_BORDER',\
+  title = 'Circle',\
+  id = 100,\
+  x = 10, y = 40, width = 361, height = 405,\
+  background_colour = 'C0C0C0',\
+  use_dialog_units = 0,\
+  use_system_defaults = 0,\
+  font = [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif'],\
+  control = [106, wxStaticText, 'Segment Id', '0', 'statictext7', 12, 169, 64, 13, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [107, wxTextCtrl, '', '0', 'textctrl8', 106, 168, 120, 19, ''],\
+  control = [108, wxStaticText, 'Num Channels', '0', 'statictext9', 12, 204, 79, 13, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [109, wxTextCtrl, '1', '0', 'textctrl10', 106, 202, 30, 19, '1'],\
+  control = [110, wxStaticText, 'Attributes', '0', 'statictext11', 12, 267, 54, 13, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [111, wxTextCtrl, '', '0', 'textctrl12', 106, 265, 120, 19, ''],\
+  control = [5106, wxRadioBox, 'Scope', 'wxRA_SPECIFY_COLS', 'radiobox1', 13, 16, 236, 44, ['Process', 'Application', 'Project'], 3],\
+  control = [5108, wxRadioBox, 'Resource', 'wxRA_SPECIFY_ROWS', 'radiobox3', 176, 73, 72, 82, ['Heap', 'Segment', 'Any'], 3],\
+  control = [5109, wxRadioBox, 'Volatility', 'wxRA_SPECIFY_ROWS', 'radiobox4', 14, 73, 81, 63, ['Permanent', 'Temporary'], 2],\
+  control = [5111, wxStaticText, 'Num Events', '0', 'statictext1', 156, 205, 68, 13, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [5112, wxTextCtrl, '1', '0', 'textctrl2', 228, 202, 40, 19, '1'],\
+  control = [5113, wxStaticText, 'Num Fields', '0', 'statictext3', 12, 234, 62, 13, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [5114, wxTextCtrl, '1', '0', 'textctrl4', 106, 234, 40, 19, '1']).";
+
+static char *triangle = "dialog(name = 'triangle',\
+  style = 'wxNO_BORDER',\
+  title = 'Triangle',\
+  id = 100,\
+  x = 10, y = 40, width = 362, height = 405,\
+  background_colour = 'C0C0C0',\
+  use_dialog_units = 0,\
+  use_system_defaults = 0,\
+  font = [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif'],\
+  control = [106, wxStaticText, 'Segment Id', '0', 'statictext7', 16, 170, 64, 13, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [107, wxTextCtrl, '', '0', 'textctrl8', 110, 169, 120, 19, ''],\
+  control = [108, wxStaticText, 'Num Channels', '0', 'statictext9', 16, 213, 79, 13, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [109, wxTextCtrl, '1', '0', 'textctrl10', 110, 213, 30, 19, '1'],\
+  control = [110, wxStaticText, 'Attributes', '0', 'statictext11', 16, 252, 54, 13, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [111, wxTextCtrl, '', '0', 'textctrl12', 110, 252, 120, 19, ''],\
+  control = [5106, wxRadioBox, 'Scope', 'wxRA_SPECIFY_COLS', 'radiobox1', 14, 16, 236, 44, ['Process', 'Application', 'Project'], 3],\
+  control = [5108, wxRadioBox, 'Resource', 'wxRA_SPECIFY_ROWS', 'radiobox3', 178, 75, 72, 82, ['Heap', 'Segment', 'Any'], 3],\
+  control = [5109, wxRadioBox, 'Volatility', 'wxRA_SPECIFY_ROWS', 'radiobox4', 15, 75, 81, 63, ['Permanent', 'Temporary'], 2],\
+  control = [5111, wxStaticText, 'Num Events', '0', 'statictext1', 156, 215, 68, 13, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [5112, wxTextCtrl, '1', '0', 'textctrl2', 227, 213, 40, 19, '1']).";
+
+static char *shape_label_dialog = "dialog(name = 'shape_label_dialog',\
+  style = 'wxRAISED_BORDER | wxCAPTION | wxTHICK_FRAME | wxSYSTEM_MENU',\
+  title = 'Edit Shape Label',\
+  id = 6008,\
+  x = 10, y = 10, width = 190, height = 60,\
+  background_colour = 'C0C0C0',\
+  use_dialog_units = 1,\
+  use_system_defaults = 0,\
+  font = [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif'],\
+  control = [6009, wxStaticText, 'Please enter a label for this shape.', '0', 'statictext2', 8, 6, 100, 6, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [101, wxTextCtrl, '', '0', 'textctrl4', 8, 18, 168, 11, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [5100, wxButton, 'OK', '0', 'button5', 100, 37, 36, 13, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [5101, wxButton, 'Cancel', '0', 'button6', 140, 37, 36, 13, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']]).";
+
