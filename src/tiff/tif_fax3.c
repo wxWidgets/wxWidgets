@@ -499,7 +499,33 @@ Fax3SetupState(TIFF* tif)
 		uint32 nruns = needsRefLine ?
 		     2*TIFFroundup(rowpixels,32) : rowpixels;
 
+#if 0
 		dsp->runs = (uint32*) _TIFFmalloc(nruns*sizeof (uint16));
+#endif
+                /* 
+Problem
+-------
+
+Decoding the file frle_bug.tif causes a crash (such as with tiff2rgba). 
+
+In particular the array dsp->runs allocated in Fax3SetupState() is overrun 
+by 4-8 bytes.  This occurs when Fax3DecodeRLE() processes the first
+scanline.  The EXPAND1D() macro advances "pa" to be thisrun+512 (an
+alias for dsp->runs), pointing just beyond the end of the array.  Then 
+the call to _TIFFFax3fillruns() does an "*erun++ = 0;" which writes beyond 
+the end of the array.
+
+In the short term I have modified the dsp->runs allocation to add eight
+extra bytes to the runs buffer; however, I am only doing this because I
+don't understand the algorithm well enough to change it without risking
+more adverse side effects.
+
+Frank Warmerdam (warmerda@home.com)
+
+                */
+
+		dsp->runs = (uint32*) _TIFFmalloc(8+nruns*sizeof (uint32));
+
 		if (dsp->runs == NULL) {
 			TIFFError("Fax3SetupState",
 			    "%s: No space for Group 3/4 run arrays",
