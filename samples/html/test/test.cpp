@@ -51,7 +51,7 @@
    
     // event handlers (these functions should _not_ be virtual)
       void OnQuit(wxCommandEvent& event);
-      void OnAbout(wxCommandEvent& event);
+      void OnPageOpen(wxCommandEvent& event);
       void OnBack(wxCommandEvent& event);
       void OnForward(wxCommandEvent& event);
 
@@ -70,7 +70,7 @@
    {
     // menu items
    Minimal_Quit = 1,
-   Minimal_About,
+   Minimal_PageOpen,
    Minimal_Back,
    Minimal_Forward,
    
@@ -87,7 +87,7 @@
 // simple menu events like this the static method is much simpler.
    BEGIN_EVENT_TABLE(MyFrame, wxFrame)
    EVT_MENU(Minimal_Quit,  MyFrame::OnQuit)
-   EVT_MENU(Minimal_About, MyFrame::OnAbout)
+   EVT_MENU(Minimal_PageOpen, MyFrame::OnPageOpen)
    EVT_MENU(Minimal_Back, MyFrame::OnBack)
    EVT_MENU(Minimal_Forward, MyFrame::OnForward)
    END_EVENT_TABLE()
@@ -147,7 +147,7 @@
       wxMenu *menuFile = new wxMenu;
       wxMenu *menuNav = new wxMenu;
 
-      menuFile->Append(Minimal_About, "&Load wxWindows manual page");
+      menuFile->Append(Minimal_PageOpen, "&Open HTML page...");
       menuFile->AppendSeparator();
       menuFile->Append(Minimal_Quit, "&Close frame");
       menuNav->Append(Minimal_Back, "Go &BACK");
@@ -181,9 +181,11 @@
     Close(TRUE);
    }
 
-   void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
+   void MyFrame::OnPageOpen(wxCommandEvent& WXUNUSED(event))
    {
-     m_Html -> LoadPage("fft.html");
+     wxString p = wxFileSelector("Open HTML document", "", "", "", "HTML files|*.htm");
+     if (p != wxEmptyString)
+       m_Html -> LoadPage(p);
    }
 
 
