@@ -66,7 +66,10 @@ public:
     inline bool operator == (const wxColour& colour) const { return (m_red == colour.m_red && m_green == colour.m_green && m_blue == colour.m_blue); }
     
     inline bool operator != (const wxColour& colour) const { return (!(m_red == colour.m_red && m_green == colour.m_green && m_blue == colour.m_blue)); }
-    
+
+    // Get colour from name or wxNullColour
+    static wxColour CreateByName(const wxString& name);
+
     // Allocate a colour, or nearest colour, using the given display.
     // If realloc is TRUE, ignore the existing pixel, otherwise just return
     // the existing one.

@@ -63,6 +63,26 @@ void wxColour::InitFromName(const wxString& name)
     *this = wxTheColourDatabase->Find(name);
 }
 
+/* static */
+wxColour wxColour::CreateByName(const wxString& name)
+{
+    wxColour col;
+
+    Display *dpy = wxGlobalDisplay();
+    WXColormap colormap = wxTheApp->GetMainColormap( dpy );
+    XColor xcol;
+    if ( XParseColor( dpy, (Colormap)colormap, name.mb_str(), &xcol ) )
+    {
+        col.m_red = xcol.red & 0xff;
+        col.m_green = xcol.green & 0xff;
+        col.m_blue = xcol.blue & 0xff;
+        col.m_isInit = TRUE;
+        col.m_pixel = -1;
+    }
+
+    return col;
+}
+
 wxColour::~wxColour ()
 {
 }
