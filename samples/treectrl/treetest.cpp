@@ -1012,7 +1012,7 @@ void LogKeyEvent(const wxChar *name, const wxKeyEvent& event)
 
             default:
             {
-               if ( wxIsprint((int)keycode) )
+               if ( keycode < 128 && wxIsprint((int)keycode) )
                    key.Printf(wxT("'%c'"), (char)keycode);
                else if ( keycode > 0 && keycode < 27 )
                    key.Printf(_("Ctrl-%c"), wxT('A') + keycode - 1);
