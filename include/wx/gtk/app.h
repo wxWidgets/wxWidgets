@@ -120,6 +120,10 @@ class wxApp: public wxEvtHandler
 #endif
     void DeletePendingObjects();
 
+    /// This can be used to suppress the generation of Idle events.
+    inline void SuppressIdleEvents(bool arg = TRUE) { m_suppressIdleEvents = arg; }
+    inline bool GetSuppressIdleEvents() const { return m_suppressIdleEvents; }
+    
     bool            m_initialized;
     bool            m_exitOnFrameDelete;
     bool            m_wantDebugOutput;
@@ -136,7 +140,9 @@ class wxApp: public wxEvtHandler
     wxString        m_className;
 
     static wxAppInitializerFunction m_appInitFn;
-    
+ private:
+    /// Set to TRUE while we are in wxYield().
+    bool m_suppressIdleEvents;
   DECLARE_EVENT_TABLE()
 };
 

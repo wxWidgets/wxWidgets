@@ -135,6 +135,9 @@ void wxExit()
     gtk_main_quit();
 }
 
+// forward decl
+gint wxapp_idle_callback( gpointer WXUNUSED(data) );
+
 bool wxYield()
 {
     // it's necessary to call ProcessIdle() to update the frames sizes which
@@ -148,9 +151,14 @@ bool wxYield()
         win->OnInternalIdle();
     }
 
-    while (gtk_events_pending() > 0)
+    // We need to temporarily remove idle callbacks or the loop will
+    // never finish.
+    gtk_idle_remove( wxTheApp->m_idleTag );
+    
+    while (gtk_events_pending())
         gtk_main_iteration();
 
+    wxTheApp->m_idleTag = gtk_idle_add( wxapp_idle_callback, (gpointer) NULL );
     return TRUE;
 }
 
