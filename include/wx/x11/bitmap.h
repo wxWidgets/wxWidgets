@@ -130,7 +130,9 @@ public:
 
     WXPixmap GetPixmap() const;
     WXPixmap GetBitmap() const;
-    
+
+    WXPixmap GetDrawable() const;
+
     WXDisplay *GetDisplay() const;
     
 protected:

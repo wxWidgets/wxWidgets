@@ -1107,6 +1107,13 @@ WXPixmap wxBitmap::GetBitmap() const
     return M_BMPDATA->m_bitmap;
 }
 
+WXPixmap wxBitmap::GetDrawable() const
+{
+    wxCHECK_MSG( Ok(), (WXPixmap) NULL, wxT("invalid bitmap") );
+
+    return M_BMPDATA->m_bpp == 1 ? M_BMPDATA->m_bitmap : M_BMPDATA->m_pixmap;
+}
+
 WXDisplay *wxBitmap::GetDisplay() const
 {
     wxCHECK_MSG( Ok(), (WXDisplay*) NULL, wxT("invalid bitmap") );
