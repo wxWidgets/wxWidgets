@@ -50,12 +50,8 @@ class WXDLLEXPORT wxDateSpan;
 // set this to the corresponding value in seconds 1/1/1970 has on your
 // systems c-runtime
 
-#ifdef __WXMAC__
-#if __MSL__ < 0x6000
+#if defined(__WXMAC__) && !defined(__DARWIN__) && __MSL__ < 0x6000
     #define WX_TIME_BASE_OFFSET ( 2082844800L + 126144000L )
-#else
-    #define WX_TIME_BASE_OFFSET 0
-#endif
 #else
     #define WX_TIME_BASE_OFFSET 0
 #endif
