@@ -1251,7 +1251,11 @@ double ElapsedTime::Duration(bool reset) {
 #if wxUSE_UNICODE
 wxString stc2wx(const char* str, size_t len)
 {
-    if (str[len] == 0)
+    // note: we assume that str is of length len not including the terminating null.
+
+    if (!len)
+        return wxEmptyString;
+    else if (str[len-1] == 0)
         // It's already terminated correctly.
         return wxString(str, wxConvUTF8, len);
 
