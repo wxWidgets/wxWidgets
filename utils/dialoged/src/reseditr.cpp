@@ -394,7 +394,7 @@ bool wxResourceManager::Save(const wxString& filename)
 bool wxResourceManager::SaveAs()
 {
   wxString s(wxFileSelector("Save resource file", wxPathOnly(WXSTRINGCAST m_currentFilename), wxFileNameFromPath(WXSTRINGCAST m_currentFilename),
-    "wxr", "*.wxr", wxSAVE | wxOVERWRITE_PROMPT));
+    "wxr", "*.wxr", wxSAVE | wxOVERWRITE_PROMPT, wxTheApp->GetTopWindow()));
     
   if (s.IsNull() || s == "")
     return FALSE;
@@ -437,7 +437,7 @@ bool wxResourceManager::New(bool loadFromFile, const wxString& filename)
     wxString str = filename;
     if (str == wxString(""))
     {
-      wxString f(wxFileSelector("Open resource file", NULL, NULL, "wxr", "*.wxr", 0, NULL));
+      wxString f(wxFileSelector("Open resource file", NULL, NULL, "wxr", "*.wxr", 0, wxTheApp->GetTopWindow()));
       if (!f.IsNull() && f != "")
         str = f;
       else

@@ -106,8 +106,8 @@ wxString wxFileSelector(const char *title,
 
                 if( i-is-1 > 0 && is+1 < filter2.Len() )
                 {
-//                    if( filter2.Mid(is+1,i-is-1).Contains(defaultExtension) )
-                    if( filter2.Mid(is+1,i-is-1) == defaultExtension )
+                    if( filter2.Mid(is+1,i-is-1).Contains(defaultExtension) )
+//                    if( filter2.Mid(is+1,i-is-1) == defaultExtension )
                     {
                         filterFind = filterIndex;
                         break;
@@ -251,10 +251,13 @@ int wxFileDialog::ShowModal(void)
     else {                                // more then one filter
         filterBuffer = theFilter;
 
-        for ( unsigned int i = 0; i < filterBuffer.Len(); i++ ) {
-            if ( filterBuffer.GetChar(i) == '|' ) {
-                filterBuffer[i] = '\0';
-            }
+    }
+
+    filterBuffer += "|";
+    // Replace | with \0
+    for ( unsigned int i = 0; i < filterBuffer.Len(); i++ ) {
+        if ( filterBuffer.GetChar(i) == '|' ) {
+            filterBuffer[i] = '\0';
         }
     }
 

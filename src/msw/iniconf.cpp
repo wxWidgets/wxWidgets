@@ -467,3 +467,15 @@ bool wxIniConfig::DeleteAll()
 
   return TRUE;
 }
+
+bool wxIniConfig::RenameEntry(const wxString& oldName, const wxString& newName)
+{
+    // Not implemented
+    return FALSE;
+}
+
+bool wxIniConfig::RenameGroup(const wxString& oldName, const wxString& newName)
+{
+    // Not implemented
+    return FALSE;
+}

@@ -72,19 +72,6 @@ winstyle.obj:      winstyle.h winstyle.$(SRCSUFF) $(DUMMYOBJ)
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<
 
-$(PROGRAM).res :      $(PROGRAM).rc $(WXDIR)\include\wx\msw\wx.rc
-    $(rc) -r /i$(WXDIR)\include -fo$@ $(PROGRAM).rc
-
-clean:
-        -erase *.obj
-        -erase *.sbr
-        -erase *.exe
-        -erase *.res
-        -erase *.map
-        -erase *.pdb
-
-cleanutils: clean
-
 DOCSOURCES=$(LOCALDOCDIR)\dialoged.tex $(LOCALDOCDIR)\body.tex\
  $(LOCALDOCDIR)\bugs.tex $(LOCALDOCDIR)\changes.tex\
  $(LOCALDOCDIR)\classes.tex $(LOCALDOCDIR)\tech.tex

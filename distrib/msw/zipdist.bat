@@ -46,6 +46,9 @@ zip32 -@ %dest\glcanvas.zip < %src\distrib\msw\glcanvas.rsp
 rem Tex2RTF
 zip32 -@ %dest\tex2rtf2.zip < %src\distrib\msw\tex2rtf.rsp
 
+rem wxTreeLayout
+zip32 -@ %dest\treedraw.zip < %src\distrib\msw\wxtree.rsp
+
 copy %src\docs\changes.txt %dest
 copy %src\docs\msw\install.txt %dest\install_msw.txt
 copy %src\docs\motif\install.txt %dest\install_motif.txt
