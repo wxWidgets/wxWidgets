@@ -1659,8 +1659,14 @@ void wxTreeCtrl::DeleteChildren(const wxTreeItemId& item)
 
 void wxTreeCtrl::DeleteAllItems()
 {
-    // delete stored root item.
-    delete GET_VIRTUAL_ROOT();
+    // delete the "virtual" root item.
+    if ( GET_VIRTUAL_ROOT() )
+    {
+        delete GET_VIRTUAL_ROOT();
+        m_pVirtualRoot = NULL;
+    }
+
+    // and all the real items
 
     if ( !TreeView_DeleteAllItems(GetHwnd()) )
     {
