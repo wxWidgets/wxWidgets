@@ -186,9 +186,8 @@ wxString wxStatusBarUniv::GetStatusText(int number) const
 
 void wxStatusBarUniv::SetFieldsCount(int number, const int *widths)
 {
-    wxStatusBarBase::SetFieldsCount(number, widths);
-
     m_statusText.SetCount(number);
+    wxStatusBarBase::SetFieldsCount(number, widths);
     m_widthsAbs.Empty();
 }
 

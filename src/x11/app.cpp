@@ -598,6 +598,10 @@ void wxApp::DeletePendingObjects()
 // Create an application context
 bool wxApp::OnInitGui()
 {
+    // Eventually this line will be removed, but for
+    // now we don't want to try popping up a dialog
+    // for error messages.
+    delete wxLog::SetActiveTarget(new wxLogStderr);
     if (!wxAppBase::OnInitGui())
 	return FALSE;
     

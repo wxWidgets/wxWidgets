@@ -156,9 +156,6 @@ wxTopLevelWindowX11::~wxTopLevelWindowX11()
 
 bool wxTopLevelWindowX11::Show(bool show)
 {
-    if ( !wxWindowBase::Show(show) )
-        return FALSE;
-
     return wxWindowX11::Show(show);
 }
 
