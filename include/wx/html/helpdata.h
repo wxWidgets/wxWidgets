@@ -124,7 +124,8 @@ class WXDLLEXPORT wxHtmlSearchStatus
     private:
         wxHtmlHelpData* m_Data;
         wxSearchEngine m_Engine;
-        wxString m_Keyword, m_Name, m_LastPage;
+        wxString m_Keyword, m_Name;
+        wxChar *m_LastPage;
         wxHtmlContentsItem* m_ContentsItem;
         bool m_Active;  // search is not finished
         int m_CurIndex;  // where we are now
