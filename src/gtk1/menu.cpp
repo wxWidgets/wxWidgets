@@ -500,8 +500,11 @@ void wxMenuItem::SetName( const wxString& str )
     /* only GTK 1.2 know about hot keys */
     m_hotKey = _T("");
 #if (GTK_MINOR_VERSION > 0)
-    pc++;
-    m_hotKey = pc;
+    if(*pc == _T('\t'))
+    {
+       pc++;
+       m_hotKey = pc;
+    }
 #endif
 
     if (m_menuItem)
