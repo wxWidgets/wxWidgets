@@ -424,7 +424,7 @@ void wxWindowMSW::SetFocus()
 #ifndef __WXMICROWIN__
     ::SetLastError(0);
 #endif
-    
+
     if ( !::SetFocus(hWnd) )
     {
         // was there really an error?
@@ -499,7 +499,7 @@ bool wxWindowMSW::Show(bool show)
 #ifdef __WXMICROWIN__
 	// It seems that MicroWindows brings the _parent_ of the
 	// window to the top, which can be the wrong one.
-	
+
 	/* activate (set focus to) specified window*/
 	::SetFocus(hWnd);
 
@@ -523,7 +523,7 @@ void wxWindowMSW::Raise()
 #ifdef __WXMICROWIN__
 	// It seems that MicroWindows brings the _parent_ of the
 	// window to the top, which can be the wrong one.
-	
+
 	/* activate (set focus to) specified window*/
 	::SetFocus(GetHwnd());
 
@@ -947,7 +947,7 @@ void wxWindowMSW::SubclassWin(WXHWND hWnd)
     m_oldWndProc = (WXFARPROC) GetWindowLong(hwnd, GWL_WNDPROC);
 
     wxASSERT( (WXFARPROC) m_oldWndProc != (WXFARPROC) wxWndProc );
-    
+
     SetWindowLong(hwnd, GWL_WNDPROC, (LONG) wxWndProc);
 }
 
@@ -2163,35 +2163,35 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
         case WM_MBUTTONDOWN:
         case WM_MBUTTONUP:
         case WM_MBUTTONDBLCLK:
-	 {
-		processed = FALSE;
+         {
+                processed = FALSE;
 #ifdef __WXMICROWIN__
-	        // MicroWindows seems to ignore the fact that a window
-		// is disabled. So catch mouse events and throw them away if necessary.
-		wxWindowMSW* win = this;
-		while (win)
-		{
-		    if (!win->IsEnabled())
-		    {
-			processed = TRUE;
-			break;
-		    }
-		    win = win->GetParent();
-		    if (win && win->IsTopLevel())
-			break;
-		}
+                // MicroWindows seems to ignore the fact that a window
+                // is disabled. So catch mouse events and throw them away if necessary.
+                wxWindowMSW* win = this;
+                while (win)
+                {
+                    if (!win->IsEnabled())
+                    {
+                        processed = TRUE;
+                        break;
+                    }
+                    win = win->GetParent();
+                    if (win && win->IsTopLevel())
+                        break;
+                }
 #endif
-		if (!processed)
-		{
+                if (!processed)
+                {
                     if (message == WM_LBUTTONDOWN && AcceptsFocus())
                         SetFocus();
                      processed = HandleMouseEvent(message,
                                          GET_X_LPARAM(lParam),
                                          GET_Y_LPARAM(lParam),
-						  wParam);
-		}
+                                                  wParam);
+                }
                 break;
-	 }
+         }
 
 #ifdef __WXMICROWIN__
         case WM_NCLBUTTONDOWN:
@@ -2204,28 +2204,27 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
         case WM_NCMBUTTONDOWN:
         case WM_NCMBUTTONUP:
         case WM_NCMBUTTONDBLCLK:
- #endif
-	    {
-	        // MicroWindows seems to ignore the fact that a window
-		// is disabled. So catch mouse events and throw them away if necessary.
-		processed = FALSE;
-		wxWindowMSW* win = this;
-		while (win)
-		{
-		    if (!win->IsEnabled())
-		    {
-			processed = TRUE;
-			break;
-		    }
-		    win = win->GetParent();
-		    if (win && win->IsTopLevel())
-			break;
-		}
-		break;
-		
+#endif
+            {
+                // MicroWindows seems to ignore the fact that a window
+                // is disabled. So catch mouse events and throw them away if necessary.
+                processed = FALSE;
+                wxWindowMSW* win = this;
+                while (win)
+                {
+                    if (!win->IsEnabled())
+                    {
+                        processed = TRUE;
+                        break;
+                    }
+                    win = win->GetParent();
+                    if (win && win->IsTopLevel())
+                        break;
+                }
+                break;
             }
 #endif
-	    
+
 #ifdef MM_JOY1MOVE // __WXMICROWIN__
         case MM_JOY1MOVE:
         case MM_JOY2MOVE:
