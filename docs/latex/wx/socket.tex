@@ -16,7 +16,7 @@ defines all basic IO functionality.
 
 \wxheading{Derived from}
 
-\helpref{wxEvtHandler}{wxevthandler}
+\helpref{wxObject}{wxobject}
 
 \wxheading{Include files}
 
@@ -139,13 +139,20 @@ Functions that perform basic IO functionality.
 
 Functions that perform a timed wait on a certain IO condition.
 
+\helpref{InterruptWait}{wxsocketbaseinterruptwait}\\
 \helpref{Wait}{wxsocketbasewait}\\
+\helpref{WaitForLost}{wxsocketbasewaitforlost}\\
 \helpref{WaitForRead}{wxsocketbasewaitforread}\\
 \helpref{WaitForWrite}{wxsocketbasewaitforwrite}\\
-\helpref{WaitForLost}{wxsocketbasewaitforlost}
+
+and also:
+
+\helpref{wxSocketServer::WaitForAccept}{wxsocketserverwaitforaccept}\\
+\helpref{wxSocketClient::WaitOnConnect}{wxsocketclientwaitonconnect}
 
 Functions that allow applications to customize socket IO as needed.
 
+\helpref{GetFlags}{wxsocketbasegetflags}\\
 \helpref{SetFlags}{wxsocketbasesetflags}\\
 \helpref{SetTimeout}{wxsocketbasesettimeout}
 
@@ -155,11 +162,14 @@ Functions that allow applications to receive socket events.
 
 \helpref{Notify}{wxsocketbasenotify}\\
 \helpref{SetNotify}{wxsocketbasesetnotify}\\
+\helpref{GetClientData}{wxsocketbasegetclientdata}\\
+\helpref{SetClientData}{wxsocketbasesetclientdata}\\
 \helpref{SetEventHandler}{wxsocketbaseseteventhandler}
 
 Callback functions are also available, but they are provided for backwards
-compatibility only. Their use is discouraged in favour of events, and should
-be considered deprecated.
+compatibility only. Their use is strongly discouraged in favour of events,
+and should be considered deprecated. Callbacks may be unsupported in future
+releases of wxWindows.
 
 \helpref{Callback}{wxsocketbasecallback}\\
 \helpref{CallbackData}{wxsocketbasecallbackdata}
@@ -188,8 +198,8 @@ Default constructor. Don't use it directly; instead, use
 \func{}{\destruct{wxSocketBase}}{\void}
 
 Destructor. Do not destroy a socket using the delete operator directly;
-use \helpref{Destroy}{wxsocketbasedestroy} instead. Also, do not create socket
-objects in the stack.
+use \helpref{Destroy}{wxsocketbasedestroy} instead. Also, do not create
+socket objects in the stack.
 
 %
 % Callback
@@ -211,8 +221,7 @@ void SocketCallback(wxSocketBase& sock, wxSocketNotify evt, char *cdata);
 The first parameter is a reference to the socket object in which the
 event occured. The second parameter tells you which event occured.
 (See \helpref{wxSocket events}{wxsocketbase}). The third parameter
-is the user data you specified using
-\helpref{CallbackData}{wxsocketbasecallbackdata}.
+is the user data you specified using \helpref{CallbackData}{wxsocketbasecallbackdata}.
 
 Note that events are preferred over callbacks where possible.
 
@@ -313,6 +322,16 @@ Use this function to check for an error condition after one of the
 following calls: Discard, Peek, Read, ReadMsg, Unread, Write, WriteMsg.
 
 %
+% GetClientData
+%
+\membersection{wxSocketBase::GetClientData}\label{wxsocketbasegetclientdata}
+
+\constfunc{void *}{GetClientData}{\void}
+
+Returns a pointer of the client data for this socket, as set with
+\helpref{SetClientData}{wxsocketbasesetclientdata}
+
+%
 % GetLocal
 %
 \membersection{wxSocketBase::GetLocal}\label{wxsocketbasegetlocal}
@@ -328,6 +347,15 @@ address, local port, ...).
 It returns TRUE if no errors happened, FALSE otherwise.
 
 %
+% GetFlags
+%
+\membersection{wxSocketBase::GetFlags}\label{wxsocketbasegetflags}
+
+\constfunc{wxSocketFlags}{GetFlags}{\void}
+
+Returns current IO flags, as set with \helpref{SetFlags}{wxsocketbasesetflags}
+
+%
 % GetPeer
 %
 \membersection{wxSocketBase::GetPeer}\label{wxsocketbasegetpeer}
@@ -341,6 +369,28 @@ address field contains the complete peer host address of the socket
 \wxheading{Return value}
 
 It returns TRUE if no errors happened, FALSE otherwise.
+
+%
+% InterruptWait
+%
+\membersection{wxSocketBase::InterruptWait}\label{wxsocketbaseinterruptwait}
+
+\func{void}{InterruptWait}{\void}
+
+Use this function to interrupt any wait operation currently in progress.
+Note that this is not intended as a regular way to interrupt a Wait call,
+but only as an escape mechanism for exceptional situations where it is
+absolutely necessary to use it, for example to abort an operation due to
+some exception or abnormal problem. InterruptWait is automatically called
+when you \helpref{Close}{wxsocketbaseclose} a socket (and thus also upon
+socket destruction), so you don't need to use it in these cases.
+
+\helpref{wxSocketBase::Wait}{wxsocketbasewait},
+\helpref{wxSocketServer::WaitForAccept}{wxsocketserverwaitforaccept},
+\helpref{wxSocketBase::WaitForLost}{wxsocketbasewaitforlost},
+\helpref{wxSocketBase::WaitForRead}{wxsocketbasewaitforread},
+\helpref{wxSocketBase::WaitForWrite}{wxsocketbasewaitforwrite},
+\helpref{wxSocketClient::WaitOnConnect}{wxsocketclientwaitonconnect}
 
 %
 % IsConnected
@@ -463,8 +513,9 @@ Calls to SaveState and RestoreState can be nested.
 This function saves the current state of the socket in a stack. Socket
 state includes flags, as set with \helpref{SetFlags}{wxsocketbasesetflags},
 event mask, as set with \helpref{SetNotify}{wxsocketbasesetnotify} and
-\helpref{Notify}{wxsocketbasenotify}, and current settings for the
-asynchronous callbacks, as set with \helpref{Callback}{wxsocketbasecallback}
+\helpref{Notify}{wxsocketbasenotify}, user data, as set with
+\helpref{SetClientData}{wxsocketbasesetclientdata}, and asynchronous
+callback settings, as set with \helpref{Callback}{wxsocketbasecallback}
 and \helpref{CallbackData}{wxsocketbasecallbackdata}.
 
 Calls to SaveState and RestoreState can be nested.
@@ -472,6 +523,18 @@ Calls to SaveState and RestoreState can be nested.
 \wxheading{See also}
 
 \helpref{wxSocketBase::RestoreState}{wxsocketbaserestorestate}
+
+%
+% SetClientData
+%
+\membersection{wxSocketBase::SetClientData}\label{wxsocketbasesetclientdata}
+
+\func{void}{SetClientData}{\param{void *}{data}}
+
+Sets user-supplied client data for this socket. All socket events will
+contain a pointer to this data, which can be retrieved with the
+\helpref{wxSocketEvent::GetClientData}{wxsocketeventgetclientdata}
+function.
 
 %
 % SetEventHandler
@@ -485,11 +548,6 @@ handler will be called for those events for which notification is
 enabled with \helpref{SetNotify}{wxsocketbasesetnotify} and
 \helpref{Notify}{wxsocketbasenotify}.
 
-You can also specify a callback function to be called when an event
-occurs, although if possible, events should be used instead of callbacks.
-See \helpref{Callback}{wxsocketbasecallback} and
-\helpref{CallbackData}{wxsocketbasecallbackdata}.
-
 \wxheading{Parameters}
 
 \docparam{evt\_hdlr}{Specifies the event handler you want to use.}
@@ -502,8 +560,6 @@ See \helpref{Callback}{wxsocketbasecallback} and
 \helpref{wxSocketBase::Notify}{wxsocketbasenotify}, 
 \helpref{wxSocketEvent}{wxsocketevent}, 
 \helpref{wxEvtHandler}{wxevthandler}, 
-\helpref{wxSocketBase::Callback}{wxsocketbasecallback}, 
-\helpref{wxSocketBase::CallbackData}{wxsocketbasecallbackdata}
 
 %
 % SetFlags
@@ -511,6 +567,10 @@ See \helpref{Callback}{wxsocketbasecallback} and
 \membersection{wxSocketBase::SetFlags}\label{wxsocketbasesetflags}
 
 \func{void}{SetFlags}{\param{wxSocketBase::wxSocketFlags}{ flags}}
+
+Use SetFlags to customize IO operation for this socket. The {\it flags}
+parameter is a combination of flags ORed toghether. The following flags
+can be used:
 
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
@@ -783,9 +843,39 @@ FALSE if the timeout was reached.
 
 \wxheading{See also}
 
+\helpref{wxSocketBase::InterruptWait}{wxsocketbaseinterruptwait},
+\helpref{wxSocketServer::WaitForAccept}{wxsocketserverwaitforaccept},
+\helpref{wxSocketBase::WaitForLost}{wxsocketbasewaitforlost},
 \helpref{wxSocketBase::WaitForRead}{wxsocketbasewaitforread}, 
-\helpref{wxSocketBase::WaitForWrite}{wxsocketbasewaitforwrite}, 
-\helpref{wxSocketBase::WaitForLost}{wxsocketbasewaitforlost}
+\helpref{wxSocketBase::WaitForWrite}{wxsocketbasewaitforwrite},
+\helpref{wxSocketClient::WaitOnConnect}{wxsocketclientwaitonconnect}
+
+%
+% WaitForLost
+%
+\membersection{wxSocketBase::WaitForLost}\label{wxsocketbasewaitforlost}
+
+\func{bool}{Wait}{\param{long}{ seconds = -1}, \param{long}{ millisecond = 0}}
+
+This function waits until the connection is lost. This may happen if
+the peer gracefully closes the connection or if the connection breaks.
+
+\wxheading{Parameters}
+
+\docparam{seconds}{Number of seconds to wait.
+If -1, it will wait for the default timeout,
+as set with \helpref{SetTimeout}{wxsocketbasesettimeout}.}
+
+\docparam{millisecond}{Number of milliseconds to wait.}
+
+\wxheading{Return value}
+
+Returns TRUE if the connection was lost, FALSE if the timeout was reached.
+
+\wxheading{See also}
+
+\helpref{wxSocketBase::InterruptWait}{wxsocketbaseinterruptwait},
+\helpref{wxSocketBase::Wait}{wxsocketbasewait}
 
 %
 % WaitForRead
@@ -814,9 +904,8 @@ Returns TRUE if the socket becomes readable, FALSE on timeout.
 
 \wxheading{See also}
 
-\helpref{wxSocketBase::Wait}{wxsocketbasewait}, 
-\helpref{wxSocketBase::WaitForWrite}{wxsocketbasewaitforwrite}, 
-\helpref{wxSocketBase::WaitForLost}{wxsocketbasewaitforlost}
+\helpref{wxSocketBase::InterruptWait}{wxsocketbaseinterruptwait},
+\helpref{wxSocketBase::Wait}{wxsocketbasewait}
 
 %
 % WaitForWrite
@@ -845,37 +934,8 @@ Returns TRUE if the socket becomes writable, FALSE on timeout.
 
 \wxheading{See also}
 
-\helpref{wxSocketBase::Wait}{wxsocketbasewait}, 
-\helpref{wxSocketBase::WaitForRead}{wxsocketbasewaitforread}, 
-\helpref{wxSocketBase::WaitForLost}{wxsocketbasewaitforlost}
-
-%
-% WaitForLost
-%
-\membersection{wxSocketBase::WaitForLost}\label{wxsocketbasewaitforlost}
-
-\func{bool}{Wait}{\param{long}{ seconds = -1}, \param{long}{ millisecond = 0}}
-
-This function waits until the connection is lost. This may happen if
-the peer gracefully closes the connection or if the connection breaks.
-
-\wxheading{Parameters}
-
-\docparam{seconds}{Number of seconds to wait.
-If -1, it will wait for the default timeout,
-as set with \helpref{SetTimeout}{wxsocketbasesettimeout}.}
-
-\docparam{millisecond}{Number of milliseconds to wait.}
-
-\wxheading{Return value}
-
-Returns TRUE if the connection was lost, FALSE if the timeout was reached.
-
-\wxheading{See also}
-
-\helpref{wxSocketBase::WaitForRead}{wxsocketbasewaitforread}, 
-\helpref{wxSocketBase::WaitForWrite}{wxsocketbasewaitforwrite}, 
-\helpref{wxSocketBase::WaitForLost}{wxsocketbasewaitforlost}
+\helpref{wxSocketBase::InterruptWait}{wxsocketbaseinterruptwait},
+\helpref{wxSocketBase::Wait}{wxsocketbasewait}
 
 %
 % Write
@@ -1085,6 +1145,7 @@ bool success = client->IsConnected();
 \wxheading{See also}
 
 \helpref{wxSocketClient::Connect}{wxsocketclientconnect},
+\helpref{wxSocketBase::InterruptWait}{wxsocketbaseinterruptwait},
 \helpref{wxSocketBase::IsConnected}{wxsocketbaseisconnected}
 
 % ---------------------------------------------------------------------------
@@ -1125,6 +1186,13 @@ functions that take a wxSocketEvent argument.
 \func{}{wxSocketEvent}{\param{int}{ id = 0}}
 
 Constructor.
+
+\membersection{wxSocketEvent::GetClientData}\label{wxsocketeventgetclientdata}
+
+\func{void *}{GetClientData}{\void}
+
+Gets the client data of the socket which generated this event, as
+set with \helpref{wxSocketBase::SetClientData}{wxsocketbasesetclientdata}.
 
 \membersection{wxSocketEvent::GetSocket}\label{wxsocketeventgetsocket}
 
@@ -1269,5 +1337,6 @@ Returns TRUE if an incoming connection arrived, FALSE if the timeout elapsed.
 \wxheading{See also}
 
 \helpref{wxSocketServer::Accept}{wxsocketserveraccept}, 
-\helpref{wxSocketServer::AcceptWith}{wxsocketserveracceptwith}
+\helpref{wxSocketServer::AcceptWith}{wxsocketserveracceptwith},
+\helpref{wxSocketBase::InterruptWait}{wxsocketbaseinterruptwait}
 

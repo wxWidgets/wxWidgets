@@ -287,22 +287,22 @@ The sample also provides some timings for adding/deleting/sorting a lot of
 
 The sockets sample demonstrates how to use the communication facilities
 provided by \helpref{wxSocket}{wxsocketbase}. There are two different
-applications in this sample: a server, which is implemented as a
-\helpref{wxSocketServer}{wxsocketserver} object, and a client, which is
-implemented with \helpref{wxSocketClient}{wxsocketclient}.
+applications in this sample: a server, which is implemented using a
+\helpref{wxSocketServer}{wxsocketserver} object, and a client, which
+is implemented as a \helpref{wxSocketClient}{wxsocketclient}.
 
-The server binds to the local address, using TCP port number 3000, sets
-up an event handler to be notified of incoming connection requests
-({\bf wxSOCKET\_CONNECTION} event), and stands there, waiting (listening
-in the socket parlance) for clients. For each incoming client, a new
-\helpref{wxSocketBase}{wxsocketbase} object is created, which represents
-the connection. Connections are independent from the server that created
-them, so they set up their own event handler, and stay awaiting for 
-{\bf wxSOCKET\_INPUT} (incoming data) or {\bf wxSOCKET\_LOST} (connection
-closed at the remote end) events. This event handler is the same for all
-connections, and demonstrates how to determine which socket the event
-is addressed to by using the \helpref{Socket}{wxsocketeventsocket} function
-in the \helpref{wxSocketEvent}{wxsocketevent} class.
+The server binds to the local address, using TCP port number 3000,
+sets up an event handler to be notified of incoming connection requests
+({\bf wxSOCKET\_CONNECTION} events), and stands there, waiting for clients
+({\it listening} in the socket parlance). For each accepted connection,
+a new \helpref{wxSocketBase}{wxsocketbase} object is created. These
+socket objects are independent from the server that created them, so
+they set up their own event handler, and then request to be notified
+of {\bf wxSOCKET\_INPUT} (incoming data) or {\bf wxSOCKET\_LOST}
+(connection closed at the remote end) events. In the sample, the event
+handler is the same for all connections; to find out which socket the
+event is addressed to, the \helpref{GetSocket}{wxsocketeventgetsocket}
+function is used.
 
 Although it might take some time to get used to the event-oriented
 system upon which wxSocket is built, the benefits are many. See, for
@@ -318,21 +318,20 @@ how to use the basic IO calls in \helpref{wxSocketBase}{wxsocketbase},
 such as \helpref{Read}{wxsocketbaseread}, \helpref{Write}{wxsocketbasewrite},
 \helpref{ReadMsg}{wxsocketbasereadmsg} and \helpref{WriteMsg}{wxsocketbasewritemsg},
 and how to set up the correct IO flags depending on what you are going to
-do. See the comments in the code for more information (a lengthy explanation
-on socket flags is available in \helpref{SetFlags}{wxsocketbasesetflags}).
-Note that because both clients and connection objects in the server set
-up an event handler to catch {\bf wxSOCKET\_LOST} events, each one is
-immediately notified if the other end closes the connection.
+do. See the comments in the code for more information. Note that because
+both clients and connection objects in the server set up an event handler
+to catch {\bf wxSOCKET\_LOST} events, each one is immediately notified
+if the other end closes the connection.
 
-There is also an URL test which demonstrates how to use the \helpref{wxURL}{wxurl}
-class.
+There is also an URL test which shows how to use the \helpref{wxURL}{wxurl}
+class to fetch data from a given URL.
 
-The sockets sample is work in progress. Coming soon:
+The sockets sample is work in progress. Some things to do:
 
 \begin{itemize}\itemsep=0pt
 \item More tests for basic socket functionality.
 \item More tests for protocol classes (wxProtocol and its descendants).
-\item Tests for the recently added datagram socket classes.
+\item Tests for the recently added (and still in alpha stage) datagram sockets.
 \item New samples which actually do something useful (suggestions accepted).
 \end{itemize}
 
