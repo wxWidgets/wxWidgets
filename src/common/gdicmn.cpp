@@ -468,6 +468,10 @@ void wxInitializeStockObjects ()
   wxSMALL_FONT = new wxFont (sizeFont - 4, wxMODERN, wxNORMAL, wxNORMAL); /* System VIO */
   wxITALIC_FONT = new wxFont (sizeFont, wxROMAN, wxITALIC, wxNORMAL);
   wxSWISS_FONT = new wxFont (sizeFont, wxSWISS, wxNORMAL, wxNORMAL); /* Helv */
+#elif defined(__WXMAC__)
+  wxSMALL_FONT = new wxFont (sizeFont - 2, wxSWISS, wxNORMAL, wxNORMAL);
+  wxITALIC_FONT = new wxFont (sizeFont, wxROMAN, wxITALIC, wxNORMAL);
+  wxSWISS_FONT = new wxFont (sizeFont - 2, wxSWISS, wxNORMAL, wxNORMAL);
 #else
   wxSMALL_FONT = new wxFont (sizeFont - 2, wxSWISS, wxNORMAL, wxNORMAL);
   wxITALIC_FONT = new wxFont (sizeFont, wxROMAN, wxITALIC, wxNORMAL);
