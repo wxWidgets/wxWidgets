@@ -35,24 +35,33 @@ stream buffer can point to another stream.
 
 Destructor.
 
-% -----------
-% IO function
-% -----------
-\membersection{wxInputStream::Peek}
-
-\func{char}{Peek}{\void}
-
-Returns the first character in the input queue without removing it.
-
 \membersection{wxInputStream::GetC}
 
 \func{char}{GetC}{\void}
 
 Returns the first character in the input queue and removes it.
 
+\membersection{wxInputStream::InputStreamBuffer}
+
+\func{wxStreamBuffer*}{InputStreamBuffer}{\void}
+
+Returns the stream buffer associated with the input stream.
+
+\membersection{wxInputStream::LastRead}
+
+\constfunc{size\_t}{LastRead}{\void}
+
+Returns the last number of bytes read.
+
+\membersection{wxInputStream::Peek}
+
+\func{char}{Peek}{\void}
+
+Returns the first character in the input queue without removing it.
+
 \membersection{wxInputStream::Read}
 
-\func{wxInputStream\&}{Read}{\param{void *}{buffer}, \param{size_t}{ size}}
+\func{wxInputStream\&}{Read}{\param{void *}{buffer}, \param{size\_t}{ size}}
 
 Reads the specified amount of bytes and stores the data in \it{buffer}.
 
@@ -75,33 +84,15 @@ The data is read until an error is raised by one of the two streams.
 This function returns a reference on the current object, so the user can test
 any states of the stream right away.
 
-% ------------------
-% Position functions
-% ------------------
 \membersection{wxInputStream::SeekI}
 
-\func{off_t}{SeekI}{\param{off_t}{ pos}, \param{wxSeekMode}{ mode = wxFromStart}}
+\func{off\_t}{SeekI}{\param{off\_t}{ pos}, \param{wxSeekMode}{ mode = wxFromStart}}
 
 Changes the stream current position.
 
 \membersection{wxInputStream::TellI}
 
-\constfunc{off_t}{TellI}{\void}
+\constfunc{off\_t}{TellI}{\void}
 
 Returns the current stream position.
-
-% ---------------
-% State functions
-% ---------------
-\membersection{wxInputStream::InputStreamBuffer}
-
-\func{wxStreamBuffer*}{InputStreamBuffer}{\void}
-
-Returns the stream buffer associated with the input stream.
-
-\membersection{wxInputStream::LastRead}
-
-\constfunc{size_t}{LastRead}{\void}
-
-Returns the last number of bytes read.
 

@@ -49,8 +49,36 @@ This function returns the last error.
 \twocolitem{{\bf wxStream_READ_ERR}}{A generic error occured on the last read call.}
 \end{twocollist}
 
+\membersection{wxStreamBase::OnSysRead}\label{wxstreambaseonsysread}
+
+\func{size\_t}{OnSysRead}{\param{void*}{ buffer}, \param{size\_t}{ bufsize}}
+
+Internal function. It is called when the stream buffer needs a buffer of the
+specified size. It should return the size that was actually read.
+
+\membersection{wxStreamBase::OnSysSeek}
+
+\func{off\_t}{OnSysSeek}{\param{off\_t}{ pos}, \param{wxSeekMode}{ mode}}
+
+Internal function. It is called when the stream buffer needs to change the
+current position in the stream. See \helpref{wxStreamBuffer::Seek}{wxstreambufferseek}
+
+\membersection{wxStreamBase::OnSysTell}
+
+\constfunc{off\_t}{OnSysTell}{\void}
+
+Internal function. Is is called when the stream buffer needs to know the
+real position in the stream.
+
+\membersection{wxStreamBase::OnSysWrite}
+
+\func{size\_t}{OnSysWrite}{\param{void *}{buffer}, \param{size\_t}{ bufsize}}
+
+See \helpref{OnSysRead}{wxstreambaseonsysread}.
+
 \membersection{wxStreamBase::StreamSize}
-\constfunc{size_t}{StreamSize}{\void}
+
+\constfunc{size\_t}{StreamSize}{\void}
 
 This function returns the size of the stream. For example, for a file it is the size of
 the file).
@@ -59,34 +87,8 @@ the file).
 
 There are streams which do not have size by definition, such as socket streams.
 In that cases, StreamSize returns an invalid size represented by
+
 \begin{verbatim}
 ~(size_t)0
 \end{verbatim}
-
-\membersection{wxStreamBase::OnSysRead}\label{wxstreambaseonsysread}
-
-\func{size_t}{OnSysRead}{\param{void*}{ buffer}, \param{size_t}{ bufsize}}
-
-Internal function. It is called when the stream buffer needs a buffer of the
-specified size. It should return the size that was actually read.
-
-\membersection{wxStreamBase::OnSysWrite}
-
-\func{size_t}{OnSysWrite}{\param{void *}{buffer}, \param{size_t}{ bufsize}}
-
-See \helpref{OnSysRead}{wxstreambaseonsysread}.
-
-\membersection{wxStreamBase::OnSysSeek}
-
-\func{off_t}{OnSysSeek}{\param{off_t}{ pos}, \param{wxSeekMode}{ mode}}
-
-Internal function. It is called when the stream buffer needs to change the
-current position in the stream. See \helpref{wxStreamBuffer::Seek}{wxstreambufferseek}
-
-\membersection{wxStreamBase::OnSysTell}
-
-\constfunc{off_t}{OnSysTell}{\void}
-
-Internal function. Is is called when the stream buffer needs to know the
-real position in the stream.
 

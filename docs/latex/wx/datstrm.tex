@@ -57,6 +57,12 @@ Reads a 32 bit integer from the stream.
 
 Reads a double (IEEE encoded) from the stream.
 
+\membersection{wxDataInputStream::ReadLine}
+
+\func{wxString}{wxDataInputStream::ReadLine}{\void}
+
+Reads a line from the stream. A line is a string which ends with \\n or \\r\\n.
+
 \membersection{wxDataInputStream::ReadString}
 
 \func{wxString}{wxDataInputStream::ReadString}{\void}
@@ -64,12 +70,6 @@ Reads a double (IEEE encoded) from the stream.
 Reads a string from a stream. Actually, this function first reads a long integer
 specifying the length of the string (without the last null character) and then
 reads the string.
-
-\membersection{wxDataInputStream::ReadLine}
-
-\func{wxString}{wxDataInputStream::ReadLine}{\void}
-
-Reads a line from the stream. A line is a string which ends with \\n or \\r\\n.
 
 \section{\class{wxDataOutputStream}}\label{wxdataoutputstream}
 
@@ -120,17 +120,17 @@ Writes the 32 bit integer {\it i32} to the stream.
 
 Writes the double {\it f} to the stream using the IEEE format.
 
-\membersection{wxDataOutputStream::WriteString}
-
-\func{void}{wxDataOutputStream::WriteString}{{\param const wxString\& }{string}}
-
-Writes {\it string} to the stream. Actually, this method writes the size of
-the string before writing {\it string} itself.
-
 \membersection{wxDataOutputStream::WriteLine}
 
 \func{void}{wxDataOutputStream::WriteLine}{{\param const wxString\& }{string}}
 
 Writes {\it string} as a line. Depending on the operating system, it adds
 $\backslash$n or $\backslash$r$\backslash$n.
+
+\membersection{wxDataOutputStream::WriteString}
+
+\func{void}{wxDataOutputStream::WriteString}{{\param const wxString\& }{string}}
+
+Writes {\it string} to the stream. Actually, this method writes the size of
+the string before writing {\it string} itself.
 

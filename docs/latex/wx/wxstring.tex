@@ -1,10 +1,10 @@
 \section{\class{wxString}}\label{wxstring}
 
-wxString is a class representing a character string. Please see wxString 
-\helpref{overview}{wxstringoverview} for more information about it. As explained
-there, wxStrign implements about 90\% of methods of std::string class (iterators
-are not supported and so all methods which use them are not supported neither),
-but they are not documented here - please see any source of STL documentation.
+wxString is a class representing a character string. Please see the 
+\helpref{wxString overview}{wxstringoverview} for more information about it. As explained
+there, wxString implements about 90\% of methods of the std::string class (iterators
+are not supported, nor all methods which use them).
+These standard functions are not documented in this manual so please see the STL documentation.
 The behaviour of all these functions is identical to the behaviour described
 there.
 
@@ -126,7 +126,7 @@ lower case and leave the original string unchanged.
 
 \membersection{Searching and replacing}
 
-These functions replace the standard {\it strchr()} and {\it strstr()}
+These functions replace the standard {\it strchr()} and {\it strstr()} 
 functions.
 
 \helpref{Find}{wxstringfind}\\
@@ -139,7 +139,7 @@ insertion operators exist (for basic types only).
 
 \helpref{Printf}{wxstringprintf}\\
 \helpref{PrintfV}{wxstringprintfv}\\
-\helpref{operator \cinsert}{wxstringoperatorout)
+\helpref{operator \cinsert}{wxstringoperatorout}
 
 \membersection{Memory management}
 
@@ -961,5 +961,4 @@ Implicit conversion to a C string.
 \wxheading{Remarks}
 
 These comparisons are case-sensitive.
-
 

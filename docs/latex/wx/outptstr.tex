@@ -35,15 +35,34 @@ stream buffer can point to another stream.
 
 Destructor.
 
-% -----------
-% IO function
-% -----------
+\membersection{wxOutputStream::OutputStreamBuffer}
+
+\func{wxStreamBuffer *}{OutputStreamBuffer}{\void}
+
+Returns the stream buffer associated with the output stream.
+
+\membersection{wxOutputStream::LastWrite}
+
+\constfunc{size_t}{LastWrite}{\void}
+
 \membersection{wxOutputStream::PutC}
 
 \func{void}{PutC}{\param{char}{ c}}
 
 Puts the specified character in the output queue and increments the
 stream position.
+
+\membersection{wxOutputStream::SeekO}
+
+\func{off_t}{SeekO}{\param{off_t}{ pos}, \param{wxSeekMode}{ mode}}
+
+Changes the stream current position.
+
+\membersection{wxOutputStream::TellO}
+
+\constfunc{off_t}{TellO}{\void}
+
+Returns the current stream position.
 
 \membersection{wxOutputStream::Write}
 
@@ -60,32 +79,4 @@ any states of the stream right away.
 Reads data from the specified input stream and stores them 
 in the current stream. The data is read until an error is raised
 by one of the two streams.
-
-% ------------------
-% Position functions
-% ------------------
-\membersection{wxOutputStream::SeekO}
-
-\func{off_t}{SeekO}{\param{off_t}{ pos}, \param{wxSeekMode}{ mode}}
-
-Changes the stream current position.
-
-\membersection{wxOutputStream::TellO}
-
-\constfunc{off_t}{TellO}{\void}
-
-Returns the current stream position.
-
-% ---------------
-% State functions
-% ---------------
-\membersection{wxOutputStream::OutputStreamBuffer}
-
-\func{wxStreamBuffer *}{OutputStreamBuffer}{\void}
-
-Returns the stream buffer associated with the output stream.
-
-\membersection{wxOutputStream::LastWrite}
-
-\constfunc{size_t}{LastWrite}{\void}
 

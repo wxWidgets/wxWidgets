@@ -33,34 +33,34 @@ finally, C++ even has one (std::string) in standard. Why use wxString then?
 There are several advantages:
 
 \begin{enumerate}\itemsep=0pt
-\item {\bf Efficiency} {This class was made to be as efficient as possible: both
+\item {\bf Efficiency} This class was made to be as efficient as possible: both
 in terms of size (each wxString objects takes exactly the same place as {\it
 char *} pointer, \helpref{reference counting}{wxstringrefcount}) and speed.
 It also provides performance \helpref{statistics gathering code}{wxstringtuning} 
 which may be enabled to fine tune the memory allocation strategy for your
-particular application - and the gain might be quite big.}
-\item {\bf Compatibility} {This class tries to combine almost full compatibility
+particular application - and the gain might be quite big.
+\item {\bf Compatibility} This class tries to combine almost full compatibility
 with the old wxWindows 1.xx wxString class, some reminiscence to MFC CString
-class and 90\% of functionality of std::string class.}
-\item {\bf Rich set of functions} {Some of the functions present in wxString are
+class and 90\% of functionality of std::string class.
+\item {\bf Rich set of functions} Some of the functions present in wxString are
 very useful but don't exist in most of other string classes: for example, 
 \helpref{AfterFirst}{wxstringafterfirst}, 
 \helpref{BeforLast}{wxstringbeforlast}, \helpref{operator<<}{wxstringoperator} 
 or \helpref{Printf}{wxstringprintf}. Of course, all the standard string
-operations are supported as well.}
-\item {\bf UNICODE} {In this release, wxString only supports construction from
+operations are supported as well.
+\item {\bf UNICODE} In this release, wxString only supports construction from
 an UNICODE string, but in the next one it will be capable of also storing its
-internal data in either ASCII or UNICODE format.}
-\item {\bf Used by wxWindows} {And, of course, this class is used everywhere
+internal data in either ASCII or UNICODE format.
+\item {\bf Used by wxWindows} And, of course, this class is used everywhere
 inside wxWindows so there is no performance loss which would result from
 conversions of objects of any other string class (including std::string) to
-wxString internally by wxWindows.}
+wxString internally by wxWindows.
 \end{enumerate}
 
 However, there are several problems as well. The most important one is probably
 that there are often several functions to do exactly the same thing: for
 example, to get the length of the string either one of 
-\helpref{length()}{wxstringlength}, \helpref{Len()}{wxstringlen} or
+\helpref{length()}{wxstringlength}, \helpref{Len()}{wxstringlen} or 
 \helpref{Length()}{wxstringLength} may be used. The first function, as almost
 all the other functions in lowercase, is std::string compatible. The second one
 is "native" wxString version and the last one is wxWindows 1.xx way. So the
@@ -77,15 +77,14 @@ In the situations when there is no correspondinw std::string function, please
 try to use the new wxString methods and not the old wxWindows 1.xx variants
 which are deprecated and risk to disappear in future versions.
 
-\subsection{Some advices about using wxString}\label{wxstringadvices}
+\subsection{Some advice about using wxString}\label{wxstringadvices}
 
-Probably main trap with using this class is the implicit conversion operator to
+Probably the main trap with using this class is the implicit conversion operator to 
 {\it const char *}. It is advised that you use \helpref{c\_str()}{wxstringcstr}
 instead of it to clearly indicate when the conversion is done. Specifically, the
 danger of this implicit conversion may be seen in the following code fragment:
 
 \begin{verbatim}
-
 // this function converts the input string to uppercase, output it to the screen
 // and returns the result
 const char *SayHELLO(const wxString& input)
@@ -96,19 +95,18 @@ const char *SayHELLO(const wxString& input)
 
     return output;
 }
-
 \end{verbatim}
 
-There are two nasty bugs in these three lines. First of them is in the call to
+There are two nasty bugs in these three lines. First of them is in the call to the 
 {\it printf()} function. Although the implicit conversion to C strings is applied
-automatically by the compiler in case of
+automatically by the compiler in the case of
 
 \begin{verbatim}
     puts(output);
 \end{verbatim}
 
-because the argument of {\it puts()} is known to be of the type {\it const char
-*}, this is {\bf not} done for {\it printf()} which is a function with variable
+because the argument of {\it puts()} is known to be of the type {\it const char *},
+this is {\bf not} done for {\it printf()} which is a function with variable
 number of arguments (and whose arguments are of unknown types). So this call may
 do anything at all (including displaying the correct string on screen), although
 the most likely result is a program crash. The solution is to use 
@@ -139,7 +137,7 @@ intuitive behaviour (like strncpy() which doesn't always terminate the resulting
 string with a NUL) and are in general not very safe (passing NULL to them will
 probably lead to program crash). Moreover, some of very useful functions are not
 standard at all. This is why in addition to all wxString functions, there are
-also a few of global string functions which try to correct these problems:
+also a few of global string functions which try to correct these problems: 
 \helpref{IsEmpty()}{isempty} verifies whether the string is empty (returning
 TRUE for NULL pointers), \helpref{Strlen()}{strlen} also handles NULLs correctly
 and returns 0 for them and \helpref{Stricmp()}{stricmp} is just a
@@ -148,13 +146,13 @@ known either as stricmp() or strcasecmp() on different platforms.
 
 There is another class which might be useful when working with wxString: 
 \helpref{wxStringTokenizer}{wxstringtokenizer}. It is helpful when a string must
-be broken into tokens and replaces advatageously the standard C library {\it
+be broken into tokens and replaces the standard C library {\it
 strtok()} function.
 
 And the very last string related class is \helpref{wxArrayString}{wxarray}: it
-is just a version of "template" dynamic array class which is specialized to work
+is just a version of the "template" dynamic array class which is specialized to work
 with strings. Please note that this class is specially optimized (it uses its
-knowledge of internal structure of wxString) for storing strigns and so it is
+knowledge of internal structure of wxString) for storing strings and so it is
 vastly better from performance point of view than wxObjectArray of wxString.
 
 \subsection{Reference counting and why you shouldn't care about it}\label{wxstringrefcount}
@@ -189,7 +187,7 @@ of array subscript operator for this reasons. Please note that
 \helpref{at()}{wxstringat} method has the same problem as subscript operator in
 this situation and so using it is not really better. Also note that if all
 string arguments to your functions are passed as {\it const wxString\&} (see the
-section \helpref{Some advices}{wxstringadvices}) this situation will almost
+section \helpref{Some advice}{wxstringadvices}) this situation will almost
 never arise because for constant references the correct operator is called automatically.
 
 \subsection{Tuning wxString for your application}\label{wxstringtuning}
@@ -207,7 +205,6 @@ expensive operation) too often as when, for example, a string is constructed by
 subsequently adding one character at a time to it, as for example in:
 
 \begin{verbatim}
-
 // delete all vowels from the string
 wxString DeleteAllVowels(const wxString& original)
 {
@@ -222,10 +219,9 @@ wxString DeleteAllVowels(const wxString& original)
 
     return result;
 }
-
 \end{verbatim}
 
-This is a quite common situation and not allocating extra memory at all would
+This is quite a common situation and not allocating extra memory at all would
 lead to very bad performance in this case because there would be as many memory
 (re)allocations as there are consonants in the original string. Allocating too
 much extra memory would help to improve the speed in this situation, but due to
