@@ -94,8 +94,8 @@ class RowColSizer(wx.PySizer):
         #if rowspan > 1 or colspan > 1:
         #    flag = flag | wx.EXPAND
 
-        wx.PySizer.Add(self, item, option, flag, border,
-                       userData=(row, col, row+rowspan, col+colspan))
+        return wx.PySizer.Add(self, item, option, flag, border,
+                              userData=(row, col, row+rowspan, col+colspan))
 
     #AddWindow = Add
     #AddSizer  = Add
@@ -113,8 +113,8 @@ class RowColSizer(wx.PySizer):
         assert row != -1, "Row must be specified"
         assert col != -1, "Column must be specified"
 
-        wx.PySizer.Add(self, (width, height), option, flag, border,
-                       userData=(row, col, row+rowspan, col+colspan))
+        return wx.PySizer.Add(self, (width, height), option, flag, border,
+                              userData=(row, col, row+rowspan, col+colspan))
 
     #--------------------------------------------------
     def _add( self, size, dim ):
