@@ -122,7 +122,7 @@ class KeySink(wx.Window):
 
         self.SetBackgroundColour(wx.BLUE)
         self.haveFocus = False
-        self.callSkip = False
+        self.callSkip = True
         self.logKeyDn = True
         self.logKeyUp = True
         self.logChar = True
@@ -315,6 +315,7 @@ class TestPanel(wx.Panel):
 
         cb1 = wx.CheckBox(self, -1, "Call evt.Skip in Key* events")
         self.Bind(wx.EVT_CHECKBOX, self.OnSkipCB, cb1)
+        cb1.SetValue(True)
 
         cb2 = wx.CheckBox(self, -1, "KEY_UP")
         self.Bind(wx.EVT_CHECKBOX, self.OnKeyUpCB, cb2)
