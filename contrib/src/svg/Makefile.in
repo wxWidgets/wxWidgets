@@ -2,7 +2,7 @@
 
 top_srcdir = @top_srcdir@/..
 top_builddir = ../../..
-libsrc_dir = contrib/src/dcsvg
+libsrc_dir = contrib/src/svg
 
 TARGET_LIBNAME=libwx_dcsvg
 
