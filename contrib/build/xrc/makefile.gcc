@@ -29,6 +29,7 @@ XRCDLL_OBJECTS =  \
 	$(OBJS)\xrcdll_xh_bttn.o \
 	$(OBJS)\xrcdll_xh_cald.o \
 	$(OBJS)\xrcdll_xh_chckb.o \
+	$(OBJS)\xrcdll_xh_tglbtn.o \
 	$(OBJS)\xrcdll_xh_chckl.o \
 	$(OBJS)\xrcdll_xh_choic.o \
 	$(OBJS)\xrcdll_xh_combo.o \
@@ -75,6 +76,7 @@ XRCLIB_OBJECTS =  \
 	$(OBJS)\xrclib_xh_bttn.o \
 	$(OBJS)\xrclib_xh_cald.o \
 	$(OBJS)\xrclib_xh_chckb.o \
+	$(OBJS)\xrclib_xh_tglbtn.o \
 	$(OBJS)\xrclib_xh_chckl.o \
 	$(OBJS)\xrclib_xh_choic.o \
 	$(OBJS)\xrclib_xh_combo.o \
@@ -287,6 +289,9 @@ $(OBJS)\xrcdll_xh_cald.o: ../../src/xrc/xh_cald.cpp
 $(OBJS)\xrcdll_xh_chckb.o: ../../src/xrc/xh_chckb.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
+$(OBJS)\xrcdll_xh_tglbtn.o: ../../src/xrc/xh_tglbtn.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
 $(OBJS)\xrcdll_xh_chckl.o: ../../src/xrc/xh_chckl.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
@@ -402,6 +407,9 @@ $(OBJS)\xrclib_xh_cald.o: ../../src/xrc/xh_cald.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_chckb.o: ../../src/xrc/xh_chckb.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_tglbtn.o: ../../src/xrc/xh_tglbtn.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_chckl.o: ../../src/xrc/xh_chckl.cpp

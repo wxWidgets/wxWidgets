@@ -211,6 +211,7 @@ XRCDLL_OBJECTS =  &
 	$(OBJS)\xrcdll_xh_bttn.obj &
 	$(OBJS)\xrcdll_xh_cald.obj &
 	$(OBJS)\xrcdll_xh_chckb.obj &
+	$(OBJS)\xrcdll_xh_tglbtn.obj &
 	$(OBJS)\xrcdll_xh_chckl.obj &
 	$(OBJS)\xrcdll_xh_choic.obj &
 	$(OBJS)\xrcdll_xh_combo.obj &
@@ -257,6 +258,7 @@ XRCLIB_OBJECTS =  &
 	$(OBJS)\xrclib_xh_bttn.obj &
 	$(OBJS)\xrclib_xh_cald.obj &
 	$(OBJS)\xrclib_xh_chckb.obj &
+	$(OBJS)\xrclib_xh_tglbtn.obj &
 	$(OBJS)\xrclib_xh_chckl.obj &
 	$(OBJS)\xrclib_xh_choic.obj &
 	$(OBJS)\xrclib_xh_combo.obj &
@@ -349,6 +351,9 @@ $(OBJS)\xrcdll_xh_cald.obj :  .AUTODEPEND ../../src/xrc\xh_cald.cpp
 	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_chckb.obj :  .AUTODEPEND ../../src/xrc\xh_chckb.cpp
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_tglbtn.obj :  .AUTODEPEND ../../src/xrc\xh_tglbtn.cpp
 	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_chckl.obj :  .AUTODEPEND ../../src/xrc\xh_chckl.cpp
@@ -466,6 +471,9 @@ $(OBJS)\xrclib_xh_cald.obj :  .AUTODEPEND ../../src/xrc\xh_cald.cpp
 	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_chckb.obj :  .AUTODEPEND ../../src/xrc\xh_chckb.cpp
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_tglbtn.obj :  .AUTODEPEND ../../src/xrc\xh_tglbtn.cpp
 	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_chckl.obj :  .AUTODEPEND ../../src/xrc\xh_chckl.cpp

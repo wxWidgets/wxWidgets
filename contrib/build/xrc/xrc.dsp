@@ -478,10 +478,6 @@ SOURCE=../../src/xrc\xh_chckb.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=../../src/xrc\xh_tglbtn.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=../../src/xrc\xh_chckl.cpp
 # End Source File
 # Begin Source File
@@ -587,6 +583,10 @@ SOURCE=../../src/xrc\xh_sttxt.cpp
 # Begin Source File
 
 SOURCE=../../src/xrc\xh_text.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=../../src/xrc\xh_tglbtn.cpp
 # End Source File
 # Begin Source File
 
