@@ -1635,9 +1635,10 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, 
     wxMemoryDC dc;
     dc.SelectObject(src);
     dc.SetFont(GetFont());
-    dc.SetBackground(*wxWHITE_BRUSH);
+    dc.SetBackground(*wxBLACK_BRUSH);
     dc.SetBrush(*wxBLACK_BRUSH);
     dc.Clear();
+    dc.SetTextForeground( *wxWHITE );
     dc.DrawText(text, 0, 0);
     dc.SelectObject(wxNullBitmap);
 
@@ -1654,54 +1655,24 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, 
            y4 = h*dx;
     double x3 = x4 + x2,
            y3 = y4 + y2;
-
+           
     // calc max and min
     wxCoord maxX = (wxCoord)(dmax(x2, dmax(x3, x4)) + 0.5),
             maxY = (wxCoord)(dmax(y2, dmax(y3, y4)) + 0.5),
             minX = (wxCoord)(dmin(x2, dmin(x3, x4)) - 0.5),
             minY = (wxCoord)(dmin(y2, dmin(y3, y4)) - 0.5);
 
-    // prepare to blit-with-rotate the bitmap to the DC
+
     wxImage image = src.ConvertToImage();
 
-    GdkColor *colText = m_textForegroundColour.GetColor(),
-             *colBack = m_textBackgroundColour.GetColor();
+    image.ConvertColourToAlpha( m_textForegroundColour.Red(),
+                                m_textForegroundColour.Green(),
+                                m_textForegroundColour.Blue() );
+    image = image.Rotate( rad, wxPoint(0,0) );
+    
+    src = image;
+    DoDrawBitmap( src, x /*- (int)(sin(rad)*h)*/ , y-image.GetHeight()+h, true );
 
-    bool textColSet = TRUE;
-
-    unsigned char *data = image.GetData();
-
-    // paint pixel by pixel
-    for ( wxCoord srcX = 0; srcX < w; srcX++ )
-    {
-        for ( wxCoord srcY = 0; srcY < h; srcY++ )
-        {
-            // transform source coords to dest coords
-            double r = sqrt((double)srcX*srcX + srcY*srcY);
-            double angleOrig = atan2((double)srcY, (double)srcX) - rad;
-            wxCoord dstX = (wxCoord)(r*cos(angleOrig) + 0.5),
-                    dstY = (wxCoord)(r*sin(angleOrig) + 0.5);
-
-            // non-white pixel?
-            bool textPixel = data[(srcY*w + srcX)*3] != 0xff;
-            if ( textPixel || (m_backgroundMode == wxSOLID) )
-            {
-                // change colour if needed
-                if ( textPixel != textColSet )
-                {
-                    gdk_gc_set_foreground( m_textGC, textPixel ? colText
-                                                               : colBack );
-
-                    textColSet = textPixel;
-                }
-
-                // don't use DrawPoint() because it uses the current pen
-                // colour, and we don't need it here
-                gdk_draw_point( m_window, m_textGC,
-                                XLOG2DEV(x) + dstX, YLOG2DEV(y) + dstY );
-            }
-        }
-    }
 
     // it would be better to draw with non underlined font and draw the line
     // manually here (it would be more straight...)
@@ -1713,9 +1684,6 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, 
                        XLOG2DEV(x + x3), YLOG2DEV(y + y3 + font->descent));
     }
 #endif // 0
-
-    // restore the font colour
-    gdk_gc_set_foreground( m_textGC, colText );
 
     // update the bounding box
     CalcBoundingBox(x + minX, y + minY);
