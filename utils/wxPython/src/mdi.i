@@ -76,7 +76,11 @@ public:
     %pragma(python) addtomethod = "__init__:wx._StdFrameCallbacks(self)"
 
     void Activate();
+#ifdef __WXMSW__
+    void Maximize();
+#else
     void Maximize(bool maximize);
+#endif
     void Restore();
 
 };
@@ -92,53 +96,3 @@ public:
 };
 
 //---------------------------------------------------------------------------
-/////////////////////////////////////////////////////////////////////////////
-//
-// $Log$
-// Revision 1.7  1999/05/01 04:40:57  RD
-// wxPython 2.0b9, second phase (gtk)
-// Added gobs of stuff, see wxPython/README.txt for details
-//
-// Revision 1.6  1999/02/25 07:08:34  RD
-//
-// wxPython version 2.0b5
-//
-// Revision 1.5  1998/12/15 20:41:21  RD
-// Changed the import semantics from "from wxPython import *" to "from
-// wxPython.wx import *"  This is for people who are worried about
-// namespace pollution, they can use "from wxPython import wx" and then
-// prefix all the wxPython identifiers with "wx."
-//
-// Added wxTaskbarIcon for wxMSW.
-//
-// Made the events work for wxGrid.
-//
-// Added wxConfig.
-//
-// Added wxMiniFrame for wxGTK, (untested.)
-//
-// Changed many of the args and return values that were pointers to gdi
-// objects to references to reflect changes in the wxWindows API.
-//
-// Other assorted fixes and additions.
-//
-// Revision 1.4  1998/10/02 06:40:41  RD
-//
-// Version 0.4 of wxPython for MSW.
-//
-// Revision 1.3  1998/08/18 19:48:18  RD
-// more wxGTK compatibility things.
-//
-// It builds now but there are serious runtime problems...
-//
-// Revision 1.2  1998/08/15 07:36:39  RD
-// - Moved the header in the .i files out of the code that gets put into
-// the .cpp files.  It caused CVS conflicts because of the RCS ID being
-// different each time.
-//
-// - A few minor fixes.
-//
-// Revision 1.1  1998/08/09 08:25:51  RD
-// Initial version
-//
-//
