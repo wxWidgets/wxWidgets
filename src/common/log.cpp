@@ -714,7 +714,11 @@ void wxLogWindow::DoLog(wxLogLevel level, const char *szString)
     ((wxLogWindow *)m_pOldLog)->DoLog(level, szString);
   }
 
-  if ( m_pLogFrame ) {
+  // don't put trace messages in the text window for 2 reasons:
+  // 1) there are too many of them
+  // 2) they may provoke other trace messages thus sending a program into an
+  //    infinite loop
+  if ( m_pLogFrame && level != wxLOG_Trace ) {
     // and this will format it nicely and call our DoLogString()
     wxLog::DoLog(level, szString);
   }
