@@ -144,7 +144,7 @@ class SizeRenderer(Renderer):
     def characterData(self, data):
         self.dc.SetFont(self.getCurrentFont())
         width, height = self.dc.GetTextExtent(data)
-        self.width += width
+        self.width = self.width +  width
         self.minY = min(self.minY, self.offsets[-1])
         self.maxY = max(self.maxY, self.offsets[-1] + height)
         self.height = self.maxY - self.minY
@@ -167,7 +167,7 @@ class DCRenderer(Renderer):
         self.dc.SetTextForeground(self.getCurrentColor())
         width, height = self.dc.GetTextExtent(data)
         self.dc.DrawText(data, self.x, self.y + self.offsets[-1])
-        self.x += width
+        self.x = self.x + width
 
     def start_angle(self, attrs):
         self.dc.SetFont(self.getCurrentFont())
@@ -176,7 +176,7 @@ class DCRenderer(Renderer):
         y = self.y + self.offsets[-1] + height - descent
         self.dc.DrawLine(self.x, y, self.x+width, y)
         self.dc.DrawLine(self.x, y, self.x+width, y-width)
-        self.x += width
+        self.x = self.x + width
 
     def end_angle(self):
         pass
@@ -241,7 +241,7 @@ if __name__ == "__main__":
             return 1
     app = myApp()
     frame = wxFrame(NULL, -1, "wxFancyText demo", wxDefaultPosition)
-    frame.SetClientSize(wxSize(*getExtent(str)))
+    frame.SetClientSize(getExtent(str))
     bmp = renderToBitmap(str, wxCYAN_BRUSH)
     sb = wxStaticBitmap(frame, -1, bmp)
     EVT_MENU(frame, ID_EXIT, frame.Destroy)

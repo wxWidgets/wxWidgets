@@ -2,6 +2,8 @@ include *.txt
 include my_distutils.py
 ## include my_install_data.py
 include licence/*.txt
+include b
+include b.bat
 
 include demo/*.py
 include demo/bitmaps/*.bmp
