@@ -64,6 +64,7 @@ public:
     // --------
 
     wxTextCtrlBase();
+    ~wxTextCtrlBase();
 
     // accessors
     // ---------
@@ -159,6 +160,13 @@ protected:
     // the name of the last file loaded with LoadFile() which will be used by
     // SaveFile() by default
     wxString m_filename;
+
+private:
+#ifndef NO_TEXT_WINDOW_STREAM
+#if !wxUSE_IOSTREAMH
+  char *m_streambuf;
+#endif
+#endif
 };
 
 // ----------------------------------------------------------------------------

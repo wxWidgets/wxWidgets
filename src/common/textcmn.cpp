@@ -48,18 +48,25 @@
 // ----------------------------------------------------------------------------
 
 wxTextCtrlBase::wxTextCtrlBase()
-#if !wxUSE_IOSTREAMH
-    #ifndef NO_TEXT_WINDOW_STREAM
-        :streambuf()
-    #endif //NO_TEXT_WINDOW_STREAM
-#endif //!wxUSE_IOSTREAMH
 {
-#if wxUSE_IOSTREAMH
-    #ifndef NO_TEXT_WINDOW_STREAM
-        if (allocate())
-            setp(base(),ebuf());
-    #endif // NO_TEXT_WINDOW_STREAM
-#endif //wxUSE_IOSTREAMH
+#ifndef NO_TEXT_WINDOW_STREAM
+  #if wxUSE_IOSTREAMH
+  if (allocate())
+    setp(base(),ebuf());
+  #else
+  m_streambuf=new char[64];
+  setp(m_streambuf,m_streambuf+64);
+  #endif //wxUSE_IOSTREAMH
+#endif // NO_TEXT_WINDOW_STREAM
+}
+
+wxTextCtrlBase::~wxTextCtrlBase()
+{
+#ifndef NO_TEXT_WINDOW_STREAM
+#if !wxUSE_IOSTREAMH
+  delete m_streambuf;
+#endif
+#endif
 }
 
 // ----------------------------------------------------------------------------
