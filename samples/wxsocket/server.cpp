@@ -180,6 +180,7 @@ MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, -1,
   // Create the socket
   wxIPV4address addr;
   addr.Service(3000);
+  addr.LocalHost();
 
   m_server = new wxSocketServer(addr);
   m_server->SetEventHandler(*this, SERVER_ID);
