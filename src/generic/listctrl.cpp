@@ -3497,8 +3497,9 @@ void wxListMainWindow::SetItemState( long litem, long state, long stateMask )
                   _T("invalid list ctrl item index in SetItem") );
 
     size_t oldCurrent = m_current;
-    size_t item = (size_t)litem;    // sdafe because of the check above
+    size_t item = (size_t)litem;    // safe because of the check above
 
+    // do we need to change the focus?
     if ( stateMask & wxLIST_STATE_FOCUSED )
     {
         if ( state & wxLIST_STATE_FOCUSED )
@@ -3510,9 +3511,13 @@ void wxListMainWindow::SetItemState( long litem, long state, long stateMask )
                 m_current = item;
                 OnFocusLine( m_current );
 
-                if ( IsSingleSel() && (oldCurrent != (size_t)-1) )
+                if ( oldCurrent != (size_t)-1 )
                 {
-                    HighlightLine(oldCurrent, FALSE);
+                    if ( IsSingleSel() )
+                    {
+                        HighlightLine(oldCurrent, FALSE);
+                    }
+
                     RefreshLine(oldCurrent);
                 }
 
@@ -3526,10 +3531,13 @@ void wxListMainWindow::SetItemState( long litem, long state, long stateMask )
             {
                 OnUnfocusLine( m_current );
                 m_current = (size_t)-1;
+
+                RefreshLine( oldCurrent );
             }
         }
     }
 
+    // do we need to change the selection state?
     if ( stateMask & wxLIST_STATE_SELECTED )
     {
         bool on = (state & wxLIST_STATE_SELECTED) != 0;

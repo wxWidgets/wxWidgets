@@ -84,6 +84,7 @@ public:
     void OnSmallIconTextView(wxCommandEvent& event);
     void OnVirtualView(wxCommandEvent& event);
 
+    void OnFocusLast(wxCommandEvent& event);
     void OnToggleFirstSel(wxCommandEvent& event);
     void OnDeselectAll(wxCommandEvent& event);
     void OnSelectAll(wxCommandEvent& event);
@@ -144,6 +145,7 @@ enum
     LIST_TOGGLE_FIRST,
     LIST_SHOW_COL_INFO,
     LIST_SHOW_SEL_INFO,
+    LIST_FOCUS_LAST,
 
     LIST_CTRL                   = 1000
 };

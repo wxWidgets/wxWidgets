@@ -60,6 +60,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LIST_SMALL_ICON_TEXT_VIEW, MyFrame::OnSmallIconTextView)
     EVT_MENU(LIST_VIRTUAL_VIEW, MyFrame::OnVirtualView)
 
+    EVT_MENU(LIST_FOCUS_LAST, MyFrame::OnFocusLast)
     EVT_MENU(LIST_TOGGLE_FIRST, MyFrame::OnToggleFirstSel)
     EVT_MENU(LIST_DESELECT_ALL, MyFrame::OnDeselectAll)
     EVT_MENU(LIST_SELECT_ALL, MyFrame::OnSelectAll)
@@ -180,6 +181,7 @@ MyFrame::MyFrame(const wxChar *title, int x, int y, int w, int h)
     menuView->Append(LIST_VIRTUAL_VIEW, _T("Virtual view\tF7"));
 
     wxMenu *menuList = new wxMenu;
+    menuList->Append(LIST_FOCUS_LAST, _T("&Make last item current\tCtrl-L"));
     menuList->Append(LIST_TOGGLE_FIRST, _T("&Toggle first item\tCtrl-T"));
     menuList->Append(LIST_DESELECT_ALL, _T("&Deselect All\tCtrl-D"));
     menuList->Append(LIST_SELECT_ALL, _T("S&elect All\tCtrl-A"));
@@ -250,6 +252,18 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
             "About list test", wxOK|wxCANCEL);
 
     dialog.ShowModal();
+}
+
+void MyFrame::OnFocusLast(wxCommandEvent& WXUNUSED(event))
+{
+    long index = m_listCtrl->GetItemCount() - 1;
+    if ( index == -1 )
+    {
+        return;
+    }
+
+    m_listCtrl->SetItemState(index, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
+    m_listCtrl->EnsureVisible(index);
 }
 
 void MyFrame::OnToggleFirstSel(wxCommandEvent& WXUNUSED(event))
