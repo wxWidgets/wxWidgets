@@ -59,6 +59,7 @@ AC_OUTPUT([
             src/applet/Makefile
             src/fl/Makefile
             src/net/Makefile
+	    src/animate/Makefile
             samples/Makefile
             samples/mmedia/Makefile
             samples/ogl/Makefile
