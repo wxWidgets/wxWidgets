@@ -31,6 +31,9 @@ public:
     :   m_cocoaNSColor(NULL)
     {   Set(colRGB); }
 
+    // initialization using existing NSColor
+    wxColour( WX_NSColor aColor );
+
     // implicit conversion from the colour name
     wxColour( const wxString &colourName )
     {   InitFromName(colourName); }
@@ -57,11 +60,11 @@ public:
     // comparison
     bool operator == (const wxColour& colour) const
     {
-        // VZ: sure we want to compare NSColor objects for equality here?
+        // TODO: Really compare the NSColor
         return (m_cocoaNSColor == colour.m_cocoaNSColor
-            && m_red == colour.m_red
+            || (m_red == colour.m_red
             && m_green == colour.m_green
-            && m_blue == colour.m_blue);
+            && m_blue == colour.m_blue));
     }
     bool operator != (const wxColour& colour) const
     {   return !(*this == colour); }
@@ -76,6 +79,7 @@ public:
             (unsigned char)(colRGB >> 8),
             (unsigned char)(colRGB >> 16));
     }
+    void Set( WX_NSColor aColor );
 
 protected:
     // puts the object in an invalid, uninitialized state
