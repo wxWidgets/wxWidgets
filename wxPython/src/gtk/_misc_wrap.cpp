@@ -16752,7 +16752,7 @@ static PyObject *_wrap_ArtProvider_GetIcon(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_ArtProvider_GetSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ArtProvider_GetSizeHint(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString *arg1 = 0 ;
     bool arg2 = (bool) false ;
@@ -16764,7 +16764,7 @@ static PyObject *_wrap_ArtProvider_GetSize(PyObject *, PyObject *args, PyObject 
         (char *) "client",(char *) "platform_dependent", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:ArtProvider_GetSize",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:ArtProvider_GetSizeHint",kwnames,&obj0,&obj1)) goto fail;
     {
         arg1 = wxString_in_helper(obj0);
         if (arg1 == NULL) SWIG_fail;
@@ -16778,7 +16778,7 @@ static PyObject *_wrap_ArtProvider_GetSize(PyObject *, PyObject *args, PyObject 
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = wxPyArtProvider::GetSize((wxString const &)*arg1,arg2);
+        result = wxPyArtProvider::GetSizeHint((wxString const &)*arg1,arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -31774,7 +31774,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ArtProvider_RemoveProvider", (PyCFunction) _wrap_ArtProvider_RemoveProvider, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ArtProvider_GetBitmap", (PyCFunction) _wrap_ArtProvider_GetBitmap, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ArtProvider_GetIcon", (PyCFunction) _wrap_ArtProvider_GetIcon, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"ArtProvider_GetSize", (PyCFunction) _wrap_ArtProvider_GetSize, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"ArtProvider_GetSizeHint", (PyCFunction) _wrap_ArtProvider_GetSizeHint, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ArtProvider_Destroy", (PyCFunction) _wrap_ArtProvider_Destroy, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ArtProvider_swigregister", ArtProvider_swigregister, METH_VARARGS, NULL},
 	 { (char *)"delete_ConfigBase", (PyCFunction) _wrap_delete_ConfigBase, METH_VARARGS | METH_KEYWORDS, NULL},
