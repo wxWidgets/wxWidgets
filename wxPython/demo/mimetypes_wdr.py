@@ -60,7 +60,7 @@ def MakeMimeTypesTestPanel( parent, call_fit = True, set_sizer = True ):
     item9.SetFont( wxFont( 14, wxSWISS, wxNORMAL, wxBOLD ) )
     item8.AddWindow( item9, 0, wxALL, 5 )
 
-    item8.AddSpacer( 20, 20, 0, wxALIGN_CENTRE|wxALL, 5 )
+    item8.AddSpacer( (20, 20), 0, wxALIGN_CENTRE|wxALL, 5 )
 
     item10 = wxStaticText( parent, ID_TEXT, "GetIconInfo:", wxDefaultPosition, wxDefaultSize, 0 )
     item8.AddWindow( item10, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
