@@ -55,7 +55,7 @@ public:
    
    void OnEraseBackground(wxEraseEvent& event);
    
-   virtual bool	         Enable(bool enabled) ;
+   virtual bool	         Enable(bool enable = TRUE) ;
    virtual bool	         Show(bool show = TRUE) ;
    
    virtual void		 MacRedrawControl () ;
