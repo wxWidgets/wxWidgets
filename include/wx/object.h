@@ -83,8 +83,10 @@ public:
     wxObject *CreateObject() { return m_objectConstructor ? (*m_objectConstructor)() : 0; }
 
     const wxChar       *GetClassName() const { return m_className; }
-    const wxChar       *GetBaseClassName1() const { return m_baseInfo1->GetClassName(); }
-    const wxChar       *GetBaseClassName2() const { return m_baseInfo2->GetClassName(); }
+    const wxChar       *GetBaseClassName1() const
+        { return m_baseInfo1 ? m_baseInfo1->GetClassName() : NULL; }
+    const wxChar       *GetBaseClassName2() const
+        { return m_baseInfo2 ? m_baseInfo2->GetClassName() : NULL; }
     const wxClassInfo  *GetBaseClass1() const { return m_baseInfo1; }
     const wxClassInfo  *GetBaseClass2() const { return m_baseInfo2; }
     int                 GetSize() const { return m_objectSize; }
