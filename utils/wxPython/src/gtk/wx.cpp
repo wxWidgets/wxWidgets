@@ -1709,6 +1709,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxIdleEvent","_class_wxIdleEvent",0},
     { "_class_wxUpdateUIEvent","_wxUpdateUIEvent",0},
     { "_wxToolBar","_class_wxToolBar",0},
+    { "_wxCaret","_class_wxCaret",0},
     { "_wxStaticLine","_class_wxStaticLine",0},
     { "_class_wxLayoutAlgorithm","_wxLayoutAlgorithm",0},
     { "_wxBrush","_class_wxBrush",0},
@@ -1808,6 +1809,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_WXTYPE","_signed_short",0},
     { "_WXTYPE","_unsigned_short",0},
     { "_wxFileDialog","_class_wxFileDialog",0},
+    { "_class_wxCaret","_wxCaret",0},
     { "_class_wxMDIClientWindow","_wxMDIClientWindow",0},
     { "_class_wxBrush","_wxBrush",0},
     { "_unsigned_short","_WXTYPE",0},
@@ -2034,6 +2036,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxTB_HORIZONTAL", PyInt_FromLong((long) wxTB_HORIZONTAL));
 	 PyDict_SetItemString(d,"wxTB_VERTICAL", PyInt_FromLong((long) wxTB_VERTICAL));
 	 PyDict_SetItemString(d,"wxTB_FLAT", PyInt_FromLong((long) wxTB_FLAT));
+	 PyDict_SetItemString(d,"wxTB_DOCKABLE", PyInt_FromLong((long) wxTB_DOCKABLE));
 	 PyDict_SetItemString(d,"wxCOLOURED", PyInt_FromLong((long) wxCOLOURED));
 	 PyDict_SetItemString(d,"wxFIXED_LENGTH", PyInt_FromLong((long) wxFIXED_LENGTH));
 	 PyDict_SetItemString(d,"wxALIGN_LEFT", PyInt_FromLong((long) wxALIGN_LEFT));
@@ -2247,6 +2250,9 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxGROW", PyInt_FromLong((long) wxGROW));
 	 PyDict_SetItemString(d,"wxEXPAND", PyInt_FromLong((long) wxEXPAND));
 	 PyDict_SetItemString(d,"wxNB_FIXEDWIDTH", PyInt_FromLong((long) wxNB_FIXEDWIDTH));
+	 PyDict_SetItemString(d,"wxNB_LEFT", PyInt_FromLong((long) wxNB_LEFT));
+	 PyDict_SetItemString(d,"wxNB_RIGHT", PyInt_FromLong((long) wxNB_RIGHT));
+	 PyDict_SetItemString(d,"wxNB_BOTTOM", PyInt_FromLong((long) wxNB_BOTTOM));
 	 PyDict_SetItemString(d,"wxLI_HORIZONTAL", PyInt_FromLong((long) wxLI_HORIZONTAL));
 	 PyDict_SetItemString(d,"wxLI_VERTICAL", PyInt_FromLong((long) wxLI_VERTICAL));
 	 PyDict_SetItemString(d,"wxHW_SCROLLBAR_NEVER", PyInt_FromLong((long) wxHW_SCROLLBAR_NEVER));
