@@ -38,10 +38,9 @@
 #include "wx/msw/private.h"
 
 #if wxUSE_TOOLTIPS
-    #ifndef __GNUWIN32__
+//    #ifndef __GNUWIN32__
         #include <commctrl.h>
-    #endif
-
+//    #endif
     #include "wx/tooltip.h"
 #endif // wxUSE_TOOLTIPS
 
