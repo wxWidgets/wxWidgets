@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWindows-2.5.1\n"
 "POT-Creation-Date: 2004-02-04 18:56+0100\n"
-"PO-Revision-Date: 2004-02-07 15:23+0100\n"
-"Last-Translator:  <>\n"
+"PO-Revision-Date: 2004-05-03 23:09+0100\n"
+"Last-Translator: Marco Cavallini <wx@koansoftware.com>\n"
 "Language-Team: wxWindows translators <wx-translators@wxwindows.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
@@ -291,7 +291,7 @@ msgstr ".."
 
 #: ../src/html/chm.cpp:561
 msgid "/#SYSTEM"
-msgstr ""
+msgstr "/#SYSTEM"
 
 #: ../src/common/paper.cpp:132
 msgid "10 x 14 in"
@@ -402,11 +402,11 @@ msgstr "Aggiungi ai colori personalizzati"
 
 #: ../include/wx/xti.h:858
 msgid "AddToPropertyCollection called on a generic accessor"
-msgstr ""
+msgstr "AddToPropertyCollection chiamata su 'generic accessor'"
 
 #: ../include/wx/xti.h:806
 msgid "AddToPropertyCollection called w/o valid adder"
-msgstr ""
+msgstr "AddToPropertyCollection chiamata senza 'valid adder'"
 
 #: ../src/html/helpctrl.cpp:106
 #, c-format
@@ -431,7 +431,7 @@ msgstr "Tutti i file (*.*)|*.*"
 
 #: ../src/common/xtistrm.cpp:383
 msgid "Already Registered Object passed to SetObjectClassInfo"
-msgstr ""
+msgstr "Oggetto già registrato passato a SetObjectClassInfo"
 
 #: ../src/unix/dialup.cpp:362
 msgid "Already dialling ISP."
@@ -698,8 +698,12 @@ msgstr "Impossibile aprire la chiave '%s' del registro di sistema"
 
 #: ../src/common/zstream.cpp:142
 #, c-format
-msgid "Can't read from inflate stream: %s\n"
-msgstr "Impossibile leggere dal flusso di decompressione: %s\n"
+msgid ""
+"Can't read from inflate stream: %s\n"
+""
+msgstr ""
+"Impossibile leggere dal flusso di decompressione: %s\n"
+""
 
 #: ../src/common/zstream.cpp:121
 msgid "Can't read inflate stream: unexpected EOF in underlying stream."
@@ -739,8 +743,12 @@ msgstr "Impossibile impostare il valore di '%s'"
 
 #: ../src/common/zstream.cpp:276
 #, c-format
-msgid "Can't write to deflate stream: %s\n"
-msgstr "Impossibile scrivere new flusso di compressione: %s\n"
+msgid ""
+"Can't write to deflate stream: %s\n"
+""
+msgstr ""
+"Impossibile scrivere new flusso di compressione: %s\n"
+""
 
 #: ../src/common/dlgcmn.cpp:240
 #: ../src/generic/dirdlgg.cpp:155
@@ -1090,7 +1098,7 @@ msgstr "Impossibile terminare il thread"
 
 #: ../src/common/xtistrm.cpp:161
 msgid "Create Parameter not found in declared RTTI Parameters"
-msgstr ""
+msgstr "Create Parameter non trovato in declared RTTI Parameters"
 
 #: ../src/generic/dirdlgg.cpp:265
 msgid "Create directory"
@@ -1226,7 +1234,7 @@ msgstr "Finito."
 #: ../src/common/xtixml.cpp:271
 #, c-format
 msgid "Doubly used id : %d"
-msgstr ""
+msgstr "Doppio utilizzo di id : %d"
 
 #: ../src/generic/fdrepdlg.cpp:151
 msgid "Down"
@@ -1464,8 +1472,12 @@ msgstr "Impossibile connettersi: %s"
 #: ../src/unix/utilsunx.cpp:459
 #: ../src/unix/utilsunx.cpp:475
 #, c-format
-msgid "Failed to execute '%s'\n"
-msgstr "Impossibile eseguire '%s'\n"
+msgid ""
+"Failed to execute '%s'\n"
+""
+msgstr ""
+"Impossibile eseguire '%s'\n"
+""
 
 #: ../src/msw/dialup.cpp:678
 #, c-format
@@ -1777,7 +1789,7 @@ msgstr "Avanti"
 
 #: ../src/common/xtixml.cpp:235
 msgid "Forward hrefs are not supported"
-msgstr ""
+msgstr "Forward hrefs non supportata"
 
 #: ../src/html/helpfrm.cpp:722
 #, c-format
@@ -1822,15 +1834,15 @@ msgstr "German Std Fanfold, 8 1/2 x 12 in"
 
 #: ../include/wx/xti.h:802
 msgid "GetProperty called w/o valid getter"
-msgstr ""
+msgstr "GetProperty chiamato senza un 'valid getter'"
 
 #: ../include/wx/xti.h:862
 msgid "GetPropertyCollection called on a generic accessor"
-msgstr ""
+msgstr "GetPropertyCollection chiamato su  'generic accessor'"
 
 #: ../include/wx/xti.h:810
 msgid "GetPropertyCollection called w/o valid collection getter"
-msgstr ""
+msgstr "GetPropertyCollection chiamato senza un valido 'collection getter'"
 
 #: ../src/common/image.cpp:1499
 msgid "GetUnusedColour:: No Unused Color in image "
@@ -1956,15 +1968,15 @@ msgstr "IFF: errore sconosciuto!!!"
 
 #: ../src/common/xtistrm.cpp:258
 msgid "Illegal Object Class (Non-wxEvtHandler) as Event Source"
-msgstr ""
+msgstr "Object Class (Non-wxEvtHandler) come Event Source non consentito"
 
 #: ../include/wx/xti.h:1606
 msgid "Illegal Parameter Count for ConstructObject Method"
-msgstr ""
+msgstr "Parameter Count per ConstructObject non consentito"
 
 #: ../include/wx/xti.h:1679
 msgid "Illegal Parameter Count for Create Method"
-msgstr ""
+msgstr "Parameter Count per Create Method non consentito"
 
 #: ../src/generic/dirctrlg.cpp:683
 #: ../src/generic/filedlgg.cpp:711
@@ -2017,7 +2029,7 @@ msgstr "Indiano (ISO-8859-12)"
 
 #: ../src/common/xtistrm.cpp:702
 msgid "Internal error, illegal wxCustomTypeInfo"
-msgstr ""
+msgstr "Errore interno, wxCustomTypeInfo non consentito"
 
 #: ../src/common/imagtiff.cpp:211
 msgid "Invalid TIFF image index."
@@ -2046,11 +2058,11 @@ msgstr "File di blocco '%s' non valido."
 #: ../src/common/xtistrm.cpp:363
 #: ../src/common/xtistrm.cpp:378
 msgid "Invalid or Null Object ID passed to GetObjectClassInfo"
-msgstr ""
+msgstr "ID Oggetto Invalid o Null passato a GetObjectClassInfo"
 
 #: ../src/common/xtistrm.cpp:393
 msgid "Invalid or Null Object ID passed to HasObjectClassInfo"
-msgstr ""
+msgstr "ID Oggetto Invalid o Null passato a HasObjectClassInfo"
 
 #: ../src/common/regex.cpp:182
 #, c-format
@@ -2135,7 +2147,7 @@ msgstr "Registro salvato nel file '%s'."
 #: ../include/wx/xti.h:469
 #: ../include/wx/xti.h:473
 msgid "Long Conversions not supported"
-msgstr ""
+msgstr "Long conversion non supportata"
 
 #: ../src/gtk/mdi.cpp:442
 msgid "MDI child"
@@ -2289,7 +2301,6 @@ msgid "No matching page found yet"
 msgstr "Pagina corrispondente non ancora trovata"
 
 #: ../src/unix/sound.cpp:89
-#, fuzzy
 msgid "No sound"
 msgstr "Nessun suono"
 
@@ -2329,7 +2340,7 @@ msgstr "OK"
 
 #: ../src/common/xtixml.cpp:263
 msgid "Objects must have an id attribute"
-msgstr ""
+msgstr "L'oggetto deve avere un ID ed un attributo"
 
 #: ../src/common/docview.cpp:1197
 #: ../src/common/docview.cpp:1525
@@ -2442,16 +2453,16 @@ msgstr "Dimensione del foglio"
 
 #: ../src/common/xtistrm.cpp:423
 msgid "Passing a already registered object to SetObject"
-msgstr ""
+msgstr "Passato un oggetto già registrato a SetObject"
 
 #: ../src/common/xtistrm.cpp:641
 msgid "Passing a already registered object to SetObjectName"
-msgstr ""
+msgstr "Passato un oggetto già registrato a SetObjectName"
 
 #: ../src/common/xtistrm.cpp:434
 #: ../src/common/xtistrm.cpp:654
 msgid "Passing an unkown object to GetObject"
-msgstr ""
+msgstr "Passato un oggetto sconosciuto a GetObject"
 
 #: ../src/generic/filedlgg.cpp:425
 msgid "Permissions"
@@ -2486,8 +2497,12 @@ msgstr ""
 "oppure il programma non funzionerà correttamente"
 
 #: ../src/common/prntbase.cpp:112
-msgid "Please wait while printing\n"
-msgstr "Stampa in corso\n"
+msgid ""
+"Please wait while printing\n"
+""
+msgstr ""
+"Stampa in corso\n"
+""
 
 #: ../src/generic/prntdlgg.cpp:427
 #: ../src/generic/prntdlgg.cpp:637
@@ -2738,7 +2753,7 @@ msgstr "Atteso separatore dopo l'opzione '%s'."
 
 #: ../include/wx/xti.h:798
 msgid "SetProperty called w/o valid setter"
-msgstr ""
+msgstr "SetProperty chiamata senza un 'valid setter'"
 
 #: ../src/common/dlgcmn.cpp:230
 msgid "Setup"
@@ -2827,7 +2842,7 @@ msgstr "Stato: "
 
 #: ../src/common/xtistrm.cpp:251
 msgid "Streaming delegates for not already streamed objects not yet supported"
-msgstr ""
+msgstr "Streaming con oggetti non stream non ancora supportato"
 
 #: ../src/msw/colour.cpp:38
 #, c-format
@@ -2837,7 +2852,7 @@ msgstr "Specifica di colore '%s' non valida"
 #: ../include/wx/xti.h:396
 #: ../include/wx/xti.h:400
 msgid "String conversions not supported"
-msgstr ""
+msgstr "Conversione a stringa non supportata"
 
 #: ../contrib/src/xrc/xmlres.cpp:676
 #, c-format
@@ -3031,7 +3046,7 @@ msgstr "Tipo"
 #: ../src/common/xtixml.cpp:351
 #: ../src/common/xtixml.cpp:498
 msgid "Type must have enum - long conversion"
-msgstr ""
+msgstr "Tipo deve avere enumeratore - convertito a long"
 
 #: ../src/common/paper.cpp:152
 msgid "US Std Fanfold, 14 7/8 x 11 in"
@@ -3094,7 +3109,7 @@ msgstr "Errore DDE %08x sconosciuto"
 
 #: ../src/common/xtistrm.cpp:368
 msgid "Unknown Object passed to GetObjectClassInfo"
-msgstr ""
+msgstr "Oggetto non conosciuto passato a GetObjectClassInfo"
 
 #: ../src/common/fmapbase.cpp:674
 #, c-format
@@ -3600,7 +3615,7 @@ msgstr "predefinito"
 
 #: ../src/common/xtistrm.cpp:841
 msgid "delegate has no type info"
-msgstr ""
+msgstr "Delegato non type info"
 
 #: ../src/common/datetime.cpp:3483
 msgid "eighteenth"
@@ -3700,7 +3715,7 @@ msgstr "gmtime() fallita"
 
 #: ../src/common/xtixml.cpp:479
 msgid "incorrect event handler string, missing dot"
-msgstr ""
+msgstr "Event handler si stringa non corretto, manca punto"
 
 #: ../src/msw/dialup.cpp:841
 msgid "initiate"
@@ -3775,7 +3790,7 @@ msgstr "num"
 
 #: ../src/common/xtixml.cpp:258
 msgid "objects cannot have XML Text Nodes"
-msgstr ""
+msgstr "L'oggetto non può avere nodi XML Text"
 
 #: ../src/html/chm.cpp:340
 msgid "out of memory"
