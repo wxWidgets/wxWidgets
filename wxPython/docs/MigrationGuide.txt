@@ -441,6 +441,110 @@ BTW, wx.Platform will probably be deprecated in the future.
 
 
 
+ActiveX
+-------
+
+Lindsay Mathieson's newest wxActiveX_ class has been wrapped into a new
+extension module called wx.activex.  It is very generic and dynamic
+and should allow hosting of arbitray ActiveX controls within your
+wxPython apps.  So far I've tested it with IE, PDF, and Flash
+controls, (and there are new samples in the demo and also library
+modules supporting these.)
+
+.. _wxActiveX: http://members.optusnet.com.au/~blackpaw1/wxactivex.html
+
+The new wx.activex module contains a bunch of code, but the most
+important things to look at are ActiveXWindow and ActiveXEvent.
+ActiveXWindow derives from wxWindow and the constructor accepts a
+CLSID for the ActiveX Control that should be created.  (There is also
+a CLSID class that can convert from a progID or a CLSID String.)  The
+ActiveXWindow class simply adds methods that allow you to query some
+of the TypeInfo exposed by the ActiveX object, and also to get/set
+properties or call methods by name.  The Python implementation
+automatically handles converting parameters and return values to/from
+the types expected by the ActiveX code as specified by the TypeInfo,
+(just bool, integers, floating point, strings and None/Empty so far,
+but more can be handled later.)
+
+That's pretty much all there is to the class, as I mentioned before it
+is very generic and dynamic.  Very little is hard-coded and everything
+that is done with the actual ActiveX control is done at runtime and
+referenced by property or method name.  Since Python is such a dynamic
+language this is a very good match.  I thought for a while about doing
+some Python black-magic and making the specific methods/properties of
+the actual ActiveX control "appear" at runtime, but then decided that
+it would be better and more understandable to do it via subclassing.
+So there is a utility class in wx.activex that given an existing
+ActiveXWindow instance can generate a .py module containing a derived
+class with real methods and properties that do the Right Thing to
+reflect those calls to the real ActiveX control.  There is also a
+script/tool module named genaxmodule that given a CLSID or progID and
+a class name, will generate the module for you.  There are a few
+examples of the output of this tool in the wx.lib package.  See
+iewin.py, pdfwin.py and flashwin.py.
+
+Currently the genaxmodule tool will tweak some of the names it
+generates, but this can be controled if you would like to do it
+differently by deriving your own class from GernerateAXModule,
+overriding some methods and then using this class from a tool like
+genaxmodule.  [TODO: make specifying a new class on genaxmodule's
+command-line possible.]  The current default behavior is that any
+event names that start with "On" will have the "On" dropped, property
+names are converted to all lower case, and if any name is a Python
+keyword it will have an underscore appended to it.  GernerateAXModule
+does it's best when generating the code in the new module, but it can
+only be as good as the TypeInfo data available from the ActiveX
+control so sometimes some tweaking will be needed.  For example, the
+IE web browser control defines the Flags parameter of the Navigate2
+method as required, but MSDN says it is optional.
+
+It is intended that this new wx.activex module will replace both the
+older version of Lindsay's code available in iewin.IEHtmlWindow, and
+also the wx.lib.activexwraper module.  Probably the biggest
+differences you'l ecounted in migrating activexwrapper-based code
+(besides events working better without causing deadlocks) is that
+events are no longer caught by overriding methods in your derived
+class.  Instead ActiveXWindow uses the wx event system and you bind
+handlers for the ActiveX events exactly the same way you do for any wx
+event.  There is just one extra step needed and that is creating an
+event ID from the ActiveX event name, and if you use the genaxmodule
+tool then this extra step will be handled for you there.  For example,
+for the StatusTextChange event in the IE web browser control, this
+code is generated for you::
+
+    wxEVT_StatusTextChange = wx.activex.RegisterActiveXEvent('StatusTextChange')
+    EVT_StatusTextChange = wx.PyEventBinder(wxEVT_StatusTextChange, 1)
+
+and you would use it in your code like this::
+
+    self.Bind(iewin.EVT_StatusTextChange, self.UpdateStatusText, self.ie)
+
+When the event happens and your event handler function is called the
+event properties from the ActiveX control (if any) are converted to
+attributes of the event object passed to the handler.  (Can you say
+'event' any more times in a single sentence? ;-) ) For example the
+StatusTextChange event will also send the text that should be put into
+the status line as an event parameter named "Text" and you can access
+it your handlers as an attribute of the evnt object like this::
+
+    def UpdateStatusText(self, evt):
+        self.SetStatusText(evt.Text)
+
+These event object attributes should be considered read-only since
+support for output parameters on the events is not yet implemented.
+But that could/should change in the future.
+
+So how do you know what methods, events and properties that am ActiveX
+control supports?  There is a funciton in wx.activex named GetAXInfo
+that returns a printable summary of the TypeInfo from the ActiveX
+instance passed in.  You can use this as an example of how to browse
+the TypeInfo provided, and there is also a copy of this function's
+output appended as a comment to the modules produced by the
+genaxmodule tool.  Beyond that you'll need to consult the docs
+provided by the makers of the ActiveX control that you are using.
+
+
+
 Other Stuff
 -----------
 

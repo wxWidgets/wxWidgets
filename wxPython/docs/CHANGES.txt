@@ -87,6 +87,26 @@ Added wx.PlatformInfo which is a tuple containing strings that
 describe the platform and build options of wxPython.  See the
 MigrationGuide for more details.
 
+Created a new extension module "activex" from Lindsay Mathieson's
+newest wxActiveX_ class.  (The existing iewin module used an older
+version of this code, but only exposed the wxIEHtmlWin class.)  This
+new module will (in theory ;-) ) allow you to host arbitrary ActiveX
+controls in a wx.Window, **without** requiring the use of the win32com
+and other PyWin32 modules!  This should eliminate the cronic problems
+that have resulted from minor mismatches in how PyWin32 handles the
+GIL and tstate when making callbacks, etc.  The older iewin module
+will be left in this release as the new stuff is not fully backwards
+compatible, but you should migrate your code to the wx.activex version
+of IEHtmlWindow, or the implementation in wx.lib.iewin, so the old one
+can be eventually removed.  Additionally, I've always considered that
+the wx.lib.activexwrapper module is an ugly hack that I only included
+in the lib because I couldn't figure out anything better.  Well now we
+have something that, if it isn't already, has the potential to be
+better.  So consider migrating away from using activexwrapper as well.
+Please see the MigrationGuide for more details on using the new
+module.
+
+.. _wxActiveX: http://members.optusnet.com.au/~blackpaw1/wxactivex.html
 
 
 

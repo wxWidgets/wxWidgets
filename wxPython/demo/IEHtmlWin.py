@@ -2,10 +2,6 @@
 #
 # o Updated for wx namespace
 # 
-# 11/28/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o iewin.py is missing
-# 
 
 import  wx
 

@@ -19,6 +19,7 @@ scriptdir = os.getcwd()
 scripts = [ ("img2png",    0),
             ("img2py",     0),
             ("img2xpm",    0),
+            ("genaxmodule",0),
             ("xrced",      1),
             ("pyshell",    1),
             ("pycrust",    1),

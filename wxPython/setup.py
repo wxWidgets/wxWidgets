@@ -67,6 +67,7 @@ BUILD_DLLWIDGET = 0# Build a module that enables unknown wx widgets
 
                    # Internet Explorer wrapper (experimental)
 BUILD_IEWIN = (os.name == 'nt')
+BUILD_ACTIVEX = (os.name == 'nt')  # new version of IEWIN
 
 
 CORE_ONLY = 0      # if true, don't build any of the above
@@ -186,7 +187,7 @@ if os.name == 'nt':
 
 # Boolean (int) flags
 for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC', 'BUILD_XRC',
-             'BUILD_GIZMOS', 'BUILD_DLLWIDGET', 'BUILD_IEWIN',
+             'BUILD_GIZMOS', 'BUILD_DLLWIDGET', 'BUILD_IEWIN', 'BUILD_ACTIVEX',
              'CORE_ONLY', 'PREP_ONLY', 'USE_SWIG', 'UNICODE',
              'UNDEF_NDEBUG', 'NO_SCRIPTS', 'BUILD_RENAMERS',
              'FINAL', 'HYBRID', ]:
@@ -463,6 +464,7 @@ if CORE_ONLY:
     BUILD_GIZMOS = 0
     BUILD_DLLWIDGET = 0
     BUILD_IEWIN = 0
+    BUILD_ACTIVEX = 0
 
 if debug:
     FINAL  = 0
@@ -1135,6 +1137,39 @@ if BUILD_IEWIN:
                              ] + swig_sources,
 
                     include_dirs =  includes + CONTRIBS_INC,
+                    define_macros = defines,
+
+                    library_dirs = libdirs,
+                    libraries = libs,
+
+                    extra_compile_args = cflags,
+                    extra_link_args = lflags,
+                    )
+
+    wxpExtensions.append(ext)
+
+
+#----------------------------------------------------------------------
+# Define the ACTIVEX extension module (experimental)
+#----------------------------------------------------------------------
+
+if BUILD_ACTIVEX:
+    msg('Preparing ACTIVEX...')
+    location = 'contrib/activex'
+    axloc = opj(location, "wxie")
+
+    swig_files = ['activex.i', ]
+
+    swig_sources = run_swig(swig_files, location, '', PKGDIR,
+                            USE_SWIG, swig_force, swig_args, swig_deps +
+                            [ '%s/_activex_ex.py' % location])
+
+
+    ext = Extension('_activex', ['%s/IEHtmlWin.cpp' % axloc,
+                                 '%s/wxactivex.cpp' % axloc,
+                                 ] + swig_sources,
+
+                    include_dirs =  includes + [ axloc ],
                     define_macros = defines,
 
                     library_dirs = libdirs,

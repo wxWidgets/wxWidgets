@@ -144,8 +144,20 @@ void wxPyEndBlockThreads();
 
 #endif // wxPyUSE_EXPORTED_API
 
-#define wxPyBLOCK_THREADS(stmt) { wxPyBeginBlockThreads(); stmt; wxPyEndBlockThreads(); }
-#define wxPyRaiseNotImplemented() wxPyBLOCK_THREADS(PyErr_SetNone(PyExc_NotImplementedError))
+
+// A macro that will help to execute simple statments wrapped in
+// StartBlock/EndBlockThreads calls
+#define wxPyBLOCK_THREADS(stmt) \
+    { wxPyBeginBlockThreads(); stmt; wxPyEndBlockThreads(); }
+
+// Raise the NotImplementedError exception  (blocking threads)
+#define wxPyRaiseNotImplemented() \
+    wxPyBLOCK_THREADS(PyErr_SetNone(PyExc_NotImplementedError))
+
+// Raise any exception witha string value  (blocking threads)
+#define wxPyErr_SetString(err, str) \
+    wxPyBLOCK_THREADS(PyErr_SetString(err, str))
+
 
 //---------------------------------------------------------------------------
 // These are helpers used by the typemaps

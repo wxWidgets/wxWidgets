@@ -39,6 +39,9 @@ _treeList = [
         'Cursor',
         'PyPlot',
         'ImageAlpha',
+        'ActiveX_FlashWindow',
+        'ActiveX_IEHtmlWindow',
+        'ActiveX_PDFWindow',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -126,6 +129,9 @@ _treeList = [
     
     # controls coming from other libraries
     ('More Windows/Controls', [
+        'ActiveX_FlashWindow',
+        'ActiveX_IEHtmlWindow',
+        'ActiveX_PDFWindow',
         #'RightTextCtrl',     deprecated as we have wxTE_RIGHT now.
         'Calendar',
         'CalendarCtrl',
@@ -137,7 +143,7 @@ _treeList = [
         'FloatBar',  
         'FloatCanvas',
         'HtmlWindow',
-        'IEHtmlWin',
+        ##'IEHtmlWin',
         'IntCtrl',
         'MVCTree',   
         'MaskedEditControls',
@@ -219,7 +225,7 @@ _treeList = [
 
     # need libs not coming with the demo
     ('Objects using an external library', [
-        'ActiveXWrapper_Acrobat',
+        ##'ActiveXWrapper_Acrobat',
         ##'ActiveXWrapper_IE',      # currently has tstate problems...
         'GLCanvas',
         #'PlotCanvas', # deprecated, use PyPlot
