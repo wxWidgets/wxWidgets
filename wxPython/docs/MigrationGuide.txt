@@ -480,3 +480,12 @@ there are compatibility aliases for much of the above items.
 
 The wxWave class has been renamed to wxSound, and now has a slightly
 different API.
+
+Instead of a very small 20x20 the default window size is now a more
+reasonable size, (currently 400x250 but that may change...)  If you
+don't specify a size, and the window/control class does not have any
+definition of it's own "best size" (most controls do) then the new
+default will be used.  If you have code that accidentally depends on
+the smaller size then things will look a bit odd.  To work around this
+just give those windows an explicit size when created.
+
