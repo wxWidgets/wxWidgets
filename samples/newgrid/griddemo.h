@@ -68,6 +68,7 @@ public:
 
     void OnQuit( wxCommandEvent& );
     void About( wxCommandEvent& );
+    void OnVTable( wxCommandEvent& );
 
     enum
     {
@@ -91,6 +92,7 @@ public:
         ID_SET_CELL_FG_COLOUR,
         ID_SET_CELL_BG_COLOUR,
         ID_ABOUT,
+        ID_VTABLE,
 
         ID_TESTFUNC
     };
@@ -102,11 +104,38 @@ class MyGridCellRenderer : public wxGridCellStringRenderer
 {
 public:
     virtual void Draw(wxGrid& grid,
+                      wxGridCellAttr& attr,
                       wxDC& dc,
                       const wxRect& rect,
                       int row, int col,
                       bool isSelected);
 };
+
+
+class BigGridTable : public wxGridTableBase {
+public:
+    long GetNumberRows() { return 10000; }
+    long GetNumberCols() { return 10000; }
+
+    wxString GetValue( int row, int col ) {
+        wxString str;
+        str.Printf("(%d, %d)", row, col);
+        return str;
+    }
+
+    void SetValue( int , int , const wxString&  ) {}
+    bool IsEmptyCell( int , int  ) { return FALSE; }
+};
+
+class BigGridFrame : public wxFrame {
+public:
+    BigGridFrame();
+
+private:
+    wxGrid*       m_grid;
+    BigGridTable* m_table;
+};
+
 
 #endif
 

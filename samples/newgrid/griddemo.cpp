@@ -86,6 +86,7 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
 
     EVT_MENU( ID_ABOUT, GridFrame::About )
     EVT_MENU( wxID_EXIT, GridFrame::OnQuit )
+    EVT_MENU( ID_VTABLE, GridFrame::OnVTable)
 
     EVT_GRID_LABEL_LEFT_CLICK( GridFrame::OnLabelLeftClick )
     EVT_GRID_CELL_LEFT_CLICK( GridFrame::OnCellLeftClick )
@@ -107,6 +108,8 @@ GridFrame::GridFrame()
     int logW = gridW, logH = 80;
 
     wxMenu *fileMenu = new wxMenu;
+    fileMenu->Append( ID_VTABLE, "&Virtual table test");
+    fileMenu->AppendSeparator();
     fileMenu->Append( wxID_EXIT, "E&xit\tAlt-X" );
 
     wxMenu *viewMenu = new wxMenu;
@@ -583,6 +586,12 @@ void GridFrame::OnQuit( wxCommandEvent& WXUNUSED(ev) )
     Close( TRUE );
 }
 
+void GridFrame::OnVTable(wxCommandEvent& )
+{
+    BigGridFrame* win = new BigGridFrame();
+    win->Show(TRUE);
+}
+
 // ----------------------------------------------------------------------------
 // MyGridCellRenderer
 // ----------------------------------------------------------------------------
@@ -591,14 +600,29 @@ void GridFrame::OnQuit( wxCommandEvent& WXUNUSED(ev) )
 // possible to alter the appearance of the cell beyond what the attributes
 // allow
 void MyGridCellRenderer::Draw(wxGrid& grid,
+                              wxGridCellAttr& attr,
                               wxDC& dc,
                               const wxRect& rect,
                               int row, int col,
                               bool isSelected)
 {
-    wxGridCellStringRenderer::Draw(grid, dc, rect, row, col, isSelected);
+    wxGridCellStringRenderer::Draw(grid, attr, dc, rect, row, col, isSelected);
 
     dc.SetPen(*wxGREEN_PEN);
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
     dc.DrawEllipse(rect);
+}
+
+
+// ----------------------------------------------------------------------------
+// BigGridFrame and BigGridTable:  Sample of a non-standard table
+// ----------------------------------------------------------------------------
+
+BigGridFrame::BigGridFrame()
+    : wxFrame(NULL, -1, "Plugin Virtual Table", wxDefaultPosition,
+              wxSize(500, 450))
+{
+    m_grid = new wxGrid(this, -1, wxDefaultPosition, wxDefaultSize);
+    m_table = new BigGridTable;
+    m_grid->SetTable(m_table, TRUE);
 }
