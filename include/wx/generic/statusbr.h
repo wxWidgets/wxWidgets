@@ -115,7 +115,6 @@ protected:
 
   int               m_borderX;
   int               m_borderY;
-  wxFont            m_defaultStatusBarFont;
   wxPen             m_mediumShadowPen;
   wxPen             m_hilightPen;
 

@@ -90,8 +90,10 @@ bool wxStatusBarGeneric::Create(wxWindow *parent,
   parent->GetChildren().DeleteObject(this);
 #endif
   InitColours();
-
-  SetFont(m_defaultStatusBarFont);
+  
+#ifdef __WXPM__
+  SetFont(*wxSMALL_FONT);
+#endif
 
   // Set the height according to the font and the border size
   wxClientDC dc(this);
@@ -368,15 +370,9 @@ void wxStatusBarGeneric::InitColours()
     SetBackgroundColour(vColour);
     vColour.Set(wxString("BLACK"));
     SetForegroundColour(vColour);
-    m_defaultStatusBarFont = *wxSMALL_FONT;
 #else
     m_mediumShadowPen = wxPen("GREY", 1, wxSOLID);
     m_hilightPen = wxPen("WHITE", 1, wxSOLID);
-#endif
-
-#ifndef __WXPM__
-    m_defaultStatusBarFont = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
-    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
 #endif
 }
 
