@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<makefile>
+
+    <template id="sub">
+        <dir>$(id)</dir>
+        <dependency-of>all</dependency-of>
+    </template>
+
+    <!-- all samples are enumerated here: -->
+    <subproject id="artprov" template="sub"/>
+    <subproject id="dialogs" template="sub"/>
+    <subproject id="image" template="sub"/>
+    <subproject id="minimal" template="sub"/>
+
+</makefile>

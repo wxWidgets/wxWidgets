@@ -132,6 +132,7 @@ DEFAULT_DEFAULT_wxUSE_X11=0
 
 PROGRAM_EXT=
 SO_SUFFIX=so
+SAMPLES_RPATH_FLAG=
 
 dnl to support a new system, you need to add its canonical name (as determined
 dnl by config.sub or specified by the configure command line) to this "case"
@@ -2886,14 +2887,18 @@ if test -n "$TOOLKIT" ; then
     TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WX${TOOLKIT}__"
 fi
 
+UNICODE=0
 lib_unicode_suffix=
 if test "$wxUSE_UNICODE" = "yes"; then
     lib_unicode_suffix=u
+    UNICODE=1
 fi
 
 lib_debug_suffix=
+BUILD=release
 if test "$wxUSE_DEBUG_FLAG" = "yes"; then
     lib_debug_suffix=d
+    BUILD=debug
 fi
 
 WX_VERSION_TAG=`echo WX${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}_${WX_RELEASE} | tr "[[a-z]]" "[[A-Z]]"`
@@ -2991,7 +2996,9 @@ if test "$wxUSE_SHARED" = "yes"; then
     esac
 fi
 
+SHARED=0
 if test "$wxUSE_SHARED" = "yes"; then
+    SHARED=1
 
     dnl install targets
     if test "$wxUSE_OPENGL" = "yes"; then
@@ -3063,6 +3070,7 @@ if test "$wxUSE_SHARED" = "yes"; then
             dnl substitute this in makelib.env for the contrib libs
             WX_TARGET_LIBRARY_SONAME="-Wl,-soname,\$(TARGETLIB_LINK1)"
         fi
+        SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(top_builddir)/lib"
       ;;
 
       *-*-solaris2* )
@@ -3070,11 +3078,38 @@ if test "$wxUSE_SHARED" = "yes"; then
             dnl newer versions of gcc need -isystem to compile X headers on
             dnl Solaris (which use old style C syntax)
             CPPFLAGS="$CPPFLAGS -isystem /usr/openwin/include"
+
+            dnl gcc may use Sun's ld, in which case -rpath gives a confusing
+            dnl error message. We have to try both -Wl,-rpath and -Wl,-R:
+            saveLdflags="$LDFLAGS"
+            LDFLAGS="$saveLdflags -Wl,-rpath,/"
+            AC_MSG_CHECKING([if the linker accepts -rpath])
+            AC_TRY_LINK(
+                [],[],
+                [
+                    AC_MSG_RESULT([yes])
+                    SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(top_builddir)/lib"
+                ],
+                [
+                    AC_MSG_RESULT([no])
+                    AC_MSG_CHECKING([if the linker accepts -R])
+                    LDFLAGS="$saveLdflags -Wl,-R,/"
+                    AC_TRY_LINK(
+                        [],[],
+                        [
+                             AC_MSG_RESULT([yes])
+                             SAMPLES_RPATH_FLAG="-Wl,-R,\$(top_builddir)/lib"],
+                        [
+                            AC_MSG_RESULT([no])
+                        ])                    
+                ])
+            LDFLAGS="$saveLdflags"
         else
             SHARED_LD="${CXX} -G -o"
             PIC_FLAG="-KPIC"
             SONAME_FLAGS="-h ${WX_LIBRARY_NAME_SHARED}"
             SONAME_FLAGS_GL="-h ${WX_LIBRARY_NAME_SHARED_GL}"
+            SAMPLES_RPATH_FLAG="-R\$(top_builddir)/lib"
         fi
       ;;
 
@@ -5489,19 +5524,43 @@ else
     WXCONFIG_INCLUDE="$TOOLKIT_INCLUDE"
 fi
 
+if test "x$wxUSE_UNIVERSAL" = "xyes" ; then
+    WXUNIV=1
+else
+    WXUNIV=0
+fi
+
+AC_SUBST(wxUSE_ZLIB)
+AC_SUBST(wxUSE_REGEX)
+AC_SUBST(wxUSE_ODBC)
+AC_SUBST(wxUSE_LIBJPEG)
+AC_SUBST(wxUSE_LIBPNG)
+AC_SUBST(wxUSE_LIBTIFF)
+
+EXTRALIBS="$LDFLAGS $LDFLAGS_VERSIONING $LIBS $DMALLOC_LIBS"
+
+dnl FIXME -- must use configure option!
+MONOLITHIC=1
+
+AC_SUBST(WXUNIV)
+AC_SUBST(MONOLITHIC)
+AC_SUBST(EXTRALIBS)
+AC_SUBST(UNICODE)
+AC_SUBST(BUILD)
+AC_SUBST(SHARED)
+TOOLKIT_LOWERCASE=`echo $TOOLKIT | tr [[A-Z]] [[a-z]]`
+AC_SUBST(TOOLKIT_LOWERCASE)
+AC_SUBST(TOOLKIT_VERSION)
+AC_SUBST(SAMPLES_RPATH_FLAG)
+
+AC_BAKEFILE
+
 dnl C/C++ compiler options used to compile wxWindows
 if test "$GXX" = yes ; then
     dnl CXXWARNINGS="-Wall -W -Wcast-qual -Werror"
     CXXWARNINGS="-Wall"
     dnl should enable this one day...
     dnl CXXWARNINGS="-Wall -Werror"
-
-    dnl Add this *after* all compile tests, we don't need or want generated
-    dnl depfiles until actually building the lib
-    if test "$wxUSE_NO_DEPS" = "no" ; then
-        CFLAGS="-MMD $CFLAGS"
-        CXXFLAGS="-MMD $CXXFLAGS"
-    fi
 fi
 
 EXTRA_CFLAGS="$WXDEBUG $WXODBCFLAG $PROFILE $OPTIMISE"
@@ -5610,7 +5669,6 @@ AC_SUBST(LDFLAGS_VERSIONING)
 AC_SUBST(LDFLAGS_EXE)
 AC_SUBST(OPENGL_LIBS)
 AC_SUBST(DMALLOC_LIBS)
-AC_SUBST(EXTRADEFS)
 AC_SUBST(WX_VERSION_TAG)
 
 dnl additional resurces settings
@@ -5671,8 +5729,14 @@ wx_cv_use_resources=${wxUSE_RESOURCES}
 export wx_cv_path_samplesubdirs wx_cv_if_gnu_make \
        wx_cv_path_ifs wx_cv_program_ext \
        wx_cv_target_library wx_cv_target_library_gl wx_cv_target_libtype \
-       wx_cv_library_basename wx_cv_release wx_cv_current wx_cv_revision wx_cv_age \
-       wx_cv_use_gui wx_cv_use_resources
+       wx_cv_library_basename \
+       wx_cv_release wx_cv_current wx_cv_revision wx_cv_age \
+       wx_cv_use_gui wx_cv_use_resources \
+       CFLAGS LDFLAGS CXXFLAGS CPPFLAGS \
+       top_builddir USE_GUI MONOLITHIC \
+       wxUSE_ZLIB wxUSE_REGEX wxUSE_ODBC wxUSE_LIBJPEG wxUSE_LIBPNG \
+       wxUSE_LIBTIFF EXTRALIBS UNICODE BUILD SHARED TOOLKIT TOOLKIT_LOWERCASE \
+       TOOLKIT_VERSION SAMPLES_RPATH_FLAG WXUNIV
 
 AC_CONFIG_SUBDIRS(demos samples utils contrib)
 
@@ -5682,9 +5746,6 @@ dnl colon)
 AC_OUTPUT([
             wx-config
             version-script
-            src/make.env
-            src/makeprog.env
-            src/makelib.env
             Makefile
           ],
           [
