@@ -369,7 +369,12 @@
     #define  wxAtoi      _ttoi
     #define  wxAtol      _ttol
     /* #define  wxAtof   _tttof -- notice that there is no such thing (why?) */
-    #define  wxGetenv    _tgetenv
+    /* there are no env vars at all under CE, so no _tgetenv neither */
+    #ifdef __WXWINCE__
+        inline wxChar *wxGetenv(const wxChar *) { return NULL; }
+    #else
+        #define  wxGetenv    _tgetenv
+    #endif
     #define  wxSystem    _tsystem
 
     /* time.h functions */
