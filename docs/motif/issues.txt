@@ -9,8 +9,6 @@ See also: todo.txt.
 
 - wxTextCtrl doesn't work as a stream buffer in Linux/gcc.
 
-- No wxSpinButton.
-
 - No wxToolTip (but see wxToolBar for a way of implementing it).
 
 - Limited clipboard support (text only) and no drag and drop.
