@@ -104,7 +104,7 @@ int CALLBACK wxFontEnumeratorProc(LPLOGFONT lplf, LPTEXTMETRIC lptm,
 wxFontEnumeratorHelper::wxFontEnumeratorHelper(wxFontEnumerator *fontEnum)
 {
     m_fontEnum = fontEnum;
-    m_charset = -1;
+    m_charset = DEFAULT_CHARSET;
     m_fixedOnly = FALSE;
     m_enumEncodings = FALSE;
 }
@@ -178,7 +178,7 @@ bool wxFontEnumeratorHelper::OnFont(const LPLOGFONT lf,
             wxConstCast(this, wxFontEnumeratorHelper)->m_charsets.Add(cs);
 
             wxFontEncoding enc = wxGetFontEncFromCharSet(cs);
-            return m_fontEnum->OnFontEncoding(m_family,
+            return m_fontEnum->OnFontEncoding(lf->lfFaceName,
                                               wxFontMapper::GetEncodingName(enc));
         }
         else
