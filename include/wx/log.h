@@ -16,8 +16,6 @@
 #pragma interface "log.h"
 #endif
 
-#include "wx/intl.h"
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -122,6 +120,10 @@ protected:
     // you override DoLog() you might not need it at all
   virtual void DoLogString(const char *szString);
 
+  // helpers
+    // put the time stamp in the current format into the string
+  wxString TimeStamp() const;
+
 private:
   // static variables
   // ----------------
@@ -211,7 +213,7 @@ public:
   // window operations
     // show/hide the log window
   void Show(bool bShow = TRUE);
-    // get the frame pointer (you shouldn't close it!)
+    // retrieve the pointer to the frame
   wxFrame *GetFrame() const;
 
   // accessors
@@ -224,6 +226,17 @@ public:
   // default: we collect all messages in the window, but also let the default
   // processing take place)
   void PassMessages(bool bDoPass) { m_bPassMessages = bDoPass; }
+
+  // base class virtuals
+    // we don't need it ourselves, but we pass it to the previous logger
+  virtual void Flush();
+
+  // overridables
+    // called immediately after the log frame creation allowing for
+    // any extra initializations
+  virtual void OnFrameCreate(wxFrame *frame);
+    // called right before the log frame is going to be deleted
+  virtual void OnFrameDelete(wxFrame *frame);
 
 protected:
   virtual void DoLog(wxLogLevel level, const char *szString);

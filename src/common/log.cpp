@@ -249,11 +249,10 @@ wxLog *wxLog::SetActiveTarget(wxLog *pLogger)
   return pOldLogger;
 }
 
-void wxLog::DoLog(wxLogLevel level, const char *szString)
+wxString wxLog::TimeStamp() const
 {
   wxString str;
 
-  // prepend a timestamp if not disabled
   if ( !IsEmpty(m_szTimeFormat) ) {
     char szBuf[128];
     time_t timeNow;
@@ -265,6 +264,14 @@ void wxLog::DoLog(wxLogLevel level, const char *szString)
     strftime(szBuf, WXSIZEOF(szBuf), m_szTimeFormat, ptmNow);
     str = szBuf;
   }
+
+  return str;
+}
+
+void wxLog::DoLog(wxLogLevel level, const char *szString)
+{
+  // prepend a timestamp if not disabled
+  wxString str = TimeStamp();
 
   switch ( level ) {
     case wxLOG_FatalError:
@@ -295,11 +302,6 @@ void wxLog::DoLog(wxLogLevel level, const char *szString)
     case wxLOG_Trace:
     case wxLOG_Debug:
       #ifdef __WXDEBUG__
-        #ifdef  __WIN32__
-          // in addition to normal logging, also send the string to debugger
-          // (don't prepend "Debug" here: it will go to debug window anyhow)
-          ::OutputDebugString(str + szString + "\n\r");
-        #endif  //Win32
         DoLogString(str << (level == wxLOG_Trace ? _("Trace") : _("Debug"))
                         << ": " << szString);
       #endif
@@ -453,15 +455,22 @@ void wxLogGui::DoLog(wxLogLevel level, const char *szString)
     case wxLOG_Trace:
     case wxLOG_Debug:
       #ifdef __WXDEBUG__
-        #ifdef  __WIN32__
-          OutputDebugString(szString);
-          OutputDebugString("\n\r");
-        #else   //!WIN32
-          // send them to stderr
-          fprintf(stderr, "%s: %s\n",
-                  level == wxLOG_Trace ? _("Trace") : _("Debug"), szString);
-          fflush(stderr);
-        #endif  // WIN32
+        {
+          wxString strTime = TimeStamp();
+
+          #ifdef  __WIN32__
+              // don't prepend debug/trace here: it goes to the debug window
+              // anyhow, but do put a timestamp
+              OutputDebugString(strTime + szString + "\n\r");
+          #else   //!WIN32
+            // send them to stderr
+            fprintf(stderr, "%s %s: %s\n",
+                    strTime.c_str(),
+                    level == wxLOG_Trace ? _("Trace") : _("Debug"),
+                    szString);
+            fflush(stderr);
+          #endif  // WIN32
+        }
       #endif
       break;
 
@@ -488,21 +497,25 @@ void wxLogGui::DoLog(wxLogLevel level, const char *szString)
 }
 
 // ----------------------------------------------------------------------------
-// wxLogWindow implementation
+// wxLogWindow and wxLogFrame implementation
 // ----------------------------------------------------------------------------
 
 // log frame class
+// ---------------
 class wxLogFrame : public wxFrame
 {
 public:
-  // ctor
-  wxLogFrame(const char *szTitle);
+  // ctor & dtor
+  wxLogFrame(wxLogWindow *log, const char *szTitle);
+  virtual ~wxLogFrame();
 
   // menu callbacks
   void OnClose(wxCommandEvent& event);
   void OnCloseWindow(wxCloseEvent& event);
   void OnSave (wxCommandEvent& event);
   void OnClear(wxCommandEvent& event);
+
+  void OnIdle(wxIdleEvent&);
 
   // accessors
   wxTextCtrl *TextCtrl() const { return m_pTextCtrl; }
@@ -515,7 +528,11 @@ private:
     Menu_Clear
   };
 
-  wxTextCtrl *m_pTextCtrl;
+  // instead of closing just hide the window to be able to Show() it later
+  void DoClose() { Show(FALSE); }
+
+  wxTextCtrl  *m_pTextCtrl;
+  wxLogWindow *m_log;
 
   DECLARE_EVENT_TABLE()
 };
@@ -527,17 +544,17 @@ BEGIN_EVENT_TABLE(wxLogFrame, wxFrame)
   EVT_MENU(Menu_Clear, wxLogFrame::OnClear)
 
   EVT_CLOSE(wxLogFrame::OnCloseWindow)
+
+  EVT_IDLE(wxLogFrame::OnIdle)
 END_EVENT_TABLE()
 
-wxLogFrame::wxLogFrame(const char *szTitle)
+wxLogFrame::wxLogFrame(wxLogWindow *log, const char *szTitle)
           : wxFrame(NULL, -1, szTitle)
 {
-  // we don't want to be a top-level frame because it would prevent the
-  // application termination when all other frames are closed
-  wxTopLevelWindows.DeleteObject(this);
+  m_log = log;
 
   // @@ kludge: wxSIMPLE_BORDER is simply to prevent wxWindows from creating
-  //    a rich edit control instead of a normal one we want
+  //    a rich edit control instead of a normal one we want in wxMSW
   m_pTextCtrl = new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition,
                                wxDefaultSize,
                                wxSIMPLE_BORDER |
@@ -552,26 +569,35 @@ wxLogFrame::wxLogFrame(const char *szTitle)
   // create menu
   wxMenuBar *pMenuBar = new wxMenuBar;
   wxMenu *pMenu = new wxMenu;
-  pMenu->Append(Menu_Save,  _("&Save..."));
-  pMenu->Append(Menu_Clear, _("C&lear"));
+  pMenu->Append(Menu_Save,  _("&Save..."), _("Save log contents to file"));
+  pMenu->Append(Menu_Clear, _("C&lear"), _("Clear the log contents"));
   pMenu->AppendSeparator();
-  pMenu->Append(Menu_Close, _("&Close"));
+  pMenu->Append(Menu_Close, _("&Close"), _("Close this window"));
   pMenuBar->Append(pMenu, _("&Log"));
   SetMenuBar(pMenuBar);
 
-  // @@ what about status bar? needed (for menu prompts)?
+  // status bar for menu prompts
+  CreateStatusBar();
+
+  m_log->OnFrameCreate(this);
 }
 
 void wxLogFrame::OnClose(wxCommandEvent& WXUNUSED(event))
 {
-  // just hide the window
-  Show(FALSE);
+  DoClose();
 }
 
 void wxLogFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
-  // just hide the window
-  Show(FALSE);
+  DoClose();
+}
+
+void wxLogFrame::OnIdle(wxIdleEvent& WXUNUSED(event))
+{
+  // if we're the last frame to stay, delete log frame letting the 
+  // application to close
+  if ( wxTopLevelWindows.Number() == 1 )
+    Destroy();
 }
 
 void wxLogFrame::OnSave(wxCommandEvent& WXUNUSED(event))
@@ -646,11 +672,18 @@ void wxLogFrame::OnClear(wxCommandEvent& WXUNUSED(event))
   m_pTextCtrl->Clear();
 }
 
+wxLogFrame::~wxLogFrame()
+{
+  m_log->OnFrameDelete(this);
+}
+
+// wxLogWindow
+// -----------
 wxLogWindow::wxLogWindow(const char *szTitle, bool bShow, bool bDoPass)
 {
   m_bPassMessages = bDoPass;
 
-  m_pLogFrame = new wxLogFrame(szTitle);
+  m_pLogFrame = new wxLogFrame(this, szTitle);
   m_pOldLog = wxLog::SetActiveTarget(this);
 
   if ( bShow )
@@ -662,9 +695,12 @@ void wxLogWindow::Show(bool bShow)
   m_pLogFrame->Show(bShow);
 }
 
-wxFrame *wxLogWindow::GetFrame() const
+void wxLogWindow::Flush()
 {
-  return m_pLogFrame;
+  if ( m_pOldLog != NULL )
+    m_pOldLog->Flush();
+
+  m_bHasMessages = FALSE; 
 }
 
 void wxLogWindow::DoLog(wxLogLevel level, const char *szString)
@@ -680,6 +716,8 @@ void wxLogWindow::DoLog(wxLogLevel level, const char *szString)
 
   // and this will format it nicely and call our DoLogString()
   wxLog::DoLog(level, szString);
+
+  m_bHasMessages = TRUE;
 }
 
 void wxLogWindow::DoLogString(const char *szString)
@@ -700,9 +738,27 @@ void wxLogWindow::DoLogString(const char *szString)
   // @@@ TODO
 }
 
+wxFrame *wxLogWindow::GetFrame() const
+{
+  return m_pLogFrame;
+}
+
+void wxLogWindow::OnFrameCreate(wxFrame *frame)
+{
+}
+
+void wxLogWindow::OnFrameDelete(wxFrame *frame)
+{
+  m_pLogFrame = NULL;
+}
+
 wxLogWindow::~wxLogWindow()
 {
-  m_pLogFrame->Close(TRUE);
+  // may be NULL if log frame already auto destroyed itself
+  delete m_pLogFrame;
+
+  // delete the old log
+  delete m_pOldLog;
 }
 
 #endif  //WX_TEST_MINIMAL
