@@ -40,7 +40,7 @@
 // macros
 // ----------------------------------------------------------------------------
 
-#define IS_VALID_PAGE(nPage) (((nPage) >= 0) && ((nPage) < GetPageCount()))
+#define IS_VALID_PAGE(nPage) (((nPage) >= 0) && ((size_t(nPage)) < GetPageCount()))
 
 // ----------------------------------------------------------------------------
 // constants
@@ -381,7 +381,7 @@ wxNotebookPage *wxNotebook::DoRemovePage(size_t nPage)
         UpdateSpinBtn();
     }
 
-    int count = GetPageCount();
+    size_t count = GetPageCount();
     if ( count )
     {
         if ( m_sel == (size_t)nPage )

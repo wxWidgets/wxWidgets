@@ -181,10 +181,10 @@ const wxNotebookPageInfoList& wxNotebook::GetPageInfos() const
 {
     wxNotebookPageInfoList* list = const_cast< wxNotebookPageInfoList* >( &m_pageInfos ) ;
     WX_CLEAR_LIST( wxNotebookPageInfoList , *list ) ;
-    for( int i = 0 ; i < GetPageCount() ; ++i )
+    for( size_t i = 0 ; i < GetPageCount() ; ++i )
     {
         wxNotebookPageInfo *info = new wxNotebookPageInfo() ;
-        info->Create( const_cast<wxNotebook*>(this)->GetPage(i) , GetPageText(i) , GetSelection() == i , GetPageImage(i) ) ;
+        info->Create( const_cast<wxNotebook*>(this)->GetPage(i) , GetPageText(i) , GetSelection() == int(i) , GetPageImage(i) ) ;
         list->Append( info ) ;
     }
     return m_pageInfos ;
@@ -300,7 +300,7 @@ int wxNotebook::SetSelection(size_t nPage)
 {
   wxCHECK_MSG( IS_VALID_PAGE(nPage), -1, wxT("notebook page out of range") );
 
-  if ( nPage != m_nSelection )
+  if ( int(nPage) != m_nSelection )
   {
     wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, m_windowId);
     event.SetSelection(nPage);
@@ -473,12 +473,12 @@ wxNotebookPage *wxNotebook::DoRemovePage(size_t nPage)
     {
         // change the selected page if it was deleted or became invalid
         int selNew;
-        if ( m_nSelection == GetPageCount() )
+        if ( m_nSelection == int(GetPageCount()) )
         {
             // last page deleted, make the new last page the new selection
             selNew = m_nSelection - 1;
         }
-        else if ( nPage <= m_nSelection )
+        else if ( int(nPage) <= m_nSelection )
         {
             // we must show another page, even if it has the same index
             selNew = m_nSelection;
@@ -619,7 +619,7 @@ bool wxNotebook::InsertPage(size_t nPage,
 
     // if the inserted page is before the selected one, we must update the
     // index of the selected page
-    if ( nPage <= m_nSelection )
+    if ( int(nPage) <= m_nSelection )
     {
         // one extra page added
         m_nSelection++;

@@ -258,7 +258,7 @@ void wxGenericMDIParentFrame::ActivateNext()
 {
     if (m_pClientWindow && m_pClientWindow->GetSelection() != -1)
     {
-        int active = m_pClientWindow->GetSelection() + 1;
+        size_t active = m_pClientWindow->GetSelection() + 1;
         if (active >= m_pClientWindow->GetPageCount())
             active = 0;
 
@@ -419,7 +419,7 @@ wxGenericMDIChildFrame::~wxGenericMDIChildFrame()
         wxGenericMDIClientWindow *pClientWindow = pParentFrame->GetClientWindow();
 
         // Remove page if still there
-        int pos;
+        size_t pos;
         for (pos = 0; pos < pClientWindow->GetPageCount(); pos++)
         {
             if (pClientWindow->GetPage(pos) == this)
@@ -518,7 +518,7 @@ void wxGenericMDIChildFrame::SetTitle(const wxString& title)
 
         if (pClientWindow != NULL)
         {
-            int pos;
+            size_t pos;
             for (pos = 0; pos < pClientWindow->GetPageCount(); pos++)
             {
                 if (pClientWindow->GetPage(pos) == this)
@@ -546,7 +546,7 @@ void wxGenericMDIChildFrame::Activate()
 
         if (pClientWindow != NULL)
         {
-            int pos;
+            size_t pos;
             for (pos = 0; pos < pClientWindow->GetPageCount(); pos++)
             {
                 if (pClientWindow->GetPage(pos) == this)
@@ -783,7 +783,7 @@ void wxGenericMDIClientWindow::OnSize(wxSizeEvent& event)
 {
     wxNotebook::OnSize(event);
 
-    int pos;
+    size_t pos;
     for (pos = 0; pos < GetPageCount(); pos++)
     {
         ((wxGenericMDIChildFrame *)GetPage(pos))->ApplyMDIChildFrameRect();
