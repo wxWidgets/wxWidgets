@@ -607,7 +607,12 @@ class WXDLLEXPORT wxListCtrl: public wxControl
     bool DoPopupMenu( wxMenu *menu, int x, int y )
       { return m_mainWin->PopupMenu( menu, x, y ); }
     void SetFocus()
-      { m_mainWin->SetFocus(); }
+       {
+          /* The test in window.cpp fails as we are a composite
+             window, so it checks against "this", but not m_mainWin. */
+          if(FindFocus() != this)
+             m_mainWin->SetFocus();
+       }
 
   // implementation
 

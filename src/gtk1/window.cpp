@@ -2475,7 +2475,7 @@ void wxWindow::GetTextExtent( const wxString& string,
 void wxWindow::SetFocus()
 {
     wxCHECK_RET( (m_widget != NULL), wxT("invalid window") );
-
+    
     if (m_wxwindow)
     {
         if (!GTK_WIDGET_HAS_FOCUS (m_wxwindow))

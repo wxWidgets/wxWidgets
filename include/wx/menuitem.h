@@ -45,7 +45,6 @@ class WXDLLEXPORT wxMenu;
 class WXDLLEXPORT wxMenuItemBase : public wxObject
 {
 public:
-    wxMenuItemBase() { }
 
     // creation
     static wxMenuItem *New(wxMenu *parentMenu = (wxMenu *)NULL,
@@ -118,6 +117,10 @@ protected:
     bool          m_isCheckable;    // can be checked?
     bool          m_isChecked;      // is checked?
     bool          m_isEnabled;      // is enabled?
+
+    // some compilers need a default constructor here, do not use
+    wxMenuItemBase() 
+        { }
 };
 
 // ----------------------------------------------------------------------------
