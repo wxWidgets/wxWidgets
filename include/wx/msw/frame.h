@@ -78,6 +78,9 @@ public:
     // process menu command: returns TRUE if processed
     bool ProcessCommand(int id);
 
+    // make the window modal (all other windows unresponsive)
+    virtual void MakeModal(bool modal = TRUE);
+
     // Set icon
     virtual void SetIcon(const wxIcon& icon);
 

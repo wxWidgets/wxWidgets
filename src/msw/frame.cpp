@@ -791,6 +791,20 @@ void wxFrame::IconizeChildFrames(bool bIconize)
     }
 }
 
+
+// make the window modal (all other windows unresponsive)
+void wxFrame::MakeModal(bool modal)
+{
+    if (modal) {
+        wxEnableTopLevelWindows(FALSE);
+        Enable(TRUE);           // keep this window enabled
+    }
+    else {
+        wxEnableTopLevelWindows(TRUE);
+    }
+}
+
+
 // ===========================================================================
 // message processing
 // ===========================================================================
