@@ -63,7 +63,7 @@ def MakeActiveXClass(CoClass, eventClass=None, eventObj=None):
 
     # determine the base classes
     axEventClass = CoClass.default_source
-    baseClasses = [wx.Window, pywin.mfc.activex.Control, CoClass, axEventClass]
+    baseClasses = [pywin.mfc.activex.Control, wx.Window, CoClass, axEventClass]
     if eventClass:
         baseClasses.append(eventClass)
     baseClasses = tuple(baseClasses)
