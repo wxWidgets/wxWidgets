@@ -799,6 +799,7 @@ WX_ARG_ENABLE(shared,      [  --enable-shared         create shared library code
 WX_ARG_ENABLE(optimise,    [  --enable-optimise       create optimised code], wxUSE_OPTIMISE)
 WX_ARG_ENABLE(debug,       [  --enable-debug          same as debug_flag and debug_info], wxUSE_DEBUG)
 WX_ARG_ENABLE(stl,         [  --enable-stl            use STL for containers], wxUSE_STL)
+WX_ARG_ENABLE(omf,         [  --enable-omf            use OMF object format on OS/2], wxUSE_OMF)
 
 if test "$wxUSE_DEBUG" = "yes"; then
   DEFAULT_wxUSE_DEBUG_FLAG=yes
@@ -1141,6 +1142,14 @@ dnl Path separator; ':' for unix, ';' for OS/2
 case "${host}" in
   *-pc-os2_emx | *-pc-os2-emx )
     PATH_IFS=';'
+    dnl Handle OMF support
+    if test "$wxUSE_OMF" = "yes"; then
+      AR=emxomfar
+      RANLIB=:
+      LDFLAGS="-Zomf $LDFLAGS"
+      CFLAGS="-Zomf $CFLAGS"
+      CXXFLAGS="-Zomf $CXXFLAGS"
+    fi
   ;;
   *)
     PATH_IFS=':'
@@ -1535,6 +1544,9 @@ case "${host}" in
           else
               LIBS="$LIBS -lstdc++"
           fi
+      fi
+      if test "$wxUSE_OMF" = "yes"; then
+        LDFLAGS="$LDFLAGS -Zlinker /PMTYPE:PM -Zlinker /EXEPACK"
       fi
       dnl (end of OS/2-only piece)
   ;;
