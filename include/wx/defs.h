@@ -1096,8 +1096,8 @@ enum wxBorder
 #define wxSL_VERTICAL        wxVERTICAL   // 8
 // The next one is obsolete - use scroll events instead
 #define wxSL_NOTIFY_DRAG     0x0000
-#define wxSL_AUTOTICKS       0x0010
-// #define wxSL_MANUALTICKS     0x0010
+#define wxSL_TICKS           0x0010
+#define wxSL_AUTOTICKS       wxSL_TICKS // we don't support manual ticks
 #define wxSL_LABELS          0x0020
 #define wxSL_LEFT            0x0040
 #define wxSL_TOP             0x0080

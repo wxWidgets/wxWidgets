@@ -172,6 +172,17 @@ public:
                                  const wxRect& rect,
                                  wxOrientation orient,
                                  int flags = 0);
+    virtual void DrawSliderTicks(wxDC& dc,
+                                 const wxRect& rect,
+                                 const wxSize& sizeThumb,
+                                 wxOrientation orient,
+                                 int start,
+                                 int end,
+                                 int step,
+                                 int flags)
+    {
+        // we don't have the ticks in GTK version
+    }
 
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
                                  wxBitmap *bmpPressed,
@@ -212,6 +223,7 @@ public:
     virtual wxSize GetTabPadding() const { return wxSize(6, 6); }
 
     virtual wxCoord GetSliderDim() const { return 15; }
+    virtual wxCoord GetSliderTickLen() const { return 0; }
     virtual wxRect GetSliderShaftRect(const wxRect& rect,
                                       wxOrientation orient) const;
     virtual wxSize GetSliderThumbSize(const wxRect& rect,

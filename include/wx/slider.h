@@ -64,8 +64,8 @@ public:
     virtual void SetThumbLength(int lenPixels) = 0;
     virtual int GetThumbLength() const = 0;
 
-    // warning: all subsequent methods are currently only implemented in wxMSW
-    //          under Win95 and are silently ignored on other platforms
+    // warning: most of subsequent methods are currently only implemented in
+    //          wxMSW under Win95 and are silently ignored on other platforms
 
     virtual void SetTickFreq(int WXUNUSED(n), int WXUNUSED(pos)) { }
     virtual int GetTickFreq() const { return 0; }

@@ -384,23 +384,32 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
 #endif // TEST_SCROLL
 
 #ifdef TEST_SLIDER
-    wxSlider *slider = new wxSlider(this, -1, 83, 0, 100,
+#if 1
+    static const int style = wxSL_TICKS;
+#else
+    static const int style = 0;
+#endif
+
+    wxSlider *slider = new wxSlider(this, -1, 83, 0, 10,
                                     wxPoint(10, 30), wxDefaultSize,
-                                    wxSL_HORIZONTAL | wxSL_BOTTOM | wxSL_LABELS);
+                                    wxSL_HORIZONTAL
+                                    | wxSL_BOTTOM
+                                    | wxSL_LABELS
+                                    | style);
     slider->SetValue(17);
 
-    (void)new wxSlider(this, -1, 50, 0, 100, wxPoint(10, 80), wxDefaultSize,
-                       wxSL_HORIZONTAL);
+    (void)new wxSlider(this, -1, 50, 0, 10, wxPoint(10, 80), wxDefaultSize,
+                       wxSL_HORIZONTAL | style);
 
-    (void)new wxSlider(this, -1, 100, 0, 100, wxPoint(10, 130), wxDefaultSize,
-                       wxSL_HORIZONTAL | wxSL_TOP | wxSL_LABELS);
+    (void)new wxSlider(this, -1, 10, 0, 10, wxPoint(10, 130), wxDefaultSize,
+                       wxSL_HORIZONTAL | wxSL_TOP | wxSL_LABELS | style);
 
-    (void)new wxSlider(this, -1, 0, 0, 100, wxPoint(160, 30), wxDefaultSize,
-                       wxSL_VERTICAL | wxSL_LEFT | wxSL_LABELS);
-    (void)new wxSlider(this, -1, 50, 0, 100, wxPoint(210, 30), wxDefaultSize,
-                       wxSL_VERTICAL);
-    (void)new wxSlider(this, -1, 100, 0, 100, wxPoint(260, 30), wxDefaultSize,
-                       wxSL_VERTICAL | wxSL_RIGHT | wxSL_LABELS);
+    (void)new wxSlider(this, -1, 0, 0, 10, wxPoint(160, 30), wxDefaultSize,
+                       wxSL_VERTICAL | wxSL_LEFT | wxSL_LABELS | style);
+    (void)new wxSlider(this, -1, 50, 0, 10, wxPoint(210, 30), wxDefaultSize,
+                       wxSL_VERTICAL | style);
+    (void)new wxSlider(this, -1, 10, 0, 10, wxPoint(260, 30), wxDefaultSize,
+                       wxSL_VERTICAL | wxSL_RIGHT | wxSL_LABELS | style);
 #endif // TEST_SLIDER
 
 #ifdef TEST_SPIN

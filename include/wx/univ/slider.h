@@ -81,6 +81,9 @@ public:
     virtual void SetThumbLength(int lenPixels);
     virtual int GetThumbLength() const;
 
+    virtual void SetTickFreq(int n, int WXUNUSED(dummy) = 0);
+    virtual int GetTickFreq() const { return m_tickFreq; }
+
     // wxUniv-specific methods
     // -----------------------
 
@@ -93,6 +96,9 @@ public:
 
     // do we have labels?
     bool HasLabels() const { return (GetWindowStyle() & wxSL_LABELS) != 0; }
+
+    // do we have ticks?
+    bool HasTicks() const { return (GetWindowStyle() & wxSL_TICKS) != 0; }
 
     // implement wxControlWithThumb interface
     virtual wxWindow *GetWindow() { return this; }
@@ -182,6 +188,9 @@ private:
         m_max,
         m_value;
 
+    // the tick frequence (default is 1)
+    int m_tickFreq;
+
     // the line and page increments (logical units)
     int m_lineSize,
         m_pageSize;
@@ -189,9 +198,10 @@ private:
     // the size of the thumb (in pixels)
     int m_thumbSize;
 
-    // the part of the client area reserved for the label and the part for the
-    // slider itself
+    // the part of the client area reserved for the label, the ticks and the
+    // part for the slider itself
     wxRect m_rectLabel,
+           m_rectTicks,
            m_rectSlider;
 
     DECLARE_EVENT_TABLE()

@@ -205,6 +205,16 @@ public:
                                  wxOrientation orient,
                                  int flags = 0) = 0;
 
+    // draw the slider ticks
+    virtual void DrawSliderTicks(wxDC& dc,
+                                 const wxRect& rect,
+                                 const wxSize& sizeThumb,
+                                 wxOrientation orient,
+                                 int start,
+                                 int end,
+                                 int step = 1,
+                                 int flags = 0) = 0;
+
     // misc functions
     // --------------
 
@@ -280,6 +290,9 @@ public:
     // get the default size of the slider in lesser dimension (i.e. height of a
     // horizontal slider or width of a vertical one)
     virtual wxCoord GetSliderDim() const = 0;
+
+    // get the length of the slider ticks displayed along side slider
+    virtual wxCoord GetSliderTickLen() const = 0;
 
     // get the slider shaft rect from the total slider rect
     virtual wxRect GetSliderShaftRect(const wxRect& rect,
@@ -480,6 +493,16 @@ public:
                                  wxOrientation orient,
                                  int flags = 0)
         { m_renderer->DrawSliderThumb(dc, rect, orient, flags); }
+    virtual void DrawSliderTicks(wxDC& dc,
+                                 const wxRect& rect,
+                                 const wxSize& sizeThumb,
+                                 wxOrientation orient,
+                                 int start,
+                                 int end,
+                                 int step = 1,
+                                 int flags = 0)
+        { m_renderer->DrawSliderTicks(dc, rect, sizeThumb, orient,
+                                      start, end, start, flags); }
 
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
                                  wxBitmap *bmpPressed,
@@ -531,6 +554,8 @@ public:
 
     virtual wxCoord GetSliderDim() const
         { return m_renderer->GetSliderDim(); }
+    virtual wxCoord GetSliderTickLen() const
+        { return m_renderer->GetSliderTickLen(); }
     virtual wxRect GetSliderShaftRect(const wxRect& rect,
                                       wxOrientation orient) const
         { return GetSliderShaftRect(rect, orient); }

@@ -215,6 +215,14 @@ public:
                                  const wxRect& rect,
                                  wxOrientation orient,
                                  int flags = 0);
+    virtual void DrawSliderTicks(wxDC& dc,
+                                 const wxRect& rect,
+                                 const wxSize& sizeThumb,
+                                 wxOrientation orient,
+                                 int start,
+                                 int end,
+                                 int step = 1,
+                                 int flags = 0);
 
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
                                  wxBitmap *bmpPressed,
@@ -254,6 +262,7 @@ public:
     virtual wxSize GetTabPadding() const { return wxSize(6, 5); }
 
     virtual wxCoord GetSliderDim() const { return 20; }
+    virtual wxCoord GetSliderTickLen() const { return 4; }
     virtual wxRect GetSliderShaftRect(const wxRect& rect,
                                       wxOrientation orient) const;
     virtual wxSize GetSliderThumbSize(const wxRect& rect,
@@ -2076,6 +2085,74 @@ void wxWin32Renderer::DrawSliderThumb(wxDC& dc,
     dc.SetPen(m_penDarkGrey);
     DrawLine(dc, x3, y2 - 1, x2 - 1, y3, transpose);
     DrawLine(dc, x2 - 1, y3, x2 - 1, y, transpose);
+}
+
+void wxWin32Renderer::DrawSliderTicks(wxDC& dc,
+                                      const wxRect& rect,
+                                      const wxSize& sizeThumb,
+                                      wxOrientation orient,
+                                      int start,
+                                      int end,
+                                      int step,
+                                      int flags)
+{
+    if ( end == start )
+    {
+        // empty slider?
+        return;
+    }
+
+    // the variable names correspond to horizontal case, but they can be used
+    // for both orientations
+    wxCoord x1, x2, y1, y2, len, widthThumb;
+    if ( orient == wxHORIZONTAL )
+    {
+        x1 = rect.GetLeft();
+        x2 = rect.GetRight();
+
+        // draw from bottom to top to leave one pixel space between the ticks
+        // and the slider as Windows do
+        y1 = rect.GetBottom();
+        y2 = rect.GetTop();
+
+        len = rect.width;
+
+        widthThumb = sizeThumb.x;
+    }
+    else // vertical
+    {
+        x1 = rect.GetTop();
+        x2 = rect.GetBottom();
+
+        y1 = rect.GetRight();
+        y2 = rect.GetLeft();
+
+        len = rect.height;
+
+        widthThumb = sizeThumb.y;
+    }
+
+    // the first tick should be positioned in such way that a thumb drawn in
+    // the first position points down directly to it
+    x1 += widthThumb / 2;
+    x2 -= widthThumb / 2;
+
+    // this also means that we have slightly less space for the ticks in
+    // between the first and the last
+    len -= widthThumb;
+
+    dc.SetPen(m_penBlack);
+
+    int range = end - start;
+    for ( int n = 0; n < range; n++ )
+    {
+        wxCoord x = x1 + (len*n) / range;
+
+        DrawLine(dc, x, y1, x, y2, orient == wxVERTICAL);
+    }
+
+    // always draw the line at the end position
+    DrawLine(dc, x2, y1, x2, y2, orient == wxVERTICAL);
 }
 
 // ----------------------------------------------------------------------------

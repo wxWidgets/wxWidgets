@@ -28,8 +28,10 @@
 
    TODO:
 
-   1. support for ticks (probably only regular one) - search for TICKS
-   2. support for all orientations
+  +0. add ticks support
+   1. support for all orientations
+   2. draw the slider thumb highlighted when it is dragged
+  ?3. manual ticks support?
  */
 
 // ============================================================================
@@ -119,6 +121,8 @@ void wxSlider::Init()
     m_min =
     m_max =
     m_value = 0;
+
+    m_tickFreq = 1;
 
     m_lineSize =
     m_pageSize = 0;
@@ -320,6 +324,20 @@ int wxSlider::GetThumbLength() const
 }
 
 // ----------------------------------------------------------------------------
+// wxSlider ticks
+// ----------------------------------------------------------------------------
+
+void wxSlider::SetTickFreq(int n, int WXUNUSED(dummy))
+{
+    if ( n != m_tickFreq )
+    {
+        m_tickFreq = n;
+
+        Refresh();
+    }
+}
+
+// ----------------------------------------------------------------------------
 // wxSlider geometry
 // ----------------------------------------------------------------------------
 
@@ -362,6 +380,17 @@ wxSize wxSlider::DoGetBestClientSize() const
         size.y = height;
     }
 
+    // add space for ticks
+    if ( HasTicks() )
+    {
+        wxCoord lenTick = GetRenderer()->GetSliderTickLen();
+
+        if ( IsVert() )
+            size.x += lenTick;
+        else
+            size.y += lenTick;
+    }
+
     // if we have the label, reserve enough space for it
     if ( HasLabels() )
     {
@@ -372,8 +401,6 @@ wxSize wxSlider::DoGetBestClientSize() const
         else
             size.y += sizeLabels.y + SLIDER_LABEL_MARGIN;
     }
-
-    // TODO TICKS: add space for ticks on the other side of the label
 
     return size;
 }
@@ -406,25 +433,27 @@ void wxSlider::CalcGeometry()
        |                T      |  <-- this is the slider rect
        | HHHHHHHHHHHHHHHTHHHHH |
        |                T      |
+       | *  *  *  *  *  *  *  *|
        -------------------------
 
        LLL is m_rectLabel as calculated here and lll is the real rect used for
-       label drawing in OnDraw() (TTT indicated the thumb position)
+       label drawing in OnDraw() (TTT indicated the thumb position and *s are
+       the ticks)
 
        in the wxSL_VERTICAL | wxSL_RIGHT case the picture is like this:
 
-       ----- LLL
-       | H |
-       | H |
-       | H |
-       | H |
-       | H |
-       | H |
-       | H |
-       |TTT| lll
-       | H |
-       | H |
-       -----
+       ------ LLL
+       | H  |
+       | H *|
+       | H  |
+       | H *|
+       | H  |
+       | H *|
+       | H  |
+       |TTT*| lll
+       | H  |
+       | H *|
+       ------
     */
 
     wxRect rectTotal = GetClientRect();
@@ -476,6 +505,37 @@ void wxSlider::CalcGeometry()
     {
         // the slider takes the whole client rect
         m_rectSlider = rectTotal;
+    }
+
+    // now adjust for ticks too
+    if ( HasTicks() )
+    {
+        wxCoord lenTick = GetRenderer()->GetSliderTickLen();
+
+        if ( IsVert() )
+        {
+            m_rectSlider.width -= lenTick;
+        }
+        else // horizontal
+        {
+            m_rectSlider.height -= lenTick;
+        }
+
+        // note that we must compute m_rectSlider first as GetShaftRect() uses
+        // it
+        m_rectTicks = GetShaftRect();
+
+        if ( IsVert() )
+        {
+            m_rectTicks.x = m_rectSlider.x + m_rectSlider.width;
+            m_rectTicks.width = lenTick;
+        }
+        else // horizontal
+        {
+            m_rectTicks.y = m_rectSlider.y + m_rectSlider.height;
+            m_rectTicks.height = lenTick;
+        }
+
     }
 }
 
@@ -605,6 +665,13 @@ void wxSlider::DoDraw(wxControlRenderer *renderer)
 
     rend->DrawSliderThumb(dc, rectThumb, orient, flags);
 
+    // draw the ticks
+    if ( HasTicks() )
+    {
+        rend->DrawSliderTicks(dc, m_rectTicks, rectThumb.GetSize(), orient,
+                              m_min, m_max, m_tickFreq);
+    }
+
     // draw the label near the thumb
     if ( HasLabels() )
     {
@@ -628,8 +695,6 @@ void wxSlider::DoDraw(wxControlRenderer *renderer)
         rend->DrawLabel(dc, FormatValue(m_value), rectLabel,
                         flags & ~wxCONTROL_FOCUSED, align);
     }
-
-    // TODO TICKS: draw them
 }
 
 void wxSlider::RefreshThumb()
@@ -666,7 +731,7 @@ bool wxSlider::PerformAction(const wxControlAction& action,
     }
     else if ( action == wxACTION_SLIDER_LINE_UP )
     {
-        ChangeValueBy(GetLineSize());
+        ChangeValueBy(-GetLineSize());
     }
     else if ( action == wxACTION_SLIDER_PAGE_UP )
     {
