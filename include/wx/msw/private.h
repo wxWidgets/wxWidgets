@@ -236,13 +236,16 @@ struct WXDLLEXPORT wxCOLORMAP
 // this function is implemented in src/msw/window.cpp
 extern wxCOLORMAP *wxGetStdColourMap();
 
+// create a wxRect from Windows RECT
+inline wxRect wxRectFromRECT(const RECT& r)
+{
+    return wxRect(r.left, r.top, r.right - r.left, r.bottom - r.top);
+}
+
 // copy Windows RECT to our wxRect
 inline void wxCopyRECTToRect(const RECT& r, wxRect& rect)
 {
-    rect.y = r.top;
-    rect.x = r.left;
-    rect.width = r.right - r.left;
-    rect.height = r.bottom - r.top;
+    rect = wxRectFromRECT(r);
 }
 
 // translations between HIMETRIC units (which OLE likes) and pixels (which are
