@@ -277,7 +277,7 @@ public: \
          /* the cast is needed for MS VC++ 5.0 */ \
          { return (type *)((kbList::iterator *)this)->operator*() ; } \
    }; \
-   inline name(bool ownsEntriesFlag = TRUE) \
+   inline name(bool ownsEntriesFlag = true) \
       : kbList(ownsEntriesFlag) {} \
    \
    inline type *pop_back(void) \

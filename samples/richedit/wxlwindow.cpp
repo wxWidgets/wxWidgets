@@ -146,7 +146,7 @@ static bool IsDirectionKey(long keyCode);
 // ----------------------------------------------------------------------------
 
 wxLayoutWindow::wxLayoutWindow(wxWindow *parent)
-              : wxScrolledWindow(parent, -1,
+              : wxScrolledWindow(parent, wxID_ANY,
                                  wxDefaultPosition, wxDefaultSize,
                                  wxHSCROLL | wxVSCROLL |
                                  wxBORDER |
