@@ -145,7 +145,7 @@ enum
     ID_NEWMENU,
     ID_NEWMENUBAR,
     ID_NEWTOOLBAR,   
-    ID_NEWNODE = wxID_HIGHEST + 10000, // safely out of XMLID range :)
+    ID_NEWNODE = wxID_HIGHEST + 10000, // safely out of XRCID range :)
     ID_NEWSYBNODE = ID_NEWNODE + 20000
 };
 
@@ -297,7 +297,7 @@ void EditorFrame::LoadFile(const wxString& filename)
     m_Resource = new wxXmlRcEditDocument;
     m_Modified = FALSE;
     
-    if (!m_Resource->Load(filename))
+    if (!m_Resource->Load(filename, wxXML_IO_AUTO, wxLocale::GetSystemEncodingName()))
     {
         delete m_Resource;
         m_Resource = NULL;
