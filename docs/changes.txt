@@ -219,7 +219,7 @@ All:
 - sped up wxHTTP and wxFTP
 - added wxStringInput/OutputStreams
 - added wxFileConfig::Save(wxOutputStream)
-- fixed wxString's behavior with inserted null characters (RN) 
+- fixed wxString's behavior with inserted null characters
 
 All (GUI):
 
@@ -258,21 +258,21 @@ Unix:
   builds of wxWidgets and to return flags/libs for selected libraries only
 - wx-config has new --version-full option
 
-wxCOCOA:
+wxCocoa:
 
-- Added UNICODE layer for OSX so that you can build wxWidgets in UNICODE mode in OSX 10.2 (and possibly lower) with wxMAC and wxCOCOA (RN)
-- Fixed so that wxCOCOA runs in 10.2 (and possibly lower) (RN)
-- Tooltips now supported - Enable and SetDelay not implemented (RN)
-- wxSound now supported (RN)
-- wxDisplay now supported (RN)
-- Cursors (hopefully) now supported (RN)
+- added Unicode compatability layer for OSX 10.2
+- fixed so that wxCocoa runs in OSX 10.2 
+- Tooltips now supported
+- wxSound now supported
+- wxDisplay now supported 
+- Some stock cursors now supported 
 
 wxMac:
 
-- Fixed MLTE text control GetLineText and GetLineLength on OSX (RN)
-- Added OSX wxTaskBarIcon implementation for the OSX Dock (RN)
-- Added UNICODE layer for OSX so that you can build wxWidgets in UNICODE mode in OSX 10.2 (and possibly lower) with wxMAC and wxCOCOA (RN)
-- Made wxGetKeyState work with nearly all keys (RN)
+- fixed MLTE text control GetLineText and GetLineLength on OSX 
+- added OSX wxTaskBarIcon implementation for the OSX Dock 
+- added Unicode compatability layer for OSX 10.2
+- wxGetKeyState now works with nearly all wx key codes
 
 wxGTK:
 
