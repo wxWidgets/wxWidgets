@@ -61,6 +61,10 @@ class wxIDropTarget : public IDropTarget
 {
 public:
     wxIDropTarget(wxDropTarget *p);
+    // suppress gcc warning
+#ifdef __GNUG__
+    virtual
+#endif
     ~wxIDropTarget();
 
     // accessors for wxDropTarget
