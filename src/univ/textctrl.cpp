@@ -241,6 +241,14 @@ struct WXDLLEXPORT wxTextMultiLineData
     // horizontal band at the bottom of it
     wxRect m_rectTextReal;
 
+    // the x-coordinate of the caret before we started moving it vertically:
+    // this is used to ensure that moving the caret up and then down will
+    // return it to the same position as if we always round it in one direction
+    // we would shift it in that direction
+    //
+    // when m_xCaret == -1, we don't have any remembered position
+    wxCoord m_xCaret;
+
     // the def ctor
     wxTextMultiLineData()
     {
@@ -252,6 +260,8 @@ struct WXDLLEXPORT wxTextMultiLineData
 
         m_widthMax = -1;
         m_lineLongest = 0;
+
+        m_xCaret = -1;
     }
 };
 
@@ -1227,6 +1237,13 @@ void wxTextCtrl::SetInsertionPoint(wxTextPos pos)
     if ( pos != m_curPos )
     {
         DoSetInsertionPoint(pos);
+    }
+
+    if ( !IsSingleLine() )
+    {
+        // moving cursor should reset the stored abscissa (even if the cursor
+        // position didn't actually change!)
+        MData().m_xCaret = -1;
     }
 
     ClearSelection();
@@ -4134,6 +4151,11 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
     // has the text changed as result of this action?
     bool textChanged = FALSE;
 
+    // the remembered cursor abscissa for multiline text controls is usually
+    // reset after each user action but for ones which do use it (UP and DOWN
+    // for example) we shouldn't do it - as indicated by this flag
+    bool rememberAbscissa = FALSE;
+
     // the command this action corresponds to or NULL if this action doesn't
     // change text at all or can't be undone
     wxTextCtrlCommand *command = (wxTextCtrlCommand *)NULL;
@@ -4183,33 +4205,61 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
     }
     else if ( action == wxACTION_TEXT_UP )
     {
-        // move the cursor up by one ROW not by one LINE: this means that we
-        // should really use HitTest() and not just go to the same position in
-        // the previous line
-        wxPoint pt = GetCaretPosition() - m_rectText.GetPosition();
-        CalcUnscrolledPosition(pt.x, pt.y, &pt.x, &pt.y);
-        pt.y -= GetLineHeight();
-
-        wxTextCoord col, row;
-        if ( HitTestLogical(pt, &col, &row) != wxTE_HT_BEFORE )
+        if ( !IsSingleLine() )
         {
-            newPos = XYToPosition(col, row);
+            // move the cursor up by one ROW not by one LINE: this means that
+            // we should really use HitTest() and not just go to the same
+            // position in the previous line
+            wxPoint pt = GetCaretPosition() - m_rectText.GetPosition();
+            if ( MData().m_xCaret == -1 )
+            {
+                // remember the initial cursor abscissa
+                MData().m_xCaret = pt.x;
+            }
+            else
+            {
+                // use the remembered abscissa
+                pt.x = MData().m_xCaret;
+            }
+            rememberAbscissa = TRUE;
+            CalcUnscrolledPosition(pt.x, pt.y, &pt.x, &pt.y);
+            pt.y -= GetLineHeight();
+
+            wxTextCoord col, row;
+            if ( HitTestLogical(pt, &col, &row) != wxTE_HT_BEFORE )
+            {
+                newPos = XYToPosition(col, row);
+            }
         }
     }
     else if ( action == wxACTION_TEXT_DOWN )
     {
-        // see comments for wxACTION_TEXT_UP
-        wxPoint pt = GetCaretPosition() - m_rectText.GetPosition();
-        CalcUnscrolledPosition(pt.x, pt.y, &pt.x, &pt.y);
-        pt.y += GetLineHeight();
-
-        wxTextCoord col, row;
-        if ( HitTestLogical(pt, &col, &row) != wxTE_HT_BELOW )
+        if ( !IsSingleLine() )
         {
-            // note that wxTE_HT_BEYOND is ok: it happens when we go down from
-            // a longer line to a shorter one, for example (OTOH wxTE_HT_BEFORE
-            // can never happen)
-            newPos = XYToPosition(col, row);
+            // see comments for wxACTION_TEXT_UP
+            wxPoint pt = GetCaretPosition() - m_rectText.GetPosition();
+            if ( MData().m_xCaret == -1 )
+            {
+                // remember the initial cursor abscissa
+                MData().m_xCaret = pt.x;
+            }
+            else
+            {
+                // use the remembered abscissa
+                pt.x = MData().m_xCaret;
+            }
+            rememberAbscissa = TRUE;
+            CalcUnscrolledPosition(pt.x, pt.y, &pt.x, &pt.y);
+            pt.y += GetLineHeight();
+
+            wxTextCoord col, row;
+            if ( HitTestLogical(pt, &col, &row) != wxTE_HT_BELOW )
+            {
+                // note that wxTE_HT_BEYOND is ok: it happens when we go down
+                // from a longer line to a shorter one, for example (OTOH
+                // wxTE_HT_BEFORE can never happen)
+                newPos = XYToPosition(col, row);
+            }
         }
     }
     else if ( action == wxACTION_TEXT_LEFT )
@@ -4336,6 +4386,11 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
                 // clear the existing selection
                 ClearSelection();
             }
+        }
+
+        if ( !rememberAbscissa && !IsSingleLine() )
+        {
+            MData().m_xCaret = -1;
         }
     }
 
