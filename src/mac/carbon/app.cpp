@@ -1540,9 +1540,12 @@ void wxApp::MacHandleMouseDownEvent( WXEVENTREF evr )
                     }
                     else
                     {
+                        // Activate window first
+                        ::SelectWindow( window ) ;
+                        
+                        // Send event later
                         if ( win )
                             win->MacMouseDown( ev , windowPart ) ;
-                        ::SelectWindow( window ) ;
                     }
                 }
                 else

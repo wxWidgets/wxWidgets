@@ -35,11 +35,17 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
 
     m_bmpNormal = bitmap;
  
-    m_marginX = 0;
-    m_marginY = 0;
+    if (style & wxBU_AUTODRAW)
+    {
+        m_marginX = wxDEFAULT_BUTTON_MARGIN;
+        m_marginY = wxDEFAULT_BUTTON_MARGIN;
+    }
+    else
+    {
+        m_marginX = 0;
+        m_marginY = 0;
+    }
 
-    // int x = pos.x;
-    // int y = pos.y;
     int width = size.x;
     int height = size.y;
 
