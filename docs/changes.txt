@@ -181,6 +181,10 @@ OTHER CHANGES
 2.4.3
 -----
 
+All:
+
+- Spanish translations updated (Javier San Jose)
+
 wxMSW:
 
 - strip ampersands from strings returned by wxMenuBar::GetLabelTop()
