@@ -68,7 +68,8 @@
   BEGIN_EVENT_TABLE(wxNotebook, wxControl)
     EVT_NOTEBOOK_PAGE_CHANGED(-1, wxNotebook::OnSelChange)
 
-    EVT_WINDOW_CREATE(wxNotebook::OnWindowCreate)
+    // doesn't work yet EVT_WINDOW_CREATE(wxNotebook::OnWindowCreate)
+    EVT_SIZE(wxNotebook::OnWindowCreate)
 
     EVT_SET_FOCUS(wxNotebook::OnSetFocus)
 
