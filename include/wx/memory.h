@@ -56,23 +56,26 @@ void wxDebugFree(void * buf, bool isVect = FALSE);
     #define wxUSE_ARRAY_MEMORY_OPERATORS 0
 #elif !( defined (__VISUALC__) && (__VISUALC__ <= 1020) ) || defined( __MWERKS__)
     #define wxUSE_ARRAY_MEMORY_OPERATORS 1
+#elif defined (__SGI_CC_)
+    // only supported by -n32 compilers
+    #ifndef __EDG_ABI_COMPATIBILITY_VERSION
+        #define wxUSE_ARRAY_MEMORY_OPERATORS 0
+    #endif
 #else
+    // ::operator new[] is a recent C++ feature, so assume it's not supported
     #define wxUSE_ARRAY_MEMORY_OPERATORS 0
 #endif
 
 // Added JACS 25/11/98: needed for some compilers
 void * operator new (size_t size);
 
-#if wxUSE_ARRAY_MEMORY_OPERATORS
-void * operator new[] (size_t size);
-#endif
-
 void * operator new (size_t size, char * fileName, int lineNum);
 void operator delete (void * buf);
 
 #if wxUSE_ARRAY_MEMORY_OPERATORS
-void * operator new[] (size_t size, char * fileName, int lineNum);
-void operator delete[] (void * buf);
+    void * operator new[] (size_t size);
+    void * operator new[] (size_t size, char * fileName, int lineNum);
+    void operator delete[] (void * buf);
 #endif
 
 // VC++ 6.0

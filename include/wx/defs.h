@@ -128,31 +128,27 @@
 
 // Make sure the environment is set correctly
 #if defined(__WXMSW__) && defined(__X__)
-# error "Target can't be both X and Windows"
+    #error "Target can't be both X and Windows"
 #elif !defined(__WXMOTIF__) && !defined(__WXMSW__) && !defined(__WXGTK__) && \
       !defined(__WXMAC__) && !defined(__X__) && !defined(__WXQT__) && !defined(__WXSTUBS__)
-#error "No Target! Use -D[__WXMOTIF__|__WXGTK__|__WXMSW__|__WXMAC__|__WXQT__|__WXSTUBS__]"
+    #error "No Target! Use -D[__WXMOTIF__|__WXGTK__|__WXMSW__|__WXMAC__|__WXQT__|__WXSTUBS__]"
 #endif
 
 #if defined(__WXMOTIF__) || defined(__WXGTK__) || defined(__WXQT__) || defined(__WXSTUBS__)
+    // Bool is now obsolete, use bool instead
+    // typedef int Bool;
 
-// Bool is now obsolete, use bool instead
-// typedef int Bool;
-
-#ifndef TRUE
-# define TRUE  1
-# define FALSE 0
-# define Bool_DEFINED
-#endif
-
+    #ifndef TRUE
+        #define TRUE  1
+        #define FALSE 0
+        #define Bool_DEFINED
+    #endif
 #elif defined(__WXMSW__)
-
-#ifndef TRUE
-# define TRUE  1
-# define FALSE 0
-#endif
-
-#endif
+    #ifndef TRUE
+        #define TRUE  1
+        #define FALSE 0
+    #endif
+#endif // TRUE/FALSE
 
 // VC++ 4.0 is 1000.
 
@@ -172,12 +168,9 @@
 #elif defined(__BORLANDC__) && (__BORLANDC__ < 0x500)
     typedef unsigned int bool;
 #elif defined(__WATCOMC__)
-//    typedef unsigned int bool;
-
- #if (__WATCOMC__ < 1100)
-    typedef unsigned int bool;
- #endif
-
+    #if (__WATCOMC__ < 1100)
+        typedef unsigned int bool;
+    #endif
 #elif defined(__SUNCC__) || defined(__SUNPRO_CC)
     #ifdef __SUNPRO_CC
         // starting from version 5.0 Sun CC understands 'bool'
@@ -188,12 +181,11 @@
     #else
         #error "Unknown compiler: only Sun's CC and gcc are currently recognised."
     #endif // Sun CC
-#endif
-
-#if ( defined(__VISUALC__) && (__VISUALC__ <= 800) ) || defined(__GNUWIN32__) || (defined(__BORLANDC__) && defined(__WIN16__)) || defined(__SC__) || defined(__SALFORDC__)
-// Not a good idea, because later system files (e.g. windows.h)
-// may try to define it. Use wxByte instead.
-// #define byte unsigned char
+#elif defined(__SGI_CC__)
+    // test is taken from SGI "C++ Programming Guide"
+    #ifndef _BOOL 
+        typedef unsigned char bool; 
+    #endif // _BOOL
 #endif
 
 typedef unsigned char wxByte;
