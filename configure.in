@@ -1170,6 +1170,11 @@ dnl   defines CC with the compiler to use
 dnl   defines GCC with yes if using gcc
 dnl   defines GCC empty if not using gcc
 dnl   defines CFLAGS
+dnl
+dnl this magic incantation is needed to prevent AC_PROG_CC from setting the
+dnl default CFLAGS (something like "-g -O2") - we don't need this as add
+dnl -g and -O flags ourselves below
+CFLAGS=${CFLAGS=}
 AC_PROG_CC
 
 dnl is -traditional needed for correct compilations
@@ -1184,6 +1189,9 @@ dnl   defines CXX with the compiler to use
 dnl   defines GXX with yes if using gxx
 dnl   defines GXX empty if not using gxx
 dnl   defines CXXFLAGS
+dnl
+dnl see CFLAGS line above
+CXXFLAGS=${CXXFLAGS=}
 AC_PROG_CXX
 
 AC_LANG_RESTORE
@@ -3205,7 +3213,7 @@ if test "$TOOLKIT" != "MSW"; then
               save_LIBS="$LIBS"
               save_CFLAGS="$CFLAGS"
               LIBS="$THREADS_LINK $LIBS"
-              CFLAGS="$CFLAGS $THREADS_CFLAGS"
+              CFLAGS="$THREADS_CFLAGS $CFLAGS"
 
               AC_TRY_LINK([#include <pthread.h>],
                           [pthread_create(0,0,0,0);],
@@ -3239,7 +3247,7 @@ if test "$TOOLKIT" != "MSW"; then
           esac
           AC_MSG_RESULT(${flag})
           if test "x$flag" != xno; then
-              THREADS_CFLAGS="$flag $THREADS_CFLAGS"
+              THREADS_CFLAGS="$THREADS_CFLAGS $flag"
           fi
 
           if test "x$THREADS_LINK" != "x"; then
@@ -3247,8 +3255,13 @@ if test "$TOOLKIT" != "MSW"; then
           fi
 
           if test "x$THREADS_CFLAGS" != "x"; then
+            dnl don't add this to CPPFLAGS as cpp might not recognize them
             CFLAGS="$CFLAGS $THREADS_CFLAGS"
             CXXFLAGS="$CXXFLAGS $THREADS_CFLAGS"
+
+            dnl yes, these special compiler flags should be used with the
+            dnl linker as well
+            LIBS="$LIBS $THREADS_CFLAGS"
           fi
       fi
     fi
@@ -3382,9 +3395,6 @@ fi
 if test "$wxUSE_THREADS" = "yes"; then
   AC_DEFINE(wxUSE_THREADS)
 
-  dnl we must define _REENTRANT or something along these lines for MT code
-  TOOLCHAIN_DEFS="$TOOLCHAIN_DEFS $THREADS_CFLAGS"
-
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS thread"
 else
   dnl on some systems, _REENTRANT should be defined if we want to use any _r()
@@ -3470,9 +3480,6 @@ if test "$GCC" = "yes" ; then
     fi
 fi
 
-
-CXXFLAGS=`echo "${CXXFLAGS}" | sed "s/\-O.//g" `
-CFLAGS=`echo "${CFLAGS}" | sed "s/\-O.//g" `
 if test "$wxUSE_OPTIMISE" = "no" ; then
     OPTIMISE=
 else
