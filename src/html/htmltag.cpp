@@ -190,7 +190,7 @@ bool wxHtmlTag::HasParam(const wxString& par) const
     if (*st == 0) return FALSE;
     if (*p == 0) return FALSE;
     for (st2 = st, p2 = p; ; st2++) {
-        if (*p2 == 0) return TRUE;
+        if (*p2 == 0 && *st2 == wxT('=')) return TRUE;
         if (*st2 == 0) return FALSE;
         if (*p2 != *st2) p2 = &invalid;
         if (*p2 == *st2) p2++;
@@ -222,7 +222,7 @@ wxString wxHtmlTag::GetParam(const wxString& par, bool with_commas) const
     if (*st == 0) return "";
     if (*p == 0) return "";
     for (st2 = st, p2 = p; ; st2++) {
-        if (*p2 == 0) { // found
+        if (*p2 == 0 && *st2 == wxT('=')) { // found
             wxString fnd = "";
             st2++; // '=' character
             comma = FALSE;
