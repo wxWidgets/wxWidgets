@@ -253,14 +253,9 @@ int lw_is_lwobject(const char *lw_file)
 
 lwObject *lw_object_read(const char *lw_file)
 {
-  FILE *f = NULL;
-  lwObject *lw_object = NULL;
-
-  wxInt32 form_bytes = 0;
-  wxInt32 read_bytes = 0;
 
   /* open file */
-  f = fopen(lw_file, "rb");
+  FILE *f = fopen(lw_file, "rb");
   if (f == NULL) {
     return NULL;
   }
@@ -270,7 +265,10 @@ lwObject *lw_object_read(const char *lw_file)
     fclose(f);
     return NULL;
   }
-  form_bytes = read_long(f);
+
+  wxInt32 read_bytes = 0;
+
+  wxInt32 form_bytes = read_long(f);
   read_bytes += 4;
 
   if (read_long(f) != ID_LWOB) {
@@ -279,7 +277,7 @@ lwObject *lw_object_read(const char *lw_file)
   }
 
   /* create new lwObject */
-  lw_object = (lwObject*) calloc(sizeof(lwObject),1);
+  lwObject *lw_object = (lwObject*) calloc(sizeof(lwObject),1);
 
   /* read chunks */
   while (read_bytes < form_bytes) {
