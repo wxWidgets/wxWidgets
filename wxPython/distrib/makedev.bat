@@ -66,9 +66,9 @@ rem del /sxzy @del-dirs
 rm del-files
 rm del-dirs
 
-rem *** bundle it all up
-tar cvf ../dist/wxPython-win32-devel-%1.tar wxPython-%1
-gzip -9 ../dist/wxPython-win32-devel-%1.tar
+rem *** bundle it all up  TODO: don't hard-code the 2.5
+tar cvf ../dist/wxPython2.5-win32-devel-%1.tar wxPython-%1
+gzip -9 ../dist/wxPython2.5-win32-devel-%1.tar
 
 rem *** cleanup
 cd ..
