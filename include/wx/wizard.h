@@ -204,7 +204,7 @@ public:
     virtual void SetBorder(int border) = 0;
     
     // wxWizard should be created using "new wxWizard" now, not with Create()
-#ifdef WXWIN_COMPATIBILITY_2_2
+#if WXWIN_COMPATIBILITY_2_2
     static wxWizard *Create(wxWindow *parent,
                             int id = -1,
                             const wxString& title = wxEmptyString,

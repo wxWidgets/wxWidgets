@@ -170,7 +170,7 @@ public:
     // if you are hiding the help, TRUE otherwise
     virtual void DoGiveHelp(const wxString& text, bool show);
 
-#ifdef WXWIN_COMPATIBILITY_2_2
+#if WXWIN_COMPATIBILITY_2_2
     // call this to simulate a menu command
     bool Command(int winid) { return ProcessCommand(winid); }
 #endif // WXWIN_COMPATIBILITY_2_2

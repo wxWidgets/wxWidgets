@@ -738,7 +738,7 @@ void wxWizard::OnWizEvent(wxWizardEvent& event)
 // our public interface
 // ----------------------------------------------------------------------------
 
-#ifdef WXWIN_COMPATIBILITY_2_2
+#if WXWIN_COMPATIBILITY_2_2
 
 /* static */
 wxWizard *wxWizardBase::Create(wxWindow *parent,

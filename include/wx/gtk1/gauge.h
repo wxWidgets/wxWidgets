@@ -87,8 +87,8 @@ public:
         m_gaugePos;
 
     // obsolete functions, don't use
-#ifdef WXWIN_COMPATIBILITY_2_2
-    bool GetProgressBar() const { return TRUE; }
+#if WXWIN_COMPATIBILITY_2_2
+    bool GetProgressBar() const { return true; }
 #endif // WXWIN_COMPATIBILITY_2_2
 
 protected:
