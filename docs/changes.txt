@@ -193,6 +193,7 @@ versions, please update your code to not use them.
   and has now been removed
 - wxTaskBarIcon::OnXXX() virtual methods: use events instead
 - obsolete and not used wxUSE_GENERIC_DIALOGS_IN_MSW has been removed
+- wxDbTable::wxDbTable with wxChar* deprecated, same with wxString& instead
 
 
 OTHER CHANGES
