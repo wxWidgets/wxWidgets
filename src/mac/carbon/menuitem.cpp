@@ -35,146 +35,6 @@
 // ----------------------------------------------------------------------------
 
 //
-// Helper Functions to get Mac Menus the way they should be ;-)
-//
-
-void wxMacCtoPString(const char* theCString, Str255 thePString);
-
-// remove inappropriate characters, if useShortcuts is false, the ampersand will not auto-generate a mac menu-shortcut
-
-int wxMenuItem::MacBuildMenuString(StringPtr outMacItemText, SInt16 *outMacShortcutChar , UInt8 *outMacModifiers , const char *inItemText , bool useShortcuts )
-{
-	char *p = (char *) &outMacItemText[1] ;
-	short macModifiers = 0 ;
-	SInt16 macShortCut = 0 ;
-	const char *inItemName ;
-	wxString inItemTextMac ;
-	
-	if (wxApp::s_macDefaultEncodingIsPC)
-	{
-		inItemTextMac =  wxMacMakeMacStringFromPC( inItemText ) ;
-		inItemName = inItemTextMac ;
-	}
-	else
-	{
-		inItemName = inItemText ;
-	}
-	
-	if ( useShortcuts && !wxApp::s_macSupportPCMenuShortcuts )
-		useShortcuts = false ;
-	
-	// we have problems with a leading hypen - it will be taken as a separator
-	
-	while ( *inItemName == '-' )
-		inItemName++ ;
-		
-	while( *inItemName )
-	{
-		switch ( *inItemName )
-		{
-			// shortcuts
-			case '&' :
-				{
-					++inItemName ;
-					if ( *inItemName )
-					{
-						*p++ = *inItemName ;
-						if ( useShortcuts )
-							macShortCut = *inItemName ;
-					}
-					else
-						--inItemName ;
-				}
-				break ;
-			// win-like accelerators
-			case '\t' :
-				{
-					++inItemName ;
-					bool skip = false ;
-					bool explicitCommandKey = false ;
-					while( *inItemName && !skip )
-					{
-						if (wxStrnicmp("Ctrl", inItemName, 4) == 0) 
-						{
-							inItemName = inItemName + 5;
-							explicitCommandKey = true ;
-						}
-						else if (wxStrnicmp("Cntrl", inItemName, 5) == 0) 
-						{
-							inItemName = inItemName + 6;
-							explicitCommandKey = true ;
-						}
-						else if (wxStrnicmp("Alt", inItemName, 3) == 0) 
-						{
-							inItemName = inItemName + 4;
-							macModifiers |= kMenuOptionModifier ;
-						}
-						else if (wxStrnicmp("Shift", inItemName, 5) == 0) 
-						{
-							inItemName = inItemName + 6;
-							macModifiers |= kMenuShiftModifier ;
-						}
-						else
-						{
-						    skip = true ;
-						}
-					}
-					if ( *inItemName )
-				    {
-				        if ( strlen(inItemName) == 1 )
-				        {
-						    macShortCut = *inItemName;
-						}
-						else if ( !wxStricmp( inItemName , "Delete" ) || !wxStricmp( inItemName , "Del" ) )
-						{
-						    macShortCut = WXK_DELETE ;
-						}
-						else if ( !wxStricmp( inItemName , "Back" ) || !wxStricmp( inItemName , "Backspace" ) )
-						{
-						    macShortCut = WXK_BACK ;
-						}
-						else if ( !wxStricmp( inItemName , "Return" ) )
-						{
-						    macShortCut = WXK_RETURN ;
-						}
-						else if ( !wxStricmp( inItemName , "Enter" ) )
-						{
-						    macShortCut = kEnterCharCode ;
-						}
-						else if ( *inItemName == 'F' )
-						{
-						    int fkey = atol(inItemName+1) ;
-						    if (fkey >= 1 && fkey < 15 )
-						    {
-                                macShortCut = WXK_F1 + fkey - 1 ;
-						    }
-                            if ( !explicitCommandKey )
-                                macModifiers |= kMenuNoCommandModifier ;
-						}
-					}
-						
-					inItemName += strlen( inItemName ) ;
-					
-					if ( *inItemName == 0 )
-						--inItemName ;
-						
-				}
-				break ;
-			default :
-				*p++ = *inItemName ;
-		}
-		++inItemName ;
-	}
-
-	outMacItemText[0] = (p - (char *)outMacItemText) - 1;
-	if ( outMacShortcutChar )
-		*outMacShortcutChar = macShortCut ;
-	if ( outMacModifiers )
-		*outMacModifiers = macModifiers ;
-		
-	return 0 ;
-}
-
 // ctor & dtor
 // -----------
 
@@ -186,115 +46,164 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu,
                        wxMenu *pSubMenu) 
           : wxMenuItemBase(pParentMenu, id, text, strHelp, kind, pSubMenu)
 {
-    // VZ: what about translations?? (FIXME)
-    if ( m_text ==  "E&xit"  ||m_text == "Exit"  ||m_text.Left(5) == "Exit\t" || m_text.Left(6) == "E&xit\t" )
+    // In other languages there is no difference in naming the Exit/Quit menu item between MacOS and Windows guidelines
+    // therefore these item must not be translated
+    if ( wxStripMenuCodes(m_text).Upper() ==  "EXIT" )
     {
         m_text = "Quit\tCtrl+Q" ;
     }
+
+    m_radioGroup.start = -1;
+    m_isRadioGroupStart = FALSE;
 }
 
 wxMenuItem::~wxMenuItem() 
 {
 }
 
-bool wxMenuItem::IsChecked() const
-{
-    return wxMenuItemBase::IsChecked() ;
-}
-
-wxString wxMenuItem::GetLabel() const
-{
-    return wxStripMenuCodes(m_text);
-}
-
-// accelerators
-// ------------
-
-#if wxUSE_ACCEL
-
-wxAcceleratorEntry *wxMenuItem::GetAccel() const
-{
-    return wxGetAccelFromString(GetText());
-}
-
-#endif // wxUSE_ACCEL
-
-// misc
-// ----
-
-/*
-
-// delete the sub menu
-void wxMenuItem::DeleteSubMenu()
-{
-  wxASSERT( m_subMenu != NULL );
-
-  delete m_subMenu;
-  m_subMenu = NULL;
-}
-
-*/
-
 // change item state
 // -----------------
 
+void wxMenuItem::SetBitmap(const wxBitmap& bitmap) 
+{ 
+  	m_bitmap = bitmap; 
+  	UpdateItemBitmap() ;
+}
+
+void wxMenuItem::UpdateItemBitmap() 
+{
+	if ( !m_parentMenu )
+		return ;
+		
+	MenuHandle mhandle = MAC_WXHMENU(m_parentMenu->GetHMenu()) ;
+	MenuItemIndex index = m_parentMenu->MacGetIndexFromItem( this ) ;
+	if( mhandle == NULL || index == 0)
+		return ;
+		
+	if ( m_bitmap.Ok() )
+	{
+		ControlButtonContentInfo info ;
+		wxMacCreateBitmapButton( &info , m_bitmap , kControlContentCIconHandle ) ;
+		if ( info.contentType != kControlNoContent )
+		{
+			if ( info.contentType == kControlContentCIconHandle )
+				SetMenuItemIconHandle( mhandle , index , 
+					kMenuColorIconType , (Handle) info.u.cIconHandle ) ;
+	    }
+			
+	}
+}
+
+void wxMenuItem::UpdateItemStatus() 
+{
+	if ( !m_parentMenu )
+		return ;
+		
+	MenuHandle mhandle = MAC_WXHMENU(m_parentMenu->GetHMenu()) ;
+	MenuItemIndex index = m_parentMenu->MacGetIndexFromItem( this ) ;
+	if( mhandle == NULL || index == 0)
+		return ;
+
+  	UMAEnableMenuItem( mhandle , index , m_isEnabled ) ;
+  	if ( IsCheckable() && IsChecked() )
+		::SetItemMark( mhandle , index , 0x12 ) ; // checkmark
+	else
+		::SetItemMark( mhandle , index , 0 ) ; // no mark
+
+   	UMASetMenuItemText( mhandle , index , m_text ) ; 
+   	wxAcceleratorEntry *entry = wxGetAccelFromString( m_text ) ;
+	UMASetMenuItemShortcut( mhandle , index , entry ) ;
+	delete entry ;
+}
+
+void wxMenuItem::UpdateItemText() 
+{
+	if ( !m_parentMenu )
+		return ;
+		
+	MenuHandle mhandle = MAC_WXHMENU(m_parentMenu->GetHMenu()) ;
+	MenuItemIndex index = m_parentMenu->MacGetIndexFromItem( this ) ;
+	if( mhandle == NULL || index == 0)
+		return ;
+
+   	UMASetMenuItemText( mhandle , index , m_text ) ; 
+   	wxAcceleratorEntry *entry = wxGetAccelFromString( m_text ) ;
+	UMASetMenuItemShortcut( mhandle , index , entry ) ;
+	delete entry ;
+}
+
+
 void wxMenuItem::Enable(bool bDoEnable)
 {
-  if ( m_isEnabled != bDoEnable ) {
-    if ( m_subMenu == NULL ) 
-    {     
-    	// normal menu item
-	    if ( MAC_WXHMENU(m_parentMenu->GetHMenu()) )
-	    {
-	   	 	int index = m_parentMenu->MacGetIndexFromItem( this ) ;
-	   	 	if ( index >= 1 )
-	   	 	{
-	   	 		if ( bDoEnable )
-	   	 			UMAEnableMenuItem( MAC_WXHMENU(m_parentMenu->GetHMenu()) , index ) ;
-	   	 		else
-	   	 			UMADisableMenuItem( MAC_WXHMENU(m_parentMenu->GetHMenu()) , index ) ;
-	   	 	}
-	    }
-    }
-    else                            
-    {
-  		// submenu
-	    if ( MAC_WXHMENU(m_parentMenu->GetHMenu()) )
-	    {
-	   	 	int index = m_parentMenu->MacGetIndexFromItem( this ) ;
-	   	 	if ( index >= 1 )
-	   	 	{
-	   	 		if ( bDoEnable )
-	   	 			UMAEnableMenuItem( MAC_WXHMENU(m_parentMenu->GetHMenu()) , index ) ;
-	   	 		else
-	   	 			UMADisableMenuItem( MAC_WXHMENU(m_parentMenu->GetHMenu()) , index ) ;
-	   	 	}
-	    }
-    }
-
-    m_isEnabled = bDoEnable;
-  }
+	if ( m_isEnabled != bDoEnable ) 
+	{
+		wxMenuItemBase::Enable( bDoEnable ) ;
+		UpdateItemStatus() ;
+	}
+}
+void wxMenuItem::UncheckRadio()
+{
+	if ( m_isChecked ) 
+	{
+		wxMenuItemBase::Check( false ) ;
+		UpdateItemStatus() ;
+	}
 }
 
 void wxMenuItem::Check(bool bDoCheck)
 {
-  wxCHECK_RET( IsCheckable(), "only checkable items may be checked" );
+	wxCHECK_RET( IsCheckable(), "only checkable items may be checked" );
 
-  if ( m_isChecked != bDoCheck ) 
-  {
-    m_isChecked = bDoCheck;
-   	if ( MAC_WXHMENU(m_parentMenu->GetHMenu()) )
-    {
-   	 	int index = m_parentMenu->MacGetIndexFromItem( this ) ;
-   	 	if ( index >= 1 )
-   	 	{
-   	 		if ( bDoCheck )
-					::SetItemMark( MAC_WXHMENU(m_parentMenu->GetHMenu()) , index , 0x12 ) ; // checkmark
-				else
- 					::SetItemMark( MAC_WXHMENU(m_parentMenu->GetHMenu()) , index , 0 ) ; // no mark
-  	 	}
-  	}
-  }
+	if ( m_isChecked != bDoCheck ) 
+	{
+		if ( GetKind() == wxITEM_RADIO )
+		{
+			if ( bDoCheck )
+			{
+				wxMenuItemBase::Check( bDoCheck ) ;
+				UpdateItemStatus() ;
+				
+		        // get the index of this item in the menu
+		        const wxMenuItemList& items = m_parentMenu->GetMenuItems();
+		        int pos = items.IndexOf(this);
+		        wxCHECK_RET( pos != wxNOT_FOUND,
+		                     _T("menuitem not found in the menu items list?") );
+
+		        // get the radio group range
+		        int start,
+		            end;
+
+		        if ( m_isRadioGroupStart )
+		        {
+		            // we already have all information we need
+		            start = pos;
+		            end = m_radioGroup.end;
+		        }
+		        else // next radio group item
+		        {
+		            // get the radio group end from the start item
+		            start = m_radioGroup.start;
+		            end = items.Item(start)->GetData()->m_radioGroup.end;
+		        }
+
+		        // also uncheck all the other items in this radio group
+		        wxMenuItemList::Node *node = items.Item(start);
+		        for ( int n = start; n <= end && node; n++ )
+		        {
+		            if ( n != pos )
+		            {
+		                ((wxMenuItem*)node->GetData())->UncheckRadio();
+		            }
+		            node = node->GetNext();
+		        }
+			}
+		}
+		else
+		{
+			wxMenuItemBase::Check( bDoCheck ) ;
+			UpdateItemStatus() ;
+		}
+	}
 }
 
 void wxMenuItem::SetText(const wxString& text)
@@ -304,29 +213,32 @@ void wxMenuItem::SetText(const wxString& text)
         return;
 
     wxMenuItemBase::SetText(text);
-//    OWNER_DRAWN_ONLY( wxOwnerDrawn::SetName(text) );
-
-    wxCHECK_RET( m_parentMenu && m_parentMenu->GetHMenu(), wxT("menuitem without menu") );
-   	if ( MAC_WXHMENU(m_parentMenu->GetHMenu()) )
-    {
-   	 	int index = m_parentMenu->MacGetIndexFromItem( this ) ;
-   	 	if ( index >= 1 )
-   	 	{
- 			Str255 label;
-			MacBuildMenuString( label , NULL , NULL , text ,false);
-   	 		::SetMenuItemText( MAC_WXHMENU(m_parentMenu->GetHMenu()) , index , label ) ; // checkmark
-  	 	}
-  	}
-
-#if wxUSE_ACCEL
-    m_parentMenu->UpdateAccel(this);
-#endif // wxUSE_ACCEL
-
+    
+    UpdateItemText() ;
 }
-void wxMenuItem::SetCheckable(bool checkable)
+
+// radio group stuff
+// -----------------
+
+void wxMenuItem::SetAsRadioGroupStart()
 {
-    wxMenuItemBase::SetCheckable(checkable);
-   // OWNER_DRAWN_ONLY( wxOwnerDrawn::SetCheckable(checkable) );
+    m_isRadioGroupStart = TRUE;
+}
+
+void wxMenuItem::SetRadioGroupStart(int start)
+{
+    wxASSERT_MSG( !m_isRadioGroupStart,
+                  _T("should only be called for the next radio items") );
+
+    m_radioGroup.start = start;
+}
+
+void wxMenuItem::SetRadioGroupEnd(int end)
+{
+    wxASSERT_MSG( m_isRadioGroupStart,
+                  _T("should only be called for the first radio item") );
+
+    m_radioGroup.end = end;
 }
 
 // ----------------------------------------------------------------------------

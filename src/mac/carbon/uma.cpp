@@ -180,67 +180,105 @@ bool UMAGetProcessModeDoesActivateOnFGSwitch()
 
 // menu manager
 
-void UMASetMenuTitle( MenuRef menu , StringPtr title )
+MenuRef UMANewMenu( SInt16 id , const wxString& title )
 {
-/*
-#if !TARGET_CARBON
-	long 			size = GetHandleSize( (Handle) menu ) ;
-	const long 		headersize = 14 ;
-	int				oldlen = (**menu).menuData[0] + 1;
-	int				newlen = title[0] + 1 ;
-	
-	if ( oldlen < newlen )
-	{
-		// enlarge before adjusting
-		SetHandleSize( (Handle) menu , size + (newlen - oldlen ) );
-	}
-
-	if ( oldlen != newlen )
-		memmove( (char*) (**menu).menuData + newlen , (char*) (**menu).menuData + oldlen , size - headersize - oldlen ) ;
-
-	memcpy( (char*) (**menu).menuData , title ,  newlen ) ;
-	if ( oldlen > newlen )
-	{
-		// shrink after
-		SetHandleSize( (Handle) menu , size + (newlen - oldlen ) ) ;
-	}
+	wxString str = wxStripMenuCodes( title ) ;
+	MenuRef menu ;
+#if TARGET_CARBON
+	CFStringRef cfs = wxMacCreateCFString( str ) ;
+	CreateNewMenu( id , 0 , &menu ) ;
+	SetMenuTitleWithCFString( menu , cfs ) ;
+	CFRelease( cfs ) ;
 #else
-*/
-	SetMenuTitle( menu , title ) ;
-//#endif
+	Str255 ptitle ;
+	wxMacStringToPascal( str , ptitle ) ;
+	menu = ::NewMenu( id , ptitle ) ;
+#endif
+	return menu ;
 }
+
+void UMASetMenuTitle( MenuRef menu , const wxString& title )
+{
+	wxString str = wxStripMenuCodes( title ) ;
+#if TARGET_CARBON
+	CFStringRef cfs = wxMacCreateCFString( str ) ;
+	SetMenuTitleWithCFString( menu , cfs ) ;
+	CFRelease( cfs ) ;
+#else
+	Str255 ptitle ;
+	wxMacStringToPascal( str , ptitle ) ;
+	SetMenuTitle( menu , ptitle ) ;
+#endif
+}
+
+void UMASetMenuItemText(  MenuRef menu,  MenuItemIndex item, const wxString& title ) 
+{
+	wxString str = wxStripMenuCodes( title ) ;
+#if TARGET_CARBON
+	CFStringRef cfs = wxMacCreateCFString( str ) ;
+	SetMenuItemTextWithCFString( menu , item , cfs ) ;
+	CFRelease( cfs ) ;
+#else
+	Str255 ptitle ;
+	wxMacStringToPascal( str , ptitle ) ;
+	SetMenuItemText( menu , item , ptitle ) ;
+#endif
+}
+
 
 UInt32 UMAMenuEvent( EventRecord *inEvent )
 {
 		return MenuEvent( inEvent ) ;
 }
 
-void 			UMAEnableMenuItem( MenuRef inMenu , MenuItemIndex inItem ) 
+void UMAEnableMenuItem( MenuRef inMenu , MenuItemIndex inItem , bool enable) 
 {
-	EnableMenuItem( inMenu , inItem ) ;
+	if ( enable )
+		EnableMenuItem( inMenu , inItem ) ;
+	else
+		DisableMenuItem( inMenu , inItem ) ;
 }
 
-void 			UMADisableMenuItem( MenuRef inMenu , MenuItemIndex inItem ) 
+void UMAAppendSubMenuItem( MenuRef menu , const wxString& title , SInt16 id ) 
 {
-	DisableMenuItem( inMenu , inItem ) ;
-}
-
-void UMAAppendSubMenuItem( MenuRef menu , StringPtr l , SInt16 id ) 
-{
-	MacAppendMenu(menu, l);
+	MacAppendMenu(menu, "\pA");
+	UMASetMenuItemText(menu, (SInt16) ::CountMenuItems(menu), title );
 	SetMenuItemHierarchicalID( menu , CountMenuItems( menu ) , id ) ;
 }
 
-void UMAInsertSubMenuItem( MenuRef menu , StringPtr l , MenuItemIndex item , SInt16 id  ) 
+void UMAInsertSubMenuItem( MenuRef menu , const wxString& title , MenuItemIndex item , SInt16 id  ) 
 {
-	MacInsertMenuItem(menu, l , item);
+	MacInsertMenuItem(menu, "\pA" , item);
+	UMASetMenuItemText(menu, item , title );
 	SetMenuItemHierarchicalID( menu , item , id ) ;
 }
 
-void UMASetMenuItemShortcut( MenuRef menu , MenuItemIndex item , SInt16 key , UInt8 modifiers )
+void UMASetMenuItemShortcut( MenuRef menu , MenuItemIndex item , wxAcceleratorEntry *entry )
 {
+	if ( !entry )
+		return ;
+		
+	UInt8 modifiers = 0 ;
+	SInt16 key = entry->GetKeyCode() ;
 	if ( key )
 	{
+		bool explicitCommandKey = false ;
+
+		if ( entry->GetFlags() & wxACCEL_CTRL ) 
+		{
+			explicitCommandKey = true ;
+		}
+
+		if (entry->GetFlags() & wxACCEL_ALT ) 
+		{
+			modifiers |= kMenuOptionModifier ;
+		}
+
+		if (entry->GetFlags() & wxACCEL_SHIFT) 
+		{
+			modifiers |= kMenuShiftModifier ;
+		}
+
 	    SInt16 glyph = 0 ;
 	    SInt16 macKey = key ;
 	    if ( key >= WXK_F1 && key <= WXK_F15 )
@@ -249,7 +287,10 @@ void UMASetMenuItemShortcut( MenuRef menu , MenuItemIndex item , SInt16 key , UI
 	        glyph = kMenuF1Glyph + ( key - WXK_F1 ) ;
 	        if ( key >= WXK_F13 )
 	            glyph += 13 ;
-	        switch( key )
+            if ( !explicitCommandKey )
+            	modifiers |= kMenuNoCommandModifier ;
+            	
+			switch( key )
 	        {
 	            case WXK_F1 :
 	                macKey += ( 0x7a << 8 ) ;
@@ -367,7 +408,7 @@ void UMASetMenuItemShortcut( MenuRef menu , MenuItemIndex item , SInt16 key , UI
     	            break ;
             }
         }
-	    
+
 	    SetItemCmd( menu, item , macKey );
 	    SetMenuItemModifiers(menu, item , modifiers ) ;
 
@@ -376,18 +417,18 @@ void UMASetMenuItemShortcut( MenuRef menu , MenuItemIndex item , SInt16 key , UI
 	}
 }
 
-void UMAAppendMenuItem( MenuRef menu , StringPtr l , SInt16 key, UInt8 modifiers ) 
+void UMAAppendMenuItem( MenuRef menu , const wxString& title , wxAcceleratorEntry *entry ) 
 {
 	MacAppendMenu(menu, "\pA");
-	SetMenuItemText(menu, (SInt16) ::CountMenuItems(menu), l);
-	UMASetMenuItemShortcut( menu ,  (SInt16) ::CountMenuItems(menu), key , modifiers ) ;
+	UMASetMenuItemText(menu, (SInt16) ::CountMenuItems(menu), title );
+	UMASetMenuItemShortcut( menu ,  (SInt16) ::CountMenuItems(menu), entry ) ;
 }
 
-void UMAInsertMenuItem( MenuRef menu , StringPtr l , MenuItemIndex item , SInt16 key, UInt8 modifiers ) 
+void UMAInsertMenuItem( MenuRef menu , const wxString& title , MenuItemIndex item , wxAcceleratorEntry *entry ) 
 {
 	MacInsertMenuItem( menu , "\p" , item) ;
-	SetMenuItemText(menu, item , l);
-	UMASetMenuItemShortcut( menu , item , key , modifiers ) ;
+	UMASetMenuItemText(menu, item , title );
+	UMASetMenuItemShortcut( menu , item , entry ) ;
 }
 
 // quickdraw
