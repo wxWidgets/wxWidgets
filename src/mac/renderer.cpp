@@ -139,23 +139,59 @@ wxRendererMac::DrawHeaderButton(wxWindow *win,
                   w = rect.width,
                   h = rect.height;
 
+    int major,minor;
+    wxGetOsVersion( &major, &minor );
+
     dc.SetBrush( *wxTRANSPARENT_BRUSH );
 
-    dc.SetPen( wxPen( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNSHADOW ) , 1 , wxSOLID ) );
-    dc.DrawLine( x+w-CORNER+1, y, x+w, y+h );       // right (outer)
-    dc.DrawRectangle( x, y+h, w+1, 1 );             // bottom (outer)
-
-    wxPen pen( wxColour( 0x88 , 0x88 , 0x88 ), 1, wxSOLID );
-
-    dc.SetPen( pen );
-    dc.DrawLine( x+w-CORNER, y, x+w-1, y+h );       // right (inner)
-    dc.DrawRectangle( x+1, y+h-1, w-2, 1 );         // bottom (inner)
-
-    dc.SetPen( *wxWHITE_PEN );
-    dc.DrawRectangle( x, y, w-CORNER+1, 1 );        // top (outer)
-    dc.DrawRectangle( x, y, 1, h );                 // left (outer)
-    dc.DrawLine( x, y+h-1, x+1, y+h-1 );
-    dc.DrawLine( x+w-1, y, x+w-1, y+1 );
+    if (major >= 10) 
+    {
+        dc.SetPen( wxPen( wxColour( 0xC5 , 0xC5 , 0xC5 ) , 1 , wxSOLID ) );
+        dc.DrawRectangle( x, y+CORNER, 1, h-CORNER );  				// left
+        // The right border is overdrawn by the left border of the right neighbouring
+        // header (to maintain a proper single pixel border). Except for the 
+        // rightmost header of the listctrl.
+        dc.DrawRectangle( x+w+(CORNER*2), y+CORNER, 1, h-CORNER ); 	// right
+        dc.SetPen( wxPen( wxColour( 0xB1 , 0xB1 , 0xB1 ) , 1 , wxSOLID ) );    
+        dc.DrawRectangle( x, y+h, w+(CORNER*3), 1 );          		// bottom
+        dc.DrawRectangle( x, y, w+(CORNER*3), 1 );  			    // top
+        
+        // Do a fill of the interior for background:
+        dc.SetPen( wxPen( wxColour( 0xF6 , 0xF6 , 0xF6 ) , 1 , wxSOLID ) ); 
+        dc.DrawRectangle( x+CORNER, y+CORNER, w+CORNER, h-CORNER );
+    
+        // Do the gradient fill:
+        static int grayValues[] = 
+        {
+            0xF6, 0xF2, 0xEF, 0xED, 0xED, 0xEB, 0xEA, 0xEA, 0xE8, 
+            0xE8, 0xE2, 0xE5, 0xE8, 0xEB, 0xEF, 0xF2, 0xFD
+        };
+        int i;
+        for (i=0; i < h && i < (int)WXSIZEOF(grayValues); i++) 
+        {
+            dc.SetPen( wxPen( wxColour( grayValues[i] , grayValues[i] , grayValues[i] ),
+                            1 , wxSOLID ) );
+            dc.DrawRectangle( x+CORNER, y+CORNER+i, w+CORNER, 1 );
+        }
+    }
+    else
+    {
+        dc.SetPen( wxPen( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNSHADOW ) , 1 , wxSOLID ) );
+        dc.DrawLine( x+w-CORNER+1, y, x+w, y+h );       // right (outer)
+        dc.DrawRectangle( x, y+h, w+1, 1 );             // bottom (outer)
+    
+        wxPen pen( wxColour( 0x88 , 0x88 , 0x88 ), 1, wxSOLID );
+    
+        dc.SetPen( pen );
+        dc.DrawLine( x+w-CORNER, y, x+w-1, y+h );       // right (inner)
+        dc.DrawRectangle( x+1, y+h-1, w-2, 1 );         // bottom (inner)
+    
+        dc.SetPen( *wxWHITE_PEN );
+        dc.DrawRectangle( x, y, w-CORNER+1, 1 );        // top (outer)
+        dc.DrawRectangle( x, y, 1, h );                 // left (outer)
+        dc.DrawLine( x, y+h-1, x+1, y+h-1 );
+        dc.DrawLine( x+w-1, y, x+w-1, y+1 );
+	}
 }
 
 void

@@ -57,7 +57,10 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
             break ;
         }
         case wxSYS_COLOUR_BTNSHADOW:
-            return wxColor( 0x44 , 0x44 , 0x44 ) ;
+            if (major >= 10)
+                return wxColor( 0xBE , 0xBE , 0xBE ) ;
+            else
+                return wxColor( 0x44 , 0x44 , 0x44 ) ;
             break ;
 
         case wxSYS_COLOUR_BTNTEXT:

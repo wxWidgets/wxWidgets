@@ -1067,23 +1067,38 @@ void wxWindowMac::MacPaintBorders( int left , int top )
 {
     if( IsTopLevel() )
         return ;
+        
+    int major,minor;
+    wxGetOsVersion( &major, &minor );
 
     RGBColor white = { 0xFFFF, 0xFFFF , 0xFFFF } ;
-    RGBColor black = { 0x0000, 0x0000 , 0x0000 } ;
     RGBColor face = { 0xDDDD, 0xDDDD , 0xDDDD } ;
-    RGBColor shadow = { 0x4444, 0x4444 , 0x4444 } ;
+    
+    RGBColor darkShadow = { 0x0000, 0x0000 , 0x0000 } ;
+    RGBColor lightShadow = { 0x4444, 0x4444 , 0x4444 } ;
+    // OS X has lighter border edges than classic:
+    if (major >= 10) 
+    {
+        darkShadow.red 		= 0x8E8E;
+        darkShadow.green 	= 0x8E8E;
+        darkShadow.blue 	= 0x8E8E;
+        lightShadow.red 	= 0xBDBD;
+        lightShadow.green 	= 0xBDBD;
+        lightShadow.blue 	= 0xBDBD;
+	}
+    
     PenNormal() ;
 
     if (HasFlag(wxRAISED_BORDER) || HasFlag( wxSUNKEN_BORDER) || HasFlag(wxDOUBLE_BORDER) )
     {
 #if wxMAC_USE_THEME_BORDER
-          Rect rect = { top , left , m_height + top , m_width + left } ;
-          SInt32 border = 0 ;
-          /*
-          GetThemeMetric( kThemeMetricListBoxFrameOutset , &border ) ;
-          InsetRect( &rect , border , border );
-      DrawThemeListBoxFrame(&rect,IsEnabled() ? kThemeStateActive : kThemeStateInactive) ;
-      */
+        Rect rect = { top , left , m_height + top , m_width + left } ;
+        SInt32 border = 0 ;
+        /*
+        GetThemeMetric( kThemeMetricListBoxFrameOutset , &border ) ;
+        InsetRect( &rect , border , border );
+        DrawThemeListBoxFrame(&rect,IsEnabled() ? kThemeStateActive : kThemeStateInactive) ;
+        */
 
         DrawThemePrimaryGroup(&rect  ,IsEnabled() ? kThemeStateActive : kThemeStateInactive) ;
 #else
@@ -1097,22 +1112,22 @@ void wxWindowMac::MacPaintBorders( int left , int top )
         LineTo( left + m_width - 3 , top + m_height - 3 );
         LineTo( left + m_width - 3 , top + 2 );
 
-        RGBForeColor( sunken ? &face : &black );
+        RGBForeColor( sunken ? &face : &darkShadow );
         MoveTo( left + 0 , top + m_height - 1 );
         LineTo( left + m_width - 1 , top + m_height - 1 );
         LineTo( left + m_width - 1 , top + 0 );
 
-        RGBForeColor( sunken ? &shadow : &white );
+        RGBForeColor( sunken ? &lightShadow : &white );
         MoveTo( left + 1 , top + m_height - 3 );
         LineTo( left + 1, top + 1 );
         LineTo( left + m_width - 3 , top + 1 );
 
-        RGBForeColor( sunken ? &white : &shadow );
+        RGBForeColor( sunken ? &white : &lightShadow );
         MoveTo( left + 1 , top + m_height - 2 );
         LineTo( left + m_width - 2 , top + m_height - 2 );
         LineTo( left + m_width - 2 , top + 1 );
 
-        RGBForeColor( sunken ? &black : &face );
+        RGBForeColor( sunken ? &darkShadow : &face );
         MoveTo( left + 2 , top + m_height - 4 );
         LineTo( left + 2 , top + 2 );
         LineTo( left + m_width - 4 , top + 2 );
@@ -1120,8 +1135,8 @@ void wxWindowMac::MacPaintBorders( int left , int top )
     }
     else if (HasFlag(wxSIMPLE_BORDER))
     {
-            Rect rect = { top , left , m_height + top , m_width + left } ;
-        RGBForeColor( &black ) ;
+        Rect rect = { top , left , m_height + top , m_width + left } ;
+        RGBForeColor( &darkShadow ) ;
         FrameRect( &rect ) ;
     }
 }
@@ -1453,6 +1468,10 @@ bool wxWindowMac::MacSetupCursor( const wxPoint& pt)
 
 bool wxWindowMac::MacDispatchMouseEvent(wxMouseEvent& event)
 {
+    //In case a third-party component changed the port...
+    wxMacPortStateHelper help( (GrafPtr) GetWindowPort( (WindowRef) MacGetRootWindow()) ) ;
+    wxMacWindowClipper clip (this);
+    
     if ((event.m_x < m_x) || (event.m_y < m_y) ||
         (event.m_x > (m_x + m_width)) || (event.m_y > (m_y + m_height)))
         return FALSE;

@@ -102,35 +102,50 @@ void wxStatusBarMac::SetStatusText(const wxString& text, int number)
 
 void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event) )
 {
-    wxPaintDC dc(this);
-    dc.Clear() ;
-    
-    if ( IsWindowHilited( MAC_WXHWND( MacGetRootWindow() ) ) )
-    {
-        wxPen black( wxBLACK , 1 , wxSOLID ) ;
-        wxPen white( wxWHITE , 1 , wxSOLID ) ;
-        
-        dc.SetPen(black);
-        dc.DrawLine(0, 0 ,
-            m_width , 0);
-        dc.SetPen(white);
-        dc.DrawLine(0, 1 ,
-            m_width , 1);
-    }
-    else
-    {
-        dc.SetPen(wxPen(wxColour(0x80,0x80,0x80),1,wxSOLID));
-        dc.DrawLine(0, 0 ,
-            m_width , 0);
-    }
-    
-    int i;
-    if ( GetFont().Ok() )
-        dc.SetFont(GetFont());
-    dc.SetBackgroundMode(wxTRANSPARENT);
-    
-    for ( i = 0; i < m_nFields; i ++ )
-        DrawField(dc, i);
+  	wxPaintDC dc(this);
+  	dc.Clear() ;
+
+    int major,minor;
+    wxGetOsVersion( &major, &minor );
+
+	if ( IsWindowHilited( MAC_WXHWND( MacGetRootWindow() ) ) )
+	{
+		wxPen white( wxWHITE , 1 , wxSOLID ) ;
+        if (major >= 10) 
+        {
+            //Finder statusbar border color: (Project builder similar is 9B9B9B)
+            dc.SetPen(wxPen(wxColour(0xB1,0xB1,0xB1),1,wxSOLID));  
+        }
+        else
+        {
+            wxPen black( wxBLACK , 1 , wxSOLID ) ;
+            dc.SetPen(black);
+    	}
+		dc.DrawLine(0, 0 ,
+		       m_width , 0);
+		dc.SetPen(white);
+		dc.DrawLine(0, 1 ,
+		       m_width , 1);
+	}
+	else
+	{
+        if (major >= 10) 
+            //Finder statusbar border color: (Project builder similar is 9B9B9B)
+            dc.SetPen(wxPen(wxColour(0xB1,0xB1,0xB1),1,wxSOLID)); 
+        else
+            dc.SetPen(wxPen(wxColour(0x80,0x80,0x80),1,wxSOLID));
+
+		dc.DrawLine(0, 0 ,
+		       m_width , 0);
+	}
+
+	int i;
+	if ( GetFont().Ok() )
+		dc.SetFont(GetFont());
+	dc.SetBackgroundMode(wxTRANSPARENT);
+
+	for ( i = 0; i < m_nFields; i ++ )
+		DrawField(dc, i);
 }
 
 void wxStatusBarMac::MacSuperEnabled( bool enabled ) 
