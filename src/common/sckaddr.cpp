@@ -42,7 +42,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxIPV4address, wxSockAddress)
 #ifdef ENABLE_IPV6
 IMPLEMENT_DYNAMIC_CLASS(wxIPV6address, wxSockAddress)
 #endif
-#if defined(__UNIX__) && !defined(__WXMAC_X__)
+#if defined(__UNIX__) && !defined(__WXMAC__)
 IMPLEMENT_DYNAMIC_CLASS(wxUNIXaddress, wxSockAddress)
 #endif
 
@@ -201,7 +201,7 @@ unsigned short wxIPV6address::Service()
 
 #endif
 
-#if defined(__UNIX__) && !defined(__WXMAC_X__)
+#if defined(__UNIX__) && !defined(__WXMAC__)
 // ---------------------------------------------------------------------------
 // wxUNIXaddress
 // ---------------------------------------------------------------------------
