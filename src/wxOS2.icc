@@ -1,11 +1,12 @@
-option ProjectOptions = gen(arch, "pentium2"), lang(longlong, "yes"), lang(trailingenumcommas, "no"),
-                        link(debug, "yes"), link(defaultlibs, "no"), link(version, 2, 11), opt(inline, "yes"), opt(tune, "pentium2"),
-                        define("__WXPM__", ), define("__VISAGECPP__", ),
-                        incl(searchpath, "..\\src\\png"),
-                        incl(searchpath, "..\\src\\jpeg"),
-                        incl(searchpath, "..\\src\\xpm"),
-                        incl(searchpath, "..\\src\\zlib"),
-                        incl(searchpath, "..\\Include")
+option ProjectOptions = gen(arch, "pentium2"), lang(longlong, "yes"),  gen(manglelinkagekeywordonlyfuncs, "no"), lang(allowtypedefasclassname, "yes"),
+                        opt(tune, "pentium2"), define("__WXPM__", ), define("__VISAGECPP__", ), incl(searchpath, "..\\src\\png"), incl(searchpath, "..\\src\\jpeg"),
+                        lang(templatedefimpls, "dontparse"), lang(compatmath, "yes"),
+                        lang(nokeyword, "const_cast"), lang(nokeyword, "explicit"), lang(nokeyword, "export"), lang(nokeyword, "false"),
+                        lang(nokeyword, "mutable"),
+                        lang(nokeyword, "true"), lang(nokeyword, "typename"),
+                        lang(trailingenumcommas, "no"), lang(universalcharacternames, "no"), link(debug, "yes"), link(linkwithmultithreadlib, "yes"),
+                        link(linkwithsharedlib, "yes"), link(defaultlibs, "no"), link(extdictionary, "no"), opt(inline, "yes"),
+                        incl(searchpath, "..\\src\\xpm"), incl(searchpath, "..\\src\\zlib"), incl(searchpath, "..\\Include"), macros(redefine, "yes")
 {
    target type("lib") "..\\LIB\\wxOS2.lib"
    {

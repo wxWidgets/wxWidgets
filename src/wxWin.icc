@@ -1,7 +1,12 @@
-option ProjectOptions = gen(arch, "pentium2"), lang(longlong, "yes"), lang(trailingenumcommas, "no"), link(debug, "yes"), 
-                        link(defaultlibs, "no"), link(version, 2, 11), opt(inline, "yes"), opt(tune, "pentium2"), define("__WXPM__", ), define("__VISAGECPP__", ), 
-                        incl(searchpath, "..\\src\\png"), incl(searchpath, "..\\src\\jpeg"), incl(searchpath, "..\\src\\xpm"), 
-                        incl(searchpath, "..\\src\\zlib"), incl(searchpath, "..\\Include"), gen(debug, "yes"), 
+option ProjectOptions = gen(arch, "pentium2"), lang(longlong, "yes"),  gen(manglelinkagekeywordonlyfuncs, "no"), lang(allowtypedefasclassname, "yes"),
+                        opt(tune, "pentium2"), define("__WXPM__", ), define("__VISAGECPP__", ), incl(searchpath, "..\\src\\png"), incl(searchpath, "..\\src\\jpeg"),
+                        lang(templatedefimpls, "dontparse"), lang(compatmath, "yes"),
+                        lang(nokeyword, "const_cast"), lang(nokeyword, "explicit"), lang(nokeyword, "export"), lang(nokeyword, "false"),
+                        lang(nokeyword, "mutable"),
+                        lang(nokeyword, "true"), lang(nokeyword, "typename"),
+                        lang(trailingenumcommas, "no"), lang(universalcharacternames, "no"), link(debug, "yes"), link(linkwithmultithreadlib, "yes"),
+                        link(linkwithsharedlib, "yes"), link(defaultlibs, "no"), link(extdictionary, "no"), opt(inline, "yes"),
+                        incl(searchpath, "..\\src\\xpm"), incl(searchpath, "..\\src\\zlib"), incl(searchpath, "..\\Include"), macros(redefine, "yes"),
                         file(genobject, "..\\src\\common\\dbgos240\\"),
                         file(usepch, "No"), debug(maxerrors, 100), info(cmp, "yes"), info(cnd, "yes"), info(cns, "yes"), info(cnv, "yes"), 
                         info(cpy, "yes"), info(dcl, "yes"), info(eff, "yes"), info(enu, "yes"), info(ext, "yes"), info(ini, "yes"), 
@@ -90,7 +95,6 @@ option ProjectOptions = gen(arch, "pentium2"), lang(longlong, "yes"), lang(trail
       source "COMMON\\stream.cpp"
       source "COMMON\\string.cpp"
       source "COMMON\\tbarbase.cpp"
-      source "COMMON\\tbarsmpl.cpp"
       source "COMMON\\textcmn.cpp"
       source "COMMON\\textfile.cpp"
       source "COMMON\\time.cpp"
