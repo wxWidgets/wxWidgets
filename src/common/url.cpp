@@ -398,23 +398,37 @@ void wxURL::SetProxy(const wxString& url_proxy)
 }
 #endif // wxUSE_SOCKETS
 
-wxString wxURL::ConvertToValidURI(const wxString& uri)
+wxString wxURL::ConvertToValidURI(const wxString& uri, const wxChar* delims)
 {
   wxString out_str;
   wxString hexa_code;
   size_t i;
 
-  for (i=0;i<uri.Len();i++)
+  for (i = 0; i < uri.Len(); i++)
   {
     wxChar c = uri.GetChar(i);
 
     if (c == wxT(' '))
     {
-      out_str += wxT('+');
+      // GRG, Apr/2000: changed to "%20" instead of '+'
+
+      out_str += wxT("%20");
     }
     else
     {
-      if (!wxIsalnum(c) && c != wxT('.') && c != wxT('+') && c != wxT('/'))
+      // GRG, Apr/2000: modified according to the URI definition (RFC 2396)
+      // 
+      // - Alphanumeric characters are never escaped
+      // - Unreserved marks are never escaped
+      // - Delimiters must be escaped if they appear within a component
+      //     but not if they are used to separate components. Here we have
+      //     no clear way to distinguish between these two cases, so they
+      //     are escaped unless they are passed in the 'delims' parameter
+      //     (allowed delimiters).
+
+      static const wxChar marks[] = wxT("-_.!~*()'");
+
+      if ( !wxIsalnum(c) && !wxStrchr(marks, c) && !wxStrchr(delims, c) )
       {
         hexa_code.Printf(wxT("%%%02X"), c);
         out_str += hexa_code;
@@ -434,7 +448,7 @@ wxString wxURL::ConvertFromURI(const wxString& uri)
   wxString new_uri;
 
   size_t i = 0;
-  while (i<uri.Len())
+  while (i < uri.Len())
   {
     int code;
     if (uri[i] == wxT('%'))
@@ -485,6 +499,7 @@ bool wxURLModule::OnInit()
     // set, but don't try to create this proxy right now because it will slow
     // down the program startup (especially if there is no DNS server
     // available, in which case it may take up to 1 minute)
+
     if ( getenv("HTTP_PROXY") )
     {
         wxURL::ms_useDefaultProxy = TRUE;
