@@ -781,7 +781,7 @@ bool wxFrame::OS2Create(
 
     if (ulStyle == wxDEFAULT_FRAME_STYLE)
         ulCreateFlags = FCF_SIZEBORDER | FCF_TITLEBAR | FCF_SYSMENU |
-                        FCF_MINMAX | FCF_VERTSCROLL | FCF_HORZSCROLL | FCF_TASKLIST;
+                        FCF_MINMAX | FCF_TASKLIST;
     else
     {
         if ((ulStyle & wxCAPTION) == wxCAPTION)
@@ -789,6 +789,10 @@ bool wxFrame::OS2Create(
         else
             ulCreateFlags = FCF_NOMOVEWITHOWNER;
 
+        if ((ulStyle & wxVSCROLL) == wxVSCROLL)
+            ulCreateFlags |= FCF_VERTSCROLL;
+        if ((ulStyle & wxHSCROLL) == wxHSCROLL)
+            ulCreateFlags |= FCF_HORZSCROLL;
         if (ulStyle & wxMINIMIZE_BOX)
             ulCreateFlags |= FCF_MINBUTTON;
         if (ulStyle & wxMAXIMIZE_BOX)
