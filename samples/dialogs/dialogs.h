@@ -100,6 +100,9 @@ private:
 
 #if wxUSE_FINDREPLDLG
     wxFindReplaceData m_findData;
+
+    wxFindReplaceDialog *m_dlgFind,
+                        *m_dlgReplace;
 #endif // wxUSE_FINDREPLDLG
 
     DECLARE_EVENT_TABLE()

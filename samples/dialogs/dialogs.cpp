@@ -165,8 +165,8 @@ bool MyApp::OnInit()
   file_menu->Append(DIALOGS_BUSYINFO, "&Busy info dialog\tCtrl-B");
 #endif // wxUSE_BUSYINFO
 #if wxUSE_FINDREPLDLG
-  file_menu->Append(DIALOGS_FIND, "&Find dialog\tCtrl-F");
-  file_menu->Append(DIALOGS_REPLACE, "Find and &replace dialog\tShift-Ctrl-F");
+  file_menu->Append(DIALOGS_FIND, "&Find dialog\tCtrl-F", "", TRUE);
+  file_menu->Append(DIALOGS_REPLACE, "Find and &replace dialog\tShift-Ctrl-F", "", TRUE);
 #endif // wxUSE_FINDREPLDLG
   file_menu->AppendSeparator();
   file_menu->Append(DIALOGS_MODAL, "Mo&dal dialog\tCtrl-D");
@@ -198,6 +198,9 @@ MyFrame::MyFrame(wxWindow *parent,
        : wxFrame(parent, -1, title, pos, size)
 {
     m_dialog = (MyModelessDialog *)NULL;
+
+    m_dlgFind =
+    m_dlgReplace = NULL;
 
     CreateStatusBar();
 }
@@ -658,27 +661,45 @@ void MyFrame::ShowBusyInfo(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::ShowReplaceDialog( wxCommandEvent& WXUNUSED(event) )
 {
-    wxFindReplaceDialog *dialog = new wxFindReplaceDialog
-                                      (
-                                        this,
-                                        &m_findData,
-                                        "Find and replace dialog",
-                                        wxFR_REPLACEDIALOG
-                                      );
-    dialog->Show(TRUE);
+    if ( m_dlgReplace )
+    {
+        delete m_dlgReplace;
+        m_dlgReplace = NULL;
+    }
+    else
+    {
+        m_dlgReplace = new wxFindReplaceDialog
+                           (
+                            this,
+                            &m_findData,
+                            "Find and replace dialog",
+                            wxFR_REPLACEDIALOG
+                           );
+
+        m_dlgReplace->Show(TRUE);
+    }
 }
 
 void MyFrame::ShowFindDialog( wxCommandEvent& WXUNUSED(event) )
 {
-    wxFindReplaceDialog *dialog = new wxFindReplaceDialog
-                                      (
-                                        this,
-                                        &m_findData,
-                                        "Find dialog",
-                                        // just for testing
-                                        wxFR_NOWHOLEWORD
-                                      );
-    dialog->Show(TRUE);
+    if ( m_dlgFind )
+    {
+        delete m_dlgFind;
+        m_dlgFind = NULL;
+    }
+    else
+    {
+        m_dlgFind = new wxFindReplaceDialog
+                        (
+                            this,
+                            &m_findData,
+                            "Find dialog",
+                            // just for testing
+                            wxFR_NOWHOLEWORD
+                        );
+
+        m_dlgFind->Show(TRUE);
+    }
 }
 
 static wxString DecodeFindDialogEventFlags(int flags)
@@ -714,9 +735,29 @@ void MyFrame::OnFindDialog(wxFindDialogEvent& event)
     }
     else if ( type == wxEVT_COMMAND_FIND_CLOSE )
     {
-        wxLogMessage(wxT("Find dialog is being closed."));
+        wxFindReplaceDialog *dlg = event.GetDialog();
 
-        event.GetDialog()->Destroy();
+        const wxChar *txt;
+        if ( dlg == m_dlgFind )
+        {
+            txt = _T("Find");
+            m_dlgFind = NULL;
+        }
+        else if ( dlg == m_dlgReplace )
+        {
+            txt = _T("Replace");
+            m_dlgReplace = NULL;
+        }
+        else
+        {
+            txt = _T("Unknown");
+
+            wxFAIL_MSG( _T("unexecpted event") );
+        }
+
+        wxLogMessage(wxT("%s dialog is being closed."), txt),
+
+        dlg->Destroy();
     }
     else
     {

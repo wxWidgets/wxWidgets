@@ -81,6 +81,10 @@ public:
     // only for passing to ::FindText or ::ReplaceText
     FINDREPLACE *GetPtrFindReplace() { return &m_findReplace; }
 
+    // set/query the "closed by user" flag
+    void SetClosedByUser() { m_wasClosedByUser = TRUE; }
+    bool WasClosedByUser() const { return m_wasClosedByUser; }
+
 private:
     void InitString(const wxString& str, LPTSTR *ppStr, WORD *pLen);
 
@@ -92,6 +96,9 @@ private:
 
     // the find replace data used by the dialog
     FINDREPLACE m_findReplace;
+
+    // TRUE if the user closed us, FALSE otherwise
+    bool m_wasClosedByUser;
 
     // registered Message for Dialog
     static UINT ms_msgFindDialog;
@@ -123,6 +130,8 @@ wxFindReplaceDialogImpl::wxFindReplaceDialogImpl(wxFindReplaceDialog *dialog,
 
     m_hwndOwner = NULL;
     m_oldParentWndProc = NULL;
+
+    m_wasClosedByUser = FALSE;
 
     wxZeroMemory(m_findReplace);
 
@@ -231,6 +240,11 @@ LRESULT APIENTRY wxFindReplaceWindowProc(HWND hwnd, WXUINT nMsg,
         bool replace = FALSE;
         if ( pFR->Flags & FR_DIALOGTERM )
         {
+            // we have to notify the dialog that it's being closed by user and
+            // not deleted programmatically as it behaves differently in these
+            // 2 cases
+            dialog->GetImpl()->SetClosedByUser();
+
             evtType = wxEVT_COMMAND_FIND_CLOSE;
         }
         else if ( pFR->Flags & FR_FINDNEXT )
@@ -338,13 +352,25 @@ wxFindReplaceDialog::wxFindReplaceDialog(wxWindow *parent,
 
 wxFindReplaceDialog::~wxFindReplaceDialog()
 {
+    // the dialog might have been already deleted if the user closed it
+    // manually but in this case we should have got a notification about it and
+    // the flagmust have been set
+    if ( !m_impl->WasClosedByUser() )
+    {
+        // if it wasn't, delete the dialog ourselves
+        if ( !::DestroyWindow(GetHwnd()) )
+        {
+            wxLogLastError(_T("DestroyWindow(find dialog)"));
+        }
+    }
+
     // unsubclass the parent
     delete m_impl;
 
     // prevent the base class dtor from trying to hide us!
     m_isShown = FALSE;
 
-    // and from destroying our window
+    // and from destroying our window [again]
     m_hWnd = (WXHWND)NULL;
 }
 
