@@ -39,8 +39,13 @@ BEGIN_EVENT_TABLE(wxSplashScreen, wxFrame)
     EVT_CLOSE(wxSplashScreen::OnCloseWindow)
 END_EVENT_TABLE()
 
+/* Note that unless we pass a non-default size to the frame, SetClientSize
+ * won't work properly under Windows, and the splash screen frame is sized
+ * slightly too small.
+ */
+
 wxSplashScreen::wxSplashScreen(const wxBitmap& bitmap, long splashStyle, int milliseconds, wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style):
-    wxFrame(parent, id, wxEmptyString, pos, size, style)
+    wxFrame(parent, id, wxEmptyString, wxPoint(0, 0), wxSize(100, 100), style)
 {
     m_window = NULL;
     m_splashStyle = splashStyle;
@@ -48,15 +53,7 @@ wxSplashScreen::wxSplashScreen(const wxBitmap& bitmap, long splashStyle, int mil
 
     m_window = new wxSplashScreenWindow(bitmap, this, -1, pos, size, wxNO_BORDER);
 
-    // For some reason, we need to make the client size a couple of pixels
-    // bigger for all of the bitmap to show.
-    // Or do we?
-#ifdef __WXMSW__
-    int fudge = 0;
-#else
-    int fudge = 0;
-#endif
-    SetClientSize(bitmap.GetWidth()+fudge, bitmap.GetHeight()+fudge);
+    SetClientSize(bitmap.GetWidth(), bitmap.GetHeight());
 
     if (m_splashStyle & wxSPLASH_CENTRE_ON_PARENT)
         CentreOnParent();
