@@ -226,7 +226,33 @@ wxDllLoader::LoadLibrary(const wxString & libname, bool *success)
 
     if ( !handle )
     {
-        wxLogSysError(_("Failed to load shared library '%s'"), libname.c_str());
+        wxString msg(_("Failed to load shared library '%s'"));
+
+#ifdef HAVE_DLERROR
+        const char *errmsg = dlerror();
+        if ( errmsg )
+        {
+            // the error string format is "libname: ...", but we already have
+            // libname, so cut it off
+            const char *p = strchr(errmsg, ':');
+            if ( p )
+            {
+                if ( *++p == ' ' )
+                    p++;
+            }
+            else
+            {
+                p = errmsg;
+            }
+
+            msg += _T(" (%s)");
+            wxLogError(msg, libname.c_str(), p);
+        }
+        else
+#endif // HAVE_DLERROR
+        {
+            wxLogSysError(msg, libname.c_str());
+        }
     }
 
     if ( success )
