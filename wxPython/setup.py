@@ -404,7 +404,7 @@ if os.name == 'nt':
     lflags = None
 
     # Other MSVC flags...
-    # To bad I don't remember why I was playing with these, can they be removed?
+    # Too bad I don't remember why I was playing with these, can they be removed?
     if FINAL:
         pass #cflags = cflags + ['/O1']
     elif HYBRID :
