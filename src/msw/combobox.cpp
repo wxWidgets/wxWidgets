@@ -399,9 +399,10 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
                         validator, name) )
         return FALSE;
 
-    // we shouldn't call SetValue() for an empty read only combobox as it would
-    // (correctly) thro an assert and is otherwise useless anyhow
-    if ( n || !HasFlag(wxCB_READONLY) )
+    // we shouldn't call SetValue() for an empty string because this would
+    // (correctly) result in an assert with a read only combobox and is useless
+    // for the other ones anyhow
+    if ( !value.empty() )
         SetValue(value);
 
     // a (not read only) combobox is, in fact, 2 controls: the combobox itself
