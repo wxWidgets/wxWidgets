@@ -81,9 +81,9 @@ static pascal void wxMacListDefinition( short message, Boolean isSelected, Rect 
 			
 			savedClipRegion = NewRgn();
 			GetClip( savedClipRegion );
+
 			ClipRect( drawRect );
 			EraseRect( drawRect );
-						
     		
     	MoveTo(drawRect->left + 4 , drawRect->top + 10 );
     	::TextFont( kFontIDMonaco ) ;
@@ -265,6 +265,27 @@ void wxListBox::Free()
     }
 }
 
+void  wxListBox::DoSetSize(int x, int y,
+            int width, int height,
+            int sizeFlags )
+{
+	wxControl::DoSetSize( x , y , width , height , sizeFlags ) ;
+#if TARGET_CARBON
+	Rect bounds ;
+	GetControlBounds( m_macControl , &bounds ) ;
+	ControlRef control = GetListVerticalScrollBar( m_macList ) ;
+	if ( control )
+	{
+		Rect scrollbounds ;
+		GetControlBounds( control , &scrollbounds ) ;
+		if( scrollbounds.right != bounds.right + 1 )
+		{
+			UMAMoveControl( control , bounds.right - (scrollbounds.right - scrollbounds.left) + 1 , 
+				scrollbounds.top ) ;
+		}
+	}
+#endif
+}
 void wxListBox::DoSetFirstItem(int N)
 {
 	MacScrollTo( N ) ;
