@@ -83,6 +83,7 @@
     #define TEST_THREADS
     #define TEST_TIMER
     // #define TEST_VCARD            -- don't enable this (VZ)
+    #define TEST_VOLUME
     #define TEST_WCHAR
     #define TEST_ZIP
     #define TEST_ZLIB
@@ -90,7 +91,7 @@
     #undef TEST_ALL
     static const bool TEST_ALL = TRUE;
 #else
-    #define TEST_FILETIME
+    #define TEST_VOLUME
 
     static const bool TEST_ALL = FALSE;
 #endif
@@ -3299,6 +3300,65 @@ static void TestVCardWrite()
 #endif // TEST_VCARD
 
 // ----------------------------------------------------------------------------
+// wxVolume tests
+// ----------------------------------------------------------------------------
+
+#if !wxUSE_FSVOLUME
+    #undef TEST_VOLUME
+#endif
+
+#ifdef TEST_VOLUME
+
+#include "wx/volume.h"
+
+static const wxChar *volumeKinds[] =
+{
+    _T("floppy"),
+    _T("hard disk"),
+    _T("CD-ROM"),
+    _T("DVD-ROM"),
+    _T("network volume"),
+    _T("other volume"),
+};
+
+static void TestFSVolume()
+{
+    wxPuts(_T("*** Testing wxFSVolume class ***"));
+
+    wxArrayString volumes = wxFSVolume::GetVolumes();
+    size_t count = volumes.GetCount();
+
+    if ( !count )
+    {
+        wxPuts(_T("ERROR: no mounted volumes?"));
+        return;
+    }
+
+    wxPrintf(_T("%u mounted volumes found:\n"), count);
+
+    for ( size_t n = 0; n < count; n++ )
+    {
+        wxFSVolume vol(volumes[n]);
+        if ( !vol.IsOk() )
+        {
+            wxPuts(_T("ERROR: couldn't create volume"));
+            continue;
+        }
+
+        wxPrintf(_T("%u: %s (%s), %s, %s, %s\n"),
+                 n + 1,
+                 vol.GetDisplayName().c_str(),
+                 vol.GetName().c_str(),
+                 volumeKinds[vol.GetKind()],
+                 vol.IsWritable() ? _T("rw") : _T("ro"),
+                 vol.GetFlags() & wxFS_VOL_REMOVABLE ? _T("removable")
+                                                     : _T("fixed"));
+    }
+}
+
+#endif // TEST_VOLUME
+
+// ----------------------------------------------------------------------------
 // wide char (Unicode) support
 // ----------------------------------------------------------------------------
 
@@ -5829,6 +5889,10 @@ int main(int argc, char **argv)
     TestVCardRead();
     TestVCardWrite();
 #endif // TEST_VCARD
+
+#ifdef TEST_VOLUME
+    TestFSVolume();
+#endif // TEST_VOLUME
 
 #ifdef TEST_WCHAR
     TestUtf8();
