@@ -337,60 +337,56 @@ static const EventTypeSpec eventList[] =
 static pascal OSStatus
 wxMacAppMenuEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
 {
-    wxMenuBar* mbar = wxMenuBar::MacGetInstalledMenuBar();
+    EventRef formerEvent = (EventRef) wxTheApp->MacGetCurrentEvent() ;
+    EventHandlerCallRef formerEventHandlerCallRef = (EventHandlerCallRef) wxTheApp->MacGetCurrentEventHandlerCallRef() ;
+    wxTheApp->MacSetCurrentEvent( event , handler ) ;
     
-    if ( mbar )
+    wxMacCarbonEvent cEvent( event ) ;
+    MenuRef menuRef = cEvent.GetParameter<MenuRef>(kEventParamDirectObject) ;
+    wxMenu* menu = wxFindMenuFromMacMenu( menuRef ) ;
+    
+    if ( menu )
     {
-        wxFrame* win = mbar->GetFrame();
-        if ( win )
+        wxEventType type=0;        
+        MenuCommand cmd=0;
+        switch (GetEventKind(event))
         {
-            EventRef formerEvent = (EventRef) wxTheApp->MacGetCurrentEvent() ;
-            EventHandlerCallRef formerEventHandlerCallRef = (EventHandlerCallRef) wxTheApp->MacGetCurrentEventHandlerCallRef() ;
-            wxTheApp->MacSetCurrentEvent( event , handler ) ;
-            
-            // VZ: we could find the menu from its handle here by examining all
-            //     the menus in the menu bar recursively but knowing that neither
-            //     wxMSW nor wxGTK do it why bother...
- #if 0
-            MenuRef menuRef;
-
-            GetEventParameter(event,
-                              kEventParamDirectObject,
-                              typeMenuRef, NULL,
-                              sizeof(menuRef), NULL,
-                              &menuRef);
- #endif // 0
-
-            wxEventType type=0;        
-            MenuCommand cmd=0;
-            switch (GetEventKind(event))
-            {
-                case kEventMenuOpening:
-                    type = wxEVT_MENU_OPEN;
-                    break;
-                case kEventMenuClosed:
-                    type = wxEVT_MENU_CLOSE;
-                    break;
-                case kEventMenuTargetItem:
+            case kEventMenuOpening:
+                type = wxEVT_MENU_OPEN;
+                break;
+            case kEventMenuClosed:
+                type = wxEVT_MENU_CLOSE;
+                break;
+            case kEventMenuTargetItem:
+                cmd = cEvent.GetParameter<MenuCommand>(kEventParamMenuCommand,typeMenuCommand) ;
+                if (cmd != 0) 
                     type = wxEVT_MENU_HIGHLIGHT;
-                    GetEventParameter(event, kEventParamMenuCommand,
-                                      typeMenuCommand, NULL,
-                                      sizeof(cmd), NULL, &cmd);
-                    if (cmd == 0) return eventNotHandledErr;
-                    break;
-                default:
-                    wxFAIL_MSG(wxT("Unexpected menu event kind"));
-                    break;
-            }
-
-            wxMenuEvent wxevent(type, cmd);
-            wxevent.SetEventObject(win);
-
-            (void)win->GetEventHandler()->ProcessEvent(wxevent);
-            
-            wxTheApp->MacSetCurrentEvent( formerEvent, formerEventHandlerCallRef ) ;
+                break;
+            default:
+                wxFAIL_MSG(wxT("Unexpected menu event kind"));
+                break;
         }
+
+        if ( type )
+        {
+            wxMenuEvent wxevent(type, cmd);
+            wxevent.SetEventObject(menu);
+
+            wxEvtHandler* handler = menu->GetEventHandler();
+            if (handler && handler->ProcessEvent(wxevent))
+            {
+                // handled
+            }
+            else
+            {
+                wxWindow *win = menu->GetInvokingWindow();
+                if (win) 
+                    win->GetEventHandler()->ProcessEvent(wxevent);
+                }
+            }
     }
+    
+    wxTheApp->MacSetCurrentEvent( formerEvent, formerEventHandlerCallRef ) ;
 
     return eventNotHandledErr;
 }
@@ -401,32 +397,31 @@ static pascal OSStatus wxMacAppCommandEventHandler( EventHandlerCallRef handler 
 
     HICommand command ;
 
-    GetEventParameter( event, kEventParamDirectObject, typeHICommand, NULL,
-        sizeof( HICommand ), NULL, &command );
-
-    MenuCommand id = command.commandID ;
-    if ( id == kHICommandPreferences )
-        id = wxApp::s_macPreferencesMenuItemId ;
-
-    wxMenuBar* mbar = wxMenuBar::MacGetInstalledMenuBar() ;
-    wxMenu* menu = NULL ;
+    wxMacCarbonEvent cEvent( event ) ;
+    cEvent.GetParameter<HICommand>(kEventParamDirectObject,typeHICommand,&command) ;
+        
     wxMenuItem* item = NULL ;
-
-    if ( mbar )
+    MenuCommand id = command.commandID ;
+    // for items we don't really control
+    if ( id == kHICommandPreferences )
     {
-        item = mbar->FindItem( id , &menu ) ;
-        // it is not 100 % sure that an menu of id 0 is really ours, safety check
-        if ( id == 0 && menu != NULL && menu->GetHMenu() != command.menu.menuRef )
+        id = wxApp::s_macPreferencesMenuItemId ;
+        
+        wxMenuBar* mbar = wxMenuBar::MacGetInstalledMenuBar() ;
+        if ( mbar )
         {
-            item = NULL ;
-            menu = NULL ;
+            wxMenu* menu = NULL ;
+            item = mbar->FindItem( id , &menu ) ;
         }
     }
-
-    if ( item == NULL || menu == NULL || mbar == NULL )
-        return result ;
-
-       switch( GetEventKind( event ) )
+    else if ( id != 0 && command.menu.menuRef != 0 && command.menu.menuItemIndex != 0 )
+    {
+        GetMenuItemRefCon( command.menu.menuRef , command.menu.menuItemIndex , (UInt32*) &item ) ;
+    }
+    
+    if ( item )
+    {
+       switch( cEvent.GetKind() )
        {
            case kEventProcessCommand :
            {
@@ -435,18 +430,18 @@ static pascal OSStatus wxMacAppCommandEventHandler( EventHandlerCallRef handler 
                     item->Check( !item->IsChecked() ) ;
                 }
 
-                menu->SendEvent( id , item->IsCheckable() ? item->IsChecked() : -1 ) ;
+                item->GetMenu()->SendEvent( id , item->IsCheckable() ? item->IsChecked() : -1 ) ;
                 result = noErr ;
             }
-               break ;
+            break ;
         case kEventCommandUpdateStatus:
             // eventually trigger an updateui round
             result = noErr ;
             break ;
-           default :
-               break ;
-       }
-
+        default :
+            break ;
+        }
+    }
     return result ;
 }
 
