@@ -185,41 +185,23 @@ static ibool MGLAPI wxWindowMouseHandler(window_t *wnd, event_t *e)
             if ( win->AcceptsFocus() && wxWindow::FindFocus() != win )
                 win->SetFocus();
 
-            if ( e->message & EVT_LEFTBMASK )
-                type = wxEVT_LEFT_DOWN;
-            else if ( e->message & EVT_MIDDLEBMASK )
-                type = wxEVT_MIDDLE_DOWN;
-            else if ( e->message & EVT_RIGHTBMASK )
-                type = wxEVT_RIGHT_DOWN;
-
             if ( e->message & EVT_DBLCLICK )
             {
-                // MGL doesn't generate two subsequent single clicks prior
-                // to a double click, but rather only fires one single click
-                // followed by one double click. wxWindows expects two single
-                // clicks, so we have to synthetize the second one. First
-                // generate wxEVT_?_DOWN:
-                event.SetEventType(type);
-                win->GetEventHandler()->ProcessEvent(event);
-
-                // ...followed by wxEVT_?_UP:
-                if ( e->message & EVT_LEFTBMASK )
-                    type = wxEVT_LEFT_UP;
-                else if ( e->message & EVT_MIDDLEBMASK )
-                    type = wxEVT_MIDDLE_UP;
-                else if ( e->message & EVT_RIGHTBMASK )
-                    type = wxEVT_RIGHT_UP;
-                event.SetEventType(type);
-                win->GetEventHandler()->ProcessEvent(event);
-            
-                // And change event type for the real double click event
-                // that will be generated later in this function:
                 if ( e->message & EVT_LEFTBMASK )
                     type = wxEVT_LEFT_DCLICK;
                 else if ( e->message & EVT_MIDDLEBMASK )
                     type = wxEVT_MIDDLE_DCLICK;
                 else if ( e->message & EVT_RIGHTBMASK )
                     type = wxEVT_RIGHT_DCLICK;
+            }
+            else
+            {
+                if ( e->message & EVT_LEFTBMASK )
+                    type = wxEVT_LEFT_DOWN;
+                else if ( e->message & EVT_MIDDLEBMASK )
+                    type = wxEVT_MIDDLE_DOWN;
+                else if ( e->message & EVT_RIGHTBMASK )
+                    type = wxEVT_RIGHT_DOWN;
             }
 
             break;
@@ -933,7 +915,7 @@ void wxWindowMGL::DragAcceptFiles(bool accept)
 // Get total size
 void wxWindowMGL::DoGetSize(int *x, int *y) const
 {
-    wxASSERT_MSG( m_wnd, wxT("invalid window") )
+    wxASSERT_MSG( m_wnd, wxT("invalid window") );
     
     if (x) *x = m_wnd->width;
     if (y) *y = m_wnd->height;
@@ -941,10 +923,13 @@ void wxWindowMGL::DoGetSize(int *x, int *y) const
 
 void wxWindowMGL::DoGetPosition(int *x, int *y) const
 {
-    wxASSERT_MSG( m_wnd, wxT("invalid window") )
+    wxASSERT_MSG( m_wnd, wxT("invalid window") );
 
-    if (x) *x = m_wnd->x;
-    if (y) *y = m_wnd->y;
+    int pX = 0, pY = 0;
+    AdjustForParentClientOrigin(pX, pY, 0);   
+
+    if (x) *x = m_wnd->x - pX;
+    if (y) *y = m_wnd->y - pY;
 }
 
 void wxWindowMGL::DoScreenToClient(int *x, int *y) const
