@@ -1909,11 +1909,7 @@ AC_OUTPUT([
             wx-config
             Makefile
             src/Makefile
-            src/common/Makefile
-            src/generic/Makefile
             src/gtk/Makefile
-            src/motif/Makefile
-            src/unix/Makefile
             include/Makefile
             include/wx/Makefile
             include/wx/generic/Makefile

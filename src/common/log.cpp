@@ -30,22 +30,24 @@
 // wxWindows
 #ifndef WX_PRECOMP
   #include "wx/window.h"
+#ifdef __WXMSW__
   #include "wx/msw/private.h"
-  #include  <wx/event.h>
-  #include  <wx/app.h>
-  #include  <wx/string.h>
-  #include  <wx/intl.h>
-  #include  <wx/menu.h>
-  #include  <wx/frame.h>
-  #include  <wx/msgdlg.h>
-  #include  <wx/filedlg.h>
-  #include  <wx/textctrl.h>
+#endif
+  #include  "wx/event.h"
+  #include  "wx/app.h"
+  #include  "wx/string.h"
+  #include  "wx/intl.h"
+  #include  "wx/menu.h"
+  #include  "wx/frame.h"
+  #include  "wx/msgdlg.h"
+  #include  "wx/filedlg.h"
+  #include  "wx/textctrl.h"
 #endif //WX_PRECOMP
 
-#include  <wx/file.h>
-#include  <wx/textfile.h>
-#include  <wx/utils.h>
-#include  <wx/log.h>
+#include  "wx/file.h"
+#include  "wx/textfile.h"
+#include  "wx/utils.h"
+#include  "wx/log.h"
 
 // other standard headers
 #include  <errno.h>

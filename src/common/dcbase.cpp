@@ -22,7 +22,9 @@
 
 #ifndef WX_PRECOMP
    #include "wx/window.h"
+#ifdef __WXMSW__
    #include "wx/msw/private.h"
+#endif
 #endif
 
 #include "wx/dc.h"
