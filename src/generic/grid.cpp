@@ -1069,7 +1069,7 @@ void wxGridCellFloatEditor::StartingKey(wxKeyEvent& event)
 {
     int keycode = event.GetKeyCode();
         if ( wxIsdigit(keycode) || keycode == '+' || keycode == '-'
-            || keycode == wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER)[0]
+            || keycode == wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER)[0u]
             || keycode ==  WXK_NUMPAD0
             || keycode ==  WXK_NUMPAD1
             || keycode ==  WXK_NUMPAD2
@@ -1172,7 +1172,7 @@ bool wxGridCellFloatEditor::IsAcceptedKey(wxKeyEvent& event)
                 // additionally accept 'e' as in '1e+6', also '-', '+', and '.'
                 if ( (keycode < 128) &&
                      (wxIsdigit(keycode) || tolower(keycode) == 'e' ||
-                      keycode == wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER)[0] || 
+                      keycode == wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER)[0u] || 
                       keycode == '+' || keycode == '-') )
                     return TRUE;
         }
