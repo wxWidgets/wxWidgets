@@ -657,7 +657,8 @@ bool wxGridCellTextEditor::EndEdit(int row, int col,
         grid->GetTable()->SetValue(row, col, value);
 
     m_startValue = wxEmptyString;
-    Text()->SetValue(m_startValue);
+    // No point in setting the text of the hidden control
+    //Text()->SetValue(m_startValue);
 
     return changed;
 }
