@@ -4399,7 +4399,7 @@ void wxListMainWindow::InsertItem( wxListItem &item )
 
     wxListLineData *line = new wxListLineData(this);
 
-    line->SetItem( 0, item );
+    line->SetItem( item.m_col, item );
 
     m_lines.Insert( line, id );
 
