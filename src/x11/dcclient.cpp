@@ -18,6 +18,7 @@
 #include "wx/window.h"
 #include "wx/app.h"
 #include "wx/image.h"
+#include "wx/module.h"
 
 #include "wx/x11/private.h"
 
