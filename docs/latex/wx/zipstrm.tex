@@ -433,6 +433,9 @@ the wxZipInputStream then returns the entry's data. Eof() becomes true
 after an attempt has been made to read past the end of the entry's data.
 When there are no more entries, GetNextEntry() returns NULL and sets Eof().
 
+Note that in general zip entries are not seekable, and
+wxZipInputStream::SeekI() always returns wxInvalidOffset.
+
 \wxheading{Derived from}
 
 \helpref{wxArchiveInputStream}{wxarchiveinputstream}
@@ -466,6 +469,10 @@ no effect on the stream's data.
 \func{}{wxZipInputStream}{\param{const wxString\& }{archive}, \param{const wxString\& }{file}}
 
 Compatibility constructor.
+
+When this constructor is used, an emulation of seeking is
+switched on for compatibility with previous versions. Note however,
+that it is deprecated.
 
 
 \membersection{wxZipInputStream::CloseEntry}\label{wxzipinputstreamcloseentry}

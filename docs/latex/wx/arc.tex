@@ -10,7 +10,8 @@
 \section{Archive formats such as zip}\label{wxarc}
 
 The archive classes handle archive formats such as zip, tar, rar and cab.
-Currently only the wxZip classes are included.
+Currently only the wxZip classes are included. wxTar classes are under
+development at \urlref{wxCode}{http://wxcode.sf.net}.
 
 For each archive type, there are the following classes (using zip here
 as an example):
@@ -65,28 +66,36 @@ For example:
 
 \helpref{Archive formats such as zip}{wxarc}
 
-\helpref{GetNextEntry()}{wxarchiveinputstreamgetnextentry} returns an
-entry object containing the meta-data for the next entry in the archive
-(and gives away ownership). Reading from the input stream then returns
-the entry's data. Eof() becomes true after an attempt has been made to
-read past the end of the entry's data.
+\helpref{GetNextEntry()}{wxarchiveinputstreamgetnextentry} returns a pointer
+to entry object containing the meta-data for the next entry in the archive
+(and gives away ownership). Reading from the input stream then returns the
+entry's data. Eof() becomes true after an attempt has been made to read past
+the end of the entry's data.
 
 When there are no more entries, GetNextEntry() returns NULL and sets Eof().
 
 \begin{verbatim}
-    wxDEFINE_SCOPED_PTR_TYPE(wxZipEntry);
+    // 'smart pointer' type created with wxDEFINE_SCOPED_PTR_TYPE
     wxZipEntryPtr entry;
 
     wxFFileInputStream in(_T("test.zip"));
     wxZipInputStream zip(in);
-    wxTextInputStream txt(zip);
-    wxString data;
 
     while (entry.reset(zip.GetNextEntry()), entry.get() != NULL)
     {
-        wxString name = entry->GetName();    // access meta-data
-        txt >> data;                         // access data
+        // access meta-data
+        wxString name = entry->GetName();
+        // read 'zip' to access the entry's data
     }
+
+\end{verbatim}
+
+The \helpref{smart pointer}{wxscopedptr} type {\em wxZipEntryPtr}
+can be created like this:
+
+\begin{verbatim}
+    #include <wx/ptr_scpd.h>
+    wxDEFINE_SCOPED_PTR_TYPE(wxZipEntry);
 
 \end{verbatim}
 
@@ -103,18 +112,22 @@ much more efficient than transferring the data using Read() and Write()
 since it will copy them without decompressing and recompressing them.
 
 In general modifications are not possible without rewriting the archive,
-though it may be possible in some limited cases. Even then, rewriting
-the archive is usually a better choice since a failure can be handled
-without losing the whole archive.
+though it may be possible in some limited cases. Even then, rewriting the
+archive is usually a better choice since a failure can be handled without
+losing the whole
+archive. \helpref{wxTempFileOutputStream}{wxtempfileoutputstream} can
+be helpful to do this.
 
 For example to delete all entries matching the pattern "*.txt":
 
 \begin{verbatim}
-    wxFFileInputStream in(_T("in.zip"));
-    wxFFileOutputStream out(_T("out.zip"));
+    wxFFileInputStreamPtr in(new wxFFileInputStream(_T("test.zip")));
+    wxTempFileOutputStream out(_T("test.zip"));
 
-    wxZipInputStream inzip(in);
+    wxZipInputStream inzip(*in);
     wxZipOutputStream outzip(out);
+
+    // 'smart pointer' type created with wxDEFINE_SCOPED_PTR_TYPE
     wxZipEntryPtr entry;
 
     // transfer any meta-data for the archive as a whole (the zip comment
@@ -127,7 +140,22 @@ For example to delete all entries matching the pattern "*.txt":
             if (!outzip.CopyEntry(entry.release(), inzip))
                 break;
 
-    bool success = inzip.Eof() && outzip.Close();
+    // close the input stream by releasing the pointer to it, do this
+    // before closing the output stream so that the file can be replaced
+    in.reset();
+
+    // you can check for success as follows
+    bool success = inzip.Eof() && outzip.Close() && out.Commit();
+
+\end{verbatim}
+
+The \helpref{smart pointer}{wxscopedptr} types {\em wxZipEntryPtr}
+and {\em wxFFileInputStreamPtr} can be created like this:
+
+\begin{verbatim}
+    #include <wx/ptr_scpd.h>
+    wxDEFINE_SCOPED_PTR_TYPE(wxZipEntry);
+    wxDEFINE_SCOPED_PTR_TYPE(wxFFileInputStream);
 
 \end{verbatim}
 
@@ -159,7 +187,7 @@ it is better to convert the local name to the archive's internal format
 and search for that:
 
 \begin{verbatim}
-    wxDEFINE_SCOPED_PTR_TYPE(wxZipEntry);
+    // 'smart pointer' type created with wxDEFINE_SCOPED_PTR_TYPE
     wxZipEntryPtr entry;
 
     // convert the local name we are looking for into the internal format
@@ -251,7 +279,8 @@ So there is a class factory for each archive type, derived from
  \helpref{wxArchiveClassFactory}{wxarchiveclassfactory}, which can create
 the other classes.
 
-For example, given {\it wxArchiveClassFactory* factory}:
+For example, given {\it wxArchiveClassFactory* factory}, streams and
+entries can be created like this:
 
 \begin{verbatim}
     // create streams without knowing their type
@@ -260,6 +289,18 @@ For example, given {\it wxArchiveClassFactory* factory}:
 
     // create an empty entry object
     wxArchiveEntryPtr        entry(factory->NewEntry());
+
+\end{verbatim}
+
+The \helpref{smart pointer}{wxscopedptr} types {\em wxArchiveInputStreamPtr},
+{\em wxArchiveOutputStreamPtr} and {\em wxArchiveEntryPtr} would need to
+have already have been defined, which could be done like this:
+
+\begin{verbatim}
+    #include <wx/ptr_scpd.h>
+    wxDEFINE_SCOPED_PTR_TYPE(wxArchiveInputStream);
+    wxDEFINE_SCOPED_PTR_TYPE(wxArchiveOutputStream);
+    wxDEFINE_SCOPED_PTR_TYPE(wxArchiveEntry);
 
 \end{verbatim}
 
