@@ -45,7 +45,11 @@
 // ----------------------------------------------------------------------------
 
 // the margin between the text control and the spin
+#ifdef __WXMAC__
+static const wxCoord MARGIN = 4;
+#else
 static const wxCoord MARGIN = 2;
+#endif
 
 // ----------------------------------------------------------------------------
 // wxSpinCtrlText: text control used by spin control
@@ -58,6 +62,9 @@ public:
         : wxTextCtrl(spin->GetParent(), -1, value)
     {
         m_spin = spin;
+        
+        // remove the default minsize, the spinctrl will have one instead
+        SetSizeHints(-1,-1);
     }
 
 protected:
@@ -104,6 +111,9 @@ public:
         m_spin = spin;
 
         SetWindowStyle(style | wxSP_VERTICAL);
+
+        // remove the default minsize, the spinctrl will have one instead
+        SetSizeHints(-1,-1);
     }
 
 protected:
@@ -174,24 +184,21 @@ bool wxSpinCtrl::Create(wxWindow *parent,
             initial = l;
     }
 
-    SetBackgroundColour(*wxRED);
     m_text = new wxSpinCtrlText(this, value);
     m_btn = new wxSpinCtrlButton(this, style);
-
+        
     m_btn->SetRange(min, max);
     m_btn->SetValue(initial);
 #ifdef __WXMAC__
     wxSize csize = size ;
     if ( size.y == -1 ) {
-      csize.y = m_text->GetSize().y ;
+      csize.y = m_text->GetSize().y;
     }
-    DoSetSize(pos.x, pos.y, csize.x, csize.y);
+    SetBestSize(csize);
 #else
-    wxSize best = GetBestSize();
-    if ( size.x != -1 ) best.x = size.x;
-    if ( size.y != -1 ) best.y = size.y;
-    DoSetSize(pos.x, pos.y, best.x, best.y);
+    SetBestSize(size);
 #endif
+    
     // have to disable this window to avoid interfering it with message
     // processing to the text and the button... but pretend it is enabled to
     // make IsEnabled() return TRUE
@@ -209,11 +216,13 @@ bool wxSpinCtrl::Create(wxWindow *parent,
 
 wxSpinCtrl::~wxSpinCtrl()
 {
-    // delete the controls now, don't leave them alive even though they woudl
+    // delete the controls now, don't leave them alive even though they would
     // still be eventually deleted by our parent - but it will be too late, the
     // user code expects them to be gone now
     delete m_text;
+    m_text = NULL ;
     delete m_btn;
+    m_btn = NULL ;
 }
 
 // ----------------------------------------------------------------------------
@@ -237,11 +246,7 @@ void wxSpinCtrl::DoMoveWindow(int x, int y, int width, int height)
 
     wxCoord wText = width - sizeBtn.x;
     m_text->SetSize(x, y, wText, height);
-#ifdef __WXMAC__
-    m_btn->SetSize(x + wText + MARGIN, y, -1, -1);
-#else
     m_btn->SetSize(x + wText + MARGIN, y, -1, height);
-#endif
 }
 
 // ----------------------------------------------------------------------------
