@@ -587,7 +587,7 @@ void wxGridCellTextEditor::StartingKey(wxKeyEvent& event)
     if ( !event.AltDown() && !event.MetaDown() && !event.ControlDown() )
     {
         // insert the key in the control
-        long keycode = event.KeyCode();
+        int keycode = (int)event.KeyCode();
         if ( isprint(keycode) )
         {
             // FIXME this is not going to work for non letters...
@@ -610,7 +610,7 @@ void wxGridCellTextEditor::HandleReturn(wxKeyEvent& event)
 {
 #if defined(__WXMOTIF__) || defined(__WXGTK__)
     // wxMotif needs a little extra help...
-    int pos = Text()->GetInsertionPoint();
+    long pos = Text()->GetInsertionPoint();
     wxString s( Text()->GetValue() );
     s = s.Left(pos) + "\n" + s.Mid(pos);
     Text()->SetValue(s);
@@ -699,7 +699,7 @@ void wxGridCellNumberEditor::BeginEdit(int row, int col, wxGrid* grid)
 
     if ( HasRange() )
     {
-        Spin()->SetValue(m_valueOld);
+        Spin()->SetValue((int)m_valueOld);
     }
     else
     {
@@ -738,7 +738,7 @@ void wxGridCellNumberEditor::Reset()
 {
     if ( HasRange() )
     {
-        Spin()->SetValue(m_valueOld);
+        Spin()->SetValue((int)m_valueOld);
     }
     else
     {
@@ -750,7 +750,7 @@ void wxGridCellNumberEditor::StartingKey(wxKeyEvent& event)
 {
     if ( !HasRange() )
     {
-        long keycode = event.KeyCode();
+        int keycode = (int) event.KeyCode();
         if ( isdigit(keycode) || keycode == '+' || keycode == '-' )
         {
             wxGridCellTextEditor::StartingKey(event);
@@ -854,7 +854,7 @@ void wxGridCellFloatEditor::Reset()
 
 void wxGridCellFloatEditor::StartingKey(wxKeyEvent& event)
 {
-    long keycode = event.KeyCode();
+    int keycode = (int)event.KeyCode();
     if ( isdigit(keycode) ||
          keycode == '+' || keycode == '-' || keycode == '.' )
     {
@@ -5211,7 +5211,7 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 if ( !(event.AltDown() ||
                        event.MetaDown() ||
                        event.ControlDown()) &&
-                     ((isalnum(event.KeyCode()) &&
+                     ((isalnum((int)event.KeyCode()) &&
                        (event.KeyCode() < 256 && event.KeyCode() >= 0)) ||
                       event.KeyCode() == WXK_F2) &&
                      !IsCellEditControlEnabled() &&
@@ -5745,7 +5745,7 @@ void wxGrid::DrawTextRectangle( wxDC& dc,
 
         for ( size_t i = 0;  i < lines.GetCount();  i++ )
         {
-            dc.DrawText( lines[i], (long)x, (long)y );
+            dc.DrawText( lines[i], (int)x, (int)y );
             y += lineHeight;
         }
     }
