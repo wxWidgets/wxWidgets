@@ -184,23 +184,11 @@ Constructor from a directory name, file base name and extension
 
 \func{void}{Assign}{\param{const wxFileName\& }{filepath}}
 
-
-\membersection{wxFileName::Assign}\label{wxfilenameassign}
-
 \func{void}{Assign}{\param{const wxString\& }{fullpath}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
-
-
-\membersection{wxFileName::Assign}\label{wxfilenameassign}
 
 \func{void}{Assign}{\param{const wxString\& }{volume}, \param{const wxString\& }{path}, \param{const wxString\& }{name}, \param{const wxString\& }{ext}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
-
-\membersection{wxFileName::Assign}\label{wxfilenameassign}
-
 \func{void}{Assign}{\param{const wxString\& }{path}, \param{const wxString\& }{name}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
-
-
-\membersection{wxFileName::Assign}\label{wxfilenameassign}
 
 \func{void}{Assign}{\param{const wxString\& }{path}, \param{const wxString\& }{name}, \param{const wxString\& }{ext}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
@@ -245,7 +233,7 @@ temporary file couldn't be created, the object is put into the\rtfsp
 
 Reset all components to default, uninitialized state.
 
-\membersection{wxFileName::CreateTempFileName}{wxfilenamecreatetempfilename}
+\membersection{wxFileName::CreateTempFileName}\label{wxfilenamecreatetempfilename}
 
 \func{static wxString}{CreateTempFileName}{\param{const wxString\& }{prefix}}
 
@@ -266,37 +254,27 @@ The full temporary file name or an empty string on error.
 
 \func{bool}{DirExists}{\void}
 
-does the directory with this name exists?
-
-
-\membersection{wxFileName::DirExists}\label{wxfilenamedirexists}
-
 \func{bool}{DirExists}{\param{const wxString\& }{dir}}
 
+Does the directory with this name exists?
 
 \membersection{wxFileName::DirName}\label{wxfilenamedirname}
 
 \func{wxFileName}{DirName}{\param{const wxString\& }{dir}}
 
-
 \membersection{wxFileName::FileExists}\label{wxfilenamefileexists}
 
 \func{bool}{FileExists}{\void}
 
-does the file with this name exists?
-
-
-\membersection{wxFileName::FileExists}\label{wxfilenamefileexists}
-
 \func{bool}{FileExists}{\param{const wxString\& }{file}}
 
+Does the file with this name exists?
 
 \membersection{wxFileName::FileName}\label{wxfilenamefilename}
 
 \func{wxFileName}{FileName}{\param{const wxString\& }{file}}
 
 static pseudo constructors
-
 
 \membersection{wxFileName::GetCwd}\label{wxfilenamegetcwd}
 
