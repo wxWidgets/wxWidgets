@@ -16,6 +16,7 @@
 #include "wx/debug.h"
 #include "wx/mstream.h"
 #include "wx/image.h"
+#include "wx/log.h"
 
 #include <gdk/gdk.h>
 
