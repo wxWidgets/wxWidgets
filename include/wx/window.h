@@ -439,6 +439,10 @@ public:
         // make the window modal (all other windows unresponsive)
     virtual void MakeModal(bool modal = true);
 
+
+    // (primitive) theming support
+    // ---------------------------
+
     virtual void SetThemeEnabled(bool enableTheme) { m_themeEnabled = enableTheme; }
     virtual bool GetThemeEnabled() const { return m_themeEnabled; }
 
@@ -450,10 +454,6 @@ public:
     virtual void ApplyParentThemeBackground(const wxColour& WXUNUSED(bg))
         { /* do nothing */ }
     
-        // returns true if this window should inherit its parent colours on
-        // creation
-    virtual bool ShouldInheritColours() const { return false; }
-
 
     // focus and keyboard handling
     // ---------------------------
@@ -697,24 +697,41 @@ public:
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
         // set/retrieve the window colours (system defaults are used by
-        // default): Set functions return true if colour was changed
-    virtual bool SetBackgroundColour( const wxColour &colour );
-    virtual bool SetForegroundColour( const wxColour &colour );
-
+        // default): SetXXX() functions return true if colour was changed,
+        // SetDefaultXXX() reset the "m_hasXXX" flag after setting the value
+        // to prevent it from being inherited by our children
+    virtual bool SetBackgroundColour(const wxColour& colour);
+    void SetDefaultBackgroundColour(const wxColour& colour)
+    {
+        if ( SetBackgroundColour(colour) )
+            m_hasBgCol = false;
+    }
     wxColour GetBackgroundColour() const;
+
+    virtual bool SetForegroundColour(const wxColour& colour);
+    void SetDefaultForegroundColour(const wxColour& colour)
+    {
+        if ( SetForegroundColour(colour) )
+            m_hasFgCol = false;
+    }
     wxColour GetForegroundColour() const;
+
+        // set/retrieve the font for the window (SetFont() returns true if the
+        // font really changed)
+    virtual bool SetFont(const wxFont& font) = 0;
+    void SetDefaultFont(const wxFont& font)
+    {
+        if ( SetFont(font) )
+            m_hasFont = false;
+    }
+    const wxFont& GetFont() const { return DoGetFont(); }
+    wxFont& GetFont() { return DoGetFont(); }
 
         // set/retrieve the cursor for this window (SetCursor() returns true
         // if the cursor was really changed)
     virtual bool SetCursor( const wxCursor &cursor );
     const wxCursor& GetCursor() const { return m_cursor; }
     wxCursor& GetCursor() { return m_cursor; }
-
-        // set/retrieve the font for the window (SetFont() returns true if the
-        // font really changed)
-    virtual bool SetFont( const wxFont &font ) = 0;
-    const wxFont& GetFont() const { return DoGetFont(); }
-    wxFont& GetFont() { return DoGetFont(); }
 
 #if wxUSE_CARET
         // associate a caret with the window
@@ -986,6 +1003,18 @@ protected:
     // event handling specific to wxWindow
     virtual bool TryValidator(wxEvent& event);
     virtual bool TryParent(wxEvent& event);
+
+    // inherit the parents visual attributes if they had been explicitly set
+    // by the user (i.e. we don't inherit default attributes) and if we don't
+    // have our own explicitly set
+    virtual void InheritAttributes();
+
+    // returns false from here if this window doesn't want to inherit the
+    // parents colours even if InheritAttributes() would normally do it
+    //
+    // this just provides a simple way to customize InheritAttributes()
+    // behaviour in the most common case
+    virtual bool ShouldInheritColours() const { return false; }
 
 
 #if wxUSE_CONSTRAINTS

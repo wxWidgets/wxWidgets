@@ -781,6 +781,10 @@ if it was not possible to determine the default control appearance or,
 especially for the background colour, if the field doesn't make sense as is
 the case for \texttt{colBg} for the controls with themed background.
 
+\wxheading{See also}
+
+\helpref{InheritAttributes}{wxwindowinheritattributes}
+
 
 \membersection{wxWindow::GetClientSize}\label{wxwindowgetclientsize}
 
@@ -1264,6 +1268,35 @@ Returns true if this window has the current mouse capture.
 \func{bool}{Hide}{\void}
 
 Equivalent to calling \helpref{Show}{wxwindowshow}({\tt false}).
+
+
+\membersection{wxWindow::InheritAttributes}\label{wxwindowinheritattributes}
+
+\func{void}{InheritAttributes}{\void}
+
+This function is (or should be, in case of custom controls) called during
+window creation to intelligently set up the window visual attributes, that is
+the font and the foreground and background colours.
+
+By ``intelligently'' the following is meant: by default, all windows use their
+own \helpref{default}{wxwindowgetclassdefaultattributes} attributes. However
+if some of the parents attributes are explicitly (that is, using 
+\helpref{SetFont}{wxwindowsetfont} and not 
+\helpref{SetDefaultFont}{wxwindowsetdefaultfont}) changed \emph{and} if the
+corresponding attribute hadn't been explicitly set for this window itself,
+then this window takes the same value as used by the parent. In addition, if
+the window overrides \helpref{ShouldInheritColours}{wxwindowshouldinheritcolours} 
+to return \false, the colours will not be changed no matter what and only the
+font might.
+
+This rather complicated logic is necessary in order to accomodate the
+different usage scenarius. The most common one is when all default attributes
+are used and in this case, nothing should be inherited as in modern GUIs
+different controls use different fonts (and colours) than their siblings so
+they can't inherit the same value from the parent. However it was also deemed
+desirable to allow to simply change the attributes of all children at once by
+just changing the font or colour of their common parent, hence in this case we
+do inherit the parents attributes.
 
 
 \membersection{wxWindow::InitDialog}\label{wxwindowinitdialog}
@@ -2300,6 +2333,10 @@ from within wxWindow::OnSize functions.}
 
 Sets the background colour of the window.
 
+Please see \helpref{InheritAttributes}{wxwindowinheritattributes} for
+explanation of the difference between this method and 
+\helpref{SetDefaultBackgroundColour}{wxwindowsetdefaultbackgroundcolour}.
+
 \wxheading{Parameters}
 
 \docparam{colour}{The colour to be used as the background colour.}
@@ -2415,6 +2452,45 @@ explicitly. When setting both a wxLayoutConstraints and a \helpref{wxSizer}{wxsi
 sizer will have effect.
 
 
+\membersection{wxWindow::SetDefaultBackgroundColour}\label{wxwindowsetdefaultbackgroundcolour}
+
+\func{void}{SetDefaultBackgroundColour}{\param{const wxColour\& }{colour}}
+
+Sets the background colour of the window but prevents it from being inherited
+by the children of this window.
+
+\wxheading{See also}
+
+\helpref{SetBackgroundColour}{wxwindowsetbackgroundcolour},\rtfsp
+\helpref{InheritAttributes}{wxwindowinheritattributes}
+
+
+\membersection{wxWindow::SetDefaultFont}\label{wxwindowsetdefaultfont}
+
+\func{void}{SetDefaultBackgroundColour}{\param{const wxColour\& }{colour}}
+
+Sets the font of the window but prevents it from being inherited by the
+children of this window.
+
+\wxheading{See also}
+
+\helpref{SetFont}{wxwindowsetfont},\rtfsp
+\helpref{InheritAttributes}{wxwindowinheritattributes}
+
+
+\membersection{wxWindow::SetDefaultForegroundColour}\label{wxwindowsetdefaultforegroundcolour}
+
+\func{void}{SetDefaultForegroundColour}{\param{const wxColour\& }{colour}}
+
+Sets the foreground colour of the window but prevents it from being inherited
+by the children of this window.
+
+\wxheading{See also}
+
+\helpref{SetForegroundColour}{wxwindowsetforegroundcolour},\rtfsp
+\helpref{InheritAttributes}{wxwindowinheritattributes}
+
+
 \membersection{wxWindow::SetDropTarget}\label{wxwindowsetdroptarget}
 
 \func{void}{SetDropTarget}{\param{wxDropTarget*}{ target}}
@@ -2523,7 +2599,11 @@ can be overridden to do something in addition to this in the derived classes.
 
 \func{void}{SetFont}{\param{const wxFont\& }{font}}
 
-Sets the font for this window.
+Sets the font for this window. This function should not be called for the
+parent window if you don't want its font to be inherited by its children,
+use \helpref{SetDefaultFont}{wxwindowsetdefaultfont} instead in this case and
+see \helpref{InheritAttributes}{wxwindowinheritattributes} for more
+explanations.
 
 \wxheading{Parameters}
 
@@ -2531,7 +2611,8 @@ Sets the font for this window.
 
 \wxheading{See also}
 
-\helpref{wxWindow::GetFont}{wxwindowgetfont}
+\helpref{wxWindow::GetFont}{wxwindowgetfont},\\
+\helpref{InheritAttributes}{wxwindowinheritattributes}
 
 
 \membersection{wxWindow::SetForegroundColour}\label{wxwindowsetforegroundcolour}
@@ -2539,6 +2620,10 @@ Sets the font for this window.
 \func{virtual void}{SetForegroundColour}{\param{const wxColour\& }{colour}}
 
 Sets the foreground colour of the window.
+
+Please see \helpref{InheritAttributes}{wxwindowinheritattributes} for
+explanation of the difference between this method and 
+\helpref{SetDefaultForegroundColour}{wxwindowsetdefaultforegroundcolour}.
 
 \wxheading{Parameters}
 
@@ -2558,7 +2643,8 @@ their parent windows.
 
 \helpref{wxWindow::GetForegroundColour}{wxwindowgetforegroundcolour},\rtfsp
 \helpref{wxWindow::SetBackgroundColour}{wxwindowsetbackgroundcolour},\rtfsp
-\helpref{wxWindow::GetBackgroundColour}{wxwindowgetbackgroundcolour}
+\helpref{wxWindow::GetBackgroundColour}{wxwindowgetbackgroundcolour},\rtfsp
+\helpref{wxWindow::ShouldInheritColours}{wxwindowshouldinheritcolours}
 
 
 \membersection{wxWindow::SetHelpText}\label{wxwindowsethelptext}
@@ -3052,6 +3138,18 @@ enum wxWindowVariant
 
 By default the controls use the normal size, of course, but this function can
 be used to change this.
+
+
+\membersection{wxWindow::ShouldInheritColours}\label{wxwindowshouldinheritcolours}
+
+\func{virtual bool}{ShouldInheritColours}{\void}
+
+Return \true from here to allow the colours of this window to be changed by 
+\helpref{InheritAttributes}{wxwindowinheritattributes}, returning \false
+forbids inheriting them from the parent window.
+
+The base class version returns \false, but this method is overridden in 
+\helpref{wxControl}{wxcontrol} where it returns \true.
 
 
 \membersection{wxWindow::Show}\label{wxwindowshow}

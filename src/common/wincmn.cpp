@@ -888,6 +888,31 @@ bool wxWindowBase::RemoveEventHandler(wxEvtHandler *handler)
 // colours, fonts &c
 // ----------------------------------------------------------------------------
 
+void wxWindowBase::InheritAttributes()
+{
+    const wxWindow * const parent = GetParent();
+    if ( !parent )
+        return;
+
+    // we only inherit attributes which had been explicitly set for the parent
+    // which ensures that this only happens if the user really wants it and
+    // not by default which wouldn't make any sense in modern GUIs where the
+    // controls don't all use the same fonts (nor colours)
+    if ( parent->m_hasFont && !m_hasFont )
+        SetFont(parent->GetFont());
+
+    // in addition, there is a possibility to explicitly forbid inheriting
+    // colours at each class level by overriding ShouldInheritColours()
+    if ( ShouldInheritColours() )
+    {
+        if ( parent->m_hasFgCol && !m_hasFgCol )
+            SetForegroundColour(parent->GetForegroundColour());
+
+        if ( parent->m_hasBgCol && !m_hasBgCol )
+            SetBackgroundColour(parent->GetBackgroundColour());
+    }
+}
+
 /* static */ wxVisualAttributes
 wxWindowBase::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {

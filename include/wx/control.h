@@ -74,10 +74,6 @@ protected:
                        const wxValidator& validator,
                        const wxString& name);
 
-    // this function is obsolete, it is only kept for backwards compatibility,
-    // do *not* use it
-    void InheritAttributes() { }
-
     // initialize the common fields of wxCommandEvent
     void InitCommandEvent(wxCommandEvent& event) const;
 
