@@ -1503,7 +1503,7 @@ void wxTextCtrl::OnUpdateRedo(wxUpdateUIEvent& event)
 // EN_LINK processing
 // ----------------------------------------------------------------------------
 
-bool wxTextCtrl::MSWOnNotify(int WXUNUSED(idCtrl), WXLPARAM lParam, WXLPARAM *result)
+bool wxTextCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 {
     NMHDR *hdr = (NMHDR* )lParam;
     if ( hdr->code == EN_LINK )
