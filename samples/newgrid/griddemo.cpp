@@ -805,22 +805,28 @@ static const wxChar* severities[] =
 static struct BugsGridData
 {
     int id;
+
+    // Borland can't deal with global wxStrings and will generate a
+    // compile time error with the initializing the gs_dataGridBugs
+    // array (below)
+    //
 #ifndef __BORLANDC__
-    wxString
+    wxString summary;
 #else
-    const wxChar *
+    wxChar *summary;
 #endif
-        summary;
+
     Severity severity;
     int prio;
+    
 #ifndef __BORLANDC__
-    wxString
+    wxString platform;
 #else
-    const wxChar *
+    wxChar *platform;
 #endif
-        platform;
+
     bool opened;
-} gs_dataBugsGrid [] =
+} gs_dataBugsGrid [] = 
 {
     { 18, _T("foo doesn't work"), Sev_Major, 1, _T("wxMSW"), TRUE },
     { 27, _T("bar crashes"), Sev_Critical, 1, _T("all"), FALSE },
@@ -940,11 +946,27 @@ void BugsGridTable::SetValue( int row, int col, const wxString& value )
             break;
 
         case Col_Summary:
+#ifndef __BORLANDC__
             gd.summary = value;
+#else
+            // this generates a warning message if you are using the
+            // memory tracing code but it should be ok :MB
+            //
+            delete gd.summary;
+            gd.summary = copystring( value.c_str() );
+#endif
             break;
 
         case Col_Platform:
+#ifndef __BORLANDC__
             gd.platform = value;
+#else            
+            // this generates a warning message if you are using the
+            // memory tracing code but it should be ok :MB
+            //
+            delete gd.platform;
+            gd.platform = copystring( value.c_str() );
+#endif
             break;
     }
 }
