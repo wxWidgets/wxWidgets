@@ -1,0 +1,8 @@
+aaaa                    ICON    "bitmaps/wxconfigtool.ico"
+
+wxconfigtool              ICON    "bitmaps/wxconfigtool.ico"
+
+#include "wx/msw/wx.rc"
+
+1 24 "wxconfigtool.exe.manifest"
+

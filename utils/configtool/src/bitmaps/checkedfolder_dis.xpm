@@ -1,0 +1,23 @@
+/* XPM */
+static char *checkedfolder_dis_xpm[] = {
+"16 16 4 1",
+" 	c None",
+".	c #808080",
+"X	c #C0C0C0",
+"o	c #000000",
+"                ",
+"  .....         ",
+" .XXXXX.        ",
+".XXXXXXX......  ",
+".XXXXXXXXXXXX.o ",
+".XXXXXXXXX.XX.o ",
+".XXXXXXXX..XX.o ",
+".XXX.XXX...XX.o ",
+".XXX..X...XXX.o ",
+".XXX.....XXXX.o ",
+".XXXX...XXXXX.o ",
+".XXXXX.XXXXXX.o ",
+"..............o ",
+" oooooooooooooo ",
+"                ",
+"                "};

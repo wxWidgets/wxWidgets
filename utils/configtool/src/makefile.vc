@@ -1,0 +1,20 @@
+#
+# File:		makefile.vc
+# Author:	Julian Smart
+# Created:	2003
+# Updated:	
+# Copyright:	(c) Julian Smart
+#
+# Makefile : Builds wxWindows Configuration Tool (VC++, WIN32)
+# Use FINAL=1 argument to nmake to build final version with no debug info.
+
+# Set WXDIR for your system
+WXDIR = $(WXWIN)
+
+PROGRAM=wxconfigtool
+OBJECTS = wxconfigtool.obj appsettings.obj configitem.obj configitemselector.obj configtooldoc.obj \
+ configtoolview.obj configtree.obj custompropertydialog.obj htmlparser.obj mainframe.obj \
+ propeditor.obj property.obj settingsdialog.obj utils.obj
+
+!include $(WXDIR)\src\makeprog.vc
+
