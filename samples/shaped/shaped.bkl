@@ -9,5 +9,9 @@
         <wx-lib>base</wx-lib>
         <win32-res>shaped.rc</win32-res>
     </exe>
+    
+    <wx-data id="data">
+        <files>star.png</files>
+    </wx-data>
 
 </makefile>

@@ -118,10 +118,10 @@ __RUNTIME_LIBS_7 = i
 __RUNTIME_LIBS_7 = 
 !endif
 !if "$(UNICODE)" == "1"
-__UNICODE_DEFINE_p = -DwxUSE_UNICODE=1
+__UNICODE_DEFINE_p = -D_UNICODE
 !endif
 !if "$(UNICODE)" == "1"
-__UNICODE_DEFINE_p_1 = -dwxUSE_UNICODE=1
+__UNICODE_DEFINE_p_1 = -d_UNICODE
 !endif
 !if "$(MSLU)" == "1"
 __UNICOWS_LIB_p = unicows.lib
@@ -151,7 +151,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\shaped.exe
+all: $(OBJS)\shaped.exe data
 
 $(OBJS)\shaped_shaped.obj: .\shaped.cpp
 	$(CXX) -q -c -P -o$@ $(SHAPED_CXXFLAGS) $**
@@ -163,8 +163,17 @@ clean:
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\shaped.exe del $(OBJS)\shaped.exe
+	-if exist $(OBJS)\shaped.tds del $(OBJS)\shaped.tds
+	-if exist $(OBJS)\shaped.ilc del $(OBJS)\shaped.ilc
+	-if exist $(OBJS)\shaped.ild del $(OBJS)\shaped.ild
+	-if exist $(OBJS)\shaped.ilf del $(OBJS)\shaped.ilf
+	-if exist $(OBJS)\shaped.ils del $(OBJS)\shaped.ils
+
+data: 
+	if not exist $(OBJS) mkdir $(OBJS)
+	for %f in (star.png) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\shaped.exe: $(SHAPED_OBJECTS)  $(OBJS)\shaped_shaped.res
 	ilink32 -Tpe -q $(LDFLAGS) -L$(BCCDIR)\lib $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa @&&|
-	c0w32.obj $(SHAPED_OBJECTS),$@,, $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) import32.lib ole2w32.lib  import32.lib cw32mt$(__RUNTIME_LIBS_7).lib,, $(OBJS)\shaped_shaped.res
+	c0w32.obj $(SHAPED_OBJECTS),$@,, $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) import32.lib ole2w32.lib oleacc.lib  import32.lib cw32mt$(__RUNTIME_LIBS_7).lib,, $(OBJS)\shaped_shaped.res
 |

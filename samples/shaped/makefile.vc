@@ -19,7 +19,7 @@ SETUPHDIR = \
 SHAPED_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS_7)$(__DEBUGRUNTIME_3) /DWIN32 \
 	$(__DEBUGINFO_0) /Fd$(OBJS)\shaped.pdb $(____DEBUGRUNTIME_2_p) \
 	$(__OPTIMIZEFLAG_4) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) /I.\..\..\include /I$(SETUPHDIR) /I. $(__DLLFLAG_p) \
+	$(__UNICODE_DEFINE_p) /I.\..\..\include /I$(SETUPHDIR) /W4 /I. $(__DLLFLAG_p) \
 	/D_WINDOWS /I.\..\..\samples $(CXXFLAGS) /GR /GX
 SHAPED_OBJECTS =  \
 	$(OBJS)\shaped_shaped.obj \
@@ -139,10 +139,10 @@ __RUNTIME_LIBS_7 = D
 __RUNTIME_LIBS_7 = T
 !endif
 !if "$(UNICODE)" == "1"
-__UNICODE_DEFINE_p = /DwxUSE_UNICODE=1
+__UNICODE_DEFINE_p = /D_UNICODE
 !endif
 !if "$(UNICODE)" == "1"
-__UNICODE_DEFINE_p_1 = /d wxUSE_UNICODE=1
+__UNICODE_DEFINE_p_1 = /d _UNICODE
 !endif
 !if "$(MSLU)" == "1"
 __UNICOWS_LIB_p = unicows.lib
@@ -214,7 +214,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\shaped.exe
+all: $(OBJS)\shaped.exe data
 
 $(OBJS)\shaped_shaped.obj: .\shaped.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(SHAPED_CXXFLAGS) $**
@@ -226,8 +226,14 @@ clean:
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\shaped.exe del $(OBJS)\shaped.exe
+	-if exist $(OBJS)\shaped.ilk del $(OBJS)\shaped.ilk
+	-if exist $(OBJS)\shaped.pdb del $(OBJS)\shaped.pdb
+
+data: 
+	if not exist $(OBJS) mkdir $(OBJS)
+	for %f in (star.png) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\shaped.exe: $(SHAPED_OBJECTS) $(OBJS)\shaped_shaped.res
 	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_1)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS @<<
-	$(SHAPED_OBJECTS)  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib
+	$(SHAPED_OBJECTS)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib
 <<

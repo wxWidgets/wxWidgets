@@ -137,7 +137,7 @@ __RUNTIME_LIBS_5 =
 !endif
 __UNICODE_DEFINE_p =
 !ifeq UNICODE 1
-__UNICODE_DEFINE_p = -dwxUSE_UNICODE=1
+__UNICODE_DEFINE_p = -d_UNICODE
 !endif
 __WXLIB_BASE_p =
 !ifeq MONOLITHIC 0
@@ -178,7 +178,7 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\shaped.exe
+all : .SYMBOLIC $(OBJS)\shaped.exe data
 
 $(OBJS)\shaped_shaped.obj :  .AUTODEPEND .\shaped.cpp
 	$(CXX) -zq -fo=$^@ $(SHAPED_CXXFLAGS) $<
@@ -193,6 +193,10 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
 	-if exist $(OBJS)\shaped.exe del $(OBJS)\shaped.exe
 
+data : .SYMBOLIC 
+	if not exist $(OBJS) mkdir $(OBJS)
+	for %f in (star.png) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+
 $(OBJS)\shaped.exe :  $(SHAPED_OBJECTS) $(OBJS)\shaped_shaped.res
 	@%create $(OBJS)\shaped.lbc
 	@%append $(OBJS)\shaped.lbc option quiet
@@ -200,6 +204,6 @@ $(OBJS)\shaped.exe :  $(SHAPED_OBJECTS) $(OBJS)\shaped_shaped.res
 	@%append $(OBJS)\shaped.lbc option caseexact
 	@%append $(OBJS)\shaped.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(SHAPED_OBJECTS)) do @%append $(OBJS)\shaped.lbc file %i
-	@for %i in ( $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\shaped.lbc library %i
+	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\shaped.lbc library %i
 	@%append $(OBJS)\shaped.lbc option resource=$(OBJS)\shaped_shaped.res
 	wlink @$(OBJS)\shaped.lbc

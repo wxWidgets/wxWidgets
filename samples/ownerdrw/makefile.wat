@@ -137,7 +137,7 @@ __RUNTIME_LIBS_5 =
 !endif
 __UNICODE_DEFINE_p =
 !ifeq UNICODE 1
-__UNICODE_DEFINE_p = -dwxUSE_UNICODE=1
+__UNICODE_DEFINE_p = -d_UNICODE
 !endif
 __WXLIB_BASE_p =
 !ifeq MONOLITHIC 0
@@ -178,7 +178,7 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\ownerdrw.exe
+all : .SYMBOLIC $(OBJS)\ownerdrw.exe data
 
 $(OBJS)\ownerdrw_ownerdrw.obj :  .AUTODEPEND .\ownerdrw.cpp
 	$(CXX) -zq -fo=$^@ $(OWNERDRW_CXXFLAGS) $<
@@ -193,6 +193,10 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
 	-if exist $(OBJS)\ownerdrw.exe del $(OBJS)\ownerdrw.exe
 
+data : .SYMBOLIC 
+	if not exist $(OBJS) mkdir $(OBJS)
+	for %f in (sound.png nosound.png) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+
 $(OBJS)\ownerdrw.exe :  $(OWNERDRW_OBJECTS) $(OBJS)\ownerdrw_ownerdrw.res
 	@%create $(OBJS)\ownerdrw.lbc
 	@%append $(OBJS)\ownerdrw.lbc option quiet
@@ -200,6 +204,6 @@ $(OBJS)\ownerdrw.exe :  $(OWNERDRW_OBJECTS) $(OBJS)\ownerdrw_ownerdrw.res
 	@%append $(OBJS)\ownerdrw.lbc option caseexact
 	@%append $(OBJS)\ownerdrw.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(OWNERDRW_OBJECTS)) do @%append $(OBJS)\ownerdrw.lbc file %i
-	@for %i in ( $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\ownerdrw.lbc library %i
+	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\ownerdrw.lbc library %i
 	@%append $(OBJS)\ownerdrw.lbc option resource=$(OBJS)\ownerdrw_ownerdrw.res
 	wlink @$(OBJS)\ownerdrw.lbc
