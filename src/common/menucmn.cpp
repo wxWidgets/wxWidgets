@@ -94,11 +94,11 @@ wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
         wxString current;
         for ( size_t n = (size_t)posTab + 1; n < label.Len(); n++ ) {
             if ( (label[n] == '+') || (label[n] == '-') ) {
-                if ( current == _("ctrl") )
+                if ( current == _("ctrl") || current == _T("ctrl") )
                     accelFlags |= wxACCEL_CTRL;
-                else if ( current == _("alt") )
+                else if ( current == _("alt") || current == _T("alt") )
                     accelFlags |= wxACCEL_ALT;
-                else if ( current == _("shift") )
+                else if ( current == _("shift") || current == _T("shift") )
                     accelFlags |= wxACCEL_SHIFT;
                 else {
                     // we may have "Ctrl-+", for example, but we still want to
