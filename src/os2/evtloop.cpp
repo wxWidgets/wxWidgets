@@ -191,8 +191,7 @@ bool wxEventLoopImpl::PreProcessMessage(QMSG *pMsg)
            for(pWnd = pWndThis; pWnd; pWnd = pWnd->GetParent() )
            {
                if((bRc = pWnd->OS2TranslateMessage((WXMSG*)pMsg)) == TRUE)
-		   return TRUE;
-	       //  break;
+                   break;
 	    // stop at first top level window, i.e. don't try to process the
 	    // key strokes originating in a dialog using the accelerators of
 	    // the parent frame - this doesn't make much sense
