@@ -378,6 +378,9 @@ public:
     virtual bool SetBackgroundColour(const wxColour& colour);
     virtual bool SetForegroundColour(const wxColour& colour);
 
+    virtual void Freeze();
+    virtual void Thaw();
+ 
     // callbacks
     void OnPaint( wxPaintEvent &event );
     void OnSetFocus( wxFocusEvent &event );
@@ -419,6 +422,7 @@ protected:
                         *m_imageListState,
                         *m_imageListButtons;
 
+    int                  m_freezeCount; 
     int                  m_dragCount;
     wxPoint              m_dragStart;
     wxGenericTreeItem   *m_dropTarget;

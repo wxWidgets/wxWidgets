@@ -734,6 +734,8 @@ void wxGenericTreeCtrl::Init()
     m_textCtrl = NULL;
 
     m_renameTimer = NULL;
+    m_freezeCount = 0;
+
     m_findTimer = NULL;
 
     m_lastOnSame = FALSE;
@@ -3219,7 +3221,8 @@ void wxGenericTreeCtrl::OnInternalIdle()
      * we actually redraw the tree when everything is over */
 
     if (!m_dirty) return;
-
+    if (m_freezeCount) return;
+    
     m_dirty = FALSE;
 
     CalculatePositions();
@@ -3330,6 +3333,7 @@ void wxGenericTreeCtrl::CalculatePositions()
 void wxGenericTreeCtrl::RefreshSubtree(wxGenericTreeItem *item)
 {
     if (m_dirty) return;
+    if (m_freezeCount) return;
 
     wxSize client = GetClientSize();
 
@@ -3346,6 +3350,7 @@ void wxGenericTreeCtrl::RefreshSubtree(wxGenericTreeItem *item)
 void wxGenericTreeCtrl::RefreshLine( wxGenericTreeItem *item )
 {
     if (m_dirty) return;
+    if (m_freezeCount) return;
 
     wxRect rect;
     CalcScrolledPosition(0, item->GetY(), NULL, &rect.y);
@@ -3357,6 +3362,8 @@ void wxGenericTreeCtrl::RefreshLine( wxGenericTreeItem *item )
 
 void wxGenericTreeCtrl::RefreshSelected()
 {
+    if (m_freezeCount) return;
+    
     // TODO: this is awfully inefficient, we should keep the list of all
     //       selected items internally, should be much faster
     if ( m_anchor )
@@ -3365,6 +3372,8 @@ void wxGenericTreeCtrl::RefreshSelected()
 
 void wxGenericTreeCtrl::RefreshSelectedUnder(wxGenericTreeItem *item)
 {
+    if (m_freezeCount) return;
+    
     if ( item->IsSelected() )
         RefreshLine(item);
 
@@ -3373,6 +3382,21 @@ void wxGenericTreeCtrl::RefreshSelectedUnder(wxGenericTreeItem *item)
     for ( size_t n = 0; n < count; n++ )
     {
         RefreshSelectedUnder(children[n]);
+    }
+}
+
+void wxGenericTreeCtrl::Freeze()
+{
+    m_freezeCount++;
+}
+
+void wxGenericTreeCtrl::Thaw()
+{
+    wxCHECK_RET( m_freezeCount > 0, _T("thawing unfrozen tree control?") );
+    
+    if ( !--m_freezeCount )
+    {
+        Refresh();
     }
 }
 
@@ -3385,6 +3409,8 @@ bool wxGenericTreeCtrl::SetBackgroundColour(const wxColour& colour)
     if ( !wxWindow::SetBackgroundColour(colour) )
         return FALSE;
 
+    if (m_freezeCount) return TRUE;
+    
     Refresh();
 
     return TRUE;
@@ -3395,6 +3421,8 @@ bool wxGenericTreeCtrl::SetForegroundColour(const wxColour& colour)
     if ( !wxWindow::SetForegroundColour(colour) )
         return FALSE;
 
+    if (m_freezeCount) return TRUE;
+    
     Refresh();
 
     return TRUE;

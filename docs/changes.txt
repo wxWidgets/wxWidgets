@@ -89,8 +89,8 @@ All (GUI):
 
 - wxHtmlWindow now delays image scaling until rendering,
   resulting in much better display of scaled images
-- Added UpdateSize to wxSplitterWindow to allow layout
-  while hidden
+- Added UpdateSize to wxSplitterWindow to allow layout while hidden
+- implemented Freeze/Thaw() for wxGenericTreeCtrl (Kevin Hock)
 
 wxMSW:
 
