@@ -128,9 +128,9 @@ static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* 
        here in order to make repositioning after resizing to take effect. */
     if ((gtk_major_version == 1) &&
         (gtk_minor_version == 2) &&
-	    (gtk_micro_version < 6) &&
-        (win->m_wxwindow) && 
-	    (GTK_WIDGET_REALIZED(win->m_wxwindow)))
+        (gtk_micro_version < 6) &&
+        (win->m_wxwindow) &&
+        (GTK_WIDGET_REALIZED(win->m_wxwindow)))
     {
         gtk_widget_size_allocate( win->m_wxwindow, alloc );
     }
@@ -154,7 +154,7 @@ gtk_notebook_realized_callback( GtkWidget * WXUNUSED(widget), wxWindow *win )
 }
 
 //-----------------------------------------------------------------------------
-// "key_press_event" 
+// "key_press_event"
 //-----------------------------------------------------------------------------
 
 static gint gtk_notebook_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxNotebook *win )
@@ -183,11 +183,11 @@ static gint gtk_notebook_key_press_callback( GtkWidget *widget, GdkEventKey *gdk
         {
              page->m_client->SetFocus();
         }
-     
+
         gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "key_press_event" );
         return TRUE;
     }
-    
+
     return FALSE;
 }
 
@@ -251,7 +251,7 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
     {
         wxFAIL_MSG( wxT("wxNoteBook creation failed") );
-	    return FALSE;
+        return FALSE;
     }
 
 
@@ -268,12 +268,12 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
 
     m_parent->DoAddChild( this );
 
-	if (m_windowStyle & wxNB_RIGHT)
-		gtk_notebook_set_tab_pos( GTK_NOTEBOOK(m_widget), GTK_POS_RIGHT );
-	if (m_windowStyle & wxNB_LEFT)
-		gtk_notebook_set_tab_pos( GTK_NOTEBOOK(m_widget), GTK_POS_LEFT );
-	if (m_windowStyle & wxNB_BOTTOM)
-		gtk_notebook_set_tab_pos( GTK_NOTEBOOK(m_widget), GTK_POS_BOTTOM );
+    if (m_windowStyle & wxNB_RIGHT)
+        gtk_notebook_set_tab_pos( GTK_NOTEBOOK(m_widget), GTK_POS_RIGHT );
+    if (m_windowStyle & wxNB_LEFT)
+        gtk_notebook_set_tab_pos( GTK_NOTEBOOK(m_widget), GTK_POS_LEFT );
+    if (m_windowStyle & wxNB_BOTTOM)
+        gtk_notebook_set_tab_pos( GTK_NOTEBOOK(m_widget), GTK_POS_BOTTOM );
 
     gtk_signal_connect( GTK_OBJECT(m_widget), "key_press_event",
       GTK_SIGNAL_FUNC(gtk_notebook_key_press_callback), (gpointer)this );
@@ -365,13 +365,19 @@ void wxNotebook::AdvanceSelection( bool forward )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid notebook") );
 
-    int sel = GetSelection();
     int max = GetPageCount();
+    if ( !max )
+    {
+        // nothing to do with empty notebook
+        return;
+    }
+
+    int sel = GetSelection();
 
     if (forward)
-        SetSelection( sel == max ? 0 : sel + 1 );
+        SetSelection( sel == max - 1 ? 0 : sel + 1 );
     else
-        SetSelection( sel == 0 ? max-1 : sel - 1 );
+        SetSelection( sel == 0 ? max - 1 : sel - 1 );
 }
 
 void wxNotebook::SetImageList( wxImageList* imageList )
@@ -425,20 +431,20 @@ bool wxNotebook::SetPageImage( int page, int image )
 
         GList *child = gtk_container_children(GTK_CONTAINER(nb_page->m_box));
         while (child)
-	{
+        {
             if (GTK_IS_PIXMAP(child->data))
-	    {
- 	        pixmapwid = GTK_WIDGET(child->data);
- 	        break;
+            {
+                pixmapwid = GTK_WIDGET(child->data);
+                break;
             }
-	    child = child->next;
-	}
+            child = child->next;
+        }
 
         /* We should have the pixmap widget now */
         wxASSERT(pixmapwid != NULL);
 
         if (image == -1)
-	{
+        {
             /* If there's no new widget, just remove the old from the box */
             gtk_container_remove(GTK_CONTAINER(nb_page->m_box), pixmapwid);
             nb_page->m_image = -1;
@@ -606,7 +612,7 @@ bool wxNotebook::InsertPage( int position, wxWindow* win, const wxString& text,
     {
         if (position < 0)
             SetSelection( GetPageCount()-1 );
-	else
+        else
             SetSelection( position );
     }
 
@@ -656,7 +662,7 @@ bool wxNotebook::DoPhase( int WXUNUSED(nPhase) )
 void wxNotebook::ApplyWidgetStyle()
 {
     // TODO, font for labels etc
-    
+
     SetWidgetStyle();
     gtk_widget_set_style( m_widget, m_widgetStyle );
 }
