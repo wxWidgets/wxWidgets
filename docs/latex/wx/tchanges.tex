@@ -23,7 +23,7 @@ For other changes (such as additional features, bug fixes, etc.) see the changes
 
 \wxheading{wxEvent and its derivatives losing public variable members}
 
-\helpref{wxEvent}{wxevent} and its \helpref{derivatives}{eventhandlingoverview} do not have their public variable members public anymore.
+\helpref{wxEvent}{wxevent} and its \helpref{derivatives}{eventhandlingoverview} do not have their public variable members public any more.
 Please use Get/Set accessors.
 
 \wxheading{New window repainting behaviour}
@@ -36,23 +36,24 @@ wxWindow::m\_font and m\_backgroundColour/m\_foregroundColour are no longer alwa
 
 \wxheading{Sizers Internal Overhaul}
 
-\helpref{The Sizers}{sizeroverview} have had some fundamental internal changes in the 2.5.2 and 2.5.3 releases intended to make them do more of the "Right Thing" but also be as backwards compatible as possible.  First a bit about how things used to work:
+\helpref{The sizers}{sizeroverview} have had some fundamental internal changes in the 2.5.2 and 2.5.3 releases intended to make them do more of the "Right Thing" but also be as backwards compatible as possible. First a bit about how things used to work:
 
 \begin{itemize}\itemsep=0pt
 \item The size that a window had when \helpref{Add()}{wxsizeradd}ed to the sizer was assumed to be its minimal size, and that size would always be used by default when calculating layout size and positions, and the sizer itself would keep track of that minimal size.
 \item If the window item was \helpref{Add()}{wxsizeradd}ed with the \windowstyle{wxADJUST\_MINSIZE} flag then when layout was calculated the item's \helpref{GetBestSize}{wxwindowgetbestsize} would be used to reset the minimal size that the sizer used.
 \end{itemize}
 
-The main thrust of the new Sizer changes was to make behaviour like \windowstyle{wxADJUST\_MINSIZE} be the default, and also to push the tracking of the minimal size to the window itself (since it knows its own needs) instead of having the sizer take care of it.  Consequently these changes were made:
+The main thrust of the new sizer changes was to make behaviour like \windowstyle{wxADJUST\_MINSIZE} be the default, and also to push the tracking of the minimal size to the window itself (since it knows its own needs) instead of having the sizer take care of it.  Consequently these changes were made:
 
 \begin{itemize}\itemsep=0pt
 \item The \windowstyle{wxFIXED\_MINSIZE} flag was added to allow for the old behaviour.  When this flag is used the size a window has when \helpref{Add()}{wxsizeradd}ed to the sizer will be treated as its minimal size and it will not be readjusted on each layout.
-\item The min size stored in wxWindow and settable with \helpref{SetSizeHints}{wxwindowsetsizehints} or \helpref{SetMinSize}{wxwindowsetminsize} will by default be used by the sizer (if it was set) as the minimal size of the sizer item.  If the minsize was not set (or was only partially set) then the window's best size is fetched and it is used instead of (or blended with) the minsize.  \helpref{wxWindow::GetBestFittingSize}{wxwindowgetbestfittingsize} was added to facilitate getting the size to be used by the sizers.
-\item The best size of a window is cached so it doesn't need to recalculated on every layout. \helpref{wxWindow::InvalidateBestSize}{wxwindowinvalidatebestsize} was added and should be called (usually just internally in control methods) whenever something is done that would make the best size change.
+\item The minimum size stored in wxWindow and settable with \helpref{SetSizeHints}{wxwindowsetsizehints} or \helpref{SetMinSize}{wxwindowsetminsize} will by default be used by the sizer (if it was set) as the minimal size of the sizer item.  If the minsize was not set (or was only partially set) then the window's best size is fetched and it is used instead of (or blended with) the minsize.  \helpref{wxWindow::GetBestFittingSize}{wxwindowgetbestfittingsize} was added to facilitate getting the size to be used by the sizers.
+\item The best size of a window is cached so it doesn't need to be recalculated on every layout. \helpref{wxWindow::InvalidateBestSize}{wxwindowinvalidatebestsize} was added and should be called (usually just internally in control methods) whenever something is done that would make the best size change.
 \item All \helpref{wxControls}{wxcontrol} were changed to set the minsize to what is passed to the constructor or their Create method, and also to set the real size of the control to the blending of the minsize and bestsize.  \helpref{wxWindow::SetBestFittingSize}{wxwindowsetbestfittingsize} was added to help with this, although most controls don't need to call it directly because it is called indirectly via the \helpref{SetInitialBestSize}{wxwindowsetinitialbestsize} called in the base classes.
 \end{itemize}
 
 At this time, the only situation known not to work the same as before is the following:
+
 \begin{verbatim}
 win = new SomeWidget(parent);
 win->SetSize(SomeNonDefaultSize);
@@ -61,14 +62,13 @@ sizer->Add(win);
 
 In this case the old code would have used the new size as the minimum, but now the sizer will use the default size as the minimum rather than the size set later.  It is an easy fix though, just move the specification of the size to the constructor (assuming that SomeWidget will set its minsize there like the rest of the controls do) or call \helpref{SetMinSize}{wxwindowsetminsize} instead of \helpref{SetSize}{wxwindowsetsize}.
 
-In order to fit well with this new scheme of things, all \helpref{wxControls}{wxcontrol} or custom controls should do the following things.  (Depending on how they are used you may also want to do the same thing for non-control custom windows.)
+In order to fit well with this new scheme of things, all \helpref{wxControls}{wxcontrol} or custom controls should do the following things. (Depending on how they are used you may also want to do the same thing for non-control custom windows.)
 
 \begin{itemize}\itemsep=0pt
 \item Either override or inherit a meaningful \helpref{DoGetBestSize}{wxwindowdogetbestsize} method that calculates whatever size is "best" for the control.  Once that size is calculated then there should normally be a call to \helpref{CacheBestSize}{wxwindowcachebestsize} to save it for later use, unless for some reason you want the best size to be recalculated on every layout.
 \item Any method that changes the attributes of the control such that the best size will change should call \helpref{InvalidateBestSize}{wxwindowinvalidatebestsize} so it will be recalculated the next time it is needed.
 \item The control's constructor and/or Create method should ensure that the minsize is set to the size passed in, and that the control is sized to a blending of the min size and best size.  This can be done by calling \helpref{SetBestFittingSize}{wxwindowsetbestfittingsize}.
 \end{itemize}
-
 
 \wxheading{Massive wxURL Rewrite}
 
@@ -82,8 +82,9 @@ In order to fit well with this new scheme of things, all \helpref{wxControls}{wx
 
 
 \wxheading{Minor incompatible changes since 2.4.x}
+
 \begin{itemize}\itemsep=0pt
-\item no initialization/cleanup can be done in wxApp's Constructor or Destructor because they are now called much earlier/later than before; please move any exiting code from there to \helpref{wxApp::OnInit()}{wxapponinit}/\helpref{OnExit()}{wxapponexit} 
+\item no initialization/cleanup can be done in wxApp's constructor or destructor because they are now called much earlier/later than before; please move any exiting code from there to \helpref{wxApp::OnInit()}{wxapponinit}/\helpref{OnExit()}{wxapponexit} 
 \item also, \helpref{OnExit()}{wxapponexit} is not called if \helpref{OnInit()}{wxapponinit} fails
 \item finally the program exit code is \helpref{OnRun()}{wxapponrun} return value, not \helpref{OnExit()}{wxapponexit} one
 \item \texttt{wxTheApp} can't be assigned to any longer, use \helpref{wxApp::SetInstance()}{wxappsetinstance} instead
@@ -114,6 +115,7 @@ In order to fit well with this new scheme of things, all \helpref{wxControls}{wx
 \end{itemize}
 
 \subsection{Deprecated changes since 2.4.x}\label{deprecatedsince24}
+
 \begin{itemize}\itemsep=0pt
 \item wxURL::GetInputStream() and similar functionality has been deprecated in favor of other ways of connecting, such as though sockets or wxFileSystem.
 \item wxDocManager::GetNoHistoryFiles() renamed to \helpref{GetHistoryFilesCount()}{wxdocmanagergethistoryfilescount}
@@ -140,3 +142,4 @@ In order to fit well with this new scheme of things, all \helpref{wxControls}{wx
 \item obsolete and not used wxUSE\_GENERIC\_DIALOGS\_IN\_MSW has been removed
 \item wxDbTable::wxDbTable with wxChar* deprecated, same with wxString\& instead.
 \end{itemize}
+
