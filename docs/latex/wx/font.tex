@@ -44,7 +44,8 @@ Default constructor.
  \param{const bool}{ underline = FALSE}, \param{const wxString\& }{faceName = ""},
  \param{wxFontEncoding }{encoding = wxFONTENCODING\_DEFAULT}}
 
-Creates a font object.
+Creates a font object (see \helpref{font encoding
+overview}{wxfontencodingoverview} for the meaning of the last parameter).
 
 \wxheading{Parameters}
 
@@ -106,12 +107,23 @@ Destructor.
 \wxheading{Remarks}
 
 The destructor may not delete the underlying font object of the native windowing
-system, since wxBrush uses a reference counting system for efficiency.
+system, since wxFont uses a reference counting system for efficiency.
 
 Although all remaining fonts are deleted when the application exits,
 the application should try to clean up all fonts itself. This is because
 wxWindows cannot know if a pointer to the font object is stored in an
 application data structure, and there is a risk of double deletion.
+
+\membersection{wxFont::GetDefaultEncoding}\label{wxfontgetdefaultencoding}
+
+\func{static wxFontEncoding}{GetDefaultEncoding}{\void}
+
+Returns the current applications default encoding.
+
+\wxheading{See also}
+
+\helpref{Font encoding overview}{wxfontencodingoverview}, 
+\helpref{SetDefaultEncoding}{wxfontsetdefaultencoding}
 
 \membersection{wxFont::GetFaceName}\label{wxfontgetfacename}
 
@@ -189,6 +201,11 @@ weight identifiers.
 \func{static void}{SetDefaultEncoding}{\param{wxFontEncoding }{encoding}}
 
 Sets the default font encoding.
+
+\wxheading{See also}
+
+\helpref{Font encoding overview}{wxfontencodingoverview}, 
+\helpref{GetDefaultEncoding}{wxfontgetdefaultencoding}
 
 \membersection{wxFont::SetFaceName}\label{wxfontsetfacename}
 

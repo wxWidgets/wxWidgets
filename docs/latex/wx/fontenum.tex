@@ -1,0 +1,92 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        fontenum.tex
+%% Purpose:     wxFontEnumerator documentation
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     03.11.99
+%% RCS-ID:      $Id$
+%% Copyright:   (c) Vadim Zeitlin
+%% Licence:     wxWindows licence
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxFontEnumerator}}\label{wxfontenumerator}
+
+wxFontEnumerator enumerates either all available fonts on the system or only
+the ones with given attributes - either only fixed-width (suited for use in
+programs such as terminal emulators and the like) or the fonts available in
+the given \helpref{encoding}{wxfontencodingoverview}.
+
+To do this, you just have to call one of EnumerateXXX() functions - either 
+\helpref{EnumerateFamilies}{wxfontenumeratorenumeratefamilies} or 
+\helpref{EnumerateEncodings}{wxfontenumeratorenumerateencodings} and the
+corresponding callback ( 
+\helpref{OnFontFamily}{wxFontEnumeratoronfontfamily} or
+\helpref{OnFontEncoding}{wxfontenumeratoronfontencoding}) will be called
+repeatedly until either all fonts (satisfying the specified criteria) are
+exhausted or the callback returns FALSE.
+
+\wxheading{Virtual functions to override}
+
+Either \helpref{OnFontFamily}{wxfontenumeratoronfontfamily} or 
+\helpref{OnFontEncoding}{wxfontenumeratoronfontencoding} should be overridden
+depending on whether you plan to call 
+\helpref{EnumerateFamilies}{wxfontenumeratorenumeratefamilies} or 
+\helpref{EnumerateEncodings}{wxfontenumeratorenumerateencodings}. Of course,
+if you call both of them, you should override both functions.
+
+\wxheading{Derived from}
+
+None
+
+\wxheading{Include files}
+
+<wx/fontenum.h>
+
+\wxheading{See also}
+
+\helpref{Font encoding overview}{wxfontencodingoverview}, 
+\helpref{Font sample}{samplefont}, 
+\helpref{wxFont}{wxfont}, 
+\helpref{wxFontMapper}{wxfontmapper}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxFontEnumerator::EnumerateFamilies}\label{wxfontenumeratorenumeratefamilies}
+
+\func{virtual bool}{EnumerateFamilies}{
+    \param{wxFontEncoding }{encoding = wxFONTENCODING\_SYSTEM},
+    \param{bool }{fixedWidthOnly = FALSE}}
+
+Call \helpref{OnFontFamily}{wxfontenumeratoronfontfamily} for each font which
+supports given encoding (only if it is not wxFONTENCODING\_SYSTEM) and is of
+fixed width (if {\it fixedWidthOnly} is TRUE).
+
+Calling this function with default arguments will result in enumerating all
+fonts available on the system.
+
+\membersection{wxFontEnumerator::EnumerateEncodings}\label{wxfontenumeratorenumerateencodings}
+
+\func{virtual bool}{EnumerateEncodings}{\param{const wxString\& }{font = ""}}
+
+Call \helpref{OnFontEncoding}{wxfontenumeratoronfontencoding} for each
+encoding supported by the given font - or for each encoding supported by at
+least some font if {\it font} is not specified.
+
+\membersection{wxFontEnumerator::OnFontFamily}\label{wxfontenumeratoronfontfamily}
+
+\func{virtual bool}{OnFontFamily}{\param{const wxString\& }{font}}
+
+Called by \helpref{EnumerateFamilies}{wxfontenumeratorenumeratefamilies} for
+each match. Return TRUE to continue enumeration or FALSE to stop it.
+
+\membersection{wxFontEnumerator::OnFontEncoding}\label{wxfontenumeratoronfontencoding}
+
+\func{virtual bool}{OnFontEncoding}{
+    \param{const wxString\& }{font},
+    \param{const wxString\& }{encoding}
+}
+
+Called by \helpref{EnumerateEncodings}{wxfontenumeratorenumerateencodings} for
+each match. Return TRUE to continue enumeration or FALSE to stop it.
+
+
