@@ -19,7 +19,29 @@ It has one predefined instance, {\bf wxConvUTF8}.
 
 \wxheading{See also}
 
-\helpref{wxMBConvUTF7}{wxmbconvutf7}
+\helpref{wxMBConvUTF7}{wxmbconvutf7}, 
+\helpref{wxMBConv classes overview}{mbconvclasses}
+
+\wxheading{Remarks}
+
+UTF-8 is a compatibility encoding used to encode Unicode text into anything that was
+originally written for 8-bit strings, including (but not limited to) filenames, transfer
+protocols, and database fields. Notable properties include:
+
+\begin{itemize}
+\item Variable-length encoding able to encode up to 31 bits per character
+\item ASCII characters (character values under 128) are encoded as plain ASCII
+(1 byte per character)
+\item Null bytes do not occur in the encoding, except when there's an actual Unicode
+null character
+\item Preserves sort ordering for plain 8-bit comparison routines like strcmp()
+\item High bit patterns unambiguates character boundaries, and makes it easy to
+detect whether a string is encoded with UTF-8 or not
+\end{itemize}
+
+All of these properties make UTF-8 a very favorable solution in any situation
+where full Unicode character support is desired while remaining compatible with
+code written with only 8-bit extended-ASCII characters in mind.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 

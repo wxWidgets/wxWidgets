@@ -9,7 +9,7 @@
 %% Licence:     wxWindows license
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{wxMBConv classes}\label{mbconvclasses}
+\section{wxMBConv classes overview}\label{mbconvclasses}
 
 Classes: \helpref{wxMBConv}{wxmbconv}, \helpref{wxMBConvFile}{wxmbconvfile}, 
 \helpref{wxMBConvUTF7}{wxmbconvutf7}, \helpref{wxMBConvUTF8}{wxmbconvutf8}, 
@@ -122,7 +122,7 @@ Using preconstructed wxCSConv instance.
 
 \begin{verbatim}
 wxCSConv cust(user_encoding);
-printf("Data: %s\\n", (const char*) str.mb_str(cust));
+printf("Data: %s\n", (const char*) str.mb_str(cust));
 \end{verbatim}
 
 Note: Since mb_str() returns a temporary wxCharBuffer to hold the result
@@ -147,9 +147,30 @@ set using the passed conversion object, *wxConvCurrent. (In a Unicode build
 of wxWindows, the constructor ignores the passed conversion object and
 retains the Unicode data.)
 
+This could also be done by first making a wxString of the original data:
+
+\begin{verbatim}
+wxString input_str(input_data);
+wxString str(input_str.wc_str(wxConvUTF8), *wxConvCurrent);
+\end{verbatim}
+
 To print a wxChar buffer to a non-Unicode stdout:
 
 \begin{verbatim}
-printf("Data: %s\\n", (const char*) wxConvCurrent->cWX2MB(unicode_data));
+printf("Data: %s\n", (const char*) wxConvCurrent->cWX2MB(unicode_data));
 \end{verbatim}
 
+If you need to do more complex processing on the converted data, you
+may want to store the temporary buffer in a local variable:
+
+\begin{verbatim}
+const wxWX2MBbuf tmp_buf = wxConvCurrent->cWX2MB(unicode_data);
+const char *tmp_str = (const char*) tmp_buf;
+printf("Data: %s\n", tmp_str);
+process_data(tmp_str);
+\end{verbatim}
+
+If a conversion had taken place in cWX2MB (i.e. in a Unicode build),
+the buffer will be deallocated as soon as tmp_buf goes out of scope.
+(The macro wxWX2MBbuf reflects the correct return value of cWX2MB
+(either char* or wxCharBuffer), except for the const.)

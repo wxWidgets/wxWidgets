@@ -22,7 +22,8 @@ No base class
 \wxheading{See also}
 
 \helpref{wxCSConv}{wxcsconv}, 
-\helpref{wxEncodingConverter}{wxencodingconverter}
+\helpref{wxEncodingConverter}{wxencodingconverter}, 
+\helpref{wxMBConv classes overview}{mbconvclasses}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -70,7 +71,8 @@ allocating a temporary wxCharBuffer to hold the result.
 Converts from multibyte encoding to the current wxChar type
 (which depends on whether wxUSE\_UNICODE is set to 1). If wxChar is char,
 it returns the parameter unaltered. If wxChar is wchar\_t, it returns the
-result in a wxWCharBuffer.
+result in a wxWCharBuffer. The macro wxMB2WXbuf is defined as the correct
+return type (without const).
 
 \membersection{wxMBConv::cWX2MB}\label{wxmbconvcwx2mb}
 
@@ -80,7 +82,8 @@ result in a wxWCharBuffer.
 
 Converts from the current wxChar type to multibyte encoding. If wxChar is char,
 it returns the parameter unaltered. If wxChar is wchar\_t, it returns the
-result in a wxCharBuffer.
+result in a wxCharBuffer. The macro wxWX2MBbuf is defined as the correct
+return type (without const).
 
 \membersection{wxMBConv::cWC2WX}\label{wxmbconvcwc2wx}
 
@@ -90,7 +93,8 @@ result in a wxCharBuffer.
 
 Converts from Unicode to the current wxChar type. If wxChar is wchar\_t,
 it returns the parameter unaltered. If wxChar is char, it returns the
-result in a wxCharBuffer.
+result in a wxCharBuffer. The macro wxWC2WXbuf is defined as the correct
+return type (without const).
 
 \membersection{wxMBConv::cWX2WC}\label{wxmbconvcwx2wc}
 
@@ -100,5 +104,5 @@ result in a wxCharBuffer.
 
 Converts from the current wxChar type to Unicode. If wxChar is wchar\_t,
 it returns the parameter unaltered. If wxChar is char, it returns the
-result in a wxWCharBuffer.
-
+result in a wxWCharBuffer. The macro wxWX2WCbuf is defined as the correct
+return type (without const).
