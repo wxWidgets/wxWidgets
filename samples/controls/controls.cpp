@@ -228,7 +228,7 @@ void MyTextCtrl::OnChar(wxKeyEvent& event)
         s_repeatCount = 1;
     }
         
-    wxLogStatus("Key event: %d (x%u), at position %ld",
+    wxLogStatus( _T("Key event: %d (x%u), at position %ld"),
                 s_keycode, s_repeatCount, GetInsertionPoint());
 
     event.Skip();
@@ -244,11 +244,11 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
                 long line, column, pos = GetInsertionPoint();
                 PositionToXY(pos, &column, &line);
 
-                wxLogMessage("Current position: %ld\n"
+                wxLogMessage( _T("Current position: %ld\n"
                         "Current line, column: (%ld, %ld)\n"
                         "Number of lines: %ld\n"
                         "Current line length: %ld\n"
-                        "Total text length: %ld",
+                        "Total text length: %ld"),
                         pos,
                         line, column,
                         GetNumberOfLines(),
@@ -909,10 +909,10 @@ void MyPanel::OnSliderUpdate( wxCommandEvent &WXUNUSED(event) )
 void MyPanel::OnSpinUpdate( wxSpinEvent &event )
 {
     wxString value;
-    value.Printf( "%d", event.GetPosition() );
+    value.Printf( _T("%d"), event.GetPosition() );
     m_spintext->SetValue( value );
 
-    value.Printf("Spin control range: (%d, %d), current = %d\n",
+    value.Printf( _T("Spin control range: (%d, %d), current = %d\n"),
                  m_spinbutton->GetMin(), m_spinbutton->GetMax(),
                  m_spinbutton->GetValue());
 
@@ -969,7 +969,7 @@ void MyFrame::OnSetTooltipDelay(wxCommandEvent& event)
     static long s_delay = 5000;
 
     wxString delay;
-    delay.Printf("%ld", s_delay);
+    delay.Printf( _T("%ld"), s_delay);
 
     delay = wxGetTextFromUser("Enter delay (in milliseconds)",
             "Set tooltip delay",
@@ -978,11 +978,11 @@ void MyFrame::OnSetTooltipDelay(wxCommandEvent& event)
     if ( !delay )
         return; // cancelled
 
-    sscanf(delay, "%ld", &s_delay);
+    wxSscanf(delay, _T("%ld"), &s_delay);
 
     wxToolTip::SetDelay(s_delay);
 
-    wxLogStatus(this, "Tooltip delay set to %ld milliseconds", s_delay);
+    wxLogStatus(this, _T("Tooltip delay set to %ld milliseconds"), s_delay);
 }
 
 void MyFrame::OnToggleTooltips(wxCommandEvent& event)
@@ -993,14 +993,14 @@ void MyFrame::OnToggleTooltips(wxCommandEvent& event)
 
     wxToolTip::Enable(s_enabled);
 
-    wxLogStatus(this, "Tooltips %sabled", s_enabled ? "en" : "dis");
+    wxLogStatus(this, _T("Tooltips %sabled"), s_enabled ? _T("en") : _T("dis") );
 }
 #endif // tooltips
 
 void MyFrame::OnSize( wxSizeEvent& event )
 {
     wxString msg;
-    msg.Printf("%dx%d", event.GetSize().x, event.GetSize().y);
+    msg.Printf( _("%dx%d"), event.GetSize().x, event.GetSize().y);
     SetStatusText(msg, 1);
 
     event.Skip();
@@ -1016,14 +1016,16 @@ void MyFrame::OnIdle( wxIdleEvent& WXUNUSED(event) )
         s_windowFocus = focus;
 
         wxString msg;
-        msg.Printf("Focus: wxWindow = %p"
+        msg.Printf(
 #ifdef __WXMSW__
-                ", HWND = %08x"
-#endif // wxMSW
-                , s_windowFocus
+                _T("Focus: wxWindow = %p, HWND = %08x"),
+#else
+                _T("Focus: wxWindow = %p"),
+#endif
+                s_windowFocus
 #ifdef __WXMSW__
                 , s_windowFocus->GetHWND()
-#endif // wxMSW
+#endif
                   );
 
         SetStatusText(msg);
