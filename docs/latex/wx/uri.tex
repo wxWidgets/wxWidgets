@@ -19,7 +19,7 @@ For information about URIs, see
 \urlref{RFC 2396.bis (Updated draft of RFC 2396)}{http://www.gbiv.com/protocols/uri/rev-2002/rfc2396bis.html}.
 
 In short, a URL \em{is} a URI.  In other
-words, URL is a subset of a URI - most 
+words, URL is a subset of a URI - all 
 acceptable URLs are also acceptable URIs.
 
 wxURI supports copy construction and standard assignment
@@ -73,19 +73,15 @@ if(myuri.HasScheme())
 
 \func{}{wxURI}{\void}
 
-Creates an empty URI.  In order for the URI to be
-useful, Create needs to be called eventually.
-
-\membersection{wxURI::\destruct{wxURI}}\label{wxuridtor}
+Creates an empty URI.
 
 \func{}{wxURI}{\param{const wxChar* }{uri}}
 
-Constructor for quick creation
+Constructor for quick creation.
 
 \docparam{uri}{string to initialize with}
 
-
-\func{}{wxURI}{\param{const wxURI& }{uri}}
+\func{}{wxURI}{\param{const wxURI\& }{uri}}
 
 Copies this URI from another URI.
 
@@ -275,10 +271,10 @@ returns false.
 
 \membersection{wxURI::operator ==}\label{wxurioperatorcompare}
 
-\func{void}{operator ==}{\param{const wxURI& }{uricomp}}
+\func{void}{operator ==}{\param{const wxURI\& }{uricomp}}
 
 Compares this URI to another URI, and returns true if 
-this URI equals uricomp, otherwise it returns false.
+this URI equals {\tt uricomp}, otherwise it returns false.
 
 \docparam{uricomp}{URI to compare to}
 
