@@ -38,7 +38,10 @@
 #include "wx/msw/private.h"
 
 #if wxUSE_TOOLTIPS
+
+#ifndef __GNUWIN32__
     #include <commctrl.h>
+#endif
 
     #include "wx/tooltip.h"
 #endif // wxUSE_TOOLTIPS
@@ -52,7 +55,15 @@
 //     and allows tooltips to work with radioboxes, so there should be no
 //     reason to revert to the backward compatible behaviour - but I still
 //     leave this possibility just in case.
+
+// For some reason, the background colour is set wrongly in WIN16 mode
+// if we use the new method.
+
+#ifdef __WIN16__
+#define RADIOBTN_PARENT_IS_RADIOBOX 0
+#else
 #define RADIOBTN_PARENT_IS_RADIOBOX 1
+#endif
 
 // ---------------------------------------------------------------------------
 // private functions
@@ -746,7 +757,7 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
 
         wxCHECK_MSG( radiobox, 0, wxT("radio button without radio box?") );
 
-#if wxUSE_TOOLTIPS
+#if wxUSE_TOOLTIPS && !defined(__GNUWIN32__)
         if ( msg == WM_NOTIFY )
         {
             NMHDR* hdr = (NMHDR *)lParam;

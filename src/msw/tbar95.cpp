@@ -49,7 +49,10 @@
 
 #ifndef __TWIN32__
 
-#ifdef __GNUWIN32_OLD__
+// I don't know what _OLD_ refers to so I'm reinstating the old
+// ifdef (JACS).
+// #ifdef __GNUWIN32_OLD__
+#if defined(__GNUWIN32__) && !defined(__MINGW32__)
     #include "wx/msw/gnuwin32/extra.h"
 #else
     #include <commctrl.h>
@@ -199,7 +202,10 @@ bool wxToolBar::Create(wxWindow *parent,
     DWORD msflags = 0;      // WS_VISIBLE | WS_CHILD always included
     if (style & wxBORDER)
         msflags |= WS_BORDER;
+
+#ifdef TBSTYLE_TOOLTIPS
     msflags |= TBSTYLE_TOOLTIPS;
+#endif
 
     if (style & wxTB_FLAT)
     {

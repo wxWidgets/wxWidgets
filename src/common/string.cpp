@@ -107,7 +107,7 @@ extern const wxChar WXDLLEXPORT *wxEmptyString = &g_strEmpty.dummy;
 //       function wxVsnprintfA (A for ANSI), should also find one for Unicode
 //       strings in Unicode build
 #ifdef __WXMSW__
-    #if defined(__VISUALC__) || defined(wxUSE_NORLANDER_HEADERS)
+    #if (defined(__VISUALC__) || defined(wxUSE_NORLANDER_HEADERS)) && !defined(__MINGW32__)
         #define wxVsnprintfA     _vsnprintf
     #endif
 #else   // !Windows

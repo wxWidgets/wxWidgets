@@ -32,6 +32,9 @@
 #if defined(__WIN95__) && !defined(__TWIN32__)
 
 #include <windows.h>
+
+#include "wx/msw/winundef.h"
+
 #include <string.h>
 #include "wx/msw/taskbar.h"
 #include "wx/msw/private.h"

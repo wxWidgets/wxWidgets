@@ -79,6 +79,11 @@
     #define WX_TIMEZONE timezone
 #endif
 
+// Is this right? Just a guess. (JACS)
+#ifdef __MINGW32__
+#define timezone _timezone
+#endif
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -114,7 +119,7 @@ static const int DAYS_PER_400_YEARS = 146097;
 
 // a critical section is needed to protect GetTimeZone() static
 // variable in MT case
-#ifdef wxUSE_THREADS
+#if wxUSE_THREADS
     wxCriticalSection gs_critsectTimezone;
 #endif // wxUSE_THREADS
 

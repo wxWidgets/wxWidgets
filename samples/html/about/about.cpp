@@ -22,6 +22,7 @@
 #endif
 
 #include <wx/image.h>
+#include <wx/imagpng.h>
 #include <wx/wxhtml.h>
 
 // ----------------------------------------------------------------------------

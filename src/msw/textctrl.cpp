@@ -58,7 +58,9 @@
 #   include <fstream>
 #endif
 
-#if wxUSE_RICHEDIT
+// Why oh why did someone remove the tail of this line? Bizarre.
+// It's needed for GNUWIN32 b20, at least.
+#if wxUSE_RICHEDIT && (!defined(__GNUWIN32__) || defined(wxUSE_NORLANDER_HEADERS))
     #include <richedit.h>
 #endif
 

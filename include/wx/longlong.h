@@ -39,6 +39,9 @@
 #if defined(SIZEOF_LONG) && (SIZEOF_LONG == 8)
     #define wxLongLong_t long
     #define wxLongLongIsLong
+#elif defined(__WIN16__)
+    #define wxLongLong_t long
+    #define wxLongLongIsLong
 #elif defined(__VISUALC__) || defined( __VMS__ )
     #define wxLongLong_t __int64
 #elif defined(__GNUG__)

@@ -521,6 +521,10 @@ bool wxThread::IsMain()
     return ::GetCurrentThreadId() == gs_idMainThread;
 }
 
+#ifdef Yield
+#undef Yield
+#endif
+
 void wxThread::Yield()
 {
     // 0 argument to Sleep() is special and means to just give away the rest of

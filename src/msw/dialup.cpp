@@ -38,12 +38,16 @@
     #include "wx/event.h"
 #endif
 
+#ifndef wxUSE_DYNLIB_CLASS
+#error You need wxUSE_DYNLIB_CLASS to be 1 to compile dialup.cpp.
+#endif
+
 #include "wx/dynlib.h"
 
 #include "wx/dialup.h"
 
 // Doesn't yet compile under BC++ nor with mingw: no wininet.h
-#if !defined(__BORLANDC__) && !defined(__GNUWIN32_OLD__)
+#if !defined(__BORLANDC__) && !defined(__GNUWIN32_OLD__) && !defined(__GNUWIN32__)
 
 #include <ras.h>
 #include <raserror.h>

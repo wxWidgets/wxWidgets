@@ -32,7 +32,7 @@
     #include "wx/wx.h"
 #endif
 
-#if wxUSE_BUTTONBAR && wxUSE_TOOLBAR && !wxUSE_TOOLBAR_SIMPLE
+#if wxUSE_TOOLBAR && defined(__WIN16__)
 
 #if !defined(__WIN32__) && !wxUSE_IMAGE_LOADING_IN_MSW
     #error wxToolBar needs wxUSE_IMAGE_LOADING_IN_MSW under Win16
@@ -48,7 +48,7 @@
 
 #include <stdlib.h>
 
-#include "wx/tbarmsw.h"
+#include "wx/msw/tbarmsw.h"
 #include "wx/event.h"
 #include "wx/app.h"
 #include "wx/bitmap.h"
@@ -491,7 +491,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
     // TODO: use the mapping code from wxToolBar95 to get it right in this class
 #if !defined(__WIN32__) && !defined(__WIN386__)
     wxBitmap bitmap2;
-    if (toggle)
+    if (tool->CanBeToggled())
     {
         HBITMAP hbmp = CreateMappedBitmap((WXHINSTANCE)wxGetInstance(),
                                           GetHbitmapOf(tool->GetBitmap1()));

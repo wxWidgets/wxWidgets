@@ -37,6 +37,7 @@
 #include "wx/app.h"
 
 #include "wx/msw/dib.h"
+#include "wx/msw/bitmap.h"
 #include "wx/msw/gdiimage.h"
 
 #ifdef __WIN16__

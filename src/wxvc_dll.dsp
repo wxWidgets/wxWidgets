@@ -402,10 +402,6 @@ SOURCE=.\common\tbarbase.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\tbarsmpl.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\common\textcmn.cpp
 # End Source File
 # Begin Source File
@@ -562,6 +558,10 @@ SOURCE=.\generic\statusbr.cpp
 # Begin Source File
 
 SOURCE=.\generic\tabg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic\tbarsmpl.cpp
 # End Source File
 # Begin Source File
 
