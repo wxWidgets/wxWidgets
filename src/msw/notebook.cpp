@@ -32,6 +32,7 @@
 #include  "wx/event.h"
 #include  "wx/control.h"
 #include  "wx/notebook.h"
+#include  "wx/app.h"
 
 #include  "wx/msw/private.h"
 
@@ -158,6 +159,20 @@ bool wxNotebook::Create(wxWindow *parent,
                         long style,
                         const wxString& name)
 {
+    // Does ComCtl32 support non-top tabs?
+    int verComCtl32 = wxApp::GetComCtl32Version();
+    if ( verComCtl32 < 470 || verComCtl32 >= 600 )
+    {
+        if (style & wxNB_BOTTOM)
+            style &= ~wxNB_BOTTOM;
+        
+        if (style & wxNB_LEFT)
+            style &= ~wxNB_LEFT;
+        
+        if (style & wxNB_RIGHT)
+            style &= ~wxNB_RIGHT;
+    }
+    
     // base init
     if ( !CreateControl(parent, id, pos, size, style, wxDefaultValidator, name) )
         return FALSE;

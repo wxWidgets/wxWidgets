@@ -240,6 +240,8 @@ wxMSW:
   enables XP theme engine code, and wxUSE_UXTHEME_AUTO tells
   wxWindows to use the theme tab colour for control backgrounds.
   Proper XP theme support is planned for 2.6
+- disable wxNB_RIGHT, wxNB_LEFT, wxNB_BOTTOM notebook styles
+  if the version of CommCtl doesn't support it (XP)
 
 wxMotif:
 
