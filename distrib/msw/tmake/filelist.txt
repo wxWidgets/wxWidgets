@@ -266,6 +266,7 @@ uuid.cpp	M	O
 wave.cpp	M
 window.cpp	M
 xpmhand.cpp	M
+gsocket.c	M	S
 
 threadpsx.cpp	U
 utilsunx.cpp	U
