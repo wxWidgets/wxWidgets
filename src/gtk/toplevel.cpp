@@ -989,7 +989,7 @@ static bool do_shape_combine_region(GdkWindow* window, const wxRegion& region)
         gdk_window_shape_combine_region(window, region.GetRegion(), 0, 0);
 #else
         wxBitmap bmp = region.ConvertToBitmap();
-        bmp.SetMask(new wxMask(bmp, *wxWHITE));
+        bmp.SetMask(new wxMask(bmp, *wxBLACK));
         GdkBitmap* mask = bmp.GetMask()->GetBitmap();
         gdk_window_shape_combine_mask(window, mask, 0, 0);
 #endif

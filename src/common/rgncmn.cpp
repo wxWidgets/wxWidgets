@@ -37,10 +37,10 @@ wxBitmap wxRegion::ConvertToBitmap() const
     wxBitmap bmp(box.GetRight(), box.GetBottom());
     wxMemoryDC dc;
     dc.SelectObject(bmp);
-    dc.SetBackground(*wxWHITE_BRUSH);
+    dc.SetBackground(*wxBLACK_BRUSH);
     dc.Clear();
     dc.SetClippingRegion(*this);
-    dc.SetBackground(*wxBLACK_BRUSH);
+    dc.SetBackground(*wxWHITE_BRUSH);
     dc.Clear();
     dc.SelectObject(wxNullBitmap);
     return bmp;
