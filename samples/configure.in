@@ -3,6 +3,9 @@ AC_REVISION($Id$)dnl
 
 AC_INIT(Makefile.in)
 
+SAMPLES_SUBDIRS=$wx_cv_path_samplesubdirs
+AC_SUBST(SAMPLES_SUBDIRS)
+
 AC_OUTPUT([
             Makefile
             caret/Makefile

@@ -3379,9 +3379,12 @@ if test "$wxUSE_GUI" = "yes"; then
     ])
 
     dnl It's needed in glcanvas/Makefile.in so we even have to subst this hack!
-    GL_TOOLKIT_DIR=$wx_cv_PATH_glcanvas
+    GL_TOOLKIT_DIR=$wx_cv_path_glcanvas
     AC_SUBST(GL_TOOLKIT_DIR)
 
+    dnl another hack: we need to pass SAMPLES_SUBDIRS to the configure in
+    dnl samples and the only way to do it is, again, use the cache
+    wx_cv_path_samplesubdirs=$SAMPLES_SUBDIRS
     AC_CONFIG_SUBDIRS(demos samples utils)
 fi
 dnl from wxUSE_GUI

@@ -12099,7 +12099,7 @@ ac_compile='${CXX-g++} -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext 1>&5'
 ac_link='${CXX-g++} -o conftest${ac_exeext} $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&5'
 cross_compiling=$ac_cv_prog_cxx_cross
 
-        echo $ac_n "checking the type of the third argument of getsockname""... $ac_c" 1>&6
+            echo $ac_n "checking the type of the third argument of getsockname""... $ac_c" 1>&6
 echo "configure:12104: checking the type of the third argument of getsockname" >&5
     cat > conftest.$ac_ext <<EOF
 #line 12106 "configure"
@@ -13191,9 +13191,10 @@ fi
 
 echo "$ac_t""$wx_cv_path_glcanvas" 1>&6
 
-        GL_TOOLKIT_DIR=$wx_cv_PATH_glcanvas
+        GL_TOOLKIT_DIR=$wx_cv_path_glcanvas
     
 
+            wx_cv_path_samplesubdirs=$SAMPLES_SUBDIRS
     subdirs="demos samples utils"
 
 fi
