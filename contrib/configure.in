@@ -54,6 +54,7 @@ dnl File output
 
 AC_OUTPUT([
             src/Makefile
+            src/deprecated/Makefile
             src/ogl/Makefile
             src/mmedia/Makefile
             src/stc/Makefile
@@ -65,6 +66,10 @@ AC_OUTPUT([
             src/fl/Makefile
             src/net/Makefile
             samples/Makefile
+            samples/deprecated/Makefile
+            samples/deprecated/proplist/Makefile
+            samples/deprecated/resource/Makefile
+            samples/deprecated/treelay/Makefile
             samples/mmedia/Makefile
             samples/ogl/Makefile
             samples/ogl/ogledit/Makefile
