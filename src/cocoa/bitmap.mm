@@ -92,15 +92,10 @@ IMPLEMENT_DYNAMIC_CLASS(wxBitmap, wxGDIObject)
 wxBitmap::wxBitmap()
 {
     m_refData = NULL;
-
-    if ( wxTheBitmapList )
-        wxTheBitmapList->AddBitmap(this);
 }
 
 wxBitmap::~wxBitmap()
 {
-    if (wxTheBitmapList)
-        wxTheBitmapList->DeleteObject(this);
 }
 
 wxBitmap::wxBitmap(const char bits[], int the_width, int the_height, int no_bits)
@@ -113,33 +108,21 @@ wxBitmap::wxBitmap(const char bits[], int the_width, int the_height, int no_bits
     M_BITMAPDATA->m_numColors = 0;
 
     /* TODO: create the bitmap from data */
-
-    if ( wxTheBitmapList )
-        wxTheBitmapList->AddBitmap(this);
 }
 
 wxBitmap::wxBitmap(int w, int h, int d)
 {
     (void)Create(w, h, d);
-
-    if ( wxTheBitmapList )
-        wxTheBitmapList->AddBitmap(this);
 }
 
 wxBitmap::wxBitmap(void *data, wxBitmapType type, int width, int height, int depth)
 {
     (void) Create(data, type, width, height, depth);
-
-    if ( wxTheBitmapList )
-        wxTheBitmapList->AddBitmap(this);
 }
 
 wxBitmap::wxBitmap(const wxString& filename, wxBitmapType type)
 {
     LoadFile(filename, type);
-
-    if ( wxTheBitmapList )
-        wxTheBitmapList->AddBitmap(this);
 }
 
 wxObjectRefData *wxBitmap::CreateRefData() const
