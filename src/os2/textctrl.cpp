@@ -43,6 +43,11 @@
 #   include <fstream>
 #endif
 
+#if defined(__EMX__) && !defined(MLE_INDEX)
+#define MLE_INDEX  0
+#define MLE_RGB    1
+#endif
+
 
 // ----------------------------------------------------------------------------
 // event tables and other macros
