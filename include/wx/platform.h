@@ -146,6 +146,9 @@
       defined(THINK_C) || \
       (defined(__MWERKS__) && !defined(__INTEL__))
       /* MacOS */
+    #if !defined(wxSIZE_T_IS_UINT) && !defined(wxSIZE_T_IS_ULONG)
+        #define wxSIZE_T_IS_ULONG
+    #endif
 #elif defined(__WXMAC__) && defined(__APPLE__)
     /* Mac OS X */
     #define __UNIX_LIKE__
@@ -167,6 +170,9 @@
         #define __POWERPC__ 1
     #endif
 
+    #if !defined(wxSIZE_T_IS_UINT) && !defined(wxSIZE_T_IS_ULONG)
+        #define wxSIZE_T_IS_ULONG
+    #endif
     /*
        Some code has been added to workaround defects(?) in the
        bundled gcc compiler. These corrections are identified by
