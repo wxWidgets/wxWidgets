@@ -246,7 +246,7 @@ bool wxSpinButton::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
 
 bool wxSpinButton::MSWOnNotify(int WXUNUSED(idCtrl), WXLPARAM lParam, WXLPARAM *result)
 {
-    LPNM_UPDOWN lpnmud = (LPNM_UPDOWN)lParam;
+    NM_UPDOWN lpnmud = (NM_UPDOWN *)lParam;
 
     if (lpnmud->hdr.hwndFrom != GetHwnd()) // make sure it is the right control
         return FALSE;
