@@ -29,7 +29,6 @@ public:
     wxCharBuffer(const char *str)
         : m_str(str ? strdup(str) : NULL)
     {
-        wxASSERT_MSG( str, wxT("NULL string in wxCharBuffer") );
     }
 
     wxCharBuffer(size_t len)
@@ -71,15 +70,8 @@ public:
     wxWCharBuffer(const wchar_t *wcs)
         : m_wcs((wchar_t *)NULL)
     {
-        wxASSERT_MSG( wcs, wxT("NULL string in wxWCharBuffer") );
-
         if (wcs) {
-#if ( defined(__BORLANDC__) && (__BORLANDC__ > 0x530) ) \
-    || ( defined(__MWERKS__) && defined(__WXMSW__) )
-          size_t siz = (std::wcslen(wcs)+1)*sizeof(wchar_t);
-#else
-          size_t siz = (::wcslen(wcs)+1)*sizeof(wchar_t);
-#endif
+          size_t siz = (wxWcslen(wcs) + 1)*sizeof(wchar_t);
           m_wcs = (wchar_t *)malloc(siz);
           memcpy(m_wcs, wcs, siz);
         }
