@@ -1354,11 +1354,14 @@ PYTHON_DIST:
 	mkdir $(DISTDIR)/wxPython/demo/dllwidget
 	mkdir $(DISTDIR)/wxPython/src
 	mkdir $(DISTDIR)/wxPython/src/gtk
+	mkdir $(DISTDIR)/wxPython/scripts
 	mkdir $(DISTDIR)/wxPython/wxPython
 	mkdir $(DISTDIR)/wxPython/wxPython/lib
 	mkdir $(DISTDIR)/wxPython/wxPython/lib/PyCrust
 	mkdir $(DISTDIR)/wxPython/wxPython/lib/editor
 	mkdir $(DISTDIR)/wxPython/wxPython/lib/mixins
+	mkdir $(DISTDIR)/wxPython/wxPython/tools
+	mkdir $(DISTDIR)/wxPython/wxPython/tools/XRCed
 
 	cp $(WXDIR)/wxPython/*.txt $(DISTDIR)/wxPython
 	cp $(WXDIR)/wxPython/*.py $(DISTDIR)/wxPython
@@ -1378,6 +1381,7 @@ PYTHON_DIST:
 	-cp $(WXDIR)/wxPython/demo/data/* $(DISTDIR)/wxPython/demo/data
 	-cp $(WXDIR)/wxPython/demo/dllwidget/Makefile $(DISTDIR)/wxPython/demo/dllwidget
 	-cp $(WXDIR)/wxPython/demo/dllwidget/test_* $(DISTDIR)/wxPython/demo/dllwidget
+	-cp $(WXDIR)/wxPython/scripts/* $(DISTDIR)/wxPython/scripts
 	-cp $(WXDIR)/wxPython/src/* $(DISTDIR)/wxPython/src
 	cp $(WXDIR)/wxPython/src/gtk/*.py $(DISTDIR)/wxPython/src/gtk
 	cp $(WXDIR)/wxPython/src/gtk/*.cpp $(DISTDIR)/wxPython/src/gtk
@@ -1385,6 +1389,8 @@ PYTHON_DIST:
 	cp $(WXDIR)/wxPython/wxPython/lib/PyCrust/*.py $(DISTDIR)/wxPython/wxPython/lib/PyCrust
 	cp $(WXDIR)/wxPython/wxPython/lib/editor/*.py $(DISTDIR)/wxPython/wxPython/lib/editor
 	cp $(WXDIR)/wxPython/wxPython/lib/mixins/*.py $(DISTDIR)/wxPython/wxPython/lib/mixins
+	cp $(WXDIR)/wxPython/wxPython/tools/*.py $(DISTDIR)/wxPython/wxPython/tools
+	cp $(WXDIR)/wxPython/wxPython/tools/XRCed/*.{py,ico,sh,xrc} $(DISTDIR)/wxPython/wxPython/tools/XRCed
 
 distclean:
 	$(RM) -r _dist_dir

@@ -74,7 +74,7 @@ typedef int wxEventType;
 #define BEGIN_DECLARE_EVENT_TYPES() enum {
 #define END_DECLARE_EVENT_TYPES() };
 #define DECLARE_EVENT_TYPE(name, value) name = wxEVT_FIRST + value,
-#define DECLARE_LOCAL_EVENT_TYPE(name, value) name = wxEVT_FIRST + value,
+#define DECLARE_LOCAL_EVENT_TYPE(name, value) name = wxEVT_USER_FIRST + value,
 #define DEFINE_EVENT_TYPE(name)
 #define DEFINE_LOCAL_EVENT_TYPE(name)
 

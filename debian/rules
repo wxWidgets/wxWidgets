@@ -271,6 +271,7 @@ build-gtk-shared-stamp:
 				--with-libjpeg=sys \
 				--with-libpng=sys \
 				--with-libtiff=sys \
+				--enable-dynamic-loader \
 		&& $(MAKE)
 	touch $@
 
@@ -287,6 +288,7 @@ build-gtk-static-stamp:
 				--with-libjpeg=sys \
 				--with-libpng=sys \
 				--with-libtiff=sys \
+				--enable-dynamic-loader \
 		&& $(MAKE)
 	touch $@
 
@@ -304,6 +306,7 @@ build-gtk-debug-stamp:
 				--with-libjpeg=sys \
 				--with-libpng=sys \
 				--with-libtiff=sys \
+				--enable-dynamic-loader \
 		&& $(MAKE)
 	touch $@
 
@@ -321,6 +324,7 @@ build-gtk-univ-stamp:
 				--with-libjpeg=sys \
 				--with-libpng=sys \
 				--with-libtiff=sys \
+				--enable-dynamic-loader \
 		&& $(MAKE)
 	touch $@
 
