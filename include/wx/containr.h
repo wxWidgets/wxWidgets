@@ -39,13 +39,13 @@ class WXDLLEXPORT wxControlContainer
 {
 public:
     // ctors and such
-    wxControlContainer(wxWindow *winParent);
+    wxControlContainer(wxWindow *winParent = NULL);
+    void SetContainerWindow(wxWindow *winParent) { m_winParent = winParent; }
 
+    // default item access
     wxWindow *GetDefaultItem() const { return m_winDefault; }
     wxWindow *SetDefaultItem(wxWindow *win)
         { wxWindow *winOld = m_winDefault; m_winDefault = win; return winOld; }
-
-    void SetLastFocus(wxWindow *win);
 
     // the methods to be called from the window event handlers
     void HandleOnNavigationKey(wxNavigationKeyEvent& event);
@@ -55,6 +55,10 @@ public:
     // should be called from SetFocus(), returns FALSE if we did nothing with
     // the focus and the default processing should take place
     bool DoSetFocus();
+
+    // called from OnChildFocus() handler, i.e. when one of our (grand)
+    // children gets the focus
+    void SetLastFocus(wxWindow *win);
 
 protected:
     // set the focus to the child which had it the last time

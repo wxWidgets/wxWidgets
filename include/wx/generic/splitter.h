@@ -61,7 +61,7 @@ public:
 // Public API
 
     // Default constructor
-    wxSplitterWindow() : m_container(this)
+    wxSplitterWindow()
     {
         Init();
     }
@@ -72,7 +72,6 @@ public:
                      const wxSize& size = wxDefaultSize,
                      long style = wxSP_3D,
                      const wxString& name = "splitter")
-        : m_container(this)
     {
         Init();
         Create(parent, id, pos, size, style, name);

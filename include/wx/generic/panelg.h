@@ -34,7 +34,7 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxPanelNameStr;
 class WXDLLEXPORT wxPanel : public wxWindow
 {
 public:
-    wxPanel() : m_container(this) { Init(); }
+    wxPanel() { Init(); }
 
     // Old-style constructor (no default values for coordinates to avoid
     // ambiguity with the new one)
@@ -42,7 +42,6 @@ public:
             int x, int y, int width, int height,
             long style = wxTAB_TRAVERSAL | wxNO_BORDER,
             const wxString& name = wxPanelNameStr)
-        : m_container(this)
     {
         Init();
 
@@ -56,7 +55,6 @@ public:
             const wxSize& size = wxDefaultSize,
             long style = wxTAB_TRAVERSAL | wxNO_BORDER,
             const wxString& name = wxPanelNameStr)
-        : m_container(this)
     {
         Init();
 
