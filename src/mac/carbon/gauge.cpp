@@ -47,8 +47,10 @@ bool wxGauge::Create(wxWindow *parent, wxWindowID id,
     m_peer = new wxMacControl() ;
     verify_noerr ( CreateProgressBarControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , 
      GetValue() , 0 , GetRange() , false /* not indeterminate */ , m_peer->GetControlRefAddr() ) );
-    
-       
+
+    if ( GetValue() == 0 )
+        m_peer->SetData<Boolean>( kControlEntireControl , kControlProgressBarAnimatingTag , (Boolean) false ) ;
+
     MacPostControlCreate(pos,size) ;
     
     return TRUE;
@@ -69,7 +71,18 @@ void wxGauge::SetValue(int pos)
     // some change behind the values by it
     wxGaugeBase::SetValue(pos) ;
     if ( m_peer && m_peer->Ok() )
+    {
         m_peer->SetValue( GetValue() ) ;
+        Boolean shouldAnimate = ( GetValue() > 0 && GetValue() < GetRange() ) ;
+        if ( m_peer->GetData<Boolean>( kControlEntireControl , kControlProgressBarAnimatingTag ) != shouldAnimate )
+        {
+            m_peer->SetData<Boolean>( kControlEntireControl , kControlProgressBarAnimatingTag , shouldAnimate ) ;
+            if ( !shouldAnimate )
+            {
+                Refresh() ;
+            }
+        }
+    }
 }
 
 int wxGauge::GetValue() const
