@@ -64,7 +64,7 @@ struct	sockaddr_un {
 #  endif
 #endif
 
-#endif // SOCKLEN_T
+#endif /* SOCKLEN_T */
 
 #define MASK_SIGNAL()                       \
 {                                           \
