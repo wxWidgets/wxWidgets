@@ -90,11 +90,11 @@ static gint wxlistbox_idle_callback( gpointer gdata )
     gdk_threads_enter();
 
     gtk_idle_remove( data->m_tag );
-    
+
     data->m_listbox->SetFirstItem( data->m_item );
-    
+
     delete data;
-    
+
     gdk_threads_leave();
 
     return TRUE;
@@ -219,7 +219,7 @@ gtk_listbox_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxLis
         // eat return in all modes
         ret = TRUE;
     }
-        
+
 #if wxUSE_CHECKLISTBOX
     if ((gdk_event->keyval == ' ') && (listbox->m_hasCheckBoxes) && (!ret))
     {
@@ -424,7 +424,7 @@ wxListBox::~wxListBox()
     m_hasVMT = FALSE;
 
     Clear();
-    
+
     if (m_strings)
       delete m_strings;
 }
@@ -455,7 +455,7 @@ void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
         for (size_t n = 0; n < nItems; n++)
         {
             index = m_strings->Add( items[n] );
-            
+
             if (index != GetCount())
             {
                 GtkAddItem( items[n], index );
@@ -876,18 +876,18 @@ void wxListBox::DoSetFirstItem( int n )
 
     if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (m_list))
         return;
-    
-    // terribly efficient    
+
+    // terribly efficient
     const gchar *vadjustment_key = "gtk-vadjustment";
     guint vadjustment_key_id = g_quark_from_static_string (vadjustment_key);
-    
-    GtkAdjustment *adjustment = 
+
+    GtkAdjustment *adjustment =
        (GtkAdjustment*) gtk_object_get_data_by_id (GTK_OBJECT (m_list), vadjustment_key_id);
     wxCHECK_RET( adjustment, wxT("invalid listbox code") );
 
     GList *target = g_list_nth( m_list->children, n );
     wxCHECK_RET( target, wxT("invalid listbox index") );
-    
+
     GtkWidget *item = GTK_WIDGET(target->data);
     wxCHECK_RET( item, wxT("invalid listbox code") );
 
@@ -897,7 +897,7 @@ void wxListBox::DoSetFirstItem( int n )
         data->m_listbox = this;
         data->m_item = n;
         data->m_tag = gtk_idle_add_priority( 800, wxlistbox_idle_callback, (gpointer) data );
-        
+
         return;
     }
 
@@ -1053,7 +1053,30 @@ void wxListBox::OnInternalIdle()
 
 wxSize wxListBox::DoGetBestSize() const
 {
-    return wxSize(100, 110);
+    int lbWidth = 100;  // some defaults
+    int lbHeight = 110;
+    int wLine;
+
+    // Find the widest line
+    for(int i = 0; i < GetCount(); i++) {
+        wxString str(GetString(i));
+        GetTextExtent(str, &wLine, NULL);
+        lbWidth = wxMax(lbWidth, wLine);
+    }
+
+    // Add room for the scrollbar
+    lbWidth += wxSystemSettings::GetSystemMetric(wxSYS_VSCROLL_X);
+
+    // And just a bit more
+    int cx, cy;
+    GetTextExtent("X", &cx, &cy);
+    lbWidth += 3 * cx;
+
+    // don't make the listbox too tall (limit height to around 10 items) but don't
+    // make it too small neither
+    lbHeight = (cy+4) * wxMin(wxMax(GetCount(), 3), 10);
+
+    return wxSize(lbWidth, lbHeight);
 }
 
 #endif
