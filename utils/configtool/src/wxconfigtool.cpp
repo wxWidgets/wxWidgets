@@ -25,6 +25,7 @@
 #include "wx/menuitem.h"
 #include "wx/tooltip.h"
 #include "wx/cshelp.h"
+#include "wx/helphtml.h"
 #include "wx/html/htmprint.h"
 #include "wx/html/htmlwin.h"
 #include "wx/filesys.h"
@@ -73,7 +74,7 @@ bool ctApp::OnInit(void)
     wxImage::AddHandler( new wxGIFHandler );
 #endif
 
-#ifdef __WXMSW__
+#if wxUSE_MS_HTML_HELP && !defined(__WXUNIVERSAL__)
     m_helpController = new wxCHMHelpController;
     m_helpControllerReference = new wxCHMHelpController;
 #else
