@@ -752,8 +752,9 @@ bool wxListCtrl::SetItemState(long item, long state, long stateMask)
     wxConvertToMSWFlags(state, stateMask, lvItem);
 
     // for the virtual list controls we need to refresh the previously focused
-    // item manually when changing focus programmatically because otherwise it
-    // keeps its focus rectangle until next repaint (yet another comctl32 bug)
+    // item manually when changing focus without changing selection
+    // programmatically because otherwise it keeps its focus rectangle until
+    // next repaint (yet another comctl32 bug)
     long focusOld;
     if ( IsVirtual() &&
          (stateMask & wxLIST_STATE_FOCUSED) &&
@@ -776,7 +777,13 @@ bool wxListCtrl::SetItemState(long item, long state, long stateMask)
 
     if ( focusOld != -1 )
     {
-        RefreshItem(focusOld);
+        // no need to refresh the item if it was previously selected, it would
+        // only result in annoying flicker
+        if ( !(GetItemState(focusOld,
+                            wxLIST_STATE_SELECTED) & wxLIST_STATE_SELECTED) )
+        {
+            RefreshItem(focusOld);
+        }
     }
 
     return TRUE;
