@@ -183,7 +183,7 @@ wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
                         keyCode = WXK_SPACE;
                     else if ( current == wxT("TAB") )
                         keyCode = WXK_TAB;
-                    else if ( current == wxT("ESC") || current == wxT("ESCAPE") ) {
+                    else if ( current == wxT("ESC") || current == wxT("ESCAPE") )
                         keyCode = WXK_ESCAPE;
                     else
                     {
