@@ -39,6 +39,7 @@ wxToolBarXmlHandler::wxToolBarXmlHandler()
     XRC_ADD_STYLE(wxTB_NOICONS);
     XRC_ADD_STYLE(wxTB_NODIVIDER);
     XRC_ADD_STYLE(wxTB_NOALIGN);
+    XRC_ADD_STYLE(wxTB_HORZ_LAYOUT);
     AddWindowStyles();
 }
 
