@@ -84,6 +84,7 @@ void wxDataFormat::SetType(  wxDataFormatId  Type )
         m_format = kDragFlavorTypeHFS ;
     else
     {
+        m_format = '????' ;
        wxFAIL_MSG( wxT("invalid dataformat") );
     }
 }
@@ -96,7 +97,7 @@ wxDataFormatId wxDataFormat::GetType() const
 wxString wxDataFormat::GetId() const
 {
 	char text[5] ;
-	strncpy( text , (char*) m_format , 4 ) ;
+	strncpy( text , (char*) &m_format , 4 ) ;
 	text[4] = 0 ;
     return wxString::FromAscii( text ) ;
 }
