@@ -36,6 +36,9 @@
            want that!
          */
 #        define WXIMPORT
+#    elif defined(__EMX__)
+#        define WXEXPORT
+#        define WXIMPORT
 #    elif (!(defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )))
 #        define WXEXPORT _Export
 #        define WXIMPORT _Export
