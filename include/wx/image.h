@@ -24,6 +24,8 @@
 #  include "wx/stream.h"
 #endif
 
+#if wxUSE_IMAGE
+
 //-----------------------------------------------------------------------------
 // classes
 //-----------------------------------------------------------------------------
@@ -248,6 +250,9 @@ WXDLLEXPORT_DATA(extern wxImage)    wxNullImage;
 #include "wx/imagjpeg.h"
 #include "wx/imagtiff.h"
 #include "wx/imagpnm.h"
+#include "wx/imagxpm.h"
+
+#endif // wxUSE_IMAGE
 
 #endif
   // _WX_IMAGE_H_
