@@ -292,7 +292,7 @@ private:
     short               m_images[wxTreeItemIcon_Max];
 
     wxCoord             m_x;            // (virtual) offset from top
-    short               m_y;            // (virtual) offset from left
+    wxCoord             m_y;            // (virtual) offset from left
     short               m_width;        // width of this item
     unsigned char       m_height;       // height of this item
 
