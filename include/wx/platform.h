@@ -84,7 +84,8 @@
 #   endif /* !__WIN64__ */
 #endif /* _WIN64 */
 
-#if defined(_WIN32) || defined(WIN32) || defined(__NT__) || defined(__WXWINCE__)
+#if (defined(_WIN32) || defined(WIN32) || defined(__NT__) || defined(__WXWINCE__)) \
+    && !defined(__WXMOTIF__) && !defined(__WXGTK__) && !defined(__WXX11__)
 #    ifndef __WXMSW__
 #        define __WXMSW__
 #    endif
@@ -422,7 +423,7 @@
 #if ( defined( __GNUWIN32__ ) || defined( __MINGW32__ ) || \
     defined( __CYGWIN__ ) || \
       (defined(__WATCOMC__) && __WATCOMC__ >= 1200) ) && \
-    !defined(__DOS__)
+    !defined(__DOS__) && !defined(__WXMOTIF__) && !defined(__WXGTK__) && !defined(__WXX11__)
 #    include "wx/msw/gccpriv.h"
 #else
 #    undef wxCHECK_W32API_VERSION
