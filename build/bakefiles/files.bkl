@@ -7,8 +7,8 @@
 IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 -->
-    
-    
+
+
 <!-- ======================================================================
                                        FILES
 
@@ -1559,6 +1559,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/fontdlgg.cpp
     src/generic/imaglist.cpp
     src/generic/listctrl.cpp
+    src/generic/prntdlgg.cpp
     src/generic/statusbr.cpp
     src/generic/tabg.cpp
     <!-- Unix files used by wxMac: -->
@@ -2147,8 +2148,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         $(BASE_AND_GUI_CMN_SRC)
         $(BASE_AND_GUI_PLATFORM_SRC) $(BASE_AND_GUI_TOOLKIT_SRC)
     </set>
-    
-    
+
+
     <!-- wxNet files: -->
     <set var="NET_MACOSX_SRC" hints="files">
         <if cond="TOOLKIT=='MAC'">$(NET_MAC_SRC)</if>
@@ -2174,7 +2175,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 
     <!-- GUI sources: -->
-    
+
     <set var="LOWLEVEL_SRC" hints="files">
         <if cond="TOOLKIT=='GTK'">$(GTK_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='MOTIF'">$(MOTIF_LOWLEVEL_SRC)</if>
@@ -2195,7 +2196,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='X11'">$(X11_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='MGL'">$(MGL_LOWLEVEL_HDR)</if>
     </set>
-    
+
     <set var="GUI_SRC" hints="files">
         <if cond="TOOLKIT=='GTK'">$(GTK_SRC)</if>
         <if cond="TOOLKIT=='MOTIF'">$(MOTIF_SRC)</if>
@@ -2221,7 +2222,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
             $(LOWLEVEL_SRC) $(UNIV_SRC) $(UNIV_THEMES_SRC) $(GUI_CMN_SRC)
         </if>
     </set>
-    
+
     <!-- wxAdvanced files: -->
     <set var="ADVANCED_PLATFORM_SRC" hints="files">
         <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_SRC)</if>
@@ -2258,7 +2259,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
             $(OPENGL_HDR) $(ODBC_HDR) $(DBGRID_HDR)
         </if>
     </set>
-        
+
 
     <set var="ALL_BASE_HEADERS" make_var="1" hints="files">
         $(BASE_CMN_HDR) $(BASE_PLATFORM_HDR)

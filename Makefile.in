@@ -3244,6 +3244,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS =  \
 	monodll_fontdlgg.o \
 	monodll_imaglist.o \
 	monodll_listctrl.o \
+	monodll_prntdlgg.o \
 	monodll_statusbr.o \
 	monodll_tabg.o \
 	monodll_snglinst.o
@@ -3630,6 +3631,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_1 =  \
 	monolib_fontdlgg.o \
 	monolib_imaglist.o \
 	monolib_listctrl.o \
+	monolib_prntdlgg.o \
 	monolib_statusbr.o \
 	monolib_tabg.o \
 	monolib_snglinst.o
@@ -4016,6 +4018,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_2 =  \
 	coredll_fontdlgg.o \
 	coredll_imaglist.o \
 	coredll_listctrl.o \
+	coredll_prntdlgg.o \
 	coredll_statusbr.o \
 	coredll_tabg.o \
 	coredll_snglinst.o
@@ -4402,6 +4405,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_3 =  \
 	corelib_fontdlgg.o \
 	corelib_imaglist.o \
 	corelib_listctrl.o \
+	corelib_prntdlgg.o \
 	corelib_statusbr.o \
 	corelib_tabg.o \
 	corelib_snglinst.o
@@ -8237,6 +8241,9 @@ coredll_printmac.o: $(srcdir)/src/mac/printmac.cpp
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_prntdlgg.o: $(srcdir)/src/generic/prntdlgg.cpp
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_prntdlgg.o: $(srcdir)/src/generic/prntdlgg.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+
 @COND_USE_GUI_1_WXUNIV_1@coredll_prntdlgg.o: $(srcdir)/src/generic/prntdlgg.cpp
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
@@ -10290,6 +10297,9 @@ corelib_printmac.o: $(srcdir)/src/mac/printmac.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_prntdlgg.o: $(srcdir)/src/generic/prntdlgg.cpp
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_prntdlgg.o: $(srcdir)/src/generic/prntdlgg.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 @COND_USE_GUI_1_WXUNIV_1@corelib_prntdlgg.o: $(srcdir)/src/generic/prntdlgg.cpp
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
@@ -13022,6 +13032,9 @@ monodll_printmac.o: $(srcdir)/src/mac/printmac.cpp
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_prntdlgg.o: $(srcdir)/src/generic/prntdlgg.cpp
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_prntdlgg.o: $(srcdir)/src/generic/prntdlgg.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
 @COND_USE_GUI_1_WXUNIV_1@monodll_prntdlgg.o: $(srcdir)/src/generic/prntdlgg.cpp
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -15531,6 +15544,9 @@ monolib_printmac.o: $(srcdir)/src/mac/printmac.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_prntdlgg.o: $(srcdir)/src/generic/prntdlgg.cpp
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_prntdlgg.o: $(srcdir)/src/generic/prntdlgg.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_USE_GUI_1_WXUNIV_1@monolib_prntdlgg.o: $(srcdir)/src/generic/prntdlgg.cpp
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
