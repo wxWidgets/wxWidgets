@@ -175,6 +175,12 @@ OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, char *title, int x, int y, int 
   // create the menu
   InitMenu();
 
+  // create the status line
+  const int widths[] = { -1, 60 };
+  CreateStatusBar(2);
+  SetStatusWidths(2, widths);
+  SetStatusText("no selection", 0);
+
   // make a panel with some controls
   wxPanel *pPanel = new wxPanel(this, -1, wxPoint(0, 0), 
                                 wxSize(400, 200), wxTAB_TRAVERSAL);
@@ -242,12 +248,6 @@ OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, char *title, int x, int y, int 
   }
 
   delete[] astrChoices;
-
-  // create the status line
-  const int widths[] = { -1, 60 };
-  CreateStatusBar(2);
-  SetStatusWidths(2, widths);
-  SetStatusText("no selection", 0);
 
   Show(TRUE);
 }
