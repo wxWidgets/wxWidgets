@@ -343,7 +343,11 @@ void wxRegionIterator::Reset(const wxRegion& region)
     else
     {
         // TODO create m_rects and fill with rectangles for this region
-        m_numRects = 0;
+
+        // For now, fudge by getting the whole bounding box.
+        m_rects = new wxRect[1];
+        m_numRects = 1;
+        m_rects[0] = m_region.GetBox();
     }
 }
 
