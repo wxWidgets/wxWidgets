@@ -557,7 +557,7 @@ can specify anywhere from one column up to all columns in the table.
 
 \begin{verbatim}
     table->SetColDefs(0, "FIRST_NAME", DB_DATA_TYPE_VARCHAR, FirstName,
-                      SQL_C_CHAR, sizeof(name), true, true);
+                      SQL_C_CHAR, sizeof(FirstName), true, true);
     table->SetColDefs(1, "LAST_NAME", DB_DATA_TYPE_VARCHAR, LastName,
                       SQL_C_CHAR, sizeof(LastName), true, true);
 \end{verbatim}
@@ -920,136 +920,207 @@ report the bugs/problems you have encountered in the latter case.
 
 Simplest example of establishing/opening a connection to an ODBC datasource, 
 binding variables to the columns for read/write usage, opening an 
-existing table in the datasource, setting the query parameters 
+existing table in the datasource, inserting a record, setting query parameters 
 (where/orderBy/from), querying the datasource, reading each row of the 
-result set, then cleaning up.
+result set, deleting a record, releasing the connection, then cleaning up.
 
-NOTE: Not all error trapping is shown here, to reduce the size of the 
-code and to make it more easily readable.
+NOTE: Very basic error handling is shown here, to reduce the size of the 
+code and to make it more easily readable.  The HandleError() function uses the wxDbLogExtendedErrorMsg() function for retrieving database error messages.
 
 \begin{verbatim}
-wxDbConnectInf  *DbConnectInf = NULL;
+// ----------------------------------------------------------------------------
+// HEADERS
+// ----------------------------------------------------------------------------
+#include "wx/log.h"         // #included to enable output of messages only
+#include "wx/dbtable.h"
 
-wxDb        *db    = NULL;       // The database connection
-wxDbTable   *table = NULL;       // The data table to access
+// ----------------------------------------------------------------------------
+// FUNCTION USED FOR HANDLING/DISPLAYING ERRORS
+// ----------------------------------------------------------------------------
+// Very generic error handling function.  
+// If a connection to the database is passed in, then we retrieve all the 
+// database errors for the connection and add them to the displayed message
+int HandleError(wxString errmsg, wxDb *pDb=NULL)
+{
+    // Retrieve all the error message for the errors that occurred
+    wxString allErrors;
+    if (!pDb == NULL)
+        // Get the database errors and append them to the error message
+        allErrors = wxDbLogExtendedErrorMsg(errmsg.c_str(), pDb, 0, 0);
+    else
+        allErrors = errmsg;
 
-wxChar       FirstName[50+1];    // buffer for data from column "FIRST_NAME"
-wxChar       LastName[50+1];     // buffer for data from column "LAST_NAME"
+    // Do whatever you wish with the error message here
+    // wxLogDebug() is called inside wxDbLogExtendedErrorMsg() so this
+    // console program will show the errors in the console window,
+    // but these lines will show the errors in RELEASE builds also
+    wxFprintf(stderr, wxT("\n%s\n"), allErrors.c_str());
+    fflush(stderr);
 
-bool         errorOccured = false;
+    return 1;
+}
 
-const wxChar tableName[]          = "CONTACTS";
-const UWORD  numTableColumns      = 2;           // Number of bound columns
 
-FirstName[0] = 0;
-LastName[0]  = 0;
+// ----------------------------------------------------------------------------
+// entry point
+// ----------------------------------------------------------------------------
+int main(int argc, char **argv)
+{
+wxDbConnectInf  *DbConnectInf    = NULL;    // DB connection information
 
-DbConnectInf = new wxDbConnectInf(NULL,"MyDSN","MyUserName", "MyPassword");
+wxDb            *db              = NULL;    // Database connection
 
+wxDbTable       *table           = NULL;    // Data table to access
+const wxChar     tableName[]     = wxT("USERS"); // Name of database table
+const UWORD      numTableColumns = 2;       // Number table columns
+wxChar           FirstName[50+1];           // column data: "FIRST_NAME"
+wxChar           LastName[50+1];            // column data: "LAST_NAME"
+
+wxString         msg;                       // Used for display messages
+
+// -----------------------------------------------------------------------
+// DEFINE THE CONNECTION HANDLE FOR THE DATABASE
+// -----------------------------------------------------------------------
+DbConnectInf = new wxDbConnectInf(NULL, 
+                                    wxT("CONTACTS-SqlServer"),
+                                    wxT("sa"),
+                                    wxT("abk"));
+
+// Error checking....
 if (!DbConnectInf || !DbConnectInf->GetHenv())
 {
-  wxMessageBox("Unable to allocate an ODBC environment handle",
-            "DB CONNECTION ERROR", wxOK | wxICON_EXCLAMATION);
-  return;
-} 
+    return HandleError(wxT("DB ENV ERROR: Cannot allocate ODBC env handle"));
+}
 
-// Get a database connection from the cached connections
+
+// -----------------------------------------------------------------------
+// GET A DATABASE CONNECTION
+// -----------------------------------------------------------------------
 db = wxDbGetConnection(DbConnectInf);
 
-// Create the table connection
-table = new wxDbTable(db, tableName, numTableColumns, "", 
-                      !wxDB_QUERY_ONLY, "");
+if (!db)
+{
+    return HandleError(wxT("CONNECTION ERROR - Cannot get DB connection"));
+}
 
+
+// -----------------------------------------------------------------------
+// DEFINE THE TABLE, AND THE COLUMNS THAT WILL BE ACCESSED
+// -----------------------------------------------------------------------
+table = new wxDbTable(db, tableName, numTableColumns, wxT(""), 
+                    !wxDB_QUERY_ONLY, wxT(""));
 //
 // Bind the columns that you wish to retrieve. Note that there must be
-// 'numTableColumns' calls to SetColDefs(), to match the wxDbTable definition
+// 'numTableColumns' calls to SetColDefs(), to match the wxDbTable def
 //
 // Not all columns need to be bound, only columns whose values are to be 
 // returned back to the client.
 //
-table->SetColDefs(0, "FIRST_NAME", DB_DATA_TYPE_VARCHAR, FirstName,
-                  SQL_C_CHAR, sizeof(name), true, true);
-table->SetColDefs(1, "LAST_NAME", DB_DATA_TYPE_VARCHAR, LastName,
-                  SQL_C_CHAR, sizeof(LastName), true, true);
+table->SetColDefs(0, wxT("FIRST_NAME"), DB_DATA_TYPE_VARCHAR, FirstName,
+                SQL_C_CHAR, sizeof(FirstName), true, true);
+table->SetColDefs(1, wxT("LAST_NAME"), DB_DATA_TYPE_VARCHAR, LastName,
+                SQL_C_CHAR, sizeof(LastName), true, true);
 
-// Open the table for access
-table->Open();
 
+// -----------------------------------------------------------------------
+// CREATE (or RECREATE) THE TABLE IN THE DATABASE
+// -----------------------------------------------------------------------
+if (!table->CreateTable(true))  //NOTE: No CommitTrans is required
+{
+    return HandleError(wxT("TABLE CREATION ERROR: "), table->GetDb());
+}
+
+
+// -----------------------------------------------------------------------
+// OPEN THE TABLE FOR ACCESS
+// -----------------------------------------------------------------------
+if (!table->Open())
+{
+    return HandleError(wxT("TABLE OPEN ERROR: "), table->GetDb());
+}
+
+
+// -----------------------------------------------------------------------
+// INSERT A NEW ROW INTO THE TABLE
+// -----------------------------------------------------------------------
+wxStrcpy(FirstName, wxT("JULIAN"));
+wxStrcpy(LastName, wxT("SMART"));
+if (!table->Insert())
+{
+    return HandleError(wxT("INSERTION ERROR: "), table->GetDb());
+}
+
+// Must commit the insert to write the data to the DB
+table->GetDb()->CommitTrans();
+
+
+// -----------------------------------------------------------------------
+// RETRIEVE ROWS FROM THE TABLE BASED ON SUPPLIED CRITERIA
+// -----------------------------------------------------------------------
 // Set the WHERE clause to limit the result set to return
-// all rows that have a value of 'GEORGE' in the FIRST_NAME
+// all rows that have a value of 'JULIAN' in the FIRST_NAME
 // column of the table.
-table->SetWhereClause("FIRST_NAME = 'GEORGE'");
+table->SetWhereClause(wxT("FIRST_NAME = 'JULIAN'"));
 
 // Result set will be sorted in ascending alphabetical 
 // order on the data in the 'LAST_NAME' column of each row
-table->SetOrderByClause("LAST_NAME");
+table->SetOrderByClause(wxT("LAST_NAME"));
 
 // No other tables (joins) are used for this query
-table->SetFromClause("");
+table->SetFromClause(wxT(""));
 
 // Instruct the datasource to perform a query based on the 
 // criteria specified above in the where/orderBy/from clauses.
 if (!table->Query())
 {
-    wxMessageBox("Error on Query()","ERROR!",
-                  wxOK | wxICON_EXCLAMATION);
-    errorOccured = true;
+    return HandleError(wxT("QUERY ERROR: "), table->GetDb());
 }
 
-wxString msg;
-
-// Start and continue reading every record in the table
-// displaying info about each record read.
+// Loop through all rows matching the query criteria until
+// there are no more records to read
 while (table->GetNext())
 {
-    msg.Printf("Row #%lu -- First Name : %s  Last Name is %s",
-               table->GetRowNum(), FirstName, LastName);
-    wxMessageBox(msg, "Data", wxOK | wxICON_INFORMATION, NULL);
+    msg.Printf(wxT("Row #%lu -- First Name : %s  Last Name is %s"),
+            table->GetRowNum(), FirstName, LastName);
+
+    // Code to display 'msg' here
+    wxLogMessage(wxT("\n%s\n"), msg.c_str());
 }
 
 
+// -----------------------------------------------------------------------
+// DELETE A ROW FROM THE TABLE
+// -----------------------------------------------------------------------
+// Select the row which has FIRST_NAME of 'JULIAN' and LAST_NAME
+// of 'SMART', then delete the retrieved row
 //
-// Select the row which has FIRST_NAME of 'GEORGE' and LAST_NAME
-// of 'TASKER', then delete the retrieved row
-//
-table->SetWhereClause("FIRST_NAME = 'GEORGE' and "LAST_NAME = 'TASKER'");
-if (table->Query())
+if (!table->DeleteWhere(wxT("FIRST_NAME = 'JULIAN' and LAST_NAME = 'SMART'")))
 {
-    table->Delete();
-	
-	// Must commit the deletion
-	table->GetDb()->CommitTrans();
+    return HandleError(wxT("DELETION ERROR: "), table->GetDb());
 }
-
-
-//
-// Insert a new row into the table
-//
-wxStrcpy(FirstName, "JULIAN");
-wxStrcpy(LastName, "SMART");
-table->Insert();
-
-// Must commit the insert
+    
+// Must commit the deletion to the database
 table->GetDb()->CommitTrans();
 
 
+// -----------------------------------------------------------------------
+// TAKE CARE OF THE ODBC CLASS INSTANCES THAT WERE BEING USED
+// -----------------------------------------------------------------------
 // If the wxDbTable instance was successfully created
 // then delete it as we are done with it now.
-if (table)
-{
-    wxDelete(table);
-}
+wxDELETE(table);
 
-// If we have a valid wxDb instance, then free the connection
+// Free the cached connection
 // (meaning release it back in to the cache of datasource
 // connections) for the next time a call to wxDbGetConnection()
 // is made.
-if (db)
-{
-    wxDbFreeConnection(db);
-    db = NULL;
-}
+wxDbFreeConnection(db);
+db = NULL;
 
+
+// -----------------------------------------------------------------------
+// CLEANUP BEFORE EXITING APP
+// -----------------------------------------------------------------------
 // The program is now ending, so we need to close
 // any cached connections that are still being 
 // maintained.
@@ -1057,8 +1128,13 @@ wxDbCloseConnections();
 
 // Release the environment handle that was created
 // for use with the ODBC datasource connections
-wxDelete(DbConnectInf);
+wxDELETE(DbConnectInf);
 
+wxUnusedVar(argc);  // Here just to prevent compiler warnings
+wxUnusedVar(argv);  // Here just to prevent compiler warnings
+
+return 0;
+}
 \end{verbatim}
 
 \subsection{A selection of SQL commands}\label{sqlcommands}
