@@ -379,7 +379,7 @@ wxMenu *wxMenuBar::Remove(size_t pos)
 
 static int FindMenuItemRecursive( const wxMenu *menu, const wxString &menuString, const wxString &itemString )
 {
-    if (menu->GetTitle() == menuString)
+    if (wxMenuItem::GetLabelFromText(menu->GetTitle()) == wxMenuItem::GetLabelFromText(menuString))
     {
         int res = menu->FindItem( itemString );
         if (res != wxNOT_FOUND)
