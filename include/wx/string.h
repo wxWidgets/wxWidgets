@@ -803,6 +803,8 @@ public:
 
   // standard types
   typedef wxChar value_type;
+  typedef size_t size_type;
+  typedef value_type *iterator;
   typedef const value_type *const_iterator;
 
   // an 'invalid' value for string index
@@ -847,6 +849,11 @@ public:
   const_iterator begin() const { return wx_str(); }
     // position one after the last valid one
   const_iterator end() const { return wx_str() + length(); }
+
+  // first valid index position
+  iterator begin() { CopyBeforeWrite(); return m_pchData; }
+  // position one after the last valid one
+  iterator end() { CopyBeforeWrite(); return m_pchData + length(); }
 
   // lib.string.modifiers
     // append a string
