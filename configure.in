@@ -829,7 +829,7 @@ WX_ARG_ENABLE(compat24,      [  --disable-compat24      disable wxWidgets 2.4 co
 
 AC_ARG_ENABLE(rpath,         [  --enable-rpath=DIR      output the rpath flag from wx-config], [wxRPATH_DIR="$enableval"])
 
-if test "$wxRPATH_DIR" != "" -a "$wxRPATH_DIR" != "disable"; then
+if test "$wxRPATH_DIR" != "" -a "$wxRPATH_DIR" != "disable" -a "$wxRPATH_DIR" != "no"; then
    WXCONFIG_RPATH="-Wl,-rpath -Wl,$wxRPATH_DIR"
 fi
 
