@@ -92,7 +92,16 @@ int wxDisplayBase::GetFromPoint(const wxPoint &p)
   }
   else
   {
-    return 0;
+    wxSize size = wxGetDisplaySize();
+    if (p.x >= 0 &&
+        p.x <= size.GetWidth() && 
+        p.y > 0 &&
+        p.y <= size.GetHeight())
+    {
+        return 0;
+    }
+
+    return -1
   }
 }
 
