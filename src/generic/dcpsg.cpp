@@ -1964,6 +1964,7 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
 
         switch (Family)
         {
+            case wxTELETYPE:
             case wxMODERN:
                 {
                     if ((Style == wxITALIC) && (Weight == wxBOLD)) name = "CourBoO";
