@@ -477,12 +477,15 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_notebook->AddPage(panel, "wxGauge", FALSE, Image_Gauge);
 
     panel = new wxPanel(m_notebook);
+    
+#ifndef __WXMOTIF__  // wxStaticBitmap not working under Motif yet. MB
     wxIcon icon = wxTheApp->GetStdIcon(wxICON_INFORMATION);
     wxStaticBitmap *bmpStatic = new wxStaticBitmap(panel, -1, icon, wxPoint(10, 10));
 
     bmpStatic = new wxStaticBitmap(panel, -1, wxNullIcon, wxPoint(50, 10));
     bmpStatic->SetIcon(wxTheApp->GetStdIcon(wxICON_QUESTION));
-
+#endif
+    
     wxBitmap bitmap( 100, 100 );
     wxMemoryDC dc;
     dc.SelectObject( bitmap );
