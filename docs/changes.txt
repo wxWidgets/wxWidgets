@@ -193,7 +193,11 @@ wxGTK:
 - added wxEVT_MENU_OPEN event generation
 - fixed bug in generic file selector causing incomplete file extensions to
   be appended to filenames with no extension
+- added SetSelection implementation for GTK+ 2
 
+wxMSW:
+
+- no longer take ampersand into account in wxStaticText::GetBestSize.
 
 2.4.0
 -----

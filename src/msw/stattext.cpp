@@ -39,8 +39,7 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos,
            const wxSize& size,
            long style,
-           const wxString& name)
-{
+           const wxString& name){
   SetName(name);
   if (parent) parent->AddChild(this);
 
@@ -97,10 +96,15 @@ wxSize wxStaticText::DoGetBestSize() const
     int widthTextMax = 0, widthLine,
         heightTextTotal = 0, heightLineDefault = 0, heightLine = 0;
 
+    bool lastWasAmpersand = FALSE;
+
     wxString curLine;
-    for ( const wxChar *pc = text; ; pc++ ) {
-        if ( *pc == wxT('\n') || *pc == wxT('\0') ) {
-            if ( !curLine ) {
+    for ( const wxChar *pc = text; ; pc++ )
+    {
+        if ( *pc == wxT('\n') || *pc == wxT('\0') )
+        {
+            if ( !curLine )
+            {
                 // we can't use GetTextExtent - it will return 0 for both width
                 // and height and an empty line should count in height
                 // calculation
@@ -111,22 +115,44 @@ wxSize wxStaticText::DoGetBestSize() const
 
                 heightTextTotal += heightLineDefault;
             }
-            else {
+            else
+            {
                 GetTextExtent(curLine, &widthLine, &heightLine);
                 if ( widthLine > widthTextMax )
                     widthTextMax = widthLine;
                 heightTextTotal += heightLine;
             }
 
-            if ( *pc == wxT('\n') ) {
+            if ( *pc == wxT('\n') )
+            {
                curLine.Empty();
             }
-            else {
+            else
+            {
                // the end of string
                break;
             }
         }
-        else {
+        else
+        {
+            // we shouldn't take into account the '&' which just introduces the
+            // mnemonic characters and so are not shown on the screen -- except
+            // when it is preceded by another '&' in which case it stands for a
+            // literal ampersand
+            if ( *pc == _T('&') )
+            {
+                if ( !lastWasAmpersand )
+                {
+                    lastWasAmpersand = TRUE;
+
+                    // skip the statement adding pc to curLine below
+                    continue;
+                }
+
+                // it is a literal ampersand
+                lastWasAmpersand = FALSE;
+            }
+
             curLine += *pc;
         }
     }
