@@ -57,7 +57,7 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
 	
 	MacPreControlCreate( parent , id ,  "" , pos , wxSize( width , height ) ,style, validator , name , &bounds , title ) ;
 
-	m_macControl = ::NewControl( parent->GetMacRootWindow() , &bounds , title , false , 0 , 
+	m_macControl = ::NewControl( parent->MacGetRootWindow() , &bounds , title , false , 0 , 
 		kControlBehaviorOffsetContents + 
 		    ( bmap->m_bitmapType == kMacBitmapTypeIcon ? kControlContentCIconHandle : kControlContentPictHandle ) , 0, 
 	  	(( style & wxBU_AUTODRAW ) ? kControlBevelButtonSmallBevelProc : kControlBevelButtonNormalBevelProc ), (long) this ) ;

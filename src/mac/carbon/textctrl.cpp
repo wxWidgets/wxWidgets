@@ -124,7 +124,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     }
 
 
-    m_macControl = ::NewControl( parent->GetMacRootWindow() , &bounds , "\p" , true , 0 , 0 , 1, 
+    m_macControl = ::NewControl( parent->MacGetRootWindow() , &bounds , "\p" , true , 0 , 0 , 1, 
         ( style & wxTE_PASSWORD ) ? kControlEditTextPasswordProc : kControlEditTextProc , (long) this ) ;
     MacPostControlCreate() ;
 
@@ -179,7 +179,7 @@ void wxTextCtrl::SetValue(const wxString& st)
     else
         value = st ;
     ::SetControlData( m_macControl, 0, ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag , value.Length() , (char*) ((const char*)value) ) ;
-    WindowRef window = GetMacRootWindow() ;
+    WindowRef window = MacGetRootWindow() ;
     if ( window )
     {
         wxWindow* win = wxFindWinFromMacWindow( window ) ;
@@ -193,9 +193,9 @@ void wxTextCtrl::SetValue(const wxString& st)
             wxWindow* parent = GetParent() ;
             while ( parent )
             {
-                if( parent->MacGetWindowData() )
+                if( parent->IsTopLevel() )
                 {
-                    ::SetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , kThemeBrushDialogBackgroundActive , false ) ;
+//                    ::SetThemeWindowBackground( win->MacGetRootWindow() , kThemeBrushDialogBackgroundActive , false ) ;
                     break ;
                 }
                 
@@ -210,7 +210,7 @@ void wxTextCtrl::SetValue(const wxString& st)
             } 
             
             UMADrawControl( m_macControl ) ;
-            ::SetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , win->MacGetWindowData()->m_macWindowBackgroundTheme , false ) ;
+//            ::SetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , win->MacGetWindowData()->m_macWindowBackgroundTheme , false ) ;
         }
     }
 }
@@ -255,7 +255,7 @@ void wxTextCtrl::Paste()
         ::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
         TEFromScrap() ;
         TEPaste( teH ) ;
-        WindowRef window = GetMacRootWindow() ;
+        WindowRef window = MacGetRootWindow() ;
         if ( window )
         {
             wxWindow* win = wxFindWinFromMacWindow( window ) ;
@@ -269,9 +269,9 @@ void wxTextCtrl::Paste()
                 wxWindow* parent = GetParent() ;
                 while ( parent )
                 {
-                    if( parent->MacGetWindowData() )
+                    if( parent->IsTopLevel() )
                     {
-                        ::SetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , kThemeBrushDialogBackgroundActive , false ) ;
+//                        ::SetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , kThemeBrushDialogBackgroundActive , false ) ;
                         break ;
                     }
                     
@@ -286,7 +286,7 @@ void wxTextCtrl::Paste()
                 } 
                 
                 UMADrawControl( m_macControl ) ;
-                ::SetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , win->MacGetWindowData()->m_macWindowBackgroundTheme , false ) ;
+//                ::SetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , win->MacGetWindowData()->m_macWindowBackgroundTheme , false ) ;
             }
         }
     }
@@ -1772,12 +1772,12 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 
     if ( style & wxTE_PASSWORD )
     {
-      m_macControl = ::NewControl( parent->GetMacRootWindow() , &bounds , "\p" , true , 0 , 0 , 1, 
+      m_macControl = ::NewControl( parent->MacGetRootWindow() , &bounds , "\p" , true , 0 , 0 , 1, 
         kControlEditTextPasswordProc , (long) this ) ;
     }
     else
     {
-    if ( mUPCreateControl(parent->GetMacRootWindow(), &bounds, &m_macControl) != noErr ) 
+    if ( mUPCreateControl(parent->MacGetRootWindow(), &bounds, &m_macControl) != noErr ) 
       return FALSE ;
     }
     MacPostControlCreate() ;
@@ -1887,7 +1887,7 @@ void wxTextCtrl::SetValue(const wxString& st)
     TXNSetData( (**tpvars).fTXNRec, kTXNTextData,  (const char*)value, value.Length(),
       kTXNStartOffset, kTXNEndOffset);
   }
-    WindowRef window = GetMacRootWindow() ;
+    WindowRef window = MacGetRootWindow() ;
     if ( window )
     {
         wxWindow* win = wxFindWinFromMacWindow( window ) ;
@@ -1979,7 +1979,7 @@ void wxTextCtrl::Paste()
      		::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
   		TEFromScrap() ;
   		TEPaste( teH ) ;
-  		WindowRef window = GetMacRootWindow() ;
+  		WindowRef window = MacGetRootWindow() ;
   		if ( window )
   		{
   			wxWindow* win = wxFindWinFromMacWindow( window ) ;

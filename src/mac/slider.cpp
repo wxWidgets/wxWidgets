@@ -84,7 +84,7 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     }
   
 
-     m_macControl = ::NewControl( parent->GetMacRootWindow(), &bounds, title, false,
+     m_macControl = ::NewControl( parent->MacGetRootWindow(), &bounds, title, false,
                                    value, minValue, maxValue, procID, (long) this);
  
      wxASSERT_MSG( m_macControl != NULL , "No valid mac control" ) ;
@@ -408,7 +408,7 @@ void wxSlider::MacHandleControlClick( ControlHandle control , SInt16 controlpart
  
          // Update window at old and new positions
          SetRect(&newbounds, m_x, m_y, m_x + m_width, m_y + m_height);
-         WindowRef rootwindow = GetMacRootWindow();
+         WindowRef rootwindow = MacGetRootWindow();
          InvalWindowRect( rootwindow , &oldbounds );
          InvalWindowRect( rootwindow , &newbounds );
  

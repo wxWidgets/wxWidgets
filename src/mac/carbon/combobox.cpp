@@ -47,7 +47,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
 	
 		MacPreControlCreate( parent , id ,  "" , pos , size ,style, validator , name , &bounds , title ) ;
 	
-		m_macControl = ::NewControl( parent->GetMacRootWindow() , &bounds , title , false , 0 , -12345 , 0, 
+		m_macControl = ::NewControl( parent->MacGetRootWindow() , &bounds , title , false , 0 , -12345 , 0, 
 	  	kControlPopupButtonProc , (long) this ) ; 
 	
 		m_macPopUpMenuHandle =  NewUniqueMenu() ;
