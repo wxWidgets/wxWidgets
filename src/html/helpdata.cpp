@@ -222,7 +222,7 @@ bool wxHtmlHelpData::LoadMSProject(wxHtmlBookRecord *book, wxFileSystem& fsys, c
     HP_TagHandler *handler = new HP_TagHandler(book);
     parser.AddTagHandler(handler);
 
-    f = ( contentsfile.IsEmpty() ? 0 : fsys.OpenFile(contentsfile) );
+    f = ( contentsfile.IsEmpty() ? NULL : fsys.OpenFile(contentsfile) );
     if (f) {
         sz = f -> GetStream() -> GetSize();
         buf = new char[sz + 1];
@@ -237,7 +237,7 @@ bool wxHtmlHelpData::LoadMSProject(wxHtmlBookRecord *book, wxFileSystem& fsys, c
     else
         wxLogError(_("Cannot open contents file: %s"), contentsfile.mb_str());
 
-    f = ( indexfile.IsEmpty() ? 0 : fsys.OpenFile(indexfile) );
+    f = ( indexfile.IsEmpty() ? NULL : fsys.OpenFile(indexfile) );
     if (f) {
         sz = f -> GetStream() -> GetSize();
         buf = new char[sz + 1];
@@ -249,7 +249,7 @@ bool wxHtmlHelpData::LoadMSProject(wxHtmlBookRecord *book, wxFileSystem& fsys, c
         handler -> WriteOut(m_Index, m_IndexCnt);
         delete[] buf;
     }
-    else
+    else if (!indexfile.IsEmpty())
         wxLogError(_("Cannot open index file: %s"), indexfile.mb_str());
     return TRUE;
 }
