@@ -167,7 +167,7 @@ bool wxTimerBase::Start(int milliseconds, bool oneShot)
 
 void wxStopWatch::Start(long t)
 {
-    m_t0 = wxGetLocalTimeMillis() - t;
+    m_t0 = wxGetLocalTimeMillis() - (wxLongLong)t;
     m_pause = 0;
     m_pauseCount = 0;
 }
@@ -329,7 +329,7 @@ wxLongLong wxGetLocalTimeMillis()
     if ( wxGetTimeOfDay(&tp, (struct timezone *)NULL) != -1 )
     {
         val *= tp.tv_sec;
-        return (val + (tp.tv_usec / 1000));
+        return (val + (wxLongLong)(tp.tv_usec / 1000));
     }
     else
     {

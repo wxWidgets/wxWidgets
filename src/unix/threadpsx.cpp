@@ -374,7 +374,7 @@ wxCondError wxConditionInternal::WaitTimeout(unsigned long milliseconds)
 {
     wxLongLong curtime = wxGetLocalTimeMillis();
     curtime += milliseconds;
-    wxLongLong temp = curtime / 1000;
+    wxLongLong temp = curtime / 1000L;
     int sec = temp.GetLo();
     temp *= 1000;
     temp = curtime - temp;

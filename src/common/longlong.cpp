@@ -1075,7 +1075,7 @@ wxLongLongWx::ToString() const
     wxLongLong ll = *this;
 
     bool neg;
-    if ( ll < 0 )
+    if ( ll < 0L )
     {
         ll.Negate();
         neg = TRUE;
@@ -1085,9 +1085,9 @@ wxLongLongWx::ToString() const
         neg = FALSE;
     }
 
-    while ( ll != 0 )
+    while ( ll != 0L )
     {
-        result.Prepend((wxChar)(_T('0') + (ll % 10).ToLong()));
+        result.Prepend((wxChar)(_T('0') + (ll % 10L).ToLong()));
         ll /= 10;
     }
 
