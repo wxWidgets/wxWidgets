@@ -730,6 +730,23 @@ void wxListLineData::CalculateSize( wxDC *dc, int spacing )
             m_bound_all.width = 0;
             m_bound_all.height = 0;
             wxNode *node = m_items.First();
+            if (node)
+            {
+                wxListItemData *item = (wxListItemData*)node->Data();
+                if (item->HasImage())
+                {
+                    int w = 0;
+                    int h = 0;
+                    m_owner->GetImageSize( item->GetImage(), w, h );
+                    m_bound_icon.width = w;
+                    m_bound_icon.height = h;
+                }
+                else
+                {
+                    m_bound_icon.width = 0;
+                    m_bound_icon.height = 0;
+                }
+            }
             while (node)
             {
                 wxListItemData *item = (wxListItemData*)node->Data();
