@@ -108,6 +108,56 @@ void wxRadioButton::SetValue(bool value)
     // BST_CHECKED is defined as 1, BST_UNCHECKED as 0, so we can just pass
     // value as is (we don't use BST_XXX here as they're not defined for Win16)
     (void)::SendMessage(GetHwnd(), BM_SETCHECK, (WPARAM)value, 0L);
+
+    // if we set the value of one radio button we also must clear all the other
+    // buttons in the same group: Windows doesn't do it automatically
+    if ( value )
+    {
+        const wxWindowList& siblings = GetParent()->GetChildren();
+        wxWindowList::Node *nodeThis = siblings.Find(this);
+        wxCHECK_RET( nodeThis, _T("radio button not a child of its parent?") );
+
+        // turn off all radio buttons before this one
+        for ( wxWindowList::Node *nodeBefore = nodeThis->GetPrevious();
+              nodeBefore;
+              nodeBefore = nodeBefore->GetPrevious() )
+        {
+            wxRadioButton *btn = wxDynamicCast(nodeBefore->GetData(),
+                                               wxRadioButton);
+            if ( !btn )
+            {
+                // the radio buttons in a group must be consecutive, so there
+                // are no more of them
+                break;
+            }
+
+            btn->SetValue(FALSE);
+
+            if ( btn->HasFlag(wxRB_GROUP) )
+            {
+                // even if there are other radio buttons before this one,
+                // they're not in the same group with us
+                break;
+            }
+        }
+
+        // ... and all after this one
+        for ( wxWindowList::Node *nodeAfter = nodeThis->GetNext();
+              nodeAfter;
+              nodeAfter = nodeAfter->GetNext() )
+        {
+            wxRadioButton *btn = wxDynamicCast(nodeAfter->GetData(),
+                                               wxRadioButton);
+
+            if ( !btn || btn->HasFlag(wxRB_GROUP) )
+            {
+                // no more buttons or the first button of the next group
+                break;
+            }
+
+            btn->SetValue(FALSE);
+        }
+    }
 }
 
 bool wxRadioButton::GetValue() const
