@@ -960,7 +960,7 @@ void wxWindowMGL::DoSetSize(int x, int y, int width, int height, int sizeFlags)
             width = currentW;
         }
     }
-
+    
     if ( height == -1 )
     {
         if ( sizeFlags & wxSIZE_AUTO_HEIGHT )
@@ -979,6 +979,16 @@ void wxWindowMGL::DoSetSize(int x, int y, int width, int height, int sizeFlags)
             height = currentH;
         }
     }
+    
+    int maxWidth = GetMaxWidth(),
+        minWidth = GetMinWidth(),    
+        maxHeight = GetMaxHeight(),
+        minHeight = GetMinHeight();
+        
+    if ( minWidth != -1 && width < minWidth ) width = minWidth;
+    if ( maxWidth != -1 && width > maxWidth ) width = maxWidth;
+    if ( minHeight != -1 && height < minHeight ) height = minHeight;
+    if ( maxHeight != -1 && height > maxHeight ) height = maxHeight;
 
     if ( m_wnd->x != x || m_wnd->y != y || 
          (int)m_wnd->width != width || (int)m_wnd->height != height )
