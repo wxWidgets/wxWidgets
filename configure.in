@@ -3672,12 +3672,13 @@ dnl Checks specific to contrib libs (MMedia)
 dnl ------------------------------------------
 
 dnl Check for ESD:
-ESD_LINK=
-AC_CHECK_HEADER([esd.h], [
-  AC_CHECK_LIB(esd, esd_close, [
-    ESD_LINK="-lesd"
+EXTRALIBS_ESD=
+AC_CHECK_LIB(esd, esd_close, [
+    AC_CHECK_HEADERS([esd.h], [
+    EXTRALIBS_ESD="-lesd"
   ])
 ])
+AC_SUBST(EXTRALIBS_ESD)
 
 
 dnl ===========================================================================
@@ -5390,6 +5391,28 @@ AC_DEFINE_UNQUOTED(wxINSTALL_PREFIX, "$wxPREFIX")
 dnl define the variables used in wx-config
 top_builddir_wxconfig=`pwd`
 
+
+dnl ---------------------------------------------------------------------------
+dnl define variables with all built libraries for wx-config
+dnl ---------------------------------------------------------------------------
+
+CORE_BASE_LIBS="net base"
+CORE_GUI_LIBS="adv core"
+
+if test "$wxUSE_XML" = "yes" ; then
+    CORE_BASE_LIBS="xml $CORE_BASE_LIBS"
+fi
+if test "$wxUSE_ODBC" = "yes" ; then
+    CORE_GUI_LIBS="odbc $CORE_GUI_LIBS"
+fi
+if test "$wxUSE_HTML" = "yes" ; then
+    CORE_GUI_LIBS="html $CORE_GUI_LIBS"
+fi
+
+AC_SUBST(CORE_BASE_LIBS)
+AC_SUBST(CORE_GUI_LIBS)
+
+
 dnl ---------------------------------------------------------------------------
 dnl Output the makefiles and such from the results found above
 dnl ---------------------------------------------------------------------------
@@ -5732,9 +5755,6 @@ AC_SUBST(LD)
 AC_SUBST(MAKEINFO)
 AC_SUBST(INSTALL_LIBRARY)
 AC_SUBST(INSTALL_DIR)
-
-dnl contrib tests results:
-AC_SUBST(ESD_LINK)
 
 
 dnl MAKE_SET will be replaced with "MAKE=..." or nothing if make sets MAKE
