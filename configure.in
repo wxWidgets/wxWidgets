@@ -1058,6 +1058,15 @@ if test "$wxUSE_MOTIF" = 1; then
          AC_LINK_PATH_EXIST($ac_find_libraries,$CHECK_LIB)
          CHECK_LINK="$CHECK_LIB $ac_path_to_link"
          AC_MSG_RESULT(found at $ac_find_libraries)
+         AC_MSG_CHECKING(for Xpm library)
+         AC_PATH_FIND_LIBRARIES($SEARCH_LIB,Xpm)
+         if test "$ac_find_libraries" != "" ; then
+           AC_LINK_PATH_EXIST($ac_find_libraries,$CHECK_LIB)
+           CHECK_LINK="$CHECK_LIB $ac_path_to_link"
+           AC_MSG_RESULT(found at $ac_find_libraries)
+         else
+           AC_MSG_ERROR(no)
+         fi
        else
          AC_MSG_ERROR(no)
        fi
@@ -1067,7 +1076,7 @@ if test "$wxUSE_MOTIF" = 1; then
   else
      AC_MSG_ERROR(no)
   fi
-  GUI_TK_LINK="-lXt -lX11 -lXm -lm"
+  GUI_TK_LINK="-lXt -lXmu -lXpm -lX11 -lXm -lm"
   GUI_TK_LINK="$CHECK_LINK $GUI_TK_LINK"
   TOOLKIT=MOTIF
   TOOLKIT_DEF=__WXMOTIF__

@@ -52,6 +52,7 @@ all::
 	@if test ! -d gtk; then mkdir gtk; fi
 	@if test ! -d qt; then mkdir qt; fi
 	@if test ! -d motif; then mkdir motif; fi
+	@if test ! -d motif/xmcombo; then mkdir motif/xmcombo; fi
 	@if test ! -d common; then mkdir common; fi
 	@if test ! -d generic; then mkdir generic; fi
 	@if test ! -d png; then mkdir png; fi
