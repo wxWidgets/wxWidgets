@@ -2353,7 +2353,7 @@ AC_CACHE_CHECK([size of wchar_t], wx_cv_sizeof_wchar_t,
 	)
 ])
 
-AC_DEFINE_UNQUOTED(wxSIZEOF_WCHAR_T, $wx_cv_sizeof_wchar_t)
+AC_DEFINE_UNQUOTED(SIZEOF_WCHAR_T, $wx_cv_sizeof_wchar_t)
 
 
 dnl for bytesex stuff (don't use AC_C_BIGENDIAN to allow cross-compiling)

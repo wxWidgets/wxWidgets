@@ -10531,7 +10531,7 @@ fi
 echo "$ac_t""$wx_cv_sizeof_wchar_t" 1>&6
 
 cat >> confdefs.h <<EOF
-#define wxSIZEOF_WCHAR_T $wx_cv_sizeof_wchar_t
+#define SIZEOF_WCHAR_T $wx_cv_sizeof_wchar_t
 EOF
 
 
