@@ -36,8 +36,6 @@
 // Useful buffer, initialized in wxCommonInit
 wxChar *wxBuffer = NULL;
 
-#if wxUSE_GUI
-
 // Windows List
 wxWindowList wxTopLevelWindows;
 
@@ -160,4 +158,3 @@ WXDLLEXPORT_DATA(const wxChar *) wxUserResourceStr = wxT("TEXT");
 const wxSize wxDefaultSize(-1, -1);
 const wxPoint wxDefaultPosition(-1, -1);
 
-#endif // wxUSE_GUI

@@ -53,9 +53,6 @@
     #include "wx/object.h"
     #include "wx/list.h"
     #include "wx/utils.h"
-    #if wxUSE_GUI
-        #include "wx/msgdlg.h"
-    #endif
     #include "wx/log.h"
 #endif
 #include "wx/filefn.h"
