@@ -41,7 +41,7 @@ WX_DEFINE_OBJARRAY(HtmlHistoryArray)
 
 
 wxHtmlWindow::wxHtmlWindow(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
-                long style, const wxString& name) : wxScrolledWindow(parent, id, pos, size, wxVSCROLL | wxHSCROLL, name)
+                long style, const wxString& name) : wxScrolledWindow(parent, id, pos, size, style | wxVSCROLL | wxHSCROLL, name)
 {
     m_tmpMouseMoved = FALSE;
     m_tmpLastLink = NULL;
@@ -282,7 +282,7 @@ void wxHtmlWindow::CreateLayout()
 
     if (!m_Cell) return;
 
-    if (m_Style == wxHW_SCROLLBAR_NEVER) {
+    if (m_Style & wxHW_SCROLLBAR_NEVER) {
         SetScrollbars(wxHTML_SCROLL_STEP, 1, m_Cell -> GetWidth() / wxHTML_SCROLL_STEP, 0); // always off
         GetClientSize(&ClientWidth, &ClientHeight);
         m_Cell -> Layout(ClientWidth);
