@@ -17,7 +17,7 @@ An additional method of manual control, which requires a little less
 computation of your own, is to set the total size of the scrolling area by
 calling either \helpref{wxWindow::SetVirtualSize}{wxwindowsetvirtualsize},
 or \helpref{wxWindow::FitInside}{wxwindowfitinside}, and setting the
-scrolling increments for it by calling
+scrolling increments for it by calling 
 \helpref{wxScrolledWindow::SetScrollRate}{wxscrolledwindowsetscrollrate}.
 Scrolling in some orientation is enabled by setting a non zero increment
 for it.
@@ -435,9 +435,9 @@ adjusting the scrollbars appropriately.
 
 \membersection{wxScrolledWindow::SetScrollRate}\label{wxscrolledwindowsetscrollrate}
 
-\func{void}{SetScrollRate}{\param{int}{xstep}, \param{int}{ystep}}
+\func{void}{SetScrollRate}{\param{int}{ xstep}, \param{int}{ ystep}}
 
-Set the horizontal and vertical scrolling increment only.  See the pixelsPerUnit
+Set the horizontal and vertical scrolling increment only. See the pixelsPerUnit
 parameter in SetScrollbars.
 
 \membersection{wxScrolledWindow::SetTargetWindow}\label{wxscrolledwindowsettargetwindow}
@@ -445,5 +445,5 @@ parameter in SetScrollbars.
 \func{void}{SetTargetWindow}{\param{wxWindow* }{window}}
 
 Call this function to tell wxScrolledWindow to perform the actual scrolling on
-a different window (not on itself).
+a different window (and not on itself).
 

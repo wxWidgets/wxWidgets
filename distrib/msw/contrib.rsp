@@ -120,6 +120,19 @@ contrib/samples/gizmos/dynsash_switch/*.rc
 contrib/samples/gizmos/dynsash_switch/dynsash_switch.dsp
 contrib/samples/gizmos/dynsash_switch/dynsash_switch.dsw
 
+contrib/samples/gizmos/led/*.cpp
+contrib/samples/gizmos/led/*.h
+contrib/samples/gizmos/led/*.def
+contrib/samples/gizmos/led/makefile*
+contrib/samples/gizmos/led/*.xbm
+contrib/samples/gizmos/led/*.xpm
+contrib/samples/gizmos/led/*.txt
+contrib/samples/gizmos/led/*.ico
+contrib/samples/gizmos/led/*.bmp
+contrib/samples/gizmos/led/*.rc
+contrib/samples/gizmos/led/led.dsp
+contrib/samples/gizmos/led/led.dsw
+
 contrib/samples/animate/*.cpp
 contrib/samples/animate/*.h
 contrib/samples/animate/*.def

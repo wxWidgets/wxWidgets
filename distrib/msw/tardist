@@ -66,7 +66,7 @@ dospinwxgtk()
 echo Tarring wxGTK...
 
 cd $WXSRC
-cat $WXSRC/distrib/msw/generic.rsp $WXSRC/distrib/msw/contrib.rsp $WXSRC/distrib/msw/xml.rsp $WXSRC/distrib/msw/utils.rsp $WXSRC/distrib/msw/ogl.rsp $WXSRC/distrib/msw/tex2rtf.rsp $WXSRC/distrib/msw/dialoged.rsp $WXSRC/distrib/msw/gtk.rsp $WXSRC/distrib/msw/makefile.rsp $WXSRC/distrib/msw/tiff.rsp $WXSRC/distrib/msw/jpeg.rsp > /tmp/wxgtk_in.txt
+cat $WXSRC/distrib/msw/generic.rsp $WXSRC/distrib/msw/contrib.rsp $WXSRC/distrib/msw/stc.rsp $WXSRC/distrib/msw/xml.rsp $WXSRC/distrib/msw/utils.rsp $WXSRC/distrib/msw/ogl.rsp $WXSRC/distrib/msw/tex2rtf.rsp $WXSRC/distrib/msw/dialoged.rsp $WXSRC/distrib/msw/gtk.rsp $WXSRC/distrib/msw/makefile.rsp $WXSRC/distrib/msw/tiff.rsp $WXSRC/distrib/msw/jpeg.rsp > /tmp/wxgtk_in.txt
 expandlines /tmp/wxgtk_in.txt /tmp/wxgtk.txt
 $TAR cf $WXDEST/wxGTK-${WXVER}.tar -T /tmp/wxgtk.txt
 
@@ -87,7 +87,7 @@ dospinwxmotif()
 echo Tarring wxMotif...
 
 cd $WXSRC
-cat $WXSRC/distrib/msw/generic.rsp $WXSRC/distrib/msw/motif.rsp $WXSRC/distrib/msw/contrib.rsp $WXSRC/distrib/msw/xml.rsp $WXSRC/distrib/msw/ogl.rsp $WXSRC/distrib/msw/makefile.rsp $WXSRC/distrib/msw/tiff.rsp $WXSRC/distrib/msw/jpeg.rsp > /tmp/wxmotif_in.txt
+cat $WXSRC/distrib/msw/generic.rsp $WXSRC/distrib/msw/motif.rsp $WXSRC/distrib/msw/contrib.rsp $WXSRC/distrib/msw/stc.rsp $WXSRC/distrib/msw/xml.rsp $WXSRC/distrib/msw/ogl.rsp $WXSRC/distrib/msw/makefile.rsp $WXSRC/distrib/msw/tiff.rsp $WXSRC/distrib/msw/jpeg.rsp > /tmp/wxmotif_in.txt
 expandlines /tmp/wxmotif_in.txt /tmp/wxmotif.txt
 $TAR cf $WXDEST/wxMotif-${WXVER}.tar -T /tmp/wxmotif.txt
 
@@ -109,7 +109,7 @@ echo Tarring wxX11...
 
 ### wxX11: combined wxMotif and wxX11 distributions
 cd $WXSRC
-cat $WXSRC/distrib/msw/generic.rsp $WXSRC/distrib/msw/motif.rsp $WXSRC/distrib/msw/x11.rsp $WXSRC/distrib/msw/univ.rsp $WXSRC/distrib/msw/contrib.rsp $WXSRC/distrib/msw/utils.rsp $WXSRC/distrib/msw/xml.rsp $WXSRC/distrib/msw/dialoged.rsp $WXSRC/distrib/msw/ogl.rsp $WXSRC/distrib/msw/makefile.rsp $WXSRC/distrib/msw/tiff.rsp $WXSRC/distrib/msw/jpeg.rsp > /tmp/wxx11_in.txt
+cat $WXSRC/distrib/msw/generic.rsp $WXSRC/distrib/msw/motif.rsp $WXSRC/distrib/msw/x11.rsp $WXSRC/distrib/msw/univ.rsp $WXSRC/distrib/msw/contrib.rsp $WXSRC/distrib/msw/stc.rsp $WXSRC/distrib/msw/utils.rsp $WXSRC/distrib/msw/xml.rsp $WXSRC/distrib/msw/dialoged.rsp $WXSRC/distrib/msw/ogl.rsp $WXSRC/distrib/msw/makefile.rsp $WXSRC/distrib/msw/tiff.rsp $WXSRC/distrib/msw/jpeg.rsp > /tmp/wxx11_in.txt
 expandlines /tmp/wxx11_in.txt /tmp/wxx11.txt
 $TAR cf $WXDEST/wxX11-${WXVER}.tar -T /tmp/wxx11.txt
 
@@ -148,6 +148,15 @@ echo Re-tarring wxMac in a subdirectory...
 cd $WXDEST
 mkdir wxMac-${WXVER}
 cd wxMac-${WXVER}
+
+# If we have the full set of Mac CW project files,
+# get them
+if [ -f $WXDEST/extra/wxWindows-${WXVER}-CW-Mac.zip ]; then
+  unzip -o $WXDEST/extra/wxWindows-${WXVER}-CW-Mac.zip
+else
+  echo "Warning - did not find $WXDEST/deliver/extra/wxWindows-${WXVER}-CW-Mac.zip"
+fi
+
 $TAR xf ../wxMac-${WXVER}.tar
 rm -f -r contrib/src/mmedia contrib/samples/mmedia
 cd ..
@@ -188,6 +197,8 @@ echo Re-tarring wxAll in a subdirectory...
 cd $WXDEST
 mkdir wxWindows-${WXVER}
 
+cd wxWindows-${WXVER}
+
 # If we have the full set of VC++ project files,
 # get them
 if [ -f $WXDEST/extra/wxWindows-${WXVER}-VC.zip ]; then
@@ -196,7 +207,14 @@ else
   echo "Warning - did not find $WXDEST/deliver/extra/wxWindows-${WXVER}-VC.zip"
 fi
 
-cd wxWindows-${WXVER}
+# If we have the full set of Mac CW project files,
+# get them
+if [ -f $WXDEST/extra/wxWindows-${WXVER}-CW-Mac.zip ]; then
+  unzip -o $WXDEST/extra/wxWindows-${WXVER}-CW-Mac.zip
+else
+  echo "Warning - did not find $WXDEST/deliver/extra/wxWindows-${WXVER}-CW-Mac.zip"
+fi
+
 $TAR xf ../wxAll-${WXVER}.tar
 
 # Translate all .dsp and .dsw files to DOS format
@@ -461,5 +479,4 @@ fi
 if [ "$SPINWXALL" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
   dospinwxall
 fi
-
 
