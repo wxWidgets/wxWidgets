@@ -1229,8 +1229,17 @@
 /* Define if you have wcsrtombs() function */
 #undef HAVE_WCSRTOMBS
 
-/* Define this if you have fputws() and putwc() */
-#undef HAVE_FPUTWC
+/* Define this if you have wputc() */
+#undef HAVE_WPUTC
+
+/* Define this if you have wputchar() */
+#undef HAVE_WPUTCHAR
+
+/* Define this if you have putws() */
+#undef HAVE_PUTWS
+
+/* Define this if you have fputws() */
+#undef HAVE_FPUTWS
 
 /* Define this if you have strcasecmp() function in <string.h> */
 #undef HAVE_STRCASECMP_IN_STRING_H

@@ -415,21 +415,32 @@
             #define  wxGets      getws
             #define  wxUngetc    ungetwc
 
-            #ifdef HAVE_FPUTWC
-                #define  wxPutc      wputc
-                #define  wxPutchar   wputchar
-                #define  wxPuts      putws
-                #define  wxFputs     fputws
+            #ifdef HAVE_FPUTWS
+                #define wxFputs     fputws
             #else
-                #define wxNEED_FPUTWC
-
+                #define wxNEED_FPUTS
                 #include <stdio.h>
-
                 int wxFputs(const wxChar *ch, FILE *stream);
-                int wxPutc(wxChar ch, FILE *stream);
+            #endif
 
-                #define wxPuts(ws) wxFputs(ws, stdout)
+            #ifdef HAVE_WPUTC
+                #define wxPutc      wputc
+            #else
+                #define wxNEED_PUTC
+                #include <stdio.h>
+                int wxPutc(wxChar ch, FILE *stream);
+            #endif
+
+            #ifdef HAVE_WPUTCHAR
+                #define wxPutchar   wputchar
+            #else
                 #define wxPutchar(wch) wxPutc(wch, stdout)
+            #endif
+            
+            #ifdef HAVE_PUTWS
+                #define wxPuts      putws
+            #else
+                #define wxPuts(ws) wxFputs(ws, stdout)
             #endif
 
             /* we need %s to %ls conversion for printf and scanf etc */

@@ -604,23 +604,23 @@ int WXDLLEXPORT wxSnprintf_(wxChar *buf, size_t len, const wxChar *format, ...)
 // implement the standard IO functions for wide char if libc doesn't have them
 // ----------------------------------------------------------------------------
 
-#ifdef wxNEED_FPUTWC
-
+#ifdef wxNEED_FPUTS
 int wxFputs(const wchar_t *ws, FILE *stream)
 {
     // counting the number of wide characters written isn't worth the trouble,
     // simply distinguish between ok and error
     return fputs(wxConvLibc.cWC2MB(ws), stream) == -1 ? -1 : 0;
 }
+#endif // wxNEED_FPUTS
 
+#ifdef wxNEED_PUTC
 int /* not wint_t */ wxPutc(wchar_t wc, FILE *stream)
 {
     wchar_t ws[2] = { wc, L'\0' };
 
     return wxFputs(ws, stream);
 }
-
-#endif // wxNEED_FPUTWC
+#endif // wxNEED_PUTC
 
 // NB: we only implement va_list functions here, the ones taking ... are
 //     defined below for wxNEED_PRINTF_CONVERSION case anyhow and we reuse

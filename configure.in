@@ -3709,7 +3709,7 @@ fi
 
 if test "$wxUSE_UNICODE" = yes; then
     dnl also look if we have wide char IO functions
-    AC_CHECK_FUNCS(fputwc wprintf vswprintf)
+    AC_CHECK_FUNCS(wputc wputchar putws fputws wprintf vswprintf)
 
     dnl MinGW has a vswprintf with a different prototype, and
     dnl a _vsnwprintf with the correct prototype, but AC_CHECK_FUNCS
