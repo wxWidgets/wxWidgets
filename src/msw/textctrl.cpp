@@ -756,7 +756,10 @@ void wxTextCtrl::DoWriteText(const wxString& value, bool selectionOnly)
 #endif // wxUSE_RICHEDIT
            )
         {
-            SendUpdateEvent();
+            // Windows already sends an update event for single-line
+            // controls.
+            if ( m_windowStyle & wxTE_MULTILINE )
+                SendUpdateEvent();
         }
     }
 
@@ -790,7 +793,11 @@ void wxTextCtrl::Clear()
         // rich edit controls send EN_UPDATE from WM_SETTEXT handler themselves
         // but the normal ones don't -- make Clear() behaviour consistent by
         // always sending this event
-        SendUpdateEvent();
+
+        // Windows already sends an update event for single-line
+        // controls.
+        if ( m_windowStyle & wxTE_MULTILINE )
+            SendUpdateEvent();
     }
 }
 
