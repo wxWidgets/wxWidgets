@@ -127,11 +127,11 @@ bool wxXmlNode::HasProp(const wxString& propName) const
 
     while (prop)
     {
-        if (prop->GetName() == propName) return TRUE;
+        if (prop->GetName() == propName) return true;
         prop = prop->GetNext();
     }
 
-    return FALSE;
+    return false;
 }
 
 bool wxXmlNode::GetPropVal(const wxString& propName, wxString *value) const
@@ -143,12 +143,12 @@ bool wxXmlNode::GetPropVal(const wxString& propName, wxString *value) const
         if (prop->GetName() == propName)
         {
             *value = prop->GetValue();
-            return TRUE;
+            return true;
         }
         prop = prop->GetNext();
     }
 
-    return FALSE;
+    return false;
 }
 
 wxString wxXmlNode::GetPropVal(const wxString& propName, const wxString& defaultVal) const
@@ -194,13 +194,13 @@ void wxXmlNode::InsertChild(wxXmlNode *child, wxXmlNode *before_node)
 bool wxXmlNode::RemoveChild(wxXmlNode *child)
 {
     if (m_children == NULL)
-        return FALSE;
+        return false;
     else if (m_children == child)
     {
         m_children = child->m_next;
         child->m_parent = NULL;
         child->m_next = NULL;
-        return TRUE;
+        return true;
     }
     else
     {
@@ -212,11 +212,11 @@ bool wxXmlNode::RemoveChild(wxXmlNode *child)
                 ch->m_next = child->m_next;
                 child->m_parent = NULL;
                 child->m_next = NULL;
-                return TRUE;
+                return true;
             }
             ch = ch->m_next;
         }
-        return FALSE;
+        return false;
     }
 }
 
@@ -242,7 +242,7 @@ bool wxXmlNode::DeleteProperty(const wxString& name)
     wxXmlProperty *prop;
 
     if (m_properties == NULL)
-        return FALSE;
+        return false;
 
     else if (m_properties->GetName() == name)
     {
@@ -250,7 +250,7 @@ bool wxXmlNode::DeleteProperty(const wxString& name)
         m_properties = prop->GetNext();
         prop->SetNext(NULL);
         delete prop;
-        return TRUE;
+        return true;
     }
 
     else
@@ -264,11 +264,11 @@ bool wxXmlNode::DeleteProperty(const wxString& name)
                 p->SetNext(prop->GetNext());
                 prop->SetNext(NULL);
                 delete prop;
-                return TRUE;
+                return true;
             }
             p = p->GetNext();
         }
-        return FALSE;
+        return false;
     }
 }
 
@@ -431,11 +431,11 @@ static void TextHnd(void *userData, const char *s, int len)
     }
     else
     {
-        bool whiteOnly = TRUE;
+        bool whiteOnly = true;
         for (char *c = buf; *c != '\0'; c++)
             if (*c != ' ' && *c != '\t' && *c != '\n' && *c != '\r')
             {
-                whiteOnly = FALSE;
+                whiteOnly = false;
                 break;
             }
         if (!whiteOnly)
@@ -569,9 +569,9 @@ bool wxXmlDocument::Load(wxInputStream& stream, const wxString& encoding)
 
     if (ok)
     {
-        if (!ctx.version.IsEmpty())
+        if (!ctx.version.empty())
             SetVersion(ctx.version);
-        if (!ctx.encoding.IsEmpty())
+        if (!ctx.encoding.empty())
             SetFileEncoding(ctx.encoding);
         SetRoot(ctx.root);
     }
@@ -605,7 +605,7 @@ inline static void OutputString(wxOutputStream& stream, const wxString& str,
 #endif
     wxMBConv *convFile)
 {
-    if (str.IsEmpty()) return;
+    if (str.empty()) return;
 #if wxUSE_UNICODE
     const wxWX2MBbuf buf(str.mb_str(*(convFile ? convFile : &wxConvUTF8)));
     stream.Write((const char*)buf, strlen((const char*)buf));
@@ -734,14 +734,16 @@ static void OutputNode(wxOutputStream& stream, wxXmlNode *node, int indent,
 bool wxXmlDocument::Save(wxOutputStream& stream) const
 {
     if ( !IsOk() )
-        return FALSE;
+        return false;
 
     wxString s;
 
-    wxMBConv *convMem = NULL, *convFile = NULL;
+    wxMBConv *convMem = NULL;
+
 #if wxUSE_UNICODE
-    convFile = new wxCSConv(GetFileEncoding());
+    wxMBConv *convFile = new wxCSConv(GetFileEncoding());
 #else
+    wxMBConv *convFile = NULL;
     if ( GetFileEncoding() != GetEncoding() )
     {
         convFile = new wxCSConv(GetFileEncoding());
@@ -761,7 +763,7 @@ bool wxXmlDocument::Save(wxOutputStream& stream) const
     if ( convMem )
         delete convMem;
 
-    return TRUE;
+    return true;
 }
 
 #endif // wxUSE_XML
