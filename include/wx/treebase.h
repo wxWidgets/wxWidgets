@@ -234,10 +234,15 @@ public:
 
         // keyboard data (for wxEVT_COMMAND_TREE_KEY_DOWN only)
     const wxKeyEvent& GetKeyEvent() const { return m_evtKey; }
-    int GetCode() const { return m_evtKey.GetKeyCode(); }
+    int GetKeyCode() const { return m_evtKey.GetKeyCode(); }
 
         // label (for EVT_TREE_{BEGIN|END}_LABEL_EDIT only)
     const wxString& GetLabel() const { return m_label; }
+
+#if WXWIN_COMPATIBILITY_2_2
+    // for compatibility only, don't use
+    int GetCode() const { return m_evtKey.GetKeyCode(); }
+#endif // WXWIN_COMPATIBILITY_2_2
 
 private:
     // not all of the members are used (or initialized) for all events
@@ -314,7 +319,7 @@ END_DECLARE_EVENT_TYPES()
 #define EVT_TREE_SEL_CHANGED(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_SEL_CHANGED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, NULL ),
 #define EVT_TREE_SEL_CHANGING(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_SEL_CHANGING, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, NULL ),
 
-// GetCode() returns the key code
+// GetKeyCode() returns the key code
 // NB: this is the only message for which GetItem() is invalid (you may get the
 //     item from GetSelection())
 #define EVT_TREE_KEY_DOWN(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_KEY_DOWN, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, NULL ),

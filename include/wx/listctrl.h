@@ -413,8 +413,8 @@ public:
         , m_pointDrag(event.m_pointDrag)
         , m_item(event.m_item)
         { }
-    
-    int GetCode() const { return m_code; }
+
+    int GetKeyCode() const { return m_code; }
     long GetIndex() const { return m_itemIndex; }
     int GetColumn() const { return m_col; }
     wxPoint GetPoint() const { return m_pointDrag; }
@@ -429,10 +429,13 @@ public:
     long GetCacheFrom() const { return m_oldItemIndex; }
     long GetCacheTo() const { return m_itemIndex; }
 
-    // these methods don't do anything at all
 #if WXWIN_COMPATIBILITY_2_2
+    // these methods don't do anything at all
     long GetOldIndex() const { return 0; }
     long GetOldItem() const { return 0; }
+
+    // this one is superseded by GetKeyCode()
+    int GetCode() const { return GetKeyCode(); }
 #endif // WXWIN_COMPATIBILITY_2_2
 
     virtual wxEvent *Clone() const { return new wxListEvent(*this); }

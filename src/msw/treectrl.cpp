@@ -2294,12 +2294,26 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 eventType = wxEVT_COMMAND_TREE_KEY_DOWN;
                 TV_KEYDOWN *info = (TV_KEYDOWN *)lParam;
 
-                // we pass 0 as 2 last CreateKeyEvent() parameters because we
-                // don't have access to the real key press flags here - but as
-                // it is only used to determin wxKeyEvent::m_altDown flag it's
-                // not too bad
+                // fabricate the lParam and wParam parameters sufficiently
+                // similar to the ones from a "real" WM_KEYDOWN so that
+                // CreateKeyEvent() works correctly
+                WXLPARAM lParam =
+                    (::GetKeyState(VK_MENU) & 0x100 ? KF_ALTDOWN : 0) << 16;
+
+                WXWPARAM wParam = info->wVKey;
+
+                int keyCode = wxCharCodeMSWToWX(info->wVKey);
+                if ( !keyCode )
+                {
+                    // wxCharCodeMSWToWX() returns 0 to indicate that this is a
+                    // simple ASCII key
+                    keyCode = wParam;
+                }
+
                 event.m_evtKey = CreateKeyEvent(wxEVT_KEY_DOWN,
-                                                wxCharCodeMSWToWX(info->wVKey));
+                                                keyCode,
+                                                lParam,
+                                                wParam);
 
                 // a separate event for Space/Return
                 if ( !wxIsCtrlDown() && !wxIsShiftDown() &&

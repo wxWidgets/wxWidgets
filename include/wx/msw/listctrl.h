@@ -401,7 +401,5 @@ private:
 
 #endif // wxUSE_LISTCTRL
 
-#endif
-    // _WX_LISTCTRL_H_
+#endif // _WX_LISTCTRL_H_
 
-// vi:sts=4:sw=4:et
