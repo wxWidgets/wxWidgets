@@ -74,6 +74,7 @@
     #define TEST_PRINTF
     #define TEST_REGCONF
     #define TEST_REGEX
+    #define TEST_REGEX
     #define TEST_REGISTRY
     #define TEST_SCOPEGUARD
     #define TEST_SNGLINST
@@ -93,9 +94,7 @@
     #undef TEST_ALL
     static const bool TEST_ALL = true;
 #else
-    #define TEST_HASH
-    #define TEST_HASHMAP
-    #define TEST_HASHSET
+    #define TEST_FILENAME
 
     static const bool TEST_ALL = false;
 #endif
@@ -1059,6 +1058,11 @@ static void TestFileNameMakeAbsolute()
     }
 
     wxPuts(_T(""));
+}
+
+static void TestFileNameDirManip()
+{
+    // TODO: test AppendDir(), RemoveDir(), ...
 }
 
 static void TestFileNameComparison()
@@ -3216,8 +3220,27 @@ rfg2 (void)
 
 static void TestRegConfWrite()
 {
-    wxRegConfig regconf(_T("console"), _T("wxwindows"));
-    regconf.Write(_T("Hello"), wxString(_T("world")));
+    wxConfig *config = new wxConfig("myapp");
+    config->SetPath("/group1");
+    config->Write("entry1", "foo");
+    config->SetPath("/group2");
+    config->Write("entry1", "bar");
+}
+
+static void TestRegConfRead()
+{
+    wxConfig *config = new wxConfig("myapp");
+
+    wxString str;
+    long dummy;
+    config->SetPath("/");
+    puts("Enumerating / subgroups:");
+    bool bCont = config->GetFirstGroup(str, dummy);
+    while(bCont)
+    {
+        puts(str);
+        bCont = config->GetNextGroup(str, dummy);
+    }
 }
 
 #endif // TEST_REGCONF
@@ -7229,15 +7252,6 @@ int main(int argc, char **argv)
 #endif // TEST_FILE
 
 #ifdef TEST_FILENAME
-    if ( 1 )
-    {
-        wxFileName fn(_T("c:\\foo"), _T("bar.baz"));
-        DumpFileName(_T("Before Normalize():"), fn);
-
-        fn.Normalize();
-        DumpFileName(_T("After Normalize():"), fn);
-    }
-
     if ( TEST_ALL )
     {
         TestFileNameConstruction();
@@ -7246,6 +7260,7 @@ int main(int argc, char **argv)
         TestFileNameSplit();
         TestFileNameTemp();
         TestFileNameCwd();
+        TestFileNameDirManip();
         TestFileNameComparison();
         TestFileNameOperations();
     }
@@ -7348,7 +7363,8 @@ int main(int argc, char **argv)
 #endif // TEST_PRINTF
 
 #ifdef TEST_REGCONF
-    TestRegConfWrite();
+    //TestRegConfWrite();
+    TestRegConfRead();
 #endif // TEST_REGCONF
 
 #ifdef TEST_REGEX
