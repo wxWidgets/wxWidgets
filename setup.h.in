@@ -834,7 +834,7 @@
 #define wxUSE_XPM 0
 
 /*
- * MS Icons and Cursors format support
+ * MS ICO (and CUR,ANI derivatives) image format support (on any platform)
  */
 #define wxUSE_ICO_CUR 0
 
