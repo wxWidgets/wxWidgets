@@ -2113,7 +2113,7 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
         pt = (double*) &m_underlinePosition;
         *pt = UnderlinePosition * fontToUse->GetPointSize() / 1000.0f;
         pt = (double*) &m_underlineThickness;
-        *pt = UnderlineThickness * fontToUse->GetPointSize() / 1000.0f * m_scaleFactor;
+        *pt = UnderlineThickness * fontToUse->GetPointSize() / 1000.0f;
     }
 
     /* 3. now the font metrics are read in, calc size this
