@@ -60,20 +60,33 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
     return FALSE;
 }
 
-wxSize wxStaticText::DoGetBestSize()
+wxSize wxStaticText::DoGetBestSize() const
 {
     wxString text(wxGetWindowText(GetHWND()));
 
     int widthTextMax = 0, widthLine,
-        heightTextTotal = 0, heightLine;
+        heightTextTotal = 0, heightLineDefault = 0, heightLine = 0;
 
     wxString curLine;
     for ( const wxChar *pc = text; ; pc++ ) {
         if ( *pc == wxT('\n') || *pc == wxT('\0') ) {
-            GetTextExtent(curLine, &widthLine, &heightLine);
-            if ( widthLine > widthTextMax )
-                widthTextMax = widthLine;
-            heightTextTotal += heightLine;
+            if ( !curLine ) {
+                // we can't use GetTextExtent - it will return 0 for both width
+                // and height and an empty line should count in height
+                // calculation
+                if ( !heightLineDefault )
+                    heightLineDefault = heightLine;
+                if ( !heightLineDefault )
+                    GetTextExtent(_T("W"), NULL, &heightLineDefault);
+
+                heightTextTotal += heightLineDefault;
+            }
+            else {
+                GetTextExtent(curLine, &widthLine, &heightLine);
+                if ( widthLine > widthTextMax )
+                    widthTextMax = widthLine;
+                heightTextTotal += heightLine;
+            }
 
             if ( *pc == wxT('\n') ) {
                curLine.Empty();

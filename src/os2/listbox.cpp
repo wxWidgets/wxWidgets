@@ -606,7 +606,7 @@ void wxListBox::SetHorizontalExtent(const wxString& s)
 */
 }
 
-wxSize wxListBox::DoGetBestSize()
+wxSize wxListBox::DoGetBestSize() const
 {
     // find the widest string
     int wLine;
@@ -626,7 +626,7 @@ wxSize wxListBox::DoGetBestSize()
 
     // the listbox should be slightly larger than the widest string
     int cx, cy;
-    wxGetCharSize(GetHWND(), &cx, &cy, &GetFont());
+    wxGetCharSize(GetHWND(), &cx, &cy, (wxFont*)&GetFont());
 
     wListbox += 3*cx;
 

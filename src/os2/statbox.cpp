@@ -93,10 +93,10 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
   return FALSE;
 }
 
-wxSize wxStaticBox::DoGetBestSize()
+wxSize wxStaticBox::DoGetBestSize() const
 {
     int cx, cy;
-    wxGetCharSize(GetHWND(), &cx, &cy, &GetFont());
+    wxGetCharSize(GetHWND(), &cx, &cy, (wxFont*)&GetFont());
 
     int wBox;
     GetTextExtent(wxGetWindowText(m_hWnd), &wBox, &cy);

@@ -56,7 +56,7 @@ class WXDLLEXPORT wxStaticText: public wxControl
     virtual MRESULT OS2WindowProc(HWND hwnd, WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 
 protected:
-    virtual wxSize DoGetBestSize();
+    virtual wxSize DoGetBestSize() const;
 };
 
 #endif

@@ -70,7 +70,7 @@ protected:
     virtual wxClientData* DoGetItemClientObject( int n ) const;
 
     // OS2 implementation
-    virtual wxSize DoGetBestSize();
+    virtual wxSize DoGetBestSize() const;
     virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);

@@ -72,14 +72,14 @@ wxButton::~wxButton()
 // size management including autosizing
 // ----------------------------------------------------------------------------
 
-wxSize wxButton::DoGetBestSize()
+wxSize wxButton::DoGetBestSize() const
 {
     wxString label = wxGetWindowText(GetHWND());
     int wBtn;
     GetTextExtent(label, &wBtn, NULL);
 
     int wChar, hChar;
-    wxGetCharSize(GetHWND(), &wChar, &hChar, &GetFont());
+    wxGetCharSize(GetHWND(), &wChar, &hChar, (wxFont*)&GetFont());
 
     // add a margin - the button is wider than just its label
     wBtn += 3*wChar;

@@ -216,7 +216,7 @@ void wxChoice::DoSetSize(int x, int y,
     wxControl::DoSetSize(x, y, width, -1, sizeFlags);
 }
 
-wxSize wxChoice::DoGetBestSize()
+wxSize wxChoice::DoGetBestSize() const
 {
     // find the widest string
     int wLine;
@@ -237,7 +237,7 @@ wxSize wxChoice::DoGetBestSize()
 
     // the combobox should be larger than the widest string
     int cx, cy;
-    wxGetCharSize(GetHWND(), &cx, &cy, &GetFont());
+    wxGetCharSize(GetHWND(), &cx, &cy, (wxFont*)&GetFont());
 
     wChoice += 5*cx;
 

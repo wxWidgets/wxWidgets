@@ -814,12 +814,6 @@ void wxWindow::DoSetSize(int x, int y,
     // TODO:
 }
 
-// for a generic window there is no natural best size - just use the current one
-wxSize wxWindow::DoGetBestSize()
-{
-    return GetSize();
-}
-
 void wxWindow::DoSetClientSize(int width, int height)
 {
     // TODO:

@@ -240,48 +240,6 @@ void wxCondition::Broadcast()
 }
 
 // ----------------------------------------------------------------------------
-// wxCriticalSection implementation
-// ----------------------------------------------------------------------------
-
-class wxCriticalSectionInternal
-{
-public:
-    // init the critical section object
-    wxCriticalSectionInternal()
-        { }
-
-    // free the associated ressources
-    ~wxCriticalSectionInternal()
-        { }
-
-private:
-};
-
-// ----------------------------------------------------------------------------
-// wxCriticalSection implementation
-// ----------------------------------------------------------------------------
-
-wxCriticalSection::wxCriticalSection()
-{
-    m_critsect = new wxCriticalSectionInternal;
-}
-
-wxCriticalSection::~wxCriticalSection()
-{
-    delete m_critsect;
-}
-
-void wxCriticalSection::Enter()
-{
-    ::DosEnterCritSec();
-}
-
-void wxCriticalSection::Leave()
-{
-    ::DosExitCritSec();
-}
-
-// ----------------------------------------------------------------------------
 // wxThread implementation
 // ----------------------------------------------------------------------------
 

@@ -923,4 +923,3 @@ void wxSetInstance(HINSTANCE hInst)
     wxhInstance = hInst;
 }
 
-

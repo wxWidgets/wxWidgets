@@ -58,7 +58,7 @@ class WXDLLEXPORT wxStaticBox: public wxControl
     virtual bool AcceptsFocus() const { return FALSE; }
 
 protected:
-    virtual wxSize DoGetBestSize();
+    virtual wxSize DoGetBestSize() const;
 
 private:
     DECLARE_EVENT_TABLE()

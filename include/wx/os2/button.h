@@ -59,7 +59,7 @@ protected:
     // send a notification event, return TRUE if processed
     bool SendClickEvent();
 
-    virtual wxSize DoGetBestSize();
+    virtual wxSize DoGetBestSize() const;
 };
 
 #endif

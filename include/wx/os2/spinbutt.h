@@ -49,7 +49,7 @@ public:
                           ,int maxVal
                          );
 
-    // Implementation    
+    // Implementation
     virtual bool OS2Command( WXUINT param
                             ,WXWORD id
                            );
@@ -64,7 +64,7 @@ public:
                             );
 
 protected:
-   virtual wxSize DoGetBestSize();
+   virtual wxSize DoGetBestSize() const;
 private:
     DECLARE_DYNAMIC_CLASS(wxSpinButton)
 };

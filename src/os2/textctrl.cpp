@@ -798,10 +798,10 @@ bool wxTextCtrl::AcceptsFocus() const
     return IsEditable() && wxControl::AcceptsFocus();
 }
 
-wxSize wxTextCtrl::DoGetBestSize()
+wxSize wxTextCtrl::DoGetBestSize() const
 {
     int cx, cy;
-    wxGetCharSize(GetHWND(), &cx, &cy, &GetFont());
+    wxGetCharSize(GetHWND(), &cx, &cy, (wxFont*)&GetFont());
 
     int wText = DEFAULT_ITEM_WIDTH;
 

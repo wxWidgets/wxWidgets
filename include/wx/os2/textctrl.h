@@ -146,7 +146,7 @@ protected:
     // limit is big enough)
     void AdjustSpaceLimit();
 
-    virtual wxSize DoGetBestSize();
+    virtual wxSize DoGetBestSize() const;
 
 private:
     DECLARE_EVENT_TABLE()

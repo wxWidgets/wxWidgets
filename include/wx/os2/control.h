@@ -63,7 +63,7 @@ protected:
    // For controls like radiobuttons which are really composite
    wxList m_subControls;
 
-   virtual wxSize DoGetBestSize();
+   virtual wxSize DoGetBestSize() const;
 
    // create the control of the given class with the given style, returns FALSE
    // if creation failed
