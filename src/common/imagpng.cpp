@@ -167,6 +167,7 @@ bool wxPNGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
     {
         int transp = 0;
         png_read_image( png_ptr, lines );
+        png_read_end( png_ptr, info_ptr );
         png_destroy_read_struct( &png_ptr, &info_ptr, (png_infopp) NULL );
         unsigned char *ptr = image->GetData();
         if ((color_type == PNG_COLOR_TYPE_GRAY) ||
