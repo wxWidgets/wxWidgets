@@ -50,7 +50,7 @@ bool MyApp::OnInit()
     if (!stick.IsOk())
     {
         wxMessageBox(_T("No joystick detected!"));
-        return FALSE;
+        return false;
     }
 
 #if wxUSE_SOUND
@@ -90,11 +90,11 @@ bool MyApp::OnInit()
     frame->CreateStatusBar();
 
     frame->CenterOnScreen();
-    frame->Show(TRUE);
+    frame->Show(true);
 
     SetTopWindow(frame);
 
-    return TRUE;
+    return true;
 }
 
 BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
@@ -103,7 +103,7 @@ END_EVENT_TABLE()
 
 // Define a constructor for my canvas
 MyCanvas::MyCanvas(wxWindow *parent, const wxPoint& pos, const wxSize& size):
-    wxScrolledWindow(parent, -1, pos, size, wxSUNKEN_BORDER)
+    wxScrolledWindow(parent, wxID_ANY, pos, size, wxSUNKEN_BORDER)
 {
     m_stick = new wxJoystick(wxJOYSTICK1);
     m_stick->SetCapture(this, 10);
@@ -129,12 +129,10 @@ void MyCanvas::OnJoystickEvent(wxJoystickEvent& event)
     if (xmin < 0) {
         xmax += abs(xmin);
         pt.x += abs(xmin);
-        xmin = 0;
     }
     if (ymin < 0) {
         ymax += abs(ymin);
         pt.y += abs(ymin);
-        ymin = 0;
     }
     
     // Scale to canvas size
@@ -175,7 +173,7 @@ END_EVENT_TABLE()
 
 MyFrame::MyFrame(wxFrame *parent, const wxString& title, const wxPoint& pos,
     const wxSize& size, const long style)
-    : wxFrame(parent, -1, title, pos, size, style)
+    : wxFrame(parent, wxID_ANY, title, pos, size, style)
 {
     canvas = new MyCanvas(this);
 }
@@ -187,7 +185,7 @@ MyFrame::~MyFrame()
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    Close(TRUE);
+    Close(true);
 }
 
 void MyFrame::OnActivate(wxActivateEvent& event)
