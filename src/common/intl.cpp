@@ -313,6 +313,7 @@ static wxString GetFullSearchPath(const wxChar *lang)
 #ifdef __UNIX__
     // and finally add some standard ones
     searchPath
+        << GetAllMsgCatalogSubdirs(wxString(wxGetInstallPrefix()) + wxT("/share/locale"), lang)
         << GetAllMsgCatalogSubdirs(wxT("/usr/share/locale"), lang)
         << GetAllMsgCatalogSubdirs(wxT("/usr/lib/locale"), lang)
         << GetAllMsgCatalogSubdirs(wxT("/usr/local/share/locale"), lang);
