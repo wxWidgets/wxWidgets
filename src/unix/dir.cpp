@@ -126,12 +126,20 @@ bool wxDirData::Read(wxString *filename)
     wxString path = m_dirname;
     path += _T('/');
     path.reserve(path.length() + 255);
+    
+    wxString de_d_name;
 
     while ( !matches )
     {
         de = readdir(m_dir);
         if ( !de )
             return FALSE;
+            
+#if wxUSE_UNICODE
+        de_d_name = wxConvLibc.cMB2WC( de->d_name );
+#else
+        de_d_name = de->d_name;
+#endif            
 
         // don't return "." and ".." unless asked for
         if ( de->d_name[0] == '.' &&
@@ -146,12 +154,12 @@ bool wxDirData::Read(wxString *filename)
         }
 
         // check the type now
-        if ( !(m_flags & wxDIR_FILES) && !wxDir::Exists(path + de->d_name) )
+        if ( !(m_flags & wxDIR_FILES) && !wxDir::Exists(path + de_d_name) )
         {
             // it's a file, but we don't want them
             continue;
         }
-        else if ( !(m_flags & wxDIR_DIRS) && wxDir::Exists(path + de->d_name) )
+        else if ( !(m_flags & wxDIR_DIRS) && wxDir::Exists(path + de_d_name) )
         {
             // it's a dir, and we don't want it
             continue;
@@ -164,13 +172,17 @@ bool wxDirData::Read(wxString *filename)
         }
         else
         {
+#if wxUSE_UNICODE
+            matches = TRUE;  // FIXME
+#else
             // test against the pattern
-            matches = wxMatchWild(m_filespec, de->d_name,
+            matches = wxMatchWild(m_filespec, de_d_name,
                                   !(m_flags & wxDIR_HIDDEN));
+#endif
         }
     }
 
-    *filename = de->d_name;
+    *filename = de_d_name;
 
     return TRUE;
 }
