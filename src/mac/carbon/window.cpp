@@ -222,6 +222,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                 {
                     if ( thisWindow->GetPeer()->IsCompositing() == false )
                     {
+/*
                         if ( thisWindow->GetPeer()->IsRootControl() == false )
                         {
                             GetControlBounds( thisWindow->GetPeer()->GetControlRef() , &controlBounds ) ;
@@ -230,6 +231,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                         {
                             thisWindow->GetPeer()->GetRect( &controlBounds ) ;
                         }
+*/ 
                         allocatedRgn = NewRgn() ;
                         CopyRgn( updateRgn , allocatedRgn ) ;
                         OffsetRgn( allocatedRgn , -controlBounds.left , -controlBounds.top ) ;
@@ -749,6 +751,7 @@ void wxWindowMac::Init()
     m_cgContextRef = NULL ;
 #endif
     m_clipChildren = false ;
+    m_cachedClippedRectValid = false ;
     // we need a valid font for the encodings
     wxWindowBase::SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 }
@@ -1342,9 +1345,13 @@ void wxWindowMac::MacRootWindowToWindow( int *x , int *y ) const
 
     if ( !IsTopLevel() )
     {
-        wxMacControl::Convert( &pt , MacGetTopLevelWindow()->m_peer , m_peer ) ;
-        pt.x += MacGetLeftBorderSize() ;
-        pt.y += MacGetTopBorderSize() ;
+        wxTopLevelWindowMac* top = MacGetTopLevelWindow();
+        if (top)
+        {
+            wxMacControl::Convert( &pt , top->m_peer , m_peer ) ;
+            pt.x += MacGetLeftBorderSize() ;
+            pt.y += MacGetTopBorderSize() ;
+        }
     }
 
     if ( x ) *x = (int) pt.x ;
@@ -1742,8 +1749,9 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
 
         MacInvalidateBorders() ;
         
+        m_cachedClippedRectValid = false ;
         m_peer->SetRect( &r ) ;
-
+        
         if ( doMove )
             wxWindowMac::MacSuperChangedPosition() ; // like this only children will be notified
 
@@ -2726,82 +2734,120 @@ wxTopLevelWindowMac* wxWindowMac::MacGetTopLevelWindow() const
     }
     return win ;
 }
-wxRegion wxWindowMac::MacGetVisibleRegion( bool includeOuterStructures )
+
+const wxRect& wxWindowMac::MacGetClippedRect() const 
 {
+    MacUpdateClippedRects() ;
+    return m_cachedClippedRect ;
+}
+
+const wxRect&wxWindowMac:: MacGetClippedRectWithOuterStructure() const 
+{
+    MacUpdateClippedRects() ;
+    return m_cachedClippedRectWithOuterStructure ;
+}
+
+const wxRegion& wxWindowMac::MacGetVisibleRegion( bool includeOuterStructures )
+{
+    static wxRegion emptyrgn ;
+    if ( !m_isBeingDeleted && MacIsReallyShown() /*m_peer->IsVisible() */ )
+    {
+        MacUpdateClippedRects() ;
+        if ( includeOuterStructures )
+            return m_cachedClippedRegionWithOuterStructure ;
+        else
+            return m_cachedClippedRegion ;
+    }
+    else
+    {
+        return emptyrgn ;
+    }
+}
+
+void wxWindowMac::MacUpdateClippedRects() const
+{
+    if ( m_cachedClippedRectValid )
+        return ;
+
     // includeOuterStructures is true if we try to draw somthing like a focus ring etc.
     // also a window dc uses this, in this case we only clip in the hierarchy for hard
     // borders like a scrollwindow, splitter etc otherwise we end up in a paranoia having
     // to add focus borders everywhere
 
     Rect r ;
-    RgnHandle visRgn = NewRgn() ;
-    RgnHandle tempRgn = NewRgn() ;
-    if ( !m_isBeingDeleted && MacIsReallyShown() /*m_peer->IsVisible() */ )
+    Rect rIncludingOuterStructures ;
+
+    m_peer->GetRect( &r ) ;
+    r.left -= MacGetLeftBorderSize() ;
+    r.top -= MacGetTopBorderSize() ;
+    r.bottom += MacGetBottomBorderSize() ;
+    r.right += MacGetRightBorderSize() ;
+
+    r.right -= r.left ;
+    r.bottom -= r.top ;
+    r.left = 0 ;
+    r.top = 0 ;
+
+    rIncludingOuterStructures = r ;
+    InsetRect( &rIncludingOuterStructures , -4 , -4 ) ;
+ 
+    if ( !IsTopLevel() )
     {
-        m_peer->GetRect( &r ) ;
-        r.left -= MacGetLeftBorderSize() ;
-        r.top -= MacGetTopBorderSize() ;
-        r.bottom += MacGetBottomBorderSize() ;
-        r.right += MacGetRightBorderSize() ;
-
-        r.right -= r.left ;
-        r.bottom -= r.top ;
-        r.left = 0 ;
-        r.top = 0 ;
-
-        if ( includeOuterStructures )
-            InsetRect( &r , -4 , -4 ) ;
-        RectRgn( visRgn , &r ) ;
-
-        if ( !IsTopLevel() )
+        const wxWindow* child = this ;
+        const wxWindow* parent = child->GetParent() ;
+        while( parent )
         {
-            wxWindow* child = this ;
-            wxWindow* parent = child->GetParent() ;
-            while( parent )
+            int x , y ;
+            wxSize size ;
+            // we have to find a better clipping algorithm here, in order not to clip things
+            // positioned like status and toolbar
+            if ( 1 /* parent->IsTopLevel() && child->IsKindOf( CLASSINFO( wxToolBar ) ) */ )
             {
-                int x , y ;
-                wxSize size ;
-                // we have to find a better clipping algorithm here, in order not to clip things
-                // positioned like status and toolbar
-                if ( 1 /* parent->IsTopLevel() && child->IsKindOf( CLASSINFO( wxToolBar ) ) */ )
-                {
-                    size = parent->GetSize() ;
-                    x = y = 0 ;
-                }
-                else
-                {
-                    size = parent->GetClientSize() ;
-                    wxPoint origin = parent->GetClientAreaOrigin() ;
-                    x = origin.x ;
-                    y = origin.y ;
-                }
-                parent->MacWindowToRootWindow( &x, &y ) ;
-                MacRootWindowToWindow( &x , &y ) ;
-
-                if ( !includeOuterStructures || (
-                    parent->MacClipChildren() ||
-                    ( parent->GetParent() && parent->GetParent()->MacClipGrandChildren() )
-                    ) )
-                {
-                    SetRectRgn( tempRgn ,
-                        x + parent->MacGetLeftBorderSize() , y + parent->MacGetTopBorderSize() ,
-                        x + size.x - parent->MacGetRightBorderSize(),
-                        y + size.y - parent->MacGetBottomBorderSize()) ;
-
-                    SectRgn( visRgn , tempRgn , visRgn ) ;
-                }
-                if ( parent->IsTopLevel() )
-                    break ;
-                child = parent ;
-                parent = child->GetParent() ;
+                size = parent->GetSize() ;
+                x = y = 0 ;
             }
+            else
+            {
+                size = parent->GetClientSize() ;
+                wxPoint origin = parent->GetClientAreaOrigin() ;
+                x = origin.x ;
+                y = origin.y ;
+            }
+            parent->MacWindowToRootWindow( &x, &y ) ;
+            MacRootWindowToWindow( &x , &y ) ;
+
+            Rect rparent = { 
+                y + parent->MacGetTopBorderSize() , x + parent->MacGetLeftBorderSize() , 
+                y + size.y - parent->MacGetBottomBorderSize() ,
+                x + size.x - parent->MacGetRightBorderSize() } ;
+
+            // the content will always be clipped
+            SectRect( &r , &rparent , &r ) ;
+
+            // the structure only at 'hard' borders
+            if ( parent->MacClipChildren() ||
+                ( parent->GetParent() && parent->GetParent()->MacClipGrandChildren() ) )
+            {
+                SectRect( &rIncludingOuterStructures , &rparent , &rIncludingOuterStructures ) ;
+            }
+
+            if ( parent->IsTopLevel() )
+                break ;
+            child = parent ;
+            parent = child->GetParent() ;
         }
     }
-
-    wxRegion vis = visRgn ;
-    DisposeRgn( visRgn ) ;
-    DisposeRgn( tempRgn ) ;
-    return vis ;
+    
+    m_cachedClippedRect = wxRect( r.left , r.top , r.right - r.left , r.bottom - r.top ) ;
+    m_cachedClippedRectWithOuterStructure = wxRect( 
+        rIncludingOuterStructures.left , rIncludingOuterStructures.top , 
+        rIncludingOuterStructures.right - rIncludingOuterStructures.left , 
+        rIncludingOuterStructures.bottom - rIncludingOuterStructures.top ) ;
+    
+    m_cachedClippedRegionWithOuterStructure = wxRegion( m_cachedClippedRectWithOuterStructure ) ;
+    m_cachedClippedRegion = wxRegion( m_cachedClippedRect ) ;
+    
+    m_cachedClippedRectValid = true ;
 }
 
 /*
@@ -2830,12 +2876,12 @@ bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time )
             // for all the others only their client area, otherwise they
             // might be drawing with full alpha and eg put blue into
             // the grow-box area of a scrolled window (scroll sample)
-            wxDC* dc ;
+            wxDC* dc = new wxWindowDC(this);
             if ( IsTopLevel() )
-                dc = new wxWindowDC(this);
+                dc->SetClippingRegion(wxRegion(updatergn));
             else
-                dc = new wxClientDC(this);
-            dc->SetClippingRegion(wxRegion(updatergn));
+                dc->SetClippingRegion(wxRegion(newupdate));
+                
             wxEraseEvent eevent( GetId(), dc );
             eevent.SetEventObject( this );
             GetEventHandler()->ProcessEvent( eevent );
@@ -3055,6 +3101,7 @@ bool wxWindowMac::AcceptsFocus() const
 
 void wxWindowMac::MacSuperChangedPosition()
 {
+    m_cachedClippedRectValid = false ;
     // only window-absolute structures have to be moved i.e. controls
 
     wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
