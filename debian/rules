@@ -41,7 +41,7 @@ objdir_examples=docs/examples
 objdir_i18n=locale
 objdirs=$(objdir_wxbase_shared) $(objdir_wxbase_static) $(objdir_wxbase_debug) \
 	$(objdir_gtk_shared) $(objdir_gtk_static) $(objdir_gtk_debug) \
-	$(objdir_doc) $(objdir_examples)
+	$(objdir_doc_cruft) $(objdir_doc) $(objdir_examples)
 
 #	note that the i18n package is actually arch indep (once built)
 #	but must be built (and installed) during the arch any phase as
@@ -142,8 +142,12 @@ control-files-stamp: debian/control debian/wxwin-doc.doc-base
 build_arch: control-files-stamp $(build_arch_stamps)
 build_all: control-files-stamp $(build_stamps)
 
-# do nothing until we know which binary target is called
-build:
+# Really we should probably do nothing here until we know which
+# binary target is called, but alpha builds were exploding
+# (compiler segfaults) in random places when building under fakeroot
+# fom the binary-arch target.  Build all -arch files here then, and
+# let the -indep stuff fend for itself later.
+build: build_arch
 
 
 build-wxbase-shared-stamp:
