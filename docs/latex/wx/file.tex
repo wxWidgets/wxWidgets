@@ -52,7 +52,8 @@ or test if it can be opened for writing with Access()}
 \twocolitem{{\bf wxFile::read\_write}}{Open file for reading and writing; can not be used with Access()}
 \twocolitem{{\bf wxFile::write\_append}}{Open file for appending: the file is opened for writing, but the old
 contents of the file is not erased and the file pointer is initially placed at the end of the file;
-can not be used with Access()}
+can not be used with Access(). This is the same as {\bf wxFile::write} if the
+file doesn't exist.}
 \end{twocollist}
 
 Other constants defined elsewhere but used by wxFile functions are wxInvalidOffset which represents an

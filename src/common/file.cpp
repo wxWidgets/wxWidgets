@@ -221,7 +221,7 @@ bool wxFile::Open(const wxChar *szFileName, OpenMode mode, int accessMode)
             break;
 
         case write_append:
-            flags |= O_WRONLY | O_APPEND;
+            flags |= O_WRONLY | O_CREAT | O_APPEND;
             break;
 
         case read_write:
