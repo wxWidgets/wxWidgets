@@ -1486,6 +1486,7 @@
     src/cocoa/font.cpp
     src/cocoa/fontutil.cpp
     src/cocoa/frame.mm
+    src/cocoa/gauge.mm
     src/cocoa/gdiobj.cpp
     src/cocoa/icon.cpp
     src/cocoa/listbox.mm
@@ -1556,6 +1557,7 @@
     wx/cocoa/dialog.h
     wx/cocoa/font.h
     wx/cocoa/frame.h
+    wx/cocoa/gauge.h
     wx/cocoa/gdiobj.h
     wx/cocoa/icon.h
     wx/cocoa/listbox.h
