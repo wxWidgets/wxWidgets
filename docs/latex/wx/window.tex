@@ -147,6 +147,8 @@ Clears the window by filling it with the current background colour.
 
 \constfunc{virtual void}{ClientToScreen}{\param{int* }{x}, \param{int* }{y}}
 
+\constfunc{virtual wxPoint}{ClientToScreen}{\param{const wxPoint\&}{ pt}}
+
 Converts to screen coordinates from coordinates relative to this window.
 
 \docparam{x}{A pointer to a integer value for the x coordinate. Pass the client coordinate in, and
@@ -154,6 +156,8 @@ a screen coordinate will be passed out.}
 
 \docparam{y}{A pointer to a integer value for the y coordinate. Pass the client coordinate in, and
 a screen coordinate will be passed out.}
+
+\docparam{pt}{The client position for the second form of the function.}
 
 \membersection{wxWindow::Close}\label{wxwindowclose}
 
@@ -383,6 +387,8 @@ Returns a pointer to the list of the window's children.
 
 \constfunc{virtual void}{GetClientSize}{\param{int* }{width}, \param{int* }{height}}
 
+\constfunc{virtual wxSize}{GetClientSize}{\void}
+
 This gets the size of the window `client area' in pixels.  The client area is the
 area which may be drawn on by the programmer, excluding title bar, border etc.
 
@@ -527,6 +533,12 @@ name in the window constructor or via \helpref{wxWindow::SetName}{wxwindowsetnam
 
 Returns the parent of the window, or NULL if there is no parent.
 
+\membersection{wxWindow::GetRect}\label{wxwindowgetrect}
+
+\constfunc{virtual wxRect}{GetRect}{\void}
+
+Returns the size and position of the window as a \helpref{wxRect}{wxrect} object.
+
 \membersection{wxWindow::GetReturnCode}\label{wxwindowgetreturncode}
 
 \func{int}{GetReturnCode}{\void}
@@ -573,9 +585,11 @@ Returns the built-in scrollbar range.
 
 \helpref{wxWindow::SetScrollbar}{wxwindowsetscrollbar}
 
-\membersection{wxWindow::GetSize}
+\membersection{wxWindow::GetSize}\label{wxwindowgetsize}
 
 \constfunc{virtual void}{GetSize}{\param{int* }{width}, \param{int* }{height}}
+
+\constfunc{virtual wxSize}{GetSize}{\void}
 
 This gets the size of the entire window in pixels.
 
@@ -732,6 +746,8 @@ the user can only interact with this window. If FALSE, the effect is reversed.}
 
 \func{void}{Move}{\param{int}{ x}, \param{int}{ y}}
 
+\func{void}{Move}{\param{const wxPoint\&}{ pt}}
+
 Moves the window to the given position.
 
 \wxheading{Parameters}
@@ -739,6 +755,8 @@ Moves the window to the given position.
 \docparam{x}{Required x position.}
 
 \docparam{y}{Required y position.}
+
+\docparam{pt}{\helpref{wxPoint}{wxpoint} object representing the position.}
 
 \wxheading{Remarks}
 
@@ -1395,9 +1413,11 @@ functions so should not be required by the application programmer.
 
 \docparam{child}{Child window to remove.}
 
-\membersection{wxWindow::ScreenToClient}
+\membersection{wxWindow::ScreenToClient}\label{wxwindowscreentoclient}
 
 \constfunc{virtual void}{ScreenToClient}{\param{int* }{x}, \param{int* }{y}}
+
+\constfunc{virtual wxPoint}{ScreenToClient}{\param{const wxPoint\& }{pt}}
 
 Converts from screen to client window coordinates.
 
@@ -1406,6 +1426,8 @@ Converts from screen to client window coordinates.
 \docparam{x}{Stores the screen x coordinate and receives the client x coordinate.}
 
 \docparam{y}{Stores the screen x coordinate and receives the client x coordinate.}
+
+\docparam{pt}{The screen position for the second form of the function.}
 
 \membersection{wxWindow::ScrollWindow}\label{wxwindowscrollwindow}
 
@@ -1742,9 +1764,13 @@ and usually the scrollbar will be automatically hidden.
 \func{virtual void}{SetSize}{\param{int}{ x}, \param{int}{ y}, \param{int}{ width}, \param{int}{ height},
  \param{int}{ sizeFlags = wxSIZE\_AUTO}}
 
+\func{virtual void}{SetSize}{\param{const wxRect\&}{ rect}}
+
 Sets the size and position of the window in pixels.
 
 \func{virtual void}{SetSize}{\param{int}{ width}, \param{int}{ height}}
+
+\func{virtual void}{SetSize}{\param{const wxSize\&}{ size}}
 
 Sets the size of the window in pixels.
 
@@ -1761,6 +1787,10 @@ value should be used.}
 
 \docparam{height}{Required height position in pixels, or -1 to indicate that the existing
 value should be used.}
+
+\docparam{size}{\helpref{wxSize}{wxsize} object for setting the size.}
+
+\docparam{rect}{\helpref{wxRect}{wxrect} object for setting the position and size.}
 
 \docparam{sizeFlags}{Indicates the interpretation of other parameters. It is a bit list of the following:
 
@@ -1822,6 +1852,8 @@ The resizing increments are only significant under Motif or Xt.
 
 \func{virtual void}{SetClientSize}{\param{int}{ width}, \param{int}{ height}}
 
+\func{virtual void}{SetClientSize}{\param{const wxSize\&}{ size}}
+
 This sets the size of the window client area in pixels. Using this function to size a window
 tends to be more device-independent than \helpref{wxWindow::SetSize}{wxwindowsetsize}, since the application need not
 worry about what dimensions the border or title bar have when trying to fit the window
@@ -1832,6 +1864,8 @@ around panel items, for example.
 \docparam{width}{The required client area width.}
 
 \docparam{height}{The required client area height.}
+
+\docparam{size}{The required client size.}
 
 \membersection{wxWindow::SetPalette}
 
