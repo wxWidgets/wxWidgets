@@ -48,10 +48,11 @@
 //#define TEST_LONGLONG
 //#define TEST_MIME
 //#define TEST_INFO_FUNCTIONS
-#define TEST_SOCKETS
+//#define TEST_SOCKETS
 //#define TEST_STRINGS
 //#define TEST_THREADS
 //#define TEST_TIMER
+#define TEST_VCARD
 //#define TEST_WCHAR
 
 // ============================================================================
@@ -1170,6 +1171,226 @@ static void TestStopWatch()
 }
 
 #endif // TEST_TIMER
+
+// ----------------------------------------------------------------------------
+// vCard support
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_VCARD
+
+#include <wx/vcard.h>
+
+static void DumpVObject(size_t level, const wxVCardObject& vcard)
+{
+    void *cookie;
+    wxVCardObject *vcObj = vcard.GetFirstProp(&cookie);
+    while ( vcObj )
+    {
+        printf("%s%s",
+               wxString(_T('\t'), level),
+               vcObj->GetName().c_str());
+
+        wxString value;
+        switch ( vcObj->GetType() )
+        {
+            case wxVCardObject::String:
+            case wxVCardObject::UString:
+                {
+                    wxString val;
+                    vcObj->GetValue(&val);
+                    value << _T('"') << val << _T('"');
+                }
+                break;
+
+            case wxVCardObject::Int:
+                {
+                    unsigned int i;
+                    vcObj->GetValue(&i);
+                    value.Printf(_T("%u"), i);
+                }
+                break;
+
+            case wxVCardObject::Long:
+                {
+                    unsigned long l;
+                    vcObj->GetValue(&l);
+                    value.Printf(_T("%lu"), l);
+                }
+                break;
+
+            case wxVCardObject::None:
+                break;
+
+            case wxVCardObject::Object:
+                value = _T("<node>");
+                break;
+
+            default:
+                value = _T("<unknown value type>");
+        }
+
+        if ( !!value )
+            printf(" = %s", value.c_str());
+        putchar('\n');
+
+        DumpVObject(level + 1, *vcObj);
+
+        delete vcObj;
+        vcObj = vcard.GetNextProp(&cookie);
+    }
+}
+
+static void DumpVCardAddresses(const wxVCard& vcard)
+{
+    puts("\nShowing all addresses from vCard:\n");
+
+    size_t nAdr = 0;
+    void *cookie;
+    wxVCardAddress *addr = vcard.GetFirstAddress(&cookie);
+    while ( addr )
+    {
+        wxString flagsStr;
+        int flags = addr->GetFlags();
+        if ( flags & wxVCardAddress::Domestic )
+        {
+            flagsStr << _T("domestic ");
+        }
+        if ( flags & wxVCardAddress::Intl )
+        {
+            flagsStr << _T("international ");
+        }
+        if ( flags & wxVCardAddress::Postal )
+        {
+            flagsStr << _T("postal ");
+        }
+        if ( flags & wxVCardAddress::Parcel )
+        {
+            flagsStr << _T("parcel ");
+        }
+        if ( flags & wxVCardAddress::Home )
+        {
+            flagsStr << _T("home ");
+        }
+        if ( flags & wxVCardAddress::Work )
+        {
+            flagsStr << _T("work ");
+        }
+
+        printf("Address %u:\n"
+               "\tflags = %s\n"
+               "\tvalue = %s;%s;%s;%s;%s;%s;%s\n",
+               ++nAdr,
+               flagsStr.c_str(),
+               addr->GetPostOffice().c_str(),
+               addr->GetExtAddress().c_str(),
+               addr->GetStreet().c_str(),
+               addr->GetLocality().c_str(),
+               addr->GetRegion().c_str(),
+               addr->GetPostalCode().c_str(),
+               addr->GetCountry().c_str()
+               );
+
+        delete addr;
+        addr = vcard.GetNextAddress(&cookie);
+    }
+}
+
+static void DumpVCardPhoneNumbers(const wxVCard& vcard)
+{
+    puts("\nShowing all phone numbers from vCard:\n");
+
+    size_t nPhone = 0;
+    void *cookie;
+    wxVCardPhoneNumber *phone = vcard.GetFirstPhoneNumber(&cookie);
+    while ( phone )
+    {
+        wxString flagsStr;
+        int flags = phone->GetFlags();
+        if ( flags & wxVCardPhoneNumber::Voice )
+        {
+            flagsStr << _T("voice ");
+        }
+        if ( flags & wxVCardPhoneNumber::Fax )
+        {
+            flagsStr << _T("fax ");
+        }
+        if ( flags & wxVCardPhoneNumber::Cellular )
+        {
+            flagsStr << _T("cellular ");
+        }
+        if ( flags & wxVCardPhoneNumber::Modem )
+        {
+            flagsStr << _T("modem ");
+        }
+        if ( flags & wxVCardPhoneNumber::Home )
+        {
+            flagsStr << _T("home ");
+        }
+        if ( flags & wxVCardPhoneNumber::Work )
+        {
+            flagsStr << _T("work ");
+        }
+
+        printf("Phone number %u:\n"
+               "\tflags = %s\n"
+               "\tvalue = %s\n",
+               ++nPhone,
+               flagsStr.c_str(),
+               phone->GetNumber().c_str()
+               );
+
+        delete phone;
+        phone = vcard.GetNextPhoneNumber(&cookie);
+    }
+}
+
+static void TestVCardRead()
+{
+    puts("*** Testing wxVCard reading ***\n");
+
+    wxVCard vcard(_T("vcard.vcf"));
+    if ( !vcard.IsOk() )
+    {
+        puts("ERROR: couldn't load vCard.");
+    }
+    else
+    {
+        // read individual vCard properties
+        wxVCardObject *vcObj = vcard.GetProperty("FN");
+        wxString value;
+        if ( vcObj )
+        {
+            vcObj->GetValue(&value);
+            delete vcObj;
+        }
+        else
+        {
+            value = _T("<none>");
+        }
+
+        printf("Full name retrieved directly: %s\n", value.c_str());
+
+
+        if ( !vcard.GetFullName(&value) )
+        {
+            value = _T("<none>");
+        }
+
+        printf("Full name from wxVCard API: %s\n", value.c_str());
+
+        // now show how to deal with multiply occuring properties
+        DumpVCardAddresses(vcard);
+        DumpVCardPhoneNumbers(vcard);
+
+        // and finally show all
+        puts("\nNow dumping the entire vCard:\n"
+             "-----------------------------\n");
+
+        DumpVObject(0, vcard);
+    }
+}
+
+#endif // TEST_VCARD
 
 // ----------------------------------------------------------------------------
 // wide char (Unicode) support
@@ -3029,6 +3250,10 @@ int main(int argc, char **argv)
     if ( 0 )
         TestInteractive();
 #endif // TEST_DATETIME
+
+#ifdef TEST_VCARD
+    TestVCardRead();
+#endif // TEST_VCARD
 
 #ifdef TEST_WCHAR
     TestUtf8();
