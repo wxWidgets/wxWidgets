@@ -673,7 +673,7 @@ void LifeNavigator::OnClose(wxCloseEvent& event)
 // canvas constructor
 LifeCanvas::LifeCanvas(wxWindow *parent, Life *life, bool interactive)
           : wxWindow(parent, wxID_ANY, wxDefaultPosition, wxSize(100, 100),
-            wxSUNKEN_BORDER)
+            wxSUNKEN_BORDER|wxFULL_REPAINT_ON_RESIZE)
 {
     m_life        = life;
     m_interactive = interactive;
