@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------
-# Name:        wxPython.lib.buttons
+# Name:        wx.lib.buttons
 # Purpose:     Various kinds of generic buttons, (not native controls but
 #              self-drawn.)
 #
@@ -15,27 +15,27 @@
 This module implements various forms of generic buttons, meaning that
 they are not built on native controls but are self-drawn.
 
-The wxGenButton is the base.  It acts like a normal button but you
+The GenButton is the base.  It acts like a normal button but you
 are able to better control how it looks, bevel width, colours, etc.
 
-wxGenBitmapButton is a button with one or more bitmaps that show
+GenBitmapButton is a button with one or more bitmaps that show
 the various states the button can be in.
 
-wxGenToggleButton stays depressed when clicked, until clicked again.
+GenToggleButton stays depressed when clicked, until clicked again.
 
-wxGenBitmapToggleButton the same but with bitmaps.
+GenBitmapToggleButton the same but with bitmaps.
 
 """
 
-from wxPython.wx import *
+import wx
 import imageutils
 
 
 #----------------------------------------------------------------------
 
-class wxGenButtonEvent(wxPyCommandEvent):
+class GenButtonEvent(wx.PyCommandEvent):
     def __init__(self, eventType, ID):
-        wxPyCommandEvent.__init__(self, eventType, ID)
+        wx.PyCommandEvent.__init__(self, eventType, ID)
         self.isDown = False
         self.theButton = None
 
@@ -54,16 +54,16 @@ class wxGenButtonEvent(wxPyCommandEvent):
 
 #----------------------------------------------------------------------
 
-class wxGenButton(wxPyControl):
+class GenButton(wx.PyControl):
     labelDelta = 1
 
     def __init__(self, parent, ID, label,
-                 pos = wxDefaultPosition, size = wxDefaultSize,
-                 style = 0, validator = wxDefaultValidator,
+                 pos = wx.DefaultPosition, size = wx.DefaultSize,
+                 style = 0, validator = wx.DefaultValidator,
                  name = "genbutton"):
         if style == 0:
-            style = wxNO_BORDER
-        wxPyControl.__init__(self, parent, ID, pos, size, style, validator, name)
+            style = wx.NO_BORDER
+        wx.PyControl.__init__(self, parent, ID, pos, size, style, validator, name)
 
         self.up = True
         self.bezelWidth = 2
@@ -74,22 +74,22 @@ class wxGenButton(wxPyControl):
         self.SetPosition(pos)
         font = parent.GetFont()
         if not font.Ok():
-            font = wxSystemSettings_GetSystemFont(wxSYS_DEFAULT_GUI_FONT)
+            font = wx.SystemSettings.GetSystemFont(wx.SYS_DEFAULT_GUI_FONT)
         self.SetFont(font)
         self.SetBestSize(size)
         self.InitColours()
 
-        EVT_LEFT_DOWN(self,        self.OnLeftDown)
-        EVT_LEFT_UP(self,          self.OnLeftUp)
-        if wxPlatform == '__WXMSW__':
-            EVT_LEFT_DCLICK(self,  self.OnLeftDown)
-        EVT_MOTION(self,           self.OnMotion)
-        EVT_SET_FOCUS(self,        self.OnGainFocus)
-        EVT_KILL_FOCUS(self,       self.OnLoseFocus)
-        EVT_KEY_DOWN(self,         self.OnKeyDown)
-        EVT_KEY_UP(self,           self.OnKeyUp)
-        EVT_ERASE_BACKGROUND(self, self.OnEraseBackground)
-        EVT_PAINT(self,            self.OnPaint)
+        self.Bind(wx.EVT_LEFT_DOWN,        self.OnLeftDown)
+        self.Bind(wx.EVT_LEFT_UP,          self.OnLeftUp)
+        if wx.Platform == '__WXMSW__':
+            self.Bind(wx.EVT_LEFT_DCLICK,  self.OnLeftDown)
+        self.Bind(wx.EVT_MOTION,           self.OnMotion)
+        self.Bind(wx.EVT_SET_FOCUS,        self.OnGainFocus)
+        self.Bind(wx.EVT_KILL_FOCUS,       self.OnLoseFocus)
+        self.Bind(wx.EVT_KEY_DOWN,         self.OnKeyDown)
+        self.Bind(wx.EVT_KEY_UP,           self.OnKeyUp)
+        self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
+        self.Bind(wx.EVT_PAINT,            self.OnPaint)
 
 
     def SetBestSize(self, size=None):
@@ -98,10 +98,10 @@ class wxGenButton(wxPyControl):
         and set a good size.
         """
         if size is None:
-            size = wxSize(-1,-1)
+            size = wx.Size(-1,-1)
         if type(size) == type(()):
-            size = wxSize(size[0], size[1])
-        size = wxSize(size.width, size.height)  # make a copy
+            size = wx.Size(size[0], size[1])
+        size = wx.Size(size.width, size.height)  # make a copy
 
         best = self.GetBestSize()
         if size.width == -1:
@@ -116,7 +116,7 @@ class wxGenButton(wxPyControl):
         """Overridden base class virtual.  Determines the best size of the
         button based on the label and bezel size."""
         w, h, useMin = self._GetLabelSize()
-        defSize = wxButton_GetDefaultSize()
+        defSize = wx.Button.GetDefaultSize()
         width = 12 + w
         if useMin and width < defSize.width:
            width = defSize.width
@@ -134,7 +134,7 @@ class wxGenButton(wxPyControl):
 
 
     def Enable(self, enable=True):
-        wxPyControl.Enable(self, enable)
+        wx.PyControl.Enable(self, enable)
         self.Refresh()
 
 
@@ -156,39 +156,39 @@ class wxGenButton(wxPyControl):
 
 
     def InitColours(self):
-        faceClr      = wxSystemSettings_GetSystemColour(wxSYS_COLOUR_BTNFACE)
-        textClr      = wxSystemSettings_GetSystemColour(wxSYS_COLOUR_BTNTEXT)
+        faceClr      = wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNFACE)
+        textClr      = wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNTEXT)
         self.faceDnClr = faceClr
         self.SetBackgroundColour(faceClr)
         self.SetForegroundColour(textClr)
 
-        shadowClr    = wxSystemSettings_GetSystemColour(wxSYS_COLOUR_BTNSHADOW)
-        highlightClr = wxSystemSettings_GetSystemColour(wxSYS_COLOUR_BTNHIGHLIGHT)
-        self.shadowPen    = wxPen(shadowClr, 1, wxSOLID)
-        self.highlightPen = wxPen(highlightClr, 1, wxSOLID)
-        if wxPlatform == "__WXMAC__":
-            self.focusIndPen = wxPen(textClr, 1, wxSOLID)
+        shadowClr    = wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNSHADOW)
+        highlightClr = wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNHIGHLIGHT)
+        self.shadowPen    = wx.Pen(shadowClr, 1, wx.SOLID)
+        self.highlightPen = wx.Pen(highlightClr, 1, wx.SOLID)
+        if wx.Platform == "__WXMAC__":
+            self.focusIndPen = wx.Pen(textClr, 1, wx.SOLID)
         else:
-            self.focusIndPen  = wxPen(textClr, 1, wxUSER_DASH)
+            self.focusIndPen  = wx.Pen(textClr, 1, wx.USER_DASH)
             self.focusIndPen.SetDashes([1,1])
-            self.focusIndPen.SetCap(wxCAP_BUTT)
+            self.focusIndPen.SetCap(wx.CAP_BUTT)
         self.focusClr = highlightClr
 
 
     def SetBackgroundColour(self, colour):
-        wxPyControl.SetBackgroundColour(self, colour)
+        wx.PyControl.SetBackgroundColour(self, colour)
         colour = self.GetBackgroundColour()
 
         # Calculate a new set of highlight and shadow colours based on
         # the new background colour.  Works okay if the colour is dark...
         r, g, b = colour.Get()
         fr, fg, fb = min(255,r+32), min(255,g+32), min(255,b+32)
-        self.faceDnClr = wxColour(fr, fg, fb)
+        self.faceDnClr = wx.Colour(fr, fg, fb)
         sr, sg, sb = max(0,r-32), max(0,g-32), max(0,b-32)
-        self.shadowPen = wxPen(wxColour(sr,sg,sb), 1, wxSOLID)
+        self.shadowPen = wx.Pen(wx.Colour(sr,sg,sb), 1, wx.SOLID)
         hr, hg, hb = min(255,r+64), min(255,g+64), min(255,b+64)
-        self.highlightPen = wxPen(wxColour(hr,hg,hb), 1, wxSOLID)
-        self.focusClr = wxColour(hr, hg, hb)
+        self.highlightPen = wx.Pen(wx.Colour(hr,hg,hb), 1, wx.SOLID)
+        self.focusClr = wx.Colour(hr, hg, hb)
 
 
     def _GetLabelSize(self):
@@ -198,7 +198,7 @@ class wxGenButton(wxPyControl):
 
 
     def Notify(self):
-        evt = wxGenButtonEvent(wxEVT_COMMAND_BUTTON_CLICKED, self.GetId())
+        evt = GenButtonEvent(wx.wxEVT_COMMAND_BUTTON_CLICKED, self.GetId())
         evt.SetIsDown(not self.up)
         evt.SetButtonObj(self)
         evt.SetEventObject(self)
@@ -212,8 +212,8 @@ class wxGenButton(wxPyControl):
         else:
             dc.SetPen(self.shadowPen)
         for i in range(self.bezelWidth):
-            dc.DrawLine(x1+i, y1, x1+i, y2-i)
-            dc.DrawLine(x1, y1+i, x2-i, y1+i)
+            dc.DrawLine((x1+i, y1), (x1+i, y2-i))
+            dc.DrawLine((x1, y1+i), (x2-i, y1+i))
 
         # draw the lower right sides
         if self.up:
@@ -221,8 +221,8 @@ class wxGenButton(wxPyControl):
         else:
             dc.SetPen(self.highlightPen)
         for i in range(self.bezelWidth):
-            dc.DrawLine(x1+i, y2-i, x2+1, y2-i)
-            dc.DrawLine(x2-i, y1+i, x2-i, y2)
+            dc.DrawLine((x1+i, y2-i), (x2+1, y2-i))
+            dc.DrawLine((x2-i, y1+i), (x2-i, y2))
 
 
     def DrawLabel(self, dc, width, height, dw=0, dy=0):
@@ -230,12 +230,12 @@ class wxGenButton(wxPyControl):
         if self.IsEnabled():
             dc.SetTextForeground(self.GetForegroundColour())
         else:
-            dc.SetTextForeground(wxSystemSettings_GetSystemColour(wxSYS_COLOUR_GRAYTEXT))
+            dc.SetTextForeground(wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT))
         label = self.GetLabel()
         tw, th = dc.GetTextExtent(label)
         if not self.up:
             dw = dy = self.labelDelta
-        dc.DrawText(label, (width-tw)/2+dw, (height-th)/2+dy)
+        dc.DrawText(label, ((width-tw)/2+dw, (height-th)/2+dy))
 
 
     def DrawFocusIndicator(self, dc, w, h):
@@ -246,11 +246,11 @@ class wxGenButton(wxPyControl):
 ##             #self.focusIndPen.SetColour(self.GetBackgroundColour())
 ##             self.focusIndPen.SetColour(self.GetForegroundColour())
         self.focusIndPen.SetColour(self.focusClr)
-        dc.SetLogicalFunction(wxINVERT)
+        dc.SetLogicalFunction(wx.INVERT)
         dc.SetPen(self.focusIndPen)
-        dc.SetBrush(wxTRANSPARENT_BRUSH)
-        dc.DrawRectangle(bw+2,bw+2, w-bw*2-4, h-bw*2-4)
-        dc.SetLogicalFunction(wxCOPY)
+        dc.SetBrush(wx.TRANSPARENT_BRUSH)
+        dc.DrawRectangle((bw+2,bw+2), (w-bw*2-4, h-bw*2-4))
+        dc.SetLogicalFunction(wx.COPY)
 
 
     def OnPaint(self, event):
@@ -258,11 +258,11 @@ class wxGenButton(wxPyControl):
         x1 = y1 = 0
         x2 = width-1
         y2 = height-1
-        dc = wxBufferedPaintDC(self)
+        dc = wx.BufferedPaintDC(self)
         if self.up:
-            dc.SetBackground(wxBrush(self.GetBackgroundColour(), wxSOLID))
+            dc.SetBackground(wx.Brush(self.GetBackgroundColour(), wx.SOLID))
         else:
-            dc.SetBackground(wxBrush(self.faceDnClr, wxSOLID))
+            dc.SetBackground(wx.Brush(self.faceDnClr, wx.SOLID))
         dc.Clear()
         self.DrawBezel(dc, x1, y1, x2, y2)
         self.DrawLabel(dc, width, height)
@@ -315,7 +315,7 @@ class wxGenButton(wxPyControl):
 
     def OnGainFocus(self, event):
         self.hasFocus = True
-        dc = wxClientDC(self)
+        dc = wx.ClientDC(self)
         w, h = self.GetClientSizeTuple()
         if self.useFocusInd:
             self.DrawFocusIndicator(dc, w, h)
@@ -323,7 +323,7 @@ class wxGenButton(wxPyControl):
 
     def OnLoseFocus(self, event):
         self.hasFocus = False
-        dc = wxClientDC(self)
+        dc = wx.ClientDC(self)
         w, h = self.GetClientSizeTuple()
         if self.useFocusInd:
             self.DrawFocusIndicator(dc, w, h)
@@ -346,16 +346,16 @@ class wxGenButton(wxPyControl):
 
 #----------------------------------------------------------------------
 
-class wxGenBitmapButton(wxGenButton):
+class GenBitmapButton(GenButton):
     def __init__(self, parent, ID, bitmap,
-                 pos = wxDefaultPosition, size = wxDefaultSize,
-                 style = 0, validator = wxDefaultValidator,
+                 pos = wx.DefaultPosition, size = wx.DefaultSize,
+                 style = 0, validator = wx.DefaultValidator,
                  name = "genbutton"):
         self.bmpDisabled = None
         self.bmpFocus = None
         self.bmpSelected = None
         self.SetBitmapLabel(bitmap)
-        wxGenButton.__init__(self, parent, ID, "", pos, size, style, validator, name)
+        GenButton.__init__(self, parent, ID, "", pos, size, style, validator, name)
 
 
     def GetBitmapLabel(self):
@@ -391,9 +391,9 @@ class wxGenBitmapButton(wxGenButton):
         """
         self.bmpLabel = bitmap
         if bitmap is not None and createOthers:
-            image = wxImageFromBitmap(bitmap)
+            image = wx.ImageFromBitmap(bitmap)
             imageutils.grayOut(image)
-            self.SetBitmapDisabled(wxBitmapFromImage(image))
+            self.SetBitmapDisabled(wx.BitmapFromImage(image))
 
 
     def _GetLabelSize(self):
@@ -414,18 +414,18 @@ class wxGenBitmapButton(wxGenButton):
         if not self.up:
             dw = dy = self.labelDelta
         hasMask = bmp.GetMask() != None
-        dc.DrawBitmap(bmp, (width-bw)/2+dw, (height-bh)/2+dy, hasMask)
+        dc.DrawBitmap(bmp, ((width-bw)/2+dw, (height-bh)/2+dy), hasMask)
 
 
 #----------------------------------------------------------------------
 
 
-class wxGenBitmapTextButton(wxGenBitmapButton):     # generic bitmapped button with Text Label
+class GenBitmapTextButton(GenBitmapButton):     # generic bitmapped button with Text Label
     def __init__(self, parent, ID, bitmap, label,
-                 pos = wxDefaultPosition, size = wxDefaultSize,
-                 style = 0, validator = wxDefaultValidator,
+                 pos = wx.DefaultPosition, size = wx.DefaultSize,
+                 style = 0, validator = wx.DefaultValidator,
                  name = "genbutton"):
-        wxGenBitmapButton.__init__(self, parent, ID, bitmap, pos, size, style, validator, name)
+        GenBitmapButton.__init__(self, parent, ID, bitmap, pos, size, style, validator, name)
         self.SetLabel(label)
 
 
@@ -465,7 +465,7 @@ class wxGenBitmapTextButton(wxGenBitmapButton):     # generic bitmapped button w
         if self.IsEnabled():
             dc.SetTextForeground(self.GetForegroundColour())
         else:
-            dc.SetTextForeground(wxSystemSettings_GetSystemColour(wxSYS_COLOUR_GRAYTEXT))
+            dc.SetTextForeground(wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT))
 
         label = self.GetLabel()
         tw, th = dc.GetTextExtent(label)        # size of text
@@ -474,10 +474,10 @@ class wxGenBitmapTextButton(wxGenBitmapButton):     # generic bitmapped button w
 
         pos_x = (width-bw-tw)/2+dw      # adjust for bitmap and text to centre
         if bmp !=None:
-            dc.DrawBitmap(bmp, pos_x, (height-bh)/2+dy, hasMask) # draw bitmap if available
+            dc.DrawBitmap(bmp, (pos_x, (height-bh)/2+dy), hasMask) # draw bitmap if available
             pos_x = pos_x + 2   # extra spacing from bitmap
 
-        dc.DrawText(label, pos_x + dw+bw, (height-th)/2+dy)      # draw the text
+        dc.DrawText(label, (pos_x + dw+bw, (height-th)/2+dy))      # draw the text
 
 
 #----------------------------------------------------------------------
@@ -540,13 +540,13 @@ class __ToggleMixin:
 
 
 
-class wxGenToggleButton(__ToggleMixin, wxGenButton):
+class GenToggleButton(__ToggleMixin, GenButton):
     pass
 
-class wxGenBitmapToggleButton(__ToggleMixin, wxGenBitmapButton):
+class GenBitmapToggleButton(__ToggleMixin, GenBitmapButton):
     pass
 
-class wxGenBitmapTextToggleButton(__ToggleMixin, wxGenBitmapTextButton):
+class GenBitmapTextToggleButton(__ToggleMixin, GenBitmapTextButton):
     pass
 
 #----------------------------------------------------------------------

@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------
-# Name:        wxPython.lib.stattext
+# Name:        wx.lib.stattext
 # Purpose:     A generic wxGenStaticText class.  Using this should
 #              eliminate some of the platform differences in wxStaticText,
 #              such as background colours and mouse sensitivity.
@@ -15,55 +15,55 @@
 """
 """
 
-from wxPython.wx import *
+import wx
 
 #----------------------------------------------------------------------
 
-class wxGenStaticText(wxPyControl):
+class GenStaticText(wx.PyControl):
     labelDelta = 1
 
     def __init__(self, parent, ID, label,
-                 pos = wxDefaultPosition, size = wxDefaultSize,
+                 pos = wx.DefaultPosition, size = wx.DefaultSize,
                  style = 0,
                  name = "genstattext"):
-        wxPyControl.__init__(self, parent, ID, pos, size, style|wxNO_BORDER,
-                             wxDefaultValidator, name)
+        wx.PyControl.__init__(self, parent, ID, pos, size, style|wx.NO_BORDER,
+                             wx.DefaultValidator, name)
 
-        wxPyControl.SetLabel(self, label) # don't check wxST_NO_AUTORESIZE yet
+        wx.PyControl.SetLabel(self, label) # don't check wx.ST_NO_AUTORESIZE yet
         self.SetPosition(pos)
         font = parent.GetFont()
         if not font.Ok():
-            font = wxSystemSettings_GetSystemFont(wxSYS_DEFAULT_GUI_FONT)
-        wxPyControl.SetFont(self, font) # same here
+            font = wx.SystemSettings.GetSystemFont(wx.SYS_DEFAULT_GUI_FONT)
+        wx.PyControl.SetFont(self, font) # same here
 
         self.defBackClr = parent.GetBackgroundColour()
         if not self.defBackClr.Ok():
-            self.defBackClr = wxSystemSettings_GetSystemColour(wxSYS_COLOUR_3DFACE)
+            self.defBackClr = wx.SystemSettings.GetSystemColour(wx.SYS_COLOUR_3DFACE)
         self.SetBackgroundColour(self.defBackClr)
 
         clr = parent.GetForegroundColour()
         if not clr.Ok():
-            clr = wxSystemSettings_GetSystemColour(wxSYS_COLOUR_BTNTEXT)
+            clr = wx.SystemSettings_GetSystemColour(wx.SYS_COLOUR_BTNTEXT)
         self.SetForegroundColour(clr)
 
         rw, rh = size
         bw, bh = self.GetBestSize()
         if rw == -1: rw = bw
         if rh == -1: rh = bh
-        self.SetSize(wxSize(rw, rh))
+        self.SetSize(wx.Size(rw, rh))
 
-        EVT_ERASE_BACKGROUND(self, self.OnEraseBackground)
-        EVT_PAINT(self,            self.OnPaint)
+        wx.EVT_ERASE_BACKGROUND(self, self.OnEraseBackground)
+        wx.EVT_PAINT(self,            self.OnPaint)
 
 
     def SetLabel(self, label):
         """
         Sets the static text label and updates the control's size to exactly
-        fit the label unless the control has wxST_NO_AUTORESIZE flag.
+        fit the label unless the control has wx.ST_NO_AUTORESIZE flag.
         """
-        wxPyControl.SetLabel(self, label)
+        wx.PyControl.SetLabel(self, label)
         style = self.GetWindowStyleFlag()
-        if not style & wxST_NO_AUTORESIZE:
+        if not style & wx.ST_NO_AUTORESIZE:
             self.SetSize(self.GetBestSize())
         self.Refresh()
 
@@ -71,11 +71,11 @@ class wxGenStaticText(wxPyControl):
     def SetFont(self, font):
         """
         Sets the static text font and updates the control's size to exactly
-        fit the label unless the control has wxST_NO_AUTORESIZE flag.
+        fit the label unless the control has wx.ST_NO_AUTORESIZE flag.
         """
-        wxPyControl.SetFont(self, font)
+        wx.PyControl.SetFont(self, font)
         style = self.GetWindowStyleFlag()
-        if not style & wxST_NO_AUTORESIZE:
+        if not style & wx.ST_NO_AUTORESIZE:
             self.SetSize(self.GetBestSize())
         self.Refresh()
 
@@ -92,7 +92,7 @@ class wxGenStaticText(wxPyControl):
                 w, h = self.GetTextExtent(line)
             totalHeight += h
             maxWidth = max(maxWidth, w)
-        return wxSize(maxWidth, totalHeight)
+        return wx.Size(maxWidth, totalHeight)
 
 
     def AcceptsFocus(self):
@@ -101,16 +101,16 @@ class wxGenStaticText(wxPyControl):
 
 
     def OnPaint(self, event):
-        dc = wxBufferedPaintDC(self)
-        #dc = wxPaintDC(self)
+        dc = wx.BufferedPaintDC(self)
+        #dc = wx.PaintDC(self)
         width, height = self.GetClientSize()
         if not width or not height:
             return
 
         clr = self.GetBackgroundColour()
-        backBrush = wxBrush(clr, wxSOLID)
-        if wxPlatform == "__WXMAC__" and clr == self.defBackClr:
-            # if colour still the default the use the striped background on Mac
+        backBrush = wx.Brush(clr, wx.SOLID)
+        if wx.Platform == "__WXMAC__" and clr == self.defBackClr:
+            # if colour is still the default then use the striped background on Mac
             backBrush.SetMacTheme(1) # 1 == kThemeBrushDialogBackgroundActive
         dc.SetBackground(backBrush)
 
@@ -125,11 +125,11 @@ class wxGenStaticText(wxPyControl):
                 w, h = self.GetTextExtent('W')  # empty lines have height too
             else:
                 w, h = self.GetTextExtent(line)
-            if style & wxALIGN_RIGHT:
+            if style & wx.ALIGN_RIGHT:
                 x = width - w
-            if style & wxALIGN_CENTER:
+            if style & wx.ALIGN_CENTER:
                 x = (width - w)/2
-            dc.DrawText(line, x, y)
+            dc.DrawText(line, (x, y))
             y += h
 
 
