@@ -293,7 +293,7 @@ int wxFileDialog::ShowModal()
     }
 
     of.lpstrFilter  = (LPTSTR)(const wxChar *)filterBuffer;
-    of.nFilterIndex = m_filterIndex;
+    of.nFilterIndex = m_filterIndex + 1;
 
     //=== Setting defaultFileName >>=========================================
 
@@ -354,7 +354,7 @@ int wxFileDialog::ShowModal()
 
             //=== Adding the correct extension >>=================================
 
-            m_filterIndex = (int)of.nFilterIndex;
+            m_filterIndex = (int)of.nFilterIndex - 1;
 
             if ( of.nFileExtension && fileNameBuffer[ of.nFileExtension-1] != wxT('.') )
             {                                    // user has typed an filename
