@@ -92,7 +92,7 @@
     #include "wx/db.h"
 #endif
 
-DbList WXDLLEXPORT *PtrBegDbList = 0;
+wxDbList WXDLLEXPORT *PtrBegDbList = 0;
 
 char const *SQL_LOG_FILENAME         = "sqllog.txt";
 char const *SQL_CATALOG_FILENAME     = "catalog.txt";
@@ -102,7 +102,7 @@ char const *SQL_CATALOG_FILENAME     = "catalog.txt";
 #endif
 
 // SQL Log defaults to be used by GetDbConnection
-enum sqlLog SQLLOGstate = sqlLogOFF;
+wxSqlLogState SQLLOGstate = sqlLogOFF;
 
 //char SQLLOGfn[DB_PATH_MAX+1] = SQL_LOG_FILENAME;
 char *SQLLOGfn         = (char*) SQL_LOG_FILENAME;
@@ -795,13 +795,13 @@ bool wxDB::getDbInfo(void)
 
 
 /********** wxDB::getDataTypeInfo() **********/
-bool wxDB::getDataTypeInfo(SWORD fSqlType, SqlTypeInfo &structSQLTypeInfo)
+bool wxDB::getDataTypeInfo(SWORD fSqlType, wxSqlTypeInfo &structSQLTypeInfo)
 {
 /*
  * fSqlType will be something like SQL_VARCHAR.  This parameter determines
  * the data type inf. is gathered for.
  *
- * SqlTypeInfo is a structure that is filled in with data type information,
+ * wxSqlTypeInfo is a structure that is filled in with data type information,
  */
     RETCODE retcode;
     SDWORD cbRet;
@@ -887,13 +887,13 @@ void wxDB::Close(void)
     assert(nTables == 0);
 
 #ifdef __WXDEBUG__
-    CstructTablesInUse *tiu;
+    wxTablesInUse *tiu;
     wxNode *pNode;
     pNode = TablesInUse.First();
     wxString s,s2;
     while (pNode)
     {
-        tiu = (CstructTablesInUse *)pNode->Data();
+        tiu = (wxTablesInUse *)pNode->Data();
         if (tiu->pDb == this)
         {
             s.sprintf("(%-20s)     tableID:[%6lu]     pDb:[%p]", tiu->tableName,tiu->tableID,tiu->pDb);
@@ -2363,7 +2363,7 @@ bool wxDB::TableExists(const char *tableName, const char *userID, const char *ta
 
 
 /********** wxDB::SqlLog() **********/
-bool wxDB::SqlLog(enum sqlLog state, const char *filename, bool append)
+bool wxDB::SqlLog(wxSqlLogState state, const char *filename, bool append)
 {
     assert(state == sqlLogON  || state == sqlLogOFF);
     assert(state == sqlLogOFF || filename);
@@ -2411,7 +2411,7 @@ bool wxDB::WriteSqlLog(const char *logMsg)
 
 
 /********** wxDB::Dbms() **********/
-DBMS wxDB::Dbms(void)
+wxDBMS wxDB::Dbms(void)
 /*
  * Be aware that not all database engines use the exact same syntax, and not
  * every ODBC compliant database is compliant to the same level of compliancy.
@@ -2432,8 +2432,8 @@ DBMS wxDB::Dbms(void)
  * DBASE
  *        - Does not support the SQL_TIMESTAMP structure
  *        - Supports only one cursor and one connect (apparently? with Microsoft driver only?)
- *    - Does not automatically create the primary index if the 'keyField' param of SetColDef
- *      is TRUE.  The user must create ALL indexes from their program.
+ *        - Does not automatically create the primary index if the 'keyField' param of SetColDef
+ *            is TRUE.  The user must create ALL indexes from their program.
  *        - Table names can only be 8 characters long
  *        - Column names can only be 10 characters long
  *
@@ -2490,10 +2490,10 @@ DBMS wxDB::Dbms(void)
 }  // wxDB::Dbms()
 
 
-/********** GetDbConnection() **********/
-wxDB WXDLLEXPORT *GetDbConnection(DbStuff *pDbStuff, bool FwdOnlyCursors)
+/********** wxDbGetConnection() **********/
+wxDB WXDLLEXPORT *wxDbGetConnection(wxDbConnectInf *pDbConfig, bool FwdOnlyCursors)
 {
-    DbList *pList;
+    wxDbList *pList;
 
     // Scan the linked list searching for an available database connection
     // that's already been opened but is currently not in use.
@@ -2501,7 +2501,7 @@ wxDB WXDLLEXPORT *GetDbConnection(DbStuff *pDbStuff, bool FwdOnlyCursors)
     {
         // The database connection must be for the same datasource
         // name and must currently not be in use.
-        if (pList->Free && (! wxStrcmp(pDbStuff->Dsn, pList->Dsn)))  // Found a free connection
+        if (pList->Free && (! wxStrcmp(pDbConfig->Dsn, pList->Dsn)))  // Found a free connection
         {
             pList->Free = FALSE;
             return(pList->PtrDb);
@@ -2515,25 +2515,25 @@ wxDB WXDLLEXPORT *GetDbConnection(DbStuff *pDbStuff, bool FwdOnlyCursors)
         // Find the end of the list
         for (pList = PtrBegDbList; pList->PtrNext; pList = pList->PtrNext);
         // Append a new list item
-        pList->PtrNext = new DbList;
+        pList->PtrNext = new wxDbList;
         pList->PtrNext->PtrPrev = pList;
         pList = pList->PtrNext;
     }
     else    // Empty list
     {
         // Create the first node on the list
-        pList = PtrBegDbList = new DbList;
+        pList = PtrBegDbList = new wxDbList;
         pList->PtrPrev = 0;
     }
 
     // Initialize new node in the linked list
     pList->PtrNext = 0;
     pList->Free = FALSE;
-    wxStrcpy(pList->Dsn, pDbStuff->Dsn);
-    pList->PtrDb = new wxDB(pDbStuff->Henv,FwdOnlyCursors);
+    wxStrcpy(pList->Dsn, pDbConfig->Dsn);
+    pList->PtrDb = new wxDB(pDbConfig->Henv,FwdOnlyCursors);
 
     // Connect to the datasource
-    if (pList->PtrDb->Open(pDbStuff->Dsn, pDbStuff->Uid, pDbStuff->AuthStr))
+    if (pList->PtrDb->Open(pDbConfig->Dsn, pDbConfig->Uid, pDbConfig->AuthStr))
     {
         pList->PtrDb->SqlLog(SQLLOGstate,SQLLOGfn,TRUE);
         return(pList->PtrDb);
@@ -2551,13 +2551,13 @@ wxDB WXDLLEXPORT *GetDbConnection(DbStuff *pDbStuff, bool FwdOnlyCursors)
         return(0);
     }
 
-}  // GetDbConnection()
+}  // wxDbGetConnection()
 
 
-/********** FreeDbConnection() **********/
-bool WXDLLEXPORT FreeDbConnection(wxDB *pDb)
+/********** wxDbFreeConnection() **********/
+bool WXDLLEXPORT wxDbFreeConnection(wxDB *pDb)
 {
-    DbList *pList;
+    wxDbList *pList;
 
     // Scan the linked list searching for the database connection
     for (pList = PtrBegDbList; pList; pList = pList->PtrNext)
@@ -2569,13 +2569,13 @@ bool WXDLLEXPORT FreeDbConnection(wxDB *pDb)
     // Never found the database object, return failure
     return(FALSE);
 
-}  // FreeDbConnection()
+}  // wxDbFreeConnection()
 
 
-/********** CloseDbConnections() **********/
-void WXDLLEXPORT CloseDbConnections(void)
+/********** wxDbCloseConnections() **********/
+void WXDLLEXPORT wxDbCloseConnections(void)
 {
-    DbList *pList, *pNext;
+    wxDbList *pList, *pNext;
 
     // Traverse the linked list closing database connections and freeing memory as I go.
     for (pList = PtrBegDbList; pList; pList = pNext)
@@ -2590,13 +2590,13 @@ void WXDLLEXPORT CloseDbConnections(void)
     // Mark the list as empty
     PtrBegDbList = 0;
 
-}  // CloseDbConnections()
+}  // wxDbCloseConnections()
 
 
-/********** NumberDbConnectionsInUse() **********/
-int WXDLLEXPORT NumberDbConnectionsInUse(void)
+/********** wxDbNumberConnectionsInUse() **********/
+int WXDLLEXPORT wxDbConnectionsInUse(void)
 {
-    DbList *pList;
+    wxDbList *pList;
     int cnt = 0;
 
     // Scan the linked list counting db connections that are currently in use
@@ -2608,14 +2608,14 @@ int WXDLLEXPORT NumberDbConnectionsInUse(void)
 
     return(cnt);
 
-}  // NumberDbConnectionsInUse()
+}  // wxDbConnectionsInUse()
 
 
-/********** SqlLog() **********/
-bool SqlLog(enum sqlLog state, char *filename)
+/********** wxDbSqlLog() **********/
+bool wxDbSqlLog(wxSqlLogState state, char *filename)
 {
     bool append = FALSE;
-    DbList *pList;
+    wxDbList *pList;
 
     for (pList = PtrBegDbList; pList; pList = pList->PtrNext)
     {
@@ -2629,11 +2629,92 @@ bool SqlLog(enum sqlLog state, char *filename)
 
     return(TRUE);
 
-}  // SqlLog()
+}  // wxDbSqlLog()
 
 
-/********** GetDataSource() **********/
-bool GetDataSource(HENV henv, char *Dsn, SWORD DsnMax, char *DsDesc, SWORD DsDescMax,
+#if 0
+/********** wxDbCreateDataSource() **********/
+int wxDbCreateDataSource(const char *driverName, const char *dsn, const char *description,
+                         bool sysDSN, const char *defDir, wxWindow *parent)
+/*
+ * !!!! ONLY FUNCTIONAL UNDER MSW with VC6 !!!!
+ * Very rudimentary creation of an ODBC data source.  
+ */
+{
+    int result = FALSE;
+
+#ifdef __WXMSW__
+    int       dsnLocation;
+    wxString  setupStr;
+
+    if (sysDSN)
+        dsnLocation = ODBC_ADD_SYS_DSN;
+    else
+        dsnLocation = ODBC_ADD_DSN;
+
+    // NOTE: The decimal 2 is an invalid character in all keyword pairs
+    // so that is why I used it, as wxString does not deal well with 
+    // embedded nulls in strings
+    setupStr.sprintf("DSN=%s%cDescription=%s%cDefaultDir=%s%c",dsn,2,description,2,defDir,2);
+
+    // Replace the separator from above with the '\0' seperator needed
+    // by the SQLConfigDataSource() function
+    int k;
+    do
+    {
+        k = setupStr.Find((wxChar)2,TRUE);
+        if (k != wxNOT_FOUND)
+            setupStr[(UINT)k] = '\0';
+    }
+    while (k != wxNOT_FOUND);
+
+    result = SQLConfigDataSource((HWND)parent->GetHWND(), dsnLocation,
+                                 driverName, setupStr.GetData());
+
+    if (!result)
+    {
+        // check for errors caused by ConfigDSN based functions
+        DWORD retcode = 0;
+        WORD cb;
+        wxChar errMsg[500+1];
+        errMsg[0] = '\0';
+
+        SQLInstallerError(1,&retcode,errMsg,500,&cb);
+        if (retcode)
+        {
+//            logError(errMsg, sqlState);
+//            if (!silent)
+//            {
+#ifdef DBDEBUG_CONSOLE
+                // When run in console mode, use standard out to display errors.
+                cout << errMsg << endl;
+                cout << "Press any key to continue..." << endl;
+                getchar();
+#endif  // DBDEBUG_CONSOLE
+//            }
+
+#ifdef __WXDEBUG__
+            wxLogDebug(errMsg,"DEBUG MESSAGE");
+#endif  // __WXDEBUG__
+        }
+    }
+    else
+       result = TRUE;
+
+#else  // __WXMSW__
+#ifdef __WXDEBUG__
+    wxLogDebug("wxDbCreateDataSource() not available except under MSW","DEBUG MESSAGE");
+#endif
+#endif  // __WXMSW__
+
+    return result;
+
+}  // wxDbCreateDataSource()
+#endif
+
+
+/********** wxDbGetDataSource() **********/
+bool wxDbGetDataSource(HENV henv, char *Dsn, SWORD DsnMax, char *DsDesc, SWORD DsDescMax,
                          UWORD direction)
 /*
  * Dsn and DsDesc will contain the data source name and data source
@@ -2648,7 +2729,54 @@ bool GetDataSource(HENV henv, char *Dsn, SWORD DsnMax, char *DsDesc, SWORD DsDes
     else
         return(FALSE);
 
-}  // GetDataSource()
+}  // wxDbGetDataSource()
+
+
+// Change this to 0 to remove use of all deprecated functions
+#if 1
+/********************************************************************
+ ********************************************************************
+ *
+ * The following functions are all DEPRECATED and are included for
+ * backward compatability reasons only
+ *
+ ********************************************************************
+ ********************************************************************/
+bool SqlLog(sqlLog state, char *filename)
+{
+    return wxDbSqlLog((enum wxSqlLogState)state, filename);
+}
+/***** DEPRECATED: use wxGetDataSource() *****/
+bool GetDataSource(HENV henv, char *Dsn, SWORD DsnMax, char *DsDesc, SWORD DsDescMax,
+                         UWORD direction)
+{
+    return wxDbGetDataSource(henv, Dsn, DsnMax, DsDesc, DsDescMax, direction);
+}
+/***** DEPRECATED: use wxDbGetConnection() *****/
+wxDB WXDLLEXPORT *GetDbConnection(DbStuff *pDbStuff, bool FwdOnlyCursors)
+{
+    return wxDbGetConnection((wxDbConnectInf *)pDbStuff, FwdOnlyCursors);
+}
+/***** DEPRECATED: use wxDbFreeConnection() *****/
+bool WXDLLEXPORT FreeDbConnection(wxDB *pDb)
+{
+    return wxDbFreeConnection(pDb);
+}
+/***** DEPRECATED: use wxDbCloseConnections() *****/
+void WXDLLEXPORT CloseDbConnections(void)
+{
+    wxDbCloseConnections();
+}
+/***** DEPRECATED: use wxDbConnectionsInUse() *****/
+int WXDLLEXPORT NumberDbConnectionsInUse(void)
+{
+    return wxDbConnectionsInUse();
+}
+#endif
+
+
+
+
 
 #endif
  // wxUSE_ODBC
