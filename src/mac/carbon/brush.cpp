@@ -24,6 +24,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxBrush, wxGDIObject)
 wxBrushRefData::wxBrushRefData()
 {
     m_style = wxSOLID;
+    m_isMacTheme = false ;
+    m_isMacThemeBackground = false ;
 }
 
 wxBrushRefData::wxBrushRefData(const wxBrushRefData& data)
@@ -31,6 +33,8 @@ wxBrushRefData::wxBrushRefData(const wxBrushRefData& data)
   m_style = data.m_style;
   m_stipple = data.m_stipple;
   m_colour = data.m_colour;
+  m_isMacTheme = data.m_isMacTheme ;
+  m_macThemeBrush = data.m_macThemeBrush ;
 }
 
 wxBrushRefData::~wxBrushRefData()
@@ -66,6 +70,15 @@ wxBrush::wxBrush(const wxBitmap& stipple)
     RealizeResource();
 }
 
+wxBrush::wxBrush(ThemeBrush macThemeBrush ) 
+{
+    m_refData = new wxBrushRefData;
+
+    M_BRUSHDATA->m_isMacTheme = true;
+    M_BRUSHDATA->m_macThemeBrush = macThemeBrush;
+
+    RealizeResource();
+}
 void wxBrush::Unshare()
 {
 	// Don't change shared data
@@ -84,7 +97,8 @@ void wxBrush::Unshare()
 void wxBrush::SetColour(const wxColour& col)
 {
     Unshare();
-
+    M_BRUSHDATA->m_isMacTheme = false;
+    M_BRUSHDATA->m_isMacThemeBackground = false ;
     M_BRUSHDATA->m_colour = col;
 
     RealizeResource();
@@ -94,6 +108,8 @@ void wxBrush::SetColour(unsigned char r, unsigned char g, unsigned char b)
 {
     Unshare();
 
+    M_BRUSHDATA->m_isMacTheme = false;
+    M_BRUSHDATA->m_isMacThemeBackground = false ;
     M_BRUSHDATA->m_colour.Set(r, g, b);
 
     RealizeResource();
@@ -103,6 +119,8 @@ void wxBrush::SetStyle(int Style)
 {
     Unshare();
 
+    M_BRUSHDATA->m_isMacTheme = false;
+    M_BRUSHDATA->m_isMacThemeBackground = false ;
     M_BRUSHDATA->m_style = Style;
 
     RealizeResource();
@@ -113,6 +131,28 @@ void wxBrush::SetStipple(const wxBitmap& Stipple)
     Unshare();
 
     M_BRUSHDATA->m_stipple = Stipple;
+
+    RealizeResource();
+}
+
+void wxBrush::SetMacTheme(ThemeBrush macThemeBrush)
+{
+    Unshare();
+
+    M_BRUSHDATA->m_isMacTheme = true;
+    M_BRUSHDATA->m_isMacThemeBackground = false ;
+    M_BRUSHDATA->m_macThemeBrush = macThemeBrush;
+
+    RealizeResource();
+}
+
+void wxBrush::SetMacThemeBackground(ThemeBackgroundKind macThemeBackground)
+{
+    Unshare();
+
+    M_BRUSHDATA->m_isMacTheme = false;
+    M_BRUSHDATA->m_isMacThemeBackground = true ;
+    M_BRUSHDATA->m_macThemeBackground = macThemeBackground;
 
     RealizeResource();
 }

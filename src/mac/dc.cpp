@@ -473,16 +473,12 @@ void  wxDC::SetBackgroundMode( int mode )
 
 void  wxDC::SetFont( const wxFont &font )
 {
-    wxCHECK_RET(Ok(), wxT("Invalid DC"));
-
     m_font = font;
     m_macFontInstalled = false ;
 }
 
 void  wxDC::SetPen( const wxPen &pen )
 {
-    wxCHECK_RET(Ok(), wxT("Invalid DC"));
-
 	if ( m_pen == pen )
 		return ;
 		
@@ -493,8 +489,6 @@ void  wxDC::SetPen( const wxPen &pen )
 
 void  wxDC::SetBrush( const wxBrush &brush )
 {
-  wxCHECK_RET(Ok(), wxT("Invalid DC"));
-  
   if (m_brush == brush) 
   	return;
   
@@ -504,8 +498,6 @@ void  wxDC::SetBrush( const wxBrush &brush )
 
 void  wxDC::SetBackground( const wxBrush &brush )
 {
-  wxCHECK_RET(Ok(), wxT("Invalid DC"));
-  
   if (m_backgroundBrush == brush) 
   	return;
   
@@ -1003,10 +995,10 @@ bool  wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
 	if ( LockPixels(bmappixels) )
 	{
 		Rect srcrect , dstrect ;
-		srcrect.top = source->YLOG2DEV(ysrc) ;
-		srcrect.left = source->XLOG2DEV(xsrc) ;
-		srcrect.right = source->XLOG2DEV(xsrc + width ) ;
-		srcrect.bottom = source->YLOG2DEV(ysrc + height) ;
+		srcrect.top = source->YLOG2DEV(ysrc) + source->m_macLocalOrigin.v ;
+		srcrect.left = source->XLOG2DEV(xsrc) + source->m_macLocalOrigin.h ;
+		srcrect.right = source->XLOG2DEV(xsrc + width ) + source->m_macLocalOrigin.v;
+		srcrect.bottom = source->YLOG2DEV(ysrc + height) + source->m_macLocalOrigin.h;
 		dstrect.top = YLOG2DEV(ydest) ;
 		dstrect.left = XLOG2DEV(xdest) ;
 		dstrect.bottom = YLOG2DEV(ydest + height )  ;
@@ -1028,15 +1020,31 @@ bool  wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
 
 		if ( useMask && source->m_macMask )
 		{
-			wxASSERT( mode == srcCopy ) ;
-			if ( LockPixels( GetGWorldPixMap( source->m_macMask ) ) )
-			{
-				CopyMask( GetPortBitMapForCopyBits( sourcePort ) , 
-				            GetPortBitMapForCopyBits( source->m_macMask ) , 
-				            GetPortBitMapForCopyBits( m_macPort ) ,
-					        &srcrect, &srcrect , &dstrect ) ;
-				UnlockPixels( GetGWorldPixMap( source->m_macMask )  ) ;
-			}
+		    if ( mode == srcCopy )
+		    {
+    			if ( LockPixels( GetGWorldPixMap( source->m_macMask ) ) )
+    			{
+    				CopyMask( GetPortBitMapForCopyBits( sourcePort ) , 
+    				            GetPortBitMapForCopyBits( source->m_macMask ) , 
+    				            GetPortBitMapForCopyBits( m_macPort ) ,
+    					        &srcrect, &srcrect , &dstrect ) ;
+    				UnlockPixels( GetGWorldPixMap( source->m_macMask )  ) ;
+    			}
+		    }
+		    else
+		    {
+                RgnHandle clipRgn = NewRgn() ;
+                
+                LockPixels( GetGWorldPixMap( source->m_macMask ) ) ;
+                BitMapToRegion( clipRgn , (BitMap*) *GetGWorldPixMap( source->m_macMask ) ) ;
+                UnlockPixels( GetGWorldPixMap( source->m_macMask ) ) ;
+                //OffsetRgn( clipRgn , -source->m_macMask->portRect.left , -source->m_macMask->portRect.top ) ;
+                OffsetRgn( clipRgn , -srcrect.left + dstrect.left, -srcrect.top +  dstrect.top ) ;
+    			CopyBits( GetPortBitMapForCopyBits( sourcePort ) , 
+    			    GetPortBitMapForCopyBits( m_macPort ) ,
+    				&srcrect, &dstrect, mode, clipRgn ) ;
+    		    DisposeRgn( clipRgn ) ;
+    		}
 		}
 		else
 		{
@@ -1553,20 +1561,50 @@ void wxDC::MacInstallPen() const
 	m_macFontInstalled = false ;
 }
 
+int wxDC::MacSetupBackgroundForCurrentPort(const wxBrush& background ) 
+{
+    Pattern whiteColor ;
+	if ( background.IsMacTheme() )
+	{
+	    SetThemeBackground( background.GetMacTheme() , wxDisplayDepth() , true ) ;
+	}
+	else if ( background.IsMacThemeBackground() )
+	{
+	    Rect originBox = { 0,0,1,1 } ;
+	    ::ApplyThemeBackground( background.GetMacThemeBackground() , &originBox ,kThemeStateActive , 
+	        wxDisplayDepth() , true ) ;
+	}
+	else
+	{
+    	::RGBBackColor( &background.GetColour().GetPixel() );
+    	int brushStyle = background.GetStyle();
+    	if (brushStyle == wxSOLID)
+    		::BackPat(GetQDGlobalsWhite(&whiteColor));
+    	else if (IS_HATCH(brushStyle))
+    	{
+    		Pattern pat ;
+    		wxMacGetHatchPattern(brushStyle, &pat);
+    		::BackPat(&pat);
+    	}
+    	else
+    	{
+    		::BackPat(GetQDGlobalsWhite(&whiteColor));
+    	}
+	}
+	return 0 ;
+}
+
 void wxDC::MacInstallBrush() const
 {
     wxCHECK_RET(Ok(), wxT("Invalid DC"));
 
-	Pattern	 blackColor, whiteColor ;
+	Pattern	 blackColor ;
 //	if ( m_macBrushInstalled )
 //		return ;
 
 	// foreground
 
-	RGBColor forecolor = m_brush.GetColour().GetPixel();
-	RGBColor backcolor = m_backgroundBrush.GetColour().GetPixel();
-	::RGBForeColor( &forecolor );
-	::RGBBackColor( &backcolor );
+	::RGBForeColor( &m_brush.GetColour().GetPixel() );
 
 	int brushStyle = m_brush.GetStyle();
 	if (brushStyle == wxSOLID)
@@ -1585,24 +1623,12 @@ void wxDC::MacInstallBrush() const
 	
 	// background
 	
-	brushStyle = m_backgroundBrush.GetStyle();
-	if (brushStyle == wxSOLID)
-		::BackPat(GetQDGlobalsWhite(&whiteColor));
-	else if (IS_HATCH(brushStyle))
-	{
-		Pattern pat ;
-		wxMacGetHatchPattern(brushStyle, &pat);
-		::BackPat(&pat);
-	}
-	else
-	{
-		::BackPat(GetQDGlobalsWhite(&whiteColor));
-	}
+    MacSetupBackgroundForCurrentPort( m_backgroundBrush ) ;
 	
-	short mode = patCopy ;
 
 	// todo :
 	
+	short mode = patCopy ;
 	switch( m_logicalFunction )
 	{
 		case wxCOPY:       // src
