@@ -60,11 +60,21 @@ little-endian order.
 
 Writes the single byte {\it i8} to the stream.
 
+\func{void}{Write8}{\param{const wxUint8 *}{buffer}, \param{size\_t }{size}}
+
+Writes an array of bytes to the stream. The amount of bytes to write is
+specified with the {\it size} variable.
+
 \membersection{wxDataOutputStream::Write16}
 
 \func{void}{Write16}{{\param wxUint16 }{i16}}
 
 Writes the 16 bit unsigned integer {\it i16} to the stream.
+
+\func{void}{Write16}{\param{const wxUint16 *}{buffer}, \param{size\_t }{size}}
+
+Writes an array of 16 bit unsigned integer to the stream. The amount of
+16 bit unsigned integer to write is specified with the {\it size} variable.
 
 \membersection{wxDataOutputStream::Write32}
 
@@ -72,17 +82,32 @@ Writes the 16 bit unsigned integer {\it i16} to the stream.
 
 Writes the 32 bit unsigned integer {\it i32} to the stream.
 
+\func{void}{Write32}{\param{const wxUint32 *}{buffer}, \param{size\_t }{size}}
+
+Writes an array of 32 bit unsigned integer to the stream. The amount of
+32 bit unsigned integer to write is specified with the {\it size} variable.
+
 \membersection{wxDataOutputStream::Write64}
 
 \func{void}{Write64}{{\param wxUint64 }{i64}}
 
 Writes the 64 bit unsigned integer {\it i64} to the stream.
 
+\func{void}{Write64}{\param{const wxUint64 *}{buffer}, \param{size\_t }{size}}
+
+Writes an array of 64 bit unsigned integer to the stream. The amount of
+64 bit unsigned integer to write is specified with the {\it size} variable.
+
 \membersection{wxDataOutputStream::WriteDouble}
 
 \func{void}{WriteDouble}{{\param double }{f}}
 
 Writes the double {\it f} to the stream using the IEEE format.
+
+\func{void}{WriteDouble}{\param{const double *}{buffer}, \param{size\_t }{size}}
+
+Writes an array of double to the stream. The amount of double to write is
+specified with the {\it size} variable.
 
 \membersection{wxDataOutputStream::WriteString}\label{wxdataoutputstreamwritestring}
 
