@@ -112,6 +112,18 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
 
   dc.GetTextExtent(str, (long *)pwidth, (long *)pheight);
 
+  if (!m_strAccel.IsEmpty())
+  {
+      // measure the accelerator string, and add it's width to
+      // the total item width, plus 16 (Accelerators are right justified,
+      // with the right edge of the text rectangle 16 pixels left of
+      // the right edge of the menu)
+
+      int accel_width, accel_height;
+      dc.GetTextExtent(m_strAccel, &accel_width, &accel_height);
+      *pwidth += (accel_width + 16);
+  }
+
   // JACS: items still look too tightly packed, so adding 5 pixels.
   (*pheight) = (*pheight) + 5;
 
@@ -180,7 +192,14 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
   DWORD colBack, colText;
   if ( st & wxODSelected ) {
     colBack = GetSysColor(COLOR_HIGHLIGHT);
-    colText = GetSysColor(COLOR_HIGHLIGHTTEXT);
+    if (!(st & wxODDisabled))
+    {
+        colText = GetSysColor(COLOR_HIGHLIGHTTEXT);
+    }
+     else
+    {
+        colText = GetSysColor(COLOR_GRAYTEXT);
+    }
   }
   else {
     // fall back to default colors if none explicitly specified
@@ -236,23 +255,24 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
 
     HFONT hPrevFont = (HFONT) ::SelectObject(hdc, hfont);
 
-    wxString strStrippedName = wxStripMenuCodes(m_strName);
+    wxString strMenuText = m_strName.BeforeFirst('\t');
 
     ::DrawState(hdc, NULL, NULL,
-                (LPARAM)strStrippedName.c_str(), strStrippedName.length(),
+                (LPARAM)strMenuText.c_str(), strMenuText.length(),
                 x, rc.y + 1, rc.GetWidth(), rc.GetHeight(),
-                DST_PREFIXTEXT | (st & wxODDisabled ? DSS_DISABLED : 0));
+                DST_PREFIXTEXT |
+                (((st & wxODDisabled) && !(st & wxODSelected)) ? DSS_DISABLED : 0));
 
     if ( !m_strAccel.empty() )
     {
-        RECT r;
-        r.top = rc.GetTop() + 1;
-        r.left = rc.GetLeft();
-        r.right = rc.GetRight() - 16;
-        r.bottom = rc.GetBottom();
+        int accel_width, accel_height;
+        dc.GetTextExtent(m_strAccel, &accel_width, &accel_height);
 
-        DrawText(hdc, m_strAccel, m_strAccel.length(), &r,
-                 DT_SINGLELINE | DT_RIGHT);
+        ::DrawState(hdc, NULL, NULL,
+                    (LPARAM)m_strAccel.c_str(), m_strAccel.length(),
+                    rc.GetRight() - accel_width - 16, rc.y + 1, 0, 0,
+                    DST_TEXT |
+                    (((st & wxODDisabled) && !(st & wxODSelected)) ? DSS_DISABLED : 0));
     }
 
     (void)SelectObject(hdc, hPrevBrush);
