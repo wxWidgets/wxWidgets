@@ -1,14 +1,25 @@
-/*
- * wxuxthem.h : wxWindows support for Microsoft Windows XP Theme library
- *                (uxtheme.dll)
- * Modified to work with almost all Win32 compilers
- * Compiler must support Unicode, the __cdecl calling convention, and the
- * __stdcall calling convention
- */
+///////////////////////////////////////////////////////////////////////////////
+// Name:        src/msw/uxtheme.cpp
+// Purpose:     implements wxUxThemeEngine class: support for XP themes
+// Author:      
+// Modified by:
+// Created:     2003
+// RCS-ID:      $Id$
+// Copyright:   (c) 2003 wxWindows Dev-Team
+// License:     wxWindows license
+///////////////////////////////////////////////////////////////////////////////
+
+// ============================================================================
+// declarations
+// ============================================================================
 
 #ifdef __GNUG__
-#pragma implementation "uxtheme.h"
+    #pragma implementation "uxtheme.h"
 #endif
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
@@ -16,6 +27,8 @@
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
+
+#if wxUSE_UXTHEME
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -26,250 +39,138 @@
 
 #include "wx/module.h"
 
-#if wxUSE_UXTHEME
-
 #include "wx/msw/wrapwin.h"
 
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/private.h"
-#include "wx/app.h"         // for GetComCtl32Version
 
-wxUxThemeEngine* g_pThemeEngine = ((wxUxThemeEngine*)NULL) ;
+// ============================================================================
+// wxUxThemeModule
+// ============================================================================
 
-BOOL wxCanUseInitThemeEngine()
-{
-    WXUOSVERSIONINFOEX wxuosex ;
-    memset((void*)&wxuosex, 0, sizeof(WXUOSVERSIONINFOEX)) ;
-    wxuosex.dwOSVersionInfoSize = sizeof(WXUOSVERSIONINFOEX) ;
-    if(!GetVersionEx((LPOSVERSIONINFO)&wxuosex))
-    {
-        wxuosex.dwOSVersionInfoSize = sizeof(OSVERSIONINFO) ;
-        if(!GetVersionEx((LPOSVERSIONINFO)&wxuosex))
-        {
-            return FALSE ;
-        }
-    }
-    if ((wxuosex.dwMajorVersion == 5) && (wxuosex.dwMinorVersion > 0))
-    {
-        return (wxTheApp->GetComCtl32Version() >= 600) ;
-    }
-    else
-    {
-        return FALSE ;
-    }
-}
-
-wxUxThemeEngine* wxUxThemeEngine::wxInitUxThemeEngine()
-{
-    wxUxThemeEngine* pThemeEngine = new wxUxThemeEngine ;
-    return pThemeEngine ;
-}
-
-wxUxThemeEngine* wxUxThemeEngine::Get()
-{
-    return g_pThemeEngine;
-}
-
-#ifdef WXU_USE_WXMODULE
+// this module is responsable for deleting the theme engine
 class wxUxThemeModule : public wxModule
 {
-	DECLARE_DYNAMIC_CLASS(wxUxThemeModule)
 public:
+	virtual bool OnInit() { return true; }
 	virtual void OnExit()
 	{
-		if((wxCanUseInitThemeEngine()) && (g_pThemeEngine))
+		if ( wxUxThemeEngine::ms_themeEngine )
 		{
-			delete g_pThemeEngine ;
-			g_pThemeEngine = ((wxUxThemeEngine*)NULL) ;
+            // this is probably not necessary right now but try to be careful
+            // and avoid the problems which we might have if someone ever
+            // decides to show a message box using the theme engine from
+            // wxUxThemeEngine dtor (e.g. from wxDynamicLibrary dtor...) or
+            // something like this
+            wxUxThemeEngine *themeEngine = wxUxThemeEngine::ms_themeEngine;
+            wxUxThemeEngine::ms_themeEngine = NULL;
+            wxUxThemeEngine::ms_isThemeEngineAvailable = false;
+
+			delete themeEngine;
 		}
 	}
 
-	virtual bool OnInit()
-	{
-		if(!wxCanUseInitThemeEngine())
-		{
-			g_pThemeEngine = ((wxUxThemeEngine*)NULL) ;
-			return TRUE ;
-		}
-		g_pThemeEngine = wxUxThemeEngine::wxInitUxThemeEngine() ;
-		if(!g_pThemeEngine)
-		{
-			return FALSE ;
-		}
-		else if(!g_pThemeEngine->IsInitialized())
-		{
-			OnExit() ;
-			return FALSE ;
-		}
 
-		return TRUE ;
-	}
+	DECLARE_DYNAMIC_CLASS(wxUxThemeModule)
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxUxThemeModule, wxModule)
-#else
-static void __cdecl wxUxThemeEngineOnExit()
+
+// ============================================================================
+// wxUxThemeEngine implementation
+// ============================================================================
+
+wxUxThemeEngine *wxUxThemeEngine::ms_themeEngine = NULL;
+int wxUxThemeEngine::ms_isThemeEngineAvailable = -1;        // unknown
+
+wxUxThemeEngine* wxUxThemeEngine::Get()
 {
-    if(g_pThemeEngine)
+    // we assume that themes are only used in the main thread hence no need for
+    // critical section here
+    if ( ms_isThemeEngineAvailable == -1 )
     {
-        delete g_pThemeEngine ;
-        g_pThemeEngine = ((wxUxThemeEngine*)NULL) ;
+        // we're called or the first time, check if the themes are available
+        ms_themeEngine = new wxUxThemeEngine;
+        if ( !ms_themeEngine->Initialize() )
+        {
+            // can't use themes, probably because the system doesn't support
+            // them, don't do it again
+            delete ms_themeEngine;
+            ms_themeEngine = NULL;
+
+            ms_isThemeEngineAvailable = false;
+        }
+        else // initialized ok
+        {
+            ms_isThemeEngineAvailable = true;
+        }
     }
+
+    return ms_themeEngine;
 }
 
-BOOL wxUxInitThemeEngine()
+bool wxUxThemeEngine::Initialize()
 {
-    if(!wxCanUseInitThemeEngine())
-    {
-        return TRUE ;
-    }
-    g_pThemeEngine = wxUxThemeEngine::wxInitUxThemeEngine() ;
-    if(!g_pThemeEngine)
-    {
-        return FALSE ;
-    }
-    else if(!g_pThemeEngine->IsInitialized())
-    {
-        wxUxThemeEngineOnExit() ;
-        return FALSE ;
-    }
+    if ( !m_dllUxTheme.Load(_T("uxtheme.dll")) )
+        return false;
 
-    if(atexit(wxUxThemeEngineOnExit) != 0)
-    {
-        wxUxThemeEngineOnExit() ;
-        return FALSE ;
-    }
+#define RESOLVE_UXTHEME_FUNCTION(type, funcname)                              \
+    funcname = (type)m_dllUxTheme.GetSymbol(_T(#funcname));                   \
+    if ( !funcname )                                                          \
+        return false
 
-    return TRUE ;
-}
-#endif
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUOPENTHEMEDATA, OpenThemeData);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUCLOSETHEMEDATA, CloseThemeData);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUDRAWTHEMEBACKGROUND, DrawThemeBackground);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUDRAWTHEMETEXT, DrawThemeText);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUGETTHEMEBACKGROUNDCONTENTRECT, GetThemeBackgroundContentRect);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUGETTHEMEBACKGROUNDEXTENT, GetThemeBackgroundExtent);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUGETTHEMEPARTSIZE, GetThemePartSize);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUGETTHEMETEXTEXTENT, GetThemeTextExtent);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUGETTHEMETEXTMETRICS, GetThemeTextMetrics);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUGETTHEMEBACKGROUNDREGION, GetThemeBackgroundRegion);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUHITTESTTHEMEBACKGROUND, HitTestThemeBackground);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUDRAWTHEMEEDGE, DrawThemeEdge);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUDRAWTHEMEICON, DrawThemeIcon);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUISTHEMEPARTDEFINED, IsThemePartDefined);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUISTHEMEBACKGROUNDPARTIALLYTRANSPARENT, IsThemeBackgroundPartiallyTransparent);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUGETTHEMECOLOR, GetThemeColor);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUGETTHEMEMETRIC, GetThemeMetric);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUGETTHEMESTRING, GetThemeString);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUGETTHEMEBOOL, GetThemeBool);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUGETTHEMEINT, GetThemeInt);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUGETTHEMEENUMVALUE, GetThemeEnumValue);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUGETTHEMEPOSITION, GetThemePosition);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUGETTHEMEFONT, GetThemeFont);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUGETTHEMERECT, GetThemeRect);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUGETTHEMEMARGINS, GetThemeMargins);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUGETTHEMEINTLIST, GetThemeIntList);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUGETTHEMEPROPERTYORIGIN, GetThemePropertyOrigin);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUSETWINDOWTHEME, SetWindowTheme);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUGETTHEMEFILENAME, GetThemeFilename);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUGETTHEMESYSCOLOR, GetThemeSysColor);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUGETTHEMESYSCOLORBRUSH, GetThemeSysColorBrush);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUGETTHEMESYSBOOL, GetThemeSysBool);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUGETTHEMESYSSIZE, GetThemeSysSize);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUGETTHEMESYSFONT, GetThemeSysFont);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUGETTHEMESYSSTRING, GetThemeSysString);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUGETTHEMESYSINT, GetThemeSysInt);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUISTHEMEACTIVE, IsThemeActive);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUISAPPTHEMED, IsAppThemed);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUGETWINDOWTHEME, GetWindowTheme);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUENABLETHEMEDIALOGTEXTURE, EnableThemeDialogTexture);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUISTHEMEDIALOGTEXTUREENABLED, IsThemeDialogTextureEnabled);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUGETTHEMEAPPPROPERTIES, GetThemeAppProperties);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUSETTHEMEAPPPROPERTIES, SetThemeAppProperties);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUGETCURRENTTHEMENAME, GetCurrentThemeName);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUGETTHEMEDOCUMENTATIONPROPERTY, GetThemeDocumentationProperty);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUDRAWTHEMEPARENTBACKGROUND, DrawThemeParentBackground);
+    RESOLVE_UXTHEME_FUNCTION(PFNWXUENABLETHEMING, EnableTheming);
 
-#define WXU_GET_FN_PTR(hmod, type, pfunc, funcname) if(hmod != ((HINSTANCE)NULL)) { \
-    pfunc = (type)::GetProcAddress(hmod, funcname) ; \
-    if(pfunc == ((type)NULL)) \
-    {	\
-        ::FreeLibrary(hmod) ; \
-        hmod = ((HINSTANCE)NULL) ; \
-    }	\
-}
+#undef RESOLVE_UXTHEME_FUNCTION
 
-wxUxThemeEngine::wxUxThemeEngine()
-{
-    m_hInstUXThemeDLL = ::LoadLibraryA("uxtheme.dll") ;
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUOPENTHEMEDATA, m_pfnOpenThemeData, "OpenThemeData")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUCLOSETHEMEDATA, m_pfnCloseThemeData, "CloseThemeData")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUDRAWTHEMEBACKGROUND, m_pfnDrawThemeBackground, "DrawThemeBackground")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUDRAWTHEMETEXT, m_pfnDrawThemeText, "DrawThemeText")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUGETTHEMEBACKGROUNDCONTENTRECT, m_pfnGetThemeBackgroundContentRect, "GetThemeBackgroundContentRect")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUGETTHEMEBACKGROUNDEXTENT, m_pfnGetThemeBackgroundExtent, "GetThemeBackgroundExtent")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUGETTHEMEPARTSIZE, m_pfnGetThemePartSize, "GetThemePartSize")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUGETTHEMETEXTEXTENT, m_pfnGetThemeTextExtent, "GetThemeTextExtent")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUGETTHEMETEXTMETRICS, m_pfnGetThemeTextMetrics, "GetThemeTextMetrics")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUGETTHEMEBACKGROUNDREGION, m_pfnGetThemeBackgroundRegion, "GetThemeBackgroundRegion")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUHITTESTTHEMEBACKGROUND, m_pfnHitTestThemeBackground, "HitTestThemeBackground")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUDRAWTHEMEEDGE, m_pfnDrawThemeEdge, "DrawThemeEdge")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUDRAWTHEMEICON, m_pfnDrawThemeIcon, "DrawThemeIcon")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUISTHEMEPARTDEFINED, m_pfnIsThemePartDefined, "IsThemePartDefined")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUISTHEMEBACKGROUNDPARTIALLYTRANSPARENT, m_pfnIsThemeBackgroundPartiallyTransparent, "IsThemeBackgroundPartiallyTransparent")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUGETTHEMECOLOR, m_pfnGetThemeColor, "GetThemeColor")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUGETTHEMEMETRIC, m_pfnGetThemeMetric, "GetThemeMetric")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUGETTHEMESTRING, m_pfnGetThemeString, "GetThemeString")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUGETTHEMEBOOL, m_pfnGetThemeBool, "GetThemeBool")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUGETTHEMEINT, m_pfnGetThemeInt, "GetThemeInt")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUGETTHEMEENUMVALUE, m_pfnGetThemeEnumValue, "GetThemeEnumValue")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUGETTHEMEPOSITION, m_pfnGetThemePosition, "GetThemePosition")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUGETTHEMEFONT, m_pfnGetThemeFont, "GetThemeFont")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUGETTHEMERECT, m_pfnGetThemeRect, "GetThemeRect")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUGETTHEMEMARGINS, m_pfnGetThemeMargins, "GetThemeMargins")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUGETTHEMEINTLIST, m_pfnGetThemeIntList, "GetThemeIntList")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUGETTHEMEPROPERTYORIGIN, m_pfnGetThemePropertyOrigin, "GetThemePropertyOrigin")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUSETWINDOWTHEME, m_pfnSetWindowTheme, "SetWindowTheme")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUGETTHEMEFILENAME, m_pfnGetThemeFilename, "GetThemeFilename")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUGETTHEMESYSCOLOR, m_pfnGetThemeSysColor, "GetThemeSysColor")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUGETTHEMESYSCOLORBRUSH, m_pfnGetThemeSysColorBrush, "GetThemeSysColorBrush")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUGETTHEMESYSBOOL, m_pfnGetThemeSysBool, "GetThemeSysBool")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUGETTHEMESYSSIZE, m_pfnGetThemeSysSize, "GetThemeSysSize")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUGETTHEMESYSFONT, m_pfnGetThemeSysFont, "GetThemeSysFont")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUGETTHEMESYSSTRING, m_pfnGetThemeSysString, "GetThemeSysString")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUGETTHEMESYSINT, m_pfnGetThemeSysInt, "GetThemeSysInt")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUISTHEMEACTIVE, m_pfnIsThemeActive, "IsThemeActive")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUISAPPTHEMED, m_pfnIsAppThemed, "IsAppThemed")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUGETWINDOWTHEME, m_pfnGetWindowTheme, "GetWindowTheme")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUENABLETHEMEDIALOGTEXTURE, m_pfnEnableThemeDialogTexture, "EnableThemeDialogTexture")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUISTHEMEDIALOGTEXTUREENABLED, m_pfnIsThemeDialogTextureEnabled, "IsThemeDialogTextureEnabled")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUGETTHEMEAPPPROPERTIES, m_pfnGetThemeAppProperties, "GetThemeAppProperties")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUSETTHEMEAPPPROPERTIES, m_pfnSetThemeAppProperties, "SetThemeAppProperties")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUGETCURRENTTHEMENAME, m_pfnGetCurrentThemeName, "GetCurrentThemeName")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUGETTHEMEDOCUMENTATIONPROPERTY, m_pfnGetThemeDocumentationProperty, "GetThemeDocumentationProperty")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUDRAWTHEMEPARENTBACKGROUND, m_pfnDrawThemeParentBackground, "DrawThemeParentBackground")
-    WXU_GET_FN_PTR (m_hInstUXThemeDLL, PFNWXUENABLETHEMING, m_pfnEnableTheming, "EnableTheming")
-    m_bIsInitialized = (m_hInstUXThemeDLL != ((HINSTANCE)NULL)) ;
-    if(!m_bIsInitialized)
-    {
-        ResetFunctionPointers() ;
-    }
+    return true;
 }
 
-void wxUxThemeEngine::ResetFunctionPointers()
-{
-    m_pfnOpenThemeData = ((PFNWXUOPENTHEMEDATA)NULL) ;
-    m_pfnCloseThemeData = ((PFNWXUCLOSETHEMEDATA)NULL) ;
-    m_pfnDrawThemeBackground = ((PFNWXUDRAWTHEMEBACKGROUND)NULL) ;
-    m_pfnDrawThemeText = ((PFNWXUDRAWTHEMETEXT)NULL) ;
-    m_pfnGetThemeBackgroundContentRect = ((PFNWXUGETTHEMEBACKGROUNDCONTENTRECT)NULL) ;
-    m_pfnGetThemeBackgroundExtent = ((PFNWXUGETTHEMEBACKGROUNDEXTENT)NULL) ;
-    m_pfnGetThemePartSize = ((PFNWXUGETTHEMEPARTSIZE)NULL) ;
-    m_pfnGetThemeTextExtent = ((PFNWXUGETTHEMETEXTEXTENT)NULL) ;
-    m_pfnGetThemeTextMetrics = ((PFNWXUGETTHEMETEXTMETRICS)NULL) ;
-    m_pfnGetThemeBackgroundRegion = ((PFNWXUGETTHEMEBACKGROUNDREGION)NULL) ;
-    m_pfnHitTestThemeBackground = ((PFNWXUHITTESTTHEMEBACKGROUND)NULL) ;
-    m_pfnDrawThemeEdge = ((PFNWXUDRAWTHEMEEDGE)NULL) ;
-    m_pfnDrawThemeIcon = ((PFNWXUDRAWTHEMEICON)NULL) ;
-    m_pfnIsThemePartDefined = ((PFNWXUISTHEMEPARTDEFINED)NULL) ;
-    m_pfnIsThemeBackgroundPartiallyTransparent = ((PFNWXUISTHEMEBACKGROUNDPARTIALLYTRANSPARENT)NULL) ;
-    m_pfnGetThemeColor = ((PFNWXUGETTHEMECOLOR)NULL) ;
-    m_pfnGetThemeMetric = ((PFNWXUGETTHEMEMETRIC)NULL) ;
-    m_pfnGetThemeString = ((PFNWXUGETTHEMESTRING)NULL) ;
-    m_pfnGetThemeBool = ((PFNWXUGETTHEMEBOOL)NULL) ;
-    m_pfnGetThemeInt = ((PFNWXUGETTHEMEINT)NULL) ;
-    m_pfnGetThemeEnumValue = ((PFNWXUGETTHEMEENUMVALUE)NULL) ;
-    m_pfnGetThemePosition = ((PFNWXUGETTHEMEPOSITION)NULL) ;
-    m_pfnGetThemeFont = ((PFNWXUGETTHEMEFONT)NULL) ;
-    m_pfnGetThemeRect = ((PFNWXUGETTHEMERECT)NULL) ;
-    m_pfnGetThemeMargins = ((PFNWXUGETTHEMEMARGINS)NULL) ;
-    m_pfnGetThemeIntList = ((PFNWXUGETTHEMEINTLIST)NULL) ;
-    m_pfnGetThemePropertyOrigin = ((PFNWXUGETTHEMEPROPERTYORIGIN)NULL) ;
-    m_pfnSetWindowTheme = ((PFNWXUSETWINDOWTHEME)NULL) ;
-    m_pfnGetThemeFilename = ((PFNWXUGETTHEMEFILENAME)NULL) ;
-    m_pfnGetThemeSysColor = ((PFNWXUGETTHEMESYSCOLOR)NULL) ;
-    m_pfnGetThemeSysColorBrush = ((PFNWXUGETTHEMESYSCOLORBRUSH)NULL) ;
-    m_pfnGetThemeSysBool = ((PFNWXUGETTHEMESYSBOOL)NULL) ;
-    m_pfnGetThemeSysSize = ((PFNWXUGETTHEMESYSSIZE)NULL) ;
-    m_pfnGetThemeSysFont = ((PFNWXUGETTHEMESYSFONT)NULL) ;
-    m_pfnGetThemeSysString = ((PFNWXUGETTHEMESYSSTRING)NULL) ;
-    m_pfnGetThemeSysInt = ((PFNWXUGETTHEMESYSINT)NULL) ;
-    m_pfnIsThemeActive = ((PFNWXUISTHEMEACTIVE)NULL) ;
-    m_pfnIsAppThemed = ((PFNWXUISAPPTHEMED)NULL) ;
-    m_pfnGetWindowTheme = ((PFNWXUGETWINDOWTHEME)NULL) ;
-    m_pfnEnableThemeDialogTexture = ((PFNWXUENABLETHEMEDIALOGTEXTURE)NULL) ;
-    m_pfnIsThemeDialogTextureEnabled = ((PFNWXUISTHEMEDIALOGTEXTUREENABLED)NULL) ;
-    m_pfnGetThemeAppProperties = ((PFNWXUGETTHEMEAPPPROPERTIES)NULL) ;
-    m_pfnSetThemeAppProperties = ((PFNWXUSETTHEMEAPPPROPERTIES)NULL) ;
-    m_pfnGetCurrentThemeName = ((PFNWXUGETCURRENTTHEMENAME)NULL) ;
-    m_pfnGetThemeDocumentationProperty = ((PFNWXUGETTHEMEDOCUMENTATIONPROPERTY)NULL) ;
-    m_pfnDrawThemeParentBackground = ((PFNWXUDRAWTHEMEPARENTBACKGROUND)NULL) ;
-    m_pfnEnableTheming = ((PFNWXUENABLETHEMING)NULL) ;
-}
-
-wxUxThemeEngine::~wxUxThemeEngine()
-{
-    if(m_hInstUXThemeDLL != ((HINSTANCE)NULL))
-    {
-        ::FreeLibrary(m_hInstUXThemeDLL) ;
-    }
-    ResetFunctionPointers() ;
-}
-
-#endif
-    // wxUSE_UXTHEME
+#endif // wxUSE_UXTHEME
 
