@@ -733,13 +733,14 @@ bool wxApp::ProcessMessage(
     // Try translations first; find the youngest window with
     // a translation table.
     //
+#if 0
     for (pWnd = pWndThis; pWnd; pWnd = pWnd->GetParent() )
     {
         if (pMsg->msg == WM_CHAR)
             if (pWnd->OS2TranslateMessage(pWxmsg))
                 return TRUE;
     }
-
+#endif
     //
     // Anyone for a non-translation message? Try youngest descendants first.
     //
