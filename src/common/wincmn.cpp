@@ -589,11 +589,14 @@ wxSize wxWindowBase::DoGetBestSize() const
 
         return wxSize(maxX, maxY);
     }
-    else // has children
+    else // ! has children
     {
-        // for a generic window there is no natural best size - just use the
-        // current size
-        return GetSize();
+        // for a generic window there is no natural best size - just use either the
+        // minimum size if there is one, or the current size
+        if ( GetMinSize().IsFullySpecified() )
+            return GetMinSize();
+        else
+            return GetSize();
     }
 }
 
