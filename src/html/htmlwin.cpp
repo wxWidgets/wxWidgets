@@ -345,6 +345,12 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
 }
 
 
+bool wxHtmlWindow::LoadFile(const wxFileName& filename)
+{
+    wxString url = wxFileSystem::FileNameToURL(filename);
+    return LoadPage(url);
+}
+
 
 bool wxHtmlWindow::ScrollToAnchor(const wxString& anchor)
 {
