@@ -504,9 +504,10 @@ m_text(NULL), m_notebook(NULL)
 
     wxString choices2[] =
     {
-        "First", "Second", "Third",
-        "Fourth", "Fifth", //"Sixth",
-        //"Seventh", "Eighth", "Nineth", "Tenth"
+        "First", "Second",
+	/* "Third",
+        "Fourth", "Fifth", "Sixth",
+        "Seventh", "Eighth", "Nineth", "Tenth" */
     };
 
     panel = new wxPanel(m_notebook);

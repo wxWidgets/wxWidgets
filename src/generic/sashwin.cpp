@@ -113,7 +113,8 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
     // reset the cursor
 #ifdef __WXMOTIF__
     SetCursor(* wxSTANDARD_CURSOR);
-#else
+#endif
+#ifdef __WXMSW__
     SetCursor(wxCursor());
 #endif
 

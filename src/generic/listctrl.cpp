@@ -713,7 +713,7 @@ void wxListHeaderWindow::DoDrawRect( wxDC *dc, int x, int y, int w, int h )
 
     dc->SetPen( *wxBLACK_PEN );
     dc->DrawLine( x+w-m_corner+1, y, x+w, y+h );  // right (outer)
-    dc->DrawRectangle( x, y+h, w, 1 );            // bottom (outer)
+    dc->DrawRectangle( x, y+h, w+1, 1 );          // bottom (outer)
 
     wxPen pen( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNSHADOW ), 1, wxSOLID );
   

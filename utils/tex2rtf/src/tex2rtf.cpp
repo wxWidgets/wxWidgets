@@ -1084,6 +1084,7 @@ char *Tex2RTFConnection::OnRequest(const wxString& topic, const wxString& item, 
 
 
 #ifndef NO_GUI
+#ifndef __WXGTK__
 void wxObject::Dump(ostream& str)
 {
   if (GetClassInfo() && GetClassInfo()->GetClassName())
@@ -1091,4 +1092,5 @@ void wxObject::Dump(ostream& str)
   else
     str << "unknown object class";
 }
+#endif
 #endif
