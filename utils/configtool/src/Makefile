@@ -127,8 +127,14 @@ else
 include $(top_builddir)/src/makeprog.env
 endif
 
+# Only omit C++ libs for economy of size on Unix
+ifeq "$(WXTOOLKIT)" "msw"
+CC=c++
+CXX=c++
+else
 CC=gcc
 CXX=gcc
+endif
 
 mkbuilddir:
 	mkdir -p $(APPBUILDDIR)
