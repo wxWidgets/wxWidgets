@@ -89,7 +89,7 @@ class TestPanel(wxPanel):
         #self.tc.Remove(5, 9)
 
     def OnTestWriteText(self, evt):
-        self.tc1.WriteText("TEXT")
+        self.tc.WriteText("TEXT")
 
     def OnTestGetSelection(self, evt):
         start, end = self.tc.GetSelection()
