@@ -2132,7 +2132,7 @@ WXJPEG_OBJECTS =  &
 	$(OBJS)\wxjpeg_jquant2.obj &
 	$(OBJS)\wxjpeg_jdmerge.obj
 WXTIFF_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
-	-i=..\..\src\jpeg $(CPPFLAGS) $(CFLAGS)
+	-i=..\..\src\zlib -i=..\..\src\jpeg $(CPPFLAGS) $(CFLAGS)
 WXTIFF_OBJECTS =  &
 	$(OBJS)\wxtiff_tif_win32.obj &
 	$(OBJS)\wxtiff_tif_aux.obj &
