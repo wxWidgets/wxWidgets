@@ -139,7 +139,7 @@ class ImageDialog(wx.Dialog):
 
         self.y_pos = self.y_pos + self.delta
 
-        btn = wx.Button(self, -1, ' Set Directory ', (self.x_pos, self.y_pos), size).SetDefault()
+        btn = wx.Button(self, 12331, ' Set Directory ', (self.x_pos, self.y_pos), size)
         self.Bind(wx.EVT_BUTTON, self.SetDirect, btn)
 
         self.type_posy = self.y_pos     # save the y position for the image type combo
@@ -194,7 +194,7 @@ class ImageDialog(wx.Dialog):
 
         self.y_pos = self.y_pos + height + 20
 
-        btn = wx.Button(self, -1, ' Select ', (100, self.y_pos), size).SetDefault()
+        btn = wx.Button(self, -1, ' Select ', (100, self.y_pos), size)
         self.Bind(wx.EVT_BUTTON, self.OnOk, btn)
 
         wx.Button(self, wx.ID_CANCEL, 'Cancel', (250, self.y_pos), size)
