@@ -90,7 +90,7 @@
     #undef TEST_ALL
     static const bool TEST_ALL = TRUE;
 #else
-    #define TEST_ARRAYS
+    #define TEST_WCHAR
 
     static const bool TEST_ALL = FALSE;
 #endif
@@ -3309,20 +3309,20 @@ static void TestVCardWrite()
 #include "wx/encconv.h"
 #include "wx/buffer.h"
 
+static const char textInUtf8[] =
+{
+    208, 157, 208, 181, 209, 129, 208, 186, 208, 176, 208, 183, 208, 176,
+    208, 189, 208, 189, 208, 190, 32, 208, 191, 208, 190, 209, 128, 208,
+    176, 208, 180, 208, 190, 208, 178, 208, 176, 208, 187, 32, 208, 188,
+    208, 181, 208, 189, 209, 143, 32, 209, 129, 208, 178, 208, 190, 208,
+    181, 208, 185, 32, 208, 186, 209, 128, 209, 131, 209, 130, 208, 181,
+    208, 185, 209, 136, 208, 181, 208, 185, 32, 208, 189, 208, 190, 208,
+    178, 208, 190, 209, 129, 209, 130, 209, 140, 209, 142, 0
+};
+
 static void TestUtf8()
 {
     puts("*** Testing UTF8 support ***\n");
-
-    static const char textInUtf8[] =
-    {
-        208, 157, 208, 181, 209, 129, 208, 186, 208, 176, 208, 183, 208, 176,
-        208, 189, 208, 189, 208, 190, 32, 208, 191, 208, 190, 209, 128, 208,
-        176, 208, 180, 208, 190, 208, 178, 208, 176, 208, 187, 32, 208, 188,
-        208, 181, 208, 189, 209, 143, 32, 209, 129, 208, 178, 208, 190, 208,
-        181, 208, 185, 32, 208, 186, 209, 128, 209, 131, 209, 130, 208, 181,
-        208, 185, 209, 136, 208, 181, 208, 185, 32, 208, 189, 208, 190, 208,
-        178, 208, 190, 209, 129, 209, 130, 209, 140, 209, 142, 0
-    };
 
     char buf[1024];
     wchar_t wbuf[1024];
@@ -3332,22 +3332,49 @@ static void TestUtf8()
     }
     else
     {
-        // using wxEncodingConverter
-#if 0
-        wxEncodingConverter ec;
-        ec.Init(wxFONTENCODING_UNICODE, wxFONTENCODING_KOI8);
-        ec.Convert(wbuf, buf);
-#else // using wxCSConv
         wxCSConv conv(_T("koi8-r"));
         if ( conv.WC2MB(buf, wbuf, 0 /* not needed wcslen(wbuf) */) <= 0 )
         {
             puts("ERROR: conversion to KOI8-R failed.");
         }
         else
-#endif
-
-        printf("The resulting string (in koi8-r): %s\n", buf);
+        {
+            printf("The resulting string (in KOI8-R): %s\n", buf);
+        }
     }
+
+    if ( wxConvUTF8.WC2MB(buf, L"à la", WXSIZEOF(buf)) <= 0 )
+    {
+        puts("ERROR: conversion to UTF-8 failed.");
+    }
+    else
+    {
+        printf("The string in UTF-8: %s\n", buf);
+    }
+
+    puts("");
+}
+
+static void TestEncodingConverter()
+{
+    wxPuts(_T("*** Testing wxEncodingConverter ***\n"));
+
+    // using wxEncodingConverter should give the same result as above
+    char buf[1024];
+    wchar_t wbuf[1024];
+    if ( wxConvUTF8.MB2WC(wbuf, textInUtf8, WXSIZEOF(textInUtf8)) <= 0 )
+    {
+        puts("ERROR: UTF-8 decoding failed.");
+    }
+    else
+    {
+        wxEncodingConverter ec;
+        ec.Init(wxFONTENCODING_UNICODE, wxFONTENCODING_KOI8);
+        ec.Convert(wbuf, buf);
+        printf("The same string obtained using wxEC: %s\n", buf);
+    }
+
+    puts("");
 }
 
 #endif // TEST_WCHAR
@@ -5805,6 +5832,7 @@ int main(int argc, char **argv)
 
 #ifdef TEST_WCHAR
     TestUtf8();
+    TestEncodingConverter();
 #endif // TEST_WCHAR
 
 #ifdef TEST_ZIP
