@@ -24,7 +24,7 @@ enum    DialogModes {mView,mCreate,mEdit,mSearch};
 #define FILE_RECREATE_INDEXES 120
 #define FILE_EXIT             199
 #define EDIT_PARAMETERS       200
-#define ABOUT_DEMO            300
+#define HELP_ABOUT            300
 
 // this seems to be missing, Robert Roebling (?)
 #ifndef MAX_PATH
@@ -212,6 +212,11 @@ class DatabaseDemoApp: public wxApp
         bool             WriteParamFile(Cparameters &params);
 
         void             CreateDataTable(bool recreate);
+
+        // Pointer to the wxDbTable instance that is used to manipulate
+        // the data in memory and in the database
+        Ccontact        *Contact;
+
 };  // DatabaseDemoApp
 
 
@@ -255,10 +260,6 @@ class CeditorDlg : public wxPanel
         bool             initialized;
 
         enum DialogModes mode;
-
-        // Pointer to the wxDbTable instance that is used to manipulate
-        // the data in memory and in the database
-        Ccontact        *Contact;
 
         CeditorDlg(wxWindow *parent);
 

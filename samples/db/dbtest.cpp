@@ -312,7 +312,8 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
 
 bool DatabaseDemoApp::OnInit()
 {
-    DbConnectInf = NULL;
+    DbConnectInf    = NULL;
+    Contact         = NULL;
 
     // Create the main frame window
     DemoFrame = new DatabaseDemoFrame(NULL, wxT("wxWindows Database Demo"), wxPoint(50, 50), wxSize(537, 480));
@@ -330,13 +331,13 @@ bool DatabaseDemoApp::OnInit()
     wxMenu *edit_menu = new wxMenu;
     edit_menu->Append(EDIT_PARAMETERS, wxT("&Parameters..."));
 
-    wxMenu *about_menu = new wxMenu;
-    about_menu->Append(ABOUT_DEMO, wxT("&About"));
+    wxMenu *help_menu = new wxMenu;
+    help_menu->Append(HELP_ABOUT, wxT("&About"));
 
     wxMenuBar *menu_bar = new wxMenuBar;
     menu_bar->Append(file_menu, wxT("&File"));
     menu_bar->Append(edit_menu, wxT("&Edit"));
-    menu_bar->Append(about_menu, wxT("&About"));
+    menu_bar->Append(help_menu, wxT("&Help"));
     DemoFrame->SetMenuBar(menu_bar);
 
     params.ODBCSource[0] = 0;
@@ -360,7 +361,7 @@ bool DatabaseDemoApp::OnInit()
     if (!DbConnectInf || !DbConnectInf->GetHenv())
     {
         wxMessageBox(wxT("Unable to define data source connection info."), wxT("DB CONNECTION ERROR..."),wxOK | wxICON_EXCLAMATION);
-        delete DbConnectInf;
+        wxDELETE(DbConnectInf);
     }
 
     if (!ReadParamFile(params))
@@ -368,7 +369,7 @@ bool DatabaseDemoApp::OnInit()
 
     if (!wxStrlen(params.ODBCSource))
     {
-        delete DbConnectInf;
+        wxDELETE(DbConnectInf);
         return(FALSE);
     }
 
@@ -382,7 +383,7 @@ bool DatabaseDemoApp::OnInit()
     {
         wxMessageBox(wxT("Unable to connect to the data source.\n\nCheck the name of your data source to verify it has been correctly entered/spelled.\n\nWith some databases, the user name and password must\nbe created with full rights to the CONTACT table prior to making a connection\n(using tools provided by the database manufacturer)"), wxT("DB CONNECTION ERROR..."),wxOK | wxICON_EXCLAMATION);
         DemoFrame->BuildParameterDialog(NULL);
-        delete DbConnectInf;
+        wxDELETE(DbConnectInf);
         wxMessageBox(wxT("Now exiting program.\n\nRestart program to try any new settings."),wxT("Notice..."),wxOK | wxICON_INFORMATION);
         return(FALSE);
     }
@@ -469,16 +470,7 @@ void DatabaseDemoApp::CreateDataTable(bool recreate)
 
     bool success = TRUE;
 
-    // Use a temporary instance of a new Ccontact table object
-    // for creating the table within the datasource.
-    Ccontact *Contact = new Ccontact();
-
-    if (!Contact)
-    {
-        wxEndBusyCursor();
-        wxMessageBox(wxT("Error allocating memory for 'Ccontact'object.\n\nTable was not created."),wxT("Error..."),wxOK | wxICON_EXCLAMATION);
-        return;
-    }
+    Contact->GetDb()->RollbackTrans();  // Make sure the current cursor is in a known/stable state
 
     if (!Contact->CreateTable(recreate))
     {
@@ -504,9 +496,6 @@ void DatabaseDemoApp::CreateDataTable(bool recreate)
     while (wxIsBusy())
         wxEndBusyCursor();
 
-    delete Contact;
-    Contact = NULL;
-
     if (success)
         wxMessageBox(wxT("Table and index(es) were successfully created."),wxT("Notice..."),wxOK | wxICON_INFORMATION);
 }  // DatabaseDemoApp::CreateDataTable()
@@ -518,7 +507,7 @@ BEGIN_EVENT_TABLE(DatabaseDemoFrame, wxFrame)
     EVT_MENU(FILE_RECREATE_INDEXES, DatabaseDemoFrame::OnRecreateIndexes)
     EVT_MENU(FILE_EXIT, DatabaseDemoFrame::OnExit)
     EVT_MENU(EDIT_PARAMETERS, DatabaseDemoFrame::OnEditParameters)
-    EVT_MENU(ABOUT_DEMO, DatabaseDemoFrame::OnAbout)
+    EVT_MENU(HELP_ABOUT, DatabaseDemoFrame::OnAbout)
     EVT_CLOSE(DatabaseDemoFrame::OnCloseWindow)
 END_EVENT_TABLE()
 
@@ -548,29 +537,20 @@ void DatabaseDemoFrame::OnRecreateTable(wxCommandEvent& event)
 
 void DatabaseDemoFrame::OnRecreateIndexes(wxCommandEvent& event)
 {
-    // Using a new connection to the database so as not to disturb
-    // the current cursors on the table in use in the editor dialog
-    Ccontact *Contact = new Ccontact();
-
-    if (!Contact)
+    if (!wxGetApp().Contact->CreateIndexes())
     {
-        wxEndBusyCursor();
-        wxMessageBox(wxT("Error allocating memory for 'Ccontact'object.\n\nTable could not be opened."),wxT("Error..."),wxOK | wxICON_EXCLAMATION);
-        return;
+        while (wxIsBusy())
+            wxEndBusyCursor();
+        wxString tStr;
+        tStr  = wxT("Error creating CONTACTS indexes.\nNew indexes will be unavailable.\n\n");
+        tStr += GetExtendedDBErrorMsg(wxGetApp().Contact->GetDb(),__FILE__,__LINE__);
+        wxMessageBox(tStr,wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
     }
+	 else
+        wxMessageBox(wxT("Index(es) were successfully recreated."),wxT("Notice..."),wxOK | wxICON_INFORMATION);
 
-    if (!Contact->CreateIndexes())
-    {
-       wxEndBusyCursor();
-       wxString tStr;
-       tStr  = wxT("Error creating CONTACTS indexes.\nNew indexes will be unavailable.\n\n");
-       tStr += GetExtendedDBErrorMsg(Contact->GetDb(),__FILE__,__LINE__);
-       wxMessageBox(tStr,wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
-    }
-
-    delete Contact;
-    Contact = NULL;
 }  // DatabaseDemoFrame::OnRecreateIndexes()
+
 
 void DatabaseDemoFrame::OnExit(wxCommandEvent& event)
 {
@@ -609,6 +589,8 @@ void DatabaseDemoFrame::OnCloseWindow(wxCloseEvent& event)
         }
     }
 
+    wxDELETE(wxGetApp().Contact);
+
     // This function will close all the connections to the database that have been
     // previously cached.
     wxDbCloseConnections();
@@ -616,8 +598,7 @@ void DatabaseDemoFrame::OnCloseWindow(wxCloseEvent& event)
     // Deletion of the wxDbConnectInf instance must be the LAST thing done that
     // has anything to do with the database.  Deleting this before disconnecting,
     // freeing/closing connections, etc will result in a crash!
-    delete wxGetApp().DbConnectInf;
-    wxGetApp().DbConnectInf = NULL;
+    wxDELETE(wxGetApp().DbConnectInf);
 
     this->Destroy();
 
@@ -826,8 +807,6 @@ CeditorDlg::CeditorDlg(wxWindow *parent) : wxPanel (parent, 0, 0, 537, 480)
 
     SetMode(mView);
 
-    Contact = NULL;
-
     Show(FALSE);
 }  // CeditorDlg constructor
 
@@ -837,11 +816,6 @@ void CeditorDlg::OnCloseWindow(wxCloseEvent& event)
     // Clean up time
     if ((mode != mCreate) && (mode != mEdit))
     {
-        if (Contact)
-        {
-            delete Contact;
-            Contact = NULL;
-        }
         this->Destroy();
     }
     else
@@ -870,7 +844,7 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
 
     if (widgetName == pCreateBtn->GetName())
     {
-        Contact->Initialize();
+        wxGetApp().Contact->Initialize();
         PutData();
         SetMode( mCreate );
         pNameTxt->SetValue(wxT(""));
@@ -880,7 +854,7 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
 
     if (widgetName == pEditBtn->GetName())
     {
-        saveName = Contact->Name;
+        saveName = wxGetApp().Contact->Name;
         SetMode( mEdit );
         pNameTxt->SetFocus();
         return;
@@ -905,7 +879,7 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
         if (!Ok)
             return;
 
-        if (Ok && Contact->Delete())
+        if (Ok && wxGetApp().Contact->Delete())
         {
             // NOTE: Deletions are not finalized until a CommitTrans() is performed.  
             //       If the commit were not performed, the program will continue to 
@@ -913,7 +887,7 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
             //       of Ccontact is deleted.  If the Commit wasn't performed, the 
             //       database will automatically Rollback the changes when the database
             //       connection is terminated
-            Contact->GetDb()->CommitTrans();
+            wxGetApp().Contact->GetDb()->CommitTrans();
 
             // Try to get the row that followed the just deleted row in the orderBy sequence
             if (!GetNextRec())
@@ -923,7 +897,7 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
                 if (!GetPrevRec())
                 {
                     // There are now no rows remaining, so clear the dialog widgets
-                    Contact->Initialize();
+                    wxGetApp().Contact->Initialize();
                     PutData();
                 }
             }
@@ -931,7 +905,7 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
         }
         else
             // Delete failed
-            Contact->GetDb()->RollbackTrans();
+            wxGetApp().Contact->GetDb()->RollbackTrans();
 
         SetMode(mView);
         return;
@@ -952,7 +926,7 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
 
         if (saveName.IsEmpty())
         {
-            Contact->Initialize();
+            wxGetApp().Contact->Initialize();
             PutData();
             SetMode(mView);
             return;
@@ -960,7 +934,7 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
         else
         {
             // Requery previous record
-            if (Contact->FetchByName(saveName))
+            if (wxGetApp().Contact->FetchByName(saveName))
             {
                 PutData();
                 SetMode(mView);
@@ -969,33 +943,34 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
         }
 
         // Previous record not available, retrieve first record in table
-        if (Contact->GetDb()->Dbms() != dbmsPOSTGRES && Contact->GetDb()->Dbms() != dbmsMY_SQL)
+        if (wxGetApp().Contact->GetDb()->Dbms() != dbmsPOSTGRES &&
+            wxGetApp().Contact->GetDb()->Dbms() != dbmsMY_SQL)
         {
-            Contact->whereStr  = wxT("NAME = (SELECT MIN(NAME) FROM ");
-            Contact->whereStr += Contact->GetTableName();
-            Contact->whereStr += wxT(")");
-            Contact->SetWhereClause(Contact->whereStr.c_str());
+            wxGetApp().Contact->whereStr  = wxT("NAME = (SELECT MIN(NAME) FROM ");
+            wxGetApp().Contact->whereStr += wxGetApp().Contact->GetTableName();
+            wxGetApp().Contact->whereStr += wxT(")");
+            wxGetApp().Contact->SetWhereClause(wxGetApp().Contact->whereStr.c_str());
         }
         else
-            Contact->SetWhereClause(wxT(""));
+            wxGetApp().Contact->SetWhereClause(wxT(""));
 
-        if (!Contact->Query())
+        if (!wxGetApp().Contact->Query())
         {
             wxString tStr;
             tStr  = wxT("ODBC error during Query()\n\n");
-            tStr += GetExtendedDBErrorMsg(Contact->GetDb(),__FILE__,__LINE__);
+            tStr += GetExtendedDBErrorMsg(wxGetApp().Contact->GetDb(),__FILE__,__LINE__);
             wxMessageBox(tStr,wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
             SetMode(mView);
             return;
         }
-        if (Contact->GetNext())  // Successfully read first record
+        if (wxGetApp().Contact->GetNext())  // Successfully read first record
         {
             PutData();
             SetMode(mView);
             return;
         }
         // No contacts are available, clear dialog
-        Contact->Initialize();
+        wxGetApp().Contact->Initialize();
         PutData();
         SetMode(mView);
         return;
@@ -1019,50 +994,51 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
     {
         // Display the query dialog box
         wxChar qryWhere[DB_MAX_WHERE_CLAUSE_LEN+1];
-        wxStrcpy(qryWhere, (const wxChar*) Contact->qryWhereStr);
+        wxStrcpy(qryWhere, (const wxChar*) wxGetApp().Contact->qryWhereStr);
         wxChar *tblName[] = {(wxChar *)CONTACT_TABLE_NAME, 0};
-        new CqueryDlg(GetParent(), Contact->GetDb(), tblName, qryWhere);
+        new CqueryDlg(GetParent(), wxGetApp().Contact->GetDb(), tblName, qryWhere);
 
         // Query the first record in the new record set and
         // display it, if the query string has changed.
-        if (wxStrcmp(qryWhere, (const wxChar*) Contact->qryWhereStr))
+        if (wxStrcmp(qryWhere, (const wxChar*) wxGetApp().Contact->qryWhereStr))
         {
-            Contact->whereStr.Empty();
-            Contact->SetOrderByClause("NAME");
+            wxGetApp().Contact->whereStr.Empty();
+            wxGetApp().Contact->SetOrderByClause("NAME");
 
-            if (Contact->GetDb()->Dbms() != dbmsPOSTGRES && Contact->GetDb()->Dbms() != dbmsMY_SQL)
+            if (wxGetApp().Contact->GetDb()->Dbms() != dbmsPOSTGRES &&
+                wxGetApp().Contact->GetDb()->Dbms() != dbmsMY_SQL)
             {
-                Contact->whereStr  = wxT("NAME = (SELECT MIN(NAME) FROM ");
-                Contact->whereStr += CONTACT_TABLE_NAME;
+                wxGetApp().Contact->whereStr  = wxT("NAME = (SELECT MIN(NAME) FROM ");
+                wxGetApp().Contact->whereStr += CONTACT_TABLE_NAME;
             }
             
             // Append the query where string (if there is one)
-            Contact->qryWhereStr  = qryWhere;
+            wxGetApp().Contact->qryWhereStr  = qryWhere;
             if (wxStrlen(qryWhere))
             {
-                Contact->whereStr += wxT(" WHERE ");
-                Contact->whereStr += Contact->qryWhereStr;
+                wxGetApp().Contact->whereStr += wxT(" WHERE ");
+                wxGetApp().Contact->whereStr += wxGetApp().Contact->qryWhereStr;
             }
             // Close the expression with a right paren
-            Contact->whereStr += wxT(")");
+            wxGetApp().Contact->whereStr += wxT(")");
             // Requery the table
-            Contact->SetWhereClause(Contact->whereStr.c_str());
-            if (!Contact->Query())
+            wxGetApp().Contact->SetWhereClause(wxGetApp().Contact->whereStr.c_str());
+            if (!wxGetApp().Contact->Query())
             {
                 wxString tStr;
                 tStr  = wxT("ODBC error during Query()\n\n");
-                tStr += GetExtendedDBErrorMsg(Contact->GetDb(),__FILE__,__LINE__);
+                tStr += GetExtendedDBErrorMsg(wxGetApp().Contact->GetDb(),__FILE__,__LINE__);
                 wxMessageBox(tStr,wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
                 return;
             }
             // Display the first record from the query set
-            if (!Contact->GetNext())
-                Contact->Initialize();
+            if (!wxGetApp().Contact->GetNext())
+                wxGetApp().Contact->Initialize();
             PutData();
         }
 
         // Enable/Disable the reset button
-        pResetBtn->Enable(!Contact->qryWhereStr.IsEmpty());
+        pResetBtn->Enable(!wxGetApp().Contact->qryWhereStr.IsEmpty());
 
         return;
     }  // Query button
@@ -1071,27 +1047,28 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
     if (widgetName == pResetBtn->GetName())
     {
         // Clear the additional where criteria established by the query feature
-        Contact->qryWhereStr = wxT("");
-        Contact->SetOrderByClause(wxT("NAME"));
+        wxGetApp().Contact->qryWhereStr = wxT("");
+        wxGetApp().Contact->SetOrderByClause(wxT("NAME"));
 
-        if (Contact->GetDb()->Dbms() != dbmsPOSTGRES && Contact->GetDb()->Dbms() != dbmsMY_SQL)
+        if (wxGetApp().Contact->GetDb()->Dbms() != dbmsPOSTGRES &&
+            wxGetApp().Contact->GetDb()->Dbms() != dbmsMY_SQL)
         {
-            Contact->whereStr  = wxT("NAME = (SELECT MIN(NAME) FROM ");
-            Contact->whereStr += CONTACT_TABLE_NAME;
-            Contact->whereStr += wxT(")");
+            wxGetApp().Contact->whereStr  = wxT("NAME = (SELECT MIN(NAME) FROM ");
+            wxGetApp().Contact->whereStr += CONTACT_TABLE_NAME;
+            wxGetApp().Contact->whereStr += wxT(")");
         }
 
-        Contact->SetWhereClause(Contact->whereStr.c_str());
-        if (!Contact->Query())
+        wxGetApp().Contact->SetWhereClause(wxGetApp().Contact->whereStr.c_str());
+        if (!wxGetApp().Contact->Query())
         {
             wxString tStr;
             tStr  = wxT("ODBC error during Query()\n\n");
-            tStr += GetExtendedDBErrorMsg(Contact->GetDb(),__FILE__,__LINE__);
+            tStr += GetExtendedDBErrorMsg(wxGetApp().Contact->GetDb(),__FILE__,__LINE__);
             wxMessageBox(tStr,wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
             return;
         }
-        if (!Contact->GetNext())
-            Contact->Initialize();
+        if (!wxGetApp().Contact->GetNext())
+            wxGetApp().Contact->Initialize();
         PutData();
         pResetBtn->Enable(FALSE);
 
@@ -1130,9 +1107,9 @@ bool CeditorDlg::Initialize()
     // Create the data structure and a new database connection.  
     // (As there is not a pDb being passed in the constructor, a new database
     // connection is created)
-    Contact = new Ccontact();
+    wxGetApp().Contact = new Ccontact();
 
-    if (!Contact)
+    if (!wxGetApp().Contact)
     {
         wxMessageBox(wxT("Unable to instantiate an instance of Ccontact"),wxT("Error..."),wxOK | wxICON_EXCLAMATION);
         return FALSE;
@@ -1140,13 +1117,13 @@ bool CeditorDlg::Initialize()
 
     // Check if the table exists or not.  If it doesn't, ask the user if they want to 
     // create the table.  Continue trying to create the table until it exists, or user aborts
-    while (!Contact->GetDb()->TableExists((wxChar *)CONTACT_TABLE_NAME, 
+    while (!wxGetApp().Contact->GetDb()->TableExists((wxChar *)CONTACT_TABLE_NAME, 
                                           wxGetApp().DbConnectInf->GetUserID(), 
                                           wxGetApp().DbConnectInf->GetDefaultDir()))
     {
         wxString tStr;
         tStr.Printf(wxT("Unable to open the table '%s'.\n\nTable may need to be created...?\n\n"),CONTACT_TABLE_NAME);
-        tStr += GetExtendedDBErrorMsg(Contact->GetDb(),__FILE__,__LINE__);
+        tStr += GetExtendedDBErrorMsg(wxGetApp().Contact->GetDb(),__FILE__,__LINE__);
         wxMessageBox(tStr,wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
 
         bool createTable = (wxMessageBox(wxT("Do you wish to try to create/clear the CONTACTS table?"),wxT("Confirm"),wxYES_NO|wxICON_QUESTION) == wxYES);
@@ -1161,7 +1138,7 @@ bool CeditorDlg::Initialize()
     }
 
     // Tables must be "opened" before anything other than creating/deleting table can be done
-    if (!Contact->Open())
+    if (!wxGetApp().Contact->Open())
     {
         // Table does exist, or there was some problem opening it.  Currently this should
         // never fail, except in the case of the table not exisiting or the current
@@ -1171,25 +1148,25 @@ bool CeditorDlg::Initialize()
 // in the 2.4 release.  This check will determine whether the open failing was due
 // to the table not existing, or the users privileges being insufficient to
 // open the table.
-        if (!Contact->GetDb()->TablePrivileges(CONTACT_TABLE_NAME, wxT("SELECT"),
-                                               Contact->GetDb()->GetUsername(),
-															  Contact->GetDb()->GetUsername(),
-															  wxGetApp().DbConnectInf->GetDefaultDir()))
+        if (!wxGetApp().Contact->GetDb()->TablePrivileges(CONTACT_TABLE_NAME, wxT("SELECT"),
+                                                wxGetApp().Contact->GetDb()->GetUsername(),
+						                        wxGetApp().Contact->GetDb()->GetUsername(),
+												wxGetApp().DbConnectInf->GetDefaultDir()))
         {
             wxString tStr;
             tStr.Printf(wxT("Unable to open the table '%s' (likely due to\ninsufficient privileges of the logged in user).\n\n"),CONTACT_TABLE_NAME);
-            tStr += GetExtendedDBErrorMsg(Contact->GetDb(),__FILE__,__LINE__);
+            tStr += GetExtendedDBErrorMsg(wxGetApp().Contact->GetDb(),__FILE__,__LINE__);
             wxMessageBox(tStr,wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
         }
         else 
 #endif
-        if (!Contact->GetDb()->TableExists(CONTACT_TABLE_NAME,
-                                           Contact->GetDb()->GetUsername(),
+        if (!wxGetApp().Contact->GetDb()->TableExists(CONTACT_TABLE_NAME,
+                                           wxGetApp().Contact->GetDb()->GetUsername(),
                                            wxGetApp().DbConnectInf->GetDefaultDir()))
         {
             wxString tStr;
             tStr.Printf(wxT("Unable to open the table '%s' as the table\ndoes not appear to exist in the tablespace available\nto the currently logged in user.\n\n"),CONTACT_TABLE_NAME);
-            tStr += GetExtendedDBErrorMsg(Contact->GetDb(),__FILE__,__LINE__);
+            tStr += GetExtendedDBErrorMsg(wxGetApp().Contact->GetDb(),__FILE__,__LINE__);
             wxMessageBox(tStr,wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
         }
 
@@ -1256,7 +1233,7 @@ bool CeditorDlg::Initialize()
     // as there will only be one record being shown on the dialog at a time, this optimizes
     // network traffic by only returning a one row result
     
-    Contact->SetOrderByClause(wxT("NAME"));  // field name to sort by
+    wxGetApp().Contact->SetOrderByClause(wxT("NAME"));  // field name to sort by
 
     // The wxString "whereStr" is not a member of the wxDbTable object, it is a member variable
     // specifically in the Ccontact class.  It is used here for simpler construction of a varying
@@ -1266,35 +1243,38 @@ bool CeditorDlg::Initialize()
     // The constructed where clause below has a sub-query within it "SELECT MIN(NAME) FROM %s" 
     // to achieve a single row (in this case the first name in alphabetical order).
     
-    if (Contact->GetDb()->Dbms() != dbmsPOSTGRES && Contact->GetDb()->Dbms() != dbmsMY_SQL)
+    if (wxGetApp().Contact->GetDb()->Dbms() != dbmsPOSTGRES &&
+        wxGetApp().Contact->GetDb()->Dbms() != dbmsMY_SQL)
     {
-        Contact->whereStr.Printf(wxT("NAME = (SELECT MIN(NAME) FROM %s)"),Contact->GetTableName().c_str());
+        wxGetApp().Contact->whereStr.Printf(wxT("NAME = (SELECT MIN(NAME) FROM %s)"),
+                                            wxGetApp().Contact->GetTableName().c_str());
         // NOTE: (const wxChar*) returns a pointer which may not be valid later, so this is short term use only
-        Contact->SetWhereClause(Contact->whereStr);
+        wxGetApp().Contact->SetWhereClause(wxGetApp().Contact->whereStr);
     }
     else
-       Contact->SetWhereClause(wxT(""));
+       wxGetApp().Contact->SetWhereClause(wxT(""));
 
     // Perform the Query to get the result set.  
     // NOTE: If there are no rows returned, that is a valid result, so Query() would return TRUE.  
     //       Only if there is a database error will Query() come back as FALSE
-    if (!Contact->Query())
+    if (!wxGetApp().Contact->Query())
     {
         wxString tStr;
         tStr  = wxT("ODBC error during Query()\n\n");
-        tStr += GetExtendedDBErrorMsg(Contact->GetDb(),__FILE__,__LINE__);
+        tStr += GetExtendedDBErrorMsg(wxGetApp().Contact->GetDb(),__FILE__,__LINE__);
         wxMessageBox(tStr,wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
-//        GetParent()->Close();
         return FALSE;
     }
 
     // Since Query succeeded, now get the row that was returned
-    if (!Contact->GetNext())
+    if (!wxGetApp().Contact->GetNext())
         // If the GetNext() failed at this point, then there are no rows to retrieve, 
         // so clear the values in the members of "Contact" so that PutData() blanks the 
         // widgets on the dialog
-        Contact->Initialize();
-
+        wxGetApp().Contact->Initialize();
+/*
+    wxGetApp().Contact->GetDb()->RollbackTrans();
+*/
     SetMode(mView);
     PutData();
 
@@ -1349,15 +1329,15 @@ void CeditorDlg::SetMode(enum DialogModes m)
     if (widgetPtrsSet)
     {
         pCreateBtn->Enable( !edit );
-        pEditBtn->Enable( !edit && (wxStrcmp(Contact->Name,wxT(""))!=0) );
-        pDeleteBtn->Enable( !edit && (wxStrcmp(Contact->Name,wxT(""))!=0) );
-        pCopyBtn->Enable( !edit && (wxStrcmp(Contact->Name,wxT(""))!=0) );
+        pEditBtn->Enable( !edit && (wxStrcmp(wxGetApp().Contact->Name,wxT(""))!=0) );
+        pDeleteBtn->Enable( !edit && (wxStrcmp(wxGetApp().Contact->Name,wxT(""))!=0) );
+        pCopyBtn->Enable( !edit && (wxStrcmp(wxGetApp().Contact->Name,wxT(""))!=0) );
         pSaveBtn->Enable( edit );
         pCancelBtn->Enable( edit );
         pPrevBtn->Enable( !edit );
         pNextBtn->Enable( !edit );
         pQueryBtn->Enable( !edit );
-        pResetBtn->Enable( !edit && !Contact->qryWhereStr.IsEmpty() );
+        pResetBtn->Enable( !edit && !wxGetApp().Contact->qryWhereStr.IsEmpty() );
         pNameListBtn->Enable( !edit );
     }
 
@@ -1369,26 +1349,26 @@ bool CeditorDlg::PutData()
 {
     wxString tStr;
 
-    pNameTxt->SetValue(Contact->Name);
-    pAddress1Txt->SetValue(Contact->Addr1);
-    pAddress2Txt->SetValue(Contact->Addr2);
-    pCityTxt->SetValue(Contact->City);
-    pStateTxt->SetValue(Contact->State);
-    pCountryTxt->SetValue(Contact->Country);
-    pPostalCodeTxt->SetValue(Contact->PostalCode);
+    pNameTxt->SetValue(wxGetApp().Contact->Name);
+    pAddress1Txt->SetValue(wxGetApp().Contact->Addr1);
+    pAddress2Txt->SetValue(wxGetApp().Contact->Addr2);
+    pCityTxt->SetValue(wxGetApp().Contact->City);
+    pStateTxt->SetValue(wxGetApp().Contact->State);
+    pCountryTxt->SetValue(wxGetApp().Contact->Country);
+    pPostalCodeTxt->SetValue(wxGetApp().Contact->PostalCode);
 
-    tStr.Printf(wxT("%d/%d/%d"),Contact->JoinDate.month,Contact->JoinDate.day,Contact->JoinDate.year);
+    tStr.Printf(wxT("%d/%d/%d"),wxGetApp().Contact->JoinDate.month,wxGetApp().Contact->JoinDate.day,wxGetApp().Contact->JoinDate.year);
     pJoinDateTxt->SetValue(tStr);
 
-    tStr.Printf(wxT("%d"),Contact->Contributions);
+    tStr.Printf(wxT("%d"),wxGetApp().Contact->Contributions);
     pContribTxt->SetValue(tStr);
 
-    tStr.Printf(wxT("%lu"),Contact->LinesOfCode);
+    tStr.Printf(wxT("%lu"),wxGetApp().Contact->LinesOfCode);
     pLinesTxt->SetValue(tStr);
 
-    pNativeLangChoice->SetSelection(Contact->NativeLanguage);
+    pNativeLangChoice->SetSelection(wxGetApp().Contact->NativeLanguage);
 
-    pDeveloperRadio->SetSelection(Contact->IsDeveloper);
+    pDeveloperRadio->SetSelection(wxGetApp().Contact->IsDeveloper);
 
     return TRUE;
 }  // Ceditor::PutData()
@@ -1469,9 +1449,9 @@ bool CeditorDlg::GetData()
 
     if (!invalid)
     {
-        Contact->JoinDate.month = mm;
-        Contact->JoinDate.day   = dd;
-        Contact->JoinDate.year  = yyyy;
+        wxGetApp().Contact->JoinDate.month = mm;
+        wxGetApp().Contact->JoinDate.day   = dd;
+        wxGetApp().Contact->JoinDate.year  = yyyy;
     }
     else
     {
@@ -1480,19 +1460,19 @@ bool CeditorDlg::GetData()
     }
 
     tStr = pNameTxt->GetValue();
-    wxStrcpy(Contact->Name,(const wxChar*) tStr);
-    wxStrcpy(Contact->Addr1,pAddress1Txt->GetValue());
-    wxStrcpy(Contact->Addr2,pAddress2Txt->GetValue());
-    wxStrcpy(Contact->City,pCityTxt->GetValue());
-    wxStrcpy(Contact->State,pStateTxt->GetValue());
-    wxStrcpy(Contact->Country,pCountryTxt->GetValue());
-    wxStrcpy(Contact->PostalCode,pPostalCodeTxt->GetValue());
+    wxStrcpy(wxGetApp().Contact->Name,(const wxChar*) tStr);
+    wxStrcpy(wxGetApp().Contact->Addr1,pAddress1Txt->GetValue());
+    wxStrcpy(wxGetApp().Contact->Addr2,pAddress2Txt->GetValue());
+    wxStrcpy(wxGetApp().Contact->City,pCityTxt->GetValue());
+    wxStrcpy(wxGetApp().Contact->State,pStateTxt->GetValue());
+    wxStrcpy(wxGetApp().Contact->Country,pCountryTxt->GetValue());
+    wxStrcpy(wxGetApp().Contact->PostalCode,pPostalCodeTxt->GetValue());
 
-    Contact->Contributions = atoi(pContribTxt->GetValue());
-    Contact->LinesOfCode = atol(pLinesTxt->GetValue());
+    wxGetApp().Contact->Contributions = atoi(pContribTxt->GetValue());
+    wxGetApp().Contact->LinesOfCode = atol(pLinesTxt->GetValue());
 
-    Contact->NativeLanguage = (enum Language) pNativeLangChoice->GetSelection();
-    Contact->IsDeveloper = pDeveloperRadio->GetSelection() > 0;
+    wxGetApp().Contact->NativeLanguage = (enum Language) pNativeLangChoice->GetSelection();
+    wxGetApp().Contact->IsDeveloper = pDeveloperRadio->GetSelection() > 0;
 
     return TRUE;
 }  // CeditorDlg::GetData()
@@ -1522,7 +1502,7 @@ bool CeditorDlg::Save()
 
         if (mode == mCreate)
         {
-            RETCODE result = Contact->Insert();
+            RETCODE result = wxGetApp().Contact->Insert();
 
             failed = (result != DB_SUCCESS);
             if (failed)
@@ -1533,7 +1513,7 @@ bool CeditorDlg::Save()
                 {
                     wxString tStr;
                     tStr  = wxT("A duplicate key value already exists in the table.\nUnable to save record\n\n");
-                    tStr += GetExtendedDBErrorMsg(Contact->GetDb(),__FILE__,__LINE__);
+                    tStr += GetExtendedDBErrorMsg(wxGetApp().Contact->GetDb(),__FILE__,__LINE__);
                     wxMessageBox(tStr,wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
                 }
                 else
@@ -1541,19 +1521,19 @@ bool CeditorDlg::Save()
                     // Some other unexpexted error occurred
                     wxString tStr;
                     tStr  = wxT("Database insert failed\n\n");
-                    tStr += GetExtendedDBErrorMsg(Contact->GetDb(),__FILE__,__LINE__);
+                    tStr += GetExtendedDBErrorMsg(wxGetApp().Contact->GetDb(),__FILE__,__LINE__);
                     wxMessageBox(tStr,wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
                 }
             }
         }
         else  // mode == mEdit
         {
-            Contact->whereStr.Printf("NAME = '%s'",saveName.c_str());
-            if (!Contact->UpdateWhere(Contact->whereStr))
+            wxGetApp().Contact->whereStr.Printf("NAME = '%s'",saveName.c_str());
+            if (!wxGetApp().Contact->UpdateWhere(wxGetApp().Contact->whereStr))
             {
                 wxString tStr;
                 tStr  = wxT("Database update failed\n\n");
-                tStr += GetExtendedDBErrorMsg(Contact->GetDb(),__FILE__,__LINE__);
+                tStr += GetExtendedDBErrorMsg(wxGetApp().Contact->GetDb(),__FILE__,__LINE__);
                 wxMessageBox(tStr,wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
                 failed = TRUE;
             }
@@ -1561,11 +1541,11 @@ bool CeditorDlg::Save()
 
         if (!failed)
         {
-            Contact->GetDb()->CommitTrans();
+            wxGetApp().Contact->GetDb()->CommitTrans();
             SetMode(mView);  // Sets the dialog mode back to viewing after save is successful
         }
         else
-            Contact->GetDb()->RollbackTrans();
+            wxGetApp().Contact->GetDb()->RollbackTrans();
 
         wxEndBusyCursor();
     }
@@ -1583,23 +1563,24 @@ bool CeditorDlg::GetNextRec()
 {
     wxString w;
 
-    if (Contact->GetDb()->Dbms() != dbmsPOSTGRES && Contact->GetDb()->Dbms() != dbmsMY_SQL)
+    if (wxGetApp().Contact->GetDb()->Dbms() != dbmsPOSTGRES &&
+        wxGetApp().Contact->GetDb()->Dbms() != dbmsMY_SQL)
     {
         w  = wxT("NAME = (SELECT MIN(NAME) FROM ");
-        w += Contact->GetTableName();
+        w += wxGetApp().Contact->GetTableName();
         w += wxT(" WHERE NAME > '");
     }
     else
         w = wxT("(NAME > '");
 
-    w += Contact->Name;
+    w += wxGetApp().Contact->Name;
     w += wxT("'");
 
     // If a query where string is currently set, append that criteria
-    if (!Contact->qryWhereStr.IsEmpty())
+    if (!wxGetApp().Contact->qryWhereStr.IsEmpty())
     {
         w += wxT(" AND (");
-        w += Contact->qryWhereStr;
+        w += wxGetApp().Contact->qryWhereStr;
         w += wxT(")");
     }
 
@@ -1618,23 +1599,24 @@ bool CeditorDlg::GetPrevRec()
 {
     wxString w;
 
-    if (Contact->GetDb()->Dbms() != dbmsPOSTGRES && Contact->GetDb()->Dbms() != dbmsMY_SQL)
+    if (wxGetApp().Contact->GetDb()->Dbms() != dbmsPOSTGRES &&
+        wxGetApp().Contact->GetDb()->Dbms() != dbmsMY_SQL)
     {
         w  = wxT("NAME = (SELECT MAX(NAME) FROM ");
-        w += Contact->GetTableName();
+        w += wxGetApp().Contact->GetTableName();
         w += wxT(" WHERE NAME < '");
     }
     else
         w = wxT("(NAME < '");
 
-    w += Contact->Name;
+    w += wxGetApp().Contact->Name;
     w += wxT("'");
 
     // If a query where string is currently set, append that criteria
-    if (!Contact->qryWhereStr.IsEmpty())
+    if (!wxGetApp().Contact->qryWhereStr.IsEmpty())
     {
         w += wxT(" AND (");
-        w += Contact->qryWhereStr;
+        w += wxGetApp().Contact->qryWhereStr;
         w += wxT(")");
     }
 
@@ -1651,20 +1633,20 @@ bool CeditorDlg::GetPrevRec()
  */
 bool CeditorDlg::GetRec(const wxString &whereStr)
 {
-    Contact->SetWhereClause(whereStr);
-    Contact->SetOrderByClause(wxT("NAME"));
+    wxGetApp().Contact->SetWhereClause(whereStr);
+    wxGetApp().Contact->SetOrderByClause(wxT("NAME"));
 
-    if (!Contact->Query())
+    if (!wxGetApp().Contact->Query())
     {
         wxString tStr;
         tStr  = wxT("ODBC error during Query()\n\n");
-        tStr += GetExtendedDBErrorMsg(Contact->GetDb(),__FILE__,__LINE__);
+        tStr += GetExtendedDBErrorMsg(wxGetApp().Contact->GetDb(),__FILE__,__LINE__);
         wxMessageBox(tStr,wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
 
         return(FALSE);
     }
 
-    if (Contact->GetNext())
+    if (wxGetApp().Contact->GetNext())
     {
         PutData();
         return(TRUE);
@@ -1886,7 +1868,7 @@ void CparameterDlg::FillDataSourceList()
     for (i = 0; wxStrlen(p[i]); i++)
         pParamODBCSourceList->Append(p[i]);
 
-    delete [] p;
+    wxDELETEA(p);
 }  // CparameterDlg::FillDataSourceList()
 
 
@@ -2228,17 +2210,9 @@ void CqueryDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
 void CqueryDlg::OnCloseWindow(wxCloseEvent& event)
 {
     // Clean up
-    if (colInf)
-    {
-        delete [] colInf;
-        colInf = 0;
-    }
+    wxDELETEA(colInf);
 
-    if (dbTable)
-    {
-        delete dbTable;
-        dbTable = 0;
-    }
+    wxDELETE(dbTable);
 
     GetParent()->SetFocus();
     while (wxIsBusy())
