@@ -1,0 +1,21 @@
+#
+# File:         makefile.g95
+# Author:       Julian Smart
+# Created:      1999
+# Updated:
+# Copyright:    (c) Julian Smart, 1999
+#
+# Makefile for wxWindows FL library Cygwin/Mingw32).
+
+WXDIR = ../../..
+
+LIBTARGET=$(WXDIR)/lib/libfl.a
+
+OBJECTS = antiflickpl.o bardragpl.o barhintspl.o cbcustom.o\
+ cbstore.o controlarea.o controlbar.o dyntbar.o dyntbarhnd.o\
+ frmview.o garbagec.o gcupdatesmgr.o hintanimpl.o newbmpbtn.o\
+ objstore.o panedrawpl.o pf_sample.o rowdragpl.o rowlayoutpl.o\
+ settingsdlg.o toolwnd.o updatesmgr.o wxinfo.o
+
+include $(WXDIR)/src/makelib.g95
+
