@@ -490,7 +490,9 @@ wxNamedColor = wxNamedColour
 
 wxPyDefaultPosition.Set(-1,-1)
 wxPyDefaultSize.Set(-1,-1)
-
+# aliases so that C++ documentation applies:
+wxDefaultPosition = wxPyDefaultPosition
+wxDefaultSize = wxPyDefaultSize
 #----------------------------------------------------------------------
 
 ## class wxPyStdOutWindow(wxFrame):
@@ -558,7 +560,12 @@ class wxApp(wxPyApp):
 #----------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.8  1999/01/29 21:13:42  HH
+# Added aliases for wxDefaultPosition and wxDefaultSize (from wxPy..) in _extras,
+# so that C++ documentation applies.
+#
 # Revision 1.7  1998/11/25 08:45:21  RD
+#
 # Added wxPalette, wxRegion, wxRegionIterator, wxTaskbarIcon
 # Added events for wxGrid
 # Other various fixes and additions
