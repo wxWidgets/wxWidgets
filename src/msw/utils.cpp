@@ -273,7 +273,7 @@ wxShell(const wxString& command)
 }
 
 // Get free memory in bytes, or -1 if cannot determine amount (e.g. on UNIX)
-long wxGetFreeMemory(void)
+long wxGetFreeMemory()
 {
 #if defined(__WIN32__) && !defined(__BORLANDC__) && !defined(__TWIN32__)
   MEMORYSTATUS memStatus;
@@ -290,7 +290,7 @@ static bool inTimer = FALSE;
 class wxSleepTimer: public wxTimer
 {
  public:
-  inline void Notify(void)
+  inline void Notify()
   {
     inTimer = FALSE;
     Stop();
@@ -321,7 +321,7 @@ void wxSleep(int nSecs)
 }
 
 // Consume all events until no more left
-void wxFlushEvents(void)
+void wxFlushEvents()
 {
 //  wxYield();
 }
@@ -360,7 +360,7 @@ void wxFatalError(const wxString& msg, const wxString& title)
 }
 
 // Emit a beeeeeep
-void wxBell(void)
+void wxBell()
 {
     // Removed by RD because IHMO syncronous sound is a Bad Thing.  MessageBeep
     // will do a similar thing anyway if there is no sound card...
@@ -512,44 +512,47 @@ bool wxGetResource(const wxString& section, const wxString& entry, int *value, c
 }
 #endif // wxUSE_RESOURCES
 
-// Old cursor
-static HCURSOR wxBusyCursorOld = 0;
-static int wxBusyCursorCount = 0;
+// ---------------------------------------------------------------------------
+// helper functiosn for showing a "busy" cursor
+// ---------------------------------------------------------------------------
+
+extern HCURSOR gs_wxBusyCursor = 0;     // new, busy cursor
+static HCURSOR gs_wxBusyCursorOld = 0;  // old cursor
+static int gs_wxBusyCursorCount = 0;
 
 // Set the cursor to the busy cursor for all windows
 void wxBeginBusyCursor(wxCursor *cursor)
 {
-  wxBusyCursorCount ++;
-  if (wxBusyCursorCount == 1)
-  {
-    wxBusyCursorOld = ::SetCursor((HCURSOR) cursor->GetHCURSOR());
-  }
-  else
-  {
-    (void)::SetCursor((HCURSOR) cursor->GetHCURSOR());
-  }
+    if ( gs_wxBusyCursorCount++ == 0 )
+    {
+        gs_wxBusyCursor = (HCURSOR)cursor->GetHCURSOR();
+        gs_wxBusyCursorOld = ::SetCursor(gs_wxBusyCursor);
+    }
+    //else: nothing to do, already set
 }
 
 // Restore cursor to normal
-void wxEndBusyCursor(void)
+void wxEndBusyCursor()
 {
-  if (wxBusyCursorCount == 0)
-    return;
+    wxCHECK_RET( gs_wxBusyCursorCount > 0,
+                 "no matching wxBeginBusyCursor() for wxEndBusyCursor()" );
 
-  wxBusyCursorCount --;
-  if (wxBusyCursorCount == 0)
-  {
-    ::SetCursor(wxBusyCursorOld);
-    wxBusyCursorOld = 0;
-  }
+    gs_wxBusyCursorCount--;
+    if ( --gs_wxBusyCursorCount == 0 )
+    {
+        ::SetCursor(gs_wxBusyCursorOld);
+
+        gs_wxBusyCursorOld = 0;
+    }
 }
 
 // TRUE if we're between the above two calls
-bool wxIsBusy(void)
+bool wxIsBusy()
 {
-  return (wxBusyCursorCount > 0);
+  return (gs_wxBusyCursorCount > 0);
 }
 
+// ---------------------------------------------------------------------------
 const char* wxGetHomeDir(wxString *pstr)
 {
   wxString& strDir = *pstr;
@@ -652,7 +655,8 @@ bool wxCheckForInterrupt(wxWindow *wnd)
     return TRUE;//*** temporary?
   }
   else{
-    wxError("wnd==NULL !!!");
+    wxFAIL_MSG("wnd==NULL !!!");
+
     return FALSE;//*** temporary?
   }
 }
@@ -706,7 +710,7 @@ void wxGetMousePosition( int* x, int* y )
 };
 
 // Return TRUE if we have a colour display
-bool wxColourDisplay(void)
+bool wxColourDisplay()
 {
   HDC dc = ::GetDC((HWND) NULL);
   bool flag;
@@ -720,7 +724,7 @@ bool wxColourDisplay(void)
 }
 
 // Returns depth of screen
-int wxDisplayDepth(void)
+int wxDisplayDepth()
 {
   HDC dc = ::GetDC((HWND) NULL);
   int planes = GetDeviceCaps(dc, PLANES);

@@ -231,6 +231,8 @@ void wxWindow::SetHWND(WXHWND hWnd)
 
 void wxWindow::Init()
 {
+    m_isWindow = TRUE;
+
     // Generic
     m_windowId = 0;
     m_isShown = TRUE;
@@ -1482,6 +1484,20 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 
     case WM_GETDLGCODE:
         return MSWGetDlgCode();
+
+    case WM_SETCURSOR:
+        if ( wxIsBusy() )
+        {
+            extern HCURSOR gs_wxBusyCursor; // from msw\utils.cpp
+
+            ::SetCursor(gs_wxBusyCursor);
+
+            // returning TRUE stops the DefWindowProc() from further processing
+            // this message - exactly what we need because we've just set the
+            // cursor
+            return TRUE;
+        }
+        break;  // leave it to DefWindowProc()
 
     default:
         return MSWDefWindowProc(message, wParam, lParam );
