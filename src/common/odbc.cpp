@@ -23,7 +23,11 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_ODBC
+// this code is old and shouldn't be used - use the new ODBC classes in db.cpp
+// and dbtable.cpp instead
+#define wxUSE_OLD_ODBC 0
+
+#if wxUSE_OLD_ODBC
 
 #ifdef __VISUALC__
     #pragma warning(disable:4706)   // assignment within conditional expression
@@ -1835,4 +1839,4 @@ bool wxQueryField::IsDirty(void) {
     #pragma warning(default:4706)   // assignment within conditional expression
 #endif // VC++
 
-#endif // wxUSE_ODBC
+#endif // wxUSE_OLD_ODBC
