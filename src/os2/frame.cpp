@@ -490,7 +490,7 @@ wxStatusBar* wxFrame::OnCreateStatusBar(
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
         wxLogError("Error setting parent for statusbar. Error: %s\n", sError);
-//      return NULL;
+        return NULL;
     }
 
     //

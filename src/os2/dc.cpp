@@ -370,9 +370,39 @@ void wxDC::SetPalette(const wxPalette& palette)
    // TODO
 }
 
-void wxDC::SetFont(const wxFont& font)
+void wxDC::SetFont(
+  const wxFont&                     rFont
+)
 {
-   // TODO
+    //
+    // Set the old object temporarily, in case the assignment deletes an object
+    // that's not yet selected out.
+    //
+    if (m_hOldFont)
+    {
+//        ::SelectObject(GetHdc(), (HFONT) m_hOldFont);
+        m_hOldFont = 0;
+    }
+
+    m_font = rFont;
+
+    if (!rFont.Ok())
+    {
+        if (m_hOldFont)
+//            ::SelectObject(GetHdc(), (HFONT) m_hOldFont);
+        m_hOldFont = 0;
+    }
+
+    if (m_font.Ok() && m_font.GetResourceHandle())
+    {
+        HFONT                       hFont = (HFONT)0; //::SelectObject(GetHdc(), (HFONT) m_font.GetResourceHandle());
+        if (hFont == (HFONT) NULL)
+        {
+            wxLogDebug(wxT("::SelectObject failed in wxDC::SetFont."));
+        }
+        if (!m_hOldFont)
+            m_hOldFont = (WXHFONT) hFont;
+    }
 }
 
 void wxDC::SetPen(const wxPen& pen)
