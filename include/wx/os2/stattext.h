@@ -20,7 +20,7 @@
 
 WXDLLEXPORT_DATA(extern const char*) wxStaticTextNameStr;
 
-class WXDLLEXPORT wxStaticText : public wxControl
+class WXDLLEXPORT wxStaticText : public wxStaticTextBase
 {
 public:
     inline wxStaticText() { }
@@ -48,8 +48,8 @@ public:
     //
     // Accessors
     //
-    void SetLabel(const wxString&);
-    bool SetFont(const wxFont &rFont);
+    virtual void SetLabel(const wxString& rsLabel);
+    virtual bool SetFont(const wxFont &rFont);
 
     //
     // Overriden base class virtuals
@@ -65,6 +65,12 @@ public:
                                  );
 
 protected:
+    virtual void   DoSetSize( int nX
+                             ,int nY
+                             ,int nWidth
+                             ,int nHeight
+                             ,int nSizeFlags = wxSIZE_AUTO
+                            );
     virtual wxSize DoGetBestSize(void) const;
 
 private:

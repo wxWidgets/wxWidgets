@@ -252,9 +252,6 @@
 
 #define wxUSE_SERIAL        1
                                   // Use serialization (requires utils/serialize)
-#define wxUSE_DYNLIB_CLASS  1
-                                  // Compile in wxLibrary class for run-time
-                                  // DLL loading and function calling
 #define wxUSE_TOOLTIPS      1
                                   // Define to use wxToolTip class and
                                   // wxWindow::SetToolTip() method
@@ -378,6 +375,11 @@
 
 #define wxUSE_UNICODE      0
 #define wxUSE_UNICODE_MSLU 0
+
+#define wxUSE_DYNLIB_CLASS  1
+                                  // Compile in wxLibrary class for run-time
+                                  // DLL loading and function calling
+#define wxUSE_DYNAMIC_LOADER 0
 
 #endif
     // _WX_SETUP_H_
