@@ -170,6 +170,19 @@ public:
     int GetWidth() const;
     int GetHeight() const;
 
+    
+    DocDeclStr(
+        bool , IsFullySpecified() const,
+        "Returns True if both components of the size are non-default values.");
+    
+
+    DocDeclStr(
+        void , SetDefaults(const wxSize& size),
+        "Combine this size with the other one replacing the default
+components of this object (i.e. equal to -1) with those of the
+other.");
+    
+   
     //int GetX() const;
     //int GetY() const;
 
