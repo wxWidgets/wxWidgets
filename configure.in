@@ -4491,9 +4491,6 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
         AC_CACHE_CHECK([what is the type of the third argument of getsockname],
                        wx_cv_type_getsockname3,
             [
-                AC_LANG_SAVE
-                AC_LANG_CPLUSPLUS
-
                 AC_TRY_COMPILE(
                     [
                         #include <sys/types.h>
@@ -4504,32 +4501,45 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
                         getsockname(0, 0, &len);
                     ],
                     wx_cv_type_getsockname3=socklen_t,
-                    AC_TRY_COMPILE(
-                        [
-                            #include <sys/types.h>
-                            #include <sys/socket.h>
-                        ],
-                        [
-                            size_t len;
-                            getsockname(0, 0, &len);
-                        ],
-                        wx_cv_type_getsockname3=size_t,
+                    [
+                        dnl the compiler will compile the version with size_t
+                        dnl even if the real type of the last parameter is int
+                        dnl but it should give at least a warning about
+                        dnl converting between incompatible pointer types, so
+                        dnl try to use it to get the correct behaviour at
+                        dnl least with gcc (otherwise we'd always use size_t)
+                        CFLAGS_OLD="$CFLAGS"
+                        if test "$GCC" = yes ; then
+                            CFLAGS="$CFLAGS -Werror"
+                        fi
+
                         AC_TRY_COMPILE(
                             [
                                 #include <sys/types.h>
                                 #include <sys/socket.h>
                             ],
                             [
-                                int len;
+                                size_t len;
                                 getsockname(0, 0, &len);
                             ],
-                            wx_cv_type_getsockname3=int,
-                            wx_cv_type_getsockname3=unknown
+                            wx_cv_type_getsockname3=size_t,
+                            AC_TRY_COMPILE(
+                                [
+                                    #include <sys/types.h>
+                                    #include <sys/socket.h>
+                                ],
+                                [
+                                    int len;
+                                    getsockname(0, 0, &len);
+                                ],
+                                wx_cv_type_getsockname3=int,
+                                wx_cv_type_getsockname3=unknown
+                            )
                         )
-                    )
-                )
 
-                AC_LANG_RESTORE
+                        CFLAGS="$CFLAGS_OLD"
+                    ]
+                )
             ])
 
         if test "$wx_cv_type_getsockname3" = "unknown"; then
