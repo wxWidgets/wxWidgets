@@ -564,6 +564,7 @@ WXWidget wxCreateTopLevelWidget( WXDisplay* display )
                                    applicationShellWidgetClass,
                                    (Display*)display,
                                    NULL, 0 );
+    XtSetMappedWhenManaged( tlw, False );
     XtRealizeWidget( tlw );
 
     XtAddCallback( tlw, XmNdestroyCallback,
