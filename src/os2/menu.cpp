@@ -47,7 +47,7 @@ extern wxMenu*                      wxCurrentPopupMenu;
 //
 // The (popup) menu title has this special id
 //
-static const int                    idMenuTitle = -2;
+static const int                    idMenuTitle = -3;
 
 //
 // The unique ID for Menus
@@ -280,7 +280,7 @@ bool wxMenu::DoInsertOrAppend(
         rItem.id = pItem->GetId();
     }
 
-    BYTE*                           pData;
+    BYTE*                           pData=NULL;
 
 #if wxUSE_OWNER_DRAWN
     if (pItem->IsOwnerDrawn())
@@ -304,10 +304,18 @@ bool wxMenu::DoInsertOrAppend(
     }
     else
     {
-        //
-        // Menu is just a normal string (passed in data parameter)
-        //
-        rItem.afStyle |= MIS_TEXT;
+        if (pItem->GetId() == idMenuTitle)
+        {
+            // Item is an unselectable title to be passed via pData
+            rItem.afStyle = MIS_STATIC;
+        }
+        else
+        {
+            //
+            // Menu is just a normal string (passed in data parameter)
+            //
+            rItem.afStyle |= MIS_TEXT;
+        }
         pData = (char*)pItem->GetText().c_str();
     }
 

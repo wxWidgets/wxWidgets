@@ -1951,10 +1951,15 @@ bool wxWindowOS2::DoPopupMenu(
     HWND                            hWndParent = GetHwnd();
     HWND                            hMenu = GetHmenuOf(pMenu);
     bool                            bIsWaiting = TRUE;
+    int                             nHeight;
+
+    // Protect against recursion
+    if (wxCurrentPopupMenu)
+        return false;
 
     pMenu->SetInvokingWindow(this);
     pMenu->UpdateUI();
-    
+
     if ( nX == -1 && nY == -1 )
     {
         wxPoint mouse = wxGetMousePosition();
@@ -1965,6 +1970,8 @@ bool wxWindowOS2::DoPopupMenu(
         DoClientToScreen( &nX
                          ,&nY
                         );
+        DoGetSize(0,&nHeight);
+        nY = nHeight - nY;
     }
     wxCurrentPopupMenu = pMenu;
 
@@ -1981,13 +1988,12 @@ bool wxWindowOS2::DoPopupMenu(
     {
         QMSG                            vMsg;
 
-        if (vMsg.msg == WM_MENUEND || vMsg.msg == WM_COMMAND)
-        {
+        ::WinGetMsg(vHabmain,&vMsg, (HWND)0, 0, 0);
+        if (vMsg.msg == WM_COMMAND)
             bIsWaiting = FALSE;
-        }
         ::WinDispatchMsg(vHabmain, (PQMSG)&vMsg);
-
     }
+
     wxCurrentPopupMenu = NULL;
     pMenu->SetInvokingWindow(NULL);
     return TRUE;
@@ -2958,6 +2964,20 @@ MRESULT wxWindowOS2::OS2WindowProc(
                 mResult = (MRESULT)TRUE;
             }
             break;
+
+#if wxUSE_MENUS_NATIVE
+         case WM_MENUEND:
+            if (wxCurrentPopupMenu)
+            {
+                if (GetHmenuOf(wxCurrentPopupMenu) == (HWND)lParam)
+                {
+                    // Break out of msg loop in DoPopupMenu
+                    ::WinPostMsg((HWND)lParam,WM_COMMAND,wParam,0);
+                }
+            }
+            break;
+#endif // wxUSE_MENUS_NATIVE
+
     }
     if (!bProcessed)
     {
@@ -4047,7 +4067,7 @@ bool wxWindowOS2::HandleMouseEvent(
 
     //
     // The mouse events take consecutive IDs from WM_MOUSEFIRST to
-    // WM_MOUSELAST, so it's enough to substract WM_MOUSEMOVE == WM_MOUSEFIRST
+    // WM_MOUSELAST, so it's enough to subtract WM_MOUSEMOVE == WM_MOUSEFIRST
     // from the message id and take the value in the table to get wxWin event
     // id
     //
@@ -4065,26 +4085,30 @@ bool wxWindowOS2::HandleMouseEvent(
         wxEVT_MIDDLE_DCLICK
     };
 
-    wxMouseEvent                    vEvent(eventsMouse[uMsg - WM_MOUSEMOVE]);
-
-    InitMouseEvent( vEvent
-                   ,nX
-                   ,nY
-                   ,uFlags
-                  );
-
-    bProcessed = GetEventHandler()->ProcessEvent(vEvent);
-    if (!bProcessed)
+    // Bounds check
+    if ((uMsg >= WM_MOUSEMOVE) && (uMsg <= WM_BUTTON3DBLCLK))
     {
-        HPOINTER                    hCursor = (HPOINTER)GetCursor().GetHCURSOR();
+        wxMouseEvent               vEvent(eventsMouse[uMsg - WM_MOUSEMOVE]);
 
-        if (hCursor != NULLHANDLE)
+        InitMouseEvent( vEvent
+                       ,nX
+                       ,nY
+                       ,uFlags
+                       );
+
+        bProcessed = GetEventHandler()->ProcessEvent(vEvent);
+        if (!bProcessed)
         {
-            ::WinSetPointer(HWND_DESKTOP, hCursor);
-            bProcessed = TRUE;
+            HPOINTER               hCursor = (HPOINTER)GetCursor().GetHCURSOR();
+
+            if (hCursor != NULLHANDLE)
+            {
+                ::WinSetPointer(HWND_DESKTOP, hCursor);
+                bProcessed = TRUE;
+            }
         }
     }
-    return GetEventHandler()->ProcessEvent(vEvent);
+    return bProcessed;
 } // end of wxWindowOS2::HandleMouseEvent
 
 bool wxWindowOS2::HandleMouseMove(
