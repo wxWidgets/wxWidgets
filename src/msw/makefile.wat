@@ -77,7 +77,6 @@ NONESSENTIALOBJS= $(OUTPUTDIR)\accel.obj &
 	$(OUTPUTDIR)\timer.obj
 
 COMMONOBJS = &
-	$(OUTPUTDIR)\y_tab.obj &
 	$(OUTPUTDIR)\accesscmn.obj &
 	$(OUTPUTDIR)\appcmn.obj &
 	$(OUTPUTDIR)\artprov.obj &
@@ -1110,15 +1109,15 @@ $(OUTPUTDIR)\zstream.obj:     $(COMMDIR)\zstream.cpp
 
 
 
-$(OUTPUTDIR)\y_tab.obj:     $(COMMDIR)\y_tab.c $(COMMDIR)\lex_yy.c
-  *$(CC) $(CFLAGS) -DUSE_DEFINE $(COMMDIR)\y_tab.c
-
-$(COMMDIR)\y_tab.c:     $(COMMDIR)\dosyacc.c
-        copy $(COMMDIR)\dosyacc.c $(COMMDIR)\y_tab.c
-
-$(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
-    copy $(COMMDIR)\doslex.c $(COMMDIR)\lex_yy.c
-
+##$(OUTPUTDIR)\y_tab.obj:     $(COMMDIR)\y_tab.c $(COMMDIR)\lex_yy.c
+##  *$(CC) $(CFLAGS) -DUSE_DEFINE $(COMMDIR)\y_tab.c
+##
+##$(COMMDIR)\y_tab.c:     $(COMMDIR)\dosyacc.c
+##        copy $(COMMDIR)\dosyacc.c $(COMMDIR)\y_tab.c
+##
+##$(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
+##    copy $(COMMDIR)\doslex.c $(COMMDIR)\lex_yy.c
+##
 ########################################################
 # Generic objects (not always compiled, depending on
 # whether platforms have native implementations)
