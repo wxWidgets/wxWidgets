@@ -1080,7 +1080,7 @@ wxPropertyValidator *wxPropertyValidatorRegistry::GetValidator(const wxString& t
 void wxPropertyValidatorRegistry::ClearRegistry(void)
 {
   BeginFind();
-  wxNode *node;
+  wxHashTable::Node *node;
   while ((node = Next()) != NULL)
   {
     delete (wxPropertyValidator *)node->GetData();

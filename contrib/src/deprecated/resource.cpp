@@ -215,7 +215,7 @@ bool wxResourceTable::DeleteResource(const wxString& name)
         // See if any resource has this as its child; if so, delete from
         // parent's child list.
         BeginFind();
-        wxNode *node = Next();
+        wxHashTable::Node *node = Next();
         while (node != NULL)
         {
             wxItemResource *parent = (wxItemResource *)node->GetData();
@@ -309,10 +309,10 @@ bool wxResourceTable::SaveResource(const wxString& WXUNUSED(filename))
 void wxResourceTable::ClearTable()
 {
     BeginFind();
-    wxNode *node = Next();
+    wxHashTable::Node *node = Next();
     while (node)
     {
-        wxNode *next = Next();
+        wxHashTable::Node *next = Next();
         wxItemResource *item = (wxItemResource *)node->GetData();
         delete item;
         delete node;

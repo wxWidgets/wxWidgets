@@ -68,7 +68,7 @@ bool wxr2xml::Convert(wxString wxrfile, wxString xmlfile)
 bool wxr2xml::ParseResources()
 {
     m_table.BeginFind();
-    wxNode *node;
+    wxHashTable::Node *node;
 
     node = m_table.Next();
     while (node) 
