@@ -1021,7 +1021,7 @@ if test "$wxUSE_GTK" = 1; then
   ], AC_MSG_ERROR(Is gtk-config in path and GTK+ is version 1.0.4?))
   TOOLKIT=GTK
   TOOLKIT_DEF=__WXGTK__
-  WX_LINK=-lwx_gtk
+  WX_LINK=-lwx_gtk_1_0
   MAKEINCLUDE=../gtk.inc
 fi
 

@@ -6222,7 +6222,7 @@ fi
 
   TOOLKIT=GTK
   TOOLKIT_DEF=__WXGTK__
-  WX_LINK=-lwx_gtk
+  WX_LINK=-lwx_gtk_1_0
   MAKEINCLUDE=../gtk.inc
 fi
 
