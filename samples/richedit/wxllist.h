@@ -948,7 +948,7 @@ public:
        @return The cursor position on the DC.
    */
    wxPoint GetScreenPos(wxDC &dc, const wxPoint &cpos, wxPoint *csize = NULL);
-   
+
    /** Calculates new sizes for everything in the list, like Layout()
        but this is needed after the list got changed.
        @param dc the wxDC to draw on
@@ -968,16 +968,11 @@ public:
        @return cursor position in pixels
    */
    wxPoint GetCursorScreenPos(wxDC &dc);
+
    /** Calculates the cursor position on the screen.
        @param dc the dc to use for cursor position calculations
-       @param resetCursorMovedFlag: if true, reset "cursor moved" flag
-       @param translate optional translation of cursor coords on screen
-       
    */
-   void UpdateCursorScreenPos(wxDC &dc,
-                              bool resetCursorMovedFlag = true,
-                              const wxPoint& translate = wxPoint(0,
-                                                                 0));
+   void UpdateCursorScreenPos(wxDC &dc);
 
    /** Draws the cursor.
        @param active If true, draw a bold cursor to mark window as

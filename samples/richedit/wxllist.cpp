@@ -2085,47 +2085,24 @@ wxLayoutList::Recalculate(wxDC &dc, CoordType bottom)
 }
 
 void
-wxLayoutList::UpdateCursorScreenPos(wxDC &dc,
-                                    bool resetCursorMovedFlag,
-                                    const wxPoint& translate)
+wxLayoutList::UpdateCursorScreenPos(wxDC &dc)
 {
    wxCHECK_RET( m_CursorLine, "no cursor line" );
 
-   if ( m_movedCursor )
-   {
-      // we need to save the current style, in case the layout() of
-      // the line changes it
-      wxLayoutStyleInfo SiBackup = m_CurrentStyleInfo;
-      m_CursorLine->Layout(dc, this,
-                           &m_CursorScreenPos, &m_CursorSize,
-                           m_CursorPos.x,
-                           /* suppress update */ true);
-      ApplyStyle(SiBackup, dc); // restore it
-
-      if ( resetCursorMovedFlag )
-      {
-#ifdef WXLAYOUT_USE_CARET
-            // adjust the caret position
-            wxPoint coords(m_CursorScreenPos);
-            coords += translate;
-
-            // and set it
-            m_caret->Move(coords);
-#endif // WXLAYOUT_USE_CARET
-
-         m_movedCursor = false;
-      }
-   }
+   // we need to save the current style, in case the layout() of the line
+   // changes it
+   wxLayoutStyleInfo SiBackup = m_CurrentStyleInfo;
+   m_CursorLine->Layout(dc, this,
+                        &m_CursorScreenPos, &m_CursorSize,
+                        m_CursorPos.x,
+                        true /* suppress update */);
+   ApplyStyle(SiBackup, dc); // restore it
 }
 
 wxPoint
 wxLayoutList::GetCursorScreenPos(wxDC &dc)
 {
-   // this function is called with wxMemoryDC argument from ScrollToCursor(),
-   // for example, so it shouldn't clear "cursor moved" flag - or else the
-   // cursor won't be moved when UpdateCursorScreenPos() is called with the
-   // "real" (i.e. the one used for drawing) wxDC.
-   UpdateCursorScreenPos(dc, false /* don't reset the flag */);
+   UpdateCursorScreenPos(dc);
 
    return m_CursorScreenPos;
 }
@@ -2136,8 +2113,7 @@ wxLayoutList::GetCursorScreenPos(wxDC &dc)
 */
 void
 wxLayoutList::Layout(wxDC &dc, CoordType bottom, bool forceAll,
-                     wxPoint *cpos = NULL,
-                     wxPoint *csize = NULL)
+                     wxPoint *cpos, wxPoint *csize)
 {
    // first, make sure everything is calculated - this might not be
    // needed, optimise it later
@@ -2184,7 +2160,7 @@ wxLayoutList::Layout(wxDC &dc, CoordType bottom, bool forceAll,
 }
 
 wxPoint
-wxLayoutList::GetScreenPos(wxDC &dc, const wxPoint &cpos, wxPoint *csize = NULL)
+wxLayoutList::GetScreenPos(wxDC &dc, const wxPoint &cpos, wxPoint *csize)
 {
    wxPoint pos = cpos;
    Layout(dc, -1, false, &pos, csize);
@@ -2320,6 +2296,13 @@ wxLayoutList::GetSize(void) const
 void
 wxLayoutList::DrawCursor(wxDC &dc, bool active, wxPoint const &translate)
 {
+   if ( m_movedCursor )
+   {
+      UpdateCursorScreenPos(dc);
+
+      m_movedCursor = false;
+   }
+
    wxPoint coords(m_CursorScreenPos);
    coords += translate;
 
@@ -2334,7 +2317,9 @@ wxLayoutList::DrawCursor(wxDC &dc, bool active, wxPoint const &translate)
    wxLogStatus("Cursor is at (%d, %d)", m_CursorPos.x, m_CursorPos.y);
 #endif
 
-#ifndef WXLAYOUT_USE_CARET
+#ifdef WXLAYOUT_USE_CARET
+   m_caret->Move(coords);
+#else // !WXLAYOUT_USE_CARET
    dc.SetBrush(*wxBLACK_BRUSH);
    dc.SetLogicalFunction(wxXOR);
    dc.SetPen(wxPen(*wxBLACK,1,wxSOLID));

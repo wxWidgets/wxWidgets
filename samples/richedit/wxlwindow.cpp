@@ -288,10 +288,15 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
       x0 *= dx; y0 *= dy;
 
       wxPoint offset(-x0+WXLO_XOFFSET, -y0+WXLO_YOFFSET);
-      m_llist->UpdateCursorScreenPos(dc, true, offset);
 
       if(m_CursorVisibility == -1)
          m_CursorVisibility = 1;
+
+      if(m_CursorVisibility != 0)
+      {
+         // draw a thick cursor for    editable windows with focus
+         m_llist->DrawCursor(dc, m_HaveFocus && IsEditable(), offset);
+      }
 
       // VZ: this should be unnecessary because mouse can only click on a
       //     visible part of the canvas
@@ -620,10 +625,11 @@ wxLayoutWindow::OnPaint( wxPaintEvent &WXUNUSED(event))
 void
 wxLayoutWindow::DoPaint(const wxRect *updateRect)
 {
-#ifndef __WXMSW__
+   // Causes bad flicker under wxGTK!!!
+#ifdef __WXGTK__
    InternalPaint(updateRect);
 #else
-   Refresh(FALSE, updateRect); // Causes bad flicker under wxGTK!!!
+   Refresh(FALSE); //, updateRect);
 
    if ( !::UpdateWindow(GetHwnd()) )
       wxLogLastError("UpdateWindow");
@@ -722,10 +728,9 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
    m_llist->InvalidateUpdateRect();
    if(m_CursorVisibility != 0)
    {
-      m_llist->UpdateCursorScreenPos(dc, true, offset);
+      // draw a thick cursor for editable windows with focus
       m_llist->DrawCursor(*m_memDC,
-                          m_HaveFocus && IsEditable(), // draw a thick
-                          // cursor for    editable windows with focus
+                          m_HaveFocus && IsEditable(),
                           offset);
    }
 
