@@ -850,6 +850,19 @@ void wxWindowMac::MacInstallEventHandler( WXWidget control )
     InstallControlEventHandler( (ControlRef)  control , GetwxMacWindowEventHandlerUPP(),
         GetEventTypeCount(eventList), eventList, this,
         (EventHandlerRef *)&m_macControlEventHandler);
+#if !TARGET_API_MAC_OSX
+    if ( (ControlRef) control == m_peer->GetControlRef() )
+    {
+        m_peer->SetData<ControlUserPaneDrawUPP>(kControlEntireControl,kControlUserPaneDrawProcTag,&gControlUserPaneDrawUPP) ;
+        m_peer->SetData<ControlUserPaneHitTestUPP>(kControlEntireControl,kControlUserPaneHitTestProcTag,&gControlUserPaneHitTestUPP) ;
+        m_peer->SetData<ControlUserPaneTrackingUPP>(kControlEntireControl,kControlUserPaneTrackingProcTag,&gControlUserPaneTrackingUPP) ;
+        m_peer->SetData<ControlUserPaneIdleUPP>(kControlEntireControl,kControlUserPaneIdleProcTag,&gControlUserPaneIdleUPP) ;
+        m_peer->SetData<ControlUserPaneKeyDownUPP>(kControlEntireControl,kControlUserPaneKeyDownProcTag,&gControlUserPaneKeyDownUPP) ;
+        m_peer->SetData<ControlUserPaneActivateUPP>(kControlEntireControl,kControlUserPaneActivateProcTag,&gControlUserPaneActivateUPP) ;
+        m_peer->SetData<ControlUserPaneFocusUPP>(kControlEntireControl,kControlUserPaneFocusProcTag,&gControlUserPaneFocusUPP) ;
+        m_peer->SetData<ControlUserPaneBackgroundUPP>(kControlEntireControl,kControlUserPaneBackgroundProcTag,&gControlUserPaneBackgroundUPP) ;
+    }
+#endif
 
 }
 
@@ -887,16 +900,6 @@ bool wxWindowMac::Create(wxWindowMac *parent, wxWindowID id,
 
 
         MacPostControlCreate(pos,size) ;
-#if !TARGET_API_MAC_OSX
-        m_peer->SetData<ControlUserPaneDrawUPP>(kControlEntireControl,kControlUserPaneDrawProcTag,&gControlUserPaneDrawUPP) ;
-        m_peer->SetData<ControlUserPaneHitTestUPP>(kControlEntireControl,kControlUserPaneHitTestProcTag,&gControlUserPaneHitTestUPP) ;
-        m_peer->SetData<ControlUserPaneTrackingUPP>(kControlEntireControl,kControlUserPaneTrackingProcTag,&gControlUserPaneTrackingUPP) ;
-        m_peer->SetData<ControlUserPaneIdleUPP>(kControlEntireControl,kControlUserPaneIdleProcTag,&gControlUserPaneIdleUPP) ;
-        m_peer->SetData<ControlUserPaneKeyDownUPP>(kControlEntireControl,kControlUserPaneKeyDownProcTag,&gControlUserPaneKeyDownUPP) ;
-        m_peer->SetData<ControlUserPaneActivateUPP>(kControlEntireControl,kControlUserPaneActivateProcTag,&gControlUserPaneActivateUPP) ;
-        m_peer->SetData<ControlUserPaneFocusUPP>(kControlEntireControl,kControlUserPaneFocusProcTag,&gControlUserPaneFocusUPP) ;
-        m_peer->SetData<ControlUserPaneBackgroundUPP>(kControlEntireControl,kControlUserPaneBackgroundProcTag,&gControlUserPaneBackgroundUPP) ;
-#endif
     }
 #ifndef __WXUNIVERSAL__
     // Don't give scrollbars to wxControls unless they ask for them
@@ -3018,12 +3021,10 @@ bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time )
                     else
 #endif
                     {
-#if !wxMAC_USE_CORE_GRAPHICS
                         wxWindowDC dc(this) ;
                         dc.SetClippingRegion(wxRegion(updatergn));
                         wxMacPortSetter helper(&dc) ;
                         child->MacPaintBorders(0,0)  ;
-#endif
                     }
                 }
             }
