@@ -362,8 +362,8 @@ wxBitmap wxBitmap::GetSubBitmap(wxRect const&) const
 
 wxImage wxBitmap::ConvertToImage() const
 {
-    if(!M_BITMAPDATA->m_ok)
-        return wxImage(5,5)/*wxNullImage*/;
+    if(!Ok())
+        return /*wxImage(5,5)*/wxNullImage;
     return wxImage(M_BITMAPDATA->m_width,M_BITMAPDATA->m_height);
 }
 
