@@ -203,6 +203,7 @@ int wxGetOsVersion(int *majorVsn, int *minorVsn)
         *minorVsn = ProtocolRevision (display);
 
     return wxMOTIF_X;
+#endif
 #ifdef __WXX11__
     if (majorVsn)
         *majorVsn = 0;
@@ -633,8 +634,9 @@ WXDisplay *wxGetDisplay()
         return XtDisplay ((Widget) wxTheApp->GetTopLevelWidget());
     else if (wxTheApp)
         return wxTheApp->GetInitialDisplay();
+    return NULL;
 #endif
-#ifdef __WXGTK__
+#ifdef __WXX11__
     return wxApp::GetDisplay();
 #endif
 }
