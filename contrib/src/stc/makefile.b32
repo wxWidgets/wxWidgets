@@ -17,9 +17,26 @@ SCINTILLA=.\scintilla
 
 S=$(SCINTILLA)\src
 
-STCEXTRACPPFLAGS=-D__WX__ -DSCI_LEXER -DLINK_LEXERS -I$(SCINTILLA)/include -I$(S)
+
 
 LIBTARGET=$(WXDIR)\lib\stc.lib
+
+!if "$(WXUSINGUNIV)" == "1"
+USE_UNIV="UNIV"
+CFG=$(CFG)v
+WXLIBNAME=$(WXLIBNAME)v
+ARCHINCDIR=$(ARCHINCDIR)v
+SETUPSRCDIR=$(WXDIR)\include\wx\univ
+PORT=__WXUNIVERSAL__
+STCEXTRACPPFLAGS=-D__WX__ -D__WXUNIVERSAL__ -DSCI_LEXER -DLINK_LEXERS -I$(SCINTILLA)/include -I$(S) 
+STCCFG = stcu.cfg
+!else
+USE_UNIV=""
+PORT=__WXMSW__
+SETUPSRCDIR=$(WXDIR)\include\wx\msw
+STCEXTRACPPFLAGS=-D__WX__ -DSCI_LEXER -DLINK_LEXERS -I$(SCINTILLA)/include -I$(S)
+STCCFG = stc.cfg
+!endif
 
 OBJECTS = \
         AutoComplete.obj	\
@@ -77,7 +94,7 @@ OBJECTS = \
 	stc.obj                 \
 
 
-STCCFG = stc.cfg
+
 STCCPPFLAGS=$(DLL_FLAGS) $(EXTRACPPFLAGS) @$(STCCFG)
 
 default: $(STCCFG) $(LIBTARGET)
