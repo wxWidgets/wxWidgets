@@ -91,6 +91,11 @@ WXDLLEXPORT_DATA(extern HFONT) wxSTATUS_LINE_FONT;
 
 #define CASTWNDPROC (WndProcCast)
 
+//is this the right place; doing a #include...missing.h gives errors (CE)
+#if defined(__DIGITALMARS__) 
+#define CCS_VERT                0x00000080L
+#endif
+
 // ---------------------------------------------------------------------------
 // some stuff for old Windows versions (FIXME: what does it do here??)
 // ---------------------------------------------------------------------------

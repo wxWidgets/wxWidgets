@@ -14,7 +14,7 @@ WXDIR = ..\..
 
 include ..\makesc.env
 
-DEBUG=1
+DEBUG=0
 
 LIBTARGET = $(LIBDIR)\wx$(SC_SUFFIX).lib
 
@@ -133,6 +133,7 @@ COMMONOBJS = $(COMMDIR)\accesscmn.obj \
 		$(COMMDIR)\imagtiff.obj \
 		$(COMMDIR)\imagxpm.obj \
 		$(COMMDIR)\intl.obj \
+		$(COMMDIR)\init.obj \
 		$(COMMDIR)\ipcbase.obj \
 		$(COMMDIR)\layout.obj \
 		$(COMMDIR)\lboxcmn.obj \
