@@ -14,7 +14,7 @@
 
 // check if to use precompiled headers
 #if (defined(__BORLANDC__) || defined(__VISUALC__) || defined(__WATCOMC__)) && defined(__WXMSW__)
-    #if !NOPCH
+    #if !defined(NOPCH)
         #define WX_PRECOMP
     #endif
 #endif
