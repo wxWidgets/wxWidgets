@@ -239,6 +239,7 @@ class wxPythonDemo(wxFrame):
 
         self.cwd = os.getcwd()
         self.curOverview = ""
+        self.window = None
 
         icon = images.getMondrianIcon()
         self.SetIcon(icon)
@@ -453,6 +454,10 @@ class wxPythonDemo(wxFrame):
         if self.nb.GetPageCount() == 3:
             if self.nb.GetSelection() == 2:
                 self.nb.SetSelection(0)
+            # inform the window that it's time to quit if it cares
+            if self.window is not None:
+                if hasattr(self.window, "ShutdownDemo"):
+                    self.window.ShutdownDemo()
             wxSafeYield() # in case the page has pending events
             self.nb.DeletePage(2)
 
@@ -479,7 +484,7 @@ class wxPythonDemo(wxFrame):
                 wxSafeYield()
 
                 self.window = module.runTest(self, self.nb, self) ###
-                if self.window:
+                if self.window is not None:
                     self.nb.AddPage(self.window, 'Demo')
                     self.nb.SetSelection(2)
                     self.nb.Refresh()  # without this wxMac has troubles showing the just added page
