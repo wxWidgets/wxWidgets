@@ -33,8 +33,9 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.2  1998/08/22 19:50:56  RD
- * some tweaks for wxGTK
+ * Revision 1.3  1998/08/27 00:00:54  RD
+ * - more tweaks
+ * - have discovered some problems but not yet discovered solutions...
  *
  ************************************************************************/
 
@@ -556,15 +557,6 @@ char *SWIG_GetPtr(char *_c, void **ptr, char *_t)
 
 #define SWIG_name    "wxpc"
 
-
-#ifdef __WXMSW__
-#include <windows.h>
-#undef FindWindow
-#undef GetCharWidth
-#undef LoadAccelerators
-#endif
-
-
 #include "helpers.h"
 
 static PyObject* l_output_helper(PyObject* target, PyObject* o) {
@@ -627,21 +619,6 @@ extern wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source);
 
 
 static char* wxStringErrorMsg = "string type is required for parameter";
-
-#ifdef __WXMSW__             // If building for win32...
-extern HINSTANCE wxhInstance;
-
-BOOL WINAPI DllMain(
-    HINSTANCE   hinstDLL,    // handle to DLL module
-    DWORD       fdwReason,   // reason for calling function
-    LPVOID      lpvReserved  // reserved
-   )
-{
-    wxhInstance = hinstDLL;
-    return 1;
-}
-#endif
-
 
 extern "C" SWIGEXPORT(void,initwindowsc)();
 extern "C" SWIGEXPORT(void,initwindows2c)();
@@ -1695,12 +1672,6 @@ SWIGEXPORT(void,initwxpc)() {
 	 SWIG_addvarlink(SWIG_globals,"wxPyDefaultPosition",_wrap_wxPyDefaultPosition_get, _wrap_wxPyDefaultPosition_set);
 	 SWIG_addvarlink(SWIG_globals,"wxPyDefaultSize",_wrap_wxPyDefaultSize_get, _wrap_wxPyDefaultSize_set);
 
-        // We don't want to run the wxEntry or OnInit yet, so we just do the
-        // beginings of what it would have done...  See __wxStart() for the
-        // rest.
-#ifdef __WXMSW__
-    wxApp::Initialize((WXHINSTANCE)wxhInstance);
-#endif
 
 
 //    wxPyWindows = new wxHashTable(wxKEY_INTEGER, 100);

@@ -10,6 +10,13 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+#ifdef __WXMSW__
+#include <windows.h>
+#undef FindWindow
+#undef GetCharWidth
+#undef LoadAccelerators
+#endif
+
 #undef DEBUG
 #include <Python.h>
 #include "helpers.h"
@@ -30,6 +37,23 @@ wxSize      wxPyDefaultSize;            //wxDefaultSize);
 wxString    wxPyEmptyStr("");
 
 
+
+#ifdef __WXMSW__             // If building for win32...
+extern HINSTANCE wxhInstance;
+
+//----------------------------------------------------------------------
+// This gets run when the DLL is loaded.  We just need to save a handle.
+//----------------------------------------------------------------------
+BOOL WINAPI DllMain(
+    HINSTANCE   hinstDLL,    // handle to DLL module
+    DWORD       fdwReason,   // reason for calling function
+    LPVOID      lpvReserved  // reserved
+   )
+{
+    wxhInstance = hinstDLL;
+    return 1;
+}
+#endif
 
 //----------------------------------------------------------------------
 // Class for implementing the wxp main application shell.
@@ -81,6 +105,7 @@ void wxPyApp::AfterMainLoop(void) {
 //----------------------------------------------------------------------
 
 
+
 // Start the user application, user App's OnInit method is a parameter here
 PyObject* __wxStart(PyObject* /* self */, PyObject* args)
 {
@@ -92,15 +117,18 @@ PyObject* __wxStart(PyObject* /* self */, PyObject* args)
     if (!PyArg_ParseTuple(args, "O", &onInitFunc))
         return NULL;
 
-    // This is where we pick up one part of the wxEntry functionality...
-    // the rest is in AfterMainLoop.
+// This is where we pick up one part of the wxEntry functionality...
+// the rest is in AfterMainLoop.
 #ifdef __WXMSW__
+    wxApp::Initialize((WXHINSTANCE)wxhInstance);
+
     wxPythonApp->argc = 0;
     wxPythonApp->argv = NULL;
     wxPythonApp->OnInitGui();
 #endif
 #ifdef __WXGTK__
     wxClassInfo::InitializeClasses();
+
     PyObject* sysargv = PySys_GetObject("argv");
     int argc = PyList_Size(sysargv);
     char** argv = new char*[argc+1];
@@ -110,23 +138,18 @@ PyObject* __wxStart(PyObject* /* self */, PyObject* args)
     argv[argc] = NULL;
 
 
-    wxTheApp->argc = argc;
-    wxTheApp->argv = argv;
+    wxPythonApp->argc = argc;
+    wxPythonApp->argv = argv;
 
-    gtk_init( &wxTheApp->argc, &wxTheApp->argv );
+    gtk_init( &wxPythonApp->argc, &wxPythonApp->argv );
 
 #ifdef USE_GDK_IMLIB
-
     gdk_imlib_init();
-
     gtk_widget_push_visual(gdk_imlib_get_visual());
-
     gtk_widget_push_colormap(gdk_imlib_get_colormap());
-
 #endif
 
     wxApp::CommonInit();
-
     wxTheApp->OnInitGui();
 
 #endif
@@ -167,106 +190,6 @@ PyObject* __wxStart(PyObject* /* self */, PyObject* args)
 }
 
 
-//PyObject* __wxMainLoop(PyObject* /* self */, PyObject* /* args */)
-//{
-//    wxPythonApp->MainLoop();
-//    if (wxPythonApp->wx_frame) {
-//        wxPythonApp->wx_frame->GetEventHandler()->OnClose();
-//        delete wxPythonApp->wx_frame;
-//    }
-//    wxCleanUp();
-
-//    Py_INCREF(Py_None);
-//    return Py_None;
-//}
-
-
-//PyObject* __wxExitMainLoop(PyObject* /* self */, PyObject* /* args */)
-//{
-//    wxPythonApp->ExitMainLoop();
-//    Py_INCREF(Py_None);
-//    return Py_None;
-//}
-
-
-
-//PyObject* __wxAddCallback(PyObject* /* self */, PyObject* args)
-//{
-//    char*           swigPtr;
-//    char*           name;
-//    PyObject*       callback;
-//    wxWindow*       win;
-//    wxPyEvtHandlers* evtHdlr;
-
-//    if (!PyArg_ParseTuple(args, "ssO", &swigPtr, &name, &callback))
-//        return NULL;
-
-//    if (!PyCallable_Check(callback)) {
-//        PyErr_SetString(PyExc_TypeError, "Expected a callable object.");
-//        return NULL;
-//    }
-
-//    if (SWIG_GetPtr(swigPtr, (void **)&win, "_wxWindow_p")) {
-//        PyErr_SetString(PyExc_TypeError, "Expected class derived from wxWindow.");
-//        return NULL;
-//    }
-
-//    evtHdlr = (wxPyEvtHandlers*)win->GetClientData();
-//    if (! evtHdlr->addCallback(name, callback)) {
-//        PyErr_SetString(PyExc_TypeError, "Unknown callback name.");
-//        return NULL;
-//    }
-
-//    Py_INCREF(Py_None);
-//    return Py_None;
-//}
-
-
-
-//PyObject* __wxSetWinEvtHdlr(PyObject* /* self */, PyObject* args)
-//{
-//    char*           swigPtr;
-//    wxWindow*       win;
-//    wxPyEvtHandlers* evtHdlr;
-
-//    if (!PyArg_ParseTuple(args, "s", &swigPtr))
-//        return NULL;
-
-//    if (SWIG_GetPtr(swigPtr, (void **)&win, "_wxWindow_p")) {
-//        PyErr_SetString(PyExc_TypeError, "Expected class derived from wxWindow.");
-//        return NULL;
-//    }
-
-//    evtHdlr = new wxPyEvtHandlers;
-//    win->SetClientData((char*)evtHdlr);
-
-//    Py_INCREF(Py_None);
-//    return Py_None;
-//}
-
-
-
-//PyObject* __wxDelWinEvtHdlr(PyObject* /* self */, PyObject* args)
-//{
-//    char*               swigPtr;
-//    wxWindow*           win;
-//    wxPyEvtHandlers*    evtHdlr;
-
-//    if (!PyArg_ParseTuple(args, "s", &swigPtr))
-//        return NULL;
-
-//    if (SWIG_GetPtr(swigPtr, (void **)&win, "_wxWindow_p")) {
-//        PyErr_SetString(PyExc_TypeError, "Expected class derived from wxWindow.");
-//        return NULL;
-//    }
-
-//    evtHdlr = (wxPyEvtHandlers*)win->GetClientData();
-//    printf("__wxDelWinEvtHdlr: %p\n", evtHdlr);
-//    delete evtHdlr;
-
-//    Py_INCREF(Py_None);
-//    return Py_None;
-//}
 
 
 
@@ -282,16 +205,19 @@ PyObject* __wxSetDictionary(PyObject* /* self */, PyObject* args)
         return NULL;
     }
 #ifdef __WXMOTIF__
-#define wxPlatform "__MOTIF__"
+#define wxPlatform "__WXMOTIF__"
+#endif
+#ifdef __WXQT__
+#define wxPlatform "__WXQT__"
 #endif
 #ifdef __WXGTK__
-#define wxPlatform "__GTK__"
+#define wxPlatform "__WXGTK__"
 #endif
 #if defined(__WIN32__) || defined(__WXMSW__)
 #define wxPlatform "__WXMSW__"
 #endif
 #ifdef __WXMAC__
-#define wxPlatform "__MAC__"
+#define wxPlatform "__WXMAC__"
 #endif
 
     PyDict_SetItemString(wxPython_dict, "wxPlatform", PyString_FromString(wxPlatform));
@@ -415,377 +341,6 @@ void wxPyTimer::Notify() {
 
 
 
-//----------------------------------------------------------------------
-// wxPyEvtHandlers class
-//----------------------------------------------------------------------
-
-//wxPyEvtHandlers::wxPyEvtHandlers()
-//    :   pyOnActivate(0),
-//        pyOnChar(0),
-//        pyOnCharHook(0),
-//        pyOnClose(0),
-//        pyOnCommand(0),
-//        pyOnDropFiles(0),
-//        pyOnDefaultAction(0),
-//        pyOnEvent(0),
-//        pyOnInitMenuPopup(0),
-//        pyOnKillFocus(0),
-//        pyOnMenuCommand(0),
-//        pyOnMenuSelect(0),
-//        pyOnMove(0),
-//        pyOnPaint(0),
-//        pyOnScroll(0),
-//        pyOnSetFocus(0),
-//        pyOnSize(0),
-//        pyOnSysColourChange(0),
-//        pyOnLeftClick(0),
-//        pyOnMouseEnter(0),
-//        pyOnRightClick(0),
-//        pyOnDoubleClickSash(0),
-//        pyOnUnsplit(0)
-//{
-//}
-
-
-//wxPyEvtHandlers::~wxPyEvtHandlers()
-//{
-//    Py_XDECREF(pyOnActivate);
-//    Py_XDECREF(pyOnChar);
-//    Py_XDECREF(pyOnCharHook);
-//    Py_XDECREF(pyOnClose);
-//    Py_XDECREF(pyOnCommand);
-//    Py_XDECREF(pyOnDropFiles);
-//    Py_XDECREF(pyOnDefaultAction);
-//    Py_XDECREF(pyOnEvent);
-//    Py_XDECREF(pyOnInitMenuPopup);
-//    Py_XDECREF(pyOnKillFocus);
-//    Py_XDECREF(pyOnMenuCommand);
-//    Py_XDECREF(pyOnMenuSelect);
-//    Py_XDECREF(pyOnMove);
-//    Py_XDECREF(pyOnPaint);
-//    Py_XDECREF(pyOnScroll);
-//    Py_XDECREF(pyOnSetFocus);
-//    Py_XDECREF(pyOnSize);
-//    Py_XDECREF(pyOnSysColourChange);
-//    Py_XDECREF(pyOnLeftClick);
-//    Py_XDECREF(pyOnMouseEnter);
-//    Py_XDECREF(pyOnRightClick);
-//    Py_XDECREF(pyOnDoubleClickSash);
-//    Py_XDECREF(pyOnUnsplit);
-
-//    wxNode* node = cleanupList.First();
-//    while (node) {
-//        delete (wxPyEvtHandlers*)node->Data();
-//        delete node;
-//        node = cleanupList.First();
-//    }
-
-//    node = decrefList.First();
-//    while (node) {
-//        PyObject* obj = (PyObject*)node->Data();
-//        Py_DECREF(obj);
-//        delete node;
-//        node = decrefList.First();
-//    }
-////    printf("~wxPyEvtHandlers: %p\n", this);
-//}
-
-////----------------------------------------------------------------------
-
-//Bool wxPyEvtHandlers::addCallback(char* name, PyObject* callback)
-//{
-//    Py_INCREF(callback);
-
-//    if (strcmp(name, "OnActivate") == 0) {
-//        pyOnActivate = callback;
-//        return TRUE;
-//    }
-//    if (strcmp(name, "OnChar") == 0) {
-//        pyOnChar = callback;
-//        return TRUE;
-//    }
-//    if (strcmp(name, "OnCharHook") == 0) {
-//        pyOnCharHook = callback;
-//        return TRUE;
-//    }
-//    if (strcmp(name, "OnClose") == 0) {
-//        pyOnClose = callback;
-//        return TRUE;
-//    }
-//    if (strcmp(name, "OnCommand") == 0) {
-//        pyOnCommand = callback;
-//        return TRUE;
-//    }
-//    if (strcmp(name, "OnDropFiles") == 0) {
-//        pyOnDropFiles = callback;
-//        return TRUE;
-//    }
-//    if (strcmp(name, "OnDefaultAction") == 0) {
-//        pyOnDefaultAction = callback;
-//        return TRUE;
-//    }
-//    if (strcmp(name, "OnEvent") == 0) {
-//        pyOnEvent = callback;
-//        return TRUE;
-//    }
-//    if (strcmp(name, "OnInitMenuPopup") == 0) {
-//        pyOnInitMenuPopup = callback;
-//        return TRUE;
-//    }
-//    if (strcmp(name, "OnKillFocus") == 0) {
-//        pyOnKillFocus = callback;
-//        return TRUE;
-//    }
-//    if (strcmp(name, "OnMenuCommand") == 0) {
-//        pyOnMenuCommand = callback;
-//        return TRUE;
-//    }
-//    if (strcmp(name, "OnMenuSelect") == 0) {
-//        pyOnMenuSelect = callback;
-//        return TRUE;
-//    }
-//    if (strcmp(name, "OnMove") == 0) {
-//        pyOnMove = callback;
-//        return TRUE;
-//    }
-//    if (strcmp(name, "OnPaint") == 0) {
-//        pyOnPaint = callback;
-//        return TRUE;
-//    }
-//    if (strcmp(name, "OnScroll") == 0) {
-//        pyOnScroll = callback;
-//        return TRUE;
-//    }
-//    if (strcmp(name, "OnSetFocus") == 0) {
-//        pyOnSetFocus = callback;
-//        return TRUE;
-//    }
-//    if (strcmp(name, "OnSize") == 0) {
-//        pyOnSize = callback;
-//        return TRUE;
-//    }
-//    if (strcmp(name, "OnSysColourChange") == 0) {
-//        pyOnSysColourChange = callback;
-//        return TRUE;
-//    }
-//    if (strcmp(name, "OnLeftClick") == 0) {
-//        pyOnLeftClick = callback;
-//        return TRUE;
-//    }
-//    if (strcmp(name, "OnMouseEnter") == 0) {
-//        pyOnMouseEnter = callback;
-//        return TRUE;
-//    }
-//    if (strcmp(name, "OnRightClick") == 0) {
-//        pyOnRightClick = callback;
-//        return TRUE;
-//    }
-//    if (strcmp(name, "OnDoubleClickSash") == 0) {
-//        pyOnDoubleClickSash = callback;
-//        return TRUE;
-//    }
-//    if (strcmp(name, "OnUnsplit") == 0) {
-//        pyOnUnsplit = callback;
-//        return TRUE;
-//    }
-
-//    // If we get here, there was no match.
-//    Py_DECREF(callback);
-//    return FALSE;
-//}
-
-
-////----------------------------------------------------------------------
-//// Helpers to assist in calling the python callable objects
-////----------------------------------------------------------------------
-
-//PyObject* wxPyEvtHandlers::constructObject(void* ptr, char* className)
-//{
-//    char    buff[64];               // should be big enough...
-//    char    swigptr[64];
-
-//    sprintf(buff, "_%s_p", className);
-//    SWIG_MakePtr(swigptr, ptr, buff);
-
-//    sprintf(buff, "%sPtr", className);
-//    PyObject* classobj = PyDict_GetItemString(wxPython_dict, buff);
-//    PyObject* arg = Py_BuildValue("(s)", swigptr);
-//    PyObject* obj = PyInstance_New(classobj, arg, NULL);
-//    Py_DECREF(arg);
-
-//    return obj;
-//}
-
-
-
-//int wxPyEvtHandlers::callFunc(PyObject* func, PyObject* arglist)
-//{
-//    PyObject*   result;
-//    int         retval = FALSE;
-
-//    result = PyEval_CallObject(func, arglist);
-//    Py_DECREF(arglist);
-//    if (result) {                       // Assumes an integer return type...
-//        retval = PyInt_AsLong(result);
-//        Py_DECREF(result);
-//        PyErr_Clear();                  // forget about it if it's not...
-//    } else {
-//        PyErr_Print();
-//    }
-//    return retval;
-//}
-
-////---------------------------------------------------------------------------
-//// Methods and helpers of the wxPy* classes
-////---------------------------------------------------------------------------
-
-//IMP_OnActivate(wxFrame, wxPyFrame);
-//IMP_OnCharHook(wxFrame, wxPyFrame);
-//IMP_OnClose(wxFrame, wxPyFrame);
-//IMP_OnMenuCommand(wxFrame, wxPyFrame);
-//IMP_OnMenuSelect(wxFrame, wxPyFrame);
-//IMP_OnSize(wxFrame, wxPyFrame);
-//IMP_OnDropFiles(wxFrame, wxPyFrame);
-
-//IMP_OnChar(wxCanvas, wxPyCanvas);
-//IMP_OnEvent(wxCanvas, wxPyCanvas);
-//IMP_OnPaint(wxCanvas, wxPyCanvas);
-//IMP_OnScroll(wxCanvas, wxPyCanvas);
-//IMP_OnDropFiles(wxCanvas, wxPyCanvas);
-
-//IMP_OnChar(wxPanel, wxPyPanel);
-//IMP_OnEvent(wxPanel, wxPyPanel);
-//IMP_OnPaint(wxPanel, wxPyPanel);
-//IMP_OnScroll(wxPanel, wxPyPanel);
-//IMP_OnCommand(wxPanel, wxPyPanel);
-//IMP_OnDefaultAction(wxPanel, wxPyPanel);
-//IMP_OnDropFiles(wxPanel, wxPyPanel);
-
-//IMP_OnChar(wxTextWindow, wxPyTextWindow);
-//IMP_OnDropFiles(wxTextWindow, wxPyTextWindow);
-
-//IMP_OnCharHook(wxDialogBox, wxPyDialogBox);
-//IMP_OnClose(wxDialogBox, wxPyDialogBox);
-//IMP_OnSize(wxDialogBox, wxPyDialogBox);
-//IMP_OnDropFiles(wxDialogBox, wxPyDialogBox);
-//IMP_OnChar(wxDialogBox, wxPyDialogBox);
-//IMP_OnEvent(wxDialogBox, wxPyDialogBox);
-//IMP_OnPaint(wxDialogBox, wxPyDialogBox);
-//IMP_OnScroll(wxDialogBox, wxPyDialogBox);
-//IMP_OnCommand(wxDialogBox, wxPyDialogBox);
-//IMP_OnDefaultAction(wxDialogBox, wxPyDialogBox);
-
-//IMP_OnChar(wxToolBar, wxPyToolBar);
-//IMP_OnEvent(wxToolBar, wxPyToolBar);
-//IMP_OnPaint(wxToolBar, wxPyToolBar);
-//IMP_OnScroll(wxToolBar, wxPyToolBar);
-//IMP_OnCommand(wxToolBar, wxPyToolBar);
-//IMP_OnDefaultAction(wxToolBar, wxPyToolBar);
-//IMP_OnDropFiles(wxToolBar, wxPyToolBar);
-//IMP_OnMouseEnter(wxToolBar, wxPyToolBar);
-//IMP_OnRightClick(wxToolBar, wxPyToolBar);
-
-//IMP_OnChar(wxButtonBar, wxPyButtonBar);
-//IMP_OnEvent(wxButtonBar, wxPyButtonBar);
-//IMP_OnPaint(wxButtonBar, wxPyButtonBar);
-//IMP_OnScroll(wxButtonBar, wxPyButtonBar);
-//IMP_OnCommand(wxButtonBar, wxPyButtonBar);
-//IMP_OnDefaultAction(wxButtonBar, wxPyButtonBar);
-//IMP_OnDropFiles(wxButtonBar, wxPyButtonBar);
-//IMP_OnMouseEnter(wxButtonBar, wxPyButtonBar);
-//IMP_OnRightClick(wxButtonBar, wxPyButtonBar);
-
-//IMP_OnDoubleClickSash(wxSplitterWindow, wxPySplitterWindow);
-//IMP_OnUnsplit(wxSplitterWindow, wxPySplitterWindow);
-
-
-
-//Bool wxPyToolBar::OnLeftClick(int a, int b) {
-//    wxPyEvtHandlers* peh=(wxPyEvtHandlers*)GetClientData();
-//    if (peh->pyOnLeftClick)
-//        return peh->callFunc(peh->pyOnLeftClick, Py_BuildValue("(ii)",a,b));
-//    else {
-//        // If there is no Python callback, redirect the request to
-//        // the OnMenuCommand of the parent frame.
-//        wxFrame* frame = (wxFrame*)GetParent();
-//        frame->OnMenuCommand(a);
-//        return TRUE;
-//    }
-////    else
-////        return wxToolBar::OnLeftClick(a,b);
-//}
-//Bool wxPyToolBar::baseclass_OnLeftClick(int a, int b) {
-//    return wxToolBar::OnLeftClick(a,b);
-//}
-
-
-//Bool wxPyButtonBar::OnLeftClick(int a, int b) {
-//    wxPyEvtHandlers* peh=(wxPyEvtHandlers*)GetClientData();
-//    if (peh->pyOnLeftClick)
-//        return peh->callFunc(peh->pyOnLeftClick, Py_BuildValue("(ii)",a,b));
-//    else {
-//        // If there is no Python callback, redirect the request to
-//        // the OnMenuCommand of the parent frame.
-//        wxFrame* frame = (wxFrame*)GetParent();
-//        frame->OnMenuCommand(a);
-//        return TRUE;
-//    }
-//}
-//Bool wxPyButtonBar::baseclass_OnLeftClick(int a, int b) {
-//    return wxButtonBar::OnLeftClick(a,b);
-//}
-
-
-
-//wxPyMenu::wxPyMenu(PyObject* _func)
-//    : wxMenu(NULL, (wxFunction)(func ? MenuCallback : NULL)), func(0) {
-
-//    if (_func) {
-//        func = _func;
-//        Py_INCREF(func);
-//    }
-//}
-
-//wxPyMenu::~wxPyMenu() {
-//    if (func)
-//        Py_DECREF(func);
-//}
-
-
-//void wxPyMenu::MenuCallback(wxWindow& win, wxCommandEvent& evt) {
-//    wxPyEvtHandlers* peh= new wxPyEvtHandlers;  // Used for the helper methods
-//    PyObject* evtobj = peh->constructObject((void*)&evt, "wxCommandEvent");
-//    PyObject* winobj = peh->constructObject((void*)&win, "wxWindow");
-//    if (PyErr_Occurred()) {
-//        // bail out if a problem
-//        PyErr_Print();
-//        delete peh;
-//        return;
-//    }
-//    // Now call the callback...
-//    PyObject* func = ((wxPyMenu*)&win)->func;
-//    peh->callFunc(func, Py_BuildValue("(OO)", winobj, evtobj));
-//    Py_DECREF(evtobj);
-//    Py_DECREF(winobj);
-//    delete peh;
-//}
-
-
-
-//wxPyTimer::wxPyTimer(PyObject* callback) {
-//    func = callback;
-//    Py_INCREF(func);
-//}
-
-//wxPyTimer::~wxPyTimer() {
-//    Py_DECREF(func);
-//}
-
-//void wxPyTimer::Notify() {
-//    wxPyEvtHandlers* peh= new wxPyEvtHandlers;  // just for the helper methods
-//    peh->callFunc(func, Py_BuildValue("()"));
-//    delete peh;
-//}
 
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
@@ -1073,7 +628,12 @@ wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source) {
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.7  1998/08/27 00:00:26  RD
+// - more tweaks
+// - have discovered some problems but not yet discovered solutions...
+//
 // Revision 1.6  1998/08/18 21:54:12  RD
+//
 // ifdef out some wxGTK specific code
 //
 // Revision 1.5  1998/08/18 19:48:17  RD

@@ -369,10 +369,11 @@ class AppFrame(wxFrame):
 
     def WriteText(self, str):
         self.log.WriteText(str)
-        w, h = self.log.GetClientSize()
-        numLines = h/self.charHeight
-        x, y = self.log.PositionToXY(self.log.GetLastPosition())
-        self.log.ShowPosition(self.log.XYToPosition(x, y-numLines+1))
+        if wxPlatform == '__WXMSW__':
+            w, h = self.log.GetClientSize()
+            numLines = h/self.charHeight
+            x, y = self.log.PositionToXY(self.log.GetLastPosition())
+            self.log.ShowPosition(self.log.XYToPosition(x, y-numLines+1))
 
     def OnFileExit(self, event):
         self.Close()
@@ -506,12 +507,31 @@ class MyApp(wxApp):
 
 def main():
     app = MyApp(0)
+    import wxPython.gdi
+    reload(wxPython.gdi)
+    print wxPython.gdi.wxBLUE
+    print wxPython.gdi.wxBLUE.this
+
     app.MainLoop()
 
 
 def t():
     import pdb
     pdb.run('main()')
+
+
+# for focused testing...
+def t2():
+    class T2App(wxApp):
+        def OnInit(self):
+            frame = TestLayoutConstraints(NULL)
+            frame.Show(true)
+            self.SetTopWindow(frame)
+
+    app = T2App(0)
+    app.MainLoop()
+
+
 
 if __name__ == '__main__':
     main()
@@ -520,6 +540,10 @@ if __name__ == '__main__':
 #----------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.3  1998/08/27 00:01:17  RD
+# - more tweaks
+# - have discovered some problems but not yet discovered solutions...
+#
 # Revision 1.2  1998/08/22 19:51:18  RD
 # some tweaks for wxGTK
 #

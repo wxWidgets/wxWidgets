@@ -1372,8 +1372,9 @@ class wxApp(wxPyApp):
 #----------------------------------------------------------------------------
 #
 # $Log$
-# Revision 1.2  1998/08/22 19:50:58  RD
-# some tweaks for wxGTK
+# Revision 1.3  1998/08/27 00:00:56  RD
+# - more tweaks
+# - have discovered some problems but not yet discovered solutions...
 #
 # Revision 1.2  1998/08/18 19:48:12  RD
 # more wxGTK compatibility things.

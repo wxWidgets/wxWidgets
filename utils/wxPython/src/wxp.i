@@ -14,15 +14,6 @@
 
 
 %{
-
-#ifdef __WXMSW__
-#include <windows.h>
-#undef FindWindow
-#undef GetCharWidth
-#undef LoadAccelerators
-#endif
-
-
 #include "helpers.h"
 %}
 
@@ -101,29 +92,6 @@ public:
 };
 
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
-
-
-%{
-#ifdef __WXMSW__             // If building for win32...
-extern HINSTANCE wxhInstance;
-
-BOOL WINAPI DllMain(
-    HINSTANCE   hinstDLL,    // handle to DLL module
-    DWORD       fdwReason,   // reason for calling function
-    LPVOID      lpvReserved  // reserved
-   )
-{
-    wxhInstance = hinstDLL;
-    return 1;
-}
-#endif
-
-%}
-
-
-
 
 //----------------------------------------------------------------------
 // This code gets added to the module initialization function
@@ -143,12 +111,6 @@ extern "C" SWIGEXPORT(void,initcmndlgsc)();
 %}
 
 %init %{
-        // We don't want to run the wxEntry or OnInit yet, so we just do the
-        // beginings of what it would have done...  See __wxStart() for the
-        // rest.
-#ifdef __WXMSW__
-    wxApp::Initialize((WXHINSTANCE)wxhInstance);
-#endif
 
 
 //    wxPyWindows = new wxHashTable(wxKEY_INTEGER, 100);
@@ -177,6 +139,10 @@ extern "C" SWIGEXPORT(void,initcmndlgsc)();
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.5  1998/08/27 00:00:28  RD
+// - more tweaks
+// - have discovered some problems but not yet discovered solutions...
+//
 // Revision 1.4  1998/08/18 19:48:20  RD
 // more wxGTK compatibility things.
 //
