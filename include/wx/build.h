@@ -50,11 +50,38 @@
 #else
     #define __WX_BO_COMPILER
 #endif
+
+// WXWIN_COMPATIBILITY macros affect presence of virtual functions
+#if WXWIN_COMPATIBILITY
+    #define __WX_BO_WXWIN_COMPAT_1_68 ",compatible with 1.68"
+#else
+    #define __WX_BO_WXWIN_COMPAT_1_68
+#endif
+#if WXWIN_COMPATIBILITY_2
+    #define __WX_BO_WXWIN_COMPAT_2_0 ",compatible with 2.0"
+#else
+    #define __WX_BO_WXWIN_COMPAT_2_0
+#endif
+#if WXWIN_COMPATIBILITY_2_2
+    #define __WX_BO_WXWIN_COMPAT_2_2 ",compatible with 2.2"
+#else
+    #define __WX_BO_WXWIN_COMPAT_2_2
+#endif
+#if WXWIN_COMPATIBILITY_2_4
+    #define __WX_BO_WXWIN_COMPAT_2_4 ",compatible with 2.4"
+#else
+    #define __WX_BO_WXWIN_COMPAT_2_4
+#endif
+
         
 // This macro is passed as argument to wxConsoleApp::CheckBuildOptions()
 #define WX_BUILD_OPTIONS_SIGNATURE \
     __WX_BO_VERSION(wxMAJOR_VERSION, wxMINOR_VERSION, wxRELEASE_NUMBER) \
-    " (" __WX_BO_DEBUG "," __WX_BO_UNICODE __WX_BO_COMPILER ")"
+    " (" __WX_BO_DEBUG "," __WX_BO_UNICODE \
+     __WX_BO_COMPILER \
+     __WX_BO_WXWIN_COMPAT_1_68 __WX_BO_WXWIN_COMPAT_2_0 \
+     __WX_BO_WXWIN_COMPAT_2_2 __WX_BO_WXWIN_COMPAT_2_4 \
+     ")"
 
 
 
