@@ -28,6 +28,9 @@
 #if wxUSE_NANOX
 #undef wxHAVE_LIB_XPM
 #define wxHAVE_LIB_XPM 0
+
+// Copy from the drawable to the wxImage
+bool wxGetImageFromDrawable(GR_DRAW_ID drawable, int srcX, int srcY, int width, int height, wxImage& image);
 #endif
 
 #if wxUSE_XPM
@@ -1295,4 +1298,146 @@ WXDisplay *wxBitmap::GetDisplay() const
 
     return M_BMPDATA->m_display;
 }
+
+#if wxUSE_NANOX
+// Copy from the drawable to the wxImage
+bool wxGetImageFromDrawable(GR_DRAW_ID drawable, int srcX, int srcY, int width, int height, wxImage& image)
+{
+	GR_SCREEN_INFO sinfo;
+    int x, y;
+    GR_PIXELVAL *pixels;
+    GR_PIXELVAL pixel;
+    GR_COLOR colour;
+    GR_PALETTE* palette = NULL;
+
+	GrGetScreenInfo(&sinfo);
+
+	if (sinfo.pixtype == MWPF_PALETTE) {
+		if(!(palette = malloc(sizeof(GR_PALETTE)))) {
+			return FALSE;
+		}
+		GrGetSystemPalette(palette);
+	}
+
+	if(!(pixels = (GR_PIXELVAL*) malloc(sizeof(GR_PIXELVAL) * width * height)))
+    {
+        return FALSE;
+    }
+
+    if (!image.Create(width, height))
+    {
+        free(pixels);
+        return FALSE;
+    }
+
+	GrReadArea(drawable, srcX, srcY, width, height,
+						pixels);
+
+
+		for(x = 0; x < sinfo.cols; x++) {
+
+			pp = (unsigned char *)pixels +
+				((x + (y * sinfo.cols)) *
+				sizeof(GR_PIXELVAL));
+
+			switch(sinfo.pixtype) {
+			/* FIXME: These may need modifying on big endian. */
+				case MWPF_TRUECOLOR0888:
+				case MWPF_TRUECOLOR888:
+					rgb[0] = pp[2];
+					rgb[1] = pp[1];
+					rgb[2] = pp[0];
+					break;
+				case MWPF_PALETTE:
+					rgb[0] = palette->palette[pp[0]].r;
+					rgb[1] = palette->palette[pp[0]].g;
+					rgb[2] = palette->palette[pp[0]].b;
+					break;
+				case MWPF_TRUECOLOR565:
+					rgb[0] = pp[1] & 0xf8;
+					rgb[1] = ((pp[1] & 0x07) << 5) |
+						((pp[0] & 0xe0) >> 3);
+					rgb[2] = (pp[0] & 0x1f) << 3;
+					break;
+				case MWPF_TRUECOLOR555:
+					rgb[0] = (pp[1] & 0x7c) << 1;
+					rgb[1] = ((pp[1] & 0x03) << 6) |
+						((pp[0] & 0xe0) >> 2);
+					rgb[2] = (pp[0] & 0x1f) << 3;
+					break;
+				case MWPF_TRUECOLOR332:
+					rgb[0] = pp[0] & 0xe0;
+					rgb[1] = (pp[0] & 0x1c) << 3;
+					rgb[2] = (pp[0] & 0x03) << 6;
+					break;
+				default:
+					fprintf(stderr, "Unsupported pixel "
+							"format\n");
+					return 1;
+			}
+
+            image.SetRGB(x, y, rgb[0], rgb[1], rgb[2]);
+
+		}
+	}
+
+    free(pixels);
+	if(palette) free(palette);
+
+    return TRUE;
+}
+
+#if 0
+int GrGetPixelColor(GR_SCREEN_INFO* sinfo, GR_PALETTE* palette, GR_PIXELVAL pixel,
+    unsigned char* red, unsigned char* green, unsigned char* blue)
+{
+	unsigned char rgb[3], *pp;
+
+    pp = (unsigned char*) & pixel ;
+
+    switch (sinfo.pixtype)
+    {
+			/* FIXME: These may need modifying on big endian. */
+				case MWPF_TRUECOLOR0888:
+				case MWPF_TRUECOLOR888:
+					rgb[0] = pp[2];
+					rgb[1] = pp[1];
+					rgb[2] = pp[0];
+					break;
+				case MWPF_PALETTE:
+					rgb[0] = palette->palette[pp[0]].r;
+					rgb[1] = palette->palette[pp[0]].g;
+					rgb[2] = palette->palette[pp[0]].b;
+					break;
+				case MWPF_TRUECOLOR565:
+					rgb[0] = pp[1] & 0xf8;
+					rgb[1] = ((pp[1] & 0x07) << 5) |
+						((pp[0] & 0xe0) >> 3);
+					rgb[2] = (pp[0] & 0x1f) << 3;
+					break;
+				case MWPF_TRUECOLOR555:
+					rgb[0] = (pp[1] & 0x7c) << 1;
+					rgb[1] = ((pp[1] & 0x03) << 6) |
+						((pp[0] & 0xe0) >> 2);
+					rgb[2] = (pp[0] & 0x1f) << 3;
+					break;
+				case MWPF_TRUECOLOR332:
+					rgb[0] = pp[0] & 0xe0;
+					rgb[1] = (pp[0] & 0x1c) << 3;
+					rgb[2] = (pp[0] & 0x03) << 6;
+					break;
+				default:
+					fprintf(stderr, "Unsupported pixel format\n");
+					return 0;
+	}
+
+
+    *(red) = rgb[0];
+    *(green) = rgb[1];
+    *(blue) = rgb[2];
+    return 1;
+}
+#endif
+#endif
+  // wxUSE_NANOX
 
