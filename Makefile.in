@@ -598,11 +598,13 @@ DEMOS_DIST: ALL_GUI_DIST
 	cp $(DEMODIR)/life/*.cpp $(DISTDIR)/demos/life
 	cp $(DEMODIR)/life/*.h $(DISTDIR)/demos/life
 	cp $(DEMODIR)/life/*.xpm $(DISTDIR)/demos/life
+	cp $(DEMODIR)/life/*.inc $(DISTDIR)/demos/life
 	cp $(DEMODIR)/life/bitmaps/*.xpm $(DISTDIR)/demos/life/bitmaps
 	
 	mkdir $(DISTDIR)/demos/poem
 	cp $(DEMODIR)/poem/Makefile.in $(DISTDIR)/demos/poem
 	cp $(DEMODIR)/poem/makefile.unx $(DISTDIR)/demos/poem
+	cp $(DEMODIR)/poem/*.h $(DISTDIR)/demos/poem
 	cp $(DEMODIR)/poem/*.cpp $(DISTDIR)/demos/poem
 	cp $(DEMODIR)/poem/*.xpm $(DISTDIR)/demos/poem
 	cp $(DEMODIR)/poem/*.dat $(DISTDIR)/demos/poem
@@ -1046,6 +1048,9 @@ MANUAL_DIST:
 # see utils/wxPython/distrib for scripts to make a proper wxPython dist.
 PYTHON_DIST:
 	mkdir $(DISTDIR)/utils/wxPython
+	mkdir $(DISTDIR)/utils/wxPython/demo
+	mkdir $(DISTDIR)/utils/wxPython/demo/bitmaps
+	mkdir $(DISTDIR)/utils/wxPython/demo/data
 	mkdir $(DISTDIR)/utils/wxPython/distrib
 	mkdir $(DISTDIR)/utils/wxPython/lib
 	mkdir $(DISTDIR)/utils/wxPython/lib/editor
@@ -1058,6 +1063,9 @@ PYTHON_DIST:
 	mkdir $(DISTDIR)/utils/wxPython/src/gtk
 
 	cp $(UTILSDIR)/wxPython/*.txt $(DISTDIR)/utils/wxPython
+	-cp $(UTILSDIR)/wxPython/demo/* $(DISTDIR)/utils/wxPython/demo
+	-cp $(UTILSDIR)/wxPython/demo/bitmaps/* $(DISTDIR)/utils/wxPython/demo/bitmaps
+	-cp $(UTILSDIR)/wxPython/demo/data/* $(DISTDIR)/utils/wxPython/demo/data
 	cp $(UTILSDIR)/wxPython/distrib/build.py $(DISTDIR)/utils/wxPython/distrib
 	cp $(UTILSDIR)/wxPython/lib/*.py $(DISTDIR)/utils/wxPython/lib
 	cp $(UTILSDIR)/wxPython/lib/editor/*.py $(DISTDIR)/utils/wxPython/lib/editor
