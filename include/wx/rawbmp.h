@@ -141,7 +141,7 @@ public:
 
     // default copy ctor, assignment operator and dtor are ok
 
-    
+
     // navigation
     // ----------
 
