@@ -65,6 +65,8 @@ C++ pointer.
 Added some optimization methods to wxDC: GetBoundingBox, DrawLineList,
 DrawPointList.
 
+Added a set of sophisticated Error Dialogs from Chris Fama.
+
 
 
 

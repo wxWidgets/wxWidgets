@@ -31,6 +31,7 @@ _treeList = [
                                 'OOR',
                                 'wxFindReplaceDialog',
                                 'DrawXXXList',
+                                'ErrorDialogs',
                                 ##'wxPopupWindow',
                                 ]),
 
@@ -64,7 +65,7 @@ _treeList = [
                         'PythonEvents', 'Threads',
                         'ActiveXWrapper_Acrobat', 'ActiveXWrapper_IE',
                         'wxDragImage', "wxProcess", "FancyText", "OOR", "wxWave",
-                        'wxJoystick', 'DrawXXXList',
+                        'wxJoystick', 'DrawXXXList', 'ErrorDialogs',
                         ]),
 
     ('wxPython Library', ['Layoutf', 'wxScrolledMessageDialog',
