@@ -97,9 +97,7 @@ bool wxTextCtrl::Create(
 , const wxPoint&                    rPos
 , const wxSize&                     rSize
 , long                              lStyle
-#if wxUSE_VALIDATORS
 , const wxValidator&                rValidator
-#endif
 , const wxString&                   rsName
 )
 {
@@ -114,9 +112,7 @@ bool wxTextCtrl::Create(
                      ,rPos
                      ,rSize
                      ,lStyle
-#if wxUSE_VALIDATORS
                      ,rValidator
-#endif
                      ,rsName
                     ))
         return FALSE;
