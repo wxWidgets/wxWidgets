@@ -502,31 +502,6 @@ class Choice(_core.ControlWithItems):
         """
         return _controls_.Choice_Create(*args, **kwargs)
 
-    def SetSelection(*args, **kwargs):
-        """
-        SetSelection(self, int n)
-
-        Select the n'th item (zero based) in the list.
-        """
-        return _controls_.Choice_SetSelection(*args, **kwargs)
-
-    def SetStringSelection(*args, **kwargs):
-        """
-        SetStringSelection(self, String string) -> bool
-
-        Select the item with the specifed string
-        """
-        return _controls_.Choice_SetStringSelection(*args, **kwargs)
-
-    def SetString(*args, **kwargs):
-        """
-        SetString(self, int n, String string)
-
-        Set the label for the n'th item (zero based) in the list.
-        """
-        return _controls_.Choice_SetString(*args, **kwargs)
-
-    Select = SetSelection 
     def GetClassDefaultAttributes(*args, **kwargs):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
@@ -1376,7 +1351,8 @@ class ListBox(_core.ControlWithItems):
         """
         Select(self, int n)
 
-        Sets the item at index 'n' to be the selected item.
+        This is the same as `SetSelection` and exists only because it is
+        slightly more natural for controls which support multiple selection.
         """
         return _controls_.ListBox_Select(*args, **kwargs)
 
@@ -3509,8 +3485,8 @@ class NotebookSizerPtr(NotebookSizer):
         self.__class__ = NotebookSizer
 _controls_.NotebookSizer_swigregister(NotebookSizerPtr)
 
-NotebookSizer = wx._deprecated(NotebookSizer, "NotebookSizer is no longer needed.") 
-BookCtrlSizer = wx._deprecated(BookCtrlSizer, "BookCtrlSizer is no longer needed.") 
+NotebookSizer.__init__ = wx._deprecated(NotebookSizer.__init__, "NotebookSizer is no longer needed.") 
+BookCtrlSizer.__init__ = wx._deprecated(BookCtrlSizer.__init__, "BookCtrlSizer is no longer needed.") 
 #---------------------------------------------------------------------------
 
 TOOL_STYLE_BUTTON = _controls_.TOOL_STYLE_BUTTON
@@ -4751,7 +4727,7 @@ class ListCtrl(_core.Control):
         HitTest(Point point) -> (item, where)
 
         Determines which item (if any) is at the specified point, giving
-         in the second return value (see wxLIST_HITTEST_... flags.)
+         in the second return value (see wx.LIST_HITTEST flags.)
         """
         return _controls_.ListCtrl_HitTest(*args, **kwargs)
 
@@ -6352,6 +6328,126 @@ def DragTreeItem(*args, **kwargs):
 def DragListItem(*args, **kwargs):
     """DragListItem(ListCtrl listCtrl, long id) -> DragImage"""
     val = _controls_.new_DragListItem(*args, **kwargs)
+    val.thisown = 1
+    return val
+
+#---------------------------------------------------------------------------
+
+DP_DEFAULT = _controls_.DP_DEFAULT
+DP_SPIN = _controls_.DP_SPIN
+DP_DROPDOWN = _controls_.DP_DROPDOWN
+DP_SHOWCENTURY = _controls_.DP_SHOWCENTURY
+DP_ALLOWNONE = _controls_.DP_ALLOWNONE
+class DatePickerCtrl(_core.Control):
+    """
+    This control allows the user to select a date. Unlike
+    `wx.calendar.CalendarCtrl`, which is a relatively big control,
+    `wx.DatePickerCtrl` is implemented as a small window showing the
+    currently selected date. The control can be edited using the keyboard,
+    and can also display a popup window for more user-friendly date
+    selection, depending on the styles used and the platform.
+    """
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxDatePickerCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """
+        __init__(self, Window parent, int id=-1, DateTime dt=wxDefaultDateTime, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=wxDP_DEFAULT|wxDP_SHOWCENTURY, 
+            Validator validator=DefaultValidator, 
+            String name=DatePickerCtrlNameStr) -> DatePickerCtrl
+
+        Create a new DatePickerCtrl.
+        """
+        newobj = _controls_.new_DatePickerCtrl(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+        self._setOORInfo(self)
+
+    def Create(*args, **kwargs):
+        """
+        Create(self, Window parent, int id=-1, DateTime dt=wxDefaultDateTime, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=wxDP_DEFAULT|wxDP_SHOWCENTURY, 
+            Validator validator=DefaultValidator, 
+            String name=DatePickerCtrlNameStr) -> bool
+
+        Create the GUI parts of the DatePickerCtrl, for use in 2-phase
+        creation.
+        """
+        return _controls_.DatePickerCtrl_Create(*args, **kwargs)
+
+    def SetValue(*args, **kwargs):
+        """
+        SetValue(self, DateTime dt)
+
+        Changes the current value of the control. The date should be valid and
+        included in the currently selected range, if any.
+
+        Calling this method does not result in a date change event.
+        """
+        return _controls_.DatePickerCtrl_SetValue(*args, **kwargs)
+
+    def GetValue(*args, **kwargs):
+        """
+        GetValue(self) -> DateTime
+
+        Returns the currently selected date. If there is no selection or the
+        selection is outside of the current range, an invalid `wx.DateTime`
+        object is returned.
+        """
+        return _controls_.DatePickerCtrl_GetValue(*args, **kwargs)
+
+    def SetRange(*args, **kwargs):
+        """
+        SetRange(self, DateTime dt1, DateTime dt2)
+
+        Sets the valid range for the date selection. If dt1 is valid, it
+        becomes the earliest date (inclusive) accepted by the control. If dt2
+        is valid, it becomes the latest possible date.
+
+        If the current value of the control is outside of the newly set range
+        bounds, the behaviour is undefined.
+        """
+        return _controls_.DatePickerCtrl_SetRange(*args, **kwargs)
+
+    def GetLowerLimit(*args, **kwargs):
+        """
+        GetLowerLimit(self) -> DateTime
+
+        Get the lower limit of the valid range for the date selection, if any.
+        If there is no range or there is no lower limit, then the
+        `wx.DateTime` value returned will be invalid.
+        """
+        return _controls_.DatePickerCtrl_GetLowerLimit(*args, **kwargs)
+
+    def GetUpperLimit(*args, **kwargs):
+        """
+        GetUpperLimit(self) -> DateTime
+
+        Get the upper limit of the valid range for the date selection, if any.
+        If there is no range or there is no upper limit, then the
+        `wx.DateTime` value returned will be invalid.
+        """
+        return _controls_.DatePickerCtrl_GetUpperLimit(*args, **kwargs)
+
+
+class DatePickerCtrlPtr(DatePickerCtrl):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = DatePickerCtrl
+_controls_.DatePickerCtrl_swigregister(DatePickerCtrlPtr)
+DatePickerCtrlNameStr = cvar.DatePickerCtrlNameStr
+
+def PreDatePickerCtrl(*args, **kwargs):
+    """
+    PreDatePickerCtrl() -> DatePickerCtrl
+
+    Precreate a DatePickerCtrl for use in 2-phase creation.
+    """
+    val = _controls_.new_PreDatePickerCtrl(*args, **kwargs)
     val.thisown = 1
     return val
 

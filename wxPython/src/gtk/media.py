@@ -120,14 +120,6 @@ class MediaCtrl(_core.Control):
         """LoadFromURI(self, String location) -> bool"""
         return _media.MediaCtrl_LoadFromURI(*args, **kwargs)
 
-    def Loop(*args, **kwargs):
-        """Loop(self, bool bLoop=True)"""
-        return _media.MediaCtrl_Loop(*args, **kwargs)
-
-    def IsLooped(*args, **kwargs):
-        """IsLooped(self) -> bool"""
-        return _media.MediaCtrl_IsLooped(*args, **kwargs)
-
     def GetState(*args, **kwargs):
         """GetState(self) -> int"""
         return _media.MediaCtrl_GetState(*args, **kwargs)

@@ -163,7 +163,7 @@ class CalendarDateAttrPtr(CalendarDateAttr):
         self.__class__ = CalendarDateAttr
 _calendar.CalendarDateAttr_swigregister(CalendarDateAttrPtr)
 
-class CalendarEvent(_core.CommandEvent):
+class CalendarEvent(_core.DateEvent):
     """Proxy of C++ CalendarEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxCalendarEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -173,14 +173,6 @@ class CalendarEvent(_core.CommandEvent):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
-    def GetDate(*args, **kwargs):
-        """GetDate(self) -> DateTime"""
-        return _calendar.CalendarEvent_GetDate(*args, **kwargs)
-
-    def SetDate(*args, **kwargs):
-        """SetDate(self, DateTime date)"""
-        return _calendar.CalendarEvent_SetDate(*args, **kwargs)
-
     def SetWeekDay(*args, **kwargs):
         """SetWeekDay(self, int wd)"""
         return _calendar.CalendarEvent_SetWeekDay(*args, **kwargs)
@@ -239,7 +231,7 @@ class CalendarCtrl(_core.Control):
     SetAttr allows to modify its appearance. Just create a custom
     attribute object and set it for the day you want to be displayed
     specially A day may be marked as being a holiday, (even if it is not
-    recognized as one by wx.DateTime) by using the SetHoliday method.
+    recognized as one by `wx.DateTime`) by using the SetHoliday method.
 
     As the attributes are specified for each day, they may change when the
     month is changed, so you will often want to update them in an

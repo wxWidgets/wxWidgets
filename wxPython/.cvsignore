@@ -16,6 +16,7 @@ build-pkg-debug
 build-x11
 build.local
 build.unicode
+build_options.py
 dist
 licence
 s.bat

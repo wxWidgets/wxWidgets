@@ -1039,7 +1039,7 @@ def CursorFromImage(*args, **kwargs):
     CursorFromImage(Image image) -> Cursor
 
     Constructs a cursor from a `wx.Image`. The mask (if any) will be used
-    as transparent.
+    for setting the transparent portions of the cursor.
     """
     val = _gdi_.new_CursorFromImage(*args, **kwargs)
     val.thisown = 1

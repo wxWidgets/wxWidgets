@@ -1087,6 +1087,10 @@ class HtmlWindow(_windows.ScrolledWindow):
         """SetBorders(self, int b)"""
         return _html.HtmlWindow_SetBorders(*args, **kwargs)
 
+    def SetBackgroundImage(*args, **kwargs):
+        """SetBackgroundImage(self, Bitmap bmpBg)"""
+        return _html.HtmlWindow_SetBackgroundImage(*args, **kwargs)
+
     def ReadCustomization(*args, **kwargs):
         """ReadCustomization(self, ConfigBase cfg, String path=EmptyString)"""
         return _html.HtmlWindow_ReadCustomization(*args, **kwargs)

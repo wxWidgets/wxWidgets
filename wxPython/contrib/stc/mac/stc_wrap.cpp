@@ -14179,6 +14179,46 @@ static PyObject *_wrap_StyledTextCtrl_Allocate(PyObject *, PyObject *args, PyObj
 }
 
 
+static PyObject *_wrap_StyledTextCtrl_FindColumn(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    int arg2 ;
+    int arg3 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "line",(char *) "column", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_FindColumn",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStyledTextCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = (int)(SWIG_As_int(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        arg3 = (int)(SWIG_As_int(obj2)); 
+        if (SWIG_arg_fail(3)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)(arg1)->FindColumn(arg2,arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = SWIG_From_int((int)(result)); 
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_StyledTextCtrl_StartRecord(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
@@ -17068,6 +17108,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"StyledTextCtrl_SetCharsDefault", (PyCFunction) _wrap_StyledTextCtrl_SetCharsDefault, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_AutoCompGetCurrent", (PyCFunction) _wrap_StyledTextCtrl_AutoCompGetCurrent, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_Allocate", (PyCFunction) _wrap_StyledTextCtrl_Allocate, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"StyledTextCtrl_FindColumn", (PyCFunction) _wrap_StyledTextCtrl_FindColumn, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_StartRecord", (PyCFunction) _wrap_StyledTextCtrl_StartRecord, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_StopRecord", (PyCFunction) _wrap_StyledTextCtrl_StopRecord, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_SetLexer", (PyCFunction) _wrap_StyledTextCtrl_SetLexer, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -17253,6 +17294,9 @@ static void *_p_wxToolTipTo_p_wxObject(void *x) {
 static void *_p_wxMenuItemTo_p_wxObject(void *x) {
     return (void *)((wxObject *)  ((wxMenuItem *) x));
 }
+static void *_p_wxDateEventTo_p_wxObject(void *x) {
+    return (void *)((wxObject *) (wxEvent *)(wxCommandEvent *) ((wxDateEvent *) x));
+}
 static void *_p_wxIdleEventTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvent *) ((wxIdleEvent *) x));
 }
@@ -17430,6 +17474,9 @@ static void *_p_wxScrollEventTo_p_wxCommandEvent(void *x) {
 static void *_p_wxWindowCreateEventTo_p_wxCommandEvent(void *x) {
     return (void *)((wxCommandEvent *)  ((wxWindowCreateEvent *) x));
 }
+static void *_p_wxDateEventTo_p_wxCommandEvent(void *x) {
+    return (void *)((wxCommandEvent *)  ((wxDateEvent *) x));
+}
 static void *_p_wxUpdateUIEventTo_p_wxCommandEvent(void *x) {
     return (void *)((wxCommandEvent *)  ((wxUpdateUIEvent *) x));
 }
@@ -17547,6 +17594,9 @@ static void *_p_wxSizeEventTo_p_wxEvent(void *x) {
 static void *_p_wxMoveEventTo_p_wxEvent(void *x) {
     return (void *)((wxEvent *)  ((wxMoveEvent *) x));
 }
+static void *_p_wxDateEventTo_p_wxEvent(void *x) {
+    return (void *)((wxEvent *) (wxCommandEvent *) ((wxDateEvent *) x));
+}
 static void *_p_wxPaintEventTo_p_wxEvent(void *x) {
     return (void *)((wxEvent *)  ((wxPaintEvent *) x));
 }
@@ -17605,13 +17655,13 @@ static void *_p_wxScrollWinEventTo_p_wxEvent(void *x) {
     return (void *)((wxEvent *)  ((wxScrollWinEvent *) x));
 }
 static swig_type_info _swigt__p_wxRect[] = {{"_p_wxRect", 0, "wxRect *", 0, 0, 0, 0},{"_p_wxRect", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
-static swig_type_info _swigt__p_wxObject[] = {{"_p_wxObject", 0, "wxObject *", 0, 0, 0, 0},{"_p_wxLayoutConstraints", _p_wxLayoutConstraintsTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxGBSizerItem", _p_wxGBSizerItemTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSizerItem", _p_wxSizerItemTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxIndividualLayoutConstraint", _p_wxIndividualLayoutConstraintTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxStaticBoxSizer", _p_wxStaticBoxSizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxBoxSizer", _p_wxBoxSizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSizer", _p_wxSizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxGridBagSizer", _p_wxGridBagSizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFileHistory", _p_wxFileHistoryTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMenu", _p_wxMenuTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxEvent", _p_wxEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxGridSizer", _p_wxGridSizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFlexGridSizer", _p_wxFlexGridSizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxInitDialogEvent", _p_wxInitDialogEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPaintEvent", _p_wxPaintEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxNcPaintEvent", _p_wxNcPaintEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxStyledTextEvent", _p_wxStyledTextEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPaletteChangedEvent", _p_wxPaletteChangedEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxDisplayChangedEvent", _p_wxDisplayChangedEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMouseCaptureChangedEvent", _p_wxMouseCaptureChangedEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSysColourChangedEvent", _p_wxSysColourChangedEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxControl", _p_wxControlTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSetCursorEvent", _p_wxSetCursorEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxTimerEvent", _p_wxTimerEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFSFile", _p_wxFSFileTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxClipboard", _p_wxClipboardTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPySizer", _p_wxPySizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxStyledTextCtrl", _p_wxStyledTextCtrlTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyEvent", _p_wxPyEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxShowEvent", _p_wxShowEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxToolTip", _p_wxToolTipTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMenuItem", _p_wxMenuItemTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMoveEvent", _p_wxMoveEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSizeEvent", _p_wxSizeEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxActivateEvent", _p_wxActivateEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxIconizeEvent", _p_wxIconizeEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMaximizeEvent", _p_wxMaximizeEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxQueryNewPaletteEvent", _p_wxQueryNewPaletteEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxIdleEvent", _p_wxIdleEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxCURHandler", _p_wxCURHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxICOHandler", _p_wxICOHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxBMPHandler", _p_wxBMPHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxImageHandler", _p_wxImageHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxTIFFHandler", _p_wxTIFFHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxEvtHandler", _p_wxEvtHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxANIHandler", _p_wxANIHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPNGHandler", _p_wxPNGHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxGIFHandler", _p_wxGIFHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPCXHandler", _p_wxPCXHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxJPEGHandler", _p_wxJPEGHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPNMHandler", _p_wxPNMHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxXPMHandler", _p_wxXPMHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxStdDialogButtonSizer", _p_wxStdDialogButtonSizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxAcceleratorTable", _p_wxAcceleratorTableTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxImage", _p_wxImageTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxScrollWinEvent", _p_wxScrollWinEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSystemOptions", _p_wxSystemOptionsTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxJoystickEvent", _p_wxJoystickEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxObject", 0, 0, 0, 0, 0, 0},{"_p_wxKeyEvent", _p_wxKeyEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxNavigationKeyEvent", _p_wxNavigationKeyEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxWindow", _p_wxWindowTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyProcess", _p_wxPyProcessTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFileSystem", _p_wxFileSystemTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMenuEvent", _p_wxMenuEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyApp", _p_wxPyAppTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxCloseEvent", _p_wxCloseEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMouseEvent", _p_wxMouseEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxEraseEvent", _p_wxEraseEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxBusyInfo", _p_wxBusyInfoTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxCommandEvent", _p_wxCommandEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxDropFilesEvent", _p_wxDropFilesEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFocusEvent", _p_wxFocusEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxProcessEvent", _p_wxProcessEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyValidator", _p_wxPyValidatorTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxValidator", _p_wxValidatorTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyTimer", _p_wxPyTimerTo_p_wxObject, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxObject[] = {{"_p_wxObject", 0, "wxObject *", 0, 0, 0, 0},{"_p_wxLayoutConstraints", _p_wxLayoutConstraintsTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxGBSizerItem", _p_wxGBSizerItemTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSizerItem", _p_wxSizerItemTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxIndividualLayoutConstraint", _p_wxIndividualLayoutConstraintTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxStaticBoxSizer", _p_wxStaticBoxSizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxBoxSizer", _p_wxBoxSizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSizer", _p_wxSizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxGridBagSizer", _p_wxGridBagSizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFileHistory", _p_wxFileHistoryTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMenu", _p_wxMenuTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxEvent", _p_wxEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxGridSizer", _p_wxGridSizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFlexGridSizer", _p_wxFlexGridSizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxInitDialogEvent", _p_wxInitDialogEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPaintEvent", _p_wxPaintEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxNcPaintEvent", _p_wxNcPaintEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxStyledTextEvent", _p_wxStyledTextEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPaletteChangedEvent", _p_wxPaletteChangedEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxDisplayChangedEvent", _p_wxDisplayChangedEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMouseCaptureChangedEvent", _p_wxMouseCaptureChangedEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSysColourChangedEvent", _p_wxSysColourChangedEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxControl", _p_wxControlTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSetCursorEvent", _p_wxSetCursorEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxTimerEvent", _p_wxTimerEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFSFile", _p_wxFSFileTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxClipboard", _p_wxClipboardTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPySizer", _p_wxPySizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxStyledTextCtrl", _p_wxStyledTextCtrlTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyEvent", _p_wxPyEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxShowEvent", _p_wxShowEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxToolTip", _p_wxToolTipTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMenuItem", _p_wxMenuItemTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxDateEvent", _p_wxDateEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMoveEvent", _p_wxMoveEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSizeEvent", _p_wxSizeEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxActivateEvent", _p_wxActivateEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxIconizeEvent", _p_wxIconizeEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMaximizeEvent", _p_wxMaximizeEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxQueryNewPaletteEvent", _p_wxQueryNewPaletteEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxIdleEvent", _p_wxIdleEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxICOHandler", _p_wxICOHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxBMPHandler", _p_wxBMPHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxImageHandler", _p_wxImageHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxTIFFHandler", _p_wxTIFFHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxEvtHandler", _p_wxEvtHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxCURHandler", _p_wxCURHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxANIHandler", _p_wxANIHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPNGHandler", _p_wxPNGHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxGIFHandler", _p_wxGIFHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPCXHandler", _p_wxPCXHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxJPEGHandler", _p_wxJPEGHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPNMHandler", _p_wxPNMHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxXPMHandler", _p_wxXPMHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxStdDialogButtonSizer", _p_wxStdDialogButtonSizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxAcceleratorTable", _p_wxAcceleratorTableTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxImage", _p_wxImageTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxScrollWinEvent", _p_wxScrollWinEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSystemOptions", _p_wxSystemOptionsTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxJoystickEvent", _p_wxJoystickEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxObject", 0, 0, 0, 0, 0, 0},{"_p_wxKeyEvent", _p_wxKeyEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxNavigationKeyEvent", _p_wxNavigationKeyEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxWindow", _p_wxWindowTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyProcess", _p_wxPyProcessTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFileSystem", _p_wxFileSystemTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMenuEvent", _p_wxMenuEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyApp", _p_wxPyAppTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxCloseEvent", _p_wxCloseEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMouseEvent", _p_wxMouseEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxEraseEvent", _p_wxEraseEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxBusyInfo", _p_wxBusyInfoTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxCommandEvent", _p_wxCommandEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxDropFilesEvent", _p_wxDropFilesEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFocusEvent", _p_wxFocusEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxProcessEvent", _p_wxProcessEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyValidator", _p_wxPyValidatorTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxValidator", _p_wxValidatorTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyTimer", _p_wxPyTimerTo_p_wxObject, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_unsigned_char[] = {{"_p_unsigned_char", 0, "unsigned char *|byte *", 0, 0, 0, 0},{"_p_unsigned_char", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxColour[] = {{"_p_wxColour", 0, "wxColour *", 0, 0, 0, 0},{"_p_wxColour", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxScrollBar[] = {{"_p_wxScrollBar", 0, "wxScrollBar *", 0, 0, 0, 0},{"_p_wxScrollBar", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxStyledTextEvent[] = {{"_p_wxStyledTextEvent", 0, "wxStyledTextEvent *", 0, 0, 0, 0},{"_p_wxStyledTextEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxWindow[] = {{"_p_wxWindow", 0, "wxWindow *", 0, 0, 0, 0},{"_p_wxControl", _p_wxControlTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxWindow", 0, 0, 0, 0, 0, 0},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxStyledTextCtrl", _p_wxStyledTextCtrlTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxWindow, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
-static swig_type_info _swigt__p_wxCommandEvent[] = {{"_p_wxCommandEvent", 0, "wxCommandEvent *", 0, 0, 0, 0},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxStyledTextEvent", _p_wxStyledTextEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxCommandEvent", 0, 0, 0, 0, 0, 0},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxCommandEvent[] = {{"_p_wxCommandEvent", 0, "wxCommandEvent *", 0, 0, 0, 0},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxDateEvent", _p_wxDateEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxStyledTextEvent", _p_wxStyledTextEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxCommandEvent", 0, 0, 0, 0, 0, 0},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_unsigned_long[] = {{"_p_unsigned_long", 0, "unsigned long *|wxLogLevel *", 0, 0, 0, 0},{"_p_unsigned_long", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxBitmap[] = {{"_p_wxBitmap", 0, "wxBitmap *", 0, 0, 0, 0},{"_p_wxBitmap", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_unsigned_int[] = {{"_p_unsigned_int", 0, "unsigned int *|time_t *", 0, 0, 0, 0},{"_p_unsigned_int", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
@@ -17628,7 +17678,7 @@ static swig_type_info _swigt__ptrdiff_t[] = {{"_ptrdiff_t", 0, "ptrdiff_t", 0, 0
 static swig_type_info _swigt__p_wxStyledTextCtrl[] = {{"_p_wxStyledTextCtrl", 0, "wxStyledTextCtrl *", 0, 0, 0, 0},{"_p_wxStyledTextCtrl", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxFont[] = {{"_p_wxFont", 0, "wxFont *", 0, 0, 0, 0},{"_p_wxFont", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxControl[] = {{"_p_wxControl", 0, "wxControl *", 0, 0, 0, 0},{"_p_wxControl", 0, 0, 0, 0, 0, 0},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxControl, 0, 0, 0, 0, 0},{"_p_wxStyledTextCtrl", _p_wxStyledTextCtrlTo_p_wxControl, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
-static swig_type_info _swigt__p_wxEvent[] = {{"_p_wxEvent", 0, "wxEvent *", 0, 0, 0, 0},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxMenuEvent", _p_wxMenuEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxCloseEvent", _p_wxCloseEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxMouseEvent", _p_wxMouseEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxEraseEvent", _p_wxEraseEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxSetCursorEvent", _p_wxSetCursorEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxTimerEvent", _p_wxTimerEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxInitDialogEvent", _p_wxInitDialogEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxPyEvent", _p_wxPyEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxJoystickEvent", _p_wxJoystickEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxEvent", 0, 0, 0, 0, 0, 0},{"_p_wxIdleEvent", _p_wxIdleEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxQueryNewPaletteEvent", _p_wxQueryNewPaletteEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxMaximizeEvent", _p_wxMaximizeEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxIconizeEvent", _p_wxIconizeEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxActivateEvent", _p_wxActivateEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxSizeEvent", _p_wxSizeEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxMoveEvent", _p_wxMoveEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxPaintEvent", _p_wxPaintEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxNcPaintEvent", _p_wxNcPaintEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxStyledTextEvent", _p_wxStyledTextEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxPaletteChangedEvent", _p_wxPaletteChangedEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxDisplayChangedEvent", _p_wxDisplayChangedEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxMouseCaptureChangedEvent", _p_wxMouseCaptureChangedEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxSysColourChangedEvent", _p_wxSysColourChangedEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxDropFilesEvent", _p_wxDropFilesEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxFocusEvent", _p_wxFocusEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxProcessEvent", _p_wxProcessEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxShowEvent", _p_wxShowEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxCommandEvent", _p_wxCommandEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxNavigationKeyEvent", _p_wxNavigationKeyEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxKeyEvent", _p_wxKeyEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxScrollWinEvent", _p_wxScrollWinEventTo_p_wxEvent, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxEvent[] = {{"_p_wxEvent", 0, "wxEvent *", 0, 0, 0, 0},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxMenuEvent", _p_wxMenuEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxCloseEvent", _p_wxCloseEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxMouseEvent", _p_wxMouseEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxEraseEvent", _p_wxEraseEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxSetCursorEvent", _p_wxSetCursorEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxTimerEvent", _p_wxTimerEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxInitDialogEvent", _p_wxInitDialogEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxPyEvent", _p_wxPyEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxJoystickEvent", _p_wxJoystickEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxEvent", 0, 0, 0, 0, 0, 0},{"_p_wxIdleEvent", _p_wxIdleEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxQueryNewPaletteEvent", _p_wxQueryNewPaletteEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxMaximizeEvent", _p_wxMaximizeEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxIconizeEvent", _p_wxIconizeEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxActivateEvent", _p_wxActivateEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxSizeEvent", _p_wxSizeEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxMoveEvent", _p_wxMoveEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxDateEvent", _p_wxDateEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxPaintEvent", _p_wxPaintEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxNcPaintEvent", _p_wxNcPaintEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxStyledTextEvent", _p_wxStyledTextEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxPaletteChangedEvent", _p_wxPaletteChangedEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxDisplayChangedEvent", _p_wxDisplayChangedEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxMouseCaptureChangedEvent", _p_wxMouseCaptureChangedEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxSysColourChangedEvent", _p_wxSysColourChangedEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxDropFilesEvent", _p_wxDropFilesEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxFocusEvent", _p_wxFocusEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxProcessEvent", _p_wxProcessEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxShowEvent", _p_wxShowEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxCommandEvent", _p_wxCommandEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxNavigationKeyEvent", _p_wxNavigationKeyEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxKeyEvent", _p_wxKeyEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxScrollWinEvent", _p_wxScrollWinEventTo_p_wxEvent, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPaperSize[] = {{"_p_wxPaperSize", 0, "enum wxPaperSize *|wxPaperSize *", 0, 0, 0, 0},{"_p_wxPaperSize", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_int[] = {{"_p_int", 0, "int *", 0, 0, 0, 0},{"_p_int", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxMemoryBuffer[] = {{"_p_wxMemoryBuffer", 0, "wxMemoryBuffer *", 0, 0, 0, 0},{"_p_wxMemoryBuffer", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
@@ -18738,6 +18788,12 @@ SWIGEXPORT(void) SWIG_init(void) {
         PyDict_SetItemString(d,"STC_LEX_BASH", SWIG_From_int((int)(62))); 
     }
     {
+        PyDict_SetItemString(d,"STC_LEX_ASN1", SWIG_From_int((int)(63))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_LEX_VHDL", SWIG_From_int((int)(64))); 
+    }
+    {
         PyDict_SetItemString(d,"STC_LEX_AUTOMATIC", SWIG_From_int((int)(1000))); 
     }
     {
@@ -19461,6 +19517,9 @@ SWIGEXPORT(void) SWIG_init(void) {
         PyDict_SetItemString(d,"STC_ERR_TIDY", SWIG_From_int((int)(19))); 
     }
     {
+        PyDict_SetItemString(d,"STC_ERR_JAVA_STACK", SWIG_From_int((int)(20))); 
+    }
+    {
         PyDict_SetItemString(d,"STC_BAT_DEFAULT", SWIG_From_int((int)(0))); 
     }
     {
@@ -19999,6 +20058,9 @@ SWIGEXPORT(void) SWIG_init(void) {
     }
     {
         PyDict_SetItemString(d,"STC_CSS_SINGLESTRING", SWIG_From_int((int)(14))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_CSS_IDENTIFIER2", SWIG_From_int((int)(15))); 
     }
     {
         PyDict_SetItemString(d,"STC_POV_DEFAULT", SWIG_From_int((int)(0))); 
@@ -20685,6 +20747,9 @@ SWIGEXPORT(void) SWIG_init(void) {
         PyDict_SetItemString(d,"STC_AU3_PREPROCESSOR", SWIG_From_int((int)(11))); 
     }
     {
+        PyDict_SetItemString(d,"STC_AU3_SPECIAL", SWIG_From_int((int)(12))); 
+    }
+    {
         PyDict_SetItemString(d,"STC_APDL_DEFAULT", SWIG_From_int((int)(0))); 
     }
     {
@@ -20700,16 +20765,28 @@ SWIGEXPORT(void) SWIG_init(void) {
         PyDict_SetItemString(d,"STC_APDL_STRING", SWIG_From_int((int)(4))); 
     }
     {
-        PyDict_SetItemString(d,"STC_APDL_WORD", SWIG_From_int((int)(5))); 
+        PyDict_SetItemString(d,"STC_APDL_OPERATOR", SWIG_From_int((int)(5))); 
     }
     {
-        PyDict_SetItemString(d,"STC_APDL_COMMAND", SWIG_From_int((int)(6))); 
+        PyDict_SetItemString(d,"STC_APDL_WORD", SWIG_From_int((int)(6))); 
     }
     {
         PyDict_SetItemString(d,"STC_APDL_PROCESSOR", SWIG_From_int((int)(7))); 
     }
     {
-        PyDict_SetItemString(d,"STC_APDL_FUNCTION", SWIG_From_int((int)(8))); 
+        PyDict_SetItemString(d,"STC_APDL_COMMAND", SWIG_From_int((int)(8))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_APDL_SLASHCOMMAND", SWIG_From_int((int)(9))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_APDL_STARCOMMAND", SWIG_From_int((int)(10))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_APDL_ARGUMENT", SWIG_From_int((int)(11))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_APDL_FUNCTION", SWIG_From_int((int)(12))); 
     }
     {
         PyDict_SetItemString(d,"STC_SH_DEFAULT", SWIG_From_int((int)(0))); 
@@ -20752,6 +20829,84 @@ SWIGEXPORT(void) SWIG_init(void) {
     }
     {
         PyDict_SetItemString(d,"STC_SH_HERE_Q", SWIG_From_int((int)(13))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ASN1_DEFAULT", SWIG_From_int((int)(0))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ASN1_COMMENT", SWIG_From_int((int)(1))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ASN1_IDENTIFIER", SWIG_From_int((int)(2))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ASN1_STRING", SWIG_From_int((int)(3))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ASN1_OID", SWIG_From_int((int)(4))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ASN1_SCALAR", SWIG_From_int((int)(5))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ASN1_KEYWORD", SWIG_From_int((int)(6))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ASN1_ATTRIBUTE", SWIG_From_int((int)(7))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ASN1_DESCRIPTOR", SWIG_From_int((int)(8))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ASN1_TYPE", SWIG_From_int((int)(9))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ASN1_OPERATOR", SWIG_From_int((int)(10))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_VHDL_DEFAULT", SWIG_From_int((int)(0))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_VHDL_COMMENT", SWIG_From_int((int)(1))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_VHDL_COMMENTLINEBANG", SWIG_From_int((int)(2))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_VHDL_NUMBER", SWIG_From_int((int)(3))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_VHDL_STRING", SWIG_From_int((int)(4))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_VHDL_OPERATOR", SWIG_From_int((int)(5))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_VHDL_IDENTIFIER", SWIG_From_int((int)(6))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_VHDL_STRINGEOL", SWIG_From_int((int)(7))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_VHDL_KEYWORD", SWIG_From_int((int)(8))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_VHDL_STDOPERATOR", SWIG_From_int((int)(9))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_VHDL_ATTRIBUTE", SWIG_From_int((int)(10))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_VHDL_STDFUNCTION", SWIG_From_int((int)(11))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_VHDL_STDPACKAGE", SWIG_From_int((int)(12))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_VHDL_STDTYPE", SWIG_From_int((int)(13))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_VHDL_USERWORD", SWIG_From_int((int)(14))); 
     }
     {
         PyDict_SetItemString(d,"STC_CMD_REDO", SWIG_From_int((int)(2011))); 

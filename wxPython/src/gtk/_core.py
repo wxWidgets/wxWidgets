@@ -4788,6 +4788,35 @@ class PyCommandEventPtr(PyCommandEvent):
         self.__class__ = PyCommandEvent
 _core_.PyCommandEvent_swigregister(PyCommandEventPtr)
 
+class DateEvent(CommandEvent):
+    """Proxy of C++ DateEvent class"""
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxDateEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """__init__(self, Window win, DateTime dt, wxEventType type) -> DateEvent"""
+        newobj = _core_.new_DateEvent(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    def GetDate(*args, **kwargs):
+        """GetDate(self) -> DateTime"""
+        return _core_.DateEvent_GetDate(*args, **kwargs)
+
+    def SetDate(*args, **kwargs):
+        """SetDate(self, DateTime date)"""
+        return _core_.DateEvent_SetDate(*args, **kwargs)
+
+
+class DateEventPtr(DateEvent):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = DateEvent
+_core_.DateEvent_swigregister(DateEventPtr)
+
+wxEVT_DATE_CHANGED = _core_.wxEVT_DATE_CHANGED
+EVT_DATE_CHANGED = wx.PyEventBinder( wxEVT_DATE_CHANGED, 1 )
+
 #---------------------------------------------------------------------------
 
 PYAPP_ASSERT_SUPPRESS = _core_.PYAPP_ASSERT_SUPPRESS
@@ -8803,10 +8832,10 @@ def Control_GetClassDefaultAttributes(*args, **kwargs):
 
 class ItemContainer(object):
     """
-    wx.ItemContainer defines an interface which is implemented by all
-    controls which have string subitems, each of which may be selected,
-    such as `wx.ListBox`, `wx.CheckListBox`, `wx.Choice` as well as
-    `wx.ComboBox` which implements an extended interface deriving from
+    The wx.ItemContainer class defines an interface which is implemented
+    by all controls which have string subitems, each of which may be
+    selected, such as `wx.ListBox`, `wx.CheckListBox`, `wx.Choice` as well
+    as `wx.ComboBox` which implements an extended interface deriving from
     this one.
 
     It defines the methods for accessing the control's items and although
@@ -8869,6 +8898,22 @@ class ItemContainer(object):
         """
         return _core_.ItemContainer_Delete(*args, **kwargs)
 
+    def GetClientData(*args, **kwargs):
+        """
+        GetClientData(self, int n) -> PyObject
+
+        Returns the client data associated with the given item, (if any.)
+        """
+        return _core_.ItemContainer_GetClientData(*args, **kwargs)
+
+    def SetClientData(*args, **kwargs):
+        """
+        SetClientData(self, int n, PyObject clientData)
+
+        Associate the given client data with the item at position n.
+        """
+        return _core_.ItemContainer_SetClientData(*args, **kwargs)
+
     def GetCount(*args, **kwargs):
         """
         GetCount(self) -> int
@@ -8915,15 +8960,14 @@ class ItemContainer(object):
         """
         return _core_.ItemContainer_FindString(*args, **kwargs)
 
-    def Select(*args, **kwargs):
+    def SetSelection(*args, **kwargs):
         """
-        Select(self, int n)
+        SetSelection(self, int n)
 
         Sets the item at index 'n' to be the selected item.
         """
-        return _core_.ItemContainer_Select(*args, **kwargs)
+        return _core_.ItemContainer_SetSelection(*args, **kwargs)
 
-    SetSelection = Select 
     def GetSelection(*args, **kwargs):
         """
         GetSelection(self) -> int
@@ -8932,6 +8976,10 @@ class ItemContainer(object):
         is selected.
         """
         return _core_.ItemContainer_GetSelection(*args, **kwargs)
+
+    def SetStringSelection(*args, **kwargs):
+        """SetStringSelection(self, String s) -> bool"""
+        return _core_.ItemContainer_SetStringSelection(*args, **kwargs)
 
     def GetStringSelection(*args, **kwargs):
         """
@@ -8942,21 +8990,14 @@ class ItemContainer(object):
         """
         return _core_.ItemContainer_GetStringSelection(*args, **kwargs)
 
-    def GetClientData(*args, **kwargs):
+    def Select(*args, **kwargs):
         """
-        GetClientData(self, int n) -> PyObject
+        Select(self, int n)
 
-        Returns the client data associated with the given item, (if any.)
+        This is the same as `SetSelection` and exists only because it is
+        slightly more natural for controls which support multiple selection.
         """
-        return _core_.ItemContainer_GetClientData(*args, **kwargs)
-
-    def SetClientData(*args, **kwargs):
-        """
-        SetClientData(self, int n, PyObject clientData)
-
-        Associate the given client data with the item at position n.
-        """
-        return _core_.ItemContainer_SetClientData(*args, **kwargs)
+        return _core_.ItemContainer_Select(*args, **kwargs)
 
 
 class ItemContainerPtr(ItemContainer):
@@ -10152,7 +10193,7 @@ class StdDialogButtonSizer(BoxSizer):
     A special sizer that knows how to order and position standard buttons
     in order to conform to the current platform's standards.  You simply
     need to add each `wx.Button` to the sizer, and be sure to create the
-    buttons using the standard ID's.  Then call `Finalize` and the sizer
+    buttons using the standard ID's.  Then call `Realize` and the sizer
     will take care of the rest.
 
     """
@@ -10173,15 +10214,15 @@ class StdDialogButtonSizer(BoxSizer):
         """
         return _core_.StdDialogButtonSizer_AddButton(*args, **kwargs)
 
-    def Finalise(*args, **kwargs):
+    def Realize(*args, **kwargs):
         """
-        Finalise(self)
+        Realize(self)
 
         This funciton needs to be called after all the buttons have been added
         to the sizer.  It will reorder them and position them in a platform
         specifc manner.
         """
-        return _core_.StdDialogButtonSizer_Finalise(*args, **kwargs)
+        return _core_.StdDialogButtonSizer_Realize(*args, **kwargs)
 
     def SetAffirmativeButton(*args, **kwargs):
         """SetAffirmativeButton(self, wxButton button)"""
