@@ -74,9 +74,9 @@ Name: manifest; Description: "Manifest files for XP LnF";     Types: full
 ;;------------------------------------------------------------
 
 [Files]
-Source: "%(SYSDIR)s\MSVCRT.dll";        DestDir: "{code:GetPythonDir}"; CopyMode: alwaysskipifsameorolder; Flags: uninsneveruninstall; Components: core
-Source: "%(SYSDIR)s\MSVCIRT.dll";       DestDir: "{code:GetPythonDir}"; CopyMode: alwaysskipifsameorolder; Flags: uninsneveruninstall; Components: core
-Source: "%(SYSDIR)s\MSVCP60.dll";       DestDir: "{code:GetPythonDir}"; CopyMode: alwaysskipifsameorolder; Flags: uninsneveruninstall; Components: core
+Source: "distrib\msw\MSVCRT.dll";        DestDir: "{code:GetPythonDir}"; CopyMode: alwaysskipifsameorolder; Flags: uninsneveruninstall; Components: core
+Source: "distrib\msw\MSVCIRT.dll";       DestDir: "{code:GetPythonDir}"; CopyMode: alwaysskipifsameorolder; Flags: uninsneveruninstall; Components: core
+Source: "distrib\msw\MSVCP60.dll";       DestDir: "{code:GetPythonDir}"; CopyMode: alwaysskipifsameorolder; Flags: uninsneveruninstall; Components: core
 
 Source: "%(WXDIR)s\lib\vc_dll\wx*%(WXDLLVER)s_*.dll";  DestDir: "{app}\wx"; Components: core
 %(MSLU)s
