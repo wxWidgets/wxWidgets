@@ -71,7 +71,7 @@ class DoodleWindow(wx.Window):
     def InitBuffer(self):
         """Initialize the bitmap used for buffering the display."""
         size = self.GetClientSize()
-        self.buffer = wx.EmptyBitmap(size.width, size.height)
+        self.buffer = wx.EmptyBitmap(max(1,size.width), max(1,size.height))
         dc = wx.BufferedDC(None, self.buffer)
         dc.SetBackground(wx.Brush(self.GetBackgroundColour()))
         dc.Clear()
