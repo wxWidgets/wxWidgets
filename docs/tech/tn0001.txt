@@ -14,8 +14,7 @@ samples/ with demos/ where needed).
    it:
    a) copy the makefiles from samples/minimal, replace all occurrences of
       minimal with foo
-   b) use makegen (sources are under utils/makegen)
-   c) use projgen
+   b) use bakefile (http://bakefile.sourceforge.net/)
 
 4. Modify configure.in and samples/configure.in for Unix compilation:
    a) if the sample should only be built if "wxUSE_FOO" is enabled, locate

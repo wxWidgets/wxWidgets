@@ -279,7 +279,6 @@ ALL_BASE_SOURCES =  \
 	src/unix/mimetype.cpp \
 	src/unix/snglinst.cpp \
 	src/unix/threadpsx.cpp \
-	src/unix/baseunix.cpp \
 	src/os2/dir.cpp \
 	src/os2/mimetype.cpp \
 	src/os2/thread.cpp \
@@ -1291,6 +1290,7 @@ COND_TOOLKIT_COCOA_GUI_HDR =  \
 	wx/cocoa/gdiobj.h \
 	wx/cocoa/icon.h \
 	wx/cocoa/listbox.h \
+	wx/cocoa/mbarman.h \
 	wx/cocoa/menu.h \
 	wx/cocoa/menuitem.h \
 	wx/cocoa/pen.h \
@@ -1667,6 +1667,10 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 @COND_TOOLKIT_MSW@GUI_HDR = $(COND_TOOLKIT_MSW_GUI_HDR)
 COND_TOOLKIT_PM_GUI_HDR =  \
 	wx/generic/caret.h \
+	wx/generic/colrdlgg.h \
+	wx/generic/dirdlgg.h \
+	wx/generic/fdrepdlg.h \
+	wx/generic/statusbr.h \
 	wx/os2/accel.h \
 	wx/os2/app.h \
 	wx/os2/bitmap.h \
@@ -1702,6 +1706,7 @@ COND_TOOLKIT_PM_GUI_HDR =  \
 	wx/os2/icon.h \
 	wx/os2/iniconf.h \
 	wx/os2/listbox.h \
+	wx/os2/listctrl.h \
 	wx/os2/menu.h \
 	wx/os2/menuitem.h \
 	wx/os2/metafile.h \
@@ -1733,6 +1738,7 @@ COND_TOOLKIT_PM_GUI_HDR =  \
 	wx/os2/toolbar.h \
 	wx/os2/tooltip.h \
 	wx/os2/toplevel.h \
+	wx/msw/treectrl.h \
 	wx/os2/window.h
 @COND_TOOLKIT_PM@GUI_HDR = $(COND_TOOLKIT_PM_GUI_HDR)
 @COND_TOOLKIT_COCOA@LOWLEVEL_HDR = 
@@ -2035,7 +2041,6 @@ COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS_3 =  \
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS \
 @COND_PLATFORM_MACOSX_1@	= $(__BASE_MACOSX_SRC_OBJECTS)
 COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS =  \
-	monodll_baseunix.o \
 	monodll_dir.o \
 	monodll_mimetype.o \
 	monodll_thread.o \
@@ -2065,7 +2070,6 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS_1 \
 @COND_PLATFORM_MACOSX_1@	= $(__BASE_MACOSX_SRC_OBJECTS_1)
 COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
-	monolib_baseunix.o \
 	monolib_dir.o \
 	monolib_mimetype.o \
 	monolib_thread.o \
@@ -2095,7 +2099,6 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS_2 \
 @COND_PLATFORM_MACOSX_1@	= $(__BASE_MACOSX_SRC_OBJECTS_2)
 COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
-	basedll_baseunix.o \
 	basedll_dir.o \
 	basedll_mimetype.o \
 	basedll_thread.o \
@@ -2125,7 +2128,6 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS_3 \
 @COND_PLATFORM_MACOSX_1@	= $(__BASE_MACOSX_SRC_OBJECTS_3)
 COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
-	baselib_baseunix.o \
 	baselib_dir.o \
 	baselib_mimetype.o \
 	baselib_thread.o \
@@ -3159,6 +3161,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_icon.o \
 	monodll_listbox.o \
 	monodll_main.o \
+	monodll_mbarman.o \
 	monodll_menu.o \
 	monodll_menuitem.o \
 	monodll_pen.o \
@@ -3437,6 +3440,13 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 @COND_TOOLKIT_MSW@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_MSW___GUI_SRC_OBJECTS)
 COND_TOOLKIT_PM___GUI_SRC_OBJECTS =  \
 	monodll_caret.o \
+	monodll_colrdlgg.o \
+	monodll_dirdlgg.o \
+	monodll_fdrepdlg.o \
+	monodll_imaglist.o \
+	monodll_msgdlgg.o \
+	monodll_prntdlgg.o \
+	monodll_statusbr.o \
 	monodll_accel.o \
 	monodll_app.o \
 	monodll_bitmap.o \
@@ -3474,6 +3484,7 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS =  \
 	monodll_icon.o \
 	monodll_iniconf.o \
 	monodll_listbox.o \
+	monodll_listctrl.o \
 	monodll_main.o \
 	monodll_menu.o \
 	monodll_menuitem.o \
@@ -3503,6 +3514,7 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS =  \
 	monodll_toolbar.o \
 	monodll_tooltip.o \
 	monodll_toplevel.o \
+	monodll_treectrl.o \
 	monodll_utilsgui.o \
 	monodll_window.o
 @COND_TOOLKIT_PM@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_PM___GUI_SRC_OBJECTS)
@@ -3545,6 +3557,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_icon.o \
 	monolib_listbox.o \
 	monolib_main.o \
+	monolib_mbarman.o \
 	monolib_menu.o \
 	monolib_menuitem.o \
 	monolib_pen.o \
@@ -3823,6 +3836,13 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_MSW@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_PM___GUI_SRC_OBJECTS_1 =  \
 	monolib_caret.o \
+	monolib_colrdlgg.o \
+	monolib_dirdlgg.o \
+	monolib_fdrepdlg.o \
+	monolib_imaglist.o \
+	monolib_msgdlgg.o \
+	monolib_prntdlgg.o \
+	monolib_statusbr.o \
 	monolib_accel.o \
 	monolib_app.o \
 	monolib_bitmap.o \
@@ -3860,6 +3880,7 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_1 =  \
 	monolib_icon.o \
 	monolib_iniconf.o \
 	monolib_listbox.o \
+	monolib_listctrl.o \
 	monolib_main.o \
 	monolib_menu.o \
 	monolib_menuitem.o \
@@ -3889,6 +3910,7 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_1 =  \
 	monolib_toolbar.o \
 	monolib_tooltip.o \
 	monolib_toplevel.o \
+	monolib_treectrl.o \
 	monolib_utilsgui.o \
 	monolib_window.o
 @COND_TOOLKIT_PM@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_PM___GUI_SRC_OBJECTS_1)
@@ -3931,6 +3953,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_icon.o \
 	coredll_listbox.o \
 	coredll_main.o \
+	coredll_mbarman.o \
 	coredll_menu.o \
 	coredll_menuitem.o \
 	coredll_pen.o \
@@ -4209,6 +4232,13 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 @COND_TOOLKIT_MSW@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_PM___GUI_SRC_OBJECTS_2 =  \
 	coredll_caret.o \
+	coredll_colrdlgg.o \
+	coredll_dirdlgg.o \
+	coredll_fdrepdlg.o \
+	coredll_imaglist.o \
+	coredll_msgdlgg.o \
+	coredll_prntdlgg.o \
+	coredll_statusbr.o \
 	coredll_accel.o \
 	coredll_app.o \
 	coredll_bitmap.o \
@@ -4246,6 +4276,7 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_2 =  \
 	coredll_icon.o \
 	coredll_iniconf.o \
 	coredll_listbox.o \
+	coredll_listctrl.o \
 	coredll_main.o \
 	coredll_menu.o \
 	coredll_menuitem.o \
@@ -4275,6 +4306,7 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_2 =  \
 	coredll_toolbar.o \
 	coredll_tooltip.o \
 	coredll_toplevel.o \
+	coredll_treectrl.o \
 	coredll_utilsgui.o \
 	coredll_window.o
 @COND_TOOLKIT_PM@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_PM___GUI_SRC_OBJECTS_2)
@@ -4317,6 +4349,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_icon.o \
 	corelib_listbox.o \
 	corelib_main.o \
+	corelib_mbarman.o \
 	corelib_menu.o \
 	corelib_menuitem.o \
 	corelib_pen.o \
@@ -4595,6 +4628,13 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_MSW@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_PM___GUI_SRC_OBJECTS_3 =  \
 	corelib_caret.o \
+	corelib_colrdlgg.o \
+	corelib_dirdlgg.o \
+	corelib_fdrepdlg.o \
+	corelib_imaglist.o \
+	corelib_msgdlgg.o \
+	corelib_prntdlgg.o \
+	corelib_statusbr.o \
 	corelib_accel.o \
 	corelib_app.o \
 	corelib_bitmap.o \
@@ -4632,6 +4672,7 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_3 =  \
 	corelib_icon.o \
 	corelib_iniconf.o \
 	corelib_listbox.o \
+	corelib_listctrl.o \
 	corelib_main.o \
 	corelib_menu.o \
 	corelib_menuitem.o \
@@ -4661,6 +4702,7 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_3 =  \
 	corelib_toolbar.o \
 	corelib_tooltip.o \
 	corelib_toplevel.o \
+	corelib_treectrl.o \
 	corelib_utilsgui.o \
 	corelib_window.o
 @COND_TOOLKIT_PM@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_PM___GUI_SRC_OBJECTS_3)
@@ -6294,9 +6336,6 @@ basedll_basemsw.o: $(srcdir)/src/msw/basemsw.cpp
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@basedll_baseunix.o: $(srcdir)/src/unix/baseunix.cpp
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
-@COND_PLATFORM_OS2_1@basedll_baseunix.o: $(srcdir)/src/unix/baseunix.cpp
-@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
-
 basedll_clntdata.o: $(srcdir)/src/common/clntdata.cpp
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
@@ -6592,9 +6631,6 @@ baselib_basemsw.o: $(srcdir)/src/msw/basemsw.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@baselib_baseunix.o: $(srcdir)/src/unix/baseunix.cpp
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
-
-@COND_PLATFORM_OS2_1@baselib_baseunix.o: $(srcdir)/src/unix/baseunix.cpp
-@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 baselib_clntdata.o: $(srcdir)/src/common/clntdata.cpp
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
@@ -7298,6 +7334,9 @@ coredll_bmpmotif.o: $(srcdir)/src/motif/bmpmotif.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_colrdlgg.o: $(srcdir)/src/generic/colrdlgg.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_colrdlgg.o: $(srcdir)/src/generic/colrdlgg.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+
 @COND_USE_GUI_1_WXUNIV_1@coredll_colrdlgg.o: $(srcdir)/src/generic/colrdlgg.cpp
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
@@ -7601,6 +7640,9 @@ coredll_ctrlrend.o: $(srcdir)/src/univ/ctrlrend.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_dirdlgg.o: $(srcdir)/src/generic/dirdlgg.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_dirdlgg.o: $(srcdir)/src/generic/dirdlgg.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+
 @COND_USE_GUI_1_WXUNIV_1@coredll_dirdlgg.o: $(srcdir)/src/generic/dirdlgg.cpp
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
@@ -7693,6 +7735,9 @@ coredll_event.o: $(srcdir)/src/common/event.cpp
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_fdrepdlg.o: $(srcdir)/src/generic/fdrepdlg.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_fdrepdlg.o: $(srcdir)/src/generic/fdrepdlg.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
 @COND_USE_GUI_1_WXUNIV_1@coredll_fdrepdlg.o: $(srcdir)/src/generic/fdrepdlg.cpp
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
@@ -8003,6 +8048,9 @@ coredll_gtk.o: $(srcdir)/src/univ/themes/gtk.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_imaglist.o: $(srcdir)/src/generic/imaglist.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_imaglist.o: $(srcdir)/src/generic/imaglist.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+
 @COND_USE_GUI_1_WXUNIV_1@coredll_imaglist.o: $(srcdir)/src/generic/imaglist.cpp
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
@@ -8066,6 +8114,9 @@ coredll_inphand.o: $(srcdir)/src/univ/inphand.cpp
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_listbox.o: $(srcdir)/src/mac/listbox.cpp
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_listctrl.o: $(srcdir)/src/os2/listctrl.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_listctrl.o: $(srcdir)/src/msw/listctrl.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
@@ -8110,6 +8161,9 @@ coredll_macnotfy.o: $(srcdir)/src/mac/macnotfy.cpp
 
 @COND_USE_GUI_1@coredll_matrix.o: $(srcdir)/src/common/matrix.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+
+coredll_mbarman.o: $(srcdir)/src/cocoa/mbarman.mm
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_mdi.o: $(srcdir)/src/mac/mdi.cpp
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
@@ -8215,6 +8269,9 @@ coredll_metal.o: $(srcdir)/src/univ/themes/metal.cpp
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_msgdlgg.o: $(srcdir)/src/generic/msgdlgg.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_msgdlgg.o: $(srcdir)/src/generic/msgdlgg.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
 @COND_USE_GUI_1_WXUNIV_1@coredll_msgdlgg.o: $(srcdir)/src/generic/msgdlgg.cpp
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
@@ -8368,6 +8425,9 @@ coredll_printmac.o: $(srcdir)/src/mac/printmac.cpp
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_prntdlgg.o: $(srcdir)/src/generic/prntdlgg.cpp
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_prntdlgg.o: $(srcdir)/src/generic/prntdlgg.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
 @COND_USE_GUI_1_WXUNIV_1@coredll_prntdlgg.o: $(srcdir)/src/generic/prntdlgg.cpp
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
@@ -8702,6 +8762,9 @@ coredll_statlmac.o: $(srcdir)/src/mac/statlmac.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_statusbr.o: $(srcdir)/src/generic/statusbr.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_statusbr.o: $(srcdir)/src/generic/statusbr.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_tabctrl.o: $(srcdir)/src/msw/tabctrl.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
@@ -8864,8 +8927,11 @@ coredll_topluniv.o: $(srcdir)/src/univ/topluniv.cpp
 @COND_USE_GUI_1@coredll_treectlg.o: $(srcdir)/src/generic/treectlg.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
-coredll_treectrl.o: $(srcdir)/src/msw/treectrl.cpp
-	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_treectrl.o: $(srcdir)/src/os2/treectrl.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_treectrl.o: $(srcdir)/src/msw/treectrl.cpp
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
 coredll_uma.o: $(srcdir)/src/mac/uma.cpp
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
@@ -9355,6 +9421,9 @@ corelib_bmpmotif.o: $(srcdir)/src/motif/bmpmotif.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_colrdlgg.o: $(srcdir)/src/generic/colrdlgg.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_colrdlgg.o: $(srcdir)/src/generic/colrdlgg.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+
 @COND_USE_GUI_1_WXUNIV_1@corelib_colrdlgg.o: $(srcdir)/src/generic/colrdlgg.cpp
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
@@ -9658,6 +9727,9 @@ corelib_ctrlrend.o: $(srcdir)/src/univ/ctrlrend.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_dirdlgg.o: $(srcdir)/src/generic/dirdlgg.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_dirdlgg.o: $(srcdir)/src/generic/dirdlgg.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+
 @COND_USE_GUI_1_WXUNIV_1@corelib_dirdlgg.o: $(srcdir)/src/generic/dirdlgg.cpp
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
@@ -9750,6 +9822,9 @@ corelib_event.o: $(srcdir)/src/common/event.cpp
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_fdrepdlg.o: $(srcdir)/src/generic/fdrepdlg.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_fdrepdlg.o: $(srcdir)/src/generic/fdrepdlg.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 @COND_USE_GUI_1_WXUNIV_1@corelib_fdrepdlg.o: $(srcdir)/src/generic/fdrepdlg.cpp
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
@@ -10060,6 +10135,9 @@ corelib_gtk.o: $(srcdir)/src/univ/themes/gtk.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_imaglist.o: $(srcdir)/src/generic/imaglist.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_imaglist.o: $(srcdir)/src/generic/imaglist.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+
 @COND_USE_GUI_1_WXUNIV_1@corelib_imaglist.o: $(srcdir)/src/generic/imaglist.cpp
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
@@ -10123,6 +10201,9 @@ corelib_inphand.o: $(srcdir)/src/univ/inphand.cpp
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_listbox.o: $(srcdir)/src/mac/listbox.cpp
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_listctrl.o: $(srcdir)/src/os2/listctrl.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_listctrl.o: $(srcdir)/src/msw/listctrl.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
@@ -10167,6 +10248,9 @@ corelib_macnotfy.o: $(srcdir)/src/mac/macnotfy.cpp
 
 @COND_USE_GUI_1@corelib_matrix.o: $(srcdir)/src/common/matrix.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+
+corelib_mbarman.o: $(srcdir)/src/cocoa/mbarman.mm
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_mdi.o: $(srcdir)/src/mac/mdi.cpp
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
@@ -10272,6 +10356,9 @@ corelib_metal.o: $(srcdir)/src/univ/themes/metal.cpp
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_msgdlgg.o: $(srcdir)/src/generic/msgdlgg.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_msgdlgg.o: $(srcdir)/src/generic/msgdlgg.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 @COND_USE_GUI_1_WXUNIV_1@corelib_msgdlgg.o: $(srcdir)/src/generic/msgdlgg.cpp
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
@@ -10425,6 +10512,9 @@ corelib_printmac.o: $(srcdir)/src/mac/printmac.cpp
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_prntdlgg.o: $(srcdir)/src/generic/prntdlgg.cpp
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_prntdlgg.o: $(srcdir)/src/generic/prntdlgg.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 @COND_USE_GUI_1_WXUNIV_1@corelib_prntdlgg.o: $(srcdir)/src/generic/prntdlgg.cpp
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
@@ -10759,6 +10849,9 @@ corelib_statlmac.o: $(srcdir)/src/mac/statlmac.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_statusbr.o: $(srcdir)/src/generic/statusbr.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_statusbr.o: $(srcdir)/src/generic/statusbr.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_tabctrl.o: $(srcdir)/src/msw/tabctrl.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
@@ -10921,8 +11014,11 @@ corelib_topluniv.o: $(srcdir)/src/univ/topluniv.cpp
 @COND_USE_GUI_1@corelib_treectlg.o: $(srcdir)/src/generic/treectlg.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
-corelib_treectrl.o: $(srcdir)/src/msw/treectrl.cpp
-	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_treectrl.o: $(srcdir)/src/os2/treectrl.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_treectrl.o: $(srcdir)/src/msw/treectrl.cpp
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 corelib_uma.o: $(srcdir)/src/mac/uma.cpp
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
@@ -11565,9 +11661,6 @@ monodll_basemsw.o: $(srcdir)/src/msw/basemsw.cpp
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@monodll_baseunix.o: $(srcdir)/src/unix/baseunix.cpp
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-@COND_PLATFORM_OS2_1@monodll_baseunix.o: $(srcdir)/src/unix/baseunix.cpp
-@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
-
 @COND_TOOLKIT_MGL_USE_GUI_1@monodll_bitmap.o: $(srcdir)/src/mgl/bitmap.cpp
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -11843,6 +11936,9 @@ monodll_cmdline.o: $(srcdir)/src/common/cmdline.cpp
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_colrdlgg.o: $(srcdir)/src/generic/colrdlgg.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_colrdlgg.o: $(srcdir)/src/generic/colrdlgg.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 @COND_USE_GUI_1_WXUNIV_1@monodll_colrdlgg.o: $(srcdir)/src/generic/colrdlgg.cpp
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -12192,6 +12288,9 @@ monodll_dircmn.o: $(srcdir)/src/common/dircmn.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_dirdlgg.o: $(srcdir)/src/generic/dirdlgg.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_dirdlgg.o: $(srcdir)/src/generic/dirdlgg.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
 @COND_USE_GUI_1_WXUNIV_1@monodll_dirdlgg.o: $(srcdir)/src/generic/dirdlgg.cpp
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -12302,6 +12401,9 @@ monodll_extended.o: $(srcdir)/src/common/extended.c
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_fdrepdlg.o: $(srcdir)/src/generic/fdrepdlg.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_fdrepdlg.o: $(srcdir)/src/generic/fdrepdlg.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 @COND_USE_GUI_1_WXUNIV_1@monodll_fdrepdlg.o: $(srcdir)/src/generic/fdrepdlg.cpp
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -12714,6 +12816,9 @@ monodll_http.o: $(srcdir)/src/common/http.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_imaglist.o: $(srcdir)/src/generic/imaglist.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_imaglist.o: $(srcdir)/src/generic/imaglist.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
 @COND_USE_GUI_1_WXUNIV_1@monodll_imaglist.o: $(srcdir)/src/generic/imaglist.cpp
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -12810,6 +12915,9 @@ monodll_list.o: $(srcdir)/src/common/list.cpp
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_listbox.o: $(srcdir)/src/mac/listbox.cpp
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_listctrl.o: $(srcdir)/src/os2/listctrl.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_listctrl.o: $(srcdir)/src/msw/listctrl.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -12890,6 +12998,9 @@ monodll_macnotfy.o: $(srcdir)/src/mac/macnotfy.cpp
 
 @COND_USE_GUI_1@monodll_matrix.o: $(srcdir)/src/common/matrix.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_mbarman.o: $(srcdir)/src/cocoa/mbarman.mm
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_mdi.o: $(srcdir)/src/mac/mdi.cpp
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -13022,6 +13133,9 @@ monodll_module.o: $(srcdir)/src/common/module.cpp
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_msgdlgg.o: $(srcdir)/src/generic/msgdlgg.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_msgdlgg.o: $(srcdir)/src/generic/msgdlgg.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 @COND_USE_GUI_1_WXUNIV_1@monodll_msgdlgg.o: $(srcdir)/src/generic/msgdlgg.cpp
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -13181,6 +13295,9 @@ monodll_printmac.o: $(srcdir)/src/mac/printmac.cpp
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_prntdlgg.o: $(srcdir)/src/generic/prntdlgg.cpp
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_prntdlgg.o: $(srcdir)/src/generic/prntdlgg.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 @COND_USE_GUI_1_WXUNIV_1@monodll_prntdlgg.o: $(srcdir)/src/generic/prntdlgg.cpp
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -13563,6 +13680,9 @@ monodll_statlmac.o: $(srcdir)/src/mac/statlmac.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_statusbr.o: $(srcdir)/src/generic/statusbr.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_statusbr.o: $(srcdir)/src/generic/statusbr.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
 monodll_stopwatch.o: $(srcdir)/src/common/stopwatch.cpp
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -13791,8 +13911,11 @@ monodll_topluniv.o: $(srcdir)/src/univ/topluniv.cpp
 @COND_USE_GUI_1@monodll_treectlg.o: $(srcdir)/src/generic/treectlg.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-monodll_treectrl.o: $(srcdir)/src/msw/treectrl.cpp
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_treectrl.o: $(srcdir)/src/os2/treectrl.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_treectrl.o: $(srcdir)/src/msw/treectrl.cpp
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 monodll_txtstrm.o: $(srcdir)/src/common/txtstrm.cpp
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -14108,9 +14231,6 @@ monolib_basemsw.o: $(srcdir)/src/msw/basemsw.cpp
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@monolib_baseunix.o: $(srcdir)/src/unix/baseunix.cpp
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-@COND_PLATFORM_OS2_1@monolib_baseunix.o: $(srcdir)/src/unix/baseunix.cpp
-@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-
 @COND_TOOLKIT_MGL_USE_GUI_1@monolib_bitmap.o: $(srcdir)/src/mgl/bitmap.cpp
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
@@ -14386,6 +14506,9 @@ monolib_cmdline.o: $(srcdir)/src/common/cmdline.cpp
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_colrdlgg.o: $(srcdir)/src/generic/colrdlgg.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_colrdlgg.o: $(srcdir)/src/generic/colrdlgg.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_USE_GUI_1_WXUNIV_1@monolib_colrdlgg.o: $(srcdir)/src/generic/colrdlgg.cpp
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
@@ -14735,6 +14858,9 @@ monolib_dircmn.o: $(srcdir)/src/common/dircmn.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_dirdlgg.o: $(srcdir)/src/generic/dirdlgg.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_dirdlgg.o: $(srcdir)/src/generic/dirdlgg.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
 @COND_USE_GUI_1_WXUNIV_1@monolib_dirdlgg.o: $(srcdir)/src/generic/dirdlgg.cpp
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
@@ -14845,6 +14971,9 @@ monolib_extended.o: $(srcdir)/src/common/extended.c
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_fdrepdlg.o: $(srcdir)/src/generic/fdrepdlg.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_fdrepdlg.o: $(srcdir)/src/generic/fdrepdlg.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_USE_GUI_1_WXUNIV_1@monolib_fdrepdlg.o: $(srcdir)/src/generic/fdrepdlg.cpp
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
@@ -15257,6 +15386,9 @@ monolib_http.o: $(srcdir)/src/common/http.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_imaglist.o: $(srcdir)/src/generic/imaglist.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_imaglist.o: $(srcdir)/src/generic/imaglist.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
 @COND_USE_GUI_1_WXUNIV_1@monolib_imaglist.o: $(srcdir)/src/generic/imaglist.cpp
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
@@ -15353,6 +15485,9 @@ monolib_list.o: $(srcdir)/src/common/list.cpp
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_listbox.o: $(srcdir)/src/mac/listbox.cpp
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_listctrl.o: $(srcdir)/src/os2/listctrl.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_listctrl.o: $(srcdir)/src/msw/listctrl.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
@@ -15433,6 +15568,9 @@ monolib_macnotfy.o: $(srcdir)/src/mac/macnotfy.cpp
 
 @COND_USE_GUI_1@monolib_matrix.o: $(srcdir)/src/common/matrix.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_mbarman.o: $(srcdir)/src/cocoa/mbarman.mm
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_mdi.o: $(srcdir)/src/mac/mdi.cpp
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
@@ -15565,6 +15703,9 @@ monolib_module.o: $(srcdir)/src/common/module.cpp
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_msgdlgg.o: $(srcdir)/src/generic/msgdlgg.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_msgdlgg.o: $(srcdir)/src/generic/msgdlgg.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_USE_GUI_1_WXUNIV_1@monolib_msgdlgg.o: $(srcdir)/src/generic/msgdlgg.cpp
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
@@ -15724,6 +15865,9 @@ monolib_printmac.o: $(srcdir)/src/mac/printmac.cpp
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_prntdlgg.o: $(srcdir)/src/generic/prntdlgg.cpp
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_prntdlgg.o: $(srcdir)/src/generic/prntdlgg.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_USE_GUI_1_WXUNIV_1@monolib_prntdlgg.o: $(srcdir)/src/generic/prntdlgg.cpp
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
@@ -16106,6 +16250,9 @@ monolib_statlmac.o: $(srcdir)/src/mac/statlmac.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_statusbr.o: $(srcdir)/src/generic/statusbr.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_statusbr.o: $(srcdir)/src/generic/statusbr.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
 monolib_stopwatch.o: $(srcdir)/src/common/stopwatch.cpp
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
@@ -16334,8 +16481,11 @@ monolib_topluniv.o: $(srcdir)/src/univ/topluniv.cpp
 @COND_USE_GUI_1@monolib_treectlg.o: $(srcdir)/src/generic/treectlg.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-monolib_treectrl.o: $(srcdir)/src/msw/treectrl.cpp
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_treectrl.o: $(srcdir)/src/os2/treectrl.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_treectrl.o: $(srcdir)/src/msw/treectrl.cpp
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 monolib_txtstrm.o: $(srcdir)/src/common/txtstrm.cpp
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
@@ -18039,12 +18189,6 @@ UTILS_DIST: ALL_GUI_DIST
 	cp $(UTILSDIR)/emulator/src/*.wxe $(DISTDIR)/utils/emulator/src
 	cp $(UTILSDIR)/emulator/docs/*.txt $(DISTDIR)/utils/emulator/docs
 	cp $(UTILSDIR)/emulator/docs/*.jpg $(DISTDIR)/utils/emulator/docs
-
-	mkdir $(DISTDIR)/utils/makegen
-	mkdir $(DISTDIR)/utils/makegen/templates
-	cp $(UTILSDIR)/makegen/Makefile.in $(DISTDIR)/utils/makegen
-	cp $(UTILSDIR)/makegen/*.cpp $(DISTDIR)/utils/makegen
-	cp $(UTILSDIR)/makegen/templates/*.* $(DISTDIR)/utils/makegen/templates
 
 	mkdir $(DISTDIR)/utils/hhp2cached
 	cp $(UTILSDIR)/hhp2cached/*.* $(DISTDIR)/utils/hhp2cached

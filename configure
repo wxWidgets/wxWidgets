@@ -1616,6 +1616,7 @@ WX_AGE=0
 
 
 USE_UNIX=1
+USE_OS2=0
 USE_WIN32=0
 USE_DOS=0
 USE_BEOS=0
@@ -1889,10 +1890,11 @@ _ACEOF
 #define __EMX__ 1
 _ACEOF
 
+    USE_OS2=1
     PROGRAM_EXT=".exe"
     DEFAULT_DEFAULT_wxUSE_PM=1
         CXX=gcc
-        LIBS="$LIBS -lstdcpp"
+    LDFLAGS="$LDFLAGS -Zcrtdll -Zsysv-signals"
                         ac_executable_extensions=".exe"
     export ac_executable_extensions
             ac_save_IFS="$IFS"
@@ -11699,6 +11701,66 @@ fi
       else
                     RESPROGRAMOBJ="\${top_srcdir}/include/wx/os2/wx.res"
       fi
+      echo "$as_me:$LINENO: checking for gcc 3 or later" >&5
+echo $ECHO_N "checking for gcc 3 or later... $ECHO_C" >&6
+if test "${wx_cv_gcc3+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+          cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <features.h>
+int
+main ()
+{
+
+                  #if (__GNUC__ < 3)
+                      #error old gcc
+                  #endif
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+
+                  wx_cv_gcc3=yes
+
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+
+                  wx_cv_gcc3=no
+
+
+fi
+rm -f conftest.$ac_objext conftest.$ac_ext
+
+fi
+echo "$as_me:$LINENO: result: $wx_cv_gcc3" >&5
+echo "${ECHO_T}$wx_cv_gcc3" >&6
+      if test "$wx_cv_gcc3" = "no"; then
+          LIBS="$LIBS -lstdcpp"
+      else
+          LIBS="$LIBS -lstdcxx"
+      fi
   ;;
 esac
 
@@ -13183,7 +13245,7 @@ case "${host}" in
 esac
 
 if test "$wxUSE_GUI" = "yes"; then
-    if test "$wxUSE_UNIX" = "yes"; then
+    if test "$wxUSE_UNIX" = "yes" -a "$wxUSE_PM" != 1; then
 
 for ac_header in X11/Xlib.h
 do
@@ -24267,9 +24329,6 @@ rm -f conftest.$ac_objext conftest.$ac_ext
     if test "$wxUSE_PM" = 1; then
         TOOLKIT=PM
         GUIDIST=GTK_DIST
-        { echo "$as_me:$LINENO: WARNING: OS/2 threads are not yet supported... disabled" >&5
-echo "$as_me: WARNING: OS/2 threads are not yet supported... disabled" >&2;}
-        wxUSE_THREADS="no"
     fi
 
         if test "$TOOLKIT" = "PM" ; then
@@ -28796,7 +28855,7 @@ rm -f confcache
 
 
 CPP_MT_FLAG=
-if test "$TOOLKIT" != "MSW"; then
+if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
 
 
     THREADS_LINK=
@@ -29984,6 +30043,11 @@ echo "${ECHO_T}$wx_cv_cflags_mthread" >&6
             else
                                 CFLAGS="$CFLAGS_OLD"
             fi
+        ;;
+        *-pc-os2*emx )
+            CFLAGS="$CFLAGS -Zmt -D__ST_MT_ERRNO__"
+            CXXFLAGS="$CXXFLAGS -Zmt -D__ST_MT_ERRNO__"
+            LDFLAGS="$LDFLAGS -Zmt"
         ;;
       esac
     fi
@@ -31554,7 +31618,7 @@ _ACEOF
 fi
 
 
-if test "$TOOLKIT" != "MSW"; then
+if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
 
     HAVE_DL_FUNCS=0
     HAVE_SHL_FUNCS=0
@@ -35469,8 +35533,7 @@ for subdir in `echo $SUBDIRS`; do
         else                                     if test ${subdir} = "samples"; then
                 makefiles="samples/Makefile.in samples/console/Makefile.in"
             else                 makefiles="utils/HelpGen/Makefile.in \
-                           utils/HelpGen/src/Makefile.in \
-                           utils/makegen/Makefile.in"
+                           utils/HelpGen/src/Makefile.in"
             fi
         fi
 

@@ -916,12 +916,6 @@ UTILS_DIST: ALL_GUI_DIST
 	cp $(UTILSDIR)/emulator/docs/*.txt $(DISTDIR)/utils/emulator/docs
 	cp $(UTILSDIR)/emulator/docs/*.jpg $(DISTDIR)/utils/emulator/docs
 
-	mkdir $(DISTDIR)/utils/makegen
-	mkdir $(DISTDIR)/utils/makegen/templates
-	cp $(UTILSDIR)/makegen/Makefile.in $(DISTDIR)/utils/makegen
-	cp $(UTILSDIR)/makegen/*.cpp $(DISTDIR)/utils/makegen
-	cp $(UTILSDIR)/makegen/templates/*.* $(DISTDIR)/utils/makegen/templates
-
 	mkdir $(DISTDIR)/utils/hhp2cached
 	cp $(UTILSDIR)/hhp2cached/*.* $(DISTDIR)/utils/hhp2cached
 
