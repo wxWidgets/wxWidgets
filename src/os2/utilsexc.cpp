@@ -25,9 +25,6 @@
 
 #include "wx/os2/private.h"
 
-#define INCL_DOS
-#include <os2.h>
-
 #include <ctype.h>
 #include <direct.h>
 
@@ -43,220 +40,239 @@
 // this message is sent when the process we're waiting for terminates
 #define wxWM_PROC_TERMINATED (WM_USER + 10000)
 
+#ifndef NO_ERROR
+#  define NO_ERROR  0
+#endif
+
 // structure describing the process we're being waiting for
 struct wxExecuteData
 {
 public:
     ~wxExecuteData()
     {
-// TODO:
-/*
-        if ( !::CloseHandle(hProcess) )
-        {
-            wxLogLastError("CloseHandle(hProcess)");
-        }
-*/
+        DosExit(EXIT_PROCESS, 0);
     }
 
-    HWND       hWnd;          // window to send wxWM_PROC_TERMINATED to
-    HANDLE     hProcess;      // handle of the process
-    DWORD      dwProcessId;   // pid of the process
-    wxProcess *handler;
-    DWORD      dwExitCode;    // the exit code of the process
-    bool       state;         // set to FALSE when the process finishes
+    HWND                            hWnd;          // window to send wxWM_PROC_TERMINATED to [not used]
+    RESULTCODES                     vResultCodes;
+    wxProcess*                      pHandler;
+    ULONG                           ulExitCode;    // the exit code of the process
+    bool                            bState;        // set to FALSE when the process finishes
 };
 
-
-static DWORD wxExecuteThread(wxExecuteData *data)
+static ULONG wxExecuteThread(
+  wxExecuteData*                    pData
+)
 {
-// TODO:
-/*
-    WaitForSingleObject(data->hProcess, INFINITE);
+    ULONG                           ulRc;
+    PID                             vPidChild;
 
-    // get the exit code
-    if ( !GetExitCodeProcess(data->hProcess, &data->dwExitCode) )
+     ulRc = ::DosWaitChild( DCWA_PROCESSTREE
+                          ,DCWW_WAIT
+                          ,&pData->vResultCodes
+                          ,&vPidChild
+                          ,pData->vResultCodes.codeTerminate // process PID to look at
+                         );
+    if (ulRc != NO_ERROR)
     {
-        wxLogLastError("GetExitCodeProcess");
+        wxLogLastError("DosWaitChild");
     }
+    delete pData;
 
-    wxASSERT_MSG( data->dwExitCode != STILL_ACTIVE,
-                  wxT("process should have terminated") );
 
-    // send a message indicating process termination to the window
-    SendMessage(data->hWnd, wxWM_PROC_TERMINATED, 0, (LPARAM)data);
-*/
+//    ::WinSendMsg(pData->hWnd, (ULONG)wxWM_PROC_TERMINATED, 0, (MPARAM)pData);
     return 0;
 }
 
-// window procedure of a hidden window which is created just to receive
-// the notification message when a process exits
-MRESULT APIENTRY wxExecuteWindowCbk(HWND hWnd, UINT message,
-                                    MPARAM wParam, MPARAM lParam)
+// Unlike windows where everything needs a window, console apps in OS/2
+// need no windows so this is not ever used
+MRESULT APIENTRY wxExecuteWindowCbk(
+  HWND                              hWnd
+, ULONG                             ulMessage
+, MPARAM                            wParam
+, MPARAM                            lParam
+)
 {
-    if ( message == wxWM_PROC_TERMINATED )
+    if (ulMessage == wxWM_PROC_TERMINATED)
     {
-//        DestroyWindow(hWnd);    // we don't need it any more
+        wxExecuteData*              pData = (wxExecuteData *)lParam;
 
-        wxExecuteData *data = (wxExecuteData *)lParam;
-        if ( data->handler )
+        if (pData->pHandler)
         {
-            data->handler->OnTerminate((int)data->dwProcessId,
-                                       (int)data->dwExitCode);
+            pData->pHandler->OnTerminate( (int)pData->vResultCodes.codeTerminate
+                                         ,(int)pData->vResultCodes.codeResult
+                                        );
         }
 
-        if ( data->state )
+        if (pData->bState)
         {
             // we're executing synchronously, tell the waiting thread
             // that the process finished
-            data->state = 0;
+            pData->bState = 0;
         }
         else
         {
             // asynchronous execution - we should do the clean up
-            delete data;
+            delete pData;
         }
+        ::WinDestroyWindow(hWnd);    // we don't need it any more
     }
-
     return 0;
 }
 
 extern wxChar wxPanelClassName[];
 
-long wxExecute(const wxString& command, bool sync, wxProcess *handler)
+long wxExecute(
+  const wxString&                   rCommand
+, bool                              bSync
+, wxProcess*                        pHandler
+)
 {
-    wxCHECK_MSG( !!command, 0, wxT("empty command in wxExecute") );
-
-    // the old code is disabled because we really need a process handle
-    // if we want to execute it asynchronously or even just get its
-    // return code and for this we must use CreateProcess() and not
-    // ShellExecute()
+    wxCHECK_MSG(!!rCommand, 0, wxT("empty command in wxExecute"));
 
     // create the process
-// TODO:
-/*
-    STARTUPINFO si;
-    memset(&si, 0, sizeof(si));
-    si.cb = sizeof(si);
+    UCHAR                           vLoadError[CCHMAXPATH] = {0};
+    RESULTCODES                     vResultCodes = {0};
+    ULONG                           ulExecFlag;
+    PSZ                             zArgs = NULL;
+    PSZ                             zEnvs = NULL;
+    ULONG                           ulWindowId;
+    APIRET                          rc;
+    PFNWP                           pOldProc;
+    TID                             vTID;
 
-    PROCESS_INFORMATION pi;
+    if (bSync)
+        ulExecFlag = EXEC_SYNC;
+    else
+        ulExecFlag = EXEC_ASYNCRESULT;
 
-    if ( ::CreateProcess(
-                         NULL,       // application name (use only cmd line)
-                         (wxChar *)command.c_str(),  // full command line
-                         NULL,       // security attributes: defaults for both
-                         NULL,       //   the process and its main thread
-                         FALSE,      // don't inherit handles
-                         CREATE_DEFAULT_ERROR_MODE,  // flags
-                         NULL,       // environment (use the same)
-                         NULL,       // current directory (use the same)
-                         &si,        // startup info (unused here)
-                         &pi         // process info
-                        ) == 0 )
+    if (::DosExecPgm( (PCHAR)vLoadError
+                     ,sizeof(vLoadError)
+                     ,ulExecFlag
+                     ,zArgs
+                     ,zEnvs
+                     ,&vResultCodes
+                     ,rCommand
+                    ))
     {
-        wxLogSysError(_("Execution of command '%s' failed"), command.c_str());
-
+        wxLogSysError(_("Execution of command '%s' failed"), rCommand.c_str());
         return 0;
     }
 
-    // close unneeded handle
-    if ( !::CloseHandle(pi.hThread) )
-        wxLogLastError("CloseHandle(hThread)");
-
-    // create a hidden window to receive notification about process
-    // termination
-    HWND hwnd = ::CreateWindow(wxPanelClassName, NULL, 0, 0, 0, 0, 0, NULL,
-                               (HMENU)NULL, wxGetInstance(), 0);
+    // PM does not need non visible object windows to run console child processes
+/*
+    HWND                            hwnd = ::WinCreateWindow( HWND_DESKTOP
+                                                             ,wxPanelClassName
+                                                             ,NULL
+                                                             ,0
+                                                             ,0
+                                                             ,0
+                                                             ,0
+                                                             ,0
+                                                             ,NULLHANDLE
+                                                             ,NULLHANDLE
+                                                             ,ulWindowId
+                                                             ,NULL
+                                                             ,NULL
+                                                            );
     wxASSERT_MSG( hwnd, wxT("can't create a hidden window for wxExecute") );
+    pOldProc = ::WinSubclassWindow(hwnd, (PFNWP)&wxExecuteWindowCbk);
 
-    FARPROC ExecuteWindowInstance = MakeProcInstance((FARPROC)wxExecuteWindowCbk,
-                                                     wxGetInstance());
-
-    ::SetWindowLong(hwnd, GWL_WNDPROC, (LONG) ExecuteWindowInstance);
-
+*/
     // Alloc data
-    wxExecuteData *data = new wxExecuteData;
-    data->hProcess    = pi.hProcess;
-    data->dwProcessId = pi.dwProcessId;
-    data->hWnd        = hwnd;
-    data->state       = sync;
-    if ( sync )
-    {
-        wxASSERT_MSG( !handler, wxT("wxProcess param ignored for sync execution") );
+    wxExecuteData*                  pData = new wxExecuteData;
 
-        data->handler = NULL;
+    pData->vResultCodes = vResultCodes;
+    pData->hWnd         = NULLHANDLE;
+    pData->bState       = bSync;
+    if (bSync)
+    {
+        wxASSERT_MSG(!pHandler, wxT("wxProcess param ignored for sync execution"));
+        pData->pHandler = NULL;
     }
     else
     {
         // may be NULL or not
-        data->handler = handler;
+        pData->pHandler = pHandler;
     }
 
-    DWORD tid;
-    HANDLE hThread = ::CreateThread(NULL,
-                                    0,
-                                    (LPTHREAD_START_ROUTINE)wxExecuteThread,
-                                    (void *)data,
-                                    0,
-                                    &tid);
-
-    if ( !hThread )
+    rc = ::DosCreateThread( &vTID
+                           ,(PFNTHREAD)&wxExecuteThread
+                           ,(ULONG)pData
+                           ,CREATE_READY|STACK_SPARSE
+                           ,8192
+                          );
+    if (rc != NO_ERROR)
     {
         wxLogLastError("CreateThread in wxExecute");
 
-        DestroyWindow(hwnd);
-        delete data;
+//      ::WinDestroyWindow(hwnd);
+        delete pData;
 
         // the process still started up successfully...
-        return pi.dwProcessId;
+        return vResultCodes.codeTerminate;
     }
-
-    if ( !sync )
+    if (!bSync)
     {
         // clean up will be done when the process terminates
 
         // return the pid
-        return pi.dwProcessId;
+        return vResultCodes.codeTerminate;
     }
+    ::DosWaitThread(&vTID, DCWW_WAIT);
 
-    // waiting until command executed
-    while ( data->state )
-        wxYield();
-
-    DWORD dwExitCode = data->dwExitCode;
-    delete data;
+    ULONG ulExitCode = pData->vResultCodes.codeResult;
+    delete pData;
 
     // return the exit code
-    return dwExitCode;
-*/
-    return 0;
+    return (long)ulExitCode;
 }
 
-long wxExecute(char **argv, bool sync, wxProcess *handler)
+long wxExecute(
+  char**                            ppArgv
+, bool                              bSync
+, wxProcess*                        pHandler
+)
 {
-    wxString command;
+    wxString                        sCommand;
 
-    while ( *argv != NULL )
+    while (*ppArgv != NULL)
     {
-        command << *argv++ << ' ';
+        sCommand << *ppArgv++ << ' ';
     }
-
-    command.RemoveLast();
-
-    return wxExecute(command, sync, handler);
+    sCommand.RemoveLast();
+    return wxExecute( sCommand
+                     ,bSync
+                     ,pHandler
+                    );
 }
 
-bool wxGetFullHostName(wxChar *buf, int maxSize)
+bool wxGetFullHostName(
+  wxChar*                           zBuf
+, int                               nMaxSize
+)
 {
-    DWORD nSize = maxSize ;
-// TODO:
-/*
-    if ( !::GetComputerName(buf, &nSize) )
-    {
-        wxLogLastError("GetComputerName");
+#if wxUSE_NET_API
+    char                            zServer[256];
+    char                            zComputer[256];
+    unsigned short                  nLevel = 0;
+    unsigned char*                  zBuffer;
+    unsigned short                  nBuffer;
+    unsigned short*                 pnTotalAvail;
 
-        return FALSE;
-    }
-*/
+    NetBios32GetInfo( (const unsigned char*)zServer
+                     ,(const unsigned char*)zComputer
+                     ,nLevel
+                     ,zBuffer
+                     ,nBuffer
+                     ,pnTotalAvail
+                    );
+    strncpy(zBuf, zComputer, nMaxSize);
+    zBuf[nMaxSize] = _T('\0');
+#else
+    strcpy(zBuf, "noname");
+#endif
+    return *zBuf ? TRUE : FALSE;
     return TRUE;
 }
 

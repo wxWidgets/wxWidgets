@@ -1047,25 +1047,19 @@ void wxExit()
 // Yield to incoming messages
 bool wxYield()
 {
-   // TODO:
-/*
-    MSG msg;
+    HAB                             vHab;
+    QMSG                            vMsg;
     // We want to go back to the main message loop
     // if we see a WM_QUIT. (?)
-#ifdef __WXWINE__
-    while (PeekMessage(&msg, (HWND)NULL, 0, 0, PM_NOREMOVE) && msg.message != WM_QUIT)
-#else
-    while (PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE) && msg.message != WM_QUIT)
-#endif
+    while (::WinPeekMsg(vHab, &vMsg, (HWND)NULL, 0, 0, PM_NOREMOVE) && vMsg.msg != WM_QUIT)
     {
-        if ( !wxTheApp->DoMessage() )
+        if (!wxTheApp->DoMessage())
             break;
     }
     // If they are pending events, we must process them.
 #if wxUSE_THREADS
     wxTheApp->ProcessPendingEvents();
 #endif
-*/
     return TRUE;
 }
 
