@@ -22,8 +22,78 @@
 #include "wx/cocoa/autorelease.h"
 
 #import <Foundation/NSString.h>
+#import <Foundation/NSNotification.h>
 #import <AppKit/NSMenu.h>
 #import <AppKit/NSApplication.h>
+#import <AppKit/NSWindow.h>
+
+// ============================================================================
+// wxMenuBarManagerObserver
+// ============================================================================
+@interface wxMenuBarManagerObserver : NSObject
+{
+    wxMenuBarManager *m_mbarman;
+}
+
+- (id)init;
+- (id)initWithWxMenuBarManager: (wxMenuBarManager *)mbarman;
+- (void)windowDidBecomeKey: (NSNotification *)notification;
+#if 0
+- (void)windowDidResignKey: (NSNotification *)notification;
+- (void)windowDidBecomeMain: (NSNotification *)notification;
+- (void)windowDidResignMain: (NSNotification *)notification;
+- (void)windowWillClose: (NSNotification *)notification;
+#endif // 0
+@end // interface wxMenuBarManagerObserver : NSObject
+
+@implementation wxMenuBarManagerObserver : NSObject
+- (id)init
+{
+    wxFAIL_MSG("[wxMenuBarManagerObserver -init] should never be called!");
+    m_mbarman = NULL;
+    return self;
+}
+
+- (id)initWithWxMenuBarManager: (wxMenuBarManager *)mbarman
+{
+    wxASSERT(mbarman);
+    m_mbarman = mbarman;
+    return [super init];
+}
+
+- (void)windowDidBecomeKey: (NSNotification *)notification
+{
+    wxASSERT(m_mbarman);
+    m_mbarman->WindowDidBecomeKey(notification);
+}
+
+#if 0
+- (void)windowDidResignKey: (NSNotification *)notification
+{
+    wxASSERT(m_mbarman);
+    m_mbarman->WindowDidResignKey(notification);
+}
+
+- (void)windowDidBecomeMain: (NSNotification *)notification
+{
+    wxASSERT(m_mbarman);
+    m_mbarman->WindowDidBecomeMain(notification);
+}
+
+- (void)windowDidResignMain: (NSNotification *)notification
+{
+    wxASSERT(m_mbarman);
+    m_mbarman->WindowDidResignMain(notification);
+}
+
+- (void)windowWillClose: (NSNotification *)notification
+{
+    wxASSERT(m_mbarman);
+    m_mbarman->WindowWillClose(notification);
+}
+#endif // 0
+
+@end // implementation wxMenuBarManagerObserver : NSObject
 
 // ============================================================================
 // wxMenuBarManager
@@ -32,15 +102,32 @@ wxMenuBarManager *wxMenuBarManager::sm_mbarmanInstance = NULL;
 
 wxMenuBarManager::wxMenuBarManager()
 {
+    m_observer = [[wxMenuBarManagerObserver alloc]
+            initWithWxMenuBarManager:this];
+    [[NSNotificationCenter defaultCenter] addObserver:m_observer
+            selector:@selector(windowDidBecomeKey:)
+            name:NSWindowDidBecomeKeyNotification object:nil];
+#if 0
+    [[NSNotificationCenter defaultCenter] addObserver:m_observer
+            selector:@selector(windowDidResignKey:)
+            name:NSWindowDidResignKeyNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:m_observer
+            selector:@selector(windowDidBecomeMain:)
+            name:NSWindowDidBecomeMainNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:m_observer
+            selector:@selector(windowDidResignMain:)
+            name:NSWindowDidResignMainNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:m_observer
+            selector:@selector(windowWillClose:)
+            name:NSWindowWillCloseNotification object:nil];
+#endif // 0
     m_menuApp = nil;
     m_menuServices = nil;
     m_menuWindows = nil;
     m_menuMain = nil;
-    m_needMenuBar = true;
     m_mainMenuBarInstalled = true;
     m_mainMenuBar = NULL;
-    m_windowKey = NULL;
-    m_windowMain = NULL;
+    m_windowCurrent = NULL;
 
     NSApplication *theNSApplication = wxTheApp->GetNSApplication();
     // Create the services menu.
@@ -107,6 +194,7 @@ wxMenuBarManager::wxMenuBarManager()
 
 wxMenuBarManager::~wxMenuBarManager()
 {
+    [m_observer release];
 }
 
 void wxMenuBarManager::CreateInstance()
@@ -120,22 +208,17 @@ void wxMenuBarManager::DestroyInstance()
     sm_mbarmanInstance = NULL;
 }
 
-void wxMenuBarManager::CocoaInternalIdle()
-{
-    if(m_needMenuBar)
-        InstallMainMenu();
-}
-
 void wxMenuBarManager::SetMenuBar(wxMenuBar* menubar)
 {
     m_mainMenuBarInstalled = false;
-    m_needMenuBar = !menubar;
     if(menubar)
     {
         [[[wxTheApp->GetNSApplication() mainMenu] itemAtIndex:0] setSubmenu:nil];
         [[menubar->GetNSMenu() itemAtIndex:0] setSubmenu:m_menuApp];
         [wxTheApp->GetNSApplication() setMainMenu:menubar->GetNSMenu()];
     }
+    else
+        InstallMainMenu();
 }
 
 void wxMenuBarManager::SetMainMenuBar(wxMenuBar* menubar)
@@ -151,7 +234,6 @@ void wxMenuBarManager::InstallMainMenu()
         SetMenuBar(m_mainMenuBar);
     else
     {
-        m_needMenuBar = false;
         m_mainMenuBarInstalled = true;
         [[[wxTheApp->GetNSApplication() mainMenu] itemAtIndex:0] setSubmenu:nil];
         [[m_menuMain itemAtIndex:0] setSubmenu:m_menuApp];
@@ -159,44 +241,46 @@ void wxMenuBarManager::InstallMainMenu()
     }
 }
 
-void wxMenuBarManager::WindowDidBecomeKey(wxTopLevelWindowNative *win)
+void wxMenuBarManager::WindowDidBecomeKey(NSNotification *notification)
 {
-    wxASSERT(!m_windowKey);
-    m_windowKey = win;
-    InstallMenuBarForWindow(win);
-}
-
-void wxMenuBarManager::WindowDidResignKey(wxTopLevelWindowNative *win, bool uninstallMenuBar)
-{
-    wxASSERT(m_windowKey==win);
-    m_windowKey = NULL;
-    if(uninstallMenuBar)
+    wxCocoaNSWindow *win = wxCocoaNSWindow::GetFromCocoa([notification object]);
+    if(win)
+        InstallMenuBarForWindow(win);
+    else
         SetMenuBar(NULL);
 }
 
-void wxMenuBarManager::WindowDidBecomeMain(wxTopLevelWindowNative *win)
+#if 0
+void wxMenuBarManager::WindowDidResignKey(NSNotification *notification)
 {
-    wxASSERT(!m_windowMain);
-    m_windowMain = win;
 }
 
-void wxMenuBarManager::WindowDidResignMain(wxTopLevelWindowNative *win)
+void wxMenuBarManager::WindowDidBecomeMain(NSNotification *notification)
 {
-    wxASSERT(m_windowMain==win);
-    m_windowMain = NULL;
 }
 
-void wxMenuBarManager::InstallMenuBarForWindow(wxTopLevelWindowNative *win)
+void wxMenuBarManager::WindowDidResignMain(NSNotification *notification)
+{
+}
+
+void wxMenuBarManager::WindowWillClose(NSNotification *notification)
+{
+}
+#endif // 0
+
+void wxMenuBarManager::InstallMenuBarForWindow(wxCocoaNSWindow *win)
 {
     wxASSERT(win);
+    m_windowCurrent = win;
     wxMenuBar *menubar = win->GetAppMenuBar();
+    wxLogDebug("Found menubar=%p for window=%p.",menubar,win);
     SetMenuBar(menubar);
 }
 
 void wxMenuBarManager::UpdateWindowMenuBar(wxTopLevelWindowNative *win)
 {
-    if(m_windowKey)
-        InstallMenuBarForWindow(m_windowKey);
+    if(m_windowCurrent)
+        InstallMenuBarForWindow(m_windowCurrent);
 }
 
 #endif // wxUSE_MENUS

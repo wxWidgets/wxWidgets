@@ -16,6 +16,8 @@
 
 #include "wx/toplevel.h"
 
+DECLARE_WXCOCOA_OBJC_CLASS(wxMenuBarManagerObserver);
+
 // ========================================================================
 // wxMenuBarManager
 // ========================================================================
@@ -41,28 +43,28 @@ protected:
 // ------------------------------------------------------------------------
 public:
     void SetMainMenuBar(wxMenuBar* menubar);
-    void CocoaInternalIdle();
-    void WindowDidBecomeKey(wxTopLevelWindowNative *win);
-    void WindowDidResignKey(wxTopLevelWindowNative *win, bool uninstallMenuBar = true);
-    void WindowDidBecomeMain(wxTopLevelWindowNative *win);
-    void WindowDidResignMain(wxTopLevelWindowNative *win);
+    void WindowDidBecomeKey(NSNotification *notification);
+#if 0
+    void WindowDidResignKey(NSNotification *notification);
+    void WindowDidBecomeMain(NSNotification *notification);
+    void WindowDidResignMain(NSNotification *notification);
+    void WindowWillClose(NSNotification *notification);
+#endif // 0
     void UpdateWindowMenuBar(wxTopLevelWindowNative *win);
 protected:
     void SetMenuBar(wxMenuBar* menubar);
-    void InstallMenuBarForWindow(wxTopLevelWindowNative *win);
+    void InstallMenuBarForWindow(wxCocoaNSWindow *win);
     void InstallMainMenu();
     WX_NSMenu m_menuApp;
     WX_NSMenu m_menuServices;
     WX_NSMenu m_menuWindows;
     WX_NSMenu m_menuMain;
-    // Some menu bar needs to be installed
-    bool m_needMenuBar;
     // Is main menu bar the current one
     bool m_mainMenuBarInstalled;
     // Main menu (if app provides one)
     wxMenuBar *m_mainMenuBar;
-    wxTopLevelWindowNative *m_windowKey;
-    wxTopLevelWindowNative *m_windowMain;
+    wxMenuBarManagerObserver *m_observer;
+    wxCocoaNSWindow *m_windowCurrent;
 };
 
 #endif // wxUSE_MENUS
