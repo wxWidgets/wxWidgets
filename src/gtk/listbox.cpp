@@ -233,18 +233,21 @@ gtk_listbox_button_press_callback( GtkWidget *widget,
     }
 #endif // wxUSE_CHECKLISTBOX
 
-#if 0
     if ((gdk_event->state == 0) &&
          (((listbox->GetWindowStyleFlag() & wxLB_MULTIPLE) != 0) ||
           ((listbox->GetWindowStyleFlag() & wxLB_EXTENDED) != 0)) )
     {
-        if (listbox->IsSelected(sel))
-        {
-            gtk_list_unselect_item( GTK_LIST(listbox->m_list), sel );
-            return true;
-        }
+            listbox->m_blockEvent = TRUE;
+
+            int i;
+            for (i = 0; i < (int)listbox->GetCount(); i++)
+                if (i != sel)
+                    gtk_list_unselect_item( GTK_LIST(listbox->m_list), i );
+                
+            listbox->m_blockEvent = FALSE;
+            
+            return false;
     }
-#endif
 
     /* emit wxEVT_COMMAND_LISTBOX_DOUBLECLICKED later */
     g_hasDoubleClicked = (gdk_event->type == GDK_2BUTTON_PRESS);
