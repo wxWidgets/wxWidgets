@@ -41,6 +41,9 @@
 #  S	Socket file (currently doesn't compile under Win16 nor with GNU)
 #  R	Not required for the GTK port
 #  X	Not required for the Motif port
+#  P	Not required for the os2Pm port
+#		(unfortunately I can't use O since that is
+#		 in use already - and above I can't use P :-( )
 #
 #  WX	Base header
 #  GTK	GTK header
@@ -62,9 +65,9 @@ caret.cpp	G	U
 choicdgg.cpp	G
 colrdlgg.cpp	G	G
 dcpsg.cpp	G	U
-dirdlgg.cpp	G	16
-fontdlgg.cpp	G	G,R
-filedlgg.cpp	G	U,X
+dirdlgg.cpp	G	16,P
+fontdlgg.cpp	G	G,R,P
+filedlgg.cpp	G	U,X,P
 grid.cpp	G
 helpext.cpp	G	G
 helphtml.cpp	G	G
@@ -75,7 +78,7 @@ laywin.cpp	G
 listctrl.cpp	G	16
 logg.cpp	G
 msgdlgg.cpp	G	G
-notebook.cpp	G	16,R
+notebook.cpp	G	16,R,P
 panelg.cpp	G
 printps.cpp	G	PS
 prntdlgg.cpp	G	PS,U
@@ -86,9 +89,9 @@ proplist.cpp	G
 sashwin.cpp	G
 scrolwin.cpp	G
 splitter.cpp	G
-statline.cpp	G	U,R
+statline.cpp	G	U,R,P
 statusbr.cpp	G
-tabg.cpp	G	16
+tabg.cpp	G	16,P
 numdlgg.cpp	G
 tbarsmpl.cpp	G
 textdlgg.cpp	G
@@ -995,7 +998,6 @@ settings.h	2
 window.h	2
 fontdlg.h	2
 msgdlg.h	2
-setup.h	2
 colour.h	2
 frame.h	2
 setup0.h	2

@@ -8,7 +8,8 @@
 #!################################################################################
 #${
     #! include the code which parses filelist.txt file and initializes
-    #! %wxCommon, %wxGeneric, %wxHtml, %wxUnix and %wxGTK hashes.
+    #! %wxCommon, %wxGeneric, %wxHtml, %wxUnix, %wxGTK, %wxMOTIF and
+    #! %wxOS2PM hashes.
     IncludeTemplate("filelist.t");
 
     #! Generic
@@ -39,6 +40,7 @@
     }
 
     foreach $file (sort keys %wxGeneric) {
+        #! skip generic files not required for the wxMotif port
         next if $wxGeneric{$file} =~ /\bX\b/;
 
         $file2 = $file;
@@ -46,6 +48,17 @@
         $file2 =~ s/cp?p?$/\d/;
         $project{"WXMOTIF_GENERICOBJS"} .= $file . " ";
         $project{"WXMOTIF_GENERICDEPS"} .= $file2 . " "
+    }
+
+    foreach $file (sort keys %wxGeneric) {
+        #! skip generic files not required for the wxPM port
+        next if $wxGeneric{$file} =~ /\bP\b/;
+
+        $file2 = $file;
+        $file =~ s/cp?p?$/\o/;
+        $file2 =~ s/cp?p?$/\d/;
+        $project{"WXOS2PM_GENERICOBJS"} .= $file . " ";
+        $project{"WXOS2PM_GENERICDEPS"} .= $file2 . " "
     }
 
     #! Base
@@ -77,6 +90,10 @@
         if ( $wxCommon{$file} !~ /\bX\b/ ) {    #! unless not for Motif
             $project{"WXMOTIF_COMMONOBJS"} .= $fileobj . " ";
             $project{"WXMOTIF_COMMONDEPS"} .= $filedep . " "
+        }
+        if ( $wxCommon{$file} !~ /\bP\b/ ) {    #! unless not for OS2PM
+            $project{"WXOS2PM_COMMONOBJS"} .= $fileobj . " ";
+            $project{"WXOS2PM_COMMONDEPS"} .= $filedep . " ";
         }
 
         #! ODBC needs extra files (sql*.h) so not compiled by default.
@@ -117,6 +134,14 @@
         $file2 =~ s/cp?p?$/\d/;
         $project{"WXMOTIF_GUIOBJS"} .= $file . " ";
         $project{"WXMOTIF_GUIDEPS"} .= $file2 . " "
+    }
+
+    foreach $file (sort keys %wxOS2PM) {
+        $file2 = $file;
+        $file =~ s/cp?p?$/\o/;
+        $file2 =~ s/cp?p?$/\d/;
+        $project{"WXOS2PM_GUIOBJS"} .= $file . " ";
+        $project{"WXOS2PM_GUIDEPS"} .= $file2 . " "
     }
 
     #! others
@@ -161,11 +186,15 @@
     foreach $file (sort keys %wxGTKINCLUDE) {
         $project{"WXGTK_HEADERS"} .= "gtk/" . $file . " "
     }
+
+    foreach $file (sort keys %wxOS2PMINCLUDE) {
+        $project{"WXOS2PM_HEADERS"} .= "os2/" . $file . " "
+    }
     
     foreach $file (sort keys %wxMSWINCLUDE) {
         $project{"WXMSW_HEADERS"} .= "msw/" . $file . " "
     }
-    
+
     foreach $file (sort keys %wxHTMLINCLUDE) {
         $project{"WXHTML_HEADERS"} .= "html/" . $file . " "
     }
@@ -227,7 +256,7 @@ VP9 = @top_srcdir@/src/tiff
 VP10 = @top_srcdir@/src/zlib
 VP11 = @top_srcdir@/src/iodbc
 
-VPATH = $(VP1):$(VP2):$(VP3):$(VP4):$(VP5):$(VP6):$(VP7):$(VP8):$(VP9):$(VP10):$(VP11)
+VPATH = $(VP1)@PATH_IFS@$(VP2)@PATH_IFS@$(VP3)@PATH_IFS@$(VP4)@PATH_IFS@$(VP5)@PATH_IFS@$(VP6)@PATH_IFS@$(VP7)@PATH_IFS@$(VP8)@PATH_IFS@$(VP9)@PATH_IFS@$(VP10)@PATH_IFS@$(VP11)
 
 top_srcdir = @top_srcdir@
 prefix = @prefix@
@@ -294,6 +323,7 @@ ZLIBDIR  = $(WXDIR)/src/zlib
 GTKDIR   = $(WXDIR)/src/gtk
 MOTIFDIR = $(WXDIR)/src/motif
 MSWDIR   = $(WXDIR)/src/msw
+PMDIR    = $(WXDIR)/src/os2
 ODBCDIR  = $(WXDIR)/src/iodbc
 INCDIR   = $(WXDIR)/include
 SAMPDIR  = $(WXDIR)/samples
@@ -324,6 +354,9 @@ MOTIF_HEADERS = \
 
 MSW_HEADERS = \
 		#$ ExpandList("WXMSW_HEADERS");
+
+PM_HEADERS = \
+		#$ ExpandList("WXOS2PM_HEADERS");
 
 UNIX_HEADERS = \
 		#$ ExpandList("WXUNIX_HEADERS");
@@ -398,6 +431,26 @@ MSW_GUIOBJS = \
 
 MSW_GUIDEPS = \
 		#$ ExpandList("WXMSW_GUIDEPS");
+
+PM_GENERICOBJS = \
+		#$ ExpandList("WXOS2PM_GENERICOBJS");
+
+PM_GENERICDEPS = \
+		#$ ExpandList("WXOS2PM_GENERICDEPS");
+
+PM_COMMONOBJS = \
+		parser.o \
+		#$ ExpandList("WXOS2PM_COMMONOBJS");
+
+PM_COMMONDEPS = \
+		parser.d \
+		#$ ExpandList("WXOS2PM_COMMONDEPS");
+
+PM_GUIOBJS = \
+		#$ ExpandList("WXOS2PM_GUIOBJS");
+
+PM_GUIDEPS = \
+		#$ ExpandList("WXOS2PM_GUIDEPS");
 
 BASE_OBJS = \
 		#$ ExpandList("BASE_OBJS");
@@ -614,11 +667,11 @@ parser.c:	$(COMMDIR)/parser.y lexer.c
 
 lexer.c:	$(COMMDIR)/lexer.l
 	$(LEX) $(COMMDIR)/lexer.l
-	@sed -e "s;$(COMMDIR)/lex.yy.c;lexer.l;g" < lex.yy.c | \
+	@sed -e "s;$(COMMDIR)/@LEX_STEM@.c;lexer.l;g" < @LEX_STEM@.c | \
 	sed -e "s/yy/PROIO_yy/g"            | \
 	sed -e "s/input/PROIO_input/g"      | \
 	sed -e "s/unput/PROIO_unput/g"      > lexer.c
-	@$(RM) lex.yy.c
+	@$(RM) @LEX_STEM@.c
 
 -include $(DEPFILES)
 
