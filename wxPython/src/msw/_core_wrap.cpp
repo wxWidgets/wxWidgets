@@ -5279,6 +5279,34 @@ static PyObject *_wrap_Rect_SetSize(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
+static PyObject *_wrap_Rect_IsEmpty(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxRect *arg1 = (wxRect *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Rect_IsEmpty",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxRect, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)((wxRect const *)arg1)->IsEmpty();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_Rect_GetTopLeft(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
@@ -10913,6 +10941,73 @@ static PyObject *_wrap_Image_Rescale(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
+static PyObject *_wrap_Image_Resize(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxImage *arg1 = (wxImage *) 0 ;
+    wxSize *arg2 = 0 ;
+    wxPoint *arg3 = 0 ;
+    int arg4 = (int) -1 ;
+    int arg5 = (int) -1 ;
+    int arg6 = (int) -1 ;
+    wxImage *result;
+    wxSize temp2 ;
+    wxPoint temp3 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    PyObject * obj4 = 0 ;
+    PyObject * obj5 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "size",(char *) "pos",(char *) "r",(char *) "g",(char *) "b", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OOO:Image_Resize",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxImage, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = &temp2;
+        if ( ! wxSize_helper(obj1, &arg2)) SWIG_fail;
+    }
+    {
+        arg3 = &temp3;
+        if ( ! wxPoint_helper(obj2, &arg3)) SWIG_fail;
+    }
+    if (obj3) {
+        {
+            arg4 = (int)(SWIG_As_int(obj3)); 
+            if (SWIG_arg_fail(4)) SWIG_fail;
+        }
+    }
+    if (obj4) {
+        {
+            arg5 = (int)(SWIG_As_int(obj4)); 
+            if (SWIG_arg_fail(5)) SWIG_fail;
+        }
+    }
+    if (obj5) {
+        {
+            arg6 = (int)(SWIG_As_int(obj5)); 
+            if (SWIG_arg_fail(6)) SWIG_fail;
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        {
+            wxImage &_result_ref = (arg1)->Resize((wxSize const &)*arg2,(wxPoint const &)*arg3,arg4,arg5,arg6);
+            result = (wxImage *) &_result_ref;
+        }
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxImage, 0);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_Image_SetRGB(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
@@ -10957,6 +11052,56 @@ static PyObject *_wrap_Image_SetRGB(PyObject *, PyObject *args, PyObject *kwargs
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetRGB(arg2,arg3,arg4,arg5,arg6);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Image_SetRGBRect(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxImage *arg1 = (wxImage *) 0 ;
+    wxRect *arg2 = 0 ;
+    unsigned char arg3 ;
+    unsigned char arg4 ;
+    unsigned char arg5 ;
+    wxRect temp2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    PyObject * obj4 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "rect",(char *) "r",(char *) "g",(char *) "b", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:Image_SetRGBRect",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxImage, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = &temp2;
+        if ( ! wxRect_helper(obj1, &arg2)) SWIG_fail;
+    }
+    {
+        arg3 = (unsigned char)(SWIG_As_unsigned_SS_char(obj2)); 
+        if (SWIG_arg_fail(3)) SWIG_fail;
+    }
+    {
+        arg4 = (unsigned char)(SWIG_As_unsigned_SS_char(obj3)); 
+        if (SWIG_arg_fail(4)) SWIG_fail;
+    }
+    {
+        arg5 = (unsigned char)(SWIG_As_unsigned_SS_char(obj4)); 
+        if (SWIG_arg_fail(5)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetRGB((wxRect const &)*arg2,arg3,arg4,arg5);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -12101,6 +12246,74 @@ static PyObject *_wrap_Image_GetSubImage(PyObject *, PyObject *args, PyObject *k
 }
 
 
+static PyObject *_wrap_Image_Size(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxImage *arg1 = (wxImage *) 0 ;
+    wxSize *arg2 = 0 ;
+    wxPoint *arg3 = 0 ;
+    int arg4 = (int) -1 ;
+    int arg5 = (int) -1 ;
+    int arg6 = (int) -1 ;
+    SwigValueWrapper<wxImage > result;
+    wxSize temp2 ;
+    wxPoint temp3 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    PyObject * obj4 = 0 ;
+    PyObject * obj5 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "size",(char *) "pos",(char *) "r",(char *) "g",(char *) "b", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OOO:Image_Size",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxImage, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = &temp2;
+        if ( ! wxSize_helper(obj1, &arg2)) SWIG_fail;
+    }
+    {
+        arg3 = &temp3;
+        if ( ! wxPoint_helper(obj2, &arg3)) SWIG_fail;
+    }
+    if (obj3) {
+        {
+            arg4 = (int)(SWIG_As_int(obj3)); 
+            if (SWIG_arg_fail(4)) SWIG_fail;
+        }
+    }
+    if (obj4) {
+        {
+            arg5 = (int)(SWIG_As_int(obj4)); 
+            if (SWIG_arg_fail(5)) SWIG_fail;
+        }
+    }
+    if (obj5) {
+        {
+            arg6 = (int)(SWIG_As_int(obj5)); 
+            if (SWIG_arg_fail(6)) SWIG_fail;
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = ((wxImage const *)arg1)->Size((wxSize const &)*arg2,(wxPoint const &)*arg3,arg4,arg5,arg6);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxImage * resultptr;
+        resultptr = new wxImage((wxImage &)(result));
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxImage, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_Image_Copy(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
@@ -12431,6 +12644,49 @@ static PyObject *_wrap_Image_SetMaskColour(PyObject *, PyObject *args, PyObject 
         if (PyErr_Occurred()) SWIG_fail;
     }
     Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Image_GetOrFindMaskColour(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxImage *arg1 = (wxImage *) 0 ;
+    unsigned char *arg2 = (unsigned char *) 0 ;
+    unsigned char *arg3 = (unsigned char *) 0 ;
+    unsigned char *arg4 = (unsigned char *) 0 ;
+    unsigned char temp2 ;
+    int res2 = 0 ;
+    unsigned char temp3 ;
+    int res3 = 0 ;
+    unsigned char temp4 ;
+    int res4 = 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    arg2 = &temp2; res2 = SWIG_NEWOBJ;
+    arg3 = &temp3; res3 = SWIG_NEWOBJ;
+    arg4 = &temp4; res4 = SWIG_NEWOBJ;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Image_GetOrFindMaskColour",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxImage, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        ((wxImage const *)arg1)->GetOrFindMaskColour(arg2,arg3,arg4);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    resultobj = t_output_helper(resultobj, ((res2 == SWIG_NEWOBJ) ?
+    SWIG_From_unsigned_SS_char((*arg2)) : SWIG_NewPointerObj((void*)(arg2), SWIGTYPE_p_unsigned_char, 0)));
+    resultobj = t_output_helper(resultobj, ((res3 == SWIG_NEWOBJ) ?
+    SWIG_From_unsigned_SS_char((*arg3)) : SWIG_NewPointerObj((void*)(arg3), SWIGTYPE_p_unsigned_char, 0)));
+    resultobj = t_output_helper(resultobj, ((res4 == SWIG_NEWOBJ) ?
+    SWIG_From_unsigned_SS_char((*arg4)) : SWIG_NewPointerObj((void*)(arg4), SWIGTYPE_p_unsigned_char, 0)));
     return resultobj;
     fail:
     return NULL;
@@ -44926,6 +45182,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Rect_SetPosition", (PyCFunction) _wrap_Rect_SetPosition, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Rect_GetSize", (PyCFunction) _wrap_Rect_GetSize, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Rect_SetSize", (PyCFunction) _wrap_Rect_SetSize, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Rect_IsEmpty", (PyCFunction) _wrap_Rect_IsEmpty, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Rect_GetTopLeft", (PyCFunction) _wrap_Rect_GetTopLeft, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Rect_SetTopLeft", (PyCFunction) _wrap_Rect_SetTopLeft, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Rect_GetBottomRight", (PyCFunction) _wrap_Rect_GetBottomRight, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -45092,7 +45349,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Image_Scale", (PyCFunction) _wrap_Image_Scale, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_ShrinkBy", (PyCFunction) _wrap_Image_ShrinkBy, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_Rescale", (PyCFunction) _wrap_Image_Rescale, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Image_Resize", (PyCFunction) _wrap_Image_Resize, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_SetRGB", (PyCFunction) _wrap_Image_SetRGB, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Image_SetRGBRect", (PyCFunction) _wrap_Image_SetRGBRect, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_GetRed", (PyCFunction) _wrap_Image_GetRed, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_GetGreen", (PyCFunction) _wrap_Image_GetGreen, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_GetBlue", (PyCFunction) _wrap_Image_GetBlue, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -45118,6 +45377,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Image_GetHeight", (PyCFunction) _wrap_Image_GetHeight, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_GetSize", (PyCFunction) _wrap_Image_GetSize, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_GetSubImage", (PyCFunction) _wrap_Image_GetSubImage, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Image_Size", (PyCFunction) _wrap_Image_Size, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_Copy", (PyCFunction) _wrap_Image_Copy, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_Paste", (PyCFunction) _wrap_Image_Paste, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_GetData", (PyCFunction) _wrap_Image_GetData, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -45129,6 +45389,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Image_GetAlphaBuffer", (PyCFunction) _wrap_Image_GetAlphaBuffer, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_SetAlphaBuffer", (PyCFunction) _wrap_Image_SetAlphaBuffer, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_SetMaskColour", (PyCFunction) _wrap_Image_SetMaskColour, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Image_GetOrFindMaskColour", (PyCFunction) _wrap_Image_GetOrFindMaskColour, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_GetMaskRed", (PyCFunction) _wrap_Image_GetMaskRed, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_GetMaskGreen", (PyCFunction) _wrap_Image_GetMaskGreen, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_GetMaskBlue", (PyCFunction) _wrap_Image_GetMaskBlue, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -46777,7 +47038,7 @@ static swig_type_info _swigt__unsigned_int[] = {{"_unsigned_int", 0, "unsigned i
 static swig_type_info _swigt__p_unsigned_int[] = {{"_p_unsigned_int", 0, "unsigned int *|time_t *", 0, 0, 0, 0},{"_p_unsigned_int", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxMenuEvent[] = {{"_p_wxMenuEvent", 0, "wxMenuEvent *", 0, 0, 0, 0},{"_p_wxMenuEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxContextMenuEvent[] = {{"_p_wxContextMenuEvent", 0, "wxContextMenuEvent *", 0, 0, 0, 0},{"_p_wxContextMenuEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
-static swig_type_info _swigt__p_unsigned_char[] = {{"_p_unsigned_char", 0, "unsigned char *|byte *", 0, 0, 0, 0},{"_p_unsigned_char", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_unsigned_char[] = {{"_p_unsigned_char", 0, "unsigned char *", 0, 0, 0, 0},{"_p_unsigned_char", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxEraseEvent[] = {{"_p_wxEraseEvent", 0, "wxEraseEvent *", 0, 0, 0, 0},{"_p_wxEraseEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxMouseEvent[] = {{"_p_wxMouseEvent", 0, "wxMouseEvent *", 0, 0, 0, 0},{"_p_wxMouseEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxCloseEvent[] = {{"_p_wxCloseEvent", 0, "wxCloseEvent *", 0, 0, 0, 0},{"_p_wxCloseEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};

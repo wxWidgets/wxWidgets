@@ -1135,6 +1135,10 @@ class Rect(object):
         """SetSize(self, Size s)"""
         return _core_.Rect_SetSize(*args, **kwargs)
 
+    def IsEmpty(*args, **kwargs):
+        """IsEmpty(self) -> bool"""
+        return _core_.Rect_IsEmpty(*args, **kwargs)
+
     def GetTopLeft(*args, **kwargs):
         """GetTopLeft(self) -> Point"""
         return _core_.Rect_GetTopLeft(*args, **kwargs)
@@ -2149,9 +2153,17 @@ class Image(Object):
         """Rescale(self, int width, int height) -> Image"""
         return _core_.Image_Rescale(*args, **kwargs)
 
+    def Resize(*args, **kwargs):
+        """Resize(self, Size size, Point pos, int r=-1, int g=-1, int b=-1) -> Image"""
+        return _core_.Image_Resize(*args, **kwargs)
+
     def SetRGB(*args, **kwargs):
         """SetRGB(self, int x, int y, unsigned char r, unsigned char g, unsigned char b)"""
         return _core_.Image_SetRGB(*args, **kwargs)
+
+    def SetRGBRect(*args, **kwargs):
+        """SetRGBRect(self, Rect rect, unsigned char r, unsigned char g, unsigned char b)"""
+        return _core_.Image_SetRGBRect(*args, **kwargs)
 
     def GetRed(*args, **kwargs):
         """GetRed(self, int x, int y) -> unsigned char"""
@@ -2289,6 +2301,10 @@ class Image(Object):
         """GetSubImage(self, Rect rect) -> Image"""
         return _core_.Image_GetSubImage(*args, **kwargs)
 
+    def Size(*args, **kwargs):
+        """Size(self, Size size, Point pos, int r=-1, int g=-1, int b=-1) -> Image"""
+        return _core_.Image_Size(*args, **kwargs)
+
     def Copy(*args, **kwargs):
         """Copy(self) -> Image"""
         return _core_.Image_Copy(*args, **kwargs)
@@ -2332,6 +2348,14 @@ class Image(Object):
     def SetMaskColour(*args, **kwargs):
         """SetMaskColour(self, unsigned char r, unsigned char g, unsigned char b)"""
         return _core_.Image_SetMaskColour(*args, **kwargs)
+
+    def GetOrFindMaskColour(*args, **kwargs):
+        """
+        GetOrFindMaskColour() -> (r,g,b)
+
+        Get the current mask colour or find a suitable colour.
+        """
+        return _core_.Image_GetOrFindMaskColour(*args, **kwargs)
 
     def GetMaskRed(*args, **kwargs):
         """GetMaskRed(self) -> unsigned char"""
