@@ -435,7 +435,7 @@ void wxRadioBox::SetSize(int x, int y, int width, int height, int sizeFlags)
 
     int nbHor,nbVer;
 
-    if (m_windowStyle & wxRA_HORIZONTAL)
+    if (m_windowStyle & wxRA_VERTICAL)
     {
       nbVer = m_majorDim ;
       nbHor = (m_noItems+m_majorDim-1)/m_majorDim ;
@@ -476,7 +476,7 @@ void wxRadioBox::SetSize(int x, int y, int width, int height, int sizeFlags)
     // Bidimensional radio adjustment
     if (i&&((i%m_majorDim)==0)) // Why is this omitted for i = 0?
     {
-      if (m_windowStyle & wxRA_HORIZONTAL)
+      if (m_windowStyle & wxRA_VERTICAL)
       {
         y_offset = startY;
         x_offset += maxWidth + cx1 ;
@@ -509,7 +509,7 @@ void wxRadioBox::SetSize(int x, int y, int width, int height, int sizeFlags)
     }
 
     MoveWindow((HWND) m_radioButtons[i],x_offset,y_offset,eachWidth,eachHeight,TRUE);
-    if (m_windowStyle & wxRA_HORIZONTAL)
+    if (m_windowStyle & wxRA_VERTICAL)
     {
       y_offset += maxHeight;
       if (m_radioWidth[0]>0)
