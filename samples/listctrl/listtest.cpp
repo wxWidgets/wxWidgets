@@ -716,7 +716,9 @@ void MyListCtrl::OnBeginLabelEdit(wxListEvent& event)
 
 void MyListCtrl::OnEndLabelEdit(wxListEvent& event)
 {
-    wxLogMessage( wxT("OnEndLabelEdit: %s"), event.m_item.m_text.c_str());
+    wxLogMessage( wxT("OnEndLabelEdit: %s"),
+                  event.IsEditCancelled() ? _T("[cancelled]")
+                                          : event.m_item.m_text.c_str());
 }
 
 void MyListCtrl::OnDeleteItem(wxListEvent& event)
