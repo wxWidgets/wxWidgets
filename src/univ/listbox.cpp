@@ -66,6 +66,7 @@ void wxListBox::Init()
 
     // no items hence no current item
     m_current = -1;
+    m_selAnchor = -1;
     m_currentChanged = FALSE;
 
     // no need to update anything initially
@@ -97,8 +98,6 @@ bool wxListBox::Create(wxWindow *parent,
         return FALSE;
 
     SetWindow(this);
-
-    SetBackgroundColour(*wxWHITE);
 
     if ( style & wxLB_SORT )
         m_strings = wxArrayString(TRUE /* auto sort */);
@@ -683,23 +682,17 @@ bool wxListBox::SendEvent(int item, wxEventType type)
     wxCommandEvent event(type, m_windowId);
     event.SetEventObject(this);
 
-    int n;
-    if ( m_selections.GetCount() > 0 )
+    if ( item != -1 )
     {
-        n = m_selections[0];
         if ( HasClientObjectData() )
-            event.SetClientObject(GetClientObject(n));
+            event.SetClientObject(GetClientObject(item));
         else if ( HasClientUntypedData() )
-            event.SetClientData(GetClientData(n));
+            event.SetClientData(GetClientData(item));
 
-        event.SetString(GetString(n));
-    }
-    else // no selection
-    {
-        n = -1;
+        event.SetString(GetString(item));
     }
 
-    event.m_commandInt = n;
+    event.m_commandInt = item;
 
     return GetEventHandler()->ProcessEvent(event);
 }
@@ -715,7 +708,15 @@ void wxListBox::SetCurrentItem(int n)
 
         if ( m_current != -1 )
         {
-            if ( !HasMultipleSelection() )
+            if ( GetWindowStyle() & wxLB_EXTENDED )
+            {
+                // if we hadn't had any selection before, make the freshly
+                // selected item the new selection anchor
+                if ( m_selections.IsEmpty() )
+                    m_selAnchor = m_current;
+            }
+
+            if ( !(GetWindowStyle() & wxLB_MULTIPLE) )
             {
                 // for a single selection listbox, the current item is always
                 // the one selected
@@ -773,17 +774,55 @@ void wxListBox::ChangeCurrent(int diff)
     SetCurrentItem(current);
 }
 
-void wxListBox::Select(bool sel)
+void wxListBox::ExtendSelection(int itemTo)
 {
-    if ( sel && !HasMultipleSelection() )
+    // if we don't have the explicit values for selection start/end, make them
+    // up
+    if ( m_selAnchor == -1 )
+        m_selAnchor = m_current;
+
+    if ( itemTo == -1 )
+        itemTo = m_current;
+
+    // swap the start/end of selection range if necessary
+    int itemFrom = m_selAnchor;
+    if ( itemFrom > itemTo )
     {
-        // deselect the old item first
-        int selOld = GetSelection();
-        if ( selOld != -1 )
-        {
-            SetSelection(selOld, FALSE);
-        }
+        int itemTmp = itemFrom;
+        itemFrom = itemTo;
+        itemTo = itemTmp;
     }
+
+    // the selection should now include all items in the range between the
+    // anchor and the specified item and only them
+
+    int n;
+    for ( n = 0; n < itemFrom; n++ )
+    {
+        Deselect(n);
+    }
+
+    for ( ; n <= itemTo; n++ )
+    {
+        SetSelection(n);
+    }
+
+    int count = GetCount();
+    for ( ; n < count; n++ )
+    {
+        Deselect(n);
+    }
+}
+
+void wxListBox::Select(bool sel, int item)
+{
+    if ( sel && !(GetWindowStyle() & wxLB_MULTIPLE) )
+    {
+        DeselectAll(item);
+    }
+
+    if ( item != -1 )
+        SetCurrentItem(item);
 
     if ( m_current != -1 )
     {
@@ -797,8 +836,11 @@ void wxListBox::Select(bool sel)
     }
 }
 
-void wxListBox::Activate()
+void wxListBox::Activate(int item)
 {
+    if ( item != -1 )
+        SetCurrentItem(item);
+
     if ( m_current != -1 )
     {
         Select();
@@ -811,16 +853,20 @@ bool wxListBox::PerformAction(const wxControlAction& action,
                               long numArg,
                               const wxString& strArg)
 {
+    int item = (int)numArg;
+    if ( item == -1 )
+        item = m_current;
+
     if ( action == wxACTION_LISTBOX_SETFOCUS )
-        SetCurrentItem(numArg);
+        SetCurrentItem(item);
     else if ( action == wxACTION_LISTBOX_ACTIVATE )
-        Activate();
+        Activate(item);
     else if ( action == wxACTION_LISTBOX_TOGGLE )
-        Select(!IsSelected(m_current));
+        Select(!IsSelected(item), item);
     else if ( action == wxACTION_LISTBOX_SELECT )
-        Select(TRUE);
+        Select(TRUE, item);
     else if ( action == wxACTION_LISTBOX_UNSELECT )
-        Select(FALSE);
+        Select(FALSE, item);
     else if ( action == wxACTION_LISTBOX_MOVEDOWN )
         ChangeCurrent(1);
     else if ( action == wxACTION_LISTBOX_MOVEUP )
@@ -833,6 +879,13 @@ bool wxListBox::PerformAction(const wxControlAction& action,
         SetCurrentItem(0);
     else if ( action == wxACTION_LISTBOX_END )
         SetCurrentItem(GetCount() - 1);
+    else if ( action == wxACTION_LISTBOX_UNSELECTALL )
+        DeselectAll(item);
+    else if ( action == wxACTION_LISTBOX_EXTENDSEL )
+        ExtendSelection(item);
+    else if ( action == wxACTION_LISTBOX_SELECTALL ||
+                action == wxACTION_LISTBOX_SELTOGGLE )
+        wxFAIL_MSG(_T("unimplemented yet"));
     else
         return wxControl::PerformAction(action, numArg, strArg);
 
@@ -864,7 +917,7 @@ bool wxStdListboxInputHandler::HandleKey(wxControl *control,
                                          const wxKeyEvent& event,
                                          bool pressed)
 {
-    // we're only interested in the (normal) key presses
+    // we're only interested in the key press events
     if ( pressed && !event.AltDown() )
     {
         wxControlAction action;
@@ -886,6 +939,12 @@ bool wxStdListboxInputHandler::HandleKey(wxControl *control,
         if ( !!action )
         {
             control->PerformAction(action);
+
+            if ( event.ShiftDown() &&
+                    (control->GetWindowStyle() & wxLB_EXTENDED) )
+            {
+                control->PerformAction(wxACTION_LISTBOX_EXTENDSEL);
+            }
 
             return TRUE;
         }
@@ -945,9 +1004,29 @@ bool wxStdListboxInputHandler::HandleMouse(wxControl *control,
                                             ? 3
                                             : 2;
                     }
-                    else
+                    else // wxLB_EXTENDED listbox
                     {
-                        action = wxACTION_LISTBOX_TOGGLE;
+                        // simple click in an extended listbox clears the
+                        // selection, ctrl-click toggles an item to it and
+                        // shift-click adds a range
+                        if ( event.ControlDown() )
+                        {
+                            lbox->AnchorSelection(item);
+
+                            action = wxACTION_LISTBOX_TOGGLE;
+                        }
+                        else if ( event.ShiftDown() )
+                        {
+                            action = wxACTION_LISTBOX_EXTENDSEL;
+                        }
+                        else // simple click
+                        {
+                            lbox->AnchorSelection(item);
+                            lbox->PerformAction(wxACTION_LISTBOX_UNSELECTALL,
+                                                item);
+
+                            action = wxACTION_LISTBOX_SELECT;
+                        }
                     }
                 }
                 else // single selection

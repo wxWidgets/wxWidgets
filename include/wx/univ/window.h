@@ -118,6 +118,36 @@ public:
     // operations
     virtual void SetCurrent(bool doit = TRUE);
 
+    // methods used by wxColourScheme to choose the colours for this window
+    // --------------------------------------------------------------------
+
+    // return TRUE if this is a panel/canvas window which contains other
+    // controls only
+    virtual bool IsCanvasWindow() const { return FALSE; }
+
+    // return TRUE if this a container window which contains the other items:
+    // e.g, a listbox, listctrl, treectrl, ... and FALSE if it is a monolithic
+    // control (e.g. a button, checkbox, ...)
+    virtual bool IsContainerWindow() const { return FALSE; }
+
+    // return TRUE if this control can be highlighted when the mouse is over
+    // it (the theme decides itself whether it is really highlighted or not)
+    virtual bool CanBeHighlighted() const { return FALSE; }
+
+    // return TRUE if we should use the colours/fonts returned by the
+    // corresponding GetXXX() methods instead of the default ones
+    bool UseBgCol() const { return m_hasBgCol; }
+    bool UseFgCol() const { return m_hasFgCol; }
+    bool UseFont() const { return m_hasFont; }
+
+    // overridden base class methods
+    // -----------------------------
+
+    // remember that the font/colour was changed
+    virtual bool SetBackgroundColour(const wxColour& colour);
+    virtual bool SetForegroundColour(const wxColour& colour);
+    virtual bool SetFont(const wxFont& font);
+
 protected:
     // common part of all ctors
     void Init();
@@ -172,8 +202,11 @@ protected:
     int       m_alignBgBitmap;
     wxStretch m_stretchBgBitmap;
 
-    // is the mouse currently inside the window?
-    bool m_isCurrent;
+    // more flags
+    bool m_isCurrent:1; // is the mouse currently inside the window?
+    bool m_hasBgCol:1;  // was the bg colour explicitly changed by user?
+    bool m_hasFgCol:1;  //         fg
+    bool m_hasFont:1;   //         font
 
 private:
     // the window scrollbars

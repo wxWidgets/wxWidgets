@@ -16,6 +16,8 @@
     #pragma interface "colschem.h"
 #endif
 
+class WXDLLEXPORT wxWindow;
+
 #include "wx/colour.h"
 
 // ----------------------------------------------------------------------------
@@ -28,17 +30,28 @@ public:
     // the standard colours
     enum StdColour
     {
-        // the background and text colour for the control
+        // the background colour for a window
+        WINDOW,
+
+        // the different background and text colours for the control
         CONTROL,
+        CONTROL_PRESSED,
+        CONTROL_CURRENT,
+
+        // the label text for the normal and the disabled state
         CONTROL_TEXT,
+        CONTROL_TEXT_DISABLED,
+        CONTROL_TEXT_DISABLED_SHADOW,
+
+        // the scrollbar background colour for the normal and pressed states
         SCROLLBAR,
+        SCROLLBAR_PRESSED,
 
         // the background and text colour for the highlighted item
         HIGHLIGHT,
         HIGHLIGHT_TEXT,
 
-        // these colours are used for drawing the shadows of 3D objects, use
-        // only NORMAL in the renderers which don't use 3D shading
+        // these colours are used for drawing the shadows of 3D objects
         SHADOW_DARK,
         SHADOW_HIGHLIGHT,
         SHADOW_IN,
@@ -47,9 +60,11 @@ public:
         MAX
     };
 
-    // get the colour for the control in the state (combination of
-    // wxCONTROL_XXX values)
-    virtual wxColour Get(StdColour col, int flags = 0) const = 0;
+    // get a standard colour
+    virtual wxColour Get(StdColour col) const = 0;
+
+    // get the background colour for the given window
+    virtual wxColour GetBackground(wxWindow *win) const = 0;
 
     // virtual dtor for any base class
     virtual ~wxColourScheme();
@@ -57,5 +72,17 @@ public:
 
 // some people just can't spell it correctly :-)
 typedef wxColourScheme wxColorScheme;
+
+// ----------------------------------------------------------------------------
+// macros
+// ----------------------------------------------------------------------------
+
+// retrieve the default colour from the theme or the given scheme
+#define wxSCHEME_COLOUR(scheme, what) scheme->Get(wxColorScheme::what)
+#define wxTHEME_COLOUR(what) wxSCHEME_COLOUR(wxTheme::Get(), what)
+
+// get the background colour for the window in the current theme
+#define wxTHEME_BG_COLOUR(win) \
+    wxTheme::Get()->GetColourScheme()->GetBackground(win)
 
 #endif // _WX_UNIV_COLSCHEM_H_

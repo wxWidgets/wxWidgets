@@ -49,7 +49,7 @@
 #include "wx/univ/theme.h"
 
 //#define DEBUG_SCROLL
-#define DEBUG_LISTBOX
+//#define DEBUG_LISTBOX
 
 // ----------------------------------------------------------------------------
 // resources
@@ -319,7 +319,7 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
                                     WXSIZEOF(choices), choices,
                                     wxLB_MULTIPLE | wxLB_ALWAYS_SB);
     lbox = new wxListBox(this, -1, wxPoint(550, 300), wxDefaultSize,
-                         0, NULL, wxLB_HSCROLL);
+                         0, NULL, wxLB_HSCROLL | wxLB_EXTENDED);
     for ( int i = 1; i <= 20; i++ )
     {
         lbox->Append(wxString::Format(_T("%sentry %d"),

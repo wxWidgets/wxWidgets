@@ -97,6 +97,11 @@ bool wxWindow::Create(wxWindow *parent,
                                           wxSB_VERTICAL);
     }
 
+    // the colours/fonts are default
+    m_hasBgCol =
+    m_hasFgCol =
+    m_hasFont = FALSE;
+
     return TRUE;
 }
 
@@ -570,3 +575,36 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
     }
 }
 
+// ----------------------------------------------------------------------------
+// colours/fonts
+// ----------------------------------------------------------------------------
+
+bool wxWindow::SetBackgroundColour(const wxColour& colour)
+{
+    if ( !wxWindowNative::SetBackgroundColour(colour) )
+        return FALSE;
+
+    m_hasBgCol = TRUE;
+
+    return TRUE;
+}
+
+bool wxWindow::SetForegroundColour(const wxColour& colour)
+{
+    if ( !wxWindowNative::SetForegroundColour(colour) )
+        return FALSE;
+
+    m_hasFgCol = TRUE;
+
+    return TRUE;
+}
+
+bool wxWindow::SetFont(const wxFont& font)
+{
+    if ( !wxWindowNative::SetFont(font) )
+        return FALSE;
+
+    m_hasFont = TRUE;
+
+    return TRUE;
+}

@@ -118,15 +118,11 @@ void wxWindowBase::InitBase()
     m_windowValidator = (wxValidator *) NULL;
 #endif // wxUSE_VALIDATORS
 
-    // use the system default colours
-    wxSystemSettings settings;
-
-    m_backgroundColour = settings.GetSystemColour(wxSYS_COLOUR_BTNFACE);
-    // m_foregroundColour = *wxBLACK;  // TODO take this from sys settings too?
+    // use the system default colours and font
+    m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BTNFACE);
     m_foregroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOWTEXT);
+    m_font = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
 
-    // GRG, changed Mar/2000
-    m_font = settings.GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
     // no style bits
     m_exStyle =
     m_windowStyle = 0;

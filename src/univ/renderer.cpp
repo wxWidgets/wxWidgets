@@ -38,7 +38,9 @@
 
 #include "wx/image.h"
 
+#include "wx/univ/theme.h"
 #include "wx/univ/renderer.h"
+#include "wx/univ/colschem.h"
 
 // ============================================================================
 // implementation
@@ -376,13 +378,7 @@ void wxControlRenderer::DrawButtonBorder()
 
     m_renderer->DrawButtonBorder(m_dc, m_rect, flags, &m_rect);
 
-    wxColour colBg;
-    if ( !(flags & wxCONTROL_CURRENT) )
-    {
-        colBg = m_window->GetBackgroundColour();
-    }
-
-    m_renderer->DrawBackground(m_dc, colBg, m_rect, flags);
+    m_renderer->DrawBackground(m_dc, wxTHEME_BG_COLOUR(m_window), m_rect, flags);
 }
 
 void wxControlRenderer::DrawBitmap(const wxBitmap& bitmap)
@@ -405,7 +401,7 @@ void wxControlRenderer::DrawBackgroundBitmap()
     }
     else // just fill it with bg colour if no bitmap
     {
-        m_renderer->DrawBackground(m_dc, m_window->GetBackgroundColour(),
+        m_renderer->DrawBackground(m_dc, wxTHEME_BG_COLOUR(m_window),
                                    m_rect, m_window->GetStateFlags());
     }
 }

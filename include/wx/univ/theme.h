@@ -56,7 +56,7 @@ public:
     virtual wxInputHandler *GetInputHandler(const wxString& control) = 0;
 
     // get the colour scheme for the control with this name
-    virtual wxColourScheme *GetColourScheme(const wxString& control) = 0;
+    virtual wxColourScheme *GetColourScheme() = 0;
 
     // implementation only from now on
     // -------------------------------

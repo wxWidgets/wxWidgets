@@ -251,6 +251,7 @@ class wxWin32ColourScheme : public wxColourScheme
 {
 public:
     virtual wxColour Get(StdColour col, int flags = 0) const;
+    virtual wxColour GetBackground(wxWindow *win);
 };
 
 // ----------------------------------------------------------------------------
@@ -344,11 +345,18 @@ wxColourScheme *wxWin32Theme::GetColourScheme(const wxString& control)
 // wxWin32ColourScheme
 // ============================================================================
 
+wxColour wxWin32ColourScheme::GetBackground(wxWindow *win)
+{
+    return win->GetBackgroundColour();
+}
+
 wxColour wxWin32ColourScheme::Get(wxWin32ColourScheme::StdColour col,
                                   int flags) const
 {
     switch ( col )
     {
+        case WINDOW:            return *wxWHITE;
+
         case CONTROL:           return wxColour(0xc0c0c0);
         case CONTROL_TEXT:      return *wxBLACK;
         case SCROLLBAR:         if ( flags & wxCONTROL_PRESSED )

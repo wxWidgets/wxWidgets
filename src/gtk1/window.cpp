@@ -697,6 +697,7 @@ static int gtk_window_expose_callback( GtkWidget *widget,
         if (gdk_event->count == 0)
         {
             wxClientDC dc(win);
+            dc.SetClippingRegion(win->GetUpdateRegion());
             wxEraseEvent eevent( win->GetId(), &dc );
             eevent.SetEventObject( win );
             win->GetEventHandler()->ProcessEvent(eevent);
@@ -804,6 +805,7 @@ static void gtk_window_draw_callback( GtkWidget *widget,
     win->m_clipPaintRegion = TRUE;
 
     wxClientDC dc(win);
+    dc.SetClippingRegion(win->GetUpdateRegion());
     wxEraseEvent eevent( win->GetId(), &dc );
     eevent.SetEventObject( win );
     win->GetEventHandler()->ProcessEvent(eevent);

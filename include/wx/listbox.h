@@ -66,6 +66,7 @@ public:
     virtual void SetSelection(int n, bool select = TRUE) = 0;
     virtual void Select(int n) { SetSelection(n, TRUE); }
     void Deselect(int n) { SetSelection(n, FALSE); }
+    void DeselectAll(int itemToLeaveSelected = -1);
 
     virtual bool SetStringSelection(const wxString& s, bool select = TRUE);
 

@@ -123,7 +123,14 @@ protected:
 
     // get the colour to use for background
     wxColour GetBackgroundColour(int flags) const
-        { return m_scheme->Get(wxColourScheme::CONTROL, flags); }
+    {
+        if ( flags & wxCONTROL_PRESSED )
+            return wxSCHEME_COLOUR(m_scheme, CONTROL_PRESSED);
+        else if ( flags & wxCONTROL_CURRENT )
+            return wxSCHEME_COLOUR(m_scheme, CONTROL_CURRENT);
+        else
+            return wxSCHEME_COLOUR(m_scheme, CONTROL);
+    }
 
     // draw the background with any colour, not only the default one(s)
     void DoDrawBackground(wxDC& dc,
@@ -264,7 +271,8 @@ protected:
 class wxGTKColourScheme : public wxColourScheme
 {
 public:
-    virtual wxColour Get(StdColour col, int flags = 0) const;
+    virtual wxColour Get(StdColour col) const;
+    virtual wxColour GetBackground(wxWindow *win) const;
 };
 
 // ----------------------------------------------------------------------------
@@ -281,8 +289,7 @@ public:
 
     virtual wxRenderer *GetRenderer() { return m_renderer; }
     virtual wxInputHandler *GetInputHandler(const wxString& control);
-    virtual wxColourScheme *GetColourScheme(const wxString& control)
-        { return m_scheme; }
+    virtual wxColourScheme *GetColourScheme() { return m_scheme; }
 
 private:
     wxGTKRenderer *m_renderer;
@@ -350,40 +357,68 @@ wxInputHandler *wxGTKTheme::GetInputHandler(const wxString& control)
 // wxGTKColourScheme
 // ============================================================================
 
-wxColour wxGTKColourScheme::Get(wxGTKColourScheme::StdColour col,
-                                int flags) const
+wxColour wxGTKColourScheme::GetBackground(wxWindow *win) const
+{
+    wxColour col;
+    if ( win->UseBgCol() )
+    {
+        // use the user specified colour
+        col = win->GetBackgroundColour();
+    }
+
+    if ( win->IsContainerWindow() )
+    {
+        // doesn't depend on the state
+        if ( !col.Ok() )
+        {
+            col = Get(WINDOW);
+        }
+    }
+    else
+    {
+        int flags = win->GetStateFlags();
+
+        // the colour set by the user should be used for the normal state
+        // and for the states for which we don't have any specific colours
+        if ( !col.Ok() || (flags != 0) )
+        {
+            if ( wxDynamicCast(win, wxScrollBar) )
+                col = Get(SCROLLBAR);
+            else if ( (flags & wxCONTROL_CURRENT) && win->CanBeHighlighted() )
+                col = Get(CONTROL_CURRENT);
+            else if ( flags & wxCONTROL_PRESSED )
+                col = Get(CONTROL_PRESSED);
+            else
+                col = Get(CONTROL);
+        }
+    }
+
+    return col;
+}
+
+wxColour wxGTKColourScheme::Get(wxGTKColourScheme::StdColour col) const
 {
     switch ( col )
     {
+        case WINDOW:            return *wxWHITE;
+
         case SHADOW_DARK:       return *wxBLACK;
         case SHADOW_HIGHLIGHT:  return *wxWHITE;
         case SHADOW_IN:         return wxColour(0xd6d6d6);
         case SHADOW_OUT:        return wxColour(0x969696);
 
-        case CONTROL:
-                                if ( flags & wxCONTROL_PRESSED )
-                                {
-                                    return wxColour(0xc3c3c3);
-                                }
-                                else if ( flags & wxCONTROL_CURRENT )
-                                {
-                                    return wxColour(0xeaeaea);
-                                }
-                                else
-                                {
-                                    return wxColour(0xd6d6d6);
-                                }
+        case CONTROL:           return wxColour(0xd6d6d6);
+        case CONTROL_PRESSED:   return wxColour(0xc3c3c3);
+        case CONTROL_CURRENT:   return wxColour(0xeaeaea);
 
-        case CONTROL_TEXT:      if ( flags & wxCONTROL_DISABLED )
-                                {
-                                    return wxColour(0x757575);
-                                }
-                                else
-                                {
-                                    return *wxBLACK;
-                                }
+        case CONTROL_TEXT:      return *wxBLACK;
+        case CONTROL_TEXT_DISABLED:
+                                return wxColour(0x757575);
+        case CONTROL_TEXT_DISABLED_SHADOW:
+                                return *wxWHITE;
 
-        case SCROLLBAR:         return wxColour(0xc3c3c3);
+        case SCROLLBAR:
+        case SCROLLBAR_PRESSED: return wxColour(0xc3c3c3);
 
         case HIGHLIGHT:         return wxColour(0x9c0000);
         case HIGHLIGHT_TEXT:    return wxColour(0xffffff);
@@ -410,11 +445,11 @@ wxGTKRenderer::wxGTKRenderer(const wxColourScheme *scheme)
     m_sizeScrollbarArrow = wxSize(15, 14);
 
     // init pens
-    m_penBlack = wxPen(scheme->Get(wxColourScheme::SHADOW_DARK), 0, wxSOLID);
-    m_penDarkGrey = wxPen(scheme->Get(wxColourScheme::SHADOW_OUT), 0, wxSOLID);
-    m_penGrey = wxPen(scheme->Get(wxColourScheme::SCROLLBAR), 0, wxSOLID);
-    m_penLightGrey = wxPen(scheme->Get(wxColourScheme::SHADOW_IN), 0, wxSOLID);
-    m_penHighlight = wxPen(scheme->Get(wxColourScheme::SHADOW_HIGHLIGHT), 0, wxSOLID);
+    m_penBlack = wxPen(wxSCHEME_COLOUR(scheme, SHADOW_DARK), 0, wxSOLID);
+    m_penDarkGrey = wxPen(wxSCHEME_COLOUR(scheme, SHADOW_OUT), 0, wxSOLID);
+    m_penGrey = wxPen(wxSCHEME_COLOUR(scheme, SCROLLBAR), 0, wxSOLID);
+    m_penLightGrey = wxPen(wxSCHEME_COLOUR(scheme, SHADOW_IN), 0, wxSOLID);
+    m_penHighlight = wxPen(wxSCHEME_COLOUR(scheme, SHADOW_HIGHLIGHT), 0, wxSOLID);
 }
 
 // ----------------------------------------------------------------------------
@@ -746,7 +781,7 @@ void wxGTKRenderer::DrawLabel(wxDC& dc,
         rectShadow.x++;
         rectShadow.y++;
         dc.DrawLabel(label, rectShadow, alignment, indexAccel);
-        dc.SetTextForeground(m_scheme->Get(wxColourScheme::CONTROL_TEXT, flags));
+        dc.SetTextForeground(wxSCHEME_COLOUR(m_scheme, CONTROL_TEXT_DISABLED));
     }
 
     dc.DrawLabel(label, image, rect, alignment, indexAccel, rectBounds);
@@ -765,12 +800,12 @@ void wxGTKRenderer::DrawItem(wxDC& dc,
     wxColour colFg;
     if ( flags & wxCONTROL_SELECTED )
     {
-        dc.SetBrush(wxBrush(m_scheme->Get(wxColourScheme::HIGHLIGHT), wxSOLID));
+        dc.SetBrush(wxBrush(wxSCHEME_COLOUR(m_scheme, HIGHLIGHT), wxSOLID));
         dc.SetPen(*wxTRANSPARENT_PEN);
         dc.DrawRectangle(rect);
 
         colFg = dc.GetTextForeground();
-        dc.SetTextForeground(m_scheme->Get(wxColourScheme::HIGHLIGHT_TEXT));
+        dc.SetTextForeground(wxSCHEME_COLOUR(m_scheme, HIGHLIGHT_TEXT));
     }
 
     if ( flags & wxCONTROL_FOCUSED )
@@ -816,16 +851,7 @@ void wxGTKRenderer::DrawBackground(wxDC& dc,
                                    const wxRect& rect,
                                    int flags)
 {
-    wxColour colBg;
-    if ( !col.Ok() )
-    {
-        colBg = m_scheme->Get(wxColourScheme::CONTROL, flags);
-    }
-    else
-    {
-        colBg = col;
-    }
-
+    wxColour colBg = col.Ok() ? col : GetBackgroundColour(flags);
     DoDrawBackground(dc, colBg, rect);
 }
 
@@ -850,7 +876,7 @@ void wxGTKRenderer::DrawArrowBorder(wxDC& dc,
     rect2.Inflate(-1);
     rectInner.Inflate(-2);
 
-    DoDrawBackground(dc, m_scheme->Get(wxColourScheme::SCROLLBAR), *rect);
+    DoDrawBackground(dc, wxSCHEME_COLOUR(m_scheme, SCROLLBAR), *rect);
 
     // find the side not to draw and also adjust the rectangles to compensate
     // for it
@@ -936,7 +962,7 @@ void wxGTKRenderer::DrawArrow(wxDC& dc,
 
     wxPoint ptArrow[Point_Max];
 
-    wxColour colInside = m_scheme->Get(wxColourScheme::CONTROL, flags);
+    wxColour colInside = GetBackgroundColour(flags);
     wxPen penShadow[4];
     if ( flags & wxCONTROL_PRESSED )
     {
@@ -1145,12 +1171,12 @@ void wxGTKRenderer::DrawScrollbarShaft(wxDC& dc,
 {
     wxRect rectBar = rect;
     DrawThumbBorder(dc, &rectBar, orient);
-    DoDrawBackground(dc, m_scheme->Get(wxColourScheme::SCROLLBAR), rectBar);
+    DoDrawBackground(dc, wxSCHEME_COLOUR(m_scheme, SCROLLBAR), rectBar);
 }
 
 void wxGTKRenderer::DrawScrollCorner(wxDC& dc, const wxRect& rect)
 {
-    DoDrawBackground(dc, m_scheme->Get(wxColourScheme::CONTROL), rect);
+    DoDrawBackground(dc, wxSCHEME_COLOUR(m_scheme, CONTROL), rect);
 }
 
 wxRect wxGTKRenderer::GetScrollbarRect(const wxScrollBar *scrollbar,

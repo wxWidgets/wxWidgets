@@ -37,6 +37,12 @@
 #define wxACTION_LISTBOX_SELECT     _T("select")    // select/focus
 #define wxACTION_LISTBOX_UNSELECT   _T("unselect")  // unselect/unfocus
 
+// do something with the selection globally (not for single selection ones)
+#define wxACTION_LISTBOX_SELECTALL   _T("selectall")   // select all items
+#define wxACTION_LISTBOX_UNSELECTALL _T("unselectall") // unselect all items
+#define wxACTION_LISTBOX_SELTOGGLE   _T("togglesel")   // invert the selection
+#define wxACTION_LISTBOX_EXTENDSEL   _T("extend")      // extend to item
+
 // ----------------------------------------------------------------------------
 // wxListBox: a list of selectable items
 // ----------------------------------------------------------------------------
@@ -118,9 +124,12 @@ public:
     void ChangeCurrent(int diff);
 
     // actions
-    void Activate();
-    void Select(bool sel = TRUE);
+    void Activate(int item);
+    void Select(bool sel = TRUE, int item = -1);
     void EnsureVisible();
+
+    void ExtendSelection(int itemTo);
+    void AnchorSelection(int itemFrom) { m_selAnchor = itemFrom; }
 
     // get, calculating it if necessary, the number of items per page, the
     // height of each line and the max width of an item
@@ -132,6 +141,9 @@ public:
     virtual bool PerformAction(const wxControlAction& action,
                                long numArg = 0l,
                                const wxString& strArg = wxEmptyString);
+
+    // let wxColourScheme choose the right colours for us
+    virtual bool IsContainerWindow() const { return TRUE; }
 
 protected:
     virtual wxSize DoGetBestClientSize() const;
@@ -202,6 +214,11 @@ private:
     // if the current item has changed, we might need to scroll if it went out
     // of the window
     bool m_currentChanged;
+
+    // the anchor from which the selection is extended for the listboxes with
+    // wxLB_EXTENDED style - this is set to the last item which was selected
+    // by not extending the selection but by choosing it directly
+    int m_selAnchor;
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxListBox)

@@ -86,7 +86,7 @@ public:
     //     several overloaded versions but this will expose the problem of
     //     virtual function hiding we don't have here.
     virtual bool PerformAction(const wxControlAction& action,
-                               long numArg = 0l,
+                               long numArg = -1l,
                                const wxString& strArg = wxEmptyString);
 
 protected:
