@@ -86,7 +86,7 @@ void ScoreCanvas::OnDraw(wxDC& dc)
 {
 	dc.SetFont(* m_font);
 
-	const char* str = m_text;
+	const wxChar* str = m_text;
 	unsigned int tab = 0;
 	unsigned int tabstops[] = { 5, 100, 150, 200 };
 
@@ -94,29 +94,29 @@ void ScoreCanvas::OnDraw(wxDC& dc)
 	int lineSpacing;
 	{
 		long w, h;
-		dc.GetTextExtent("Testing", &w, &h);
+		dc.GetTextExtent(_T("Testing"), &w, &h);
 		lineSpacing = (int)h;
 	}
 
 	int y = 0;
 	while (*str)
 	{
-		char text[256];
-		char* dest = text;
+		wxChar text[256];
+		wxChar* dest = text;
 		
-		while (*str && *str >= ' ') *dest++ = *str++;
-		*dest = '\0';
+		while (*str && *str >= _T(' ')) *dest++ = *str++;
+		*dest = _T('\0');
 
 		dc.DrawText(text, tabstops[tab], y);
 
-		if (*str == '\t')
+		if (*str == _T('\t'))
 		{
 			if (tab < sizeof(tabstops) / sizeof(tabstops[0]) - 1)
 			{
 				tab++;
 			}
 		}
-		else if (*str == '\n')
+		else if (*str == _T('\n'))
 		{
 			tab = 0;
 			y += lineSpacing;
@@ -133,7 +133,7 @@ ScoreDialog::ScoreDialog(
 							wxWindow* parent,
 							ScoreFile* file
 							) :
-	wxDialog(parent, -1, "Scores",
+	wxDialog(parent, -1, _T("Scores"),
 			wxDefaultPosition, wxSize(310, 200),
 			wxDIALOG_MODAL | wxDEFAULT_DIALOG_STYLE),
 	m_scoreFile(file)
@@ -142,7 +142,7 @@ ScoreDialog::ScoreDialog(
 	SetAutoLayout (TRUE);
 
 	ScoreCanvas* list = new ScoreCanvas(this, m_scoreFile);
-	m_OK = new wxButton(this, wxID_OK, "OK");
+	m_OK = new wxButton(this, wxID_OK, _T("OK"));
 
 	wxLayoutConstraints* layout;
 

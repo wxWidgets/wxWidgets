@@ -76,7 +76,7 @@ bool FortyApp::OnInit()
         bool largecards = FALSE;
         wxSize size(668,510);
 
-        if ((argc > 1) && (!wxStrcmp(argv[1],"-L")))
+        if ((argc > 1) && (!wxStrcmp(argv[1],_T("-L"))))
         {
             largecards = TRUE;
             size = wxSize(1000,750);
@@ -84,7 +84,7 @@ bool FortyApp::OnInit()
 
 	FortyFrame* frame = new FortyFrame(
 			0,
-			"Forty Thieves",
+			_T("Forty Thieves"),
                         -1, -1, size.x, size.y,largecards
 			);
 
@@ -120,14 +120,14 @@ const wxColour& FortyApp::TextColour()
 {
 	if (!m_textColour)
 	{
-		m_textColour = new wxColour("BLACK");
+		m_textColour = new wxColour(_T("BLACK"));
 	}
 
 	return *m_textColour;
 }
 
 // My frame constructor
-FortyFrame::FortyFrame(wxFrame* frame, char* title, int x, int y, int w, int h,bool largecards):
+FortyFrame::FortyFrame(wxFrame* frame, const wxString& title, int x, int y, int w, int h,bool largecards):
 	wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
 {
 #ifdef __WXMAC__
@@ -136,7 +136,7 @@ FortyFrame::FortyFrame(wxFrame* frame, char* title, int x, int y, int w, int h,b
 #endif
 	// set the icon
 #ifdef __WXMSW__
-	SetIcon(wxIcon("CardsIcon"));
+	SetIcon(wxIcon(_T("CardsIcon")));
 #else
 #ifdef GTK_TBD
 	SetIcon(wxIcon(Cards_bits, Cards_width, Cards_height));
@@ -145,28 +145,28 @@ FortyFrame::FortyFrame(wxFrame* frame, char* title, int x, int y, int w, int h,b
 
 	// Make a menu bar
 	wxMenu* gameMenu = new wxMenu;
-	gameMenu->Append(NEW_GAME, "&New", "Start a new game");
-	gameMenu->Append(SCORES, "&Scores...", "Displays scores");
-	gameMenu->Append(EXIT, "E&xit", "Exits Forty Thieves");
+	gameMenu->Append(NEW_GAME, _T("&New"), _T("Start a new game"));
+	gameMenu->Append(SCORES, _T("&Scores..."), _T("Displays scores"));
+	gameMenu->Append(EXIT, _T("E&xit"), _T("Exits Forty Thieves"));
 
 	wxMenu* editMenu = new wxMenu;
-	editMenu->Append(UNDO, "&Undo", "Undo the last move");
-	editMenu->Append(REDO, "&Redo", "Redo a move that has been undone");
+	editMenu->Append(UNDO, _T("&Undo"), _T("Undo the last move"));
+	editMenu->Append(REDO, _T("&Redo"), _T("Redo a move that has been undone"));
 
 	wxMenu*	optionsMenu = new wxMenu;
 	optionsMenu->Append(RIGHT_BUTTON_UNDO,
-			"&Right button undo",
-			"Enables/disables right mouse button undo and redo",
+			_T("&Right button undo"),
+			_T("Enables/disables right mouse button undo and redo"),
 			TRUE
 			);
 	optionsMenu->Append(HELPING_HAND,
-			"&Helping hand",
-			"Enables/disables hand cursor when a card can be moved",
+			_T("&Helping hand"),
+			_T("Enables/disables hand cursor when a card can be moved"),
 			TRUE
 			);
         optionsMenu->Append(LARGE_CARDS,
-                        "&Large cards",
-                        "Enables/disables large cards for high resolution displays",
+                        _T("&Large cards"),
+                        _T("Enables/disables large cards for high resolution displays"),
                         TRUE
                         );
 	optionsMenu->Check(HELPING_HAND, TRUE);
@@ -174,13 +174,13 @@ FortyFrame::FortyFrame(wxFrame* frame, char* title, int x, int y, int w, int h,b
         optionsMenu->Check(LARGE_CARDS, largecards ? TRUE : FALSE);
 
 	wxMenu* helpMenu = new wxMenu;
-	helpMenu->Append(ABOUT, "&About...", "Displays information about the game");
+	helpMenu->Append(ABOUT, _T("&About..."), _T("Displays information about the game"));
 
 	m_menuBar = new wxMenuBar;
-	m_menuBar->Append(gameMenu,    "&Game");
-	m_menuBar->Append(editMenu,    "&Edit");
-	m_menuBar->Append(optionsMenu, "&Options");
-	m_menuBar->Append(helpMenu,    "&Help");
+	m_menuBar->Append(gameMenu,    _T("&Game"));
+	m_menuBar->Append(editMenu,    _T("&Edit"));
+	m_menuBar->Append(optionsMenu, _T("&Options"));
+	m_menuBar->Append(helpMenu,    _T("&Help"));
 
 	SetMenuBar(m_menuBar);
 
@@ -243,14 +243,14 @@ FortyFrame::About(wxCommandEvent&)
 #endif
     {
         wxMessageBox(
-            "Forty Thieves\n\n"
-            "A freeware program using the wxWindows\n"
-            "portable C++ GUI toolkit.\n"
-            "http://www.wxwindows.org\n"
-            "http://www.freiburg.linux.de/~wxxt\n\n"
-            "Author: Chris Breeze (c) 1992-1998\n"
-            "email: chris.breeze@iname.com",
-            "About Forty Thieves",
+            _T("Forty Thieves\n\n")
+            _T("A freeware program using the wxWindows\n")
+            _T("portable C++ GUI toolkit.\n")
+            _T("http://www.wxwindows.org\n")
+            _T("http://www.freiburg.linux.de/~wxxt\n\n")
+            _T("Author: Chris Breeze (c) 1992-1998\n")
+            _T("email: chris.breeze@iname.com"),
+            _T("About Forty Thieves"),
             wxOK, this
             );
     }
@@ -331,7 +331,7 @@ bool FortyAboutDialog::AddControls(wxWindow* parent)
             wxFile file;
             file.Open(htmlFile, wxFile::read);
             long len = file.Length();
-            char* buf = htmlText.GetWriteBuf(len + 1);
+            wxChar* buf = htmlText.GetWriteBuf(len + 1);
             file.Read(buf, len);
             buf[len] = 0;
             htmlText.UngetWriteBuf();
@@ -349,7 +349,7 @@ bool FortyAboutDialog::AddControls(wxWindow* parent)
     verString.Printf("%.2f", stVERSION_NUMBER);
     htmlText.Replace(wxT("$VERSION$"), verString);
 #endif
-    htmlText.Replace(wxT("$DATE$"), __DATE__);
+    htmlText.Replace(wxT("$DATE$"), _T(__DATE__));
 
     wxSize htmlSize(400, 290);
 
@@ -373,7 +373,7 @@ bool FortyAboutDialog::AddControls(wxWindow* parent)
     wxASSERT( item1 );
     item0->Add( item1, 0, wxALIGN_CENTRE|wxALL, 5 );
 
-    wxButton *item2 = new wxButton( parent, wxID_CANCEL, "&Close", wxDefaultPosition, wxDefaultSize, 0 );
+    wxButton *item2 = new wxButton( parent, wxID_CANCEL, _T("&Close"), wxDefaultPosition, wxDefaultSize, 0 );
     item2->SetDefault();
     item2->SetFocus();
 

@@ -202,7 +202,7 @@ protected:
 
     void DoSend()
     {
-        m_out.WriteString(m_textIn->GetValue() + '\n');
+        m_out.WriteString(m_textIn->GetValue() + _T('\n'));
         m_textIn->Clear();
 
         DoGet();
