@@ -172,17 +172,7 @@ regexec(regex_t *re,
 		   int flags)
 {
 	rm_detail_t det;
-    size_t nLen = 0;
-    chr* s2 = (chr*) string;
-
-    if (string && *string)
-    {
-        while(*++s2);
-    }
-
-    nLen = ((s2 - string) / sizeof(chr));
-
-    return wx_regexec(re, string, nLen, &det, nmatch, pmatch, flags);
+    return wx_regexec(re, string, wx_strlen(string), &det, nmatch, pmatch, flags);
 }
 int
 wx_regexec(regex_t *re,

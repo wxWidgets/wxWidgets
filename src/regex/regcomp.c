@@ -188,6 +188,7 @@ extern int	wx_ispunct(wx_wchar c);
 extern int	wx_isspace(wx_wchar c);
 extern wx_wchar wx_toupper(wx_wchar c);
 extern wx_wchar wx_tolower(wx_wchar c);
+extern int  wx_strlen(const wx_wchar* szString);
 static int	nmcces(struct vars *);
 static int	nleaders(struct vars *);
 static struct cvec *allmcces(struct vars *, struct cvec *);
@@ -296,18 +297,7 @@ regcomp(regex_t *re,
                    const chr *string,
 		   int flags)
 {
-    
-    size_t nLen = 0;
-    chr* s2 = (chr*) string;
-
-    if (string && *string)
-    {
-        while(*++s2);
-    }
-
-    nLen = ((s2 - string) / sizeof(chr));
-
-	return wx_regcomp(re, string, nLen, flags);
+	return wx_regcomp(re, string, wx_strlen(string), flags);
 }
 int
 wx_regcomp(regex_t *re,

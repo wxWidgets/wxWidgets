@@ -53,10 +53,44 @@
 int char_and_wchar_strncmp (const char* cp, const wx_wchar* wp, size_t nNum)
 {
 	while(*cp++ == (const char)*wp++ && --nNum){}
-
 	return nNum;
 }
 
+int wx_isdigit(wx_wchar c) {return (c >= 0 && c <= UCHAR_MAX &&  wxIsdigit((unsigned char) c));}
+int wx_isalpha(wx_wchar c) {return (c >= 0 && c <= UCHAR_MAX &&  wxIsalpha((unsigned char) c));}
+int wx_isalnum(wx_wchar c) {return (c >= 0 && c <= UCHAR_MAX &&  wxIsalnum((unsigned char) c));}
+int wx_isupper(wx_wchar c) {return (c >= 0 && c <= UCHAR_MAX &&  wxIsupper((unsigned char) c));}
+int wx_islower(wx_wchar c) {return (c >= 0 && c <= UCHAR_MAX &&  wxIslower((unsigned char) c));}
+int wx_isgraph(wx_wchar c) {return (c >= 0 && c <= UCHAR_MAX &&  wxIsgraph((unsigned char) c));}
+int wx_ispunct(wx_wchar c) {return (c >= 0 && c <= UCHAR_MAX &&  wxIspunct((unsigned char) c));}
+int wx_isspace(wx_wchar c) {return (c >= 0 && c <= UCHAR_MAX &&  wxIsspace((unsigned char) c));}
+
+wx_wchar wx_toupper(wx_wchar c) 
+{
+	if (c >= 0 && c <= UCHAR_MAX)
+		return wxToupper((unsigned char) c);
+	return c;
+
+}
+
+wx_wchar wx_tolower(wx_wchar c)
+{
+	if (c >= 0 && c <= UCHAR_MAX)
+		return wxTolower((unsigned char) c);
+	return c;
+}
+
+int wx_strlen(const wx_wchar* szString)
+{
+    /*  
+    Generic -- note that some clib functions also test for eol character '^Z'
+    
+	int	nLength	= 0;
+	for (; *(szString + nLength) != '\0'; nLength++);
+	return nLength;
+    */
+    return szString == NULL ? 0 : wxStrlen_(szString);
+}
 /* ASCII character-name table */
 
 static struct cname

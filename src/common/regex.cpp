@@ -52,9 +52,10 @@
 
 #include "wx/regex.h"
 
-#ifdef wx_wchar
-    #define regerror wx_regerror
-    #define regfree wx_regfree
+#if wxUSE_UNICODE
+#   if !defined(wxUSE_BUILTIN_REGEX)
+#       error "Unicode not supported with system regex, please reconfigure with --with-regex=builtin"
+#   endif
 #endif
 
 // ----------------------------------------------------------------------------
@@ -141,32 +142,25 @@ wxRegExImpl::~wxRegExImpl()
 
 wxString wxRegExImpl::GetErrorMsg(int errorcode) const
 {
-    wxString msg;
+    wxString szError;
 
     // first get the string length needed
     int len = regerror(errorcode, &m_RegEx, NULL, 0);
     if ( len > 0 )
     {
-        len++;
+        char* szcmbError = new char[++len];
 
-#ifdef wx_wchar
-        wxCharBuffer buf(len);
+        (void)regerror(errorcode, &m_RegEx, szcmbError, len);
 
-        (void)regerror(errorcode, &m_RegEx, (char *)buf.data(), len);
-
-        msg = wxString(buf.data(), wxConvLibc);
-#else 
-        (void)regerror(errorcode, &m_RegEx, msg.GetWriteBuf(len), len);
-
-        msg.UngetWriteBuf();
-#endif 
+        szError = wxConvertMB2WX(szcmbError);
+        delete [] szcmbError;
     }
     else // regerror() returned 0
     {
-        msg = _("unknown error");
+        szError = _("unknown error");
     }
 
-    return msg;
+    return szError;
 }
 
 bool wxRegExImpl::Compile(const wxString& expr, int flags)
@@ -189,12 +183,8 @@ bool wxRegExImpl::Compile(const wxString& expr, int flags)
         flagsRE |= REG_NEWLINE;
 
 
-    // compile it
-#ifdef wx_wchar
-    int errorcode = wx_regcomp(&m_RegEx, expr, expr.Length(), flagsRE);
-#else
-    int errorcode = regcomp(&m_RegEx, expr.mb_str(), flagsRE);
-#endif
+
+    int errorcode = regcomp(&m_RegEx, expr, flagsRE);
 
      if ( errorcode )
     {
@@ -269,12 +259,7 @@ bool wxRegExImpl::Matches(const wxChar *str, int flags) const
     }
 
     // do match it
-#ifdef wx_wchar
-	rm_detail_t rd;
-    int rc = wx_regexec(&self->m_RegEx, str, wxStrlen(str), &rd, m_nMatches, m_Matches, flagsRE);
-#else
-    int rc = regexec(&self->m_RegEx, wxConvertWX2MB(str), m_nMatches, m_Matches, flagsRE);
-#endif
+    int rc = regexec(&self->m_RegEx, str, m_nMatches, m_Matches, flagsRE);
 
     switch ( rc )
     {
@@ -486,39 +471,5 @@ int wxRegEx::Replace(wxString *pattern,
 
     return m_impl->Replace(pattern, replacement, maxMatches);
 }
-
-#ifdef wx_wchar
-
-/**  Locale functions */
-
-extern "C" {
-
-int wx_isdigit(wx_wchar c) {return (c >= 0 && c <= UCHAR_MAX &&  wxIsdigit((unsigned char) c));}
-int wx_isalpha(wx_wchar c) {return (c >= 0 && c <= UCHAR_MAX &&  wxIsalpha((unsigned char) c));}
-int wx_isalnum(wx_wchar c) {return (c >= 0 && c <= UCHAR_MAX &&  wxIsalnum((unsigned char) c));}
-int wx_isupper(wx_wchar c) {return (c >= 0 && c <= UCHAR_MAX &&  wxIsupper((unsigned char) c));}
-int wx_islower(wx_wchar c) {return (c >= 0 && c <= UCHAR_MAX &&  wxIslower((unsigned char) c));}
-int wx_isgraph(wx_wchar c) {return (c >= 0 && c <= UCHAR_MAX &&  wxIsgraph((unsigned char) c));}
-int wx_ispunct(wx_wchar c) {return (c >= 0 && c <= UCHAR_MAX &&  wxIspunct((unsigned char) c));}
-int wx_isspace(wx_wchar c) {return (c >= 0 && c <= UCHAR_MAX &&  wxIsspace((unsigned char) c));}
-
-wx_wchar wx_toupper(wx_wchar c) 
-{
-	if (c >= 0 && c <= UCHAR_MAX)
-		return wxToupper((unsigned char) c);
-	return c;
-
-}
-
-wx_wchar wx_tolower(wx_wchar c)
-{
-	if (c >= 0 && c <= UCHAR_MAX)
-		return wxTolower((unsigned char) c);
-	return c;
-}
-
-}
-
-#endif
 
 #endif // wxUSE_REGEX
