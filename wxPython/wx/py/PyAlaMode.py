@@ -6,3 +6,6 @@ from wxPython.py import PyAlaMode
 _rename(globals(), PyAlaMode.__dict__, modulename='py.PyAlaMode')
 del PyAlaMode
 del _rename
+
+if __name__ == '__main__':
+    main()

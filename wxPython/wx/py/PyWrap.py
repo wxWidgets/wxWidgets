@@ -6,3 +6,6 @@ from wxPython.py import PyWrap
 _rename(globals(), PyWrap.__dict__, modulename='py.PyWrap')
 del PyWrap
 del _rename
+
+if __name__ == '__main__':
+    main()

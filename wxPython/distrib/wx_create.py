@@ -28,6 +28,11 @@ del %(suffix)s
 del _rename
 """
 
+call_main = """
+if __name__ == '__main__':
+    main()
+"""    
+
 wxPython_dir = "../wxPython"
 
 subpackage_list = ['.',
@@ -47,6 +52,9 @@ skip_modules = [ '__init__', '__version__',
                  ]
 
 
+add_call_main = ['py/PyAlaCarte.py',  'py/PyAlaMode.py',  'py/PyCrust.py',
+                 'py/PyFilling.py',  'py/PyShell.py',  'py/PyWrap.py'
+                 ]
 
 
 
@@ -101,6 +109,8 @@ for subdir in subpackage_list:
         content = wxmodule_template % globals()
         f = open(fname, 'w')
         f.write(content)
+        if fname in add_call_main:
+            f.write(call_main)            
         f.close()
         print fname + ' created'
 
