@@ -166,6 +166,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
         nTimeLabels++;
 
         m_elapsed = CreateLabel(_("Elapsed time : "), &lastWindow);
+        SetTimeLabel(0, m_elapsed);
     }
 
     if ( style & wxPD_ESTIMATED_TIME )
