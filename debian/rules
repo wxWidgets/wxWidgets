@@ -43,6 +43,10 @@ objdirs=$(objdir_wxbase_shared) $(objdir_wxbase_static) $(objdir_wxbase_debug) \
 	$(objdir_gtk_shared) $(objdir_gtk_static) $(objdir_gtk_debug) \
 	$(objdir_doc) $(objdir_examples)
 
+#	note that the i18n package is actually arch indep (once built)
+#	but must be built (and installed) during the arch any phase as
+#	it's pulled out of the wxGtk shared lib package.
+
 # Build stamps:
 build_arch_stamps=build-wxbase-shared-stamp build-wxbase-static-stamp \
                   build-wxbase-debug-stamp build-gtk-shared-stamp \
@@ -60,13 +64,14 @@ install_all_arch=install-wxbase-lib install-wxbase-dev install-wxbase-dbg \
                  install-gtk-contrib install-gtk-contrib-dev install-gtk-py \
                  install-headers install-i18n
 
-install_all_indep=install-doc install-examples
+install_all_indep=install-examples install-doc
 
 install_all=$(install_all_arch) $(install_all_indep)
 
-#	note that the i18n package is actually arch indep (once built)
-#	but must be built during the arch any phase as it's pulled out
-#	the wxGtk shared lib package.
+
+wxconfig:=$(shell pwd)/$(objdir_gtk_shared)/wx-config \
+                --prefix=$(shell pwd) \
+                --exec-prefix=$(shell pwd)/$(objdir_gtk_shared)
 
 
 # The Rules:
@@ -240,7 +245,7 @@ build-gtk-py-stamp: build-gtk-shared-stamp
 	dh_testdir
 	touch docs/lgpl.txt
 	cd wxPython \
-		&& ./setup.py build IN_CVS_TREE=1
+		&& ./setup.py build IN_CVS_TREE=1 WX_CONFIG='$(wxconfig)'
 	touch $@
 
 build-doc-stamp: build-gtk-shared-stamp
@@ -444,7 +449,7 @@ binary-common:
 	dh_strip -N$(package_gtk_dbg) -N$(package_wxbase_dbg)
 	dh_compress
 	dh_fixperms
-	dh_makeshlibs -N$(package_gtk_py)
+	dh_makeshlibs -N$(package_gtk_py) -V
 	dh_installdeb
 	dh_shlibdeps -ldebian/$(package_gtk_lib)/usr/lib
 	dh_gencontrol

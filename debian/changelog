@@ -1,3 +1,13 @@
+wxwindows2.2 (2.2.6) unstable; urgency=low
+
+  * changed i18n package back to building during arch phase
+    so we can reap the .mo files as they are created. Closes: #86174
+  * OBCBLR Closes: #84692
+  * fix wxPython build gremlin.  Closes: #89209, #85129
+  * general buglet count reduced.
+
+ -- Ron <ron@debian.org>  Thu,  8 Mar 2001 21:10:07 -0800
+
 wxwindows2.2 (2.2.5.1) unstable; urgency=low
 
   * "This One's for Dirk"  Closes: #84696
