@@ -404,6 +404,23 @@ static void gtk_listitem_select_cb( GtkWidget *widget,
 // wxListBox
 //-----------------------------------------------------------------------------
 
+static gint
+gtk_listbox_realized_callback( GtkWidget *m_widget, wxListBox *win )
+{
+    if (g_isIdle)
+        wxapp_install_idle_handler();
+        
+    GList *child = win->m_list->children;
+    for (child = win->m_list->children; child != NULL; child = child->next)
+        gtk_widget_show( GTK_WIDGET(child->data) );
+    
+    return false;
+}
+
+//-----------------------------------------------------------------------------
+// wxListBox
+//-----------------------------------------------------------------------------
+
 IMPLEMENT_DYNAMIC_CLASS(wxListBox,wxControl)
 
 // ----------------------------------------------------------------------------
@@ -490,6 +507,9 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
     gtk_widget_show( GTK_WIDGET(m_list) );
 
+    gtk_signal_connect( GTK_OBJECT(m_list), "realize",
+                        GTK_SIGNAL_FUNC(gtk_listbox_realized_callback), (gpointer) this );
+                            
     if ( style & wxLB_SORT )
     {
         // this will change DoAppend() behaviour
@@ -678,13 +698,12 @@ void wxListBox::GtkAddItem( const wxString &item, int pos )
     gtk_signal_connect( GTK_OBJECT(list_item), "focus_out_event",
             GTK_SIGNAL_FUNC(gtk_listitem_focus_out_callback), (gpointer)this );
 
-
     ConnectWidget( list_item );
-
-    gtk_widget_show( list_item );
 
     if (GTK_WIDGET_REALIZED(m_widget))
     {
+        gtk_widget_show( list_item );
+        
         gtk_widget_realize( list_item );
         gtk_widget_realize( GTK_BIN(list_item)->child );
 

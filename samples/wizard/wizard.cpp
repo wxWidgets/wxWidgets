@@ -30,6 +30,7 @@
     #include "wx/log.h"
     #include "wx/app.h"
     #include "wx/checkbox.h"
+    #include "wx/checklst.h"
     #include "wx/msgdlg.h"
     #include "wx/radiobox.h"
     #include "wx/menu.h"
@@ -177,6 +178,7 @@ public:
             wxALL,
             5 // Border
         );
+        
         SetSizer(mainSizer);
         mainSizer->Fit(this);
     }
@@ -246,6 +248,23 @@ public:
             wxALL,
             5 // Border width
         );
+
+        static const wxChar *aszChoices[] =
+            { _T("Zeroth"), _T("First"), _T("Second"), _T("Third"), _T("Fourth"), _T("Fifth"), _T("Sixth"), _T("Seventh"), _T("Eighth"), _T("Nineth") };
+        wxString *astrChoices = new wxString[WXSIZEOF(aszChoices)];
+        unsigned int ui;
+        for ( ui = 0; ui < WXSIZEOF(aszChoices); ui++ )
+            astrChoices[ui] = aszChoices[ui];
+        m_checklistbox = new wxCheckListBox(this, wxID_ANY, wxDefaultPosition, wxSize(100,100), 
+            WXSIZEOF(aszChoices), astrChoices);
+			
+        mainSizer->Add(
+            m_checklistbox,
+            0, // No vertical stretching
+            wxALL,
+            5 // Border width
+        );
+
         
         SetSizer(mainSizer);
         mainSizer->Fit(this);
@@ -263,6 +282,7 @@ private:
                  *m_next;
 
     wxCheckBox *m_checkbox;
+    wxCheckListBox *m_checklistbox;
 };
 
 // ============================================================================
