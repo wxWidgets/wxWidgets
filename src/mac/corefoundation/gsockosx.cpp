@@ -123,7 +123,8 @@ void GSocketGUIFunctionsTableConcrete::Destroy_Socket(GSocket *socket)
     struct MacGSocketData *data = (struct MacGSocketData*)(socket->m_gui_dependent);
     if (data)
     {
-        CFRelease(data->socket);
+        if ( data->socket )
+            CFRelease(data->socket);
         free(data);
     }
 }
