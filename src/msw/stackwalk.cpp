@@ -344,7 +344,61 @@ void wxStackWalker::Walk(size_t skip)
 
 #else // !wxUSE_DBGHELP
 
-// TODO: implement stubs
+// ============================================================================
+// stubs
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxStackFrame
+// ----------------------------------------------------------------------------
+
+void wxStackFrame::OnGetName()
+{
+}
+
+void wxStackFrame::OnGetLocation()
+{
+}
+
+bool
+wxStackFrame::GetParam(size_t WXUNUSED(n),
+                       wxString * WXUNUSED(type),
+                       wxString * WXUNUSED(name),
+                       wxString * WXUNUSED(value)) const
+{
+    return false;
+}
+
+void wxStackFrame::OnParam(PSYMBOL_INFO WXUNUSED(pSymInfo))
+{
+}
+
+void wxStackFrame::OnGetParam()
+{
+}
+
+// ----------------------------------------------------------------------------
+// wxStackWalker
+// ----------------------------------------------------------------------------
+
+void
+wxStackWalker::WalkFrom(const CONTEXT * WXUNUSED(pCtx), size_t WXUNUSED(skip))
+{
+}
+
+void
+wxStackWalker::WalkFrom(const _EXCEPTION_POINTERS * WXUNUSED(ep),
+                        size_t WXUNUSED(skip))
+{
+}
+
+void wxStackWalker::WalkFromException()
+{
+}
+
+void wxStackWalker::Walk(size_t WXUNUSED(skip))
+{
+}
 
 #endif // wxUSE_DBGHELP/!wxUSE_DBGHELP
 
