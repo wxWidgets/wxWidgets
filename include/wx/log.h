@@ -71,7 +71,7 @@ enum
     wxLOG_Trace,      // trace messages are also only enabled in debug mode
     wxLOG_Progress,   // used for progress indicator (not yet)
     wxLOG_User = 100, // user defined levels start here
-    wxLOG_Max = UINT_MAX
+    wxLOG_Max = 10000
 };
 
 // symbolic trace masks - wxLogTrace("foo", "some trace message...") will be
