@@ -328,7 +328,7 @@ call %WXWIN\distrib\msw\makeinno.bat
 erase /Y %dest\setup.*
 
 rem Now invoke Inno Setup on the new wxwin2.iss
-set innocmd="C:\Program Files\Inno Setup 2\compil32.exe" /cc %WXWIN\distrib\msw\wxwin2.iss
+set innocmd="C:\Program Files\Inno Setup 4\compil32.exe" /cc %WXWIN\distrib\msw\wxwin2.iss
 echo Invoking %innocmd...
 start "Inno Setup" /w %innocmd%
 Rem pause Press any key to continue with the wxWindows distribution...
