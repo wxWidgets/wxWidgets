@@ -164,6 +164,7 @@ public:
 };
 
 class wxPyTreeCtrl : public wxTreeCtrl {
+    DECLARE_ABSTRACT_CLASS(wxPyTreeCtrl);
 public:
     wxPyTreeCtrl(wxWindow *parent, wxWindowID id,
                  const wxPoint& pos,
@@ -172,7 +173,6 @@ public:
                  const wxValidator& validator,
                  char* name) :
         wxTreeCtrl(parent, id, pos, size, style, validator, name) {}
-
 
     int OnCompareItems(const wxTreeItemId& item1,
                        const wxTreeItemId& item2) {
@@ -190,6 +190,8 @@ public:
     }
     PYPRIVATE;
 };
+
+IMPLEMENT_ABSTRACT_CLASS(wxPyTreeCtrl, wxTreeCtrl);
 
 #ifdef __cplusplus
 extern "C" {

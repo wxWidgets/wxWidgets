@@ -6,13 +6,14 @@ import string
 #---------------------------------------------------------------------------
 
 class MyTreeCtrl(wxTreeCtrl):
-    def __init__(self, parent, id, pos, size, style):
+    def __init__(self, parent, id, pos, size, style, log):
         wxTreeCtrl.__init__(self, parent, id, pos, size, style)
-
+        self.log = log
 
     def OnCompareItems(self, item1, item2):
         t1 = self.GetItemText(item1)
         t2 = self.GetItemText(item2)
+        self.log.WriteText('compare: ' + t1 + '<>' + t2 + '\n')
         if t1 < t2: return -1
         if t1 == t2: return 0
         return 1
@@ -29,7 +30,8 @@ class TestTreeCtrlPanel(wxPanel):
         tID = NewId()
 
         self.tree = MyTreeCtrl(self, tID, wxDefaultPosition, wxDefaultSize,
-                               wxTR_HAS_BUTTONS | wxTR_EDIT_LABELS)# | wxTR_MULTIPLE)
+                               wxTR_HAS_BUTTONS | wxTR_EDIT_LABELS# | wxTR_MULTIPLE
+                               , self.log)
 
         #import images
         #il = wxImageList(16, 16)

@@ -55,7 +55,9 @@ Added a ton of missing methods for wxPrintData.
 
 Switched to InnoSetup for MSW distributions.
 
-Added wxToggleButton
+Added wxToggleButton.
+
+Fixed bug that prevented wxTreeCtrl.OnCompareItems from being called.
 
 
 
