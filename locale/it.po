@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWindows-2.2.1\n"
-"POT-Creation-Date: 2000-08-13 16:29+0200\n"
+"POT-Creation-Date: 2000-10-16 04:14+0930\n"
 "PO-Revision-Date: 2000-03-22 11:46Romance Standard Time\n"
 "Last-Translator: Mattia Barbon <mbarbon@dsi.unive.it>\n"
 "Language-Team: wxWindows translators <wx-translators@wxwindows.org>\n"
@@ -312,7 +312,7 @@ msgstr ""
 msgid "A3 sheet, 297 x 420 mm"
 msgstr "Foglio A3, 297 x 420 mm"
 
-#: ../src/common/paper.cpp:104 ../src/generic/dcpsg.cpp:2533
+#: ../src/common/paper.cpp:104 ../src/generic/dcpsg.cpp:2535
 msgid "A4 sheet, 210 x 297 mm"
 msgstr "Foglio A4, 210 x 297 mm"
 
@@ -479,13 +479,17 @@ msgstr "Busta C6, 114 x 162 mm"
 msgid "C65 Envelope, 114 x 229 mm"
 msgstr "Busta C65, 114 x 229 mm"
 
-#: ../src/msw/thread.cpp:222
+#: ../src/mac/thread.cpp:179 ../src/msw/thread.cpp:222
 msgid "Can not create event object."
 msgstr "Impossibile creare l'oggetto evento."
 
 #: ../src/msw/thread.cpp:124
 msgid "Can not create mutex"
 msgstr "Impossibile creare mutex"
+
+#: ../src/mac/thread.cpp:92
+msgid "Can not create mutex."
+msgstr "Impossibile creare mutex."
 
 #: ../src/common/filefn.cpp:1287 ../src/msw/dir.cpp:294
 #: ../src/unix/dir.cpp:214
@@ -515,18 +519,18 @@ msgstr "Impossibile attendere la file del thread"
 msgid "Can't &Undo "
 msgstr "Impossibile &Annullare "
 
-#: ../src/common/image.cpp:926
+#: ../src/common/image.cpp:953
 #, c-format
 msgid "Can't check image format of file '%s': file does not exist."
 msgstr ""
 "Impossibile verificare il formato del file immagine '%s': file non esistente."
 
-#: ../src/msw/registry.cpp:410
+#: ../src/msw/registry.cpp:409
 #, c-format
 msgid "Can't close registry key '%s'"
 msgstr "Impossibile chiudere la chiave '%s' del registro di sistema"
 
-#: ../src/msw/registry.cpp:486
+#: ../src/msw/registry.cpp:485
 #, c-format
 msgid "Can't copy values of unsupported type %d."
 msgstr "Impossibile copiare valori del tipo non supportato %d."
@@ -536,7 +540,7 @@ msgid "Can't create list control window, check that comctl32.dll is installed."
 msgstr ""
 "Impossibile creare list control, controllare che comctl32.dll sia installato."
 
-#: ../src/msw/registry.cpp:393
+#: ../src/msw/registry.cpp:392
 #, c-format
 msgid "Can't create registry key '%s'"
 msgstr "Impossibile creare la chiave '%s' del registro di sistema"
@@ -553,7 +557,7 @@ msgstr "Impossibile creare la pipe di scrittura tra processi"
 msgid "Can't create thread"
 msgstr "Impossibile creare il thread"
 
-#: ../src/msw/window.cpp:2396
+#: ../src/msw/window.cpp:2390
 #, c-format
 msgid ""
 "Can't create window of class %s!\n"
@@ -582,12 +586,12 @@ msgstr "Impossibile eliminare il valore '%s' dalla chiave '%s'"
 msgid "Can't delete value of key '%s'"
 msgstr "Impossibile eliminare un valore dalla chiave '%s'"
 
-#: ../src/msw/registry.cpp:991
+#: ../src/msw/registry.cpp:1015
 #, c-format
 msgid "Can't enumerate subkeys of key '%s'"
 msgstr "Impossibile enumerare le sottochiavi della chiave '%s'"
 
-#: ../src/msw/registry.cpp:946
+#: ../src/msw/registry.cpp:970
 #, c-format
 msgid "Can't enumerate values of key '%s'"
 msgstr "Impossibile enumerare i valori della chiave '%s'"
@@ -597,7 +601,7 @@ msgstr "Impossibile enumerare i valori della chiave '%s'"
 msgid "Can't find current position in file '%s'"
 msgstr "Impossibile determinare la posizione corrente nel file '%s'"
 
-#: ../src/msw/window.cpp:2346
+#: ../src/msw/window.cpp:2340
 msgid ""
 "Can't find dummy dialog template!\n"
 "Check resource include path for finding wx.rc."
@@ -611,13 +615,13 @@ msgid "Can't find the serialization object '%s' for the object '%s'."
 msgstr ""
 "Impossibile trovare l'oggetto di registrazione '%s' per l'oggetto '%s'."
 
-#: ../src/msw/registry.cpp:342
+#: ../src/msw/registry.cpp:341
 #, c-format
 msgid "Can't get info about registry key '%s'"
 msgstr ""
 "Impossibile ottenere informazioni sulla chiave '%s' del registro di sistema"
 
-#: ../src/common/image.cpp:626 ../src/common/image.cpp:646
+#: ../src/common/image.cpp:653 ../src/common/image.cpp:673
 #, c-format
 msgid "Can't load image from file '%s': file does not exist."
 msgstr "Impossibile caricare l'immagine dal file '%s': file non esistente."
@@ -631,12 +635,12 @@ msgstr "Impossibile caricare la libreria dinamica wxSerial."
 msgid "Can't open file '%s'"
 msgstr "Impossibile aprire il file '%s'"
 
-#: ../src/msw/registry.cpp:368
+#: ../src/msw/registry.cpp:367
 #, c-format
 msgid "Can't open registry key '%s'"
 msgstr "Impossibile aprire la chiave '%s' del registro di sistema"
 
-#: ../src/msw/registry.cpp:870
+#: ../src/msw/registry.cpp:894
 #, c-format
 msgid "Can't read value of '%s'"
 msgstr "Impossibile leggere il valore di '%s'"
@@ -654,13 +658,13 @@ msgstr "Impossibile salvare il contenuto del registro su file."
 msgid "Can't set thread priority"
 msgstr "Impossibile impostare la priorità del thread"
 
-#: ../src/msw/registry.cpp:794 ../src/msw/registry.cpp:894
+#: ../src/msw/registry.cpp:794 ../src/msw/registry.cpp:918
 #, c-format
 msgid "Can't set value of '%s'"
 msgstr "Impossibile impostare il valore di '%s'"
 
 #: ../src/common/dlgcmn.cpp:148 ../src/common/prntbase.cpp:109
-#: ../src/generic/dcpsg.cpp:2257 ../src/generic/dirdlgg.cpp:424
+#: ../src/generic/dcpsg.cpp:2259 ../src/generic/dirdlgg.cpp:424
 #: ../src/generic/filedlgg.cpp:916 ../src/generic/fontdlgg.cpp:257
 #: ../src/generic/prntdlgg.cpp:468 ../src/generic/progdlgg.cpp:179
 #: ../src/generic/proplist.cpp:523 ../src/generic/wizard.cpp:192
@@ -669,12 +673,12 @@ msgstr "Impossibile impostare il valore di '%s'"
 msgid "Cancel"
 msgstr "Annulla"
 
-#: ../src/msw/dialup.cpp:514
+#: ../src/msw/dialup.cpp:518
 #, c-format
 msgid "Cannot find active dialup connection: %s"
 msgstr "Impossibile trovare la connessione attiva: %s"
 
-#: ../src/msw/dialup.cpp:827
+#: ../src/msw/dialup.cpp:832
 msgid "Cannot find the location of address book file"
 msgstr "Impossibile trovare il file di degli indirizzi"
 
@@ -693,7 +697,7 @@ msgstr "Impossibile ottenere il nome dell'host"
 msgid "Cannot get the official hostname"
 msgstr "Impossibile ottenere il nome ufficiale dell'host"
 
-#: ../src/msw/dialup.cpp:920
+#: ../src/msw/dialup.cpp:925
 msgid "Cannot hang up - no active dialup connection."
 msgstr "Impossibile disconnettere - nessuna connessione attiva."
 
@@ -721,7 +725,7 @@ msgstr "Impossibile aprire l'URL '%s'"
 msgid "Cannot open contents file: %s"
 msgstr "Impossibile aprire il file sommario: %s"
 
-#: ../src/generic/dcpsg.cpp:1599
+#: ../src/generic/dcpsg.cpp:1603
 msgid "Cannot open file for PostScript printing!"
 msgstr "Impossibile aprire il file per la stampa PostScript!"
 
@@ -746,11 +750,16 @@ msgstr "Impossibile avviare il thread: errore nella scrittura del TLS"
 msgid "Case sensitive"
 msgstr "Maiuscole/minuscole"
 
+#: ../src/common/fontmap.cpp:110
+#, fuzzy
+msgid "Celtic (ISO-8859-14)"
+msgstr "Baltico (ISO-8859-13)"
+
 #: ../src/common/fontmap.cpp:98
 msgid "Central European (ISO-8859-2/Latin 2)"
 msgstr "Europa Centrale (ISO-8859-2/Latin 2)"
 
-#: ../src/msw/dialup.cpp:762
+#: ../src/msw/dialup.cpp:767
 msgid "Choose ISP to dial"
 msgstr "Scegliere l'ISP da chiamare"
 
@@ -771,7 +780,7 @@ msgstr "Chiudi"
 msgid "Close this window"
 msgstr "Chiudi questa finestra"
 
-#: ../src/common/fileconf.cpp:750
+#: ../src/common/fileconf.cpp:757
 #, c-format
 msgid "Config entry name cannot start with '%c'."
 msgstr "Il nome di una vode di configurazione non può iniziare per '%c'."
@@ -855,6 +864,10 @@ msgstr "Impossibile ottenere il lock sul mutex"
 msgid "Couldn't add an image to the image list."
 msgstr "Impossibile aggiungere un'immagine alla lista."
 
+#: ../src/mac/thread.cpp:227
+msgid "Couldn't change the state of event object."
+msgstr "Impossibile cambiare lo stato dell'oggetto evento."
+
 #: ../src/msw/timer.cpp:96
 msgid "Couldn't create a timer"
 msgstr "Impossibile creare un timer"
@@ -888,7 +901,7 @@ msgstr "Impossibile registrare il formato '%s' degli appunti."
 msgid "Couldn't release a mutex"
 msgstr "Impossibile rilasciare un mutex"
 
-#: ../src/msw/listctrl.cpp:612
+#: ../src/msw/listctrl.cpp:615
 #, c-format
 msgid "Couldn't retrieve information about list control item %d."
 msgstr "Impossibile ottenere informazioni sull'elemento %d del list control."
@@ -933,7 +946,7 @@ msgstr "Data"
 msgid "Decorative"
 msgstr "Decorativo"
 
-#: ../src/msw/dialup.cpp:350
+#: ../src/msw/dialup.cpp:354
 msgid ""
 "Dial up functions are unavailable because the remote access service (RAS) is "
 "not installed on this machine. Please install it."
@@ -1061,7 +1074,7 @@ msgstr "Atteso '=' durante l'analisi della risorsa."
 msgid "Expected 'char' whilst parsing resource."
 msgstr "Atteso 'char' durante l'analisi della risorsa."
 
-#: ../src/msw/dialup.cpp:855
+#: ../src/msw/dialup.cpp:860
 #, c-format
 msgid "Failed to %s dialup connection: %s"
 msgstr "Impossibile %s la connessione: %s"
@@ -1070,20 +1083,20 @@ msgstr "Impossibile %s la connessione: %s"
 msgid "Failed to close the clipboard."
 msgstr "Impossibile chiudere gli appunti."
 
-#: ../src/msw/dialup.cpp:796
+#: ../src/msw/dialup.cpp:801
 msgid "Failed to connect: missing username/password."
 msgstr "Connessione impossibile: mancano nome utente/password."
 
-#: ../src/msw/dialup.cpp:742
+#: ../src/msw/dialup.cpp:747
 msgid "Failed to connect: no ISP to dial."
 msgstr "Connessione impossibile: numero dell'ISP mancante."
 
-#: ../src/msw/registry.cpp:590
+#: ../src/msw/registry.cpp:589
 #, c-format
 msgid "Failed to copy registry value '%s'"
 msgstr "Impossibile copiare il valore '%s' del registro di sistema"
 
-#: ../src/msw/registry.cpp:599
+#: ../src/msw/registry.cpp:598
 #, c-format
 msgid "Failed to copy the contents of registry key '%s' to '%s'."
 msgstr ""
@@ -1132,7 +1145,7 @@ msgstr "Impossibile eliminare il contenuto degli appunti."
 msgid "Failed to establish an advise loop with DDE server"
 msgstr "Impossibile stabilire un ciclo advise con il server DDE"
 
-#: ../src/msw/dialup.cpp:635
+#: ../src/msw/dialup.cpp:639
 #, c-format
 msgid "Failed to establish dialup connection: %s"
 msgstr "Impossibile connettersi: %s"
@@ -1169,7 +1182,7 @@ msgstr ""
 "Impossibile trovare la risorsa XPM %s.\n"
 "Dimenticato di impiegare wxResourceLoadBitmapData?"
 
-#: ../src/msw/dialup.cpp:695
+#: ../src/msw/dialup.cpp:699
 #, c-format
 msgid "Failed to get ISP names: %s"
 msgstr "Impossibile ottenere i nomi degli ISP: %s"
@@ -1221,12 +1234,12 @@ msgstr "Impossibile registrare il server DDE '%s'"
 msgid "Failed to remember the encoding for the charset '%s'."
 msgstr "Impossibile ricordare la codifica per il set di caratteri '%s'."
 
-#: ../src/msw/registry.cpp:436
+#: ../src/msw/registry.cpp:435
 #, c-format
 msgid "Failed to rename registry value '%s' to '%s'."
 msgstr "Impossibile rinominare il valore '%s' del registro di sistema in '%s'."
 
-#: ../src/msw/registry.cpp:536
+#: ../src/msw/registry.cpp:535
 #, c-format
 msgid "Failed to rename the registry key '%s' to '%s'."
 msgstr "Impossibile rinominare la chiave '%s' del registro di sistema in '%s'."
@@ -1235,7 +1248,7 @@ msgstr "Impossibile rinominare la chiave '%s' del registro di sistema in '%s'."
 msgid "Failed to retrieve data from the clipboard."
 msgstr "Impossibile leggere dati dagli appunti."
 
-#: ../src/msw/dialup.cpp:459
+#: ../src/msw/dialup.cpp:463
 msgid "Failed to retrieve text of RAS error message"
 msgstr ""
 "Impossibile ottenere il testo del messaggio di errore di Accesso Remoto (RAS)"
@@ -1270,7 +1283,7 @@ msgstr "Impossibile terminare il thread."
 msgid "Failed to terminate the advise loop with DDE server"
 msgstr "Impossibile terminare il loop advise con il server DDE"
 
-#: ../src/msw/dialup.cpp:928
+#: ../src/msw/dialup.cpp:933
 #, c-format
 msgid "Failed to terminate the dialup connection: %s"
 msgstr "Impossibile terminare la connessione: %s"
@@ -1447,14 +1460,6 @@ msgstr "Stampa"
 msgid "Help: %s"
 msgstr "Aiuto: %s"
 
-#: ../src/common/fontmap.cpp:108
-msgid "ISO-8859-12"
-msgstr "ISO-8859-12"
-
-#: ../src/common/fontmap.cpp:110
-msgid "ISO-8859-14"
-msgstr "ISO-8859-14"
-
 #: ../src/common/resourc2.cpp:997 ../src/common/resourc2.cpp:1008
 #: ../src/common/resource.cpp:2647 ../src/common/resource.cpp:2658
 #, c-format
@@ -1493,6 +1498,11 @@ msgstr "Versione errata del libro di aiuto HTML"
 msgid "Index"
 msgstr "Indice"
 
+#: ../src/common/fontmap.cpp:108
+#, fuzzy
+msgid "Indian (ISO-8859-12)"
+msgstr "Nordico (ISO-8859-6)"
+
 #: ../src/common/imagtiff.cpp:171
 msgid "Invalid TIFF image index."
 msgstr "Indice dell'immagine TIFF non valido."
@@ -1517,7 +1527,7 @@ msgstr "JPEG: Impossibile salvare l'immagine."
 msgid "KOI8-R"
 msgstr "KOI8-R"
 
-#: ../src/generic/dcpsg.cpp:2248 ../src/generic/prntdlgg.cpp:441
+#: ../src/generic/dcpsg.cpp:2250 ../src/generic/prntdlgg.cpp:441
 #: ../src/generic/prntdlgg.cpp:637
 msgid "Landscape"
 msgstr "Orizzontale"
@@ -1654,16 +1664,16 @@ msgstr "Funzionalità per icone XPM non disponibili!"
 msgid "No entries found."
 msgstr "Voci non trovate."
 
-#: ../src/common/image.cpp:731
+#: ../src/common/image.cpp:758
 msgid "No handler found for image type."
 msgstr "Funzionalità non disponibili per questo formato di immagine."
 
-#: ../src/common/image.cpp:739 ../src/common/image.cpp:773
+#: ../src/common/image.cpp:766 ../src/common/image.cpp:800
 #, c-format
 msgid "No image handler for type %d defined."
 msgstr "Funzionalità non disponibili per il formato di immagine %d."
 
-#: ../src/common/image.cpp:757 ../src/common/image.cpp:789
+#: ../src/common/image.cpp:784 ../src/common/image.cpp:816
 #, c-format
 msgid "No image handler for type %s defined."
 msgstr "Funzionalità non disponibili il formato di immagine %s."
@@ -1688,7 +1698,7 @@ msgstr "Carattere normale:"
 msgid "Note, 8 1/2 x 11 in"
 msgstr "Note, 8 1/2 x 11 in"
 
-#: ../src/common/dlgcmn.cpp:127 ../src/generic/dcpsg.cpp:2256
+#: ../src/common/dlgcmn.cpp:127 ../src/generic/dcpsg.cpp:2258
 #: ../src/generic/dirdlgg.cpp:422 ../src/generic/filedlgg.cpp:907
 #: ../src/generic/fontdlgg.cpp:256 ../src/generic/logg.cpp:729
 #: ../src/generic/prntdlgg.cpp:467 ../src/generic/proplist.cpp:511
@@ -1809,7 +1819,7 @@ msgstr "Per favore scegliere un carattere valido."
 msgid "Please choose an existing file."
 msgstr "Per favore scegliere un file esistente."
 
-#: ../src/msw/dialup.cpp:763
+#: ../src/msw/dialup.cpp:768
 msgid "Please choose which ISP do you want to connect to"
 msgstr "Per favore scegliere l'ISP a cui connettersi"
 
@@ -1817,7 +1827,7 @@ msgstr "Per favore scegliere l'ISP a cui connettersi"
 msgid "Please wait..."
 msgstr "Attenedere prego..."
 
-#: ../src/generic/dcpsg.cpp:2247 ../src/generic/prntdlgg.cpp:440
+#: ../src/generic/dcpsg.cpp:2249 ../src/generic/prntdlgg.cpp:440
 #: ../src/generic/prntdlgg.cpp:636
 msgid "Portrait"
 msgstr "Verticale"
@@ -1830,11 +1840,11 @@ msgstr "PostScript"
 msgid "PostScript file"
 msgstr "File PostScript"
 
-#: ../src/generic/dcpsg.cpp:2289
+#: ../src/generic/dcpsg.cpp:2291
 msgid "PostScript:"
 msgstr "PostScript:"
 
-#: ../src/generic/dcpsg.cpp:2252
+#: ../src/generic/dcpsg.cpp:2254
 msgid "Preview Only"
 msgstr "Solo Anteprima"
 
@@ -1878,7 +1888,7 @@ msgstr "Coda di stampa"
 msgid "Print this page"
 msgstr "Stampa questa pagina"
 
-#: ../src/generic/dcpsg.cpp:2251 ../src/generic/prntdlgg.cpp:150
+#: ../src/generic/dcpsg.cpp:2253 ../src/generic/prntdlgg.cpp:150
 msgid "Print to File"
 msgstr "Stampa su File"
 
@@ -1886,11 +1896,11 @@ msgstr "Stampa su File"
 msgid "Print..."
 msgstr "Stampa..."
 
-#: ../src/generic/dcpsg.cpp:2262
+#: ../src/generic/dcpsg.cpp:2264
 msgid "Printer Command: "
 msgstr "Comando stampante:"
 
-#: ../src/generic/dcpsg.cpp:2267
+#: ../src/generic/dcpsg.cpp:2269
 msgid "Printer Options: "
 msgstr "Opzioni stampante:"
 
@@ -1948,12 +1958,12 @@ msgstr "Domanda"
 msgid "Read error on file '%s'"
 msgstr "Errore di lettura nel file '%s'"
 
-#: ../src/msw/registry.cpp:528
+#: ../src/msw/registry.cpp:527
 #, c-format
 msgid "Registry key '%s' already exists."
 msgstr "Chiave '%s' del registro di sistema già presente."
 
-#: ../src/msw/registry.cpp:497
+#: ../src/msw/registry.cpp:496
 #, c-format
 msgid "Registry key '%s' does not exist, cannot rename it."
 msgstr ""
@@ -1971,7 +1981,7 @@ msgstr ""
 "il sistema inutilizzabile:\n"
 "operazione abbandonata."
 
-#: ../src/msw/registry.cpp:428
+#: ../src/msw/registry.cpp:427
 #, c-format
 msgid "Registry value '%s' already exists."
 msgstr "Valore '%s' del registro di sistema già presente."
@@ -2060,7 +2070,7 @@ msgstr "Scegliere una rappresentazione del documento"
 msgid "Select a file"
 msgstr "Scegliere un file"
 
-#: ../src/generic/dcpsg.cpp:2250
+#: ../src/generic/dcpsg.cpp:2252
 msgid "Send to Printer"
 msgstr "Invia alla stampante"
 
@@ -2077,7 +2087,7 @@ msgstr "Configurazione"
 msgid "Setup..."
 msgstr "Configurazione..."
 
-#: ../src/msw/dialup.cpp:535
+#: ../src/msw/dialup.cpp:539
 msgid "Several active dialup connections found, choosing one randomly."
 msgstr "Trovate più connessioni attive, ne viene scelta una a caso."
 
@@ -2233,7 +2243,7 @@ msgstr "Il testo non può essere salvato."
 msgid "The value for the option '%s' must be specified."
 msgstr "Il valore per l'opzione '%s' deve essere presente."
 
-#: ../src/msw/dialup.cpp:411
+#: ../src/msw/dialup.cpp:415
 #, c-format
 msgid ""
 "The version of remote access service (RAS) installed on this machine is "
@@ -2420,17 +2430,19 @@ msgstr "Avviso"
 msgid "Warning: "
 msgstr "Avviso:"
 
-#: ../src/html/htmlpars.cpp:179
+#: ../src/html/htmlpars.cpp:177
 msgid "Warning: attempt to remove HTML tag handler from empty stack."
 msgstr ""
 "Avviso: tentata la rimozione di un handler di tag HTML da uno stack vuoto."
 
 #: ../src/common/fontmap.cpp:97
-msgid "West European (ISO-8859-1/Latin 1)"
+#, fuzzy
+msgid "Western European (ISO-8859-1/Latin 1)"
 msgstr "Europeo Occidentale (ISO-8859-1/Latin 1)"
 
 #: ../src/common/fontmap.cpp:111
-msgid "West European new (ISO-8859-15/Latin 0)"
+#, fuzzy
+msgid "Western European with Euro (ISO-8859-15/Latin 0)"
 msgstr "Europeo Occidentale nuovo (ISO-8859-15/Latin 0)"
 
 #: ../src/html/helpfrm.cpp:406
@@ -2462,6 +2474,11 @@ msgstr "Windows Arabo (CP 1256)"
 msgid "Windows Baltic (CP 1257)"
 msgstr "Windows Baltico (CP 1257)"
 
+#: ../src/common/fontmap.cpp:113
+#, fuzzy
+msgid "Windows Central European (CP 1250)"
+msgstr "Windows Ebraico (CP 1255)"
+
 #: ../src/common/fontmap.cpp:114
 msgid "Windows Cyrillic (CP 1251)"
 msgstr "Windows Cirillico (CP 1251)"
@@ -2474,17 +2491,14 @@ msgstr "Windows Greco (CP 1253)"
 msgid "Windows Hebrew (CP 1255)"
 msgstr "Windows Ebraico (CP 1255)"
 
-#: ../src/common/fontmap.cpp:115
-msgid "Windows Latin 1 (CP 1252)"
-msgstr "Windows Latin 1 (CP 1252)"
-
-#: ../src/common/fontmap.cpp:113
-msgid "Windows Latin 2 (CP 1250)"
-msgstr "Windows Latin 2 (CP 1250)"
-
 #: ../src/common/fontmap.cpp:117
 msgid "Windows Turkish (CP 1254)"
 msgstr "Windows Turco (CP 1254)"
+
+#: ../src/common/fontmap.cpp:115
+#, fuzzy
+msgid "Windows Western European (CP 1252)"
+msgstr "Windows Latin 1 (CP 1252)"
 
 #: ../src/common/fontmap.cpp:121
 msgid "Windows/DOS OEM (CP 437)"
@@ -2495,19 +2509,19 @@ msgstr "Windows/DOS OEM (CP 437)"
 msgid "Write error on file '%s'"
 msgstr "Errore di scrittura nel file '%s'"
 
-#: ../src/generic/dcpsg.cpp:2307
+#: ../src/generic/dcpsg.cpp:2309
 msgid "X Scaling"
 msgstr "Scala X"
 
-#: ../src/generic/dcpsg.cpp:2316
+#: ../src/generic/dcpsg.cpp:2318
 msgid "X Translation"
 msgstr "Traslazione X"
 
-#: ../src/generic/dcpsg.cpp:2311
+#: ../src/generic/dcpsg.cpp:2313
 msgid "Y Scaling"
 msgstr "Scala Y"
 
-#: ../src/generic/dcpsg.cpp:2320
+#: ../src/generic/dcpsg.cpp:2322
 msgid "Y Translation"
 msgstr "Traslazione Y"
 
@@ -2626,7 +2640,7 @@ msgstr ""
 "Una volta che l'applicazione é uscita da una callback XTYP_XACT_COMPLETE,\n"
 "l'identificatore di transazione per questa callback non é più valido."
 
-#: ../src/common/fileconf.cpp:1440
+#: ../src/common/fileconf.cpp:1447
 #, c-format
 msgid "attempt to change immutable key '%s' ignored."
 msgstr "tentativo di modificare la chiave non modificabile '%s' ignorato."
@@ -2651,7 +2665,7 @@ msgstr "impossibile applicare i cambiamenti al file '%s'"
 msgid "can't create file '%s'"
 msgstr "impossibile creare il file '%s'"
 
-#: ../src/common/fileconf.cpp:910
+#: ../src/common/fileconf.cpp:917
 #, c-format
 msgid "can't delete user configuration file '%s'"
 msgstr "impossibile eliminare il file di configurazione utente '%s'"
@@ -2702,7 +2716,7 @@ msgstr "impossibile aprire il file globale di configurazione '%s'."
 msgid "can't open user configuration file '%s'."
 msgstr "impossibile aprire il file globale di configurazione utente '%s'."
 
-#: ../src/common/fileconf.cpp:790
+#: ../src/common/fileconf.cpp:797
 msgid "can't open user configuration file."
 msgstr "impossibile aprire il file globale di configurazione utente."
 
@@ -2736,7 +2750,7 @@ msgstr "impossibile scrivere su disco il file '%s'."
 msgid "can't write to file descriptor %d"
 msgstr "impossibile scrivere sul descrittore %d"
 
-#: ../src/common/fileconf.cpp:797
+#: ../src/common/fileconf.cpp:804
 msgid "can't write user configuration file."
 msgstr "impossibile scrivere il file di configurazione utente."
 
@@ -2765,12 +2779,12 @@ msgstr "otto"
 msgid "eleventh"
 msgstr "undici"
 
-#: ../src/common/fileconf.cpp:1427
+#: ../src/common/fileconf.cpp:1434
 #, c-format
 msgid "entry '%s' appears more than once in group '%s'"
 msgstr "la voce '%s' é presente più volte nel gruppo '%s'"
 
-#: ../src/msw/dialup.cpp:856
+#: ../src/msw/dialup.cpp:861
 msgid "establish"
 msgstr "stabilire"
 
@@ -2787,28 +2801,28 @@ msgstr "quindici"
 msgid "fifth"
 msgstr "cinque"
 
-#: ../src/common/fileconf.cpp:471
+#: ../src/common/fileconf.cpp:478
 #, c-format
 msgid "file '%s', line %d: '%s' ignored after group header."
 msgstr "file %s, riga %d: '%s' ignorato dopo làinizio di un gruppo."
 
-#: ../src/common/fileconf.cpp:500
+#: ../src/common/fileconf.cpp:507
 #, c-format
 msgid "file '%s', line %d: '=' expected."
 msgstr "file %s, riga %d: atteso '='."
 
-#: ../src/common/fileconf.cpp:526
+#: ../src/common/fileconf.cpp:533
 #, c-format
 msgid "file '%s', line %d: key '%s' was first found at line %d."
 msgstr "file %s, riga %d: la chiave '%s' é già stata trovata alla riga %d."
 
-#: ../src/common/fileconf.cpp:516
+#: ../src/common/fileconf.cpp:523
 #, c-format
 msgid "file '%s', line %d: value for immutable key '%s' ignored."
 msgstr ""
 "file '%s', riga %d: il valore per la chiava non configurabile '%s' ignorato."
 
-#: ../src/common/fileconf.cpp:439
+#: ../src/common/fileconf.cpp:446
 #, c-format
 msgid "file '%s': unexpected character %c at line %d."
 msgstr "file %s: carattere %c non atteso alla riga %d."
@@ -2829,7 +2843,7 @@ msgstr "quattro"
 msgid "gmtime() failed"
 msgstr "gmtime() fallita"
 
-#: ../src/msw/dialup.cpp:856
+#: ../src/msw/dialup.cpp:861
 msgid "initiate"
 msgstr "iniziare"
 
@@ -2960,7 +2974,7 @@ msgstr "dodici"
 msgid "twentieth"
 msgstr "venti"
 
-#: ../src/common/fileconf.cpp:1547
+#: ../src/common/fileconf.cpp:1554
 #, c-format
 msgid "unexpected \" at position %d in '%s'."
 msgstr "\" non atteso alla posizione %d in '%s'."
@@ -2969,7 +2983,7 @@ msgstr "\" non atteso alla posizione %d in '%s'."
 msgid "unknown"
 msgstr "sconosciuto"
 
-#: ../src/msw/dialup.cpp:462
+#: ../src/msw/dialup.cpp:466
 #, c-format
 msgid "unknown error (error code %08x)."
 msgstr "errore sconosciuto (codice %08x)."
@@ -3030,11 +3044,14 @@ msgstr "wxWindows: impossibile trovare il nome di file temporaneo.\n"
 msgid "yesterday"
 msgstr "ieri"
 
-#~ msgid "Can not create mutex."
-#~ msgstr "Impossibile creare mutex."
+#~ msgid "ISO-8859-12"
+#~ msgstr "ISO-8859-12"
+
+#~ msgid "ISO-8859-14"
+#~ msgstr "ISO-8859-14"
+
+#~ msgid "Windows Latin 2 (CP 1250)"
+#~ msgstr "Windows Latin 2 (CP 1250)"
 
 #~ msgid "Computer"
 #~ msgstr "Computer"
-
-#~ msgid "Couldn't change the state of event object."
-#~ msgstr "Impossibile cambiare lo stato dell'oggetto evento."

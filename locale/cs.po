@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWindows-2.2\n"
-"POT-Creation-Date: 2000-08-13 16:29+0200\n"
+"POT-Creation-Date: 2000-10-16 04:14+0930\n"
 "PO-Revision-Date: 2000-06-17 19:23+0200\n"
 "Last-Translator: Vaclav Slavik <v.slavik@volny.cz>\n"
 "Language-Team: wxWindows translators <wx-translators@wxwindows.org>\n"
@@ -314,7 +314,7 @@ msgstr ""
 msgid "A3 sheet, 297 x 420 mm"
 msgstr "stránka A3, 297 x 420 mm"
 
-#: ../src/common/paper.cpp:104 ../src/generic/dcpsg.cpp:2533
+#: ../src/common/paper.cpp:104 ../src/generic/dcpsg.cpp:2535
 msgid "A4 sheet, 210 x 297 mm"
 msgstr "stránka A4, 210 x 297 mm"
 
@@ -481,12 +481,16 @@ msgstr "Obálka C6, 114 x 162 mm"
 msgid "C65 Envelope, 114 x 229 mm"
 msgstr "Obálka C65, 114 x 229 mm"
 
-#: ../src/msw/thread.cpp:222
+#: ../src/mac/thread.cpp:179 ../src/msw/thread.cpp:222
 msgid "Can not create event object."
 msgstr "Nemohu vytvoøit object události."
 
 #: ../src/msw/thread.cpp:124
 msgid "Can not create mutex"
+msgstr "Nemohu vytvoøit mutex."
+
+#: ../src/mac/thread.cpp:92
+msgid "Can not create mutex."
 msgstr "Nemohu vytvoøit mutex."
 
 #: ../src/common/filefn.cpp:1287 ../src/msw/dir.cpp:294
@@ -517,17 +521,17 @@ msgstr "Nemohu poèkat na ukonèení vlákna"
 msgid "Can't &Undo "
 msgstr "Nemohu vzít zpìt"
 
-#: ../src/common/image.cpp:926
+#: ../src/common/image.cpp:953
 #, c-format
 msgid "Can't check image format of file '%s': file does not exist."
 msgstr "Nemohu detekovat formát obrázku '%s': soubor neexistuje."
 
-#: ../src/msw/registry.cpp:410
+#: ../src/msw/registry.cpp:409
 #, c-format
 msgid "Can't close registry key '%s'"
 msgstr "Nemohu zavøít registrový klíè '%s'"
 
-#: ../src/msw/registry.cpp:486
+#: ../src/msw/registry.cpp:485
 #, c-format
 msgid "Can't copy values of unsupported type %d."
 msgstr "Nemohu kopírovat hodnoty nepodporovaného typu %d"
@@ -538,7 +542,7 @@ msgstr ""
 "Nemohu vytvoøit ovládací prvek list, zkontrolujte, jestli máte "
 "nainstalovanou comctl32.dll."
 
-#: ../src/msw/registry.cpp:393
+#: ../src/msw/registry.cpp:392
 #, c-format
 msgid "Can't create registry key '%s'"
 msgstr "Nemohu vytvoøit registrový klíè '%s'"
@@ -555,7 +559,7 @@ msgstr "Nemohu vytvoøit meziprocesovou rouru pro zápis"
 msgid "Can't create thread"
 msgstr "Nemohu vytvoøit vlákno"
 
-#: ../src/msw/window.cpp:2396
+#: ../src/msw/window.cpp:2390
 #, c-format
 msgid ""
 "Can't create window of class %s!\n"
@@ -584,12 +588,12 @@ msgstr "Nemohu smazat hodnotu '%s' z klíèe '%s'"
 msgid "Can't delete value of key '%s'"
 msgstr "Nemohu smazat hodnotu klíèe '%s'"
 
-#: ../src/msw/registry.cpp:991
+#: ../src/msw/registry.cpp:1015
 #, c-format
 msgid "Can't enumerate subkeys of key '%s'"
 msgstr "Nemohu vyjmenovat podklíèe klíèe '%s'"
 
-#: ../src/msw/registry.cpp:946
+#: ../src/msw/registry.cpp:970
 #, c-format
 msgid "Can't enumerate values of key '%s'"
 msgstr "Nemohu vyjmenovat hodnoty klíèe '%s'"
@@ -599,7 +603,7 @@ msgstr "Nemohu vyjmenovat hodnoty klíèe '%s'"
 msgid "Can't find current position in file '%s'"
 msgstr "Nemohu zjistit pozici v souboru '%s'"
 
-#: ../src/msw/window.cpp:2346
+#: ../src/msw/window.cpp:2340
 msgid ""
 "Can't find dummy dialog template!\n"
 "Check resource include path for finding wx.rc."
@@ -612,12 +616,12 @@ msgstr ""
 msgid "Can't find the serialization object '%s' for the object '%s'."
 msgstr "Nemohu najít serializaèní objekt '%s' k objektu '%s'."
 
-#: ../src/msw/registry.cpp:342
+#: ../src/msw/registry.cpp:341
 #, c-format
 msgid "Can't get info about registry key '%s'"
 msgstr "Nemohu získat informace o registrovém klíèi '%s'"
 
-#: ../src/common/image.cpp:626 ../src/common/image.cpp:646
+#: ../src/common/image.cpp:653 ../src/common/image.cpp:673
 #, c-format
 msgid "Can't load image from file '%s': file does not exist."
 msgstr "Nemohu naèíst obrázek ze souboru '%s': soubor neexistuje."
@@ -631,12 +635,12 @@ msgstr "Nemohu naèíst dynamickou knihovnu wxSerial."
 msgid "Can't open file '%s'"
 msgstr "Nemohu otevøít soubor '%s'"
 
-#: ../src/msw/registry.cpp:368
+#: ../src/msw/registry.cpp:367
 #, c-format
 msgid "Can't open registry key '%s'"
 msgstr "Nemohu otevøít registrový klíè '%s'"
 
-#: ../src/msw/registry.cpp:870
+#: ../src/msw/registry.cpp:894
 #, c-format
 msgid "Can't read value of '%s'"
 msgstr "Nemohu pøeèíst hodnotu '%s'"
@@ -654,13 +658,13 @@ msgstr "Nemohu ulo¾it obsah logu do souboru."
 msgid "Can't set thread priority"
 msgstr "Nemohu nastavit prioritu vlákna"
 
-#: ../src/msw/registry.cpp:794 ../src/msw/registry.cpp:894
+#: ../src/msw/registry.cpp:794 ../src/msw/registry.cpp:918
 #, c-format
 msgid "Can't set value of '%s'"
 msgstr "Nemohu nastavit hodnotu '%s'"
 
 #: ../src/common/dlgcmn.cpp:148 ../src/common/prntbase.cpp:109
-#: ../src/generic/dcpsg.cpp:2257 ../src/generic/dirdlgg.cpp:424
+#: ../src/generic/dcpsg.cpp:2259 ../src/generic/dirdlgg.cpp:424
 #: ../src/generic/filedlgg.cpp:916 ../src/generic/fontdlgg.cpp:257
 #: ../src/generic/prntdlgg.cpp:468 ../src/generic/progdlgg.cpp:179
 #: ../src/generic/proplist.cpp:523 ../src/generic/wizard.cpp:192
@@ -669,12 +673,12 @@ msgstr "Nemohu nastavit hodnotu '%s'"
 msgid "Cancel"
 msgstr "Storno"
 
-#: ../src/msw/dialup.cpp:514
+#: ../src/msw/dialup.cpp:518
 #, c-format
 msgid "Cannot find active dialup connection: %s"
 msgstr "Nemohu nalézt aktivní vytáèené pøipojení: %s"
 
-#: ../src/msw/dialup.cpp:827
+#: ../src/msw/dialup.cpp:832
 msgid "Cannot find the location of address book file"
 msgstr "Nemohu najít umístìní adresáøe"
 
@@ -691,7 +695,7 @@ msgstr "Nemohu zjistit jméno poèítaèe"
 msgid "Cannot get the official hostname"
 msgstr "Nemohu zjistit oficiální jméno poèítaèe"
 
-#: ../src/msw/dialup.cpp:920
+#: ../src/msw/dialup.cpp:925
 msgid "Cannot hang up - no active dialup connection."
 msgstr "Nemohu zavìsit - ¾ádná aktivní vytáèená pøipojení."
 
@@ -719,7 +723,7 @@ msgstr "Nemohu otevøít URL '%s'"
 msgid "Cannot open contents file: %s"
 msgstr "Nelze otevøít soubor s obsahem: %s"
 
-#: ../src/generic/dcpsg.cpp:1599
+#: ../src/generic/dcpsg.cpp:1603
 msgid "Cannot open file for PostScript printing!"
 msgstr "Nemohu otevøít soubor k PostScriptovému tisku!"
 
@@ -744,11 +748,16 @@ msgstr "Nemohu spustit vlákno: chyba zápisu TLS"
 msgid "Case sensitive"
 msgstr "Rozli¹ovat velká/malá"
 
+#: ../src/common/fontmap.cpp:110
+#, fuzzy
+msgid "Celtic (ISO-8859-14)"
+msgstr "Baltské (ISO-8859-13)"
+
 #: ../src/common/fontmap.cpp:98
 msgid "Central European (ISO-8859-2/Latin 2)"
 msgstr "Støedoevropské (ISO-8859-2/Latin 2)"
 
-#: ../src/msw/dialup.cpp:762
+#: ../src/msw/dialup.cpp:767
 msgid "Choose ISP to dial"
 msgstr "Vyberte ISP, ke kterému se má volat"
 
@@ -769,7 +778,7 @@ msgstr "Zavøít"
 msgid "Close this window"
 msgstr "Zavøít okno"
 
-#: ../src/common/fileconf.cpp:750
+#: ../src/common/fileconf.cpp:757
 #, c-format
 msgid "Config entry name cannot start with '%c'."
 msgstr "Polo¾ka konfigurace nemù¾e zaèínat na '%c'"
@@ -852,6 +861,10 @@ msgstr "Nemohu získat zámek mutexu."
 msgid "Couldn't add an image to the image list."
 msgstr "Nemohu pøidat obrázek do seznamu."
 
+#: ../src/mac/thread.cpp:227
+msgid "Couldn't change the state of event object."
+msgstr "Nemohu zmìnit stav event object."
+
 #: ../src/msw/timer.cpp:96
 msgid "Couldn't create a timer"
 msgstr "Nemohu vytvoøit èasovaè"
@@ -885,7 +898,7 @@ msgstr "Nemohu zaregistrovat formát schránky '%s'."
 msgid "Couldn't release a mutex"
 msgstr "Nemohu uvolnit mutex"
 
-#: ../src/msw/listctrl.cpp:612
+#: ../src/msw/listctrl.cpp:615
 #, c-format
 msgid "Couldn't retrieve information about list control item %d."
 msgstr "Nemohu získat informace o polo¾ce %d v seznamu."
@@ -930,7 +943,7 @@ msgstr "Datum"
 msgid "Decorative"
 msgstr "Ozdobný"
 
-#: ../src/msw/dialup.cpp:350
+#: ../src/msw/dialup.cpp:354
 msgid ""
 "Dial up functions are unavailable because the remote access service (RAS) is "
 "not installed on this machine. Please install it."
@@ -1056,7 +1069,7 @@ msgstr "Pøi parsování resource oèekávám '='."
 msgid "Expected 'char' whilst parsing resource."
 msgstr "Pøi parsování resource oèekávám 'char'."
 
-#: ../src/msw/dialup.cpp:855
+#: ../src/msw/dialup.cpp:860
 #, c-format
 msgid "Failed to %s dialup connection: %s"
 msgstr "Nepodaøilo se %s pøipojení k Internetu: %s"
@@ -1065,20 +1078,20 @@ msgstr "Nepodaøilo se %s pøipojení k Internetu: %s"
 msgid "Failed to close the clipboard."
 msgstr "Nemohu uzavøít schránku."
 
-#: ../src/msw/dialup.cpp:796
+#: ../src/msw/dialup.cpp:801
 msgid "Failed to connect: missing username/password."
 msgstr "Nepodaøilo se pøipojit: chybí u¾ivatelské jméno nebo heslo."
 
-#: ../src/msw/dialup.cpp:742
+#: ../src/msw/dialup.cpp:747
 msgid "Failed to connect: no ISP to dial."
 msgstr "Nelze se pøipojit: ¾ádný ISP."
 
-#: ../src/msw/registry.cpp:590
+#: ../src/msw/registry.cpp:589
 #, c-format
 msgid "Failed to copy registry value '%s'"
 msgstr "Nelze zkopírovat hodnotu registru '%s'"
 
-#: ../src/msw/registry.cpp:599
+#: ../src/msw/registry.cpp:598
 #, c-format
 msgid "Failed to copy the contents of registry key '%s' to '%s'."
 msgstr "Nelze zkopírovat obsah registrového klíèe '%s' do '%s'."
@@ -1125,7 +1138,7 @@ msgstr "Nemohu vyprázdnit shcránku."
 msgid "Failed to establish an advise loop with DDE server"
 msgstr "Nelze navázat 'advise loop' s DDE serverem"
 
-#: ../src/msw/dialup.cpp:635
+#: ../src/msw/dialup.cpp:639
 #, c-format
 msgid "Failed to establish dialup connection: %s"
 msgstr "Nepodaøilo se navázat vytáèené spojení: %s"
@@ -1162,7 +1175,7 @@ msgstr ""
 "Nemohu nalézt XPM resource %s.\n"
 "Nezapomnìl jste pou¾ít wxResourceLoadBitmapData?"
 
-#: ../src/msw/dialup.cpp:695
+#: ../src/msw/dialup.cpp:699
 #, c-format
 msgid "Failed to get ISP names: %s"
 msgstr "Nepodaøilo se získat jména ISP: %s"
@@ -1214,12 +1227,12 @@ msgstr "Nelze zaregistrovat DDE server '%s'"
 msgid "Failed to remember the encoding for the charset '%s'."
 msgstr "Nemohu ulo¾it kódování znakové sady '%s'."
 
-#: ../src/msw/registry.cpp:436
+#: ../src/msw/registry.cpp:435
 #, c-format
 msgid "Failed to rename registry value '%s' to '%s'."
 msgstr "Nelze pøejmenovat registrový klíè '%s' na '%s'."
 
-#: ../src/msw/registry.cpp:536
+#: ../src/msw/registry.cpp:535
 #, c-format
 msgid "Failed to rename the registry key '%s' to '%s'."
 msgstr "Nelze pøejmenovat registrový klíè '%s' na '%s'."
@@ -1228,7 +1241,7 @@ msgstr "Nelze pøejmenovat registrový klíè '%s' na '%s'."
 msgid "Failed to retrieve data from the clipboard."
 msgstr "Nemohu získat data ze schránky."
 
-#: ../src/msw/dialup.cpp:459
+#: ../src/msw/dialup.cpp:463
 msgid "Failed to retrieve text of RAS error message"
 msgstr "Nepodaøilo se získat text chybového hlá¹ení RAS"
 
@@ -1262,7 +1275,7 @@ msgstr "Nemohu ukonèit vlákno."
 msgid "Failed to terminate the advise loop with DDE server"
 msgstr "Nelze ukonèit 'advise loop' s DDE serverem"
 
-#: ../src/msw/dialup.cpp:928
+#: ../src/msw/dialup.cpp:933
 #, c-format
 msgid "Failed to terminate the dialup connection: %s"
 msgstr "Nelze ukonèit vytáèené spojení: %s"
@@ -1439,14 +1452,6 @@ msgstr "Tisk nápovìdy"
 msgid "Help: %s"
 msgstr "Nápovìda: %s"
 
-#: ../src/common/fontmap.cpp:108
-msgid "ISO-8859-12"
-msgstr "ISO-8859-12"
-
-#: ../src/common/fontmap.cpp:110
-msgid "ISO-8859-14"
-msgstr "ISO-8859-14"
-
 #: ../src/common/resourc2.cpp:997 ../src/common/resourc2.cpp:1008
 #: ../src/common/resource.cpp:2647 ../src/common/resource.cpp:2658
 #, c-format
@@ -1485,6 +1490,11 @@ msgstr "©patná verze knihy s HTML nápovìdou"
 msgid "Index"
 msgstr "Rejtøík"
 
+#: ../src/common/fontmap.cpp:108
+#, fuzzy
+msgid "Indian (ISO-8859-12)"
+msgstr "Severské (ISO-8859-10)"
+
 #: ../src/common/imagtiff.cpp:171
 msgid "Invalid TIFF image index."
 msgstr "Po¹kozený index v TIFF obrázku."
@@ -1509,7 +1519,7 @@ msgstr "JPEG: Nemohu ulo¾it obrázek."
 msgid "KOI8-R"
 msgstr "KOI8-R"
 
-#: ../src/generic/dcpsg.cpp:2248 ../src/generic/prntdlgg.cpp:441
+#: ../src/generic/dcpsg.cpp:2250 ../src/generic/prntdlgg.cpp:441
 #: ../src/generic/prntdlgg.cpp:637
 msgid "Landscape"
 msgstr "Na ¹íøku"
@@ -1642,16 +1652,16 @@ msgstr "Chybí podpora XPM ikon!"
 msgid "No entries found."
 msgstr "Nenalezeny ¾ádné polo¾ky."
 
-#: ../src/common/image.cpp:731
+#: ../src/common/image.cpp:758
 msgid "No handler found for image type."
 msgstr "Nenalezen ¾ádný ovladaè pro tento typ obrázkù."
 
-#: ../src/common/image.cpp:739 ../src/common/image.cpp:773
+#: ../src/common/image.cpp:766 ../src/common/image.cpp:800
 #, c-format
 msgid "No image handler for type %d defined."
 msgstr "®ádný ovladaè pro typ obrázkù %d."
 
-#: ../src/common/image.cpp:757 ../src/common/image.cpp:789
+#: ../src/common/image.cpp:784 ../src/common/image.cpp:816
 #, c-format
 msgid "No image handler for type %s defined."
 msgstr "®ádný ovladaè pro typ obrázkù %s."
@@ -1676,7 +1686,7 @@ msgstr "Normální písmo:"
 msgid "Note, 8 1/2 x 11 in"
 msgstr "Note, 8 1/2 x 11 palcù"
 
-#: ../src/common/dlgcmn.cpp:127 ../src/generic/dcpsg.cpp:2256
+#: ../src/common/dlgcmn.cpp:127 ../src/generic/dcpsg.cpp:2258
 #: ../src/generic/dirdlgg.cpp:422 ../src/generic/filedlgg.cpp:907
 #: ../src/generic/fontdlgg.cpp:256 ../src/generic/logg.cpp:729
 #: ../src/generic/prntdlgg.cpp:467 ../src/generic/proplist.cpp:511
@@ -1797,7 +1807,7 @@ msgstr "Prosím vyberte korektní font."
 msgid "Please choose an existing file."
 msgstr "Vyberte prosím existující soubor."
 
-#: ../src/msw/dialup.cpp:763
+#: ../src/msw/dialup.cpp:768
 msgid "Please choose which ISP do you want to connect to"
 msgstr "Prosím vyberte si poskytovatele (ISP), ke kterému se chcete pøipojit"
 
@@ -1805,7 +1815,7 @@ msgstr "Prosím vyberte si poskytovatele (ISP), ke kterému se chcete pøipojit"
 msgid "Please wait..."
 msgstr "Èekejte prosím..."
 
-#: ../src/generic/dcpsg.cpp:2247 ../src/generic/prntdlgg.cpp:440
+#: ../src/generic/dcpsg.cpp:2249 ../src/generic/prntdlgg.cpp:440
 #: ../src/generic/prntdlgg.cpp:636
 msgid "Portrait"
 msgstr "Na vý¹ku"
@@ -1818,11 +1828,11 @@ msgstr "PostScript"
 msgid "PostScript file"
 msgstr "soubor PostScript"
 
-#: ../src/generic/dcpsg.cpp:2289
+#: ../src/generic/dcpsg.cpp:2291
 msgid "PostScript:"
 msgstr "PostScript:"
 
-#: ../src/generic/dcpsg.cpp:2252
+#: ../src/generic/dcpsg.cpp:2254
 msgid "Preview Only"
 msgstr "Pouze náhled"
 
@@ -1866,7 +1876,7 @@ msgstr "Tisková fronta"
 msgid "Print this page"
 msgstr "Vytiskne tuto stránku"
 
-#: ../src/generic/dcpsg.cpp:2251 ../src/generic/prntdlgg.cpp:150
+#: ../src/generic/dcpsg.cpp:2253 ../src/generic/prntdlgg.cpp:150
 msgid "Print to File"
 msgstr "Tisknout do souboru"
 
@@ -1874,11 +1884,11 @@ msgstr "Tisknout do souboru"
 msgid "Print..."
 msgstr "Tisknout..."
 
-#: ../src/generic/dcpsg.cpp:2262
+#: ../src/generic/dcpsg.cpp:2264
 msgid "Printer Command: "
 msgstr "Pøíkaz tisku: "
 
-#: ../src/generic/dcpsg.cpp:2267
+#: ../src/generic/dcpsg.cpp:2269
 msgid "Printer Options: "
 msgstr "Nastavení tiskárny: "
 
@@ -1936,12 +1946,12 @@ msgstr "Otázka"
 msgid "Read error on file '%s'"
 msgstr "Chyba pøi ètení ze souboru '%s'"
 
-#: ../src/msw/registry.cpp:528
+#: ../src/msw/registry.cpp:527
 #, c-format
 msgid "Registry key '%s' already exists."
 msgstr "Registrový klíè '%s' u¾ existuje."
 
-#: ../src/msw/registry.cpp:497
+#: ../src/msw/registry.cpp:496
 #, c-format
 msgid "Registry key '%s' does not exist, cannot rename it."
 msgstr "Registrový klíè '%s' neexistuje, nemohu ho pøejmenovat."
@@ -1957,7 +1967,7 @@ msgstr ""
 "pokud ho sma¾ete, systém bude nestabilní:\n"
 "operace pøeru¹ena."
 
-#: ../src/msw/registry.cpp:428
+#: ../src/msw/registry.cpp:427
 #, c-format
 msgid "Registry value '%s' already exists."
 msgstr "Registrový klíè '%s' u¾ existuje."
@@ -2047,7 +2057,7 @@ msgstr "Vyberte zobrazení dokumentu"
 msgid "Select a file"
 msgstr "Vyberte soubor"
 
-#: ../src/generic/dcpsg.cpp:2250
+#: ../src/generic/dcpsg.cpp:2252
 msgid "Send to Printer"
 msgstr "Poslat na tiskárnu"
 
@@ -2064,7 +2074,7 @@ msgstr "Nastavení"
 msgid "Setup..."
 msgstr "Nastavení..."
 
-#: ../src/msw/dialup.cpp:535
+#: ../src/msw/dialup.cpp:539
 msgid "Several active dialup connections found, choosing one randomly."
 msgstr ""
 "Nalezeno nìkolik aktivních vytáèených pøipojení, vybírám jedno náhodnì."
@@ -2221,7 +2231,7 @@ msgstr "Text nelze ulo¾it."
 msgid "The value for the option '%s' must be specified."
 msgstr "Musíte zadat hodnotu volby '%s'."
 
-#: ../src/msw/dialup.cpp:411
+#: ../src/msw/dialup.cpp:415
 #, c-format
 msgid ""
 "The version of remote access service (RAS) installed on this machine is "
@@ -2407,16 +2417,18 @@ msgstr "Varování"
 msgid "Warning: "
 msgstr "Varování: "
 
-#: ../src/html/htmlpars.cpp:179
+#: ../src/html/htmlpars.cpp:177
 msgid "Warning: attempt to remove HTML tag handler from empty stack."
 msgstr "Varování: pokus o vyjmutí HTML tag handleru z prázdného zásobníku."
 
 #: ../src/common/fontmap.cpp:97
-msgid "West European (ISO-8859-1/Latin 1)"
+#, fuzzy
+msgid "Western European (ISO-8859-1/Latin 1)"
 msgstr "Západoevropské (ISO-8859-1/Latin 1)"
 
 #: ../src/common/fontmap.cpp:111
-msgid "West European new (ISO-8859-15/Latin 0)"
+#, fuzzy
+msgid "Western European with Euro (ISO-8859-15/Latin 0)"
 msgstr "Západoevropské nové (ISO-8859-15/Latin 0)"
 
 #: ../src/html/helpfrm.cpp:406
@@ -2448,6 +2460,11 @@ msgstr "Arabské pro Windows (CP 1256)"
 msgid "Windows Baltic (CP 1257)"
 msgstr "Baltské pro Windows (CP 1257)"
 
+#: ../src/common/fontmap.cpp:113
+#, fuzzy
+msgid "Windows Central European (CP 1250)"
+msgstr "Hebrejské pro Windows (CP 1255)"
+
 #: ../src/common/fontmap.cpp:114
 msgid "Windows Cyrillic (CP 1251)"
 msgstr "Cyrilice pro Windows (CP 1251)"
@@ -2460,17 +2477,14 @@ msgstr "Øecké pro Windows (CP 1253)"
 msgid "Windows Hebrew (CP 1255)"
 msgstr "Hebrejské pro Windows (CP 1255)"
 
-#: ../src/common/fontmap.cpp:115
-msgid "Windows Latin 1 (CP 1252)"
-msgstr "Windows Latin 1 (CP 1252)"
-
-#: ../src/common/fontmap.cpp:113
-msgid "Windows Latin 2 (CP 1250)"
-msgstr "Windows Latin 2 (CP 1250)"
-
 #: ../src/common/fontmap.cpp:117
 msgid "Windows Turkish (CP 1254)"
 msgstr "Turecké pro Windows (CP 1254)"
+
+#: ../src/common/fontmap.cpp:115
+#, fuzzy
+msgid "Windows Western European (CP 1252)"
+msgstr "Windows Latin 1 (CP 1252)"
 
 #: ../src/common/fontmap.cpp:121
 msgid "Windows/DOS OEM (CP 437)"
@@ -2481,19 +2495,19 @@ msgstr "Windows/DOS OEM (CP 437)"
 msgid "Write error on file '%s'"
 msgstr "Chyba pøi zápisu do souboru '%s'"
 
-#: ../src/generic/dcpsg.cpp:2307
+#: ../src/generic/dcpsg.cpp:2309
 msgid "X Scaling"
 msgstr "Mìøítko v X"
 
-#: ../src/generic/dcpsg.cpp:2316
+#: ../src/generic/dcpsg.cpp:2318
 msgid "X Translation"
 msgstr "Posunutí v X"
 
-#: ../src/generic/dcpsg.cpp:2311
+#: ../src/generic/dcpsg.cpp:2313
 msgid "Y Scaling"
 msgstr "Mìøítko v Y"
 
-#: ../src/generic/dcpsg.cpp:2320
+#: ../src/generic/dcpsg.cpp:2322
 msgid "Y Translation"
 msgstr "Posunutí v Y"
 
@@ -2605,7 +2619,7 @@ msgstr ""
 "Identifikátor transakce se stává neplatný, jakmile se aplikace vrátí z\n"
 "XTYP_XACT_COMPLETE callbacku."
 
-#: ../src/common/fileconf.cpp:1440
+#: ../src/common/fileconf.cpp:1447
 #, c-format
 msgid "attempt to change immutable key '%s' ignored."
 msgstr "pokus o zmìnu nemìnného klíèe '%s' ignorován."
@@ -2630,7 +2644,7 @@ msgstr "Nemohu ulo¾it zmìny v souboru '%s'"
 msgid "can't create file '%s'"
 msgstr "nemohu vytvoøit soubor '%s'"
 
-#: ../src/common/fileconf.cpp:910
+#: ../src/common/fileconf.cpp:917
 #, c-format
 msgid "can't delete user configuration file '%s'"
 msgstr "nemohu smazat u¾ivatelský konfiguraèní soubor '%s'"
@@ -2678,7 +2692,7 @@ msgstr "nemohu otevøít globální konfiguraèní soubor '%s'."
 msgid "can't open user configuration file '%s'."
 msgstr "nemohu otevøít konfiguraèní soubor '%s'"
 
-#: ../src/common/fileconf.cpp:790
+#: ../src/common/fileconf.cpp:797
 msgid "can't open user configuration file."
 msgstr "nemohu otevøít soubor s u¾ivatelskou konfigurací"
 
@@ -2712,7 +2726,7 @@ msgstr "nemohu zapsat soubor '%s' na disk."
 msgid "can't write to file descriptor %d"
 msgstr "nemohu zapisovat do deskriptoru %d"
 
-#: ../src/common/fileconf.cpp:797
+#: ../src/common/fileconf.cpp:804
 msgid "can't write user configuration file."
 msgstr "nemohu ulo¾it u¾ivatelskou konfiguraci"
 
@@ -2741,12 +2755,12 @@ msgstr "osmý"
 msgid "eleventh"
 msgstr "jedenáctý"
 
-#: ../src/common/fileconf.cpp:1427
+#: ../src/common/fileconf.cpp:1434
 #, c-format
 msgid "entry '%s' appears more than once in group '%s'"
 msgstr "polo¾ka '%s' se v '%s' vyskytuje víc ne¾ jednou"
 
-#: ../src/msw/dialup.cpp:856
+#: ../src/msw/dialup.cpp:861
 msgid "establish"
 msgstr "navázat"
 
@@ -2763,27 +2777,27 @@ msgstr "patnáctý"
 msgid "fifth"
 msgstr "pátý"
 
-#: ../src/common/fileconf.cpp:471
+#: ../src/common/fileconf.cpp:478
 #, c-format
 msgid "file '%s', line %d: '%s' ignored after group header."
 msgstr "soubor '%s', øádka %d: '%s' ignorováno po hlavièce skupiny."
 
-#: ../src/common/fileconf.cpp:500
+#: ../src/common/fileconf.cpp:507
 #, c-format
 msgid "file '%s', line %d: '=' expected."
 msgstr "soubor '%s', øádka %d: oèekávám '='."
 
-#: ../src/common/fileconf.cpp:526
+#: ../src/common/fileconf.cpp:533
 #, c-format
 msgid "file '%s', line %d: key '%s' was first found at line %d."
 msgstr "soubor '%s', øádka %d: klíè '%s' byl poprvé nalezen na øádce %d."
 
-#: ../src/common/fileconf.cpp:516
+#: ../src/common/fileconf.cpp:523
 #, c-format
 msgid "file '%s', line %d: value for immutable key '%s' ignored."
 msgstr "soubor '%s', øádka %d: hodnota pro nemìnný klíè '%s' ignorována."
 
-#: ../src/common/fileconf.cpp:439
+#: ../src/common/fileconf.cpp:446
 #, c-format
 msgid "file '%s': unexpected character %c at line %d."
 msgstr "soubor '%s': neoèekávaný znak %c na øádku %d."
@@ -2804,7 +2818,7 @@ msgstr "ètvrtý"
 msgid "gmtime() failed"
 msgstr "gmtime() selhalo"
 
-#: ../src/msw/dialup.cpp:856
+#: ../src/msw/dialup.cpp:861
 msgid "initiate"
 msgstr "inicializovat"
 
@@ -2934,7 +2948,7 @@ msgstr "dvanáctý"
 msgid "twentieth"
 msgstr "dvacátý"
 
-#: ../src/common/fileconf.cpp:1547
+#: ../src/common/fileconf.cpp:1554
 #, c-format
 msgid "unexpected \" at position %d in '%s'."
 msgstr "neoèekávané \" na pozici %d v '%s'."
@@ -2943,7 +2957,7 @@ msgstr "neoèekávané \" na pozici %d v '%s'."
 msgid "unknown"
 msgstr "neznámý"
 
-#: ../src/msw/dialup.cpp:462
+#: ../src/msw/dialup.cpp:466
 #, c-format
 msgid "unknown error (error code %08x)."
 msgstr "neznámá chyba (kód %08x)."
@@ -3004,11 +3018,14 @@ msgstr "wxWindows: chyba pøi hledání jména doèasného souboru.\n"
 msgid "yesterday"
 msgstr "vèera"
 
-#~ msgid "Can not create mutex."
-#~ msgstr "Nemohu vytvoøit mutex."
+#~ msgid "ISO-8859-12"
+#~ msgstr "ISO-8859-12"
 
-#~ msgid "Couldn't change the state of event object."
-#~ msgstr "Nemohu zmìnit stav event object."
+#~ msgid "ISO-8859-14"
+#~ msgstr "ISO-8859-14"
+
+#~ msgid "Windows Latin 2 (CP 1250)"
+#~ msgstr "Windows Latin 2 (CP 1250)"
 
 #~ msgid "Previewing"
 #~ msgstr "Vytváøím náhled"
