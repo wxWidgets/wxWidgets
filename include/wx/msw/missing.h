@@ -438,7 +438,9 @@ typedef struct {
     #endif
 #endif
 
-#ifndef NMTVGETINFOTIP
+#if !defined(NMTVGETINFOTIP) && defined(TVN_FIRST)
+    // NB: Check for TVN_FIRST is done so that this code is not included if
+    //     <commctrl.h> (which defined HTREEITEM) wasn't included before.
     struct NMTVGETINFOTIPA
     {
         NMHDR     hdr;
