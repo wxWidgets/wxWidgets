@@ -41,8 +41,6 @@ public:
     virtual bool OnInitGui();
 
     // override base class (pure) virtuals
-    virtual bool Initialized();
-
     virtual bool Yield(bool onlyIfNeeded = FALSE);
     virtual void WakeUpIdle();
 
