@@ -12,11 +12,11 @@
 /*
   About pens, brushes, and the autoSetting flag:
 
-  Under X, pens and brushes control some of the same X drawing parameters.
-  Therefore, it is impossible to independently maintain the current pen and the
-  current brush. Also, some settings depend on the current logical function. The
-  m_currentFill, etc. instance variables remember state across the brush and
-  pen.
+  Under X, pens and brushes control some of the same X drawing
+  parameters.  Therefore, it is impossible to independently maintain
+  the current pen and the current brush. Also, some settings depend on
+  the current logical function. The m_currentFill, etc. instance
+  variables remember state across the brush and pen.
 
   Since pens are used more than brushes, the autoSetting flag is used to
   indicate that a brush was recently used, and SetPen must be called to
@@ -1237,7 +1237,8 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     CalcBoundingBox (x, y);
 }
 
-void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, double angle )
+void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y,
+                                    double angle )
 {
     if (angle == 0.0)
     {
@@ -1247,27 +1248,50 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, 
 
     wxCHECK_RET( Ok(), "invalid dc" );
 
+    int oldBackgroundPixel = -1;
+    int oldForegroundPixel = -1;
+    int foregroundPixel = -1;
+    int backgroundPixel = -1;
+
+    if (m_textBackgroundColour.Ok())
+    {
+        oldBackgroundPixel = m_backgroundPixel;
+        backgroundPixel = m_textBackgroundColour.AllocColour(m_display);
+    }
+    if (m_textForegroundColour.Ok())
+    {
+        oldForegroundPixel = m_currentColour.GetPixel();
+
+        if( m_textForegroundColour.GetPixel() <= -1 )
+            CalculatePixel( m_textForegroundColour,
+                            m_textForegroundColour, TRUE);
+ 
+        foregroundPixel = m_textForegroundColour.GetPixel();
+    }
+
     // Since X draws from the baseline of the text, must add the text height
     int cx = 0;
     int cy = 0;
     int ascent = 0;
-    int slen;
-
-    slen = strlen(text);
+    int slen = text.length();
 
     if (m_font.Ok())
     {
         // Calculate text extent.
-        WXFontStructPtr pFontStruct = m_font.GetFontStruct(m_userScaleY*m_logicalScaleY, m_display);
+        WXFontStructPtr pFontStruct =
+            m_font.GetFontStruct(m_userScaleY*m_logicalScaleY, m_display);
         int direction, descent;
         XCharStruct overall_return;
 #if 0
         if (use16)
-            (void)XTextExtents16((XFontStruct*) pFontStruct, (XChar2b *)(const char*) text, slen, &direction,
+            (void)XTextExtents16((XFontStruct*) pFontStruct,
+                                 (XChar2b *)(const char*) text,
+                                 slen, &direction,
             &ascent, &descent, &overall_return);
         else
 #endif // 0
-            (void)XTextExtents((XFontStruct*) pFontStruct, (char*) (const char*) text, slen, &direction,
+            (void)XTextExtents((XFontStruct*) pFontStruct,
+                               (char*)text.c_str(), slen, &direction,
                                &ascent, &descent, &overall_return);
 
         cx = overall_return.width;
@@ -1287,10 +1311,10 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, 
     // Calculate the size of the rotated bounding box.
     double dx = cos(angle / 180.0 * M_PI);
     double dy = sin(angle / 180.0 * M_PI);
-    double x4 = -cy * dy;
+    double x4 = cy * dy;
     double y4 = cy * dx;
     double x3 = cx * dx;
-    double y3 = cx * dy;
+    double y3 = -cx * dy;
     double x2 = x3 + x4;
     double y2 = y3 + y4;
     double x1 = x;
@@ -1304,75 +1328,69 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, 
     int maxx = roundmax(0, roundmax(x4, roundmax(x2, x3)));
     int maxy = roundmax(0, roundmax(y4, roundmax(y2, y3)));
 
+    bool lastFore = false, lastBack = false;
+
     // This rotates counterclockwise around the top left corner.
     for (int rx = minx; rx < maxx; rx++)
     {
         for (int ry = miny; ry < maxy; ry++)
         {
             // transform dest coords to source coords
-            int sx = (int) (rx * dx + ry * dy + 0.5);
-            int sy = (int) (ry * dx - rx * dy + 0.5);
+            int sx = (int) (rx * dx - ry * dy + 0.5);
+            int sy = - (int) (-ry * dx - rx * dy + 0.5);
             if (sx >= 0 && sx < cx && sy >= 0 && sy < cy)
             {
+                bool textPixel = image.GetRed(sx, sy) == 0;
+
+                if (!textPixel && m_backgroundMode != wxSOLID)
+                    continue;
+
+                wxCoord ox = (wxCoord) (x1 + rx),
+                        oy = (wxCoord) (y1 + ry);
                 // draw black pixels, ignore white ones (i.e. transparent b/g)
-                if (image.GetRed(sx, sy) == 0)
+                if (textPixel && !lastFore)
                 {
-                    DrawPoint((wxCoord) (x1 + maxx - rx), (wxCoord) (cy + y1 - ry));
+                    XSetForeground ((Display*) m_display, (GC) m_gc,
+                                    foregroundPixel);
+                    lastFore = true;
+                    lastBack = false;
                 }
-                else
+                else if (!textPixel && !lastBack)
                 {
-                    // Background
-                    //DrawPoint(x1 + maxx - rx, cy + y1 + maxy - ry);
+                    XSetForeground ((Display*) m_display, (GC) m_gc,
+                                    backgroundPixel);
+                    lastFore = false;
+                    lastBack = true;
                 }
-            }
-        }
-    }
 
-#if 0
-    // First draw a rectangle representing the text background, if a text
-    // background is specified
-    if (m_textBackgroundColour.Ok () && (m_backgroundMode != wxTRANSPARENT))
-    {
-        wxColour oldPenColour = m_currentColour;
-        m_currentColour = m_textBackgroundColour;
-        bool sameColour = (oldPenColour.Ok () && m_textBackgroundColour.Ok () &&
-            (oldPenColour.Red () == m_textBackgroundColour.Red ()) &&
-            (oldPenColour.Blue () == m_textBackgroundColour.Blue ()) &&
-            (oldPenColour.Green () == m_textBackgroundColour.Green ()));
-
-        // This separation of the big && test required for gcc2.7/HP UX 9.02
-        // or pixel value can be corrupted!
-        sameColour = (sameColour &&
-            (oldPenColour.GetPixel() == m_textBackgroundColour.GetPixel()));
-
-        if (!sameColour || !GetOptimization())
-        {
-            int pixel = m_textBackgroundColour.AllocColour(m_display);
-            m_currentColour = m_textBackgroundColour;
-
-            // Set the GC to the required colour
-            if (pixel > -1)
-            {
-                XSetForeground ((Display*) m_display, (GC) m_gc, pixel);
+                XDrawPoint ((Display*) m_display, (Pixmap) m_pixmap,
+                            (GC) m_gc, XLOG2DEV (ox), YLOG2DEV (oy));
                 if (m_window && m_window->GetBackingPixmap())
-                    XSetForeground ((Display*) m_display,(GC) m_gcBacking, pixel);
+                    XDrawPoint ((Display*) m_display,
+                                (Pixmap) m_window->GetBackingPixmap(),
+                                (GC) m_gcBacking,
+                                XLOG2DEV_2 (ox), YLOG2DEV_2 (oy));
             }
         }
-        else
-            m_textBackgroundColour = oldPenColour ;
-
-        XFillRectangle ((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc, XLOG2DEV (x), YLOG2DEV (y), cx, cy);
-        if (m_window && m_window->GetBackingPixmap())
-            XFillRectangle ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking,
-            XLOG2DEV_2 (x), YLOG2DEV_2 (y), cx, cy);
     }
-#endif
 
-    long w, h;
-    // XXX use pixmap size
-    GetTextExtent (text, &w, &h);
-    CalcBoundingBox (x + w, y + h);
-    CalcBoundingBox (x, y);
+    if (oldBackgroundPixel > -1)
+    {
+        XSetBackground ((Display*) m_display, (GC) m_gc, oldBackgroundPixel);
+        if (m_window && m_window->GetBackingPixmap())
+            XSetBackground ((Display*) m_display,(GC) m_gcBacking,
+                            oldBackgroundPixel);
+    }
+    if (oldForegroundPixel > -1)
+    {
+        XSetForeground ((Display*) m_display, (GC) m_gc, oldForegroundPixel);
+        if (m_window && m_window->GetBackingPixmap())
+            XSetForeground ((Display*) m_display,(GC) m_gcBacking,
+                            oldForegroundPixel);
+    }
+
+    CalcBoundingBox (minx, miny);
+    CalcBoundingBox (maxx, maxy);
 }
 
 bool wxWindowDC::CanGetTextExtent() const
