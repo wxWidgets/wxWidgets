@@ -247,7 +247,6 @@ void WriteWinHelpContentsFileLine(char *topicName, char *xitle, int level)
 		  char ch1=xitle[s+1]&0xff;
 		  char ch2=xitle[s+2]&0xff;
 		  char ch3=xitle[s+3]&0xff;
-		  char ch4=xitle[s+4]&0xff;
 		  s+=4; // next character		  
 		  char a=0;
 		  if ((ch1==0x27)&&(ch2==0x66)&&(ch3==0x36)) { title[d++]='ö';  a=1; }
@@ -3370,7 +3369,6 @@ bool RTFOnArgument(int macroId, int arg_no, bool start)
                 {
                   if (useWord)
                   {
-                      char *s = GetArgData();
                       TexOutput("p. ");
                       TexOutput("{\\field{\\*\\fldinst  PAGEREF ");
                       TexOutput(refName);
@@ -3622,7 +3620,7 @@ bool RTFOnArgument(int macroId, int arg_no, bool start)
               }
               else
               {
-                sprintf(buf, "Could not read metafile %s. Perhaps it's not a placeable metafile?", f);
+                sprintf(buf, "Could not read metafile %s. Perhaps it's not a placeable metafile?", (const char*)f);
                 OnError(buf);
               }
               fclose(fd);

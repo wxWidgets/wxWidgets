@@ -2526,7 +2526,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
       if (val)
       {
         bool isPicture = FALSE;
-        char *s = ParseColourString(val, &isPicture);
+        ParseColourString(val, &isPicture);
         if (isPicture)
         {
           if (backgroundImageString)
@@ -2665,7 +2665,6 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
         startRows = TRUE;
         tableVerticalLineLeft = FALSE;
         tableVerticalLineRight = FALSE;
-        int currentWidth = 0;
 
         char *alignString = copystring(GetArgData());
         ParseTableArgument(alignString);

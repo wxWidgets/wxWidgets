@@ -1697,7 +1697,7 @@ bool StringMatch(const wxChar *str1, const wxChar *str2, bool subString,
           Sstr1.MakeUpper();
           Sstr2.MakeUpper();
       }
-      return Sstr2.Index(Sstr1) != wxNOT_FOUND;
+      return Sstr2.Index(Sstr1) != (size_t)wxNOT_FOUND;
    }
    else
       return exact ? wxString(str2).Cmp(str1) == 0 : 
