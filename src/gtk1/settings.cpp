@@ -156,6 +156,7 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
         case wxSYS_COLOUR_ACTIVEBORDER:
         case wxSYS_COLOUR_INACTIVEBORDER:
         case wxSYS_COLOUR_BTNFACE:
+        case wxSYS_COLOUR_MENUBAR:
         case wxSYS_COLOUR_3DLIGHT:
             if (!g_systemBtnFaceColour)
             {
@@ -292,6 +293,17 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
 
         case wxSYS_COLOUR_APPWORKSPACE:
             return *wxWHITE;    // ?
+
+        case wxSYS_COLOUR_HOTLIGHT:
+        case wxSYS_COLOUR_GRADIENTACTIVECAPTION:
+        case wxSYS_COLOUR_GRADIENTINACTIVECAPTION:
+        case wxSYS_COLOUR_MENUHILIGHT:
+            // TODO
+            return *wxBLACK;
+
+        case wxSYS_COLOUR_MAX:
+        default:
+            wxFAIL_MSG( _T("unknown system colour index") );
   }
 
   return *wxWHITE;
