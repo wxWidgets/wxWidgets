@@ -275,7 +275,7 @@ bool wxMenu::DoInsertOrAppend(
     //
 
     wxMenu*                         pSubmenu = pItem->GetSubMenu();
-    MENUITEM	&rItem = (pSubmenu != NULL)?pSubmenu->m_vMenuData:
+    MENUITEM&                       rItem = (pSubmenu != NULL)?pSubmenu->m_vMenuData:
                                             pItem->m_vMenuData;
     if(pSubmenu != NULL)
     {
@@ -297,6 +297,25 @@ bool wxMenu::DoInsertOrAppend(
     if (pItem->IsSeparator())
     {
         rItem.afStyle |= MIS_SEPARATOR;
+    }
+
+    //
+    // Id is the numeric id for normal menu items and HMENU for submenus as
+    // required by ::MM_INSERTITEM message API
+    //
+
+    if (pSubmenu != NULL)
+    {
+        wxASSERT_MSG(pSubmenu->GetHMenu(), wxT("invalid submenu"));
+        pSubmenu->SetParent(this);
+
+        rItem.iPosition = 0; // submenus have a 0 position
+        rItem.id = (USHORT)pSubmenu->GetHMenu();
+        rItem.afStyle |= MIS_SUBMENU | MIS_TEXT;
+    }
+    else
+    {
+        rItem.id = pItem->GetId();
     }
 
     BYTE*                           pData;
@@ -1012,7 +1031,7 @@ void wxMenuBar::Attach(
     // Ensure the accelerator table is set to the frame (not the client!)
     //
     if (!::WinSetAccelTable( vHabmain
-                            ,(HWND)pFrame->GetFrame()
+                            ,(HWND)pFrame->GetHWND()
                             ,m_vAccelTable.GetHACCEL()
                            ))
         wxLogLastError("WinSetAccelTable");

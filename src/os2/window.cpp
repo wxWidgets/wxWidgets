@@ -306,8 +306,11 @@ wxWindow::~wxWindow()
     if (m_parent)
         m_parent->RemoveChild(this);
     DestroyChildren();
+
     if (m_hWnd)
     {
+//      UnsubclassWin();
+
         if(!::WinDestroyWindow(GetHWND()))
             wxLogLastError(wxT("DestroyWindow"));
         //
@@ -382,6 +385,7 @@ bool wxWindow::Create(
               ,NULLHANDLE
               ,m_windowId
              );
+
     return(TRUE);
 } // end of wxWindow::Create
 
@@ -714,28 +718,28 @@ void wxWindow::SubclassWin(
 
     wxCHECK_RET(::WinIsWindow(vHabmain, hwnd), wxT("invalid HWND in SubclassWin") );
 
-    wxAssociateWinWithHandle(hwnd, this);
+//  wxAssociateWinWithHandle(hwnd, this);
 
     m_fnOldWndProc = (WXFARPROC) ::WinSubclassWindow(hwnd, (PFNWP)wxWndProc);
-    ::WinSetWindowULong(hwnd, QWS_USER, (ULONG)wxWndProc);
+//    ::WinSetWindowULong(hwnd, QWL_USER, (ULONG)wxWndProc);
 } // end of wxWindow::SubclassWin
 
 void wxWindow::UnsubclassWin()
 {
-    wxRemoveHandleAssociation(this);
+//    wxRemoveHandleAssociation(this);
 
     //
     // Restore old Window proc
     //
-    HWND                            hwnd = GetHwnd();
+    HWND                            hwnd = GetHWND();
 
-    if (hwnd)
+    if (m_hWnd)
     {
-        m_hWnd = 0;
+//        m_hWnd = 0;
 
         wxCHECK_RET( ::WinIsWindow(vHabmain, hwnd), wxT("invalid HWND in UnsubclassWin") );
 
-        PFNWP                       fnProc = (PFNWP)::WinQueryWindowULong(hwnd, QWS_USER);
+        PFNWP                       fnProc = (PFNWP)::WinQueryWindowPtr(hwnd, QWP_PFNWP);
         if ( (m_fnOldWndProc != 0) && (fnProc != (PFNWP) m_fnOldWndProc))
         {
             WinSubclassWindow(hwnd, (PFNWP)m_fnOldWndProc);
@@ -1502,9 +1506,9 @@ MRESULT wxWindow::OS2DefWindowProc(
 )
 {
     if (m_fnOldWndProc)
-        return ((MRESULT)m_fnOldWndProc());
+        return (MRESULT)m_fnOldWndProc(GetHWND(), (ULONG)uMsg, (MPARAM)wParam, (MPARAM)lParam);
     else
-        return (::WinDefWindowProc(GetHwnd(), (ULONG)uMsg, (MPARAM)wParam, (MPARAM)lParam));
+        return ::WinDefWindowProc(GetHWND(), (ULONG)uMsg, (MPARAM)wParam, (MPARAM)lParam);
 } // end of wxWindow::OS2DefWindowProc
 
 bool wxWindow::OS2ProcessMessage(
@@ -1798,7 +1802,8 @@ MRESULT EXPENTRY wxWndProc(
         pWnd->SetHWND((WXHWND)hWnd);
     }
 
-    MRESULT                         rc;
+    MRESULT                         rc = (MRESULT)FALSE;
+
 
     //
     // Stop right here if we don't have a valid handle in our wxWindow object.
@@ -1813,7 +1818,7 @@ MRESULT EXPENTRY wxWndProc(
     {
         if (pWnd)
             rc = pWnd->OS2WindowProc(ulMsg, wParam, lParam);
-        if (!rc)
+        else
             rc = ::WinDefWindowProc(hWnd, ulMsg, wParam, lParam);
     }
     return rc;
@@ -1833,22 +1838,26 @@ MRESULT wxWindow::OS2WindowProc(
     // Did we process the uMsg?
     //
     bool                            bProcessed = FALSE;
+    bool                            bAllow;
+    MRESULT                         mResult;
+    WXHICON                         hIcon;
+    WXHBRUSH                        hBrush;
 
     //
     // The return value
     //
-    union
-    {
-        bool                        bAllow;
-        MRESULT                     mResult;
-        WXHICON                     hIcon;
-        WXHBRUSH                    hBrush;
-    } vRc;
+//  union
+//  {
+//      bool                        bAllow;
+//      MRESULT                     mResult;
+//      WXHICON                     hIcon;
+//      WXHBRUSH                    hBrush;
+//  } vRc;
 
     //
     // For most messages we should return 0 when we do process the message
     //
-    vRc.mResult = (MRESULT)0;
+    mResult = (MRESULT)0;
 
     switch (uMsg)
     {
@@ -1864,14 +1873,16 @@ MRESULT wxWindow::OS2WindowProc(
                     //
                     // Return 0 to bAllow window creation
                     //
-                    vRc.mResult = (MRESULT)(bMayCreate ? 0 : -1);
+                    mResult = (MRESULT)(bMayCreate ? 0 : -1);
                 }
             }
             break;
 
         case WM_DESTROY:
-            bProcessed = HandleDestroy();
-            break;
+             HandleDestroy();
+             bProcessed = TRUE;
+             delete this;
+             break;
 
         case WM_MOVE:
             bProcessed = HandleMove( LOWORD(lParam)
@@ -1900,6 +1911,7 @@ MRESULT wxWindow::OS2WindowProc(
                 bProcessed = HandleActivate( wState
                                             ,(WXHWND)hWnd
                                            );
+                bProcessed = FALSE;
             }
             break;
 
@@ -1920,7 +1932,7 @@ MRESULT wxWindow::OS2WindowProc(
             // ourselves in ~wxWindow
             //
             bProcessed = TRUE;
-            vRc.mResult = (MRESULT)TRUE;
+            mResult = (MRESULT)TRUE;
             break;
 
         case WM_SHOW:
@@ -1987,14 +1999,14 @@ MRESULT wxWindow::OS2WindowProc(
                 }
 
                 if ( bProcessed )
-                    vRc.mResult = (MRESULT)TRUE;
+                    mResult = (MRESULT)TRUE;
             }
             break;
 
         case WM_QUERYDLGCODE:
             if ( m_lDlgCode )
             {
-                vRc.mResult = (MRESULT)m_lDlgCode;
+                mResult = (MRESULT)m_lDlgCode;
                 bProcessed = TRUE;
             }
             //
@@ -2093,7 +2105,7 @@ MRESULT wxWindow::OS2WindowProc(
 #if defined(__VISAGECPP__) && (__IBMCPP__ >= 400)
         case WM_CTLCOLORCHANGE:
             {
-                bProcessed = HandleCtlColor(&vRc.hBrush);
+                bProcessed = HandleCtlColor(&hBrush);
             }
             break;
 #endif
@@ -2132,7 +2144,7 @@ MRESULT wxWindow::OS2WindowProc(
                 //
                 // We processed the message, i.e. erased the background
                 //
-                vRc.mResult = (MRESULT)TRUE;
+                mResult = (MRESULT)TRUE;
             }
             break;
 
@@ -2147,7 +2159,7 @@ MRESULT wxWindow::OS2WindowProc(
             if ( bProcessed )
             {
                 // we never set focus from here
-                vRc.mResult = FALSE;
+                mResult = FALSE;
             }
             break;
 
@@ -2158,7 +2170,7 @@ MRESULT wxWindow::OS2WindowProc(
 
         case WM_SYSVALUECHANGED:
             // TODO: do something
-            vRc.mResult = (MRESULT)TRUE;
+            mResult = (MRESULT)TRUE;
             break;
 
         //
@@ -2175,7 +2187,7 @@ MRESULT wxWindow::OS2WindowProc(
                 // processing this message - exactly what we need because we've
                 // just set the cursor.
                 //
-                vRc.mResult = (MRESULT)TRUE;
+                mResult = (MRESULT)TRUE;
             }
             break;
     }
@@ -2186,9 +2198,9 @@ MRESULT wxWindow::OS2WindowProc(
         wxLogTrace(wxTraceMessages, wxT("Forwarding %s to DefWindowProc."),
                    wxGetMessageName(uMsg));
 #endif // __WXDEBUG__
-        vRc.mResult = OS2DefWindowProc(uMsg, wParam, lParam);
+        mResult = OS2DefWindowProc(uMsg, wParam, lParam);
     }
-    return vRc.mResult;
+    return mResult;
 } // end of wxWindow::OS2WindowProc
 
 //
@@ -2414,6 +2426,12 @@ bool wxWindow::OS2Create(
     wxAssociateWinWithHandle((HWND)m_hWnd
                              ,this
                             );
+    // 
+    // Now need to subclass window.
+    //
+
+    SubclassWin(GetHWND());
+
     return TRUE;
 } // end of wxWindow::OS2Create
 
@@ -2797,6 +2815,8 @@ bool wxWindow::HandlePaint()
 {
     HRGN                            hRgn = NULLHANDLE;
     wxPaintEvent                    vEvent;
+    HPS                             hPS;
+    RECTL                           vRect;
 
     if (::WinQueryUpdateRegion(GetHwnd(), hRgn) == RGN_NULL)
     {
@@ -2804,7 +2824,11 @@ bool wxWindow::HandlePaint()
          return FALSE;
     }
     m_updateRegion = wxRegion(hRgn);
-
+/*
+    hPS = WinBeginPaint(GetHWND(), 0L, &vRect);
+    WinFillRect(hPS, &vRect, SYSCLR_WINDOW);
+    WinEndPaint(hPS);
+*/
     vEvent.SetEventObject(this);
     return (GetEventHandler()->ProcessEvent(vEvent));
 } // end of wxWindow::HandlePaint

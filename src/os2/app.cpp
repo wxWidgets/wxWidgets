@@ -184,7 +184,7 @@ bool wxApp::RegisterWindowClasses(
     if (!::WinRegisterClass( vHab
                             ,wxFrameClassName
                             ,(PFNWP)wxWndProc
-                            ,CS_SIZEREDRAW | CS_MOVENOTIFY | CS_SYNCPAINT
+                            ,CS_SIZEREDRAW | CS_MOVENOTIFY | CS_SYNCPAINT | CS_FRAME
                             ,sizeof(ULONG)
                            ))
     {
@@ -651,11 +651,11 @@ int wxApp::MainLoop()
 #if wxUSE_THREADS
         wxMutexGuiLeaveOrEnter();
 #endif // wxUSE_THREADS
-        while (!Pending() && ProcessIdle())
-        {
-//            wxUsleep(10000);
-        }
-        DoMessage();
+      while (!Pending() && ProcessIdle())
+      {
+//          wxUsleep(10000);
+      }
+      DoMessage();
     }
     return (int)svCurrentMsg.mp1;
 } // end of wxApp::MainLoop
@@ -761,11 +761,11 @@ bool wxApp::ProcessMessage(
     //
     // Anyone for a non-translation message? Try youngest descendants first.
     //
-    for (pWnd = pWndThis; pWnd; pWnd = pWnd->GetParent())
-    {
-        if (pWnd->OS2ProcessMessage(pWxmsg))
-            return TRUE;
-    }
+//  for (pWnd = pWndThis; pWnd; pWnd = pWnd->GetParent())
+//  {
+//      if (pWnd->OS2ProcessMessage(pWxmsg))
+//          return TRUE;
+//  }
     return FALSE;
 } // end of wxApp::ProcessMessage
 
