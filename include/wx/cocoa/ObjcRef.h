@@ -9,6 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#ifndef _WX_COCOA_OBJCREF_H__
+#define _WX_COCOA_OBJCREF_H__
 /*
 wxObjcAutoRefFromAlloc: construct a reference to an object that was
 [NSObject -alloc]'ed and thus does not need a retain
@@ -74,3 +76,4 @@ public:
     {   return wxObjcAutoRefFromAlloc<T>::operator=(otherRef); }
 };
 
+#endif //ndef _WX_COCOA_OBJCREF_H__
