@@ -682,7 +682,9 @@ static wxPyCoreAPI API = {
 
     wxPyClientData_dtor,
     wxPyUserData_dtor,
-    wxPyOORClientData_dtor
+    wxPyOORClientData_dtor,
+
+    wxPyCBInputStream_create
 };
 
 

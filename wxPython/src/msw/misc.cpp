@@ -2551,6 +2551,76 @@ static PyObject *_wrap_wxRect_GetSize(PyObject *self, PyObject *args, PyObject *
     return _resultobj;
 }
 
+#define wxRect_SetPosition(_swigobj,_swigarg0)  (_swigobj->SetPosition(_swigarg0))
+static PyObject *_wrap_wxRect_SetPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxRect * _arg0;
+    wxPoint * _arg1;
+    wxRect  temp;
+    PyObject * _obj0 = 0;
+    wxPoint  temp0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","p", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxRect_SetPosition",_kwnames,&_obj0,&_obj1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxRect_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    _arg1 = &temp0;
+    if (! wxPoint_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxRect_SetPosition(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxRect_SetSize(_swigobj,_swigarg0)  (_swigobj->SetSize(_swigarg0))
+static PyObject *_wrap_wxRect_SetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxRect * _arg0;
+    wxSize * _arg1;
+    wxRect  temp;
+    PyObject * _obj0 = 0;
+    wxSize  temp0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","s", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxRect_SetSize",_kwnames,&_obj0,&_obj1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxRect_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    _arg1 = &temp0;
+    if (! wxSize_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxRect_SetSize(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxRect_GetLeft(_swigobj)  (_swigobj->GetLeft())
 static PyObject *_wrap_wxRect_GetLeft(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -4223,6 +4293,8 @@ static PyMethodDef misccMethods[] = {
 	 { "wxRect_GetBottom", (PyCFunction) _wrap_wxRect_GetBottom, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRect_GetTop", (PyCFunction) _wrap_wxRect_GetTop, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRect_GetLeft", (PyCFunction) _wrap_wxRect_GetLeft, METH_VARARGS | METH_KEYWORDS },
+	 { "wxRect_SetSize", (PyCFunction) _wrap_wxRect_SetSize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxRect_SetPosition", (PyCFunction) _wrap_wxRect_SetPosition, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRect_GetSize", (PyCFunction) _wrap_wxRect_GetSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRect_GetPosition", (PyCFunction) _wrap_wxRect_GetPosition, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRect_SetHeight", (PyCFunction) _wrap_wxRect_SetHeight, METH_VARARGS | METH_KEYWORDS },
