@@ -176,6 +176,7 @@ COMMONOBJS = \
 		$(COMMDIR)\$D\filefn.obj \
 		$(COMMDIR)\$D\filename.obj \
 		$(COMMDIR)\$D\filesys.obj \
+		$(COMMDIR)\$D\fldlgcmn.obj \
 		$(COMMDIR)\$D\fontcmn.obj \
 		$(COMMDIR)\$D\fontmap.obj \
 		$(COMMDIR)\$D\framecmn.obj \

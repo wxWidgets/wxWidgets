@@ -88,6 +88,7 @@ ALL_SOURCES = \
 		common/filefn.cpp \
 		common/filename.cpp \
 		common/filesys.cpp \
+		common/fldlgcmn.cpp \
 		common/fontcmn.cpp \
 		common/fontmap.cpp \
 		common/framecmn.cpp \
@@ -678,6 +679,7 @@ COMMONOBJS = \
 		filefn.o \
 		filename.o \
 		filesys.o \
+		fldlgcmn.o \
 		fontcmn.o \
 		fontmap.o \
 		framecmn.o \

@@ -121,6 +121,7 @@ COMMONOBJS = &
 	$(OUTPUTDIR)\filefn.obj &
 	$(OUTPUTDIR)\filename.obj &
 	$(OUTPUTDIR)\filesys.obj &
+	$(OUTPUTDIR)\fldlgcmn.obj &
 	$(OUTPUTDIR)\fontcmn.obj &
 	$(OUTPUTDIR)\fontmap.obj &
 	$(OUTPUTDIR)\framecmn.obj &
@@ -845,6 +846,9 @@ $(OUTPUTDIR)\filename.obj:     $(COMMDIR)\filename.cpp
   *$(CXX) $(CXXFLAGS) $<
 
 $(OUTPUTDIR)\filesys.obj:     $(COMMDIR)\filesys.cpp
+  *$(CXX) $(CXXFLAGS) $<
+
+$(OUTPUTDIR)\fldlgcmn.obj:     $(COMMDIR)\fldlgcmn.cpp
   *$(CXX) $(CXXFLAGS) $<
 
 $(OUTPUTDIR)\fontcmn.obj:     $(COMMDIR)\fontcmn.cpp

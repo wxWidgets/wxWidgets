@@ -129,6 +129,7 @@ COMMONOBJS1 = \
 		$(COMMDIR)\filefn.obj \
 		$(COMMDIR)\filename.obj \
 		$(COMMDIR)\filesys.obj \
+		$(COMMDIR)\fldlgcmn.obj \
 		$(COMMDIR)\fontcmn.obj \
 		$(COMMDIR)\fontmap.obj \
 		$(COMMDIR)\framecmn.obj \
@@ -1000,6 +1001,11 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(COMMDIR)/filesys.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(COMMDIR)/fldlgcmn.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<

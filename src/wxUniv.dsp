@@ -261,6 +261,10 @@ SOURCE=.\common\filesys.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\fldlgcmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\fontcmn.cpp
 # End Source File
 # Begin Source File

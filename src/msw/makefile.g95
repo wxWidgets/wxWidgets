@@ -201,6 +201,7 @@ COMMONOBJS  = \
 		$(COMMDIR)/dseldlg.$(OBJSUFF) \
 		$(COMMDIR)/effects.$(OBJSUFF) \
 		$(COMMDIR)/fddlgcmn.$(OBJSUFF) \
+		$(COMMDIR)/fldlgcmn.$(OBJSUFF) \
 		$(COMMDIR)/fontcmn.$(OBJSUFF) \
 		$(COMMDIR)/framecmn.$(OBJSUFF) \
 		$(COMMDIR)/gaugecmn.$(OBJSUFF) \

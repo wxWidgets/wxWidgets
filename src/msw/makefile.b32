@@ -420,6 +420,7 @@ COMMONOBJS = \
 		$(OBJ_PATH)\filefn.obj \
 		$(OBJ_PATH)\filename.obj \
 		$(OBJ_PATH)\filesys.obj \
+		$(OBJ_PATH)\fldlgcmn.obj \
 		$(OBJ_PATH)\fontcmn.obj \
 		$(OBJ_PATH)\fontmap.obj \
 		$(OBJ_PATH)\framecmn.obj \
@@ -1106,6 +1107,8 @@ $(OBJ_PATH)\filefn.obj: $(COMMDIR)\filefn.$(SRCSUFF)
 $(OBJ_PATH)\filename.obj: $(COMMDIR)\filename.$(SRCSUFF)
 
 $(OBJ_PATH)\filesys.obj: $(COMMDIR)\filesys.$(SRCSUFF)
+
+$(OBJ_PATH)\fldlgcmn.obj: $(COMMDIR)\fldlgcmn.$(SRCSUFF)
 
 $(OBJ_PATH)\fontcmn.obj: $(COMMDIR)\fontcmn.$(SRCSUFF)
 

@@ -131,6 +131,7 @@ COMMONOBJS = &
 	filefn.obj &
 	filename.obj &
 	filesys.obj &
+	fldlgcmn.obj &
 	fontcmn.obj &
 	fontmap.obj &
 	framecmn.obj &
@@ -665,6 +666,9 @@ filename.obj:     $(COMMDIR)\filename.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 filesys.obj:     $(COMMDIR)\filesys.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+fldlgcmn.obj:     $(COMMDIR)\fldlgcmn.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 fontcmn.obj:     $(COMMDIR)\fontcmn.cpp

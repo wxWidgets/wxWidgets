@@ -144,6 +144,7 @@ COMMONOBJS = \
 		$(MSWDIR)\filefn.obj \
 		$(MSWDIR)\filename.obj \
 		$(MSWDIR)\filesys.obj \
+		$(MSWDIR)\fldlgcmn.obj \
 		$(MSWDIR)\fontcmn.obj \
 		$(MSWDIR)\fontmap.obj \
 		$(MSWDIR)\framecmn.obj \
@@ -583,6 +584,8 @@ $(MSWDIR)\filefn.obj: $(COMMDIR)\filefn.$(SRCSUFF)
 $(MSWDIR)\filename.obj: $(COMMDIR)\filename.$(SRCSUFF)
 
 $(MSWDIR)\filesys.obj: $(COMMDIR)\filesys.$(SRCSUFF)
+
+$(MSWDIR)\fldlgcmn.obj: $(COMMDIR)\fldlgcmn.$(SRCSUFF)
 
 $(MSWDIR)\fontcmn.obj: $(COMMDIR)\fontcmn.$(SRCSUFF)
 

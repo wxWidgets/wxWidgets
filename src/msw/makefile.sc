@@ -101,6 +101,7 @@ COMMONOBJS = $(COMMDIR)\accesscmn.obj \
 		$(COMMDIR)\filefn.obj \
 		$(COMMDIR)\filename.obj \
 		$(COMMDIR)\filesys.obj \
+		$(COMMDIR)\fldlgcmn.obj \
 		$(COMMDIR)\fontcmn.obj \
 		$(COMMDIR)\fontmap.obj \
 		$(COMMDIR)\framecmn.obj \
