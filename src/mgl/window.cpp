@@ -197,7 +197,18 @@ static ibool MGLAPI wxWindowMouseHandler(window_t *wnd, event_t *e)
                 // MGL doesn't generate two subsequent single clicks prior
                 // to a double click, but rather only fires one single click
                 // followed by one double click. wxWindows expects two single
-                // clicks, so we have to emulate the second one.
+                // clicks, so we have to synthetize the second one. First
+                // generate wxEVT_?_DOWN:
+                event.SetEventType(type);
+                win->GetEventHandler()->ProcessEvent(event);
+
+                // ...followed by wxEVT_?_UP:
+                if ( e->message & EVT_LEFTBMASK )
+                    type = wxEVT_LEFT_UP;
+                else if ( e->message & EVT_MIDDLEBMASK )
+                    type = wxEVT_MIDDLE_UP;
+                else if ( e->message & EVT_RIGHTBMASK )
+                    type = wxEVT_RIGHT_UP;
                 event.SetEventType(type);
                 win->GetEventHandler()->ProcessEvent(event);
             
