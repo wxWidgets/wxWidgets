@@ -9,7 +9,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_LAYWIN_H_G_
@@ -34,7 +34,7 @@ enum wxLayoutAlignment {
     wxLAYOUT_TOP,
     wxLAYOUT_LEFT,
     wxLAYOUT_RIGHT,
-    wxLAYOUT_BOTTOM,
+    wxLAYOUT_BOTTOM
 };
 
 // Not sure this is necessary
@@ -110,7 +110,7 @@ public:
     {
         SetEventType(wxEVT_CALCULATE_LAYOUT);
         m_flags = 0;
-	m_id = id;
+        m_id = id;
     }
 // Read by the app
     inline void SetFlags(int flags) { m_flags = flags; }

@@ -86,6 +86,30 @@ extern "C"
 }
 #endif
 
+void wxUsleep(unsigned long milliseconds)
+{
+#if defined(HAVE_NANOSLEEP)
+    timespec tmReq;
+    tmReq.tv_sec = milliseconds / 1000;
+    tmReq.tv_nsec = (milliseconds % 1000) * 1000 * 1000;
+
+    // we're not interested in remaining time nor in return value
+    (void)nanosleep(&tmReq, (timespec *)NULL);
+#elif defined(HAVE_USLEEP)
+    // uncomment this if you feel brave or if you are sure that your version
+    // of Solaris has a safe usleep() function but please notice that usleep()
+    // is known to lead to crashes in MT programs in Solaris 2.[67] and is not
+    // documented as MT-Safe
+    #if defined(__SUN__) && defined(wxUSE_THREADS)
+        #error "usleep() cannot be used in MT programs under Solaris."
+    #endif // Sun
+
+    usleep(milliseconds * 1000); // usleep(3) wants microseconds
+#else // !sleep function
+    #error "usleep() or nanosleep() function required for wxUsleep"
+#endif // sleep function
+}
+
 void xt_notify_end_process(XtPointer client, int *fid,
                            XtInputId *id)
 {
