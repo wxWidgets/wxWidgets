@@ -47,13 +47,17 @@ Base:
 
 - wxDateTime::ParseDateTime() implemented (Linus McCabe)
 
+All (GUI):
+
+- added wxListCtrl::GetViewRect()
+
 wxMSW:
 
 - fixed wxTE_*WRAP styles handling
 
-All (GUI):
+wxGTK:
 
-- added wxListCtrl::GetViewRect()
+- fixes to wxTextCtrl scrolling under GTK2 (Nerijus Baliunas)
 
 
 2.5.0

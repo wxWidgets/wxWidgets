@@ -587,10 +587,13 @@ void wxTextCtrl::WriteText( const wxString &text )
         // TODO: Call whatever is needed to delete the selection.
         wxGtkTextInsert( m_text, text_buffer, m_defaultStyle, buffer );
 
-        // Scroll to cursor.
-        GtkTextIter iter;
-        gtk_text_buffer_get_iter_at_mark( text_buffer, &iter,  gtk_text_buffer_get_insert( text_buffer ) );
-        gtk_text_view_scroll_to_iter( GTK_TEXT_VIEW(m_text), &iter, 0.0, FALSE, 0.0, 1.0 );
+        GtkAdjustment *adj = gtk_scrolled_window_get_vadjustment( GTK_SCROLLED_WINDOW(m_widget) );
+        // Scroll to cursor, but only if scrollbar thumb is at the very bottom
+        if ( adj->value == adj->upper - adj->page_size )
+        {
+            gtk_text_view_scroll_to_mark( GTK_TEXT_VIEW(m_text),
+                    gtk_text_buffer_get_insert( text_buffer ), 0.0, FALSE, 0.0, 1.0 );
+        }
 #else // GTK 1.x
         // After cursor movements, gtk_text_get_point() is wrong by one.
         gtk_text_set_point( GTK_TEXT(m_text), GET_EDITABLE_POS(m_text) );
@@ -1005,9 +1008,16 @@ void wxTextCtrl::SetSelection( long from, long to )
 
 void wxTextCtrl::ShowPosition( long pos )
 {
-#ifndef __WXGTK20__
     if (m_windowStyle & wxTE_MULTILINE)
     {
+#ifdef __WXGTK20__
+        GtkTextBuffer *buf = gtk_text_view_get_buffer( GTK_TEXT_VIEW(m_text) );
+        GtkTextIter iter;
+        gtk_text_buffer_get_start_iter( buf, &iter );
+        gtk_text_iter_set_offset( &iter, pos );
+        GtkTextMark *mark = gtk_text_buffer_create_mark( buf, NULL, &iter, TRUE );
+        gtk_text_view_scroll_to_mark( GTK_TEXT_VIEW(m_text), mark, 0.0, FALSE, 0.0, 0.0 );
+#else // GTK 1.x
         GtkAdjustment *vp = GTK_TEXT(m_text)->vadj;
         float totalLines =  (float) GetNumberOfLines();
         long posX;
@@ -1016,8 +1026,8 @@ void wxTextCtrl::ShowPosition( long pos )
         float posLine = (float) posY;
         float p = (posLine/totalLines)*(vp->upper - vp->lower) + vp->lower;
         gtk_adjustment_set_value(GTK_TEXT(m_text)->vadj, p);
+#endif // GTK 1.x/2.x
     }
-#endif
 }
 
 long wxTextCtrl::GetInsertionPoint() const
