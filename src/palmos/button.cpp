@@ -138,7 +138,7 @@ bool wxButton::Create(wxWindow *parent,
     wxPoint palmPos(pos);
     if((palmPos.x==wxDefaultCoord)||(palmPos.y==wxDefaultCoord))
     {
-        wxSize parentSize(parent->GetSize());
+        wxSize parentSize(parent->GetClientSize());
         wxWindow* parentTLW = parent;
         while ( parentTLW && !parentTLW->IsTopLevel() )
         {
@@ -148,14 +148,14 @@ bool wxButton::Create(wxWindow *parent,
         if(wxDynamicCast(parentTLW, wxFrame)!=NULL)
         {
             if(palmPos.x==wxDefaultCoord)
-                palmPos.x = 1;
+                palmPos.x = 0;
             if(palmPos.y==wxDefaultCoord)
                 palmPos.y = parentSize.y-palmSize.y;
         }
         else if(wxDynamicCast(parentTLW, wxDialog)!=NULL)
         {
             if(palmPos.x==wxDefaultCoord)
-                palmPos.x = 5;
+                palmPos.x = 4;
             if(palmPos.y==wxDefaultCoord)
                 palmPos.y = parentSize.y-palmSize.y-5;
         }

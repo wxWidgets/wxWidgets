@@ -183,6 +183,10 @@ void wxFrame::DoSetClientSize(int width, int height)
 // Get size *available for subwindows* i.e. excluding menu bar, toolbar etc.
 void wxFrame::DoGetClientSize(int *x, int *y) const
 {
+    wxSize size = GetSize();
+    wxPoint pos = GetClientAreaOrigin();
+    *x = size.x - pos.x - 1;
+    *y = size.y - pos.y - 1;
 }
 
 // ----------------------------------------------------------------------------

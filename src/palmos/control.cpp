@@ -117,15 +117,23 @@ bool wxControl::PalmCreateControl(ControlStyleType style,
     if(form==NULL)
         return false;
 
+
+    wxCoord x = pos.x == wxDefaultCoord ? 0 : pos.x,
+            y = pos.y == wxDefaultCoord ? 0 : pos.y,
+            w = size.x == wxDefaultCoord ? 1 : size.x,
+            h = size.y == wxDefaultCoord ? 1 : size.y;
+
+    AdjustForParentClientOrigin(x, y);
+
     ControlType *control = CtlNewControl(
                                (void **)&form,
                                GetId(),
                                style,
                                wxEmptyString,
-                               ( pos.x == wxDefaultCoord ) ? winUndefConstraint : pos.x,
-                               ( pos.y == wxDefaultCoord ) ? winUndefConstraint : pos.y,
-                               ( size.x == wxDefaultCoord ) ? winUndefConstraint : size.x,
-                               ( size.y == wxDefaultCoord ) ? winUndefConstraint : size.y,
+                               x,
+                               y,
+                               w,
+                               h,
                                stdFont,
                                groupID,
                                true
@@ -136,6 +144,7 @@ bool wxControl::PalmCreateControl(ControlStyleType style,
 
     m_palmControl = true;
 
+    SetInitialBestSize(size);
     SetLabel(label);
     Show();
     return true;
@@ -154,13 +163,20 @@ bool wxControl::PalmCreateField(const wxString& label,
 
     m_label = label;
 
+    wxCoord x = pos.x == wxDefaultCoord ? 0 : pos.x,
+            y = pos.y == wxDefaultCoord ? 0 : pos.y,
+            w = size.x == wxDefaultCoord ? 1 : size.x,
+            h = size.y == wxDefaultCoord ? 1 : size.y;
+
+    AdjustForParentClientOrigin(x, y);
+
     FieldType *field = FldNewField(
                            (void **)&form,
                            GetId(),
-                           ( pos.x == wxDefaultCoord ) ? winUndefConstraint : pos.x,
-                           ( pos.y == wxDefaultCoord ) ? winUndefConstraint : pos.y,
-                           ( size.x == wxDefaultCoord ) ? winUndefConstraint : size.x,
-                           ( size.y == wxDefaultCoord ) ? winUndefConstraint : size.y,
+                           x,
+                           y,
+                           w,
+                           h,
                            stdFont,
                            10,
                            editable,
@@ -178,8 +194,9 @@ bool wxControl::PalmCreateField(const wxString& label,
 
     m_palmField = true;
 
-    Show();
+    SetInitialBestSize(size);
     SetLabel(label);
+    Show();
     return true;
 }
 

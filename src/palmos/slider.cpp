@@ -130,6 +130,13 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
 
     m_oldValue = m_oldPos = value;
 
+    wxCoord x = pos.x == wxDefaultCoord ? 0 : pos.x,
+            y = pos.y == wxDefaultCoord ? 0 : pos.y,
+            w = size.x == wxDefaultCoord ? 1 : size.x,
+            h = size.y == wxDefaultCoord ? 1 : size.y;
+
+    AdjustForParentClientOrigin(x, y);
+
     SliderControlType *slider = CtlNewSliderControl (
                                    (void **)&form,
                                    GetId(),
@@ -137,10 +144,10 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
                                    NULL,
                                    0,
                                    0,
-                                   pos.x,
-                                   pos.y,
-                                   size.x,
-                                   size.y,
+                                   x,
+                                   y,
+                                   w,
+                                   h,
                                    minValue,
                                    maxValue,
                                    1,
@@ -150,6 +157,7 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     if(slider==NULL)
         return false;
 
+    SetInitialBestSize(size);
     Show();
     return true;
 }
