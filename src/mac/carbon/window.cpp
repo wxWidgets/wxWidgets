@@ -425,6 +425,7 @@ pascal void wxMacLiveScrollbarActionProc( ControlRef control , ControlPartCode p
 
 void wxWindowMac::Init()
 {
+    m_frozenness = 0 ;
     m_backgroundTransparent = FALSE;
 
     // as all windows are created with WS_VISIBLE style...
@@ -920,7 +921,7 @@ void wxWindowMac::MacGetPositionAndSizeFromControl(int& x, int& y,
 bool wxWindowMac::MacGetBoundsForControl(const wxPoint& pos,
                                        const wxSize& size,
                                        int& x, int& y,
-                                       int& w, int& h) const 
+                                       int& w, int& h , bool adjustOrigin ) const 
 {
     x = (int)pos.x;
     y = (int)pos.y;
@@ -930,7 +931,8 @@ bool wxWindowMac::MacGetBoundsForControl(const wxPoint& pos,
 #if !TARGET_API_MAC_OSX
     GetParent()->MacWindowToRootWindow( &x , &y ) ;
 #endif
-
+    if ( adjustOrigin )
+        AdjustForParentClientOrigin( x , y ) ;
     return true ;
 }
 
@@ -1360,7 +1362,8 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
 
     if ( doMove || doResize )
     {
-        Rect r = wxMacGetBoundsForControl(this , wxPoint( actualX,actualY), wxSize( actualWidth, actualHeight ) ) ;
+        // we don't adjust twice for the origin
+        Rect r = wxMacGetBoundsForControl(this , wxPoint( actualX,actualY), wxSize( actualWidth, actualHeight ) , false ) ;
         bool vis = IsControlVisible( (ControlRef) m_macControl ) ;
 #if TARGET_API_MAC_OSX
         // the HIViewSetFrame call itself should invalidate the areas, but when testing with the UnicodeTextCtrl it does not !
@@ -1808,6 +1811,29 @@ void wxWindowMac::Refresh(bool eraseBack, const wxRect *rect)
       MacGetTopLevelWindow()->MacInvalidate( &clientrect , eraseBack ) ;
     }
     */
+#endif
+}
+
+void wxWindowMac::Freeze()
+{
+#if TARGET_API_MAC_OSX
+    if ( !m_frozenness++ )
+    {
+        HIViewSetDrawingEnabled( (HIViewRef) m_macControl , false ) ;
+    }
+#endif
+}
+
+void wxWindowMac::Thaw()
+{
+#if TARGET_API_MAC_OSX
+    wxASSERT_MSG( m_frozenness > 0, _T("Thaw() without matching Freeze()") );
+
+    if ( !--m_frozenness )
+    {
+        HIViewSetDrawingEnabled( (HIViewRef) m_macControl , true ) ;
+        HIViewSetNeedsDisplay( (HIViewRef) m_macControl , true ) ;
+    }
 #endif
 }
 
@@ -2755,11 +2781,11 @@ void wxWindowMac::MacHandleControlClick( WXWidget control , wxInt16 controlpart 
     wxASSERT_MSG( (ControlRef) m_macControl != NULL , wxT("No valid mac control") ) ;
 }
 
-Rect wxMacGetBoundsForControl( wxWindow* window , const wxPoint& pos , const wxSize &size ) 
+Rect wxMacGetBoundsForControl( wxWindow* window , const wxPoint& pos , const wxSize &size , bool adjustForOrigin ) 
 {
     int x ,y , w ,h ;
     
-    window->MacGetBoundsForControl( pos , size , x , y, w, h ) ;
+    window->MacGetBoundsForControl( pos , size , x , y, w, h , adjustForOrigin) ;
     Rect bounds =  { y , x , y+h , x+w  };
     return bounds ;
 }

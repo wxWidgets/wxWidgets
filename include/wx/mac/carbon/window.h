@@ -79,6 +79,8 @@ public:
 
     virtual void Refresh( bool eraseBackground = TRUE,
                           const wxRect *rect = (const wxRect *) NULL );
+    virtual void Freeze() ;
+    virtual void Thaw() ;
 
     virtual bool SetCursor( const wxCursor &cursor );
     virtual bool SetFont( const wxFont &font ) ;
@@ -224,14 +226,16 @@ public:
     bool                MacGetBoundsForControl(const wxPoint& pos,
                                            const wxSize& size,
                                            int& x, int& y,
-                                           int& w, int& h) const ;
+                                           int& w, int& h , bool adjustForOrigin ) const ;
     // calculates the real window position and size from the native control
     void                MacGetPositionAndSizeFromControl(int& x, int& y,
                                            int& w, int& h) const ;
 protected:
     // For controls like radiobuttons which are really composite
     wxList              m_subControls;
-
+    // number of calls to Freeze() minus number of calls to Thaw()
+    unsigned int        m_frozenness;
+    
     WXWidget            m_macControl ;
 	bool				m_macIsUserPane ;
     wxBrush             m_macBackgroundBrush ;
