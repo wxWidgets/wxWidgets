@@ -62,7 +62,7 @@
 
 #define TE_UNLIMITED_LENGTH 0xFFFFFFFFUL
 #if TARGET_API_MAC_OSX
- #define wxMAC_USE_MLTE 1
+ #define wxMAC_USE_MLTE 0
  #if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
  #define wxMAC_USE_MLTE_HIVIEW 1
  #else
@@ -1341,10 +1341,19 @@ void wxTextCtrl::WriteText(const wxString& str)
 
     MacRedrawControl() ;
 #else
+#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
     wxMacCFStringHolder cf(st , m_font.GetEncoding() ) ;
     CFStringRef value = cf ;
     SetControlData(  (ControlRef) m_macControl , 0, kControlEditTextInsertCFStringRefTag, 
         sizeof(CFStringRef), &value );
+#else
+    wxString val = GetValue() ;
+    long start , end ;
+    GetSelection( &start , &end ) ;
+    val.Remove( start, end - start ) ;
+    val.insert( start , str ) ;
+    SetValue( val ) ;
+#endif    
 #endif
 }
 
