@@ -57,7 +57,6 @@ const int wxID_LISTBOOKLISTVIEW = wxNewId();
 
 BEGIN_EVENT_TABLE(wxListbook, wxBookCtrl)
     EVT_SIZE(wxListbook::OnSize)
-
     EVT_LIST_ITEM_SELECTED(wxID_LISTBOOKLISTVIEW, wxListbook::OnListSelected)
 END_EVENT_TABLE()
 
@@ -125,6 +124,16 @@ wxListbook::Create(wxWindow *parent,
                  );
 #endif // wxUSE_LINE_IN_LISTBOOK
 
+#ifdef __WXMSW__
+    // On XP with themes enabled the GetViewRect used in GetListSize to
+    // determine the space needed for the list view will incorrectly return
+    // (0,0,0,0) the first time.  So send a pending event so OnSize wiull be
+    // called again after the window is ready to go.  Technically we don't
+    // need to do this on non-XP windows, but if things are already sized
+    // correctly then nothing changes and so there is no harm.
+    wxSizeEvent evt;
+    GetEventHandler()->AddPendingEvent(evt);
+#endif
     return true;
 }
 
