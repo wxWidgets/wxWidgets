@@ -1979,6 +1979,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
     if (event.KeyCode() == WXK_TAB)
     {
         wxNavigationKeyEvent nevent;
+        nevent.SetWindowChange( event.ControlDown() );
         nevent.SetDirection( !event.ShiftDown() );
         nevent.SetEventObject( GetParent()->GetParent() );
         nevent.SetCurrentFocus( m_parent );
