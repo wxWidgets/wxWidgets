@@ -3686,6 +3686,22 @@ if test "$TOOLKIT" != "MSW"; then
                 if test "x$GCC" != "xyes"; then
                     THREAD_OPTS=""
                 fi
+
+          *-*-irix* )
+                dnl gcc under IRIX doesn't seem to like -pthread, but it
+                dnl doesn't give an error for it neither, just a warning
+                dnl message -- but this is still very annoying
+                if test "x$GCC" = "xyes"; then
+                    THREAD_OPTS=""
+                fi
+                ;;
+
+          *-*-*UnixWare*)
+                dnl flying by man pages here: Caldera online docs use this
+                if test "x$GCC" != "xyes"; then
+                    THREAD_OPTS="-Ethread"
+                fi
+                ;;
         esac
 
         dnl simply linking with libpthread should make the test below work but
