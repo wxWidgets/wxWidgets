@@ -72,14 +72,15 @@ bool MyApp::OnInit()
     // Create the main frame window
     (new MyFrame(NULL, "Server"))->Show(TRUE);
 
-    // create the server object
-    wxString server_name = "4242";
+    // service name (DDE classes) or port number (TCP/IP based classes)
+    wxString service = "4242";
+
     if (argc > 1)
-        server_name = argv[1];
+        service = argv[1];
 
     // Create a new server
     m_server = new MyServer;
-    m_server->Create(server_name);
+    m_server->Create(service);
 
     return TRUE;
 }
