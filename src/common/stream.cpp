@@ -574,6 +574,8 @@ wxFilterInputStream::wxFilterInputStream(wxInputStream& stream)
   : wxInputStream(NULL)
 {
   m_parent_i_stream = &stream;
+  wxDELETE(m_i_streambuf); // In case m_i_streambuf has been initialized.
+  m_i_destroybuf = FALSE;
   m_i_streambuf = stream.InputStreamBuffer();
 }
 
@@ -608,6 +610,8 @@ wxFilterOutputStream::wxFilterOutputStream(wxOutputStream& stream)
   : wxOutputStream(NULL)
 {
   m_parent_o_stream = &stream;
+  wxDELETE(m_o_streambuf); // In case m_o_streambuf has been initialized.
+  m_o_destroybuf = FALSE;
   m_o_streambuf = stream.OutputStreamBuffer();
 }
 

@@ -147,7 +147,7 @@ bool wxURL::PrepHost(wxString& url)
 
   pos = url.Find('/');
   if (pos == -1)
-    return FALSE;
+    pos = url.Length();
 
   pos2 = url.Find(':');
   if (pos2 != -1 && pos2 < pos) {
