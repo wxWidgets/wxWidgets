@@ -162,7 +162,7 @@ void wxUsleep(unsigned long milliseconds)
     do 
     {
         YieldToAnyThread() ;
-    } while( clock() - start < milliseconds / CLOCKS_PER_SEC ) ;
+    } while( clock() - start < milliseconds /  1000.0 * CLOCKS_PER_SEC ) ;
 }
 
 void wxSleep(int nSecs)
