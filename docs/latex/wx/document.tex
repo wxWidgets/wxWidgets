@@ -161,6 +161,9 @@ Copies a suitable document name into the supplied {\it name} buffer. The default
 function uses the title, or if there is no title, uses the filename; or if no
 filename, the string {\bf unnamed}. 
 
+\perlnote{In wxPerl this function must return the modified name rather
+than just modifying the argument.}
+
 \membersection{wxDocument::GetTitle}
 
 \constfunc{wxString}{GetTitle}{\void}

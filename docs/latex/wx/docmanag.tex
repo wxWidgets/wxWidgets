@@ -277,6 +277,9 @@ Copies a suitable default name into {\it buf}. This is implemented by
 appending an integer counter to the string {\bf unnamed} and incrementing
 the counter.
 
+\perlnote{In wxPerl this function must return the modified name rather
+than just modifying the argument.}
+
 \membersection{wxDocManager::OnCreateFileHistory}
 
 \func{wxFileHistory *}{OnCreateFileHistory}{\void}
