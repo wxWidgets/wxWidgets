@@ -54,7 +54,7 @@ overview = """<html><body>
 <h2><center>Images with Alpha</center></h2>
 
 wxMSW and wxMac now support alpha channels of supported image
-types, and will properly blend that chennel when drawing a
+types, and will properly blend that channel when drawing a
 bitmap.  It is not supported yet on wxGTK, (if you would like to
 change that please submit a patch!)
 
