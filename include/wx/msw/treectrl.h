@@ -230,7 +230,7 @@ public:
     	{ return GetItemParent( item ); }
 
     	// Expose the base class method hidden by the one above.
-    wxWindow *GetParent() const { return wxScrolledWindow::GetParent(); }
+    wxWindow *GetParent() const { return wxControl::GetParent(); }
 #endif  // WXWIN_COMPATIBILITY_2_2
 
         // for this enumeration function you must pass in a "cookie" parameter
