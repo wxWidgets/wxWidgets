@@ -1,0 +1,52 @@
+## This file gives the details of what is needed to build this extension
+## module so the Makefile can be created.
+
+## If you have not done "make install" for wxWindows then see Setup.in.linux
+## for a more verbose version of this file.
+
+*shared*
+
+CCC=c++
+WXWIN=../../../..
+GENCODEDIR=gtk
+# srcdir=$(GENCODEDIR)
+WX_CONFIG_CFLAGS=`wx-config --cflags`
+WX_CONFIG_LIBS=`wx-config --libs`
+
+
+## Depending on how your Python was built, you may have to set this
+## value to use the C++ driver to link with instead of the default
+## C driver.  For example:
+MY_LDSHARED=$(CCC) -shared
+
+## Same as above, but for statically linking Python and wxPython together,
+## in other words, if you comment out the *shared* above.  If this is the
+## case then you should ensure that the main() function is Python's, not
+## wxWindows'.  You can rebuild $(WXWIN)/src/gtk/app.cpp with NOMAIN defined
+## to force this...
+MY_LINKCC=$(CCC)
+
+#--------------------------------------------------------------------
+#
+# Below follow settings that may be specific for a wxPython module
+#
+#--------------------------------------------------------------------
+
+## Pick one of these, or set your own.  This is where the wxPython module
+## should be installed.  It should be a subdirectory named wxPython.
+#TARGETDIR=../..
+TARGETDIR=$(BINLIBDEST)/site-packages/wxPython
+
+# The location of the wxPython source dir
+WXP_SRCDIR=../../src
+
+# These defines are usually best left alone
+C_DEFINES = -DSWIG_GLOBAL -DWXP_USE_THREAD -DSEPARATE
+C_FLAGS = -I. -I$(WXP_SRCDIR) $(WX_CONFIG_CFLAGS)
+# Add a couple of GL libraries
+C_LIBS = -lwxPyHelpers -lMesaGL -lMesaGLU $(WX_CONFIG_LIBS) 
+
+PYMODULES = $(GENCODEDIR)/glcanvas.py
+
+glcanvasc	$(GENCODEDIR)/glcanvas.cpp $(GENCODEDIR)/_glcanvas.cpp \
+	$(C_DEFINES) $(C_FLAGS) -Xlinker $(C_LIBS)

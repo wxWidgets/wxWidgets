@@ -1,0 +1,35 @@
+
+#----------------------------------------------------------------------
+
+TARGET = htmlc
+
+OBJECTS = html.obj
+
+PYMODULES = $(TARGETDIR)\html.py $(TARGETDIR)\htmlhelper.py 
+
+SOURCES = $(GENCODEDIR)\html.cpp 
+
+
+#----------------------------------------------------------------------
+
+!include ..\makeinc.vc
+
+#----------------------------------------------------------------------
+
+default: $(TARGETDIR)\$(TARGET).pyd pycfiles
+
+all:    $(TARGET)
+
+#----------------------------------------------------------------------
+
+$(TARGETDIR)\$(TARGET).pyd : $(DUMMYOBJ) $(WXLIB) $(OBJECTS) # $(TARGET).res
+	$(link) @<<
+/out:$@ /dll
+$(LFLAGS) /def:$(TARGET).def /implib:./$(TARGET).lib
+$(DUMMYOBJ) $(OBJECTS) 
+$(LIBS)
+<<
+
+
+#----------------------------------------------------------------------
+

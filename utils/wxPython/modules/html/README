@@ -1,0 +1,11 @@
+Aug. 2 1999 Harm van der Heijden
+
+What's in here:
+
+html
+	-- minimal wrap of Vaclaf Slavik's wxHTML (now part of
+	wxWindows); only parts of the wxHtmlWindow class are used.
+	Testsample htmlview.py.
+	There's also a python tag handler, see htmlwidget.py for
+	a demonstration.
+

@@ -1,0 +1,13 @@
+Aug. 2 1999 Harm van der Heijden
+
+What's in here:
+
+lseditorplugin
+	-- minimal wrap of Alexanders Gluchovas' editor plugin. The code was
+	ransacked from the wxStudio (http://wxstudio.linuxbox.com) project.
+	Since the editor is released under the Gnu Public License, this
+	module, as a derivative work, is also released under this licence
+	and NOT THE WXWINDOWS LICENSE. See the file COPYING for details.
+	the file 'editor.py' contains a sample implementation using the
+	editorplugin object.
+
