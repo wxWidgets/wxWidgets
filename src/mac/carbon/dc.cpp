@@ -107,6 +107,7 @@ typedef wxMacPortSetter wxMacFastPortSetter ;
 wxMacWindowClipper::wxMacWindowClipper( const wxWindow* win ) :
     wxMacPortSaver( (GrafPtr) GetWindowPort((WindowRef) win->MacGetTopLevelWindowRef()) )
 {
+    m_newPort =(GrafPtr) GetWindowPort((WindowRef) win->MacGetTopLevelWindowRef()) ;
     m_formerClip = NewRgn() ;
     m_newClip = NewRgn() ;
     GetClip( m_formerClip ) ;
@@ -126,9 +127,24 @@ wxMacWindowClipper::wxMacWindowClipper( const wxWindow* win ) :
 
 wxMacWindowClipper::~wxMacWindowClipper() 
 {
+    SetPort( m_newPort ) ;
     SetClip( m_formerClip ) ;
     DisposeRgn( m_newClip ) ;
     DisposeRgn( m_formerClip ) ;
+}
+
+wxMacWindowStateSaver::wxMacWindowStateSaver( const wxWindow* win ) :
+    wxMacWindowClipper( win )
+{
+    // the port is already set at this point
+    m_newPort =(GrafPtr) GetWindowPort((WindowRef) win->MacGetTopLevelWindowRef()) ;
+    GetThemeDrawingState( &m_themeDrawingState ) ;
+}
+
+wxMacWindowStateSaver::~wxMacWindowStateSaver() 
+{
+    SetPort( m_newPort ) ;
+    SetThemeDrawingState( m_themeDrawingState , true ) ;
 }
 
 //-----------------------------------------------------------------------------

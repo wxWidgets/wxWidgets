@@ -105,8 +105,21 @@ public:
     wxMacWindowClipper( const wxWindow* win ) ;
     ~wxMacWindowClipper() ;
 private:
+    GrafPtr   m_newPort ;
     RgnHandle m_formerClip ;
     RgnHandle m_newClip ;
+} ;
+
+class WXDLLEXPORT wxMacWindowStateSaver : public wxMacWindowClipper
+{
+    DECLARE_NO_COPY_CLASS(wxMacWindowStateSaver)
+        
+public:
+    wxMacWindowStateSaver( const wxWindow* win ) ;
+    ~wxMacWindowStateSaver() ;
+private:
+    GrafPtr   m_newPort ;
+    ThemeDrawingState m_themeDrawingState ;
 } ;
 
 /*
