@@ -140,7 +140,7 @@ wxLANGUAGE_NEPALI                      ne     LANG_NEPALI      SUBLANG_DEFAULT  
 wxLANGUAGE_NEPALI_INDIA                ne_IN  LANG_NEPALI      SUBLANG_NEPALI_INDIA                "Nepali (India)"
 wxLANGUAGE_NORWEGIAN                   no_NO  LANG_NORWEGIAN   SUBLANG_DEFAULT                     "Norwegian"
 wxLANGUAGE_NORWEGIAN_BOKMAL            no_NO  LANG_NORWEGIAN   SUBLANG_NORWEGIAN_BOKMAL            "Norwegian (Bokmal)"
-wxLANGUAGE_NORWEGIAN_NYNORSK           no_NO  LANG_NORWEGIAN   SUBLANG_NORWEGIAN_NYNORSK           "Norwegian (Nynorsk)"
+wxLANGUAGE_NORWEGIAN_NYNORSK           nn_NO  LANG_NORWEGIAN   SUBLANG_NORWEGIAN_NYNORSK           "Norwegian (Nynorsk)"
 wxLANGUAGE_OCCITAN                     oc     -                -                                   "Occitan"
 wxLANGUAGE_ORIYA                       or     LANG_ORIYA       SUBLANG_DEFAULT                     "Oriya"
 wxLANGUAGE_OROMO                       om     -                -                                   "(Afan) Oromo"
