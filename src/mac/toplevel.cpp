@@ -181,19 +181,19 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
                 wxWindow* focus = wxWindow::FindFocus() ;
                 event.SetEventObject(focus);
 
-                if ( (modifiers ^ wxTheApp->s_lastModifiers ) & controlKey )
+                if ( focus && (modifiers ^ wxTheApp->s_lastModifiers ) & controlKey )
                 {
                     event.m_keyCode = WXK_CONTROL ;
                     event.SetEventType( ( modifiers & controlKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;
                     focus->GetEventHandler()->ProcessEvent( event ) ;
                 }
-                if ( (modifiers ^ wxTheApp->s_lastModifiers ) & shiftKey )
+                if ( focus && (modifiers ^ wxTheApp->s_lastModifiers ) & shiftKey )
                 {
                     event.m_keyCode = WXK_SHIFT ;
                     event.SetEventType( ( modifiers & shiftKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;
                     focus->GetEventHandler()->ProcessEvent( event ) ;
                 }
-                if ( (modifiers ^ wxTheApp->s_lastModifiers ) & optionKey )
+                if ( focus && (modifiers ^ wxTheApp->s_lastModifiers ) & optionKey )
                 {
                     event.m_keyCode = WXK_ALT ;
                     event.SetEventType( ( modifiers & optionKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;
