@@ -32,7 +32,7 @@ typedef unsigned long ulong;
 // ----------------------------------------------------------------------------
 // class wxRegKey encapsulates window HKEY handle
 // ----------------------------------------------------------------------------
-class WXDLLEXPORT wxRegKey 
+class WXDLLIMPEXP_BASE wxRegKey 
 {
 public:
   // NB: do _not_ change the values of elements in these enumerations!
