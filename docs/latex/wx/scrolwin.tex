@@ -112,7 +112,7 @@ Destructor.
 Translates the logical coordinates to the device ones. For example, if a window is
 scrolled 10 pixels to the bottom, the device coordinates of the origin are (0, 0)
 (as always), but the logical coordinates are (0, 10) and so the call to
-CalcScrolledPosition(0, 0, \&xx, \&yy) will return 10 in yy.
+CalcScrolledPosition(0, 10, \&xx, \&yy) will return 0 in yy.
 
 \wxheading{See also}
 
@@ -135,7 +135,7 @@ parameters and returns xx and yy as a tuple of values.}
 Translates the device coordinates to the logical ones. For example, if a window is
 scrolled 10 pixels to the bottom, the device coordinates of the origin are (0, 0)
 (as always), but the logical coordinates are (0, 10) and so the call to
-CalcUnscrolledPosition(0, 10, \&xx, \&yy) will return 0 in yy.
+CalcUnscrolledPosition(0, 0, \&xx, \&yy) will return 10 in yy.
 
 \wxheading{See also}
 
