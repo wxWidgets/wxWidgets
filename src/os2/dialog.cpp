@@ -93,6 +93,12 @@ bool wxDialog::Create(
                                  ))
         return FALSE;
     SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
+
+    //
+    // Must defer setting the title until after dialog is created and sized
+    //
+    if (!rsTitle.IsNull())
+        SetTitle(rsTitle);
     return TRUE;
 } // end of wxDialog::Create
 
@@ -265,6 +271,8 @@ bool wxDialog::Show(
         InitDialog();
     }
 
+    if (GetTitle().c_str())
+        ::WinSetWindowText((HWND)GetHwnd(), GetTitle().c_str());
     if (IsModal())
     {
         if (bShow)
