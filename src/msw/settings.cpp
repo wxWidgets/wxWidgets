@@ -333,7 +333,8 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index)
     // TODO: probably use wxUniv themes functionality
     return 0;
 #else // !__WXMICROWIN__
-    wxCHECK_MSG( index < WXSIZEOF(gs_metricsMap), 0, _T("invalid metric") );
+    wxCHECK_MSG( index > 0 && (size_t)index < WXSIZEOF(gs_metricsMap), 0,
+                 _T("invalid metric") );
 
     int indexMSW = gs_metricsMap[index];
     if ( indexMSW == -1 )
