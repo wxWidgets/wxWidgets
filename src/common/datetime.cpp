@@ -3349,18 +3349,27 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
             }
             else // not the month
             {
-                wxDateTime_t maxDays = haveMon
-                    ? GetNumOfDaysInMonth(haveYear ? year : Inv_Year, mon)
-                    : 31;
-
-                // can it be day?
-                if ( (val == 0) || (val > (unsigned long)maxDays) )  // cast to shut up compiler warning in BCC
+                if ( haveDay )
                 {
+                    // this can only be the year
                     isYear = TRUE;
                 }
-                else
+                else // may be either day or year
                 {
-                    isDay = TRUE;
+                    wxDateTime_t maxDays = haveMon
+                        ? GetNumOfDaysInMonth(haveYear ? year : Inv_Year, mon)
+                        : 31;
+
+                    // can it be day?
+                    if ( (val == 0) || (val > (unsigned long)maxDays) )
+                    {
+                        // no
+                        isYear = TRUE;
+                    }
+                    else // yes, suppose it's the day
+                    {
+                        isDay = TRUE;
+                    }
                 }
             }
 
