@@ -43,7 +43,6 @@ wxWindowList       wxModelessWindows;
 // ----------------------------------------------------------------------------
 // wxTopLevelWindowCocoa creation
 // ----------------------------------------------------------------------------
-IMPLEMENT_CLASS(wxTopLevelWindowCocoa,wxWindowCocoa)
 BEGIN_EVENT_TABLE(wxTopLevelWindowCocoa,wxTopLevelWindowBase)
     EVT_CLOSE(wxTopLevelWindowCocoa::OnCloseWindow)
 END_EVENT_TABLE()

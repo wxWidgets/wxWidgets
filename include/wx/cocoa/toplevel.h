@@ -20,8 +20,8 @@
 // ========================================================================
 class WXDLLEXPORT wxTopLevelWindowCocoa : public wxTopLevelWindowBase, protected wxCocoaNSWindow
 {
-    DECLARE_CLASS(wxTopLevelWindowCocoa);
     DECLARE_EVENT_TABLE();
+    DECLARE_NO_COPY_CLASS(wxTopLevelWindowCocoa);
 // ------------------------------------------------------------------------
 // initialization
 // ------------------------------------------------------------------------
