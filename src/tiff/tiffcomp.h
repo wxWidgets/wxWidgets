@@ -84,7 +84,7 @@
 #define	BSDTYPES
 #define	HAVE_UNISTD_H	0
 /* GRG: added check for MINGW32 */
-#elif (defined(_WINDOWS) || defined(__WIN32__) || defined(_Windows)) && !defined(__MINGW32__)
+#elif defined(_WINDOWS) || defined(__WIN32__) || defined(_Windows)
 #define BSDTYPES
 #elif defined(OS2_16) || defined(OS2_32)
 #define	BSDTYPES
