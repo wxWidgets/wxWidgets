@@ -144,8 +144,6 @@ wxApp::~wxApp()
 
 bool wxApp::OnInitGui()
 {
-    if ( MGL_init(".", NULL) == 0 )
-        return FALSE;
     if ( !wxCreateMGL_WM() )
         return FALSE;
 
@@ -256,9 +254,7 @@ void wxApp::ExitMainLoop()
 
 bool wxApp::Initialized()
 {
-    // FIXME_MGL -- only for now because we don't have wxFrame/wxDialog yet
-    return TRUE;
-    //return (wxTopLevelWindows.GetCount() != 0);
+    return (wxTopLevelWindows.GetCount() != 0);
 }
 
 bool wxApp::Pending()
@@ -289,6 +285,9 @@ void wxApp::DeletePendingObjects()
 
 bool wxApp::Initialize()
 {
+    if ( MGL_init(".", NULL) == 0 )
+        return FALSE;
+
     wxBuffer = new wxChar[BUFSIZ + 512];
 
     wxClassInfo::InitializeClasses();
