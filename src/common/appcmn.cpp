@@ -141,7 +141,15 @@ void wxAppBase::ProcessPendingEvents()
 
 void wxAppBase::SetActive(bool active, wxWindow * WXUNUSED(lastFocus))
 {
+    if ( active == m_isActive )
+        return;
+
     m_isActive = active;
+
+    wxActivateEvent event(wxEVT_ACTIVATE_APP, active);
+    event.SetEventObject(this);
+
+    (void)ProcessEvent(event);
 }
 
 #endif // wxUSE_GUI

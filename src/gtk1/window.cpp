@@ -2786,11 +2786,6 @@ void wxWindowGTK::OnInternalIdle()
         g_sendActivateEvent = -1;
 
         wxTheApp->SetActive(activate, (wxWindow *)g_focusWindowLast);
-
-        wxActivateEvent event(wxEVT_ACTIVATE_APP, activate, GetId());
-        event.SetEventObject(this);
-
-        (void)GetEventHandler()->ProcessEvent(event);
     }
 
     wxCursor cursor = m_cursor;
