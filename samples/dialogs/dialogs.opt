@@ -1,0 +1,6 @@
+[--.lib]libwx_motif.olb/lib
+sys$library:decw$xlibshr.exe/share
+sys$library:decw$xtlibshrr5.exe/share
+sys$library:decw$xmlibshr12.exe/share
+sys$library:decw$xmulibshrr5.exe/share
+X11:libxpm.olb/lib
