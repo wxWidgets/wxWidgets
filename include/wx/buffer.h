@@ -17,11 +17,12 @@
 #include "wx/wxchar.h"
 #include <string.h> // strdup
 
-// wchar.h isn't available on my system (Linux, g++ 2.7.2). JACS.
-#ifdef __LINUX__
+#ifdef HAVE_WCSTR_H
 #include <wcstr.h>
-#else
+#elif defined( HAVE_WCHAR_H )
 #include <wchar.h>  // wchar_t
+#else
+#pragma error "Don't know what to do!"
 #endif
 
 // ----------------------------------------------------------------------------
