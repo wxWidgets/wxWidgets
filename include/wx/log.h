@@ -471,7 +471,7 @@ DECLARE_LOG_FUNCTION2(SysError, long lErrCode);
 
     // this second version will only log the message if the mask had been
     // added to the list of masks with AddTraceMask()
-    DECLARE_LOG_FUNCTION2(Trace, const char *mask);
+    DECLARE_LOG_FUNCTION2(Trace, const wxChar *mask);
 
     // the last one does nothing if all of level bits are not set
     // in wxLog::GetActive()->GetTraceMask() - it's deprecated in favour of

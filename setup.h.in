@@ -428,19 +428,14 @@
 #define wxUSE_POSTSCRIPT 0
 
 /*
- * Compile wxString with some Unicode support?
+ * Compile wxString with some Unicode (wide character) support?
  */
 #define wxUSE_WCHAR_T 0
 
 /*
- * Compile wxString in wide character (Unicode) mode?
+ * Compile wxWindows in Unicode mode (Win32 only for now)?
  */
 #define wxUSE_UNICODE 0
-
-/*
- * Compile wxString with (limited) multibyte char support?
- */
-#define wxUSE_MULTIBYTE 0
 
 /*
  * Work around a bug in GNU libc 5.x wcstombs() implementation.

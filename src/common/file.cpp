@@ -360,7 +360,7 @@ off_t wxFile::Tell() const
 {
     wxASSERT( IsOpened() );
 
-    int iRc = tell(m_fd);
+    int iRc = wxTell(m_fd);
     if ( iRc == -1 ) {
         wxLogSysError(_("can't get seek position on file descriptor %d"), m_fd);
         return wxInvalidOffset;
@@ -377,7 +377,7 @@ off_t wxFile::Length() const
 #ifdef __VISUALC__
     int iRc = _filelength(m_fd);
 #else // !VC++
-    int iRc = tell(m_fd);
+    int iRc = wxTell(m_fd);
     if ( iRc != -1 ) {
         // @ have to use const_cast :-(
         int iLen = ((wxFile *)this)->SeekEnd();

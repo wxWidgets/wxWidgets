@@ -428,18 +428,30 @@ public:
     operator const wxChar*() const { return m_pchData; }
     // explicit conversion to C string (use this with printf()!)
     const wxChar* c_str()   const { return m_pchData; }
-    // (and this with [wx]Printf()!)
+    // identical to c_str()
     const wxChar* wx_str()  const { return m_pchData; }
     // identical to c_str()
     const wxChar* GetData() const { return m_pchData; }
 
     // conversions with (possible) format convertions: have to return a
     // buffer with temporary data
+    //
+    // the functions defined (in either Unicode or ANSI) mode are mb_str() to
+    // return an ANSI (multibyte) string, wc_str() to return a wide string and
+    // fn_str() to return a string which should be used with the OS APIs
+    // accepting the file names. The return value is always the same, but the
+    // type differs because a function may either return pointer to the buffer
+    // directly or have to use intermediate buffer for translation.
 #if wxUSE_UNICODE
-    const wxCharBuffer mb_str(wxMBConv& conv = wxConvLibc) const { return conv.cWC2MB(m_pchData); }
+    const wxCharBuffer mb_str(wxMBConv& conv = wxConvLibc) const
+        { return conv.cWC2MB(m_pchData); }
+
     const wxWX2MBbuf mbc_str() const { return mb_str(*wxConvCurrent); }
 
-    const wxChar* wc_str(wxMBConv& WXUNUSED(conv) = wxConvLibc) const { return m_pchData; }
+    const wxChar* wc_str() const { return m_pchData; }
+
+    // for compatibility with !wxUSE_UNICODE version
+    const wxChar* wc_str(wxMBConv& WXUNUSED(conv)) const { return m_pchData; }
 
 #if wxMBFILES
     const wxCharBuffer fn_str() const { return mb_str(wxConvFile); }
@@ -447,17 +459,18 @@ public:
     const wxChar* fn_str() const { return m_pchData; }
 #endif // wxMBFILES/!wxMBFILES
 #else // ANSI
-#if wxUSE_MULTIBYTE
-    const wxChar* mb_str(wxMBConv& WXUNUSED(conv) = wxConvLibc) const
-        { return m_pchData; }
-    const wxWX2MBbuf mbc_str() const { return mb_str(*wxConvCurrent); }
-#else // !mmultibyte
-    const wxChar* mb_str(wxMBConv& WXUNUSED(con) = wxConvLibc) const { return m_pchData; }
+    const wxChar* mb_str() const { return m_pchData; }
+
+    // for compatibility with wxUSE_UNICODE version
+    const wxChar* mb_str(wxMBConv& WXUNUSED(conv)) const { return m_pchData; }
+
     const wxWX2MBbuf mbc_str() const { return mb_str(); }
-#endif // multibyte/!multibyte
+
 #if wxUSE_WCHAR_T
-    const wxWCharBuffer wc_str(wxMBConv& conv) const { return conv.cMB2WC(m_pchData); }
+    const wxWCharBuffer wc_str(wxMBConv& conv) const
+        { return conv.cMB2WC(m_pchData); }
 #endif // wxUSE_WCHAR_T
+
     const wxChar* fn_str() const { return m_pchData; }
 #endif // Unicode/ANSI
 
