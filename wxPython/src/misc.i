@@ -211,22 +211,6 @@ public:
 };
 
 
-//  %inline %{
-//      bool wxIntersectRect(wxRect* dest, wxRect* r1, wxRect* r2) {
-//          wxRegion reg1(*r1);
-//          wxRegion reg2(*r2);
-//          bool     success;
-//          *dest = wxRect(0,0,0,0);
-//          success = reg1.Intersect(reg2);
-//          if (success) {
-//              *dest = reg1.GetBox();
-//              return *dest != wxRect(0,0,0,0);
-//          }
-//          return FALSE;
-//      }
-//  %}
-
-
 %inline %{
     PyObject* wxIntersectRect(wxRect* r1, wxRect* r2) {
         wxRegion  reg1(*r1);
@@ -431,7 +415,7 @@ public:
 
 %readonly
 %{
-#if 0  // we want to use the definition from the header, no the
+#if 0  // we want to use the definition from the header, not the
        // one SWIG will generate.
 %}
 extern wxAcceleratorTable wxNullAcceleratorTable;
