@@ -33,6 +33,7 @@
 #include "wx/dcscreen.h"
 #include "wx/settings.h"
 #include "wx/log.h"
+#include "wx/utils.h"
 
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING)
@@ -87,6 +88,13 @@ bool wxSplitterWindow::Create(wxWindow *parent, wxWindowID id,
         m_borderSize = 1;
     else
         m_borderSize = 0;
+        
+#ifdef __WXMAC__
+    int major,minor;
+    wxGetOsVersion( &major, &minor );
+    if (major >= 10)
+        m_windowStyle |= wxSP_SASH_AQUA;
+#endif
 
     return TRUE;
 }
