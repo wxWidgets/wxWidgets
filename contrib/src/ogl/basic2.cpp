@@ -30,12 +30,6 @@
 #undef new
 #endif
 
-#if wxUSE_IOSTREAMH
-#include <iostream.h>
-#else
-#include <iostream>
-#endif
-
 #include <stdio.h>
 #include <ctype.h>
 #include <math.h>
