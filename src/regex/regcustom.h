@@ -47,7 +47,7 @@
 #include <ctype.h>
 #include <limits.h>
 
-#include "./../../include/wx/wxchar.h"
+#include "wx/wxchar.h"
 
 /**
 *
