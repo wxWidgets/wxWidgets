@@ -174,6 +174,13 @@ void wxGenericColourDialog::OnMouseEvent(wxMouseEvent& event)
     int x = (int)event.GetX();
     int y = (int)event.GetY();
 
+#ifdef __WXPM__
+    // Handle OS/2's reverse coordinate system and account for the dialog title
+    int                             nClientHeight;
+
+    GetClientSize(NULL, &nClientHeight);
+    y = (nClientHeight - y) + 20;
+#endif
     if ((x >= standardColoursRect.x && x <= (standardColoursRect.x + standardColoursRect.width)) &&
         (y >= standardColoursRect.y && y <= (standardColoursRect.y + standardColoursRect.height)))
     {
@@ -222,7 +229,11 @@ void wxGenericColourDialog::CalculateMeasurements()
   sectionSpacing = 15;
 
   standardColoursRect.x = 10;
+#ifdef __WXPM__
+  standardColoursRect.y = 15 + 20; /* OS/2 needs to account for dialog titlebar */
+#else
   standardColoursRect.y = 15;
+#endif
   standardColoursRect.width = (8*smallRectangleSize.x) + (7*gridSpacing);
   standardColoursRect.height = (6*smallRectangleSize.y) + (5*gridSpacing);
 
