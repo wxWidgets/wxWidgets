@@ -153,6 +153,14 @@ wxObject *wxSizerXmlHandler::DoCreateResource()
                          new wxStaticBox(m_ParentAsWindow, -1, GetText(_T("label"))),
                          GetStyle(_T("orient"), wxHORIZONTAL));
         }
+        
+        else if (m_Node->GetName() == _T("gridsizer"))
+            sizer = new wxGridSizer(GetLong(_T("rows")), GetLong(_T("cols")),
+                                    GetLong(_T("vgap")), GetLong(_T("hgap")));
+                                    
+        else if (m_Node->GetName() == _T("flexgridsizer"))
+            sizer = new wxFlexGridSizer(GetLong(_T("rows")), GetLong(_T("cols")),
+                                    GetLong(_T("vgap")), GetLong(_T("hgap")));
 
         wxSizer *old_par = m_ParentSizer;
         m_ParentSizer = sizer;
@@ -187,6 +195,8 @@ bool wxSizerXmlHandler::CanHandle(wxXmlNode *node)
 {
     return ((!m_IsInside && node->GetName() == _T("boxsizer")) ||
             (!m_IsInside && node->GetName() == _T("staticboxsizer")) ||
+            (!m_IsInside && node->GetName() == _T("gridsizer")) ||
+            (!m_IsInside && node->GetName() == _T("flexgridsizer")) ||
 #if wxUSE_NOTEBOOK
             (!m_IsInside && node->GetName() == _T("notebooksizer")) ||
 #endif

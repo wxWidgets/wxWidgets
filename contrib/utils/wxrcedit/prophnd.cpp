@@ -24,6 +24,7 @@
 #include "wx/valtext.h"
 #include "wx/tokenzr.h"
 #include "wx/checklst.h"
+#include "wx/listctrl.h"
 #include "xmlhelpr.h"
 #include "editor.h"
 
