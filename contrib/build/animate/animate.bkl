@@ -16,6 +16,7 @@
     </headers>
 
     <dll id="animatedll" template="wx_contrib_dll" cond="SHARED=='1'">
+        <define>WXUSINGDLL</define>
         <define>WXMAKINGDLL_ANIMATE</define>
         <sources>$(ANIMATE_SRC)</sources>
         <wx-lib>core</wx-lib>
