@@ -1220,7 +1220,7 @@ wxString wxFileName::GetPath( int flags, wxPathFormat format ) const
         }
     }
 
-    if ( (flags & wxPATH_GET_SEPARATOR) && !fullpath.empty() )
+    if ( (flags & wxPATH_GET_SEPARATOR) && !fullpath.empty() && fullpath.Last() != wxFILE_SEP_PATH)
     {
         fullpath += GetPathSeparator(format);
     }
