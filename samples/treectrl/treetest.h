@@ -73,7 +73,7 @@ public:
     void OnBeginLabelEdit(wxTreeEvent& event);
     void OnEndLabelEdit(wxTreeEvent& event);
     void OnDeleteItem(wxTreeEvent& event);
-    void OnRMouseUp(wxMouseEvent& event);
+    void OnContextMenu(wxContextMenuEvent& event);
     void OnGetInfo(wxTreeEvent& event);
     void OnTreeRMouseClick(wxTreeEvent& event);
     void OnItemRightClick(wxTreeEvent& event);

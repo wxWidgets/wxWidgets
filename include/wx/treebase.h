@@ -294,6 +294,7 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK, 615)
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK, 616)
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_TREE_END_DRAG, 617)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK, 618)
 END_DECLARE_EVENT_TYPES()
 
 // GetItem() returns the item being dragged, GetPoint() the mouse coords
@@ -345,6 +346,9 @@ END_DECLARE_EVENT_TYPES()
 // GetItem() returns the item that was clicked on
 #define EVT_TREE_ITEM_RIGHT_CLICK(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, NULL ),
 #define EVT_TREE_ITEM_MIDDLE_CLICK(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, NULL ),
+
+// GetItem() returns the item whose state image was clicked on
+#define EVT_TREE_STATE_IMAGE_CLICK(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, NULL ),
 
 #endif // wxUSE_TREECTRL
 
