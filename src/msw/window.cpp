@@ -379,7 +379,7 @@ wxWindow *wxWindowBase::FindFocus()
     HWND hWnd = ::GetFocus();
     if ( hWnd )
     {
-        return wxFindWinFromHandle((WXHWND) hWnd);
+        return wxGetWindowFromHWND((WXHWND)hWnd);
     }
 
     return NULL;
@@ -396,7 +396,7 @@ bool wxWindow::Enable(bool enable)
 
     // VZ: no, this is a bad idea: imagine that you have a dialog with some
     //     disabled controls and disable it - you really wouldn't like the
-    //     disabled controls eb reenabled too when you reenable the dialog!
+    //     disabled controls be reenabled too when you reenable the dialog!
 #if 0
     wxWindowList::Node *node = GetChildren().GetFirst();
     while ( node )
@@ -3939,24 +3939,37 @@ extern wxWindow *wxGetWindowFromHWND(WXHWND hWnd)
         win = wxFindWinFromHandle((WXHWND)hwnd);
         if ( !win )
         {
-            // the radiobox pointer is stored in GWL_USERDATA only under Win32
+            // all these hacks only work under Win32 anyhow
 #ifdef __WIN32__
+
+#if wxUSE_RADIOBOX
             // native radiobuttons return DLGC_RADIOBUTTON here and for any
             // wxWindow class which overrides WM_GETDLGCODE processing to
             // do it as well, win would be already non NULL
-            if ( ::SendMessage((HWND)hwnd, WM_GETDLGCODE,
-                               0, 0) & DLGC_RADIOBUTTON )
+            if ( ::SendMessage(hwnd, WM_GETDLGCODE, 0, 0) & DLGC_RADIOBUTTON )
             {
                 win = (wxWindow *)::GetWindowLong(hwnd, GWL_USERDATA);
             }
-            else
+            //else: it's a wxRadioButton, not a radiobutton from wxRadioBox
+#endif // wxUSE_RADIOBOX
+
+            // spin control text buddy window should be mapped to spin ctrl
+            // itself so try it too
+#if wxUSE_SPINCTRL
+            if ( !win )
+            {
+                win = wxSpinCtrl::GetSpinForTextCtrl((WXHWND)hwnd);
+            }
+#endif // wxUSE_SPINCTRL
+
 #endif // Win32
+
+            if ( !win )
             {
                 // hwnd is not a wxWindow, try its parent next below
                 hwnd = ::GetParent(hwnd);
             }
         }
-        //else: it's a wxRadioButton, not a radiobutton from wxRadioBox
     }
 
     while ( hwnd && !win )
