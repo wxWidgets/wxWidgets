@@ -1,17 +1,20 @@
 /* -------------------------------------------------------------------------
  * Project: GSocket (Generic Socket) for WX
  * Name:    gsocket.c
- * Authors: Guilhem Lavaux,
- *          Guillermo Rodriguez Garcia <guille@iies.es> (maintainer)
+ * Authors: David Elliott (C++ conversion, maintainer)
+ *          Guilhem Lavaux,
+ *          Guillermo Rodriguez Garcia <guille@iies.es>
  * Purpose: GSocket main Unix and OS/2 file
  * Licence: The wxWindows licence
  * CVSID:   $Id$
  * -------------------------------------------------------------------------
  */
 
-#ifndef __GSOCKET_STANDALONE__
-#include "wx/setup.h"
-#endif
+#include "wx/wxprec.h"
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+    #include "wx/apptrait.h"
+#endif //ndef WX_PRECOMP
 
 #if defined(__VISAGECPP__)
 /* Seems to be needed by Visual Age C++, though I don't see how it manages
@@ -1401,7 +1404,7 @@ void GSocketBSD::Detected_Write()
 /* Compatibility functions for GSocket */
 GSocket *GSocket_new(void)
 {
-    GSocket *newsocket = new GSocketBSDGUIShim();
+    GSocket *newsocket = wxTheApp->GetTraits()->CreateGSocket();
     if(newsocket->IsOk())
         return newsocket;
     delete newsocket;
