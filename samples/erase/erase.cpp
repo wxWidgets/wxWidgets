@@ -198,9 +198,9 @@ void MyCanvas::OnChar( wxKeyEvent &event )
         case WXK_RIGHT: m_text += wxT( "<RIGHT>" ); break;
         case WXK_DOWN: m_text += wxT( "<DOWN>" ); break;
         case WXK_RETURN: m_text += wxT( "<ENTER>" ); break;
-        default: m_text += event.m_keyCode; break;
+        default: m_text += (wxChar)event.m_keyCode; break;
     }
-    
+
 }
 
 void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
@@ -215,7 +215,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     dc.SetTextForeground(*wxBLUE);
     dc.DrawText(_T("This text is drawn from OnPaint"), 65, 65);
-    
+
     wxString tmp;
     tmp.Printf( _T("Hit any key to display more text: %s"), m_text.c_str() );
     int w,h;

@@ -13,7 +13,7 @@
 class MyApp: public wxApp
 {
 public:
-    MyApp();
+    MyApp(){};
     bool OnInit();
 };
 
@@ -26,7 +26,7 @@ public:
     void TestFlexSizers(wxCommandEvent& event);
     void TestNotebookSizers(wxCommandEvent& event);
     void TestGridBagSizer(wxCommandEvent& event);
-    
+
     void OnAbout(wxCommandEvent& event);
     void OnQuit(wxCommandEvent& event);
 
@@ -62,7 +62,7 @@ public:
     void OnHideBtn(wxCommandEvent&);
     void OnShowBtn(wxCommandEvent&);
     void OnMoveBtn(wxCommandEvent&);
-    
+
 private:
     wxGridBagSizer*     m_gbs;
     wxPanel*            m_panel;
@@ -73,7 +73,7 @@ private:
     wxButton*           m_moveBtn1;
     wxButton*           m_moveBtn2;
     wxGBPosition        m_lastPos;
-    
+
     DECLARE_EVENT_TABLE()
 };
 

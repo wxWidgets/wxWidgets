@@ -123,7 +123,7 @@ class DragShape: public wxObject
 {
 public:
     DragShape(const wxBitmap& bitmap);
-    ~DragShape();
+    ~DragShape(){};
 
 //// Operations
 

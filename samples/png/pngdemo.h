@@ -19,7 +19,7 @@
 class MyApp: public wxApp
 {
   public:
-    MyApp(void) ;
+    MyApp(void){};
     bool OnInit(void);
 };
 
@@ -46,7 +46,7 @@ class MyCanvas: public wxScrolledWindow
 {
   public:
     MyCanvas(wxWindow *parent, const wxPoint& pos, const wxSize& size);
-    ~MyCanvas(void) ;
+    ~MyCanvas(void){};
 
     void OnPaint(wxPaintEvent& event);
 DECLARE_EVENT_TABLE()

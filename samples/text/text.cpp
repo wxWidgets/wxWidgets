@@ -97,10 +97,10 @@ class MyPanel: public wxPanel
 {
 public:
     MyPanel(wxFrame *frame, int x, int y, int w, int h);
-    virtual ~MyPanel() 
-    { 
+    virtual ~MyPanel()
+    {
 #if wxUSE_LOG
-        delete wxLog::SetActiveTarget(m_logOld); 
+        delete wxLog::SetActiveTarget(m_logOld);
 #endif // wxUSE_LOG
     }
 
@@ -200,13 +200,13 @@ public:
         if ( !m_panel->m_textrich->PageUp() )
             wxLogMessage(_T("Already at the top"));
     }
-    
+
     void OnGetLine(wxCommandEvent& WXUNUSED(event))
     {
         long nLine = wxGetNumberFromUser(wxT("Which line would you like to get?"),
                                          wxT("Enter which line you would like to get"),
                                          wxT("Get a line from the tabbed multiline text control") );
-                                         
+
         wxMessageBox(m_panel->m_tab->GetLineText(nLine));
     }
 
@@ -215,8 +215,8 @@ public:
         long nLine = wxGetNumberFromUser(wxT("Which line would you like to get?"),
                                          wxT("Enter which line you would like to get"),
                                          wxT("Get length of a line from the tabbed multiline text control") );
-                                         
-        wxMessageBox(wxString::Format(wxT("Length of line %i is:%i"), 
+
+        wxMessageBox(wxString::Format(wxT("Length of line %i is:%i"),
                                       (int) nLine,
                                       m_panel->m_tab->GetLineLength(nLine))
                     );
@@ -357,10 +357,10 @@ enum
     TEXT_LINE_UP,
     TEXT_PAGE_DOWN,
     TEXT_PAGE_UP,
-    
+
     TEXT_GET_LINE,
     TEXT_GET_LINELENGTH,
-    
+
     TEXT_REMOVE,
     TEXT_REPLACE,
     TEXT_SELECT,
@@ -1552,7 +1552,7 @@ void RichTextFrame::OnChangeFont(wxCommandEvent& WXUNUSED(event))
 
         wxTextAttr attr;
         attr.SetFont(font);
-        
+
         long start, end;
         m_textCtrl->GetSelection(& start, & end);
         m_textCtrl->SetStyle(start, end, attr);
@@ -1568,7 +1568,7 @@ void RichTextFrame::OnChangeTextColour(wxCommandEvent& WXUNUSED(event))
     data.SetChooseFull(true);
     for (int i = 0; i < 16; i++)
     {
-        wxColour colour(i*16, i*16, i*16);
+        wxColour colour((unsigned char)(i*16), (unsigned char)(i*16), (unsigned char)(i*16));
         data.SetCustomColour(i, colour);
     }
 
@@ -1581,7 +1581,7 @@ void RichTextFrame::OnChangeTextColour(wxCommandEvent& WXUNUSED(event))
 
         wxTextAttr attr;
         attr.SetTextColour(col);
-        
+
         long start, end;
         m_textCtrl->GetSelection(& start, & end);
         m_textCtrl->SetStyle(start, end, attr);
@@ -1597,7 +1597,7 @@ void RichTextFrame::OnChangeBackgroundColour(wxCommandEvent& WXUNUSED(event))
     data.SetChooseFull(true);
     for (int i = 0; i < 16; i++)
     {
-        wxColour colour(i*16, i*16, i*16);
+        wxColour colour((unsigned char)(i*16), (unsigned char)(i*16), (unsigned char)(i*16));
         data.SetCustomColour(i, colour);
     }
 
@@ -1610,7 +1610,7 @@ void RichTextFrame::OnChangeBackgroundColour(wxCommandEvent& WXUNUSED(event))
 
         wxTextAttr attr;
         attr.SetBackgroundColour(col);
-        
+
         long start, end;
         m_textCtrl->GetSelection(& start, & end);
         m_textCtrl->SetStyle(start, end, attr);
@@ -1634,7 +1634,7 @@ void RichTextFrame::OnLeftIndent(wxCommandEvent& WXUNUSED(event))
 
         wxTextAttr attr;
         attr.SetLeftIndent(indent);
-        
+
         long start, end;
         m_textCtrl->GetSelection(& start, & end);
         m_textCtrl->SetStyle(start, end, attr);
@@ -1658,7 +1658,7 @@ void RichTextFrame::OnRightIndent(wxCommandEvent& WXUNUSED(event))
 
         wxTextAttr attr;
         attr.SetRightIndent(indent);
-        
+
         long start, end;
         m_textCtrl->GetSelection(& start, & end);
         m_textCtrl->SetStyle(start, end, attr);

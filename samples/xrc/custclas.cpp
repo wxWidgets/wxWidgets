@@ -102,11 +102,6 @@ MyResizableListCtrl::MyResizableListCtrl( wxWindow *parent, wxWindowID id,
 }
 
 
-MyResizableListCtrl::~MyResizableListCtrl()
-{
-}
-
-
 void MyResizableListCtrl::ContextSensitiveMenu( wxMouseEvent& event )
 {
     // Make an instance of a menu.

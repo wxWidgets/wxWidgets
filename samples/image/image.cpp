@@ -203,7 +203,7 @@ public:
         {
             unsigned char *cmap = new unsigned char [256];
             for ( int i = 0; i < 256; i++ )
-                cmap[i] = i;
+                cmap[i] = (unsigned char)i;
             image.SetPalette(wxPalette(256, cmap, cmap, cmap));
 
             delete cmap;
@@ -538,7 +538,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
             tmp << i ;
             wxLogError(tmp);
         }
-        else    
+        else
             my_horse_ani [i] = wxBitmap( image );
     }
 #endif // wxUSE_ICO_CUR
@@ -549,7 +549,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     wxFile file(dir + _T("horse.bmp"));
     if ( file.IsOpened() )
     {
-        off_t len = file.Length();
+        size_t len = (size_t)file.Length();
         void *data = malloc(len);
         if ( file.Read(data, len) != len )
             wxLogError(_T("Reading bitmap file failed"));
@@ -713,7 +713,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     // For testing transparency
     dc.SetBrush( *wxRED_BRUSH );
     dc.DrawRectangle( 20, 2220, 560, 68 );
-    
+
     dc.DrawText(_T("XPM bitmap"), 30, 2230 );
     if ( m_bmpSmileXpm.Ok() )
         dc.DrawBitmap(m_bmpSmileXpm, 30, 2250, true);
@@ -721,8 +721,8 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     dc.DrawText(_T("XPM icon"), 110, 2230 );
     if ( m_iconSmileXpm.Ok() )
         dc.DrawIcon(m_iconSmileXpm, 110, 2250);
-    
-    // testing icon -> bitmap conversion    
+
+    // testing icon -> bitmap conversion
     wxBitmap to_blit( m_iconSmileXpm );
     if (to_blit.Ok())
     {
@@ -737,7 +737,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         dc.SetUserScale( 2, 2 );
         dc.DrawBitmap( to_blit, (int)(300/2), (int)(2250/2), true );
         dc.SetUserScale( 1.0, 1.0 );
-        
+
         dc.DrawText( _T("Blit"), 400, 2230);
         wxMemoryDC blit_dc;
         blit_dc.SelectObject( to_blit );
@@ -822,7 +822,7 @@ void MyCanvas::CreateAntiAliasedBitmap()
                   original.GetBlue( x*2, y*2+1 ) +
                   original.GetBlue( x*2+1, y*2+1 );
        blue = blue/4;
-       anti.SetRGB( x, y, red, green, blue );
+       anti.SetRGB( x, y, (unsigned char)red, (unsigned char)green, (unsigned char)blue );
     }
   my_anti = new wxBitmap(anti);
 }

@@ -68,7 +68,7 @@ void DisplayDbDiagnostics(wxDb *pDb);
 
 //
 // This class contains the actual data members that are used for transferring
-// data back and forth from the database to the program.  
+// data back and forth from the database to the program.
 //
 // NOTE: The object described in this class is just for example purposes, and has no
 // real meaning other than to show each type of field being used by the database
@@ -99,10 +99,10 @@ class CstructContact : public wxObject
 // all combined in this one class.
 //
 class Ccontact : public wxDbTable, public CstructContact
-{ 
+{
     private:
         // Used to keep track of whether this class had a wxDb instance
-        // passed in to it or not.  If an existing wxDb instance was not 
+        // passed in to it or not.  If an existing wxDb instance was not
         // passed in at Ccontact creation time, then when the Ccontact
         // instance is deleted, the connection will be freed as Ccontact
         // created its own connection when it was created.
@@ -114,7 +114,7 @@ class Ccontact : public wxDbTable, public CstructContact
         void                 SetupColumns();
 
     public:
-        // Used in places where we need to construct a WHERE clause to 
+        // Used in places where we need to construct a WHERE clause to
         // be passed to the SetWhereClause() function.  From example,
         // where building the WHERE clause requires using ::Printf()
         // to build the string.
@@ -151,7 +151,7 @@ typedef struct Cparameters
 
 // Define a new frame type
 class DatabaseDemoFrame: public wxFrame
-{ 
+{
     private:
         CeditorDlg      *pEditorDlg;
         CparameterDlg   *pParamDlg;
@@ -169,7 +169,7 @@ class DatabaseDemoFrame: public wxFrame
         void    OnAbout(wxCommandEvent& event);
 #if wxUSE_GRID
         void    OnDbGridTable( wxCommandEvent& );
-#endif 
+#endif
         void    CreateDataTable(bool recreate);
         void    BuildEditorDialog();
         void    BuildParameterDialog(wxWindow *parent);
@@ -212,26 +212,26 @@ class DatabaseDemoApp: public wxApp
         // Pointer to the main database connection used in the program.  This
         // pointer would normally be used for doing things as database lookups
         // for user login names and passwords, getting workstation settings, etc.
-        //         
+        //
         // ---> IMPORTANT <---
-        // 
+        //
         // For each database object created which uses this wxDb pointer
         // connection to the database, when a CommitTrans() or RollBackTrans()
         // will commit or rollback EVERY object which uses this wxDb pointer.
-        // 
-        // To allow each table object (those derived from wxDbTable) to be 
+        //
+        // To allow each table object (those derived from wxDbTable) to be
         // individually committed or rolled back, you MUST use a different
-        // instance of wxDb in the constructor of the table.  Doing so creates 
+        // instance of wxDb in the constructor of the table.  Doing so creates
         // more overhead, and will use more database connections (some DBs have
         // connection limits...), so use connections sparringly.
-        // 
+        //
         // It is recommended that one "main" database connection be created for
         // the entire program to use for READ-ONLY database accesses, but for each
         // table object which will do a CommitTrans() or RollbackTrans() that a
         // new wxDb object be created and used for it.
         wxDb            *READONLY_DB;
 
-        // Contains the ODBC connection information used by 
+        // Contains the ODBC connection information used by
         // all database connections
         wxDbConnectInf  *DbConnectInf;
 
@@ -259,13 +259,13 @@ class CeditorDlg : public wxPanel
 {
     private:
         // Used to indicate whether all of the widget pointers (defined
-        // below) have been initialized to point to the memory for 
+        // below) have been initialized to point to the memory for
         // the named widget.  Used as a safeguard from using the widget
         // before it has been initialized.
         bool             widgetPtrsSet;
 
-        // Used when the EDIT button has been pressed to maintain the 
-        // original name that was displayed in the editor before the 
+        // Used when the EDIT button has been pressed to maintain the
+        // original name that was displayed in the editor before the
         // EDIT button was pressed, so that if CANCEL is pressed, a
         // FetchByName() can be done to retrieve the original data
         // to repopulate the dialog.
@@ -318,7 +318,7 @@ class CeditorDlg : public wxPanel
         // retrieved from the editor dialog
         bool    Save();
 
-        // Database functions for changing the data that is to 
+        // Database functions for changing the data that is to
         // be displayed on the dialog.  GetNextRec()/GetPrevRec()
         // provide database independent methods that do not require
         // backward scrolling cursors to obtain the record that
@@ -326,7 +326,7 @@ class CeditorDlg : public wxPanel
         bool    GetNextRec();
         bool    GetPrevRec();
         bool    GetRec(const wxString &whereStr);
-        
+
 DECLARE_EVENT_TABLE()
 };  // CeditorDlg
 
@@ -381,14 +381,14 @@ class CparameterDlg : public wxDialog
 {
     private:
         // Used to indicate whether all of the widget pointers (defined
-        // below) have been initialized to point to the memory for 
+        // below) have been initialized to point to the memory for
         // the named widget.  Used as a safeguard from using the widget
         // before it has been initialized.
         bool                 widgetPtrsSet;
 
         enum DialogModes     mode;
 
-        // Have the parameters been saved yet, or do they 
+        // Have the parameters been saved yet, or do they
         // need to be saved to update the params on disk
         bool                 saved;
 
@@ -480,7 +480,7 @@ class CqueryDlg : public wxDialog
 
     public:
         // Used to indicate whether all of the widget pointers (defined
-        // below) have been initialized to point to the memory for 
+        // below) have been initialized to point to the memory for
         // the named widget.  Used as a safeguard from using the widget
         // before it has been initialized.
         bool                     widgetPtrsSet;
@@ -515,7 +515,7 @@ class CqueryDlg : public wxDialog
         wxTextCtrl              *pFocusTxt;
 
         CqueryDlg(wxWindow *parent, wxDb *pDb, wxChar *tblName[], const wxString &pWhereArg);
-        ~CqueryDlg();
+        ~CqueryDlg(){};
 
         void        OnButton( wxCommandEvent &event );
         void        OnCommand(wxWindow& win, wxCommandEvent& event);
@@ -572,7 +572,7 @@ wxChar * const langDBINF_OUTER_JOINS         = wxT("Outer Joins = ");
 wxChar * const langDBINF_STORED_PROC         = wxT("Stored Procedures = ");
 wxChar * const langDBINF_MAX_HDBC            = wxT("Max # of Db connections = ");
 wxChar * const langDBINF_MAX_HSTMT           = wxT("Max # of cursors (per db connection) = ");
-wxChar * const langDBINF_UNLIMITED           = wxT("Unlimited or Unknown"); 
+wxChar * const langDBINF_UNLIMITED           = wxT("Unlimited or Unknown");
 wxChar * const langDBINF_API_LVL             = wxT("ODBC API conformance level = ");
 wxChar * const langDBINF_CLI_LVL             = wxT("Client (SAG) conformance level = ");
 wxChar * const langDBINF_SQL_LVL             = wxT("SQL conformance level = ");

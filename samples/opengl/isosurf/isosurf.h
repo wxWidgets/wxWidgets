@@ -29,7 +29,7 @@ public:
         const wxSize& size = wxDefaultSize, long style = 0,
         const wxString& name = _T("TestGLCanvas"), int *gl_attrib = NULL);
 
-   ~TestGLCanvas();
+   ~TestGLCanvas(){};
 
     void OnPaint(wxPaintEvent& event);
     void OnSize(wxSizeEvent& event);

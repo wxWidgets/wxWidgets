@@ -180,10 +180,11 @@ wxLayoutExportStatus::wxLayoutExportStatus(wxLayoutList *list)
 wxLayoutExportObject *wxLayoutExport(wxLayoutExportStatus *status,
                                      int mode, int flags)
 {
+   wxLayoutObjectList::iterator nulled(NULL);
    wxASSERT(status);
    wxLayoutExportObject * exp;
 
-   if(status->m_iterator == NULLIT) // end of line
+   if(status->m_iterator == nulled) // end of line
    {
       if(!status->m_line || status->m_line->GetNextLine() == NULL)
          // reached end of list
@@ -191,7 +192,7 @@ wxLayoutExportObject *wxLayoutExport(wxLayoutExportStatus *status,
    }
    exp = new wxLayoutExportObject();
    wxLayoutObjectType type;
-   if(status->m_iterator != NULLIT)
+   if(status->m_iterator != nulled)
    {
       type = (** status->m_iterator).GetType();
       if( mode == WXLO_EXPORT_AS_OBJECTS || ! WXLO_IS_TEXT(type)) // simple case
@@ -203,7 +204,7 @@ wxLayoutExportObject *wxLayoutExport(wxLayoutExportStatus *status,
       }
    }
    else
-   {  // iterator == NULLIT
+   {  // iterator == nulled
       if(mode == WXLO_EXPORT_AS_OBJECTS)
       {
          exp->type = WXLO_EXPORT_EMPTYLINE;
@@ -222,7 +223,7 @@ wxLayoutExportObject *wxLayoutExport(wxLayoutExportStatus *status,
    // text must be concatenated
    for(;;)
    {
-      while(status->m_iterator == NULLIT)
+      while(status->m_iterator == nulled)
       {
          if(mode & WXLO_EXPORT_AS_HTML)
             *str += _T("<br>");

@@ -232,7 +232,7 @@ private:
 class BugsGridTable : public wxGridTableBase
 {
 public:
-    BugsGridTable();
+    BugsGridTable(){};
 
     virtual int GetNumberRows();
     virtual int GetNumberCols();

@@ -71,6 +71,9 @@ BEGIN_EVENT_TABLE(MyApp, wxApp)
     EVT_MENU(TYPES_MIME, MyApp::DoMIMEDemo)
 END_EVENT_TABLE()
 
+wxString file_name = _T("test_wx.dat");
+wxString file_name2 = wxString(_T("test_wx2.dat"));
+
 bool MyApp::OnInit()
 {
     // Create the main frame window
@@ -129,7 +132,7 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
     textCtrl.WriteText( _T("Writing to ofstream and wxFileOutputStream:\n") );
 
     wxSTD ofstream std_file_output( "test_std.dat" );
-    wxFileOutputStream file_output( wxString(_T("test_wx.dat")) );
+    wxFileOutputStream file_output( file_name );
     wxBufferedOutputStream buf_output( file_output );
     wxTextOutputStream text_output( buf_output );
 
@@ -194,7 +197,7 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
 
     buf_output.Sync();
 
-    wxFileInputStream file_input( wxString(_T("test_wx.dat")) );
+    wxFileInputStream file_input( file_name );
     wxBufferedInputStream buf_input( file_input );
     wxTextInputStream text_input( file_input );
 
@@ -282,13 +285,13 @@ void MyApp::DoStreamDemo2(wxCommandEvent& WXUNUSED(event))
 
     textCtrl.WriteText( _T("Writing number 0 to 9 to buffered wxFileOutputStream:\n\n") );
 
-    wxFileOutputStream file_output( wxString(_T("test_wx.dat")) );
+    wxFileOutputStream file_output( file_name );
     wxBufferedOutputStream buf_output( file_output );
     for (ch = 0; ch < 10; ch++)
         buf_output.Write( &ch, 1 );
     buf_output.Sync();
 
-    wxFileInputStream file_input( wxString(_T("test_wx.dat")) );
+    wxFileInputStream file_input( file_name );
     for (ch2 = 0; ch2 < 10; ch2++)
     {
         file_input.Read( &ch, 1 );
@@ -299,7 +302,7 @@ void MyApp::DoStreamDemo2(wxCommandEvent& WXUNUSED(event))
     textCtrl.WriteText( _T("Writing number 0 to 9 to buffered wxFileOutputStream, then\n") );
     textCtrl.WriteText( _T("seeking back to #3 and writing 0:\n\n") );
 
-    wxFileOutputStream file_output2( wxString(_T("test_wx2.dat")) );
+    wxFileOutputStream file_output2( file_name2 );
     wxBufferedOutputStream buf_output2( file_output2 );
     for (ch = 0; ch < 10; ch++)
         buf_output2.Write( &ch, 1 );
@@ -308,7 +311,7 @@ void MyApp::DoStreamDemo2(wxCommandEvent& WXUNUSED(event))
     buf_output2.Write( &ch, 1 );
     buf_output2.Sync();
 
-    wxFileInputStream file_input2( wxString(_T("test_wx2.dat")) );
+    wxFileInputStream file_input2( file_name2 );
     for (ch2 = 0; ch2 < 10; ch2++)
     {
         file_input2.Read( &ch, 1 );
@@ -326,7 +329,7 @@ void MyApp::DoStreamDemo2(wxCommandEvent& WXUNUSED(event))
     textCtrl.WriteText( _T("Reading number 0 to 9 from buffered wxFileInputStream, then\n") );
     textCtrl.WriteText( _T("seeking back to #3 and reading the 0:\n\n") );
 
-    wxFileInputStream file_input3( wxString(_T("test_wx2.dat")) );
+    wxFileInputStream file_input3( file_name2 );
     wxBufferedInputStream buf_input3( file_input3 );
     for (ch2 = 0; ch2 < 10; ch2++)
     {
@@ -354,7 +357,7 @@ void MyApp::DoStreamDemo3(wxCommandEvent& WXUNUSED(event))
 
     textCtrl.WriteText( _T("Writing number 0 to 9 to wxFileOutputStream:\n\n") );
 
-    wxFileOutputStream file_output( wxString(_T("test_wx.dat")) );
+    wxFileOutputStream file_output( file_name );
     for (ch = 0; ch < 10; ch++)
         file_output.Write( &ch, 1 );
 
@@ -362,7 +365,7 @@ void MyApp::DoStreamDemo3(wxCommandEvent& WXUNUSED(event))
 
     textCtrl.WriteText( _T("Reading 0 to 10 to wxFileInputStream:\n\n") );
 
-    wxFileInputStream file_input( wxString(_T("test_wx.dat")) );
+    wxFileInputStream file_input( file_name );
     for (ch2 = 0; ch2 < 11; ch2++)
     {
         file_input.Read( &ch, 1 );
@@ -411,7 +414,7 @@ void MyApp::DoStreamDemo3(wxCommandEvent& WXUNUSED(event))
 
     textCtrl.WriteText( _T("Reading 0 to 10 to wxFFileInputStream:\n\n") );
 
-    wxFFileInputStream ffile_input( wxString(_T("test_wx.dat")) );
+    wxFFileInputStream ffile_input( file_name );
     for (ch2 = 0; ch2 < 11; ch2++)
     {
         ffile_input.Read( &ch, 1 );
@@ -459,7 +462,7 @@ void MyApp::DoStreamDemo3(wxCommandEvent& WXUNUSED(event))
 
     textCtrl.WriteText( _T("Reading 0 to 10 to buffered wxFFileInputStream:\n\n") );
 
-    wxFFileInputStream ffile_input2( wxString(_T("test_wx.dat")) );
+    wxFFileInputStream ffile_input2( file_name );
     wxBufferedInputStream buf_input( ffile_input2 );
     for (ch2 = 0; ch2 < 11; ch2++)
     {
@@ -516,7 +519,7 @@ void MyApp::DoStreamDemo4(wxCommandEvent& WXUNUSED(event))
     // bigger than buffer
     textCtrl.WriteText( _T("Writing 2000x 1 to wxFileOutputStream.\n\n") );
 
-    wxFileOutputStream file_output( wxString(_T("test_wx.dat")) );
+    wxFileOutputStream file_output( file_name );
     for (int i = 0; i < 2000; i++)
     {
         char ch = 1;
@@ -525,7 +528,7 @@ void MyApp::DoStreamDemo4(wxCommandEvent& WXUNUSED(event))
 
     textCtrl.WriteText( _T("Opening with a buffered wxFileInputStream:\n\n") );
 
-    wxFileInputStream file_input( wxString(_T("test_wx.dat")) );
+    wxFileInputStream file_input( file_name );
     wxBufferedInputStream buf_input( file_input );
 
     textCtrl.WriteText( _T("wxBufferedInputStream.GetLastError() returns: ") );
@@ -655,13 +658,13 @@ void MyApp::DoStreamDemo5(wxCommandEvent& WXUNUSED(event))
 
     textCtrl.WriteText( _T("Writing number 0 to 9 to wxFileOutputStream:\n\n") );
 
-    wxFileOutputStream file_output( wxString(_T("test_wx.dat")) );
+    wxFileOutputStream file_output( file_name );
     for (ch = 0; ch < 10; ch++)
         file_output.Write( &ch, 1 );
 
     file_output.Sync();
 
-    wxFileInputStream file_input( wxString(_T("test_wx.dat")) );
+    wxFileInputStream file_input( file_name );
 
     ch = file_input.Peek();
     str.Printf( wxT("First char peeked: %d\n"), (int) ch );
@@ -730,7 +733,7 @@ void MyApp::DoStreamDemo6(wxCommandEvent& WXUNUSED(event))
 
     textCtrl.WriteText( _T("Writing number 0 to 9 to wxFileOutputStream...\n\n") );
 
-    wxFileOutputStream file_output( wxString(_T("test_wx.dat")) );
+    wxFileOutputStream file_output( file_name );
     for (ch = 0; ch < 10; ch++)
         file_output.Write( &ch, 1 );
 
@@ -738,52 +741,52 @@ void MyApp::DoStreamDemo6(wxCommandEvent& WXUNUSED(event))
 
     textCtrl.WriteText( _T("Reading char from wxFileInputStream:\n\n") );
 
-    wxFileInputStream file_input( wxString(_T("test_wx.dat")) );
+    wxFileInputStream file_input( file_name );
 
     ch = file_input.GetC();
-    size_t pos = file_input.TellI();
+    size_t pos = (size_t)file_input.TellI();
     str.Printf( wxT("Read char: %d. Now at position %d\n\n"), (int) ch, (int) pos );
     textCtrl.WriteText( str );
 
     textCtrl.WriteText( _T("Reading another char from wxFileInputStream:\n\n") );
 
     ch = file_input.GetC();
-    pos = file_input.TellI();
+    pos = (size_t)file_input.TellI();
     str.Printf( wxT("Read char: %d. Now at position %d\n\n"), (int) ch, (int) pos );
     textCtrl.WriteText( str );
 
     textCtrl.WriteText( _T("Reading yet another char from wxFileInputStream:\n\n") );
 
     ch = file_input.GetC();
-    pos = file_input.TellI();
+    pos = (size_t)file_input.TellI();
     str.Printf( wxT("Read char: %d. Now at position %d\n\n"), (int) ch, (int) pos );
     textCtrl.WriteText( str );
 
     textCtrl.WriteText( _T("Now calling Ungetch( 5 ) from wxFileInputStream...\n\n") );
 
     file_input.Ungetch( 5 );
-    pos = file_input.TellI();
+    pos = (size_t)file_input.TellI();
     str.Printf( wxT("Now at position %d\n\n"), (int) pos );
     textCtrl.WriteText( str );
 
     textCtrl.WriteText( _T("Reading char from wxFileInputStream:\n\n") );
 
     ch = file_input.GetC();
-    pos = file_input.TellI();
+    pos = (size_t)file_input.TellI();
     str.Printf( wxT("Read char: %d. Now at position %d\n\n"), (int) ch, (int) pos );
     textCtrl.WriteText( str );
 
     textCtrl.WriteText( _T("Reading another char from wxFileInputStream:\n\n") );
 
     ch = file_input.GetC();
-    pos = file_input.TellI();
+    pos = (size_t)file_input.TellI();
     str.Printf( wxT("Read char: %d. Now at position %d\n\n"), (int) ch, (int) pos );
     textCtrl.WriteText( str );
 
     textCtrl.WriteText( _T("Now calling Ungetch( 5 ) from wxFileInputStream again...\n\n") );
 
     file_input.Ungetch( 5 );
-    pos = file_input.TellI();
+    pos = (size_t)file_input.TellI();
     str.Printf( wxT("Now at position %d\n\n"), (int) pos );
     textCtrl.WriteText( str );
 
@@ -792,7 +795,7 @@ void MyApp::DoStreamDemo6(wxCommandEvent& WXUNUSED(event))
     file_input.SeekI( 3 );
 
     ch = file_input.GetC();
-    pos = file_input.TellI();
+    pos = (size_t)file_input.TellI();
     str.Printf( wxT("Read char: %d. Now at position %d\n\n"), (int) ch, (int) pos );
     textCtrl.WriteText( str );
 }
@@ -809,7 +812,7 @@ void MyApp::DoStreamDemo7(wxCommandEvent& WXUNUSED(event))
 
     textCtrl.WriteText( _T("Writing number 0 to 9 to wxFileOutputStream...\n\n") );
 
-    wxFileOutputStream file_output( wxString(_T("test_wx.dat")) );
+    wxFileOutputStream file_output( file_name );
     for (ch = 0; ch < 10; ch++)
         file_output.Write( &ch, 1 );
 
@@ -817,53 +820,53 @@ void MyApp::DoStreamDemo7(wxCommandEvent& WXUNUSED(event))
 
     textCtrl.WriteText( _T("Reading char from wxBufferedInputStream via wxFileInputStream:\n\n") );
 
-    wxFileInputStream file_input( wxString(_T("test_wx.dat")) );
+    wxFileInputStream file_input( file_name );
     wxBufferedInputStream buf_input( file_input );
 
     ch = buf_input.GetC();
-    size_t pos = buf_input.TellI();
+    size_t pos = (size_t)buf_input.TellI();
     str.Printf( wxT("Read char: %d. Now at position %d\n\n"), (int) ch, (int) pos );
     textCtrl.WriteText( str );
 
     textCtrl.WriteText( _T("Reading another char from wxBufferedInputStream:\n\n") );
 
     ch = buf_input.GetC();
-    pos = buf_input.TellI();
+    pos = (size_t)buf_input.TellI();
     str.Printf( wxT("Read char: %d. Now at position %d\n\n"), (int) ch, (int) pos );
     textCtrl.WriteText( str );
 
     textCtrl.WriteText( _T("Reading yet another char from wxBufferedInputStream:\n\n") );
 
     ch = buf_input.GetC();
-    pos = buf_input.TellI();
+    pos = (size_t)buf_input.TellI();
     str.Printf( wxT("Read char: %d. Now at position %d\n\n"), (int) ch, (int) pos );
     textCtrl.WriteText( str );
 
     textCtrl.WriteText( _T("Now calling Ungetch( 5 ) from wxBufferedInputStream...\n\n") );
 
     buf_input.Ungetch( 5 );
-    pos = buf_input.TellI();
+    pos = (size_t)buf_input.TellI();
     str.Printf( wxT("Now at position %d\n\n"), (int) pos );
     textCtrl.WriteText( str );
 
     textCtrl.WriteText( _T("Reading char from wxBufferedInputStream:\n\n") );
 
     ch = buf_input.GetC();
-    pos = buf_input.TellI();
+    pos = (size_t)buf_input.TellI();
     str.Printf( wxT("Read char: %d. Now at position %d\n\n"), (int) ch, (int) pos );
     textCtrl.WriteText( str );
 
     textCtrl.WriteText( _T("Reading another char from wxBufferedInputStream:\n\n") );
 
     ch = buf_input.GetC();
-    pos = buf_input.TellI();
+    pos = (size_t)buf_input.TellI();
     str.Printf( wxT("Read char: %d. Now at position %d\n\n"), (int) ch, (int) pos );
     textCtrl.WriteText( str );
 
     textCtrl.WriteText( _T("Now calling Ungetch( 5 ) from wxBufferedInputStream again...\n\n") );
 
     buf_input.Ungetch( 5 );
-    pos = buf_input.TellI();
+    pos = (size_t)buf_input.TellI();
     str.Printf( wxT("Now at position %d\n\n"), (int) pos );
     textCtrl.WriteText( str );
 
@@ -872,7 +875,7 @@ void MyApp::DoStreamDemo7(wxCommandEvent& WXUNUSED(event))
     buf_input.SeekI( 3 );
 
     ch = buf_input.GetC();
-    pos = buf_input.TellI();
+    pos = (size_t)buf_input.TellI();
     str.Printf( wxT("Read char: %d. Now at position %d\n\n"), (int) ch, (int) pos );
     textCtrl.WriteText( str );
 }

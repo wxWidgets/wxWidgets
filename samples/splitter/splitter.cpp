@@ -73,7 +73,7 @@ class MyFrame: public wxFrame
 {
 public:
     MyFrame();
-    virtual ~MyFrame();
+    virtual ~MyFrame(){};
 
     // Menu commands
     void SplitHorizontal(wxCommandEvent& event);
@@ -121,7 +121,7 @@ class MyCanvas: public wxScrolledWindow
 {
 public:
     MyCanvas(wxWindow* parent, bool mirror);
-    virtual ~MyCanvas();
+    virtual ~MyCanvas(){};
 
     virtual void OnDraw(wxDC& dc);
 
@@ -240,10 +240,6 @@ MyFrame::MyFrame()
 #if wxUSE_STATUSBAR
     SetStatusText(_T("Min pane size = 0"), 1);
 #endif // wxUSE_STATUSBAR
-}
-
-MyFrame::~MyFrame()
-{
 }
 
 // menu command handlers
@@ -417,10 +413,6 @@ MyCanvas::MyCanvas(wxWindow* parent, bool mirror)
                            wxHSCROLL | wxVSCROLL | wxNO_FULL_REPAINT_ON_RESIZE)
 {
     m_mirror = mirror;
-}
-
-MyCanvas::~MyCanvas()
-{
 }
 
 void MyCanvas::OnDraw(wxDC& dcOrig)

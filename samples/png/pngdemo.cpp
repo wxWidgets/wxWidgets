@@ -29,10 +29,6 @@ wxBitmap  *g_TestBitmap = (wxBitmap *) NULL;
 
 IMPLEMENT_APP(MyApp)
 
-MyApp::MyApp()
-{
-}
-
 bool MyApp::OnInit(void)
 {
   wxImage::AddHandler(new wxPNGHandler);
@@ -119,9 +115,9 @@ void MyFrame::OnSaveFile(wxCommandEvent& WXUNUSED(event))
                                wxT("png"), wxT("PNG files (*.png)|*.png") );
 
   if (f == _T(""))  return;
-  
+
   wxBitmap *backstore = new wxBitmap( 150, 150 );
-  
+
   wxMemoryDC memDC;
   memDC.SelectObject( *backstore );
   memDC.Clear();
@@ -132,11 +128,11 @@ void MyFrame::OnSaveFile(wxCommandEvent& WXUNUSED(event))
   memDC.DrawLine( 0, 0, 0, 10 );
   memDC.SetTextForeground( *wxWHITE );
   memDC.DrawText( _T("This is a memory dc."), 10, 10 );
-  
+
   memDC.SelectObject( wxNullBitmap );
-  
+
   backstore->SaveFile( f, wxBITMAP_TYPE_PNG, (wxPalette*)NULL );
-  
+
   delete backstore;
 }
 
@@ -170,10 +166,6 @@ END_EVENT_TABLE()
 // Define a constructor for my canvas
 MyCanvas::MyCanvas(wxWindow *parent, const wxPoint& pos, const wxSize& size):
  wxScrolledWindow(parent, wxID_ANY, pos, size)
-{
-}
-
-MyCanvas::~MyCanvas(void)
 {
 }
 

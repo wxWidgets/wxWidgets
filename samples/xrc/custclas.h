@@ -69,7 +69,7 @@ public:
                        );
 
     // Destuctor.
-    ~MyResizableListCtrl();
+    ~MyResizableListCtrl(){};
 
 protected:
 

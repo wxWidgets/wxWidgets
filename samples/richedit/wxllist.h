@@ -260,9 +260,6 @@ protected:
 /// Define a list type of wxLayoutObject pointers.
 KBLIST_DEFINE(wxLayoutObjectList, wxLayoutObject);
 
-/// An illegal iterator to save typing.
-#define NULLIT (wxLayoutObjectList::iterator(NULL))
-
 /// The iterator type.
 typedef wxLayoutObjectList::iterator wxLOiterator;
 
@@ -595,7 +592,7 @@ public:
         @param xpos the column number
         @param offset where to store the difference between xpos and
         the object's head
-        @return iterator to the object or NULLIT
+        @return iterator to the object or iterator to NULL
     */
     wxLayoutObjectList::iterator FindObject(CoordType xpos, CoordType
         *offset) const ;
@@ -607,7 +604,7 @@ public:
         @param xpos the screen x coordinate
         @param offset where to store the difference between xpos and
         the object's head
-        @return iterator to the object or NULLIT
+        @return iterator to the object or iterator to NULL
     */
     wxLayoutObjectList::iterator FindObjectScreen(wxDC &dc,
         wxLayoutList *llist,
@@ -771,7 +768,7 @@ public:
 
 private:
     /// Destructor is private. Use DeleteLine() to remove it.
-    ~wxLayoutLine();
+    ~wxLayoutLine(){};
 
     /**@name Functions to let the lines synchronise with each other. */
     //@{
@@ -1412,7 +1409,7 @@ public:
         _T("wxLayout Printout"));
 
     /// Destructor.
-    ~wxLayoutPrintout();
+    ~wxLayoutPrintout(){};
 
     /** Function which prints the n-th page.
         @param page the page number to print

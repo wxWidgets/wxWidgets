@@ -66,10 +66,6 @@ IMPLEMENT_APP(MyApp)
 // Writes a header on a page. Margin units are in millimetres.
 bool WritePageHeader(wxPrintout *printout, wxDC *dc, wxChar *text, float mmToLogical);
 
-MyApp::MyApp()
-{
-}
-
 // The `main program' equivalent, creating the windows and returning the
 // main frame
 bool MyApp::OnInit(void)
@@ -338,10 +334,6 @@ MyCanvas::MyCanvas(wxFrame *frame, const wxPoint& pos, const wxSize& size, long 
     wxScrolledWindow(frame, wxID_ANY, pos, size, style)
 {
     SetBackgroundColour(* wxWHITE);
-}
-
-MyCanvas::~MyCanvas(void)
-{
 }
 
 // Define the repainting behaviour

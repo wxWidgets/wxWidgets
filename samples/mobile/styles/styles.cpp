@@ -2,7 +2,7 @@
 // Name:        styles.cpp
 // Author:      Robert Roebling
 // Created:     04/07/02
-// Copyright:   
+// Copyright:
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -41,17 +41,17 @@ MyFrame::MyFrame( wxWindow *parent, wxWindowID id, const wxString &title,
     CreateStatusBar(1);
     SetStatusText( _T("Welcome to Styles!") );
 #endif // wxUSE_STATUSBAR
-    
+
     wxImage image;
     image.LoadFile( _T("marble.jpg"), wxBITMAP_TYPE_JPEG );
-    
+
     wxBitmap bitmap( image );
 #ifdef __WXUNIVERSAL__
     SetBackground( bitmap, 0, wxTILE );
 #endif
-    
+
     new wxStaticText( this, wxID_ANY, _T("This is text"), wxPoint( 20,50 ) );
-    
+
     new wxCheckBox( this, wxID_ANY, _T("This is a checkbox"), wxPoint( 20,70 ) );
 }
 
@@ -64,7 +64,7 @@ void MyFrame::CreateMyMenuBar()
 
     wxMenuBar *menu_bar = new wxMenuBar();
     menu_bar->Append( file_menu, _T("&File") );
-    
+
     SetMenuBar( menu_bar );
 }
 
@@ -88,20 +88,16 @@ void MyFrame::OnCloseWindow( wxCloseEvent &WXUNUSED(event) )
 
 IMPLEMENT_APP(MyApp)
 
-MyApp::MyApp()
-{
-}
-
 bool MyApp::OnInit()
 {
     wxInitAllImageHandlers();
 
     SetVendorName(_T("Free world"));
     SetAppName(_T("Styles"));
-    
+
     MyFrame *frame = new MyFrame( NULL, wxID_ANY, _T("Styles"), wxPoint(20,20), wxSize(500,340) );
     frame->Show( true );
-    
+
     return true;
 }
 

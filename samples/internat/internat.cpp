@@ -251,15 +251,15 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     localeInfo.Printf(_("Language: %s\nSystem locale name:\n%s\nCanonical locale name: %s\n"),
         locale.c_str(), sysname.c_str(), canname.c_str() );
 
-    wxMessageDialog
-    (
-        this,
-        wxString(_("I18n sample\n(c) 1998, 1999 Vadim Zeitlin and Julian Smart"))
-            + wxT("\n\n")
-            + localeInfo,
-        _("About Internat"),
-        wxOK | wxICON_INFORMATION
-    ).ShowModal();
+    wxMessageDialog dlg(
+                        this,
+                        wxString(_("I18n sample\n(c) 1998, 1999 Vadim Zeitlin and Julian Smart"))
+                                 + wxT("\n\n")
+                                 + localeInfo,
+                                 _("About Internat"),
+                        wxOK | wxICON_INFORMATION
+                       );
+    dlg.ShowModal();
 }
 
 void MyFrame::OnPlay(wxCommandEvent& WXUNUSED(event))

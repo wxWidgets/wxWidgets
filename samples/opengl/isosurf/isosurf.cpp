@@ -373,10 +373,6 @@ TestGLCanvas::TestGLCanvas(wxWindow *parent, wxWindowID id,
 }
 
 
-TestGLCanvas::~TestGLCanvas()
-{
-}
-
 void TestGLCanvas::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
     // This is a dummy, to avoid an endless succession of paint messages.

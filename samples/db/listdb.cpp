@@ -15,7 +15,7 @@
     Member functions for the classes defined in LISTDB.H
 
      This class is used to present a generic ListBox lookup window for
-     use with any of the object creation/selection choice widgets.   This 
+     use with any of the object creation/selection choice widgets.   This
      dialog window will present a (possibly) scrolling list of values
      that come from a data table source.  Based on the object type passed
      in the constructor, a ListBox is built to present the user with a
@@ -28,7 +28,7 @@
      For each object (database) type that is to be used, an overridden
      constructor should be written to appropriately link to the proper
      data table/object for building the list.
-       
+
     The data table record access is all handled through the routines
     in this module, interfacing with the methods defined in wxDbTable.
 
@@ -36,7 +36,7 @@
      have opened the table prior to passing them in the dialog
      constructor, and the 'where' query should already have been set
      and performed before creating this dialog instance.
-    
+
 // SYNOPSIS STOP
 */
 
@@ -108,7 +108,7 @@ const wxChar *GetExtendedDBErrorMsg2(wxDb *pDb, wxChar *ErrFile, int ErrLine)
 
     msg.Append (wxT("\nODBC errors:\n"));
     msg += wxT("\n");
-    
+
     // Display errors for this connection
     int i;
     for (i = 0; i < DB_MAX_ERROR_HISTORY; i++)
@@ -131,7 +131,7 @@ const wxChar *GetExtendedDBErrorMsg2(wxDb *pDb, wxChar *ErrFile, int ErrLine)
 
 // Clookup constructor
 Clookup::Clookup(wxChar *tblName, wxChar *colName, wxDb *pDb, const wxString &defDir)
-   : wxDbTable(pDb, tblName, 1, wxT(""), !wxDB_QUERY_ONLY,
+   : wxDbTable(pDb, tblName, 1, wxEmptyString, !wxDB_QUERY_ONLY,
                defDir)
 {
 
@@ -143,7 +143,7 @@ Clookup::Clookup(wxChar *tblName, wxChar *colName, wxDb *pDb, const wxString &de
 // Clookup2 constructor
 Clookup2::Clookup2(wxChar *tblName, wxChar *colName1, wxChar *colName2,
                    wxDb *pDb, const wxString &defDir)
-   : wxDbTable(pDb, tblName, (1 + (wxStrlen(colName2) > 0)), wxT(""),
+   : wxDbTable(pDb, tblName, (UWORD)(1 + (wxStrlen(colName2) > 0)), wxEmptyString,
                !wxDB_QUERY_ONLY, defDir)
 {
     wxASSERT(pDb);
@@ -153,10 +153,10 @@ Clookup2::Clookup2(wxChar *tblName, wxChar *colName1, wxChar *colName2,
 
     int i = 0;
 
-    SetColDefs (i, colName1, DB_DATA_TYPE_VARCHAR, lookupCol1, SQL_C_CHAR, LOOKUP_COL_LEN+1, false, false);
+    SetColDefs ((UWORD)i, colName1, DB_DATA_TYPE_VARCHAR, lookupCol1, SQL_C_CHAR, LOOKUP_COL_LEN+1, false, false);
 
     if (wxStrlen(colName2) > 0)
-        SetColDefs (++i, colName2, DB_DATA_TYPE_VARCHAR, lookupCol2, SQL_C_CHAR, LOOKUP_COL_LEN+1, false, false);
+        SetColDefs ((UWORD)(++i), colName2, DB_DATA_TYPE_VARCHAR, lookupCol2, SQL_C_CHAR, LOOKUP_COL_LEN+1, false, false);
 
 }  // Clookup2()
 
@@ -175,7 +175,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
    : wxDialog (parent, LOOKUP_DIALOG, wxT("Select..."), wxDefaultPosition, wxSize(400, 290))
 {
     wxBeginBusyCursor();
-    
+
     wxStrcpy(ListDB_Selection,wxT(""));
     widgetPtrsSet = false;
     lookup  = 0;
@@ -267,12 +267,12 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
 //
 ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
                        wxChar *dispCol1, wxChar *dispCol2, wxChar *where, wxChar *orderBy,
-                       wxDb *pDb, const wxString &defDir, bool distinctValues, 
+                       wxDb *pDb, const wxString &defDir, bool distinctValues,
                        wxChar *selectStmt, int maxLenCol1, bool allowOk)
    : wxDialog (parent, LOOKUP_DIALOG, wxT("Select..."), wxDefaultPosition, wxSize(400, 290))
 {
     wxBeginBusyCursor();
-    
+
     wxStrcpy(ListDB_Selection,wxT(""));
     wxStrcpy(ListDB_Selection2,wxT(""));
     widgetPtrsSet = false;

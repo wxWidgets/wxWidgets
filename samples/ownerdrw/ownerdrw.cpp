@@ -2,7 +2,7 @@
 // Name:        ownerdrw.cpp
 // Purpose:     Owner-draw sample, for Windows
 // Author:      Vadim Zeitlin
-// Modified by: 
+// Modified by:
 // Created:     13.11.97
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
@@ -41,7 +41,7 @@ class OwnerDrawnFrame : public wxFrame
 public:
     // ctor & dtor
     OwnerDrawnFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h);
-    ~OwnerDrawnFrame();
+    ~OwnerDrawnFrame(){};
 
     // notifications
     void OnQuit             (wxCommandEvent& event);
@@ -61,12 +61,12 @@ private:
     wxMenuItem *pAboutItem;
 };
 
-enum 
+enum
 {
-    Menu_Quit = 1, 
+    Menu_Quit = 1,
     Menu_First = 100,
-    Menu_Test1, Menu_Test2, Menu_Test3, 
-    Menu_Bitmap, Menu_Bitmap2, 
+    Menu_Test1, Menu_Test2, Menu_Test3,
+    Menu_Bitmap, Menu_Bitmap2,
     Menu_Submenu, Menu_Sub1, Menu_Sub2, Menu_Sub3,
     Menu_Toggle, Menu_About,
     Control_First = 1000,
@@ -79,7 +79,7 @@ BEGIN_EVENT_TABLE(OwnerDrawnFrame, wxFrame)
     EVT_MENU(Menu_Quit, OwnerDrawnFrame::OnQuit)
     EVT_LISTBOX(Control_Listbox, OwnerDrawnFrame::OnListboxSelect)
     EVT_CHECKLISTBOX(Control_Listbox, OwnerDrawnFrame::OnCheckboxToggle)
-    EVT_COMMAND(Control_Listbox, wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, 
+    EVT_COMMAND(Control_Listbox, wxEVT_COMMAND_LISTBOX_DOUBLECLICKED,
                 OwnerDrawnFrame::OnListboxDblClick)
 END_EVENT_TABLE()
 
@@ -176,13 +176,13 @@ void OwnerDrawnFrame::InitMenu()
     file_menu->Append(pItem);
 
     file_menu->AppendSeparator();
-    pItem = new wxMenuItem(file_menu, Menu_Toggle, _T("&Disable/Enable\tCtrl+D"), 
+    pItem = new wxMenuItem(file_menu, Menu_Toggle, _T("&Disable/Enable\tCtrl+D"),
                           _T("enables/disables the About-Item"), wxITEM_NORMAL);
     pItem->SetFont(*wxNORMAL_FONT);
     file_menu->Append(pItem);
 
     // Of course Ctrl+RatherLongAccel will not work in this example:
-    pAboutItem = new wxMenuItem(file_menu, Menu_About, _T("&About\tCtrl+RatherLongAccel"), 
+    pAboutItem = new wxMenuItem(file_menu, Menu_About, _T("&About\tCtrl+RatherLongAccel"),
                                 _T("display program information"), wxITEM_NORMAL);
     pAboutItem->SetBitmap(bmpInfo);
     pAboutItem->SetDisabledBitmap(bmpInfo_mono);
@@ -224,7 +224,7 @@ OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, wxChar *title,
     wxPanel *pPanel = new wxPanel(this);
 
     // check list box
-    static const wxChar* aszChoices[] = { _T("Hello"), _T("world"), _T("and"), 
+    static const wxChar* aszChoices[] = { _T("Hello"), _T("world"), _T("and"),
                                           _T("goodbye"), _T("cruel"), _T("world"),
                                           _T("-------"), _T("owner-drawn"), _T("listbox") };
 
@@ -256,7 +256,7 @@ OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, wxChar *title,
 
     // normal (but owner-drawn) listbox
     static const wxChar* aszColors[] = { _T("Red"), _T("Blue"), _T("Pink"),
-                                         _T("Green"), _T("Yellow"), 
+                                         _T("Green"), _T("Yellow"),
                                          _T("Black"), _T("Violet")  };
 
     astrChoices = new wxString[WXSIZEOF(aszColors)];
@@ -279,17 +279,17 @@ OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, wxChar *title,
 
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
 
-    struct { unsigned int r, g, b; } aColors[] =
+    struct { unsigned char r, g, b; } aColors[] =
         {
             {255,0,0}, {0,0,255}, {255,128,192},
-            {0,255,0}, {255,255,128}, 
+            {0,255,0}, {255,255,128},
             {0,0,0}, {128,0,255}
         };
 
     for ( ui = 0; ui < WXSIZEOF(aszColors); ui++ )
     {
         pListBox->GetItem(ui)->SetTextColour(wxColor(aColors[ui].r,
-                                                     aColors[ui].g, 
+                                                     aColors[ui].g,
                                                      aColors[ui].b));
         // yellow on white is horrible...
         if ( ui == 4 )
@@ -305,10 +305,6 @@ OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, wxChar *title,
     delete[] astrChoices;
 
     Show(true);
-}
-
-OwnerDrawnFrame::~OwnerDrawnFrame()
-{
 }
 
 void OwnerDrawnFrame::OnQuit(wxCommandEvent& WXUNUSED(event))

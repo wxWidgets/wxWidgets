@@ -17,7 +17,7 @@
 class MyApp: public wxApp
 {
   public:
-    MyApp() ;
+    MyApp(){};
     bool OnInit();
     int OnExit();
 
@@ -59,7 +59,7 @@ class MyCanvas: public wxScrolledWindow
 {
   public:
     MyCanvas(wxFrame *frame, const wxPoint& pos, const wxSize& size, long style = wxRETAINED);
-    ~MyCanvas(void) ;
+    ~MyCanvas(void){};
 
     virtual void OnDraw(wxDC& dc);
     void OnEvent(wxMouseEvent& event);

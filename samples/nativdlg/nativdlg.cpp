@@ -34,11 +34,6 @@
 
 IMPLEMENT_APP(MyApp)
 
-// Testing of ressources
-MyApp::MyApp()
-{
-}
-
 bool MyApp::OnInit(void)
 {
   // Create the main frame window

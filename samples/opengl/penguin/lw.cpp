@@ -63,7 +63,7 @@ static wxInt32 read_short(FILE *f)
     // when using the direct evaluation in the return statement
     wxInt32 first = read_char(f) ;
     wxInt32 second = read_char(f) ;
-    
+
   return (first<<8) | second ;
 }
 
@@ -91,7 +91,7 @@ static int read_string(FILE *f, char *s)
   do {
     c = read_char(f);
     if (cnt < LW_MAX_NAME_LEN)
-      s[cnt] = c;
+      s[cnt] = (char)c;
     else
       s[LW_MAX_NAME_LEN-1] = 0;
     cnt++;
@@ -170,7 +170,7 @@ static void read_surf(FILE *f, int nbytes, lwObject *lwo)
 static void read_pols(FILE *f, int nbytes, lwObject *lwo)
 {
   int guess_cnt = lwo->face_cnt;
-  
+
   while (nbytes > 0) {
     lwFace *face;
     int i;
@@ -188,17 +188,17 @@ static void read_pols(FILE *f, int nbytes, lwObject *lwo)
 
     /* allocate space for points */
     face->index = (int*) calloc(sizeof(int)*face->index_cnt,1);
-    
+
     /* read points in */
     for (i=0; i<face->index_cnt; i++) {
       face->index[i] = read_short(f);
       nbytes -= 2;
     }
-    
+
     /* read surface material */
     face->material = read_short(f);
     nbytes -= 2;
-    
+
     /* skip over detail  polygons */
     if (face->material < 0) {
       int det_cnt;

@@ -29,7 +29,7 @@
 #  pragma hdrstop
 #endif
 
-// for all others, include the necessary headers 
+// for all others, include the necessary headers
 #ifndef WX_PRECOMP
 #  include "wx/wx.h"
 #endif
@@ -313,7 +313,7 @@ void MyFrame::OnOpenConnection(wxCommandEvent& WXUNUSED(event))
   //     // update waitmore if needed.
   //   }
   //   bool success = client->IsConnected();
-  // 
+  //
   // And that's all :-)
 
   m_text->AppendText(_("\nTrying to connect (timeout = 10 sec) ...\n"));
@@ -328,7 +328,7 @@ void MyFrame::OnOpenConnection(wxCommandEvent& WXUNUSED(event))
     m_text->AppendText(_("Failed ! Unable to connect\n"));
     wxMessageBox(_("Can't connect to the specified host"), _("Alert !"));
   }
-  
+
   UpdateStatusBar();
 }
 
@@ -363,7 +363,7 @@ void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event))
   m_sock->SetFlags(wxSOCKET_WAITALL);
 
   buf1 = _("Test string (less than 256 chars!)");
-  len  = (wxStrlen(buf1) + 1) * sizeof(wxChar);
+  len  = (unsigned char)((wxStrlen(buf1) + 1) * sizeof(wxChar));
   buf2 = new wxChar[wxStrlen(buf1) + 1];
 
   m_text->AppendText(_("Sending a test buffer to the server ..."));
@@ -443,7 +443,7 @@ void MyFrame::OnTest2(wxCommandEvent& WXUNUSED(event))
     m_text->AppendText(_("Comparing the two buffers ..."));
     if (memcmp(msg1, msg2, len) != 0)
     {
-      m_text->AppendText(_("failed!\n"));  
+      m_text->AppendText(_("failed!\n"));
       m_text->AppendText(_("Test 2 failed !\n"));
     }
     else

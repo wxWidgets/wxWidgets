@@ -674,11 +674,12 @@ void MyCanvas::DrawDefault(wxDC& dc)
     wxMemoryDC memdc2;
     memdc2.SelectObject(bitmap2);
 
-    wxBrush yellowBrush(wxColour(255, 255, 0), wxSOLID);
+    wxColour clr(255, 255, 0);
+    wxBrush yellowBrush(clr, wxSOLID);
     memdc2.SetBackground(yellowBrush);
     memdc2.Clear();
 
-    wxPen yellowPen(wxColour(255, 255, 0), 1, wxSOLID);
+    wxPen yellowPen(clr, 1, wxSOLID);
 
     // Now draw a white rectangle with red outline. It should
     // entirely eclipse the yellow background.
@@ -951,7 +952,8 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
 
     if ( m_owner->m_textureBackground) {
         if ( ! m_owner->m_backgroundBrush.Ok() ) {
-            wxBrush b(wxColour(0,128,0), wxSOLID);
+            wxColour clr(0,128,0);
+            wxBrush b(clr, wxSOLID);
             dc.SetBackground(b);
         }
     }

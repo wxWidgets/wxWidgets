@@ -36,9 +36,9 @@ class MyApp;
 class MyScrolledWindow: public wxScrolledWindow
 {
 public:
-    MyScrolledWindow() {}
+    MyScrolledWindow(){};
     MyScrolledWindow( wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size );
-    ~MyScrolledWindow();
+    ~MyScrolledWindow(){};
     void OnPaint( wxPaintEvent &event );
 
 private:
@@ -87,10 +87,10 @@ private:
 class MyCanvas: public wxPanel
 {
 public:
-    MyCanvas() {}
+    MyCanvas(){};
     MyCanvas( wxScrolledWindow *parent, MyTopLabels *top, MyRightLabels *right,
               wxWindowID id, const wxPoint &pos, const wxSize &size );
-    ~MyCanvas();
+    ~MyCanvas(){};
     void OnPaint( wxPaintEvent &event );
     void ScrollWindow( int dx, int dy, const wxRect *rect );
 
@@ -175,10 +175,6 @@ MyScrolledWindow::MyScrolledWindow( wxWindow *parent, wxWindowID id,
 
     SetAutoLayout( true );
     SetSizer( mainsizer );
-}
-
-MyScrolledWindow::~MyScrolledWindow()
-{
 }
 
 void MyScrolledWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
@@ -294,10 +290,6 @@ MyCanvas::MyCanvas( wxScrolledWindow *parent, MyTopLabels *top, MyRightLabels *r
     SetBackgroundColour( wxT("WHEAT") );
 
     SetCursor( wxCursor( wxCURSOR_IBEAM ) );
-}
-
-MyCanvas::~MyCanvas()
-{
 }
 
 void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )

@@ -91,7 +91,7 @@ void MyCanvas::OnEraseBackground(wxEraseEvent& event)
     {
         wxSize sz = GetClientSize();
         wxRect rect(0, 0, sz.x, sz.y);
-        
+
         if (event.GetDC())
         {
             wxGetApp().TileBitmap(rect, *(event.GetDC()), wxGetApp().GetBackgroundBitmap());
@@ -195,7 +195,7 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
 #else
                     wxIcon icon(wxICON(dragicon));
 #endif
-                    
+
                     m_dragImage = new wxDragImage(icon, wxCursor(wxCURSOR_HAND));
                     break;
                 }
@@ -205,19 +205,19 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
 
             // The offset between the top-left of the shape image and the current shape position
             wxPoint beginDragHotSpot = m_dragStartPos - m_draggedShape->GetPosition();
-            
+
             // Now we do this inside the implementation: always assume
             // coordinates relative to the capture window (client coordinates)
 
             //if (fullScreen)
             //    beginDragHotSpot -= ClientToScreen(wxPoint(0, 0));
-            
+
             if (!m_dragImage->BeginDrag(beginDragHotSpot, this, fullScreen))
             {
                 delete m_dragImage;
                 m_dragImage = (wxDragImage*) NULL;
                 m_dragMode = TEST_DRAG_NONE;
-                
+
             } else
             {
                 m_dragImage->Move(event.GetPosition());
@@ -287,7 +287,7 @@ void MyCanvas::EraseShape(DragShape* shape, wxDC& dc)
 
     wxRect rect2(shape->GetRect());
     dc.SetClippingRegion(rect2.x, rect2.y, rect2.width, rect2.height);
-        
+
     wxGetApp().TileBitmap(rect, dc, wxGetApp().GetBackgroundBitmap());
 
     dc.DestroyClippingRegion();
@@ -334,19 +334,19 @@ MyFrame::MyFrame()
     file_menu->Append( wxID_ABOUT, _T("&About..."));
     file_menu->AppendCheckItem( TEST_USE_SCREEN, _T("&Use whole screen for dragging"), _T("Use whole screen"));
     file_menu->Append( wxID_EXIT, _T("E&xit"));
-    
+
     wxMenuBar *menu_bar = new wxMenuBar();
     menu_bar->Append(file_menu, _T("&File"));
 
     SetIcon(wxICON(mondrian));
     SetMenuBar( menu_bar );
-    
+
 #if wxUSE_STATUSBAR
     CreateStatusBar(2);
     int widths[] = { -1, 100 };
     SetStatusWidths( 2, widths );
 #endif // wxUSE_STATUSBAR
-    
+
     m_canvas = new MyCanvas( this, wxID_ANY, wxPoint(0,0), wxSize(10,10) );
 }
 
@@ -359,7 +359,7 @@ void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
 {
     (void)wxMessageBox( _T("wxDragImage demo\n")
         _T("Julian Smart (c) 2000"),
-        _T("About wxDragImage Demo"), 
+        _T("About wxDragImage Demo"),
         wxICON_INFORMATION | wxOK );
 }
 
@@ -447,7 +447,7 @@ bool MyApp::TileBitmap(const wxRect& rect, wxDC& dc, wxBitmap& bitmap)
 {
     int w = bitmap.GetWidth();
     int h = bitmap.GetHeight();
-    
+
     int i, j;
     for (i = rect.x; i < rect.x + rect.width; i += w)
     {
@@ -473,10 +473,6 @@ DragShape::DragShape(const wxBitmap& bitmap)
     m_show = true;
 }
 
-DragShape::~DragShape()
-{
-}
-
 bool DragShape::HitTest(const wxPoint& pt) const
 {
     wxRect rect(GetRect());
@@ -489,7 +485,7 @@ bool DragShape::Draw(wxDC& dc, int op)
     {
         wxMemoryDC memDC;
         memDC.SelectObject(m_bitmap);
-    
+
         dc.Blit(m_pos.x, m_pos.y, m_bitmap.GetWidth(), m_bitmap.GetHeight(),
             & memDC, 0, 0, op, true);
 

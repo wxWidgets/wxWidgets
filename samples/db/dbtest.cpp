@@ -654,7 +654,7 @@ bool DatabaseDemoApp::OnInit()
     // WARNING: Be certain that you do not free this handle
     //          directly with SQLFreeEnv().  Use either the
     //          method ::FreeHenv() or delete the DbConnectInf.
-    DbConnectInf = new wxDbConnectInf(NULL, params.ODBCSource, params.UserName, 
+    DbConnectInf = new wxDbConnectInf(NULL, params.ODBCSource, params.UserName,
                                       params.Password, params.DirPath);
 
     if (!DbConnectInf || !DbConnectInf->GetHenv())
@@ -963,7 +963,7 @@ void DatabaseDemoFrame::BuildEditorDialog()
             wxMessageBox(wxT("Unable to initialize the editor dialog for some reason"),wxT("Error..."),wxOK | wxICON_EXCLAMATION);
             Close();
         }
-    } 
+    }
     else
     {
         wxMessageBox(wxT("Unable to create the editor dialog for some reason"),wxT("Error..."),wxOK | wxICON_EXCLAMATION);
@@ -985,24 +985,24 @@ void DatabaseDemoFrame::BuildParameterDialog(wxWindow *parent)
  * Constructor note: If no wxDb object is passed in, a new connection to the database
  *     is created for this instance of Ccontact.  This can be a slow process depending
  *     on the database engine being used, and some database engines have a limit on the
- *     number of connections (either hard limits, or license restricted) so care should 
- *     be used to use as few connections as is necessary.  
+ *     number of connections (either hard limits, or license restricted) so care should
+ *     be used to use as few connections as is necessary.
  *
- * IMPORTANT: Objects which share a wxDb pointer are ALL acted upon whenever a member 
- *     function of pDb is called (i.e. CommitTrans() or RollbackTrans(), so if modifying 
+ * IMPORTANT: Objects which share a wxDb pointer are ALL acted upon whenever a member
+ *     function of pDb is called (i.e. CommitTrans() or RollbackTrans(), so if modifying
  *     or creating a table objects which use the same pDb, know that all the objects
  *     will be committed or rolled back when any of the objects has this function call made.
  */
 Ccontact::Ccontact (wxDb *pwxDb) : wxDbTable(pwxDb ? pwxDb : wxDbGetConnection(wxGetApp().DbConnectInf),
-                                             CONTACT_TABLE_NAME, CONTACT_NO_COLS, wxT(""),
+                                             CONTACT_TABLE_NAME, CONTACT_NO_COLS, wxEmptyString,
                                              !wxDB_QUERY_ONLY, wxGetApp().DbConnectInf->GetDefaultDir())
 {
     // This is used to represent whether the database connection should be released
     // when this instance of the object is deleted.  If using the same connection
-    // for multiple instance of database objects, then the connection should only be 
+    // for multiple instance of database objects, then the connection should only be
     // released when the last database instance using the connection is deleted
     freeDbConn = !pwxDb;
-    
+
     if (GetDb())
         GetDb()->SetSqlLogging(sqlLogON);
 
@@ -1053,7 +1053,7 @@ Ccontact::~Ccontact()
 
 /*
  * Handles setting up all the connections for the interface from the wxDbTable
- * functions to interface to the data structure used to store records in 
+ * functions to interface to the data structure used to store records in
  * memory, and for all the column definitions that define the table structure
  */
 void Ccontact::SetupColumns()
@@ -1080,7 +1080,7 @@ void Ccontact::SetupColumns()
 
 bool Ccontact::CreateIndexes(bool recreate)
 {
-    // This index could easily be accomplished with an "orderBy" clause, 
+    // This index could easily be accomplished with an "orderBy" clause,
     // but is done to show how to construct a non-primary index.
     wxString    indexName;
     wxDbIdxDef  idxDef[2];
@@ -1134,12 +1134,12 @@ bool Ccontact::FetchByName(const wxString &name)
  * An instance of Ccontact is created - "Contact" - which is used to hold the Ccontact
  * object that is currently being worked with.
  */
- 
+
 BEGIN_EVENT_TABLE(CeditorDlg, wxPanel)
     EVT_BUTTON(wxID_ANY,  CeditorDlg::OnButton)
     EVT_CLOSE(CeditorDlg::OnCloseWindow)
 END_EVENT_TABLE()
- 
+
 CeditorDlg::CeditorDlg(wxWindow *parent) : wxPanel (parent, 0, 0, 537, 480)
 {
     // Since the ::OnCommand() function is overridden, this prevents the widget
@@ -1180,7 +1180,7 @@ void CeditorDlg::OnButton(wxCommandEvent &event)
 void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& WXUNUSED(event))
 {
     wxString widgetName;
-    
+
     widgetName = win.GetName();
 
     if (!widgetPtrsSet)
@@ -1221,10 +1221,10 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& WXUNUSED(event))
 
         if (Ok && wxGetApp().Contact->Delete())
         {
-            // NOTE: Deletions are not finalized until a CommitTrans() is performed.  
-            //       If the commit were not performed, the program will continue to 
+            // NOTE: Deletions are not finalized until a CommitTrans() is performed.
+            //       If the commit were not performed, the program will continue to
             //       show the table contents as if they were deleted until this instance
-            //       of Ccontact is deleted.  If the Commit wasn't performed, the 
+            //       of Ccontact is deleted.  If the Commit wasn't performed, the
             //       database will automatically Rollback the changes when the database
             //       connection is terminated
             wxGetApp().Contact->GetDb()->CommitTrans();
@@ -1300,7 +1300,7 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& WXUNUSED(event))
             tStr = wxT("ODBC error during Query()\n\n");
             wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__TFILE__,__LINE__),
                          wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
-            
+
             SetMode(mView);
             return;
         }
@@ -1352,7 +1352,7 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& WXUNUSED(event))
                 wxGetApp().Contact->whereStr  = wxT("NAME = (SELECT MIN(NAME) FROM ");
                 wxGetApp().Contact->whereStr += CONTACT_TABLE_NAME;
             }
-            
+
             // Append the query where string (if there is one)
             wxGetApp().Contact->qryWhereStr  = qryWhere;
             if (wxStrlen(qryWhere))
@@ -1470,7 +1470,7 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& WXUNUSED(event))
 
 bool CeditorDlg::Initialize()
 {
-    // Create the data structure and a new database connection.  
+    // Create the data structure and a new database connection.
     // (As there is not a pDb being passed in the constructor, a new database
     // connection is created)
     wxGetApp().Contact = new Ccontact();
@@ -1481,10 +1481,10 @@ bool CeditorDlg::Initialize()
         return false;
     }
 
-    // Check if the table exists or not.  If it doesn't, ask the user if they want to 
+    // Check if the table exists or not.  If it doesn't, ask the user if they want to
     // create the table.  Continue trying to create the table until it exists, or user aborts
-    while (!wxGetApp().Contact->GetDb()->TableExists((wxChar *)CONTACT_TABLE_NAME, 
-                                          wxGetApp().DbConnectInf->GetUserID(), 
+    while (!wxGetApp().Contact->GetDb()->TableExists((wxChar *)CONTACT_TABLE_NAME,
+                                          wxGetApp().DbConnectInf->GetUserID(),
                                           wxGetApp().DbConnectInf->GetDefaultDir()))
     {
         wxString tStr;
@@ -1522,7 +1522,7 @@ bool CeditorDlg::Initialize()
             wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__TFILE__,__LINE__),
                          wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
         }
-        else 
+        else
 #endif
         if (!wxGetApp().Contact->GetDb()->TableExists(CONTACT_TABLE_NAME,
                                            wxGetApp().Contact->GetDb()->GetUsername(),
@@ -1593,14 +1593,14 @@ bool CeditorDlg::Initialize()
     pDataTypesBtn     = new wxButton(this, EDITOR_DIALOG_DATATYPES,      wxT("Data&types"),       wxPoint(430, 337), wxSize( 70,  35), 0, wxDefaultValidator, wxT("DataTypesBtn"));
     pDbDiagsBtn       = new wxButton(this, EDITOR_DIALOG_DB_DIAGS,       wxT("DB Dia&gs"),        wxPoint(430, 387), wxSize( 70,  35), 0, wxDefaultValidator, wxT("DbDiagsBtn"));
 
-    // Now that all the widgets on the panel are created, its safe to allow ::OnCommand() to 
+    // Now that all the widgets on the panel are created, its safe to allow ::OnCommand() to
     // handle all widget processing
     widgetPtrsSet = true;
 
-    // Setup the orderBy and where clauses to return back a single record as the result set, 
+    // Setup the orderBy and where clauses to return back a single record as the result set,
     // as there will only be one record being shown on the dialog at a time, this optimizes
     // network traffic by only returning a one row result
-    
+
     wxGetApp().Contact->SetOrderByClause(wxT("NAME"));  // field name to sort by
 
     // The wxString "whereStr" is not a member of the wxDbTable object, it is a member variable
@@ -1608,9 +1608,9 @@ bool CeditorDlg::Initialize()
     // length string, and then after the string is built, the wxDbTable member variable "where" is
     // assigned the pointer to the constructed string.
     //
-    // The constructed where clause below has a sub-query within it "SELECT MIN(NAME) FROM %s" 
+    // The constructed where clause below has a sub-query within it "SELECT MIN(NAME) FROM %s"
     // to achieve a single row (in this case the first name in alphabetical order).
-    
+
     if (wxGetApp().Contact->GetDb()->Dbms() != dbmsPOSTGRES &&
         wxGetApp().Contact->GetDb()->Dbms() != dbmsMY_SQL)
     {
@@ -1622,8 +1622,8 @@ bool CeditorDlg::Initialize()
     else
        wxGetApp().Contact->SetWhereClause(wxT(""));
 
-    // Perform the Query to get the result set.  
-    // NOTE: If there are no rows returned, that is a valid result, so Query() would return true.  
+    // Perform the Query to get the result set.
+    // NOTE: If there are no rows returned, that is a valid result, so Query() would return true.
     //       Only if there is a database error will Query() come back as false
     if (!wxGetApp().Contact->Query())
     {
@@ -1636,8 +1636,8 @@ bool CeditorDlg::Initialize()
 
     // Since Query succeeded, now get the row that was returned
     if (!wxGetApp().Contact->GetNext())
-        // If the GetNext() failed at this point, then there are no rows to retrieve, 
-        // so clear the values in the members of "Contact" so that PutData() blanks the 
+        // If the GetNext() failed at this point, then there are no rows to retrieve,
+        // so clear the values in the members of "Contact" so that PutData() blanks the
         // widgets on the dialog
         wxGetApp().Contact->Initialize();
 /*
@@ -1817,9 +1817,9 @@ bool CeditorDlg::GetData()
 
     if (!invalid)
     {
-        wxGetApp().Contact->JoinDate.month = mm;
-        wxGetApp().Contact->JoinDate.day   = dd;
-        wxGetApp().Contact->JoinDate.year  = yyyy;
+        wxGetApp().Contact->JoinDate.month = (SQLUSMALLINT)mm;
+        wxGetApp().Contact->JoinDate.day   = (SQLUSMALLINT)dd;
+        wxGetApp().Contact->JoinDate.year  = (SQLSMALLINT)yyyy;
     }
     else
     {
@@ -1836,7 +1836,7 @@ bool CeditorDlg::GetData()
     wxStrcpy(wxGetApp().Contact->Country,pCountryTxt->GetValue());
     wxStrcpy(wxGetApp().Contact->PostalCode,pPostalCodeTxt->GetValue());
 
-    wxGetApp().Contact->Contributions = wxAtoi(pContribTxt->GetValue());
+    wxGetApp().Contact->Contributions = (UCHAR)wxAtoi(pContribTxt->GetValue());
     wxGetApp().Contact->LinesOfCode = wxAtol(pLinesTxt->GetValue());
 
     wxGetApp().Contact->NativeLanguage = (enum Language) pNativeLangChoice->GetSelection();
@@ -1870,7 +1870,7 @@ bool CeditorDlg::Save()
 
         if (mode == mCreate)
         {
-            RETCODE result = wxGetApp().Contact->Insert();
+            RETCODE result = (RETCODE)wxGetApp().Contact->Insert();
 
             failed = (result != DB_SUCCESS);
             if (failed)
@@ -2054,7 +2054,7 @@ CparameterDlg::CparameterDlg(wxWindow *parent) : wxDialog (parent, PARAMETER_DIA
     pParamSaveBtn        = new wxButton(this, PARAMETER_DIALOG_SAVE,             wxT("&Save"),                wxPoint(310,  21),   wxSize( 70,  35), 0, wxDefaultValidator, wxT("ParamSaveBtn"));
     pParamCancelBtn      = new wxButton(this, PARAMETER_DIALOG_CANCEL,           wxT("C&ancel"),              wxPoint(310,  66),   wxSize( 70,  35), 0, wxDefaultValidator, wxT("ParamCancelBtn"));
 
-    // Now that all the widgets on the panel are created, its safe to allow ::OnCommand() to 
+    // Now that all the widgets on the panel are created, its safe to allow ::OnCommand() to
     // handle all widget processing
     widgetPtrsSet = true;
 
@@ -2074,13 +2074,13 @@ void CparameterDlg::OnCloseWindow(wxCloseEvent& event)
     if (!saved)
     {
         bool Ok = (wxMessageBox(wxT("No changes have been saved.\n\nAre you sure you wish exit the parameter screen?"),wxT("Confirm"),wxYES_NO|wxICON_QUESTION) == wxYES);
-        
+
         if (!Ok)
         {
             event.Veto();
             return;
         }
-        
+
         wxGetApp().params = savedParamSettings;
     }
 
@@ -2107,7 +2107,7 @@ void CparameterDlg::OnButton( wxCommandEvent &event )
 void CparameterDlg::OnCommand(wxWindow& win, wxCommandEvent& WXUNUSED(event))
 {
     wxString widgetName;
-    
+
     widgetName = win.GetName();
 
     if (!widgetPtrsSet)
@@ -2172,7 +2172,7 @@ bool CparameterDlg::GetData()
     }
     else
         return false;
-    
+
     tStr = pParamUserNameTxt->GetValue();
     if (tStr.Length() > (sizeof(wxGetApp().params.UserName)-1))
     {
@@ -2248,9 +2248,9 @@ BEGIN_EVENT_TABLE(CqueryDlg, wxDialog)
     EVT_CLOSE(CqueryDlg::OnCloseWindow)
 END_EVENT_TABLE()
 
- 
+
 // CqueryDlg() constructor
-CqueryDlg::CqueryDlg(wxWindow *parent, wxDb *pDb, wxChar *tblName[], 
+CqueryDlg::CqueryDlg(wxWindow *parent, wxDb *pDb, wxChar *tblName[],
                      const wxString &pWhereArg) :
     wxDialog (parent, QUERY_DIALOG, wxT("Query"), wxDefaultPosition, wxSize(480, 360))
 {
@@ -2361,11 +2361,6 @@ CqueryDlg::CqueryDlg(wxWindow *parent, wxDb *pDb, wxChar *tblName[],
     Centre(wxBOTH);
     ShowModal();
 }  // CqueryDlg() constructor
-
-
-CqueryDlg::~CqueryDlg()
-{
-}  // CqueryDlg::~CqueryDlg() destructor
 
 
 void CqueryDlg::OnButton(wxCommandEvent &event)
@@ -2630,10 +2625,10 @@ void CqueryDlg::ProcessAddBtn()
 
     // Build the expression and append it to the where clause window
     wxString s = pQueryCol1Choice->GetStringSelection();
-    
+
     if (pQueryNotCheck->GetValue() && (oper != qryOpEQ))
         s += wxT(" NOT");
-    
+
     switch(oper)
     {
     case qryOpEQ:
@@ -2712,8 +2707,8 @@ void CqueryDlg::ProcessCountBtn()
 
     if (!dbTable)  // wxDbTable object needs to be created and opened
     {
-        dbTable = new wxDbTable(pDB, masterTableName, 0, wxT(""),
-                                !wxDB_QUERY_ONLY, 
+        dbTable = new wxDbTable(pDB, masterTableName, 0, wxEmptyString,
+                                !wxDB_QUERY_ONLY,
                                 wxGetApp().DbConnectInf->GetDefaultDir());
         if (!dbTable)
         {
@@ -3155,13 +3150,13 @@ bool DbGridFrame::Initialize()
     grid->RegisterDataType(wxGRID_VALUE_CHOICEINT,
                              new wxGridCellEnumRenderer,
                              new wxGridCellEnumEditor);
-                             
-    wxString NativeLangChoice( wxString::Format(wxT("%s:%s,%s,%s,%s,%s"),wxGRID_VALUE_CHOICEINT, 
+
+    wxString NativeLangChoice( wxString::Format(wxT("%s:%s,%s,%s,%s,%s"),wxGRID_VALUE_CHOICEINT,
                             wxT("English"),
                             wxT("French"),
                             wxT("German"),
                             wxT("Spanish"),
-                            wxT("Other") )); 
+                            wxT("Other") ));
 #endif
 
     // Columns must match the sequence specified in SetColDef() calls
@@ -3179,7 +3174,7 @@ bool DbGridFrame::Initialize()
         new wxDbGridColInfo(10,wxGRID_VALUE_NUMBER,wxT("Lines Of Code"),
 #ifdef CHOICEINT
         new wxDbGridColInfo(11,NativeLangChoice,   wxT("Native Language"),NULL))))))))))));
-#else        
+#else
         new wxDbGridColInfo(11,wxGRID_VALUE_NUMBER,wxT("Native Language"),NULL))))))))))));
 #endif
 

@@ -64,11 +64,6 @@ PreferencesDialog::PreferencesDialog(wxWindow* parent)
     wxXmlResource::Get()->LoadDialog(this, parent, wxT("derived_dialog"));
 }
 
-// Destructor. (Empty, as I don't need anything special done when destructing).
-PreferencesDialog::~PreferencesDialog()
-{
-}
-
 //-----------------------------------------------------------------------------
 // Private members (including the event handlers)
 //-----------------------------------------------------------------------------

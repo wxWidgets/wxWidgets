@@ -722,7 +722,8 @@ void GridFrame::SetCellBgColour( wxCommandEvent& WXUNUSED(ev) )
     {
         // Check the new Refresh function by passing it a rectangle
         // which exactly fits the grid.
-        wxRect r(wxPoint(0, 0), grid->GetSize());
+        wxPoint pt(0, 0);
+        wxRect r(pt, grid->GetSize());
         grid->SetDefaultCellBackgroundColour(col);
         grid->Refresh(true, &r);
     }
@@ -1347,10 +1348,6 @@ void BugsGridTable::SetValueAsBool( int row, int col, bool value )
 wxString BugsGridTable::GetColLabelValue( int col )
 {
     return headers[col];
-}
-
-BugsGridTable::BugsGridTable()
-{
 }
 
 // ----------------------------------------------------------------------------

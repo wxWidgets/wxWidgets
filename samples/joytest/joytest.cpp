@@ -132,7 +132,7 @@ void MyCanvas::OnJoystickEvent(wxJoystickEvent& event)
         ymax += abs(ymin);
         pt.y += abs(ymin);
     }
-    
+
     // Scale to canvas size
     int cw, ch;
     GetSize(&cw, &ch);
@@ -176,11 +176,6 @@ MyFrame::MyFrame(wxFrame *parent, const wxString& title, const wxPoint& pos,
     : wxFrame(parent, wxID_ANY, title, pos, size, style)
 {
     canvas = new MyCanvas(this);
-}
-
-MyFrame::~MyFrame()
-{
-    // Empty
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))

@@ -37,7 +37,7 @@ class MyCanvas: public wxScrolledWindow
 public:
     MyCanvas() {}
     MyCanvas( wxWindow *parent, wxWindowID, const wxPoint &pos, const wxSize &size );
-    ~MyCanvas();
+    ~MyCanvas(){};
     void OnPaint( wxPaintEvent &event );
     void OnQueryPosition( wxCommandEvent &event );
     void OnAddButton( wxCommandEvent &event );
@@ -270,10 +270,6 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     SetBackgroundColour( wxT("BLUE") );
 
     SetCursor( wxCursor( wxCURSOR_IBEAM ) );
-}
-
-MyCanvas::~MyCanvas()
-{
 }
 
 void MyCanvas::OnMouseDown( wxMouseEvent &event )

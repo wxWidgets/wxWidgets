@@ -47,7 +47,7 @@ class MyApp : public wxApp
 {
 public:
     MyApp();
-    virtual ~MyApp();
+    virtual ~MyApp(){};
 
     virtual bool OnInit();
 
@@ -356,10 +356,6 @@ MyApp::MyApp()
      : m_semAllDone()
 {
     m_waitingUntilAllDone = false;
-}
-
-MyApp::~MyApp()
-{
 }
 
 // `Main program' equivalent, creating windows and returning main app frame

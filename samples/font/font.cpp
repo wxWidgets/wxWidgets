@@ -32,8 +32,10 @@
 #include "wx/splitter.h"
 #include "wx/textfile.h"
 
+#ifdef __WXMAC__
 #undef wxFontDialog
 #include "wx/mac/fontdlg.h"
+#endif
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -57,7 +59,7 @@ class MyCanvas: public wxWindow
 {
 public:
     MyCanvas( wxWindow *parent );
-    virtual ~MyCanvas();
+    virtual ~MyCanvas(){};
 
     // accessors for the frame
     const wxFont& GetTextFont() const { return m_font; }
@@ -714,10 +716,6 @@ MyCanvas::MyCanvas( wxWindow *parent )
 {
 }
 
-MyCanvas::~MyCanvas()
-{
-}
-
 void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
     wxPaintDC dc(this);
@@ -784,7 +782,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     {
         for ( int j = 0; j < 32; j++ )
         {
-            wxChar c = 32 * (i + 1) + j;
+            wxChar c = (wxChar)(32 * (i + 1) + j);
 
             long charWidth, charHeight;
             dc.GetTextExtent(c, &charWidth, &charHeight);
