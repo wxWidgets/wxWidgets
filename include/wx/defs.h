@@ -1646,7 +1646,7 @@ enum
     wxMM_ISOTROPIC,
     wxMM_ANISOTROPIC,
     wxMM_POINTS,
-    wxMM_METRIC,
+    wxMM_METRIC
 };
 
 /* Shortcut for easier dialog-unit-to-pixel conversion */
