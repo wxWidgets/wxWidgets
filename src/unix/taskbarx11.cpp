@@ -150,10 +150,7 @@ void wxTaskBarIconArea::SetTrayIcon(const wxBitmap& bmp)
     }
 
     wxRegion region;
-    if (m_bmp.GetMask())
-        region.Union(m_bmp);
-    else
-        region.Union(0,0, iconsize.x, iconsize.y);
+    region.Union(m_bmp);
 
     // if the bitmap is smaller than the window, offset it:
     if (winsize != iconsize)

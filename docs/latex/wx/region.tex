@@ -48,8 +48,10 @@ provided array. {\it fillStyle} parameter may have values
 
 {\bf NB:} This constructor is only implemented for Win32 and GTK+ wxWidgets ports.
 
+\func{}{wxRegion}{\param{const wxBitmap\&}{ bmp}}
+
 \func{}{wxRegion}{\param{const wxBitmap\&}{ bmp},
-                  \param{const wxColour\&}{ transColour = wxNullColour},
+                  \param{const wxColour\&}{ transColour},
 		  \param{int}{ tolerance = 0}}
 
 Constructs a region using the non-transparent pixels of a bitmap.  See
@@ -183,13 +185,19 @@ Finds the union of this region and another, rectangular region.
 
 Finds the union of this region and another region.
 
+\func{bool}{Union}{\param{const wxBitmap\&}{ bmp}}
+
+Finds the union of this region and the the non-transparent pixels of a
+bitmap. Bitmap's mask is used to determine transparency. If the bitmap doesn't
+have a mask, solid rectangle of bitmap's dimensions is used.
+
 \func{bool}{Union}{\param{const wxBitmap\&}{ bmp},
-                  \param{const wxColour\&}{ transColour = wxNullColour},
+                  \param{const wxColour\&}{ transColour},
 		  \param{int}{ tolerance = 0}}
 
 Finds the union of this region and the the non-transparent pixels of a
-bitmap.  If the bitmap has a mask then it will be used, otherwise the
-colour to be treated as transparent may be specified, along with an
+bitmap. Colour to be treated as transparent is specified in the
+\arg{transColour} argument, along with an
 optional colour tolerance value.
 
 \wxheading{Return value}

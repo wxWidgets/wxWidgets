@@ -48,9 +48,12 @@ public:
     wxRegion(const wxRect& rect);
     wxRegion(WXHRGN hRegion); // Hangs on to this region
     wxRegion(size_t n, const wxPoint *points, int fillStyle = wxODDEVEN_RULE );
+    wxRegion( const wxBitmap& bmp)
+    {
+        Union(bmp);
+    }
     wxRegion( const wxBitmap& bmp,
-              const wxColour& transColour = wxNullColour,
-              int   tolerance = 0)
+              const wxColour& transColour, int tolerance = 0)
     {
         Union(bmp, transColour, tolerance);
     }
@@ -119,12 +122,13 @@ public:
     wxBitmap ConvertToBitmap() const;
 
     // Use the non-transparent pixels of a wxBitmap for the region to combine
-    // with this region.  If the bitmap has a mask then it will be used,
-    // otherwise the colour to be treated as transparent may be specified,
+    // with this region.  First version takes transparency from bitmap's mask,
+    // second lets the user specify the colour to be treated as transparent
     // along with an optional tolerance value.
+    // NOTE: implemented in common/rgncmn.cpp
+    bool Union(const wxBitmap& bmp);
     bool Union(const wxBitmap& bmp,
-               const wxColour& transColour = wxNullColour,
-               int   tolerance = 0);
+               const wxColour& transColour, int tolerance = 0);
 
 // Internal
     bool Combine(wxCoord x, wxCoord y, wxCoord width, wxCoord height, wxRegionOp op);

@@ -30,13 +30,13 @@ public:
     :   wxRegionGeneric(rect)
     {}
     wxRegion() {}
-    wxRegion(const wxBitmap& bmp,
-            const wxColour& transColour = wxNullColour,
-            int tolerance = 0)
+    wxRegion(const wxBitmap& bmp)
     :   wxRegionGeneric()
-    {
-        Union(bmp, transColour, tolerance);
-    }
+        { Union(bmp); }
+    wxRegion(const wxBitmap& bmp,
+             const wxColour& transColour, int tolerance = 0)
+    :   wxRegionGeneric()
+        { Union(bmp, transColour, tolerance); }
     ~wxRegion() {}
     wxRegion(const wxRegion& r)
     :   wxRegionGeneric(r)
@@ -49,13 +49,13 @@ public:
     wxRegion(const NSRect *rects, int count);
 
     // Use the non-transparent pixels of a wxBitmap for the region to combine
-    // with this region.  If the bitmap has a mask then it will be used,
-    // otherwise the colour to be treated as transparent may be specified,
+    // with this region.  First version takes transparency from bitmap's mask,
+    // second lets the user specify the colour to be treated as transparent
     // along with an optional tolerance value.
     // NOTE: implemented in common/rgncmn.cpp
+    bool Union(const wxBitmap& bmp);
     bool Union(const wxBitmap& bmp,
-               const wxColour& transColour = wxNullColour,
-               int   tolerance = 0);
+               const wxColour& transColour, int tolerance = 0);
     /* And because of function hiding: */
     bool Union(long x, long y, long width, long height)
     {   return wxRegionGeneric::Union(x,y,width,height); }
