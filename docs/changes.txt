@@ -112,20 +112,17 @@ All:
 - number of fixes to wxPluginManager (Rick Brice, Hans Van Leemputten)
 - fixed memory leak in wxURL when using a proxy (Steven Van Ingelgem)
 - fixed bug in wxDateTime::Set(jdn) when DST was in effect
-- it's now possible to use msgids in other languages than English with
-  wxLocale (based on patch by Stefan Kowski)
+- support msgids in charsets other than C (based on patch by Stefan Kowski)
 
 All (GUI):
 
 - added wxTaskBarIcon::CreatePopupMenu which is now recommended way
   of showing popup menu; calling wxTaskBarIcon::PopupMenu directly
   is discouraged
-- Added ..._CMD_... variants for wxGrid event table entry macros
-  taking window identifiers
-- Added wxWindowBase::Navigate for programmatic navigation to the next
-  control.
-- On most platforms, wxTextCtrl::OnChar now inserts a tab character if
-  wxTE_PROCESS_TAB is set, or navigates to the next control if not.
+- Added ..._CMD_...(id) variants for wxGrid event table entry macros
+- Added wxWindow::Navigate for programmatic navigation to the next control.
+- wxTextCtrl::OnChar now inserts a tab character if wxTE_PROCESS_TAB is set
+- added wxKeyEvent::GetUnicodeKey()
 
 Unix:
 
@@ -140,11 +137,12 @@ wxGTK:
 
 wxMotif:
 
-- added 3 state checkbox
+- added support for wxCHK_3STATE style (3 state checkbox)
 
 wxMSW:
 
 - fixed UNC paths handling in wxFileSystem (Daniel Nash)
+- set wxKeyEvent::m_uniChar in Unicode build
 
 wxWinCE:
 

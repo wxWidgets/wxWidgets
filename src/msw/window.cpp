@@ -4522,6 +4522,9 @@ wxKeyEvent wxWindowMSW::CreateKeyEvent(wxEventType evType,
 
     event.m_eventObject = (wxWindow *)this; // const_cast
     event.m_keyCode = id;
+#if wxUSE_UNICODE
+    event.m_uniChar = wParam;
+#endif
     event.m_rawCode = (wxUint32) wParam;
     event.m_rawFlags = (wxUint32) lParam;
 #ifndef __WXWINCE__
