@@ -38,7 +38,7 @@ MAKEARGS = -DCC="$(CC)" -DCXX="$(CXX)" -DCFLAGS="$(CFLAGS)" \
 
 ### Targets: ###
 
-all: access artprov calendar caret checklst config console controls db dialogs dialup display dnd docview docvwmdi dragimag drawing dynamic erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listbox listctrl mdi memcheck menu mfc minifram minimal mobile multimon nativdlg notebook oleauto opengl ownerdrw png printing propsize regtest render richedit rotate sashtest scroll scrollsub shaped sockets sound splitter statbar tab taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard
+all: access artprov calendar caret checklst config console controls db dialogs dialup display dnd docview docvwmdi dragimag drawing dynamic erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listbox listctrl mdi memcheck menu mfc minifram minimal mobile multimon nativdlg notebook oleauto opengl ownerdrw png printing propsize regtest render richedit rotate sashtest scroll scrollsub shaped sockets sound splash splitter statbar tab taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard
 
 clean: 
 	-if exist .\*.obj del .\*.obj
@@ -287,6 +287,10 @@ clean:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>sound.bat
 	call sound.bat
 	@del sound.bat
+	@echo cd splash >splash.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>splash.bat
+	call splash.bat
+	@del splash.bat
 	@echo cd splitter >splitter.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>splitter.bat
 	call splitter.bat
@@ -705,6 +709,12 @@ sound:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>sound.bat
 	call sound.bat
 	@del sound.bat
+
+splash: 
+	@echo cd splash >splash.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>splash.bat
+	call splash.bat
+	@del splash.bat
 
 splitter: 
 	@echo cd splitter >splitter.bat
