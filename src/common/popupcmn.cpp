@@ -198,8 +198,7 @@ void wxPopupTransientWindow::PopHandlers()
             m_handlerPopup = NULL;
         }
 
-        if (m_child->HasCapture())
-            m_child->ReleaseMouse();
+        // m_child->ReleaseMouse();
         m_child = NULL;
     }
 
@@ -278,14 +277,30 @@ bool wxPopupTransientWindow::Show( bool show )
 {
 #ifdef __WXGTK__
     if (!show)
+    {
+        gdk_pointer_ungrab( (guint32)GDK_CURRENT_TIME );
+    
         gtk_grab_remove( m_widget );
+    }
 #endif
 
     bool ret = wxPopupWindow::Show( show );
     
 #ifdef __WXGTK__
     if (show)
+    {
         gtk_grab_add( m_widget );
+        
+        gdk_pointer_grab( m_widget->window, TRUE,
+                          (GdkEventMask)
+                            (GDK_BUTTON_PRESS_MASK |
+                             GDK_BUTTON_RELEASE_MASK |
+                             GDK_POINTER_MOTION_HINT_MASK |
+                             GDK_POINTER_MOTION_MASK),
+                          (GdkWindow *) NULL,
+                          (GdkCursor *) NULL,
+                          (guint32)GDK_CURRENT_TIME );
+    }
 #endif
 
     return ret;
