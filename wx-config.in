@@ -371,87 +371,8 @@ fi
 
 
 
-# The only action we can perform authoritatively prior to delegation
-# is to list all the possible delegates.
-# --------------------------------------------------------------
-
-# find_eligible_delegates _mask
-# Outputs all the config files installed which match the
-# (extended regex) _mask passed as an argument.
-find_eligible_delegates() { echo "$installed_configs" | grep -E "$1" 2> /dev/null; }
-
-# user_mask_fits _config
-# Returns true if the string _config satisfies the user specified mask.
-user_mask_fits()          { echo "$1" | grep -E "$configmask" > /dev/null 2>&1; }
-
-
-# Next chance for another satisfied customer then
-#
-# If we want to get really polished here we can do plural checking,
-# but we should probably leave that until the day we gettextise it.
-# If we have cpu cycles to spare for glitz, we could run the
-# find_best_delegate function over the list and mark the one that
-# would be used by default if no further disambiguation was to occur.
-# FIXME:  This is probably useful to do in any case, but lets not
-# tangle them up until things settle down again.
-if [ -n "$output_option_list" ]; then
-
-    _delegates="$(find_eligible_delegates $configmask)"
-
-    if user_mask_fits "$this_config" ; then
-
-        echo
-        echo "  This config ($this_config) will be used for output."
-
-        if match_field "$this_config" $_delegates ; then
-            _delegates=$(remove_field $this_config $_delegates)
-        else
-            echo "    though it is not installed in:"
-            echo "    $wxconfdir"
-        fi
-
-        if [ -n "$_delegates" ]; then
-            echo
-            echo "  You can select from the following alternates by explicitly"
-            echo "  specifying additional features to wx-config:"
-        fi
-
-    elif [ -z "$_delegates" ]; then
-
-        cat <<-EOF
-
-	  No config found to match:
-	     $configmask
-	  in $wxconfdir
-
-	      This config is: $this_config
-
-	  Please install the desired library build, or use --list
-	  without any feature specifiers to see the available configs
-	  for this host.  wx-config --list --host=?.* will list all
-	  installed configs including cross builds for other hosts.
-
-	EOF
-        exit 1
-
-    else
-        echo
-        echo "  The following installed configurations match your specification:"
-    fi
-
-    echo
-    for i in $_delegates; do echo "    $i"; done
-    [ -z "$_delegates" ] || echo
-
-    exit
-fi
-
-
-
-
-
-# From here, we now need to figure out a delegation target.
-# --------------------------------------------------------------
+# From here on, we'll need to be able to figure out a delegation target.
+# -----------------------------------------------------------------------
 
 # The rules for delegation are:
 #
@@ -491,6 +412,15 @@ fi
 
 # But first, more sugar to keep what follows clear and legible.
 # --------------------------------------------------------------
+
+# find_eligible_delegates _mask
+# Outputs all the config files installed which match the
+# (extended regex) _mask passed as an argument.
+find_eligible_delegates() { echo "$installed_configs" | grep -E "$1" 2> /dev/null; }
+
+# user_mask_fits _config
+# Returns true if the string _config satisfies the user specified mask.
+user_mask_fits()          { echo "$1" | grep -E "$configmask" > /dev/null 2>&1; }
 
 # count_fields _word
 # Returns the number of IFS split fields in _word
@@ -601,11 +531,99 @@ find_best_delegate()
 }
 
 
-
-# And finally some cereal to sprinkle it all on.
+# The only action we can perform authoritatively prior to delegation
+# is to list all the possible delegates.
 # --------------------------------------------------------------
 
-# No more messing around, can this config satisfy the user specification?
+config_spec="$0 $*"
+[ -z "$WXDEBUG" ] || config_spec=$configmask
+
+# Next chance for another satisfied customer then
+#
+# If we want to get really polished here we can do plural checking,
+# but we should probably leave that until the day we gettextise it.
+if [ -n "$output_option_list" ]; then
+
+    _remains_in_prefix=$installed_configs
+    _delegates=$(find_eligible_delegates $configmask)
+    _best_delegate=$(find_best_delegate)
+
+    if [ "x$WXDEBUG" = "xverbose" ]; then
+        echo " all = $_remains_in_prefix"
+        echo " matching = $_delegates"
+        echo " best = $_best_delegate"
+        echo " this = $this_config"
+    fi
+
+    for d in $_delegates; do
+        _remains_in_prefix=$(remove_field $d $_remains_in_prefix)
+    done
+
+    echo
+    echo "    Default config is $this_config"
+    echo
+
+    if user_mask_fits "$this_config" ; then
+
+        echo "  Default config ${this_exec_prefix+in $this_exec_prefix }will be used for output"
+
+        if match_field "$this_config" $_delegates ; then
+            _delegates=$(remove_field $this_config $_delegates)
+        else
+            echo "  though it is not installed in: $prefix"
+            if [ -n "$_best_delegate" ] && [ "x$_best_delegate" != "x$this_config" ]; then
+                echo
+                echo "  Best alternate in $prefix:"
+                echo "    $_best_delegate"
+            fi
+        fi
+
+    elif [ -n "$_best_delegate" ]; then
+
+        echo "  Specification best match: $_best_delegate"
+
+    elif [ -n "_delegates" ]; then
+
+        cat <<-EOF
+	  No config found to match: $config_spec
+	  in $wxconfdir
+
+	  Please install the desired library build, or specify a different
+	  prefix where it may be found.  If the library is not installed
+	  you may call its wx-config directly by specifying its full path.
+
+	EOF
+        exit 1
+
+    fi
+
+    _delegates=$(remove_field $_best_delegate $_delegates)
+
+    if [ -n "$_delegates" ]; then
+        echo
+        echo "  Alternate matches:"
+        for d in $_delegates; do
+            echo "    $d"
+        done
+    fi
+    if [ -n "$_remains_in_prefix" ]; then
+        echo
+        echo "  Also available in $prefix:"
+        for d in $_remains_in_prefix; do
+            echo "    $d"
+        done
+    fi
+
+    echo
+    exit
+fi
+
+
+
+# ... so if that wasn't what they wanted, then we need to know for
+# certain, can this config satisfy the user specification?
+# --------------------------------------------------------------
+
 if ! user_mask_fits "$this_config" ; then
 
     # No?  Then lets see if it knows anybody who can.
@@ -619,7 +637,7 @@ if ! user_mask_fits "$this_config" ; then
         decho
         decho " to: $0"
         decho " ($this_config) cannot satisfy:"
-        decho " $configmask"
+        decho " $config_spec"
         decho " Someone has been terribly careless."
         decho
         exit 1
@@ -639,7 +657,7 @@ if ! user_mask_fits "$this_config" ; then
     if [ $_numdelegates -eq 0 ]; then
         cat 1>&2 <<-EOF
 
-	  No config found to match: $configmask
+	  No config found to match: $config_spec
 	  in $wxconfdir
 	  Please install the desired library build, or use --list
 	  without any feature specifiers to see all available configs.
