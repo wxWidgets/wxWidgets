@@ -704,15 +704,16 @@ preinstall: $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(top_builddir)/wx-config
 	$(INSTALL_DATA) $(top_builddir)/include/wx/@TOOLKIT_DIR@/setup.h $(libdir)/wx/include/wx/@TOOLKIT_DIR@/setup.h
 	
 	$(INSTALL) -d $(includedir)/wx
-    @if test "$USE_GUI" = 1; then $(INSTALL) -d $(includedir)/wx/html; fi
-	@if test "$USE_GUI" = 1; then $(INSTALL) -d $(includedir)/wx/protocol; fi
-	@if test "$USE_GUI" = 1; then $(INSTALL) -d $(includedir)/wx/unix; fi
-	@if test "$USE_GUI" = 1; then $(INSTALL) -d $(includedir)/wx/generic; fi
+	@if test "$(USE_GUI)" = 1; then $(INSTALL) -d $(includedir)/wx/@TOOLKIT_DIR@; fi
+	@if test "$(USE_GUI)" = 1; then $(INSTALL) -d $(includedir)/wx/html; fi
+	@if test "$(USE_GUI)" = 1; then $(INSTALL) -d $(includedir)/wx/protocol; fi
+	@if test "$(USE_GUI)" = 1; then $(INSTALL) -d $(includedir)/wx/unix; fi
+	@if test "$(USE_GUI)" = 1; then $(INSTALL) -d $(includedir)/wx/generic; fi
 	@list='$(HEADERS)'; for p in $$list; do \
 	  $(INSTALL_DATA) $(top_srcdir)/include/wx/$$p $(includedir)/wx/$$p; \
 	  echo "$(INSTALL_DATA) $(top_srcdir)/include/wx/$$p $(includedir)/wx/$$p"; \
 	done
-	
+
 write_message:
 	@echo " "
 	@echo " The installation of wxWindows is finished.  On certain"
