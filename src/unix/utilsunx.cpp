@@ -149,12 +149,12 @@ void wxSleep(int nSecs)
     sleep(nSecs);
 }
 
-void wxUsleep(unsigned long milliseconds)
+void wxMicroSleep(unsigned long microseconds)
 {
 #if defined(HAVE_NANOSLEEP)
     timespec tmReq;
-    tmReq.tv_sec = (time_t)(milliseconds / 1000);
-    tmReq.tv_nsec = (milliseconds % 1000) * 1000 * 1000;
+    tmReq.tv_sec = (time_t)(microseconds / 1000000);
+    tmReq.tv_nsec = (microseconds % 1000000) * 1000;
 
     // we're not interested in remaining time nor in return value
     (void)nanosleep(&tmReq, (timespec *)NULL);
@@ -167,13 +167,18 @@ void wxUsleep(unsigned long milliseconds)
         #error "usleep() cannot be used in MT programs under Solaris."
     #endif // Sun
 
-    usleep(milliseconds * 1000); // usleep(3) wants microseconds
+    usleep(microseconds);
 #elif defined(HAVE_SLEEP)
     // under BeOS sleep() takes seconds (what about other platforms, if any?)
-    sleep(milliseconds * 1000);
+    sleep(microseconds * 1000000);
 #else // !sleep function
-    #error "usleep() or nanosleep() function required for wxUsleep"
+    #error "usleep() or nanosleep() function required for wxMicroSleep"
 #endif // sleep function
+}
+
+void wxMilliSleep(unsigned long milliseconds)
+{
+    wxMicroSleep(milliseconds*1000);
 }
 
 // ----------------------------------------------------------------------------
