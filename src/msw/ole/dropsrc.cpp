@@ -27,6 +27,9 @@
 #if defined(__BORLANDC__)
   #pragma hdrstop
 #endif
+#ifndef WX_PRECOMP
+#include "wx/window.h"
+#endif
 
 #include "wx/setup.h"
 
@@ -37,6 +40,9 @@
 #include "wx/msw/ole/dropsrc.h"
 
 #include <windows.h>
+#ifdef wxUSE_NORLANDER_HEADERS
+#include <ole2.h>
+#endif
 
 #ifndef __WIN32__
   #include <ole2.h>

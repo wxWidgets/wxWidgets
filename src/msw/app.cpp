@@ -69,11 +69,13 @@
 #endif
 
 // OLE is used for drag-and-drop, clipboard, OLE Automation...
+#ifndef wxUSE_NORLANDER_HEADERS
 #if defined(__GNUWIN32__) || defined(__SC__) || defined(__SALFORDC__)
     #undef wxUSE_OLE
 
     #define  wxUSE_OLE 0
 #endif // broken compilers
+#endif
 
 #if wxUSE_OLE
     #include <ole2.h>
@@ -218,7 +220,6 @@ bool wxApp::Initialize()
     while (!SetMessageQueue(iMsg) && (iMsg -= 8))
         ;
 #endif // Win16
-
     // we need to initialize OLE library
     if ( FAILED(::OleInitialize(NULL)) )
         wxLogError(_("Cannot initialize OLE"));

@@ -27,18 +27,23 @@
 #if defined(__BORLANDC__)
   #pragma hdrstop
 #endif
-
+#ifndef WX_PRECOMP
+#include "wx/intl.h"
+#endif
 #include "wx/defs.h"
 
-#if defined(__WIN32__) && !defined(__GNUWIN32__)
+#if defined(__WIN32__) && !defined(__GNUWIN32__) || defined(wxUSE_NORLANDER_HEADERS)
 
 #include "wx/log.h"
 #include "wx/dataobj.h"
 
 #include <windows.h>
+#ifdef wxUSE_NORLANDER_HEADERS
+  #include <ole2.h>
+#endif
 #include <oleauto.h>
 
-#ifndef __WIN32__
+#ifndef __WIN32__  
   #include <ole2.h>
   #include <olestd.h>
 #endif

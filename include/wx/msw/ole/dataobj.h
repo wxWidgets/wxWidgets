@@ -12,6 +12,7 @@
 #ifndef   _WX_OLEDATAOBJ_H
 #define   _WX_OLEDATAOBJ_H
 
+#include "wx/bitmap.h"
 // ----------------------------------------------------------------------------
 // wxDataFormat identifies the single format of data
 // ----------------------------------------------------------------------------
@@ -148,7 +149,7 @@ class WXDLLEXPORT wxBitmapDataObject : public wxDataObject
 {
 public:
   // ctors
-  wxBitmapDataObject() {};
+  wxBitmapDataObject() {}
   wxBitmapDataObject(const wxBitmap& bitmap): m_bitmap(bitmap) {}
   void SetBitmap(const wxBitmap& bitmap) { m_bitmap = bitmap; }
   wxBitmap GetBitmap() const { return m_bitmap; }

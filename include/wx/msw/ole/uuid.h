@@ -17,7 +17,7 @@
 #ifdef __GNUG__
 #pragma interface "uuid.h"
 #endif
-
+#include "wx/wxchar.h"
 // ------------------------------------------------------------------
 // UUID (Universally Unique IDentifier) definition
 // ------------------------------------------------------------------
