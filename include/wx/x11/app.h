@@ -72,8 +72,6 @@ public:
     // Returns TRUE if more idle time is requested.
     bool SendIdleEvents(wxWindow* win);
     
-    // Motif implementation.
-    
     // Processes an X event.
     virtual void ProcessXEvent(WXEvent* event);
     
@@ -97,9 +95,7 @@ public:
     void DeletePendingObjects();
     bool ProcessIdle();
     
-    // Motif-specific
-    WXAppContext   GetAppContext() const { return m_appContext; }
-    WXWidget       GetTopLevelWidget() const { return m_topLevelWidget; }
+    WXWindow       GetTopLevelWidget() const { return m_topLevelWidget; }
     WXColormap     GetMainColormap(WXDisplay* display);
     WXDisplay*     GetInitialDisplay() const { return m_initialDisplay; }
     long           GetMaxRequestSize() const { return m_maxRequestSize; }
@@ -114,9 +110,7 @@ public:
 protected:
     bool                  m_keepGoing;
     
-    // Motif-specific
-    WXAppContext          m_appContext;
-    WXWidget              m_topLevelWidget;
+    WXWindow              m_topLevelWidget;
     WXColormap            m_mainColormap;
     WXDisplay*            m_initialDisplay;
     long                  m_maxRequestSize;
