@@ -100,8 +100,10 @@ MAKEARCHDIR:
     @if not exist $(ARCHINCDIR)\wx\setup.h copy $(MSWINCDIR)\setup.h $(ARCHINCDIR)\wx\setup.h
 
 MAKEWINSOCKLIB:
-      @if not exist $(WINSOCKLIB) implib  /s $(WINSOCKLIB) $(WINDIR)\system32\winsock.dll
-##    implib /system /v /suffix /Ic:\wx\dm\include\win32 $(WINSOCKLIB) $(WINDIR)\system32\winsock.dll
+      if not exist $(WINSOCKLIB) implib  /s $(WINSOCKLIB) $(WINDIR)\system32\wsock32.dll
+##    implib /system /v /suffix /Ic:\wx\dm\include\win32 $(WINSOCKLIB) $(WINDIR)\system32\wsock32.dll
+##  bug here on win98 no system32 ??
+##  implib doesn't work anyway
 ##    implib  /s $(WINSOCKLIB) $(WINDIR)\system32\winsock.dll
 ##@if not exist $(WINSOCKLIB)  
 
@@ -109,12 +111,15 @@ $(LIBTARGET): $(OBJECTS)
 	-del $(LIBTARGET)
 	*lib /PAGESIZE:512 $(LIBTARGET) y $(OBJECTS), nul;
 
-clean: clean_zlib clean_png clean_jpeg clean_tiff clean_regex
+clean: clean_msw clean_zlib clean_png clean_jpeg clean_tiff clean_regex
+
+clean_msw:
 	-del $(COMMDIR)\*.obj
 	-del $(MSWDIR)\*.obj
 	-del $(GENDIR)\*.obj
     -del $(HTMLDIR)\*.obj
 	-del *.obj
+    -del ole\*.obj
     -del $(LIBTARGET)
 
 png:   

@@ -320,7 +320,7 @@ MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\window.obj
 
 # Add $(NONESSENTIALOBJS) if wanting generic dialogs, PostScript etc.
-OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) $(HTMLOBJS) 
+OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) $(HTMLOBJS) $(WINSOCKLIB)
 
 all: MAKEARCHDIR MAKEWINSOCKLIB $(LIBTARGET) zlib png jpeg tiff regex
 
@@ -331,8 +331,11 @@ MAKEARCHDIR:
     @if not exist $(ARCHINCDIR)\wx\setup.h copy $(MSWINCDIR)\setup.h $(ARCHINCDIR)\wx\setup.h
 
 MAKEWINSOCKLIB:
-      implib  /s $(WINSOCKLIB) $(WINDIR)\system32\wsock32.dll
-###      implib /system /v /suffix /Ic:\wx\dm\include\win32\ $(WINSOCKLIB) $(WINDIR)\system32\wsock32.dll
+      if not exist $(WINSOCKLIB) implib  /s $(WINSOCKLIB) $(WINDIR)\system32\wsock32.dll
+##    implib /system /v /suffix /Ic:\wx\dm\include\win32 $(WINSOCKLIB) $(WINDIR)\system32\wsock32.dll
+##  bug here on win98 no system32 ??
+##  implib doesn't work anyway
+##    implib  /s $(WINSOCKLIB) $(WINDIR)\system32\winsock.dll
 ##@if not exist $(WINSOCKLIB)  
 
 $(LIBTARGET): $(OBJECTS)
@@ -347,6 +350,7 @@ clean_msw:
 	-del $(GENDIR)\*.obj
     -del $(HTMLDIR)\*.obj
 	-del *.obj
+    -del ole\*.obj
     -del $(LIBTARGET)
 
 png:   
