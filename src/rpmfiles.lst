@@ -9,8 +9,6 @@
 /usr/include/wx/datetime.inl
 /usr/include/wx/datstrm.h
 /usr/include/wx/db.h
-/usr/include/wx/dbgrid.h
-/usr/include/wx/dbkeyg.h
 /usr/include/wx/dbtable.h
 /usr/include/wx/dde.h
 /usr/include/wx/debug.h
@@ -28,7 +26,6 @@
 /usr/include/wx/filesys.h
 /usr/include/wx/fontenc.h
 /usr/include/wx/fontmap.h
-/usr/include/wx/fontutil.h
 /usr/include/wx/fs_inet.h
 /usr/include/wx/fs_mem.h
 /usr/include/wx/fs_zip.h
@@ -75,7 +72,8 @@
 /usr/include/wx/wxprec.h
 /usr/include/wx/zipstrm.h
 /usr/include/wx/zstream.h
-/usr/include/wx/unix/fontutil.h
+/usr/include/wx/unix/execute.h
+/usr/include/wx/unix/gsockunx.h
 /usr/include/wx/unix/mimetype.h
 /usr/include/wx/protocol/file.h
 /usr/include/wx/protocol/ftp.h
