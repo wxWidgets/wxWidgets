@@ -536,10 +536,10 @@ wxDateTime::Tm::Tm(const struct tm& tm, const TimeZone& tz)
               : m_tz(tz)
 {
     msec = 0;
-    sec = tm.tm_sec;
-    min = tm.tm_min;
-    hour = tm.tm_hour;
-    mday = tm.tm_mday;
+    sec = (wxDateTime::wxDateTime_t)tm.tm_sec;
+    min = (wxDateTime::wxDateTime_t)tm.tm_min;
+    hour = (wxDateTime::wxDateTime_t)tm.tm_hour;
+    mday = (wxDateTime::wxDateTime_t)tm.tm_mday;
     mon = (wxDateTime::Month)tm.tm_mon;
     year = 1900 + tm.tm_year;
     wday = tm.tm_wday;
@@ -597,7 +597,7 @@ void wxDateTime::Tm::AddDays(int dayDiff)
         dayDiff += GetNumOfDaysInMonth(year, mon);
     }
 
-    mday += dayDiff;
+    mday = (wxDateTime::wxDateTime_t)( mday + dayDiff );
     while ( mday > GetNumOfDaysInMonth(year, mon) )
     {
         mday -= GetNumOfDaysInMonth(year, mon);
@@ -1873,7 +1873,7 @@ bool wxDateTime::SetToWeekDay(WeekDay weekday,
 static inline
 wxDateTime::wxDateTime_t GetDayOfYearFromTm(const wxDateTime::Tm& tm)
 {
-    return gs_cumulatedDays[wxDateTime::IsLeapYear(tm.year)][tm.mon] + tm.mday;
+    return (wxDateTime::wxDateTime_t)(gs_cumulatedDays[wxDateTime::IsLeapYear(tm.year)][tm.mon] + tm.mday);
 }
 
 wxDateTime::wxDateTime_t wxDateTime::GetDayOfYear(const TimeZone& tz) const
@@ -1941,7 +1941,7 @@ wxDateTime::GetWeekOfYear(wxDateTime::WeekFlags flags, const TimeZone& tz) const
         }
     }
 
-    return week;
+    return (wxDateTime::wxDateTime_t)week;
 }
 
 wxDateTime::wxDateTime_t wxDateTime::GetWeekOfMonth(wxDateTime::WeekFlags flags,
@@ -2467,11 +2467,11 @@ const wxChar *wxDateTime::ParseRfc822Date(const wxChar* date)
         return (wxChar *)NULL;
     }
 
-    wxDateTime_t day = *p++ - _T('0');
+    wxDateTime_t day = (wxDateTime_t)(*p++ - _T('0'));
     if ( wxIsdigit(*p) )
     {
         day *= 10;
-        day += *p++ - _T('0');
+        day = (wxDateTime_t)(day + (*p++ - _T('0')));
     }
 
     if ( *p++ != _T(' ') )
@@ -3392,19 +3392,23 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
     {
         wxString date = wxGetTranslation(literalDates[n].str);
         size_t len = date.length();
-        if ( wxStrlen(p) >= len && (wxString(p, len).CmpNoCase(date) == 0) )
+        if ( wxStrlen(p) >= len )
         {
-            // nothing can follow this, so stop here
-            p += len;
-
-            int dayDiffFromToday = literalDates[n].dayDiffFromToday;
-            *this = Today();
-            if ( dayDiffFromToday )
+            wxString str(p, len);
+            if ( str.CmpNoCase(date) == 0 )
             {
-                *this += wxDateSpan::Days(dayDiffFromToday);
-            }
+                // nothing can follow this, so stop here
+                p += len;
 
-            return p;
+                int dayDiffFromToday = literalDates[n].dayDiffFromToday;
+                *this = Today();
+                if ( dayDiffFromToday )
+                {
+                    *this += wxDateSpan::Days(dayDiffFromToday);
+                }
+
+                return p;
+            }
         }
     }
 

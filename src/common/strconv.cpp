@@ -1190,8 +1190,8 @@ public:
         // it doesn't work with CJK encodings (which we test for rather roughly
         // here...) nor with UTF-7/8 nor, of course, with Windows versions not
         // supporting it
-        BOOL usedDef wxDUMMY_INITIALIZE(false),
-             *pUsedDef;
+        BOOL usedDef wxDUMMY_INITIALIZE(false);
+        BOOL *pUsedDef;
         int flags;
         if ( CanUseNoBestFit() && m_CodePage < 50000 )
         {
@@ -1769,7 +1769,7 @@ size_t wxCSConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
         {
             if (psz[c] > 0xFF)
                 return (size_t)-1;
-            buf[c] = psz[c];
+            buf[c] = (char)psz[c];
         }
     }
     else

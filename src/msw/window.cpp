@@ -4134,7 +4134,8 @@ bool wxWindowMSW::HandleMaximize()
 
 bool wxWindowMSW::HandleMove(int x, int y)
 {
-    wxMoveEvent event(wxPoint(x, y), m_windowId);
+    wxPoint point(x,y);
+    wxMoveEvent event(point, m_windowId);
     event.SetEventObject(this);
 
     return GetEventHandler()->ProcessEvent(event);
@@ -4708,7 +4709,7 @@ int wxWindowMSW::HandleMenuChar(int chAccel, WXLPARAM lParam)
                         // FIXME-UNICODE: this comparison doesn't risk to work
                         // for non ASCII accelerator characters I'm afraid, but
                         // what can we do?
-                        if ( wxToupper(*p) == (wchar_t)chAccel )
+                        if ( (wchar_t)wxToupper(*p) == (wchar_t)chAccel )
                         {
                             return i;
                         }

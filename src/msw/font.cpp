@@ -165,10 +165,10 @@ public:
         return m_nativeFontInfoOk ? m_nativeFontInfo.GetPixelSize()
                                   : m_pixelSize;
     }
-    
+
     bool IsUsingSizeInPixels() const
     {
-        return m_nativeFontInfoOk ? TRUE : m_sizeUsingPixels;
+        return m_nativeFontInfoOk ? true : m_sizeUsingPixels;
     }
 
     int GetFamily() const
@@ -1041,8 +1041,8 @@ bool wxFont::IsFixedWidth() const
     {
         // the two low-order bits specify the pitch of the font, the rest is
         // family
-        BYTE pitch = M_FONTDATA->GetNativeFontInfo().
-                        lf.lfPitchAndFamily & PITCH_MASK;
+        BYTE pitch =
+            (BYTE)(M_FONTDATA->GetNativeFontInfo().lf.lfPitchAndFamily & PITCH_MASK);
 
         return pitch == FIXED_PITCH;
     }

@@ -69,7 +69,7 @@ static inline WORD GetNumberOfColours(WORD bitsPerPixel)
 {
     // only 1, 4 and 8bpp bitmaps use palettes (well, they could be used with
     // 24bpp ones too but we don't support this as I think it's quite uncommon)
-    return bitsPerPixel <= 8 ? 1 << bitsPerPixel : 0;
+    return (WORD)(bitsPerPixel <= 8 ? 1 << bitsPerPixel : 0);
 }
 
 // wrapper around ::GetObject() for DIB sections
@@ -674,9 +674,9 @@ bool wxDIB::Create(const wxImage& image)
                 // RGB order is reversed, and we need to premultiply
                 // all channels by alpha value for use with ::AlphaBlend.
                 const unsigned char a = *alpha++;
-                *dst++ = (src[2] * a + 127) / 255;
-                *dst++ = (src[1] * a + 127) / 255;
-                *dst++ = (src[0] * a + 127) / 255;
+                *dst++ = (unsigned char)((src[2] * a + 127) / 255);
+                *dst++ = (unsigned char)((src[1] * a + 127) / 255);
+                *dst++ = (unsigned char)((src[0] * a + 127) / 255);
                 *dst++ = a;
                 src += 3;
             }

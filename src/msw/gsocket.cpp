@@ -1528,24 +1528,15 @@ GSocketError _GAddress_Init_UNIX(GAddress *address)
   return GSOCK_INVADDR;
 }
 
-GSocketError GAddress_UNIX_SetPath(GAddress *address, const char *path)
+GSocketError GAddress_UNIX_SetPath(GAddress *address, const char *WXUNUSED(path))
 {
-#if defined(__BORLANDC__)
-  /* prevents unused variable message in Borland */
-  (void)path;
-#endif
   assert (address != NULL);
   address->m_error = GSOCK_INVADDR;
   return GSOCK_INVADDR;
 }
 
-GSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf)
+GSocketError GAddress_UNIX_GetPath(GAddress *address, char *WXUNUSED(path), size_t WXUNUSED(sbuf))
 {
-#if defined(__BORLANDC__)
-  /* prevents unused variable message in Borland */
-  (void)path;
-  (void)sbuf;
-#endif
   assert (address != NULL);
   address->m_error = GSOCK_INVADDR;
   return GSOCK_INVADDR;

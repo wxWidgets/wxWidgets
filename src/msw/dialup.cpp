@@ -460,7 +460,7 @@ wxString wxDialUpManagerMSW::GetErrorString(DWORD error)
 
         case 0:
             // we want the error message to start from a lower case letter
-            buffer[0] = wxTolower(buffer[0]);
+            buffer[0] = (wxChar)wxTolower(buffer[0]);
 
             return wxString(buffer);
     }

@@ -114,7 +114,7 @@ wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]
 
         bool isVirtual;
 
-        WORD key = wxCharCodeWXToMSW(entries[i].GetKeyCode(), &isVirtual);
+        WORD key = (WORD)wxCharCodeWXToMSW(entries[i].GetKeyCode(), &isVirtual);
         if (isVirtual)
             fVirt |= FVIRTKEY;
 

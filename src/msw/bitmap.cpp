@@ -426,7 +426,7 @@ wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
                 for ( int bits = 0; bits < 8; bits++)
                 {
                     reversed <<= 1;
-                    reversed |= (val & 0x01);
+                    reversed |= (unsigned char)(val & 0x01);
                     val >>= 1;
                 }
                 *dst++ = reversed;
@@ -1031,7 +1031,7 @@ wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
 #ifndef __WXMICROWIN__
     // handle alpha channel, if any
     if (HasAlpha())
-	ret.UseAlpha();
+    ret.UseAlpha();
 
     // copy bitmap data
     MemoryHDC dcSrc,

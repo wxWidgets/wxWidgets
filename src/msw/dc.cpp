@@ -2461,6 +2461,7 @@ static bool AlphaBlt(HDC hdcDst,
 #else // !wxHAVE_RAW_BITMAP
     // no wxAlphaBlend() neither, fall back to using simple BitBlt() (we lose
     // alpha but at least something will be shown like this)
+    wxUnusedVar(bmp);
     return false;
 #endif // wxHAVE_RAW_BITMAP
 }
