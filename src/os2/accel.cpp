@@ -42,59 +42,101 @@ protected:
 
 wxAcceleratorRefData::wxAcceleratorRefData()
 {
-    // TODO
-/*
-    HACCEL      m_hAccel;
-*/
-}
+    m_ok = FALSE;
+    m_hAccel = 0;
+} // end of wxAcceleratorRefData::wxAcceleratorRefData
 
 wxAcceleratorRefData::~wxAcceleratorRefData()
 {
-/*
-  if (m_hAccel)
-  {
-    DestroyAcceleratorTable((HACCEL) m_hAccel);
-  }
-  m_hAccel = 0 ;
-*/
-}
+    if (m_hAccel)
+    {
+        WinDestroyAccelTable((HACCEL) m_hAccel);
+    }
+    m_hAccel = 0 ;
+} // end of wxAcceleratorRefData::~wxAcceleratorRefData
 
 wxAcceleratorTable::wxAcceleratorTable()
 {
-  m_refData = NULL;
-}
+    m_refData = NULL;
+} // end of wxAcceleratorTable::wxAcceleratorTable
 
 wxAcceleratorTable::~wxAcceleratorTable()
 {
-}
+} // end of wxAcceleratorTable::~wxAcceleratorTable
 
 // Load from .rc resource
-wxAcceleratorTable::wxAcceleratorTable(const wxString& resource)
+wxAcceleratorTable::wxAcceleratorTable(
+  const wxString&                  rResource
+)
 {
+    HACCEL                          hAccel;
+    ULONG                           ulId;
+
     m_refData = new wxAcceleratorRefData;
 
-/* TODO: load acelerator from resource, if appropriate for your platform
+    ulId = atol((char*)rResource.c_str());
+    hAccel = ::WinLoadAccelTable( vHabmain
+                                 ,NULL // resources always in .exe
+                                 ,(ULONG)ulId
+                                );
     M_ACCELDATA->m_hAccel = hAccel;
     M_ACCELDATA->m_ok = (hAccel != 0);
-*/
 }
 
-extern int wxCharCodeWXToOS2(int id, bool *isVirtual);
+extern int wxCharCodeWXToOS2(
+  int                               nId
+, bool*                             pbIsVirtual
+);
 
 // Create from an array
-wxAcceleratorTable::wxAcceleratorTable(int n, wxAcceleratorEntry entries[])
+wxAcceleratorTable::wxAcceleratorTable(
+  int                               n
+, wxAcceleratorEntry                vaEntries[]
+)
 {
-    m_refData = new wxAcceleratorRefData;
+    int                             nAccelLength = ((sizeof(ACCEL) * n) + sizeof(ACCELTABLE));
+    PACCELTABLE                     pArr;
+    int                             i;
 
-/* TODO: create table from entries
- */
-}
+    m_refData = new wxAcceleratorRefData;
+    pArr = (PACCELTABLE) new int[nAccelLength];
+
+    for (i = 0; i < n; i++)
+    {
+        USHORT                      uVirt = 0;
+
+        if (vaEntries[i].GetFlags() & wxACCEL_ALT)
+            uVirt |= AF_ALT;
+        if (vaEntries[i].GetFlags() & wxACCEL_SHIFT)
+            uVirt |= AF_SHIFT;
+        if (vaEntries[i].GetFlags() & wxACCEL_CTRL)
+            uVirt |= AF_CONTROL;
+
+        bool                        bIsVirtual;
+        USHORT                      uKey = wxCharCodeWXToOS2( vaEntries[i].GetKeyCode()
+                                                             ,&bIsVirtual
+                                                            );
+        uVirt |= AF_VIRTUALKEY;
+
+        USHORT                      uCmd = vaEntries[i].GetCommand();
+
+        pArr->aaccel[i].fs  = uVirt;
+        pArr->aaccel[i].key = uKey;
+        pArr->aaccel[i].cmd = uCmd;
+    }
+    pArr->codepage = 437; // default to english Fix???
+    pArr->cAccel = (USHORT)n;
+    M_ACCELDATA->m_hAccel = ::WinCreateAccelTable( vHabmain
+                                                  ,pArr
+                                                 );
+    delete[] pArr;
+    M_ACCELDATA->m_ok = (M_ACCELDATA->m_hAccel != 0);
+} // end of wxAcceleratorTable::wxAcceleratorTable
 
 bool wxAcceleratorTable::Ok() const
 {
-    // TODO
-    return FALSE;
-}
+    return(M_ACCELDATA && (M_ACCELDATA->m_ok));
+} // end of wxAcceleratorTable::Ok
 
 void wxAcceleratorTable::SetHACCEL(WXHACCEL hAccel)
 {
@@ -111,14 +153,17 @@ WXHACCEL wxAcceleratorTable::GetHACCEL() const
     return (WXHACCEL) M_ACCELDATA->m_hAccel;
 }
 
-bool wxAcceleratorTable::Translate(wxWindow *window, WXMSG *wxmsg) const
+bool wxAcceleratorTable::Translate(
+  wxWindow*                         pWindow
+, WXMSG*                            pWxmsg
+) const
 {
-    // TODO:
-/*
-    MSG *msg = (MSG *)wxmsg;
+    PQMSG                           pMsg = (PQMSG)pWxmsg;
 
-    return Ok() && ::TranslateAccelerator(GetHwndOf(window), GetHaccel(), msg);
-*/
-    return FALSE;
-}
+    return Ok() && ::WinTranslateAccel( vHabmain
+                                       ,GetHwndOf(pWindow)
+                                       ,GetHaccel()
+                                       ,pMsg
+                                       );
+} // end of wxAcceleratorTable::Translate
 

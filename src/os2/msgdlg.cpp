@@ -35,69 +35,105 @@
 
 IMPLEMENT_CLASS(wxMessageDialog, wxDialog)
 
-wxMessageDialog::wxMessageDialog(wxWindow *parent, const wxString& message, const wxString& caption,
-        long style, const wxPoint& pos)
+wxMessageDialog::wxMessageDialog(
+  wxWindow*                         pParent
+, const wxString&                   rsMessage
+, const wxString&                   rsCaption
+, long                              lStyle
+, const wxPoint&                    pPos
+)
 {
-    m_caption = caption;
-    m_message = message;
-    m_dialogStyle = style;
-    m_parent = parent;
-}
+    m_sCaption     = rsCaption;
+    m_sMessage     = rsMessage;
+    m_lDialogStyle = lStyle;
+    m_pParent      = NULL; // pParent;
+} // end of wxMessageDialog::wxMessageDialog
 
 int wxMessageDialog::ShowModal()
 {
-    HWND hWnd = 0;
-    if (m_parent) hWnd = (HWND) m_parent->GetHWND();
-    unsigned int msStyle = MB_OK;
-    if (m_dialogStyle & wxYES_NO)
-    {
-        if (m_dialogStyle & wxCANCEL)
-            msStyle = MB_YESNOCANCEL;
-        else
-            msStyle = MB_YESNO;
+    HWND                            hWnd = 0;
+    ULONG                           ulStyle = MB_OK;
+    int                             nAns = wxOK;
 
-        if (m_dialogStyle & wxNO_DEFAULT)
-            msStyle |= MB_DEFBUTTON2;
+    if (!wxTheApp->GetTopWindow())
+    {
+        //
+        // when the message box is shown from wxApp::OnInit() (i.e. before the
+        // message loop is entered), this must be done or the next message box
+        // will never be shown - just try putting 2 calls to wxMessageBox() in
+        // OnInit() to see it
+        //
+        while (wxTheApp->Pending())
+            wxTheApp->Dispatch();
     }
 
-    if (m_dialogStyle & wxOK)
-    {
-        if (m_dialogStyle & wxCANCEL)
-            msStyle = MB_OKCANCEL;
-        else
-            msStyle = MB_OK;
-    }
-    if (m_dialogStyle & wxICON_EXCLAMATION)
-        msStyle |= MB_ICONEXCLAMATION;
-    else if (m_dialogStyle & wxICON_HAND)
-        msStyle |= MB_ICONHAND;
-    else if (m_dialogStyle & wxICON_INFORMATION)
-        msStyle |= MB_INFORMATION;
-    else if (m_dialogStyle & wxICON_QUESTION)
-        msStyle |= MB_ICONQUESTION;
-
-    if (hWnd)
-        msStyle |= MB_APPLMODAL;
+    if (m_pParent)
+        hWnd = (HWND) m_pParent->GetHWND();
     else
-        msStyle |= MB_SYSTEMMODAL;
+        hWnd = HWND_DESKTOP;
+    if (m_lDialogStyle & wxYES_NO)
+    {
+        if (m_lDialogStyle & wxCANCEL)
+            ulStyle = MB_YESNOCANCEL;
+        else
+            ulStyle = MB_YESNO;
 
-	int msAns = WinMessageBox(HWND_DESKTOP, hWnd, m_message.c_str(), m_caption.c_str(), 0, msStyle | MB_MOVEABLE);
-    int ans = wxOK;
-    switch (msAns)
+        if (m_lDialogStyle & wxNO_DEFAULT)
+            ulStyle |= MB_DEFBUTTON2;
+    }
+
+    if (m_lDialogStyle & wxOK)
+    {
+        if (m_lDialogStyle & wxCANCEL)
+            ulStyle = MB_OKCANCEL;
+        else
+            ulStyle = MB_OK;
+    }
+    if (m_lDialogStyle & wxICON_EXCLAMATION)
+        ulStyle |= MB_ICONEXCLAMATION;
+    else if (m_lDialogStyle & wxICON_HAND)
+        ulStyle |= MB_ICONHAND;
+    else if (m_lDialogStyle & wxICON_INFORMATION)
+        ulStyle |= MB_ICONEXCLAMATION;
+    else if (m_lDialogStyle & wxICON_QUESTION)
+        ulStyle |= MB_ICONQUESTION;
+
+    if (hWnd != HWND_DESKTOP)
+        ulStyle |= MB_APPLMODAL;
+    else
+        ulStyle |= MB_SYSTEMMODAL;
+
+    //
+    // This little line of code is get message boxes under OS/2 to
+    // behve like the other ports.  In OS/2 if the parent is a window
+    // it displays, clipped, in the window.  This centers it on the
+    // desktop, like the other ports but still allows control over modality
+    //
+    hWnd = HWND_DESKTOP;
+
+    ULONG                           ulAns = ::WinMessageBox( hWnd
+                                                            ,hWnd
+                                                            ,(PSZ)m_sMessage.c_str()
+                                                            ,(PSZ)m_sCaption.c_str()
+                                                            ,0L
+                                                            ,ulStyle);
+    switch (ulAns)
     {
         case MBID_CANCEL:
-            ans = wxID_CANCEL;
+            nAns = wxID_CANCEL;
             break;
         case MBID_OK:
-            ans = wxID_OK;
+            nAns = wxID_OK;
             break;
         case MBID_YES:
-            ans = wxID_YES;
+            nAns = wxID_YES;
             break;
         case MBID_NO:
-            ans = wxID_NO;
+            nAns = wxID_NO;
             break;
+        default:
+           nAns = wxID_CANCEL;
     }
-    return ans;
-}
+    return nAns;
+} // end of wxMessageDialog::ShowModal
 

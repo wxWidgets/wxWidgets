@@ -1813,7 +1813,7 @@ MRESULT EXPENTRY wxWndProc(
     {
         if (pWnd)
             rc = pWnd->OS2WindowProc(ulMsg, wParam, lParam);
-        if(!rc)
+        if (!rc)
             rc = ::WinDefWindowProc(hWnd, ulMsg, wParam, lParam);
     }
     return rc;
