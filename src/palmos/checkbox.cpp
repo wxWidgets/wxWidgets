@@ -117,11 +117,12 @@ wxSize wxCheckBox::DoGetBestSize() const
 
 void wxCheckBox::SetValue(bool val)
 {
+    SetBoolValue(val);
 }
 
 bool wxCheckBox::GetValue() const
 {
-    return false;
+    return GetBoolValue();
 }
 
 void wxCheckBox::Command(wxCommandEvent& event)

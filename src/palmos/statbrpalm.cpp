@@ -63,10 +63,9 @@ bool wxStatusBarPalm::Create(wxWindow *parent,
 
     SetName(name);
     SetParent(parent);
+    SetId( id == wxID_ANY ? NewControlId() : id );
 
     parent->AddChild(this);
-
-    m_windowId = id == wxID_ANY ? NewControlId() : id;
 
     SetFieldsCount(1);
     SubclassWin(m_hWnd);

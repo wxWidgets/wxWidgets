@@ -109,21 +109,15 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
            const wxValidator& validator,
            const wxString& name)
 {
-    wxWindow* parentTLW = GetParent();
-    while ( parentTLW && !parentTLW->IsTopLevel() )
-    {
-        parentTLW = parentTLW->GetParent();
-    }
-    wxTopLevelWindowPalm* tlw = wxDynamicCast(parentTLW, wxTopLevelWindowPalm);
-    if(!tlw)
-        return false;
-    FormType* form = tlw->GetForm();
-
     SetParent(parent);
+    SetId( id == wxID_ANY ? NewControlId() : id );
+    FormType* form = GetParentForm();
+    if(form==NULL)
+        return false;
 
     SliderControlType *slider = CtlNewSliderControl (
                                    (void **)&form,
-                                   id,
+                                   GetId(),
                                    feedbackSliderCtl,
                                    NULL,
                                    0,
@@ -138,9 +132,7 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
                                    value
                               );
 
-    m_control = (ControlType*) slider;
-
-    if(m_control==NULL)
+    if(slider==NULL)
         return false;
 
     Show();
@@ -181,6 +173,7 @@ int wxSlider::GetValue() const
 
 void wxSlider::SetValue(int value)
 {
+    SetIntValue(value);
 }
 
 void wxSlider::DoGetSize(int *width, int *height) const

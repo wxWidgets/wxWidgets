@@ -75,8 +75,16 @@ public:
             WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
 protected:
+    // regardless how deeply we are in wxWidgets hierarchy always get correct form
+    FormType* GetParentForm() const;
+
     // choose the default border for this window
     virtual wxBorder GetDefaultBorder() const;
+
+    // on/off-like controls
+    void SetBoolValue(bool value);
+    bool GetBoolValue() const;
+    void SetIntValue(int val);
 
     // return default best size (doesn't really make any sense, override this)
     virtual wxSize DoGetBestSize() const;
@@ -108,6 +116,15 @@ protected:
     ControlType *m_control;
 
 private:
+
+    // Label stores label in case of wxButton, wxCheckBox, wxToggleButton etc.
+    // We must ensure that it persists for as long as it is being displayed
+    // (that is, for as long as the control is displayed or until we call
+    // CtlSetLabel() with a new string), and we must free the string after
+    // it is no longer in use (typically after the form containing the
+    // control is freed).
+    wxString m_label;
+
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxControl)
     DECLARE_EVENT_TABLE()
 };

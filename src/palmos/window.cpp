@@ -2,10 +2,10 @@
 // Name:        src/palmos/windows.cpp
 // Purpose:     wxWindow
 // Author:      William Osborne - minimal working wxPalmOS port
-// Modified by:
+// Modified by: Wlodzimierz ABX Skiba - more than minimal functionality
 // Created:     10/13/04
 // RCS-ID:      $Id$
-// Copyright:   (c) William Osborne
+// Copyright:   (c) William Osborne, Wlodzimierz Skiba
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -83,10 +83,7 @@
 #include "wx/textctrl.h"
 #include "wx/notebook.h"
 #include "wx/listctrl.h"
-
-#include <string.h>
-
-#include "wx/palmos/window.h"
+#include "wx/window.h"
 
 // ---------------------------------------------------------------------------
 // global variables
@@ -95,12 +92,6 @@
 #if wxUSE_MENUS_NATIVE
 wxMenu *wxCurrentPopupMenu = NULL;
 #endif // wxUSE_MENUS_NATIVE
-
-#ifdef __WXWINCE__
-extern       wxChar *wxCanvasClassName;
-#else
-extern const wxChar *wxCanvasClassName;
-#endif
 
 // true if we had already created the std colour map, used by
 // wxGetStdColourMap() and wxWindow::OnSysColourChanged()           (FIXME-MT)
@@ -705,37 +696,6 @@ bool wxWindowPalm::PalmCreate(const wxChar *wclass,
 // ===========================================================================
 // Palm message handlers
 // ===========================================================================
-
-// ---------------------------------------------------------------------------
-// WM_NOTIFY
-// ---------------------------------------------------------------------------
-
-#ifdef __WIN95__
-
-bool wxWindowPalm::HandleNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
-{
-    return false;
-}
-
-#if wxUSE_TOOLTIPS
-
-bool wxWindowPalm::HandleTooltipNotify(WXUINT code,
-                                      WXLPARAM lParam,
-                                      const wxString& ttip)
-{
-    return false;
-}
-
-#endif // wxUSE_TOOLTIPS
-
-bool wxWindowPalm::PalmOnNotify(int WXUNUSED(idCtrl),
-                              WXLPARAM lParam,
-                              WXLPARAM* WXUNUSED(result))
-{
-    return false;
-}
-
-#endif // __WIN95__
 
 // ---------------------------------------------------------------------------
 // end session messages

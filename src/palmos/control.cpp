@@ -96,27 +96,23 @@ bool wxControl::PalmCreateControl(ControlStyleType style,
                                   const wxPoint& pos,
                                   const wxSize& size)
 {
-    wxWindow* parentTLW = parent;
-    while ( parentTLW && !parentTLW->IsTopLevel() )
-    {
-        parentTLW = parentTLW->GetParent();
-    }
-    wxTopLevelWindowPalm* tlw = wxDynamicCast(parentTLW, wxTopLevelWindowPalm);
-    if(!tlw)
-        return false;
-    FormType* form = tlw->GetForm();
-
     SetParent(parent);
+    SetId( id == wxID_ANY ? NewControlId() : id );
+    FormType* form = GetParentForm();
+    if(form==NULL)
+        return false;
+
+    m_label = label;
 
     m_control = CtlNewControl(
                     (void **)&form,
-                    id,
+                    GetId(),
                     style,
-                    label.c_str(),
-                    pos.x,
-                    pos.y,
-                    size.x,
-                    size.y,
+                    m_label.c_str(),
+                    ( pos.x == wxDefaultCoord ) ? winUndefConstraint : pos.x,
+                    ( pos.y == wxDefaultCoord ) ? winUndefConstraint : pos.y,
+                    ( size.x == wxDefaultCoord ) ? winUndefConstraint : size.x,
+                    ( size.y == wxDefaultCoord ) ? winUndefConstraint : size.y,
                     boldFont,
                     0,
                     false
@@ -133,12 +129,52 @@ bool wxControl::PalmCreateControl(ControlStyleType style,
 // various accessors
 // ----------------------------------------------------------------------------
 
+FormType* wxControl::GetParentForm() const
+{
+    wxWindow* parentTLW = GetParent();
+    while ( parentTLW && !parentTLW->IsTopLevel() )
+    {
+        parentTLW = parentTLW->GetParent();
+    }
+    wxTopLevelWindowPalm* tlw = wxDynamicCast(parentTLW, wxTopLevelWindowPalm);
+    if(!tlw)
+        return NULL;
+    return tlw->GetForm();
+}
+
 wxBorder wxControl::GetDefaultBorder() const
 {
     // we want to automatically give controls a sunken style (confusingly,
     // it may not really mean sunken at all as we map it to WS_EX_CLIENTEDGE
     // which is not sunken at all under Windows XP -- rather, just the default)
     return wxBORDER_SUNKEN;
+}
+
+void wxControl::SetIntValue(int val)
+{
+    FormType* form = GetParentForm();
+    if(form==NULL)
+        return;
+    uint16_t index = FrmGetObjectIndex(form, GetId());
+    if(index==frmInvalidObjectId)
+        return;
+    FrmSetControlValue(form, index, val);
+}
+
+void wxControl::SetBoolValue(bool val)
+{
+    SetIntValue(val?1:0);
+}
+
+bool wxControl::GetBoolValue() const
+{
+    FormType* form = GetParentForm();
+    if(form==NULL)
+        return false;
+    uint16_t index = FrmGetObjectIndex(form, GetId());
+    if(index==frmInvalidObjectId)
+        return false;
+    return ( FrmGetControlValue(form, index) == 1 );
 }
 
 wxSize wxControl::DoGetBestSize() const
@@ -170,10 +206,16 @@ bool wxControl::IsShown() const
 
 bool wxControl::Show( bool show )
 {
+    FormType* form = GetParentForm();
+    if(form==NULL)
+        return false;
+    uint16_t index = FrmGetObjectIndex(form,GetId());
+    if(index==frmInvalidObjectId)
+        return false;
     if(show)
-        CtlShowControl(m_control);
+        FrmShowObject(form,index);
     else
-        CtlHideControl(m_control);
+        FrmHideObject(form,index);
     return true;
 }
 
@@ -184,7 +226,10 @@ void wxControl::SetLabel(const wxString& label)
          ( wxDynamicCast(this,wxCheckBox) != NULL ) ||
          ( wxDynamicCast(this,wxToggleButton) != NULL ) )
     {
-        CtlSetLabel(m_control,label);
+        m_label = label;
+        // TODO: as manual states, it crashes here
+        // needs own manipulation on used string pointers
+        // CtlSetLabel(m_control,m_label);
     }
 }
 
@@ -195,7 +240,7 @@ wxString wxControl::GetLabel()
          wxDynamicCast(this,wxCheckBox) ||
          wxDynamicCast(this,wxToggleButton) )
     {
-        return CtlGetLabel(m_control);
+        return m_label;
     }
 
     return wxEmptyString;

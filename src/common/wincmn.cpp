@@ -85,7 +85,9 @@
 // static data
 // ----------------------------------------------------------------------------
 
-#if defined(__WXPM__)
+#if defined(__WXPALMOS__)
+int wxWindowBase::ms_lastControlId = 65535;
+#elif defined(__WXPM__)
 int wxWindowBase::ms_lastControlId = 2000;
 #else
 int wxWindowBase::ms_lastControlId = -200;
@@ -537,7 +539,7 @@ static bool wxHasRealChildren(const wxWindowBase* win)
     return (realChildCount > 0);
 }
 #endif
-    
+
 void wxWindowBase::InvalidateBestSize()
 {
     m_bestSizeCache = wxDefaultSize;
@@ -2693,7 +2695,7 @@ wxAccStatus wxWindowAccessible::GetName(int childId, wxString* name)
 #endif
         title = GetWindow()->GetName();
 
-    if (!title.IsEmpty())
+    if (!title.empty())
     {
         *name = title;
         return wxACC_OK;
@@ -2799,7 +2801,7 @@ wxAccStatus wxWindowAccessible::GetDescription(int WXUNUSED(childId), wxString* 
         return wxACC_FAIL;
 
     wxString ht(GetWindow()->GetHelpText());
-    if (!ht.IsEmpty())
+    if (!ht.empty())
     {
         *description = ht;
         return wxACC_OK;
@@ -2815,7 +2817,7 @@ wxAccStatus wxWindowAccessible::GetHelpText(int WXUNUSED(childId), wxString* hel
         return wxACC_FAIL;
 
     wxString ht(GetWindow()->GetHelpText());
-    if (!ht.IsEmpty())
+    if (!ht.empty())
     {
         *helpText = ht;
         return wxACC_OK;

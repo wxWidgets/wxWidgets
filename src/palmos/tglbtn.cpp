@@ -76,11 +76,12 @@ wxSize wxToggleButton::DoGetBestSize() const
 
 void wxToggleButton::SetValue(bool val)
 {
+    SetBoolValue(val);
 }
 
 bool wxToggleButton::GetValue() const
 {
-    return false;
+    return GetBoolValue();
 }
 
 void wxToggleButton::Command(wxCommandEvent & event)

@@ -98,12 +98,14 @@ bool wxTopLevelWindowPalm::Create(wxWindow *parent,
     if ( parent )
         parent->AddChild(this);
 
-    m_windowId = id == wxID_ANY ? NewControlId() : id;
+    SetId( id == wxID_ANY ? NewControlId() : id );
 
     WinConstraintsType constraints;
     memset(&constraints, 0, sizeof(WinConstraintsType));
+    // position
     constraints.x_pos = ( pos.x == wxDefaultCoord ) ? winUndefConstraint : pos.x;
     constraints.y_pos = ( pos.y == wxDefaultCoord ) ? winUndefConstraint : pos.y;
+    // size
     constraints.x_min = winUndefConstraint;
     constraints.x_max = winMaxConstraint;
     constraints.x_pref = ( size.x == wxDefaultCoord ) ? winUndefConstraint : size.x;
@@ -112,7 +114,7 @@ bool wxTopLevelWindowPalm::Create(wxWindow *parent,
     constraints.y_pref = ( size.y == wxDefaultCoord ) ? winUndefConstraint : size.y;
 
     FrameForm = FrmNewFormWithConstraints(
-                    m_windowId,
+                    GetId(),
                     title.c_str(),
                     winFlagBackBuffer,
                     &constraints,
