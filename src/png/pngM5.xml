@@ -596,16 +596,16 @@
                 <SETTING><NAME>MWMerge_MacOS_copyResources</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>). </VALUE></SETTING>
-                    <SETTING><VALUE>ÍcH</VALUE></SETTING>
-                    <SETTING><VALUE>Íx*</VALUE></SETTING>
+                    <SETTING><VALUE></VALUE></SETTING>
+                    <SETTING><VALUE>6`ø</VALUE></SETTING>
+                    <SETTING><VALUE></VALUE></SETTING>
                 </SETTING>
 
                 <!-- Settings for "Perl Panel" panel -->
                 <SETTING><NAME>Perl_Prefix_Filename</NAME><VALUE></VALUE></SETTING>
 
                 <!-- Settings for "PPC CodeGen" panel -->
-                <SETTING><NAME>MWCodeGen_PPC_structalignment</NAME><VALUE>MC68K</VALUE></SETTING>
+                <SETTING><NAME>MWCodeGen_PPC_structalignment</NAME><VALUE>PPC</VALUE></SETTING>
                 <SETTING><NAME>MWCodeGen_PPC_tracebacktables</NAME><VALUE>None</VALUE></SETTING>
                 <SETTING><NAME>MWCodeGen_PPC_processor</NAME><VALUE>Generic</VALUE></SETTING>
                 <SETTING><NAME>MWCodeGen_PPC_readonlystrings</NAME><VALUE>0</VALUE></SETTING>
@@ -1168,16 +1168,16 @@
                 <SETTING><NAME>MWMerge_MacOS_copyResources</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>). </VALUE></SETTING>
-                    <SETTING><VALUE>ÍcH</VALUE></SETTING>
-                    <SETTING><VALUE>Íx*</VALUE></SETTING>
+                    <SETTING><VALUE></VALUE></SETTING>
+                    <SETTING><VALUE>6`ø</VALUE></SETTING>
+                    <SETTING><VALUE></VALUE></SETTING>
                 </SETTING>
 
                 <!-- Settings for "Perl Panel" panel -->
                 <SETTING><NAME>Perl_Prefix_Filename</NAME><VALUE></VALUE></SETTING>
 
                 <!-- Settings for "PPC CodeGen" panel -->
-                <SETTING><NAME>MWCodeGen_PPC_structalignment</NAME><VALUE>MC68K</VALUE></SETTING>
+                <SETTING><NAME>MWCodeGen_PPC_structalignment</NAME><VALUE>PPC</VALUE></SETTING>
                 <SETTING><NAME>MWCodeGen_PPC_tracebacktables</NAME><VALUE>None</VALUE></SETTING>
                 <SETTING><NAME>MWCodeGen_PPC_processor</NAME><VALUE>Generic</VALUE></SETTING>
                 <SETTING><NAME>MWCodeGen_PPC_readonlystrings</NAME><VALUE>0</VALUE></SETTING>
@@ -1843,16 +1843,16 @@
                 <SETTING><NAME>MWMerge_MacOS_copyResources</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>). </VALUE></SETTING>
-                    <SETTING><VALUE>ÍcH</VALUE></SETTING>
-                    <SETTING><VALUE>Íx*</VALUE></SETTING>
+                    <SETTING><VALUE></VALUE></SETTING>
+                    <SETTING><VALUE>6`ø</VALUE></SETTING>
+                    <SETTING><VALUE></VALUE></SETTING>
                 </SETTING>
 
                 <!-- Settings for "Perl Panel" panel -->
                 <SETTING><NAME>Perl_Prefix_Filename</NAME><VALUE></VALUE></SETTING>
 
                 <!-- Settings for "PPC CodeGen" panel -->
-                <SETTING><NAME>MWCodeGen_PPC_structalignment</NAME><VALUE>MC68K</VALUE></SETTING>
+                <SETTING><NAME>MWCodeGen_PPC_structalignment</NAME><VALUE>PPC</VALUE></SETTING>
                 <SETTING><NAME>MWCodeGen_PPC_tracebacktables</NAME><VALUE>None</VALUE></SETTING>
                 <SETTING><NAME>MWCodeGen_PPC_processor</NAME><VALUE>Generic</VALUE></SETTING>
                 <SETTING><NAME>MWCodeGen_PPC_readonlystrings</NAME><VALUE>0</VALUE></SETTING>
