@@ -214,13 +214,17 @@ MyFrame::MyFrame()
 
     int i;
     for (i = 10; i < 300; i+=10)
-        m_canvas->Append( new wxCanvasRect( i,50,3,140, 255,0,0 ) );
+    {
+        wxCanvasRect *r = new wxCanvasRect( i,50,3,140 );
+        r->SetBrush( *wxRED_BRUSH );
+        m_canvas->Append( r );
+    }
 
     m_sm2 = new wxCanvasImage( image, 0,140,24,24 );
     m_canvas->Append( m_sm2 );
 
     for (i = 15; i < 300; i+=10)
-        m_canvas->Append( new wxCanvasRect( i,50,3,140, 255,0,0 ) );
+        m_canvas->Append( new wxCanvasRect( i,50,3,140 ) );
 
     wxButton *button = new wxButton( m_canvas, -1, "Hello", wxPoint(80,50) );
     m_canvas->Append( new wxCanvasControl( button ) );
@@ -232,7 +236,7 @@ MyFrame::MyFrame()
     m_canvas->Append( m_sm3 );
 
     for (i = 10; i < 300; i+=10)
-        m_canvas->Append( new wxCanvasLine( 10,-15,i,300, 0,255,0 ) );
+        m_canvas->Append( new wxCanvasLine( 10,-15,i,300 ) );
 
     m_sm4 = new MywxCanvasImage( image, 0,270,64,32 );
     m_canvas->Append( m_sm4 );
@@ -244,7 +248,7 @@ MyFrame::MyFrame()
 /*
     //make a group of wxCanvasObjects
     wxCanvasObjectGroup* group1 = new wxCanvasObjectGroup();
-    group1->Prepend( new wxCanvasLine( 10,-35,50,190,100,255,0 ) );
+    group1->Prepend( new wxCanvasLine( 10,-35,50,190 ) );
     group1->Prepend( new wxCanvasImage( image, 4,38,32,32 ) );
     group1->Prepend( new wxCanvasRect(20,-20,50,170,0,20,240 ) );
 

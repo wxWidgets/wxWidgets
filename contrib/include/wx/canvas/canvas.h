@@ -181,10 +181,10 @@ protected:
 class wxCanvasPolygon: public wxCanvasObject
 {
 public:
-    wxCanvasPolygon(int n, wxPoint2DDouble points[]);
+    wxCanvasPolygon( int n, wxPoint2DDouble points[] );
     ~wxCanvasPolygon();
-    SetBrush(wxBrush& brush){m_brush = brush;};
-    SetPen(wxPen& pen){m_pen = pen;};
+    void SetBrush(wxBrush& brush)  { m_brush = brush; };
+    void SetPen(wxPen& pen)        { m_pen = pen; };
 
     virtual void Recreate();
 
@@ -218,7 +218,7 @@ class wxCanvasPolyline: public wxCanvasObject
 public:
     wxCanvasPolyline(int n, wxPoint2DDouble points[]);
     ~wxCanvasPolyline();
-    SetPen(wxPen& pen){m_pen = pen;};
+    void SetPen(wxPen& pen)    { m_pen = pen; };
 
     virtual void Recreate();
 
@@ -251,8 +251,9 @@ private:
 class wxCanvasRect: public wxCanvasObject
 {
 public:
-    wxCanvasRect( double x, double y, double w, double h,
-                  unsigned char red, unsigned char green, unsigned char blue );
+    wxCanvasRect( double x, double y, double w, double h );
+    void SetBrush(wxBrush& brush)  { m_brush = brush; };
+    void SetPen(wxPen& pen)        { m_pen = pen; };
 
     virtual void Recreate();
 
@@ -260,14 +261,13 @@ public:
     virtual void WriteSVG( wxTextOutputStream &stream );
 
 private:
+    wxPen         m_pen;
+    wxBrush       m_brush;
+
     double        m_x;
     double        m_y;
     double        m_width;
     double        m_height;
-
-    unsigned char m_red;
-    unsigned char m_green;
-    unsigned char m_blue;
 };
 
 //----------------------------------------------------------------------------
@@ -277,8 +277,8 @@ private:
 class wxCanvasLine: public wxCanvasObject
 {
 public:
-    wxCanvasLine( double x1, double y1, double x2, double y2,
-                  unsigned char red, unsigned char green, unsigned char blue );
+    wxCanvasLine( double x1, double y1, double x2, double y2 );
+    void SetPen(wxPen& pen)    { m_pen = pen; };
 
     virtual void Recreate();
 
@@ -286,14 +286,12 @@ public:
     virtual void WriteSVG( wxTextOutputStream &stream );
     
 private:
+    wxPen         m_pen;
+
     double        m_x1;
     double        m_y1;
     double        m_x2;
     double        m_y2;
-
-    unsigned char m_red;
-    unsigned char m_green;
-    unsigned char m_blue;
 };
 
 //----------------------------------------------------------------------------
@@ -449,6 +447,8 @@ private:
     bool             m_frozen;
     wxCanvasObject  *m_lastMouse;
     wxCanvasObject  *m_captureMouse;
+    
+    int              m_oldDeviceX,m_oldDeviceY;
 
     friend class wxCanvasObject;
 

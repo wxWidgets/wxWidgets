@@ -455,7 +455,7 @@ wxCanvasPolyline::wxCanvasPolyline( int n,  wxPoint2DDouble points[])
 {
     m_n = n;
     m_points = points;
-    m_pen   = wxPen(wxColour(0,0,0),1,wxSOLID);
+    m_pen = *wxBLACK_PEN;
 }
 
 wxCanvasPolyline::~wxCanvasPolyline()
@@ -547,8 +547,8 @@ wxCanvasPolygon::wxCanvasPolygon( int n, wxPoint2DDouble points[])
 {
     m_n = n;
     m_points = points;
-    m_brush = wxBrush(wxColour(0,0,0),wxSOLID);
-    m_pen   = wxPen(wxColour(0,0,0),1,wxSOLID);
+    m_brush = *wxBLACK_BRUSH;
+    m_pen = *wxTRANSPARENT_PEN;
 }
 
 wxCanvasPolygon::~wxCanvasPolygon()
@@ -639,8 +639,7 @@ void wxCanvasPolygon::WriteSVG( wxTextOutputStream &stream )
 // wxCanvasRect
 //----------------------------------------------------------------------------
 
-wxCanvasRect::wxCanvasRect( double x, double y, double w, double h,
-                            unsigned char red, unsigned char green, unsigned char blue )
+wxCanvasRect::wxCanvasRect( double x, double y, double w, double h )
    : wxCanvasObject()
 {
     m_x = x;
@@ -648,9 +647,8 @@ wxCanvasRect::wxCanvasRect( double x, double y, double w, double h,
     m_width = w;
     m_height = h;
 
-    m_red = red;
-    m_green = green;
-    m_blue = blue;
+    m_brush = *wxBLACK_BRUSH;
+    m_pen = *wxTRANSPARENT_PEN;
 }
 
 void wxCanvasRect::Recreate()
@@ -681,10 +679,8 @@ void wxCanvasRect::Render(int xabs, int yabs, int clip_x, int clip_y, int clip_w
             image->SetRGB( x, y, m_red, m_green, m_blue );
 #else
     wxMemoryDC *dc = m_owner->GetDC();
-    dc->SetPen( *wxTRANSPARENT_PEN );
-    wxBrush brush( wxColour( m_red,m_green,m_blue), wxSOLID );
-    dc->SetBrush( brush );
-
+    dc->SetPen( m_pen );
+    dc->SetBrush( m_brush );
     dc->DrawRectangle( clip_x-buffer_x, clip_y-buffer_y, clip_width, clip_height );
 #endif
 }
@@ -697,8 +693,7 @@ void wxCanvasRect::WriteSVG( wxTextOutputStream &stream )
 // wxCanvasLine
 //----------------------------------------------------------------------------
 
-wxCanvasLine::wxCanvasLine( double x1, double y1, double x2, double y2,
-                            unsigned char red, unsigned char green, unsigned char blue )
+wxCanvasLine::wxCanvasLine( double x1, double y1, double x2, double y2 )
    : wxCanvasObject()
 {
     m_x1 = x1;
@@ -706,9 +701,7 @@ wxCanvasLine::wxCanvasLine( double x1, double y1, double x2, double y2,
     m_x2 = x2;
     m_y2 = y2;
 
-    m_red = red;
-    m_green = green;
-    m_blue = blue;
+    m_pen = *wxBLACK_PEN;
 }
 
 void wxCanvasLine::Recreate()
@@ -807,9 +800,7 @@ void wxCanvasLine::Render(int xabs, int yabs, int clip_x, int clip_y, int clip_w
 #else
     wxMemoryDC *dc = m_owner->GetDC();
     dc->SetClippingRegion( clip_x-buffer_x, clip_y-buffer_y, clip_width, clip_height );
-
-    wxPen pen( wxColour(m_red,m_green,m_blue), 0, wxSOLID );
-    dc->SetPen( pen );
+    dc->SetPen( m_pen );
     dc->DrawLine( x1-buffer_x, y1-buffer_y, x2-buffer_x, y2-buffer_y );
 
     dc->DestroyClippingRegion();
@@ -1143,7 +1134,9 @@ wxCanvas::wxCanvas( wxWindow *parent, wxWindowID id,
     m_lastMouse = (wxCanvasObject*)NULL;
     m_captureMouse = (wxCanvasObject*)NULL;
     m_frozen = TRUE;
-
+    m_oldDeviceX = 0;
+    m_oldDeviceY = 0;
+    
     //root group always at 0,0
     m_root = new wxCanvasObjectGroup();
     m_root->DeleteContents( TRUE );
@@ -1239,6 +1232,8 @@ void wxCanvas::Thaw()
 
 void wxCanvas::Update( int x, int y, int width, int height, bool blit )
 {
+    CalcScrolledPosition( 0, 0, &m_oldDeviceX, &m_oldDeviceY );
+    
     if (m_frozen) return;
 
     // clip to buffer
@@ -1489,8 +1484,11 @@ void wxCanvas::OnPaint(wxPaintEvent &event)
 void wxCanvas::ScrollWindow( int dx, int dy, const wxRect* rect )
 {
     // If any updates are pending, do them now since they will
-    // expect the previous m_bufferX and m_bufferY values.
-    UpdateNow();
+    // expect the previous m_bufferX and m_bufferY as well as
+    // the previous device origin values. 
+    wxClientDC dc( this );
+    dc.SetDeviceOrigin( m_oldDeviceX, m_oldDeviceY );
+    BlitBuffer( dc );
 
     // The buffer always starts at the top left corner of the
     // client area. Indeed, it is the client area.
