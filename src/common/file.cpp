@@ -502,7 +502,7 @@ bool wxTempFile::Open(const wxString& strName)
     int access = wxS_DEFAULT;
 #ifdef __UNIX__
     // create the file with the same mode as the original one under Unix
-    mode_t umaskOld;
+    mode_t umaskOld = 0; // just to suppress compiler warning
     bool changedUmask;
 
     struct stat st;
