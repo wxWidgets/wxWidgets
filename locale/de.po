@@ -1867,7 +1867,6 @@ msgid "Searching..."
 msgstr "Suchen..."
 
 #: ../src/generic/dirdlgg.cpp:191
-#, fuzzy
 msgid "Sections"
 msgstr "Optionen"
 
