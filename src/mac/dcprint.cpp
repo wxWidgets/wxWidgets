@@ -46,14 +46,16 @@ GrafPtr macPrintFormerPort = NULL ;
 
 wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
 {
-    OSStatus err ;
+    OSStatus err = noErr ;
     wxString message ;
     
     m_printData = printdata ;
     m_printData.ConvertToNative() ;
 
 #if TARGET_CARBON && PM_USE_SESSION_APIS
-    err = UMAPrOpen(&m_macPrintSessionPort) ;
+    m_macPrintSessionPort = printdata.m_macPrintSession ;
+    PMRetain( m_macPrintSessionPort ) ;
+
     if ( err != noErr || m_macPrintSessionPort == kPMNoData )
 #else
     err = UMAPrOpen(NULL) ;
@@ -64,7 +66,7 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
         wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
         dialog.ShowModal();
 #if TARGET_CARBON && PM_USE_SESSION_APIS
-        UMAPrClose(&m_macPrintSessionPort) ;
+        PMRelease( m_macPrintSessionPort ) ;
 #else
         UMAPrClose(NULL) ;
 #endif
@@ -75,8 +77,13 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
 #if !TARGET_CARBON
     if ( ::PrValidate( (THPrint) m_printData.m_macPrintSettings ) )
     {
-        ::PrStlDialog( (THPrint) m_printData.m_macPrintSettings ) ;
         // the driver has changed in the mean time, should we pop up a page setup dialog ?
+        if ( !::PrStlDialog( (THPrint) m_printData.m_macPrintSettings ) )
+        {
+            UMAPrClose(NULL) ;
+            m_ok = FALSE;
+            return;
+        }
     }
     err = PrError() ;
     if ( err != noErr )
@@ -89,6 +96,7 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
         return;
     }
     ::GetPort( &macPrintFormerPort ) ;
+    /*
     m_macPrintSessionPort = ::PrOpenDoc( (THPrint) m_printData.m_macPrintSettings , NULL , NULL ) ;
     err = PrError() ;
     if ( err )
@@ -102,7 +110,9 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
     }
     // sets current port
     m_macPort = (GrafPtr ) m_macPrintSessionPort ;
+    */
 #else
+    /*
   #if PM_USE_SESSION_APIS
     err = PMSessionBeginDocument((PMPrintSession)m_macPrintSessionPort,
               (PMPrintSettings)m_printData.m_macPrintSettings, 
@@ -121,7 +131,7 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
         wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
         dialog.ShowModal();
   #if TARGET_CARBON && PM_USE_SESSION_APIS
-        UMAPrClose(&m_macPrintSessionPort) ;
+        PMRelease(&m_macPrintSessionPort) ;
   #else
         UMAPrClose(NULL) ;
   #endif
@@ -130,6 +140,7 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
     }
     // sets current port
     ::GetPort( (GrafPtr *)&m_macPort ) ;
+    */
 #endif
     m_ok = TRUE ;
     m_minY = m_minX = 0 ;
@@ -143,7 +154,7 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
         wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
         dialog.ShowModal();
   #if TARGET_CARBON && PM_USE_SESSION_APIS
-        UMAPrClose(&m_macPrintSessionPort) ;
+        PMRelease(&m_macPrintSessionPort) ;
   #else
         UMAPrClose(NULL) ;
   #endif
@@ -165,6 +176,7 @@ wxPrinterDC::~wxPrinterDC(void)
 #if !TARGET_CARBON
     if ( m_ok )
     {
+        /*
         ::PrCloseDoc( (TPPrPort) m_macPrintSessionPort  ) ;
         err = PrError() ;
         
@@ -182,6 +194,119 @@ wxPrinterDC::~wxPrinterDC(void)
             wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
             dialog.ShowModal();
         }
+        */
+        ::UMAPrClose(NULL) ;
+//      ::SetPort( macPrintFormerPort ) ;
+        ::SetPort( LMGetWMgrPort() ) ;
+    }
+#else
+    if ( m_ok ) 
+    {
+/*
+  #if PM_USE_SESSION_APIS
+        err = PMSessionEndDocument((PMPrintSession)m_macPrintSessionPort);
+  #else
+        err = PMEndDocument(m_macPrintSessionPort);
+  #endif
+         if ( err != noErr )
+         {
+            message.Printf( "Print Error %ld", err ) ;
+            wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
+            dialog.ShowModal();
+         }
+         */
+  #if TARGET_CARBON && PM_USE_SESSION_APIS
+        PMRelease(&m_macPrintSessionPort) ;
+  #else
+        UMAPrClose(NULL) ;
+  #endif
+    }
+#endif
+}
+
+bool wxPrinterDC::StartDoc( const wxString& WXUNUSED(message) ) 
+{
+    OSStatus err = noErr ;
+    wxString message ;
+        
+#if !TARGET_CARBON
+    m_macPrintSessionPort = ::PrOpenDoc( (THPrint) m_printData.m_macPrintSettings , NULL , NULL ) ;
+    err = PrError() ;
+    if ( err )
+    {
+        message.Printf( "Print Error %d", err ) ;
+        wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
+        dialog.ShowModal();
+        UMAPrClose(NULL) ;
+        m_ok = FALSE;
+        return false ;
+    }
+    // sets current port
+    m_macPort = (GrafPtr ) m_macPrintSessionPort ;
+#else
+  #if PM_USE_SESSION_APIS
+    err = PMSessionBeginDocument((PMPrintSession)m_macPrintSessionPort,
+              (PMPrintSettings)m_printData.m_macPrintSettings, 
+              (PMPageFormat)m_printData.m_macPageFormat);
+    if ( err != noErr )
+  #else
+        m_macPrintSessionPort = kPMNoReference ;
+        err = PMBeginDocument(
+              m_printData.m_macPrintSettings, 
+              m_printData.m_macPageFormat, 
+              &m_macPrintSessionPort);
+    if ( err != noErr || m_macPrintSessionPort == kPMNoReference )
+  #endif
+    {
+        message.Printf( "Print Error %d", err ) ;
+        wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
+        dialog.ShowModal();
+  #if TARGET_CARBON && PM_USE_SESSION_APIS
+        PMRelease(&m_macPrintSessionPort) ;
+  #else
+        UMAPrClose(NULL) ;
+  #endif
+        m_ok = FALSE;
+        return m_ok;
+    }
+    // sets current port
+    ::GetPort( (GrafPtr *)&m_macPort ) ;
+#endif
+    m_ok = TRUE ;
+    m_minY = m_minX = 0 ;
+#if TARGET_CARBON
+    PMRect rPaper;
+    
+    err = PMGetAdjustedPaperRect((PMPageFormat)m_printData.m_macPageFormat, &rPaper);
+    if ( err != noErr )
+    {
+        message.Printf( "Print Error %d", err ) ;
+        wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
+        dialog.ShowModal();
+  #if TARGET_CARBON && PM_USE_SESSION_APIS
+        PMRelease(&m_macPrintSessionPort) ;
+  #else
+        UMAPrClose(NULL) ;
+  #endif
+        m_ok = FALSE;
+        return m_ok;
+    }
+    m_maxX = rPaper.right - rPaper.left ;
+    m_maxY = rPaper.bottom - rPaper.top ;
+#else
+    m_maxX = (**(THPrint)m_printData.m_macPrintSettings).rPaper.right - (**(THPrint)m_printData.m_macPrintSettings).rPaper.left ;
+    m_maxY = (**(THPrint)m_printData.m_macPrintSettings).rPaper.bottom - (**(THPrint)m_printData.m_macPrintSettings).rPaper.top ;
+#endif
+    return m_ok ;
+}
+
+void wxPrinterDC::EndDoc(void) 
+{
+    OSStatus err ;
+    wxString message ;
+#if !TARGET_CARBON
+    if ( m_ok )
+    {
         ::UMAPrClose(NULL) ;
 //      ::SetPort( macPrintFormerPort ) ;
         ::SetPort( LMGetWMgrPort() ) ;
@@ -196,26 +321,12 @@ wxPrinterDC::~wxPrinterDC(void)
   #endif
          if ( err != noErr )
          {
-            message.Printf( "Print Error %ld", err ) ;
+            message.Printf( "Print Error %d", err ) ;
             wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
             dialog.ShowModal();
          }
-  #if TARGET_CARBON && PM_USE_SESSION_APIS
-        UMAPrClose(&m_macPrintSessionPort) ;
-  #else
-        UMAPrClose(NULL) ;
-  #endif
     }
 #endif
-}
-
-bool wxPrinterDC::StartDoc( const wxString& WXUNUSED(message) ) 
-{
-    return m_ok ;
-}
-
-void wxPrinterDC::EndDoc(void) 
-{
 }
 
 void wxPrinterDC::StartPage(void) 
@@ -286,6 +397,14 @@ void wxPrinterDC::StartPage(void)
            ::SetPort( macPrintFormerPort ) ;
            m_ok = FALSE ;
     }
+    PMRect rPaper;
+    
+    err = PMGetAdjustedPaperRect((PMPageFormat)m_printData.m_macPageFormat, &rPaper);
+    if ( !err )
+    {
+        m_macLocalOrigin.x = rPaper.left ;
+        m_macLocalOrigin.y = rPaper.top ;
+    }
 #endif
 }
 
@@ -298,7 +417,7 @@ void wxPrinterDC::EndPage(void)
     wxString message ;
 
 #if !TARGET_CARBON
-       PrClosePage(  (TPPrPort) m_macPort ) ;
+    PrClosePage(  (TPPrPort) m_macPort ) ;
     err = PrError() ;
     if ( err != noErr )
     {
