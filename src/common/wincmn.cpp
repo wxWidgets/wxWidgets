@@ -2473,7 +2473,7 @@ void wxWindowBase::DoMoveInTabOrder(wxWindow *win, MoveKind move)
 
 /*static*/ wxWindow* wxWindowBase::FindFocus()
 {
-    wxWindow *win = DoFindFocus();
+    wxWindowBase *win = DoFindFocus();
     return win ? win->GetMainWindowOfCompositeControl() : NULL;
 }
 
