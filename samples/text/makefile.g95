@@ -9,7 +9,7 @@
 
 WXDIR = ../..
 
-TARGET=controls
+TARGET=text
 OBJECTS = $(TARGET).o
 
 include $(WXDIR)/src/makeprog.g95

@@ -87,6 +87,8 @@ public:
     void DoMoveToEndOfText();
     void DoMoveToEndOfEntry();
 
+    void OnSize( wxSizeEvent &event );
+
     MyTextCtrl    *m_text;
     MyTextCtrl    *m_password;
     MyTextCtrl    *m_enter;
@@ -97,6 +99,9 @@ public:
     MyTextCtrl    *m_horizontal;
 
     wxTextCtrl    *m_log;
+
+private:
+    DECLARE_EVENT_TABLE()
 };
 
 class MyFrame: public wxFrame
@@ -167,7 +172,8 @@ bool MyApp::OnInit()
     // Create the main frame window
     MyFrame *frame = new MyFrame((wxFrame *) NULL,
             "Text wxWindows App",
-            50, 50, 640, 420);
+	    50, 50, 640, 420);
+    frame->SetSizeHints( 500, 400 );
 
     wxMenu *file_menu = new wxMenu;
     file_menu->Append(TEXT_LOAD, "&Load file\tCtrl-O",
@@ -228,9 +234,6 @@ void MyTextCtrl::LogEvent(const wxChar *name, wxKeyEvent& event) const
 {
     wxString key;
     long keycode = event.KeyCode();
-    if ( wxIsprint((int)keycode) )
-        key.Printf( _T("'%c'") , (char)keycode);
-    else
     {
         switch ( keycode )
         {
@@ -336,8 +339,13 @@ void MyTextCtrl::LogEvent(const wxChar *name, wxKeyEvent& event) const
             case WXK_NUMPAD_SUBTRACT: key = "NUMPAD_SUBTRACT"; break;
             case WXK_NUMPAD_DECIMAL: key = "NUMPAD_DECIMAL"; break;
 
-            default:
-                key.Printf( _T("unknown (%ld)"), keycode);
+	    default:
+            {
+               if ( wxIsprint((int)keycode) )
+                   key.Printf( _T("'%c'") , (char)keycode);
+               else
+		   key.Printf( _T("unknown (%ld)"), keycode);
+	    }
         }
     }
 
@@ -415,12 +423,18 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
 // MyPanel
 //----------------------------------------------------------------------
 
+BEGIN_EVENT_TABLE(MyPanel, wxPanel)
+    EVT_SIZE(MyPanel::OnSize)
+END_EVENT_TABLE()
+
 MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
        : wxPanel( frame, -1, wxPoint(x, y), wxSize(w, h) )
 {
     m_log = new wxTextCtrl( this, -1, "This is the log window.\n", wxPoint(5,260), wxSize(630,100), wxTE_MULTILINE );
 
-    delete wxLog::SetActiveTarget(new wxLogStderr);
+    wxLog *old_log = wxLog::SetActiveTarget( new wxLogTextCtrl( m_log ) );
+
+    delete old_log;
 
     // single line text controls
 
@@ -457,6 +471,13 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     m_enter = new MyTextCtrl( this, -1, "Multiline, allow <ENTER> processing.",
       wxPoint(180,170), wxSize(240,70), wxTE_MULTILINE);
+}
+
+void MyPanel::OnSize( wxSizeEvent &event )
+{
+    wxSize client_area( GetClientSize() );
+    m_log->SetSize( 0, 260, client_area.x, client_area.y - 260 );
+    event.Skip();
 }
 
 #if wxUSE_CLIPBOARD
@@ -647,7 +668,7 @@ void MyFrame::OnToggleTooltips(wxCommandEvent& event)
 
 void MyFrame::OnFileLoad(wxCommandEvent& event)
 {
-    if ( m_panel->m_multitext->LoadFile("controls.cpp") )
+    if ( m_panel->m_multitext->LoadFile("text.cpp") )
         wxLogStatus(this, _T("Successfully loaded file"));
     else
         wxLogStatus(this, _T("Couldn't load the file"));

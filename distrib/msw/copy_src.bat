@@ -671,13 +671,16 @@ echo TreeCtrl sample..
 cd treectrl
 md \wxmsw_dist\wxMSW\samples\treectrl
 copy Makefile.* \wxmsw_dist\wxMSW\samples\treectrl
-copy *.rc \wxmsw_dist\wxMSW\samples\toolbar
-copy *.def \wxmsw_dist\wxMSW\samples\toolbar
+copy *.rc \wxmsw_dist\wxMSW\samples\treectrl
+copy *.def \wxmsw_dist\wxMSW\samples\treectrl
 copy *.cpp \wxmsw_dist\wxMSW\samples\treectrl
 copy *.h \wxmsw_dist\wxMSW\samples\treectrl
 copy *.xpm \wxmsw_dist\wxMSW\samples\treectrl
 copy *.ico \wxmsw_dist\wxMSW\samples\treectrl
-cd ..
+cd bitmaps
+md \wxmsw_dist\wxMSW\samples\treectrl\bitmaps
+copy *.* \wxmsw_dist\wxMSW\samples\treectrl\bitmaps
+cd ..\..
 
 echo typetest sample..
 

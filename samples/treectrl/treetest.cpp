@@ -33,10 +33,10 @@
 
 #include "math.h"
 
-#ifdef __WXMSW__
-    //#define NO_MULTIPLE_SELECTION
+//#ifdef __WXMSW__
+    #define NO_MULTIPLE_SELECTION
     #define NO_VARIABLE_HEIGHT
-#endif
+//#endif
 
 #include "treetest.h"
 
@@ -184,9 +184,13 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
                                 wxDefaultPosition, wxDefaultSize,
                                 wxTR_HAS_BUTTONS |
                                 wxTR_EDIT_LABELS |
-                                wxTR_MULTIPLE |
-                                wxTR_HAS_VARIABLE_ROW_HEIGHT |
-                                wxSUNKEN_BORDER);
+#ifndef NO_MULTIPLE_SELECTION
+				wxTR_MULTIPLE |
+#endif
+#ifndef NO_VARIABLE_HEIGHT
+				wxTR_HAS_VARIABLE_ROW_HEIGHT |
+#endif
+				wxSUNKEN_BORDER);
     wxTextCtrl *textCtrl = new wxTextCtrl(this, -1, "",
                                 wxDefaultPosition, wxDefaultSize,
                                 wxTE_MULTILINE | wxSUNKEN_BORDER);
