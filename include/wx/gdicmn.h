@@ -116,7 +116,7 @@ enum wxStockCursor
     wxCURSOR_DEFAULT, // standard X11 cursor
 #endif
 #ifdef __WXMAC__
-	wxCURSOR_COPY_ARROW , // MacOS Theme Plus arrow 
+	wxCURSOR_COPY_ARROW , // MacOS Theme Plus arrow
 #endif
 #ifdef __X__
     // Not yet implemented for Windows
@@ -214,7 +214,7 @@ public:
     // FIXME are these really useful? If they're, we should have += &c as well
     wxSize operator+(const wxSize& sz) { return wxSize(x + sz.x, y + sz.y); }
     wxSize operator-(const wxSize& sz) { return wxSize(x - sz.x, y - sz.y); }
-    
+
     void IncTo(const wxSize& sz)
         { if ( sz.x > x ) x = sz.x; if ( sz.y > y ) y = sz.y; }
     void DecTo(const wxSize& sz)
@@ -227,6 +227,18 @@ public:
 
     int GetWidth() const { return x; }
     int GetHeight() const { return y; }
+
+    bool IsFullySpecified() const { return x != -1 && y != -1; }
+
+    // combine this size with the other one replacing the default (i.e. equal
+    // to -1) components of this object with those of the other
+    void SetDefaults(const wxSize& size)
+    {
+        if ( x == -1 )
+            x = size.x;
+        if ( y == -1 )
+            y = size.y;
+    }
 
     // compatibility
     int GetX() const { return x; }

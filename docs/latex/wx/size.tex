@@ -26,6 +26,7 @@ None
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxSize::wxSize}
 
 \func{}{wxSize}{\void}
@@ -33,6 +34,7 @@ None
 \func{}{wxSize}{\param{int}{ width}, \param{int}{ height}}
 
 Creates a size object.
+
 
 
 \membersection{wxSize::DecTo}\label{wxsizedecto}
@@ -47,17 +49,31 @@ corresponding dimensions of the \arg{size}.
 \helpref{IncTo}{wxsizeincto}
 
 
+\membersection{wxSize::IsFullySpecified}\label{wxsizeisfullyspecified}
+
+\constfunc{IsFullySpecified}{\void}
+
+Returns \true if neither of the size object components is equal to $-1$, which
+is used as default for the size values in wxWindows (hence the predefined 
+\texttt{wxDefaultSize} has both of its components equal to $-1$).
+
+This method is typically used before calling 
+\helpref{SetDefaults}{wxsizesetdefaults}.
+
+
 \membersection{wxSize::GetWidth}\label{wxsizegetwidth}
 
 \constfunc{int}{GetWidth}{\void}
 
 Gets the width member.
 
+
 \membersection{wxSize::GetHeight}\label{wxsizegetheight}
 
 \constfunc{int}{GetHeight}{\void}
 
 Gets the height member.
+
 
 
 \membersection{wxSize::IncTo}\label{wxsizeincto}
@@ -72,11 +88,32 @@ corresponding dimensions of the \arg{size}.
 \helpref{DecTo}{wxsizedecto}
 
 
+
 \membersection{wxSize::Set}\label{wxsizeset}
 
 \func{void}{Set}{\param{int}{ width}, \param{int}{ height}}
 
 Sets the width and height members.
+
+
+\membersection{wxSize::SetDefaults}\label{wxsizesetdefaults}
+
+\func{void}{SetDefaults}{\param{const wxSize\& }{sizeDefault}}
+
+Combine this size object with another one replacing the default (i.e. equal
+to $-1$) components of this object with those of the other. It is typically
+used like this:
+\begin{verbatim}
+    if ( !size.IsFullySpecified() )
+    {
+        size.SetDefaults(GetDefaultSize());
+    }
+\end{verbatim}
+
+\wxheading{See also}
+
+\helpref{IsFullySpecified}{wxsizeisfullyspecified}
+
 
 \membersection{wxSize::SetHeight}\label{wxsizesetheight}
 
@@ -84,11 +121,13 @@ Sets the width and height members.
 
 Sets the height.
 
+
 \membersection{wxSize::SetWidth}\label{wxsizesetwidth}
 
 \func{void}{SetWidth}{\param{int}{ width}}
 
 Sets the width.
+
 
 \membersection{wxSize::operator $=$}
 
