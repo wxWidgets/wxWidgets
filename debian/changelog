@@ -1,3 +1,11 @@
+wxwindows2.4 (2.4.2.6) unstable; urgency=medium
+
+  * Reapply HURD/K*BSD patch fragment that should not have been reverted.
+    Closes: #217726    (Make a wish, the third time is lucky so I'm told.)
+  * Updated .po files.
+
+ -- Ron Lee <ron@debian.org>  Mon,  2 Aug 2004 14:50:07 +0930
+
 wxwindows2.4 (2.4.2.5) unstable; urgency=medium
 
   * Medium urgency to keep things moving for the libtiff fudge.

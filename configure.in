@@ -2948,7 +2948,7 @@ if test "$wxUSE_SHARED" = "yes"; then
         fi
       ;;
 
-      *-*-linux* )
+      *-*-linux* | *-*-gnu* | *-*-k*bsd*-gnu )
         if test "$GCC" != "yes"; then
             AC_CACHE_CHECK([for Intel compiler], wx_cv_prog_icc,
             [

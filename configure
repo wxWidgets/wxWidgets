@@ -16278,7 +16278,7 @@ echo "$ac_t""$wx_cv_version_script" 1>&6
         fi
       ;;
 
-      *-*-linux* )
+      *-*-linux* | *-*-gnu* | *-*-k*bsd*-gnu )
         if test "$GCC" != "yes"; then
             echo $ac_n "checking for Intel compiler""... $ac_c" 1>&6
 echo "configure:16285: checking for Intel compiler" >&5
