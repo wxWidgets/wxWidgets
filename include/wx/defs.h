@@ -48,6 +48,10 @@
         #endif
     #endif // Sun
 
+    #ifdef __EMX__
+        #define OS2EMX_PLAIN_CHAR
+    #endif
+
 #elif defined(applec) || defined(THINK_C) || ( defined( __MWERKS__ ) && !defined(__INTEL__) )
         // MacOS
 #elif defined(__OS2__)
