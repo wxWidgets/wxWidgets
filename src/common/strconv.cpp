@@ -70,6 +70,7 @@
 
 #ifdef HAVE_ICONV
     #include <iconv.h>
+    #include "wx/thread.h"
 #endif
 
 #include "wx/encconv.h"
@@ -1148,12 +1149,13 @@ size_t wxMBConvUTF32swap::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 
 #ifdef HAVE_ICONV
 
-// VS: glibc 2.1.3 is broken in that iconv() conversion to/from UCS4 fails with E2BIG
-//     if output buffer is _exactly_ as big as needed. Such case is (unless there's
-//     yet another bug in glibc) the only case when iconv() returns with (size_t)-1
-//     (which means error) and says there are 0 bytes left in the input buffer --
-//     when _real_ error occurs, bytes-left-in-input buffer is non-zero. Hence,
-//     this alternative test for iconv() failure.
+// VS: glibc 2.1.3 is broken in that iconv() conversion to/from UCS4 fails with
+//     E2BIG if output buffer is _exactly_ as big as needed. Such case is
+//     (unless there's yet another bug in glibc) the only case when iconv()
+//     returns with (size_t)-1 (which means error) and says there are 0 bytes
+//     left in the input buffer -- when _real_ error occurs,
+//     bytes-left-in-input buffer is non-zero. Hence, this alternative test for
+//     iconv() failure.
 //     [This bug does not appear in glibc 2.2.]
 #if defined(__GLIBC__) && __GLIBC__ == 2 && __GLIBC_MINOR__ <= 1
 #define ICONV_FAILED(cres, bufLeft) ((cres == (size_t)-1) && \
@@ -1185,6 +1187,10 @@ protected:
     // the other direction
     iconv_t m2w,
             w2m;
+#if wxUSE_THREADS
+    // guards access to m2w and w2m objects
+    wxMutex m_iconvMutex;
+#endif
 
 private:
     // the name (for iconv_open()) of a wide char charset -- if none is
@@ -1296,6 +1302,16 @@ wxMBConv_iconv::~wxMBConv_iconv()
 
 size_t wxMBConv_iconv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 {
+#if wxUSE_THREADS
+    // NB: iconv() is MT-safe, but each thread must use it's own iconv_t handle.
+    //     Unfortunately there is a couple of global wxCSConv objects such as
+    //     wxConvLocal that are used all over wx code, so we have to make sure
+    //     the handle is used by at most one thread at the time. Otherwise
+    //     only a few wx classes would be safe to use from non-main threads
+    //     as MB<->WC conversion would fail "randomly".
+    wxMutexLocker lock(wxConstCast(this, wxMBConv_iconv)->m_iconvMutex);
+#endif
+ 
     size_t inbuf = strlen(psz);
     size_t outbuf = n * SIZEOF_WCHAR_T;
     size_t res, cres;
@@ -1353,6 +1369,11 @@ size_t wxMBConv_iconv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 
 size_t wxMBConv_iconv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 {
+#if wxUSE_THREADS
+    // NB: explained in MB2WC
+    wxMutexLocker lock(wxConstCast(this, wxMBConv_iconv)->m_iconvMutex);
+#endif
+    
     size_t inbuf = wxWcslen(psz) * SIZEOF_WCHAR_T;
     size_t outbuf = n;
     size_t res, cres;
