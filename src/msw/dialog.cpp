@@ -278,12 +278,12 @@ void wxDialog::GetPosition(int *x, int *y) const
 
 bool wxDialog::IsShown() const
 {
-  return wxModalDialogs.Find(this);
+  return m_isShown;
 }
 
 bool wxDialog::IsModal() const
 {
-    return wxModalDialogs.
+    return wxModalDialogs.Find((wxDialog *)this) != 0; // const_cast
 }
 
 bool wxDialog::Show(bool show)
