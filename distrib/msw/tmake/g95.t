@@ -142,7 +142,7 @@ DOCDIR = $(WXDIR)/docs
 # Only use the WIN32 wxDirDialog if we have a recent
 # version of Mingw32
 ifeq ($(MINGW32),1)
-  ifneq "$(findstring 2.95, $(MINGW32VERSION))" ""
+  ifneq "$(_GCC295)$(_GCC3)" ""
 		DIRDLGOBJ = $(MSWDIR)/dirdlg.$(OBJSUFF)
   else
 		DIRDLGOBJ = $(GENDIR)/dirdlgg.$(OBJSUFF)
@@ -306,7 +306,7 @@ TIFFOBJS = $(TIFFDIR)/tif_aux.o \
 		$(TIFFDIR)/tif_zip.o
 
 ifeq ($(MINGW32),1)
-  ifneq "$(findstring 2.95, $(MINGW32VERSION))" ""
+  ifneq "$(_GCC295)$(_GCC3)" ""
     OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) $(DIRDLGOBJ) $(ADVANCEDOBJS)
   else
     OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) $(DIRDLGOBJ)
