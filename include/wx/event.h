@@ -372,6 +372,9 @@ public:
     bool              m_isCommandEvent;
 
 private:
+    // normally copying the events is a bad idea, so disable this
+    wxEvent& operator=(const wxEvent&);
+
     DECLARE_ABSTRACT_CLASS(wxEvent)
 };
 
@@ -440,7 +443,7 @@ public:
     long              m_extraLong;     // Additional information (e.g. select/deselect)
     void*             m_clientData;    // Arbitrary client data
     wxClientData*     m_clientObject;  // Arbitrary client object
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxCommandEvent)
 };
@@ -494,9 +497,9 @@ public:
     int GetPosition() const { return m_commandInt ; }
     void SetOrientation(int orient) { m_extraLong = (long) orient; }
     void SetPosition(int pos) { m_commandInt = pos; }
-    
+
     virtual wxEvent *Clone() const { return new wxScrollEvent(*this); }
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxScrollEvent)
 };
@@ -743,11 +746,11 @@ public:
     bool HasCursor() const { return m_cursor.Ok(); }
 
     virtual wxEvent *Clone() const { return new wxSetCursorEvent(*this); }
-    
+
 private:
     wxCoord  m_x, m_y;
     wxCursor m_cursor;
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxSetCursorEvent)
 };
@@ -808,7 +811,25 @@ public:
     long KeyCode() const { return m_keyCode; }
 
     virtual wxEvent *Clone() const { return new wxKeyEvent(*this); }
-    
+
+    // we do need to copy wxKeyEvent sometimes (in wxTreeCtrl code, for
+    // example)
+    wxKeyEvent& operator=(const wxKeyEvent& evt)
+    {
+        m_x = evt.m_x;
+        m_y = evt.m_y;
+
+        m_keyCode = evt.m_keyCode;
+
+        m_controlDown = evt.m_controlDown;
+        m_shiftDown = evt.m_shiftDown;
+        m_altDown = evt.m_altDown;
+        m_metaDown = evt.m_metaDown;
+        m_scanCode = evt.m_scanCode;
+
+        return *this;
+    }
+
 public:
     wxCoord       m_x, m_y;
 
@@ -819,7 +840,7 @@ public:
     bool          m_altDown;
     bool          m_metaDown;
     bool          m_scanCode;
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxKeyEvent)
 };
@@ -844,7 +865,7 @@ public:
 public:
     wxSize m_size;
 
-private:    
+private:
     DECLARE_DYNAMIC_CLASS(wxSizeEvent)
 };
 
@@ -865,9 +886,9 @@ public:
     wxPoint GetPosition() const { return m_pos; }
 
     virtual wxEvent *Clone() const { return new wxMoveEvent(*this); }
-    
+
     wxPoint m_pos;
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxMoveEvent)
 };
@@ -906,7 +927,7 @@ public:
 #endif // debug
 
     virtual wxEvent *Clone() const { return new wxPaintEvent(*this); }
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxPaintEvent)
 };
@@ -915,7 +936,7 @@ class WXDLLEXPORT wxNcPaintEvent : public wxEvent
 {
 public:
     wxNcPaintEvent(int id = 0) : wxEvent(id) { SetEventType(wxEVT_NC_PAINT); }
-    
+
     virtual wxEvent *Clone() const { return new wxNcPaintEvent(*this); }
 
 private:
@@ -932,11 +953,11 @@ class WXDLLEXPORT wxEraseEvent : public wxEvent
 public:
     wxEraseEvent(int Id = 0, wxDC *dc = (wxDC *) NULL)
         { m_eventType = wxEVT_ERASE_BACKGROUND; m_id = Id; m_dc = dc; }
-        
+
     wxDC *GetDC() const { return m_dc; }
 
     virtual wxEvent *Clone() const { return new wxEraseEvent(*this); }
-    
+
     wxDC *m_dc;
 
 private:
@@ -962,7 +983,7 @@ public:
     void SetWindow(wxWindow *win) { m_win = win; }
 
     virtual wxEvent *Clone() const { return new wxFocusEvent(*this); }
-    
+
 private:
     wxWindow *m_win;
 
@@ -980,7 +1001,7 @@ public:
     wxWindow *GetWindow() const { return (wxWindow *)GetEventObject(); }
 
     virtual wxEvent *Clone() const { return new wxChildFocusEvent(*this); }
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxChildFocusEvent)
 };
@@ -996,7 +1017,7 @@ class WXDLLEXPORT wxActivateEvent : public wxEvent
 public:
     wxActivateEvent(wxEventType type = wxEVT_NULL, bool active = TRUE, int Id = 0)
         { m_eventType = type; m_active = active; m_id = Id; }
-        
+
     bool GetActive() const { return m_active; }
 
     virtual wxEvent *Clone() const { return new wxActivateEvent(*this); }
@@ -1020,8 +1041,8 @@ public:
         { m_eventType = wxEVT_INIT_DIALOG; m_id = Id; }
 
     virtual wxEvent *Clone() const { return new wxInitDialogEvent(*this); }
-    
-private:        
+
+private:
     DECLARE_DYNAMIC_CLASS(wxInitDialogEvent)
 };
 
@@ -1042,10 +1063,10 @@ public:
     int GetMenuId() const { return m_menuId; }
 
     virtual wxEvent *Clone() const { return new wxMenuEvent(*this); }
-    
+
 private:
     int m_menuId;
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxMenuEvent)
 };
@@ -1147,7 +1168,7 @@ public:
     bool Iconized() const { return m_iconized; }
 
     virtual wxEvent *Clone() const { return new wxIconizeEvent(*this); }
-    
+
 protected:
     bool m_iconized;
 
@@ -1165,7 +1186,7 @@ public:
         { m_eventType = wxEVT_MAXIMIZE; m_id = id; }
 
     virtual wxEvent *Clone() const { return new wxMaximizeEvent(*this); }
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxMaximizeEvent)
 };
@@ -1249,7 +1270,7 @@ public:
             ((m_buttonState & but) == but)); }
 
     virtual wxEvent *Clone() const { return new wxJoystickEvent(*this); }
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxJoystickEvent)
 };
@@ -1276,7 +1297,7 @@ public:
     wxString *GetFiles() const { return m_files; }
 
     virtual wxEvent *Clone() const { wxFAIL_MSG("error"); return NULL; }
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxDropFilesEvent)
 };
@@ -1321,7 +1342,7 @@ protected:
     bool          m_setText;
     bool          m_setChecked;
     wxString      m_text;
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxUpdateUIEvent)
 };
@@ -1336,9 +1357,9 @@ class WXDLLEXPORT wxSysColourChangedEvent : public wxEvent
 public:
     wxSysColourChangedEvent()
         { m_eventType = wxEVT_SYS_COLOUR_CHANGED; }
-        
+
     virtual wxEvent *Clone() const { return new wxSysColourChangedEvent(*this); }
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxSysColourChangedEvent)
 };
@@ -1387,7 +1408,7 @@ public:
 
 protected:
     bool m_paletteRealized;
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxQueryNewPaletteEvent)
 };
@@ -1467,9 +1488,9 @@ public:
     wxWindowCreateEvent(wxWindow *win = NULL);
 
     wxWindow *GetWindow() const { return (wxWindow *)GetEventObject(); }
-    
+
     virtual wxEvent *Clone() const { return new wxWindowCreateEvent(*this); }
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxWindowCreateEvent)
 };
@@ -1480,7 +1501,7 @@ public:
     wxWindowDestroyEvent(wxWindow *win = NULL);
 
     wxWindow *GetWindow() const { return (wxWindow *)GetEventObject(); }
-    
+
     virtual wxEvent *Clone() const { return new wxWindowDestroyEvent(*this); }
 
 private:
@@ -1518,7 +1539,7 @@ public:
     void SetTarget(const wxString& target) { m_target = target; }
 
     virtual wxEvent *Clone() const { return new wxHelpEvent(*this); }
-    
+
 protected:
     wxPoint   m_pos;
     wxString  m_target;
@@ -1553,7 +1574,7 @@ public:
     void SetPosition(const wxPoint& pos) { m_pos = pos; }
 
     virtual wxEvent *Clone() const { return new wxContextMenuEvent(*this); }
-    
+
 protected:
     wxPoint   m_pos;
 
@@ -1579,7 +1600,7 @@ public:
 
 protected:
     bool m_requestMore;
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxIdleEvent)
 };
