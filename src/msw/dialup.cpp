@@ -350,7 +350,7 @@ wxDialUpManagerMSW::wxDialUpManagerMSW()
     {
         wxLogError(_("Dial up functions are unavailable because the remote access service (RAS) is not installed on this machine. Please install it."));
     }
-    else if( ms_pfnRasDial == 0 )
+    else if ( !ms_pfnRasDial )
     {
         // resolve the functions we need
 
@@ -830,12 +830,12 @@ bool wxDialUpManagerMSW::Dial(const wxString& nameOfISP,
 
     DWORD dwRet = ms_pfnRasDial
                   (
-                   (LPRASDIALEXTENSIONS)NULL,   // no extended features
-                   NULL,                  // default phone book file (NT only)
+                   NULL,                    // no extended features
+                   NULL,                    // default phone book file (NT only)
                    &rasDialParams,
-                   0,                     // use callback for notifications
-                   async ? wxRasDialFunc  // the callback
-                         : 0,             // no notifications - sync operation
+                   0,                       // use callback for notifications
+                   async ? (void *)wxRasDialFunc  // cast needed for gcc 3.1
+                         : 0,               // no notifications, sync operation
                    &ms_hRasConnection
                   );
 
@@ -1277,8 +1277,7 @@ static void WINAPI wxRasDialFunc(UINT unMsg,
                 rasconnstate, dwError);
 }
 
-#endif
-  // __BORLANDC__
+#endif // __BORLANDC__
+
 #endif // wxUSE_DIALUP_MANAGER
 
-// vi:sts=4:sw=4:et
