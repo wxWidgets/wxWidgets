@@ -1,5 +1,5 @@
-NAME         Minimal
-DESCRIPTION  'Minimal wxWindows application'
+NAME         Thread
+DESCRIPTION  'wxWindows thread sample'
 EXETYPE      WINDOWS
 CODE         PRELOAD MOVEABLE DISCARDABLE
 DATA         PRELOAD MOVEABLE MULTIPLE

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        test.cpp
+// Name:        thread.cpp
 // Purpose:     wxWindows thread sample
 // Author:      Julian Smart(minimal)/Guilhem Lavaux(thread test)
 // Modified by:
@@ -15,8 +15,8 @@
  */
 
 #ifdef __GNUG__
-    #pragma implementation "test.cpp"
-    #pragma interface "test.cpp"
+    #pragma implementation "thread.cpp"
+    #pragma interface "thread.cpp"
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".
