@@ -50,9 +50,9 @@
 #include "wx/textfile.h"
 
 #include <windowsx.h>
-#include "wx/msw/winundef.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/winundef.h"
 
 #include <string.h>
 #include <stdlib.h>
