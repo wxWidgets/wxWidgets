@@ -512,6 +512,13 @@ helpwin.h	W
 helpxlp.h	W
 icon.h	W
 image.h	W
+imaggif.h	W
+imagbmp.h	W
+imagpng.h	W
+imagpcx.h	W
+imagpnm.h	W
+imagtiff.h	W
+imagjpeg.h	W
 imaglist.h	W
 intl.h	W	B
 ioswrap.h	W
