@@ -531,6 +531,7 @@ void wxLibrary::PrepareClasses(wxClassInfo *first)
         info = info->m_next;
     }
 
+#if wxUSE_EXTENDED_RTTI == 0
     // Set base pointers for each wxClassInfo
     info = first;
     while (info)
@@ -541,6 +542,7 @@ void wxLibrary::PrepareClasses(wxClassInfo *first)
             info->m_baseInfo2 = (wxClassInfo *)classTable.Get(info->GetBaseClassName2());
         info = info->m_next;
     }
+#endif
 }
 
 void *wxLibrary::GetSymbol(const wxString& symbname)
