@@ -39,6 +39,12 @@ public:
         long style = wxOK|wxCENTRE, const wxPoint& pos = wxDefaultPosition);
 
     int ShowModal();
+    
+    // not supported for message dialog, RR
+    virtual void DoSetSize(int x, int y,
+                           int width, int height,
+                           int sizeFlags = wxSIZE_AUTO) {}
+
 };
 
 #endif
