@@ -227,24 +227,32 @@ void wxWindowMac::SetFocus()
     {
         if (gFocusWindow )
         {
-            #if wxUSE_CARET
+#if wxUSE_CARET
                 // Deal with caret
                 if ( gFocusWindow->m_caret )
                 {
                       gFocusWindow->m_caret->OnKillFocus();
                 }
-            #endif // wxUSE_CARET
-      #ifndef __WXUNIVERSAL__
+#endif // wxUSE_CARET
+#ifndef __WXUNIVERSAL__
             wxControl* control = wxDynamicCast( gFocusWindow , wxControl ) ;
             if ( control && control->GetMacControl() )
             {
                 UMASetKeyboardFocus( (WindowRef) gFocusWindow->MacGetRootWindow() , (ControlHandle) control->GetMacControl()  , kControlFocusNoPart ) ;
                 control->MacRedrawControl() ;
             }
-            #endif
-            wxFocusEvent event(wxEVT_KILL_FOCUS, gFocusWindow->m_windowId);
-            event.SetEventObject(gFocusWindow);
-            gFocusWindow->GetEventHandler()->ProcessEvent(event) ;
+#endif
+            // Without testing the window id, for some reason
+            // a kill focus event can still be sent to
+            // the control just being focussed.
+            int thisId = this->m_windowId;
+            int gFocusWindowId = gFocusWindow->m_windowId;
+            if (gFocusWindowId != thisId)
+            {
+                wxFocusEvent event(wxEVT_KILL_FOCUS, gFocusWindow->m_windowId);
+                event.SetEventObject(gFocusWindow);
+                gFocusWindow->GetEventHandler()->ProcessEvent(event) ;
+            }
         }
         gFocusWindow = this ;
         {
@@ -1765,7 +1773,8 @@ void wxWindowMac::MacRedraw( WXHRGN updatergnr , long time, bool erase)
         if ( erase && !EmptyRgn(ownUpdateRgn) )
         {
           wxWindowDC dc(this);
-          dc.SetClippingRegion(wxRegion(ownUpdateRgn));
+          if (!EmptyRgn(ownUpdateRgn)) 
+              dc.SetClippingRegion(wxRegion(ownUpdateRgn));
           wxEraseEvent eevent( GetId(), &dc );
           eevent.SetEventObject( this );
           GetEventHandler()->ProcessEvent( eevent );
