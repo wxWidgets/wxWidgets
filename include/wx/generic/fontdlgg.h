@@ -29,6 +29,7 @@
 class WXDLLEXPORT wxChoice;
 class WXDLLEXPORT wxText;
 class WXDLLEXPORT wxCheckBox;
+class WXDLLEXPORT wxFontPreviewer;
 
 #define wxID_FONT_UNDERLINE 3000
 #define wxID_FONT_STYLE     3001
@@ -45,15 +46,13 @@ class WXDLLEXPORT wxGenericFontDialog: public wxDialog
   wxFont dialogFont;
   wxWindow *dialogParent;
 
-  // Area reserved for font display
-  wxRect fontRect;
-
   wxChoice *familyChoice;
   wxChoice *styleChoice;
   wxChoice *weightChoice;
   wxChoice *colourChoice;
   wxCheckBox *underLineCheckBox;
   wxChoice   *pointSizeChoice;
+  wxFontPreviewer *m_previewer;
   bool       m_useEvents;
 
 //  static bool fontDialogCancelled;
@@ -70,16 +69,11 @@ class WXDLLEXPORT wxGenericFontDialog: public wxDialog
   inline wxFontData& GetFontData(void) { return fontData; }
 
   // Internal functions
-  void OnPaint(wxPaintEvent& event);
-
   void OnCloseWindow(wxCloseEvent& event);
 
   virtual void CreateWidgets(void);
   virtual void InitializeFont(void);
   
-  virtual void PaintFontBackground(wxDC& dc);
-  virtual void PaintFont(wxDC& dc);
-
   void OnChangeFont(wxCommandEvent& event);
 
 DECLARE_EVENT_TABLE()
