@@ -64,6 +64,9 @@ zip32 -@ %dest\ogl3.zip < %src\distrib\msw\ogl.rsp
 rem MMedia
 zip32 -@ %dest\mmedia.zip < %src\distrib\msw\mmedia.rsp
 
+rem STC (Scintilla widget)
+zip32 -@ %dest\stc.zip < %src\distrib\msw\stc.rsp
+
 rem GLCanvas: obsolete, now in main library
 rem zip32 -@ %dest\glcanvas.zip < %src\distrib\msw\glcanvas.rsp
 
@@ -114,6 +117,7 @@ unzip32 -o ..\tex2rtf2.zip
 rem Now delete a few files that are unnecessary
 attrib -R *
 erase /Y BuildCVS.txt *.in *.spec *.guess *.sub mkinstalldirs modules install-sh *.sh descrip.mms
+erase /Y configure samples\configure samples\*.in demos\configure demos\*.in contrib\configure contrib\*.in
 erase /Y setup.h.in setup.h_vms
 erase /SY Makefile.in
 rem erase /Y docs\pdf\ogl.pdf

@@ -66,6 +66,7 @@ contrib/samples/ogl/studio/bitmaps/*.bmp
 contrib/samples/ogl/studio/bitmaps/*.gif
 contrib/samples/ogl/studio/bitmaps/*.xbm
 contrib/samples/ogl/studio/bitmaps/*.xpm
+contrib/samples/ogl/studio/bitmaps/*.ico
 contrib/samples/ogl/studio/manual/*.tex
 contrib/samples/ogl/studio/manual/*.ini
 contrib/samples/ogl/studio/manual/*.gif
@@ -74,20 +75,6 @@ contrib/samples/ogl/studio/manual/*.htm
 contrib/samples/ogl/studio/manual/*.hlp
 contrib/samples/ogl/studio/manual/*.cnt
 contrib/samples/ogl/studio/manual/Makefile
-
-contrib/docs/latex/ogl/*.txt
-contrib/docs/latex/ogl/*.tex
-contrib/docs/latex/ogl/*.ini
-contrib/docs/latex/ogl/*.hpj
-contrib/docs/latex/ogl/*.ps
-contrib/docs/latex/ogl/*.eps
-contrib/docs/latex/ogl/*.bmp
-contrib/docs/latex/ogl/*.gif
-
-contrib/docs/html/ogl/*.*
-contrib/docs/winhelp/ogl.hlp
-contrib/docs/winhelp/ogl.cnt
-contrib/docs/pdf/ogl.pdf
 
 distrib/msw/ogl.rsp
 distrib/msw/zipogl.bat

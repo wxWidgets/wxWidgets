@@ -36,7 +36,7 @@ item: Create Shortcut
   Working Directory=%MAINDIR%
 end
 item: Create Shortcut
-  Source=%MAINDIR%\docs\winhelp\ogl.hlp
+  Source=%MAINDIR%\contrib\docs\winhelp\ogl.hlp
   Destination=%GROUP%\Object Graphics Library Help.lnk
   Working Directory=%MAINDIR%
 end
@@ -61,27 +61,16 @@ item: Create Shortcut
   Working Directory=%MAINDIR%
 end
 item: Create Shortcut
-  Source=%MAINDIR%\docs\release.txt
-  Destination=%GROUP%\Release Details.lnk
-  Working Directory=%MAINDIR%
-end
-item: Create Shortcut
-  Source=%MAINDIR%\docs\winhelp\wxtree.hlp
-  Destination=%GROUP%\wxTreeLayout Help.lnk
+  Source=%MAINDIR%\docs\changes.txt
+  Destination=%GROUP%\Change Log.lnk
   Working Directory=%MAINDIR%
 end
 item: Else Statement
 end
 item: Add ProgMan Icon
   Group=%GROUP%
-  Icon Name=wxTreeLayout Help
-  Command Line=%MAINDIR%\docs\winhelp\wxtree.hlp
-  Default Directory=%MAINDIR%
-end
-item: Add ProgMan Icon
-  Group=%GROUP%
-  Icon Name=Release Details
-  Command Line=%MAINDIR%\docs\release.txt
+  Icon Name=Change Log
+  Command Line=%MAINDIR%\docs\changes.txt
   Default Directory=%MAINDIR%
 end
 item: Add ProgMan Icon
@@ -123,7 +112,7 @@ end
 item: Add ProgMan Icon
   Group=%GROUP%
   Icon Name=Object Graphics Library Help
-  Command Line=%MAINDIR%\docs\winhelp\ogl.hlp
+  Command Line=%MAINDIR%\contrib\docs\winhelp\ogl.hlp
   Default Directory=%MAINDIR%
 end
 item: Add ProgMan Icon

@@ -71,9 +71,11 @@ contrib/Makefile.in
 contrib/src/Makefile.in
 contrib/src/ogl/Makefile.in
 contrib/src/mmedia/Makefile.in
+contrib/src/stc/Makefile.in
 contrib/samples/Makefile.in
 contrib/samples/ogl/Makefile.in
 contrib/samples/ogl/ogledit/Makefile.in
 contrib/samples/ogl/studio/Makefile.in
 contrib/samples/mmedia/Makefile.in
+contrib/samples/stc/Makefile.in
 

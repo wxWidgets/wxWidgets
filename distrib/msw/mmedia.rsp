@@ -25,7 +25,6 @@ contrib/src/mmedia/*.h
 contrib/src/mmedia/*.cpp
 contrib/src/mmedia/MMediaVC.dsp
 contrib/src/mmedia/MMediaVC.dsw
-contrib/samples/mmedia/MMBoardVC.dsw
 contrib/samples/mmedia/*.h
 contrib/samples/mmedia/*.cpp
 contrib/samples/mmedia/makefile*

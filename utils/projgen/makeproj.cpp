@@ -228,7 +228,7 @@ void MyApp::GenerateSamples(const wxString& dir)
     GenerateSample("DynamicVC", "dynamic", dir + wxString("/samples/dynamic"), wxStringList("dynamic.cpp", 0));
     GenerateSample("DrawingVC", "drawing", dir + wxString("/samples/drawing"), wxStringList("drawing.cpp", 0));
     GenerateSample("ExecVC", "exec", dir + wxString("/samples/exec"), wxStringList("exec.cpp", 0));
-    GenerateSample("GridVC", "test", dir + wxString("/samples/grid"), wxStringList("test.cpp", 0));
+    GenerateSample("GridVC", "grid", dir + wxString("/samples/grid"), wxStringList("grid.cpp", 0));
     GenerateSample("NewGridVC", "griddemo", dir + wxString("/samples/newgrid"), wxStringList("griddemo.cpp", 0));
     GenerateSample("HelpVC", "demo", dir + wxString("/samples/help"), wxStringList("demo.cpp", 0));
 
@@ -268,16 +268,16 @@ void MyApp::GenerateSamples(const wxString& dir)
     GenerateSample("MemcheckVC", "memcheck", dir + wxString("/samples/memcheck"), wxStringList("memcheck.cpp", 0));
     // Don't always generate this project since it has to be tweaked by hand.
     // GenerateSample("MfcVC", "mfctest", dir + wxString("/samples/mfc"), wxStringList("mfctest.cpp", "mfctest.h", 0));
-    GenerateSample("MiniframVC", "test", dir + wxString("/samples/minifram"), wxStringList("test.cpp", "test.h", 0));
+    GenerateSample("MiniframVC", "minifram", dir + wxString("/samples/minifram"), wxStringList("minifram.cpp", "minifram.h", 0));
     GenerateSample("MinimalVC", "minimal", dir + wxString("/samples/minimal"), wxStringList("minimal.cpp", 0));
     GenerateSample("NativdlgVC", "nativdlg", dir + wxString("/samples/nativdlg"), wxStringList("nativdlg.cpp", "nativdlg.h", "resource.h", 0));
     GenerateSample("DialupVC", "nettest", dir + wxString("/samples/dialup"), wxStringList("nettest.cpp", 0));
-    GenerateSample("NotebookVC", "test", dir + wxString("/samples/notebook"), wxStringList("test.cpp", "test.h", 0));
+    GenerateSample("NotebookVC", "notebook", dir + wxString("/samples/notebook"), wxStringList("notebook.cpp", "notebook.h", 0));
     GenerateSample("OleautoVC", "oleauto", dir + wxString("/samples/oleauto"), wxStringList("oleauto.cpp", 0));
     GenerateSample("OwnerdrwVC", "ownerdrw", dir + wxString("/samples/ownerdrw"), wxStringList("ownerdrw.cpp", 0));
     GenerateSample("PngVC", "pngdemo", dir + wxString("/samples/png"), wxStringList("pngdemo.cpp", "pngdemo.h", 0));
     GenerateSample("PrintingVC", "printing", dir + wxString("/samples/printing"), wxStringList("printing.cpp", "printing.h", 0));
-    GenerateSample("ProplistVC", "test", dir + wxString("/samples/proplist"), wxStringList("test.cpp", "test.h", 0));
+    GenerateSample("ProplistVC", "proplist", dir + wxString("/samples/proplist"), wxStringList("proplist.cpp", "proplist.h", 0));
     GenerateSample("PropsizeVC", "propsize", dir + wxString("/samples/propsize"), wxStringList("propsize.cpp", 0));
     GenerateSample("RegtestVC", "regtest", dir + wxString("/samples/regtest"), wxStringList("regtest.cpp", 0));
     GenerateSample("ResourceVC", "resource", dir + wxString("/samples/resource"), wxStringList("resource.cpp", "resource.h", 0));
@@ -286,12 +286,12 @@ void MyApp::GenerateSamples(const wxString& dir)
     GenerateSample("SashtestVC", "sashtest", dir + wxString("/samples/sashtest"), wxStringList("sashtest.cpp", "sashtest.h", 0));
     GenerateSample("ScrollVC", "scroll", dir + wxString("/samples/scroll"), wxStringList("scroll.cpp", 0));
     GenerateSample("ScrollsubVC", "scrollsub", dir + wxString("/samples/scrollsub"), wxStringList("scrollsub.cpp", 0));
-    GenerateSample("SplitterVC", "test", dir + wxString("/samples/splitter"), wxStringList("test.cpp", 0));
+    GenerateSample("SplitterVC", "splitter", dir + wxString("/samples/splitter"), wxStringList("splitter.cpp", 0));
     GenerateSample("StatbarVC", "statbar", dir + wxString("/samples/statbar"), wxStringList("statbar.cpp", 0));
-    GenerateSample("TabVC", "test", dir + wxString("/samples/tab"), wxStringList("test.cpp", "test.h", 0));
+    GenerateSample("TabVC", "tab", dir + wxString("/samples/tab"), wxStringList("tab.cpp", "tab.h", 0));
     GenerateSample("TaskbarVC", "tbtest", dir + wxString("/samples/taskbar"), wxStringList("tbtest.cpp", "tbtest.h", 0));
     GenerateSample("TextVC", "text", dir + wxString("/samples/text"), wxStringList("text.cpp", 0));
-    GenerateSample("ThreadVC", "test", dir + wxString("/samples/thread"), wxStringList("test.cpp", 0));
+    GenerateSample("ThreadVC", "thread", dir + wxString("/samples/thread"), wxStringList("thread.cpp", 0));
     GenerateSample("ToolbarVC", "toolbar", dir + wxString("/samples/toolbar"), wxStringList("toolbar.cpp", 0));
     GenerateSample("TreectrlVC", "treetest", dir + wxString("/samples/treectrl"), wxStringList("treetest.cpp", "treetest.h", 0));
     GenerateSample("TypetestVC", "typetest", dir + wxString("/samples/typetest"), wxStringList("typetest.cpp", "typetest.h", 0));
@@ -308,8 +308,8 @@ void MyApp::GenerateSamples(const wxString& dir)
     GenerateSample("ExecVC", "exec", dir + wxString("/samples/exec"), wxStringList("exec.cpp", 0));
     GenerateSample("FontVC", "font", dir + wxString("/samples/font"), wxStringList("font.cpp", 0));
     GenerateSample("MenuVC", "menu", dir + wxString("/samples/menu"), wxStringList("menu.cpp", 0));
-    GenerateSample("TreelayVC", "test", dir + wxString("/samples/treelay"), wxStringList("test.cpp", "test.h", 0));
-    GenerateSample("DragimagVC", "test", dir + wxString("/samples/dragimag"), wxStringList("test.cpp", "test.h", 0));
+    GenerateSample("TreelayVC", "treelay", dir + wxString("/samples/treelay"), wxStringList("treelay.cpp", "treelay.h", 0));
+    GenerateSample("DragimagVC", "dragimag", dir + wxString("/samples/dragimag"), wxStringList("dragimag.cpp", "dragimag.h", 0));
     GenerateSample("PlotVC", "plot", dir + wxString("/samples/plot"), wxStringList("plot.cpp", 0));
 
     //// Demos

@@ -4,6 +4,15 @@ wxWindows 2 Change Log
 2.1.14
 ------
 
+Documentation:
+
+- Added docs/tech for technical notes
+
+File hierarchy:
+
+- Started new contrib hierarchy that mirrors
+  the main lib structure; moved OGL and MMedia into it
+
 wxBase:
 
 - wxDateTime replaces and extends old wxDate and wxTime classes (still
@@ -50,7 +59,7 @@ all (GUI):
 - wxDragImage class added
 - samples/help improved to show standard and advanced HTML help
   controllers, as well as native help
-- contrib hierarchy started, and OGL/Mmedia moved to it
+- moved wxTreeLayout class to main lib
 
 wxMSW:
 

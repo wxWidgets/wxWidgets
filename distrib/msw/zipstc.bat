@@ -7,13 +7,13 @@ if "%src" == "" goto usage
 if "%dest" == "" goto usage
 echo About to archive an external STC distribution:
 echo   From   %src
-echo   To     %dest\stc3.zip
+echo   To     %dest\stc.zip
 echo CTRL-C if this is not correct.
 inkey /W4 `Press any key to continue...` %%input
 
-erase %dest\stc3.zip
+erase %dest\stc.zip
 cd %src
-zip32 -@ %dest\stc3.zip < %src\distrib\msw\stc.rsp
+zip32 -@ %dest\stc.zip < %src\distrib\msw\stc.rsp
 
 cd %dest
 

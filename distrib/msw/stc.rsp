@@ -24,7 +24,6 @@ contrib/src/stc/*.def
 contrib/src/stc/*.xbm
 contrib/src/stc/*.xpm
 contrib/src/stc/make*.*
-contrib/src/stc/*.txt
 contrib/src/stc/*.ico
 contrib/src/stc/*.bmp
 contrib/src/stc/StcVC.dsp
