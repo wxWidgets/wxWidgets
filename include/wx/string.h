@@ -1082,6 +1082,25 @@ public:
     { Copy(array); }
 };
 
+// ----------------------------------------------------------------------------
+// wxStringBuffer: a tiny class allowing to get a writable pointer into string
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxStringBuffer
+{
+public:
+    wxStringBuffer(wxString& str, size_t lenWanted = 1024)
+        : m_str(str) { m_buf = m_str.GetWriteBuf(lenWanted); }
+
+    ~wxStringBuffer() { m_str.UngetWriteBuf(); }
+
+    operator wxChar*() const { return m_buf; }
+
+private:
+    wxString& m_str;
+    wxChar   *m_buf;
+};
+
 // ---------------------------------------------------------------------------
 // wxString comparison functions: operator versions are always case sensitive
 // ---------------------------------------------------------------------------

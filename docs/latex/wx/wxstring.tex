@@ -1116,3 +1116,57 @@ Implicit conversion to a C string.
 
 These comparisons are case-sensitive.
 
+
+\section{\class{wxStringBuffer}}\label{wxstringbuffer}
+
+This tiny class allows to conveniently access the \helpref{wxString}{wxstring} 
+internal buffer as a writable pointer without any risk to forget to restore
+the string to the usable state later.
+
+For example, assuming you have a low-level OS function called 
+{\tt GetMeaningOfLifeAsString(char *)} returning the value in the provided
+buffer (which must be writable, of course) you might call it like this:
+
+\begin{verbatim}
+    wxString theAnswer;
+    GetMeaningOfLifeAsString(wxStringBuffer(theAnswer, 1024));
+    if ( theAnswer != "42" )
+    {
+        wxLogError("Something is very wrong!");
+    }
+\end{verbatim}
+
+\wxheading{Derived from}
+
+None
+
+\wxheading{Include files}
+
+<wx/string.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxStringBuffer::wxStringBuffer}
+
+\func{}{wxStringBuffer}{\param{const wxString\& }{str}, \param{size\_t }{len}}
+
+Constructs a writable string buffer object associated with the given string
+and containing enough space for at least {\it len} characters. Basicly, this
+is equivalent to calling \helpref{GetWriteBuf}{wxstringgetwritebuf} and
+saving the result.
+
+\membersection{wxStringBuffer::\destruct{wxStringBuffer}}
+
+\func{}{\destruct{wxStringBuffer}}{\void}
+
+Restores the string passed to the constructor to the usable state by calling 
+\helpref{UngetWriteBuf}{wxstringungetwritebuf} on it.
+
+\membersection{wxStringBuffer::operator wxChar *}
+
+\constfunc{wxChar *}{operator wxChar *}{\void}
+
+Returns the writable pointer to a buffer of the size at least equal to the
+length specified in the constructor.
+
+
