@@ -134,6 +134,7 @@ protected:
   unsigned long m_timeout;          // IO timeout value
   wxList        m_states;           // Stack of states
   bool          m_interrupt;        // Interrupt ongoing wait operations
+  bool          m_beingDeleted;     // Marked for delayed deletion
 
   // Pushback buffer
   char         *m_unread;           // Pushback buffer
@@ -147,9 +148,10 @@ protected:
 public:
   wxSocketBase();
   virtual ~wxSocketBase();
-  virtual bool Close();
+  virtual bool Destroy();
 
   // Base IO
+  virtual bool Close();
   wxSocketBase& Peek(char* buffer, wxUint32 nbytes);
   wxSocketBase& Read(char* buffer, wxUint32 nbytes);
   wxSocketBase& Write(const char *buffer, wxUint32 nbytes);

@@ -92,7 +92,8 @@ wxSocketBase::wxSocketBase(wxSockFlags _flags, wxSockType _type) :
   m_neededreq(0), m_notify_state(FALSE),
   m_connected(FALSE), m_establishing(FALSE),
   m_reading(FALSE), m_writing(FALSE),
-  m_error(FALSE), m_lcount(0), m_timeout(600), m_states(),
+  m_error(FALSE), m_lcount(0), m_timeout(600),
+  m_states(), m_beingDeleted(FALSE),
   m_unread(NULL), m_unrd_size(0), m_unrd_cur(0),
   m_cbk(NULL), m_cdata(NULL)
 {
@@ -105,7 +106,8 @@ wxSocketBase::wxSocketBase() :
   m_neededreq(0), m_notify_state(FALSE),
   m_connected(FALSE), m_establishing(FALSE),
   m_reading(FALSE), m_writing(FALSE),
-  m_error(FALSE), m_lcount(0), m_timeout(600), m_states(),
+  m_error(FALSE), m_lcount(0), m_timeout(600),
+  m_states(), m_beingDeleted(FALSE),
   m_unread(NULL), m_unrd_size(0), m_unrd_cur(0),
   m_cbk(NULL), m_cdata(NULL)
 {
@@ -113,33 +115,45 @@ wxSocketBase::wxSocketBase() :
 
 wxSocketBase::~wxSocketBase()
 {
-  if (m_unread)
-    free(m_unread);
+  // Just in case the app called Destroy() *and* then deleted
+  // the socket immediately: don't leave dangling pointers.
+#if wxUSE_GUI
+  wxPendingDelete.DeleteObject(this);
+#endif
 
   // Shutdown and close the socket
-  Close();
+  if (!m_beingDeleted)
+    Close();
 
   // Destroy the GSocket object
   if (m_socket)
     GSocket_destroy(m_socket);
+
+  // Free the pushback buffer
+  if (m_unread)
+    free(m_unread);
 }
 
-/*
 bool wxSocketBase::Destroy()
 {
   // Delayed destruction: the socket will be deleted during the next
   // idle loop iteration. This ensures that all pending events have
   // been processed.
-
   m_beingDeleted = TRUE;
+
+  // Shutdown and close the socket
   Close();
 
-  if ( !wxPendingDelete.Member(this) )
+#if wxUSE_GUI
+  if ( wxPendingDelete.Member(this) )
       wxPendingDelete.Append(this);
+#else
+  delete this;
+#endif
 
   return TRUE;
 }
-*/
+
 
 // --------------------------------------------------------------------------
 // Basic IO operations
