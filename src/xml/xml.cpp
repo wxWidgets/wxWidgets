@@ -156,8 +156,8 @@ wxString wxXmlNode::GetPropVal(const wxString& propName, const wxString& default
     wxString tmp;
     if (GetPropVal(propName, &tmp))
         return tmp;
-    else
-        return defaultVal;
+
+    return defaultVal;
 }
 
 void wxXmlNode::AddChild(wxXmlNode *child)
@@ -584,7 +584,12 @@ bool wxXmlDocument::Load(wxInputStream& stream, const wxString& encoding)
 
 // write string to output:
 inline static void OutputString(wxOutputStream& stream, const wxString& str,
-                                wxMBConv *convMem, wxMBConv *convFile)
+#if wxUSE_UNICODE
+    wxMBConv * WXUNUSED(convMem),
+#else
+    wxMBConv *convMem,
+#endif
+    wxMBConv *convFile)
 {
     if (str.IsEmpty()) return;
 #if wxUSE_UNICODE
