@@ -429,7 +429,7 @@ class EditorNotebook(wx.wxNotebook):
 class EditorShellNotebookFrame(EditorNotebookFrame):
     """Frame containing a notebook containing EditorShellNotebooks."""
 
-    def __init__(self, parent=None, id=-1, title='PyAlaMode',
+    def __init__(self, parent=None, id=-1, title='PyAlaModeTest',
                  pos=wx.wxDefaultPosition, size=(600, 400), 
                  style=wx.wxDEFAULT_FRAME_STYLE,
                  filename=None, singlefile=False):
