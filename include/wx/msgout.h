@@ -23,47 +23,65 @@
 #include "wx/defs.h"
 #include "wx/wxchar.h"
 
+// ----------------------------------------------------------------------------
+// wxMessageOutput is a class abstracting formatted output target, i.e.
+// something you can printf() to
+// ----------------------------------------------------------------------------
+
 class WXDLLEXPORT wxMessageOutput
 {
 public:
-    virtual ~wxMessageOutput() {};
+    virtual ~wxMessageOutput() { }
 
     // show a message to the user
     virtual void Printf(const wxChar* format, ...)  ATTRIBUTE_PRINTF_2 = 0;
+
     // gets the current wxMessageOutput object
     static wxMessageOutput* Get();
+
     // sets the global wxMessageOutput instance; returns the previous one
     static wxMessageOutput* Set(wxMessageOutput* msgout);
+
 private:
     static wxMessageOutput* ms_msgOut;
 };
 
-// sends output to stderr
+// ----------------------------------------------------------------------------
+// implementation which sends output to stderr
+// ----------------------------------------------------------------------------
+
 class WXDLLEXPORT wxMessageOutputStderr : public wxMessageOutput
 {
 public:
-    wxMessageOutputStderr() {};
+    wxMessageOutputStderr() { }
 
     virtual void Printf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2;
 };
 
+// ----------------------------------------------------------------------------
+// implementation which shows output in a message box
+// ----------------------------------------------------------------------------
+
 #if wxUSE_GUI
 
-// shows output in a message box
 class WXDLLEXPORT wxMessageOutputMessageBox : public wxMessageOutput
 {
 public:
-    wxMessageOutputMessageBox() {};
+    wxMessageOutputMessageBox() { }
 
     virtual void Printf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2;
 };
 
 #endif // wxUSE_GUI
 
+// ----------------------------------------------------------------------------
+// implementation using wxLog (mainly for backwards compatibility)
+// ----------------------------------------------------------------------------
+
 class WXDLLEXPORT wxMessageOutputLog : public wxMessageOutput
 {
 public:
-    wxMessageOutputLog() {};
+    wxMessageOutputLog() { }
 
     virtual void Printf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2;
 };
