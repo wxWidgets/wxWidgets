@@ -56,8 +56,5 @@
     #undef wxHAS_CRASH_REPORT
 #endif
 
-// wxHtmlWindow::SelectAll()
-#define wxHAVE_HTML_SELECTALL
-
 #endif /*  _WX_FEATURES_H_ */
 
