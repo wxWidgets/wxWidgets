@@ -137,11 +137,11 @@ class WXDLLEXPORT wxLongLongNative
 public:
     // ctors
         // default ctor initializes to 0
-    wxLongLongNative() { m_ll = 0; }
+    wxLongLongNative() : m_ll(0) { }
         // from long long
-    wxLongLongNative(wxLongLong_t ll) { m_ll = ll; }
+    wxLongLongNative(wxLongLong_t ll) : m_ll(ll) { }
         // from 2 longs
-    wxLongLongNative(long hi, unsigned long lo)
+    wxLongLongNative(long hi, unsigned long lo) : m_ll(0)
     {
         // assign first to avoid precision loss!
         m_ll = ((wxLongLong_t) hi) << 32;
@@ -210,8 +210,8 @@ public:
         { m_ll++; return *this; }
 
         // post increment
-    wxLongLongNative& operator++(int)
-        { m_ll++; return *this; }
+    wxLongLongNative operator++(int)
+        { wxLongLongNative value(*this); m_ll++; return value; }
 
         // negation operator
     wxLongLongNative operator-() const
@@ -234,8 +234,8 @@ public:
         { m_ll--; return *this; }
 
         // post decrement
-    wxLongLongNative& operator--(int)
-        { m_ll--; return *this; }
+    wxLongLongNative operator--(int)
+        { wxLongLongNative value(*this); m_ll--; return value; }
 
     // shifts
         // left shift
@@ -339,11 +339,11 @@ class WXDLLEXPORT wxULongLongNative
 public:
     // ctors
         // default ctor initializes to 0
-    wxULongLongNative() { m_ll = 0; }
+    wxULongLongNative() : m_ll(0) { }
         // from long long
-    wxULongLongNative(unsigned wxLongLong_t ll) { m_ll = ll; }
+    wxULongLongNative(unsigned wxLongLong_t ll) : m_ll(ll) { }
         // from 2 longs
-    wxULongLongNative(unsigned long hi, unsigned long lo)
+    wxULongLongNative(unsigned long hi, unsigned long lo) : m_ll(0)
     {
         // assign first to avoid precision loss!
         m_ll = ((unsigned wxLongLong_t) hi) << 32;
@@ -398,8 +398,8 @@ public:
         { m_ll++; return *this; }
 
         // post increment
-    wxULongLongNative& operator++(int)
-        { m_ll++; return *this; }
+    wxULongLongNative operator++(int)
+        { wxULongLongNative value(*this); m_ll++; return value; }
 
         // subtraction
     wxULongLongNative operator-(const wxULongLongNative& ll) const
@@ -417,8 +417,8 @@ public:
         { m_ll--; return *this; }
 
         // post decrement
-    wxULongLongNative& operator--(int)
-        { m_ll--; return *this; }
+    wxULongLongNative operator--(int)
+        { wxULongLongNative value(*this); m_ll--; return value; }
 
     // shifts
         // left shift
