@@ -795,28 +795,7 @@ long wxXmlResourceHandler::GetLong(const wxString& param, long defaultv)
 
 int wxXmlResourceHandler::GetID()
 {
-    wxString sid = GetName();
-    long num;
-
-    if (sid == wxT("-1")) return -1;
-    else if (sid.IsNumber() && sid.ToLong(&num)) return num;
-#define stdID(id) else if (sid == wxT(#id)) return id
-    stdID(wxID_OPEN); stdID(wxID_CLOSE); stdID(wxID_NEW);
-    stdID(wxID_SAVE); stdID(wxID_SAVEAS); stdID(wxID_REVERT);
-    stdID(wxID_EXIT); stdID(wxID_UNDO); stdID(wxID_REDO);
-    stdID(wxID_HELP); stdID(wxID_PRINT); stdID(wxID_PRINT_SETUP);
-    stdID(wxID_PREVIEW); stdID(wxID_ABOUT); stdID(wxID_HELP_CONTENTS);
-    stdID(wxID_HELP_COMMANDS); stdID(wxID_HELP_PROCEDURES);
-    stdID(wxID_CUT); stdID(wxID_COPY); stdID(wxID_PASTE);
-    stdID(wxID_CLEAR); stdID(wxID_FIND); stdID(wxID_DUPLICATE);
-    stdID(wxID_SELECTALL); stdID(wxID_OK); stdID(wxID_CANCEL);
-    stdID(wxID_APPLY); stdID(wxID_YES); stdID(wxID_NO);
-    stdID(wxID_STATIC); stdID(wxID_FORWARD); stdID(wxID_BACKWARD);
-    stdID(wxID_DEFAULT); stdID(wxID_MORE); stdID(wxID_SETUP);
-    stdID(wxID_RESET); stdID(wxID_HELP_CONTEXT);
-    stdID(wxID_CLOSE_ALL);
-#undef stdID
-    else return wxXmlResource::GetXRCID(sid);
+    return wxXmlResource::GetXRCID(GetName());
 }
 
 
@@ -1177,7 +1156,7 @@ struct XRCID_record
 
 static XRCID_record *XRCID_Records[XRCID_TABLE_SIZE] = {NULL};
 
-/*static*/ int wxXmlResource::GetXRCID(const wxChar *str_id)
+static int XRCID_Lookup(const wxChar *str_id, int value_if_not_found = -2)
 {
     static int XRCID_LastID = wxID_HIGHEST;
 
@@ -1205,18 +1184,28 @@ static XRCID_record *XRCID_Records[XRCID_TABLE_SIZE] = {NULL};
     (*rec_var)->next = NULL;
 
     wxChar *end;
-    int asint = wxStrtol(str_id, &end, 10);
-    if (*str_id && *end == 0)
-    {
-        // if str_id was integer, keep it verbosely:
-        (*rec_var)->id = asint;
-    }
+    if (value_if_not_found != -2)
+        (*rec_var)->id = value_if_not_found;
     else
     {
-        (*rec_var)->id = ++XRCID_LastID;
+        int asint = wxStrtol(str_id, &end, 10);
+        if (*str_id && *end == 0)
+        {
+            // if str_id was integer, keep it verbosely:
+            (*rec_var)->id = asint;
+        }
+        else
+        {
+            (*rec_var)->id = ++XRCID_LastID;
+        }
     }
 
     return (*rec_var)->id;
+}
+
+/*static*/ int wxXmlResource::GetXRCID(const wxChar *str_id)
+{
+    return XRCID_Lookup(str_id);
 }
 
 
@@ -1236,8 +1225,26 @@ static void CleanXRCID_Records()
         CleanXRCID_Record(XRCID_Records[i]);
 }
 
-
-
+static void AddStdXRCID_Records()
+{
+#define stdID(id) XRCID_Lookup(wxT(#id), id)
+    stdID(-1);
+    stdID(wxID_OPEN); stdID(wxID_CLOSE); stdID(wxID_NEW);
+    stdID(wxID_SAVE); stdID(wxID_SAVEAS); stdID(wxID_REVERT);
+    stdID(wxID_EXIT); stdID(wxID_UNDO); stdID(wxID_REDO);
+    stdID(wxID_HELP); stdID(wxID_PRINT); stdID(wxID_PRINT_SETUP);
+    stdID(wxID_PREVIEW); stdID(wxID_ABOUT); stdID(wxID_HELP_CONTENTS);
+    stdID(wxID_HELP_COMMANDS); stdID(wxID_HELP_PROCEDURES);
+    stdID(wxID_CUT); stdID(wxID_COPY); stdID(wxID_PASTE);
+    stdID(wxID_CLEAR); stdID(wxID_FIND); stdID(wxID_DUPLICATE);
+    stdID(wxID_SELECTALL); stdID(wxID_OK); stdID(wxID_CANCEL);
+    stdID(wxID_APPLY); stdID(wxID_YES); stdID(wxID_NO);
+    stdID(wxID_STATIC); stdID(wxID_FORWARD); stdID(wxID_BACKWARD);
+    stdID(wxID_DEFAULT); stdID(wxID_MORE); stdID(wxID_SETUP);
+    stdID(wxID_RESET); stdID(wxID_HELP_CONTEXT);
+    stdID(wxID_CLOSE_ALL);
+#undef stdID
+}
 
 
 
@@ -1252,6 +1259,7 @@ public:
     wxXmlResourceModule() {}
     bool OnInit()
     {
+        AddStdXRCID_Records();
         wxXmlResource::AddSubclassFactory(new wxXmlSubclassFactoryCXX);
         return TRUE;
     }
