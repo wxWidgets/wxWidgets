@@ -35,6 +35,7 @@
                 @echo RUNTIME_LIBS=$(RUNTIME_LIBS) >>$(BUILD_CFG_FILE)
                 @echo MSLU=$(MSLU) >>$(BUILD_CFG_FILE)
                 @echo USE_EXCEPTIONS=$(USE_EXCEPTIONS) >>$(BUILD_CFG_FILE)
+                @echo USE_THREADS=$(USE_THREADS) >>$(BUILD_CFG_FILE)
                 @echo USE_GUI=$(USE_GUI) >>$(BUILD_CFG_FILE)
                 @echo USE_HTML=$(USE_HTML) >>$(BUILD_CFG_FILE)
                 @echo USE_ODBC=$(USE_ODBC) >>$(BUILD_CFG_FILE)
