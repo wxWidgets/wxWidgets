@@ -1342,9 +1342,6 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
         m_lastDirectory = wxPathOnly(pathTmp);
 
         path = pathTmp;
-        wxString theExt = FindExtension(path);
-        if (!theExt)
-            return (wxDocTemplate *) NULL;
 
         // This is dodgy in that we're selecting the template on the
         // basis of the file extension, which may not be a standard
