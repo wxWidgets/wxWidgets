@@ -44,20 +44,14 @@ extern bool       g_blockEventsOnDrag;
 // "clicked"
 //-----------------------------------------------------------------------------
 
-static void gtk_radiobutton_clicked_callback( GtkWidget *WXUNUSED(widget), wxRadioBox *rb )
+static void gtk_radiobutton_clicked_callback( GtkToggleButton *button, wxRadioBox *rb )
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
     if (!rb->m_hasVMT) return;
     if (g_blockEventsOnDrag) return;
 
-    if (rb->m_alreadySent)
-    {
-        rb->m_alreadySent = FALSE;
-        return;
-    }
-
-    rb->m_alreadySent = TRUE;
+    if (!button->active) return;
 
     wxCommandEvent event( wxEVT_COMMAND_RADIOBOX_SELECTED, rb->GetId() );
     event.SetInt( rb->GetSelection() );
@@ -166,7 +160,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxRadioBox,wxControl)
 
 void wxRadioBox::Init()
 {
-    m_alreadySent = FALSE;
     m_needParent = TRUE;
     m_acceptsFocus = TRUE;
 
@@ -184,7 +177,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
         wxFAIL_MSG( wxT("wxRadioBox creation failed") );
-	return FALSE;
+        return FALSE;
     }
 
     m_widget = gtk_frame_new( title.mbc_str() );
@@ -478,7 +471,7 @@ void wxRadioBox::SetSelection( int n )
 
     GtkDisableEvents();
     
-    gtk_toggle_button_set_state( button, 1 );
+    gtk_toggle_button_set_active( button, 1 );
     
     GtkEnableEvents();
 }

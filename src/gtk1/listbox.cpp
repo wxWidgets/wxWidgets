@@ -333,6 +333,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 {
     m_needParent = TRUE;
     m_acceptsFocus = TRUE;
+    m_isListBox = TRUE;
     m_prevSelection = 0;  // or -1 ??
 
     if (!PreCreation( parent, pos, size ) ||

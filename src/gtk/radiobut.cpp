@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -40,13 +40,15 @@ extern wxCursor   g_globalCursor;
 //-----------------------------------------------------------------------------
 
 static 
-void gtk_radiobutton_clicked_callback( GtkWidget *WXUNUSED(widget), wxRadioButton *rb )
+void gtk_radiobutton_clicked_callback( GtkToggleButton *button, wxRadioButton *rb )
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
     if (!rb->m_hasVMT) return;
   
     if (g_blockEventsOnDrag) return;
+  
+    if (!button->active) return;
   
     wxCommandEvent event( wxEVT_COMMAND_RADIOBUTTON_SELECTED, rb->GetId());
     event.SetInt( rb->GetValue() );
@@ -72,7 +74,7 @@ bool wxRadioButton::Create( wxWindow *parent, wxWindowID id, const wxString& lab
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
         wxFAIL_MSG( wxT("wxRadioButton creation failed") );
-	return FALSE;
+    return FALSE;
     }
 
     if (HasFlag(wxRB_GROUP))
@@ -86,25 +88,25 @@ bool wxRadioButton::Create( wxWindow *parent, wxWindowID id, const wxString& lab
         wxRadioButton *chief = (wxRadioButton*) NULL;
         wxWindowList::Node *node = parent->GetChildren().GetLast();
         while (node)
-	    {
-	        wxWindow *child = node->GetData();
-	        if (child->m_isRadioButton)
-	        {
-	            chief = (wxRadioButton*) child;
-		        if (child->HasFlag(wxRB_GROUP)) break;
-	        }
-	        node = node->GetPrevious();
+        {
+            wxWindow *child = node->GetData();
+            if (child->m_isRadioButton)
+            {
+                chief = (wxRadioButton*) child;
+                if (child->HasFlag(wxRB_GROUP)) break;
+            }
+            node = node->GetPrevious();
         }
-	    if (chief)
-	    {
+        if (chief)
+        {
             /* we are part of the group started by chief */
-	        m_radioButtonGroup = gtk_radio_button_group( GTK_RADIO_BUTTON(chief->m_widget) );
-	    }
-	    else
-	    {
+            m_radioButtonGroup = gtk_radio_button_group( GTK_RADIO_BUTTON(chief->m_widget) );
+        }
+        else
+        {
             /* start a new group */
             m_radioButtonGroup = (GSList*) NULL;
-	    }
+        }
     }
 
     m_widget = gtk_radio_button_new_with_label( m_radioButtonGroup, label.mbc_str() );
@@ -159,7 +161,7 @@ void wxRadioButton::SetValue( bool val )
 
     if (val)
     {
-        gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(m_widget), TRUE );
+        gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(m_widget), TRUE );
     }
     else
     {
@@ -209,11 +211,11 @@ void wxRadioButton::OnInternalIdle()
     if (GTK_TOGGLE_BUTTON(m_widget)->event_window && cursor.Ok())
     {
         /* I now set the cursor the anew in every OnInternalIdle call
-	   as setting the cursor in a parent window also effects the
-	   windows above so that checking for the current cursor is
-	   not possible. */
-	   
-	   gdk_window_set_cursor( GTK_TOGGLE_BUTTON(m_widget)->event_window, cursor.GetCursor() );
+       as setting the cursor in a parent window also effects the
+       windows above so that checking for the current cursor is
+       not possible. */
+       
+       gdk_window_set_cursor( GTK_TOGGLE_BUTTON(m_widget)->event_window, cursor.GetCursor() );
     }
 
     UpdateWindowUI();

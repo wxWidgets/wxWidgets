@@ -1027,7 +1027,7 @@ class WXDLLEXPORT wxMenuEvent : public wxEvent
 
 public:
     wxMenuEvent(wxEventType type = wxEVT_NULL, int id = 0)
-      { m_eventType = type; m_menuId = id; }
+      { m_eventType = type; m_menuId = id; m_id = id; }
 
     int GetMenuId() const { return m_menuId; }
 

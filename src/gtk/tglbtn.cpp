@@ -106,7 +106,7 @@ void wxToggleButton::SetValue(bool state)
                                  GTK_SIGNAL_FUNC(gtk_togglebutton_clicked_callback),
                                  (gpointer *)this);
 
-   gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(m_widget), state);
+   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_widget), state);
 
    gtk_signal_connect(GTK_OBJECT(m_widget), "clicked",
                       GTK_SIGNAL_FUNC(gtk_togglebutton_clicked_callback),

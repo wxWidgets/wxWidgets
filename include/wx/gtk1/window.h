@@ -193,6 +193,7 @@ public:
     bool                 m_resizing:1;
     bool                 m_isStaticBox:1;       // faster than IS_KIND_OF
     bool                 m_isRadioButton:1;     // faster than IS_KIND_OF
+    bool                 m_isListBox:1;         // faster than IS_KIND_OF
     bool                 m_isFrame:1;           // faster than IS_KIND_OF
     bool                 m_acceptsFocus:1;      // not wxStaticBox, not wxStaticBitmap etc.
     bool                 m_isScrolling;

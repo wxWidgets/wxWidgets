@@ -1333,6 +1333,14 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
     event.m_y = (wxCoord)gdk_event->y;
 
     AdjustEventButtonState(event);
+    
+    // wxListBox actually get mouse events from the item
+    
+    if (win->m_isListBox)
+    {
+        event.m_x += widget->allocation.x;
+        event.m_y += widget->allocation.y;
+    }
 
     // Some control don't have their own X window and thus cannot get
     // any events.
@@ -1465,6 +1473,14 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
     event.m_y = (wxCoord)gdk_event->y;
 
     AdjustEventButtonState(event);
+
+    // wxListBox actually get mouse events from the item
+    
+    if (win->m_isListBox)
+    {
+        event.m_x += widget->allocation.x;
+        event.m_y += widget->allocation.y;
+    }
 
     // Some control don't have their own X window and thus cannot get
     // any events.
@@ -2366,6 +2382,7 @@ void wxWindowGTK::Init()
 
     m_isStaticBox = FALSE;
     m_isRadioButton = FALSE;
+    m_isListBox = FALSE;
     m_isFrame = FALSE;
     m_acceptsFocus = FALSE;
 
