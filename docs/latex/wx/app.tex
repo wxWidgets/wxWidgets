@@ -320,6 +320,25 @@ Return {\tt true} to continue normal execution or {\tt false} to return
 \helpref{OnInitCmdLine}{wxapponinitcmdline}
 
 
+\membersection{wxApp::OnExceptionInMainLoop}{wxapponexceptioninmainloop}
+
+\func{virtual bool}{OnExceptionInMainLoop}{\void}
+
+This function is called if an unhandled exception occurs inside the main
+application event loop. It can return \true to ignore the exception and to
+continue running the loop or \false to exit the loop and terminate the
+program. In the latter case it can also use C++ \texttt{throw} keyword to
+rethrow the current exception.
+
+The default behaviour of this function is the latter in all ports except under
+Windows where a dialog is shown to the user which allows him to choose between
+the different options. You may override this function in your class to do
+something more appropriate.
+
+Finally note that if the exception is rethrown from here, it can be caught in 
+\helpref{OnUnhandledException}{wxapponunhandledexception}.
+
+
 \membersection{wxApp::OnExit}\label{wxapponexit}
 
 \func{virtual int}{OnExit}{\void}

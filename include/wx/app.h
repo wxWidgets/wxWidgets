@@ -117,6 +117,12 @@ public:
     virtual void OnFatalException() { }
 
 #if wxUSE_EXCEPTIONS
+    // function called if an uncaught exception is caught inside the main
+    // event loop: it may return true to continue running the event loop or
+    // false to stop it (in the latter case it may rethrow the exception as
+    // well)
+    virtual bool OnExceptionInMainLoop() { throw; }
+
     // Called when an unhandled C++ exception occurs inside OnRun(): note that
     // the exception type is lost by now, so if you really want to handle the
     // exception you should override OnRun() and put a try/catch around
