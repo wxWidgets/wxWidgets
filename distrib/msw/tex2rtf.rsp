@@ -44,4 +44,5 @@ utils/tex2rtf/docs/*.gif
 utils/tex2rtf/docs/*.wmf
 utils/tex2rtf/docs/*.shg
 utils/tex2rtf/docs/makefile.vc
+utils/tex2rtf/docs/Makefile
 
