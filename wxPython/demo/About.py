@@ -51,7 +51,7 @@ demo item so you can learn how to use the classes yourself.</p>
         btn = html.FindWindowById(wxID_OK)
         btn.SetDefault()
         ir = html.GetInternalRepresentation()
-        html.SetSize( (ir.GetWidth()+5, ir.GetHeight()+5) )
+        html.SetSize( (ir.GetWidth()+25, ir.GetHeight()+25) )
         self.SetClientSize(html.GetSize())
         self.CentreOnParent(wxBOTH)
 

@@ -23,8 +23,8 @@ class TestToolBar(wxFrame):
 
         self.CreateStatusBar()
 
-        #tb.AddSimpleTool(10, images.getNewBitmap(), "New", "Long help for 'New'")
-        tb.AddLabelTool(10, "New", images.getNewBitmap(), shortHelp="New", longHelp="Long help for 'New'")
+        tb.AddSimpleTool(10, images.getNewBitmap(), "New", "Long help for 'New'")
+        #tb.AddLabelTool(10, "New", images.getNewBitmap(), shortHelp="New", longHelp="Long help for 'New'")
         EVT_TOOL(self, 10, self.OnToolClick)
         EVT_TOOL_RCLICKED(self, 10, self.OnToolRClick)
 
@@ -47,9 +47,9 @@ class TestToolBar(wxFrame):
                                shortHelp="Toggle this")
         EVT_TOOL(self, 50, self.OnToolClick)
 
-        #tb.AddCheckTool(60, '', images.getTog1Bitmap(), images.getTog2Bitmap(),
-        #                shortHelp="Toggle with 2 bitmaps")
-        #EVT_TOOL(self, 60, self.OnToolClick)
+##         tb.AddCheckTool(60, images.getTog1Bitmap(), images.getTog2Bitmap(),
+##                         shortHelp="Toggle with 2 bitmaps")
+##         EVT_TOOL(self, 60, self.OnToolClick)
 
         EVT_TOOL_ENTER(self, -1, self.OnToolEnter)
         EVT_TOOL_RCLICKED(self, -1, self.OnToolRClick)  # Match all
@@ -110,16 +110,15 @@ def runTest(frame, nb, log):
 
 
 
-
-
-
-
-
-
-
-
-
-
 overview = """\
 
 """
+
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+

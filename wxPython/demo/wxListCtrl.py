@@ -97,7 +97,10 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
         self.sm_dn = self.il.Add(images.getSmallDnArrowBitmap())
 
         self.list = TestListCtrl(self, tID,
-                               style=wxLC_REPORT|wxSUNKEN_BORDER)#|wxLC_VRULES|wxLC_HRULES)
+                                 style=wxLC_REPORT | wxSUNKEN_BORDER
+                                 #| wxLC_NO_HEADER
+                                 #| wxLC_VRULES | wxLC_HRULES
+                                 )
         self.list.SetImageList(self.il, wxIMAGE_LIST_SMALL)
 
         self.PopulateList()

@@ -13,7 +13,7 @@ class SimpleGrid(wxGrid): ##, wxGridAutoEditMixin):
 
         EVT_IDLE(self, self.OnIdle)
 
-        self.CreateGrid(25, 25)
+        self.CreateGrid(25, 25) #, wxGrid.wxGridSelectRows)
         ##self.EnableEditing(false)
 
         # simple cell formatting

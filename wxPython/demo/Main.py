@@ -29,7 +29,7 @@ _treeList = [
         'wxPyColourChooser',
         ]),
 
-    # managed windows == things with a caption you can close
+    # managed windows == things with a (optional) caption you can close
     ('Base Frames and Dialogs', [
         'wxDialog',
         'wxFrame',
@@ -298,9 +298,10 @@ class wxPythonDemo(wxFrame):
         findID = wxNewId()
         findnextID = wxNewId()
         menu = wxMenu()
-        menu.Append(helpID, '&About\tCtrl-H', 'wxPython RULES!!!')
         menu.Append(findID, '&Find\tCtrl-F', 'Find in the Demo Code')
         menu.Append(findnextID, 'Find &Next\tF3', 'Find Next')
+        menu.AppendSeparator()
+        menu.Append(helpID, '&About\tCtrl-H', 'wxPython RULES!!!')
         EVT_MENU(self, helpID, self.OnHelpAbout)
         EVT_MENU(self, findID, self.OnHelpFind)
         EVT_MENU(self, findnextID, self.OnFindNext)
