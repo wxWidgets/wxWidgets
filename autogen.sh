@@ -1,5 +1,5 @@
 #!/bin/sh
 aclocal -I .
 autoheader
-automake --verbose
+automake --foreign --verbose
 autoconf
