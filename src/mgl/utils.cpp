@@ -208,24 +208,26 @@ int wxDisplayDepth()
     return g_displayDC->getBitsPerPixel();
 }
 
-int wxGUIAppTraits::GetOSVersion(int *majorVsn, int *minorVsn)
+wxToolkitInfo& wxGUIAppTraits::GetToolkitInfo()
 {
-    if ( majorVsn )
-        *majorVsn = MGL_RELEASE_MAJOR;
-    if ( minorVsn )
-        *minorVsn = MGL_RELEASE_MINOR;
-
+    static wxToolkitInfo info;
+    info.shortName = _T("mgluniv");
+    info.name = _T("wxMGL");
+    info.versionMajor = MGL_RELEASE_MAJOR;
+    info.versionMinor = MGL_RELEASE_MINOR;
+    info.os = wxGTK;
 #if defined(__UNIX__)
-    return wxMGL_UNIX;
+    info.os = wxMGL_UNIX;
 #elif defined(__OS2__)
-    return wxMGL_OS2;
+    info.os = wxMGL_OS2;
 #elif defined(__WIN32__)
-    return wxMGL_WIN32;
+    info.os = wxMGL_WIN32;
 #elif defined(__DOS__)
-    return wxMGL_DOS;
+    info.os = wxMGL_DOS;
 #else
     #error Platform not supported by wxMGL!
 #endif
+    return info;
 }
 
 

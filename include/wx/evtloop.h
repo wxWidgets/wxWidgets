@@ -16,6 +16,8 @@
     #pragma interface "evtloop.h"
 #endif
 
+#include "wx/utils.h"
+
 class WXDLLEXPORT wxEventLoopImpl;
 
 // ----------------------------------------------------------------------------

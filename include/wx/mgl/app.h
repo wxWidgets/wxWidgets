@@ -46,7 +46,9 @@ public:
 
     virtual bool Initialize(int& argc, wxChar **argv);
     virtual void CleanUp();
-
+    
+    virtual void Exit();
+    virtual void WakeUpIdle();
     virtual bool Yield(bool onlyIfNeeded = FALSE);
 
     virtual wxDisplayModeInfo GetDisplayMode() const { return m_displayMode; }

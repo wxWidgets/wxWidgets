@@ -208,7 +208,7 @@ BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
 END_EVENT_TABLE()
 
 
-wxApp::wxApp() : m_mainLoop(NULL)
+wxApp::wxApp()
 {
 }
 
