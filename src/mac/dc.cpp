@@ -105,6 +105,7 @@ void wxDC::MacSetupPort(AGAPortHelper* help) const
 {
 //	help->Setup( m_macPort ) ;
 	::SetOrigin(-m_macLocalOrigin.h, -m_macLocalOrigin.v);
+
 	if ( m_clipping )
 	{
 		long x1 = XLOG2DEV(m_clipX1);

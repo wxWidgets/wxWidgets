@@ -112,6 +112,7 @@ wxPaintDC::wxPaintDC(wxWindow *window)
 
 	m_macPort = UMAGetWindowPort( windowref ) ;
  	m_ok = TRUE ;
+	/*
 	wxCoord x , y ,w , h ;
 	window->GetUpdateRegion().GetBox( x , y , w , h ) ;
 	m_minY = m_minX =  0;
@@ -119,6 +120,7 @@ wxPaintDC::wxPaintDC(wxWindow *window)
 	m_maxX = size.x  ;
 	m_maxY = size.y ; 
 	SetClippingRegion( x , y , w , h ) ;
+  	*/
   	SetBackground(wxBrush(window->GetBackgroundColour(), wxSOLID));
   	SetFont(window->GetFont() ) ;
 }
