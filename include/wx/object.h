@@ -153,6 +153,14 @@ WXDLLEXPORT wxObject *wxCreateDynamicObject(const wxChar *name);
 #define DECLARE_ABSTRACT_CLASS(name) DECLARE_DYNAMIC_CLASS(name)
 #define DECLARE_CLASS(name) DECLARE_DYNAMIC_CLASS(name)
 
+#define DECLARE_DYNAMIC_CLASS_NO_ASSIGN(name)   \
+    DECLARE_NO_ASSIGN_CLASS(name)               \
+    DECLARE_DYNAMIC_CLASS(name)
+
+#define DECLARE_DYNAMIC_CLASS_NO_COPY(name)   \
+    DECLARE_NO_COPY_CLASS(name)               \
+    DECLARE_DYNAMIC_CLASS(name)
+
 // -----------------------------------
 // for concrete classes
 // -----------------------------------
