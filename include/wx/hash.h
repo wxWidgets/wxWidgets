@@ -244,7 +244,7 @@ private:
     protected:                                                                 \
         void DoPut(long key, long value, eltype *data)                         \
         {                                                                      \
-            size_t slot = (size_t)abs(key % m_hashSize);                       \
+            size_t slot = (size_t)abs((int)(key % (long)m_hashSize));          \
                                                                                \
             if ( !m_hashTable[slot] )                                          \
             {                                                                  \
