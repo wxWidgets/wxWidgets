@@ -19,7 +19,8 @@ wxHTML uses Microsoft's HTML Help Workshop project files (.hhp, .hhk, .hhc) as i
 native format. The file format is described \helpref{here}{helpformat}.
 Have a look at docs/html/ directory where sample project files are stored.
 
-You can use tex2rtf to generate MHHW projects (see wxHTML homepage for details).
+You can use Tex2RTF to produce these files when generating HTML, if you set {\bf htmlWorkshopFiles} to {\bf true} in
+your tex2rtf.ini file.
 
 In order to use the controller in your application under Windows you must
 have the following line in your .rc file:

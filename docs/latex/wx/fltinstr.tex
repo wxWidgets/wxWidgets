@@ -3,6 +3,10 @@
 % -----------------------------------------------------------------------------
 \section{\class{wxFilterInputStream}}\label{wxfilterinputstream}
 
+A filter stream has the capability of a normal stream but it can be placed on top
+of another stream. So, for example, it can uncompress, uncrypt the datas which are read
+from another stream and pass it to the requester.
+
 \wxheading{Derived from}
 
 \helpref{wxInputStream}{wxinputstream}\\
@@ -24,8 +28,5 @@ differs and it is documented below.
 
 \func{}{wxFilterInputStream}{\param{wxInputStream\&}{ stream}}
 
-Initializes a "filter" stream. A filter stream has the capability of a normal
-stream but it can be placed on the top of another stream. So, for example, it
-can uncompress, uncrypt the datas which are read from another stream and pass it
-to the requester.
+Initializes a "filter" stream.
 

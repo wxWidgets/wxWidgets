@@ -65,7 +65,7 @@ Visual C++ 4.0/5.0/6.0 compilation
 
 Using project files:
 
-1. Unarchive wx200vc.zip, the VC++ 5 project makefiles.
+1. Unarchive wx200vc.zip, the VC++ 5/6 project makefiles.
 2. Open src/wxvc.dsp, set Debug or Release configuration, and
    compile. This will produce src/Debug/wxvc.lib or
    src/Release/wxvc.lib.  The project file src/wxvc_dll.dsp

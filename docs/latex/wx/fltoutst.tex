@@ -3,6 +3,11 @@
 % -----------------------------------------------------------------------------
 \section{\class{wxFilterOutputStream}}\label{wxfilteroutputstream}
 
+A filter stream has the capability of a normal
+stream but it can be placed on top of another stream. So, for example, it
+can compress, encrypt the data which are passed to it and write them to another
+stream.
+
 \wxheading{Derived from}
 
 \helpref{wxOutputStream}{wxoutputstream}\\
@@ -24,8 +29,5 @@ differs and it is documented below.
 
 \func{}{wxFilterOutputStream}{\param{wxOutputStream\&}{ stream}}
 
-Initializes a "filter" stream. A filter stream has the capability of a normal
-stream but it can be placed on the top of another stream. So, for example, it
-can compress, crypt the datas which are passed to it and write them to another
-stream.
+Initializes a "filter" stream.
 

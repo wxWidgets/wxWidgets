@@ -1,6 +1,6 @@
 \section{\class{wxFileType}}\label{wxfiletype}
 
-This class holds information about a given "file type". File type is the same as
+This class holds information about a given {\it file type}. File type is the same as
 MIME type under Unix, but under Windows it corresponds more to an extension than
 to MIME type (in fact, several extensions may correspond to a file type). This
 object may be created in several different ways: the program might know the file
@@ -13,14 +13,14 @@ will be returned if the corresponding information couldn't be found.
 The objects of this class are never created by the application code but are
 returned by \helpref{wxMimeTypesManager::GetFileTypeFromMimeType}{wxmimetypesmanagergetfiletypefrommimetype} and 
 \helpref{wxMimeTypesManager::GetFileTypeFromExtension}{wxmimetypesmanagergetfiletypefromextension} methods.
-But it's your responsability to delete the returned pointer when you're done
+But it's your responsibility to delete the returned pointer when you're done
 with it!
 
 % TODO describe MIME types better than this...
-A brief remainder about what the MIME types are (see the RFC 1341 for more
-information): basicly, it is just a pair category/type (for example,
-"text/plain") where the category is a basic indication of what a file is
-(examples of categories are "application", "image", "text", "binary"...) and
+A brief reminder about what the MIME types are (see the RFC 1341 for more
+information): basically, it is just a pair category/type (for example,
+"text/plain") where the category is a basic indication of what a file is.
+Examples of categories are "application", "image", "text", "binary", and
 type is a precise definition of the document format: "plain" in the example
 above means just ASCII text without any formatting, while "text/html" is the
 HTML document source.
@@ -31,7 +31,7 @@ typically correspond to the extension ".txt", but may as well be associated with
 
 \wxheading{Derived from}
 
-No base class.
+None
 
 \wxheading{Include files}
 

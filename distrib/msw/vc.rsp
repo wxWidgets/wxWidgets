@@ -139,8 +139,8 @@ utils/dialoged/src/DialogEdVC.dsw
 utils/tex2rtf/src/Tex2RTFVC.dsp
 utils/tex2rtf/src/Tex2RTFVC.dsw
 
-utils/glcanvas/win/GlcanvasVC.dsp
-utils/glcanvas/win/GlcanvasVC.dsw
+utils/glcanvas/win/Glcanvas*.dsp
+utils/glcanvas/win/Glcanvas*.dsw
 utils/glcanvas/samples/cube/CubeVC.dsp
 utils/glcanvas/samples/cube/CubeVC.dsw
 utils/glcanvas/samples/isosurf/IsosurfVC.dsp

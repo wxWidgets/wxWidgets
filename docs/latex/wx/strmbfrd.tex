@@ -3,6 +3,10 @@
 % -----------------------------------------------------------------------------
 \section{\class{wxBufferedInputStream}}\label{wxbufferedinputstream}
 
+This stream acts as a cache. It caches the bytes read from the specified
+input stream (See \helpref{wxFilterInputStream}{wxfilterinputstream}).
+It uses wxStreamBuffer and sets the default in-buffer size to 1024 bytes.
+
 \wxheading{Derived from}
 
 \helpref{wxFilterInputStream}{wxfilterinputstream}
@@ -15,16 +19,15 @@
 
 \helpref{wxStreamBuffer}{wxstreamBuffer}, \helpref{wxInputStream}{wxinputstream}
 
-\wxheading{Short description}
-
-This stream acts as a cache. It caches the bytes read from the specified
-input stream (See \helpref{wxFilterInputStream}{wxfilterinputstream}).
-It uses wxStreamBuffer and sets the default in-buffer size to 1024 bytes.
-
 % -----------------------------------------------------------------------------
 % wxBufferedOutputStream
 % -----------------------------------------------------------------------------
 \section{\class{wxBufferedOutputStream}}\label{wxbufferedoutputstream}
+
+This stream acts as a cache. It caches the bytes to be written to the specified
+output stream (See \helpref{wxFilterOutputStream}{wxfilteroutputstream}). The
+datas are only written when the cache is full or when the buffered stream is
+destroyed.
 
 \wxheading{Derived from}
 
@@ -37,11 +40,4 @@ It uses wxStreamBuffer and sets the default in-buffer size to 1024 bytes.
 \wxheading{See also}
 
 \helpref{wxStreamBuffer}{wxstreamBuffer}, \helpref{wxOutputStream}{wxoutputstream}
-
-\wxheading{Short description}
-
-This stream acts as a cache. It caches the bytes to be written to the specified
-output stream (See \helpref{wxFilterOutputStream}{wxfilteroutputstream}). The
-datas are only written when the cache is full or when the buffered stream is
-destroyed.
 

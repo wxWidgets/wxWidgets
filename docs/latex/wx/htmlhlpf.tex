@@ -1,6 +1,8 @@
 \membersection{Help Files Format}\label{helpformat}
 
 wxHTML library uses a reduced version of MS HTML Workshop format.
+Tex2RTF can produce these files when generating HTML, if you set {\bf htmlWorkshopFiles} to {\bf true} in
+your tex2rtf.ini file.
 
 (See \helpref{wxHtmlHelpController}{wxhtmlhelpcontroller} for help controller description.)
 
@@ -17,15 +19,15 @@ Title=@title of your book@
 Default topic=@default page to be displayed.htm@
 \end{verbatim}
 
-All filenames (including Default topic) are relative to the location of .hhp file.
+All filenames (including the Default topic) are relative to the location of .hhp file.
 
-For larger projects I recommend storing everything but .hhp file into one .zip archive. (E.g. contents file 
-would then be reffered as myhelp.zip\#zip:contents.hhc)
+For larger projects I recommend storing everything but .hhp file into one .zip archive. (The contents file 
+would then be referred to as myhelp.zip\#zip:contents.hhc)
 
 \wxheading{Contents file (.hhc)}
 
 Contents file has HTML syntax and it can be parsed by regular HTML parser. It contains exactly one list
-(<ul>....</ul> statement):
+(\verb$<ul>$....\verb$</ul>$ statement):
 
 \begin{verbatim}
 <ul>
@@ -49,7 +51,7 @@ You can modify value attributes of param tags. {\it topic name} is name of chapt
 contents, {\it filename.htm} is HTML page name (relative to .hhp file) and {\it numeric_id} is optional 
 - it is used only when you use \helpref{wxHtmlHelpController::Display(int)}{wxhtmlhelpcontrollerdisplay}
 
-Items in the list may be nested - one \<li\> statement may contain \<ul\> sub-statement:
+Items in the list may be nested - one \verb$<li>$ statement may contain a \verb$<ul>$ sub-statement:
 
 \begin{verbatim}
 <ul>

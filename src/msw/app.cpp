@@ -648,6 +648,13 @@ int wxEntry(WXHINSTANCE hInstance,
         // but this call is provided for compatibility across platforms.
         wxTheApp->OnInitGui();
 
+        // We really don't want timestamps by default, because it means
+        // we can't simply double-click on the error message and get to that
+        // line in the source. So VC++ at least, let's have a sensible default.
+#ifdef __VISUALC__
+        wxLog::SetTimestamp(NULL);
+#endif
+
         int retValue = 0;
 
         if ( wxTheApp->OnInit() )

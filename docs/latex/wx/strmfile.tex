@@ -3,7 +3,7 @@
 % -----------------------------------------------------------------------------
 \section{\class{wxFileInputStream}}\label{wxfileinputstream}
 
-This classes represent data streams to and from a file. There are actually
+This class represents data read in from a file. There are actually
 two such groups of classes: those documented here, and another group called
 wxFFileInputStream, wxFFileOutputStream and wxFFileStream which are not
 based on file descriptors (and their wxWindows equivalent wxFile) but the
@@ -20,7 +20,7 @@ instead if "int fd") their interface is identical.
 
 \wxheading{See also}
 
-\helpref{wxStreamBuffer}{wxstreamBuffer}
+\helpref{wxStreamBuffer}{wxstreamBuffer}, \helpref{wxFileOutputStream}{wxfileoutputstream}
 
 % ----------
 % Members
@@ -58,6 +58,13 @@ Returns TRUE if the stream is initialized and ready.
 % -----------------------------------------------------------------------------
 \section{\class{wxFileOutputStream}}\label{wxfileoutputstream}
 
+This class represents data written to a file. There are actually
+two such groups of classes: those documented here, and another group called
+wxFFileInputStream, wxFFileOutputStream and wxFFileStream which are not
+based on file descriptors (and their wxWindows equivalent wxFile) but the
+FILE* type (and wxFFile). Apart from the different constructor ("FILE *file"
+instead if "int fd") their interface is identical.
+
 \wxheading{Derived from}
 
 \helpref{wxOutputStream}{wxoutputstream}
@@ -68,7 +75,7 @@ Returns TRUE if the stream is initialized and ready.
 
 \wxheading{See also}
 
-\helpref{wxStreamBuffer}{wxstreamBuffer}
+\helpref{wxStreamBuffer}{wxstreamBuffer}, \helpref{wxFileInputStream}{wxfileinputstream}
 
 % ----------
 % Members

@@ -492,10 +492,10 @@ bool csApp::WriteOptions()
 {
     wxConfig config("OGL Studio", "wxWindows");
 
-    config.Write("mainX", m_mainFramePos.x);
-    config.Write("mainY", m_mainFramePos.y);
-    config.Write("mainWidth", m_mainFrameSize.x);
-    config.Write("mainHeight", m_mainFrameSize.y);
+    config.Write("mainX", (long) m_mainFramePos.x);
+    config.Write("mainY", (long) m_mainFramePos.y);
+    config.Write("mainWidth", (long) m_mainFrameSize.x);
+    config.Write("mainHeight", (long) m_mainFrameSize.y);
     config.Write("gridStyle", (long) m_gridStyle);
     config.Write("gridSpacing", (long) m_gridSpacing);
 

@@ -3,6 +3,9 @@
 % -----------------------------------------------------------------------------
 \section{\class{wxZlibInputStream}}\label{wxzlibinputstream}
 
+This stream uncompresses all data read from it. It uses the "filtered"
+stream to get new compressed data.
+
 \wxheading{Derived from}
 
 \helpref{wxFilterInputStream}{wxfilterinputstream}
@@ -15,15 +18,13 @@
 
 \helpref{wxStreamBuffer}{wxstreamBuffer}, \helpref{wxInputStream}{wxinputstream}
 
-\wxheading{Short description}
-
-This stream uncompresses all data read from it. It uses the "filtered"
-stream to get new compressed data.
-
 % -----------------------------------------------------------------------------
 % wxZlibOutputStream
 % -----------------------------------------------------------------------------
 \section{\class{wxZlibOutputStream}}\label{wxzliboutputstream}
+
+This stream compresses all data written to it, and passes the compressed data
+to the ``filtered'' stream.
 
 \wxheading{Derived from}
 
@@ -36,9 +37,4 @@ stream to get new compressed data.
 \wxheading{See also}
 
 \helpref{wxStreamBuffer}{wxstreamBuffer}, \helpref{wxOutputStream}{wxoutputstream}
-
-\wxheading{Short description}
-
-This stream compresses all data written to it, and passes the compressed data
-to the ``filtered'' stream.
 

@@ -5,12 +5,12 @@
 
 \section{\class{wxFileSystemHandler}}\label{wxfilesystemhandler}
 
-wxFileSystemHandler (or derived classes to be exact) is used
-to access virtual file systems. It's public interface consists
-from two methods: \helpref{CanOpen}{wxfilesystemhandlercanopen}
+Classes derived from wxFileSystemHandler are used
+to access virtual file systems. Its public interface consists
+of two methods: \helpref{CanOpen}{wxfilesystemhandlercanopen} 
 and \helpref{OpenFile}{wxfilesystemhandleropenfile}. 
-It provides additional protected methods to simplify process
-of opening the file : GetProtocol, GetLeftLocation, GetRightLocation,
+It provides additional protected methods to simplify the process
+of opening the file: GetProtocol, GetLeftLocation, GetRightLocation,
 GetAnchor, GetMimeTypeFromExt.
 
 Please have a look at \helpref{overview}{fs} if you don't know how locations
@@ -18,13 +18,11 @@ are constructed.
 
 \wxheading{Notes}
 
-\begin{itemize}
+\begin{itemize}\itemsep=0pt
 \item The handlers are shared by all instances of wxFileSystem.
-
 \item wxHTML library provides handlers for local files and HTTP or FTP protocol
-
 \item The {\it location} parameter passed to OpenFile or CanOpen methods
-is always {\bf absolute} path. You don't need to check the FS's current path!
+is always an {\bf absolute} path. You don't need to check the FS's current path.
 \end{itemize}
 
 \wxheading{Derived from}
@@ -33,8 +31,8 @@ wxObject
 
 \wxheading{See also}
 
-\helpref{wxFileSystem}{wxfilesystem},
-\helpref{wxFSFile}{wxfsfile},
+\helpref{wxFileSystem}{wxfilesystem}, 
+\helpref{wxFSFile}{wxfsfile}, 
 \helpref{Overview}{fs}
 
 \membersection{wxFileSystemHandler::wxFileSystemHandler}\label{wxfilesystemhandlerwxfilesystemhandler}
@@ -47,8 +45,8 @@ Constructor.
 
 \func{virtual bool}{CanOpen}{\param{const wxString\& }{location}}
 
-Returns TRUE if the handler is able to open this file (this function doesn't
-check whether the file exists or not, it only checks if it knows the protocol).
+Returns TRUE if the handler is able to open this file. This function doesn't
+check whether the file exists or not, it only checks if it knows the protocol.
 Example:
 
 \begin{verbatim}
@@ -58,24 +56,24 @@ bool MyHand::CanOpen(const wxString& location)
 }
 \end{verbatim}
 
-Must be overwriten in derived handlers.
+Must be overridden in derived handlers.
 
 \membersection{wxFileSystemHandler::GetAnchor}\label{wxfilesystemhandlergetanchor}
 
 \constfunc{wxString}{GetAnchor}{\param{const wxString\& }{location}}
 
-Returns anchor if present in the location.
+Returns the anchor if present in the location.
 See \helpref{wxFSFile}{wxfsfilegetanchor} for details.
 
-Example : GetAnchor("index.htm\#chapter2") == "chapter2"
+Example: GetAnchor("index.htm\#chapter2") == "chapter2"
 
-{\bf Note:} anchor is NOT part of left location.
+{\bf Note:} the anchor is NOT part of the left location.
 
 \membersection{wxFileSystemHandler::GetLeftLocation}\label{wxfilesystemhandlergetleftlocation}
 
 \constfunc{wxString}{GetLeftLocation}{\param{const wxString\& }{location}}
 
-Returns left location string extracted from {\it location}. 
+Returns the left location string extracted from {\it location}. 
 
 Example: GetLeftLocation("file:myzipfile.zip\#zip:index.htm") == "file:myzipfile.zip"
 
@@ -83,8 +81,8 @@ Example: GetLeftLocation("file:myzipfile.zip\#zip:index.htm") == "file:myzipfile
 
 \func{wxString}{GetMimeTypeFromExt}{\param{const wxString\& }{location}}
 
-Returns MIME type based on {\bf extension} of {\it location}. (While wxFSFile::GetMimeType
-returns real MIME type - either extension-based or queried from HTTP)
+Returns the MIME type based on {\bf extension} of {\it location}. (While wxFSFile::GetMimeType
+returns real MIME type - either extension-based or queried from HTTP.)
 
 Example : GetMimeTypeFromExt("index.htm") == "text/html"
 
@@ -92,7 +90,7 @@ Example : GetMimeTypeFromExt("index.htm") == "text/html"
 
 \constfunc{wxString}{GetProtocol}{\param{const wxString\& }{location}}
 
-Returns protocol string extracted from {\it location}. 
+Returns the protocol string extracted from {\it location}. 
 
 Example: GetProtocol("file:myzipfile.zip\#zip:index.htm") == "zip"
 
@@ -100,13 +98,9 @@ Example: GetProtocol("file:myzipfile.zip\#zip:index.htm") == "zip"
 
 \constfunc{wxString}{GetRightLocation}{\param{const wxString\& }{location}}
 
-Returns right location string extracted from {\it location}. 
+Returns the right location string extracted from {\it location}. 
 
 Example : GetRightLocation("file:myzipfile.zip\#zip:index.htm") == "index.htm"
-
-
-
-
 
 \membersection{wxFileSystemHandler::FindFirst}\label{wxfilesystemfindfirst}
 
@@ -125,9 +119,7 @@ This method is only called if \helpref{CanOpen}{wxfilesystemhandlercanopen} retu
 Returns next filename that matches parameters passed to \helpref{FindFirst}{wxfilesystemfindfirst}.
 
 This method is only called if \helpref{CanRead}{wxfilesystemhandlercanread} returns TRUE and FindFirst
-returned non-empty string.
-
-
+returned a non-empty string.
 
 \membersection{wxFileSystemHandler::OpenFile}\label{wxfilesystemhandleropenfile}
 
@@ -135,12 +127,12 @@ returned non-empty string.
 
 Opens the file and returns wxFSFile pointer or NULL if failed.
 
-Must be overwriten in derived handlers.
+Must be overridden in derived handlers.
 
 \wxheading{Parameters}
 
 \docparam{fs}{Parent FS (the FS from that OpenFile was called). See ZIP handler
-for details how to use it.}
+for details of how to use it.}
 
 \docparam{location}{The {\bf absolute} location of file.}
 
