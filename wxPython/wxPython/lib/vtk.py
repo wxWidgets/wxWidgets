@@ -37,7 +37,7 @@ def debug(msg):
         print msg
 
 
-class wxVTKRenderWindowBase(wxScrolledWindow):
+class wxVTKRenderWindowBase(wxWindow):
     """
     A base class that enables one to embed a vtkRenderWindow into
     a wxPython widget.  This class embeds the RenderWindow correctly
@@ -49,13 +49,7 @@ class wxVTKRenderWindowBase(wxScrolledWindow):
 
     def __init__(self, parent, id, position=wxDefaultPosition,
                  size=wxDefaultSize, style=0):
-        wxScrolledWindow.__init__(self, parent, id, position, size, style | wxWANTS_CHARS)
-        style = style | wxWANTS_CHARS
-
-        # This box is necessary to eliminate flicker and enable proper
-        # event handling under Linux/GTK.
-        #self.box = wxPanel(self, -1, position, size, style)
-
+        wxWindow.__init__(self, parent, id, position, size, style | wxWANTS_CHARS)
         self._RenderWindow = vtkRenderWindow()
 
         self.__InExpose = 0
