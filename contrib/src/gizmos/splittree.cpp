@@ -282,7 +282,7 @@ void wxRemotelyScrolledTreeCtrl::OnPaint(wxPaintEvent& event)
             lastH = h;
         }
     }
-    if (GetBoundingRect(lastH, itemRect))
+    if (lastH.IsOk() && GetBoundingRect(lastH, itemRect))
     {
         cy = itemRect.GetBottom();
         dc.DrawLine(0, cy, clientSize.x, cy);
