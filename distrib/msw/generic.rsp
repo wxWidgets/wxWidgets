@@ -44,6 +44,10 @@ docs/changes.txt
 docs/upgrade.txt
 docs/todo.txt
 docs/licence.txt
+docs/licendoc.txt
+docs/preamble.txt
+docs/gpl.txt
+docs/lgpl.txt
 docs/symbols.txt
 docs/bugs.txt
 docs/*.htm

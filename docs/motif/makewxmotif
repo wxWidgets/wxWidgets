@@ -5,7 +5,7 @@
 # Note that this uses standard (but commonly-used) configure options;
 # if you're feeling brave, you may wish to compile with threads.
 # -- Julian Smart
-chmod a+x configure config.sub config.guess setup/general/* setup/shared/*
-./configure --with-shared --with-motif --without-gtk --with-debug_flag --with-debug_info --without-threads
-make makefiles
+rm -f *.cache
+chmod a+x configure config.sub config.guess
+./configure --disable-shared --with-motif --without-gtk --with-debug_flag --with-debug_info --enable-debug --without-sockets --without-odbc --without-threads --enable-newgrid
 make

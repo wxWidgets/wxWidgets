@@ -51,11 +51,6 @@ item: Create Shortcut
   Working Directory=%MAINDIR%
 end
 item: Create Shortcut
-  Source=%MAINDIR%\docs\winhelp\wxtree.hlp
-  Destination=%GROUP%\wxTree Help.lnk
-  Working Directory=%MAINDIR%
-end
-item: Create Shortcut
   Source=%MAINDIR%\docs\html\index.htm
   Destination=%GROUP%\HTML Docs Index.lnk
   Working Directory=%MAINDIR%
@@ -70,7 +65,29 @@ item: Create Shortcut
   Destination=%GROUP%\Dialog Editor.lnk
   Working Directory=%MAINDIR%
 end
+item: Create Shortcut
+  Source=%MAINDIR%\docs\release.txt
+  Destination=%GROUP%\Release Details.lnk
+  Working Directory=%MAINDIR%
+end
+item: Create Shortcut
+  Source=%MAINDIR%\docs\winhelp\wxtree.hlp
+  Destination=%GROUP%\wxTreeLayout Help.lnk
+  Working Directory=%MAINDIR%
+end
 item: Else Statement
+end
+item: Add ProgMan Icon
+  Group=%GROUP%
+  Icon Name=wxTreeLayout Help
+  Command Line=%MAINDIR%\docs\winhelp\wxtree.hlp
+  Default Directory=%MAINDIR%
+end
+item: Add ProgMan Icon
+  Group=%GROUP%
+  Icon Name=Release Details
+  Command Line=%MAINDIR%\docs\release.txt
+  Default Directory=%MAINDIR%
 end
 item: Add ProgMan Icon
   Group=%GROUP%
@@ -124,12 +141,6 @@ item: Add ProgMan Icon
   Group=%GROUP%
   Icon Name=Tex2RTF Help
   Command Line=%MAINDIR%\docs\winhelp\tex2rtf.hlp
-  Default Directory=%MAINDIR%
-end
-item: Add ProgMan Icon
-  Group=%GROUP%
-  Icon Name=wxTree Help
-  Command Line=%MAINDIR%\docs\winhelp\wxtree.hlp
   Default Directory=%MAINDIR%
 end
 item: End Block

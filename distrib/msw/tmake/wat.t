@@ -43,7 +43,7 @@
         #! these files don't compile
         next if $file =~ /^pnghand\./;
 
-        next if $wxGeneric{$file} =~ /\b16\b/;
+#!        next if $wxGeneric{$file} =~ /\b16\b/;
 
         my $isOleObj = $wxMSW{$file} =~ /\bO\b/;
         my $isCFile = $file =~ /\.c$/;

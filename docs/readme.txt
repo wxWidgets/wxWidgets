@@ -116,7 +116,6 @@ wxMotif-2.x.y.tgz          wxMotif source distribution. You will
    -- OR --                from the zip set (above).
 
 wx2_x_y_gen.zip
-wx2_x_y_msw.zip
 wx2_x_y_mot.zip
 jpeg.zip
 

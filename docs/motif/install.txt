@@ -20,8 +20,8 @@ First steps
   (not yet tested). Motif 2.0 and above may also be suitable.
 
 - Download the appropriate .tgz archive, or alternatively the files
-  wx2_x_y_gen.zip and wx2_x_y_mot.zip. Download documentation in a preferred format,
-  such as wx2_x_y_htm.zip or wx2_x_y_pdf.zip.
+  wx2_x_y_gen.zip and wx2_x_y_mot.zip. Download documentation in a
+  preferred format, such as wx2_x_y_htm.zip or wx2_x_y_pdf.zip.
 
 - Make a directory such as ~/wx and unarchive the files into this
   directory. If using the zip archives, use the -a option if available

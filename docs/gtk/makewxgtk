@@ -3,9 +3,9 @@
 # and makes wxGTK.
 # Call from top-level wxWindows directory.
 # Note that this uses standard (but commonly-used) configure options;
-# if you're feeling brave, you may wish to compile with threads.
+# if you're feeling braven, you may wish to compile with threads.
 # -- Julian Smart
-chmod a+x configure config.sub config.guess setup/general/* setup/shared/*
-./configure --with-shared --with-gtk --with-debug_flag --with-debug_info --without-threads
-make makefiles
+rm -f *.cache
+chmod a+x configure config.sub config.guess
+./configure --disable-shared --with-gtk --with-debug_flag --with-debug_info --enable-debug --without-threads --without-sockets -without-odbc -without-libjpeg
 make

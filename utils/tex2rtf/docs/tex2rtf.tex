@@ -8,11 +8,11 @@
 \parskip=10pt%
 \parindent=0pt%
 %\backgroundcolour{255;255;255}\textcolour{0;0;0}% Has an effect in HTML only
-\winhelpignore{\title{Manual for Tex2RTF 1.64:\\A \LaTeX\ to RTF and HTML converter}%
+\winhelpignore{\title{Manual for Tex2RTF 2.0:\\A \LaTeX\ to RTF and HTML converter}%
 \author{Julian Smart}%
-\date{October 1997}%
+\date{November 1999}%
 }%
-\winhelponly{\title{Manual for Tex2RTF 1.64}%
+\winhelponly{\title{Manual for Tex2RTF 2.0}%
 \author{by Julian Smart\\$$\image{1cm;0cm}{tex2rtf.wmf}$$}%
 }%
 \makeindex%
@@ -84,24 +84,13 @@ C++ class library \popref{wxWindows}{wxwindows}.
 
 \section{Status of Tex2RTF}\index{status of Tex2RTF}%
 
-Tex2RTF is under continual development, often following users'
-suggestions. From version 1.33, Tex2RTF is effectively in a second phase
-of development. In addition to the bare minimum of syntax and facilities
-for producing useable help systems or linear RTF, commands are being
-added to allow visually effective, even aesthetically pleasing,
-documentation to be produced.
+Windows HTML help, and wxWindows 2 wxHTML help, are now catered for using
+the htmlWorkshopFiles setting.
 
-Examples are the \verb$\indented$, \verb$\twocollist$ and \verb$\marginpar$\rtfsp
-commands; over time I hope to be able to reproduce most of the popular
-styles of formatting and presentation in Windows Help files, whilst
-allowing a reasonable equivalent to be generated in the other formats.
-
-Some new developments in the various formats still need to be catered
-for by Tex2RTF, such as Windows 95 help files and HTML 3.0. Features
-that can be added to Tex2RTF as a result of these developments include
-math and inline image map support in HTML, table support in Windows
-Help, and generally better formatting abilities in both. However, documentation
-about these formats is sketchy at the time of writing (October 1995).
+Tex2RTF is very rarely updated these days: it would be nice to
+rewrite the parser (and indeed the rest of it) at some point,
+to improve error reporting, space handling and ability to
+handle more advanced Tex/Latex commands.
 
 \section{Acknowledgements}\index{acknowledgements}%
 
@@ -111,7 +100,7 @@ a great help in giving advice for improvements to the manual.
 
 \section{Change log}\index{change log}%
 
-Version 1.65, August 24th 1999
+Version 2.0, August 24th 1999
 
 \begin{itemize}\itemsep=0pt
 \item Added htmlWorkshopFiles setting, to output .hpp, .hhc

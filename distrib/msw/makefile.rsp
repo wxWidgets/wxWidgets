@@ -46,7 +46,6 @@ samples/wizard/Makefile.in
 samples/wxpoem/Makefile.in
 samples/wxsocket/Makefile.in
 samples/nettest/Makefile.in
-samples/scrollsub/Makefile.in
 samples/font/Makefile.in
 samples/menu/Makefile.in
 samples/console/Makefile.in

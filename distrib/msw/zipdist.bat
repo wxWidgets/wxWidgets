@@ -12,6 +12,7 @@ if "%dest" == "" goto usage
 if "%1" == "-help" goto usage
 if "%1" == "--help" goto usage
 if "%1" == "/?" goto usage
+if "%1" == "wiseonly" goto dounzip
 if "%1" == "wise" set wise=1
 echo About to archive an external wxWindows distribution:
 echo   From   %src
@@ -19,8 +20,6 @@ echo   To     %dest
 if "%wise" == "1" echo with WISE setup creation.
 echo CTRL-C if this is not correct.
 pause
-
-rem goto dounzip
 
 erase %dest\wx*.zip
 erase %dest\glcanvas.zip
@@ -79,15 +78,16 @@ copy %src\docs\msw\install.txt %dest\install_msw.txt
 copy %src\docs\motif\install.txt %dest\install_motif.txt
 copy %src\docs\gtk\install.txt %dest\install_gtk.txt
 copy %src\docs\readme.txt %dest
+copy %src\docs\release.txt %dest
 copy %src\docs\motif\makewxmotif %dest
 copy %src\docs\gtk\makewxgtk %dest
+
+Rem Skip WISE setup if wise is 0.
+if "%wise" == "0" goto end
 
 :dounzip
 
 cd %dest
-
-Rem Skip WISE setup if wise is 0.
-if "%wise" == "0" goto end
 
 rem Unzip the Windows files into 'wx'
 mkdir %dest\wx
@@ -134,14 +134,34 @@ Rem ren %WXWIN\deliver\setup.EXE %WXWIN\deliver\setup_%version%.exe
 
 cd %dest
 
+Rem tidy up capitalisation of filenames
+ren setup.EXE s
+ren s setup.exe
+
+ren setup.w02 s
+ren s setup.w02
+
+ren setup.w03 s
+ren s setup.w03
+
+ren setup.w04 s
+ren s setup.w04
+
+ren setup.w05 s
+ren s setup.w05
+
+ren setup.w06 s
+ren s setup.w06
+
 echo wxWindows archived.
+
 goto end
 
 :usage
 echo DOS wxWindows distribution. Zips up all GTK/Motif/MSW/doc files,
 echo and optionally makes a deliver\wx directory and a setup.exe
-echo if you specify 'wise'.
+echo if you specify 'wise' (skipping the zipping if you use 'wiseonly').
 echo.
-echo Usage: zipdist [wise]
+echo Usage: zipdist [wise | wiseonly]
 
 :end
