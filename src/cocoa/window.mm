@@ -20,6 +20,13 @@
 #import <AppKit/NSColor.h>
 #import <AppKit/NSClipView.h>
 
+// Turn this on to paint green over the dummy views for debugging
+#undef WXCOCOA_FILL_DUMMY_VIEW
+
+#ifdef WXCOCOA_FILL_DUMMY_VIEW
+#import <AppKit/NSBezierPath.h>
+#endif //def WXCOCOA_FILL_DUMMY_VIEW
+
 // ========================================================================
 // wxWindowCocoaHider
 // ========================================================================
@@ -34,6 +41,9 @@ protected:
     wxWindowCocoa *m_owner;
     WX_NSView m_dummyNSView;
     virtual void Cocoa_FrameChanged(void);
+#ifdef WXCOCOA_FILL_DUMMY_VIEW
+    virtual bool Cocoa_drawRect(const NSRect& rect);
+#endif //def WXCOCOA_FILL_DUMMY_VIEW
 private:
     wxWindowCocoaHider();
 };
@@ -61,6 +71,21 @@ private:
 };
 
 // ========================================================================
+// wxDummyNSView
+// ========================================================================
+@interface wxDummyNSView : NSView
+- (NSView *)hitTest:(NSPoint)aPoint;
+@end
+
+@implementation wxDummyNSView : NSView
+- (NSView *)hitTest:(NSPoint)aPoint
+{
+    return nil;
+}
+
+@end
+
+// ========================================================================
 // wxWindowCocoaHider
 // ========================================================================
 wxWindowCocoaHider::wxWindowCocoaHider(wxWindow *owner)
@@ -68,8 +93,9 @@ wxWindowCocoaHider::wxWindowCocoaHider(wxWindow *owner)
 {
     wxASSERT(owner);
     wxASSERT(owner->GetNSViewForHiding());
-    m_dummyNSView = [[NSView alloc]
+    m_dummyNSView = [[wxDummyNSView alloc]
         initWithFrame:[owner->GetNSViewForHiding() frame]];
+    [m_dummyNSView setAutoresizingMask: [owner->GetNSViewForHiding() autoresizingMask]];
     AssociateNSView(m_dummyNSView);
 }
 
@@ -85,6 +111,17 @@ void wxWindowCocoaHider::Cocoa_FrameChanged(void)
     wxASSERT(m_dummyNSView);
     [m_owner->GetNSViewForHiding() setFrame:[m_dummyNSView frame]];
 }
+
+#ifdef WXCOCOA_FILL_DUMMY_VIEW
+bool wxWindowCocoaHider::Cocoa_drawRect(const NSRect& rect)
+{
+    NSBezierPath *bezpath = [NSBezierPath bezierPathWithRect:rect];
+    [[NSColor greenColor] set];
+    [bezpath stroke];
+    [bezpath fill];
+    return true;
+}
+#endif //def WXCOCOA_FILL_DUMMY_VIEW
 
 // ========================================================================
 // wxFlippedNSClipView
