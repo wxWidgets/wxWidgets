@@ -1217,7 +1217,6 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
 
 long wxTextCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
-    // we always want the characters and the arrows
     if ( nMsg == WM_GETDLGCODE )
     {
         // we always want the chars and the arrows
@@ -1225,14 +1224,18 @@ long wxTextCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 
         // we may have several different cases:
         // 1. normal case: both TAB and ENTER are used for dialog navigation
-        // 2. ctrl which wants TAB for itself: ENTER is used to pass to the next
-        //    control in the dialog
-        // 3. ctrl which wants ENTER for itself: TAB is used for dialog navigation
-        // 4. ctrl which wants both TAB and ENTER: Ctrl-ENTER is used to pass to
-        //    the next control
-        if ( m_windowStyle & wxTE_PROCESS_ENTER )
+        // 2. ctrl which wants TAB for itself: ENTER is used to pass to the
+        //    next control in the dialog
+        // 3. ctrl which wants ENTER for itself: TAB is used for dialog
+        //    navigation
+        // 4. ctrl which wants both TAB and ENTER: Ctrl-ENTER is used to pass
+        //    to the next control
+
+        // the multiline edit control should always get <Return> for itself
+        if ( HasFlag(wxTE_PROCESS_ENTER) || HasFlag(wxTE_MULTILINE) )
             lDlgCode |= DLGC_WANTMESSAGE;
-        if ( m_windowStyle & wxTE_PROCESS_TAB )
+
+        if ( HasFlag(wxTE_PROCESS_TAB) )
             lDlgCode |= DLGC_WANTTAB;
 
         return lDlgCode;
