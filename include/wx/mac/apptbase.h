@@ -38,5 +38,5 @@ public:
     virtual int GetOSVersion(int *verMaj, int *verMin);
 };
 
-#endif // _WX_UNIX_APPTBASE_H_
+#endif // _WX_MAC_APPTBASE_H_
 
