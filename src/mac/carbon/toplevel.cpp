@@ -756,6 +756,12 @@ void wxRemoveMacWindowAssociation(wxTopLevelWindowMac *win)
 
 wxTopLevelWindowMac *wxTopLevelWindowMac::s_macDeactivateWindow = NULL;
 
+typedef struct 
+{
+    wxPoint m_position ;
+    wxSize m_size ;  
+} FullScreenData ;
+
 void wxTopLevelWindowMac::Init()
 {
     m_iconized =
@@ -767,6 +773,7 @@ void wxTopLevelWindowMac::Init()
     m_macUsesCompositing = FALSE;
 #endif
     m_macEventHandler = NULL ;
+    m_macFullScreenData = NULL ;
 }
 
 class wxMacDeferredWindowDeleter : public wxObject
@@ -831,6 +838,10 @@ wxTopLevelWindowMac::~wxTopLevelWindowMac()
 
     if ( wxModelessWindows.Find(this) )
         wxModelessWindows.DeleteObject(this);
+        
+    FullScreenData *data = (FullScreenData *) m_macFullScreenData ;
+    delete data ;
+    m_macFullScreenData = NULL ;
 }
 
 
@@ -1139,6 +1150,67 @@ bool wxTopLevelWindowMac::Show(bool show)
     MacPropagateVisibilityChanged() ;
 
     return TRUE ;
+}
+
+bool wxTopLevelWindowMac::ShowFullScreen(bool show, long style)
+{    
+    if ( show )
+    {
+        FullScreenData *data = (FullScreenData *)m_macFullScreenData ;
+        delete data ;
+        data = new FullScreenData() ;
+        
+        m_macFullScreenData = data ;
+        data->m_position = GetPosition() ;
+        data->m_size = GetSize() ;
+        
+        if ( style & wxFULLSCREEN_NOMENUBAR )
+        {
+                HideMenuBar() ;
+        }
+        int left , top , right , bottom ;
+        wxRect client = wxGetClientDisplayRect() ;
+
+        int x, y, w, h ;
+        
+        x = client.x ;
+        y = client.y ;
+        w = client.width ;
+        h = client.height ;
+        
+        MacGetContentAreaInset( left , top , right , bottom ) ;
+
+        if ( style & wxFULLSCREEN_NOCAPTION )
+        {
+            y -= top ;
+            h += top ;
+        }
+        if ( style & wxFULLSCREEN_NOBORDER )
+        {
+            x -= left ;
+            w += left + right ;
+            h += bottom ;
+        }
+        if ( style & wxFULLSCREEN_NOTOOLBAR )
+        {
+        }
+        SetSize( x , y , w, h ) ;
+    }
+    else
+    {
+        ShowMenuBar() ;
+        FullScreenData *data = (FullScreenData *) m_macFullScreenData ;
+        SetPosition( data->m_position ) ;
+        SetSize( data->m_size ) ;
+        delete data ;
+        m_macFullScreenData = NULL ;
+    }
+    return FALSE; 
+}
+
+bool wxTopLevelWindowMac::IsFullScreen() const 
+{ 
+    return m_macFullScreenData != NULL ; 
 }
 
 // we are still using coordinates of the content view, todo switch to structure bounds
