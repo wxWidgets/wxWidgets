@@ -1,24 +1,24 @@
-from Numeric import array,Float,cos,pi,sum,minimum,maximum,Int32
+import wx
 
+from Numeric import array,Float,cos,pi,sum,minimum,maximum,Int32
 from time import clock, sleep
-from wxPython.wx import *
 import types
 import os        
 
-ID_ZOOM_IN_BUTTON = wxNewId()
-ID_ZOOM_OUT_BUTTON = wxNewId()
-ID_ZOOM_TO_FIT_BUTTON = wxNewId()
-ID_MOVE_MODE_BUTTON = wxNewId()
-ID_TEST_BUTTON = wxNewId()
+ID_ZOOM_IN_BUTTON = wx.NewId()
+ID_ZOOM_OUT_BUTTON = wx.NewId()
+ID_ZOOM_TO_FIT_BUTTON = wx.NewId()
+ID_MOVE_MODE_BUTTON = wx.NewId()
+ID_TEST_BUTTON = wx.NewId()
 
-ID_ABOUT_MENU = wxNewId()          
-ID_EXIT_MENU  = wxNewId() 
-ID_ZOOM_TO_FIT_MENU = wxNewId()
-ID_DRAWTEST_MENU = wxNewId()
-ID_DRAWMAP_MENU = wxNewId()
-ID_CLEAR_MENU = wxNewId()
+ID_ABOUT_MENU = wx.NewId()          
+ID_EXIT_MENU  = wx.NewId() 
+ID_ZOOM_TO_FIT_MENU = wx.NewId()
+ID_DRAWTEST_MENU = wx.NewId()
+ID_DRAWMAP_MENU = wx.NewId()
+ID_CLEAR_MENU = wx.NewId()
 
-ID_TEST = wxNewId()
+ID_TEST = wx.NewId()
 
 
 ### These are some functions for bitmaps of icons.
@@ -33,7 +33,7 @@ def GetHandData():
 \xdc\x86C\x06\xd9m\xe8!\xaa\x87S\x86\x1a1\xa7\x07\x00v\x0f[\x17' ))
 
 def GetHandBitmap():
-    return wxBitmapFromXPMData(GetHandData())
+    return wx.BitmapFromXPMData(GetHandData())
 
 #----------------------------------------------------------------------
 def GetPlusData():
@@ -45,7 +45,7 @@ def GetPlusData():
 \x19=\x00\x82\x16[\xf7' ))
 
 def GetPlusBitmap():
-    return wxBitmapFromXPMData(GetPlusData())
+    return wx.BitmapFromXPMData(GetPlusData())
 
 #----------------------------------------------------------------------
 def GetMinusData():
@@ -57,7 +57,7 @@ def GetMinusData():
 \xe8\x01\x00\xed\x0f[\x87' ))
 
 def GetMinusBitmap():
-    return wxBitmapFromXPMData(GetMinusData())
+    return wx.BitmapFromXPMData(GetMinusData())
 
 ## This is a bunch of stuff for implimenting interactive use: catching
 ## when objects are clicked on by the mouse, etc. I've made a start, so if
@@ -66,13 +66,13 @@ def GetMinusBitmap():
 
 #### I probably want a full set of events someday:
 ## #### mouse over, right click, left click mouse up etc, etc.
-## ##FLOATCANVAS_EVENT_LEFT_DOWN = wxNewEventType()
-## ##FLOATCANVAS_EVENT_LEFT_UP = wxNewEventType()
-## ##FLOATCANVAS_EVENT_RIGHT_DOWN = wxNewEventType()
-## ##FLOATCANVAS_EVENT_RIGHT_UP = wxNewEventType()
-## ##FLOATCANVAS_EVENT_MOUSE_OVER = wxNewEventType()
+## ##FLOATCANVAS_EVENT_LEFT_DOWN = wx.NewEventType()
+## ##FLOATCANVAS_EVENT_LEFT_UP = wx.NewEventType()
+## ##FLOATCANVAS_EVENT_RIGHT_DOWN = wx.NewEventType()
+## ##FLOATCANVAS_EVENT_RIGHT_UP = wx.NewEventType()
+## ##FLOATCANVAS_EVENT_MOUSE_OVER = wx.NewEventType()
 
-##WXFLOATCANVASEVENT = wxNewEventType()
+##WXFLOATCANVASEVENT = wx.NewEventType()
 
 ##def EVT_WXFLOATCANVASEVENT( window, function ): 
 
@@ -80,9 +80,9 @@ def GetMinusBitmap():
 
 ##    window.Connect( -1, -1, WXFLOATCANVASEVENT, function ) 
 
-##class wxFloatCanvasObjectEvent(wxPyCommandEvent):
+##class wxFloatCanvasObjectEvent(wx.PyCommandEvent):
 ##    def __init__(self, WindowID,Object):
-##        wxPyCommandEvent.__init__(self, WXFLOATCANVASEVENT, WindowID)
+##        wx.PyCommandEvent.__init__(self, WXFLOATCANVASEVENT, WindowID)
 ##        self.Object = Object
 
 ##    def Clone( self ): 
@@ -152,65 +152,65 @@ class draw_object:
         # does that on it's own. Send me a note if you know!
 
         BrushList = {
-                ( None,"Transparent")  : wxTRANSPARENT_BRUSH,
-                ("Blue","Solid")       : wxBLUE_BRUSH,
-                ("Green","Solid")      : wxGREEN_BRUSH,
-                ("White","Solid")      : wxWHITE_BRUSH,
-                ("Black","Solid")      : wxBLACK_BRUSH,
-                ("Grey","Solid")       : wxGREY_BRUSH,
-                ("MediumGrey","Solid") : wxMEDIUM_GREY_BRUSH,
-                ("LightGrey","Solid")  : wxLIGHT_GREY_BRUSH,
-                ("Cyan","Solid")       : wxCYAN_BRUSH,
-                ("Red","Solid")        : wxRED_BRUSH
+                ( None,"Transparent")  : wx.TRANSPARENT_BRUSH,
+                ("Blue","Solid")       : wx.BLUE_BRUSH,
+                ("Green","Solid")      : wx.GREEN_BRUSH,
+                ("White","Solid")      : wx.WHITE_BRUSH,
+                ("Black","Solid")      : wx.BLACK_BRUSH,
+                ("Grey","Solid")       : wx.GREY_BRUSH,
+                ("MediumGrey","Solid") : wx.MEDIUM_GREY_BRUSH,
+                ("LightGrey","Solid")  : wx.LIGHT_GREY_BRUSH,
+                ("Cyan","Solid")       : wx.CYAN_BRUSH,
+                ("Red","Solid")        : wx.RED_BRUSH
                         }
         PenList = {
-                (None,"Transparent",1)   : wxTRANSPARENT_PEN,
-                ("Green","Solid",1)      : wxGREEN_PEN,
-                ("White","Solid",1)      : wxWHITE_PEN,
-                ("Black","Solid",1)      : wxBLACK_PEN,
-                ("Grey","Solid",1)       : wxGREY_PEN,
-                ("MediumGrey","Solid",1) : wxMEDIUM_GREY_PEN,
-                ("LightGrey","Solid",1)  : wxLIGHT_GREY_PEN,
-                ("Cyan","Solid",1)       : wxCYAN_PEN,
-                ("Red","Solid",1)        : wxRED_PEN
+                (None,"Transparent",1)   : wx.TRANSPARENT_PEN,
+                ("Green","Solid",1)      : wx.GREEN_PEN,
+                ("White","Solid",1)      : wx.WHITE_PEN,
+                ("Black","Solid",1)      : wx.BLACK_PEN,
+                ("Grey","Solid",1)       : wx.GREY_PEN,
+                ("MediumGrey","Solid",1) : wx.MEDIUM_GREY_PEN,
+                ("LightGrey","Solid",1)  : wx.LIGHT_GREY_PEN,
+                ("Cyan","Solid",1)       : wx.CYAN_PEN,
+                ("Red","Solid",1)        : wx.RED_PEN
                 }
         
         FillStyleList = {
-                "Transparent"    : wxTRANSPARENT,
-                "Solid"          : wxSOLID,
-                "BiDiagonalHatch": wxBDIAGONAL_HATCH,
-                "CrossDiagHatch" : wxCROSSDIAG_HATCH,
-                "FDiagonal_Hatch": wxFDIAGONAL_HATCH,
-                "CrossHatch"     : wxCROSS_HATCH,
-                "HorizontalHatch": wxHORIZONTAL_HATCH,
-                "VerticalHatch"  : wxVERTICAL_HATCH
+                "Transparent"    : wx.TRANSPARENT,
+                "Solid"          : wx.SOLID,
+                "BiDiagonalHatch": wx.BDIAGONAL_HATCH,
+                "CrossDiagHatch" : wx.CROSSDIAG_HATCH,
+                "FDiagonal_Hatch": wx.FDIAGONAL_HATCH,
+                "CrossHatch"     : wx.CROSS_HATCH,
+                "HorizontalHatch": wx.HORIZONTAL_HATCH,
+                "VerticalHatch"  : wx.VERTICAL_HATCH
                 }
         
         LineStyleList = {
-                "Solid"      : wxSOLID,
-                "Transparent": wxTRANSPARENT,
-                "Dot"        : wxDOT,
-                "LongDash"   : wxLONG_DASH,
-                "ShortDash"  : wxSHORT_DASH,
-                "DotDash"    : wxDOT_DASH,
+                "Solid"      : wx.SOLID,
+                "Transparent": wx.TRANSPARENT,
+                "Dot"        : wx.DOT,
+                "LongDash"   : wx.LONG_DASH,
+                "ShortDash"  : wx.SHORT_DASH,
+                "DotDash"    : wx.DOT_DASH,
                 }
         
         def SetBrush(self,FillColor,FillStyle):
             if FillColor is None or FillStyle is None:
-                self.Brush = wxTRANSPARENT_BRUSH
+                self.Brush = wx.TRANSPARENT_BRUSH
                 self.FillStyle = "Transparent"
             else:
                 if not self.BrushList.has_key((FillColor,FillStyle)):
-                    self.BrushList[(FillColor,FillStyle)] = wxBrush(FillColor,self.FillStyleList[FillStyle])
+                    self.BrushList[(FillColor,FillStyle)] = wx.Brush(FillColor,self.FillStyleList[FillStyle])
                 self.Brush = self.BrushList[(FillColor,FillStyle)]
                 
         def SetPen(self,LineColor,LineStyle,LineWidth):
             if (LineColor is None) or (LineStyle is None):
-                self.Pen = wxTRANSPARENT_PEN
+                self.Pen = wx.TRANSPARENT_PEN
                 self.LineStyle = 'Transparent'
             else:
                 if not self.PenList.has_key((LineColor,LineStyle,LineWidth)):
-                    self.PenList[(LineColor,LineStyle,LineWidth)] = wxPen(LineColor,LineWidth,self.LineStyleList[LineStyle])
+                    self.PenList[(LineColor,LineStyle,LineWidth)] = wx.Pen(LineColor,LineWidth,self.LineStyleList[LineStyle])
                 self.Pen = self.PenList[(LineColor,LineStyle,LineWidth)]
 
         def SetPens(self,LineColors,LineStyles,LineWidths):
@@ -249,10 +249,10 @@ class draw_object:
             self.Pens = []
             for (LineColor,LineStyle,LineWidth) in zip(LineColors,LineStyles,LineWidths):
                 if LineColor is None or LineStyle is None:
-                    self.Pens.append(wxTRANSPARENT_PEN)
+                    self.Pens.append(wx.TRANSPARENT_PEN)
                     # what's this for?> self.LineStyle = 'Transparent'
                 if not self.PenList.has_key((LineColor,LineStyle,LineWidth)):
-                    Pen = wxPen(LineColor,LineWidth,self.LineStyleList[LineStyle])
+                    Pen = wx.Pen(LineColor,LineWidth,self.LineStyleList[LineStyle])
                     self.Pens.append(Pen)
                 else:
                     self.Pens.append(self.PenList[(LineColor,LineStyle,LineWidth)])
@@ -577,7 +577,7 @@ class Text(draw_object):
     The second letter is: l, c, or r, for left, center and right
 
     I've provided arguments for Family, Style, and Weight of font, but
-    have not yet implimented them, so all text is:  wxSWISS, wxNORMAL, wxNORMAL.
+    have not yet implimented them, so all text is:  wx.SWISS, wx.NORMAL, wx.NORMAL.
     I'd love it if someone would impliment that!
 
     The size is fixed, and does not scale with the drawing.
@@ -601,7 +601,7 @@ class Text(draw_object):
         self.Underline = Underline
         self.Position = Position
         # fixme: this should use the passed in parameters!
-        self.Font = wxFont(Size, wxMODERN, wxNORMAL, wxNORMAL, Underline, )
+        self.Font = wx.Font(Size, wx.MODERN, wx.NORMAL, wx.NORMAL, Underline, )
 
         self.BoundingBox = array(((x,y),(x,y)),Float)
 
@@ -615,13 +615,13 @@ class Text(draw_object):
         dc.SetFont(self.Font)
         dc.SetTextForeground(self.ForeGround)
         if self.BackGround:
-            dc.SetBackgroundMode(wxSOLID)
+            dc.SetBackgroundMode(wx.SOLID)
             dc.SetTextBackground(self.BackGround)
         else:
-            dc.SetBackgroundMode(wxTRANSPARENT)
+            dc.SetBackgroundMode(wx.TRANSPARENT)
 
         # compute the shift, and adjust the coordinates, if neccesary
-        # This had to be put in here, becsuse there is no wxDC during __init__
+        # This had to be put in here, becsuse there is no wx.DC during __init__
         if self.x_shift is None or self.y_shift is None:
             if self.Position == 'tl':
                 x_shift,y_shift = 0,0
@@ -652,7 +652,7 @@ class Text(draw_object):
 
 #---------------------------------------------------------------------------
     
-class FloatCanvas(wxPanel):
+class FloatCanvas(wx.Panel):
     """
     FloatCanvas.py
 
@@ -700,7 +700,7 @@ class FloatCanvas(wxPanel):
     for objects with a lot of points (big polygons, polylines, pointsets).
 
     The real slowdown comes when you have to draw a lot of objects, because
-    you have to call the wxDC.DrawSomething call each time. This is plenty
+    you have to call the wx.DC.DrawSomething call each time. This is plenty
     fast for tens of objects, OK for hundreds of objects, but pretty darn
     slow for thousands of objects.
 
@@ -724,7 +724,7 @@ class FloatCanvas(wxPanel):
     """ 
     
     def __init__(self, parent, id = -1,
-                 size = wxDefaultSize,
+                 size = wx.DefaultSize,
                  ProjectionFun = None,
                  BackgroundColor = "WHITE",
                  Debug = 0,
@@ -733,7 +733,7 @@ class FloatCanvas(wxPanel):
                  UseBackground = 0,
                  UseHitTest = 0):
 
-        wxPanel.__init__( self, parent, id, wxDefaultPosition, size)
+        wx.Panel.__init__( self, parent, id, wx.DefaultPosition, size)
 
         if ProjectionFun == 'FlatEarth':
             self.ProjectionFun = self.FlatEarthProjection 
@@ -754,11 +754,11 @@ class FloatCanvas(wxPanel):
         ## own way of navigating the canvas
         if UseToolbar:
             ## Create the vertical sizer for the toolbar and Panel
-            box = wxBoxSizer(wxVERTICAL)
-            box.Add(self.BuildToolbar(), 0, wxALL | wxALIGN_LEFT | wxGROW, 4)
+            box = wx.BoxSizer(wx.VERTICAL)
+            box.Add(self.BuildToolbar(), 0, wx.ALL | wx.ALIGN_LEFT | wx.GROW, 4)
             
-            self.DrawPanel = wxWindow(self,-1,wxDefaultPosition,wxDefaultSize,wxSUNKEN_BORDER)
-            box.Add(self.DrawPanel,1,wxGROW)
+            self.DrawPanel = wx.Window(self,-1,wx.DefaultPosition,wx.DefaultSize,wx.SUNKEN_BORDER)
+            box.Add(self.DrawPanel,1,wx.GROW)
             
             box.Fit(self)
             self.SetAutoLayout(True)
@@ -766,19 +766,19 @@ class FloatCanvas(wxPanel):
         else:
             self.DrawPanel = self
 
-        self.DrawPanel.BackgroundBrush = wxBrush(BackgroundColor,wxSOLID)
+        self.DrawPanel.BackgroundBrush = wx.Brush(BackgroundColor,wx.SOLID)
 
         self.Debug = Debug
 
         self.EnclosingFrame = EnclosingFrame
         
-        EVT_PAINT(self.DrawPanel, self.OnPaint)
-        EVT_SIZE(self.DrawPanel, self.OnSize)
+        wx.EVT_PAINT(self.DrawPanel, self.OnPaint)
+        wx.EVT_SIZE(self.DrawPanel, self.OnSize)
         
-        EVT_LEFT_DOWN(self.DrawPanel, self.LeftButtonEvent)
-        EVT_LEFT_UP(self.DrawPanel, self.LeftButtonEvent)
-        EVT_RIGHT_DOWN(self.DrawPanel, self.RightButtonEvent)
-        EVT_MOTION(self.DrawPanel,    self.LeftButtonEvent)
+        wx.EVT_LEFT_DOWN(self.DrawPanel, self.LeftButtonEvent)
+        wx.EVT_LEFT_UP(self.DrawPanel, self.LeftButtonEvent)
+        wx.EVT_RIGHT_DOWN(self.DrawPanel, self.RightButtonEvent)
+        wx.EVT_MOTION(self.DrawPanel,    self.LeftButtonEvent)
         
         
         self._DrawList = []
@@ -803,24 +803,24 @@ class FloatCanvas(wxPanel):
 
         
     def BuildToolbar(self):
-        tb = wxToolBar(self,-1)
+        tb = wx.ToolBar(self,-1)
         self.ToolBar = tb
         
         tb.SetToolBitmapSize((23,23))
         
         tb.AddTool(ID_ZOOM_IN_BUTTON, GetPlusBitmap(), isToggle=True,shortHelpString = "Zoom In")
-        EVT_TOOL(self, ID_ZOOM_IN_BUTTON, self.SetMode)
+        wx.EVT_TOOL(self, ID_ZOOM_IN_BUTTON, self.SetMode)
         
         tb.AddTool(ID_ZOOM_OUT_BUTTON, GetMinusBitmap(), isToggle=True,shortHelpString = "Zoom Out")
-        EVT_TOOL(self, ID_ZOOM_OUT_BUTTON, self.SetMode)
+        wx.EVT_TOOL(self, ID_ZOOM_OUT_BUTTON, self.SetMode)
         
         tb.AddTool(ID_MOVE_MODE_BUTTON, GetHandBitmap(), isToggle=True,shortHelpString = "Move")
-        EVT_TOOL(self, ID_MOVE_MODE_BUTTON, self.SetMode)
+        wx.EVT_TOOL(self, ID_MOVE_MODE_BUTTON, self.SetMode)
         
         tb.AddSeparator()
         
-        tb.AddControl(wxButton(tb, ID_ZOOM_TO_FIT_BUTTON, "Zoom To Fit",wxDefaultPosition, wxDefaultSize))
-        EVT_BUTTON(self, ID_ZOOM_TO_FIT_BUTTON, self.ZoomToFit)
+        tb.AddControl(wx.Button(tb, ID_ZOOM_TO_FIT_BUTTON, "Zoom To Fit",wx.DefaultPosition, wx.DefaultSize))
+        wx.EVT_BUTTON(self, ID_ZOOM_TO_FIT_BUTTON, self.ZoomToFit)
 
         tb.Realize()
         return tb
@@ -863,11 +863,11 @@ class FloatCanvas(wxPanel):
                     w = max(w,int(h*self.AspectRatio))
                     h = int(w/self.AspectRatio)
                     x_c, y_c = (x0+x1)/2 , (y0+y1)/2
-                    dc = wxClientDC(self.DrawPanel)
+                    dc = wx.ClientDC(self.DrawPanel)
                     dc.BeginDrawing()
-                    dc.SetPen(wxPen('WHITE', 2,wxSHORT_DASH))
-                    dc.SetBrush(wxTRANSPARENT_BRUSH)
-                    dc.SetLogicalFunction(wxXOR)
+                    dc.SetPen(wx.Pen('WHITE', 2,wx.SHORT_DASH))
+                    dc.SetBrush(wx.TRANSPARENT_BRUSH)
+                    dc.SetLogicalFunction(wx.XOR)
                     if self.PrevRBBox:
                         dc.DrawRectangleXY(*self.PrevRBBox)
                     dc.DrawRectangleXY(x_c-w/2,y_c-h/2,w,h)
@@ -902,11 +902,11 @@ class FloatCanvas(wxPanel):
                     x_1,y_1 = event.GetX(),event.GetY()
                     w, h = self.PanelSize
                     x_tl, y_tl = x_1 - self.StartMove[0], y_1 - self.StartMove[1]
-                    dc = wxClientDC(self.DrawPanel)
+                    dc = wx.ClientDC(self.DrawPanel)
                     dc.BeginDrawing()
-                    dc.SetPen(wxPen('WHITE', 1,))
-                    dc.SetBrush(wxTRANSPARENT_BRUSH)
-                    dc.SetLogicalFunction(wxXOR)
+                    dc.SetPen(wx.Pen('WHITE', 1,))
+                    dc.SetBrush(wx.TRANSPARENT_BRUSH)
+                    dc.SetLogicalFunction(wx.XOR)
                     if self.PrevMoveBox:
                         dc.DrawRectangleXY(*self.PrevMoveBox)
                     dc.DrawRectangleXY(x_tl,y_tl,w,h)
@@ -935,9 +935,9 @@ class FloatCanvas(wxPanel):
                 
     def MakeNewBuffers(self):
         # Make new offscreen bitmap:
-        self._Buffer = wxEmptyBitmap(self.PanelSize[0],self.PanelSize[1])
+        self._Buffer = wx.EmptyBitmap(self.PanelSize[0],self.PanelSize[1])
         if self.UseBackground:
-            self._BackBuffer = wxEmptyBitmap(self.PanelSize[0],self.PanelSize[1])
+            self._BackBuffer = wx.EmptyBitmap(self.PanelSize[0],self.PanelSize[1])
             self._BackgroundDirty = 1
         else:
             pass
@@ -952,8 +952,8 @@ class FloatCanvas(wxPanel):
         self.Draw()
         
     def OnPaint(self, event):
-        #dc = wxBufferedPaintDC(self.DrawPanel, self._Buffer)
-        dc = wxPaintDC(self.DrawPanel)
+        #dc = wx.BufferedPaintDC(self.DrawPanel, self._Buffer)
+        dc = wx.PaintDC(self.DrawPanel)
         dc.DrawBitmap(self._Buffer, (0,0))
 
     def Draw(self):
@@ -972,11 +972,11 @@ class FloatCanvas(wxPanel):
         
         """
         if self.Debug: start = clock()
-        ScreenDC =  wxClientDC(self.DrawPanel)
+        ScreenDC =  wx.ClientDC(self.DrawPanel)
         ViewPortWorld = ( self.PixelToWorld((0,0)), self.PixelToWorld(self.PanelSize) )
         ViewPortBB = array( ( minimum.reduce(ViewPortWorld), maximum.reduce(ViewPortWorld) ) )
         if self.UseBackground:
-            dc = wxMemoryDC()
+            dc = wx.MemoryDC()
             dc.SelectObject(self._BackBuffer)
             dc.SetBackground(self.DrawPanel.BackgroundBrush)
             if self._DrawList:
@@ -1008,7 +1008,7 @@ class FloatCanvas(wxPanel):
                     ScreenDC.Blit((0, 0), self.PanelSize, dc, (0, 0))
             dc.EndDrawing()
         else: # not using a Background DC
-            dc = wxMemoryDC()
+            dc = wx.MemoryDC()
             dc.SelectObject(self._Buffer)
             dc.SetBackground(self.DrawPanel.BackgroundBrush)
             if self._DrawList:
@@ -1031,14 +1031,14 @@ class FloatCanvas(wxPanel):
 
         # If the canvas is in the middle of a zoom or move, the Rubber Band box needs to be re-drawn
         if self.PrevRBBox:
-            ScreenDC.SetPen(wxPen('WHITE', 2,wxSHORT_DASH))
-            ScreenDC.SetBrush(wxTRANSPARENT_BRUSH)
-            ScreenDC.SetLogicalFunction(wxXOR)
+            ScreenDC.SetPen(wx.Pen('WHITE', 2,wx.SHORT_DASH))
+            ScreenDC.SetBrush(wx.TRANSPARENT_BRUSH)
+            ScreenDC.SetLogicalFunction(wx.XOR)
             ScreenDC.DrawRectangleXY(*self.PrevRBBox)
         elif self.PrevMoveBox:
-            ScreenDC.SetPen(wxPen('WHITE', 1,))
-            ScreenDC.SetBrush(wxTRANSPARENT_BRUSH)
-            ScreenDC.SetLogicalFunction(wxXOR)
+            ScreenDC.SetPen(wx.Pen('WHITE', 1,))
+            ScreenDC.SetBrush(wx.TRANSPARENT_BRUSH)
+            ScreenDC.SetLogicalFunction(wx.XOR)
             ScreenDC.DrawRectangleXY(*self.PrevMoveBox)
         if self.Debug: print "Drawing took %f seconds of CPU time"%(clock()-start)
 
