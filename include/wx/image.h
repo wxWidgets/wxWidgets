@@ -52,6 +52,9 @@ public:
 #if wxUSE_STREAMS
   virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE );
   virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
+
+  virtual bool CanRead( wxInputStream& stream );
+  virtual bool CanRead( const wxString& name );
 #endif
 
   inline void SetName(const wxString& name) { m_name = name; }
@@ -93,6 +96,7 @@ public:
 #if wxUSE_STREAMS
   virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE );
   virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
+  virtual bool CanRead( wxInputStream& stream );
 #endif
 };
 #endif
@@ -119,6 +123,7 @@ public:
 #if wxUSE_STREAMS
   virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE );
   virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
+  virtual bool CanRead( wxInputStream& stream );
 #endif
 };
 #endif
@@ -143,6 +148,7 @@ public:
 
 #if wxUSE_STREAMS
   virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE );
+  virtual bool CanRead( wxInputStream& stream );
 #endif
 };
 
@@ -167,6 +173,7 @@ public:
 #if wxUSE_STREAMS
   virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE );
   virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
+  virtual bool CanRead( wxInputStream& stream );
 #endif
 };
 
@@ -191,6 +198,7 @@ public:
 #if wxUSE_STREAMS
   virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE );
   virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
+  virtual bool CanRead( wxInputStream& stream );
 #endif
 };
 

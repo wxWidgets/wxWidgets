@@ -436,23 +436,14 @@ bool wxImage::LoadFile( wxInputStream& stream, long type )
 
     if (type==wxBITMAP_TYPE_ANY)
     {
-      // here we can try to guess the handler according the extension,
-      // but we lose the stream name !?
-      // Probably we should write methods such as 
-      // bool wxImageHandler::CanRead(wxString&)
-      // bool wxImageHandler::CanRead(sxInputStream&&)
-      // for png : see example.c
 	wxList &list=GetHandlers();
-	off_t pos=stream.TellI();
-
-	 wxLogNull prevent_log;
 
 	for ( wxList::Node *node = list.GetFirst(); node; node = node->GetNext() )
 	{  
  	    handler=(wxImageHandler*)node->GetData();
-	    if (handler->LoadFile( this, stream, FALSE )) return TRUE;
+        if (handler->CanRead( stream ))
+            return handler->LoadFile( this, stream );
 
-	    stream.SeekI(pos);
 	}
 
 	wxLogWarning( _T("No handler found for this image.") );
@@ -637,6 +628,33 @@ bool wxImageHandler::SaveFile( wxImage *WXUNUSED(image), wxOutputStream& WXUNUSE
 {
     return FALSE;
 }
+
+bool wxImageHandler::CanRead( wxInputStream& stream )
+{
+    return FALSE;
+}
+
+bool wxImageHandler::CanRead( const wxString& name )
+{
+#if wxUSE_STREAMS
+    if (wxFileExists(name))
+    {
+        wxFileInputStream stream(name);
+        return CanRead(stream);
+    }
+
+    else {
+        wxLogError( _T("Can't check image format of file '%s': file does not exist."), name.c_str() );
+
+        return FALSE;
+    }
+#else // !wxUSE_STREAMS
+    return FALSE;
+#endif // wxUSE_STREAMS
+}
+
+
+
 #endif // wxUSE_STREAMS
 
 //-----------------------------------------------------------------------------

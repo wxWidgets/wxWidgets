@@ -346,6 +346,15 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
     return TRUE;
 }
 
+bool wxPNGHandler::CanRead( wxInputStream& stream )
+{
+    unsigned char hdr[4];
+    
+    stream.Read(&hdr, 4);    
+    stream.SeekI(-4, wxFromCurrent);
+    return (hdr[0] == 0x89 && hdr[1] == 'P' && hdr[2] == 'N' && hdr[3] == 'G');
+}
+
 #endif
   // wxUSE_STREAMS
 

@@ -136,6 +136,12 @@ bool wxPNMHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool WXUNUS
     return (stream.LastError()==wxStream_NOERROR);
 }
 
+bool wxPNMHandler::CanRead( wxInputStream& stream )
+{
+    return FALSE; // VS - temporary - FIXME
+}
+
+
 #endif // wxUSE_STREAMS
 
 

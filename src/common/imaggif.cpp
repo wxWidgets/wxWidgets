@@ -66,4 +66,13 @@ bool wxGIFHandler::SaveFile( wxImage * WXUNUSED(image),
     return FALSE;
 }
 
+bool wxGIFHandler::CanRead( wxInputStream& stream )
+{
+    unsigned char hdr[5];
+    
+    stream.Read(&hdr, 5);
+    stream.SeekI(-5, wxFromCurrent);
+    return (hdr[0] == 'G' && hdr[1] == 'I' && hdr[2] == 'F' && hdr[3] == '8' && hdr[4] == '9');
+}
+
 #endif

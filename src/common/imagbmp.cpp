@@ -401,6 +401,15 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSE
      return TRUE;
 }
 
+bool wxBMPHandler::CanRead( wxInputStream& stream )
+{
+    unsigned char hdr[2];
+    
+    stream.Read(&hdr, 2);
+    stream.SeekI(-2, wxFromCurrent);
+    return (hdr[0] == 'B' && hdr[1] == 'M');
+}
+
 #endif // wxUSE_STREAMS
 
 

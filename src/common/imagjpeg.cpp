@@ -310,6 +310,16 @@ bool wxJPEGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     return TRUE;
 }
 
+
+bool wxJPEGHandler::CanRead( wxInputStream& stream )
+{
+    unsigned char hdr[2];
+    
+    stream.Read(&hdr, 2);
+    stream.SeekI(-2, wxFromCurrent);
+    return (hdr[0] == 0xFF && hdr[1] == 0xD8);
+}
+
 #endif 
   // wxUSE_STREAMS
 

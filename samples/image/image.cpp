@@ -126,22 +126,22 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
   else
     my_horse_png = new wxBitmap( image.ConvertToBitmap() );
   
-  if ( !image.LoadFile( dir + wxString("horse.jpg"), wxBITMAP_TYPE_JPEG ) )
+  if ( !image.LoadFile( dir + wxString("horse.jpg") ) )
       wxLogError("Can't load JPG image");
   else
       my_horse_jpeg = new wxBitmap( image.ConvertToBitmap() );
   
-  if ( !image.LoadFile( dir + wxString("horse.gif"), wxBITMAP_TYPE_GIF ) )
+  if ( !image.LoadFile( dir + wxString("horse.gif") ) )
       wxLogError("Can't load GIF image");
   else
     my_horse_gif = new wxBitmap( image.ConvertToBitmap() );
   
-  if ( !image.LoadFile( dir + wxString("horse.bmp"), wxBITMAP_TYPE_BMP ) )
+  if ( !image.LoadFile( dir + wxString("horse.bmp") ) )
       wxLogError("Can't load BMP image");
   else
     my_horse_bmp = new wxBitmap( image.ConvertToBitmap() );
   
-  image.LoadFile( dir + wxString("test.png"), wxBITMAP_TYPE_PNG );
+  image.LoadFile( dir + wxString("test.png") );
   my_square = new wxBitmap( image.ConvertToBitmap() );
   
   CreateAntiAliasedBitmap();
