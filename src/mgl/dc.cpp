@@ -47,6 +47,10 @@
 // constants
 //-----------------------------------------------------------------------------
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
 const double mm2inches      = 0.0393700787402;
 const double inches2mm      = 25.4;
 const double mm2twips       = 56.6929133859;
