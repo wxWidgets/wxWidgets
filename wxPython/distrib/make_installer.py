@@ -108,7 +108,6 @@ Source: "wx\lib\mixins\*.py";               DestDir: "{app}\wx\lib\mixins"; Comp
 Source: "wx\py\*.py";                       DestDir: "{app}\wx\py"; Components: core
 Source: "wx\tools\*.py";                    DestDir: "{app}\wx\tools"; Components: core
 Source: "wx\tools\XRCed\*.py";              DestDir: "{app}\wx\tools\XRCed"; Components: core
-Source: "wx\tools\XRCed\*.png";             DestDir: "{app}\wx\tools\XRCed"; Components: core
 
 
 %(LOCALE)s
@@ -166,6 +165,7 @@ Source: "wxPython\tools\XRCed\sawfishrc";   DestDir: "{app}\wxPython\tools\XRCed
 Source: "wxPython\tools\XRCed\*.py";        DestDir: "{app}\wxPython\tools\XRCed"; Components: core
 Source: "wxPython\tools\XRCed\*.xrc";       DestDir: "{app}\wxPython\tools\XRCed"; Components: core
 Source: "wxPython\tools\XRCed\*.ico";       DestDir: "{app}\wxPython\tools\XRCed"; Components: core
+Source: "wxPython\tools\XRCed\*.png";       DestDir: "{app}\wxPython\tools\XRCed"; Components: core
 Source: "wxPython\tools\XRCed\*.sh";        DestDir: "{app}\wxPython\tools\XRCed"; Components: core
 Source: "wxPython\tools\XRCed\src-images\*.png";  DestDir: "{app}\wxPython\tools\XRCed\src-images"; Components: core
 
