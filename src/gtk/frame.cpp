@@ -605,9 +605,11 @@ wxToolBar* wxFrame::CreateToolBar( long style, wxWindowID id, const wxString& na
 
 void wxFrame::SetToolBar(wxToolBar *toolbar)
 {
+    bool hadTbar = m_frameToolBar != NULL;
+
     wxFrameBase::SetToolBar(toolbar);
 
-    if (m_frameToolBar)
+    if ( m_frameToolBar )
     {
         // insert into toolbar area if not already there
         if ((m_frameToolBar->m_widget->parent) &&
@@ -616,6 +618,14 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
             GetChildren().DeleteObject( m_frameToolBar );
 
             gtk_widget_reparent( m_frameToolBar->m_widget, m_mainWidget );
+            GtkUpdateSize();
+        }
+    }
+    else // toolbar unset
+    {
+        // still need to update size if it had been there before
+        if ( hadTbar )
+        {
             GtkUpdateSize();
         }
     }
