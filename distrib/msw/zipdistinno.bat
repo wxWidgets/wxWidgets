@@ -6,7 +6,7 @@ set dest=%src\deliver
 set inno=0
 
 Rem Set this to the required version
-set version=2.3.1
+set version=2.3.2
 
 if "%src" == "" goto usage
 if "%dest" == "" goto usage
