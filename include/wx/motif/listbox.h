@@ -26,7 +26,7 @@ class WXDLLEXPORT wxArrayInt;
 WXDLLEXPORT_DATA(extern const char*) wxEmptyString;
 
 // List box item
-class WXDLLEXPORT wxListBox: public wxControlWithItems
+class WXDLLEXPORT wxListBox: public wxListBoxBase
 {
 DECLARE_DYNAMIC_CLASS(wxListBox)
 
@@ -87,7 +87,7 @@ public:
 
     // For single or multiple choice list item
     virtual int GetSelections(wxArrayInt& aSelections) const;
-    virtual bool Selected(int n) const ;
+    virtual bool IsSelected(int n) const ;
     virtual wxString GetString(int n) const ;
 
     // Set the specified item at the first visible item

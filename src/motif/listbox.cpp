@@ -414,7 +414,7 @@ void wxListBox::SetSelection(int N, bool select)
     m_inSetValue = FALSE;
 }
 
-bool wxListBox::Selected(int N) const
+bool wxListBox::IsSelected(int N) const
 {
     // In Motif, no simple way to determine if the item is selected.
     wxArrayInt theSelections;
