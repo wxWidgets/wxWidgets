@@ -2731,14 +2731,17 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
                 m_renameTimer->Stop();
                 m_lastOnSame = FALSE;
 
-                if (item->HasPlus())
+                if (item->HasPlus() && !HasButtons())
                 {
-                    // for a "directory" node, toggle expansion
+                    // If the control has no buttons,the only way
+                    // to expand/collapse it is by double clicking
+                    // an item. In this case we cannot send any
+                    // activate event.
                     Toggle(item);
                 }
                 else
                 {
-                    // for a "file" node, activate it
+                    // If we have buttons, just send activate event.
                     wxTreeEvent nevent( wxEVT_COMMAND_TREE_ITEM_ACTIVATED,
                                         GetId() );
                     nevent.m_item = (long) item;

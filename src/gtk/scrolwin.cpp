@@ -298,6 +298,8 @@ bool wxScrolledWindow::Create(wxWindow *parent,
 
     if (m_parent)
         m_parent->DoAddChild( this );
+        
+    m_focusWidget = m_wxwindow;
 
     PostCreation();
 
