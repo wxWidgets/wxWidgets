@@ -306,7 +306,6 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
             m_OpenedPage = f->GetLocation();
             if (f->GetAnchor() != wxEmptyString)
             {
-                wxYield();
                 ScrollToAnchor(f->GetAnchor());
             }
 
@@ -336,7 +335,6 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
 
     if (needs_refresh)
     {
-        wxYield();
         m_tmpCanDrawLocks--;
         Refresh();
     }
@@ -494,7 +492,6 @@ bool wxHtmlWindow::HistoryBack()
     if (a == wxEmptyString) LoadPage(l);
     else LoadPage(l + wxT("#") + a);
     m_HistoryOn = TRUE;
-    wxYield();
     m_tmpCanDrawLocks--;
     Scroll(0, (*m_History)[m_HistoryPos].GetPos());
     Refresh();
@@ -525,7 +522,6 @@ bool wxHtmlWindow::HistoryForward()
     if (a == wxEmptyString) LoadPage(l);
     else LoadPage(l + wxT("#") + a);
     m_HistoryOn = TRUE;
-    wxYield();
     m_tmpCanDrawLocks--;
     Scroll(0, (*m_History)[m_HistoryPos].GetPos());
     Refresh();
