@@ -1144,8 +1144,8 @@ wxConcatFiles (const wxString& file1, const wxString& file2, const wxString& fil
       return FALSE;
 
   FILE *fp1 wxDUMMY_INITIALIZE(NULL);
-  FILE *fp2 wxDUMMY_INITIALIZE(NULL);
-  FILE *fp3 wxDUMMY_INITIALIZE(NULL);
+  FILE *fp2 = NULL;
+  FILE *fp3 = NULL;
   // Open the inputs and outputs
   if ((fp1 = wxFopen ( file1, wxT("rb"))) == NULL ||
       (fp2 = wxFopen ( file2, wxT("rb"))) == NULL ||
