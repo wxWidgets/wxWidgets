@@ -177,6 +177,8 @@ public:
     void OnEnableAll(wxCommandEvent& event);
 
     void OnIdle( wxIdleEvent& event );
+    void OnIconized( wxIconizeEvent& event );
+    void OnMaximized( wxMaximizeEvent& event );
     void OnSize( wxSizeEvent& event );
     void OnMove( wxMoveEvent& event );
 
@@ -641,7 +643,6 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     wxButton *button = new MyButton( panel, ID_LISTBOX_FONT, _T("Set &Italic font"), wxPoint(340,130), wxSize(140,30) );
 
     button->SetDefault();
-
     button->SetForegroundColour(*wxBLUE);
 
 #if wxUSE_TOOLTIPS
@@ -650,6 +651,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     m_checkbox = new wxCheckBox( panel, ID_LISTBOX_ENABLE, _T("&Disable"), wxPoint(20,170) );
     m_checkbox->SetValue(false);
+    button->MoveAfterInTabOrder(m_checkbox);
 #if wxUSE_TOOLTIPS
     m_checkbox->SetToolTip( _T("Click here to disable the listbox") );
 #endif // wxUSE_TOOLTIPS
@@ -1519,6 +1521,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU(CONTROLS_ENABLE_ALL, MyFrame::OnEnableAll)
 
+    EVT_ICONIZE(MyFrame::OnIconized)
+    EVT_MAXIMIZE(MyFrame::OnMaximized)
     EVT_SIZE(MyFrame::OnSize)
     EVT_MOVE(MyFrame::OnMove)
 
@@ -1640,6 +1644,18 @@ void MyFrame::OnMove( wxMoveEvent& event )
 #endif // wxUSE_STATUSBAR
 
     event.Skip();
+}
+
+void MyFrame::OnIconized( wxIconizeEvent& event )
+{
+    wxLogMessage(_T("Frame %s"), event.Iconized() ? _T("iconized")
+                                                  : _T("restored"));
+    event.Skip();
+}
+
+void MyFrame::OnMaximized( wxMaximizeEvent& WXUNUSED(event) )
+{
+    wxLogMessage(_T("Frame maximized"));
 }
 
 void MyFrame::OnSize( wxSizeEvent& event )
