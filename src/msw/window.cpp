@@ -3138,16 +3138,22 @@ bool wxWindowMSW::HandleTooltipNotify(WXUINT code,
 
     LPTOOLTIPTEXT ttText = (LPTOOLTIPTEXT)lParam;
 
+#if !wxUSE_UNICODE
     if ( code == (WXUINT) TTN_NEEDTEXTA )
     {
-        ttText->lpszText = (wxChar *)ttip.c_str();
+        // we pass just the pointer as we store the string internally anyhow
+        ttText->lpszText = (char *)ttip.c_str();
     }
-    else
+    else // TTN_NEEDTEXTW
+#endif // !Unicode
     {
 #if wxUSE_UNICODE
+        // in Unicode mode this is just what we need
         ttText->lpszText = (wxChar *)ttip.c_str();
 #else // !Unicode
-        size_t lenAnsi = ttip.length();
+        // in ANSI mode we have to convert the string and put it into the
+        // provided buffer: be careful not to overrun it
+        const size_t lenAnsi = ttip.length();
 
         // some compilers (MetroWerks and Cygwin) don't like calling mbstowcs
         // with NULL argument
@@ -3162,6 +3168,13 @@ bool wxWindowMSW::HandleTooltipNotify(WXUINT code,
         wchar_t *dst = (wchar_t *)ttText->szText,
                 *pwz = new wchar_t[lenUnicode + 1];
         mbstowcs(pwz, ttip, lenAnsi + 1);
+
+        // stay inside the buffer (-1 because it must be NUL-terminated)
+        if ( lenUnicode > WXSIZEOF(ttText->szText) - 1 )
+        {
+            lenUnicode = WXSIZEOF(ttText->szText) - 1;
+        }
+
         memcpy(dst, pwz, lenUnicode*sizeof(wchar_t));
 
         // put the terminating wide NUL
