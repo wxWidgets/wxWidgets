@@ -479,6 +479,8 @@ wxFileSelector = misc2c.wxFileSelector
 
 wxGetTextFromUser = misc2c.wxGetTextFromUser
 
+wxGetPasswordFromUser = misc2c.wxGetPasswordFromUser
+
 wxGetSingleChoice = misc2c.wxGetSingleChoice
 
 wxGetSingleChoiceIndex = misc2c.wxGetSingleChoiceIndex
@@ -490,6 +492,15 @@ wxGetNumberFromUser = misc2c.wxGetNumberFromUser
 wxColourDisplay = misc2c.wxColourDisplay
 
 wxDisplayDepth = misc2c.wxDisplayDepth
+
+wxGetDisplayDepth = misc2c.wxGetDisplayDepth
+
+wxDisplaySize = misc2c.wxDisplaySize
+
+def wxGetDisplaySize(*_args, **_kwargs):
+    val = apply(misc2c.wxGetDisplaySize,_args,_kwargs)
+    if val: val = wxSizePtr(val); val.thisown = 1
+    return val
 
 wxSetCursor = misc2c.wxSetCursor
 

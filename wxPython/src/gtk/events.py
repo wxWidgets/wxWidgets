@@ -810,6 +810,9 @@ class wxNotifyEventPtr(wxCommandEventPtr):
     def IsAllowed(self, *_args, **_kwargs):
         val = apply(eventsc.wxNotifyEvent_IsAllowed,(self,) + _args, _kwargs)
         return val
+    def Allow(self, *_args, **_kwargs):
+        val = apply(eventsc.wxNotifyEvent_Allow,(self,) + _args, _kwargs)
+        return val
     def Veto(self, *_args, **_kwargs):
         val = apply(eventsc.wxNotifyEvent_Veto,(self,) + _args, _kwargs)
         return val

@@ -412,6 +412,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def SetPosition(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_SetPosition,(self,) + _args, _kwargs)
         return val
+    def SetRect(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_SetRect,(self,) + _args, _kwargs)
+        return val
     def SetSizeHints(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_SetSizeHints,(self,) + _args, _kwargs)
         return val
