@@ -30,6 +30,11 @@
 #include "wx/xml/xml.h"
 #include "wx/xml/xmlio.h"
 #include "wx/ffile.h"
+#include "wx/wfstream.h"
+
+
+
+
 
 /*
 #if wxUSE_GUI
@@ -52,6 +57,8 @@ private:
     void ParseParams(const wxCmdLineParser& cmdline);
     void CompileRes();
     wxArrayString PrepareTempFiles();
+    void FindFilesInXML(wxXmlNode *node, wxArrayString& flist, const wxString& inputPath);
+
     void DeleteTempFiles(const wxArrayString& flist);
     void MakePackageZIP(const wxArrayString& flist);
     void MakePackageCPP(const wxArrayString& flist);
@@ -177,14 +184,64 @@ wxArrayString XmlResApp::PrepareTempFiles()
             continue;
         }
         
-        wxString name, ext;
-        wxSplitPath(parFiles[i], NULL, &name, &ext);
+        wxString name, ext, path;
+        wxSplitPath(parFiles[i], &path, &name, &ext);
+
+        FindFilesInXML(doc.GetRoot(), flist, path);
 
         doc.Save(parOutputPath + "/" + name + ".xmb", flagCompress ? wxXML_IO_BINZ : wxXML_IO_BIN);
         flist.Add(name + ".xmb");
     }
     
     return flist;
+}
+
+
+
+// find all files mentioned in structure, e.g. <bitmap>filename</bitmap>
+void XmlResApp::FindFilesInXML(wxXmlNode *node, wxArrayString& flist, const wxString& inputPath)
+{
+    wxXmlNode *n = node;
+    if (n == NULL) return;
+    n = n->GetChildren();
+    
+    while (n)
+    {
+        if ((node->GetType() == wxXML_ELEMENT_NODE) &&
+            // parent is an element, i.e. has subnodes...
+            (n->GetType() == wxXML_TEXT_NODE || 
+            n->GetType() == wxXML_CDATA_SECTION_NODE) &&
+            // ...it is textnode...
+            (node/*not n!*/->GetName() == "bitmap"))
+            // ...and known to contain filename
+        {
+            wxString fullname;
+            wxString filename = n->GetContent();
+            if (wxIsAbsolutePath(n->GetContent())) fullname = n->GetContent();
+            else fullname = inputPath + "/" + n->GetContent();
+            
+            filename.Replace("/", "_");
+            filename.Replace("\\", "_");
+            filename.Replace("*", "_");
+            filename.Replace("?", "_");
+            n->SetContent(filename);
+            
+            if (flagVerbose) 
+                wxPrintf("adding " + filename +  "...\n");
+
+            flist.Add(filename);
+
+            wxFileInputStream sin(fullname);
+            wxFileOutputStream sout(parOutputPath + "/" + filename);
+            sin.Read(sout); // copy the stream
+        }
+        
+        // subnodes:
+        if (n->GetType() == wxXML_ELEMENT_NODE)
+            FindFilesInXML(n, flist, inputPath);
+        
+        n = n->GetNext();
+    }
 }
 
 
@@ -224,29 +281,42 @@ void XmlResApp::MakePackageZIP(const wxArrayString& flist)
 static wxString FileToCppArray(wxString filename, int num)
 {
     wxString output;
-    wxString snum;
     wxString tmp;
+    wxString snum;
     wxFFile file(filename, "rb");
     size_t lng = file.Length();
+    int linelng;
     
     snum.Printf("%i", num);
     output.Printf("static size_t xml_res_size_" + snum + " = %i;\n", lng);
-    output += "static unsigned char xml_res_file_" + snum + "[] = {";
+    output += "static unsigned char xml_res_file_" + snum + "[] = \"\\\n";
     
     unsigned char *buffer = new unsigned char[lng];
     file.Read(buffer, lng);
     
-    for (size_t i = 0; i < lng; i++)
+    for (size_t i = 0, linelng = 0; i < lng; i++)
     {
-        if (i % 16 == 0) output += "\n";
-        tmp.Printf("0x%02X", buffer[i]);
-        output += tmp;
-        if (i != lng-1) output += ",";
+        if (linelng > 70) 
+        {
+            linelng = 0;
+            output += "\\\n";
+        }
+        if (buffer[i] < 32 || buffer[i] == '"' || buffer[i] == '\\')
+        {
+            tmp.Printf("\\%03o", buffer[i]);
+            output += tmp;
+            linelng += 4;
+        }
+        else
+        {
+            output << (wxChar)buffer[i];
+            linelng++;
+        }
     }
     
     delete[] buffer;
     
-    output += "\n};\n\n";
+    output += "\"\n;\n\n";
     
     return output;
 }
@@ -299,12 +369,19 @@ void " + parFuncname + "()\n\
     {
         wxString s;
         s.Printf("    wxMemoryFSHandler::AddFile(\"xml_resource/" + flist[i] +
-                 "\", xml_res_file_%i, xml_res_size_%i);\n"
-                 "    wxTheXmlResource->Load(\"memory:xml_resource/" + flist[i] + 
-                 "\");\n", i, i);
+                 "\", xml_res_file_%i, xml_res_size_%i);\n", i, i);
         file.Write(s);
+    }
+
+    for (i = 0; i < parFiles.Count(); i++)
+    {
+        wxString name, ext, path;
+        wxSplitPath(parFiles[i], &path, &name, &ext);
+        file.Write("    wxTheXmlResource->Load(\"memory:xml_resource/" + 
+                   name + ".xmb" + "\");\n");
     }
     
     file.Write("\n}\n");
+
 
 }
