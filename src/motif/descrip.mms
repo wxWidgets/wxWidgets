@@ -74,6 +74,7 @@ OBJECTS = \
 		statbox.obj,\
 		stattext.obj,\
 		textctrl.obj,\
+		toplevel.obj,\
 		timer.obj,\
 		toolbar.obj,\
 		utils.obj,\
@@ -129,6 +130,7 @@ SOURCES = \
 		statbox.cpp,\
 		stattext.cpp,\
 		textctrl.cpp,\
+		toplevel.cpp,\
 		timer.cpp,\
 		toolbar.cpp,\
 		utils.cpp,\
@@ -193,6 +195,7 @@ statbmp.obj : statbmp.cpp
 statbox.obj : statbox.cpp
 stattext.obj : stattext.cpp
 textctrl.obj : textctrl.cpp
+toplevel.obj : toplevel.cpp
 timer.obj : timer.cpp
 toolbar.obj : toolbar.cpp
 utils.obj : utils.cpp
