@@ -27,7 +27,9 @@ class WXDLLEXPORT wxMenu : public wxMenuBase, public wxCocoaNSMenu
 public:
     // ctors and dtor
     wxMenu(const wxString& title, long style = 0)
-        : wxMenuBase(title, style) { Create(title,style); }
+    :   wxMenuBase(title, style)
+    ,   m_cocoaDeletes(false)
+    {   Create(title,style); }
     bool Create(const wxString& title, long style = 0);
 
     wxMenu(long style = 0) : wxMenuBase(style) { Create(wxEmptyString, style); }
@@ -39,8 +41,11 @@ public:
 // ------------------------------------------------------------------------
 public:
     inline WX_NSMenu GetNSMenu() { return m_cocoaNSMenu; }
+    void SetCocoaDeletes(bool cocoaDeletes);
+    virtual void Cocoa_dealloc();
 protected:
     WX_NSMenu m_cocoaNSMenu;
+    bool m_cocoaDeletes;
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------

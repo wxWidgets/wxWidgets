@@ -45,12 +45,15 @@ bool wxMenu::Create(const wxString& title, long style)
 {
     wxAutoNSAutoreleasePool pool;
     m_cocoaNSMenu = [[NSMenu alloc] initWithTitle: wxNSStringWithWxString(title)];
+    AssociateNSMenu(m_cocoaNSMenu);
     return true;
 }
 
 wxMenu::~wxMenu()
 {
-    [m_cocoaNSMenu release];
+    DisassociateNSMenu(m_cocoaNSMenu);
+    if(!m_cocoaDeletes)
+        [m_cocoaNSMenu release];
 }
 
 wxMenuItem* wxMenu::DoAppend(wxMenuItem *item)
@@ -78,6 +81,33 @@ wxMenuItem* wxMenu::DoRemove(wxMenuItem *item)
     wxASSERT(retitem->GetNSMenuItem());
     [m_cocoaNSMenu removeItem:retitem->GetNSMenuItem()];
     return retitem;
+}
+
+// This autoreleases the menu on the assumption that something is
+// going to retain it shortly (for instance, it is going to be returned from
+// an overloaded [NSStatusItem menu] or from the applicationDockMenu:
+// NSApplication delegate method.
+//
+// It then sets a bool flag m_cocoaDeletes.  When the NSMenu is dealloc'd
+// (dealloc is the Cocoa destructor) we delete ourselves.  In this manner we
+// can be available for Cocoa calls until Cocoa is finished with us.
+//
+// I can see very few reasons to undo this.  Nevertheless, it is implemented.
+void wxMenu::SetCocoaDeletes(bool cocoaDeletes)
+{
+    if(m_cocoaDeletes==cocoaDeletes)
+        return;
+    m_cocoaDeletes = cocoaDeletes;
+    if(m_cocoaDeletes)
+        [m_cocoaNSMenu autorelease];
+    else
+        [m_cocoaNSMenu retain];
+}
+
+void wxMenu::Cocoa_dealloc()
+{
+    if(m_cocoaDeletes)
+        delete this;
 }
 
 // ============================================================================
