@@ -1,0 +1,78 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        tclipbrd.tex
+%% Purpose:     Data transfer (clipboard and drag and drop) overview
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     18.10.99
+%% RCS-ID:      $Id$
+%% Copyright:   (c) Vadim Zeitlin
+%% Licence:     wxWindows licence
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Clipboard and drag and drop overview}\label{wxclipboardonfigoverview}
+
+Classes: \helpref{wxDataObject}{wxdataobject},
+         \helpref{wxClipboard}{wxclipboard},
+         \helpref{wxDataFormat}{wxdataformat},
+         \helpref{wxDropSource}{wxdropsource},
+         \helpref{wxDropTarget}{wxdroptarget}
+
+This overview discusses data transfer through clipboard or drag and drop. In
+wxWindows, these two ways to transfer data (either between different
+applications or inside one and the same) are very similar which allows to
+implement both of them using almost the same code - or, to say it in other
+words, if you implement drag and drop support for your application, you get
+clipboard support for free and vice versa.
+
+In the heart of both clipboard and drag and drop operations lies the 
+\helpref{wxDataObject}{wxdataobject} class. The objects of this (or, to be
+precise, derived from it) class represent the data which is being carried by
+the mouse during drag and drop operation or copied to or pasted from the
+clipboard. \helpref{wxDataObject}{wxdataobject} is a "smart" piece of data
+because it knows which \helpref{formats}{wxdataformat} it supports (see 
+\helpref{GetFormatCount}{wxdataobjectgetformatcount} and 
+\helpref{GetAllFormats}{wxdataobjectgetallformats}) and knows how to render
+itself in any of them (see \helpref{GetDataHere.}{wxdataobjectgetdatahere}).
+It can also receive its value from the outside in a format it supports if it
+implements \helpref{SetData}{wxdataobjectsetdata} method.
+
+Both clipboard and drag and drop operations have two sides: the source and
+target, the data provider and the data receiver (which may be the same
+application and even the same window when, for example, you drag some text from
+one position to another in a word processor). Let us describe what each of them
+should do.
+
+\subsection{The data provider (source) duties}{wxdataobjectsource}
+
+The data provider is responsible for creating a 
+\helpref{wxDataObject}{wxdataobjectwxdataobject} containing the data to be
+transfered. Then it should either pass it to the clipboard using
+\helpref{AddData}{wxclipboardadddata} or \helpref{SetData}{wxclipboardsetdata}
+functions or to \helpref{wxDropSource}{wxdropsource} and call 
+\helpref{DoDragDrop}{wxdropsourcedodragdrop} function.
+
+The only (but important) difference is that the object for the clipboard
+transfer must always be created on the heap (i.e. using {\tt new}) and it will
+be freed by the clipboard when it is no longer needed (indeed, it is not known
+in advance when, if ever, the data will be pasted from the clipboard). On the
+other hand, the object for drag and drop operation must only exist while 
+\helpref{DoDragDrop}{wxdropsourcedodragdrop} executes and may be safely deleted
+afterwards and so can be created either on heap or on stack (i.e. as a local
+variable).
+
+Another small difference si that in the case of clipboard operation, the
+application usually knows in advance whether it copies or cuts (i.e. copies and
+deletes) data - in fact, this usually depends on which menu item the user
+chose. But for drag and drop it can only know it after 
+\helpref{DoDragDrop}{wxdropsourcedodragdrop} returns (from its return value).
+
+\subsection{The data receiver (target) duties}{wxdataobjecttarget}
+
+To receive (paste in usual terminology) data from the clipboard, you should
+create a \helpref{wxDataObject}{wxdataobject} derived class which supports the
+data formats you need and pass it as argument to 
+\helpref{wxClipboard::GetData}{wxclipboardgetdata}. If it returns {\tt FALSE},
+no data in (any of) the supported format(s) is available. If it returns {\tt
+TRUE}, the data has been successfully transfered to wxDataObject.
+
+{\bf TODO} document drag and drop side when the API is finalised
