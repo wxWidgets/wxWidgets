@@ -1139,7 +1139,8 @@ bool wxSocketClient::WaitOnConnect(long seconds, long milliseconds)
   if (!m_establishing || !m_socket)     // No connection in progress
     return FALSE;
 
-  return _Wait(seconds, milliseconds, GSOCK_CONNECTION_FLAG);
+  return _Wait(seconds, milliseconds, GSOCK_CONNECTION_FLAG |
+                                      GSOCK_LOST_FLAG);
 }
 
 // ==========================================================================
