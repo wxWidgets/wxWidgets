@@ -649,7 +649,8 @@ void wxDebugContext::TraverseList (PmSFV func, wxMemStruct *from)
   if (!from)
     from = wxDebugContext::GetHead ();
 
-  for (wxMemStruct * st = from; st != 0; st = st->m_next)
+  wxMemStruct * st = NULL;
+  for (st = from; st != 0; st = st->m_next)
   {
       void* data = st->GetActualData();
 //      if ((data != (void*)m_debugStream) && (data != (void*) m_streamBuf))
@@ -943,108 +944,6 @@ int wxDebugContext::CountObjectsLeft(bool sinceCheckpoint)
 
   return n ;
 }
-
-/*
-  The global operator new used for everything apart from getting
-  dynamic storage within this function itself.
-*/
-
-// We'll only do malloc and free for the moment: leave the interesting
-// stuff for the wxObject versions.
-
-#if defined(__WXDEBUG__) && wxUSE_GLOBAL_MEMORY_OPERATORS
-
-#ifdef new
-#undef new
-#endif
-
-// Seems OK all of a sudden. Maybe to do with linking with multithreaded library?
-#if 0 // def __VISUALC__
-#define NO_DEBUG_ALLOCATION
-#endif
-
-// Unfortunately ~wxDebugStreamBuf doesn't work (VC++ 5) when we enable the debugging
-// code. I have no idea why. In BC++ 4.5, we have a similar problem the debug
-// stream myseriously changing pointer address between being passed from SetFile to SetStream.
-// See docs/msw/issues.txt.
-void * operator new (size_t size, wxChar * fileName, int lineNum)
-{
-#ifdef NO_DEBUG_ALLOCATION
-  return malloc(size);
-#else
-  return wxDebugAlloc(size, fileName, lineNum, FALSE, FALSE);
-#endif
-}
-
-// Added JACS 25/11/98
-void * operator new (size_t size)
-{
-#ifdef NO_DEBUG_ALLOCATION
-  return malloc(size);
-#else
-  return wxDebugAlloc(size, NULL, 0, FALSE);
-#endif
-}
-
-#if wxUSE_ARRAY_MEMORY_OPERATORS
-void * operator new[] (size_t size)
-{
-#ifdef NO_DEBUG_ALLOCATION
-  return malloc(size);
-#else
-  return wxDebugAlloc(size, NULL, 0, FALSE, TRUE);
-#endif
-}
-#endif
-
-#if wxUSE_ARRAY_MEMORY_OPERATORS
-void * operator new[] (size_t size, wxChar * fileName, int lineNum)
-{
-#ifdef NO_DEBUG_ALLOCATION
-  return malloc(size);
-#else
-  return wxDebugAlloc(size, fileName, lineNum, FALSE, TRUE);
-#endif
-}
-#endif
-
-#if !defined(__VISAGECPP__) // already defines this by default
-void operator delete (void * buf)
-{
-#ifdef NO_DEBUG_ALLOCATION
-  free((char*) buf);
-#else
-  wxDebugFree(buf);
-#endif
-}
-#endif
-
-// VC++ 6.0
-#if defined(__VISUALC__) && (__VISUALC__ >= 1200)
-void operator delete(void* pData, wxChar* /* fileName */, int /* lineNum */)
-{
-  wxDebugFree(pData, FALSE);
-}
-// New operator 21/11/1998
-void operator delete[](void* pData, wxChar* /* fileName */, int /* lineNum */)
-{
-  wxDebugFree(pData, TRUE);
-}
-#endif
-
-#if wxUSE_ARRAY_MEMORY_OPERATORS
-
-void operator delete[] (void * buf)
-{
-#ifdef NO_DEBUG_ALLOCATION
-  free((char*) buf);
-#else
-  wxDebugFree(buf, TRUE);
-#endif
-}
-#endif
-
-#endif
 
 // TODO: store whether this is a vector or not.
 void * wxDebugAlloc(size_t size, wxChar * fileName, int lineNum, bool isObject, bool WXUNUSED(isVect) )

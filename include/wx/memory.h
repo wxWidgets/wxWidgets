@@ -40,10 +40,22 @@
 
 #ifdef __WXDEBUG__
 
-void * wxDebugAlloc(size_t size, wxChar * fileName, int lineNum, bool isObject, bool isVect = FALSE);
-void wxDebugFree(void * buf, bool isVect = FALSE);
+// devik 2000-8-27: export these because new/delete operators are now inline
+WXDLLEXPORT void * wxDebugAlloc(size_t size, wxChar * fileName, int lineNum, bool isObject, bool isVect = FALSE);
+WXDLLEXPORT void wxDebugFree(void * buf, bool isVect = FALSE);
 
-// Global versions of the new and delete operators.
+//**********************************************************************************
+/*
+  The global operator new used for everything apart from getting
+  dynamic storage within this function itself.
+*/
+
+// We'll only do malloc and free for the moment: leave the interesting
+// stuff for the wxObject versions.
+// devik 2000-8-29: All new/delete ops are now inline because they can't
+// be marked as dllexport/dllimport. It then leads to weird bugs when
+// used on MSW as DLL
+
 #if wxUSE_GLOBAL_MEMORY_OPERATORS
 
 // Undefine temporarily (new is #defined in object.h) because we want to
@@ -61,35 +73,60 @@ void wxDebugFree(void * buf, bool isVect = FALSE);
     #ifndef __EDG_ABI_COMPATIBILITY_VERSION
         #define wxUSE_ARRAY_MEMORY_OPERATORS 0
     #endif
+#elif !( defined (__VISUALC__) && (__VISUALC__ <= 1020) ) || defined( __MWERKS__)
+    #define wxUSE_ARRAY_MEMORY_OPERATORS 1
 #else
     // ::operator new[] is a recent C++ feature, so assume it's not supported
     #define wxUSE_ARRAY_MEMORY_OPERATORS 0
 #endif
 
-// Added JACS 25/11/98: needed for some compilers
-void * operator new (size_t size);
-WXDLLEXPORT void * operator new (size_t size, wxChar * fileName, int lineNum);
+inline void * operator new (size_t size, wxChar * fileName, int lineNum)
+{
+  return wxDebugAlloc(size, fileName, lineNum, FALSE, FALSE);
+}
 
-#if !defined(__VISAGECPP__)
-void operator delete (void * buf);
-#endif
+inline void * operator new (size_t size)
+{
+  return wxDebugAlloc(size, NULL, 0, FALSE);
+}
+
+inline void operator delete (void * buf)
+{
+  wxDebugFree(buf, FALSE);
+}
 
 #if wxUSE_ARRAY_MEMORY_OPERATORS
-    WXDLLEXPORT void* operator new[] (size_t size);
-    WXDLLEXPORT void* operator new[] (size_t size, wxChar * fileName, int lineNum);
-    WXDLLEXPORT void operator delete[] (void * buf);
+inline void * operator new[] (size_t size)
+{
+  return wxDebugAlloc(size, NULL, 0, FALSE, TRUE);
+}
+
+inline void * operator new[] (size_t size, wxChar * fileName, int lineNum)
+{
+  return wxDebugAlloc(size, fileName, lineNum, FALSE, TRUE);
+}
+
+inline void operator delete[] (void * buf)
+{
+  wxDebugFree(buf, TRUE);
+}
 #endif
 
 // VC++ 6.0
 #if defined(__VISUALC__) && (__VISUALC__ >= 1200)
-    WXDLLEXPORT void operator delete(void *buf, wxChar*, int);
-    WXDLLEXPORT void operator delete[](void *buf, wxChar*, int);
-#endif
+inline void operator delete(void* pData, wxChar* /* fileName */, int /* lineNum */)
+{
+  wxDebugFree(pData, FALSE);
+}
+inline void operator delete[](void* pData, wxChar* /* fileName */, int /* lineNum */)
+{
+  wxDebugFree(pData, TRUE);
+}
+#endif // __VISUALC__>=1200
+#endif // wxUSE_GLOBAL_MEMORY_OPERATORS
+#endif // __WXDEBUG__
 
-#endif
-  // wxUSE_GLOBAL_MEMORY_OPERATORS
-#endif
-  // __WXDEBUG__
+//**********************************************************************************
 
 typedef unsigned int wxMarkerType;
 

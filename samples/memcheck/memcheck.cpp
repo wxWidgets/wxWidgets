@@ -93,9 +93,16 @@ bool MyApp::OnInit(void)
 
   const char *data = (const char*) thing ;
 
+  // On MSW, Dump() crashes if using wxLogGui,
+  // so use wxLogStderr instead.
+  wxLog* oldLog = wxLog::SetActiveTarget(new wxLogStderr);
+
   wxDebugContext::PrintClasses();
   wxDebugContext::Dump();
   wxDebugContext::PrintStatistics();
+
+  // Set back to wxLogGui
+  delete wxLog::SetActiveTarget(oldLog);
 
   // Don't delete these objects, to force wxApp to flag a memory leak.
 //  delete thing;
