@@ -146,7 +146,6 @@ class TestPanel(wxPanel):
             self.otherThrobber.SetLabel("Stop")
 
     def ShutdownDemo(self):
-        print "ShutdownDemo"
         self.otherThrobber.Rest()
         for t in self.throbbers.keys():
             self.throbbers[t]['throbber'].Rest()
