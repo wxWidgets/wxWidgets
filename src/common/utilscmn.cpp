@@ -359,28 +359,6 @@ wxString wxNow( void )
   return wxString(date);
 }
 
-/* Get Full RFC822 style email address */
-bool
-wxGetEmailAddress (char *address, int maxSize)
-{
-  char host[65];
-  char user[65];
-
-  if (wxGetHostName(host, 64) == FALSE)
-    return FALSE;
-  if (wxGetUserId(user, 64) == FALSE)
-    return FALSE;
-
-  char tmp[130];
-  strcpy(tmp, user);
-  strcat(tmp, "@");
-  strcat(tmp, host);
-
-  strncpy(address, tmp, maxSize - 1);
-  address[maxSize-1] = '\0';
-  return TRUE;
-}
-
 /*
  * Strip out any menu codes
  */
@@ -822,37 +800,81 @@ int isascii( int c )
 }
 #endif
 
-bool wxGetUserId(wxString& buf)
+// ----------------------------------------------------------------------------
+// network and user id functions
+// ----------------------------------------------------------------------------
+
+// Get Full RFC822 style email address
+bool wxGetEmailAddress(char *address, int maxSize)
 {
-    bool success = wxGetUserId(wxBuffer, 500);
-    if (success)
-    {
-        buf = wxBuffer;
-        return TRUE;
-    }
-    else
+    wxString email = wxGetEmailAddress();
+    if ( !email )
         return FALSE;
+
+    strncpy(address, email, maxSize - 1);
+    address[maxSize - 1] = '\0';
+
+    return TRUE;
 }
 
-bool wxGetUserName(wxString& buf)
+wxString wxGetEmailAddress()
 {
-    bool success = wxGetUserName(wxBuffer, 500);
-    if (success)
+    wxString email;
+
+    wxString host = wxGetHostName();
+    if ( !!host )
     {
-        buf = wxBuffer;
-        return TRUE;
+        wxString user = wxGetUserId();
+        if ( !!user )
+        {
+            wxString email(user);
+            email << '@' << host;
+        }
     }
-    else
-        return FALSE;
+
+    return email;
 }
 
-bool wxGetHostName(wxString& buf)
+wxString wxGetUserId()
+{
+    static const int maxLoginLen = 256; // FIXME arbitrary number
+
+    wxString buf;
+    bool ok = wxGetUserId(buf.GetWriteBuf(maxLoginLen), maxLoginLen);
+    buf.UngetWriteBuf();
+
+    if ( !ok )
+        buf.Empty();
+
+    return buf;
+}
+
+wxString wxGetUserName()
+{
+    static const int maxUserNameLen = 1024; // FIXME arbitrary number
+
+    wxString buf;
+    bool ok = wxGetUserName(buf.GetWriteBuf(maxUserNameLen), maxUserNameLen);
+    buf.UngetWriteBuf();
+
+    if ( !ok )
+        buf.Empty();
+
+    return buf;
+}
+
+wxString wxGetHostName()
 {
     static const size_t hostnameSize = 257;
+
+    wxString buf;
     bool ok = wxGetHostName(buf.GetWriteBuf(hostnameSize), hostnameSize);
 
     buf.UngetWriteBuf();
 
-    return ok;
+    if ( !ok )
+        buf.Empty();
+
+    return buf;
 }
 

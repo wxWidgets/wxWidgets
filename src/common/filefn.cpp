@@ -274,6 +274,12 @@ bool wxFileExists(const char *pszFileName)
 }
 */
 
+bool wxDirExists( const wxString& dir )
+{
+    struct stat st;
+    return ((stat(dir, &st) != -1) && S_ISDIR(st.st_mode) ? TRUE : FALSE);
+}
+
 bool
 wxIsAbsolutePath (const wxString& filename)
 {
@@ -785,7 +791,7 @@ wxMac2UnixFilename (char *s)
                         if (*s == ':')
                           *s = '/';
                         else
-                          *s = wxToLower (*s);        // Case INDEPENDENT
+                          *s = tolower(*s);        // Case INDEPENDENT
                         s++;
                 }
         }
@@ -830,7 +836,7 @@ wxDos2UnixFilename (char *s)
           *s = '/';
 #ifdef __WXMSW__
         else
-          *s = wxToLower (*s);        // Case INDEPENDENT
+          *s = tolower(*s);        // Case INDEPENDENT
 #endif
         s++;
       }

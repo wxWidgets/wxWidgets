@@ -110,9 +110,9 @@ void wxUsleep(unsigned long milliseconds)
 // process management
 // ----------------------------------------------------------------------------
 
-int wxKill(long pid, int sig)
+int wxKill(long pid, wxSignal sig)
 {
-    return kill(pid, sig);
+    return kill(pid, (int)sig);
 }
 
 #define WXEXECUTE_NARGS   127
@@ -350,7 +350,7 @@ char *wxGetUserHome( const wxString &user )
 {
     struct passwd *who = (struct passwd *) NULL;
 
-    if (user.IsNull() || (user== ""))
+    if ( !user )
     {
         register char *ptr;
 
@@ -378,12 +378,15 @@ char *wxGetUserHome( const wxString &user )
 }
 
 // ----------------------------------------------------------------------------
-// id routines
+// network and user id routines
 // ----------------------------------------------------------------------------
 
-bool wxGetHostName(char *buf, int sz)
+// retrieve either the hostname or FQDN depending on platform (caller must
+// check whether it's one or the other, this is why this function is for
+// private use only)
+static bool wxGetHostNameInternal(char *buf, int sz)
 {
-    wxCHECK_MSG( buf, FALSE, "NULL pointer in wxGetHostName" );
+    wxCHECK_MSG( buf, FALSE, "NULL pointer in wxGetHostNameInternal" );
 
     *buf = '\0';
 
@@ -398,15 +401,61 @@ bool wxGetHostName(char *buf, int sz)
     }
 #elif defined(HAVE_GETHOSTNAME)
     bool ok = gethostname(buf, sz) != -1;
-#else
+#else // no uname, no gethostname
     wxFAIL_MSG("don't know host name for this machibe");
 
     bool ok = FALSE;
-#endif
+#endif // uname/gethostname
 
     if ( !ok )
     {
         wxLogSysError(_("Cannot get the hostname"));
+    }
+
+    return ok;
+}
+
+bool wxGetHostName(char *buf, int sz)
+{
+    bool ok = wxGetHostNameInternal(buf, sz);
+
+    if ( ok )
+    {
+        // BSD systems return the FQDN, we only want the hostname, so extract
+        // it (we consider that dots are domain separators)
+        char *dot = strchr(buf, '.');
+        if ( dot )
+        {
+            // nuke it
+            *dot = '\0';
+        }
+    }
+
+    return ok;
+}
+
+bool wxGetFullHostName(char *buf, int sz)
+{
+    bool ok = wxGetHostNameInternal(buf, sz);
+
+    if ( ok )
+    {
+        if ( !strchr(buf, '.') )
+        {
+            struct hostent *host = gethostbyname(buf);
+            if ( !host )
+            {
+                wxLogSysError(_("Cannot get the official hostname"));
+
+                ok = FALSE;
+            }
+            else
+            {
+                // the canonical name
+                strncpy(buf, host->h_name, sz);
+            }
+        }
+        //else: it's already a FQDN (BSD behaves this way)
     }
 
     return ok;
@@ -473,14 +522,3 @@ void wxFatalError( const wxString &msg, const wxString &title )
   exit(3); // the same exit code as for abort()
 }
 
-//------------------------------------------------------------------------
-// directory routines
-//------------------------------------------------------------------------
-
-bool wxDirExists( const wxString& dir )
-{
-    char buf[500];
-    strcpy( buf, WXSTRINGCAST(dir) );
-    struct stat sbuf;
-    return ((stat(buf, &sbuf) != -1) && S_ISDIR(sbuf.st_mode) ? TRUE : FALSE);
-}

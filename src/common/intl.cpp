@@ -30,6 +30,7 @@
 
 // standard headers
 #include  <locale.h>
+#include  <ctype.h>
 
 // wxWindows
 #include "wx/defs.h"
@@ -435,7 +436,7 @@ bool wxLocale::Init(const char *szName,
   if ( m_strShort.IsEmpty() ) {
     // FIXME I don't know how these 2 letter abbreviations are formed,
     //       this wild guess is surely wrong
-    m_strShort = wxToLower(szLocale[0]) + wxToLower(szLocale[1]);
+    m_strShort = tolower(szLocale[0]) + tolower(szLocale[1]);
   }
 
   // save the old locale to be able to restore it later
