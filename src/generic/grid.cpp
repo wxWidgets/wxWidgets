@@ -3567,6 +3567,10 @@ void wxGrid::Init()
     m_inOnKeyDown = FALSE;
     m_batchCount = 0;
 
+    // default margins (usually needed to allow resizing the last column/row)
+    m_extraWidth =
+    m_extraHeight = 50;
+
     CalcDimensions();
 }
 
@@ -3659,8 +3663,8 @@ void wxGrid::CalcDimensions()
         ch -= m_colLabelHeight;
 
     // grid total size
-    int w = m_numCols > 0 ? GetColRight(m_numCols - 1) : 0;
-    int h = m_numRows > 0 ? GetRowBottom(m_numRows - 1) : 0;
+    int w = m_numCols > 0 ? GetColRight(m_numCols - 1) + m_extraWidth : 0;
+    int h = m_numRows > 0 ? GetRowBottom(m_numRows - 1) + m_extraHeight : 0;
 
     // maybe we don't need scrollbars at all? and if we do, transform w and h
     // from pixels into logical units
