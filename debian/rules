@@ -139,7 +139,7 @@ build-wxbase-shared-stamp:
 	mkdir $(objdir_wxbase_shared)
 	cd $(objdir_wxbase_shared) \
 		&& ../configure --prefix=/usr \
-				--cache-file=../config.cache.debian \
+				--cache-file=../config_deb.cache \
 				--disable-gui \
 				--enable-burnt_name \
 				--with-zlib=sys \
@@ -151,7 +151,7 @@ build-wxbase-static-stamp:
 	mkdir $(objdir_wxbase_static)
 	cd $(objdir_wxbase_static) \
 		&& ../configure --prefix=/usr \
-				--cache-file=../config.cache.debian \
+				--cache-file=../config_deb.cache \
 				--disable-gui \
 				--disable-shared \
 				--with-zlib=sys \
@@ -163,7 +163,7 @@ build-wxbase-debug-stamp:
 	mkdir $(objdir_wxbase_debug)
 	cd $(objdir_wxbase_debug) \
 		&& ../configure --prefix=/usr \
-				--cache-file=../config.cache.debian \
+				--cache-file=../config_deb.cache \
 				--disable-gui \
 				--enable-debug \
 				--enable-burnt_name \
@@ -176,7 +176,7 @@ build-gtk-shared-stamp:
 	mkdir $(objdir_gtk_shared)
 	cd $(objdir_gtk_shared) \
 		&& ../configure --prefix=/usr \
-				--cache-file=../config.cache.debian \
+				--cache-file=../config_deb.cache \
 				--with-gtk \
 				--with-opengl \
 				--enable-burnt_name \
@@ -192,7 +192,7 @@ build-gtk-static-stamp:
 	mkdir $(objdir_gtk_static)
 	cd $(objdir_gtk_static) \
 		&& ../configure --prefix=/usr \
-				--cache-file=../config.cache.debian \
+				--cache-file=../config_deb.cache \
 				--with-gtk \
 				--with-opengl \
 				--disable-shared \
@@ -208,7 +208,7 @@ build-gtk-debug-stamp:
 	mkdir $(objdir_gtk_debug)
 	cd $(objdir_gtk_debug) \
 		&& ../configure --prefix=/usr \
-				--cache-file=../config.cache.debian \
+				--cache-file=../config_deb.cache \
 				--with-gtk \
 				--with-opengl \
 				--enable-debug \
@@ -293,7 +293,7 @@ build-i18n-stamp: build-gtk-shared-stamp
 clean: debian/control
 	dh_testdir
 	dh_testroot
-	rm -rf control-files-stamp $(build_stamps) $(objdirs)
+	rm -rf config_deb.cache control-files-stamp $(build_stamps) $(objdirs)
 	-cd wxPython/src && $(MAKE) clean
 	-cd wxPython/contrib \
 		&& for d in $$(find -type d -maxdepth 1); do \
