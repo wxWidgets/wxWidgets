@@ -1937,12 +1937,35 @@ void wxTreeCtrl::CalculateSize( wxGenericTreeItem *item, wxDC &dc )
 {
     long text_w = 0;
     long text_h = 0;
-    // TODO : check for boldness. Here with suppose that font normal and bold
-    //        have the same height !
-    // TODO : bug here, text_w is sometime not the correct answer !!!
+    
+    wxFont fontOld;
+    wxFont fontNew;
+    if (item->IsBold())
+    {
+        fontOld = dc.GetFont();
+        if (fontOld.Ok())
+        {
+          // VZ: is there any better way to make a bold variant of old font?
+          fontNew = wxFont( fontOld.GetPointSize(),
+                            fontOld.GetFamily(),
+                            fontOld.GetStyle(),
+                            wxBOLD,
+                            fontOld.GetUnderlined());
+          dc.SetFont(fontNew);
+        }
+        else
+        {
+            wxFAIL_MSG(_T("wxDC::GetFont() failed!"));
+        }
+    }
+    
     dc.GetTextExtent( item->GetText(), &text_w, &text_h );
-    text_h+=4;
+    text_h+=2;
 
+    // restore normal font for bold items
+    if (fontOld.Ok())
+        dc.SetFont( fontOld);
+    
     int image_h = 0;
     int image_w = 0;
     if ((item->IsExpanded()) && (item->GetSelectedImage() != -1))
