@@ -24,14 +24,16 @@ INCOMPATIBLE CHANGES SINCE 2.4.x
 - also, OnExit() is not called if OnInit() fails
 - wxTheApp can't be assigned to any longer, use wxApp::SetInstance() instead
 - wxFileType::GetIcon() returns wxIconLocation, not wxIcon
-- wxColourDatabase doesn't derive from wxList anymore: use AddColour to add
-  new colours
+- wxColourDatabase is not a wxList any more, use AddColour to add new colours
 - wxWindow::Clear() is now called ClearBackground()
 - pointer returned by wxFont::GetNativeFontInfo() must not be deleted now
-- wxMouseEvent::Moving() doesn't return true if mouse is being dragged
+- wxMouseEvent::Moving() doesn't return true if mouse is being dragged any more
 - pointer returned by wxColourDatabase::FindColour() must now always (and
   not just sometimes) be deleted, to avoid problems, don't use it at all,
   use wxColourDatabase::Find() instead.
+- (most) controls now inherit parents colours by default, override
+  ShouldInheritColours() to return false if you don't want this to happen
+
 
 
 DEPRECATED METHODS SINCE 2.4.x
