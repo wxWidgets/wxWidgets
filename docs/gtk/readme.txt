@@ -8,10 +8,11 @@ Information on how to install can be found in the file
 INSTALL.txt, but if you cannot wait, this should work on
 all systems
 
-configure --without-threads
+configure
 make
 su (PASSWORD)
 make install
+ldconfig
 
 When you run into problems, please read the INSTALL.txt and
 follow those instructions. If you still don't have any success,
@@ -22,7 +23,7 @@ DISTRIBUTION YOU USE AND WHAT ERROR WAS REPORTED. I know
 this has no effect, but I tried...
 
 This is the beta release which means that we have a feature
-freeze. We'll move up to versin 2.0 rather soon and from then
+freeze. We'll move up to version 2.0 rather soon and from then
 on there will be no more binary incompatible changes. We might
 add more classes, but none that would alter the behaviour of
 the existing ones. The library produced by the install process

@@ -4,17 +4,10 @@
 If you compile wxWindows on Unix for the first time and don't 
 like to read install instructions just do (in the base dir):
 
-./configure --without-threads
 make
-
-and drink 10 coffees. Then you may log in as root and type
-
+su (PASSWORD)
 make install
-
-You can leave out the --without-threads option if you have 
-a NEW Linux distribution based on glibc (e.g. RedHat 5.1 or 
-Debian 2.0) or any other Unix that comes with Posix threads 
-or SGI threads.
+ldconfig
 
 Now create your super-application myfoo.app and compile anywhere 
 with
@@ -71,18 +64,15 @@ distributions have correct glibc 2 support:
  - Debian 2.0
  - Stampede
  - DLD 6.0
+ - SuSE 6.0
  
-The next major version of SuSE will also support glibc 2,
-but version 5.X does not. Also Caldera and Slackware
-don't yet support glibc 2.
-
 On IRIX you can also use SGI threads if Posix-Threads
 are not present. The SGI threads will be detected by
 configure automatically.
 
-You can always disable thread support by running 
+You can enable thread support by running 
 
-./configure "--without-threads"
+./configure "--with-threads"
 make clean
 make
   

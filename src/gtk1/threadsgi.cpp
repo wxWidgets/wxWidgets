@@ -66,24 +66,24 @@ wxMutexError wxMutex::Lock()
 {
   spin_lock(&(p_internal->p_mutex));
   m_locked++;
-  return MUTEX_NO_ERROR;
+  return wxMUTEX_NO_ERROR;
 }
 
 wxMutexError wxMutex::TryLock()
 {
   if (acquire_lock(&(p_internal->p_mutex)) != 0)
-    return MUTEX_BUSY;
+    return wxMUTEX_BUSY;
   m_locked++;
-  return MUTEX_NO_ERROR;
+  return wxMUTEX_NO_ERROR;
 }
 
 wxMutexError wxMutex::Unlock()
 {
   if (m_locked == 0)
-    return MUTEX_UNLOCKED; 
+    return wxMUTEX_UNLOCKED; 
   release_lock(&(p_internal->p_mutex));
   m_locked--;
-  return MUTEX_NO_ERROR;
+  return wxMUTEX_NO_ERROR;
 }
 
 // GL: Don't know how it works on SGI. Wolfram ?
@@ -132,13 +132,13 @@ void wxThread::Exit(void* status)
 wxThreadError wxThread::Create()
 {
   if (p_internal->state != STATE_IDLE)
-    return THREAD_RUNNING;
+    return wxTHREAD_RUNNING;
   p_internal->state = STATE_RUNNING;
   if (sproc(p_internal->SprocStart, PR_SALL, this) < 0) {
     p_internal->state = STATE_IDLE;
-    return THREAD_NO_RESOURCE;
+    return wxTHREAD_NO_RESOURCE;
   }
-  return THREAD_NO_ERROR;
+  return wxTHREAD_NO_ERROR;
 }
 
 wxThreadError wxThread::Destroy()
@@ -146,17 +146,17 @@ wxThreadError wxThread::Destroy()
   if (p_internal->state == STATE_RUNNING)
     p_internal->state = STATE_CANCELED;
 
-  return THREAD_NO_ERROR;
+  return wxTHREAD_NO_ERROR;
 }
 
 wxThreadError wxThread::Pause()
 {
-  return THREAD_NO_ERROR;
+  return wxTHREAD_NO_ERROR;
 }
 
 wxThreadError wxThread::Resume()
 {
-  return THREAD_NO_ERROR;
+  return wxTHREAD_NO_ERROR;
 }
 
 void *wxThread::Join()

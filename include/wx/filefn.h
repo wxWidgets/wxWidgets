@@ -41,6 +41,8 @@ typedef enum {
   wxFromEnd
 } wxSeekMode;
 
+WXDLLEXPORT_DATA(extern const char*) wxEmptyString;
+
 // ----------------------------------------------------------------------------
 // functions
 // ----------------------------------------------------------------------------
