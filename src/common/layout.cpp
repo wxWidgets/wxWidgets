@@ -72,7 +72,7 @@ void wxIndividualLayoutConstraint::Set(wxRelationship rel, wxWindowBase *otherW,
 
     if ( rel == wxPercentOf )
     {
-        percentage = val;
+        percent = val;
     }
     else
     {
@@ -121,7 +121,8 @@ void wxIndividualLayoutConstraint::PercentOf(wxWindowBase *otherW, wxEdge wh, in
 //
 void wxIndividualLayoutConstraint::Absolute(int val)
 {
-    value = val; relationship = wxAbsolute;
+    value = val;
+    relationship = wxAbsolute;
 }
 
 // Reset constraint if it mentions otherWin
@@ -138,8 +139,8 @@ bool wxIndividualLayoutConstraint::ResetIfWin(wxWindowBase *otherW)
         otherWin = (wxWindowBase *) NULL;
         return TRUE;
     }
-    else
-        return FALSE;
+
+    return FALSE;
 }
 
 // Try to satisfy constraint
