@@ -765,11 +765,11 @@ directly in site-packages.  This is done to help facilitate having
 multiple versions of wxPython installed side-by-side.  Why would you
 want to do this?  One possible scenario is you have an app that
 requires wxPython 2.4 but you want to use the newest 2.5 to do your
-development with.  Or perhaps you want to be able to test your app
+own development with.  Or perhaps you want to be able to test your app
 with several different versions of wxPython to ensure compatibility.
 Before everyone panics, rest asured that if you only install one
-version of wxPython then you should notice no difference in how
-things work.</p>
+version of wxPython then you should notice no difference in how things
+work.</p>
 <p>In addition to installing wxPython into a &quot;versioned&quot; subdirectory of
 site-packages, a file named <cite>wx.pth</cite> is optionally installed that will
 contain the name of the versioned subdirectory.  This will cause that
@@ -788,7 +788,7 @@ runtime so your applications can select which version of wxPython they
 would like to to have imported.  You use it like this:</p>
 <pre class="literal-block">
 import wxversion
-wxversion.require(&quot;2.4&quot;)
+wxversion.select(&quot;2.4&quot;)
 import wx
 </pre>
 <p>Then eventhough a 2.5 version of wxPython may be the default the
