@@ -13,7 +13,7 @@
 #define _WX_UNIV_MENUITEM_H_
 
 #ifdef __GNUG__
-    #pragma interface "menuitem.h"
+    #pragma interface "univmenuitem.h"
 #endif
 
 // ----------------------------------------------------------------------------

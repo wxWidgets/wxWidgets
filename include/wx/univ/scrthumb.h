@@ -13,7 +13,7 @@
 #define _WX_UNIV_SCRTHUMB_H_
 
 #ifdef __GNUG__
-    #pragma interface "scrthumb.h"
+    #pragma interface "univscrthumb.h"
 #endif
 
 // ----------------------------------------------------------------------------

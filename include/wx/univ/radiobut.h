@@ -13,7 +13,7 @@
 #define _WX_UNIV_RADIOBUT_H_
 
 #ifdef __GNUG__
-    #pragma interface "radiobut.h"
+    #pragma interface "univradiobut.h"
 #endif
 
 #include "wx/checkbox.h"

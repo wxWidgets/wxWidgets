@@ -13,7 +13,7 @@
 #define _WX_UNIV_CHECKBOX_H_
 
 #ifdef __GNUG__
-    #pragma interface "checkbox.h"
+    #pragma interface "univcheckbox.h"
 #endif
 
 #include "wx/button.h" // for wxStdButtonInputHandler

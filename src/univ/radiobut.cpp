@@ -18,7 +18,7 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-    #pragma implementation "radiobut.h"
+    #pragma implementation "univradiobut.h"
 #endif
 
 #include "wx/wxprec.h"

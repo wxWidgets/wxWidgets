@@ -18,7 +18,7 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-    #pragma implementation "listbox.h"
+    #pragma implementation "univlistbox.h"
 #endif
 
 #include "wx/wxprec.h"

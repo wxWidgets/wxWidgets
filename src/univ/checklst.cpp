@@ -18,7 +18,7 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-    #pragma implementation "checklst.h"
+    #pragma implementation "univchecklst.h"
 #endif
 
 #include "wx/wxprec.h"

@@ -13,7 +13,7 @@
 #define _WX_UNIV_BMPBUTTN_H_
 
 #ifdef __GNUG__
-    #pragma interface "bmpbuttn.h"
+    #pragma interface "univbmpbuttn.h"
 #endif
 
 class WXDLLEXPORT wxBitmapButton : public wxBitmapButtonBase

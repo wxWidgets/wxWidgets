@@ -28,7 +28,7 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-    #pragma implementation "combobox.h"
+    #pragma implementation "univcombobox.h"
 #endif
 
 #include "wx/wxprec.h"

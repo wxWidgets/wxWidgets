@@ -118,7 +118,7 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-    #pragma implementation "textctrl.h"
+    #pragma implementation "univtextctrl.h"
 #endif
 
 #include "wx/wxprec.h"

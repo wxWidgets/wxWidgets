@@ -13,7 +13,7 @@
 #define _WX_UNIV_MENU_H_
 
 #ifdef __GNUG__
-    #pragma interface "menu.h"
+    #pragma interface "univmenu.h"
 #endif
 
 #if wxUSE_ACCEL

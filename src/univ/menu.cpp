@@ -18,8 +18,8 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-    #pragma implementation "menuitem.h"
-    #pragma implementation "menu.h"
+    #pragma implementation "univmenuitem.h"
+    #pragma implementation "univmenu.h"
 #endif
 
 #include "wx/wxprec.h"

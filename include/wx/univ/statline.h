@@ -9,7 +9,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-    #pragma interface "statline.h"
+    #pragma interface "univstatline.h"
 #endif
 
 #ifndef _WX_UNIV_STATLINE_H_

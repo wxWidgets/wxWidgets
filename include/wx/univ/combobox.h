@@ -37,7 +37,7 @@
 #define _WX_UNIV_COMBOBOX_H_
 
 #ifdef __GNUG__
-    #pragma implementation "combobox.h"
+    #pragma implementation "univcombobox.h"
 #endif
 
 class WXDLLEXPORT wxComboControl;

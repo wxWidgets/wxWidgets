@@ -13,7 +13,7 @@
 #define _WX_UNIV_TEXTCTRL_H_
 
 #ifdef __GNUG__
-    #pragma interface "textctrl.h"
+    #pragma interface "univtextctrl.h"
 #endif
 
 class WXDLLEXPORT wxCaret;

@@ -43,7 +43,7 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-    #pragma implementation "slider.h"
+    #pragma implementation "univslider.h"
 #endif
 
 #include "wx/wxprec.h"

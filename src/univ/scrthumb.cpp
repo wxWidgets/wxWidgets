@@ -18,7 +18,7 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-    #pragma implementation "scrthumb.h"
+    #pragma implementation "univscrthumb.h"
 #endif
 
 #include "wx/wxprec.h"

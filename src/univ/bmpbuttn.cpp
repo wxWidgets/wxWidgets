@@ -18,7 +18,7 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-    #pragma implementation "bmpbuttn.h"
+    #pragma implementation "univbmpbuttn.h"
 #endif
 
 #include "wx/wxprec.h"

@@ -18,7 +18,7 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-    #pragma implementation "scrolbar.h"
+    #pragma implementation "univscrolbar.h"
 #endif
 
 #include "wx/wxprec.h"
