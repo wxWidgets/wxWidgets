@@ -29,6 +29,8 @@
     #include "wx/app.h"
 #endif
 
+#include "wx/module.h"
+
 #include "wx/msw/private.h"
 
 // DLL options compatibility check:
@@ -65,6 +67,116 @@ static const wxChar *wxGLCanvasClassNameNoRedraw = wxT("wxGLCanvasClassNR");
 
 LRESULT WXDLLEXPORT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message,
                                    WPARAM wParam, LPARAM lParam);
+
+// ----------------------------------------------------------------------------
+// wxGLModule is responsible for unregistering wxGLCanvasClass Windows class
+// ----------------------------------------------------------------------------
+
+class wxGLModule : public wxModule
+{
+public:
+    bool OnInit() { return true; }
+    void OnExit() { UnregisterClasses(); }
+
+    // register the GL classes if not done yet, return true if ok, false if
+    // registration failed
+    static bool RegisterClasses();
+
+    // unregister the classes, done automatically on program termination
+    static void UnregisterClasses();
+
+private:
+    // wxGLCanvas is only used from the main thread so this is MT-ok
+    static bool ms_registeredGLClasses;
+
+    DECLARE_DYNAMIC_CLASS(wxGLModule)
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxGLModule, wxModule)
+
+bool wxGLModule::ms_registeredGLClasses = false;
+
+/* static */
+bool wxGLModule::RegisterClasses()
+{
+    if (ms_registeredGLClasses)
+        return true;
+
+    // We have to register a special window class because we need the CS_OWNDC
+    // style for GLCanvas.
+
+  /*
+  From Angel Popov <jumpo@bitex.com>
+
+  Here are two snips from a dicussion in the OpenGL Gamedev list that explains
+  how this problem can be fixed:
+
+  "There are 5 common DCs available in Win95. These are aquired when you call
+  GetDC or GetDCEx from a window that does _not_ have the OWNDC flag.
+  OWNDC flagged windows do not get their DC from the common DC pool, the issue
+  is they require 800 bytes each from the limited 64Kb local heap for GDI."
+
+  "The deal is, if you hold onto one of the 5 shared DC's too long (as GL apps
+  do), Win95 will actually "steal" it from you.  MakeCurrent fails,
+  apparently, because Windows re-assigns the HDC to a different window.  The
+  only way to prevent this, the only reliable means, is to set CS_OWNDC."
+  */
+
+    WNDCLASS wndclass;
+
+    // the fields which are common to all classes
+    wndclass.lpfnWndProc   = (WNDPROC)wxWndProc;
+    wndclass.cbClsExtra    = 0;
+    wndclass.cbWndExtra    = sizeof( DWORD ); // VZ: what is this DWORD used for?
+    wndclass.hInstance     = wxhInstance;
+    wndclass.hIcon         = (HICON) NULL;
+    wndclass.hCursor       = ::LoadCursor((HINSTANCE)NULL, IDC_ARROW);
+    wndclass.lpszMenuName  = NULL;
+
+    // Register the GLCanvas class name
+    wndclass.hbrBackground = (HBRUSH)NULL;
+    wndclass.lpszClassName = wxGLCanvasClassName;
+    wndclass.style         = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS | CS_OWNDC;
+
+    if ( !::RegisterClass(&wndclass) )
+    {
+        wxLogLastError(wxT("RegisterClass(wxGLCanvasClass)"));
+        return false;
+    }
+
+    // Register the GLCanvas class name for windows which don't do full repaint
+    // on resize
+    wndclass.lpszClassName = wxGLCanvasClassNameNoRedraw;
+    wndclass.style        &= ~(CS_HREDRAW | CS_VREDRAW);
+
+    if ( !::RegisterClass(&wndclass) )
+    {
+        wxLogLastError(wxT("RegisterClass(wxGLCanvasClassNameNoRedraw)"));
+
+        ::UnregisterClass(wxGLCanvasClassName, wxhInstance);
+
+        return false;
+    }
+
+    ms_registeredGLClasses = true;
+
+    return true;
+}
+
+/* static */
+void wxGLModule::UnregisterClasses()
+{
+    // we need to unregister the classes in case we're in a DLL which is
+    // unloaded and then loaded again because if we don't, the registration is
+    // going to fail in wxGLCanvas::Create() the next time we're loaded
+    if ( ms_registeredGLClasses )
+    {
+        ::UnregisterClass(wxGLCanvasClassName, wxhInstance);
+        ::UnregisterClass(wxGLCanvasClassNameNoRedraw, wxhInstance);
+
+        ms_registeredGLClasses = false;
+    }
+}
 
 /*
  * GLContext implementation
@@ -229,8 +341,7 @@ wxGLCanvas::wxGLCanvas( wxWindow *parent, const wxGLCanvas *shared, wxWindowID i
 
 wxGLCanvas::~wxGLCanvas()
 {
-  if (m_glContext)
-    delete m_glContext;
+  delete m_glContext;
 
   ::ReleaseDC((HWND) GetHWND(), (HDC) m_hDC);
 }
@@ -244,90 +355,34 @@ bool wxGLCanvas::Create(wxWindow *parent,
                         long style,
                         const wxString& name)
 {
-  static bool s_registeredGLCanvasClass = false;
+    wxCHECK_MSG( parent, false, wxT("can't create wxWindow without parent") );
 
-  // We have to register a special window class because we need
-  // the CS_OWNDC style for GLCanvas.
-
-  /*
-  From Angel Popov <jumpo@bitex.com>
-
-  Here are two snips from a dicussion in the OpenGL Gamedev list that explains
-  how this problem can be fixed:
-
-  "There are 5 common DCs available in Win95. These are aquired when you call
-  GetDC or GetDCEx from a window that does _not_ have the OWNDC flag.
-  OWNDC flagged windows do not get their DC from the common DC pool, the issue
-  is they require 800 bytes each from the limited 64Kb local heap for GDI."
-
-  "The deal is, if you hold onto one of the 5 shared DC's too long (as GL apps
-  do), Win95 will actually "steal" it from you.  MakeCurrent fails,
-  apparently, because Windows re-assigns the HDC to a different window.  The
-  only way to prevent this, the only reliable means, is to set CS_OWNDC."
-  */
-
-  if (!s_registeredGLCanvasClass)
-  {
-    WNDCLASS wndclass;
-
-    // the fields which are common to all classes
-    wndclass.lpfnWndProc   = (WNDPROC)wxWndProc;
-    wndclass.cbClsExtra    = 0;
-    wndclass.cbWndExtra    = sizeof( DWORD ); // VZ: what is this DWORD used for?
-    wndclass.hInstance     = wxhInstance;
-    wndclass.hIcon         = (HICON) NULL;
-    wndclass.hCursor       = ::LoadCursor((HINSTANCE)NULL, IDC_ARROW);
-    wndclass.lpszMenuName  = NULL;
-
-    // Register the GLCanvas class name
-    wndclass.hbrBackground = (HBRUSH)NULL;
-    wndclass.lpszClassName = wxGLCanvasClassName;
-    wndclass.style         = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS | CS_OWNDC;
-
-    if ( !::RegisterClass(&wndclass) )
+    if ( !wxGLModule::RegisterClasses() )
     {
-      wxLogLastError(wxT("RegisterClass(wxGLCanvasClass)"));
-      return false;
-    }
-
-    // Register the GLCanvas class name for windows which don't do full repaint
-    // on resize
-    wndclass.lpszClassName = wxGLCanvasClassNameNoRedraw;
-    wndclass.style        &= ~(CS_HREDRAW | CS_VREDRAW);
-
-    if ( !::RegisterClass(&wndclass) )
-    {
-        wxLogLastError(wxT("RegisterClass(wxGLCanvasClassNameNoRedraw)"));
-
-        ::UnregisterClass(wxGLCanvasClassName, wxhInstance);
+        wxLogError(_("Failed to register OpenGL window class."));
 
         return false;
     }
 
-    s_registeredGLCanvasClass = true;
-  }
+    if ( !CreateBase(parent, id, pos, size, style, wxDefaultValidator, name) )
+        return false;
 
-  wxCHECK_MSG( parent, false, wxT("can't create wxWindow without parent") );
+    parent->AddChild(this);
 
-  if ( !CreateBase(parent, id, pos, size, style, wxDefaultValidator, name) )
-    return false;
+    DWORD msflags = 0;
 
-  parent->AddChild(this);
+    /*
+       A general rule with OpenGL and Win32 is that any window that will have a
+       HGLRC built for it must have two flags:  WS_CLIPCHILDREN & WS_CLIPSIBLINGS.
+       You can find references about this within the knowledge base and most OpenGL
+       books that contain the wgl function descriptions.
+     */
 
-  DWORD msflags = 0;
+    WXDWORD exStyle = 0;
+    msflags |= WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
+    msflags |= MSWGetStyle(style, & exStyle) ;
 
-  /*
-  A general rule with OpenGL and Win32 is that any window that will have a
-  HGLRC built for it must have two flags:  WS_CLIPCHILDREN & WS_CLIPSIBLINGS.
-  You can find references about this within the knowledge base and most OpenGL
-  books that contain the wgl function descriptions.
-  */
-
-  WXDWORD exStyle = 0;
-  msflags |= WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
-  msflags |= MSWGetStyle(style, & exStyle) ;
-
-  return MSWCreate(wxGLCanvasClassName, NULL, pos, size, msflags, exStyle);
+    return MSWCreate(wxGLCanvasClassName, NULL, pos, size, msflags, exStyle);
 }
 
 static void AdjustPFDForAttributes(PIXELFORMATDESCRIPTOR& pfd, int *attribList)
