@@ -1113,6 +1113,12 @@ wxLogStatusFrame = misc2c.wxLogStatusFrame
 
 wxLogSysError = misc2c.wxLogSysError
 
+wxLogTrace = misc2c.wxLogTrace
+
+wxLogTraceMask = misc2c.wxLogTraceMask
+
+wxLogGeneric = misc2c.wxLogGeneric
+
 wxSafeShowMessage = misc2c.wxSafeShowMessage
 
 wxExecute = misc2c.wxExecute
@@ -1312,6 +1318,14 @@ wxLOG_Debug = misc2c.wxLOG_Debug
 wxLOG_Trace = misc2c.wxLOG_Trace
 wxLOG_Progress = misc2c.wxLOG_Progress
 wxLOG_User = misc2c.wxLOG_User
+wxTRACE_MemAlloc = misc2c.wxTRACE_MemAlloc
+wxTRACE_Messages = misc2c.wxTRACE_Messages
+wxTRACE_ResAlloc = misc2c.wxTRACE_ResAlloc
+wxTRACE_RefCount = misc2c.wxTRACE_RefCount
+wxTraceMemAlloc = misc2c.wxTraceMemAlloc
+wxTraceMessages = misc2c.wxTraceMessages
+wxTraceResAlloc = misc2c.wxTraceResAlloc
+wxTraceRefCount = misc2c.wxTraceRefCount
 wxEVT_END_PROCESS = misc2c.wxEVT_END_PROCESS
 wxEXEC_ASYNC = misc2c.wxEXEC_ASYNC
 wxEXEC_SYNC = misc2c.wxEXEC_SYNC
