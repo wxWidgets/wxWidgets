@@ -240,39 +240,34 @@ int wxEventLoop::Run()
     wxEventLoopActivator activate(&ms_activeLoop, this);
     wxEventLoopImplTiedPtr impl(&m_impl, new wxEventLoopImpl);
 
-    class CallEventLoopMethod
+    // we must ensure that OnExit() is called even if an exception is thrown
+    // from inside Dispatch() but we must call it from Exit() in normal
+    // situations because it is supposed to be called synchronously,
+    // wxModalEventLoop depends on this (so we can't just use ON_BLOCK_EXIT or
+    // something similar here)
+    wxTRY
     {
-    public:
-        typedef void (wxEventLoop::*FuncType)();
-
-        CallEventLoopMethod(wxEventLoop *evtLoop, FuncType fn)
-            : m_evtLoop(evtLoop), m_fn(fn) { }
-        ~CallEventLoopMethod() { (m_evtLoop->*m_fn)(); }
-
-    private:
-        wxEventLoop *m_evtLoop;
-        FuncType m_fn;
-    } callOnExit(this, &wxEventLoop::OnExit);
-
-    for ( ;; )
-    {
+        for ( ;; )
+        {
 #if wxUSE_THREADS
-        wxMutexGuiLeaveOrEnter();
+            wxMutexGuiLeaveOrEnter();
 #endif // wxUSE_THREADS
 
-        // generate and process idle events for as long as we don't have
-        // anything else to do
-        while ( !Pending() && m_impl->SendIdleMessage() )
-            ;
+            // generate and process idle events for as long as we don't have
+            // anything else to do
+            while ( !Pending() && m_impl->SendIdleMessage() )
+                ;
 
-        // a message came or no more idle processing to do, sit in
-        // Dispatch() waiting for the next message
-        if ( !Dispatch() )
-        {
-            // we got WM_QUIT
-            break;
+            // a message came or no more idle processing to do, sit in
+            // Dispatch() waiting for the next message
+            if ( !Dispatch() )
+            {
+                // we got WM_QUIT
+                break;
+            }
         }
     }
+    wxCATCH_ALL( OnExit(); )
 
     return m_impl->GetExitCode();
 }
@@ -282,6 +277,8 @@ void wxEventLoop::Exit(int rc)
     wxCHECK_RET( IsRunning(), _T("can't call Exit() if not running") );
 
     m_impl->SetExitCode(rc);
+
+    OnExit();
 
     ::PostQuitMessage(rc);
 }
