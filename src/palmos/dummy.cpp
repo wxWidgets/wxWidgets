@@ -26,5 +26,3 @@
     #pragma hdrstop
 #endif
 
-#include "wx/palmos/msvcrt.h"
-

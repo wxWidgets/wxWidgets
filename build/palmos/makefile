@@ -197,7 +197,6 @@ SOURCES =  ../../samples/minimal/minimal.cpp \
 ../../src/palmos/colour.cpp \
 ../../src/palmos/combobox.cpp \
 ../../src/palmos/control.cpp \
-../../src/palmos/crashrpt.cpp \
 ../../src/palmos/cursor.cpp \
 ../../src/palmos/data.cpp \
 ../../src/palmos/dc.cpp \
