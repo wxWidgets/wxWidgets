@@ -200,28 +200,51 @@ wxConnectionBase *wxTCPClient::OnMakeConnection()
 
 wxTCPServer::wxTCPServer () : wxServerBase()
 {
+  m_server = NULL;
 }
 
-bool wxTCPServer::Create(const wxString& server_name)
+bool wxTCPServer::Create(const wxString& serverName)
 {
-  wxSocketServer *server;
+  // Destroy previous server, if any
+  if (m_server)
+  {
+    m_server->SetClientData(NULL);
+    m_server->Destroy();
+    m_server = NULL;
+  }
 
   // wxIPV4address defaults to INADDR_ANY:0
   wxIPV4address addr;
-  addr.Service(server_name);
+  addr.Service(serverName);
 
-  // Create a socket listening on specified port
-  server = new wxSocketServer(addr, SCKIPC_FLAGS);
-  server->SetEventHandler(*gs_handler, _SERVER_ONREQUEST_ID);
-  server->SetClientData(this);
-  server->SetNotify(wxSOCKET_CONNECTION_FLAG);
-  server->Notify(TRUE);
+  // Create a socket listening on the specified port
+  m_server = new wxSocketServer(addr, SCKIPC_FLAGS);
 
-  return TRUE;
+  if (m_server->Ok())
+  {
+    m_server->SetEventHandler(*gs_handler, _SERVER_ONREQUEST_ID);
+    m_server->SetClientData(this);
+    m_server->SetNotify(wxSOCKET_CONNECTION_FLAG);
+    m_server->Notify(TRUE);
+
+    return TRUE;
+  }
+  else
+  {
+    m_server->Destroy();
+    m_server = NULL;
+
+    return FALSE;
+  }
 }
 
 wxTCPServer::~wxTCPServer()
 {
+  if (m_server)
+  {
+    m_server->SetClientData(NULL);
+    m_server->Destroy();
+  }
 }
 
 wxConnectionBase *wxTCPServer::OnAcceptConnection( const wxString& WXUNUSED(topic) )
@@ -555,7 +578,7 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
 void wxTCPEventHandler::Server_OnRequest(wxSocketEvent &event)
 {
   wxSocketServer *server = (wxSocketServer *) event.GetSocket();
-  wxTCPServer *ipcserv = (wxTCPServer *) event.GetClientData();
+  wxTCPServer *ipcserv = (wxTCPServer *) server->GetClientData();
 
   // This socket is being deleted; skip this event
   if (!ipcserv)
