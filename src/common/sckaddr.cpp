@@ -55,6 +55,11 @@ wxSockAddress::wxSockAddress()
   m_address = GAddress_new();
 }
 
+wxSockAddress::wxSockAddress(const wxSockAddress& other)
+{
+    m_address = GAddress_copy(other.m_address);
+}
+
 wxSockAddress::~wxSockAddress()
 {
   GAddress_destroy(m_address);
@@ -66,7 +71,7 @@ void wxSockAddress::SetAddress(GAddress *address)
   m_address = GAddress_copy(address);
 }
 
-const wxSockAddress& wxSockAddress::operator=(const wxSockAddress& addr)
+wxSockAddress& wxSockAddress::operator=(const wxSockAddress& addr)
 {
   SetAddress(addr.GetAddress());
   return *this;
@@ -83,7 +88,11 @@ void wxSockAddress::Clear()
 // ---------------------------------------------------------------------------
 
 wxIPV4address::wxIPV4address()
-  : wxSockAddress()
+{
+}
+
+wxIPV4address::wxIPV4address(const wxIPV4address& other)
+             : wxSockAddress(other)
 {
 }
 
@@ -152,6 +161,11 @@ wxIPV6address::wxIPV6address()
 {
 }
 
+wxIPV6address::wxIPV6address(const wxIPV6address& other)
+             : wxSockAddress(other)
+{
+}
+
 wxIPV6address::~wxIPV6address()
 {
 }
@@ -191,15 +205,21 @@ unsigned short wxIPV6address::Service()
   return GAddress_INET_GetPort(m_address);
 }
 
-#endif
+#endif // 0
 
 #if defined(__UNIX__) && !defined(__WXMAC__)
+
 // ---------------------------------------------------------------------------
 // wxUNIXaddress
 // ---------------------------------------------------------------------------
 
 wxUNIXaddress::wxUNIXaddress()
-  : wxSockAddress()
+             : wxSockAddress()
+{
+}
+
+wxUNIXaddress::wxUNIXaddress(const wxUNIXaddress& other)
+             : wxSockAddress(other)
 {
 }
 
@@ -221,7 +241,7 @@ wxString wxUNIXaddress::Filename()
   return wxString(path);
 }
 
-#endif
+#endif // __UNIX__
 
 #endif
   // wxUSE_SOCKETS

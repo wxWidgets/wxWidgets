@@ -30,14 +30,16 @@ public:
   typedef enum { IPV4=1, IPV6=2, UNIX=3 } Addr;
 
   wxSockAddress();
+  wxSockAddress(const wxSockAddress& other);
   virtual ~wxSockAddress();
+
+  wxSockAddress& operator=(const wxSockAddress& other);
 
   virtual void Clear();
   virtual int Type() = 0;
 
   GAddress *GetAddress() const { return m_address; }
   void SetAddress(GAddress *address);
-  const wxSockAddress& operator =(const wxSockAddress& addr);
 
   // we need to be able to create copies of the addresses polymorphically (i.e.
   // wihtout knowing the exact address class)
@@ -51,6 +53,7 @@ class WXDLLEXPORT wxIPV4address : public wxSockAddress {
   DECLARE_DYNAMIC_CLASS(wxIPV4address)
 public:
   wxIPV4address();
+  wxIPV4address(const wxIPV4address& other);
   virtual ~wxIPV4address();
 
   bool Hostname(const wxString& name);
@@ -74,7 +77,8 @@ private:
   struct sockaddr_in6 *m_addr;
 public:
   wxIPV6address();
-  ~wxIPV6address();
+  wxIPV6address(const wxIPV6address& other);
+  virtual ~wxIPV6address();
 
   bool Hostname(const wxString& name);
   bool Hostname(unsigned char addr[16]);
@@ -102,7 +106,8 @@ private:
   struct sockaddr_un *m_addr;
 public:
   wxUNIXaddress();
-  ~wxUNIXaddress();
+  wxUNIXaddress(const wxUNIXaddress& other);
+  virtual ~wxUNIXaddress();
 
   void Filename(const wxString& name);
   wxString Filename();
