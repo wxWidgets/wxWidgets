@@ -162,7 +162,7 @@ bool wxPropertyFormView::AssociateNames(void)
   while (node)
   {
     wxWindow *win = (wxWindow *)node->Data();
-    if (win->GetName() != "")
+    if (win->GetName() != _T(""))
     {
       wxProperty *prop = m_propertySheet->GetProperty(win->GetName());
       if (prop)
@@ -219,7 +219,7 @@ void wxPropertyFormView::OnCommand(wxWindow& win, wxCommandEvent& event)
   if (!m_propertySheet)
     return;
     
-  if (win.GetName() == "")
+  if (win.GetName() == _T(""))
     return;
 
   if (wxStrcmp(win.GetName(), _T("ok")) == 0)

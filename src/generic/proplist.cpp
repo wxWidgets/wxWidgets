@@ -158,7 +158,7 @@ bool wxPropertyListView::UpdatePropertyList(bool clearEditArea)
     wxString stringValueRepr(property->GetValue().GetStringRepresentation());
     wxString paddedString(MakeNameValueString(property->GetName(), stringValueRepr));
 
-    m_propertyScrollingList->Append(paddedString.GetData(), (char *)property);
+    m_propertyScrollingList->Append(paddedString.GetData(), (void *)property);
     node = node->Next();
   }
   return TRUE;
@@ -960,7 +960,7 @@ bool wxPropertyListValidator::OnSelect(bool select, wxProperty *property, wxProp
 bool wxPropertyListValidator::OnValueListSelect(wxProperty *property, wxPropertyListView *view, wxWindow *WXUNUSED(parentWindow))
 {
   wxString s(view->GetValueList()->GetStringSelection());
-  if (s != "")
+  if (s != _T(""))
   {
     view->GetValueText()->SetValue(s);
     view->RetrieveProperty(property);
@@ -1483,7 +1483,7 @@ void wxFilenameListValidator::OnEdit(wxProperty *property, wxPropertyListView *v
      m_filenameWildCard.GetData(),
      0,
      parentWindow);
-  if (s != "")
+  if (s != _T(""))
   {
     property->GetValue() = s;
     view->DisplayProperty(property);
@@ -1896,7 +1896,7 @@ void wxPropertyStringListEditorDialog::OnAdd(wxCommandEvent& WXUNUSED(event))
 
   wxChar *initialText = _T("");
   wxNode *node = m_stringList->Add(initialText);
-  m_listBox->Append(initialText, (wxChar *)node);
+  m_listBox->Append(initialText, (void *)node);
   m_currentSelection = m_stringList->Number() - 1;
   m_listBox->SetSelection(m_currentSelection);
   ShowCurrentSelection();
