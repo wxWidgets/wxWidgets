@@ -753,10 +753,6 @@ wxNewId = miscc.wxNewId
 
 wxRegisterId = miscc.wxRegisterId
 
-NewId = miscc.NewId
-
-RegisterId = miscc.RegisterId
-
 wxGetCurrentId = miscc.wxGetCurrentId
 
 wxBell = miscc.wxBell

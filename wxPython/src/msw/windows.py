@@ -165,6 +165,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def Enable(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_Enable,(self,) + _args, _kwargs)
         return val
+    def Disable(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_Disable,(self,) + _args, _kwargs)
+        return val
     def FindWindowById(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_FindWindowById,(self,) + _args, _kwargs)
         return val

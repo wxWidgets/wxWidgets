@@ -1603,6 +1603,34 @@ static PyObject *_wrap_wxWindow_Enable(PyObject *self, PyObject *args, PyObject 
     return _resultobj;
 }
 
+#define wxWindow_Disable(_swigobj)  (_swigobj->Disable())
+static PyObject *_wrap_wxWindow_Disable(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxWindow_Disable",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_Disable. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxWindow_Disable(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxWindow_FindWindowById(_swigobj,_swigarg0)  (_swigobj->FindWindow(_swigarg0))
 static PyObject *_wrap_wxWindow_FindWindowById(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -12149,6 +12177,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxWindow_Fit", (PyCFunction) _wrap_wxWindow_Fit, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_FindWindowByName", (PyCFunction) _wrap_wxWindow_FindWindowByName, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_FindWindowById", (PyCFunction) _wrap_wxWindow_FindWindowById, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_Disable", (PyCFunction) _wrap_wxWindow_Disable, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_Enable", (PyCFunction) _wrap_wxWindow_Enable, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_DragAcceptFiles", (PyCFunction) _wrap_wxWindow_DragAcceptFiles, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_IsBeingDeleted", (PyCFunction) _wrap_wxWindow_IsBeingDeleted, METH_VARARGS | METH_KEYWORDS },
