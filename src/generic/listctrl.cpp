@@ -2621,6 +2621,14 @@ void wxListMainWindow::RefreshSelected()
         to = GetItemCount() - 1;
     }
 
+    // VZ: this code would work fine if wxGTK wxWindow::Refresh() were
+    //     reasonable, i.e. if it only generated one expose event for
+    //     several calls to it - as it is, each Refresh() results in a
+    //     repaint which provokes flicker too horrible to be seen
+    //
+    //     when/if wxGTK is fixed, this code should be restored as normally it
+    //     should generate _less_ flicker than the version below
+#ifndef __WXGTK__
     if ( HasCurrent() && m_current >= from && m_current <= to )
     {
         RefreshLine(m_current);
@@ -2634,6 +2642,26 @@ void wxListMainWindow::RefreshSelected()
             RefreshLine(line);
         }
     }
+#else // __WXGTK__
+    size_t selMin = (size_t)-1,
+           selMax = 0;
+
+    for ( size_t line = from; line <= to; line++ )
+    {
+        if ( IsHighlighted(line) )
+        {
+            if ( line < selMin )
+                selMin = line;
+            if ( line > selMax )
+                selMax = line;
+        }
+    }
+
+    if ( selMin != (size_t)-1 )
+    {
+        RefreshLines(selMin, selMax);
+    }
+#endif // !__WXGTK__/__WXGTK__
 }
 
 void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
@@ -3361,6 +3389,13 @@ extern wxWindow *g_focusWindow;
 
 void wxListMainWindow::OnSetFocus( wxFocusEvent &WXUNUSED(event) )
 {
+    // wxGTK sends us EVT_SET_FOCUS events even if we had never got
+    // EVT_KILL_FOCUS before which means that we finish by redrawing the items
+    // which are already drawn correctly resulting in horrible flicker - avoid
+    // it
+    if ( m_hasFocus )
+        return;
+
     m_hasFocus = TRUE;
 
     if (!GetParent())
