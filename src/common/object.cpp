@@ -266,7 +266,7 @@ void wxObject::AllocExclusive()
     else if ( m_refData->GetRefCount() > 1 )
     {
         // note that ref is not going to be destroyed in this case
-        wxObjectRefData* ref = m_refData;
+        const wxObjectRefData* ref = m_refData;
         UnRef();
 
         // ... so we can still access it
@@ -286,7 +286,8 @@ wxObjectRefData *wxObject::CreateRefData() const
     return NULL;
 }
 
-wxObjectRefData *wxObject::CloneRefData(const wxObjectRefData * WXUNUSED(data)) const
+wxObjectRefData *
+wxObject::CloneRefData(const wxObjectRefData * WXUNUSED(data)) const
 {
     // if you use AllocExclusive() you must override this method
     wxFAIL_MSG( _T("CloneRefData() must be overridden if called!") );
