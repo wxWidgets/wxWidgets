@@ -361,7 +361,7 @@ public:
   wxSocketNotify  m_event;
   void           *m_clientData;
 
-  DECLARE_DYNAMIC_CLASS_NO_COPY(wxSocketEvent)
+  DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxSocketEvent)
 };
 
 

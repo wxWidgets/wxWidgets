@@ -2319,5 +2319,9 @@ typedef struct window_t *WXWidget;
         classname(const classname&);            \
         classname& operator=(const classname&);
 
+#define DECLARE_NO_ASSIGN_CLASS(classname)      \
+    private:                                    \
+        classname& operator=(const classname&);
+
 #endif
     // _WX_DEFS_H_

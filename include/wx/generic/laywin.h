@@ -99,7 +99,7 @@ protected:
     wxLayoutAlignment       m_alignment;
     
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxQueryLayoutInfoEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxQueryLayoutInfoEvent)
 };
 
 typedef void (wxEvtHandler::*wxQueryLayoutInfoEventFunction)(wxQueryLayoutInfoEvent&);
@@ -136,7 +136,7 @@ protected:
     wxRect                  m_rect;
     
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxCalculateLayoutEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxCalculateLayoutEvent)
 };
 
 typedef void (wxEvtHandler::*wxCalculateLayoutEventFunction)(wxCalculateLayoutEvent&);

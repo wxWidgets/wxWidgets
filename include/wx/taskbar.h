@@ -47,7 +47,7 @@ public:
     virtual wxEvent *Clone() const { return new wxTaskBarIconEvent(*this); }
 
 private:
-    DECLARE_NO_COPY_CLASS(wxTaskBarIconEvent)
+    DECLARE_NO_ASSIGN_CLASS(wxTaskBarIconEvent)
 };
 
 BEGIN_DECLARE_EVENT_TYPES()

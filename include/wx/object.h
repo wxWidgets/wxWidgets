@@ -146,8 +146,7 @@ WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxChar *name);
    { return &name::sm_class##name; }
 
 #define DECLARE_DYNAMIC_CLASS_NO_ASSIGN(name)   \
-    private:                                    \
-        name& operator=(const name&);           \
+    DECLARE_NO_ASSIGN_CLASS(name)               \
     DECLARE_DYNAMIC_CLASS(name)
 
 #define DECLARE_DYNAMIC_CLASS_NO_COPY(name)   \
