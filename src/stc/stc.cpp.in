@@ -320,7 +320,7 @@ bool wxStyledTextCtrl::SaveFile(const wxString& filename)
     if (!file.IsOpened())
         return FALSE;
 
-    bool success = file.Write(GetText());
+    bool success = file.Write(GetText(), *wxConvCurrent);
 
     if (success)
         SetSavePoint();
@@ -336,13 +336,22 @@ bool wxStyledTextCtrl::LoadFile(const wxString& filename)
     if (file.IsOpened())
     {
         wxString contents;
+#if wxUSE_UNICODE
+        wxMemoryBuffer buffer;
+#else
+        wxString buffer;
+#endif
         off_t len = file.Length();
-
         if (len > 0)
         {
-            wxChar *buf = contents.GetWriteBuf(len);
-            success = (file.Read(buf, len) == len);
-            contents.UngetWriteBuf();
+            void *bufptr = buffer.GetWriteBuf(len);
+            success = (file.Read(bufptr, len) == len);
+            buffer.UngetWriteBuf(len);
+#if #wxUSE_UNICODE
+            contents = wxString(buffer, *wxConvCurrent);
+#else
+            contents = buffer;
+#endif
         }
         else
             success = true;		// empty file is ok
@@ -356,6 +365,16 @@ bool wxStyledTextCtrl::LoadFile(const wxString& filename)
     }
 
     return success;
+}
+
+
+wxDragResult wxStyledTextCtrl::DoDragOver(wxCoord x, wxCoord y, wxDragResult def) { 
+        return m_swx->DoDragOver(x, y, def); 
+} 
+
+
+bool wxStyledTextCtrl::DoDropText(long x, long y, const wxString& data) { 
+    return m_swx->DoDropText(x, y, data);
 }
 
 
