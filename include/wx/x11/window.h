@@ -62,6 +62,8 @@ public:
     
     virtual void Refresh( bool eraseBackground = TRUE,
         const wxRect *rect = (const wxRect *) NULL );
+    virtual void Update();
+    
     virtual void Clear();
     
     virtual bool SetBackgroundColour( const wxColour &colour );
@@ -109,15 +111,6 @@ public:
     
     // Get main widget for this window, e.g. a text widget
     virtual WXWindow GetMainWindow() const;
-    // Get the widget that corresponds to the label (for font setting, label setting etc.)
-    virtual WXWindow GetLabelWindow() const;
-    // Get the client widget for this window (something we can create other
-    // windows on)
-    virtual WXWindow GetClientWindow() const;
-    // Get the top widget for this window, e.g. the scrolled widget parent of a
-    // multi-line text widget. Top means, top in the window hierarchy that
-    // implements this window.
-    virtual WXWindow GetTopWindow() const;
     
     // Get the underlying X window and display
     WXWindow GetXWindow() const;
@@ -152,69 +145,8 @@ protected:
     // a toolbar that it manages itself).
     virtual void AdjustForParentClientOrigin(int& x, int& y, int sizeFlags);
     
-    wxWindow *GetChild(int number) const
-    { return GetChildren().Item(number)->GetData(); }
-    
     // Responds to colour changes: passes event on to children.
     void OnSysColourChanged(wxSysColourChangedEvent& event);
-    
-    void SetMainWindow(WXWindow w) { m_mainWidget = w; }
-    
-    bool CanAddEventHandler() const { return m_canAddEventHandler; }
-    void SetCanAddEventHandler(bool flag) { m_canAddEventHandler = flag; }
-    
-public:
-    // Change properties
-    virtual void ChangeFont(bool keepOriginalSize = TRUE);             // Change to the current font (often overridden)
-    
-    // Change background and foreground colour using current background colour
-    // setting (Motif generates foreground based on background)
-    virtual void ChangeBackgroundColour();
-    // Change foreground colour using current foreground colour setting
-    virtual void ChangeForegroundColour();
-    
-protected:
-    // How to implement accelerators. If we find a key event, translate to
-    // wxWindows wxKeyEvent form. Find a widget for the window. Now find a
-    // wxWindow for the widget. If there isn't one, go up the widget hierarchy
-    // trying to find one. Once one is found, call ProcessAccelerator for the
-    // window. If it returns TRUE (processed the event), skip the X event,
-    // otherwise carry on up the wxWindows window hierarchy calling
-    // ProcessAccelerator. If all return FALSE, process the X event as normal.
-    // Eventually we can implement OnCharHook the same way, but concentrate on
-    // accelerators for now. ProcessAccelerator must look at the current
-    // accelerator table, and try to find what menu id or window (beneath it)
-    // has this ID. Then construct an appropriate command
-    // event and send it.
-public:
-    virtual bool ProcessAccelerator(wxKeyEvent& event);
-    
-protected:
-    // scrolling stuff
-    // ---------------
-    
-    // create/destroy window scrollbars
-    void CreateScrollbar(wxOrientation orientation);
-    void DestroyScrollbar(wxOrientation orientation);
-    
-    // get either hor or vert scrollbar widget
-    WXWindow GetScrollbar(wxOrientation orient) const
-    { return orient == wxHORIZONTAL ? m_hScrollBar : m_vScrollBar; }
-    
-    // set the scroll pos
-    void SetInternalScrollPos(wxOrientation orient, int pos)
-    {
-        if ( orient == wxHORIZONTAL )
-            m_scrollPosX = pos;
-        else
-            m_scrollPosY = pos;
-    }
-    
-    // Motif-specific flags
-    // --------------------
-    
-    bool m_needsRefresh:1;          // repaint backing store?
-    bool m_canAddEventHandler:1;    // ???
     
     // For double-click detection
     long   m_lastTS;         // last timestamp
@@ -226,23 +158,8 @@ protected:
     wxRegion              m_clearRegion;
     bool                  m_clipPaintRegion;
     
-    WXWindow              m_hScrollBar;
-    WXWindow              m_vScrollBar;
-    WXWindow              m_borderWidget;
-    WXWindow              m_scrolledWindow;
-    WXWindow              m_drawingArea;
-    bool                  m_winCaptured;
-    bool                  m_hScroll;
-    bool                  m_vScroll;
-    
-    // Store the last scroll pos, since in wxWin the pos isn't set automatically
-    // by system
-    int                   m_scrollPosX;
-    int                   m_scrollPosY;
+    bool                  m_winCaptured;  // ????
 
-    // Window border size
-    int                   m_borderSize;
-    
     // implement the base class pure virtuals
     virtual void DoClientToScreen( int *x, int *y ) const;
     virtual void DoScreenToClient( int *x, int *y ) const;

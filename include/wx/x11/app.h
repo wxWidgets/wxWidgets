@@ -76,9 +76,6 @@ public:
     // Processes an X event.
     virtual void ProcessXEvent(WXEvent* event);
     
-    // Returns TRUE if an accelerator has been processed
-    virtual bool CheckForAccelerator(WXEvent* event);
-    
 protected:
     bool                  m_showOnInit;
     

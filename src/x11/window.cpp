@@ -99,8 +99,6 @@ void wxWindowX11::Init()
     InitBase();
 
     // X11-specific
-    // TODO: prune those that are no longer needed
-    m_needsRefresh = TRUE;
     m_mainWidget = (WXWindow) 0;
 
     m_winCaptured = FALSE;
@@ -108,23 +106,8 @@ void wxWindowX11::Init()
     m_isShown = TRUE;
     m_isBeingDeleted = FALSE;
     
-    m_hScrollBar =
-    m_vScrollBar =
-    m_borderWidget =
-    m_scrolledWindow =
-    m_drawingArea = (WXWindow) 0;
-
-    m_hScroll =
-    m_vScroll = FALSE;
-
-    m_scrollPosX =
-    m_scrollPosY = 0;
-
     m_lastTS = 0;
     m_lastButton = 0;
-    m_canAddEventHandler = FALSE;
-
-    m_borderSize = 0;
 }
 
 // real construction (Init() must have been called before!)
@@ -144,6 +127,7 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
     m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
     m_foregroundColour = *wxBLACK;
 
+#if 0
     // TODO: How to create more interesting borders?
     // Will presumably have to create multiple windows.
     if (style & wxSIMPLE_BORDER)
@@ -156,6 +140,7 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
     {
         m_borderSize = 1;
     }
+#endif
 
     int w = size.GetWidth();
     int h = size.GetHeight();
@@ -170,12 +155,12 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
 
     Window parentWindow;
     if (parent)
-        parentWindow = (Window) parent->GetClientWindow();
+        parentWindow = (Window) parent->GetMainWindow();
     else
         parentWindow = RootWindow(wxGlobalDisplay(), screen);
 
     Window window = XCreateSimpleWindow(wxGlobalDisplay(), parentWindow,
-        x, y, w, h, m_borderSize,
+        x, y, w, h, 0,
         m_backgroundColour.AllocColour(wxGlobalDisplay()),
         m_foregroundColour.AllocColour(wxGlobalDisplay()));
 
@@ -213,214 +198,26 @@ wxWindowX11::~wxWindowX11()
     m_isBeingDeleted = TRUE;
     
     // X11-specific actions first
-    WXWindow wMain = GetMainWindow();
-    if ( wMain )
+    Window main = (Window) m_mainWidget;
+    if ( main )
     {
         // Removes event handlers
-        //DetachWidget(wMain);
+        //DetachWidget(main);
     }
 
-    if ( m_parent )
+    if (m_parent)
         m_parent->RemoveChild( this );
 
-    // TODO
-
-#if 0    
-    // If m_drawingArea, we're a fully-fledged window with drawing area,
-    // scrollbars etc. (what wxCanvas used to be)
-    if ( m_drawingArea )
-    {
-        // Destroy children before destroying self
-        DestroyChildren();
-
-        if (m_backingPixmap)
-            XFreePixmap (XtDisplay ((Widget) GetMainWidget()), (Pixmap) m_backingPixmap);
-
-        Widget w = (Widget) m_drawingArea;
-        wxDeleteWindowFromTable(w);
-
-        if (w)
-        {
-            XtDestroyWidget(w);
-	    m_drawingArea = (WXWidget) 0;
-        }
-
-        // Only if we're _really_ a canvas (not a dialog box/panel)
-        if (m_scrolledWindow)
-        {
-            wxDeleteWindowFromTable((Widget) m_scrolledWindow);
-        }
-
-        if (m_hScrollBar)
-        {
-            wxDeleteWindowFromTable((Widget) m_hScrollBar);
-	    XtUnmanageChild((Widget) m_hScrollBar);
-        }
-        if (m_vScrollBar)
-        {
-            wxDeleteWindowFromTable((Widget) m_vScrollBar);
-	    XtUnmanageChild((Widget) m_vScrollBar);
-        }
-
-        if (m_hScrollBar)
-	    XtDestroyWidget((Widget) m_hScrollBar);
-        if (m_vScrollBar)
-	    XtDestroyWidget((Widget) m_vScrollBar);
-
-        UnmanageAndDestroy(m_scrolledWindow);
-
-        if (m_borderWidget)
-        {
-            XtDestroyWidget ((Widget) m_borderWidget);
-            m_borderWidget = (WXWidget) 0;
-        }
-    }
-    else // Why wasn't this here before? JACS 8/3/2000
-#endif
-        DestroyChildren();
-
+    DestroyChildren();
 
     // Destroy the window
-    if (GetMainWindow())
+    if (main)
     {
-        XSelectInput(wxGlobalDisplay(), (Window) GetMainWindow(),
-            NoEventMask);
-        wxDeleteWindowFromTable((Window) GetMainWindow());
-        XDestroyWindow(wxGlobalDisplay(), (Window) GetMainWindow());
-        SetMainWindow((WXWindow) NULL);
+        XSelectInput( wxGlobalDisplay(), main, NoEventMask);
+        wxDeleteWindowFromTable( main );
+        XDestroyWindow( wxGlobalDisplay(), main );
+        m_mainWidget = NULL;
     }
-}
-
-// ----------------------------------------------------------------------------
-// scrollbar management
-// ----------------------------------------------------------------------------
-
-// Helper function
-void wxWindowX11::CreateScrollbar(wxOrientation orientation)
-{
-    // TODO
-#if 0
-    wxCHECK_RET( m_drawingArea, "this window can't have scrollbars" );
-
-    XtVaSetValues((Widget) m_scrolledWindow, XmNresizePolicy, XmRESIZE_NONE, NULL);
-
-    // Add scrollbars if required
-    if (orientation == wxHORIZONTAL)
-    {
-        Widget hScrollBar = XtVaCreateManagedWidget ("hsb",
-            xmScrollBarWidgetClass, (Widget) m_scrolledWindow,
-            XmNorientation, XmHORIZONTAL,
-            NULL);
-        XtAddCallback (hScrollBar, XmNvalueChangedCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmHORIZONTAL);
-        XtAddCallback (hScrollBar, XmNdragCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmHORIZONTAL);
-        XtAddCallback (hScrollBar, XmNincrementCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmHORIZONTAL);
-        XtAddCallback (hScrollBar, XmNdecrementCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmHORIZONTAL);
-        XtAddCallback (hScrollBar, XmNpageIncrementCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmHORIZONTAL);
-        XtAddCallback (hScrollBar, XmNpageDecrementCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmHORIZONTAL);
-        XtAddCallback (hScrollBar, XmNtoTopCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmHORIZONTAL);
-        XtAddCallback (hScrollBar, XmNtoBottomCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmHORIZONTAL);
-
-        XtVaSetValues (hScrollBar,
-            XmNincrement, 1,
-            XmNvalue, 0,
-            NULL);
-
-        m_hScrollBar = (WXWidget) hScrollBar;
-
-        wxColour backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
-        DoChangeBackgroundColour(m_hScrollBar, backgroundColour, TRUE);
-
-        XtRealizeWidget(hScrollBar);
-
-        XtVaSetValues((Widget) m_scrolledWindow,
-            XmNhorizontalScrollBar, (Widget) m_hScrollBar,
-            NULL);
-
-        m_hScroll = TRUE;
-
-        wxAddWindowToTable( hScrollBar, this );
-    }
-
-    if (orientation == wxVERTICAL)
-    {
-        Widget vScrollBar = XtVaCreateManagedWidget ("vsb",
-            xmScrollBarWidgetClass, (Widget) m_scrolledWindow,
-            XmNorientation, XmVERTICAL,
-            NULL);
-        XtAddCallback (vScrollBar, XmNvalueChangedCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmVERTICAL);
-        XtAddCallback (vScrollBar, XmNdragCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmVERTICAL);
-        XtAddCallback (vScrollBar, XmNincrementCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmVERTICAL);
-        XtAddCallback (vScrollBar, XmNdecrementCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmVERTICAL);
-        XtAddCallback (vScrollBar, XmNpageIncrementCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmVERTICAL);
-        XtAddCallback (vScrollBar, XmNpageDecrementCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmVERTICAL);
-        XtAddCallback (vScrollBar, XmNtoTopCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmVERTICAL);
-        XtAddCallback (vScrollBar, XmNtoBottomCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmVERTICAL);
-
-        XtVaSetValues (vScrollBar,
-            XmNincrement, 1,
-            XmNvalue, 0,
-            NULL);
-
-        m_vScrollBar = (WXWidget) vScrollBar;
-        wxColour backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
-        DoChangeBackgroundColour(m_vScrollBar, backgroundColour, TRUE);
-
-        XtRealizeWidget(vScrollBar);
-
-        XtVaSetValues((Widget) m_scrolledWindow,
-            XmNverticalScrollBar, (Widget) m_vScrollBar,
-            NULL);
-
-        m_vScroll = TRUE;
-
-        wxAddWindowToTable( vScrollBar, this );
-    }
-
-    XtVaSetValues((Widget) m_scrolledWindow, XmNresizePolicy, XmRESIZE_ANY, NULL);
-#endif
-}
-
-void wxWindowX11::DestroyScrollbar(wxOrientation orientation)
-{
-    // TODO
-#if 0
-    wxCHECK_RET( m_drawingArea, "this window can't have scrollbars" );
-
-    XtVaSetValues((Widget) m_scrolledWindow, XmNresizePolicy, XmRESIZE_NONE, NULL);
-    // Add scrollbars if required
-    if (orientation == wxHORIZONTAL)
-    {
-        if (m_hScrollBar)
-        {
-            wxDeleteWindowFromTable((Widget)m_hScrollBar);
-            XtDestroyWidget((Widget) m_hScrollBar);
-        }
-        m_hScrollBar = (WXWidget) 0;
-        m_hScroll = FALSE;
-
-        XtVaSetValues((Widget) m_scrolledWindow,
-            XmNhorizontalScrollBar, (Widget) 0,
-            NULL);
-
-    }
-
-    if (orientation == wxVERTICAL)
-    {
-        if (m_vScrollBar)
-        {
-            wxDeleteWindowFromTable((Widget)m_vScrollBar);
-            XtDestroyWidget((Widget) m_vScrollBar);
-        }
-        m_vScrollBar = (WXWidget) 0;
-        m_vScroll = FALSE;
-
-        XtVaSetValues((Widget) m_scrolledWindow,
-            XmNverticalScrollBar, (Widget) 0,
-            NULL);
-
-    }
-    XtVaSetValues((Widget) m_scrolledWindow, XmNresizePolicy, XmRESIZE_ANY, NULL);
-#endif
 }
 
 // ---------------------------------------------------------------------------
@@ -497,17 +294,15 @@ bool wxWindowX11::Show(bool show)
 // Raise the window to the top of the Z order
 void wxWindowX11::Raise()
 {
-    Window window = (Window) GetTopWindow();
-    if (window)
-        XRaiseWindow(wxGlobalDisplay(), window);
+    if (m_mainWidget)
+        XRaiseWindow( wxGlobalDisplay(), (Window) m_mainWidget );
 }
 
 // Lower the window to the bottom of the Z order
 void wxWindowX11::Lower()
 {
-    Window window = (Window) GetTopWindow();
-    if (window)
-        XLowerWindow(wxGlobalDisplay(), window);
+    if (m_mainWidget)
+        XLowerWindow( wxGlobalDisplay(), (Window) m_mainWidget );
 }
 
 void wxWindowX11::DoCaptureMouse()
@@ -558,8 +353,6 @@ bool wxWindowX11::SetFont(const wxFont& font)
         return FALSE;
     }
 
-    ChangeFont();
-
     return TRUE;
 }
 
@@ -589,9 +382,8 @@ bool wxWindowX11::SetCursor(const wxCursor& cursor)
 // Coordinates relative to the window
 void wxWindowX11::WarpPointer (int x, int y)
 {
-    Window wClient = (Window) GetClientWindow();
-
-    XWarpPointer(wxGlobalDisplay(), None, wClient, 0, 0, 0, 0, x, y);
+    if (m_mainWidget)
+        XWarpPointer( wxGlobalDisplay(), None, (Window) m_mainWidget, 0, 0, 0, 0, x, y);
 }
 
 // ---------------------------------------------------------------------------
@@ -600,56 +392,25 @@ void wxWindowX11::WarpPointer (int x, int y)
 
 int wxWindowX11::GetScrollPos(int orient) const
 {
-    if (orient == wxHORIZONTAL)
-        return m_scrollPosX;
-    else
-        return m_scrollPosY;
+    return 0;
 }
 
 // This now returns the whole range, not just the number of positions that we
 // can scroll.
 int wxWindowX11::GetScrollRange(int WXUNUSED(orient)) const
 {
-    // TODO
     return 0;
-#if 0
-    Widget scrollBar = (Widget)GetScrollbar((wxOrientation)orient);
-    wxCHECK_MSG( scrollBar, 0, "no such scrollbar" );
-
-    int range;
-    XtVaGetValues(scrollBar, XmNmaximum, &range, NULL);
-    return range;
-#endif
 }
 
 int wxWindowX11::GetScrollThumb(int orient) const
 {
     // TODO
     return 0;
-
-#if 0
-    Widget scrollBar = (Widget)GetScrollbar((wxOrientation)orient);
-    wxCHECK_MSG( scrollBar, 0, "no such scrollbar" );
-
-    int thumb;
-    XtVaGetValues(scrollBar, XmNsliderSize, &thumb, NULL);
-    return thumb;
-#endif
 }
 
 void wxWindowX11::SetScrollPos(int orient, int pos, bool WXUNUSED(refresh))
 {
     // TODO
-
-#if 0
-    Widget scrollBar = (Widget)GetScrollbar((wxOrientation)orient);
-
-    if ( scrollBar )
-    {
-        XtVaSetValues (scrollBar, XmNvalue, pos, NULL);
-    }
-#endif
-    SetInternalScrollPos((wxOrientation)orient, pos);
 }
 
 // New function that will replace some of the above.
@@ -657,77 +418,6 @@ void wxWindowX11::SetScrollbar(int WXUNUSED(orient), int WXUNUSED(pos), int WXUN
                             int WXUNUSED(range), bool WXUNUSED(refresh))
 {
     // TODO
-#if 0
-    int oldW, oldH;
-    GetSize(& oldW, & oldH);
-
-    if (range == 0)
-        range = 1;
-    if (thumbVisible == 0)
-        thumbVisible = 1;
-
-    if (thumbVisible > range)
-        thumbVisible = range;
-
-    // Save the old state to see if it changed
-    WXWidget oldScrollBar = GetScrollbar((wxOrientation)orient);
-
-    if (orient == wxHORIZONTAL)
-    {
-        if (thumbVisible == range)
-        {
-            if (m_hScrollBar)
-                DestroyScrollbar(wxHORIZONTAL);
-        }
-        else
-        {
-            if (!m_hScrollBar)
-                CreateScrollbar(wxHORIZONTAL);
-        }
-    }
-    if (orient == wxVERTICAL)
-    {
-        if (thumbVisible == range)
-        {
-            if (m_vScrollBar)
-                DestroyScrollbar(wxVERTICAL);
-        }
-        else
-        {
-            if (!m_vScrollBar)
-                CreateScrollbar(wxVERTICAL);
-        }
-    }
-    WXWidget newScrollBar =  GetScrollbar((wxOrientation)orient);
-
-    if (oldScrollBar != newScrollBar)
-    {
-        // This is important! Without it, scrollbars misbehave badly.
-        XtUnrealizeWidget((Widget) m_scrolledWindow);
-        XmScrolledWindowSetAreas ((Widget) m_scrolledWindow, (Widget) m_hScrollBar, (Widget) m_vScrollBar, (Widget) m_drawingArea);
-        XtRealizeWidget((Widget) m_scrolledWindow);
-        XtManageChild((Widget) m_scrolledWindow);
-    }
-
-    if (newScrollBar)
-    {
-        XtVaSetValues((Widget) newScrollBar,
-        XmNvalue, pos,
-        XmNminimum, 0,
-        XmNmaximum, range,
-        XmNsliderSize, thumbVisible,
-        NULL);
-    }
-
-    SetInternalScrollPos((wxOrientation)orient, pos);
-
-    int newW, newH;
-    GetSize(& newW, & newH);
-
-    // Adjusting scrollbars can resize the canvas accidentally
-    if (newW != oldW || newH != oldH)
-        SetSize(-1, -1, oldW, oldH);
-#endif
 }
 
 // Does a physical scroll
@@ -945,7 +635,7 @@ bool wxWindowX11::PreResize()
 // Get total size
 void wxWindowX11::DoGetSize(int *x, int *y) const
 {
-    Window window = (Window) GetTopWindow();
+    Window window = (Window) m_mainWidget;
     if (window)
     {
         XWindowAttributes attr;
@@ -954,15 +644,15 @@ void wxWindowX11::DoGetSize(int *x, int *y) const
         
         if (status)
         {
-            *x = attr.width + 2*m_borderSize;
-            *y = attr.height + 2*m_borderSize;
+            *x = attr.width /* + 2*m_borderSize */ ;
+            *y = attr.height /* + 2*m_borderSize */ ;
         }
     }
 }
 
 void wxWindowX11::DoGetPosition(int *x, int *y) const
 {
-    Window window = (Window) GetTopWindow();
+    Window window = (Window) m_mainWidget;
     if (window)
     {
         XWindowAttributes attr;
@@ -990,7 +680,7 @@ void wxWindowX11::DoScreenToClient(int *x, int *y) const
 {
     Display *display = wxGlobalDisplay();
     Window rootWindow = RootWindowOfScreen(DefaultScreenOfDisplay(display));
-    Window thisWindow = (Window) GetClientWindow();
+    Window thisWindow = (Window) m_mainWidget;
 
     Window childWindow;
     int xx = *x;
@@ -1002,7 +692,7 @@ void wxWindowX11::DoClientToScreen(int *x, int *y) const
 {
     Display *display = wxGlobalDisplay();
     Window rootWindow = RootWindowOfScreen(DefaultScreenOfDisplay(display));
-    Window thisWindow = (Window) GetClientWindow();
+    Window thisWindow = (Window) m_mainWidget;
 
     Window childWindow;
     int xx = *x;
@@ -1014,7 +704,7 @@ void wxWindowX11::DoClientToScreen(int *x, int *y) const
 // Get size *available for subwindows* i.e. excluding menu bar etc.
 void wxWindowX11::DoGetClientSize(int *x, int *y) const
 {
-    Window window = (Window) GetClientWindow();
+    Window window = (Window) m_mainWidget;
 
     if (window)
     {
@@ -1050,12 +740,12 @@ void wxWindowX11::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     }
     if (width != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
     {
-        windowChanges.width = width - m_borderSize*2;
+        windowChanges.width = width /* - m_borderSize*2 */;
         valueMask |= CWWidth;
     }
     if (height != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
     {
-        windowChanges.height = height - m_borderSize*2;
+        windowChanges.height = height /* -m_borderSize*2*/;
         valueMask |= CWHeight;
     }
     AdjustForParentClientOrigin( x, y, sizeFlags);
@@ -1217,46 +907,49 @@ void wxWindowX11::GetTextExtent(const wxString& string,
 
 void wxWindowX11::Refresh(bool eraseBack, const wxRect *rect)
 {
-    m_needsRefresh = TRUE;
-    Display *display = wxGlobalDisplay();
-    Window thisWindow = (Window) GetMainWindow();
+    if (eraseBack)
+    {
+        if (rect)
+        {
+            // Schedule for later Updating in ::Update() or ::OnInternalIdle().
+            m_clearRegion.Union( rect->x, rect->y, rect->width, rect->height );
+        }
+        else
+        {
+            int height,width;
+            GetSize( &width, &height );
+            
+            // Schedule for later Updating in ::Update() or ::OnInternalIdle().
+            m_clearRegion.Clear();
+            m_clearRegion.Union( 0, 0, width, height );
+        }
+    }
 
-    XExposeEvent dummyEvent;
-    int width, height;
-    GetSize(&width, &height);
-
-    dummyEvent.type = Expose;
-    dummyEvent.display = display;
-    dummyEvent.send_event = True;
-    dummyEvent.window = thisWindow;
     if (rect)
     {
-        dummyEvent.x = rect->x;
-        dummyEvent.y = rect->y;
-        dummyEvent.width = rect->width;
-        dummyEvent.height = rect->height;
+         // Schedule for later Updating in ::Update() or ::OnInternalIdle().
+         m_updateRegion.Union( rect->x, rect->y, rect->width, rect->height );
     }
     else
     {
-        dummyEvent.x = 0;
-        dummyEvent.y = 0;
-        dummyEvent.width = width;
-        dummyEvent.height = height;
+       int height,width;
+       GetSize( &width, &height );
+            
+        // Schedule for later Updating in ::Update() or ::OnInternalIdle().
+        m_updateRegion.Clear();
+        m_updateRegion.Union( 0, 0, width, height );
     }
-    dummyEvent.count = 0;
+    
+    // Actually don't schedule yet..
+    Update();
+}
 
-    if (eraseBack)
+void wxWindowX11::Update()
+{
+    if (!m_updateRegion.IsEmpty())
     {
-        wxClientDC dc((wxWindow*) this);
-        wxBrush backgroundBrush(GetBackgroundColour(), wxSOLID);
-        dc.SetBackground(backgroundBrush);
-        if (rect)
-            dc.Clear(*rect);
-        else
-            dc.Clear();
+        X11SendPaintEvents();
     }
-
-    XSendEvent(display, thisWindow, False, ExposureMask, (XEvent *)&dummyEvent);
 }
 
 void wxWindowX11::Clear()
@@ -1333,77 +1026,6 @@ void wxWindowX11::OnIdle(wxIdleEvent& WXUNUSED(event))
 }
 
 // ----------------------------------------------------------------------------
-// accelerators
-// ----------------------------------------------------------------------------
-
-bool wxWindowX11::ProcessAccelerator(wxKeyEvent& event)
-{
-    if (!m_acceleratorTable.Ok())
-        return FALSE;
-
-    const wxAcceleratorEntry* entry = m_acceleratorTable.GetEntry(event);
-    if (entry)
-    {
-            // Bingo, we have a match. Now find a control that matches the
-	    // entry command id.
-
-            // Need to go up to the top of the window hierarchy, since it might
-            // be e.g. a menu item
-            wxWindow* parent = (wxWindow*) this;
-            while ( parent && !parent->IsTopLevel() )
-                parent = parent->GetParent();
-
-            if (!parent)
-                return FALSE;
-
-            wxFrame* frame = wxDynamicCast(parent, wxFrame);
-            if ( frame )
-            {
-                // Try for a menu command
-                if (frame->GetMenuBar())
-                {
-                    wxMenuItem* item = frame->GetMenuBar()->FindItem(entry->GetCommand());
-                    if (item)
-                    {
-                        wxCommandEvent commandEvent(wxEVT_COMMAND_MENU_SELECTED, entry->GetCommand());
-                        commandEvent.SetEventObject(frame);
-
-                        // If ProcessEvent returns TRUE (it was handled), then
-                        // the calling code will skip the event handling.
-                        return frame->GetEventHandler()->ProcessEvent(commandEvent);
-                    }
-                }
-            }
-
-            // Find a child matching the command id
-            wxWindow* child = parent->FindWindow(entry->GetCommand());
-
-            // No such child
-            if (!child)
-                return FALSE;
-
-            // Now we process those kinds of windows that we can.
-            // For now, only buttons.
-            if ( wxDynamicCast(child, wxButton) )
-            {
-                wxCommandEvent commandEvent (wxEVT_COMMAND_BUTTON_CLICKED, child->GetId());
-                commandEvent.SetEventObject(child);
-                return child->GetEventHandler()->ProcessEvent(commandEvent);
-            }
-
-            return FALSE;
-
-    }// if
-
-    // We didn't match the key event against an accelerator.
-    return FALSE;
-}
-
-// ============================================================================
-// X11-specific stuff from here on
-// ============================================================================
-
-// ----------------------------------------------------------------------------
 // function which maintain the global hash table mapping Widgets to wxWindows
 // ----------------------------------------------------------------------------
 
@@ -1457,28 +1079,7 @@ WXDisplay *wxWindowX11::GetXDisplay() const
 
 WXWindow wxWindowX11::GetMainWindow() const
 {
-    if (m_drawingArea)
-        return m_drawingArea;
-    else
-        return m_mainWidget;
-}
-
-WXWindow wxWindowX11::GetClientWindow() const
-{
-    if (m_drawingArea != (WXWindow) 0)
-        return m_drawingArea;
-    else
-        return GetMainWindow();
-}
-
-WXWindow wxWindowX11::GetTopWindow() const
-{
-    return GetMainWindow();
-}
-
-WXWindow wxWindowX11::GetLabelWindow() const
-{
-    return GetMainWindow();
+    return m_mainWidget;
 }
 
 // ----------------------------------------------------------------------------
@@ -1790,81 +1391,10 @@ int wxComputeColours (Display *display, wxColour * back, wxColour * fore)
 }
 #endif
 
-// Changes the foreground and background colours to be derived from the current
-// background colour. To change the foreground colour, you must call
-// SetForegroundColour explicitly.
-void wxWindowX11::ChangeBackgroundColour()
-{
-    // TODO
-#if 0
-    WXWidget mainWidget = GetMainWidget();
-    if ( mainWidget )
-        DoChangeBackgroundColour(mainWidget, m_backgroundColour);
-#endif
-}
-
-void wxWindowX11::ChangeForegroundColour()
-{
-    // TODO
-#if 0
-    WXWidget mainWidget = GetMainWidget();
-    if ( mainWidget )
-        DoChangeForegroundColour(mainWidget, m_foregroundColour);
-    if ( m_scrolledWindow && mainWidget != m_scrolledWindow )
-        DoChangeForegroundColour(m_scrolledWindow, m_foregroundColour);
-#endif
-}
-
-// Change a widget's foreground and background colours.
-void wxWindowX11::DoChangeForegroundColour(WXWindow widget, wxColour& foregroundColour)
-{
-    // TODO
-#if 0
-    // When should we specify the foreground, if it's calculated
-    // by wxComputeColours?
-    // Solution: say we start with the default (computed) foreground colour.
-    // If we call SetForegroundColour explicitly for a control or window,
-    // then the foreground is changed.
-    // Therefore SetBackgroundColour computes the foreground colour, and
-    // SetForegroundColour changes the foreground colour. The ordering is
-    // important.
-
-    Widget w = (Widget)widget;
-    XtVaSetValues(
-                  w,
-                  XmNforeground, foregroundColour.AllocColour(XtDisplay(w)),
-                  NULL
-                 );
-#endif
-}
-
-void wxWindowX11::DoChangeBackgroundColour(WXWindow widget, wxColour& backgroundColour, bool changeArmColour)
-{
-    // TODO
-#if 0
-    wxComputeColours (XtDisplay((Widget) widget), & backgroundColour,
-        (wxColour*) NULL);
-
-    XtVaSetValues ((Widget) widget,
-        XmNbackground, g_itemColors[wxBACK_INDEX].pixel,
-        XmNtopShadowColor, g_itemColors[wxTOPS_INDEX].pixel,
-        XmNbottomShadowColor, g_itemColors[wxBOTS_INDEX].pixel,
-        XmNforeground, g_itemColors[wxFORE_INDEX].pixel,
-        NULL);
-
-    if (changeArmColour)
-        XtVaSetValues ((Widget) widget,
-        XmNarmColor, g_itemColors[wxSELE_INDEX].pixel,
-        NULL);
-#endif
-}
-
 bool wxWindowX11::SetBackgroundColour(const wxColour& col)
 {
     if ( !wxWindowBase::SetBackgroundColour(col) )
         return FALSE;
-
-    ChangeBackgroundColour();
 
     return TRUE;
 }
@@ -1874,38 +1404,7 @@ bool wxWindowX11::SetForegroundColour(const wxColour& col)
     if ( !wxWindowBase::SetForegroundColour(col) )
         return FALSE;
 
-    ChangeForegroundColour();
-
     return TRUE;
-}
-
-void wxWindowX11::ChangeFont(bool keepOriginalSize)
-{
-    // TODO
-#if 0
-    // Note that this causes the widget to be resized back
-    // to its original size! We therefore have to set the size
-    // back again. TODO: a better way in Motif?
-    Widget w = (Widget) GetLabelWidget(); // Usually the main widget
-    if (w && m_font.Ok())
-    {
-        int width, height, width1, height1;
-        GetSize(& width, & height);
-
-        // lesstif 0.87 hangs here
-#ifndef LESSTIF_VERSION
-        XtVaSetValues (w,
-            XmNfontList, (XmFontList) m_font.GetFontList(1.0, XtDisplay(w)),
-            NULL);
-#endif
-
-        GetSize(& width1, & height1);
-        if (keepOriginalSize && (width != width1 || height != height1))
-        {
-            SetSize(-1, -1, width, height);
-        }
-    }
-#endif
 }
 
 // ----------------------------------------------------------------------------

@@ -307,13 +307,6 @@ void wxApp::ProcessXEvent(WXEvent* _event)
             if (win && !win->IsEnabled())
                 return;
 
-            if (CheckForAccelerator(_event))
-            {
-                // Do nothing! We intercepted and processed the event as an
-                // accelerator.
-                return;
-            }
-            else
             {
                 if (win)
                 {
@@ -659,41 +652,6 @@ Window wxGetParentWindow(Window window)
         return parent;
     else
         return (Window) 0;
-}
-
-// Returns TRUE if an accelerator has been processed
-bool wxApp::CheckForAccelerator(WXEvent* event)
-{
-    XEvent* xEvent = (XEvent*) event;
-    if (xEvent->xany.type == KeyPress)
-    {
-        // Find a wxWindow for this window
-        // TODO: should get display for the window, not the current display
-        Window window = xEvent->xany.window;
-        wxWindow* win = NULL;
-
-        // Find the first wxWindow that corresponds to this event window
-        while (window && !(win = wxGetWindowFromTable(window)))
-            window = wxGetWindowParent(window);
-
-        if (!window || !win)
-            return FALSE;
-
-        wxKeyEvent keyEvent(wxEVT_CHAR);
-        wxTranslateKeyEvent(keyEvent, win, (Window) 0, xEvent);
-
-        // Now we have a wxKeyEvent and we have a wxWindow.
-        // Go up the hierarchy until we find a matching accelerator,
-        // or we get to the top.
-        while (win)
-        {
-            if (win->ProcessAccelerator(keyEvent))
-                return TRUE;
-            win = win->GetParent();
-        }
-        return FALSE;
-    }
-    return FALSE;
 }
 
 void wxExit()
