@@ -49,7 +49,10 @@ class TestHtmlPanel(wx.Panel):
         wx.Panel.__init__(self, parent, id, size=size)
         self.html = html.HtmlWindow(self, -1, (5,5), (400, 350))
         py_version = sys.version.split()[0]
-        self.html.SetPage(About.MyAboutBox.text % (wx.VERSION_STRING, py_version))
+        self.html.SetPage(About.MyAboutBox.text %
+                          (wx.VERSION_STRING,
+                           ", ".join(wx.PlatformInfo[1:]),
+                           py_version))
         ir = self.html.GetInternalRepresentation()
         self.html.SetSize( (ir.GetWidth()+5, ir.GetHeight()+5) )
         self.Fit()
