@@ -948,6 +948,14 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
 
     int x = (int)pos.x;
     int y = (int)pos.y;
+    
+    wxRect display = wxGetClientDisplayRect() ;
+
+    if ( x == wxDefaultPosition.x )
+        x = display.x ;
+    
+    if ( y == wxDefaultPosition.y )
+        y = display.y ;
 
     int w = WidthDefault(size.x);
     int h = HeightDefault(size.y);
