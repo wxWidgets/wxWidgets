@@ -99,8 +99,8 @@ QMSG                      s_currentMsg;
 
 wxMenu*                   wxCurrentPopupMenu = NULL;
 extern wxList WXDLLEXPORT wxPendingDelete;
-#if defined(__VISAGECPP__) && (__IBMCPP__ < 400)
-extern wxChar*            wxCanvasClassName;
+#if !defined(__VISAGECPP__) || (__IBMCPP__ < 400)
+extern wxChar             wxCanvasClassName[];
 #endif
 wxList*                   wxWinHandleList = NULL;
 
@@ -2357,6 +2357,7 @@ bool wxWindow::OS2Create(
         (ULONG)zClass == (ULONG)WC_COMBOBOX ||
         (ULONG)zClass == (ULONG)WC_CONTAINER ||
         (ULONG)zClass == (ULONG)WC_ENTRYFIELD ||
+	(ULONG)zClass == (ULONG)WC_FRAME ||
         (ULONG)zClass == (ULONG)WC_LISTBOX ||
         (ULONG)zClass == (ULONG)WC_MENU ||
         (ULONG)zClass == (ULONG)WC_NOTEBOOK ||
