@@ -120,8 +120,14 @@ bool wxTextCtrl::Create(wxWindow *parent,
     SetCursor(wxCURSOR_IBEAM);
 
     SetValue(value);
-    SetBestSize(m_sizeInitial);
+    SetBestSize(size);
+
     CreateCaret();
+    InitInsertionPoint();
+
+    // we can't show caret right now as we're not shown yet and so it would
+    // result in garbage on the screen - we'll do it after first OnPaint()
+    m_hasCaret = FALSE;
 
     return TRUE;
 }
@@ -135,7 +141,7 @@ bool wxTextCtrl::SetFont(const wxFont& font)
     CreateCaret();
 
     // and refresh everything, of course
-    SetInsertionPoint(0);
+    InitInsertionPoint();
     ClearSelection();
     Refresh();
 
@@ -245,28 +251,40 @@ void wxTextCtrl::SetInsertionPoint(long pos)
     wxCHECK_RET( pos >= 0 && pos <= GetLastPosition(),
                  _T("insertion point position out of range") );
 
+    // don't do anything if it didn't change
     if ( pos != m_curPos )
     {
-        HideCaret();
-
-        m_curPos = pos;
-
-        if ( IsSingleLine() )
-        {
-            m_curLine = 0;
-            m_curRow = m_curPos;
-
-            // the current position should always be shown, scroll the window
-            // for this if necessary
-            ShowHorzPosition(GetCaretPosition());
-        }
-        else // multi line
-        {
-            wxFAIL_MSG(_T("unimplemented for multi line"));
-        }
-
-        ShowCaret();
+        DoSetInsertionPoint(pos);
     }
+}
+
+void wxTextCtrl::InitInsertionPoint()
+{
+    // so far always put it in the beginning
+    DoSetInsertionPoint(0);
+}
+
+void wxTextCtrl::DoSetInsertionPoint(long pos)
+{
+    HideCaret();
+
+    m_curPos = pos;
+
+    if ( IsSingleLine() )
+    {
+        m_curLine = 0;
+        m_curRow = m_curPos;
+
+        // the current position should always be shown, scroll the window
+        // for this if necessary
+        ShowHorzPosition(GetCaretPosition());
+    }
+    else // multi line
+    {
+        wxFAIL_MSG(_T("unimplemented for multi line"));
+    }
+
+    ShowCaret();
 }
 
 void wxTextCtrl::SetInsertionPointEnd()
@@ -852,6 +870,14 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTestLine(const wxString& line,
         // and this should give us much better approximation in such case
         dc.GetTextExtent(line[0], &width, NULL);
         col = x / width;
+        if ( col < 0 )
+        {
+            col = 0;
+        }
+        else if ( (size_t)col > line.length() )
+        {
+            col = line.length();
+        }
 
         // matchDir is -1 if we must move left, +1 to move right and 0 when
         // we're exactly on the character we need
@@ -1185,7 +1211,7 @@ void wxTextCtrl::RefreshTextRange(long start, long end)
     if ( !PositionToXY(end, &colEnd, &lineEnd) )
     {
         // the range spans beyond the end of text, refresh to the end
-        colEnd = wxSTRING_MAXLEN;
+        colEnd = -1;
         lineEnd = GetNumberOfLines() - 1;
     }
 
@@ -1197,7 +1223,7 @@ void wxTextCtrl::RefreshTextRange(long start, long end)
         // the end of the range
         long posStart = line == lineStart ? colStart : 0;
         long posCount;
-        if ( (line != lineEnd) || (colEnd == wxSTRING_MAXLEN) )
+        if ( (line != lineEnd) || (colEnd == -1) )
         {
             // intermediate line or the last one but we need to refresh it
             // until the end anyhow - do it
@@ -1486,6 +1512,15 @@ void wxTextCtrl::DoDraw(wxControlRenderer *renderer)
 
         DoDrawTextInRect(dc, r);
     }
+
+    // show caret first time only
+    if ( !m_hasCaret )
+    {
+        GetCaret()->Show();
+
+        m_hasCaret = TRUE;
+    }
+
 }
 
 // ----------------------------------------------------------------------------
@@ -1502,8 +1537,6 @@ void wxTextCtrl::CreateCaret()
 
     // SetCaret() will delete the old caret if any
     SetCaret(caret);
-
-    caret->Show();
 }
 
 wxCoord wxTextCtrl::GetCaretPosition() const
@@ -1689,7 +1722,16 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
     if ( !event.HasModifiers() )
     {
         int keycode = event.GetKeyCode();
-        if ( keycode < 255 && keycode != WXK_DELETE && keycode != WXK_BACK )
+        if ( keycode == WXK_RETURN )
+        {
+            wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, GetId());
+            InitCommandEvent(event);
+            event.SetString(GetValue());
+            GetEventHandler()->ProcessEvent(event);
+        }
+        else if ( keycode < 255 &&
+                  keycode != WXK_DELETE &&
+                  keycode != WXK_BACK )
         {
             PerformAction(wxACTION_TEXT_INSERT, -1, (wxChar)keycode);
 

@@ -2,38 +2,87 @@
 // Name:        gtk/region.cpp
 // Purpose:
 // Author:      Robert Roebling
+// Modified:    VZ at 05.10.00: use Unshare(), comparison fixed
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
 #ifdef __GNUG__
-#pragma implementation "region.h"
+    #pragma implementation "region.h"
 #endif
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
 
 #include "wx/region.h"
 
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
 
+#include "wx/log.h"
 
-//-----------------------------------------------------------------------------
-// wxRegion
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// wxRegionRefData: private class containing the information about the region
+// ----------------------------------------------------------------------------
 
-class wxRegionRefData: public wxObjectRefData
+class wxRegionRefData : public wxObjectRefData
 {
 public:
     wxRegionRefData();
-    ~wxRegionRefData();
+    wxRegionRefData(const wxRegionRefData& refData);
+    virtual ~wxRegionRefData();
 
     GdkRegion  *m_region;
     wxList      m_rects;
 };
 
+// ----------------------------------------------------------------------------
+// macros
+// ----------------------------------------------------------------------------
+
+#define M_REGIONDATA ((wxRegionRefData *)m_refData)
+#define M_REGIONDATA_OF(rgn) ((wxRegionRefData *)(rgn.m_refData))
+
+IMPLEMENT_DYNAMIC_CLASS(wxRegion, wxGDIObject);
+IMPLEMENT_DYNAMIC_CLASS(wxRegionIterator,wxObject);
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxRegionRefData
+// ----------------------------------------------------------------------------
+
 wxRegionRefData::wxRegionRefData()
 {
     m_region = (GdkRegion *) NULL;
+}
+
+wxRegionRefData::wxRegionRefData(const wxRegionRefData& refData)
+{
+#ifdef __WXGTK20__
+    m_region = gdk_region_copy(refData.m_region);
+#else
+    m_region = gdk_region_new();
+    GdkRegion *regCopy = gdk_regions_union(m_region, refData.m_region);
+    gdk_region_destroy(m_region);
+    m_region = regCopy;
+#endif
+
+    wxNode *node = refData.m_rects.First();
+    while (node)
+    {
+        wxRect *r = (wxRect*)node->Data();
+        m_rects.Append( (wxObject*) new wxRect(*r) );
+        node = node->Next();
+    }
 }
 
 wxRegionRefData::~wxRegionRefData()
@@ -49,11 +98,13 @@ wxRegionRefData::~wxRegionRefData()
     }
 }
 
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// wxRegion construction
+// ----------------------------------------------------------------------------
 
-#define M_REGIONDATA ((wxRegionRefData *)m_refData)
-
-IMPLEMENT_DYNAMIC_CLASS(wxRegion,wxGDIObject);
+wxRegion::wxRegion()
+{
+}
 
 wxRegion::wxRegion( wxCoord x, wxCoord y, wxCoord w, wxCoord h )
 {
@@ -112,23 +163,41 @@ wxRegion::wxRegion( const wxRect& rect )
     M_REGIONDATA->m_rects.Append( (wxObject*) new wxRect(rect.x,rect.y,rect.width,rect.height) );
 }
 
-wxRegion::wxRegion()
-{
-}
-
 wxRegion::~wxRegion()
 {
 }
 
-bool wxRegion::operator == ( const wxRegion& region )
+bool wxRegion::operator==( const wxRegion& region )
 {
-    return m_refData == region.m_refData;
+    // VZ: compare the regions themselves, not the pointers to ref data!
+    return gdk_region_equal(M_REGIONDATA->m_region,
+                            M_REGIONDATA_OF(region)->m_region);
 }
 
 bool wxRegion::operator != ( const wxRegion& region )
 {
-    return m_refData != region.m_refData;
+    return !(*this == region);
 }
+
+void wxRegion::Unshare()
+{
+    if ( !m_refData )
+    {
+        m_refData = new wxRegionRefData;
+        M_REGIONDATA->m_region = gdk_region_new();
+    }
+    else if ( m_refData->GetRefCount() > 1 )
+    {
+        wxRegionRefData *refData = new wxRegionRefData(*M_REGIONDATA);
+        UnRef();
+        m_refData = refData;
+    }
+    //else: we're not shared
+}
+
+// ----------------------------------------------------------------------------
+// wxRegion operations
+// ----------------------------------------------------------------------------
 
 void wxRegion::Clear()
 {
@@ -156,6 +225,8 @@ bool wxRegion::Union( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
     }
     else
     {
+        Unshare();
+
 #ifdef __WXGTK20__
         gdk_region_union_with_rect( M_REGIONDATA->m_region, &rect );
 #else
@@ -180,11 +251,7 @@ bool wxRegion::Union( const wxRegion& region )
     if (region.IsNull())
         return FALSE;
 
-    if (!m_refData)
-    {
-        m_refData = new wxRegionRefData();
-        M_REGIONDATA->m_region = gdk_region_new();
-    }
+    Unshare();
 
 #ifdef __WXGTK20__
     gdk_region_union( M_REGIONDATA->m_region, region.GetRegion() );
@@ -207,28 +274,15 @@ bool wxRegion::Union( const wxRegion& region )
 
 bool wxRegion::Intersect( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
 {
-    if (!m_refData)
-    {
-        m_refData = new wxRegionRefData();
-        M_REGIONDATA->m_region = gdk_region_new();
-    }
-
     wxRegion reg( x, y, width, height );
-    Intersect( reg );
-    return TRUE;
+
+    return Intersect( reg );
 }
 
 bool wxRegion::Intersect( const wxRect& rect )
 {
-    if (!m_refData)
-    {
-        m_refData = new wxRegionRefData();
-        M_REGIONDATA->m_region = gdk_region_new();
-    }
-
     wxRegion reg( rect );
-    Intersect( reg );
-    return TRUE;
+    return Intersect( reg );
 }
 
 // this helper function just computes the region intersection without updating
@@ -237,6 +291,8 @@ bool wxRegion::Intersect( const wxRect& rect )
 // if we called Intersect() itself recursively
 bool wxRegion::IntersectRegionOnly(const wxRegion& region)
 {
+    Unshare();
+
 #ifdef __WXGTK20__
     gdk_region_intersect( M_REGIONDATA->m_region, region.GetRegion() );
 #else
@@ -295,28 +351,14 @@ bool wxRegion::Intersect( const wxRegion& region )
 
 bool wxRegion::Subtract( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
 {
-    if (!m_refData)
-    {
-        m_refData = new wxRegionRefData();
-        M_REGIONDATA->m_region = gdk_region_new();
-    }
-
     wxRegion reg( x, y, width, height );
-    Subtract( reg );
-    return TRUE;
+    return Subtract( reg );
 }
 
 bool wxRegion::Subtract( const wxRect& rect )
 {
-    if (!m_refData)
-    {
-        m_refData = new wxRegionRefData();
-        M_REGIONDATA->m_region = gdk_region_new();
-    }
-
     wxRegion reg( rect );
-    Subtract( reg );
-    return TRUE;
+    return Subtract( reg );
 }
 
 bool wxRegion::Subtract( const wxRegion& region )
@@ -330,6 +372,8 @@ bool wxRegion::Subtract( const wxRegion& region )
         M_REGIONDATA->m_region = gdk_region_new();
     }
 
+    Unshare();
+
 #ifdef __WXGTK20__
     gdk_region_subtract( M_REGIONDATA->m_region, region.GetRegion() );
 #else
@@ -337,33 +381,20 @@ bool wxRegion::Subtract( const wxRegion& region )
     gdk_region_destroy( M_REGIONDATA->m_region );
     M_REGIONDATA->m_region = reg;
 #endif
+
     return TRUE;
 }
 
 bool wxRegion::Xor( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
 {
-    if (!m_refData)
-    {
-        m_refData = new wxRegionRefData();
-        M_REGIONDATA->m_region = gdk_region_new();
-    }
-
     wxRegion reg( x, y, width, height );
-    Xor( reg );
-    return TRUE;
+    return Xor( reg );
 }
 
 bool wxRegion::Xor( const wxRect& rect )
 {
-    if (!m_refData)
-    {
-        m_refData = new wxRegionRefData();
-        M_REGIONDATA->m_region = gdk_region_new();
-    }
-
     wxRegion reg( rect );
-    Xor( reg );
-    return TRUE;
+    return Xor( reg );
 }
 
 bool wxRegion::Xor( const wxRegion& region )
@@ -375,6 +406,10 @@ bool wxRegion::Xor( const wxRegion& region )
     {
         m_refData = new wxRegionRefData();
         M_REGIONDATA->m_region = gdk_region_new();
+    }
+    else
+    {
+        Unshare();
     }
 
 #ifdef __WXGTK20__
@@ -396,29 +431,33 @@ bool wxRegion::Xor( const wxRegion& region )
     return TRUE;
 }
 
+// ----------------------------------------------------------------------------
+// wxRegion tests
+// ----------------------------------------------------------------------------
+
 void wxRegion::GetBox( wxCoord &x, wxCoord &y, wxCoord &w, wxCoord &h ) const
 {
-    x = 0;
-    y = 0;
-    w = -1;
-    h = -1;
-    if (!m_refData)
-        return;
-
-    GdkRectangle rect;
-    gdk_region_get_clipbox( M_REGIONDATA->m_region, &rect );
-    x = rect.x;
-    y = rect.y;
-    w = rect.width;
-    h = rect.height;
+    if ( m_refData )
+    {
+        GdkRectangle rect;
+        gdk_region_get_clipbox( M_REGIONDATA->m_region, &rect );
+        x = rect.x;
+        y = rect.y;
+        w = rect.width;
+        h = rect.height;
+    }
+    else
+    {
+        x = 0;
+        y = 0;
+        w = -1;
+        h = -1;
+    }
 }
 
 wxRect wxRegion::GetBox() const
 {
-    wxCoord x = 0;
-    wxCoord y = 0;
-    wxCoord w = -1;
-    wxCoord h = -1;
+    wxCoord x, y, w, h;
     GetBox( x, y, w, h );
     return wxRect( x, y, w, h );
 }
@@ -488,11 +527,9 @@ wxList *wxRegion::GetRectList() const
     return &(M_REGIONDATA->m_rects);
 }
 
-//-----------------------------------------------------------------------------
-// wxRegion
-//-----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxRegionIterator,wxObject);
+// ----------------------------------------------------------------------------
+// wxRegionIterator
+// ----------------------------------------------------------------------------
 
 wxRegionIterator::wxRegionIterator()
 {

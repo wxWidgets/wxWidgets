@@ -11,6 +11,8 @@ All
 !   wxThemeSettings
 !   actions/wxInputHandler?
 
+*   wxCheckListBox: redraw only the bitmap when toggled
+
 *   problem with lbox horz scrolling: the focus rect isn't drawn entirely...
 *   write sample testing all listbox styles/events
 *   text ctrl wxTE_XXX styles support

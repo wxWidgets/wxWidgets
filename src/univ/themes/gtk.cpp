@@ -41,10 +41,10 @@
 #include "wx/univ/theme.h"
 
 // ----------------------------------------------------------------------------
-// constants (to be removed)
+// constants (to be removed, for testing only)
 // ----------------------------------------------------------------------------
 
-static const size_t BORDER_THICKNESS = 10;
+static const size_t BORDER_THICKNESS = 1;
 
 // ----------------------------------------------------------------------------
 // wxGTKRenderer: draw the GUI elements in GTK style
@@ -734,7 +734,7 @@ wxRect wxGTKRenderer::GetBorderDimensions(wxBorder border) const
     {
         case wxBORDER_RAISED:
         case wxBORDER_SUNKEN:
-            width = 20;
+            width = 2*BORDER_THICKNESS;
             break;
 
         case wxBORDER_SIMPLE:

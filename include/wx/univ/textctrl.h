@@ -282,6 +282,13 @@ protected:
     // calculate the last visible position
     void UpdateLastVisible();
 
+    // move caret to the given position unconditionally
+    // (SetInsertionPoint() does nothing if the position didn't change)
+    void DoSetInsertionPoint(long pos);
+
+    // set the caret to its initial (default) position
+    void InitInsertionPoint();
+
     // event handlers
     void OnChar(wxKeyEvent& event);
     void OnSize(wxSizeEvent& event);
@@ -305,7 +312,8 @@ private:
 
     // flags
     bool m_isModified:1,
-         m_isEditable:1;
+         m_isEditable:1,
+         m_hasCaret:1;
 
     // the rectangle (in client coordinates) to draw text inside
     wxRect m_rectText;

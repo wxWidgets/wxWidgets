@@ -45,9 +45,9 @@ enum wxRegionOp
    wxRGN_XOR           // Creates the union of two combined regions except for any overlapping areas.
 };
 
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // wxRegion
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 class wxRegion : public wxGDIObject
 {
@@ -101,9 +101,16 @@ protected:
     // helper of Intersect()
     bool IntersectRegionOnly(const wxRegion& reg);
 
+    // call this before modifying the region
+    void Unshare();
+
 private:
     DECLARE_DYNAMIC_CLASS(wxRegion);
 };
+
+// ----------------------------------------------------------------------------
+// wxRegionIterator: decomposes a region into rectangles
+// ----------------------------------------------------------------------------
 
 class wxRegionIterator: public wxObject
 {

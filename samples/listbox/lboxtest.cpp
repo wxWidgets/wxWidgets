@@ -34,31 +34,21 @@
     #include "wx/frame.h"
     #include "wx/dcclient.h"
 
-    #include "wx/bmpbuttn.h"
     #include "wx/button.h"
     #include "wx/checkbox.h"
     #include "wx/checklst.h"
     #include "wx/listbox.h"
     #include "wx/radiobox.h"
     #include "wx/radiobut.h"
-    #include "wx/scrolbar.h"
-    #include "wx/scrolwin.h"
     #include "wx/statbox.h"
     #include "wx/stattext.h"
+    #include "wx/textctrl.h"
 #endif
 
 #include "wx/sizer.h"
 
 #ifdef __WXUNIVERSAL__
-
-#include "wx/univ/theme.h"
-
-// ----------------------------------------------------------------------------
-// resources
-// ----------------------------------------------------------------------------
-
-#include "bricks.xpm"
-
+    #include "wx/univ/theme.h"
 #endif // __WXUNIVERSAL__
 
 // ----------------------------------------------------------------------------
@@ -279,11 +269,11 @@ LboxTestFrame::LboxTestFrame(const wxString& title)
     wxSizer *sizerDown = new wxStaticBoxSizer(box2, wxVERTICAL);
 
     btn = new wxButton(this, LboxTest_Add, _T("&Add string..."));
-    sizerDown->Add(btn, 0, wxALL, 5);
+    sizerDown->Add(btn, 0, wxALL | wxGROW, 5);
     btn = new wxButton(this, LboxTest_AddSeveral, _T("Add a &few string"));
-    sizerDown->Add(btn, 0, wxALL, 5);
+    sizerDown->Add(btn, 0, wxALL | wxGROW, 5);
     btn = new wxButton(this, LboxTest_Clear, _T("&Clear"));
-    sizerDown->Add(btn, 0, wxALL, 5);
+    sizerDown->Add(btn, 0, wxALL | wxGROW, 5);
 
     sizerLeft->Add(sizerUp, 0, wxGROW | wxTOP | wxBOTTOM, 5);
     sizerLeft->Add(sizerDown, 0,  wxGROW | wxTOP | wxBOTTOM, 5);

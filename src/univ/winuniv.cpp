@@ -423,7 +423,7 @@ void wxWindow::DoGetClientSize(int *width, int *height) const
 
         // if we don't have scrollbar or if it is outside the border (and not
         // blended into it), take account of the right border as well
-        if ( !m_scrollbarVert || inside )
+        if ( !m_scrollbarVert || !inside )
             w -= rectBorder.width;
 
         // and always account for the left border
@@ -435,7 +435,7 @@ void wxWindow::DoGetClientSize(int *width, int *height) const
         if ( m_scrollbarHorz )
             h -= m_scrollbarHorz->GetSize().y;
 
-        if ( !m_scrollbarHorz || inside )
+        if ( !m_scrollbarHorz || !inside )
             h -= rectBorder.height;
 
         *height = h - rectBorder.y;
