@@ -315,11 +315,11 @@ end.
 ISS_DocDemo_Template = r'''
 
 [Setup]
-AppName = wxPython%(SHORTVER)s-DocsDemo
+AppName = wxPython%(SHORTVER)s-docs-demos
 AppVerName = wxPython Docs and Demos %(VERSION)s
-OutputBaseFilename = wxPython%(SHORTVER)s-win32-DocsDemo-%(VERSION)s
+OutputBaseFilename = wxPython%(SHORTVER)s-win32-docs-demos-%(VERSION)s
 AppCopyright = Copyright © 2004 Total Control Software
-DefaultDirName = {pf}\wxPython%(SHORTVER)s Docs Demos and Tools
+DefaultDirName = {pf}\wxPython%(SHORTVER)s Docs and Demos
 DefaultGroupName = wxPython%(SHORTVER)s Docs Demos and Tools
 AlwaysCreateUninstallIcon = yes
 AdminPrivilegesRequired = no

@@ -3,10 +3,10 @@ wxPython win32 README
 
 The self-installer pacakge you have just installed contains the Python
 extension modules, python modules and pakcages needed to run wxPython
-applications.  If you selected "Make this install be the default
-wxPython" then this version will be the one that is imported when apps
-do "import wx".  See the following wiki page for more information
-about managing multiple installs:
+applications.  If you selected the "Make this install be the default
+wxPython" option in the installer then this version will be the one
+that is imported when apps do "import wx".  See the following wiki
+page for more information about managing multiple installs:
 
       http://wiki.wxpython.org/index.cgi/MultiVersionInstalls
 
@@ -21,9 +21,10 @@ page for using wxversion.
 This installer does *not* include the wxPython documentation, the
 wxPython demo and other sample applications are provided as part of
 wxPython.  Those are available in a separate installer named
-wxPython2.5-DocsDemo-*.exe that should also be located from wherever
-you downloaded this package from.  The DocsDemo installer will also
-install Start Menu shortcuts for the tool scripts mentioned above.
+wxPython2.5-win32-docs-demos-*.exe which should also be located from
+wherever you downloaded this package from.  The Docs and Demos
+installer will also create Start Menu shortcuts for the tool scripts
+mentioned above.
 
 
 
