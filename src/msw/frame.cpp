@@ -219,42 +219,43 @@ void wxFrame::DoGetClientSize(int *x, int *y) const
 // to wxWindows)
 void wxFrame::DoSetClientSize(int width, int height)
 {
-  HWND hWnd = GetHwnd();
+    HWND hWnd = GetHwnd();
 
-  RECT rect;
-  ::GetClientRect(hWnd, &rect);
+    RECT rectClient;
+    ::GetClientRect(hWnd, &rectClient);
 
-  RECT rect2;
-  GetWindowRect(hWnd, &rect2);
+    RECT rectTotal;
+    ::GetWindowRect(hWnd, &rectTotal);
 
-  // Find the difference between the entire window (title bar and all)
-  // and the client area; add this to the new client size to move the
-  // window
-  int actual_width = rect2.right - rect2.left - rect.right + width;
-  int actual_height = rect2.bottom - rect2.top - rect.bottom + height;
+    // Find the difference between the entire window (title bar and all)
+    // and the client area; add this to the new client size to move the
+    // window
+    width += rectTotal.right - rectTotal.left - rectClient.right;
+    height += rectTotal.bottom - rectTotal.top - rectClient.bottom;
 
 #if wxUSE_STATUSBAR
-  if ( GetStatusBar() && GetStatusBar()->IsShown())
-  {
-    int statusX, statusY;
-    GetStatusBar()->GetClientSize(&statusX, &statusY);
-    actual_height += statusY;
-  }
+    wxStatusBar *statbar = GetStatusBar();
+    if ( statbar && statbar->IsShown() )
+    {
+        // leave enough space for the status bar
+        height += statbar->GetSize().y;
+    }
 #endif // wxUSE_STATUSBAR
 
-  wxPoint pt(GetClientAreaOrigin());
-  actual_width += pt.y;
-  actual_height += pt.x;
+    // note that this takes the toolbar into account
+    wxPoint pt = GetClientAreaOrigin();
+    width += pt.x;
+    height += pt.y;
 
-  POINT point;
-  point.x = rect2.left;
-  point.y = rect2.top;
+    if ( !::MoveWindow(hWnd, rectTotal.left, rectTotal.top,
+                       width, height, TRUE /* redraw */) )
+    {
+        wxLogLastError(_T("MoveWindow"));
+    }
 
-  MoveWindow(hWnd, point.x, point.y, actual_width, actual_height, (BOOL)TRUE);
-
-  wxSizeEvent event(wxSize(width, height), m_windowId);
-  event.SetEventObject( this );
-  GetEventHandler()->ProcessEvent(event);
+    wxSizeEvent event(wxSize(width, height), m_windowId);
+    event.SetEventObject(this);
+    GetEventHandler()->ProcessEvent(event);
 }
 
 void wxFrame::DoGetSize(int *width, int *height) const
