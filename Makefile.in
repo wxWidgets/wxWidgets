@@ -691,6 +691,16 @@ GTK_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/contrib
 	cp -R $(WXDIR)/contrib $(DISTDIR)
 
+X11_DIST: ALL_GUI_DIST UNIV_DIST
+	cp $(WXDIR)/wxX11.spec $(DISTDIR)
+	cp $(INCDIR)/wx/x11/*.h $(DISTDIR)/include/wx/x11
+	cp $(X11DIR)/files.lst $(DISTDIR)/src/x11
+	cp $(X11DIR)/*.cpp $(DISTDIR)/src/x11
+	cp $(X11DIR)/*.c $(DISTDIR)/src/x11
+	cp $(X11DIR)/*.xbm $(DISTDIR)/src/x11
+	mkdir $(DISTDIR)/contrib
+	cp -R $(WXDIR)/contrib $(DISTDIR)
+
 MOTIF_DIST: ALL_GUI_DIST
 	cp $(WXDIR)/wxMotif.spec $(DISTDIR)
 	cp $(INCDIR)/wx/motif/*.h $(DISTDIR)/include/wx/motif
