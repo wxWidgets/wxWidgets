@@ -30,6 +30,16 @@ wxTextCtrlXmlHandler::wxTextCtrlXmlHandler() : wxXmlResourceHandler()
     XRC_ADD_STYLE(wxTE_PASSWORD);
     XRC_ADD_STYLE(wxTE_READONLY);
     XRC_ADD_STYLE(wxHSCROLL);
+    XRC_ADD_STYLE(wxTE_RICH);
+    XRC_ADD_STYLE(wxTE_RICH2);
+    XRC_ADD_STYLE(wxTE_AUTO_URL);
+    XRC_ADD_STYLE(wxTE_NOHIDESEL);
+    XRC_ADD_STYLE(wxTE_LEFT);
+    XRC_ADD_STYLE(wxTE_CENTRE);
+    XRC_ADD_STYLE(wxTE_RIGHT);
+    XRC_ADD_STYLE(wxTE_DONTWRAP);
+    XRC_ADD_STYLE(wxTE_LINEWRAP);
+    XRC_ADD_STYLE(wxTE_WORDWRAP);
     AddWindowStyles();
 }
 

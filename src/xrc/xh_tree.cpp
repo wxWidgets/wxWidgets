@@ -26,6 +26,7 @@
 wxTreeCtrlXmlHandler::wxTreeCtrlXmlHandler() 
 : wxXmlResourceHandler() 
 {
+    XRC_ADD_STYLE(wxTR_HIDE_ROOT);
     XRC_ADD_STYLE(wxTR_HAS_BUTTONS);
     XRC_ADD_STYLE(wxTR_EDIT_LABELS);
     XRC_ADD_STYLE(wxTR_MULTIPLE);
