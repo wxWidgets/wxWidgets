@@ -138,6 +138,13 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
 
   SetSize(x, y, width, height);
 
+  // for compatibility with wxGTK, the first radio button in a group is
+  // always checked (this makes sense anyhow as you need to ensure that at
+  // least one button in the group is checked and this is the simlpest way to
+  // do it)
+  if ( m_windowStyle & wxRB_GROUP )
+      SetValue(TRUE);
+
   return TRUE;
 }
 
