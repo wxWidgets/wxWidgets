@@ -315,6 +315,49 @@ LRESULT APIENTRY _EXPORT wxExecuteWindowCbk(HWND hWnd, UINT message,
 }
 #endif // Win32
 
+#if wxUSE_IPC
+
+// connect to the given server via DDE and ask it to execute the command
+static bool wxExecuteDDE(const wxString& ddeServer,
+                         const wxString& ddeTopic,
+                         const wxString& ddeCommand)
+{
+    bool ok;
+
+    wxDDEClient client;
+    wxConnectionBase *conn = client.MakeConnection(_T(""),
+                                                   ddeServer,
+                                                   ddeTopic);
+    if ( !conn )
+    {
+        ok = FALSE;
+    }
+    else // connected to DDE server
+    {
+        // the added complication here is that although most
+        // programs use XTYP_EXECUTE for their DDE API, some
+        // important ones - like IE and other MS stuff - use
+        // XTYP_REQUEST!
+        //
+        // so we try it first and then the other one if it
+        // failed
+        {
+            wxLogNull noErrors;
+            ok = conn->Request(ddeCommand) != NULL;
+        }
+
+        if ( !ok )
+        {
+            // now try execute - but show the errors
+            ok = conn->Execute(ddeCommand);
+        }
+    }
+
+    return ok;
+}
+
+#endif // wxUSE_IPC
+
 long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
 {
     wxCHECK_MSG( !!cmd, 0, wxT("empty command in wxExecute") );
@@ -334,6 +377,11 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
     static const size_t lenDdePrefix = 7;   // strlen("WX_DDE:")
     if ( cmd.Left(lenDdePrefix) == _T("WX_DDE#") )
     {
+        // speed up the concatenations below
+        ddeServer.reserve(256);
+        ddeTopic.reserve(256);
+        ddeCommand.reserve(256);
+
         const wxChar *p = cmd.c_str() + 7;
         while ( *p && *p != _T('#') )
         {
@@ -385,27 +433,21 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
             ddeCommand += *p++;
         }
 
-        // maybe we don't have to launch the DDE server at all - if it is
-        // already running, for example
-        wxDDEClient client;
-        wxLogNull nolog;
-        wxConnectionBase *conn = client.MakeConnection(_T(""),
-                                                       ddeServer,
-                                                       ddeTopic);
-        if ( conn )
+        // if we want to just launch the program and not wait for its
+        // termination, try to execute DDE command right now, it can succeed if
+        // the process is already running - but as it fails if it's not
+        // running, suppress any errors it might generate
+        if ( !sync )
         {
-            // FIXME we don't check the return code as for some strange reason
-            //       it will sometimes be FALSE - it is probably a bug in our
-            //       DDE code but I don't see anything wrong there
-            (void)conn->Execute(ddeCommand);
-
-            // ok, the command executed - return value indicating success,
-            // making it up for async case as we really don't have any way to
-            // get the real PID of the DDE server here
-            return sync ? 0 : -1;
+            wxLogNull noErrors;
+            if ( wxExecuteDDE(ddeServer, ddeTopic, ddeCommand) )
+            {
+                // a dummy PID - this is a hack, of course, but it's well worth
+                // it as we don't open a new server each time we're called
+                // which would be quite bad
+                return -1;
+            }
         }
-        //else: couldn't establish DDE conversation, now try launching the app
-        //      and sending the DDE request again
     }
     else
 #endif // wxUSE_IPC
@@ -637,36 +679,36 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
 #if wxUSE_IPC
     // second part of DDE hack: now establish the DDE conversation with the
     // just launched process
-    if ( !!ddeServer )
+    if ( !ddeServer.empty() )
     {
-        wxDDEClient client;
-        wxConnectionBase *conn;
+        bool ok;
 
+        // give the process the time to init itself
+        //
+        // we use a very big timeout hoping that WaitForInputIdle() will return
+        // much sooner, but not INFINITE just in case the process hangs
+        // completely - like this we will regain control sooner or later
+        switch ( ::WaitForInputIdle(pi.hProcess, 10000 /* 10 seconds */) )
         {
-            // try doing it the first time without error messages
-            wxLogNull nolog;
+            default:
+                wxFAIL_MSG( _T("unexpected WaitForInputIdle() return code") );
+                // fall through
 
-            conn = client.MakeConnection(_T(""), ddeServer, ddeTopic);
+            case -1:
+                wxLogLastError(_T("WaitForInputIdle() in wxExecute"));
+
+            case WAIT_TIMEOUT:
+                wxLogDebug(_T("Timeout too small in WaitForInputIdle"));
+
+                ok = FALSE;
+                break;
+
+            case 0:
+                // ok, process ready to accept DDE requests
+                ok = wxExecuteDDE(ddeServer, ddeTopic, ddeCommand);
         }
 
-        if ( !conn )
-        {
-            // give the app some time to initialize itself: in fact, a common
-            // reason for failure is that we tried to open DDE conversation too
-            // soon (before the app had time to setup its DDE server), so wait
-            // a bit and try again
-            ::Sleep(2000);
-
-            wxConnectionBase *conn = client.MakeConnection(_T(""),
-                                                           ddeServer,
-                                                           ddeTopic);
-            if ( !conn )
-            {
-                wxLogError(_("Couldn't launch DDE server '%s'."), command.c_str());
-            }
-        }
-
-        if ( conn )
+        if ( !ok )
         {
             // FIXME just as above we don't check Execute() return code
             wxLogNull nolog;

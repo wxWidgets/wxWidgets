@@ -1466,7 +1466,12 @@ should ensure that this can cause no recursion, in the simplest case by
 calling \helpref{wxEnableTopLevelWindows(FALSE)}{wxenabletoplevelwindows}.
 
 For asynchronous execution, however, the return value is the process id and
-zero value indicates that the command could not be executed.
+zero value indicates that the command could not be executed. As an added
+complication, the return value of $-1$ in this case indicattes that we didn't
+launch a new process, but connected to the running one (this can only happen in
+case of using DDE under Windows for command execution). In particular, in this,
+and only this, case the calling code will not get the notification about
+process termination.
 
 If callback isn't NULL and if execution is asynchronous (note that callback
 parameter can not be non-NULL for synchronous execution),
