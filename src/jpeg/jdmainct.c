@@ -13,10 +13,12 @@
  * supplies the equivalent of the main buffer in that case.
  */
 
+/* suppress the warnings about using main for the variable names */
+#define main jpegMain
+
 #define JPEG_INTERNALS
 #include "jinclude.h"
 #include "jpeglib.h"
-
 
 /*
  * In the current system design, the main buffer need never be a full-image
