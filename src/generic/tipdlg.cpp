@@ -45,6 +45,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/statline.h"
+#include "wx/artprov.h"
 
 #include "wx/tipdlg.h"
 
@@ -195,18 +196,7 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
     m_text->SetFont(wxFont(14, wxROMAN, wxNORMAL, wxNORMAL));
 #endif
 
-#if defined(__WXMSW__) || defined(__WXPM__)
-    wxIcon icon("wxICON_TIP");
-#else
-    // XPM hack: make the arrays const
-    #define static static const
-
-    #include "wx/generic/tip.xpm"
-
-    #undef static
-
-    wxIcon icon(tipIcon);
-#endif
+    wxIcon icon = wxArtProvider::GetIcon(wxART_TIP, wxART_CMN_DIALOG);
     wxStaticBitmap *bmp = new wxStaticBitmap(this, -1, icon);
 
     // 2) put them in boxes
