@@ -25,6 +25,7 @@ clean:
 	-$(RM) core 
 	-$(RM) *.rsc
 	-$(RM) *.res
+	-$(RM) *.exe
 
 cleanall: clean
 	-$(RM) $(TARGET).exe 

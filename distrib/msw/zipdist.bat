@@ -183,7 +183,7 @@ if not isdir bin mkdir bin
 copy %src%\bin\dialoged.exe bin
 copy %src%\bin\tex2rtf.exe bin
 copy %src%\bin\dbgview.* bin
-copy %src%\bin\life.exe bin
+Rem copy %src%\bin\life.exe bin
 copy %src%\docs\winhelp\dialoged.hlp %src%\docs\winhelp\dialoged.cnt bin
 copy %src%\docs\winhelp\tex2rtf.hlp %src%\docs\winhelp\tex2rtf.cnt bin
 

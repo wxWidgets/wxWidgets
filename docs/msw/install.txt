@@ -1,12 +1,12 @@
 
-Installing wxWindows 2.3
-------------------------
+Installing wxWindows 2.3.3
+--------------------------
 
-This is wxWindows 2.3 for Microsoft Windows 9x/ME, Windows NT,
+This is wxWindows 2.3.3 for Microsoft Windows 9x/ME, Windows NT,
 Windows 2000 and Windows XP. This is an unstable development release.
 
 Please note that the library naming conventions for VC++
-compilation have changed between 2.3.1 and 2.3.2. This means that
+compilation have changed after 2.3.1. This means that
 you will need to change your application project files. See the
 relevant section below for details.
 

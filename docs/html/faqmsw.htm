@@ -1,18 +1,19 @@
+
 <HTML>
 
 <HEAD>
 <TITLE>wxWindows 2 for Windows FAQ</TITLE>
 </HEAD>
 
-<BODY BGCOLOR=#FFFFFF TEXT=#000000 LINK=#FF0000 VLINK=#000000>
+<BODY BGCOLOR=#FFFFFF TEXT=#000000 VLINK="#00376A" LINK="#00529C" ALINK="#313063">
 
 <font face="Arial, Lucida Sans, Helvetica">
 
-<table width=100% border=0 cellpadding=5 cellspacing=0>
+<table width=100% border=0 cellpadding=3 cellspacing=0>
 <tr>
-<td bgcolor="#C4ECF9">
-<font size=+1 face="Arial, Lucida Sans, Helvetica" color="#000000">
-wxWindows 2 for Windows FAQ
+<td bgcolor="#004080" align=left height=24 background="images/bluetitlegradient.gif">
+<font size=+1 face="Arial, Lucida Sans, Helvetica" color="#FFFFFF">
+<b>wxWindows 2 for Windows FAQ</b>
 </font>
 </td>
 </tr>
@@ -26,9 +27,11 @@ See also <a href="faq.htm">top-level FAQ page</a>.
 <ul>
 <li><a href="#platforms">Which Windows platforms are supported?</a></li>
 <li><a href="#wince">What about Windows CE?</a></li>
+<li><a href="#winxp">What do I need to do for Windows XP?</a></li>
 <li><a href="#compilers">What compilers are supported?</a></li>
 <li><a href="#bestcompiler">Which is the best compiler to use with wxWindows 2?</a></li>
 <li><a href="#unicode">Is Unicode supported?</a></li>
+<li><a href="#doublebyte">Does wxWindows support double byte fonts (Chinese/Japanese/Korean etc.)?</a></li>
 <li><a href="#dll">Can you compile wxWindows 2 as a DLL?</a></li>
 <li><a href="#exesize">How can I reduce executable size?</a></li>
 <li><a href="#mfc">Is wxWindows compatible with MFC?</a></li>
@@ -38,13 +41,15 @@ See also <a href="faq.htm">top-level FAQ page</a>.
 <li><a href="#makefiles">How are the wxWindows makefiles edited under Windows?</a></li>
 <li><a href="#vcdebug">How do you use VC++&#39;s memory leak checking instead of that in wxWindows?</a></li>
 <li><a href="#shortcutproblem">Why are menu hotkeys or shortcuts not working in my application?</a></li>
+<li><a href="#regconfig">Why can I not write to the HKLM part of the registry with wxRegConfig?</a></li>
 </ul>
 <hr>
 
 <h3><a name="platforms">Which Windows platforms are supported?</a></h3>
 
 wxWindows 2 can be used to develop and deliver applications on Windows 3.1, Win32s,
-Windows 95, Windows 98, and Windows NT. A Windows CE version is being looked into (see below).<P>
+Windows 95, Windows 98, Windows NT, Windows 2000, and Windows XP. A Windows CE
+version is being looked into (see below).<P>
 
 wxWindows 2 is designed to make use of WIN32 features and controls. However, unlike Microsoft,
 we have not forgotten users of 16-bit Windows. Most features
@@ -75,6 +80,37 @@ by mostly cutting down wxWindows 2 API functionality, and adding a few classes h
 and there. Since wxWindows for 2 produces small binaries (less than 300K for
 the statically-linked &#39;minimal&#39; sample), shoehorning wxWindows 2 into a Windows CE device&#39;s limited
 storage should not be a problem.<P>
+
+<h3><a name="winxp">What do I need to do for Windows XP?</a></h3>
+
+In the same directory as you have your executable (e.g. foo.exe) you
+put a file called foo.exe.manifest in which you have something like
+the following:
+
+<pre>
+&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+&lt;assembly
+   xmlns="urn:schemas-microsoft-com:asm.v1"
+   manifestVersion="1.0"&gt;
+&lt;assemblyIdentity
+    processorArchitecture="x86"
+    version="5.1.0.0"
+    type="win32"
+    name="foo.exe"/&gt;
+    &lt;description&gt;Foo program&lt;/description&gt;
+    &lt;dependency&gt;
+    &lt;dependentAssembly&gt;
+    &lt;assemblyIdentity
+         type="win32"
+         name="Microsoft.Windows.Common-Controls"
+         version="6.0.0.0"
+         publicKeyToken="6595b64144ccf1df"
+         language="*"
+         processorArchitecture="x86"/&gt;
+    &lt;/dependentAssembly&gt;
+    &lt;/dependency&gt;
+&lt;/assembly&gt;
+</pre>
 
 <h3><a name="compilers">What compilers are supported?</a></h3>
 
@@ -126,6 +162,22 @@ wxWindows.
 Yes, Unicode is fully supported under Windows NT/2000 (Windows 9x don&#39;t
 have Unicode support anyhow).
 
+<h3><a name="doublebyte">Does wxWindows support double byte fonts (Chinese/Japanese/Korean etc.)?</a></h3>
+
+An answer from <a href="mailto:goedde@logosoft.de">Klaus Goedde</a>:<p>
+
+"For Japanese under Win2000, it seems that wxWindows has no problems to work with double byte char sets
+(I mean DBCS, that&#39;s not Unicode). First you have to install Japanese support on your Win2K system
+and choose for ANSI translation 
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Nls\CodePage=932 (default is 1252 for Western).
+Then you can see all the funny Japanese letters under wxWindows too.<P>
+
+In a wxTextCtrl control you have to set the window style "wxTE_RICH", otherwise this control shows the wrong 
+letters.
+
+I don&#39;t now whether it works on non W2K systems, because I&#39;m just starting using wxWindows."
+<P>
+
 <h3><a name="dll">Can you compile wxWindows 2 as a DLL?</a></h3>
 
 Yes (using the Visual C++ or Borland C++ makefile), but be aware that distributing DLLs is a thorny issue
@@ -152,10 +204,11 @@ indirectly) referenced
 by your application. So for example, the &#39;minimal&#39; sample is less than 300KB using VC++ 6.<P>
 
 If you want to distribute really small executables, you can
-use <a href="http://www.icl.ndirect.co.uk/petite/" target=_top>Petite</a>
+use <a href="http://www.un4seen.com/petite/" target=_top>Petite</a>
 by Ian Luck. This nifty utility compresses Windows executables by around 50%, so your 500KB executable
 will shrink to a mere 250KB. With this sort of size, there is reduced incentive to
-use DLLs.<P>
+use DLLs. Another good compression tool is <a href="http://upx.sourceforge.net/" target=_top>UPX</a>.
+<P>
 
 <H3><a name="mfc">Is wxWindows compatible with MFC?</a></H3>
 
@@ -322,6 +375,63 @@ This can happen if you have a child window intercepting EVT_CHAR events and swal
 all keyboard input. You should ensure that event.Skip() is called for all input that
 isn&#39;used by the event handler.
 
+<H3><a name="#regconfig">Why can I not write to the HKLM part of the registry with wxRegConfig?</a></H3>
+
+Currently this is not possible because the wxConfig family of classes is
+supposed to deal with per-user application configuration data, and HKLM is
+only supposed to be writeable by a user with Administrator privileges. In theory,
+only installers should write to HKLM. This is still a point debated by the
+wxWindows developers. There are at least two ways to work around it if you really
+need to write to HKLM.<P>
+
+First, you can use wxRegKey directly, for example:
+
+<pre>
+    wxRegKey regKey;
+
+    wxString idName(wxT("HKEY_LOCAL_MACHINE\\SOFTWARE\\My Company\\My Product\\Stuff\\"));
+    idName += packid;
+
+    regKey.SetName(idName);
+
+    {
+        wxLogNull dummy; 
+        if (!regKey.Create())
+        {
+            idName = wxT("HKEY_CURRENT_USER\\SOFTWARE\\My Company\\My Product\\Stuff\\");
+            idName += packid;
+            regKey.SetName(idName);
+            if (!regKey.Create())
+                return FALSE;
+        }
+    }
+
+    if (!regKey.SetValue(wxT("THING"), (long) thing)) err += 1;
+
+    regKey.Close();
+
+</pre>
+
+Or, you can employ this trick suggested by Istvan Kovacs:
+
+<pre>
+class myGlobalConfig : public wxConfig
+{
+    myGlobalConfig() :
+        wxConfig ("myApp", "myCompany", "", "", wxCONFIG_USE_GLOBAL_FILE)
+{};
+    bool Write(const wxString& key, const wxString& value);
+}
+
+bool myGlobalConfig::Write (const wxString& key, const wxString& value)
+{
+    wxString path = wxString ("SOFTWARE\\myCompany\\myApp\\") + wxPathOnly(key);
+    wxString new_path = path.Replace ("/", "\\", true);
+    wxString new_key = wxFileNameFromPath (key);
+    LocalKey().SetName (wxRegKey::HKLM, path);
+    return wxConfig::Write (new_key, value);
+}
+</pre>
 
 </font>
 

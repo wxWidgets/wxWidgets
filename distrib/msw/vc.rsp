@@ -22,6 +22,9 @@ src/regex/regex.dsw
 
 samples/samples.dsw
 
+samples/artprov/arttest.dsp
+samples/artprov/arttest.dsw
+
 samples/calendar/arttest.dsp
 samples/calendar/arttest.dsw
 

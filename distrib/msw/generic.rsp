@@ -242,7 +242,8 @@ samples/caret/*.xpm
 samples/caret/*.xbm
 samples/caret/*.png
 samples/caret/*.ico
-samples/caret/*.txtsamples/caret/*.pro
+samples/caret/*.txt
+samples/caret/*.pro
 
 samples/checklst/*.cpp
 samples/checklst/*.h
