@@ -34,6 +34,8 @@
 #include "wx/intl.h"
 #endif
 
+#if wxUSE_FONTDLG
+
 #include <string.h>
 #include <stdlib.h>
 
@@ -447,4 +449,6 @@ int wxFontWeightStringToInt(wxChar *weight)
     return wxNORMAL;
 }
 
+#endif
+    // wxUSE_FONTDLG
 
