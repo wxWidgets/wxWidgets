@@ -11,11 +11,19 @@ BUGS
   - delete in empty line doesn't always work
   - fix initial scrollbar sizes
   - fix horiz scrollbar size
-  - occasionally wraps lines wongly (twice) ??
 
 
 TODO
 =====================================================================
+
+Selections:
+  - moving in negative direction doesn't work
+  - selection state not properly reset, only works once
+  - selecting non-text objects is strange
+
+wxllist::GetSize() requires extra Layout() call, which should not be
+necessary. Find out why this is so.
+
 
 - Image at end of a message doesn't get considered properly in
   wxLayoutList::GetSize(), so it cannot be seen

@@ -71,23 +71,27 @@ wxString wxLayoutExportCmdAsHTML(wxLayoutObjectCmd const & cmd,
    static char buffer[20];
    wxString html;
    
-   wxLayoutStyleInfo si;
-   cmd.GetStyle(&si);
+   wxLayoutStyleInfo *si = cmd.GetStyle();
 
    int size, sizecount;
    
    html += "<font ";
 
-   html +="color=";
-   sprintf(buffer,"\"#%02X%02X%02X\"", si.fg_red,si.fg_green,si.fg_blue);
-   html += buffer;
+   if(si->fg_valid)
+   {
+      html +="color=";
+      sprintf(buffer,"\"#%02X%02X%02X\"", si->fg_red,si->fg_green,si->fg_blue);
+      html += buffer;
+   }
 
-
-   html += " bgcolor=";
-   sprintf(buffer,"\"#%02X%02X%02X\"", si.bg_red,si.bg_green,si.bg_blue);
-   html += buffer;
-
-   switch(si.family)
+   if(si->bg_valid)
+   {
+      html += " bgcolor=";
+      sprintf(buffer,"\"#%02X%02X%02X\"", si->bg_red,si->bg_green,si->bg_blue);
+      html += buffer;
+   }
+   
+   switch(si->family)
    {
    case wxSWISS:
    case wxMODERN:
@@ -101,12 +105,12 @@ wxString wxLayoutExportCmdAsHTML(wxLayoutObjectCmd const & cmd,
    }
 
    size = BASE_SIZE; sizecount = 0;
-   while(size < si.size && sizecount < 5)
+   while(size < si->size && sizecount < 5)
    {
       sizecount ++;
       size = (size*12)/10;
    }
-   while(size > si.size && sizecount > -5)
+   while(size > si->size && sizecount > -5)
    {
       sizecount --;
       size = (size*10)/12;
@@ -120,28 +124,28 @@ wxString wxLayoutExportCmdAsHTML(wxLayoutObjectCmd const & cmd,
    if(styleInfo != NULL)
       html ="</font>"+html; // terminate any previous font command
 
-   if((si.weight == wxBOLD) && ( (!styleInfo) || (styleInfo->weight != wxBOLD)))
+   if((si->weight == wxBOLD) && ( (!styleInfo) || (styleInfo->weight != wxBOLD)))
       html += "<b>";
    else
-      if(si.weight != wxBOLD && ( styleInfo && (styleInfo->weight == wxBOLD)))
+      if(si->weight != wxBOLD && ( styleInfo && (styleInfo->weight == wxBOLD)))
          html += "</b>";
 
-   if(si.style == wxSLANT)
-      si.style = wxITALIC; // the same for html
+   if(si->style == wxSLANT)
+      si->style = wxITALIC; // the same for html
    
-   if((si.style == wxITALIC) && ( (!styleInfo) || (styleInfo->style != wxITALIC)))
+   if((si->style == wxITALIC) && ( (!styleInfo) || (styleInfo->style != wxITALIC)))
       html += "<i>";
    else
-      if(si.style != wxITALIC && ( styleInfo && (styleInfo->style == wxITALIC)))
+      if(si->style != wxITALIC && ( styleInfo && (styleInfo->style == wxITALIC)))
          html += "</i>";
 
-   if(si.underline && ( (!styleInfo) || ! styleInfo->underline))
+   if(si->underline && ( (!styleInfo) || ! styleInfo->underline))
       html += "<u>";
-   else if(si.underline == false && ( styleInfo && styleInfo->underline))
+   else if(si->underline == false && ( styleInfo && styleInfo->underline))
       html += "</u>";
 
    
-   *styleInfo = si; // update last style info
+   *styleInfo = *si; // update last style info
    
    return html;
 }
@@ -150,7 +154,7 @@ wxString wxLayoutExportCmdAsHTML(wxLayoutObjectCmd const & cmd,
 
 wxLayoutExportStatus::wxLayoutExportStatus(wxLayoutList *list)
 {
-   list->GetDefaults()->GetStyle(&m_si);
+   m_si = *list->GetDefaults();
    m_line = list->GetFirstLine();
    m_iterator = m_line->GetFirstObject();
 }

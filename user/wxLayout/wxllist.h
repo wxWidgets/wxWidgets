@@ -40,7 +40,7 @@
 #   define WXLO_TRACE(x)   
 #endif
 
-
+#define WXLO_DEBUG_URECT 0
 
 #ifndef WXLO_DEFAULTFONTSIZE
 #   define WXLO_DEFAULTFONTSIZE 12
@@ -106,8 +106,9 @@ public:
    virtual wxLayoutObjectType GetType(void) const { return WXLO_TYPE_INVALID; }
    /** Calculates the size of an object.
        @param dc the wxDC to draw on
+       @param llist the wxLayoutList
    */
-   virtual void Layout(wxDC &) = 0;
+   virtual void Layout(wxDC &dc, class wxLayoutList *llist) = 0;
 
    /** Draws an object.
        @param dc the wxDC to draw on
@@ -194,7 +195,7 @@ public:
    wxLayoutObjectText(const wxString &txt);
 
    virtual wxLayoutObjectType GetType(void) const { return WXLO_TYPE_TEXT; }
-   virtual void Layout(wxDC &dc);
+   virtual void Layout(wxDC &dc, class wxLayoutList *llist);
    virtual void Draw(wxDC &dc, wxPoint const &coords,
                      class wxLayoutList *wxllist,
                      CoordType begin = -1,
@@ -254,7 +255,7 @@ public:
    ~wxLayoutObjectIcon() { delete m_Icon; }
 
    virtual wxLayoutObjectType GetType(void) const { return WXLO_TYPE_ICON; }
-   virtual void Layout(wxDC &dc);
+   virtual void Layout(wxDC &dc, class wxLayoutList *llist);
    virtual void Draw(wxDC &dc, wxPoint const &coords,
                      class wxLayoutList *wxllist,
                      CoordType begin = -1,
@@ -277,16 +278,34 @@ private:
    wxBitmap *m_Icon;
 };
 
-/// for export to html:
+/** This structure holds all formatting information. Members which are 
+    undefined (for a CmdObject this means: no change), are set to -1.
+*/
 struct wxLayoutStyleInfo
 {
-   wxLayoutStyleInfo()
+   wxLayoutStyleInfo(int ifamily = -1,
+                     int isize = -1,
+                     int istyle = -1,
+                     int iweight = -1,
+                     int iul = -1,
+                     wxColour *fg = NULL,
+                     wxColour *bg = NULL);
+   wxColour * GetBGColour() const
       {
-         family = -1; // this marks the styleinfo as uninitialised
+         return fg_valid ? new
+            wxColour(bg_red,bg_green,bg_blue)
+            : wxWHITE;
       }
-   int  size, family, style, weight;
-   bool underline;
+   wxFont *GetFont(wxLayoutStyleInfo *);
+   /// Font change parameters.
+   int  size, family, style, weight, underline;
+   /// Is foreground colour valid to bet set?
+   bool fg_valid;
+   /// Is background colour valid to bet set?
+   bool bg_valid;
+   /// Foreground colour RGB values.
    unsigned fg_red, fg_green, fg_blue;
+   /// Background colour RGB values.
    unsigned bg_red, bg_green, bg_blue;
 };
 
@@ -301,29 +320,28 @@ class wxLayoutObjectCmd : public wxLayoutObject
 {
 public:
    virtual wxLayoutObjectType GetType(void) const { return WXLO_TYPE_CMD; }
-   virtual void Layout(wxDC &dc);
+   virtual void Layout(wxDC &dc, class wxLayoutList *llist);
    virtual void Draw(wxDC &dc, wxPoint const &coords,
                      class wxLayoutList *wxllist,
                      CoordType begin = -1,
                      CoordType end = -1);
-   wxLayoutObjectCmd(int size, int family, int style, int weight,
-                bool underline,
-                wxColour &fg, wxColour &bg);
+   wxLayoutObjectCmd(int size = -1,
+                     int family = -1,
+                     int style = -1,
+                     int weight = -1,
+                     int underline = -1,
+                     wxColour *fg = NULL,
+                     wxColour *bg = NULL);
    ~wxLayoutObjectCmd();
    /** Stores the current style in the styleinfo structure */
-   void GetStyle(wxLayoutStyleInfo *si) const;
-   /// return the background colour for setting colour of window
-   wxColour &GetBGColour(void) { return m_ColourBG; }
+   wxLayoutStyleInfo * GetStyle(void) const;
    /** Makes a copy of this object.
     */
    virtual wxLayoutObject *Copy(void);
 private:
    /// the font to use
    wxFont *m_font;
-   /// foreground colour
-   wxColour m_ColourFG;
-   /// background colour
-   wxColour m_ColourBG;
+   wxLayoutStyleInfo *m_StyleInfo;
 };
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
@@ -748,16 +766,13 @@ public:
       { SetFont(-1,-1,-1,-1,-1,fg,bg); }
 
 
-   /// Used by wxLayoutObjectCmd only:
-   void SetColour_Internal(wxColour *fg, wxColour *bg)
-     { if(fg) m_ColourFG = *fg; if(bg) m_ColourBG = *bg; }
    /**
       Returns a pointer to the default settings.
       This is only valid temporarily and should not be stored
       anywhere.
       @return the default settings of the list
    */
-   wxLayoutObjectCmd *GetDefaults(void) { return m_DefaultSetting ; }
+   wxLayoutStyleInfo *GetDefaults(void) { return m_DefaultSetting ; }
    //@}
 
    /**@name Drawing */
@@ -859,6 +874,8 @@ public:
 
    /// Return the selection as a wxLayoutList:
    wxLayoutList *GetSelection(void);
+   /// Delete selected bit
+   void DeleteSelection(void);
    
    wxLayoutList *Copy(const wxPoint &from = wxPoint(0,0),
                       const wxPoint &to = wxPoint(-1,-1));
@@ -878,7 +895,9 @@ public:
        
    */
    int IsSelected(const wxLayoutLine *line, CoordType *from, CoordType *to);
-   
+
+
+   void ApplyStyle(wxLayoutStyleInfo *si, wxDC &dc);
 #ifdef WXLAYOUT_DEBUG
    void Debug(void);
 #endif
@@ -924,7 +943,9 @@ private:
    wxColour m_ColourFG;
    wxColour m_ColourBG;
    /// the default setting:
-   wxLayoutObjectCmd *m_DefaultSetting;
+   wxLayoutStyleInfo *m_DefaultSetting;
+   /// the current setting:
+   wxLayoutStyleInfo m_CurrentSetting;
    //@}
 };
 

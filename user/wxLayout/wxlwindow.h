@@ -65,20 +65,7 @@ public:
               int weight=wxNORMAL,
               int underline=0,
               wxColour *fg=NULL,
-              wxColour *bg=NULL)
-      {
-         GetLayoutList()->Clear(family,size,style,weight,underline,fg,bg);
-         SetBackgroundColour(GetLayoutList()->GetDefaults()->GetBGColour());
-         ResizeScrollbars(true);
-         SetDirty();
-         SetModified(false);
-         wxRect r;
-         int w,h;
-         r.x = r.y = 0; GetSize(&w,&h);
-         r.width = w;
-         r.height = h;
-         DoPaint(&r);
-      }
+              wxColour *bg=NULL);
    /** Sets a background image, only used on screen, not on printouts.
        @param bitmap a pointer to a wxBitmap or NULL to remove it
    */
@@ -95,6 +82,8 @@ public:
    void Paste(void);
    /// Copies selection to clipboard.
    bool Copy(void);
+   /// Copies selection to clipboard and deletes it.
+   bool Cut(void);
    
    //@}
    
