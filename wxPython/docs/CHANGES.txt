@@ -1,6 +1,26 @@
 Recent Changes for wxPython
 =====================================================================
 
+2.5.5.0
+-------
+
+wxMSW: Fixed bug #1022383, 'several ComboBoxes appear selected'
+
+wx.grid.Grid: Fixed bug #1163384.  Moved the code that handles
+activating the cell editors to a EVT_CHAR event handler.  This is done
+so the character inserted into the editor will be the "cooked" char
+value (including accented or composed keys) rather than the raw code
+provided by the EVT_KEY_DOWN event.  
+
+Added orient parameter to wx.MDIParentFrame.Tile()
+
+wxMSW: wxTextCtrl with wx.TE_RICH2 style now uses RichEdit 4.1 if
+available. 
+
+Added GetCount, GetCountRGB, and GetCountColour methods to
+wx.ImageHistogram. 
+
+
 
 2.5.4.1
 -------

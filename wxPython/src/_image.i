@@ -68,6 +68,37 @@ public:
         "Find first colour that is not used in the image and has higher RGB
 values than startR, startG, startB.  Returns a tuple consisting of a
 success flag and rgb values.", "");
+
+    %extend {
+        DocStr(GetCount,
+               "Returns the pixel count for the given key.  Use `MakeKey` to create a
+key value from a RGB tripple.", "");
+        unsigned long GetCount(unsigned long key) {
+            wxImageHistogramEntry e = (*self)[key];
+            return e.value;
+        }
+
+        DocStr(GetCountRGB,
+               "Returns the pixel count for the given RGB values.", "");
+        unsigned long GetCountRGB(unsigned char r,
+                                  unsigned char g,
+                                  unsigned char b) {
+            unsigned long key = wxImageHistogram::MakeKey(r, g, b);
+            wxImageHistogramEntry e = (*self)[key];
+            return e.value;
+        }
+        
+        DocStr(GetCountColour,
+               "Returns the pixel count for the given `wx.Colour` value.", "");
+        unsigned long GetCountColour(const wxColour& colour) {
+            unsigned long key = wxImageHistogram::MakeKey(colour.Red(),
+                                                          colour.Green(),
+                                                          colour.Blue());
+            wxImageHistogramEntry e = (*self)[key];
+            return e.value;
+        }
+    }
+    
 };
 
 
