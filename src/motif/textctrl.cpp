@@ -39,6 +39,11 @@
 // private functions
 // ----------------------------------------------------------------------------
 
+// helper: inserts the new text in the value of the text ctrl and returns the
+// result in place
+static void MergeChangesIntoString(wxString& value,
+                                   XmTextVerifyCallbackStruct *textStruct);
+
 // callbacks
 static void wxTextWindowChangedProc(Widget w, XtPointer clientData, XtPointer ptr);
 static void wxTextWindowModifyProc(Widget w, XtPointer clientData, XmTextVerifyCallbackStruct *cbs);
@@ -185,22 +190,34 @@ WXWidget wxTextCtrl::GetTopWidget() const
 
 wxString wxTextCtrl::GetValue() const
 {
+    wxString str; // result
+
     if (m_windowStyle & wxTE_PASSWORD)
-        return m_value;
+    {
+        // the value is stored always in m_value because it can't be retrieved
+        // from the text control
+        str = m_value;
+    }
     else
     {
+        // just get the string from Motif
         char *s = XmTextGetString ((Widget) m_mainWidget);
-        if (s)
+        if ( s )
         {
-            wxString str(s);
+            str = s;
             XtFree (s);
-            return str;
         }
-        else
+        //else: return empty string
+
+        if ( m_tempCallbackStruct )
         {
-            return wxEmptyString;
+            // the string in the control isn't yet updated, can't use it as is
+            MergeChangesIntoString(str, (XmTextVerifyCallbackStruct *)
+                                   m_tempCallbackStruct);
         }
     }
+
+    return str;
 }
 
 void wxTextCtrl::SetValue(const wxString& value)
@@ -727,7 +744,96 @@ void wxTextCtrl::ChangeForegroundColour()
     }
 }
 
-static void wxTextWindowChangedProc (Widget w, XtPointer clientData, XtPointer ptr)
+void wxTextCtrl::DoSendEvents(void *wxcbs, long keycode)
+{
+    // we're in process of updating the text control
+    m_tempCallbackStruct = wxcbs;
+
+    XmTextVerifyCallbackStruct *cbs = (XmTextVerifyCallbackStruct *)wxcbs;
+
+    wxKeyEvent event (wxEVT_CHAR);
+    event.SetId(GetId());
+    event.m_keyCode = keycode;
+    event.SetEventObject(this);
+
+    // Only if wxTextCtrl::OnChar is called will this be set to True (and
+    // the character passed through)
+    cbs->doit = False;
+
+    GetEventHandler()->ProcessEvent(event);
+
+    if ( !InSetValue() && m_processedDefault )
+    {
+        // Can generate a command
+        wxCommandEvent commandEvent(wxEVT_COMMAND_TEXT_UPDATED, GetId());
+        commandEvent.SetEventObject(this);
+        ProcessCommand(commandEvent);
+    }
+
+    // do it after the (user) event handlers processed the events because
+    // otherwise GetValue() would return incorrect (not yet updated value)
+    m_tempCallbackStruct = NULL;
+}
+
+// ----------------------------------------------------------------------------
+// helpers and Motif callbacks
+// ----------------------------------------------------------------------------
+
+static void MergeChangesIntoString(wxString& value,
+                                   XmTextVerifyCallbackStruct *cbs)
+{
+    /* _sm_
+     * At least on my system (SunOS 4.1.3 + Motif 1.2), you need to think of
+     * every event as a replace event.  cbs->text->ptr gives the replacement
+     * text, cbs->startPos gives the index of the first char affected by the
+     * replace, and cbs->endPos gives the index one more than the last char
+     * affected by the replace (startPos == endPos implies an empty range).
+     * Hence, a deletion is represented by replacing all input text with a
+     * blank string ("", *not* NULL!).  A simple insertion that does not
+     * overwrite any text has startPos == endPos.
+     */
+
+    if ( !value )
+    {
+        // easy case: the ol value was empty
+        value = cbs->text->ptr;
+    }
+    else
+    {
+        // merge the changes into the value
+        const char * const passwd = value;
+        int len = value.length();
+
+        len += strlen(cbs->text->ptr) + 1;     // + new text (if any) + NUL
+        len -= cbs->endPos - cbs->startPos;    // - text from affected region.
+
+        char * newS = new char [len];
+        char * dest = newS,
+             * insert = cbs->text->ptr;
+
+        // Copy (old) text from passwd, up to the start posn of the change.
+        int i;
+        const char * p = passwd;
+        for (i = 0; i < cbs->startPos; ++i)
+            *dest++ = *p++;
+
+        // Copy the text to be inserted).
+        while (*insert)
+            *dest++ = *insert++;
+
+        // Finally, copy into newS any remaining text from passwd[endPos] on.
+        for (p = passwd + cbs->endPos; *p; )
+            *dest++ = *p++;
+        *dest = 0;
+
+        value = newS;
+
+        delete[] newS;
+    }
+}
+
+static void
+wxTextWindowChangedProc (Widget w, XtPointer clientData, XtPointer ptr)
 {
     if (!wxGetWindowFromTable(w))
         // Widget has been deleted!
@@ -743,105 +849,38 @@ wxTextWindowModifyProc (Widget w, XtPointer clientData, XmTextVerifyCallbackStru
     wxTextCtrl *tw = (wxTextCtrl *) clientData;
     tw->m_processedDefault = FALSE;
 
-    // First, do some stuff if it's a password control.
-    // (What does this do exactly?)
+    // First, do some stuff if it's a password control: in this case, we need
+    // to store the string inside the class because GetValue() can't retrieve
+    // it from the text ctrl. We do *not* do it in other circumstances because
+    // it would double the amount of memory needed.
 
-    if (tw->GetWindowStyleFlag() & wxTE_PASSWORD)
+    if ( tw->GetWindowStyleFlag() & wxTE_PASSWORD )
     {
-        /* _sm_
-        * At least on my system (SunOS 4.1.3 + Motif 1.2), you need to think of
-        * every event as a replace event.  cbs->text->ptr gives the replacement
-        * text, cbs->startPos gives the index of the first char affected by the
-        * replace, and cbs->endPos gives the index one more than the last char
-        * affected by the replace (startPos == endPos implies an empty range).
-        * Hence, a deletion is represented by replacing all input text with a
-        * blank string ("", *not* NULL!).  A simple insertion that does not
-        * overwrite any text has startPos == endPos.
-        */
+        MergeChangesIntoString(tw->m_value, cbs);
 
-        if (tw->m_value.IsNull())
-        {
-            tw->m_value = cbs->text->ptr;
-        }
-        else
-        {
-            char * passwd = (char*) (const char*) tw->m_value;  // Set up a more convenient alias.
-
-            int len = passwd ? strlen(passwd) : 0; // Enough room for old text
-            len += strlen(cbs->text->ptr) + 1;     // + new text (if any) + NUL
-            len -= cbs->endPos - cbs->startPos;    // - text from affected region.
-
-            char * newS = new char [len];
-            char * p = passwd, * dest = newS, * insert = cbs->text->ptr;
-
-            // Copy (old) text from passwd, up to the start posn of the change.
-            int i;
-            for (i = 0; i < cbs->startPos; ++i)
-                *dest++ = *p++;
-
-            // Copy the text to be inserted).
-            while (*insert)
-                *dest++ = *insert++;
-
-            // Finally, copy into newS any remaining text from passwd[endPos] on.
-            for (p = passwd + cbs->endPos; *p; )
-                *dest++ = *p++;
-            *dest = 0;
-
-            tw->m_value = newS;
-
-            delete[] newS;
-        }
-
-        if (cbs->text->length>0)
+        if ( cbs->text->length > 0 )
         {
             int i;
             for (i = 0; i < cbs->text->length; ++i)
                 cbs->text->ptr[i] = '*';
-            cbs->text->ptr[i] = 0;
+            cbs->text->ptr[i] = '\0';
         }
     }
 
-    // If we're already within an OnChar, return: probably
-    // a programmatic insertion.
+    // If we're already within an OnChar, return: probably a programmatic
+    // insertion.
     if (tw->m_tempCallbackStruct)
         return;
 
     // Check for a backspace
     if (cbs->startPos == (cbs->currInsert - 1))
     {
-        tw->m_tempCallbackStruct = (void*) cbs;
-
-        wxKeyEvent event (wxEVT_CHAR);
-        event.SetId(tw->GetId());
-        event.m_keyCode = WXK_DELETE;
-        event.SetEventObject(tw);
-
-        // Only if wxTextCtrl::OnChar is called
-        // will this be set to True (and the character
-        // passed through)
-        cbs->doit = False;
-
-        tw->GetEventHandler()->ProcessEvent(event);
-
-        tw->m_tempCallbackStruct = NULL;
-
-        if (tw->InSetValue())
-            return;
-
-        if (tw->m_processedDefault)
-        {
-            // Can generate a command
-            wxCommandEvent commandEvent(wxEVT_COMMAND_TEXT_UPDATED, tw->GetId());
-            commandEvent.SetEventObject(tw);
-            tw->ProcessCommand(commandEvent);
-        }
+        tw->DoSendEvents((void *)cbs, WXK_DELETE);
 
         return;
     }
 
-    // Pasting operation: let it through without
-    // calling OnChar
+    // Pasting operation: let it through without calling OnChar
     if (cbs->text->length > 1)
         return;
 
@@ -849,37 +888,10 @@ wxTextWindowModifyProc (Widget w, XtPointer clientData, XmTextVerifyCallbackStru
     if (cbs->text->ptr == NULL)
         return;
 
-    tw->m_tempCallbackStruct = (void*) cbs;
-
-    wxKeyEvent event (wxEVT_CHAR);
-    event.SetId(tw->GetId());
-    event.SetEventObject(tw);
-    event.m_keyCode = (cbs->text->ptr[0] == 10 ? 13 : cbs->text->ptr[0]);
-
-    // Only if wxTextCtrl::OnChar is called
-    // will this be set to True (and the character
-    // passed through)
-    cbs->doit = False;
-
-    tw->GetEventHandler()->ProcessEvent(event);
-
-    tw->m_tempCallbackStruct = NULL;
-
-    if (tw->InSetValue())
-        return;
-
-    if (tw->m_processedDefault)
-    {
-        // Can generate a command
-        wxCommandEvent commandEvent(wxEVT_COMMAND_TEXT_UPDATED, tw->GetId());
-        commandEvent.SetEventObject(tw);
-        tw->ProcessCommand(commandEvent);
-    }
+    // normal key press
+    char ch = cbs->text->ptr[0];
+    tw->DoSendEvents((void *)cbs, ch == '\n' ? '\r' : ch);
 }
-
-// ----------------------------------------------------------------------------
-// callbacks
-// ----------------------------------------------------------------------------
 
 static void
 wxTextWindowGainFocusProc (Widget w, XtPointer clientData, XmAnyCallbackStruct *cbs)
@@ -921,3 +933,4 @@ static void wxTextWindowActivateProc(Widget w, XtPointer clientData,
     event.SetEventObject(tw);
     tw->ProcessCommand(event);
 }
+
