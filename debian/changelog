@@ -1,6 +1,43 @@
+wxwindows2.2 (2.3.0) unstable; urgency=low
+
+  * Updated 2.2 build scripts for 2.3
+  * initial test builds, please do not release..
+
+ -- Ron Lee <ron@debian.org>  Sat, 27 Jan 2001 01:51:24 -0800
+
+wxwindows2.2 (2.2.4) unstable; urgency=low
+
+  * Fixed parser.y for Alpha builds (#82949)
+  * changed mesa dependency to the virtual libgl package and
+    added Conflicts for the old 2.1 packages (which are now
+    gone from woody anyway)  Closes: #80120, #70778, #70779, #70780
+  * wxPython now builds as a single unit (including contrib)
+    so removed the libwxgtk-python-contrib package
+
+ -- Ron Lee <ron@debian.org>  Wed, 24 Jan 2001 18:51:24 -0800
+
+wxwindows2.2 (2.2.2) unstable; urgency=low
+
+  * added missing dependancy for contrib-dev package.  Closes: #70880
+  * by popular demand, added a package with the python-contrib libs.
+  * more tweaks to deb/rules.  autodetect the python install location,
+    and cache the results of configure tests for all packages.
+  * and of course a whole stack of minor fixes in the main codebase too.
+
+ -- Ron Lee <ron@debian.org>  Tue,  5 Sep 2000 18:51:24 +0930
+
 wxwindows2.2 (2.2.1) unstable; urgency=low
 
-  * Repackaged to build from cvs.
+  * wxWin 2.2.1 stable release.
+  * First upload to deb.org after repackaging to build directly from
+    upstream cvs.
+  * still not quite lintian clean yet:
+    - wxPython lib can't be built with a proper soname yet.
+    - the -dbg packages need an override for the shlib symlink.
+    - and a couple of packages have the lib symlink 'before the
+      lib', but that's ugly to fix right now, they aren't critical
+      libs, and allegedly this will be handled by dpkg sometime soon.
+  * moved full licence text into copyright file.
 
  -- Ron Lee <ron@debian.org>  Sun, 13 Feb 2000 18:40:00 +1030
 
