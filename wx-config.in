@@ -43,7 +43,7 @@ while test $# -gt 0; do
         includes=-I@includedir@
       fi
       includes="$includes -I@libdir@/wx/include"
-      echo $includes -D@TOOLKIT_DEF@ @GUI_TK_INCLUDE@ @OPTIMISE@ @PROFILE@ @WXDEBUG@ @WXDEBUG_DEFINE@
+      echo $includes -D@TOOLKIT_DEF@ @GUI_TK_INCLUDE@ @WXDEBUG_DEFINE@
 
       ;;
     --libs)

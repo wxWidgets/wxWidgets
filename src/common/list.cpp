@@ -292,7 +292,7 @@ wxNodeBase *wxListBase::Item(size_t n) const
         }
     }
 
-//    wxFAIL_MSG( "invalid index in wxListBase::Item" );
+    wxFAIL_MSG( "invalid index in wxListBase::Item" );
 
     return (wxNodeBase *)NULL;
 }

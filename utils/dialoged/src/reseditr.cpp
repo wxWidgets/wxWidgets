@@ -86,6 +86,11 @@ wxResourceManager *wxResourceManager::sm_currentResourceManager = NULL;
 #include "bitmaps/toback.xpm"
 #include "bitmaps/help.xpm"
 #include "bitmaps/wxwin.xpm"
+
+#include "bitmaps/dialog.xpm"
+#include "bitmaps/folder1.xpm"
+#include "bitmaps/folder2.xpm"
+#include "bitmaps/buttonsm.xpm"
 #endif
 
 /*
@@ -187,11 +192,16 @@ bool wxResourceManager::Initialize()
   wxIcon icon2("FOLDER1_ICON", wxBITMAP_TYPE_ICO_RESOURCE, 16, 16);
   wxIcon icon3("FOLDER2_ICON", wxBITMAP_TYPE_ICO_RESOURCE, 16, 16);
   wxIcon icon4("BUTTONSM_ICON", wxBITMAP_TYPE_ICO_RESOURCE, 16, 16);
+#else
+  wxIcon icon1( dialog_xpm );    
+  wxIcon icon2( folder1_xpm );    
+  wxIcon icon3( folder2_xpm );    
+  wxIcon icon4( buttonsm_xpm );    
+#endif
   m_imageList.Add(icon1);
   m_imageList.Add(icon2);
   m_imageList.Add(icon3);
   m_imageList.Add(icon4);
-#endif
 
   m_symbolTable.AddStandardSymbols();
 

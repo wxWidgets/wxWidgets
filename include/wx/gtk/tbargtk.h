@@ -127,10 +127,12 @@ class wxToolBar: public wxControl
     virtual void SetToolPacking(int packing);
     virtual void SetToolSeparation(int separation);
 
-  public:
+  // implementation
   
     GtkToolbar   *m_toolbar;
     wxList        m_tools;
+    GdkColor      m_fg;
+    GdkColor      m_bg;
 };
 
 #endif
