@@ -66,6 +66,7 @@ public:
 
     void SetSize(const wxSize& size) ;
     void SetPosition( const wxPoint& position ) ;
+    
     wxSize GetSize() const
     {
         if ( IsControl() )
@@ -88,6 +89,7 @@ public:
     {
         return wxPoint(m_x, m_y);
     }    
+    bool DoEnable( bool enable ) ;
 private :
     void Init() 
     {
@@ -159,6 +161,28 @@ DEFINE_ONE_SHOT_HANDLER_GETTER( wxMacToolBarToolEventHandler )
 // wxToolBarTool
 // ----------------------------------------------------------------------------
 
+bool wxToolBarTool::DoEnable(bool enable)
+{
+    if ( IsControl() )
+    {
+        GetControl()->Enable( enable ) ;
+    }
+    else if ( IsButton() )
+    {
+#if TARGET_API_MAC_OSX
+        if ( enable )
+            EnableControl( m_controlHandle ) ;
+        else
+            DisableControl( m_controlHandle ) ;
+#else
+        if ( enable )
+            ActivateControl( m_controlHandle ) ;
+        else
+            DeactivateControl( m_controlHandle ) ;
+#endif
+    }
+    return true ;
+}
 void wxToolBarTool::SetSize(const wxSize& size)
 {
     if ( IsControl() )
@@ -240,8 +264,6 @@ wxToolBarTool::wxToolBarTool(wxToolBar *tbar,
         GetEventTypeCount(eventList), eventList, this,NULL);
         
     UMAShowControl( m_controlHandle ) ;
-    if ( !IsEnabled() )
-        DisableControl( m_controlHandle ) ;
 
     if ( CanBeToggled() && IsToggled() )
         ::SetControl32BitValue( m_controlHandle , 1 ) ;
@@ -443,18 +465,7 @@ void wxToolBar::DoEnableTool(wxToolBarToolBase *t, bool enable)
     if (!IsShown())
         return ;
 
-    wxToolBarTool *tool = (wxToolBarTool *)t;
-    if ( tool->IsControl() )
-    {
-        tool->GetControl()->Enable( enable ) ;
-    }
-    else if ( tool->IsButton() )
-    {
-        if ( enable )
-            UMAActivateControl( (ControlRef) tool->GetControlHandle() ) ;
-        else
-            UMADeactivateControl( (ControlRef) tool->GetControlHandle() ) ;
-    }
+    ((wxToolBarTool*)t)->DoEnable( enable ) ;
 }
 
 void wxToolBar::DoToggleTool(wxToolBarToolBase *t, bool toggle)
