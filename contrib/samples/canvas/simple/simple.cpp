@@ -47,28 +47,29 @@ MyFrame::MyFrame( wxWindow *parent, wxWindowID id, const wxString &title,
     CreateMyMenuBar();
     
     CreateStatusBar(1);
-    SetStatusText( "Welcome!" );
+    SetStatusText( "Welcome to wxCanvas sample!" );
     
     SetIcon(wxICON(mondrian));
 
-    // wxCanvas from here
-    
+    // Create wxCanvasAdmin and wxCanvas.
     m_admin = new wxCanvasAdmin;
     wxCanvas *canvas = new wxCanvas( m_admin, this, -1 );
+    
+    canvas->SetScroll( 0, 0, 400, 600 );
+    canvas->SetMappingScroll( 0, 0, 400, 600, FALSE );
+    
+    // The wxCanvasAdmin need to know about all Admin wxCanvas objects.
     m_admin->Append( canvas );
+    
+    // One wxCanvas is the active one (current rendering and current
+    // world coordinates).
     m_admin->SetActive( canvas );
     
-
+    // One object group is the root in every canvas.
     wxCanvasObjectGroup *root = new wxCanvasObjectGroup(0,0);
     root->DeleteContents( TRUE );
 
-    wxCanvasRect *rect;
-    
-    rect = new wxCanvasRect( 120,10,120,140 );
-    rect->SetBrush( *wxRED_BRUSH );
-    root->Append( rect );
-        
-/*
+    // Bunch of rects and images.
     wxBitmap bitmap( smile_xpm );
     wxImage image( bitmap );
 
@@ -92,8 +93,12 @@ MyFrame::MyFrame( wxWindow *parent, wxWindowID id, const wxString &title,
         r->SetBrush( *wxRED_BRUSH );
         root->Append( r );
     }
-*/
     
+    // This will call all object and children recursivly so
+    // all know what their wxCanvasAdmin is. Call at the end.
+    root->SetAdmin( m_admin );
+    
+    // One object group is the root object.
     canvas->SetRoot( root );
 }
 

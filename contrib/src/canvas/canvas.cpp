@@ -50,6 +50,7 @@ FT_Library g_freetypeLibrary;
 //----------------------------------------------------------------------------
 // wxCanvasObject
 //----------------------------------------------------------------------------
+
 wxCanvasObject::wxCanvasObject()
 {
     // the default event handler is just this object
@@ -367,9 +368,11 @@ wxCanvasObject* wxCanvasObject::IsHitWorld( double x, double y, double margin )
     if ((x >= m_bbox.GetMinX()-margin) &&
         (x <= m_bbox.GetMaxX()+margin) &&
         (y >= m_bbox.GetMinY()-margin) &&
-        (y <= m_bbox.GetMaxY()+margin)
-       )
+        (y <= m_bbox.GetMaxY()+margin))
+    {
         return this;
+    }
+    
     return (wxCanvasObject*) NULL;
 }
 
@@ -377,6 +380,7 @@ wxCanvasObject* wxCanvasObject::Contains( wxCanvasObject* obj )
 {
     if (obj == this)
         return this;
+        
     return (wxCanvasObject*) NULL;
 }
 
@@ -392,7 +396,7 @@ void wxCanvasObject::ReleaseMouse()
 
 bool wxCanvasObject::IsCapturedMouse()
 {
-    return m_admin->GetActive()->GetCaptured()==this;
+    return (m_admin->GetActive()->GetCaptured() == this);
 }
 
 
@@ -510,7 +514,9 @@ void wxCanvasObjectGroup::Prepend( wxCanvasObject* obj )
 {
     m_objects.Insert( obj );
     if (m_objects.First())
+    {
         m_bbox.Expand(obj->GetBbox());
+    }
     else
     {
         m_bbox.SetValid(FALSE);
@@ -522,7 +528,9 @@ void wxCanvasObjectGroup::Append( wxCanvasObject* obj )
 {
     m_objects.Append( obj );
     if (m_objects.First())
+    {
         m_bbox.Expand(obj->GetBbox());
+    }
     else
     {
         m_bbox.SetValid(FALSE);
@@ -535,7 +543,9 @@ void wxCanvasObjectGroup::Insert( size_t before, wxCanvasObject* obj )
     m_objects.Insert( before, obj );
     m_bbox.SetValid(FALSE);
     if (m_objects.First())
+    {
         m_bbox.Expand(obj->GetBbox());
+    }
     else
     {
         m_bbox.SetValid(FALSE);
@@ -657,7 +667,7 @@ void wxCanvasObjectGroup::WriteSVG( wxTextOutputStream &stream )
 {
 }
 
-wxCanvasObject* wxCanvasObjectGroup::IsHitWorld( double x, double y, double margin  )
+wxCanvasObject* wxCanvasObjectGroup::IsHitWorld( double x, double y, double margin )
 {
     //KKKfirst check if within bbox
     //will only work if they are always uptodate
@@ -711,8 +721,6 @@ int wxCanvasObjectGroup::IndexOf( wxCanvasObject* obj )
     return m_objects.IndexOf( obj );
 }
 
-
-
 //----------------------------------------------------------------------------
 // wxCanvasObjectRef
 //----------------------------------------------------------------------------
@@ -720,7 +728,7 @@ int wxCanvasObjectGroup::IndexOf( wxCanvasObject* obj )
 wxCanvasObjectRef::wxCanvasObjectRef(double x, double y, wxCanvasObject* obj)
    : wxCanvasObject()
 {
-     lworld.Translate(x,y);
+    lworld.Translate(x,y);
     m_obj = obj;
 
     m_bbox.SetValid(FALSE);
@@ -1421,12 +1429,10 @@ wxCanvasImage::wxCanvasImage( const wxImage &image, double x, double y, double w
 
     m_image = image;
 
-    m_orgw=m_image.GetWidth();
-    m_orgh=m_image.GetHeight();
+    m_orgw = m_image.GetWidth();
+    m_orgh = m_image.GetHeight();
 
     m_isImage = TRUE;
-    m_visible = FALSE;
-//KKK    m_visible=TRUE;
     CalcBoundingBox();
 }
 
@@ -1439,8 +1445,8 @@ void wxCanvasImage::TransLate( double x, double y )
 
 void wxCanvasImage::CalcBoundingBox()
 {
-    m_bbox.SetMin( m_x , m_y);
-    m_bbox.SetMax( m_x + m_width , m_y + m_height);
+    m_bbox.SetMin( m_x, m_y );
+    m_bbox.SetMax( m_x + m_width, m_y + m_height );
 }
 
 void wxCanvasImage::Render(wxTransformMatrix* cworld, int clip_x, int clip_y, int clip_width, int clip_height )
@@ -1902,7 +1908,7 @@ wxCanvas::wxCanvas( wxCanvasAdmin* admin, wxWindow *parent, wxWindowID id,
     m_background = *wxWHITE;
     m_lastMouse = (wxCanvasObject*)NULL;
     m_captureMouse = (wxCanvasObject*)NULL;
-    m_frozen = TRUE;
+    m_frozen = FALSE;
     m_oldDeviceX = 0;
     m_oldDeviceY = 0;
     m_scrolled=FALSE;
@@ -2607,11 +2613,13 @@ void wxCanvas::SetMappingScroll( double vx1,    double vy1, double vx2, double v
      // make mappingmatrix
     m_mapping_matrix.Identity();
     if (!border)
+    {
         // translate the drawing to 0,0
         if (m_yaxis)
             m_mapping_matrix.Translate(-m_virt_minX,-m_virt_maxY);
         else
             m_mapping_matrix.Translate(-m_virt_minX,-m_virt_minY);
+    }
     else
     {
         // make a small white border around the drawing
@@ -2673,17 +2681,17 @@ void wxCanvas::SetScroll(double vx1,double vy1,double vx2,double vy2)
     double dmvx = m_virtm_maxX - m_virtm_minX;
     double dmvy = m_virtm_maxY - m_virtm_minY;
 
-    SetScrollbar(wxHORIZONTAL,(m_virt_minX-m_virtm_minX)/dmvx *1000,dvx/dmvx *1000,1000,true);
+    SetScrollbar(wxHORIZONTAL,(m_virt_minX-m_virtm_minX)/dmvx *1000,dvx/dmvx *1000,1000,FALSE);
     if (m_yaxis)
     {
-        SetScrollbar(wxVERTICAL,(m_virtm_maxY-m_virt_maxY)/dmvy *1000,dvy/dmvy *1000,1000,true);
+        SetScrollbar(wxVERTICAL,(m_virtm_maxY-m_virt_maxY)/dmvy *1000,dvy/dmvy *1000,1000,FALSE);
     }
     else
     {
-        SetScrollbar(wxVERTICAL,(m_virt_minY-m_virtm_minY)/dmvy *1000,dvy/dmvy *1000,1000,true);
+        SetScrollbar(wxVERTICAL,(m_virt_minY-m_virtm_minY)/dmvy *1000,dvy/dmvy *1000,1000,FALSE);
     }
 
-    m_scrolled=true;
+    m_scrolled=TRUE;
 }
 
 // coordinates conversions
