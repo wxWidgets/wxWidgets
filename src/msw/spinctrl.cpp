@@ -384,8 +384,6 @@ bool wxSpinCtrl::Create(wxWindow *parent,
         sizeText.y = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
     }
 
-    //DoMoveWindow(pos.x, pos.y,
-    //             sizeText.x + sizeBtn.x + MARGIN_BETWEEN, sizeText.y);
     SetBestSize(size);
 
     (void)::ShowWindow(GetBuddyHwnd(), SW_SHOW);
