@@ -847,6 +847,14 @@ SOURCE=.\common\xpmdecod.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\xti.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\xtistrm.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\zipstrm.cpp
 # End Source File
 # Begin Source File
@@ -908,6 +916,10 @@ SOURCE=.\generic\htmllbox.cpp
 # Begin Source File
 
 SOURCE=.\generic\laywin.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic\listbkg.cpp
 # End Source File
 # Begin Source File
 
@@ -1698,6 +1710,10 @@ SOURCE=..\include\wx\bmpbuttn.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\bookctrl.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\brush.h
 # End Source File
 # Begin Source File
@@ -2198,6 +2214,10 @@ SOURCE=..\include\wx\listbase.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\listbook.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\listbox.h
 # End Source File
 # Begin Source File
@@ -2679,6 +2699,14 @@ SOURCE=..\include\wx\xpmdecod.h
 # Begin Source File
 
 SOURCE=..\include\wx\xpmhand.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xti.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xtistrm.h
 # End Source File
 # Begin Source File
 
