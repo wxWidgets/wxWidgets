@@ -121,7 +121,6 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
    PrepareDC( dc );     
    SetFocus();
 
-   
    wxPoint findPos;
    findPos.x = dc.DeviceToLogicalX(event.GetX());
    findPos.y = dc.DeviceToLogicalY(event.GetY());
@@ -164,7 +163,7 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
    {
       m_llist->MoveCursorTo(cursorPos);
       ScrollToCursor();
-      Refresh();
+      Refresh(FALSE); // DoPaint suppresses flicker under GTK
    }
    if(!m_doSendEvents) // nothing to do
       return;
@@ -263,7 +262,6 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
    default:
       if(keyCode == 'c' && event.ControlDown())
          Copy();
-      break;
       if( IsEditable() )
       {
          /* First, handle control keys */
@@ -352,7 +350,7 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
    }// first switch()
    ScrollToCursor();
    wxRect r = *m_llist->GetUpdateRect();
-   Refresh( FALSE, &r);
+   DoPaint(&r);
 }
 
 void
@@ -674,12 +672,12 @@ void
 wxLayoutWindow::OnSetFocus(wxFocusEvent &ev)
 {
    m_HaveFocus = true;
-//FIXME   DoPaint(); // to repaint the cursor
+//FIXME: need argument   DoPaint(); // to repaint the cursor
 }
 
 void
 wxLayoutWindow::OnKillFocus(wxFocusEvent &ev)
 {
    m_HaveFocus = false;
-//FIXME   DoPaint(); // to repaint the cursor
+//FIXME: need argument   DoPaint(); // to repaint the cursor
 }
