@@ -166,6 +166,7 @@ protected:
                *m_radioVAlign;
 
     // the controls and the sizer containing them
+    wxStaticBox *m_staticBox;
     wxStaticBoxSizer *m_sizerStatBox;
     wxStaticText *m_statText;
     wxStaticLine *m_statLine;
@@ -215,6 +216,7 @@ StaticWidgetsPage::StaticWidgetsPage(wxNotebook *notebook,
     m_statLine = (wxStaticLine *)NULL;
     m_statText = (wxStaticText *)NULL;
 
+    m_staticBox = (wxStaticBox *)NULL;
     m_sizerStatBox = (wxStaticBoxSizer *)NULL;
     m_sizerStatic = (wxSizer *)NULL;
 
@@ -319,9 +321,9 @@ void StaticWidgetsPage::CreateStatic()
 
     if ( m_sizerStatBox )
     {
-        m_sizerStatic->Remove(m_sizerStatBox);
-
+        delete m_staticBox;
         // delete m_sizerStatBox; -- deleted by Remove()
+        m_sizerStatic->Remove(m_sizerStatBox);
         delete m_statText;
         delete m_statLine;
     }
@@ -376,11 +378,11 @@ void StaticWidgetsPage::CreateStatic()
     flagsText |= align;
     flagsBox |= align;
 
-    wxStaticBox *box = new MyStaticBox(this, -1, m_textBox->GetValue(),
-                                       wxDefaultPosition, wxDefaultSize,
-                                       flagsBox);
-    m_sizerStatBox = new wxStaticBoxSizer(box, isVert ? wxHORIZONTAL
-                                                      : wxVERTICAL);
+    m_staticBox = new MyStaticBox(this, -1, m_textBox->GetValue(),
+                                  wxDefaultPosition, wxDefaultSize,
+                                  flagsBox);
+    m_sizerStatBox = new wxStaticBoxSizer(m_staticBox, isVert ? wxHORIZONTAL
+                                                              : wxVERTICAL);
 
     m_statText = new MyStaticText(this, -1, m_textLabel->GetValue(),
                                   wxDefaultPosition, wxDefaultSize,
