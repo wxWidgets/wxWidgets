@@ -512,12 +512,11 @@ static pascal OSStatus wxMacTopLevelWindowEventHandler( EventHandlerCallRef hand
         case kEventWindowActivated :
         {
             toplevelWindow->MacActivate( cEvent.GetTicks() , true) ;
-
             wxActivateEvent wxevent(wxEVT_ACTIVATE, true , toplevelWindow->GetId());
             wxevent.SetTimestamp( cEvent.GetTicks() ) ;
             wxevent.SetEventObject(toplevelWindow);
             toplevelWindow->GetEventHandler()->ProcessEvent(wxevent);
-            result = noErr ;
+            // we still sending an eventNotHandledErr in order to allow for default processing
             break ;
         }
         case kEventWindowDeactivated :
@@ -527,7 +526,7 @@ static pascal OSStatus wxMacTopLevelWindowEventHandler( EventHandlerCallRef hand
             wxevent.SetTimestamp( cEvent.GetTicks() ) ;
             wxevent.SetEventObject(toplevelWindow);
             toplevelWindow->GetEventHandler()->ProcessEvent(wxevent);
-            result = noErr ;
+            // we still sending an eventNotHandledErr in order to allow for default processing
             break ;
         }
     	case kEventWindowShown :
@@ -961,8 +960,10 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     {
         ::CreateRootControl( (WindowRef)m_macWindow , (ControlRef*)&m_macControl ) ;
     }
+    // the root control level handleer
     MacInstallEventHandler() ;
 
+    // the frame window event handler
     InstallStandardEventHandler( GetWindowEventTarget(MAC_WXHWND(m_macWindow)) ) ;
     MacInstallTopLevelWindowEventHandler() ;
     

@@ -105,10 +105,14 @@ pascal OSStatus wxMacSetupControlBackground( ControlRef iControl , SInt16 iMessa
 static const EventTypeSpec eventList[] =
 {
 #if TARGET_API_MAC_OSX
-	{ kEventClassControl , kEventControlDraw } ,
+    { kEventClassControl , kEventControlDraw } ,
+    { kEventClassControl , kEventControlVisibilityChanged } ,
+    { kEventClassControl , kEventControlEnabledStateChanged } ,
+    { kEventClassControl , kEventControlHiliteChanged } ,
 //	{ kEventClassControl , kEventControlInvalidateForSizeChange } , // 10.3 only
 //  { kEventClassControl , kEventControlBoundsChanged } ,
-// kEventControlEnabledStateChanged , kEventControlVisibilityChanged , kEventControlHiliteChanged
+
+    {}
 #else
     {}
 #endif
@@ -148,6 +152,15 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                 else
                     result = eventNotHandledErr; 
             }
+            break ;
+        case kEventControlVisibilityChanged :
+                thisWindow->MacVisibilityChanged() ;
+            break ;
+        case kEventControlEnabledStateChanged :
+                thisWindow->MacEnabledStateChanged() ;
+            break ;
+        case kEventControlHiliteChanged :
+                thisWindow->MacHiliteChanged() ;
             break ;
         default :
             break ;
@@ -1540,6 +1553,7 @@ bool wxWindowMac::Enable(bool enable)
 
 void wxWindowMac::MacPropagateVisibilityChanged()
 {
+#if !TARGET_API_MAC_OSX
     MacVisibilityChanged() ;
     
     wxWindowListNode *node = GetChildren().GetFirst();
@@ -1550,10 +1564,12 @@ void wxWindowMac::MacPropagateVisibilityChanged()
             child->MacPropagateVisibilityChanged(  ) ;
         node = node->GetNext();
     }
+#endif
 }
 
 void wxWindowMac::MacPropagateEnabledStateChanged( )
 {
+#if !TARGET_API_MAC_OSX
     MacEnabledStateChanged() ;
     
     wxWindowListNode *node = GetChildren().GetFirst();
@@ -1564,10 +1580,12 @@ void wxWindowMac::MacPropagateEnabledStateChanged( )
             child->MacPropagateEnabledStateChanged() ;
         node = node->GetNext();
     }
+#endif
 }
 
 void wxWindowMac::MacPropagateHiliteChanged( )
 {
+#if !TARGET_API_MAC_OSX
     MacHiliteChanged() ;
     
     wxWindowListNode *node = GetChildren().GetFirst();
@@ -1578,6 +1596,7 @@ void wxWindowMac::MacPropagateHiliteChanged( )
             child->MacPropagateHiliteChanged() ;
         node = node->GetNext();
     }
+#endif
 }
 
 //
