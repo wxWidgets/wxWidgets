@@ -2341,6 +2341,8 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
 }
 
 #if WXWIN_COMPATIBILITY_2_2
+WXDLLEXPORT wxPrintSetupData *wxThePrintSetupData = 0;
+
 void wxInitializePrintSetupData(bool init)
 {
     if (init)
@@ -2350,9 +2352,8 @@ void wxInitializePrintSetupData(bool init)
     }
     else
     {
-        if (wxThePrintSetupData)
-            delete wxThePrintSetupData;
-            
+        delete wxThePrintSetupData;
+
         wxThePrintSetupData = (wxPrintSetupData *) NULL;
     }
 }
@@ -2390,3 +2391,6 @@ void wxPostScriptModule::OnExit()
 
 #endif
   // wxUSE_PRINTING_ARCHITECTURE
+
+
+// vi:sts=4:sw=4:et
