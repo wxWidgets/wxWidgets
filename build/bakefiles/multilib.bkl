@@ -23,6 +23,8 @@
         <msvc-headers>$(BASE_CMN_HDR) $(BASE_PLATFORM_HDR)</msvc-headers>
         <msvc-copy-setup-h/>
     </lib>
+
+    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">base=baselib+basedll</set>
     
     
     <!-- ================================================================= -->
@@ -43,6 +45,8 @@
         <sources>$(NET_SRC)</sources>
         <msvc-headers>$(NET_CMN_HDR)</msvc-headers>
     </lib>
+    
+    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">net=netlib+netdll</set>
 
     
     <!-- ================================================================= -->
@@ -66,6 +70,8 @@
         <msvc-headers>$(ALL_GUI_HEADERS)</msvc-headers>
     </lib>
     
+    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">core=corelib+coredll</set>
+    
     
     <!-- ================================================================= -->
     <!--                     "Advanced" controls library                   -->
@@ -86,6 +92,8 @@
         <sources>$(ADVANCED_SRC)</sources>
         <msvc-headers>$(ADVANCED_HDR)</msvc-headers>
     </lib>
+    
+    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">adv=advlib+advdll</set>
     
     
     <!-- ================================================================= -->
@@ -126,6 +134,9 @@
         <sources>$(DBGRID_SRC)</sources>
         <msvc-headers>$(DBGRID_HDR)</msvc-headers>
     </lib>
+    
+    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">odbc=odbclib+odbcdll</set>
+    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">dbgrid=dbgridlib+dbgriddll</set>
 
     
     <!-- ================================================================ -->
@@ -148,11 +159,15 @@
         <msvc-headers>$(HTML_HDR)</msvc-headers>
     </lib>
     
+    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">html=htmllib+htmldll</set>
+    
     <!-- ================================================================ -->
     <!--                             OpenGL                               -->
     <!-- ================================================================ -->
 
     <!-- included by wx.bkl from opengl.bkl -->
+    
+    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">gl=gllib+gldll</set>
     
     
     <!-- ================================================================ -->
@@ -174,5 +189,7 @@
         <sources>$(XML_SRC)</sources>
         <msvc-headers>$(XML_HDR)</msvc-headers>
     </lib>
+    
+    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">xml=xmllib+xmldll</set>
 
 </makefile>

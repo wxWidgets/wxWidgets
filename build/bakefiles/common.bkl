@@ -399,8 +399,8 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(LIBDIRNAME)\wx\setup.h
         <depends>wxregex</depends>
     </template>
     
-    <template id="wx_lib" template="wx_lib_b,wx_3rdparty_dependencies"/>
-    <template id="wx_base_lib" template="wx_lib_b,wx_3rdparty_dependencies">
+    <template id="wx_lib" template="wx_lib_b"/>
+    <template id="wx_base_lib" template="wx_lib_b">
         <define>wxUSE_GUI=0</define> 
     </template>
 
@@ -462,6 +462,11 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(LIBDIRNAME)\wx\setup.h
     <!-- Link against one wxWin library. Value must be literal! -->
     <define-tag name="wx-lib" rules="exe,dll,module">
         <sys-lib>$(wxwin.libToLink(value))</sys-lib>
+        <if cond="FORMAT=='msvc6prj'">
+            <depends-on-dsp>
+                $(value):$(nativePaths(WXTOPDIR))build\msw\wx_$(value).dsp
+            </depends-on-dsp>
+        </if>
     </define-tag>
 
 </makefile>
