@@ -401,21 +401,6 @@ int wxEntryReal(int& argc, wxChar **argv)
     // app execution
     int retValue = wxTheApp->OnRun();
 
-    // why should we do this? it doesn't close all window, just one of them and
-    // this shouldn't be necessary anyhow...
-#if 0
-    // close any remaining windows
-    wxWindow *topWindow = wxTheApp->GetTopWindow();
-    if ( topWindow )
-    {
-        // forcibly delete the window.
-        topWindow->Destroy();
-
-        // collect the dead objects
-        wxTheApp->DeletePendingObjects();
-    }
-#endif // 0
-
     // app clean up
     wxTheApp->OnExit();
 
@@ -431,7 +416,7 @@ int wxEntryReal(int& argc, wxChar **argv)
 #include "wx/msw/private.h"
 #endif
 
-extern unsigned long wxGlobalSEHandler();
+extern unsigned long wxGlobalSEHandler(EXCEPTION_POINTERS *pExcPtrs);
 
 int wxEntry(int& argc, wxChar **argv)
 {
@@ -439,7 +424,7 @@ int wxEntry(int& argc, wxChar **argv)
     {
         return wxEntryReal(argc, argv);
     }
-    __except ( wxGlobalSEHandler() )
+    __except ( wxGlobalSEHandler(GetExceptionInformation()) )
     {
 #ifdef __WXWINCE__
         ::ExitThread(3); // the same exit code as abort()
