@@ -22,10 +22,11 @@
     #include <wx/wx.h>
 #endif
 
-#include <wx/image.h>
-#include <wx/wxhtml.h>
-#include <wx/filesys.h>
-#include <wx/fs_zip.h>
+#include "wx/image.h"
+#include "wx/html/helpfrm.h"
+#include "wx/html/helpctrl.h"
+#include "wx/filesys.h"
+#include "wx/fs_zip.h"
 
 // ----------------------------------------------------------------------------
 // private classes
