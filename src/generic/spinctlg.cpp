@@ -69,6 +69,15 @@ protected:
 
         event.Skip();
     }
+    
+    bool ProcessEvent(wxEvent &event)
+    {
+        // Hand button down events to wxSpinCtrl. Doesn't work.
+        if (event.GetEventType() == wxEVT_LEFT_DOWN && m_spin->ProcessEvent( event ))
+            return TRUE;
+            
+        return wxTextCtrl::ProcessEvent( event );
+    }
 
 private:
     wxSpinCtrl *m_spin;
