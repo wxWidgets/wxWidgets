@@ -694,7 +694,7 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
     }
 #else // !HAVE_MKTEMP (includes __DOS__)
     // generate the unique file name ourselves
-    #ifndef __DOS__
+    #if !defined(__DOS__) && (!defined(__MWERKS__) || defined(__DARWIN__) )
     path << (unsigned int)getpid();
     #endif
 
