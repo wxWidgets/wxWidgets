@@ -16,6 +16,8 @@
 #include <stdio.h>
 #include "wx/setup.h"
 #include "wx/window.h"
+#include "wx/app.h"
+#include "wx/frame.h"
 #endif
 
 #include "wx/os2/accel.h"
