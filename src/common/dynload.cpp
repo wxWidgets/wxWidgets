@@ -58,7 +58,7 @@ public:
     // TODO: create ms_classes on demand, why always preallocate it?
     virtual bool OnInit()
     {
-        wxPluginLibrary::ms_classes = new wxDLImports(wxKEY_STRING);
+        wxPluginLibrary::ms_classes = new wxDLImports;
         wxPluginManager::CreateManifest();
         return TRUE;
     }
