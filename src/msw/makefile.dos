@@ -126,7 +126,8 @@ COMMONOBJS = \
   $(COMMDIR)\zstream.obj \
   $(COMMDIR)\datstrm.obj \
   $(COMMDIR)\extended.obj \
-  $(COMMDIR)\wincmn.obj
+  $(COMMDIR)\wincmn.obj \
+  $(COMMDIR)\wxchar.obj
 
 # Doesn't compile (nested classes)
 # $(COMMDIR)\fileconf.obj\
@@ -935,6 +936,11 @@ $(CPPFLAGS2) /Fo$@ /c /Tp $*.c
 <<
 
 $(COMMDIR)/wincmn.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(COMMDIR)/wxchar.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<

@@ -103,7 +103,8 @@ COMMONOBJS = \
   $(COMMDIR)\datstrm.obj \
   $(COMMDIR)\objstrm.obj \
   $(COMMDIR)\variant.obj \
-  $(COMMDIR)\wincmn.obj
+  $(COMMDIR)\wincmn.obj \
+  $(COMMDIR)\wxchar.obj
 
 # Don't compile for WIN16
 #  $(COMMDIR)\socket.obj \

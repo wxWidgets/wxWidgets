@@ -97,7 +97,8 @@ COMMONOBJS = cmndata.obj \
   datstrm.obj \
   objstrm.obj \
   variant.obj \
-  wincmn.obj
+  wincmn.obj \
+  wxchar.obj
 
 # Can't compile these yet under Salford C++
 #  mimetype.obj \
@@ -686,6 +687,9 @@ variant.obj:     $(COMMDIR)\variant.cpp
 
 wincmn.obj:     $(COMMDIR)\wincmn.cpp
   $(CCC) $(CPPFLAGS) $(IFLAGS) $(COMMDIR)\wincmn.cpp /BINARY wincmn.obj
+
+wxchar.obj:     $(COMMDIR)\wxcharp.cpp
+  $(CCC) $(CPPFLAGS) $(IFLAGS) $(COMMDIR)\wxchar.cpp /BINARY wxchar.obj
 
 ########################################################
 # Generic objects (not always compiled, depending on

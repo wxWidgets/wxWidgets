@@ -145,6 +145,7 @@ addobj wave.obj
 addobj wfstream.obj
 addobj wincmn.obj
 addobj window.obj
+addobj wxchar.obj
 addobj wxexpr.obj
 addobj y_tab.obj
 addobj zstream.obj

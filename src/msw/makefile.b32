@@ -157,7 +157,8 @@ COMMONOBJS = \
   $(MSWDIR)\http.obj \
   $(MSWDIR)\ftp.obj \
   $(MSWDIR)\sckfile.obj \
-  $(MSWDIR)\sckipc.obj
+  $(MSWDIR)\sckipc.obj \
+  $(MSWDIR)\wxchar.obj
 
 #  $(MSWDIR)\odbc.obj \
 #  $(MSWDIR)\matrix.obj \
@@ -605,6 +606,8 @@ $(MSWDIR)\ftp.obj:	$(COMMDIR)\ftp.$(SRCSUFF)
 $(MSWDIR)\sckfile.obj:	$(COMMDIR)\sckfile.$(SRCSUFF)
 
 $(MSWDIR)\sckipc.obj:	$(COMMDIR)\sckipc.$(SRCSUFF)
+
+$(MSWDIR)\wxchar.obj:	$(COMMDIR)\wxchar.$(SRCSUFF)
 
 ########################################################
 # Generic objects (not always compiled, depending on

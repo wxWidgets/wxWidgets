@@ -109,7 +109,8 @@ COMMONOBJS = cmndata.obj &
   datstrm.obj &
   objstrm.obj &
   variant.obj &
-  wincmn.obj
+  wincmn.obj &
+  wxchar.obj
 
 # Can't compile these yet under Watcom C++
 #  odbc.obj &
@@ -705,6 +706,9 @@ variant.obj:     $(COMMDIR)\variant.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 wincmn.obj:     $(COMMDIR)\wincmn.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+wxchar.obj:     $(COMMDIR)\wxchar.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 y_tab.obj:     $(COMMDIR)\y_tab.c $(COMMDIR)\lex_yy.c
