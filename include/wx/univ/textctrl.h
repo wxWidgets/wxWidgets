@@ -320,7 +320,14 @@ protected:
     // get the width of the longest line in pixels
     wxCoord GetMaxWidth() const;
 
-    // update the max width if the width of this line is greater than it
+    // force recalculation of the max line width
+    void RecalcMaxWidth()
+    {
+        m_widthMax = -1;
+        (void)GetMaxWidth();
+    }
+
+    // update the max width after the given line was modified
     void UpdateMaxWidth(long line);
 
     // event handlers
@@ -404,6 +411,9 @@ private:
 
     // the max line length in pixels
     wxCoord m_widthMax;
+
+    // the index of the line which has the length of m_widthMax
+    long m_lineLongest;
 
     // the object to which we delegate our undo/redo implementation
     wxTextCtrlCommandProcessor *m_cmdProcessor;

@@ -259,6 +259,7 @@ void wxTextCtrl::Init()
     m_updateScrollbarY = FALSE;
 
     m_widthMax = -1;
+    m_lineLongest = 0;
 
     // init wxScrollHelper
     SetWindow(this);
@@ -307,6 +308,8 @@ bool wxTextCtrl::Create(wxWindow *parent,
 
     SetValue(value);
     SetBestSize(size);
+
+    m_isEditable = !(style & wxTE_READONLY);
 
     CreateCaret();
     InitInsertionPoint();
@@ -748,9 +751,21 @@ void wxTextCtrl::Replace(long from, long to, const wxString& text)
             {
                 // (4b) delete all extra lines (note that we need to delete
                 //      them backwards because indices shift while we do it)
+                bool deletedLongestLine = FALSE;
                 for ( long lineDel = lineEnd; lineDel >= line; lineDel-- )
                 {
+                    if ( lineDel == m_lineLongest )
+                    {
+                        // we will need to recalc the max line width
+                        deletedLongestLine = TRUE;
+                    }
+
                     m_lines.RemoveAt(lineDel);
+                }
+
+                if ( deletedLongestLine )
+                {
+                    RecalcMaxWidth();
                 }
 
                 // update line to exit the loop
@@ -1132,6 +1147,9 @@ void wxTextCtrl::SetEditable(bool editable)
     if ( editable != m_isEditable )
     {
         m_isEditable = editable;
+
+        // the caret (dis)appears
+        CreateCaret();
 
         // the appearance of the control might have changed
         Refresh();
@@ -2146,16 +2164,36 @@ void wxTextCtrl::DoPrepareDC(wxDC& dc)
 
 void wxTextCtrl::UpdateMaxWidth(long line)
 {
-    wxCoord width;
+    // check if the max width changes after this line was modified
+    wxCoord widthMaxOld = m_widthMax,
+            width;
     GetTextExtent(GetLineText(line), &width, NULL);
 
-    // GetMaxWidth() and not m_widthMax as it might be not calculated yet
-    if ( width > GetMaxWidth() )
+    if ( line == m_lineLongest )
     {
-        m_widthMax = width;
-
-        m_updateScrollbarX = TRUE;
+        // this line was the longest one, is it still?
+        if ( width > m_widthMax )
+        {
+            m_widthMax = width;
+        }
+        else if ( width < m_widthMax )
+        {
+            // we need to find the new longest line
+            RecalcMaxWidth();
+        }
+        //else: its length didn't change, nothing to do
     }
+    else // it wasn't the longest line, but maybe it became it?
+    {
+        // GetMaxWidth() and not m_widthMax as it might be not calculated yet
+        if ( width > GetMaxWidth() )
+        {
+            m_widthMax = width;
+            m_lineLongest = line;
+        }
+    }
+
+    m_updateScrollbarX = m_widthMax != widthMaxOld;
 }
 
 wxCoord wxTextCtrl::GetMaxWidth() const
@@ -2170,6 +2208,8 @@ wxCoord wxTextCtrl::GetMaxWidth() const
         wxClientDC dc(self);
         dc.SetFont(GetFont());
 
+        self->m_widthMax = 0;
+
         size_t count = m_lines.GetCount();
         for ( size_t n = 0; n < count; n++ )
         {
@@ -2177,10 +2217,14 @@ wxCoord wxTextCtrl::GetMaxWidth() const
             dc.GetTextExtent(m_lines[n], &width, NULL);
             if ( width > m_widthMax )
             {
+                // remember the width and the line which has it
                 self->m_widthMax = width;
+                self->m_lineLongest = n;
             }
         }
     }
+
+    wxASSERT_MSG( m_widthMax != -1, _T("should have at least 1 line") );
 
     return m_widthMax;
 }
@@ -2537,7 +2581,7 @@ void wxTextCtrl::DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate)
         }
 
         // extract the part of line we need to redraw
-        wxString textLine = GetLineText(line);
+        wxString textLine = GetTextToShow(GetLineText(line));
         wxString text = textLine.Mid(colStart, colEnd - colStart + 1);
 
         // now deal with the selection
@@ -2617,7 +2661,7 @@ void wxTextCtrl::DoDraw(wxControlRenderer *renderer)
     }
 
     // show caret first time only
-    if ( !m_hasCaret )
+    if ( !m_hasCaret && GetCaret() )
     {
         GetCaret()->Show();
 
@@ -2641,7 +2685,7 @@ bool wxTextCtrl::SetFont(const wxFont& font)
     InitInsertionPoint();
     ClearSelection();
 
-    m_widthMax = -1;
+    RecalcMaxWidth();
 
     Refresh();
 
@@ -2660,11 +2704,21 @@ bool wxTextCtrl::Enable(bool enable)
 
 void wxTextCtrl::CreateCaret()
 {
-    // FIXME use renderer
-    wxCaret *caret = new wxCaret(this, 1, GetCharHeight());
+    wxCaret *caret;
+
+    if ( IsEditable() )
+    {
+        // FIXME use renderer
+        caret = new wxCaret(this, 1, GetCharHeight());
 #ifndef __WXMSW__
-    caret->SetBlinkTime(0);
+        caret->SetBlinkTime(0);
 #endif // __WXMSW__
+    }
+    else
+    {
+        // read only controls don't have the caret
+        caret = (wxCaret *)NULL;
+    }
 
     // SetCaret() will delete the old caret if any
     SetCaret(caret);

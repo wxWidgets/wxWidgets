@@ -3,6 +3,7 @@ UNIVOBJS = \
            button.o \
            checkbox.o \
            checklst.o \
+           cmdproc.o \
            colschem.o \
            control.o \
            inphand.o \
@@ -15,6 +16,7 @@ UNIVOBJS = \
            statbox.o \
            statline.o \
            stattext.o \
+           textctrl.o \
            theme.o \
            gtk.o \
            winuniv.o \
@@ -27,6 +29,7 @@ UNIVDEPS = \
            button.d \
            checkbox.d \
            checklst.d \
+           cmdproc.d \
            colschem.d \
            control.d \
            inphand.d \

@@ -16,6 +16,9 @@
     #pragma interface "cmdproc.h"
 #endif
 
+#include "wx/object.h"
+#include "wx/list.h"
+
 // ----------------------------------------------------------------------------
 // wxCommand: a single command capable of performing itself
 // ----------------------------------------------------------------------------

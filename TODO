@@ -15,6 +15,7 @@ samples:
 wxTextCtrl
 
 *!  display corrupted when typing text in quickly (caret problem?)
+*   caret leaves traces under wxGTK
 *   scrollbars don't disappear after deleting long line
 ?   text ctrl display pb when text is truncated
 *   too much is refreshed when double clicking (word select)
