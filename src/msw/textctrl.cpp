@@ -121,13 +121,13 @@ IMPLEMENT_DYNAMIC_CLASS_XTI(wxTextCtrl, wxControl,"wx/textctrl.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxTextCtrl)
 	WX_PROPERTY_SET_AND_GET_BY_REF_RET_BOOL( Font , wxFont , SetFont , GetFont  , )
-	WX_PROPERTY( Value , wxString , SetValue, GetValue, wxEmptyString )
+	WX_PROPERTY_SET_BY_REF( Value , wxString , SetValue, GetValue, wxEmptyString )
 WX_END_PROPERTIES_TABLE()
 
 WX_BEGIN_HANDLERS_TABLE(wxTextCtrl)
 WX_END_HANDLERS_TABLE()
 
-WX_CONSTRUCTOR_6( wxTextCtrl , wxWindow* , Parent , wxWindowID , Id , wxString , Value , wxPoint , Position , wxSize , Size , long , WindowStyle) 
+WX_CONSTRUCTOR_6( wxTextCtrl , wxWindow* , Parent , wxWindowID , Id , wxString , Value , wxPoint , Position , wxSize , Size , long , WindowStyle)
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxControl)
 #endif
@@ -1864,7 +1864,7 @@ bool wxTextCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             }
             return TRUE;
     }
-    
+
     // not processed, leave it to the base class
     return wxTextCtrlBase::MSWOnNotify(idCtrl, lParam, result);
 }
