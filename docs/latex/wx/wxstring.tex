@@ -621,6 +621,16 @@ This static function returns the string containing the result of calling
 
 Returns the number of occurrences of {\it ch} in the string.
 
+\membersection{wxString::FromAscii}\label{wxstringfromascii}
+
+\func{static wxString }{FromAscii}{\param{const char*}{ s}}
+
+\func{static wxString }{FromAscii}{\param{const char}{ c}}
+
+Converts the string or character from an ASCII, 7-bit form
+to the native wxString representation. Most useful when using
+a Unicode build of wxWindows.
+
 \membersection{wxString::GetChar}\label{wxstringgetchar}
 
 \constfunc{char}{GetChar}{\param{size\_t}{ n}}
@@ -907,6 +917,17 @@ have different meaning).
 
 Returns the part of the string between the indices {\it from} and {\it to}
 inclusive.
+
+\membersection{wxString::ToAscii}\label{wxstringtoascii}
+
+\constfunc{const char*}{ToAscii}{\void}
+
+Converts the string to an ASCII, 7-bit string (ANSI builds only).
+
+\constfunc{const wxCharBuffer}{ToAscii}{\void}
+
+Converts the string to an ASCII, 7-bit string in the form of
+a wxCharBuffer (Unicode builds only).
 
 \membersection{wxString::ToDouble}\label{wxstringtodouble}
 
