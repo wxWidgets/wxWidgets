@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:           wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -51,7 +51,7 @@ bool wxPanel::Create(wxWindow *parent, wxWindowID id,
 {
     bool ret = wxWindow::Create(parent, id, pos, size, style, name);
 
-    if ( ret ) 
+    if ( ret )
     {
 #ifndef __WXGTK__
         SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
@@ -81,6 +81,7 @@ void wxPanel::OnSysColourChanged(wxSysColourChangedEvent& event)
 
 void wxPanel::OnNavigationKey( wxNavigationKeyEvent& event )
 {
+    // there is not much to do if we have only one child (or not at all)
     if (GetChildren().GetCount() < 2)
     {
         event.Skip();
@@ -88,59 +89,66 @@ void wxPanel::OnNavigationKey( wxNavigationKeyEvent& event )
     }
 
     // don't process these ones here
-    if (event.IsWindowChange()) 
+    if (event.IsWindowChange())
     {
         event.Skip();
         return;
     }
 
     wxWindow *winFocus = event.GetCurrentFocus();
-    if (!winFocus) winFocus = wxWindow::FindFocus();
-    
+    if (!winFocus)
+        winFocus = wxWindow::FindFocus();
+
     if (!winFocus)
     {
         event.Skip();
         return;
     }
-    
+
     wxNode *start_node = GetChildren().Find( winFocus );
-    if (!start_node) start_node = GetChildren().First();
-    
-    wxNode *node = event.GetDirection() ? start_node->Next() : start_node->Previous();
-	    
+    if (!start_node)
+        start_node = GetChildren().First();
+
+    wxNode *node = event.GetDirection() ? start_node->Next()
+                                        : start_node->Previous();
+
     while (node != start_node)
     {
-	if (!node)
-	{
-/*
-            if (GetParent() != NULL) 
-	    {
+        if (!node)
+        {
+#if 0
+            if (GetParent() != NULL)
+            {
                 wxNavigationKeyEvent new_event;
                 new_event.SetDirection( event.GetDirection() );
                 new_event.SetWindowChange(FALSE);
                 new_event.SetCurrentFocus( this );
 
                 if (GetParent()->GetEventHandler()->ProcessEvent(new_event))
-		{  
-		    return;
-		}
+                {
+                    return;
+                }
             }
-*/
-	    
-	    node = event.GetDirection() ? GetChildren().First() : GetChildren().Last();
-	}
-	        
-	wxWindow *child = (wxWindow*) node->Data();
-		
-	if (child->AcceptsFocus())
-	{
-	    child->SetFocus();
-	    return;
-	}
-		
-	node = node->Next();
+#endif // 0
+
+            node = event.GetDirection() ? GetChildren().First()
+                                        : GetChildren().Last();
+        }
+
+        wxWindow *child = (wxWindow *)node->Data();
+
+        if (child->AcceptsFocus())
+        {
+            // ok, event processed
+            child->SetFocus();
+            return;
+        }
+
+        node = event.GetDirection() ? node->Next() : node->Previous();
     }
-    
+
+    // we cycled through all of our children and none of them wanted to accept
+    // focus
     event.Skip();
 }
 
