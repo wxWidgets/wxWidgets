@@ -8,6 +8,9 @@ wxPython/demo/bitmaps/*.png
 wxPython/demo/bitmaps/*.jpg
 wxPython/demo/README.txt
 wxPython/demo/*.xml
+wxPython/demo/data/*.png
+wxPython/demo/data/*.htm
+wxPython/demo/data/*.bpm
 
 wxPython/distrib/build.py
 
