@@ -395,7 +395,7 @@ class wxGrid : public wxPanel
     void OnSize( wxSizeEvent& );
     void OnMouse( wxMouseEvent& );
     void OnKeyDown( wxKeyEvent& );
-    void OnText( wxKeyEvent& );
+    void OnText( wxCommandEvent& );
     void OnGridScroll( wxScrollEvent& );
 
     void SelectCell( const wxGridCellCoords& coords );

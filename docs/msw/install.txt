@@ -150,6 +150,10 @@ optimized. For example, in wxWindows project, set to 'Minimum
 Size'. In Dialog Editor project, set to 'Customize: Favor Small
 Code' (and no others). This will then work.
 
+Similarly, in VC++ 4, optimization can cause internal compiler
+errors, so edit src\makevc.env and change /O1 to /Od before
+trying build a release version of the library.
+
 Note (4): some crash problems can be due to inconsistent compiler
 options. If strange/weird/impossible things start to happen please
 check (dumping IDE project file as makefile and doing text comparison

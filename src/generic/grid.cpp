@@ -1942,7 +1942,7 @@ void wxGrid::OnKeyDown( wxKeyEvent& ev )
 // Text updated in an edit control - either a text control or a
 // combo box
 //
-void wxGrid::OnText( wxKeyEvent& ev )
+void wxGrid::OnText( wxCommandEvent& ev )
 {
     if ( !m_inOnText )
     {

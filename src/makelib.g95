@@ -20,4 +20,4 @@ $(LIBTARGET): $(OBJECTS)
 	$(RANLIB) $@
 
 clean:
-	rm -f $(OBJECTS) $(LIBTARGET) core *.rsc *.res
+	-$(RM) $(OBJECTS) $(LIBTARGET) core *.rsc *.res

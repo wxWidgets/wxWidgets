@@ -211,7 +211,7 @@ bool wxSpinButton::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 #ifndef __GNUWIN32__
 #if defined(__BORLANDC__) || defined(__WATCOMC__)
     LPNM_UPDOWN lpnmud = (LPNM_UPDOWN)lParam;
-#elif defined(__VISUALC__) && (__VISUALC__ == 1010)
+#elif defined(__VISUALC__) && (__VISUALC__ >= 1000) && (__VISUALC__ < 1020)
     LPNM_UPDOWN lpnmud = (LPNM_UPDOWN)lParam;
 #else
     LPNMUPDOWN lpnmud = (LPNMUPDOWN)lParam;

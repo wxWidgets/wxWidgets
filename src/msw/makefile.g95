@@ -390,10 +390,10 @@ $(COMMDIR)/y_tab.$(OBJSUFF):    $(COMMDIR)/y_tab.c $(COMMDIR)/lex_yy.c
 	$(CCLEX) -c $(CPPFLAGS) -DUSE_DEFINE -DYY_USE_PROTOS -o $@ $(COMMDIR)/y_tab.c
 
 $(COMMDIR)/y_tab.c:     $(COMMDIR)/dosyacc.c
-	copy ..\common\dosyacc.c ..\common\y_tab.c
+	copy ..\\common\\dosyacc.c ..\\common\\y_tab.c
 
 $(COMMDIR)/lex_yy.c:    $(COMMDIR)/doslex.c
-	copy ..\common\doslex.c ..\common\lex_yy.c
+	copy ..\\common\\doslex.c ..\\common\\lex_yy.c
 
 # Replace lex with flex if you run into compilation
 # problems with lex_yy.c. See also note about LEX_SCANNER
@@ -426,21 +426,21 @@ $(COMMDIR)/lex_yy.c:    $(COMMDIR)/doslex.c
 #	mv y.tab.c $(COMMDIR)/y_tab.c
 
 clean:
-	rm -f *.o
-	rm -f *.bak
-	rm -f core
-	rm -f ..\common\y_tab.c
-	rm -f ..\common\lex_yy.c
-	rm -f ..\common\*.o
-	rm -f ..\common\*.bak
-	rm -f ..\generic\*.o
-	rm -f ..\generic\*.bak
-	rm -f ..\html\*.o
-	rm -f ..\png\*.o
-	rm -f ..\png\*.bak
-	rm -f ..\zlib\*.o
-	rm -f ..\zlib\*.bak
-	rm -f ..\jpeg\*.o
-	rm -f ..\..\lib\libwx.a
+	-$(RM) *.o
+	-$(RM) *.bak
+	-$(RM) core
+	-$(RM) ..\common\y_tab.c
+	-$(RM) ..\common\lex_yy.c
+	-$(RM) ..\common\*.o
+	-$(RM) ..\common\*.bak
+	-$(RM) ..\generic\*.o
+	-$(RM) ..\generic\*.bak
+	-$(RM) ..\html\*.o
+	-$(RM) ..\png\*.o
+	-$(RM) ..\png\*.bak
+	-$(RM) ..\zlib\*.o
+	-$(RM) ..\zlib\*.bak
+	-$(RM) ..\jpeg\*.o
+	-$(RM) ..\..\lib\libwx.a
 
 cleanall: clean
