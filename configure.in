@@ -1270,6 +1270,16 @@ case ${INSTALL} in
      INSTALL=`pwd`/${INSTALL} ;;
 esac
 
+dnl HP-UX install doesn't handle the "-d" switch so don't use it there
+case ${host} in
+    *-hp-hpux* )
+        INSTALL_DIR="mkdir"
+        ;;
+
+    *)  INSTALL_DIR="$INSTALL -d"
+        ;;
+esac
+
 
 case "${host}" in
 
@@ -3566,6 +3576,13 @@ if test "$TOOLKIT" != "MSW"; then
                 dnl AIX calls the library libpthreads - thanks IBM!
                 THREAD_OPTS="pthreads"
                 ;;
+          *-hp-hpux* )
+                dnl HP-UX aCC only gives a warning, not an error about
+                dnl -pthread but it doesn't work and we have to use -lpthread
+                dnl there
+                if test "x$GCC" != "xyes"; then
+                    THREAD_OPTS=""
+                fi
         esac
 
         dnl simply linking with libpthread should make the test below work but
@@ -3640,6 +3657,10 @@ if test "$TOOLKIT" != "MSW"; then
                 ;;
             *-hp-hpux* )
                 flag="-D_REENTRANT"
+                if test "x$GCC" != "xyes"; then
+                    dnl see http://docs.hp.com/hpux/onlinedocs/2213/threads.htm
+                    flag="$flag -D_RWSTD_MULTI_THREAD"
+                fi
                 ;;
             *solaris* | alpha*-osf*)
                 flag="-D_REENTRANT"
@@ -5443,6 +5464,7 @@ AC_SUBST(NM)
 AC_SUBST(LD)
 AC_SUBST(MAKEINFO)
 AC_SUBST(INSTALL_LIBRARY)
+AC_SUBST(INSTALL_DIR)
 
 dnl MAKE_SET will be replaced with "MAKE=..." or nothing if make sets MAKE
 dnl itself (this macro is required if SUBDIRS variable is used in Makefile.am

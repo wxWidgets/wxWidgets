@@ -73,6 +73,7 @@ INSTALL = @INSTALL@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_SCRIPT = @INSTALL@
+INSTALL_DIR = @INSTALL_DIR@
 
 build_alias = @build_alias@
 build_triplet = @build@
@@ -305,29 +306,29 @@ SONAME_FLAGS_GL = @SONAME_FLAGS_GL@
 all: @WX_ALL@
 
 $(build_libdir)/@WX_LIBRARY_NAME_STATIC@: $(OBJECTS)
-	@$(INSTALL) -d $(build_libdir)
+	@$(INSTALL_DIR) $(build_libdir)
 	@$(RM) $@
 	$(AR) $(AROPTIONS) $@ $(OBJECTS)
 	$(RANLIB) $@
 
 $(build_libdir)/@WX_LIBRARY_NAME_STATIC_GL@: glcanvas.o
-	@$(INSTALL) -d $(build_libdir)
+	@$(INSTALL_DIR) $(build_libdir)
 	@$(RM) $@
 	$(AR) $(AROPTIONS) $@ glcanvas.o
 	$(RANLIB) $@
 
 $(build_libdir)/@WX_LIBRARY_NAME_SHARED@: $(OBJECTS)
-	@$(INSTALL) -d $(build_libdir)
+	@$(INSTALL_DIR) $(build_libdir)
 	$(SHARED_LD) $@ $(SONAME_FLAGS) $(OBJECTS) $(EXTRALIBS)
 
 # NB: we used to have "-L$(build_libdir) @WXCONFIG_LIBS@" in the SHARED_LD line
 #     but this seems to result in problems with libwx_gtk being linked in twice
 $(build_libdir)/@WX_LIBRARY_NAME_SHARED_GL@: glcanvas.o $(build_libdir)/@WX_LIBRARY_NAME_SHARED@
-	@$(INSTALL) -d $(build_libdir)
+	@$(INSTALL_DIR) $(build_libdir)
 	$(SHARED_LD) $@ $(SONAME_FLAGS_GL) glcanvas.o $(EXTRALIBS) $(OPENGLLIBS)
 
 $(build_libdir)/@WX_RESOURCES_MACOSX_DATA@: $(MACRESOURCES)
-	@$(INSTALL) -d $(build_libdir)
+	@$(INSTALL_DIR) $(build_libdir)
 	$(RESCOMP) -d __UNIX__ -useDF $^ -o $@
 
 $(build_libdir)/@WX_LIBRARY_LINK1@: $(build_libdir)/@WX_LIBRARY_NAME_SHARED@
@@ -384,22 +385,22 @@ CREATE_INSTALLED_LINKS_GL: preinstall_gl
 		&& $(LN_S) @WX_LIBRARY_NAME_SHARED_GL@ @WX_LIBRARY_LINK2_GL@
 
 afminstall: preinstall
-	@if test ! -d $(datadir); then $(INSTALL) -d $(datadir); fi
-	$(INSTALL) -d $(datadir)/wx
-	$(INSTALL) -d $(datadir)/wx/$(VER_MAJMIN)
-	$(INSTALL) -d $(datadir)/wx/$(VER_MAJMIN)/afm
-	$(INSTALL) -d $(datadir)/wx/$(VER_MAJMIN)/gs_afm
+	@if test ! -d $(datadir); then $(INSTALL_DIR) $(datadir); fi
+	$(INSTALL_DIR) $(datadir)/wx
+	$(INSTALL_DIR) $(datadir)/wx/$(VER_MAJMIN)
+	$(INSTALL_DIR) $(datadir)/wx/$(VER_MAJMIN)/afm
+	$(INSTALL_DIR) $(datadir)/wx/$(VER_MAJMIN)/gs_afm
 	$(INSTALL_DATA) $(top_srcdir)/misc/afm/*.afm $(datadir)/wx/$(VER_MAJMIN)/afm
 	$(INSTALL_DATA) $(top_srcdir)/misc/gs_afm/*.afm $(datadir)/wx/$(VER_MAJMIN)/gs_afm
 
 m4datainstall: preinstall
-	$(INSTALL) -d $(datadir)/aclocal
+	$(INSTALL_DIR) $(datadir)/aclocal
 	$(INSTALL_DATA) $(top_srcdir)/wxwin.m4 $(datadir)/aclocal
 
 win32install: preinstall
-	$(INSTALL) -d $(includedir)/wx/msw
-	$(INSTALL) -d $(includedir)/wx/msw/gnuwin32
-	$(INSTALL) -d $(includedir)/wx/msw/gnuwin32/gl
+	$(INSTALL_DIR) $(includedir)/wx/msw
+	$(INSTALL_DIR) $(includedir)/wx/msw/gnuwin32
+	$(INSTALL_DIR) $(includedir)/wx/msw/gnuwin32/gl
 	$(INSTALL_DATA) $(top_srcdir)/include/wx/msw/*.cur \
 			$(top_srcdir)/include/wx/msw/*.ico \
 			$(top_srcdir)/include/wx/msw/*.bmp \
@@ -415,9 +416,9 @@ preinstall: $(build_libdir)/@WX_TARGET_LIBRARY@ $(top_builddir)/wx@TOOLCHAIN_NAM
 	@echo " Installing wxWindows..."
 	@echo " "
 
-	@if test ! -d $(prefix); then $(INSTALL) -d $(prefix); fi
-	@if test ! -d $(bindir); then $(INSTALL) -d $(bindir); fi
-	@if test ! -d $(libdir); then $(INSTALL) -d $(libdir); fi
+	@if test ! -d $(prefix); then $(INSTALL_DIR) $(prefix); fi
+	@if test ! -d $(bindir); then $(INSTALL_DIR) $(bindir); fi
+	@if test ! -d $(libdir); then $(INSTALL_DIR) $(libdir); fi
 
 	$(INSTALL_SCRIPT) $(top_builddir)/wx@TOOLCHAIN_NAME@-config $(bindir)/wx@TOOLCHAIN_NAME@-config
 	cd $(bindir) && rm -f wx-config && $(LN_S) wx@TOOLCHAIN_NAME@-config wx-config
@@ -425,36 +426,36 @@ preinstall: $(build_libdir)/@WX_TARGET_LIBRARY@ $(top_builddir)/wx@TOOLCHAIN_NAM
 	@if test "x@WX_LIBRARY_IMPORTLIB@" != "x"; then \
 		$(INSTALL_PROGRAM) $(top_builddir)/lib/@WX_LIBRARY_IMPORTLIB@ $(libdir)/@WX_LIBRARY_IMPORTLIB@; fi
 
-	$(INSTALL) -d $(libdir)/wx
-	$(INSTALL) -d $(libdir)/wx/include
-	$(INSTALL) -d $(libdir)/wx/include/univ
-	$(INSTALL) -d $(libdir)/wx/include/@TOOLCHAIN_NAME@
-	$(INSTALL) -d $(libdir)/wx/include/@TOOLCHAIN_NAME@/wx
+	$(INSTALL_DIR) $(libdir)/wx
+	$(INSTALL_DIR) $(libdir)/wx/include
+	$(INSTALL_DIR) $(libdir)/wx/include/univ
+	$(INSTALL_DIR) $(libdir)/wx/include/@TOOLCHAIN_NAME@
+	$(INSTALL_DIR) $(libdir)/wx/include/@TOOLCHAIN_NAME@/wx
 	$(INSTALL_DATA) $(build_libdir)/wx/include/@TOOLCHAIN_NAME@/wx/setup.h \
                     $(libdir)/wx/include/@TOOLCHAIN_NAME@/wx/setup.h
 
-	$(INSTALL) -d $(includedir)/wx
+	$(INSTALL_DIR) $(includedir)/wx
 	@# FIXME: This will erroneously install a wx/base dir for wxBase..
-	@if test "$(USE_GUI)" = 1; then $(INSTALL) -d $(includedir)/wx/@TOOLKIT_DIR@; fi
-	@if test "$(USE_GUI)" = 1; then $(INSTALL) -d $(includedir)/wx/html; fi
-	@if test "$(USE_GUI)" = 1; then $(INSTALL) -d $(includedir)/wx/generic; fi
-	@if test "$(USE_GUI)" = 1; then $(INSTALL) -d $(includedir)/wx/univ; fi
-	@if test "@TOOLKIT_DIR@" = "msw"; then $(INSTALL) -d $(includedir)/wx/msw/ole; fi
+	@if test "$(USE_GUI)" = 1; then $(INSTALL_DIR) $(includedir)/wx/@TOOLKIT_DIR@; fi
+	@if test "$(USE_GUI)" = 1; then $(INSTALL_DIR) $(includedir)/wx/html; fi
+	@if test "$(USE_GUI)" = 1; then $(INSTALL_DIR) $(includedir)/wx/generic; fi
+	@if test "$(USE_GUI)" = 1; then $(INSTALL_DIR) $(includedir)/wx/univ; fi
+	@if test "@TOOLKIT_DIR@" = "msw"; then $(INSTALL_DIR) $(includedir)/wx/msw/ole; fi
 
 	@# always install msw headers for wxBase, it's much simpler
-	@if test "$(USE_GUI)" = 0; then $(INSTALL) -d $(includedir)/wx/msw; fi
+	@if test "$(USE_GUI)" = 0; then $(INSTALL_DIR) $(includedir)/wx/msw; fi
 
-	$(INSTALL) -d $(includedir)/wx/protocol
-	$(INSTALL) -d $(includedir)/wx/unix
+	$(INSTALL_DIR) $(includedir)/wx/protocol
+	$(INSTALL_DIR) $(includedir)/wx/unix
 	@list='$(HEADERS)'; for p in $$list; do \
 	  $(INSTALL_DATA) $(top_srcdir)/include/wx/$$p $(includedir)/wx/$$p; \
 	  echo "$(INSTALL_DATA) $(top_srcdir)/include/wx/$$p $(includedir)/wx/$$p"; \
 	done
 
-	@if test ! -d $(localedir); then $(INSTALL) -d $(localedir); fi
+	@if test ! -d $(localedir); then $(INSTALL_DIR) $(localedir); fi
 	@for p in $(WX_LINGUAS); do \
-	  if test ! -d $(localedir)/$$p; then $(INSTALL) -d $(localedir)/$$p; fi;\
-	  if test ! -d $(localedir)/$$p/LC_MESSAGES; then $(INSTALL) -d $(localedir)/$$p/LC_MESSAGES; fi;\
+	  if test ! -d $(localedir)/$$p; then $(INSTALL_DIR) $(localedir)/$$p; fi;\
+	  if test ! -d $(localedir)/$$p/LC_MESSAGES; then $(INSTALL_DIR) $(localedir)/$$p/LC_MESSAGES; fi;\
 	  $(INSTALL_DATA) $(top_srcdir)/locale/$$p.mo $(localedir)/$$p/LC_MESSAGES/wxstd.mo; \
 	  echo "$(INSTALL_DATA) $(top_srcdir)/locale/$$p.mo $(localedir)/$$p/LC_MESSAGES/wxstd.mo"; \
 	done
@@ -463,7 +464,7 @@ preinstall_res: $(build_libdir)/@WX_RESOURCES_MACOSX_ASCII@ $(build_libdir)/@WX_
 	@echo " "
 	@echo " Installing wxWindows Mac resource ..."
 	@echo " "
-	@if test ! -d $(libdir); then $(INSTALL) -d $(libdir); fi
+	@if test ! -d $(libdir); then $(INSTALL_DIR) $(libdir); fi
 	$(INSTALL_PROGRAM) $(build_libdir)/@WX_RESOURCES_MACOSX_ASCII@ $(libdir)/@WX_RESOURCES_MACOSX_ASCII@
 	$(INSTALL_PROGRAM) $(build_libdir)/@WX_RESOURCES_MACOSX_DATA@ $(libdir)/@WX_RESOURCES_MACOSX_DATA@
 
@@ -471,7 +472,7 @@ preinstall_gl: $(build_libdir)/@WX_TARGET_LIBRARY_GL@
 	@echo " "
 	@echo " Installing wxWindows OpenGl add-on..."
 	@echo " "
-	@if test ! -d $(libdir); then $(INSTALL) -d $(libdir); fi
+	@if test ! -d $(libdir); then $(INSTALL_DIR) $(libdir); fi
 	@INSTALL_LIBRARY@ $(build_libdir)/@WX_TARGET_LIBRARY_GL@ $(libdir)/@WX_TARGET_LIBRARY_GL@
 
 install: @AFMINSTALL@ @WX_ALL_INSTALLED@ m4datainstall @WIN32INSTALL@
