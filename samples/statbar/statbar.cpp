@@ -39,13 +39,14 @@
     #include "wx/app.h"
     #include "wx/frame.h"
     #include "wx/statusbr.h"
-    #include "wx/datetime.h"
     #include "wx/timer.h"
     #include "wx/checkbox.h"
     #include "wx/statbmp.h"
     #include "wx/menu.h"
     #include "wx/msgdlg.h"
 #endif
+
+#include "wx/datetime.h"
 
 // ----------------------------------------------------------------------------
 // resources
@@ -315,6 +316,11 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 // MyStatusBar
 // ----------------------------------------------------------------------------
 
+#ifdef __VISUALC__
+    // 'this' : used in base member initializer list -- so what??
+    #pragma warning(disable: 4355)
+#endif
+
 MyStatusBar::MyStatusBar(wxWindow *parent)
            : wxStatusBar(parent, -1), m_timer(this)
 {
@@ -326,12 +332,18 @@ MyStatusBar::MyStatusBar(wxWindow *parent)
     m_checkbox = new wxCheckBox(this, StatusBar_Checkbox, _T("&Toggle clock"));
     m_checkbox->SetValue(TRUE);
 
-    m_statbmp = new wxStaticBitmap(this, -1, wxICON(green));
+    m_statbmp = new wxStaticBitmap(this, -1, wxIcon(green_xpm));
 
     m_timer.Start(1000);
 
+    SetMinHeight(BITMAP_SIZE_Y);
+
     UpdateClock();
 }
+
+#ifdef __VISUALC__
+    #pragma warning(default: 4355)
+#endif
 
 MyStatusBar::~MyStatusBar()
 {
@@ -361,7 +373,7 @@ void MyStatusBar::OnToggleClock(wxCommandEvent& event)
     {
         m_timer.Start(1000);
 
-        m_statbmp->SetIcon(wxICON(green));
+        m_statbmp->SetIcon(wxIcon(green_xpm));
 
         UpdateClock();
     }
@@ -369,7 +381,7 @@ void MyStatusBar::OnToggleClock(wxCommandEvent& event)
     {
         m_timer.Stop();
 
-        m_statbmp->SetIcon(wxICON(red));
+        m_statbmp->SetIcon(wxIcon(red_xpm));
 
         SetStatusText("", Field_Clock);
     }
