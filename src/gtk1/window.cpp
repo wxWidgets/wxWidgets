@@ -683,8 +683,17 @@ static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_ev
         
     if (win->IsTopLevel())
     {
-        gtk_paint_flat_box (win->m_widget->style, pizza->bin_window, GTK_STATE_NORMAL, 
-		      GTK_SHADOW_NONE, &gdk_event->area, win->m_widget, "base", 0, 0, -1, -1);
+        gtk_paint_flat_box (win->m_widget->style, pizza->bin_window, GTK_STATE_NORMAL,
+		    GTK_SHADOW_NONE, &gdk_event->area, win->m_widget, "base", 0, 0, -1, -1);
+    }
+    
+    wxWindow *parent = win->GetParent();
+    if (parent && GTK_IS_NOTEBOOK(parent->m_widget))
+    {
+        while (!parent->IsTopLevel())
+            parent = parent->GetParent();
+        gtk_paint_flat_box (parent->m_widget->style, pizza->bin_window, GTK_STATE_NORMAL,
+		    GTK_SHADOW_NONE, &gdk_event->area, parent->m_widget, "base", 0, 0, -1, -1);
     }
         
     win->GetUpdateRegion().Union( gdk_event->area.x,
@@ -787,6 +796,15 @@ static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxW
     {
         gtk_paint_flat_box (win->m_widget->style, pizza->bin_window, GTK_STATE_NORMAL, 
 		      GTK_SHADOW_NONE, rect, win->m_widget, "base", 0, 0, -1, -1);
+    }
+        
+    wxWindow *parent = win->GetParent();
+    if (parent && GTK_IS_NOTEBOOK(parent->m_widget))
+    {
+        while (!parent->IsTopLevel())
+            parent = parent->GetParent();
+        gtk_paint_flat_box (parent->m_widget->style, pizza->bin_window, GTK_STATE_NORMAL,
+		    GTK_SHADOW_NONE, rect, parent->m_widget, "base", 0, 0, -1, -1);
     }
         
         if (!(GTK_WIDGET_APP_PAINTABLE (widget)) &&
