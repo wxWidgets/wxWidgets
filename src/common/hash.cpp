@@ -370,6 +370,7 @@ bool wxHashTable::Create(int the_key_type, int size)
 void wxHashTable::DoCopy(const wxHashTable& table)
 {
   n = table.n;
+  m_count = table.m_count;
   current_position = table.current_position;
   current_node = NULL; // doesn't matter - Next() will reconstruct it
   key_type = table.key_type;

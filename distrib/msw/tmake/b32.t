@@ -158,7 +158,13 @@ OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) $(HTMLOBJS)
 
 default:	wx
 
-wx:    $(CFG) $(DUMMY).obj $(OBJECTS) $(PERIPH_TARGET) $(LIBTARGET)
+wx:    setuph $(CFG) $(DUMMY).obj $(OBJECTS) $(PERIPH_TARGET) $(LIBTARGET)
+
+# TODO: put the setup.h under lib
+setuph:
+     cd $(WXDIR)\include\wx\msw
+     if not exist setup.h copy setup0.h setup.h
+     cd $(WXDIR)\src\msw
 
 all:	wx
 
