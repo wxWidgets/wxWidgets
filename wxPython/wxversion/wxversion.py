@@ -137,7 +137,7 @@ def selectNewest(minVersion):
 
     # ensure that wxPython hasn't been imported yet.
     if sys.modules.has_key('wx') or sys.modules.has_key('wxPython'):
-        raise VersionError("wxversion.select() must be called before wxPython is imported")
+        raise VersionError("wxversion.selectNewest() must be called before wxPython is imported")
     
     bestMatch = None
     installed = _find_installed(True)
