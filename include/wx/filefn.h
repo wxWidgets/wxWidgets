@@ -279,15 +279,16 @@ enum wxSeekMode
         #endif
     #endif
 
-    // types
+    // types: notice that Watcom is the only compiler to have a wide char
+    // version of struct stat as well as a wide char stat function variant
     #if __HUGEFILES_SUPPORTED
-        #if wxUSE_UNICODE
+        #if wxUSE_UNICODE && defined(__WATCOMC__)
             #define   wxStructStat struct _wstati64
         #else
             #define   wxStructStat struct _stati64
         #endif
     #else
-        #if wxUSE_UNICODE
+        #if wxUSE_UNICODE && defined(__WATCOMC__)
             #define   wxStructStat struct _wstat
         #else
             #define   wxStructStat struct _stat
