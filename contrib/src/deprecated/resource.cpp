@@ -1624,7 +1624,7 @@ static bool wxEatWhiteSpace(wxInputStream *is)
             while (!finished)
             {
                 ch = is->GetC();
-                if (ch == EOF)
+                if (is->LastRead() == 0)
                     return false;
                 if (ch == '*')
                 {
@@ -1733,7 +1733,7 @@ bool wxGetResourceToken(wxInputStream *is)
             // Escaped characters
             else if (ch == '\\')
             {
-                int newCh = is->GetC();
+                char newCh = is->GetC();
                 if (newCh == '"')
                     actualCh = '"';
                 else if (newCh == 10)
