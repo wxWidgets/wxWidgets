@@ -10,7 +10,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation
 #pragma implementation "clipbrd.h"
 #endif
 
@@ -143,7 +142,7 @@ void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
 #if wxUSE_UNICODE
         wxCharBuffer buf = st.ToAscii() ;
 #else
-        char* buf = st ;
+        const char* buf = st ;
 #endif
         char* newdata = new char[strlen(buf)+1] ;
         memcpy( newdata , buf , strlen(buf)+1 ) ;
