@@ -36,7 +36,8 @@ BUILD_GIZMOS = 1   # Build a module for the gizmos contrib library
 BUILD_DLLWIDGET = 1# Build a module that enables unknown wx widgets
                    # to be loaded from a DLL and to be used from Python.
 
-BUILD_IEWIN = 0    # Internet Explorer wrapper (experimental)
+                   # Internet Explorer wrapper (experimental)
+BUILD_IEWIN = (os.name == 'nt')
 
 CORE_ONLY = 0      # if true, don't build any of the above
 
@@ -136,7 +137,7 @@ if bcpp_compiling:
 
 # Boolean (int) flags
 for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC', 'BUILD_XRC',
-             'BUILD_GIZMOS', 'BUILD_DLLWIDGET',
+             'BUILD_GIZMOS', 'BUILD_DLLWIDGET', 'BUILD_IEWIN',
              'CORE_ONLY', 'USE_SWIG', 'IN_CVS_TREE', 'UNICODE', 'UNDEF_NDEBUG',
              'FINAL', 'HYBRID', ]:
     for x in range(len(sys.argv)):
@@ -169,6 +170,7 @@ if CORE_ONLY:
     BUILD_XRC = 0
     BUILD_GIZMOS = 0
     BUILD_DLLWIDGET = 0
+    BUILD_IEWIN = 0
 
 
 if UNICODE and os.name != 'nt':
@@ -685,6 +687,7 @@ if not GL_ONLY and BUILD_IEWIN:
 
 
     ext = Extension('iewinc', ['%s/IEHtmlWin.cpp' % location,
+                               '%s/wxactivex.cpp' % location,
                              ] + swig_sources,
 
                     include_dirs =  includes,

@@ -134,6 +134,8 @@ Fixed a boatload of reference leaks.
 Added a demo of using a sizer in a wxScrolledWindow, in effect
 creating a ScrolledPanel.
 
+Added wxIEHtmlWin.
+
 
 
 

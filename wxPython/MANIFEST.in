@@ -186,6 +186,13 @@ include contrib/gizmos/contrib/src/gizmos/*.cpp
 include contrib/gizmos/contrib/src/gizmos/*.xpm
 include contrib/gizmos/contrib/src/gizmos/*.txt
 
+include contrib/iewin/*.txt
+include contrib/iewin/*.i
+include contrib/iewin/*.py
+include contrib/iewin/*.cpp
+include contrib/iewin/*.c
+include contrib/iewin/*.h
+
 include contrib/dllwidget/*.txt
 include contrib/dllwidget/*.i
 include contrib/dllwidget/*.py

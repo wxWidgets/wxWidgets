@@ -33,6 +33,7 @@ _treeList = [
         'wxArtProvider',
         'ScrolledPanel',
         'wxMenu',
+        'wxIEHtmlWin',
         ]),
 
     # managed windows == things with a caption you can close
@@ -117,6 +118,7 @@ _treeList = [
         'wxEditor',
         'wxFloatBar',
         'wxHtmlWindow',
+        'wxIEHtmlWin',
         'wxLEDNumberCtrl',
         'wxMimeTypesManager',
         'wxMVCTree',
