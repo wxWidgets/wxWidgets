@@ -128,17 +128,17 @@ void wxTopLevelWindowCocoa::CocoaReplaceView(WX_NSView oldView, WX_NSView newVie
         [m_cocoaNSWindow setContentView:newView];
 }
 
-void wxTopLevelWindowCocoa::CocoaNotification_DidBecomeKey(void)
+void wxTopLevelWindowCocoa::CocoaDelegate_windowDidBecomeKey(void)
 {
-    wxLogDebug("wxTopLevelWindowCocoa=%p::CocoaNotification_DidBecomeKey",this);
+    wxLogDebug("wxTopLevelWindowCocoa=%p::CocoaDelegate_windowDidBecomeKey",this);
     wxActivateEvent event(wxEVT_ACTIVATE, TRUE, GetId());
     event.SetEventObject(this);
     GetEventHandler()->ProcessEvent(event);
 }
 
-void wxTopLevelWindowCocoa::CocoaNotification_DidResignKey(void)
+void wxTopLevelWindowCocoa::CocoaDelegate_windowDidResignKey(void)
 {
-    wxLogDebug("wxTopLevelWindowCocoa=%p::CocoaNotification_DidResignKey",this);
+    wxLogDebug("wxTopLevelWindowCocoa=%p::CocoaDelegate_windowDidResignKey",this);
     wxActivateEvent event(wxEVT_ACTIVATE, FALSE, GetId());
     event.SetEventObject(this);
     GetEventHandler()->ProcessEvent(event);
@@ -154,7 +154,7 @@ void wxTopLevelWindowCocoa::Cocoa_close(void)
     wxTheApp->CocoaInstallRequestedIdleHandler();
 }
 
-bool wxTopLevelWindowCocoa::Cocoa_windowShouldClose()
+bool wxTopLevelWindowCocoa::CocoaDelegate_windowShouldClose()
 {
     return wxWindowBase::Close(false);
 }

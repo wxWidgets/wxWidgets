@@ -48,21 +48,21 @@
 {
     wxCocoaNSWindow *win = wxCocoaNSWindow::GetFromCocoa([notification object]);
     wxCHECK_RET(win,"notificationDidBecomeKey received but no wxWindow exists");
-    win->CocoaNotification_DidBecomeKey();
+    win->CocoaDelegate_windowDidBecomeKey();
 }
 
 - (void)windowDidResignKey: (NSNotification *)notification
 {
     wxCocoaNSWindow *win = wxCocoaNSWindow::GetFromCocoa([notification object]);
     wxCHECK_RET(win,"notificationDidResignKey received but no wxWindow exists");
-    win->CocoaNotification_DidResignKey();
+    win->CocoaDelegate_windowDidResignKey();
 }
 
 - (BOOL)windowShouldClose: (id)sender
 {
     wxLogDebug("windowShouldClose");
     wxCocoaNSWindow *tlw = wxCocoaNSWindow::GetFromCocoa(sender);
-    if(tlw && !tlw->Cocoa_windowShouldClose())
+    if(tlw && !tlw->CocoaDelegate_windowShouldClose())
     {
         wxLogDebug("Window will not be closed");
         return NO;

@@ -60,9 +60,9 @@ protected:
 public:
     inline WX_NSWindow GetNSWindow() { return m_cocoaNSWindow; }
     virtual void Cocoa_close(void);
-    virtual bool Cocoa_windowShouldClose(void);
-    virtual void CocoaNotification_DidBecomeKey(void);
-    virtual void CocoaNotification_DidResignKey(void);
+    virtual bool CocoaDelegate_windowShouldClose(void);
+    virtual void CocoaDelegate_windowDidBecomeKey(void);
+    virtual void CocoaDelegate_windowDidResignKey(void);
 protected:
     void SetNSWindow(WX_NSWindow cocoaNSWindow);
     WX_NSWindow m_cocoaNSWindow;
