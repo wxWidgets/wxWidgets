@@ -86,6 +86,8 @@ wxCursor::wxCursor( int cursorId )
         case wxCURSOR_LEFT_BUTTON:      gdk_cur = GDK_LEFTBUTTON; break;
         case wxCURSOR_MIDDLE_BUTTON:    gdk_cur = GDK_MIDDLEBUTTON; break;
         case wxCURSOR_RIGHT_BUTTON:     gdk_cur = GDK_RIGHTBUTTON; break;
+        case wxCURSOR_BULLSEYE:         gdk_cur = GDK_TARGET; break;
+
 /*
         case wxCURSOR_DOUBLE_ARROW:     gdk_cur = GDK_DOUBLE_ARROW; break;
         case wxCURSOR_CROSS_REVERSE:    gdk_cur = GDK_CROSS_REVERSE; break;
@@ -158,7 +160,7 @@ void wxEndBusyCursor()
 
     wxSetCursor( gs_savedCursor );
     gs_savedCursor = wxNullCursor;
-    
+
     wxYield();
 }
 
@@ -171,9 +173,9 @@ void wxBeginBusyCursor( wxCursor *WXUNUSED(cursor) )
                   T("forgot to call wxEndBusyCursor, will leak memory") );
 
     gs_savedCursor = g_globalCursor;
-    
+
     wxSetCursor( wxCursor(wxCURSOR_WATCH) );
-    
+
     wxYield();
 }
 
@@ -184,7 +186,7 @@ bool wxIsBusy()
 
 void wxSetCursor( const wxCursor& cursor )
 {
-    if (g_isIdle) 
+    if (g_isIdle)
         wxapp_install_idle_handler();
 
     g_globalCursor = cursor;
