@@ -452,7 +452,7 @@ public:
     virtual bool Enable( bool enable = true );
     bool Disable() { return Enable(false); }
 
-    bool IsShown() const { return m_isShown; }
+    virtual bool IsShown() const { return m_isShown; }
     bool IsEnabled() const { return m_isEnabled; }
 
         // get/set window style (setting style won't update the window and so

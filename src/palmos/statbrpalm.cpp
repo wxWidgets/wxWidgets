@@ -1,11 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        palmos/statbrpalm.cpp
+// Name:        src/palmos/statbrpalm.cpp
 // Purpose:     Implementation of wxStatusBar for PalmOS
-// Author:      William Osborne
-// Modified by:
+// Author:      William Osborne - minimal working wxPalmOS port
+// Modified by: Wlodzimierz ABX Skiba - transition from faked drawing to native statusbar
 // Created:     10/13/04
-// RCS-ID:      $Id:
-// Copyright:   (c) William Osborne
+// RCS-ID:      $Id$
+// Copyright:   (c) William Osborne, Wlodzimierz Skiba
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -27,7 +27,7 @@
   #include "wx/dcclient.h"
 #endif
 
-#if wxUSE_STATUSBAR
+#if wxUSE_NATIVE_STATUSBAR
 
 #include "wx/intl.h"
 #include "wx/log.h"
@@ -53,11 +53,11 @@ wxStatusBarPalm::wxStatusBarPalm()
 }
 
 bool wxStatusBarPalm::Create(wxWindow *parent,
-                           wxWindowID id,
-                           long style,
-                           const wxString& name)
+                             wxWindowID id,
+                             long style,
+                             const wxString& name)
 {
-    wxCHECK_MSG( parent, FALSE, wxT("status bar must have a parent") );
+    wxCHECK_MSG( parent, false, wxT("status bar must have a parent") );
 
     StatusTextBuffer = NULL;
 
@@ -66,17 +66,45 @@ bool wxStatusBarPalm::Create(wxWindow *parent,
 
     parent->AddChild(this);
 
-    m_windowId = id == -1 ? NewControlId() : id;
+    m_windowId = id == wxID_ANY ? NewControlId() : id;
 
     SetFieldsCount(1);
     SubclassWin(m_hWnd);
 
-    return TRUE;
+    return true;
 }
 
 wxStatusBarPalm::~wxStatusBarPalm()
 {
+    Show();
+
     DeleteStatusBuffer();
+}
+
+bool wxStatusBarPalm::IsShown() const
+{
+    return StatGetAttribute ( statAttrBarVisible , NULL );
+}
+
+bool wxStatusBarPalm::Show( bool show )
+{
+    if(show)
+    {
+        // show it if hidden
+        if(IsShown())
+            return false;
+        status_t rc = StatShow();
+        wxCHECK_MSG( rc == errNone, false, wxT("cannot hide status bar") );
+    }
+    else
+    {
+        // hide it if shown
+        if(!IsShown())
+            return false;
+        status_t rc = StatHide();
+        wxCHECK_MSG( rc == errNone, false, wxT("cannot hide status bar") );
+    }
+    return true;
 }
 
 void wxStatusBarPalm::SetFieldsCount(int nFields, const int *widths)
@@ -244,5 +272,5 @@ void wxStatusBarPalm::DoMoveWindow(int x, int y, int width, int height)
 {
 }
 
-#endif // wxUSE_STATUSBAR
+#endif // wxUSE_NATIVE_STATUSBAR
 

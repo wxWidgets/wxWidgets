@@ -24,19 +24,23 @@ public:
     // ctors and such
     wxStatusBarPalm();
     wxStatusBarPalm(wxWindow *parent,
-                  wxWindowID id = -1,
-                  long style = wxST_SIZEGRIP,
-                  const wxString& name = wxEmptyString)
+                    wxWindowID id = wxID_ANY,
+                    long style = wxST_SIZEGRIP,
+                    const wxString& name = wxEmptyString)
     {
         (void)Create(parent, id, style, name);
     }
 
     bool Create(wxWindow *parent,
-                wxWindowID id = -1,
+                wxWindowID id = wxID_ANY,
                 long style = wxST_SIZEGRIP,
                 const wxString& name = wxEmptyString);
 
     virtual ~wxStatusBarPalm();
+
+    // for native status bar use native check for visibility
+    virtual bool IsShown() const;
+    virtual bool Show( bool show = true );
 
     // a status line can have several (<256) fields numbered from 0
     virtual void SetFieldsCount(int number = 1, const int *widths = NULL);
