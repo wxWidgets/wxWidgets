@@ -35,17 +35,17 @@ class GenStaticText(wx.PyControl):
         self.SetPosition(pos)
         font = parent.GetFont()
         if not font.Ok():
-            font = wx.SystemSettings.GetSystemFont(wx.SYS_DEFAULT_GUI_FONT)
+            font = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)
         wx.PyControl.SetFont(self, font) # same here
 
         self.defBackClr = parent.GetBackgroundColour()
         if not self.defBackClr.Ok():
-            self.defBackClr = wx.SystemSettings.GetSystemColour(wx.SYS_COLOUR_3DFACE)
+            self.defBackClr = wx.SystemSettings.GetColour(wx.SYS_COLOUR_3DFACE)
         self.SetBackgroundColour(self.defBackClr)
 
         clr = parent.GetForegroundColour()
         if not clr.Ok():
-            clr = wx.SystemSettings_GetSystemColour(wx.SYS_COLOUR_BTNTEXT)
+            clr = wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNTEXT)
         self.SetForegroundColour(clr)
 
         rw, rh = size
