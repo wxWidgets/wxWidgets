@@ -318,7 +318,28 @@ void wxButton::MakeOwnerDrawn()
         lStyle |= BS_USERBUTTON;
         ::WinSetWindowULong(GetHwnd(), QWL_STYLE, lStyle);
     }
-} // end of wxCButton::MakeOwnerDrawn
+} // end of wxButton::MakeOwnerDrawn
+
+WXDWORD wxButton::OS2GetStyle(
+  long                              lStyle
+, WXDWORD*                          pdwExstyle
+) const
+{
+    //
+    // Buttons never have an external border, they draw their own one
+    //
+    WXDWORD                         dwStyle = wxControl::OS2GetStyle( (lStyle & ~wxBORDER_MASK) | wxBORDER_NONE
+                                                                     ,pdwExstyle
+                                                                    );
+
+    //
+    // We must use WS_CLIPSIBLINGS with the buttons or they would draw over
+    // each other in any resizeable dialog which has more than one button in
+    // the bottom
+    //
+    dwStyle |= WS_CLIPSIBLINGS;
+    return dwStyle;
+} // end of wxButton::OS2GetStyle
 
 MRESULT wxButton::WindowProc(
   WXUINT                            uMsg
@@ -362,5 +383,5 @@ MRESULT wxButton::WindowProc(
                                      ,wParam
                                      ,lParam
                                     ));
-} // end of wxW indowProc
+} // end of wxWindowProc
 

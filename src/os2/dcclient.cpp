@@ -160,6 +160,17 @@ void wxWindowDC::InitDC()
     SetBackground(wxBrush(m_pCanvas->GetBackgroundColour(), wxSOLID));
 } // end of wxWindowDC::InitDC
 
+void wxWindowDC::DoGetSize(
+  int*                              pnWidth
+, int*                              pnHeight
+) const
+{
+    wxCHECK_RET( m_pCanvas, _T("wxWindowDC without a window?") );
+    m_pCanvas->GetSize( pnWidth
+                       ,pnHeight
+                      );
+} // end of wxWindowDC::DoGetSize
+
 // ----------------------------------------------------------------------------
 // wxClientDC
 // ----------------------------------------------------------------------------
@@ -240,6 +251,17 @@ void wxClientDC::InitDC()
 wxClientDC::~wxClientDC()
 {
 } // end of wxClientDC::~wxClientDC
+
+void wxClientDC::DoGetSize(
+  int*                              pnWidth
+, int*                              pnHeight
+) const
+{
+    wxCHECK_RET( m_pCanvas, _T("wxWindowDC without a window?") );
+    m_pCanvas->GetClientSize( pnWidth
+                             ,pnHeight
+                            );
+} // end of wxClientDC::DoGetSize
 
 // ----------------------------------------------------------------------------
 // wxPaintDC

@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\Dev\Wx2\WxWindows\lib\wx.lib
+;From library:  H:\Dev\wx2\wxwindows\lib\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -856,147 +856,6 @@ EXPORTS
       __ls__18wxDataOutputStreamFi
       ;wxDataOutputStream::operator<<(const wxString&)
       __ls__18wxDataOutputStreamFRC8wxString
-  ;From object file:  ..\common\dbtable.cpp
-    ;PUBDEFs (Symbols available from object file):
-      ;wxDbTable::bindParams(unsigned long)
-      bindParams__9wxDbTableFUl
-      ;wxDbTable::ClearMemberVar(unsigned short,unsigned long)
-      ClearMemberVar__9wxDbTableFUsUl
-      ;wxDbTable::BuildSelectStmt(char*,int,unsigned long)
-      BuildSelectStmt__9wxDbTableFPciUl
-      ;wxDbTable::GetNewCursor(unsigned long,unsigned long)
-      GetNewCursor__9wxDbTableFUlT1
-      __vft9wxDbTable
-      ;wxDbTable::operator--(int)
-      __mm__9wxDbTableFi
-      ;wxDbTable::GetCol(const int) const
-      GetCol__9wxDbTableCFCi
-      ;wxDbTable::wxDbTable(wxDb*,const wxString&,const unsigned short,const wxString&,unsigned long,const wxString&)
-      __ct__9wxDbTableFP4wxDbRC8wxStringCUsT2UlT2
-      ;wxDbTable::SetCursor(void**)
-      SetCursor__9wxDbTableFPPv
-      ;wxDbTable::CreateIndex(const wxString&,unsigned long,unsigned short,wxDbIdxDef*,unsigned long)
-      CreateIndex__9wxDbTableFRC8wxStringUlUsP10wxDbIdxDefT2
-      ;wxDbTable::query(int,unsigned long,unsigned long,const wxString&)
-      query__9wxDbTableFiUlT2RC8wxString
-      ;wxDbTable::SetRowMode(const wxDbTable::rowmode_t)
-      SetRowMode__9wxDbTableFCQ2_9wxDbTable9rowmode_t
-      ;wxDbTable::Open(unsigned long,unsigned long)
-      Open__9wxDbTableFUlT1
-      TablesInUse
-      ;wxDbTable::Query(unsigned long,unsigned long)
-      Query__9wxDbTableFUlT1
-      ;wxDbTable::QueryMatching(unsigned long,unsigned long)
-      QueryMatching__9wxDbTableFUlT1
-      ;wxDbColDef::wxDbColDef()
-      __ct__10wxDbColDefFv
-      ;wxDbTable::cleanup()
-      cleanup__9wxDbTableFv
-      ;wxDbTable::~wxDbTable()
-      __dt__9wxDbTableFv
-      ;wxDbTable::GetLast()
-      GetLast__9wxDbTableFv
-      ;wxDbTable::DeleteMatching()
-      DeleteMatching__9wxDbTableFv
-      ;wxDbTable::CanUpdByROWID()
-      CanUpdByROWID__9wxDbTableFv
-      ;wxDbTable::BuildDeleteStmt(char*,int,const wxString&)
-      BuildDeleteStmt__9wxDbTableFPciRC8wxString
-      ;wxDbTable::Update(const wxString&)
-      Update__9wxDbTableFRC8wxString
-      ;wxDbTable::UpdateWhere(const wxString&)
-      UpdateWhere__9wxDbTableFRC8wxString
-      ;wxDbTable::SetColDefs(unsigned short,const wxString&,int,void*,short,int,unsigned long,unsigned long,unsigned long,unsigned long)
-      SetColDefs__9wxDbTableFUsRC8wxStringiPvsT3UlN37
-      ;wxDbTable::SetColDefs(wxDbColInf*,unsigned short)
-      SetColDefs__9wxDbTableFP10wxDbColInfUs
-      ;wxDbTable::DeleteWhere(const wxString&)
-      DeleteWhere__9wxDbTableFRC8wxString
-      ;wxDbTable::BuildSelectStmt(wxString&,int,unsigned long)
-      BuildSelectStmt__9wxDbTableFR8wxStringiUl
-      ;wxDbTable::SetColNull(const wxString&,unsigned long)
-      SetColNull__9wxDbTableFRC8wxStringUl
-      ;wxDbTable::CreateTable(unsigned long)
-      CreateTable__9wxDbTableFUl
-      ;wxDbTable::ClearMemberVars(unsigned long)
-      ClearMemberVars__9wxDbTableFUl
-      ;wxDbTable::QueryOnKeyFields(unsigned long,unsigned long)
-      QueryOnKeyFields__9wxDbTableFUlT1
-      ;wxDbTable::SetKey(const GenericKey&)
-      SetKey__9wxDbTableFRC10GenericKey
-      ;wxDbColDef::Initialize()
-      Initialize__10wxDbColDefFv
-      ;wxDbTable::initialize(wxDb*,const wxString&,const unsigned short,const wxString&,unsigned long,const wxString&)
-      initialize__9wxDbTableFP4wxDbRC8wxStringCUsT2UlT2
-      ;wxDbTable::bindCols(void*)
-      bindCols__9wxDbTableFPv
-      ;wxDbTable::Update()
-      Update__9wxDbTableFv
-      ;wxDbTable::IsCursorClosedOnCommit()
-      IsCursorClosedOnCommit__9wxDbTableFv
-      ;wxDbTable::GetRowNum()
-      GetRowNum__9wxDbTableFv
-      ;wxDbTable::GetPrev()
-      GetPrev__9wxDbTableFv
-      ;wxDbTable::execUpdate(const wxString&)
-      execUpdate__9wxDbTableFRC8wxString
-      ;wxDbTable::IsColNull(unsigned short) const
-      IsColNull__9wxDbTableCFUs
-      ;wxDbTable::DropIndex(const wxString&)
-      DropIndex__9wxDbTableFRC8wxString
-      ;wxDbTable::SetColNull(unsigned short,unsigned long)
-      SetColNull__9wxDbTableFUsUl
-      lastTableID
-      ;wxDbTable::SetCol(const int,const wxVariant)
-      SetCol__9wxDbTableFCiC9wxVariant
-      ;wxDbTable::SetOrderByColNums(unsigned short,...)
-      SetOrderByColNums__9wxDbTableFUse
-      ;wxDbTable::wxDbTable(wxDb*,const wxString&,const unsigned short,const char*,unsigned long,const wxString&)
-      __ct__9wxDbTableFP4wxDbRC8wxStringCUsPCcUlT2
-      ;wxDbTable::bindUpdateParams()
-      bindUpdateParams__9wxDbTableFv
-      ;wxDbTable::Refresh()
-      Refresh__9wxDbTableFv
-      ;wxDbTable::Insert()
-      Insert__9wxDbTableFv
-      ;wxDbTable::DeleteCursor(void**)
-      DeleteCursor__9wxDbTableFPPv
-      ;wxDbTable::CanSelectForUpdate()
-      CanSelectForUpdate__9wxDbTableFv
-      ;wxDbTable::BuildDeleteStmt(wxString&,int,const wxString&)
-      BuildDeleteStmt__9wxDbTableFR8wxStringiRC8wxString
-      ;wxDbTable::Count(const wxString&)
-      Count__9wxDbTableFRC8wxString
-      ;wxDbTable::BuildUpdateStmt(char*,int,const wxString&)
-      BuildUpdateStmt__9wxDbTableFPciRC8wxString
-      ;wxDbTable::BuildWhereClause(wxString&,int,const wxString&,unsigned long)
-      BuildWhereClause__9wxDbTableFR8wxStringiRC8wxStringUl
-      ;wxDbTable::SetQueryTimeout(unsigned long)
-      SetQueryTimeout__9wxDbTableFUl
-      ;wxDbTable::BuildWhereClause(char*,int,const wxString&,unsigned long)
-      BuildWhereClause__9wxDbTableFPciRC8wxStringUl
-      ;csstrncpyt(char*,const char*,int)
-      csstrncpyt__FPcPCci
-      ;wxDbTable::bindInsertParams()
-      bindInsertParams__9wxDbTableFv
-      ;wxDbTable::GetKey()
-      GetKey__9wxDbTableFv
-      ;wxDbTable::GetFirst()
-      GetFirst__9wxDbTableFv
-      ;wxDbTable::DropTable()
-      DropTable__9wxDbTableFv
-      ;wxDbTable::Delete()
-      Delete__9wxDbTableFv
-      ;wxDbTable::CloseCursor(void*)
-      CloseCursor__9wxDbTableFPv
-      ;wxDbTable::getRec(unsigned short)
-      getRec__9wxDbTableFUs
-      ;wxDbTable::execDelete(const wxString&)
-      execDelete__9wxDbTableFRC8wxString
-      ;wxDbTable::QueryBySqlStmt(const wxString&)
-      QueryBySqlStmt__9wxDbTableFRC8wxString
-      ;wxDbTable::BuildUpdateStmt(wxString&,int,const wxString&)
-      BuildUpdateStmt__9wxDbTableFR8wxStringiRC8wxString
   ;From object file:  ..\common\dcbase.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxDCBase::DoDrawCheckMark(int,int,int,int)
@@ -1602,6 +1461,7 @@ EXPORTS
       sm_classwxCloseEvent__12wxCloseEvent
       ;wxCommandEvent::wxCommandEvent(int,int)
       __ct__14wxCommandEventFiT1
+      wxEVT_MENU_CLOSE
       wxEVT_MAXIMIZE
       wxEVT_ACTIVATE
       ;wxScrollWinEvent::wxScrollWinEvent(int,int,int)
@@ -1614,7 +1474,7 @@ EXPORTS
       wxConstructorForwxNcPaintEvent__Fv
       wxEVT_SET_CURSOR
       wxEVT_SCROLLWIN_LINEDOWN
-      wxEVT_MENU_CHAR
+      wxEVT_MENU_OPEN
       wxEVT_END_SESSION
       wxEVT_COMMAND_ENTER
       ;wxConstructorForwxShowEvent()
@@ -1651,7 +1511,6 @@ EXPORTS
       wxEVT_SCROLLWIN_PAGEUP
       wxEVT_MOUSEWHEEL
       wxEVT_MIDDLE_UP
-      wxEVT_MENU_INIT
       wxEVT_HELP
       wxEVT_ERASE_BACKGROUND
       wxEVT_DETAILED_HELP
@@ -1859,7 +1718,6 @@ EXPORTS
       ;wxEvent::wxEvent(const wxEvent&)
       __ct__7wxEventFRC7wxEvent
       wxEVT_RIGHT_UP
-      wxEVT_POPUP_MENU_INIT
       wxEVT_PALETTE_CHANGED
       wxEVT_NC_MIDDLE_UP
       wxEVT_MENU_HIGHLIGHT
@@ -3683,12 +3541,12 @@ EXPORTS
       __ct__11wxLogStreamFP7ostream
       ;wxLogPassThrough::wxLogPassThrough()
       __ct__16wxLogPassThroughFv
-      ;wxVLogFatalError(const char*,char*)
-      wxVLogFatalError__FPCcPc
-      ;wxVLogSysError(const char*,char*)
-      wxVLogSysError__FPCcPc
       ;wxVLogInfo(const char*,char*)
       wxVLogInfo__FPCcPc
+      ;wxVLogSysError(const char*,char*)
+      wxVLogSysError__FPCcPc
+      ;wxVLogFatalError(const char*,char*)
+      wxVLogFatalError__FPCcPc
       ;wxLog::ms_suspendCount
       ms_suspendCount__5wxLog
       ;wxLog::ms_bAutoCreate
@@ -4753,6 +4611,8 @@ EXPORTS
   ;From object file:  ..\common\sckaddr.cpp
     ;PUBDEFs (Symbols available from object file):
       __vft13wxSockAddress8wxObject
+      ;wxSockAddress::Init()
+      Init__13wxSockAddressFv
       ;wxIPV4address::Hostname()
       Hostname__13wxIPV4addressFv
       ;wxIPV4address::AnyAddress()
@@ -5089,6 +4949,8 @@ EXPORTS
       __dt__14wxSocketClientFv
       ;wxSocketBase::RestoreState()
       RestoreState__12wxSocketBaseFv
+      ;wxSocketBase::IsInitialized()
+      IsInitialized__12wxSocketBaseFv
       ;wxSocketBase::Init()
       Init__12wxSocketBaseFv
       ;wxSocketBase::Discard()
@@ -5108,6 +4970,8 @@ EXPORTS
       __vft12wxSocketBase8wxObject
       ;wxSocketBase::WaitForRead(long,long)
       WaitForRead__12wxSocketBaseFlT1
+      ;wxSocketBase::m_countInit
+      m_countInit__12wxSocketBase
       ;wxSocketBase::_Read(void*,unsigned int)
       _Read__12wxSocketBaseFPvUi
       ;wxSocketBase::Write(const void*,unsigned int)
@@ -5138,10 +5002,14 @@ EXPORTS
       Unread__12wxSocketBaseFPCvUi
       ;wxSocketBase::OnRequest(wxSocketNotify)
       OnRequest__12wxSocketBaseF14wxSocketNotify
-      ;wxSocketBase::wxSocketBase()
-      __ct__12wxSocketBaseFv
+      ;wxSocketBase::Initialize()
+      Initialize__12wxSocketBaseFv
       ;wxConstructorForwxSocketModule()
       wxConstructorForwxSocketModule__Fv
+      ;wxSocketBase::wxSocketBase()
+      __ct__12wxSocketBaseFv
+      ;wxSocketBase::Shutdown()
+      Shutdown__12wxSocketBaseFv
       ;wxSocketBase::GetPeer(wxSockAddress&) const
       GetPeer__12wxSocketBaseCFR13wxSockAddress
       ;wxSocketBase::Notify(unsigned long)
@@ -5668,6 +5536,8 @@ EXPORTS
       SetToggle__13wxToolBarBaseFiUl
       ;wxToolBarBase::GetToolShortHelp(int) const
       GetToolShortHelp__13wxToolBarBaseCFi
+      ;wxCreateGreyedImage(const wxImage&,wxImage&)
+      wxCreateGreyedImage__FRC7wxImageR7wxImage
       ;wxToolBarBase::sm_eventTable
       sm_eventTable__13wxToolBarBase
       ;wxToolBarBase::sm_classwxToolBarBase
@@ -6813,6 +6683,8 @@ EXPORTS
       LayoutPhase1__12wxWindowBaseFPi
       ;wxWindowBase::GetPositionConstraint(int*,int*) const
       GetPositionConstraint__12wxWindowBaseCFPiT1
+      ;wxWindowBase::AdjustForParentClientOrigin(int&,int&,int) const
+      AdjustForParentClientOrigin__12wxWindowBaseCFRiT1i
       ;wxWindowBase::TransferDataToWindow()
       TransferDataToWindow__12wxWindowBaseFv
       ;wxWindowBase::ReleaseMouse()
@@ -6841,8 +6713,6 @@ EXPORTS
       GetClientSizeConstraint__12wxWindowBaseCFPiT1
       ;wxWindowBase::DoHitTest(int,int) const
       DoHitTest__12wxWindowBaseCFiT1
-      ;wxWindowBase::AdjustForParentClientOrigin(int&,int&,int)
-      AdjustForParentClientOrigin__12wxWindowBaseFRiT1i
       ;wxWindowBase::DoGetBestSize() const
       DoGetBestSize__12wxWindowBaseCFv
       ;wxWindowBase::TransferDataFromWindow()
@@ -11885,7 +11755,6 @@ EXPORTS
       wxGaugeNameStr
       wxGREEN
       wxFrameNameStr
-      wxFatalErrorStr
       wxDefaultPosition
       wxBitmapRadioButtonNameStr
       wxTheBitmapList
@@ -11935,7 +11804,6 @@ EXPORTS
       wxStatusLineNameStr
       wxRadioBoxNameStr
       wxLIGHT_GREY_PEN
-      wxInternalErrorStr
       wxGREY_PEN
       wxFileSelectorDefaultWildcardStr
       wxDoubleToStringStr
@@ -12147,6 +12015,8 @@ EXPORTS
       DoCopy__13wxArrayDCInfoFRC13wxArrayDCInfo
       ;wxArrayDCInfo::Add(const wxPaintDCInfo&)
       Add__13wxArrayDCInfoFRC13wxPaintDCInfo
+      ;wxWindowDC::DoGetSize(int*,int*) const
+      DoGetSize__10wxWindowDCCFPiT1
       ;wxPaintDC::wxPaintDC()
       __ct__9wxPaintDCFv
       ;wxArrayDCInfo::operator=(const wxArrayDCInfo&)
@@ -12155,6 +12025,7 @@ EXPORTS
       __ct__10wxClientDCFP8wxWindow
       ;wxPaintDC::FindDCInCache(wxWindow*)
       FindDCInCache__9wxPaintDCFP8wxWindow
+      __vft10wxWindowDC8wxObject
       ;wxArrayDCInfo::Insert(const wxPaintDCInfo&,unsigned int)
       Insert__13wxArrayDCInfoFRC13wxPaintDCInfoUi
       ;wxConstructorForwxWindowDC()
@@ -12181,6 +12052,8 @@ EXPORTS
       sm_classwxPaintDC__9wxPaintDC
       __vft10wxClientDC8wxObject
       __vft9wxPaintDC8wxObject
+      ;wxClientDC::DoGetSize(int*,int*) const
+      DoGetSize__10wxClientDCCFPiT1
       ;wxArrayDCInfo::~wxArrayDCInfo()
       __dt__13wxArrayDCInfoFv
       ;wxConstructorForwxClientDC()
@@ -14570,8 +14443,6 @@ EXPORTS
       wxColourDisplay__Fv
       ;wxCheckForInterrupt(wxWindow*)
       wxCheckForInterrupt__FP8wxWindow
-      ;wxDebugMsg(const char*,...)
-      wxDebugMsg__FPCce
       ;wxWriteResource(const wxString&,const wxString&,int,const wxString&)
       wxWriteResource__FRC8wxStringT1iT1
       ;wxGetResource(const wxString&,const wxString&,float*,const wxString&)
@@ -14590,8 +14461,6 @@ EXPORTS
       wxGetWindowClass__FUl
       ;wxGetUserId(char*,int)
       wxGetUserId__FPci
-      ;wxFatalError(const wxString&,const wxString&)
-      wxFatalError__FRC8wxStringT1
       ;wxDisplaySize(int*,int*)
       wxDisplaySize__FPiT1
       ;wxClientDisplayRect(int*,int*,int*,int*)
@@ -14613,8 +14482,6 @@ EXPORTS
       wxGetHostName__FPci
       ;wxGetResource(const wxString&,const wxString&,int*,const wxString&)
       wxGetResource__FRC8wxStringT1PiT1
-      ;wxError(const wxString&,const wxString&)
-      wxError__FRC8wxStringT1
       ;wxKill(long,wxSignal,wxKillError*)
       wxKill__Fl8wxSignalP11wxKillError
       ;wxBell()

@@ -667,7 +667,6 @@ wxApp::wxApp()
 {
     m_topWindow = NULL;
     wxTheApp = this;
-    m_wantDebugOutput = TRUE;
 
     argc = 0;
     argv = NULL;

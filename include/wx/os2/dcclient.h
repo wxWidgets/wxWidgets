@@ -37,11 +37,20 @@ class WXDLLEXPORT wxWindowDC : public wxDC
 public:
     wxWindowDC();
 
+    //
     // Create a DC corresponding to the whole window
+    //
     wxWindowDC(wxWindow* pWin);
 
 protected:
     void InitDC(void);
+
+    //
+    // Override some base class virtuals
+    //
+    virtual void DoGetSize( int* pWidth
+                           ,int* pHeight
+                          ) const;
 
 private:
     SIZEL                   m_PageSize;
@@ -58,6 +67,13 @@ public:
 
 protected:
     void InitDC(void);
+
+    //
+    // Override some base class virtuals
+    //
+    virtual void DoGetSize( int* pWidth
+                           ,int* pHeight
+                          ) const;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxClientDC)
