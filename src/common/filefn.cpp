@@ -923,8 +923,27 @@ wxString wxMacFSSpec2MacFilename( const FSSpec *spec )
     Str255    theParentPath = "\p";
     FSSpec      theParentSpec;
     FSRef       theParentRef;
+    FSRef       theRef ;
     char        theFileName[FILENAME_MAX];
     char        thePath[FILENAME_MAX];
+
+    // we loose the long filename by merely copying the spec->name
+    // so try the built-ins, which only work if the file exists, but still...
+    
+    theErr = FSpMakeFSRef(spec, &theRef);
+    if ( theErr == noErr )
+    {
+    	CFURLRef fullURLRef;
+        fullURLRef = ::CFURLCreateFromFSRef(NULL, &theRef);
+#ifdef __UNIX__
+    	CFURLPathStyle pathstyle = kCFURLPOSIXPathStyle;
+#else
+    	CFURLPathStyle pathstyle = kCFURLHFSPathStyle;
+#endif
+    	CFStringRef cfString = CFURLCopyFileSystemPath(fullURLRef, pathstyle);
+    	::CFRelease( fullURLRef ) ;
+    	return wxMacCFStringHolder(cfString).AsString(wxFont::GetDefaultEncoding());
+    }
 
     strcpy(thePath, "");
 

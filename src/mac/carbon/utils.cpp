@@ -1307,9 +1307,13 @@ OSStatus wxMacControl::SetData(ControlPartCode inPartCode , ResType inTag , Size
 
 OSStatus wxMacControl::SendEvent(  EventRef event , OptionBits inOptions ) 
 {
+#if TARGET_API_MAC_OSX
     return SendEventToEventTargetWithOptions( event, 
-        HIObjectGetEventTarget( (HIObjectRef) m_controlRef ),
-	        inOptions );        
+        HIObjectGetEventTarget(  (HIObjectRef) m_controlRef ), inOptions );        
+#else
+    #pragma unused(inOptions) 
+    return SendEventToEventTarget(event,GetControlEventTarget( m_controlRef ) ) ;
+#endif
 }
 
 OSStatus wxMacControl::SendHICommand( HICommand &command , OptionBits inOptions ) 
