@@ -164,9 +164,11 @@
 #endif
 
 #ifdef __WXMSW__
-// wxWindows checks for WIN32, not __WIN32__
-#if ((defined(WIN32) || defined(__NT__)) && !defined(__WIN32__) && !defined(__WXSTUBS__))
-#define __WIN32__
+    #if defined(_WIN32) || defined(WIN32) || defined(__NT__)
+        #ifndef __WIN32__
+            #define __WIN32__
+        #endif
+    #endif
 #endif
 
 #ifdef __WXWINE__
