@@ -67,9 +67,6 @@ class WXDLLEXPORT wxPropertySheet: public wxObject
   // Clear all properties
   virtual void Clear(void);
 
-  virtual bool Save(ostream& str);
-  virtual bool Load(ostream& str);
-
   virtual void UpdateAllViews(wxPropertyView *thisView = NULL);
   inline virtual wxList& GetProperties(void) const { return (wxList&) m_properties; }
   
@@ -231,8 +228,8 @@ class WXDLLEXPORT wxPropertyValue: public wxObject
   virtual wxPropertyValue *NewCopy(void) const;
   virtual void Copy(wxPropertyValue& copyFrom);
 
-  virtual void WritePropertyClause(ostream& stream);  // Write this expression as a top-level clause
-  virtual void WritePropertyType(ostream& stream);    // Write as any other subexpression
+  virtual void WritePropertyClause(wxString &stream);  // Write this expression as a top-level clause
+  virtual void WritePropertyType(wxString &stream);    // Write as any other subexpression
 
   // Append an expression to a list
   virtual void Append(wxPropertyValue *expr);

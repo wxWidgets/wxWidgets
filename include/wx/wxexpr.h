@@ -141,7 +141,6 @@ class WXDLLEXPORT wxExpr
   bool IsFunctor(const wxString& s) const;                     // Only for a clause
   void WriteClause(FILE* stream);  // Write this expression as a top-level clause
   void WriteExpr(FILE* stream);    // Write as any other subexpression
-  void WriteLispExpr(FILE* stream);
 
   // Append an expression to a list
   void Append(wxExpr *expr);
@@ -243,7 +242,6 @@ public:
     bool ReadFromString(const wxString& buffer);
     bool Write(const wxString& fileName);
     bool Write(FILE* stream);
-    void WriteLisp(FILE* stream);
 
     // Compatibility
     inline bool ReadProlog(wxChar *filename) { return Read(wxString(filename)); }

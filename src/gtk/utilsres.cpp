@@ -15,13 +15,14 @@
 #include "wx/utils.h"
 #include "wx/string.h"
 #include "wx/list.h"
+#include "wx/log.h"
 
 #include <ctype.h>
 #include <string.h>
 #include <unistd.h>
-#ifdef __SVR4__
-#include <sys/systeminfo.h>
-#endif
+//#ifdef __SVR4__
+//#include <sys/systeminfo.h>
+//#endif
 
 #include "gdk/gdkx.h"        // GDK_DISPLAY
 #include "gdk/gdkprivate.h"  // gdk_progclass
@@ -30,7 +31,6 @@
 #include <X11/Xutil.h>
 #include <X11/Xresource.h>
 
-#include "wx/log.h"
 
 //-----------------------------------------------------------------------------
 // constants

@@ -796,54 +796,6 @@ void wxExpr::WriteExpr(FILE* stream)    // Write as any other subexpression
   }
 }
 
-void wxExpr::WriteLispExpr(FILE* stream)
-{
-  switch (type)
-  {
-    case wxExprInteger:
-    {
-      fprintf( stream, "%ld", value.integer );
-      break;
-    }
-    case wxExprReal:
-    {
-      fprintf( stream, "%.6g", value.real );
-      break;
-    }
-    case wxExprString:
-    {
-      fprintf( stream, "\"" );
-      const wxWX2MBbuf val = wxConvLibc.cWX2MB(value.string);
-      fprintf( stream, (const char*) val );
-      fprintf( stream, "\"" );
-      break;
-    }
-    case wxExprWord:
-    {
-      const wxWX2MBbuf val = wxConvLibc.cWX2MB(value.word);
-      fprintf( stream, (const char*) val );
-      break;
-    }
-    case wxExprList:
-    {
-      wxExpr *expr = value.first;
-
-      fprintf( stream, "(" );
-      while (expr)
-      {
-        expr->WriteLispExpr(stream);
-        expr = expr->next;
-        if (expr) 
-	  fprintf( stream, " " );
-      }
-
-      fprintf( stream, ")" );
-      break;
-    }
-   case wxExprNull: break;
-  }
-}
-
 /*
  * wxExpr 'database' (list of expressions)
  */
@@ -1093,19 +1045,6 @@ bool wxExprDatabase::Write(FILE *stream)
     node = node->Next();
   }
   return (noErrors == 0);
-}
-
-void wxExprDatabase::WriteLisp(FILE* stream)
-{
-  noErrors = 0;
-  wxNode *node = First();
-  while (node)
-  {
-    wxExpr *expr = (wxExpr *)node->Data();
-    expr->WriteLispExpr(stream);
-    fprintf( stream, "\n\n" );
-    node = node->Next();
-  }
 }
 
 void add_expr(wxExpr * expr)

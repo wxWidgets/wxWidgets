@@ -80,8 +80,8 @@ static gint gtk_toolbar_enter_callback( GtkWidget *WXUNUSED(widget),
     
     wxToolBar *tb = tool->m_owner;
     
-    /* we grey-out the tip text of disabled tool */
-#if 0
+#if (GTK_MINOR_VERSION == 0)
+    /* we grey-out the tip text of disabled tool in GTK 1.0 */
     if (tool->m_enabled)
     {
         if (tb->m_fg->red != 0)
@@ -91,17 +91,7 @@ static gint gtk_toolbar_enter_callback( GtkWidget *WXUNUSED(widget),
             tb->m_fg->blue = 0;
             gdk_color_alloc( gtk_widget_get_colormap( GTK_WIDGET(tb->m_toolbar) ), tb->m_fg );
             
-#if (GTK_MINOR_VERSION > 0)
-            GtkStyle *g_style = 
-              gtk_style_copy(
-                gtk_widget_get_style( 
-                   GTK_TOOLBAR(tb->m_toolbar)->tooltips->tip_window ) );
-            
-            g_style->fg[GTK_STATE_NORMAL] = *tb->m_fg;
-            gtk_widget_set_style( GTK_TOOLBAR(tb->m_toolbar)->tooltips->tip_window, g_style );
-#else
             gtk_tooltips_set_colors( GTK_TOOLBAR(tb->m_toolbar)->tooltips, tb->m_bg, tb->m_fg );
-#endif
         }
     }
     else
@@ -112,17 +102,7 @@ static gint gtk_toolbar_enter_callback( GtkWidget *WXUNUSED(widget),
             tb->m_fg->green = 33000;
             tb->m_fg->blue = 33000;
             gdk_color_alloc( gtk_widget_get_colormap( GTK_WIDGET(tb->m_toolbar) ), tb->m_fg );
-#if (GTK_MINOR_VERSION > 0)
-            GtkStyle *g_style = 
-              gtk_style_copy(
-                gtk_widget_get_style( 
-                   GTK_TOOLBAR(tb->m_toolbar)->tooltips->tip_window ) );
-            
-            g_style->fg[GTK_STATE_NORMAL] = *tb->m_fg;
-            gtk_widget_set_style( GTK_TOOLBAR(tb->m_toolbar)->tooltips->tip_window, g_style );
-#else
             gtk_tooltips_set_colors( GTK_TOOLBAR(tb->m_toolbar)->tooltips, tb->m_bg, tb->m_fg );
-#endif
         }
     }
 #endif
@@ -294,7 +274,9 @@ wxToolBarTool *wxToolBar::AddTool( int toolIndex, const wxBitmap& bitmap,
       mask = bitmap.GetMask()->GetBitmap();
     
     tool_pixmap = gtk_pixmap_new( pixmap, mask );
+#if (GTK_MINOR_VERSION > 0)
     gtk_pixmap_set_build_insensitive( GTK_PIXMAP(tool_pixmap), TRUE );
+#endif
     
     gtk_misc_set_alignment( GTK_MISC(tool_pixmap), 0.5, 0.5 );
 
@@ -376,11 +358,12 @@ void wxToolBar::EnableTool(int toolIndex, bool enable)
         {
             tool->m_enabled = enable;
             
-/*   we don't disable the tools for now as the bitmaps don't get
-     greyed anyway and this also disables tooltips */
-
+#if (GTK_MINOR_VERSION > 0)
+            /* we don't disable the tools for GTK 1.0 as the bitmaps don't get
+               greyed anyway and this also disables tooltips */
             if (tool->m_item)
                 gtk_widget_set_sensitive( tool->m_item, enable );
+#endif
                 
             return;
         }

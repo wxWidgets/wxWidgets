@@ -215,6 +215,134 @@ extern bool g_isIdle;
 //-----------------------------------------------------------------------------
 
 #if (GTK_MINOR_VERSION == 0)
+/* these functions are copied verbatim from GTK 1.2 */
+static void
+gdkx_XConvertCase (KeySym symbol,
+		   KeySym *lower,
+		   KeySym *upper)
+{
+  register KeySym sym = symbol;
+  
+  g_return_if_fail (lower != NULL);
+  g_return_if_fail (upper != NULL);
+  
+  *lower = sym;
+  *upper = sym;
+  
+  switch (sym >> 8)
+    {
+#if	defined (GDK_A) && defined (GDK_Ooblique)
+    case 0: /* Latin 1 */
+      if ((sym >= GDK_A) && (sym <= GDK_Z))
+	*lower += (GDK_a - GDK_A);
+      else if ((sym >= GDK_a) && (sym <= GDK_z))
+	*upper -= (GDK_a - GDK_A);
+      else if ((sym >= GDK_Agrave) && (sym <= GDK_Odiaeresis))
+	*lower += (GDK_agrave - GDK_Agrave);
+      else if ((sym >= GDK_agrave) && (sym <= GDK_odiaeresis))
+	*upper -= (GDK_agrave - GDK_Agrave);
+      else if ((sym >= GDK_Ooblique) && (sym <= GDK_Thorn))
+	*lower += (GDK_oslash - GDK_Ooblique);
+      else if ((sym >= GDK_oslash) && (sym <= GDK_thorn))
+	*upper -= (GDK_oslash - GDK_Ooblique);
+      break;
+#endif	/* LATIN1 */
+      
+#if	defined (GDK_Aogonek) && defined (GDK_tcedilla)
+    case 1: /* Latin 2 */
+      /* Assume the KeySym is a legal value (ignore discontinuities) */
+      if (sym == GDK_Aogonek)
+	*lower = GDK_aogonek;
+      else if (sym >= GDK_Lstroke && sym <= GDK_Sacute)
+	*lower += (GDK_lstroke - GDK_Lstroke);
+      else if (sym >= GDK_Scaron && sym <= GDK_Zacute)
+	*lower += (GDK_scaron - GDK_Scaron);
+      else if (sym >= GDK_Zcaron && sym <= GDK_Zabovedot)
+	*lower += (GDK_zcaron - GDK_Zcaron);
+      else if (sym == GDK_aogonek)
+	*upper = GDK_Aogonek;
+      else if (sym >= GDK_lstroke && sym <= GDK_sacute)
+	*upper -= (GDK_lstroke - GDK_Lstroke);
+      else if (sym >= GDK_scaron && sym <= GDK_zacute)
+	*upper -= (GDK_scaron - GDK_Scaron);
+      else if (sym >= GDK_zcaron && sym <= GDK_zabovedot)
+	*upper -= (GDK_zcaron - GDK_Zcaron);
+      else if (sym >= GDK_Racute && sym <= GDK_Tcedilla)
+	*lower += (GDK_racute - GDK_Racute);
+      else if (sym >= GDK_racute && sym <= GDK_tcedilla)
+	*upper -= (GDK_racute - GDK_Racute);
+      break;
+#endif	/* LATIN2 */
+      
+#if	defined (GDK_Hstroke) && defined (GDK_Cabovedot)
+    case 2: /* Latin 3 */
+      /* Assume the KeySym is a legal value (ignore discontinuities) */
+      if (sym >= GDK_Hstroke && sym <= GDK_Hcircumflex)
+	*lower += (GDK_hstroke - GDK_Hstroke);
+      else if (sym >= GDK_Gbreve && sym <= GDK_Jcircumflex)
+	*lower += (GDK_gbreve - GDK_Gbreve);
+      else if (sym >= GDK_hstroke && sym <= GDK_hcircumflex)
+	*upper -= (GDK_hstroke - GDK_Hstroke);
+      else if (sym >= GDK_gbreve && sym <= GDK_jcircumflex)
+	*upper -= (GDK_gbreve - GDK_Gbreve);
+      else if (sym >= GDK_Cabovedot && sym <= GDK_Scircumflex)
+	*lower += (GDK_cabovedot - GDK_Cabovedot);
+      else if (sym >= GDK_cabovedot && sym <= GDK_scircumflex)
+	*upper -= (GDK_cabovedot - GDK_Cabovedot);
+      break;
+#endif	/* LATIN3 */
+      
+#if	defined (GDK_Rcedilla) && defined (GDK_Amacron)
+    case 3: /* Latin 4 */
+      /* Assume the KeySym is a legal value (ignore discontinuities) */
+      if (sym >= GDK_Rcedilla && sym <= GDK_Tslash)
+	*lower += (GDK_rcedilla - GDK_Rcedilla);
+      else if (sym >= GDK_rcedilla && sym <= GDK_tslash)
+	*upper -= (GDK_rcedilla - GDK_Rcedilla);
+      else if (sym == GDK_ENG)
+	*lower = GDK_eng;
+      else if (sym == GDK_eng)
+	*upper = GDK_ENG;
+      else if (sym >= GDK_Amacron && sym <= GDK_Umacron)
+	*lower += (GDK_amacron - GDK_Amacron);
+      else if (sym >= GDK_amacron && sym <= GDK_umacron)
+	*upper -= (GDK_amacron - GDK_Amacron);
+      break;
+#endif	/* LATIN4 */
+      
+#if	defined (GDK_Serbian_DJE) && defined (GDK_Cyrillic_yu)
+    case 6: /* Cyrillic */
+      /* Assume the KeySym is a legal value (ignore discontinuities) */
+      if (sym >= GDK_Serbian_DJE && sym <= GDK_Serbian_DZE)
+	*lower -= (GDK_Serbian_DJE - GDK_Serbian_dje);
+      else if (sym >= GDK_Serbian_dje && sym <= GDK_Serbian_dze)
+	*upper += (GDK_Serbian_DJE - GDK_Serbian_dje);
+      else if (sym >= GDK_Cyrillic_YU && sym <= GDK_Cyrillic_HARDSIGN)
+	*lower -= (GDK_Cyrillic_YU - GDK_Cyrillic_yu);
+      else if (sym >= GDK_Cyrillic_yu && sym <= GDK_Cyrillic_hardsign)
+	*upper += (GDK_Cyrillic_YU - GDK_Cyrillic_yu);
+      break;
+#endif	/* CYRILLIC */
+      
+#if	defined (GDK_Greek_ALPHAaccent) && defined (GDK_Greek_finalsmallsigma)
+    case 7: /* Greek */
+      /* Assume the KeySym is a legal value (ignore discontinuities) */
+      if (sym >= GDK_Greek_ALPHAaccent && sym <= GDK_Greek_OMEGAaccent)
+	*lower += (GDK_Greek_alphaaccent - GDK_Greek_ALPHAaccent);
+      else if (sym >= GDK_Greek_alphaaccent && sym <= GDK_Greek_omegaaccent &&
+	       sym != GDK_Greek_iotaaccentdieresis &&
+	       sym != GDK_Greek_upsilonaccentdieresis)
+	*upper -= (GDK_Greek_alphaaccent - GDK_Greek_ALPHAaccent);
+      else if (sym >= GDK_Greek_ALPHA && sym <= GDK_Greek_OMEGA)
+	*lower += (GDK_Greek_alpha - GDK_Greek_ALPHA);
+      else if (sym >= GDK_Greek_alpha && sym <= GDK_Greek_omega &&
+	       sym != GDK_Greek_finalsmallsigma)
+	*upper -= (GDK_Greek_alpha - GDK_Greek_ALPHA);
+      break;
+#endif	/* GREEK */
+    }
+}
+
 static guint
 gdk_keyval_to_upper (guint	  keyval)
 {
@@ -223,7 +351,7 @@ gdk_keyval_to_upper (guint	  keyval)
       KeySym lower_val = 0;
       KeySym upper_val = 0;
       
-      XConvertCase (keyval, &lower_val, &upper_val);
+      gdkx_XConvertCase (keyval, &lower_val, &upper_val);
       return upper_val;
     }
   return 0;
@@ -2384,7 +2512,7 @@ bool wxWindow::AcceptsFocus() const
 
 bool wxWindow::Reparent( wxWindow *newParent )
 {
-    wxCHECK_MSG( (m_widget != NULL), (wxWindow*) NULL, _T("invalid window") );
+    wxCHECK_MSG( (m_widget != NULL), FALSE, _T("invalid window") );
     
     wxWindow *oldParent = m_parent;
 

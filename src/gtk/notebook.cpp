@@ -520,7 +520,7 @@ bool wxNotebook::InsertPage( int position, wxWindow* win, const wxString& text,
     else 
         gtk_notebook_insert_page( notebook, win->m_widget, page->m_box, position );
 
-    page->m_page = GTK_NOTEBOOK_PAGE( g_list_last(notebook->children)->data );
+    page->m_page = (GtkNotebookPage*) g_list_last(notebook->children)->data;
 
     gtk_signal_connect( GTK_OBJECT(win->m_widget), "size_allocate",
       GTK_SIGNAL_FUNC(gtk_page_size_callback), (gpointer)win );

@@ -24,26 +24,14 @@
 #include "wx/wx.h"
 #endif
 
+#include "wx/debug.h"
+#include "wx/prop.h"
+
 #include <ctype.h>
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
 
-#if wxUSE_IOSTREAMH
-#if defined(__WXMSW__) && !defined(__GNUWIN32__) && !defined(__WXWINE__)
-#include <strstrea.h>
-#else
-#include <strstream.h>
-#endif
-#else
-#include <strstream>
-#endif
-
-#include "wx/window.h"
-#include "wx/utils.h"
-#include "wx/list.h"
-#include "wx/debug.h"
-#include "wx/prop.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxPropertyValue, wxObject)
 
@@ -457,7 +445,7 @@ int wxPropertyValue::Number(void) const
   return i;
 }
 
-void wxPropertyValue::WritePropertyClause(ostream& stream)  // Write this expression as a top-level clause
+void wxPropertyValue::WritePropertyClause(wxString& stream)  // Write this expression as a top-level clause
 {
   if (m_type != wxPropertyValueList)
     return;
@@ -466,86 +454,73 @@ void wxPropertyValue::WritePropertyClause(ostream& stream)  // Write this expres
   if (node)
   {
     node->WritePropertyType(stream);
-    stream << "(";
+    stream.Append( _T("(") );
     node = node->m_next;
     bool first = TRUE;
     while (node)
     {
       if (!first)
-        stream << "  ";
+        stream.Append( _T("  ") );
       node->WritePropertyType(stream);
       node = node->m_next;
-      if (node) stream << ",\n";
+      if (node) 
+        stream.Append( _T(",\n" ) );
       first = FALSE;
     }
-    stream << ").\n\n";
+    stream.Append( _T(").\n\n") );
   }
 }
 
-void wxPropertyValue::WritePropertyType(ostream& stream)    // Write as any other subexpression
+void wxPropertyValue::WritePropertyType(wxString& stream)    // Write as any other subexpression
 {
+  wxString tmp;
   switch (m_type)
   {
     case wxPropertyValueInteger:
     {
-      stream << m_value.integer;
+      tmp.Printf( _T("%ld"), m_value.integer );
+      stream.Append( tmp );
       break;
     }
     case wxPropertyValueIntegerPtr:
     {
-      stream << *m_value.integerPtr;
+      tmp.Printf( _T("%ld"), *m_value.integerPtr );
+      stream.Append( tmp );
       break;
     }
     case wxPropertyValuebool:
     {
       if (m_value.integer)
-        stream << "True";
+        stream.Append( _T("True") );
       else
-        stream << "False";
+        stream.Append( _T("False") );
       break;
     }
     case wxPropertyValueboolPtr:
     {
       if (*m_value.integerPtr)
-        stream << "True";
+        stream.Append( _T("True") );
       else
-        stream << "False";
+        stream.Append( _T("False") );
       break;
     }
     case wxPropertyValueReal:
     {
-      float f = m_value.real;
-      wxSprintf(wxBuffer, _T("%.6g"), (double)f);
-      stream << wxBuffer;
+      double d = m_value.real;
+      tmp.Printf( _T("%.6g"), d );
+      stream.Append( tmp );
       break;
     }
     case wxPropertyValueRealPtr:
     {
-      float f = *m_value.realPtr;
-/* Now the parser can cope with this.
-      // Prevent printing in 'e' notation. Any better way?
-      if (fabs(f) < 0.00001)
-        f = 0.0;
-*/
-      wxSprintf(wxBuffer, _T("%.6g"), f);
-      stream << wxBuffer;
+      double d = *m_value.realPtr;
+      tmp.Printf( _T("%.6g"), d );
+      stream.Append( tmp );
       break;
     }
     case wxPropertyValueString:
     {
-//      stream << "\"";
-      int i;
-      const wxWX2MBbuf strbuf = wxConvCurrent->cWX2MB(m_value.string);
-      int len = strlen(strbuf);
-      for (i = 0; i < len; i++)
-      {
-        char ch = strbuf[i];
-//        if (ch == '"' || ch == '\\')
-//          stream << "\\";
-        stream << ch;
-      }
-
-//      stream << "\"";
+      stream.Append( m_value.string );
       break;
     }
     case wxPropertyValueStringPtr:
@@ -565,19 +540,20 @@ void wxPropertyValue::WritePropertyType(ostream& stream)    // Write as any othe
     case wxPropertyValueList:
     {
       if (!m_value.first)
-        stream << "[]";
+        stream.Append( _T("[]") );
       else
       {
         wxPropertyValue *expr = m_value.first;
 
-        stream << "[";
+        stream.Append( _T("[") );
         while (expr)
         {
           expr->WritePropertyType(stream);
           expr = expr->m_next;
-          if (expr) stream << ", ";
+          if (expr) 
+	    stream.Append( _T(", ") );
         }
-        stream << "]";
+        stream.Append( _T("]") );
       }
       break;
     }
@@ -587,16 +563,9 @@ void wxPropertyValue::WritePropertyType(ostream& stream)    // Write as any othe
 
 wxString wxPropertyValue::GetStringRepresentation(void)
 {
-  char buf[500];
-  buf[0] = 0;
-  
-  ostrstream str((char *)buf, (int)500, ios::out);
+  wxString str;
   WritePropertyType(str);
-  str << '\0';
-  str.flush();
-
-  wxString theString(buf);
-  return theString;
+  return str;
 }
 
 void wxPropertyValue::operator=(const wxPropertyValue& val)
@@ -950,16 +919,6 @@ wxPropertySheet::wxPropertySheet(const wxString& name)
 wxPropertySheet::~wxPropertySheet(void)
 {
   Clear();
-}
-
-bool wxPropertySheet::Save( ostream& WXUNUSED(str) )
-{
-  return FALSE;
-}
-
-bool wxPropertySheet::Load( ostream& WXUNUSED(str) )
-{
-  return FALSE;
 }
 
 void wxPropertySheet::UpdateAllViews( wxPropertyView *WXUNUSED(thisView) )

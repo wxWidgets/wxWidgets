@@ -39,7 +39,6 @@
 #include "wx/button.h"
 #include "wx/bmpbuttn.h"
 #include "wx/radiobox.h"
-#include "wx/radiobut.h"
 #include "wx/listbox.h"
 #include "wx/choice.h"
 #include "wx/checkbox.h"
@@ -48,15 +47,13 @@
 #include "wx/icon.h"
 #include "wx/statbox.h"
 #include "wx/statbmp.h"
-#if wxUSE_GAUGE
 #include "wx/gauge.h"
-#endif
 #include "wx/textctrl.h"
 #include "wx/msgdlg.h"
 #include "wx/intl.h"
 #endif
 
-#if wxUSE_RADIOBUTTON
+#if wxUSE_RADIOBTN
 #include "wx/radiobut.h"
 #endif
 
@@ -373,7 +370,7 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, const wxItemResource* c
         ((wxGauge *)control)->SetValue((int)childResource->GetValue1());
       }
 #endif
-#if wxUSE_RADIOBUTTON
+#if wxUSE_RADIOBTN
    else if (itemType == wxString(_T("wxRadioButton")))
       {
         control = new wxRadioButton(parent, id, childResource->GetTitle(), // (int)childResource->GetValue1(),
@@ -862,7 +859,7 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, wxExpr *expr)
         controlItem->SetFont(wxResourceInterpretFontSpec(expr->Nth(count)));
     }
   }
-#if wxUSE_RADIOBUTTON
+#if wxUSE_RADIOBTN
   else if (controlType == _T("wxRadioButton"))
   {
     // Check for default value

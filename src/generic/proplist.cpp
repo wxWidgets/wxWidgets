@@ -24,26 +24,14 @@
 #include "wx/wx.h"
 #endif
 
+#include "wx/colordlg.h"
+#include "wx/proplist.h"
+
 #include <ctype.h>
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
 
-#if wxUSE_IOSTREAMH
-#if defined(__WXMSW__) && !defined(__GNUWIN32__) && !defined(__WXWINE__)
-#include <strstrea.h>
-#else
-#include <strstream.h>
-#endif
-#else
-#include <strstream>
-#endif
-
-#include "wx/window.h"
-#include "wx/utils.h"
-#include "wx/list.h"
-#include "wx/colordlg.h"
-#include "wx/proplist.h"
 
 /*
  * Property text edit control
