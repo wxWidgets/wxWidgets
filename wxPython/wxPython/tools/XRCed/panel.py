@@ -11,7 +11,10 @@ from wxPython.html import wxHtmlWindow
 # Properties panel containing notebook
 class Panel(wxNotebook):
     def __init__(self, parent, id = -1):
-        wxNotebook.__init__(self, parent, id, style=wxNB_BOTTOM)
+        if wxPlatform != '__WXMAC__':   # some problems with this style on macs
+            wxNotebook.__init__(self, parent, id, style=wxNB_BOTTOM)
+        else:
+            wxNotebook.__init__(self, parent, id)
         global panel
         g.panel = panel = self
         self.modified = false

@@ -648,14 +648,18 @@ class Frame(wxFrame):
         self.tb.ToggleTool(self.ID_AUTO_REFRESH, conf.autoRefresh)
 
     def OnAbout(self, evt):
-        str = '%s %s\n\nRoman Rolinsky <rolinsky@mema.ucl.ac.be>' % \
-              (progname, version)
-        dlg = wxMessageDialog(self, str, 'About ' + progname, wxOK | wxCENTRE)
+        str = '''\
+XRCed version %s
+
+(c) Roman Rolinsky <rollrom@users.sourceforge.net>
+Homepage: http://xrced.sourceforge.net\
+''' % version
+        dlg = wxMessageDialog(self, str, 'About XRCed', wxOK | wxCENTRE)
         dlg.ShowModal()
         dlg.Destroy()
 
     def OnReadme(self, evt):
-        text = open(os.path.join(basePath, 'README'), 'r').read()
+        text = open(os.path.join(basePath, 'README.txt'), 'r').read()
         dlg = ScrolledMessageDialog(self, text, "XRCed README")
         dlg.ShowModal()
         dlg.Destroy()
@@ -920,9 +924,10 @@ class App(wxApp):
         try:
             opts, args = getopt.getopt(sys.argv[1:], 'dvh')
         except getopt.GetoptError:
-            print >> sys.stderr, 'Unknown option'
-            usage()
-            sys.exit(1)
+            if wxPlatform != '__WXMAC__': # macs have some extra parameters
+                print >> sys.stderr, 'Unknown option'
+                usage()
+                sys.exit(1)
         for o,a in opts:
             if o == '-h':
                 usage()
