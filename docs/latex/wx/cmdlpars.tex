@@ -85,7 +85,8 @@ enum wxCmdLineEntryType
     wxCMD\_LINE\_PARAM,
     wxCMD\_LINE\_NONE         // use this to terminate the list
 }
-\end{verbatim}}
+\end{verbatim}
+}
 
 The field {\tt shortName} is the usual, short, name of the switch or the option.
 {\tt longName} is the corresponding long name or NULL if the option has no long
@@ -107,7 +108,8 @@ enum wxCmdLineParamType
     wxCMD\_LINE\_VAL\_DATE,
     wxCMD\_LINE\_VAL\_NONE
 }
-\end{verbatim}}
+\end{verbatim}
+}
 
 Finally, the {\tt flags} field is a combination of the following bit masks:
 
@@ -121,7 +123,8 @@ enum
     wxCMD\_LINE\_OPTION\_HELP      = 0x08, // this option is a help request
     wxCMD\_LINE\_NEEDS\_SEPARATOR  = 0x10, // must have sep before the value
 }
-\end{verbatim}}
+\end{verbatim}
+}
 
 Notice that by default (i.e. if flags are just $0$), options are optional (sic)
 and each call to \helpref{AddParam()}{wxcmdlineparseraddparam} allows one more
