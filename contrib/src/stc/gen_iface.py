@@ -35,7 +35,7 @@ valPrefixes = [('SCI_', ''),
                ('SCWS_', 'WS_'),
 ]
 
-# Message funcion values that should have a CMD_ constant as well
+# Message function values that should have a CMD_ constant as well
 cmdValues = [ (2300, 2350), 2011, 2013, (2176, 2180) ]
 
 
