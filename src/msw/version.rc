@@ -11,10 +11,12 @@
 
 #include "wx/version.h"
 
+// see http://msdn.microsoft.com/library/psdk/winui/rc_7x2d.htm for values: we
+// don't use symbolic constants because older compilers might not have them
 #ifdef WXMAKINGDLL
-    #define wxVFT VFT_DLL
+    #define wxVFT 2 // VFT_DLL
 #else
-    #define wxVFT VFT_APP
+    #define wxVFT 1 // VFT_APP
 #endif
 
 #ifdef _DEBUG
@@ -25,14 +27,12 @@
     #define DLL_SUFFIX ""
 #endif
 
-//see http://msdn.microsoft.com/library/psdk/winui/rc_7x2d.htm for values
 1 VERSIONINFO
  FILEVERSION wxMAJOR_VERSION,wxMINOR_VERSION,wxRELEASE_NUMBER,wxBETA_NUMBER
  PRODUCTVERSION wxMAJOR_VERSION,wxMINOR_VERSION,wxRELEASE_NUMBER,wxBETA_NUMBER
  FILEFLAGSMASK 0x3fL
  FILEFLAGS DLL_FLAGS
- // for NT/win2000 use VOS_NT next
- FILEOS VOS__WINDOWS32
+ FILEOS 0x40004L // VOS_NT_WINDOWS32
  FILETYPE wxVFT
  FILESUBTYPE 0x0L
 BEGIN
