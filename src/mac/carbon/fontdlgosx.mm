@@ -209,10 +209,11 @@ bool wxFontDialog::Create(wxWindow *parent, const wxFontData& data)
             ];
             
         wxASSERT_MSG(theDefaultFont, wxT("Invalid default font for wxCocoaFontDialog!"));
-     
-        //set the initial font of the NSFontPanel 
-        //(the font manager calls the appropriate NSFontPanel method)
-        [[NSFontManager sharedFontManager] setSelectedFont:theDefaultFont isMultiple:NO];
+
+        //Apple docs say to call NSFontManager::setSelectedFont
+        //However, 10.3 doesn't seem to create the font panel
+        //is this is done, so create it ourselves
+        [[NSFontPanel sharedFontPanel] setPanelFont:theDefaultFont isMultiple:NO];
 
     }
 
