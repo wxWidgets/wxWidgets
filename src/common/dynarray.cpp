@@ -102,7 +102,7 @@ name& name::operator=(const name& src)                                      \
 }                                                                           \
                                                                             \
 /* grow the array */                                                        \
-void name::Grow()                                                           \
+void name::Grow(size_t nIncrement)                                          \
 {                                                                           \
   /* only do it if no more place */                                         \
   if( m_nCount == m_nSize ) {                                               \
@@ -116,11 +116,13 @@ void name::Grow()                                                           \
     }                                                                       \
     else                                                                    \
     {                                                                       \
-      /* add 50% but not too much */                                        \
-      size_t nIncrement = m_nSize < WX_ARRAY_DEFAULT_INITIAL_SIZE           \
-                         ? WX_ARRAY_DEFAULT_INITIAL_SIZE : m_nSize >> 1;    \
-      if ( nIncrement > ARRAY_MAXSIZE_INCREMENT )                           \
-        nIncrement = ARRAY_MAXSIZE_INCREMENT;                               \
+      /* add at least 50% but not too much */                               \
+      size_t ndefIncrement = m_nSize < WX_ARRAY_DEFAULT_INITIAL_SIZE        \
+                            ? WX_ARRAY_DEFAULT_INITIAL_SIZE : m_nSize >> 1; \
+      if ( ndefIncrement > ARRAY_MAXSIZE_INCREMENT )                        \
+        ndefIncrement = ARRAY_MAXSIZE_INCREMENT;                            \
+      if ( nIncrement < ndefIncrement )                                     \
+        nIncrement = ndefIncrement;                                         \
       T *pNew = new T[m_nSize + nIncrement];                                \
       /* only grow if allocation succeeded */                               \
       if ( pNew ) {                                                         \
@@ -240,10 +242,11 @@ int name::Index(T lItem, CMPFUNC fnCompare) const                           \
 }                                                                           \
                                                                             \
 /* add item at the end */                                                   \
-void name::Add(T lItem)                                                     \
+void name::Add(T lItem, size_t nInsert)                                     \
 {                                                                           \
-  Grow();                                                                   \
-  m_pItems[m_nCount++] = lItem;                                             \
+  Grow(nInsert);                                                            \
+  for (size_t i = 0; i < nInsert; i++)                                      \
+      m_pItems[m_nCount++] = lItem;                                         \
 }                                                                           \
                                                                             \
 /* add item assuming the array is sorted with fnCompare function */         \
@@ -253,26 +256,31 @@ void name::Add(T lItem, CMPFUNC fnCompare)                                  \
 }                                                                           \
                                                                             \
 /* add item at the given position */                                        \
-void name::Insert(T lItem, size_t nIndex)                                   \
+void name::Insert(T lItem, size_t nIndex, size_t nInsert)                   \
 {                                                                           \
   wxCHECK_RET( nIndex <= m_nCount, wxT("bad index in wxArray::Insert") );   \
+  wxCHECK_RET( m_nCount <= m_nCount + nInsert,                              \
+               wxT("array size overflow in wxArray::Insert") );             \
                                                                             \
-  Grow();                                                                   \
+  Grow(nInsert);                                                            \
                                                                             \
-  memmove(&m_pItems[nIndex + 1], &m_pItems[nIndex],                         \
+  memmove(&m_pItems[nIndex + nInsert], &m_pItems[nIndex],                   \
           (m_nCount - nIndex)*sizeof(T));                                   \
-  m_pItems[nIndex] = lItem;                                                 \
-  m_nCount++;                                                               \
+  for (size_t i = 0; i < nInsert; i++)                                      \
+      m_pItems[nIndex + i] = lItem;                                         \
+  m_nCount += nInsert;                                                      \
 }                                                                           \
                                                                             \
 /* removes item from array (by index) */                                    \
-void name::RemoveAt(size_t nIndex)                                          \
+void name::RemoveAt(size_t nIndex, size_t nRemove)                          \
 {                                                                           \
-  wxCHECK_RET( nIndex <= m_nCount, wxT("bad index in wxArray::RemoveAt") ); \
+  wxCHECK_RET( nIndex < m_nCount, wxT("bad index in wxArray::RemoveAt") );  \
+  wxCHECK_RET( nIndex + nRemove <= m_nCount,                                \
+               wxT("removing too many elements in wxArray::RemoveAt") );    \
                                                                             \
-  memmove(&m_pItems[nIndex], &m_pItems[nIndex + 1],                         \
-          (m_nCount - nIndex - 1)*sizeof(T));                               \
-  m_nCount--;                                                               \
+  memmove(&m_pItems[nIndex], &m_pItems[nIndex + nRemove],                   \
+          (m_nCount - nIndex - nRemove)*sizeof(T));                         \
+  m_nCount -= nRemove;                                                      \
 }                                                                           \
                                                                             \
 /* removes item from array (by value) */                                    \

@@ -63,27 +63,33 @@ void name::DoEmpty()                                                          \
     delete (T*)wxBaseArrayPtrVoid::Item(ui);                                  \
 }                                                                             \
                                                                               \
-void name::RemoveAt(size_t uiIndex)                                           \
+void name::RemoveAt(size_t uiIndex, size_t nRemove)                           \
 {                                                                             \
   wxCHECK_RET( uiIndex < Count(), _WX_ERROR_REMOVE2(name) );                  \
                                                                               \
-  delete (T*)wxBaseArrayPtrVoid::Item(uiIndex);                               \
+  for (size_t i = 0; i < nRemove; i++ )                                       \
+    delete (T*)wxBaseArrayPtrVoid::Item(uiIndex + i);                         \
                                                                               \
-  wxBaseArrayPtrVoid::RemoveAt(uiIndex);                                      \
+  wxBaseArrayPtrVoid::RemoveAt(uiIndex, nRemove);                             \
 }                                                                             \
                                                                               \
-void name::Add(const T& item)                                                 \
+void name::Add(const T& item, size_t nInsert)                                 \
+{                                                                             \
+  T* pItem = new T(item);                                                     \
+  size_t nOldSize = GetCount();                                               \
+  if ( pItem != NULL )                                                        \
+    wxBaseArrayPtrVoid::Add(pItem, nInsert);                                  \
+  for (size_t i = 1; i < nInsert; i++)                                        \
+    wxBaseArrayPtrVoid::Item(nOldSize + i) = new T(item);                     \
+}                                                                             \
+                                                                              \
+void name::Insert(const T& item, size_t uiIndex, size_t nInsert)              \
 {                                                                             \
   T* pItem = new T(item);                                                     \
   if ( pItem != NULL )                                                        \
-    Add(pItem);                                                               \
-}                                                                             \
-                                                                              \
-void name::Insert(const T& item, size_t uiIndex)                              \
-{                                                                             \
-  T* pItem = new T(item);                                                     \
-  if ( pItem != NULL )                                                        \
-    Insert(pItem, uiIndex);                                                   \
+    wxBaseArrayPtrVoid::Insert(pItem, uiIndex, nInsert);                      \
+  for (size_t i = 1; i < nInsert; i++)                                        \
+    wxBaseArrayPtrVoid::Item(uiIndex + i) = new T(item);                      \
 }                                                                             \
                                                                               \
 int name::Index(const T& Item, bool bFromEnd) const                           \

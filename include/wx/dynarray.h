@@ -57,7 +57,7 @@
 
 /*
     Callback compare function for quick sort.
-    
+
     It must return negative value, 0 or positive value if the first item is
     less than, equal to or greater than the second one.
  */
@@ -103,17 +103,17 @@ protected:                                                          \
   int Index(T lItem, bool bFromEnd = FALSE) const;                  \
   int Index(T lItem, CMPFUNC fnCompare) const;                      \
   size_t IndexForInsert(T lItem, CMPFUNC fnCompare) const;          \
-  void Add(T lItem);                                                \
+  void Add(T lItem, size_t nInsert = 1);                            \
   void Add(T lItem, CMPFUNC fnCompare);                             \
-  void Insert(T lItem, size_t uiIndex);                             \
+  void Insert(T lItem, size_t uiIndex, size_t nInsert = 1);         \
   void Remove(T lItem);                                             \
-  void RemoveAt(size_t uiIndex);                                    \
+  void RemoveAt(size_t uiIndex, size_t nRemove = 1);                \
                                                                     \
   void Sort(CMPFUNC fnCompare);                                     \
                                                                     \
 private:                                                            \
                                                                     \
-  void    Grow();                                                   \
+  void    Grow(size_t nIncrement = 0);                              \
                                                                     \
   size_t  m_nSize,                                                  \
           m_nCount;                                                 \
@@ -168,12 +168,13 @@ public:                                                               \
   int Index(T Item, bool bFromEnd = FALSE) const                      \
     { return base::Index(Item, bFromEnd); }                           \
                                                                       \
-  void Add(T Item)                                                    \
-    { base::Add(Item); }                                              \
-  void Insert(T Item, size_t uiIndex)                                 \
-    { base::Insert(Item, uiIndex) ; }                                 \
+  void Add(T Item, size_t nInsert = 1)                                \
+    { base::Add(Item, nInsert); }                                     \
+  void Insert(T Item, size_t uiIndex, size_t nInsert = 1)             \
+    { base::Insert(Item, uiIndex, nInsert) ; }                        \
                                                                       \
-  void RemoveAt(size_t uiIndex) { base::RemoveAt(uiIndex); }          \
+  void RemoveAt(size_t uiIndex, size_t nRemove = 1)                   \
+    { base::RemoveAt(uiIndex, nRemove); }                             \
   void Remove(T Item)                                                 \
     { int iIndex = Index(Item);                                       \
       wxCHECK2_MSG( iIndex != wxNOT_FOUND, return,                    \
@@ -223,7 +224,8 @@ public:                                                               \
   void Add(T Item)                                                    \
     { base::Add(Item, (CMPFUNC)m_fnCompare); }                        \
                                                                       \
-  void RemoveAt(size_t uiIndex) { base::RemoveAt(uiIndex); }          \
+  void RemoveAt(size_t uiIndex, size_t nRemove = 1)                   \
+    { base::RemoveAt(uiIndex, nRemove); }                             \
   void Remove(T Item)                                                 \
     { int iIndex = Index(Item);                                       \
       wxCHECK2_MSG( iIndex != wxNOT_FOUND, return,                    \
@@ -259,11 +261,11 @@ public:                                                                  \
                                                                          \
   int Index(const T& Item, bool bFromEnd = FALSE) const;                 \
                                                                          \
-  void Add(const T& Item);                                               \
+  void Add(const T& Item, size_t nInsert = 1);                           \
   void Add(const T* pItem)                                               \
     { base::Add((T*)pItem); }                                            \
                                                                          \
-  void Insert(const T& Item,  size_t uiIndex);                           \
+  void Insert(const T& Item,  size_t uiIndex, size_t nInsert = 1);       \
   void Insert(const T* pItem, size_t uiIndex)                            \
     { base::Insert((T*)pItem, uiIndex); }                                \
                                                                          \
@@ -273,7 +275,7 @@ public:                                                                  \
   T* Detach(size_t uiIndex)                                              \
     { T* p = (T*)base::Item(uiIndex);                                    \
       base::RemoveAt(uiIndex); return p; }                               \
-  void RemoveAt(size_t uiIndex);                                         \
+  void RemoveAt(size_t uiIndex, size_t nRemove = 1);                     \
                                                                          \
   void Sort(CMPFUNC##T fCmp) { base::Sort((CMPFUNC##base)fCmp); }        \
                                                                          \
