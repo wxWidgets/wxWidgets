@@ -264,9 +264,11 @@ SOURCE=.\src\msw\curico.cpp
 
 !IF  "$(CFG)" == "wxWin - Win32 Release"
 
+# ADD CPP /YX
+
 !ELSEIF  "$(CFG)" == "wxWin - Win32 Debug"
 
-# ADD CPP /D "STRICT"
+# ADD CPP /D "STRICT" /YX
 
 !ENDIF 
 
@@ -394,9 +396,11 @@ SOURCE=.\src\msw\dib.cpp
 
 !IF  "$(CFG)" == "wxWin - Win32 Release"
 
+# ADD CPP /YX
+
 !ELSEIF  "$(CFG)" == "wxWin - Win32 Debug"
 
-# ADD CPP /D "STRICT"
+# ADD CPP /D "STRICT" /YX
 
 !ENDIF 
 
@@ -433,11 +437,11 @@ SOURCE=.\src\msw\dummy.cpp
 
 !IF  "$(CFG)" == "wxWin - Win32 Release"
 
-# ADD CPP /Yc""
+# ADD CPP /YX
 
 !ELSEIF  "$(CFG)" == "wxWin - Win32 Debug"
 
-# ADD CPP /D "STRICT" /Yc""
+# ADD CPP /D "STRICT" /YX
 
 !ENDIF 
 

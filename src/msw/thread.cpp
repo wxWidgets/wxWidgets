@@ -13,6 +13,8 @@
 #pragma implementation "thread.h"
 #endif
 
+// this is here to regen the precompiled header in the ide compile otherwise the
+// compiler crashes in vc5 (nfi why)
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
