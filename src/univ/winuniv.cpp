@@ -852,7 +852,7 @@ wxRect wxWindow::ScrollNoRefresh(int dx, int dy, const wxRect *rectTotal)
         dcMem.SelectObject(bmp);
 
         dcMem.Blit(wxPoint(0, 0), size, &dc, ptSource
-#if defined(__WXGTK__) && !defined(__WX_DC_BLIT_FIXED__)
+#if defined(__WXGTK__) && !defined(wxHAS_WORKING_GTK_DC_BLIT)
                 + GetClientAreaOrigin()
 #endif // broken wxGTK wxDC::Blit
                   );

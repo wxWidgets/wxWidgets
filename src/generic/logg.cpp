@@ -546,15 +546,15 @@ wxLogFrame::~wxLogFrame()
 
 // wxLogWindow
 // -----------
+
 wxLogWindow::wxLogWindow(wxFrame *pParent,
                          const wxChar *szTitle,
                          bool bShow,
                          bool bDoPass)
 {
-    m_bPassMessages = bDoPass;
+    PassMessages(bDoPass);
 
     m_pLogFrame = new wxLogFrame(pParent, this, szTitle);
-    m_pOldLog = wxLog::SetActiveTarget(this);
 
     if ( bShow )
         m_pLogFrame->Show(TRUE);
@@ -565,21 +565,10 @@ void wxLogWindow::Show(bool bShow)
     m_pLogFrame->Show(bShow);
 }
 
-void wxLogWindow::Flush()
-{
-    if ( m_pOldLog != NULL )
-        m_pOldLog->Flush();
-
-    m_bHasMessages = FALSE;
-}
-
 void wxLogWindow::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
 {
     // first let the previous logger show it
-    if ( m_pOldLog != NULL && m_bPassMessages ) {
-        // bogus cast just to access protected DoLog
-        ((wxLogWindow *)m_pOldLog)->DoLog(level, szString, t);
-    }
+    wxLogPassThrough::DoLog(level, szString, t);
 
     if ( m_pLogFrame ) {
         switch ( level ) {
@@ -652,8 +641,6 @@ void wxLogWindow::OnFrameDelete(wxFrame * WXUNUSED(frame))
 
 wxLogWindow::~wxLogWindow()
 {
-    delete m_pOldLog;
-
     // may be NULL if log frame already auto destroyed itself
     delete m_pLogFrame;
 }

@@ -15,8 +15,10 @@
 #error No __WXxxx__ define set! Please define one of __WXBASE__,__WXGTK__,__WXMSW__,__WXMOTIF__,__WXMAC__,__WXQT__,__WXPM__,__WXSTUBS__
 #endif
 
-// wxUniversal is defined together with one of other ports, so test for it
-// first
+/*
+  wxUniversal is defined together with one of other ports, so test for it
+  first
+ */
 #ifdef __WXUNIVERSAL__
 #if defined(__USE_WXCONFIG__) && defined(__WXDEBUG__)
 #include "wx/univd/setup.h"
@@ -67,5 +69,16 @@
 #endif
 
 #include "wx/chkconf.h"
+
+/*
+   define some constants identifying wxWindows version in more details than
+   just the version number
+ */
+
+// wxLogChain class available
+#define wxHAS_LOG_CHAIN
+
+// define this when wxDC::Blit() respects SetDeviceOrigin() in wxGTK
+#undef wxHAS_WORKING_GTK_DC_BLIT
 
 #endif /* _WX_SETUP_H_BASE_ */

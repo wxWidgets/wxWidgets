@@ -407,7 +407,8 @@ void wxLog::DoLogString(const wxChar *WXUNUSED(szString), time_t WXUNUSED(t))
 
 void wxLog::Flush()
 {
-    // do nothing
+    // remember that we don't have any more messages to show
+    m_bHasMessages = FALSE;
 }
 
 // ----------------------------------------------------------------------------
@@ -423,82 +424,82 @@ wxLogStderr::wxLogStderr(FILE *fp)
 }
 
 #if defined(__WXMAC__) && !defined(__UNIX__)
-#define kDebuggerSignature		'MWDB'
+#define kDebuggerSignature        'MWDB'
 
 static Boolean FindProcessBySignature(OSType signature, ProcessInfoRec* info)
-{	
-	OSErr err;
-	ProcessSerialNumber psn;
-	Boolean found = false;
-	psn.highLongOfPSN = 0;
-	psn.lowLongOfPSN = kNoProcess;
-	
-	if (!info) return false;
-	
-	info->processInfoLength = sizeof(ProcessInfoRec);
-	info->processName = NULL;
-	info->processAppSpec = NULL;
-	
-	err = noErr;
-	while (!found && err == noErr)
-	{
-		err = GetNextProcess(&psn);
-		if (err == noErr)
-		{
-			err = GetProcessInformation(&psn, info);
-			found = err == noErr && info->processSignature == signature;
-		}
-	}				
-	return found;
+{
+    OSErr err;
+    ProcessSerialNumber psn;
+    Boolean found = false;
+    psn.highLongOfPSN = 0;
+    psn.lowLongOfPSN = kNoProcess;
+
+    if (!info) return false;
+
+    info->processInfoLength = sizeof(ProcessInfoRec);
+    info->processName = NULL;
+    info->processAppSpec = NULL;
+
+    err = noErr;
+    while (!found && err == noErr)
+    {
+        err = GetNextProcess(&psn);
+        if (err == noErr)
+        {
+            err = GetProcessInformation(&psn, info);
+            found = err == noErr && info->processSignature == signature;
+        }
+    }
+    return found;
 }
 
 pascal Boolean MWDebuggerIsRunning(void)
 {
-	ProcessInfoRec info;
-	return FindProcessBySignature(kDebuggerSignature, &info);
+    ProcessInfoRec info;
+    return FindProcessBySignature(kDebuggerSignature, &info);
 }
 
 pascal OSErr AmIBeingMWDebugged(Boolean* result)
 {
-	OSErr err;
-	ProcessSerialNumber psn;
-	OSType sig = kDebuggerSignature;
-	AppleEvent	theAE = {typeNull, NULL};
-	AppleEvent	theReply = {typeNull, NULL};
-	AEAddressDesc addr  = {typeNull, NULL};
-	DescType actualType;
-	Size actualSize;
-	
-	if (!result) return paramErr;
-	
-	err = AECreateDesc(typeApplSignature, &sig, sizeof(sig), &addr);
-	if (err != noErr) goto exit;
-	
-	err = AECreateAppleEvent('MWDB', 'Dbg?', &addr,
-				kAutoGenerateReturnID, kAnyTransactionID, &theAE);
-	if (err != noErr) goto exit;
-		
-	GetCurrentProcess(&psn);
-	err = AEPutParamPtr(&theAE, keyDirectObject, typeProcessSerialNumber,
-			&psn, sizeof(psn));
-	if (err != noErr) goto exit;
-	
-	err = AESend(&theAE, &theReply, kAEWaitReply, kAENormalPriority,
-					kAEDefaultTimeout, NULL, NULL);
-	if (err != noErr) goto exit;
-	
-	err = AEGetParamPtr(&theReply, keyAEResult, typeBoolean, &actualType, result, 
-				sizeof(Boolean), &actualSize);
+    OSErr err;
+    ProcessSerialNumber psn;
+    OSType sig = kDebuggerSignature;
+    AppleEvent    theAE = {typeNull, NULL};
+    AppleEvent    theReply = {typeNull, NULL};
+    AEAddressDesc addr  = {typeNull, NULL};
+    DescType actualType;
+    Size actualSize;
+
+    if (!result) return paramErr;
+
+    err = AECreateDesc(typeApplSignature, &sig, sizeof(sig), &addr);
+    if (err != noErr) goto exit;
+
+    err = AECreateAppleEvent(kDebuggerSignature, 'Dbg?', &addr,
+                kAutoGenerateReturnID, kAnyTransactionID, &theAE);
+    if (err != noErr) goto exit;
+
+    GetCurrentProcess(&psn);
+    err = AEPutParamPtr(&theAE, keyDirectObject, typeProcessSerialNumber,
+            &psn, sizeof(psn));
+    if (err != noErr) goto exit;
+
+    err = AESend(&theAE, &theReply, kAEWaitReply, kAENormalPriority,
+                    kAEDefaultTimeout, NULL, NULL);
+    if (err != noErr) goto exit;
+
+    err = AEGetParamPtr(&theReply, keyAEResult, typeBoolean, &actualType, result,
+                sizeof(Boolean), &actualSize);
 
 exit:
-	if (addr.dataHandle)
-		AEDisposeDesc(&addr);
-	if (theAE.dataHandle)
-		AEDisposeDesc(&theAE);
-	if (theReply.dataHandle)
-		AEDisposeDesc(&theReply);
+    if (addr.dataHandle)
+        AEDisposeDesc(&addr);
+    if (theAE.dataHandle)
+        AEDisposeDesc(&theAE);
+    if (theReply.dataHandle)
+        AEDisposeDesc(&theReply);
 
-	return err;
+    return err;
 }
 #endif
 
@@ -519,36 +520,36 @@ void wxLogStderr::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
     OutputDebugString(str.c_str());
 #endif // MSW
 #if defined(__WXMAC__) && !defined(__WXMAC_X__) && wxUSE_GUI
-	Str255 pstr ;
-	strcpy( (char*) pstr , str.c_str() ) ;
-	strcat( (char*) pstr , ";g" ) ;
-	c2pstr( (char*) pstr ) ;
+    Str255 pstr ;
+    strcpy( (char*) pstr , str.c_str() ) ;
+    strcat( (char*) pstr , ";g" ) ;
+    c2pstr( (char*) pstr ) ;
 #if __WXDEBUG__
-	Boolean running = false ;
-	
+    Boolean running = false ;
+
 /*
-	if ( MWDebuggerIsRunning() )
-	{
-		AmIBeingMWDebugged( &running ) ;
-	}
+    if ( MWDebuggerIsRunning() )
+    {
+        AmIBeingMWDebugged( &running ) ;
+    }
 */
-	if (running)
-	{
-	#ifdef __powerc
-		DebugStr(pstr);
-	#else
-		SysBreakStr(pstr);
-	#endif
-	}
-	else		
+    if (running)
+    {
+#ifdef __powerc
+        DebugStr(pstr);
+#else
+        SysBreakStr(pstr);
 #endif
-	{
-	#ifdef __powerc
-		DebugStr(pstr);
-	#else
-		DebugStr(pstr);
-	#endif
-	}
+    }
+    else
+#endif
+    {
+#ifdef __powerc
+        DebugStr(pstr);
+#else
+        DebugStr(pstr);
+#endif
+    }
 #endif // Mac
 }
 
@@ -572,6 +573,52 @@ void wxLogStream::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
     (*m_ostr) << str << wxConvertWX2MB(szString) << wxSTD endl;
 }
 #endif // wxUSE_STD_IOSTREAM
+
+// ----------------------------------------------------------------------------
+// wxLogChain
+// ----------------------------------------------------------------------------
+
+wxLogChain::wxLogChain(wxLog *logger)
+{
+    m_logNew = logger;
+    m_logOld = wxLog::SetActiveTarget(this);
+}
+
+void wxLogChain::SetLog(wxLog *logger)
+{
+    if ( m_logNew != this )
+        delete m_logNew;
+
+    wxLog::SetActiveTarget(logger);
+
+    m_logNew = logger;
+}
+
+void wxLogChain::Flush()
+{
+    if ( m_logOld )
+        m_logOld->Flush();
+
+    // be careful to avoid inifinite recursion
+    if ( m_logNew && m_logNew != this )
+        m_logNew->Flush();
+}
+
+void wxLogChain::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
+{
+    // let the previous logger show it
+    if ( m_logOld && IsPassingMessages() )
+    {
+        // bogus cast just to access protected DoLog
+        ((wxLogChain *)m_logOld)->DoLog(level, szString, t);
+    }
+
+    if ( m_logNew && m_logNew != this )
+    {
+        // as above...
+        ((wxLogChain *)m_logNew)->DoLog(level, szString, t);
+    }
+}
 
 // ============================================================================
 // Global functions/variables
