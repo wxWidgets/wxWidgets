@@ -65,6 +65,7 @@ caret.cpp	G	U
 choicdgg.cpp	G
 colrdlgg.cpp	G	G
 dcpsg.cpp	G	U
+dirctrlg.cpp	G
 dirdlgg.cpp	G	16,P
 dragimgg.cpp	G	P
 fontdlgg.cpp	G	G,R,P
@@ -1084,6 +1085,7 @@ caret.h	N
 choicdgg.h	N
 colrdlgg.h	N
 dcpsg.h	N
+dirctrlg.h	N
 dirdlgg.h	N	16
 dragimgg.h	N	16
 fontdlgg.h	N

@@ -512,6 +512,10 @@ SOURCE=.\generic\choicdgg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\generic\dirctrlg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\generic\dragimgg.cpp
 # End Source File
 # Begin Source File

@@ -33,6 +33,9 @@
 #include "wx/tipdlg.h"
 #include "wx/progdlg.h"
 
+// New wxGenericDirCtrl
+#include "wx/dirctrl.h"
+
 #define wxTEST_GENERIC_DIALOGS_IN_MSW 0
 
 #if defined(__WXMSW__) && wxTEST_GENERIC_DIALOGS_IN_MSW
@@ -61,6 +64,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(DIALOGS_FILES_OPEN,                    MyFrame::FilesOpen)
     EVT_MENU(DIALOGS_FILE_SAVE,                     MyFrame::FileSave)
     EVT_MENU(DIALOGS_DIR_CHOOSE,                    MyFrame::DirChoose)
+    EVT_MENU(DIALOGS_GENERIC_DIR_CHOOSE,            MyFrame::GenericDirChoose)
     EVT_MENU(DIALOGS_MODAL,                         MyFrame::ModalDlg)
     EVT_MENU(DIALOGS_MODELESS,                      MyFrame::ModelessDlg)
     EVT_MENU(DIALOGS_TIP,                           MyFrame::ShowTip)
@@ -129,6 +133,7 @@ bool MyApp::OnInit()
   file_menu->Append(DIALOGS_FILES_OPEN,  "Open &files\tCtrl-Q");
   file_menu->Append(DIALOGS_FILE_SAVE,  "Sa&ve file\tCtrl-S");
   file_menu->Append(DIALOGS_DIR_CHOOSE,  "&Choose a directory\tCtrl-D");
+  file_menu->Append(DIALOGS_GENERIC_DIR_CHOOSE,  "&Choose a directory (generic implementation)");
 #if wxUSE_PROGRESSDLG
   file_menu->Append(DIALOGS_PROGRESS, "Pro&gress dialog\tCtrl-G");
 #endif // wxUSE_PROGRESSDLG
@@ -410,6 +415,21 @@ void MyFrame::DirChoose(wxCommandEvent& WXUNUSED(event) )
     wxGetHomeDir(&dirHome);
 
     wxDirDialog dialog(this, "Testing directory picker", dirHome);
+
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        wxMessageDialog dialog2(this, dialog.GetPath(), "Selected path");
+        dialog2.ShowModal();
+    }
+}
+
+void MyFrame::GenericDirChoose(wxCommandEvent& WXUNUSED(event) )
+{
+    // pass some initial dir to wxDirDialog
+    wxString dirHome;
+    wxGetHomeDir(&dirHome);
+
+    wxGenericDirDialog dialog(this, "Testing generic directory picker", dirHome);
 
     if (dialog.ShowModal() == wxID_OK)
     {

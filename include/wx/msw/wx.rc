@@ -115,12 +115,22 @@ WXCURSOR_BLANK          CURSOR  DISCARDABLE     "wx/msw/blank.cur"
 //wxDEFAULT_MDIPARENTFRAME      ICON "wx/msw/mdi.ico"
 //wxDEFAULT_MDICHILDFRAME       ICON "wx/msw/child.ico"
 
-// Standard icons
-wxICON_QUESTION		ICON "wx/msw/question.ico"
-wxICON_WARNING		ICON "wx/msw/warning.ico"
-wxICON_ERROR		ICON "wx/msw/error.ico"
-wxICON_INFO		ICON "wx/msw/info.ico"
-wxICON_TIP		ICON "wx/msw/tip.ico"
+// Standard large icons
+wxICON_QUESTION		        ICON "wx/msw/question.ico"
+wxICON_WARNING		        ICON "wx/msw/warning.ico"
+wxICON_ERROR		        ICON "wx/msw/error.ico"
+wxICON_INFO		        ICON "wx/msw/info.ico"
+wxICON_TIP		        ICON "wx/msw/tip.ico"
+
+// Standard small icons
+wxICON_SMALL_CLOSED_FOLDER      ICON "wx/msw/folder1.ico"
+wxICON_SMALL_OPEN_FOLDER        ICON "wx/msw/folder2.ico"
+wxICON_SMALL_FILE               ICON "wx/msw/file1.ico"
+wxICON_SMALL_COMPUTER           ICON "wx/msw/computer.ico"
+wxICON_SMALL_DRIVE              ICON "wx/msw/drive.ico"
+wxICON_SMALL_CDROM              ICON "wx/msw/cdrom.ico"
+wxICON_SMALL_FLOPPY             ICON "wx/msw/floppy.ico"
+wxICON_SMALL_REMOVEABLE         ICON "wx/msw/removble.ico"
 
 //////////////////////////////////////////////////////////////////////////////
 //
