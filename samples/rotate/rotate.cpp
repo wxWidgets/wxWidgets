@@ -78,6 +78,10 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
     m_image = wxImage("kclub.bmp", wxBITMAP_TYPE_BMP);
+
+    // any unused colour will do
+    m_image.SetMaskColour( 0, 255, 255 );
+
     if ( !m_image.Ok() )
     {
         wxLogError("Can't load the test image, please copy it to the "
@@ -89,7 +93,7 @@ bool MyApp::OnInit()
                                   wxPoint(20,20), wxSize(600,450));
 
     frame->SetBackgroundColour (wxColour (0,80,60));
-
+    frame->Clear();
     frame->Show (TRUE);
     SetTopWindow (frame);
     return TRUE;
@@ -139,7 +143,7 @@ void MyFrame::OnMouseLeftUp (wxMouseEvent & event)
     wxBitmap bmp = img2.ConvertToBitmap ();
 
     wxClientDC dc (this);
-    dc.DrawBitmap (img2.ConvertToBitmap(), event.m_x + offset.x, event.m_y + offset.y);
+    dc.DrawBitmap (img2.ConvertToBitmap(), event.m_x + offset.x, event.m_y + offset.y, TRUE);
 }
 
 // without interpolation, and without offset correction
@@ -151,5 +155,5 @@ void MyFrame::OnMouseRightUp (wxMouseEvent & event)
     wxBitmap bmp = img2.ConvertToBitmap ();
 
     wxClientDC dc (this);
-    dc.DrawBitmap (bmp, event.m_x, event.m_y);
+    dc.DrawBitmap (bmp, event.m_x, event.m_y, TRUE);
 }
