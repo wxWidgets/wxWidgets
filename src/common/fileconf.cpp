@@ -181,6 +181,13 @@ wxFileConfig::~wxFileConfig()
 {
   Flush();
   delete m_pRootGroup;
+
+  LineList *pCur = m_linesHead;
+  while ( pCur != NULL ) {
+    LineList *pNext = pCur->Next();
+    delete pCur;
+    pCur = pNext;
+  }
 }
 
 // ----------------------------------------------------------------------------
