@@ -83,7 +83,7 @@ wxNativeFontInfo *wxFontBase::GetNativeFontInfo() const
     wxNativeFontInfo *fontInfo = new wxNativeFontInfo();
 
     fontInfo->SetPointSize(GetPointSize());
-    fontInfo->SetFamily(GetFamily());
+    fontInfo->SetFamily((wxFontFamily)GetFamily());
     fontInfo->SetStyle((wxFontStyle)GetStyle());
     fontInfo->SetWeight((wxFontWeight)GetWeight());
     fontInfo->SetUnderlined(GetUnderlined());
@@ -257,7 +257,7 @@ bool wxNativeFontInfo::FromString(const wxString& s)
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
         return FALSE;
-    family = (int)l;
+    family = (wxFontFamily)l;
 
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
@@ -371,7 +371,7 @@ void wxNativeFontInfo::SetUnderlined(bool underlined_)
 
 void wxNativeFontInfo::SetFaceName(wxString facename_)
 {
-    facename = facename_;
+    faceName = facename_;
 }
 
 void wxNativeFontInfo::SetFamily(wxFontFamily family_)
