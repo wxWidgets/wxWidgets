@@ -40,8 +40,6 @@ public:
 
     virtual void SetLabel( const wxString &label );
 
-    bool SetFont( const wxFont &font );
-    
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
@@ -49,6 +47,9 @@ public:
 
     virtual bool IsTransparentForMouse() const { return TRUE; }
 
+protected:
+    void DoApplyWidgetStyle(GtkRcStyle *style);
+    
 private:
     DECLARE_DYNAMIC_CLASS(wxStaticBox)
 };

@@ -91,19 +91,10 @@ void wxStaticBox::SetLabel( const wxString &label )
                          m_label.empty() ? (char *)NULL : (const char*) wxGTK_CONV( m_label ) );
 }
 
-bool wxStaticBox::SetFont( const wxFont &font )
+void wxStaticBox::DoApplyWidgetStyle(GtkRcStyle *style)
 {
-    wxControl::SetFont( font );
-
-    if (GTK_FRAME(m_widget)->label_widget)
-    {
-        GtkRcStyle *style = CreateWidgetStyle(true);
-        if ( style )
-        {
-            gtk_widget_modify_style( GTK_FRAME(m_widget)->label_widget, style);
-            gtk_rc_style_unref(style);
-        }
-    }
+    gtk_widget_modify_style(m_widget, style);
+    gtk_widget_modify_style(GTK_FRAME(m_widget)->label_widget, style);
 }
 
 // static
