@@ -2,6 +2,8 @@
 <!-- $Id$ -->
 
 <makefile>
+
+    <requires version="0.1.3"/>
     
     <!-- bakefile modules we need: -->
     <using module="datafiles"/>

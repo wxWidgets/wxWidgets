@@ -30,7 +30,14 @@
     <template id="wx_util" template="wx_util_b">
         <app-type>gui</app-type>
         <mac-res cond="FORMAT=='autoconf'">$(MACOSX_RESOURCES)</mac-res>
-        <include>$(SRCDIR)/$(WXTOPDIR)samples</include> <!-- for .rc files -->
+        <!-- resource files includes: -->
+        <include>$(SRCDIR)/$(WXTOPDIR)samples</include>
+        <!-- this include is not added via <include> for autoconf, see
+             common.bkl: -->
+        <res-include cond="FORMAT=='autoconf'">
+            $(TOP_SRCDIR)include
+        </res-include>
+        
         <win32-res>$(WXTOPDIR)samples/sample.rc</win32-res>
         <if cond="FORMAT=='autoconf'">
             <wx-os2-lib-resource/>
