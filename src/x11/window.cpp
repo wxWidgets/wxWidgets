@@ -74,7 +74,7 @@ static wxWindow* g_captureWindow = NULL;
 // event tables
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxWindowX11, wxWindowBase)
+IMPLEMENT_ABSTRACT_CLASS(wxWindowX11, wxWindowBase)
 
 BEGIN_EVENT_TABLE(wxWindowX11, wxWindowBase)
     EVT_SYS_COLOUR_CHANGED(wxWindowX11::OnSysColourChanged)

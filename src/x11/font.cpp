@@ -38,6 +38,7 @@
 #include "wx/fontutil.h"    // for wxNativeFontInfo
 #include "wx/tokenzr.h"
 #include "wx/settings.h"
+#include "wx/x11/private.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
 

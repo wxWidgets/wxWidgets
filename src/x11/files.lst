@@ -14,6 +14,7 @@ ALL_SOURCES = \
 		x11/dcmemory.cpp \
 		x11/dcscreen.cpp \
 		x11/evtloop.cpp \
+		x11/font.cpp \
 		x11/gdiobj.cpp \
 		x11/glcanvas.cpp \
 		x11/gsockx11.c \
@@ -23,6 +24,7 @@ ALL_SOURCES = \
 		x11/minifram.cpp \
 		x11/palette.cpp \
 		x11/pen.cpp \
+		x11/popupwin.cpp \
 		x11/region.cpp \
 		x11/settings.cpp \
 		x11/timer.cpp \
@@ -90,6 +92,7 @@ ALL_SOURCES = \
 		generic/msgdlgg.cpp \
 		generic/numdlgg.cpp \
 		generic/panelg.cpp \
+		generic/printps.cpp \
 		generic/prntdlgg.cpp \
 		generic/progdlgg.cpp \
 		generic/prop.cpp \
@@ -637,6 +640,7 @@ GUIOBJS = \
 		dcmemory.o \
 		dcscreen.o \
 		evtloop.o \
+		font.o \
 		gdiobj.o \
 		glcanvas.o \
 		gsockx11.o \
@@ -646,6 +650,7 @@ GUIOBJS = \
 		minifram.o \
 		palette.o \
 		pen.o \
+		popupwin.o \
 		region.o \
 		settings.o \
 		timer.o \
@@ -843,6 +848,7 @@ GENERICOBJS = \
 		msgdlgg.o \
 		numdlgg.o \
 		panelg.o \
+		printps.o \
 		prntdlgg.o \
 		progdlgg.o \
 		prop.o \

@@ -33,8 +33,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxPopupWindow, wxWindow)
 
 bool wxPopupWindow::Create( wxWindow *parent, int style )
 {
-    m_needParent = FALSE;
-
     if (!CreateBase( parent, -1, wxDefaultPosition, wxDefaultSize, style, wxDefaultValidator, "popup" ))
     {
         wxFAIL_MSG( wxT("wxPopupWindow creation failed") );

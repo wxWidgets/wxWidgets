@@ -98,8 +98,5 @@ protected:
     wxString              m_title;
 };
 
-// list of all frames and modeless dialogs
-;; extern WXDLLEXPORT_DATA(wxWindowList) wxModelessWindows;
-
 #endif // _WX_X11_TOPLEVEL_H_
 

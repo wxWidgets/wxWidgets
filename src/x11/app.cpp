@@ -60,8 +60,6 @@ wxApp *wxTheApp = NULL;
 
 wxHashTable *wxWidgetHashTable = NULL;
 
-static Window wxGetParentWindow(Window window);
-
 IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
 
 BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
@@ -296,7 +294,7 @@ void wxApp::ProcessXEvent(WXEvent* _event)
     // TODO: may need to translate coordinates from actualWindow
     // to window, if the receiving window != wxWindow window
     while (window && !(win = wxGetWindowFromTable(window)))
-        window = wxGetParentWindow(window);
+        window = wxGetWindowParent(window);
 
     // TODO: shouldn't all the ProcessEvents below
     // be win->GetEventHandler()->ProcessEvent?
@@ -643,7 +641,7 @@ WXColormap wxApp::GetMainColormap(WXDisplay* display)
     return (WXColormap) c;
 }
 
-Window wxGetParentWindow(Window window)
+Window wxGetWindowParent(Window window)
 {
     Window parent, root = 0;
     unsigned int noChildren = 0;

@@ -48,14 +48,6 @@ static bool SetWMDecorations(Widget w, long style);
 #endif
 static bool MWMIsRunning(Window w);
 
-
-// ----------------------------------------------------------------------------
-// globals
-// ----------------------------------------------------------------------------
-
-// list of all frames and modeless dialogs
-// wxWindowList wxModelessWindows;
-
 // ----------------------------------------------------------------------------
 // wxTopLevelWindowX11 creation
 // ----------------------------------------------------------------------------
@@ -163,9 +155,6 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
 wxTopLevelWindowX11::~wxTopLevelWindowX11()
 {
     wxTopLevelWindows.DeleteObject(this);
-
-    if ( wxModelessWindows.Find(this) )
-        wxModelessWindows.DeleteObject(this);
 
     // If this is the last top-level window, exit.
     if ( wxTheApp && (wxTopLevelWindows.Number() == 0) )

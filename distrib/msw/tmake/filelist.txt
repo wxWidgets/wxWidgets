@@ -95,7 +95,7 @@ notebook.cpp	Generic	NotWin32,NotGTK,NotOS2,NotMGL,NotX11,NotMac,NotMicro
 numdlgg.cpp	Generic
 paletteg.cpp	Generic	NotMSW,NotX,NotOS2,NotMGL,NotX11,NotMac,NotMicro
 panelg.cpp	Generic
-printps.cpp	Generic	NotMSW,NotX11
+printps.cpp	Generic	NotMSW
 prntdlgg.cpp	Generic	NotMSW
 progdlgg.cpp	Generic
 prop.cpp	Generic
@@ -615,6 +615,7 @@ dcmemory.cpp	X11
 dcscreen.cpp	X11
 dcscreen.cpp	X11
 evtloop.cpp	X11
+font.cpp	X11
 gdiobj.cpp	X11
 glcanvas.cpp	X11
 icon.cpp	X11
