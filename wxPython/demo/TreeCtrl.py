@@ -116,7 +116,7 @@ class TestTreeCtrlPanel(wx.Panel):
             # Lets just see what's visible of its children
             cookie = 0
             root = event.GetItem()
-            (child, cookie) = self.tree.GetFirstChild(root, cookie)
+            (child, cookie) = self.tree.GetFirstChild(root)
 
             while child.IsOk():
                 self.log.WriteText("Child [%s] visible = %d" %
