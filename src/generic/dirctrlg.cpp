@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "dirctrl.h"
+#pragma implementation "dirctrlg.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
@@ -38,6 +38,7 @@
 #include "wx/sizer.h"
 #include "wx/tokenzr.h"
 #include "wx/dir.h"
+#include "wx/settings.h"
 
 #if wxUSE_STATLINE
     #include "wx/statline.h"
@@ -439,7 +440,6 @@ void wxGenericDirCtrl::Init()
 {
     m_showHidden = FALSE;
     m_imageList = NULL;
-    m_rootId = 0;
     m_currentFilter = 0;
     m_currentFilterStr = wxEmptyString; // Default: any file
     m_treeCtrl = NULL;
@@ -456,7 +456,7 @@ void wxGenericDirCtrl::AddSection(const wxString& path, const wxString& name, in
 #else
     // Unix: sections are displayed as folders
     wxTreeItemId id = m_treeCtrl->AppendItem( m_rootId, name, 0, -1, dir_item);
-    SetItemImage( id, 1, wxTreeItemIcon_Expanded );
+    m_treeCtrl->SetItemImage( id, 1, wxTreeItemIcon_Expanded );
 #endif
     // TODO: other operating systems.
 
@@ -535,16 +535,14 @@ void wxGenericDirCtrl::SetupSections()
 #endif
 
 #else
-  wxString home;
-  AddSection(wxT("/"), _("The Computer"), 0)
-  wxGetHomeDir(&home);
-  AddSection(home, _("My Home"), 0 )
-  AddSection(wxT("/mnt"), _("Mounted Devices"), 0 )
-  AddSection(wxT("/usr/local"), _("User Local"), 0 )
-  AddSection(wxT("/usr"), _("User"), 0 )
-  AddSection(wxT("/var"), _("Variables"), 0 )
-  AddSection(wxT("/etc"), _("Etcetera"), 0 )
-  AddSection(wxT("/tmp"), _("Temporary"), 0 )
+  AddSection(wxT("/"), _("The Computer"), 0);
+  AddSection(wxGetHomeDir(), _("My Home"), 0 );
+  AddSection(wxT("/mnt"), _("Mounted Devices"), 0 );
+  AddSection(wxT("/usr/local"), _("User Local"), 0 );
+  AddSection(wxT("/usr"), _("User"), 0 );
+  AddSection(wxT("/var"), _("Variables"), 0 );
+  AddSection(wxT("/etc"), _("Etcetera"), 0 );
+  AddSection(wxT("/tmp"), _("Temporary"), 0 );
 #endif
 }
 
@@ -773,7 +771,7 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
             path += eachFilename;
             //path = dirName + wxString(wxT("/")) + eachFilename;
             wxDirItemDataEx *dir_item = new wxDirItemDataEx(path,eachFilename,FALSE);
-            wxTreeItemId id = m_treeCtrl->AppendItem( parentId, eachFilename, 2, -1, dir_item);
+            (void)m_treeCtrl->AppendItem( parentId, eachFilename, 2, -1, dir_item);
         }
     }
 }
@@ -830,7 +828,8 @@ wxTreeItemId wxGenericDirCtrl::FindChild(wxTreeItemId parentId, const wxString& 
         
         childId = m_treeCtrl->GetNextChild(childId, cookie);
     }
-    return 0;
+    wxTreeItemId invalid;
+    return invalid;
 }
 
 // Try to expand as much of the given path as possible,
