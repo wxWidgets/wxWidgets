@@ -32,8 +32,9 @@
 // for all others, include the necessary headers 
 #ifndef WX_PRECOMP
 #  include "wx/wx.h"
-#  include "wx/socket.h"
 #endif
+
+#include "wx/socket.h"
 
 // --------------------------------------------------------------------------
 // resources
