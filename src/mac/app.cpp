@@ -796,7 +796,9 @@ wxApp::wxApp()
   m_topWindow = NULL;
   wxTheApp = this;
 
-  m_wantDebugOutput = TRUE ;
+#if WXWIN_COMPATIBILITY_2_2
+  m_wantDebugOutput = TRUE;
+#endif
 
   argc = 0;
   argv = NULL;

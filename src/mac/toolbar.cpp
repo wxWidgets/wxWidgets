@@ -200,7 +200,7 @@ bool wxToolBar::Realize()
     while (node)
     {
         wxToolBarTool *tool = (wxToolBarTool *)node->Data();
-        wxBitmapRefData * bmap = (wxBitmapRefData*) ( tool->GetBitmap1().GetRefData()) ;
+        wxBitmapRefData * bmap = (wxBitmapRefData*) ( tool->GetNormalBitmap().GetRefData()) ;
         
         if(  !tool->IsSeparator()  )
         {
@@ -210,7 +210,7 @@ bool wxToolBar::Realize()
             toolrect.bottom = toolrect.top + toolSize.y ;
             
             ControlButtonContentInfo info ;
-            wxMacCreateBitmapButton( &info , tool->GetBitmap1() ) ;
+            wxMacCreateBitmapButton( &info , tool->GetNormalBitmap() ) ;
             ControlHandle m_macToolHandle ;
             
             SInt16 behaviour = kControlBehaviorOffsetContents ;
@@ -391,7 +391,7 @@ void wxToolBar::MacSuperChangedPosition()
     	while (node)
     	{
     		wxToolBarTool *tool = (wxToolBarTool *)node->Data();
-    		wxBitmapRefData * bmap = (wxBitmapRefData*) ( tool->GetBitmap1().GetRefData()) ;
+    		wxBitmapRefData * bmap = (wxBitmapRefData*) ( tool->GetNormalBitmap().GetRefData()) ;
     		
     		if(  !tool->IsSeparator()  )
     		{

@@ -171,7 +171,7 @@ public:
                       const wxString& deftopic = wxEmptyString,
                       const wxString& path = wxEmptyString);
 
-    bool wxHtmlHelpData::AlreadyHasBook(wxHtmlBookRecord * bookr) ;
+    bool AlreadyHasBook(wxHtmlBookRecord * bookr) ;
     // Some accessing stuff:
 
     // returns URL of page on basis of (file)name
