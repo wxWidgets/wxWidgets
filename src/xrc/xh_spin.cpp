@@ -19,10 +19,13 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XRC && wxUSE_SPINBTN
+#if wxUSE_XRC
 
 #include "wx/xrc/xh_spin.h"
-#include "wx/spinctrl.h"
+
+#if wxUSE_SPINBTN
+
+#include "wx/spinbutt.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxSpinButtonXmlHandler, wxXmlResourceHandler)
 
@@ -63,6 +66,8 @@ bool wxSpinButtonXmlHandler::CanHandle(wxXmlNode *node)
 
 #if wxUSE_SPINCTRL
 
+#include "wx/spinctrl.h"
+
 IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrlXmlHandler, wxXmlResourceHandler)
 
 wxSpinCtrlXmlHandler::wxSpinCtrlXmlHandler()
@@ -98,4 +103,6 @@ bool wxSpinCtrlXmlHandler::CanHandle(wxXmlNode *node)
     return IsOfClass(node, wxT("wxSpinCtrl"));
 }
 
-#endif // wxUSE_XRC && wxUSE_SPINCTRL
+#endif // wxUSE_SPINCTRL
+
+#endif // wxUSE_XRC
