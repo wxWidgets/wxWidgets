@@ -51,8 +51,8 @@ class TestPanel(wx.Panel):
         choices.sort()
 
         # create the controls
-        self.ch = wx.Choice(self, -1, choices=choices)
-        self.ch.SetStringSelection("wx.CURSOR_DEFAULT")
+        self.cb = wx.ComboBox(self, -1, "wx.CURSOR_DEFAULT", choices=choices,
+                              style=wx.CB_READONLY)
         self.tx = wx.StaticText(self, -1,                                
              "This sample allows you to see all the stock cursors \n"
              "available to wxPython.  Simply select a name from the \n"
@@ -64,13 +64,13 @@ class TestPanel(wx.Panel):
         self.win.SetBackgroundColour("white")
 
         # bind an event or two
-        self.Bind(wx.EVT_CHOICE, self.OnChooseCursor, self.ch)
+        self.Bind(wx.EVT_COMBOBOX, self.OnChooseCursor, self.cb)
         self.win.Bind(wx.EVT_LEFT_DOWN, self.OnDrawDot)
         
 
         # Setup the layout
         gbs = wx.GridBagSizer()
-        gbs.Add(self.ch, (2,2))
+        gbs.Add(self.cb, (2,2))
         gbs.Add(self.tx, (2,4))
         gbs.Add(self.win, (5,0), (1, 6), wx.ALIGN_CENTER)
         self.SetSizer(gbs)
@@ -80,7 +80,7 @@ class TestPanel(wx.Panel):
         # clear the dots
         self.win.Refresh()
         
-        choice = self.ch.GetStringSelection()
+        choice = self.cb.GetStringSelection()
         self.log.write("Selecting the %s cursor\n" % choice)
 
         cnum = cursors[choice]
