@@ -206,7 +206,7 @@ public:
         event.Skip();
     }
 
-    void OnButton(wxMouseEvent& event)
+    void OnButton(wxCommandEvent& event)
     {
         wxLogMessage(_T("MyButton::OnButton"));
 

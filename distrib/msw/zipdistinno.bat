@@ -6,7 +6,7 @@ set dest=%src\deliver
 set inno=0
 
 Rem Set this to the required version
-set version=2.2.6
+set version=2.2.7
 
 if "%src" == "" goto usage
 if "%dest" == "" goto usage
@@ -25,14 +25,14 @@ pause
 
 erase %dest\wx*.zip
 erase %dest\*.htb
-erase %dest\ogl3.zip
-erase %dest\tex2rtf2.zip
-erase %dest\jpeg.zip
-erase %dest\tiff.zip
-erase %dest\dialoged.zip
-erase %dest\utils.zip
-erase %dest\extradoc.zip
-erase %dest\*-win32.zip
+erase %dest\ogl3-*.zip
+erase %dest\tex2rtf2-*.zip
+erase %dest\jpeg-*.zip
+erase %dest\tiff-*.zip
+erase %dest\dialoged-*.zip
+erase %dest\utils-*.zip
+erase %dest\extradoc-*.zip
+erase %dest\*-win32-*.zip
 
 if direxist %dest\wx erase /sxyz %dest\wx\
 if not direxist %dest mkdir %dest
@@ -72,7 +72,7 @@ zip32 -@ %dest\wxWindows-%version%-HTMLHelp.zip < %src\distrib\msw\wx_chm.rsp
 
 Rem PDF/HTML docs that should go into the Windows setup because
 Rem there are no WinHelp equivalents
-zip32 -@ %dest\extradoc.zip < %src\distrib\msw\extradoc.rsp
+zip32 -@ %dest\extradoc-%version%.zip < %src\distrib\msw\extradoc.rsp
 
 rem VC++ project files
 zip32 -@ %dest\wxWindows-%version%-vc.zip < %src\distrib\msw\vc.rsp
@@ -84,59 +84,59 @@ rem CodeWarrior project files
 zip32 -@ %dest\wxWindows-%version%-cw.zip < %src\distrib\msw\cw.rsp
 
 rem OGL 3
-zip32 -@ %dest\ogl3.zip < %src\distrib\msw\ogl.rsp
+zip32 -@ %dest\ogl3-%version%.zip < %src\distrib\msw\ogl.rsp
 
 rem MMedia
-zip32 -@ %dest\mmedia.zip < %src\distrib\msw\mmedia.rsp
+zip32 -@ %dest\mmedia-%version%.zip < %src\distrib\msw\mmedia.rsp
 
 rem STC (Scintilla widget)
-zip32 -@ %dest\stc.zip < %src\distrib\msw\stc.rsp
+zip32 -@ %dest\stc-%version%.zip < %src\distrib\msw\stc.rsp
 
 rem GLCanvas: obsolete, now in main library
-rem zip32 -@ %dest\glcanvas.zip < %src\distrib\msw\glcanvas.rsp
+rem zip32 -@ %dest\glcanvas-%version%.zip < %src\distrib\msw\glcanvas.rsp
 
 rem Tex2RTF
-zip32 -@ %dest\tex2rtf2.zip < %src\distrib\msw\tex2rtf.rsp
+zip32 -@ %dest\tex2rtf2-%version%.zip < %src\distrib\msw\tex2rtf.rsp
 
 rem JPEG source
-zip32 -@ %dest\jpeg.zip < %src\distrib\msw\jpeg.rsp
+zip32 -@ %dest\jpeg-%version%.zip < %src\distrib\msw\jpeg.rsp
 
 rem TIFF source
-zip32 -@ %dest\tiff.zip < %src\distrib\msw\tiff.rsp
+zip32 -@ %dest\tiff-%version%.zip < %src\distrib\msw\tiff.rsp
 
 rem Dialog Editor source and binary
 erase %dest\dialoged_source.zip
 zip32 -@ %dest\dialoged_source.zip < %src\distrib\msw\dialoged.rsp
-zip32 -j %dest\dialoged.zip %dest\dialoged_source.zip %src\bin\dialoged.exe %src\docs\winhelp\dialoged.hlp %src\docs\winhelp\dialoged.cnt
+zip32 -j %dest\dialoged-%version%.zip %dest\dialoged_source.zip %src\bin\dialoged.exe %src\docs\winhelp\dialoged.hlp %src\docs\winhelp\dialoged.cnt
 erase %dest\dialoged_source.zip
 
 rem Misc. utils not in the main distribution
-zip32 -@ %dest\utils.zip < %src\distrib\msw\utils.rsp
-zip32 -@ -u %dest\utils.zip < %src\distrib\msw\utilmake.rsp
+zip32 -@ %dest\utils-%version%.zip < %src\distrib\msw\utils.rsp
+zip32 -@ -u %dest\utils-%version%.zip < %src\distrib\msw\utilmake.rsp
 
-copy %src\docs\changes.txt %dest
-copy %src\docs\msw\install.txt %dest\install_msw.txt
-copy %src\docs\motif\install.txt %dest\install_motif.txt
-copy %src\docs\gtk\install.txt %dest\install_gtk.txt
-copy %src\docs\readme.txt %dest
-copy %src\docs\motif\readme.txt %dest\readme_motif.txt
-copy %src\docs\gtk\readme.txt %dest\readme_gtk.txt
-copy %src\docs\msw\readme.txt %dest\readme_msw.txt
-copy %src\docs\readme_vms.txt %dest
-copy %src\docs\motif\makewxmotif %dest
-copy %src\docs\gtk\makewxgtk %dest
+copy %src\docs\changes.txt %dest\changed-%version%.txt
+copy %src\docs\msw\install.txt %dest\install_msw-%version%.txt
+copy %src\docs\motif\install.txt %dest\install_motif-%version%.txt
+copy %src\docs\gtk\install.txt %dest\install_gtk-%version%.txt
+copy %src\docs\readme.txt %dest\readme-%version%.txt
+copy %src\docs\motif\readme.txt %dest\readme_motif-%version%.txt
+copy %src\docs\gtk\readme.txt %dest\readme_gtk-%version%.txt
+copy %src\docs\msw\readme.txt %dest\readme_msw-%version%.txt
+copy %src\docs\readme_vms.txt %dest\readme_vms-%version%.txt
+copy %src\docs\motif\makewxmotif %dest\makewxmotif-%version%
+copy %src\docs\gtk\makewxgtk %dest\makewxgtk-%version%
 
 Rem Skip Inno Setup if inno is 0.
 if "%inno" == "0" goto end
 
 :dounzip
 
-Rem Make dialoged-win32.zip and tex2rtf-win32.zip
+Rem Make dialoged-win32-%version%.zip and tex2rtf-win32-%version%.zip
 
 cd %src\bin
 
-zip32 %dest\dialoged-win32.zip dialoged.*
-zip32 %dest\tex2rtf-win32.zip tex2rtf.*
+zip32 %dest\dialoged-win32-%version%.zip dialoged.*
+zip32 %dest\tex2rtf-win32-%version%.zip tex2rtf.*
 
 cd %dest
 
@@ -155,10 +155,10 @@ unzip32 -o ..\wxWindows-%version%-HTMLHelp.zip
 unzip32 -o ..\extradoc.zip
 Rem Need Word file, for Remstar DB classes
 unzip32 -o ..\wxWindows-%version%-Word.zip
-unzip32 -o ..\ogl3.zip
-unzip32 -o ..\jpeg.zip
-unzip32 -o ..\tiff.zip
-unzip32 -o ..\tex2rtf2.zip
+unzip32 -o ..\ogl3-%version%.zip
+unzip32 -o ..\jpeg-%version%.zip
+unzip32 -o ..\tiff-%version%.zip
+unzip32 -o ..\tex2rtf2-%version%.zip
 
 rem Now delete a few files that are unnecessary
 attrib -R *
@@ -209,7 +209,7 @@ Rem ren %WXWIN\deliver2\setup.EXE %WXWIN\deliver2\wxMSW-%version%-setup.exe
 cd %dest
 
 rem Put all the setup files into a single zip archive.
-zip32 wxMSW-%version%-setup.zip readme.txt setup.*
+zip32 wxMSW-%version%-setup.zip readme-%version%.txt setup.*
 
 echo wxWindows archived.
 

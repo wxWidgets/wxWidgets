@@ -37,6 +37,7 @@
 #endif
 
 #include "wx/settings.h"
+#include "wx/module.h"
 #include "wx/window.h"
 #include "wx/msw/private.h"
 
