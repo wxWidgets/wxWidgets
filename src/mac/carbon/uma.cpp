@@ -382,7 +382,11 @@ void UMASetMenuItemShortcut( MenuRef menu , MenuItemIndex item , wxAcceleratorEn
             }
         }
 
-        SetItemCmd( menu, item , macKey );
+        // 1d and 1e have special meaning to SetItemCmd, so
+        // do not use for these character codes.
+        if (key != WXK_UP && key != WXK_RIGHT)
+            SetItemCmd( menu, item , macKey );
+
         SetMenuItemModifiers(menu, item , modifiers ) ;
 
         if ( glyph )
