@@ -116,14 +116,14 @@ MyFrame::MyFrame()
     wxBitmap bitmap( smile_xpm );
     wxImage image( bitmap );
 
-    m_sm1 = new wxCanvasImage( image, 0, 70 );
+    m_sm1 = new wxCanvasImage( image, 0,70,16,16 );
     m_canvas->Append( m_sm1 );
 
     int i;
     for (i = 10; i < 300; i+=10)
         m_canvas->Append( new wxCanvasRect( i,50,3,140, 255,0,0 ) );
 
-    m_sm2 = new wxCanvasImage( image, 0, 140 );
+    m_sm2 = new wxCanvasImage( image, 0,140,24,24 );
     m_canvas->Append( m_sm2 );
 
     for (i = 15; i < 300; i+=10)
@@ -135,13 +135,13 @@ MyFrame::MyFrame()
     m_canvas->Append( new wxCanvasText( "Hello", 180, 50,
                       wxGetApp().GetFontPath() + "/times.ttf", 20 ) );
 
-    m_sm3 = new wxCanvasImage( image, 0, 210 );
+    m_sm3 = new wxCanvasImage( image, 0,210,32,32 );
     m_canvas->Append( m_sm3 );
 
     for (i = 10; i < 300; i+=10)
-        m_canvas->Append( new wxCanvasLine( 10,150,i,200, 0,255,0 ) );
+        m_canvas->Append( new wxCanvasLine( 10,150,i,300, 0,255,0 ) );
                     
-    m_sm4 = new wxCanvasImage( image, 0, 270 );
+    m_sm4 = new wxCanvasImage( image, 0,270,64,32 );
     m_canvas->Append( m_sm4 );
 
     m_canvas->Thaw();

@@ -31,18 +31,25 @@ class wxCanvas;
 class wxCanvasObject: public wxEvtHandler
 {
 public:
-    wxCanvasObject( int x, int y, int width, int height );
+    wxCanvasObject();
+    
+    // Area occupied by object. Used for clipping, intersection,
+    // mouse enter etc. Screen coordinates
+    void SetArea( int x, int y, int width, int height );
+    void SetArea( wxRect rect );
     
     // These are for screen output only therefore use
     // int as coordinates.
-    virtual void Move( int x, int y );
     virtual bool IsHit( int x, int y, int margin = 0 );
     virtual void Render( int clip_x, int clip_y, int clip_width, int clip_height );
+    
+    // use doubles later
+    virtual void Move( int x, int y );
     
     // Once we have world coordinates in doubles, this will get
     // called for every object if the world coordinate system
     // changes (zooming).
-    virtual void Rerender();
+    virtual void Recreate();
 
     // Later...
     virtual void WriteSVG( wxTextOutputStream &stream );
@@ -75,12 +82,20 @@ protected:
 class wxCanvasRect: public wxCanvasObject
 {
 public:
-    wxCanvasRect( int x, int y, int w, int h, unsigned char red, unsigned char green, unsigned char blue );
+    wxCanvasRect( double x, double y, double w, double h, 
+                  unsigned char red, unsigned char green, unsigned char blue );
+                  
+    virtual void Recreate();
     
     virtual void Render( int clip_x, int clip_y, int clip_width, int clip_height );
     virtual void WriteSVG( wxTextOutputStream &stream );
     
 private:
+    double        m_x;
+    double        m_y;
+    double        m_width;
+    double        m_height; 
+
     unsigned char m_red;
     unsigned char m_green;
     unsigned char m_blue;
@@ -93,12 +108,20 @@ private:
 class wxCanvasLine: public wxCanvasObject
 {
 public:
-    wxCanvasLine( int x, int y, int w, int h, unsigned char red, unsigned char green, unsigned char blue );
+    wxCanvasLine( double x1, double y1, double x1, double y1,
+                  unsigned char red, unsigned char green, unsigned char blue );
+    
+    virtual void Recreate();
     
     virtual void Render( int clip_x, int clip_y, int clip_width, int clip_height );
     virtual void WriteSVG( wxTextOutputStream &stream );
     
 private:
+    double        m_x1;
+    double        m_y1;
+    double        m_x2;
+    double        m_y2;
+    
     unsigned char m_red;
     unsigned char m_green;
     unsigned char m_blue;
@@ -111,13 +134,21 @@ private:
 class wxCanvasImage: public wxCanvasObject
 {
 public:
-    wxCanvasImage( const wxImage &image, int x, int y );
+    wxCanvasImage( const wxImage &image, double x, double y, double w, double h );
+    
+    virtual void Recreate();
     
     virtual void Render( int clip_x, int clip_y, int clip_width, int clip_height );
     virtual void WriteSVG( wxTextOutputStream &stream );
     
 private:
+    double      m_x;
+    double      m_y;
+    double      m_width;
+    double      m_height;
+    
     wxImage     m_image;
+    wxImage     m_tmp;
 };
 
 //----------------------------------------------------------------------------
@@ -130,8 +161,9 @@ public:
     wxCanvasControl( wxWindow *control );
     ~wxCanvasControl();
     
+    virtual void Recreate();
+    
     virtual void Move( int x, int y );
-    void UpdateSize();
     
 private:
     wxWindow     *m_control;
@@ -144,19 +176,22 @@ private:
 class wxCanvasText: public wxCanvasObject
 {
 public:
-    wxCanvasText( const wxString &text, int x, int y, const wxString &foneFile, int size );
+    wxCanvasText( const wxString &text, double x, double y, const wxString &foneFile, int size );
     ~wxCanvasText();
+    
+    void Recreate();
     
     virtual void Render( int clip_x, int clip_y, int clip_width, int clip_height );
     virtual void WriteSVG( wxTextOutputStream &stream );
     
-    void CreateBuffer();
     void SetRGB( unsigned char red, unsigned char green, unsigned char blue );
     void SetFlag( int flag );
     int GetFlag()              { return m_flag; }
     
 private:
     wxString        m_text;
+    double          m_x;
+    double          m_y;
     unsigned char  *m_alpha;
     void           *m_faceData;
     int             m_flag;
@@ -194,6 +229,18 @@ public:
     virtual void Insert( size_t before, wxCanvasObject* obj );
     virtual void Remove( wxCanvasObject* obj );
     
+    // override these to change your coordiate system ...
+    virtual int GetDeviceX( double x );
+    virtual int GetDeviceY( double y );
+    virtual int GetDeviceWidth( double width );
+    virtual int GetDeviceHeight( double height );
+    
+    // ... and call this to tell all objets to recreate then
+    virtual void Recreate();
+
+    void CaptureMouse( wxCanvasObject *obj );
+    void ReleaseMouse();
+    
     wxImage *GetBuffer()         { return &m_buffer; }
     bool NeedUpdate()            { return m_needUpdate; }
     bool IsFrozen()              { return m_frozen; }
@@ -208,6 +255,7 @@ private:
     unsigned char    m_green,m_red,m_blue;
     bool             m_frozen;
     wxCanvasObject  *m_lastMouse;
+    wxCanvasObject  *m_captureMouse;
     
     friend class wxCanvasObject;
     
