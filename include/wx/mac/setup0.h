@@ -377,6 +377,22 @@
 // wxSystemOptions class
 #define wxUSE_SYSTEM_OPTIONS 1
 
+// wxProtocol and related classes: if you want to use either of wxFTP, wxHTTP
+// or wxURL you need to set this to 1.
+//
+// Default is 1.
+//
+// Recommended setting: 1
+#define wxUSE_PROTOCOL 1
+
+// The settings for the individual URL schemes
+#define wxUSE_PROTOCOL_FILE 1
+#define wxUSE_PROTOCOL_FTP 1
+#define wxUSE_PROTOCOL_HTTP 1
+
+// Define this to use wxURL class.
+#define wxUSE_URL 1
+
 // Support for regular expression matching via wxRegEx class: enable this to
 // use POSIX regular expressions in your code. You need to compile regex
 // library from src/regex to use it under Windows.
