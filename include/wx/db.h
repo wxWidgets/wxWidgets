@@ -254,20 +254,78 @@ enum wxODBC_ERRORS
     DB_ERR_TIMEOUT_EXPIRED                             // SqlState = 'S1T00'
 };
 
+#ifndef MAXNAME
+#define MAXNAME         31
+#endif
 
-struct wxDbConnectInf
+#ifndef SQL_MAX_AUTHSTR_LEN
+// There does not seem to be a standard for this, so I am
+// defaulting to the value that MS uses
+#define SQL_MAX_AUTHSTR_LEN MAXNAME
+#endif
+
+class wxDbConnectInf
 {
-    HENV Henv;
-    wxString Dsn;                                      // Data Source Name
-    wxString Uid;                                      // User ID
-    wxString AuthStr;                                  // Authorization string (password)
+    private:
+        bool freeHenvOnDestroy;
 
-    wxString description;                              // Not sure what the max length is
-    wxString fileType;                                 // Not sure what the max length is
+    public:
+	    HENV Henv;
+	    wxChar Dsn[SQL_MAX_DSN_LENGTH+1];                  // Data Source Name
+	    wxChar Uid[SQL_MAX_USER_NAME_LEN+1];               // User ID
+	    wxChar AuthStr[SQL_MAX_AUTHSTR_LEN+1];             // Authorization string (password)
 
-    // Optionals needed for some databases like dBase
-    wxString defaultDir;                               // Directory that db file resides in
-};
+        wxString Description;                              // Not sure what the max length is
+        wxString FileType;                                 // Not sure what the max length is
+
+        // Optionals needed for some databases like dBase
+        wxString DefaultDir;                               // Directory that db file resides in
+
+    public:
+
+        wxDbConnectInf();
+        wxDbConnectInf(HENV henv, const wxString &dsn, const wxString &userID="", 
+                       const wxString &password="", const wxString &defaultDir="", 
+                       const wxString &description="", const wxString &fileType="");
+
+        ~wxDbConnectInf();
+
+        bool             Initialize();
+
+        bool             AllocHenv();
+        void             FreeHenv();
+
+        // Accessors
+        const HENV       GetHenv()          { return Henv; };
+        const HENV      &GetHenvAddress()   { return Henv; };
+
+        const wxChar    *GetDsn()           { return Dsn; };
+
+        const wxChar    *GetUid()           { return Uid; };
+        const wxChar    *GetUserID()        { return Uid; };
+
+        const wxChar    *GetAuthStr()       { return AuthStr; };
+        const wxChar    *GetPassword()      { return AuthStr; };
+
+        const wxChar    *GetDescription()   { return Description; };
+        const wxChar    *GetFileType()      { return FileType; };
+        const wxChar    *GetDefaultDir()    { return DefaultDir; };
+
+        void             SetHenv(const HENV henv)               { Henv = henv; };
+
+        void             SetDsn(const wxString &dsn);
+
+        void             SetUserID(const wxString &userID);
+        void             SetUid(const wxString &uid)            { SetUserID(uid); };
+
+        void             SetPassword(const wxString &password);
+        void             SetAuthStr(const wxString &authstr)    { SetPassword(authstr); };
+
+        void             SetDescription(const wxString &desc)   { Description   = desc;     };
+        void             SetFileType(const wxString &fileType)  { FileType      = fileType; };
+        void             SetDefaultDir(const wxString &defDir)  { DefaultDir    = defDir;   };
+};  // class wxDbConnectInf
+
 
 struct wxDbSqlTypeInfo
 {
@@ -283,12 +341,12 @@ struct wxDbSqlTypeInfo
 class WXDLLEXPORT wxDbColFor
 {
 public:
-    wxString       s_Field;             // Formated String for Output
-    wxString       s_Format[7];         // Formated Objects - TIMESTAMP has the biggest (7)
+    wxString       s_Field;              // Formated String for Output
+    wxString       s_Format[7];          // Formated Objects - TIMESTAMP has the biggest (7)
     wxString       s_Amount[7];          // Formated Objects - amount of things that can be formatted
     int            i_Amount[7];          // Formated Objects - TT MM YYYY HH MM SS m
-    int            i_Nation;            // 0 = timestamp , 1=EU, 2=UK, 3=International, 4=US
-    int            i_dbDataType;        // conversion of the 'sqlDataType' to the generic data type used by these classes
+    int            i_Nation;             // 0 = timestamp , 1=EU, 2=UK, 3=International, 4=US
+    int            i_dbDataType;         // conversion of the 'sqlDataType' to the generic data type used by these classes
     SWORD          i_sqlDataType;
 
     wxDbColFor();
@@ -408,7 +466,6 @@ private:
     bool             getDataTypeInfo(SWORD fSqlType, wxDbSqlTypeInfo &structSQLTypeInfo);
     bool             setConnectionOptions(void);
     void             logError(const wxString &errMsg, const wxString &SQLState);
-    void             initialize();
     const wxChar    *convertUserID(const wxChar *userID, wxString &UserID);
 
 #if !wxODBC_BACKWARD_COMPATABILITY
@@ -509,6 +566,8 @@ public:
 
     // Public member functions
     wxDb(HENV &aHenv, bool FwdOnlyCursors=(bool)wxODBC_FWD_ONLY_CURSORS);
+    void         Initialize();
+
     bool         Open(const wxString &Dsn, const wxString &Uid, const wxString &AuthStr);  // Data Source Name, User ID, Password
     bool         Open(wxDb *copyDb);  // pointer to a wxDb whose connection info should be copied rather than re-queried
     void         Close(void);
@@ -582,6 +641,7 @@ struct wxDbList
     bool      Free;          // Is item free or in use?
     wxDbList *PtrNext;       // Pointer to next item in the list
 };
+
 
 #ifdef __WXDEBUG__
 #include "wx/object.h"
