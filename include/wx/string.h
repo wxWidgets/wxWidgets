@@ -724,10 +724,24 @@ public:
 
     /*
        Note that we we must define all of the overloads below to avoid
-       ambiguity when using str[0]. Also note that we don't need const
-       version of operatorp[] at all as indexed access to const string
-       is provided by implicit conversion to "const wxChar *" below.
+       ambiguity when using str[0]. Also note that for a conforming compiler we
+       don't need const version of operatorp[] at all as indexed access to
+       const string is provided by implicit conversion to "const wxChar *"
+       below and defining them would only result in ambiguities, but some other
+       compilers refuse to compile "str[0]" without them.
      */
+
+#if defined(__BORLANDC__) || defined(__WATCOMC__) || defined(__MWERKS__)
+    wxChar operator[](int n) const
+      { return wxStringBase::at(n); }
+    wxChar operator[](size_type n) const
+      { return wxStringBase::at(n); }
+#ifndef wxSIZE_T_IS_UINT
+    wxChar operator[](unsigned int n) const
+      { return wxStringBase::at(n); }
+#endif // size_t != unsigned int
+#endif // broken compiler
+
 
     // operator versions of GetWriteableChar()
     wxChar& operator[](int n)
