@@ -26,6 +26,12 @@
     #include "wx/date.h"
 #endif // time/date
 
+#include "wx/datetime.h"
+
+#if wxUSE_ODBC
+    #include "wx/db.h"  // will #include sqltypes.h
+#endif //ODBC
+
 #include "wx/ioswrap.h"
 
 /*
@@ -98,12 +104,32 @@ public:
 #endif
     wxVariant(void* ptr, const wxString& name = wxEmptyString); // void* (general purpose)
     wxVariant(wxVariantData* data, const wxString& name = wxEmptyString); // User-defined data
+//TODO: Need to document
+    wxVariant(const wxDateTime& val, const wxString& name = wxEmptyString); // Date
+#if wxUSE_ODBC
+    wxVariant(const DATE_STRUCT* valptr, const wxString& name = wxEmptyString); // DateTime
+    wxVariant(const TIME_STRUCT* valptr, const wxString& name = wxEmptyString); // DateTime
+    wxVariant(const TIMESTAMP_STRUCT* valptr, const wxString& name = wxEmptyString); // DateTime
+#endif
+//TODO: End of Need to document
+    
     wxVariant(const wxVariant& variant);
     ~wxVariant();
 
 // Generic operators
     // Assignment
     void operator= (const wxVariant& variant);
+
+//TODO: Need to document
+    bool operator== (const wxDateTime& value) const;
+    bool operator!= (const wxDateTime& value) const;
+    void operator= (const wxDateTime& value) ;
+#if wxUSE_ODBC
+    void operator= (const DATE_STRUCT* value) ;
+    void operator= (const TIME_STRUCT* value) ;
+    void operator= (const TIMESTAMP_STRUCT* value) ;
+#endif
+//TODO: End of Need to document
 
     // Assignment using data, e.g.
     // myVariant = new wxStringVariantData("hello");
@@ -168,6 +194,9 @@ public:
     inline operator wxDate () const {  return GetDate(); }
 #endif
     inline operator void* () const {  return GetVoidPtr(); }
+//TODO: Need to document
+    inline operator wxDateTime () const { return GetDateTime(); }
+//TODO: End of Need to document
 
 // Accessors
     // Sets/gets name
@@ -206,6 +235,9 @@ public:
     wxDate GetDate() const ;
 #endif
     void* GetVoidPtr() const ;
+//TODO: Need to document
+    wxDateTime GetDateTime() const ;
+//TODO: End of Need to document
 
 // Operations
     // Make NULL (i.e. delete the data)
@@ -242,6 +274,9 @@ protected:
     bool Convert(wxTime* value) const;
     bool Convert(wxDate* value) const;
 #endif
+//TODO: Need to document
+    bool Convert(wxDateTime* value) const;
+//TODO: End of Need to document
 
 // Attributes
 protected:
