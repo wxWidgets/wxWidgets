@@ -2302,8 +2302,8 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         break;
                 }
 
-                int how = (int)hdr->code == TVN_ITEMEXPANDING ? IDX_DOING
-                                                              : IDX_DONE;
+                int how = hdr->code == TVN_ITEMEXPANDING ? IDX_DOING
+                                                         : IDX_DONE;
 
                 eventType = gs_expandEvents[what][how];
 

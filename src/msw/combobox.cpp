@@ -135,7 +135,7 @@ LRESULT APIENTRY _EXPORT wxComboEditWndProc(HWND hWnd,
                 wxCHECK_MSG( win, 0, _T("should have a parent") );
 
                 NMHDR* hdr = (NMHDR *)lParam;
-                if ( (int)hdr->code == TTN_NEEDTEXT )
+                if ( hdr->code == TTN_NEEDTEXT )
                 {
                     wxToolTip *tooltip = win->GetToolTip();
                     if ( tooltip )
