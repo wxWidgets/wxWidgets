@@ -31,6 +31,7 @@ wxDateCtrlXmlHandler::wxDateCtrlXmlHandler() : wxXmlResourceHandler()
     XRC_ADD_STYLE(wxDP_DEFAULT);
     XRC_ADD_STYLE(wxDP_SPIN);
     XRC_ADD_STYLE(wxDP_DROPDOWN);
+    XRC_ADD_STYLE(wxDP_ALLOWNONE);
     XRC_ADD_STYLE(wxDP_SHOWCENTURY);
     AddWindowStyles();
 }
