@@ -87,6 +87,7 @@ public:
     //
     int GetCountPerPage(void) const;
 
+    wxRect GetViewRect() const;
     //
     // Gets the edit control for editing labels.
     //
