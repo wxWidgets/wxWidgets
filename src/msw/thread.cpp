@@ -32,6 +32,7 @@
 #if wxUSE_THREADS
 
 #include "wx/msw/private.h"
+#include "wx/msw/missing.h"
 
 #include "wx/module.h"
 #include "wx/thread.h"
@@ -77,11 +78,6 @@
     // the settings for CreateThread()
     typedef DWORD THREAD_RETVAL;
     #define THREAD_CALLCONV WINAPI
-#endif
-
-// the old mingw32 headers don't have this one
-#ifndef QS_ALLPOSTMESSAGE
-    #define QS_ALLPOSTMESSAGE 0x0100
 #endif
 
 // ----------------------------------------------------------------------------

@@ -180,5 +180,15 @@ struct HH_AKLINK
     BOOL      fIndexOnFail;
 };
 
+
+// ----------------------------------------------------------------------------
+// Misc stuff
+// ----------------------------------------------------------------------------
+
+#ifndef QS_ALLPOSTMESSAGE
+    #define QS_ALLPOSTMESSAGE    0x0100
+#endif
+
+
 #endif
     // _WX_MISSING_H_
