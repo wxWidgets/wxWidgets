@@ -203,10 +203,19 @@ public:
         : wxHtmlWindow(parent, id, pos, size, style, name)  {};
     wxPyHtmlWindow() : wxHtmlWindow() {};
 
+    bool ScrollToAnchor(const wxString& anchor) {
+        return wxHtmlWindow::ScrollToAnchor(anchor);
+    }
+
+    bool HasAnchor(const wxString& anchor) {
+        const wxHtmlCell *c = m_Cell->Find(wxHTML_COND_ISANCHOR, &anchor);
+        return c!=NULL;
+    }
+
     void OnLinkClicked(const wxHtmlLinkInfo& link);
     void base_OnLinkClicked(const wxHtmlLinkInfo& link);
 
-     wxHtmlOpeningStatus OnOpeningURL(wxHtmlURLType type,
+    wxHtmlOpeningStatus OnOpeningURL(wxHtmlURLType type,
                                       const wxString& url,
                                       wxString *redirect) const;
 
@@ -5186,6 +5195,110 @@ static PyObject *_wrap_wxHtmlWindow_GetParser(PyObject *self, PyObject *args, Py
     return _resultobj;
 }
 
+#define wxHtmlWindow_ScrollToAnchor(_swigobj,_swigarg0)  (_swigobj->ScrollToAnchor(_swigarg0))
+static PyObject *_wrap_wxHtmlWindow_ScrollToAnchor(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPyHtmlWindow * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","anchor", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxHtmlWindow_ScrollToAnchor",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyHtmlWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlWindow_ScrollToAnchor. Expected _wxPyHtmlWindow_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (bool )wxHtmlWindow_ScrollToAnchor(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxHtmlWindow_HasAnchor(_swigobj,_swigarg0)  (_swigobj->HasAnchor(_swigarg0))
+static PyObject *_wrap_wxHtmlWindow_HasAnchor(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPyHtmlWindow * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","anchor", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxHtmlWindow_HasAnchor",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyHtmlWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlWindow_HasAnchor. Expected _wxPyHtmlWindow_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (bool )wxHtmlWindow_HasAnchor(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
 #define wxHtmlWindow_base_OnLinkClicked(_swigobj,_swigarg0)  (_swigobj->base_OnLinkClicked(_swigarg0))
 static PyObject *_wrap_wxHtmlWindow_base_OnLinkClicked(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -6515,6 +6628,8 @@ static PyMethodDef htmlcMethods[] = {
 	 { "wxHtmlWindow_base_OnCellMouseHover", (PyCFunction) _wrap_wxHtmlWindow_base_OnCellMouseHover, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlWindow_base_OnSetTitle", (PyCFunction) _wrap_wxHtmlWindow_base_OnSetTitle, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlWindow_base_OnLinkClicked", (PyCFunction) _wrap_wxHtmlWindow_base_OnLinkClicked, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlWindow_HasAnchor", (PyCFunction) _wrap_wxHtmlWindow_HasAnchor, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlWindow_ScrollToAnchor", (PyCFunction) _wrap_wxHtmlWindow_ScrollToAnchor, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlWindow_GetParser", (PyCFunction) _wrap_wxHtmlWindow_GetParser, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlWindow_GetInternalRepresentation", (PyCFunction) _wrap_wxHtmlWindow_GetInternalRepresentation, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlWindow_HistoryClear", (PyCFunction) _wrap_wxHtmlWindow_HistoryClear, METH_VARARGS | METH_KEYWORDS },
