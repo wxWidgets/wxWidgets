@@ -868,7 +868,10 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
         height = bmp.GetHeight();
 
     HBITMAP hbmpMask = 0;
+
+#if wxUSE_PALETTE
     HPALETTE oldPal = 0;
+#endif // wxUSE_PALETTE
 
     if ( useMask )
     {
@@ -900,16 +903,26 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
             HDC cdc = GetHdc();
             HDC hdcMem = ::CreateCompatibleDC(GetHdc());
             ::SelectObject(hdcMem, GetHbitmapOf(bmp));
-            if (bmp.GetPalette() && (::GetDeviceCaps(cdc,BITSPIXEL) <= 8)) {
-                oldPal = ::SelectPalette( hdcMem, (HPALETTE)bmp.GetPalette()->GetHPALETTE(), FALSE);
+
+#if wxUSE_PALETTE
+            wxPalette *pal = bmp.GetPalette();
+            if ( pal && ::GetDeviceCaps(cdc,BITSPIXEL) <= 8 )
+            {
+                oldPal = ::SelectPalette( hdcMem, GetHpalette(pal), FALSE);
                 ::RealizePalette(hdcMem);
-                }
+            }
+#endif // wxUSE_PALETTE
+
             ok = ::MaskBlt(cdc, x, y, width, height,
                             hdcMem, 0, 0,
                             hbmpMask, 0, 0,
                             MAKEROP4(SRCCOPY, DSTCOPY)) != 0;
+
+#if wxUSE_PALETTE
             if (oldPal)
                 ::SelectPalette(hdcMem, oldPal, FALSE);
+#endif // wxUSE_PALETTE
+
             ::DeleteDC(hdcMem);
         }
 
@@ -945,14 +958,23 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
             ::SetBkColor(GetHdc(), m_textBackgroundColour.GetPixel() );
         }
 
-        if (bmp.GetPalette() && (::GetDeviceCaps(cdc,BITSPIXEL) <= 8)) {
-            oldPal = ::SelectPalette( memdc, (HPALETTE)bmp.GetPalette()->GetHPALETTE(), FALSE);
-            ::RealizePalette(memdc);
+#if wxUSE_PALETTE
+            wxPalette *pal = bmp.GetPalette();
+            if ( pal && ::GetDeviceCaps(cdc,BITSPIXEL) <= 8 )
+            {
+                oldPal = ::SelectPalette( hdcMem, GetHpalette(pal), FALSE);
+                ::RealizePalette(hdcMem);
             }
+#endif // wxUSE_PALETTE
+
         ::SelectObject( memdc, hbitmap );
         ::BitBlt( cdc, x, y, width, height, memdc, 0, 0, SRCCOPY);
+
+#if wxUSE_PALETTE
         if (oldPal)
             ::SelectPalette(memdc, oldPal, FALSE);
+#endif // wxUSE_PALETTE
+
         ::DeleteDC( memdc );
 
         ::SetTextColor(GetHdc(), old_textground);

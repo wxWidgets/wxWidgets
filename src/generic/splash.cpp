@@ -117,11 +117,16 @@ void wxSplashScreenWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
         dc.DrawBitmap(m_bitmap, 0, 0);
 }
 
+// VZ: why don't we do it under wxGTK?
+#if !defined(__WXGTK__) && wxUSE_PALETTE
+    #define USE_PALETTE_IN_SPLASH
+#endif
+
 static void wxDrawSplashBitmap(wxDC& dc, const wxBitmap& bitmap, int WXUNUSED(x), int WXUNUSED(y))
 {
     wxMemoryDC dcMem;
 
-#ifndef __WXGTK__
+#ifdef USE_PALETTE_IN_SPLASH
     bool hiColour = (wxDisplayDepth() >= 16) ;
 
     if (bitmap.GetPalette() && !hiColour)
@@ -129,19 +134,19 @@ static void wxDrawSplashBitmap(wxDC& dc, const wxBitmap& bitmap, int WXUNUSED(x)
         dc.SetPalette(* bitmap.GetPalette());
         dcMem.SetPalette(* bitmap.GetPalette());
     }
-#endif
+#endif // USE_PALETTE_IN_SPLASH
 
     dcMem.SelectObject(bitmap);
     dc.Blit(0, 0, bitmap.GetWidth(), bitmap.GetHeight(), & dcMem, 0, 0);
     dcMem.SelectObject(wxNullBitmap);
 
-#ifndef __WXGTK__
+#ifdef USE_PALETTE_IN_SPLASH
     if (bitmap.GetPalette() && !hiColour)
     {
         dc.SetPalette(wxNullPalette);
         dcMem.SetPalette(wxNullPalette);
     }
-#endif
+#endif // USE_PALETTE_IN_SPLASH
 }
 
 void wxSplashScreenWindow::OnEraseBackground(wxEraseEvent& event)

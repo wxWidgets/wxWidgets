@@ -431,8 +431,10 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
     if (depth == -1) depth = wxDisplayDepth();
     SetDepth( depth );
 
+#if wxUSE_PALETTE
     // Copy the palette from the source image
     SetPalette(image.GetPalette());
+#endif // wxUSE_PALETTE
 
     // create a DIB header
     int headersize = sizeof(BITMAPINFOHEADER);
