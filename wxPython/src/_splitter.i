@@ -48,6 +48,58 @@ enum
 
 //---------------------------------------------------------------------------
 
+DocStr(wxSplitterWindow,
+"wx.SplitterWindow manages up to two subwindows or panes,
+with an optional vertical or horizontal split which can be
+used with the mouse or programmatically.
+");
+
+RefDoc(wxSplitterWindow, "
+ Styles
+    wx.SP_3D               Draws a 3D effect border and sash.
+    wx.SP_3DSASH           Draws a 3D effect sash.
+    wx.SP_3DBORDER         Synonym for wxSP_BORDER.
+    wx.SP_BORDER           Draws a standard border.
+    wx.SP_NOBORDER         No border (default).
+    wx.SP_NO_XP_THEME      Under Windows XP, switches off the
+                           attempt to draw the splitter
+                           using Windows XP theming, so the
+                           borders and sash will take on the
+                           pre-XP look.
+    wx.SP_PERMIT_UNSPLIT   Always allow to unsplit, even with
+                           the minimum pane size other than zero.
+    wx.SP_LIVE_UPDATE      Don't draw XOR line but resize the
+                           child windows immediately.
+
+ Events
+
+    EVT_SPLITTER_SASH_POS_CHANGING
+                           The sash position is in the
+                           process of being changed. May be
+                           used to modify the position of
+                           the tracking bar to properly
+                           reflect the position that would
+                           be set if the drag were to be
+                           completed at this point.
+
+    EVT_SPLITTER_SASH_POS_CHANGED
+                           The sash position was
+                           changed. May be used to modify
+                           the sash position before it is
+                           set, or to prevent the change
+                           from taking place. 
+
+    EVT_SPLITTER_UNSPLIT   The splitter has been just unsplit.
+
+    EVT_SPLITTER_DCLICK    The sash was double clicked. The
+                           default behaviour is to unsplit
+                           the window when this happens
+                           (unless the minimum pane size has
+                           been set to a value greater than
+                           zero.)
+
+");
+
 
 // wxSplitterWindow maintains one or two panes, with an optional vertical or
 // horizontal split which can be used with the mouse or programmatically.
@@ -59,33 +111,58 @@ public:
     %pythonAppend  wxSplitterWindow         "self._setOORInfo(self)"
     %pythonAppend  wxSplitterWindow()       ""
 
-    wxSplitterWindow(wxWindow* parent, wxWindowID id,
-                     const wxPoint& pos = wxDefaultPosition,
-                     const wxSize& size = wxDefaultSize,
-                     long style=wxSP_3D,
-                     const wxString& name = wxPySplitterNameStr);
-    %name(PreSplitterWindow)wxSplitterWindow();
+    DocCtorStr(
+        wxSplitterWindow(wxWindow* parent, wxWindowID id,
+                         const wxPoint& pos = wxDefaultPosition,
+                         const wxSize& size = wxDefaultSize,
+                         long style=wxSP_3D,
+                         const wxString& name = wxPySplitterNameStr),
+        "Constructor.  Creates and shows a SplitterWindow.");
+    
+    DocCtorStrName(
+        wxSplitterWindow(),
+        "Precreate a SplitterWindow for 2-phase creation.",
+        PreSplitterWindow);
 
-    bool Create(wxWindow* parent, wxWindowID id,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style=wxSP_3D,
-                const wxString& name = wxPySplitterNameStr);
 
-    // Gets the only or left/top pane
-    wxWindow *GetWindow1() const;
+    DocDeclStr(
+        bool , Create(wxWindow* parent, wxWindowID id,
+                      const wxPoint& pos = wxDefaultPosition,
+                      const wxSize& size = wxDefaultSize,
+                      long style=wxSP_3D,
+                      const wxString& name = wxPySplitterNameStr),
+        "Create the GUI part of the SplitterWindow for the 2-phase create.");
+    
 
-    // Gets the right/bottom pane
-    wxWindow *GetWindow2() const;
 
-    // Sets the split mode
-    void SetSplitMode(int mode);
+    DocDeclStr(
+        wxWindow *, GetWindow1() const,
+        "Gets the only or left/top pane.");
+    
 
-    // Gets the split mode
-    wxSplitMode GetSplitMode() const;
+    DocDeclStr(
+        wxWindow *, GetWindow2() const,
+        "Gets the right/bottom pane.");
 
-    // Initialize with one window
-    void Initialize(wxWindow *window);
+
+    DocDeclStr(
+        void , SetSplitMode(int mode),
+        "Sets the split mode.  The mode can be wx.SPLIT_VERTICAL or
+wx.SPLIT_HORIZONTAL.  This only sets the internal variable;
+does not update the display.");
+    
+
+    DocDeclStr(
+        wxSplitMode , GetSplitMode() const,
+        "Gets the split mode");
+    
+
+    DocDeclStr(
+        void , Initialize(wxWindow *window),
+        "Initializes the splitter window to have one pane.  This
+should be called if you wish to initially view only a single
+pane in the splitter window.");
+    
 
     // Associates the given window with window 2, drawing the appropriate sash
     // and changing the split mode.
@@ -93,58 +170,165 @@ public:
     // A sashPosition of 0 means choose a default sash position,
     // negative sashPosition specifies the size of right/lower pane as it's
     // absolute value rather than the size of left/upper pane.
-    virtual bool SplitVertically(wxWindow *window1,
-                                 wxWindow *window2,
-                                 int sashPosition = 0);
+    
+    DocDeclStr(
+        virtual bool , SplitVertically(wxWindow *window1,
+                                       wxWindow *window2,
+                                       int sashPosition = 0),
+        "Initializes the left and right panes of the splitter window.
 
-    virtual bool SplitHorizontally(wxWindow *window1,
-                                   wxWindow *window2,
-                                   int sashPosition = 0);
+    window1       The left pane.
+    window2       The right pane.
+    sashPosition  The initial position of the sash. If this
+                  value is positive, it specifies the size
+                  of the left pane. If it is negative, it is
+                  absolute value gives the size of the right
+                  pane. Finally, specify 0 (default) to
+                  choose the default position (half of the
+                  total window width).
 
-    // Removes the specified (or second) window from the view
-    // Doesn't actually delete the window.
-    bool Unsplit(wxWindow *toRemove = NULL);
+Returns True if successful, False otherwise (the window was
+already split).
 
-    // Replaces one of the windows with another one (neither old nor new
-    // parameter should be NULL)
-    bool ReplaceWindow(wxWindow *winOld, wxWindow *winNew);
+SplitVertically should be called if you wish to initially
+view two panes. It can also be called at any subsequent
+time, but the application should check that the window is
+not currently split using IsSplit.");
+    
 
-    // Make sure the child window sizes are updated. This is useful
-    // for reducing flicker by updating the sizes before a
-    // window is shown, if you know the overall size is correct.
-    void UpdateSize();
+    DocDeclStr(
+        virtual bool , SplitHorizontally(wxWindow *window1,
+                                         wxWindow *window2,
+                                         int sashPosition = 0),
+        "Initializes the top and bottom panes of the splitter window.
 
-    // Is the window split?
-    bool IsSplit() const;
+    window1       The top pane.
+    window2       The bottom pane.
+    sashPosition  The initial position of the sash. If this
+                  value is positive, it specifies the size
+                  of the upper pane. If it is negative, it
+                  is absolute value gives the size of the
+                  lower pane. Finally, specify 0 (default)
+                  to choose the default position (half of
+                  the total window height).
 
-    // Sets the sash size
-    void SetSashSize(int width);
+Returns True if successful, False otherwise (the window was
+already split).
 
-    // Sets the border size
-    void SetBorderSize(int width);
+SplitHorizontally should be called if you wish to initially
+view two panes. It can also be called at any subsequent
+time, but the application should check that the window is
+not currently split using IsSplit.");
 
-    // Gets the sash size
-    int GetSashSize() const;
+    
 
-    // Gets the border size
-    int GetBorderSize() const;
+    DocDeclStr(
+        bool , Unsplit(wxWindow *toRemove = NULL),
+        "Unsplits the window.  Pass the pane to remove, or None to
+remove the right or bottom pane.  Returns True if
+successful, False otherwise (the window was not split).
 
-    // Set the sash position
-    void SetSashPosition(int position, bool redraw = True);
-
-    // Gets the sash position
-    int GetSashPosition() const;
-
-    // If this is zero, we can remove panes by dragging the sash.
-    void SetMinimumPaneSize(int min);
-    int GetMinimumPaneSize() const;
+This function will not actually delete the pane being
+removed; it sends EVT_SPLITTER_UNSPLIT which can be handled
+for the desired behaviour. By default, the pane being
+removed is only hidden.");
+    
 
 
-    // Tests for x, y over sash
-    virtual bool SashHitTest(int x, int y, int tolerance = 5);
+    DocDeclStr(
+        bool , ReplaceWindow(wxWindow *winOld, wxWindow *winNew),
+        "This function replaces one of the windows managed by the
+SplitterWindow with another one. It is in general better to
+use it instead of calling Unsplit() and then resplitting the
+window back because it will provoke much less flicker. It is
+valid to call this function whether the splitter has two
+windows or only one.
 
-    // Resizes subwindows
-    virtual void SizeWindows();
+Both parameters should be non-None and winOld must specify
+one of the windows managed by the splitter. If the
+parameters are incorrect or the window couldn't be replaced,
+False is returned. Otherwise the function will return True,
+but please notice that it will not Destroy the replaced
+window and you may wish to do it yourself.");
+    
+
+    DocDeclStr(
+        void , UpdateSize(),
+        "Causes any pending sizing of the sash and child panes to
+take place immediately.
+
+Such resizing normally takes place in idle time, in order to
+wait for layout to be completed. However, this can cause
+unacceptable flicker as the panes are resized after the
+window has been shown. To work around this, you can perform
+window layout (for example by sending a size event to the
+parent window), and then call this function, before showing
+the top-level window.");
+
+
+   
+    DocDeclStr(
+        bool , IsSplit() const,
+        "Is the window split?");
+    
+
+    DocDeclStr(
+        void , SetSashSize(int width),
+        "Sets the sash size");
+    
+
+    DocDeclStr(
+        void , SetBorderSize(int width),
+        "Sets the border size");
+    
+
+    DocDeclStr(
+        int , GetSashSize() const,
+        "Gets the sash size");
+    
+
+    DocDeclStr(
+        int , GetBorderSize() const,
+        "Gets the border size");
+    
+
+    DocDeclStr(
+        void , SetSashPosition(int position, bool redraw = True),
+        "Sets the sash position, in pixels.  If redraw is Ttrue then
+the panes are resized and the sash and border are redrawn.");
+    
+
+    DocDeclStr(
+        int , GetSashPosition() const,
+        "Returns the surrent sash position.");
+    
+
+    DocDeclStr(
+        void , SetMinimumPaneSize(int min),
+        "Sets the minimum pane size in pixels.
+
+The default minimum pane size is zero, which means that
+either pane can be reduced to zero by dragging the sash,
+thus removing one of the panes. To prevent this behaviour (and
+veto out-of-range sash dragging), set a minimum size,
+for example 20 pixels. If the wx.SP_PERMIT_UNSPLIT style is
+used when a splitter window is created, the window may be
+unsplit even if minimum size is non-zero.");
+    
+    DocDeclStr(
+        int , GetMinimumPaneSize() const,
+        "Gets the minimum pane size in pixels.");
+    
+
+    DocDeclStr(
+        virtual bool , SashHitTest(int x, int y, int tolerance = 5),
+        "Tests for x, y over the sash");
+    
+
+    DocDeclStr(
+        virtual void , SizeWindows(),
+        "Resizes subwindows");
+    
 
     void SetNeedUpdating(bool needUpdating);
     bool GetNeedUpdating() const;
@@ -152,11 +336,9 @@ public:
 
 
 
+DocStr(wxSplitterEvent,
+       "This class represents the events generated by a splitter control.");
 
-// we reuse the same class for all splitter event types because this is the
-// usual wxWin convention, but the three event types have different kind of
-// data associated with them, so the accessors can be only used if the real
-// event type matches with the one for which the accessors make sense
 class wxSplitterEvent : public wxNotifyEvent
 {
 public:
@@ -164,19 +346,42 @@ public:
                     wxSplitterWindow *splitter = (wxSplitterWindow *)NULL);
 
 
-    // SASH_POS_CHANGED methods
-
-    // setting the sash position to -1 prevents the change from taking place at
-    // all
-    void SetSashPosition(int pos);
-    int GetSashPosition() const;
+    DocDeclStr(
+        void , SetSashPosition(int pos),
+        "This funciton is only meaningful during
+EVT_SPLITTER_SASH_POS_CHANGING and
+EVT_SPLITTER_SASH_POS_CHANGED events.  In the case of
+_CHANGED events, sets the the new sash position. In the case
+of _CHANGING events, sets the new tracking bar position so
+visual feedback during dragging will represent that change
+that will actually take place. Set to -1 from the event
+handler code to prevent repositioning.");
+    
+    DocDeclStr(
+        int , GetSashPosition() const,
+        "Returns the new sash position while in
+EVT_SPLITTER_SASH_POS_CHANGING and
+EVT_SPLITTER_SASH_POS_CHANGED events.");
+    
 
     // UNSPLIT event methods
-    wxWindow *GetWindowBeingRemoved() const;
+    DocDeclStr(
+        wxWindow *, GetWindowBeingRemoved() const,
+        "Returns a pointer to the window being removed when a
+splitter window is unsplit.");
+    
 
     // DCLICK event methods
-    int GetX() const;
-    int GetY() const;
+    DocDeclStr(
+        int , GetX() const,
+        "Returns the x coordinate of the double-click point in a
+EVT_SPLITTER_DCLICK event.");
+    
+    DocDeclStr(
+        int , GetY() const,
+        "Returns the y coordinate of the double-click point in a
+EVT_SPLITTER_DCLICK event.");
+    
 };
 
 
