@@ -89,10 +89,10 @@ void wxColour::InitFromName( const wxString &colourName )
     else
     {
         m_refData = new wxColourRefData();
-        if (!gdk_color_parse( colourName, &M_COLDATA->m_color ))
+        if (!gdk_color_parse( colourName.mb_str(), &M_COLDATA->m_color ))
         {
-            wxFAIL_MSG( "wxColour: couldn't find colour" );
-	    printf( "Colourname %s.\n", WXSTRINGCAST colourName );
+            wxFAIL_MSG( _T("wxColour: couldn't find colour") );
+	    wxPrintf( _T("Colourname %s.\n"), WXSTRINGCAST colourName );
       
             delete m_refData;
             m_refData = (wxObjectRefData *) NULL;
@@ -138,21 +138,21 @@ void wxColour::Set( unsigned char red, unsigned char green, unsigned char blue )
 
 unsigned char wxColour::Red() const
 {
-    wxCHECK_MSG( Ok(), 0, "invalid colour" );
+    wxCHECK_MSG( Ok(), 0, _T("invalid colour") );
 
     return (unsigned char)(M_COLDATA->m_color.red >> SHIFT);
 }
 
 unsigned char wxColour::Green() const
 {
-    wxCHECK_MSG( Ok(), 0, "invalid colour" );
+    wxCHECK_MSG( Ok(), 0, _T("invalid colour") );
 
     return (unsigned char)(M_COLDATA->m_color.green >> SHIFT);
 }
 
 unsigned char wxColour::Blue() const
 {
-    wxCHECK_MSG( Ok(), 0, "invalid colour" );
+    wxCHECK_MSG( Ok(), 0, _T("invalid colour") );
 
     return (unsigned char)(M_COLDATA->m_color.blue >> SHIFT);
 }
@@ -200,14 +200,14 @@ void wxColour::CalcPixel( GdkColormap *cmap )
 
 int wxColour::GetPixel() const
 {
-    wxCHECK_MSG( Ok(), 0, "invalid colour" );
+    wxCHECK_MSG( Ok(), 0, _T("invalid colour") );
 
     return M_COLDATA->m_color.pixel;
 }
 
 GdkColor *wxColour::GetColor() const
 {
-    wxCHECK_MSG( Ok(), (GdkColor *) NULL, "invalid colour" );
+    wxCHECK_MSG( Ok(), (GdkColor *) NULL, _T("invalid colour") );
 
     return &M_COLDATA->m_color;
 }

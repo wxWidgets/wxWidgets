@@ -82,7 +82,7 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
         m_clientDataList.Append( (wxObject*) NULL );
         m_clientObjectList.Append( (wxObject*) NULL );
 
-        GtkWidget *item = gtk_menu_item_new_with_label( choices[i] );
+        GtkWidget *item = gtk_menu_item_new_with_label( choices[i].mbc_str() );
         gtk_menu_append( GTK_MENU(menu), item );
 
         gtk_widget_realize( item );
@@ -117,10 +117,10 @@ wxChoice::~wxChoice()
 
 void wxChoice::AppendCommon( const wxString &item )
 {
-    wxCHECK_RET( m_widget != NULL, "invalid choice" );
+    wxCHECK_RET( m_widget != NULL, _T("invalid choice") );
 
     GtkWidget *menu = gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) );
-    GtkWidget *menu_item = gtk_menu_item_new_with_label( item );
+    GtkWidget *menu_item = gtk_menu_item_new_with_label( item.mbc_str() );
 
     gtk_menu_append( GTK_MENU(menu), menu_item );
 
@@ -161,7 +161,7 @@ void wxChoice::Append( const wxString &item, wxClientData *clientData )
 
 void wxChoice::SetClientData( int n, void* clientData )
 {
-    wxCHECK_RET( m_widget != NULL, "invalid combobox" );
+    wxCHECK_RET( m_widget != NULL, _T("invalid combobox") );
 
     wxNode *node = m_clientDataList.Nth( n );
     if (!node) return;
@@ -171,7 +171,7 @@ void wxChoice::SetClientData( int n, void* clientData )
 
 void* wxChoice::GetClientData( int n )
 {
-    wxCHECK_MSG( m_widget != NULL, NULL, "invalid combobox" );
+    wxCHECK_MSG( m_widget != NULL, NULL, _T("invalid combobox") );
 
     wxNode *node = m_clientDataList.Nth( n );
     if (!node) return NULL;
@@ -181,7 +181,7 @@ void* wxChoice::GetClientData( int n )
 
 void wxChoice::SetClientObject( int n, wxClientData* clientData )
 {
-    wxCHECK_RET( m_widget != NULL, "invalid combobox" );
+    wxCHECK_RET( m_widget != NULL, _T("invalid combobox") );
 
     wxNode *node = m_clientObjectList.Nth( n );
     if (!node) return;
@@ -194,7 +194,7 @@ void wxChoice::SetClientObject( int n, wxClientData* clientData )
 
 wxClientData* wxChoice::GetClientObject( int n )
 {
-    wxCHECK_MSG( m_widget != NULL, (wxClientData*) NULL, "invalid combobox" );
+    wxCHECK_MSG( m_widget != NULL, (wxClientData*) NULL, _T("invalid combobox") );
 
     wxNode *node = m_clientObjectList.Nth( n );
     if (!node) return (wxClientData*) NULL;
@@ -204,7 +204,7 @@ wxClientData* wxChoice::GetClientObject( int n )
 
 void wxChoice::Clear()
 {
-    wxCHECK_RET( m_widget != NULL, "invalid choice" );
+    wxCHECK_RET( m_widget != NULL, _T("invalid choice") );
 
     gtk_option_menu_remove_menu( GTK_OPTION_MENU(m_widget) );
     GtkWidget *menu = gtk_menu_new();
@@ -224,12 +224,12 @@ void wxChoice::Clear()
 
 void wxChoice::Delete( int WXUNUSED(n) )
 {
-    wxFAIL_MSG( "wxChoice:Delete not implemented" );
+    wxFAIL_MSG( _T("wxChoice:Delete not implemented") );
 }
 
 int wxChoice::FindString( const wxString &string ) const
 {
-    wxCHECK_MSG( m_widget != NULL, -1, "invalid choice" );
+    wxCHECK_MSG( m_widget != NULL, -1, _T("invalid choice") );
 
     // If you read this code once and you think you understand
     // it, then you are very wrong. Robert Roebling.
@@ -244,7 +244,7 @@ int wxChoice::FindString( const wxString &string ) const
         if (bin->child) label = GTK_LABEL(bin->child);
         if (!label) label = GTK_LABEL( GTK_BUTTON(m_widget)->child );
 
-        wxASSERT_MSG( label != NULL , "wxChoice: invalid label" );
+        wxASSERT_MSG( label != NULL , _T("wxChoice: invalid label") );
 
        if (string == label->label)
            return count;
@@ -263,7 +263,7 @@ int wxChoice::GetColumns() const
 
 int wxChoice::GetSelection()
 {
-    wxCHECK_MSG( m_widget != NULL, -1, "invalid choice" );
+    wxCHECK_MSG( m_widget != NULL, -1, _T("invalid choice") );
 
     GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) ) );
     int count = 0;
@@ -276,14 +276,14 @@ int wxChoice::GetSelection()
         count++;
     }
 
-    wxFAIL_MSG( "wxChoice: no selection" );
+    wxFAIL_MSG( _T("wxChoice: no selection") );
 
     return -1;
 }
 
 wxString wxChoice::GetString( int n ) const
 {
-    wxCHECK_MSG( m_widget != NULL, "", "invalid choice" );
+    wxCHECK_MSG( m_widget != NULL, _T(""), _T("invalid choice") );
 
     GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) ) );
     int count = 0;
@@ -297,7 +297,7 @@ wxString wxChoice::GetString( int n ) const
             if (bin->child) label = GTK_LABEL(bin->child);
             if (!label) label = GTK_LABEL( GTK_BUTTON(m_widget)->child );
 
-            wxASSERT_MSG( label != NULL , "wxChoice: invalid label" );
+            wxASSERT_MSG( label != NULL , _T("wxChoice: invalid label") );
 
             return label->label;
         }
@@ -305,25 +305,25 @@ wxString wxChoice::GetString( int n ) const
         count++;
     }
 
-    wxFAIL_MSG( "wxChoice: invalid index in GetString()" );
+    wxFAIL_MSG( _T("wxChoice: invalid index in GetString()") );
 
     return "";
 }
 
 wxString wxChoice::GetStringSelection() const
 {
-    wxCHECK_MSG( m_widget != NULL, "", "invalid choice" );
+    wxCHECK_MSG( m_widget != NULL, _T(""), _T("invalid choice") );
 
     GtkLabel *label = GTK_LABEL( GTK_BUTTON(m_widget)->child );
 
-    wxASSERT_MSG( label != NULL , "wxChoice: invalid label" );
+    wxASSERT_MSG( label != NULL , _T("wxChoice: invalid label") );
 
     return label->label;
 }
 
 int wxChoice::Number() const
 {
-    wxCHECK_MSG( m_widget != NULL, 0, "invalid choice" );
+    wxCHECK_MSG( m_widget != NULL, 0, _T("invalid choice") );
 
     GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) ) );
     int count = 0;
@@ -342,7 +342,7 @@ void wxChoice::SetColumns( int WXUNUSED(n) )
 
 void wxChoice::SetSelection( int n )
 {
-    wxCHECK_RET( m_widget != NULL, "invalid choice" );
+    wxCHECK_RET( m_widget != NULL, _T("invalid choice") );
 
     int tmp = n;
     gtk_option_menu_set_history( GTK_OPTION_MENU(m_widget), (gint)tmp );
@@ -352,7 +352,7 @@ void wxChoice::SetSelection( int n )
 
 void wxChoice::SetStringSelection( const wxString &string )
 {
-    wxCHECK_RET( m_widget != NULL, "invalid choice" );
+    wxCHECK_RET( m_widget != NULL, _T("invalid choice") );
 
     int n = FindString( string );
     if (n != -1) SetSelection( n );

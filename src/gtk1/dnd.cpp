@@ -399,7 +399,7 @@ bool wxDropTarget::GetData( wxDataObject *data_object )
   
 void wxDropTarget::UnregisterWidget( GtkWidget *widget )
 {
-    wxCHECK_RET( widget != NULL, "unregister widget is NULL" );
+    wxCHECK_RET( widget != NULL, _T("unregister widget is NULL") );
   
     gtk_drag_dest_unset( widget );
 		     
@@ -418,7 +418,7 @@ void wxDropTarget::UnregisterWidget( GtkWidget *widget )
 
 void wxDropTarget::RegisterWidget( GtkWidget *widget )
 {
-    wxCHECK_RET( widget != NULL, "register widget is NULL" );
+    wxCHECK_RET( widget != NULL, _T("register widget is NULL") );
   
     /* gtk_drag_dest_set() determines what default behaviour we'd like
        GTK to supply. we don't want to specify out targets (=formats)
@@ -474,7 +474,7 @@ bool wxTextDropTarget::OnData( int x, int y )
     wxTextDataObject data;
     if (!GetData( &data )) return FALSE;
     
-    OnDropText( x, y, data.GetText() );
+    OnDropText( x, y, data.GetText().mbc_str() );
     
     return TRUE;
 }
@@ -550,19 +550,19 @@ bool wxFileDropTarget::OnData( int x, int y )
     size_t number = 0;
     size_t i;
     size_t size = data.GetFiles().Length();
-    char *text = WXSTRINGCAST data.GetFiles();
+    wxChar *text = WXSTRINGCAST data.GetFiles();
     for ( i = 0; i < size; i++)
         if (text[i] == 0) number++;
 
     if (number == 0) return FALSE;
     
-    char **files = new char*[number];
+    wxChar **files = new wxChar*[number];
   
     text = WXSTRINGCAST data.GetFiles();
     for (i = 0; i < number; i++)
     {
         files[i] = text;
-        int len = strlen( text );
+        int len = wxStrlen( text );
         text += len+1;
     }
 
@@ -755,7 +755,7 @@ wxDropSource::~wxDropSource(void)
    
 wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
 {
-    wxASSERT_MSG( m_data, "wxDragSource: no data" );
+    wxASSERT_MSG( m_data, _T("wxDragSource: no data") );
   
     if (!m_data) return (wxDragResult) wxDragNone;
   

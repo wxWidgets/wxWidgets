@@ -84,7 +84,7 @@ wxCursor::wxCursor( int cursorId )
         case wxCURSOR_BASED_ARROW_DOWN: gdk_cur = GDK_BASED_ARROW_DOWN; break;
 */
         default:
-            wxFAIL_MSG("unsupported cursor type");
+            wxFAIL_MSG(_T("unsupported cursor type"));
             // will use the standard one
 
         case wxCURSOR_ARROW:
@@ -148,7 +148,7 @@ void wxEndBusyCursor()
         return;
 
     wxCHECK_RET( gs_savedCursor && gs_savedCursor->Ok(),
-                 "calling wxEndBusyCursor() without wxBeginBusyCursor()?" );
+                 _T("calling wxEndBusyCursor() without wxBeginBusyCursor()?") );
 
     wxSetCursor(*gs_savedCursor);
     delete gs_savedCursor;
@@ -161,7 +161,7 @@ void wxBeginBusyCursor( wxCursor *WXUNUSED(cursor) )
         return;
 
     wxASSERT_MSG( !gs_savedCursor,
-                  "forgot to call wxEndBusyCursor, will leak memory" );
+                  _T("forgot to call wxEndBusyCursor, will leak memory") );
 
     gs_savedCursor = new wxCursor;
     if ( g_globalCursor && g_globalCursor->Ok() )
@@ -180,5 +180,3 @@ void wxSetCursor( const wxCursor& cursor )
 {
     if (g_globalCursor) (*g_globalCursor) = cursor;
 }
-
-

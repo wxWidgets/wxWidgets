@@ -140,18 +140,18 @@ wxWindowDC::~wxWindowDC()
 void wxWindowDC::FloodFill( long WXUNUSED(x), long WXUNUSED(y), 
                            const wxColour &WXUNUSED(col), int WXUNUSED(style) )
 {
-    wxFAIL_MSG( "wxWindowDC::FloodFill not implemented" );
+    wxFAIL_MSG( _T("wxWindowDC::FloodFill not implemented") );
 }
 
 bool wxWindowDC::GetPixel( long WXUNUSED(x1), long WXUNUSED(y1), wxColour *WXUNUSED(col) ) const
 {
-    wxFAIL_MSG( "wxWindowDC::GetPixel not implemented" );
+    wxFAIL_MSG( _T("wxWindowDC::GetPixel not implemented") );
     return FALSE;
 }
 
 void wxWindowDC::DrawLine( long x1, long y1, long x2, long y2 )
 {
-    wxCHECK_RET( Ok(), "invalid window dc" );
+    wxCHECK_RET( Ok(), _T("invalid window dc") );
   
     if (m_pen.GetStyle() != wxTRANSPARENT)
     {
@@ -165,7 +165,7 @@ void wxWindowDC::DrawLine( long x1, long y1, long x2, long y2 )
 
 void wxWindowDC::CrossHair( long x, long y )
 {
-    wxCHECK_RET( Ok(), "invalid window dc" );
+    wxCHECK_RET( Ok(), _T("invalid window dc") );
   
     if (m_pen.GetStyle() != wxTRANSPARENT)
     {
@@ -181,7 +181,7 @@ void wxWindowDC::CrossHair( long x, long y )
 
 void wxWindowDC::DrawArc( long x1, long y1, long x2, long y2, double xc, double yc )
 {
-    wxCHECK_RET( Ok(), "invalid window dc" );
+    wxCHECK_RET( Ok(), _T("invalid window dc") );
   
     long xx1 = XLOG2DEV(x1); 
     long yy1 = YLOG2DEV(y1);
@@ -231,7 +231,7 @@ void wxWindowDC::DrawArc( long x1, long y1, long x2, long y2, double xc, double 
 
 void wxWindowDC::DrawEllipticArc( long x, long y, long width, long height, double sa, double ea )
 {
-    wxCHECK_RET( Ok(), "invalid window dc" );
+    wxCHECK_RET( Ok(), _T("invalid window dc") );
   
     long xx = XLOG2DEV(x);    
     long yy = YLOG2DEV(y);
@@ -256,7 +256,7 @@ void wxWindowDC::DrawEllipticArc( long x, long y, long width, long height, doubl
 
 void wxWindowDC::DrawPoint( long x, long y )
 {
-    wxCHECK_RET( Ok(), "invalid window dc" );
+    wxCHECK_RET( Ok(), _T("invalid window dc") );
   
     if (m_pen.GetStyle() != wxTRANSPARENT)
         gdk_draw_point( m_window, m_penGC, XLOG2DEV(x), YLOG2DEV(y) );
@@ -266,7 +266,7 @@ void wxWindowDC::DrawPoint( long x, long y )
 
 void wxWindowDC::DrawLines( int n, wxPoint points[], long xoffset, long yoffset )
 {
-    wxCHECK_RET( Ok(), "invalid window dc" );
+    wxCHECK_RET( Ok(), _T("invalid window dc") );
   
     if (m_pen.GetStyle() == wxTRANSPARENT) return;
     if (n <= 0) return;
@@ -287,7 +287,7 @@ void wxWindowDC::DrawLines( int n, wxPoint points[], long xoffset, long yoffset 
 
 void wxWindowDC::DrawLines( wxList *points, long xoffset, long yoffset )
 {
-    wxCHECK_RET( Ok(), "invalid window dc" );
+    wxCHECK_RET( Ok(), _T("invalid window dc") );
   
     if (m_pen.GetStyle() == wxTRANSPARENT) return;
   
@@ -314,7 +314,7 @@ void wxWindowDC::DrawLines( wxList *points, long xoffset, long yoffset )
 
 void wxWindowDC::DrawPolygon( int n, wxPoint points[], long xoffset, long yoffset, int WXUNUSED(fillStyle) )
 {
-    wxCHECK_RET( Ok(), "invalid window dc" );
+    wxCHECK_RET( Ok(), _T("invalid window dc") );
   
     if (n <= 0) return;
     
@@ -348,7 +348,7 @@ void wxWindowDC::DrawPolygon( int n, wxPoint points[], long xoffset, long yoffse
 
 void wxWindowDC::DrawPolygon( wxList *lines, long xoffset, long yoffset, int WXUNUSED(fillStyle))
 {
-    wxCHECK_RET( Ok(), "invalid window dc" );
+    wxCHECK_RET( Ok(), _T("invalid window dc") );
   
     int n = lines->Number();
     if (n <= 0) return;
@@ -389,7 +389,7 @@ void wxWindowDC::DrawPolygon( wxList *lines, long xoffset, long yoffset, int WXU
 
 void wxWindowDC::DrawRectangle( long x, long y, long width, long height )
 {
-    wxCHECK_RET( Ok(), "invalid window dc" );
+    wxCHECK_RET( Ok(), _T("invalid window dc") );
 
     long xx = XLOG2DEV(x);
     long yy = YLOG2DEV(y);
@@ -415,7 +415,7 @@ void wxWindowDC::DrawRectangle( long x, long y, long width, long height )
 
 void wxWindowDC::DrawRoundedRectangle( long x, long y, long width, long height, double radius )
 {
-    wxCHECK_RET( Ok(), "invalid window dc" );
+    wxCHECK_RET( Ok(), _T("invalid window dc") );
   
     if (radius < 0.0) radius = - radius * ((width < height) ? width : height);
   
@@ -484,7 +484,7 @@ void wxWindowDC::DrawRoundedRectangle( long x, long y, long width, long height, 
 
 void wxWindowDC::DrawEllipse( long x, long y, long width, long height )
 {
-    wxCHECK_RET( Ok(), "invalid window dc" );
+    wxCHECK_RET( Ok(), _T("invalid window dc") );
   
     long xx = XLOG2DEV(x);    
     long yy = YLOG2DEV(y);
@@ -517,7 +517,7 @@ void wxWindowDC::DrawIcon( const wxIcon &icon, long x, long y )
 
 void wxWindowDC::DrawBitmap( const wxBitmap &bitmap, long x, long y, bool useMask )
 {
-    wxCHECK_RET( Ok(), "invalid window dc" );
+    wxCHECK_RET( Ok(), _T("invalid window dc") );
   
     if (!bitmap.Ok()) return;
     
@@ -595,9 +595,9 @@ bool wxWindowDC::Blit( long xdest, long ydest, long width, long height,
       of the source dc, but scales correctly on the target dc and
       knows about possible mask information in a memory dc. */
 
-    wxCHECK_MSG( Ok(), FALSE, "invalid window dc" );
+    wxCHECK_MSG( Ok(), FALSE, _T("invalid window dc") );
     
-    wxCHECK_MSG( source, FALSE, "invalid source dc" );
+    wxCHECK_MSG( source, FALSE, _T("invalid source dc") );
     
     wxClientDC *srcDC = (wxClientDC*)source;
     wxMemoryDC *memDC = (wxMemoryDC*)source;
@@ -783,7 +783,7 @@ bool wxWindowDC::Blit( long xdest, long ydest, long width, long height,
 
 void wxWindowDC::DrawText( const wxString &text, long x, long y, bool WXUNUSED(use16) )
 {
-    wxCHECK_RET( Ok(), "invalid window dc" );
+    wxCHECK_RET( Ok(), _T("invalid window dc") );
 
     GdkFont *font = m_font.GetInternalFont( m_scaleY );
 
@@ -793,20 +793,20 @@ void wxWindowDC::DrawText( const wxString &text, long x, long y, bool WXUNUSED(u
     /* CMB 21/5/98: draw text background if mode is wxSOLID */
     if (m_backgroundMode == wxSOLID)
     {
-        long width = gdk_string_width( font, text );
+        long width = gdk_string_width( font, text.mbc_str() );
         long height = font->ascent + font->descent;
         gdk_gc_set_foreground( m_textGC, m_textBackgroundColour.GetColor() );
         gdk_draw_rectangle( m_window, m_textGC, TRUE, x, y, width, height );
         gdk_gc_set_foreground( m_textGC, m_textForegroundColour.GetColor() );
     }
-    gdk_draw_string( m_window, font, m_textGC, x, y + font->ascent, text );
+    gdk_draw_string( m_window, font, m_textGC, x, y + font->ascent, text.mbc_str() );
 
     /* CMB 17/7/98: simple underline: ignores scaling and underlying
        X font's XA_UNDERLINE_POSITION and XA_UNDERLINE_THICKNESS
        properties (see wxXt implementation) */
     if (m_font.GetUnderlined())
     {
-        long width = gdk_string_width( font, text );
+        long width = gdk_string_width( font, text.mbc_str() );
         long ul_y = y + font->ascent;
         if (font->descent > 0) ul_y++;
         gdk_draw_line( m_window, m_textGC, x, ul_y, x + width, ul_y);
@@ -827,13 +827,13 @@ void wxWindowDC::GetTextExtent( const wxString &string, long *width, long *heigh
                      long *descent, long *externalLeading,
                      wxFont *theFont, bool WXUNUSED(use16) )
 {
-    wxCHECK_RET( Ok(), "invalid window dc" );
+    wxCHECK_RET( Ok(), _T("invalid window dc") );
   
     wxFont fontToUse = m_font;
     if (theFont) fontToUse = *theFont;
   
     GdkFont *font = fontToUse.GetInternalFont( m_scaleY );
-    if (width) (*width) = long(gdk_string_width( font, string ) / m_scaleX);
+    if (width) (*width) = long(gdk_string_width( font, string.mbc_str() ) / m_scaleX);
     if (height) (*height) = long((font->ascent + font->descent) / m_scaleY);
     if (descent) (*descent) = long(font->descent / m_scaleY);
     if (externalLeading) (*externalLeading) = 0;  // ??
@@ -841,7 +841,7 @@ void wxWindowDC::GetTextExtent( const wxString &string, long *width, long *heigh
 
 long wxWindowDC::GetCharWidth()
 {
-    wxCHECK_MSG( Ok(), 0, "invalid window dc" );
+    wxCHECK_MSG( Ok(), 0, _T("invalid window dc") );
   
     GdkFont *font = m_font.GetInternalFont( m_scaleY );
     return long(gdk_string_width( font, "H" ) / m_scaleX);
@@ -849,7 +849,7 @@ long wxWindowDC::GetCharWidth()
 
 long wxWindowDC::GetCharHeight()
 {
-    wxCHECK_MSG( Ok(), 0, "invalid window dc" );
+    wxCHECK_MSG( Ok(), 0, _T("invalid window dc") );
   
     GdkFont *font = m_font.GetInternalFont( m_scaleY );
     return long((font->ascent + font->descent) / m_scaleY);
@@ -857,7 +857,7 @@ long wxWindowDC::GetCharHeight()
 
 void wxWindowDC::Clear()
 {
-    wxCHECK_RET( Ok(), "invalid window dc" );
+    wxCHECK_RET( Ok(), _T("invalid window dc") );
   
     /* - we either are a memory dc or have a window as the
        owner. anything else shouldn't happen.
@@ -885,14 +885,14 @@ void wxWindowDC::Clear()
 
 void wxWindowDC::SetFont( const wxFont &font )
 {
-    wxCHECK_RET( Ok(), "invalid window dc" );
+    wxCHECK_RET( Ok(), _T("invalid window dc") );
   
     m_font = font;
 }
 
 void wxWindowDC::SetPen( const wxPen &pen )
 {
-    wxCHECK_RET( Ok(), "invalid window dc" );
+    wxCHECK_RET( Ok(), _T("invalid window dc") );
   
     if (m_pen == pen) return;
   
@@ -948,7 +948,7 @@ void wxWindowDC::SetPen( const wxPen &pen )
 
 void wxWindowDC::SetBrush( const wxBrush &brush )
 {
-    wxCHECK_RET( Ok(), "invalid window dc" );
+    wxCHECK_RET( Ok(), _T("invalid window dc") );
   
     if (m_brush == brush) return;
   
@@ -991,7 +991,7 @@ void wxWindowDC::SetBackground( const wxBrush &brush )
    /* CMB 21/7/98: Added SetBackground. Sets background brush
     * for Clear() and bg colour for shapes filled with cross-hatch brush */
    
-    wxCHECK_RET( Ok(), "invalid window dc" );
+    wxCHECK_RET( Ok(), _T("invalid window dc") );
   
     if (m_backgroundBrush == brush) return;
   
@@ -1031,7 +1031,7 @@ void wxWindowDC::SetBackground( const wxBrush &brush )
 
 void wxWindowDC::SetLogicalFunction( int function )
 {
-    wxCHECK_RET( Ok(), "invalid window dc" );
+    wxCHECK_RET( Ok(), _T("invalid window dc") );
   
     if (m_logicalFunction == function) return;
     
@@ -1051,7 +1051,7 @@ void wxWindowDC::SetLogicalFunction( int function )
 
 void wxWindowDC::SetTextForeground( const wxColour &col )
 {
-    wxCHECK_RET( Ok(), "invalid window dc" );
+    wxCHECK_RET( Ok(), _T("invalid window dc") );
   
     if (m_textForegroundColour == col) return;
   
@@ -1064,7 +1064,7 @@ void wxWindowDC::SetTextForeground( const wxColour &col )
 
 void wxWindowDC::SetTextBackground( const wxColour &col )
 {
-    wxCHECK_RET( Ok(), "invalid window dc" );
+    wxCHECK_RET( Ok(), _T("invalid window dc") );
   
     if (m_textBackgroundColour == col) return;
   
@@ -1077,7 +1077,7 @@ void wxWindowDC::SetTextBackground( const wxColour &col )
 
 void wxWindowDC::SetBackgroundMode( int mode )
 {
-    wxCHECK_RET( Ok(), "invalid window dc" );
+    wxCHECK_RET( Ok(), _T("invalid window dc") );
   
     m_backgroundMode = mode;
 
@@ -1093,12 +1093,12 @@ void wxWindowDC::SetBackgroundMode( int mode )
 
 void wxWindowDC::SetPalette( const wxPalette& WXUNUSED(palette) )
 {
-    wxFAIL_MSG( "wxWindowDC::SetPalette not implemented" );
+    wxFAIL_MSG( _T("wxWindowDC::SetPalette not implemented") );
 }
 
 void wxWindowDC::SetClippingRegion( long x, long y, long width, long height )
 {
-    wxCHECK_RET( Ok(), "invalid window dc" );
+    wxCHECK_RET( Ok(), _T("invalid window dc") );
   
     wxDC::SetClippingRegion( x, y, width, height );
   
@@ -1115,7 +1115,7 @@ void wxWindowDC::SetClippingRegion( long x, long y, long width, long height )
 
 void wxWindowDC::SetClippingRegion( const wxRegion &region  )
 {
-    wxCHECK_RET( Ok(), "invalid window dc" );
+    wxCHECK_RET( Ok(), _T("invalid window dc") );
   
     if (region.Empty())
     {
@@ -1131,7 +1131,7 @@ void wxWindowDC::SetClippingRegion( const wxRegion &region  )
 
 void wxWindowDC::DestroyClippingRegion()
 {
-    wxCHECK_RET( Ok(), "invalid window dc" );
+    wxCHECK_RET( Ok(), _T("invalid window dc") );
   
     wxDC::DestroyClippingRegion();
   
@@ -1320,7 +1320,7 @@ static void wx_spline_draw_point_array(wxDC *dc)
 
 void wxWindowDC::DrawSpline( wxList *points )
 {
-    wxCHECK_RET( Ok(), "invalid window dc" );
+    wxCHECK_RET( Ok(), _T("invalid window dc") );
   
     wxPoint *p;
     double           cx1, cy1, cx2, cy2, cx3, cy3, cx4, cy4;
