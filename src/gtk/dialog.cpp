@@ -198,7 +198,7 @@ int wxDialog::ShowModal()
     if ( !GetParent() && !(GetWindowStyleFlag() & wxDIALOG_NO_PARENT) )
     {
         wxWindow *parent = wxTheApp->GetTopWindow();
-        if ( parent && parent != this )
+        if ( parent && parent != this && parent->IsBeingDeleted() )
         {
             m_parent = parent;
             gtk_window_set_transient_for( GTK_WINDOW(m_widget), GTK_WINDOW(parent->m_widget) );
