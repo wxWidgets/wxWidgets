@@ -70,6 +70,8 @@ class WXDLLEXPORT wxToolBar95: public wxToolBarBase
   wxSize GetMaxSize(void) const;
   void GetSize(int *w, int *y) const;
 
+  virtual bool GetToolState(int toolIndex) const;
+
   // Add all the buttons: required for Win95.
   virtual bool CreateTools(void);
   virtual void SetRows(int nRows);

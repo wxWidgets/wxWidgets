@@ -873,7 +873,11 @@ typedef unsigned long   WXHCONV;
 typedef void *          WXDRAWITEMSTRUCT;
 typedef void *          WXMEASUREITEMSTRUCT;
 typedef void *          WXLPCREATESTRUCT;
+#ifdef __GNUWIN32__
+typedef int (*WXFARPROC)();
+#else
 typedef int (__stdcall *WXFARPROC)();
+#endif
 
 #endif
 

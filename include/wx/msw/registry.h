@@ -121,10 +121,18 @@ public:
     // return true if the key exists
   bool  Exists() const;
     // get the info about key (any number of these pointers may be NULL)
+
+#ifdef __GNUWIN32__
+  bool  GetKeyInfo(uint *pnSubKeys,      // number of subkeys
+                   uint *pnMaxKeyLen,    // max len of subkey name
+                   uint *pnValues,       // number of values
+                   uint *pnMaxValueLen) const;
+#else
   bool  GetKeyInfo(ulong *pnSubKeys,      // number of subkeys
                    ulong *pnMaxKeyLen,    // max len of subkey name
                    ulong *pnValues,       // number of values
                    ulong *pnMaxValueLen) const;
+#endif
     // return true if the key is opened
   bool  IsOpened() const { return m_hKey != 0; }
     // for "if ( !key ) wxLogError(...)" kind of expressions

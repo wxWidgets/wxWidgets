@@ -26,6 +26,7 @@
 #include "wx/string.h"
 #include "wx/list.h"
 #include "wx/region.h"
+#include "wx/msw/accel.h"
 
 #define wxKEY_SHIFT     1
 #define wxKEY_CTRL      2
@@ -348,6 +349,8 @@ public:
   inline virtual wxButton *GetDefaultItem(void) const;
   inline virtual void SetDefaultItem(wxButton *but);
 
+  virtual void SetAcceleratorTable(const wxAcceleratorTable& accel);
+
   // Override to define new behaviour for default action (e.g. double clicking
   // on a listbox)
   virtual void OnDefaultAction(wxControl *initiatingItem);
@@ -588,6 +591,7 @@ public:
   ////////////////////////////////////////////////////////////////////////
   //// PROTECTED DATA
 protected:
+  wxAcceleratorTable    m_acceleratorTable;
   int                   m_windowId;
   long                  m_windowStyle; 			// Store the window's style
   wxEvtHandler *        m_windowEventHandler; 	// Usually is 'this'
