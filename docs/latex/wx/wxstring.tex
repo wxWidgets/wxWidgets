@@ -922,7 +922,7 @@ if the string does not represent such number.
 
 \membersection{wxString::ToLong}\label{wxstringtolong}
 
-\constfunc{bool}{ToLong}{\param{long}{ *val}, \param{int }{base = 0}}
+\constfunc{bool}{ToLong}{\param{long}{ *val}, \param{int }{base = $0$}}
 
 Attempts to convert the string to a signed integer in base {\it base}. Returns
 {\tt TRUE} on success in which case the number is stored in the location
@@ -932,7 +932,11 @@ valid number in the given base.
 The default value of {\it base} $0$ is special and means that the usual rules
 of {\tt C} numbers are applied: if the number starts with {\tt 0x} it is
 considered to be in base $16$, if it starts with {\tt 0} - in base $8$ and in
-base $10$ otherwise.
+base $10$ otherwise. Note that you may want to specify the base $10$ explicitly
+if you are parsing the numbers which may have leading zeroes as otherwise the
+string {\tt "09"} may not be parsed correctly: it would be understood as an
+octal number because of the leading zero and the parsing would then fail as 
+{\tt '9'} is not a valid octal digit.
 
 \wxheading{See also}
 
@@ -941,17 +945,15 @@ base $10$ otherwise.
 
 \membersection{wxString::ToULong}\label{wxstringtoulong}
 
-\constfunc{bool}{ToULong}{\param{unsigned long}{ *val}, \param{int }{base = 0}}
+\constfunc{bool}{ToULong}{\param{unsigned long}{ *val}, \param{int }{base = $0$}}
 
 Attempts to convert the string to a ansigned integer in base {\it base}.
 Returns {\tt TRUE} on success in which case the number is stored in the
 location pointed to by {\it val} or {\tt FALSE} if the string does not
 represent a valid number in the given base.
 
-The default value of {\it base} $0$ is special and means that the usual rules
-of {\tt C} numbers are applied: if the number starts with {\tt 0x} it is
-considered to be in base $16$, if it starts with {\tt 0} - in base $8$ and in
-base $10$ otherwise.
+See \helpref{wxString::ToLong}{wxstringtolong} for the more detailed
+description of the {\it base} parameter.
 
 \wxheading{See also}
 
