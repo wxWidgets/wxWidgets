@@ -235,6 +235,7 @@ public:
         : wxCommandEvent(type)
     {
         SetEventObject(splitter);
+        if (splitter) m_id = splitter->GetId();
     }
 
     // SASH_POS_CHANGED methods
