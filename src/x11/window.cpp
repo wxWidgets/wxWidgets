@@ -613,6 +613,7 @@ void wxWindowX11::DoGetSize(int *x, int *y) const
     wxCHECK_RET( xwindow, wxT("invalid window") );
     
     XSync(wxGlobalDisplay(), False);
+
     XWindowAttributes attr;
     Status status = XGetWindowAttributes( wxGlobalDisplay(), xwindow, &attr );
     wxASSERT(status);
