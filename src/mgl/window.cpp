@@ -875,12 +875,16 @@ void wxWindowMGL::DragAcceptFiles(bool accept)
 // Get total size
 void wxWindowMGL::DoGetSize(int *x, int *y) const
 {
+    wxASSERT_MSG( m_wnd, wxT("invalid window") )
+    
     if (x) *x = m_wnd->width;
     if (y) *y = m_wnd->height;
 }
 
 void wxWindowMGL::DoGetPosition(int *x, int *y) const
 {
+    wxASSERT_MSG( m_wnd, wxT("invalid window") )
+
     if (x) *x = m_wnd->x;
     if (y) *y = m_wnd->y;
 }
