@@ -137,7 +137,7 @@ public:
     %extend {
         PyObject* GetMenuItems() {
             wxMenuItemList& list = self->GetMenuItems();
-            return wxPy_ConvertList(&list, "wxMenuItem");
+            return wxPy_ConvertList(&list);
         }
     }
 

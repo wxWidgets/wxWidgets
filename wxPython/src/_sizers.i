@@ -324,7 +324,7 @@ public:
     %extend {
         PyObject* GetChildren() {
             wxSizerItemList& list = self->GetChildren();
-            return wxPy_ConvertList(&list, "wxSizerItem");
+            return wxPy_ConvertList(&list);
         }
     }
 

@@ -50,12 +50,26 @@ swig_type_info* wxPyFindSwigType(const wxChar* className) {
     return swigType;    
 }
 
-    
+
+extern PyObject* wxPyPtrTypeMap; 
 
 // Check if a class name is a type known to SWIG
 bool wxPyCheckSwigType(const wxChar* className) {
 
+    // Try the name as-is first
     swig_type_info* swigType = wxPyFindSwigType(className);
+
+    // if not found see if there is a mapped name for it
+    if (! swigType) {
+        PyObject* item;
+        wxString name(className);
+        
+        if ((item = PyDict_GetItemString(wxPyPtrTypeMap,
+                                         (char*)(const char*)name.mbc_str())) != NULL) {
+            name = wxString(PyString_AsString(item), *wxConvCurrent);
+            swigType = wxPyFindSwigType(name);
+        }
+    }                 
     return swigType != NULL;
 }
  

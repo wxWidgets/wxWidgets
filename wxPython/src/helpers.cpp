@@ -65,8 +65,9 @@ wxMutex*              wxPyTMutex = NULL;
 
 
 static PyObject* wxPython_dict = NULL;
-static PyObject* wxPyPtrTypeMap = NULL;
 static PyObject* wxPyAssertionError = NULL;
+
+PyObject* wxPyPtrTypeMap = NULL;
 
 
 #ifdef __WXMSW__             // If building for win32...
@@ -1598,7 +1599,7 @@ wxPyCommandEvent::~wxPyCommandEvent() {
 //---------------------------------------------------------------------------
 // Convert a wxList to a Python List, only works for lists of wxObjects
 
-PyObject* wxPy_ConvertList(wxListBase* listbase, const char* className) {
+PyObject* wxPy_ConvertList(wxListBase* listbase) {
     wxList*     list = (wxList*)listbase;  // this is probably bad...
     PyObject*   pyList;
     PyObject*   pyObj;
@@ -1609,7 +1610,7 @@ PyObject* wxPy_ConvertList(wxListBase* listbase, const char* className) {
     pyList = PyList_New(0);
     while (node) {
         wxObj = node->GetData();
-        pyObj = wxPyMake_wxObject(wxObj); //wxPyConstructObject(wxObj, className);
+        pyObj = wxPyMake_wxObject(wxObj); 
         PyList_Append(pyList, pyObj);
         node = node->GetNext();
     }

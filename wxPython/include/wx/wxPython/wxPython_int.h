@@ -109,7 +109,7 @@ PyObject* wxPyMake_wxObject(wxObject* source, bool checkEvtHandler=TRUE);
 PyObject* wxPyMake_wxSizer(wxSizer* source);
 void      wxPyPtrTypeMap_Add(const char* commonName, const char* ptrName);
 
-PyObject* wxPy_ConvertList(wxListBase* list, const char* className);
+PyObject* wxPy_ConvertList(wxListBase* list);
 long      wxPyGetWinHandle(wxWindow* win);
 
 void wxPy_ReinitStockObjects(bool init);
@@ -363,7 +363,7 @@ struct wxPyCoreAPI {
     void                (*p_wxPyBeginBlockThreads)();
     void                (*p_wxPyEndBlockThreads)();
 
-    PyObject*           (*p_wxPy_ConvertList)(wxListBase* list, const char* className);
+    PyObject*           (*p_wxPy_ConvertList)(wxListBase* list);
 
     wxString*           (*p_wxString_in_helper)(PyObject* source);
     wxString            (*p_Py2wxString)(PyObject* source);

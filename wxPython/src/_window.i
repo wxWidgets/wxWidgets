@@ -314,7 +314,7 @@ public:
     %extend {
         PyObject* GetChildren() {
             wxWindowList& list = self->GetChildren();
-            return wxPy_ConvertList(&list, "wxWindow");
+            return wxPy_ConvertList(&list);
         }
     }
 
