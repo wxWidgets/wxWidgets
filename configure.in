@@ -1790,7 +1790,6 @@ fi
 
 dnl check for large file support
 AC_SYS_LARGEFILE
-AC_FUNC_FSEEKO
 
 dnl we need to define _FILE_OFFSET_BITS or _LARGE_FILES on the compiler command
 dnl line because otherwise the system headers risk being included before
@@ -1802,6 +1801,11 @@ if test "x$wx_largefile" = "xyes"; then
         WX_LARGEFILE_FLAGS="-D_FILE_OFFSET_BITS=64 -D_LARGE_FILES"
     else
         WX_LARGEFILE_FLAGS="-D_LARGE_FILES"
+    fi
+    dnl AC_FUNC_FSEEKO sets HAVE_FSEEKO and $ac_cv_sys_largefile_source
+    AC_FUNC_FSEEKO
+    if test "$ac_cv_sys_largefile_source" != no; then
+        WX_LARGEFILE_FLAGS="$WX_LARGEFILE_FLAGS -D_LARGEFILE_SOURCE=$ac_cv_sys_largefile_source"
     fi
     CPPFLAGS="$CPPFLAGS $WX_LARGEFILE_FLAGS"
 fi
