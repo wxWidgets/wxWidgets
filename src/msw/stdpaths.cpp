@@ -268,10 +268,16 @@ wxString wxStandardPathsWin16::GetConfigDir() const
     // this is for compatibility with earlier wxFileConfig versions
     // which used the Windows directory for the global files
     wxString dir;
+#ifndef __WXWINCE__
     if ( !::GetWindowsDirectory(wxStringBuffer(dir, MAX_PATH), MAX_PATH) )
     {
         wxLogLastError(_T("GetWindowsDirectory"));
     }
+#else
+    // TODO:
+    //    eVC4 - use CSIDL_WINDOWS
+    //    eVC3 - probably not possible through API
+#endif
 
     return dir;
 }
