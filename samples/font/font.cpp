@@ -296,28 +296,43 @@ bool MyFrame::DoEnumerateFamilies(bool fixedWidthOnly,
 
     if ( fontEnumerator.GotAny() )
     {
-        int n, nFacenames = fontEnumerator.GetFacenames().GetCount();
-        wxLogStatus(this, "Found %d %sfonts",
-                    nFacenames, fixedWidthOnly ? "fixed width " : "");
+        int nFacenames = fontEnumerator.GetFacenames().GetCount();
+        if ( !silent )
+        {
+            wxLogStatus(this, "Found %d %sfonts",
+                        nFacenames, fixedWidthOnly ? "fixed width " : "");
+        }
 
-        wxString *facenames = new wxString[nFacenames];
-        for ( n = 0; n < nFacenames; n++ )
-            facenames[n] = fontEnumerator.GetFacenames().Item(n);
-
+        wxString facename;
         if ( silent )
-            n = 0;
+        {
+            // choose the first
+            facename = fontEnumerator.GetFacenames().Item(0);
+        }
         else
+        {
+            // let the user choose
+            wxString *facenames = new wxString[nFacenames];
+            int n;
+            for ( n = 0; n < nFacenames; n++ )
+                facenames[n] = fontEnumerator.GetFacenames().Item(n);
+
             n = wxGetSingleChoiceIndex("Choose a facename", "Font demo",
                                        nFacenames, facenames, this);
-        if ( n != -1 )
+
+            if ( n != -1 )
+                facename = facenames[n];
+
+            delete [] facenames;
+        }
+
+        if ( !facename.IsEmpty() )
         {
-            wxFont font(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL,
-                        wxFONTWEIGHT_NORMAL, FALSE, facenames[n], encoding);
+            wxFont font(12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL,
+                        wxFONTWEIGHT_NORMAL, FALSE, facename, encoding);
 
             DoChangeFont(font);
         }
-
-        delete [] facenames;
 
         return TRUE;
     }
@@ -477,7 +492,7 @@ void MyFrame::OnViewMsg(wxCommandEvent& WXUNUSED(event))
     // and now create the correct font
     if ( !DoEnumerateFamilies(FALSE, fontenc, TRUE /* silent */) )
     {
-        wxFont font(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL,
+        wxFont font(12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL,
                     wxFONTWEIGHT_NORMAL, FALSE /* !underlined */,
                     wxEmptyString /* facename */, fontenc);
         if ( font.Ok() )
