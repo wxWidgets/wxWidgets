@@ -947,6 +947,71 @@ void wxGnomePrintDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoor
 
 void wxGnomePrintDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius)
 {
+    wxCoord rad = (wxCoord) radius;
+
+    if (m_brush.GetStyle() != wxTRANSPARENT)
+    {
+        SetBrush(m_brush);
+        gs_lgp->gnome_print_newpath(m_gpc);
+        gs_lgp->gnome_print_moveto(m_gpc,XLOG2DEV(x + rad),YLOG2DEV(y));
+        gs_lgp->gnome_print_curveto(m_gpc,
+	                            XLOG2DEV(x + rad),YLOG2DEV(y),
+                                XLOG2DEV(x),YLOG2DEV(y),
+                                XLOG2DEV(x),YLOG2DEV(y + rad));
+        gs_lgp->gnome_print_lineto(m_gpc,XLOG2DEV(x),YLOG2DEV(y + height - rad));
+        gs_lgp->gnome_print_curveto(m_gpc,
+	                            XLOG2DEV(x),YLOG2DEV(y + height - rad),
+                                XLOG2DEV(x),YLOG2DEV(y + height),
+                                XLOG2DEV(x + rad),YLOG2DEV(y + height));
+        gs_lgp->gnome_print_lineto(m_gpc,XLOG2DEV(x + width - rad),YLOG2DEV(y + height));
+        gs_lgp->gnome_print_curveto(m_gpc,
+	                            XLOG2DEV(x + width - rad),YLOG2DEV(y + height),
+                                XLOG2DEV(x + width),YLOG2DEV(y + height),
+                                XLOG2DEV(x + width),YLOG2DEV(y + height - rad));
+        gs_lgp->gnome_print_lineto(m_gpc,XLOG2DEV(x + width),YLOG2DEV(y + rad));
+        gs_lgp->gnome_print_curveto(m_gpc,
+	                            XLOG2DEV(x + width),YLOG2DEV(y + rad),
+                                XLOG2DEV(x + width),YLOG2DEV(y),
+                                XLOG2DEV(x + width - rad),YLOG2DEV(y));
+        gs_lgp->gnome_print_lineto(m_gpc,XLOG2DEV(x + rad),YLOG2DEV(y));
+        gs_lgp->gnome_print_closepath(m_gpc);
+        gs_lgp->gnome_print_fill(m_gpc);
+	
+        CalcBoundingBox(x,y);
+        CalcBoundingBox(x+width,y+height);
+    }
+    
+    if (m_pen.GetStyle() != wxTRANSPARENT)
+    {
+        SetPen(m_pen);
+        gs_lgp->gnome_print_newpath(m_gpc);
+        gs_lgp->gnome_print_moveto(m_gpc,XLOG2DEV(x + rad),YLOG2DEV(y));
+        gs_lgp->gnome_print_curveto(m_gpc,
+	                            XLOG2DEV(x + rad),YLOG2DEV(y),
+				    XLOG2DEV(x),YLOG2DEV(y),
+				    XLOG2DEV(x),YLOG2DEV(y + rad));
+        gs_lgp->gnome_print_lineto(m_gpc,XLOG2DEV(x),YLOG2DEV(y + height - rad));
+        gs_lgp->gnome_print_curveto(m_gpc,
+	                            XLOG2DEV(x),YLOG2DEV(y + height - rad),
+				    XLOG2DEV(x),YLOG2DEV(y + height),
+				    XLOG2DEV(x + rad),YLOG2DEV(y + height));
+        gs_lgp->gnome_print_lineto(m_gpc,XLOG2DEV(x + width - rad),YLOG2DEV(y + height));
+        gs_lgp->gnome_print_curveto(m_gpc,
+	                            XLOG2DEV(x + width - rad),YLOG2DEV(y + height),
+				    XLOG2DEV(x + width),YLOG2DEV(y + height),
+				    XLOG2DEV(x + width),YLOG2DEV(y + height - rad));
+        gs_lgp->gnome_print_lineto(m_gpc,XLOG2DEV(x + width),YLOG2DEV(y + rad));
+        gs_lgp->gnome_print_curveto(m_gpc,
+	                            XLOG2DEV(x + width),YLOG2DEV(y + rad),
+				    XLOG2DEV(x + width),YLOG2DEV(y),
+				    XLOG2DEV(x + width - rad),YLOG2DEV(y));
+        gs_lgp->gnome_print_lineto(m_gpc,XLOG2DEV(x + rad),YLOG2DEV(y));
+        gs_lgp->gnome_print_closepath(m_gpc);
+        gs_lgp->gnome_print_stroke(m_gpc);
+	
+        CalcBoundingBox(x,y);
+        CalcBoundingBox(x+width,y+height);
+    }
 }
 
 void wxGnomePrintDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
