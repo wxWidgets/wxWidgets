@@ -132,8 +132,14 @@ static void CommentHnd(void *userData, const char *data)
 {
     wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;   
  
-    ctx->node->AddChild(new wxXmlNode(wxXML_COMMENT_NODE, 
-                                      wxT("comment"), CharToString(data)));
+    if (ctx->node)
+    {
+        // VS: ctx->node == NULL happens if there is a comment before
+        //     the root element (e.g. wxDesigner's output). We ignore such
+        //     comments, no big deal...
+        ctx->node->AddChild(new wxXmlNode(wxXML_COMMENT_NODE, 
+                            wxT("comment"), CharToString(data)));
+    }
     ctx->lastAsText = NULL;
 }
 
