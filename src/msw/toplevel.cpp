@@ -141,7 +141,7 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
     WXDWORD msflags = wxWindow::MSWGetStyle
                       (
                         (style & ~wxBORDER_MASK) | wxBORDER_NONE, exflags
-                      ) & ~WS_CHILD;
+                      ) & ~WS_CHILD & ~WS_VISIBLE;
 
     // first select the kind of window being created
     //
