@@ -32,7 +32,9 @@
     #include "wx/string.h"
     #include "wx/log.h"
     #include "wx/intl.h"
+    #include "wx/app.h"
     #include "wx/dynarray.h"
+    #include "wx/filefn.h"
 #endif //WX_PRECOMP
 
 #include "wx/datetime.h"
@@ -521,8 +523,13 @@ int wxCmdLineParser::Parse()
                 }
                 while ( optInd == wxNOT_FOUND );
 
+                len++;  // compensates extra len-- above
                 if ( (optInd != wxNOT_FOUND) && (len != name.length()) )
                 {
+                    // first of all, the option name is only part of this
+                    // string
+                    name = name.Left(len);
+
                     // our option is only part of this argument, there is
                     // something else in it - it is either the value of this
                     // option or other switches if it is a switch
@@ -532,7 +539,7 @@ int wxCmdLineParser::Parse()
                         // pretend that all the rest of the argument is the
                         // next argument, in fact
                         wxString arg2 = arg[0u];
-                        arg2 += name.Mid(len + 1); // compensates extra --
+                        arg2 += arg.Mid(len + 1); // +1 for leading '-'
 
                         m_data->m_arguments.Insert(arg2, n + 1);
                         count++;
@@ -650,7 +657,7 @@ int wxCmdLineParser::Parse()
                                 const wxChar *res = dt.ParseDate(value);
                                 if ( !res || *res )
                                 {
-                                    wxLogError(_("Options '%s': '%s' cannot "
+                                    wxLogError(_("Option '%s': '%s' cannot "
                                                   "be converted to a date."),
                                                name.c_str(), value.c_str());
 
@@ -765,8 +772,17 @@ int wxCmdLineParser::Parse()
 
 void wxCmdLineParser::Usage()
 {
+    wxString appname = wxTheApp->GetAppName();
+    if ( !appname )
+    {
+        wxCHECK_RET( !m_data->m_arguments.IsEmpty(), _T("no program name") );
+
+        appname = wxFileNameFromPath(m_data->m_arguments[0]);
+        wxStripExtension(appname);
+    }
+
     wxString brief, detailed;
-    brief.Printf(_("Usage: %s"), wxTheApp->GetAppName().c_str());
+    brief.Printf(_("Usage: %s"), appname.c_str());
 
     size_t n, count = m_data->m_options.GetCount();
     for ( n = 0; n < count; n++ )
