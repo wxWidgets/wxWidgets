@@ -213,6 +213,8 @@ public:
 	void Release();
 
 	FontID GetID() { return id; }
+	// Alias another font - caller guarantees not to Release
+	void SetID(FontID id_) { id = id_; }
 	friend class Surface;
 };
 
@@ -290,6 +292,7 @@ public:
 	
 	int SetPalette(Palette *pal, bool inBackGround);
 	void SetClip(PRectangle rc);
+	void FlushCachedState();
 };
 
 // Class to hide the details of window manipulation

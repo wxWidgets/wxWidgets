@@ -111,7 +111,6 @@ public:
 	undoCollectionType SetUndoCollection(undoCollectionType collectUndo) {
 		return cb.SetUndoCollection(collectUndo);
 	}
-	void AppendUndoStartAction() { cb.AppendUndoStartAction(); }
 	void BeginUndoAction() { cb.BeginUndoAction(); }
 	void EndUndoAction() { cb.EndUndoAction(); }
 	void SetSavePoint();
@@ -123,6 +122,7 @@ public:
 	void InsertChar(int pos, char ch);
 	void InsertString(int position, const char *s);
 	void InsertString(int position, const char *s, int insertLength);
+	void ChangeChar(int pos, char ch);
 	void DelChar(int pos);
 	int DelCharBack(int pos);
 
@@ -132,12 +132,13 @@ public:
 	}
 	char StyleAt(int position) { return cb.StyleAt(position); }
 	int GetMark(int line) { return cb.GetMark(line); }
-	int AddMark(int line, int markerNum) { return cb.AddMark(line, markerNum); }
-	void DeleteMark(int line, int markerNum) { cb.DeleteMark(line, markerNum); }
-	void DeleteMarkFromHandle(int markerHandle) { cb.DeleteMarkFromHandle(markerHandle); }
-	void DeleteAllMarks(int markerNum) { cb.DeleteAllMarks(markerNum); }
+	int AddMark(int line, int markerNum);
+	void DeleteMark(int line, int markerNum);
+	void DeleteMarkFromHandle(int markerHandle);
+	void DeleteAllMarks(int markerNum);
 	int LineFromHandle(int markerHandle) { return cb.LineFromHandle(markerHandle); }
 	int LineStart(int line);
+	int LineEnd(int line);
 	int LineEndPosition(int position);
 	int VCHomePosition(int position);
 
@@ -154,12 +155,15 @@ public:
 	long FindText(WORD iMessage,WPARAM wParam,LPARAM lParam);
 	int LinesTotal();
 	
+	void ChangeCase(Range r, bool makeUpperCase);
+	
 	void SetWordChars(unsigned char *chars);
 	void SetStylingBits(int bits);
 	void StartStyling(int position, char mask);
 	void SetStyleFor(int length, char style);
 	void SetStyles(int length, char *styles);
 	int GetEndStyled() { return endStyled; }
+	bool EnsureStyledTo(int pos);
 
 	int SetLineState(int line, int state) { return cb.SetLineState(line, state); }
 	int GetLineState(int line) { return cb.GetLineState(line); }
@@ -217,6 +221,7 @@ public:
 	virtual void NotifySavePoint(Document *doc, void *userData, bool atSavePoint) = 0;
 	virtual void NotifyModified(Document *doc, DocModification mh, void *userData) = 0;
 	virtual void NotifyDeleted(Document *doc, void *userData) = 0;
+	virtual void NotifyStyleNeeded(Document *doc, void *userData, int endPos) = 0;
 };
 
 #endif

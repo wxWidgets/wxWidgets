@@ -116,6 +116,8 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 
 	int searchAnchor;
 
+	int displayPopupMenu;
+
 #ifdef MACRO_SUPPORT
 	int recordingMacro;
 #endif
@@ -218,12 +220,16 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	void NotifySavePoint(Document *document, void *userData, bool atSavePoint);
 	void NotifyModified(Document *document, DocModification mh, void *userData);
 	void NotifyDeleted(Document *document, void *userData);
+	void NotifyStyleNeeded(Document *doc, void *userData, int endPos);
+
 	
 #ifdef MACRO_SUPPORT
 	void NotifyMacroRecord(UINT iMessage, WPARAM wParam, LPARAM lParam);
 #endif
 
 	void PageMove(int direction, bool extend=false);
+	void ChangeCaseOfSelection(bool makeUpperCase);
+	void LineTranspose();
 	virtual int KeyCommand(UINT iMessage);
 	virtual int KeyDefault(int /* key */, int /*modifiers*/);
 	int KeyDown(int key, bool shift, bool ctrl, bool alt);

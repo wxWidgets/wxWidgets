@@ -29,6 +29,13 @@ OBJECTS=PlatWX.o ScintillaWX.o stc.o \
         Indicator.o	        \
         KeyMap.o		    \
         KeyWords.o	        \
+	LexCPP.o		\
+	LexHTML.o		\
+	LexOthers.o		\
+	LexPerl.o		\
+	LexPython.o		\
+	LexSQL.o		\
+	LexVB.o			\
         LineMarker.o	    \
         PropSet.o	        \
         ScintillaBase.o	    \
