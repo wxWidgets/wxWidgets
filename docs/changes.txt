@@ -49,6 +49,7 @@ wxBase:
   must modify YourApp::OnAssert() signature if you were using it to override
   the default assert handling.
 
+
 All (GUI):
 
 ! the event type constants are not constants any more but are dynamically
@@ -112,7 +113,6 @@ All (GUI):
   wxMessageOutput::Set(new wxMessageOutputLog); to your program
   (you will need to #include <wx/msgout.h>)
 
-- Backported XRC handlers for wxSplitterWindow and wxWizard.
 
 wxMSW:
 
@@ -188,6 +188,7 @@ All:
 - wxFileConfig now always uses UTF-8 to store settings in Unicode build;
   it will be possible to set different charset in wxWindows >= 2.5.0
 - added wxFileName::MakeAbsolute
+- bugs in wxCalCtrl fixed (year not being updated)
 
 Unix (GUI):
 
@@ -201,6 +202,7 @@ wxBase
 - bug in wxDateTime with timezones on systems with tm_gmtoff in struct tm fixed
 - fixed bug in wxArray::Shrink() (Seth Manley)
 - fixed bug with searching in sorted arrays (Jürgen Palm)
+- wxFileConfig parse bug fixed
 
 wxGTK:
 
@@ -234,6 +236,10 @@ wxMSW:
 - fixed memory leak when setting new wxMask for wxBitmap
 - improved border handling so it no longer shows a thin and
   sunken border under XP
+- partial fix for wxNotebook pages looking bad under XP: wxUSE_UXTHEME
+  enables XP theme engine code, and wxUSE_UXTHEME_AUTO tells
+  wxWindows to use the theme tab colour for control backgrounds.
+  Proper XP theme support is planned for 2.6
 
 wxMotif:
 
@@ -265,6 +271,7 @@ wxXRC:
 - wxToolBar handler now supports all wxToolBar's features
 - <object_ref> handling was fixed
 - loading of resources specified using relative file names was fixed
+- added wxSplitterWindow and wxWizard support
 
 2.4.0
 -----
