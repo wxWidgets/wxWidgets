@@ -1080,21 +1080,19 @@ wxLayoutWindow::Paste(bool primary)
    // Read some text
    if (wxTheClipboard->Open())
    {
-#if __WXGTK__
       if(primary)
          wxTheClipboard->UsePrimarySelection();
-#endif
-#if wxUSE_PRIVATE_CLIPBOARD_FORMAT
+
       wxLayoutDataObject wxldo;
       if (wxTheClipboard->IsSupported( wxldo.GetFormat() ))
       {
-         wxTheClipboard->GetData(&wxldo);
-         {
-         }
-         //FIXME: missing functionality  m_llist->Insert(wxldo.GetList());
+         wxTheClipboard->GetData(wxldo);
+
+         // now we can access the data we had put into wxLayoutDataObject in
+         // wxLayoutList::GetSelection by calling its GetLayoutData() - the
+         // trouble is that I don't know what to do with it! (VZ)
       }
       else
-#endif
       {
          wxTextDataObject data;
          if (wxTheClipboard->IsSupported( data.GetFormat() ))
@@ -1120,8 +1118,8 @@ wxLayoutWindow::Copy(bool invalidate)
       m_llist->EndSelection();
    }
 
-   wxLayoutDataObject wldo;
-   wxLayoutList *llist = m_llist->GetSelection(&wldo, invalidate);
+   wxLayoutDataObject *wldo = new wxLayoutDataObject;
+   wxLayoutList *llist = m_llist->GetSelection(wldo, invalidate);
    if(! llist)
       return FALSE;
    // Export selection as text:
@@ -1149,11 +1147,12 @@ wxLayoutWindow::Copy(bool invalidate)
 
    if (wxTheClipboard->Open())
    {
-      wxTextDataObject *data = new wxTextDataObject( text );
-      bool  rc = wxTheClipboard->SetData( data );
-#if wxUSE_PRIVATE_CLIPBOARD_FORMAT
-      rc |= wxTheClipboard->AddData( &wldo );
-#endif
+      wxDataObjectComposite *dobj = new wxDataObjectComposite;
+      dobj->Add(new wxTextDataObject(text));
+      dobj->Add(wldo);
+
+      bool rc = wxTheClipboard->SetData(dobj);
+
       wxTheClipboard->Close();
       return rc;
    }

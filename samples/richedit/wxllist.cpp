@@ -2844,9 +2844,8 @@ wxLayoutList::GetSelection(wxLayoutDataObject *wxlo, bool invalidate)
             exp->content.object->Write(string);
          delete exp;
       }
-#if 0 // FIXME: DnD/Clipboard API has changed, what should this be?
-      wxlo->SetData(string.c_str(), string.Length()+1);
-#endif
+
+      wxlo->SetLayoutData(string);
    }
    return llist;
 }

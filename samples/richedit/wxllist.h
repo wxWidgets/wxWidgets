@@ -1218,13 +1218,15 @@ private:
 class wxLayoutDataObject : public wxCustomDataObject
 {
 public:
-   wxLayoutDataObject(void)
+   wxLayoutDataObject()
       {
-#if 0 // TODO: No longer exists, what should we do instead?
-         SetId("application/wxlayoutlist");
-#endif
-         //m_format.SetAtom((GdkAtom) 222222);
+         SetFormat("application/wxlayoutlist");
       }
+
+   // type safe wrappers
+   void SetLayoutData(const wxString& text)
+      { SetData(text.length() + 1, text.c_str()); }
+   const char *GetLayoutData() const { return (const char *)GetData(); }
 };
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
