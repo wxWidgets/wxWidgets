@@ -597,6 +597,7 @@ if os.name == 'nt':
              makeLibName('core')[0],
              makeLibName('adv')[0],
              makeLibName('html')[0],
+             makeLibName('xrc')[0],
              ]
 
     libs = libs + ['kernel32', 'user32', 'gdi32', 'comdlg32',
