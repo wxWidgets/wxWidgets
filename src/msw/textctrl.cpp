@@ -38,6 +38,7 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/app.h"
+    #include "wx/menu.h"
 #endif
 
 #include "wx/module.h"
