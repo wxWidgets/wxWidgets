@@ -95,6 +95,7 @@ public:
     virtual void SetSelection(int n) { wxChoice::SetSelection(n); }
     virtual void SetSelection(long from, long to);
     virtual void SetEditable(bool editable);
+    virtual void Clear() { wxChoice::Clear(); m_selectionOld = -1; }
 
     // implementation only from now on
     virtual bool MSWCommand(WXUINT param, WXWORD id);
