@@ -810,51 +810,56 @@ static wxString GetHotKey( const wxMenuItem& item )
     // as wxGetAccelFromString() looks for TAB, insert a dummy one here
     wxString label;
     label << wxT('\t') << item.GetHotKey();
-    wxAcceleratorEntry *accel = wxGetAccelFromString(label);
-    if ( accel )
+
+    // but if the hotkey is empty don't do anything
+    if ( label.length() > 1 )
     {
-        int flags = accel->GetFlags();
-        if ( flags & wxACCEL_ALT )
-            hotkey += wxT("<alt>");
-        if ( flags & wxACCEL_CTRL )
-            hotkey += wxT("<control>");
-        if ( flags & wxACCEL_SHIFT )
-            hotkey += wxT("<shift>");
-
-        int code = accel->GetKeyCode();
-        switch ( code )
+        wxAcceleratorEntry *accel = wxGetAccelFromString(label);
+        if ( accel )
         {
-            case WXK_F1:
-            case WXK_F2:
-            case WXK_F3:
-            case WXK_F4:
-            case WXK_F5:
-            case WXK_F6:
-            case WXK_F7:
-            case WXK_F8:
-            case WXK_F9:
-            case WXK_F10:
-            case WXK_F11:
-            case WXK_F12:
-                hotkey << wxT('F') << code = WXK_F1 + 1;
-                break;
+            int flags = accel->GetFlags();
+            if ( flags & wxACCEL_ALT )
+                hotkey += wxT("<alt>");
+            if ( flags & wxACCEL_CTRL )
+                hotkey += wxT("<control>");
+            if ( flags & wxACCEL_SHIFT )
+                hotkey += wxT("<shift>");
 
-            // if there are any other keys wxGetAccelFromString() may return,
-            // we should process them here
-
-            default:
-                if ( wxIsalnum(code) )
-                {
-                    hotkey << (wxChar)code;
-
+            int code = accel->GetKeyCode();
+            switch ( code )
+            {
+                case WXK_F1:
+                case WXK_F2:
+                case WXK_F3:
+                case WXK_F4:
+                case WXK_F5:
+                case WXK_F6:
+                case WXK_F7:
+                case WXK_F8:
+                case WXK_F9:
+                case WXK_F10:
+                case WXK_F11:
+                case WXK_F12:
+                    hotkey << wxT('F') << code = WXK_F1 + 1;
                     break;
-                }
 
-                wxFAIL_MSG( wxT("unknown keyboard accel") );
+                // if there are any other keys wxGetAccelFromString() may return,
+                // we should process them here
+
+                default:
+                    if ( wxIsalnum(code) )
+                    {
+                        hotkey << (wxChar)code;
+
+                        break;
+                    }
+
+                    wxFAIL_MSG( wxT("unknown keyboard accel") );
+            }
+
+            delete accel;
         }
     }
-    if (accel)
-        delete accel;
 
     return hotkey;
 }
