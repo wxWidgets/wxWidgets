@@ -99,10 +99,10 @@ wxSize wxButton::DoGetBestSize() const
     Rect    bestsize = { 0 , 0 , 0 , 0 } ;
     m_peer->GetBestRect( &bestsize ) ;
   
-    int wBtn = 0 ;
+    int wBtn;
     if ( EmptyRect( &bestsize ) )
     {
-        int wBtn = m_label.Length() * charspace + 12 ;
+        wBtn = m_label.Length() * charspace + 12 ;
     }
     else
     {
