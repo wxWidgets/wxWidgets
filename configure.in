@@ -917,6 +917,13 @@ if test "$wxUSE_UNIX" = 1 ; then
 fi
 
 dnl ----------------------------------------------------------------
+dnl Linux: test for libc5/glibc2: glibc2 has gettext() included
+dnl ----------------------------------------------------------------
+if test "$USE_LINUX" = 1; then
+	AC_CHECK_LIB(c,gettext,AC_DEFINE(wxHAVE_GLIBC2))
+fi
+
+dnl ----------------------------------------------------------------
 dnl search for toolkit (widget sets)
 dnl ----------------------------------------------------------------
 

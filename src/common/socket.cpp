@@ -518,11 +518,10 @@ void wxSocketBase::Discard()
 // Meanwhile, if your compiler complains about socklen_t,
 // switch lines below.
 
-#if defined(__LINUX__)
-// #if 0
-#define wxSOCKET_INT socklen_t
+#if wxHAVE_GLIBC2
+#   define wxSOCKET_INT socklen_t
 #else
-#define wxSOCKET_INT int
+#   define wxSOCKET_INT int
 #endif
 
 // --------------------------------------------------------------

@@ -1,7 +1,7 @@
 #ifndef _HENV_H
 #define _HENV_H
 
-# include       <config.h>
+# include       "config.h"
 # include       <dlproc.h>
 
 # include       <isql.h>

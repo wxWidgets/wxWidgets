@@ -29,8 +29,14 @@
 
    typedef      WORD            WPARAM;
    typedef      DWORD           LPARAM;
-   typedef      void*           HWND;
-   typedef      int             BOOL;
+// KB: I don't see where HWND and BOOL could get defined before here,
+// but putting in the #ifndef's solved the compilation problem on Solaris.
+#ifndef HWND
+typedef      void*           HWND;
+#endif
+#ifndef BOOL
+typedef      int             BOOL;
+#endif
 
 # endif /* _UNIX_ */
 

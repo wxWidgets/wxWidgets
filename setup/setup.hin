@@ -55,6 +55,10 @@
  * Use Threads
  */
 #define wxUSE_THREADS 0
+/*
+ * Have glibc2
+ */
+#define wxHAVE_GLIBC2 0
 
 //------------------------------------------------------------------------
 // GUI control options (allways enabled in wxGTK)
