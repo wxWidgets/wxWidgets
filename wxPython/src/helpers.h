@@ -1145,10 +1145,10 @@ public:
     wxDragResult CLASS::CBNAME(wxCoord a, wxCoord b, wxDragResult c) {          \
         int rval=0;                                                             \
         bool found;                                                             \
-        wxPyBeginBlockThreads();                            \
+        wxPyBeginBlockThreads();                                                \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME)))                  \
             rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iii)", a,b,c));\
-        wxPyEndBlockThreads();                                             \
+        wxPyEndBlockThreads();                                                  \
         if (! found)                                                            \
             rval = PCLASS::CBNAME(a, b, c);                                     \
         return (wxDragResult)rval;                                              \
@@ -1164,20 +1164,20 @@ public:
 
 #define IMP_PYCALLBACK_FSF_FSSTRING_pure(CLASS, PCLASS, CBNAME)         \
     wxFSFile* CLASS::CBNAME(wxFileSystem& a,const wxString& b) {        \
-        wxPyBeginBlockThreads();                    \
+        wxPyBeginBlockThreads();                                        \
         wxFSFile* rval=0;                                               \
         if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                  \
             PyObject* ro;                                               \
             PyObject* obj = wxPyMake_wxObject(&a);                      \
             ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(OO)",\
-                                          obj, wx2PyString));           \
+                                          obj, wx2PyString(b)));        \
             if (ro) {                                                   \
                 SWIG_GetPtrObj(ro, (void **)&rval, "_wxFSFILE_p");      \
                 Py_DECREF(ro);                                          \
             }                                                           \
             Py_DECREF(obj);                                             \
         }                                                               \
-        wxPyEndBlockThreads();                                     \
+        wxPyEndBlockThreads();                                          \
         return rval;                                                    \
     };
 
