@@ -14,7 +14,7 @@
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
-#include <wx/wxprec.h>
+#include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
 #pragma hdrstop
@@ -26,7 +26,7 @@
 
 #if wxUSE_TREELAYOUT
 
-#include <wx/treelay.h>
+#include "wx/treelay.h"
 
 /*
  * Abstract tree
