@@ -2398,7 +2398,10 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 // similar to the ones from a "real" WM_KEYDOWN so that
                 // CreateKeyEvent() works correctly
                 WXLPARAM lParam =
-                    (::GetKeyState(VK_MENU) & 0x100 ? KF_ALTDOWN : 0) << 16;
+//                    (::GetKeyState(VK_MENU) & 0x100 ? KF_ALTDOWN : 0) << 16;
+                     // Returns different negative values on WinME and WinNT,
+                     // so simply test for negative value.
+                     (::GetKeyState(VK_MENU) < 0 ? KF_ALTDOWN : 0) << 16;
 
                 WXWPARAM wParam = info->wVKey;
 
