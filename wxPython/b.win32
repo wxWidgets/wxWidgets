@@ -66,12 +66,12 @@ elif [ "$1" = "a" ]; then
     shift
     CMD=
 
-    $0 22 d
-    $0 22 h
-    $0 22 r
-    $0 22 d UNICODE=1
-    $0 22 h UNICODE=1
-    $0 22 r UNICODE=1
+#     $0 22 d
+#     $0 22 h
+#     $0 22 r
+#     $0 22 d UNICODE=1
+#     $0 22 h UNICODE=1
+#     $0 22 r UNICODE=1
     
     $0 23 d
     $0 23 h
