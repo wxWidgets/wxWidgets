@@ -48,10 +48,10 @@
 //#define TEST_MIME
 //#define TEST_INFO_FUNCTIONS
 //#define TEST_SOCKETS
-//#define TEST_STRINGS
+#define TEST_STRINGS
 //#define TEST_THREADS
 //#define TEST_TIMER
-#define TEST_WCHAR
+//#define TEST_WCHAR
 
 // ============================================================================
 // implementation
@@ -1067,6 +1067,7 @@ static void TestStopWatch()
 #ifdef TEST_WCHAR
 
 #include <wx/strconv.h>
+#include <wx/buffer.h>
 
 static void TestUtf8()
 {
@@ -2585,6 +2586,49 @@ static void TestStringTokenizer()
     puts("");
 }
 
+static void TestStringReplace()
+{
+    puts("*** Testing wxString::replace ***");
+
+    static const struct StringReplaceTestData
+    {
+        const wxChar *original;     // original test string
+        size_t start, len;          // the part to replace
+        const wxChar *replacement;  // the replacement string
+        const wxChar *result;       // and the expected result
+    } stringReplaceTestData[] =
+    {
+        { _T("012-AWORD-XYZ"), 4, 5, _T("BWORD"), _T("012-BWORD-XYZ") },
+        { _T("increase"), 0, 2, _T("de"), _T("decrease") },
+        { _T("wxWindow"), 8, 0, _T("s"), _T("wxWindows") },
+        { _T("foobar"), 3, 0, _T("-"), _T("foo-bar") },
+        { _T("barfoo"), 0, 6, _T("foobar"), _T("foobar") },
+    };
+
+    for ( size_t n = 0; n < WXSIZEOF(stringReplaceTestData); n++ )
+    {
+        const StringReplaceTestData data = stringReplaceTestData[n];
+
+        wxString original = data.original;
+        original.replace(data.start, data.len, data.replacement);
+
+        wxPrintf(_T("wxString(\"%s\").replace(%u, %u, %s) = %s "),
+                 data.original, data.start, data.len, data.replacement,
+                 original.c_str());
+
+        if ( original == data.result )
+        {
+            puts("(ok)");
+        }
+        else
+        {
+            wxPrintf(_T("(ERROR: should be '%s')\n"), data.result);
+        }
+    }
+
+    puts("");
+}
+
 #endif // TEST_STRINGS
 
 // ----------------------------------------------------------------------------
@@ -2652,6 +2696,7 @@ int main(int argc, char **argv)
         TestStringFind();
         TestStringTokenizer();
     }
+    TestStringReplace();
 #endif // TEST_STRINGS
 
 #ifdef TEST_ARRAYS

@@ -1717,13 +1717,15 @@ wxString& wxString::erase(size_t nStart, size_t nLen)
 
 wxString& wxString::replace(size_t nStart, size_t nLen, const wxChar *sz)
 {
-  wxASSERT( nStart + nLen <= wxStrlen(sz) );
+  wxASSERT_MSG( nStart + nLen <= Len(),
+                _T("index out of bounds in wxString::replace") );
 
   wxString strTmp;
+  strTmp.Alloc(Len());      // micro optimisation to avoid multiple mem allocs
+
   if ( nStart != 0 )
     strTmp.append(c_str(), nStart);
-  strTmp += sz;
-  strTmp.append(c_str() + nStart + nLen);
+  strTmp << sz << c_str() + nStart + nLen;
 
   *this = strTmp;
   return *this;
