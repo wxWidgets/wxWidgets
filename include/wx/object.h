@@ -28,6 +28,16 @@ class WXDLLIMPEXP_BASE wxObject;
 
 #if wxUSE_DYNAMIC_CLASSES
 
+#ifndef wxUSE_XTI 
+#define wxUSE_XTI 0
+#endif
+
+#if wxUSE_XTI
+
+#include "wx/xti.h"
+
+#else
+
 // ----------------------------------------------------------------------------
 // conditional compilation
 // ----------------------------------------------------------------------------
@@ -103,6 +113,7 @@ public:
         // Cleans up hash table used for fast searching.
 
     static void     CleanUpClasses();
+
 
 public:
     const wxChar            *m_className;
@@ -198,6 +209,9 @@ WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxChar *name);
 #define IMPLEMENT_CLASS IMPLEMENT_ABSTRACT_CLASS
 #define IMPLEMENT_CLASS2 IMPLEMENT_ABSTRACT_CLASS2
 
+#endif // !wxUSE_XTI
+
+
 // -----------------------------------
 // for pluggable classes
 // -----------------------------------
@@ -265,7 +279,6 @@ name##PluginSentinel  m_pluginsentinel;
 #define IMPLEMENT_USER_EXPORTED_ABSTRACT_PLUGGABLE_CLASS2(name, basename1, basename2)  \
  IMPLEMENT_ABSTRACT_PLUGGABLE_CLASS2(name, basename1, basename2)
 
-
 #define CLASSINFO(name) (&name::sm_class##name)
 
 #else // !wxUSE_DYNAMIC_CLASSES
@@ -297,7 +310,6 @@ name##PluginSentinel  m_pluginsentinel;
 #define IMPLEMENT_USER_EXPORTED_ABSTRACT_PLUGGABLE_CLASS2(name, basename1, basename2)
 
 #endif // wxUSE_DYNAMIC_CLASSES
-
 
 #define wxIS_KIND_OF(obj, className) obj->IsKindOf(&className::sm_class##className)
 

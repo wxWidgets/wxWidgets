@@ -51,9 +51,26 @@
     #pragma optimize("", off)
 #endif
 
+#if wxUSE_XTI
+const wxClassInfo* wxObject::sm_classParentswxObject[] = { NULL } ; 
+ wxObject* wxVariantToObjectConverterwxObject ( const wxxVariant &data ) 
+{ return data.Get<wxObject*>() ; } 
+ wxxVariant wxObjectToVariantConverterwxObject ( wxObject *data ) 
+ { return wxxVariant( dynamic_cast<wxObject*> (data)  ) ; }
+ wxClassInfo wxObject::sm_classwxObject(sm_classParentswxObject , wxT("") , wxT("wxObject"),   
+            (int) sizeof(wxObject),                              \
+            (wxObjectConstructorFn) 0   ,   
+			(wxPropertyInfo*) NULL,0 , 0 ,     
+			0 , wxVariantToObjectConverterwxObject , wxObjectToVariantConverterwxObject);    
+ template<> void wxStringReadValue(const wxString & , wxObject * & ){assert(0) ;}
+ template<> void wxStringWriteValue(wxString & , wxObject* const & ){assert(0) ;}
+ template<> const wxTypeInfo* wxGetTypeInfo( wxObject ** )
+ { static wxClassTypeInfo s_typeInfo(&wxObject::sm_classwxObject) ; return &s_typeInfo ; }
+#else
 wxClassInfo wxObject::sm_classwxObject( wxT("wxObject"), 0, 0,
                                         (int) sizeof(wxObject),
                                         (wxObjectConstructorFn) 0 );
+#endif
 
 // restore optimizations
 #if defined __VISUALC__ && __VISUALC__ >= 1300
@@ -171,6 +188,9 @@ wxClassInfo::~wxClassInfo()
             info = info->m_next;
         }
     }
+#if wxUSE_XTI
+	Unregister( m_className ) ;
+#endif
 }
 
 wxClassInfo *wxClassInfo::FindClass(const wxChar *className)
@@ -244,6 +264,7 @@ void wxClassInfo::InitializeClasses()
         }
     }
 
+#if wxUSE_XTI == 0
         // Set base pointers for each wxClassInfo
 
     for(info = sm_first; info; info = info->m_next)
@@ -251,6 +272,7 @@ void wxClassInfo::InitializeClasses()
         info->m_baseInfo1 = GetBaseByName(info->GetBaseClassName1());
         info->m_baseInfo2 = GetBaseByName(info->GetBaseClassName2());
     }
+#endif
 }
 
 void wxClassInfo::CleanUpClasses()
@@ -258,7 +280,6 @@ void wxClassInfo::CleanUpClasses()
     delete wxClassInfo::sm_classTable;
     wxClassInfo::sm_classTable = NULL;
 }
-
 
 wxObject *wxCreateDynamicObject(const wxChar *name)
 {

@@ -422,6 +422,7 @@ void wxPluginLibrary::UpdateClassInfo()
         }
     }
 
+#if wxUSE_XTI == 0
     for(info = m_after; info != m_before; info = info->m_next)
     {
         if( info->m_baseClassName1 )
@@ -429,6 +430,7 @@ void wxPluginLibrary::UpdateClassInfo()
         if( info->m_baseClassName2 )
             info->m_baseInfo2 = (wxClassInfo *)t->Get(info->m_baseClassName2);
     }
+#endif
 }
 
 void wxPluginLibrary::RestoreClassInfo()
