@@ -12,12 +12,16 @@
 #ifndef _WX_APP_H_
 #define _WX_APP_H_
 
+#include <sys/time.h>
+#include <sys/types.h>
+#include <unistd.h>
+
 #include "wx/event.h"
 #include "wx/icon.h"
 
 class WXDLLEXPORT wxFrame;
 class WXDLLEXPORT wxWindow;
-class WXDLLEXPORT wxApp ;
+class WXDLLEXPORT wxApp;
 class WXDLLEXPORT wxKeyEvent;
 class WXDLLEXPORT wxLog;
 
@@ -35,6 +39,7 @@ extern MRESULT EXPENTRY wxWndProc( HWND
                                   ,MPARAM
                                   ,MPARAM
                                  );
+
 
 // Represents the application. Derive OnInit and declare
 // a new App object to start application
@@ -76,6 +81,11 @@ public:
     void SetAuto3D(bool bFlag) { m_bAuto3D = bFlag; }
     bool GetAuto3D(void) const { return m_bAuto3D; }
 
+    int AddSocketHandler(int handle, int mask,
+                         void (*callback)(void*), void * gsock);
+    void RemoveSocketHandler(int handle);
+    void HandleSockets();
+
 protected:
     bool                            m_bShowOnInit;
     int                             m_nPrintMode; // wxPRINT_WINDOWS, wxPRINT_POSTSCRIPT
@@ -84,6 +94,13 @@ protected:
     //
     // PM-specific wxApp definitions */
     //
+private:
+    int m_maxSocketHandles;
+    int m_maxSocketNr;
+    int m_lastUsedHandle;
+    fd_set m_readfds, m_writefds;
+    void *m_sockCallbackInfo;
+
 public:
 
     // Implementation
@@ -98,13 +115,12 @@ public:
 
 public:
     int                             m_nCmdShow;
+    HMQ                             m_hMq;
 
 protected:
     bool                            m_bKeepGoing ;
 
     DECLARE_EVENT_TABLE()
-private:
-    HMQ                             m_hMq;
 };
 
 int WXDLLEXPORT wxEntry( int argc, char *argv[] );

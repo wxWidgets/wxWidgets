@@ -37,6 +37,24 @@
 
 #include "wx/os2/private.h"
 
+#if defined(__VISAGECPP__) && __IBMCPP__ < 400
+#include <machine\endian.h>
+#include <ioctl.h>
+#include <select.h>
+#include <unistd.h>
+#else
+#include <sys\ioctl.h>
+#include <sys\select.h>
+#ifndef __EMX__
+#define select(a,b,c,d,e) bsdselect(a,b,c,d,e)
+int _System bsdselect(int,
+                      struct fd_set *,
+                      struct fd_set *,
+                      struct fd_set *,
+                      struct timeval *);
+#endif
+#endif
+
 #if wxUSE_THREADS
     #include "wx/thread.h"
 
@@ -100,6 +118,92 @@ MRESULT EXPENTRY wxFrameWndProc( HWND hWnd,ULONG message,MPARAM mp1,MPARAM mp2);
 // implementation
 // ===========================================================================
 
+// ---------------------------------------------------------------------------
+// helper struct and functions for socket handling
+// ---------------------------------------------------------------------------
+
+struct GsocketCallbackInfo{
+    void (*proc)(void *);
+    int type;
+    int handle;
+    void* gsock;
+};
+
+// These defines and wrapper functions are used here and in gsockpm.c
+#define wxSockReadMask  0x01
+#define wxSockWriteMask 0x02
+
+extern "C"
+int wxAppAddSocketHandler(int handle, int mask,
+                          void (*callback)(void*), void * gsock)
+{
+    return wxTheApp->AddSocketHandler(handle, mask, callback, gsock);
+}
+
+extern "C"
+void wxAppRemoveSocketHandler(int handle)
+{
+    wxTheApp->RemoveSocketHandler(handle);
+}
+
+void wxApp::HandleSockets()
+{
+    bool pendingEvent = false;
+
+    // Check whether it's time for Gsocket operation
+    if (m_maxSocketHandles > 0 && m_maxSocketNr > 0)
+    {
+        fd_set readfds = m_readfds;
+        fd_set writefds = m_writefds;
+        struct timeval timeout;
+        int i;
+        struct GsocketCallbackInfo
+          *CallbackInfo = (struct GsocketCallbackInfo *)m_sockCallbackInfo;
+        int r = 0;
+        timeout.tv_sec = 0;
+        timeout.tv_usec = 0;
+        if ( select(m_maxSocketNr, &readfds, &writefds, 0, &timeout) > 0)
+        {
+            for (i = m_lastUsedHandle + 1; i != m_lastUsedHandle; i++)
+            {
+                if (i == m_maxSocketNr)
+                    i = 0;
+                if (FD_ISSET(i, &readfds))
+                {
+                    int r;
+                    for (r = 0; r < m_maxSocketHandles; r++){
+                        if(CallbackInfo[r].handle == i &&
+                           CallbackInfo[r].type == wxSockReadMask)
+                            break;
+                    }
+                    if (r < m_maxSocketHandles)
+                    {
+                        CallbackInfo[r].proc(CallbackInfo[r].gsock);
+                        pendingEvent = true;
+                        wxYield();
+                    }
+                }
+                if (FD_ISSET(i, &writefds))
+                {
+                    int r;
+                    for (r = 0; r < m_maxSocketHandles; r++)
+                        if(CallbackInfo[r].handle == i &&
+                           CallbackInfo[r].type == wxSockWriteMask)
+                            break;
+                    if (r < m_maxSocketHandles)
+                    {
+                        CallbackInfo[r].proc(CallbackInfo[r].gsock);
+                        pendingEvent = true;
+                        wxYield();
+                    }
+                }
+            }
+            m_lastUsedHandle = i;
+        }
+        if (pendingEvent)
+            wxYield();
+    }
+}
 // ---------------------------------------------------------------------------
 // wxApp
 // ---------------------------------------------------------------------------
@@ -560,6 +664,9 @@ wxApp::wxApp()
     m_exitOnFrameDelete = TRUE;
     m_bAuto3D = TRUE;
     m_hMq = 0;
+    m_maxSocketHandles = 0;
+    m_maxSocketNr = 0;
+    m_sockCallbackInfo = 0;
 } // end of wxApp::wxApp
 
 wxApp::~wxApp()
@@ -590,6 +697,7 @@ bool wxApp::Initialized()
 // Get and process a message, returning FALSE if WM_QUIT
 // received (and also set the flag telling the app to exit the main loop)
 //
+
 bool wxApp::DoMessage()
 {
     BOOL                            bRc = ::WinGetMsg(vHabmain, &svCurrentMsg, HWND(NULL), 0, 0);
@@ -694,11 +802,17 @@ int wxApp::MainLoop()
 #if wxUSE_THREADS
         wxMutexGuiLeaveOrEnter();
 #endif // wxUSE_THREADS
-        while (/*Pending() &&*/ ProcessIdle())
+        while (!Pending() && ProcessIdle())
         {
-//          wxUsleep(10000);
+            HandleSockets();
+            wxUsleep(10000);
         }
-        DoMessage();
+        HandleSockets();
+        if (Pending())
+            DoMessage();
+        else
+            wxUsleep(10000);
+
     }
     return (int)svCurrentMsg.mp1;
 } // end of wxApp::MainLoop
@@ -1040,6 +1154,54 @@ wxIcon wxApp::GetStdIcon(
     }
     return wxIcon("wxICON_ERROR");
 } // end of wxApp::GetStdIcon
+
+int wxApp::AddSocketHandler(int handle, int mask,
+                            void (*callback)(void*), void * gsock)
+{
+    int find;
+    struct GsocketCallbackInfo
+        *CallbackInfo = (struct GsocketCallbackInfo *)m_sockCallbackInfo;
+
+    for (find = 0; find < m_maxSocketHandles; find++)
+        if (CallbackInfo[find].handle == -1)
+            break;
+    if (find == m_maxSocketHandles)
+    {
+        // Allocate new memory
+        m_sockCallbackInfo = realloc(m_sockCallbackInfo,
+                                     (m_maxSocketHandles+=10)*
+                                     sizeof(struct GsocketCallbackInfo));
+        CallbackInfo = (struct GsocketCallbackInfo *)m_sockCallbackInfo;
+        for (find = m_maxSocketHandles - 10; find < m_maxSocketHandles; find++)
+            CallbackInfo[find].handle = -1;
+        find = m_maxSocketHandles - 10;
+    }
+    CallbackInfo[find].proc = callback;
+    CallbackInfo[find].type = mask;
+    CallbackInfo[find].handle = handle;
+    CallbackInfo[find].gsock = gsock;
+    if (mask & wxSockReadMask)
+        FD_SET(handle, &m_readfds);
+    if (mask & wxSockWriteMask)
+        FD_SET(handle, &m_writefds);
+    if (handle >= m_maxSocketNr)
+        m_maxSocketNr = handle + 1;
+    return find;
+}
+
+void wxApp::RemoveSocketHandler(int handle)
+{
+    struct GsocketCallbackInfo
+        *CallbackInfo = (struct GsocketCallbackInfo *)m_sockCallbackInfo;
+    if (handle < m_maxSocketHandles)
+    {
+        if (CallbackInfo[handle].type & wxSockReadMask)
+            FD_CLR(CallbackInfo[handle].handle, &m_readfds);
+        if (CallbackInfo[handle].type & wxSockWriteMask)
+            FD_CLR(CallbackInfo[handle].handle, &m_writefds);
+        CallbackInfo[handle].handle = -1;
+    }
+}
 
 //-----------------------------------------------------------------------------
 // wxWakeUpIdle
