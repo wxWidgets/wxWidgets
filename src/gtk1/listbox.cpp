@@ -518,7 +518,14 @@ void wxListBox::AppendCommon( const wxString &item )
         gtk_widget_realize( list_item );
         gtk_widget_realize( GTK_BIN(list_item)->child );
 	
-        if (m_widgetStyle) ApplyWidgetStyle();
+        //if (m_widgetStyle) ApplyWidgetStyle();
+        if (m_widgetStyle) {
+            // Apply current widget style to the new list_item
+            gtk_widget_set_style( GTK_WIDGET( list_item ), m_widgetStyle );
+            GtkBin *bin = GTK_BIN( list_item );
+            GtkWidget *label = GTK_WIDGET( bin->child );
+            gtk_widget_set_style( label, m_widgetStyle );
+        }
 
 #if wxUSE_DRAG_AND_DROP
 #ifndef NEW_GTK_DND_CODE
