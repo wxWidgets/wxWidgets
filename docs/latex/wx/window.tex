@@ -1720,8 +1720,10 @@ from within wxWindow::OnSize functions.}
 \wxheading{Remarks}
 
 Note that this function is actually disabled for wxWindow. It has
-effect for wxDialog, wxFrame, wxPanel and wxScrolledWindow as well as indirectly for
-children of wxNotebook and wxSplitterWindow.
+effect for wxDialog, wxFrame, wxPanel and wxScrolledWindow.  Windows
+of other types that need to invoke the Layout algorithm should provide
+an EVT_SIZE handler and call
+\helpref{wxWindow::Layout}{wxwindowlayout} from within it.
 
 \wxheading{See also}
 

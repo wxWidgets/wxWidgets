@@ -414,8 +414,6 @@ bool wxNotebook::InsertPage(int nPage,
   GetSize((int *)&rc.right, (int *)&rc.bottom);
   TabCtrl_AdjustRect(m_hwnd, FALSE, &rc);
   pPage->SetSize(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
-  if ( pPage->GetAutoLayout() )
-      pPage->Layout();
 
 
   // some page should be selected: either this one or the first one if there is
@@ -448,8 +446,6 @@ void wxNotebook::OnSize(wxSizeEvent& event)
   for ( size_t nPage = 0; nPage < nCount; nPage++ ) {
     wxNotebookPage *pPage = m_aPages[nPage];
     pPage->SetSize(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
-    if ( pPage->GetAutoLayout() )
-      pPage->Layout();
   }
 
   event.Skip();
