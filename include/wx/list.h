@@ -119,6 +119,10 @@ enum wxKeyType
             compatibility_iterator() : m_list( NULL ) { }                     \
             dummy* operator->() { return (dummy*)this; }                      \
             const dummy* operator->() const { return (const dummy*)this; }    \
+            bool operator==(const compatibility_iterator& it)                 \
+                { return m_list == it.m_list && m_iter == it.m_iter; }        \
+            bool operator!=(const compatibility_iterator& it)                 \
+                { return m_list != it.m_list || m_iter != it.m_iter; }        \
         };                                                                    \
         typedef struct compatibility_iterator citer;                          \
                                                                               \
@@ -142,7 +146,7 @@ enum wxKeyType
             {                                                                 \
                 citer* i = (citer*)this;                                      \
                 it lit = i->m_iter;                                           \
-                return citer( i->m_list, ++lit );                             \
+                return citer( i->m_list, --lit );                             \
             }                                                                 \
             void SetData( elT e )                                             \
             {                                                                 \
@@ -1030,7 +1034,8 @@ class WXDLLIMPEXP_BASE wxList : public wxObjectList
 {
 public:
 #if defined(wxWARN_COMPAT_LIST_USE) && !wxUSE_STL
-    wxDEPRECATED( wxList(int key_type = wxKEY_NONE) );
+    wxList() { };
+    wxDEPRECATED( wxList(int key_type) );
 #elif !wxUSE_STL
     wxList(int key_type = wxKEY_NONE);
 #endif
@@ -1070,7 +1075,7 @@ public:
     // ctors and such
         // default
 #ifdef wxWARN_COMPAT_LIST_USE
-    wxDEPRECATED( wxStringList() );
+    wxStringList();
     wxDEPRECATED( wxStringList(const wxChar *first ...) );
 #else
     wxStringList();
