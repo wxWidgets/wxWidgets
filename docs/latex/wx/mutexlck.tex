@@ -13,24 +13,27 @@ None.
 
 \wxheading{See also}
 
-\helpref{wxMutex}{wxmutex},
-\helpref{wxCriticalSectionLocker}{wxcriticalsectionlocker}
+\helpref{wxMutex}{wxmutex}, \helpref{wxCriticalSectionLocker}{wxcriticalsectionlocker}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 \membersection{wxMutexLocker::wxMutexLocker}\label{wxmutexlockerctor}
+
 \func{}{wxMutexLocker}{\param{wxMutex *}{mutex}}
 
 Constructs a wxMutexLocker object associated with mutex which must be non NULL
-and locks it. Call \helpref{IsOk}{wxmutexisok} to check if the mutex was
+and locks it. Call \helpref{IsLocked}{wxmutexlockerisok} to check if the mutex was
 successfully locked.
 
 \membersection{wxMutexLocker::\destruct{wxMutexLocker}}\label{wxmutexlockerdtor}
+
 \func{}{\destruct{wxMutexLocker}}{\void}
 
 Destuctor releases the mutex if it was successfully acquired in the ctor.
 
 \membersection{wxMutexLocker::IsOk}\label{wxmutexlockerisok}
+
 \constfunc{bool}{IsOk}{\void}
 
 Returns TRUE if mutex was acquired in the constructor, FALSE otherwise.
+

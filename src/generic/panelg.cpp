@@ -21,6 +21,9 @@
 #endif
 
 #ifndef WX_PRECOMP
+#include "wx/object.h"
+#include "wx/font.h"
+#include "wx/colour.h"
 #include "wx/settings.h"
 #endif
 

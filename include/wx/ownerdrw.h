@@ -59,8 +59,8 @@ public:
     m_bmpUnchecked = bmpUnchecked; 
     m_bOwnerDrawn = TRUE;          }
 
-  inline wxBitmap& GetBitmap(bool bChecked = TRUE) const
-  { return (wxBitmap &)(bChecked ? m_bmpChecked : m_bmpUnchecked); }
+  inline const wxBitmap& GetBitmap(bool bChecked = TRUE) const
+  { return (bChecked ? m_bmpChecked : m_bmpUnchecked); }
 
   // the height of the menu checkmark (or bitmap) is determined by the font
   // for the current item, but the width should be always the same (for the

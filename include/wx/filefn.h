@@ -37,6 +37,10 @@ typedef long off_t;
 typedef long off_t;
 #endif
 
+#if defined(__SC__)
+typedef long off_t;
+#endif
+
 const off_t wxInvalidOffset = (off_t)-1;
 
 typedef enum {

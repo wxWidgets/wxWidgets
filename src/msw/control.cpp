@@ -21,9 +21,12 @@
 #endif
 
 #ifndef WX_PRECOMP
+#include "wx/event.h"
 #include "wx/app.h"
 #include "wx/dcclient.h"
 #endif
+
+#include "wx/control.h"
 
 #include "wx/msw/private.h"
 
@@ -61,7 +64,7 @@ wxControl::~wxControl(void)
   wxWindow *parent = (wxWindow *)GetParent();
   if (parent)
   {
-    if (parent->GetDefaultItem() == this)
+    if (parent->GetDefaultItem() == (wxButton*) this)
         parent->SetDefaultItem(NULL);
   }
 }

@@ -24,7 +24,15 @@
 
 #include <windows.h>
 
+#include "wx/object.h"
+#include "wx/colour.h"
+#include "wx/font.h"
+#include "wx/bitmap.h"
+#include "wx/window.h"
+#include "wx/listbox.h"
 #include "wx/ownerdrw.h"
+#include "wx/settings.h"
+#include "wx/dcmemory.h"
 #include "wx/msw/checklst.h"
 
 // ============================================================================
@@ -120,7 +128,9 @@ bool wxCheckListBoxItem::OnDrawItem(wxDC& dc, const wxRect& rc,
       RECT rect = { 0, 0, nCheckWidth, nCheckHeight };
 
 #ifdef __WIN32__
+#ifndef __SC__
       DrawFrameControl(hdcMem, &rect, DFC_MENU, DFCS_MENUCHECK);
+#endif
 #else
       // In WIN16, draw a cross
       HPEN blackPen = CreatePen(PS_SOLID, 1, RGB(0, 0, 0));

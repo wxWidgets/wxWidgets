@@ -46,7 +46,7 @@ bool MyApp::OnInit(void)
   RegisterValidators();
 
   // Create the main frame window
-  m_mainFrame = new MyFrame(NULL, "wxPropertySheet Demo", wxPoint(0, 0), wxSize(300, 400), wxDEFAULT_FRAME);
+  m_mainFrame = new MyFrame(NULL, "wxPropertySheet Demo", wxPoint(0, 0), wxSize(300, 400), wxDEFAULT_FRAME_STYLE);
 
   // Make a menubar
   wxMenu *file_menu = new wxMenu;

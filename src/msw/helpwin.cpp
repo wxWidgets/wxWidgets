@@ -96,7 +96,7 @@ bool wxWinHelpController::DisplaySection(int section)
 bool wxWinHelpController::DisplayBlock(long block)
 {
     // Use context number -- a very rough equivalent to block id!
-    if (!m_helpFile) return FALSE;
+    if (m_helpFile == "") return FALSE;
 
     char buf[_MAXPATHLEN];
     strcpy(buf, m_helpFile);

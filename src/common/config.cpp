@@ -19,6 +19,10 @@
 
 #include  "wx/wxprec.h"
 
+#ifndef WX_PRECOMP
+#include  "wx/wx.h"
+#endif
+
 #include  <wx/confbase.h>
 
 #ifdef wxUSE_CONFIG
@@ -26,11 +30,6 @@
 #ifdef    __BORLANDC__
   #pragma hdrstop
 #endif  //__BORLANDC__
-
-#ifndef WX_PRECOMP
-  #include  <wx/string.h>
-  #include  <wx/intl.h>
-#endif //WX_PRECOMP
 
 #include  <wx/app.h>
 #include  <wx/file.h>

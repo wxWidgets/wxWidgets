@@ -31,7 +31,7 @@ typically correspond to the extension ".txt", but may as well be associated with
 
 \wxheading{Required headers}
 
-#include <wx/mimetype.h>
+<wx/mimetype.h>
 
 \wxheading{Derived from}
 
@@ -64,10 +64,10 @@ function, for example:
 
 \begin{verbatim}
 // provide the message parameters for the MIME type manager
-class MailMessageParamaters : public wxFileType::MessageParameters
+class MailMessageParameters : public wxFileType::MessageParameters
 {
 public:
-   MailMessageParamaters(const wxString& filename,
+   MailMessageParameters(const wxString& filename,
                          const wxString& mimetype)
       : wxFileType::MessageParameters(filename, mimetype)
    {
@@ -85,7 +85,7 @@ public:
 \end{verbatim}
 
 Now you only need to create an object of this class and pass it to, for example,
-\helpref{GetOpenCommand}{wxfiletypegetopencommand} like this:
+\rtfsp\helpref{GetOpenCommand}{wxfiletypegetopencommand} like this:
 
 \begin{verbatim}
 wxString command;
@@ -99,7 +99,6 @@ else
 {
     // we don't know how to handle such files...
 }
-
 \end{verbatim}
 
 {\bf Windows:} As only the file name is used by the program associated with the
@@ -107,25 +106,28 @@ given extension anyhow (but no other message parameters), there is no need to
 ever derive from MessageParameters class for a Windows-only program.
 
 \membersection{wxFileType::wxFileType}\label{wxfiletypewxfiletype}
+
 \func{}{wxFileType}{\void}
 
 The default constructor is private because you should never create objects of
-this type: they are only returned by 
-\helpref{wxMimeTypesManager}{wxmimetypesmanager} methods.
+this type: they are only returned by \helpref{wxMimeTypesManager}{wxmimetypesmanager} methods.
 
 \membersection{wxFileType::\destruct{wxFileType}}\label{wxfiletypedtor}
-\func{}{\destruct{wxFileType}{\void}
+
+\func{}{\destruct{wxFileType}}{\void}
 
 The destructor of this class is not virtual, so it should not be derived from.
 
 \membersection{wxFileType::GetMimeType}\label{wxfiletypegetmimetype}
-\func{bool}{GetMimeType}{\param{wxString *}{mimeType}}
+
+\func{bool}{GetMimeType}{\param{wxString*}{ mimeType}}
 
 If the function returns TRUE, the string pointed to by {\it mimeType} is filled
 with full MIME type specification for this file type: for example, "text/plain".
 
 \membersection{wxFileType::GetExtensions}\label{wxfiletypegetextensions}
-\func{bool}{GetExtensions}{\param{wxArrayString \&}{extensions}}
+
+\func{bool}{GetExtensions}{\param{wxArrayString\&}{ extensions}}
 
 If the function returns TRUE, the array {\it extensions} is filled
 with all extensions associated with this file type: for example, it may
@@ -139,7 +141,8 @@ by \helpref{GetFileTypeFromExtension}{wxmimetypesmanagergetfiletypefromextension
 function in the first place.
 
 \membersection{wxFileType::GetIcon}\label{wxfiletypegeticon}
-\func{bool}{GetIcon}{\param{wxIcon *}{icon}}
+
+\func{bool}{GetIcon}{\param{wxIcon*}{ icon}}
 
 If the function returns TRUE, the icon associated with this file type will be
 created and assigned to the {\it icon} parameter.
@@ -147,14 +150,16 @@ created and assigned to the {\it icon} parameter.
 {\bf Unix:} This function always returns FALSE under Unix.
 
 \membersection{wxFileType::GetDescription}\label{wxfiletypegetdescription}
-\func{bool}{GetDescription}{\param{wxString *}{desc}}
+
+\func{bool}{GetDescription}{\param{wxString*}{ desc}}
 
 If the function returns TRUE, the string pointed to by {\it desc} is filled
 with a brief description for this file type: for example, "text document" for
 the "text/plain" MIME type.
 
 \membersection{wxFileType::GetOpenCommand}\label{wxfiletypegetopencommand}
-\func{bool}{GetOpenCommand}{\param{wxString *}{command},\param{MessageParameters \&}{params}}
+
+\func{bool}{GetOpenCommand}{\param{wxString*}{ command}, \param{MessageParameters\&}{ params}}
 
 If the function returns TRUE, the string pointed to by {\it command} is filled
 with the command which must be executed (see \helpref{wxExecute}{wxexecute}) in
@@ -162,7 +167,8 @@ order to open the file of the given type. The name of the file is
 retrieved from \helpref{MessageParameters}{wxfiletypemessageparameters} class.
 
 \membersection{wxFileType::GetPrintCommand}\label{wxfiletypegetprintcommand}
-\func{bool}{GetPrintCommand}{\param{wxString *}{command},\param{MessageParameters \&}{params}}
+
+\func{bool}{GetPrintCommand}{\param{wxString*}{ command},\param{MessageParameters\&}{ params}}
 
 If the function returns TRUE, the string pointed to by {\it command} is filled
 with the command which must be executed (see \helpref{wxExecute}{wxexecute}) in
@@ -170,13 +176,15 @@ order to print the file of the given type. The name of the file is
 retrieved from \helpref{MessageParameters}{wxfiletypemessageparameters} class.
 
 \membersection{wxFileType::ExpandCommand}\label{wxfiletypeexpandcommand}
-\func{static wxString}{ExpandCommand}{\param{const wxString \&}{command},\param{MessageParameters \&}{params}}
+
+\func{static wxString}{ExpandCommand}{\param{const wxString\&}{ command}, \param{MessageParameters\&}{ params}}
 
 This function is primarly intended for GetOpenCommand and GetPrintCommand
 usage but may be also used by the application directly if, for example, you want
 to use some non default command to open the file.
 
 The function replaces all occurences of
+
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
 \twocolitem{format specificator}{with}
@@ -184,6 +192,7 @@ The function replaces all occurences of
 \twocolitem{\%t}{the MIME type}
 \twocolitem{\%\{param\}}{the value of the parameter {\it param}}
 \end{twocollist}
+
 using the MessageParameters object you pass to it.
 
 If there is no '\%s' in the command string (and the string is not empty), it is
@@ -192,3 +201,4 @@ as "< \%s" were appended to the string.
 
 Unlike all other functions of this class, there is no error return for this
 function.
+

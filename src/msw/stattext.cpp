@@ -21,7 +21,9 @@
 #endif
 
 #ifndef WX_PRECOMP
+#include "wx/event.h"
 #include "wx/app.h"
+#include "wx/brush.h"
 #endif
 
 #include "wx/stattext.h"

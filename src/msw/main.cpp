@@ -20,6 +20,7 @@
 #pragma hdrstop
 #endif
 
+#include "wx/event.h"
 #include "wx/app.h"
 #include <windows.h>
 

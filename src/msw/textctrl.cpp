@@ -23,6 +23,9 @@
 #ifndef WX_PRECOMP
 #include "wx/textctrl.h"
 #include "wx/settings.h"
+#include "wx/brush.h"
+#include "wx/utils.h"
+#include "wx/log.h"
 #endif
 
 #if wxUSE_CLIPBOARD
@@ -514,7 +517,7 @@ void wxTextCtrl::SetSelection(long from, long to)
 
 bool wxTextCtrl::LoadFile(const wxString& file)
 {
-  if (!FileExists(WXSTRINGCAST file))
+  if (!wxFileExists(WXSTRINGCAST file))
     return FALSE;
 
   m_fileName = file;
@@ -754,7 +757,7 @@ int wxTextCtrl::overflow(int c)
 #if wxUSE_IOSTREAMH
   if ( allocate()==EOF )
   {
-    wxError("Streambuf allocation failed","Internal error");
+    wxLogError("Streambuf allocation failed");
     return EOF;
   }
 #endif

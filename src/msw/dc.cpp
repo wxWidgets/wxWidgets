@@ -26,6 +26,8 @@
 #include "wx/utils.h"
 #include "wx/dialog.h"
 #include "wx/app.h"
+#include "wx/bitmap.h"
+#include "wx/dcmemory.h"
 #endif
 
 #include "wx/dcprint.h"
@@ -603,7 +605,7 @@ void wxDC::DrawEllipticArc(long x,long y,long w,long h,double sa,double ea)
 
 void wxDC::DrawIcon(const wxIcon& icon, long x, long y)
 {
-#if defined(__WIN32__)
+#if defined(__WIN32__) && !defined(__SC__)
   ::DrawIconEx((HDC) m_hDC, XLOG2DEV(x), YLOG2DEV(y), (HICON) icon.GetHICON(),
       icon.GetWidth(), icon.GetHeight(), 0, 0, DI_NORMAL);
 #else

@@ -275,7 +275,7 @@ class wxPropertyFormFrame: public wxFrame
  public:
   wxPropertyFormFrame(wxPropertyFormView *v, wxFrame *parent, const wxString& title,
     const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-    long style = wxDEFAULT_FRAME, const wxString& name = "frame"):
+    long style = wxDEFAULT_FRAME_STYLE, const wxString& name = "frame"):
      wxFrame(parent, -1, title, pos, size, style, name)
   {
     m_view = v;

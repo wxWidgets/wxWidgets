@@ -133,7 +133,7 @@ int DibWriteFile(LPSTR szFile, LPBITMAPINFOHEADER lpbi)
   bmf.bfReserved1 = 0;
   bmf.bfReserved2 = 0;
   bmf.bfOffBits = sizeof(bmf) + (char far*)(DibPtr(lpbi)) - (char far*)lpbi;
-#if defined( __WATCOMC__) || defined(_MSC_VER)
+#if defined( __WATCOMC__) || defined(_MSC_VER) || defined(__SC__)
   if (_hwrite(fh, (LPCSTR)(&bmf), sizeof(bmf))<0 ||
 	_hwrite(fh, (LPCSTR)lpbi, size)<0) {
 	  _lclose(fh);

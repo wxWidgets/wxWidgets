@@ -17,6 +17,7 @@
 #endif
 
 #include "wx/defs.h"
+#include "wx/string.h"
 
 /*
   The macro which will be expanded to include the file and line number
@@ -36,8 +37,6 @@
       using namespace std;
 #  endif
 #endif
-
-#include "wx/string.h"
 
 #ifdef __WXDEBUG__
 
@@ -83,7 +82,9 @@ void operator delete[](void *buf, char*, int);
 #endif
 
 #endif
+  // wxUSE_GLOBAL_MEMORY_OPERATORS
 #endif
+  // __WXDEBUG__
 
 typedef unsigned int wxMarkerType;
 

@@ -22,6 +22,7 @@
 
 #ifndef WX_PRECOMP
 #include "wx/setup.h"
+#include "wx/event.h"
 #include "wx/app.h"
 #include "wx/utils.h"
 #endif

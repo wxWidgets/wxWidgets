@@ -99,6 +99,7 @@ COMMONOBJS = \
   $(COMMDIR)/log.$(OBJSUFF) \
   $(COMMDIR)/memory.$(OBJSUFF) \
   $(COMMDIR)/module.$(OBJSUFF) \
+  $(COMMDIR)/mimetype.$(OBJSUFF) \
   $(COMMDIR)/object.$(OBJSUFF) \
   $(COMMDIR)/odbc.$(OBJSUFF) \
   $(COMMDIR)/process.$(OBJSUFF) \

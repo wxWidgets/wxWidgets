@@ -31,14 +31,17 @@
 // wxWindows
 #ifndef WX_PRECOMP
     #include  "wx/string.h"
+    #include  "wx/icon.h"
 #endif //WX_PRECOMP
 
 #include "wx/log.h"
 #include "wx/intl.h"
 #include "wx/dynarray.h"
+#include "wx/confbase.h"
 
 #ifdef __WXMSW__
     #include "wx/msw/registry.h"
+    #include "windows.h"
 #else  // Unix
     #include "wx/textfile.h"
 #endif // OS

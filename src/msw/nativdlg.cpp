@@ -169,7 +169,7 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
 		{
 			win = new wxRadioButton;
 		}
-#ifdef __WIN32__
+#if defined(__WIN32__) && defined(BS_BITMAP)
 		else if (style & BS_BITMAP)
 		{
 			// TODO: how to find the bitmap?
@@ -241,7 +241,7 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
 
 		if ((style1 == SS_LEFT) || (style1 == SS_RIGHT) || (style1 == SS_SIMPLE))
 			win = new wxStaticText;
-#ifdef __WIN32__
+#if defined(__WIN32__) && defined(BS_BITMAP)
 		else if (style1 == SS_BITMAP)
 		{
 			win = new wxStaticBitmap;

@@ -22,6 +22,7 @@
 
 #ifndef WX_PRECOMP
 #include "wx/checkbox.h"
+#include "wx/brush.h"
 #endif
 
 #include "wx/msw/private.h"
@@ -168,6 +169,10 @@ void wxCheckBox::SetValue(bool val)
 {
   SendMessage((HWND) GetHWND(), BM_SETCHECK, val, 0);
 }
+
+#ifndef BST_CHECKED
+#define BST_CHECKED 0x0001
+#endif
 
 bool wxCheckBox::GetValue(void) const
 {

@@ -125,6 +125,9 @@ COMMONOBJS = \
 # Doesn't compile (nested classes)
 # $(COMMDIR)\fileconf.obj\
 
+# Uses WIN32 registry functions
+#  $(COMMDIR)\mimetype.obj \
+
 # Fails when including png.h, on jmp_buf.
 #  $(COMMDIR)\image.obj \
 
@@ -754,6 +757,11 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(COMMDIR)/memory.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(COMMDIR)/mimetype.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<

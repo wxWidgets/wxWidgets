@@ -27,13 +27,15 @@
 
 #include  <wx/log.h>
 #include  <wx/imaglist.h>
+#include  <wx/event.h>
+#include  <wx/control.h>
 #include  <wx/notebook.h>
 
 #include  <wx/msw/private.h>
 
 // Windows standard headers
 #ifndef   __WIN95__
-  #error  "wxNotebook is not supported under Windows 3.1"
+  #error  "wxNotebook is only supported Windows 95 and above"
 #endif    //Win95
 
 #include  <windowsx.h>  // for SetWindowFont

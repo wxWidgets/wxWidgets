@@ -1908,7 +1908,7 @@ void wxPropertyStringListEditorDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
 
 void wxPropertyStringListEditorDialog::OnText(wxCommandEvent& event)
 {
-  if (event.GetEventType() == wxEVENT_TYPE_TEXT_ENTER_COMMAND)
+  if (event.GetEventType() == wxEVT_COMMAND_TEXT_ENTER)
   {
     SaveCurrentSelection();
   }

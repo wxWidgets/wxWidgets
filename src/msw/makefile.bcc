@@ -146,6 +146,7 @@ COMMONOBJS = \
   $(MSWDIR)\dynlib.obj \
   $(MSWDIR)\tokenzr.obj
 
+# Don't compile for WIN16
 #  $(MSWDIR)\socket.obj \
 #  $(MSWDIR)\sckaddr.obj \
 #  $(MSWDIR)\protocol.obj \
@@ -154,7 +155,12 @@ COMMONOBJS = \
 #  $(MSWDIR)\ftp.obj \
 #  $(MSWDIR)\sckfile.obj \
 #  $(MSWDIR)\sckipc.obj \
+
+# Needs extra files (sql*.h) so not compiled by default.
 #  $(MSWDIR)\odbc.obj \
+
+# Uses WIN32 registry functions
+#  $(MSWDIR)\mimetype.obj \
 
 MSWOBJS = \
   $(MSWDIR)\accel.obj \
@@ -490,6 +496,8 @@ $(MSWDIR)\layout.obj:     $(COMMDIR)\layout.$(SRCSUFF)
 $(MSWDIR)\log.obj:     $(COMMDIR)\log.$(SRCSUFF)
 
 $(MSWDIR)\memory.obj:     $(COMMDIR)\memory.$(SRCSUFF)
+
+$(MSWDIR)\mimetype.obj:     $(COMMDIR)\mimetype.$(SRCSUFF)
 
 $(MSWDIR)\module.obj:     $(COMMDIR)\module.$(SRCSUFF)
 

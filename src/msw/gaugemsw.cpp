@@ -22,6 +22,7 @@
 
 #ifndef WX_PRECOMP
 #include "wx/defs.h"
+#include "wx/utils.h"
 #endif
 
 #if wxUSE_GAUGE 

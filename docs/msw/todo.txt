@@ -5,73 +5,52 @@ Todo on wxWin 2.0, Windows platform
 HIGH PRIORITY
 -------------
 
-Find/add wxThread sample - Arthur T-D?
-
-Implement wxDC floating point transformations.
-
-Add wxDC::DeviceToLogical -> wxPoint etc (convenience accessors).
-
-Revamp Dialog Editor for new controls and properties (e.g.
-window id).
+Add further controls and properties to Dialog Editor.
 
 Update manual.
-    wxApp changes       DONE
-    wxMenu changes      DONE
-    wxModule            DONE
-    wxRegion            DONE
-    wxFile              DONE
     wxTempFile
-    wxMask              DONE
-    wxDC:Blit           DONE
-    wxTaskBarIcon       DONE
     wxMsgCatalog etc.
-    wxLog
-    wxConfig            DONE
     wxRegKey
-    wxTabCtrl           DONE
-    wxNotebook          DONE (some more explanation required)
-    wxWave              DONE
-    wxJoystick          DONE
     wxStatusBar95 and wxFrame status bar functions
     wxListBox changes (for ownerdraw functionality)
     wxThread            DONE (except for topic overview)
-    wxHelpController classes DONE (except for Unix ones)
     wxString            PARTLY DONE
     Drag and drop (change API if required, e.g. const).
-    wxCheckListBox      DONE
-    wxAcceleratorTable  DONE
     wxBaseArray, other arrays
     (wxOwnerDrawn)
     Document the include file for each class
-    Macros, e.g. wxASSERT
     Stream classes
+    wxSocket topic overview
     Functions
 
-Write tutorial.
+Makefiles and/or IDE files for other compilers: Symantec C++,
+Salford C++. IDE files for BC++.
 
-A wxDC function (or two) for drawing 3D edges.
+Check TODO entries in source and manual.
 
-Makefiles for other compilers. Generic makefiles?
-Rewrite makefiles to maintain simultaneous debug/release
-objects.
+Add centring, right justify styles to wxStaticText.
+
+Extend wxSystemSettings to get symbols for current nationality,
+e.g. ',' instead of '.' for decimal points.
+
+LOW PRIORITY (MEDIUM TERM)
+--------------------------
+
+Convert remaining utilities e.g. wxGraphLayout.
 
 More wxSystemSettings (see comment in settings.cpp).
 
-Convert remaining utilities e.g. (GLCanvas; wxGraphLayout) and samples
-
-Check TODO entries.
+Synchronize drawing functions on all platforms, using Chris's
+code to test them.
 
 Shell function to invoke a document with open, print, whatever...
 
-Make use of Vadim's gettext implementation throughout wxWin code.
-Document it.
+Write tutorial.
 
-Retain callback functions; have semi-compatible callback function prototypes
-for all controls, at least in WXWIN_COMPATIBLE mode, but
-retain (Set)Callback for all compilations. This is following a
-panicky response to losing callbacks.
+Add wxDC::DeviceToLogical -> wxPoint etc (convenience accessors).
 
-Merge dib.cpp, dibutils.cpp (see also some DIB code in bitmap.cpp).
+Generic makefiles? Rewrite makefiles to maintain simultaneous debug/release
+objects.
 
 Add a wxTabCtrl sample.
 
@@ -81,16 +60,7 @@ printer characteristics) and more reliable printing framework.
 Add GetIcon, GetBitmap to wxImageList. Perhaps store bitmaps
 in image list so we can get them later.
 
-Add centring, right justify styles to wxStaticText.
-
-Synchronize drawing functions on all platforms, using Chris's
-code to test them.
-
-Extend wxSystemSettings to get symbols for current nationality,
-e.g. ',' instead of '.' for decimal points.
-
-LOW PRIORITY
-------------
+Merge dib.cpp, dibutils.cpp (see also some DIB code in bitmap.cpp).
 
 Debug PNG support in wxBitmap (no 4-bit support), and possibly add a convertor from PNG
 to HICON. We could perhaps also support inclusion of PNGs into
@@ -100,45 +70,24 @@ Fonts: ability to enumerate them.
 
 Angled text.
 
-Eliminate Set/GetDefaultBackgroundColour? Just take background
-colour for child control instead.
-
 Think about reimplementing wxBitmapButton, wxStaticBitmap using
 BS_BITMAP, SS_BITMAP - but this may not allow wxBitmap
 argument, so instead just allow controls loaded from native
 resource to deal with this style and call default processing.
 
-Better clipboard support.
+Better clipboard support (as per Robert's class).
 
 wxWizard class?
 
 Doc/view - have some standard views/docs e.g. wxTextView.
 
-wxClassWizard for generating files, chunks of code.
-
 Miscellaneous file/system function wrappers.
-
-wxImage or replacement; further wxBitmap/wxIcon etc. functions
-(load animated icos).
-
-Integrate existing multimedia classes.
-
-Rich text class?
-
-Look at WinCE stuff incl. database classes.
-
-Improve conversion guide, compatibility classes, tools?
 
 Bug database.
 
-ActiveX support?
-
-OpenGL integration.
+OpenGL integration: check that wxGLCanvas works cross-platform.
 
 Menu bitmaps - document Vadim's enhancements.
-
-Enhance Tex2RTF to generate Microsoft HTML help, perhaps Netscape
-HTML help also.
 
 wxCreateDynamicObject is apparently slow: ~ 2000 calls to strcmp. Need to
 use some kind of hash table scheme.
@@ -149,8 +98,6 @@ to wxFrame to mirror the X situation (multiple displays).
 Write translator between old and new .wxr formats (including
 substituting static text for obsolete labels).
 
-Improve and expand wxSizer classes.
-
 Write more validators. Also, how do they work if loading the
 dialog from a .wxr? Could call SetValidator from within
 InitDialog for all controls, then call TransferDataToWindow.
@@ -158,6 +105,30 @@ InitDialog for all controls, then call TransferDataToWindow.
 Classes for file/OS utility functions.
 
 Add support for more static controls e.g. wxStaticLine.
+
+Perhaps rewrite wxFile to use FILE* descriptors, so Eof and Flush
+can work.
+
+Find out how to set wxFileDialog position.
+
+Maybe bundle Andrew Tucker's DBWIN32 with wxWindows (it's only
+26KB), for viewing debug messages without a debugger.
+
+Implement wxDC floating point transformations.
+
+A wxDC function (or two) for drawing 3D edges?
+
+LOW PRIORITY (LONG TERM)
+------------------------
+
+Improve and expand wxSizer classes.
+
+ActiveX support
+
+Look at porting to WinCE
+
+Enhance Tex2RTF to generate Microsoft HTML help, perhaps Netscape
+HTML help also.
 
 GDI objects could be optimised further in constructors by
 searching for a matching, pre-existing object, and assigning from
@@ -181,10 +152,9 @@ needed to ensure that the operation was maximally efficient
 (creating a new object rather than searching may or may not be
 more efficient).
 
-Perhaps rewrite wxFile to use FILE* descriptors, so Eof and Flush
-can work.
+Integrate Guilhem's multimedia classes: documentation, makefiles,
+different platforms.
 
-Find out how to set wxFileSelector position.
+Rich text class.
 
-Maybe bundle Andrew Tucker's DBWIN32 with wxWindows (it's only
-26KB), for viewing debug messages without a debugger.
+

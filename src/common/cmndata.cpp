@@ -38,7 +38,8 @@
 #include <commdlg.h>
 #endif
 
-#if defined(__WATCOMC__)
+#if defined(__WATCOMC__) || defined(__SC__)
+#include <windowsx.h>
 #include <commdlg.h>
 #endif
 

@@ -24,6 +24,8 @@
 #include <stdio.h>
 #endif
 
+#include "wx/utils.h"
+#include "wx/brush.h"
 #include "wx/msw/slidrmsw.h"
 #include "wx/msw/private.h"
 

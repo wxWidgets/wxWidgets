@@ -474,7 +474,7 @@ bool wxRegKey::DeleteValue(const char *szValue)
     return FALSE;
 
   #ifdef  __WIN32__
-    m_dwLastError = RegDeleteValue((HKEY) m_hKey, szValue);
+    m_dwLastError = RegDeleteValue((HKEY) m_hKey, (char*) (const char*) szValue);
     if ( m_dwLastError != ERROR_SUCCESS ) {
       wxLogSysError(m_dwLastError, _("can't delete value '%s' from key '%s'"),
                     szValue, GetName().c_str());
@@ -508,7 +508,7 @@ bool wxRegKey::HasValue(const char *szValue) const
   
   #ifdef  __WIN32__
     if ( CONST_CAST Open() ) {
-      return RegQueryValueEx((HKEY) m_hKey, szValue, RESERVED,
+      return RegQueryValueEx((HKEY) m_hKey, (char*) (const char*) szValue, RESERVED,
                              NULL, NULL, NULL) == ERROR_SUCCESS;
     }
     else
@@ -550,7 +550,7 @@ wxRegKey::ValueType wxRegKey::GetValueType(const char *szValue)
       return Type_None;
 
     DWORD dwType;
-    m_dwLastError = RegQueryValueEx((HKEY) m_hKey, szValue, RESERVED,
+    m_dwLastError = RegQueryValueEx((HKEY) m_hKey, (char*) (const char*) szValue, RESERVED,
                                     &dwType, NULL, NULL);
     if ( m_dwLastError != ERROR_SUCCESS ) {
       wxLogSysError(m_dwLastError, _("can't read value of key '%s'"),
@@ -584,7 +584,7 @@ bool wxRegKey::QueryValue(const char *szValue, long *plValue) const
   if ( CONST_CAST Open() ) {
     DWORD dwType, dwSize = sizeof(DWORD);
     RegString pBuf = (RegString)plValue;
-    m_dwLastError = RegQueryValueEx((HKEY) m_hKey, szValue, RESERVED,
+    m_dwLastError = RegQueryValueEx((HKEY) m_hKey, (char*) (const char*) szValue, RESERVED,
                                     &dwType, pBuf, &dwSize);
     if ( m_dwLastError != ERROR_SUCCESS ) {
       wxLogSysError(m_dwLastError, _("can't read value of key '%s'"),
@@ -611,11 +611,11 @@ bool wxRegKey::QueryValue(const char *szValue, wxString& strValue) const
     #ifdef  __WIN32__
       // first get the type and size of the data
       DWORD dwType, dwSize;
-      m_dwLastError = RegQueryValueEx((HKEY) m_hKey, szValue, RESERVED,
+      m_dwLastError = RegQueryValueEx((HKEY) m_hKey, (char*) (const char*) szValue, RESERVED,
                                       &dwType, NULL, &dwSize);
       if ( m_dwLastError == ERROR_SUCCESS ) {
         RegString pBuf = (RegString)strValue.GetWriteBuf(dwSize);
-        m_dwLastError = RegQueryValueEx((HKEY) m_hKey, szValue, RESERVED,
+        m_dwLastError = RegQueryValueEx((HKEY) m_hKey, (char*) (const char*) szValue, RESERVED,
                                         &dwType, pBuf, &dwSize);
         strValue.UngetWriteBuf();
         if ( m_dwLastError == ERROR_SUCCESS ) {

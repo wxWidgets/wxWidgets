@@ -17,6 +17,7 @@
 #endif
 
 #include "wx/gdiobj.h"
+#include "wx/bitmap.h"
 
 typedef    WXDWORD  wxDash ;
 

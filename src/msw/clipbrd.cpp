@@ -27,6 +27,8 @@
 #if wxUSE_CLIPBOARD
 
 #ifndef WX_PRECOMP
+#include "wx/object.h"
+#include "wx/event.h"
 #include "wx/app.h"
 #include "wx/frame.h"
 #include "wx/bitmap.h"

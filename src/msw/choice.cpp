@@ -22,6 +22,7 @@
 
 #ifndef WX_PRECOMP
 #include "wx/choice.h"
+#include "wx/utils.h"
 #endif
 
 #include "wx/msw/private.h"

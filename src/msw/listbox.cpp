@@ -23,6 +23,9 @@
 #ifndef WX_PRECOMP
 #include "wx/listbox.h"
 #include "wx/settings.h"
+#include "wx/brush.h"
+#include "wx/font.h"
+#include "wx/dc.h"
 #endif
 
 #include "wx/msw/private.h"

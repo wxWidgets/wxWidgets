@@ -22,6 +22,7 @@
 
 #ifndef WX_PRECOMP
 #include "wx/button.h"
+#include "wx/brush.h"
 #endif
 
 #include "wx/msw/private.h"

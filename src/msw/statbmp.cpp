@@ -144,7 +144,7 @@ void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
 bool wxStaticBitmap::MSWOnDraw(WXDRAWITEMSTRUCT *item)
 {
     long style = GetWindowLong((HWND) GetHWND(), GWL_STYLE);
-#ifdef __WIN32__
+#if defined(__WIN32__) && defined(SS_BITMAP)
     if ((style & 0xFF) == SS_BITMAP)
     {
         // Should we call Default() here?

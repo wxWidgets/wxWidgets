@@ -90,6 +90,8 @@ inline int WXDLLEXPORT Stricmp(const char *psz1, const char *psz2)
 {
 #if     defined(_MSC_VER)
   return _stricmp(psz1, psz2);
+#elif     defined(__SC__)
+  return _stricmp(psz1, psz2);
 #elif defined(__BORLANDC__)
   return stricmp(psz1, psz2);
 #elif defined(__WATCOMC__)

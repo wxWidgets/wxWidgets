@@ -177,6 +177,10 @@ inline bool wxStyleHasBorder(long style)
   #define WS_EX_CLIENTEDGE 0
 #endif
 
+#if defined(__WIN32__) && !defined(WS_EX_CLIENTEDGE)
+  #define WS_EX_CLIENTEDGE 0x00000200L
+#endif
+
 #if defined(__WIN95__) && defined(__WXDEBUG__) && wxUSE_DBWIN32
 #ifdef OutputDebugString
 #undef OutputDebugString

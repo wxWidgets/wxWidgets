@@ -23,7 +23,9 @@
 #ifndef   WX_PRECOMP
   #include  <wx/string.h>
   #include  <wx/intl.h>
+  #include  <wx/event.h>
   #include  <wx/app.h>
+  #include  <wx/utils.h>
 #endif  //WX_PRECOMP
 
 #include  <wx/dynarray.h>
@@ -401,9 +403,15 @@ bool wxIniConfig::Flush(bool /* bCurrentOnly */)
 bool wxIniConfig::DeleteEntry(const wxString& szKey, bool bGroupIfEmptyAlso)
 {
   // passing NULL as value to WritePrivateProfileString deletes the key
-  if ( !Write(szKey, (const char *)NULL) )
+//  if ( !Write(szKey, (const char *)NULL) )
+//    return FALSE;
+  wxConfigPathChanger path(this, szKey);
+  wxString strKey = GetPrivateKeyName(path.Name());
+
+  if (WritePrivateProfileString(m_strGroup, szKey,
+                                         (const char*) NULL, m_strLocalFilename) == 0)
     return FALSE;
-    
+
   if ( !bGroupIfEmptyAlso || !IsEmpty() )
     return TRUE;
 

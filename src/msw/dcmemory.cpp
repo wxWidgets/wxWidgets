@@ -21,6 +21,7 @@
 #endif
 
 #ifndef WX_PRECOMP
+#include "wx/utils.h"
 #endif
 
 #include "wx/dcmemory.h"

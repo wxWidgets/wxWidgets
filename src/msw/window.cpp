@@ -31,6 +31,7 @@
 #include "wx/panel.h"
 #include "wx/layout.h"
 #include "wx/dialog.h"
+#include "wx/frame.h"
 #include "wx/listbox.h"
 #include "wx/button.h"
 #include "wx/settings.h"

@@ -24,6 +24,7 @@
 #include "wx/setup.h"
 #include "wx/utils.h"
 #include "wx/app.h"
+#include "wx/intl.h"
 #endif
 
 #include "wx/log.h"

@@ -107,6 +107,8 @@
     #if (__MWERKS__ < 0x1000) || !__option(bool)
         typedef unsigned int bool;
     #endif
+#elif defined(__SC__)
+    typedef unsigned int bool;
 #elif defined(_MSC_VER) && (_MSC_VER <= 1000)
     typedef unsigned int bool;
 #elif defined(_MSC_VER) && (_MSC_VER == 1020)
@@ -120,7 +122,7 @@
     typedef unsigned char bool;
 #endif
 
-#if ( defined(_MSC_VER) && (_MSC_VER <= 800) ) || defined(__GNUWIN32__) || (defined(__BORLANDC__) && defined(__WIN16__))
+#if ( defined(_MSC_VER) && (_MSC_VER <= 800) ) || defined(__GNUWIN32__) || (defined(__BORLANDC__) && defined(__WIN16__)) || defined(__SC__)
     #define byte unsigned char
 #endif
 

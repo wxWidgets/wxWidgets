@@ -35,6 +35,8 @@
 #endif
 
 #include <windows.h>
+#include <wx/palette.h>
+#include <wx/bitmap.h>
 #include <wx/msw/pngread.h>
 #include <wx/msw/dibutils.h>
 

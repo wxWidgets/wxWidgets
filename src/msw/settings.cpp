@@ -90,7 +90,7 @@ int wxSystemSettings::GetSystemMetric(int index)
 			return ::GetSystemMetrics(SM_CXDOUBLECLK);
         case wxSYS_DCLICK_Y:
 			return ::GetSystemMetrics(SM_CYDOUBLECLK);
-#ifdef __WIN32__
+#if defined(__WIN32__) && defined(SM_CXDRAG)
         case wxSYS_DRAG_X:
 			return ::GetSystemMetrics(SM_CXDRAG);
         case wxSYS_DRAG_Y:
@@ -122,7 +122,8 @@ int wxSystemSettings::GetSystemMetric(int index)
 			return ::GetSystemMetrics(SM_CXSCREEN);
         case wxSYS_SCREEN_Y:
 			return ::GetSystemMetrics(SM_CYSCREEN);
-#ifdef __WIN32__
+
+#if defined(__WIN32__) && defined(SM_CXSIZEFRAME)
         case wxSYS_FRAMESIZE_X:
 			return ::GetSystemMetrics(SM_CXSIZEFRAME);
         case wxSYS_FRAMESIZE_Y:
@@ -146,13 +147,13 @@ int wxSystemSettings::GetSystemMetric(int index)
 			return ::GetSystemMetrics(SM_CYCAPTION);
         case wxSYS_MENU_Y:
 			return ::GetSystemMetrics(SM_CYMENU);
-#ifdef __WIN32__
+#if defined(__WIN32__) && defined(SM_NETWORK)
         case wxSYS_NETWORK_PRESENT:
 			return ::GetSystemMetrics(SM_NETWORK) & 0x0001;
 #endif
         case wxSYS_PENWINDOWS_PRESENT:
 			return ::GetSystemMetrics(SM_PENWINDOWS);
-#ifdef __WIN32__
+#if defined(__WIN32__) && defined(SM_SHOWSOUNDS)
         case wxSYS_SHOW_SOUNDS:
 			return ::GetSystemMetrics(SM_SHOWSOUNDS);
 #endif

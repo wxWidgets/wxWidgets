@@ -39,12 +39,14 @@
 #include "wx/button.h"
 #include "wx/bmpbuttn.h"
 #include "wx/radiobox.h"
+#include "wx/radiobut.h"
 #include "wx/listbox.h"
 #include "wx/choice.h"
 #include "wx/checkbox.h"
 #include "wx/settings.h"
 #include "wx/slider.h"
 #include "wx/statbox.h"
+#include "wx/statbmp.h"
 #if wxUSE_GAUGE
 #include "wx/gauge.h"
 #endif
@@ -1321,18 +1323,18 @@ wxItemResource *wxResourceInterpretBitmap(wxResourceTable& WXUNUSED(table), wxEx
           wxExpr *coloursExpr = listExpr->Nth(3);
           wxExpr *xresExpr = listExpr->Nth(4);
           wxExpr *yresExpr = listExpr->Nth(5);
-          if (nameExpr && nameExpr->StringValue())
+          if (nameExpr && nameExpr->StringValue() != "")
           {
             bitmapSpec->SetName(nameExpr->StringValue());
           }
-          if (typeExpr && typeExpr->StringValue())
+          if (typeExpr && typeExpr->StringValue() != "")
           {
             bitmapSpec->SetValue1(wxParseWindowStyle(typeExpr->StringValue()));
           }
           else
             bitmapSpec->SetValue1(0);
 
-          if (platformExpr && platformExpr->StringValue())
+          if (platformExpr && platformExpr->StringValue() != "")
           {
             wxString plat(platformExpr->StringValue());
             if (plat == "windows" || plat == "WINDOWS")
@@ -2034,7 +2036,7 @@ wxBitmap wxResourceCreateBitmap(const wxString& resource, wxResourceTable *table
   wxItemResource *item = table->FindResource(resource);
   if (item)
   {
-    if (!item->GetType() || strcmp(item->GetType(), "wxBitmap") != 0)
+    if ((item->GetType() == "") || (item->GetType() != "wxBitmap"))
     {
       wxLogWarning(_("%s not a bitmap resource specification."), (const char*) resource);
       return wxNullBitmap;
@@ -2812,8 +2814,8 @@ bool wxWindow::LoadFromResource(wxWindow *parent, const wxString& resourceName, 
 
   wxItemResource *resource = table->FindResource((const char *)resourceName);
 //  if (!resource || (resource->GetType() != wxTYPE_DIALOG_BOX))
-  if (!resource || !resource->GetType() ||
-    ! ((strcmp(resource->GetType(), "wxDialog") == 0) || (strcmp(resource->GetType(), "wxPanel") == 0)))
+  if (!resource || (resource->GetType() == "") ||
+    ! ((resource->GetType() == "wxDialog") || (resource->GetType() == "wxPanel")))
     return FALSE;
 
   wxString title(resource->GetTitle());

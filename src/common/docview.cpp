@@ -1258,7 +1258,7 @@ wxDocTemplate *wxDocManager::SelectViewType(wxDocTemplate **templates,
   int n = 0;
   for (i = 0; i < noTemplates; i++)
   {
-    if (templates[i]->IsVisible() && templates[i]->GetViewName())
+    if (templates[i]->IsVisible() && (templates[i]->GetViewName() != ""))
     {
       strings[n] = WXSTRINGCAST templates[i]->m_viewTypeName;
       data[n] = (char *)templates[i];
@@ -1706,7 +1706,7 @@ void wxCommandProcessor::SetMenuStrings(void)
         // we've undone to the start of the list, but can redo the first.
         wxCommand *redoCommand = (wxCommand *)m_commands.First()->Data();
         wxString redoCommandName(redoCommand->GetName());
-        if (!redoCommandName) redoCommandName = _("Unnamed command");
+        if (redoCommandName == "") redoCommandName = _("Unnamed command");
         buf = wxString(_("&Redo ")) + redoCommandName;
         m_commandEditMenu->SetLabel(wxID_REDO, buf);
         m_commandEditMenu->Enable(wxID_REDO, TRUE);

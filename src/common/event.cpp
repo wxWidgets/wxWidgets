@@ -395,7 +395,11 @@ bool wxEvtHandler::SearchEventTable(wxEventTable& table, wxEvent& event)
 
     // BC++ doesn't like while (table.entries[i].m_fn)
 
+#ifdef __SC__
+    while (table.entries[i].m_fn != 0)
+#else
     while (table.entries[i].m_fn != 0L)
+#endif
     {
         if ((event.GetEventType() == table.entries[i].m_eventType) &&
                 (table.entries[i].m_id == -1 || // Match, if event spec says any id will do (id == -1)

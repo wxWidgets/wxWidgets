@@ -1,4 +1,6 @@
 src/make_cw.mcp
+src/common/cwy_tab.c
+src/common/cwlex_yy.c
 include/wx_cw.pch
 include/wx_cw.pch++
 include/wx_cw_d.pch

@@ -101,6 +101,7 @@ COMMONOBJS = \
   $(COMMDIR)\layout.obj \
   $(COMMDIR)\log.obj \
   $(COMMDIR)\memory.obj \
+  $(COMMDIR)\mimetype.obj \
   $(COMMDIR)\module.obj \
   $(COMMDIR)\odbc.obj \
   $(COMMDIR)\object.obj \
@@ -863,6 +864,11 @@ $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
 
 $(COMMDIR)/memory.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/mimetype.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<

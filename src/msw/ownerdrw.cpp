@@ -21,13 +21,21 @@
 #endif
 
 #ifndef WX_PRECOMP
+  #include "wx/font.h"
+  #include "wx/bitmap.h"
+  #include "wx/dcmemory.h"
   #include "wx/menu.h"
+  #include "wx/utils.h"
 #endif
 
 #include "wx/ownerdrw.h"
 #include "wx/menuitem.h"
 
 #include <windows.h>
+
+#ifdef DrawText
+#undef DrawText
+#endif
 
 // ============================================================================
 // implementation of wxOwnerDrawn class
@@ -45,7 +53,7 @@ wxOwnerDrawn::wxOwnerDrawn(const wxString& str,
   m_nMarginWidth = ms_nLastMarginWidth;
 }
 
-#if defined(__WXMSW__) && defined(__WIN32__)
+#if defined(__WXMSW__) && defined(__WIN32__) && defined(SM_CXMENUCHECK)
   size_t wxOwnerDrawn::ms_nDefaultMarginWidth = GetSystemMetrics(SM_CXMENUCHECK);
 #else   // # what is the reasonable default?
   size_t wxOwnerDrawn::ms_nDefaultMarginWidth = 15;
@@ -81,7 +89,7 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
 // Win32 GDI functions and not wxWindows ones. Might help to whoever decides to
 // port this code to X. (VZ)
 
-#ifdef __WIN32__
+#if defined(__WIN32__) && !defined(__SC__)
 #define   O_DRAW_NATIVE_API     // comments below explain why I use it
 #endif
 
@@ -173,7 +181,9 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODSt
 
         // then draw a check mark into it
       RECT rect = { 0, 0, GetMarginWidth(), m_nHeight };
+#ifndef __SC__
       DrawFrameControl(hdcMem, &rect, DFC_MENU, DFCS_MENUCHECK);
+#endif
 
         // finally copy it to screen DC and clean up
       BitBlt(hdc, rc.x, rc.y, GetMarginWidth(), m_nHeight, 

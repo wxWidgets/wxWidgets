@@ -28,8 +28,7 @@
 #endif  //__BORLANDC__
 
 #ifndef   WX_PRECOMP
-  #include  "wx/string.h"
-  #include  "wx/intl.h"
+  #include  "wx/wx.h"
 #endif  //WX_PRECOMP
 
 #include  "wx/app.h"

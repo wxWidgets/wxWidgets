@@ -23,6 +23,7 @@
 #ifndef WX_PRECOMP
 #include <stdio.h>
 #include "wx/setup.h"
+#include "wx/window.h"
 #endif
 
 #include "wx/msw/private.h"

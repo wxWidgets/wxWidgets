@@ -5,143 +5,244 @@
 
 WXDIR = $(WXWIN)
 
-!include $(WXDIR)\src\makesc.env
+include ..\makesc.env
 
-INCDIR = $(WXDIR)\include
-MSWINC = $(INCDIR)\msw
-BASEINC = $(INCDIR)\base
+DEBUG=0
 
-# default values overridden by src\makefile.sc
-
-CC=sc
-CFLAGS = -o -ml -W -Dwx_msw
-
-INCLUDE=$(BASEINC);$(MSWINC);$(WXDIR)\contrib\fafa;$(WXDIR)\contrib\itsybits
+LIBTARGET = $(LIBDIR)\wx.lib
 
 OPTIONS=
 
 # end of configuration section ##########################################
 
-OBJS = wx_win.obj wx_frame.obj wx_panel.obj wx_utils.obj wx_main.obj \
-wx_item.obj wx_text.obj wx_gdi.obj wx_dialg.obj wx_canvs.obj wx_dc.obj \
-wx_mf.obj wx_ipc.obj wx_timer.obj wx_clipb.obj wx_scrol.obj wx_vlbox.obj \
-wx_stat.obj wx_buttn.obj wx_messg.obj wx_check.obj wx_choic.obj wx_rbox.obj wx_lbox.obj \
-wx_group.obj wx_gauge.obj wx_txt.obj wx_mtxt.obj wx_slidr.obj wx_menu.obj wx_db.obj\
-wx_cmdlg.obj
+GENDIR=$(WXDIR)\src\generic
+COMMDIR=$(WXDIR)\src\common
+XPMDIR=$(WXDIR)\src\xpm
+OLEDIR=ole
+MSWDIR=$(WXDIR)\src\msw
 
-all: $(OBJS)
+GENERICOBJS= \
+  $(GENDIR)\choicdgg.obj \
+  $(GENDIR)\gridg.obj \
+  $(GENDIR)\laywin.obj \
+  $(GENDIR)\panelg.obj \
+  $(GENDIR)\prop.obj \
+  $(GENDIR)\propform.obj \
+  $(GENDIR)\proplist.obj \
+  $(GENDIR)\sashwin.obj \
+  $(GENDIR)\scrolwin.obj \
+  $(GENDIR)\splitter.obj \
+  $(GENDIR)\statusbr.obj \
+  $(GENDIR)\tabg.obj \
+  $(GENDIR)\textdlgg.obj
 
-wx_obj.obj: $(BASEINC)\wx_obj.h
+#  $(GENDIR)\imaglist.obj \
+#  $(GENDIR)\treectrl.obj \
+#  $(GENDIR)\listctrl.obj \
+#  $(GENDIR)\notebook.obj \
 
-wx_win.obj: $(BASEINC)\wx_defs.h $(MSWINC)\wx_win.h \
-$(BASEINC)\wx_obj.h $(BASEINC)\wx_utils.h wx_win.$(SRCSUFF) \
-$(MSWINC)\wx_gdi.h $(MSWINC)\wx_privt.h
+# These are generic things that don't need to be compiled on MSW,
+# but sometimes it's useful to do so for testing purposes.
+NONESSENTIALOBJS= \
+  $(GENDIR)\printps.obj \
+  $(GENDIR)\prntdlgg.obj \
+  $(GENDIR)\msgdlgg.obj \
+  $(GENDIR)\helpxlp.obj \
+  $(GENDIR)\colrdlgg.obj \
+  $(GENDIR)\fontdlgg.obj \
+  $(COMMDIR)\postscrp.obj
 
-wx_main.obj: $(BASEINC)\wx_defs.h $(BASEINC)\wx_obj.h \
-$(MSWINC)\wx_frame.h $(BASEINC)\wx_utils.h
+COMMONOBJS = \
+  $(COMMDIR)\cmndata.obj \
+  $(COMMDIR)\config.obj \
+  $(COMMDIR)\docview.obj \
+  $(COMMDIR)\docmdi.obj \
+  $(COMMDIR)\dynarray.obj \
+  $(COMMDIR)\dynlib.obj \
+  $(COMMDIR)\event.obj \
+  $(COMMDIR)\file.obj \
+  $(COMMDIR)\filefn.obj \
+  $(COMMDIR)\fileconf.obj \
+  $(COMMDIR)\framecmn.obj \
+  $(COMMDIR)\gdicmn.obj \
+  $(COMMDIR)\image.obj \
+  $(COMMDIR)\intl.obj \
+  $(COMMDIR)\ipcbase.obj \
+  $(COMMDIR)\helpbase.obj \
+  $(COMMDIR)\layout.obj \
+  $(COMMDIR)\log.obj \
+  $(COMMDIR)\memory.obj \
+  $(COMMDIR)\mimetype.obj \
+  $(COMMDIR)\module.obj \
+  $(COMMDIR)\object.obj \
+  $(COMMDIR)\prntbase.obj \
+  $(COMMDIR)\resource.obj \
+  $(COMMDIR)\tbarbase.obj \
+  $(COMMDIR)\tbarsmpl.obj \
+  $(COMMDIR)\textfile.obj \
+  $(COMMDIR)\timercmn.obj \
+  $(COMMDIR)\utilscmn.obj \
+  $(COMMDIR)\validate.obj \
+  $(COMMDIR)\valtext.obj \
+  $(COMMDIR)\date.obj \
+  $(COMMDIR)\hash.obj \
+  $(COMMDIR)\list.obj \
+  $(COMMDIR)\string.obj \
+  $(COMMDIR)\socket.obj \
+  $(COMMDIR)\sckaddr.obj \
+  $(COMMDIR)\sckfile.obj \
+  $(COMMDIR)\sckipc.obj \
+  $(COMMDIR)\sckstrm.obj \
+  $(COMMDIR)\url.obj \
+  $(COMMDIR)\http.obj \
+  $(COMMDIR)\protocol.obj \
+  $(COMMDIR)\time.obj \
+  $(COMMDIR)\tokenzr.obj \
+  $(COMMDIR)\wxexpr.obj \
+  $(COMMDIR)\y_tab.obj \
+  $(COMMDIR)\extended.obj \
+  $(COMMDIR)\process.obj \
+  $(COMMDIR)\wfstream.obj \
+  $(COMMDIR)\mstream.obj \
+  $(COMMDIR)\zstream.obj \
+  $(COMMDIR)\stream.obj \
+  $(COMMDIR)\datstrm.obj \
+  $(COMMDIR)\objstrm.obj \
+  $(COMMDIR)\variant.obj \
+  $(COMMDIR)\wincmn.obj
 
-wx_frame.obj: $(BASEINC)\wx_defs.h $(MSWINC)\wx_win.h $(BASEINC)\wx_obj.h \
-$(BASEINC)\wx_utils.h $(MSWINC)\wx_frame.h wx_frame.$(SRCSUFF) \
-$(BASEINC)\wx_stdev.h $(MSWINC)\wx_privt.h
+# Don't compile
+#  $(COMMDIR)\db.obj \
+#  $(COMMDIR)\dbtable.obj \
+#  $(COMMDIR)\odbc.obj \
 
-wx_panel.obj: $(BASEINC)\wx_defs.h $(MSWINC)\wx_win.h $(BASEINC)\wx_obj.h \
-$(BASEINC)\wx_utils.h $(MSWINC)\wx_frame.h $(MSWINC)\wx_panel.h \
-wx_panel.$(SRCSUFF) $(BASEINC)\wx_stdev.h $(MSWINC)\wx_privt.h
+MSWOBJS = \
+  $(MSWDIR)\accel.obj \
+  $(MSWDIR)\app.obj \
+  $(MSWDIR)\bitmap.obj \
+  $(MSWDIR)\bmpbuttn.obj \
+  $(MSWDIR)\brush.obj \
+  $(MSWDIR)\button.obj \
+  $(MSWDIR)\checkbox.obj \
+  $(MSWDIR)\checklst.obj \
+  $(MSWDIR)\choice.obj \
+  $(MSWDIR)\clipbrd.obj \
+  $(MSWDIR)\colordlg.obj \
+  $(MSWDIR)\colour.obj \
+  $(MSWDIR)\combobox.obj \
+  $(MSWDIR)\control.obj \
+  $(MSWDIR)\curico.obj \
+  $(MSWDIR)\cursor.obj \
+  $(MSWDIR)\data.obj \
+  $(MSWDIR)\dc.obj \
+  $(MSWDIR)\dcmemory.obj \
+  $(MSWDIR)\dcclient.obj \
+  $(MSWDIR)\dcprint.obj \
+  $(MSWDIR)\dcscreen.obj \
+  $(MSWDIR)\dde.obj \
+  $(MSWDIR)\dialog.obj \
+  $(MSWDIR)\dib.obj \
+  $(MSWDIR)\dibutils.obj \
+  $(MSWDIR)\dirdlg.obj \
+  $(MSWDIR)\filedlg.obj \
+  $(MSWDIR)\font.obj \
+  $(MSWDIR)\fontdlg.obj \
+  $(MSWDIR)\frame.obj \
+  $(MSWDIR)\gauge95.obj \
+  $(MSWDIR)\gaugemsw.obj \
+  $(MSWDIR)\gdiobj.obj \
+  $(MSWDIR)\helpwin.obj \
+  $(MSWDIR)\icon.obj \
+  $(MSWDIR)\iniconf.obj \
+  $(MSWDIR)\listbox.obj \
+  $(MSWDIR)\main.obj \
+  $(MSWDIR)\mdi.obj \
+  $(MSWDIR)\menu.obj \
+  $(MSWDIR)\menuitem.obj \
+  $(MSWDIR)\metafile.obj \
+  $(MSWDIR)\minifram.obj \
+  $(MSWDIR)\msgdlg.obj \
+  $(MSWDIR)\nativdlg.obj \
+  $(MSWDIR)\ownerdrw.obj \
+  $(MSWDIR)\palette.obj \
+  $(MSWDIR)\pen.obj \
+  $(MSWDIR)\penwin.obj \
+  $(MSWDIR)\printdlg.obj \
+  $(MSWDIR)\printwin.obj \
+  $(MSWDIR)\radiobox.obj \
+  $(MSWDIR)\radiobut.obj \
+  $(MSWDIR)\region.obj \
+  $(MSWDIR)\registry.obj \
+  $(MSWDIR)\regconf.obj \
+  $(MSWDIR)\scrolbar.obj \
+  $(MSWDIR)\settings.obj \
+  $(MSWDIR)\slidrmsw.obj \
+  $(MSWDIR)\slider95.obj \
+  $(MSWDIR)\spinbutt.obj \
+  $(MSWDIR)\statbmp.obj \
+  $(MSWDIR)\statbox.obj \
+  $(MSWDIR)\statbr95.obj \
+  $(MSWDIR)\stattext.obj \
+  $(MSWDIR)\tabctrl.obj \
+  $(MSWDIR)\taskbar.obj \
+  $(MSWDIR)\tbar95.obj \
+  $(MSWDIR)\tbarmsw.obj \
+  $(MSWDIR)\textctrl.obj \
+  $(MSWDIR)\thread.obj \
+  $(MSWDIR)\timer.obj \
+  $(MSWDIR)\utils.obj \
+  $(MSWDIR)\utilsexc.obj \
+  $(MSWDIR)\wave.obj \
+  $(MSWDIR)\window.obj
 
-wx_text.obj: $(BASEINC)\wx_defs.h $(MSWINC)\wx_win.h $(BASEINC)\wx_obj.h \
-$(BASEINC)\wx_utils.h $(MSWINC)\wx_frame.h $(MSWINC)\wx_text.h \
-wx_text.$(SRCSUFF) $(BASEINC)\wx_stdev.h $(MSWINC)\wx_privt.h
+# Need Win95 support for these
+#  $(MSWDIR)\notebook.obj \
+#  $(MSWDIR)\listctrl.obj \
+#  $(MSWDIR)\imaglist.obj \
+#  $(MSWDIR)\treectrl.obj \
+#  $(OLEDIR)\droptgt.obj \
+#  $(OLEDIR)\dropsrc.obj \
+#  $(OLEDIR)\dataobj.obj \
+#  $(OLEDIR)\oleutils.obj \
+#  $(OLEDIR)\uuid.obj \
+#  $(OLEDIR)\automtn.obj
 
-wx_canvs.obj: $(BASEINC)\wx_defs.h $(MSWINC)\wx_win.h $(BASEINC)\wx_obj.h \
-$(BASEINC)\wx_utils.h $(MSWINC)\wx_frame.h $(MSWINC)\wx_canvs.h \
-wx_canvs.$(SRCSUFF) $(BASEINC)\wx_stdev.h $(MSWINC)\wx_gdi.h $(MSWINC)\wx_dc.h \
-$(MSWINC)\wx_privt.h
+# Doesn't compile with SC++ 6
+#  $(MSWDIR)\joystick.obj \
+#  $(MSWDIR)\pnghand.obj \
 
-wx_dc.obj: $(BASEINC)\wx_defs.h $(MSWINC)\wx_win.h $(BASEINC)\wx_obj.h \
-$(BASEINC)\wx_utils.h $(MSWINC)\wx_frame.h $(MSWINC)\wx_canvs.h wx_dc.$(SRCSUFF) \
-$(BASEINC)\wx_stdev.h $(MSWINC)\wx_gdi.h $(MSWINC)\wx_dc.h \
-$(MSWINC)/wx_dccan.h $(MSWINC)/wx_dcmem.h
+XPMOBJECTS = 	$(XPMDIR)\crbuffri.obj\
+		$(XPMDIR)\crdatfri.obj\
+		$(XPMDIR)\create.obj $(XPMDIR)\crifrbuf.obj\
+		$(XPMDIR)\crifrdat.obj\
+		$(XPMDIR)\data.obj\
+		$(XPMDIR)\hashtab.obj $(XPMDIR)\misc.obj\
+		$(XPMDIR)\parse.obj $(XPMDIR)\rdftodat.obj\
+		$(XPMDIR)\rdftoi.obj\
+		$(XPMDIR)\rgb.obj $(XPMDIR)\scan.obj\
+		$(XPMDIR)\simx.obj $(XPMDIR)\wrffrdat.obj\
+		$(XPMDIR)\wrffrp.obj $(XPMDIR)\wrffri.obj
 
-wx_mf.obj: $(BASEINC)\wx_defs.h $(MSWINC)\wx_win.h $(BASEINC)\wx_obj.h \
-wx_mf.$(SRCSUFF) $(BASEINC)\wx_stdev.h $(MSWINC)\wx_gdi.h $(MSWINC)\wx_mf.h
+# Add $(NONESSENTIALOBJS) if wanting generic dialogs, PostScript etc.
+OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) # $(XPMOBJECTS)
 
-wx_item.obj: $(BASEINC)\wx_defs.h $(MSWINC)\wx_win.h $(BASEINC)\wx_obj.h \
-$(BASEINC)\wx_utils.h $(MSWINC)\wx_frame.h $(MSWINC)\wx_item.h \
-wx_item.$(SRCSUFF) $(BASEINC)\wx_stdev.h $(MSWINC)\wx_privt.h
+all: $(LIBTARGET)
 
-wx_utils.obj: $(BASEINC)\wx_defs.h $(BASEINC)\wx_obj.h \
-$(BASEINC)\wx_utils.h wx_utils.$(SRCSUFF)
-
-wx_ipc.obj: $(BASEINC)\wx_defs.h $(BASEINC)\wx_obj.h \
-$(BASEINC)\wx_utils.h $(MSWINC)\wx_ipc.h wx_ipc.$(SRCSUFF)
-
-wx_gdi.obj: $(BASEINC)\wx_defs.h $(MSWINC)\wx_gdi.h $(BASEINC)\wx_utils.h \
-wx_gdi.$(SRCSUFF)
-
-wx_dialg.obj: $(BASEINC)\wx_defs.h wx_dialg.$(SRCSUFF) $(MSWINC)\wx_dialg.h \
-$(MSWINC)\wx_win.h $(BASEINC)\wx_utils.h $(MSWINC)\wx_panel.h \
-$(MSWINC)\wx_privt.h
-
-wx_timer.obj: $(BASEINC)\wx_defs.h wx_timer.$(SRCSUFF) $(MSWINC)\wx_timer.h
-
-wx_clipb.obj: $(BASEINC)\wx_defs.h wx_clipb.$(SRCSUFF) $(MSWINC)\wx_clipb.h
-
-wx_stat.obj: wx_stat.$(SRCSUFF) $(MSWINC)\wx_stat.h
-
-wx_scrol.obj: wx_scrol.$(SRCSUFF) $(MSWINC)\wx_scrol.h
-
-wx_vlbox.obj: wx_vlbox.$(SRCSUFF) $(MSWINC)\wx_vlbox.h
-
-wx_buttn.obj: wx_buttn.$(SRCSUFF) $(MSWINC)\wx_buttn.h
-
-wx_messg.obj: wx_messg.$(SRCSUFF) $(MSWINC)\wx_messg.h
-
-wx_check.obj: wx_check.$(SRCSUFF) $(MSWINC)\wx_check.h
-
-wx_choic.obj: wx_choic.$(SRCSUFF) $(MSWINC)\wx_choic.h
-
-wx_rbox.obj: wx_rbox.$(SRCSUFF) $(MSWINC)\wx_rbox.h
-
-wx_lbox.obj: wx_lbox.$(SRCSUFF) $(MSWINC)\wx_lbox.h
-
-wx_group.obj: wx_group.$(SRCSUFF) $(MSWINC)\wx_group.h
-
-wx_gauge.obj: wx_gauge.$(SRCSUFF) $(MSWINC)\wx_gauge.h
-
-wx_txt.obj: wx_txt.$(SRCSUFF) $(MSWINC)\wx_txt.h
-
-wx_mtxt.obj: wx_mtxt.$(SRCSUFF) $(MSWINC)\wx_mtxt.h
-
-wx_slidr.obj: wx_slidr.$(SRCSUFF) $(MSWINC)\wx_slidr.h
-
-wx_menu.obj: wx_menu.$(SRCSUFF) $(MSWINC)\wx_menu.h
-
-wx_db.obj: wx_db.$(SRCSUFF) $(MSWINC)\wx_db.h
-
-wx_cmdlg.obj: wx_cmdlg.$(SRCSUFF) $(MSWINC)\wx_cmdlg.h
-
-$(MSWINC)/wx_win.h:  $(BASEINC)/wb_win.h
-$(MSWINC)/wx_main.h:  $(BASEINC)/wb_main.h
-$(MSWINC)/wx_frame.h:  $(BASEINC)/wb_frame.h
-$(MSWINC)/wx_panel.h:  $(BASEINC)/wb_panel.h
-$(MSWINC)/wx_text.h:  $(BASEINC)/wb_text.h
-$(MSWINC)/wx_dialg.h:  $(BASEINC)/wb_dialg.h
-$(MSWINC)/wx_ipc.h:  $(BASEINC)/wb_ipc.h
-$(MSWINC)/wx_gdi.h:  $(BASEINC)/wb_gdi.h
-$(MSWINC)/wx_event.h:  $(BASEINC)/wb_event.h
-$(MSWINC)/wx_canvs.h:  $(BASEINC)/wb_canvs.h
-$(MSWINC)/wx_mf.h:  $(BASEINC)/wb_mf.h
-$(MSWINC)/wx_item.h:  $(BASEINC)/wb_item.h
-$(MSWINC)/wx_buttn.h:  $(BASEINC)/wb_buttn.h
-$(MSWINC)/wx_messg.h:  $(BASEINC)/wb_messg.h
-$(MSWINC)/wx_choic.h:  $(BASEINC)/wb_choic.h
-$(MSWINC)/wx_check.h:  $(BASEINC)/wb_check.h
-$(MSWINC)/wx_lbox.h:  $(BASEINC)/wb_lbox.h
-$(MSWINC)/wx_txt.h:  $(BASEINC)/wb_txt.h
-$(MSWINC)/wx_mtxt.h:  $(BASEINC)/wb_mtxt.h
-$(MSWINC)/wx_slidr.h:  $(BASEINC)/wb_slidr.h
-$(MSWINC)/wx_menu.h:  $(BASEINC)/wb_menu.h
-
+$(LIBTARGET): $(OBJECTS)
+	-del $(LIBTARGET)
+	*lib /PAGESIZE:512 $(LIBTARGET) y $(OBJECTS), nul;
 
 clean:
 	-del *.obj
+    -del $(LIBTARGET)
+
+$(COMMDIR)\y_tab.obj:     $(COMMDIR)\y_tab.c $(COMMDIR)\lex_yy.c
+
+$(COMMDIR)\y_tab.c:     $(COMMDIR)\dosyacc.c
+        copy $(COMMDIR)\dosyacc.c $(COMMDIR)\y_tab.c
+
+$(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
+    copy $(COMMDIR)\doslex.c $(COMMDIR)\lex_yy.c
+
+#$(COMMDIR)\cmndata.obj:     $(COMMDIR)\cmndata.cpp
+#	*$(CC) -c $(CFLAGS) -I$(INCLUDE) $(OPTIONS) $(COMMDIR)\cmndata.cpp -o$(COMMDIR)\cmndata.obj

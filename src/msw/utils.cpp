@@ -391,7 +391,7 @@ int wxGetOsVersion(int *majorVsn, int *minorVsn)
   if (majorVsn) *majorVsn = 0;
   if (minorVsn) *minorVsn = 0;
 
-#ifdef WIN32
+#if defined(__WIN32__) && !defined(__SC__)
   OSVERSIONINFO info;
   memset(&info, 0, sizeof(OSVERSIONINFO));
   info.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
@@ -415,7 +415,7 @@ int wxGetOsVersion(int *majorVsn, int *minorVsn)
   return wxWINDOWS; // error if we get here, return generic value
 #else
   // Win16 code...
-  int retValue ;
+  int retValue = 0;
 #  ifdef __WINDOWS_386__
   retValue = wxWIN386;
 #  else

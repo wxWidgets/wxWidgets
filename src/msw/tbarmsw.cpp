@@ -21,7 +21,7 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx.h"
+#include "wx/wx.h"
 #endif
 
 #if wxUSE_BUTTONBAR && wxUSE_TOOLBAR
@@ -36,7 +36,9 @@
 #include <stdlib.h>
 
 #include "wx/tbarmsw.h"
+#include "wx/event.h"
 #include "wx/app.h"
+#include "wx/bitmap.h"
 #include "wx/msw/private.h"
 #include "wx/msw/dib.h"
 

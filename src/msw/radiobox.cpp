@@ -23,6 +23,8 @@
 #ifndef WX_PRECOMP
 #include <stdio.h>
 #include "wx/setup.h"
+#include "wx/bitmap.h"
+#include "wx/brush.h"
 #include "wx/radiobox.h"
 #endif
 
@@ -592,7 +594,7 @@ wxString wxRadioBox::GetLabel(void) const
 
 void wxRadioBox::SetLabel(const wxString& label)
 {
-  if (m_hWnd && label)
+  if (m_hWnd)
     SetWindowText((HWND) m_hWnd, label);
 }
 

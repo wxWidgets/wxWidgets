@@ -106,7 +106,9 @@ extern const char *g_szNul = &g_strEmpty.dummy;
     // always available), but it's unsafe because it doesn't check for buffer
     // size - so give a warning
     #define wxVsprintf(buffer,len,format,argptr) vsprintf(buffer,format, argptr)
+#ifndef __SC__
     #pragma message("Using sprintf() because no snprintf()-like function defined")
+#endif
 #endif
 
 // ----------------------------------------------------------------------------

@@ -35,6 +35,7 @@
 #ifndef WX_PRECOMP
 #include "wx/setup.h"
 #include "wx/defs.h"
+#include "wx/bitmap.h"
 #endif
 
 #include <windows.h>
@@ -688,7 +689,7 @@ HPALETTE MakeDIBPalette(LPBITMAPINFOHEADER lpInfo)
 	return((HPALETTE) GetStockObject(DEFAULT_PALETTE));
 }
 
-bool wxLoadIntoBitmap(char *filename, wxBitmap *bitmap, wxColourMap **pal)
+bool wxLoadIntoBitmap(char *filename, wxBitmap *bitmap, wxPalette **pal)
 {
   HBITMAP hBitmap;
   HPALETTE hPalette;
@@ -705,7 +706,7 @@ bool wxLoadIntoBitmap(char *filename, wxBitmap *bitmap, wxColourMap **pal)
   {
     if (pal)
     {
-      *pal = new wxColourMap;
+      *pal = new wxPalette;
       (*pal)->SetHPALETTE((WXHPALETTE) hPalette);
     }
     else
@@ -729,7 +730,7 @@ bool wxLoadIntoBitmap(char *filename, wxBitmap *bitmap, wxColourMap **pal)
   else return FALSE;
 }
 
-wxBitmap *wxLoadBitmap(char *filename, wxColourMap **pal)
+wxBitmap *wxLoadBitmap(char *filename, wxPalette **pal)
 {
   wxBitmap *bitmap = new wxBitmap;
   if (wxLoadIntoBitmap(filename, bitmap, pal))
@@ -918,7 +919,7 @@ HANDLE BitmapToDIB (HBITMAP hBitmap, HPALETTE hPal)
    return hDIB;
 }
 
-bool wxSaveBitmap(char *filename, wxBitmap *bitmap, wxColourMap *colourmap)
+bool wxSaveBitmap(char *filename, wxBitmap *bitmap, wxPalette *colourmap)
 {
   HPALETTE hPalette = 0;
   if (colourmap)

@@ -116,6 +116,7 @@ COMMONOBJS = \
   $(MSWDIR)\log.obj \
   $(MSWDIR)\layout.obj \
   $(MSWDIR)\memory.obj \
+  $(MSWDIR)\mimetype.obj \
   $(MSWDIR)\module.obj \
   $(MSWDIR)\object.obj \
   $(MSWDIR)\postscrp.obj \
@@ -510,6 +511,8 @@ $(MSWDIR)\layout.obj:     $(COMMDIR)\layout.$(SRCSUFF)
 $(MSWDIR)\log.obj:     $(COMMDIR)\log.$(SRCSUFF)
 
 $(MSWDIR)\memory.obj:     $(COMMDIR)\memory.$(SRCSUFF)
+
+$(MSWDIR)\mimetype.obj:     $(COMMDIR)\mimetype.$(SRCSUFF)
 
 $(MSWDIR)\module.obj:     $(COMMDIR)\module.$(SRCSUFF)
 

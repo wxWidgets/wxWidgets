@@ -142,7 +142,7 @@ bool wxICOResourceHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long
 {
   if ( bitmap->IsKindOf(CLASSINFO(wxIcon)) )
   {
-#if defined(__WIN32__)
+#if defined(__WIN32__) && !defined(__SC__)
     if (desiredWidth > -1 && desiredHeight > -1)
     {
         M_ICONHANDLERDATA->m_hIcon = (WXHICON) ::LoadImage(wxGetInstance(), name, IMAGE_ICON, desiredWidth, desiredHeight, LR_DEFAULTCOLOR);

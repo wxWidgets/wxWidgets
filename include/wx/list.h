@@ -127,6 +127,8 @@ private:
 // wxNodeBase class is a (base for) node in a double linked list
 // -----------------------------------------------------------------------------
 
+WXDLLEXPORT_DATA(extern wxListKey) wxDefaultListKey;
+
 class WXDLLEXPORT wxNodeBase
 {
 friend class wxListBase;
@@ -136,7 +138,7 @@ public:
                wxNodeBase *previous = (wxNodeBase *)NULL,
                wxNodeBase *next = (wxNodeBase *)NULL,
                void *data = NULL,
-               const wxListKey& key = wxListKey());
+               const wxListKey& key = wxDefaultListKey);
 
     virtual ~wxNodeBase();
 
@@ -221,7 +223,7 @@ protected:
     // create a node for the list of this type
     virtual wxNodeBase *CreateNode(wxNodeBase *prev, wxNodeBase *next,
                                    void *data,
-                                   const wxListKey& key = wxListKey()) = 0;
+                                   const wxListKey& key = wxDefaultListKey) = 0;
 
     // ctors
         // from an array
@@ -334,7 +336,7 @@ private:
                  nodetype *previous = (nodetype *)NULL,                     \
                  nodetype *next = (nodetype *)NULL,                         \
                  T *data = (T *)NULL,                                       \
-                 const wxListKey& key = wxListKey())                        \
+                 const wxListKey& key = wxDefaultListKey)                        \
             : wxNodeBase(list, previous, next, data, key) { }               \
                                                                             \
         nodetype *GetNext() const                                           \
@@ -408,7 +410,7 @@ private:
     protected:                                                              \
         wxNodeBase *CreateNode(wxNodeBase *prev, wxNodeBase *next,          \
                                void *data,                                  \
-                               const wxListKey& key = wxListKey())          \
+                               const wxListKey& key = wxDefaultListKey)          \
             {                                                               \
                 return new nodetype(this,                                   \
                                     (nodetype *)prev, (nodetype *)next,     \

@@ -27,6 +27,8 @@
   #include "wx/dcclient.h"
 #endif
 
+#ifdef __WIN95__
+
 #include "wx/log.h"
 
 #include "wx/generic/statusbr.h"
@@ -35,7 +37,7 @@
 #include  <windows.h>
 #include  <windowsx.h>
 
-#ifndef __GNUWIN32__
+#if !defined(__GNUWIN32__)
 #include  <commctrl.h>
 #endif
 
@@ -227,4 +229,7 @@ void wxStatusBar95::OnSize(wxSizeEvent& event)
   SetFieldsWidth();
 }
 
-#endif  //USE_NATIVE_STATUSBAR
+#endif
+  // __WIN95__
+#endif
+  // wxUSE_NATIVE_STATUSBAR

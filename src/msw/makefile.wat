@@ -70,6 +70,7 @@ COMMONOBJS = cmndata.obj &
   layout.obj &
   log.obj &
   memory.obj &
+  mimetype.obj &
   module.obj &
   object.obj &
   prntbase.obj &
@@ -563,6 +564,9 @@ log.obj:     $(COMMDIR)\log.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 memory.obj:     $(COMMDIR)\memory.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+mimetype.obj:     $(COMMDIR)\mimetype.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 module.obj:     $(COMMDIR)\module.cpp

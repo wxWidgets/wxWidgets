@@ -21,6 +21,7 @@
 #include "wx/icon.h"
 #include "wx/font.h"
 #include "wx/gdicmn.h"
+#include "wx/window.h"
 
 class WXDLLEXPORT wxDC: public wxObject
 {

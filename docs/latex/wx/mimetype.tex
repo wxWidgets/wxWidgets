@@ -24,7 +24,7 @@ but it will support modifying it as well in the future versions.
 
 \wxheading{Required headers}
 
-#include <wx/mimetype.h>
+<wx/mimetype.h>
 
 \wxheading{Derived from}
 
@@ -46,18 +46,18 @@ program.
 
 \membersection{Query database}
 
-These functions are the heart of this class: they allow to find a 
-\helpref{file type}{wxfiletype} object from either file extension or MIME type.
+These functions are the heart of this class: they allow to find a \helpref{file type}{wxfiletype} object
+from either file extension or MIME type.
 If the function is successful, it returns a pointer to the wxFileType object
-which {\bf must be deleted by the caller}, otherwise NULL will be returned.
+which {\bf must} be deleted by the caller, otherwise NULL will be returned.
 
 \helpref{GetFileTypeFromMimeType}{wxmimetypesmanagergetfiletypefrommimetype}\\
 \helpref{GetFileTypeFromExtension}{wxmimetypesmanagergetfiletypefromextension}
 
-\membersection{Initialization functions}
+\membersection{Initialization functions}\label{wxmimetypesmanagerinit}
 
-{\bf Unix:} These functions may be used to load additional (except for the
-default ones which are loaded automatically) files containing MIME
+{\bf Unix:} These functions may be used to load additional files (except for the
+default ones which are loaded automatically) containing MIME
 information in either mailcap(5) or mime.types(5) format.
 
 \helpref{ReadMailcap}{wxmimetypesmanagerreadmailcap}\\
@@ -71,6 +71,7 @@ information in either mailcap(5) or mime.types(5) format.
 }}
 
 \membersection{wxMimeTypesManager::wxMimeTypesManager}\label{wxmimetypesmanagerctor}
+
 \func{}{wxMimeTypesManager}{\void}
 
 Constructor puts the object in the "working" state, no additional initialization
@@ -78,34 +79,40 @@ are needed - but \helpref{ReadXXX}{wxmimetypesmanagerinit} may be used to load
 additional mailcap/mime.types files.
 
 \membersection{wxMimeTypesManager::\destruct{wxMimeTypesManager}}\label{wxmimetypesmanagerdtor}
-\func{}{\destruct{wxMimeTypesManager}{\void}
+
+\func{}{\destruct{wxMimeTypesManager}}{\void}
 
 Destructor is not virtual, so this class should not be derived from.
 
 \membersection{wxMimeTypesManager::GetFileTypeFromExtension}\label{wxmimetypesmanagergetfiletypefromextension}
-\func{wxFileType *}{GetFileTypeFromExtension}{\param{const wxString \&}{extension}}
+
+\func{wxFileType*}{GetFileTypeFromExtension}{\param{const wxString\&}{ extension}}
 
 Gather information about the files with given extension and return the
 corresponding \helpref{wxFileType}{wxfiletype} object or NULL if the extension
 is unknown.
 
 \membersection{wxMimeTypesManager::GetFileTypeFromMimeType}\label{wxmimetypesmanagergetfiletypefrommimetype}
-\func{wxFileType *}{GetFileTypeFromMimeType}{\param{const wxString \&}{mimeType}}
+
+\func{wxFileType*}{GetFileTypeFromMimeType}{\param{const wxString\&}{ mimeType}}
 
 Gather information about the files with given MIME type and return the
 corresponding \helpref{wxFileType}{wxfiletype} object or NULL if the MIME type
 is unknown.
 
 \membersection{wxMimeTypesManager::ReadMailcap}\label{wxmimetypesmanagerreadmailcap}
-\func{\void}{ReadMailcap}{\param{const wxString \&}{filename}}
+
+\func{void}{ReadMailcap}{\param{const wxString\&}{ filename}}
 
 Load additional file containing information about MIME types and associated
 information in mailcap format. See metamail(1) and mailcap(5) for more
 information.
 
 \membersection{wxMimeTypesManager::ReadMimeTypes}\label{wxmimetypesmanagerreadmimetypes}
-\func{\void}{ReadMimeTypes}{\param{const wxString \&}{filename}}
+
+\func{void}{ReadMimeTypes}{\param{const wxString\&}{ filename}}
 
 Load additional file containing information about MIME types and associated
 information in mime.types file format. See metamail(1) and mailcap(5) for more
 information.
+

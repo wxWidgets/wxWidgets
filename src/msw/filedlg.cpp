@@ -24,8 +24,10 @@
 #include <stdio.h>
 #include "wx/defs.h"
 #include "wx/utils.h"
+#include "wx/msgdlg.h"
 #include "wx/dialog.h"
 #include "wx/filedlg.h"
+#include "wx/intl.h"
 #endif
 
 #include <windows.h>

@@ -20,7 +20,7 @@
 #pragma hdrstop
 #endif
 
-
+#include "wx/event.h"
 #include "wx/gdicmn.h"
 #include "wx/brush.h"
 #include "wx/pen.h"
@@ -598,7 +598,7 @@ wxFont *wxFontList::
           //          each_font->GetFontId () == FamilyOrFontId) /* New font system */
           //#else
           each_font->GetFamily () == FamilyOrFontId &&
-          (!each_font->GetFaceName() || each_font->GetFaceName() == Face))
+          ((each_font->GetFaceName() == "") || each_font->GetFaceName() == Face))
         //#endif
         return each_font;
     }

@@ -408,7 +408,7 @@ void wxPreviewControlBar::SetZoomControl(int zoom)
 int wxPreviewControlBar::GetZoomControl()
 {
   char buf[20];
-  if (m_zoomControl && m_zoomControl->GetStringSelection())
+  if (m_zoomControl && (m_zoomControl->GetStringSelection() != ""))
   {
     strcpy(buf, m_zoomControl->GetStringSelection());
     buf[strlen(buf) - 1] = 0;

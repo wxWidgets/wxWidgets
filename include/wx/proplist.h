@@ -57,7 +57,9 @@
 #define wxPROP_PULLDOWN           64
 #define wxPROP_SHOWVALUES         128
 
-#ifdef __XVIEW__
+// Show OK/Cancel buttons on X-based systems where window management is
+// more awkward
+#if defined(__WXMOTIF__) || defined(__WXGTK__)
 #define wxPROP_BUTTON_DEFAULT wxPROP_BUTTON_OK | wxPROP_BUTTON_CANCEL | wxPROP_BUTTON_CHECK_CROSS | wxPROP_PULLDOWN
 #else
 #define wxPROP_BUTTON_DEFAULT wxPROP_BUTTON_CHECK_CROSS | wxPROP_PULLDOWN | wxPROP_SHOWVALUES
@@ -330,7 +332,7 @@ class wxPropertyListFrame: public wxFrame
  public:
   wxPropertyListFrame(wxPropertyListView *v, wxFrame *parent, const wxString& title,
     const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-    long style = wxDEFAULT_FRAME, const wxString& name = "frame"):
+    long style = wxDEFAULT_FRAME_STYLE, const wxString& name = "frame"):
      wxFrame(parent, -1, title, pos, size, style, name)
   {
     m_view = v;

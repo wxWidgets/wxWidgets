@@ -241,7 +241,7 @@ wxFileExists (const wxString& filename)
 #else
   struct stat stbuf;
 
-  if (filename && stat ((char *)(const char *)filename, &stbuf) == 0)
+  if ((filename != "") && stat ((char *)(const char *)filename, &stbuf) == 0)
     return TRUE;
   return FALSE;
 #endif
@@ -582,8 +582,8 @@ wxContractPath (const wxString& filename, const wxString& envname, const wxStrin
       strncmp(dest, val, len) == 0)
     {
       strcpy(wxBuffer, "~");
-      if (user && *user)
-	strcat(wxBuffer, user);
+      if (user != "")
+	     strcat(wxBuffer, (const char*) user);
 #ifdef __WXMSW__
 //      strcat(wxBuffer, "\\");
 #else
