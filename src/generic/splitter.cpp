@@ -268,7 +268,6 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
         }
 
         SizeWindows();
-        m_needUpdating = FALSE;
     }  // left up && dragging
     else if (event.Moving() && !event.Dragging())
     {
@@ -297,8 +296,6 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
             SetCursor(* wxSTANDARD_CURSOR);
         }
 #endif // __WXGTK__
-
-        m_needUpdating = FALSE;
     }
     else if (event.Dragging() && (m_dragMode == wxSPLIT_DRAG_DRAGGING))
     {
@@ -332,6 +329,9 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
                 return;
             }
         }
+        
+        if (new_sash_position == m_sashPosition)
+            return;
 
         // Erase old tracker
         if ((GetWindowStyleFlag() & wxSP_LIVE_UPDATE) == 0)
@@ -344,12 +344,9 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
         else
             y = new_sash_position;
 
-        if (new_sash_position != -1)
-        {
-            // Only modify if permitted
-            m_oldX = x;
-            m_oldY = y;
-        }
+        // Remember old positions
+        m_oldX = x;
+        m_oldY = y;
 
 #ifdef __WXMSW__
         // As we captured the mouse, we may get the mouse events from outside
@@ -683,6 +680,8 @@ void wxSplitterWindow::SizeWindows()
     if ( m_borderSize > 0 )
         DrawBorders(dc);
     DrawSash(dc);
+    
+    m_needUpdating = FALSE;
 }
 
 // Set pane for unsplit window
