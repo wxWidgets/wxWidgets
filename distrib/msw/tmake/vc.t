@@ -13,6 +13,8 @@
 
     #! now transform these hashes into $project tags
     foreach $file (sort keys %wxGeneric) {
+        next if $wxGeneric{$file} =~ /\bU\b/;
+
         my $tag = "";
         if ( $wxGeneric{$file} =~ /\b(PS|G|16|U)\b/ ) {
             $tag = "WXNONESSENTIALOBJS";
@@ -36,7 +38,7 @@
         next if $wxMSW{$file} =~ /\b16\b/;
 
         #! OLE files live in a subdir
-        $project{"WXMSWOBJS"} .= '..\msw\\';
+        $project{"WXMSWOBJS"} .= '..\\msw\\';
         $project{"WXMSWOBJS"} .= 'ole\\' if $wxMSW{$file} =~ /\bO\b/;
         $file =~ s/cp?p?$/obj/;
         $project{"WXMSWOBJS"} .= '$D\\' . $file . " ";
