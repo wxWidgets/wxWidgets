@@ -1,5 +1,4 @@
 [OPTIONS]
-BMROOT=d:\wx2\wxWindows\docs/latex/porting ; Assume that bitmaps are where the source is
 TITLE=wxWindows Porting Guide
 CONTENTS=Contents
 COMPRESS=HIGH
