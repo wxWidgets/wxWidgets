@@ -21,7 +21,7 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-    #pragma implementation ".h"
+    #pragma implementation "wizardg.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
@@ -64,6 +64,11 @@ BEGIN_EVENT_TABLE(wxWizard, wxDialog)
     EVT_BUTTON(wxID_BACKWARD, wxWizard::OnBackOrNext)
     EVT_BUTTON(wxID_FORWARD, wxWizard::OnBackOrNext)
     EVT_BUTTON(wxID_HELP, wxWizard::OnHelp)
+
+    EVT_WIZARD_PAGE_CHANGED(-1, wxWizard::OnWizEvent)
+    EVT_WIZARD_PAGE_CHANGING(-1, wxWizard::OnWizEvent)
+    EVT_WIZARD_CANCEL(-1, wxWizard::OnWizEvent)
+    EVT_WIZARD_HELP(-1, wxWizard::OnWizEvent)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxWizard, wxDialog)
@@ -90,7 +95,7 @@ wxWizardPage::wxWizardPage(wxWizard *parent,
 {
     Create(parent, bitmap, resource);
 }
-    
+
 bool wxWizardPage::Create(wxWizard *parent,
                           const wxBitmap& bitmap,
                           const wxChar *resource)
@@ -112,7 +117,7 @@ bool wxWizardPage::Create(wxWizard *parent,
 
     // initially the page is hidden, it's shown only when it becomes current
     Hide();
-    
+
     return TRUE;
 }
 
@@ -465,6 +470,23 @@ void wxWizard::OnHelp(wxCommandEvent& WXUNUSED(event))
     }
 }
 
+void wxWizard::OnWizEvent(wxWizardEvent& event)
+{
+    // the dialogs have wxWS_EX_BLOCK_EVENTS style on by default but we want to
+    // propagate wxEVT_WIZARD_XXX to the parent (if any), so do it manually
+    if ( !(GetExtraStyle() & wxWS_EX_BLOCK_EVENTS) )
+    {
+        // the event will be propagated anyhow
+        return;
+    }
+
+    wxWindow *parent = GetParent();
+
+    if ( !parent || !parent->GetEventHandler()->ProcessEvent(event) )
+    {
+        event.Skip();
+    }
+}
 
 // ----------------------------------------------------------------------------
 // our public interface

@@ -13,8 +13,13 @@
 // wxWizard
 // ----------------------------------------------------------------------------
 
+#ifdef __GNUG__
+    #pragma interface "wizardg.h"
+#endif
+
 class WXDLLEXPORT wxButton;
 class WXDLLEXPORT wxStaticBitmap;
+class WXDLLEXPORT wxWizardEvent;
 
 class WXDLLEXPORT wxWizard : public wxWizardBase
 {
@@ -66,6 +71,8 @@ private:
     void OnCancel(wxCommandEvent& event);
     void OnBackOrNext(wxCommandEvent& event);
     void OnHelp(wxCommandEvent& event);
+
+    void OnWizEvent(wxWizardEvent& event);
 
     // the page size requested by user
     wxSize m_sizePage;
