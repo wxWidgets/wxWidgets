@@ -659,8 +659,10 @@ public:
     // ------------------------------------------------------------------------
 
         // set to the given week day in the same week as this one
-    wxDateTime& SetToWeekDayInSameWeek(WeekDay weekday);
-    inline wxDateTime GetWeekDayInSameWeek(WeekDay weekday) const;
+    wxDateTime& SetToWeekDayInSameWeek(WeekDay weekday,
+                                       WeekFlags flags = Monday_First);
+    inline wxDateTime GetWeekDayInSameWeek(WeekDay weekday,
+                                           WeekFlags flags = Monday_First) const;
 
         // set to the next week day following this one
     wxDateTime& SetToNextWeekDay(WeekDay weekday);
@@ -694,8 +696,12 @@ public:
         // sets the date to the given day of the given week in the year,
         // returns TRUE on success and FALSE if given date doesn't exist (e.g.
         // numWeek is > 53)
-    bool SetToTheWeek(wxDateTime_t numWeek, WeekDay weekday = Mon);
-    inline wxDateTime GetWeek(wxDateTime_t numWeek, WeekDay weekday = Mon) const;
+    bool SetToTheWeek(wxDateTime_t numWeek,
+                      WeekDay weekday = Mon,
+                      WeekFlags flags = Monday_First);
+    inline wxDateTime GetWeek(wxDateTime_t numWeek,
+                              WeekDay weekday = Mon,
+                              WeekFlags flags = Monday_First) const;
 
         // sets the date to the last day of the given (or current) month or the
         // given (or current) year

@@ -1494,13 +1494,18 @@ wxDateTime& wxDateTime::Add(const wxDateSpan& diff)
 // Weekday and monthday stuff
 // ----------------------------------------------------------------------------
 
-bool wxDateTime::SetToTheWeek(wxDateTime_t numWeek, WeekDay weekday)
+bool wxDateTime::SetToTheWeek(wxDateTime_t numWeek,
+                              WeekDay weekday,
+                              WeekFlags flags)
 {
+    wxASSERT_MSG( numWeek > 0,
+                  _T("invalid week number: weeks are counted from 1") );
+
     int year = GetYear();
 
     // Jan 4 always lies in the 1st week of the year
     Set(4, Jan, year);
-    SetToWeekDayInSameWeek(weekday) += wxDateSpan::Weeks(numWeek);
+    SetToWeekDayInSameWeek(weekday, flags) += wxDateSpan::Weeks(numWeek - 1);
 
     if ( GetYear() != year )
     {
@@ -1523,17 +1528,34 @@ wxDateTime& wxDateTime::SetToLastMonthDay(Month month,
     return Set(GetNumOfDaysInMonth(year, month), month, year);
 }
 
-wxDateTime& wxDateTime::SetToWeekDayInSameWeek(WeekDay weekday)
+wxDateTime& wxDateTime::SetToWeekDayInSameWeek(WeekDay weekday, WeekFlags flags)
 {
     wxDATETIME_CHECK( weekday != Inv_WeekDay, _T("invalid weekday") );
 
-    WeekDay wdayThis = GetWeekDay();
+    int wdayThis = GetWeekDay();
     if ( weekday == wdayThis )
     {
         // nothing to do
         return *this;
     }
-    else if ( weekday < wdayThis )
+
+    if ( flags == Default_First )
+    {
+        flags = GetCountry() == USA ? Sunday_First : Monday_First;
+    }
+
+    // the logic below based on comparing weekday and wdayThis works if Sun (0)
+    // is the first day in the week, but breaks down for Monday_First case so
+    // we adjust the week days in this case
+    if( flags == Monday_First )
+    {
+        if ( wdayThis == Sun )
+            wdayThis += 7;
+    }
+    //else: Sunday_First, nothing to do
+
+    // go forward or back in time to the day we want
+    if ( weekday < wdayThis )
     {
         return Subtract(wxDateSpan::Days(wdayThis - weekday));
     }
