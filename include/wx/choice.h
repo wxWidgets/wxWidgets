@@ -47,7 +47,7 @@ public:
     // don't override this
     virtual void Select(int n) { SetSelection(n); }
 
-    // set/get the number of columns in the control (as they're not supporte on
+    // set/get the number of columns in the control (as they're not supported on
     // most platforms, they do nothing by default)
     virtual void SetColumns(int WXUNUSED(n) = 1 ) { }
     virtual int GetColumns() const { return 1 ; }
