@@ -9,7 +9,10 @@ utils/tex2rtf/src/makefile.wat
 utils/tex2rtf/src/makefile.unx
 utils/tex2rtf/src/makefile.vms
 utils/tex2rtf/src/makefile.g95
+utils/tex2rtf/src/makengui.nt
 utils/tex2rtf/src/Makefile.in
+utils/tex2rtf/src/*.dsp
+utils/tex2rtf/src/*.dsw
 utils/tex2rtf/src/*.xbm
 utils/tex2rtf/src/*.xpm
 utils/tex2rtf/src/*.sty
@@ -19,6 +22,14 @@ utils/tex2rtf/src/*.bmp
 utils/tex2rtf/src/*.ico
 utils/tex2rtf/src/*.def
 utils/tex2rtf/src/*.rc
+
+utils/tex2rtf/tools/*
+
+utils/tex2rtf/distrib/*.sh
+utils/tex2rtf/distrib/*.bat
+utils/tex2rtf/distrib/*.txt
+utils/tex2rtf/distrib/*.rsp
+utils/tex2rtf/distrib/tex2rtf.exe.manifest
 
 utils/tex2rtf/docs/*.tex
 utils/tex2rtf/docs/*.sty
@@ -32,4 +43,5 @@ utils/tex2rtf/docs/*.bmp
 utils/tex2rtf/docs/*.gif
 utils/tex2rtf/docs/*.wmf
 utils/tex2rtf/docs/*.shg
+utils/tex2rtf/docs/makefile.vc
 
