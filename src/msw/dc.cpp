@@ -578,12 +578,12 @@ void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 
     if ((m_logicalFunction == wxCOPY) && (m_pen.GetStyle() == wxTRANSPARENT))
     {
-	    RECT rect;
+        RECT rect;
         rect.left = XLOG2DEV(x);
         rect.top = YLOG2DEV(y);
         rect.right = XLOG2DEV(x2);
-	    rect.bottom = YLOG2DEV(y2);
-	    (void)FillRect(GetHdc(), &rect, m_brush.GetResourceHandle() );
+        rect.bottom = YLOG2DEV(y2);
+        (void)FillRect(GetHdc(), &rect, (HBRUSH)m_brush.GetResourceHandle() );
     }
     else
     {
