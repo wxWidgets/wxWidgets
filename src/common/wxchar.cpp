@@ -24,6 +24,9 @@
   #pragma hdrstop
 #endif
 
+#define _ISOC9X_SOURCE 1 // to get vsscanf()
+#define _BSD_SOURCE    1 // to still get strdup()
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -137,7 +140,7 @@ int WXDLLEXPORT wxFprintf(FILE *stream, const wxChar *fmt, ...)
   int ret;
 
   va_start(argptr, fmt);
-  ret = wxFvprintf(stream, fmt, argptr);
+  ret = wxVfprintf(stream, fmt, argptr);
   va_end(argptr);
   return ret;
 }
@@ -169,6 +172,26 @@ int WXDLLEXPORT wxVsprintf(wxChar *buf, const wxChar *fmt, va_list argptr)
   str.PrintfV(fmt,argptr);
   wxStrcpy(buf,str.c_str());
   return str.Len();
+}
+
+int WXDLLEXPORT wxSscanf(const wxChar *buf, const wxChar *fmt, ...)
+{
+  va_list argptr;
+  int ret;
+
+  va_start(argptr, fmt);
+  ret = wxVsscanf(buf, fmt, argptr);
+  va_end(argptr);
+  return ret;
+}
+
+int WXDLLEXPORT wxVsscanf(const wxChar *buf, const wxChar *fmt, va_list argptr)
+{
+  int ret;
+  // this will work only for numeric conversion! Strings will not be converted correctly
+  // hopefully this is all we'll need
+  ret = vsscanf(wxConv_libc.cWX2MB(buf), wxConv_libc.cWX2MB(fmt), argptr);
+  return ret;
 }
 #endif
 
