@@ -173,13 +173,6 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
 {
     wxEventType evType = event.GetEventType();
 
-    // always process the size events ourselves, even if the user code handles
-    // them as well, as we need to AdjustScrollbars()
-    if ( evType == wxEVT_SIZE )
-    {
-        m_scrollHelper->HandleOnSize((wxSizeEvent &)event);
-    }
-
     // the explanation of wxEVT_PAINT processing hack: for historic reasons
     // there are 2 ways to process this event in classes deriving from
     // wxScrolledWindow. The user code may
@@ -198,7 +191,24 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
     // user code defined OnPaint() in the derived class)
     m_hasDrawnWindow = TRUE;
 
-    if ( wxEvtHandler::ProcessEvent(event) )
+    // pass it on to the real handler
+    bool processed = wxEvtHandler::ProcessEvent(event);
+
+    // always process the size events ourselves, even if the user code handles
+    // them as well, as we need to AdjustScrollbars()
+    //
+    // NB: it is important to do it after processing the event in the normal
+    //     way as HandleOnSize() may generate a wxEVT_SIZE itself if the
+    //     scrollbar[s] (dis)appear and it should be seen by the user code
+    //     after this one
+    if ( evType == wxEVT_SIZE )
+    {
+        m_scrollHelper->HandleOnSize((wxSizeEvent &)event);
+
+        return TRUE;
+    }
+
+    if ( processed )
     {
         // normally, nothing more to do here - except if it was a paint event
         // which wasn't really processed, then we'll try to call our
