@@ -24,12 +24,15 @@
 #ifndef SWIGXML
 %include typemaps.i
 %include my_typemaps.i
-#endif
+
 %include _core_api.i
 %include _core_rename.i
 
 
-%insert("python") {
+
+%native(_wxPySetDictionary)   __wxPySetDictionary;
+
+%pythoncode {
 %#// Give a reference to the dictionary of this module to the C++ extension
 %#// code.
 _core._wxPySetDictionary(vars())
@@ -40,7 +43,7 @@ import sys as _sys
 wx = _sys.modules[__name__]
 }
 
-%native(_wxPySetDictionary)   __wxPySetDictionary;
+#endif
 
 //---------------------------------------------------------------------------
 
