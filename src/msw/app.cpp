@@ -34,6 +34,7 @@
   #include "wx/dialog.h"
   #include "wx/msgdlg.h"
   #include "wx/intl.h"
+  #include "wx/dynarray.h"
 #endif
 
 #include "wx/msw/private.h"
