@@ -161,7 +161,7 @@ wxLayoutObjectIcon::wxLayoutObjectIcon(wxIcon *icon)
 void
 wxLayoutObjectIcon::Draw(wxDC &dc, wxPoint const &translate)
 {
-   dc.DrawIcon(m_Icon,wxPoint(m_Position.x+translate.x, m_Position.y+translate.y));
+   dc.DrawIcon(*m_Icon,m_Position.x+translate.x, m_Position.y+translate.y);
 }
 
 void
