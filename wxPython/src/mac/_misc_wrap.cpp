@@ -2168,7 +2168,7 @@ static PyObject *_wrap_GetCurrentId(PyObject *self, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_wxIsStockID(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IsStockID(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 ;
     bool result;
@@ -2177,7 +2177,7 @@ static PyObject *_wrap_wxIsStockID(PyObject *self, PyObject *args, PyObject *kwa
         (char *) "id", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:wxIsStockID",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:IsStockID",kwnames,&obj0)) goto fail;
     arg1 = (int) SWIG_AsInt(obj0); 
     if (PyErr_Occurred()) SWIG_fail;
     {
@@ -2196,7 +2196,7 @@ static PyObject *_wrap_wxIsStockID(PyObject *self, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_wxIsStockLabel(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IsStockLabel(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 ;
     wxString *arg2 = 0 ;
@@ -2208,7 +2208,7 @@ static PyObject *_wrap_wxIsStockLabel(PyObject *self, PyObject *args, PyObject *
         (char *) "id",(char *) "label", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:wxIsStockLabel",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:IsStockLabel",kwnames,&obj0,&obj1)) goto fail;
     arg1 = (int) SWIG_AsInt(obj0); 
     if (PyErr_Occurred()) SWIG_fail;
     {
@@ -2240,7 +2240,7 @@ static PyObject *_wrap_wxIsStockLabel(PyObject *self, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_wxGetStockLabel(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GetStockLabel(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 ;
     wxString result;
@@ -2249,7 +2249,7 @@ static PyObject *_wrap_wxGetStockLabel(PyObject *self, PyObject *args, PyObject 
         (char *) "id", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:wxGetStockLabel",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:GetStockLabel",kwnames,&obj0)) goto fail;
     arg1 = (int) SWIG_AsInt(obj0); 
     if (PyErr_Occurred()) SWIG_fail;
     {
@@ -28419,9 +28419,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"NewId", (PyCFunction) _wrap_NewId, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"RegisterId", (PyCFunction) _wrap_RegisterId, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"GetCurrentId", (PyCFunction) _wrap_GetCurrentId, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"wxIsStockID", (PyCFunction) _wrap_wxIsStockID, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"wxIsStockLabel", (PyCFunction) _wrap_wxIsStockLabel, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"wxGetStockLabel", (PyCFunction) _wrap_wxGetStockLabel, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"IsStockID", (PyCFunction) _wrap_IsStockID, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"IsStockLabel", (PyCFunction) _wrap_IsStockLabel, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GetStockLabel", (PyCFunction) _wrap_GetStockLabel, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Bell", (PyCFunction) _wrap_Bell, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"EndBusyCursor", (PyCFunction) _wrap_EndBusyCursor, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"GetElapsedTime", (PyCFunction) _wrap_GetElapsedTime, METH_VARARGS | METH_KEYWORDS },
