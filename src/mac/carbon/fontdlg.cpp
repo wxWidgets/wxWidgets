@@ -197,6 +197,11 @@ int wxFontDialog::ShowModal()
     status = ATSUDisposeStyle(theStyle);
     check_noerr(status);
     
+    //in case the user doesn't choose anything -
+    //if he doesn't we'll get a bad font with red text
+    m_fontData.SetChosenFont(m_fontData.GetInitialFont());
+    m_fontData.SetColour(wxColour(0,0,0));
+    
     //finally, show the font dialog
     if( (status = FPShowHideFontPanel()) == noErr)
     {
