@@ -378,30 +378,97 @@ Insert, Prepend, and etc.) methods any longer.  Just use Add and the
 wrappers will figure out what to do.  <strong>[Changed in 2.5.2.x]</strong>
 AddWindow, AddSize, AddSpacer and etc. will now issue a
 DeprecationWarning.</p>
-<p><strong>[Changed in 2.5.2.x]</strong> wx.ADJUST_MINSIZE is now the default
-behaviour for window items in sizers.  This means that the item's
-GetMinSize and/or GetBestSize will be called when calculating layout
-and the return value from that will be used for the minimum size used
-by the sizer.  The wx.FIXED_MINSIZE flag was added that will cause the
-sizer to use the old behaviour in that it will <em>not</em> call the window's
-methods to determine the new best size, instead the minsize that the
-window had when added to the sizer (or the size the window was created
-with) will always be used.</p>
-<p>Related to the above, when controls and some other window types are
-created either the size passed to the constructor, or their &quot;best
-size&quot; if an explicit size was not passed in, is set as the window's
-minimal size.  For non top-level windows that hasn't meant much in the
-past, but now the sizers are sensitive to the window's minimal size.
-The key point to understand here is that it is no longer the window's
-size it has when added to the sizer that matters, but its minimal
-size.  So you might have some issues to iron out if you create a
-control without a size and then set its size to something before
-adding it to the sizer.  Since it's minimal size is probably not the
-size you set then the sizer will appear to be misbehaving.  The fix is
-to either set the size when calling the window's constructor, or to
-reset the min size by calling SetSizeHints.  You can call SetSizeHints
-at anytime to change the minsize of a window, just call the sizer's
-Layout method to redistribute the controls as needed.</p>
+<p><strong>[Changed in 2.5.2.x]</strong> The Sizers have had some fundamental internal
+changes in the 2.5.2.x release intended to make them do more of the
+&quot;Right Thing&quot; but also be as backwards compatible as possible.
+First a bit about how things used to work:</p>
+<blockquote>
+<ul class="simple">
+<li>The size that a window had when Add()ed to the sizer was assumed
+to be its minimal size, and that size would always be used by
+default when calculating layout size and positions, and the
+sizer itself would keep track of that minimal size.</li>
+<li>If the window item was added with the <tt class="literal"><span class="pre">wx.ADJUST_MINSIZE</span></tt>
+flag then when layout was calculated the item's <tt class="literal"><span class="pre">GetBestSize</span></tt>
+would be used to reset the minimal size that the sizer used.</li>
+</ul>
+</blockquote>
+<p>The main thrust of the new Sizer changes was to make behaviour like
+<tt class="literal"><span class="pre">wx.ADJUST_MINSIZE</span></tt> be the default, and also to push the tracking of
+the minimal size to the window itself (since it knows its own needs)
+instead of having the sizer take care of it.  Consequently these
+changes were made:</p>
+<blockquote>
+<ul class="simple">
+<li>The <tt class="literal"><span class="pre">wx.FIXED_MINSIZE</span></tt> flag was added to allow for the old
+behaviour.  When this flag is used the size a window has when
+added to the sizer will be treated as its minimal size and it
+will not be readjusted on each layout.</li>
+<li>The min size stored in <tt class="literal"><span class="pre">wx.Window</span></tt> and settable with
+<tt class="literal"><span class="pre">SetSizeHints</span></tt> or <tt class="literal"><span class="pre">SetMinSize</span></tt> will by default be used by
+the sizer (if it was set) as the minimal size of the sizer item.
+If the min size was not set (or was only partially set) then the
+window's best size is fetched and it is used instead of (or
+blended with) the min size.  <tt class="literal"><span class="pre">wx.Window.GetBestFittingSize</span></tt>
+was added to facilitate getting the size to be used by the
+sizers.</li>
+<li>The best size of a window is cached so it doesn't need to
+recaculated on every layout.  <tt class="literal"><span class="pre">wx.Window.InvalidateBestSize</span></tt>
+was added and should be called (usually just internally in
+control methods) whenever something is done that would make the
+best size change.</li>
+<li>All wxControls were changed to set the minsize to what is passed
+to the constructor or Create method, and also to set the real
+size of the control to the blending of the min size and best
+size.  <tt class="literal"><span class="pre">wx.Window.SetBestFittingSize</span></tt> was added to help with
+this, although most controls don't need to call it directly
+because it is called indirectly via the <tt class="literal"><span class="pre">SetInitialSize</span></tt>
+called in the base classes.</li>
+</ul>
+</blockquote>
+<p>At this time, the only situation known not to work the same as before
+is the following:</p>
+<pre class="literal-block">
+win = SomeWidget(parent)
+win.SetSize(SomeNonDefaultSize)
+sizer.Add(win)
+</pre>
+<p>In this case the old code would have used the new size as the minimum,
+but now the sizer will use the default size as the minimum rather than
+the size set later.  It is an easy fix though, just move the
+specification of the size to the constructor (assuming that SomeWidget
+will set its minsize there like the rest of the controls do) or call
+<tt class="literal"><span class="pre">SetMinSize</span></tt> instead of <tt class="literal"><span class="pre">SetSize</span></tt>.</p>
+<p>In order to fit well with this new scheme of things, all wxControls or
+custom controls should do the following things.  (Depending on how
+they are used you may also want to do the same thing for non-control
+custom windows.)</p>
+<blockquote>
+<ul>
+<li><p class="first">Either override or inherit a meaningful <tt class="literal"><span class="pre">DoGetBestSize</span></tt> method
+that calculates whatever size is &quot;best&quot; for the control.  Once
+that size is calculated then there should normally be a call to
+<tt class="literal"><span class="pre">CacheBestSize</span></tt> to save it for later use, unless for some
+reason you want the best size to be recalculated on every
+layout.</p>
+<p>Note: In order to successfully override <tt class="literal"><span class="pre">DoGetBestSize</span></tt> in
+Python the class needs to be derived from <tt class="literal"><span class="pre">wx.PyWindow</span></tt>,
+<tt class="literal"><span class="pre">wx.PyControl</span></tt>, or etc.  If your class instead derives from
+one of the standard wx classes then just be sure that the min
+size gets explicitly set to what would have been the best size
+and things should work properly in almost all situations.</p>
+</li>
+<li><p class="first">Any method that changes the attributes of the control such that
+the best size will change should call <tt class="literal"><span class="pre">InvalidateBestSize</span></tt> so
+it will be recalculated the next time it is needed.</p>
+</li>
+<li><p class="first">The control's constructor and/or Create method should ensure
+that the minsize is set to the size passed in, and that the
+control is sized to a blending of the min size and best size.
+This can be done by calling <tt class="literal"><span class="pre">SetBestFittingSize</span></tt>.</p>
+</li>
+</ul>
+</blockquote>
 </div>
 <div class="section" id="platforminfo">
 <h1><a name="platforminfo">PlatformInfo</a></h1>

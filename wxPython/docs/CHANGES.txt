@@ -11,23 +11,8 @@ be used for the minimum size used by the sizer.  The wx.FIXED_MINSIZE
 flag was added that will cause the sizer to use the old behaviour in
 that it will *not* call the window's methods to determine the new best
 size, instead the minsize that the window had when added to the sizer
-(or the size the window was created with) will always be used.  
-
-Related to the above, when controls and some other window types are
-created either the size passed to the constructor, or their "best
-size" if an explicit size was not passed in, is set as the window's
-minimal size.  For non top-level windows that hasn't meant much in the
-past, but now the sizers are sensitive to the window's minimal size.
-The key point to understand here is that it is no longer the window's
-size it has when added to the sizer that matters, but its minimal
-size.  So you might have some issues to iron out if you create a
-control without a size and then set its size to something before
-adding it to the sizer.  Since it's minimal size is probably not the
-size you set then the sizer will appear to be misbehaving.  The fix is
-to either set the size when calling the window's constructor, or to
-reset the min size by calling SetSizeHints.  You can call SetSizeHints
-at anytime to change the minsize of a window, just call the sizer's
-Layout method to redistribute the controls as needed.
+(or the size the window was created with) will always be used.  Please
+see the Sizers section in the Migration Guide for more details.
 
 Added new MaskedEditControl code from Will Sadkin.  The modules are
 now locaed in their own sub-package, wx.lib.masked.  Demos updated.
