@@ -201,6 +201,17 @@ bool wxComboBox::MSWProcessEditMsg(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam)
     switch ( msg )
     {
         case WM_CHAR:
+            // for compatibility with wxTextCtrl, generate a special message
+            // when Enter is pressed
+            if ( wParam == VK_RETURN )
+            {
+                wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
+                InitCommandEvent(event);
+                event.SetString(GetValue());
+                event.SetInt(GetSelection());
+                ProcessCommand(event);
+            }
+
             return HandleChar(wParam, lParam, TRUE /* isASCII */);
 
         case WM_KEYDOWN:
