@@ -24,10 +24,11 @@
 #ifndef __WIN16__
 
 #ifndef WX_PRECOMP
-  #include "wx/string.h"
-  #if wxUSE_GUI
-    #include "wx/icon.h"
-  #endif
+    #include "wx/string.h"
+    #if wxUSE_GUI
+        #include "wx/icon.h"
+        #include "wx/msgdlg.h"
+    #endif
 #endif //WX_PRECOMP
 
 #include "wx/log.h"
