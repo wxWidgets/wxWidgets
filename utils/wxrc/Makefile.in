@@ -11,6 +11,7 @@ prefix = @prefix@
 exec_prefix = @exec_prefix@
 INSTALL = @INSTALL@
 EXEEXT = @EXEEXT@
+LN_S = @LN_S@
 SETFILE = @SETFILE@
 STRIP = @STRIP@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -53,6 +54,7 @@ WXRC_OBJECTS =  \
 @COND_DEBUG_FLAG_1@WXDEBUGFLAG = d
 @COND_UNICODE_1@WXUNICODEFLAG = u
 @COND_WXUNIV_1@WXUNIVNAME = univ
+@COND_USE_XRC_1@__wxrc___depname = wxrc$(EXEEXT)
 @COND_PLATFORM_MAC_1@__wxrc___mac_setfilecmd = \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -t APPL wxrc$(EXEEXT)
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
@@ -63,6 +65,7 @@ COND_MONOLITHIC_0___WXLIB_XML_p = \
 COND_MONOLITHIC_0___WXLIB_BASE_p = \
 	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = $(COND_MONOLITHIC_0___WXLIB_BASE_p)
+@COND_USE_XRC_1@__install_wxrc___depname = install_wxrc
 COND_MONOLITHIC_1___WXLIB_MONO_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_1@__WXLIB_MONO_p = $(COND_MONOLITHIC_1___WXLIB_MONO_p)
@@ -87,9 +90,9 @@ COND_WXUSE_REGEX_BUILTIN___LIB_REGEX_p = \
 
 ### Targets: ###
 
-all: wxrc$(EXEEXT)
+all: $(__wxrc___depname)
 
-install: all install_wxrc
+install: all $(__install_wxrc___depname)
 
 uninstall: 
 
@@ -104,14 +107,16 @@ clean:
 distclean: clean
 	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
-wxrc$(EXEEXT): $(WXRC_OBJECTS)
-	$(CXX) -o $@ $(WXRC_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME)   $(__WXLIB_XML_p) $(EXTRALIBS_XML) $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
-	
-	$(__wxrc___mac_setfilecmd)
+@COND_USE_XRC_1@wxrc$(EXEEXT): $(WXRC_OBJECTS)
+@COND_USE_XRC_1@	$(CXX) -o $@ $(WXRC_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME)   $(__WXLIB_XML_p) $(EXTRALIBS_XML) $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
+@COND_USE_XRC_1@	
+@COND_USE_XRC_1@	$(__wxrc___mac_setfilecmd)
 
-install_wxrc: 
-	$(INSTALL_DIR) $(DESTDIR)$(bindir)
-	$(INSTALL_PROGRAM) wxrc$(EXEEXT) $(DESTDIR)$(bindir)
+@COND_USE_XRC_1@install_wxrc: 
+@COND_USE_XRC_1@	$(INSTALL_DIR) $(DESTDIR)$(bindir)
+@COND_USE_XRC_1@	$(INSTALL_PROGRAM) wxrc$(EXEEXT) $(DESTDIR)$(bindir)
+@COND_USE_XRC_1@	mv -f $(DESTDIR)$(bindir)/wxrc$(EXEEXT) $(DESTDIR)$(bindir)/wxrc-$(WX_RELEASE)
+@COND_USE_XRC_1@	(cd $(DESTDIR)$(bindir) && $(LN_S) wxrc-$(WX_RELEASE) wxrc$(EXEEXT))
 
 wxrc_wxrc.o: $(srcdir)/wxrc.cpp
 	$(CXXC) -c -o $@ $(WXRC_CXXFLAGS) $<
