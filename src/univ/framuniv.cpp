@@ -98,16 +98,19 @@ void wxFrame::PositionMenuBar()
         wxCoord heightMbar = m_frameMenuBar->GetSize().y;
 
         wxCoord heightTbar = 0;
-        if (m_frameToolBar)
-            heightTbar = m_frameToolBar->GetSize().y;
 
-        m_frameMenuBar->SetSize(0, 
+#if wxUSE_TOOLBAR
+        if ( m_frameToolBar )
+            heightTbar = m_frameToolBar->GetSize().y;
+#endif // wxUSE_TOOLBAR
+
+        m_frameMenuBar->SetSize(0,
 #ifdef __WXPM__	 // FIXME -- remove this, make wxOS2/Univ behave as
                  //          the rest of the world!!!
                                 GetClientSize().y - heightMbar - heightTbar,
 #else
                                 - (heightMbar + heightTbar),
-#endif				
+#endif
                                 GetClientSize().x, heightMbar);
     }
 }
@@ -304,7 +307,7 @@ int wxFrame::GetMinHeight() const
         height += m_frameStatusBar->GetSize().y;
     }
 #endif // wxUSE_STATUSBAR
-    
+
     if ( height )
         return height + wxMax(0, wxFrameBase::GetMinHeight());
     else

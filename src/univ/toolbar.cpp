@@ -29,6 +29,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_TOOLBAR
+
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/app.h"
@@ -704,4 +706,6 @@ bool wxStdToolbarInputHandler::HandleActivation(wxInputConsumer *consumer,
 
     return TRUE;
 }
+
+#endif // wxUSE_TOOLBAR
 
