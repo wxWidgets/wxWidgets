@@ -25,7 +25,9 @@
 // SYNOPSIS STOP
 */
 
+#ifdef __GNUG__
 #pragma implementation "db.h"
+#endif
 
 /*
 #ifdef _CONSOLE
