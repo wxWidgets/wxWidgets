@@ -282,6 +282,18 @@ public:
 
         // the part to be highlighted
         wxRect m_rectHighlight;
+
+        // extend all our rects to be centered inside theo ne of given width
+        void ExtendWidth(wxCoord w)
+        {
+            wxASSERT_MSG( m_rectAll.width <= w,
+                            _T("width can only be increased") );
+
+            m_rectAll.width = w;
+            m_rectLabel.x = m_rectAll.x + (w - m_rectLabel.width)/2;
+            m_rectIcon.x = m_rectAll.x + (w - m_rectIcon.width)/2;
+            m_rectHighlight.x = m_rectAll.x + (w - m_rectHighlight.width)/2;
+        }
     } *m_gi;
 
     // is this item selected? [NB: not used in virtual mode]
@@ -1115,96 +1127,93 @@ void wxListLineData::CalculateSize( wxDC *dc, int spacing )
 
     wxListItemData *item = node->GetData();
 
+    wxString s;
+    wxCoord lw, lh;
+
     switch ( GetMode() )
     {
         case wxLC_ICON:
         case wxLC_SMALL_ICON:
+            m_gi->m_rectAll.width = spacing;
+
+            s = item->GetText();
+
+            if ( s.empty() )
             {
-                m_gi->m_rectAll.width = spacing;
-
-                wxString s = item->GetText();
-
-                wxCoord lw, lh;
-                if ( s.empty() )
-                {
-                    lh =
-                    m_gi->m_rectLabel.width =
-                    m_gi->m_rectLabel.height = 0;
-                }
-                else // has label
-                {
-                    dc->GetTextExtent( s, &lw, &lh );
-                    if (lh < SCROLL_UNIT_Y)
-                        lh = SCROLL_UNIT_Y;
-                    lw += EXTRA_WIDTH;
-                    lh += EXTRA_HEIGHT;
-
-                    m_gi->m_rectAll.height = spacing + lh;
-                    if (lw > spacing)
-                        m_gi->m_rectAll.width = lw;
-
-                    m_gi->m_rectLabel.width = lw;
-                    m_gi->m_rectLabel.height = lh;
-                }
-
-                if (item->HasImage())
-                {
-                    int w, h;
-                    m_owner->GetImageSize( item->GetImage(), w, h );
-                    m_gi->m_rectIcon.width = w + 8;
-                    m_gi->m_rectIcon.height = h + 8;
-
-                    if ( m_gi->m_rectIcon.width > m_gi->m_rectAll.width )
-                        m_gi->m_rectAll.width = m_gi->m_rectIcon.width;
-                    if ( m_gi->m_rectIcon.height + lh > m_gi->m_rectAll.height - 4 )
-                        m_gi->m_rectAll.height = m_gi->m_rectIcon.height + lh + 4;
-                }
-
-                if ( item->HasText() )
-                {
-                    m_gi->m_rectHighlight.width = m_gi->m_rectLabel.width;
-                    m_gi->m_rectHighlight.height = m_gi->m_rectLabel.height;
-                }
-                else // no text, highlight the icon
-                {
-                    m_gi->m_rectHighlight.width = m_gi->m_rectIcon.width;
-                    m_gi->m_rectHighlight.height = m_gi->m_rectIcon.height;
-                }
+                lh =
+                m_gi->m_rectLabel.width =
+                m_gi->m_rectLabel.height = 0;
             }
-            break;
-
-        case wxLC_LIST:
+            else // has label
             {
-                wxString s = item->GetTextForMeasuring();
-
-                wxCoord lw,lh;
                 dc->GetTextExtent( s, &lw, &lh );
                 if (lh < SCROLL_UNIT_Y)
                     lh = SCROLL_UNIT_Y;
                 lw += EXTRA_WIDTH;
                 lh += EXTRA_HEIGHT;
 
+                m_gi->m_rectAll.height = spacing + lh;
+                if (lw > spacing)
+                    m_gi->m_rectAll.width = lw;
+
                 m_gi->m_rectLabel.width = lw;
                 m_gi->m_rectLabel.height = lh;
-
-                m_gi->m_rectAll.width = lw;
-                m_gi->m_rectAll.height = lh;
-
-                if (item->HasImage())
-                {
-                    int w, h;
-                    m_owner->GetImageSize( item->GetImage(), w, h );
-                    m_gi->m_rectIcon.width = w;
-                    m_gi->m_rectIcon.height = h;
-
-                    m_gi->m_rectAll.width += 4 + w;
-                    if (h > m_gi->m_rectAll.height)
-                        m_gi->m_rectAll.height = h;
-                }
-
-                m_gi->m_rectHighlight.width = m_gi->m_rectAll.width;
-                m_gi->m_rectHighlight.height = m_gi->m_rectAll.height;
             }
+
+            if (item->HasImage())
+            {
+                int w, h;
+                m_owner->GetImageSize( item->GetImage(), w, h );
+                m_gi->m_rectIcon.width = w + 8;
+                m_gi->m_rectIcon.height = h + 8;
+
+                if ( m_gi->m_rectIcon.width > m_gi->m_rectAll.width )
+                    m_gi->m_rectAll.width = m_gi->m_rectIcon.width;
+                if ( m_gi->m_rectIcon.height + lh > m_gi->m_rectAll.height - 4 )
+                    m_gi->m_rectAll.height = m_gi->m_rectIcon.height + lh + 4;
+            }
+
+            if ( item->HasText() )
+            {
+                m_gi->m_rectHighlight.width = m_gi->m_rectLabel.width;
+                m_gi->m_rectHighlight.height = m_gi->m_rectLabel.height;
+            }
+            else // no text, highlight the icon
+            {
+                m_gi->m_rectHighlight.width = m_gi->m_rectIcon.width;
+                m_gi->m_rectHighlight.height = m_gi->m_rectIcon.height;
+            }
+            break;
+
+        case wxLC_LIST:
+            s = item->GetTextForMeasuring();
+
+            dc->GetTextExtent( s, &lw, &lh );
+            if (lh < SCROLL_UNIT_Y)
+                lh = SCROLL_UNIT_Y;
+            lw += EXTRA_WIDTH;
+            lh += EXTRA_HEIGHT;
+
+            m_gi->m_rectLabel.width = lw;
+            m_gi->m_rectLabel.height = lh;
+
+            m_gi->m_rectAll.width = lw;
+            m_gi->m_rectAll.height = lh;
+
+            if (item->HasImage())
+            {
+                int w, h;
+                m_owner->GetImageSize( item->GetImage(), w, h );
+                m_gi->m_rectIcon.width = w;
+                m_gi->m_rectIcon.height = h;
+
+                m_gi->m_rectAll.width += 4 + w;
+                if (h > m_gi->m_rectAll.height)
+                    m_gi->m_rectAll.height = h;
+            }
+
+            m_gi->m_rectHighlight.width = m_gi->m_rectAll.width;
+            m_gi->m_rectHighlight.height = m_gi->m_rectAll.height;
             break;
 
         case wxLC_REPORT:
@@ -1446,20 +1455,31 @@ void wxListLineData::Draw( wxDC *dc )
         dc->DrawRectangle( m_gi->m_rectHighlight );
     }
 
+    // just for debugging to better see where the items are
+#if 0
+    dc->SetPen(*wxRED_PEN);
+    dc->SetBrush(*wxTRANSPARENT_BRUSH);
+    dc->DrawRectangle( m_gi->m_rectAll );
+    dc->SetPen(*wxGREEN_PEN);
+    dc->DrawRectangle( m_gi->m_rectIcon );
+#endif // 0
+
     wxListItemData *item = node->GetData();
     if (item->HasImage())
     {
-        wxRect rectIcon = m_gi->m_rectIcon;
-        m_owner->DrawImage( item->GetImage(), dc,
-                            rectIcon.x, rectIcon.y );
+        // centre the image inside our rectangle, this looks nicer when items
+        // ae aligned in a row
+        const wxRect& rectIcon = m_gi->m_rectIcon;
+
+        m_owner->DrawImage(item->GetImage(), dc, rectIcon.x, rectIcon.y);
     }
 
     if (item->HasText())
     {
-        wxRect rectLabel = m_gi->m_rectLabel;
+        const wxRect& rectLabel = m_gi->m_rectLabel;
 
         wxDCClipper clipper(*dc, rectLabel);
-        dc->DrawText( item->GetText(), rectLabel.x, rectLabel.y );
+        dc->DrawText(item->GetText(), rectLabel.x, rectLabel.y);
     }
 }
 
@@ -3892,7 +3912,10 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
             int x = EXTRA_BORDER_X;
             int y = EXTRA_BORDER_Y;
 
-            for ( size_t i = 0; i < count; i++ )
+            wxCoord widthMax = 0;
+
+            size_t i;
+            for ( i = 0; i < count; i++ )
             {
                 wxListLineData *line = GetLine(i);
                 line->CalculateSize( &dc, iconSpacing );
@@ -3902,6 +3925,9 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
 
                 if ( HasFlag(wxLC_ALIGN_TOP) )
                 {
+                    if ( sizeLine.x > widthMax )
+                        widthMax = sizeLine.x;
+
                     y += sizeLine.y;
                 }
                 else // wxLC_ALIGN_LEFT
@@ -3909,6 +3935,18 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
                     x += sizeLine.x + MARGIN_BETWEEN_ROWS;
                 }
             }
+
+            if ( HasFlag(wxLC_ALIGN_TOP) )
+            {
+                // traverse the items again and tweak their sizes so that they are
+                // all the same in a row
+                for ( i = 0; i < count; i++ )
+                {
+                    wxListLineData *line = GetLine(i);
+                    line->m_gi->ExtendWidth(widthMax);
+                }
+            }
+
 
             SetScrollbars
             (
