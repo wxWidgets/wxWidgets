@@ -3,16 +3,24 @@
 #
 
 WXDIR = $(%WXWIN)
+!ifndef EXEDIR
+OUTPUTDIR = $(THISDIR)\Watcom 
+!else
+OUTPUTDIR = $(THISDIR)\$(EXEDIR)
+!ifeq EXEDIR "."
+OUTPUTDIR = $(THISDIR)
+!endif
+!endif
 
 !include $(WXDIR)\src\makewat.env
 
 WXLIB = $(WXDIR)\lib
 LNK = $(OUTPUTDIR)\$(PROGRAM).lnk
 
-all: $(OUTPUTDIR) $(OUTPUTDIR)\$(PROGRAM).exe $(EXTRATARGETS) .SYMBOLIC
+all: MAKEDIR $(OUTPUTDIR)\$(PROGRAM).exe $(EXTRATARGETS) .SYMBOLIC
 
-$(OUTPUTDIR):
-	@if not exist $^@ mkdir $^@
+MAKEDIR: .SYMBOLIC
+	@if not exist $(OUTPUTDIR) mkdir $(OUTPUTDIR)
 
 !ifeq wxUSE_GUI 0
 RESFILE=
