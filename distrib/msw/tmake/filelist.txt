@@ -78,6 +78,7 @@ proplist.cpp	G
 sashwin.cpp	G
 scrolwin.cpp	G
 splitter.cpp	G
+statline.cpp	G	U,R
 statusbr.cpp	G
 tabg.cpp	G	R
 numdlgg.cpp	G
@@ -337,6 +338,7 @@ bmpbuttn.cpp	X
 brush.cpp	X
 button.cpp	X
 checkbox.cpp	X
+checklst.cpp	X
 choice.cpp	X
 clipbrd.cpp	X
 colour.cpp	X
@@ -371,6 +373,7 @@ region.cpp	X
 scrolbar.cpp	X
 settings.cpp	X
 slider.cpp	X
+spinbutt.cpp	X
 statbmp.cpp	X
 statbox.cpp	X
 stattext.cpp	X
