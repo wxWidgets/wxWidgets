@@ -52,10 +52,10 @@
 #include "wx/grid.h"
 #include "wx/generic/gridsel.h"
 
-#if defined(__WXGTK__) || defined(__WXMOTIF__)
-    #define WXUNUSED_GTK_AND_MOTIF(identifier)  WXUNUSED(identifier)
+#if defined(__WXMOTIF__)
+    #define WXUNUSED_MOTIF(identifier)  WXUNUSED(identifier)
 #else
-    #define WXUNUSED_GTK_AND_MOTIF(identifier)  identifier
+    #define WXUNUSED_MOTIF(identifier)  identifier
 #endif
 
 #if defined(__WXGTK__)
@@ -620,7 +620,7 @@ void wxGridCellTextEditor::StartingKey(wxKeyEvent& event)
 }
 
 void wxGridCellTextEditor::HandleReturn( wxKeyEvent&
-                                         WXUNUSED_GTK_AND_MOTIF(event) )
+                                         WXUNUSED_GTK(WXUNUSED_MOTIF(event)) )
 {
 #if defined(__WXMOTIF__) || defined(__WXGTK__)
     // wxMotif needs a little extra help...
