@@ -254,6 +254,8 @@ wxGraphicPath* wxMacCGContext::CreatePath()
 { 
     // make sure that we now have a real cgref, before doing
     // anything with paths
+    CGContextRef cg = GetNativeContext() ;
+    cg = NULL ;
     return new wxMacCGPath() ; 
 }
 
@@ -562,7 +564,7 @@ wxDC::wxDC()
     m_needComputeScaleY = FALSE;
 
     m_ok = FALSE ;
-
+    m_macPort = 0 ;
     m_macLocalOrigin.x = m_macLocalOrigin.y = 0 ;
 
     m_pen = *wxBLACK_PEN;
@@ -1010,7 +1012,7 @@ void  wxDC::DoDrawArc( wxCoord x1, wxCoord y1,
     }
     wxMacCGContext* mctx = ((wxMacCGContext*) m_graphicContext) ;
     CGContextRef ctx = mctx->GetNativeContext() ;
-    AddEllipticArcToPath( ctx , CGPointMake( xxc , yyc ) , rad , rad , 0 , 180 ) ;
+    AddEllipticArcToPath( ctx , CGPointMake( xxc , yyc ) , rad , rad , alpha1 , alpha2 ) ;
     CGContextDrawPath( ctx , mctx->GetDrawingMode() ) ;
 }
 
@@ -1517,39 +1519,63 @@ void  wxDC::Clear(void)
     if ( m_backgroundBrush.Ok() && m_backgroundBrush.GetStyle() != wxTRANSPARENT)
     {      
         HIRect rect = CGRectMake( -10000 , -10000 , 20000 , 20000 ) ;
+        CGContextRef cg = dynamic_cast<wxMacCGContext*>(m_graphicContext)->GetNativeContext() ;
         switch( m_backgroundBrush.MacGetBrushKind() )
         {
             case kwxMacBrushTheme :
                 {
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
+                    if ( HIThemeSetFill != 0 )
+                    {
+                        HIThemeSetFill( m_backgroundBrush.MacGetTheme() , cg ) ;
+                        CGContextFillRect(cg, rect);
+
+                    }
+                    else
+#endif
+                    {
+        				RGBColor	color;
+        				GetThemeBrushAsColor( m_backgroundBrush.MacGetTheme() , 32, true, &color );
+        				CGContextSetRGBFillColor( cg , (float) color.red / 65536,
+        						(float) color.green / 65536, (float) color.blue / 65536, 1 );
+        				CGContextFillRect( cg, rect );
+                    }
+                    // reset to normal value
+                    RGBColor col = MAC_WXCOLORREF( GetBrush().GetColour().GetPixel() ) ;
+                    CGContextSetRGBFillColor( cg , col.red / 65536.0 , col.green / 65536.0 , col.blue / 65536.0 , 1.0 ) ;
                 }
             break ;
             case kwxMacBrushThemeBackground :
                 {
+                    wxFAIL_MSG( wxT("There shouldn't be theme backgrounds under Quartz") ) ;
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
-                    if ( HIThemeDrawBackground )
+                    if ( HIThemeDrawBackground != 0 )
                     {
                         HIThemeBackgroundDrawInfo drawInfo ;
                         drawInfo.version = 0 ;
                         drawInfo.state = kThemeStateActive ;
                         drawInfo.kind = m_backgroundBrush.MacGetThemeBackground(NULL) ;
                         if ( drawInfo.kind == kThemeBackgroundMetal )
-                            HIThemeDrawBackground( &rect , &drawInfo, dynamic_cast<wxMacCGContext*>(m_graphicContext)->GetNativeContext() ,
+                            HIThemeDrawBackground( &rect , &drawInfo, cg ,
                                 kHIThemeOrientationNormal) ;
-                            HIThemeApplyBackground( &rect , &drawInfo, dynamic_cast<wxMacCGContext*>(m_graphicContext)->GetNativeContext() ,
+                            HIThemeApplyBackground( &rect , &drawInfo, cg ,
                                 kHIThemeOrientationNormal) ;
                     }
+                    else
 #endif
+                    {
+                    }
                 }
             break ;
             case kwxMacBrushColour :
             {
                 RGBColor col = MAC_WXCOLORREF( m_backgroundBrush.GetColour().GetPixel()) ;
-                CGContextSetRGBFillColor( dynamic_cast<wxMacCGContext*>(m_graphicContext)->GetNativeContext() , col.red / 65536.0 , col.green / 65536.0 , col.blue / 65536.0 , 1.0 ) ;
-                CGContextFillRect(dynamic_cast<wxMacCGContext*>(m_graphicContext)->GetNativeContext(), rect);
+                CGContextSetRGBFillColor( cg , col.red / 65536.0 , col.green / 65536.0 , col.blue / 65536.0 , 1.0 ) ;
+                CGContextFillRect(cg, rect);
 
                 // reset to normal value
                 col = MAC_WXCOLORREF( GetBrush().GetColour().GetPixel() ) ;
-                CGContextSetRGBFillColor( dynamic_cast<wxMacCGContext*>(m_graphicContext)->GetNativeContext() , col.red / 65536.0 , col.green / 65536.0 , col.blue / 65536.0 , 1.0 ) ;
+                CGContextSetRGBFillColor( cg , col.red / 65536.0 , col.green / 65536.0 , col.blue / 65536.0 , 1.0 ) ;
             }
             break ;
         }
