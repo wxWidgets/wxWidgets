@@ -660,16 +660,12 @@ void wxScrolledWindow::OnChar(wxKeyEvent& event)
             Scroll(-1, sty + (5 * cliy / 6));
             break;
 
-        // notice that handling of Ctrl-Home/End is asymmetrical: Home goes to
-        // the beginning of the current line, Ctrl-Home returns to the origin
-        // while End goes to the bottom without changing horizontal position
-        // and only Ctrl-End does go to the most rightmost position as well
         case WXK_HOME:
             Scroll(0, event.ControlDown() ? 0 : -1);
             break;
 
         case WXK_END:
-            Scroll(event.ControlDown() ? szx - clix : -1, szy - cliy);
+            Scroll(szx - clix, event.ControlDown() ? szy - cliy : -1);
             break;
 
         case WXK_UP:
