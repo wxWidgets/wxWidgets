@@ -186,6 +186,7 @@ private:
 // -----------------------------------------------------------------------------
 // a double-linked list class
 // -----------------------------------------------------------------------------
+
 class WXDLLEXPORT wxListBase : public wxObject
 {
 friend class wxNodeBase;        // should be able to call DetachNode()
@@ -506,6 +507,9 @@ public:
     void Sort(wxSortCompareFunction compfunc) { wxListBase::Sort(compfunc); }
 
     wxNode *Member(wxObject *object) const { return (wxNode *)Find(object); }
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxList)
 };
 
 // -----------------------------------------------------------------------------
@@ -543,6 +547,8 @@ public:
 
 private:
     void DoCopy(const wxStringList&); // common part of copy ctor and operator=
+
+    DECLARE_DYNAMIC_CLASS(wxStringList)
 };
 
 #endif // wxLIST_COMPATIBILITY

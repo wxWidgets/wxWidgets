@@ -532,9 +532,17 @@ void wxListBase::Sort(const wxSortCompareFunction compfunc)
     delete[] objArray;
 }
 
+// ============================================================================
+// compatibility section from now on
+// ============================================================================
+
+#ifdef wxLIST_COMPATIBILITY
+
 // -----------------------------------------------------------------------------
 // wxList (a.k.a. wxObjectList)
 // -----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxList, wxObject)
 
 void wxObjectListNode::DeleteData()
 {
@@ -544,6 +552,8 @@ void wxObjectListNode::DeleteData()
 // -----------------------------------------------------------------------------
 // wxStringList
 // -----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxStringList, wxObject)
 
 // instead of WX_DEFINE_LIST(wxStringListBase) we define this function
 // ourselves
@@ -670,3 +680,6 @@ void wxStringList::Sort()
 
     delete [] array;
 }
+
+#endif // wxLIST_COMPATIBILITY
+
