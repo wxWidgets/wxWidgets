@@ -22,6 +22,7 @@
 
 #import <Foundation/NSString.h>
 #import <AppKit/NSTextField.h>
+#import <AppKit/NSCell.h>
 
 #include <math.h>
 
