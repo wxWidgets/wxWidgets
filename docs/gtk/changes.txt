@@ -1,4 +1,4 @@
-23rd May '2000: wxWindows pre-2.2 release
+4th June '2000: wxWindows pre-2.2 release
 
 Complete freeze now. Only vital bug-fixes allowed.
 

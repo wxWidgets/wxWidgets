@@ -1018,11 +1018,11 @@ wxSize wxNotebookSizer::CalcMin()
     if ((m_notebook->HasFlag(wxNB_RIGHT)) ||
         (m_notebook->HasFlag(wxNB_LEFT)))
     {
-        borderX += 70; // improvements later..
+        borderX += 90; // improvements later..
     }
     else
     {
-        borderY += 35; // improvements later..
+        borderY += 40; // improvements later..
     }
     
     if (m_notebook->GetChildren().GetCount() == 0)
