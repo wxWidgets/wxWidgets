@@ -1397,14 +1397,14 @@ case "${canonical}" in
 esac
 
 if test "x$GCC" = xyes; then
-  CFLAGS="${CFLAGS} -Wall"
+  CFLAGS="${CFLAGS} -Wall -Wno-unused -Wno-uninitialized -D_REENTRANT -DLEX_SCANNER"
 fi
 
 if test "x$GXX" = xyes; then
   if test "$wxUSE_MOTIF" = 1; then
-    CXXFLAGS="${CXXFLAGS} -Wall -Wno-unused"
+    CXXFLAGS="${CXXFLAGS} -Wall -Wno-unused -D_REENTRANT"
   else
-    CXXFLAGS="${CXXFLAGS} -Wall"
+    CXXFLAGS="${CXXFLAGS} -Wall -D_REENTRANT"
   fi
 fi
 
