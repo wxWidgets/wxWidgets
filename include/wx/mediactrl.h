@@ -13,6 +13,4 @@
 #include "wx/msw/mediactrl.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/mediactrl.h"
-#else
-#error wxMediaCtrl not supported on this platform!
 #endif
