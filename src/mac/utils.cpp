@@ -221,7 +221,7 @@ static int DoGetOSVersion(int *majorVsn, int *minorVsn)
 wxToolkitInfo& wxConsoleAppTraits::GetToolkitInfo()
 {
     static wxToolkitInfo info;
-    info.os = DoGetOSVersion(&info.majorVersion, &info.minorVersion);
+    info.os = DoGetOSVersion(&info.versionMajor, &info.versionMinor);
     info.name = _T("wxBase");
     return info;
 }
@@ -233,7 +233,7 @@ wxToolkitInfo& wxConsoleAppTraits::GetToolkitInfo()
 wxToolkitInfo& wxGUIAppTraits::GetToolkitInfo()
 {
     static wxToolkitInfo info;
-    info.os = DoGetOSVersion(&info.majorVersion, &info.minorVersion);
+    info.os = DoGetOSVersion(&info.versionMajor, &info.versionMinor);
     info.shortName = _T("mac");
     info.name = _T("wxMac");
 #ifdef __WXUNIVERSAL__

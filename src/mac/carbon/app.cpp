@@ -970,12 +970,6 @@ pascal OSStatus wxMacApplicationEventHandler( EventHandlerCallRef handler , Even
 
 wxApp::wxApp()
 {
-  m_topWindow = NULL;
-  wxTheApp = this;
-
-  argc = 0;
-  argv = NULL;
-
   m_printMode = wxPRINT_WINDOWS;
   m_auto3D = TRUE;
 }

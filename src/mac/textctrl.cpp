@@ -60,7 +60,6 @@
 
 #define TE_UNLIMITED_LENGTH 0xFFFFFFFFUL
 
-extern wxApp *wxTheApp ;
 extern wxControl *wxFindControlFromMacControl(ControlHandle inControl ) ;
 
 // CS:TODO we still have a problem getting properly at the text events of a control because under Carbon
