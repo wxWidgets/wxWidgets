@@ -773,14 +773,12 @@ void wxWindowMac::MacPostControlCreate(const wxPoint& pos, const wxSize& size)
     
     UMASetControlTitle( (ControlRef) m_macControl , wxStripMenuCodes(m_label) , m_font.GetEncoding() ) ;
 
-    wxSize new_size = size ;
     if (!m_macIsUserPane)
     {
         SetInitialBestSize(size);
     }
 
     SetCursor( *wxSTANDARD_CURSOR ) ;
-
 }
 
 void wxWindowMac::DoSetWindowVariant( wxWindowVariant variant )
