@@ -744,3 +744,27 @@ void wxControlRenderer::DrawCheckItems(const wxCheckListBox *lbox,
 
 #endif // wxUSE_CHECKLISTBOX
 
+#if wxUSE_NOTEBOOK
+
+void wxControlRenderer::DrawTab(wxDirection dir,
+                                const wxRect& rect,
+                                const wxString& label,
+                                const wxBitmap& bitmap,
+                                int flags)
+{
+    m_dc.SetFont(m_window->GetFont());
+    m_dc.SetTextForeground(m_window->GetForegroundColour());
+
+    m_renderer->DrawButtonLabel(m_dc, label, bitmap, rect,
+                                flags, wxALIGN_CENTRE);
+    DrawLine(rect.x, rect.GetBottom(), rect.x, rect.GetTop());
+    DrawLine(rect.GetRight(), rect.GetBottom(), rect.GetRight(), rect.GetTop());
+    DrawLine(rect.GetLeft(), rect.y, rect.GetRight(), rect.y);
+    if ( !(flags & wxCONTROL_SELECTED) )
+    {
+        DrawLine(rect.GetLeft(), rect.GetBottom(),
+                 rect.GetRight(), rect.GetBottom());
+    }
+}
+
+#endif // wxUSE_NOTEBOOK

@@ -316,15 +316,27 @@ public:
     void Offset(wxCoord dx, wxCoord dy) { x += dx; y += dy; }
     void Offset(const wxPoint& pt) { Offset(pt.x, pt.y); }
 
+    wxRect& Intersect(const wxRect& rect);
+    wxRect Intersect(const wxRect& rect) const
+    {
+        wxRect r = *this;
+        r.Intersect(rect);
+        return r;
+    }
+
     wxRect operator+(const wxRect& rect) const;
     wxRect& operator+=(const wxRect& rect);
 
-    // tests
+    // compare rectangles
     bool operator==(const wxRect& rect) const;
     bool operator!=(const wxRect& rect) const { return !(*this == rect); }
 
+    // return TRUE if the point is (not strcitly) inside the rect
     bool Inside(int x, int y) const;
     bool Inside(const wxPoint& pt) const { return Inside(pt.x, pt.y); }
+
+    // return TRUE if the rectangles have a non empty intersection
+    bool Intersects(const wxRect& rect) const;
 
 public:
     int x, y, width, height;

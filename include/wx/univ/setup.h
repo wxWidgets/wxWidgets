@@ -63,7 +63,7 @@
 #define wxUSE_TOOLBAR 0
 #define wxUSE_TOOLBAR_NATIVE 0
 #define wxUSE_TOOLBAR_SIMPLE 0
-#define wxUSE_NOTEBOOK 0
+#define wxUSE_NOTEBOOK 1
 #define wxUSE_FONTMAP 0
 #define wxUSE_MIMETYPE 0
 

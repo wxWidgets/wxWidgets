@@ -633,12 +633,7 @@ void wxListBox::DoDraw(wxControlRenderer *renderer)
     dc.SetFont(GetFont());
 
     // get the update rect
-    wxRegion rgnUpdate = GetUpdateRegion();
-    rgnUpdate.Intersect(GetClientRect());
-    wxRect rectUpdate = rgnUpdate.GetBox();
-    wxPoint ptOrigin = GetClientAreaOrigin();
-    rectUpdate.x -= ptOrigin.x;
-    rectUpdate.y -= ptOrigin.y;
+    wxRect rectUpdate = GetUpdateClientRect();
 
     int yTop, yBottom;
     CalcUnscrolledPosition(0, rectUpdate.GetTop(), NULL, &yTop);

@@ -49,6 +49,7 @@
     #include "wx/textctrl.h"
 #endif
 
+#include "wx/notebook.h"
 #include "wx/spinbutt.h"
 #include "wx/spinctrl.h"
 #include "wx/statbmp.h"
@@ -62,9 +63,10 @@
 //#define TEST_CHECKLISTBOX
 //#define TEST_COMBO
 //#define TEST_LISTBOX
+#define TEST_NOTEBOOK
 //#define TEST_RADIO
-#define TEST_SCROLL
-#define TEST_SPIN
+//#define TEST_SCROLL
+//#define TEST_SPIN
 //#define TEST_STATIC_BMP
 //#define TEST_STATIC_BOX
 //#define TEST_STATIC_LINE
@@ -470,6 +472,13 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
 
     combo->SetSelection(1);
 #endif // TEST_COMBO
+
+#ifdef TEST_NOTEBOOK
+    wxNotebook *nb = new wxNotebook(this, -1,
+                                    wxPoint(10, 30), wxSize(300, 200));
+    nb->AddPage(new wxStaticText(nb, _T("First label")), _T("First page"));
+    nb->AddPage(new wxStaticText(nb, _T("Second label")), _T("Second page"));
+#endif // TEST_NOTEBOOK
 
 #ifdef TEST_TEXT
 #ifndef TEST_TEXT_ONLY

@@ -22,9 +22,10 @@ class WXDLLEXPORT wxSpinButton;
 // the actions supported by this control
 // ----------------------------------------------------------------------------
 
-// change the page: to the next/previous one
+// change the page: to the next/previous/given one
 #define wxACTION_NOTEBOOK_NEXT      _T("nexttab")
 #define wxACTION_NOTEBOOK_PREV      _T("prevtab")
+#define wxACTION_NOTEBOOK_GOTO      _T("gototab")
 
 // ----------------------------------------------------------------------------
 // wxNotebook
@@ -100,7 +101,7 @@ public:
     bool IsVertical() const;
 
 protected:
-    virtual wxNotebookPage *RemovePage(int nPage);
+    virtual wxNotebookPage *DoRemovePage(int nPage);
 
     // wxUniv implementation
     virtual void DoDraw(wxControlRenderer *renderer);
@@ -124,9 +125,14 @@ protected:
     // recalculate the geometry of the notebook completely
     void Relayout();
 
-    // refresh one or all tabs
+    // refresh the given tab only
     void RefreshTab(int page);
+
+    // refresh all tabs
     void RefreshAllTabs();
+
+    // get the tab rect (inefficient, don't use this in a loop)
+    wxRect GetTabRect(int page) const;
 
     // get the rectangle containing all tabs
     wxRect GetAllTabsRect() const;
@@ -138,7 +144,11 @@ protected:
     void GetTabSize(int page, wxCoord *w, wxCoord *h) const;
 
     // return TRUE if the tab has an associated image
-    bool HasImage() const { return m_imageList && m_images[page] != -1; }
+    bool HasImage(int page) const
+        { return m_imageList && m_images[page] != -1; }
+
+    // get the page rect in our client coords
+    wxRect GetPageRect() const;
 
     // get our client size from the page size
     wxSize GetSizeForPage(const wxSize& size) const;
@@ -168,6 +178,11 @@ protected:
 
     // the icon indices
     wxArrayInt m_images;
+
+    // the padding
+    wxSize m_sizePad;
+
+    DECLARE_DYNAMIC_CLASS(wxNotebook)
 };
 
 #endif // _WX_UNIV_NOTEBOOK_H_

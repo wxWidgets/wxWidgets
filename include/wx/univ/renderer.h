@@ -499,7 +499,7 @@ public:
     void DrawTab(wxDirection dir,
                  const wxRect& rect,
                  const wxString& title,
-                 const wxBitmap *image,
+                 const wxBitmap& bitmap = wxNullBitmap,
                  int flags = 0);
 #endif // wxUSE_NOTEBOOK
 

@@ -682,8 +682,20 @@ void wxWindowBase::SetValidator(const wxValidator& validator)
 #endif // wxUSE_VALIDATORS
 
 // ----------------------------------------------------------------------------
-// update region testing
+// update region stuff
 // ----------------------------------------------------------------------------
+
+wxRect wxWindowBase::GetUpdateClientRect() const
+{
+    wxRegion rgnUpdate = GetUpdateRegion();
+    rgnUpdate.Intersect(GetClientRect());
+    wxRect rectUpdate = rgnUpdate.GetBox();
+    wxPoint ptOrigin = GetClientAreaOrigin();
+    rectUpdate.x -= ptOrigin.x;
+    rectUpdate.y -= ptOrigin.y;
+
+    return rectUpdate;
+}
 
 bool wxWindowBase::IsExposed(int x, int y) const
 {

@@ -119,7 +119,7 @@ public:
     virtual bool RemovePage(int nPage) { return DoRemovePage(nPage) != NULL; }
 
     // remove all pages and delete them
-    virtual bool DeleteAllPages() { WX_CLEAR_ARRAY(m_pages); }
+    virtual bool DeleteAllPages() { WX_CLEAR_ARRAY(m_pages); return TRUE; }
 
     // adds a new page to the notebook (it will be deleted by the notebook,
     // don't delete it yourself) and make it the current one if bSelect
@@ -145,7 +145,7 @@ public:
     virtual int SetSelection(int nPage) = 0;
 
     // cycle thru the tabs
-    void AdvanceSelection(bool forward = TRUE);
+    void AdvanceSelection(bool forward = TRUE)
     {
         int nPage = GetNextPage(forward);
         if ( nPage != -1 )
@@ -154,7 +154,7 @@ public:
 
 protected:
     // remove the page and return a pointer to it
-    virtual wxNotebookPage *DoRemovePage() = 0;
+    virtual wxNotebookPage *DoRemovePage(int page) = 0;
 
     // get the next page wrapping if we reached the end
     int GetNextPage(bool forward) const

@@ -508,6 +508,9 @@ public:
     const wxRegion& GetUpdateRegion() const { return m_updateRegion; }
     wxRegion& GetUpdateRegion() { return m_updateRegion; }
 
+        // get the update rectangleregion bounding box in client coords
+    wxRect GetUpdateClientRect() const;
+
         // these functions verify whether the given point/rectangle belongs to
         // (or at least intersects with) the update region
     bool IsExposed( int x, int y ) const;

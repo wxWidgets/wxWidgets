@@ -29,7 +29,12 @@
 
 #if wxUSE_NOTEBOOK
 
+#include "wx/imaglist.h"
+#include "wx/notebook.h"
+
 #include "wx/spinbutt.h"
+
+#include "wx/univ/renderer.h"
 
 // ----------------------------------------------------------------------------
 // macros
@@ -47,6 +52,9 @@ static const size_t INVALID_PAGE = (size_t)-1;
 // implementation
 // ============================================================================
 
+IMPLEMENT_DYNAMIC_CLASS(wxNotebook, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxCommandEvent)
+
 // ----------------------------------------------------------------------------
 // wxNotebook creation
 // ----------------------------------------------------------------------------
@@ -56,7 +64,9 @@ void wxNotebook::Init()
     m_sel = INVALID_PAGE;
 
     m_heightTab =
-    m_widthMax = -1;
+    m_widthMax = 0;
+
+    m_sizePad = wxSize(5, 5); // FIXME: hardcoded
 
     m_spinbtn = NULL;
 }
@@ -124,7 +134,7 @@ bool wxNotebook::SetPageImage(int nPage, int nImage)
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), FALSE, _T("invalid notebook page") );
 
-    wxCHECK_MSG( m_imageList && nImage < m_imageList.GetImageCount(), FALSE,
+    wxCHECK_MSG( m_imageList && nImage < m_imageList->GetImageCount(), FALSE,
                  _T("invalid image index in SetPageImage()") );
 
     if ( nImage != m_images[nPage] )
@@ -144,6 +154,10 @@ bool wxNotebook::SetPageImage(int nPage, int nImage)
     return TRUE;
 }
 
+wxNotebook::~wxNotebook()
+{
+}
+
 // ----------------------------------------------------------------------------
 // wxNotebook page switching
 // ----------------------------------------------------------------------------
@@ -152,9 +166,21 @@ int wxNotebook::SetSelection(int nPage)
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), -1, _T("invalid notebook page") );
 
-    int selOld = m_sel;
+    if ( m_sel != -1 )
+    {
+        RefreshTab(m_sel);
+
+        m_pages[m_sel]->Hide();
+    }
 
     m_sel = nPage;
+
+    if ( m_sel != -1 ) // yes, this is impossible - but test nevertheless
+    {
+        RefreshTab(m_sel);
+
+        m_pages[m_sel]->Show();
+    }
 
     return m_sel;
 }
@@ -197,21 +223,40 @@ bool wxNotebook::InsertPage(int nPage,
     m_images.Insert(imageId, nPage);
 
     // cache the tab geometry here
-    m_heightTab;
-    m_widthMax;
-    m_widths[nPage] = ;
+    wxSize sizeTab = CalcTabSize(nPage);
+
+    if ( sizeTab.y > m_heightTab )
+        m_heightTab = sizeTab.y;
+
+    if ( FixedSizeTabs() && sizeTab.x > m_widthMax )
+        m_widthMax = sizeTab.x;
+
+    m_widths.Insert(sizeTab.x, nPage);
+
+    // if the tab has just appeared, we have to relayout everything, otherwise
+    // it's enough to just redraw the tabs
+    if ( nPages == 0 )
+    {
+        // always select the first tab to have at least some selection
+        bSelect = TRUE;
+
+        Relayout();
+    }
+    else // not the first tab
+    {
+        RefreshAllTabs();
+    }
 
     if ( bSelect )
     {
         SetSelection(nPage);
     }
+    else // pages added to the notebook are initially hidden
+    {
+        pPage->Hide();
+    }
 
-    // if the tab has just appeared, we have to relayout everything, otherwise
-    // it's enough to just redraw the tabs
-    if ( nPages == 0 )
-        Relayout();
-    else
-        RefreshAllTabs();
+    return TRUE;
 }
 
 bool wxNotebook::DeleteAllPages()
@@ -224,7 +269,7 @@ bool wxNotebook::DeleteAllPages()
     return TRUE;
 }
 
-wxNotebookPage *wxNotebook::RemovePage(int nPage)
+wxNotebookPage *wxNotebook::DoRemovePage(int nPage)
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), NULL, _T("invalid notebook page") );
 
@@ -257,14 +302,20 @@ wxNotebookPage *wxNotebook::RemovePage(int nPage)
 
 void wxNotebook::RefreshTab(int page)
 {
+    wxRect r = GetTabRect(page);
+    Refresh(TRUE, &r);
 }
 
 void wxNotebook::RefreshAllTabs()
 {
+    wxRect r = GetAllTabsRect();
+    Refresh(TRUE, &r);
 }
 
 void wxNotebook::DoDraw(wxControlRenderer *renderer)
 {
+    wxRect rectUpdate = GetUpdateClientRect();
+
     wxRect rect = GetAllTabsRect();
     wxDirection dir = GetTabOrientation();
     bool isVertical = IsVertical();
@@ -274,10 +325,26 @@ void wxNotebook::DoDraw(wxControlRenderer *renderer)
     {
         GetTabSize(n, &rect.width, &rect.height);
 
-        wxBitmap *bmp = m_imageList ? m_imageList->GetBitmap(m_images[n])
-                                    : NULL;
-        renderer->DrawTab(dir, rect, m_titles[n], bmp,
-                          n == m_sel ? wxCONTROL_FOCUSED : 0);
+        if ( rectUpdate.Intersects(rect) )
+        {
+            wxBitmap bmp;
+            if ( HasImage(n) )
+            {
+#ifdef __WXMSW__    // FIXME
+                wxMemoryDC dc;
+                dc.SelectObject(bmp);
+                m_imageList->Draw(m_images[n], dc, 0, 0);
+#else
+                bmp = *m_imageList->GetBitmap(m_images[n]);
+#endif
+            }
+
+            renderer->DrawTab(dir, rect, m_titles[n], bmp,
+                              n == m_sel
+                                ? wxCONTROL_FOCUSED | wxCONTROL_SELECTED
+                                : 0);
+        }
+        //else: doesn't need to be refreshed
 
         // move the rect to the next tab
         if ( isVertical )
@@ -312,25 +379,68 @@ wxDirection wxNotebook::GetTabOrientation() const
     return wxTOP;
 }
 
-wxRect wxNotebook::GetAllTabsRect() const
+wxRect wxNotebook::GetTabRect(int page) const
 {
     wxRect rect;
-    wxSize size = GetClientSize();
+    wxCHECK_MSG( IS_VALID_PAGE(page), rect, _T("invalid notebook page") );
 
+    // calc the size of this tab and of the preceding ones
+    wxCoord widthThis, widthBefore;
+    if ( FixedSizeTabs() )
+    {
+        widthThis = m_widthMax;
+        widthBefore = page*m_widthMax;
+    }
+    else
+    {
+        widthBefore = 0;
+        for ( int n = 0; n < page; n++ )
+        {
+            widthBefore += m_widths[n];
+        }
+
+        widthThis = m_widths[page];
+    }
+
+    rect = GetAllTabsRect();
     if ( IsVertical() )
     {
-        rect.x = GetDirection() == wxLEFT ? 0 : size.x - m_heightTab;
-        rect.width = m_heightTab;
-        rect.y = 0;
-        rect.height = size.y;
+        rect.y = widthBefore;
+        rect.height = widthThis;
     }
     else // horz
     {
-        rect.x = 0;
-        rect.width = size.x;
-        rect.y = GetDirection() == wxTOP ? 0 : size.y - m_heightTab;
-        rect.height = m_heightTab;
+        rect.x = widthBefore;
+        rect.width = widthThis;
     }
+
+    return rect;
+}
+
+wxRect wxNotebook::GetAllTabsRect() const
+{
+    wxRect rect;
+
+    if ( GetPageCount() )
+    {
+        wxSize size = GetClientSize();
+
+        if ( IsVertical() )
+        {
+            rect.x = GetTabOrientation() == wxLEFT ? 0 : size.x - m_heightTab;
+            rect.width = m_heightTab;
+            rect.y = 0;
+            rect.height = size.y;
+        }
+        else // horz
+        {
+            rect.x = 0;
+            rect.width = size.x;
+            rect.y = GetTabOrientation() == wxTOP ? 0 : size.y - m_heightTab;
+            rect.height = m_heightTab;
+        }
+    }
+    //else: no pages
 
     return rect;
 }
@@ -372,22 +482,28 @@ void wxNotebook::SetTabSize(const wxSize& sz)
 
 wxSize wxNotebook::CalcTabSize(int page) const
 {
+    // NB: don't use m_widthMax, m_heightTab or m_widths here because this
+    //     method is called to calculate them
+
     wxSize size;
 
-    wxCHECK_MSG( IS_VALID_PAGE(nPage), size, _T("invalid notebook page") );
+    wxCHECK_MSG( IS_VALID_PAGE(page), size, _T("invalid notebook page") );
 
     GetTextExtent(m_titles[page], &size.x, &size.y);
 
     if ( HasImage(page) )
     {
         wxSize sizeImage;
-        m_imageList->GetSize(m_images[page], &sizeImage.x, &sizeImage.y);
+        m_imageList->GetSize(m_images[page], sizeImage.x, sizeImage.y);
 
         size.x += sizeImage.x + 5; // FIXME: hard coded margin
 
         if ( sizeImage.y > size.y )
             size.y = sizeImage.y;
     }
+
+    size.x += 2*m_sizePad.x;
+    size.y += 2*m_sizePad.y;
 
     return size;
 }
@@ -437,6 +553,39 @@ void wxNotebook::SetPadding(const wxSize& padding)
 
 void wxNotebook::Relayout()
 {
+    wxRect rectPage = GetPageRect();
+
+    size_t count = GetPageCount();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        m_pages[n]->SetSize(rectPage);
+    }
+}
+
+wxRect wxNotebook::GetPageRect() const
+{
+    wxRect rectPage = GetClientRect();
+
+    if ( GetPageCount() )
+    {
+        wxRect rectTabs = GetAllTabsRect();
+        wxDirection dir = GetTabOrientation();
+        if ( IsVertical() )
+        {
+            rectPage.width -= rectTabs.width;
+            if ( dir == wxLEFT )
+                rectPage.x += rectTabs.width;
+        }
+        else // horz
+        {
+            rectPage.height -= rectTabs.height;
+            if ( dir == wxTOP )
+                rectPage.y += rectTabs.height;
+        }
+    }
+    //else: no pages at all
+
+    return rectPage;
 }
 
 wxSize wxNotebook::GetSizeForPage(const wxSize& size) const
@@ -444,9 +593,9 @@ wxSize wxNotebook::GetSizeForPage(const wxSize& size) const
     wxSize sizeNb = size;
     wxRect rect = GetAllTabsRect();
     if ( IsVertical() )
-        sizeNb.width += rect.width;
+        sizeNb.x += rect.width;
     else
-        sizeNb.height += rect.height;
+        sizeNb.y += rect.height;
 
     return sizeNb;
 }
@@ -482,6 +631,7 @@ wxSize wxNotebook::DoGetBestClientSize() const
 void wxNotebook::DoMoveWindow(int x, int y, int width, int height)
 {
     // move the spin ctrl
+    wxControl::DoMoveWindow(x, y, width, height);
 }
 
 void wxNotebook::DoSetSize(int x, int y,
@@ -489,6 +639,8 @@ void wxNotebook::DoSetSize(int x, int y,
                            int sizeFlags)
 {
     wxControl::DoSetSize(x, y, width, height, sizeFlags);
+
+    Relayout();
 }
 
 // ----------------------------------------------------------------------------
