@@ -49,7 +49,7 @@
 #  define wxDllClose(handle)                DosFreeModule(handle)
 #elif defined(HAVE_DLOPEN)
 #   define wxDllOpen(lib)                dlopen(lib.fn_str(), RTLD_NOW/*RTLD_LAZY*/)
-#   define wxDllGetSymbol(handle, name)  dlsym(handle, name.mb_str())
+#   define wxDllGetSymbol(handle, name)  dlsym(handle, name)
 #   define wxDllClose                    dlclose
 #elif defined(HAVE_SHL_LOAD)
 #   define wxDllOpen(lib)                shl_load(lib.fn_str(), BIND_DEFERRED, 0)
