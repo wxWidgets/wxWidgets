@@ -1203,6 +1203,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/window.cpp
 </set>
 <set var="MSW_LOWLEVEL_HDR" hints="files">
+    wx/msw/uxtheme.h
 </set>
 
 <set var="MSW_DESKTOP_LOWLEVEL_SRC" hints="files">

@@ -1307,9 +1307,9 @@ COND_TOOLKIT_MOTIF_LOWLEVEL_HDR =  \
 	wx/x11/pen.h \
 	wx/x11/region.h
 @COND_TOOLKIT_MOTIF@LOWLEVEL_HDR = $(COND_TOOLKIT_MOTIF_LOWLEVEL_HDR)
-@COND_TOOLKIT_MSW@LOWLEVEL_HDR = 
+@COND_TOOLKIT_MSW@LOWLEVEL_HDR = wx/msw/uxtheme.h
 @COND_TOOLKIT_PM@LOWLEVEL_HDR = 
-@COND_TOOLKIT_WINCE@LOWLEVEL_HDR = 
+@COND_TOOLKIT_WINCE@LOWLEVEL_HDR = wx/msw/uxtheme.h
 COND_TOOLKIT_X11_LOWLEVEL_HDR =  \
 	wx/generic/caret.h \
 	wx/unix/fontutil.h \
@@ -2383,6 +2383,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/xrc/xh_chckl.h \
 	wx/xrc/xh_choic.h \
 	wx/xrc/xh_combo.h \
+	wx/xrc/xh_datectrl.h \
 	wx/xrc/xh_dlg.h \
 	wx/xrc/xh_frame.h \
 	wx/xrc/xh_gauge.h \
