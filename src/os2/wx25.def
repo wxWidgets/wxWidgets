@@ -325,6 +325,10 @@ EXPORTS
       __ct__18wxCommandProcessorFi
       ;wxConstructorForwxCommandProcessor()
       wxConstructorForwxCommandProcessor__Fv
+      ;wxCommandProcessor::GetUndoMenuLabel() const
+      GetUndoMenuLabel__18wxCommandProcessorCFv
+      ;wxCommandProcessor::GetRedoMenuLabel() const
+      GetRedoMenuLabel__18wxCommandProcessorCFv
       ;wxCommandProcessor::DoCommand(wxCommand&)
       DoCommand__18wxCommandProcessorFR9wxCommand
       ;wxCommand::sm_classwxCommand
@@ -3749,6 +3753,8 @@ EXPORTS
       Flush__10wxLogChainFv
       ;wxVLogTrace(const char*,char*)
       wxVLogTrace__FPCcPc
+      ;wxLog::ms_logLevel
+      ms_logLevel__5wxLog
       ;wxLog::ms_doLog
       ms_doLog__5wxLog
       ;wxLog::SetActiveTarget(wxLog*)
@@ -5232,6 +5238,8 @@ EXPORTS
       Clear__7wxSizerFUl
       ;wxSizer::Remove(int)
       Remove__7wxSizerFi
+      ;wxSizer::Detach(int)
+      Detach__7wxSizerFi
       ;wxSizer::GetMinSize()
       GetMinSize__7wxSizerFv
       __vft16wxStaticBoxSizer21wxClientDataContainer
@@ -5298,10 +5306,12 @@ EXPORTS
       DoSetMinSize__7wxSizerFiT1
       ;wxFlexGridSizer::AddGrowableRow(unsigned int)
       AddGrowableRow__15wxFlexGridSizerFUi
-      ;wxSizer::Layout()
-      Layout__7wxSizerFv
+      ;wxSizer::Detach(wxSizer*)
+      Detach__7wxSizerFP7wxSizer
       ;wxGridSizer::SetItemBounds(wxSizerItem*,int,int,int,int)
       SetItemBounds__11wxGridSizerFP11wxSizerItemiN32
+      ;wxSizer::Layout()
+      Layout__7wxSizerFv
       ;wxGridSizer::CalcMin()
       CalcMin__11wxGridSizerFv
       ;wxSizer::VirtualFitSize(wxWindow*)
@@ -6390,6 +6400,8 @@ EXPORTS
       wxExecute__FRC8wxStringR13wxArrayString
       ;LongToString(long)
       LongToString__Fl
+      ;wxSafeYield(wxWindow*,unsigned long)
+      wxSafeYield__FP8wxWindowUl
       ;wxGetFontFromUser(wxWindow*,const wxFont&)
       wxGetFontFromUser__FP8wxWindowRC6wxFont
       ;wxGetCurrentId()
@@ -6426,8 +6438,6 @@ EXPORTS
       wxStripMenuCodes__FRC8wxString
       ;wxStripMenuCodes(const char*,char*)
       wxStripMenuCodes__FPCcPc
-      ;wxSafeYield(wxWindow*)
-      wxSafeYield__FP8wxWindow
       ;wxFindMenuItemId(wxFrame*,const wxString&,const wxString&)
       wxFindMenuItemId__FP7wxFrameRC8wxStringT2
       ;wxGetUserName()
@@ -10653,8 +10663,6 @@ EXPORTS
       OnSetFocus__17wxGenericTreeCtrlFR12wxFocusEvent
       ;wxGenericTreeCtrl::IsVisible(const wxTreeItemId&) const
       IsVisible__17wxGenericTreeCtrlCFRC12wxTreeItemId
-      ;wxGenericTreeCtrl::GetParent(const wxTreeItemId&) const
-      GetParent__17wxGenericTreeCtrlCFRC12wxTreeItemId
       ;wxGenericTreeCtrl::GetBoundingRect(const wxTreeItemId&,wxRect&,unsigned long) const
       GetBoundingRect__17wxGenericTreeCtrlCFRC12wxTreeItemIdR6wxRectUl
       ;wxGenericTreeCtrl::DrawLine(const wxTreeItemId&,unsigned long)
@@ -10872,6 +10880,8 @@ EXPORTS
       SetWindowStyle__17wxGenericTreeCtrlFCl
       ;wxGenericTreeCtrl::GetNextVisible(const wxTreeItemId&) const
       GetNextVisible__17wxGenericTreeCtrlCFRC12wxTreeItemId
+      ;wxGenericTreeCtrl::GetItemParent(const wxTreeItemId&) const
+      GetItemParent__17wxGenericTreeCtrlCFRC12wxTreeItemId
       ;wxGenericTreeCtrl::GetItemFont(const wxTreeItemId&) const
       GetItemFont__17wxGenericTreeCtrlCFRC12wxTreeItemId
       ;wxGenericTreeCtrl::GetItemData(const wxTreeItemId&) const

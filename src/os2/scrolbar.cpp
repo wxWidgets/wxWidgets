@@ -40,7 +40,7 @@ bool wxScrollBar::Create (
     int                             nWidth = rSize.x;
     int                             nHeight = rSize.y;
 
-    if (!parent)
+    if (!pParent)
         return FALSE;
     pParent->AddChild(this);
     SetName(rsName);
