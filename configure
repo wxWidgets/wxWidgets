@@ -34896,23 +34896,23 @@ fi
   else
      PKG_CONFIG_MIN_VERSION=0.9.0
      if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
-        echo "$as_me:$LINENO: checking for libgnomeprintui-2.2" >&5
-echo $ECHO_N "checking for libgnomeprintui-2.2... $ECHO_C" >&6
+        echo "$as_me:$LINENO: checking for libgnomeprintui-2.2 >= 2.8" >&5
+echo $ECHO_N "checking for libgnomeprintui-2.2 >= 2.8... $ECHO_C" >&6
 
-        if $PKG_CONFIG --exists "libgnomeprintui-2.2" ; then
+        if $PKG_CONFIG --exists "libgnomeprintui-2.2 >= 2.8" ; then
             echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
             succeeded=yes
 
             echo "$as_me:$LINENO: checking LIBGNOMEPRINTUI_CFLAGS" >&5
 echo $ECHO_N "checking LIBGNOMEPRINTUI_CFLAGS... $ECHO_C" >&6
-            LIBGNOMEPRINTUI_CFLAGS=`$PKG_CONFIG --cflags "libgnomeprintui-2.2"`
+            LIBGNOMEPRINTUI_CFLAGS=`$PKG_CONFIG --cflags "libgnomeprintui-2.2 >= 2.8"`
             echo "$as_me:$LINENO: result: $LIBGNOMEPRINTUI_CFLAGS" >&5
 echo "${ECHO_T}$LIBGNOMEPRINTUI_CFLAGS" >&6
 
             echo "$as_me:$LINENO: checking LIBGNOMEPRINTUI_LIBS" >&5
 echo $ECHO_N "checking LIBGNOMEPRINTUI_LIBS... $ECHO_C" >&6
-            LIBGNOMEPRINTUI_LIBS=`$PKG_CONFIG --libs "libgnomeprintui-2.2"`
+            LIBGNOMEPRINTUI_LIBS=`$PKG_CONFIG --libs "libgnomeprintui-2.2 >= 2.8"`
             echo "$as_me:$LINENO: result: $LIBGNOMEPRINTUI_LIBS" >&5
 echo "${ECHO_T}$LIBGNOMEPRINTUI_LIBS" >&6
         else
@@ -34920,7 +34920,7 @@ echo "${ECHO_T}$LIBGNOMEPRINTUI_LIBS" >&6
             LIBGNOMEPRINTUI_LIBS=""
             ## If we have a custom action on failure, don't print errors, but
             ## do set a variable so people can do so.
-            LIBGNOMEPRINTUI_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "libgnomeprintui-2.2"`
+            LIBGNOMEPRINTUI_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "libgnomeprintui-2.2 >= 2.8"`
 
         fi
 
@@ -38939,7 +38939,11 @@ fi
 
     case ${BAKEFILE_HOST} in
         *-hp-hpux* )
+<<<<<<< aclocal.m4
+            INSTALL_DIR="mkdir"
+=======
                                     INSTALL_DIR="mkdir -p"
+>>>>>>> 1.69
             ;;
         *)  INSTALL_DIR="$INSTALL -d"
             ;;
