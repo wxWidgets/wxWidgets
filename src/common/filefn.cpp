@@ -1096,7 +1096,7 @@ bool wxMkdir(const wxString& dir, int perm)
 bool wxRmdir(const wxString& dir, int WXUNUSED(flags))
 {
 #ifdef __VMS__
-  return FALSE;
+  return FALSE; //to be changed since rmdir exists in VMS7.x
 #elif defined( __WXMAC__ )
   return (rmdir(wxUnix2MacFilename( dir )) == 0);
 #else
@@ -1114,7 +1114,7 @@ bool wxRmdir(const wxString& dir, int WXUNUSED(flags))
 bool wxDirExists(const wxString& dir)
 {
 #ifdef __VMS__
-  return FALSE;
+  return FALSE; //To be changed since stat exists in VMS7.x
 #elif !defined(__WXMSW__)
   struct stat sbuf;
   return (stat(dir.fn_str(), &sbuf) != -1) && S_ISDIR(sbuf.st_mode) ? TRUE : FALSE;
@@ -1227,7 +1227,7 @@ wxChar *wxGetTempFileName(const wxString& prefix, wxChar *buf)
 // Get first file name matching given wild card.
 // Flags are reserved for future use.
 
-#ifndef __VMS__
+#if !defined( __VMS__ ) || ( __VMS_VER >= 70000000 )
     static DIR *gs_dirStream = (DIR *) NULL;
     static wxString gs_strFileSpec;
     static int gs_findFlags = 0;
@@ -1237,7 +1237,7 @@ wxString wxFindFirstFile(const wxChar *spec, int flags)
 {
     wxString result;
 
-#ifndef __VMS__
+#if !defined( __VMS__ ) || ( __VMS_VER >= 70000000 )
     if (gs_dirStream)
         closedir(gs_dirStream); // edz 941103: better housekeping
 
@@ -1266,7 +1266,7 @@ wxString wxFindFirstFile(const wxChar *spec, int flags)
     {
         result = wxFindNextFile();
     }
-#endif // !VMS
+#endif // !VMS6.x or earlier
 
     return result;
 }
@@ -1275,7 +1275,7 @@ wxString wxFindNextFile()
 {
     wxString result;
 
-#ifndef __VMS__
+#if !defined( __VMS__ ) || ( __VMS_VER >= 70000000 )
     wxCHECK_MSG( gs_dirStream, result, wxT("must call wxFindFirstFile first") );
 
     // Find path only so we can concatenate
@@ -1332,7 +1332,7 @@ wxString wxFindNextFile()
 
     closedir(gs_dirStream);
     gs_dirStream = (DIR *) NULL;
-#endif // !VMS
+#endif // !VMS6.2 or earlier
 
     return result;
 }
