@@ -1,47 +1,207 @@
 #!/bin/bash
+#----------------------------------------------------------------------
+# Build an RPM containing both wxGTK and wxPython
 
-if [ -z $1 ]; then
-    echo "Please specify a version number on the command line."
+spectemplate=distrib/wxPythonFull.spec.in
+
+if [ ! -d wxPython -o ! -e ${spectemplate} ]; then
+    echo "Please run this script from the root wxPython directory."
     exit 1
 fi
 
-if [ ! -f wxPython.spec ]; then
-    echo "Please run this script from the directory containing the wxPython.spec file."
+
+#----------------------------------------------------------------------
+# Initialization
+
+distdir=`pwd`/dist
+builddir=`pwd`/build_rpm
+rpmtop=${builddir}/rpmtop
+cvsroot=:pserver:anoncvs@cvs.wxwindows.org:/home/wxcvs
+pythonbin=/usr/bin/python
+port=GTK
+lcport=gtk
+tarname=wxPythonFull
+debug=0
+
+
+#----------------------------------------------------------------------
+# Check parameters
+
+function useage {
+    echo "Usage: $0 cvs_tag wx_version py_version [command flags...]"
+    echo "   cvs_tag        Tag to use for CVS export"
+    echo "   wx_version     String to use for version in filenames, etc."
+    echo "   py_version     String to append to $pythonbin (which python"
+    echo "                  version to use.)"
+    echo ""
+    echo "command flags:"
+    echo "   skipcvs        Don't do the CVS export"
+    echo "   skiptar        Don't build the tarball"
+    echo "   skiprpm        Don't build the RPM (but why?)"
+    echo "   skipclean      Don't do the cleanup at the end"
+    echo "   speconly       Do nothing but write the RPM spec file"
+    echo "   debug          Make a __WXDEBUG__ version"
+    echo "   smp            Add SMP=2 to the envivonment to speed wxGTK build"
+}
+
+if [ $# -lt 3 ]; then
+    useage
+    exit 1
+fi
+
+cvs_tag=$1
+version=$2
+pyver=$3
+shift;shift;shift
+
+
+python=${pythonbin}${pyver}
+if [ ! -e ${python} ]; then
+    echo "${python} not found!"
     exit 1
 fi
 
 
+function makespec {
+    echo "*** Writing ${distdir}/wxPython${port}.spec"
+    cat ${spectemplate} \
+	| sed s:@PYTHON@:${python}:g \
+	| sed s:@PYVER@:${pyver}:g \
+	| sed s:@DEBUG@:${debug}:g \
+	| sed s:@PORT@:${port}:g \
+	| sed s:@LCPORT@:${lcport}:g \
+	| sed s:@TARNAME@:${tarname}:g \
+	> ${distdir}/wxPython${port}.spec
+}
 
-#strip /usr/lib/python1.5/site-packages/wxPython/*.so
-#strip /usr/lib/libwxPyHelpers.so
-#
-#cat wxPython.spec.in | sed s/__VERSION__/$1/g > wxPython.spec
-#
-#mkdir /usr/doc/wxPython-$1
-#cp ../README.txt /usr/doc/wxPython-$1
-#cp ../../../docs/preamble.txt /usr/doc/wxPython-$1
-#cp ../../../docs/licence.txt /usr/doc/wxPython-$1
-#cp ../../../docs/licendoc.txt /usr/doc/wxPython-$1
-#cp ../../../docs/lgpl.txt /usr/doc/wxPython-$1
-#cp ../../../docs/gpl.txt /usr/doc/wxPython-$1
-#
-#rpm -bb wxPython.spec
-#
-#mv /usr/src/redhat/RPMS/*/wxPython*.rpm .
-#chown rd:users wxPython*.rpm
-#
-#rm -r /usr/doc/wxPython-$1
 
-cp -f  wxPython-$1.tar.gz /usr/src/redhat/SOURCES
-rpm -ba wxPython.spec
 
-mv /usr/src/redhat/RPMS/*/wxPython*.rpm .
-mv /usr/src/redhat/SRPMS/wxPython*.rpm .
-chown rd:users wxPython*.rpm
-rm -rf /usr/lib/python1.5/site-packages/wxPython/
-rm -f /usr/lib/libwxPyHelpers*
-rm -rf /usr/doc/wxPython-$1
+for flag in $*; do
+    case ${flag} in
+	skipcvs)   skipcvs=1        ;;
+	skipclean) skipclean=1      ;;
+	skiptar)   skiptar=1        ;;
+	skiprpm)   skiprpm=1        ;;
+	smp)       export SMP=2     ;;
+	debug)     debug=1          ;;
+	speconly)  makespec; exit 0 ;;
 
+	*)  echo "Unknown flag \"${flag}\""
+	    useage
+	    exit 1
+    esac
+done
+
+
+tarver=${tarname}-${version}
+
+#----------------------------------------------------------------------
+# Setup build dirs
+
+echo "*** Setting up"
+
+if [ ! -d ${builddir} ]; then
+    mkdir -p ${builddir}
+fi
+
+if [ ! -d ${distdir} ]; then
+    mkdir -p ${distdir}
+fi
+
+for dir in SOURCES SPECS BUILD RPMS SRPMS; do
+    if [ ! -d ${rpmtop}/${dir} ]; then
+	mkdir -p ${rpmtop}/${dir}
+    fi
+done
+
+
+#----------------------------------------------------------------------
+# Get the sources from CVS
+
+if [ -z "${skipcvs}" ]; then
+    echo "*** Exporting CVS archive..."
+    pushd ${builddir} > /dev/null
+    if [ -e ${tarver} ]; then
+	rm -rf ${tarver}
+    fi
+    cvs -d ${cvsroot} export -r ${cvs_tag} -d ${tarver} wxWindows > /dev/null 2>&1
+    if [ "$?" != "0" ]; then
+	echo "*** CVS failure, exiting."
+	exit 1
+    fi
+
+    echo "*** Removing unneeded stuff from CVS tree"
+    pushd ${tarver} > /dev/null
+    rm `find . -name .cvsignore`
+    rm *.spec
+    rm -rf demos
+#     rm -rf docs
+    rm -rf samples
+    rm -rf utils
+#     rm -rf include/wx/mgl
+#     rm -rf include/wx/motif
+#     rm -rf include/wx/os2
+#     rm -rf src/mgl
+#     rm -rf src/motif
+#     rm -rf src/os2
+    rm -rf wxPython/wxSWIG
+
+    popd > /dev/null
+    popd > /dev/null
+fi
+
+
+#----------------------------------------------------------------------
+# Make the spec file and copy to ${builddir}/${tarver}
+
+#if [ -z "${skiptar}" ]; then
+    makespec
+    cp ${distdir}/wxPython${port}.spec ${builddir}/${tarver}/wxPython${port}.spec
+#fi
+
+
+#----------------------------------------------------------------------
+# Build the tar file
+
+if [ -z "${skiptar}" ]; then
+    echo "*** Creating tarball..."
+    pushd ${builddir} > /dev/null
+    tar cvf ${distdir}/${tarver}.tar ${tarver} > /dev/null
+    echo "*** Compressing..."
+    if [ -e ${distdir}/${tarver}.tar.gz ]; then
+	rm ${distdir}/${tarver}.tar.gz
+    fi
+    gzip --best ${distdir}/${tarver}.tar
+    popd > /dev/null
+fi
+
+
+#----------------------------------------------------------------------
+# build the RPM
+
+if [ -z "${skiprpm}" ]; then
+    echo "*** Building RPMs..."
+    cp ${distdir}/${tarver}.tar.gz ${rpmtop}/SOURCES
+    rpm -ba \
+	--define "_topdir ${rpmtop}" \
+	--define "_tmppath ${builddir}" \
+	${distdir}/wxPython${port}.spec
+    if [ "$?" != "0" ]; then
+	echo "*** RPM failure, exiting."
+	exit 1
+    else
+	mv -f `find ${rpmtop} -name "wxPython*.rpm"` ${distdir}
+    fi
+fi
+
+#----------------------------------------------------------------------
+# Cleanup
+
+if [ -z ${skipclean} ]; then
+    echo "*** Cleaning up"
+    rm -rf ${rpmtop}
+    rm -rf ${builddir}
+fi
 
 
 

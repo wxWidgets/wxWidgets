@@ -1,0 +1,144 @@
+%define pref %{_prefix}
+%define python @PYTHON@
+%define pyver @PYVER@
+%define debug @DEBUG@
+%define port  @PORT@
+%define lcport @LCPORT@
+%define tarname @TARNAME@
+
+%if %{debug}
+    %define name wxPython%{port}_py%{pyver}_dbg
+%else
+    %define name wxPython%{port}_py%{pyver}
+%endif
+%define version 2.3.3pre5
+%define release 1
+
+
+Summary: Cross platform GUI toolkit for Python using wx%{port}
+Name: %{name}
+Version: %{version}
+Release: %{release}
+Source0: %{tarname}-%{version}.tar.gz
+License: wxWindows Library Licence, Version 3
+url: http://wxPython.org/
+packager: Robin Dunn <robind@alldunn.com>
+Group: Development/Python
+BuildRoot: %{_tmppath}/%{name}-buildroot
+Prefix: %{pref}
+
+
+# They conflict with each other
+%if %{debug}
+Conflicts: wxPython%{port}_py%{pyver}
+%else
+Conflicts: wxPython%{port}_py%{pyver}_dbg
+%endif
+
+Provides: wxwin
+Provides: wx%{port} = %{version}
+Provides: wxPython  = %{version}
+
+
+# ?? Obsoletes: wx%{port}, wxPython
+# Some funky mandrake names
+Conflicts: wxGTK2.3, wxGTK6
+
+
+%description
+wxPython is a GUI toolkit for Python that is a wrapper around the
+wxWindows C++ GUI library.  wxPython provides a large variety of
+window types and controls, all implemented with a native look and feel
+(and native runtime speed) on the platforms it is supported on.
+
+This package is implemented using the GTK port of wxWindows, and
+includes the wx%{port} shared libs and etc.
+
+
+%prep
+%setup -n %{tarname}-%{version}
+
+
+%build
+if [ "$SMP" != "" ]; then
+    MAKE="make -j$SMP"
+else
+    MAKE="make"
+fi
+
+mkdir build
+cd build
+
+# Configure, trying to reduce dependencies
+../configure --with-%{lcport} --enable-soname --prefix=%{pref} \
+	--with-odbc \
+	--with-opengl \
+%if %{debug}
+	--enable-debug \
+%else
+	--enable-optimise \
+%endif
+	--with-libjpeg=builtin \
+	--with-libpng=builtin \
+	--with-libtiff=builtin \
+	--with-zlib=builtin \
+
+# Build wxWindows
+$MAKE
+
+cd ../locale
+make allmo
+
+
+# ** Unfortunately we have to do a bit of installation here so wxPython
+# can be built.  Perhaps wx-config should be changed to be able to be
+# used from the build dir, maybe with an --inplace flag...  Move these
+# three lines to %install if/when that happens.
+[ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
+cd ../build
+make prefix=$RPM_BUILD_ROOT%{pref} install
+
+
+# Now build wxPython
+cd ../wxPython
+%{python} setup.py \
+	IN_CVS_TREE=1 \
+	WX_CONFIG="$RPM_BUILD_ROOT%{pref}/bin/wx-config --prefix=$RPM_BUILD_ROOT%{pref}" \
+	build
+
+
+%install
+## ** [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
+%find_lang wxstd
+cd wxPython
+%{python} setup.py \
+	IN_CVS_TREE=1 \
+	WX_CONFIG="$RPM_BUILD_ROOT%{pref}/bin/wx-config --prefix=$RPM_BUILD_ROOT%{pref}" \
+	install \
+	--root=$RPM_BUILD_ROOT
+
+
+
+%clean
+##[ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
+
+
+%post
+/sbin/ldconfig
+
+
+%postun
+/sbin/ldconfig
+
+
+
+%files
+%defattr(-,root,root)
+%{_libdir}/libwx*
+%{_libdir}/python*
+%{_datadir}
+
+
+%changelog
+
+# end of file
