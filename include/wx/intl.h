@@ -6,14 +6,14 @@
 // Created:     29/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef   __INTLH__
 #define   __INTLH__
 
 #ifdef __GNUG__
-#pragma interface "intl.h"
+    #pragma interface "intl.h"
 #endif
 
 #include "wx/defs.h"
@@ -24,20 +24,13 @@
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// simple types
-// ----------------------------------------------------------------------------
-
-// # adjust if necessary
-typedef unsigned char size_t8;
-typedef unsigned long size_t32;
-
-// ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------
 
-// gettext() style macro
+// gettext() style macro (notice that xgettext should be invoked with "-k_"
+// option to extract the strings inside _() from the sources)
 #ifndef WXINTL_NO_GETTEXT_MACRO
-#define   _(str)  wxGetTranslation(str)
+    #define   _(str)  wxGetTranslation(str)
 #endif
 
 // ----------------------------------------------------------------------------
@@ -45,7 +38,6 @@ typedef unsigned long size_t32;
 // ----------------------------------------------------------------------------
 class WXDLLEXPORT wxLocale;
 class WXDLLEXPORT wxMsgCatalog;
-extern WXDLLEXPORT_DATA(wxLocale *) g_pLocale;
 
 // ============================================================================
 // locale support
@@ -53,89 +45,94 @@ extern WXDLLEXPORT_DATA(wxLocale *) g_pLocale;
 
 // ----------------------------------------------------------------------------
 // wxLocale: encapsulates all language dependent settings, including current
-//           message catalogs, date, time and currency formats (#### to do) &c
+//           message catalogs, date, time and currency formats (TODO) &c
 // ----------------------------------------------------------------------------
 class WXDLLEXPORT wxLocale
 {
 public:
-  // ctor & dtor
-    // call Init() if you use this ctor
-  wxLocale();
-    // the ctor has a side effect of changing current locale
-  wxLocale(const char *szName,              // name (for messages)
-           const char *szShort = (const char *) NULL,      // dir prefix (for msg files)
-           const char *szLocale = (const char *) NULL,     // locale (for setlocale)
-           bool bLoadDefault = TRUE)        // preload wxstd.mo?
-    { Init(szName, szShort, szLocale, bLoadDefault); }
-    // the same as a function (returns TRUE on success)
-  bool Init(const char *szName,
-            const char *szShort = (const char *) NULL,
-            const char *szLocale = (const char *) NULL,
-            bool bLoadDefault = TRUE);
-    // restores old locale
- ~wxLocale();
+    // ctor & dtor
+    // -----------
 
-  // returns locale name
-  const char *GetLocale() const { return m_strLocale; }
+        // call Init() if you use this ctor
+    wxLocale();
+        // the ctor has a side effect of changing current locale
+    wxLocale(const char *szName,              // name (for messages)
+             const char *szShort = (const char *) NULL,      // dir prefix (for msg files)
+             const char *szLocale = (const char *) NULL,     // locale (for setlocale)
+             bool bLoadDefault = TRUE)        // preload wxstd.mo?
+        { Init(szName, szShort, szLocale, bLoadDefault); }
+        // the same as a function (returns TRUE on success)
+    bool Init(const char *szName,
+              const char *szShort = (const char *) NULL,
+              const char *szLocale = (const char *) NULL,
+              bool bLoadDefault = TRUE);
+        // restores old locale
+    ~wxLocale();
 
-  // add a prefix to the catalog lookup path: the message catalog files will be
-  // looked up under prefix/<lang>/LC_MESSAGES, prefix/LC_MESSAGES and prefix
-  // (in this order).
-  //
-  // This only applies to subsequent invocations of AddCatalog()!
-  static void AddCatalogLookupPathPrefix(const wxString& prefix);
-  
-  // add a catalog: it's searched for in standard places (current directory 
-  // first, system one after), but the you may prepend additional directories to
-  // the search path with AddCatalogLookupPathPrefix().
-  //
-  // The loaded catalog will be used for message lookup by GetString().
-  //
-  // Returns 'true' if it was successfully loaded
-  bool AddCatalog(const char *szDomain);
-  
-  // check if the given catalog is loaded
-  bool IsLoaded(const char *szDomain) const;
-  
-  // retrieve the translation for a string in all loaded domains unless
-  // the szDomain parameter is specified (and then only this domain is
-  // searched)
-  //
-  // return original string if translation is not available
-  // (in this case an error message is generated the first time
-  //  a string is not found; use wxLogNull to suppress it)
-  //
-  // domains are searched in the last to first order, i.e. catalogs
-  // added later override those added before.
-  const char *GetString(const char *szOrigString, 
-                        const char *szDomain = (const char *) NULL) const;
+    // returns locale name
+    const char *GetLocale() const { return m_strLocale; }
 
-  // Returns the current short name for the locale
-  wxString const &GetName() const { return m_strShort; }
- private:
-  // find catalog by name in a linked list, return NULL if !found
-  wxMsgCatalog  *FindCatalog(const char *szDomain) const;
+    // add a prefix to the catalog lookup path: the message catalog files will be
+    // looked up under prefix/<lang>/LC_MESSAGES, prefix/LC_MESSAGES and prefix
+    // (in this order).
+    //
+    // This only applies to subsequent invocations of AddCatalog()!
+    static void AddCatalogLookupPathPrefix(const wxString& prefix);
 
-  wxString       m_strLocale,     // this locale name
-                 m_strShort;      // short name for the locale
-  
-  const char    *m_pszOldLocale;  // previous locale from setlocale()
-  wxLocale      *m_pOldLocale;    // previous wxLocale
-  
-  wxMsgCatalog  *m_pMsgCat;       // pointer to linked list of catalogs
+    // add a catalog: it's searched for in standard places (current directory
+    // first, system one after), but the you may prepend additional directories to
+    // the search path with AddCatalogLookupPathPrefix().
+    //
+    // The loaded catalog will be used for message lookup by GetString().
+    //
+    // Returns 'true' if it was successfully loaded
+    bool AddCatalog(const char *szDomain);
+
+    // check if the given catalog is loaded
+    bool IsLoaded(const char *szDomain) const;
+
+    // retrieve the translation for a string in all loaded domains unless
+    // the szDomain parameter is specified (and then only this domain is
+    // searched)
+    //
+    // return original string if translation is not available
+    // (in this case an error message is generated the first time
+    //  a string is not found; use wxLogNull to suppress it)
+    //
+    // domains are searched in the last to first order, i.e. catalogs
+    // added later override those added before.
+    const char *GetString(const char *szOrigString,
+                          const char *szDomain = (const char *) NULL) const;
+
+    // Returns the current short name for the locale
+    const wxString& GetName() const { return m_strShort; }
+
+private:
+    // find catalog by name in a linked list, return NULL if !found
+    wxMsgCatalog  *FindCatalog(const char *szDomain) const;
+
+    wxString       m_strLocale,     // this locale name
+                   m_strShort;      // short name for the locale
+
+    const char    *m_pszOldLocale;  // previous locale from setlocale()
+    wxLocale      *m_pOldLocale;    // previous wxLocale
+
+    wxMsgCatalog  *m_pMsgCat;       // pointer to linked list of catalogs
 };
 
 // ----------------------------------------------------------------------------
 // global functions
 // ----------------------------------------------------------------------------
-WXDLLEXPORT wxLocale* wxGetLocale();
 
-// get the translation of the string in the current locale  
+// get the current locale object (note that it may be NULL!)
+extern WXDLLEXPORT wxLocale* wxGetLocale();
+
+// get the translation of the string in the current locale
 inline const char *wxGetTranslation(const char *sz)
 {
-  wxLocale *pLoc = wxGetLocale();
-  return pLoc == (wxLocale *) NULL ? sz : pLoc->GetString(sz);
+    wxLocale *pLoc = wxGetLocale();
+    return pLoc ? pLoc->GetString(sz) : sz;
 }
 
 #endif
-	// _WX_INTLH__
+    // _WX_INTLH__

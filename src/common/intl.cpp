@@ -18,14 +18,14 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-#pragma implementation "intl.h"
+    #pragma implementation "intl.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 // standard headers
@@ -40,6 +40,14 @@
 #include "wx/utils.h"
 
 #include <stdlib.h>
+
+// ----------------------------------------------------------------------------
+// simple types
+// ----------------------------------------------------------------------------
+
+// FIXME adjust if necessary
+typedef unsigned char size_t8;
+typedef unsigned long size_t32;
 
 // ----------------------------------------------------------------------------
 // constants
@@ -68,8 +76,7 @@ void wxRestoreTransErrors();
 // get the current state
 bool wxIsLoggingTransErrors();
 
-// get the current locale object (## may be NULL!)
-extern wxLocale *wxSetLocale(wxLocale *pLocale);
+static wxLocale *wxSetLocale(wxLocale *pLocale);
 
 // ----------------------------------------------------------------------------
 // wxMsgCatalog corresponds to one disk-file message catalog.
@@ -112,21 +119,21 @@ private:
   struct wxMsgCatalogHeader
   {
     size_t32  magic,          // offset +00:  magic id
-            revision,       //        +04:  revision
-            numStrings;     //        +08:  number of strings in the file
+              revision,       //        +04:  revision
+              numStrings;     //        +08:  number of strings in the file
     size_t32  ofsOrigTable,   //        +0C:  start of original string table
-            ofsTransTable;  //        +10:  start of translated string table
+              ofsTransTable;  //        +10:  start of translated string table
     size_t32  nHashSize,      //        +14:  hash table size
-            ofsHashTable;   //        +18:  offset of hash table start
+              ofsHashTable;   //        +18:  offset of hash table start
   };
 
   // all data is stored here, NULL if no data loaded
   size_t8 *m_pData;
 
   // data description
-  size_t32            m_numStrings,   // number of strings in this domain
+  size_t32          m_numStrings,   // number of strings in this domain
                     m_nHashSize;    // number of entries in hash table
-  size_t32           *m_pHashTable;   // pointer to hash table
+  size_t32         *m_pHashTable;   // pointer to hash table
   wxMsgTableEntry  *m_pOrigTable,   // pointer to original   strings
                    *m_pTransTable;  //            translated
 
@@ -592,7 +599,7 @@ bool wxIsLoggingTransErrors()
 // ------------------------------
 
 // the current locale object
-wxLocale *g_pLocale = NULL;
+static wxLocale *g_pLocale = NULL;
 
 wxLocale *wxGetLocale()
 {
