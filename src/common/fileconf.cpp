@@ -208,82 +208,51 @@ void wxFileConfig::Init()
   }
 }
 
-#if 0
-wxFileConfig::wxFileConfig(const char *szAppName, bool bLocalOnly)
-{
-  wxASSERT( !IsEmpty(szAppName) ); // invent a name for your application!
-
-  m_strLocalFile = GetLocalFileName(szAppName);
-  if ( !bLocalOnly )
-    m_strGlobalFile = GetGlobalFileName(szAppName);
-  //else: it's going to be empty and we won't use the global file
-
-  Init();
-}
-
-wxFileConfig::wxFileConfig(const wxString& strLocal, const wxString& strGlobal)
-            : m_strLocalFile(strLocal), m_strGlobalFile(strGlobal)
-{
-  // if the path is not absolute, prepend the standard directory to it
-  if ( !strLocal.IsEmpty() && !wxIsAbsolutePath(strLocal) )
-  {
-     m_strLocalFile = GetLocalDir();
-     m_strLocalFile << strLocal;
-  }
-  
-  if ( !strGlobal.IsEmpty() && !wxIsAbsolutePath(strGlobal) )
-  {
-     m_strGlobalFile = GetGlobalDir();
-     m_strGlobalFile << strGlobal;
-  }
-
-  Init();
-}
-#endif
-
-// New-style constructor
+// constructor supports creation of wxFileConfig objects of any type
 wxFileConfig::wxFileConfig(const wxString& appName, const wxString& vendorName,
-      const wxString& strLocal, const wxString& strGlobal, long style)
+                           const wxString& strLocal, const wxString& strGlobal,
+                           long style)
             : wxConfigBase(appName, vendorName, strLocal, strGlobal, style),
               m_strLocalFile(strLocal), m_strGlobalFile(strGlobal)
 {
-    // Make up an application name if not supplied
-    if (appName.IsEmpty() && wxTheApp)
-    {
-        SetAppName(wxTheApp->GetAppName());
-    }
+  // Make up an application name if not supplied
+  if (appName.IsEmpty() && wxTheApp)
+  {
+    SetAppName(wxTheApp->GetAppName());
+  }
 
-    // Make up names for files if empty
-    if (m_strLocalFile.IsEmpty() && (style & wxCONFIG_USE_LOCAL_FILE) && wxTheApp)
-    {
-        m_strLocalFile = wxTheApp->GetAppName();
-    }
+  // Make up names for files if empty
+  if ( m_strLocalFile.IsEmpty() && (style & wxCONFIG_USE_LOCAL_FILE) )
+  {
+    m_strLocalFile = GetLocalFileName(GetAppName());
+  }
 
-    if (m_strGlobalFile.IsEmpty() && (style & wxCONFIG_USE_GLOBAL_FILE))
-    {
-        // TODO: What should the default global filename be?
-        m_strGlobalFile = "global";
-    }
+  if ( m_strGlobalFile.IsEmpty() && (style & wxCONFIG_USE_GLOBAL_FILE) )
+  {
+    m_strGlobalFile = GetGlobalFileName(GetAppName());
+  }
 
-    // Check if styles are not supplied, but filenames are, in which case
-    // add the correct styles.
-    if (!m_strLocalFile.IsEmpty() && ((style & wxCONFIG_USE_LOCAL_FILE) != wxCONFIG_USE_LOCAL_FILE))
-        SetStyle(GetStyle() | wxCONFIG_USE_LOCAL_FILE);
+  // Check if styles are not supplied, but filenames are, in which case
+  // add the correct styles.
+  if ( !m_strLocalFile.IsEmpty() )
+    SetStyle(GetStyle() | wxCONFIG_USE_LOCAL_FILE);
 
-    if (!m_strGlobalFile.IsEmpty() && ((style & wxCONFIG_USE_GLOBAL_FILE) != wxCONFIG_USE_GLOBAL_FILE))
-        SetStyle(GetStyle() | wxCONFIG_USE_GLOBAL_FILE);
+  if ( !m_strGlobalFile.IsEmpty() )
+    SetStyle(GetStyle() | wxCONFIG_USE_GLOBAL_FILE);
 
   // if the path is not absolute, prepend the standard directory to it
-  if ( !strLocal.IsEmpty() && !wxIsAbsolutePath(strLocal) )
+  if ( !m_strLocalFile.IsEmpty() && !wxIsAbsolutePath(m_strLocalFile) )
   {
-     m_strLocalFile = GetLocalDir();
-     m_strLocalFile << strLocal;
+    wxString strLocal = m_strLocalFile;
+    m_strLocalFile = GetLocalDir();
+    m_strLocalFile << strLocal;
   }
-  
-  if ( !strGlobal.IsEmpty() && !wxIsAbsolutePath(strGlobal) )
+
+  if ( !m_strGlobalFile.IsEmpty() && !wxIsAbsolutePath(m_strGlobalFile) )
   {
-     m_strGlobalFile = GetGlobalDir();
-     m_strGlobalFile << strGlobal;
+    wxString strGlobal = m_strGlobalFile;
+    m_strGlobalFile = GetGlobalDir();
+    m_strGlobalFile << strGlobal;
   }
 
   Init();
