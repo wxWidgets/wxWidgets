@@ -186,8 +186,24 @@ MyFrame::MyFrame(const wxString& title)
     myToolbar->AddSeparator();
     myToolbar->Realize();
 
-    mySafari = new wxWebKitCtrl(this, ID_WEBKIT, _T("http://www.wxwidgets.org"), wxDefaultPosition, wxSize(200, 200));
+    // Testing wxWebKitCtrl inside a panel
+#if 1
+    wxPanel* panel = new wxPanel(this, -1);
 
+    wxBoxSizer* boxSizer = new wxBoxSizer(wxVERTICAL);
+    panel->SetSizer(boxSizer);
+
+    mySafari = new wxWebKitCtrl(panel, ID_WEBKIT, _T("http://www.wxwidgets.org"), wxDefaultPosition, wxSize(200, 200));
+
+    boxSizer->Add(mySafari, 1, wxEXPAND);
+
+    wxBoxSizer* frameSizer = new wxBoxSizer(wxVERTICAL);
+    SetSizer(frameSizer);
+    frameSizer->Add(panel, 1, wxEXPAND);
+#else
+    mySafari = new wxWebKitCtrl(this, ID_WEBKIT, _T("http://www.wxwidgets.org"), wxDefaultPosition, wxSize(200, 200));
+#endif
+    
 #if wxUSE_STATUSBAR
     CreateStatusBar(2);
 #endif // wxUSE_STATUSBAR
