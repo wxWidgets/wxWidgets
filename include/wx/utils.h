@@ -79,7 +79,7 @@ class WXDLLIMPEXP_CORE wxPoint;
 
 // Make a copy of this string using 'new'
 #if WXWIN_COMPATIBILITY_2_4
-WXDLLIMPEXP_BASE wxChar* copystring(const wxChar *s);
+wxDEPRECATED( WXDLLIMPEXP_BASE wxChar* copystring(const wxChar *s) );
 #endif
 
 // A shorter way of using strcmp
@@ -146,14 +146,14 @@ WXDLLEXPORT long wxGetCurrentId();
 WXDLLIMPEXP_DATA_BASE(extern const wxChar*) wxFloatToStringStr;
 WXDLLIMPEXP_DATA_BASE(extern const wxChar*) wxDoubleToStringStr;
 
-WXDLLIMPEXP_BASE void StringToFloat(const wxChar *s, float *number);
-WXDLLIMPEXP_BASE wxChar* FloatToString(float number, const wxChar *fmt = wxFloatToStringStr);
-WXDLLIMPEXP_BASE void StringToDouble(const wxChar *s, double *number);
-WXDLLIMPEXP_BASE wxChar* DoubleToString(double number, const wxChar *fmt = wxDoubleToStringStr);
-WXDLLIMPEXP_BASE void StringToInt(const wxChar *s, int *number);
-WXDLLIMPEXP_BASE void StringToLong(const wxChar *s, long *number);
-WXDLLIMPEXP_BASE wxChar* IntToString(int number);
-WXDLLIMPEXP_BASE wxChar* LongToString(long number);
+wxDEPRECATED( WXDLLIMPEXP_BASE void StringToFloat(const wxChar *s, float *number) );
+wxDEPRECATED( WXDLLIMPEXP_BASE wxChar* FloatToString(float number, const wxChar *fmt = wxFloatToStringStr) );
+wxDEPRECATED( WXDLLIMPEXP_BASE void StringToDouble(const wxChar *s, double *number) );
+wxDEPRECATED( WXDLLIMPEXP_BASE wxChar* DoubleToString(double number, const wxChar *fmt = wxDoubleToStringStr) );
+wxDEPRECATED( WXDLLIMPEXP_BASE void StringToInt(const wxChar *s, int *number) );
+wxDEPRECATED( WXDLLIMPEXP_BASE void StringToLong(const wxChar *s, long *number) );
+wxDEPRECATED( WXDLLIMPEXP_BASE wxChar* IntToString(int number) );
+wxDEPRECATED( WXDLLIMPEXP_BASE wxChar* LongToString(long number) );
 
 #endif // WXWIN_COMPATIBILITY_2_4
 

@@ -32,17 +32,11 @@
 
 #include "wx/palmos/private.h"
 
-// Set this to 1 to be _absolutely_ sure that repainting will work for all
-// comctl32.dll versions
-#define wxUSE_COMCTL32_SAFELY 0
-
 #include "wx/app.h"
 #include "wx/log.h"
 #include "wx/dynarray.h"
 #include "wx/imaglist.h"
 #include "wx/settings.h"
-
-#include "wx/palmos/wrapcctl.h"
 
 // macros to hide the cast ugliness
 // --------------------------------

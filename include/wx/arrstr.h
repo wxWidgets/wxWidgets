@@ -160,7 +160,7 @@ public:
     // once you are done with it.  Will return NULL if the
     // ArrayString was empty.
 #if WXWIN_COMPATIBILITY_2_4
-  wxString* GetStringArray() const;
+  wxDEPRECATED( wxString* GetStringArray() const );
 #endif
 
   // item management
@@ -180,7 +180,7 @@ public:
   void Remove(const wxChar *sz);
     // remove item by index
 #if WXWIN_COMPATIBILITY_2_4
-  void Remove(size_t nIndex, size_t nRemove = 1) { RemoveAt(nIndex, nRemove); }
+  wxDEPRECATED( void Remove(size_t nIndex, size_t nRemove = 1) );
 #endif
   void RemoveAt(size_t nIndex, size_t nRemove = 1);
 

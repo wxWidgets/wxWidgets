@@ -1024,7 +1024,7 @@ wxString::wxString(const char *psz, wxMBConv& conv, size_t nLength)
         size_t nRealSize;
         wxWCharBuffer theBuffer = conv.cMB2WC(psz, nLen, &nRealSize);
 
-        //Copy 
+        //Copy
         if (nRealSize)
             assign( theBuffer.data() , nRealSize - 1 );
     }
@@ -1080,7 +1080,7 @@ wxString::wxString(const wchar_t *pwz, wxMBConv& conv, size_t nLength)
         size_t nRealSize;
         wxCharBuffer theBuffer = conv.cWC2MB(pwz, nLen, &nRealSize);
 
-        //Copy 
+        //Copy
         if (nRealSize)
             assign( theBuffer.data() , nRealSize - 1 );
     }
@@ -1629,7 +1629,7 @@ inline int wxSafeIsspace(wxChar ch) { return (ch < 127) && wxIsspace(ch); }
 wxString& wxString::Trim(bool bFromRight)
 {
   // first check if we're going to modify the string at all
-  if ( !IsEmpty() &&
+  if ( !empty() &&
        (
         (bFromRight && wxSafeIsspace(GetChar(Len() - 1))) ||
         (!bFromRight && wxSafeIsspace(GetChar(0u)))
@@ -2193,6 +2193,11 @@ wxString* wxArrayString::GetStringArray() const
     }
 
     return array;
+}
+
+void wxArrayString::Remove(size_t nIndex, size_t nRemove)
+{
+    RemoveAt(nIndex, nRemove);
 }
 
 #endif // WXWIN_COMPATIBILITY_2_4

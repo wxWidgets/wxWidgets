@@ -84,9 +84,9 @@ public:
     // The arrays will contain an equal number of items found before the error.
     // wildCard is in the form:
     // "All files (*)|*|Image Files (*.jpeg *.png)|*.jpg;*.png"
-    static int ParseWildcard(const wxString& wildCard,
-                             wxArrayString& descriptions,
-                             wxArrayString& filters);
+    wxDEPRECATED( static int ParseWildcard(const wxString& wildCard,
+                                           wxArrayString& descriptions,
+                                           wxArrayString& filters) );
 #endif // WXWIN_COMPATIBILITY_2_4
 
     // Append first extension to filePath from a ';' separated extensionList

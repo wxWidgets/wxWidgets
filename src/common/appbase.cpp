@@ -442,6 +442,15 @@ void wxAppConsole::OnAssert(const wxChar *file,
 
 #endif // __WXDEBUG__
 
+#if WXWIN_COMPATIBILITY_2_4
+
+bool wxAppConsole::CheckBuildOptions(const wxBuildOptions& buildOptions)
+{
+    return CheckBuildOptions(buildOptions.m_signature, "your program");
+}
+
+#endif
+
 // ============================================================================
 // other classes implementations
 // ============================================================================

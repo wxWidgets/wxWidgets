@@ -206,12 +206,12 @@ public:
         // user-defined class (default implementation creates a wxLogGui
         // object) -- this log object is used by default by all wxLogXXX()
         // functions.
-    virtual wxLog *CreateLogTarget();
+    wxDEPRECATED( virtual wxLog *CreateLogTarget() );
 #endif // wxUSE_LOG
 
         // similar to CreateLogTarget() but for the global wxMessageOutput
         // object
-    virtual wxMessageOutput *CreateMessageOutput();
+    wxDEPRECATED( virtual wxMessageOutput *CreateMessageOutput() );
 
 #endif // WXWIN_COMPATIBILITY_2_4
 
@@ -278,10 +278,7 @@ public:
     static bool CheckBuildOptions(const char *optionsSignature,
                                   const char *componentName);
 #if WXWIN_COMPATIBILITY_2_4
-    static bool CheckBuildOptions(const wxBuildOptions& buildOptions)
-    {
-        return CheckBuildOptions(buildOptions.m_signature, "your program");
-    }
+    wxDEPRECATED( static bool CheckBuildOptions(const wxBuildOptions& buildOptions) );
 #endif
 
     // implementation only from now on

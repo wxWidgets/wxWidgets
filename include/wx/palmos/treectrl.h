@@ -27,12 +27,6 @@
 #include "wx/treebase.h"
 #include "wx/hashmap.h"
 
-#ifdef __GNUWIN32__
-    // Cygwin windows.h defines these identifiers
-    #undef GetFirstChild
-    #undef GetNextSibling
-#endif // Cygwin
-
 // fwd decl
 class  WXDLLEXPORT wxImageList;
 class  WXDLLEXPORT wxDragImage;
@@ -363,42 +357,6 @@ public:
                          wxRect& rect,
                          bool textOnly = false) const;
 
-    // deprecated
-    // ----------
-
-#if WXWIN_COMPATIBILITY_2_4
-    // these methods are deprecated and will be removed in future versions of
-    // wxWidgets, they're here for compatibility only, don't use them in new
-    // code (the comments indicate why these methods are now useless and how to
-    // replace them)
-
-        // use Expand, Collapse, CollapseAndReset or Toggle
-    wxDEPRECATED( void ExpandItem(const wxTreeItemId& item, int action) );
-
-        // use AddRoot, PrependItem or AppendItem
-    wxDEPRECATED( wxTreeItemId InsertItem(const wxTreeItemId& parent,
-                            const wxString& text,
-                            int image = -1, int selImage = -1,
-                            long insertAfter = wxTREE_INSERT_LAST) );
-
-        // use Set/GetImageList and Set/GetStateImageList
-    wxImageList *GetImageList(int) const { return GetImageList(); }
-    void SetImageList(wxImageList *imageList, int) { SetImageList(imageList); }
-
-    // use Set/GetItemImage directly
-    int GetItemSelectedImage(const wxTreeItemId& item) const
-        { return GetItemImage(item, wxTreeItemIcon_Selected); }
-    void SetItemSelectedImage(const wxTreeItemId& item, int image)
-        { SetItemImage(item, image, wxTreeItemIcon_Selected); }
-
-    // use the versions taking wxTreeItemIdValue cookies
-    wxDEPRECATED( wxTreeItemId GetFirstChild(const wxTreeItemId& item,
-                                             long& cookie) const );
-    wxDEPRECATED( wxTreeItemId GetNextChild(const wxTreeItemId& item,
-                                            long& cookie) const );
-#endif // WXWIN_COMPATIBILITY_2_4
-
-
     // implementation
     // --------------
 
@@ -462,7 +420,7 @@ private:
     void DeleteTextCtrl();
 
     // support for additional item images which we implement using
-    // wxTreeItemIndirectData technique - see the comments in msw/treectrl.cpp
+    // wxTreeItemIndirectData technique
     void SetIndirectItemData(const wxTreeItemId& item,
                              class wxTreeItemIndirectData *data);
     bool HasIndirectData(const wxTreeItemId& item) const;
@@ -493,5 +451,4 @@ private:
 
 #endif // wxUSE_TREECTRL
 
-#endif
-    // _WX_TREECTRL_H_
+#endif // _WX_TREECTRL_H_
