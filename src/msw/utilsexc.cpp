@@ -32,9 +32,8 @@
     #include "wx/utils.h"
     #include "wx/app.h"
     #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
-
-#include "wx/log.h"
 
 #ifdef __WIN32__
     #include "wx/stream.h"
@@ -845,12 +844,44 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
         return pi.dwProcessId;
     }
 
-    // waiting until command executed (disable everything while doing it)
+    // disable all app windows while waiting for the child process to finish
 #if wxUSE_GUI
+
+    /*
+       We use a dirty hack here to disable all application windows (which we
+       must do because otherwise the calls to wxYield() could lead to some very
+       unexpected reentrancies in the users code) but to avoid losing
+       focus/activation entirely when the child process terminates which would
+       happen if we simply disabled everything using wxWindowDisabler. Indeed,
+       remember that Windows will never activate a disabled window and when the
+       last childs window is closed and Windows looks for a window to activate
+       all our windows are still disabled. There is no way to enable them in
+       time because we don't know when the childs windows are going to be
+       closed, so the solution we use here is to keep one special tiny frame
+       enabled all the time. Then when the child terminates it will get
+       activated and when we close it below -- after reenabling all the other
+       windows! -- the previously active window becomes activated again and
+       everything is ok.
+     */
+    wxWindow *winActive;
     {
         wxBusyCursor bc;
 
+        // first disable all existing windows
         wxWindowDisabler wd;
+
+        // then create an "invisible" frame: it has minimal size, is positioned
+        // (hopefully) outside the screen and doesn't appear on the taskbar
+        winActive = new wxFrame
+                        (
+                            wxTheApp->GetTopWindow(),
+                            -1,
+                            _T(""),
+                            wxPoint(32600, 32600),
+                            wxSize(1, 1),
+                            wxDEFAULT_FRAME_STYLE | wxFRAME_NO_TASKBAR
+                        );
+        winActive->Show();
 #endif // wxUSE_GUI
 
         // wait until the child process terminates
@@ -871,6 +902,11 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
 
 #if wxUSE_GUI
     }
+
+    // finally delete the dummy frame and, as wd has been already destroyed and
+    // the other windows reenabled, the activation is going to return to the
+    // window which had it before
+    winActive->Destroy();
 #endif // wxUSE_GUI
 
     DWORD dwExitCode = data->dwExitCode;
