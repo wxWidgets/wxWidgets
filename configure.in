@@ -6469,6 +6469,12 @@ else
     USE_ODBC=0
 fi
 
+if test "$wxUSE_DEBUGREPORT" = "yes" ; then
+    USE_QA=1
+else
+    USE_QA=0
+fi
+
 if test $wxUSE_OFFICIAL_BUILD = "yes" ; then
     OFFICIAL_BUILD=1
 else
