@@ -24,11 +24,12 @@
 // ----------------------------------------------------------------------------
 
 // to avoid compilation problems on 64bit machines with ambiguous method calls
-// we will need this
+// we will need to define this
 #undef wxLongLongIsLong
 
 // NB: we #define and not typedef wxLongLong_t because we want to be able to
-//     use 'unsigned wxLongLong_t' as well
+//     use 'unsigned wxLongLong_t' as well and because we use "#ifdef
+//     wxLongLong_t" below
 #if defined(SIZEOF_LONG) && (SIZEOF_LONG == 8)
     #define wxLongLong_t long
     #define wxLongLongIsLong
@@ -98,7 +99,7 @@ public:
         m_ll |= (wxLongLong_t) lo;
     }
 
-    // default copy ctor is ok in both cases
+    // default copy ctor is ok
 
     // no dtor
 
@@ -112,10 +113,10 @@ public:
     // accessors
         // get high part
     long GetHi() const
-        { return (long)((m_ll & 0xFFFFFFFF00000000l) >> 32); }
+        { return (long)(m_ll >> 32); }
         // get low part
     unsigned long GetLo() const
-        { return (unsigned long) (m_ll & 0x00000000FFFFFFFFl); }
+        { return (unsigned long)m_ll; }
 
         // get absolute value
     wxLongLongNative& Abs() { if ( m_ll < 0 ) m_ll = -m_ll; return *this; }
@@ -123,6 +124,8 @@ public:
         // convert to native long long
     wxLongLong_t GetValue() const { return m_ll; }
 
+    // don't provide implicit conversion to wxLongLong_t or we will have an
+    // ambiguity for all arithmetic operations
     //operator wxLongLong_t() const { return m_ll; }
 
     // operations
@@ -200,8 +203,12 @@ public:
     // multiplication/division
     wxLongLongNative operator*(const wxLongLongNative& ll) const
         { return wxLongLongNative(m_ll * ll.m_ll); }
+    wxLongLongNative operator*(long l) const
+        { return wxLongLongNative(m_ll * l); }
     wxLongLongNative& operator*=(const wxLongLongNative& ll)
         { m_ll *= ll.m_ll; return *this; }
+    wxLongLongNative& operator*=(long l)
+        { m_ll *= l; return *this; }
 
     wxLongLongNative operator/(const wxLongLongNative& ll) const
         { return wxLongLongNative(m_ll / ll.m_ll); }
@@ -209,6 +216,8 @@ public:
         { return wxLongLongNative(m_ll / l); }
     wxLongLongNative& operator/=(const wxLongLongNative& ll)
         { m_ll /= ll.m_ll; return *this; }
+    wxLongLongNative& operator/=(long l)
+        { m_ll /= l; return *this; }
 
     wxLongLongNative operator%(const wxLongLongNative& ll) const
         { return wxLongLongNative(m_ll % ll.m_ll); }

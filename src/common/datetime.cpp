@@ -54,6 +54,7 @@ static wxDateTime::wxDateTime_t gs_daysInMonth[2][12] =
 // private functions
 // ----------------------------------------------------------------------------
 
+// this function is a wrapper around strftime(3)
 static wxString CallStrftime(const wxChar *format, const tm* tm)
 {
     wxChar buf[1024];
@@ -64,6 +65,28 @@ static wxString CallStrftime(const wxChar *format, const tm* tm)
     }
 
     return wxString(buf);
+}
+
+// if year and/or month have invalid values, replace them with the current ones
+static void ReplaceDefaultYearMonthWithCurrent(int *year,
+                                               wxDateTime::Month *month)
+{
+    struct tm *tmNow = NULL;
+
+    if ( *year == wxDateTime::Inv_Year )
+    {
+        tmNow = wxDateTime::GetTmNow();
+
+        *year = 1900 + tmNow->tm_year;
+    }
+
+    if ( *month == wxDateTime::Inv_Month )
+    {
+        if ( !tmNow )
+            tmNow = wxDateTime::GetTmNow();
+
+        *month = (wxDateTime::Month)tmNow->tm_mon;
+    }
 }
 
 // ============================================================================
@@ -122,6 +145,9 @@ void wxDateTime::Tm::ComputeWeekDay()
 /* static */
 bool wxDateTime::IsLeapYear(int year, wxDateTime::Calendar cal)
 {
+    if ( year == Inv_Year )
+        year = GetCurrentYear();
+
     if ( cal == Gregorian )
     {
         // in Gregorian calendar leap years are those divisible by 4 except
@@ -195,6 +221,30 @@ wxDateTime::Month wxDateTime::GetCurrentMonth(wxDateTime::Calendar cal)
     }
 
     return Inv_Month;
+}
+
+/* static */
+wxDateTime::wxDateTime_t wxDateTime::GetNumberOfDays(int year, Calendar cal)
+{
+    if ( year == Inv_Year )
+    {
+        // take the current year if none given
+        year = GetCurrentYear();
+    }
+
+    switch ( cal )
+    {
+        case Gregorian:
+        case Julian:
+            return IsLeapYear(year) ? 366 : 365;
+            break;
+
+        default:
+            wxFAIL_MSG(_T("unsupported calendar"));
+            break;
+    }
+
+    return 0;
 }
 
 /* static */
@@ -310,12 +360,9 @@ wxDateTime& wxDateTime::Set(wxDateTime_t day,
                  ms_InvDateTime,
                  _T("Invalid time in wxDateTime::Set()") );
 
-    if ( year == Inv_Year )
-        year = GetCurrentYear();
-    if ( month == Inv_Month )
-        month = GetCurrentMonth();
+    ReplaceDefaultYearMonthWithCurrent(&year, &month);
 
-    wxCHECK_MSG( day < GetNumberOfDays(month, year), ms_InvDateTime,
+    wxCHECK_MSG( day <= GetNumberOfDays(month, year), ms_InvDateTime,
                  _T("Invalid date in wxDateTime::Set()") );
 
     // the range of time_t type (inclusive)
@@ -324,7 +371,7 @@ wxDateTime& wxDateTime::Set(wxDateTime_t day,
 
     // test only the year instead of testing for the exact end of the Unix
     // time_t range - it doesn't bring anything to do more precise checks
-    if ( year >= yearMaxInRange && year <= yearMaxInRange )
+    if ( year >= yearMinInRange && year <= yearMaxInRange )
     {
         // use the standard library version if the date is in range - this is
         // probably more efficient than our code
@@ -471,6 +518,87 @@ wxDateTime& wxDateTime::Add(const wxDateSpan& diff)
     Set(tm);
 
     return *this;
+}
+
+// ----------------------------------------------------------------------------
+// Weekday and monthday stuff
+// ----------------------------------------------------------------------------
+
+wxDateTime& wxDateTime::SetToLastMonthDay(Month month,
+                                          int year)
+{
+    // take the current month/year if none specified
+    ReplaceDefaultYearMonthWithCurrent(&year, &month);
+
+    return Set(gs_daysInMonth[IsLeapYear(year)][month], month, year);
+}
+
+bool wxDateTime::SetToWeekDay(WeekDay weekday,
+                              int n,
+                              Month month,
+                              int year)
+{
+    wxCHECK_MSG( weekday != Inv_WeekDay, FALSE, _T("invalid weekday") );
+
+    // we don't check explicitly that -5 <= n <= 5 because we will return FALSE
+    // anyhow in such case - but may be should still give an assert for it?
+
+    // take the current month/year if none specified
+    ReplaceDefaultYearMonthWithCurrent(&year, &month);
+
+    wxDateTime dt;
+
+    // TODO this probably could be optimised somehow...
+
+    if ( n > 0 )
+    {
+        // get the first day of the month
+        dt.Set(1, month, year);
+
+        // get its wday
+        WeekDay wdayFirst = dt.GetWeekDay();
+
+        // go to the first weekday of the month
+        int diff = weekday - wdayFirst;
+        if ( diff < 0 )
+            diff += 7;
+
+        // add advance n-1 weeks more
+        diff += 7*(n - 1);
+
+        dt -= wxDateSpan::Days(diff);
+    }
+    else
+    {
+        // get the last day of the month
+        dt.SetToLastMonthDay(month, year);
+
+        // get its wday
+        WeekDay wdayLast = dt.GetWeekDay();
+
+        // go to the last weekday of the month
+        int diff = wdayLast - weekday;
+        if ( diff < 0 )
+            diff += 7;
+
+        // and rewind n-1 weeks from there
+        diff += 7*(n - 1);
+
+        dt -= wxDateSpan::Days(diff);
+    }
+
+    // check that it is still in the same month
+    if ( dt.GetMonth() == month )
+    {
+        *this = dt;
+
+        return TRUE;
+    }
+    else
+    {
+        // no such day in this month
+        return FALSE;
+    }
 }
 
 // ----------------------------------------------------------------------------

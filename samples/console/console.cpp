@@ -32,8 +32,8 @@
 //#define TEST_ARRAYS
 //#define TEST_LOG
 //#define TEST_STRINGS
-#define TEST_THREADS
-//#define TEST_TIME
+//#define TEST_THREADS
+#define TEST_TIME
 //#define TEST_LONGLONG
 
 // ============================================================================
@@ -93,9 +93,26 @@ static void TestSpeed()
 
 static void TestDivision()
 {
-    wxLongLong ll = 0x38417388; // some number < LONG_MAX
+    #define MAKE_LL(x1, x2, x3, x4) wxLongLong((x1 << 16) | x2, (x3 << 16) | x3)
 
-    wxASSERT( (ll / 1000l)*1000l == ll );
+    // seed pseudo random generator
+    //srand((unsigned)time(NULL));
+
+    size_t nTested = 0;
+    for ( size_t n = 0; n < 10000; n++ )
+    {
+        // get a random wxLongLong (shifting by 12 the MSB ensures that the
+        // multiplication will not overflow)
+        wxLongLong ll = MAKE_LL((rand() >> 12), rand(), rand(), rand());
+
+        wxASSERT( (ll * 1000l)/1000l == ll );
+
+        nTested++;
+    }
+
+    printf("\n*** Tested %u divisions/multiplications: ok\n", nTested);
+
+    #undef MAKE_LL
 }
 
 #endif // TEST_LONGLONG
@@ -107,6 +124,60 @@ static void TestDivision()
 #ifdef TEST_TIME
 
 #include <wx/datetime.h>
+
+// this test miscellaneous static wxDateTime functions
+static void TestTimeStatic()
+{
+    puts("\n*** wxDateTime static methods test ***");
+
+    // some info about the current date
+    int year = wxDateTime::GetCurrentYear();
+    printf("Current year %d is %sa leap one and has %d days.\n",
+           year,
+           wxDateTime::IsLeapYear(year) ? "" : "not ",
+           wxDateTime::GetNumberOfDays(year));
+
+    wxDateTime::Month month = wxDateTime::GetCurrentMonth();
+    printf("Current month is '%s' ('%s') and it has %d days\n",
+           wxDateTime::GetMonthName(month, TRUE).c_str(),
+           wxDateTime::GetMonthName(month).c_str(),
+           wxDateTime::GetNumberOfDays(month));
+
+    // leap year logic
+    static const nYears = 5;
+    static const int years[2][nYears] =
+    {
+        // first line: the years to test
+        { 1990, 1976, 2000, 2030, 1984, },
+
+        // second line: TRUE if leap, FALSE otherwise
+        { FALSE, TRUE, TRUE, FALSE, TRUE }
+    };
+
+    for ( size_t n = 0; n < nYears; n++ )
+    {
+        int year = years[0][n];
+        bool should = years[1][n] != 0;
+
+        printf("Year %d is %sa leap year (should be: %s)\n",
+               year,
+               wxDateTime::IsLeapYear(year) ? "" : "not ",
+               should ? "yes" : "no");
+
+        wxASSERT( should == wxDateTime::IsLeapYear(year) );
+    }
+}
+
+// test constructing wxDateTime objects
+static void TestTimeSet()
+{
+    puts("\n*** wxDateTime construction test ***");
+
+    printf("Current time:\t%s\n", wxDateTime::Now().Format().c_str());
+    printf("Unix epoch:\t%s\n", wxDateTime((time_t)0).Format().c_str());
+    printf("Today noon:\t%s\n", wxDateTime(12, 0).Format().c_str());
+    printf("May 29, 1976:\t%s\n", wxDateTime(29, wxDateTime::May, 1976).Format().c_str());
+}
 
 #endif // TEST_TIME
 
@@ -200,7 +271,7 @@ void MyDetachedThread::OnExit()
 
 void TestDetachedThreads()
 {
-    puts("*** Testing detached threads ***");
+    puts("\n*** Testing detached threads ***");
 
     static const size_t nThreads = 3;
     MyDetachedThread *threads[nThreads];
@@ -226,7 +297,7 @@ void TestDetachedThreads()
 
 void TestJoinableThreads()
 {
-    puts("*** Testing a joinable thread (a loooong calculation...) ***");
+    puts("\n*** Testing a joinable thread (a loooong calculation...) ***");
 
     // calc 10! in the background
     MyJoinableThread thread(10);
@@ -238,7 +309,9 @@ void TestJoinableThreads()
 
 void TestThreadSuspend()
 {
-    MyDetachedThread *thread = new MyDetachedThread(30, 'X');
+    puts("\n*** Testing thread suspend/resume functions ***");
+
+    MyDetachedThread *thread = new MyDetachedThread(15, 'X');
 
     thread->Run();
 
@@ -267,6 +340,56 @@ void TestThreadSuspend()
 
     // wait until the thread terminates
     gs_cond.Wait();
+
+    puts("");
+}
+
+void TestThreadDelete()
+{
+    // As above, using Sleep() is only for testing here - we must use some
+    // synchronisation object instead to ensure that the thread is still
+    // running when we delete it - deleting a detached thread which already
+    // terminated will lead to a crash!
+
+    puts("\n*** Testing thread delete function ***");
+
+    MyDetachedThread *thread1 = new MyDetachedThread(30, 'Y');
+
+    thread1->Run();
+
+    wxThread::Sleep(300);
+
+    thread1->Delete();
+
+    puts("\nDeleted a running thread.");
+
+    MyDetachedThread *thread2 = new MyDetachedThread(30, 'Z');
+
+    thread2->Run();
+
+    wxThread::Sleep(300);
+
+    thread2->Pause();
+
+    thread2->Delete();
+
+    puts("\nDeleted a sleeping thread.");
+
+    MyJoinableThread *thread3 = new MyJoinableThread(20);
+    thread3->Run();
+
+    thread3->Delete();
+
+    puts("\nDeleted a joinable thread.");
+
+    MyJoinableThread *thread4 = new MyJoinableThread(2);
+    thread4->Run();
+
+    wxThread::Sleep(300);
+
+    thread4->Delete();
+
+    puts("\nDeleted a joinable thread which already terminated.");
 
     puts("");
 }
@@ -421,12 +544,15 @@ int main(int argc, char **argv)
     if ( argc > 1 && argv[1][0] == 't' )
         wxLog::AddTraceMask("thread");
 
-    TestThreadSuspend();
     if ( 0 )
-    {
-    TestDetachedThreads();
-    TestJoinableThreads();
-    }
+        TestDetachedThreads();
+    if ( 0 )
+        TestJoinableThreads();
+    if ( 0 )
+        TestThreadSuspend();
+    if ( 1 )
+        TestThreadDelete();
+
 #endif // TEST_THREADS
 
 #ifdef TEST_LONGLONG
@@ -437,11 +563,8 @@ int main(int argc, char **argv)
 #endif // TEST_LONGLONG
 
 #ifdef TEST_TIME
-    wxDateTime time = wxDateTime::Now();
-    printf("Current time: '%s', current year %u is %sa leap one",
-           time.Format().c_str(),
-           time.GetYear(),
-           wxDateTime::IsLeapYear(time.GetYear()) ? "" : "not");
+    TestTimeStatic();
+    TestTimeSet();
 #endif // TEST_TIME
 
     wxUninitialize();

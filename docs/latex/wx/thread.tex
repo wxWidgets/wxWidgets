@@ -105,7 +105,9 @@ threads).
 
 Delete() may be called for thread in any state: running, paused or even not yet created. Moreover,
 it must be called if \helpref{Create}{wxthreadcreate} or \helpref{Run}{wxthreadrun} fail to free
-the memory occupied by the thread object.
+the memory occupied by the thread object. However, you should not call Delete()
+on a detached thread which already terminated - doing so will probably result
+in a crash because the thread object doesn't exist any more.
 
 For detached threads Delete() will also delete the C++ thread object, but it
 will not do this for joinable ones.
