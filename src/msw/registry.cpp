@@ -27,7 +27,6 @@
 #include  "wx/string.h"
 #include  "wx/intl.h"
 #include  "wx/log.h"
-#include  "wx/config.h"    // for wxExpandEnvVars
 
 #ifndef __WIN16__
 
@@ -316,6 +315,9 @@ bool wxRegKey::GetKeyInfo(size_t *pnSubKeys,
     #define REG_PARAM   (LPDWORD)
 #endif
 
+  // it might be unexpected to some that this function doesn't open the key
+  wxASSERT_MSG( IsOpened(), _T("key should be opened in GetKeyInfo") );
+
   m_dwLastError = ::RegQueryInfoKey
                   (
                     (HKEY) m_hKey,
@@ -343,8 +345,8 @@ bool wxRegKey::GetKeyInfo(size_t *pnSubKeys,
                   GetName().c_str());
     return FALSE;
   }
-  else
-    return TRUE;
+
+  return TRUE;
 #else // Win16
   wxFAIL_MSG("GetKeyInfo() not implemented");
 
@@ -823,7 +825,9 @@ bool wxRegKey::QueryValue(const wxChar *szValue, long *plValue) const
 
 #endif  //Win32
 
-bool wxRegKey::QueryValue(const wxChar *szValue, wxString& strValue) const
+bool wxRegKey::QueryValue(const wxChar *szValue,
+                          wxString& strValue,
+                          bool raw) const
 {
   if ( CONST_CAST Open() ) {
     #ifdef  __WIN32__
@@ -846,6 +850,30 @@ bool wxRegKey::QueryValue(const wxChar *szValue, wxString& strValue) const
                                             pBuf,
                                             &dwSize);
             strValue.UngetWriteBuf();
+
+            // expand the var expansions in the string unless disabled
+            if ( (dwType == REG_EXPAND_SZ) && !raw )
+            {
+                DWORD dwExpSize = ::ExpandEnvironmentStrings(strValue, NULL, 0);
+                bool ok = dwExpSize != 0;
+                if ( ok )
+                {
+                    wxString strExpValue;
+                    ok = ::ExpandEnvironmentStrings
+                           (
+                            strValue,
+                            strExpValue.GetWriteBuf(dwExpSize),
+                            dwExpSize
+                           ) != 0;
+                    strExpValue.UngetWriteBuf();
+                    strValue = strExpValue;
+                }
+
+                if ( !ok )
+                {
+                    wxLogLastError(_T("ExpandEnvironmentStrings"));
+                }
+            }
         }
 
         if ( m_dwLastError == ERROR_SUCCESS ) {

@@ -49,8 +49,9 @@
 //#define TEST_LONGLONG
 //#define TEST_MIME
 //#define TEST_INFO_FUNCTIONS
+#define TEST_REGISTRY
 //#define TEST_SOCKETS
-#define TEST_STREAMS
+//#define TEST_STREAMS
 //#define TEST_STRINGS
 //#define TEST_THREADS
 //#define TEST_TIMER
@@ -1053,6 +1054,87 @@ static void TestLongLongComparison()
 #undef RAND_LL
 
 #endif // TEST_LONGLONG
+
+// ----------------------------------------------------------------------------
+// registry
+// ----------------------------------------------------------------------------
+
+// this is for MSW only
+#ifndef __WXMSW__
+    #undef TEST_REGISTRY
+#endif
+
+#ifdef TEST_REGISTRY
+
+#include <wx/msw/registry.h>
+
+// I chose this one because I liked its name, but it probably only exists under
+// NT
+static const wxChar *TESTKEY =
+    _T("HKEY_LOCAL_MACHINE\\SYSTEM\\ControlSet001\\Control\\CrashControl");
+
+static void TestRegistryRead()
+{
+    puts("*** testing registry reading ***");
+
+    wxRegKey key(TESTKEY);
+    printf("The test key name is '%s'.\n", key.GetName().c_str());
+    if ( !key.Open() )
+    {
+        puts("ERROR: test key can't be opened, aborting test.");
+
+        return;
+    }
+
+    size_t nSubKeys, nValues;
+    if ( key.GetKeyInfo(&nSubKeys, NULL, &nValues, NULL) )
+    {
+        printf("It has %u subkeys and %u values.\n", nSubKeys, nValues);
+    }
+
+    printf("Enumerating values:\n");
+
+    long dummy;
+    wxString value;
+    bool cont = key.GetFirstValue(value, dummy);
+    while ( cont )
+    {
+        printf("Value '%s': type ", value.c_str());
+        switch ( key.GetValueType(value) )
+        {
+            case wxRegKey::Type_None:   printf("ERROR (none)"); break;
+            case wxRegKey::Type_String: printf("SZ"); break;
+            case wxRegKey::Type_Expand_String: printf("EXPAND_SZ"); break;
+            case wxRegKey::Type_Binary: printf("BINARY"); break;
+            case wxRegKey::Type_Dword: printf("DWORD"); break;
+            case wxRegKey::Type_Multi_String: printf("MULTI_SZ"); break;
+            default: printf("other (unknown)"); break;
+        }
+
+        printf(", value = ");
+        if ( key.IsNumericValue(value) )
+        {
+            long val;
+            key.QueryValue(value, &val);
+            printf("%ld", val);
+        }
+        else // string
+        {
+            wxString val;
+            key.QueryValue(value, val);
+            printf("'%s'", val.c_str());
+
+            key.QueryRawValue(value, val);
+            printf(" (raw value '%s')", val.c_str());
+        }
+
+        putchar('\n');
+
+        cont = key.GetNextValue(value, dummy);
+    }
+}
+
+#endif // TEST_REGISTRY
 
 // ----------------------------------------------------------------------------
 // sockets
@@ -3611,6 +3693,10 @@ int main(int argc, char **argv)
     TestOsInfo();
     TestUserInfo();
 #endif // TEST_INFO_FUNCTIONS
+
+#ifdef TEST_REGISTRY
+    TestRegistryRead();
+#endif // TEST_REGISTRY
 
 #ifdef TEST_SOCKETS
     if ( 0 )
