@@ -106,7 +106,6 @@ DBTree::~DBTree()
 //----------------------------------------------------------------------------------------
 int  DBTree::OnPopulate()
 {
- wxStopWatch sw;
  wxTreeItemId Root, Folder, Docu, Funkt;
  int i,x,y,z=0, TableType;
  wxString SQL_TYPE, DB_TYPE;
@@ -114,6 +113,7 @@ int  DBTree::OnPopulate()
  //---------------------------------------------------------------------------------------
  if ((pDoc->db_Br+i_Which)->Initialize(FALSE))
  {
+  wxStopWatch sw;
   wxBeginBusyCursor();
   ct_BrowserDB = (pDoc->db_Br+i_Which)->OnGetCatalog(FALSE);
   if (ct_BrowserDB)
