@@ -6,7 +6,7 @@
 // Created:     06/01/99
 // RCS-ID:      $Id$
 // Copyright:   (c) 1999 VZ
-// Licence:     GPL
+// Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
 /*
@@ -2203,6 +2203,9 @@ static const wxString GetVersionString()
 
 /*
    $Log$
+   Revision 1.22.2.2  2004/11/23 09:54:12  JS
+   Changed GPL to wxWindows Licence
+
    Revision 1.22.2.1  2004/05/29 20:23:33  DS
    blind compilation fix for first warning and error reported by "i686-pc-linux-gnu+RH" tinderbox compilation
 
