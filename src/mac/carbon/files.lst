@@ -138,6 +138,7 @@ ALL_SOURCES = \
 		common/process.cpp \
 		common/protocol.cpp \
 		common/quantize.cpp \
+		common/radiocmn.cpp \
 		common/regex.cpp \
 		common/resource.cpp \
 		common/sckaddr.cpp \
@@ -761,6 +762,7 @@ COMMONOBJS = \
 		process.o \
 		protocol.o \
 		quantize.o \
+		radiocmn.o \
 		regex.o \
 		resource.o \
 		sckaddr.o \

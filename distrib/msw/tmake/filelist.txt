@@ -219,7 +219,7 @@ prntbase.cpp	Common
 process.cpp	Common	Win32Only,Base
 protocol.cpp	Common	Socket,Base
 quantize.cpp	Common
-radiocmn.cpp	Common	NotMac
+radiocmn.cpp	Common
 regex.cpp	Common	Base
 resource.cpp	Common
 sckaddr.cpp	Common	Socket,Base
