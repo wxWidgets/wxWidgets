@@ -42,6 +42,12 @@
 #endif
 
 #if defined(__VISUALC__) || (defined(__BORLANDC__) && (__BORLANDC__ >= 0x500))
+
+#if defined(__BORLANDC__) && !defined(__MT__)
+// I can't set -tWM in the IDE (anyone?) so have to do this
+#define __MT__
+#endif
+
     #include <process.h>
 #endif
 

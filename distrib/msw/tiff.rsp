@@ -1,0 +1,9 @@
+src/tiff/make*
+src/tiff/tiff.dsp
+src/tiff/tiff.dsw
+src/tiff/*.c
+src/tiff/*.h
+src/tiff/README
+src/tiff/COPYRIGHT
+src/tiff/VERSION
+src/tiff/TODO

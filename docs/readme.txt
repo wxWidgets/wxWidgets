@@ -1,4 +1,4 @@
-wxWindows 2.1.11
+wxWindows 2.1.12
 ----------------
 
 Welcome to wxWindows 2, a sophisticated cross-platform C++
@@ -22,6 +22,16 @@ Changes in this release
 -----------------------
 
 These are some of the major improvements:
+
+wxWindows 2.1.12
+================
+
+- New wxDateTime class to replace millenium-uncompliant wxTime
+  and wxDate classes.
+- New wxCalendarCtrl class and sample.
+- New wxCmdLineParser class.
+- Further bug fixes.
+- TIFF support added to wxImage.
 
 wxWindows 2.1.11
 ================
@@ -97,6 +107,7 @@ wx2_x_y_vc.zip             MS VC++ 5/6 project files
 wx2_x_y_bc.zip             Borland C++ 5 project files
 wx2_x_y_cw.zip             Metrowerks CodeWarrior 4.1 project files
 jpeg.zip                   Optional JPEG library
+tiff.zip                   Optional TIFF library
 ogl3.zip                   Optional Object Graphics Library
 glcanvas.zip               Optional wxGLCanvas class (Motif, GTK, MSW)
 tex2rtf2.zip               Tex2RTF documentation tool
@@ -204,5 +215,5 @@ web site) or contact Julian Smart <julian.smart@ukonline.co.uk>.
 
 Good luck!
 
-The wxWindows Team, November 1999
+The wxWindows Team, Janurary 2000
 

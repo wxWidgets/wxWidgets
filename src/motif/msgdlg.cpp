@@ -52,7 +52,7 @@
 // ----------------------------------------------------------------------------
 
 // the common part
-static void msgboxCallBack(Widget w, int client_data, int id)
+static void msgboxCallBack(Widget w, void* client_data, int id)
 {
     // close the dialog
     XtUnmanageChild(w);
@@ -62,28 +62,28 @@ static void msgboxCallBack(Widget w, int client_data, int id)
 }
 
 static void msgboxCallBackOk(Widget w,
-                             int client_data,
+                             void* client_data,
                              XmAnyCallbackStruct *WXUNUSED(call_data))
 {
     msgboxCallBack(w, client_data, wxID_OK);
 }
 
 static void msgboxCallBackCancel(Widget w,
-                                 int client_data,
+                                 void* client_data,
                                  XmAnyCallbackStruct *WXUNUSED(call_data))
 {
     msgboxCallBack(w, client_data, wxID_CANCEL);
 }
 
 static void msgboxCallBackHelp(Widget w,
-                               int client_data,
+                               void* client_data,
                                XmAnyCallbackStruct *WXUNUSED(call_data))
 {
     msgboxCallBack(w, client_data, wxID_HELP);
 }
 
 static void msgboxCallBackClose(Widget w,
-                                int client_data,
+                                void* client_data,
                                 XmAnyCallbackStruct *WXUNUSED(call_data))
 {
     msgboxCallBack(w, client_data, wxID_CANCEL);

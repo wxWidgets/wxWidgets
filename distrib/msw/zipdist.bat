@@ -26,6 +26,7 @@ erase %dest\glcanvas.zip
 erase %dest\ogl3.zip
 erase %dest\tex2rtf2.zip
 erase %dest\jpeg.zip
+erase %dest\tiff.zip
 
 if direxist %dest\wx deltree /Y %dest\wx
 
@@ -73,6 +74,9 @@ zip32 -@ %dest\treedraw.zip < %src\distrib\msw\wxtree.rsp
 rem JPEG source
 zip32 -@ %dest\jpeg.zip < %src\distrib\msw\jpeg.rsp
 
+rem TIFF source
+zip32 -@ %dest\tiff.zip < %src\distrib\msw\tiff.rsp
+
 copy %src\docs\changes.txt %dest
 copy %src\docs\msw\install.txt %dest\install_msw.txt
 copy %src\docs\motif\install.txt %dest\install_motif.txt
@@ -107,6 +111,7 @@ unzip32 -o ..\glcanvas.zip
 unzip32 -o ..\treedraw.zip
 unzip32 -o ..\ogl3.zip
 unzip32 -o ..\jpeg.zip
+unzip32 -o ..\tiff.zip
 unzip32 -o ..\tex2rtf2.zip
 
 rem Now delete a few files that are unnecessary
@@ -126,7 +131,7 @@ rem from within distrib\msw, to split off wisetop.txt and wisebott.txt.
 echo Calling 'makewise' to generate wxwin2.wse...
 call %WXWIN\distrib\msw\makewise.bat
 
-erase /Y setup.*
+erase /Y *setup.*
 
 rem Now invoke WISE install on the new wxwin2.wse
 set wisecmd="c:\Program Files\wise\wise32.exe" /C %WXWIN\distrib\msw\wxwin2.wse
@@ -156,7 +161,7 @@ ren setup.w06 s
 ren s setup.w06
 
 rem Put all the setup files into a single zip archive.
-zip32 setup.zip readme.txt setup.*
+zip32 wx%version%_setup.zip readme.txt setup.*
 
 echo wxWindows archived.
 

@@ -112,7 +112,7 @@ bool wxFontEnumeratorHelper::SetEncoding(wxFontEncoding encoding)
 
 #if defined(__GNUWIN32__)
     #if defined(__MINGW32__)
-        #define wxFONTENUMPROC FONTENUMEXPROC
+        #define wxFONTENUMPROC FONTENUMPROC
     #else
         #define wxFONTENUMPROC int(*)(ENUMLOGFONTEX *, NEWTEXTMETRICEX*, int, LPARAM)
     #endif

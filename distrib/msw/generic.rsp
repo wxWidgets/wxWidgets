@@ -54,6 +54,9 @@ docs/*.htm
 docs/html/*.htm
 docs/html/*.gif
 docs/html/*.png
+docs/html/icons/*.gif
+docs/html/icons/*.png
+docs/html/icons/*.jpg
 
 src/makeenvs/*.env
 src/make.env
@@ -141,7 +144,8 @@ bitmaps/bmp/16x15/*.*
 bitmaps/bmp/10x8/*.*
 bitmaps/ico/32x32/*.*
 
-afm/*.*
+misc/afm/*.afm
+misc/gs_afm/*.afm
 
 utils/*.txt
 utils/make*
@@ -1035,4 +1039,15 @@ samples/menu/*.xbm
 samples/menu/*.png
 samples/menu/*.ico
 samples/menu/*.txt
+
+samples/life/*.cpp
+samples/life/*.h
+samples/life/makefile*
+samples/life/*.rc
+samples/life/*.def
+samples/life/*.ico
+samples/life/*.xpm
+samples/life/*.txt
+samples/life/bitmaps/*.xpm
+samples/life/bitmaps/*.bmp
 

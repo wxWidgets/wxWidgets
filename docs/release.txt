@@ -1,6 +1,22 @@
 wxWindows Release Notes
 -----------------------
 
+2.1.12
+======
+
+- New wxDateTime class to replace millenium-uncompliant wxTime
+  and wxDate classes.
+
+- New wxCalendarCtrl class and sample.
+
+- New wxCmdLineParser class.
+
+- wxHTML printing and other improvements.
+
+- Life sample added.
+
+- TIFF support added to wxImage.
+
 2.1.11
 ======
 

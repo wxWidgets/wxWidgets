@@ -310,6 +310,23 @@ WORKAROUND:
 visitor_email_address: 
 wxWINDOWS+VERSION: 2.1.11
 
+DATE+FIXED: 05/01/2000
+DATE+IDENTIFIED: 04/01/2000
+DETAILS: The various message callback members of
+wxMessageDialog pass the client_data variable
+as in "int" which are later used a pointers. On a 64-bit 
+system they must be passed as pointers or
+as "long" variables.
+FIXED+BY: JACS
+IDENTIFIED+BY: Ray Lanza
+PLATFORMS: motif
+SHORT+DESCRIPTION: wxMessageDialog is not 64bit safe
+Submit: Submit
+WORKAROUND: Change the declaration to void * or long
+visitor_email_address: rjl@zk3.dec.com
+wxWINDOWS+VERSION: 2.1.10
+
+
 ---------------------------END OF BUGLIST-------------------------
 
 
