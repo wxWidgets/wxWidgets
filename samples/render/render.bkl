@@ -13,4 +13,13 @@
         <mac-res>../sample.r</mac-res>
     </exe>
 
+    <module id="renddll" cond="SHARED=='1'"
+            template="wx" template_append="wx_append">
+        <dllname>renddll_$(PORTNAME)$(WXUNIVNAME)$(WXWIN32DLLVERSION)</dllname>
+        <define>WXUSINGDLL</define>
+        <sources>renddll.cpp</sources>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+    </module>
+    
 </makefile>
