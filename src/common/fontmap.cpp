@@ -447,7 +447,7 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
                 {
                     value -= 1250;
                     if ( value < wxFONTENCODING_CP12_MAX -
-                                 wxFONTENCODING_CP1250 - 1 )
+                                 wxFONTENCODING_CP1250 )
                     {
                         // a valid Windows code page
                         value += wxFONTENCODING_CP1250;
