@@ -82,7 +82,8 @@ class WXDLLEXPORT wxEventLoop : public wxEventLoopBase
 {
 public:
     wxEventLoop() { m_impl = NULL; }
-
+    virtual ~wxEventLoop();
+    
     virtual int Run();
     virtual void Exit(int rc = 0);
     virtual bool Pending() const;
@@ -94,7 +95,7 @@ protected:
     wxEventLoopImpl *m_impl;
 
     DECLARE_NO_COPY_CLASS(wxEventLoop)
-}
+        };
 
 #endif // __WXMSW__/!__WXMSW__
 
