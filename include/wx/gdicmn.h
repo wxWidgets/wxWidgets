@@ -214,6 +214,11 @@ public:
     // FIXME are these really useful? If they're, we should have += &c as well
     wxSize operator+(const wxSize& sz) { return wxSize(x + sz.x, y + sz.y); }
     wxSize operator-(const wxSize& sz) { return wxSize(x - sz.x, y - sz.y); }
+    
+    void IncTo(const wxSize& sz)
+        { if ( sz.x > x ) x = sz.x; if ( sz.y > y ) y = sz.y; }
+    void DecTo(const wxSize& sz)
+        { if ( sz.x < x ) x = sz.x; if ( sz.y < y ) y = sz.y; }
 
     // accessors
     void Set(int xx, int yy) { x = xx; y = yy; }
