@@ -20,7 +20,7 @@
   #pragma hdrstop
 #endif
 
-#if wxUSE_DOC_VIEW_ARCHITECTURE
+#if wxUSE_MDI_ARCHITECTURE && wxUSE_DOC_VIEW_ARCHITECTURE
 
 #include "wx/docmdi.h"
 

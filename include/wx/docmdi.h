@@ -18,7 +18,7 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_MDI_ARCHITECTURE
+#if wxUSE_MDI_ARCHITECTURE && wxUSE_DOC_VIEW_ARCHITECTURE
 
 #include "wx/docview.h"
 #include "wx/mdi.h"
@@ -85,6 +85,6 @@ DECLARE_EVENT_TABLE()
 
 #endif
     // wxUSE_MDI_ARCHITECTURE
-    
+
 #endif
     // _WX_DOCMDI_H_
