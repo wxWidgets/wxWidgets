@@ -50,6 +50,16 @@
              conditional and optional subprojects is needed -->
         <action id="wxrc" cond="USE_XRC=='1'">
             <dependency-of>all</dependency-of>
+
+            <!-- some of these are not built in all configurations, <depends>
+                 takes care of ignoring the disabled ones: -->
+            <depends>monodll</depends>
+            <depends>monolib</depends>
+            <depends>basedll</depends>
+            <depends>baselib</depends>
+            <depends>xmldll</depends>
+            <depends>xmllib</depends>
+            
             <command>
                 (test -d utils/wxrc &amp;&amp; cd utils/wxrc &amp;&amp; $(DOLLAR)(MAKE) all) || true
             </command>
@@ -62,6 +72,7 @@
         </action>
         <action id="install-wxrc" cond="USE_XRC=='1'">
             <dependency-of>install</dependency-of>
+            <depends>wxrc</depends>
             <command>
                 (test -d utils/wxrc &amp;&amp; cd utils/wxrc &amp;&amp; $(DOLLAR)(MAKE) install) || true
             </command>

@@ -9426,13 +9426,13 @@ distclean: clean
 samples: 
 	(cd samples && $(MAKE) all)
 
-@COND_USE_XRC_1@wxrc: 
+@COND_USE_XRC_1@wxrc: $(__monodll___depname) $(__monolib___depname) $(__basedll___depname) $(__baselib___depname) $(__xmldll___depname) $(__xmllib___depname)
 @COND_USE_XRC_1@	(test -d utils/wxrc && cd utils/wxrc && $(MAKE) all) || true
 
 @COND_USE_XRC_1@clean-wxrc: 
 @COND_USE_XRC_1@	(test -d utils/wxrc && cd utils/wxrc && $(MAKE) clean) || true
 
-@COND_USE_XRC_1@install-wxrc: 
+@COND_USE_XRC_1@install-wxrc: $(__wxrc___depname)
 @COND_USE_XRC_1@	(test -d utils/wxrc && cd utils/wxrc && $(MAKE) install) || true
 
 install-wxconfig: 
