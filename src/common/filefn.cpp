@@ -143,11 +143,7 @@ const off_t wxInvalidOffset = (off_t)-1;
 // ----------------------------------------------------------------------------
 
 // we need to translate Mac filenames before passing them to OS functions
-#if defined(__WXMAC__) && defined(__DARWIN__)
-    #define OS_FILENAME(s) wxMac2UnixFilename(s.fn_str())
-#else
-    #define OS_FILENAME(s) (s.fn_str())
-#endif
+#define OS_FILENAME(s) (s.fn_str())
 
 // ============================================================================
 // implementation
@@ -846,7 +842,11 @@ wxString wxMacFSSpec2MacFilename( const FSSpec *spec )
     if ( length > 0 && (*myPath)[length-1] ==':' )
         (*myPath)[length-1] = 0 ;
 
-    wxString result(     (char*) *myPath ) ;
+#ifdef __DARWIN__
+    wxString result( wxMac2UnixFilename((char*) *myPath) ) ;
+#else
+    wxString result( (char*) *myPath ) ;
+#endif
     ::HUnlock( myPath ) ;
     ::DisposeHandle( myPath ) ;
     return result ;
@@ -854,7 +854,12 @@ wxString wxMacFSSpec2MacFilename( const FSSpec *spec )
 
 void wxMacFilename2FSSpec( const char *path , FSSpec *spec )
 {
-    FSpLocationFromFullPath( strlen(path ) , path , spec ) ;
+#ifdef __DARWIN__
+    const char *s = wxUnix2MacFilename(path);
+    FSpLocationFromFullPath( strlen(s) , s , spec ) ;
+#else
+    FSpLocationFromFullPath( strlen(path) , path , spec ) ;
+#endif
 }
 
 static char sMacFileNameConversion[ 1000 ] ;
