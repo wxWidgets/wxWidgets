@@ -25,9 +25,9 @@
 #ifndef WX_PRECOMP
     #include "wx/msgdlg.h"
     #include "wx/filedlg.h"
-    #include "wx/filename.h"
     #include "wx/app.h"
 #endif
+#include "wx/filename.h"
 
 #include "wx/cocoa/autorelease.h"
 #include "wx/cocoa/string.h"

@@ -12,9 +12,9 @@
 #include "wx/wxprec.h"
 #ifndef WX_PRECOMP
     #include "wx/log.h"
-    #include "wx/tooltip.h"
     #include "wx/window.h"
 #endif //WX_PRECOMP
+#include "wx/tooltip.h"
 
 #include "wx/cocoa/autorelease.h"
 #include "wx/cocoa/string.h"
@@ -25,8 +25,6 @@
 #import <AppKit/NSColor.h>
 #import <AppKit/NSClipView.h>
 #import <Foundation/NSException.h>
-
-#include <objc/objc-runtime.h>
 
 // Turn this on to paint green over the dummy views for debugging
 #undef WXCOCOA_FILL_DUMMY_VIEW
