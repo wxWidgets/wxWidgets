@@ -129,7 +129,11 @@ WXDWORD wxStaticText::MSWGetStyle(long style, WXDWORD *exstyle) const
 wxSize wxStaticText::DoGetBestSize() const
 {
     wxClientDC dc(wx_const_cast(wxStaticText *, this));
-    dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
+    wxFont font(GetFont());
+    if (!font.Ok())
+        font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+    
+    dc.SetFont(font);
 
     wxCoord widthTextMax, heightTextTotal;
     dc.GetMultiLineTextExtent(GetLabel(), &widthTextMax, &heightTextTotal);
