@@ -381,8 +381,8 @@ wxSize wxSizer::GetMaxWindowSize( wxWindow *WXUNUSED(window) )
     wxRect rect = wxGetClientDisplayRect();
     wxSize sizeMax (rect.width,rect.height);
 
-    // Make the max size a bit smaller than the visible portion of 
-    // the screen.  A window which takes the entire screen doesn't 
+    // Make the max size a bit smaller than the visible portion of
+    // the screen.  A window which takes the entire screen doesn't
     // look very nice either
     sizeMax.x *= 9;
     sizeMax.x /= 10;
@@ -944,7 +944,29 @@ wxSize wxBoxSizer::CalcMin()
     m_fixedWidth = 0;
     m_fixedHeight = 0;
 
+    // Find how long each stretch unit needs to be
+    int stretchSize = 1;
     wxNode *node = m_children.GetFirst();
+    while (node)
+    {
+        wxSizerItem *item = (wxSizerItem*) node->Data();
+        if (item->GetOption() != 0)
+        {
+            int stretch = item->GetOption();
+            wxSize size( item->CalcMin() );
+            int sizePerStretch;
+            // Integer division rounded up is (a + b - 1) / b
+            if (m_orient == wxHORIZONTAL)
+                sizePerStretch = ( size.x + stretch - 1 ) / stretch;
+            else
+                sizePerStretch = ( size.y + stretch - 1 ) / stretch;
+            if (sizePerStretch > stretchSize)
+                stretchSize = sizePerStretch;
+        }
+        node = node->Next();
+    }
+	// Calculate overall minimum size
+	node = m_children.GetFirst();
     while (node)
     {
         wxSizerItem *item = (wxSizerItem*) node->Data();
@@ -952,6 +974,13 @@ wxSize wxBoxSizer::CalcMin()
         m_stretchable += item->GetOption();
 
         wxSize size( item->CalcMin() );
+        if (item->GetOption() != 0)
+        {
+            if (m_orient == wxHORIZONTAL)
+                size.x = stretchSize * item->GetOption();
+            else
+                size.y = stretchSize * item->GetOption();
+        }
 
         if (m_orient == wxHORIZONTAL)
         {
