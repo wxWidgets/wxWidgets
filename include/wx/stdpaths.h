@@ -91,6 +91,8 @@ protected:
     #include "wx/msw/stdpaths.h"
 #elif defined(__WXMAC__) || defined(__WXCOCOA__)
     #include "wx/mac/corefoundation/stdpaths.h"
+#elif defined(__OS2__)
+    #include "wx/os2/stdpaths.h"
 #elif defined(__UNIX__)
     #include "wx/unix/stdpaths.h"
 #endif

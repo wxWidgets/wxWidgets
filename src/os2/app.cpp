@@ -33,6 +33,8 @@
     #include "wx/dynarray.h"
     #include "wx/wxchar.h"
     #include "wx/icon.h"
+    #include "wx/stdpaths.h"
+    #include "wx/filename.h"
 #endif
 
 #include "wx/log.h"
@@ -219,7 +221,9 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     // OS2 has to have an anchorblock
     //
     vHabmain = WinInitialize(0);
-
+    wxFileName GetPrefix(argv[0]);
+    GetPrefix.MakeAbsolute();
+    wxStandardPaths::SetInstallPrefix(GetPrefix.GetPath());
     if (!vHabmain)
     {
         // TODO: at least give some error message here...
