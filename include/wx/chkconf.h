@@ -419,6 +419,14 @@
 #   endif
 #endif /* !defined(wxUSE_JOYSTICK) */
 
+#ifndef wxUSE_LISTBOOK
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_LISTBOOK must be defined."
+#   else
+#       define wxUSE_LISTBOOK 0
+#   endif
+#endif /* !defined(wxUSE_LISTBOOK) */
+
 #ifndef wxUSE_LISTBOX
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_LISTBOX must be defined."
@@ -891,7 +899,7 @@
 #    endif
 #endif /* controls */
 
-#if wxUSE_NOTEBOOK
+#if wxUSE_NOTEBOOK || wxUSE_LISTBOOK
 #   if defined(wxUSE_BOOKCTRL) && !wxUSE_BOOKCTRL
 #       ifdef wxABORT_ON_CONFIG_ERROR
 #           error "wxUSE_BOOKCTRL must be set."
@@ -904,6 +912,17 @@
 #       define wxUSE_BOOKCTRL 1
 #   endif
 #endif /* wxUSE_NOTEBOOK */
+
+#if wxUSE_LISTBOOK
+#   if !wxUSE_LISTCTRL
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxListbook requires wxListCtrl"
+#       else
+#           undef wxUSE_LISTCTRL
+#           define wxUSE_LISTCTRL 1
+#       endif
+#   endif
+#endif /* wxUSE_LISTBOOK */
 
 /* wxUniv-specific dependencies */
 #if defined(__WXUNIVERSAL__)
