@@ -256,37 +256,55 @@ void wxWebKitCtrl::SetPageSource(wxString& source, const wxString& baseUrl){
 }
 
 void wxWebKitCtrl::OnSize(wxSizeEvent &event){
-    // This is a nasty hack because WebKit does not seem to recognize a Tabs control as its parent. 
-    // Therefore, coordinates must be relative to the left-hand side of the screen, rather than
-    // relative to the Tabs control.
+    // This is a nasty hack because WebKit seems to lose its position when it is embedded
+    // in a control that is not itself the content view for a TLW.
+        
     wxWindow* parent = GetParent();
-    bool inNotebook = false;
-    int x = 0;
-    int y = 18;
+    bool isParentTopLevel = true;
+    if (!parent->IsTopLevel())
+        isParentTopLevel = false;
+        
+    int x = GetPosition().x;
+    // we must take into account the title bar size as well, which is 26 pixels
+    int y = GetPosition().y + 26;
+        
+    NSRect bounds = [m_webView frame];
+    wxWindow* tlw = NULL;
+    
     while(parent != NULL)
     {
-        // keep adding the position until we hit the notebook
-        if (!inNotebook){
-            x += parent->GetPosition().x;
-            y += parent->GetPosition().y;
+        if (parent->IsTopLevel())
+            tlw = parent;
+
+        x += parent->GetPosition().x;
+        y += parent->GetPosition().y;
+        
+        if ( parent->IsKindOf( CLASSINFO( wxNotebook ) )  ){
+            //manually account for the size the tabs take up
+            y += 14;
         }
         
-        if ( parent->GetClassInfo()->GetClassName() == wxT("wxSplitterWindow") ){
-            x += 3;
-        }
+        //if ( parent->GetClassInfo()->GetClassName() == wxT("wxSplitterWindow") ){
+        //    x += 3;
+        //}
         
-        if( parent->IsKindOf( CLASSINFO( wxNotebook ) ) ){
-            inNotebook = true;
-            }
         parent = parent->GetParent();
     }
     
-    if (inNotebook){
+    if (!isParentTopLevel){
+        if (tlw){
+            //x = tlw->GetSize().x - (GetSize().x + x);
+            y = tlw->GetSize().y - (GetSize().y + y);
+        }
         NSRect bounds = [m_webView frame];
         bounds.origin.x += x;
         bounds.origin.y += y;
+        //leaving debug checks in until I know it works everywhere ;-)
+        //printf("Added to bounds x=%d, y=%d\n", x, y);
         [m_webView setFrame:bounds];
     }
+    
+    //printf("Carbon position x=%d, y=%d\n", GetPosition().x, GetPosition().y);
     
     [m_webView display];
     event.Skip();
