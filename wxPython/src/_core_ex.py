@@ -32,6 +32,16 @@ if RELEASE_VERSION != _core_.RELEASE_VERSION:
 
 #----------------------------------------------------------------------------
 
+# Set the default string conversion encoding from the locale
+import locale
+default = locale.getdefaultlocale()[1]
+if default:
+    wx.SetDefaultPyEncoding(default)
+del default
+del locale
+
+#----------------------------------------------------------------------------
+
 class PyDeadObjectError(AttributeError):
     pass
 
