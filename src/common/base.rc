@@ -37,7 +37,7 @@ BEGIN
             VALUE "FileDescription", "wxBase is a non GUI part of wxWindows\0"
             VALUE "FileVersion", wxVERSION_NUM_DOT_STRING "\0"
             VALUE "InternalName", "wxBase\0"
-            VALUE "LegalCopyright", "Copyright © 1993, 2001 wxWindows development team\0"
+            VALUE "LegalCopyright", "Copyright © 1993-2002 wxWindows development team\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "wxbase" wxVERSION_NUM_STRING DLL_SUFFIX ".dll\0"
             VALUE "PrivateBuild", "\0"
