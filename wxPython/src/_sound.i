@@ -96,6 +96,7 @@ public:
             PyErr_SetString(PyExc_NotImplementedError,
                             "Create from data  is not available on this platform.");
             wxPyEndBlockThreads();
+            return False;
         }
     }
 #endif

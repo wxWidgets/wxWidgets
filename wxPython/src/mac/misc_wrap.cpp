@@ -717,6 +717,7 @@ bool wxSound_Create__SWIG_1(wxSound *self,int size,wxByte const *data){
             PyErr_SetString(PyExc_NotImplementedError,
                             "Create from data  is not available on this platform.");
             wxPyEndBlockThreads();
+            return False;
         }
 void Sound_Stop(){}
 
