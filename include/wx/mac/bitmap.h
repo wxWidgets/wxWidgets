@@ -28,9 +28,10 @@ class WXDLLEXPORT wxCursor;
 class WXDLLEXPORT wxImage;
 
 GWorldPtr 	wxMacCreateGWorld( int width , int height , int depth ) ;
-void 		wxMacDestroyGWorld( GWorldPtr gw ) ;
+void 		    wxMacDestroyGWorld( GWorldPtr gw ) ;
 PicHandle 	wxMacCreatePict( GWorldPtr gw , GWorldPtr mask = NULL ) ;
-void 		wxMacSetColorTableEntry( CTabHandle newColors , int index , int red , int green ,  int blue ) ;
+CIconHandle wxMacCreateCIcon(GWorldPtr image , GWorldPtr mask , short dstDepth , short iconSize  ) ;
+void 		    wxMacSetColorTableEntry( CTabHandle newColors , int index , int red , int green ,  int blue ) ;
 CTabHandle 	wxMacCreateColorTable( int numColors ) ;
 
 // A mask is a mono bitmap used for drawing bitmaps
