@@ -18,6 +18,12 @@ almost every aspect of it is pluggable:
         on. The 'model' part of MVC.
 
 Author/Maintainer - Bryn Keller <xoltar@starship.python.net>
+
+
+NOTE: This module is *not* supported in any way.  Use it however you
+      wish, but be warned that dealing with any consequences is
+      entirly up to you.
+      --Robin
 """
 
 #------------------------------------------------------------------------
