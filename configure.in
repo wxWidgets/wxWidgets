@@ -1525,7 +1525,13 @@ dnl        )
 dnl    )
 
     TOOLKIT_INCLUDE="$GTK_CFLAGS"
-    GUI_TK_LIBRARY="$GTK_LIBS -lgthread"
+dnl On FreeBSD, the libs are called gtk12 etc, so we must append gthread12
+    echo $GTK_LIBS | fgrep -q "glib12"
+    if test $? = 0  ; then
+       GUI_TK_LIBRARY="$GTK_LIBS -gthread12"
+    else
+       GUI_TK_LIBRARY="$GTK_LIBS -lgthread"
+    fi
     TOOLKIT=GTK
 
     AFMINSTALL=afminstall
