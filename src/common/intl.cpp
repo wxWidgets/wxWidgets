@@ -1481,6 +1481,8 @@ bool wxLocale::AddCatalog(const wxChar *szDomain)
 // accessors for locale-dependent data
 // ----------------------------------------------------------------------------
 
+#if 0
+
 #ifdef __WXMSW__
 
 /* static */
@@ -1528,6 +1530,8 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory)
 }
 
 #endif // __WXMSW__/!__WXMSW__
+
+#endif // 0
 
 // ----------------------------------------------------------------------------
 // global functions and variables
