@@ -50,7 +50,7 @@ DATAFILES = \
           df/listbox.df
 
 
-APPEXTRALIBS=-lwxxml
+APPEXTRALIBS=$(top_builddir)/lib/libwxxml.@WX_TARGET_LIBRARY_TYPE@
 APPEXTRADEFS=-I$(top_srcdir)/contrib/include
 
 include $(top_builddir)/src/makeprog.env
