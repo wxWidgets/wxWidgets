@@ -179,6 +179,8 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
 // Get a system metric, e.g. scrollbar size
 int wxSystemSettingsNative::GetMetric(wxSystemMetric index)
 {
+    int return_value = 0;
+
     switch ( index)
     {
         case wxSYS_HSCROLL_Y:
@@ -223,11 +225,13 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index)
         case wxSYS_WINDOWMIN_X:
             // TODO
         case wxSYS_WINDOWMIN_Y:
-            // TODO
+            break;
         case wxSYS_SCREEN_X:
-            // TODO
+            return_value = DisplayWidth( wxGlobalDisplay(), 0 );
+            break;
         case wxSYS_SCREEN_Y:
-            // TODO
+            return_value = DisplayHeight( wxGlobalDisplay(), 0 );
+            break;
         case wxSYS_FRAMESIZE_X:
             // TODO
         case wxSYS_FRAMESIZE_Y:
@@ -258,7 +262,7 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index)
             ;
     }
 
-    return 0;
+    return return_value;
 }
 
 bool wxSystemSettingsNative::HasFeature(wxSystemFeature index)
