@@ -45,8 +45,9 @@ private:
 #define SWIG_TypeName        SWIG_Python_TypeName
 #define SWIG_TypeQuery       SWIG_Python_TypeQuery
 #define SWIG_TypeClientData  SWIG_Python_TypeClientData
-#define SWIG_PackData        SWIG_Python_PackData
-#define SWIG_UnpackData      SWIG_Python_UnpackData
+#define SWIG_PackData        SWIG_Python_PackData 
+#define SWIG_UnpackData      SWIG_Python_UnpackData 
+
 
 /***********************************************************************
  * common.swg for wxPython
@@ -20444,6 +20445,46 @@ static PyObject *_wrap_TreeEvent_SetEditCanceled(PyObject *self, PyObject *args,
 }
 
 
+static PyObject *_wrap_TreeEvent_SetToolTip(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxTreeEvent *arg1 = (wxTreeEvent *) 0 ;
+    wxString *arg2 = 0 ;
+    bool temp2 = False ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "toolTip", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeEvent_SetToolTip",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxTreeEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = wxString_in_helper(obj1);
+        if (arg2 == NULL) SWIG_fail;
+        temp2 = True;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetToolTip((wxString const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    {
+        if (temp2)
+        delete arg2;
+    }
+    return resultobj;
+    fail:
+    {
+        if (temp2)
+        delete arg2;
+    }
+    return NULL;
+}
+
+
 static PyObject * TreeEvent_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -26420,6 +26461,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"TreeEvent_SetLabel", (PyCFunction) _wrap_TreeEvent_SetLabel, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TreeEvent_IsEditCancelled", (PyCFunction) _wrap_TreeEvent_IsEditCancelled, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TreeEvent_SetEditCanceled", (PyCFunction) _wrap_TreeEvent_SetEditCanceled, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"TreeEvent_SetToolTip", (PyCFunction) _wrap_TreeEvent_SetToolTip, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TreeEvent_swigregister", TreeEvent_swigregister, METH_VARARGS },
 	 { (char *)"new_TreeCtrl", (PyCFunction) _wrap_new_TreeCtrl, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_PreTreeCtrl", (PyCFunction) _wrap_new_PreTreeCtrl, METH_VARARGS | METH_KEYWORDS },
@@ -27962,6 +28004,7 @@ static swig_const_info swig_const_table[] = {
 { SWIG_PY_INT,     (char *)"wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK", (long) wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"wxEVT_COMMAND_TREE_END_DRAG", (long) wxEVT_COMMAND_TREE_END_DRAG, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK", (long) wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK, 0, 0, 0},
+{ SWIG_PY_INT,     (char *)"wxEVT_COMMAND_TREE_ITEM_GETTOOLTIP", (long) wxEVT_COMMAND_TREE_ITEM_GETTOOLTIP, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"DIRCTRL_DIR_ONLY", (long) wxDIRCTRL_DIR_ONLY, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"DIRCTRL_SELECT_FIRST", (long) wxDIRCTRL_SELECT_FIRST, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"DIRCTRL_SHOW_FILTERS", (long) wxDIRCTRL_SHOW_FILTERS, 0, 0, 0},
@@ -28052,6 +28095,7 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d, "wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK", PyInt_FromLong(wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK));
     PyDict_SetItemString(d, "wxEVT_COMMAND_TREE_END_DRAG", PyInt_FromLong(wxEVT_COMMAND_TREE_END_DRAG));
     PyDict_SetItemString(d, "wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK", PyInt_FromLong(wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_TREE_ITEM_GETTOOLTIP", PyInt_FromLong(wxEVT_COMMAND_TREE_ITEM_GETTOOLTIP));
     
     // Map renamed classes back to their common name for OOR
     wxPyPtrTypeMap_Add("wxTreeItemData", "wxPyTreeItemData");

@@ -45,8 +45,9 @@ private:
 #define SWIG_TypeName        SWIG_Python_TypeName
 #define SWIG_TypeQuery       SWIG_Python_TypeQuery
 #define SWIG_TypeClientData  SWIG_Python_TypeClientData
-#define SWIG_PackData        SWIG_Python_PackData
-#define SWIG_UnpackData      SWIG_Python_UnpackData
+#define SWIG_PackData        SWIG_Python_PackData 
+#define SWIG_UnpackData      SWIG_Python_UnpackData 
+
 
 /***********************************************************************
  * common.swg for wxPython
@@ -1000,7 +1001,7 @@ static PyObject *_wrap_Colour_Set(PyObject *self, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Colour_SetRBG(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Colour_SetRGB(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxColour *arg1 = (wxColour *) 0 ;
     unsigned long arg2 ;
@@ -1010,7 +1011,7 @@ static PyObject *_wrap_Colour_SetRBG(PyObject *self, PyObject *args, PyObject *k
         (char *) "self",(char *) "colRGB", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Colour_SetRBG",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Colour_SetRGB",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxColour,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     arg2 = (unsigned long) PyInt_AsLong(obj1);
     if (PyErr_Occurred()) SWIG_fail;
@@ -1088,6 +1089,46 @@ static PyObject *_wrap_Colour___ne__(PyObject *self, PyObject *args, PyObject *k
     resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Colour_InitFromName(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxColour *arg1 = (wxColour *) 0 ;
+    wxString *arg2 = 0 ;
+    bool temp2 = False ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "colourName", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Colour_InitFromName",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxColour,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = wxString_in_helper(obj1);
+        if (arg2 == NULL) SWIG_fail;
+        temp2 = True;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->InitFromName((wxString const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    {
+        if (temp2)
+        delete arg2;
+    }
+    return resultobj;
+    fail:
+    {
+        if (temp2)
+        delete arg2;
+    }
     return NULL;
 }
 
@@ -1693,6 +1734,31 @@ static PyObject *_wrap_Pen_GetDashes(PyObject *self, PyObject *args, PyObject *k
         if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = result;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Pen_GetDashCount(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPen *arg1 = (wxPen *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Pen_GetDashCount",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPen,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)((wxPen const *)arg1)->GetDashCount();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -15807,9 +15873,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Colour_Blue", (PyCFunction) _wrap_Colour_Blue, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Colour_Ok", (PyCFunction) _wrap_Colour_Ok, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Colour_Set", (PyCFunction) _wrap_Colour_Set, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"Colour_SetRBG", (PyCFunction) _wrap_Colour_SetRBG, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Colour_SetRGB", (PyCFunction) _wrap_Colour_SetRGB, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Colour___eq__", (PyCFunction) _wrap_Colour___eq__, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Colour___ne__", (PyCFunction) _wrap_Colour___ne__, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Colour_InitFromName", (PyCFunction) _wrap_Colour_InitFromName, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Colour_Get", (PyCFunction) _wrap_Colour_Get, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Colour_swigregister", Colour_swigregister, METH_VARARGS },
 	 { (char *)"new_Palette", (PyCFunction) _wrap_new_Palette, METH_VARARGS | METH_KEYWORDS },
@@ -15833,6 +15900,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Pen_SetWidth", (PyCFunction) _wrap_Pen_SetWidth, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Pen_SetDashes", (PyCFunction) _wrap_Pen_SetDashes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Pen_GetDashes", (PyCFunction) _wrap_Pen_GetDashes, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Pen_GetDashCount", (PyCFunction) _wrap_Pen_GetDashCount, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Pen_swigregister", Pen_swigregister, METH_VARARGS },
 	 { (char *)"new_PyPen", (PyCFunction) _wrap_new_PyPen, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"delete_PyPen", (PyCFunction) _wrap_delete_PyPen, METH_VARARGS | METH_KEYWORDS },

@@ -45,8 +45,9 @@ private:
 #define SWIG_TypeName        SWIG_Python_TypeName
 #define SWIG_TypeQuery       SWIG_Python_TypeQuery
 #define SWIG_TypeClientData  SWIG_Python_TypeClientData
-#define SWIG_PackData        SWIG_Python_PackData
-#define SWIG_UnpackData      SWIG_Python_UnpackData
+#define SWIG_PackData        SWIG_Python_PackData 
+#define SWIG_UnpackData      SWIG_Python_UnpackData 
+
 
 /***********************************************************************
  * common.swg for wxPython
@@ -3005,6 +3006,126 @@ static PyObject *_wrap_Rect_SetSize(PyObject *self, PyObject *args, PyObject *kw
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetSize((wxSize const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Rect_GetTopLeft(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxRect *arg1 = (wxRect *) 0 ;
+    wxPoint result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Rect_GetTopLeft",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxRect,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = ((wxRect const *)arg1)->GetTopLeft();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxPoint * resultptr;
+        resultptr = new wxPoint((wxPoint &) result);
+        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_wxPoint, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Rect_SetTopLeft(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxRect *arg1 = (wxRect *) 0 ;
+    wxPoint *arg2 = 0 ;
+    wxPoint temp2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "p", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Rect_SetTopLeft",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxRect,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = &temp2;
+        if ( ! wxPoint_helper(obj1, &arg2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetTopLeft((wxPoint const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Rect_GetBottomRight(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxRect *arg1 = (wxRect *) 0 ;
+    wxPoint result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Rect_GetBottomRight",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxRect,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = ((wxRect const *)arg1)->GetBottomRight();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxPoint * resultptr;
+        resultptr = new wxPoint((wxPoint &) result);
+        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_wxPoint, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Rect_SetBottomRight(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxRect *arg1 = (wxRect *) 0 ;
+    wxPoint *arg2 = 0 ;
+    wxPoint temp2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "p", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Rect_SetBottomRight",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxRect,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = &temp2;
+        if ( ! wxPoint_helper(obj1, &arg2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetBottomRight((wxPoint const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -35413,6 +35534,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Rect_SetPosition", (PyCFunction) _wrap_Rect_SetPosition, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Rect_GetSize", (PyCFunction) _wrap_Rect_GetSize, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Rect_SetSize", (PyCFunction) _wrap_Rect_SetSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_GetTopLeft", (PyCFunction) _wrap_Rect_GetTopLeft, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_SetTopLeft", (PyCFunction) _wrap_Rect_SetTopLeft, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_GetBottomRight", (PyCFunction) _wrap_Rect_GetBottomRight, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Rect_SetBottomRight", (PyCFunction) _wrap_Rect_SetBottomRight, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Rect_GetLeft", (PyCFunction) _wrap_Rect_GetLeft, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Rect_GetTop", (PyCFunction) _wrap_Rect_GetTop, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Rect_GetBottom", (PyCFunction) _wrap_Rect_GetBottom, METH_VARARGS | METH_KEYWORDS },

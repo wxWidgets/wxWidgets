@@ -3065,7 +3065,7 @@ class ListEvent(core.NotifyEvent):
         """GetPoint() -> Point"""
         return _controls.ListEvent_GetPoint(*args, **kwargs)
 
-    GetPostiion = GetPoint 
+    GetPosition = GetPoint 
     def GetLabel(*args, **kwargs):
         """GetLabel() -> wxString"""
         return _controls.ListEvent_GetLabel(*args, **kwargs)
@@ -3737,6 +3737,7 @@ wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK = _controls.wxEVT_COMMAND_TREE_ITEM_RIGHT_CL
 wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK = _controls.wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK
 wxEVT_COMMAND_TREE_END_DRAG = _controls.wxEVT_COMMAND_TREE_END_DRAG
 wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK = _controls.wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK
+wxEVT_COMMAND_TREE_ITEM_GETTOOLTIP = _controls.wxEVT_COMMAND_TREE_ITEM_GETTOOLTIP
 EVT_TREE_BEGIN_DRAG        = wx.PyEventBinder(wxEVT_COMMAND_TREE_BEGIN_DRAG       , 1)
 EVT_TREE_BEGIN_RDRAG       = wx.PyEventBinder(wxEVT_COMMAND_TREE_BEGIN_RDRAG      , 1)
 EVT_TREE_BEGIN_LABEL_EDIT  = wx.PyEventBinder(wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT , 1)
@@ -3756,7 +3757,7 @@ EVT_TREE_ITEM_RIGHT_CLICK  = wx.PyEventBinder(wxEVT_COMMAND_TREE_ITEM_RIGHT_CLIC
 EVT_TREE_ITEM_MIDDLE_CLICK = wx.PyEventBinder(wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK, 1)
 EVT_TREE_END_DRAG          = wx.PyEventBinder(wxEVT_COMMAND_TREE_END_DRAG         , 1)
 EVT_TREE_STATE_IMAGE_CLICK = wx.PyEventBinder(wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK, 1)
-
+EVT_TREE_ITEM_GETTOOLTIP   = wx.PyEventBinder(wxEVT_COMMAND_TREE_ITEM_GETTOOLTIP,   1)
 
 class TreeEvent(core.NotifyEvent):
     def __repr__(self):
@@ -3818,6 +3819,10 @@ class TreeEvent(core.NotifyEvent):
     def SetEditCanceled(*args, **kwargs):
         """SetEditCanceled(bool editCancelled)"""
         return _controls.TreeEvent_SetEditCanceled(*args, **kwargs)
+
+    def SetToolTip(*args, **kwargs):
+        """SetToolTip(wxString toolTip)"""
+        return _controls.TreeEvent_SetToolTip(*args, **kwargs)
 
 
 class TreeEventPtr(TreeEvent):
