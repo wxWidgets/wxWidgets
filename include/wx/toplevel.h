@@ -174,7 +174,10 @@ public:
     // Attracts the users attention to this window if the application is
     // inactive (should be called when a background event occurs)
     virtual void RequestUserAttention(int flags = wxUSER_ATTENTION_INFO);
-
+    
+    // Is this the active frame (highlighted in the taskbar)?
+    virtual bool HasFocus()
+        { return (wxGetTopLevelParent(FindFocus()) == this); }
 
     // implementation only from now on
     // -------------------------------

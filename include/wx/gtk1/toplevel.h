@@ -64,6 +64,8 @@ public:
 
     virtual bool Show(bool show = TRUE);
 
+    virtual bool HasFocus();
+
     virtual void SetTitle( const wxString &title );
     virtual wxString GetTitle() const { return m_title; }
 
