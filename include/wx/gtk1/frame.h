@@ -87,7 +87,7 @@ public:
     void SetToolBar(wxToolBar *toolbar);
 #endif // wxUSE_TOOLBAR
 
-    virtual bool Show(bool show);
+    virtual bool Show(bool show = TRUE);
 
     virtual void SetTitle( const wxString &title );
     virtual wxString GetTitle() const { return m_title; }

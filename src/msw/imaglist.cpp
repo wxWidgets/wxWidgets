@@ -82,7 +82,16 @@ wxImageList::wxImageList()
 // Creates an image list
 bool wxImageList::Create(int width, int height, bool mask, int initial)
 {
-    UINT flags = 0; // TODO shouldallow to specify ILC_COLORxxx here
+    UINT flags = 0;
+
+    // set appropriate color depth
+    int dd = wxDisplayDepth();
+    if (dd <= 4)       flags |= ILC_COLOR;	// 16 color
+    else if (dd <= 8)  flags |= ILC_COLOR8;	// 256 color
+    else if (dd <= 16) flags |= ILC_COLOR16;	// 64k hi-color
+    else if (dd <= 24) flags |= ILC_COLOR24;	// 16m truecolor
+    else if (dd <= 32) flags |= ILC_COLOR32;	// 16m truecolor
+
     if ( mask )
         flags |= ILC_MASK;
 

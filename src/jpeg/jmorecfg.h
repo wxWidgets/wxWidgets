@@ -158,12 +158,12 @@ typedef short INT16;
 /* INT32 must hold at least signed 32-bit values. */
 
 /* Modified JACS 23/4/99. 1200 means VC++ 6 */
-#if !defined(XMD_H) && !(_MSC_VER >= 1200)			/* X11/xmd.h correctly defines INT32 */
+#if !defined(XMD_H) && !(_MSC_VER >= 1200) && !(__BORLANDC__ >= 0x550)  /* X11/xmd.h correctly defines INT32 */
 typedef long INT32;
 #endif
 
 /* Added JACS 23/4/99, to get INT32 definition */
-#if (_MSC_VER >= 1200)
+#if (_MSC_VER >= 1200) || (__BORLANDC__ >= 0x550)
 #include <windows.h>
 #endif
 

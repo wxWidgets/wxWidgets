@@ -43,7 +43,7 @@ public:
 
     virtual ~wxFrame();
 
-    bool Show(bool show);
+    virtual bool Show(bool show = TRUE);
 
     // Set menu bar
     void SetMenuBar(wxMenuBar *menu_bar);
