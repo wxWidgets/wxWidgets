@@ -38,16 +38,17 @@ class MyParentFrame(wxMDIParentFrame):
 
 #----------------------------------------------------------------------
 
-class MyApp(wxApp):
-    def OnInit(self):
-        frame = MyParentFrame()
-        frame.Show(true)
-        self.SetTopWindow(frame)
-        return true
+if __name__ == '__main__':
+    class MyApp(wxApp):
+        def OnInit(self):
+            frame = MyParentFrame()
+            frame.Show(true)
+            self.SetTopWindow(frame)
+            return true
 
 
-app = MyApp(0)
-app.MainLoop()
+    app = MyApp(0)
+    app.MainLoop()
 
 
 

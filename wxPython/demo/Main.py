@@ -20,70 +20,243 @@ import images
 #---------------------------------------------------------------------------
 
 
+## _treeList = [
+##     ('New since last release', ['wxGenericDirCtrl',
+##                                 'wxImageFromStream',
+##                                 'RowColSizer',
+##                                 'Unicode',
+##                                 'wxFileHistory',
+##                                 ]),
+
+##     ('Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame',
+##                  'wxGrid', 'wxSashWindow',
+##                  'wxScrolledWindow', 'wxSplitterWindow',
+##                  'wxStatusBar', 'wxNotebook',
+##                  'wxHtmlWindow',
+##                  'wxStyledTextCtrl_1', 'wxStyledTextCtrl_2',
+##                  'wxPopupWindow',
+##                  'wxDynamicSashWindow',
+##                  ]),
+
+##     ('Common Dialogs', ['wxColourDialog', 'wxDirDialog', 'wxFileDialog',
+##                         'wxSingleChoiceDialog', 'wxTextEntryDialog',
+##                         'wxFontDialog', 'wxPageSetupDialog', 'wxPrintDialog',
+##                         'wxMessageDialog', 'wxProgressDialog', 'wxFindReplaceDialog',
+##                         ]),
+
+##     ('Controls', ['wxButton', 'wxCheckBox', 'wxCheckListBox', 'wxChoice',
+##                   'wxComboBox', 'wxGauge', 'wxListBox', 'wxListCtrl', 'VirtualListCtrl',
+##                   'wxTextCtrl',
+##                   'wxTreeCtrl', 'wxSpinButton', 'wxSpinCtrl', 'wxStaticText',
+##                   'wxStaticBitmap', 'wxRadioBox', 'wxSlider', 'wxToolBar',
+##                   'wxCalendarCtrl', 'wxToggleButton',
+##                   'wxEditableListBox', 'wxLEDNumberCtrl',
+##                   ]),
+
+##     ('Window Layout', ['wxLayoutConstraints', 'LayoutAnchors', 'Sizers', 'XML_Resource',
+##                        'RowColSizer',
+##                        ]),
+
+##     ('Miscellaneous', [ 'DragAndDrop', 'CustomDragAndDrop', 'URLDragAndDrop',
+##                         'FontEnumerator',
+##                         'wxTimer', 'wxValidator', 'wxGLCanvas', 'DialogUnits',
+##                         'wxImage', 'wxMask', 'PrintFramework', 'wxOGL',
+##                         'PythonEvents', 'Threads',
+##                         'ActiveXWrapper_Acrobat', 'ActiveXWrapper_IE',
+##                         'wxDragImage', "wxProcess", "FancyText", "OOR", "wxWave",
+##                         'wxJoystick', 'DrawXXXList', 'ErrorDialogs', 'wxMimeTypesManager',
+##                         'ContextHelp', 'SplitTree', 'Unicode', 'wxFileHistory',
+##                         ]),
+
+##     ('wxPython Library', ['Layoutf', 'wxScrolledMessageDialog',
+##                           'wxMultipleChoiceDialog', 'wxPlotCanvas', 'wxFloatBar',
+##                           'wxCalendar', 'wxMVCTree', 'wxVTKRenderWindow',
+##                           'FileBrowseButton', 'GenericButtons', 'wxEditor',
+##                           'ColourSelect', 'ImageBrowser',
+##                           'infoframe', 'ColourDB', 'PyCrust', 'PyCrustWithFilling',
+##                           'TablePrint',
+##                           'wxRightTextCtrl',
+##                           ]),
+
+##     ('Cool Contribs', ['pyTree', 'hangman',
+##                        #'SlashDot',
+##                        'XMLtreeview'
+##                        ]),
+
+##     ]
+
+
 _treeList = [
-    ('New since last release', ['wxGenericDirCtrl',
-                                'wxImageFromStream',
-                                'RowColSizer',
-                                'Unicode',
-                                'wxFileHistory',
-                                ]),
+    # new stuff
+    ('New since last release', [
+        'RowColSizer',
+        'Unicode',
+        'wxFileHistory',
+        'wxGenericDirCtrl',
+        'wxImageFromStream',
+        ]),
 
-    ('Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame',
-                 'wxGrid', 'wxSashWindow',
-                 'wxScrolledWindow', 'wxSplitterWindow',
-                 'wxStatusBar', 'wxNotebook',
-                 'wxHtmlWindow',
-                 'wxStyledTextCtrl_1', 'wxStyledTextCtrl_2',
-                 'wxPopupWindow',
-                 'wxDynamicSashWindow',
-                 ]),
+    # managed windows == things with a caption you can close
+    ('Base Frames and Dialogs', [
+        'wxDialog',
+        'wxFrame',
+        'wxMDIWindows',
+        'wxMiniFrame',
+        ]),
 
-    ('Common Dialogs', ['wxColourDialog', 'wxDirDialog', 'wxFileDialog',
-                        'wxSingleChoiceDialog', 'wxTextEntryDialog',
-                        'wxFontDialog', 'wxPageSetupDialog', 'wxPrintDialog',
-                        'wxMessageDialog', 'wxProgressDialog', 'wxFindReplaceDialog',
-                        ]),
+    # the common dialogs
+    ('Common Dialogs', [
+        'wxColourDialog',
+        'wxDirDialog',
+        'wxFileDialog',
+        'wxFindReplaceDialog',
+        'wxFontDialog',
+        'wxMessageDialog',
+        'wxPageSetupDialog',
+        'wxPrintDialog',
+        'wxProgressDialog',
+        'wxSingleChoiceDialog',
+        'wxTextEntryDialog',
+        ]),
 
-    ('Controls', ['wxButton', 'wxCheckBox', 'wxCheckListBox', 'wxChoice',
-                  'wxComboBox', 'wxGauge', 'wxListBox', 'wxListCtrl', 'VirtualListCtrl',
-                  'wxTextCtrl',
-                  'wxTreeCtrl', 'wxSpinButton', 'wxSpinCtrl', 'wxStaticText',
-                  'wxStaticBitmap', 'wxRadioBox', 'wxSlider', 'wxToolBar',
-                  'wxCalendarCtrl', 'wxToggleButton',
-                  'wxEditableListBox', 'wxLEDNumberCtrl',
-                  ]),
+    # dialogs form libraries
+    ('More Dialogs', [
+        'ErrorDialogs',
+        'ImageBrowser',
+        'wxMultipleChoiceDialog',
+        'wxScrolledMessageDialog',
+        ]),
 
-    ('Window Layout', ['wxLayoutConstraints', 'LayoutAnchors', 'Sizers', 'XML_Resource',
-                       'RowColSizer',
-                       ]),
+    # core controls
+    ('Core Windows/Controls', [
+        'VirtualListCtrl',
+        'wxButton',
+        'wxCheckBox',
+        'wxCheckListBox',
+        'wxChoice',
+        'wxComboBox',
+        'wxGauge',
+        'wxGenericDirCtrl',
+        'wxGrid',
+        'wxListBox',
+        'wxListCtrl',
+        'wxNotebook',
+        'wxPopupWindow',
+        'wxRadioBox',
+        'wxSashWindow',
+        'wxSlider',
+        'wxScrolledWindow',
+        'wxSplitterWindow',
+        'wxSpinButton',
+        'wxSpinCtrl',
+        'wxStaticText',
+        'wxStaticBitmap',
+        'wxStatusBar',
+        'wxTextCtrl',
+        'wxTimer',
+        'wxToggleButton',
+        'wxToolBar',
+        'wxTreeCtrl',
+        'wxValidator',
+        ]),
 
-    ('Miscellaneous', [ 'DragAndDrop', 'CustomDragAndDrop', 'URLDragAndDrop',
-                        'FontEnumerator',
-                        'wxTimer', 'wxValidator', 'wxGLCanvas', 'DialogUnits',
-                        'wxImage', 'wxMask', 'PrintFramework', 'wxOGL',
-                        'PythonEvents', 'Threads',
-                        'ActiveXWrapper_Acrobat', 'ActiveXWrapper_IE',
-                        'wxDragImage', "wxProcess", "FancyText", "OOR", "wxWave",
-                        'wxJoystick', 'DrawXXXList', 'ErrorDialogs', 'wxMimeTypesManager',
-                        'ContextHelp', 'SplitTree', 'Unicode', 'wxFileHistory',
-                        ]),
+    # controls coming from other librairies
+    ('More Windows/Controls', [
+        'ColourSelect',
+        'ContextHelp',
+        'FancyText',
+        'FileBrowseButton',
+        'GenericButtons',
+        'PyCrust',
+        'PyCrustWithFilling',
+        'SplitTree',
+        'TablePrint',
+        'wxCalendar',
+        'wxCalendarCtrl',
+        'wxDynamicSashWindow',
+        'wxEditableListBox',
+        'wxEditor',
+        'wxFloatBar',
+        'wxHtmlWindow',
+        'wxLEDNumberCtrl',
+        'wxMimeTypesManager',
+        'wxMVCTree',
+        'wxStyledTextCtrl_1',
+        'wxStyledTextCtrl_2',
+        'wxRightTextCtrl',
+        ]),
 
-    ('wxPython Library', ['Layoutf', 'wxScrolledMessageDialog',
-                          'wxMultipleChoiceDialog', 'wxPlotCanvas', 'wxFloatBar',
-                          'wxCalendar', 'wxMVCTree', 'wxVTKRenderWindow',
-                          'FileBrowseButton', 'GenericButtons', 'wxEditor',
-                          'ColourSelect', 'ImageBrowser',
-                          'infoframe', 'ColourDB', 'PyCrust', 'PyCrustWithFilling',
-                          'TablePrint',
-                          'wxRightTextCtrl',
-                          ]),
+    # How to lay out the controls in a frame/dialog
+    ('Window Layout', [
+        'LayoutAnchors',
+        'Layoutf',
+        'RowColSizer',
+        'Sizers',
+        'wxLayoutConstraints',
+        'XML_Resource',
+        ]),
 
-    ('Cool Contribs', ['pyTree', 'hangman',
-                       #'SlashDot',
-                       'XMLtreeview'
-                       ]),
+    # ditto
+    ('Process and Events', [
+        'infoframe',
+        'OOR',
+        'PythonEvents',
+        'Threads',
+        'wxProcess',
+        'wxTimer',
+        ]),
 
-    ]
+    # Clipboard and DnD
+    ('Clipboard and DnD', [
+        'CustomDragAndDrop',
+        'DragAndDrop',
+        'URLDragAndDrop',
+        ]),
+
+    # Images
+    ('Images', [
+        'wxDragImage',
+        'wxImage',
+        'wxImageFromStream',
+        'wxMask',
+        ]),
+
+    # Other stuff
+    ('Miscellaneous', [
+        'ColourDB',
+        'DialogUnits',
+        'DrawXXXList',
+        'FontEnumerator',
+        'PrintFramework',
+        'Unicode',
+        'wxFileHistory',
+        'wxJoystick',
+        'wxOGL',
+        'wxWave',
+        ]),
+
+    # need libs not coming with the demo
+    ('Objects using an external library', [
+        'ActiveXWrapper_Acrobat',
+        'ActiveXWrapper_IE',
+        'wxGLCanvas',
+        'wxPlotCanvas',
+        'wxVTKRenderWindow',
+        ]),
+
+    # pyTree, hangman, ... in the samples dir
+    ('Check out the samples dir too', [
+        ]),
+
+    #~ ('Cool Contribs', [
+        #~ 'pyTree',
+        #~ 'hangman',
+        #'SlashDot',
+        #~ 'XMLtreeview'
+        #~ ]),
+]
+
+
 
 #---------------------------------------------------------------------------
 
