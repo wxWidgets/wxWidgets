@@ -2,30 +2,51 @@
 
 WXDIR = ..\..\..
 
-EXTRACPPFLAGS=/Id:\libxml\libxml2-2.1.1
+#XMLDIR=
+!error modify makefile.wat to include the path to the XML library
+
+EXTRACPPFLAGS = -I$(WXDIR)\contrib\include;-I$(XMLDIR)\libxml2-2.1.1
 
 !include $(WXDIR)\src\makewat.env
 
-WXXMLLIB = $(WXDIR)\lib\wxxrc.lib
-THISDIR = $(WXDIR)\contrib\src\xrc
+LIBTARGET = $(WXDIR)\lib\wxxrc_w.lib
 
-NAME = wxxrc
-LNK = $(name).lnk
+OBJECTS=&
+    $(OUTPUTDIR)\xml.obj &
+    $(OUTPUTDIR)\xmlres.obj &
+    $(OUTPUTDIR)\xmlrsall.obj &
+    $(OUTPUTDIR)\xh_bttn.obj &
+    $(OUTPUTDIR)\xh_chckb.obj &
+    $(OUTPUTDIR)\xh_chckl.obj &
+    $(OUTPUTDIR)\xh_choic.obj &
+    $(OUTPUTDIR)\xh_combo.obj &
+    $(OUTPUTDIR)\xh_dlg.obj &
+    $(OUTPUTDIR)\xh_gauge.obj &
+    $(OUTPUTDIR)\xh_html.obj &
+    $(OUTPUTDIR)\xh_menu.obj &
+    $(OUTPUTDIR)\xh_notbk.obj &
+    $(OUTPUTDIR)\xh_panel.obj &
+    $(OUTPUTDIR)\xh_radbt.obj &
+    $(OUTPUTDIR)\xh_radbx.obj &
+    $(OUTPUTDIR)\xh_sizer.obj &
+    $(OUTPUTDIR)\xh_slidr.obj &
+    $(OUTPUTDIR)\xh_spin.obj &
+    $(OUTPUTDIR)\xh_stbmp.obj &
+    $(OUTPUTDIR)\xh_sttxt.obj &
+    $(OUTPUTDIR)\xh_text.obj &
+    $(OUTPUTDIR)\xh_listb.obj&
+    $(OUTPUTDIR)\xh_toolb.obj &
+    $(OUTPUTDIR)\xh_stlin.obj &
+    $(OUTPUTDIR)\xh_bmp.obj &
+    $(OUTPUTDIR)\xh_bmpbt.obj &
+    $(OUTPUTDIR)\xh_cald.obj &
+    $(OUTPUTDIR)\xh_listc.obj &
+    $(OUTPUTDIR)\xh_scrol.obj &
+    $(OUTPUTDIR)\xh_stbox.obj &
+    $(OUTPUTDIR)\xh_tree.obj &
+    $(OUTPUTDIR)\xh_unkwn.obj &
+    $(OUTPUTDIR)\xh_frame.obj &
+    $(OUTPUTDIR)\xh_scwin.obj &
+    $(OUTPUTDIR)\xh_split.obj
 
-OBJECTS=xml.obj xmlres.obj xmlrsall.obj &
-        xh_bttn.obj xh_chckb.obj xh_chckl.obj xh_choic.obj xh_combo.obj xh_dlg.obj &
-        xh_gauge.obj xh_html.obj xh_menu.obj xh_notbk.obj xh_panel.obj xh_radbt.obj &
-        xh_radbx.obj xh_sizer.obj xh_slidr.obj xh_spin.obj xh_stbmp.obj xh_sttxt.obj &
-        xh_text.obj xh_listb.obj xh_toolb.obj xh_stlin.obj xh_bmp.obj &
-        xh_bmpbt.obj xh_cald.obj xh_listc.obj xh_scrol.obj xh_stbox.obj &
-        xh_tree.obj xh_unkwn.obj xh_frame.obj xh_scwin.obj xh_split.obj
-
-
-all: $(WXXMLLIB)
-
-$(WXXMLLIB): $(OBJECTS)
-	*wlib /b /c /n /P=256 $(WXXMLLIB) $(OBJECTS)
-
-clean:   .SYMBOLIC
-    -erase *.obj *.bak *.err *.pch $(WXXMLLIB) *.lbc
-
+!include $(WXDIR)\src\makelib.wat

@@ -1,32 +1,27 @@
-#############################################################################
-#
-#                   Copyright (C) 1999 SciTech Software
-#                           All rights reserved.
-#
-# Descripton:   Generic makefile for the SciTech wxApplet library
-#
-#############################################################################
+# Generated automatically from Makefile.in by configure.
+# $Id$
 
-# We are building with the Win32 version
+top_srcdir = ../../..
+top_builddir = ../../..
+libsrc_dir = contrib/src/applet
 
-USE_RTTI		:= 1
-USE_CPPEXCEPT	:= 1
-PRECOMP_HDR		:= wx/wxprec.h
-CFLAGS          += -D__WIN95__ -D__WXMSW__ -D__WINDOWS__
+TARGET_LIBNAME=libwx_msw_applet-2.5
 
-# Link with wxWindows static link libraries or with the DLL. DLL is default.
+LIBVERSION_CURRENT=0
+LIBVERSION_REVISION=0
+LIBVERSION_AGE=0
 
-.IF $(STATIC_LINK)
-.ELSE
-CFLAGS          += -DWXUSINGDLL
-.ENDIF
 
-# Define the library name and objects
+HEADER_PATH=$(top_srcdir)/contrib/include/wx
+HEADER_SUBDIR=applet
 
-LIBFILE         = wxapplet$L
-LIBCLEAN        = *.il? *.dll *.lib
-OBJECTS			:= applet$O appletwindow$O
+HEADERS=applet.h appletwindow.h
 
-DEPEND_OBJ      = $(OBJECTS)
-.INCLUDE: "$(SCITECH)\makedefs\common.mk"
+OBJECTS=applet.o appletwindow.o
+DEPFILES=$(OBJECTS:.o=.d)
 
+APPEXTRADEFS=-I$(top_srcdir)/contrib/include
+
+include $(top_builddir)/src/makelib.env
+
+-include $(DEPFILES)

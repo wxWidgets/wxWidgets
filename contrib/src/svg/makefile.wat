@@ -1,26 +1,13 @@
-# svg makefile for Watcom C++
+# SVG src makefile for Watcom C++
 
 WXDIR = ..\..\..
 EXTRACPPFLAGS = -I$(WXDIR)\contrib\include
 
-!include $(WXDIR)\src\makewat.env
+LIBTARGET = $(WXDIR)\lib\svg_w.lib
 
-SVGLIB = $(WXDIR)\lib\svg.lib
-THISDIR = $(WXDIR)\contrib\src\svg
-OUTPUTDIR = $(THISDIR)\
+OBJECTS =  &
+    $(OUTPUTDIR)\dcsvg.obj &
 
-NAME = svg
-LNK = $(name).lnk
+!include $(WXDIR)\src\makelib.wat
 
-OBJECTS = dcsvg.obj 
-
-
-all:     $(SVGLIB) .SYMBOLIC
-    
-
-$(SVGLIB): $(OBJECTS)
-	*wlib /b /c /n /P=256 $(SVGLIB) $(OBJECTS)
-
-clean:   .SYMBOLIC
-    -erase *.obj *.bak *.err *.pch $(SVGLIB) *.lbc
 

@@ -1,11 +1,12 @@
-# Purpose: makefile for validate example (Watcom)
-# Created: 2000-03-14
-
-WXDIR = $(%WXWIN)
-
-PROGRAM = validate
-OBJECTS = $(PROGRAM).obj
-
-!include $(WXDIR)\src\makeprog.wat
-
-
+# 
+# Makefile for WATCOM 
+# 
+# Created by Julian Smart, January 1999 
+#  
+# 
+# 
+# 
+PROGRAM = validate 
+OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 
+# 
+!include $(%WXWIN)\src\makeprog.wat 

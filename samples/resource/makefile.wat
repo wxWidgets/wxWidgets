@@ -6,7 +6,7 @@
 # 
 # 
 # 
-PROGRAM = docview 
+PROGRAM = resource 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 
 # 
 !include $(%WXWIN)\src\makeprog.wat 

@@ -1,11 +1,12 @@
-# Purpose: makefile for statbar example (Watcom)
-# Created: 2000-02-04
-
-WXDIR = $(%WXWIN)
-
-PROGRAM = statbar
-OBJECTS = $(PROGRAM).obj
-
-!include $(WXDIR)\src\makeprog.wat
-
-
+# 
+# Makefile for WATCOM 
+# 
+# Created by Julian Smart, January 1999 
+#  
+# 
+# 
+# 
+PROGRAM = statbar 
+OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 
+# 
+!include $(%WXWIN)\src\makeprog.wat 

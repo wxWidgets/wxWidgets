@@ -3,6 +3,7 @@
 # File:		makefile.wat
 # Author:	Julian Smart
 # Created:	1998
+# Changelist:	2003-02-25 - Juergen Ulbts - update from wxWindows 2.5.x/HEAD branch
 #
 # Makefile : Builds TIFF library for Watcom C++, WIN32
 # This makefile has to rename files because apparently Watcom C++
@@ -31,42 +32,42 @@ LIBTARGET = $(WXLIB)\tiff$(WATCOM_SUFFIX).lib
 
 OBJECTS= &
 !ifeq RENAME 1
-		$(OUTPUTDIR)_aux.obj &
+		$(OUTPUTDIR)\_aux.obj &
 !else
-		$(OUTPUTDIR)tif_aux.obj &
+		$(OUTPUTDIR)\tif_aux.obj &
 !endif
-		$(OUTPUTDIR)$(TIFF)close.obj &
-		$(OUTPUTDIR)$(TIFF)codec.obj &
-		$(OUTPUTDIR)$(TIFF)compress.obj &
-		$(OUTPUTDIR)$(TIFF)dir.obj &
-		$(OUTPUTDIR)$(TIFF)dirinfo.obj &
-		$(OUTPUTDIR)$(TIFF)dirread.obj &
-		$(OUTPUTDIR)$(TIFF)dirwrite.obj &
-		$(OUTPUTDIR)$(TIFF)dumpmode.obj &
-		$(OUTPUTDIR)$(TIFF)error.obj &
-		$(OUTPUTDIR)$(TIFF)fax3.obj &
-		$(OUTPUTDIR)$(TIFF)fax3sm.obj &
-		$(OUTPUTDIR)$(TIFF)flush.obj &
-		$(OUTPUTDIR)$(TIFF)getimage.obj &
-		$(OUTPUTDIR)$(TIFF)jpeg.obj &
-		$(OUTPUTDIR)$(TIFF)luv.obj &
-		$(OUTPUTDIR)$(TIFF)lzw.obj &
-		$(OUTPUTDIR)$(TIFF)next.obj &
-		$(OUTPUTDIR)$(TIFF)open.obj &
-		$(OUTPUTDIR)$(TIFF)packbits.obj &
-		$(OUTPUTDIR)$(TIFF)pixarlog.obj &
-		$(OUTPUTDIR)$(TIFF)predict.obj &
-		$(OUTPUTDIR)$(TIFF)print.obj &
-		$(OUTPUTDIR)$(TIFF)read.obj &
-		$(OUTPUTDIR)$(TIFF)strip.obj &
-		$(OUTPUTDIR)$(TIFF)swab.obj &
-		$(OUTPUTDIR)$(TIFF)thunder.obj &
-		$(OUTPUTDIR)$(TIFF)tile.obj &
-		$(OUTPUTDIR)$(TIFF)version.obj &
-		$(OUTPUTDIR)$(TIFF)warning.obj &
-		$(OUTPUTDIR)$(TIFF)win32.obj &
-		$(OUTPUTDIR)$(TIFF)write.obj &
-		$(OUTPUTDIR)$(TIFF)zip.obj
+		$(OUTPUTDIR)\$(TIFF)close.obj &
+		$(OUTPUTDIR)\$(TIFF)codec.obj &
+		$(OUTPUTDIR)\$(TIFF)compress.obj &
+		$(OUTPUTDIR)\$(TIFF)dir.obj &
+		$(OUTPUTDIR)\$(TIFF)dirinfo.obj &
+		$(OUTPUTDIR)\$(TIFF)dirread.obj &
+		$(OUTPUTDIR)\$(TIFF)dirwrite.obj &
+		$(OUTPUTDIR)\$(TIFF)dumpmode.obj &
+		$(OUTPUTDIR)\$(TIFF)error.obj &
+		$(OUTPUTDIR)\$(TIFF)fax3.obj &
+		$(OUTPUTDIR)\$(TIFF)fax3sm.obj &
+		$(OUTPUTDIR)\$(TIFF)flush.obj &
+		$(OUTPUTDIR)\$(TIFF)getimage.obj &
+		$(OUTPUTDIR)\$(TIFF)jpeg.obj &
+		$(OUTPUTDIR)\$(TIFF)luv.obj &
+		$(OUTPUTDIR)\$(TIFF)lzw.obj &
+		$(OUTPUTDIR)\$(TIFF)next.obj &
+		$(OUTPUTDIR)\$(TIFF)open.obj &
+		$(OUTPUTDIR)\$(TIFF)packbits.obj &
+		$(OUTPUTDIR)\$(TIFF)pixarlog.obj &
+		$(OUTPUTDIR)\$(TIFF)predict.obj &
+		$(OUTPUTDIR)\$(TIFF)print.obj &
+		$(OUTPUTDIR)\$(TIFF)read.obj &
+		$(OUTPUTDIR)\$(TIFF)strip.obj &
+		$(OUTPUTDIR)\$(TIFF)swab.obj &
+		$(OUTPUTDIR)\$(TIFF)thunder.obj &
+		$(OUTPUTDIR)\$(TIFF)tile.obj &
+		$(OUTPUTDIR)\$(TIFF)version.obj &
+		$(OUTPUTDIR)\$(TIFF)warning.obj &
+		$(OUTPUTDIR)\$(TIFF)win32.obj &
+		$(OUTPUTDIR)\$(TIFF)write.obj &
+		$(OUTPUTDIR)\$(TIFF)zip.obj
 
 all: $(OUTPUTDIR) $(RENAME) $(LIBTARGET) .SYMBOLIC
 
@@ -111,7 +112,7 @@ rename: .SYMBOLIC
 $(OUTPUTDIR):
 	@if not exist $^@ mkdir $^@
 
-LBCFILE=$(OUTPUTDIR)tiff.lbc
+LBCFILE=$(OUTPUTDIR)\tiff.lbc
 $(LIBTARGET) : $(OBJECTS)
     %create $(LBCFILE)
     @for %i in ( $(OBJECTS) ) do @%append $(LBCFILE) +%i

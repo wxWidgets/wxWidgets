@@ -1,11 +1,12 @@
-# Purpose: makefile for tab example (Watcom)
-# Created: 2000-03-15
-
-WXDIR = $(%WXWIN)
-
-PROGRAM = tab
-OBJECTS = $(PROGRAM).obj
-
-!include $(WXDIR)\src\makeprog.wat
-
-
+# 
+# Makefile for WATCOM 
+# 
+# Created by Julian Smart, January 1999 
+#  
+# 
+# 
+# 
+PROGRAM = tab 
+OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 
+# 
+!include $(%WXWIN)\src\makeprog.wat 

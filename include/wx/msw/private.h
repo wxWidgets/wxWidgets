@@ -398,6 +398,9 @@ private:
    DECLARE_NO_COPY_CLASS(SelectInHDC)
 };
 
+#ifdef __WATCOM__
+//FIXME why does watcom dislike this ?? CE 05 April 2003
+
 // when working with global pointers (which is unfortunately still necessary
 // sometimes, e.g. for clipboard) it is important to unlock them exactly as
 // many times as we lock them which just asks for using a "smart lock" class
@@ -437,6 +440,7 @@ private:
     DECLARE_NO_COPY_CLASS(GlobalHandle)
 };
 
+#endif //__WATCOM__
 // ---------------------------------------------------------------------------
 // macros to make casting between WXFOO and FOO a bit easier: the GetFoo()
 // returns Foo cast to the Windows type for oruselves, while GetFooOf() takes

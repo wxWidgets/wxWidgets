@@ -1,17 +1,13 @@
-#
-# Makefile for WATCOM
-#
+# Purpose: makefile for SVG example (Watcom)
+# Created 2000-07-28
 
-
-WXDIR = $(WXWIN)
+WXDIR = $(%WXWIN)
 
 EXTRACPPFLAGS = -I$(WXDIR)\contrib\include
-THISDIR = $(WXDIR)\contrib\samples\stc
-OUTPUTDIR = $(THISDIR)\
-
 PROGRAM = stctest
-EXTRALIBS = $(WXDIR)\lib\stc.lib
-OBJECTS = $(PROGRAM).obj 
+EXTRALIBS = $(WXDIR)\lib\stc_w.lib
+OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 
 
 !include $(WXDIR)\src\makeprog.wat
+
 
