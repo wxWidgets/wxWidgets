@@ -190,7 +190,9 @@ Extra Styles
 MustHaveApp(wxWindow);
 MustHaveApp(wxWindow::FindFocus);
 MustHaveApp(wxWindow::GetCapture);
-MustHaveApp(wxWindow::GetClassDefaultAttributes);
+
+// This one is not restricted to wxWindow
+MustHaveApp(GetClassDefaultAttributes);
 
 class wxWindow : public wxEvtHandler
 {
