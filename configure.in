@@ -764,6 +764,7 @@ DEFAULT_wxUSE_POSTSCRIPT=1
 DEFAULT_wxUSE_IPC=1
 DEFAULT_wxUSE_RESOURCES=1
 DEFAULT_wxUSE_CLIPBOARD=1
+DEFAULT_wxUSE_TOOLTIPS=1
 DEFAULT_wxUSE_DRAG_AND_DROP=1
 
 DEFAULT_wxUSE_MDI_ARCHITECTURE=1
@@ -937,6 +938,10 @@ wxUSE_RESOURCES)
 AC_OVERRIDES(clipboard,clipboard,
 **--with-clipboard        use wxClipboard classes,
 wxUSE_CLIPBOARD)
+
+AC_OVERRIDES(tooltips,tooltips,
+**--with-tooltips         use tooltips,
+wxUSE_TOOLTIPS)
 
 AC_OVERRIDES(dnd,dnd,
 **--with-dnd              use Drag'n'Drop classes,
@@ -1280,6 +1285,10 @@ fi
 
 if test "$wxUSE_CLIPBOARD" = 1 ; then
   AC_DEFINE_UNQUOTED(wxUSE_CLIPBOARD,$wxUSE_CLIPBOARD)
+fi
+
+if test "$wxUSE_TOOLTIPS" = 1 ; then
+  AC_DEFINE_UNQUOTED(wxUSE_TOOLTIPS,$wxUSE_TOOLTIPS)
 fi
 
 if test "$wxUSE_DRAG_AND_DROP" = 1 ; then

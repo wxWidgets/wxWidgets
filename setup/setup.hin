@@ -165,6 +165,10 @@
  */
 #define wxUSE_CLIPBOARD 0
 /*
+ * Use tooltips
+ */
+#define wxUSE_TOOLTIPS 0
+/*
  * Use dnd
  */
 #define wxUSE_DRAG_AND_DROP 0

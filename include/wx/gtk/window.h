@@ -146,23 +146,23 @@ public:
   virtual void SetSize( int x, int y, int width, int height,
     int sizeFlags = wxSIZE_AUTO );
   virtual void SetSize( int width, int height );
-  
+
   virtual void Move( int x, int y );
-  
+
   virtual void GetSize( int *width, int *height ) const;
   wxSize GetSize() const { int w, h; GetSize(& w, & h); return wxSize(w, h); }
-  
+
   virtual void SetClientSize( int const width, int const height );
-  
+
   virtual void GetClientSize( int *width, int *height ) const;
   wxSize GetClientSize() const { int w, h; GetClientSize(& w, & h); return wxSize(w, h); }
-  
+
   virtual void GetPosition( int *x, int *y ) const;
   wxPoint GetPosition() const { int w, h; GetPosition(& w, & h); return wxPoint(w, h); }
-  
+
   wxRect GetRect() const
     { int x, y, w, h; GetPosition(& x, & y); GetSize(& w, & h); return wxRect(x, y, w, h); }
-    
+
   virtual void Centre( int direction = wxHORIZONTAL );
   inline void Center(int direction = wxHORIZONTAL) { Centre(direction); }
   virtual void Fit();
@@ -188,7 +188,7 @@ public:
 
   virtual void SetFocus();
   static wxWindow *FindFocus();
-  
+
   virtual void AddChild( wxWindow *child );
   wxList& GetChildren() { return m_children; }
 
@@ -226,12 +226,14 @@ public:
   wxWindowID GetId() const;
 
   void SetCursor( const wxCursor &cursor );
-  
+
   void WarpPointer(int x, int y);
-  
-  virtual void SetToolTip( const wxString &tip );
+
+#if wxUSE_TOOLTIPS
+  void SetToolTip( const wxString &tip );
   virtual void SetToolTip( wxToolTip *tip );
-  virtual wxToolTip* GetToolTip();
+  wxToolTip* GetToolTip() const { return m_toolTip; }
+#endif // wxUSE_TOOLTIPS
 
   virtual void Refresh( bool eraseBackground = TRUE, const wxRect *rect = (const wxRect *) NULL );
   virtual void Clear();
@@ -326,20 +328,20 @@ public:
   bool HasVMT();
 
   virtual void OnInternalIdle();
-  
+
   /* used by all classes in the widget creation process */
-  
+
   void PreCreation( wxWindow *parent, wxWindowID id, const wxPoint &pos,
                     const wxSize &size, long style, const wxString &name );
   void PostCreation();
-  
+
   /* the methods below are required because many native widgets
      are composed of several subwidgets and setting a style for
-     the widget means setting it for all subwidgets as well. 
+     the widget means setting it for all subwidgets as well.
      also, it is nor clear, which native widget is the top
      widget where (most of) the input goes. even tooltips have
      to be applied to all subwidgets. */
-  
+
   virtual GtkWidget* GetConnectWidget();
   virtual bool IsOwnGtkWindow( GdkWindow *window );
   void ConnectWidget( GtkWidget *widget );
@@ -347,8 +349,10 @@ public:
   GtkStyle *GetWidgetStyle();
   void SetWidgetStyle();
   virtual void ApplyWidgetStyle();
-  
+
+#if wxUSE_TOOLTIPS
   virtual void ApplyToolTip( GtkTooltips *tips, const char *tip );
+#endif // wxUSE_TOOLTIPS
 
   /* private member variables */
 
@@ -377,7 +381,10 @@ public:
   wxAcceleratorTable   m_acceleratorTable;
   wxClientData        *m_clientObject;
   void                *m_clientData;
+
+#if wxUSE_TOOLTIPS
   wxToolTip           *m_toolTip;
+#endif // wxUSE_TOOLTIPS
 
   GtkWidget           *m_widget;
   GtkWidget           *m_wxwindow;

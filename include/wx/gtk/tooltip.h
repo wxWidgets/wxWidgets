@@ -1,53 +1,56 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        tooltip.h
-// Purpose:
+// Purpose:     wxToolTip class
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __GTKTOOLTIPH__
 #define __GTKTOOLTIPH__
 
 #ifdef __GNUG__
-#pragma interface
+    #pragma interface
 #endif
 
 #include "wx/defs.h"
+#include "wx/string.h"
 #include "wx/object.h"
-#include "wx/window.h"
 
 //-----------------------------------------------------------------------------
-// classes
+// forward declarations
 //-----------------------------------------------------------------------------
 
 class wxToolTip;
+class wxWindow;
 
 //-----------------------------------------------------------------------------
 // wxToolTip
 //-----------------------------------------------------------------------------
 
-class wxToolTip: public wxObject
+class wxToolTip : public wxObject
 {
 public:
-  
-    wxToolTip( const wxString &tip );
-    
-    void SetTip( const wxString &tip );
-    wxString GetTip() const;
-    wxWindow *GetWindow() const;
-    bool Ok() const;
-    
+    // globally change the tooltip parameters
     static void Enable( bool flag );
     static void SetDelay( long msecs );
 
-  // implementation
-    
+    wxToolTip( const wxString &tip );
+
+    // get/set the tooltip text
+    void SetTip( const wxString &tip );
+    wxString GetTip() const { return m_text; }
+
+    wxWindow *GetWindow() const { return m_window; }
+    bool IsOk() const { return m_window != NULL; }
+
+    // implementation
+    void Apply( wxWindow *win );
+
+private:
     wxString     m_text;
     wxWindow    *m_window;
-    
-    void Apply( wxWindow *win );
 };
 
 #endif // __GTKTOOLTIPH__

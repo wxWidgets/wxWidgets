@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -38,33 +38,32 @@ extern const char *wxCheckBoxNameStr;
 
 class wxCheckBox: public wxControl
 {
-  DECLARE_DYNAMIC_CLASS(wxCheckBox)
+DECLARE_DYNAMIC_CLASS(wxCheckBox)
 
-  public:
-
+public:
     wxCheckBox(void);
-    inline wxCheckBox( wxWindow *parent, wxWindowID id, const wxString& label,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize, long style = 0,
-           const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxCheckBoxNameStr)
+    wxCheckBox( wxWindow *parent, wxWindowID id, const wxString& label,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize, long style = 0,
+            const wxValidator& validator = wxDefaultValidator,
+            const wxString& name = wxCheckBoxNameStr)
     {
-      Create(parent, id, label, pos, size, style, validator, name);
+        Create(parent, id, label, pos, size, style, validator, name);
     }
     bool Create( wxWindow *parent, wxWindowID id, const wxString& label,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize, long style = 0,
-           const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxCheckBoxNameStr );
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize, long style = 0,
+            const wxValidator& validator = wxDefaultValidator,
+            const wxString& name = wxCheckBoxNameStr );
     void SetValue( bool state );
     bool GetValue() const;
-    
+
     void SetLabel( const wxString& label );
     void Enable( bool enable );
-    
-  // implementation        
-  
-    void ApplyWidgetStyle();    
+
+    // implementation
+
+    void ApplyWidgetStyle();
 
     bool   m_blockFirstEvent;
 };

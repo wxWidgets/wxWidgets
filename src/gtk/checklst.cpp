@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -31,7 +31,7 @@ wxCheckListBox::wxCheckListBox() :
 wxCheckListBox::wxCheckListBox(wxWindow *parent, wxWindowID id,
                  const wxPoint& pos,
                  const wxSize& size,
-                 int nStrings, 
+                 int nStrings,
                  const wxString choices[],
                  long style,
                  const wxValidator& validator,
@@ -44,18 +44,18 @@ wxCheckListBox::wxCheckListBox(wxWindow *parent, wxWindowID id,
 bool wxCheckListBox::IsChecked( int index ) const
 {
     wxCHECK_MSG( m_list != NULL, FALSE, "invalid checklistbox" );
-  
+
     GList *child = g_list_nth( m_list->children, index );
     if (child)
     {
         GtkBin *bin = GTK_BIN( child->data );
         GtkLabel *label = GTK_LABEL( bin->child );
-	
-	wxString str = label->label;
-    
+
+        wxString str = label->label;
+
         return (str[1] == 'X');
     }
-    
+
     wxFAIL_MSG("wrong checklistbox index");
     return FALSE;
 }
@@ -63,31 +63,32 @@ bool wxCheckListBox::IsChecked( int index ) const
 void wxCheckListBox::Check( int index, bool check )
 {
     wxCHECK_RET( m_list != NULL, "invalid checklistbox" );
-  
+
     GList *child = g_list_nth( m_list->children, index );
     if (child)
     {
         GtkBin *bin = GTK_BIN( child->data );
         GtkLabel *label = GTK_LABEL( bin->child );
-	
-	wxString str = label->label;
-    
+
+        wxString str = label->label;
+
         if (check == (str[1] == 'X')) return;
-	
-	if (check)
-	    str.SetChar( 1, 'X' );
-	else
-	    str.SetChar( 1, '-' );
-	    
-	gtk_label_set( label, str );
-	    
-	return;
+
+        if (check)
+            str.SetChar( 1, 'X' );
+        else
+            str.SetChar( 1, '-' );
+
+        gtk_label_set( label, str );
+
+        return;
     }
-    
+
     wxFAIL_MSG("wrong checklistbox index");
 }
 
-int wxCheckListBox::GetItemHeight()
+int wxCheckListBox::GetItemHeight() const
 {
+    // FIXME
     return 22;
 }
