@@ -175,7 +175,16 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
 #if defined(__BORLANDC__) || defined(__GNUWIN32__)
   ::SetAbortProc((HDC) dc->GetHDC(), (FARPROC) lpAbortProc);
 #else
-  ::SetAbortProc((HDC) dc->GetHDC(), (int (_stdcall *)(HDC, int)) lpAbortProc);
+  ::SetAbortProc((HDC) dc->GetHDC(), (int (_stdcall *)
+    // cast it to right type only if required
+    // @@@ it's really cdecl and we're casting it to stdcall - either there is
+    //     something I don't understand or it will crash at first usage
+  #ifdef STRICT
+    (HDC, int)
+  #else
+    ()
+  #endif
+    )lpAbortProc);
 #endif
 
   if (!win)
