@@ -165,6 +165,9 @@ wxWindowCocoaScroller::wxWindowCocoaScroller(wxWindow *owner)
 
 void wxWindowCocoaScroller::Encapsulate()
 {
+    // Set the scroll view autoresizingMask to match the current NSView
+    [m_cocoaNSScrollView setAutoresizingMask: [m_owner->GetNSView() autoresizingMask]];
+    [m_owner->GetNSView() setAutoresizingMask: NSViewNotSizable];
     // NOTE: replaceSubView will cause m_cocaNSView to be released
     // except when it hasn't been added into an NSView hierarchy in which
     // case it doesn't need to be and this should work out to a no-op
@@ -178,6 +181,8 @@ void wxWindowCocoaScroller::Unencapsulate()
 {
     [m_cocoaNSScrollView setDocumentView: nil];
     m_owner->CocoaReplaceView(m_cocoaNSScrollView, m_owner->GetNSView());
+    if(![[m_owner->GetNSView() superview] isFlipped])
+        [m_owner->GetNSView() setAutoresizingMask: NSViewMinYMargin];
 }
 
 wxWindowCocoaScroller::~wxWindowCocoaScroller()
@@ -591,13 +596,15 @@ void wxWindowCocoa::SetInitialFrameRect(const wxPoint& pos, const wxSize& size)
         frameRect.size.height = size.y;
     frameRect.origin.x = pos.x;
     frameRect.origin.y = parentRect.size.height-(pos.y+frameRect.size.height);
-    [nsview setFrame: frameRect];
     // Tell Cocoa to change the margin between the bottom of the superview
     // and the bottom of the control.  Keeps the control pinned to the top
     // of its superview so that its position in the wxWindows coordinate
     // system doesn't change.
     if(![superview isFlipped])
         [nsview setAutoresizingMask: NSViewMinYMargin];
+    // MUST set the mask before setFrame: which can generate a size event
+    // and cause a scroller to be added!
+    [nsview setFrame: frameRect];
 }
 
 // Get total size
