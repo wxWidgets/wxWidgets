@@ -1302,6 +1302,11 @@ def wxCursorFromImage(*_args, **_kwargs):
     if val: val = wxCursorPtr(val); val.thisown = 1
     return val
 
+def wxCursorFromBits(*_args, **_kwargs):
+    val = gdic.wxCursorFromBits(*_args,**_kwargs)
+    if val: val = wxCursorPtr(val); val.thisown = 1
+    return val
+
 def wxNamedColour(*_args, **_kwargs):
     val = gdic.wxNamedColour(*_args,**_kwargs)
     if val: val = wxColourPtr(val); val.thisown = 1
