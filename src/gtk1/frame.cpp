@@ -23,7 +23,8 @@
 #define XIconifyWindow XICONIFYWINDOW
 #endif
 
-#include "wx/frame.h"
+#include "wx/defs.h"
+
 #include "wx/dialog.h"
 #include "wx/control.h"
 #include "wx/app.h"
@@ -1247,16 +1248,6 @@ void wxFrameGTK::SetIconizeState(bool iconize)
     {
         m_isIconized = iconize;
         (void)SendIconizeEvent(iconize);
-    }
-    else
-    {
-        // this is not supposed to happen if we're called only from
-        // gtk_frame_(un)map_callback!
-        
-        // RR: I don't understand this test. Upon startup, the frame is
-        //     not iconized by default, it has just not been created
-        //     yet.
-        ///wxFAIL_MSG( _T("unexpected call to SendIconizeEvent ignored") );
     }
 }
 

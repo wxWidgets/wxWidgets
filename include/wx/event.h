@@ -419,7 +419,7 @@ public:
 
     void CopyObject(wxObject& obj) const;
 
-#ifdef WXWIN_COMPATIBILITY_2
+#if WXWIN_COMPATIBILITY_2
     bool Checked() const { return IsChecked(); }
 #endif // WXWIN_COMPATIBILITY_2
 
