@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/nix/fontutil.h
+// Name:        wx/mgl/fontutil.h
 // Purpose:     font-related helper functions for MGL
 // Author:      Vaclav Slavik
 // Created:     2001/05/01
@@ -10,8 +10,6 @@
 
 #ifndef _WX_MGL_FONTUTIL_H_
 #define _WX_MGL_FONTUTIL_H_
-
-#ifdef __WXMGL__
 
 #include "wx/list.h"
 
@@ -120,7 +118,5 @@ class wxFontsManager
 };
 
 extern wxFontsManager *wxTheFontsManager;
-
-#endif
 
 #endif // _WX_MGL_FONTUTIL_H_
