@@ -92,12 +92,11 @@ public:
 
 #if defined(__WXMSW__)
     #include "wx/msw/apptbase.h"
-#elif defined(__UNIX__)
-    #include "wx/unix/apptbase.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/apptbase.h"
+#elif defined(__UNIX__)
+    #include "wx/unix/apptbase.h"
 #else // no platform-specific methods to add to wxAppTraits
-    typedef 
     // wxAppTraits must be a class because it was forward declared as class
     class WXDLLIMPEXP_BASE wxAppTraits : public wxAppTraitsBase
     {
@@ -166,10 +165,10 @@ public:
 
 #if defined(__WXMSW__)
     #include "wx/msw/apptrait.h"
-#elif defined(__UNIX__)
-    #include "wx/unix/apptrait.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/apptrait.h"
+#elif defined(__UNIX__)
+    #include "wx/unix/apptrait.h"
 #else // no platform-specific methods to add to wxAppTraits
     #if wxUSE_GUI
         typedef wxGUIAppTraitsBase wxGUIAppTraits;
