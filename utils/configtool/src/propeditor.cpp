@@ -313,12 +313,16 @@ bool ctPropertyEditor::DisplayProperty(int row, ctProperty* prop, bool valueOnly
     // Set the value type
     if (prop->GetEditorType() == _T("choice"))
     {
+#if 0
         wxString* strArr = prop->GetChoices().GetStringArray();
 
         m_attributeEditorGrid->SetCellEditor(row, 1,
                 new wxGridCellChoiceEditor(prop->GetChoices().GetCount(), strArr));
 
         delete[] strArr;
+#endif
+        m_attributeEditorGrid->SetCellEditor(row, 1,
+                new wxGridCellChoiceEditor(prop->GetChoices()));
     }
     else if (prop->GetEditorType() == _T("integer") || prop->GetVariant().GetType() == _T("long"))
     {

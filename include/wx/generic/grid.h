@@ -567,6 +567,8 @@ public:
     wxGridCellChoiceEditor(size_t count = 0,
                            const wxString choices[] = NULL,
                            bool allowOthers = FALSE);
+    wxGridCellChoiceEditor(const wxArrayString& choices,
+                           bool allowOthers = FALSE);
 
     virtual void Create(wxWindow* parent,
                         wxWindowID id,

@@ -1364,6 +1364,11 @@ wxString wxGridCellBoolEditor::GetValue() const
 // wxGridCellChoiceEditor
 // ----------------------------------------------------------------------------
 
+wxGridCellChoiceEditor::wxGridCellChoiceEditor(const wxArrayString& choices,
+                                               bool allowOthers)
+    : m_choices(choices),
+      m_allowOthers(allowOthers) { }
+
 wxGridCellChoiceEditor::wxGridCellChoiceEditor(size_t count,
                                                const wxString choices[],
                                                bool allowOthers)
