@@ -141,6 +141,8 @@ unsigned char g_XBM[] = {0x55,0x55,0xF0,0xF0,0xCC,0xCC,0x39,0x39,0xFF,0xFF,
                                                /*  ---  -  ---  -*/;        
                                                /*----------------*/;        
 
+#include "garfield.xpm"
+
 void TestBitmap()
 {
     wxBitmap myBmp(800, 600);
@@ -213,6 +215,8 @@ void TestBitmap()
     dc.SetUserScale(1.0, 1.0);
 
     dc.DrawBitmap(garfield.GetSubBitmap(wxRect(32, 32, 64, 64)), 720, 10);
+
+    dc.DrawBitmap(wxBitmap(garfield_xpm), 720, 120);
     
 #ifdef __WXMGL__
     dc.DrawIcon(wxICON(folder1), 10, 80);

@@ -6,7 +6,7 @@ program_dir = samples/mgl
 PROGRAM=dctest
 
 DATAFILES=blender.png mask1.png mask2.png garfield.png stipple1.png stipple2.png \
-          folder1.ico
+          folder1.ico garfield.xpm
 
 OBJECTS=$(PROGRAM).o tests.o
 
