@@ -234,6 +234,8 @@ bool wxSound::Create(const wxString& fileName, bool isResource)
     if(!wxInitQT())
         return false;
 
+    FreeData();
+
     if (isResource)
     {
 #ifdef __WXMAC__
@@ -260,7 +262,8 @@ bool wxSound::Create(const wxString& fileName, bool isResource)
 
 bool wxSound::DoPlay(unsigned flags) const
 {
-    wxASSERT(m_pTimer == NULL || !((wxTimer*)m_pTimer)->IsRunning() );
+//    wxASSERT(m_pTimer == NULL || !((wxTimer*)m_pTimer)->IsRunning() );
+    FreeData();
 
     Movie movie;
 
