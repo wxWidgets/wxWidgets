@@ -6,13 +6,13 @@
 // Created:     21/07/97
 // RCS-ID:      $Id$
 // Copyright:   (c) 1993-1998 Chris Breeze
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 //---------------------------------------------------------------------------
 // Last modified: 22nd July 1998 - ported to wxWidgets 2.0
 /////////////////////////////////////////////////////////////////////////////
 //+-------------------------------------------------------------+
-//| Description:												|
-//|	The base class for holding piles of playing cards.			|
+//| Description:                                                |
+//| The base class for holding piles of playing cards.          |
 //+-------------------------------------------------------------+
 
 #ifdef __GNUG__
@@ -46,10 +46,10 @@
 #include "wx/app.h"
 
 //+-------------------------------------------------------------+
-//| Pile::Pile()												|
+//| Pile::Pile()                                                |
 //+-------------------------------------------------------------+
-//| Description:												|
-//|	Initialise the pile to be empty of cards.					|
+//| Description:                                                |
+//| Initialise the pile to be empty of cards.                   |
 //+-------------------------------------------------------------+
 Pile::Pile(int x, int y, int dx, int dy)
 {
@@ -59,67 +59,67 @@ Pile::Pile(int x, int y, int dx, int dy)
     m_dy = dy;
     for (m_topCard = 0; m_topCard < NumCards; m_topCard++)
     {
-    	m_cards[m_topCard] = 0;
+        m_cards[m_topCard] = 0;
     }
-    m_topCard = -1;	// i.e. empty
+    m_topCard = -1; // i.e. empty
 }
 
 
 //+-------------------------------------------------------------+
-//| Pile::Redraw()												|
+//| Pile::Redraw()                                              |
 //+-------------------------------------------------------------+
-//| Description:												|
-//|	Redraw the pile on the screen. If the pile is empty			|
-//|	just draw a NULL card as a place holder for the pile.		|
-//|	Otherwise draw the pile from the bottom up, starting		|
-//|	at the origin of the pile, shifting each subsequent			|
-//|	card by the pile's x and y offsets.							|
+//| Description:                                                |
+//| Redraw the pile on the screen. If the pile is empty         |
+//| just draw a NULL card as a place holder for the pile.       |
+//| Otherwise draw the pile from the bottom up, starting        |
+//| at the origin of the pile, shifting each subsequent         |
+//| card by the pile's x and y offsets.                         |
 //+-------------------------------------------------------------+
 void Pile::Redraw(wxDC& dc )
 {
-   FortyFrame *frame = (FortyFrame*) wxTheApp->GetTopWindow();
-   wxWindow *canvas = (wxWindow *) NULL;
-   if (frame)
-   {
-       canvas = frame->GetCanvas();
-   }
+    FortyFrame *frame = (FortyFrame*) wxTheApp->GetTopWindow();
+    wxWindow *canvas = (wxWindow *) NULL;
+    if (frame)
+    {
+        canvas = frame->GetCanvas();
+    }
 
-	if (m_topCard >= 0)
-	{
-		if (m_dx == 0 && m_dy == 0)
-		{
-      if ((canvas) && (canvas->IsExposed(m_x,m_y,(int)(Card::GetScale()*60),(int)(Card::GetScale()*200))))
-			  m_cards[m_topCard]->Draw(dc, m_x, m_y);
-		}
-		else
-		{
-			int x = m_x;
-			int y = m_y;
-			for (int i = 0; i <= m_topCard; i++)
-			{
-        if ((canvas) && (canvas->IsExposed(x,y,(int)(Card::GetScale()*60),(int)(Card::GetScale()*200))))
-			        m_cards[i]->Draw(dc, x, y);
+    if (m_topCard >= 0)
+    {
+        if (m_dx == 0 && m_dy == 0)
+        {
+            if ((canvas) && (canvas->IsExposed(m_x,m_y,(int)(Card::GetScale()*60),(int)(Card::GetScale()*200))))
+                m_cards[m_topCard]->Draw(dc, m_x, m_y);
+        }
+        else
+        {
+            int x = m_x;
+            int y = m_y;
+            for (int i = 0; i <= m_topCard; i++)
+            {
+                if ((canvas) && (canvas->IsExposed(x,y,(int)(Card::GetScale()*60),(int)(Card::GetScale()*200))))
+                    m_cards[i]->Draw(dc, x, y);
                               x += (int)Card::GetScale()*m_dx;
                               y += (int)Card::GetScale()*m_dy;
-			}
-		}
-	}
-	else
-	{
-    if ((canvas) && (canvas->IsExposed(m_x,m_y,(int)(Card::GetScale()*60),(int)(Card::GetScale()*200))))
-		Card::DrawNullCard(dc, m_x, m_y);
-	}
+            }
+        }
+    }
+    else
+    {
+        if ((canvas) && (canvas->IsExposed(m_x,m_y,(int)(Card::GetScale()*60),(int)(Card::GetScale()*200))))
+            Card::DrawNullCard(dc, m_x, m_y);
+    }
 }
 
 
 //+-------------------------------------------------------------+
-//| Pile::GetTopCard()	                                        |
+//| Pile::GetTopCard()                                          |
 //+-------------------------------------------------------------+
-//| Description:												|
-//|	Return a pointer to the top card in the pile or NULL		|
-//|	if the pile is empty.										|
-//| NB:	Gets a copy of the card without removing it from the	|
-//|	pile.														|
+//| Description:                                                |
+//| Return a pointer to the top card in the pile or NULL        |
+//| if the pile is empty.                                       |
+//| NB: Gets a copy of the card without removing it from the    |
+//| pile.                                                       |
 //+-------------------------------------------------------------+
 Card* Pile::GetTopCard()
 {
@@ -127,7 +127,7 @@ Card* Pile::GetTopCard()
 
     if (m_topCard >= 0)
     {
-    	card = m_cards[m_topCard];
+        card = m_cards[m_topCard];
     }
     return card;
 }
@@ -136,10 +136,10 @@ Card* Pile::GetTopCard()
 //+-------------------------------------------------------------+
 //| Pile::RemoveTopCard()                                       |
 //+-------------------------------------------------------------+
-//| Description:												|
-//|	If the pile is not empty, remove the top card from the		|
-//|	pile and return the pointer to the removed card.			|
-//|	If the pile is empty return a NULL pointer.					|
+//| Description:                                                |
+//| If the pile is not empty, remove the top card from the      |
+//| pile and return the pointer to the removed card.            |
+//| If the pile is empty return a NULL pointer.                 |
 //+-------------------------------------------------------------+
 Card* Pile::RemoveTopCard()
 {
@@ -147,7 +147,7 @@ Card* Pile::RemoveTopCard()
 
     if (m_topCard >= 0)
     {
-		card = m_cards[m_topCard--];
+        card = m_cards[m_topCard--];
     }
     return card;
 }
@@ -156,49 +156,49 @@ Card* Pile::RemoveTopCard()
 //+-------------------------------------------------------------+
 //| Pile::RemoveTopCard()                                       |
 //+-------------------------------------------------------------+
-//| Description:												|
-//|	As RemoveTopCard() but also redraw the top of the pile		|
-//|	after the card has been removed.							|
-//| NB:	the offset allows for the redrawn area to be in a		|
-//|	bitmap ready for 'dragging' cards acrosss the screen.		|
+//| Description:                                                |
+//| As RemoveTopCard() but also redraw the top of the pile      |
+//| after the card has been removed.                            |
+//| NB: the offset allows for the redrawn area to be in a       |
+//| bitmap ready for 'dragging' cards acrosss the screen.       |
 //+-------------------------------------------------------------+
 Card* Pile::RemoveTopCard(wxDC& dc, int xOffset, int yOffset)
 {
-	int topX, topY, x, y;
+    int topX, topY, x, y;
 
-	GetTopCardPos(topX, topY);
-	Card* card = RemoveTopCard();
+    GetTopCardPos(topX, topY);
+    Card* card = RemoveTopCard();
 
-	if (card)
-	{
-		card->Erase(dc, topX - xOffset, topY - yOffset);
-		GetTopCardPos(x, y);
-		if (m_topCard < 0)
-		{
-			Card::DrawNullCard(dc, x - xOffset, y - yOffset);
-		}
-		else
-		{
-			m_cards[m_topCard]->Draw(dc, x - xOffset, y - yOffset);
-		}
-	}
+    if (card)
+    {
+        card->Erase(dc, topX - xOffset, topY - yOffset);
+        GetTopCardPos(x, y);
+        if (m_topCard < 0)
+        {
+            Card::DrawNullCard(dc, x - xOffset, y - yOffset);
+        }
+        else
+        {
+            m_cards[m_topCard]->Draw(dc, x - xOffset, y - yOffset);
+        }
+    }
 
-	return card;
+    return card;
 }
 
 
 void Pile::GetTopCardPos(int& x, int& y)
 {
-	if (m_topCard < 0)
-	{
-		x = m_x;
-		y = m_y;
-	}
-	else
-	{
-                x = m_x + (int)Card::GetScale()*m_dx * m_topCard;
-                y = m_y + (int)Card::GetScale()*m_dy * m_topCard;
-	}
+    if (m_topCard < 0)
+    {
+        x = m_x;
+        y = m_y;
+    }
+    else
+    {
+        x = m_x + (int)Card::GetScale()*m_dx * m_topCard;
+        y = m_y + (int)Card::GetScale()*m_dy * m_topCard;
+    }
 }
 
 void Pile::AddCard(Card* card)
@@ -224,7 +224,7 @@ bool Pile::CanCardLeave(Card* card)
 {
     for (int i = 0; i <= m_topCard; i++)
     {
-    	if (card == m_cards[i]) return true;
+        if (card == m_cards[i]) return true;
     }
     return false;
 }
@@ -244,21 +244,21 @@ int Pile::CalcDistance(int x, int y)
 // to the card, otherwise return NULL
 Card* Pile::GetCard(int x, int y)
 {
-	int cardX;
-	int cardY;
-	GetTopCardPos(cardX, cardY);
+    int cardX;
+    int cardY;
+    GetTopCardPos(cardX, cardY);
 
-	for (int i = m_topCard; i >= 0; i--)
-	{
-                if (x >= cardX && x <= cardX + Card::GetWidth() &&
-                        y >= cardY && y <= cardY + Card::GetHeight())
-		{
-			return m_cards[i];
-		}
-                cardX -= (int)Card::GetScale()*m_dx;
-                cardY -= (int)Card::GetScale()*m_dy;
-	}
-	return 0;
+    for (int i = m_topCard; i >= 0; i--)
+    {
+        if (x >= cardX && x <= cardX + Card::GetWidth() &&
+            y >= cardY && y <= cardY + Card::GetHeight())
+        {
+            return m_cards[i];
+        }
+        cardX -= (int)Card::GetScale()*m_dx;
+        cardY -= (int)Card::GetScale()*m_dy;
+    }
+    return 0;
 }
 
 
@@ -266,22 +266,22 @@ Card* Pile::GetCard(int x, int y)
 // return the origin of the pile.
 void Pile::GetCardPos(Card* card, int& x, int& y)
 {
-	x = m_x;
-	y = m_y;
+    x = m_x;
+    y = m_y;
 
-	for (int i = 0; i <= m_topCard; i++)
-	{
-		if (card == m_cards[i])
-		{
-			return;
-		}
-                x += (int)Card::GetScale()*m_dx;
-                y += (int)Card::GetScale()*m_dy;
-	}
+    for (int i = 0; i <= m_topCard; i++)
+    {
+        if (card == m_cards[i])
+        {
+            return;
+        }
+        x += (int)Card::GetScale()*m_dx;
+        y += (int)Card::GetScale()*m_dy;
+    }
 
-	// card not found in pile, return origin of pile
-	x = m_x;
-	y = m_y;
+    // card not found in pile, return origin of pile
+    x = m_x;
+    y = m_y;
 }
 
 
@@ -294,7 +294,7 @@ bool Pile::Overlap(int x, int y)
     if (x >= cardX - Card::GetWidth()  && x <= cardX + Card::GetWidth() &&
         y >= cardY - Card::GetHeight() && y <= cardY + Card::GetHeight())
     {
-	    return true;
+        return true;
     }
     return false;
 }

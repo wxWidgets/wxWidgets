@@ -6,7 +6,7 @@
 // Created:     21/07/97
 // RCS-ID:      $Id$
 // Copyright:   (c) 1993-1998 Chris Breeze
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 //---------------------------------------------------------------------------
 // Last modified: 22nd July 1998 - ported to wxWidgets 2.0
 /////////////////////////////////////////////////////////////////////////////
@@ -38,21 +38,21 @@
 #endif
 
 BEGIN_EVENT_TABLE(FortyFrame, wxFrame)
-	EVT_MENU(NEW_GAME, FortyFrame::NewGame)
-	EVT_MENU(wxID_EXIT, FortyFrame::Exit)
-	EVT_MENU(wxID_ABOUT, FortyFrame::About)
-	EVT_MENU(wxID_HELP_CONTENTS, FortyFrame::Help)
-	EVT_MENU(UNDO, FortyFrame::Undo)
-	EVT_MENU(REDO, FortyFrame::Redo)
-	EVT_MENU(SCORES, FortyFrame::Scores)
-	EVT_MENU(RIGHT_BUTTON_UNDO, FortyFrame::ToggleRightButtonUndo)
-	EVT_MENU(HELPING_HAND, FortyFrame::ToggleHelpingHand)
-        EVT_MENU(LARGE_CARDS, FortyFrame::ToggleCardSize)
+    EVT_MENU(NEW_GAME, FortyFrame::NewGame)
+    EVT_MENU(wxID_EXIT, FortyFrame::Exit)
+    EVT_MENU(wxID_ABOUT, FortyFrame::About)
+    EVT_MENU(wxID_HELP_CONTENTS, FortyFrame::Help)
+    EVT_MENU(UNDO, FortyFrame::Undo)
+    EVT_MENU(REDO, FortyFrame::Redo)
+    EVT_MENU(SCORES, FortyFrame::Scores)
+    EVT_MENU(RIGHT_BUTTON_UNDO, FortyFrame::ToggleRightButtonUndo)
+    EVT_MENU(HELPING_HAND, FortyFrame::ToggleHelpingHand)
+    EVT_MENU(LARGE_CARDS, FortyFrame::ToggleCardSize)
     EVT_CLOSE(FortyFrame::OnCloseWindow)
 END_EVENT_TABLE()
 
 // Create a new application object
-IMPLEMENT_APP	(FortyApp)
+IMPLEMENT_APP (FortyApp)
 
 wxColour* FortyApp::m_backgroundColour = 0;
 wxColour* FortyApp::m_textColour = 0;
@@ -74,131 +74,131 @@ FortyApp::~FortyApp()
 
 bool FortyApp::OnInit()
 {
-  bool largecards = false;
+    bool largecards = false;
 
-        wxSize size(668,510);
+    wxSize size(668,510);
 
-        if ((argc > 1) && (!wxStrcmp(argv[1],_T("-L"))))
-        {
-    largecards = true;
-            size = wxSize(1000,750);
-        }
+    if ((argc > 1) && (!wxStrcmp(argv[1],_T("-L"))))
+    {
+        largecards = true;
+        size = wxSize(1000,750);
+    }
 
-	FortyFrame* frame = new FortyFrame(
-			0,
-			_T("Forty Thieves"),
-    wxDefaultPosition,
-    size,
-    largecards
-			);
+    FortyFrame* frame = new FortyFrame(
+            0,
+            _T("Forty Thieves"),
+            wxDefaultPosition,
+            size,
+            largecards
+    );
 
- 	// Show the frame
-	frame->Show(true);
+     // Show the frame
+    frame->Show(true);
 
-        frame->GetCanvas()->ShowPlayerDialog();
+    frame->GetCanvas()->ShowPlayerDialog();
 
-	return true;
+    return true;
 }
 
 const wxColour& FortyApp::BackgroundColour()
 {
-	if (!m_backgroundColour)
-	{
-		m_backgroundColour = new wxColour(0, 128, 0);
-	}
+    if (!m_backgroundColour)
+    {
+        m_backgroundColour = new wxColour(0, 128, 0);
+    }
 
-	return *m_backgroundColour;
+    return *m_backgroundColour;
 }
 
 const wxBrush& FortyApp::BackgroundBrush()
 {
-	if (!m_backgroundBrush)
-	{
-		m_backgroundBrush = new wxBrush(BackgroundColour(), wxSOLID);
-	}
+    if (!m_backgroundBrush)
+    {
+        m_backgroundBrush = new wxBrush(BackgroundColour(), wxSOLID);
+    }
 
-	return *m_backgroundBrush;
+    return *m_backgroundBrush;
 }
 
 const wxColour& FortyApp::TextColour()
 {
-	if (!m_textColour)
-	{
-		m_textColour = new wxColour(_T("BLACK"));
-	}
+    if (!m_textColour)
+    {
+        m_textColour = new wxColour(_T("BLACK"));
+    }
 
-	return *m_textColour;
+    return *m_textColour;
 }
 
 // My frame constructor
 FortyFrame::FortyFrame(wxFrame* frame, const wxString& title, const wxPoint& pos, const wxSize& size, bool largecards):
-	wxFrame(frame, wxID_ANY, title, pos, size)
+    wxFrame(frame, wxID_ANY, title, pos, size)
 {
 #ifdef __WXMAC__
-	wxApp::s_macAboutMenuItemId = wxID_ABOUT ;
+    wxApp::s_macAboutMenuItemId = wxID_ABOUT ;
 #endif
-	// set the icon
+    // set the icon
 #ifdef __WXMSW__
-	SetIcon(wxIcon(_T("CardsIcon")));
+    SetIcon(wxIcon(_T("CardsIcon")));
 #else
 #ifdef GTK_TBD
-	SetIcon(wxIcon(Cards_bits, Cards_width, Cards_height));
+    SetIcon(wxIcon(Cards_bits, Cards_width, Cards_height));
 #endif
 #endif
 
-	// Make a menu bar
-	wxMenu* gameMenu = new wxMenu;
-	gameMenu->Append(NEW_GAME, _T("&New"), _T("Start a new game"));
-	gameMenu->Append(SCORES, _T("&Scores..."), _T("Displays scores"));
-	gameMenu->Append(wxID_EXIT, _T("E&xit"), _T("Exits Forty Thieves"));
+    // Make a menu bar
+    wxMenu* gameMenu = new wxMenu;
+    gameMenu->Append(NEW_GAME, _T("&New"), _T("Start a new game"));
+    gameMenu->Append(SCORES, _T("&Scores..."), _T("Displays scores"));
+    gameMenu->Append(wxID_EXIT, _T("E&xit"), _T("Exits Forty Thieves"));
 
-	wxMenu* editMenu = new wxMenu;
-	editMenu->Append(UNDO, _T("&Undo"), _T("Undo the last move"));
-	editMenu->Append(REDO, _T("&Redo"), _T("Redo a move that has been undone"));
+    wxMenu* editMenu = new wxMenu;
+    editMenu->Append(UNDO, _T("&Undo"), _T("Undo the last move"));
+    editMenu->Append(REDO, _T("&Redo"), _T("Redo a move that has been undone"));
 
-	wxMenu*	optionsMenu = new wxMenu;
-	optionsMenu->Append(RIGHT_BUTTON_UNDO,
-			_T("&Right button undo"),
-			_T("Enables/disables right mouse button undo and redo"),
-			true
-			);
-	optionsMenu->Append(HELPING_HAND,
-			_T("&Helping hand"),
-			_T("Enables/disables hand cursor when a card can be moved"),
-			true
-			);
-        optionsMenu->Append(LARGE_CARDS,
-                        _T("&Large cards"),
-                        _T("Enables/disables large cards for high resolution displays"),
-                        true
-                        );
-	optionsMenu->Check(HELPING_HAND, true);
-	optionsMenu->Check(RIGHT_BUTTON_UNDO, true);
-        optionsMenu->Check(LARGE_CARDS, largecards ? true : false);
+    wxMenu* optionsMenu = new wxMenu;
+    optionsMenu->Append(RIGHT_BUTTON_UNDO,
+            _T("&Right button undo"),
+            _T("Enables/disables right mouse button undo and redo"),
+            true
+            );
+    optionsMenu->Append(HELPING_HAND,
+            _T("&Helping hand"),
+            _T("Enables/disables hand cursor when a card can be moved"),
+            true
+            );
+    optionsMenu->Append(LARGE_CARDS,
+            _T("&Large cards"),
+            _T("Enables/disables large cards for high resolution displays"),
+            true
+            );
+    optionsMenu->Check(HELPING_HAND, true);
+    optionsMenu->Check(RIGHT_BUTTON_UNDO, true);
+    optionsMenu->Check(LARGE_CARDS, largecards ? true : false);
 
-	wxMenu* helpMenu = new wxMenu;
-	helpMenu->Append(wxID_HELP_CONTENTS, _T("&Help Contents"), _T("Displays information about playing the game"));
-	helpMenu->Append(wxID_ABOUT, _T("&About..."), _T("About Forty Thieves"));
+    wxMenu* helpMenu = new wxMenu;
+    helpMenu->Append(wxID_HELP_CONTENTS, _T("&Help Contents"), _T("Displays information about playing the game"));
+    helpMenu->Append(wxID_ABOUT, _T("&About..."), _T("About Forty Thieves"));
 
-	m_menuBar = new wxMenuBar;
-	m_menuBar->Append(gameMenu,    _T("&Game"));
-	m_menuBar->Append(editMenu,    _T("&Edit"));
-	m_menuBar->Append(optionsMenu, _T("&Options"));
-	m_menuBar->Append(helpMenu,    _T("&Help"));
+    m_menuBar = new wxMenuBar;
+    m_menuBar->Append(gameMenu,    _T("&Game"));
+    m_menuBar->Append(editMenu,    _T("&Edit"));
+    m_menuBar->Append(optionsMenu, _T("&Options"));
+    m_menuBar->Append(helpMenu,    _T("&Help"));
 
-	SetMenuBar(m_menuBar);
+    SetMenuBar(m_menuBar);
 
-        if (largecards)
-            Card::SetScale(1.3);
+    if (largecards)
+        Card::SetScale(1.3);
 
-	m_canvas = new FortyCanvas(this, wxDefaultPosition, size);
+    m_canvas = new FortyCanvas(this, wxDefaultPosition, size);
 
-  wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
-  topsizer->Add( m_canvas, 1, wxEXPAND | wxALL, 0);
-  SetSizer( topsizer );
-  topsizer->SetSizeHints( this );
+    wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
+    topsizer->Add( m_canvas, 1, wxEXPAND | wxALL, 0);
+    SetSizer( topsizer );
+    topsizer->SetSizeHints( this );
 
-	CreateStatusBar();
+    CreateStatusBar();
 }
 
 FortyFrame::~FortyFrame()
@@ -218,13 +218,13 @@ void FortyFrame::OnCloseWindow(wxCloseEvent& event)
 void
 FortyFrame::NewGame(wxCommandEvent&)
 {
-	m_canvas->NewGame();
+    m_canvas->NewGame();
 }
 
 void
 FortyFrame::Exit(wxCommandEvent&)
 {
-	Close(true);
+    Close(true);
 }
 
 void
@@ -262,35 +262,35 @@ FortyFrame::About(wxCommandEvent&)
 void
 FortyFrame::Undo(wxCommandEvent&)
 {
-	m_canvas->Undo();
+    m_canvas->Undo();
 }
 
 void
 FortyFrame::Redo(wxCommandEvent&)
 {
-	m_canvas->Redo();
+    m_canvas->Redo();
 }
 
 void
 FortyFrame::Scores(wxCommandEvent&)
 {
-	m_canvas->UpdateScores();
-	ScoreDialog scores(this, m_canvas->GetScoreFile());
-	scores.Display();
+    m_canvas->UpdateScores();
+    ScoreDialog scores(this, m_canvas->GetScoreFile());
+    scores.Display();
 }
 
 void
 FortyFrame::ToggleRightButtonUndo(wxCommandEvent& event)
 {
-	bool checked = m_menuBar->IsChecked(event.GetId());
-	m_canvas->EnableRightButtonUndo(checked);
+    bool checked = m_menuBar->IsChecked(event.GetId());
+    m_canvas->EnableRightButtonUndo(checked);
 }
 
 void
 FortyFrame::ToggleHelpingHand(wxCommandEvent& event)
 {
-	bool checked = m_menuBar->IsChecked(event.GetId());
-	m_canvas->EnableHelpingHand(checked);
+    bool checked = m_menuBar->IsChecked(event.GetId());
+    m_canvas->EnableHelpingHand(checked);
 }
 
 void

@@ -6,7 +6,7 @@
 // Created:     21/07/97
 // RCS-ID:      $Id$
 // Copyright:   (c) 1993-1998 Chris Breeze
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 //---------------------------------------------------------------------------
 // Last modified: 22nd July 1998 - ported to wxWidgets 2.0
 /////////////////////////////////////////////////////////////////////////////
@@ -35,11 +35,11 @@
 #include "game.h"
 
 Game::Game(int wins, int games, int score) :
-	m_inPlay(false),
-	m_moveIndex(0),
-	m_redoIndex(0),
-	m_bmap(0),
-	m_bmapCard(0)
+    m_inPlay(false),
+    m_moveIndex(0),
+    m_redoIndex(0),
+    m_bmap(0),
+    m_bmapCard(0)
 {
     int i;
 
@@ -52,19 +52,19 @@ Game::Game(int wins, int games, int score) :
 
     for (i = 0; i < 8; i++)
     {
-		m_foundations[i] = new Foundation(2 + (i / 4) * (CardWidth + 2),
-					2 + (i % 4) * (CardHeight + 2));
+        m_foundations[i] = new Foundation(2 + (i / 4) * (CardWidth + 2),
+                    2 + (i % 4) * (CardHeight + 2));
     }
 
     for (i = 0; i < 10; i++)
     {
-    	m_bases[i] = new Base(8 + (i + 2) * (CardWidth + 2), 2);
+        m_bases[i] = new Base(8 + (i + 2) * (CardWidth + 2), 2);
     }
     Deal();
     m_srcPile = 0;
     m_liftedCard = 0;
 
-	// copy the input parameters for future reference
+    // copy the input parameters for future reference
     m_numWins = wins;
     m_numGames = games;
     m_totalScore = score;
@@ -105,14 +105,14 @@ Game::~Game()
     delete m_discard;
     for (i = 0; i < 8; i++)
     {
-		delete m_foundations[i];
+        delete m_foundations[i];
     }
     for (i = 0; i < 10; i++)
     {
-		delete m_bases[i];
+        delete m_bases[i];
     }
-	delete m_bmap;
-	delete m_bmapCard;
+    delete m_bmap;
+    delete m_bmapCard;
 }
 
 /*
@@ -133,10 +133,10 @@ void Game::Undo(wxDC& dc)
 {
     if (m_moveIndex > 0)
     {
-		m_moveIndex--;
-		Card* card = m_moves[m_moveIndex].dest->RemoveTopCard(dc);
-		m_moves[m_moveIndex].src->AddCard(dc, card);
-		DisplayScore(dc);
+        m_moveIndex--;
+        Card* card = m_moves[m_moveIndex].dest->RemoveTopCard(dc);
+        m_moves[m_moveIndex].src->AddCard(dc, card);
+        DisplayScore(dc);
     }
 }
 
@@ -145,15 +145,15 @@ void Game::Redo(wxDC& dc)
 {
     if (m_moveIndex < m_redoIndex)
     {
-		Card* card = m_moves[m_moveIndex].src->RemoveTopCard(dc);
-		if (m_moves[m_moveIndex].src == m_pack)
-		{
-			m_pack->Redraw(dc);
-			card->TurnCard(faceup);
-		}
-		m_moves[m_moveIndex].dest->AddCard(dc, card);
-		DisplayScore(dc);
-		m_moveIndex++;
+        Card* card = m_moves[m_moveIndex].src->RemoveTopCard(dc);
+        if (m_moves[m_moveIndex].src == m_pack)
+        {
+            m_pack->Redraw(dc);
+            card->TurnCard(faceup);
+        }
+        m_moves[m_moveIndex].dest->AddCard(dc, card);
+        DisplayScore(dc);
+        m_moveIndex++;
     }
 }
 
@@ -161,91 +161,91 @@ void Game::DoMove(wxDC& dc, Pile* src, Pile* dest)
 {
     if (m_moveIndex < MaxMoves)
     {
-		if (src == dest)
-		{
-			wxMessageBox(_T("Game::DoMove() src == dest"), _T("Debug message"),
-				   wxOK | wxICON_EXCLAMATION);
-		}
-		m_moves[m_moveIndex].src = src;
-		m_moves[m_moveIndex].dest = dest;
-		m_moveIndex++;
+        if (src == dest)
+        {
+            wxMessageBox(_T("Game::DoMove() src == dest"), _T("Debug message"),
+                   wxOK | wxICON_EXCLAMATION);
+        }
+        m_moves[m_moveIndex].src = src;
+        m_moves[m_moveIndex].dest = dest;
+        m_moveIndex++;
 
-		// when we do a move any moves in redo buffer are discarded
-		m_redoIndex = m_moveIndex;
+        // when we do a move any moves in redo buffer are discarded
+        m_redoIndex = m_moveIndex;
     }
     else
     {
-		wxMessageBox(_T("Game::DoMove() Undo buffer full"), _T("Debug message"),
-			   wxOK | wxICON_EXCLAMATION);
+        wxMessageBox(_T("Game::DoMove() Undo buffer full"), _T("Debug message"),
+               wxOK | wxICON_EXCLAMATION);
     }
 
-	if (!m_inPlay)
-	{
-		m_inPlay = true;
-		m_numGames++;
-	}
-	DisplayScore(dc);
+    if (!m_inPlay)
+    {
+        m_inPlay = true;
+        m_numGames++;
+    }
+    DisplayScore(dc);
 
-	if (HaveYouWon())
-	{
-		wxWindow *frame = wxTheApp->GetTopWindow();
-		wxWindow *canvas = (wxWindow *) NULL;
+    if (HaveYouWon())
+    {
+        wxWindow *frame = wxTheApp->GetTopWindow();
+        wxWindow *canvas = (wxWindow *) NULL;
 
-		if (frame)
-		{
-			wxNode *node = (wxNode *)frame->GetChildren().GetFirst();
-			if (node) canvas = (wxWindow*)node->GetData();
-		}
+        if (frame)
+        {
+            wxNode *node = (wxNode *)frame->GetChildren().GetFirst();
+            if (node) canvas = (wxWindow*)node->GetData();
+        }
 
-		// This game is over
-		m_inPlay = false;
+        // This game is over
+        m_inPlay = false;
 
-		// Redraw the score box to update games won
-		DisplayScore(dc);
+        // Redraw the score box to update games won
+        DisplayScore(dc);
 
-		if (wxMessageBox(_T("Do you wish to play again?"),
-			_T("Well Done, You have won!"), wxYES_NO | wxICON_QUESTION) == wxYES)
-		{
-			Deal();
-			canvas->Refresh();
-		}
-		else
-		{
-			// user cancelled the dialog - exit the app
-			((wxFrame*)canvas->GetParent())->Close(true);
-		}
-	}
+        if (wxMessageBox(_T("Do you wish to play again?"),
+            _T("Well Done, You have won!"), wxYES_NO | wxICON_QUESTION) == wxYES)
+        {
+            Deal();
+            canvas->Refresh();
+        }
+        else
+        {
+            // user cancelled the dialog - exit the app
+            ((wxFrame*)canvas->GetParent())->Close(true);
+        }
+    }
 }
 
 
 void Game::DisplayScore(wxDC& dc)
 {
     wxColour bgColour = FortyApp::BackgroundColour();
-	wxPen* pen = wxThePenList->FindOrCreatePen(bgColour, 1, wxSOLID);
+    wxPen* pen = wxThePenList->FindOrCreatePen(bgColour, 1, wxSOLID);
     dc.SetTextBackground(bgColour);
     dc.SetTextForeground(FortyApp::TextColour());
-	dc.SetBrush(FortyApp::BackgroundBrush());
-	dc.SetPen(* pen);
+    dc.SetBrush(FortyApp::BackgroundBrush());
+    dc.SetPen(* pen);
 
-	// count the number of cards in foundations
+    // count the number of cards in foundations
     m_currentScore = 0;
     for (int i = 0; i < 8; i++)
     {
-    	m_currentScore += m_foundations[i]->GetNumCards();
+        m_currentScore += m_foundations[i]->GetNumCards();
     }
 
     int x, y;
     m_pack->GetTopCardPos(x, y);
     x += 12 * CardWidth - 105;
 
-	int w, h;
-	{
-		long width, height;
-		dc.GetTextExtent(_T("Average score:m_x"), &width, &height);
-		w = width;
-		h = height;
-	}
-	dc.DrawRectangle(x + w, y, 20, 4 * h);
+    int w, h;
+    {
+        long width, height;
+        dc.GetTextExtent(_T("Average score:m_x"), &width, &height);
+        w = width;
+        h = height;
+    }
+    dc.DrawRectangle(x + w, y, 20, 4 * h);
 
     wxString str;
     str.Printf(_T("%d"), m_currentScore);
@@ -264,10 +264,10 @@ void Game::DisplayScore(wxDC& dc)
     y += h;
 
     int average = 0;
-	if (m_numGames > 0)
-	{
-		average = (2 * (m_currentScore + m_totalScore) + m_numGames ) / (2 * m_numGames);
-	}
+    if (m_numGames > 0)
+    {
+        average = (2 * (m_currentScore + m_totalScore) + m_numGames ) / (2 * m_numGames);
+    }
     str.Printf(_T("%d"), average);
     dc.DrawText(_T("Average score:"), x, y);
     dc.DrawText(str, x + w, y);
@@ -280,40 +280,40 @@ void Game::Deal()
     int i, j;
     Card* card;
 
-	// Reset all the piles, the undo buffer and shuffle the m_pack
+    // Reset all the piles, the undo buffer and shuffle the m_pack
     m_moveIndex = 0;
     m_pack->ResetPile();
     for (i = 0; i < 5; i++)
-	{
-		m_pack->Shuffle();
-	}
+    {
+        m_pack->Shuffle();
+    }
     m_discard->ResetPile();
     for (i = 0; i < 10; i++)
-	{
-		m_bases[i]->ResetPile();
-	}
+    {
+        m_bases[i]->ResetPile();
+    }
     for (i = 0; i <  8; i++)
-	{
-		m_foundations[i]->ResetPile();
-	}
+    {
+        m_foundations[i]->ResetPile();
+    }
 
-    	// Deal the initial 40 cards onto the bases
+    // Deal the initial 40 cards onto the bases
     for (i = 0; i < 10; i++)
     {
-		for (j = 1; j <= 4; j++)
-		{
-			card = m_pack->RemoveTopCard();
-			card->TurnCard(faceup);
-			m_bases[i]->AddCard(card);
-		}
+        for (j = 1; j <= 4; j++)
+        {
+            card = m_pack->RemoveTopCard();
+            card->TurnCard(faceup);
+            m_bases[i]->AddCard(card);
+        }
     }
 
     if (m_inPlay)
-	{
-		// player has started the game and then redealt
-		// and so we must add the score for this game to the total score
-		m_totalScore += m_currentScore;
-	}
+    {
+        // player has started the game and then redealt
+        // and so we must add the score for this game to the total score
+        m_totalScore += m_currentScore;
+    }
     m_currentScore = 0;
     m_inPlay = false;
 }
@@ -322,34 +322,34 @@ void Game::Deal()
 // Redraw the m_pack, discard pile, the bases and the foundations
 void Game::Redraw(wxDC& dc)
 {
-	int i;
-	m_pack->Redraw(dc);
-	m_discard->Redraw(dc);
-	for (i = 0; i < 8; i++)
-	{
-		m_foundations[i]->Redraw(dc);
-	}
-	for (i = 0; i < 10; i++)
-	{
-		m_bases[i]->Redraw(dc);
-	}
-	DisplayScore(dc);
+    int i;
+    m_pack->Redraw(dc);
+    m_discard->Redraw(dc);
+    for (i = 0; i < 8; i++)
+    {
+        m_foundations[i]->Redraw(dc);
+    }
+    for (i = 0; i < 10; i++)
+    {
+        m_bases[i]->Redraw(dc);
+    }
+    DisplayScore(dc);
 
-	if (m_bmap == 0)
-	{
-		m_bmap = new wxBitmap(CardWidth, CardHeight);
-		m_bmapCard = new wxBitmap(CardWidth, CardHeight);
+    if (m_bmap == 0)
+    {
+        m_bmap = new wxBitmap(CardWidth, CardHeight);
+        m_bmapCard = new wxBitmap(CardWidth, CardHeight);
 
-		// Initialise the card bitmap to the background colour
-		wxMemoryDC memoryDC;
-		memoryDC.SelectObject(*m_bmapCard);
+        // Initialise the card bitmap to the background colour
+        wxMemoryDC memoryDC;
+        memoryDC.SelectObject(*m_bmapCard);
         memoryDC.SetPen( *wxTRANSPARENT_PEN );
-		memoryDC.SetBrush(FortyApp::BackgroundBrush());
-		memoryDC.DrawRectangle(0, 0, CardWidth, CardHeight);
-		memoryDC.SelectObject(*m_bmap);
-		memoryDC.DrawRectangle(0, 0, CardWidth, CardHeight);
-		memoryDC.SelectObject(wxNullBitmap);
-	}
+        memoryDC.SetBrush(FortyApp::BackgroundBrush());
+        memoryDC.DrawRectangle(0, 0, CardWidth, CardHeight);
+        memoryDC.SelectObject(*m_bmap);
+        memoryDC.DrawRectangle(0, 0, CardWidth, CardHeight);
+        memoryDC.SelectObject(wxNullBitmap);
+    }
 }
 
 
@@ -358,37 +358,37 @@ void Game::Redraw(wxDC& dc)
 // or the pile is empty
 Pile* Game::WhichPile(int x, int y)
 {
-	if (m_pack->GetCard(x, y) &&
-		m_pack->GetCard(x, y) == m_pack->GetTopCard())
-	{
-		return m_pack;
-	}
+    if (m_pack->GetCard(x, y) &&
+        m_pack->GetCard(x, y) == m_pack->GetTopCard())
+    {
+        return m_pack;
+    }
 
-	if (m_discard->GetCard(x, y) &&
-		m_discard->GetCard(x, y) == m_discard->GetTopCard())
-	{
-		return m_discard;
-	}
+    if (m_discard->GetCard(x, y) &&
+        m_discard->GetCard(x, y) == m_discard->GetTopCard())
+    {
+        return m_discard;
+    }
 
-	int i;
-	for (i = 0; i < 8; i++)
-	{
-		if (m_foundations[i]->GetCard(x, y) &&
-			m_foundations[i]->GetCard(x, y) == m_foundations[i]->GetTopCard())
-		{
-			return m_foundations[i];
-		}
-	}
+    int i;
+    for (i = 0; i < 8; i++)
+    {
+        if (m_foundations[i]->GetCard(x, y) &&
+            m_foundations[i]->GetCard(x, y) == m_foundations[i]->GetTopCard())
+        {
+            return m_foundations[i];
+        }
+    }
 
-	for (i = 0; i < 10; i++)
-	{
-		if (m_bases[i]->GetCard(x, y) &&
-			m_bases[i]->GetCard(x, y) == m_bases[i]->GetTopCard())
-		{
-			return m_bases[i];
-		}
-	}
-	return 0;
+    for (i = 0; i < 10; i++)
+    {
+        if (m_bases[i]->GetCard(x, y) &&
+            m_bases[i]->GetCard(x, y) == m_bases[i]->GetTopCard())
+        {
+            return m_bases[i];
+        }
+    }
+    return 0;
 }
 
 
@@ -399,37 +399,37 @@ bool Game::LButtonDown(wxDC& dc, int x, int y)
     m_srcPile = WhichPile(x, y);
     if (m_srcPile == m_pack)
     {
-		Card* card = m_pack->RemoveTopCard();
-		if (card)
-		{
-			m_pack->Redraw(dc);
-			card->TurnCard(faceup);
-			m_discard->AddCard(dc, card);
-			DoMove(dc, m_pack, m_discard);
-		}
+        Card* card = m_pack->RemoveTopCard();
+        if (card)
+        {
+            m_pack->Redraw(dc);
+            card->TurnCard(faceup);
+            m_discard->AddCard(dc, card);
+            DoMove(dc, m_pack, m_discard);
+        }
         m_srcPile = 0;
     }
     else if (m_srcPile)
     {
-		m_srcPile->GetTopCardPos(m_xPos, m_yPos);
-		m_xOffset = m_xPos - x;
-		m_yOffset = m_yPos - y;
+        m_srcPile->GetTopCardPos(m_xPos, m_yPos);
+        m_xOffset = m_xPos - x;
+        m_yOffset = m_yPos - y;
 
-			// Copy the area under the card
-			// Initialise the card bitmap to the background colour
-		{
-			wxMemoryDC memoryDC;
-			memoryDC.SelectObject(*m_bmap);
-			m_liftedCard = m_srcPile->RemoveTopCard(memoryDC, m_xPos, m_yPos);
-		}
+        // Copy the area under the card
+        // Initialise the card bitmap to the background colour
+        {
+            wxMemoryDC memoryDC;
+            memoryDC.SelectObject(*m_bmap);
+            m_liftedCard = m_srcPile->RemoveTopCard(memoryDC, m_xPos, m_yPos);
+        }
 
-			// Draw the card in card bitmap ready for blitting onto
-			// the screen
-		{
-			wxMemoryDC memoryDC;
-			memoryDC.SelectObject(*m_bmapCard);
-			m_liftedCard->Draw(memoryDC, 0, 0);
-		}
+        // Draw the card in card bitmap ready for blitting onto
+        // the screen
+        {
+            wxMemoryDC memoryDC;
+            memoryDC.SelectObject(*m_bmapCard);
+            m_liftedCard->Draw(memoryDC, 0, 0);
+        }
     }
     return m_srcPile != 0;
 }
@@ -445,77 +445,77 @@ void Game::LButtonDblClk(wxDC& dc, int x, int y)
     Pile* pile = WhichPile(x, y);
     if (!pile) return;
 
-    	// Double click on m_pack is the same as left button down
+    // Double click on m_pack is the same as left button down
     if (pile == m_pack)
     {
-		LButtonDown(dc, x, y);
+        LButtonDown(dc, x, y);
     }
     else
     {
-		Card* card = pile->GetTopCard();
+        Card* card = pile->GetTopCard();
 
-		if (card)
-		{
-			int i;
+        if (card)
+        {
+            int i;
 
-			// if the card is an ace then try to place it next
-			// to an ace of the same suit
-			if (card->GetPipValue() == 1)
-			{
-				for(i = 0; i < 4; i++)
-				{
-					Card* m_topCard = m_foundations[i]->GetTopCard();
-					if ( m_topCard )
+            // if the card is an ace then try to place it next
+            // to an ace of the same suit
+            if (card->GetPipValue() == 1)
+            {
+                for(i = 0; i < 4; i++)
+                {
+                    Card* m_topCard = m_foundations[i]->GetTopCard();
+                    if ( m_topCard )
                     {
-						if (m_topCard->GetSuit() == card->GetSuit() &&
+                        if (m_topCard->GetSuit() == card->GetSuit() &&
                             m_foundations[i + 4] != pile &&
-							m_foundations[i + 4]->GetTopCard() == 0)
-						{
-							pile->RemoveTopCard(dc);
-							m_foundations[i + 4]->AddCard(dc, card);
-							DoMove(dc, pile, m_foundations[i + 4]);
-							return;
-						}
+                            m_foundations[i + 4]->GetTopCard() == 0)
+                        {
+                            pile->RemoveTopCard(dc);
+                            m_foundations[i + 4]->AddCard(dc, card);
+                            DoMove(dc, pile, m_foundations[i + 4]);
+                            return;
+                        }
                     }
-				}
-			}
+                }
+            }
 
-			// try to place the card on a foundation
-			for(i = 0; i < 8; i++)
-			{
-				if (m_foundations[i]->AcceptCard(card) && m_foundations[i] != pile)
-				{
-					pile->RemoveTopCard(dc);
-					m_foundations[i]->AddCard(dc, card);
-					DoMove(dc, pile, m_foundations[i]);
-					return;
-				}
+            // try to place the card on a foundation
+            for(i = 0; i < 8; i++)
+            {
+                if (m_foundations[i]->AcceptCard(card) && m_foundations[i] != pile)
+                {
+                    pile->RemoveTopCard(dc);
+                    m_foundations[i]->AddCard(dc, card);
+                    DoMove(dc, pile, m_foundations[i]);
+                    return;
+                }
             }
-			// try to place the card on a populated base
-			for(i = 0; i < 10; i++)
-			{
-				if (m_bases[i]->AcceptCard(card) &&
-					m_bases[i] != pile &&
-					m_bases[i]->GetTopCard())
-				{
-					pile->RemoveTopCard(dc);
-					m_bases[i]->AddCard(dc, card);
-					DoMove(dc, pile, m_bases[i]);
-					return;
-				}
+            // try to place the card on a populated base
+            for(i = 0; i < 10; i++)
+            {
+                if (m_bases[i]->AcceptCard(card) &&
+                    m_bases[i] != pile &&
+                    m_bases[i]->GetTopCard())
+                {
+                    pile->RemoveTopCard(dc);
+                    m_bases[i]->AddCard(dc, card);
+                    DoMove(dc, pile, m_bases[i]);
+                    return;
+                }
             }
-			// try to place the card on any base
-			for(i = 0; i < 10; i++)
-			{
-				if (m_bases[i]->AcceptCard(card) && m_bases[i] != pile)
-				{
-					pile->RemoveTopCard(dc);
-					m_bases[i]->AddCard(dc, card);
-					DoMove(dc, pile, m_bases[i]);
-					return;
-				}
+            // try to place the card on any base
+            for(i = 0; i < 10; i++)
+            {
+                if (m_bases[i]->AcceptCard(card) && m_bases[i] != pile)
+                {
+                    pile->RemoveTopCard(dc);
+                    m_bases[i]->AddCard(dc, card);
+                    DoMove(dc, pile, m_bases[i]);
+                    return;
+                }
             }
-		}
+        }
     }
 }
 
@@ -528,7 +528,7 @@ bool Game::HaveYouWon()
     if (m_discard->GetTopCard()) return false;
     for(int i = 0; i < 10; i++)
     {
-    	if (m_bases[i]->GetTopCard()) return false;
+        if (m_bases[i]->GetTopCard()) return false;
     }
     m_numWins++;
     m_totalScore += m_currentScore;
@@ -544,28 +544,28 @@ bool Game::CanYouGo(int x, int y)
     Pile* pile = WhichPile(x, y);
     if (pile && pile != m_pack)
     {
-	Card* card = pile->GetTopCard();
+        Card* card = pile->GetTopCard();
 
-	if (card)
-	{
-	    int i;
-	    for(i = 0; i < 8; i++)
-	    {
-	    	if (m_foundations[i]->AcceptCard(card) && m_foundations[i] != pile)
-		{
+        if (card)
+        {
+            int i;
+            for(i = 0; i < 8; i++)
+            {
+                if (m_foundations[i]->AcceptCard(card) && m_foundations[i] != pile)
+                {
                     return true;
-		}
+                }
             }
-	    for(i = 0; i < 10; i++)
-	    {
-		if (m_bases[i]->GetTopCard() &&
-		    m_bases[i]->AcceptCard(card) &&
-		    m_bases[i] != pile)
-		{
-		    return true;
-		}
+            for(i = 0; i < 10; i++)
+            {
+                if (m_bases[i]->GetTopCard() &&
+                    m_bases[i]->AcceptCard(card) &&
+                    m_bases[i] != pile)
+                {
+                    return true;
+                }
             }
-	}
+        }
     }
     return false;
 }
@@ -579,61 +579,61 @@ void Game::LButtonUp(wxDC& dc, int x, int y)
 {
     if (m_srcPile)
     {
-        	// work out the position of the dragged card
-		x += m_xOffset;
+        // work out the position of the dragged card
+        x += m_xOffset;
         y += m_yOffset;
 
-		Pile* nearestPile = 0;
-		int distance = (CardHeight + CardWidth) * (CardHeight + CardWidth);
+        Pile* nearestPile = 0;
+        int distance = (CardHeight + CardWidth) * (CardHeight + CardWidth);
 
-        	// find the nearest pile which will accept the card
-		int i;
-		for (i = 0; i < 8; i++)
-		{
-			if (DropCard(x, y, m_foundations[i], m_liftedCard))
-			{
-				if (m_foundations[i]->CalcDistance(x, y) < distance)
-				{
-					nearestPile = m_foundations[i];
-                    distance = nearestPile->CalcDistance(x, y);
-                }
-            }
-		}
-		for (i = 0; i < 10; i++)
-		{
-			if (DropCard(x, y, m_bases[i], m_liftedCard))
-			{
-				if (m_bases[i]->CalcDistance(x, y) < distance)
+        // find the nearest pile which will accept the card
+        int i;
+        for (i = 0; i < 8; i++)
+        {
+            if (DropCard(x, y, m_foundations[i], m_liftedCard))
+            {
+                if (m_foundations[i]->CalcDistance(x, y) < distance)
                 {
-					nearestPile = m_bases[i];
+                    nearestPile = m_foundations[i];
                     distance = nearestPile->CalcDistance(x, y);
                 }
             }
-		}
+        }
+        for (i = 0; i < 10; i++)
+        {
+            if (DropCard(x, y, m_bases[i], m_liftedCard))
+            {
+                if (m_bases[i]->CalcDistance(x, y) < distance)
+                {
+                    nearestPile = m_bases[i];
+                    distance = nearestPile->CalcDistance(x, y);
+                }
+            }
+        }
 
-		// Restore the area under the card
-		wxMemoryDC memoryDC;
-		memoryDC.SelectObject(*m_bmap);
-		dc.Blit(m_xPos, m_yPos, CardWidth, CardHeight,
-			   &memoryDC, 0, 0, wxCOPY);
+        // Restore the area under the card
+        wxMemoryDC memoryDC;
+        memoryDC.SelectObject(*m_bmap);
+        dc.Blit(m_xPos, m_yPos, CardWidth, CardHeight,
+               &memoryDC, 0, 0, wxCOPY);
 
-        	// Draw the card in its new position
-		if (nearestPile)
-		{
-			// Add to new pile
-			nearestPile->AddCard(dc, m_liftedCard);
-			if (nearestPile != m_srcPile)
-			{
-				DoMove(dc, m_srcPile, nearestPile);
-			}
-		}
+        // Draw the card in its new position
+        if (nearestPile)
+        {
+            // Add to new pile
+            nearestPile->AddCard(dc, m_liftedCard);
+            if (nearestPile != m_srcPile)
+            {
+                DoMove(dc, m_srcPile, nearestPile);
+            }
+        }
         else
         {
-			// Return card to src pile
-			m_srcPile->AddCard(dc, m_liftedCard);
-		}
-		m_srcPile = 0;
-		m_liftedCard = 0;
+            // Return card to src pile
+            m_srcPile->AddCard(dc, m_liftedCard);
+        }
+        m_srcPile = 0;
+        m_liftedCard = 0;
     }
 }
 
@@ -645,9 +645,9 @@ bool Game::DropCard(int x, int y, Pile* pile, Card* card)
     bool retval = false;
     if (pile->Overlap(x, y))
     {
-	if (pile->AcceptCard(card))
-	{
-	    retval = true;
+        if (pile->AcceptCard(card))
+        {
+            retval = true;
         }
     }
     return retval;
@@ -658,81 +658,81 @@ void Game::MouseMove(wxDC& dc, int mx, int my)
 {
     if (m_liftedCard)
     {
-		wxMemoryDC memoryDC;
-		memoryDC.SelectObject(*m_bmap);
+        wxMemoryDC memoryDC;
+        memoryDC.SelectObject(*m_bmap);
 
-		int dx = mx + m_xOffset - m_xPos;
-		int dy = my + m_yOffset - m_yPos;
+        int dx = mx + m_xOffset - m_xPos;
+        int dy = my + m_yOffset - m_yPos;
 
-		if (abs(dx) >= CardWidth || abs(dy) >= CardHeight)
+        if (abs(dx) >= CardWidth || abs(dy) >= CardHeight)
         {
-			// Restore the area under the card
-			dc.Blit(m_xPos, m_yPos, CardWidth, CardHeight,
-			   &memoryDC, 0, 0, wxCOPY);
+            // Restore the area under the card
+            dc.Blit(m_xPos, m_yPos, CardWidth, CardHeight,
+               &memoryDC, 0, 0, wxCOPY);
 
-			// Copy the area under the card in the new position
-			memoryDC.Blit(0, 0, CardWidth, CardHeight,
-			   &dc, m_xPos + dx, m_yPos + dy, wxCOPY);
-		}
-		else if (dx >= 0)
-		{
-			// dx >= 0
-			dc.Blit(m_xPos, m_yPos, dx, CardHeight, &memoryDC, 0, 0, wxCOPY);
-			if (dy >= 0)
-			{
-					// dy >= 0
-				dc.Blit(m_xPos + dx, m_yPos, CardWidth - dx, dy, &memoryDC, dx, 0, wxCOPY);
-				memoryDC.Blit(0, 0, CardWidth - dx, CardHeight - dy,
-					   &memoryDC, dx, dy, wxCOPY);
-				memoryDC.Blit(0, CardHeight - dy, CardWidth - dx, dy,
-					   &dc, m_xPos + dx, m_yPos + CardHeight, wxCOPY);
-			}
-			else
-			{
-                		// dy < 0
-				dc.Blit(m_xPos + dx, m_yPos + dy + CardHeight, CardWidth - dx, -dy,
-					   &memoryDC, dx, CardHeight + dy, wxCOPY);
-				memoryDC.Blit(0, -dy, CardWidth - dx, CardHeight + dy,
-					   &memoryDC, dx, 0, wxCOPY);
-				memoryDC.Blit(0, 0, CardWidth - dx, -dy,
-					   &dc, m_xPos + dx, m_yPos + dy, wxCOPY);
-			}
-			memoryDC.Blit(CardWidth - dx, 0, dx, CardHeight,
-	    		   &dc, m_xPos + CardWidth, m_yPos + dy, wxCOPY);
-		}
-		else
-		{
-			// dx < 0
-			dc.Blit(m_xPos + CardWidth + dx, m_yPos, -dx, CardHeight,
-	    		   &memoryDC, CardWidth + dx, 0, wxCOPY);
-			if (dy >= 0)
-			{
-				dc.Blit(m_xPos, m_yPos, CardWidth + dx, dy, &memoryDC, 0, 0, wxCOPY);
-				memoryDC.Blit(-dx, 0, CardWidth + dx, CardHeight - dy,
-					   &memoryDC, 0, dy, wxCOPY);
-				memoryDC.Blit(-dx, CardHeight - dy, CardWidth + dx, dy,
-					   &dc, m_xPos, m_yPos + CardHeight, wxCOPY);
-			}
-			else
-			{
-                			// dy < 0
-				dc.Blit(m_xPos, m_yPos + CardHeight + dy, CardWidth + dx, -dy,
-					   &memoryDC, 0, CardHeight + dy, wxCOPY);
-				memoryDC.Blit(-dx, -dy, CardWidth + dx, CardHeight + dy,
-					   &memoryDC, 0, 0, wxCOPY);
-				memoryDC.Blit(-dx, 0, CardWidth + dx, -dy,
-					   &dc, m_xPos, m_yPos + dy, wxCOPY);
-			}
-			memoryDC.Blit(0, 0, -dx, CardHeight,
-	    		   &dc, m_xPos + dx, m_yPos + dy, wxCOPY);
-		}
-		m_xPos += dx;
-		m_yPos += dy;
+            // Copy the area under the card in the new position
+            memoryDC.Blit(0, 0, CardWidth, CardHeight,
+               &dc, m_xPos + dx, m_yPos + dy, wxCOPY);
+        }
+        else if (dx >= 0)
+        {
+            // dx >= 0
+            dc.Blit(m_xPos, m_yPos, dx, CardHeight, &memoryDC, 0, 0, wxCOPY);
+            if (dy >= 0)
+            {
+                // dy >= 0
+                dc.Blit(m_xPos + dx, m_yPos, CardWidth - dx, dy, &memoryDC, dx, 0, wxCOPY);
+                memoryDC.Blit(0, 0, CardWidth - dx, CardHeight - dy,
+                       &memoryDC, dx, dy, wxCOPY);
+                memoryDC.Blit(0, CardHeight - dy, CardWidth - dx, dy,
+                       &dc, m_xPos + dx, m_yPos + CardHeight, wxCOPY);
+            }
+            else
+            {
+                // dy < 0
+                dc.Blit(m_xPos + dx, m_yPos + dy + CardHeight, CardWidth - dx, -dy,
+                       &memoryDC, dx, CardHeight + dy, wxCOPY);
+                memoryDC.Blit(0, -dy, CardWidth - dx, CardHeight + dy,
+                       &memoryDC, dx, 0, wxCOPY);
+                memoryDC.Blit(0, 0, CardWidth - dx, -dy,
+                       &dc, m_xPos + dx, m_yPos + dy, wxCOPY);
+            }
+            memoryDC.Blit(CardWidth - dx, 0, dx, CardHeight,
+                   &dc, m_xPos + CardWidth, m_yPos + dy, wxCOPY);
+        }
+        else
+        {
+            // dx < 0
+            dc.Blit(m_xPos + CardWidth + dx, m_yPos, -dx, CardHeight,
+                   &memoryDC, CardWidth + dx, 0, wxCOPY);
+            if (dy >= 0)
+            {
+                dc.Blit(m_xPos, m_yPos, CardWidth + dx, dy, &memoryDC, 0, 0, wxCOPY);
+                memoryDC.Blit(-dx, 0, CardWidth + dx, CardHeight - dy,
+                       &memoryDC, 0, dy, wxCOPY);
+                memoryDC.Blit(-dx, CardHeight - dy, CardWidth + dx, dy,
+                       &dc, m_xPos, m_yPos + CardHeight, wxCOPY);
+            }
+            else
+            {
+                // dy < 0
+                dc.Blit(m_xPos, m_yPos + CardHeight + dy, CardWidth + dx, -dy,
+                       &memoryDC, 0, CardHeight + dy, wxCOPY);
+                memoryDC.Blit(-dx, -dy, CardWidth + dx, CardHeight + dy,
+                       &memoryDC, 0, 0, wxCOPY);
+                memoryDC.Blit(-dx, 0, CardWidth + dx, -dy,
+                       &dc, m_xPos, m_yPos + dy, wxCOPY);
+            }
+            memoryDC.Blit(0, 0, -dx, CardHeight,
+                   &dc, m_xPos + dx, m_yPos + dy, wxCOPY);
+        }
+        m_xPos += dx;
+        m_yPos += dy;
 
-			// draw the card in its new position
-		memoryDC.SelectObject(*m_bmapCard);
-		dc.Blit(m_xPos, m_yPos, CardWidth, CardHeight,
-			   &memoryDC, 0, 0, wxCOPY);
+        // draw the card in its new position
+        memoryDC.SelectObject(*m_bmapCard);
+        dc.Blit(m_xPos, m_yPos, CardWidth, CardHeight,
+               &memoryDC, 0, 0, wxCOPY);
     }
 }
 
@@ -745,7 +745,7 @@ Pack::Pack(int x, int y) : Pile(x, y, 0, 0)
 {
     for (m_topCard = 0; m_topCard < NumCards; m_topCard++)
     {
-    	m_cards[m_topCard] = new Card(1 + m_topCard / 2, facedown);
+        m_cards[m_topCard] = new Card(1 + m_topCard / 2, facedown);
     }
     m_topCard = NumCards - 1;
 }
@@ -756,40 +756,40 @@ void Pack::Shuffle()
     Card* temp[NumCards];
     int i;
 
-	// Don't try to shuffle an empty m_pack!
+    // Don't try to shuffle an empty m_pack!
     if (m_topCard < 0) return;
 
-	// Copy the cards into a temporary array. Start by clearing
-	// the array and then copy the card into a random position.
-        // If the position is occupied then find the next lower position.
+    // Copy the cards into a temporary array. Start by clearing
+    // the array and then copy the card into a random position.
+    // If the position is occupied then find the next lower position.
     for (i = 0; i <= m_topCard; i++)
     {
-		temp[i] = 0;
+        temp[i] = 0;
     }
     for (i = 0; i <= m_topCard; i++)
     {
-	    int pos = rand() % (m_topCard + 1);
-	    while (temp[pos])
-	    {
-	        pos--;
-	        if (pos < 0) pos = m_topCard;
-	    }
-	    m_cards[i]->TurnCard(facedown);
-	    temp[pos] = m_cards[i];
+        int pos = rand() % (m_topCard + 1);
+        while (temp[pos])
+        {
+            pos--;
+            if (pos < 0) pos = m_topCard;
+        }
+        m_cards[i]->TurnCard(facedown);
+        temp[pos] = m_cards[i];
         m_cards[i] = 0;
     }
 
-	// Copy each card back into the m_pack in a random
-	// position. If position is occupied then find nearest
-        // unoccupied position after the random position.
+    // Copy each card back into the m_pack in a random
+    // position. If position is occupied then find nearest
+    // unoccupied position after the random position.
     for (i = 0; i <= m_topCard; i++)
     {
-	    int pos = rand() % (m_topCard + 1);
-	    while (m_cards[pos])
-	    {
-	        pos++;
+        int pos = rand() % (m_topCard + 1);
+        while (m_cards[pos])
+        {
+            pos++;
             if (pos > m_topCard) pos = 0;
-	    }
+        }
         m_cards[pos] = temp[i];
     }
 }
@@ -802,8 +802,8 @@ void Pack::Redraw(wxDC& dc)
     str.Printf(_T("%d  "), m_topCard + 1);
 
     dc.SetBackgroundMode( wxSOLID );
-	dc.SetTextBackground(FortyApp::BackgroundColour());
-	dc.SetTextForeground(FortyApp::TextColour());
+    dc.SetTextBackground(FortyApp::BackgroundColour());
+    dc.SetTextForeground(FortyApp::TextColour());
     dc.DrawText(str, m_x + CardWidth + 5, m_y + CardHeight / 2);
 
 }
@@ -812,12 +812,12 @@ void Pack::AddCard(Card* card)
 {
     if (card == m_cards[m_topCard + 1])
     {
-		m_topCard++;
+        m_topCard++;
     }
     else
     {
-		wxMessageBox(_T("Pack::AddCard() Undo error"), _T("Forty Thieves: Warning"),
-		   wxOK | wxICON_EXCLAMATION);
+        wxMessageBox(_T("Pack::AddCard() Undo error"), _T("Forty Thieves: Warning"),
+           wxOK | wxICON_EXCLAMATION);
     }
     card->TurnCard(facedown);
 }
@@ -827,7 +827,7 @@ Pack::~Pack()
 {
     for (m_topCard = 0; m_topCard < NumCards; m_topCard++)
     {
-	    delete m_cards[m_topCard];
+        delete m_cards[m_topCard];
     }
 };
 
@@ -847,15 +847,15 @@ bool Base::AcceptCard(Card* card)
 
     if (m_topCard >= 0)
     {
-	    if (m_cards[m_topCard]->GetSuit() == card->GetSuit() &&
-	        m_cards[m_topCard]->GetPipValue() - 1 == card->GetPipValue())
-	    {
+        if (m_cards[m_topCard]->GetSuit() == card->GetSuit() &&
+            m_cards[m_topCard]->GetPipValue() - 1 == card->GetPipValue())
+        {
             retval = true;
         }
     }
     else
     {
-		// pile is empty - ACCEPT
+        // pile is empty - ACCEPT
         retval = true;
     }
     return retval;
@@ -881,15 +881,15 @@ bool Foundation::AcceptCard(Card* card)
 
     if (m_topCard >= 0)
     {
-	    if (m_cards[m_topCard]->GetSuit() == card->GetSuit() &&
-	        m_cards[m_topCard]->GetPipValue() + 1 == card->GetPipValue())
-	    {
+        if (m_cards[m_topCard]->GetSuit() == card->GetSuit() &&
+            m_cards[m_topCard]->GetPipValue() + 1 == card->GetPipValue())
+        {
             retval = true;
         }
     }
     else if (card->GetPipValue() == 1)
     {
-	    // It's an ace and the pile is empty - ACCEPT
+        // It's an ace and the pile is empty - ACCEPT
         retval = true;
     }
     return retval;
@@ -913,22 +913,22 @@ void Discard::Redraw(wxDC& dc)
 {
     if (m_topCard >= 0)
     {
-	    if (m_dx == 0 && m_dy == 0)
-	    {
+        if (m_dx == 0 && m_dy == 0)
+        {
             m_cards[m_topCard]->Draw(dc, m_x, m_y);
-	    }
-	    else
-	    {
-	        int x = m_x;
-	        int y = m_y;
-	        for (int i = 0; i <= m_topCard; i++)
-	        {
-		        m_cards[i]->Draw(dc, x, y);
-		        x += m_dx;
-		        y += m_dy;
-		        if (i == 31)
-		        {
-		            x = m_x;
+        }
+        else
+        {
+            int x = m_x;
+            int y = m_y;
+            for (int i = 0; i <= m_topCard; i++)
+            {
+                m_cards[i]->Draw(dc, x, y);
+                x += m_dx;
+                y += m_dy;
+                if (i == 31)
+                {
+                    x = m_x;
                     y = m_y + CardHeight / 3;
                 }
             }
@@ -936,7 +936,7 @@ void Discard::Redraw(wxDC& dc)
     }
     else
     {
-		Card::DrawNullCard(dc, m_x, m_y);
+        Card::DrawNullCard(dc, m_x, m_y);
     }
 }
 
@@ -945,18 +945,18 @@ void Discard::GetTopCardPos(int& x, int& y)
 {
     if (m_topCard < 0)
     {
-	    x = m_x;
-	    y = m_y;
+        x = m_x;
+        y = m_y;
     }
     else if (m_topCard > 31)
     {
-	    x = m_x + m_dx * (m_topCard - 32);
-	    y = m_y + CardHeight / 3;
+        x = m_x + m_dx * (m_topCard - 32);
+        y = m_y + CardHeight / 3;
     }
     else
     {
-	    x = m_x + m_dx * m_topCard;
-	    y = m_y;
+        x = m_x + m_dx * m_topCard;
+        y = m_y;
     }
 }
 
@@ -967,27 +967,27 @@ Card* Discard::RemoveTopCard(wxDC& dc, int m_xOffset, int m_yOffset)
 
     if (m_topCard <= 31)
     {
-		card = Pile::RemoveTopCard(dc, m_xOffset, m_yOffset);
+        card = Pile::RemoveTopCard(dc, m_xOffset, m_yOffset);
     }
     else
     {
-    	int topX, topY, x, y;
-    	GetTopCardPos(topX, topY);
-		card = Pile::RemoveTopCard();
-		card->Erase(dc, topX - m_xOffset, topY - m_yOffset);
-		GetTopCardPos(x, y);
-		dc.SetClippingRegion(topX - m_xOffset, topY - m_yOffset,
-					 CardWidth, CardHeight);
+        int topX, topY, x, y;
+        GetTopCardPos(topX, topY);
+        card = Pile::RemoveTopCard();
+        card->Erase(dc, topX - m_xOffset, topY - m_yOffset);
+        GetTopCardPos(x, y);
+        dc.SetClippingRegion(topX - m_xOffset, topY - m_yOffset,
+                     CardWidth, CardHeight);
 
-		for (int i = m_topCard - 31; i <= m_topCard - 31 + CardWidth / m_dx; i++)
-		{
-			m_cards[i]->Draw(dc, m_x - m_xOffset + i * m_dx, m_y - m_yOffset); 
-		}
-		if (m_topCard > 31)
-		{
-			m_cards[m_topCard]->Draw(dc, topX - m_xOffset - m_dx, topY - m_yOffset);
-		}
-		dc.DestroyClippingRegion();
+        for (int i = m_topCard - 31; i <= m_topCard - 31 + CardWidth / m_dx; i++)
+        {
+            m_cards[i]->Draw(dc, m_x - m_xOffset + i * m_dx, m_y - m_yOffset); 
+        }
+        if (m_topCard > 31)
+        {
+            m_cards[m_topCard]->Draw(dc, topX - m_xOffset - m_dx, topY - m_yOffset);
+        }
+        dc.DestroyClippingRegion();
     }
 
     return card;

@@ -6,7 +6,7 @@
 // Created:     21/07/97
 // RCS-ID:      $Id$
 // Copyright:   (c) 1993-1998 Chris Breeze
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 //---------------------------------------------------------------------------
 // Last modified: 22nd July 1998 - ported to wxWidgets 2.0
 /////////////////////////////////////////////////////////////////////////////
@@ -18,16 +18,16 @@ class FortyApp: public wxApp
 public:
     FortyApp();
     ~FortyApp();
-	bool OnInit();
+    bool OnInit();
 
-	static const wxColour& BackgroundColour();
-	static const wxColour& TextColour();
-	static const wxBrush&  BackgroundBrush();
+    static const wxColour& BackgroundColour();
+    static const wxColour& TextColour();
+    static const wxBrush&  BackgroundBrush();
 
 private:
-	static wxColour* m_backgroundColour;
-	static wxColour* m_textColour;
-	static wxBrush*  m_backgroundBrush;
+    static wxColour* m_backgroundColour;
+    static wxColour* m_textColour;
+    static wxBrush*  m_backgroundBrush;
 };
 
 class FortyCanvas;
@@ -35,34 +35,39 @@ class FortyFrame: public wxFrame
 {
 public:
   FortyFrame(wxFrame* frame, const wxString& title, const wxPoint& pos, const wxSize& size, bool largecards);
-	virtual ~FortyFrame();
+    virtual ~FortyFrame();
 
-	void OnCloseWindow(wxCloseEvent& event);
+    void OnCloseWindow(wxCloseEvent& event);
 
-	// Menu callbacks
-	void NewGame(wxCommandEvent& event);
-	void Exit(wxCommandEvent& event);
-	void About(wxCommandEvent& event);
-	void Help(wxCommandEvent& event);
-	void Undo(wxCommandEvent& event);
-	void Redo(wxCommandEvent& event);
-	void Scores(wxCommandEvent& event);
-	void ToggleRightButtonUndo(wxCommandEvent& event);
-	void ToggleHelpingHand(wxCommandEvent& event);
-        void ToggleCardSize(wxCommandEvent& event);
+    // Menu callbacks
+    void NewGame(wxCommandEvent& event);
+    void Exit(wxCommandEvent& event);
+    void About(wxCommandEvent& event);
+    void Help(wxCommandEvent& event);
+    void Undo(wxCommandEvent& event);
+    void Redo(wxCommandEvent& event);
+    void Scores(wxCommandEvent& event);
+    void ToggleRightButtonUndo(wxCommandEvent& event);
+    void ToggleHelpingHand(wxCommandEvent& event);
+    void ToggleCardSize(wxCommandEvent& event);
 
-        FortyCanvas* GetCanvas() { return m_canvas; }
+    FortyCanvas* GetCanvas() { return m_canvas; }
 
-	DECLARE_EVENT_TABLE()
+    DECLARE_EVENT_TABLE()
 
 private:
-	enum MenuCommands { NEW_GAME = 10, SCORES,
-						UNDO, REDO,
-                        RIGHT_BUTTON_UNDO, HELPING_HAND, LARGE_CARDS
-					};
+    enum MenuCommands { 
+        NEW_GAME = 10, 
+        SCORES,
+        UNDO, 
+        REDO,
+        RIGHT_BUTTON_UNDO, 
+        HELPING_HAND, 
+        LARGE_CARDS
+    };
 
-	wxMenuBar*		m_menuBar;
-	FortyCanvas*	m_canvas;
+    wxMenuBar* m_menuBar;
+    FortyCanvas* m_canvas;
 };
 
 //----------------------------------------------------------------------------

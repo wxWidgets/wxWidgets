@@ -6,7 +6,7 @@
 // Created:     21/07/97
 // RCS-ID:      $Id$
 // Copyright:   (c) 1993-1998 Chris Breeze
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 //---------------------------------------------------------------------------
 // Last modified: 22nd July 1998 - ported to wxWidgets 2.0
 /////////////////////////////////////////////////////////////////////////////
@@ -23,13 +23,13 @@ const int MaxMoves = 800;
 //---------------------------------------//
 class Pack : public Pile {
 public:
-	Pack(int x, int y);
-	~Pack();
-	void Redraw(wxDC& dc);
-	void ResetPile() { m_topCard = NumCards - 1; }
-	void Shuffle();
-	void AddCard(Card* card);		// Add card
-	void AddCard(wxDC& dc, Card* card) { AddCard(card); Redraw(dc); }
+    Pack(int x, int y);
+    ~Pack();
+    void Redraw(wxDC& dc);
+    void ResetPile() { m_topCard = NumCards - 1; }
+    void Shuffle();
+    void AddCard(Card* card); // Add card
+    void AddCard(wxDC& dc, Card* card) { AddCard(card); Redraw(dc); }
 };
 
 
@@ -38,9 +38,9 @@ public:
 //----------------------------------------------------------//
 class Base : public Pile {
 public:
-	Base(int x, int y);
-	~Base();
-	bool AcceptCard(Card* card);
+    Base(int x, int y);
+    ~Base();
+    bool AcceptCard(Card* card);
 };
 
 
@@ -49,9 +49,9 @@ public:
 //----------------------------------------------------//
 class Foundation : public Pile {
 public:
-	Foundation(int x, int y);
-	~Foundation();
-	bool AcceptCard(Card* card);
+    Foundation(int x, int y);
+    ~Foundation();
+    bool AcceptCard(Card* card);
 };
 
 
@@ -60,77 +60,77 @@ public:
 //--------------------------------------//
 class Discard : public Pile {
 public:
-	Discard(int x, int y);
-	~Discard();
-	void Redraw(wxDC& dc);
-	void GetTopCardPos(int& x, int& y);
-	Card* RemoveTopCard(wxDC& dc, int m_xOffset, int m_yOffset);
+    Discard(int x, int y);
+    ~Discard();
+    void Redraw(wxDC& dc);
+    void GetTopCardPos(int& x, int& y);
+    Card* RemoveTopCard(wxDC& dc, int m_xOffset, int m_yOffset);
 };
 
 
 class Game {
 public:
-	Game(int wins, int games, int score);
-	virtual ~Game();
+    Game(int wins, int games, int score);
+    virtual ~Game();
 
-        void Layout();
-	void NewPlayer(int wins, int games, int score);
-	void Deal();		// Shuffle and deal a new game
-	bool CanYouGo(int x, int y);	// can card under (x,y) go somewhere?
-	bool HaveYouWon();		// have you won the game?
+    void Layout();
+    void NewPlayer(int wins, int games, int score);
+    void Deal(); // Shuffle and deal a new game
+    bool CanYouGo(int x, int y); // can card under (x,y) go somewhere?
+    bool HaveYouWon(); // have you won the game?
 
-	void Undo(wxDC& dc);		// Undo the last go
-	void Redo(wxDC& dc);		// Redo the last go
+    void Undo(wxDC& dc); // Undo the last go
+    void Redo(wxDC& dc); // Redo the last go
 
-	void Redraw(wxDC& dc);
-	void DisplayScore(wxDC& dc);
-	bool LButtonDown(wxDC& dc, int mx, int my);	//
-	void LButtonUp(wxDC& dc, int mx, int my);
-	void LButtonDblClk(wxDC& dc, int mx, int my);
-	void MouseMove(wxDC& dc, int mx, int my);
+    void Redraw(wxDC& dc);
+    void DisplayScore(wxDC& dc);
+    bool LButtonDown(wxDC& dc, int mx, int my);
+    void LButtonUp(wxDC& dc, int mx, int my);
+    void LButtonDblClk(wxDC& dc, int mx, int my);
+    void MouseMove(wxDC& dc, int mx, int my);
 
-	int GetNumWins() const	{ return m_numWins; }
-	int GetNumGames() const	{ return m_numGames; }
-	int GetScore() const	{ return m_currentScore + m_totalScore; }
+    int GetNumWins() const { return m_numWins; }
+    int GetNumGames() const { return m_numGames; }
+    int GetScore() const { return m_currentScore + m_totalScore; }
 
-	bool InPlay() const		{ return m_inPlay; }
+    bool InPlay() const { return m_inPlay; }
 
 private:
-	bool DropCard(int x, int y, Pile* pile, Card* card);
-			//  can the card at (x, y) be dropped on the pile?
-	Pile* WhichPile(int x, int y);	// which pile is (x, y) over?
-	void DoMove(wxDC& dc, Pile* src, Pile* dest);
+    bool DropCard(int x, int y, Pile* pile, Card* card);
+            //  can the card at (x, y) be dropped on the pile?
+    Pile* WhichPile(int x, int y); // which pile is (x, y) over?
+    void DoMove(wxDC& dc, Pile* src, Pile* dest);
 
-	bool m_inPlay;		// flag indicating that the game has started
+    bool m_inPlay; // flag indicating that the game has started
 
-	// undo buffer
-	struct {
-		Pile* src;
-		Pile* dest;
-	} m_moves[MaxMoves];
-	int m_moveIndex;	// current position in undo/redo buffer
-	int m_redoIndex;	// max move index available for redo
+    // undo buffer
+    struct {
+        Pile* src;
+        Pile* dest;
+    } m_moves[MaxMoves];
+    int m_moveIndex; // current position in undo/redo buffer
+    int m_redoIndex; // max move index available for redo
 
-	// the various piles of cards
-	Pack*		m_pack;		
-	Discard*	m_discard;
-	Base*		m_bases[10];
-	Foundation*	m_foundations[8];
+    // the various piles of cards
+    Pack* m_pack;
+    Discard* m_discard;
+    Base* m_bases[10];
+    Foundation* m_foundations[8];
 
-	// variables to do with dragging cards
-	Pile*		m_srcPile;
-	Card*		m_liftedCard;
-	int m_xPos, m_yPos;		// current coords of card being dragged
-	int m_xOffset, m_yOffset;	// card/mouse offset when dragging a card
+    // variables to do with dragging cards
+    Pile* m_srcPile;
+    Card* m_liftedCard;
+    int m_xPos, m_yPos; // current coords of card being dragged
+    int m_xOffset, m_yOffset; // card/mouse offset when dragging a card
 
-	wxBitmap* m_bmap;
-	wxBitmap* m_bmapCard;
+    wxBitmap* m_bmap;
+    wxBitmap* m_bmapCard;
 
-	// variables to do with scoring
-	int m_numGames;		
-	int m_numWins;
-	int m_totalScore;
-	int m_currentScore;
+    // variables to do with scoring
+    int m_numGames;
+    int m_numWins;
+    int m_totalScore;
+    int m_currentScore;
 };
 
 #endif // _GAME_H_
