@@ -311,19 +311,6 @@ wxRendererGeneric::DrawSplitterSash(wxWindow *win,
         offset = 3;
     }
 
-    // We need to erase any droppings left behind on
-    // the splitter background
-    if ( win->HasFlag(wxSP_3DBORDER) )
-    {
-        wxPen pen(win->GetBackgroundColour());
-        dc.SetPen(pen);
-
-        dc.DrawLine(2, 2, size.x - 2, 2);
-        dc.DrawLine(2, h - 2, size.x - 2, h - 2);
-
-        dc.SetPen(wxNullPen);
-    }
-
     // from left to right
     if ( win->HasFlag(wxSP_3D) )
     {
