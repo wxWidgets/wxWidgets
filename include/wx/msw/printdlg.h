@@ -100,12 +100,15 @@ public:
 
     bool Create(wxWindow *parent, wxPageSetupData *data = NULL);
     virtual int ShowModal();
+    bool ConvertToNative( wxPageSetupDialogData &data );
+    bool ConvertFromNative( wxPageSetupDialogData &data );
 
     wxPageSetupData& GetPageSetupData() { return m_pageSetupData; }
 
 private:
     wxPageSetupData   m_pageSetupData;
     wxWindow*         m_dialogParent;
+    void*             m_pageDlg;
 
     DECLARE_NO_COPY_CLASS(wxPageSetupDialog)
 };
