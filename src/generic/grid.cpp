@@ -2088,6 +2088,9 @@ void wxGridCellAttrData::SetAttr(wxGridCellAttr *attr, int row, int col)
     }
     else
     {
+        // free the old attribute
+        m_attrs[(size_t)n].attr->DecRef();
+
         if ( attr )
         {
             // change the attribute
@@ -3607,6 +3610,8 @@ void wxGrid::Create()
                                   wxDefaultSize );
 
     SetTargetWindow( m_gridWin );
+
+    Init();
 }
 
 
@@ -3624,7 +3629,9 @@ bool wxGrid::CreateGrid( int numRows, int numCols,
     m_table->SetView( this );
     m_ownTable = TRUE;
     m_selection = new wxGridSelection( this, selmode );
-    Init();
+
+    CalcDimensions();
+
     m_created = TRUE;
 
     return m_created;
@@ -3632,12 +3639,10 @@ bool wxGrid::CreateGrid( int numRows, int numCols,
 
 void wxGrid::SetSelectionMode(wxGrid::wxGridSelectionModes selmode)
 {
-    if ( !m_created )
-    {
-        wxFAIL_MSG( wxT("Called wxGrid::SetSelectionMode() before calling CreateGrid()") );
-    }
-    else
-        m_selection->SetSelectionMode( selmode );
+    wxCHECK_RET( m_created,
+                 wxT("Called wxGrid::SetSelectionMode() before calling CreateGrid()") );
+
+    m_selection->SetSelectionMode( selmode );
 }
 
 bool wxGrid::SetTable( wxGridTableBase *table, bool takeOwnership,
@@ -3664,7 +3669,9 @@ bool wxGrid::SetTable( wxGridTableBase *table, bool takeOwnership,
         if (takeOwnership)
             m_ownTable = TRUE;
         m_selection = new wxGridSelection( this, selmode );
-        Init();
+
+        CalcDimensions();
+
         m_created = TRUE;
     }
 
@@ -3746,8 +3753,6 @@ void wxGrid::Init()
 
     m_extraWidth =
     m_extraHeight = 50;
-
-    CalcDimensions();
 }
 
 // ----------------------------------------------------------------------------
