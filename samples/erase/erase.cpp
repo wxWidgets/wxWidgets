@@ -125,7 +125,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 {
     SetIcon(wxICON(mondrian));
 
-    wxMenu *menuFile = new wxMenu("", wxMENU_TEAROFF);
+    wxMenu *menuFile = new wxMenu(_T(""), wxMENU_TEAROFF);
 
     wxMenu *helpMenu = new wxMenu;
     helpMenu->Append(wxID_ABOUT, _T("&About...\tCtrl-A"), _T("Show about dialog"));
@@ -228,7 +228,7 @@ void MyCanvas::OnPaint( wxPaintEvent &event )
     wxRegionIterator upd( GetUpdateRegion() );
     while (upd)
     {
-        wxLogDebug( "Paint: %d %d %d %d", upd.GetX(), upd.GetY(), upd.GetWidth(), upd.GetHeight() );
+        wxLogDebug( _T("Paint: %d %d %d %d"), upd.GetX(), upd.GetY(), upd.GetWidth(), upd.GetHeight() );
         upd ++;
     }
 #endif
@@ -236,7 +236,7 @@ void MyCanvas::OnPaint( wxPaintEvent &event )
 #if 0
     wxSize size = GetSize();
     wxSize client_size = GetClientSize();
-    wxLogDebug( "size %d %d client_size %d %d", size.x, size.y, client_size.x, client_size.y );
+    wxLogDebug( _T("size %d %d client_size %d %d"), size.x, size.y, client_size.x, client_size.y );
 #endif
 
 #if 0

@@ -87,44 +87,44 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit(void)
 {
 #ifdef __WXMSW__
-    cellBitmap1 = new wxBitmap("bitmap1");
-    cellBitmap2 = new wxBitmap("bitmap2");
+    cellBitmap1 = new wxBitmap(_T("bitmap1"));
+    cellBitmap2 = new wxBitmap(_T("bitmap2"));
 #endif
 
     // Create the main frame window
-    MyFrame *frame = new MyFrame((wxFrame *) NULL, (char *) "wxGrid Sample", wxPoint(50, 50), wxSize(450, 300));
+    MyFrame *frame = new MyFrame(NULL,  _T("wxGrid Sample"), wxPoint(50, 50), wxSize(450, 300));
 
     // Give it an icon
 #ifdef __WXMSW__
-    frame->SetIcon(wxIcon("mondrian"));
+    frame->SetIcon(wxIcon(_T("mondrian")));
 #endif
 
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
-    file_menu->Append(GRID_QUIT, "E&xit");
+    file_menu->Append(GRID_QUIT, _T("E&xit"));
 
     wxMenu *settings_menu = new wxMenu;
-    settings_menu->Append(GRID_TOGGLE_EDITABLE, "&Toggle editable");
-    settings_menu->Append(GRID_TOGGLE_EDITINPLACE, "&Toggle edit in place");
-    settings_menu->Append(GRID_TOGGLE_ROW_LABEL, "Toggle ro&w label");
-    settings_menu->Append(GRID_TOGGLE_COL_LABEL, "Toggle co&l label");
-    settings_menu->Append(GRID_TOGGLE_DIVIDERS, "Toggle &dividers");
+    settings_menu->Append(GRID_TOGGLE_EDITABLE, _T("&Toggle editable"));
+    settings_menu->Append(GRID_TOGGLE_EDITINPLACE, _T("&Toggle edit in place"));
+    settings_menu->Append(GRID_TOGGLE_ROW_LABEL, _T("Toggle ro&w label"));
+    settings_menu->Append(GRID_TOGGLE_COL_LABEL, _T("Toggle co&l label"));
+    settings_menu->Append(GRID_TOGGLE_DIVIDERS, _T("Toggle &dividers"));
     settings_menu->AppendSeparator();
-    settings_menu->Append(GRID_LEFT_CELL, "&Left cell alignment ");
-    settings_menu->Append(GRID_CENTRE_CELL, "&Centre cell alignment ");
-    settings_menu->Append(GRID_RIGHT_CELL, "&Right cell alignment ");
+    settings_menu->Append(GRID_LEFT_CELL, _T("&Left cell alignment "));
+    settings_menu->Append(GRID_CENTRE_CELL, _T("&Centre cell alignment "));
+    settings_menu->Append(GRID_RIGHT_CELL, _T("&Right cell alignment "));
     settings_menu->AppendSeparator();
-    settings_menu->Append(GRID_COLOUR_LABEL_BACKGROUND, "Choose a label &background colour");
-    settings_menu->Append(GRID_COLOUR_LABEL_TEXT, "Choose a label fore&ground colour");
-    settings_menu->Append(GRID_NORMAL_LABEL_COLOURING, "&Normal label colouring");
+    settings_menu->Append(GRID_COLOUR_LABEL_BACKGROUND, _T("Choose a label &background colour"));
+    settings_menu->Append(GRID_COLOUR_LABEL_TEXT, _T("Choose a label fore&ground colour"));
+    settings_menu->Append(GRID_NORMAL_LABEL_COLOURING, _T("&Normal label colouring"));
     settings_menu->AppendSeparator();
-    settings_menu->Append(GRID_COLOUR_CELL_BACKGROUND, "Choo&se a cell &background colour");
-    settings_menu->Append(GRID_COLOUR_CELL_TEXT, "Choose &a cell foreground colour");
-    settings_menu->Append(GRID_NORMAL_CELL_COLOURING, "N&ormal cell colouring");
+    settings_menu->Append(GRID_COLOUR_CELL_BACKGROUND, _T("Choo&se a cell &background colour"));
+    settings_menu->Append(GRID_COLOUR_CELL_TEXT, _T("Choose &a cell foreground colour"));
+    settings_menu->Append(GRID_NORMAL_CELL_COLOURING, _T("N&ormal cell colouring"));
 
     wxMenuBar *menu_bar = new wxMenuBar;
-    menu_bar->Append(file_menu, "&File");
-    menu_bar->Append(settings_menu, "&Settings");
+    menu_bar->Append(file_menu, _T("&File"));
+    menu_bar->Append(settings_menu, _T("&Settings"));
     frame->SetMenuBar(menu_bar);
 
     // Make a grid
@@ -133,9 +133,9 @@ bool MyApp::OnInit(void)
     frame->grid->CreateGrid(10, 8);
     frame->grid->SetColumnWidth(3, 200);
     frame->grid->SetRowHeight(4, 45);
-    frame->grid->SetCellValue("First cell", 0, 0);
-    frame->grid->SetCellValue("Another cell", 1, 1);
-    frame->grid->SetCellValue("Yet another cell", 2, 2);
+    frame->grid->SetCellValue(_T("First cell"), 0, 0);
+    frame->grid->SetCellValue(_T("Another cell"), 1, 1);
+    frame->grid->SetCellValue(_T("Yet another cell"), 2, 2);
     frame->grid->SetCellTextFont(wxFont(10, wxROMAN, wxITALIC, wxNORMAL), 0, 0);
     frame->grid->SetCellTextColour(*wxRED, 1, 1);
     frame->grid->SetCellBackgroundColour(*wxCYAN, 2, 2);
