@@ -52,6 +52,9 @@
 #include "wx/grid.h"
 #include "wx/generic/gridsel.h"
 
+// Required for wxIs... functions
+#include <ctype.h>
+
 // ----------------------------------------------------------------------------
 // array classes
 // ----------------------------------------------------------------------------

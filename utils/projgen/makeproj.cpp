@@ -268,8 +268,8 @@ void MyApp::GenerateSamples(const wxString& dir)
     GenerateSample("ListctrlVC", "listtest", dir + wxString("/samples/listctrl"), wxStringList("listtest.cpp", "listtest.h", 0));
     GenerateSample("MdiVC", "mdi", dir + wxString("/samples/mdi"), wxStringList("mdi.cpp", "mdi.h", 0));
     GenerateSample("MemcheckVC", "memcheck", dir + wxString("/samples/memcheck"), wxStringList("memcheck.cpp", 0));
-    // Note: MFC sample will be different.
-    GenerateSample("MfcVC", "mfc", dir + wxString("/samples/mfc"), wxStringList("mfctest.cpp", "mfctest.h", 0));
+    // Don't always generate this project since it has to be tweaked by hand.
+    // GenerateSample("MfcVC", "mfctest", dir + wxString("/samples/mfc"), wxStringList("mfctest.cpp", "mfctest.h", 0));
     GenerateSample("MiniframVC", "test", dir + wxString("/samples/minifram"), wxStringList("test.cpp", "test.h", 0));
     GenerateSample("MinimalVC", "minimal", dir + wxString("/samples/minimal"), wxStringList("minimal.cpp", 0));
     GenerateSample("NativdlgVC", "nativdlg", dir + wxString("/samples/nativdlg"), wxStringList("nativdlg.cpp", "nativdlg.h", "resource.h", 0));

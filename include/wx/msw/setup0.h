@@ -428,6 +428,9 @@
  *
  */
 
+// Make settings compatible with MFC
+#define wxUSE_MFC           0
+
 #define wxUSE_OLE           1
                                 // drag-and-drop, clipboard, OLE Automation
 
@@ -508,6 +511,19 @@
 
 #undef  wxUSE_DEBUG_NEW_ALWAYS
 #define wxUSE_DEBUG_NEW_ALWAYS          0
+#endif
+
+// MFC duplicates these operators
+#if wxUSE_MFC
+#undef  wxUSE_GLOBAL_MEMORY_OPERATORS
+#define wxUSE_GLOBAL_MEMORY_OPERATORS   0
+
+#undef  wxUSE_DEBUG_NEW_ALWAYS
+#define wxUSE_DEBUG_NEW_ALWAYS          0
+
+#ifndef _MBCS
+// #define _MBCS
+#endif
 #endif
 
 #if (!defined(WIN32) && !defined(__WIN32__)) || (defined(__GNUWIN32__) && !wxUSE_NORLANDER_HEADERS)

@@ -241,6 +241,7 @@ bool MyApp::OnInit()
         else
         {
           OnError("Incorrect argument for -charset");
+          return FALSE;
         }
       }
     }
@@ -254,6 +255,7 @@ bool MyApp::OnInit()
       ShowOptions();
       exit(1);
 #endif
+      return FALSE;
     }
   }
 
@@ -854,7 +856,7 @@ void OnError(char *msg)
   cerr << "Error: " << msg << "\n";
   cerr.flush();
 #else
-  if (isInteractive)
+  if (isInteractive && frame)
     (*frame->textWindow) << "Error: " << msg << "\n";
   else
 #ifdef __UNIX__
@@ -876,7 +878,7 @@ void OnInform(char *msg)
   cout << msg << "\n";
   cout.flush();
 #else
-  if (isInteractive)
+  if (isInteractive && frame)
     (*frame->textWindow) << msg << "\n";
   else
 #ifdef __WXMSW__

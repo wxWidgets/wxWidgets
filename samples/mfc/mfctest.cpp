@@ -26,14 +26,26 @@
 // initially as the main frame, and allows wxWindows frames to be
 // created subsequently:
 //
-// (1) Make MyApp::OnInit return NULL, not create a window.
+// (1) Make MyApp::OnInit return FALSE, not creating a window.
 // (2) Restore the MFC code to create a window in InitInstance, and remove
 //     creation of CDummyWindow.
 //
-// IMPORTANT NOTE: to compile this sample, you must first edit
-// wx/src/msw/wx_main.cc, set NOWINMAIN to 1, and remake wxWindows
-// (it only needs to recompile wx_main.cc).
-// This eliminates the duplicate WinMain function which MFC implements.
+// IMPORTANT NOTES:
+//
+// (1) You need to set wxUSE_MFC to 1 in include/wx/msw/setup.h, which switches
+// off some debugging features and also removes the windows.h inclusion
+// in wxprec.h (MFC headers don't like this to have been included previously).
+// Then recompile wxWindows and this sample.
+//
+// (2) 10/3/2000, wxWindows 2.1.14: unfortunately there is an assert when
+// the sample tries to create an MFC window. Any suggestions welcome. It may be
+// a problem with conflicting project settings. Ignoring the assert (several times)
+// allows the sample to continue. In release mode the asserts don't happen.
+//
+// (3) I can't get the sample to link using a static MFC library, only the DLL
+// version. Perhaps someone else is a wizard at working out the required settings
+// in the wxWin library and the sample; then debugging the assert problem may be
+// easier.
 
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
@@ -331,14 +343,13 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
 {
     wxClientDC dc(this);
     dc.SetPen(* wxBLACK_PEN);
-    long x, y;
-    event.Position(&x, &y);
+    wxPoint pos = event.GetPosition();
     if (xpos > -1 && ypos > -1 && event.Dragging())
     {
-        dc.DrawLine(xpos, ypos, x, y);
+        dc.DrawLine(xpos, ypos, pos.x, pos.y);
     }
-    xpos = x;
-    ypos = y;
+    xpos = pos.x;
+    ypos = pos.y;
 }
 
 BEGIN_EVENT_TABLE(MyChild, wxFrame)

@@ -1569,7 +1569,8 @@ void Tex2RTFYield(bool force)
     yieldCount = 0;
   if (yieldCount == 0)
   {
-    wxYield();
+    if (wxTheApp)
+        wxYield();
     yieldCount = 10;
   }
   yieldCount --;

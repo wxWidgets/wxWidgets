@@ -1228,11 +1228,6 @@ enum wxStretch
 // id for a separator line in the menu (invalid for normal item)
 #define wxID_SEPARATOR (-1)
 
-// this one is for compatibility only, don't use in new code
-#ifndef ID_SEPARATOR
-    #define ID_SEPARATOR    wxID_SEPARATOR
-#endif
-
 // Standard menu IDs
 #define wxID_LOWEST             4999
 

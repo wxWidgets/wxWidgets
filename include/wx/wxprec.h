@@ -28,7 +28,7 @@
 #ifdef WX_PRECOMP
 
 // include standard Windows headers
-#ifdef __WXMSW__
+#if defined(__WXMSW__) && !wxUSE_MFC
     #include <windows.h>
     #include "wx/msw/winundef.h"
 #endif

@@ -1,6 +1,6 @@
 \section{\class{wxIndividualLayoutConstraint}}\label{wxindividuallayoutconstraint}
 
-Objects of this class are stored in the wxIndividualLayoutConstraint class
+Objects of this class are stored in the wxLayoutConstraint class
 as one of eight possible constraints that a window can be involved in.
 
 Constraints are initially set to have the relationship wxUnconstrained,
@@ -105,7 +105,7 @@ optional margin. Implicitly, this is relative to the left edge of the other wind
 
 \membersection{wxIndividualLayoutConstraint::PercentOf}
 
-\func{void}{PercentOf}{\param{wxWindow *}{otherWin}, \param{wxEdge}{ edge}, \param{int}{ margin = 0}}
+\func{void}{PercentOf}{\param{wxWindow *}{otherWin}, \param{wxEdge}{ edge}, \param{int}{ per}}
 
 Constrains this edge or dimension to be to a percentage of the given window, with an
 optional margin.

@@ -1199,6 +1199,7 @@ void wxExit()
     wxLogError(_("Fatal error: exiting"));
 
     wxApp::CleanUp();
+    exit(0);
 }
 
 // Yield to incoming messages
@@ -1223,7 +1224,8 @@ bool wxYield()
     }
 
     // If they are pending events, we must process them.
-    wxTheApp->ProcessPendingEvents();
+    if (wxTheApp)
+        wxTheApp->ProcessPendingEvents();
 
     // let the logs be flashed again
     wxLog::Resume();
