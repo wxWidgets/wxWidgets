@@ -176,6 +176,7 @@ void wxHtmlWindow::Init()
     m_timerAutoScroll = NULL;
 #endif
     m_backBuffer = NULL;
+    m_lastDoubleClick = 0;
 }
 
 bool wxHtmlWindow::Create(wxWindow *parent, wxWindowID id,
@@ -860,20 +861,30 @@ void wxHtmlWindow::OnMouseMove(wxMouseEvent& event)
 
 void wxHtmlWindow::OnMouseDown(wxMouseEvent& event)
 {
+#if wxUSE_CLIPBOARD
     if ( event.LeftDown() && IsSelectionEnabled() )
     {
-        m_makingSelection = true;
-            
-        if ( m_selection )
+        const long TRIPLECLICK_LEN = 200; // 0.2 sec after doubleclick
+        if ( wxGetLocalTimeMillis() - m_lastDoubleClick <= TRIPLECLICK_LEN )
         {
-            wxDELETE(m_selection);
-            Refresh();
+            SelectLine(CalcUnscrolledPosition(event.GetPosition()));
         }
-        m_tmpSelFromPos = CalcUnscrolledPosition(event.GetPosition());
-        m_tmpSelFromCell = NULL;
+        else
+        {            
+            m_makingSelection = true;
+                
+            if ( m_selection )
+            {
+                wxDELETE(m_selection);
+                Refresh();
+            }
+            m_tmpSelFromPos = CalcUnscrolledPosition(event.GetPosition());
+            m_tmpSelFromCell = NULL;
 
-        CaptureMouse();
+            CaptureMouse();
+        }
     }
+#endif
 }
 
 void wxHtmlWindow::OnMouseUp(wxMouseEvent& event)
@@ -1145,19 +1156,77 @@ void wxHtmlWindow::OnDoubleClick(wxMouseEvent& event)
     // select word under cursor:
     if ( IsSelectionEnabled() )
     {
-        wxPoint pos = CalcUnscrolledPosition(event.GetPosition());
-        wxHtmlCell *cell = m_Cell->FindCellByPos(pos.x, pos.y);
-        if ( cell )
-        {
-            delete m_selection;
-            m_selection = new wxHtmlSelection();
-            m_selection->Set(cell, cell);
-            RefreshRect(wxRect(CalcScrolledPosition(cell->GetAbsPos()),
-                               wxSize(cell->GetWidth(), cell->GetHeight())));
-        }
+        SelectWord(CalcUnscrolledPosition(event.GetPosition()));
+        m_lastDoubleClick = wxGetLocalTimeMillis();
     }
     else
         event.Skip();
+}
+
+void wxHtmlWindow::SelectWord(const wxPoint& pos)
+{
+    wxHtmlCell *cell = m_Cell->FindCellByPos(pos.x, pos.y);
+    if ( cell )
+    {
+        delete m_selection;
+        m_selection = new wxHtmlSelection();
+        m_selection->Set(cell, cell);
+        RefreshRect(wxRect(CalcScrolledPosition(cell->GetAbsPos()),
+                           wxSize(cell->GetWidth(), cell->GetHeight())));
+    }
+}
+
+void wxHtmlWindow::SelectLine(const wxPoint& pos)
+{
+    wxHtmlCell *cell = m_Cell->FindCellByPos(pos.x, pos.y);
+    if ( cell )
+    {
+        // We use following heuristic to find a "line": let the line be all
+        // cells in same container as the cell under mouse cursor that are
+        // neither completely above nor completely bellow the clicked cell
+        // (i.e. are likely to be words positioned on same line of text).
+                
+        int y1 = cell->GetAbsPos().y;
+        int y2 = y1 + cell->GetHeight();
+        int y;
+        const wxHtmlCell *c;
+        const wxHtmlCell *before = NULL;
+        const wxHtmlCell *after = NULL;
+
+        // find last cell of line:
+        for ( c = cell->GetNext(); c; c = c->GetNext())
+        {
+            y = c->GetAbsPos().y;
+            if ( y + c->GetHeight() > y1 && y < y2 )
+                after = c;
+            else
+                break;
+        }
+        if ( !after )
+            after = cell;
+
+        // find first cell of line:
+        for ( c = cell->GetParent()->GetFirstChild();
+                c && c != cell; c = c->GetNext())
+        {
+            y = c->GetAbsPos().y;
+            if ( y + c->GetHeight() > y1 && y < y2 )
+            {
+                if ( ! before )
+                    before = c;
+            }
+            else
+                before = NULL;
+        }
+        if ( !before )
+            before = cell;
+       
+        delete m_selection;
+        m_selection = new wxHtmlSelection();
+        m_selection->Set(before, after);
+        
+        Refresh();
+    }
 }
 #endif
 

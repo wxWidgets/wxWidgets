@@ -245,6 +245,12 @@ protected:
     
     // Copies selection to clipboard:
     void CopySelection(ClipboardType t = Secondary);
+
+    // Helper functions to select parts of page:
+    void SelectWord(const wxPoint& pos);
+    void SelectLine(const wxPoint& pos);
+
+    // Automatic scrolling during selection:
     void StopAutoScrolling();
 #endif
 
@@ -284,6 +290,12 @@ protected:
     bool m_makingSelection;
 
 #if wxUSE_CLIPBOARD
+    // time of the last doubleclick event, used to detect tripleclicks
+    // (tripleclicks are used to select whole line):
+    wxLongLong m_lastDoubleClick;
+
+    // helper class to automatically scroll the window if the user is selecting
+    // text and the mouse leaves wxHtmlWindow:
     wxHtmlWinAutoScrollTimer *m_timerAutoScroll;
 #endif
 
