@@ -2822,6 +2822,35 @@ fi
 dnl check for vfork() (even if it's the same as fork() in modern Unices)
 AC_CHECK_FUNCS(vfork)
 
+dnl get the library function to use for wxGetDiskSpace()
+AC_CACHE_CHECK(for statfs, wx_cv_func_statfs,
+    AC_TRY_COMPILE(
+        [
+             #include <sys/vfs.h>
+        ],
+        [
+             long l;
+             struct statfs fs;
+             statfs("/", &fs);
+             l = fs.f_bsize;
+             l += fs.f_blocks;
+             l += fs.f_bavail;
+        ],
+        [
+             wx_cv_func_statfs=yes
+        ],
+        [
+             wx_cv_func_statfs=no
+        ]
+    )
+)
+
+if test "$wx_cv_func_statfs" = "yes"; then
+    AC_DEFINE(HAVE_STATFS)
+else
+    AC_MSG_WARN([wxGetDiskSpace() function won't work without statfs()])
+fi
+
 dnl check for fcntl() or at least flock() needed by Unix implementation of
 dnl wxSingleInstanceChecker
 if test "$wxUSE_SNGLINST_CHECKER" = "yes"; then
@@ -3571,7 +3600,7 @@ if test "$wxUSE_STREAMS" = "yes" ; then
   AC_DEFINE(wxUSE_STREAMS)
 fi
 
-dnl ------------------------------------------------------------------------
+dnl ---------------------------------------------------------------------------
 dnl time/date functions
 dnl ------------------------------------------------------------------------
 
