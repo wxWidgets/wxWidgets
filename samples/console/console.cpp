@@ -91,7 +91,7 @@
     #undef TEST_ALL
     static const bool TEST_ALL = TRUE;
 #else
-    #define TEST_FILENAME
+    #define TEST_TIMER
 
     static const bool TEST_ALL = FALSE;
 #endif
@@ -3032,18 +3032,28 @@ static void TestStopWatch()
     puts("*** Testing wxStopWatch ***\n");
 
     wxStopWatch sw;
-    printf("Sleeping 3 seconds...");
+    sw.Pause();
+    printf("Initially paused, after 2 seconds time is...");
+    fflush(stdout);
+    wxSleep(2);
+    printf("\t%ldms\n", sw.Time());
+
+    printf("Resuming stopwatch and sleeping 3 seconds...");
+    fflush(stdout);
+    sw.Resume();
     wxSleep(3);
     printf("\telapsed time: %ldms\n", sw.Time());
 
     sw.Pause();
-    printf("Sleeping 2 more seconds...");
+    printf("Pausing agan and sleeping 2 more seconds...");
+    fflush(stdout);
     wxSleep(2);
     printf("\telapsed time: %ldms\n", sw.Time());
 
     sw.Resume();
-    printf("And 3 more seconds...");
-    wxSleep(3);
+    printf("Finally resuming and sleeping 2 more seconds...");
+    fflush(stdout);
+    wxSleep(2);
     printf("\telapsed time: %ldms\n", sw.Time());
 
     wxStopWatch sw2;
@@ -3061,6 +3071,7 @@ static void TestStopWatch()
         }
 
         putchar('.');
+        fflush(stdout);
     }
 
     puts(", ok.");

@@ -26,6 +26,8 @@ wxBase:
   documentation for details and revise your code accordingly: this change was
   unfortunately needed as the old class didn't behave correctly in all cases
 
+- small change to wxStopWatch::Pause() semantics, please see the documentation
+
 All (GUI):
 
 - the event type constants are not constants any more but are dynamically

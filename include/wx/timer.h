@@ -191,12 +191,18 @@ class WXDLLEXPORT wxStopWatch
 {
 public:
     // ctor starts the stop watch
-    wxStopWatch()        { Start(); }
-    void Start(long t = 0);
-    void Pause()  { m_pause = GetElapsedTime(); }
-    void Resume() { Start(m_pause); }
+    wxStopWatch() { m_pauseCount = 0; Start(); }
 
-    // get elapsed time since the last Start() or Pause() in milliseconds
+    // start the stop watch at the moment t0
+    void Start(long t0 = 0);
+
+    // pause the stop watch
+    void Pause() { if ( !m_pauseCount++) m_pause = GetElapsedTime(); }
+
+    // resume it
+    void Resume() { if ( !--m_pauseCount ) Start(m_pause); }
+
+    // get elapsed time since the last Start() in milliseconds
     long Time() const;
 
 protected:
@@ -204,8 +210,14 @@ protected:
     long GetElapsedTime() const;
 
 private:
-    wxLongLong m_t0;      // the time of the last Start()
-    long m_pause;         // the time of the last Pause() or 0
+    // the time of the last Start()
+    wxLongLong m_t0;
+
+    // the time of the last Pause() (only valid if m_pauseCount > 0)
+    long m_pause;
+
+    // if > 0, the stop watch is paused, otherwise it is running
+    int m_pauseCount;
 };
 
 #endif // wxUSE_STOPWATCH

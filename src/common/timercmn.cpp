@@ -161,12 +161,12 @@ void wxStopWatch::Start(long t)
 
 long wxStopWatch::GetElapsedTime() const
 {
-  return (wxGetLocalTimeMillis() - m_t0).GetLo();
+    return (wxGetLocalTimeMillis() - m_t0).GetLo();
 }
 
 long wxStopWatch::Time() const
 {
-    return (m_pause ? m_pause : GetElapsedTime());
+    return m_pauseCount ? m_pause : GetElapsedTime();
 }
 
 #endif // wxUSE_LONGLONG
