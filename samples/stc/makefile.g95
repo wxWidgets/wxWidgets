@@ -1,0 +1,14 @@
+# File:     makefile.g95 for stectrl
+# Author:	Robin Dunn
+# Created:	1-Feb-2000
+# Updated:
+
+WXDIR = ../../..
+
+TARGET = stctest
+OBJECTS = $(TARGET).o
+EXTRAINC = -I$(WXDIR)/contrib/include
+EXTRALIBS = -lstc
+
+include $(WXDIR)/src/makeprog.g95
+
