@@ -28,6 +28,7 @@
 %rename(EXT_DIALOG_STYLE)                   wxEXT_DIALOG_STYLE;
 %rename(CLIP_CHILDREN)                      wxCLIP_CHILDREN;
 %rename(CLIP_SIBLINGS)                      wxCLIP_SIBLINGS;
+%rename(ALWAYS_SHOW_SB)                     wxALWAYS_SHOW_SB;
 %rename(RETAINED)                           wxRETAINED;
 %rename(BACKINGSTORE)                       wxBACKINGSTORE;
 %rename(COLOURED)                           wxCOLOURED;

@@ -285,6 +285,8 @@ enum {
     wxCLIP_CHILDREN,
     wxCLIP_SIBLINGS,
 
+    wxALWAYS_SHOW_SB,
+    
     wxRETAINED,
     wxBACKINGSTORE,
 

@@ -26,6 +26,10 @@
 %rename(FRAME_NO_WINDOW_MENU)               wxFRAME_NO_WINDOW_MENU;
 %rename(FRAME_NO_TASKBAR)                   wxFRAME_NO_TASKBAR;
 %rename(FRAME_SHAPED)                       wxFRAME_SHAPED;
+%rename(DIALOG_MODAL)                       wxDIALOG_MODAL;
+%rename(DIALOG_MODELESS)                    wxDIALOG_MODELESS;
+%rename(USER_COLOURS)                       wxUSER_COLOURS;
+%rename(NO_3D)                              wxNO_3D;
 %rename(FULLSCREEN_NOMENUBAR)               wxFULLSCREEN_NOMENUBAR;
 %rename(FULLSCREEN_NOTOOLBAR)               wxFULLSCREEN_NOTOOLBAR;
 %rename(FULLSCREEN_NOSTATUSBAR)             wxFULLSCREEN_NOSTATUSBAR;

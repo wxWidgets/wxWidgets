@@ -51,10 +51,10 @@ enum
     wxFRAME_SHAPED,
 
     // Obsolete
-    //wxDIALOG_MODAL,
-    //wxDIALOG_MODELESS,
-    //wxUSER_COLOURS,
-    //wxNO_3D,
+    wxDIALOG_MODAL,
+    wxDIALOG_MODELESS,
+    wxUSER_COLOURS,
+    wxNO_3D,
 };    
 
 enum
