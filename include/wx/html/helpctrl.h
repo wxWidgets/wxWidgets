@@ -18,7 +18,7 @@
 #pragma interface "helpctrl.h"
 #endif
 
-#if wxUSE_HTML
+#if wxUSE_WXHTML_HELP
 
 #include "wx/html/helpfrm.h"
 #include "wx/helpbase.h"
@@ -109,6 +109,6 @@ protected:
     // DECLARE_EVENT_TABLE()
 };
 
-#endif
+#endif // wxUSE_WXHTML_HELP
 
 #endif // _WX_HELPCTRL_H_
