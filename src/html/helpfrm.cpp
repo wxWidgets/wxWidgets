@@ -59,6 +59,7 @@
 #include "wx/spinctrl.h"
 #include "wx/dynarray.h"
 #include "wx/choicdlg.h"
+#include "wx/settings.h"
 
 // what is considered "small index"?
 #define INDEX_IS_SMALL 100
@@ -110,7 +111,11 @@ class wxHtmlHelpHashData : public wxObject
 class wxHtmlHelpHtmlWindow : public wxHtmlWindow
 {
     public:
-        wxHtmlHelpHtmlWindow(wxHtmlHelpFrame *fr, wxWindow *parent) : wxHtmlWindow(parent), m_Frame(fr) {}
+        wxHtmlHelpHtmlWindow(wxHtmlHelpFrame *fr, wxWindow *parent)
+            : wxHtmlWindow(parent), m_Frame(fr)
+        {
+            SetStandardFonts();
+        }
 
         virtual void OnLinkClicked(const wxHtmlLinkInfo& link)
         {
