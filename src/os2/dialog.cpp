@@ -24,6 +24,8 @@
 
 #include "wx/os2/private.h"
 #include "wx/log.h"
+#include "wx/evtloop.h"
+#include "wx/ptr_scpd.h"
 
 #define wxDIALOG_DEFAULT_X 300
 #define wxDIALOG_DEFAULT_Y 300
@@ -43,6 +45,41 @@ BEGIN_EVENT_TABLE(wxDialog, wxDialogBase)
     EVT_SYS_COLOUR_CHANGED(wxDialog::OnSysColourChanged)
     EVT_CLOSE(wxDialog::OnCloseWindow)
 END_EVENT_TABLE()
+
+// ----------------------------------------------------------------------------
+// wxDialogModalData
+// ----------------------------------------------------------------------------
+
+// this is simply a container for any data we need to implement modality which
+// allows us to avoid changing wxDialog each time the implementation changes
+class wxDialogModalData
+{
+public:
+    wxDialogModalData(wxDialog *dialog) : m_evtLoop(dialog) { }
+
+    void RunLoop()
+    {
+        m_evtLoop.Run();
+    }
+
+    void ExitLoop()
+    {
+        m_evtLoop.Exit();
+    }
+
+private:
+    wxModalEventLoop m_evtLoop;
+};
+
+wxDEFINE_TIED_SCOPED_PTR_TYPE(wxDialogModalData);
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxDialog construction
+// ----------------------------------------------------------------------------
 
 void wxDialog::Init()
 {
@@ -215,25 +252,16 @@ void wxDialog::DoShowModal()
 
     gbInOnIdle = FALSE;
 
-    //
-    // Enter the modal loop
-    //
-    while ( IsModalShowing() )
+    // enter the modal loop
     {
-#if wxUSE_THREADS
-        wxMutexGuiLeaveOrEnter();
-#endif // wxUSE_THREADS
-
-        while ( !wxTheApp->Pending() && wxTheApp->ProcessIdle() )
-            ;
-
-        // a message came or no more idle processing to do
-        wxTheApp->DoMessage();
+        wxDialogModalDataTiedPtr modalData(&m_modalData,
+                                           new wxDialogModalData(this));
+        modalData->RunLoop();
     }
     gbInOnIdle = bWasInOnIdle;
 
     //
-    // Snd restore focus
+    // and restore focus
     // Note that this code MUST NOT access the dialog object's data
     // in case the object has been deleted (which will be the case
     // for a modal dialog that has been destroyed before calling EndModal).

@@ -31,22 +31,26 @@
 #ifndef WX_PRECOMP
     #include "wx/window.h"
     #include "wx/app.h"
+    #include "wx/timer.h"
 #endif //WX_PRECOMP
 
 #include "wx/evtloop.h"
+#include "wx/log.h"
 #include "wx/tooltip.h"
+#include "wx/ptr_scpd.h"
 
 #include "wx/os2/private.h"
 
 #if wxUSE_THREADS
     // define the array of QMSG strutures
     WX_DECLARE_OBJARRAY(QMSG, wxMsgArray);
-    // VS: this is a bit dirty - it duplicates same declaration in app.cpp
-    //     (and there's no WX_DEFINE_OBJARRAY for that reason - it is already
-    //     defined in app.cpp).
+
+    #include "wx/arrimpl.cpp"
+
+    WX_DEFINE_OBJARRAY(wxMsgArray);
 #endif
 
-extern HAB vHabMain;
+extern HAB vHabmain;
 
 // ----------------------------------------------------------------------------
 // wxEventLoopImpl
@@ -77,6 +81,36 @@ private:
     int m_exitcode;
 };
 
+// ----------------------------------------------------------------------------
+// helper class
+// ----------------------------------------------------------------------------
+
+wxDEFINE_TIED_SCOPED_PTR_TYPE(wxEventLoopImpl);
+
+// this object sets the wxEventLoop given to the ctor as the currently active
+// one and unsets it in its dtor
+class wxEventLoopActivator
+{
+public:
+    wxEventLoopActivator(wxEventLoop **pActive,
+                         wxEventLoop *evtLoop)
+    {
+        m_pActive = pActive;
+        m_evtLoopOld = *pActive;
+        *pActive = evtLoop;
+    }
+
+    ~wxEventLoopActivator()
+    {
+        // restore the previously active event loop
+        *m_pActive = m_evtLoopOld;
+    }
+
+private:
+    wxEventLoop *m_evtLoopOld;
+    wxEventLoop **m_pActive;
+};
+
 // ============================================================================
 // wxEventLoopImpl implementation
 // ============================================================================
@@ -91,44 +125,93 @@ void wxEventLoopImpl::ProcessMessage(QMSG *msg)
     if ( !PreProcessMessage(msg) )
     {
         // if it wasn't done, dispatch it to the corresponding window
-        ::WinDispatchMsg(vHabMain, msg);
+        ::WinDispatchMsg(vHabmain, msg);
     }
 }
 
-bool wxEventLoopImpl::PreProcessMessage(QMSG *msg)
+bool wxEventLoopImpl::PreProcessMessage(QMSG *pMsg)
 {
-    HWND hWnd = msg->hwnd;
-    wxWindow *wndThis = wxFindWinFromHandle((WXHWND)hWnd);
+    HWND hWnd = pMsg->hwnd;
+    wxWindow *pWndThis = wxFindWinFromHandle((WXHWND)hWnd);
+    wxWindow *pWnd;
 
-#if wxUSE_TOOLTIPS
-    // we must relay WM_MOUSEMOVE events to the tooltip ctrl if we want it to
-    // popup the tooltip bubbles
-    if ( wndThis && (msg->message == WM_MOUSEMOVE) )
+    //
+    // Pass non-system timer messages to the wxTimerProc
+    //
+    if (pMsg->msg == WM_TIMER &&
+        (SHORT1FROMMP(pMsg->mp1) != TID_CURSOR &&
+         SHORT1FROMMP(pMsg->mp1) != TID_FLASHWINDOW &&
+         SHORT1FROMMP(pMsg->mp1) != TID_SCROLL &&
+         SHORT1FROMMP(pMsg->mp1) != 0x0000
+        ))
+        wxTimerProc(NULL, 0, (int)pMsg->mp1, 0);
+
+    // Allow the window to prevent certain messages from being
+    // translated/processed (this is currently used by wxTextCtrl to always
+    // grab Ctrl-C/V/X, even if they are also accelerators in some parent)
+    //
+    if (pWndThis && !pWndThis->OS2ShouldPreProcessMessage((WXMSG*)pMsg))
     {
-        wxToolTip *tt = wndThis->GetToolTip();
-        if ( tt )
-        {
-            tt->RelayEvent((WXMSG *)msg);
+        return FALSE;
+    }
+
+    //
+    // For some composite controls (like a combobox), wndThis might be NULL
+    // because the subcontrol is not a wxWindow, but only the control itself
+    // is - try to catch this case
+    //
+    while (hWnd && !pWndThis)
+    {
+        hWnd = ::WinQueryWindow(hWnd, QW_PARENT);
+        pWndThis = wxFindWinFromHandle((WXHWND)hWnd);
+    }
+
+
+    //
+    // Try translations first; find the youngest window with
+    // a translation table. OS/2 has case sensiive accels, so
+    // this block, coded by BK, removes that and helps make them
+    // case insensitive.
+    //
+    if(pMsg->msg == WM_CHAR)
+    {
+       PBYTE                        pChmsg = (PBYTE)&(pMsg->msg);
+       USHORT                       uSch  = CHARMSG(pChmsg)->chr;
+       bool                         bRc = FALSE;
+
+       //
+       // Do not process keyup events
+       //
+       if(!(CHARMSG(pChmsg)->fs & KC_KEYUP))
+       {
+           if((CHARMSG(pChmsg)->fs & (KC_ALT | KC_CTRL)) && CHARMSG(pChmsg)->chr != 0)
+                CHARMSG(pChmsg)->chr = (USHORT)wxToupper((UCHAR)uSch);
+
+
+           for(pWnd = pWndThis; pWnd; pWnd = pWnd->GetParent() )
+           {
+               if((bRc = pWnd->OS2TranslateMessage((WXMSG*)pMsg)) == TRUE)
+		   return TRUE;
+	       //  break;
+	    // stop at first top level window, i.e. don't try to process the
+	    // key strokes originating in a dialog using the accelerators of
+	    // the parent frame - this doesn't make much sense
+	    if ( pWnd->IsTopLevel() )
+	        break;
+           }
+
+            if(!bRc)    // untranslated, should restore original value
+                CHARMSG(pChmsg)->chr = uSch;
         }
     }
-#endif // wxUSE_TOOLTIPS
-
-    // try translations first; find the youngest window with a translation
-    // table.
-    wxWindow *wnd;
-    for ( wnd = wndThis; wnd; wnd = wnd->GetParent() )
-    {
-        if ( wnd->OS2TranslateMessage((WXMSG *)msg) )
-            return TRUE;
-    }
-
+    //
     // Anyone for a non-translation message? Try youngest descendants first.
-    for ( wnd = wndThis; wnd; wnd = wnd->GetParent() )
-    {
-        if ( wnd->OS2ProcessMessage((WXMSG *)msg) )
-            return TRUE;
-    }
-
+    //
+//  for (pWnd = pWndThis->GetParent(); pWnd; pWnd = pWnd->GetParent())
+//  {
+//      if (pWnd->OS2ProcessMessage(pWxmsg))
+//          return TRUE;
+//  }
     return FALSE;
 }
 
@@ -161,15 +244,47 @@ bool wxEventLoop::IsRunning() const
     return m_impl != NULL;
 }
 
+//////////////////////////////////////////////////////////////////////////////
+//
+// Keep trying to process messages until WM_QUIT
+// received.
+//
+// If there are messages to be processed, they will all be
+// processed and OnIdle will not be called.
+// When there are no more messages, OnIdle is called.
+// If OnIdle requests more time,
+// it will be repeatedly called so long as there are no pending messages.
+// A 'feature' of this is that once OnIdle has decided that no more processing
+// is required, then it won't get processing time until further messages
+// are processed (it'll sit in Dispatch).
+//
+//////////////////////////////////////////////////////////////////////////////
+class CallEventLoopMethod
+{
+public:
+    typedef void (wxEventLoop::*FuncType)();
+
+    CallEventLoopMethod(wxEventLoop *evtLoop, FuncType fn)
+        : m_evtLoop(evtLoop), m_fn(fn) { }
+    ~CallEventLoopMethod() { (m_evtLoop->*m_fn)(); }
+
+private:
+    wxEventLoop *m_evtLoop;
+    FuncType m_fn;
+};
+
 int wxEventLoop::Run()
 {
     // event loops are not recursive, you need to create another loop!
     wxCHECK_MSG( !IsRunning(), -1, _T("can't reenter a message loop") );
 
-    m_impl = new wxEventLoopImpl;
+    // SendIdleMessage() and Dispatch() below may throw so the code here should
+    // be exception-safe, hence we must use local objects for all actions we
+    // should undo
+    wxEventLoopActivator activate(&ms_activeLoop, this);
+    wxEventLoopImplTiedPtr impl(&m_impl, new wxEventLoopImpl);
 
-    wxEventLoop *oldLoop = ms_activeLoop;
-    ms_activeLoop = this;
+    CallEventLoopMethod  callOnExit(this, &wxEventLoop::OnExit);
 
     for ( ;; )
     {
@@ -180,24 +295,25 @@ int wxEventLoop::Run()
         // generate and process idle events for as long as we don't have
         // anything else to do
         while ( !Pending() && m_impl->SendIdleMessage() )
-            ;
+	{
+	    wxTheApp->HandleSockets();
+	    wxUsleep(10);
+	}
 
-        // a message came or no more idle processing to do, sit in Dispatch()
-        // waiting for the next message
-        if ( !Dispatch() )
-        {
-            // we got WM_QUIT
-            break;
-        }
+        wxTheApp->HandleSockets();
+        if (Pending())
+	{
+	    if ( !Dispatch() )
+	    {
+		// we got WM_QUIT
+		break;
+	    }
+	}
+        else
+            wxUsleep(10);
     }
 
-    int exitcode = m_impl->GetExitCode();
-    delete m_impl;
-    m_impl = NULL;
-
-    ms_activeLoop = oldLoop;
-
-    return exitcode;
+    return m_impl->GetExitCode();
 }
 
 void wxEventLoop::Exit(int rc)
@@ -216,7 +332,7 @@ void wxEventLoop::Exit(int rc)
 bool wxEventLoop::Pending() const
 {
     QMSG msg;
-    return ::WinPeekMsg(vHabMain, &msg, 0, 0, 0, PM_NOREMOVE) != 0;
+    return ::WinPeekMsg(vHabmain, &msg, 0, 0, 0, PM_NOREMOVE) != 0;
 }
 
 bool wxEventLoop::Dispatch()
@@ -224,20 +340,11 @@ bool wxEventLoop::Dispatch()
     wxCHECK_MSG( IsRunning(), FALSE, _T("can't call Dispatch() if not running") );
 
     QMSG msg;
-    BOOL rc = ::WinGetMsg(vHabMain, &msg, (HWND) NULL, 0, 0);
+    BOOL bRc = ::WinGetMsg(vHabmain, &msg, (HWND) NULL, 0, 0);
 
-    if ( rc == 0 )
+    if ( bRc == 0 )
     {
         // got WM_QUIT
-        return FALSE;
-    }
-
-    if ( rc == -1 )
-    {
-        // should never happen, but let's test for it nevertheless
-        wxLogLastError(wxT("GetMessage"));
-
-        // still break from the loop
         return FALSE;
     }
 
@@ -257,7 +364,7 @@ bool wxEventLoop::Dispatch()
 
         // leave out WM_COMMAND messages: too dangerous, sometimes
         // the message will be processed twice
-        if ( !wxIsWaitingForThread() || msg.message != WM_COMMAND )
+        if ( !wxIsWaitingForThread() || msg.msg != WM_COMMAND )
         {
             s_aSavedMessages.Add(msg);
         }
@@ -278,7 +385,7 @@ bool wxEventLoop::Dispatch()
             size_t count = s_aSavedMessages.Count();
             for ( size_t n = 0; n < count; n++ )
             {
-                MSG& msg = s_aSavedMessages[n];
+                QMSG& msg = s_aSavedMessages[n];
                 m_impl->ProcessMessage(&msg);
             }
 

@@ -33,7 +33,6 @@
     #include "wx/dynarray.h"
     #include "wx/wxchar.h"
     #include "wx/icon.h"
-    #include "wx/timer.h"
 #endif
 
 #include "wx/log.h"
@@ -67,13 +66,6 @@ extern "C" int _System bsdselect(int,
 
 #if wxUSE_THREADS
     #include "wx/thread.h"
-
-    // define the array of QMSG strutures
-    WX_DECLARE_OBJARRAY(QMSG, wxMsgArray);
-
-    #include "wx/arrimpl.cpp"
-
-    WX_DEFINE_OBJARRAY(wxMsgArray);
 #endif // wxUSE_THREADS
 
 #if wxUSE_TOOLTIPS
@@ -93,7 +85,6 @@ extern wxList WXDLLEXPORT           wxPendingDelete;
 extern wxCursor*                    g_globalCursor;
 
 HAB                                 vHabmain = NULLHANDLE;
-QMSG                                svCurrentMsg;
 
 
 HICON wxSTD_FRAME_ICON          = (HICON) NULL;
@@ -514,241 +505,6 @@ bool wxApp::Initialized()
         return FALSE;
 } // end of wxApp::Initialized
 
-//
-// Get and process a message, returning FALSE if WM_QUIT
-// received (and also set the flag telling the app to exit the main loop)
-//
-
-bool wxApp::DoMessage()
-{
-    BOOL                            bRc = ::WinGetMsg(vHabmain, &svCurrentMsg, HWND(NULL), 0, 0);
-
-    if (bRc == 0)
-    {
-        // got WM_QUIT
-        m_bKeepGoing = FALSE;
-        return FALSE;
-    }
-    else if (bRc == -1)
-    {
-        // should never happen, but let's test for it nevertheless
-        wxLogLastError("GetMessage");
-    }
-    else
-    {
-#if wxUSE_THREADS
-        wxASSERT_MSG( wxThread::IsMain()
-                     ,wxT("only the main thread can process Windows messages")
-                    );
-
-        static bool                 sbHadGuiLock = TRUE;
-        static wxMsgArray           svSavedMessages;
-
-        //
-        // If a secondary thread owns is doing GUI calls, save all messages for
-        // later processing - we can't process them right now because it will
-        // lead to recursive library calls (and we're not reentrant)
-        //
-        if (!wxGuiOwnedByMainThread())
-        {
-            sbHadGuiLock = FALSE;
-
-            //
-            // Leave out WM_COMMAND messages: too dangerous, sometimes
-            // the message will be processed twice
-            //
-            if ( !wxIsWaitingForThread() ||
-                    svCurrentMsg.msg != WM_COMMAND )
-            {
-                svSavedMessages.Add(svCurrentMsg);
-            }
-            return TRUE;
-        }
-        else
-        {
-            //
-            // Have we just regained the GUI lock? if so, post all of the saved
-            // messages
-            //
-            if (!sbHadGuiLock )
-            {
-                sbHadGuiLock = TRUE;
-
-                size_t             nCount = svSavedMessages.Count();
-
-                for (size_t n = 0; n < nCount; n++)
-                {
-                    QMSG            vMsg = svSavedMessages[n];
-
-                    DoMessage((WXMSG*)&vMsg);
-                }
-                svSavedMessages.Empty();
-            }
-        }
-#endif // wxUSE_THREADS
-
-        //
-        // Process the message
-        //
-        DoMessage((WXMSG *)&svCurrentMsg);
-    }
-    return TRUE;
-} // end of wxApp::DoMessage
-
-void wxApp::DoMessage(
-  WXMSG*                            pMsg
-)
-{
-    if (!ProcessMessage((WXMSG *)&svCurrentMsg))
-    {
-        ::WinDispatchMsg(vHabmain, (PQMSG)&svCurrentMsg);
-    }
-} // end of wxApp::DoMessage
-
-//////////////////////////////////////////////////////////////////////////////
-//
-// Keep trying to process messages until WM_QUIT
-// received.
-//
-// If there are messages to be processed, they will all be
-// processed and OnIdle will not be called.
-// When there are no more messages, OnIdle is called.
-// If OnIdle requests more time,
-// it will be repeatedly called so long as there are no pending messages.
-// A 'feature' of this is that once OnIdle has decided that no more processing
-// is required, then it won't get processing time until further messages
-// are processed (it'll sit in DoMessage).
-//
-//////////////////////////////////////////////////////////////////////////////
-int wxApp::MainLoop()
-{
-    m_bKeepGoing = TRUE;
-
-    while (m_bKeepGoing)
-    {
-#if wxUSE_THREADS
-        wxMutexGuiLeaveOrEnter();
-#endif // wxUSE_THREADS
-        while (!Pending() && ProcessIdle())
-        {
-            HandleSockets();
-            wxUsleep(10);
-        }
-        HandleSockets();
-        if (Pending())
-            DoMessage();
-        else
-            wxUsleep(10);
-
-    }
-    return (int)svCurrentMsg.mp1;
-} // end of wxApp::MainLoop
-
-void wxApp::ExitMainLoop()
-{
-    ::WinPostMsg(NULL, WM_QUIT, 0, 0);
-} // end of wxApp::ExitMainLoop
-
-bool wxApp::Pending()
-{
-    return (::WinPeekMsg(vHabmain, (PQMSG)&svCurrentMsg, (HWND)NULL, 0, 0, PM_NOREMOVE) != 0);
-} // end of wxApp::Pending
-
-bool wxApp::Dispatch()
-{
-    return DoMessage();
-}
-
-//////////////////////////////////////////////////////////////////////////////
-//
-// Give all windows a chance to preprocess
-// the message. Some may have accelerator tables, or have
-// MDI complications.
-//
-//////////////////////////////////////////////////////////////////////////////
-bool wxApp::ProcessMessage(
-  WXMSG*                            pWxmsg
-)
-{
-    QMSG*                           pMsg = (PQMSG)pWxmsg;
-    HWND                            hWnd = pMsg->hwnd;
-    wxWindow*                       pWndThis = wxFindWinFromHandle((WXHWND)hWnd);
-    wxWindow*                       pWnd;
-
-    //
-    // Pass non-system timer messages to the wxTimerProc
-    //
-    if (pMsg->msg == WM_TIMER &&
-        (SHORT1FROMMP(pMsg->mp1) != TID_CURSOR &&
-         SHORT1FROMMP(pMsg->mp1) != TID_FLASHWINDOW &&
-         SHORT1FROMMP(pMsg->mp1) != TID_SCROLL &&
-         SHORT1FROMMP(pMsg->mp1) != 0x0000
-        ))
-        wxTimerProc(NULL, 0, (int)pMsg->mp1, 0);
-
-    //
-    // Allow the window to prevent certain messages from being
-    // translated/processed (this is currently used by wxTextCtrl to always
-    // grab Ctrl-C/V/X, even if they are also accelerators in some parent)
-    //
-    if (pWndThis && !pWndThis->OS2ShouldPreProcessMessage(pWxmsg))
-    {
-        return FALSE;
-    }
-
-    //
-    // For some composite controls (like a combobox), wndThis might be NULL
-    // because the subcontrol is not a wxWindow, but only the control itself
-    // is - try to catch this case
-    //
-    while (hWnd && !pWndThis)
-    {
-        hWnd = ::WinQueryWindow(hWnd, QW_PARENT);
-        pWndThis = wxFindWinFromHandle((WXHWND)hWnd);
-    }
-
-    //
-    // Try translations first; find the youngest window with
-    // a translation table. OS/2 has case sensative accels, so
-    // this block, coded by BK, removes that and helps make them
-    // case insensative.
-    //
-    if(pMsg->msg == WM_CHAR)
-    {
-       PBYTE                        pChmsg = (PBYTE)&(pMsg->msg);
-       USHORT                       uSch  = CHARMSG(pChmsg)->chr;
-       bool                         bRc;
-
-       //
-       // Do not process keyup events
-       //
-       if(!(CHARMSG(pChmsg)->fs & KC_KEYUP))
-       {
-           if((CHARMSG(pChmsg)->fs & (KC_ALT | KC_CTRL)) && CHARMSG(pChmsg)->chr != 0)
-                CHARMSG(pChmsg)->chr = (USHORT)wxToupper((UCHAR)uSch);
-
-
-           for(pWnd = pWndThis; pWnd; pWnd = pWnd->GetParent() )
-           {
-               if((bRc = pWnd->OS2TranslateMessage(pWxmsg)) == TRUE)
-                   break;
-           }
-
-            if(!bRc)    // untranslated, should restore original value
-                CHARMSG(pChmsg)->chr = uSch;
-        }
-    }
-    //
-    // Anyone for a non-translation message? Try youngest descendants first.
-    //
-//  for (pWnd = pWndThis; pWnd; pWnd = pWnd->GetParent())
-//  {
-//      if (pWnd->OS2ProcessMessage(pWxmsg))
-//          return TRUE;
-//  }
-    return FALSE;
-} // end of wxApp::ProcessMessage
-
 bool                                gbInOnIdle = FALSE;
 
 void wxApp::OnIdle(
@@ -801,14 +557,6 @@ void wxApp::OnQueryEndSession(
     }
 } // end of wxApp::OnQueryEndSession
 
-void wxApp::Exit()
-{
-    wxApp::CleanUp();
-
-    // VZ: must really exit somehow, insert appropriate OS/2 syscall (FIXME)
-    wxAppConsole::Exit();
-} // end of wxExit
-
 //
 // Yield to incoming messages
 //
@@ -846,7 +594,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
 #if wxUSE_THREADS
         wxMutexGuiLeaveOrEnter();
 #endif // wxUSE_THREADS
-        if (!wxTheApp->DoMessage())
+        if (!wxTheApp->Dispatch())
             break;
     }
     //

@@ -1969,7 +1969,10 @@ static void wxYieldForCommandsOnly()
     while (::WinPeekMsg(vHabmain, &vMsg, (HWND)0, WM_COMMAND, WM_COMMAND, PM_REMOVE)
            && vMsg.msg != WM_QUIT)
     {
-        wxTheApp->DoMessage((WXMSG*)&vMsg);
+        // luckily (as we don't have access to wxEventLoopImpl method from here
+        // anyhow...) we don't need to pre process WM_COMMANDs so dispatch it
+        // immediately
+        ::WinDispatchMsg(vHabmain, &vMsg);
     }
     if (vMsg.msg == WM_QUIT)
         ::WinPostMsg(NULL, WM_QUIT, 0, 0);

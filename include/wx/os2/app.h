@@ -68,16 +68,12 @@ public:
     wxApp();
     virtual ~wxApp();
 
-    virtual bool OnInitGui(void);
-
     // override base class (pure) virtuals
-    virtual int  MainLoop(void);
-    virtual void ExitMainLoop(void);
-    virtual bool Initialized(void);
-    virtual bool Pending(void) ;
-    virtual bool Dispatch(void);
+    virtual bool Initialize(int& argc, wxChar **argv);
+    virtual void CleanUp(void);
 
-    virtual void Exit();
+    virtual bool Initialized(void);
+    virtual bool OnInitGui(void);
 
     virtual bool Yield(bool onlyIfNeeded = FALSE);
     virtual void WakeUpIdle(void);
@@ -113,22 +109,15 @@ private:
 public:
 
     // Implementation
-    virtual bool  Initialize(int& argc, wxChar **argv);
-    virtual void  CleanUp(void);
-
     static bool  RegisterWindowClasses(HAB vHab);
-    virtual void DoMessage(WXMSG *pMsg);
-    virtual bool DoMessage(void);
-    virtual bool ProcessMessage(WXMSG* pMsg);
 
 public:
     int                             m_nCmdShow;
     HMQ                             m_hMq;
 
 protected:
-    bool                            m_bKeepGoing ;
-
     DECLARE_EVENT_TABLE()
+    DECLARE_NO_COPY_CLASS(wxApp)
 };
 #endif
     // _WX_APP_H_
