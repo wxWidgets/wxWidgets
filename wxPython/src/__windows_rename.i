@@ -48,6 +48,9 @@
 %rename(SPLASH_NO_TIMEOUT)                  wxSPLASH_NO_TIMEOUT;
 %rename(SplashScreenWindow)                 wxSplashScreenWindow;
 %rename(SplashScreen)                       wxSplashScreen;
+%rename(SB_NORMAL)                          wxSB_NORMAL;
+%rename(SB_FLAT)                            wxSB_FLAT;
+%rename(SB_RAISED)                          wxSB_RAISED;
 %rename(StatusBar)                          wxStatusBar;
 %rename(SP_NOBORDER)                        wxSP_NOBORDER;
 %rename(SP_NOSASH)                          wxSP_NOSASH;

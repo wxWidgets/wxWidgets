@@ -22,7 +22,15 @@
 %newgroup;
 
 
+enum {
+    wxSB_NORMAL,
+    wxSB_FLAT,
+    wxSB_RAISED
+};
 
+
+
+      
 // wxStatusBar: a window near the bottom of the frame used for status info
 MustHaveApp(wxStatusBar);
 class wxStatusBar : public wxWindow
@@ -62,8 +70,16 @@ public:
     // minus the sum of fixed width fields) is divided between the fields with
     // negative width according to the abs value of the width (field with width
     // -2 grows twice as much as one with width -1 &c)
-    virtual void SetStatusWidths(int widths, const int* widths_field); // uses typemap in _toplvl.i
+    virtual void SetStatusWidths(int widths, const int* widths_field); 
 
+
+    // Set the field style. Use either wxSB_NORMAL (default) for a standard 3D 
+    // border around a field, wxSB_FLAT for no border around a field, so that it 
+    // appears flat or wxSB_POPOUT to make the field appear raised.
+    // Setting field styles only works on wxMSW
+    virtual void SetStatusStyles(int styles, const int* styles_field);
+    
+    
     // Get the position and size of the field's internal bounding rectangle
     %extend {
         wxRect GetFieldRect(int i) {

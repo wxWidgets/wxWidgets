@@ -497,6 +497,8 @@ public:
                           proportion, flag, border, data);
         }
 
+//    virtual void AddSpacer(int size);
+//    virtual void AddStretchSpacer(int prop = 1);
 
         DocAStr(Insert,
                 "Insert(self, int before, item, int proportion=0, int flag=0, int border=0,
@@ -525,6 +527,8 @@ the item at index *before*.  See `Add` for a description of the parameters.", ""
         }
 
 
+//    virtual void InsertSpacer(size_t index, int size);
+//    virtual void InsertStretchSpacer(size_t index, int prop = 1);
         
         DocAStr(Prepend,
                 "Prepend(self, item, int proportion=0, int flag=0, int border=0,
@@ -552,6 +556,8 @@ this sizer.  See `Add` for a description of the parameters.", "");
                               proportion, flag, border, data);
         }
 
+//    virtual void PrependSpacer(int size);
+//    virtual void PrependStretchSpacer(int prop = 1);
 
         DocAStr(Remove,
                 "Remove(self, item) -> bool",

@@ -227,7 +227,22 @@ function is not supported at all on this platform.", "");
 
     DocDeclStr(
         virtual bool , ChangeMode(const wxVideoMode& mode = wxDefaultVideoMode),
-        "Change current mode, return true if succeeded, false otherwise", "");
+        "Changes the video mode of this display to the mode specified in the
+mode parameter.
+
+If wx.DefaultVideoMode is passed in as the mode parameter, the defined
+behaviour is that wx.Display will reset the video mode to the default
+mode used by the display.  On Windows, the behavior is normal.
+However, there are differences on other platforms. On Unix variations
+using X11 extensions it should behave as defined, but some
+irregularities may occur.
+
+On wxMac passing in wx.DefaultVideoMode as the mode parameter does
+nothing.  This happens because Carbon no longer has access to
+DMUseScreenPrefs, an undocumented function that changed the video mode
+to the system default by using the system's 'scrn' resource.
+
+Returns True if succeeded, False otherwise", "");
     
 
     DocDeclStr(

@@ -14,6 +14,24 @@
 //----------------------------------------------------------------------
 // Typemaps to convert a list of items to an int (size) and an array
 
+%define MAKE_INT_ARRAY_TYPEMAPS(NAME, ARR_NAME)
+    %typemap(in) (int NAME, int* ARR_NAME) {
+        $1 = PyList_Size($input);
+        $2 =  int_LIST_helper($input);
+        if ($2 == NULL) SWIG_fail;
+    }
+
+    %typemap(freearg) (int NAME, int* ARR_NAME) {
+        if ($2) delete [] $2;
+    }
+%enddef
+
+MAKE_INT_ARRAY_TYPEMAPS(widths, widths_field)
+MAKE_INT_ARRAY_TYPEMAPS(styles, styles_field)
+
+    
+
+// Same things for a wxString
 %typemap(in) (int choices, wxString* choices_array ) {
     $1 = PyList_Size($input);
     $2 = wxString_LIST_helper($input);
@@ -22,6 +40,7 @@
 %typemap(freearg) (int choices, wxString* choices_array ) {
     if ($2) delete [] $2;
 }
+
 
 
 //---------------------------------------------------------------------------

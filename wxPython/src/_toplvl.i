@@ -70,18 +70,6 @@ enum
 };
 
 
-
-%typemap(in) (int widths, int* widths_field) {
-    $1 = PyList_Size($input);
-    $2 =  int_LIST_helper($input);
-    if ($2 == NULL) SWIG_fail;
-}
-
-%typemap(freearg) (int widths, int* widths_field) {
-    if ($2) delete [] $2;
-}
-
-
 //---------------------------------------------------------------------------
 
 class  wxTopLevelWindow : public wxWindow

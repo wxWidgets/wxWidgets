@@ -50,18 +50,8 @@ public:
     %name(RegionFromBitmapColour)wxRegion(const wxBitmap& bmp,
                                           const wxColour& transColour,
                                           int   tolerance = 0);
-#ifndef __WXMAC__
     %name(RegionFromPoints)wxRegion(int points, wxPoint* points_array,
                                       int fillStyle = wxWINDING_RULE);
-#else
-    %extend {
-        %name(RegionFromPoints)wxRegion(int points, wxPoint* points_array,
-                                        int fillStyle = wxWINDING_RULE) {
-            wxPyRaiseNotImplemented();
-            return NULL;
-        }
-    }
-#endif
 
     ~wxRegion();
 
