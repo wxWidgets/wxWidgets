@@ -511,6 +511,9 @@ class wxListCtrlPtr(wxControlPtr):
     def GetItemSpacing(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_GetItemSpacing,(self,) + _args, _kwargs)
         return val
+    def SetItemSpacing(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_SetItemSpacing,(self,) + _args, _kwargs)
+        return val
     def GetSelectedItemCount(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_GetSelectedItemCount,(self,) + _args, _kwargs)
         return val
