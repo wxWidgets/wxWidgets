@@ -40,7 +40,7 @@ WX_DEFINE_ARRAY(wxNotebookPage *, wxArrayPages);
 class WXDLLEXPORT wxNotebookEvent : public wxCommandEvent
 {
 public:
-  wxNotebookEvent(WXTYPE commandType = wxEVT_NULL, int id = 0,
+  wxNotebookEvent(wxEventType commandType = wxEVT_NULL, int id = 0, 
                   int nSel = -1, int nOldSel = -1)
     : wxCommandEvent(commandType, id) { m_nSel = nSel; m_nOldSel = nOldSel; }
 
@@ -118,11 +118,6 @@ public:
   int  GetPageImage(int nPage) const;
   bool SetPageImage(int nPage, int nImage);
 
-  // each page can have some user-defined data associated with it:
-    // set/retrieve this pointer
-  bool  SetPageData(int nPage, void* data);
-  void* GetPageData(int nPage) const;
-
     // currently it's always 1 because wxGTK doesn't support multi-row
     // tab controls
   int GetRowCount() const;
@@ -144,15 +139,13 @@ public:
   bool AddPage(wxNotebookPage *pPage,
                const wxString& strText,
                bool bSelect = FALSE,
-               int imageId = -1,
-               void* data = NULL);
+               int imageId = -1);
     // the same as AddPage(), but adds it at the specified position
   bool InsertPage(int nPage,
                   wxNotebookPage *pPage,
                   const wxString& strText,
                   bool bSelect = FALSE,
-                  int imageId = -1,
-                  void* data = NULL);
+                  int imageId = -1);
     // get the panel which represents the given page
   wxNotebookPage *GetPage(int nPage) { return m_aPages[nPage]; }
 
@@ -160,6 +153,8 @@ public:
   // ---------
   void OnSize(wxSizeEvent& event);
   void OnSelChange(wxNotebookEvent& event);
+  void OnSetFocus(wxFocusEvent& event);
+  void OnNavigationKey(wxNavigationKeyEvent& event);
   
   // base class virtuals
   // -------------------
