@@ -673,6 +673,10 @@
  */
 #define wxUSE_SOUND 1
 /*
+ * Use wxMediaCtrl class
+ */
+#define wxUSE_MEDIACTRL 0
+/*
  * Use config system
  */
 #define wxUSE_CONFIG 1
