@@ -1274,11 +1274,15 @@ static void gtk_wxwindow_commit_cb (GtkIMContext *context,
     if (event.m_uniChar < 256)
         event.m_keyCode = event.m_uniChar;
 #else
-    gunichar uniChar = g_utf8_get_char( str );
-    // We cannot handle Unicode in non-Unicode mode
-    if (uniChar > 255) return;
+    wchar_t unistr[2];
+    unistr[0] = g_utf8_get_char(str);
+    unistr[1] = 0;
+    wxCharBuffer ansistr(wxConvLocal.cWC2MB(unistr));
+    // We cannot handle characters that cannot be represented in 
+    // current locale's charset in non-Unicode mode:
+    if (ansistr.data() == NULL) return;
 
-    event.m_keyCode = uniChar;
+    event.m_keyCode = ansistr[0u];
 #endif
 
 
