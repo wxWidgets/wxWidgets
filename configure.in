@@ -4,7 +4,7 @@ dnl Top-level configure.in for wxWindows by Robert Roebling, Wolfram Gloger
 dnl and Martin Sperl.
 dnl
 dnl This script is under the wxWindows licence.
-dnl
+dnl $Id$
 dnl ////////////////////////////////////////////////////////////////////////
 
 dnl AM_PATH_GTK([MINIMUM-VERSION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]]])
@@ -773,6 +773,10 @@ AC_OVERRIDES(debug_info,debug_info,
 **--with-debug_info       create code with debuging information,
 wxUSE_DEBUG_INFO)
 
+AC_OVERRIDES(debug_gdb,debug_gdb,
+**--with-debug_gdb        create code with extra GDB debuging information,
+wxUSE_DEBUG_GDB)
+
 AC_OVERRIDES(mem_tracing,mem_tracing,
 **--with-mem_traing       create code with memory tracing,
 wxUSE_MEM_TRACING)
@@ -1117,9 +1121,15 @@ dnl Register compile options for makefiles and setup.h
 dnl ----------------------------------------------------------------
 
 WXDEBUG=
-if test "$wxUSE_DEBUG_INFO" = 1 ; then
+if test "$wxUSE_DEBUG_GDB" = 1 ; then
+  wxUSE_DEBUG_INFO=1
   WXDEBUG="-ggdb"
   wxUSE_OPTIMISE=0
+else
+  if test "$wxUSE_DEBUG_INFO" = 1 ; then
+    WXDEBUG="-g"
+    wxUSE_OPTIMISE=0
+  endif
 fi
 AC_SUBST(WXDEBUG)
 
