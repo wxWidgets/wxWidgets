@@ -15,9 +15,6 @@
 #ifndef _WX_CLIPBRD_H_
 #define _WX_CLIPBRD_H_
 
-#include "wx/defs.h"
-#include "wx/setup.h"
-
 #if wxUSE_CLIPBOARD
 
 #include "wx/list.h"
@@ -83,28 +80,16 @@ public:
     // clears wxTheClipboard and the system's clipboard if possible
     virtual void Clear();
 
-    /// X11 has two clipboards which get selected by this call. Empty on MSW.
+    // flushes the clipboard: this means that the data which is currently on
+    // clipboard will stay available even after the application exits (possibly
+    // eating memory), otherwise the clipboard will be emptied on exit
+    virtual bool Flush();
+
+    // X11 has two clipboards which get selected by this call. Empty on MSW.
     void UsePrimarySelection( bool WXUNUSED(primary) = FALSE ) { }
 
-};
-
-// The global clipboard object
-WXDLLEXPORT_DATA(extern wxClipboard*) wxTheClipboard;
-
-//-----------------------------------------------------------------------------
-// wxClipboardModule: module responsible for initializing the global clipboard
-// object
-//-----------------------------------------------------------------------------
-
-class wxClipboardModule : public wxModule
-{
-    DECLARE_DYNAMIC_CLASS(wxClipboardModule)
-
-public:
-    wxClipboardModule() { }
-
-    bool OnInit();
-    void OnExit();
+private:
+    bool m_clearOnExit;
 };
 
 #endif // wxUSE_CLIPBOARD

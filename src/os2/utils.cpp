@@ -336,39 +336,64 @@ bool wxWriteResource(
                           );
 }
 
-bool wxWriteResource(const wxString& section, const wxString& entry, long value, const wxString& file)
+bool wxWriteResource(
+  const wxString&                   rSection
+, const wxString&                   rEntry
+, long                              lValue
+, const wxString&                   rFile
+)
 {
-    wxChar buf[50];
-    wxSprintf(buf, "%ld", value);
-    return wxWriteResource(section, entry, buf, file);
+    wxChar                          zBuf[50];
+
+    wxSprintf(zBuf, "%ld", lValue);
+    return wxWriteResource( rSection
+                           ,rEntry
+                           ,zBuf
+                           ,rFile
+                          );
 }
 
-bool wxWriteResource(const wxString& section, const wxString& entry, int value, const wxString& file)
+bool wxWriteResource(
+  const wxString&                   rSection
+, const wxString&                   rEntry
+, int                               lValue
+, const wxString&                   rFile
+)
 {
-    wxChar buf[50];
-    wxSprintf(buf, "%d", value);
-    return wxWriteResource(section, entry, buf, file);
+    wxChar                          zBuf[50];
+
+    wxSprintf(zBuf, "%d", lValue);
+    return wxWriteResource( rSection
+                           ,rEntry
+                           ,zBuf
+                           ,rFile
+                          );
 }
 
-bool wxGetResource(const wxString& section, const wxString& entry, wxChar **value, const wxString& file)
+bool wxGetResource(
+  const wxString&                   rSection
+, const wxString&                   rEntry
+, wxChar**                          ppValue
+, const wxString&                   rFile
+)
 {
     HAB                             hab;
     HINI                            hIni;
-    static const wxChar             defunkt[] = _T("$$default");
+    static const wxChar             zDefunkt[] = _T("$$default");
 
-    if (file != "")
+    if (rFile != "")
     {
-        hIni = ::PrfOpenProfile(hab, (PSZ)WXSTRINGCAST file);
+        hIni = ::PrfOpenProfile(hab, (PSZ)WXSTRINGCAST rFile);
         if (hIni != 0L)
         {
             ULONG n = ::PrfQueryProfileString( hIni
-                                              ,(PSZ)WXSTRINGCAST section
-                                              ,(PSZ)WXSTRINGCAST entry
-                                              ,(PSZ)defunkt
+                                              ,(PSZ)WXSTRINGCAST rSection
+                                              ,(PSZ)WXSTRINGCAST rEntry
+                                              ,(PSZ)zDefunkt
                                               ,(void*)wxBuffer
                                               ,1000
                                              );
-            if (n == 0L || wxStrcmp(wxBuffer, defunkt) == 0)
+            if (n == 0L || wxStrcmp(wxBuffer, zDefunkt) == 0)
                 return FALSE;
         }
         else
@@ -377,58 +402,88 @@ bool wxGetResource(const wxString& section, const wxString& entry, wxChar **valu
     else
     {
         ULONG n = ::PrfQueryProfileString( HINI_PROFILE
-                                          ,(PSZ)WXSTRINGCAST section
-                                          ,(PSZ)WXSTRINGCAST entry
-                                          ,(PSZ)defunkt
+                                          ,(PSZ)WXSTRINGCAST rSection
+                                          ,(PSZ)WXSTRINGCAST rEntry
+                                          ,(PSZ)zDefunkt
                                           ,(void*)wxBuffer
                                           ,1000
                                          );
-        if (n == 0L || wxStrcmp(wxBuffer, defunkt) == 0)
+        if (n == 0L || wxStrcmp(wxBuffer, zDefunkt) == 0)
             return FALSE;
     }
-    if (*value)
-        delete[] (*value);
-    *value = copystring(wxBuffer);
+    if (*ppValue)
+        delete[] (*ppValue);
+    *ppValue = copystring(wxBuffer);
     return TRUE;
 }
 
-bool wxGetResource(const wxString& section, const wxString& entry, float *value, const wxString& file)
+bool wxGetResource(
+  const wxString&                   rSection
+, const wxString&                   rEntry
+, float*                            pValue
+, const wxString&                   rFile
+)
 {
-  wxChar *s = NULL;
-  bool succ = wxGetResource(section, entry, (wxChar **)&s, file);
-  if (succ)
-  {
-    *value = (float)wxStrtod(s, NULL);
-    delete[] s;
-    return TRUE;
-  }
-  else return FALSE;
+    wxChar*                         zStr = NULL;
+    bool                            bSucc = wxGetResource( rSection
+                                                          ,rEntry
+                                                          ,(wxChar **)&zStr
+                                                          ,rFile
+                                                         );
+
+    if (bSucc)
+    {
+        *pValue = (float)wxStrtod(zStr, NULL);
+        delete[] zStr;
+        return TRUE;
+    }
+    else return FALSE;
 }
 
-bool wxGetResource(const wxString& section, const wxString& entry, long *value, const wxString& file)
+bool wxGetResource(
+  const wxString&                   rSection
+, const wxString&                   rEntry
+, long*                             pValue
+, const wxString&                   rFile
+)
 {
-  wxChar *s = NULL;
-  bool succ = wxGetResource(section, entry, (wxChar **)&s, file);
-  if (succ)
-  {
-    *value = wxStrtol(s, NULL, 10);
-    delete[] s;
-    return TRUE;
-  }
-  else return FALSE;
+    wxChar*                           zStr = NULL;
+    bool                              bSucc = wxGetResource( rSection
+                                                            ,rEntry
+                                                            ,(wxChar **)&zStr
+                                                            ,rFile
+                                                           );
+
+    if (bSucc)
+    {
+        *pValue = wxStrtol(zStr, NULL, 10);
+        delete[] zStr;
+        return TRUE;
+    }
+    else return FALSE;
 }
 
-bool wxGetResource(const wxString& section, const wxString& entry, int *value, const wxString& file)
+bool wxGetResource(
+  const wxString&                   rSection
+, const wxString&                   rEntry
+, int*                              pValue
+, const wxString&                   rFile
+)
 {
-  wxChar *s = NULL;
-  bool succ = wxGetResource(section, entry, (wxChar **)&s, file);
-  if (succ)
-  {
-    *value = (int)wxStrtol(s, NULL, 10);
-    delete[] s;
-    return TRUE;
-  }
-  else return FALSE;
+    wxChar*                         zStr = NULL;
+    bool                            bSucc = wxGetResource( rSection
+                                                          ,rEntry
+                                                          ,(wxChar **)&zStr
+                                                          ,rFile
+                                                         );
+
+    if (bSucc)
+    {
+        *pValue = (int)wxStrtol(zStr, NULL, 10);
+        delete[] zStr;
+        return TRUE;
+    }
+    else return FALSE;
 }
 #endif // wxUSE_RESOURCES
 
@@ -441,11 +496,13 @@ HCURSOR gs_wxBusyCursorOld = 0;  // old cursor
 static int gs_wxBusyCursorCount = 0;
 
 // Set the cursor to the busy cursor for all windows
-void wxBeginBusyCursor(wxCursor *cursor)
+void wxBeginBusyCursor(
+  wxCursor*                         pCursor
+)
 {
     if ( gs_wxBusyCursorCount++ == 0 )
     {
-        gs_wxBusyCursor = (HCURSOR)cursor->GetHCURSOR();
+        gs_wxBusyCursor = (HCURSOR)pCursor->GetHCURSOR();
         ::WinSetPointer(HWND_DESKTOP, (HPOINTER)gs_wxBusyCursor);
     }
     //else: nothing to do, already set
@@ -454,10 +511,11 @@ void wxBeginBusyCursor(wxCursor *cursor)
 // Restore cursor to normal
 void wxEndBusyCursor()
 {
-    wxCHECK_RET( gs_wxBusyCursorCount > 0,
-                 _T("no matching wxBeginBusyCursor() for wxEndBusyCursor()"));
+    wxCHECK_RET( gs_wxBusyCursorCount > 0
+                ,_T("no matching wxBeginBusyCursor() for wxEndBusyCursor()")
+               );
 
-    if ( --gs_wxBusyCursorCount == 0 )
+    if (--gs_wxBusyCursorCount == 0)
     {
         ::WinSetPointer(HWND_DESKTOP, (HPOINTER)gs_wxBusyCursorOld);
         gs_wxBusyCursorOld = 0;
@@ -467,187 +525,209 @@ void wxEndBusyCursor()
 // TRUE if we're between the above two calls
 bool wxIsBusy()
 {
-  return (gs_wxBusyCursorCount > 0);
+    return (gs_wxBusyCursorCount > 0);
 }
 
 // ---------------------------------------------------------------------------
-const wxChar* wxGetHomeDir(wxString *pstr)
+const wxChar* wxGetHomeDir(
+  wxString*                         pStr
+)
 {
-  wxString& strDir = *pstr;
+    wxString&                       rStrDir = *pStr;
 
-  // OS/2 has no idea about home,
-  // so use the working directory instead?
+    // OS/2 has no idea about home,
+    // so use the working directory instead?
 
-  // 256 was taken from os2def.h
+    // 256 was taken from os2def.h
 #ifndef MAX_PATH
 #  define MAX_PATH  256
 #endif
 
+    char                            zDirName[256];
+    ULONG                           ulDirLen;
 
-    char     DirName[256];
-    ULONG    DirLen;
-
-    ::DosQueryCurrentDir( 0, DirName, &DirLen);
-    strDir = DirName;
-  return strDir.c_str();
+    ::DosQueryCurrentDir(0, zDirName, &ulDirLen);
+    rStrDir = zDirName;
+    return rStrDir.c_str();
 }
 
 // Hack for OS/2
-wxChar *wxGetUserHome (const wxString& user)
+wxChar* wxGetUserHome (
+  const wxString&                   rUser
+)
 {
-  wxChar *home;
-  wxString user1(user);
+    wxChar*                         zHome;
+    wxString                        sUser1(rUser);
 
-  if (user1 != _T("")) {
-    wxChar tmp[64];
-    if (wxGetUserId(tmp, sizeof(tmp)/sizeof(char))) {
-      // Guests belong in the temp dir
-      if (wxStricmp(tmp, _T("annonymous")) == 0) {
-        if ((home = wxGetenv(_T("TMP"))) != NULL ||
-            (home = wxGetenv(_T("TMPDIR"))) != NULL ||
-            (home = wxGetenv(_T("TEMP"))) != NULL)
-            return *home ? home : (wxChar*)_T("\\");
-      }
-      if (wxStricmp(tmp, WXSTRINGCAST user1) == 0)
-        user1 = _T("");
-    }
-  }
-  if (user1 == _T(""))
-    if ((home = wxGetenv(_T("HOME"))) != NULL)
+    if (sUser1 != _T(""))
     {
-      wxStrcpy(wxBuffer, home);
-      Unix2DosFilename(wxBuffer);
-      return wxBuffer;
+        wxChar                      zTmp[64];
+
+        if (wxGetUserId( zTmp
+                        ,sizeof(zTmp)/sizeof(char)
+                       ))
+        {
+            // Guests belong in the temp dir
+            if (wxStricmp(zTmp, _T("annonymous")) == 0)
+            {
+                if ((zHome = wxGetenv(_T("TMP"))) != NULL    ||
+                    (zHome = wxGetenv(_T("TMPDIR"))) != NULL ||
+                    (zHome = wxGetenv(_T("TEMP"))) != NULL)
+                    return *zHome ? zHome : (wxChar*)_T("\\");
+            }
+            if (wxStricmp(zTmp, WXSTRINGCAST sUser1) == 0)
+                sUser1 = _T("");
+        }
     }
-  return NULL; // No home known!
+    if (sUser1 == _T(""))
+        if ((zHome = wxGetenv(_T("HOME"))) != NULL)
+        {
+            wxStrcpy(wxBuffer, zHome);
+            Unix2DosFilename(wxBuffer);
+            return wxBuffer;
+        }
+        return NULL; // No home known!
 }
 
 // Check whether this window wants to process messages, e.g. Stop button
 // in long calculations.
-bool wxCheckForInterrupt(wxWindow *wnd)
+bool wxCheckForInterrupt(
+  wxWindow*                         pWnd
+)
 {
-  if(wnd){
-    QMSG            msg;
-    HAB             hab;
-    HWND            hwndFilter;
-
-    HWND win= (HWND) wnd->GetHWND();
-    while(::WinPeekMsg(hab,&msg,hwndFilter,0,0,PM_REMOVE))
+    if(pWnd)
     {
-      ::WinDispatchMsg( hab, &msg );
-    }
-    return TRUE;//*** temporary?
-  }
-  else{
-    wxFAIL_MSG(_T("wnd==NULL !!!"));
+        QMSG                        vMsg;
+        HAB                         hab;
+        HWND                        hwndFilter;
+        HWND                        hwndWin= (HWND) pWnd->GetHWND();
 
-    return FALSE;//*** temporary?
-  }
+        while(::WinPeekMsg(hab, &vMsg, hwndFilter, 0, 0, PM_REMOVE))
+        {
+            ::WinDispatchMsg(hab, &vMsg);
+        }
+        return TRUE;//*** temporary?
+    }
+    else
+    {
+        wxFAIL_MSG(_T("pWnd==NULL !!!"));
+        return FALSE;//*** temporary?
+    }
 }
 
-void wxGetMousePosition( int* x, int* y )
+void wxGetMousePosition(
+  int*                              pX
+, int*                              pY
+)
 {
-    POINTL pt;
-    ::WinQueryPointerPos( HWND_DESKTOP, & pt );
-    *x = pt.x;
-    *y = pt.y;
+    POINTL                          vPt;
+
+    ::WinQueryPointerPos(HWND_DESKTOP, &vPt);
+    *pX = vPt.x;
+    *pY = vPt.y;
 };
 
 // Return TRUE if we have a colour display
 bool wxColourDisplay()
 {
-    bool flag;
-    // TODO:  use DosQueryDevCaps to figure it out
-    return flag;
+    HPS                             hpsScreen;
+    HDC                             hdcScreen;
+    LONG                            lColors;
+
+    hpsScreen = ::WinGetScreenPS(HWND_DESKTOP);
+    hdcScreen = ::GpiQueryDevice(hpsScreen);
+    ::DevQueryCaps(hdcScreen, CAPS_COLORS, 1L, &lColors);
+    return(lColors > 1L);
 }
 
 // Returns depth of screen
 int wxDisplayDepth()
 {
-    HDC                             hDc = ::WinOpenWindowDC((HWND)NULL);
-    long                            lArray[CAPS_COLOR_BITCOUNT];
-    int                             nPlanes;
-    int                             nBitsPerPixel;
-    int                             nDepth;
+    HPS                             hpsScreen;
+    HDC                             hdcScreen;
+    LONG                            lPlanes;
+    LONG                            lBitsPerPixel;
+    LONG                            nDepth;
 
-    if(DevQueryCaps( hDc
-                    ,CAPS_FAMILY
-                    ,CAPS_COLOR_BITCOUNT
-                    ,lArray
-                   ))
-    {
-        nPlanes = (int)lArray[CAPS_COLOR_PLANES];
-        nBitsPerPixel = (int)lArray[CAPS_COLOR_BITCOUNT];
-        nDepth = nPlanes * nBitsPerPixel;
-    }
-    DevCloseDC(hDc);
+    hpsScreen = ::WinGetScreenPS(HWND_DESKTOP);
+    hdcScreen = ::GpiQueryDevice(hpsScreen);
+    ::DevQueryCaps(hdcScreen, CAPS_COLOR_PLANES, 1L, &lPlanes);
+    ::DevQueryCaps(hdcScreen, CAPS_COLOR_BITCOUNT, 1L, &lBitsPerPixel);
+
+    nDepth = (int)(lPlanes * lBitsPerPixel);
+    DevCloseDC(hdcScreen);
     return (nDepth);
 }
 
 // Get size of display
-void wxDisplaySize(int *width, int *height)
+void wxDisplaySize(
+  int*                              pWidth
+, int*                              pHeight
+)
 {
-    HDC                             hDc = ::WinOpenWindowDC((HWND)NULL);
-    long                            lArray[CAPS_HEIGHT];
+    HPS                             hpsScreen;
+    HDC                             hdcScreen;
 
-    if(DevQueryCaps( hDc
-                    ,CAPS_FAMILY
-                    ,CAPS_HEIGHT
-                    ,lArray
-                   ))
-    {
-        *width  = (int)lArray[CAPS_WIDTH];
-        *height = (int)lArray[CAPS_HEIGHT];
-    }
-    DevCloseDC(hDc);
+    hpsScreen = ::WinGetScreenPS(HWND_DESKTOP);
+    hdcScreen = ::GpiQueryDevice(hpsScreen);
+    ::DevQueryCaps(hdcScreen, CAPS_WIDTH, 1L, (PLONG)pWidth);
+    ::DevQueryCaps(hdcScreen, CAPS_HEIGHT, 1L, (PLONG)pHeight);
+    DevCloseDC(hdcScreen);
 }
 
-bool wxDirExists(const wxString& dir)
+bool wxDirExists(
+  const wxString&                   rDir
+)
 {
-   // TODO:  Control program file stuff
-   return TRUE;
+    return (::DosSetCurrentDir(WXSTRINGCAST rDir));
 }
 
 // ---------------------------------------------------------------------------
 // window information functions
 // ---------------------------------------------------------------------------
 
-wxString WXDLLEXPORT wxGetWindowText(WXHWND hWnd)
+wxString WXDLLEXPORT wxGetWindowText(
+  WXHWND                            hWnd
+)
 {
-    wxString str;
-    long len = ::WinQueryWindowTextLength((HWND)hWnd) + 1;
-    ::WinQueryWindowText((HWND)hWnd, len, str.GetWriteBuf((int)len));
-    str.UngetWriteBuf();
+    wxString                        vStr;
+    long                            lLen = ::WinQueryWindowTextLength((HWND)hWnd) + 1;
 
-    return str;
+    ::WinQueryWindowText((HWND)hWnd, lLen, vStr.GetWriteBuf((int)lLen));
+    vStr.UngetWriteBuf();
+
+    return vStr;
 }
 
-wxString WXDLLEXPORT wxGetWindowClass(WXHWND hWnd)
+wxString WXDLLEXPORT wxGetWindowClass(
+  WXHWND                            hWnd
+)
 {
-    wxString str;
-
-    int len = 256; // some starting value
+    wxString                        vStr;
+    int                             nLen = 256; // some starting value
 
     for ( ;; )
     {
-        int count = ::WinQueryClassName((HWND)hWnd, len, str.GetWriteBuf(len));
+        int                         nCount = ::WinQueryClassName((HWND)hWnd, nLen, vStr.GetWriteBuf(nLen));
 
-        str.UngetWriteBuf();
-        if ( count == len )
+        vStr.UngetWriteBuf();
+        if (nCount == nLen )
         {
             // the class name might have been truncated, retry with larger
             // buffer
-            len *= 2;
+            nLen *= 2;
         }
         else
         {
             break;
         }
     }
-    return str;
+    return vStr;
 }
 
-WXWORD WXDLLEXPORT wxGetWindowId(WXHWND hWnd)
+WXWORD WXDLLEXPORT wxGetWindowId(
+  WXHWND                            hWnd
+)
 {
     return ::WinQueryWindowUShort((HWND)hWnd, QWS_ID);
 }
