@@ -25,9 +25,9 @@
 
 #include "wx/defs.h"
 #include "wx/object.h"
+#include "wx/clntdata.h"
 
 #if wxUSE_GUI
-    #include "wx/clntdata.h"
     #include "wx/gdicmn.h"
     #include "wx/cursor.h"
 #endif
