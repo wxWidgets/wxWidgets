@@ -6,7 +6,7 @@
 // Created:     09/04/99
 // RCS-ID:      $Id$
 // Copyright:   (c) wxWindows copyright
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__

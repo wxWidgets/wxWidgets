@@ -6,7 +6,7 @@
 // Copyright:  (C) 1999-1997, Guilhem Lavaux
 //             (C) 2000-1999, Guillermo Rodriguez Garcia
 // RCS_ID:     $Id$
-// License:    see wxWindows license
+// License:    see wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ==========================================================================
