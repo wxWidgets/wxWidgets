@@ -36,6 +36,7 @@ wxMSW:
 - Added "orient" parameter to wxMDIParentFrame::Tile()
 - wxTextCtrl with wxTE_RICH2 style now uses RichEdit 4.1 if available
 - fix handling Alt-key events in wxComboBox (reported by Joakim Roubert)
+- wxWindow::Refresh() refreshes the window children as well
 
 wxGTK:
 

@@ -1324,18 +1324,27 @@ void wxWindowMSW::Refresh(bool eraseBack, const wxRect *rect)
     HWND hWnd = GetHwnd();
     if ( hWnd )
     {
+        RECT mswRect;
+        const RECT *pRect;
         if ( rect )
         {
-            RECT mswRect;
             mswRect.left = rect->x;
             mswRect.top = rect->y;
             mswRect.right = rect->x + rect->width;
             mswRect.bottom = rect->y + rect->height;
 
-            ::InvalidateRect(hWnd, &mswRect, eraseBack);
+            pRect = &mswRect;
         }
         else
-            ::InvalidateRect(hWnd, NULL, eraseBack);
+        {
+            pRect = NULL;
+        }
+
+        UINT flags = RDW_INVALIDATE | RDW_ALLCHILDREN;
+        if ( eraseBack )
+            flags |= RDW_ERASE;
+
+        ::RedrawWindow(hWnd, pRect, NULL, flags);
     }
 }
 
