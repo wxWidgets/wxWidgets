@@ -87,11 +87,14 @@ Gets a pointer to the document associated with the view.
 
 Returns a pointer to the document manager instance associated with this view.
 
-\membersection{wxView::GetFrame}
+\membersection{wxView::GetFrame}\label{wxviewgetframe}
 
-\func{wxFrame *}{GetFrame}{\void}
+\func{wxWindow *}{GetFrame}{\void}
 
-Gets the frame associated with the view (if any).
+Gets the frame associated with the view (if any). Note that this ``frame'' is
+not a wxFrame at all in the generic MDI implementation which uses the notebook
+pages instead of the frames and this is why this method returns a wxWindow and
+not a wxFrame.
 
 \membersection{wxView::GetViewName}
 
@@ -177,10 +180,13 @@ framework.
 
 \membersection{wxView::SetFrame}
 
-\func{void}{SetFrame}{\param{wxFrame* }{frame}}
+\func{void}{SetFrame}{\param{wxWindow* }{frame}}
 
 Sets the frame associated with this view. The application should call this
 if possible, to tell the view about the frame.
+
+See \helpref{GetFrame}{wxviewgetframe} for the explanation about the mismatch
+between the ``Frame'' in the method name and the type of its parameter.
 
 \membersection{wxView::SetViewName}
 
