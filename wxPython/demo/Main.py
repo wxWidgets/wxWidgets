@@ -600,7 +600,8 @@ class MySplashScreen(wxSplashScreen):
         bmp = wxImage(opj("bitmaps/splash.gif")).ConvertToBitmap()
         wxSplashScreen.__init__(self, bmp,
                                 wxSPLASH_CENTRE_ON_SCREEN|wxSPLASH_TIMEOUT,
-                                4000, None, -1)
+                                4000, None, -1,
+                                style = wxSIMPLE_BORDER|wxFRAME_NO_TASKBAR|wxSTAY_ON_TOP)
         EVT_CLOSE(self, self.OnClose)
 
     def OnClose(self, evt):
