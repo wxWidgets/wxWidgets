@@ -172,7 +172,7 @@
 				FRAMEWORK_SEARCH_PATHS = "";
 				HEADER_SEARCH_PATHS = "../../src/build/include ../../include . - /usr/include";
 				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = /Volumes/Users/gilles/cvs/wxWindows/src/build;
+				LIBRARY_SEARCH_PATHS = ../../src/build;
 				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = "-D__WXDEBUG__ -D__WXMAC__ -fno-rtti -fno-exceptions";
 				OTHER_LDFLAGS = "";
@@ -299,7 +299,7 @@
 				FRAMEWORK_SEARCH_PATHS = "";
 				HEADER_SEARCH_PATHS = "../../src/build/include ../../include . - /usr/include";
 				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = /Volumes/Users/gilles/cvs/wxWindows/src/build;
+				LIBRARY_SEARCH_PATHS = ../../src/build;
 				OPTIMIZATION_CFLAGS = "-O3";
 				OTHER_CFLAGS = "-D__WXMAC__ -fno-rtti -fno-exceptions";
 				OTHER_LDFLAGS = "";
