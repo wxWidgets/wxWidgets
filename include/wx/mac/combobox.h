@@ -106,6 +106,8 @@ protected:
     virtual void DoSetItemClientObject(int n, wxClientData* clientData) ;
     virtual wxClientData* DoGetItemClientObject(int n) const ;
 
+    void FreeData();
+
     // the subcontrols
     wxTextCtrl*     m_text;
     wxChoice*       m_choice;

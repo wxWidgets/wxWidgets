@@ -72,11 +72,14 @@ public:
 
 protected:
     virtual wxSize DoGetBestSize() const ;
+
+public: // for wxComboBox only
     virtual void DoSetItemClientData( int n, void* clientData );
     virtual void* DoGetItemClientData( int n ) const;
     virtual void DoSetItemClientObject( int n, wxClientData* clientData );
     virtual wxClientData* DoGetItemClientObject( int n ) const;
 
+protected:
     // free all memory we have (used by Clear() and dtor)
     // prevent collision with some BSD definitions of macro Free()   
     void FreeData();

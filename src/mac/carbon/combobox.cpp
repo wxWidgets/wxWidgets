@@ -414,31 +414,47 @@ int wxComboBox::DoInsert(const wxString& item, int pos)
 
 void wxComboBox::DoSetItemClientData(int n, void* clientData) 
 {
-    return m_choice->SetClientData( n , clientData ) ;
+    return m_choice->DoSetItemClientData( n , clientData ) ;
 }
 
 void* wxComboBox::DoGetItemClientData(int n) const
 {
-    return m_choice->GetClientData( n ) ;
+    return m_choice->DoGetItemClientData( n ) ;
 }
 
 void wxComboBox::DoSetItemClientObject(int n, wxClientData* clientData)
 {
-    return m_choice->SetClientObject( n , clientData ) ;
+    return m_choice->DoSetItemClientObject( n , clientData ) ;
 }
 
 wxClientData* wxComboBox::DoGetItemClientObject(int n) const 
 {
-    return m_choice->GetClientObject( n ) ;
+    return m_choice->DoGetItemClientObject( n ) ;
+}
+
+void wxComboBox::FreeData()
+{
+    if ( HasClientObjectData() )
+    {
+        size_t count = GetCount();
+        for ( size_t n = 0; n < count; n++ )
+        {
+            SetClientObject( n, NULL );
+        }
+    }
 }
 
 void wxComboBox::Delete(int n)
 {
+    // force client object deletion
+    if( HasClientObjectData() )
+        SetClientObject( n, NULL );
     m_choice->Delete( n );
 }
 
 void wxComboBox::Clear()
 {
+    FreeData();
     m_choice->Clear();
 }
 
