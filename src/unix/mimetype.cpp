@@ -2117,8 +2117,13 @@ bool wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
                 strExtensions = strRHS;
             }
             else {
-                wxLogWarning(_("Unknown field in file %s, line %d: '%s'."),
-                             strFileName.c_str(), nLine + 1, strLHS.c_str());
+                // this one is simply ignored: it usually refers to Netscape
+                // built in icons which are useless for us anyhow
+                if ( strLHS != _T("icon") )
+                {
+                    wxLogWarning(_("Unknown field in file %s, line %d: '%s'."),
+                                 strFileName.c_str(), nLine + 1, strLHS.c_str());
+                }
             }
 
             if ( !entryEnded ) {
