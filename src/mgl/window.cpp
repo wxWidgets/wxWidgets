@@ -476,7 +476,10 @@ void wxWindowMGL::Init()
     // First of all, make sure window manager is up and running. If it is
     // not the case, initialize it in default display mode
     if ( !g_winMng )
-        wxTheApp->SetDisplayMode(wxGetDefaultDisplayMode());
+    {
+        if ( !wxTheApp->SetDisplayMode(wxGetDefaultDisplayMode()) )
+            wxFatalError(_("Cannot initialize display."));
+    }
 
     // generic:
     InitBase();
