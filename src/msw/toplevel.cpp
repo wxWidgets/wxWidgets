@@ -265,6 +265,13 @@ bool wxTopLevelWindowMSW::CreateDialog(const wxChar *dlgTemplate,
             h = 100;
         }
 
+        if ( x == CW_USEDEFAULT )
+        {
+            // well, where should we put it? maybe centre it on screen?
+            x =
+            y = 0;
+        }
+
         if ( !::MoveWindow(GetHwnd(), x, y, w, h, FALSE) )
         {
             wxLogLastError(wxT("MoveWindow"));
