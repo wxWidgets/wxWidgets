@@ -168,10 +168,10 @@ bool MyApp::OnInit()
   menubar->Append(menuCol, "&Colour");
   frame->SetMenuBar(menubar);
 
-  // Make a panel with a message
   frame->m_listCtrl = new MyListCtrl(frame, LIST_CTRL, wxPoint(0, 0), wxSize(400, 200),
           wxLC_LIST|wxSUNKEN_BORDER|wxLC_EDIT_LABELS );
 //          wxLC_LIST|wxLC_USER_TEXT|wxSUNKEN_BORDER); // wxLC_USER_TEXT requires app to supply all text on demand
+
   frame->m_logWindow = new wxTextCtrl(frame, -1, "", wxPoint(0, 0), wxSize(400, 200), wxTE_MULTILINE|wxSUNKEN_BORDER);
 
   wxLayoutConstraints *c = new wxLayoutConstraints;
@@ -192,7 +192,8 @@ bool MyApp::OnInit()
   wxString buf;
   for ( int i=0; i < 30; i++)
   {
-      buf.Printf(_T("Item %d"), i);
+      wxChar buf[20];
+      wxSprintf(buf, _T("Item %d"), i);
       frame->m_listCtrl->InsertItem(i, buf);
   }
 

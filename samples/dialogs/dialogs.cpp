@@ -238,7 +238,7 @@ void MyFrame::LogDialog(wxCommandEvent& event)
 
     wxLog::FlushActive();
 
-    wxLogMessage("And this is the same dialog but with onle one message");
+    wxLogMessage("And this is the same dialog but with only one message.");
 }
 
 void MyFrame::MessageBox(wxCommandEvent& WXUNUSED(event) )
