@@ -68,7 +68,7 @@
 // Macros which are completely disabled in 'release' mode
 //
 // NB: these functions are implemented in src/common/appcmn.cpp
-#ifdef  __WXDEBUG__
+#if defined(__cplusplus) && defined(__WXDEBUG__)
   /*
     this function may be redefined to do something non trivial and is called
     whenever one of debugging macros fails (i.e. condition is false in an
@@ -122,9 +122,12 @@
   #define wxASSERT_MSG(x, m)
 #endif  //__WXDEBUG__
 
-// Use of wxFalse instead of FALSE suppresses compiler warnings about testing
-// constant expression
-WXDLLIMPEXP_DATA_BASE(extern const bool) wxFalse;
+#ifdef __cplusplus
+    // Use of wxFalse instead of FALSE suppresses compiler warnings about testing
+    // constant expression
+    WXDLLIMPEXP_DATA_BASE(extern const bool) wxFalse;
+#endif
+
 #define wxAssertFailure wxFalse
 
 // special form of assert: always triggers it (in debug mode)
@@ -223,11 +226,13 @@ WXDLLIMPEXP_DATA_BASE(extern const bool) wxFalse;
 //
 // currently this only really works under Mac in CodeWarrior builds, it always
 // returns false otherwise
-#ifdef __WXMAC__
-    extern bool WXDLLIMPEXP_BASE wxIsDebuggerRunning();
-#else // !Mac
-    inline bool wxIsDebuggerRunning() { return false; }
-#endif // Mac/!Mac
+#ifdef __cplusplus
+    #ifdef __WXMAC__
+        extern bool WXDLLIMPEXP_BASE wxIsDebuggerRunning();
+    #else // !Mac
+        inline bool wxIsDebuggerRunning() { return false; }
+    #endif // Mac/!Mac
+#endif //__cplusplus
 
 #endif  // _WX_DEBUG_H_
 

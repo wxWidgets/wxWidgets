@@ -1,3 +1,6 @@
+#ifndef _REGEX_CUSTOM_H_
+#define _REGEX_CUSTOM_H_
+
 /*
  * Copyright (c) 1998, 1999 Henry Spencer.	All rights reserved.
  *
@@ -30,10 +33,10 @@
 
 /* headers if any */
 
-// FreeBSD, Watcom and DMars require this, CW doesn't have nor need it.
-// Others also don't seem to need it. If you have an error related to
-// (not) including <sys/types.h> please report details to
-// wx-dev@lists.wxwindows.org
+/*  FreeBSD, Watcom and DMars require this, CW doesn't have nor need it. */
+/*  Others also don't seem to need it. If you have an error related to */
+/*  (not) including <sys/types.h> please report details to */
+/*  wx-dev@lists.wxwindows.org */
 #if defined(__UNIX__) || defined(__WATCOMC__) || defined(__DIGITALMARS__)
 #   include <sys/types.h>
 #endif
@@ -42,23 +45,15 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <limits.h>
-#ifndef wxCHECK_GCC_VERSION
-#define wxCHECK_GCC_VERSION( major, minor ) \
-    ( defined(__GNUC__) && defined(__GNUC_MINOR__) \
-    && ( ( __GNUC__ > (major) ) \
-        || ( __GNUC__ == (major) && __GNUC_MINOR__ >= (minor) ) ) )
-#endif
 
-#if !wxUSE_UNICODE
-#   define wx_wchar char
-#else // Unicode
-    #if (defined(__GNUC__) && !wxCHECK_GCC_VERSION(2, 96))
-    #       define wx_wchar __WCHAR_TYPE__ 
-    #else // __WCHAR_TYPE__ and gcc < 2.96
-        // standard case
-        #       define wx_wchar wchar_t         
-    #endif // __WCHAR_TYPE__
-#endif // ASCII/Unicode
+#include "wx/wxchar.h"
+
+/**
+*
+*   wx_wchar == wxChar
+*   
+*/
+#define wx_wchar wxChar
 
 /* overrides for regguts.h definitions, if any */
 #define FUNCPTR(name, args) (*name) args
@@ -78,36 +73,9 @@ typedef long celt;				/* type to hold chr, MCCE number, or
 										 * literal */
 #define DIGITVAL(c) ((c)-'0')	/* turn chr digit into its value */
 
-/*  RN - the "not use sizeof() thing is really annoying!" */
-#if wxUSE_UNICODE
-#   if defined(__WINDOWS__)
-#       define CHRBITS 16
-#       define CHR_MAX 0xfffe		
-#   else   /* !__WINDOWS__ */
-#       if defined(__MACH__)
-#           define CHRBITS 32
-#           define CHR_MAX 0xfffffffe		
-#       else  /* !__MACH__ */
-#           if !defined(SIZEOF_WCHAR_T)
-#               define CHRBITS 16
-#               define CHR_MAX 0xfffe		
-#           else	/* defined(SIZEOF_WCHAR_T) */
-#               define CHRBITS SIZEOF_WCHAR_T
-#               define CHR_MAX ((1 << CHRBITS) - 1)		
-#           endif  /* !defined(SIZEOF_WCHAR_T) */
-#       endif  /* defined(__MACH__)  */
-#   endif  /*  defined(__WINDOWS__)  */
-#else  /*  !wxUSE_UNICODE */
-#   define CHRBITS 8			/* bits in a chr; must not use sizeof */
-#   define CHR_MAX 0xfe
-#endif  /* wxUSE_UNICODE  */
-
+#define CHRBITS (SIZEOF_WCHAR_T << 3)			/* bits in a chr; must not use sizeof */
+#define CHR_MAX ((1 << CHRBITS) - 1)
 #define CHR_MIN 0x00000000		/* smallest and largest chr; the value */
-/*	
-	PUTTING PARENTHASES AROUND THIS, I.E. (1 << CHRBITS) WILL
-	CAUSE ALL CHARACTERS TO BE MATCHED!!!
-*/
-/*#define CHR_MAX 1 << CHRBITS /		 CHR_MAX-CHR_MIN+1 should fit in uchr */
 
 
 /* functions operating on chr */
@@ -118,3 +86,5 @@ typedef long celt;				/* type to hold chr, MCCE number, or
 
 /* and pick up the standard header */
 #include "regex.h"
+
+#endif /* _REGEX_CUSTOM_H_ */

@@ -27,6 +27,7 @@ CFG=wxWindows - Win32 Debug
 !MESSAGE "wxWindows - Win32 Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "wxWindows - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "wxWindows - Win32 Release With Debug Info" (based on "Win32 (x86) Static Library")
+!MESSAGE "wxWindows - Win32 Release Unicode With Debug Info" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -275,6 +276,31 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\lib\wxmsw.lib"
 # ADD LIB32 /nologo /out:"..\lib\wxmsw.lib"
 
+!ELSEIF  "$(CFG)" == "wxWindows - Win32 Release Unicode With Debug Info"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "wxWindows___Win32_Release_Unicode_With_Debug_Info"
+# PROP BASE Intermediate_Dir "wxWindows___Win32_Release_Unicode_With_Debug_Info"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "wxWindows___Win32_Release_Unicode_With_Debug_Info"
+# PROP Intermediate_Dir "wxWindows___Win32_Release_Unicode_With_Debug_Info"
+# PROP Target_Dir ""
+CPP=cl.exe
+# ADD BASE CPP /nologo /MD /W4 /GX /O2 /I "../lib/mswu" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /I "./expat/lib" /D "NDEBUG" /D "_UNICODE" /D "UNICODE" /D "WIN32" /D WINVER=0x0400 /D "STRICT" /D wxUSE_BASE=1 /Yu"wx/wxprec.h" /FD /c
+# ADD CPP /nologo /MD /W4 /GX /Zi /O2 /I "../lib/mswu" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /I "./expat/lib" /D "NDEBUG" /D "_UNICODE" /D "UNICODE" /D "WIN32" /D WINVER=0x0400 /D "STRICT" /D wxUSE_BASE=1 /Yu"wx/wxprec.h" /FD /c
+RSC=rc.exe
+# ADD BASE RSC /l 0x409
+# ADD RSC /l 0x409
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo /out:"..\lib\wxmswu.lib"
+# ADD LIB32 /nologo /out:"..\lib\wxmswu.lib"
+
 !ENDIF 
 
 # Begin Target
@@ -288,6 +314,7 @@ LIB32=link.exe -lib
 # Name "wxWindows - Win32 Release"
 # Name "wxWindows - Win32 Debug"
 # Name "wxWindows - Win32 Release With Debug Info"
+# Name "wxWindows - Win32 Release Unicode With Debug Info"
 # Begin Group "Common Files"
 
 # PROP Default_Filter ""
@@ -1677,6 +1704,16 @@ InputPath=..\include\wx\msw\setup.h
 
 # End Custom Build
 
+!ELSEIF  "$(CFG)" == "wxWindows - Win32 Release Unicode With Debug Info"
+
+# Begin Custom Build - Creating ..\lib\mswu\wx\setup.h from $(InputPath)
+InputPath=..\include\wx\msw\setup.h
+
+"../lib/mswu/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\lib\mswu\wx\setup.h
+
+# End Custom Build
+
 !ENDIF 
 
 # End Source File
@@ -1763,10 +1800,6 @@ SOURCE=..\include\wx\checkbox.h
 # Begin Source File
 
 SOURCE=..\include\wx\checklst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\chkconf.h
 # End Source File
 # Begin Source File
 
@@ -1906,10 +1939,6 @@ SOURCE=..\include\wx\debug.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\defs.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\dialog.h
 # End Source File
 # Begin Source File
@@ -1991,10 +2020,6 @@ SOURCE=..\include\wx\except.h
 # Begin Source File
 
 SOURCE=..\include\wx\fdrepdlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\features.h
 # End Source File
 # Begin Source File
 
@@ -2374,10 +2399,6 @@ SOURCE=..\include\wx\pen.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\platform.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\popupwin.h
 # End Source File
 # Begin Source File
@@ -2674,10 +2695,6 @@ SOURCE=..\include\wx\vector.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\version.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\vidmode.h
 # End Source File
 # Begin Source File
@@ -2715,10 +2732,6 @@ SOURCE=..\include\wx\wizard.h
 # Begin Source File
 
 SOURCE=..\include\wx\wx.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\wxchar.h
 # End Source File
 # Begin Source File
 
@@ -2815,10 +2828,6 @@ SOURCE=..\include\wx\msw\checkbox.h
 # Begin Source File
 
 SOURCE=..\include\wx\msw\checklst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\msw\chkconf.h
 # End Source File
 # Begin Source File
 
@@ -2939,10 +2948,6 @@ SOURCE=..\include\wx\msw\frame.h
 # Begin Source File
 
 SOURCE=..\include\wx\msw\gauge95.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\msw\gccpriv.h
 # End Source File
 # Begin Source File
 
@@ -3383,6 +3388,46 @@ SOURCE=..\include\wx\html\m_templ.h
 # Begin Source File
 
 SOURCE=..\include\wx\html\winpars.h
+# End Source File
+# End Group
+# Begin Group "C-Only"
+
+# PROP Default_Filter ""
+# Begin Group "msw No. 1"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\include\wx\msw\chkconf.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\gccpriv.h
+# End Source File
+# End Group
+# Begin Source File
+
+SOURCE=..\include\wx\chkconf.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\defs.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\features.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\platform.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\version.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\wxchar.h
 # End Source File
 # End Group
 # End Group

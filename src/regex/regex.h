@@ -1,5 +1,6 @@
 #ifndef _REGEX_H_
 #define	_REGEX_H_	/* never again */
+
 /*
  * regular expressions
  *
@@ -39,34 +40,25 @@
 extern "C" {
 #endif
 
-// FreeBSD, Watcom and DMars require this, CW doesn't have nor need it.
-// Others also don't seem to need it. If you have an error related to
-// (not) including <sys/types.h> please report details to
-// wx-dev@lists.wxwindows.org
-#if defined(__UNIX__) || defined(__WATCOMC__) || defined(__DIGITALMARS__)
-#   include <sys/types.h>
-#endif
+/*****************************
+    WXWINDOWS CUSTOM 
+*****************************/
+#ifndef _REGEX_CUSTOM_H_
+#   define wx_wchar wxChar
+/*  FreeBSD, Watcom and DMars require this, CW doesn't have nor need it. */
+/*  Others also don't seem to need it. If you have an error related to */
+/*  (not) including <sys/types.h> please report details to */
+/*  wx-dev@lists.wxwindows.org */
+#   if defined(__UNIX__) || defined(__WATCOMC__) || defined(__DIGITALMARS__)
+#       include <sys/types.h>
+#   endif
+#endif /* ndef _REGEX_CUSTOM_H_ */
+/*****************************
+    END WXWINDOWS CUSTOM
+*****************************/
 
 #include <stdio.h>
 #include <stdlib.h>
-
-#ifndef wxCHECK_GCC_VERSION
-#define wxCHECK_GCC_VERSION( major, minor ) \
-    ( defined(__GNUC__) && defined(__GNUC_MINOR__) \
-    && ( ( __GNUC__ > (major) ) \
-        || ( __GNUC__ == (major) && __GNUC_MINOR__ >= (minor) ) ) )
-#endif
-
-#if !wxUSE_UNICODE
-#	define wx_wchar char
-#else // Unicode
-    #if (defined(__GNUC__) && !wxCHECK_GCC_VERSION(2, 96))
-#		define wx_wchar __WCHAR_TYPE__ 
-    #else // __WCHAR_TYPE__ and gcc < 2.96
-		// standard case
-#		define wx_wchar wchar_t         
-    #endif // __WCHAR_TYPE__
-#endif // ASCII/Unicode
 
 /*
  * interface types etc.

@@ -9,6 +9,8 @@
  * Licence:     wxWindows licence
  */
 
+/* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
+
 #ifndef _WX_MSW_CHKCONF_H_
 #define _WX_MSW_CHKCONF_H_
 
