@@ -1990,6 +1990,8 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
     {
         if (x) (*x) = 0;
         if (y) (*y) = 0;
+        if (descent) (*descent) = 0;
+        if (externalLeading) (*externalLeading) = 0;
         return;
     }
     
