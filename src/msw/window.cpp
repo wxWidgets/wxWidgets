@@ -3088,7 +3088,7 @@ bool wxWindowMSW::HandleSetFocus(WXHWND hwnd)
 {
     // notify the parent keeping track of focus for the kbd navigation
     // purposes that we got it
-    wxChildFocusEvent eventFocus(this);
+    wxChildFocusEvent eventFocus((wxWindow *)this);
     (void)GetEventHandler()->ProcessEvent(eventFocus);
 
 #if wxUSE_CARET
