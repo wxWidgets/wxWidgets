@@ -972,10 +972,10 @@ static wxString DDEGetErrorMsg(UINT error)
             err = _("a request for a synchronous data transaction has timed out.");
             break;
         case DMLERR_DLL_NOT_INITIALIZED:
-            err = _("a DDEML function was called without first calling the DdeInitialize function,\n\ror an invalid instance identifier\n\rwas passed to a DDEML function.");
+            err = _("a DDEML function was called without first calling the DdeInitialize function,\nor an invalid instance identifier\nwas passed to a DDEML function.");
             break;
         case DMLERR_DLL_USAGE:
-            err = _("an application initialized as APPCLASS_MONITOR has\n\rattempted to perform a DDE transaction,\n\ror an application initialized as APPCMD_CLIENTONLY has \n\rattempted to perform server transactions.");
+            err = _("an application initialized as APPCLASS_MONITOR has\nattempted to perform a DDE transaction,\nor an application initialized as APPCMD_CLIENTONLY has \nattempted to perform server transactions.");
             break;
         case DMLERR_EXECACKTIMEOUT:
             err = _("a request for a synchronous execute transaction has timed out.");
@@ -1005,7 +1005,7 @@ static wxString DDEGetErrorMsg(UINT error)
             err = _("reentrancy problem.");
             break;
         case DMLERR_SERVER_DIED:
-            err = _("a server-side transaction was attempted on a conversation\n\rthat was terminated by the client, or the server\n\rterminated before completing a transaction.");
+            err = _("a server-side transaction was attempted on a conversation\nthat was terminated by the client, or the server\nterminated before completing a transaction.");
             break;
         case DMLERR_SYS_ERROR:
             err = _("an internal error has occurred in the DDEML.");
@@ -1014,7 +1014,7 @@ static wxString DDEGetErrorMsg(UINT error)
             err = _("a request to end an advise transaction has timed out.");
             break;
         case DMLERR_UNFOUND_QUEUE_ID:
-            err = _("an invalid transaction identifier was passed to a DDEML function.\n\rOnce the application has returned from an XTYP_XACT_COMPLETE callback,\n\rthe transaction identifier for that callback is no longer valid.");
+            err = _("an invalid transaction identifier was passed to a DDEML function.\nOnce the application has returned from an XTYP_XACT_COMPLETE callback,\nthe transaction identifier for that callback is no longer valid.");
             break;
         default:
             err.Printf(_("Unknown DDE error %08x"), error);
