@@ -53,13 +53,23 @@ WX_DEFINE_LIST(wxAccelList);
 class wxAccelRefData : public wxObjectRefData
 {
 public:
-    wxAccelRefData() { m_accels.DeleteContents(TRUE); }
+    wxAccelRefData()
+    {
+        m_accels.DeleteContents(TRUE);
+    }
+
+    wxAccelRefData(const wxAccelRefData& data)
+    {
+        m_accels.DeleteContents(TRUE);
+        m_accels = data.m_accels;
+    }
 
     wxAccelList m_accels;
 };
 
 // macro which can be used to access wxAccelRefData from wxAcceleratorTable
 #define M_ACCELDATA ((wxAccelRefData *)m_refData)
+
 
 // ============================================================================
 // implementation
@@ -108,6 +118,8 @@ bool wxAcceleratorTable::Ok() const
 
 void wxAcceleratorTable::Add(const wxAcceleratorEntry& entry)
 {
+    AllocExclusive();
+
     if ( !m_refData )
     {
         m_refData = new wxAccelRefData;
@@ -118,6 +130,8 @@ void wxAcceleratorTable::Add(const wxAcceleratorEntry& entry)
 
 void wxAcceleratorTable::Remove(const wxAcceleratorEntry& entry)
 {
+    AllocExclusive();
+
     wxAccelList::Node *node = M_ACCELDATA->m_accels.GetFirst();
     while ( node )
     {
@@ -187,6 +201,16 @@ int wxAcceleratorTable::GetCommand(const wxKeyEvent& event) const
     const wxAcceleratorEntry *entry = GetEntry(event);
 
     return entry ? entry->GetCommand() : -1;
+}
+
+wxObjectRefData *wxAcceleratorTable::CreateRefData() const
+{
+    return new wxAccelRefData;
+}
+
+wxObjectRefData *wxAcceleratorTable::CloneRefData(const wxObjectRefData *data) const
+{
+    return new wxAccelRefData(*(wxAccelRefData *)data);
 }
 
 #endif // wxUSE_ACCEL

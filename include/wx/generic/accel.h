@@ -50,6 +50,11 @@ public:
 
     const wxAcceleratorEntry *GetEntry(const wxKeyEvent& event) const;
 
+protected:
+    // ref counting code
+    virtual wxObjectRefData *CreateRefData() const;
+    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
+
 private:
     DECLARE_DYNAMIC_CLASS(wxAcceleratorTable)
 };
