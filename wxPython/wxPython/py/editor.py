@@ -141,7 +141,14 @@ class EditorFrame(frame.Frame):
         """Create new buffer."""
         self.bufferDestroy()
         buffer = Buffer()
-        editor = Editor(parent=self)
+        self.panel = panel = wx.wxPanel(parent=self, id=-1)
+        editor = Editor(parent=panel)
+        panel.editor = editor
+        sizer = wx.wxBoxSizer(wx.wxVERTICAL)
+        sizer.Add(editor.window, 1, wx.wxEXPAND)
+        panel.SetSizer(sizer)
+        panel.SetAutoLayout(True)
+        sizer.Layout()
         buffer.addEditor(editor)
         buffer.open(filename)
         self.setEditor(editor)
@@ -155,6 +162,7 @@ class EditorFrame(frame.Frame):
             self.editor = None
             del self.buffers[self.buffer.id]
             self.buffer = None
+            self.panel.Destroy()
 
     def bufferHasChanged(self):
         """Return True if buffer has changed since last save."""
@@ -309,12 +317,18 @@ class EditorNotebookFrame(EditorFrame):
     def bufferCreate(self, filename=None):
         """Create new buffer."""
         buffer = Buffer()
-        editor = Editor(parent=self.notebook)
+        panel = wx.wxPanel(parent=self.notebook, id=-1)
+        editor = Editor(parent=panel)
+        panel.editor = editor
+        sizer = wx.wxBoxSizer(wx.wxVERTICAL)
+        sizer.Add(editor.window, 1, wx.wxEXPAND)
+        panel.SetSizer(sizer)
+        panel.SetAutoLayout(True)
+        sizer.Layout()
         buffer.addEditor(editor)
         buffer.open(filename)
         self.setEditor(editor)
-        self.notebook.AddPage(page=editor.window, text=self.buffer.name,
-                              select=True)
+        self.notebook.AddPage(page=panel, text=self.buffer.name, select=True)
         self.editor.setFocus()
 
     def bufferDestroy(self):
