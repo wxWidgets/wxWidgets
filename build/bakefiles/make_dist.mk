@@ -1,6 +1,5 @@
 #
 # "make dist" target implementation:
-# $Id$
 #
 
 
