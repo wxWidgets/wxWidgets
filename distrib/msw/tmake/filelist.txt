@@ -114,6 +114,7 @@ docmdi.cpp	C
 docview.cpp	C
 dynarray.cpp	C	B
 dynlib.cpp	C	B
+encconv.cpp	C
 event.cpp	C	B
 extended.c	C	B
 ffile.cpp	C	B
