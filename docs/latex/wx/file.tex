@@ -328,7 +328,10 @@ Opens a file with the given file pointer, which has already been opened.
 
 \docparam{filename}{The filename.}
 
-\docparam{mode}{The mode in which to open the file using standard C strings.}
+\docparam{mode}{The mode in which to open the file using standard C strings.
+Note that you should use {\tt "b"} flag if you use binary files under Windows
+or the results might be unexpected due to automatic newline conversion done
+for the text files.}
 
 \docparam{fp}{An existing file descriptor, such as stderr.}
 
