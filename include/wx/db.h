@@ -111,30 +111,21 @@ typedef UCHAR SQLTCHAR;
 enum enumDummy {enumDum1};
 
 #ifndef SQL_C_BOOLEAN
-#define SQL_C_BOOLEAN(datatype) (sizeof(datatype) == 1 ? SQL_C_UTINYINT : (sizeof(datatype) == 2 ? SQL_C_USHORT : SQL_C_ULONG))
-//#  define SQL_C_BOOLEAN (sizeof(int) == 2 ? SQL_C_USHORT : SQL_C_ULONG)
+    #define SQL_C_BOOLEAN(datatype) (sizeof(datatype) == 1 ? SQL_C_UTINYINT : (sizeof(datatype) == 2 ? SQL_C_USHORT : SQL_C_ULONG))
 #endif
 
 #ifndef SQL_C_ENUM
-#define SQL_C_ENUM (sizeof(enumDummy) == 2 ? SQL_C_USHORT : SQL_C_ULONG)
+    #define SQL_C_ENUM (sizeof(enumDummy) == 2 ? SQL_C_USHORT : SQL_C_ULONG)
 #endif
 
+// NOTE: If SQL_C_BLOB is defined, and it is not SQL_C_BINARY, iODBC 2.x
+//       may not function correctly.  Likely best to use SQL_C_BINARY direct
 #ifndef SQL_C_BLOB
-    #ifdef SQL_LONGVARBINARY
-        #define SQL_C_BLOB SQL_LONGVARBINARY
-    #elif SQL_VARBINARY
-        #define SQL_C_BLOB SQL_VARBINARY
+    #ifdef SQL_C_BINARY
+        #define SQL_C_BLOB SQL_C_BINARY
     #endif
 #endif
-/*
-#ifndef TRUE
-#define TRUE true
-#endif
 
-#ifndef FALSE
-#define FALSE false
-#endif
-*/
 const int wxDB_PATH_MAX                 = 254;
 
 WXDLLIMPEXP_DATA_ODBC(extern wxChar const *) SQL_LOG_FILENAME;
@@ -274,13 +265,13 @@ enum wxODBC_ERRORS
 };
 
 #ifndef MAXNAME
-#define MAXNAME         31
+    #define MAXNAME         31
 #endif
 
 #ifndef SQL_MAX_AUTHSTR_LEN
-// There does not seem to be a standard for this, so I am
-// defaulting to the value that MS uses
-#define SQL_MAX_AUTHSTR_LEN MAXNAME
+    // There does not seem to be a standard for this, so I am
+    // defaulting to the value that MS uses
+    #define SQL_MAX_AUTHSTR_LEN MAXNAME
 #endif
 
 class WXDLLIMPEXP_ODBC wxDbConnectInf
@@ -351,7 +342,6 @@ struct WXDLLIMPEXP_ODBC wxDbSqlTypeInfo
     SWORD       FsqlType;
     long        Precision;
     short       CaseSensitive;
-//    short     MinimumScale;
     short       MaximumScale;
 };
 
@@ -609,7 +599,7 @@ public:
 
     // Data Source Name, User ID, Password and whether open should fail on data type not supported
     bool         Open(const wxString &Dsn, const wxString &Uid, const wxString &AuthStr, bool failOnDataTypeUnsupported=TRUE);
-    bool         Open(wxDbConnectInf *dbConnectInf);
+    bool         Open(wxDbConnectInf *dbConnectInf, bool failOnDataTypeUnsupported=TRUE);
     bool         Open(wxDb *copyDb);  // pointer to a wxDb whose connection info should be copied rather than re-queried
     void         Close(void);
     bool         CommitTrans(void);
