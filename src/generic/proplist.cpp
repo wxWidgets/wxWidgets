@@ -217,7 +217,7 @@ bool wxPropertyListView::UpdatePropertyDisplayInList(wxProperty *property)
 // Find the wxListBox index corresponding to this property
 int wxPropertyListView::FindListIndexForProperty(wxProperty *property)
 {
-  int n = m_propertyScrollingList->Number();
+  int n = m_propertyScrollingList->GetCount();
   for (int i = 0; i < n; i++)
   {
     if (property == (wxProperty *)m_propertyScrollingList->wxListBox::GetClientData(i))
@@ -1172,7 +1172,7 @@ bool wxStringListValidator::OnDisplayValue(wxProperty *property, wxPropertyListV
     return FALSE;
   wxString str(property->GetValue().GetStringRepresentation());
   view->GetValueText()->SetValue(str);
-  if (m_strings && view->GetValueList() && view->GetValueList()->IsShown() && view->GetValueList()->Number() > 0)
+  if (m_strings && view->GetValueList() && view->GetValueList()->IsShown() && view->GetValueList()->GetCount() > 0)
   {
     view->GetValueList()->SetStringSelection(str);
   }

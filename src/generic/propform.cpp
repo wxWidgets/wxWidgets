@@ -713,7 +713,7 @@ bool wxStringFormValidator::OnDisplayValue(wxProperty *property, wxPropertyFormV
     else if (m_propertyWindow->IsKindOf(CLASSINFO(wxListBox)))
     {
         wxListBox *lbox = (wxListBox *)m_propertyWindow;
-        if (lbox->Number() == 0 && m_strings)
+        if (lbox->GetCount() == 0 && m_strings)
         {
             // Try to initialize the listbox from 'strings'
             wxNode *node = m_strings->First();
@@ -737,7 +737,7 @@ bool wxStringFormValidator::OnDisplayValue(wxProperty *property, wxPropertyFormV
     {
         wxChoice *choice = (wxChoice *)m_propertyWindow;
 #ifndef __XVIEW__
-        if (choice->Number() == 0 && m_strings)
+        if (choice->GetCount() == 0 && m_strings)
         {
             // Try to initialize the choice item from 'strings'
             // XView doesn't allow this kind of thing.
