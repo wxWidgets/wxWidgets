@@ -258,7 +258,8 @@ wxDateTime::wxDateTime_t GetNumOfDaysInMonth(int year, wxDateTime::Month month)
     return daysInMonth[wxDateTime::IsLeapYear(year)][month];
 }
 
-// ensure that the timezone variable is set by calling localtime
+// returns the time zone in the C sense, i.e. the difference UTC - local
+// (in seconds)
 static int GetTimeZone()
 {
     // set to TRUE when the timezone is set
@@ -266,20 +267,25 @@ static int GetTimeZone()
 #ifdef WX_GMTOFF_IN_TM
     static long gmtoffset = LONG_MAX; // invalid timezone
 #endif
-    
+
     wxCRIT_SECT_LOCKER(lock, gs_critsectTimezone);
 
+    // ensure that the timezone variable is set by calling localtime
     if ( !s_timezoneSet )
     {
         // just call localtime() instead of figuring out whether this system
         // supports tzset(), _tzset() or something else
-        time_t     t = 0;
+        time_t t = 0;
         struct tm *tm;
 
         tm = localtime(&t);
         s_timezoneSet = TRUE;
+
 #ifdef WX_GMTOFF_IN_TM
-        gmtoffset = tm->tm_gmtoff;
+        // note that GMT offset is the opposite of time zone and so to return
+        // consistent results in both WX_GMTOFF_IN_TM and !WX_GMTOFF_IN_TM
+        // cases we have to negate it
+        gmtoffset = -tm->tm_gmtoff;
 #endif
     }
 

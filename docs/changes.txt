@@ -185,6 +185,7 @@ Unix (GUI):
 wxBase
 
 - compilation with wxUSE_ODBC=1 fixed (dbkeyg.h file was missing in the archive)
+- bug in wxDateTime with timezones on systems with tm_gmtoff in struct tm fixed
 
 wxGTK:
 
