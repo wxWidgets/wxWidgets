@@ -1,0 +1,35 @@
+#!/bin/bash
+#----------------------------------------------------------------------
+# Uses simplify.xsl to convert the XML files output by SWIG to a
+# simpler XML format that contains only the metadata that we are
+# interested in.  Converts all input files into a single output file.
+#----------------------------------------------------------------------
+
+if [ ! -d wxPython ]; then
+    echo "Please run this script from the root wxPython directory."
+    exit 1
+fi
+
+
+XSLT=docs/bin/simplify.xsl
+MODULES=`python -c "import sys,setup; [sys.stdout.write(e.name[1:]+' ') for e in setup.wxpExtensions]"`
+DEST=docs/xml/wxPython-metadata.xml
+SRC=docs/xml-raw
+
+
+echo "Using:      " $XSLT
+echo "Writing to: " $DEST
+echo "Modules:    " $MODULES
+
+
+
+echo "<?xml version='1.0'?>"  > $DEST
+echo "<top>"                 >> $DEST
+
+for m in $MODULES; do
+    F=$SRC/${m}_swig.xml
+    echo $F
+    xsltproc $XSLT  $F       >> $DEST
+done
+
+echo "</top>"                >> $DEST
