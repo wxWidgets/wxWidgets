@@ -182,13 +182,25 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
         icon->CopyFromBitmap(bmp);
         return icon;
     }
-                              // Alternate 'constructor'
+
     wxCursor* wxPyStockCursor(int id) {
         return new wxCursor(id);
     }
 
     wxCursor* wxCursorFromImage(const wxImage& image) {
         return new wxCursor(image);
+    }
+
+    wxCursor* wxCursorFromBits(PyObject* bits, int width, int  height,
+                               int hotSpotX=-1, int hotSpotY=-1,
+                               PyObject* maskBits=0) {
+        char* bitsbuf;
+        char* maskbuf = NULL;
+        int   length;
+        PyString_AsStringAndSize(bits, &bitsbuf, &length);
+        if (maskBits)
+            PyString_AsStringAndSize(maskBits, &maskbuf, &length);
+        return new wxCursor(bitsbuf, width, height, hotSpotX, hotSpotY, maskbuf);
     }
                                       // Alternate 'constructor'
     wxColour* wxNamedColour(const wxString& colorName) {
@@ -581,6 +593,46 @@ static PyObject *_wrap_wxCursorFromImage(PyObject *self, PyObject *args, PyObjec
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     _result = (wxCursor *)wxCursorFromImage(*_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxCursor_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxCursorFromBits(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxCursor * _result;
+    PyObject * _arg0;
+    int  _arg1;
+    int  _arg2;
+    int  _arg3 = (int ) -1;
+    int  _arg4 = (int ) -1;
+    PyObject * _arg5 = (PyObject *) 0;
+    PyObject * _obj0 = 0;
+    PyObject * _obj5 = 0;
+    char *_kwnames[] = { "bits","width","height","hotSpotX","hotSpotY","maskBits", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii|iiO:wxCursorFromBits",_kwnames,&_obj0,&_arg1,&_arg2,&_arg3,&_arg4,&_obj5)) 
+        return NULL;
+{
+  _arg0 = _obj0;
+}
+    if (_obj5)
+{
+  _arg5 = _obj5;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxCursor *)wxCursorFromBits(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -2745,7 +2797,15 @@ static void *SwigwxCursorTowxObject(void *ptr) {
     return (void *) dest;
 }
 
-#define new_wxCursor(_swigarg0,_swigarg1,_swigarg2,_swigarg3) (new wxCursor(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
+static wxCursor *new_wxCursor(const wxString *cursorName,long flags,int hotSpotX,int hotSpotY) {
+#ifdef __WXGTK__
+            wxCHECK_MSG(FALSE, NULL,
+                        wxT("wxCursor constructor not implemented for wxGTK, use wxStockCursor, wxCursorFromImage, or wxCursorFromBits instead."));
+#else
+            return new wxCursor(*cursorName, flags, hotSpotX, hotSpotY);
+#endif
+        }
+
 static PyObject *_wrap_new_wxCursor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxCursor * _result;
@@ -2767,7 +2827,7 @@ static PyObject *_wrap_new_wxCursor(PyObject *self, PyObject *args, PyObject *kw
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxCursor *)new_wxCursor(*_arg0,_arg1,_arg2,_arg3);
+    _result = (wxCursor *)new_wxCursor(_arg0,_arg1,_arg2,_arg3);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -10875,6 +10935,7 @@ static PyMethodDef gdicMethods[] = {
 	 { "new_wxGDIObject", (PyCFunction) _wrap_new_wxGDIObject, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMemoryDCFromDC", (PyCFunction) _wrap_wxMemoryDCFromDC, METH_VARARGS | METH_KEYWORDS },
 	 { "wxNamedColour", (PyCFunction) _wrap_wxNamedColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCursorFromBits", (PyCFunction) _wrap_wxCursorFromBits, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCursorFromImage", (PyCFunction) _wrap_wxCursorFromImage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStockCursor", (PyCFunction) _wrap_wxStockCursor, METH_VARARGS | METH_KEYWORDS },
 	 { "wxIconFromBitmap", (PyCFunction) _wrap_wxIconFromBitmap, METH_VARARGS | METH_KEYWORDS },
