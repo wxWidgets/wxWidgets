@@ -4,7 +4,7 @@
 #define _WX_MSW_GCCPRIV_H_
 
 #if defined( __MINGW32__ )
-    #include <_mingw.h>
+    //#include <_mingw.h>
     #if __MINGW32_MAJOR_VERSION >= 1
         #define HAVE_W32API_H
     #endif
