@@ -213,7 +213,7 @@ private:
 #ifdef __WXOSX__
 #define wxConvFile wxConvUTF8
 #else
-#define wxConvFile wxConvLocal
+#define wxConvFile wxConvLibc
 #endif
 
 extern WXDLLIMPEXP_DATA_BASE(wxCSConv&) wxConvLocal;
