@@ -47,7 +47,8 @@ protected:
 class MyFrame: public wxFrame
 { 
 public:
-  MyFrame(wxFrame *frame, const char *title, int x, int y, int w, int h);
+  MyFrame(wxFrame *frame, const char *title, int x, int y, int w, int h,
+          wxLocale& m_locale);
 
 public:
   void OnQuit(wxCommandEvent& event);
@@ -56,6 +57,8 @@ public:
   void OnOpen(wxCommandEvent& event);
 
   DECLARE_EVENT_TABLE()
+  
+  wxLocale& m_locale;
 };
 
 // ID for the menu commands
@@ -81,36 +84,13 @@ IMPLEMENT_APP(MyApp)
 // `Main program' equivalent, creating windows and returning main app frame
 bool MyApp::OnInit()
 {
-  // set the language to use
-  const char *language = NULL;
-  const char *langid = NULL;
-  switch ( argc )
-  {
-      default:
-          // ignore the other args, fall through
+  if (argc == 2 && wxString(argv[1]) == "french")
+      m_locale.Init(wxLANGUAGE_FRENCH);
+  else if (argc == 2 && wxString(argv[1]) == "german")
+      m_locale.Init(wxLANGUAGE_GERMAN);
+  else
+      m_locale.Init(wxLANGUAGE_DEFAULT);
 
-      case 3:
-          language = argv[1];
-          langid = argv[2];
-          break;
-
-      case 2:
-          language = argv[1];
-          break;
-
-      case 1:
-          language = "french";
-          langid = "fr";
-  };
-
-  // there are very few systems right now which support locales other than "C"
-  m_locale.Init(language, langid, "C");
-               // note that under GTK starting from version 1.2.8 if
-               // you set locale to "C" and then use ASCII characters above
-               // #128 in GUI elements, they will be truncated (it seems GTK
-               // replaces them by \0). You should use either "" (checks
-               // the value of LC_ALL etc. environment variables) or the form
-               // accepted by glibc, e.g cs_CZ. 
 
   // Initialize the catalogs we'll be using
   /* not needed any more, done in wxLocale ctor
@@ -121,12 +101,12 @@ bool MyApp::OnInit()
      it might not be installed on yours - just ignore the errrors
      or comment out this line then */
 #ifdef __LINUX__
-  m_locale.AddCatalog("fileutils");  // 3) and another just for testing
+  //m_locale.AddCatalog("fileutils");  // 3) and another just for testing
 #endif
   
   // Create the main frame window
   MyFrame *frame = new MyFrame((wxFrame *) NULL, _("International wxWindows App"),
-                               50, 50, 350, 60);
+                               50, 50, 350, 60, m_locale);
 
   // Give it an icon
   frame->SetIcon(wxICON(mondrian));
@@ -154,8 +134,10 @@ bool MyApp::OnInit()
 }
 
 // My frame constructor
-MyFrame::MyFrame(wxFrame *frame, const char *title, int x, int y, int w, int h)
-       : wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
+MyFrame::MyFrame(wxFrame *frame, const char *title, int x, int y, int w, int h, 
+                 wxLocale& l)
+       : wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h)),
+         m_locale(l)
 {
 }
 
@@ -166,8 +148,17 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-  wxMessageDialog(this, _("I18n sample\n"
-                          "© 1998, 1999 Vadim Zeitlin and Julian Smart"),
+  wxString localeInfo;
+  localeInfo.Printf(_("Language: %s\n"
+                      "System locale name: %s\n"
+                      "Canonical locale name: %s\n"),
+                      m_locale.GetLocale(),
+                      m_locale.GetSysName().c_str(),
+                      m_locale.GetCanonicalName().c_str());
+
+  wxMessageDialog(this, wxString(_("I18n sample\n"
+                          "(c) 1998, 1999 Vadim Zeitlin and Julian Smart"))
+                          + wxT("\n\n") + localeInfo,
                   _("About Internat"), wxOK | wxICON_INFORMATION).ShowModal();
 }
 
