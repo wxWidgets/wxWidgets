@@ -49,8 +49,10 @@ void            UMASetMenuItemText(  MenuRef menu,  MenuItemIndex item, const wx
 void            UMAShowWatchCursor() ;
 void            UMAShowArrowCursor() ;
 
-OSStatus        UMAPrOpen(void *macPrintSession) ;
-OSStatus        UMAPrClose(void *macPrintSession) ;
+#if !TARGET_CARBON
+OSStatus        UMAPrOpen() ;
+OSStatus        UMAPrClose() ;
+#endif
 
 // window manager
 
