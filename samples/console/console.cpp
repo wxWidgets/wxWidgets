@@ -99,7 +99,7 @@
 #ifdef TEST_INTERACTIVE
     #undef TEST_INTERACTIVE
 
-    static const bool TEST_INTERACTIVE = FALSE;
+    static const bool TEST_INTERACTIVE = TRUE;
 #else
     static const bool TEST_INTERACTIVE = FALSE;
 #endif
@@ -1947,8 +1947,15 @@ static void TestDivision()
         // multiplication will not overflow)
         wxLongLong ll = MAKE_LL((rand() >> 12), rand(), rand(), rand());
 
-        // get a random long (not wxLongLong for now) to divide it with
-        long l = rand();
+        // get a random (but non null) long (not wxLongLong for now) to divide
+        // it with
+        long l;
+        do
+        {
+           l = rand();
+        }
+        while ( !l );
+
         q = ll / l;
         r = ll % l;
 
@@ -5692,7 +5699,9 @@ int main(int argc, char **argv)
     {
         TestOsInfo();
         TestUserInfo();
-        TestDiskInfo();
+
+        if ( TEST_INTERACTIVE )
+            TestDiskInfo();
     }
 #endif // TEST_INFO_FUNCTIONS
 
