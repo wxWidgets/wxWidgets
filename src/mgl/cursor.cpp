@@ -3,7 +3,7 @@
 // Purpose:
 // Author:      Vaclav Slavik
 // Id:          $Id$
-// Copyright:   (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
+// Copyright:   (c) 2001-2002 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -20,9 +20,11 @@
 #endif
 
 #include "wx/cursor.h"
+#include "wx/module.h"
 #include "wx/utils.h"
 #include "wx/log.h"
 #include "wx/intl.h"
+#include "wx/hashmap.h"
 
 #include "wx/mgl/private.h"
 
@@ -51,9 +53,13 @@ wxCursorRefData::~wxCursorRefData()
     delete m_cursor;
 }
 
+#define M_CURSORDATA ((wxCursorRefData *)m_refData)
+
 //-----------------------------------------------------------------------------
 
-#define M_CURSORDATA ((wxCursorRefData *)m_refData)
+WX_DECLARE_HASH_MAP(int, wxCursor, wxIntegerHash, wxIntegerEqual, wxCursorsHash)
+
+static wxCursorsHash *gs_cursorsHash = NULL;
 
 IMPLEMENT_DYNAMIC_CLASS(wxCursor,wxObject)
 
@@ -63,14 +69,18 @@ wxCursor::wxCursor()
 
 wxCursor::wxCursor(int cursorId)
 {
+    if ( gs_cursorsHash->find(cursorId) != gs_cursorsHash->end() )
+    {
+        wxLogTrace(_T("mglcursor"), _T("cursor id %i fetched from cache"), cursorId);
+        *this = (*gs_cursorsHash)[cursorId];
+        return;
+    }
+
     const char *cursorname = NULL;
     m_refData = new wxCursorRefData();
 
     switch (cursorId)
     {
-        // FIXME_MGL -- what about storing these default cursors in executable
-        //              as XPMs so that wxMGL binary wouldn't depend on 
-        //              tons of files in $MGL_ROOT/cursors? I don't know yet...
         case wxCURSOR_ARROW:           cursorname = "arrow.cur"; break;
         case wxCURSOR_BULLSEYE:        cursorname = "bullseye.cur"; break;
         case wxCURSOR_CHAR:            cursorname = "char.cur"; break;
@@ -120,6 +130,12 @@ wxCursor::wxCursor(int cursorId)
     {
         wxLogError(_("Couldn't create cursor."));
         UnRef();
+    }
+    else
+    {
+        (*gs_cursorsHash)[cursorId] = *this;
+        wxLogTrace(_T("mglcursor"), _T("cursor id %i added to cache (%s)"), 
+                   cursorId, cursorname);
     }
 }
 
@@ -261,3 +277,28 @@ bool wxIsBusy()
     return (gs_busyCount > 0);
 }
 
+
+
+//-----------------------------------------------------------------------------
+// module - clean up code
+//-----------------------------------------------------------------------------
+
+class wxCursorModule : public wxModule
+{
+public:
+    virtual bool OnInit()
+    {
+        gs_cursorsHash = new wxCursorsHash;
+        return TRUE;
+    }
+    
+    virtual void OnExit()
+    {
+        wxDELETE(gs_cursorsHash);
+    }
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxCursorModule)
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxCursorModule, wxModule)
