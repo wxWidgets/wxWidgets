@@ -95,6 +95,7 @@
 
 WXDLLEXPORT_DATA(wxDbList*) PtrBegDbList = 0;
 
+
 char const *SQL_LOG_FILENAME         = "sqllog.txt";
 char const *SQL_CATALOG_FILENAME     = "catalog.txt";
 
@@ -839,10 +840,11 @@ bool wxDb::getDataTypeInfo(SWORD fSqlType, wxDbSqlTypeInfo &structSQLTypeInfo)
         if (!wxStrcmp(structSQLTypeInfo.TypeName, "varchar")) wxStrcpy(structSQLTypeInfo.TypeName, "char");
     }
 
-// BJO 20000427 : OpenLink driver (at least for unix)
-#ifdef _IODBC_    
+   // BJO 20000427 : OpenLink driver 
+   if (!wxStrncmp(dbInf.driverName, "oplodbc", 7) ||
+          !wxStrncmp(dbInf.driverName, "OLOD", 4))    
     if (!wxStrcmp(structSQLTypeInfo.TypeName, "double precision")) wxStrcpy(structSQLTypeInfo.TypeName, "real");
-#endif
+
 
     if (SQLGetData(hstmt, 3, SQL_C_LONG, (UCHAR*) &structSQLTypeInfo.Precision, 0, &cbRet) != SQL_SUCCESS)
         return(DispAllErrors(henv, hdbc, hstmt));
@@ -2488,10 +2490,14 @@ wxDBMS wxDb::Dbms(void)
     if (!wxStricmp(dbInf.dbmsName,"Adaptive Server Anywhere"))
         return(dbmsSYBASE_ASA);
     
-    // BJO 20000427 : The "SQL Server" string is also returned by SQLServer when connected trough an OpenLink driver.
+    // BJO 20000427 : The "SQL Server" string is also returned by SQLServer when
+    // connected trhough an OpenLink driver.
     // Is it also returned by Sybase?    
+    // OpenLink driver name is OLOD3032.DLL for msw and oplodbc.so for unix	
     if (!wxStricmp(dbInf.dbmsName,"SQL Server"))       
-      if (!wxStricmp(dbInf.driverName, "oplodbc.so")) return dbmsMS_SQL_SERVER; else return dbmsSYBASE_ASE;
+      if (!wxStrncmp(dbInf.driverName, "oplodbc", 7) ||
+          !wxStrncmp(dbInf.driverName, "OLOD", 4))
+			 return dbmsMS_SQL_SERVER; else return dbmsSYBASE_ASE;
      
 
     if (!wxStricmp(dbInf.dbmsName,"Microsoft SQL Server"))
