@@ -22565,15 +22565,15 @@ static swig_const_info swig_const_table[] = {
 { SWIG_PY_INT,     (char *)"SP_3DBORDER", (long) wxSP_3DBORDER, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"SP_BORDER", (long) wxSP_BORDER, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"SP_3D", (long) wxSP_3D, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED", (long) wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING", (long) wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"wxEVT_COMMAND_SPLITTER_DOUBLECLICKED", (long) wxEVT_COMMAND_SPLITTER_DOUBLECLICKED, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"wxEVT_COMMAND_SPLITTER_UNSPLIT", (long) wxEVT_COMMAND_SPLITTER_UNSPLIT, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"SPLIT_HORIZONTAL", (long) wxSPLIT_HORIZONTAL, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"SPLIT_VERTICAL", (long) wxSPLIT_VERTICAL, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"SPLIT_DRAG_NONE", (long) wxSPLIT_DRAG_NONE, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"SPLIT_DRAG_DRAGGING", (long) wxSPLIT_DRAG_DRAGGING, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"SPLIT_DRAG_LEFT_DOWN", (long) wxSPLIT_DRAG_LEFT_DOWN, 0, 0, 0},
+{ SWIG_PY_INT,     (char *)"wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED", (long) wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED, 0, 0, 0},
+{ SWIG_PY_INT,     (char *)"wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING", (long) wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING, 0, 0, 0},
+{ SWIG_PY_INT,     (char *)"wxEVT_COMMAND_SPLITTER_DOUBLECLICKED", (long) wxEVT_COMMAND_SPLITTER_DOUBLECLICKED, 0, 0, 0},
+{ SWIG_PY_INT,     (char *)"wxEVT_COMMAND_SPLITTER_UNSPLIT", (long) wxEVT_COMMAND_SPLITTER_UNSPLIT, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"SASH_DRAG_NONE", (long) wxSASH_DRAG_NONE, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"SASH_DRAG_DRAGGING", (long) wxSASH_DRAG_DRAGGING, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"SASH_DRAG_LEFT_DOWN", (long) wxSASH_DRAG_LEFT_DOWN, 0, 0, 0},
@@ -22682,12 +22682,31 @@ SWIGEXPORT(void) SWIG_init(void) {
     
     PyDict_SetItemString(d,(char*)"cvar", SWIG_globals);
     SWIG_addvarlink(SWIG_globals,(char*)"NullAcceleratorTable",_wrap_NullAcceleratorTable_get, _wrap_NullAcceleratorTable_set);
+    PyDict_SetItemString(d, "wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED", PyInt_FromLong(wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING", PyInt_FromLong(wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_SPLITTER_DOUBLECLICKED", PyInt_FromLong(wxEVT_COMMAND_SPLITTER_DOUBLECLICKED));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_SPLITTER_UNSPLIT", PyInt_FromLong(wxEVT_COMMAND_SPLITTER_UNSPLIT));
+    PyDict_SetItemString(d, "wxEVT_SASH_DRAGGED", PyInt_FromLong(wxEVT_SASH_DRAGGED));
+    PyDict_SetItemString(d, "wxEVT_QUERY_LAYOUT_INFO", PyInt_FromLong(wxEVT_QUERY_LAYOUT_INFO));
+    PyDict_SetItemString(d, "wxEVT_CALCULATE_LAYOUT", PyInt_FromLong(wxEVT_CALCULATE_LAYOUT));
     
     // Map renamed classes back to their common name for OOR
     wxPyPtrTypeMap_Add("wxHtmlListBox",     "wxPyHtmlListBox");
     wxPyPtrTypeMap_Add("wxVListBox",        "wxPyVListBox");
     wxPyPtrTypeMap_Add("wxVScrolledWindow", "wxPyVScrolledWindow");
     
+    PyDict_SetItemString(d, "wxEVT_TASKBAR_MOVE", PyInt_FromLong(wxEVT_TASKBAR_MOVE));
+    PyDict_SetItemString(d, "wxEVT_TASKBAR_LEFT_DOWN", PyInt_FromLong(wxEVT_TASKBAR_LEFT_DOWN));
+    PyDict_SetItemString(d, "wxEVT_TASKBAR_LEFT_UP", PyInt_FromLong(wxEVT_TASKBAR_LEFT_UP));
+    PyDict_SetItemString(d, "wxEVT_TASKBAR_RIGHT_DOWN", PyInt_FromLong(wxEVT_TASKBAR_RIGHT_DOWN));
+    PyDict_SetItemString(d, "wxEVT_TASKBAR_RIGHT_UP", PyInt_FromLong(wxEVT_TASKBAR_RIGHT_UP));
+    PyDict_SetItemString(d, "wxEVT_TASKBAR_LEFT_DCLICK", PyInt_FromLong(wxEVT_TASKBAR_LEFT_DCLICK));
+    PyDict_SetItemString(d, "wxEVT_TASKBAR_RIGHT_DCLICK", PyInt_FromLong(wxEVT_TASKBAR_RIGHT_DCLICK));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_FIND", PyInt_FromLong(wxEVT_COMMAND_FIND));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_FIND_NEXT", PyInt_FromLong(wxEVT_COMMAND_FIND_NEXT));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_FIND_REPLACE", PyInt_FromLong(wxEVT_COMMAND_FIND_REPLACE));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_FIND_REPLACE_ALL", PyInt_FromLong(wxEVT_COMMAND_FIND_REPLACE_ALL));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_FIND_CLOSE", PyInt_FromLong(wxEVT_COMMAND_FIND_CLOSE));
     
     wxPyPtrTypeMap_Add("wxPrintout", "wxPyPrintout");
     

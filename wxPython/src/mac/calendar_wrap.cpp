@@ -2511,6 +2511,12 @@ SWIGEXPORT(void) SWIG_init(void) {
     }
     SWIG_InstallConstants(d,swig_const_table);
     
+    PyDict_SetItemString(d, "wxEVT_CALENDAR_DOUBLECLICKED", PyInt_FromLong(wxEVT_CALENDAR_DOUBLECLICKED));
+    PyDict_SetItemString(d, "wxEVT_CALENDAR_SEL_CHANGED", PyInt_FromLong(wxEVT_CALENDAR_SEL_CHANGED));
+    PyDict_SetItemString(d, "wxEVT_CALENDAR_DAY_CHANGED", PyInt_FromLong(wxEVT_CALENDAR_DAY_CHANGED));
+    PyDict_SetItemString(d, "wxEVT_CALENDAR_MONTH_CHANGED", PyInt_FromLong(wxEVT_CALENDAR_MONTH_CHANGED));
+    PyDict_SetItemString(d, "wxEVT_CALENDAR_YEAR_CHANGED", PyInt_FromLong(wxEVT_CALENDAR_YEAR_CHANGED));
+    PyDict_SetItemString(d, "wxEVT_CALENDAR_WEEKDAY_CLICKED", PyInt_FromLong(wxEVT_CALENDAR_WEEKDAY_CLICKED));
     
     
 }

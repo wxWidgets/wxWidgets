@@ -960,7 +960,6 @@ Process_Exists = _misc.Process_Exists
 
 Process_Open = _misc.Process_Open
 
-wxEVT_END_PROCESS = _misc.wxEVT_END_PROCESS
 class ProcessEvent(core.Event):
     def __init__(self, *args, **kwargs):
         newobj = _misc.new_ProcessEvent(*args, **kwargs)
@@ -981,6 +980,7 @@ class ProcessEventPtr(ProcessEvent):
         self.__class__ = ProcessEvent
 _misc.ProcessEvent_swigregister(ProcessEventPtr)
 
+wxEVT_END_PROCESS = _misc.wxEVT_END_PROCESS
 EVT_END_PROCESS = wx.PyEventBinder( wxEVT_END_PROCESS, 1 )
 
 EXEC_ASYNC = _misc.EXEC_ASYNC

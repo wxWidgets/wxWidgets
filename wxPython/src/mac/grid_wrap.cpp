@@ -15334,6 +15334,22 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,(char*)"cvar", SWIG_globals);
     SWIG_addvarlink(SWIG_globals,(char*)"GridNoCellCoords",_wrap_GridNoCellCoords_get, _wrap_GridNoCellCoords_set);
     SWIG_addvarlink(SWIG_globals,(char*)"GridNoCellRect",_wrap_GridNoCellRect_get, _wrap_GridNoCellRect_set);
+    PyDict_SetItemString(d, "wxEVT_GRID_CELL_LEFT_CLICK", PyInt_FromLong(wxEVT_GRID_CELL_LEFT_CLICK));
+    PyDict_SetItemString(d, "wxEVT_GRID_CELL_RIGHT_CLICK", PyInt_FromLong(wxEVT_GRID_CELL_RIGHT_CLICK));
+    PyDict_SetItemString(d, "wxEVT_GRID_CELL_LEFT_DCLICK", PyInt_FromLong(wxEVT_GRID_CELL_LEFT_DCLICK));
+    PyDict_SetItemString(d, "wxEVT_GRID_CELL_RIGHT_DCLICK", PyInt_FromLong(wxEVT_GRID_CELL_RIGHT_DCLICK));
+    PyDict_SetItemString(d, "wxEVT_GRID_LABEL_LEFT_CLICK", PyInt_FromLong(wxEVT_GRID_LABEL_LEFT_CLICK));
+    PyDict_SetItemString(d, "wxEVT_GRID_LABEL_RIGHT_CLICK", PyInt_FromLong(wxEVT_GRID_LABEL_RIGHT_CLICK));
+    PyDict_SetItemString(d, "wxEVT_GRID_LABEL_LEFT_DCLICK", PyInt_FromLong(wxEVT_GRID_LABEL_LEFT_DCLICK));
+    PyDict_SetItemString(d, "wxEVT_GRID_LABEL_RIGHT_DCLICK", PyInt_FromLong(wxEVT_GRID_LABEL_RIGHT_DCLICK));
+    PyDict_SetItemString(d, "wxEVT_GRID_ROW_SIZE", PyInt_FromLong(wxEVT_GRID_ROW_SIZE));
+    PyDict_SetItemString(d, "wxEVT_GRID_COL_SIZE", PyInt_FromLong(wxEVT_GRID_COL_SIZE));
+    PyDict_SetItemString(d, "wxEVT_GRID_RANGE_SELECT", PyInt_FromLong(wxEVT_GRID_RANGE_SELECT));
+    PyDict_SetItemString(d, "wxEVT_GRID_CELL_CHANGE", PyInt_FromLong(wxEVT_GRID_CELL_CHANGE));
+    PyDict_SetItemString(d, "wxEVT_GRID_SELECT_CELL", PyInt_FromLong(wxEVT_GRID_SELECT_CELL));
+    PyDict_SetItemString(d, "wxEVT_GRID_EDITOR_SHOWN", PyInt_FromLong(wxEVT_GRID_EDITOR_SHOWN));
+    PyDict_SetItemString(d, "wxEVT_GRID_EDITOR_HIDDEN", PyInt_FromLong(wxEVT_GRID_EDITOR_HIDDEN));
+    PyDict_SetItemString(d, "wxEVT_GRID_EDITOR_CREATED", PyInt_FromLong(wxEVT_GRID_EDITOR_CREATED));
     
     
 }

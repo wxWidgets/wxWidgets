@@ -26321,9 +26321,15 @@ SWIGEXPORT(void) SWIG_init(void) {
     }
     SWIG_InstallConstants(d,swig_const_table);
     
+    PyDict_SetItemString(d, "wxEVT_TIMER", PyInt_FromLong(wxEVT_TIMER));
+    PyDict_SetItemString(d, "wxEVT_END_PROCESS", PyInt_FromLong(wxEVT_END_PROCESS));
     
     wxPyPtrTypeMap_Add("wxProcess", "wxPyProcess");
     
+    PyDict_SetItemString(d, "wxEVT_JOY_BUTTON_DOWN", PyInt_FromLong(wxEVT_JOY_BUTTON_DOWN));
+    PyDict_SetItemString(d, "wxEVT_JOY_BUTTON_UP", PyInt_FromLong(wxEVT_JOY_BUTTON_UP));
+    PyDict_SetItemString(d, "wxEVT_JOY_MOVE", PyInt_FromLong(wxEVT_JOY_MOVE));
+    PyDict_SetItemString(d, "wxEVT_JOY_ZMOVE", PyInt_FromLong(wxEVT_JOY_ZMOVE));
     PyDict_SetItemString(d,(char*)"cvar", SWIG_globals);
     SWIG_addvarlink(SWIG_globals,(char*)"TheMimeTypesManager",_wrap_TheMimeTypesManager_get, _wrap_TheMimeTypesManager_set);
     SWIG_addvarlink(SWIG_globals,(char*)"ART_TOOLBAR",_wrap_ART_TOOLBAR_get, _wrap_ART_TOOLBAR_set);

@@ -424,6 +424,7 @@ wxString wxTextCtrl_GetString(wxTextCtrl *self,long from,long to){
 // implement dummy classes and such for wxMac
 
 #define wxEVT_COMMAND_TOGGLEBUTTON_CLICKED 0
+    
 class wxToggleButton : public wxControl
 {
 public:
@@ -26868,8 +26869,6 @@ static swig_const_info swig_const_table[] = {
 { SWIG_PY_INT,     (char *)"SP_WRAP", (long) wxSP_WRAP, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"wxEVT_COMMAND_SPINCTRL_UPDATED", (long) wxEVT_COMMAND_SPINCTRL_UPDATED, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"wxEVT_COMMAND_TOGGLEBUTTON_CLICKED", (long) wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED", (long) wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING", (long) wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"NB_FIXEDWIDTH", (long) wxNB_FIXEDWIDTH, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"NB_TOP", (long) wxNB_TOP, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"NB_LEFT", (long) wxNB_LEFT, 0, 0, 0},
@@ -26880,6 +26879,8 @@ static swig_const_info swig_const_table[] = {
 { SWIG_PY_INT,     (char *)"NB_HITTEST_ONICON", (long) wxNB_HITTEST_ONICON, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"NB_HITTEST_ONLABEL", (long) wxNB_HITTEST_ONLABEL, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"NB_HITTEST_ONITEM", (long) wxNB_HITTEST_ONITEM, 0, 0, 0},
+{ SWIG_PY_INT,     (char *)"wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED", (long) wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, 0, 0, 0},
+{ SWIG_PY_INT,     (char *)"wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING", (long) wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"LB_DEFAULT", (long) wxLB_DEFAULT, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"LB_TOP", (long) wxLB_TOP, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"LB_BOTTOM", (long) wxLB_BOTTOM, 0, 0, 0},
@@ -27081,14 +27082,67 @@ SWIGEXPORT(void) SWIG_init(void) {
     }
     SWIG_InstallConstants(d,swig_const_table);
     
+    PyDict_SetItemString(d, "wxEVT_COMMAND_TEXT_UPDATED", PyInt_FromLong(wxEVT_COMMAND_TEXT_UPDATED));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_TEXT_ENTER", PyInt_FromLong(wxEVT_COMMAND_TEXT_ENTER));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_TEXT_URL", PyInt_FromLong(wxEVT_COMMAND_TEXT_URL));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_TEXT_MAXLEN", PyInt_FromLong(wxEVT_COMMAND_TEXT_MAXLEN));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_SPINCTRL_UPDATED", PyInt_FromLong(wxEVT_COMMAND_SPINCTRL_UPDATED));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_TOGGLEBUTTON_CLICKED", PyInt_FromLong(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED", PyInt_FromLong(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING", PyInt_FromLong(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED", PyInt_FromLong(wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING", PyInt_FromLong(wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_BEGIN_DRAG", PyInt_FromLong(wxEVT_COMMAND_LIST_BEGIN_DRAG));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_BEGIN_RDRAG", PyInt_FromLong(wxEVT_COMMAND_LIST_BEGIN_RDRAG));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT", PyInt_FromLong(wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_END_LABEL_EDIT", PyInt_FromLong(wxEVT_COMMAND_LIST_END_LABEL_EDIT));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_DELETE_ITEM", PyInt_FromLong(wxEVT_COMMAND_LIST_DELETE_ITEM));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS", PyInt_FromLong(wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_GET_INFO", PyInt_FromLong(wxEVT_COMMAND_LIST_GET_INFO));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_SET_INFO", PyInt_FromLong(wxEVT_COMMAND_LIST_SET_INFO));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_ITEM_SELECTED", PyInt_FromLong(wxEVT_COMMAND_LIST_ITEM_SELECTED));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_ITEM_DESELECTED", PyInt_FromLong(wxEVT_COMMAND_LIST_ITEM_DESELECTED));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_KEY_DOWN", PyInt_FromLong(wxEVT_COMMAND_LIST_KEY_DOWN));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_INSERT_ITEM", PyInt_FromLong(wxEVT_COMMAND_LIST_INSERT_ITEM));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_COL_CLICK", PyInt_FromLong(wxEVT_COMMAND_LIST_COL_CLICK));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK", PyInt_FromLong(wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK", PyInt_FromLong(wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_ITEM_ACTIVATED", PyInt_FromLong(wxEVT_COMMAND_LIST_ITEM_ACTIVATED));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_CACHE_HINT", PyInt_FromLong(wxEVT_COMMAND_LIST_CACHE_HINT));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_COL_RIGHT_CLICK", PyInt_FromLong(wxEVT_COMMAND_LIST_COL_RIGHT_CLICK));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_COL_BEGIN_DRAG", PyInt_FromLong(wxEVT_COMMAND_LIST_COL_BEGIN_DRAG));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_COL_DRAGGING", PyInt_FromLong(wxEVT_COMMAND_LIST_COL_DRAGGING));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_COL_END_DRAG", PyInt_FromLong(wxEVT_COMMAND_LIST_COL_END_DRAG));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_ITEM_FOCUSED", PyInt_FromLong(wxEVT_COMMAND_LIST_ITEM_FOCUSED));
     
     // Map renamed classes back to their common name for OOR
     wxPyPtrTypeMap_Add("wxListCtrl", "wxPyListCtrl");
     
+    PyDict_SetItemString(d, "wxEVT_COMMAND_TREE_BEGIN_DRAG", PyInt_FromLong(wxEVT_COMMAND_TREE_BEGIN_DRAG));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_TREE_BEGIN_RDRAG", PyInt_FromLong(wxEVT_COMMAND_TREE_BEGIN_RDRAG));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT", PyInt_FromLong(wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_TREE_END_LABEL_EDIT", PyInt_FromLong(wxEVT_COMMAND_TREE_END_LABEL_EDIT));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_TREE_DELETE_ITEM", PyInt_FromLong(wxEVT_COMMAND_TREE_DELETE_ITEM));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_TREE_GET_INFO", PyInt_FromLong(wxEVT_COMMAND_TREE_GET_INFO));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_TREE_SET_INFO", PyInt_FromLong(wxEVT_COMMAND_TREE_SET_INFO));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_TREE_ITEM_EXPANDED", PyInt_FromLong(wxEVT_COMMAND_TREE_ITEM_EXPANDED));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_TREE_ITEM_EXPANDING", PyInt_FromLong(wxEVT_COMMAND_TREE_ITEM_EXPANDING));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_TREE_ITEM_COLLAPSED", PyInt_FromLong(wxEVT_COMMAND_TREE_ITEM_COLLAPSED));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_TREE_ITEM_COLLAPSING", PyInt_FromLong(wxEVT_COMMAND_TREE_ITEM_COLLAPSING));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_TREE_SEL_CHANGED", PyInt_FromLong(wxEVT_COMMAND_TREE_SEL_CHANGED));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_TREE_SEL_CHANGING", PyInt_FromLong(wxEVT_COMMAND_TREE_SEL_CHANGING));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_TREE_KEY_DOWN", PyInt_FromLong(wxEVT_COMMAND_TREE_KEY_DOWN));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_TREE_ITEM_ACTIVATED", PyInt_FromLong(wxEVT_COMMAND_TREE_ITEM_ACTIVATED));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK", PyInt_FromLong(wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK", PyInt_FromLong(wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_TREE_END_DRAG", PyInt_FromLong(wxEVT_COMMAND_TREE_END_DRAG));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK", PyInt_FromLong(wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK));
     
     // Map renamed classes back to their common name for OOR
     wxPyPtrTypeMap_Add("wxTreeItemData", "wxPyTreeItemData");
     wxPyPtrTypeMap_Add("wxTreeCtrl", "wxPyTreeCtrl");
     
+    PyDict_SetItemString(d, "wxEVT_HELP", PyInt_FromLong(wxEVT_HELP));
+    PyDict_SetItemString(d, "wxEVT_DETAILED_HELP", PyInt_FromLong(wxEVT_DETAILED_HELP));
 }
 
