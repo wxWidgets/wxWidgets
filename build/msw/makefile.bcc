@@ -37,6 +37,7 @@ WX_RELEASE_NODOT = 25
 WX_VERSION_NODOT = $(WX_RELEASE_NODOT)3
 OBJS = \
 	bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+LIBDIRNAME = ..\..\lib\bcc_$(LIBTYPE_SUFFIX)$(CFG)
 SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 WXREGEX_CFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
@@ -173,8 +174,8 @@ WXTIFF_OBJECTS =  \
 	$(OBJS)\wxtiff_tif_write.obj \
 	$(OBJS)\wxtiff_tif_zip.obj
 WXEXPAT_CFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
-	$(__OPTIMIZEFLAG) -tWM $(____LIBDIRNAME_FILENAMES_6_p) -DCOMPILED_FROM_DSP \
-	-w-8004 -w-8008 -w-8012 -w-8057 -w-8066 $(CPPFLAGS) $(CFLAGS)
+	$(__OPTIMIZEFLAG) -tWM -I$(LIBDIRNAME) -DCOMPILED_FROM_DSP -w-8004 -w-8008 \
+	-w-8012 -w-8057 -w-8066 $(CPPFLAGS) $(CFLAGS)
 WXEXPAT_OBJECTS =  \
 	$(OBJS)\wxexpat_xmlparse.obj \
 	$(OBJS)\wxexpat_xmlrole.obj \
@@ -650,21 +651,7 @@ ADVDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	-H=$(OBJS)\wxprec_advdll.csm $(CPPFLAGS) $(CXXFLAGS)
 ADVDLL_OBJECTS =  \
 	$(OBJS)\advdll_dummy.obj \
-	$(OBJS)\advdll_calctrl.obj \
-	$(OBJS)\advdll_grid.obj \
-	$(OBJS)\advdll_gridctrl.obj \
-	$(OBJS)\advdll_gridsel.obj \
-	$(OBJS)\advdll_helpext.obj \
-	$(OBJS)\advdll_laywin.obj \
-	$(OBJS)\advdll_sashwin.obj \
-	$(OBJS)\advdll_splash.obj \
-	$(OBJS)\advdll_tipdlg.obj \
-	$(OBJS)\advdll_wizard.obj \
-	$(OBJS)\advdll_taskbarcmn.obj \
-	$(OBJS)\advdll_datectrl.obj \
-	$(OBJS)\advdll_sound.obj \
-	$(OBJS)\advdll_taskbar.obj \
-	$(OBJS)\advdll_joystick.obj
+	$(____ADVANCED_SRC_FILENAMES_2_OBJECTS)
 ADVLIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
@@ -673,21 +660,7 @@ ADVLIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(CXXFLAGS)
 ADVLIB_OBJECTS =  \
 	$(OBJS)\advlib_dummy.obj \
-	$(OBJS)\advlib_calctrl.obj \
-	$(OBJS)\advlib_grid.obj \
-	$(OBJS)\advlib_gridctrl.obj \
-	$(OBJS)\advlib_gridsel.obj \
-	$(OBJS)\advlib_helpext.obj \
-	$(OBJS)\advlib_laywin.obj \
-	$(OBJS)\advlib_sashwin.obj \
-	$(OBJS)\advlib_splash.obj \
-	$(OBJS)\advlib_tipdlg.obj \
-	$(OBJS)\advlib_wizard.obj \
-	$(OBJS)\advlib_taskbarcmn.obj \
-	$(OBJS)\advlib_datectrl.obj \
-	$(OBJS)\advlib_sound.obj \
-	$(OBJS)\advlib_taskbar.obj \
-	$(OBJS)\advlib_joystick.obj
+	$(____ADVANCED_SRC_FILENAMES_3_OBJECTS)
 MEDIADLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
@@ -969,6 +942,12 @@ WXUNIVNAME = univ
 !if "$(SHARED)" == "1"
 WXDLLFLAG = dll
 !endif
+!if "$(SHARED)" == "0"
+LIBTYPE_SUFFIX = lib
+!endif
+!if "$(SHARED)" == "1"
+LIBTYPE_SUFFIX = dll
+!endif
 !if "$(USE_GUI)" == "1"
 __wxpng___depname = $(LIBDIRNAME)\wxpng$(WXDEBUGFLAG).lib
 !endif
@@ -977,12 +956,6 @@ __wxjpeg___depname = $(LIBDIRNAME)\wxjpeg$(WXDEBUGFLAG).lib
 !endif
 !if "$(USE_GUI)" == "1"
 __wxtiff___depname = $(LIBDIRNAME)\wxtiff$(WXDEBUGFLAG).lib
-!endif
-!if "$(SHARED)" == "0"
-____LIBDIRNAME_FILENAMES_6_p = -I..\..\lib\bcc_lib$(CFG)
-!endif
-!if "$(SHARED)" == "1"
-____LIBDIRNAME_FILENAMES_6_p = -I..\..\lib\bcc_dll$(CFG)
 !endif
 !if "$(MONOLITHIC)" == "0"
 EXTRALIBS_FOR_BASE = 
@@ -997,21 +970,7 @@ __monodll___depname = \
 !if "$(USE_GUI)" == "1"
 ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(____CORE_SRC_FILENAMES_OBJECTS) \
-	$(OBJS)\monodll_calctrl.obj \
-	$(OBJS)\monodll_grid.obj \
-	$(OBJS)\monodll_gridctrl.obj \
-	$(OBJS)\monodll_gridsel.obj \
-	$(OBJS)\monodll_helpext.obj \
-	$(OBJS)\monodll_laywin.obj \
-	$(OBJS)\monodll_sashwin.obj \
-	$(OBJS)\monodll_splash.obj \
-	$(OBJS)\monodll_tipdlg.obj \
-	$(OBJS)\monodll_wizard.obj \
-	$(OBJS)\monodll_taskbarcmn.obj \
-	$(OBJS)\monodll_datectrl.obj \
-	$(OBJS)\monodll_sound.obj \
-	$(OBJS)\monodll_taskbar.obj \
-	$(OBJS)\monodll_joystick.obj \
+	$(____ADVANCED_SRC_FILENAMES_OBJECTS) \
 	$(OBJS)\monodll_mediactrlcmn.obj \
 	$(OBJS)\monodll_mediactrl.obj \
 	$(OBJS)\monodll_helpbest.obj \
@@ -1470,6 +1429,41 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_vlbox.obj \
 	$(OBJS)\monodll_vscroll.obj
 !endif
+!if "$(WXUNIV)" == "0"
+____ADVANCED_SRC_FILENAMES_OBJECTS =  \
+	$(OBJS)\monodll_calctrl.obj \
+	$(OBJS)\monodll_grid.obj \
+	$(OBJS)\monodll_gridctrl.obj \
+	$(OBJS)\monodll_gridsel.obj \
+	$(OBJS)\monodll_helpext.obj \
+	$(OBJS)\monodll_laywin.obj \
+	$(OBJS)\monodll_sashwin.obj \
+	$(OBJS)\monodll_splash.obj \
+	$(OBJS)\monodll_tipdlg.obj \
+	$(OBJS)\monodll_wizard.obj \
+	$(OBJS)\monodll_taskbarcmn.obj \
+	$(OBJS)\monodll_sound.obj \
+	$(OBJS)\monodll_taskbar.obj \
+	$(OBJS)\monodll_joystick.obj \
+	$(OBJS)\monodll_datectrl.obj
+!endif
+!if "$(WXUNIV)" == "1"
+____ADVANCED_SRC_FILENAMES_OBJECTS =  \
+	$(OBJS)\monodll_calctrl.obj \
+	$(OBJS)\monodll_grid.obj \
+	$(OBJS)\monodll_gridctrl.obj \
+	$(OBJS)\monodll_gridsel.obj \
+	$(OBJS)\monodll_helpext.obj \
+	$(OBJS)\monodll_laywin.obj \
+	$(OBJS)\monodll_sashwin.obj \
+	$(OBJS)\monodll_splash.obj \
+	$(OBJS)\monodll_tipdlg.obj \
+	$(OBJS)\monodll_wizard.obj \
+	$(OBJS)\monodll_taskbarcmn.obj \
+	$(OBJS)\monodll_sound.obj \
+	$(OBJS)\monodll_taskbar.obj \
+	$(OBJS)\monodll_joystick.obj
+!endif
 !if "$(MONOLITHIC)" == "1" && "$(SHARED)" == "0"
 __monolib___depname = \
 	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
@@ -1477,21 +1471,7 @@ __monolib___depname = \
 !if "$(USE_GUI)" == "1"
 ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(____CORE_SRC_FILENAMES_1_OBJECTS) \
-	$(OBJS)\monolib_calctrl.obj \
-	$(OBJS)\monolib_grid.obj \
-	$(OBJS)\monolib_gridctrl.obj \
-	$(OBJS)\monolib_gridsel.obj \
-	$(OBJS)\monolib_helpext.obj \
-	$(OBJS)\monolib_laywin.obj \
-	$(OBJS)\monolib_sashwin.obj \
-	$(OBJS)\monolib_splash.obj \
-	$(OBJS)\monolib_tipdlg.obj \
-	$(OBJS)\monolib_wizard.obj \
-	$(OBJS)\monolib_taskbarcmn.obj \
-	$(OBJS)\monolib_datectrl.obj \
-	$(OBJS)\monolib_sound.obj \
-	$(OBJS)\monolib_taskbar.obj \
-	$(OBJS)\monolib_joystick.obj \
+	$(____ADVANCED_SRC_FILENAMES_1_OBJECTS) \
 	$(OBJS)\monolib_mediactrlcmn.obj \
 	$(OBJS)\monolib_mediactrl.obj \
 	$(OBJS)\monolib_helpbest.obj \
@@ -1949,6 +1929,41 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_treectlg.obj \
 	$(OBJS)\monolib_vlbox.obj \
 	$(OBJS)\monolib_vscroll.obj
+!endif
+!if "$(WXUNIV)" == "0"
+____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
+	$(OBJS)\monolib_calctrl.obj \
+	$(OBJS)\monolib_grid.obj \
+	$(OBJS)\monolib_gridctrl.obj \
+	$(OBJS)\monolib_gridsel.obj \
+	$(OBJS)\monolib_helpext.obj \
+	$(OBJS)\monolib_laywin.obj \
+	$(OBJS)\monolib_sashwin.obj \
+	$(OBJS)\monolib_splash.obj \
+	$(OBJS)\monolib_tipdlg.obj \
+	$(OBJS)\monolib_wizard.obj \
+	$(OBJS)\monolib_taskbarcmn.obj \
+	$(OBJS)\monolib_sound.obj \
+	$(OBJS)\monolib_taskbar.obj \
+	$(OBJS)\monolib_joystick.obj \
+	$(OBJS)\monolib_datectrl.obj
+!endif
+!if "$(WXUNIV)" == "1"
+____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
+	$(OBJS)\monolib_calctrl.obj \
+	$(OBJS)\monolib_grid.obj \
+	$(OBJS)\monolib_gridctrl.obj \
+	$(OBJS)\monolib_gridsel.obj \
+	$(OBJS)\monolib_helpext.obj \
+	$(OBJS)\monolib_laywin.obj \
+	$(OBJS)\monolib_sashwin.obj \
+	$(OBJS)\monolib_splash.obj \
+	$(OBJS)\monolib_tipdlg.obj \
+	$(OBJS)\monolib_wizard.obj \
+	$(OBJS)\monolib_taskbarcmn.obj \
+	$(OBJS)\monolib_sound.obj \
+	$(OBJS)\monolib_taskbar.obj \
+	$(OBJS)\monolib_joystick.obj
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1"
 __basedll___depname = \
@@ -2760,9 +2775,79 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 __advdll___depname = \
 	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv_bcc$(VENDORTAG).dll
 !endif
+!if "$(WXUNIV)" == "0"
+____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
+	$(OBJS)\advdll_calctrl.obj \
+	$(OBJS)\advdll_grid.obj \
+	$(OBJS)\advdll_gridctrl.obj \
+	$(OBJS)\advdll_gridsel.obj \
+	$(OBJS)\advdll_helpext.obj \
+	$(OBJS)\advdll_laywin.obj \
+	$(OBJS)\advdll_sashwin.obj \
+	$(OBJS)\advdll_splash.obj \
+	$(OBJS)\advdll_tipdlg.obj \
+	$(OBJS)\advdll_wizard.obj \
+	$(OBJS)\advdll_taskbarcmn.obj \
+	$(OBJS)\advdll_sound.obj \
+	$(OBJS)\advdll_taskbar.obj \
+	$(OBJS)\advdll_joystick.obj \
+	$(OBJS)\advdll_datectrl.obj
+!endif
+!if "$(WXUNIV)" == "1"
+____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
+	$(OBJS)\advdll_calctrl.obj \
+	$(OBJS)\advdll_grid.obj \
+	$(OBJS)\advdll_gridctrl.obj \
+	$(OBJS)\advdll_gridsel.obj \
+	$(OBJS)\advdll_helpext.obj \
+	$(OBJS)\advdll_laywin.obj \
+	$(OBJS)\advdll_sashwin.obj \
+	$(OBJS)\advdll_splash.obj \
+	$(OBJS)\advdll_tipdlg.obj \
+	$(OBJS)\advdll_wizard.obj \
+	$(OBJS)\advdll_taskbarcmn.obj \
+	$(OBJS)\advdll_sound.obj \
+	$(OBJS)\advdll_taskbar.obj \
+	$(OBJS)\advdll_joystick.obj
+!endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_GUI)" == "1"
 __advlib___depname = \
 	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv.lib
+!endif
+!if "$(WXUNIV)" == "0"
+____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
+	$(OBJS)\advlib_calctrl.obj \
+	$(OBJS)\advlib_grid.obj \
+	$(OBJS)\advlib_gridctrl.obj \
+	$(OBJS)\advlib_gridsel.obj \
+	$(OBJS)\advlib_helpext.obj \
+	$(OBJS)\advlib_laywin.obj \
+	$(OBJS)\advlib_sashwin.obj \
+	$(OBJS)\advlib_splash.obj \
+	$(OBJS)\advlib_tipdlg.obj \
+	$(OBJS)\advlib_wizard.obj \
+	$(OBJS)\advlib_taskbarcmn.obj \
+	$(OBJS)\advlib_sound.obj \
+	$(OBJS)\advlib_taskbar.obj \
+	$(OBJS)\advlib_joystick.obj \
+	$(OBJS)\advlib_datectrl.obj
+!endif
+!if "$(WXUNIV)" == "1"
+____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
+	$(OBJS)\advlib_calctrl.obj \
+	$(OBJS)\advlib_grid.obj \
+	$(OBJS)\advlib_gridctrl.obj \
+	$(OBJS)\advlib_gridsel.obj \
+	$(OBJS)\advlib_helpext.obj \
+	$(OBJS)\advlib_laywin.obj \
+	$(OBJS)\advlib_sashwin.obj \
+	$(OBJS)\advlib_splash.obj \
+	$(OBJS)\advlib_tipdlg.obj \
+	$(OBJS)\advlib_wizard.obj \
+	$(OBJS)\advlib_taskbarcmn.obj \
+	$(OBJS)\advlib_sound.obj \
+	$(OBJS)\advlib_taskbar.obj \
+	$(OBJS)\advlib_joystick.obj
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_GUI)" == "1"
 __mediadll___depname = \
@@ -2885,12 +2970,6 @@ __DEBUG_DEFINE_p = -D__WXDEBUG__
 !endif
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p = -D_UNICODE
-!endif
-!if "$(SHARED)" == "0"
-LIBDIRNAME = ..\..\lib\bcc_lib$(CFG)
-!endif
-!if "$(SHARED)" == "1"
-LIBDIRNAME = ..\..\lib\bcc_dll$(CFG)
 !endif
 !if "$(WXUNIV)" == "0"
 __SETUP_H_SUBDIR_FILENAMES = msw
@@ -4057,49 +4136,7 @@ $(OBJS)\monodll_metal.obj: ..\..\src\univ\themes\metal.cpp
 $(OBJS)\monodll_win32.obj: ..\..\src\univ\themes\win32.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 
-$(OBJS)\monodll_calctrl.obj: ..\..\src\generic\calctrl.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
-
-$(OBJS)\monodll_grid.obj: ..\..\src\generic\grid.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
-
-$(OBJS)\monodll_gridctrl.obj: ..\..\src\generic\gridctrl.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
-
-$(OBJS)\monodll_gridsel.obj: ..\..\src\generic\gridsel.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
-
-$(OBJS)\monodll_helpext.obj: ..\..\src\generic\helpext.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
-
-$(OBJS)\monodll_laywin.obj: ..\..\src\generic\laywin.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
-
-$(OBJS)\monodll_sashwin.obj: ..\..\src\generic\sashwin.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
-
-$(OBJS)\monodll_splash.obj: ..\..\src\generic\splash.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
-
-$(OBJS)\monodll_tipdlg.obj: ..\..\src\generic\tipdlg.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
-
-$(OBJS)\monodll_wizard.obj: ..\..\src\generic\wizard.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
-
-$(OBJS)\monodll_taskbarcmn.obj: ..\..\src\common\taskbarcmn.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
-
 $(OBJS)\monodll_datectrl.obj: ..\..\src\msw\datectrl.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
-
-$(OBJS)\monodll_sound.obj: ..\..\src\msw\sound.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
-
-$(OBJS)\monodll_taskbar.obj: ..\..\src\msw\taskbar.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
-
-$(OBJS)\monodll_joystick.obj: ..\..\src\msw\joystick.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 
 $(OBJS)\monodll_mediactrlcmn.obj: ..\..\src\common\mediactrlcmn.cpp
@@ -5281,6 +5318,76 @@ $(OBJS)\monodll_vscroll.obj: ..\..\src\generic\vscroll.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 !endif
 
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_calctrl.obj: ..\..\src\generic\calctrl.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_grid.obj: ..\..\src\generic\grid.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_gridctrl.obj: ..\..\src\generic\gridctrl.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_gridsel.obj: ..\..\src\generic\gridsel.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_helpext.obj: ..\..\src\generic\helpext.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_laywin.obj: ..\..\src\generic\laywin.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_sashwin.obj: ..\..\src\generic\sashwin.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_splash.obj: ..\..\src\generic\splash.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_tipdlg.obj: ..\..\src\generic\tipdlg.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_wizard.obj: ..\..\src\generic\wizard.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_taskbarcmn.obj: ..\..\src\common\taskbarcmn.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_sound.obj: ..\..\src\msw\sound.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_taskbar.obj: ..\..\src\msw\taskbar.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_joystick.obj: ..\..\src\msw\joystick.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
+!endif
+
 $(OBJS)\monolib_dummy.obj: ..\..\src\msw\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) -H $**
 
@@ -5686,49 +5793,7 @@ $(OBJS)\monolib_metal.obj: ..\..\src\univ\themes\metal.cpp
 $(OBJS)\monolib_win32.obj: ..\..\src\univ\themes\win32.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 
-$(OBJS)\monolib_calctrl.obj: ..\..\src\generic\calctrl.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
-
-$(OBJS)\monolib_grid.obj: ..\..\src\generic\grid.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
-
-$(OBJS)\monolib_gridctrl.obj: ..\..\src\generic\gridctrl.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
-
-$(OBJS)\monolib_gridsel.obj: ..\..\src\generic\gridsel.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
-
-$(OBJS)\monolib_helpext.obj: ..\..\src\generic\helpext.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
-
-$(OBJS)\monolib_laywin.obj: ..\..\src\generic\laywin.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
-
-$(OBJS)\monolib_sashwin.obj: ..\..\src\generic\sashwin.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
-
-$(OBJS)\monolib_splash.obj: ..\..\src\generic\splash.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
-
-$(OBJS)\monolib_tipdlg.obj: ..\..\src\generic\tipdlg.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
-
-$(OBJS)\monolib_wizard.obj: ..\..\src\generic\wizard.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
-
-$(OBJS)\monolib_taskbarcmn.obj: ..\..\src\common\taskbarcmn.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
-
 $(OBJS)\monolib_datectrl.obj: ..\..\src\msw\datectrl.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
-
-$(OBJS)\monolib_sound.obj: ..\..\src\msw\sound.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
-
-$(OBJS)\monolib_taskbar.obj: ..\..\src\msw\taskbar.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
-
-$(OBJS)\monolib_joystick.obj: ..\..\src\msw\joystick.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 
 $(OBJS)\monolib_mediactrlcmn.obj: ..\..\src\common\mediactrlcmn.cpp
@@ -6907,6 +6972,76 @@ $(OBJS)\monolib_vlbox.obj: ..\..\src\generic\vlbox.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_vscroll.obj: ..\..\src\generic\vscroll.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_calctrl.obj: ..\..\src\generic\calctrl.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_grid.obj: ..\..\src\generic\grid.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_gridctrl.obj: ..\..\src\generic\gridctrl.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_gridsel.obj: ..\..\src\generic\gridsel.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_helpext.obj: ..\..\src\generic\helpext.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_laywin.obj: ..\..\src\generic\laywin.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_sashwin.obj: ..\..\src\generic\sashwin.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_splash.obj: ..\..\src\generic\splash.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_tipdlg.obj: ..\..\src\generic\tipdlg.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_wizard.obj: ..\..\src\generic\wizard.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_taskbarcmn.obj: ..\..\src\common\taskbarcmn.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_sound.obj: ..\..\src\msw\sound.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_taskbar.obj: ..\..\src\msw\taskbar.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_joystick.obj: ..\..\src\msw\joystick.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 !endif
 
@@ -9727,6 +9862,9 @@ $(OBJS)\corelib_vscroll.obj: ..\..\src\generic\vscroll.cpp
 $(OBJS)\advdll_dummy.obj: ..\..\src\msw\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) -H $**
 
+$(OBJS)\advdll_datectrl.obj: ..\..\src\msw\datectrl.cpp
+	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) $**
+
 $(OBJS)\advdll_calctrl.obj: ..\..\src\generic\calctrl.cpp
 	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) $**
 
@@ -9760,9 +9898,6 @@ $(OBJS)\advdll_wizard.obj: ..\..\src\generic\wizard.cpp
 $(OBJS)\advdll_taskbarcmn.obj: ..\..\src\common\taskbarcmn.cpp
 	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) $**
 
-$(OBJS)\advdll_datectrl.obj: ..\..\src\msw\datectrl.cpp
-	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) $**
-
 $(OBJS)\advdll_sound.obj: ..\..\src\msw\sound.cpp
 	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) $**
 
@@ -9774,6 +9909,9 @@ $(OBJS)\advdll_joystick.obj: ..\..\src\msw\joystick.cpp
 
 $(OBJS)\advlib_dummy.obj: ..\..\src\msw\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) -H $**
+
+$(OBJS)\advlib_datectrl.obj: ..\..\src\msw\datectrl.cpp
+	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) $**
 
 $(OBJS)\advlib_calctrl.obj: ..\..\src\generic\calctrl.cpp
 	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) $**
@@ -9806,9 +9944,6 @@ $(OBJS)\advlib_wizard.obj: ..\..\src\generic\wizard.cpp
 	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) $**
 
 $(OBJS)\advlib_taskbarcmn.obj: ..\..\src\common\taskbarcmn.cpp
-	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) $**
-
-$(OBJS)\advlib_datectrl.obj: ..\..\src\msw\datectrl.cpp
 	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) $**
 
 $(OBJS)\advlib_sound.obj: ..\..\src\msw\sound.cpp

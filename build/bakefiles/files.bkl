@@ -30,6 +30,13 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
        XWIN_LOWLEVEL                 low-level classes for X Window System
                                      ports (wxGTK, wxMotif, wxX11)
 
+       MSW_DESKTOP                   files used only on desktop Windows
+                                     versions and not under Windows CE
+
+       xxx_NATIVE                    native files not used by wxUniv (used as
+                                     complement of LOWLEVEL when most of the
+                                     files are lowlevel and only few are native)
+
        HTML                          wxHTML files
        XRC                           wxXRC files
 
@@ -1196,14 +1203,14 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="MSW_LOWLEVEL_HDR" hints="files">
 </set>
 
-<set var="MSW_ONLY_LOWLEVEL_SRC" hints="files">
+<set var="MSW_DESKTOP_LOWLEVEL_SRC" hints="files">
     src/msw/helpchm.cpp
     src/msw/helpwin.cpp
     src/msw/ole/automtn.cpp
     src/msw/ole/uuid.cpp
 </set>
 
-<set var="MSW_ONLY_LOWLEVEL_HDR" hints="files">
+<set var="MSW_DESKTOP_LOWLEVEL_HDR" hints="files">
     wx/msw/helpchm.h
     wx/msw/helpwin.h
 </set>
@@ -1387,11 +1394,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <!-- Files used only by desktop MSW port, but *not* WindowsCE one: -->
-<set var="MSW_ONLY_SRC" hints="files">
+<set var="MSW_DESKTOP_SRC" hints="files">
     src/msw/fdrepdlg.cpp
     src/msw/fontdlg.cpp
 </set>
-<set var="MSW_ONLY_HDR" hints="files">
+<set var="MSW_DESKTOP_HDR" hints="files">
     wx/msw/fdrepdlg.h
     wx/msw/fontdlg.h
     wx/msw/helpbest.h
@@ -2265,7 +2272,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="ADVANCED_CMN_HDR" hints="files">
     wx/calctrl.h
     wx/dateevt.h
-    wx/datectrl.h
     wx/dcbuffer.h
     wx/generic/calctrl.h
     wx/generic/grid.h
@@ -2288,22 +2294,33 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/wizard.h
 </set>
 
+<set var="ADVANCED_CMN_NATIVE_HDR" hints="files">
+    wx/datectrl.h
+</set>
+
 <set var="ADVANCED_MSW_SRC" hints="files">
     src/common/taskbarcmn.cpp
-    src/msw/datectrl.cpp
     src/msw/sound.cpp
     src/msw/taskbar.cpp
 </set>
 <set var="ADVANCED_MSW_HDR" hints="files">
-    wx/msw/datectrl.h
     wx/msw/sound.h
     wx/msw/taskbar.h
 </set>
+
+<!-- not used with wxUniv -->
+<set var="ADVANCED_MSW_NATIVE_SRC" hints="files">
+    src/msw/datectrl.cpp
+</set>
+<set var="ADVANCED_MSW_NATIVE_HDR" hints="files">
+    wx/msw/datectrl.h
+</set>
+
 <!-- not built on WindowsCE: -->
-<set var="ADVANCED_MSW_ONLY_SRC" hints="files">
+<set var="ADVANCED_MSW_DESKTOP_SRC" hints="files">
     src/msw/joystick.cpp
 </set>
-<set var="ADVANCED_MSW_ONLY_HDR" hints="files">
+<set var="ADVANCED_MSW_DESKTOP_HDR" hints="files">
     wx/msw/joystick.h
 </set>
 
@@ -2373,9 +2390,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="MEDIA_MSW_HDR" hints="files">
 </set>
 <!-- not built on WindowsCE: -->
-<set var="MEDIA_MSW_ONLY_SRC" hints="files">
+<set var="MEDIA_MSW_DESKTOP_SRC" hints="files">
 </set>
-<set var="MEDIA_MSW_ONLY_HDR" hints="files">
+<set var="MEDIA_MSW_DESKTOP_HDR" hints="files">
 </set>
 
 <set var="MEDIA_MAC_SRC" hints="files">
@@ -2709,7 +2726,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <set var="LOWLEVEL_SRC" hints="files">
         <if cond="TOOLKIT=='GTK'">$(GTK_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='MOTIF'">$(MOTIF_LOWLEVEL_SRC)</if>
-        <if cond="TOOLKIT=='MSW'">$(MSW_LOWLEVEL_SRC) $(MSW_ONLY_LOWLEVEL_SRC)</if>
+        <if cond="TOOLKIT=='MSW'">$(MSW_LOWLEVEL_SRC) $(MSW_DESKTOP_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='WINCE'">$(MSW_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='MAC'">$(MAC_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='COCOA'">$(COCOA_LOWLEVEL_SRC)</if>
@@ -2732,7 +2749,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <set var="GUI_SRC" hints="files">
         <if cond="TOOLKIT=='GTK'">$(GTK_SRC)</if>
         <if cond="TOOLKIT=='MOTIF'">$(MOTIF_SRC)</if>
-        <if cond="TOOLKIT=='MSW'">$(MSW_SRC) $(MSW_ONLY_SRC)</if>
+        <if cond="TOOLKIT=='MSW'">$(MSW_SRC) $(MSW_DESKTOP_SRC)</if>
         <if cond="TOOLKIT=='WINCE'">$(MSW_SRC) $(WINCE_SRC)</if>
         <if cond="TOOLKIT=='MAC'">$(MAC_SRC) $(MAC_OSX_SRC)</if>
         <if cond="TOOLKIT=='COCOA'">$(COCOA_SRC)</if>
@@ -2741,7 +2758,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <set var="GUI_HDR" hints="files">
         <if cond="TOOLKIT=='GTK'">$(GTK_HDR)</if>
         <if cond="TOOLKIT=='MOTIF'">$(MOTIF_HDR)</if>
-        <if cond="TOOLKIT=='MSW'">$(MSW_HDR) $(MSW_ONLY_HDR)</if>
+        <if cond="TOOLKIT=='MSW'">$(MSW_HDR) $(MSW_DESKTOP_HDR)</if>
         <if cond="TOOLKIT=='WINCE'">$(MSW_HDR) $(WINCE_HDR)</if>
         <if cond="TOOLKIT=='MAC'">$(MAC_CMN_HDR) $(MAC_HDR)</if>
         <if cond="TOOLKIT=='COCOA'">$(COCOA_HDR)</if>
@@ -2759,7 +2776,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
     <!-- wxAdvanced files: -->
     <set var="ADVANCED_PLATFORM_SRC" hints="files">
-        <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_SRC) $(ADVANCED_MSW_ONLY_SRC)</if>
+        <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_SRC) $(ADVANCED_MSW_DESKTOP_SRC)</if>
         <if cond="TOOLKIT=='WINCE'">$(ADVANCED_MSW_SRC)</if>
         <if cond="TOOLKIT=='MAC'">$(ADVANCED_MAC_SRC)</if>
         <if cond="TOOLKIT=='COCOA'">$(ADVANCED_COCOA_SRC)</if>
@@ -2769,7 +2786,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='PM'">$(ADVANCED_OS2_SRC)</if>
     </set>
     <set var="ADVANCED_PLATFORM_HDR" hints="files">
-        <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_HDR) $(ADVANCED_MSW_ONLY_HDR)</if>
+        <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_HDR) $(ADVANCED_MSW_DESKTOP_HDR)</if>
         <if cond="TOOLKIT=='WINCE'">$(ADVANCED_MSW_HDR)</if>
         <if cond="TOOLKIT=='MAC'">$(ADVANCED_MAC_HDR)</if>
         <if cond="TOOLKIT=='COCOA'">$(ADVANCED_COCOA_HDR)</if>
@@ -2778,12 +2795,27 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='X11'">$(ADVANCED_UNIX_HDR)</if>
         <if cond="TOOLKIT=='PM'">$(ADVANCED_OS2_HDR)</if>
     </set>
-    <set var="ADVANCED_SRC">$(ADVANCED_CMN_SRC) $(ADVANCED_PLATFORM_SRC)</set>
-    <set var="ADVANCED_HDR">$(ADVANCED_CMN_HDR) $(ADVANCED_PLATFORM_HDR)</set>
+
+    <!-- wxAdv files not used by wxUniv -->
+    <set var="ADVANCED_PLATFORM_NATIVE_SRC" hints="files">
+        <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_NATIVE_SRC)</if>
+    </set>
+    <set var="ADVANCED_PLATFORM_NATIVE_HDR" hints="files">
+        <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_NATIVE_HDR)</if>
+    </set>
+
+    <set var="ADVANCED_SRC" hints="files">
+        <if cond="WXUNIV=='0'">$(ADVANCED_CMN_SRC) $(ADVANCED_PLATFORM_SRC) $(ADVANCED_PLATFORM_NATIVE_SRC)</if>
+        <if cond="WXUNIV=='1'">$(ADVANCED_CMN_SRC) $(ADVANCED_PLATFORM_SRC)</if>
+    </set>
+    <set var="ADVANCED_HDR" hints="files">
+        <if cond="WXUNIV=='0'">$(ADVANCED_CMN_HDR) $(ADVANCED_CMN_NATIVE_HDR) $(ADVANCED_PLATFORM_HDR) $(ADVANCED_PLATFORM_NATIVE_HDR)</if>
+        <if cond="WXUNIV=='1'">$(ADVANCED_CMN_HDR) $(ADVANCED_PLATFORM_HDR)</if>
+    </set>
 
     <!-- wxMedia files: -->
     <set var="MEDIA_PLATFORM_SRC" hints="files">
-        <if cond="TOOLKIT=='MSW'">$(MEDIA_MSW_SRC) $(MEDIA_MSW_ONLY_SRC)</if>
+        <if cond="TOOLKIT=='MSW'">$(MEDIA_MSW_SRC) $(MEDIA_MSW_DESKTOP_SRC)</if>
         <if cond="TOOLKIT=='WINCE'">$(MEDIA_MSW_SRC)</if>
         <if cond="TOOLKIT=='MAC'">$(MEDIA_MAC_SRC)</if>
         <if cond="TOOLKIT=='COCOA'">$(MEDIA_COCOA_SRC)</if>
@@ -2793,7 +2825,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='PM'">$(MEDIA_OS2_SRC)</if>
     </set>
     <set var="MEDIA_PLATFORM_HDR" hints="files">
-        <if cond="TOOLKIT=='MSW'">$(MEDIA_MSW_HDR) $(MEDIA_MSW_ONLY_HDR)</if>
+        <if cond="TOOLKIT=='MSW'">$(MEDIA_MSW_HDR) $(MEDIA_MSW_DESKTOP_HDR)</if>
         <if cond="TOOLKIT=='WINCE'">$(MEDIA_MSW_HDR)</if>
         <if cond="TOOLKIT=='MAC'">$(MEDIA_MAC_HDR)</if>
         <if cond="TOOLKIT=='COCOA'">$(MEDIA_COCOA_HDR)</if>

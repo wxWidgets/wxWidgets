@@ -62,6 +62,13 @@ WXDLLFLAG =
 !ifeq SHARED 1
 WXDLLFLAG = dll
 !endif
+LIBTYPE_SUFFIX =
+!ifeq SHARED 0
+LIBTYPE_SUFFIX = lib
+!endif
+!ifeq SHARED 1
+LIBTYPE_SUFFIX = dll
+!endif
 __wxpng___depname =
 !ifeq USE_GUI 1
 __wxpng___depname = $(LIBDIRNAME)\wxpng$(WXDEBUGFLAG).lib
@@ -73,13 +80,6 @@ __wxjpeg___depname = $(LIBDIRNAME)\wxjpeg$(WXDEBUGFLAG).lib
 __wxtiff___depname =
 !ifeq USE_GUI 1
 __wxtiff___depname = $(LIBDIRNAME)\wxtiff$(WXDEBUGFLAG).lib
-!endif
-____LIBDIRNAME_FILENAMES_6_p =
-!ifeq SHARED 0
-____LIBDIRNAME_FILENAMES_6_p = -i=..\..\lib\wat_lib$(CFG)
-!endif
-!ifeq SHARED 1
-____LIBDIRNAME_FILENAMES_6_p = -i=..\..\lib\wat_dll$(CFG)
 !endif
 EXTRALIBS_FOR_BASE =
 !ifeq MONOLITHIC 0
@@ -99,21 +99,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =
 !ifeq USE_GUI 1
 ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(____CORE_SRC_FILENAMES_OBJECTS) &
-	$(OBJS)\monodll_calctrl.obj &
-	$(OBJS)\monodll_grid.obj &
-	$(OBJS)\monodll_gridctrl.obj &
-	$(OBJS)\monodll_gridsel.obj &
-	$(OBJS)\monodll_helpext.obj &
-	$(OBJS)\monodll_laywin.obj &
-	$(OBJS)\monodll_sashwin.obj &
-	$(OBJS)\monodll_splash.obj &
-	$(OBJS)\monodll_tipdlg.obj &
-	$(OBJS)\monodll_wizard.obj &
-	$(OBJS)\monodll_taskbarcmn.obj &
-	$(OBJS)\monodll_datectrl.obj &
-	$(OBJS)\monodll_sound.obj &
-	$(OBJS)\monodll_taskbar.obj &
-	$(OBJS)\monodll_joystick.obj &
+	$(____ADVANCED_SRC_FILENAMES_OBJECTS) &
 	$(OBJS)\monodll_mediactrlcmn.obj &
 	$(OBJS)\monodll_mediactrl.obj &
 	$(OBJS)\monodll_helpbest.obj &
@@ -577,6 +563,42 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_vscroll.obj
 !endif
 !endif
+____ADVANCED_SRC_FILENAMES_OBJECTS =
+!ifeq WXUNIV 0
+____ADVANCED_SRC_FILENAMES_OBJECTS =  &
+	$(OBJS)\monodll_calctrl.obj &
+	$(OBJS)\monodll_grid.obj &
+	$(OBJS)\monodll_gridctrl.obj &
+	$(OBJS)\monodll_gridsel.obj &
+	$(OBJS)\monodll_helpext.obj &
+	$(OBJS)\monodll_laywin.obj &
+	$(OBJS)\monodll_sashwin.obj &
+	$(OBJS)\monodll_splash.obj &
+	$(OBJS)\monodll_tipdlg.obj &
+	$(OBJS)\monodll_wizard.obj &
+	$(OBJS)\monodll_taskbarcmn.obj &
+	$(OBJS)\monodll_sound.obj &
+	$(OBJS)\monodll_taskbar.obj &
+	$(OBJS)\monodll_joystick.obj &
+	$(OBJS)\monodll_datectrl.obj
+!endif
+!ifeq WXUNIV 1
+____ADVANCED_SRC_FILENAMES_OBJECTS =  &
+	$(OBJS)\monodll_calctrl.obj &
+	$(OBJS)\monodll_grid.obj &
+	$(OBJS)\monodll_gridctrl.obj &
+	$(OBJS)\monodll_gridsel.obj &
+	$(OBJS)\monodll_helpext.obj &
+	$(OBJS)\monodll_laywin.obj &
+	$(OBJS)\monodll_sashwin.obj &
+	$(OBJS)\monodll_splash.obj &
+	$(OBJS)\monodll_tipdlg.obj &
+	$(OBJS)\monodll_wizard.obj &
+	$(OBJS)\monodll_taskbarcmn.obj &
+	$(OBJS)\monodll_sound.obj &
+	$(OBJS)\monodll_taskbar.obj &
+	$(OBJS)\monodll_joystick.obj
+!endif
 __monolib___depname =
 !ifeq MONOLITHIC 1
 !ifeq SHARED 0
@@ -588,21 +610,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =
 !ifeq USE_GUI 1
 ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(____CORE_SRC_FILENAMES_1_OBJECTS) &
-	$(OBJS)\monolib_calctrl.obj &
-	$(OBJS)\monolib_grid.obj &
-	$(OBJS)\monolib_gridctrl.obj &
-	$(OBJS)\monolib_gridsel.obj &
-	$(OBJS)\monolib_helpext.obj &
-	$(OBJS)\monolib_laywin.obj &
-	$(OBJS)\monolib_sashwin.obj &
-	$(OBJS)\monolib_splash.obj &
-	$(OBJS)\monolib_tipdlg.obj &
-	$(OBJS)\monolib_wizard.obj &
-	$(OBJS)\monolib_taskbarcmn.obj &
-	$(OBJS)\monolib_datectrl.obj &
-	$(OBJS)\monolib_sound.obj &
-	$(OBJS)\monolib_taskbar.obj &
-	$(OBJS)\monolib_joystick.obj &
+	$(____ADVANCED_SRC_FILENAMES_1_OBJECTS) &
 	$(OBJS)\monolib_mediactrlcmn.obj &
 	$(OBJS)\monolib_mediactrl.obj &
 	$(OBJS)\monolib_helpbest.obj &
@@ -1065,6 +1073,42 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_vlbox.obj &
 	$(OBJS)\monolib_vscroll.obj
 !endif
+!endif
+____ADVANCED_SRC_FILENAMES_1_OBJECTS =
+!ifeq WXUNIV 0
+____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
+	$(OBJS)\monolib_calctrl.obj &
+	$(OBJS)\monolib_grid.obj &
+	$(OBJS)\monolib_gridctrl.obj &
+	$(OBJS)\monolib_gridsel.obj &
+	$(OBJS)\monolib_helpext.obj &
+	$(OBJS)\monolib_laywin.obj &
+	$(OBJS)\monolib_sashwin.obj &
+	$(OBJS)\monolib_splash.obj &
+	$(OBJS)\monolib_tipdlg.obj &
+	$(OBJS)\monolib_wizard.obj &
+	$(OBJS)\monolib_taskbarcmn.obj &
+	$(OBJS)\monolib_sound.obj &
+	$(OBJS)\monolib_taskbar.obj &
+	$(OBJS)\monolib_joystick.obj &
+	$(OBJS)\monolib_datectrl.obj
+!endif
+!ifeq WXUNIV 1
+____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
+	$(OBJS)\monolib_calctrl.obj &
+	$(OBJS)\monolib_grid.obj &
+	$(OBJS)\monolib_gridctrl.obj &
+	$(OBJS)\monolib_gridsel.obj &
+	$(OBJS)\monolib_helpext.obj &
+	$(OBJS)\monolib_laywin.obj &
+	$(OBJS)\monolib_sashwin.obj &
+	$(OBJS)\monolib_splash.obj &
+	$(OBJS)\monolib_tipdlg.obj &
+	$(OBJS)\monolib_wizard.obj &
+	$(OBJS)\monolib_taskbarcmn.obj &
+	$(OBJS)\monolib_sound.obj &
+	$(OBJS)\monolib_taskbar.obj &
+	$(OBJS)\monolib_joystick.obj
 !endif
 __basedll___depname =
 !ifeq MONOLITHIC 0
@@ -1913,6 +1957,42 @@ __advdll___depname = &
 !endif
 !endif
 !endif
+____ADVANCED_SRC_FILENAMES_2_OBJECTS =
+!ifeq WXUNIV 0
+____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
+	$(OBJS)\advdll_calctrl.obj &
+	$(OBJS)\advdll_grid.obj &
+	$(OBJS)\advdll_gridctrl.obj &
+	$(OBJS)\advdll_gridsel.obj &
+	$(OBJS)\advdll_helpext.obj &
+	$(OBJS)\advdll_laywin.obj &
+	$(OBJS)\advdll_sashwin.obj &
+	$(OBJS)\advdll_splash.obj &
+	$(OBJS)\advdll_tipdlg.obj &
+	$(OBJS)\advdll_wizard.obj &
+	$(OBJS)\advdll_taskbarcmn.obj &
+	$(OBJS)\advdll_sound.obj &
+	$(OBJS)\advdll_taskbar.obj &
+	$(OBJS)\advdll_joystick.obj &
+	$(OBJS)\advdll_datectrl.obj
+!endif
+!ifeq WXUNIV 1
+____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
+	$(OBJS)\advdll_calctrl.obj &
+	$(OBJS)\advdll_grid.obj &
+	$(OBJS)\advdll_gridctrl.obj &
+	$(OBJS)\advdll_gridsel.obj &
+	$(OBJS)\advdll_helpext.obj &
+	$(OBJS)\advdll_laywin.obj &
+	$(OBJS)\advdll_sashwin.obj &
+	$(OBJS)\advdll_splash.obj &
+	$(OBJS)\advdll_tipdlg.obj &
+	$(OBJS)\advdll_wizard.obj &
+	$(OBJS)\advdll_taskbarcmn.obj &
+	$(OBJS)\advdll_sound.obj &
+	$(OBJS)\advdll_taskbar.obj &
+	$(OBJS)\advdll_joystick.obj
+!endif
 __advlib___depname =
 !ifeq MONOLITHIC 0
 !ifeq SHARED 0
@@ -1921,6 +2001,42 @@ __advlib___depname = &
 	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv.lib
 !endif
 !endif
+!endif
+____ADVANCED_SRC_FILENAMES_3_OBJECTS =
+!ifeq WXUNIV 0
+____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
+	$(OBJS)\advlib_calctrl.obj &
+	$(OBJS)\advlib_grid.obj &
+	$(OBJS)\advlib_gridctrl.obj &
+	$(OBJS)\advlib_gridsel.obj &
+	$(OBJS)\advlib_helpext.obj &
+	$(OBJS)\advlib_laywin.obj &
+	$(OBJS)\advlib_sashwin.obj &
+	$(OBJS)\advlib_splash.obj &
+	$(OBJS)\advlib_tipdlg.obj &
+	$(OBJS)\advlib_wizard.obj &
+	$(OBJS)\advlib_taskbarcmn.obj &
+	$(OBJS)\advlib_sound.obj &
+	$(OBJS)\advlib_taskbar.obj &
+	$(OBJS)\advlib_joystick.obj &
+	$(OBJS)\advlib_datectrl.obj
+!endif
+!ifeq WXUNIV 1
+____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
+	$(OBJS)\advlib_calctrl.obj &
+	$(OBJS)\advlib_grid.obj &
+	$(OBJS)\advlib_gridctrl.obj &
+	$(OBJS)\advlib_gridsel.obj &
+	$(OBJS)\advlib_helpext.obj &
+	$(OBJS)\advlib_laywin.obj &
+	$(OBJS)\advlib_sashwin.obj &
+	$(OBJS)\advlib_splash.obj &
+	$(OBJS)\advlib_tipdlg.obj &
+	$(OBJS)\advlib_wizard.obj &
+	$(OBJS)\advlib_taskbarcmn.obj &
+	$(OBJS)\advlib_sound.obj &
+	$(OBJS)\advlib_taskbar.obj &
+	$(OBJS)\advlib_joystick.obj
 !endif
 __mediadll___depname =
 !ifeq MONOLITHIC 0
@@ -2151,13 +2267,6 @@ __UNICODE_DEFINE_p =
 !ifeq UNICODE 1
 __UNICODE_DEFINE_p = -d_UNICODE
 !endif
-LIBDIRNAME =
-!ifeq SHARED 0
-LIBDIRNAME = ..\..\lib\wat_lib$(CFG)
-!endif
-!ifeq SHARED 1
-LIBDIRNAME = ..\..\lib\wat_dll$(CFG)
-!endif
 __SETUP_H_SUBDIR_FILENAMES =
 !ifeq WXUNIV 0
 __SETUP_H_SUBDIR_FILENAMES = msw
@@ -2183,6 +2292,7 @@ WX_RELEASE_NODOT = 25
 WX_VERSION_NODOT = $(WX_RELEASE_NODOT)3
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+LIBDIRNAME = ..\..\lib\wat_$(LIBTYPE_SUFFIX)$(CFG)
 SETUPHDIR = &
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 WXREGEX_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
@@ -2315,7 +2425,7 @@ WXTIFF_OBJECTS =  &
 	$(OBJS)\wxtiff_tif_write.obj &
 	$(OBJS)\wxtiff_tif_zip.obj
 WXEXPAT_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
-	$(____LIBDIRNAME_FILENAMES_6_p) -dCOMPILED_FROM_DSP $(CPPFLAGS) $(CFLAGS)
+	-i=$(LIBDIRNAME) -dCOMPILED_FROM_DSP $(CPPFLAGS) $(CFLAGS)
 WXEXPAT_OBJECTS =  &
 	$(OBJS)\wxexpat_xmlparse.obj &
 	$(OBJS)\wxexpat_xmlrole.obj &
@@ -2797,21 +2907,7 @@ ADVDLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
 	/fh=$(OBJS)\wxprec_advdll.pch $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 ADVDLL_OBJECTS =  &
 	$(OBJS)\advdll_dummy.obj &
-	$(OBJS)\advdll_calctrl.obj &
-	$(OBJS)\advdll_grid.obj &
-	$(OBJS)\advdll_gridctrl.obj &
-	$(OBJS)\advdll_gridsel.obj &
-	$(OBJS)\advdll_helpext.obj &
-	$(OBJS)\advdll_laywin.obj &
-	$(OBJS)\advdll_sashwin.obj &
-	$(OBJS)\advdll_splash.obj &
-	$(OBJS)\advdll_tipdlg.obj &
-	$(OBJS)\advdll_wizard.obj &
-	$(OBJS)\advdll_taskbarcmn.obj &
-	$(OBJS)\advdll_datectrl.obj &
-	$(OBJS)\advdll_sound.obj &
-	$(OBJS)\advdll_taskbar.obj &
-	$(OBJS)\advdll_joystick.obj
+	$(____ADVANCED_SRC_FILENAMES_2_OBJECTS)
 ADVLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
 	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
 	-i=..\..\include -i=$(SETUPHDIR) -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
@@ -2820,21 +2916,7 @@ ADVLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
 	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 ADVLIB_OBJECTS =  &
 	$(OBJS)\advlib_dummy.obj &
-	$(OBJS)\advlib_calctrl.obj &
-	$(OBJS)\advlib_grid.obj &
-	$(OBJS)\advlib_gridctrl.obj &
-	$(OBJS)\advlib_gridsel.obj &
-	$(OBJS)\advlib_helpext.obj &
-	$(OBJS)\advlib_laywin.obj &
-	$(OBJS)\advlib_sashwin.obj &
-	$(OBJS)\advlib_splash.obj &
-	$(OBJS)\advlib_tipdlg.obj &
-	$(OBJS)\advlib_wizard.obj &
-	$(OBJS)\advlib_taskbarcmn.obj &
-	$(OBJS)\advlib_datectrl.obj &
-	$(OBJS)\advlib_sound.obj &
-	$(OBJS)\advlib_taskbar.obj &
-	$(OBJS)\advlib_joystick.obj
+	$(____ADVANCED_SRC_FILENAMES_3_OBJECTS)
 MEDIADLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
 	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
 	-i=..\..\include -i=$(SETUPHDIR) -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
@@ -4342,49 +4424,7 @@ $(OBJS)\monodll_metal.obj :  .AUTODEPEND ..\..\src\univ\themes\metal.cpp
 $(OBJS)\monodll_win32.obj :  .AUTODEPEND ..\..\src\univ\themes\win32.cpp
 	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
-$(OBJS)\monodll_calctrl.obj :  .AUTODEPEND ..\..\src\generic\calctrl.cpp
-	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_grid.obj :  .AUTODEPEND ..\..\src\generic\grid.cpp
-	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_gridctrl.obj :  .AUTODEPEND ..\..\src\generic\gridctrl.cpp
-	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_gridsel.obj :  .AUTODEPEND ..\..\src\generic\gridsel.cpp
-	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_helpext.obj :  .AUTODEPEND ..\..\src\generic\helpext.cpp
-	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_laywin.obj :  .AUTODEPEND ..\..\src\generic\laywin.cpp
-	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_sashwin.obj :  .AUTODEPEND ..\..\src\generic\sashwin.cpp
-	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_splash.obj :  .AUTODEPEND ..\..\src\generic\splash.cpp
-	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_tipdlg.obj :  .AUTODEPEND ..\..\src\generic\tipdlg.cpp
-	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_wizard.obj :  .AUTODEPEND ..\..\src\generic\wizard.cpp
-	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_taskbarcmn.obj :  .AUTODEPEND ..\..\src\common\taskbarcmn.cpp
-	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
 $(OBJS)\monodll_datectrl.obj :  .AUTODEPEND ..\..\src\msw\datectrl.cpp
-	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_sound.obj :  .AUTODEPEND ..\..\src\msw\sound.cpp
-	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_taskbar.obj :  .AUTODEPEND ..\..\src\msw\taskbar.cpp
-	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_joystick.obj :  .AUTODEPEND ..\..\src\msw\joystick.cpp
 	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_mediactrlcmn.obj :  .AUTODEPEND ..\..\src\common\mediactrlcmn.cpp
@@ -5666,6 +5706,76 @@ $(OBJS)\monodll_vscroll.obj :  .AUTODEPEND ..\..\src\generic\vscroll.cpp
 	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
+!ifeq USE_GUI 1
+$(OBJS)\monodll_calctrl.obj :  .AUTODEPEND ..\..\src\generic\calctrl.cpp
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_grid.obj :  .AUTODEPEND ..\..\src\generic\grid.cpp
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_gridctrl.obj :  .AUTODEPEND ..\..\src\generic\gridctrl.cpp
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_gridsel.obj :  .AUTODEPEND ..\..\src\generic\gridsel.cpp
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_helpext.obj :  .AUTODEPEND ..\..\src\generic\helpext.cpp
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_laywin.obj :  .AUTODEPEND ..\..\src\generic\laywin.cpp
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_sashwin.obj :  .AUTODEPEND ..\..\src\generic\sashwin.cpp
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_splash.obj :  .AUTODEPEND ..\..\src\generic\splash.cpp
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_tipdlg.obj :  .AUTODEPEND ..\..\src\generic\tipdlg.cpp
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_wizard.obj :  .AUTODEPEND ..\..\src\generic\wizard.cpp
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_taskbarcmn.obj :  .AUTODEPEND ..\..\src\common\taskbarcmn.cpp
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_sound.obj :  .AUTODEPEND ..\..\src\msw\sound.cpp
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_taskbar.obj :  .AUTODEPEND ..\..\src\msw\taskbar.cpp
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_joystick.obj :  .AUTODEPEND ..\..\src\msw\joystick.cpp
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
 $(OBJS)\monolib_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
 	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -6071,49 +6181,7 @@ $(OBJS)\monolib_metal.obj :  .AUTODEPEND ..\..\src\univ\themes\metal.cpp
 $(OBJS)\monolib_win32.obj :  .AUTODEPEND ..\..\src\univ\themes\win32.cpp
 	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
-$(OBJS)\monolib_calctrl.obj :  .AUTODEPEND ..\..\src\generic\calctrl.cpp
-	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_grid.obj :  .AUTODEPEND ..\..\src\generic\grid.cpp
-	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_gridctrl.obj :  .AUTODEPEND ..\..\src\generic\gridctrl.cpp
-	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_gridsel.obj :  .AUTODEPEND ..\..\src\generic\gridsel.cpp
-	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_helpext.obj :  .AUTODEPEND ..\..\src\generic\helpext.cpp
-	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_laywin.obj :  .AUTODEPEND ..\..\src\generic\laywin.cpp
-	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_sashwin.obj :  .AUTODEPEND ..\..\src\generic\sashwin.cpp
-	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_splash.obj :  .AUTODEPEND ..\..\src\generic\splash.cpp
-	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_tipdlg.obj :  .AUTODEPEND ..\..\src\generic\tipdlg.cpp
-	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_wizard.obj :  .AUTODEPEND ..\..\src\generic\wizard.cpp
-	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_taskbarcmn.obj :  .AUTODEPEND ..\..\src\common\taskbarcmn.cpp
-	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
 $(OBJS)\monolib_datectrl.obj :  .AUTODEPEND ..\..\src\msw\datectrl.cpp
-	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_sound.obj :  .AUTODEPEND ..\..\src\msw\sound.cpp
-	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_taskbar.obj :  .AUTODEPEND ..\..\src\msw\taskbar.cpp
-	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_joystick.obj :  .AUTODEPEND ..\..\src\msw\joystick.cpp
 	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_mediactrlcmn.obj :  .AUTODEPEND ..\..\src\common\mediactrlcmn.cpp
@@ -7392,6 +7460,76 @@ $(OBJS)\monolib_vlbox.obj :  .AUTODEPEND ..\..\src\generic\vlbox.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_vscroll.obj :  .AUTODEPEND ..\..\src\generic\vscroll.cpp
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_calctrl.obj :  .AUTODEPEND ..\..\src\generic\calctrl.cpp
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_grid.obj :  .AUTODEPEND ..\..\src\generic\grid.cpp
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_gridctrl.obj :  .AUTODEPEND ..\..\src\generic\gridctrl.cpp
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_gridsel.obj :  .AUTODEPEND ..\..\src\generic\gridsel.cpp
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_helpext.obj :  .AUTODEPEND ..\..\src\generic\helpext.cpp
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_laywin.obj :  .AUTODEPEND ..\..\src\generic\laywin.cpp
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_sashwin.obj :  .AUTODEPEND ..\..\src\generic\sashwin.cpp
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_splash.obj :  .AUTODEPEND ..\..\src\generic\splash.cpp
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_tipdlg.obj :  .AUTODEPEND ..\..\src\generic\tipdlg.cpp
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_wizard.obj :  .AUTODEPEND ..\..\src\generic\wizard.cpp
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_taskbarcmn.obj :  .AUTODEPEND ..\..\src\common\taskbarcmn.cpp
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_sound.obj :  .AUTODEPEND ..\..\src\msw\sound.cpp
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_taskbar.obj :  .AUTODEPEND ..\..\src\msw\taskbar.cpp
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_joystick.obj :  .AUTODEPEND ..\..\src\msw\joystick.cpp
 	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -10412,6 +10550,9 @@ $(OBJS)\corelib_vscroll.obj :  .AUTODEPEND ..\..\src\generic\vscroll.cpp
 $(OBJS)\advdll_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
 	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
+$(OBJS)\advdll_datectrl.obj :  .AUTODEPEND ..\..\src\msw\datectrl.cpp
+	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+
 $(OBJS)\advdll_calctrl.obj :  .AUTODEPEND ..\..\src\generic\calctrl.cpp
 	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
@@ -10445,9 +10586,6 @@ $(OBJS)\advdll_wizard.obj :  .AUTODEPEND ..\..\src\generic\wizard.cpp
 $(OBJS)\advdll_taskbarcmn.obj :  .AUTODEPEND ..\..\src\common\taskbarcmn.cpp
 	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
-$(OBJS)\advdll_datectrl.obj :  .AUTODEPEND ..\..\src\msw\datectrl.cpp
-	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
-
 $(OBJS)\advdll_sound.obj :  .AUTODEPEND ..\..\src\msw\sound.cpp
 	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
@@ -10458,6 +10596,9 @@ $(OBJS)\advdll_joystick.obj :  .AUTODEPEND ..\..\src\msw\joystick.cpp
 	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
 $(OBJS)\advlib_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
+	$(CXX) -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+
+$(OBJS)\advlib_datectrl.obj :  .AUTODEPEND ..\..\src\msw\datectrl.cpp
 	$(CXX) -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_calctrl.obj :  .AUTODEPEND ..\..\src\generic\calctrl.cpp
@@ -10491,9 +10632,6 @@ $(OBJS)\advlib_wizard.obj :  .AUTODEPEND ..\..\src\generic\wizard.cpp
 	$(CXX) -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_taskbarcmn.obj :  .AUTODEPEND ..\..\src\common\taskbarcmn.cpp
-	$(CXX) -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
-
-$(OBJS)\advlib_datectrl.obj :  .AUTODEPEND ..\..\src\msw\datectrl.cpp
 	$(CXX) -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_sound.obj :  .AUTODEPEND ..\..\src\msw\sound.cpp
