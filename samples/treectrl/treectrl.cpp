@@ -155,6 +155,7 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     // Give it an icon
     SetIcon(wxICON(mondrian));
 
+#if wxUSE_MENUS
     // Make a menubar
     wxMenu *file_menu = new wxMenu,
            *tree_menu = new wxMenu,
@@ -215,6 +216,7 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     SetMenuBar(menu_bar);
 
     menu_bar->Check(TreeTest_ToggleImages, TRUE);
+#endif // wxUSE_MENUS
 
     m_treeCtrl = new MyTreeCtrl(this, TreeTest_Ctrl,
                                 wxDefaultPosition, wxDefaultSize,
@@ -867,11 +869,13 @@ void MyTreeCtrl::ShowMenu(wxTreeItemId id, const wxPoint& pt)
         title = _T("Menu for no particular item");
     }
 
+#if wxUSE_MENUS
     wxMenu menu(title);
     menu.Append(TreeTest_About, _T("&About..."));
     menu.Append(TreeTest_Dump, _T("&Dump"));
 
     PopupMenu(&menu, pt);
+#endif // wxUSE_MENUS
 }
 
 void MyTreeCtrl::OnRMouseDClick(wxMouseEvent& event)
