@@ -59,17 +59,17 @@ public:
    virtual bool	         Show(bool show = TRUE) ;
    
    virtual void		 MacRedrawControl () ;
-   virtual void 	 MacHandleControlClick( ControlHandle control , SInt16 controlpart ) ;
+   virtual void 	 MacHandleControlClick( WXWidget control , short controlpart ) ;
    virtual void	         MacPreControlCreate( wxWindow *parent, wxWindowID id, wxString label , 
 					      const wxPoint& pos,
 					      const wxSize& size, long style,
 					      const wxValidator& validator,
 					      const wxString& name ,
-					      Rect *outBounds ,
-					      StringPtr maclabel ) ;
+					      WXRECTPTR outBounds ,
+					      unsigned char* maclabel ) ;
    virtual void		 MacPostControlCreate() ;
    virtual void		 MacAdjustControlRect() ;
-   virtual ControlHandle MacGetContainerForEmbedding() ;
+   virtual WXWidget MacGetContainerForEmbedding() ;
    virtual void 	 MacSuperChangedPosition() ;
    virtual void 	 MacSuperEnabled( bool enabled ) ;
    virtual void 	 MacSuperShown( bool show ) ;
@@ -80,7 +80,7 @@ public:
    virtual void		 OnMouseEvent( wxMouseEvent &event ) ;
    virtual void 	 OnPaint(wxPaintEvent& event) ;
    virtual void		 Refresh(bool eraseBack = TRUE, const wxRect *rect = NULL) ;
-   ControlHandle	 GetMacControl() { return m_macControl ;}
+   WXWidget	 GetMacControl() { return m_macControl ;}
 
 #if WXWIN_COMPATIBILITY
    virtual void SetButtonColour(const wxColour& WXUNUSED(col)) { }
@@ -102,7 +102,7 @@ protected:
 
 protected:
    // For controls like radiobuttons which are really composite
-	ControlHandle		m_macControl ;
+	WXWidget		m_macControl ;
 	bool				m_macControlIsShown ;
    	wxList m_subControls;
 	int							m_macHorizontalBorder ;
@@ -123,8 +123,8 @@ private:
     inline void wxControl::SetButtonFont(const wxFont& font) { SetFont(font); }
 #endif // WXWIN_COMPATIBILITY
 
-wxControl *wxFindControlFromMacControl(ControlHandle inControl ) ;
-void wxAssociateControlWithMacControl(ControlHandle inControl, wxControl *control) ;
+wxControl *wxFindControlFromMacControl(WXWidget inControl ) ;
+void wxAssociateControlWithMacControl(WXWidget inControl, wxControl *control) ;
 void wxRemoveMacControlAssociation(wxControl *control) ;
 
 #endif

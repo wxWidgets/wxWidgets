@@ -72,7 +72,7 @@ public:
     // menu handle depending on what we're
     int GetRealId() const;
 
-    static int MacBuildMenuString(StringPtr outMacItemText, SInt16 *outMacShortcutChar , UInt8 *outMacModifiers , const char *inItemName , bool useShortcuts ) ;
+    static int MacBuildMenuString(unsigned char* outMacItemText, wxInt16 *outMacShortcutChar , wxUint8 *outMacModifiers , const char *inItemName , bool useShortcuts ) ;
 
 private:
     wxBitmap  m_bitmap; // Bitmap for menuitem, if any

@@ -86,7 +86,7 @@ private:
 
 public:
   WXCOLORREF m_pixel ;
-  void Set( WXCOLORREF color ) { m_pixel = color ; m_red = m_pixel.red>>8 ;m_blue = m_pixel.blue>>8 ;m_green = m_pixel.green>>8 ;}
+  void Set( const WXCOLORREF* color ) ;
 
 private:
   DECLARE_DYNAMIC_CLASS(wxColour)

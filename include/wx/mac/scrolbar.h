@@ -57,7 +57,7 @@ public:
     bool refresh = TRUE);
 
   void Command(wxCommandEvent& event);
-		virtual void 						MacHandleControlClick( ControlHandle control , SInt16 controlpart ) ;
+		virtual void 						MacHandleControlClick( WXWidget control , wxInt16 controlpart ) ;
 
 protected:
     int m_pageSize;

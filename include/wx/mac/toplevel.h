@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/mac/toplevel.h
-// Purpose:     wxTopLevelWindowMac is the MSW implementation of wxTLW
+// Purpose:     wxTopLevelWindowMac is the Mac implementation of wxTLW
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     20.09.01
@@ -68,24 +68,24 @@ public:
            const wxSize& size,
            long style,
            const wxString& name ) ;
-	static WindowRef MacGetWindowInUpdate() { return s_macWindowInUpdate ; }
-	virtual void MacGetPortParams(Point* localOrigin, Rect* clipRect, WindowRef *window , wxWindowMac** rootwin ) ;
+	static WXWindow MacGetWindowInUpdate() { return s_macWindowInUpdate ; }
+	virtual void MacGetPortParams(WXPOINTPTR localOrigin, WXRECTPTR clipRect, WXWindow *window , wxWindowMac** rootwin ) ;
   virtual void Clear() ;
-  virtual ControlHandle MacGetContainerForEmbedding() ;
-  WindowRef MacGetWindowRef() { return m_macWindow ; }
-	virtual void MacActivate( EventRecord *ev , bool inIsActivating ) ;
+  virtual WXWidget MacGetContainerForEmbedding() ;
+  WXWindow MacGetWindowRef() { return m_macWindow ; }
+	virtual void MacActivate( WXEVENTREF ev , bool inIsActivating ) ;
 	virtual void MacUpdate( long timestamp ) ;
-	virtual void MacMouseDown( EventRecord *ev , short windowPart ) ;
-	virtual void MacMouseUp( EventRecord *ev , short windowPart ) ;
-	virtual void MacMouseMoved( EventRecord *ev , short windowPart ) ;
-	virtual void MacKeyDown( EventRecord *ev ) ;
-	virtual void MacFireMouseEvent( EventRecord *ev ) ;
+	virtual void MacMouseDown( WXEVENTREF ev , short windowPart ) ;
+	virtual void MacMouseUp( WXEVENTREF ev , short windowPart ) ;
+	virtual void MacMouseMoved( WXEVENTREF ev , short windowPart ) ;
+	virtual void MacKeyDown( WXEVENTREF ev ) ;
+	virtual void MacFireMouseEvent( WXEVENTREF ev ) ;
   virtual void Raise();
   virtual void Lower();
   virtual void SetTitle( const wxString& title);
   virtual bool Show( bool show = TRUE );
   virtual void DoMoveWindow(int x, int y, int width, int height);
-  void MacInvalidate( const Rect * rect, bool eraseBackground ) ;
+  void MacInvalidate( const WXRECTPTR rect, bool eraseBackground ) ;
 protected:
     // common part of all ctors
     void Init();
@@ -97,14 +97,14 @@ protected:
     // when it is called while the frame is hidden
     bool m_maximizeOnShow;
 
-    SInt16 m_macWindowBackgroundTheme ;
-    WindowRef m_macWindow ;
-    ControlHandle m_macRootControl ;
+    short m_macWindowBackgroundTheme ;
+    WXWindow m_macWindow ;
+    WXWidget m_macRootControl ;
     wxWindowMac* m_macFocus ;
-    RgnHandle m_macNoEraseUpdateRgn ;
+    WXHRGN m_macNoEraseUpdateRgn ;
     bool m_macNeedsErasing ;
 
-	  static WindowRef s_macWindowInUpdate ;
+	  static WXWindow s_macWindowInUpdate ;
 };
 
 // list of all frames and modeless dialogs
@@ -112,8 +112,8 @@ extern WXDLLEXPORT_DATA(wxWindowList) wxModelessWindows;
 
 // associate mac windows with wx counterparts
 
-wxTopLevelWindowMac* wxFindWinFromMacWindow( WindowRef inWindow ) ;
-void wxAssociateWinWithMacWindow(WindowRef inWindow, wxTopLevelWindowMac *win) ;
+wxTopLevelWindowMac* wxFindWinFromMacWindow( WXWindow inWindow ) ;
+void wxAssociateWinWithMacWindow(WXWindow inWindow, wxTopLevelWindowMac *win) ;
 void wxRemoveMacWindowAssociation(wxTopLevelWindowMac *win) ;
 
 

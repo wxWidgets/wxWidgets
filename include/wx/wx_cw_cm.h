@@ -1,4 +1,4 @@
-#define MSL_USE_PRECOMPILED_HEADERS	1
+#define MSL_USE_PRECOMPILED_HEADERS	0
 
 #if !defined( __MWERKS__ )
     #error "this file is only for builds with Metrowerks CodeWarrior"
@@ -38,11 +38,15 @@
     #endif
 #elif defined( __WXMAC__)
 	  #define	USE_PRECOMPILED_MAC_HEADERS	0  /*Set to 0 if you don't want to use precompiled MacHeaders*/
-		#include "MacHeaders.c"
-    #include <ansi_prefix.mac.h>
+	  #define ACCESSOR_CALLS_ARE_FUNCTIONS 1
+    #define OPAQUE_TOOLBOX_STRUCTS 1
+      #include <ansi_prefix.mac.h>
+      /*
+      #include <MacTypes.h>
 		#if UNIVERSAL_INTERFACES_VERSION < 0x0340
 		    #error "please update to Apple's lastest universal headers from http://developer.apple.com/sdk/"
 		#endif
+		*/
 #endif
 
 #define USE_DEFINE

@@ -15,7 +15,7 @@
 class wxDataFormat
 {
 public:
-    typedef OSType NativeFormat;
+    typedef unsigned long NativeFormat;
 
     wxDataFormat();
     wxDataFormat(wxDataFormatId vType);

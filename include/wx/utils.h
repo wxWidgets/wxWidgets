@@ -272,12 +272,6 @@ WXDLLEXPORT const wxMB2WXbuf wxGetUserHome(const wxString& user = wxEmptyString)
 WXDLLEXPORT wxChar* wxGetUserHome(const wxString& user = wxEmptyString);
 #endif
 
-#ifdef __WXMAC__
-WXDLLEXPORT wxString wxMacFindFolder(short vRefNum,
-                                     OSType folderType,
-                                     Boolean createFolder);
-#endif
-
 // get number of total/free bytes on the disk where path belongs
 WXDLLEXPORT bool wxGetDiskSpace(const wxString& path,
                                 wxLongLong *pTotal = NULL,

@@ -64,7 +64,7 @@ class WXDLLEXPORT wxChoice: public wxChoiceBase
   virtual int FindString(const wxString& s) const;
   virtual wxString GetString(int n) const ;
   virtual void SetString( int , const wxString& s ) ;
-	void		MacHandleControlClick( ControlHandle control , SInt16 controlpart ) ;
+	void		MacHandleControlClick( WXWidget control , wxInt16 controlpart ) ;
 
 /*
   virtual void Append(const wxString& item);
@@ -78,7 +78,7 @@ class WXDLLEXPORT wxChoice: public wxChoiceBase
 
   // Mac specific
   virtual void Command(wxCommandEvent& event);
-  void		MacHandleControlClick( ControlHandle control , SInt16 controlpart ) ;
+  void		MacHandleControlClick( WXWidget control , wxInt16 controlpart ) ;
 
   virtual inline int GetColumns() const { return 1 ; };
 */
@@ -94,7 +94,7 @@ protected:
 
   wxArrayString m_strings;
   wxChoiceDataArray m_datas ;
-  MenuHandle	m_macPopUpMenuHandle ;
+  WXHMENU	m_macPopUpMenuHandle ;
 };
 
 #endif

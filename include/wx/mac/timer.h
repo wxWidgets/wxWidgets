@@ -21,12 +21,7 @@
 
 class wxTimer ;
 
-typedef struct MacTimerInfo
-{
-    TMTask m_task;
-    wxMacNotifierTableRef m_table ;
-    wxTimer* m_timer ;
-} ;
+struct MacTimerInfo ;
 
 class WXDLLEXPORT wxTimer: public wxTimerBase
 {
@@ -41,7 +36,7 @@ public:
 
     virtual bool IsRunning() const ;
 
-    MacTimerInfo m_info;
+    MacTimerInfo* m_info;
 protected :
 	void Init();
 private:

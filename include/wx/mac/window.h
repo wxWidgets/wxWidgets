@@ -215,16 +215,16 @@ public:
 public :
 	static bool							MacGetWindowFromPoint( const wxPoint &point , wxWindowMac** outWin ) ;
 	virtual bool						MacGetWindowFromPointSub( const wxPoint &point , wxWindowMac** outWin ) ;
-	virtual	void						MacRedraw( RgnHandle updatergn , long time , bool erase) ;
+	virtual	void						MacRedraw( WXHRGN updatergn , long time , bool erase) ;
 	virtual bool						MacCanFocus() const { return true ; }
 
 	virtual bool						MacDispatchMouseEvent(wxMouseEvent& event ) ;
 
 	virtual void 						MacPaintBorders( int left , int top ) ;
-	WindowRef						    MacGetRootWindow() const  ;
+	WXWindow						    MacGetRootWindow() const  ;
 	wxTopLevelWindowMac*                MacGetTopLevelWindow() const ;
 
-	virtual ControlHandle 				MacGetContainerForEmbedding() ;
+	virtual WXWidget 				    MacGetContainerForEmbedding() ;
 	
 	virtual long						MacGetLeftBorderSize() const ;
 	virtual long						MacGetRightBorderSize() const ;
@@ -307,24 +307,6 @@ private:
     DECLARE_NO_COPY_CLASS(wxWindowMac)
     DECLARE_EVENT_TABLE()
 };
-
-class wxMacDrawingHelper
-{
-public :
-	wxMacDrawingHelper( wxWindowMac * theWindow , bool clientArea = false ) ;
-	~wxMacDrawingHelper() ;
-	bool Ok() { return m_ok ; }
-	void LocalToWindow( Rect *rect) { OffsetRect( rect , m_origin.h , m_origin.v ) ; }
-	void LocalToWindow( Point *pt ) { AddPt( m_origin , pt ) ; }
-	void LocalToWindow( RgnHandle rgn ) { OffsetRgn( rgn , m_origin.h , m_origin.v ) ; }
-  const Point& GetOrigin() { return m_origin ; }
-private :
-  Point     m_origin ;
-	GrafPtr 	m_formerPort ;
-	GrafPtr		m_currentPort ;
-	PenState 	m_savedPenState ;
-	bool			m_ok ;
-} ;
 
 #endif
     // _WX_WINDOW_H_

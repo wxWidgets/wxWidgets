@@ -21,7 +21,6 @@
 #include "wx/icon.h"
 #include "wx/font.h"
 #include "wx/gdicmn.h"
-#include "wx/mac/aga.h"
 
 //-----------------------------------------------------------------------------
 // constants
@@ -44,18 +43,10 @@
 
 extern int wxPageNumber;
 
+class wxMacPortStateHelper ;
 //-----------------------------------------------------------------------------
 // wxDC
 //-----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxMacPortSetter
-{
-public :
-	wxMacPortSetter( const wxDC* dc ) ;
-	~wxMacPortSetter() ;
-private :
-	AGAPortHelper m_ph ;
-} ;
 
 class WXDLLEXPORT wxDC: public wxDCBase
 {
@@ -180,20 +171,20 @@ class WXDLLEXPORT wxDC: public wxDCBase
 	{ 
 	  long new_x = x - m_logicalOriginX;
 	  if (new_x > 0)
-	    return (wxCoord)((double)(new_x) * m_scaleX + 0.5) * m_signX + m_deviceOriginX + m_macLocalOrigin.h ;
+	    return (wxCoord)((double)(new_x) * m_scaleX + 0.5) * m_signX + m_deviceOriginX + m_macLocalOrigin.x ;
 	  else
-	    return (wxCoord)((double)(new_x) * m_scaleX - 0.5) * m_signX + m_deviceOriginX + m_macLocalOrigin.h ;
+	    return (wxCoord)((double)(new_x) * m_scaleX - 0.5) * m_signX + m_deviceOriginX + m_macLocalOrigin.x ;
 	}
     wxCoord YLOG2DEVMAC(wxCoord y) const
 	{
 	  long new_y = y - m_logicalOriginY ;
 	  if (new_y > 0)
-	    return (wxCoord)((double)(new_y) * m_scaleY + 0.5) * m_signY + m_deviceOriginY + m_macLocalOrigin.v ;
+	    return (wxCoord)((double)(new_y) * m_scaleY + 0.5) * m_signY + m_deviceOriginY + m_macLocalOrigin.y ;
 	  else
-	    return (wxCoord)((double)(new_y) * m_scaleY - 0.5) * m_signY + m_deviceOriginY + m_macLocalOrigin.v ;
+	    return (wxCoord)((double)(new_y) * m_scaleY - 0.5) * m_signY + m_deviceOriginY + m_macLocalOrigin.y ;
 	}
   
-    RgnHandle MacGetCurrentClipRgn() { return m_macCurrentClipRgn ; }
+    WXHRGN MacGetCurrentClipRgn() { return m_macCurrentClipRgn ; }
     static void MacSetupBackgroundForCurrentPort(const wxBrush& background ) ;
 //
 
@@ -269,8 +260,8 @@ protected:
     // Begin implementation for Mac
     public:
 								    
-	GrafPtr				m_macPort ;
-	GWorldPtr			m_macMask ;
+	WXHDC				m_macPort ;
+	WXHBITMAP			m_macMask ;
 
 	// in order to preserve the const inheritance of the virtual functions, we have to 
 	// use mutable variables starting from CWPro 5
@@ -283,10 +274,10 @@ protected:
 	mutable bool	m_macPenInstalled ;
 	mutable bool	m_macBrushInstalled ;
 	
-	RgnHandle				m_macBoundaryClipRgn ;
-	RgnHandle               m_macCurrentClipRgn ;
-	Point					m_macLocalOrigin ;
-	void					MacSetupPort( AGAPortHelper* ph ) const ;
+	WXHRGN				m_macBoundaryClipRgn ;
+	WXHRGN               m_macCurrentClipRgn ;
+	wxPoint					m_macLocalOrigin ;
+	void					MacSetupPort( wxMacPortStateHelper* ph ) const ;
 };
 
 #endif

@@ -31,7 +31,7 @@ public:
     static void Enable(bool flag);
         // set the delay after which the tooltip appears
     static void SetDelay(long milliseconds);
-    static void NotifyWindowDelete( WindowRef win ) ;
+    static void NotifyWindowDelete( WXHWND win ) ;
 
     // implementation only from now on
     // -------------------------------

@@ -93,8 +93,8 @@ public:
   static long           sm_lastMessageTime;
   static wxWindow*			s_captureWindow ;
   static int						s_lastMouseDown ; // 0 = none , 1 = left , 2 = right
-  static RgnHandle			s_macCursorRgn ;
-	EventRecord*					m_macCurrentEvent ;
+  static WXHRGN			s_macCursorRgn ;
+  WXEVENTREF					m_macCurrentEvent ;
   
   int                   m_nCmdShow;
 
@@ -120,9 +120,9 @@ public :
   static bool						s_macHasDialogManager ;
   static long						s_macDialogManagerVersion ;
 
-	RgnHandle							m_macCursorRgn ;
-	RgnHandle							m_macSleepRgn ;
-	RgnHandle							m_macHelpRgn ;
+	WXHRGN							m_macCursorRgn ;
+	WXHRGN							m_macSleepRgn ;
+	WXHRGN							m_macHelpRgn ;
 	
   virtual void          MacSuspend( bool convertClipboard ) ;
   virtual void          MacResume( bool convertClipboard ) ;
@@ -133,25 +133,25 @@ public :
 	// event main methods
 
 	void									MacDoOneEvent() ;	
-	void									MacHandleOneEvent( EventRecord *ev ) ;
-	EventRecord*					MacGetCurrentEvent() { return m_macCurrentEvent ; }
+	void									MacHandleOneEvent( WXEVENTREF ev ) ;
+	WXEVENTREF					MacGetCurrentEvent() { return m_macCurrentEvent ; }
 	// primary events
 	
-  virtual void          MacHandleMouseDownEvent( EventRecord *ev ) ;
-  virtual void          MacHandleMouseUpEvent( EventRecord *ev ) ;
- 	virtual void          MacHandleActivateEvent( EventRecord *ev ) ;
-  virtual void          MacHandleUpdateEvent( EventRecord *ev ) ;
-  virtual void          MacHandleKeyDownEvent( EventRecord *ev ) ;
-  virtual void          MacHandleKeyUpEvent( EventRecord *ev ) ;
-  virtual void          MacHandleDiskEvent( EventRecord *ev ) ;
-  virtual void          MacHandleOSEvent( EventRecord *ev ) ;
-  virtual void   				MacHandleHighLevelEvent( EventRecord *ev ) ;
+  virtual void          MacHandleMouseDownEvent( WXEVENTREF ev ) ;
+  virtual void          MacHandleMouseUpEvent( WXEVENTREF ev ) ;
+ 	virtual void          MacHandleActivateEvent( WXEVENTREF ev ) ;
+  virtual void          MacHandleUpdateEvent( WXEVENTREF ev ) ;
+  virtual void          MacHandleKeyDownEvent( WXEVENTREF ev ) ;
+  virtual void          MacHandleKeyUpEvent( WXEVENTREF ev ) ;
+  virtual void          MacHandleDiskEvent( WXEVENTREF ev ) ;
+  virtual void          MacHandleOSEvent( WXEVENTREF ev ) ;
+  virtual void   				MacHandleHighLevelEvent( WXEVENTREF ev ) ;
  	virtual void					MacHandleMenuSelect( int menuid , int menuitem ) ;
 
-	virtual OSErr					MacHandleAEODoc(const AppleEvent *event , AppleEvent *reply) ;
-	virtual OSErr					MacHandleAEPDoc(const AppleEvent *event , AppleEvent *reply) ;
-	virtual OSErr					MacHandleAEOApp(const AppleEvent *event , AppleEvent *reply) ;
-	virtual OSErr					MacHandleAEQuit(const AppleEvent *event , AppleEvent *reply) ;
+	virtual short					MacHandleAEODoc(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
+	virtual short					MacHandleAEPDoc(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
+	virtual short					MacHandleAEOApp(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
+	virtual short					MacHandleAEQuit(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
 
 DECLARE_EVENT_TABLE()
 };
@@ -172,17 +172,17 @@ void wxMacConvertToPC( unsigned char *p ) ;
 wxString wxMacMakePCStringFromMac( const char * p ) ;
 
 // converts this string into a pascal with optional pc 2 mac encoding
-void wxMacStringToPascal( const char * from , StringPtr to , bool pc2macEncoding ) ;
+void wxMacStringToPascal( const char * from , unsigned char* to , bool pc2macEncoding ) ;
 
 // converts this string into a pascal with pc 2 mac encoding if s_macDefaultEncodingIsPC
-inline void wxMacStringToPascal( const char * from , StringPtr to ) 
+inline void wxMacStringToPascal( const char * from , unsigned char*  to ) 
   { wxMacStringToPascal( from , to , wxApp::s_macDefaultEncodingIsPC ) ; }
 
 // converts this string into a pascal with optional mac 2 pc encoding
-wxString wxMacMakeStringFromPascal( StringPtr from , bool mac2pcEncoding ) ;
+wxString wxMacMakeStringFromPascal( unsigned char*  from , bool mac2pcEncoding ) ;
 
 // converts this pascal string into a wxString with pc 2 mac encoding if s_macDefaultEncodingIsPC
-inline wxString wxMacMakeStringFromPascal( StringPtr from  ) 
+inline wxString wxMacMakeStringFromPascal( unsigned char*  from  ) 
   { return wxMacMakeStringFromPascal( from , wxApp::s_macDefaultEncodingIsPC ) ; }
 
 // converts this c string into a wxString with optional mac 2 pc encoding

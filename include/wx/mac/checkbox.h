@@ -44,7 +44,7 @@ class WXDLLEXPORT wxCheckBox: public wxControl
            const wxString& name = wxCheckBoxNameStr);
   virtual void SetValue(bool);
   virtual bool GetValue() const ;
-	virtual void 						MacHandleControlClick( ControlHandle control , SInt16 controlpart ) ;
+	virtual void 						MacHandleControlClick( WXWidget control , wxInt16 controlpart ) ;
   virtual void Command(wxCommandEvent& event);
 };
 

@@ -36,14 +36,14 @@ class WXDLLEXPORT wxPrinterDC: public wxDC
  protected :
  #if TARGET_CARBON
     #if PM_USE_SESSION_APIS
-      PMPrintSession  m_macPrintSession;
+      void*         m_macPrintSession;
     #else
-      PMPrintContext  m_macPrintPort ;
+      void*         m_macPrintPort ;
     #endif
  #else
-      TPPrPort 	m_macPrintPort ;
+      void* 	    m_macPrintPort ;
  #endif
-      wxPrintData m_printData ;
+      wxPrintData   m_printData ;
 #endif // wxUSE_PRINTING_ARCHITECTURE
 };
 

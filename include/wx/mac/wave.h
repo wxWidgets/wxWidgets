@@ -35,10 +35,10 @@ protected:
   bool  Free();
 
 private:
-  SndChannelPtr m_sndChan;
+  void* m_sndChan;
 	
   wxString m_sndname;
-  SndListHandle m_hSnd;
+  void* m_hSnd;
   int   m_waveLength;
   bool  m_isResource;
 };

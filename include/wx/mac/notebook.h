@@ -132,7 +132,7 @@ public:
   virtual void Command(wxCommandEvent& event);
 protected:
     virtual wxNotebookPage *DoRemovePage(int page) ;
-	virtual void MacHandleControlClick( ControlHandle control , SInt16 controlpart ) ;
+	virtual void MacHandleControlClick( WXWidget control , wxInt16 controlpart ) ;
   // common part of all ctors
   void Init();
 

@@ -195,10 +195,10 @@ public:
     void*           m_devNames;
 #elif defined( __WXMAC__  )
   #if TARGET_CARBON
-    PMPageFormat    m_macPageFormat ;
-    PMPrintSettings m_macPrintSettings ;
+    void*           m_macPageFormat ;
+    void*           m_macPrintSettings ;
   #else
-	THPrint 		m_macPrintInfo ;
+	void* 		    m_macPrintInfo ;
   #endif
 #endif
 

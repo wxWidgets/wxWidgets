@@ -27,13 +27,6 @@ class WXDLLEXPORT wxIcon;
 class WXDLLEXPORT wxCursor;
 class WXDLLEXPORT wxImage;
 
-GWorldPtr 	wxMacCreateGWorld( int width , int height , int depth ) ;
-void 		    wxMacDestroyGWorld( GWorldPtr gw ) ;
-PicHandle 	wxMacCreatePict( GWorldPtr gw , GWorldPtr mask = NULL ) ;
-CIconHandle wxMacCreateCIcon(GWorldPtr image , GWorldPtr mask , short dstDepth , short iconSize  ) ;
-void 		    wxMacSetColorTableEntry( CTabHandle newColors , int index , int red , int green ,  int blue ) ;
-CTabHandle 	wxMacCreateColorTable( int numColors ) ;
-
 // A mask is a mono bitmap used for drawing bitmaps
 // transparently.
 class WXDLLEXPORT wxMask: public wxObject
@@ -88,10 +81,10 @@ public:
   wxPalette     m_bitmapPalette;
   int           m_quality;
 
-	int						m_bitmapType ;
-	PicHandle			m_hPict ;
-	WXHBITMAP     m_hBitmap;
-	WXHICON m_hIcon ;
+	int			m_bitmapType ;
+	WXHMETAFILE	m_hPict ;
+	WXHBITMAP   m_hBitmap;
+	WXHICON     m_hIcon ;
   wxMask *      m_bitmapMask; // Optional mask
 };
 
@@ -206,7 +199,7 @@ public:
   void SetHICON(WXHICON ico);
   inline WXHICON GetHICON() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_hIcon : 0); }
   
-  PicHandle GetPict() const;
+  WXHMETAFILE GetPict() const;
 
   bool FreeResource(bool force = FALSE);
 };

@@ -78,10 +78,10 @@ class WXDLLEXPORT wxComboBox: public wxChoice
   virtual void Remove(long from, long to);
   virtual void SetSelection(long from, long to);
   virtual void SetEditable(bool editable);
-	void		MacHandleControlClick( ControlHandle control , SInt16 controlpart ) ;
+	void		MacHandleControlClick( WXWidget control , wxInt16 controlpart ) ;
 protected:
   int m_noStrings;
-  MenuHandle	m_macPopUpMenuHandle ;
+  WXHMENU	m_macPopUpMenuHandle ;
 };
 
 #endif

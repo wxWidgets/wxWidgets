@@ -12,16 +12,7 @@
 #ifndef H_UMA
 #define H_UMA
 
-#if defined(__POWERPC__)
-    #if defined(__DARWIN__)
-        #include <Carbon/Carbon.h>
-    #endif
-#endif
-
-#if !TARGET_CARBON
-//  this is now defined in the latest headers
-//	typedef short MenuItemIndex  ;
-#endif
+#include "wx/mac/private.h"
 
 void UMAInitToolbox( UInt16 inMoreMastersCalls) ;
 void UMACleanupToolbox() ;
@@ -222,7 +213,15 @@ OSStatus UMAGetHelpMenu(
   MenuRef *        outHelpMenu,
   MenuItemIndex *  outFirstCustomItemIndex);      /* can be NULL */
 
+// Appearance Drawing
+
+OSStatus UMADrawThemePlacard( const Rect *inRect , ThemeDrawState inState ) ;
+
+// accessor helpers
+
 #if !TARGET_CARBON
+#define ClearCurrentScrap() ZeroScrap() ;
+/*
 #define GetPortTextFont( p) ((p)->txFont )
 #define GetPortTextSize( p) ((p)->txSize )
 #define GetPortTextFace( p) ((p)->txFace )
@@ -238,10 +237,9 @@ OSStatus UMAGetHelpMenu(
 #define GetControlBounds( c , b ) &((*b) = (**c).contrlRect )
 #define GetPortBitMapForCopyBits( p ) ((BitMap*) &(((CGrafPtr)p)->portPixMap ))
 #define	GetControlOwner( control ) ((**control).contrlOwner)
-#define InvalWindowRgn( window , rgn ) InvalRgn( rgn )
+
 #define GetPortPenMode( p ) (p->pnMode)
 #define SetPortPenMode( p , mode ) (p->pnMode = mode )
-#define ClearCurrentScrap() ZeroScrap() ;
 // control manager
 
 #define GetControlReference( control ) ((**control).contrlRfCon)
@@ -250,13 +248,13 @@ OSStatus UMAGetHelpMenu(
 
 #define SetListSelectionFlags( list , options ) (**list).selFlags = options
 #define GetListRefCon( list ) (**list).refCon
+*/
+#else
+
+// calls not in carbon
+
 
 #endif
-#if TARGET_CARBON
 #define GetWindowUpdateRgn( inWindow , updateRgn ) GetWindowRegion( inWindow , kWindowUpdateRgn, updateRgn ) 
-#endif
-// Appearance Drawing
-
-OSStatus UMADrawThemePlacard( const Rect *inRect , ThemeDrawState inState ) ;
 
 #endif

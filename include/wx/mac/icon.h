@@ -32,13 +32,13 @@ public:
   wxIcon(const char **data);
   wxIcon(char **data);
   wxIcon(const char bits[], int width , int height );
-  wxIcon(const wxString& name, long flags = wxBITMAP_TYPE_ICON_RESOURCE,
+  wxIcon(const wxString& name, int flags = wxBITMAP_TYPE_ICON_RESOURCE,
     int desiredWidth = -1, int desiredHeight = -1);
   ~wxIcon();
 
-  bool LoadFile(const wxString& name, long flags /* = wxBITMAP_TYPE_ICON_RESOURCE */ ,
+  bool LoadFile(const wxString& name, wxBitmapType flags /* = wxBITMAP_TYPE_ICON_RESOURCE */ ,
       int desiredWidth /* = -1 */ , int desiredHeight = -1);
-  bool LoadFile(const wxString& name ,long flags = wxBITMAP_TYPE_ICON_RESOURCE )
+  bool LoadFile(const wxString& name ,wxBitmapType flags = wxBITMAP_TYPE_ICON_RESOURCE )
   	{ return LoadFile( name , flags , -1 , -1 ) ; } 
 
   inline wxIcon& operator = (const wxIcon& icon) { if (*this == icon) return (*this); Ref(icon); return *this; }

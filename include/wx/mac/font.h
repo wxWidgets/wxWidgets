@@ -72,7 +72,7 @@ protected:
 public :
 	short		m_macFontNum ;
 	short		m_macFontSize ;
-	Style		m_macFontStyle ;
+	unsigned char m_macFontStyle ;
 public :
 	void		MacFindFont() ;
 };

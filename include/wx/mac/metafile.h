@@ -41,7 +41,7 @@ public:
     ~wxMetafileRefData(void);
 
 public:
-    PicHandle m_metafile;
+    WXHMETAFILE m_metafile;
 };
 
 #define M_METAFILEDATA ((wxMetafileRefData *)m_refData)
@@ -65,8 +65,8 @@ class WXDLLEXPORT wxMetafile: public wxGDIObject
   inline bool Ok(void) const { return (M_METAFILEDATA && (M_METAFILEDATA->m_metafile != 0)); };
 
   // Implementation
-  inline PicHandle GetHMETAFILE(void) { return M_METAFILEDATA->m_metafile; }
-  void SetHMETAFILE(PicHandle mf) ;
+  inline WXHMETAFILE GetHMETAFILE(void) { return M_METAFILEDATA->m_metafile; }
+  void SetHMETAFILE(WXHMETAFILE mf) ;
 
   // Operators
   inline wxMetafile& operator = (const wxMetafile& metafile) { if (*this == metafile) return (*this); Ref(metafile); return *this; }

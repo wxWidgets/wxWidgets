@@ -61,10 +61,10 @@ class WXDLLEXPORT wxDropTarget: public wxDropTargetBase
     virtual bool GetData();
     
     bool CurrentDragHasSupportedFormat() ;
-    void SetCurrentDrag( DragReference drag ) { m_currentDrag = drag ; }
-    DragReference GetCurrentDrag() { return m_currentDrag ; }
+    void SetCurrentDrag( void* drag ) { m_currentDrag = drag ; }
+    void* GetCurrentDrag() { return m_currentDrag ; }
   protected :
-    DragReference m_currentDrag ;
+    void* m_currentDrag ;
 };
 
 //-------------------------------------------------------------------------
@@ -94,11 +94,11 @@ public:
     virtual wxDragResult DoDragDrop( bool bAllowMove = FALSE );
     
     wxWindow*     GetWindow() { return m_window ; }
-    void SetCurrentDrag( DragReference drag ) { m_currentDrag = drag ; }
-    DragReference GetCurrentDrag() { return m_currentDrag ; }
+    void SetCurrentDrag( void* drag ) { m_currentDrag = drag ; }
+    void* GetCurrentDrag() { return m_currentDrag ; }
   protected :
     wxWindow        *m_window;
-    DragReference m_currentDrag ;
+    void* m_currentDrag ;
 };
 
 #endif

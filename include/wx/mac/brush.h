@@ -29,28 +29,6 @@ typedef enum
   kwxMacBrushThemeBackground
 } wxMacBrushKind ;
 
-class WXDLLEXPORT wxBrushRefData: public wxGDIRefData
-{
-    friend class WXDLLEXPORT wxBrush;
-public:
-    wxBrushRefData();
-    wxBrushRefData(const wxBrushRefData& data);
-    ~wxBrushRefData();
-
-protected:
-    wxMacBrushKind m_macBrushKind ;
-    int           m_style;
-    wxBitmap      m_stipple ;
-    wxColour      m_colour;
-    
-    ThemeBrush    m_macThemeBrush ;
-    
-    ThemeBackgroundKind m_macThemeBackground ;
-    Rect         m_macThemeBackgroundExtent ;
-};
-
-#define M_BRUSHDATA ((wxBrushRefData *)m_refData)
-
 // Brush
 class WXDLLEXPORT wxBrush: public wxGDIObject
 {
@@ -58,7 +36,7 @@ class WXDLLEXPORT wxBrush: public wxGDIObject
 
 public:
   wxBrush();
-  wxBrush(ThemeBrush macThemeBrush ) ;
+  wxBrush(short macThemeBrush ) ;
   wxBrush(const wxColour& col, int style);
   wxBrush(const wxBitmap& stipple);
   inline wxBrush(const wxBrush& brush) { Ref(brush); }
@@ -68,20 +46,20 @@ public:
   virtual void SetColour(unsigned char r, unsigned char g, unsigned char b)  ;
   virtual void SetStyle(int style)  ;
   virtual void SetStipple(const wxBitmap& stipple)  ;
-  virtual void SetMacTheme(ThemeBrush macThemeBrush) ;
-  virtual void SetMacThemeBackground(ThemeBackgroundKind macThemeBackground , const Rect &extent) ;
+  virtual void SetMacTheme(short macThemeBrush) ;
+  virtual void SetMacThemeBackground(unsigned long macThemeBackground ,  WXRECTPTR extent) ;
 
   inline wxBrush& operator = (const wxBrush& brush) { if (*this == brush) return (*this); Ref(brush); return *this; }
   inline bool operator == (const wxBrush& brush) { return m_refData == brush.m_refData; }
   inline bool operator != (const wxBrush& brush) { return m_refData != brush.m_refData; }
 
-  inline wxMacBrushKind MacGetBrushKind()  const { return (M_BRUSHDATA ? M_BRUSHDATA->m_macBrushKind : kwxMacBrushColour); };
+  wxMacBrushKind MacGetBrushKind()  const ;
 
-  ThemeBackgroundKind GetMacThemeBackground(Rect *extent)  const ;
-  inline ThemeBrush GetMacTheme()  const { return (M_BRUSHDATA ? ( M_BRUSHDATA->m_macBrushKind == kwxMacBrushTheme ? M_BRUSHDATA->m_macThemeBrush : kThemeBrushBlack) : kThemeBrushBlack); };
-  inline wxColour& GetColour() const { return (M_BRUSHDATA ? M_BRUSHDATA->m_colour : wxNullColour); };
-  inline int GetStyle() const { return (M_BRUSHDATA ? M_BRUSHDATA->m_style : 0); };
-  inline wxBitmap *GetStipple() const { return (M_BRUSHDATA ? & M_BRUSHDATA->m_stipple : 0); };
+  unsigned long GetMacThemeBackground(WXRECTPTR extent)  const ;
+  short GetMacTheme()  const ;
+  wxColour& GetColour() const ;
+  int GetStyle() const ;
+  wxBitmap *GetStipple() const ;
 
   virtual bool Ok() const { return (m_refData != NULL) ; }
 

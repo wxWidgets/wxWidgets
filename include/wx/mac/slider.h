@@ -87,7 +87,7 @@ public:
      virtual void   DoMoveWindow(int x, int y, int w, int h);
  
   void Command(wxCommandEvent& event);
-	void 					MacHandleControlClick( ControlHandle control , SInt16 controlpart ) ;
+	void 					MacHandleControlClick( WXWidget control , wxInt16 controlpart ) ;
 
  	wxStaticText*	m_macMinimumStatic ;
  	wxStaticText*	m_macMaximumStatic ;

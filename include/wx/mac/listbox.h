@@ -109,9 +109,9 @@ public:
     // Windows callbacks
 
     virtual void SetupColours();
-    virtual void	MacHandleControlClick( ControlHandle control , SInt16 controlpart ) ;
+    virtual void	MacHandleControlClick( WXWidget control , wxInt16 controlpart ) ;
 
-  	ListHandle		m_macList ;
+  	void*		m_macList ;
 	wxArrayString 	m_stringArray ;
 	wxListDataArray m_dataArray ;
 	wxArrayInt m_selectionPreImage ;
