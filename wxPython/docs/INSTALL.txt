@@ -98,7 +98,7 @@ instructions above, except for a few small, but important details:
    install MacPython-OSX-2.3 from http://www.python.org/ and the
    Python Framework will then be installed in /Library/Frameworks.  On
    10.3 (Panther) Apple supplies the Python Framework as part of the
-   OS install, but it will located in /System/LIbrary/Frameworks
+   OS install, but it will located in /System/Library/Frameworks
    instead.  To complicate things further, the Jaguar version, or a
    custom build you do yourself will end up in /Library/Frameworks
    even on Panther...

@@ -5,12 +5,12 @@ README for wxPythonSrc-2.5.*.tar.gz
 This archive contains the source code and other files for both
 wxWindows and wxPython.  Some things not needed for the build (such as
 the wxWindows samples and docs) have been removed in order to minimize
-the size of the archive.  If you would like to have the complete set
-of sources and etc. then please either use a CVS snapshot from
-http://wxwindows.org/snapshots/ or do a checkout from CVS yourself
-(see http://www.wxwindows.org/cvs.htm.)  If you would like to use CVS
-to get the exact same sources as one of these tarballs then you can
-update using a release tag.  For example::
+the size of the archive and are available elsewhere.  If you would
+like to have the complete set of sources and etc. then please either
+use a CVS snapshot from http://wxwindows.org/snapshots/ or do a
+checkout from CVS yourself (see http://www.wxwindows.org/cvs.htm.)  If
+you would like to use CVS to get the exact same sources as one of
+these tarballs then you can update using a release tag.  For example::
 
       cvs update -r wxPy_2_5_1_0
 
@@ -35,7 +35,7 @@ migrate your existing code to 2.5 please read this file::
 
 
 Further information can be found on the wxWindows and wxPython web
-sites and wikis:: 
+sites and the project wikis:: 
 
       http://www.wxwindows.org/
       http://wiki.wxwindows.org/
