@@ -58,7 +58,7 @@ wxHtmlWinParser::wxHtmlWinParser(wxWindow *wnd) : wxHtmlParser()
 #else
         static int default_sizes[7] = {10, 12, 14, 16, 19, 24, 32};
 #endif
-        SetFonts("", wxSLANT, "", wxSLANT, default_sizes);
+        SetFonts("", "", default_sizes);
     }
 
     // fill in wxHtmlParser's tables:
@@ -79,15 +79,13 @@ void wxHtmlWinParser::AddModule(wxHtmlTagsModule *module)
 
 
 
-void wxHtmlWinParser::SetFonts(wxString normal_face, int normal_italic_mode, wxString fixed_face, int fixed_italic_mode, const int *sizes)
+void wxHtmlWinParser::SetFonts(wxString normal_face, wxString fixed_face, const int *sizes)
 {
     int i, j, k, l, m;
 
     for (i = 0; i < 7; i++) m_FontsSizes[i] = sizes[i];
     m_FontFaceFixed = fixed_face;
     m_FontFaceNormal = normal_face;
-    m_ItalicModeFixed = fixed_italic_mode;
-    m_ItalicModeNormal = normal_italic_mode;
 
     for (i = 0; i < 2; i++)
         for (j = 0; j < 2; j++)
@@ -257,7 +255,7 @@ wxFont* wxHtmlWinParser::CreateCurrentFont()
             new wxFont(
                 m_FontsSizes[fs] * m_PixelScale,
                 ff ? wxMODERN : wxSWISS,
-                fi ? (ff ? m_ItalicModeFixed : m_ItalicModeNormal) : wxNORMAL,
+                fi ? wxITALIC : wxNORMAL,
                 fb ? wxBOLD : wxNORMAL,
                 fu ? TRUE : FALSE, ff ? m_FontFaceFixed : m_FontFaceNormal);
     }

@@ -93,11 +93,11 @@ void wxHtmlWindow::SetRelatedStatusBar(int bar)
 
 
 
-void wxHtmlWindow::SetFonts(wxString normal_face, int normal_italic_mode, wxString fixed_face, int fixed_italic_mode, const int *sizes)
+void wxHtmlWindow::SetFonts(wxString normal_face, wxString fixed_face, const int *sizes)
 {
     wxString op = m_OpenedPage;
 
-    m_Parser -> SetFonts(normal_face, normal_italic_mode, fixed_face, fixed_italic_mode, sizes);
+    m_Parser -> SetFonts(normal_face, fixed_face, sizes);
     SetPage(wxT("<html><body></body></html>")); // fonts changed => contents invalid
     if (!op.IsEmpty()) LoadPage(op);
 }
@@ -296,7 +296,6 @@ void wxHtmlWindow::ReadCustomization(wxConfigBase *cfg, wxString path)
     wxString tmp;
     int p_fontsizes[7];
     wxString p_fff, p_ffn;
-    int p_imf, p_imn;
 
     if (path != wxEmptyString) {
         oldpath = cfg -> GetPath();
@@ -306,13 +305,11 @@ void wxHtmlWindow::ReadCustomization(wxConfigBase *cfg, wxString path)
     m_Borders = cfg -> Read("wxHtmlWindow/Borders", m_Borders);
     p_fff = cfg -> Read("wxHtmlWindow/FontFaceFixed", m_Parser -> m_FontFaceFixed);
     p_ffn = cfg -> Read("wxHtmlWindow/FontFaceNormal", m_Parser -> m_FontFaceNormal);
-    p_imf = cfg -> Read("wxHtmlWindow/ItalicModeFixed", m_Parser -> m_ItalicModeFixed);
-    p_imn = cfg -> Read("wxHtmlWindow/ItalicModeNormal", m_Parser -> m_ItalicModeNormal);
     for (int i = 0; i < 7; i++) {
         tmp.Printf(wxT("wxHtmlWindow/FontsSize%i"), i);
         p_fontsizes[i] = cfg -> Read(tmp, m_Parser -> m_FontsSizes[i]);
     }
-    SetFonts(p_ffn, p_imn, p_fff, p_imf, p_fontsizes);
+    SetFonts(p_ffn, p_fff, p_fontsizes);
 
     if (path != wxEmptyString)
         cfg -> SetPath(oldpath);
@@ -333,8 +330,6 @@ void wxHtmlWindow::WriteCustomization(wxConfigBase *cfg, wxString path)
     cfg -> Write("wxHtmlWindow/Borders", (long) m_Borders);
     cfg -> Write("wxHtmlWindow/FontFaceFixed", m_Parser -> m_FontFaceFixed);
     cfg -> Write("wxHtmlWindow/FontFaceNormal", m_Parser -> m_FontFaceNormal);
-    cfg -> Write("wxHtmlWindow/ItalicModeFixed", (long) m_Parser -> m_ItalicModeFixed);
-    cfg -> Write("wxHtmlWindow/ItalicModeNormal", (long) m_Parser -> m_ItalicModeNormal);
     for (int i = 0; i < 7; i++) {
         tmp.Printf(wxT("wxHtmlWindow/FontsSize%i"), i);
         cfg -> Write(tmp, (long) m_Parser -> m_FontsSizes[i]);

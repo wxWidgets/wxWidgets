@@ -140,7 +140,6 @@ void wxHtmlHelpFrame::Init(wxHtmlHelpData* data)
     m_NormalFonts = m_FixedFonts = NULL;
     m_FontSize = 1;
     m_NormalFace = m_FixedFace = wxEmptyString;
-    m_NormalItalic =  m_FixedItalic = wxSLANT;
 }
 
 // Create: builds the GUI components.
@@ -160,7 +159,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
     if (m_Config)
         ReadCustomization(m_Config, m_ConfigRoot);
 
-    wxFrame::Create(parent, id, _("Help"), wxPoint(m_Cfg.x, m_Cfg.y), wxSize(m_Cfg.w, m_Cfg.h));
+    wxFrame::Create(parent, id, _("Help"), wxPoint(m_Cfg.x, m_Cfg.y), wxSize(m_Cfg.w, m_Cfg.h), wxDEFAULT_FRAME_STYLE, "wxHtmlHelp");
 
     GetPosition(&m_Cfg.x, &m_Cfg.y);
 
@@ -609,8 +608,6 @@ void wxHtmlHelpFrame::ReadCustomization(wxConfigBase *cfg, const wxString& path)
     m_FixedFace = cfg -> Read("hcFixedFace", m_FixedFace);
     m_NormalFace = cfg -> Read("hcNormalFace", m_NormalFace);
     m_FontSize = cfg -> Read("hcFontSize", m_FontSize);
-    m_NormalItalic = cfg -> Read("hcNormalItalic", m_NormalItalic);
-    m_FixedItalic = cfg -> Read("hcFixedItalic", m_FixedItalic);
 
     {
         int i;
@@ -664,8 +661,6 @@ void wxHtmlHelpFrame::WriteCustomization(wxConfigBase *cfg, const wxString& path
     cfg -> Write("hcFixedFace", m_FixedFace);
     cfg -> Write("hcNormalFace", m_NormalFace);
     cfg -> Write("hcFontSize", (long)m_FontSize);
-    cfg -> Write("hcNormalItalic", (long)m_NormalItalic);
-    cfg -> Write("hcFixedItalic", (long)m_FixedItalic);
     
     if (m_Bookmarks) {
         int i;
@@ -692,7 +687,7 @@ void wxHtmlHelpFrame::WriteCustomization(wxConfigBase *cfg, const wxString& path
 
 
 
-static void SetFontsToHtmlWin(wxHtmlWindow *win, wxString scalf, int scalit, wxString fixf, int fixit, int size)
+static void SetFontsToHtmlWin(wxHtmlWindow *win, wxString scalf, wxString fixf, int size)
 {
     static int f_sizes[3][7] = 
         {
@@ -701,7 +696,7 @@ static void SetFontsToHtmlWin(wxHtmlWindow *win, wxString scalf, int scalit, wxS
             {14, 16, 18, 24, 32, 38, 45}
         };
 
-    win -> SetFonts(scalf, scalit, fixf, fixit, f_sizes[size]);
+    win -> SetFonts(scalf, fixf, f_sizes[size]);
 }
 
 
@@ -709,15 +704,13 @@ class wxHtmlHelpFrameOptionsDialog : public wxDialog
 {
     public:
         wxComboBox *NormalFont, *FixedFont;
-        wxRadioButton *SFI_i, *SFI_s, *FFI_i, *FFI_s;
         wxRadioBox *RadioBox;
         wxHtmlWindow *TestWin;
 
         wxHtmlHelpFrameOptionsDialog(wxWindow *parent) : wxDialog(parent, -1, wxString(_("Help Browser Options")))
             {
                 wxString choices[3] = {_("small"), _("medium"), _("large")};
-                wxString choices2[2] = {_("italic"), _("slant")};
-                wxBoxSizer *topsizer, *sizer, *sizer2, *sizer3;
+                wxBoxSizer *topsizer, *sizer, *sizer2;
 
                 topsizer = new wxBoxSizer(wxVERTICAL);
 
@@ -729,13 +722,6 @@ class wxHtmlHelpFrameOptionsDialog : public wxDialog
                               0, NULL, wxCB_DROPDOWN | wxCB_READONLY),
                               1, wxEXPAND | wxLEFT | wxRIGHT, 10);
 
-                sizer3 = new wxBoxSizer(wxHORIZONTAL);
-                sizer3 -> Add(SFI_i = new wxRadioButton(this, -1, _("use italic"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP), 
-                              1, wxEXPAND, 0);
-                sizer3 -> Add(SFI_s = new wxRadioButton(this, -1, _("use slant"), wxDefaultPosition, wxDefaultSize, 0), 
-                              1, wxEXPAND, 0);
-                sizer2 -> Add(sizer3, 0, wxEXPAND | wxLEFT | wxRIGHT, 10);
-
                 sizer -> Add(sizer2, 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10);
 
                 sizer2 = new wxStaticBoxSizer( new wxStaticBox(this, -1, _("Fixed font:")), wxVERTICAL);
@@ -743,13 +729,6 @@ class wxHtmlHelpFrameOptionsDialog : public wxDialog
                               wxSize(200, 200), 
                               0, NULL, wxCB_DROPDOWN | wxCB_READONLY), 
                               1, wxEXPAND | wxLEFT | wxRIGHT, 10);
-
-                sizer3 = new wxBoxSizer(wxHORIZONTAL);
-                sizer3 -> Add(FFI_i = new wxRadioButton(this, -1, _("use italic"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP), 
-                              1, wxEXPAND, 0);
-                sizer3 -> Add(FFI_s = new wxRadioButton(this, -1, _("use slant"), wxDefaultPosition, wxDefaultSize, 0), 
-                              1, wxEXPAND, 0);
-                sizer2 -> Add(sizer3, 0, wxEXPAND | wxLEFT | wxRIGHT, 10);
 
                 sizer -> Add(sizer2, 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10);
 
@@ -780,8 +759,8 @@ class wxHtmlHelpFrameOptionsDialog : public wxDialog
             {
                 wxBusyCursor bcur;
                 SetFontsToHtmlWin(TestWin, 
-                                  NormalFont -> GetStringSelection(), SFI_i -> GetValue() ? wxITALIC : wxSLANT,
-                                  FixedFont -> GetStringSelection(), FFI_i -> GetValue() ? wxITALIC : wxSLANT,
+                                  NormalFont -> GetStringSelection(),
+                                  FixedFont -> GetStringSelection(),
                                   RadioBox -> GetSelection());
                 TestWin -> SetPage(_("<html><body>"
                                    "Normal face<br>(and <u>underlined</u>. <i>Italic face.</i> "
@@ -817,7 +796,6 @@ class wxHtmlHelpFrameOptionsDialog : public wxDialog
 BEGIN_EVENT_TABLE(wxHtmlHelpFrameOptionsDialog, wxDialog)
     EVT_COMBOBOX(-1, wxHtmlHelpFrameOptionsDialog::OnUpdate)
     EVT_RADIOBOX(-1, wxHtmlHelpFrameOptionsDialog::OnUpdate)
-    EVT_RADIOBUTTON(-1, wxHtmlHelpFrameOptionsDialog::OnUpdate)
 END_EVENT_TABLE()
 
 
@@ -850,19 +828,13 @@ void wxHtmlHelpFrame::OptionsDialog()
     if (!m_FixedFace.IsEmpty()) dlg.FixedFont -> SetStringSelection(m_FixedFace);
     else dlg.FixedFont -> SetSelection(0);
     dlg.RadioBox -> SetSelection(m_FontSize);
-    dlg.SFI_i -> SetValue(m_NormalItalic == wxITALIC);
-    dlg.SFI_s -> SetValue(m_NormalItalic == wxSLANT);
-    dlg.FFI_i -> SetValue(m_FixedItalic == wxITALIC);
-    dlg.FFI_s -> SetValue(m_FixedItalic == wxSLANT);
     dlg.UpdateTestWin();
     
     if (dlg.ShowModal() == wxID_OK) {
         m_NormalFace = dlg.NormalFont -> GetStringSelection();
         m_FixedFace = dlg.FixedFont -> GetStringSelection();
         m_FontSize = dlg.RadioBox -> GetSelection();
-        m_NormalItalic = dlg.SFI_i -> GetValue() ? wxITALIC : wxSLANT;
-        m_FixedItalic = dlg.FFI_i -> GetValue() ? wxITALIC : wxSLANT;
-        SetFontsToHtmlWin(m_HtmlWin, m_NormalFace, m_NormalItalic, m_FixedFace, m_FixedItalic, m_FontSize);
+        SetFontsToHtmlWin(m_HtmlWin, m_NormalFace, m_FixedFace, m_FontSize);
     }
 }
 

@@ -60,6 +60,7 @@ class WXDLLEXPORT HtmlHistoryItem : public wxObject
 WX_DECLARE_EXPORTED_OBJARRAY(HtmlHistoryItem, HtmlHistoryArray);
 
 
+
 class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
 {
     DECLARE_DYNAMIC_CLASS(wxHtmlWindow)
@@ -104,9 +105,8 @@ class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
                 // after(!) calling SetRelatedFrame, this sets statusbar slot where messages
                 // will be displayed. Default is -1 = no messages.
 
-        void SetFonts(wxString normal_face, int normal_italic_mode, wxString fixed_face, int fixed_italic_mode, const int *sizes);
+        void SetFonts(wxString normal_face, wxString fixed_face, const int *sizes);
                 // sets fonts to be used when displaying HTML page.
-                // *_italic_mode can be either wxSLANT or wxITALIC
 
         virtual void OnSetTitle(const wxString& title);
                 // Sets the title of the window

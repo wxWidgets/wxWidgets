@@ -164,7 +164,7 @@ This function sets the space between border of window and HTML contents. See ima
 
 \membersection{wxHtmlWindow::SetFonts}\label{wxhtmlwindowsetfonts}
 
-\func{void}{SetFonts}{\param{wxString }{normal\_face}, \param{int }{normal\_italic\_mode}, \param{wxString }{fixed\_face}, \param{int }{fixed\_italic\_mode}, \param{const int }{*sizes}}
+\func{void}{SetFonts}{\param{wxString }{normal\_face}, \param{wxString }{fixed\_face}, \param{const int }{*sizes}}
 
 This function sets font sizes and faces.
 
@@ -175,15 +175,7 @@ It can be either empty string (then the default face is choosen) or
 platform-specific face name. Examples are "helvetica" under Unix or
 "Times New Roman" under Windows.}
 
-\docparam{normal\_italic\_mode}{This is either wxSLANT or wxITALIC.
-It determines how
-italic (<I>..</I>) text is handled. See wxFont documentation for
-details. For example you should use wxSLANT in conjuction with
-"helvetica" face or wxITALIC with "times" face.}
-
 \docparam{fixed\_face}{The same thing for fixed face ( <TT>..</TT> )}
-
-\docparam{fixed\_italic\_mode}{The same thing for fixed face.}
 
 \docparam{sizes}{This is an array of 7 items of {\it int} type.
 The values represent size of font with HTML size from -2 to +4
@@ -194,13 +186,13 @@ The values represent size of font with HTML size from -2 to +4
 Under wxGTK:
 
 \begin{verbatim}
-    SetFonts("", wxSLANT, "", wxSLANT, {10, 12, 14, 16, 19, 24, 32});
+    SetFonts("", "", {10, 12, 14, 16, 19, 24, 32});
 \end{verbatim}
 
 Under Windows:
 
 \begin{verbatim}
-    SetFonts("", wxSLANT, "", wxSLANT, {7, 8, 10, 12, 16, 22, 30});
+    SetFonts("", "", {7, 8, 10, 12, 16, 22, 30});
 \end{verbatim}
 
 Athough it seems different the fact is that the fonts are of approximately

@@ -58,9 +58,8 @@ class WXDLLEXPORT wxHtmlWinParser : public wxHtmlParser
         wxWindow *GetWindow() {return m_Window;}
                 // returns associated wxWindow
 
-        void SetFonts(wxString normal_face, int normal_italic_mode, wxString fixed_face, int fixed_italic_mode, const int *sizes);
+        void SetFonts(wxString normal_face, wxString fixed_face, const int *sizes);
                 // sets fonts to be used when displaying HTML page.
-                // *_italic_mode can be either wxSLANT or wxITALIC
 
         virtual wxList* GetTempData();
 
@@ -147,7 +146,6 @@ class WXDLLEXPORT wxHtmlWinParser : public wxHtmlParser
                 // all of them are used, so many items in table are usually NULL.
         int m_FontsSizes[7];
         wxString m_FontFaceFixed, m_FontFaceNormal;
-        int m_ItalicModeFixed, m_ItalicModeNormal;
                 // html font sizes and faces of fixed and proportional fonts
 };
 
