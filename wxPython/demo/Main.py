@@ -65,7 +65,6 @@ _treeList = [
         'ColourDialog',
         'DirDialog',
         'FileDialog',
-        'FileDialog_Save',
         'FindReplaceDialog',
         'FontDialog',
         'MessageDialog',
@@ -189,7 +188,7 @@ _treeList = [
         'PythonEvents',
         'Threads',
         'Timer',
-        'infoframe',
+        ##'infoframe',    # needs better explaination and some fixing
         ]),
 
     # Clipboard and DnD
@@ -214,7 +213,7 @@ _treeList = [
     # Other stuff
     ('Miscellaneous', [
         'ColourDB',
-        'DialogUnits',
+        ##'DialogUnits',   # needs more explainations
         'DrawXXXList',
         'FileHistory',
         'FontEnumerator',
