@@ -1320,36 +1320,44 @@ void wxDC::InitializePalette()
 
 #endif // wxUSE_PALETTE
 
-void wxDC::SetFont(const wxFont& the_font)
+// SetFont/Pen/Brush() really ask to be implemented as a single template
+// function... but doing it is not worth breaking OpenWatcom build <sigh>
+
+void wxDC::SetFont(const wxFont& font)
 {
     WXMICROWIN_CHECK_HDC
 
-    // Set the old object temporarily, in case the assignment deletes an object
-    // that's not yet selected out.
-    if (m_oldFont)
-    {
-        ::SelectObject(GetHdc(), (HFONT) m_oldFont);
-        m_oldFont = 0;
-    }
+    if ( font == m_font )
+        return;
 
-    m_font = the_font;
-
-    if (!the_font.Ok())
+    if ( font.Ok() )
     {
-        if (m_oldFont)
-            ::SelectObject(GetHdc(), (HFONT) m_oldFont);
-        m_oldFont = 0;
-    }
-
-    if (m_font.Ok() && m_font.GetResourceHandle())
-    {
-        HFONT f = (HFONT) ::SelectObject(GetHdc(), (HFONT) m_font.GetResourceHandle());
-        if (f == (HFONT) NULL)
+        HGDIOBJ hfont = ::SelectObject(GetHdc(), GetHfontOf(font));
+        if ( hfont == HGDI_ERROR )
         {
-            wxLogDebug(wxT("::SelectObject failed in wxDC::SetFont."));
+            wxLogLastError(_T("SelectObject(font)"));
         }
-        if (!m_oldFont)
-            m_oldFont = (WXHFONT) f;
+        else // selected ok
+        {
+            if ( !m_oldFont )
+                m_oldFont = (WXHPEN)hfont;
+
+            m_font = font;
+        }
+    }
+    else // invalid font, reset the current font
+    {
+        if ( m_oldFont )
+        {
+            if ( ::SelectObject(GetHdc(), (HPEN) m_oldFont) == HGDI_ERROR )
+            {
+                wxLogLastError(_T("SelectObject(old font)"));
+            }
+
+            m_oldFont = NULL;
+        }
+
+        m_font = wxNullFont;
     }
 }
 
@@ -1395,47 +1403,54 @@ void wxDC::SetBrush(const wxBrush& brush)
 {
     WXMICROWIN_CHECK_HDC
 
-    // Set the old object temporarily, in case the assignment deletes an object
-    // that's not yet selected out.
-    if (m_oldBrush)
-    {
-        ::SelectObject(GetHdc(), (HBRUSH) m_oldBrush);
-        m_oldBrush = 0;
-    }
+    if ( brush == m_brush )
+        return;
 
-    m_brush = brush;
-
-    if (!m_brush.Ok())
+    if ( brush.Ok() )
     {
-        if (m_oldBrush)
-            ::SelectObject(GetHdc(), (HBRUSH) m_oldBrush);
-        m_oldBrush = 0;
-    }
-
-    if (m_brush.Ok())
-    {
-        // to make sure the brush is alligned with the logical coordinates
-        wxBitmap *stipple = m_brush.GetStipple();
+        // we must make sure the brush is aligned with the logical coordinates
+        // before selecting it
+        wxBitmap *stipple = brush.GetStipple();
         if ( stipple && stipple->Ok() )
         {
-#ifdef __WIN32__
-            ::SetBrushOrgEx(GetHdc(),
-                            m_deviceOriginX % stipple->GetWidth(),
-                            m_deviceOriginY % stipple->GetHeight(),
-                            NULL);  // don't need previous brush origin
-#else
-            ::SetBrushOrg(GetHdc(),
-                            m_deviceOriginX % stipple->GetWidth(),
-                            m_deviceOriginY % stipple->GetHeight());
-#endif
+            if ( !::SetBrushOrgEx
+                    (
+                        GetHdc(),
+                        m_deviceOriginX % stipple->GetWidth(),
+                        m_deviceOriginY % stipple->GetHeight(),
+                        NULL                    // [out] previous brush origin
+                    ) )
+            {
+                wxLogLastError(_T("SetBrushOrgEx()"));
+            }
         }
 
-        if ( m_brush.GetResourceHandle() )
+        HGDIOBJ hbrush = ::SelectObject(GetHdc(), GetHbrushOf(brush));
+        if ( hbrush == HGDI_ERROR )
         {
-            HBRUSH b = (HBRUSH) ::SelectObject(GetHdc(), (HBRUSH)m_brush.GetResourceHandle());
-            if (!m_oldBrush)
-                m_oldBrush = (WXHBRUSH) b;
+            wxLogLastError(_T("SelectObject(brush)"));
         }
+        else // selected ok
+        {
+            if ( !m_oldBrush )
+                m_oldBrush = (WXHPEN)hbrush;
+
+            m_brush = brush;
+        }
+    }
+    else // invalid brush, reset the current brush
+    {
+        if ( m_oldBrush )
+        {
+            if ( ::SelectObject(GetHdc(), (HPEN) m_oldBrush) == HGDI_ERROR )
+            {
+                wxLogLastError(_T("SelectObject(old brush)"));
+            }
+
+            m_oldBrush = NULL;
+        }
+
+        m_brush = wxNullBrush;
     }
 }
 
