@@ -240,8 +240,7 @@ zero-based in MSW wxFileDialog implementation
 IDENTIFIED+BY: Haneef Mohammed
 PLATFORMS: wxMSW
 SHORT+DESCRIPTION: Bug in wxDocTemplate::SelectDocumentPath()
-Submit: Submit
-WORKAROUND: 
+WORKAROUND:
 visitor_email_address: haneef@symphonyeda.com
 wxWINDOWS+VERSION: 2.1.12
 DATE+FIXED: 29/11/99
@@ -267,7 +266,6 @@ FIXED+BY: Vadim, just after 2.1.11?
 IDENTIFIED+BY: Tom Marshall
 PLATFORMS: wxGTK
 SHORT+DESCRIPTION: wxGTK: infinite recursion in font selection
-Submit: Submit
 WORKAROUND: Create default font mapping for every
 wxGTK app (?)
 visitor_email_address: tommy@aa.net
@@ -282,12 +280,23 @@ FIXED+BY:
 IDENTIFIED+BY: Tom Marshall
 PLATFORMS: wxGTK
 SHORT+DESCRIPTION: wxGTK: wxsocket example crashes if listen socket unavailable
-Submit: Submit
 WORKAROUND: None.
 visitor_email_address: tommy@aa.net
 wxWINDOWS+VERSION: 2.1.11
 
-
+DATE+FIXED: 07/12/1999
+DATE+IDENTIFIED: 04/12/1999
+DETAILS: In wxTextCtrl::AdjustSpaceLimit(), the check for len > limit
+does not take into account when len == limit. This caused the
+output to freeze when the limit was reached.
+FIXED+BY: Vasu Harish
+IDENTIFIED+BY: Vasu Harish
+PLATFORMS: wxMSW
+SHORT+DESCRIPTION: wxTextCtrl clogs output occassionally when the text size limit is reached
+WORKAROUND: In the check for (len > limit) condition in wxTextCtrl::AdjustSpaceLimit()
+call, added the condition to check for the len==limit. 
+visitor_email_address: vasuh@bullant.net
+wxWINDOWS+VERSION: wx2.1.11
 
 
 ---------------------------END OF BUGLIST-------------------------

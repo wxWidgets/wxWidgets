@@ -771,6 +771,10 @@ SOURCE=.\msw\dibutils.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\dir.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\dirdlg.cpp
 # End Source File
 # Begin Source File

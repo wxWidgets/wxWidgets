@@ -33,6 +33,10 @@ IMPLEMENT_DYNAMIC_CLASS(wxHashTable, wxObject)
 
 wxHashTable::wxHashTable (int the_key_type, int size)
 {
+  n = 0;
+  hash_table = (wxList**) NULL;
+  Create(the_key_type, size);
+/*
   n = size;
   current_position = -1;
   current_node = (wxNode *) NULL;
@@ -42,6 +46,7 @@ wxHashTable::wxHashTable (int the_key_type, int size)
   int i;
   for (i = 0; i < size; i++)
     hash_table[i] = (wxList *) NULL;
+*/
 }
 
 wxHashTable::~wxHashTable (void)
@@ -62,13 +67,13 @@ void wxHashTable::Destroy(void)
 
 bool wxHashTable::Create(int the_key_type, int size)
 {
+  Destroy();
+
   n = size;
   current_position = -1;
   current_node = (wxNode *) NULL;
 
   key_type = the_key_type;
-  if (hash_table)
-    delete[] hash_table;
   hash_table = new wxList *[size];
   int i;
   for (i = 0; i < size; i++)

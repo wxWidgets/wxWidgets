@@ -107,7 +107,7 @@ unzip32 -o ..\glcanvas.zip
 unzip32 -o ..\treedraw.zip
 unzip32 -o ..\ogl3.zip
 unzip32 -o ..\jpeg.zip
-unzip32 -o ..\tex2rtf3.zip
+unzip32 -o ..\tex2rtf2.zip
 
 rem Now delete a few files that are unnecessary
 erase /Y *.in *.spec *.guess *.sub mkinstalldirs modules install-sh *.sh

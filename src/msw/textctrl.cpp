@@ -860,7 +860,7 @@ void wxTextCtrl::AdjustSpaceLimit()
 #ifndef __WIN16__
     unsigned int len = ::GetWindowTextLength(GetHwnd()),
     limit = ::SendMessage(GetHwnd(), EM_GETLIMITTEXT, 0, 0);
-    if ( len > limit )
+    if ( len >= limit )
     {
         limit = len + 0x8000;    // 32Kb
 
