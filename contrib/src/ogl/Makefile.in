@@ -1,7 +1,8 @@
-#
+# $Id$
 
-top_srcdir = @top_srcdir@
+top_srcdir = @top_srcdir@/..
 top_builddir = ../../..
+libsrc_dir = contrib/src/ogl
 
 TARGET_LIBNAME=libogl
 
@@ -9,14 +10,17 @@ LIBVERSION_CURRENT=1
 LIBVERSION_REVISION=0
 LIBVERSION_AGE=0
 
-OBJECTS=basic.o   bmpshape.o  composit.o  divided.o  lines.o    misc.o \
-        basic2.o  canvas.o    constrnt.o  drawn.o    mfutils.o  ogldiag.o
+HEADER_PATH=$(top_srcdir)/contrib/include/wx
+HEADER_SUBDIR=ogl
 
-# the comment at the end of the next line is needed because otherwise autoconf
-# would remove this line completely - it contains a built-in hack to remove
-# any VPATH assignment not containing ':'
-VPATH = :$(top_srcdir)/src/ogl # ':' for autoconf
+HEADERS=basic.h basicp.h bmpshape.h canvas.h composit.h constrnt.h \
+	divided.h drawn.h drawnp.h lines.h linesp.h mfutils.h misc.h \
+	ogl.h ogldiag.h
 
-APPEXTRADEFS=-I$(top_srcdir)/include -I$(top_srcdir)/../include
+OBJECTS=basic.o bmpshape.o composit.o divided.o lines.o misc.o \
+        basic2.o canvas.o constrnt.o drawn.o mfutils.o ogldiag.o
+
+APPEXTRADEFS=-I$(top_srcdir)/contrib/include
 
 include $(top_builddir)/src/makelib.env
+

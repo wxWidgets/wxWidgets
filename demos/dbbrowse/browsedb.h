@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------------------
 // Name:        browsedb.h
-// Purpose:     a wxDB class
+// Purpose:     a wxDb class
 // Author:      Mark Johnson, mj10777@gmx.net
 // Modified by:
 // Created:     19991127.mj10777
@@ -26,24 +26,24 @@ class BrowserDB
  // for user login names and passwords, getting workstation settings, etc.
  // ---> IMPORTANT <---
  //
- //  For each database object created which uses this wxDB pointer
+ //  For each database object created which uses this wxDb pointer
  //    connection to the database, when a CommitTrans() or RollBackTrans()
- //    will commit or rollback EVERY object which uses this wxDB pointer.
+ //    will commit or rollback EVERY object which uses this wxDb pointer.
  //
- //    To allow each table object (those derived from wxTable) to be
+ //    To allow each table object (those derived from wxDbTable) to be
  //    individually committed or rolled back, you MUST use a different
- //    instance of wxDB in the constructor of the table.  Doing so creates
+ //    instance of wxDb in the constructor of the table.  Doing so creates
  //  more overhead, and will use more database connections (some DBs have
  //    connection limits...), so use connections sparringly.
  //
  //  It is recommended that one "main" database connection be created for
  //  the entire program to use for READ-ONLY database accesses, but for each
  //  table object which will do a CommitTrans() or RollbackTrans() that a
- // new wxDB object be created and used for it.
+ // new wxDb object be created and used for it.
  //---------------------------------------------------------------------------------------
-  wxDB*          db_BrowserDB;
+  wxDb*          db_BrowserDB;
   wxDbInf*       ct_BrowserDB;
-  wxColInf*      cl_BrowserDB;
+  wxDbColInf*    cl_BrowserDB;
   wxString       ODBCSource, UserName, Password;
   MainDoc *pDoc;
  //---------------------------------------------------------------------------------------
@@ -61,15 +61,15 @@ class BrowserDB
   BrowserDB();
   ~BrowserDB();
   void Zeiger_auf_NULL(int Art);
-  bool Initialize(int Quite);
+  bool Initialize(int Quiet);
  //---------------------------------------------------------------------------------------
-  bool           OnStartDB(int Quite);
-  bool           OnCloseDB(int Quite);
-  bool           OnSelect(wxString tb_Name,int Quite);
-  bool           OnExecSql(wxString SQLStmt,int Quite);
-  bool           OnGetNext(int Cols,int Quite);
-  wxDbInf*       OnGetCatalog(int Quite);
-  wxColInf*      OnGetColumns(char *tableName, int numCols,int Quite);
+  bool           OnStartDB(int Quiet);
+  bool           OnCloseDB(int Quiet);
+  bool           OnSelect(wxString tb_Name,int Quiet);
+  bool           OnExecSql(wxString SQLStmt,int Quiet);
+  bool           OnGetNext(int Cols,int Quiet);
+  wxDbInf*       OnGetCatalog(int Quiet);
+  wxDbColInf*    OnGetColumns(char *tableName, int numCols,int Quiet);
   void           OnFillSqlTyp();
   void           OnFilldbTyp();
  //---------------------------------------------------------------------------------------

@@ -8,23 +8,23 @@ many characters it is impossible to use same texts under all platforms.
 wxWindows provide mechanism that helps you avoid distributing many
 identical, only differently encoded, packages with your application 
 (e.g. help files and menu items in iso8859-13 and windows-1257). Thanks
-to this mechanism you can distribute only let's say iso8859-13 data 
+to this mechanism you can, for example, distribute only iso8859-13 data 
 and it will be handled transparently under all systems.
 
 Please read \helpref{Internationalization}{internationalization} which
-describes locales concept.
+describes the locales concept.
 
-Whereever in the following text {\it iso8859-2} and {\it windows-1250} are
+In the following text, wherever {\it iso8859-2} and {\it windows-1250} are
 used, any encodings are meant and any encodings may be substituted there.
 
 \wxheading{Locales}
 
-The best way how to ensure correctly displayed texts in GUI across platforms
+The best way to ensure correctly displayed texts in a GUI across platforms
 is to use locales. Write your in-code messages in English or without 
-diacritics and put real messages into message catalog (see 
+diacritics and put real messages into the message catalog (see 
 \helpref{Internationalization}{internationalization}).
 
-Standard .po file begins with a header like this:
+A standard .po file begins with a header like this:
 
 \begin{verbatim}
 # SOME DESCRIPTIVE TITLE.
@@ -51,11 +51,11 @@ Notice these two lines:
 "Content-Type: text/plain; charset=CHARSET\n"
 \end{verbatim}
 
-The first tells {\it msgfmt} compiler not to include string "" (empty)
-to compiled .mo catalog. Second one informs about charset used to write
+The first tells the {\it msgfmt} compiler not to include "" (the empty string)
+in compiled .mo catalog. The second one specifies the charset used to write
 translated messages.
 
-You have to do 2 things: fill-in proper charset information and delete
+You have to do two things: fill in proper charset information and delete
 the {\tt fuzzy} line. Your .po file may look like this after doing so:
 
 \begin{verbatim}
@@ -76,24 +76,24 @@ msgstr ""
 \end{verbatim}
 
 wxWindows is able to use this catalog under any supported platform
-(although iso8859-2 is Unix encoding and is not understood by Windows).
+(although iso8859-2 is a Unix encoding and is not understood by Windows).
 
-How is this done? When you tell wxLocale class to load message catalog that
-contains the header (msgid "". Normal .mo catalogs do {\bf not} contain it,
+How is this done? When you tell the wxLocale class to load a message catalog that
+contains the header (msgid ""; normal .mo catalogs do {\bf not} contain it,
 you must remove the line with {\it fuzzy}!), it checks the charset. If the
 charset is "alien" on the platform the program is currently running (e.g.
-any of ISO encodings under Windows or CP12XX under Unix) it uses
+any of ISO encodings under Windows or CP12XX under Unix) it uses 
 \helpref{wxEncodingConverter::GetPlatformEquivalents}{wxencodingconvertergetplatformequivalents}
-to obtain encoding that is more common on this platform and converts
+to obtain an encoding that is more common on this platform and converts
 the message catalog to this encoding. Note that it does {\bf not} check
 for presence of this encoding! It only assumes that it is always better to
 have strings in platform native encoding than in an encoding that is rarely
 (if ever) used.
 
-The behaviour described about is disabled by default.
+The behaviour described above is disabled by default.
 You must set {\it bConvertEncoding} to TRUE in 
 \helpref{wxLocale constructor}{wxlocaledefctor} in order to enable
-runtime encoding conversion!
+runtime encoding conversion.
 
 \wxheading{Font mapping}
 
@@ -122,26 +122,26 @@ if (!wxTheFontMapper->IsEncodingAvailable(enc, facename))
 \wxheading{Converting data}
 
 You may want to store all program data (created documents etc.) in
-same encoding, let's say windows1250. Obviously, the best way would
+the same encoding, let's say windows1250. Obviously, the best way would
 be to use \helpref{wxEncodingConverter}{wxencodingconverter}.
 
 \wxheading{Help files}
 
 If you're using \helpref{wxHtmlHelpController}{wxhtmlhelpcontroller} there is
-no problem at all. You must only make sure that all HTML files contain
-META tag, e.g.
+no problem at all. You must only make sure that all the HTML files contain
+the META tag, e.g.
 
 \begin{verbatim}
 <meta http-equiv="Content-Type" content="iso8859-2">
 \end{verbatim}
 
-and that hhp project file contains one additional line in {\tt OPTIONS}
+and that the hhp project file contains one additional line in the {\tt OPTIONS}
 section:
 
 \begin{verbatim}
 Charset=iso8859-2
 \end{verbatim}
 
-This additional entry tells HTML help controller what encoding is used
+This additional entry tells the HTML help controller what encoding is used
 in contents and index tables.
 

@@ -75,7 +75,7 @@ public:
 		else
 			return 0;
 	}
-	char operator[](int i) {
+	char operator[](int i) const {
 		if (s)
 			return s[i];
 		else
@@ -95,7 +95,7 @@ public:
 		}
 		return *this;
 	}
-	int value() {
+	int value() const {
 		if (s)
 			return atoi(s);
 		else 
@@ -168,7 +168,7 @@ public:
 	WordList(bool onlyLineEnds_ = false) : 
 		words(0), list(0), len(0), onlyLineEnds(onlyLineEnds_) {}
 	~WordList() { Clear(); }
-	operator bool() { return list; }
+	operator bool() { return list ? true : false; }
 	const char *operator[](int ind) { return words[ind]; }
 	void Clear();
 	void Set(const char *s);

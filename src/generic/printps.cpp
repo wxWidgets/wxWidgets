@@ -80,7 +80,10 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
     sm_abortWindow = (wxWindow *) NULL;
 
     if (!printout)
+    {
+        sm_lastError = wxPRINTER_ERROR;
         return FALSE;
+    }
 
     printout->SetIsPreview(FALSE);
 
@@ -96,7 +99,10 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
     printout->GetPageInfo(&minPage, &maxPage, &fromPage, &toPage);
 
     if (maxPage == 0)
+    {
+        sm_lastError = wxPRINTER_ERROR;
         return FALSE;
+    }
 
     m_printDialogData.SetMinPage(minPage);
     m_printDialogData.SetMaxPage(maxPage);
@@ -131,13 +137,14 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
     }
     else
     {
-        dc = new wxPostScriptDC(wxThePrintSetupData->GetPrinterFile(), FALSE, (wxWindow *) NULL);
+        dc = new wxPostScriptDC(GetPrintDialogData().GetPrintData());
     }
 
     // May have pressed cancel.
     if (!dc || !dc->Ok())
     {
         if (dc) delete dc;
+        sm_lastError = wxPRINTER_ERROR;
         return FALSE;
     }
 
@@ -189,6 +196,8 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
 
     printout->OnBeginPrinting();
 
+    sm_lastError = wxPRINTER_NO_ERROR;
+
     bool keepGoing = TRUE;
 
     int copyCount;
@@ -197,11 +206,15 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
         if (!printout->OnBeginDocument(m_printDialogData.GetFromPage(), m_printDialogData.GetToPage()))
         {
             wxEndBusyCursor();
-            wxMessageBox(_("Could not start printing."), _("Print Error"), wxOK, parent);
+            wxLogError(_("Could not start printing."));
+            sm_lastError = wxPRINTER_ERROR;
             break;
         }
         if (sm_abortIt)
+        {
+            sm_lastError = wxPRINTER_CANCELLED;
             break;
+        }
 
         int pn;
         for (pn = m_printDialogData.GetFromPage(); keepGoing && (pn <= m_printDialogData.GetToPage()) && printout->HasPage(pn);
@@ -210,6 +223,7 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
             if (sm_abortIt)
             {
                 keepGoing = FALSE;
+                sm_lastError = wxPRINTER_CANCELLED;
                 break;
             }
             else
@@ -225,6 +239,7 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
                else
                {
                   sm_abortIt = TRUE;
+                  sm_lastError = wxPRINTER_CANCELLED;
                   keepGoing = FALSE;
                }
             }
@@ -240,7 +255,7 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
 
     delete dc;
 
-    return TRUE;
+    return (sm_lastError == wxPRINTER_NO_ERROR);
 }
 
 wxDC* wxPostScriptPrinter::PrintDialog(wxWindow *parent)
@@ -252,7 +267,14 @@ wxDC* wxPostScriptPrinter::PrintDialog(wxWindow *parent)
     {
         dc = dialog->GetPrintDC();
         m_printDialogData = dialog->GetPrintDialogData();
+        if (dc == NULL)
+            sm_lastError = wxPRINTER_ERROR;
+        else
+            sm_lastError = wxPRINTER_NO_ERROR;
     }
+    else
+        sm_lastError = wxPRINTER_CANCELLED;
+
     dialog->Destroy();
 
     return dc;

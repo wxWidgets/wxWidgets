@@ -485,17 +485,63 @@ wxStatusBar* wxFrame::OnCreateStatusBar(
 )
 {
     wxStatusBar*                    pStatusBar = NULL;
+    SWP                             vSwp;
+    ERRORID                         vError;
+    wxString                        sError;
+    HWND                            hWnd;
 
     pStatusBar = wxFrameBase::OnCreateStatusBar( nNumber
                                                 ,lulStyle
                                                 ,vId
                                                 ,rName
                                                );
+    //
+    // The default parent set for the Statusbar is m_hWnd which, of course,
+    // is the handle to the client window of the frame.  We don't want that,
+    // so we have to set the parent to actually be the Frame.
+    //
+    hWnd = pStatusBar->GetHWND();
+    if (!::WinSetParent(hWnd, m_hFrame, FALSE))
+    {
+        vError = ::WinGetLastError(vHabmain);
+        sError = wxPMErrorToStr(vError);
+        wxLogError("Error setting parent for statusbar. Error: %s\n", sError);
+        return NULL;
+    }
+
+    //
+    // Also we need to reset it positioning to enable the SHOW attribute
+    //
+    if (!::WinQueryWindowPos((HWND)pStatusBar->GetHWND(), &vSwp))
+    {
+        vError = ::WinGetLastError(vHabmain);
+        sError = wxPMErrorToStr(vError);
+        wxLogError("Error querying frame for statusbar position. Error: %s\n", sError);
+        return NULL;
+    }
+    if (!::WinSetWindowPos( (HWND)pStatusBar->GetHWND()
+                           ,HWND_TOP
+                           ,vSwp.cx
+                           ,vSwp.cy
+                           ,vSwp.x
+                           ,vSwp.y
+                           ,SWP_SIZE | SWP_MOVE | SWP_SHOW | SWP_ZORDER
+                          ))
+    {
+        vError = ::WinGetLastError(vHabmain);
+        sError = wxPMErrorToStr(vError);
+        wxLogError("Error setting statusbar position. Error: %s\n", sError);
+        return NULL;
+    }
     return pStatusBar;
 } // end of wxFrame::OnCreateStatusBar
 
 void wxFrame::PositionStatusBar()
 {
+    SWP                             vSwp;
+    ERRORID                         vError;
+    wxString                        sError;
+
     //
     // Native status bar positions itself
     //
@@ -525,6 +571,27 @@ void wxFrame::PositionStatusBar()
                                   ,nWidth
                                   ,nStatbarHeight
                                  );
+        if (!::WinQueryWindowPos(m_frameStatusBar->GetHWND(), &vSwp))
+        {
+            vError = ::WinGetLastError(vHabmain);
+            sError = wxPMErrorToStr(vError);
+            wxLogError("Error setting parent for submenu. Error: %s\n", sError);
+            return;
+        }
+        if (!::WinSetWindowPos( m_frameStatusBar->GetHWND()
+                               ,HWND_TOP
+                               ,nStatbarWidth
+                               ,nStatbarHeight
+                               ,vSwp.x
+                               ,vSwp.y
+                               ,SWP_SIZE | SWP_MOVE | SWP_SHOW | SWP_ZORDER
+                              ))
+        {
+            vError = ::WinGetLastError(vHabmain);
+            sError = wxPMErrorToStr(vError);
+            wxLogError("Error setting parent for submenu. Error: %s\n", sError);
+            return;
+        }
     }
 } // end of wxFrame::PositionStatusBar
 #endif // wxUSE_STATUSBAR
@@ -817,7 +884,7 @@ bool wxFrame::OS2Create(
 
     if (ulStyle == wxDEFAULT_FRAME_STYLE)
         ulCreateFlags = FCF_SIZEBORDER | FCF_TITLEBAR | FCF_SYSMENU |
-                        FCF_MINMAX | FCF_VERTSCROLL | FCF_HORZSCROLL | FCF_TASKLIST;
+                        FCF_MINMAX | FCF_TASKLIST;
     else
     {
         if ((ulStyle & wxCAPTION) == wxCAPTION)
@@ -825,6 +892,10 @@ bool wxFrame::OS2Create(
         else
             ulCreateFlags = FCF_NOMOVEWITHOWNER;
 
+        if ((ulStyle & wxVSCROLL) == wxVSCROLL)
+            ulCreateFlags |= FCF_VERTSCROLL;
+        if ((ulStyle & wxHSCROLL) == wxHSCROLL)
+            ulCreateFlags |= FCF_HORZSCROLL;
         if (ulStyle & wxMINIMIZE_BOX)
             ulCreateFlags |= FCF_MINBUTTON;
         if (ulStyle & wxMAXIMIZE_BOX)
@@ -884,7 +955,7 @@ bool wxFrame::OS2Create(
                                       ,HWND_TOP              // Sibling
                                       ,(ULONG)nId            // ID
                                       ,(PVOID)&vFrameCtlData // Creation data
-                                     ,NULL                   // Window Pres Params
+                                      ,NULL                  // Window Pres Params
                                      )) == 0L)
     {
         return FALSE;
@@ -917,7 +988,7 @@ bool wxFrame::OS2Create(
                            ,nY
                            ,nWidth
                            ,nHeight
-                           ,SWP_SIZE | SWP_MOVE | SWP_ACTIVATE
+                           ,SWP_SIZE | SWP_MOVE | SWP_ACTIVATE | SWP_ZORDER
                           ))
         return FALSE;
 
@@ -1129,8 +1200,6 @@ bool wxFrame::OS2TranslateMessage(
   WXMSG*                            pMsg
 )
 {
-    if (wxWindow::OS2TranslateMessage(pMsg))
-        return TRUE;
     //
     // try the menu bar accels
     //
@@ -1140,7 +1209,7 @@ bool wxFrame::OS2TranslateMessage(
         return FALSE;
 
     const wxAcceleratorTable&       rAcceleratorTable = pMenuBar->GetAccelTable();
-    return rAcceleratorTable.Translate(this, pMsg);
+    return rAcceleratorTable.Translate(m_hFrame, pMsg);
 } // end of wxFrame::OS2TranslateMessage
 
 // ---------------------------------------------------------------------------
@@ -1195,6 +1264,13 @@ bool wxFrame::HandlePaint()
         }
         else
         {
+            HPS                             hPS;
+            RECTL                           vRect;
+
+            hPS = WinBeginPaint(GetHwnd(), 0L, &vRect);
+            WinFillRect(hPS, &vRect, SYSCLR_WINDOW);
+            WinEndPaint(hPS);
+
             return wxWindow::HandlePaint();
         }
     }

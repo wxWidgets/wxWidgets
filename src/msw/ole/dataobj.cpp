@@ -317,7 +317,7 @@ STDMETHODIMP wxIDataObject::GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
             pmedium->hGlobal = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE,
                                            sizeof(METAFILEPICT));
             if ( !pmedium->hGlobal ) {
-                wxLogLastError("GlobalAlloc");
+                wxLogLastError(wxT("GlobalAlloc"));
                 return E_OUTOFMEMORY;
             }
             pmedium->tymed = TYMED_MFPICT;
@@ -341,7 +341,7 @@ STDMETHODIMP wxIDataObject::GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
 
             HGLOBAL hGlobal = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE, size);
             if ( hGlobal == NULL ) {
-                wxLogLastError("GlobalAlloc");
+                wxLogLastError(wxT("GlobalAlloc"));
                 return E_OUTOFMEMORY;
             }
 
@@ -457,7 +457,7 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
                 // copy data
                 void *pBuf = GlobalLock(pmedium->hGlobal);
                 if ( pBuf == NULL ) {
-                    wxLogLastError("GlobalLock");
+                    wxLogLastError(wxT("GlobalLock"));
 
                     return E_OUTOFMEMORY;
                 }
@@ -691,37 +691,37 @@ void wxDataObject::SetAutoDelete()
 
 #ifdef __WXDEBUG__
 
-const char *wxDataObject::GetFormatName(wxDataFormat format)
+const wxChar *wxDataObject::GetFormatName(wxDataFormat format)
 {
     // case 'xxx' is not a valid value for switch of enum 'wxDataFormat'
     #ifdef __VISUALC__
         #pragma warning(disable:4063)
     #endif // VC++
 
-    static char s_szBuf[256];
+    static wxChar s_szBuf[256];
     switch ( format ) {
-        case CF_TEXT:         return "CF_TEXT";
-        case CF_BITMAP:       return "CF_BITMAP";
-        case CF_METAFILEPICT: return "CF_METAFILEPICT";
-        case CF_SYLK:         return "CF_SYLK";
-        case CF_DIF:          return "CF_DIF";
-        case CF_TIFF:         return "CF_TIFF";
-        case CF_OEMTEXT:      return "CF_OEMTEXT";
-        case CF_DIB:          return "CF_DIB";
-        case CF_PALETTE:      return "CF_PALETTE";
-        case CF_PENDATA:      return "CF_PENDATA";
-        case CF_RIFF:         return "CF_RIFF";
-        case CF_WAVE:         return "CF_WAVE";
-        case CF_UNICODETEXT:  return "CF_UNICODETEXT";
-        case CF_ENHMETAFILE:  return "CF_ENHMETAFILE";
-        case CF_HDROP:        return "CF_HDROP";
-        case CF_LOCALE:       return "CF_LOCALE";
+        case CF_TEXT:         return wxT("CF_TEXT");
+        case CF_BITMAP:       return wxT("CF_BITMAP");
+        case CF_METAFILEPICT: return wxT("CF_METAFILEPICT");
+        case CF_SYLK:         return wxT("CF_SYLK");
+        case CF_DIF:          return wxT("CF_DIF");
+        case CF_TIFF:         return wxT("CF_TIFF");
+        case CF_OEMTEXT:      return wxT("CF_OEMTEXT");
+        case CF_DIB:          return wxT("CF_DIB");
+        case CF_PALETTE:      return wxT("CF_PALETTE");
+        case CF_PENDATA:      return wxT("CF_PENDATA");
+        case CF_RIFF:         return wxT("CF_RIFF");
+        case CF_WAVE:         return wxT("CF_WAVE");
+        case CF_UNICODETEXT:  return wxT("CF_UNICODETEXT");
+        case CF_ENHMETAFILE:  return wxT("CF_ENHMETAFILE");
+        case CF_HDROP:        return wxT("CF_HDROP");
+        case CF_LOCALE:       return wxT("CF_LOCALE");
 
         default:
             if ( !::GetClipboardFormatName(format, s_szBuf, WXSIZEOF(s_szBuf)) )
             {
                 // it must be a new predefined format we don't know the name of
-                sprintf(s_szBuf, "unknown CF (0x%04x)", format.GetFormatId());
+                wxSprintf(s_szBuf, wxT("unknown CF (0x%04x)"), format.GetFormatId());
             }
 
             return s_szBuf;
@@ -792,7 +792,7 @@ bool wxBitmapDataObject2::SetData(size_t WXUNUSED(len), const void *pBuf)
     BITMAP bmp;
     if ( !GetObject(hbmp, sizeof(BITMAP), &bmp) )
     {
-        wxLogLastError("GetObject(HBITMAP)");
+        wxLogLastError(wxT("GetObject(HBITMAP)"));
     }
 
     wxBitmap bitmap(bmp.bmWidth, bmp.bmHeight, bmp.bmPlanes);
@@ -827,7 +827,7 @@ size_t wxBitmapDataObject::GetDataSize(const wxDataFormat& format) const
         if ( !GetDIBits(hdc, (HBITMAP)m_bitmap.GetHBITMAP(), 0, 0,
                         NULL, &bi, DIB_RGB_COLORS) )
         {
-            wxLogLastError("GetDIBits(NULL)");
+            wxLogLastError(wxT("GetDIBits(NULL)"));
 
             return 0;
         }
@@ -860,7 +860,7 @@ bool wxBitmapDataObject::GetDataHere(const wxDataFormat& format,
         BITMAPINFO *pbi = (BITMAPINFO *)pBuf;
         if ( !GetDIBits(hdc, hbmp, 0, 0, NULL, pbi, DIB_RGB_COLORS) )
         {
-            wxLogLastError("GetDIBits(NULL)");
+            wxLogLastError(wxT("GetDIBits(NULL)"));
 
             return 0;
         }
@@ -869,7 +869,7 @@ bool wxBitmapDataObject::GetDataHere(const wxDataFormat& format,
         if ( !GetDIBits(hdc, hbmp, 0, pbi->bmiHeader.biHeight, pbi + 1,
                         pbi, DIB_RGB_COLORS) )
         {
-            wxLogLastError("GetDIBits");
+            wxLogLastError(wxT("GetDIBits"));
 
             return FALSE;
         }
@@ -899,7 +899,7 @@ bool wxBitmapDataObject::SetData(const wxDataFormat& format,
                               pbmi + 1, pbmi, DIB_RGB_COLORS);
         if ( !hbmp )
         {
-            wxLogLastError("CreateDIBitmap");
+            wxLogLastError(wxT("CreateDIBitmap"));
         }
 
         m_bitmap.SetWidth(pbmih->biWidth);
@@ -913,7 +913,7 @@ bool wxBitmapDataObject::SetData(const wxDataFormat& format,
         BITMAP bmp;
         if ( !GetObject(hbmp, sizeof(BITMAP), &bmp) )
         {
-            wxLogLastError("GetObject(HBITMAP)");
+            wxLogLastError(wxT("GetObject(HBITMAP)"));
         }
 
         m_bitmap.SetWidth(bmp.bmWidth);
@@ -963,8 +963,8 @@ bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *pData)
         m_filenames.Add(str);
 
         if ( len2 != len - 1 ) {
-            wxLogDebug(wxT("In wxFileDropTarget::OnDrop DragQueryFile returned"
-                           " %d characters, %d expected."), len2, len - 1);
+            wxLogDebug(wxT("In wxFileDropTarget::OnDrop DragQueryFile returned\
+ %d characters, %d expected."), len2, len - 1);
         }
     }
 
@@ -1087,7 +1087,7 @@ size_t wxConvertBitmapToDIB(LPBITMAPINFO pbi, const wxBitmap& bitmap)
     HBITMAP hbmp = (HBITMAP)bitmap.GetHBITMAP();
     if ( !GetObject(hbmp, sizeof(bm), &bm) )
     {
-        wxLogLastError("GetObject(bitmap)");
+        wxLogLastError(wxT("GetObject(bitmap)"));
 
         return 0;
     }
@@ -1125,7 +1125,7 @@ size_t wxConvertBitmapToDIB(LPBITMAPINFO pbi, const wxBitmap& bitmap)
     ScreenHDC hdc;
     if ( !GetDIBits(hdc, hbmp, 0, bi.biHeight, NULL, pbi, DIB_RGB_COLORS) )
     {
-        wxLogLastError("GetDIBits(NULL)");
+        wxLogLastError(wxT("GetDIBits(NULL)"));
 
         return 0;
     }
@@ -1140,7 +1140,7 @@ size_t wxConvertBitmapToDIB(LPBITMAPINFO pbi, const wxBitmap& bitmap)
     void *image = (char *)pbi + dwLen;
     if ( !GetDIBits(hdc, hbmp, 0, bi.biHeight, image, pbi, DIB_RGB_COLORS) )
     {
-        wxLogLastError("GetDIBits");
+        wxLogLastError(wxT("GetDIBits"));
 
         return 0;
     }
@@ -1163,7 +1163,7 @@ wxBitmap wxConvertDIBToBitmap(const LPBITMAPINFO pbmi)
                                   image, pbmi, DIB_RGB_COLORS);
     if ( !hbmp )
     {
-        wxLogLastError("CreateDIBitmap");
+        wxLogLastError(wxT("CreateDIBitmap"));
     }
 
     wxBitmap bitmap(pbmih->biWidth, pbmih->biHeight, pbmih->biBitCount);

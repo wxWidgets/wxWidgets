@@ -58,7 +58,7 @@ class WXDLLEXPORT wxWindow;
 // (pseudo)template list classes
 // ----------------------------------------------------------------------------
 
-WX_DECLARE_LIST_3(wxWindow, wxWindowBase, wxWindowList, wxWindowListNode);
+WX_DECLARE_LIST_3(wxWindow, wxWindowBase, wxWindowList, wxWindowListNode, class WXDLLEXPORT);
 
 // ----------------------------------------------------------------------------
 // global variables

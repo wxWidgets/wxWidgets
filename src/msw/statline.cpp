@@ -34,6 +34,14 @@
 #include "wx/msw/private.h"
 #include "wx/log.h"
 
+#ifndef SS_SUNKEN
+    #define SS_SUNKEN 0x00001000L
+#endif
+
+#ifndef SS_NOTIFY
+    #define SS_NOTIFY 0x00000100L
+#endif
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -58,16 +66,12 @@ bool wxStaticLine::Create( wxWindow *parent,
 
     wxSize sizeReal = AdjustSize(size);
 
-#ifndef WIN32
-#define SS_SUNKEN 0
-#endif
-
     m_hWnd = (WXHWND)::CreateWindow
                        (
                         wxT("STATIC"),
                         wxT(""),
-                        WS_VISIBLE | WS_CHILD |
-                        SS_GRAYRECT | SS_SUNKEN, // | SS_ETCHEDFRAME,
+                        WS_VISIBLE | WS_CHILD /* | WS_CLIPSIBLINGS */ |
+                        SS_GRAYRECT | SS_SUNKEN | SS_NOTIFY,
                         pos.x, pos.y, sizeReal.x, sizeReal.y,
                         GetWinHwnd(parent),
                         (HMENU)m_windowId,
@@ -77,9 +81,8 @@ bool wxStaticLine::Create( wxWindow *parent,
 
     if ( !m_hWnd )
     {
-#ifdef __WXDEBUG__        
         wxLogDebug(wxT("Failed to create static control"));
-#endif
+
         return FALSE;
     }
 
@@ -87,5 +90,6 @@ bool wxStaticLine::Create( wxWindow *parent,
 
     return TRUE;
 }
-#endif
+
+#endif // wxUSE_STATLINE
 

@@ -355,5 +355,5 @@ bool wxJoystick::ReleaseCapture(void)
   m_polling = 0;
   return TRUE;
 }
-#endif
+#endif  // wxUSE_JOYSTICK
 

@@ -36,6 +36,45 @@ static wxString GetHotKey( const wxMenuItem& item );
 #endif
 
 //-----------------------------------------------------------------------------
+// idle system
+//-----------------------------------------------------------------------------
+
+static wxString wxReplaceUnderscore( const wxString& title )
+{
+    const wxChar *pc;
+    
+    /* GTK 1.2 wants to have "_" instead of "&" for accelerators */
+    wxString str;
+    for ( pc = title; *pc != wxT('\0'); pc++ )
+    {
+        if (*pc == wxT('&'))
+        {
+#if (GTK_MINOR_VERSION > 0) && (GTK_MICRO_VERSION > 0)
+            str << wxT('_');
+        }
+        else if (*pc == wxT('/'))
+        {
+            str << wxT('\\');
+#endif
+        }
+        else
+        {
+#if __WXGTK12__
+            if ( *pc == wxT('_') )
+            {
+                // underscores must be doubled to prevent them from being
+                // interpreted as accelerator character prefix by GTK
+                str << *pc;
+            }
+#endif // GTK+ 1.2
+
+            str << *pc;
+        }
+    }
+    return str;
+}
+
+//-----------------------------------------------------------------------------
 // wxMenuBar
 //-----------------------------------------------------------------------------
 
@@ -221,36 +260,7 @@ bool wxMenuBar::Append( wxMenu *menu, const wxString &title )
 
 bool wxMenuBar::GtkAppend(wxMenu *menu, const wxString& title)
 {
-    const wxChar *pc;
-
-    /* GTK 1.2 wants to have "_" instead of "&" for accelerators */
-    wxString str;
-    for ( pc = title; *pc != wxT('\0'); pc++ )
-    {
-        if (*pc == wxT('&'))
-        {
-#if (GTK_MINOR_VERSION > 0) && (GTK_MICRO_VERSION > 0)
-            str << wxT('_');
-        }
-        else if (*pc == wxT('/'))
-        {
-            str << wxT('\\');
-#endif
-        }
-        else
-        {
-#if __WXGTK12__
-            if ( *pc == wxT('_') )
-            {
-                // underscores must be doubled to prevent them from being
-                // interpreted as accelerator character prefix by GTK
-                str << *pc;
-            }
-#endif // GTK+ 1.2
-
-            str << *pc;
-        }
-    }
+    wxString str( wxReplaceUnderscore( title ) );
 
     /* this doesn't have much effect right now */
     menu->SetTitle( str );
@@ -275,6 +285,7 @@ bool wxMenuBar::GtkAppend(wxMenu *menu, const wxString& title)
     gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
     /* in order to get the pointer to the item we need the item text _without_ underscores */
     wxString tmp = wxT("<main>/");
+    const wxChar *pc;
     for ( pc = str; *pc != wxT('\0'); pc++ )
     {
        // contrary to the common sense, we must throw out _all_ underscores,
@@ -379,7 +390,7 @@ wxMenu *wxMenuBar::Remove(size_t pos)
 
 static int FindMenuItemRecursive( const wxMenu *menu, const wxString &menuString, const wxString &itemString )
 {
-    if (menu->GetTitle() == menuString)
+    if (wxMenuItem::GetLabelFromText(menu->GetTitle()) == wxMenuItem::GetLabelFromText(menuString))
     {
         int res = menu->FindItem( itemString );
         if (res != wxNOT_FOUND)
@@ -472,7 +483,25 @@ wxString wxMenuBar::GetLabelTop( size_t pos ) const
 
     wxMenu* menu = node->GetData();
 
-    return menu->GetTitle();
+    wxString label;
+    wxString text( menu->GetTitle() );
+#if (GTK_MINOR_VERSION > 0)
+    for ( const wxChar *pc = text.c_str(); *pc; pc++ )
+    {
+        if ( *pc == wxT('_') || *pc == wxT('&') )
+        {
+            // '_' is the escape character for GTK+ and '&' is the one for
+            // wxWindows - skip both of them
+            continue;
+        }
+
+        label += *pc;
+    }
+#else // GTK+ 1.0
+    label = text;
+#endif // GTK+ 1.2/1.0
+
+    return label;
 }
 
 void wxMenuBar::SetLabelTop( size_t pos, const wxString& label )
@@ -483,7 +512,22 @@ void wxMenuBar::SetLabelTop( size_t pos, const wxString& label )
 
     wxMenu* menu = node->GetData();
 
-    menu->SetTitle( label );
+    wxString str( wxReplaceUnderscore( label ) );
+
+    menu->SetTitle( str );
+
+    if (menu->m_owner)
+    {
+        GtkLabel *label = GTK_LABEL( GTK_BIN(menu->m_owner)->child );
+
+        /* set new text */
+        gtk_label_set( label, str.mb_str());
+
+        /* reparse key accel */
+        (void)gtk_label_parse_uline (GTK_LABEL(label), str.mb_str() );
+        gtk_accel_label_refetch( GTK_ACCEL_LABEL(label) );
+    }
+
 }
 
 //-----------------------------------------------------------------------------
@@ -962,6 +1006,12 @@ bool wxMenu::DoInsert(size_t pos, wxMenuItem *item)
     // index
     if ( !GtkAppend(item) )
         return FALSE;
+
+    if ( m_style & wxMENU_TEAROFF )
+    {
+        // change the position as the first item is the tear-off marker
+        pos++;
+    }
 
     GtkMenuShell *menu_shell = GTK_MENU_SHELL(m_factory->widget);
     gpointer data = g_list_last(menu_shell->children)->data;

@@ -1,11 +1,11 @@
 \section{Internationalization}\label{internationalization}
 
-Although internationalization (i18n for short) of an application involves far
-more than just translating its text messages to another message (date, time and
+Although internationalization of an application (i18n for short) involves far
+more than just translating its text messages to another message -- date, time and
 currency formats need changing too, some languages are written left to right
 and others right to left, character encoding may differ and many other things
-may need changing too), it is a necessary first step. wxWindows provides
-facilities for the messages translation with its 
+may need changing too -- it is a necessary first step. wxWindows provides
+facilities for message translation with its 
 \helpref{wxLocale}{wxlocale} class and is itself fully translated into several
 languages. Please consult wxWindows home page for the most up-to-date
 translations - and if you translate it into one of the languages not done
@@ -24,7 +24,7 @@ to be buggy, so you should find a later version of it!
 
 There are two kinds of message catalogs: source catalogs which are text files
 with extension .po and binary catalogs which are created from the source ones
-with {\it msgfmt} program (part fo gettext package) and have the extension .mo.
+with {\it msgfmt} program (part of gettext package) and have the extension .mo.
 Only the binary files are needed during program execution.
 
 The program i18n involves several steps:

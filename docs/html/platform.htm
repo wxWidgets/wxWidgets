@@ -8,10 +8,10 @@
 
 <FONT FACE="Arial, Lucida Sans, Helvetica">
 
-<table align=center width=100% border=4 cellpadding=5 cellspacing=0>
+<table align=center width=100% border=0 cellpadding=5 cellspacing=0>
 <tr>
-<td bgcolor="#660000" align=left colspan=2>
-<font size=+1 face="Arial, Lucida Sans, Helvetica" color="#FFFFFF">
+<td bgcolor="#C4ECF9" align=left colspan=2>
+<font size=+1 face="Arial, Lucida Sans, Helvetica" color="#000000">
 Supported Platforms
 </font>
 </td>
@@ -29,7 +29,9 @@ See also the <A HREF="http://www.lpthe.jussieu.fr/~zeitlin/wxWindows/daily/">dai
 <p>
 If you have tested wxWindows on a platform not mentioned here, please tell us about your experience on our mailing list!
 We would especially like to have information about compiling wxGTK on other Unix variants, such as IRIX, DG-UX,
-other flavours of BSD, ...
+other flavours of BSD, ... Please note that you will generally need GNU make
+(also known as <tt>gmake</tt>) to compile wxWindows, native make programs
+often don't work.
 <p>
 
 <table width=100% border=4 cellpadding=5 cellspacing=0>
@@ -47,14 +49,15 @@ other flavours of BSD, ...
 </tr>
 
 <tr>
-<td bgcolor="#FFFFFF" align=center valign=center rowspan=6>Win32 (Windows 9x/NT)</td>
+<td bgcolor="#FFFFFF" align=center valign=center rowspan=7>Win32 (Windows 9x/NT)</td>
      <td>Visual C++ 4.2/5.x/6.0</td><td align=center><IMG SRC="icons/yes.gif" ALT=Ok></td><td>VZ, JS</td><td>Project files are provided for all versions except 4.2</td>
 <tr> <td>Borland C++ 5.0</td><td align=center><IMG SRC="icons/yes.gif" ALT=Ok></td><td><br></td><td>Also works with free command line Borland C++ 5.5</td>
 <tr> <td>Mingw32</td><td align=center><IMG SRC="icons/yes.gif" ALT=Ok></td><td>GRG, VZ</td><td>Cross compilation from Linux works as well<br>
                                                                                                Version 2.95.2 recommended, otherwise some (included) patches must be applied<br>
                                                                                                Memory debugging code doesn't seem to work well</td>
-<tr> <td>Cygwin</td><td align=center><IMG SRC="icons/no.gif" ALT=Unknown></td><td><br></td><td>Hasn't been tested recently, anyone?</td>
+<tr> <td>Cygwin</td><td align=center><IMG SRC="icons/yes.gif" ALT=Ok></td><td>Stephane Junique<br>Andrea Venturoli</td><td>tested under NT 4, cross-compiling for mingw also works</td>
 <tr> <td>Watcom C++ 10</td><td align=center><IMG SRC="icons/somewhat.gif" ALT=Almost></td><td>JS</td><td>Tested with 10.6: works, but wxImage seems to be broken<br>no support for JPEG, TIFF or OpenGL</td>
+<tr> <td>Watcom C++ 11</td><td align=center><IMG SRC="icons/yes.gif" ALT=Ok></td><td>Markus Neifer</td><td>Tested with 11.0b under win95</td>
 <tr> <td>Symantec C++</td><td align=center><IMG SRC="icons/no.gif" ALT=Unknown></td><td><br></td><td><br></td>
 </tr>
 
@@ -80,9 +83,10 @@ other flavours of BSD, ...
 </tr>
 
 <tr>
-<td bgcolor="#FFFFFF" align=center valign=center rowspan=3>Solaris</td>
-     <td>wxMotif with Sun CC 4.2</td><td align=center><IMG SRC="icons/yes.gif" ALT=Ok></td><td>VZ</td><td><tt>-mt</tt> should be added to <tt>CFLAGS</tt> for MT compilation</td>
+<td bgcolor="#FFFFFF" align=center valign=center rowspan=4>Solaris</td>
+     <td>wxMotif with Sun CC 4.2</td><td align=center><IMG SRC="icons/yes.gif" ALT=Ok></td><td>VZ</td><td>Thread support must be disabled on system with not MT-safe X11</td>
 <tr> <td>wxMotif with gcc</td><td align=center><IMG SRC="icons/yes.gif" ALT=Ok></td><td><br></td><td><br></td>
+<tr> <td>wxGTK with Sun CC 4.2</td><td align=center><IMG SRC="icons/yes.gif" ALT=Ok></td><td>Shiv Shankar Ramakrishnan</td><td><br></td>
 <tr> <td>wxGTK with gcc</td><td align=center><IMG SRC="icons/yes.gif" ALT=Ok></td><td><br></td><td><br></td>
 </tr>
 
@@ -94,13 +98,31 @@ other flavours of BSD, ...
 
 <tr>
 <td bgcolor="#FFFFFF" align=center valign=center rowspan=2>HP-UX</td>
-     <td>wxGTK with HP CC A.10.22</td><td align=center><IMG SRC="icons/somewhat.gif" ALT=Almost></td><td><br></td>
-     <td>special extra compiler options must be manually added, see the docs for details</td>
+     <td>wxGTK with HP CC A.10.22<br>or HP aCC B3910B A.01.18
+     </td><td align=center><IMG SRC="icons/yes.gif" ALT=Ok></td><td>Staf Verhaegen</td>
+     <td>you need to add <tt>-Aa -D_HPUX_SOURCE</tt> to <tt>CFLAGS</tt></td>
 <tr> <td>wxGTK with gcc</td><td align=center><IMG SRC="icons/no.gif" ALT=Unknown></td><td><br></td><td><br></td>
 </tr>
 
 <tr>
-<td bgcolor="#F0F0F0" align=center valign=center rowspan=4>OS/2</td>
+<td bgcolor="#F0F0F0" align=center valign=center rowspan=2>IRIX</td>
+     <td>wxGTK</td><td align=center><IMG SRC="icons/yes.gif" ALT=Ok></td><td><br></td><td>You may need to use <tt>--disable-catch_segvs</tt> if you get compiler<br>error in utilsunx.cpp</td>
+<tr> <td>wxMotif with MIPSPro 7.30</td><td align=center><IMG SRC="icons/yes.gif" ALT=Ok></td><td>David Marshall</td><td>On IRIX 6.5.6 (Indigo2, 64bit), with SGI Motif 1.2</td>
+</tr>
+
+<tr>
+<td bgcolor="#FFFFFF" align=center valign=center rowspan=1>SCO UnixWare</td>
+    <td>wxGTK with gcc</td><td align=center><IMG SRC="icons/yes.gif" ALT=Ok></td><td>William Suetholz</td><td>UnixWare 2.1.3 with UnixWare 7 compatibility PTF</td>
+</tr>
+
+<tr>
+<td bgcolor="#F0F0F0" align=center valign=center rowspan=1>DEC OSF/1</td>
+    <td>wxGTK with gcc</td><td align=center><IMG SRC="icons/yes.gif" ALT=Ok></td><td>Fabrice Didierjean</td><td>OSF1 4.0 on Dec Alpha<br>
+                                                                                     you may need to run configure with <tt>--host=alpha-dec-osf switch</tt></td>
+</tr>
+
+<tr>
+<td bgcolor="#FFFFFF" align=center valign=center rowspan=4>OS/2</td>
      <td>VisualAge 3.0/4.0</td><td align=center><IMG SRC="icons/no.gif" ALT="Not yet"></td><td>DW</td>
      <td rowspan=2 valign=center>OS/2 port is work in progress...</td>
 <tr> <td>EMX</td><td align=center><IMG SRC="icons/no.gif" ALT="Not yet"></td><td>SN</td>
@@ -120,3 +142,5 @@ any comments/suggestions.
 
 </body>
 </html>
+
+<!-- vi: set tw=0: !-->

@@ -22,19 +22,13 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_HTML
+#if wxUSE_HTML && wxUSE_STREAMS
 
 #include "wx/html/helpctrl.h"
 #include "wx/wx.h"
 #include "wx/busyinfo.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxHtmlHelpController, wxHelpControllerBase)
-
-#if 0
-BEGIN_EVENT_TABLE(wxHtmlHelpController, wxEvtHandler)
-EVT_CLOSE(wxHtmlHelpController::OnCloseFrame)
-END_EVENT_TABLE()
-#endif
 
 wxHtmlHelpController::wxHtmlHelpController(int style)
 {
@@ -47,7 +41,8 @@ wxHtmlHelpController::wxHtmlHelpController(int style)
 
 wxHtmlHelpController::~wxHtmlHelpController()
 {
-    WriteCustomization(m_Config, m_ConfigRoot);
+    if (m_Config)
+        WriteCustomization(m_Config, m_ConfigRoot);
     if (m_helpFrame)
         DestroyHelpWindow();
 }
@@ -121,7 +116,6 @@ void wxHtmlHelpController::CreateHelpWindow()
 
     m_helpFrame = CreateHelpFrame(&m_helpData);
     m_helpFrame->SetController(this);
-//    m_helpFrame->PushEventHandler(this);
 
     if (m_Config)
         m_helpFrame->UseConfig(m_Config, m_ConfigRoot);
@@ -135,14 +129,14 @@ void wxHtmlHelpController::ReadCustomization(wxConfigBase* cfg, const wxString& 
 {
     /* should not be called by the user; call UseConfig, and the controller
      * will do the rest */
-    if (m_helpFrame)
+    if (m_helpFrame && cfg)
         m_helpFrame->ReadCustomization(cfg, path);
 }
 
 void wxHtmlHelpController::WriteCustomization(wxConfigBase* cfg, const wxString& path)
 {
     /* typically called by the controllers OnCloseFrame handler */
-    if (m_helpFrame)
+    if (m_helpFrame && cfg)
         m_helpFrame->WriteCustomization(cfg, path);
 }
 

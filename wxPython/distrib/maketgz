@@ -1,0 +1,62 @@
+#!/bin/bash
+#----------------------------------------------------------------------
+# Make a source distribution as a tar.gz file.  This script should be
+# run from the directory that holds the wxPython dir (../..) and be
+# given a version number as an parameter.  The best way to do this is
+# run "make dist" in the wxPython/src/ directory.
+#----------------------------------------------------------------------
+
+if [ -z $1 ]; then
+    echo "Please specify a version number on the command line."
+    exit 1
+fi
+
+if [ ! -d wxPython ]; then
+    echo "Please run this script from the root wxPython directory."
+    exit 1
+fi
+
+mkdir _distrib_tgz
+mkdir _distrib_tgz/wxPython-$1
+
+# Copy license files
+cp $WXWIN/docs/gpl.txt _distrib_tgz/wxPython-$1
+cp $WXWIN/docs/lgpl.txt _distrib_tgz/wxPython-$1
+cp $WXWIN/docs/licence.txt _distrib_tgz/wxPython-$1
+cp $WXWIN/docs/licendoc.txt _distrib_tgz/wxPython-$1
+cp $WXWIN/docs/preamble.txt _distrib_tgz/wxPython-$1
+
+# Copy files from the live dirs
+#   first, get a list of files
+for x in `cat distrib/wxPython.rsp`; do
+    ls $x >> _distrib_tgz/filelist
+done
+
+#   and make a tar file containing those files
+tar cf _distrib_tgz/dist-temp.tar -T _distrib_tgz/filelist
+
+#   now untar it in the right place
+cd _distrib_tgz/wxPython-$1
+tar xf ../dist-temp.tar
+cd ..
+
+#   update a few things
+rm wxPython-$1/src/gtk/helpers.cpp
+touch `find wxPython-$1 -name "*.cpp"`
+touch `find wxPython-$1 -name "*.py"`
+
+# Finally, make the finished tar file
+tar cvf ../distrib/wxPython-$1.tar wxPython-$1
+gzip ../distrib/wxPython-$1.tar
+
+cd ..
+rm -rf _distrib_tgz
+
+
+
+
+
+
+
+
+

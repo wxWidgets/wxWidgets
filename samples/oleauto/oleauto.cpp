@@ -40,6 +40,10 @@
 #error "Sorry, this sample works under Windows only."
 #endif
 
+#ifdef __WATCOMC__
+#error "Sorry, Watcom C++ does not support wxAutomationObject."
+#endif
+
 // ----------------------------------------------------------------------------
 // ressources
 // ----------------------------------------------------------------------------

@@ -1,5 +1,5 @@
-wxWindows 2.1.14
-----------------
+wxWindows 2.2.0
+---------------
 
 Welcome to wxWindows 2, a sophisticated cross-platform C++
 framework for writing advanced GUI applications using (where
@@ -12,7 +12,7 @@ and facilities for writing TCP/IP applications, thread handling, and more.
 Where certain features are not available on a platform, such as MDI and
 tree controls on Unix, they are emulated.
 
-A detailed 1100-page reference manual is supplied in HTML, PDF and
+A detailed 1400-page reference manual is supplied in HTML, PDF and
 Windows Help form: see the docs hierarchy.
 
 For a quick start, point your Web browser at docs/html/index.htm for a
@@ -22,16 +22,6 @@ Changes in this release
 -----------------------
 
 Please see changes.txt for details.
-
-Note that there is a new contrib hierarchy for contributions,
-which mirrors the regular wxWindows hierarchy. The Object
-Graphics Library and MMedia library have been moved under
-contrib, so you may need to change your makefiles or project
-files, together with your source files. E.g. change #include "ogl.h"
-to #include <wx/ogl/ogl>.
-
-Also VC++ project files and makefiles have been made more
-consistent, so some paths and library names have changed.
 
 Platforms supported
 -------------------
@@ -46,78 +36,87 @@ wxWindows 2 currently supports the following platforms:
 
 Most popular C++ compilers are supported; see the install.txt
 file for each platform (available via docs/html/index.htm) for details.
+See also http://www.lpthe.jussieu.fr/~zeitlin/wxWindows/platform.html.
 
 Files
 -----
 
-The distribution is available in a number of formats.
-The most convenient is the platform-specific distribution,
-but the zip set forms a more complete distribution, for example if
-you wish to take part in wxWindows development. Also, add-ons
-such as OGL may only be available in zip form.
-
-Zip set
--------
-
-Depending on what you downloaded, you may have one or more of
-these ports. You may unarchive any or all of the ports into
-the same directory hierarchy. The zip archive set comprises the
-following, where x is the minor version and y the release number:
-
-wx2_x_y_gen.zip            Generic source code and samples (required)
-wx2_x_y_msw.zip            Windows-specific source code
-wx2_x_y_mot.zip            Motif-specific source code
-wx2_x_y_gtk.zip            GTK-specific source code
-wx2_x_y_stubs.zip          Stubs ('empty port') source. Needs
-                           wx2_x_y_gen.zip/tgz.
-wx2_x_y_doc.zip            Documentation source code (not required)
-wx2_x_y_hlp.zip            WinHelp documentation
-wx2_x_y_pdf.zip            Acrobat PDF documentation
-wx2_x_y_htm.zip            HTML documentation
-wx2_x_y_vc.zip             MS VC++ 5/6 project files
-wx2_x_y_bc.zip             Borland C++ 5 project files
-wx2_x_y_cw.zip             Metrowerks CodeWarrior 4.1 project files
-jpeg.zip                   Optional JPEG library
-tiff.zip                   Optional TIFF library
-ogl3.zip                   Optional Object Graphics Library
-mmedia.zip                 Optional MMedia class library (Motif, GTK, MSW)
-stc.zip                    Optional wxStyledTextCtrl library (Motif, GTK, MSW)
-tex2rtf2.zip               Tex2RTF documentation tool
+The distribution is available in archive formats appropriate to the
+target system. Documentation is available mainly in zip format.
+Some add-on libraries (such as the Object Graphics Library) are
+available in zip form only. In the following, x.y.z represents
+the current version number.
 
 wxWindows for GTK distribution
 ------------------------------
 
-wxGTK-2.x.y.tgz            wxGTK source distribution. You will
-                           need the HTML and/or PDF documentation
-                           from the zip set (above).
+wxGTK-x.y.z.tgz                    wxGTK source distribution. You will
+                                   need the HTML, HTB and/or PDF documentation
+                                   (see below)
+wxGTK-demos-x.y.z.tgz              wxGTK demos source
+wxGTK-samples-x.y.z.tgz            wxGTK samples source
+wxGTK-x.y.z-0.src.rpm              wxGTK Linux source as an RPM, without manuals
+wxGTK-x.y.z-0.i386.rpm             wxGTK Linux binaries as an RPM, without manuals
+wxGTK-devel-x.y.z-0.i386.rpm       wxGTK Linux minimum development system as an RPM
 
 wxWindows for Motif distribution
 --------------------------------
 
-wxMotif-2.x.y.tgz          wxMotif source distribution. You will
-                           need the HTML and/or PDF documentation
-   -- OR --                from the zip set (above).
+wxMotif-x.y.z.tgz                  wxMotif source distribution. Contains
+                                   TIFF, JPEG, Tex2RTF source plus HTML
+                                   documentation.
 
-wx2_x_y_gen.zip
-wx2_x_y_mot.zip
-jpeg.zip
-tiff.zip
+wxWindows for MS Windows distribution
+-------------------------------------
 
-wxWindows for Windows distribution
-----------------------------------
+setup.exe, setup.w*                Setup files (Windows 95/98, NT)
+                                   in floppy-disk-sized chunks
+wxMSW-x.y.z-setup.zip              Zip archive containing the
+                                   setup files
+wxMSW-x.y.z.zip                    Zip archive containing all the
+                                   files that are in the setup
+                                   distribution
 
-As well as the core source, the Windows setup contains:
+As well as the core source, the wxMSW distribution contains:
 
-- Windows Help versions of the documentation (docs/winhelp);
-- OGL 3 (Object Graphics Library, in contrib/src/ogl);
+- Windows HTML Help versions of the documentation (docs/htmlhelp);
+- Object Graphics Library, in contrib/src/ogl;
 - a Dialog Editor binary;
 - a Tex2RTF binary;
 - Life! sample binary;
 - the JPEG library source;
 - the TIFF library source.
 
-setup.exe               Setup file (Windows 95/98, NT)
-setup.*                 Other setup files
+Documentation files
+-------------------
+
+wxWindows-x.y.z-WinHelp.zip        WinHelp documentation
+wxWindows-x.y.z-PDF.zip            Acrobat PDF documentation
+wxWindows-x.y.z-HTML.zip           HTML documentation
+wxWindows-x.y.z-HTMLHelp.zip       Windows HTML Help documentation
+wxWindows-x.y.z-HTB.zip            wxHTML documentation (for
+                                   use with the helpview utility)
+wxWindows-x.y.z-Word.zip           MS Word documentation (currently,
+                                   database class documentation only)
+wxWindows-x.y.z-DocSource.zip      Documentation source code (not required)
+
+Add-ons
+-------
+
+wxWindows-x.y.z-cw.zip             Metrowerks CodeWarrior 4.1 project files
+wxWindows-x.y.z-wat.zip            Watcom C++ project files
+wxWindows-x.y.z-vc.zip             Visual C++ project files (in wxMSW distr.)
+wxWindows-x.y.z-bc.zip             Borland C++ project files (in wxMSW distr.)
+jpeg.zip                           JPEG library (already included
+                                   in most distributions)
+tiff.zip                           TIFF library (already included
+                                   in most distributions)
+ogl3.zip                           Optional Object Graphics Library
+mmedia.zip                         Optional MMedia library (Motif, GTK, MSW)
+stc.zip                            Optional wxStyledTextCtrl library
+                                   (Motif, GTK, MSW)
+tex2rtf2.zip                       Tex2RTF documentation tool
+wxGTK-gl-x.y.z-0.i386.rpm          add-on OpenGL binary as an RPM
 
 Installation
 ------------
@@ -169,7 +168,6 @@ If you use JPEG image handler, documentation for your program should
 contain following sentence: "This software is based in part on the work of
 the Independent JPEG Group". See src/jpeg/README for details.
 
-
 Documentation
 -------------
 
@@ -208,5 +206,5 @@ web site) or contact Julian Smart <julian.smart@ukonline.co.uk>.
 
 Good luck!
 
-The wxWindows Team, 19 March, 2000
+The wxWindows Team, 9th July, 2000
 

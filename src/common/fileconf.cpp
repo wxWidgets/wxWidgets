@@ -54,6 +54,12 @@
 #include  <stdlib.h>
 #include  <ctype.h>
 
+// headers needed for umask()
+#ifdef __UNIX__
+    #include <sys/types.h>
+    #include <sys/stat.h>
+#endif // __UNIX__
+
 // ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------
@@ -371,6 +377,8 @@ wxFileConfig::wxFileConfig(const wxString& appName, const wxString& vendorName,
       }
   }
 
+  SetUmask(-1);
+
   Init();
 }
 
@@ -460,8 +468,7 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
             break;
 
           default:
-            wxLogWarning(_("file '%s', line %d: '%s' "
-                           "ignored after group header."),
+            wxLogWarning(_("file '%s', line %d: '%s' ignored after group header."),
                          file.GetName(), n + 1, pEnd);
             bCont = FALSE;
         }
@@ -486,7 +493,7 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
       wxString strKey(FilterInEntryName(wxString(pStart, pEnd)));
 
       // skip whitespace
-      while ( isspace(*pEnd) )
+      while ( wxIsspace(*pEnd) )
         pEnd++;
 
       if ( *pEnd++ != wxT('=') ) {
@@ -506,8 +513,7 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
         else {
           if ( bLocal && pEntry->IsImmutable() ) {
             // immutable keys can't be changed by user
-            wxLogWarning(_("file '%s', line %d: value for "
-                           "immutable key '%s' ignored."),
+            wxLogWarning(_("file '%s', line %d: value for immutable key '%s' ignored."),
                          file.GetName(), n + 1, strKey.c_str());
             continue;
           }
@@ -517,8 +523,7 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
           //  (c) key from global file now found in local one
           // which is exactly what we want.
           else if ( !bLocal || pEntry->IsLocal() ) {
-            wxLogWarning(_("file '%s', line %d: key '%s' was first "
-                           "found at line %d."),
+            wxLogWarning(_("file '%s', line %d: key '%s' was first found at line %d."),
                          file.GetName(), n + 1, strKey.c_str(), pEntry->Line());
 
             if ( bLocal )
@@ -684,10 +689,9 @@ bool wxFileConfig::Read(const wxString& key,
   if (pEntry == NULL) {
     return FALSE;
   }
-  else {
-    *pStr = ExpandEnvVars(pEntry->Value());
-    return TRUE;
-  }
+
+  *pStr = ExpandEnvVars(pEntry->Value());
+  return TRUE;
 }
 
 bool wxFileConfig::Read(const wxString& key,
@@ -696,28 +700,31 @@ bool wxFileConfig::Read(const wxString& key,
   wxConfigPathChanger path(this, key);
 
   ConfigEntry *pEntry = m_pCurrentGroup->FindEntry(path.Name());
+  bool ok;
   if (pEntry == NULL) {
     if( IsRecordingDefaults() )
       ((wxFileConfig *)this)->Write(key,defVal);
     *pStr = ExpandEnvVars(defVal);
-    return FALSE;
+    ok = FALSE;
   }
   else {
     *pStr = ExpandEnvVars(pEntry->Value());
-    return TRUE;
+    ok = TRUE;
   }
+
+  return ok;
 }
 
 bool wxFileConfig::Read(const wxString& key, long *pl) const
 {
   wxString str;
-  if ( Read(key, & str) ) {
-    *pl = wxAtol(str);
-    return TRUE;
-  }
-  else {
+  if ( !Read(key, & str) )
+  {
     return FALSE;
   }
+
+  *pl = wxAtol(str);
+  return TRUE;
 }
 
 bool wxFileConfig::Write(const wxString& key, const wxString& szValue)
@@ -768,6 +775,15 @@ bool wxFileConfig::Flush(bool /* bCurrentOnly */)
   if ( LineListIsEmpty() || !m_pRootGroup->IsDirty() || !m_strLocalFile )
     return TRUE;
 
+#ifdef __UNIX__
+  // set the umask if needed
+  mode_t umaskOld = 0;
+  if ( m_umask != -1 )
+  {
+      umaskOld = umask((mode_t)m_umask);
+  }
+#endif // __UNIX__
+
   wxTempFile file(m_strLocalFile);
 
   if ( !file.IsOpened() ) {
@@ -783,10 +799,9 @@ bool wxFileConfig::Flush(bool /* bCurrentOnly */)
     }
   }
 
-#ifndef __WXMAC__
-  return file.Commit();
-#else
   bool ret = file.Commit();
+
+#ifdef __WXMAC__
   if ( ret )
   {
   	FSSpec spec ;
@@ -800,8 +815,17 @@ bool wxFileConfig::Flush(bool /* bCurrentOnly */)
   		FSpSetFInfo( &spec , &finfo ) ;
   	}
   }
-  return ret ;
-#endif
+#endif // __WXMAC__
+
+#ifdef __UNIX__
+  // restore the old umask if we changed it
+  if ( m_umask != -1 )
+  {
+      (void)umask(umaskOld);
+  }
+#endif // __UNIX__
+
+  return ret;
 }
 
 // ----------------------------------------------------------------------------
@@ -882,7 +906,7 @@ bool wxFileConfig::DeleteAll()
 {
   CleanUp();
 
-  if ( remove(m_strLocalFile.fn_str()) == -1 )
+  if ( wxRemove(m_strLocalFile) == -1 )
     wxLogSysError(_("can't delete user configuration file '%s'"), m_strLocalFile.c_str());
 
   m_strLocalFile = m_strGlobalFile = wxT("");

@@ -42,7 +42,7 @@
 
 #include <stdlib.h>
 #include <math.h>
-#include <ctype.h>    // for isalnum()
+#include <ctype.h>
 
 // ----------------------------------------------------------------------------
 // global and class static variables
@@ -59,13 +59,20 @@ bool          wxConfigBase::ms_bAutoCreate = TRUE;
 // wxConfigBase
 // ----------------------------------------------------------------------------
 
-// Not all args will always be used by derived classes, but
-// including them all in each class ensures compatibility.
-wxConfigBase::wxConfigBase(const wxString& appName, const wxString& vendorName,
-    const wxString& WXUNUSED(localFilename), const wxString& WXUNUSED(globalFilename), long style):
-        m_appName(appName), m_vendorName(vendorName), m_style(style)
+// Not all args will always be used by derived classes, but including them all
+// in each class ensures compatibility.
+wxConfigBase::wxConfigBase(const wxString& appName,
+                           const wxString& vendorName,
+                           const wxString& WXUNUSED(localFilename),
+                           const wxString& WXUNUSED(globalFilename),
+                           long style)
+            : m_appName(appName), m_vendorName(vendorName), m_style(style)
 {
     m_bExpandEnvVars = TRUE; m_bRecordDefaults = FALSE;
+}
+
+wxConfigBase::~wxConfigBase()
+{
 }
 
 wxConfigBase *wxConfigBase::Set(wxConfigBase *pConfig)
@@ -130,8 +137,8 @@ bool wxConfigBase::Read(const wxString& key, double* val) const
         *val = wxAtof(str);
         return TRUE;
     }
-    else
-        return FALSE;
+
+    return FALSE;
 }
 
 bool wxConfigBase::Read(const wxString& key, double* val, double defVal) const
@@ -285,13 +292,13 @@ wxString wxExpandEnvVars(const wxString& str)
   for ( size_t n = 0; n < str.Len(); n++ ) {
     switch ( str[n] ) {
 #ifdef  __WXMSW__
-      case '%':
+      case wxT('%'):
 #endif  //WINDOWS
-      case '$':
+      case wxT('$'):
         {
           Bracket bracket;
           #ifdef  __WXMSW__
-            if ( str[n] == '%' )
+            if ( str[n] == wxT('%') )
               bracket = Bracket_Windows;
             else
           #endif  //WINDOWS
@@ -300,12 +307,12 @@ wxString wxExpandEnvVars(const wxString& str)
           }
           else {
             switch ( str[n + 1] ) {
-              case '(':
+              case wxT('('):
                 bracket = Bracket_Normal;
                 n++;                   // skip the bracket
                 break;
 
-              case '{':
+              case wxT('{'):
                 bracket = Bracket_Curly;
                 n++;                   // skip the bracket
                 break;
@@ -317,7 +324,7 @@ wxString wxExpandEnvVars(const wxString& str)
 
           m = n + 1;
 
-          while ( m < str.Len() && (isalnum(str[m]) || str[m] == '_') )
+          while ( m < str.Len() && (wxIsalnum(str[m]) || str[m] == wxT('_')) )
             m++;
 
           wxString strVarName(str.c_str() + n + 1, m - n - 1);
@@ -356,7 +363,7 @@ wxString wxExpandEnvVars(const wxString& str)
 
       case '\\':
         // backslash can be used to suppress special meaning of % and $
-        if ( n != str.Len() && (str[n + 1] == '%' || str[n + 1] == '$') ) {
+        if ( n != str.Len() && (str[n + 1] == wxT('%') || str[n + 1] == wxT('$')) ) {
           strResult += str[++n];
 
           break;
@@ -400,7 +407,7 @@ void wxSplitPath(wxArrayString& aParts, const wxChar *sz)
         // could log an error here, but we prefer to ignore extra '/'
 
       if ( *pc == wxT('\0') )
-        return;
+        break;
     }
     else
       strCurrent += *pc;

@@ -41,15 +41,21 @@
 // private classes
 // ----------------------------------------------------------------------------
 
+// the helper class which calls ::EnumFontFamilies() and whose OnFont() is
+// called from the callback passed to this function and, in its turn, calls the
+// appropariate wxFontEnumerator method
 class wxFontEnumeratorHelper
 {
 public:
     wxFontEnumeratorHelper(wxFontEnumerator *fontEnum);
 
     // control what exactly are we enumerating
+        // we enumerate fonts with given enocding
     bool SetEncoding(wxFontEncoding encoding);
-    void SetFixedOnly(bool fixedOnly)
-        { m_fixedOnly = fixedOnly; }
+        // we enumerate fixed-width fonts
+    void SetFixedOnly(bool fixedOnly) { m_fixedOnly = fixedOnly; }
+        // we enumerate the encodings available in this family
+    void SetFamily(const wxString& family);
 
     // call to start enumeration
     void DoEnumerate();
@@ -67,8 +73,17 @@ private:
     // if not empty, enum only the fonts with this facename
     wxString m_facename;
 
+    // if not empty, enum only the fonts in this family
+    wxString m_family;
+
     // if TRUE, enum only fixed fonts
     bool m_fixedOnly;
+
+    // if TRUE, we enumerate the encodings, not fonts
+    bool m_enumEncodings;
+
+    // the list of charsets we already found while enumerating charsets
+    wxArrayInt m_charsets;
 };
 
 // ----------------------------------------------------------------------------
@@ -91,6 +106,13 @@ wxFontEnumeratorHelper::wxFontEnumeratorHelper(wxFontEnumerator *fontEnum)
     m_fontEnum = fontEnum;
     m_charset = -1;
     m_fixedOnly = FALSE;
+    m_enumEncodings = FALSE;
+}
+
+void wxFontEnumeratorHelper::SetFamily(const wxString& family)
+{
+    m_enumEncodings = TRUE;
+    m_family = family;
 }
 
 bool wxFontEnumeratorHelper::SetEncoding(wxFontEncoding encoding)
@@ -111,7 +133,7 @@ bool wxFontEnumeratorHelper::SetEncoding(wxFontEncoding encoding)
 }
 
 #if defined(__GNUWIN32__)
-    #if defined(__MINGW32__) && ((__GNUC__>2) ||((__GNUC__==2) && (__GNUC_MINOR__>=95)))
+    #if wxUSE_NORLANDER_HEADERS
         #define wxFONTENUMPROC int(*)(const LOGFONTA *, const TEXTMETRICA *, long unsigned int, LPARAM)
     #else
         #define wxFONTENUMPROC int(*)(ENUMLOGFONTEX *, NEWTEXTMETRICEX*, int, LPARAM)
@@ -147,6 +169,25 @@ void wxFontEnumeratorHelper::DoEnumerate()
 bool wxFontEnumeratorHelper::OnFont(const LPLOGFONT lf,
                                     const LPTEXTMETRIC tm) const
 {
+    if ( m_enumEncodings )
+    {
+        // is this a new charset?
+        int cs = lf->lfCharSet;
+        if ( m_charsets.Index(cs) == wxNOT_FOUND )
+        {
+            wxConstCast(this, wxFontEnumeratorHelper)->m_charsets.Add(cs);
+
+            wxFontEncoding enc = wxGetFontEncFromCharSet(cs);
+            return m_fontEnum->OnFontEncoding(m_family,
+                                              wxFontMapper::GetEncodingName(enc));
+        }
+        else
+        {
+            // continue enumeration
+            return TRUE;
+        }
+    }
+
     if ( m_fixedOnly )
     {
         // check that it's a fixed pitch font (there is *no* error here, the
@@ -191,7 +232,9 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
 
 bool wxFontEnumerator::EnumerateEncodings(const wxString& family)
 {
-    wxFAIL_MSG(wxT("TODO"));
+    wxFontEnumeratorHelper fe(this);
+    fe.SetFamily(family);
+    fe.DoEnumerate();
 
     return TRUE;
 }

@@ -102,6 +102,7 @@ public:
 #endif // wxUSE_STATUSBAR
 
     WXHMENU GetWinMenu() const { return m_hMenu; }
+    WXHWND  GetFrame() const { return m_hFrame; }
 
     // Returns the origin of client area (may be different from (0,0) if the
     // frame has a toolbar)
@@ -217,7 +218,7 @@ private:
     WXHWND                          m_hVScroll;
 
     //
-    // Swp structures for various client data 
+    // Swp structures for various client data
     // DW: Better off in attached RefData?
     //
     SWP                             m_vSwp;

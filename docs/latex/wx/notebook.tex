@@ -23,11 +23,16 @@ managed by wxNotebook.
 
 \twocolwidtha{5cm}
 \begin{twocollist}\itemsep=0pt
-\twocolitem{\windowstyle{wxNB\_FIXEDWIDTH}}{Make all tabs of equal width}
-\twocolitem{\windowstyle{wxNB\_LEFT}}{Put the tabs on the left side of the notebook}
-\twocolitem{\windowstyle{wxNB\_RIGHT}}{Put the tabs on the right side of the notebook}
-\twocolitem{\windowstyle{wxNB\_BOTTOM}}{Put the tabs on the bottom of the notebook}
+
+\twocolitem{\windowstyle{wxNB\_FIXEDWIDTH}}{(Windows only)All tabs will have same width.}
+\twocolitem{\windowstyle{wxNB\_LEFT}}{Place tabs on the left side.}
+\twocolitem{\windowstyle{wxNB\_RIGHT}}{Place tabs on the right side.}
+\twocolitem{\windowstyle{wxNB\_BOTTOM}}{Place tabs under instead of above the notebook pages.}
+
 \end{twocollist}
+
+See also \helpref{window styles overview}{windowstyles}.
+
 
 \wxheading{Event handling}
 
@@ -71,10 +76,7 @@ Note that sometimes you can reduce flicker by passing the wxCLIP\_CHILDREN windo
 
 \docparam{size}{The window size.}
 
-\docparam{style}{The window style. Its value is a bit list of zero or more of {\bf wxTC\_MULTILINE},
- {\bf wxTC\_RIGHTJUSTIFY}, {\bf wxTC\_FIXEDWIDTH} and {\bf wxTC\_OWNERDRAW}
- possibly combined with one of {\bf wxNB\_LEFT}, {\bf wxNB\_RIGHT} or 
- {\bf wxNB\_BOTTOM}.}
+\docparam{style}{The window style. See \helpref{wxNotebook}{wxnotebook}.}
 
 \docparam{name}{The name of the control (used only under Motif).}
 
@@ -165,13 +167,13 @@ Returns the number of pages in the notebook control.
 
 \membersection{wxNotebook::GetPageImage}\label{wxnotebookgetpageimage}
 
-\constfunc{int}{GetPageImage}{\void}
+\constfunc{int}{GetPageImage}{\param{int }{nPage}}
 
 Returns the image index for the given page.
 
 \membersection{wxNotebook::GetPageText}\label{wxnotebookgetpagetext}
 
-\constfunc{wxString}{GetPageText}{\void}
+\constfunc{wxString}{GetPageText}{\param{int }{nPage}}
 
 Returns the string for the given page.
 

@@ -35,12 +35,18 @@
 #endif // PCH
 
 #include "wx/fontmap.h"
-#include "wx/config.h"
-#include "wx/memconf.h"
 
-#include "wx/msgdlg.h"
-#include "wx/fontdlg.h"
-#include "wx/choicdlg.h"
+#if wxUSE_CONFIG
+    #include "wx/config.h"
+    #include "wx/memconf.h"
+#endif
+
+#if wxUSE_GUI
+    #include "wx/msgdlg.h"
+    #include "wx/fontdlg.h"
+    #include "wx/choicdlg.h"
+#endif // wxUSE_GUI
+
 #include "wx/encconv.h"
 
 // ----------------------------------------------------------------------------
@@ -51,7 +57,9 @@
 static const wxChar* FONTMAPPER_ROOT_PATH = wxT("wxWindows/FontMapper");
 static const wxChar* FONTMAPPER_CHARSET_PATH = wxT("Charsets");
 static const wxChar* FONTMAPPER_CHARSET_ALIAS_PATH = wxT("Aliases");
-static const wxChar* FONTMAPPER_FONT_FROM_ENCODING_PATH = wxT("Encodings");
+#if wxUSE_GUI
+    static const wxChar* FONTMAPPER_FONT_FROM_ENCODING_PATH = wxT("Encodings");
+#endif // wxUSE_GUI
 
 // encodings supported by GetEncodingDescription
 static wxFontEncoding gs_encodings[] =
@@ -80,6 +88,7 @@ static wxFontEncoding gs_encodings[] =
     wxFONTENCODING_CP1255,
     wxFONTENCODING_CP1256,
     wxFONTENCODING_CP1257,
+    wxFONTENCODING_CP437,
 };
 
 // the descriptions for them
@@ -88,16 +97,16 @@ static const wxChar* gs_encodingDescs[] =
     wxTRANSLATE( "West European (ISO-8859-1/Latin 1)" ),
     wxTRANSLATE( "Central European (ISO-8859-2/Latin 2)" ),
     wxTRANSLATE( "Esperanto (ISO-8859-3)" ),
-    wxTRANSLATE( "Baltic (ISO-8859-4)" ),
+    wxTRANSLATE( "Baltic (old) (ISO-8859-4)" ),
     wxTRANSLATE( "Cyrillic (Latin 5)" ),
     wxTRANSLATE( "Arabic (ISO-8859-6)" ),
     wxTRANSLATE( "Greek (ISO-8859-7)" ),
     wxTRANSLATE( "Hebrew (ISO-8859-8)" ),
     wxTRANSLATE( "Turkish (ISO-8859-9)" ),
-    wxTRANSLATE( "Baltic II (ISO-8859-10)" ),
+    wxTRANSLATE( "Nordic (ISO-8859-10)" ),
     wxTRANSLATE( "Thai (ISO-8859-11)" ),
     wxTRANSLATE( "ISO-8859-12" ),
-    wxTRANSLATE( "ISO-8859-13" ),
+    wxTRANSLATE( "Baltic (ISO-8859-13)" ),
     wxTRANSLATE( "ISO-8859-14" ),
     wxTRANSLATE( "West European new (ISO-8859-15/Latin 0)" ),
     wxTRANSLATE( "KOI8-R" ),
@@ -109,6 +118,7 @@ static const wxChar* gs_encodingDescs[] =
     wxTRANSLATE( "Windows Hebrew (CP 1255)" ),
     wxTRANSLATE( "Windows Arabic (CP 1256)" ),
     wxTRANSLATE( "Windows Baltic (CP 1257)" ),
+    wxTRANSLATE( "Windows/DOS OEM (CP 437)" ),
 };
 
 // and the internal names
@@ -138,6 +148,7 @@ static const wxChar* gs_encodingNames[] =
     wxT( "windows1255" ),
     wxT( "windows1256" ),
     wxT( "windows1257" ),
+    wxT( "windows437" ),
 };
 
 // ----------------------------------------------------------------------------
@@ -188,8 +199,13 @@ private:
 
 wxFontMapper::wxFontMapper()
 {
+#if wxUSE_CONFIG
     m_config = NULL;
+#endif // wxUSE_CONFIG
+
+#if wxUSE_GUI
     m_windowParent = NULL;
+#endif // wxUSE_GUI
 }
 
 wxFontMapper::~wxFontMapper()
@@ -199,6 +215,8 @@ wxFontMapper::~wxFontMapper()
 // ----------------------------------------------------------------------------
 // customisation
 // ----------------------------------------------------------------------------
+
+#if wxUSE_CONFIG
 
 /* static */ const wxChar *wxFontMapper::GetDefaultConfigPath()
 {
@@ -212,7 +230,6 @@ void wxFontMapper::SetConfigPath(const wxString& prefix)
 
     m_configRootPath = prefix;
 }
-
 
 // ----------------------------------------------------------------------------
 // get config object and path for it
@@ -250,9 +267,11 @@ const wxString& wxFontMapper::GetConfigPath()
 
     return m_configRootPath;
 }
+#endif
 
 bool wxFontMapper::ChangePath(const wxString& pathNew, wxString *pathOld)
 {
+#if wxUSE_CONFIG
     wxConfigBase *config = GetConfig();
     if ( !config )
         return FALSE;
@@ -273,11 +292,17 @@ bool wxFontMapper::ChangePath(const wxString& pathNew, wxString *pathOld)
     config->SetPath(path);
 
     return TRUE;
+#else
+    return FALSE;
+#endif
 }
 
 void wxFontMapper::RestorePath(const wxString& pathOld)
 {
+#if wxUSE_CONFIG
     GetConfig()->SetPath(pathOld);
+#else
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -290,8 +315,7 @@ wxString wxFontMapper::GetEncodingDescription(wxFontEncoding encoding)
     size_t count = WXSIZEOF(gs_encodingDescs);
 
     wxASSERT_MSG( count == WXSIZEOF(gs_encodings),
-                  wxT("inconsitency detected - forgot to update one of "
-                     "the arrays?") );
+                  wxT("inconsitency detected - forgot to update one of the arrays?") );
 
     for ( size_t i = 0; i < count; i++ )
     {
@@ -313,8 +337,7 @@ wxString wxFontMapper::GetEncodingName(wxFontEncoding encoding)
     size_t count = WXSIZEOF(gs_encodingNames);
 
     wxASSERT_MSG( count == WXSIZEOF(gs_encodings),
-                  wxT("inconsitency detected - forgot to update one of "
-                     "the arrays?") );
+                  wxT("inconsistency detected - forgot to update one of the arrays?") );
 
     for ( size_t i = 0; i < count; i++ )
     {
@@ -338,6 +361,7 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
     // we're going to modify it, make a copy
     wxString cs = charset;
 
+#if wxUSE_CONFIG
     // first try the user-defined settings
     wxString pathOld;
     if ( ChangePath(FONTMAPPER_CHARSET_PATH, &pathOld) )
@@ -354,8 +378,7 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
             }
             else
             {
-                wxLogDebug(wxT("corrupted config data: invalid encoding %ld "
-                               "for charset '%s' ignored"),
+                wxLogDebug(wxT("corrupted config data: invalid encoding %ld for charset '%s' ignored"),
                            value, charset.c_str());
             }
         }
@@ -375,6 +398,7 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
 
         RestorePath(pathOld);
     }
+#endif
 
     // if didn't find it there, try to reckognise it ourselves
     if ( encoding == wxFONTENCODING_SYSTEM )
@@ -426,6 +450,7 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
         //else: unknown
     }
 
+#if wxUSE_GUI
     // if still no luck, ask the user - unless disabled
     if ( (encoding == wxFONTENCODING_SYSTEM) && interactive )
     {
@@ -438,16 +463,13 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
 
         // the message
         wxString msg;
-        msg.Printf(_("The charset '%s' is unknown. You may select\n"
-                     "another charset to replace it with or choose\n"
-                     "[Cancel] if it cannot be replaced"), charset.c_str());
+        msg.Printf(_("The charset '%s' is unknown. You may select\nanother charset to replace it with or choose\n[Cancel] if it cannot be replaced"), charset.c_str());
 
         // the list of choices
         size_t count = WXSIZEOF(gs_encodingDescs);
 
         wxASSERT_MSG( count == WXSIZEOF(gs_encodings),
-                      wxT("inconsitency detected - forgot to update one of "
-                          "the arrays?") );
+                      wxT("inconsitency detected - forgot to update one of the arrays?") );
 
         wxString *encodingNamesTranslated = new wxString[count];
 
@@ -473,7 +495,8 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
         {
             encoding = gs_encodings[n];
 
-            // save the result in the config now
+#if wxUSE_CONFIG
+        // save the result in the config now
             if ( ChangePath(FONTMAPPER_CHARSET_PATH, &pathOld) )
             {
                 wxConfigBase *config = GetConfig();
@@ -481,15 +504,16 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
                 // remember the alt encoding for this charset
                 if ( !config->Write(charset, (long)encoding) )
                 {
-                    wxLogError(_("Failed to remember the encoding "
-                                 "for the charset '%s'."), charset.c_str());
+                    wxLogError(_("Failed to remember the encoding for the charset '%s'."), charset.c_str());
                 }
 
                 RestorePath(pathOld);
             }
+#endif // wxUSE_CONFIG
         }
         //else: cancelled
     }
+#endif // wxUSE_GUI
 
     return encoding;
 }
@@ -500,6 +524,8 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
 // correspond to which is used by GetFontForEncoding() function
 // ----------------------------------------------------------------------------
 
+#if wxUSE_GUI
+
 bool wxFontMapper::TestAltEncoding(const wxString& configEntry,
                                    wxFontEncoding encReplacement,
                                    wxNativeEncodingInfo *info)
@@ -507,6 +533,7 @@ bool wxFontMapper::TestAltEncoding(const wxString& configEntry,
     if ( wxGetNativeFontEncoding(encReplacement, info) &&
          wxTestFontEncoding(*info) )
     {
+#if wxUSE_CONFIG
         // remember the mapping in the config
         wxFontMapperPathChanger path(this, FONTMAPPER_FONT_FROM_ENCODING_PATH);
 
@@ -514,18 +541,48 @@ bool wxFontMapper::TestAltEncoding(const wxString& configEntry,
         {
             GetConfig()->Write(configEntry, info->ToString());
         }
-
+#endif // wxUSE_CONFIG
         return TRUE;
     }
 
     return FALSE;
 }
 
+#if wxUSE_GUI
+class ReentrancyBlocker
+{
+public:
+    ReentrancyBlocker(bool& b) : m_b(b) { m_b = TRUE; }
+    ~ReentrancyBlocker() { m_b = FALSE; }
+
+private:
+    bool& m_b;
+};
+#endif
+
 bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
                                      wxNativeEncodingInfo *info,
                                      const wxString& facename,
                                      bool interactive)
 {
+#if wxUSE_GUI
+    // we need a flag to prevent infinite recursion which happens, for
+    // example, when GetAltForEncoding() is called from an OnPaint() handler:
+    // in this case, wxYield() which is called from wxMessageBox() we use here
+    // will lead to another call of OnPaint() and hence to another call of
+    // GetAltForEncoding() - and it is impossible to catch this from the user
+    // code because we are called from wxFont ctor implicitly.
+
+    // assume we're always called from the main thread, so that it is safe to
+    // use a static var
+    static bool s_inGetAltForEncoding = FALSE;
+
+    if ( interactive && s_inGetAltForEncoding )
+        return FALSE;
+
+    ReentrancyBlocker blocker(s_inGetAltForEncoding);
+#endif // wxUSE_GUI
+
     wxCHECK_MSG( info, FALSE, wxT("bad pointer in GetAltForEncoding") );
 
     info->facename = facename;
@@ -553,6 +610,7 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
     }
     configEntry += encName;
 
+#if wxUSE_CONFIG
     // do we have a font spec for this encoding?
     wxString pathOld;
     if ( ChangePath(FONTMAPPER_FONT_FROM_ENCODING_PATH, &pathOld) )
@@ -582,12 +640,12 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
             }
             else
             {
-                wxLogDebug(wxT("corrupted config data: string '%s' is not "
-                              "a valid font encoding info"), fontinfo.c_str());
+                wxLogDebug(wxT("corrupted config data: string '%s' is not a valid font encoding info"), fontinfo.c_str());
             }
         }
         //else: there is no information in config about this encoding
     }
+#endif // wxUSE_CONFIG
 
     // ask the user
     if ( interactive )
@@ -598,11 +656,7 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
 
         // the message
         wxString msg;
-        msg.Printf(_("The encoding '%s' is unknown.\n"
-                     "Would you like to select a font to be used for this "
-                     "encoding\n"
-                     "(otherwise the text in this encoding will not be "
-                     "shown correctly)?"),
+        msg.Printf(_("The encoding '%s' is unknown.\nWould you like to select a font to be used for this encoding\n(otherwise the text in this encoding will not be shown correctly)?"),
                      GetEncodingDescription(encoding).c_str());
 
         wxWindow *parent = m_windowParent;
@@ -624,13 +678,15 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
                 *info = retData.EncodingInfo();
                 info -> encoding = retData.GetEncoding();
 
-                // remember this in the config
+#if wxUSE_CONFIG
+            // remember this in the config
                 if ( ChangePath(FONTMAPPER_FONT_FROM_ENCODING_PATH, &pathOld) )
                 {
                     GetConfig()->Write(configEntry, info->ToString());
 
                     RestorePath(pathOld);
                 }
+#endif
 
                 return TRUE;
             }
@@ -639,7 +695,6 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
         //else: the user doesn't want to select a font
     }
     //else: we're in non-interactive mode
-
 
     // now try the default mappings:
     wxFontEncodingArray equiv = wxEncodingConverter::GetAllEquivalents(encoding);
@@ -653,8 +708,6 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
     return FALSE;
 }
 
-
-
 bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
                                      wxFontEncoding *alt_encoding,
                                      const wxString& facename,
@@ -665,8 +718,6 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
     *alt_encoding = info.encoding;
     return r;
 }
-
-
 
 bool wxFontMapper::IsEncodingAvailable(wxFontEncoding encoding,
                                        const wxString& facename)
@@ -681,3 +732,5 @@ bool wxFontMapper::IsEncodingAvailable(wxFontEncoding encoding,
     else
         return FALSE;
 }
+
+#endif // wxUSE_GUI

@@ -17,14 +17,46 @@ MarginStyle::MarginStyle() :
 	symbol(false), width(16), mask(0xffffffff), sensitive(false) {
 }
 
+// A list of the fontnames - avoids wasting space in each style
+FontNames::FontNames() {
+	max = 0;
+}
+
+FontNames::~FontNames() {
+	Clear();
+}
+
+void FontNames::Clear() {
+	for (int i=0;i<max;i++) {
+		delete []names[i];
+	}
+	max = 0;
+}
+
+const char *FontNames::Save(const char *name) {
+	if (!name)
+		return 0;
+	for (int i=0;i<max;i++) {
+		if (strcmp(names[i], name) == 0) {
+			return names[i];
+		}
+	}
+	names[max] = new char[strlen(name) + 1];
+	strcpy(names[max], name);
+	max++;
+	return names[max-1];
+}
+
 ViewStyle::ViewStyle() {
 	Init();
 }
 
 ViewStyle::ViewStyle(const ViewStyle &source) {
 	Init();
-	for (int sty=0;sty<=STYLE_MAX;sty++) {
+	for (unsigned int sty=0;sty<(sizeof(styles)/sizeof(styles[0]));sty++) {
 		styles[sty] = source.styles[sty];
+		// Can't just copy fontname as its lifetime is relative to its owning ViewStyle
+		styles[sty].fontName = fontNames.Save(source.styles[sty].fontName);
 	}
 	for (int mrk=0;mrk<=MARKER_MAX;mrk++) {
 		markers[mrk] = source.markers[mrk];
@@ -59,6 +91,9 @@ ViewStyle::~ViewStyle() {
 }
 
 void ViewStyle::Init() {
+	fontNames.Clear();
+	ResetDefaultStyle();
+	
 	indicators[0].style = INDIC_SQUIGGLE;
 	indicators[0].fore = Colour(0, 0x7f, 0);
 	indicators[1].style = INDIC_TT;
@@ -136,14 +171,17 @@ void ViewStyle::RefreshColourPalette(Palette &pal, bool want) {
 void ViewStyle::Refresh(Surface &surface) {
 	selbar.desired = Platform::Chrome();
 	selbarlight.desired = Platform::ChromeHighlight();
-	maxAscent = 1;
-	maxDescent = 1;
+	styles[STYLE_DEFAULT].Realise(surface, zoomLevel);
+	maxAscent = styles[STYLE_DEFAULT].ascent;
+	maxDescent = styles[STYLE_DEFAULT].descent;
 	for (unsigned int i=0;i<(sizeof(styles)/sizeof(styles[0]));i++) {
-		styles[i].Realise(surface, zoomLevel);
-		if (maxAscent < styles[i].ascent)
-			maxAscent = styles[i].ascent;
-		if (maxDescent < styles[i].descent)
-			maxDescent = styles[i].descent;
+		if (i != STYLE_DEFAULT) {
+			styles[i].Realise(surface, zoomLevel, &styles[STYLE_DEFAULT]);
+			if (maxAscent < styles[i].ascent)
+				maxAscent = styles[i].ascent;
+			if (maxDescent < styles[i].descent)
+				maxDescent = styles[i].descent;
+		}
 	}
 	
 	lineHeight = maxAscent + maxDescent;
@@ -162,22 +200,31 @@ void ViewStyle::Refresh(Surface &surface) {
 }
 
 void ViewStyle::ResetDefaultStyle() {
-	styles[STYLE_DEFAULT].Clear();
+	styles[STYLE_DEFAULT].Clear(Colour(0,0,0), Colour(0xff,0xff,0xff),
+	        Platform::DefaultFontSize(), fontNames.Save(Platform::DefaultFont()), 
+		SC_CHARSET_DEFAULT,
+		false, false, false, false);
 }
 
 void ViewStyle::ClearStyles() {
 	// Reset all styles to be like the default style
-	for (int i=0; i<=STYLE_MAX; i++) {
+	for (unsigned int i=0;i<(sizeof(styles)/sizeof(styles[0]));i++) {
 		if (i != STYLE_DEFAULT) {
 			styles[i].Clear(
 				styles[STYLE_DEFAULT].fore.desired, 
 				styles[STYLE_DEFAULT].back.desired, 
 				styles[STYLE_DEFAULT].size, 
 				styles[STYLE_DEFAULT].fontName, 
+				styles[STYLE_DEFAULT].characterSet, 
 				styles[STYLE_DEFAULT].bold, 
-				styles[STYLE_DEFAULT].italic);
+				styles[STYLE_DEFAULT].italic,
+				styles[STYLE_DEFAULT].eolFilled,
+				styles[STYLE_DEFAULT].underline);
 		}
 	}
 	styles[STYLE_LINENUMBER].back.desired = Platform::Chrome();
 }
 
+void ViewStyle::SetStyleFontName(int styleIndex, const char *name) {
+	styles[styleIndex].fontName = fontNames.Save(name);
+}

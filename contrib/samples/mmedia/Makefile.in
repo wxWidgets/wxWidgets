@@ -1,13 +1,5 @@
-#
-# File:		makefile.unx
-# Author:	Julian Smart
-# Created:	1998
-# Updated:	
-# Copyright:	(c) 1998 Julian Smart
-#
-# "%W% %G%"
-#
-# Makefile for minimal example (UNIX).
+# Makefile for mmedia sample.
+# $Id$
 
 top_srcdir = @top_srcdir@/..
 top_builddir = ../../..
@@ -17,25 +9,8 @@ PROGRAM=mmboard
 
 OBJECTS=mmboard.o mmbman.o
 
-EXTRA_LIBS= $(top_builddir)/contrib/src/mmedia/libmmedia.@WX_TARGET_LIBRARY_TYPE@ @ESD_LINK@
+APPEXTRALIBS=$(top_builddir)/lib/libmmedia.@WX_TARGET_LIBRARY_TYPE@ @ESD_LINK@
 APPEXTRADEFS=-I$(top_srcdir)/contrib/include
 
-# the comment at the end of the next line is needed because otherwise autoconf
-# would remove this line completely - it contains a built-in hack to remove
-# any VPATH assignment not containing ':'
-VPATH = @PATH_IFS@$(top_srcdir)/contrib/samples/mmedia # ':' for autoconf
+include $(top_builddir)/src/makeprog.env
 
-include ../../../src/make.env
-
-.SUFFIXES: .o .cpp .c
-
-.cpp.o:
-	$(CC) -c $(CPPFLAGS) $(EXTRA_CPPFLAGS) -o $@ $<
-
-all: $(PROGRAM)
-
-clean:
-	rm -f *.o $(PROGRAM)
-
-mmboard: $(OBJECTS)
-	$(CC) $(LDFLAGS) -o mmboard $(OBJECTS) $(EXTRA_LIBS) $(LDLIBS) $(top_builddir)/lib/@WX_TARGET_LIBRARY@

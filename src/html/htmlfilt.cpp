@@ -15,7 +15,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/defs.h"
-#if wxUSE_HTML
+#if wxUSE_HTML && wxUSE_STREAMS
 
 #ifdef __BORDLANDC__
 #pragma hdrstop
@@ -143,7 +143,7 @@ wxString wxHtmlFilterHTML::ReadFile(const wxFSFile& file) const
 
     if (s == NULL) 
     {
-        wxLogError(_("Cannot open HTML document: %s"), file.GetLocation().mb_str());
+        wxLogError(_("Cannot open HTML document: %s"), file.GetLocation().c_str());
         return wxEmptyString;
     }
     src = new char[s -> GetSize() + 1];

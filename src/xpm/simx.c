@@ -38,7 +38,7 @@
 
 #ifdef FOR_MSW
 
-#include "xpmi.h"			/* for XpmMalloc */
+#include "XpmI.h"           /* for XpmMalloc */
 
 /*
  * On DOS size_t is only 2 bytes, thus malloc(size_t s) can only malloc

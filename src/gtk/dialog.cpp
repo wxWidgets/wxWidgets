@@ -126,7 +126,7 @@ gtk_dialog_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *e
    so we do this directly after realization */
 
 static gint
-gtk_dialog_realized_callback( GtkWidget *widget, wxDialog *win )
+gtk_dialog_realized_callback( GtkWidget * WXUNUSED(widget), wxDialog *win )
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
@@ -231,7 +231,6 @@ void wxDialog::Init()
     m_returnCode = 0;
     m_sizeSet = FALSE;
     m_modalShowing = FALSE;
-    m_isFrame = TRUE;
 }
 
 wxDialog::wxDialog( wxWindow *parent,
@@ -293,7 +292,7 @@ bool wxDialog::Create( wxWindow *parent,
     if ((m_x != -1) || (m_y != -1))
         gtk_widget_set_uposition( m_widget, m_x, m_y );
     gtk_widget_set_usize( m_widget, m_width, m_height );
-        
+
     /*  we cannot set MWM hints  before the widget has
         been realized, so we do this directly after realization */
     gtk_signal_connect( GTK_OBJECT(m_widget), "realize",
@@ -315,14 +314,7 @@ bool wxDialog::Create( wxWindow *parent,
 
 wxDialog::~wxDialog()
 {
-    m_isBeingDeleted = TRUE;
-
-    wxTopLevelWindows.DeleteObject( this );
-
-    if (wxTheApp->GetTopWindow() == this)
-    {
-        wxTheApp->SetTopWindow( (wxWindow*) NULL );
-    }
+    CleanUp();
 
     if ((wxTopLevelWindows.Number() == 0) &&
         (wxTheApp->GetExitOnFrameDelete()))
@@ -334,13 +326,12 @@ wxDialog::~wxDialog()
 void wxDialog::SetTitle( const wxString& title )
 {
     m_title = title;
-    if (m_title.IsNull()) m_title = wxT("");
     gtk_window_set_title( GTK_WINDOW(m_widget), m_title.mbc_str() );
 }
 
 wxString wxDialog::GetTitle() const
 {
-    return (wxString&)m_title;
+    return m_title;
 }
 
 void wxDialog::OnApply( wxCommandEvent &WXUNUSED(event) )
@@ -372,7 +363,7 @@ void wxDialog::OnOK( wxCommandEvent &WXUNUSED(event) )
         else
         {
             SetReturnCode(wxID_OK);
-            this->Show(FALSE);
+            Show(FALSE);
         }
     }
 }
@@ -413,9 +404,29 @@ void wxDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 
 bool wxDialog::Destroy()
 {
-    if (!wxPendingDelete.Member(this)) wxPendingDelete.Append(this);
+    // schedule the dialog for the deletion
+    if ( !wxPendingDelete.Member(this) )
+    {
+        wxPendingDelete.Append(this);
+    }
+
+    // don't leave a dangling pointer as the app top window, we can be deleted
+    // any moment at all now!
+    CleanUp();
 
     return TRUE;
+}
+
+void wxDialog::CleanUp()
+{
+    m_isBeingDeleted = TRUE;
+
+    if ( wxTheApp->GetTopWindow() == this )
+    {
+        wxTheApp->SetTopWindow( (wxWindow*) NULL );
+    }
+
+    wxTopLevelWindows.DeleteObject( this );
 }
 
 void wxDialog::OnSize( wxSizeEvent &WXUNUSED(event) )
@@ -457,7 +468,7 @@ void wxDialog::DoMoveWindow(int WXUNUSED(x), int WXUNUSED(y), int WXUNUSED(width
 {
     wxFAIL_MSG( wxT("DoMoveWindow called for wxDialog") );
 }
-    
+
 void wxDialog::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid dialog") );
@@ -552,7 +563,7 @@ void wxDialog::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int heigh
     geom.min_height = m_minHeight;
     geom.max_width = m_maxWidth;
     geom.max_height = m_maxHeight;
-    gtk_window_set_geometry_hints( GTK_WINDOW(m_widget), 
+    gtk_window_set_geometry_hints( GTK_WINDOW(m_widget),
                                    (GtkWidget*) NULL,
                                    &geom,
                                    (GdkWindowHints) flag );
@@ -618,6 +629,16 @@ int wxDialog::ShowModal()
     {
        wxFAIL_MSG( wxT("wxDialog:ShowModal called twice") );
        return GetReturnCode();
+    }
+
+    if ( !GetParent() )
+    {
+        wxWindow *parent = wxTheApp->GetTopWindow();
+        if ( parent && parent != this )
+        {
+            m_parent = parent;
+            gtk_window_set_transient_for( GTK_WINDOW(m_widget), GTK_WINDOW(parent->m_widget) );
+        }
     }
 
     wxBusyCursorSuspender cs; // temporarily suppress the busy cursor

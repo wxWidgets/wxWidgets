@@ -44,5 +44,8 @@ AC_OUTPUT([
             src/stc/Makefile
             samples/Makefile
             samples/mmedia/Makefile
+            samples/ogl/Makefile
+            samples/ogl/ogledit/Makefile
+            samples/ogl/studio/Makefile
             samples/stc/Makefile
          ])

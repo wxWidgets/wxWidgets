@@ -22,14 +22,16 @@
 #endif
 
 #include  "wx/wxprec.h"
-#if defined(__WINDOWS__)
-#include "wx/msw/private.h"
-#endif
 
 #ifdef __BORLANDC__
   #pragma hdrstop
 #endif
+
 #if wxUSE_DYNLIB_CLASS
+
+#if defined(__WINDOWS__)
+    #include "wx/msw/private.h"
+#endif
 
 #include "wx/dynlib.h"
 #include "wx/filefn.h"
@@ -48,8 +50,8 @@
 #  define wxDllGetSymbol(handle, modaddr)   DosQueryProcAddr(handle, 1L, NULL, (PFN*)modaddr)
 #  define wxDllClose(handle)                DosFreeModule(handle)
 #elif defined(HAVE_DLOPEN)
-#   define wxDllOpen(lib)                dlopen(lib.fn_str(), RTLD_NOW|RTLD_GLOBAL/*RTLD_LAZY*/)
-#   define wxDllGetSymbol(handle, name)  dlsym(handle, name.mb_str())
+#   define wxDllOpen(lib)                dlopen(lib.fn_str(), RTLD_NOW/*RTLD_LAZY*/)
+#   define wxDllGetSymbol(handle, name)  dlsym(handle, name)
 #   define wxDllClose                    dlclose
 #elif defined(HAVE_SHL_LOAD)
 #   define wxDllOpen(lib)                shl_load(lib.fn_str(), BIND_DEFERRED, 0)
@@ -66,7 +68,11 @@
 #elif defined(__WINDOWS__)
     // using LoadLibraryEx under Win32 to avoid name clash with LoadLibrary
 #   ifdef __WIN32__
-#      define wxDllOpen(lib)                  ::LoadLibraryEx(lib, 0, 0)
+#ifdef _UNICODE
+#      define wxDllOpen(lib)                  ::LoadLibraryExW(lib, 0, 0)
+#else
+#      define wxDllOpen(lib)                  ::LoadLibraryExA(lib, 0, 0)
+#endif
 #   else   // Win16
 #      define wxDllOpen(lib)                  ::LoadLibrary(lib)
 #   endif  // Win32/16
@@ -82,32 +88,19 @@
 
 wxLibraries wxTheLibraries;
 
-// ----------------------------------------------------------------------------
-// private functions
-// ----------------------------------------------------------------------------
+// ============================================================================
+// implementation
+// ============================================================================
 
 // construct the full name from the base shared object name: adds a .dll
 // suffix under Windows or .so under Unix
 static wxString ConstructLibraryName(const wxString& basename)
 {
-    wxString fullname(basename);
-
-#if defined(__WINDOWS__) || defined(__WXPM__) || defined(__EMX__)
-    fullname << ".dll";
-#elif defined(__UNIX__)
-#   if defined(__HPUX__)
-        fullname << ".sl";
-#   else	//__HPUX__
-        fullname << ".so";
-#   endif	//__HPUX__
-#endif
+    wxString fullname;
+    fullname << basename << wxDllLoader::GetDllExt();
 
     return fullname;
 }
-
-// ============================================================================
-// implementation
-// ============================================================================
 
 
 // ---------------------------------------------------------------------------
@@ -179,6 +172,24 @@ void *wxLibrary::GetSymbol(const wxString& symbname)
 // ---------------------------------------------------------------------------
 
 /* static */
+wxString wxDllLoader::GetDllExt()
+{
+    wxString ext;
+
+#if defined(__WINDOWS__) || defined(__WXPM__) || defined(__EMX__)
+    ext = _T(".dll");
+#elif defined(__UNIX__)
+#   if defined(__HPUX__)
+        ext = _T(".sl");
+#   else //__HPUX__
+        ext = _T(".so");
+#   endif //__HPUX__
+#endif
+
+    return ext;
+}
+
+/* static */
 wxDllType
 wxDllLoader::GetProgramHandle(void)
 {
@@ -202,8 +213,8 @@ wxDllLoader::LoadLibrary(const wxString & libname, bool *success)
 
 #if defined(__WXMAC__)
     FSSpec myFSSpec ;
-    Ptr	myMainAddr ;
-    Str255	myErrName ;
+    Ptr myMainAddr ;
+    Str255 myErrName ;
 
     wxMacPathToFSSpec( libname , &myFSSpec ) ;
     if (GetDiskFragment( &myFSSpec , 0 , kCFragGoesToEOF , "\p" , kPrivateCFragCopy , &handle , &myMainAddr ,
@@ -214,7 +225,7 @@ wxDllLoader::LoadLibrary(const wxString & libname, bool *success)
         return NULL ;
     }
 #elif defined(__WXPM__) || defined(__EMX__)
-    char                            zError[256] = "";
+    char zError[256] = "";
     wxDllOpen(zError, libname, handle);
 #else // !Mac
     handle = wxDllOpen(libname);
@@ -222,7 +233,33 @@ wxDllLoader::LoadLibrary(const wxString & libname, bool *success)
 
     if ( !handle )
     {
-        wxLogSysError(_("Failed to load shared library '%s'"), libname.c_str());
+        wxString msg(_("Failed to load shared library '%s'"));
+
+#ifdef HAVE_DLERROR
+        const char *errmsg = dlerror();
+        if ( errmsg )
+        {
+            // the error string format is "libname: ...", but we already have
+            // libname, so cut it off
+            const char *p = strchr(errmsg, ':');
+            if ( p )
+            {
+                if ( *++p == ' ' )
+                    p++;
+            }
+            else
+            {
+                p = errmsg;
+            }
+
+            msg += _T(" (%s)");
+            wxLogError(msg, libname.c_str(), p);
+        }
+        else
+#endif // HAVE_DLERROR
+        {
+            wxLogSysError(msg, libname.c_str());
+        }
     }
 
     if ( success )
@@ -250,7 +287,7 @@ wxDllLoader::GetSymbol(wxDllType dllHandle, const wxString &name)
 #if defined( __WXMAC__ )
     Ptr symAddress ;
     CFragSymbolClass symClass ;
-    Str255	symName ;
+    Str255 symName ;
 
     strcpy( (char*) symName , name ) ;
     c2pstr( (char*) symName ) ;
@@ -260,7 +297,8 @@ wxDllLoader::GetSymbol(wxDllType dllHandle, const wxString &name)
 #elif defined( __WXPM__ ) || defined(__EMX__)
     wxDllGetSymbol(dllHandle, symbol);
 #else
-    symbol = wxDllGetSymbol(dllHandle, name);
+    // mb_str() is necessary in Unicode build
+    symbol = wxDllGetSymbol(dllHandle, name.mb_str());
 #endif
 
     if ( !symbol )

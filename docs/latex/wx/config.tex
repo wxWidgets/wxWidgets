@@ -1,7 +1,7 @@
 \section{\class{wxConfigBase}}\label{wxconfigbase}
 
 wxConfigBase class defines the basic interface of all config classes. It can
-not be used by itself (it's an abstract base class) and you'll always use one
+not be used by itself (it is an abstract base class) and you will always use one
 of its derivations: wxIniConfig, wxFileConfig, wxRegConfig or any other.
 
 However, usually you don't even need to know the precise nature of the class
@@ -118,7 +118,7 @@ support a file system-like hierarchy of keys (files) and groups (directories).
 As in the file system case, to specify a key in the config class you must use
 a path to it. Config classes also support the notion of the current group,
 which makes it possible to use the relative paths. To clarify all this, here
-is an example (it's only for the sake of demonstration, it doesn't do anything
+is an example (it is only for the sake of demonstration, it doesn't do anything
 sensible!):
 
 \begin{verbatim}
@@ -139,11 +139,11 @@ sensible!):
 
   wxASSERT( conf->Read("Subgroup/SubgroupEntry", 0l) == 3 );
 
-  // use absolute path: it's allowed, too
+  // use absolute path: it is allowed, too
   wxASSERT( conf->Read("/RootEntry", 0l) == 1 );
 \end{verbatim}
 
-{\it Warning}: it's probably a good idea to always restore the path to its
+{\it Warning}: it is probably a good idea to always restore the path to its
 old value on function exit:
 
 \begin{verbatim}
@@ -175,7 +175,7 @@ doesn't save and restore the path):
 \end{verbatim}
 
 Finally, the path separator in wxConfigBase and derived classes is always '/',
-regardless of the platform (i.e. it's {\bf not} '$\backslash\backslash$' under Windows).
+regardless of the platform (i.e. it is {\bf not} '$\backslash\backslash$' under Windows).
 
 \helpref{SetPath}{wxconfigbasesetpath}\\
 \helpref{GetPath}{wxconfigbasegetpath}
@@ -186,9 +186,9 @@ The functions in this section allow to enumerate all entries and groups in the
 config file. All functions here return FALSE when there are no more items.
 
 You must pass the same index to GetNext and GetFirst (don't modify it).
-Please note that it's {\bf not} the index of the current item (you will have
+Please note that it is {\bf not} the index of the current item (you will have
 some great surprizes with wxRegConfig if you assume this) and you shouldn't
-even look at it: it's just a "cookie" which stores the state of the
+even look at it: it is just a "cookie" which stores the state of the
 enumeration. It can't be stored inside the class because it would prevent you
 from running several enumerations simultaneously, that's why you must pass it
 explicitly.
@@ -241,10 +241,11 @@ actually enumerating them, but you will probably never need them.
 \helpref{Exists}{wxconfigbaseexists}\\
 \helpref{GetEntryType}{wxconfigbasegetentrytype}
 
-\membersection{Miscellaneous accessors}
+\membersection{Miscellaneous functions}
 
 \helpref{GetAppName}{wxconfigbasegetappname}\\
-\helpref{GetVendorName}{wxconfigbasegetvendorname}
+\helpref{GetVendorName}{wxconfigbasegetvendorname}\\
+\helpref{SetUmask}{wxfileconfigsetumask}
 
 \membersection{Key access}
 
@@ -321,7 +322,7 @@ would be to prefix the offending symbols with a backslash.
 The following functions control this option:
 
 \helpref{IsExpandingEnvVars}{wxconfigbaseisexpandingenvvars}\\
-\helpref{SetExpandingEnvVars}{wxconfigbasesetexpandingenvvars}\\
+\helpref{SetExpandEnvVars}{wxconfigbasesetexpandenvvars}\\
 \helpref{SetRecordDefaults}{wxconfigbasesetrecorddefaults}\\
 \helpref{IsRecordingDefaults}{wxconfigbaseisrecordingdefaults}
 
@@ -407,8 +408,7 @@ for use by desinstallation routine.
 
 \membersection{wxConfigBase::DeleteEntry}\label{wxconfigbasedeleteentry}
 
-\func{bool}{DeleteEntry}{\param{const wxString\& }{ key}, \param{bool}{
-bDeleteGroupIfEmpty = TRUE}}
+\func{bool}{DeleteEntry}{\param{const wxString\& }{ key}, \param{bool}{ bDeleteGroupIfEmpty = TRUE}}
 
 Deletes the specified entry and the group it belongs to if it was the last key
 in it and the second parameter is true.
@@ -471,8 +471,7 @@ The result is an element of enum EntryType:
 
 \membersection{wxConfigBase::GetFirstGroup}\label{wxconfigbasegetfirstgroup}
 
-\constfunc{bool}{GetFirstGroup}{\param{wxString\& }{str}, \param{long\&}{
-index}}
+\constfunc{bool}{GetFirstGroup}{\param{wxString\& }{str}, \param{long\&}{ index}}
 
 Gets the first group.
 
@@ -482,8 +481,7 @@ the next call.}
 
 \membersection{wxConfigBase::GetFirstEntry}\label{wxconfigbasegetfirstentry}
 
-\constfunc{bool}{GetFirstEntry}{\param{wxString\& }{str}, \param{long\&}{
-index}}
+\constfunc{bool}{GetFirstEntry}{\param{wxString\& }{str}, \param{long\&}{ index}}
 
 Gets the first entry.
 
@@ -493,8 +491,7 @@ the next call.}
 
 \membersection{wxConfigBase::GetNextGroup}\label{wxconfigbasegetnextgroup}
 
-\constfunc{bool}{GetNextGroup}{\param{wxString\& }{str}, \param{long\&}{
-index}}
+\constfunc{bool}{GetNextGroup}{\param{wxString\& }{str}, \param{long\&}{ index}}
 
 Gets the next group.
 
@@ -504,8 +501,7 @@ the next call.}
 
 \membersection{wxConfigBase::GetNextEntry}\label{wxconfigbasegetnextentry}
 
-\constfunc{bool}{GetNextEntry}{\param{wxString\& }{str}, \param{long\&}{
-index}}
+\constfunc{bool}{GetNextEntry}{\param{wxString\& }{str}, \param{long\&}{ index}}
 
 Gets the next entry.
 
@@ -556,20 +552,18 @@ Returns TRUE if we are expanding environment variables in key values.
 
 \membersection{wxConfigBase::IsRecordingDefaults}\label{wxconfigbaseisrecordingdefaults}
 
-\func{bool}{IsRecordingDefaults}{\void} const
+\constfunc{bool}{IsRecordingDefaults}{\void}
 
 Returns TRUE if we are writing defaults back to the config file.
 
 \membersection{wxConfigBase::Read}\label{wxconfigbaseread}
 
-\constfunc{bool}{Read}{\param{const wxString\& }{key}, \param{wxString*}{
-str}}
+\constfunc{bool}{Read}{\param{const wxString\& }{key}, \param{wxString*}{ str}}
 
 Read a string from the key, returning TRUE if the value was read. If the key
 was not found, {\it str} is not changed.
 
-\constfunc{bool}{Read}{\param{const wxString\& }{key}, \param{wxString*}{
-str}, \param{const wxString\& }{defaultVal}}
+\constfunc{bool}{Read}{\param{const wxString\& }{key}, \param{wxString*}{ str}, \param{const wxString\& }{defaultVal}}
 
 Read a string from the key. The default value is returned if the key was not
 found.
@@ -592,8 +586,7 @@ not found, {\it l} is not changed.
 Reads a long value, returning TRUE if the value was found. If the value was
 not found, {\it defaultVal} is used instead.
 
-\constfunc{long }{Read}{\param{const wxString\& }{key}, \param{long}{
-defaultVal}}
+\constfunc{long }{Read}{\param{const wxString\& }{key}, \param{long}{ defaultVal}}
 
 Reads a long value from the key and returns it. {\it defaultVal} is returned
 if the key is not found.
@@ -667,7 +660,7 @@ exists.
 Sets the config object as the current one, returns the pointer to the previous
 current object (both the parameter and returned value may be NULL)
 
-\membersection{wxConfigBase::SetExpandingEnvVars}\label{wxconfigbasesetexpandingenvvars}
+\membersection{wxConfigBase::SetExpandEnvVars}\label{wxconfigbasesetexpandenvvars}
 
 \func{void}{SetExpandEnvVars }{\param{bool }{bDoIt = TRUE}}
 
@@ -677,8 +670,8 @@ Determine whether we wish to expand environment variables in key values.
 
 \func{void}{SetPath}{\param{const wxString\& }{strPath}}
 
-Set current path: if the first character is '/', it's the absolute path,
-otherwise it's a relative path. '..' is supported. If the strPath doesn't
+Set current path: if the first character is '/', it is the absolute path,
+otherwise it is a relative path. '..' is supported. If the strPath doesn't
 exist it is created.
 
 \membersection{wxConfigBase::SetRecordDefaults}\label{wxconfigbasesetrecorddefaults}
@@ -690,6 +683,19 @@ Sets whether defaults are written back to the config file.
 If on (default is off) all default values are written back to the config file.
 This allows the user to see what config options may be changed and is probably
 useful only for wxFileConfig.
+
+\membersection{wxConfigBase::SetUmask}\label{wxfileconfigsetumask}
+
+\func{void}{SetUmask}{\param{int }{mode}}
+
+{\bf NB:} this function is not in the base wxConfigBase class but is only
+implemented in wxFileConfig. Moreover, this function is Unix-specific and
+doesn't do anything on other platforms.
+
+SetUmask() allows to set the mode to be used for the config file creation.
+For example, to create a config file which is not readable by other users
+(useful if it stores some sensitive information, such as passwords), you
+should do {\tt SetUmask(0077)}.
 
 \membersection{wxConfigBase::Write}\label{wxconfigbasewrite}
 
@@ -713,8 +719,4 @@ implements the following methods:\par
 \twocolitem{{\bf WriteFloat(key, value)}}{Writes a floating point number.}
 \end{twocollist}}
 }
-
-
-
-
 

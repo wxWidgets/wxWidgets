@@ -37,19 +37,51 @@
 
 //#define TEST_ARRAYS
 //#define TEST_CMDLINE
-//#define TEST_DATETIME
+#define TEST_DATETIME
 //#define TEST_DIR
+//#define TEST_DLLLOADER
 //#define TEST_EXECUTE
+//#define TEST_FILE
 //#define TEST_FILECONF
 //#define TEST_HASH
+//#define TEST_LIST
 //#define TEST_LOG
 //#define TEST_LONGLONG
 //#define TEST_MIME
-#define TEST_INFO_FUNCTIONS
+//#define TEST_INFO_FUNCTIONS
 //#define TEST_SOCKETS
 //#define TEST_STRINGS
 //#define TEST_THREADS
 //#define TEST_TIMER
+//#define TEST_VCARD
+//#define TEST_WCHAR
+//#define TEST_ZIP
+
+// ----------------------------------------------------------------------------
+// test class for container objects
+// ----------------------------------------------------------------------------
+
+#if defined(TEST_ARRAYS) || defined(TEST_LIST)
+
+class Bar // Foo is already taken in the hash test
+{
+public:
+    Bar(const wxString& name) : m_name(name) { ms_bars++; }
+   ~Bar() { ms_bars--; }
+
+   static size_t GetNumber() { return ms_bars; }
+
+   const char *GetName() const { return m_name; }
+
+private:
+   wxString m_name;
+
+   static size_t ms_bars;
+};
+
+size_t Bar::ms_bars = 0;
+
+#endif // defined(TEST_ARRAYS) || defined(TEST_LIST)
 
 // ============================================================================
 // implementation
@@ -108,6 +140,8 @@ static void ShowCmdLine(const wxCmdLineParser& parser)
         s << "Size:\t" << lVal << '\n';
     if ( parser.Found("d", &dt) )
         s << "Date:\t" << dt.FormatISODate() << '\n';
+    if ( parser.Found("project_name", &strVal) )
+        s << "Project:\t" << strVal << '\n';
 
     wxLogMessage(s);
 }
@@ -192,6 +226,61 @@ static void TestDirEnum()
 #endif // TEST_DIR
 
 // ----------------------------------------------------------------------------
+// wxDllLoader
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_DLLLOADER
+
+#include <wx/dynlib.h>
+
+static void TestDllLoad()
+{
+#if defined(__WXMSW__)
+    static const wxChar *LIB_NAME = _T("kernel32.dll");
+    static const wxChar *FUNC_NAME = _T("lstrlenA");
+#elif defined(__UNIX__)
+    // weird: using just libc.so does *not* work!
+    static const wxChar *LIB_NAME = _T("/lib/libc-2.0.7.so");
+    static const wxChar *FUNC_NAME = _T("strlen");
+#else
+    #error "don't know how to test wxDllLoader on this platform"
+#endif
+
+    puts("*** testing wxDllLoader ***\n");
+
+    wxDllType dllHandle = wxDllLoader::LoadLibrary(LIB_NAME);
+    if ( !dllHandle )
+    {
+        wxPrintf(_T("ERROR: failed to load '%s'.\n"), LIB_NAME);
+    }
+    else
+    {
+        typedef int (*strlenType)(char *);
+        strlenType pfnStrlen = (strlenType)wxDllLoader::GetSymbol(dllHandle, FUNC_NAME);
+        if ( !pfnStrlen )
+        {
+            wxPrintf(_T("ERROR: function '%s' wasn't found in '%s'.\n"),
+                     FUNC_NAME, LIB_NAME);
+        }
+        else
+        {
+            if ( pfnStrlen("foo") != 3 )
+            {
+                wxPrintf(_T("ERROR: loaded function is not strlen()!\n"));
+            }
+            else
+            {
+                puts("... ok");
+            }
+        }
+
+        wxDllLoader::UnloadLibrary(dllHandle);
+    }
+}
+
+#endif // TEST_DLLLOADER
+
+// ----------------------------------------------------------------------------
 // wxExecute
 // ----------------------------------------------------------------------------
 
@@ -257,6 +346,73 @@ static void TestExecute()
 }
 
 #endif // TEST_EXECUTE
+
+// ----------------------------------------------------------------------------
+// file
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_FILE
+
+#include <wx/file.h>
+#include <wx/textfile.h>
+
+static void TestFileRead()
+{
+    puts("*** wxFile read test ***");
+
+    wxFile file(_T("testdata.fc"));
+    if ( file.IsOpened() )
+    {
+        printf("File length: %lu\n", file.Length());
+
+        puts("File dump:\n----------");
+
+        static const size_t len = 1024;
+        char buf[len];
+        for ( ;; )
+        {
+            off_t nRead = file.Read(buf, len);
+            if ( nRead == wxInvalidOffset )
+            {
+                printf("Failed to read the file.");
+                break;
+            }
+
+            fwrite(buf, nRead, 1, stdout);
+
+            if ( nRead < len )
+                break;
+        }
+
+        puts("----------");
+    }
+    else
+    {
+        printf("ERROR: can't open test file.\n");
+    }
+
+    puts("");
+}
+
+static void TestTextFileRead()
+{
+    puts("*** wxTextFile read test ***");
+
+    wxTextFile file(_T("testdata.fc"));
+    if ( file.Open() )
+    {
+        printf("Number of lines: %u\n", file.GetLineCount());
+        printf("Last line: '%s'\n", file.GetLastLine().c_str());
+    }
+    else
+    {
+        printf("ERROR: can't open '%s'\n", file.GetName());
+    }
+
+    puts("");
+}
+
+#endif // TEST_FILE
 
 // ----------------------------------------------------------------------------
 // wxFileConfig
@@ -408,6 +564,44 @@ static void TestHash()
 #endif // TEST_HASH
 
 // ----------------------------------------------------------------------------
+// wxList
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_LIST
+
+#include <wx/list.h>
+
+WX_DECLARE_LIST(Bar, wxListBars);
+#include <wx/listimpl.cpp>
+WX_DEFINE_LIST(wxListBars);
+
+static void TestListCtor()
+{
+    puts("*** Testing wxList construction ***\n");
+
+    {
+        wxListBars list1;
+        list1.Append(new Bar(_T("first")));
+        list1.Append(new Bar(_T("second")));
+
+        printf("After 1st list creation: %u objects in the list, %u objects total.\n",
+               list1.GetCount(), Bar::GetNumber());
+
+        wxListBars list2;
+        list2 = list1;
+
+        printf("After 2nd list creation: %u and %u objects in the lists, %u objects total.\n",
+               list1.GetCount(), list2.GetCount(), Bar::GetNumber());
+
+        list1.DeleteContents(TRUE);
+    }
+
+    printf("After list destruction: %u objects left.\n", Bar::GetNumber());
+}
+
+#endif // TEST_LIST
+
+// ----------------------------------------------------------------------------
 // MIME types
 // ----------------------------------------------------------------------------
 
@@ -415,12 +609,13 @@ static void TestHash()
 
 #include <wx/mimetype.h>
 
+static wxMimeTypesManager g_mimeManager;
+
 static void TestMimeEnum()
 {
-    wxMimeTypesManager mimeTM;
     wxArrayString mimetypes;
 
-    size_t count = mimeTM.EnumAllFileTypes(mimetypes);
+    size_t count = g_mimeManager.EnumAllFileTypes(mimetypes);
 
     printf("*** All %u known filetypes: ***\n", count);
 
@@ -429,7 +624,7 @@ static void TestMimeEnum()
 
     for ( size_t n = 0; n < count; n++ )
     {
-        wxFileType *filetype = mimeTM.GetFileTypeFromMimeType(mimetypes[n]);
+        wxFileType *filetype = g_mimeManager.GetFileTypeFromMimeType(mimetypes[n]);
         if ( !filetype )
         {
             printf("nothing known about the filetype '%s'!\n",
@@ -452,6 +647,60 @@ static void TestMimeEnum()
 
         printf("\t%s: %s (%s)\n",
                mimetypes[n].c_str(), desc.c_str(), extsAll.c_str());
+    }
+}
+
+static void TestMimeOverride()
+{
+    wxPuts(_T("*** Testing wxMimeTypesManager additional files loading ***\n"));
+
+    wxString mailcap = _T("/tmp/mailcap"),
+             mimetypes = _T("/tmp/mime.types");
+
+    wxPrintf(_T("Loading mailcap from '%s': %s\n"),
+             mailcap.c_str(),
+             g_mimeManager.ReadMailcap(mailcap) ? _T("ok") : _T("ERROR"));
+    wxPrintf(_T("Loading mime.types from '%s': %s\n"),
+             mimetypes.c_str(),
+             g_mimeManager.ReadMimeTypes(mimetypes) ? _T("ok") : _T("ERROR"));
+}
+
+static void TestMimeFilename()
+{
+    wxPuts(_T("*** Testing MIME type from filename query ***\n"));
+
+    static const wxChar *filenames[] =
+    {
+        _T("readme.txt"),
+        _T("document.pdf"),
+        _T("image.gif"),
+    };
+
+    for ( size_t n = 0; n < WXSIZEOF(filenames); n++ )
+    {
+        const wxString fname = filenames[n];
+        wxString ext = fname.AfterLast(_T('.'));
+        wxFileType *ft = g_mimeManager.GetFileTypeFromExtension(ext);
+        if ( !ft )
+        {
+            wxPrintf(_T("WARNING: extension '%s' is unknown.\n"), ext.c_str());
+        }
+        else
+        {
+            wxString desc;
+            if ( !ft->GetDescription(&desc) )
+                desc = _T("<no description>");
+
+            wxString cmd;
+            if ( !ft->GetOpenCommand(&cmd,
+                                     wxFileType::MessageParameters(fname, _T(""))) )
+                cmd = _T("<no command available>");
+
+            wxPrintf(_T("To open %s (%s) do '%s'.\n"),
+                     fname.c_str(), desc.c_str(), cmd.c_str());
+
+            delete ft;
+        }
     }
 }
 
@@ -703,28 +952,16 @@ static void TestBitOperations()
 {
     puts("*** Testing wxLongLong bit operation ***\n");
 
-    wxLongLong a, c;
+    wxLongLong ll;
     size_t nTested = 0;
     for ( size_t n = 0; n < 100000; n++ )
     {
-        a = RAND_LL();
+        ll = RAND_LL();
 
 #if wxUSE_LONGLONG_NATIVE
         for ( size_t n = 0; n < 33; n++ )
         {
-            wxLongLongNative b(a.GetHi(), a.GetLo());
-
-            b >>= n;
-            c = a >> n;
-
-            wxASSERT_MSG( b == c, "bit shift failure" );
-
-            b = wxLongLongNative(a.GetHi(), a.GetLo()) << n;
-            c = a << n;
-
-            wxASSERT_MSG( b == c, "bit shift failure" );
         }
-
 #else // !wxUSE_LONGLONG_NATIVE
         puts("Can't do it without native long long type, test skipped.");
 
@@ -741,6 +978,55 @@ static void TestBitOperations()
     }
 
     puts(" done!");
+}
+
+static void TestLongLongComparison()
+{
+    puts("*** Testing wxLongLong comparison ***\n");
+
+    static const long testLongs[] =
+    {
+        0,
+        1,
+        -1,
+        LONG_MAX,
+        LONG_MIN,
+        0x1234,
+        -0x1234
+    };
+
+    static const long ls[2] =
+    {
+        0x1234,
+       -0x1234,
+    };
+
+    wxLongLongWx lls[2];
+    lls[0] = ls[0];
+    lls[1] = ls[1]; 
+
+    for ( size_t n = 0; n < WXSIZEOF(testLongs); n++ )
+    {
+        bool res;
+
+        for ( size_t m = 0; m < WXSIZEOF(lls); m++ )
+        {
+            res = lls[m] > testLongs[n];
+            printf("0x%lx > 0x%lx is %s (%s)\n",
+                   ls[m], testLongs[n], res ? "true" : "false",
+                   res == (ls[m] > testLongs[n]) ? "ok" : "ERROR");
+
+            res = lls[m] < testLongs[n];
+            printf("0x%lx < 0x%lx is %s (%s)\n",
+                   ls[m], testLongs[n], res ? "true" : "false",
+                   res == (ls[m] < testLongs[n]) ? "ok" : "ERROR");
+
+            res = lls[m] == testLongs[n];
+            printf("0x%lx == 0x%lx is %s (%s)\n",
+                   ls[m], testLongs[n], res ? "true" : "false",
+                   res == (ls[m] == testLongs[n]) ? "ok" : "ERROR");
+        }
+    }
 }
 
 #undef MAKE_LL
@@ -881,7 +1167,7 @@ static void TestSocketClient()
 
 static void TestProtocolFtp()
 {
-    puts("*** Testing wxFTP ***\n");
+    puts("*** Testing wxFTP download ***\n");
 
     wxLog::AddTraceMask(_T("ftp"));
 
@@ -951,6 +1237,49 @@ static void TestProtocolFtp()
     }
 }
 
+static void TestProtocolFtpUpload()
+{
+    puts("*** Testing wxFTP uploading ***\n");
+
+    wxLog::AddTraceMask(_T("ftp"));
+
+    static const char *hostname = "localhost";
+
+    printf("--- Attempting to connect to %s:21...\n", hostname);
+
+    wxFTP ftp;
+    ftp.SetUser("zeitlin");
+    ftp.SetPassword("insert your password here");
+    if ( !ftp.Connect(hostname) )
+    {
+        printf("ERROR: failed to connect to %s\n", hostname);
+    }
+    else
+    {
+        printf("--- Connected to %s, current directory is '%s'\n",
+               hostname, ftp.Pwd().c_str());
+
+        // upload a file
+        static const char *file1 = "test1";
+        static const char *file2 = "test2";
+        wxOutputStream *out = ftp.GetOutputStream(file1);
+        if ( out )
+        {
+            printf("--- Uploading to %s ---\n", file1);
+            out->Write("First hello", 11);
+            delete out;
+        }
+
+        out = ftp.GetOutputStream(file2);
+        if ( out )
+        {
+            printf("--- Uploading to %s ---\n", file1);
+            out->Write("Second hello", 12);
+            delete out;
+        }
+    }
+}
+
 #endif // TEST_SOCKETS
 
 // ----------------------------------------------------------------------------
@@ -1002,6 +1331,317 @@ static void TestStopWatch()
 }
 
 #endif // TEST_TIMER
+
+// ----------------------------------------------------------------------------
+// vCard support
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_VCARD
+
+#include <wx/vcard.h>
+
+static void DumpVObject(size_t level, const wxVCardObject& vcard)
+{
+    void *cookie;
+    wxVCardObject *vcObj = vcard.GetFirstProp(&cookie);
+    while ( vcObj )
+    {
+        printf("%s%s",
+               wxString(_T('\t'), level).c_str(),
+               vcObj->GetName().c_str());
+
+        wxString value;
+        switch ( vcObj->GetType() )
+        {
+            case wxVCardObject::String:
+            case wxVCardObject::UString:
+                {
+                    wxString val;
+                    vcObj->GetValue(&val);
+                    value << _T('"') << val << _T('"');
+                }
+                break;
+
+            case wxVCardObject::Int:
+                {
+                    unsigned int i;
+                    vcObj->GetValue(&i);
+                    value.Printf(_T("%u"), i);
+                }
+                break;
+
+            case wxVCardObject::Long:
+                {
+                    unsigned long l;
+                    vcObj->GetValue(&l);
+                    value.Printf(_T("%lu"), l);
+                }
+                break;
+
+            case wxVCardObject::None:
+                break;
+
+            case wxVCardObject::Object:
+                value = _T("<node>");
+                break;
+
+            default:
+                value = _T("<unknown value type>");
+        }
+
+        if ( !!value )
+            printf(" = %s", value.c_str());
+        putchar('\n');
+
+        DumpVObject(level + 1, *vcObj);
+
+        delete vcObj;
+        vcObj = vcard.GetNextProp(&cookie);
+    }
+}
+
+static void DumpVCardAddresses(const wxVCard& vcard)
+{
+    puts("\nShowing all addresses from vCard:\n");
+
+    size_t nAdr = 0;
+    void *cookie;
+    wxVCardAddress *addr = vcard.GetFirstAddress(&cookie);
+    while ( addr )
+    {
+        wxString flagsStr;
+        int flags = addr->GetFlags();
+        if ( flags & wxVCardAddress::Domestic )
+        {
+            flagsStr << _T("domestic ");
+        }
+        if ( flags & wxVCardAddress::Intl )
+        {
+            flagsStr << _T("international ");
+        }
+        if ( flags & wxVCardAddress::Postal )
+        {
+            flagsStr << _T("postal ");
+        }
+        if ( flags & wxVCardAddress::Parcel )
+        {
+            flagsStr << _T("parcel ");
+        }
+        if ( flags & wxVCardAddress::Home )
+        {
+            flagsStr << _T("home ");
+        }
+        if ( flags & wxVCardAddress::Work )
+        {
+            flagsStr << _T("work ");
+        }
+
+        printf("Address %u:\n"
+               "\tflags = %s\n"
+               "\tvalue = %s;%s;%s;%s;%s;%s;%s\n",
+               ++nAdr,
+               flagsStr.c_str(),
+               addr->GetPostOffice().c_str(),
+               addr->GetExtAddress().c_str(),
+               addr->GetStreet().c_str(),
+               addr->GetLocality().c_str(),
+               addr->GetRegion().c_str(),
+               addr->GetPostalCode().c_str(),
+               addr->GetCountry().c_str()
+               );
+
+        delete addr;
+        addr = vcard.GetNextAddress(&cookie);
+    }
+}
+
+static void DumpVCardPhoneNumbers(const wxVCard& vcard)
+{
+    puts("\nShowing all phone numbers from vCard:\n");
+
+    size_t nPhone = 0;
+    void *cookie;
+    wxVCardPhoneNumber *phone = vcard.GetFirstPhoneNumber(&cookie);
+    while ( phone )
+    {
+        wxString flagsStr;
+        int flags = phone->GetFlags();
+        if ( flags & wxVCardPhoneNumber::Voice )
+        {
+            flagsStr << _T("voice ");
+        }
+        if ( flags & wxVCardPhoneNumber::Fax )
+        {
+            flagsStr << _T("fax ");
+        }
+        if ( flags & wxVCardPhoneNumber::Cellular )
+        {
+            flagsStr << _T("cellular ");
+        }
+        if ( flags & wxVCardPhoneNumber::Modem )
+        {
+            flagsStr << _T("modem ");
+        }
+        if ( flags & wxVCardPhoneNumber::Home )
+        {
+            flagsStr << _T("home ");
+        }
+        if ( flags & wxVCardPhoneNumber::Work )
+        {
+            flagsStr << _T("work ");
+        }
+
+        printf("Phone number %u:\n"
+               "\tflags = %s\n"
+               "\tvalue = %s\n",
+               ++nPhone,
+               flagsStr.c_str(),
+               phone->GetNumber().c_str()
+               );
+
+        delete phone;
+        phone = vcard.GetNextPhoneNumber(&cookie);
+    }
+}
+
+static void TestVCardRead()
+{
+    puts("*** Testing wxVCard reading ***\n");
+
+    wxVCard vcard(_T("vcard.vcf"));
+    if ( !vcard.IsOk() )
+    {
+        puts("ERROR: couldn't load vCard.");
+    }
+    else
+    {
+        // read individual vCard properties
+        wxVCardObject *vcObj = vcard.GetProperty("FN");
+        wxString value;
+        if ( vcObj )
+        {
+            vcObj->GetValue(&value);
+            delete vcObj;
+        }
+        else
+        {
+            value = _T("<none>");
+        }
+
+        printf("Full name retrieved directly: %s\n", value.c_str());
+
+
+        if ( !vcard.GetFullName(&value) )
+        {
+            value = _T("<none>");
+        }
+
+        printf("Full name from wxVCard API: %s\n", value.c_str());
+
+        // now show how to deal with multiply occuring properties
+        DumpVCardAddresses(vcard);
+        DumpVCardPhoneNumbers(vcard);
+
+        // and finally show all
+        puts("\nNow dumping the entire vCard:\n"
+             "-----------------------------\n");
+
+        DumpVObject(0, vcard);
+    }
+}
+
+static void TestVCardWrite()
+{
+    puts("*** Testing wxVCard writing ***\n");
+
+    wxVCard vcard;
+    if ( !vcard.IsOk() )
+    {
+        puts("ERROR: couldn't create vCard.");
+    }
+    else
+    {
+        // set some fields
+        vcard.SetName("Zeitlin", "Vadim");
+        vcard.SetFullName("Vadim Zeitlin");
+        vcard.SetOrganization("wxWindows", "R&D");
+
+        // just dump the vCard back
+        puts("Entire vCard follows:\n");
+        puts(vcard.Write());
+    }
+}
+
+#endif // TEST_VCARD
+
+// ----------------------------------------------------------------------------
+// wide char (Unicode) support
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_WCHAR
+
+#include <wx/strconv.h>
+#include <wx/buffer.h>
+
+static void TestUtf8()
+{
+    puts("*** Testing UTF8 support ***\n");
+
+    wxString testString = "français";
+#if 0
+"************ French - Français ****************"
+"Juste un petit exemple pour dire que les français aussi"
+"ont à cœur de pouvoir utiliser tous leurs caractères ! :)";
+#endif
+
+    wxWCharBuffer wchBuf = testString.wc_str(wxConvUTF8);
+    const wchar_t *pwz = (const wchar_t *)wchBuf;
+    wxString testString2(pwz, wxConvLocal);
+
+    printf("Decoding '%s' => '%s'\n", testString.c_str(), testString2.c_str());
+
+    char *psz = "fran" "\xe7" "ais";
+    size_t len = strlen(psz);
+    wchar_t *pwz2 = new wchar_t[len + 1];
+    for ( size_t n = 0; n <= len; n++ )
+    {
+        pwz2[n] = (wchar_t)(unsigned char)psz[n];
+    }
+
+    wxString testString3(pwz2, wxConvUTF8);
+    delete [] pwz2;
+
+    printf("Encoding '%s' -> '%s'\n", psz, testString3.c_str());
+}
+
+#endif // TEST_WCHAR
+
+// ----------------------------------------------------------------------------
+// ZIP stream
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_ZIP
+
+#include "wx/zipstrm.h"
+
+static void TestZipStreamRead()
+{
+    puts("*** Testing ZIP reading ***\n");
+
+    wxZipInputStream istr(_T("idx.zip"), _T("IDX.txt"));
+    printf("Archive size: %u\n", istr.GetSize());
+
+    puts("Dumping the file:");
+    while ( !istr.Eof() )
+    {
+        putchar(istr.GetC());
+        fflush(stdout);
+    }
+
+    puts("\n----- done ------");
+}
+
+#endif // TEST_ZIP
 
 // ----------------------------------------------------------------------------
 // date time
@@ -1662,6 +2302,7 @@ static void TestTimeFormat()
        { CompareBoth, "Date is %x, time is %X" },
        { CompareTime, "Time is %H:%M:%S or %I:%M:%S %p" },
        { CompareNone, "The day of year: %j, the week of year: %W" },
+       { CompareDate, "ISO date without separators: %4Y%2m%2d" },
     };
 
     static const Date formatTestDates[] =
@@ -1807,16 +2448,24 @@ static void TestInteractive()
         if ( !fgets(buf, WXSIZEOF(buf), stdin) )
             break;
 
+        // kill the last '\n'
+        buf[strlen(buf) - 1] = 0;
+
         wxDateTime dt;
-        if ( !dt.ParseDate(buf) )
+        const char *p = dt.ParseDate(buf);
+        if ( !p )
         {
-            puts("failed to parse the date");
+            printf("ERROR: failed to parse the date '%s'.\n", buf);
 
             continue;
         }
+        else if ( *p )
+        {
+            printf("WARNING: parsed only first %u characters.\n", p - buf);
+        }
 
         printf("%s: day %u, week of month %u/%u, week of year %u\n",
-               dt.FormatISODate().c_str(),
+               dt.Format("%b %d, %Y").c_str(),
                dt.GetDayOfYear(),
                dt.GetWeekOfMonth(wxDateTime::Monday_First),
                dt.GetWeekOfMonth(wxDateTime::Sunday_First),
@@ -1826,21 +2475,38 @@ static void TestInteractive()
     puts("\n*** done ***");
 }
 
+static void TestTimeMS()
+{
+    puts("*** testing millisecond-resolution support in wxDateTime ***");
+
+    wxDateTime dt1 = wxDateTime::Now(),
+               dt2 = wxDateTime::UNow();
+
+    printf("Now = %s\n", dt1.Format("%H:%M:%S:%l").c_str());
+    printf("UNow = %s\n", dt2.Format("%H:%M:%S:%l").c_str());
+    printf("Difference is %s\n", (dt2 - dt1).Format("%l").c_str());
+
+    puts("\n*** done ***");
+}
+
 static void TestTimeArithmetics()
 {
     puts("\n*** testing arithmetic operations on wxDateTime ***");
 
-    static const struct
+    static const struct ArithmData
     {
+        ArithmData(const wxDateSpan& sp, const char *nam)
+            : span(sp), name(nam) { }
+
         wxDateSpan span;
         const char *name;
     } testArithmData[] =
     {
-        { wxDateSpan::Day(),           "day"                                },
-        { wxDateSpan::Week(),          "week"                               },
-        { wxDateSpan::Month(),         "month"                              },
-        { wxDateSpan::Year(),          "year"                               },
-        { wxDateSpan(1, 2, 3, 4),      "year, 2 months, 3 weeks, 4 days"    },
+        ArithmData(wxDateSpan::Day(), "day"),
+        ArithmData(wxDateSpan::Week(), "week"),
+        ArithmData(wxDateSpan::Month(), "month"),
+        ArithmData(wxDateSpan::Year(), "year"),
+        ArithmData(wxDateSpan(1, 2, 3, 4), "year, 2 months, 3 weeks, 4 days"),
     };
 
     wxDateTime dt(29, wxDateTime::Dec, 1999), dt1, dt2;
@@ -1910,6 +2576,23 @@ static void TestTimeHolidays()
     for ( size_t n = 0; n < count; n++ )
     {
         printf("\t%s\n", hol[n].Format(format).c_str());
+    }
+
+    puts("");
+}
+
+static void TestTimeZoneBug()
+{
+    puts("\n*** testing for DST/timezone bug ***\n");
+
+    wxDateTime date = wxDateTime(1, wxDateTime::Mar, 2000);
+    for ( int i = 0; i < 31; i++ )
+    {
+        printf("Date %s: week day %s.\n",
+               date.Format(_T("%d-%m-%Y")).c_str(),
+               date.GetWeekDayName(date.GetWeekDay()).c_str());
+
+        date += wxDateSpan::Day();
     }
 
     puts("");
@@ -2191,7 +2874,7 @@ void TestThreadDelete()
 
 #ifdef TEST_ARRAYS
 
-void PrintArray(const char* name, const wxArrayString& array)
+static void PrintArray(const char* name, const wxArrayString& array)
 {
     printf("Dump of the array '%s'\n", name);
 
@@ -2200,6 +2883,44 @@ void PrintArray(const char* name, const wxArrayString& array)
     {
         printf("\t%s[%u] = '%s'\n", name, n, array[n].c_str());
     }
+}
+
+static int StringLenCompare(const wxString& first, const wxString& second)
+{
+    return first.length() - second.length();
+}
+
+#include "wx/dynarray.h"
+
+WX_DECLARE_OBJARRAY(Bar, ArrayBars);
+#include "wx/arrimpl.cpp"
+WX_DEFINE_OBJARRAY(ArrayBars);
+
+static void TestArrayOfObjects()
+{
+    puts("*** Testing wxObjArray ***\n");
+
+    {
+        ArrayBars bars;
+        Bar bar("second bar");
+
+        printf("Initially: %u objects in the array, %u objects total.\n",
+               bars.GetCount(), Bar::GetNumber());
+
+        bars.Add(new Bar("first bar"));
+        bars.Add(bar);
+
+        printf("Now: %u objects in the array, %u objects total.\n",
+               bars.GetCount(), Bar::GetNumber());
+
+        bars.Empty();
+
+        printf("After Empty(): %u objects in the array, %u objects total.\n",
+               bars.GetCount(), Bar::GetNumber());
+    }
+
+    printf("Finally: no more objects in the array, %u objects total.\n",
+           Bar::GetNumber());
 }
 
 #endif // TEST_ARRAYS
@@ -2305,6 +3026,32 @@ static void TestStringSub()
     printf("Mid(3) = '%s'\n", s.Mid(3).c_str());
     printf("substr(3, 5) = '%s'\n", s.substr(3, 5).c_str());
     printf("substr(3) = '%s'\n", s.substr(3).c_str());
+
+    static const wxChar *prefixes[] =
+    {
+        _T("Hello"),
+        _T("Hello, "),
+        _T("Hello, world!"),
+        _T("Hello, world!!!"),
+        _T(""),
+        _T("Goodbye"),
+        _T("Hi"),
+    };
+
+    for ( size_t n = 0; n < WXSIZEOF(prefixes); n++ )
+    {
+        wxString prefix = prefixes[n], rest;
+        bool rc = s.StartsWith(prefix, &rest);
+        printf("StartsWith('%s') = %s", prefix.c_str(), rc ? "TRUE" : "FALSE");
+        if ( rc )
+        {
+            printf(" (the rest is '%s')\n", rest.c_str());
+        }
+        else
+        {
+            putchar('\n');
+        }
+    }
 
     puts("");
 }
@@ -2429,7 +3176,7 @@ static void TestStringTokenizer()
         }
 
         // if we emulate strtok(), check that we do it correctly
-        wxChar *buf, *s, *last;
+        wxChar *buf, *s = NULL, *last;
 
         if ( tkz.GetMode() == wxTOKEN_STRTOK )
         {
@@ -2484,6 +3231,49 @@ static void TestStringTokenizer()
     puts("");
 }
 
+static void TestStringReplace()
+{
+    puts("*** Testing wxString::replace ***");
+
+    static const struct StringReplaceTestData
+    {
+        const wxChar *original;     // original test string
+        size_t start, len;          // the part to replace
+        const wxChar *replacement;  // the replacement string
+        const wxChar *result;       // and the expected result
+    } stringReplaceTestData[] =
+    {
+        { _T("012-AWORD-XYZ"), 4, 5, _T("BWORD"), _T("012-BWORD-XYZ") },
+        { _T("increase"), 0, 2, _T("de"), _T("decrease") },
+        { _T("wxWindow"), 8, 0, _T("s"), _T("wxWindows") },
+        { _T("foobar"), 3, 0, _T("-"), _T("foo-bar") },
+        { _T("barfoo"), 0, 6, _T("foobar"), _T("foobar") },
+    };
+
+    for ( size_t n = 0; n < WXSIZEOF(stringReplaceTestData); n++ )
+    {
+        const StringReplaceTestData data = stringReplaceTestData[n];
+
+        wxString original = data.original;
+        original.replace(data.start, data.len, data.replacement);
+
+        wxPrintf(_T("wxString(\"%s\").replace(%u, %u, %s) = %s "),
+                 data.original, data.start, data.len, data.replacement,
+                 original.c_str());
+
+        if ( original == data.result )
+        {
+            puts("(ok)");
+        }
+        else
+        {
+            wxPrintf(_T("(ERROR: should be '%s')\n"), data.result);
+        }
+    }
+
+    puts("");
+}
+
 #endif // TEST_STRINGS
 
 // ----------------------------------------------------------------------------
@@ -2521,6 +3311,10 @@ int main(int argc, char **argv)
 
     wxCmdLineParser parser(cmdLineDesc, argc, argv);
 
+    parser.AddOption("project_name", "", "full path to project file",
+                     wxCMD_LINE_VAL_STRING,
+                     wxCMD_LINE_OPTION_MANDATORY | wxCMD_LINE_NEEDS_SEPARATOR);
+
     switch ( parser.Parse() )
     {
         case -1:
@@ -2543,13 +3337,14 @@ int main(int argc, char **argv)
         TestPChar();
         TestString();
     }
+        TestStringSub();
     if ( 0 )
     {
         TestStringConstruction();
-        TestStringSub();
         TestStringFormat();
         TestStringFind();
         TestStringTokenizer();
+        TestStringReplace();
     }
 #endif // TEST_STRINGS
 
@@ -2583,11 +3378,29 @@ int main(int argc, char **argv)
     a3 = a2 = a1;
     PrintArray("a2", a2);
     PrintArray("a3", a3);
+
+    puts("*** After sorting a1");
+    a1.Sort();
+    PrintArray("a1", a1);
+
+    puts("*** After sorting a1 in reverse order");
+    a1.Sort(TRUE);
+    PrintArray("a1", a1);
+
+    puts("*** After sorting a1 by the string length");
+    a1.Sort(StringLenCompare);
+    PrintArray("a1", a1);
+
+    TestArrayOfObjects();
 #endif // TEST_ARRAYS
 
 #ifdef TEST_DIR
     TestDirEnum();
 #endif // TEST_DIR
+
+#ifdef TEST_DLLLOADER
+    TestDllLoad();
+#endif // TEST_DLLLOADER
 
 #ifdef TEST_EXECUTE
     TestExecute();
@@ -2596,6 +3409,10 @@ int main(int argc, char **argv)
 #ifdef TEST_FILECONF
     TestFileConfRead();
 #endif // TEST_FILECONF
+
+#ifdef TEST_LIST
+    TestListCtor();
+#endif // TEST_LIST
 
 #ifdef TEST_LOG
     wxString s;
@@ -2615,6 +3432,11 @@ int main(int argc, char **argv)
     //  by wxLog anyhow)
     wxLogMessage("A very very long message 2: '%s', the end!", s.c_str());
 #endif // TEST_LOG
+
+#ifdef TEST_FILE
+    TestFileRead();
+    TestTextFileRead();
+#endif // TEST_FILE
 
 #ifdef TEST_THREADS
     int nCPUs = wxThread::GetCPUCount();
@@ -2644,14 +3466,15 @@ int main(int argc, char **argv)
     {
         TestSpeed();
     }
-    TestMultiplication();
     if ( 0 )
     {
+        TestMultiplication();
         TestDivision();
         TestAddition();
         TestLongLongConversion();
         TestBitOperations();
     }
+    TestLongLongComparison();
 #endif // TEST_LONGLONG
 
 #ifdef TEST_HASH
@@ -2659,7 +3482,11 @@ int main(int argc, char **argv)
 #endif // TEST_HASH
 
 #ifdef TEST_MIME
-    TestMimeEnum();
+    wxLog::AddTraceMask(_T("mime"));
+    if ( 0 )
+        TestMimeEnum();
+    TestMimeOverride();
+    TestMimeFilename();
 #endif // TEST_MIME
 
 #ifdef TEST_INFO_FUNCTIONS
@@ -2668,13 +3495,13 @@ int main(int argc, char **argv)
 #endif // TEST_INFO_FUNCTIONS
 
 #ifdef TEST_SOCKETS
-    if ( 1 )
-        TestSocketServer();
     if ( 0 )
     {
+        TestSocketServer();
         TestSocketClient();
         TestProtocolFtp();
     }
+        TestProtocolFtpUpload();
 #endif // TEST_SOCKETS
 
 #ifdef TEST_TIMER
@@ -2694,15 +3521,33 @@ int main(int argc, char **argv)
         TestTimeWDays();
         TestTimeWNumber();
         TestTimeParse();
-        TestTimeFormat();
         TestTimeArithmetics();
+        TestTimeHolidays();
+        TestTimeFormat();
+
+        TestTimeZoneBug();
     }
-    TestTimeHolidays();
+    TestTimeMS();
     if ( 0 )
         TestInteractive();
 #endif // TEST_DATETIME
+
+#ifdef TEST_VCARD
+    if ( 0 )
+    TestVCardRead();
+    TestVCardWrite();
+#endif // TEST_VCARD
+
+#ifdef TEST_WCHAR
+    TestUtf8();
+#endif // TEST_WCHAR
+
+#ifdef TEST_ZIP
+    TestZipStreamRead();
+#endif // TEST_ZIP
 
     wxUninitialize();
 
     return 0;
 }
+

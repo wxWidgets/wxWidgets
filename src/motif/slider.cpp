@@ -300,6 +300,7 @@ void wxSliderCallback (Widget widget, XtPointer clientData, XmScaleCallbackStruc
             // Also send a wxCommandEvent for compatibility.
             wxCommandEvent event2(wxEVT_COMMAND_SLIDER_UPDATED, slider->GetId());
             event2.SetEventObject(slider);
+            event2.SetInt( event.GetInt() );
             slider->ProcessCommand(event2);
             break;
         }

@@ -1,6 +1,13 @@
 TN0001   How to add a new sample
 TN0002   wxWindows translator guide
 TN0003   Adding wxWindows class documentation
+TN0004   Compiling a sample in the C++Builder IDE
+TN0005   Adding a wxWindows contribution
+TN0006   Making and installing RPMs for wxWindows
+TN0007   Using and modifying the BC++ IDE files
+TN0008   How to learn wxWindows programming
+TN0009   Creating and converting icons
+TN0010   Compiling wxWindows applications in the VC++ IDE
 
 
 Version: $Id$

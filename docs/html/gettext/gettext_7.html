@@ -1,0 +1,122 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.54
+     from gettext.texi on 25 January 1999 -->
+
+<TITLE>GNU gettext utilities - The User's View</TITLE>
+<link href="gettext_8.html" rel=Next>
+<link href="gettext_6.html" rel=Previous>
+<link href="gettext_toc.html" rel=ToC>
+
+</HEAD>
+<BODY>
+<p>Go to the <A HREF="gettext_1.html">first</A>, <A HREF="gettext_6.html">previous</A>, <A HREF="gettext_8.html">next</A>, <A HREF="gettext_12.html">last</A> section, <A HREF="gettext_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC35" HREF="gettext_toc.html#TOC35">The User's View</A></H1>
+
+<P>
+When GNU <CODE>gettext</CODE> will truly have reached is goal, average users
+should feel some kind of astonished pleasure, seeing the effect of
+that strange kind of magic that just makes their own native language
+appear everywhere on their screens.  As for naive users, they would
+ideally have no special pleasure about it, merely taking their own
+language for <EM>granted</EM>, and becoming rather unhappy otherwise.
+
+</P>
+<P>
+So, let's try to describe here how we would like the magic to operate,
+as we want the users' view to be the simplest, among all ways one
+could look at GNU <CODE>gettext</CODE>.  All other software engineers:
+programmers, translators, maintainers, should work together in such a
+way that the magic becomes possible.  This is a long and progressive
+undertaking, and information is available about the progress of the
+Translation Project.
+
+</P>
+<P>
+When a package is distributed, there are two kind of users:
+<STRONG>installers</STRONG> who fetch the distribution, unpack it, configure
+it, compile it and install it for themselves or others to use; and
+<STRONG>end users</STRONG> that call programs of the package, once these have
+been installed at their site.  GNU <CODE>gettext</CODE> is offering magic
+for both installers and end users.
+
+</P>
+
+
+
+<H2><A NAME="SEC36" HREF="gettext_toc.html#TOC36">The Current <TT>`ABOUT-NLS'</TT> Matrix</A></H2>
+
+<P>
+Languages are not equally supported in all packages using GNU
+<CODE>gettext</CODE>.  To know if some package uses GNU <CODE>gettext</CODE>, one
+may check the distribution for the <TT>`ABOUT-NLS'</TT> information file, for
+some <TT>`<VAR>ll</VAR>.po'</TT> files, often kept together into some <TT>`po/'</TT>
+directory, or for an <TT>`intl/'</TT> directory.  Internationalized packages
+have usually many <TT>`<VAR>ll</VAR>.po'</TT> files, where <VAR>ll</VAR> represents
+the language.  section <A HREF="gettext_7.html#SEC38">Magic for End Users</A> for a complete description of the format
+for <VAR>ll</VAR>.
+
+</P>
+<P>
+More generally, a matrix is available for showing the current state
+of the Translation Project, listing which packages are prepared for
+multi-lingual messages, and which languages is supported by each.
+Because this information changes often, this matrix is not kept within
+this GNU <CODE>gettext</CODE> manual.  This information is often found in
+file <TT>`ABOUT-NLS'</TT> from various distributions, but is also as old as
+the distribution itself.  A recent copy of this <TT>`ABOUT-NLS'</TT> file,
+containing up-to-date information, should generally be found on the
+Translation Project sites, and also on most GNU archive sites.
+
+</P>
+
+
+<H2><A NAME="SEC37" HREF="gettext_toc.html#TOC37">Magic for Installers</A></H2>
+
+<P>
+By default, packages fully using GNU <CODE>gettext</CODE>, internally,
+are installed in such a way that they to allow translation of
+messages.  At <EM>configuration</EM> time, those packages should
+automatically detect whether the underlying host system provides usable
+<CODE>catgets</CODE> or <CODE>gettext</CODE> functions.  If neither is present,
+the GNU <CODE>gettext</CODE> library should be automatically prepared
+and used.  Installers may use special options at configuration
+time for changing this behavior.  The command <SAMP>`./configure
+--with-included-gettext'</SAMP> bypasses system <CODE>catgets</CODE> or <CODE>gettext</CODE> to
+use GNU <CODE>gettext</CODE> instead, while <SAMP>`./configure --disable-nls'</SAMP>
+produces program totally unable to translate messages.
+
+</P>
+<P>
+Internationalized packages have usually many <TT>`<VAR>ll</VAR>.po'</TT>
+files.  Unless
+translations are disabled, all those available are installed together
+with the package.  However, the environment variable <CODE>LINGUAS</CODE>
+may be set, prior to configuration, to limit the installed set.
+<CODE>LINGUAS</CODE> should then contain a space separated list of two-letter
+codes, stating which languages are allowed.
+
+</P>
+
+
+<H2><A NAME="SEC38" HREF="gettext_toc.html#TOC38">Magic for End Users</A></H2>
+
+<P>
+We consider here those packages using GNU <CODE>gettext</CODE> internally,
+and for which the installers did not disable translation at
+<EM>configure</EM> time.  Then, users only have to set the <CODE>LANG</CODE>
+environment variable to the appropriate <SAMP>`<VAR>ll</VAR>'</SAMP> prior to
+using the programs in the package.  See section <A HREF="gettext_7.html#SEC36">The Current <TT>`ABOUT-NLS'</TT> Matrix</A>.  For example,
+let's presume a German site.  At the shell prompt, users merely have to
+execute <SAMP>`setenv LANG de'</SAMP> (in <CODE>csh</CODE>) or <SAMP>`export
+LANG; LANG=de'</SAMP> (in <CODE>sh</CODE>).  They could even do this from their
+<TT>`.login'</TT> or <TT>`.profile'</TT> file.
+
+</P>
+<P><HR><P>
+<p>Go to the <A HREF="gettext_1.html">first</A>, <A HREF="gettext_6.html">previous</A>, <A HREF="gettext_8.html">next</A>, <A HREF="gettext_12.html">last</A> section, <A HREF="gettext_toc.html">table of contents</A>.
+</BODY>
+</HTML>

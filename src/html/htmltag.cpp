@@ -59,7 +59,9 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
             tg = m_CacheSize++;
             m_Cache[tg].Key = stpos = pos++;
             dummy[0] = 0; i = 0;
-            while ((src[pos] != wxT('>')) && (src[pos] != wxT(' '))) {
+            while (src[pos] != wxT('>') &&
+                   src[pos] != wxT(' ') && src[pos] != wxT('\r') && 
+                   src[pos] != wxT('\n') && src[pos] != wxT('\t')) {
                 dummy[i] = src[pos++];
                 if ((dummy[i] >= wxT('a')) && (dummy[i] <= wxT('z'))) dummy[i] -= (wxT('a') - wxT('A'));
                 i++;
@@ -128,7 +130,9 @@ wxHtmlTag::wxHtmlTag(const wxString& source, int pos, int end_pos, wxHtmlTagsCac
     if (source[i] == '/') {m_Ending = TRUE; i++;}
     else m_Ending = FALSE;
 
-    while ((i < end_pos) && ((c = source[i++]) != ' ') && (c != '>')) {
+    while ((i < end_pos) && 
+               ((c = source[i++]) != ' ' && c != '\r' && c != '\n' && c != '\t' &&
+                c != '>')) {
         if ((c >= 'a') && (c <= 'z')) c -= ('a' - 'A');
         m_Name += c;
     }
@@ -136,6 +140,7 @@ wxHtmlTag::wxHtmlTag(const wxString& source, int pos, int end_pos, wxHtmlTagsCac
     if (source[i-1] != '>')
         while ((i < end_pos) && ((c = source[i++]) != '>')) {
             if ((c >= 'a') && (c <= 'z')) c -= ('a' - 'A');
+            if (c == '\r' || c == '\n' || c == '\t') c = ' '; // make future parsing a bit simpler
             m_Params += c;
             if (c == '"') {
                 while ((i < end_pos) && ((c = source[i++]) != '"')) m_Params += c;

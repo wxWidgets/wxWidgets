@@ -13,7 +13,11 @@
 WXDIR = $(WXWIN)
 !include $(WXDIR)\src\makeb32.env
 
+!if "$(WXUSINGDLL)" == "1"
+LIBS=$(WXLIB) $(EXTRALIBS) cw32mti import32 ole2w32 winpng zlib jpeg xpm tiff odbc32
+!else
 LIBS=$(WXLIB) $(EXTRALIBS) cw32mt import32 ole2w32 winpng zlib jpeg xpm tiff odbc32
+!endif
 
 # Note: you may need to remove some libraries for earlier versions of BC++, as below
 #LIBS=$(WXLIB) $(EXTRALIBS) cw32mt import32 ole2w32 winpng zlib xpm tiff
@@ -30,7 +34,7 @@ OPT = -Od
 DEBUG_FLAGS =
 !endif
 
-CPPFLAGS=$(DEBUG_FLAGS) $(EXTRACPPFLAGS) $(OPT) @$(CFG)
+CPPFLAGS=$(CPPFLAGS) $(DEBUG_FLAGS) $(OPT)
 
 all: $(TARGET).exe $(EXTRATARGETS)
 

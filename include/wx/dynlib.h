@@ -94,6 +94,9 @@ public:
      */
     static void * GetSymbol(wxDllType dllHandle, const wxString &name);
 
+    // return the standard DLL extension (with leading dot) for this platform
+    static wxString GetDllExt();
+
 private:
     /// forbid construction of objects
     wxDllLoader();

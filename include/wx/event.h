@@ -768,7 +768,11 @@ public:
     bool MetaDown() const { return m_metaDown; }
     bool AltDown() const { return m_altDown; }
     bool ShiftDown() const { return m_shiftDown; }
-    long KeyCode() const { return m_keyCode; }
+
+    bool HasModifiers() const { return ControlDown() || AltDown() || MetaDown(); }
+
+    // get the key code: an ASCII7 char or an element of wxKeyCode enum
+    int GetKeyCode() const { return (int)m_keyCode; }
 
     // Find the position of the event
     void GetPosition(wxCoord *xpos, wxCoord *ypos) const
@@ -795,6 +799,9 @@ public:
     wxCoord GetY() const { return m_y; }
 
     void CopyObject(wxObject& obj) const;
+
+    // deprecated
+    long KeyCode() const { return m_keyCode; }
 
 public:
     wxCoord       m_x, m_y;
@@ -1369,7 +1376,7 @@ private:
  wxEVT_DESTROY
  */
 
-class WXDLLEXPORT wxWindowCreateEvent : public wxEvent
+class WXDLLEXPORT wxWindowCreateEvent : public wxCommandEvent
 {
     DECLARE_DYNAMIC_CLASS(wxWindowCreateEvent)
 
@@ -1379,7 +1386,7 @@ public:
     wxWindow *GetWindow() const { return (wxWindow *)GetEventObject(); }
 };
 
-class WXDLLEXPORT wxWindowDestroyEvent : public wxEvent
+class WXDLLEXPORT wxWindowDestroyEvent : public wxCommandEvent
 {
     DECLARE_DYNAMIC_CLASS(wxWindowDestroyEvent)
 

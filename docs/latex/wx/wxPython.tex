@@ -35,8 +35,8 @@ wxPython is a Python package that can be imported at runtime that
 includes a collection of Python modules and an extension module
 (native code). It provides a series of Python classes that mirror (or
 shadow) many of the wxWindows GUI classes. This extension module
-attempts to mirror the class heiarchy of wxWindows as closely as
-possble. This means that there is a wxFrame class in wxPython that
+attempts to mirror the class heirarchy of wxWindows as closely as
+possible. This means that there is a wxFrame class in wxPython that
 looks, smells, tastes and acts almost the same as the wxFrame class in
 the C++ version.
 
@@ -55,7 +55,7 @@ details about getting wxPython working for you.
 So why would you want to use wxPython over just C++ and wxWindows?
 Personally I prefer using Python for everything. I only use C++ when
 I absolutely have to eek more performance out of an algorithm, and even
-then I ususally code it as an extension module and leave the majority
+then I usually code it as an extension module and leave the majority
 of the program in Python.
 
 Another good thing to use wxPython for is quick prototyping of your
@@ -80,7 +80,7 @@ This has its upsides and its downsides...
 
 The upside is that Tk is a pretty versatile toolkit. It can be made
 to do a lot of things in a lot of different environments. It is fairly
-easy to create new widgets and use them interchangably in your
+easy to create new widgets and use them interchangeably in your
 programs.
 
 The downside is Tcl. When using Tkinter you actually have two
@@ -89,7 +89,7 @@ Tcl interpreter for the GUI. Since the guts of Tcl is mostly about
 string processing, it is fairly slow as well. (Not too bad on a fast
 Pentium II, but you really notice the difference on slower machines.)
 
-It wasn't until the lastest version of Tcl/Tk that native Look and
+It wasn't until the latest version of Tcl/Tk that native Look and
 Feel was possible on non-Motif platforms. This is because Tk
 usually implements its own widgets (controls) even when there are
 native controls available.
@@ -111,9 +111,9 @@ to use the GUI portions.
 \wxheading{Others}
 
 There are quite a few other GUI modules available for Python, some in
-active use, some that havn't been updated for ages. Most are simple
+active use, some that haven't been updated for ages. Most are simple
 wrappers around some C or C++ toolkit or another, and most are not
-cross-platform compatible. See \urlref{this link}{http://www.python.org/download/Contributed.html\#Graphics} 
+cross-platform compatible. See \urlref{this link}{http://www.python.org/download/Contributed.html\#Graphics}
 for a listing of a few of them.
 
 %----------------------------------------------------------------------
@@ -123,7 +123,7 @@ I used SWIG (\urlref{http://www.swig.org}{http://www.swig.org}) to
 to create the source code for the
 extension module. This enabled me to only have to deal with a small
 amount of code and only have to bother with the exceptional issues.
-SWIG takes care of the rest and generates all the repetative code for
+SWIG takes care of the rest and generates all the repetitive code for
 me. You don't need SWIG to build the extension module as all the
 generated C++ code is included under the src directory.
 
@@ -173,7 +173,7 @@ The build.py script actually generates a Makefile based on what it
 finds on your system and information found in the build.cfg file.
 If you have troubles building or you want it built or installed in
 a different way, take a look at the docstring in build.py. You are
-able to to override many configuration options in a file named
+able to override many configuration options in a file named
 build.local.
 \item To build and install the add-on modules, change to the appropriate
 directory under {\tt \$(WXWIN)/utils/wxPython/modules} and run the build
@@ -300,7 +300,7 @@ methods of the class. These helper functions are intended to be like
 the event table macros that wxWindows employs. But since static event
 tables are impossible with wxPython, we use helpers that are named the
 same to dynamically build the table. The only real difference is
-that the first arguemnt to the event helpers is always the window that
+that the first argument to the event helpers is always the window that
 the event table entry should be added to.
 \item Notice the use of {\tt wxDLG\_PNT} and {\tt wxDLG\_SZE} in lines 19
 - 29 to convert from dialog units to pixels. These helpers are unique
@@ -311,14 +311,14 @@ called?  The answer is, yes it does. This is because many of the
 {\em standard} events are attached to windows that have the associated
 {\em standard} method names. I have tried to follow the lead of the
 C++ classes in this area to determine what is {\em standard} but since
-that changes from time to time I can make no guarentees, nor will it
+that changes from time to time I can make no guarantees, nor will it
 be fully documented. When in doubt, use an EVT\_*** function.
 \item At lines 17 to 21 notice that there are no saved references to
 the panel or the static text items that are created. Those of you
 who know Python might be wondering what happens when Python deletes
 these objects when they go out of scope. Do they disappear from the GUI?  They
 don't. Remember that in wxPython the Python objects are just shadows of the
-coresponding C++ objects. Once the C++ windows and controls are
+corresponding C++ objects. Once the C++ windows and controls are
 attached to their parents, the parents manage them and delete them
 when necessary. For this reason, most wxPython objects do not need to
 have a \_\_del\_\_ method that explicitly causes the C++ object to be
@@ -360,6 +360,7 @@ as possible to the C++ spec over time.
 \item \helpref{wxBusyCursor}{wxbusycursor}
 \item \helpref{wxButton}{wxbutton}
 \item \helpref{wxCalculateLayoutEvent}{wxcalculatelayoutevent}
+\item \helpref{wxCalendarCtrl}{wxcalendarctrl}
 \item wxCaret
 \item \helpref{wxCheckBox}{wxcheckbox}
 \item \helpref{wxCheckListBox}{wxchecklistbox}
@@ -380,15 +381,19 @@ as possible to the C++ spec over time.
 \item \helpref{wxDataObject}{wxdataobject}
 \item \helpref{wxDataObjectComposite}{wxdataobjectcomposite}
 \item \helpref{wxDataObjectSimple}{wxdataobjectsimple}
+\item \helpref{wxDateTime}{wxdatetime}
+\item \helpref{wxDateSpan}{wxdatespan}
 \item \helpref{wxDC}{wxdc}
 \item \helpref{wxDialog}{wxdialog}
 \item \helpref{wxDirDialog}{wxdirdialog}
+\item \helpref{wxDragImage}{wxdragimage}
 \item \helpref{wxDropFilesEvent}{wxdropfilesevent}
 \item \helpref{wxDropSource}{wxdropsource}
 \item \helpref{wxDropTarget}{wxdroptarget}
 \item \helpref{wxEraseEvent}{wxeraseevent}
 \item \helpref{wxEvent}{wxevent}
 \item \helpref{wxEvtHandler}{wxevthandler}
+\item wxFileConfig
 \item \helpref{wxFileDataObject}{wxfiledataobject}
 \item \helpref{wxFileDialog}{wxfiledialog}
 \item \helpref{wxFileDropTarget}{wxfiledroptarget}
@@ -400,9 +405,11 @@ as possible to the C++ spec over time.
 \item \helpref{wxGauge}{wxgauge}
 \item wxGIFHandler
 \item wxGLCanvas
+\begin{comment}
 \item wxGridCell
 \item wxGridEvent
 \item \helpref{wxGrid}{wxgrid}
+\end{comment}
 \item \helpref{wxHtmlCell}{wxhtmlcell}
 \item \helpref{wxHtmlContainerCell}{wxhtmlcontainercell}
 \item \helpref{wxHtmlDCRenderer}{wxhtmldcrenderer}
@@ -504,6 +511,9 @@ as possible to the C++ spec over time.
 \item \helpref{wxTextDropTarget}{wxtextdroptarget}
 \item \helpref{wxTextEntryDialog}{wxtextentrydialog}
 \item \helpref{wxTimer}{wxtimer}
+\item \helpref{wxTimerEvent}{wxtimerevent}
+\item \helpref{wxTimeSpan}{wxtimespan}
+\item \helpref{wxTipProvider}{wxtipprovider}
 \item wxToolBarTool
 \item \helpref{wxToolBar}{wxtoolbar}
 \item wxToolTip
@@ -521,15 +531,16 @@ as possible to the C++ spec over time.
 \section{Where to go for help}\label{wxphelp}
 
 Since wxPython is a blending of multiple technologies, help comes from
-multiple sources. See 
-\urlref{http://alldunn.com/wxPython}{http://alldunn.com/wxPython} for details on
+multiple sources. See
+\urlref{http://wxpython.org/}{http://wxpython.org/} for details on
 various sources of help, but probably the best source is the
 wxPython-users mail list. You can view the archive or subscribe by
 going to
 
-\urlref{http://starship.python.net/mailman/listinfo/wxpython-users}{http://starship.python.net/mailman/listinfo/wxpython-users}
+\urlref{http://wxwindows.org/mailman/listinfo/wxpython-users}{http://wxwindows.org/mailman/listinfo/wxpython-users}
 
 Or you can send mail directly to the list using this address:
 
-wxpython-users@starship.python.net
+wxpython-users@wxwindows.org
+
 

@@ -17,7 +17,7 @@ DATAFILES = penguin.lwo
 
 PROGRAM=penguin
 
-LIBRARIES=-lMesaGL -lMesaGLU ../../../lib/libwx_gtk_gl.so
+LIBRARIES=$(OPENGLLIBS) ../../../lib/libwx_gtk_gl.so
 
 OBJECTS=$(PROGRAM).o lw.o trackball.o
 
