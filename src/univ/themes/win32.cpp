@@ -2045,6 +2045,9 @@ void wxWin32Renderer::DrawSliderThumb(wxDC& dc,
        ^  ^  ^
        |  |  |
        x x3  x2
+
+       The interior of this shape is filled with the hatched brush if the thumb
+       is pressed.
     */
 
     DrawBackground(dc, wxNullColour, rect, flags);
@@ -2085,6 +2088,33 @@ void wxWin32Renderer::DrawSliderThumb(wxDC& dc,
     dc.SetPen(m_penDarkGrey);
     DrawLine(dc, x3, y2 - 1, x2 - 1, y3, transpose);
     DrawLine(dc, x2 - 1, y3, x2 - 1, y, transpose);
+
+    if ( flags & wxCONTROL_PRESSED )
+    {
+        // TODO: MSW fills the entire area inside, not just the rect
+        wxRect rectInt = rect;
+        if ( transpose )
+            rectInt.SetRight(y3);
+        else
+            rectInt.SetBottom(y3);
+        rectInt.Deflate(2);
+
+        static const char *stipple_xpm[] = {
+            /* columns rows colors chars-per-pixel */
+            "2 2 2 1",
+            "  c None",
+            "w c white",
+            /* pixels */
+            "w ",
+            " w",
+        };
+        dc.SetBrush(wxBrush(stipple_xpm));
+
+        dc.SetTextForeground(wxSCHEME_COLOUR(m_scheme, SHADOW_HIGHLIGHT));
+        dc.SetTextBackground(wxSCHEME_COLOUR(m_scheme, CONTROL));
+        dc.SetPen(*wxTRANSPARENT_PEN);
+        dc.DrawRectangle(rectInt);
+    }
 }
 
 void wxWin32Renderer::DrawSliderTicks(wxDC& dc,

@@ -204,6 +204,9 @@ private:
            m_rectTicks,
            m_rectSlider;
 
+    // the state of the thumb (wxCONTROL_XXX constants sum)
+    int m_thumbFlags;
+
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxSlider)
 };

@@ -128,6 +128,7 @@ void wxSlider::Init()
     m_pageSize = 0;
 
     m_thumbSize = 0;
+    m_thumbFlags = 0;
 }
 
 bool wxSlider::Create(wxWindow *parent,
@@ -663,7 +664,7 @@ void wxSlider::DoDraw(wxControlRenderer *renderer)
     wxRect rectThumb, rectLabel;
     CalcThumbRect(&rectShaft, &rectThumb, &rectLabel);
 
-    rend->DrawSliderThumb(dc, rectThumb, orient, flags);
+    rend->DrawSliderThumb(dc, rectThumb, orient, flags | m_thumbFlags);
 
     // draw the ticks
     if ( HasTicks() )
@@ -854,8 +855,17 @@ void wxSlider::SetShaftPartState(wxScrollThumb::Shaft shaftPart,
                                  int flag,
                                  bool set)
 {
-    // TODO: for now we ignore the flags for the shaft
+    // for now we ignore the flags for the shaft as no renderer uses them
+    // anyhow
+    if ( shaftPart == wxScrollThumb::Shaft_Thumb )
+    {
+        if ( set )
+            m_thumbFlags |= flag;
+        else
+            m_thumbFlags &= ~flag;
 
+        RefreshThumb();
+    }
 }
 
 void wxSlider::OnThumbDragStart(int pos)
