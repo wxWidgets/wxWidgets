@@ -57,7 +57,8 @@ for some notes on using member functions for callbacks. wxWindows 2.0 will banis
 callback functions (and OnMenuCommand), and nearly all event handling will be done by functions taking a single event argument.
 So in future you will have code like:
 
-{\small\begin{verbatim}
+{\small
+\begin{verbatim}
 void MyFrame::OnOK(wxCommandEvent& event)
 {
         ...
@@ -258,7 +259,8 @@ returned in wxWindows 1.xx, your application will need to be changed. Usually yo
 simplify your application's allocation and deallocation of memory for the returned string,
 and simply assign the result to a wxString object. For example, replace this:
 
-{\small\begin{verbatim}
+{\small
+\begin{verbatim}
   char* s = wxFunctionThatReturnsString();
   s = copystring(s); // Take a copy in case it is temporary
   .... // Do something with it
@@ -268,7 +270,8 @@ and simply assign the result to a wxString object. For example, replace this:
 
 with this:
 
-{\small\begin{verbatim}
+{\small
+\begin{verbatim}
   wxString s = wxFunctionThatReturnsString();
   .... // Do something with it
 \end{verbatim}

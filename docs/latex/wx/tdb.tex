@@ -1308,31 +1308,31 @@ for selection and the columns returned may be specified.
 
 Examples:
 
-\verb$SELECT * FROM Book$
+\tt{SELECT * FROM Book}
 
 Selects all rows and columns from table Book.
 
-\verb$SELECT Title, RetailPriceAmount FROM Book WHERE RetailPriceAmount > 20.0$
+\tt{SELECT Title, RetailPriceAmount FROM Book WHERE RetailPriceAmount > 20.0}
 
 Selects columns Title and RetailPriceAmount from table Book, returning only
 the rows that match the WHERE clause.
 
-\verb$SELECT * FROM Book WHERE CatCode = 'LL' OR CatCode = 'RR'$
+\tt{SELECT * FROM Book WHERE CatCode = 'LL' OR CatCode = 'RR'}
 
 Selects all columns from table Book, returning only
 the rows that match the WHERE clause.
 
-\verb$SELECT * FROM Book WHERE CatCode IS NULL$
+\tt{SELECT * FROM Book WHERE CatCode IS NULL}
 
 Selects all columns from table Book, returning only rows where the CatCode column
 is NULL.
 
-\verb$SELECT * FROM Book ORDER BY Title$
+\tt{SELECT * FROM Book ORDER BY Title}
 
 Selects all columns from table Book, ordering by Title, in ascending order. To specify
 descending order, add DESC after the ORDER BY Title clause.
 
-\verb$SELECT Title FROM Book WHERE RetailPriceAmount >= 20.0 AND RetailPriceAmount <= 35.0$
+\tt{SELECT Title FROM Book WHERE RetailPriceAmount >= 20.0 AND RetailPriceAmount <= 35.0}
 
 Selects records where RetailPriceAmount conforms to the WHERE expression.
 
@@ -1342,7 +1342,7 @@ Updates records in a table.
 
 Example:
 
-\verb$UPDATE Incident SET X = 123 WHERE ASSET = 'BD34'$
+\tt{UPDATE Incident SET X = 123 WHERE ASSET = 'BD34'}
 
 This example sets a field in column `X' to the number 123, for the record
 where the column ASSET has the value `BD34'.
