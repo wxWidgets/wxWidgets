@@ -68,7 +68,11 @@
         (defined(__DJGPP__) && __DJGPP__ >= 2)
     #define wxLongLong_t long long
     #define wxLongLongSuffix ll
+    #if defined(__MINGW32__)
+      #define wxLongLongFmtSpec _T("I64")
+    #else
     #define wxLongLongFmtSpec _T("ll")
+    #endif
 #elif defined(__MWERKS__)
     #if __option(longlong)
         #define wxLongLong_t long long
