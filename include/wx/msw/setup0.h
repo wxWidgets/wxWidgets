@@ -751,6 +751,9 @@
 
 #undef wxUSE_MS_HTML_HELP
 #define wxUSE_MS_HTML_HELP 0
+
+#undef wxUSE_WCHAR_T
+#define wxUSE_WCHAR_T 0
 #endif
 
 #if defined(__WXMSW__) && !defined(__WIN32__)
