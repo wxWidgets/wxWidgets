@@ -1526,7 +1526,7 @@ if test "$wxUSE_GTK" = 1; then
     GUIDIST=GTK_DIST
 
 dnl test for XIM support in libgdk
-AC_CHECK_LIB(gdk, gdk_im_open, AC_DEFINE(HAVE_GDK_XIM))
+AC_CHECK_LIB(gdk, gdk_im_open, AC_DEFINE(HAVE_XIM))
 
 fi
 
