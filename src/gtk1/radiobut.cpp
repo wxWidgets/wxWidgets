@@ -102,9 +102,9 @@ void wxRadioButton::SetValue( bool val )
 {
   wxCHECK_RET( m_widget != NULL, "invalid radiobutton" );
   
-  gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(m_widget), val );
-  
   m_blockFirstEvent = TRUE;
+  
+  gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(m_widget), val );
 }
 
 bool wxRadioButton::GetValue(void) const

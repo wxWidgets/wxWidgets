@@ -90,6 +90,7 @@ class MyPanel: public wxPanel
     wxSpinButton  *m_spinbutton;
     wxTextCtrl    *m_spintext;
     wxTextCtrl    *m_multitext;
+    wxCheckBox    *m_checkbox;
     
     wxTextCtrl    *m_text;
     wxNotebook    *m_notebook;    
@@ -310,7 +311,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   (void)new wxButton( panel, ID_LISTBOX_DELETE, "Delete selected item", wxPoint(180,130), wxSize(140,30) );
   button = new wxButton( panel, ID_LISTBOX_FONT, "Set Italic font", wxPoint(340,130), wxSize(140,30) );
 //  button->SetForegroundColour( "red" );
-  (void)new wxCheckBox( panel, ID_LISTBOX_ENABLE, "Disable", wxPoint(20,130), wxSize(140,30) );
+  m_checkbox = new wxCheckBox( panel, ID_LISTBOX_ENABLE, "Disable", wxPoint(20,130), wxSize(140,30) );
   m_notebook->AddPage(panel, "wxList", FALSE, Image_List);
   
   panel = new wxPanel(m_notebook);
@@ -505,6 +506,7 @@ void MyPanel::OnListBoxButtons( wxCommandEvent &event )
     case ID_LISTBOX_FONT:
     {
       m_listbox->SetFont( *wxITALIC_FONT );
+      m_checkbox->SetFont( *wxITALIC_FONT );
       break;
     }
   }

@@ -95,13 +95,10 @@ bool wxCheckBox::Create(  wxWindow *parent, wxWindowID id, const wxString &label
 void wxCheckBox::SetValue( bool state )
 {
   wxCHECK_RET( m_widget != NULL, "invalid checkbox" );
-
-  if (state)
-    gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(m_widget), GTK_STATE_ACTIVE );
-  else
-    gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(m_widget), GTK_STATE_NORMAL );
     
   m_blockFirstEvent = TRUE;
+
+  gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(m_widget), state );
 }
 
 bool wxCheckBox::GetValue() const

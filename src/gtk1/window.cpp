@@ -2164,14 +2164,6 @@ void wxWindow::SetBackgroundColour( const wxColour &colour )
 
     if (m_backgroundColour == colour) return;
 
-    wxColour sysbg = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE );
-    if (sysbg.Red() == colour.Red() && 
-        sysbg.Green() == colour.Green() && 
-        sysbg.Blue() == colour.Blue())
-    {
-        return;
-    } 
-
     m_backgroundColour = colour;
     if (!m_backgroundColour.Ok()) return;
 
@@ -2183,7 +2175,19 @@ void wxWindow::SetBackgroundColour( const wxColour &colour )
         gdk_window_clear( window );
     }
 
-    ApplyWidgetStyle();
+    wxColour sysbg = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE );
+    if (sysbg.Red() == colour.Red() && 
+        sysbg.Green() == colour.Green() && 
+        sysbg.Blue() == colour.Blue())
+    {
+        m_backgroundColour = wxNullColour;
+        ApplyWidgetStyle();
+	m_backgroundColour = sysbg;
+    } 
+    else
+    {
+        ApplyWidgetStyle();
+    }
 }
 
 wxColour wxWindow::GetForegroundColour() const
@@ -2200,7 +2204,19 @@ void wxWindow::SetForegroundColour( const wxColour &colour )
     m_foregroundColour = colour;
     if (!m_foregroundColour.Ok()) return;
 
-    ApplyWidgetStyle();
+    wxColour sysbg = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE );
+    if (sysbg.Red() == colour.Red() && 
+        sysbg.Green() == colour.Green() && 
+        sysbg.Blue() == colour.Blue())
+    {
+        m_backgroundColour = wxNullColour;
+        ApplyWidgetStyle();
+	m_backgroundColour = sysbg;
+    } 
+    else
+    {
+        ApplyWidgetStyle();
+    }
 }
 
 GtkStyle *wxWindow::GetWidgetStyle()
@@ -2395,7 +2411,19 @@ void wxWindow::SetFont( const wxFont &font )
     else
         m_font = *wxSWISS_FONT;
 
-    ApplyWidgetStyle();
+    wxColour sysbg = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE );
+    if (sysbg.Red() == m_backgroundColour.Red() && 
+        sysbg.Green() == m_backgroundColour.Green() && 
+        sysbg.Blue() == m_backgroundColour.Blue())
+    {
+        m_backgroundColour = wxNullColour;
+        ApplyWidgetStyle();
+	m_backgroundColour = sysbg;
+    } 
+    else
+    {
+        ApplyWidgetStyle();
+    }
 }
 
 void wxWindow::SetWindowStyleFlag( long flag )

@@ -13,7 +13,8 @@
 
 #include "wx/textctrl.h"
 #include "wx/utils.h"
-#include <wx/intl.h>
+#include "wx/intl.h"
+#include "wx/settings.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -645,57 +646,65 @@ wxTextCtrl& wxTextCtrl::operator<<(const char c)
 
 GtkWidget* wxTextCtrl::GetConnectWidget()
 {
-  return GTK_WIDGET(m_text);
+    return GTK_WIDGET(m_text);
 }
 
 bool wxTextCtrl::IsOwnGtkWindow( GdkWindow *window )
 {
-  if (m_windowStyle & wxTE_MULTILINE)
-    return (window == GTK_TEXT(m_text)->text_area);
-  else
-    return (window == GTK_ENTRY(m_text)->text_area);
+    if (m_windowStyle & wxTE_MULTILINE)
+        return (window == GTK_TEXT(m_text)->text_area);
+    else
+        return (window == GTK_ENTRY(m_text)->text_area);
 }
 
 void wxTextCtrl::SetFont( const wxFont &WXUNUSED(font) )
 {
-  wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
+    wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
 
-  // doesn't work
+    // doesn't work
 }
 
 void wxTextCtrl::SetForegroundColour( const wxColour &WXUNUSED(colour) )
 {
-  wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
+    wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
 
-  // doesn't work
+    // doesn't work
 }
 
 void wxTextCtrl::SetBackgroundColour( const wxColour &colour )
 {
-  wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
+    wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
 
-  wxControl::SetBackgroundColour( colour );
+    wxControl::SetBackgroundColour( colour );
 
-  if (!m_backgroundColour.Ok()) return;
+    wxColour sysbg = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE );
+    if (sysbg.Red() == colour.Red() && 
+        sysbg.Green() == colour.Green() && 
+        sysbg.Blue() == colour.Blue())
+    {
+        return;
+    } 
+    
+    if (!m_backgroundColour.Ok()) return;
 
-  if (m_windowStyle & wxTE_MULTILINE)
-  {
-    GdkWindow *window = GTK_TEXT(m_text)->text_area;
-    m_backgroundColour.CalcPixel( gdk_window_get_colormap( window ) );
-    gdk_window_set_background( window, m_backgroundColour.GetColor() );
-    gdk_window_clear( window );
-  }
+    if (m_windowStyle & wxTE_MULTILINE)
+    {
+        GdkWindow *window = GTK_TEXT(m_text)->text_area;
+        m_backgroundColour.CalcPixel( gdk_window_get_colormap( window ) );
+        gdk_window_set_background( window, m_backgroundColour.GetColor() );
+        gdk_window_clear( window );
+    }
 }
 
 void wxTextCtrl::ApplyWidgetStyle()
 {
-  if (m_windowStyle & wxTE_MULTILINE)
-  {
-  }
-  else
-  {
-    SetWidgetStyle();
-    gtk_widget_set_style( m_text, m_widgetStyle );
-  }
+    if (m_windowStyle & wxTE_MULTILINE)
+    {
+    } 
+    else
+    {
+        SetWidgetStyle();
+        gtk_widget_set_style( m_text, m_widgetStyle );
+    }
 }
 
