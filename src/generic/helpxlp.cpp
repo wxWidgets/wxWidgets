@@ -66,12 +66,21 @@ IMPLEMENT_CLASS(wxXLPHelpConnection, wxTCPConnection)
 IMPLEMENT_CLASS(wxXLPHelpController, wxHelpControllerBase)
 #endif
 
-wxXLPHelpController::wxXLPHelpController(void):
-  helpClient(this)
+// suppress annoying warning "'this' used in base member init list" (so what?)
+#ifdef _MSC_VER
+#pragma warning(disable: 4355)
+#endif // Visual C++
+
+wxXLPHelpController::wxXLPHelpController(void)
+                   : helpClient(this)
 {
   helpFile = ""; helpServer = -1; helpHost = "";
   helpRunning = FALSE; helpConnection = NULL;
 }
+
+#ifdef _MSC_VER
+#pragma warning(default: 4355)
+#endif // Visual C++
 
 wxXLPHelpController::~wxXLPHelpController(void)
 {
