@@ -23,7 +23,7 @@
 #include "wx/gdicmn.h"
 #include "wx/pen.h"
 #include "wx/dcmemory.h"
-
+#include "wx/settings.h"
 #include "wx/effects.h"
 
 /*
