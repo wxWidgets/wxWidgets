@@ -616,6 +616,22 @@ void CheckSupportForAllDataTypes(wxDb *pDb)
         wxLogMessage(nativeDataTypeName);
     }
 #endif
+#ifdef SQL_WVARCHAR
+    if (DataTypeSupported(pDb,SQL_WVARCHAR, &nativeDataTypeName))
+    {
+        nativeDataTypeName = wxT("SQL_WVARCHAR (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")\n");
+        wxLogMessage(nativeDataTypeName);
+    }
+#endif
+#ifdef SQL_WCHAR
+    if (DataTypeSupported(pDb,SQL_WCHAR, &nativeDataTypeName))
+    {
+        nativeDataTypeName = wxT("SQL_WCHAR (") + nativeDataTypeName;
+        nativeDataTypeName += wxT(")\n");
+        wxLogMessage(nativeDataTypeName);
+    }
+#endif
 
     wxLogMessage(wxT("Done\n"));
 }  // CheckSupportForAllDataTypes()
