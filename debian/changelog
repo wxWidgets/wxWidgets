@@ -1,3 +1,11 @@
+wxwindows2.2 (2.2.7) unstable; urgency=medium
+
+  * The "Testing Tarantella" release.
+  * various small control (mis)behaviours corrected.
+  * added missing build-dep for gettext.
+
+ -- Ron <ron@debian.org>  Sun, 10 Jun 2001 19:32:46 -0700
+
 wxwindows2.2 (2.2.6.1) unstable; urgency=low
 
   * fix rules so it really doesn't build -indep for ports
