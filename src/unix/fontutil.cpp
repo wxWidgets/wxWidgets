@@ -184,7 +184,7 @@ bool wxGetNativeFontEncoding(wxFontEncoding encoding,
 
         case wxFONTENCODING_SYSTEM:
             info->xregistry =
-            info->xencoding = wxT('*');
+            info->xencoding = wxT("*");
             break;
 
         default:
@@ -222,20 +222,29 @@ wxNativeFont wxLoadQueryNearestFont(int pointSize,
     // encoding, it's useless to do all other approximations (i.e. size,
     // family &c don't matter much)
     wxNativeEncodingInfo info;
-    if ( !wxGetNativeFontEncoding(encoding, &info) ||
-         !wxTestFontEncoding(info) )
+    if (encoding == wxFONTENCODING_SYSTEM)
     {
-        if ( !wxTheFontMapper->GetAltForEncoding(encoding, &info) )
-        {
-            // unspported encoding - replace it with the default
-            //
-            // NB: we can't just return 0 from here because wxGTK code doesn't
-            //     check for it (i.e. it supposes that we'll always succeed),
-            //     so it would provoke a crash
-            wxGetNativeFontEncoding(wxFONTENCODING_SYSTEM, &info);
-        }
+        // This will always work so we don't test to save time
+        wxGetNativeFontEncoding(wxFONTENCODING_SYSTEM, &info);
     }
-    //else: we have the correct xregistry/xencoding in info structure
+    else
+    {
+        if ( !wxGetNativeFontEncoding(encoding, &info) ||
+             !wxTestFontEncoding(info) )
+        {
+            if ( !wxTheFontMapper->GetAltForEncoding(encoding, &info) )
+            {
+                // unspported encoding - replace it with the default
+                //
+                // NB: we can't just return 0 from here because wxGTK code doesn't
+                //     check for it (i.e. it supposes that we'll always succeed),
+                //     so it would provoke a crash
+                wxGetNativeFontEncoding(wxFONTENCODING_SYSTEM, &info);
+            }
+	}
+    }
+    
+    // OK, we have the correct xregistry/xencoding in info structure
 
     wxNativeFont font = wxLoadQueryFont( pointSize, family, style, weight,
                                          underlined, facename,

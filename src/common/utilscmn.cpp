@@ -151,7 +151,7 @@ int strcasecmp(const char *str_1, const char *str_2)
   myLowerString(temp1);
   myLowerString(temp2);
 
-  int result = strcmp(temp1,temp2);
+  int result = wxStrcmp(temp1,temp2);
   delete[] temp1;
   delete[] temp2;
 

@@ -205,7 +205,7 @@ bool wxClassInfo::IsKindOf(wxClassInfo *info) const
     // PROBABLY NO LONGER TRUE now I've done DLL creation right.
     /*
 #if WXMAKINGDLL
-if (GetClassName() && info->GetClassName() && (strcmp(GetClassName(), info->GetClassName()) == 0))
+if (GetClassName() && info->GetClassName() && (wxStrcmp(GetClassName(), info->GetClassName()) == 0))
 return TRUE;
 #else
      */

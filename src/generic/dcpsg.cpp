@@ -1876,54 +1876,54 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
             while(fgets(line,sizeof(line),afmFile)!=NULL)
             {
                 /* A.) check for descender definition */
-                if (strncmp(line,"Descender",9)==0)
+                if (wxStrncmp(line,"Descender",9)==0)
                 {
                     if ((sscanf(line,"%s%d",descString,&lastDescender)!=2) ||
-                            (strcmp(descString,"Descender")!=0))
+                            (wxStrcmp(descString,"Descender")!=0))
                     {
                         wxLogDebug( wxT("AFM-file '%hs': line '%hs' has error (bad descender)\n"), afmName.c_str(),line );
                     }
                 }
                 /* JC 1.) check for UnderlinePosition */
-                else if(strncmp(line,"UnderlinePosition",17)==0)
+                else if(wxStrncmp(line,"UnderlinePosition",17)==0)
                 {
                     if ((sscanf(line,"%s%lf",upString,&UnderlinePosition)!=2) ||
-                            (strcmp(upString,"UnderlinePosition")!=0))
+                            (wxStrcmp(upString,"UnderlinePosition")!=0))
                     {
                         wxLogDebug( wxT("AFM-file '%hs': line '%hs' has error (bad UnderlinePosition)\n"), afmName.c_str(), line );
                     }
                 }
                 /* JC 2.) check for UnderlineThickness */
-                else if(strncmp(line,"UnderlineThickness",18)==0)
+                else if(wxStrncmp(line,"UnderlineThickness",18)==0)
                 {
                     if ((sscanf(line,"%s%lf",utString,&UnderlineThickness)!=2) ||
-                            (strcmp(utString,"UnderlineThickness")!=0))
+                            (wxStrcmp(utString,"UnderlineThickness")!=0))
                     {
                         wxLogDebug( wxT("AFM-file '%hs': line '%hs' has error (bad UnderlineThickness)\n"), afmName.c_str(), line );
                     }
                 }
                 /* JC 3.) check for EncodingScheme */
-                else if(strncmp(line,"EncodingScheme",14)==0)
+                else if(wxStrncmp(line,"EncodingScheme",14)==0)
                 {
                     if ((sscanf(line,"%s%s",utString,encString)!=2) ||
-                            (strcmp(utString,"EncodingScheme")!=0))
+                            (wxStrcmp(utString,"EncodingScheme")!=0))
                     {
                         wxLogDebug( wxT("AFM-file '%hs': line '%hs' has error (bad EncodingScheme)\n"), afmName.c_str(), line );
                     }
-                    else if (strncmp(encString, "AdobeStandardEncoding", 21))
+                    else if (wxStrncmp(encString, "AdobeStandardEncoding", 21))
                     {
                         wxLogDebug( wxT("AFM-file '%hs': line '%hs' has error (unsupported EncodingScheme %hs)\n"),
                                 afmName.c_str(),line, encString);
                     }
                 }
                 /* B.) check for char-width */
-                else if(strncmp(line,"C ",2)==0)
+                else if(wxStrncmp(line,"C ",2)==0)
                 {
                     if (sscanf(line,"%s%d%s%s%d",cString,&ascii,semiString,WXString,&cWidth)!=5)
                     {
                         wxLogDebug(wxT("AFM-file '%hs': line '%hs' has an error (bad character width)\n"),afmName.c_str(),line);
                     }
-                    if(strcmp(cString,"C")!=0 || strcmp(semiString,";")!=0 || strcmp(WXString,"WX")!=0)
+                    if(wxStrcmp(cString,"C")!=0 || wxStrcmp(semiString,";")!=0 || wxStrcmp(WXString,"WX")!=0)
                     {
                         wxLogDebug(wxT("AFM-file '%hs': line '%hs' has a format error\n"),afmName.c_str(),line);
                     }

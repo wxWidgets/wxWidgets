@@ -81,8 +81,6 @@
     #ifndef __TWIN32__
         #include <sys/unistd.h>
     #endif
-
-    #define stricmp strcasecmp
 #endif
 
 #ifdef __BORLANDC__ // Please someone tell me which version of Borland needs
