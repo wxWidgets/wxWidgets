@@ -4537,6 +4537,14 @@ static PyObject *_wrap_wxQueryNewPaletteEvent_GetPaletteRealized(PyObject *self,
     return _resultobj;
 }
 
+static void *SwigwxWindowCreateEventTowxCommandEvent(void *ptr) {
+    wxWindowCreateEvent *src;
+    wxCommandEvent *dest;
+    src = (wxWindowCreateEvent *) ptr;
+    dest = (wxCommandEvent *) src;
+    return (void *) dest;
+}
+
 static void *SwigwxWindowCreateEventTowxEvent(void *ptr) {
     wxWindowCreateEvent *src;
     wxEvent *dest;
@@ -4611,6 +4619,14 @@ static PyObject *_wrap_wxWindowCreateEvent_GetWindow(PyObject *self, PyObject *a
         _resultobj = Py_None;
     }
     return _resultobj;
+}
+
+static void *SwigwxWindowDestroyEventTowxCommandEvent(void *ptr) {
+    wxWindowDestroyEvent *src;
+    wxCommandEvent *dest;
+    src = (wxWindowDestroyEvent *) ptr;
+    dest = (wxCommandEvent *) src;
+    return (void *) dest;
 }
 
 static void *SwigwxWindowDestroyEventTowxEvent(void *ptr) {
@@ -5286,6 +5302,10 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxRect","_class_wxRect",0},
     { "_wxCommandEvent","_class_wxPyCommandEvent",SwigwxPyCommandEventTowxCommandEvent},
     { "_wxCommandEvent","_wxPyCommandEvent",SwigwxPyCommandEventTowxCommandEvent},
+    { "_wxCommandEvent","_class_wxWindowDestroyEvent",SwigwxWindowDestroyEventTowxCommandEvent},
+    { "_wxCommandEvent","_wxWindowDestroyEvent",SwigwxWindowDestroyEventTowxCommandEvent},
+    { "_wxCommandEvent","_class_wxWindowCreateEvent",SwigwxWindowCreateEventTowxCommandEvent},
+    { "_wxCommandEvent","_wxWindowCreateEvent",SwigwxWindowCreateEventTowxCommandEvent},
     { "_wxCommandEvent","_class_wxNotifyEvent",SwigwxNotifyEventTowxCommandEvent},
     { "_wxCommandEvent","_wxNotifyEvent",SwigwxNotifyEventTowxCommandEvent},
     { "_wxCommandEvent","_class_wxSpinEvent",SwigwxSpinEventTowxCommandEvent},
@@ -5405,6 +5425,10 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxBusyInfo","_wxBusyInfo",0},
     { "_class_wxCommandEvent","_class_wxPyCommandEvent",SwigwxPyCommandEventTowxCommandEvent},
     { "_class_wxCommandEvent","_wxPyCommandEvent",SwigwxPyCommandEventTowxCommandEvent},
+    { "_class_wxCommandEvent","_class_wxWindowDestroyEvent",SwigwxWindowDestroyEventTowxCommandEvent},
+    { "_class_wxCommandEvent","_wxWindowDestroyEvent",SwigwxWindowDestroyEventTowxCommandEvent},
+    { "_class_wxCommandEvent","_class_wxWindowCreateEvent",SwigwxWindowCreateEventTowxCommandEvent},
+    { "_class_wxCommandEvent","_wxWindowCreateEvent",SwigwxWindowCreateEventTowxCommandEvent},
     { "_class_wxCommandEvent","_class_wxNotifyEvent",SwigwxNotifyEventTowxCommandEvent},
     { "_class_wxCommandEvent","_wxNotifyEvent",SwigwxNotifyEventTowxCommandEvent},
     { "_class_wxCommandEvent","_class_wxSpinEvent",SwigwxSpinEventTowxCommandEvent},

@@ -936,9 +936,6 @@ public:
 
     virtual bool CanHaveAttributes();
 
-    virtual void UpdateAttrRows( size_t pos, int numRows );
-    virtual void UpdateAttrCols( size_t pos, int numCols );
-
     virtual wxGridCellAttr *GetAttr( int row, int col );
     virtual void SetAttr(wxGridCellAttr* attr, int row, int col);
     virtual void SetRowAttr(wxGridCellAttr *attr, int row);
@@ -958,17 +955,9 @@ public:
     PYCALLBACK_INT__pure(GetNumberRows);
     PYCALLBACK_INT__pure(GetNumberCols);
     PYCALLBACK_BOOL_INTINT_pure(IsEmptyCell);
-    //PYCALLBACK_STRING_INTINT_pure(GetValue);
-    //PYCALLBACK__INTINTSTRING_pure(SetValue);
     PYCALLBACK_STRING_INTINT(wxGridTableBase, GetTypeName);
     PYCALLBACK_BOOL_INTINTSTRING(wxGridTableBase, CanGetValueAs);
     PYCALLBACK_BOOL_INTINTSTRING(wxGridTableBase, CanSetValueAs);
-    //PYCALLBACK_LONG_INTINT(wxGridTableBase, GetValueAsLong);
-    //PYCALLBACK_DOUBLE_INTINT(wxGridTableBase, GetValueAsDouble);
-    //PYCALLBACK_BOOL_INTINT(wxGridTableBase, GetValueAsBool);
-    //PYCALLBACK__INTINTLONG(wxGridTableBase, SetValueAsLong);
-    //PYCALLBACK__INTINTDOUBLE(wxGridTableBase, SetValueAsDouble);
-    //PYCALLBACK__INTINTBOOL(wxGridTableBase, SetValueAsBool);
     PYCALLBACK__(wxGridTableBase, Clear);
     PYCALLBACK_BOOL_SIZETSIZET(wxGridTableBase, InsertRows);
     PYCALLBACK_BOOL_SIZETSIZET(wxGridTableBase, DeleteRows);
@@ -981,8 +970,6 @@ public:
     PYCALLBACK__INTSTRING(wxGridTableBase, SetRowLabelValue);
     PYCALLBACK__INTSTRING(wxGridTableBase, SetColLabelValue);
     PYCALLBACK_BOOL_(wxGridTableBase, CanHaveAttributes);
-    PYCALLBACK__SIZETINT(wxGridTableBase, UpdateAttrRows);
-    PYCALLBACK__SIZETINT(wxGridTableBase, UpdateAttrCols);
     PYCALLBACK_GCA_INTINT(wxGridTableBase, GetAttr);
     PYCALLBACK__GCAINTINT(wxGridTableBase, SetAttr);
     PYCALLBACK__GCAINT(wxGridTableBase, SetRowAttr);
@@ -1080,14 +1067,6 @@ public:
     }
 
 
-
-    //TODO:  void* GetValueAsCustom( int row, int col, const wxString& typeName );
-    //TODO:  void  SetValueAsCustom( int row, int col, const wxString& typeName, void* value );
-    //
-    // It would be nice to SetValue/GetValue in the Python code to be able to
-    // work with any python objects and auto-convert to the various types for
-    // the C++ code.  Figure it out.
-
     PYPRIVATE;
 };
 %}
@@ -1106,12 +1085,6 @@ public:
     wxString base_GetTypeName( int row, int col );
     bool base_CanGetValueAs( int row, int col, const wxString& typeName );
     bool base_CanSetValueAs( int row, int col, const wxString& typeName );
-    //long base_GetValueAsLong( int row, int col );
-    //double base_GetValueAsDouble( int row, int col );
-    //bool base_GetValueAsBool( int row, int col );
-    //void base_SetValueAsLong( int row, int col, long value );
-    //void base_SetValueAsDouble( int row, int col, double value );
-    //void base_SetValueAsBool( int row, int col, bool value );
     void base_Clear();
     bool base_InsertRows( size_t pos = 0, size_t numRows = 1 );
     bool base_AppendRows( size_t numRows = 1 );
@@ -1124,8 +1097,6 @@ public:
     void base_SetRowLabelValue( int row, const wxString& value );
     void base_SetColLabelValue( int col, const wxString& value );
     bool base_CanHaveAttributes();
-    void base_UpdateAttrRows( size_t pos, int numRows );
-    void base_UpdateAttrCols( size_t pos, int numCols );
     wxGridCellAttr *base_GetAttr( int row, int col );
     void base_SetAttr(wxGridCellAttr* attr, int row, int col);
     void base_SetRowAttr(wxGridCellAttr *attr, int row);

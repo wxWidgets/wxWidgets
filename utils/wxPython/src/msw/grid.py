@@ -603,12 +603,6 @@ class wxGridTableBasePtr :
     def CanHaveAttributes(self, *_args, **_kwargs):
         val = apply(gridc.wxGridTableBase_CanHaveAttributes,(self,) + _args, _kwargs)
         return val
-    def UpdateAttrRows(self, *_args, **_kwargs):
-        val = apply(gridc.wxGridTableBase_UpdateAttrRows,(self,) + _args, _kwargs)
-        return val
-    def UpdateAttrCols(self, *_args, **_kwargs):
-        val = apply(gridc.wxGridTableBase_UpdateAttrCols,(self,) + _args, _kwargs)
-        return val
     def GetAttr(self, *_args, **_kwargs):
         val = apply(gridc.wxGridTableBase_GetAttr,(self,) + _args, _kwargs)
         if val: val = wxGridCellAttrPtr(val) 
@@ -686,12 +680,6 @@ class wxPyGridTableBasePtr(wxGridTableBasePtr):
     def base_CanHaveAttributes(self, *_args, **_kwargs):
         val = apply(gridc.wxPyGridTableBase_base_CanHaveAttributes,(self,) + _args, _kwargs)
         return val
-    def base_UpdateAttrRows(self, *_args, **_kwargs):
-        val = apply(gridc.wxPyGridTableBase_base_UpdateAttrRows,(self,) + _args, _kwargs)
-        return val
-    def base_UpdateAttrCols(self, *_args, **_kwargs):
-        val = apply(gridc.wxPyGridTableBase_base_UpdateAttrCols,(self,) + _args, _kwargs)
-        return val
     def base_GetAttr(self, *_args, **_kwargs):
         val = apply(gridc.wxPyGridTableBase_base_GetAttr,(self,) + _args, _kwargs)
         if val: val = wxGridCellAttrPtr(val) 
@@ -734,6 +722,9 @@ class wxGridTableMessagePtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def __del__(self,gridc=gridc):
+        if self.thisown == 1 :
+            gridc.delete_wxGridTableMessage(self)
     def SetTableObject(self, *_args, **_kwargs):
         val = apply(gridc.wxGridTableMessage_SetTableObject,(self,) + _args, _kwargs)
         return val

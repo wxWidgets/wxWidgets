@@ -388,14 +388,14 @@ public:
 
 //---------------------------------------------------------------------------
 
-class wxWindowCreateEvent : public wxEvent {
+class wxWindowCreateEvent : public wxCommandEvent {
 public:
     wxWindowCreateEvent(wxWindow *win = NULL);
 
     wxWindow *GetWindow();
 };
 
-class wxWindowDestroyEvent : public wxEvent {
+class wxWindowDestroyEvent : public wxCommandEvent {
 public:
     wxWindowDestroyEvent(wxWindow *win = NULL);
 
