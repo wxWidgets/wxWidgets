@@ -1,0 +1,6 @@
+UNIVOBJS = winuniv.o \
+           control.o \
+           stattext.o \
+           theme.o
+
+# themes/win32.cpp
