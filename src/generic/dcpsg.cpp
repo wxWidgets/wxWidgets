@@ -1460,9 +1460,9 @@ void wxPostScriptDC::EndDoc ()
     m_pstream = fopen( wxConvFile.cWX2MB(header_file) , "w+" );
 
     fprintf( m_pstream, "%%!PS-Adobe-2.0\n" );                     // PostScript magic strings
-    fprintf( m_pstream, "%%%%Title: %s\n", m_title.mb_str() );
-    fprintf( m_pstream, "%%%%Creator: %s\n", wxTheApp->argv[0] );
-    fprintf( m_pstream, "%%%%CreationDate: %s\n", wxNow().mb_str() );
+    fprintf( m_pstream, "%%%%Title: %s\n", (const char *)m_title.mb_str() );
+    fprintf( m_pstream, "%%%%Creator: %s\n", (const char*)wxConvLibc.cWX2MB(wxTheApp->argv[0]) );
+    fprintf( m_pstream, "%%%%CreationDate: %s\n", (const char *)wxNow().mb_str() );
 
     wxChar userID[256];
     if ( wxGetEmailAddress(userID, sizeof(userID)) )
