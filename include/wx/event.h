@@ -266,6 +266,14 @@ extern wxEventType wxEVT_CALENDAR_WEEKDAY_CLICKED;
 extern wxEventType wxEVT_HELP;
 extern wxEventType wxEVT_DETAILED_HELP;
 
+#if WXWIN_COMPATIBILITY_2
+//
+// User events: this is now obsolete, just use wxNewEventType() to get a new
+// event
+extern wxEventType wxEVT_USER_FIRST;
+
+#endif // WXWIN_COMPATIBILITY_2
+
 // Compatibility
 
 #if WXWIN_COMPATIBILITY
