@@ -1,34 +1,38 @@
-#
+#####################################################################
 # File:     makefile.unx
+# Purpose:  Makefile for Unix wxWindows ports (both GUI and wxBase)
 # Author:   Julian Smart, Robert Roebling, Vadim Zeitlin, Ron Lee
 # Created:  1993
-# Updated:  2001
+# Version:  $Id$
 # Copyright:(c) 1993, AIAI, University of Edinburgh,
 # Copyright:(c) 1999, Vadim Zeitlin
 # Copyright:(c) 1999, Robert Roebling
 # Copyright:(c) 2001, Ron Lee
-#
-# Makefile for libwx_gtk.a, libwx_motif.a and libwx_msw.a
-
-###################################################################
+#####################################################################
 
 include ./src/make.env
 
-############## override make.env for PIC ##########################
+#################### the implicit rules #############################
 
-%.o : %.c
+# NB: we use the old style suffix rules (.c.o) and not the GNU make
+#     implicit rules (%.o: %.c) because they are more portable, in
+#     particular the BSD make understands the former but not the
+#     latter
+.SUFFIXES: .o .c .cpp .cxx .rsrc .r
+
+.c.o:
 	$(CC) -c $(CFLAGS) $(PICFLAGS) -o $@ $<
 
-%.o : %.cpp
+.cpp.o:
 	$(CXX) -c $(CXXFLAGS) $(PICFLAGS) -o $@ $<
 
-%.o : %.cxx
+.cxx.o:
 	$(CXX) -c $(CXXFLAGS) $(PICFLAGS) -o $@ $<
 
-%.r : %.rsrc
+.rsrc.r:
 	$(DEREZ) $^ Carbon.r -useDF > $@
 
-########################### Paths #################################
+############################# Paths #################################
 
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
