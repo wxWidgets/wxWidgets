@@ -45,6 +45,9 @@ public:
 protected:
     virtual wxSize DoGetBestSize() const;
 
+    // choose the default border for this window
+    virtual wxBorder GetDefaultBorder() const;
+
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 

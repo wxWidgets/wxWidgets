@@ -121,9 +121,16 @@ bool wxStaticBox::Create(wxWindow *parent,
     if ( !MSWCreateControl(wxT("BUTTON"), label, pos, size) )
         return false;
 
+#ifndef __WXWINCE__
     Connect(wxEVT_PAINT, wxPaintEventHandler(wxStaticBox::OnPaint));
+#endif
 
     return true;
+}
+
+wxBorder wxStaticBox::GetDefaultBorder() const
+{
+    return wxBORDER_NONE;
 }
 
 WXDWORD wxStaticBox::MSWGetStyle(long style, WXDWORD *exstyle) const
