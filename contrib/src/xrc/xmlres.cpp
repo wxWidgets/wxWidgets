@@ -808,8 +808,10 @@ wxFont wxXmlResourceHandler::GetFont(const wxString& param)
     wxString encoding = GetParamValue(wxT("encoding"));
     wxFontMapper mapper;
     wxFontEncoding enc = wxFONTENCODING_DEFAULT;
-    if (!encoding.IsEmpty()) enc = mapper.CharsetToEncoding(encoding);
-    if (enc == wxFONTENCODING_SYSTEM) enc = wxFONTENCODING_SYSTEM;
+    if (!encoding.IsEmpty())
+        enc = mapper.CharsetToEncoding(encoding);
+    if (enc == wxFONTENCODING_SYSTEM)
+        enc = wxFONTENCODING_DEFAULT;
 
     wxString faces = GetParamValue(wxT("face"));
     wxString facename = wxEmptyString;
