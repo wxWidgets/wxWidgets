@@ -354,6 +354,12 @@ public:
 protected:
     static wxList   sm_handlers;
 
+    // return the index of the point with the given coordinates or -1 if the
+    // image is invalid of the coordinates are out of range
+    //
+    // note that index must be multiplied by 3 when using it with RGB array
+    long XYToIndex(int x, int y) const;
+
 private:
     friend class WXDLLEXPORT wxImageHandler;
 

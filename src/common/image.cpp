@@ -782,16 +782,24 @@ wxImage wxImage::ConvertToMono( unsigned char r, unsigned char g, unsigned char 
     return image;
 }
 
+long wxImage::XYToIndex(int x, int y) const
+{
+    if ( Ok() &&
+            x >= 0 && y >= 0 &&
+                x < M_IMGDATA->m_width && y < M_IMGDATA->m_height )
+    {
+        return y*M_IMGDATA->m_width + x;
+    }
+
+    return -1;
+}
+
 void wxImage::SetRGB( int x, int y, unsigned char r, unsigned char g, unsigned char b )
 {
-    wxCHECK_RET( Ok(), wxT("invalid image") );
+    long pos = XYToIndex(x, y);
+    wxCHECK_RET( pos != -1, wxT("invalid image coordinates") );
 
-    int w = M_IMGDATA->m_width;
-    int h = M_IMGDATA->m_height;
-
-    wxCHECK_RET( (x>=0) && (y>=0) && (x<w) && (y<h), wxT("invalid image index") );
-
-    long pos = (y * w + x) * 3;
+    pos *= 3;
 
     M_IMGDATA->m_data[ pos   ] = r;
     M_IMGDATA->m_data[ pos+1 ] = g;
@@ -836,42 +844,30 @@ void wxImage::SetRGB( const wxRect& rect_, unsigned char r, unsigned char g, uns
 
 unsigned char wxImage::GetRed( int x, int y ) const
 {
-    wxCHECK_MSG( Ok(), 0, wxT("invalid image") );
+    long pos = XYToIndex(x, y);
+    wxCHECK_MSG( pos != -1, 0, wxT("invalid image coordinates") );
 
-    int w = M_IMGDATA->m_width;
-    int h = M_IMGDATA->m_height;
-
-    wxCHECK_MSG( (x>=0) && (y>=0) && (x<w) && (y<h), 0, wxT("invalid image index") );
-
-    long pos = (y * w + x) * 3;
+    pos *= 3;
 
     return M_IMGDATA->m_data[pos];
 }
 
 unsigned char wxImage::GetGreen( int x, int y ) const
 {
-    wxCHECK_MSG( Ok(), 0, wxT("invalid image") );
+    long pos = XYToIndex(x, y);
+    wxCHECK_MSG( pos != -1, 0, wxT("invalid image coordinates") );
 
-    int w = M_IMGDATA->m_width;
-    int h = M_IMGDATA->m_height;
-
-    wxCHECK_MSG( (x>=0) && (y>=0) && (x<w) && (y<h), 0, wxT("invalid image index") );
-
-    long pos = (y * w + x) * 3;
+    pos *= 3;
 
     return M_IMGDATA->m_data[pos+1];
 }
 
 unsigned char wxImage::GetBlue( int x, int y ) const
 {
-    wxCHECK_MSG( Ok(), 0, wxT("invalid image") );
+    long pos = XYToIndex(x, y);
+    wxCHECK_MSG( pos != -1, 0, wxT("invalid image coordinates") );
 
-    int w = M_IMGDATA->m_width;
-    int h = M_IMGDATA->m_height;
-
-    wxCHECK_MSG( (x>=0) && (y>=0) && (x<w) && (y<h), 0, wxT("invalid image index") );
-
-    long pos = (y * w + x) * 3;
+    pos *= 3;
 
     return M_IMGDATA->m_data[pos+2];
 }
@@ -947,51 +943,45 @@ void wxImage::SetData( unsigned char *data, int new_width, int new_height, bool 
 
 void wxImage::SetAlpha(int x, int y, unsigned char alpha)
 {
-    wxCHECK_RET( Ok() && HasAlpha(), wxT("invalid image or no alpha channel") );
+    wxCHECK_RET( HasAlpha(), wxT("no alpha channel") );
 
-    int w = M_IMGDATA->m_width,
-        h = M_IMGDATA->m_height;
+    long pos = XYToIndex(x, y);
+    wxCHECK_RET( pos != -1, wxT("invalid image coordinates") );
 
-    wxCHECK_RET( x >=0 && y >= 0 && x < w && y < h, wxT("invalid image index") );
-
-    M_IMGDATA->m_alpha[y*w + x] = alpha;
+    M_IMGDATA->m_alpha[pos] = alpha;
 }
 
 unsigned char wxImage::GetAlpha(int x, int y) const
 {
-    wxCHECK_MSG( Ok() && HasAlpha(), 0, wxT("invalid image or no alpha channel") );
+    wxCHECK_MSG( HasAlpha(), 0, wxT("no alpha channel") );
 
-    int w = M_IMGDATA->m_width,
-        h = M_IMGDATA->m_height;
+    long pos = XYToIndex(x, y);
+    wxCHECK_MSG( pos != -1, 0, wxT("invalid image coordinates") );
 
-    wxCHECK_MSG( x >=0 && y >= 0 && x < w && y < h, 0, wxT("invalid image index") );
-
-    return M_IMGDATA->m_alpha[y*w + x];
+    return M_IMGDATA->m_alpha[pos];
 }
 
-bool wxImage::ConvertColourToAlpha( unsigned char r, unsigned char g, unsigned char b )
+bool
+wxImage::ConvertColourToAlpha(unsigned char r, unsigned char g, unsigned char b)
 {
-    SetAlpha( NULL );
+    SetAlpha(NULL);
 
-    int w = M_IMGDATA->m_width,
-        h = M_IMGDATA->m_height;
+    const int w = M_IMGDATA->m_width;
+    const int h = M_IMGDATA->m_height;
 
     unsigned char *alpha = GetAlpha();
     unsigned char *data = GetData();
 
-    int x,y;
-    for (y = 0; y < h; y++)
-        for (x = 0; x < w; x++)
-            {
-                *alpha = *data;
-                alpha++;
-                *data = r;
-                data++;
-                *data = g;
-                data++;
-                *data = b;
-                data++;
-            }
+    for ( int y = 0; y < h; y++ )
+    {
+        for ( int x = 0; x < w; x++ )
+        {
+            *alpha++ = *data;
+            *data++ = r;
+            *data++ = g;
+            *data++ = b;
+        }
+    }
 
     return true;
 }
@@ -1008,7 +998,6 @@ void wxImage::SetAlpha( unsigned char *alpha, bool static_data )
     free(M_IMGDATA->m_alpha);
     M_IMGDATA->m_alpha = alpha;
     M_IMGDATA->m_static = static_data;
-
 }
 
 unsigned char *wxImage::GetAlpha() const
