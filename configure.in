@@ -3176,11 +3176,12 @@ if test "$TOOLKIT" != "MSW"; then
                 dnl AIX calls the library libpthreads - thanks IBM!
                 THREAD_OPTS="pthreads"
                 ;;
-          *)
-                dnl the default is ok but if it doesn't work try without it
-                dnl just in case
-                THREAD_OPTS="$THREAD_OPTS none"
         esac
+
+        dnl simply linking with libpthread should make the test below work but
+        dnl it's far from certain that the threaded programs compiled without
+        dnl any special switches actually work, so try it after all the others
+        THREAD_OPTS="$THREAD_OPTS -lpthread none"
 
         dnl now test for all possibilities
         THREADS_OK=no
