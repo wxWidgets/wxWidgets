@@ -30,7 +30,11 @@ the class with a "Pre" in it.  For example, wxPreWindow, wxPreFrame,
 etc.
 
 Updated to version 1.40 of Scintilla and updated wxStyledTextCtrl
-accordingly.
+accordingly.  While doing this update I dropped the wxLB_SORT style
+from the wxListBox created for the AutoComplete functionality.  This
+means that you will have to sort the keyword lists yourself, but you
+are free to do case sensitive or case insensitive sorts and set the
+wxSTC flag accordingly.
 
 Updated wxColumnSorterMixin to also be able to place sort icons on the
 column headers, and updated the wxListCtrl demo to show it off by
@@ -52,7 +56,11 @@ messages however is wished.  See demo/Main.py for an example.
 Added wxFindReplaceDialog.
 
 The second phase of OOR is implemented (for wxEvtHandler and derived
-classes at least.)
+classes at least.)  This means that finctions and methods that return
+an object derived from wxEvtHandler that was originally created in
+Python, will return the original python object (if it still exists)
+instead of letting SWIG wrap a new shadow object around the original
+C++ pointer.
 
 Added some optimization methods to wxDC: GetBoundingBox, DrawLineList,
 DrawPointList.
