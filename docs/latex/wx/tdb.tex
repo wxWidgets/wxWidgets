@@ -977,9 +977,9 @@ table->SetColDefs(1, "LAST_NAME", DB_DATA_TYPE_VARCHAR, LastName,
 // Open the table for access
 table->Open();
 
-// Set the WHERE clause to limit the result set to only
-// return all rows that have a value of 'GEORGE' in the
-// FIRST_NAME column of the table.
+// Set the WHERE clause to limit the result set to return
+// all rows that have a value of 'GEORGE' in the FIRST_NAME
+// column of the table.
 table->SetWhereClause("FIRST_NAME = 'GEORGE'");
 
 // Result set will be sorted in ascending alphabetical 
@@ -1009,12 +1009,37 @@ while (table->GetNext())
     wxMessageBox(msg, "Data", wxOK | wxICON_INFORMATION, NULL);
 }
 
+
+//
+// Select the row which has FIRST_NAME of 'GEORGE' and LAST_NAME
+// of 'TASKER', then delete the retrieved row
+//
+table->SetWhereClause("FIRST_NAME = 'GEORGE' and "LAST_NAME = 'TASKER'");
+if (table->Query())
+{
+    table->Delete();
+	
+	// Must commit the deletion
+	table->GetDb()->CommitTrans();
+}
+
+
+//
+// Insert a new row into the table
+//
+wxStrcpy(FirstName, "JULIAN");
+wxStrcpy(LastName, "SMART");
+table->Insert();
+
+// Must commit the insert
+table->GetDb()->CommitTrans();
+
+
 // If the wxDbTable instance was successfully created
-// then delete it as I am done with it now.
+// then delete it as we are done with it now.
 if (table)
 {
-    delete table;
-    table = NULL;
+    wxDelete(table);
 }
 
 // If we have a valid wxDb instance, then free the connection
@@ -1034,7 +1059,7 @@ wxDbCloseConnections();
 
 // Release the environment handle that was created
 // for use with the ODBC datasource connections
-delete DbConnectInf;
+wxDelete(DbConnectInf);
 
 \end{verbatim}
 
