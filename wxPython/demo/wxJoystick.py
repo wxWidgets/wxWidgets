@@ -13,9 +13,13 @@ class JoystickTestPanel(wxPanel):
 
         MakeJoystickTestPanel( self, true )
 
-        self.stick = wxJoystick()
-        self.stick.SetCapture(self)
-        EVT_JOYSTICK_EVENTS(self, self.OnJoystick)
+        try:
+            self.stick = wxJoystick()
+            self.stick.SetCapture(self)
+            EVT_JOYSTICK_EVENTS(self, self.OnJoystick)
+            self.UpdateFields()
+        except NotImplementedError, v:
+            wxMessageBox(str(v), "Exception Message")
 
 
     def UpdateFields(self):

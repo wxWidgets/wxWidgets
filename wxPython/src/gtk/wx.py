@@ -1456,10 +1456,10 @@ def EVT_END_PROCESS(eh, id, func):
 
 # wxJoyStick
 def EVT_JOY_DOWN(win, func):
-    win.Connect(-1, -1, wxEVT_JOY_DOWN, func)
+    win.Connect(-1, -1, wxEVT_JOY_BUTTON_DOWN, func)
 
 def EVT_JOY_UP(win, func):
-    win.Connect(-1, -1, wxEVT_JOY_UP, func)
+    win.Connect(-1, -1, wxEVT_JOY_BUTTON_UP, func)
 
 def EVT_JOY_MOVE(win, func):
     win.Connect(-1, -1, wxEVT_JOY_MOVE, func)
@@ -1468,8 +1468,8 @@ def EVT_JOY_ZMOVE(win, func):
     win.Connect(-1, -1, wxEVT_JOY_ZMOVE, func)
 
 def EVT_JOYSTICK_EVENTS(win, func):
-    win.Connect(-1, -1, wxEVT_JOY_DOWN, func)
-    win.Connect(-1, -1, wxEVT_JOY_UP, func)
+    win.Connect(-1, -1, wxEVT_JOY_BUTTON_DOWN, func)
+    win.Connect(-1, -1, wxEVT_JOY_BUTTON_UP, func)
     win.Connect(-1, -1, wxEVT_JOY_MOVE, func)
     win.Connect(-1, -1, wxEVT_JOY_ZMOVE, func)
 
