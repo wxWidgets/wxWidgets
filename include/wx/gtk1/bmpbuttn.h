@@ -22,7 +22,8 @@
 class wxBitmapButton: public wxBitmapButtonBase
 {
 public:
-    wxBitmapButton();
+    wxBitmapButton() { Init(); }
+
     wxBitmapButton(wxWindow *parent,
                    wxWindowID id,
                    const wxBitmap& bitmap,
@@ -32,8 +33,11 @@ public:
                    const wxValidator& validator = wxDefaultValidator,
                    const wxString& name = wxButtonNameStr)
     {
+        Init();
+
         Create(parent, id, bitmap, pos, size, style, validator, name);
     }
+
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxBitmap& bitmap,
@@ -43,12 +47,12 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxButtonNameStr);
 
-    virtual void SetDefault();
-    virtual bool Enable(bool enable = TRUE);
-
     void SetLabel( const wxString &label );
     wxString GetLabel() const;
     virtual void SetLabel( const wxBitmap& bitmap ) { SetBitmapLabel(bitmap); }
+
+    virtual void SetDefault();
+    virtual bool Enable(bool enable = TRUE);
 
     // implementation
     // --------------
@@ -59,11 +63,13 @@ public:
     void EndSelect();
     void ApplyWidgetStyle();
 
-    bool         m_hasFocus;
-    bool         m_isSelected;
+    bool         m_hasFocus:1;
+    bool         m_isSelected:1;
 
 protected:
     virtual void OnSetBitmap();
+
+    void Init();
 
 private:
     DECLARE_DYNAMIC_CLASS(wxBitmapButton)

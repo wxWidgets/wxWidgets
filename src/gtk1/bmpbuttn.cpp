@@ -109,13 +109,20 @@ static void gtk_bmpbutton_release_callback( GtkWidget *WXUNUSED(widget), wxBitma
 
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton,wxButton)
 
-wxBitmapButton::wxBitmapButton()
+void wxBitmapButton::Init()
 {
+    m_hasFocus =
+    m_isSelected = FALSE;
 }
 
-bool wxBitmapButton::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bitmap,
-                             const wxPoint &pos, const wxSize &size,
-                             long style, const wxValidator& validator, const wxString &name )
+bool wxBitmapButton::Create( wxWindow *parent,
+                             wxWindowID id,
+                             const wxBitmap& bitmap,
+                             const wxPoint& pos,
+                             const wxSize& size,
+                             long style,
+                             const wxValidator& validator,
+                             const wxString &name )
 {
     m_needParent = TRUE;
     m_acceptsFocus = TRUE;
