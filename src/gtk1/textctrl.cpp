@@ -673,10 +673,21 @@ wxString wxTextCtrl::GetLineText( long lineNo ) const
             return buf;
         }
         else
-#endif
         {
             return wxEmptyString;
         }
+#else
+        GtkTextBuffer *text_buffer;
+        text_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(m_text));
+        GtkTextIter line;
+        gtk_text_buffer_get_iter_at_line(text_buffer,&line,lineNo);
+        GtkTextIter end;
+        gtk_text_buffer_get_end_iter(text_buffer,&end );
+        gchar *text = gtk_text_buffer_get_text(text_buffer,&line,&end,TRUE);
+        wxString result(text);
+        g_free(text);
+        return result.BeforeFirst(wxT('\n'));
+#endif
     }
     else
     {
