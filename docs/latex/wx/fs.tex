@@ -61,10 +61,36 @@ which is at WWW.
 
 \wxheading{File Systems Included in wxHTML}
 
-\begin{enumerate}\itemsep=0pt
-\item Local files
-\item HTTP protocol
-\item FTP protocol
-\item .ZIP archives
-\end{enumerate}
+Following VFS handlers are part of wxWindows so far:
+
+\begin{twocollist}
+\twocolitem{{\bf wxInternetFSHandler}}{Handler for accessing documents
+via HTTP or FTP protocols. Include file is <wx/fs_inet.h>.}
+\twocolitem{{\bf wxZipFSHandler}}{Handler for ZIP archives. 
+Include file is <wx/fs_zip.h>. URL is in form "archive.zip\#zip:filename".}
+\twocolitem{{\bf wxMemoryFSHandler}}{This handler allows you to access 
+data stored in memory (such as bitmaps) as if they were regular files.
+See \helpref{wxMemoryFSHandler documentation}{wxmemoryfshandler} for details.
+Include file is <wx/fs_mem.h>. UURL is prefixed with memory:, e.g. 
+"memory:myfile.htm"}
+\end{twocollist}
+
+In addition, wxFileSystem can access local files.
+
+
+Use \helpref{wxFileSystem::AddHandler}{wxfilesystemaddhandler} to initialize
+a handler, for example:
+
+\begin{verbatim}
+#include <wx/fs_mem.h>
+
+...
+
+bool MyApp::OnInit()
+{
+    wxFileSystem::AddHandler(new wxMemoryFSHandler);
+...
+\end{verbatim}
+
+
 
