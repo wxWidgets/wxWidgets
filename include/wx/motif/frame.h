@@ -147,9 +147,12 @@ public:
   //// Motif-specific
 
   WXWidget GetMenuBarWidget() const ;
-  WXWidget GetShellWidget() const { return m_frameShell; }
-  WXWidget GetWorkAreaWidget() const { return m_workArea; }
-  WXWidget GetClientAreaWidget() const { return m_clientArea; }
+  inline WXWidget GetShellWidget() const { return m_frameShell; }
+  inline WXWidget GetWorkAreaWidget() const { return m_workArea; }
+  inline WXWidget GetClientAreaWidget() const { return m_clientArea; }
+
+  // The widget that can have children on it
+  WXWidget GetClientWidget() const;
   bool GetVisibleStatus() const { return m_visibleStatus; }
 
   bool PreResize();

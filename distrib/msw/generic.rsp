@@ -1,4 +1,5 @@
-distrib/*.*
+distrib/msw/*.rsp
+distrib/msw/*.bat
 
 docs/readme.txt
 docs/install.txt

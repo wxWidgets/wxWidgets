@@ -893,6 +893,7 @@ typedef void*           WXColormap;
 typedef void            WXDisplay;
 typedef void            WXEvent;
 typedef void*           WXCursor;
+typedef void*           WXPixmap;
 #endif
 
 #endif

@@ -448,7 +448,13 @@ public:
   // to the window via validators.
   virtual void InitDialog();
 
-  /// MOTIF-specific
+  /// Motif-specific
+
+  void CanvasGetSize(int* width, int* height) const; // If have drawing area
+  void CanvasGetClientSize(int *width, int *height) const;
+  void CanvasGetPosition(int *x, int *y) const; // If have drawing area
+  void CanvasSetClientSize(int width, int size);
+  void CanvasSetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
 
   // Gives window a chance to do something in response to a size
   // message, e.g. arrange status bar, toolbar etc.
@@ -456,11 +462,17 @@ public:
 
   // Get main widget for this window
   virtual WXWidget GetMainWidget() const;
+  // Get the client widget for this window (something we can
+  // create other windows on)
+  virtual WXWidget GetClientWidget() const;
   virtual void SetMainWidget(WXWidget w) { m_mainWidget = w; }
 
   // Get the underlying X window and display
   virtual WXWindow GetXWindow() const;
   virtual WXDisplay *GetXDisplay() const;
+
+  // Generates a paint event
+  virtual void DoPaint();
 
   ////////////////////////////////////////////////////////////////////////
   //// PROTECTED DATA
@@ -507,15 +519,32 @@ public:
   int                   m_returnCode;
 
 public:
-  /// MOTIF-specific
+  /// Motif-specific
   bool                  m_button1Pressed;
   bool                  m_button2Pressed;
   bool                  m_button3Pressed;
-
+  // For double-click detection
+  long                  m_lastTS;      // last timestamp
+  int                   m_lastButton;  // last pressed button
+  wxList                m_updateRects;     // List of wxRectangles representing damaged region
 protected:
   WXWidget              m_mainWidget;
+  WXWidget              m_hScrollBar;
+  WXWidget              m_vScrollBar;
+  WXWidget              m_borderWidget;
+  WXWidget              m_scrolledWindow;
+  WXWidget              m_drawingArea;
   bool                  m_winCaptured;
   bool                  m_isShown;
+  bool                  m_hScroll;
+  bool                  m_vScroll;
+  bool                  m_hScrollingEnabled;
+  bool                  m_vScrollingEnabled;
+  WXPixmap              m_backingPixmap;
+  int                   m_pixmapWidth;
+  int                   m_pixmapHeight;
+  int                   m_pixmapOffsetX;
+  int                   m_pixmapOffsetY;
 
 DECLARE_EVENT_TABLE()
 };

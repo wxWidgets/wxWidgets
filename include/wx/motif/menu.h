@@ -90,7 +90,27 @@ public:
 
   //// Motif-specific
   inline WXWidget GetButtonWidget() const { return m_buttonWidget; }
+  inline void SetButtonWidget(WXWidget buttonWidget) { m_buttonWidget = buttonWidget; }
   inline WXWidget GetMainWidget() const { return m_menuWidget; }
+  inline wxMenu* GetParent() const { return m_menuParent; }
+  inline int GetId() const { return m_menuId; }
+  inline void SetId(int id) { m_menuId = id; }
+  inline void SetMenuBar(wxMenuBar* menuBar) { m_menuBar = menuBar; }
+  inline wxMenuBar* GetMenuBar() const { return m_menuBar; }
+
+  void CreatePopup (WXWidget logicalParent, int x, int y);
+  void DestroyPopup (void);
+  void ShowPopup (int x, int y);
+  void HidePopup (void);
+
+  WXWidget CreateMenu(wxMenuBar *menuBar, WXWidget parent, wxMenu *topMenu,
+            const wxString& title = "", bool isPulldown = FALSE);
+
+  // For popups, need to destroy, then recreate menu for a different (or
+  // possibly same) window, since the parent may change.
+  void DestroyMenu(bool full);
+  WXWidget FindMenuItem(int id, wxMenuItem **it = NULL) const;
+
 public:
   wxFunction        m_callback;
 
@@ -107,7 +127,7 @@ public:
   WXWidget          m_popupShell;   // For holding the popup shell widget
   WXWidget          m_buttonWidget; // The actual string, so we can grey it etc.
   int               m_menuId;
-  wxMenu*           m_topMenu ;
+  wxMenu*           m_topLevelMenu ;
   wxMenu*           m_menuParent;
   bool              m_ownedByMenuBar;
 };
@@ -157,14 +177,22 @@ class WXDLLEXPORT wxMenuBar: public wxEvtHandler
   inline int GetMenuCount() const { return m_menuCount; }
   inline wxMenu* GetMenu(int i) const { return m_menus[i]; }
 
+  //// Motif-specific
+  inline wxFrame* GetMenuBarFrame() const { return m_menuBarFrame; }
+  inline void SetMenuBarFrame(wxFrame* frame) { m_menuBarFrame = frame; }
+  inline WXWidget GetMainWidget() const { return m_mainWidget; }
+  inline void SetMainWidget(WXWidget widget) { m_mainWidget = widget; }
+
  public:
   wxEvtHandler *            m_eventHandler;
   int                       m_menuCount;
   wxMenu **                 m_menus;
   wxString *                m_titles;
   wxFrame *                 m_menuBarFrame;
-/* TODO: data that represents the actual menubar when created.
- */
+
+  //// Motif-specific
+  WXWidget                  m_mainWidget;
+
 };
 
 #endif // _WX_MENU_H_

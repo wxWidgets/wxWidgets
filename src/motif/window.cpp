@@ -36,9 +36,26 @@
 #endif
 
 #include <Xm/Xm.h>
+
+#include <Xm/DrawingA.h>
+#include <Xm/ScrolledW.h>
+#include <Xm/ScrollBar.h>
+#include <Xm/Frame.h>
+#include <Xm/Label.h>
+
 #include "wx/motif/private.h"
 
 #include <string.h>
+
+#define SCROLL_MARGIN 4
+void wxCanvasRepaintProc (Widget, XtPointer, XmDrawingAreaCallbackStruct * cbs);
+void wxCanvasInputEvent (Widget drawingArea, XtPointer data, XmDrawingAreaCallbackStruct * cbs);
+void wxCanvasMotionEvent (Widget, XButtonEvent * event);
+void wxCanvasEnterLeave (Widget drawingArea, XtPointer clientData, XCrossingEvent * event);
+
+#define event_left_is_down(x) ((x)->xbutton.state & Button1Mask)
+#define event_middle_is_down(x) ((x)->xbutton.state & Button2Mask)
+#define event_right_is_down(x) ((x)->xbutton.state & Button3Mask)
 
 extern wxList wxPendingDelete;
 
@@ -87,18 +104,84 @@ wxWindow::wxWindow()
     m_pDropTarget = NULL;
 #endif
 
-    /// MOTIF-specific
+    /// Motif-specific
     m_mainWidget = (WXWidget) 0;
     m_button1Pressed = FALSE;
     m_button2Pressed = FALSE;
     m_button3Pressed = FALSE;
     m_winCaptured = FALSE;
     m_isShown = TRUE;
+    m_hScrollBar = (WXWidget) 0;
+    m_vScrollBar = (WXWidget) 0;
+    m_borderWidget = (WXWidget) 0;
+    m_scrolledWindow = (WXWidget) 0;
+    m_drawingArea = (WXWidget) 0;
+    m_hScroll = FALSE;
+    m_vScroll = FALSE;
+    m_hScrollingEnabled = FALSE;
+    m_vScrollingEnabled = FALSE;
+    m_backingPixmap = (WXPixmap) 0;
+    m_pixmapWidth = 0;
+    m_pixmapHeight = 0;
+    m_pixmapOffsetX = 0;
+    m_pixmapOffsetY = 0;
+    m_lastTS = 0;
+    m_lastButton = 0;
 }
 
 // Destructor
 wxWindow::~wxWindow()
 {
+  //// Motif-specific
+
+  // If m_drawingArea, we're a fully-fledged window with drawing area, scrollbars etc. (what wxCanvas used to be)
+  if (m_drawingArea)
+  {
+    // Destroy children before destroying self
+    DestroyChildren();
+
+    if (m_backingPixmap)
+      XFreePixmap (XtDisplay ((Widget) GetMainWidget()), (Pixmap) m_backingPixmap);
+
+    Widget w = (Widget) m_drawingArea;
+    wxDeleteWindowFromTable(w);
+
+    if (w)
+      XtDestroyWidget(w);
+    m_mainWidget = (WXWidget) 0;
+
+    // Only if we're _really_ a canvas (not a dialog box/panel)
+    if (m_scrolledWindow)
+    {
+      wxDeleteWindowFromTable((Widget) m_scrolledWindow);
+    }
+
+    if (m_hScrollBar)
+    {
+      XtUnmanageChild ((Widget) m_hScrollBar);
+      XtDestroyWidget ((Widget) m_hScrollBar);
+    }
+    if (m_vScrollBar)
+    {
+      XtUnmanageChild ((Widget) m_vScrollBar);
+      XtDestroyWidget ((Widget) m_vScrollBar);
+    }
+    if (m_scrolledWindow)
+    {
+      XtUnmanageChild ((Widget) m_scrolledWindow);
+      XtDestroyWidget ((Widget) m_scrolledWindow);
+    }
+
+    if (m_borderWidget)
+    {
+      XtDestroyWidget ((Widget) m_borderWidget);
+      m_borderWidget = (WXWidget) 0;
+    }
+  }
+
+
+  //// Generic stuff
+
 	// Have to delete constraints/sizer FIRST otherwise
 	// sizers may try to look at deleted windows as they
 	// delete themselves.
@@ -174,11 +257,9 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
     m_sizerParent = NULL;
     m_autoLayout = FALSE;
     m_windowValidator = NULL;
-
 #if USE_DRAG_AND_DROP
     m_pDropTarget = NULL;
 #endif
-
     m_caretWidth = 0; m_caretHeight = 0;
     m_caretEnabled = FALSE;
     m_caretShown = FALSE;
@@ -188,6 +269,29 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
     m_maxSizeY = -1;
     m_defaultItem = NULL;
     m_windowParent = NULL;
+
+    // Motif-specific
+    m_mainWidget = (WXWidget) 0;
+    m_button1Pressed = FALSE;
+    m_button2Pressed = FALSE;
+    m_button3Pressed = FALSE;
+    m_winCaptured = FALSE;
+    m_isShown = TRUE;
+    m_hScrollBar = (WXWidget) 0;
+    m_vScrollBar = (WXWidget) 0;
+    m_borderWidget = (WXWidget) 0;
+    m_scrolledWindow = (WXWidget) 0;
+    m_drawingArea = (WXWidget) 0;
+    m_hScroll = FALSE;
+    m_vScroll = FALSE;
+    m_hScrollingEnabled = FALSE;
+    m_vScrollingEnabled = FALSE;
+    m_backingPixmap = (WXPixmap) 0;
+    m_pixmapWidth = 0;
+    m_pixmapHeight = 0;
+    m_pixmapOffsetX = 0;
+    m_pixmapOffsetY = 0;
+
     if (!parent)
         return FALSE;
 
@@ -214,7 +318,92 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
     else
 	m_windowId = id;
 
-    // TODO: create the window
+    //// TODO: we should probably optimize by only creating a
+    //// a drawing area if we have one or more scrollbars (wxVSCROLL/wxHSCROLL).
+    //// But for now, let's simplify things by always creating the
+    //// drawing area, since otherwise the translations are different.
+
+  // New translations for getting mouse motion feedback
+  String translations =
+  "<Btn1Motion>: wxCanvasMotionEvent() DrawingAreaInput() ManagerGadgetButtonMotion()\n\
+     <Btn2Motion>: wxCanvasMotionEvent() DrawingAreaInput() ManagerGadgetButtonMotion()\n\
+     <Btn3Motion>: wxCanvasMotionEvent() DrawingAreaInput() ManagerGadgetButtonMotion()\n\
+     <BtnMotion>: wxCanvasMotionEvent() DrawingAreaInput() ManagerGadgetButtonMotion()\n\
+     <Btn1Down>: DrawingAreaInput() ManagerGadgetArm()\n\
+     <Btn2Down>: DrawingAreaInput() ManagerGadgetArm()\n\
+     <Btn3Down>: DrawingAreaInput() ManagerGadgetArm()\n\
+     <Btn1Up>: DrawingAreaInput() ManagerGadgetActivate()\n\
+     <Btn2Up>: DrawingAreaInput() ManagerGadgetActivate()\n\
+     <Btn3Up>: DrawingAreaInput() ManagerGadgetActivate()\n\
+     <Motion>: wxCanvasMotionEvent() DrawingAreaInput()\n\
+     <EnterWindow>: wxCanvasMotionEvent() DrawingAreaInput()\n\
+     <LeaveWindow>: wxCanvasMotionEvent() DrawingAreaInput()\n\
+     <Key>: DrawingAreaInput()";
+
+  XtActionsRec actions[1];
+  actions[0].string = "wxCanvasMotionEvent";
+  actions[0].proc = (XtActionProc) wxCanvasMotionEvent;
+  XtAppAddActions ((XtAppContext) wxTheApp->GetAppContext(), actions, 1);
+
+  Widget parentWidget = (Widget) parent->GetClientWidget(); 
+  if (style & wxBORDER)
+    m_borderWidget = (WXWidget) XtVaCreateManagedWidget ("canvasBorder",
+				      xmFrameWidgetClass, parentWidget,
+					    XmNshadowType, XmSHADOW_IN,
+					    NULL);
+
+  m_scrolledWindow = (WXWidget) XtVaCreateManagedWidget ("scrolledWindow",
+					    xmScrolledWindowWidgetClass, m_borderWidget ? (Widget) m_borderWidget : parentWidget,
+                                  XmNspacing, 0,
+				  XmNscrollingPolicy, XmAPPLICATION_DEFINED,
+					    NULL);
+
+  XtTranslations ptr;
+  m_drawingArea = (WXWidget) XtVaCreateWidget ((char*) (const char*) name,
+				   xmDrawingAreaWidgetClass, (Widget) m_scrolledWindow,
+					 XmNunitType, XmPIXELS,
+//					 XmNresizePolicy, XmRESIZE_ANY,
+					 XmNresizePolicy, XmRESIZE_NONE,
+                                         XmNmarginHeight, 0,
+                                         XmNmarginWidth, 0,
+	      XmNtranslations, ptr = XtParseTranslationTable (translations),
+					 NULL);
+  /*
+  if (GetWindowStyleFlag() & wxOVERRIDE_KEY_TRANSLATIONS)
+  {
+    XtFree ((char *) ptr);
+    ptr = XtParseTranslationTable ("<Key>: DrawingAreaInput()");
+    XtOverrideTranslations ((Widget) m_drawingArea, ptr);
+    XtFree ((char *) ptr);
+  }
+  */
+
+  wxAddWindowToTable((Widget) m_drawingArea, this);
+  wxAddWindowToTable((Widget) m_scrolledWindow, this);
+
+  /*
+   * This order is very important in Motif 1.2.1
+   *
+   */
+
+  XtRealizeWidget ((Widget) m_scrolledWindow);
+  XtRealizeWidget ((Widget) m_drawingArea);
+  XtManageChild ((Widget) m_drawingArea);
+
+  XtOverrideTranslations ((Widget) m_drawingArea,
+		   ptr = XtParseTranslationTable ("<Configure>: resize()"));
+  XtFree ((char *) ptr);
+
+  XtAddCallback ((Widget) m_drawingArea, XmNexposeCallback, (XtCallbackProc) wxCanvasRepaintProc, (XtPointer) this);
+  XtAddCallback ((Widget) m_drawingArea, XmNinputCallback, (XtCallbackProc) wxCanvasInputEvent, (XtPointer) this);
+
+  /* TODO?
+  display = XtDisplay (scrolledWindow);
+  xwindow = XtWindow (drawingArea);
+  */
+
+  XtAddEventHandler ((Widget) m_drawingArea, PointerMotionHintMask | EnterWindowMask | LeaveWindowMask | FocusChangeMask,
+    False, (XtEventHandler) wxCanvasEnterLeave, (XtPointer) this);
 
     return TRUE;
 }
@@ -309,6 +498,12 @@ void wxWindow::DragAcceptFiles(bool accept)
 // Get total size
 void wxWindow::GetSize(int *x, int *y) const
 {
+  if (m_drawingArea)
+  {
+    CanvasGetSize(x, y);
+    return;
+  }
+
   Widget widget = (Widget) GetMainWidget();
   Dimension xx, yy;
   XtVaGetValues(widget, XmNwidth, &xx, XmNheight, &yy, NULL);
@@ -317,6 +512,11 @@ void wxWindow::GetSize(int *x, int *y) const
 
 void wxWindow::GetPosition(int *x, int *y) const
 {
+  if (m_drawingArea)
+  {
+    CanvasGetPosition(x, y);
+    return;
+  }
   Widget widget = (Widget) GetMainWidget();
   Position xx, yy;
   XtVaGetValues(widget, XmNx, &xx, XmNy, &yy, NULL);
@@ -377,6 +577,11 @@ void wxWindow::GetClientSize(int *x, int *y) const
 
 void wxWindow::SetSize(int x, int y, int width, int height, int sizeFlags)
 {
+  if (m_drawingArea)
+  {
+    CanvasSetSize(x, y, width, height, sizeFlags);
+    return;
+  }
   Widget widget = (Widget) GetMainWidget();
 
   if (x > -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
@@ -396,6 +601,12 @@ void wxWindow::SetSize(int x, int y, int width, int height, int sizeFlags)
 
 void wxWindow::SetClientSize(int width, int height)
 {
+  if (m_drawingArea)
+  {
+    CanvasSetClientSize(width, height);
+    return;
+  }
+
   Widget widget = (Widget) GetMainWidget();
 
   if (width > -1)
@@ -429,12 +640,37 @@ void wxWindow::AdjustForParentClientOrigin(int& x, int& y, int sizeFlags)
 
 bool wxWindow::Show(bool show)
 {
+    if (show)
+    {
+       if (m_borderWidget || m_scrolledWindow)
+       {
+           XtMapWidget(m_borderWidget ? (Widget) m_borderWidget : (Widget) m_scrolledWindow);
+       }
+       else
+       {
+           XtMapWidget((Widget) GetMainWidget());
+       }
+    }
+    else
+    {
+       if (m_borderWidget || m_scrolledWindow)
+       {
+           XtUnmapWidget(m_borderWidget ? (Widget) m_borderWidget : (Widget) m_scrolledWindow);
+       }
+       else
+       {
+           XtUnmapWidget((Widget) GetMainWidget());
+       }
+    }
+
+  /*
     Window xwin = (Window) GetXWindow();
     Display *xdisp = (Display*) GetXDisplay();
     if (show)
         XMapWindow(xdisp, xwin);
     else
         XUnmapWindow(xdisp, xwin);
+   */
 
     m_isShown = show;
 
@@ -640,9 +876,9 @@ void wxWindow::Centre(int direction)
 }
 
 // Coordinates relative to the window
-void wxWindow::WarpPointer (int x_pos, int y_pos)
+void wxWindow::WarpPointer (int x, int y)
 {
-    // TODO
+  XWarpPointer (XtDisplay((Widget) GetClientWidget()), None, XtWindow((Widget) GetClientWidget()), 0, 0, 0, 0, x, y);
 }
 
 void wxWindow::OnEraseBackground(wxEraseEvent& event)
@@ -1493,17 +1729,564 @@ void wxDeleteWindowFromTable(Widget w)
 // Get the underlying X window and display
 WXWindow wxWindow::GetXWindow() const
 {
-  return (WXWindow) XtWindow((Widget) GetMainWidget());
+    return (WXWindow) XtWindow((Widget) GetMainWidget());
 }
 
 WXDisplay *wxWindow::GetXDisplay() const
 {
-  return (WXDisplay*) XtDisplay((Widget) GetMainWidget());
+    return (WXDisplay*) XtDisplay((Widget) GetMainWidget());
 }
 
 WXWidget wxWindow::GetMainWidget() const
 {
-  return m_mainWidget;
+    if (m_drawingArea)
+      return m_drawingArea;
+    else
+      return m_mainWidget;
 }
 
+WXWidget wxWindow::GetClientWidget() const
+{
+    if (m_drawingArea != (WXWidget) 0)
+        return m_drawingArea;
+    else
+        return m_mainWidget;
+}
 
+void wxCanvasRepaintProc (Widget drawingArea, XtPointer clientData,
+ XmDrawingAreaCallbackStruct * cbs)
+{
+    if (!wxWidgetHashTable->Get ((long) (Widget) drawingArea))
+	return;
+
+    XEvent * event = cbs->event;
+    wxWindow * canvas = (wxWindow *) clientData;
+    Display * display = (Display *) canvas->GetXDisplay();
+    //    GC gc = (GC) canvas->GetDC()->gc;
+
+    switch (event->type)
+    {
+      case Expose:
+      {
+	/* TODO
+        wxCanvasDC* canvasDC = canvas->GetDC();
+        if (canvasDC)
+	{
+          if (canvasDC->onpaint_reg)
+            XDestroyRegion(canvasDC->onpaint_reg);
+          canvasDC->onpaint_reg = XCreateRegion();
+          
+	}
+	*/
+
+	int n = canvas->m_updateRects.Number();
+        XRectangle* xrects = new XRectangle[n];
+        int i;
+	for (i = 0; i < canvas->m_updateRects.Number(); i++)
+	{
+	  wxRect* rect = (wxRect*) canvas->m_updateRects.Nth(i)->Data();
+	  xrects[i].x = rect->x;
+          xrects[i].y = rect->y;
+          xrects[i].width = rect->width;
+          xrects[i].height = rect->height;
+	  /* TODO (?) Actually ignore it I think.
+          if (canvasDC)
+            XUnionRectWithRegion(&(xrects[i]), canvasDC->onpaint_reg,
+              canvasDC->onpaint_reg);
+      */
+	}
+	/* TODO must clip the area being repainted. So we need a gc.
+         * Alternatively, wxPaintDC must do the clipping
+         * when it's created.
+        XSetClipRectangles(display, gc, 0, 0, xrects, n, Unsorted);
+	*/
+
+        canvas->DoPaint() ; // xrects, n);
+        delete[] xrects;
+
+        canvas->m_updateRects.Clear();
+
+	/*
+        if (canvasDC)
+	{
+          XDestroyRegion(canvasDC->onpaint_reg);
+          canvasDC->onpaint_reg = NULL;
+	}
+
+	XGCValues gc_val;
+	gc_val.clip_mask = None;
+	XChangeGC(display, gc, GCClipMask, &gc_val);
+	*/
+
+	break;
+    }
+    default:
+    {
+	cout << "\n\nNew Event ! is = " << event -> type << "\n";
+	break;
+    }
+  }
+}
+
+// Unable to deal with Enter/Leave without a separate EventHandler (Motif 1.1.4)
+void 
+wxCanvasEnterLeave (Widget drawingArea, XtPointer clientData, XCrossingEvent * event)
+{
+  XmDrawingAreaCallbackStruct cbs;
+  XEvent ev;
+
+  //if (event->mode!=NotifyNormal)
+  //  return ;
+
+//  ev = *((XEvent *) event); // Causes Purify error (copying too many bytes)
+  ((XCrossingEvent &) ev) = *event;
+
+  cbs.reason = XmCR_INPUT;
+  cbs.event = &ev;
+
+  wxCanvasInputEvent (drawingArea, (XtPointer) NULL, &cbs);
+}
+
+// Fix to make it work under Motif 1.0 (!)
+void wxCanvasMotionEvent (Widget drawingArea, XButtonEvent * event)
+{
+#if   XmVersion<=1000
+
+  XmDrawingAreaCallbackStruct cbs;
+  XEvent ev;
+
+  //ev.xbutton = *event;
+  ev = *((XEvent *) event);
+  cbs.reason = XmCR_INPUT;
+  cbs.event = &ev;
+
+  wxCanvasInputEvent (drawingArea, (XtPointer) NULL, &cbs);
+#endif
+}
+
+void wxCanvasInputEvent (Widget drawingArea, XtPointer data, XmDrawingAreaCallbackStruct * cbs)
+{
+  wxWindow *canvas = (wxWindow *) wxWidgetHashTable->Get ((long) (Widget) drawingArea);
+  XEvent local_event;
+
+  if (canvas==NULL)
+    return ;
+
+  if (cbs->reason != XmCR_INPUT)
+    return;
+
+  local_event = *(cbs->event);	// We must keep a copy!
+
+  switch (local_event.xany.type)
+    {
+    case EnterNotify:
+    case LeaveNotify:
+    case ButtonPress:
+    case ButtonRelease:
+    case MotionNotify:
+      {
+	wxEventType eventType = wxEVT_NULL;
+
+	if (local_event.xany.type == EnterNotify)
+	  {
+	    //if (local_event.xcrossing.mode!=NotifyNormal)
+	    //  return ; // Ignore grab events
+	    eventType = wxEVT_ENTER_WINDOW;
+//            canvas->GetEventHandler()->OnSetFocus();
+	  }
+	else if (local_event.xany.type == LeaveNotify)
+	  {
+	    //if (local_event.xcrossing.mode!=NotifyNormal)
+	    //  return ; // Ignore grab events
+	    eventType = wxEVT_LEAVE_WINDOW;
+//            canvas->GetEventHandler()->OnKillFocus();
+	  }
+	else if (local_event.xany.type == MotionNotify)
+	  {
+	    eventType = wxEVT_MOTION;
+	    if (local_event.xmotion.is_hint == NotifyHint)
+	      {
+		Window root, child;
+		Display *dpy = XtDisplay (drawingArea);
+
+		XQueryPointer (dpy, XtWindow (drawingArea),
+			       &root, &child,
+			       &local_event.xmotion.x_root,
+			       &local_event.xmotion.y_root,
+			       &local_event.xmotion.x,
+			       &local_event.xmotion.y,
+			       &local_event.xmotion.state);
+	      }
+	    else
+	      {
+	      }
+	  }
+
+	else if (local_event.xany.type == ButtonPress)
+	  {
+	    if (local_event.xbutton.button == Button1)
+	      {
+		eventType = wxEVT_LEFT_DOWN;
+		canvas->m_button1Pressed = TRUE;
+	      }
+	    else if (local_event.xbutton.button == Button2)
+	      {
+		eventType = wxEVT_MIDDLE_DOWN;
+		canvas->m_button2Pressed = TRUE;
+	      }
+	    else if (local_event.xbutton.button == Button3)
+	      {
+		eventType = wxEVT_RIGHT_DOWN;
+		canvas->m_button3Pressed = TRUE;
+	      }
+	  }
+	else if (local_event.xany.type == ButtonRelease)
+	  {
+	    if (local_event.xbutton.button == Button1)
+	      {
+		eventType = wxEVT_LEFT_UP;
+		canvas->m_button1Pressed = FALSE;
+	      }
+	    else if (local_event.xbutton.button == Button2)
+	      {
+		eventType = wxEVT_MIDDLE_UP;
+		canvas->m_button2Pressed = FALSE;
+	      }
+	    else if (local_event.xbutton.button == Button3)
+	      {
+		eventType = wxEVT_RIGHT_UP;
+		canvas->m_button3Pressed = FALSE;
+	      }
+	  }
+
+	wxMouseEvent wxevent (eventType);
+	wxevent.m_eventHandle = (char *) &local_event;
+
+	wxevent.m_leftDown = ((eventType == wxEVT_LEFT_DOWN)
+			    || (event_left_is_down (&local_event) 
+				&& (eventType != wxEVT_LEFT_UP)));
+	wxevent.m_middleDown = ((eventType == wxEVT_MIDDLE_DOWN)
+			      || (event_middle_is_down (&local_event) 
+				  && (eventType != wxEVT_MIDDLE_UP)));
+	wxevent.m_rightDown = ((eventType == wxEVT_RIGHT_DOWN)
+			     || (event_right_is_down (&local_event) 
+				 && (eventType != wxEVT_RIGHT_UP)));
+
+	wxevent.m_shiftDown = local_event.xbutton.state & ShiftMask;
+	wxevent.m_controlDown = local_event.xbutton.state & ControlMask;
+        wxevent.m_altDown = local_event.xbutton.state & Mod3Mask;
+        wxevent.m_metaDown = local_event.xbutton.state & Mod1Mask;
+        wxevent.SetTimestamp(local_event.xbutton.time);
+
+    // Now check if we need to translate this event into a double click
+    if (TRUE) // canvas->doubleClickAllowed)
+    {
+       if (wxevent.ButtonDown())
+       {
+             long dclickTime = XtGetMultiClickTime((Display*) wxGetDisplay()) ;
+
+	     // get button and time-stamp
+	     int button = 0;
+	     if      (wxevent.LeftDown())   button = 1;
+	     else if (wxevent.MiddleDown()) button = 2;
+	     else if (wxevent.RightDown())  button = 3;
+	     long ts = wxevent.GetTimestamp();
+	     // check, if single or double click
+	     if (canvas->m_lastButton && canvas->m_lastButton==button && (ts - canvas->m_lastTS) < dclickTime)
+	       {
+	        // I have a dclick
+		 canvas->m_lastButton = 0;
+		 switch ( eventType )
+		   {
+		   case wxEVT_LEFT_DOWN:
+		     wxevent.SetEventType(wxEVT_LEFT_DCLICK);
+		     break;
+		   case wxEVT_MIDDLE_DOWN:
+		     wxevent.SetEventType(wxEVT_MIDDLE_DCLICK);
+		     break;
+		   case wxEVT_RIGHT_DOWN:
+		     wxevent.SetEventType(wxEVT_RIGHT_DCLICK);
+		     break;
+
+		   default :
+		     break;
+		   }
+
+	       }
+	     else
+	       {
+		 // not fast enough or different button
+		 canvas->m_lastTS     = ts;
+		 canvas->m_lastButton = button;
+	       }
+       }
+    }
+
+        wxevent.SetId(canvas->GetId());
+        wxevent.SetEventObject(canvas);
+	canvas->GetEventHandler()->ProcessEvent (wxevent);
+	/*
+	if (eventType == wxEVT_ENTER_WINDOW ||
+	    eventType == wxEVT_LEAVE_WINDOW ||
+	    eventType == wxEVT_MOTION
+	  )
+	  return;
+	  */
+	break;
+      }
+    case KeyPress:
+      {
+	KeySym keySym;
+//	XComposeStatus compose;
+//	(void) XLookupString ((XKeyEvent *) & local_event, wxBuffer, 20, &keySym, &compose);
+	(void) XLookupString ((XKeyEvent *) & local_event, wxBuffer, 20, &keySym, NULL);
+	int id = wxCharCodeXToWX (keySym);
+
+	wxKeyEvent event (wxEVT_CHAR);
+
+	if (local_event.xkey.state & ShiftMask)
+	  event.m_shiftDown = TRUE;
+	if (local_event.xkey.state & ControlMask)
+	  event.m_controlDown = TRUE;
+	if (local_event.xkey.state & Mod3Mask)
+	  event.m_altDown = TRUE;
+	if (local_event.xkey.state & Mod1Mask)
+	  event.m_metaDown = TRUE;
+	event.SetEventObject(canvas);
+	event.m_keyCode = id;
+        event.SetTimestamp(local_event.xkey.time);
+
+	if (id > -1)
+        {
+          // Implement wxFrame::OnCharHook by checking ancestor.
+          wxWindow *parent = canvas->GetParent();
+          while (parent && !parent->IsKindOf(CLASSINFO(wxFrame)))
+            parent = parent->GetParent();
+            
+          if (parent)
+          {
+            event.SetEventType(wxEVT_CHAR_HOOK);
+            if (parent->GetEventHandler()->ProcessEvent(event))
+              return;
+            event.SetEventType(wxEVT_CHAR);
+          }
+
+	  canvas->GetEventHandler()->ProcessEvent (event);
+        }
+	break;
+      }
+    case FocusIn:
+      {
+        if (local_event.xfocus.detail != NotifyPointer)
+	{
+          wxFocusEvent event(wxEVT_SET_FOCUS, canvas->GetId());
+          event.SetEventObject(canvas);
+          canvas->GetEventHandler()->ProcessEvent(event);
+        }
+	break;
+      }
+    case FocusOut:
+      {
+        if (local_event.xfocus.detail != NotifyPointer)
+	{
+          wxFocusEvent event(wxEVT_KILL_FOCUS, canvas->GetId());
+          event.SetEventObject(canvas);
+          canvas->GetEventHandler()->ProcessEvent(event);
+	}
+        break;
+      }
+    default:
+      break;
+    }
+}
+
+void wxWindow::DoPaint()
+{
+  //TODO : make a temporary gc so we can do the XCopyArea below
+  if (0) // m_backingPixmap)
+    {
+      /*
+      Widget drawingArea = (Widget) m_drawingArea;
+      //      int orig = GetDC()->GetLogicalFunction();
+      //      GetDC()->SetLogicalFunction (wxCOPY);
+
+      // TODO: it may not be necessary to store m_pixmapOffsetX/Y; we
+      // should be able to calculate them.
+      XCopyArea (XtDisplay (drawingArea), m_backingPixmap, XtWindow (drawingArea), GetDC ()->gc,
+		 m_pixmapOffsetX, m_pixmapOffsetY,
+		 m_pixmapWidth, m_pixmapHeight,
+		 0, 0);
+
+      //      GetDC()->SetLogicalFunction (orig);
+      */
+    }
+  else
+    {
+        wxPaintEvent event(GetId());
+        event.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(event);
+    }
+}
+
+// SetSize, but as per old wxCanvas (with drawing widget etc.)
+void wxWindow::CanvasSetSize (int x, int y, int w, int h, int sizeFlags)
+{
+  Widget drawingArea = (Widget) m_drawingArea;
+  bool managed = XtIsManaged(m_borderWidget ? (Widget) m_borderWidget : (Widget) m_scrolledWindow);
+
+  if (managed)
+    XtUnmanageChild (m_borderWidget ? (Widget) m_borderWidget : (Widget) m_scrolledWindow);
+  XtVaSetValues((Widget) m_drawingArea, XmNresizePolicy, XmRESIZE_ANY, NULL);
+
+  if (x > -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+    {
+      XtVaSetValues (m_borderWidget ? (Widget) m_borderWidget : (Widget) m_scrolledWindow,
+		     XmNx, x, NULL);
+    }
+
+  if (y > -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+    {
+      XtVaSetValues (m_borderWidget ? (Widget) m_borderWidget : (Widget) m_scrolledWindow,
+		     XmNy, y, NULL);
+    }
+
+  if (w > -1)
+    {
+      if (m_borderWidget)
+	{
+	  XtVaSetValues ((Widget) m_borderWidget, XmNwidth, w, NULL);
+	  short thick, margin;
+	  XtVaGetValues ((Widget) m_borderWidget,
+			 XmNshadowThickness, &thick,
+			 XmNmarginWidth, &margin,
+			 NULL);
+	  w -= 2 * (thick + margin);
+	}
+
+      XtVaSetValues ((Widget) m_scrolledWindow, XmNwidth, w, NULL);
+
+      Dimension spacing;
+      Widget sbar;
+      XtVaGetValues ((Widget) m_scrolledWindow,
+		     XmNspacing, &spacing,
+		     XmNverticalScrollBar, &sbar,
+		     NULL);
+      Dimension wsbar;
+      if (sbar)
+	XtVaGetValues (sbar, XmNwidth, &wsbar, NULL);
+      else
+	wsbar = 0;
+
+      w -= (spacing + wsbar);
+
+      XtVaSetValues ((Widget) m_drawingArea, XmNwidth, w, NULL);
+    }
+  if (h > -1)
+    {
+      if (m_borderWidget)
+	{
+	  XtVaSetValues ((Widget) m_borderWidget, XmNheight, h, NULL);
+	  short thick, margin;
+	  XtVaGetValues ((Widget) m_borderWidget,
+			 XmNshadowThickness, &thick,
+			 XmNmarginHeight, &margin,
+			 NULL);
+	  h -= 2 * (thick + margin);
+	}
+
+      XtVaSetValues ((Widget) m_scrolledWindow, XmNheight, h, NULL);
+
+      Dimension spacing;
+      Widget sbar;
+      XtVaGetValues ((Widget) m_scrolledWindow,
+		     XmNspacing, &spacing,
+		     XmNhorizontalScrollBar, &sbar,
+		     NULL);
+      Dimension wsbar;
+      if (sbar)
+	XtVaGetValues (sbar, XmNheight, &wsbar, NULL);
+      else
+	wsbar = 0;
+
+      h -= (spacing + wsbar);
+
+      XtVaSetValues ((Widget) m_drawingArea, XmNheight, h, NULL);
+    }
+  if (managed)
+    XtManageChild (m_borderWidget ? (Widget) m_borderWidget : (Widget) m_scrolledWindow);
+  XtVaSetValues((Widget) m_drawingArea, XmNresizePolicy, XmRESIZE_NONE, NULL);
+
+  int ww, hh;
+  GetClientSize (&ww, &hh);
+  wxSizeEvent sizeEvent(wxSize(ww, hh), GetId());
+  sizeEvent.SetEventObject(this);
+  
+  GetEventHandler()->ProcessEvent(sizeEvent);
+}
+
+void wxWindow::CanvasSetClientSize (int w, int h)
+{
+  Widget drawingArea = (Widget) m_drawingArea;
+
+  XtVaSetValues((Widget) m_drawingArea, XmNresizePolicy, XmRESIZE_ANY, NULL);
+
+  if (w > -1)
+    XtVaSetValues ((Widget) m_drawingArea, XmNwidth, w, NULL);
+  if (h > -1)
+    XtVaSetValues ((Widget) m_drawingArea, XmNheight, h, NULL);
+  /* TODO: is this necessary?
+  allowRepainting = FALSE;
+
+  XSync (XtDisplay (drawingArea), FALSE);
+  XEvent event;
+  while (XtAppPending (wxTheApp->appContext))
+    {
+      XFlush (XtDisplay (drawingArea));
+      XtAppNextEvent (wxTheApp->appContext, &event);
+      XtDispatchEvent (&event);
+    }
+    */
+
+  XtVaSetValues((Widget) m_drawingArea, XmNresizePolicy, XmRESIZE_NONE, NULL);
+
+  /* TODO
+  allowRepainting = TRUE;
+  DoRefresh ();
+  */
+
+  wxSizeEvent sizeEvent(wxSize(w, h), GetId());
+  sizeEvent.SetEventObject(this);
+  
+  GetEventHandler()->ProcessEvent(sizeEvent);
+}
+
+void wxWindow::CanvasGetClientSize (int *w, int *h) const
+{
+  // Must return the same thing that was set via SetClientSize
+  Dimension xx, yy;
+  XtVaGetValues ((Widget) m_drawingArea, XmNwidth, &xx, XmNheight, &yy, NULL);
+  *w = xx;
+  *h = yy;
+}
+
+void wxWindow::CanvasGetSize (int *w, int *h) const
+{
+  Dimension xx, yy;
+  if ((Widget) m_borderWidget)
+    XtVaGetValues ((Widget) m_borderWidget, XmNwidth, &xx, XmNheight, &yy, NULL);
+  else if ((Widget) m_scrolledWindow)
+    XtVaGetValues ((Widget) m_scrolledWindow, XmNwidth, &xx, XmNheight, &yy, NULL);
+  else
+    XtVaGetValues ((Widget) m_drawingArea, XmNwidth, &xx, XmNheight, &yy, NULL);
+
+  *w = xx;
+  *h = yy;
+}
+
+void wxWindow::CanvasGetPosition (int *x, int *y) const
+{
+  Position xx, yy;
+  XtVaGetValues (m_borderWidget ? (Widget) m_borderWidget : (Widget) m_scrolledWindow, XmNx, &xx, XmNy, &yy, NULL);
+  *x = xx;
+  *y = yy;
+}

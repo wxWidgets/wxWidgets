@@ -23,6 +23,11 @@ extern wxHashTable *wxWidgetHashTable;
 extern void wxDeleteWindowFromTable(Widget w);
 extern wxWindow *wxGetWindowFromTable(Widget w);
 extern bool wxAddWindowToTable(Widget w, wxWindow *win);
+extern char wxFindMnemonic(const char* s);
+extern char * wxFindAccelerator (char *s);
+extern XmString wxFindAcceleratorText (char *s);
+extern int wxCharCodeXToWX(KeySym keySym);
+extern KeySym wxCharCodeWXToX(int id);
 
 #endif
     // _WX_PRIVATE_H_

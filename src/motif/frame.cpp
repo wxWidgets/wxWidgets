@@ -579,6 +579,9 @@ void wxFrame::SetStatusWidths(int n, const int widths_field[])
 
 void wxFrame::PositionStatusBar()
 {
+    if (!m_frameStatusBar)
+      return;
+
     int w, h;
     GetClientSize(&w, &h);
     int sw, sh;
@@ -586,16 +589,14 @@ void wxFrame::PositionStatusBar()
 
     // Since we wish the status bar to be directly under the client area,
     // we use the adjusted sizes without using wxSIZE_NO_ADJUSTMENTS.
-    m_frameStatusBar->SetSize(0, h, w, sh);
+    m_frameStatusBar->SetSize(0-sh, h, w, sh);
 }
 
 WXWidget wxFrame::GetMenuBarWidget() const
 {
-  /* TODO
   if (GetMenuBar())
     return GetMenuBar()->GetMainWidget();
   else
-  */
     return (WXWidget) NULL;
 }
 
@@ -612,8 +613,6 @@ void wxFrame::SetMenuBar(wxMenuBar *menuBar)
   
     m_frameMenuBar = menuBar;
 
-    // TODO
-#if 0
   Widget menuBarW = XmCreateMenuBar ((Widget) m_frameWidget, "MenuBar", NULL, 0);
   m_frameMenuBar->SetMainWidget( (WXWidget) menuBarW);
 
@@ -621,12 +620,13 @@ void wxFrame::SetMenuBar(wxMenuBar *menuBar)
   for (i = 0; i < menuBar->GetMenuCount(); i++)
     {
       wxMenu *menu = menuBar->GetMenu(i);
-      menu->SetButtonWidget(menu->CreateMenu (menuBar, menuBarW, menu, menuBar->m_titles[i], TRUE);
+      wxString title(menuBar->m_titles[i]);
+      menu->SetButtonWidget(menu->CreateMenu (menuBar, menuBarW, menu, title, TRUE));
 
       /*
        * COMMENT THIS OUT IF YOU DON'T LIKE A RIGHT-JUSTIFIED HELP MENU
        */
-      wxStripMenuCodes (menuBar->m_titles[i], wxBuffer);
+      wxStripMenuCodes ((char*) (const char*) title, wxBuffer);
 
       if (strcmp (wxBuffer, "Help") == 0)
 	XtVaSetValues ((Widget) menuBarW, XmNmenuHelpWidget, (Widget) menu->GetButtonWidget(), NULL);
@@ -635,7 +635,6 @@ void wxFrame::SetMenuBar(wxMenuBar *menuBar)
   XtRealizeWidget ((Widget) menuBarW);
   XtManageChild ((Widget) menuBarW);
   menuBar->SetMenuBarFrame(this);
-#endif
 }
 
 void wxFrame::Fit()
@@ -1016,35 +1015,13 @@ static void wxFrameMapProc(Widget frameShell, XtPointer clientData,
 //// Motif-specific
 bool wxFrame::PreResize()
 {
-  /* TODO
-  // Set status line, if any
-  if (status_line_exists)
-  {
-    Dimension clientW, clientH;
-    XtVaGetValues(clientArea, XmNwidth, &clientW, XmNheight, &clientH, NULL);
-    Dimension xx, yy;
-    XtVaGetValues(statusLineWidget, XmNwidth, &xx, XmNheight, &yy, NULL);
-
-    XtUnmanageChild(statusLineWidget);
-    XtVaSetValues(statusLineWidget, XmNx, 0, XmNy, clientH - yy, XmNwidth, clientW, NULL);
-
-    if (statusLineForm)
-      XtVaSetValues(statusLineForm,  XmNwidth, clientW, NULL);
-
-    XtManageChild(statusLineWidget);
-  }
-
-  int width, height;
-  GetSize(&width, &height);
-
-  if (width == lastWidth && height == lastHeight)
-    return FALSE;
-  else
-  {
-    return TRUE;
-  }
-  */
+  PositionStatusBar();
   return TRUE;
+}
+
+WXWidget wxFrame::GetClientWidget() const
+{
+  return m_clientArea;
 }
 
 void wxCloseFrameCallback(Widget widget, XtPointer client_data, XmAnyCallbackStruct *cbs)
