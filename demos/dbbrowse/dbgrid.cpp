@@ -33,18 +33,23 @@
 BEGIN_EVENT_TABLE(DBGrid, wxGrid)
  EVT_MOTION (DBGrid::OnMouseMove)
  // DBGrid
- EVT_GRID_LABEL_LEFT_CLICK( DBGrid::OnLabelLeftClick )
- EVT_GRID_LABEL_RIGHT_CLICK( DBGrid::OnLabelRightClick )
- EVT_GRID_LABEL_LEFT_DCLICK( DBGrid::OnLabelLeftDClick )
- EVT_GRID_LABEL_RIGHT_DCLICK( DBGrid::OnLabelRightDClick )
- EVT_GRID_CELL_LEFT_CLICK( DBGrid::OnCellLeftClick )
- EVT_GRID_CELL_RIGHT_CLICK( DBGrid::OnCellRightClick )
- EVT_GRID_CELL_LEFT_DCLICK( DBGrid::OnCellLeftDClick )
- EVT_GRID_CELL_RIGHT_DCLICK( DBGrid::OnCellRightDClick )
- EVT_GRID_ROW_SIZE( DBGrid::OnRowSize )
- // EVT_GRID_COL_SIZE( DBGrid::OnColSize )
- EVT_GRID_RANGE_SELECT( DBGrid::OnRangeSelected )
+ // ------------
  EVT_GRID_CELL_CHANGE( DBGrid::OnCellChange )
+ EVT_GRID_CELL_LEFT_CLICK( DBGrid::OnCellLeftClick )
+ EVT_GRID_CELL_LEFT_DCLICK( DBGrid::OnCellLeftDClick )
+ EVT_GRID_CELL_RIGHT_CLICK( DBGrid::OnCellRightClick )
+ EVT_GRID_CELL_RIGHT_DCLICK( DBGrid::OnCellRightDClick )
+ // EVT_GRID_COL_SIZE( DBGrid::OnColSize )
+ // EVT_GRID_ROW_SIZE( DBGrid::OnRowSize )
+ EVT_GRID_EDITOR_SHOWN( DBGrid::OnEditorShown )
+ EVT_GRID_EDITOR_HIDDEN( DBGrid::OnEditorHidden )
+ EVT_GRID_LABEL_LEFT_CLICK( DBGrid::OnLabelLeftClick )
+ EVT_GRID_LABEL_LEFT_DCLICK( DBGrid::OnLabelLeftDClick )
+ EVT_GRID_LABEL_RIGHT_CLICK( DBGrid::OnLabelRightClick )
+ EVT_GRID_LABEL_RIGHT_DCLICK( DBGrid::OnLabelRightDClick )
+ EVT_GRID_RANGE_SELECT( DBGrid::OnRangeSelected )
+ EVT_GRID_ROW_SIZE( DBGrid::OnRowSize )
+ EVT_GRID_SELECT_CELL( DBGrid::OnSelectCell )
  EVT_MENU(GRID_EDIT,DBGrid::OnModusEdit)
  EVT_MENU(GRID_BROWSE,DBGrid::OnModusBrowse)
 END_EVENT_TABLE()
@@ -59,7 +64,7 @@ END_EVENT_TABLE()
 DBGrid::DBGrid(wxWindow *parent, const wxWindowID id,const wxPoint& pos,const wxSize& size, long style):
   wxGrid(parent, id, pos, size, style)
 {
- b_EditModus = TRUE;
+ b_EditModus = FALSE;
  //---------------------------------------------------------------------------------------
  popupMenu1 = new wxMenu("");
  popupMenu1->Append(GRID_EDIT, _("Edit Modus"));
@@ -78,7 +83,7 @@ int  DBGrid::OnTableView(wxString Table)
  int  i=0,x,y,z, ValidTable=0;
  wxString Temp0;
  wxBeginBusyCursor();
- SetFont(* pDoc->ft_Doc);
+ SetDefaultCellFont(* pDoc->ft_Doc);
  //---------------------------------------------------------------------------------------
  ct_BrowserDB = (db_Br+i_Which)->ct_BrowserDB;                       // Get the DSN Pointer
  //---------------------------------------------------------------------------------------
@@ -136,7 +141,7 @@ int  DBGrid::OnTableView(wxString Table)
   wxLogMessage(_("\n-E-> DBGrid::OnTableView() : Invalid DSN Pointer : Failed"));
  //---------------------------------------------------------------------------------------
  Weiter:
- SetEditInPlace(b_EditModus);   // Activate in-place Editing (FALSE)
+ EnableEditing(b_EditModus);     // Deactivate in-place Editing
  wxEndBusyCursor();
  //---------------------------------------------------------------------------------------
  wxLogMessage(_("-I-> DBGrid::OnTableView() - End"));
@@ -146,16 +151,39 @@ int  DBGrid::OnTableView(wxString Table)
 void DBGrid::OnModusEdit(wxMenu& menu, wxCommandEvent& event)
 {
  b_EditModus = TRUE;             // Needed by PopupMenu
- SetEditable(FALSE);             // Do not Edit with Text Edit Control
- SetEditInPlace(b_EditModus);    // Deactivate in-place Editing
+ EnableEditing(b_EditModus);     // Activate in-place Editing
  UpdateDimensions();             // Redraw the Grid
+ // wxLogMessage(_("-I-> DBGrid::OnModusEdit() - End"));
 }
 //----------------------------------------------------------------------------------------
 void DBGrid::OnModusBrowse(wxMenu& menu, wxCommandEvent& event)
 {
  b_EditModus = FALSE;            // Needed by PopupMenu
- SetEditInPlace(b_EditModus);    // Deactivate in-place Editing
+ EnableEditing(b_EditModus);     // Deactivate in-place Editing
  UpdateDimensions();             // Redraw the Grid
+ // wxLogMessage(_("-I-> DBGrid::OnModusBrowse() - End"));
+}
+//----------------------------------------------------------------------------------------
+void DBGrid::OnEditorShown( wxGridEvent& ev )
+{
+ // wxLogMessage(_("-I-> DBGrid::OnEditorShown() - End"));
+ ev.Skip();
+}
+//----------------------------------------------------------------------------------------
+void DBGrid::OnEditorHidden( wxGridEvent& ev )
+{
+ // wxLogMessage(_("-I-> DBGrid::OnEditorHidden() - End"));
+ ev.Skip();
+}
+void DBGrid::OnSelectCell( wxGridEvent& ev )
+{
+ logBuf = "";
+ logBuf << "Selected cell at row " << ev.GetRow()
+        << " col " << ev.GetCol();
+ wxLogMessage( "%s", logBuf.c_str() );
+ // you must call Skip() if you want the default processing
+ // to occur in wxGrid
+ ev.Skip();
 }
 //----------------------------------------------------------------------------------------
 void DBGrid::OnMouseMove(wxMouseEvent &event)
@@ -188,7 +216,7 @@ void DBGrid::OnLabelLeftClick( wxGridEvent& ev )
 //----------------------------------------------------------------------------------------
 void DBGrid::OnLabelRightClick( wxGridEvent& ev )
 {
- //-------------------
+ //-------------------------------------------------------
  if (b_EditModus)
   PopupMenu(popupMenu2,MousePos.x,MousePos.y);
  else

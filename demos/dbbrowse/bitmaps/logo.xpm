@@ -1,5 +1,5 @@
 /* XPM */
-static char* Logo_xpm[] = {
+static char* aLogo_xpm[] = {
 "16 16 4 1",
 "  c #000000",
 "! c #C0C0C0",

@@ -38,18 +38,22 @@ class DBGrid: public wxGrid
  void OnModusBrowse(wxMenu& menu, wxCommandEvent& event);
  void OnMouseMove(wxMouseEvent& event);
  int  OnTableView(wxString Table);
- void OnLabelLeftClick( wxGridEvent& );
- void OnLabelRightClick( wxGridEvent& );
- void OnLabelLeftDClick( wxGridEvent& );
- void OnLabelRightDClick( wxGridEvent& );
- void OnCellLeftClick( wxGridEvent& );
- void OnCellRightClick( wxGridEvent& );
- void OnCellLeftDClick( wxGridEvent& );
- void OnCellRightDClick( wxGridEvent& );
- void OnRowSize( wxGridSizeEvent& );
- void OnColSize( wxGridSizeEvent& );
- void OnRangeSelected( wxGridRangeSelectEvent& );
+ //-----
  void OnCellChange( wxGridEvent& );
+ void OnCellLeftClick( wxGridEvent& );
+ void OnCellLeftDClick( wxGridEvent& );
+ void OnCellRightClick( wxGridEvent& );
+ void OnCellRightDClick( wxGridEvent& );
+ void OnColSize( wxGridSizeEvent& );
+ void OnEditorShown( wxGridEvent& );
+ void OnEditorHidden( wxGridEvent& );
+ void OnLabelLeftClick( wxGridEvent& );
+ void OnLabelLeftDClick( wxGridEvent& );
+ void OnLabelRightClick( wxGridEvent& );
+ void OnLabelRightDClick( wxGridEvent& );
+ void OnRangeSelected( wxGridRangeSelectEvent& );
+ void OnRowSize( wxGridSizeEvent& );
+ void OnSelectCell( wxGridEvent& );
  //---------------------------------------------------------------------------------------
  DECLARE_EVENT_TABLE()
 };
