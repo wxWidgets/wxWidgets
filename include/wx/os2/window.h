@@ -17,6 +17,11 @@
 // ---------------------------------------------------------------------------
 // headers
 // ---------------------------------------------------------------------------
+#define INCL_DOS
+#define INCL_PM
+#define INCL_GPI
+#include <os2.h>
+
 
 // ---------------------------------------------------------------------------
 // forward declarations
@@ -412,6 +417,10 @@ private:
     bool HandleNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
     DECLARE_NO_COPY_CLASS(wxWindow);
     DECLARE_EVENT_TABLE()
+private:
+    // Virtual function hiding supression
+    inline virtual bool Reparent( wxWindowBase *newParent )
+    { return(wxWindowBase::Reparent(newParent));};
 };
 
 // ---------------------------------------------------------------------------

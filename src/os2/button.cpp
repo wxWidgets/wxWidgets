@@ -50,9 +50,11 @@ void wxButton::SetSize(int x, int y, int width, int height, int sizeFlags)
 
 void wxButton::SetDefault()
 {
-    wxWindow *parent = (wxWindow *)GetParent();
-    if (parent)
-        parent->SetDefaultItem(this);
+    wxWindow *parent = GetParent();
+    wxButton *btnOldDefault = NULL;
+    wxPanel *panel = wxDynamicCast(parent, wxPanel);
+    if (panel)
+        panel->SetDefaultItem(this);
 
     // TODO: make button the default
 }
