@@ -333,6 +333,7 @@ wxCONSTRUCTOR_DUMMY(wxWindow)
 
 BEGIN_EVENT_TABLE(wxWindowMSW, wxWindowBase)
     EVT_SYS_COLOUR_CHANGED(wxWindowMSW::OnSysColourChanged)
+    EVT_ERASE_BACKGROUND(wxWindowMSW::OnEraseBackground)
 #ifdef __WXWINCE__
     EVT_INIT_DIALOG(wxWindowMSW::OnInitDialog)
 #endif
@@ -4065,6 +4066,40 @@ bool wxWindowMSW::HandleEraseBkgnd(WXHDC hdc)
     dc.SelectOldObjects(hdc);
 
     return rc;
+}
+
+void wxWindowMSW::OnEraseBackground(wxEraseEvent& event)
+{
+    if ( !m_hasBgCol )
+    {
+        event.Skip();
+        return;
+    }
+
+    // we have a fixed solid background colour, do use it
+    RECT rect;
+    ::GetClientRect(GetHwnd(), &rect);
+
+    wxColour backgroundColour(GetBackgroundColour());
+    COLORREF ref = PALETTERGB(backgroundColour.Red(),
+                              backgroundColour.Green(),
+                              backgroundColour.Blue());
+    HBRUSH hBrush = ::CreateSolidBrush(ref);
+    if ( !hBrush )
+        wxLogLastError(wxT("CreateSolidBrush"));
+
+    HDC hdc = (HDC)event.GetDC()->GetHDC();
+
+#ifndef __WXWINCE__
+    int mode = ::SetMapMode(hdc, MM_TEXT);
+#endif
+
+    ::FillRect(hdc, &rect, hBrush);
+    ::DeleteObject(hBrush);
+
+#ifndef __WXWINCE__
+    ::SetMapMode(hdc, mode);
+#endif
 }
 
 // ---------------------------------------------------------------------------
