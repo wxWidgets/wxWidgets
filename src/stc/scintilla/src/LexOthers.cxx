@@ -193,7 +193,112 @@ static void ColouriseErrorListDoc(unsigned int startPos, int length, int, WordLi
 		ColouriseErrorListLine(lineBuffer, linePos, startPos + length, styler);
 }
 
+static int isSpecial(char s) {
+
+	return (s == '\\') || (s == ',') || (s == ';') || (s == '\'') || (s == ' ') ||
+	       (s == '\"') || (s == '`') || (s == '^') || (s == '~');
+}
+
+static int isTag(int start, Accessor &styler) {
+
+	char s[6];
+	unsigned int i = 0, e=1;
+	while (i < 5 && e) {
+		s[i] = styler[start + i];
+		i++;
+		e = styler[start + i] != '{';
+	}
+	s[i] = '\0';
+	return (strcmp(s, "begin") == 0) || (strcmp(s, "end") == 0);
+}
+
+static void ColouriseLatexDoc(unsigned int startPos, int length, int initStyle,
+			   WordList *[], Accessor &styler) {
+
+	styler.StartAt(startPos);
+
+	int state = initStyle;
+	char chNext = styler[startPos];
+	styler.StartSegment(startPos);
+	int lengthDoc = startPos + length;
+
+	for (int i = startPos; i < lengthDoc; i++) {
+		char ch = chNext;
+		chNext = styler.SafeGetCharAt(i + 1);
+
+		if (styler.IsLeadByte(ch)) {
+			chNext = styler.SafeGetCharAt(i + 2);
+			i++;
+			continue;
+		}
+		switch(state) {
+			case SCE_L_DEFAULT :
+				switch(ch) {
+					case '\\' :
+						styler.ColourTo(i - 1, state);
+						if (isSpecial(styler[i + 1])) {
+							styler.ColourTo(i + 1, SCE_L_COMMAND);
+							i++;
+							chNext = styler.SafeGetCharAt(i + 1);
+						}		
+						else {
+						    if (isTag(i+1, styler))
+							state = SCE_L_TAG;
+						    else
+						    	state = SCE_L_COMMAND;
+						}
+						break;
+					case '$' :
+						styler.ColourTo(i - 1, state);
+						state = SCE_L_MATH;
+						if (chNext == '$') {
+							i++;
+							chNext = styler.SafeGetCharAt(i + 1);
+						}
+						break;
+					case '%' :
+						styler.ColourTo(i - 1, state);
+						state = SCE_L_COMMENT;
+						break;
+				}
+				break;                          
+			case SCE_L_COMMAND :
+				if (chNext == '[' || chNext == '{' || chNext == '}' || 
+				    chNext == ' ' || chNext == '\r' || chNext == '\n') {
+					styler.ColourTo(i, state);
+					state = SCE_L_DEFAULT;
+					i++;
+					chNext = styler.SafeGetCharAt(i + 1);
+				}
+				break;                                  
+			case SCE_L_TAG :
+				if (ch == '}') {
+					styler.ColourTo(i, state);
+					state = SCE_L_DEFAULT;
+				}
+				break;
+			case SCE_L_MATH :
+				if (ch == '$') {
+					if (chNext == '$') {
+						i++;
+						chNext = styler.SafeGetCharAt(i + 1);
+					}
+					styler.ColourTo(i, state);
+					state = SCE_L_DEFAULT;
+				}
+				break;
+			case SCE_L_COMMENT :
+				if (ch == '\r' || ch == '\n') {
+					styler.ColourTo(i - 1, state);
+					state = SCE_L_DEFAULT;
+				}
+		}               
+	}
+	styler.ColourTo(lengthDoc, state);
+}
+
 LexerModule lmProps(SCLEX_PROPERTIES, ColourisePropsDoc);
 LexerModule lmErrorList(SCLEX_ERRORLIST, ColouriseErrorListDoc);
 LexerModule lmMake(SCLEX_MAKEFILE, ColouriseMakeDoc);
 LexerModule lmBatch(SCLEX_BATCH, ColouriseBatchDoc);
+LexerModule lmLatex(SCLEX_LATEX, ColouriseLatexDoc);

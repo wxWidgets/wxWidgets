@@ -390,6 +390,7 @@ LRESULT ScintillaBase::WndProc(UINT iMessage, WPARAM wParam, LPARAM lParam) {
 		
 	case SCI_COLOURISE:
 		Colourise(wParam, lParam);
+		Redraw();
 		break;
 		
 	case SCI_SETPROPERTY:

@@ -75,6 +75,8 @@ const int wxSTC_INDIC_MAX         = 7;
 const int wxSTC_INDIC_PLAIN       = 0;
 const int wxSTC_INDIC_SQUIGGLE    = 1;
 const int wxSTC_INDIC_TT          = 2;
+const int wxSTC_INDIC_DIAGONAL    = 3;
+const int wxSTC_INDIC_STRIKE      = 4;
 const int wxSTC_INDIC0_MASK       = 32;
 const int wxSTC_INDIC1_MASK       = 64;
 const int wxSTC_INDIC2_MASK       = 128;
@@ -323,12 +325,13 @@ public:
     void     StyleSetForeground(int styleNum, const wxColour& colour);
     void     StyleSetBackground(int styleNum, const wxColour& colour);
     void     StyleSetFont(int styleNum, wxFont& font);
-    void     StyleSetFontAttr(int styleNum, int size, const wxString& faceName, bool bold, bool italic);
+    void     StyleSetFontAttr(int styleNum, int size, const wxString& faceName, bool bold=FALSE, bool italic=FALSE, bool underline=FALSE);
     void     StyleSetBold(int styleNum, bool bold);
     void     StyleSetItalic(int styleNum, bool italic);
     void     StyleSetFaceName(int styleNum, const wxString& faceName);
     void     StyleSetSize(int styleNum, int pointSize);
     void     StyleSetEOLFilled(int styleNum, bool fillEOL);
+    void     StyleSetUnderline(int styleNum, bool underline);
 
 
     // Margins in the edit area
@@ -456,6 +459,13 @@ public:
     void     ToggleFold(int line);
     void     EnsureVisible(int line);
     void     SetFoldFlags(int flags);
+
+
+    // Zooming
+    void     ZoomIn();
+    void     ZoomOut();
+    void     SetZoom(int zoom);
+    int      GetZoom();
 
 
     // Long Lines

@@ -292,11 +292,13 @@ static void ColourisePerlDoc(unsigned int startPos, int length, int initStyle,
 				} else {
 					quotes++;
 				}
-
-				if (quotes > 1 && isMatch(styler, lengthDoc, i, sooked)) {
+				if (quotes > 1 && isMatch(styler, lengthDoc, i, sooked) && (chPrev == '\n' || chPrev == '\r') ) {
 					styler.ColourTo(i + sookedpos - 1, SCE_PL_HERE);
-					state = SCE_PL_DEFAULT;
 					i += sookedpos;
+					chNext = styler.SafeGetCharAt(i);
+					if (chNext == '\n' || chNext == '\r') {
+						state = SCE_PL_DEFAULT;
+					}
 					chNext = ' ';
 				}
 			} else if (state == SCE_PL_STRING) {

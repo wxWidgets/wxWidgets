@@ -22,6 +22,7 @@
 #define SCLEX_MAKEFILE 11
 #define SCLEX_BATCH 12
 #define SCLEX_XCODE 13
+#define SCLEX_LATEX 14
 
 // Lexical states for SCLEX_PYTHON
 #define SCE_P_DEFAULT 0
@@ -170,4 +171,11 @@
 #define SCE_PL_BACKTICKS 20
 #define SCE_PL_DATASECTION 21
     
+// Lexical states for SCLEX_LATEX
+#define SCE_L_DEFAULT 0
+#define SCE_L_COMMAND 1
+#define SCE_L_TAG 2
+#define SCE_L_MATH 3
+#define SCE_L_COMMENT 4
+
 #endif

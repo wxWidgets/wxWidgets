@@ -210,7 +210,7 @@ public:
 	Font();
 	~Font();
 
-	void Create(const char *faceName, int size, bool bold=false, bool italic=false);
+	void Create(const char *faceName, int characterSet, int size, bool bold, bool italic);
 	void Release();
 
 	FontID GetID() { return id; }

@@ -727,6 +727,7 @@ void wxStyledTextCtrl::StyleResetDefault() {
 //      face:[facename]         sets the font face name to use
 //      size:[num]              sets the font size in points
 //      eol                     turns on eol filling
+//      underline               turns on underlining
 //
 
 void wxStyledTextCtrl::StyleSetSpec(int styleNum, const wxString& spec) {
@@ -743,6 +744,9 @@ void wxStyledTextCtrl::StyleSetSpec(int styleNum, const wxString& spec) {
 
         else if (option == "italic")
             StyleSetItalic(styleNum, true);
+
+        else if (option == "underline")
+            StyleSetUnderline(styleNum, true);
 
         else if (option == "eol")
             StyleSetEOLFilled(styleNum, true);
@@ -780,18 +784,21 @@ void wxStyledTextCtrl::StyleSetFont(int styleNum, wxFont& font) {
     wxString faceName = font.GetFaceName();
     bool     bold     = font.GetWeight() == wxBOLD;
     bool     italic   = font.GetStyle() != wxNORMAL;
+    bool     under    = font.GetUnderlined();
 
-    StyleSetFontAttr(styleNum, size, faceName, bold, italic);
+    StyleSetFontAttr(styleNum, size, faceName, bold, italic, under);
 }
 
 
 void wxStyledTextCtrl::StyleSetFontAttr(int styleNum, int size,
                                         const wxString& faceName,
-                                        bool bold, bool italic) {
+                                        bool bold, bool italic,
+                                        bool underline) {
     StyleSetSize(styleNum, size);
     StyleSetFaceName(styleNum, faceName);
     StyleSetBold(styleNum, bold);
     StyleSetItalic(styleNum, italic);
+    StyleSetUnderline(styleNum, underline);
 }
 
 
@@ -817,6 +824,11 @@ void wxStyledTextCtrl::StyleSetSize(int styleNum, int pointSize) {
 
 void wxStyledTextCtrl::StyleSetEOLFilled(int styleNum, bool fillEOL) {
     SendMsg(SCI_STYLESETEOLFILLED, styleNum, fillEOL);
+}
+
+
+void wxStyledTextCtrl::StyleSetUnderline(int styleNum, bool underline) {
+    SendMsg(SCI_STYLESETUNDERLINE, styleNum, underline);
 }
 
 
@@ -910,7 +922,7 @@ void wxStyledTextCtrl::SetSelectionBackground(const wxColour& colour) {
 
 
 void wxStyledTextCtrl::SetCaretForeground(const wxColour& colour) {
-    SendMsg(SCI_SETCARETFORE, 0, wxColourAsLong(colour));
+    SendMsg(SCI_SETCARETFORE, wxColourAsLong(colour));
 }
 
 
@@ -1304,6 +1316,28 @@ void wxStyledTextCtrl::SetFoldFlags(int flags) {
     SendMsg(SCI_SETFOLDFLAGS, flags);
 }
 
+
+//----------------------------------------------------------------------
+// Zooming
+
+void wxStyledTextCtrl::ZoomIn() {
+    SendMsg(SCI_ZOOMIN);
+}
+
+
+void wxStyledTextCtrl::ZoomOut() {
+    SendMsg(SCI_ZOOMOUT);
+}
+
+
+void wxStyledTextCtrl::SetZoom(int zoom) {
+    SendMsg(SCI_SETZOOM, zoom);
+}
+
+
+int  wxStyledTextCtrl::GetZoom() {
+    return SendMsg(SCI_GETZOOM);
+}
 
 //----------------------------------------------------------------------
 // Long Lines

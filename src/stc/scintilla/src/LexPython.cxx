@@ -52,6 +52,10 @@ static void ColourisePyDoc(unsigned int startPos, int length, int initStyle,
 		if (lineCurrent > 0) {
 			lineCurrent--;
 			startPos = styler.LineStart(lineCurrent);
+			if (startPos == 0)
+				initStyle = SCE_P_DEFAULT;
+			else 
+				initStyle = styler.StyleAt(startPos-1);
 		}
 	}
 	

@@ -179,10 +179,7 @@ static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, Wo
 					state = SCE_C_DEFAULT;
 				}
 			} else if (state == SCE_C_STRING) {
-				if ((ch == '\r' || ch == '\n') && (chPrev != '\\')) {
-					styler.ColourTo(i-1, SCE_C_STRINGEOL);
-					state = SCE_C_STRINGEOL;
-				} else if (ch == '\\') {
+				if (ch == '\\') {
 					if (chNext == '\"' || chNext == '\'' || chNext == '\\') {
 						i++;
 						ch = chNext;
@@ -194,7 +191,10 @@ static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, Wo
 					i++;
 					ch = chNext;
 					chNext = styler.SafeGetCharAt(i + 1);
-				}
+                } else if (chNext == '\r' || chNext == '\n') {
+					styler.ColourTo(i-1, SCE_C_STRINGEOL);
+					state = SCE_C_STRINGEOL;
+                }
 			} else if (state == SCE_C_CHARACTER) {
 				if ((ch == '\r' || ch == '\n') && (chPrev != '\\')) {
 					styler.ColourTo(i-1, SCE_C_STRINGEOL);

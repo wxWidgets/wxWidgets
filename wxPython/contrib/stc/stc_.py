@@ -373,6 +373,9 @@ class wxStyledTextCtrlPtr(wxControlPtr):
     def StyleSetEOLFilled(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextCtrl_StyleSetEOLFilled,(self,) + _args, _kwargs)
         return val
+    def StyleSetUnderline(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_StyleSetUnderline,(self,) + _args, _kwargs)
+        return val
     def GetLeftMargin(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextCtrl_GetLeftMargin,(self,) + _args, _kwargs)
         return val
@@ -610,6 +613,18 @@ class wxStyledTextCtrlPtr(wxControlPtr):
     def SetFoldFlags(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextCtrl_SetFoldFlags,(self,) + _args, _kwargs)
         return val
+    def ZoomIn(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_ZoomIn,(self,) + _args, _kwargs)
+        return val
+    def ZoomOut(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_ZoomOut,(self,) + _args, _kwargs)
+        return val
+    def SetZoom(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_SetZoom,(self,) + _args, _kwargs)
+        return val
+    def GetZoom(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_GetZoom,(self,) + _args, _kwargs)
+        return val
     def GetEdgeColumn(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextCtrl_GetEdgeColumn,(self,) + _args, _kwargs)
         return val
@@ -808,6 +823,8 @@ wxSTC_INDIC_MAX = stc_c.wxSTC_INDIC_MAX
 wxSTC_INDIC_PLAIN = stc_c.wxSTC_INDIC_PLAIN
 wxSTC_INDIC_SQUIGGLE = stc_c.wxSTC_INDIC_SQUIGGLE
 wxSTC_INDIC_TT = stc_c.wxSTC_INDIC_TT
+wxSTC_INDIC_DIAGONAL = stc_c.wxSTC_INDIC_DIAGONAL
+wxSTC_INDIC_STRIKE = stc_c.wxSTC_INDIC_STRIKE
 wxSTC_INDIC0_MASK = stc_c.wxSTC_INDIC0_MASK
 wxSTC_INDIC1_MASK = stc_c.wxSTC_INDIC1_MASK
 wxSTC_INDIC2_MASK = stc_c.wxSTC_INDIC2_MASK

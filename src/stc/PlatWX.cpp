@@ -106,14 +106,15 @@ Font::Font() {
 Font::~Font() {
 }
 
-void Font::Create(const char *faceName, int size, bool bold, bool italic) {
+void Font::Create(const char *faceName, int characterSet, int size, bool bold, bool italic) {
     Release();
     id = new wxFont(size,
                     wxDEFAULT,
                     italic ? wxITALIC :  wxNORMAL,
                     bold ? wxBOLD : wxNORMAL,
                     false,
-                    faceName);
+                    faceName,
+                    wxFONTENCODING_DEFAULT);
 }
 
 

@@ -889,6 +889,12 @@ void Editor::DrawLine(Surface *surface, ViewStyle &vsDraw, int line, int xStart,
 						}
 					}
 				}
+				if (vsDraw.styles[styleMain].underline) {
+					PRectangle rcUL = rcSegment;
+					rcUL.top = rcUL.top + vsDraw.maxAscent + 1;
+					rcUL.bottom = rcUL.top + 1;
+					surface->FillRectangle(rcUL, textFore);
+				}
 			}
 			startseg = i + 1;
 		}
@@ -1348,8 +1354,7 @@ void Editor::ClearSelection() {
 		int lineStart = pdoc->LineFromPosition(SelectionStart());
 		int lineEnd = pdoc->LineFromPosition(SelectionEnd());
 		int startPos = SelectionStart();
-		int line;
-		for (line=lineStart; line <= lineEnd; line++) {
+		for (int line=lineEnd; line >= lineStart; line--) {
 			startPos = SelectionStart(line);
 			unsigned int chars = SelectionEnd(line) - startPos;
 			if (0 != chars) {
@@ -1782,7 +1787,7 @@ void Editor::ChangeCaseOfSelection(bool makeUpperCase) {
 	if (selType == selRectangle) {
 		int lineStart = pdoc->LineFromPosition(SelectionStart());
 		int lineEnd = pdoc->LineFromPosition(SelectionEnd());
-		for (int line=lineStart; line <= lineEnd; line++) {
+		for (int line=lineEnd; line >= lineStart; line--) {
 			pdoc->ChangeCase(
 				Range(SelectionStart(line), SelectionEnd(line)), 
 				makeUpperCase);
@@ -2908,19 +2913,20 @@ LRESULT Editor::WndProc(UINT iMessage, WPARAM wParam, LPARAM lParam) {
 		//		EM_GETPUNCTUATION
 		//		EM_SETPUNCTUATION
 		//		EM_GETTHUMB
+		//		EM_SETTARGETDEVICE
 
 		// Not supported but should be:
 		//		EM_GETEVENTMASK
 		//		EM_SETEVENTMASK
 		//		For printing:
 		//			EM_DISPLAYBAND
-		//			EM_SETTARGETDEVICE
 
 	case EM_CANUNDO:
 		return pdoc->CanUndo() ? TRUE : FALSE;
 
 	case EM_UNDO:
 		Undo();
+		SetLastXChosen();
 		break;
 
 	case EM_EMPTYUNDOBUFFER:
@@ -2955,12 +2961,6 @@ LRESULT Editor::WndProc(UINT iMessage, WPARAM wParam, LPARAM lParam) {
 
 	case EM_GETMODIFY:
 		return !pdoc->IsSavePoint();
-
-	case EM_SETMODIFY:
-		// Not really supported now that there is the save point stuff
-		//pdoc->isModified = wParam;
-		//return pdoc->isModified;
-		return false;
 
 	case EM_GETRECT:
 		if (lParam == 0)
@@ -3024,22 +3024,6 @@ LRESULT Editor::WndProc(UINT iMessage, WPARAM wParam, LPARAM lParam) {
 			}
 			return iChar;
 		}
-
-	case EM_GETWORDBREAKPROC:
-		return 0;
-
-	case EM_SETWORDBREAKPROC:
-		break;
-
-	case EM_LIMITTEXT:
-		// wParam holds the number of characters control should be limited to
-		break;
-
-	case EM_GETLIMITTEXT:
-		return 0xffffffff;
-
-	case EM_GETOLEINTERFACE:
-		return 0;
 
 	case EM_LINEFROMCHAR:
 		if (static_cast<int>(wParam) < 0)
@@ -3109,9 +3093,6 @@ LRESULT Editor::WndProc(UINT iMessage, WPARAM wParam, LPARAM lParam) {
 	case EM_SETREADONLY:
 		pdoc->SetReadOnly(wParam);
 		return TRUE;
-
-	case EM_SETRECT:
-		break;
 
 	case EM_CANPASTE:
 		return 1;
@@ -3605,12 +3586,23 @@ LRESULT Editor::WndProc(UINT iMessage, WPARAM wParam, LPARAM lParam) {
 			InvalidateStyleRedraw();
 		}
 		break;
+	case SCI_STYLESETUNDERLINE:
+		if (wParam <= STYLE_MAX) {
+			vs.styles[wParam].underline = lParam;
+			InvalidateStyleRedraw();
+		}
+		break;
+	case SCI_STYLESETCHARACTERSET:
+		if (wParam <= STYLE_MAX) {
+			vs.styles[wParam].characterSet = lParam;
+			InvalidateStyleRedraw();
+		}
+		break;
 		
 	case SCI_STYLERESETDEFAULT:
 		vs.ResetDefaultStyle();
 		InvalidateStyleRedraw();
 		break;
-
 	case SCI_SETSTYLEBITS:
 		pdoc->SetStylingBits(wParam);
 		break;
@@ -3858,6 +3850,14 @@ LRESULT Editor::WndProc(UINT iMessage, WPARAM wParam, LPARAM lParam) {
 		Redraw();
 		break;
 
+	case SCI_SETZOOM:
+		vs.zoomLevel = wParam;
+		InvalidateStyleRedraw();
+		break;
+
+	case SCI_GETZOOM:
+		return vs.zoomLevel;
+	
 	case SCI_GETEDGECOLUMN:
 		return theEdge;
 		
@@ -3889,6 +3889,14 @@ LRESULT Editor::WndProc(UINT iMessage, WPARAM wParam, LPARAM lParam) {
 		SetDocPointer(reinterpret_cast<Document *>(lParam));
 		return 0;
 
+	case SCI_ADDREFDOC:
+		(reinterpret_cast<Document *>(lParam))->AddRef();
+		break;
+		
+	case SCI_RELEASEDOC:
+		(reinterpret_cast<Document *>(lParam))->Release();
+		break;
+		
 	case SCI_SETMODEVENTMASK:
 		modEventMask = wParam;
 		return 0;
