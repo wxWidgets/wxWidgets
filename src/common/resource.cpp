@@ -335,8 +335,9 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, const wxItemResource* c
             bitmap = wxResourceCreateBitmap(childResource->GetValue4(), (wxResourceTable *)this);
             ((wxItemResource*) childResource)->SetBitmap(bitmap);
           }
-          if (bitmap.Ok())
-           control = new wxBitmapButton(parent, id, bitmap, pos, size,
+          if (!bitmap.Ok())
+               bitmap.LoadFile("cross_bmp", wxBITMAP_TYPE_BMP_RESOURCE);
+          control = new wxBitmapButton(parent, id, bitmap, pos, size,
                childResource->GetStyle() | wxBU_AUTODRAW, wxDefaultValidator, childResource->GetName());
         }
         else
