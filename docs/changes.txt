@@ -72,6 +72,8 @@ All (GUI):
 - wxProgressDialog accepts smooth gauge again (wxPD_SMOOTH style)
 - wxProgressDialog new style: wxPD_CAN_SKIP which provides skipping some parts
   of the progress (with new "Skip" button in dialog)
+- wxGenericListCtrl::SetItemState(-1) now changes the state of all items as
+  in wxMSW version (Gunnar Roth)
 
 Unix:
 

@@ -644,6 +644,7 @@ public:
     void SetItem( wxListItem &item );
     void GetItem( wxListItem &item ) const;
     void SetItemState( long item, long state, long stateMask );
+    void SetItemStateAll( long state, long stateMask );
     int GetItemState( long item, long stateMask ) const;
     void GetItemRect( long index, wxRect &rect ) const;
     wxRect GetViewRect() const;
@@ -3635,8 +3636,58 @@ void wxListMainWindow::SetItem( wxListItem &item )
     RefreshRect(rectItem);
 }
 
+void wxListMainWindow::SetItemStateAll(long state, long stateMask)
+{
+    if ( IsEmpty() )
+        return;
+
+    // first deal with selection
+    if ( stateMask & wxLIST_STATE_SELECTED )
+    {
+        // set/clear select state
+        if ( IsVirtual() )
+        {
+            // optimized version for virtual listctrl.
+            m_selStore.SelectRange(0, GetItemCount() - 1, state == wxLIST_STATE_SELECTED);
+            Refresh();
+        }
+        else if ( state & wxLIST_STATE_SELECTED )
+        {
+            const long count = GetItemCount();
+            for( long i = 0; i <  count; i++ )
+            {
+                SetItemState( i, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
+            }
+
+        }
+        else
+        {
+            // clear for non virtual (somewhat optimized by using GetNextItem())
+            long i = -1;
+            while ( (i = GetNextItem(i, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1 )
+            {
+                SetItemState( i, 0, wxLIST_STATE_SELECTED );
+            }
+        }
+    }
+
+    if ( HasCurrent() && (state == 0) && (stateMask & wxLIST_STATE_FOCUSED) )
+    {
+        // unfocus all: only one item can be focussed, so clearing focus for
+        // all items is simply clearing focus of the focussed item.
+        SetItemState(m_current, state, stateMask);
+    }
+    //(setting focus to all items makes no sense, so it is not handled here.)
+}
+
 void wxListMainWindow::SetItemState( long litem, long state, long stateMask )
 {
+    if ( litem == -1 )
+    {
+        SetItemStateAll(state, stateMask);
+        return;
+    }
+
      wxCHECK_RET( litem >= 0 && (size_t)litem < GetItemCount(),
                   _T("invalid list ctrl item index in SetItem") );
 
@@ -4624,7 +4675,7 @@ void wxGenericListCtrl::CalculateAndSetHeaderHeight()
     {
 #ifdef __WXMAC__
         SInt32 h ;
-        GetThemeMetric( kThemeMetricListHeaderHeight, &h );    
+        GetThemeMetric( kThemeMetricListHeaderHeight, &h );
 #else
         // we use 'g' to get the descent, too
         int w, h, d;
