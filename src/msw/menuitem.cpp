@@ -255,7 +255,7 @@ void wxMenuItem::Check(bool check)
                                    start,   // the first radio group item
                                    end,     // the last one
                                    pos,     // the one to check
-                                   MF_BYPOSITION | flags) )
+                                   MF_BYPOSITION) )
         {
             wxLogLastError(_T("CheckMenuRadioItem"));
         }
