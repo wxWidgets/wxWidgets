@@ -4444,7 +4444,8 @@ class MaskedEditMixin:
                 dbg('text: "%s"' % text)
                 if self._signOk:
                     signpos = self._decimalpos - (len(text[:self._decimalpos].lstrip()) + 1)
-                    if text[signpos+1] in ('-','('):
+ 		    # prevent checking for empty string - Tomo - Wed 14 Jan 2004 03:19:09 PM CET
+                    if len(text) >= signpos+1 and  text[signpos+1] in ('-','('):
                         signpos += 1
                 else:
                     signpos = -1
