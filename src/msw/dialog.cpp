@@ -329,14 +329,16 @@ void wxDialog::DoShowModal()
 
     wxWindow *parent = GetParent();
 
+    wxWindow* oldFocus = m_oldFocus;
+
     // inside this block, all app windows are disabled
     {
         wxWindowDisabler wd(this);
 
         // remember where the focus was
-        if ( !m_oldFocus )
+        if ( !oldFocus )
         {
-            m_oldFocus = parent;
+            oldFocus = parent;
         }
 
         // enter the modal loop
@@ -360,9 +362,12 @@ void wxDialog::DoShowModal()
 #endif // __WIN32__
 
     // and restore focus
-    if ( m_oldFocus && (m_oldFocus != this) )
+    // Note that this code MUST NOT access the dialog object's data
+    // in case the object has been deleted (which will be the case
+    // for a modal dialog that has been destroyed before calling EndModal).
+    if ( oldFocus && (oldFocus != this) )
     {
-        m_oldFocus->SetFocus();
+        oldFocus->SetFocus();
     }
 }
 

@@ -181,7 +181,7 @@ $(LIBTARGET): $(DUMMY).obj $(OBJECTS)
 $(LIBTARGET): $(DUMMY).obj $(OBJECTS)
 	-erase $(LIBTARGET)
 	-erase $(WXLIBDIR)\wx.dll
-        $(LINK) $(LINK_FLAGS) /L$(WXLIBDIR) /v @&&!
+        $(LINK) $(LINK_FLAGS) /L$(WXLIBDIR);$(BCCDIR)\lib;$(BCCDIR)\lib\psdk /v @&&!
 c0d32.obj $(OBJECTS)
 $(WXLIBDIR)\wx
 nul

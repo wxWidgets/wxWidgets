@@ -281,6 +281,8 @@ public:
 
     // Extend event processing to search the view's event table
     virtual bool ProcessEvent(wxEvent& event);
+    void SetView(wxPropertyFormView* view) { m_view = view; }
+    wxPropertyFormView* GetView() const { return m_view; }
 
 private:
     wxPropertyFormView*       m_view;
