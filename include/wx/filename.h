@@ -80,6 +80,12 @@ enum
     wxPATH_GET_SEPARATOR = 0x0002   // terminate the path with the separator
 };
 
+// MkDir flags
+enum
+{
+    wxPATH_MKDIR_FULL    = 0x0001   // create directories recursively
+};
+
 // ----------------------------------------------------------------------------
 // wxFileName: encapsulates a file path
 // ----------------------------------------------------------------------------
@@ -236,8 +242,8 @@ public:
 
     // directory creation and removal.
     // if full is TRUE, will try to make each directory in the path.
-    bool Mkdir( int perm = 0777, bool full = FALSE);
-    static bool Mkdir( const wxString &dir, int perm = 0777, bool full = FALSE );
+    bool Mkdir( int perm = 0777, int flags = 0);
+    static bool Mkdir( const wxString &dir, int perm = 0777, int flags = 0 );
 
     bool Rmdir();
     static bool Rmdir( const wxString &dir );

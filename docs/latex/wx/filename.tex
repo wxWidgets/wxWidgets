@@ -539,15 +539,17 @@ different from the volume specified by {\it pathBase}).
 
 \membersection{wxFileName::Mkdir}\label{wxfilenamemkdir}
 
-\func{bool}{Mkdir}{\param{int }{perm = 0777}, \param{bool }{full = FALSE}}
+\func{bool}{Mkdir}{\param{int }{perm = 0777}, \param{int }{flags = $0$}}
 
-\func{static bool}{Mkdir}{\param{const wxString\& }{dir}, \param{int }{perm = 0777}, \param{bool }{full = FALSE}}
+\func{static bool}{Mkdir}{\param{const wxString\& }{dir}, \param{int }{perm = 0777}, \param{int }{flags = $0$}}
 
 \docparam{dir}{the directory to create}
 
 \docparam{parm}{the permissions for the newly created directory}
 
-\docparam{full}{if {\tt TRUE}, will try to make each directory in the path}
+\docparam{flags}{if the flags contain {\tt wxPATH\_MKDIR\_FULL} flag,
+try to create each directory in the path and also don't return an error
+if the target directory already exists.}
 
 \wxheading{Return value}
 

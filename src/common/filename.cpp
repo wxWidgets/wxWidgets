@@ -735,47 +735,48 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
 // directory operations
 // ----------------------------------------------------------------------------
 
-bool wxFileName::Mkdir( int perm, bool full )
+bool wxFileName::Mkdir( int perm, int flags )
 {
-    return wxFileName::Mkdir( GetFullPath(), perm, full );
+    return wxFileName::Mkdir( GetFullPath(), perm, flags );
 }
 
-bool wxFileName::Mkdir( const wxString &dir, int perm, bool full )
+bool wxFileName::Mkdir( const wxString& dir, int perm, int flags )
 {
-    if (full)
+    if ( flags & wxPATH_MKDIR_FULL )
     {
-        wxFileName filename(dir);
-        wxArrayString dirs = filename.GetDirs();
-        dirs.Add(filename.GetName());
+        // split the path in components
+        wxFileName filename;
+        filename.AssignDir(dir);
 
-        size_t count = dirs.GetCount();
-        size_t i;
         wxString currPath;
-        int noErrors = 0;
-        for ( i = 0; i < count; i++ )
+        if ( filename.HasVolume())  
+        { 
+            currPath << wxGetVolumeString(filename.GetVolume(), wxPATH_NATIVE);
+        } 
+
+        wxArrayString dirs = filename.GetDirs();
+        size_t count = dirs.GetCount();
+        for ( size_t i = 0; i < count; i++ )
         {
+            if ( i > 0 || filename.IsAbsolute() )
+                currPath += wxFILE_SEP_PATH;
             currPath += dirs[i];
 
-            if (currPath.Last() == wxT(':'))
-            {
-                // Can't create a root directory so continue to next dir
-                currPath += wxFILE_SEP_PATH;
-                continue;
-            }
-
             if (!DirExists(currPath))
+            {
                 if (!wxMkdir(currPath, perm))
-                    noErrors ++;
-
-            if ( (i < (count-1)) )
-                currPath += wxFILE_SEP_PATH;
+                {
+                    // no need to try creating further directories
+                    return FALSE;
+                }
+            }
         }
 
-        return (noErrors == 0);
+        return TRUE;
 
     }
-    else
-        return ::wxMkdir( dir, perm );
+
+    return ::wxMkdir( dir, perm );
 }
 
 bool wxFileName::Rmdir()
