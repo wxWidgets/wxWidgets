@@ -284,6 +284,7 @@ char wxStreamBuffer::GetChar()
   }
 
   GetFromBuffer(&c, 1);
+  
   m_stream->m_lastcount = 1;
   return c;
 }
@@ -624,7 +625,7 @@ wxInputStream& wxInputStream::operator>>(signed int& i)
 wxInputStream& wxInputStream::operator>>(signed long& i)
 {
   /* I only implemented a simple integer parser */
-  char c; 
+  int c; 
   int sign;
 
   while (isspace( c = GetC() ) )
@@ -639,8 +640,12 @@ wxInputStream& wxInputStream::operator>>(signed long& i)
   if (c == '-') {
     sign = -1;
     c = GetC();
-  } else
+  } else if (c == '+') {
     sign = 1;
+    c = GetC();
+  } else {
+    sign = 1;
+  }
 
   while (isdigit(c)) {
     i = i*10 + c;
@@ -673,7 +678,7 @@ wxInputStream& wxInputStream::operator>>(unsigned int& i)
 wxInputStream& wxInputStream::operator>>(unsigned long& i)
 {
   /* I only implemented a simple integer parser */
-  char c;
+  int c;
 
   while (isspace( c = GetC() ) )
      /* Do nothing */ ;
@@ -709,8 +714,12 @@ wxInputStream& wxInputStream::operator>>(double& f)
   if (c == '-') {
     sign = -1;
     c = GetC();
-  } else
+  } else if (c == '+') {
     sign = 1;
+    c = GetC();
+  } else {
+    sign = 1;
+  }
 
   while (isdigit(c)) {
     f = f*10 + (c - '0');

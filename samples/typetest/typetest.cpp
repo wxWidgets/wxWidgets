@@ -106,11 +106,11 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
     textCtrl.Clear();
     textCtrl << "\nTest fstream vs. wxFileStream:\n\n";
 
+    textCtrl.WriteText( "Writing to ofstream and wxFileOutputStream:\n" );
+    
     ofstream std_file_output( "test_std.dat" );
     wxFileOutputStream file_output( "test_wx.dat" );
 
-    textCtrl.WriteText( "Writig to fstream:\n" );
-    
     wxString tmp;
     signed int si = 0xFFFFFFFF;
     tmp.Printf( "Signed int: %d\n", si );
@@ -130,12 +130,65 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
     file_output << d << "\n";
     std_file_output << d << "\n";
     
+    float f = 0.00001;
+    tmp.Printf( "Float: %f\n", f );
+    textCtrl.WriteText( tmp );
+    file_output << f << "\n";
+    std_file_output << f << "\n";
+    
     wxString str( "Hello!" );
     tmp.Printf( "String: %s\n", str.c_str() );
     textCtrl.WriteText( tmp );
     file_output << str << "\n";
     std_file_output << str.c_str() << "\n";
     
+    textCtrl.WriteText( "\nReading from ifstream:\n" );
+    
+    ifstream std_file_input( "test_std.dat" );
+
+    std_file_input >> si;
+    tmp.Printf( "Signed int: %d\n", si );
+    textCtrl.WriteText( tmp );
+    
+    std_file_input >> ui;
+    tmp.Printf( "Unsigned int: %u\n", ui );
+    textCtrl.WriteText( tmp );
+    
+    std_file_input >> d;
+    tmp.Printf( "Double: %f\n", d );
+    textCtrl.WriteText( tmp );
+    
+    std_file_input >> f;
+    tmp.Printf( "Float: %f\n", f );
+    textCtrl.WriteText( tmp );
+    
+    std_file_input >> str;
+    tmp.Printf( "String: %s\n", str.c_str() );
+    textCtrl.WriteText( tmp );
+    
+    textCtrl.WriteText( "\nReading from wxFileInputStream:\n" );
+    
+    wxFileInputStream file_input( "test_wx.dat" );
+    
+    file_input >> si;
+    tmp.Printf( "Signed int: %d\n", si );
+    textCtrl.WriteText( tmp );
+    
+    file_input >> ui;
+    tmp.Printf( "Unsigned int: %u\n", ui );
+    textCtrl.WriteText( tmp );
+    
+    file_input >> d;
+    tmp.Printf( "Double: %f\n", d );
+    textCtrl.WriteText( tmp );
+    
+    file_input >> f;
+    tmp.Printf( "Float: %f\n", f );
+    textCtrl.WriteText( tmp );
+    
+    file_input >> str;
+    tmp.Printf( "String: %s\n", str.c_str() );
+    textCtrl.WriteText( tmp );
 }
 
 #if wxUSE_UNICODE
