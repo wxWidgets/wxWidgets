@@ -190,17 +190,19 @@ struct WXDLLEXPORT wxStringData
   // lock/unlock
   void  Lock()   { if ( !IsEmpty() ) nRefs++;                    }
 
-  // VC++ will refuse to inline this function but profiling shows that it
-  // is wrong
+  // VC++ will refuse to inline Unlock but profiling shows that it is wrong
 #if defined(__VISUALC__) && (__VISUALC__ >= 1200)
   __forceinline
 #endif
-  void  Unlock() { if ( !IsEmpty() && --nRefs == 0) Free();  }
-
   // VC++ free must take place in same DLL as allocation when using non dll
   // run-time library (e.g. Multithreaded instead of Multithreaded DLL)
+#if defined(__VISUALC__) && defined(_MT) && !defined(_DLL)
+  void  Unlock() { if ( !IsEmpty() && --nRefs == 0) Free();  }
   // we must not inline deallocation since allocation is not inlined
   void  Free();
+#else
+  void  Unlock() { if ( !IsEmpty() && --nRefs == 0) free();  }
+#endif
 
   // if we had taken control over string memory (GetWriteBuf), it's
   // intentionally put in invalid state
