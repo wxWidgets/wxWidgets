@@ -84,7 +84,7 @@
  * 
  */
 
-// Watcom C++ (or its make utility) doesn't like long filenames
+/* Watcom C++ (or its make utility) doesn't like long filenames */
 #ifdef __WATCOMC__
 #include "tif_pred.h"
 #else
