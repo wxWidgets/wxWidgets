@@ -11579,6 +11579,7 @@ SWIGEXPORT(void) initstc_c() {
 	 PyDict_SetItemString(d,"wxSTC_MATLAB_OPERATOR", PyInt_FromLong((long) 6));
 	 PyDict_SetItemString(d,"wxSTC_MATLAB_IDENTIFIER", PyInt_FromLong((long) 7));
 	 PyDict_SetItemString(d,"wxSTCNameStr", PyString_FromString("wxSTCNameStr"));
+	 PyDict_SetItemString(d,"STC_USE_DND", PyInt_FromLong((long) 1));
 	 PyDict_SetItemString(d,"wxEVT_STC_CHANGE", PyInt_FromLong((long) wxEVT_STC_CHANGE));
 	 PyDict_SetItemString(d,"wxEVT_STC_STYLENEEDED", PyInt_FromLong((long) wxEVT_STC_STYLENEEDED));
 	 PyDict_SetItemString(d,"wxEVT_STC_CHARADDED", PyInt_FromLong((long) wxEVT_STC_CHARADDED));

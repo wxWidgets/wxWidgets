@@ -2134,7 +2134,9 @@ wxStyledTextEvent::wxStyledTextEvent(wxEventType commandType, int id)
     m_x = 0;
     m_y = 0;
     m_dragAllowMove = FALSE;
+#if wxUSE_DRAG_AND_DROP
     m_dragResult = wxDragNone;
+#endif
 }
 
 bool wxStyledTextEvent::GetShift() const { return (m_modifiers & SCI_SHIFT) != 0; }
@@ -2168,7 +2170,9 @@ wxStyledTextEvent::wxStyledTextEvent(const wxStyledTextEvent& event):
 
     m_dragText =     event.m_dragText;
     m_dragAllowMove =event.m_dragAllowMove;
+#if wxUSE_DRAG_AND_DROP
     m_dragResult =   event.m_dragResult;
+#endif
 }
 
 //----------------------------------------------------------------------

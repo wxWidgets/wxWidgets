@@ -1860,6 +1860,15 @@ private:
 
 //----------------------------------------------------------------------
 
+// SWIG can't handle "#if" type of conditionals, onlu "#ifdef"
+#ifdef SWIG
+#define STC_USE_DND 1
+#else
+#if wxUSE_DRAG_AND_DROP
+#define STC_USE_DND 1
+#endif
+#endif
+
 class wxStyledTextEvent : public wxCommandEvent {
 public:
     wxStyledTextEvent(wxEventType commandType=0, int id=0);
@@ -1887,7 +1896,9 @@ public:
     void SetY(int val)                    { m_y = val; }
     void SetDragText(const wxString& val) { m_dragText = val; }
     void SetDragAllowMove(bool val)       { m_dragAllowMove = val; }
+#ifdef  STC_USE_DND
     void SetDragResult(wxDragResult val)  { m_dragResult = val; }
+#endif
 
     int  GetPosition() const         { return m_position; }
     int  GetKey()  const             { return m_key; }
@@ -1908,7 +1919,9 @@ public:
     int  GetY() const                { return m_y; }
     wxString GetDragText()           { return m_dragText; }
     bool GetDragAllowMove()          { return m_dragAllowMove; }
+#ifdef STC_USE_DND
     wxDragResult GetDragResult()     { return m_dragResult; }
+#endif
 
     bool GetShift() const;
     bool GetControl() const;
@@ -1945,7 +1958,9 @@ private:
     wxString m_dragText;        // wxEVT_STC_START_DRAG, wxEVT_STC_DO_DROP
     bool     m_dragAllowMove;   // wxEVT_STC_START_DRAG
 
+#if wxUSE_DRAG_AND_DROP
     wxDragResult m_dragResult; // wxEVT_STC_DRAG_OVER,wxEVT_STC_DO_DROP
+#endif
 #endif
 };
 
