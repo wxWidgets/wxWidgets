@@ -184,10 +184,26 @@ wxWindowMac::~wxWindowMac()
         gFocusWindow = NULL ;
     }
 
+	// CS: copied from MSW :
+    // VS: destroy children first and _then_ detach *this from its parent.
+    //     If we'd do it the other way around, children wouldn't be able
+    //     find their parent frame (see above).
+    DestroyChildren();
+
     if ( m_parent )
         m_parent->RemoveChild(this);
 
-    DestroyChildren();
+    wxWindowDestroyEvent event((wxWindow *)this);
+    (void)GetEventHandler()->ProcessEvent(event);
+
+    // delete our drop target if we've got one
+#if wxUSE_DRAG_AND_DROP
+    if ( m_dropTarget != NULL )
+    {
+        delete m_dropTarget;
+        m_dropTarget = NULL;
+    }
+#endif // wxUSE_DRAG_AND_DROP
 }
 
 // Constructor
