@@ -8,6 +8,13 @@ INCOMPATIBLE CHANGES SINCE 2.2.x
     paying attention to the most important changes which are marked
     with '!' in the first column.
 
+    Also please note that you should ensure that WXWIN_COMPATIBILITY_2_2
+    is defined to 1 if you wish to retain maximal compatibility with 2.2
+    series -- however you are also strongly encouraged to try to compile
+    your code without this define as it won't be default any longer in
+    2.6 release.
+
+
 wxBase:
 
 ! wxArray<T>::Remove(size_t) has been removed to fix compilation problems
@@ -37,6 +44,7 @@ wxBase:
 - another minor change: wxApp::OnAssert() has a new "cond" argument, you
   must modify YourApp::OnAssert() signature if you were using it to override
   the default assert handling.
+
 
 All (GUI):
 
@@ -83,6 +91,10 @@ All (GUI):
 - the dialogs use wxApp::GetTopWindow() as the parent implicitly if the
   parent specified is NULL, use wxDIALOG_NO_PARENT style to prevent this
   from happening
+
+- several obsolete synonyms are only retained in WXWIN_COMPATIBILITY_2_2 mode:
+  for example, use wxScrolledWindow::GetViewStart() now instead of ViewStart()
+  and GetCount() instead of Number() in many classes
 
 
 wxMSW:
