@@ -284,12 +284,12 @@ bool wxCanvasObjectGroup::IsHit( int x, int y, int margin )
         {
             if (obj->IsHit(x,y,margin))
             {
-                return true;
+                return TRUE;
             }
         }
         node = node->Previous();
     }
-    return false;
+    return FALSE;
 }
 
 wxCanvasObject* wxCanvasObjectGroup::IsHitObject( int x, int y, int margin )
@@ -322,40 +322,39 @@ wxCanvasObjectGroupRef::wxCanvasObjectGroupRef(double x, double y, wxCanvasObjec
 {
     m_x = x;
     m_y = y;
-    m_validbounds=false;
-    m_group=group;
+    m_validbounds = FALSE;
+    m_group = group;
 }
 
 void wxCanvasObjectGroupRef::SetOwner(wxCanvas* canvas)
 {
-    m_owner=canvas;
+    m_owner = canvas;
     m_group->SetOwner(canvas);
 }
 
 void wxCanvasObjectGroupRef::ExtendArea(int x, int y)
 {
-   if (m_validbounds)
-   {
-     if ( x < m_minx ) m_minx = x;
-     if ( y < m_miny ) m_miny = y;
-     if ( x > m_maxx ) m_maxx = x;
-     if ( y > m_maxy ) m_maxy = y;
-   }
-   else
-   {
-      m_validbounds = true;
+    if (m_validbounds)
+    {
+        if (x < m_minx) m_minx = x;
+        if (y < m_miny) m_miny = y;
+        if (x > m_maxx) m_maxx = x;
+        if (y > m_maxy) m_maxy = y;
+    }
+    else
+    {
+        m_validbounds = TRUE;
 
-      m_minx = x;
-      m_miny = y;
-      m_maxx = x;
-      m_maxy = y;
-   }
-
+        m_minx = x;
+        m_miny = y;
+        m_maxx = x;
+        m_maxy = y;
+    }
 }
 
 void wxCanvasObjectGroupRef::Recreate()
 {
-    m_validbounds=false;
+    m_validbounds = FALSE;
     m_group->Recreate();
     ExtendArea(m_group->GetXMin(),m_group->GetYMin());
     ExtendArea(m_group->GetXMax(),m_group->GetYMax());
@@ -467,10 +466,12 @@ void wxCanvasRect::Recreate()
 
 void wxCanvasRect::Render(int xabs, int yabs, int clip_x, int clip_y, int clip_width, int clip_height )
 {
-    wxImage *image = m_owner->GetBuffer();
     int buffer_x = m_owner->GetBufferX();
     int buffer_y = m_owner->GetBufferY();
 
+#if IMAGE_CANVAS
+    wxImage *image = m_owner->GetBuffer();
+    
     int start_y = clip_y - buffer_y;
     int end_y = clip_y+clip_height - buffer_y;
 
@@ -481,6 +482,14 @@ void wxCanvasRect::Render(int xabs, int yabs, int clip_x, int clip_y, int clip_w
     for (int y = start_y; y < end_y; y++)
         for (int x = start_x; x < end_x; x++)
             image->SetRGB( x, y, m_red, m_green, m_blue );
+#else
+    wxMemoryDC *dc = m_owner->GetDC();
+    dc->SetPen( *wxTRANSPARENT_PEN );
+    wxBrush brush( wxColour( m_red,m_green,m_blue), wxSOLID );
+    dc->SetBrush( brush );
+    
+    dc->DrawRectangle( clip_x-buffer_x, clip_y-buffer_y, clip_width, clip_height );
+#endif
 }
 
 void wxCanvasRect::WriteSVG( wxTextOutputStream &stream )
@@ -528,21 +537,22 @@ void wxCanvasLine::Recreate()
 
 void wxCanvasLine::Render(int xabs, int yabs, int clip_x, int clip_y, int clip_width, int clip_height )
 {
-    wxImage *image = m_owner->GetBuffer();
     int buffer_x = m_owner->GetBufferX();
     int buffer_y = m_owner->GetBufferY();
 
+    int x1 = xabs + m_owner->GetDeviceX( m_x1 );
+    int y1 = yabs + m_owner->GetDeviceY( m_y1 );
+    int x2 = xabs + m_owner->GetDeviceX( m_x2 );
+    int y2 = yabs + m_owner->GetDeviceY( m_y2 );
+    
+#if IMAGE_CANVAS
+    wxImage *image = m_owner->GetBuffer();
     if ((m_area.width == 0) && (m_area.height == 0))
     {
         image->SetRGB( m_area.x-buffer_x, m_area.y-buffer_y, m_red, m_green, m_blue );
     }
     else
     {
-        int x1 = xabs + m_owner->GetDeviceX( m_x1 );
-        int y1 = yabs + m_owner->GetDeviceY( m_y1 );
-        int x2 = xabs + m_owner->GetDeviceX( m_x2 );
-        int y2 = yabs + m_owner->GetDeviceY( m_y2 );
-
         wxInt32 d, ii, jj, di, ai, si, dj, aj, sj;
         di = x1 - x2;
         ai = abs(di) << 1;
@@ -597,6 +607,16 @@ void wxCanvasLine::Render(int xabs, int yabs, int clip_x, int clip_y, int clip_w
             }
         }
     }
+#else
+    wxMemoryDC *dc = m_owner->GetDC();
+    dc->SetClippingRegion( clip_x-buffer_x, clip_y-buffer_y, clip_width, clip_height );
+    
+    wxPen pen( wxColour(m_red,m_green,m_blue), 0, wxSOLID );
+    dc->SetPen( pen );
+    dc->DrawLine( x1-buffer_x, y1-buffer_y, x2-buffer_x, y2-buffer_y );
+    
+    dc->DestroyClippingRegion();
+#endif
 }
 
 void wxCanvasLine::WriteSVG( wxTextOutputStream &stream )
@@ -627,11 +647,28 @@ void wxCanvasImage::Recreate()
              m_owner->GetDeviceWidth( m_width ),
              m_owner->GetDeviceHeight( m_height ) );
 
+#if IMAGE_CANVAS
     if ((m_area.width == m_image.GetWidth()) &&
         (m_area.width == m_image.GetWidth()))
+    {
         m_tmp = m_image;
+    }
     else
+    {
         m_tmp = m_image.Scale( m_area.width, m_area.height );
+    }
+#else
+    if ((m_area.width == m_image.GetWidth()) &&
+        (m_area.width == m_image.GetWidth()))
+    {
+        m_tmp = m_image.ConvertToBitmap();
+    }
+    else
+    {
+        wxImage tmp( m_image.Scale( m_area.width, m_area.height ) );
+        m_tmp = tmp.ConvertToBitmap();
+    }
+#endif
 }
 
 void wxCanvasImage::Render(int xabs, int yabs, int clip_x, int clip_y, int clip_width, int clip_height )
@@ -639,6 +676,7 @@ void wxCanvasImage::Render(int xabs, int yabs, int clip_x, int clip_y, int clip_
     int buffer_x = m_owner->GetBufferX();
     int buffer_y = m_owner->GetBufferY();
 
+#if IMAGE_CANVAS
     if ((clip_x == xabs + m_area.x) &&
         (clip_y == yabs + m_area.y) &&
         (clip_width == m_area.width) &&
@@ -656,6 +694,28 @@ void wxCanvasImage::Render(int xabs, int yabs, int clip_x, int clip_y, int clip_
         wxImage sub_image( m_tmp.GetSubImage( rect ) );
         m_owner->GetBuffer()->Paste( sub_image, clip_x-buffer_x, clip_y-buffer_y );
     }
+#else
+    wxMemoryDC *dc = m_owner->GetDC();
+    
+    if ((clip_x == xabs + m_area.x) &&
+        (clip_y == yabs + m_area.y) &&
+        (clip_width == m_area.width) &&
+        (clip_height == m_area.height))
+    {
+        dc->DrawBitmap( m_tmp, clip_x-buffer_x, clip_y-buffer_y, TRUE );
+    }
+    else
+    {
+        // local coordinates
+        int start_x = clip_x - (xabs + m_area.x);
+        int start_y = clip_y - (yabs + m_area.y);
+        
+        // Clipping region faster ?
+        wxRect rect( start_x, start_y, clip_width, clip_height );
+        wxBitmap sub_bitmap( m_tmp.GetSubBitmap( rect ) );
+        dc->DrawBitmap( sub_bitmap, clip_x-buffer_x, clip_y-buffer_y, TRUE );
+    }
+#endif
 }
 
 void wxCanvasImage::WriteSVG( wxTextOutputStream &stream )
@@ -763,6 +823,7 @@ void wxCanvasText::Render(int xabs, int yabs, int clip_x, int clip_y, int clip_w
 {
     if (!m_alpha) return;
 
+#if IMAGE_CANVAS
     wxImage *image = m_owner->GetBuffer();
     int buffer_x = m_owner->GetBufferX();
     int buffer_y = m_owner->GetBufferY();
@@ -801,6 +862,7 @@ void wxCanvasText::Render(int xabs, int yabs, int clip_x, int clip_y, int clip_w
                 image->SetRGB( image_x, image_y, red1+red2, green1+green2, blue1+blue2 );
             }
         }
+#endif
 }
 
 void wxCanvasText::WriteSVG( wxTextOutputStream &stream )
@@ -884,7 +946,6 @@ wxCanvas::wxCanvas( wxWindow *parent, wxWindowID id,
     m_lastMouse = (wxCanvasObject*)NULL;
     m_captureMouse = (wxCanvasObject*)NULL;
     m_frozen = TRUE;
-    m_requestNewBuffer = TRUE;
 
     //root group always at 0,0
     m_root = new wxCanvasObjectGroup();
@@ -919,6 +980,7 @@ void wxCanvas::SetColour( unsigned char red, unsigned char green, unsigned char 
 
     if (m_frozen) return;
 
+#if IMAGE_CANVAS
     unsigned char *data = m_buffer.GetData();
 
     for (int y = 0; y < m_buffer.GetHeight(); y++)
@@ -931,6 +993,15 @@ void wxCanvas::SetColour( unsigned char red, unsigned char green, unsigned char 
             data[0] = blue;
             data++;
         }
+#else
+    wxMemoryDC dc;
+    dc.SelectObject( m_buffer );
+    dc.SetPen( *wxTRANSPARENT_PEN );
+    wxBrush brush( wxColour( red,green,blue), wxSOLID );
+    dc.SetBrush( brush );
+    dc.DrawRectangle( 0, 0, m_buffer.GetWidth(), m_buffer.GetHeight() );
+    dc.SelectObject( wxNullBitmap );
+#endif
 }
 
 void wxCanvas::SetCaptureMouse( wxCanvasObject *obj )
@@ -979,26 +1050,26 @@ void wxCanvas::Update( int x, int y, int width, int height, bool blit )
         width -= m_bufferX-x;
         x = m_bufferX;
     }
-    if (width < 0) return;
+    if (width <= 0) return;
 
     if (y < m_bufferY)
     {
         height -= m_bufferY-y;
         y = m_bufferY;
     }
-    if (height < 0) return;
+    if (height <= 0) return;
 
     if (x+width > m_bufferX+m_buffer.GetWidth())
     {
         width = m_bufferX+m_buffer.GetWidth() - x;
     }
-    if (width < 0) return;
+    if (width <= 0) return;
 
     if (y+height > m_bufferY+m_buffer.GetHeight())
     {
         height = m_bufferY+m_buffer.GetHeight() - y;
     }
-    if (height < 0) return;
+    if (height <= 0) return;
 
     // update is within the buffer
     m_needUpdate = TRUE;
@@ -1010,6 +1081,7 @@ void wxCanvas::Update( int x, int y, int width, int height, bool blit )
             (wxObject*) new wxRect( x,y,width,height ) );
     }
 
+#if IMAGE_CANVAS
     // speed up with direct access, maybe add wxImage::Clear(x,y,w,h,r,g,b)
     int start_y = y - m_bufferY;
     int end_y = y+height - m_bufferY;
@@ -1018,9 +1090,21 @@ void wxCanvas::Update( int x, int y, int width, int height, bool blit )
     for (int yy = start_y; yy < end_y; yy++)
         for (int xx = start_x; xx < end_x; xx++)
             m_buffer.SetRGB( xx, yy, m_red, m_green, m_blue );
-
+            
     m_root->Render(0,0, x, y, width, height );
+#else
+    wxMemoryDC dc;
+    dc.SelectObject( m_buffer );
+    dc.SetPen( *wxTRANSPARENT_PEN );
+    wxBrush brush( wxColour( m_red,m_green,m_blue), wxSOLID );
+    dc.SetBrush( brush );
+    dc.DrawRectangle( x-m_bufferX, y-m_bufferY, width, height );
 
+    m_renderDC = &dc;
+    m_root->Render(0,0, x, y, width, height );
+    
+    dc.SelectObject( wxNullBitmap );
+#endif
 }
 
 void wxCanvas::BlitBuffer( wxDC &dc )
@@ -1034,8 +1118,9 @@ void wxCanvas::BlitBuffer( wxDC &dc )
         sub_rect.x -= m_bufferX;
         sub_rect.y -= m_bufferY;
 
-        wxImage sub_image( m_buffer.GetSubImage( sub_rect ) );
+#if IMAGE_CANVAS
 
+        wxImage sub_image( m_buffer.GetSubImage( sub_rect ) );
 #ifdef __WXGTK__
         int bpp = wxDisplayDepth();
         if (bpp > 8)
@@ -1062,13 +1147,19 @@ void wxCanvas::BlitBuffer( wxDC &dc )
             wxBitmap bitmap( sub_image.ConvertToBitmap() );
             dc.DrawBitmap( bitmap, rect->x, rect->y );
         }
-#endif
-
-#ifndef __WXGTK__
+#else
         wxBitmap bitmap( sub_image.ConvertToBitmap() );
         dc.DrawBitmap( bitmap, rect->x, rect->y );
 #endif
 
+#else  // IMAGE_CANVAS
+
+        // Maybe clipping use SetClipping() is faster than
+        // getting the subrect first and drawing it then?
+        wxBitmap sub_bitmap( m_buffer.GetSubBitmap( sub_rect ) );
+        dc.DrawBitmap( sub_bitmap, rect->x, rect->y );
+        
+#endif
         delete rect;
         m_updateRects.DeleteNode( node );
         node = m_updateRects.First();
@@ -1208,6 +1299,7 @@ void wxCanvas::ScrollWindow( int dx, int dy, const wxRect* rect )
     // client area. Indeed, it is the client area.
     CalcUnscrolledPosition( 0, 0, &m_bufferX, &m_bufferY );
 
+#if IMAGE_CANVAS
     unsigned char* data = m_buffer.GetData();
 
     if (dy != 0)
@@ -1271,6 +1363,10 @@ void wxCanvas::ScrollWindow( int dx, int dy, const wxRect* rect )
             Update( m_bufferX+m_buffer.GetWidth()+dx, m_bufferY, -dx, m_buffer.GetHeight(), FALSE );
         }
     }
+#else
+    // Update everything, TODO: scrolling
+    Update( m_bufferX, m_bufferY, m_buffer.GetWidth(), m_buffer.GetHeight(), FALSE );
+#endif
 
     wxWindow::ScrollWindow( dx, dy, rect );
 }
@@ -1408,7 +1504,11 @@ void wxCanvas::OnSize(wxSizeEvent &event)
 {
     int w,h;
     GetClientSize( &w, &h );
+#if IMAGE_CANVAS
     m_buffer = wxImage( w, h );
+#else
+    m_buffer = wxBitmap( w, h );
+#endif
 
     CalcUnscrolledPosition( 0, 0, &m_bufferX, &m_bufferY );
 

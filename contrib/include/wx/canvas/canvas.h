@@ -20,9 +20,13 @@
 #include "wx/image.h"
 #include "wx/txtstrm.h"
 
-class wxCanvas;
+//----------------------------------------------------------------------------
+// decls
+//----------------------------------------------------------------------------
 
-// WDR: class declarations
+#define IMAGE_CANVAS 0
+
+class wxCanvas;
 
 //----------------------------------------------------------------------------
 // wxCanvasObject
@@ -241,7 +245,11 @@ private:
     double      m_height;
     
     wxImage     m_image;
+#if IMAGE_CANVAS
     wxImage     m_tmp;
+#else
+    wxBitmap    m_tmp;
+#endif
 };
 
 //----------------------------------------------------------------------------
@@ -331,7 +339,12 @@ public:
     // ... and call this to tell all objets to recreate then
     virtual void Recreate();
 
+#if IMAGE_CANVAS
     inline wxImage *GetBuffer()  { return &m_buffer; }
+#else
+    inline wxBitmap *GetBuffer() { return &m_buffer; }
+    inline wxMemoryDC *GetDC()   { return m_renderDC; }
+#endif
     inline int GetBufferX()      { return m_bufferX; }
     inline int GetBufferY()      { return m_bufferY; }
     inline int GetBufferWidth()  { return m_buffer.GetWidth(); }
@@ -348,7 +361,12 @@ public:
                                const wxRect* rect = (wxRect *) NULL );
 
 private:
+#if IMAGE_CANVAS
     wxImage          m_buffer;
+#else
+    wxBitmap         m_buffer;
+    wxMemoryDC      *m_renderDC;
+#endif
     int              m_bufferX;
     int              m_bufferY;
     bool             m_needUpdate;
@@ -357,7 +375,6 @@ private:
 
     unsigned char    m_green,m_red,m_blue;
     bool             m_frozen;
-    bool             m_requestNewBuffer;
     wxCanvasObject  *m_lastMouse;
     wxCanvasObject  *m_captureMouse;
 

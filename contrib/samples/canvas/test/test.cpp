@@ -209,7 +209,7 @@ MyFrame::MyFrame()
     wxBitmap bitmap( smile_xpm );
     wxImage image( bitmap );
 
-    m_sm1 = new wxCanvasImage( image, 0,70,16,16 );
+    m_sm1 = new wxCanvasImage( image, 0,70,32,32 );
     m_canvas->Append( m_sm1 );
 
     int i;
@@ -241,12 +241,12 @@ MyFrame::MyFrame()
 //    m_canvas->Append( new wxCanvasLine( 10,-1500e6,50,300000e6, 0,255,0 ) );
 //    m_canvas->Append( new wxCanvasLine( 10,-150000,50,300000, 0,255,0 ) );
 
+/*
     //make a group of wxCanvasObjects
     wxCanvasObjectGroup* group1 = new wxCanvasObjectGroup();
     group1->Prepend( new wxCanvasLine( 10,-35,50,190,100,255,0 ) );
     group1->Prepend( new wxCanvasImage( image, 4,38,32,32 ) );
     group1->Prepend( new wxCanvasRect(20,-20,50,170,0,20,240 ) );
-
 
     //make another group of wxCanvasObjects
     wxCanvasObjectGroup* group2 = new wxCanvasObjectGroup();
@@ -258,13 +258,12 @@ MyFrame::MyFrame()
     group1->Prepend( m_subref );
 
     //now make two refrences to group1 into root group of the canvas
-/*
     m_ref = new MywxCanvasObjectGroupRef(40,200, group1);
     m_canvas->Prepend( m_ref );
-*/
 
     m_ref2 = new MywxCanvasObjectGroupRef(80,350, group1);
     m_canvas->Prepend( m_ref2 );
+*/
 
     m_log = new wxTextCtrl( this, -1, "", wxPoint(0,0), wxSize(100,100), wxTE_MULTILINE );
     wxLog *old_log = wxLog::SetActiveTarget( new wxLogTextCtrl( m_log ) );
