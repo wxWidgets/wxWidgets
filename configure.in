@@ -2107,7 +2107,7 @@ dnl Check for expat libraries
 dnl ------------------------------------------------------------------------
 
 if test "$wxUSE_EXPAT" != "no"; then
-    wxUSE_XML=1
+    wxUSE_XML=yes
     AC_DEFINE(wxUSE_EXPAT)
     AC_DEFINE(wxUSE_XML)
     
