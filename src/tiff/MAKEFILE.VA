@@ -18,12 +18,23 @@ OS2LINKFLAGS=/BASE:0x00010000 /PMTYPE:PM /NOE /NOD /ALIGN:16
 OS2LIBFLAGS=/NOL /NOE
 OS2LIBS=CPPOM30.lib CPPOOC3.LIB OS2386.LIB
 
+!if "$(WXMAKINGDLL)" != "0"
+EXTRADLLFLAGS=/DWXMAKINGDLL=1 /Ge- /D__OS2DLL__
+EXTRALNKFLAGS=/DLL
+!endif
+
 # Change WXDIR or WXWIN to wherever wxWindows is found
 WXDIR = $(WXWIN)
 
 OS2TIFFDIR=$(WXDIR)\src\tiff
 OS2TIFFINC=$(WINTIFFDIR)
 OS2TIFFLIB=$(WXDIR)\lib\os2tiff.lib
+
+!if "$(WXMAKINGDLL)" != "1"
+OS2TIFFLIB=$(WXDIR)\lib\os2tiff.lib
+!else
+OS2TIFFLIB=$(WXDIR)\lib\os2tiff.dll
+!endif
 
 INC=-I$(WXDIR)\src\TIFF -I$(OS2TIFFINC)
 
@@ -42,7 +53,11 @@ MAKEPRECOMP=/Fi$(PCH)
 !endif
 
 !if "$(FINAL)" == "0"
+!if "$(WXMAKINGDLL)" == "1"
+D=DebugOS2DLL
+!else
 D=DebugOS2
+!endif
 OPT =
 DEBUG_FLAGS= /Ti /D__WXDEBUG__ #/Fb
 LINK_DEBUG_FLAGS=/DEBUG
@@ -50,7 +65,11 @@ CRTFLAG=/Gm /Gd
 !else
 # /O1 - smallest code
 # /O2 - fastest code
+!if "$(WXMAKINGDLL)" == "1"
+D=RelseOS2DLL
+!else
 D=RelseOS2
+!endif
 OPT = /O+ /Oc /G5
 DEBUG_FLAGS=
 LINK_DEBUG_FLAGS=/RELEASE
@@ -61,7 +80,8 @@ CRTFLAG=/Gm /Gd
 !endif
 
 
-CPPFLAGS=$(OS2FLAGS) $(DEBUG_FLAGS) $(PRECOMP) $(INC) $(OPT) $(CRTFLAG)
+CPPFLAGS=$(OS2FLAGS) $(EXTRADLLFLAGS) $(DEBUG_FLAGS) $(PRECOMP) $(INC) $(OPT) $(CRTFLAG)
+LINKFKAGS=$(OS2LINKFLAGS) $(EXTRALNKFLAGS)
 
 {..\tiff}.c{..\tiff\$D}.obj:
     @echo $<
@@ -141,6 +161,8 @@ LIBOBJECTS = \
 
 all:  $(OBJECTS) $(OS2TIFFLIB)
 
+!if "$(WXMAKINGDLL)" != "1"
+
 $(WXDIR)\lib\os2tiff.lib: $(LIBOBJECTS)
  touch $(WXDIR)\lib\os2tiff.lib
  del $(WXDIR)\lib\os2tiff.lib
@@ -148,6 +170,20 @@ $(WXDIR)\lib\os2tiff.lib: $(LIBOBJECTS)
     $**;
 <<
   del *.obj
+
+!else
+
+# Update the dynamic link library
+$(WXDIR)\lib\os2tiff.dll: $(OBJECTS)
+    icc @<<
+    /B" $(LINKFLAGS)" /Fe$@
+    $(LIBS)
+    $(OBJECTS)
+    $(WXDIR)\lib\os2tiff.def
+<<
+    implib $(WXDIR)\lib\os2tiffd.lib $(WXDIR)\lib\os2tiff.def
+
+!endif
 
 clean:
         del      $(OS2TIFFLIB)
