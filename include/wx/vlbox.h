@@ -103,6 +103,9 @@ public:
     // is this item selected?
     bool IsSelected(size_t line) const { return (int)line == m_selection; }
 
+    // get the margins around each item
+    wxPoint GetMargins() const { return m_ptMargins; }
+
 
 protected:
     // the derived class must implement this function to actually draw the item
