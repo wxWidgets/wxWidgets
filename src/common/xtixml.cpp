@@ -51,7 +51,7 @@ using namespace std ;
 
 void wxXmlAddContentToNode( wxXmlNode* node , const wxString& data )
 {
-    node->AddChild(new wxXmlNode(wxXML_TEXT_NODE, "value", data ) );
+    node->AddChild(new wxXmlNode(wxXML_TEXT_NODE, wxT("value"), data ) );
 }
 
 wxString wxXmlGetContentFromNode( wxXmlNode *node )
@@ -97,7 +97,7 @@ void wxXmlWriter::DoBeginWriteTopLevelEntry( const wxString &name )
 {
     wxXmlNode *pnode;
     pnode = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("entry"));
-    pnode->AddProperty(wxString("name"), name);
+    pnode->AddProperty(wxString(wxT("name")), name);
     m_data->m_current->AddChild(pnode) ;
     m_data->Push( pnode ) ;
 }
@@ -112,7 +112,7 @@ void wxXmlWriter::DoBeginWriteObject(const wxObject *WXUNUSED(object), const wxC
     wxXmlNode *pnode;
     pnode = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("object"));
     pnode->AddProperty(wxT("class"), wxString(classInfo->GetClassName()));
-    pnode->AddProperty(wxT("id"), wxString::Format( "%d" , objectID ) );
+    pnode->AddProperty(wxT("id"), wxString::Format( wxT("%d") , objectID ) );
 
     for ( size_t i = 0 ; i < metadata.GetCount() ; ++i )
     {
@@ -137,7 +137,7 @@ void wxXmlWriter::DoWriteSimpleType( wxxVariant &value )
 void wxXmlWriter::DoBeginWriteElement()
 {
     wxXmlNode *pnode;
-    pnode = new wxXmlNode(wxXML_ELEMENT_NODE, "element" );
+    pnode = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("element") );
     m_data->m_current->AddChild(pnode) ;
     m_data->Push( pnode ) ;
 }
@@ -150,7 +150,7 @@ void wxXmlWriter::DoEndWriteElement()
 void wxXmlWriter::DoBeginWriteProperty(const wxPropertyInfo *pi )
 {
     wxXmlNode *pnode;
-    pnode = new wxXmlNode(wxXML_ELEMENT_NODE, "prop" );
+    pnode = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("prop") );
     pnode->AddProperty(wxT("name"), pi->GetName() );
     m_data->m_current->AddChild(pnode) ;
     m_data->Push( pnode ) ;
@@ -168,7 +168,7 @@ void wxXmlWriter::DoWriteRepeatedObject( int objectID )
 {
     wxXmlNode *pnode;
     pnode = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("object"));
-    pnode->AddProperty(wxString("href"), wxString::Format( "%d" , objectID ) );
+    pnode->AddProperty(wxString(wxT("href")), wxString::Format( wxT("%d") , objectID ) );
     m_data->m_current->AddChild(pnode) ;
 }
 
@@ -223,18 +223,18 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
     if (!children)
     {
         // check for a null object or href
-        if (node->GetPropVal("href" , &ObjectIdString ) )
+        if (node->GetPropVal(wxT("href") , &ObjectIdString ) )
         {
-            objectID = atoi( ObjectIdString.c_str() ) ;
+            objectID = atoi( ObjectIdString.ToAscii() ) ;
             wxASSERT_MSG( HasObjectClassInfo( objectID ) , wxT("Forward hrefs are not supported") ) ;
             return objectID ;
         }
-        if ( !node->GetPropVal("id" , &ObjectIdString ) )
+        if ( !node->GetPropVal(wxT("id") , &ObjectIdString ) )
         {
             return wxNullObjectID;
         }
     }
-    if (!node->GetPropVal("class", &className))
+    if (!node->GetPropVal(wxT("class"), &className))
     {
         // No class name.  Eek. FIXME: error handling
         return wxInvalidObjectID;
@@ -242,13 +242,13 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
     classInfo = wxClassInfo::FindClass(className);
     wxASSERT_MSG( classInfo , wxString::Format(wxT("unknown class %s"),className ) ) ;
     wxASSERT_MSG( !children || children->GetType() != wxXML_TEXT_NODE , wxT("objects cannot have XML Text Nodes") ) ;
-    if (!node->GetPropVal("id", &ObjectIdString))
+    if (!node->GetPropVal(wxT("id"), &ObjectIdString))
     {
         wxASSERT_MSG(0,wxT("Objects must have an id attribute") ) ;
         // No object id.  Eek. FIXME: error handling
         return wxInvalidObjectID;
     }
-    objectID = atoi( ObjectIdString.c_str() ) ;
+    objectID = atoi( ObjectIdString.ToAscii() ) ;
     // is this object already has been streamed in, return it here
     wxASSERT_MSG( !HasObjectClassInfo( objectID ) , wxString::Format(wxT("Doubly used id : %d"), objectID ) ) ;
 
@@ -260,7 +260,7 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
     wxXmlProperty *xp = node->GetProperties() ;
     while ( xp )
     {
-        if ( xp->GetName() != wxString("class") && xp->GetName() != wxString("id") )
+        if ( xp->GetName() != wxString(wxT("class")) && xp->GetName() != wxString(wxT("id")) )
         {
             metadata.Add( new wxxVariant( xp->GetValue() , xp->GetName() ) ) ;
         }
@@ -275,9 +275,13 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
     createParamOids = new int[classInfo->GetCreateParamCount() ] ;
     createClassInfos = new const wxClassInfo*[classInfo->GetCreateParamCount() ] ;
 
+#if wxUSE_UNICODE
+    typedef map<wstring, wxXmlNode *> PropertyNodes ;
+    typedef vector<wstring> PropertyNames ;
+#else
     typedef map<string, wxXmlNode *> PropertyNodes ;
     typedef vector<string> PropertyNames ;
-
+#endif
     PropertyNodes propertyNodes ;
     PropertyNames propertyNames ;
 
@@ -295,7 +299,7 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
         const wxChar* paramName = classInfo->GetCreateParamName(i) ;
         PropertyNodes::iterator propiter = propertyNodes.find( paramName ) ;
         const wxPropertyInfo* pi = classInfo->FindPropertyInfo( paramName ) ;
-        wxASSERT_MSG(pi,wxString::Format("Unkown Property %s",paramName) ) ;
+        wxASSERT_MSG(pi,wxString::Format(wxT("Unkown Property %s"),paramName) ) ;
         // if we don't have the value of a create param set in the xml
         // we use the default value
         if ( propiter != propertyNodes.end() )
@@ -326,7 +330,7 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
             {
                 if ( propertyNames[j] == paramName )
                 {
-                    propertyNames[j] = "" ;
+                    propertyNames[j] = wxEmptyString ;
                     break ;
                 }
             }
@@ -430,7 +434,7 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
                         wxString resstring = prop->GetContent() ;
                         wxInt32 pos = resstring.Find('.') ;
                         assert( pos != wxNOT_FOUND ) ;
-                        int sinkOid = atol(resstring.Left(pos)) ;
+                        int sinkOid = atol(resstring.Left(pos).ToAscii()) ;
                         wxString handlerName = resstring.Mid(pos+1) ;
                         wxClassInfo* sinkClassInfo = GetObjectClassInfo( sinkOid ) ;
 
@@ -481,7 +485,7 @@ int wxXmlReader::ReadObject( const wxString &name , wxDepersister *callbacks)
     while ( iter )
     {
         wxString entryName ;
-        if ( iter->GetPropVal("name", &entryName) )
+        if ( iter->GetPropVal(wxT("name"), &entryName) )
         {
             if ( entryName == name )
                 return ReadComponent( iter->GetChildren() , callbacks ) ;
