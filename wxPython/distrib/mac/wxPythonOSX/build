@@ -349,7 +349,7 @@ EOF
 	--NeedsAuthorization="YES" \
 	--Relocatable="NO" \
 	--InstallOnly="YES" \
-	$INSTALLROOT
+	$INSTALLDEVEL
 
     mv wxPythonOSX-devel.pkg $DMGDIR/root
 
