@@ -1,8 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gnomeprint.cpp
-// Author:      XX
-// Created:     XX/XX/XX
-// Copyright:   XX
+// Name:        gprint.cpp
+// Author:      Robert Roebling
+// Purpose:     Implement GNOME printing support
+// Created:     09/20/04
+// Copyright:   Robert Roebling
+// Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
