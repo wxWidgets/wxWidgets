@@ -410,7 +410,7 @@ bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
 #endif
 
   SetBackgroundColour( *wxWHITE );
-  m_dottedPen = wxPen( *wxBLACK, 0, 0 );
+  m_dottedPen = wxPen( "GREY", 0, wxDOT );
 
   return TRUE;
 }
@@ -1390,13 +1390,13 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &
             dc.SetPen( *wxGREY_PEN );
             dc.SetBrush( *wxWHITE_BRUSH );
             dc.DrawRectangle( horizX+(m_indent-5), y-4, 11, 9 );
+	    
             dc.SetPen( *wxBLACK_PEN );
             dc.DrawLine( horizX+(m_indent-2), y, horizX+(m_indent+3), y );
-
             if (!item->IsExpanded())
-            {
                 dc.DrawLine( horizX+m_indent, y-2, horizX+m_indent, y+3 );
-            }
+		
+            dc.SetPen( m_dottedPen );
         }
 
         if (item->HasHilight())
@@ -1412,7 +1412,7 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &
 
             PaintItem(item, dc);
 
-            dc.SetPen( *wxBLACK_PEN );
+            dc.SetPen( m_dottedPen );
             dc.SetTextForeground( *wxBLACK );
             dc.SetBrush( *wxWHITE_BRUSH );
         }
@@ -1423,7 +1423,7 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &
 
             PaintItem(item, dc);
 
-            dc.SetPen( *wxBLACK_PEN );
+            dc.SetPen( m_dottedPen );
         }
     }
 

@@ -75,7 +75,7 @@ wxPen::wxPen(const wxColour& col, int Width, int Style)
     
     RealizeResource();
     
-    if ( wxThePenList )
+    if (wxThePenList)
         wxThePenList->AddPen(this);
 }
 

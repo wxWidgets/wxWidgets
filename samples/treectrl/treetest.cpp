@@ -340,8 +340,8 @@ void MyFrame::OnAddItem(wxCommandEvent& WXUNUSED(event))
     text.Printf("Item #%d", ++s_num);
 
     m_treeCtrl->AppendItem(m_treeCtrl->GetRootItem(),
-                           text,
-                           MyTreeCtrl::TreeCtrlIcon_File);
+                           text /*,
+                           MyTreeCtrl::TreeCtrlIcon_File */ );
 }
 
 void MyFrame::OnIncIndent(wxCommandEvent& WXUNUSED(event))
@@ -452,7 +452,8 @@ void MyTreeCtrl::AddItemsRecursively(const wxTreeItemId& idParent,
             else
                 str.Printf("%s child %d", "Folder", n + 1);
 
-            int image = depth == 1 ? TreeCtrlIcon_File : TreeCtrlIcon_Folder;
+//            int image = depth == 1 ? TreeCtrlIcon_File : TreeCtrlIcon_Folder;
+            int image = depth == 1 ? -1 : TreeCtrlIcon_Folder;
             wxTreeItemId id = AppendItem(idParent, str, image, image,
                                          new MyTreeItemData(str));
 

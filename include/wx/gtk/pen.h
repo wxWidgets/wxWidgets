@@ -27,6 +27,8 @@
 
 class wxPen;
 
+typedef    char wxDash;
+
 //-----------------------------------------------------------------------------
 // wxPen
 //-----------------------------------------------------------------------------
@@ -51,11 +53,17 @@ class wxPen: public wxGDIObject
     void SetJoin( int joinStyle );
     void SetStyle( int style );
     void SetWidth( int width );
+    void SetDashes( int number_of_dashes, const wxDash *dash );
+    
     wxColour &GetColour() const;
     int GetCap() const;
     int GetJoin() const;
     int GetStyle() const;
     int GetWidth() const;
+    int GetDashes(wxDash **ptr) const;
+    int GetDashCount() const;
+    wxDash* GetDash() const;
+    
     bool Ok() const;
 
     void Unshare();
