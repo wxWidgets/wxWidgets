@@ -49,10 +49,7 @@
 
 #ifndef __TWIN32__
 
-// I don't know what _OLD_ refers to so I'm reinstating the old
-// ifdef (JACS).
-// #ifdef __GNUWIN32_OLD__
-#if defined(__GNUWIN32__) && !defined(__MINGW32__)
+#ifdef __GNUWIN32_OLD__
     #include "wx/msw/gnuwin32/extra.h"
 #else
     #include <commctrl.h>
@@ -407,21 +404,42 @@ bool wxToolBar::Realize()
     // Map to system colours
     wxMapBitmap(hBitmap, totalBitmapWidth, totalBitmapHeight);
 
+    int bitmapId = 0;
+
+    bool addBitmap = TRUE;
+
     if ( oldToolBarBitmap )
     {
-        TBREPLACEBITMAP replaceBitmap;
-        replaceBitmap.hInstOld = NULL;
-        replaceBitmap.hInstNew = NULL;
-        replaceBitmap.nIDOld = (UINT) oldToolBarBitmap;
-        replaceBitmap.nIDNew = (UINT) hBitmap;
-        replaceBitmap.nButtons = nButtons;
-        if ( !::SendMessage(GetHwnd(), TB_REPLACEBITMAP,
-                            0, (LPARAM) &replaceBitmap) )
+#ifdef TB_REPLACEBITMAP
+        if ( wxTheApp->GetComCtl32Version() >= 400 )
         {
-            wxFAIL_MSG(wxT("Could not add bitmap to toolbar"));
-        }
+            TBREPLACEBITMAP replaceBitmap;
+            replaceBitmap.hInstOld = NULL;
+            replaceBitmap.hInstNew = NULL;
+            replaceBitmap.nIDOld = (UINT) oldToolBarBitmap;
+            replaceBitmap.nIDNew = (UINT) hBitmap;
+            replaceBitmap.nButtons = nButtons;
+            if ( !::SendMessage(GetHwnd(), TB_REPLACEBITMAP,
+                                0, (LPARAM) &replaceBitmap) )
+            {
+                wxFAIL_MSG(wxT("Could not replace the old bitmap"));
+            }
 
-        ::DeleteObject(oldToolBarBitmap);
+            ::DeleteObject(oldToolBarBitmap);
+
+            // already done
+            addBitmap = FALSE;
+        }
+        else
+#endif // TB_REPLACEBITMAP
+        {
+            // we can't replace the old bitmap, so we will add another one
+            // (awfully inefficient, but what else to do?) and shift the bitmap
+            // indices accordingly
+            addBitmap = TRUE;
+
+            bitmapId = m_nButtons;
+        }
 
         // Now delete all the buttons
         for ( size_t pos = 0; pos < m_nButtons; pos++ )
@@ -431,8 +449,10 @@ bool wxToolBar::Realize()
                 wxLogLastError("TB_DELETEBUTTON");
             }
         }
+
     }
-    else // no old bitmap
+
+    if ( addBitmap ) // no old bitmap or we can't replace it
     {
         TBADDBITMAP addBitmap;
         addBitmap.hInst = 0;
@@ -453,8 +473,6 @@ bool wxToolBar::Realize()
     wxArrayInt controlIds;
 
     int i = 0;
-    int bitmapId = 0;
-
     for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
     {
         wxToolBarToolBase *tool = node->GetData();

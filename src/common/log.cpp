@@ -431,7 +431,11 @@ wxLog          *wxLog::ms_pLogger      = (wxLog *)NULL;
 bool            wxLog::ms_doLog        = TRUE;
 bool            wxLog::ms_bAutoCreate  = TRUE;
 
-const wxChar   *wxLog::ms_timestamp    = wxT("%X");  // time only, no date
+#if wxUSE_GUI
+    const wxChar *wxLog::ms_timestamp  = wxT("%X");  // time only, no date
+#else
+    const wxChar *wxLog::ms_timestamp  = NULL;       // save space
+#endif
 
 wxTraceMask     wxLog::ms_ulTraceMask  = (wxTraceMask)0;
 wxArrayString   wxLog::ms_aTraceMasks;

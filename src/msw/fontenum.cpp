@@ -110,10 +110,14 @@ bool wxFontEnumeratorHelper::SetEncoding(wxFontEncoding encoding)
     return TRUE;
 }
 
-#if defined(__GNUWIN32__) && !defined(__MINGW32__)
-    #define wxFONTENUMPROC int(*)(ENUMLOGFONTEX *, NEWTEXTMETRICEX*, int, LPARAM)
+#if defined(__GNUWIN32__)
+    #if defined(__MINGW32__)
+        #define wxFONTENUMPROC FONTENUMEXPROC
+    #else
+        #define wxFONTENUMPROC int(*)(ENUMLOGFONTEX *, NEWTEXTMETRICEX*, int, LPARAM)
+    #endif
 #else
-    #define wxFONTENUMPROC FONTENUMEXPROC
+    #define wxFONTENUMPROC FONTENUMPROC
 #endif
 
 void wxFontEnumeratorHelper::DoEnumerate()
