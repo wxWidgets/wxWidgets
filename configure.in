@@ -293,7 +293,7 @@ dnl   possible arguments are 'yes', 'no', or 'sys'
 dnl usage: WX_ARG_SYS_WITH(option, helpmessage, variable-name)
 AC_DEFUN(WX_ARG_SYS_WITH,
         [
-          AC_MSG_CHECKING("for --with-$1")
+          AC_MSG_CHECKING([for --with-$1])
           no_cache=0
           AC_ARG_WITH($1, $2,
                       [
@@ -338,7 +338,7 @@ dnl this macro checks for a command line argument and caches the result
 dnl usage: WX_ARG_WITH(option, helpmessage, variable-name)
 AC_DEFUN(WX_ARG_WITH,
         [
-          AC_MSG_CHECKING("for --with-$1")
+          AC_MSG_CHECKING([for --with-$1])
           no_cache=0
           AC_ARG_WITH($1, $2,
                       [
@@ -375,7 +375,7 @@ dnl like WX_ARG_WITH but uses AC_ARG_ENABLE instead of AC_ARG_WITH
 dnl usage: WX_ARG_ENABLE(option, helpmessage, variable-name)
 AC_DEFUN(WX_ARG_ENABLE,
         [
-          AC_MSG_CHECKING("for --enable-$1")
+          AC_MSG_CHECKING([for --enable-$1])
           no_cache=0
           AC_ARG_ENABLE($1, $2,
                         [
@@ -1352,7 +1352,7 @@ for toolkit in `echo $ALL_TOOLKITS`; do
       echo "$var=$value" >> ${wx_arg_cache_file}
     fi
     if test "$value" = 1; then
-      AC_MSG_RESULT(`echo $toolkit | tr [[A-Z]] [[a-z]]`)
+      AC_MSG_RESULT([`echo $toolkit | tr [[A-Z]] [[a-z]]`])
     fi
   fi
 done
@@ -1436,7 +1436,7 @@ dnl   defines STRIP as strip or nothing if not found
 AC_CHECK_PROG(STRIP, strip, strip, true)
 
 dnl check if VPATH works
-AC_MSG_CHECKING("make for VPATH support")
+AC_MSG_CHECKING([make for VPATH support])
 dnl create Makefile
 cat - << EOF > confMake
 check : file
@@ -1456,7 +1456,7 @@ if test "$RESULT" = 0; then
   AC_MSG_RESULT(yes)
 else
   AC_MSG_RESULT(no)
-  AC_MSG_ERROR(
+  AC_MSG_ERROR([
 You need a make-utility that is able to use the variable
 VPATH correctly.
 If your version of make does not support VPATH correctly,
@@ -1466,7 +1466,7 @@ export MAKE=gmake; ./configure  for sh-type shells
 setenv MAKE gmake; ./configure  for csh-type shells
 Also please do remember to use gmake in this case every time
 you are trying to compile.
-)
+])
 fi
 
 dnl YACC checks
@@ -2748,7 +2748,7 @@ if test "$wxUSE_THREADS" = "yes" ; then
   dnl [
   dnl     AC_CHECK_LIB($THREADS_LINK, $1,
   dnl            AC_DEFINE(HAVE_`'translit($1, `A-Z', 'a-z'),
-  dnl            [AC_CHECK_LIB("posix4", $1,
+  dnl            [AC_CHECK_LIB([posix4], $1,
   dnl                [AC_DEFINE(HAVE_`'translit($1, `A-Z', 'a-z'))
   dnl                 POSIX4_LINK="-lposix4"
   dnl             ])
@@ -2759,7 +2759,7 @@ if test "$wxUSE_THREADS" = "yes" ; then
 
   AC_CHECK_LIB($THREADS_LINK, sched_yield,
                AC_DEFINE(HAVE_SCHED_YIELD),
-               [AC_CHECK_LIB("posix4", sched_yield,
+               [AC_CHECK_LIB([posix4], sched_yield,
                    [AC_DEFINE(HAVE_SCHED_YIELD) POSIX4_LINK="-lposix4"],
                    AC_MSG_WARN(wxThread::Yield will not work properly)
                 )]
@@ -2776,7 +2776,7 @@ if test "$wxUSE_THREADS" = "yes" ; then
                  AC_CHECK_LIB($THREADS_LINK, pthread_attr_setschedparam,
                    AC_CHECK_LIB($THREADS_LINK, sched_get_priority_max,
                        HAVE_PRIOR_FUNCS=1,
-                       AC_CHECK_LIB("posix4", sched_get_priority_max,
+                       AC_CHECK_LIB([posix4], sched_get_priority_max,
                          [
                             HAVE_PRIOR_FUNCS=1
                             POSIX4_LINK="-lposix4"
