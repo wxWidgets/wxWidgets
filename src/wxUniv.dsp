@@ -1112,10 +1112,6 @@ SOURCE=.\univ\gauge.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\univ\gtk.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\univ\inpcons.cpp
 # End Source File
 # Begin Source File
@@ -1129,10 +1125,6 @@ SOURCE=.\univ\listbox.cpp
 # Begin Source File
 
 SOURCE=.\univ\menu.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\univ\metal.cpp
 # End Source File
 # Begin Source File
 
@@ -1208,16 +1200,25 @@ SOURCE=.\univ\topluniv.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\univ\win32.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\univ\winuniv.cpp
 # End Source File
 
 # Begin Group "Theme Files"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\univ\themes\gtk.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\univ\themes\metal.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\univ\themes\win32.cpp
+# End Source File
+
 # End Group
 # End Group
 # Begin Group "Headers"
@@ -1738,6 +1739,10 @@ SOURCE=..\include\wx\laywin.h
 # Begin Source File
 
 SOURCE=..\include\wx\list.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\listbase.h
 # End Source File
 # Begin Source File
 
@@ -2327,6 +2332,10 @@ SOURCE=..\include\wx\generic\splash.h
 # Begin Source File
 
 SOURCE=..\include\wx\generic\splitter.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\generic\statline.h
 # End Source File
 # Begin Source File
 

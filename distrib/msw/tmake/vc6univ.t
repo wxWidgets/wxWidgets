@@ -30,7 +30,7 @@
     }
 
     foreach $file (sort keys %wxUNIV) {
-	my $tag = $wxUNIV{$file} =~ /Theme/ ? "WXUNIVTHEMES" : "WXUNIVSRCS";
+	my $tag = $wxUNIV{$file} =~ /T/ ? "WXUNIVTHEMES" : "WXUNIVSRCS";
 	$project{$tag} .= $file . " "
     }
 
