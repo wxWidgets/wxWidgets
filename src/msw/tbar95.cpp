@@ -915,7 +915,7 @@ bool wxToolBar::MSWCommand(WXUINT WXUNUSED(cmd), WXWORD id)
     if ( !tool )
         return FALSE;
 
-    bool toggled;
+    bool toggled = false; // just to suppress warnings
 
     if ( tool->CanBeToggled() )
     {
