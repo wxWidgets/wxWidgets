@@ -6,6 +6,11 @@
 
 <makefile>
 
+    <!-- make sure setup.h is created as soon as possible: -->
+    <phony id="setup_h" cond="FORMAT!='autoconf'">
+        <dependency-of>all</dependency-of>
+    </phony>
+
     <set var="BUILDING_LIB">1</set>
 
     <!-- common rules, names etc. for wx: -->
@@ -98,22 +103,19 @@
         </mkdir>
         <mkdir id="libdir_wx">
             <depends>libdir</depends>
-            <dir>$(LIBDIRNAME)/wx</dir>
+            <dependency-of>setup_h</dependency-of>
+            <dir>$(LIBDIRNAME)/wx</dir>            
         </mkdir>
         
-        <copy-file-to-file id="msw/setup.h">
+        <copy-file-to-file-if-not-exist id="msw/setup.h">
             <src>$(SRCDIR)/include/wx/msw/setup0.h</src>
             <dst>$(SRCDIR)/include/wx/msw/setup.h</dst>
-        </copy-file-to-file>
-        <copy-file-to-file id="setup.h">
-            <depends>msw/setup.h</depends>
-            <depends>libdir_wx</depends>
+        </copy-file-to-file-if-not-exist>
+        <copy-file-to-file-if-not-exist id="setup.h">
+            <dependency-of>setup_h</dependency-of>
             <src>$(SRCDIR)/include/wx/msw/setup.h</src>
             <dst>$(LIBDIRNAME)/wx/setup.h</dst>            
-        </copy-file-to-file>
-        <phony id="setup_h">
-            <depends>setup.h</depends>
-        </phony>
+        </copy-file-to-file-if-not-exist>
     </if>
 
 </makefile>
