@@ -16,7 +16,13 @@
 #pragma interface "basic.h"
 #endif
 
+#ifndef wxUSE_DEPRECATED
+#define wxUSE_DEPRECATED 1
+#endif
+
+#if wxUSE_DEPRECATED
 #include <wx/deprecated/setup.h>
+#endif
 
 #define OGL_VERSION     2.0
 
