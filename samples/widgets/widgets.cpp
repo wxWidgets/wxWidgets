@@ -43,6 +43,7 @@
 #include "wx/bookctrl.h"
 #include "wx/sizer.h"
 #include "wx/colordlg.h"
+#include "wx/textdlg.h"
 
 #include "widgets.h"
 
@@ -232,7 +233,7 @@ bool WidgetsApp::OnInit()
 {
     if ( !wxApp::OnInit() )
         return false;
-    
+
     // the reason for having these ifdef's is that I often run two copies of
     // this sample side by side and it is useful to see which one is which
     wxString title;
@@ -306,7 +307,7 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
 
     // we have 2 panes: book with pages demonstrating the controls in the
     // upper one and the log window with some buttons in the lower
-    
+
     int style = wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN|wxBC_DEFAULT;
     // Uncomment to suppress page theme (draw in solid colour)
     // style |= wxNB_NOPAGETHEME;
