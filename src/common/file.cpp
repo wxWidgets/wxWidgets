@@ -54,7 +54,7 @@
 #endif
 
 #elif defined(__WXMSW__) && defined(__WXWINCE__)
-    // TODO: what to include?
+    #include  "wx/msw/missing.h"
 #elif (defined(__OS2__))
     #include <io.h>
 #elif (defined(__UNIX__) || defined(__GNUWIN32__))
