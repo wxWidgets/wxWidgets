@@ -807,6 +807,8 @@ void wxApp::OnIdle(
         wxDC::ClearCache();
 #endif // wxUSE_DC_CACHEING
 
+    // Now done in ProcessIdle()
+#if 0
     //
     // Send OnIdle events to all windows
     //
@@ -818,6 +820,8 @@ void wxApp::OnIdle(
         //
         rEvent.RequestMore(TRUE);
     }
+#endif
+
     gbInOnIdle = FALSE;
 } // end of wxApp::OnIdle
 

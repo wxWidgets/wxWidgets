@@ -210,24 +210,29 @@ void wxAppBase::DeletePendingObjects()
 // Returns TRUE if more time is needed.
 bool wxAppBase::ProcessIdle()
 {
+    wxIdleEvent event;
+    bool needMore = FALSE;
     wxWindowList::compatibility_iterator node = wxTopLevelWindows.GetFirst();
     node = wxTopLevelWindows.GetFirst();
     while (node)
     {
         wxWindow* win = node->GetData();
-        win->ProcessInternalIdle();
+        if (SendIdleEvents(win, event))
+            needMore = TRUE;
         node = node->GetNext();
     }
 
-    wxIdleEvent event;
     event.SetEventObject(this);
-    bool processed = ProcessEvent(event);
+    (void) ProcessEvent(event);
+    if (event.MoreRequested())
+        needMore = TRUE;
 
     wxUpdateUIEvent::ResetUpdateTime();
     
-    return processed && event.MoreRequested();
+    return needMore;
 }
 
+#if 0
 // Send idle event to all top-level windows
 bool wxAppBase::SendIdleEvents()
 {
@@ -244,26 +249,28 @@ bool wxAppBase::SendIdleEvents()
 
     return needMore;
 }
+#endif
 
 // Send idle event to window and all subwindows
-bool wxAppBase::SendIdleEvents(wxWindow* win)
+bool wxAppBase::SendIdleEvents(wxWindow* win, wxIdleEvent& event)
 {
     bool needMore = FALSE;
     
+    win->OnInternalIdle();
     if (wxIdleEvent::CanSend(win))
     {
-        wxIdleEvent event;
         event.SetEventObject(win);
         win->GetEventHandler()->ProcessEvent(event);
 
-        needMore = event.MoreRequested();
+        if (event.MoreRequested())
+            needMore = TRUE;
     }
 
     wxWindowList::compatibility_iterator node = win->GetChildren().GetFirst();
     while ( node )
     {
         wxWindow *win = node->GetData();
-        if (SendIdleEvents(win))
+        if (SendIdleEvents(win, event))
             needMore = TRUE;
 
         node = node->GetNext();

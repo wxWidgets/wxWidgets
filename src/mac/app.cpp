@@ -1029,7 +1029,6 @@ void wxApp::OnIdle(wxIdleEvent& event)
     if ( s_inOnIdle )
         return;
 
-
   s_inOnIdle = TRUE;
 
   // 'Garbage' collection of windows deleted with Close().
@@ -1040,11 +1039,14 @@ void wxApp::OnIdle(wxIdleEvent& event)
   if ( pLog != NULL && pLog->HasPendingMessages() )
     pLog->Flush();
 
+    // Now done in ProcessIdle()
+#if 0
   // Send OnIdle events to all windows
   bool needMore = SendIdleEvents();
 
   if (needMore)
     event.RequestMore(TRUE);
+#endif
 
     // If they are pending events, we must process them: pending events are
     // either events to the threads other than main or events posted with

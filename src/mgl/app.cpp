@@ -294,9 +294,12 @@ void wxApp::OnIdle(wxIdleEvent &event)
     wxLog::FlushActive();
 #endif // wxUSE_LOG
 
+    // Now done in ProcessIdle()
+#if 0
     // Send OnIdle events to all windows
     if ( SendIdleEvents() )
         event.RequestMore(TRUE);
+#endif
 
     s_inOnIdle = FALSE;
 }

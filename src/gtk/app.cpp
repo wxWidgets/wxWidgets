@@ -551,11 +551,14 @@ void wxApp::OnIdle( wxIdleEvent &event )
     // 'Garbage' collection of windows deleted with Close()
     DeletePendingObjects();
 
+    // Now done in ProcessIdle()
+#if 0
     // Send OnIdle events to all windows
     bool needMore = SendIdleEvents();
 
     if (needMore)
         event.RequestMore(TRUE);
+#endif
 
     s_inOnIdle = FALSE;
 }

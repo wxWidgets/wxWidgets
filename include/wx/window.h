@@ -877,7 +877,7 @@ public:
         virtual void OnInternalIdle() {}
 
         // call internal idle recursively
-        void ProcessInternalIdle() ;
+//        void ProcessInternalIdle() ;
 
         // get the handle of the window for the underlying window system: this
         // is only used for wxWin itself or for user code which wants to call

@@ -233,11 +233,14 @@ void wxApp::OnIdle(wxIdleEvent& event)
     if ( pLog != NULL && pLog->HasPendingMessages() )
         pLog->Flush();
 
+    // Now done in ProcessIdle()
+#if 0
     // Send OnIdle events to all windows
     bool needMore = SendIdleEvents();
 
     if (needMore)
         event.RequestMore(TRUE);
+#endif
 
     inOnIdle = FALSE;
 }

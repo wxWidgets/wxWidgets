@@ -1830,7 +1830,9 @@ void wxWindowBase::DoUpdateWindowUI(wxUpdateUIEvent& event)
 #endif
 }
 
+#if 0
 // call internal idle recursively
+// may be obsolete (wait until OnIdle scheme stabilises)
 void wxWindowBase::ProcessInternalIdle()
 {
     OnInternalIdle();
@@ -1843,6 +1845,7 @@ void wxWindowBase::ProcessInternalIdle()
         node = node->GetNext();
     }
 }
+#endif
 
 // ----------------------------------------------------------------------------
 // dialog units translations
