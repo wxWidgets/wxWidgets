@@ -862,12 +862,13 @@ void wxCmdLineParser::Usage()
         }
     }
 
+    wxString fullmsg;
     if ( !!m_data->m_logo )
     {
-        wxLogMessage(m_data->m_logo);
+        fullmsg << m_data->m_logo << _T('\n');
     }
 
-    wxLogMessage(brief);
+    fullmsg << brief << _T('\n');
 
     // now construct the detailed help message
     size_t len, lenMax = 0;
@@ -889,7 +890,8 @@ void wxCmdLineParser::Usage()
                  << _T('\n');
     }
 
-    wxLogMessage(detailed);
+    fullmsg << detailed;
+    wxLogMessage(fullmsg);
 }
 
 // ----------------------------------------------------------------------------
