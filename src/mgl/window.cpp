@@ -440,14 +440,7 @@ static bool wxHandleSpecialKeys(wxKeyEvent& event)
         wxCaptureScreenshot(event.m_altDown/*only active wnd?*/);
         return TRUE;
     }
-
-    if ( event.m_keyCode == WXK_F4 && event.m_altDown &&
-         gs_activeFrame != NULL )
-    {
-        gs_activeFrame->Close();
-        return TRUE;
-    }
-    
+   
     return FALSE;
 }
 
@@ -830,7 +823,19 @@ bool wxWindowMGL::SetCursor(const wxCursor& cursor)
 
 void wxWindowMGL::WarpPointer(int x, int y)
 {
+    int w, h;
+    wxDisplaySize(&w, &h);
+
     ClientToScreen(&x, &y);
+    if ( x < 0 )
+        x = 0;
+    if ( y < 0 )
+        y = 0;
+    if ( x >= w )
+        x = w-1;
+    if ( y >= h )
+        y = h-1;
+    
     EVT_setMousePos(x, y);
 }
 
