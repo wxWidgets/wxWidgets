@@ -1638,10 +1638,10 @@ void wxApp::MacHandleMouseDownEvent( WXEVENTREF evr )
                     constraintRect.left  = 0 ;
                 constraintRect.right = win->GetMaxWidth() ;
                 if ( constraintRect.right == -1 )
-                    constraintRect.right  = 32768 ;
-                constraintRect.bottom = win->GetMaxWidth() ;
+                    constraintRect.right  = 32000 ;
+                constraintRect.bottom = win->GetMaxHeight() ;
                 if ( constraintRect.bottom == -1 )
-                    constraintRect.bottom  = 32768 ;
+                    constraintRect.bottom = 32000 ;
 
                 Boolean growResult = ResizeWindow( window , ev->where ,
                     &constraintRect , &newContentRect ) ;
