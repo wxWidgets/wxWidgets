@@ -36,6 +36,7 @@ _treeList = [
         'wxIEHtmlWin',
         'wxKeyEvents',
         'wxWizard',
+        'wxXmlResourceHandler',
         ]),
 
     # managed windows == things with a caption you can close
@@ -138,7 +139,8 @@ _treeList = [
         'ScrolledPanel',
         'Sizers',
         'wxLayoutConstraints',
-        'XML_Resource',
+        'wxXmlResource',
+        'wxXmlResourceHandler',
         ]),
 
     # ditto

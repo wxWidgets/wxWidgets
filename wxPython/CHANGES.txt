@@ -166,6 +166,10 @@ displays the details of the event.
 
 Added wxWizard, wxWizardPage, wxWizardPageSimple and wxPyWizardPage.
 
+Added wxXmlResourceHandler which allows you to create custom handlers
+for nonstandard class types in XRC resources.  See the demo for an
+example.
+
 
 
 
