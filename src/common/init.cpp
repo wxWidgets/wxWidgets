@@ -48,6 +48,7 @@ class /* no WXDLLEXPORT */ wxConsoleApp : public wxApp
 {
 public:
     virtual int OnRun() { wxFAIL_MSG(wxT("unreachable")); return 0; }
+    virtual bool ProcessIdle() { return TRUE; }
 };
 
 // ----------------------------------------------------------------------------
