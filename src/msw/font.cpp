@@ -521,18 +521,21 @@ void wxNativeFontInfo::SetEncoding(wxFontEncoding encoding)
     if ( !wxGetNativeFontEncoding(encoding, &info) )
     {
 #if wxUSE_FONTMAP
-        if ( !wxTheFontMapper->GetAltForEncoding(encoding, &info) )
+        if ( wxTheFontMapper->GetAltForEncoding(encoding, &info) )
+        {
+            if ( !info.facename.empty() )
+            {
+                // if we have this encoding only in some particular facename, use
+                // the facename - it is better to show the correct characters in a
+                // wrong facename than unreadable text in a correct one
+                SetFaceName(info.facename);
+            }
+        }
+        else
 #endif // wxUSE_FONTMAP
         {
             // unsupported encoding, replace with the default
             info.charset = ANSI_CHARSET;
-        }
-        else if ( !info.facename.empty() )
-        {
-            // if we have this encoding only in some particular facename, use
-            // the facename - it is better to show the correct characters in a
-            // wrong facename than unreadable text in a correct one
-            SetFaceName(info.facename);
         }
     }
 
