@@ -28,6 +28,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_BMPBUTTN
+
 #ifndef WX_PRECOMP
     #include "wx/button.h"
     #include "wx/brush.h"
@@ -524,3 +526,5 @@ bool wxButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
 }
 
 #endif // __WIN32__
+
+#endif // wxUSE_BMPBUTTN

@@ -36,9 +36,57 @@
 #include "wx/thread.h"
 #include "wx/confbase.h"
 
+#ifdef __WXUNIVERSAL__
+    #include "wx/univ/theme.h"
+#endif // __WXUNIVERSAL__
+
 // ===========================================================================
 // implementation
 // ===========================================================================
+
+wxAppBase::wxAppBase()
+{
+    wxTheApp = (wxApp *)this;
+
+    // VZ: what's this? is it obsolete?
+    m_wantDebugOutput = FALSE;
+
+#if wxUSE_GUI
+    m_topWindow = (wxWindow *)NULL;
+    m_useBestVisual = FALSE;
+    m_exitOnFrameDelete = TRUE;
+    m_isActive = TRUE;
+#endif // wxUSE_GUI
+}
+
+// ----------------------------------------------------------------------------
+// initialization and termination
+// ----------------------------------------------------------------------------
+
+bool wxAppBase::OnInitGui()
+{
+#ifdef __WXUNIVERSAL__
+    if ( !wxTheme::CreateDefault() )
+        return FALSE;
+#endif // __WXUNIVERSAL__
+
+    return TRUE;
+}
+
+int wxAppBase::OnExit()
+{
+#if wxUSE_CONFIG
+    // delete the config object if any (don't use Get() here, but Set()
+    // because Get() could create a new config object)
+    delete wxConfigBase::Set((wxConfigBase *) NULL);
+#endif // wxUSE_CONFIG
+
+#ifdef __WXUNIVERSAL__
+    delete wxTheme::Set(NULL);
+#endif // __WXUNIVERSAL__
+
+    return 0;
+}
 
 // ---------------------------------------------------------------------------
 // wxAppBase
@@ -74,13 +122,26 @@ void wxAppBase::ProcessPendingEvents()
     wxLEAVE_CRIT_SECT( *wxPendingEventsLocker );
 }
 
-int wxAppBase::OnExit()
-{
-#if wxUSE_CONFIG
-    // delete the config object if any (don't use Get() here, but Set()
-    // because Get() could create a new config object)
-    delete wxConfigBase::Set((wxConfigBase *) NULL);
-#endif // wxUSE_CONFIG
+// ----------------------------------------------------------------------------
+// misc
+// ----------------------------------------------------------------------------
 
-    return 0;
+#if wxUSE_GUI
+
+void wxAppBase::SetActive(bool active, wxWindow *lastFocus)
+{
+    static wxWindow *s_lastFocus = (wxWindow *)NULL;
+
+    m_isActive = active;
+
+    // if we're being deactivated remember the last focused window
+    if ( !active )
+    {
+        s_lastFocus = lastFocus;
+    }
+
+    if ( s_lastFocus )
+        s_lastFocus->Refresh();
 }
+
+#endif // wxUSE_GUI

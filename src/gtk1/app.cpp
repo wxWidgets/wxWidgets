@@ -245,11 +245,6 @@ END_EVENT_TABLE()
 
 wxApp::wxApp()
 {
-    wxTheApp = this;
-
-    m_topWindow = (wxWindow *) NULL;
-    m_exitOnFrameDelete = TRUE;
-
     m_idleTag = gtk_idle_add_priority( 1000, wxapp_idle_callback, (gpointer) NULL );
 
 #if wxUSE_THREADS
@@ -258,8 +253,6 @@ wxApp::wxApp()
 #endif
 
     m_colorCube = (unsigned char*) NULL;
-
-    m_useBestVisual = FALSE;
 }
 
 wxApp::~wxApp()
@@ -275,6 +268,9 @@ wxApp::~wxApp()
 
 bool wxApp::OnInitGui()
 {
+    if ( !wxAppBase::OnInitGui() )
+        return FALSE;
+
     GdkVisual *visual = gdk_visual_get_system();
 
     /* on some machines, the default visual is just 256 colours, so
@@ -624,11 +620,11 @@ int wxEntryInitGui()
 {
     int retValue = 0;
 
-    if ( !wxTheApp->OnInitGui() )
-        retValue = -1;
-
     wxRootWindow = gtk_window_new( GTK_WINDOW_TOPLEVEL );
     gtk_widget_realize( wxRootWindow );
+
+    if ( !wxTheApp->OnInitGui() )
+        retValue = -1;
 
     return retValue;
 }

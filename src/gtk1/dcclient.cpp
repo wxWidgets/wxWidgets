@@ -2208,15 +2208,10 @@ void wxWindowDC::DoDrawSpline( wxList *points )
 // wxPaintDC
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxPaintDC,wxWindowDC)
-
-wxPaintDC::wxPaintDC()
-  : wxWindowDC()
-{
-}
+IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxClientDC)
 
 wxPaintDC::wxPaintDC( wxWindow *win )
-  : wxWindowDC( win )
+         : wxClientDC( win )
 {
 #if USE_PAINT_REGION
     if (!win->m_clipPaintRegion)
@@ -2233,7 +2228,13 @@ wxPaintDC::wxPaintDC( wxWindow *win )
         gdk_gc_set_clip_region( m_textGC, region );
         gdk_gc_set_clip_region( m_bgGC, region );
     }
-#endif
+#endif // USE_PAINT_REGION
+
+#ifdef __WXUNIVERSAL__
+    wxPoint ptOrigin = win->GetClientAreaOrigin();
+    SetDeviceOrigin(ptOrigin.x, ptOrigin.y);
+    SetClippingRegion(ptOrigin, win->GetClientSize());
+#endif // __WXUNIVERSAL__
 }
 
 //-----------------------------------------------------------------------------

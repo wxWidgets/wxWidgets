@@ -27,7 +27,6 @@
 WXDLLEXPORT_DATA(extern const wxChar*) wxFrameNameStr;
 WXDLLEXPORT_DATA(extern const wxChar*) wxStatusLineNameStr;
 WXDLLEXPORT_DATA(extern const wxChar*) wxToolBarNameStr;
-WXDLLEXPORT_DATA(extern wxWindow*) wxWndHook;
 
 class WXDLLEXPORT wxMenuBar;
 class WXDLLEXPORT wxStatusBar;
@@ -101,8 +100,10 @@ public:
     // menu bar functions
     // ------------------
 
+#if wxUSE_MENUS
     virtual void SetMenuBar(wxMenuBar *menubar) = 0;
     virtual wxMenuBar *GetMenuBar() const { return m_frameMenuBar; }
+#endif // wxUSE_MENUS
 
     // call this to simulate a menu command
     bool Command(int id) { return ProcessCommand(id); }
@@ -173,9 +174,11 @@ public:
     // so should be there for all platforms
     void OnActivate(wxActivateEvent &WXUNUSED(event)) { }
 
+#if wxUSE_MENUS
     // send wxUpdateUIEvents for all menu items (called from OnIdle())
     void DoMenuUpdates();
     void DoMenuUpdates(wxMenu* menu, wxWindow* focusWin);
+#endif // wxUSE_MENUS
 
 protected:
     // the frame main menu/status/tool bars
@@ -185,7 +188,9 @@ protected:
     // main menubar, statusbar and toolbar (if any)
     void DeleteAllBars();
 
+#if wxUSE_MENUS
     wxMenuBar *m_frameMenuBar;
+#endif // wxUSE_MENUS
 
 #if wxUSE_STATUSBAR
     // override to update status bar position (or anything else) when

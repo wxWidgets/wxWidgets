@@ -24,7 +24,7 @@ class wxMimeTypesManagerImpl;
 
 #include "wx/defs.h"
 
-#if wxUSE_FILE
+#if wxUSE_MIMETYPE
 
 // the things we really need
 #include "wx/string.h"
@@ -242,8 +242,7 @@ private:
 // the default mime manager for wxWindows programs
 WXDLLEXPORT_DATA(extern wxMimeTypesManager *) wxTheMimeTypesManager;
 
-#endif
-  // wxUSE_FILE
+#endif // wxUSE_MIMETYPE
 
 #endif
   //_MIMETYPE_H

@@ -661,10 +661,12 @@ wxFindWindowByName1 (const wxString& title, wxWindow * parent)
 int
 wxFindMenuItemId (wxFrame * frame, const wxString& menuString, const wxString& itemString)
 {
+#if wxUSE_MENUS
   wxMenuBar *menuBar = frame->GetMenuBar ();
-  if (!menuBar)
-    return -1;
-  return menuBar->FindMenuItem (menuString, itemString);
+  if (menuBar)
+      return menuBar->FindMenuItem (menuString, itemString);
+#endif // wxUSE_MENUS
+  return -1;
 }
 
 #endif // wxUSE_GUI
@@ -873,6 +875,8 @@ whereami(name)
  * since otherwise the generic code may be pulled in unnecessarily.
  */
 
+#if wxUSE_MSGDLG
+
 int wxMessageBox(const wxString& message, const wxString& caption, long style,
                  wxWindow *parent, int WXUNUSED(x), int WXUNUSED(y) )
 {
@@ -896,7 +900,10 @@ int wxMessageBox(const wxString& message, const wxString& caption, long style,
     return wxCANCEL;
 }
 
+#endif // wxUSE_MSGDLG
+
 #if wxUSE_TEXTDLG
+
 wxString wxGetTextFromUser(const wxString& message, const wxString& caption,
                         const wxString& defaultValue, wxWindow *parent,
                         int x, int y, bool WXUNUSED(centre) )
@@ -929,6 +936,8 @@ wxString wxGetPasswordFromUser(const wxString& message,
 
 #endif // wxUSE_TEXTDLG
 
+#if wxUSE_COLOURDLG
+
 wxColour wxGetColourFromUser(wxWindow *parent, const wxColour& colInit)
 {
       wxColourData data;
@@ -948,6 +957,8 @@ wxColour wxGetColourFromUser(wxWindow *parent, const wxColour& colInit)
 
       return colRet;
 }
+
+#endif // wxUSE_COLOURDLG
 
 // ----------------------------------------------------------------------------
 // missing C RTL functions (FIXME shouldn't be here at all)

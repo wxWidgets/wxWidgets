@@ -20,6 +20,8 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_OLE
+
 #include "wx/defs.h"
 
 // Watcom C++ gives a linker error if this is compiled in.
@@ -1171,3 +1173,4 @@ void ShowException(LPOLESTR szMember, HRESULT hr, EXCEPINFO *pexcep, unsigned in
 
 #endif // __WATCOMC__
 
+#endif // wxUSE_OLE

@@ -371,7 +371,9 @@ void wxFillLogFont(LOGFONT *logFont, const wxFont *font)
     wxFontEncoding encoding = font->GetEncoding();
     if ( !wxGetNativeFontEncoding(encoding, &info) )
     {
+#if wxUSE_FONTMAP
         if ( !wxTheFontMapper->GetAltForEncoding(encoding, &info) )
+#endif // wxUSE_FONTMAP
         {
             // unsupported encoding, replace with the default
             info.charset = ANSI_CHARSET;

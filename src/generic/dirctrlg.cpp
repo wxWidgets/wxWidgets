@@ -20,7 +20,7 @@
 #pragma hdrstop
 #endif
 
-#include "wx/defs.h"
+#if wxUSE_GRID
 
 #include "wx/utils.h"
 #include "wx/dialog.h"
@@ -1244,3 +1244,5 @@ wxString wxGenericDirDialog::GetPath(void) const
 {
     return m_dirCtrl->GetPath();
 }
+
+#endif // wxUSE_GRID

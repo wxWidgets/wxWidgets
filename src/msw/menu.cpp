@@ -28,6 +28,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_MENUS
+
 #ifndef WX_PRECOMP
     #include "wx/frame.h"
     #include "wx/menu.h"
@@ -872,3 +874,4 @@ wxMenuItem *wxMenuBar::FindItem(int id, wxMenu **itemMenu) const
     return item;
 }
 
+#endif // wxUSE_MENUS

@@ -745,12 +745,12 @@ void wxOnAssert(const wxChar *szFile, int nLine, const wxChar *szMsg)
         // send it to the normal log destination
         wxLogDebug(szBuf);
 
-#if wxUSE_GUI || defined(__WXMSW__)
+#if (wxUSE_GUI && wxUSE_MSGDLG) || defined(__WXMSW__)
         // this message is intentionally not translated - it is for
         // developpers only
         wxStrcat(szBuf, wxT("\nDo you want to stop the program?\nYou can also choose [Cancel] to suppress further warnings."));
 
-#if wxUSE_GUI
+#if wxUSE_GUI && wxUSE_MSGDLG
         switch ( wxMessageBox(szBuf, wxT("Debug"),
                               wxYES_NO | wxCANCEL | wxICON_STOP ) ) {
             case wxYES:
@@ -763,7 +763,7 @@ void wxOnAssert(const wxChar *szFile, int nLine, const wxChar *szMsg)
 
             //case wxNO: nothing to do
         }
-#else // !GUI, but MSW
+#else // no wxMessageBox, but we still have the native MessageBox
         switch ( ::MessageBox(NULL, szBuf, _T("Debug"),
                               MB_YESNOCANCEL | MB_ICONSTOP ) ) {
             case IDYES:
@@ -778,9 +778,9 @@ void wxOnAssert(const wxChar *szFile, int nLine, const wxChar *szMsg)
         }
 #endif // GUI or MSW
 
-#else // !GUI
+#else // no message box
         Trap();
-#endif // GUI/!GUI
+#endif // message boxes
     }
 
     s_bInAssert = FALSE;

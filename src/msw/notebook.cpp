@@ -17,8 +17,10 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
+
+#if wxUSE_NOTEBOOK
 
 // wxWindows
 #ifndef WX_PRECOMP
@@ -659,3 +661,5 @@ void wxNotebook::ChangePage(int nOldSel, int nSel)
 
   s_bInsideChangePage = FALSE;
 }
+
+#endif // wxUSE_NOTEBOOK

@@ -20,7 +20,7 @@
 #pragma hdrstop
 #endif
 
-//#if !defined(__WIN32__) || !wxUSE_NATIVE_STATUSBAR
+#if wxUSE_STATUSBAR
 
 #ifndef WX_PRECOMP
 #include "wx/setup.h"
@@ -359,4 +359,4 @@ void wxStatusBarGeneric::SetMinHeight(int height)
     }
 }
 
-//#endif // Win32 && wxUSE_NATIVE_STATUSBAR
+#endif // wxUSE_STATUSBAR

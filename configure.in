@@ -680,13 +680,14 @@ WX_ARG_CACHE_INIT
 
 dnl useful to test the compilation with minimum options, define as 0 for normal
 dnl usage
-DEBUG_CONFIGURE=0
+DEBUG_CONFIGURE=1
 if test $DEBUG_CONFIGURE = 1; then
-  DEFAULT_wxUSE_THREADS=yes
+  DEFAULT_wxUSE_UNIVERSAL=no
+  DEFAULT_wxUSE_THREADS=no
 
   DEFAULT_wxUSE_SHARED=yes
   DEFAULT_wxUSE_BURNT_NAME=no
-  DEFAULT_wxUSE_OPTIMISE=yes
+  DEFAULT_wxUSE_OPTIMISE=no
   DEFAULT_wxUSE_PROFILE=no
   DEFAULT_wxUSE_NO_DEPS=no
   DEFAULT_wxUSE_NO_RTTI=no
@@ -701,8 +702,11 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_APPLE_IEEE=no
 
   DEFAULT_wxUSE_LOG=yes
+  DEFAULT_wxUSE_LOGWINDOW=no
+  DEFAULT_wxUSE_LOGGUI=no
 
   DEFAULT_wxUSE_GUI=yes
+  DEFAULT_wxUSE_CONTROLS=no
 
   DEFAULT_wxUSE_ZLIB=no
   DEFAULT_wxUSE_LIBPNG=no
@@ -713,12 +717,16 @@ if test $DEBUG_CONFIGURE = 1; then
 
   DEFAULT_wxUSE_ON_FATAL_EXCEPTION=no
   DEFAULT_wxUSE_STD_IOSTREAM=no
+  DEFAULT_wxUSE_CMDLINE_PARSER=no
+  DEFAULT_wxUSE_DATETIME=no
+  DEFAULT_wxUSE_STOPWATCH=no
   DEFAULT_wxUSE_FILE=no
   DEFAULT_wxUSE_TEXTFILE=no
   DEFAULT_wxUSE_TIMEDATE=no
   DEFAULT_wxUSE_WAVE=no
   DEFAULT_wxUSE_INTL=no
   DEFAULT_wxUSE_CONFIG=no
+  DEFAULT_wxUSE_FONTMAP=no
   DEFAULT_wxUSE_STREAMS=no
   DEFAULT_wxUSE_SOCKETS=no
   DEFAULT_wxUSE_DIALUP_MANAGER=no
@@ -750,7 +758,13 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_METAFILE=no
 
   DEFAULT_wxUSE_COMMONDLGS=no
+  DEFAULT_wxUSE_CHOICEDLG=no
+  DEFAULT_wxUSE_COLOURDLG=no
   DEFAULT_wxUSE_DIRDLG=no
+  DEFAULT_wxUSE_FILEDLG=no
+  DEFAULT_wxUSE_FONTDLG=no
+  DEFAULT_wxUSE_MSGDLG=no
+  DEFAULT_wxUSE_NUMBERDLG=no
   DEFAULT_wxUSE_TEXTDLG=no
   DEFAULT_wxUSE_STARTUP_TIPS=no
   DEFAULT_wxUSE_PROGRESSDLG=no
@@ -761,14 +775,15 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_FS_ZIP=no
   DEFAULT_wxUSE_BUSYINFO=no
   DEFAULT_wxUSE_ZIPSTREAM=no
-  DEFAULT_wxUSE_VALIDATORS=yes
+  DEFAULT_wxUSE_VALIDATORS=no
 
   DEFAULT_wxUSE_ACCEL=no
-  DEFAULT_wxUSE_CARET=no
+  DEFAULT_wxUSE_BUTTON=no
   DEFAULT_wxUSE_BMPBUTTON=no
+  DEFAULT_wxUSE_CARET=no
   DEFAULT_wxUSE_CHECKBOX=no
   DEFAULT_wxUSE_CHECKLST=no
-  DEFAULT_wxUSE_CHOICE=yes
+  DEFAULT_wxUSE_CHOICE=no
   DEFAULT_wxUSE_COMBOBOX=no
   DEFAULT_wxUSE_GAUGE=no
   DEFAULT_wxUSE_GRID=no
@@ -789,8 +804,10 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_STATBMP=no
   DEFAULT_wxUSE_STATBOX=no
   DEFAULT_wxUSE_STATLINE=no
-  DEFAULT_wxUSE_STATUSBAR=yes
+  DEFAULT_wxUSE_STATTEXT=no
+  DEFAULT_wxUSE_STATUSBAR=no
   DEFAULT_wxUSE_TABDIALOG=no
+  DEFAULT_wxUSE_TEXTCTRL=no
   DEFAULT_wxUSE_TOOLBAR=no
   DEFAULT_wxUSE_TOOLBAR_NATIVE=no
   DEFAULT_wxUSE_TOOLBAR_SIMPLE=no
@@ -803,6 +820,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_PCX=no
   DEFAULT_wxUSE_PNM=no
 else
+  DEFAULT_wxUSE_UNIVERSAL=no
   DEFAULT_wxUSE_THREADS=yes
 
   DEFAULT_wxUSE_SHARED=yes
@@ -822,8 +840,11 @@ else
   DEFAULT_wxUSE_APPLE_IEEE=yes
 
   DEFAULT_wxUSE_LOG=yes
+  DEFAULT_wxUSE_LOGWINDOW=yes
+  DEFAULT_wxUSE_LOGGUI=yes
 
   DEFAULT_wxUSE_GUI=yes
+  DEFAULT_wxUSE_CONTROLS=yes
 
   DEFAULT_wxUSE_ZLIB=yes
   DEFAULT_wxUSE_LIBPNG=yes
@@ -834,12 +855,16 @@ else
 
   DEFAULT_wxUSE_ON_FATAL_EXCEPTION=yes
   DEFAULT_wxUSE_STD_IOSTREAM=no
+  DEFAULT_wxUSE_CMDLINE_PARSER=yes
+  DEFAULT_wxUSE_DATETIME=yes
+  DEFAULT_wxUSE_STOPWATCH=yes
   DEFAULT_wxUSE_FILE=yes
   DEFAULT_wxUSE_TEXTFILE=yes
   DEFAULT_wxUSE_TIMEDATE=yes
   DEFAULT_wxUSE_WAVE=no
   DEFAULT_wxUSE_INTL=yes
   DEFAULT_wxUSE_CONFIG=yes
+  DEFAULT_wxUSE_FONTMAP=yes
   DEFAULT_wxUSE_STREAMS=yes
   DEFAULT_wxUSE_SOCKETS=yes
   DEFAULT_wxUSE_DIALUP_MANAGER=yes
@@ -871,7 +896,13 @@ else
   DEFAULT_wxUSE_METAFILE=yes
 
   DEFAULT_wxUSE_COMMONDLGS=yes
+  DEFAULT_wxUSE_CHOICEDLG=yes
+  DEFAULT_wxUSE_COLOURDLG=yes
   DEFAULT_wxUSE_DIRDLG=yes
+  DEFAULT_wxUSE_FILEDLG=yes
+  DEFAULT_wxUSE_FONTDLG=yes
+  DEFAULT_wxUSE_MSGDLG=yes
+  DEFAULT_wxUSE_NUMBERDLG=yes
   DEFAULT_wxUSE_TEXTDLG=yes
   DEFAULT_wxUSE_STARTUP_TIPS=yes
   DEFAULT_wxUSE_PROGRESSDLG=yes
@@ -885,8 +916,9 @@ else
   DEFAULT_wxUSE_VALIDATORS=yes
 
   DEFAULT_wxUSE_ACCEL=yes
-  DEFAULT_wxUSE_CARET=yes
+  DEFAULT_wxUSE_BUTTON=yes
   DEFAULT_wxUSE_BMPBUTTON=yes
+  DEFAULT_wxUSE_CARET=yes
   DEFAULT_wxUSE_CHECKBOX=yes
   DEFAULT_wxUSE_CHECKLST=yes
   DEFAULT_wxUSE_CHOICE=yes
@@ -910,8 +942,10 @@ else
   DEFAULT_wxUSE_STATBMP=yes
   DEFAULT_wxUSE_STATBOX=yes
   DEFAULT_wxUSE_STATLINE=yes
+  DEFAULT_wxUSE_STATTEXT=yes
   DEFAULT_wxUSE_STATUSBAR=yes
   DEFAULT_wxUSE_TABDIALOG=no
+  DEFAULT_wxUSE_TEXTCTRL=yes
   DEFAULT_wxUSE_TOOLBAR=yes
   DEFAULT_wxUSE_TOOLBAR_NATIVE=yes
   DEFAULT_wxUSE_TOOLBAR_SIMPLE=yes
@@ -956,6 +990,7 @@ WX_ARG_ENABLE(gui,         [  --enable-gui            use GUI classes], wxUSE_GU
 
 if test "$wxUSE_GUI" = "yes"; then
 
+WX_ARG_ENABLE(universal,   [  --enable-universal      use wxWindows GUI controls instead of native ones], wxUSE_UNIVERSAL)
 AC_ARG_WITH(gtk,           [  --with-gtk              use GTK+], [wxUSE_GTK="$withval" CACHE_GTK=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(motif,         [  --with-motif            use Motif/Lesstif], [wxUSE_MOTIF="$withval" CACHE_MOTIF=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(wine,          [  --with-wine             use WINE], [wxUSE_WINE="$withval" CACHE_WINE=1 TOOLKIT_GIVEN=1])
@@ -1023,9 +1058,12 @@ WX_ARG_ENABLE(sockets,       [  --enable-sockets        use socket/network class
 
 WX_ARG_ENABLE(ipc,           [  --enable-ipc            use interprocess communication (wxSocket etc.)], wxUSE_IPC)
 
+WX_ARG_ENABLE(cmdline,       [  --enable-cmdline        use wxCmdLineParser class], wxUSE_CMDLINE_PARSER)
+WX_ARG_ENABLE(datetime,      [  --enable-datetime       use wxDateTime class], wxUSE_DATETIME)
+WX_ARG_ENABLE(stopwatch,     [  --enable-stopwatch      use wxStopWatch class], wxUSE_STOPWATCH)
 WX_ARG_ENABLE(dialupman,     [  --enable-dialupman      use dialup network classes], wxUSE_DIALUP_MANAGER)
 WX_ARG_ENABLE(apple_ieee,    [  --enable-apple_ieee     use the Apple IEEE codec], wxUSE_APPLE_IEEE)
-WX_ARG_ENABLE(timedate,      [  --enable-timedate       use date/time classes], wxUSE_TIMEDATE)
+WX_ARG_ENABLE(timer,         [  --enable-timer          use wxTimer class], wxUSE_TIMER)
 WX_ARG_ENABLE(wave,          [  --enable-wave           use wxWave class], wxUSE_WAVE)
 WX_ARG_ENABLE(fraction,      [  --enable-fraction       use wxFraction class], wxUSE_FRACTION)
 WX_ARG_ENABLE(dynlib,        [  --enable-dynlib         use wxLibrary class for DLL loading], wxUSE_DYNLIB_CLASS)
@@ -1034,6 +1072,7 @@ WX_ARG_ENABLE(log,           [  --enable-log            use logging system], wxU
 WX_ARG_ENABLE(streams,       [  --enable-streams        use wxStream etc classes], wxUSE_STREAMS)
 WX_ARG_ENABLE(file,          [  --enable-file           use wxFile classes], wxUSE_FILE)
 WX_ARG_ENABLE(textfile,      [  --enable-textfile       use wxTextFile classes], wxUSE_TEXTFILE)
+WX_ARG_ENABLE(fontmap,       [  --enable-fontmap        use font encodings conversion classes], wxUSE_FONTMAP)
 WX_ARG_ENABLE(unicode,       [  --enable-unicode        compile wxString with Unicode support], wxUSE_UNICODE)
 WX_ARG_ENABLE(wcsrtombs,     [  --enable-wcsrtombs      use wcsrtombs instead of buggy (GNU libc1/Linux libc5) wcstombs], wxUSE_WCSRTOMBS)
 WX_ARG_ENABLE(wxprintfv,     [  --enable-wxprintfv      use wxWindows implementation of vprintf()], wxUSE_EXPERIMENTAL_PRINTF)
@@ -1063,6 +1102,8 @@ WX_ARG_ENABLE(help,        [  --enable-help           use help (using external b
 WX_ARG_ENABLE(constraints, [  --enable-constraints    use layout-constraints system], wxUSE_CONSTRAINTS)
 WX_ARG_ENABLE(printarch,   [  --enable-printarch      use printing architecture], wxUSE_PRINTING_ARCHITECTURE)
 WX_ARG_ENABLE(mdi,         [  --enable-mdi            use multiple document interface architecture], wxUSE_MDI_ARCHITECTURE)
+WX_ARG_ENABLE(loggui,      [  --enable-loggui         use standard GUI logger], wxUSE_LOGGUI)
+WX_ARG_ENABLE(logwin,      [  --enable-logwin         use wxLogWindow], wxUSE_LOGWINDOW)
 
 dnl ---------------------------------------------------------------------------
 dnl PostScript options
@@ -1102,6 +1143,7 @@ dnl --disable-<control> later on the command line - but by default all will be
 dnl used (and vice versa)
 if test "$wxUSE_CONTROLS" = "yes"; then
   DEFAULT_wxUSE_ACCEL=yes
+  DEFAULT_wxUSE_BUTTON=yes
   DEFAULT_wxUSE_CARET=yes
   DEFAULT_wxUSE_COMBOBOX=yes
   DEFAULT_wxUSE_BMPBUTTON=yes
@@ -1135,6 +1177,7 @@ if test "$wxUSE_CONTROLS" = "yes"; then
   DEFAULT_wxUSE_TREECTRL=yes
 elif test "$wxUSE_CONTROLS" = "no"; then
   DEFAULT_wxUSE_ACCEL=no
+  DEFAULT_wxUSE_BUTTON=no
   DEFAULT_wxUSE_CARET=no
   DEFAULT_wxUSE_COMBOBOX=no
   DEFAULT_wxUSE_BMPBUTTON=no
@@ -1169,8 +1212,9 @@ elif test "$wxUSE_CONTROLS" = "no"; then
 fi
 
 WX_ARG_ENABLE(accel,       [  --enable-accel          use accelerators], wxUSE_ACCEL)
-WX_ARG_ENABLE(caret,       [  --enable-caret          use wxCaret class], wxUSE_CARET)
+WX_ARG_ENABLE(button,      [  --enable-button         use wxButton class], wxUSE_BUTTON)
 WX_ARG_ENABLE(bmpbutton,   [  --enable-bmpbutton      use wxBitmapButton class], wxUSE_BMPBUTTON)
+WX_ARG_ENABLE(caret,       [  --enable-caret          use wxCaret class], wxUSE_CARET)
 WX_ARG_ENABLE(checkbox,    [  --enable-checkbox       use wxCheckBox class], wxUSE_CHECKBOX)
 WX_ARG_ENABLE(checklst,    [  --enable-checklst       use wxCheckListBox (listbox with checkboxes) class], wxUSE_CHECKLST)
 WX_ARG_ENABLE(choice,      [  --enable-choice         use wxChoice class], wxUSE_CHOICE)
@@ -1193,8 +1237,10 @@ WX_ARG_ENABLE(splitter,    [  --enable-splitter       use wxSplitterWindow class
 WX_ARG_ENABLE(statbmp,     [  --enable-statbmp        use wxStaticBitmap class], wxUSE_STATBMP)
 WX_ARG_ENABLE(statbox,     [  --enable-statbox        use wxStaticBox class], wxUSE_STATBOX)
 WX_ARG_ENABLE(statline,    [  --enable-statline       use wxStaticLine class], wxUSE_STATLINE)
+WX_ARG_ENABLE(stattext,    [  --enable-stattext       use wxStaticText class], wxUSE_STATTEXT)
 WX_ARG_ENABLE(statusbar,   [  --enable-statusbar      use wxStatusBar class], wxUSE_STATUSBAR)
 WX_ARG_ENABLE(tabdialog,   [  --enable-tabdialog      use wxTabControl class], wxUSE_TABDIALOG)
+WX_ARG_ENABLE(textctrl,    [  --enable-textctrl       use wxTextCtrl class], wxUSE_TEXTCTRL)
 WX_ARG_ENABLE(toolbar,     [  --enable-toolbar        use wxToolBar class], wxUSE_TOOLBAR)
 WX_ARG_ENABLE(tbarnative,  [  --enable-tbarnative     use native wxToolBar class], wxUSE_TOOLBAR_NATIVE)
 WX_ARG_ENABLE(tbarsmpl,    [  --enable-tbarsmpl       use wxToolBarSimple class], wxUSE_TOOLBAR_SIMPLE)
@@ -1205,7 +1251,13 @@ dnl misc GUI options
 dnl ---------------------------------------------------------------------------
 
 WX_ARG_ENABLE(commondlg,   [  --enable-commondlg      use common dialogs (wxDirDialog, wxProgressDialog, wxTextDialog, ...)], wxUSE_COMMONDLGS)
+WX_ARG_ENABLE(choicedlg,   [  --enable-choicedlg      use wxChoiceDialog], wxUSE_CHOICEDLG)
+WX_ARG_ENABLE(coldlg,      [  --enable-coldlg         use wxColourDialog], wxUSE_COLOURDLG)
+WX_ARG_ENABLE(filedlg,     [  --enable-filedlg        use wxFileDialog], wxUSE_FILEDLG)
+WX_ARG_ENABLE(fontdlg,     [  --enable-fontdlg        use wxFontDialog], wxUSE_FONTDLG)
 WX_ARG_ENABLE(dirdlg,      [  --enable-dirdlg         use wxDirDialog], wxUSE_DIRDLG)
+WX_ARG_ENABLE(msgdlg,      [  --enable-msgdlg         use wxMessageDialog], wxUSE_MSGDLG)
+WX_ARG_ENABLE(numberdlg,   [  --enable-numberdlg      use wxNumberEntryDialog], wxUSE_NUMBERDLG)
 WX_ARG_ENABLE(textdlg,     [  --enable-textdlg        use wxTextDialog], wxUSE_TEXTDLG)
 WX_ARG_ENABLE(tipdlg,      [  --enable-tipdlg         use startup tips], wxUSE_STARTUP_TIPS)
 WX_ARG_ENABLE(progressdlg, [  --enable-progressdlg    use wxProgressDialog], wxUSE_PROGRESSDLG)
@@ -1526,31 +1578,129 @@ dnl ----------------------------------------------------------------
 AFMINSTALL=
 
 if test "$wxUSE_GUI" = "yes"; then
+    USE_GUI=1
 
-USE_GUI=1
+    TOOLKIT=
+    TOOLKIT_INCLUDE=
 
-TOOLKIT=
-TOOLKIT_INCLUDE=
+    GUIOBJS=
+    COMMONOBJS=
+    GENERICOBJS=
 
-GUIOBJS=
-COMMONOBJS=
-GENERICOBJS=
+    GUI_TK_LIBRARY=
+    GUI_TK_LINK=
 
-GUI_TK_LIBRARY=
-GUI_TK_LINK=
+    WXGTK12=
+    WXGTK127=
+    WXGTK20=
 
-WXGTK12=
-WXGTK127=
-WXGTK20=
+    WXWINE=
 
-WXWINE=
+    if test "$wxUSE_CYGWIN" = 1 || test "$wxUSE_MINGW" = 1 ; then
+        if test "$cross_compiling" = "yes" ; then
+            dnl mingw32 will find them even if they're not in one of standard paths
+            AC_MSG_WARN(skipping windows.h check for cross-compilation)
+        else
+            AC_MSG_CHECKING(for Windows headers)
+            WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, windows.h)
+            if test "$ac_find_includes" != "" ; then
+                AC_MSG_RESULT(found $ac_find_includes)
+                TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE -I$ac_find_includes"
+            else
+                AC_MSG_RESULT(no)
+                AC_MSG_ERROR(please set CFLAGS to contain the location of windows.h)
+            fi
+        fi
 
-if test "$wxUSE_CYGWIN" = 1 || test "$wxUSE_MINGW" = 1 ; then
-    if test "$cross_compiling" = "yes" ; then
-        dnl mingw32 will find them even if they're not in one of standard paths
-        AC_MSG_WARN(skipping windows.h check for cross-compilation)
-    else
-        AC_MSG_CHECKING(for Windows headers)
+        INCLUDE_SUBDIRS="$INCLUDE_SUBDIRS msw"
+        dnl --- Quick & Dirty ; link against most/all libraries
+        dnl --- This will bloat the executable, but it'll work for now...
+        LIBS="$LIBS -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lctl3d32 -lcrtdll -ladvapi32 -lwsock32"
+
+        dnl add extra odbc libs if we have compiled in odbc
+        if test "$wxUSE_ODBC" = "yes" ; then
+            LIBS="$LIBS -lodbc32 -lole32 -loleaut32"
+        fi
+
+        dnl -mwindows is needed to avoid that spawning of a console window
+        if test "$wxUSE_MINGW" = 1; then
+            LDFLAGS="$LDFLAGS -mwindows"
+        fi
+
+        TOOLKIT=MSW
+
+        GUIOBJS="\$(MSW_GUIOBJS)"
+        GUIHEADERS="\$(MSW_HEADERS)"
+        COMMONOBJS="\$(MSW_COMMONOBJS)"
+        GENERICOBJS="\$(MSW_GENERICOBJS)"
+        UNIXOBJS=
+        GUIDIST=MSW_DIST
+
+        dnl we should calculate these
+        RCINCSWITCH="--include-dir"
+        RCDEFSWITCH="--define"
+        RCPREPROCESSOR="--preprocessor \"\$(CC) -c -E -xc-header -DRC_INVOKED\""
+        RCINPUTSWITCH="-i"
+        RCOUTPUTSWITCH="-o"
+        RESFLAGS="$RCPREPROCESSOR $RCINCSWITCH \$(top_srcdir)/include $RCINCSWITCH \$(top_srcdir)/\$(program_dir) $RCDEFSWITCH __WIN32__ $RCDEFSWITCH __WIN95__ $RCDEFSWITCH __GNUWIN32__"
+
+        dnl set optinal RES_PROGRAM_OPT to RES_PROGRAM
+        RESPROGRAM="\$(RES_PROGRAM)"
+    fi
+
+    if test "$wxUSE_GTK" = 1; then
+        dnl avoid calling AM_PATH_GTK twice, so check first for the newer version
+        dnl and only then, if it wasn't found, for an older one
+        AM_PATH_GTK_2_0(1.3.1, WXGTK20=1,[
+          AM_PATH_GTK(1.2.7, WXGTK127=1)
+          AM_PATH_GTK(1.2.3, WXGTK12=1)
+        ], gthread)
+
+        if test "$WXGTK12" != 1 -a "$WXGTK20" != 1; then
+            AC_MSG_ERROR([
+                Please check that gtk-config is in path, the directory
+                where GTK+ libraries are installed (returned by
+                'gtk-config --libs' command) is in LD_LIBRARY_PATH or
+                equivalent variable and GTK+ is version 1.2.3 or above.
+            ])
+        fi
+
+        TOOLKIT_INCLUDE="$GTK_CFLAGS"
+
+        dnl Appending gthreads as it was done here is not portable, instead
+        dnl we now call "gtk-config --libs gthread" which sets the right library
+        dnl name for us. The following hacks are no longer required.
+
+        GUI_TK_LIBRARY="$GTK_LIBS"
+
+    dnl dnl On FreeBSD, the libs are called gtk12 etc, so we must append gthread12
+    dnl    echo $GTK_LIBS | fgrep -q "glib12"
+    dnl    if test $? = 0  ; then
+    dnl       GUI_TK_LIBRARY="$GTK_LIBS -gthread12"
+    dnl    else
+    dnl       GUI_TK_LIBRARY="$GTK_LIBS -lgthread"
+    dnl    fi
+        TOOLKIT=GTK
+
+        AFMINSTALL=afminstall
+
+        GUIOBJS="\$(GTK_GUIOBJS)"
+        GUIHEADERS="\$(GTK_HEADERS)"
+        COMMONOBJS="\$(GTK_COMMONOBJS)"
+        GENERICOBJS="\$(GTK_GENERICOBJS)"
+        GUIDEPS="\$(GTK_GUIDEPS)"
+        COMMONDEPS="\$(GTK_COMMONDEPS)"
+        GENERICDEPS="\$(GTK_GENERICDEPS)"
+        UNIXOBJS="\$(UNIX_OBJS)"
+        UNIXDEPS="\$(UNIX_DEPS)"
+        GUIDIST=GTK_DIST
+
+        dnl test for XIM support in libgdk
+        AC_CHECK_LIB(gdk, gdk_im_open, AC_DEFINE(HAVE_XIM))
+    fi
+
+    if test "$wxUSE_WINE" = 1; then
+        AC_MSG_CHECKING(for WINE includes)
         WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, windows.h)
         if test "$ac_find_includes" != "" ; then
             AC_MSG_RESULT(found $ac_find_includes)
@@ -1559,233 +1709,99 @@ if test "$wxUSE_CYGWIN" = 1 || test "$wxUSE_MINGW" = 1 ; then
             AC_MSG_RESULT(no)
             AC_MSG_ERROR(please set CFLAGS to contain the location of windows.h)
         fi
-    fi
 
-    INCLUDE_SUBDIRS="$INCLUDE_SUBDIRS msw"
-    dnl --- Quick & Dirty ; link against most/all libraries
-    dnl --- This will bloat the executable, but it'll work for now...
-    LIBS="$LIBS -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lctl3d32 -lcrtdll -ladvapi32 -lwsock32"
-
-    dnl add extra odbc libs if we have compiled in odbc
-    if test "$wxUSE_ODBC" = "yes" ; then
-        LIBS="$LIBS -lodbc32 -lole32 -loleaut32"
-    fi
-
-    dnl -mwindows is needed to avoid that spawning of a console window
-    if test "$wxUSE_MINGW" = 1; then
-        LDFLAGS="$LDFLAGS -mwindows"
-    fi
-
-    TOOLKIT=MSW
-
-    GUIOBJS="\$(MSW_GUIOBJS)"
-    GUIHEADERS="\$(MSW_HEADERS)"
-    COMMONOBJS="\$(MSW_COMMONOBJS)"
-    GENERICOBJS="\$(MSW_GENERICOBJS)"
-    UNIXOBJS=
-    GUIDIST=MSW_DIST
-
-    dnl we should calculate these
-    RCINCSWITCH="--include-dir"
-    RCDEFSWITCH="--define"
-    RCPREPROCESSOR="--preprocessor \"\$(CC) -c -E -xc-header -DRC_INVOKED\""
-    RCINPUTSWITCH="-i"
-    RCOUTPUTSWITCH="-o"
-    RESFLAGS="$RCPREPROCESSOR $RCINCSWITCH \$(top_srcdir)/include $RCINCSWITCH \$(top_srcdir)/\$(program_dir) $RCDEFSWITCH __WIN32__ $RCDEFSWITCH __WIN95__ $RCDEFSWITCH __GNUWIN32__"
-
-    dnl set optinal RES_PROGRAM_OPT to RES_PROGRAM
-    RESPROGRAM="\$(RES_PROGRAM)"
-
-fi
-
-if test "$wxUSE_GTK" = 1; then
-    dnl avoid calling AM_PATH_GTK twice, so check first for the newer version
-    dnl and only then, if it wasn't found, for an older one
-    AM_PATH_GTK_2_0(1.3.1, WXGTK20=1,[
-      AM_PATH_GTK(1.2.7, WXGTK127=1)
-      AM_PATH_GTK(1.2.3, WXGTK12=1)
-    ], gthread)
-
-    if test "$WXGTK12" != 1 -a "$WXGTK20" != 1; then
-        AC_MSG_ERROR([
-            Please check that gtk-config is in path, the directory
-            where GTK+ libraries are installed (returned by
-            'gtk-config --libs' command) is in LD_LIBRARY_PATH or
-            equivalent variable and GTK+ is version 1.2.3 or above.
-        ])
-    fi
-
-    TOOLKIT_INCLUDE="$GTK_CFLAGS"
-
-dnl Appending gthreads as it was done here is not portable, instead
-dnl we now call "gtk-config --libs gthread" which sets the right library
-dnl name for us. The following hacks are no longer required.
-
-    GUI_TK_LIBRARY="$GTK_LIBS"
-
-dnl dnl On FreeBSD, the libs are called gtk12 etc, so we must append gthread12
-dnl    echo $GTK_LIBS | fgrep -q "glib12"
-dnl    if test $? = 0  ; then
-dnl       GUI_TK_LIBRARY="$GTK_LIBS -gthread12"
-dnl    else
-dnl       GUI_TK_LIBRARY="$GTK_LIBS -lgthread"
-dnl    fi
-    TOOLKIT=GTK
-
-    AFMINSTALL=afminstall
-
-    GUIOBJS="\$(GTK_GUIOBJS)"
-    GUIHEADERS="\$(GTK_HEADERS)"
-    COMMONOBJS="\$(GTK_COMMONOBJS)"
-    GENERICOBJS="\$(GTK_GENERICOBJS)"
-    GUIDEPS="\$(GTK_GUIDEPS)"
-    COMMONDEPS="\$(GTK_COMMONDEPS)"
-    GENERICDEPS="\$(GTK_GENERICDEPS)"
-    UNIXOBJS="\$(UNIX_OBJS)"
-    UNIXDEPS="\$(UNIX_DEPS)"
-    GUIDIST=GTK_DIST
-
-    dnl test for XIM support in libgdk
-    AC_CHECK_LIB(gdk, gdk_im_open, AC_DEFINE(HAVE_XIM))
-fi
-
-if test "$wxUSE_WINE" = 1; then
-    AC_MSG_CHECKING(for WINE includes)
-    WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, windows.h)
-    if test "$ac_find_includes" != "" ; then
-        AC_MSG_RESULT(found $ac_find_includes)
-        TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE -I$ac_find_includes"
-    else
-        AC_MSG_RESULT(no)
-        AC_MSG_ERROR(please set CFLAGS to contain the location of windows.h)
-    fi
-
-    XPM_LINK=""
-    AC_MSG_CHECKING(for Xpm library)
-    WX_PATH_FIND_LIBRARIES($SEARCH_LIB,Xpm)
-    if test "$ac_find_libraries" != "" ; then
-        GUI_TK_LIBRARY="-L$ac_find_libraries"
-        XPM_LINK="-lXpm"
-        AC_DEFINE(wxHAVE_LIB_XPM)
-        AC_MSG_RESULT(found at $ac_find_libraries)
-    else
-        AC_MSG_RESULT(no)
-        AC_MSG_WARN(library will be compiled without support for images in XPM format)
-    fi
-
-    MESA_LINK=""
-    AC_MSG_CHECKING(for Mesa library)
-    WX_PATH_FIND_LIBRARIES($SEARCH_LIB,MesaGL)
-    if test "$ac_find_libraries" != "" ; then
-        GUI_TK_LIBRARY="$GUI_TK_LIBRARY -L$ac_find_libraries"
-        MESA_LINK="-lMesaGL"
-        AC_MSG_RESULT(found at $ac_find_libraries)
-    else
-        AC_MSG_ERROR(no)
-    fi
-
-    GUI_TK_LINK="-lwine $MESA_LINK $XPM_LINK -lXxf86dga -lXxf86vm -lSM -lICE -lXext -lXmu -lX11 -lncurses"
-    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $GUI_TK_LINK"
-    WXWINE=1
-    TOOLKIT=MSW
-
-    GUIHEADERS="\$(MSW_HEADERS)"
-    GUIOBJS="\$(MSW_GUIOBJS)"
-    COMMONOBJS="\$(MSW_COMMONOBJS)"
-    GENERICOBJS="\$(MSW_GENERICOBJS)"
-    GUIDEPS="\$(MSW_GUIDEPS)"
-    COMMONDEPS="\$(MSW_COMMONDEPS)"
-    GENERICDEPS="\$(MSW_GENERICDEPS)"
-    UNIXOBJS="\$(UNIX_OBJS)"
-    UNIXDEPS="\$(UNIX_DEPS)"
-    GUIDIST=MSW_DIST
-fi
-
-dnl use standard macros to check for X headers/libs, this brings support
-dnl for the standard configure options --x-includes and --x-libraries;
-dnl the path to the X headers/libs is not only needed for motif, but also
-dnl by the OpenGL and XKBlib.h checks further down
-
-AC_PATH_XTRA
-CPPFLAGS="$CPPFLAGS $X_CFLAGS"
-LDFLAGS="$LDFLAGS $X_LIBS"
-
-if test "$wxUSE_MOTIF" = 1; then
-    if test "$no_x" = "yes"; then
-      AC_MSG_ERROR(X11 not found, please use --x-includes and/or --x-libraries options)
-    fi
-
-    GUI_TK_LIBRARY="$X_LIBS"
-    TOOLKIT_INCLUDE="$X_CFLAGS"
-
-    AFMINSTALL=afminstall
-
-    dnl manual check for X11 headers/libs
-    dnl
-    dnl    AC_MSG_CHECKING(for X11 headers)
-    dnl    WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, X11/Intrinsic.h)
-    dnl    if test "$ac_find_includes" != "" ; then
-    dnl        AC_MSG_RESULT(found $ac_find_includes)
-    dnl    else
-    dnl        AC_MSG_RESULT(no)
-    dnl        AC_MSG_ERROR(please set CFLAGS to contain the location of X11/Intrinsic.h)
-    dnl    fi
-    dnl
-    dnl    AC_MSG_CHECKING(for X11 libraries)
-    dnl    WX_PATH_FIND_LIBRARIES($SEARCH_LIB, X11)
-    dnl    if test "$ac_find_libraries" != "" ; then
-    dnl        WX_INCLUDE_PATH_EXIST($ac_find_includes, $TOOLKIT_INCLUDE)
-    dnl        WX_LINK_PATH_EXIST($ac_find_libraries, $GUI_TK_LIBRARY)
-    dnl
-    dnl        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
-    dnl        TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE $ac_path_to_include"
-    dnl        AC_MSG_RESULT(found at $ac_find_libraries)
-    dnl    else
-    dnl        AC_MSG_RESULT(no)
-    dnl        AC_MSG_ERROR(please set LDFLAGS to contain the location of libX11)
-    dnl    fi
-
-    COMPILED_X_PROGRAM=0
-
-    AC_MSG_CHECKING(for Motif/Lesstif headers)
-    WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, Xm/Xm.h)
-    if test "$ac_find_includes" != "" ; then
-        AC_MSG_RESULT(found $ac_find_includes)
-    else
-        AC_TRY_COMPILE(
-            [
-                #include <Xm/Xm.h>
-            ],
-            [
-                int version;
-
-                version = xmUseVersion;
-            ],
-            [
-                AC_MSG_RESULT(found in default search path)
-                COMPILED_X_PROGRAM=1
-            ],
-            [
-                AC_MSG_RESULT(no)
-                AC_MSG_ERROR(please set CFLAGS to contain the location of Xm/Xm.h)
-            ]
-        )
-    fi
-
-    if test "$COMPILED_X_PROGRAM" = 0; then
-        AC_MSG_CHECKING(for Motif/Lesstif library)
-        WX_PATH_FIND_LIBRARIES($SEARCH_LIB, Xm)
+        XPM_LINK=""
+        AC_MSG_CHECKING(for Xpm library)
+        WX_PATH_FIND_LIBRARIES($SEARCH_LIB,Xpm)
         if test "$ac_find_libraries" != "" ; then
-            WX_INCLUDE_PATH_EXIST($ac_find_includes, $TOOLKIT_INCLUDE)
-            WX_LINK_PATH_EXIST($ac_find_libraries, $GUI_TK_LIBRARY)
-
-            GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
-            TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE $ac_path_to_include"
+            GUI_TK_LIBRARY="-L$ac_find_libraries"
+            XPM_LINK="-lXpm"
+            AC_DEFINE(wxHAVE_LIB_XPM)
             AC_MSG_RESULT(found at $ac_find_libraries)
         else
-            dnl it might happen that we found headers in one of the standard
-            dnl paths but the libs are elsewhere - we do need to try to
-            dnl compile a sample program then here
+            AC_MSG_RESULT(no)
+            AC_MSG_WARN(library will be compiled without support for images in XPM format)
+        fi
+
+        MESA_LINK=""
+        AC_MSG_CHECKING(for Mesa library)
+        WX_PATH_FIND_LIBRARIES($SEARCH_LIB,MesaGL)
+        if test "$ac_find_libraries" != "" ; then
+            GUI_TK_LIBRARY="$GUI_TK_LIBRARY -L$ac_find_libraries"
+            MESA_LINK="-lMesaGL"
+            AC_MSG_RESULT(found at $ac_find_libraries)
+        else
+            AC_MSG_ERROR(no)
+        fi
+
+        GUI_TK_LINK="-lwine $MESA_LINK $XPM_LINK -lXxf86dga -lXxf86vm -lSM -lICE -lXext -lXmu -lX11 -lncurses"
+        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $GUI_TK_LINK"
+        WXWINE=1
+        TOOLKIT=MSW
+
+        GUIHEADERS="\$(MSW_HEADERS)"
+        GUIOBJS="\$(MSW_GUIOBJS)"
+        COMMONOBJS="\$(MSW_COMMONOBJS)"
+        GENERICOBJS="\$(MSW_GENERICOBJS)"
+        GUIDEPS="\$(MSW_GUIDEPS)"
+        COMMONDEPS="\$(MSW_COMMONDEPS)"
+        GENERICDEPS="\$(MSW_GENERICDEPS)"
+        UNIXOBJS="\$(UNIX_OBJS)"
+        UNIXDEPS="\$(UNIX_DEPS)"
+        GUIDIST=MSW_DIST
+    fi
+
+    dnl use standard macros to check for X headers/libs, this brings support
+    dnl for the standard configure options --x-includes and --x-libraries;
+    dnl the path to the X headers/libs is not only needed for motif, but also
+    dnl by the OpenGL and XKBlib.h checks further down
+
+    AC_PATH_XTRA
+    CPPFLAGS="$CPPFLAGS $X_CFLAGS"
+    LDFLAGS="$LDFLAGS $X_LIBS"
+
+    if test "$wxUSE_MOTIF" = 1; then
+        if test "$no_x" = "yes"; then
+          AC_MSG_ERROR(X11 not found, please use --x-includes and/or --x-libraries options)
+        fi
+
+        GUI_TK_LIBRARY="$X_LIBS"
+        TOOLKIT_INCLUDE="$X_CFLAGS"
+
+        AFMINSTALL=afminstall
+
+        dnl manual check for X11 headers/libs
+        dnl
+        dnl    AC_MSG_CHECKING(for X11 headers)
+        dnl    WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, X11/Intrinsic.h)
+        dnl    if test "$ac_find_includes" != "" ; then
+        dnl        AC_MSG_RESULT(found $ac_find_includes)
+        dnl    else
+        dnl        AC_MSG_RESULT(no)
+        dnl        AC_MSG_ERROR(please set CFLAGS to contain the location of X11/Intrinsic.h)
+        dnl    fi
+        dnl
+        dnl    AC_MSG_CHECKING(for X11 libraries)
+        dnl    WX_PATH_FIND_LIBRARIES($SEARCH_LIB, X11)
+        dnl    if test "$ac_find_libraries" != "" ; then
+        dnl        WX_INCLUDE_PATH_EXIST($ac_find_includes, $TOOLKIT_INCLUDE)
+        dnl        WX_LINK_PATH_EXIST($ac_find_libraries, $GUI_TK_LIBRARY)
+        dnl
+        dnl        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
+        dnl        TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE $ac_path_to_include"
+        dnl        AC_MSG_RESULT(found at $ac_find_libraries)
+        dnl    else
+        dnl        AC_MSG_RESULT(no)
+        dnl        AC_MSG_ERROR(please set LDFLAGS to contain the location of libX11)
+        dnl    fi
+
+        COMPILED_X_PROGRAM=0
+
+        AC_MSG_CHECKING(for Motif/Lesstif headers)
+        WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, Xm/Xm.h)
+        if test "$ac_find_includes" != "" ; then
+            AC_MSG_RESULT(found $ac_find_includes)
+        else
             AC_TRY_COMPILE(
                 [
                     #include <Xm/Xm.h>
@@ -1801,129 +1817,183 @@ if test "$wxUSE_MOTIF" = 1; then
                 ],
                 [
                     AC_MSG_RESULT(no)
-                    AC_MSG_ERROR(please set LDFLAGS to contain the location of libXm)
+                    AC_MSG_ERROR(please set CFLAGS to contain the location of Xm/Xm.h)
                 ]
             )
         fi
-    fi
 
-    dnl we don't need this as we used AC_PATH_XTRA above which does it for us
-    dnl
-    dnl dnl if we already compiled a sample program, X libs are surely there
-    dnl if test "$COMPILED_X_PROGRAM" = 0; then
-    dnl     AC_MSG_CHECKING(for Xt library)
-    dnl     WX_PATH_FIND_LIBRARIES($SEARCH_LIB,Xt)
-    dnl     if test "$ac_find_libraries" != "" ; then
-    dnl         WX_LINK_PATH_EXIST($ac_find_libraries,$GUI_TK_LIBRARY)
-    dnl         GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
-    dnl         AC_MSG_RESULT(found at $ac_find_libraries)
-    dnl     else
-    dnl         AC_TRY_COMPILE
-    dnl         (
-    dnl             [
-    dnl                 #include <X11/Intrinsic.h>
-    dnl             ],
-    dnl             [
-    dnl                 char *p;
-    dnl                 p = XtMalloc(5);
-    dnl             ],
-    dnl             [
-    dnl                 AC_MSG_RESULT(found in default search path)
-    dnl                 COMPILED_X_PROGRAM=1
-    dnl             ],
-    dnl             [
-    dnl                 AC_MSG_RESULT(no)
-    dnl                 AC_MSG_ERROR(please set LDFLAGS to contain the location of libXt)
-    dnl             ]
-    dnl         )
-    dnl     fi
-    dnl fi
+        if test "$COMPILED_X_PROGRAM" = 0; then
+            AC_MSG_CHECKING(for Motif/Lesstif library)
+            WX_PATH_FIND_LIBRARIES($SEARCH_LIB, Xm)
+            if test "$ac_find_libraries" != "" ; then
+                WX_INCLUDE_PATH_EXIST($ac_find_includes, $TOOLKIT_INCLUDE)
+                WX_LINK_PATH_EXIST($ac_find_libraries, $GUI_TK_LIBRARY)
 
-    XPM_LINK=""
-    AC_MSG_CHECKING(for Xpm library)
-    WX_PATH_FIND_LIBRARIES($SEARCH_LIB,Xpm)
-    if test "$ac_find_libraries" != "" ; then
-        WX_LINK_PATH_EXIST($ac_find_libraries,$GUI_TK_LIBRARY)
-        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
-        XPM_LINK="-lXpm "
-        AC_DEFINE(wxHAVE_LIB_XPM)
-        AC_MSG_RESULT(found at $ac_find_libraries)
-    else
-        AC_TRY_COMPILE(
-            [
-                #include <X11/xpm.h>
-            ],
-            [
-                int version;
+                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
+                TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE $ac_path_to_include"
+                AC_MSG_RESULT(found at $ac_find_libraries)
+            else
+                dnl it might happen that we found headers in one of the standard
+                dnl paths but the libs are elsewhere - we do need to try to
+                dnl compile a sample program then here
+                AC_TRY_COMPILE(
+                    [
+                        #include <Xm/Xm.h>
+                    ],
+                    [
+                        int version;
 
-                version = XpmLibraryVersion();
-            ],
-            [
+                        version = xmUseVersion;
+                    ],
+                    [
+                        AC_MSG_RESULT(found in default search path)
+                        COMPILED_X_PROGRAM=1
+                    ],
+                    [
+                        AC_MSG_RESULT(no)
+                        AC_MSG_ERROR(please set LDFLAGS to contain the location of libXm)
+                    ]
+                )
+            fi
+        fi
+
+        dnl we don't need this as we used AC_PATH_XTRA above which does it for us
+        dnl
+        dnl dnl if we already compiled a sample program, X libs are surely there
+        dnl if test "$COMPILED_X_PROGRAM" = 0; then
+        dnl     AC_MSG_CHECKING(for Xt library)
+        dnl     WX_PATH_FIND_LIBRARIES($SEARCH_LIB,Xt)
+        dnl     if test "$ac_find_libraries" != "" ; then
+        dnl         WX_LINK_PATH_EXIST($ac_find_libraries,$GUI_TK_LIBRARY)
+        dnl         GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
+        dnl         AC_MSG_RESULT(found at $ac_find_libraries)
+        dnl     else
+        dnl         AC_TRY_COMPILE
+        dnl         (
+        dnl             [
+        dnl                 #include <X11/Intrinsic.h>
+        dnl             ],
+        dnl             [
+        dnl                 char *p;
+        dnl                 p = XtMalloc(5);
+        dnl             ],
+        dnl             [
+        dnl                 AC_MSG_RESULT(found in default search path)
+        dnl                 COMPILED_X_PROGRAM=1
+        dnl             ],
+        dnl             [
+        dnl                 AC_MSG_RESULT(no)
+        dnl                 AC_MSG_ERROR(please set LDFLAGS to contain the location of libXt)
+        dnl             ]
+        dnl         )
+        dnl     fi
+        dnl fi
+
+        XPM_LINK=""
+        AC_MSG_CHECKING(for Xpm library)
+        WX_PATH_FIND_LIBRARIES($SEARCH_LIB,Xpm)
+        if test "$ac_find_libraries" != "" ; then
+            WX_LINK_PATH_EXIST($ac_find_libraries,$GUI_TK_LIBRARY)
+            GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
             XPM_LINK="-lXpm "
             AC_DEFINE(wxHAVE_LIB_XPM)
-                AC_MSG_RESULT(found in default search path)
-                COMPILED_X_PROGRAM=0
-            ],
-            [
-                AC_MSG_RESULT(no)
-                AC_MSG_WARN(library will be compiled without support for images in XPM format)
-            ]
-        )
+            AC_MSG_RESULT(found at $ac_find_libraries)
+        else
+            AC_TRY_COMPILE(
+                [
+                    #include <X11/xpm.h>
+                ],
+                [
+                    int version;
+
+                    version = XpmLibraryVersion();
+                ],
+                [
+                XPM_LINK="-lXpm "
+                AC_DEFINE(wxHAVE_LIB_XPM)
+                    AC_MSG_RESULT(found in default search path)
+                    COMPILED_X_PROGRAM=0
+                ],
+                [
+                    AC_MSG_RESULT(no)
+                    AC_MSG_WARN(library will be compiled without support for images in XPM format)
+                ]
+            )
+        fi
+
+        GUI_TK_LINK="-lXm $XPM_LINK -lXmu -lXext -lXt -lX11"
+        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $GUI_TK_LINK"
+        TOOLKIT=MOTIF
+
+        GUIHEADERS="\$(MOTIF_HEADERS)"
+        GUIOBJS="\$(MOTIF_GUIOBJS)"
+        COMMONOBJS="\$(MOTIF_COMMONOBJS)"
+        GENERICOBJS="\$(MOTIF_GENERICOBJS)"
+        GUIDEPS="\$(MOTIF_GUIDEPS)"
+        COMMONDEPS="\$(MOTIF_COMMONDEPS)"
+        GENERICDEPS="\$(MOTIF_GENERICDEPS)"
+        UNIXOBJS="\$(UNIX_OBJS)"
+        UNIXDEPS="\$(UNIX_DEPS)"
+        GUIDIST=MOTIF_DIST
     fi
 
-    GUI_TK_LINK="-lXm $XPM_LINK -lXmu -lXext -lXt -lX11"
-    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $GUI_TK_LINK"
-    TOOLKIT=MOTIF
+    if test "$wxUSE_PM" = 1; then
+        TOOLKIT=PM
 
-    GUIHEADERS="\$(MOTIF_HEADERS)"
-    GUIOBJS="\$(MOTIF_GUIOBJS)"
-    COMMONOBJS="\$(MOTIF_COMMONOBJS)"
-    GENERICOBJS="\$(MOTIF_GENERICOBJS)"
-    GUIDEPS="\$(MOTIF_GUIDEPS)"
-    COMMONDEPS="\$(MOTIF_COMMONDEPS)"
-    GENERICDEPS="\$(MOTIF_GENERICDEPS)"
-    UNIXOBJS="\$(UNIX_OBJS)"
-    UNIXDEPS="\$(UNIX_DEPS)"
-    GUIDIST=MOTIF_DIST
-fi
+        GUIOBJS="\$(PM_GUIOBJS)"
+        GUIHEADERS="\$(PM_HEADERS)"
+        COMMONOBJS="\$(PM_COMMONOBJS)"
+        GENERICOBJS="\$(PM_GENERICOBJS)"
+        GUIDEPS="\$(PM_GUIDEPS)"
+        COMMONDEPS="\$(PM_COMMONDEPS)"
+        GENERICDEPS="\$(PM_GENERICDEPS)"
+        UNIXOBJS=
+        UNIXDEPS=
+        GUIDIST=GTK_DIST
+    fi
 
-if test "$wxUSE_PM" = 1; then
-    TOOLKIT=PM
-
-    GUIOBJS="\$(PM_GUIOBJS)"
-    GUIHEADERS="\$(PM_HEADERS)"
-    COMMONOBJS="\$(PM_COMMONOBJS)"
-    GENERICOBJS="\$(PM_GENERICOBJS)"
-    GUIDEPS="\$(PM_GUIDEPS)"
-    COMMONDEPS="\$(PM_COMMONDEPS)"
-    GENERICDEPS="\$(PM_GENERICDEPS)"
-    UNIXOBJS=
-    UNIXDEPS=
-    GUIDIST=GTK_DIST
-fi
-
-dnl the name of the directory where the files for this toolkit live
-if test "$TOOLKIT" != "PM" ; then
-    TOOLKIT_DIR=`echo ${TOOLKIT} | tr "[[A-Z]]" "[[a-z]]"`
-else
-    TOOLKIT_DIR="os2"
-fi
+    dnl the name of the directory where the files for this toolkit live
+    if test "$TOOLKIT" != "PM" ; then
+        TOOLKIT_DIR=`echo ${TOOLKIT} | tr "[[A-Z]]" "[[a-z]]"`
+    else
+        TOOLKIT_DIR="os2"
+    fi
 
     dnl the (base) name of the library and support files for this toolkit
-    if test "$wxUSE_DEBUG_FLAG" = "yes"; then
-        TOOLKIT_NAME="${TOOLKIT_DIR}d"
+    TOOLKIT_NAME="${TOOLKIT_DIR}"
+
+    dnl are we using the generic version with this low level toolkit?
+    if test "$wxUSE_UNIVERSAL" = "yes"; then
+        TOOLKIT_NAME="${TOOLKIT_NAME}univ"
+        SETUPH_DIR="univ"
     else
-        TOOLKIT_NAME="${TOOLKIT_DIR}"
+        SETUPH_DIR="${TOOLKIT_DIR}"
+    fi
+
+    dnl append 'd' to the debug library name
+    if test "$wxUSE_DEBUG_FLAG" = "yes"; then
+        TOOLKIT_NAME="${TOOLKIT_NAME}d"
     fi
 
     dnl the symbol which allows conditional compilation for the given toolkit
     TOOLKIT_DEF="-D__WX${TOOLKIT}__"
+    if test "$wxUSE_UNIVERSAL" = "yes"; then
+        TOOLKIT_DEF="${TOOLKIT_DEF} -D__WXUNIVERSAL__"
+    fi
 
     dnl the name of the (libtool) library
     WX_LIBRARY="wx_${TOOLKIT_NAME}"
 
     dnl the sources, their dependenices and the headers
-    ALL_OBJECTS="\$(GUIOBJS) \$(COMMONOBJS) \$(GENERICOBJS) \$(UNIXOBJS) \$(HTMLOBJS) \$(OGLOBJS)"
+    if test "$wxUSE_UNIVERSAL" = "yes"; then
+        ALL_OBJECTS="\$(GUI_LOWLEVEL_OBJS) \${UNIVOBJS}"
+    else
+        ALL_OBJECTS="\$(GUIOBJS)"
+    fi
+    ALL_OBJECTS="${ALL_OBJECTS} \$(COMMONOBJS) \$(GENERICOBJS) \$(UNIXOBJS)"
+    if test "$wxUSE_HTML" = "yes"; then
+        ALL_OBJECTS="${ALL_OBJECTS} \$(HTMLOBJS)"
+    fi
 
     dnl ODBC objects are Unix only
     if test "$TOOLKIT" != "MSW"; then
@@ -1944,9 +2014,19 @@ fi
     if test "$wxUSE_ZLIB" = "yes" ; then
         ALL_OBJECTS="${ALL_OBJECTS} \$(ZLIBOBJS)"
     fi
-    ALL_DEPFILES="\$(GUIDEPS) \$(COMMONDEPS) \$(GENERICDEPS) \$(UNIXDEPS) \$(HTMLDEPS) \$(OGLDEPS)"
+
+    if test "$wxUSE_UNIVERSAL" = "yes"; then
+        ALL_DEPFILES="\$(GUI_LOWLEVEL_DEPS) \$(UNIVDEPS)"
+    else
+        ALL_DEPFILES="\$(GUIDEPS)"
+    fi
+
+    ALL_DEPFILES="${ALL_DEPFILES} \$(COMMONDEPS) \$(GENERICDEPS) \$(UNIXDEPS) \$(HTMLDEPS) \$(OGLDEPS)"
 
     PORT_FILES="src/\$(TOOLKITDIR)/files.lst"
+    if test "$wxUSE_UNIVERSAL" = "yes"; then
+        PORT_FILES="${PORT_FILES} \${top_srcdir}/src/univ/files.lst"
+    fi
     RPM_FILES="src/\$(TOOLKITDIR)/rpmfiles.lst"
     RPM_SPEC="wx\$(TOOLKIT).spec"
 
@@ -2831,7 +2911,7 @@ fi
 TIFF_INCLUDE=
 if test "$wxUSE_LIBTIFF" = "yes" -o "$wxUSE_LIBTIFF" = "sys" ; then
   AC_DEFINE(wxUSE_LIBTIFF)
-  if test "$wxUSE_LIBTIFF" = "yes" ; then  
+  if test "$wxUSE_LIBTIFF" = "yes" ; then
     TIFF_INCLUDE="-I\${top_srcdir}/src/tiff"
   else
     TIFF_LINK=
@@ -2897,8 +2977,24 @@ if test "$wxUSE_APPLE_IEEE" = "yes"; then
   AC_DEFINE(wxUSE_APPLE_IEEE)
 fi
 
+if test "$wxUSE_TIMER" = "yes"; then
+  AC_DEFINE(wxUSE_TIMER)
+fi
+
 if test "$wxUSE_WAVE" = "yes"; then
   AC_DEFINE(wxUSE_WAVE)
+fi
+
+if test "$wxUSE_CMDLINE_PARSER" = "yes"; then
+  AC_DEFINE(wxUSE_CMDLINE_PARSER)
+fi
+
+if test "$wxUSE_STOPWATCH" = "yes"; then
+  AC_DEFINE(wxUSE_STOPWATCH)
+fi
+
+if test "$wxUSE_DATETIME" = "yes"; then
+  AC_DEFINE(wxUSE_DATETIME)
 fi
 
 if test "$wxUSE_FILE" = "yes"; then
@@ -2961,11 +3057,23 @@ if test "$wxUSE_INTL" = "yes" ; then
 fi
 
 if test "$wxUSE_LOG" = "yes"; then
-  AC_DEFINE(wxUSE_LOG)
+    AC_DEFINE(wxUSE_LOG)
+
+    if test "$wxUSE_LOGGUI" = "yes"; then
+        AC_DEFINE(wxUSE_LOGGUI)
+    fi
+
+    if test "$wxUSE_LOGWINDOW" = "yes"; then
+        AC_DEFINE(wxUSE_LOGWINDOW)
+    fi
+fi
+
+if test "$wxUSE_FONTMAP" = "yes"; then
+    AC_DEFINE(wxUSE_FONTMAP)
 fi
 
 if test "$wxUSE_LONGLONG" = "yes"; then
-  AC_DEFINE(wxUSE_LONGLONG)
+    AC_DEFINE(wxUSE_LONGLONG)
 fi
 
 if test "$wxUSE_PLOT" = "yes"; then
@@ -2985,7 +3093,7 @@ dnl ------------------------------------------------------------------------
 dnl time/date functions
 dnl ------------------------------------------------------------------------
 
-if test "$wxUSE_TIMEDATE" = "yes"; then
+if test "$wxUSE_DATETIME" = "yes"; then
     dnl check for strptime
     AC_CHECK_FUNCS(strptime)
 
@@ -3108,7 +3216,7 @@ if test "$wxUSE_TIMEDATE" = "yes"; then
         fi
     fi
 
-    AC_DEFINE(wxUSE_TIMEDATE)
+    AC_DEFINE(wxUSE_DATETIME)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS typetest"
 fi
 
@@ -3451,48 +3559,68 @@ dnl ---------------------------------------------------------------------------
 dnl GUI controls
 dnl ---------------------------------------------------------------------------
 
+USES_CONTROLS=0
+if test "$wxUSE_CONTROLS" = "yes"; then
+  USES_CONTROLS=1
+fi
+
 if test "$wxUSE_ACCEL" = "yes"; then
   AC_DEFINE(wxUSE_ACCEL)
+  USES_CONTROLS=1
+fi
+
+if test "$wxUSE_BUTTON" = "yes"; then
+  AC_DEFINE(wxUSE_BUTTON)
+  USES_CONTROLS=1
+fi
+
+if test "$wxUSE_BMPBUTTON" = "yes"; then
+  AC_DEFINE(wxUSE_BMPBUTTON)
+  USES_CONTROLS=1
 fi
 
 if test "$wxUSE_CARET" = "yes"; then
   AC_DEFINE(wxUSE_CARET)
+  USES_CONTROLS=1
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS caret"
 fi
 
 if test "$wxUSE_COMBOBOX" = "yes"; then
   AC_DEFINE(wxUSE_COMBOBOX)
+  USES_CONTROLS=1
 fi
 
 if test "$wxUSE_CHOICE" = "yes"; then
   AC_DEFINE(wxUSE_CHOICE)
-fi
-
-if test "$wxUSE_BMPBUTTON" = "yes"; then
-  AC_DEFINE(wxUSE_BMPBUTTON)
+  USES_CONTROLS=1
 fi
 
 if test "$wxUSE_CHECKBOX" = "yes"; then
   AC_DEFINE(wxUSE_CHECKBOX)
+  USES_CONTROLS=1
 fi
 
 if test "$wxUSE_CHECKLST" = "yes"; then
   AC_DEFINE(wxUSE_CHECKLISTBOX)
+  USES_CONTROLS=1
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS checklst"
 fi
 
 if test "$wxUSE_GAUGE" = "yes"; then
   AC_DEFINE(wxUSE_GAUGE)
+  USES_CONTROLS=1
 fi
 
 if test "$wxUSE_NEW_GRID" = "yes"; then
   wxUSE_GRID="yes"
   AC_DEFINE(wxUSE_NEW_GRID)
+  USES_CONTROLS=1
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS newgrid"
 fi
 
 if test "$wxUSE_GRID" = "yes"; then
   AC_DEFINE(wxUSE_GRID)
+  USES_CONTROLS=1
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS grid"
 fi
 
@@ -3502,11 +3630,13 @@ fi
 
 if test "$wxUSE_LISTBOX" = "yes"; then
     AC_DEFINE(wxUSE_LISTBOX)
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_LISTCTRL" = "yes"; then
     if test "$wxUSE_IMAGLIST" = "yes"; then
         AC_DEFINE(wxUSE_LISTCTRL)
+        USES_CONTROLS=1
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS listctrl"
     else
         AC_MSG_WARN([wxListCtrl requires wxImageList and won't be compiled without it])
@@ -3515,15 +3645,18 @@ fi
 
 if test "$wxUSE_NOTEBOOK" = "yes"; then
     AC_DEFINE(wxUSE_NOTEBOOK)
+    USES_CONTROLS=1
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS notebook"
 fi
 
 if test "$wxUSE_RADIOBOX" = "yes"; then
     AC_DEFINE(wxUSE_RADIOBOX)
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_RADIOBTN" = "yes"; then
     AC_DEFINE(wxUSE_RADIOBTN)
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_SASH" = "yes"; then
@@ -3533,19 +3666,23 @@ fi
 
 if test "$wxUSE_SCROLLBAR" = "yes"; then
     AC_DEFINE(wxUSE_SCROLLBAR)
+    USES_CONTROLS=1
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS scroll scrollsub"
 fi
 
 if test "$wxUSE_SLIDER" = "yes"; then
     AC_DEFINE(wxUSE_SLIDER)
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_SPINBTN" = "yes"; then
     AC_DEFINE(wxUSE_SPINBTN)
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_SPINCTRL" = "yes"; then
     AC_DEFINE(wxUSE_SPINCTRL)
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_SPLITTER" = "yes"; then
@@ -3555,10 +3692,17 @@ fi
 
 if test "$wxUSE_STATBMP" = "yes"; then
     AC_DEFINE(wxUSE_STATBMP)
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_STATBOX" = "yes"; then
     AC_DEFINE(wxUSE_STATBOX)
+    USES_CONTROLS=1
+fi
+
+if test "$wxUSE_STATTEXT" = "yes"; then
+    AC_DEFINE(wxUSE_STATTEXT)
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_STATLINE" = "yes"; then
@@ -3566,11 +3710,13 @@ if test "$wxUSE_STATLINE" = "yes"; then
         AC_MSG_WARN([wxStaticLine is not supported under WINE])
     else
         AC_DEFINE(wxUSE_STATLINE)
+        USES_CONTROLS=1
     fi
 fi
 
 if test "$wxUSE_STATUSBAR" = "yes"; then
     AC_DEFINE(wxUSE_STATUSBAR)
+    USES_CONTROLS=1
 
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS statbar"
 fi
@@ -3580,13 +3726,21 @@ if test "$wxUSE_TABDIALOG" = "yes"; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS tab"
 fi
 
+if test "$wxUSE_TEXTCTRL" = "yes"; then
+    AC_DEFINE(wxUSE_TEXTCTRL)
+    USES_CONTROLS=1
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS text"
+fi
+
 if test "$wxUSE_TOOLBAR_SIMPLE" = "yes"; then
     AC_DEFINE(wxUSE_TOOLBAR_SIMPLE)
+    USES_CONTROLS=1
     wxUSE_TOOLBAR="yes"
 fi
 
 if test "$wxUSE_TOOLBAR" = "yes"; then
     AC_DEFINE(wxUSE_TOOLBAR)
+    USES_CONTROLS=1
 
     dnl if wxUSE_TOOLBAR and !wxUSE_TOOLBAR_SIMPLE => wxUSE_TOOLBAR_NATIVE
     if test "$wxUSE_TOOLBAR_SIMPLE" != "yes"; then
@@ -3598,6 +3752,7 @@ fi
 
 if test "$wxUSE_TOOLBAR_NATIVE" = "yes"; then
     AC_DEFINE(wxUSE_TOOLBAR_NATIVE)
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_TOOLTIPS" = "yes"; then
@@ -3615,10 +3770,15 @@ fi
 if test "$wxUSE_TREECTRL" = "yes"; then
     if test "$wxUSE_IMAGLIST" = "yes"; then
         AC_DEFINE(wxUSE_TREECTRL)
+        USES_CONTROLS=1
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS treectrl"
     else
         AC_MSG_WARN([wxTreeCtrl requires wxImageList and won't be compiled without it])
     fi
+fi
+
+if test "$USES_CONTROLS" = 1; then
+    AC_DEFINE(wxUSE_CONTROLS)
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -3634,6 +3794,22 @@ if test "$wxUSE_METAFILE" = "yes"; then
     AC_DEFINE(wxUSE_METAFILE)
 fi
 
+if test "$wxUSE_CHOICEDLG" = "yes"; then
+    AC_DEFINE(wxUSE_CHOICEDLG)
+fi
+
+if test "$wxUSE_COLOURDLG" = "yes"; then
+    AC_DEFINE(wxUSE_COLOURDLG)
+fi
+
+if test "$wxUSE_FILEDLG" = "yes"; then
+    AC_DEFINE(wxUSE_FILEDLG)
+fi
+
+if test "$wxUSE_FONTDLG" = "yes"; then
+    AC_DEFINE(wxUSE_FONTDLG)
+fi
+
 if test "$wxUSE_DIRDLG" = "yes"; then
     if test "$wxUSE_CONSTRAINTS" != "yes"; then
        AC_MSG_WARN(wxDirDialog requires constraints so it won't be compiled without them)
@@ -3644,6 +3820,14 @@ if test "$wxUSE_DIRDLG" = "yes"; then
             AC_DEFINE(wxUSE_DIRDLG)
         fi
     fi
+fi
+
+if test "$wxUSE_MSGDLG" = "yes"; then
+    AC_DEFINE(wxUSE_MSGDLG)
+fi
+
+if test "$wxUSE_NUMBERDLG" = "yes"; then
+    AC_DEFINE(wxUSE_NUMBERDLG)
 fi
 
 if test "$wxUSE_TEXTDLG" = "yes"; then
@@ -3762,6 +3946,10 @@ if test "$wxUSE_GUI" = "yes"; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS controls dialogs dragimag drawing dynamic \
                      font fractal image menu minimal richedit"
 
+    if test "$wxUSE_UNICODE" = "yes" ; then
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS univ"
+    fi
+
     dnl this is needed to be able to find AFM files
     CPPFLAGS="$CPPFLAGS \$(EXTRADEFS) \$(APPEXTRADEFS)"
 else
@@ -3828,6 +4016,7 @@ AC_SUBST(AFMINSTALL)
 AC_SUBST(TOOLKIT)
 AC_SUBST(TOOLKIT_DEF)
 AC_SUBST(TOOLKIT_DIR)
+AC_SUBST(SETUPH_DIR)
 AC_SUBST(TOOLKIT_NAME)
 AC_SUBST(TOOLKIT_INCLUDE)
 AC_SUBST(WXCONFIG_INCLUDE)
@@ -3876,7 +4065,7 @@ AC_SUBST(RESPROGRAM)
 AC_SUBST(RESCOMP)
 AC_SUBST(RESFLAGS)
 
-dnl These seam to be missing
+dnl These seem to be missing
 AC_SUBST(DLLTOOL)
 AC_SUBST(AS)
 AC_SUBST(NM)
@@ -3892,14 +4081,14 @@ AC_PROG_MAKE_SET
 dnl move setup.h back if available
 if test -d include; then
     if test -d include/wx; then
-        if test -d include/wx/${TOOLKIT_DIR}; then
-            if test -f include/wx/${TOOLKIT_DIR}/setup.h; then
-                mv -f include/wx/${TOOLKIT_DIR}/setup.h setup.h 
+        if test -d include/wx/${SETUPH_DIR}; then
+            if test -f include/wx/${SETUPH_DIR}/setup.h; then
+                mv -f include/wx/${SETUPH_DIR}/setup.h setup.h
             fi
         fi
     fi
 fi
-            
+
 AC_CONFIG_HEADER(setup.h:setup.h.in)
 
 dnl some more GUI only things
@@ -3929,10 +4118,10 @@ AC_OUTPUT([
             chmod +x wx-config
             mv wx-config wx${TOOLKIT_NAME}-config
             ${LN_S} wx${TOOLKIT_NAME}-config wx-config
-            
+
             dnl the debian build process wants setup.h in the lib subdir so we
             dnl can pretend wxWin is already installed, so we *copy* it there
-            
+
             if test ! -d lib; then
               mkdir lib
             fi
@@ -3945,11 +4134,11 @@ AC_OUTPUT([
             if test ! -d lib/wx/include/wx; then
               mkdir lib/wx/include/wx
             fi
-            if test ! -d lib/wx/include/wx/${TOOLKIT_NAME}; then
-              mkdir lib/wx/include/wx/${TOOLKIT_NAME}
+            if test ! -d lib/wx/include/wx/${SETUPH_DIR}; then
+              mkdir lib/wx/include/wx/${SETUPH_DIR}
             fi
             if test -f setup.h; then
-                cp -f setup.h lib/wx/include/wx/${TOOLKIT_NAME}/setup.h
+                cp -f setup.h lib/wx/include/wx/${SETUPH_DIR}/setup.h
             fi
 
             dnl *move* setup.h to its final place
@@ -3960,16 +4149,16 @@ AC_OUTPUT([
             if test ! -d include/wx; then
               mkdir include/wx
             fi
-            if test ! -d include/wx/${TOOLKIT_DIR}; then
-              mkdir include/wx/${TOOLKIT_DIR}
+            if test ! -d include/wx/${SETUPH_DIR}; then
+              mkdir include/wx/${SETUPH_DIR}
             fi
             if test -f setup.h; then
-                mv -f setup.h include/wx/${TOOLKIT_DIR}/setup.h
+                mv -f setup.h include/wx/${SETUPH_DIR}/setup.h
             fi
-            
+
           ],
           [
-            TOOLKIT_DIR="${TOOLKIT_DIR}"
+            SETUPH_DIR="${SETUPH_DIR}"
             TOOLKIT_NAME="${TOOLKIT_NAME}"
             LN_S="${LN_S}"
           ]

@@ -16,6 +16,8 @@
     #pragma interface "listbox.h"
 #endif
 
+#if wxUSE_LISTBOX
+
 // ----------------------------------------------------------------------------
 // simple types
 // ----------------------------------------------------------------------------
@@ -113,9 +115,6 @@ public:
     virtual void SetupColours();
 
 protected:
-    // do we have multiple selections?
-    bool HasMultipleSelection() const;
-
     // free memory (common part of Clear() and dtor)
     void Free();
 
@@ -132,6 +131,8 @@ protected:
 private:
     DECLARE_DYNAMIC_CLASS(wxListBox)
 };
+
+#endif // wxUSE_LISTBOX
 
 #endif
     // _WX_LISTBOX_H_

@@ -24,11 +24,13 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include <ctype.h>
-
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
+
+#if wxUSE_MENUS
+
+#include <ctype.h>
 
 #ifndef WX_PRECOMP
     #include "wx/menu.h"
@@ -643,3 +645,4 @@ wxString wxMenuBarBase::GetHelpString(int id) const
     return item->GetHelp();
 }
 
+#endif // wxUSE_MENUS

@@ -15,26 +15,7 @@
 #pragma interface
 #endif
 
-#include "wx/defs.h"
-
-#if wxUSE_RADIOBOX
-
-#include "wx/object.h"
-#include "wx/list.h"
-#include "wx/control.h"
 #include "wx/bitmap.h"
-
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class wxRadioBox;
-
-//-----------------------------------------------------------------------------
-// global data
-//-----------------------------------------------------------------------------
-
-extern const char *wxRadioBoxNameStr;
 
 //-----------------------------------------------------------------------------
 // wxRadioBox
@@ -130,7 +111,5 @@ protected:
 private:
     DECLARE_DYNAMIC_CLASS(wxRadioBox)
 };
-
-#endif
 
 #endif // __GTKRADIOBOXH__

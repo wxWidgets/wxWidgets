@@ -16,10 +16,6 @@
     #pragma interface "radiobox.h"
 #endif
 
-#include "wx/control.h"
-
-WXDLLEXPORT_DATA(extern const wxChar*) wxRadioBoxNameStr;
-
 class WXDLLEXPORT wxBitmap;
 
 class WXDLLEXPORT wxRadioBox : public wxControl

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        statbmp.h
+// Name:        wx/gtk/statbmp.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -17,33 +17,17 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_STATBMP
-
 #include "wx/object.h"
 #include "wx/control.h"
 #include "wx/bitmap.h"
 #include "wx/icon.h"
 
 //-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class wxStaticBitmap;
-
-//-----------------------------------------------------------------------------
-// global data
-//-----------------------------------------------------------------------------
-
-extern const char* wxStaticBitmapNameStr;
-
-//-----------------------------------------------------------------------------
 // wxStaticBitmap
 //-----------------------------------------------------------------------------
 
-class wxStaticBitmap: public wxControl
+class wxStaticBitmap : public wxStaticBitmapBase
 {
-    DECLARE_DYNAMIC_CLASS(wxStaticBitmap)
-
 public:
     wxStaticBitmap();
     wxStaticBitmap( wxWindow *parent,
@@ -62,6 +46,7 @@ public:
                  const wxString& name = wxStaticBitmapNameStr);
 
     virtual void SetBitmap( const wxBitmap& bitmap );
+    virtual void etIcon(const wxIcon& icon) { SetBitmap( icon ); }
 
     wxBitmap& GetBitmap() { return m_bitmap; }
     const wxBitmap& GetBitmap() const { return m_bitmap; }
@@ -74,22 +59,13 @@ public:
         return (const wxIcon &)m_bitmap;
     }
 
-    // for compatibility with wxMSW
-    void  SetIcon(const wxIcon& icon)
-    {
-        SetBitmap( icon );
-    }
-
-protected:
-    virtual wxSize DoGetBestSize() const;
-
 private:
     // creates the new pixmap widget
     void CreatePixmapWidget();
 
     wxBitmap   m_bitmap;
-};
 
-#endif
+    DECLARE_DYNAMIC_CLASS(wxStaticBitmap)
+};
 
 #endif // __GTKSTATICBITMAPH__

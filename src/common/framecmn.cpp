@@ -60,7 +60,9 @@ END_EVENT_TABLE()
 
 wxFrameBase::wxFrameBase()
 {
+#if wxUSE_MENUS
     m_frameMenuBar = NULL;
+#endif // wxUSE_MENUS
 
 #if wxUSE_TOOLBAR
     m_frameToolBar = NULL;
@@ -94,11 +96,13 @@ wxFrame *wxFrameBase::New(wxWindow *parent,
 
 void wxFrameBase::DeleteAllBars()
 {
+#if wxUSE_MENUS
     if ( m_frameMenuBar )
     {
         delete m_frameMenuBar;
         m_frameMenuBar = (wxMenuBar *) NULL;
     }
+#endif // wxUSE_MENUS
 
 #if wxUSE_STATUSBAR
     if ( m_frameStatusBar )
@@ -192,6 +196,7 @@ void wxFrameBase::MakeModal(bool modal)
 
 bool wxFrameBase::ProcessCommand(int id)
 {
+#if wxUSE_MENUS
     wxMenuBar *bar = GetMenuBar();
     if ( !bar )
         return FALSE;
@@ -209,6 +214,9 @@ bool wxFrameBase::ProcessCommand(int id)
     }
 
     return GetEventHandler()->ProcessEvent(commandEvent);
+#else // !wxUSE_MENUS
+    return FALSE;
+#endif // wxUSE_MENUS/!wxUSE_MENUS
 }
 
 // ----------------------------------------------------------------------------
@@ -419,8 +427,12 @@ wxToolBar* wxFrameBase::OnCreateToolBar(long style,
 
 void wxFrameBase::OnIdle(wxIdleEvent& WXUNUSED(event) )
 {
+#if wxUSE_MENUS
     DoMenuUpdates();
+#endif // wxUSE_MENUS
 }
+
+#if wxUSE_MENUS
 
 // update all menus
 void wxFrameBase::DoMenuUpdates()
@@ -465,3 +477,5 @@ void wxFrameBase::DoMenuUpdates(wxMenu* menu, wxWindow* WXUNUSED(focusWin))
         node = node->GetNext();
     }
 }
+
+#endif // wxUSE_MENUS

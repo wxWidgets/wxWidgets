@@ -700,6 +700,7 @@ trap 'rm -fr `echo "
             typetest/Makefile
             validate/Makefile
             sockets/Makefile
+            univ/Makefile
             wizard/Makefile
             html/Makefile
             html/about/Makefile
@@ -844,6 +845,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
             typetest/Makefile
             validate/Makefile
             sockets/Makefile
+            univ/Makefile
             wizard/Makefile
             html/Makefile
             html/about/Makefile

@@ -51,8 +51,6 @@ extern "C" {
 
 #include "wx/timer.h"
 
-#include <ctype.h>
-
 #if !defined(__GNUWIN32__) && !defined(__WXWINE__) && !defined(__SALFORDC__)
     #include <direct.h>
 
@@ -90,15 +88,11 @@ extern "C" {
     #endif
 #endif
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #ifndef __WATCOMC__
     #if !(defined(_MSC_VER) && (_MSC_VER > 800))
         #include <errno.h>
     #endif
 #endif
-#include <stdarg.h>
 
 //// BEGIN for console support: VC++ only
 #ifdef __VISUALC__
@@ -109,13 +103,7 @@ extern "C" {
 
 #include "wx/ioswrap.h"
 
-#if wxUSE_IOSTREAMH
-// N.B. BC++ doesn't have istream.h, ostream.h
-#  include <io.h>
-#  include <fstream.h>
-#else
-#  include <fstream>
-#endif
+#include "wx/ioswrap.h"
 
 /* Need to undef new if including crtdbg.h */
 #  ifdef new
@@ -632,10 +620,12 @@ int wxGetOsVersion(int *majorVsn, int *minorVsn)
 
 #if wxUSE_GUI
 
+#if wxUSE_TIMER
+
 // Sleep for nSecs seconds. Attempt a Windows implementation using timers.
 static bool gs_inTimer = FALSE;
 
-class wxSleepTimer: public wxTimer
+class wxSleepTimer : public wxTimer
 {
 public:
     virtual void Notify()
@@ -651,7 +641,7 @@ void wxUsleep(unsigned long milliseconds)
 {
 #ifdef __WIN32__
     ::Sleep(milliseconds);
-#else
+#else // !Win32
     if (gs_inTimer)
         return;
 
@@ -665,7 +655,7 @@ void wxUsleep(unsigned long milliseconds)
     }
     delete wxTheSleepTimer;
     wxTheSleepTimer = NULL;
-#endif
+#endif // Win32/!Win32
 }
 
 void wxSleep(int nSecs)
@@ -690,6 +680,8 @@ void wxFlushEvents()
 {
 //  wxYield();
 }
+
+#endif // wxUSE_TIMER
 
 #elif defined(__WIN32__) // wxUSE_GUI
 

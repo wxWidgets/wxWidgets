@@ -186,9 +186,34 @@
 #define wxUSE_VALIDATORS 0
 
 /*
+ * Use wxControl
+ */
+#define wxUSE_CONTROLS 0
+
+/*
  * Use accelerators
  */
 #define wxUSE_ACCEL 0
+
+/*
+ * Use wxFileDialog
+ */
+#define wxUSE_FILEDLG 0
+
+/*
+ * Use wxFontDialog
+ */
+#define wxUSE_FONTDLG 0
+
+/*
+ * Use wxMessageDialog (and wxMessageBox)
+ */
+#define wxUSE_MSGDLG 0
+
+/*
+ * Use wxNumberEntryDialog
+ */
+#define wxUSE_NUMBERDLG 0
 
 /*
  * Use wxTextEntryDialog
@@ -206,15 +231,44 @@
 #define wxUSE_PROGRESSDLG 0
 
 /*
+ * Use chooser dialog
+ */
+#define wxUSE_CHOICEDLG 0
+
+/*
+ * Use colour picker dialog
+ */
+#define wxUSE_COLOURDLG 0
+
+/*
  * Use directory chooser dialog
  */
 #define wxUSE_DIRDLG 0
+
+/*
+ * Use property sheet classes
+ */
+#define wxUSE_PROPSHEET 0
+
+/*
+ * Use wxWizard
+ */
+#define wxUSE_WIZARDDLG 0
+
+/*
+ * Use splash screen
+ */
+#define wxUSE_SPLASH 0
 
 /*
  * Joystick support (Linux/GTK only)
  */
 #define wxUSE_JOYSTICK 0
 
+/*
+ * Use this control
+ */
+#define wxUSE_BUTTON 0
 /*
  * Use this control
  */
@@ -264,6 +318,10 @@
  * Use this control
  */
 #define wxUSE_LISTCTRL 0
+/*
+ * Use wxMenuBar, wxMenuItem and wxMenu
+ */
+#define wxUSE_MENUS 0
 /*
  * Use this control
  */
@@ -319,6 +377,10 @@
 /*
  * Use this control
  */
+#define wxUSE_STATTEXT 0
+/*
+ * Use this control
+ */
 #define wxUSE_STATUSBAR 0
 /*
  * Use Tab dialog class - obsolete, use wxNotebook instead
@@ -326,6 +388,11 @@
 #define wxUSE_TAB_DIALOG 0
 /* compatibility */
 #define wxUSE_TABDIALOG wxUSE_TAB_DIALOG
+
+/*
+ * Use wxTextCtrl
+ */
+#define wxUSE_TEXTCTRL 0
 
 /*
  * Use wxToollBar
@@ -344,7 +411,7 @@
 #define wxUSE_TOOLBAR_SIMPLE 0
 
 #if defined(__WXWINE__) || defined(__GNUWIN32__) || defined(__WXPM__)
-#define wxUSE_OWNER_DRAWN 1 
+#define wxUSE_OWNER_DRAWN 1
   #if wxUSE_TOOLBAR
     #define wxUSE_BUTTONBAR 1
   #endif
@@ -361,6 +428,14 @@
 #define wxUSE_LONGLONG 0
 
 /*
+ * Use wxCmdLineParser class
+ */
+#define wxUSE_CMDLINE_PARSER 0
+/*
+ * Use wxDateTime
+ */
+#define wxUSE_DATETIME 0
+/*
  * Use wxFile class
  */
 #define wxUSE_FILE 0
@@ -373,6 +448,18 @@
  */
 #define wxUSE_LOG 0
 /*
+ * Use log window
+ */
+#define wxUSE_LOGWINDOW 0
+/*
+ * Use standard GUI logger
+ */
+#define wxUSE_LOGGUI 0
+/*
+ * Use wxStopWatch
+ */
+#define wxUSE_STOPWATCH 0
+/*
  * Use time and date classes
  */
 #define wxUSE_TIMEDATE 0
@@ -384,6 +471,10 @@
  * Use config system
  */
 #define wxUSE_CONFIG 0
+/*
+ * Use font mapping/conversion classes
+ */
+#define wxUSE_FONTMAP 0
 /*
  * Use intl system
  */
@@ -413,6 +504,11 @@
  * wxLibrary class
  */
 #define wxUSE_DYNLIB_CLASS 0
+
+/*
+ * Use wxTimer
+ */
+#define wxUSE_TIMER 0
 
 /*
  * Use font metric files in GetTextExtent for wxPostScriptDC
@@ -589,7 +685,7 @@
  * A class that shows info window when app is busy
  * (works exactly like wxBusyCursor)
  */
-#define wxUSE_BUSYINFO 0 
+#define wxUSE_BUSYINFO 0
 
 /*
  * Zip stream for accessing files stored inside .zip archives
@@ -610,7 +706,7 @@
  * PNM image format support
  */
 #define wxUSE_PNM 0
- 
+
 /*
  * Disable this if your compiler can't cope
  * with omission of prototype parameters.
@@ -792,5 +888,8 @@
 
 /* Define this if you are using gtk and gdk contains support for X11R6 XIM */
 #undef HAVE_XIM
+
+/* now check the settings self consistency */
+#include "wx/chkconf.h"
 
 #endif /* __WX_SETUP_H__ */

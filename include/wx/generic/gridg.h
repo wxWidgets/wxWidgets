@@ -19,6 +19,9 @@
 #endif
 
 #include "wx/defs.h"
+
+#if wxUSE_GRID
+
 #include "wx/panel.h"
 #include "wx/string.h"
 #include "wx/scrolbar.h"
@@ -419,6 +422,8 @@ typedef void (wxEvtHandler::*wxGridEventFunction)(wxGridEvent&);
 #define EVT_GRID_CELL_RCLICK(fn)      { wxEVT_GRID_CELL_RCLICK,      -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
 #define EVT_GRID_LABEL_LCLICK(fn)     { wxEVT_GRID_LABEL_LCLICK,     -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
 #define EVT_GRID_LABEL_RCLICK(fn)     { wxEVT_GRID_LABEL_RCLICK,     -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
+
+#endif // wxUSE_GRID
 
 #endif // __GRIDH_G__
 

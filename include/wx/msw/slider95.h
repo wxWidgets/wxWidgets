@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _SLIDER95_H_
@@ -15,6 +15,8 @@
 #ifdef __GNUG__
 #pragma interface "slider95.h"
 #endif
+
+#if wxUSE_SLIDER
 
 #include "wx/control.h"
 
@@ -104,6 +106,8 @@ protected:
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
 };
+
+#endif // wxUSE_SLIDER
 
 #endif
     // _SLIDER95_H_

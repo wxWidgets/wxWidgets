@@ -15,11 +15,15 @@
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
     #pragma interface "textctrlbase.h"
-#endif   
+#endif
 
 #include "wx/defs.h"
+
+#if wxUSE_TEXTCTRL
+
 #include "wx/control.h"         // the base class
 
 // 16-bit Borland 4.0 doesn't seem to allow multiple inheritance with wxWindow
@@ -188,6 +192,8 @@ private:
 #elif defined(__WXSTUBS__)
     #include "wx/stubs/textctrl.h"
 #endif
+
+#endif // wxUSE_TEXTCTRL
 
 #endif
     // _WX_TEXTCTRL_H_BASE_

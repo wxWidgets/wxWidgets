@@ -1,6 +1,8 @@
 #ifndef _WX_DIRDLG_H_BASE_
 #define _WX_DIRDLG_H_BASE_
 
+#if wxUSE_DIRDLG
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -28,6 +30,8 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 #elif defined(__WXSTUBS__)
 #include "wx/stubs/dirdlg.h"
 #endif
+
+#endif // wxUSE_DIRDLG
 
 #endif
     // _WX_DIRDLG_H_BASE_

@@ -71,9 +71,11 @@ public:
     // to the dialog via validators.
     virtual void InitDialog();
 
+#if wxUSE_BUTTON
     // a default button is activated when Enter is pressed
     wxButton *GetDefaultItem() const { return m_btnDefault; }
     void SetDefaultItem(wxButton *btn) { m_btnDefault = btn; }
+#endif // wxUSE_BUTTON
 
     // implementation from now on
     // --------------------------
@@ -107,8 +109,10 @@ protected:
     // the child which had the focus last time this panel was activated
     wxWindow *m_winLastFocused;
 
+#if wxUSE_BUTTON
     // a default button or NULL
     wxButton *m_btnDefault;
+#endif // wxUSE_BUTTON
 
 private:
     DECLARE_DYNAMIC_CLASS(wxPanel)

@@ -1,0 +1,10 @@
+All
+
+* problem with horz scrolling: the focus rect isn't drawn entirely...
+* write sample testing all listbox styles/events
+
+MSW
+
+GTK
+
+* check/radio box remains pressed

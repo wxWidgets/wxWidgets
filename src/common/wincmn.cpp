@@ -35,6 +35,7 @@
     #include "wx/frame.h"
     #include "wx/defs.h"
     #include "wx/window.h"
+    #include "wx/control.h"
     #include "wx/checkbox.h"
     #include "wx/radiobut.h"
     #include "wx/textctrl.h"
@@ -117,15 +118,11 @@ void wxWindowBase::InitBase()
     m_windowValidator = (wxValidator *) NULL;
 #endif // wxUSE_VALIDATORS
 
-    // use the system default colours
-    wxSystemSettings settings;
-
-    m_backgroundColour = settings.GetSystemColour(wxSYS_COLOUR_BTNFACE);
-    // m_foregroundColour = *wxBLACK;  // TODO take this from sys settings too?
+    // use the system default colours and font
+    m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BTNFACE);
     m_foregroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOWTEXT);
+    m_font = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
 
-    // GRG, changed Mar/2000
-    m_font = settings.GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
     // no style bits
     m_exStyle =
     m_windowStyle = 0;
@@ -390,7 +387,11 @@ void wxWindowBase::Fit()
 {
     if ( GetChildren().GetCount() > 0 )
     {
-        SetClientSize(DoGetBestSize());
+        // leave a margin for compatibility with old version
+        wxSize size = DoGetBestSize();
+        size.x += 7;
+        size.y += 14;
+        SetClientSize(size);
     }
     //else: do nothing if we have no children
 }
@@ -409,7 +410,11 @@ wxSize wxWindowBase::DoGetBestSize() const
               node = node->GetNext() )
         {
             wxWindow *win = node->GetData();
-            if ( win->IsTopLevel() || wxDynamicCast(win, wxStatusBar) )
+            if ( win->IsTopLevel()
+#if wxUSE_STATUSBAR
+                    || wxDynamicCast(win, wxStatusBar)
+#endif // wxUSE_STATUSBAR
+               )
             {
                 // dialogs and frames lie in different top level windows -
                 // don't deal with them here; as for the status bars, they
@@ -434,8 +439,7 @@ wxSize wxWindowBase::DoGetBestSize() const
                 maxY = wy + wh;
         }
 
-        // leave a margin
-        return wxSize(maxX + 7, maxY + 14);
+        return wxSize(maxX, maxY);
     }
     else
     {
@@ -443,6 +447,12 @@ wxSize wxWindowBase::DoGetBestSize() const
         // current one
         return GetSize();
     }
+}
+
+// by default the origin is not shifted
+wxPoint wxWindowBase::GetClientAreaOrigin() const
+{
+    return wxPoint(0, 0);
 }
 
 // set the min/max size of the window
@@ -1256,6 +1266,7 @@ void wxWindowBase::GetPositionConstraint(int *x, int *y) const
 // of control classes.
 void wxWindowBase::UpdateWindowUI()
 {
+#if wxUSE_CONTROLS
     wxUpdateUIEvent event(GetId());
     event.m_eventObject = this;
 
@@ -1269,10 +1280,12 @@ void wxWindowBase::UpdateWindowUI()
             wxControl *control = wxDynamicCast(this, wxControl);
             if ( control )
             {
+#if wxUSE_TEXTCTRL
                 wxTextCtrl *text = wxDynamicCast(control, wxTextCtrl);
                 if ( text )
                     text->SetValue(event.GetText());
                 else
+#endif // wxUSE_TEXTCTRL
                     control->SetLabel(event.GetText());
             }
         }
@@ -1295,6 +1308,7 @@ void wxWindowBase::UpdateWindowUI()
         }
 #endif // wxUSE_RADIOBTN
     }
+#endif // wxUSE_CONTROLS
 }
 
 // ----------------------------------------------------------------------------
@@ -1404,6 +1418,7 @@ void wxWindowBase::OnInitDialog( wxInitDialogEvent &WXUNUSED(event) )
 // process Ctrl-Alt-mclick
 void wxWindowBase::OnMiddleClick( wxMouseEvent& event )
 {
+#if wxUSE_MSGDLG
     if ( event.ControlDown() && event.AltDown() )
     {
         // don't translate these strings
@@ -1448,6 +1463,7 @@ void wxWindowBase::OnMiddleClick( wxMouseEvent& event )
                      (wxWindow *)this);
     }
     else
+#endif // wxUSE_MSGDLG
     {
         event.Skip();
     }
@@ -1460,5 +1476,25 @@ void wxWindowBase::OnMiddleClick( wxMouseEvent& event )
 void wxWindowListNode::DeleteData()
 {
     delete (wxWindow *)GetData();
+}
+
+// ----------------------------------------------------------------------------
+// borders
+// ----------------------------------------------------------------------------
+
+wxBorder wxWindowBase::GetBorder() const
+{
+    wxBorder border = (wxBorder)(m_windowStyle & wxBORDER_MASK);
+    if ( border == wxBORDER_DEFAULT )
+    {
+        border = GetDefaultBorder();
+    }
+
+    return border;
+}
+
+wxBorder wxWindowBase::GetDefaultBorder() const
+{
+    return wxBORDER_NONE;
 }
 

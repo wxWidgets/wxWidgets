@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        checkbox.h
+// Name:        wx/msw/checkbox.h
 // Purpose:     wxCheckBox class
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_CHECKBOX_H_
@@ -16,16 +16,10 @@
 #pragma interface "checkbox.h"
 #endif
 
-#include "wx/control.h"
-
-WXDLLEXPORT_DATA(extern const wxChar*) wxCheckBoxNameStr;
-
 // Checkbox item (single checkbox)
 class WXDLLEXPORT wxBitmap;
-class WXDLLEXPORT wxCheckBox : public wxControl
+class WXDLLEXPORT wxCheckBox : public wxCheckBoxBase
 {
-DECLARE_DYNAMIC_CLASS(wxCheckBox)
-
 public:
     wxCheckBox() { }
     wxCheckBox(wxWindow *parent, wxWindowID id, const wxString& label,
@@ -52,6 +46,9 @@ public:
 
 protected:
     virtual wxSize DoGetBestSize() const;
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxCheckBox)
 };
 
 class WXDLLEXPORT wxBitmapCheckBox: public wxCheckBox
@@ -80,5 +77,6 @@ public:
 
     virtual void SetLabel(const wxBitmap& bitmap);
 };
+
 #endif
     // _WX_CHECKBOX_H_

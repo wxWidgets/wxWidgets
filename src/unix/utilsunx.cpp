@@ -303,6 +303,8 @@ void wxHandleProcessTermination(wxEndProcessData *proc_data)
 // wxStream classes to support IO redirection in wxExecute
 // ----------------------------------------------------------------------------
 
+#if wxUSE_STREAMS
+
 class wxProcessFileInputStream : public wxInputStream
 {
 public:
@@ -399,12 +401,14 @@ size_t wxProcessFileOutputStream::OnSysWrite(const void *buffer, size_t bufsize)
     return ret;
 }
 
+#endif // wxUSE_STREAMS
+
 long wxExecute(wxChar **argv,
                bool sync,
                wxProcess *process)
 {
     // for the sync execution, we return -1 to indicate failure, but for async
-    // cse we return 0 which is never a valid PID
+    // case we return 0 which is never a valid PID
     long errorRetCode = sync ? -1 : 0;
 
     wxCHECK_MSG( *argv, errorRetCode, wxT("can't exec empty command") );
@@ -557,16 +561,18 @@ long wxExecute(wxChar **argv,
         // pipe initialization: construction of the wxStreams
         if ( process && process->IsRedirected() )
         {
+#if wxUSE_STREAMS
             // These two streams are relative to this process.
             wxOutputStream *outStream = new wxProcessFileOutputStream(pipeIn[1]);
             wxInputStream *inStream = new wxProcessFileInputStream(pipeOut[0]);
             wxInputStream *errStream = new wxProcessFileInputStream(pipeErr[0]);
 
+            process->SetPipeStreams(inStream, outStream, errStream);
+#endif // wxUSE_STREAMS
+
             close(pipeIn[0]); // close reading side
             close(pipeOut[1]); // close writing side
             close(pipeErr[1]); // close writing side
-
-            process->SetPipeStreams(inStream, outStream, errStream);
         }
 
 #if wxUSE_GUI

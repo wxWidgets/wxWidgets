@@ -18,8 +18,9 @@
 
 #include "wx/defs.h"
 
-#include "wx/mimetype.h"
+#if wxUSE_MIMETYPE
 
+#include "wx/mimetype.h"
 
 class WXDLLEXPORT wxFileTypeImpl
 {
@@ -89,6 +90,7 @@ private:
     wxArrayFileTypeInfo m_fallbacks;
 };
 
+#endif // wxUSE_MIMETYPE
 
 #endif
   //_MIMETYPE_IMPL_H

@@ -640,8 +640,7 @@ int WXDLLEXPORT wxEntryStart( int WXUNUSED(argc), char** WXUNUSED(argv) )
 
 int WXDLLEXPORT wxEntryInitGui()
 {
-    wxTheApp->OnInitGui();
-    return 0;
+    return wxTheApp->OnInitGui();
 }
 
 void WXDLLEXPORT wxEntryCleanup()
@@ -711,10 +710,6 @@ int wxEntry(WXHINSTANCE hInstance,
         wxTheApp->ConvertToStandardCommandArgs(lpCmdLine);
         wxTheApp->m_nCmdShow = nCmdShow;
 
-        // GUI-specific initialisation. In fact on Windows we don't have any,
-        // but this call is provided for compatibility across platforms.
-        wxEntryInitGui();
-
         // We really don't want timestamps by default, because it means
         // we can't simply double-click on the error message and get to that
         // line in the source. So VC++ at least, let's have a sensible default.
@@ -724,7 +719,8 @@ int wxEntry(WXHINSTANCE hInstance,
 
         int retValue = 0;
 
-        if ( wxTheApp->OnInit() )
+        // do GUI-specific initialisation and app-specific initialization
+        if ( wxEntryInitGui() && wxTheApp->OnInit() )
         {
             if ( enterLoop )
             {
@@ -828,14 +824,9 @@ wxAppInitializerFunction wxAppBase::m_appInitFn = (wxAppInitializerFunction) NUL
 
 wxApp::wxApp()
 {
-    m_topWindow = NULL;
-    wxTheApp = this;
-    m_wantDebugOutput = TRUE;
-
     argc = 0;
     argv = NULL;
     m_printMode = wxPRINT_WINDOWS;
-    m_exitOnFrameDelete = TRUE;
     m_auto3D = TRUE;
 }
 

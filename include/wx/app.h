@@ -59,6 +59,8 @@ static const int wxPRINT_POSTSCRIPT = 2;
 class WXDLLEXPORT wxAppBase : public wxEvtHandler
 {
 public:
+    wxAppBase();
+
     // the virtual functions which may/must be overridden in the derived class
     // -----------------------------------------------------------------------
 
@@ -78,7 +80,7 @@ public:
         // depend on the toolkit. default version does nothing.
         //
         // Override: rarely.
-    virtual bool OnInitGui() { return TRUE; }
+    virtual bool OnInitGui();
 #endif // wxUSE_GUI
 
         // called to start program execution - the default version just enters
@@ -163,6 +165,9 @@ public:
     // top level window functions
     // --------------------------
 
+        // return TRUE if our app has focus
+    virtual bool IsActive() const { return m_isActive; }
+
         // set the "main" top level window
     void SetTopWindow(wxWindow *win) { m_topWindow = win; }
 
@@ -198,11 +203,11 @@ public:
         // object) - this log object is used by default by all wxLogXXX()
         // functions.
     virtual wxLog *CreateLogTarget()
-#if wxUSE_GUI
-        { return new wxLogGui; }
-#else // !GUI
-        { return new wxLogStderr; }
-#endif // wxUSE_GUI
+        #if wxUSE_GUI && wxUSE_LOGGUI
+            { return new wxLogGui; }
+        #else // !GUI
+            { return new wxLogStderr; }
+        #endif // wxUSE_GUI
 #endif // wxUSE_LOG
 
 #if wxUSE_GUI
@@ -225,6 +230,11 @@ public:
         // printing.
     virtual void SetPrintMode(int WXUNUSED(mode)) { }
     int GetPrintMode() const { return wxPRINT_POSTSCRIPT; }
+
+    // called by toolkit-specific code to set the app status: active (we have
+    // focus) or not and also the last window which had focus before we were
+    // deactivated
+    virtual void SetActive(bool isActive, wxWindow *lastFocus);
 #endif // wxUSE_GUI
 
     // implementation only from now on
@@ -243,7 +253,6 @@ public:
     int      argc;
     wxChar **argv;
 
-//private:
 protected:
     // function used for dynamic wxApp creation
     static wxAppInitializerFunction m_appInitFn;
@@ -253,19 +262,22 @@ protected:
              m_appName,         // app name
              m_className;       // class name
 
-    // if TRUE, exit the main loop when the last top level window is deleted
-    bool m_exitOnFrameDelete;
-
     // TRUE if the application wants to get debug output
     bool m_wantDebugOutput;
+
+#if wxUSE_GUI
+    // the main top level window - may be NULL
+    wxWindow *m_topWindow;
+
+    // if TRUE, exit the main loop when the last top level window is deleted
+    bool m_exitOnFrameDelete;
 
     // TRUE if the apps whats to use the best visual on systems where
     // more than one are available (Sun, SGI, XFree86 4.0 ?)
     bool m_useBestVisual;
 
-#if wxUSE_GUI
-    // the main top level window - may be NULL
-    wxWindow *m_topWindow;
+    // does any of our windows has focus?
+    bool m_isActive;
 #endif // wxUSE_GUI
 };
 

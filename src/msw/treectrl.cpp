@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        treectrl.cpp
+// Name:        src/msw/treectrl.cpp
 // Purpose:     wxTreeCtrl
 // Author:      Julian Smart
 // Modified by: Vadim Zeitlin to be less MSW-specific on 10.10.98
@@ -16,6 +16,7 @@
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
     #pragma implementation "treectrl.h"
 #endif
@@ -27,9 +28,12 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_TREECTRL
+
 #include "wx/msw/private.h"
 
-// Set this to 1 to be _absolutely_ sure that repainting will work for all comctl32.dll versions
+// Set this to 1 to be _absolutely_ sure that repainting will work for all
+// comctl32.dll versions
 #define wxUSE_COMCTL32_SAFELY 0
 
 // Mingw32 is a bit mental even though this is done in winundef
@@ -2332,3 +2336,4 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
 #endif // __WIN95__
 
+#endif // wxUSE_TREECTRL

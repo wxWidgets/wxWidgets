@@ -25,14 +25,8 @@
     #define wxUSE_TEXTFILE 0
 #endif // wxUSE_FILE
 
-#if wxUSE_TEXTFILE
-
-#include "wx/string.h"
-#include "wx/file.h"
-#include "wx/dynarray.h"
-
 // ----------------------------------------------------------------------------
-// wxTextFile
+// constants
 // ----------------------------------------------------------------------------
 
 // the line termination type
@@ -44,6 +38,16 @@ enum wxTextFileType
     wxTextFileType_Mac,   //                         'CR' = 0xD = 13 = '\r'
     wxTextFileType_Os2    //                         'CR' 'LF'
 };
+
+#if wxUSE_TEXTFILE
+
+#include "wx/string.h"
+#include "wx/file.h"
+#include "wx/dynarray.h"
+
+// ----------------------------------------------------------------------------
+// wxTextFile
+// ----------------------------------------------------------------------------
 
 WX_DEFINE_EXPORTED_ARRAY(wxTextFileType, ArrayFileType);
 
@@ -184,6 +188,12 @@ private:
     // copy ctor/assignment operator not implemented
     wxTextFile(const wxTextFile&);
     wxTextFile& operator=(const wxTextFile&);
+
+    // suppress the gcc warning: 'class defines only private constructors and
+    // has no friends'
+#ifdef __GNUG__
+    friend class wxTextFileDummyFriend;
+#endif // gcc
 };
 
 #endif // wxUSE_TEXTFILE

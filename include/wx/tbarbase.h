@@ -22,6 +22,8 @@
 
 #include "wx/defs.h"
 
+#if wxUSE_TOOLBAR
+
 #include "wx/bitmap.h"
 #include "wx/list.h"
 #include "wx/control.h"
@@ -465,6 +467,8 @@ protected:
 private:
     DECLARE_EVENT_TABLE()
 };
+
+#endif // wxUSE_TOOLBAR
 
 #endif
     // _WX_TBARBASE_H_

@@ -28,6 +28,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_RADIOBOX
+
 #ifndef WX_PRECOMP
     #include "wx/bitmap.h"
     #include "wx/brush.h"
@@ -1032,3 +1034,4 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
 
 #endif // __WIN32__
 
+#endif // wxUSE_RADIOBOX

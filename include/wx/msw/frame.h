@@ -16,6 +16,8 @@
     #pragma interface "frame.h"
 #endif
 
+WXDLLEXPORT_DATA(extern wxWindowMSW*) wxWndHook;
+
 class WXDLLEXPORT wxFrame : public wxFrameBase
 {
 public:

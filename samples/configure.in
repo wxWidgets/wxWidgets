@@ -68,6 +68,7 @@ AC_OUTPUT([
             typetest/Makefile
             validate/Makefile
             sockets/Makefile
+            univ/Makefile
             wizard/Makefile
             html/Makefile
             html/about/Makefile

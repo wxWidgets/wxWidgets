@@ -20,6 +20,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_CHOICEDLG
+
 #ifndef WX_PRECOMP
     #include <stdio.h>
     #include "wx/utils.h"
@@ -315,3 +317,4 @@ void wxSingleChoiceDialog::OnListBoxDClick(wxCommandEvent& WXUNUSED(event))
     EndModal(wxID_OK);
 }
 
+#endif // wxUSE_CHOICEDLG

@@ -15,6 +15,8 @@
   #pragma interface "notebook.h"
 #endif
 
+#if wxUSE_NOTEBOOK
+
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
@@ -164,5 +166,7 @@ protected:
   DECLARE_DYNAMIC_CLASS(wxNotebook)
   DECLARE_EVENT_TABLE()
 };
+
+#endif // wxUSE_NOTEBOOK
 
 #endif // _NOTEBOOK_H

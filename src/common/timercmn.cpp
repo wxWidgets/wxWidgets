@@ -76,7 +76,7 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-#if wxUSE_GUI
+#if wxUSE_GUI && wxUSE_TIMER
     IMPLEMENT_DYNAMIC_CLASS(wxTimerEvent, wxEvent)
 #endif // wxUSE_GUI
 
@@ -103,7 +103,7 @@
 // wxTimerBase
 // ----------------------------------------------------------------------------
 
-#if wxUSE_GUI
+#if wxUSE_GUI && wxUSE_TIMER
 
 void wxTimerBase::Notify()
 {
@@ -121,6 +121,8 @@ void wxTimerBase::Notify()
 // wxStopWatch
 // ----------------------------------------------------------------------------
 
+#if wxUSE_LONGLONG
+
 void wxStopWatch::Start(long t)
 {
     m_t0 = wxGetLocalTimeMillis() - t;
@@ -137,9 +139,13 @@ long wxStopWatch::Time() const
     return (m_pause ? m_pause : GetElapsedTime());
 }
 
+#endif // wxUSE_LONGLONG
+
 // ----------------------------------------------------------------------------
 // old timer functions superceded by wxStopWatch
 // ----------------------------------------------------------------------------
+
+#if wxUSE_LONGLONG
 
 static wxLongLong wxStartTime = 0l;
 
@@ -161,6 +167,7 @@ long wxGetElapsedTime(bool resetTimer)
     return (newTime - oldTime).GetLo();
 }
 
+#endif // wxUSE_LONGLONG
 
 // ----------------------------------------------------------------------------
 // the functions to get the current time and timezone info
@@ -246,6 +253,7 @@ long wxGetUTCTime()
     return -1;
 }
 
+#if wxUSE_LONGLONG
 
 // Get local time as milliseconds since 00:00:00, Jan 1st 1970
 wxLongLong wxGetLocalTimeMillis()
@@ -314,3 +322,6 @@ wxLongLong wxGetLocalTimeMillis()
 
 #endif // time functions
 }
+
+#endif // wxUSE_LONGLONG
+

@@ -39,8 +39,8 @@ public:
     virtual int MainLoop();
     virtual void ExitMainLoop();
     virtual bool Initialized();
-    virtual bool Pending() ;
-    virtual void Dispatch() ;
+    virtual bool Pending();
+    virtual void Dispatch();
 
     virtual wxIcon GetStdIcon(int which) const;
 
@@ -64,9 +64,9 @@ public:
     bool GetAuto3D() const { return m_auto3D; }
 
 protected:
-    bool              m_showOnInit;
-    int               m_printMode; // wxPRINT_WINDOWS, wxPRINT_POSTSCRIPT
-    bool              m_auto3D ;   // Always use 3D controls, except where overriden
+    bool   m_showOnInit;
+    int    m_printMode; // wxPRINT_WINDOWS, wxPRINT_POSTSCRIPT
+    bool   m_auto3D ;   // Always use 3D controls, except where overriden
 
     /* Windows-specific wxApp definitions */
 
@@ -98,7 +98,7 @@ public:
     int               m_nCmdShow;
 
 protected:
-    bool              m_keepGoing ;
+    bool              m_keepGoing;
 
     DECLARE_EVENT_TABLE()
 };

@@ -1,0 +1,7 @@
+#include "wx/msw/wx.rc"
+
+/*
+bricks	BITMAP		"bricks.bmp"
+tip	BITMAP		"tip.bmp"
+open	BITMAP		"open.bmp"
+*/

@@ -15,71 +15,41 @@
 #pragma interface
 #endif
 
-#include "wx/defs.h"
-
-#if wxUSE_BMPBUTTON
-
-#include "wx/object.h"
-#include "wx/list.h"
-#include "wx/control.h"
-#include "wx/bitmap.h"
-#include "wx/button.h"
-
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class wxBitmapButton;
-
-//-----------------------------------------------------------------------------
-// global data
-//-----------------------------------------------------------------------------
-
-extern const wxChar *wxButtonNameStr;
-
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // wxBitmapButton
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
-class wxBitmapButton: public wxButton
+class wxBitmapButton: public wxBitmapButtonBase
 {
 public:
     wxBitmapButton();
-    inline wxBitmapButton( wxWindow *parent, wxWindowID id, const wxBitmap& bitmap,
-                         const wxPoint& pos = wxDefaultPosition,
-                         const wxSize& size = wxDefaultSize, long style = wxBU_AUTODRAW,
-                         const wxValidator& validator = wxDefaultValidator,
-                         const wxString& name = wxButtonNameStr )
+    wxBitmapButton(wxWindow *parent,
+                   wxWindowID id,
+                   const wxBitmap& bitmap,
+                   const wxPoint& pos = wxDefaultPosition,
+                   const wxSize& size = wxDefaultSize,
+                   long style = wxBU_AUTODRAW,
+                   const wxValidator& validator = wxDefaultValidator,
+                   const wxString& name = wxButtonNameStr)
     {
         Create(parent, id, bitmap, pos, size, style, validator, name);
     }
-    bool Create( wxWindow *parent, wxWindowID id, const wxBitmap& bitmap,
-               const wxPoint& pos = wxDefaultPosition,
-               const wxSize& size = wxDefaultSize, long style = wxBU_AUTODRAW,
-               const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = wxButtonNameStr);
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxBitmap& bitmap,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxBU_AUTODRAW,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxButtonNameStr);
+
     virtual void SetDefault();
+    virtual bool Enable(bool enable = TRUE);
     
     void SetLabel( const wxString &label );
     wxString GetLabel() const;
     virtual void SetLabel( const wxBitmap& bitmap ) { SetBitmapLabel(bitmap); }
     
-    wxBitmap& GetBitmapDisabled() const { return (wxBitmap&) m_disabled; }
-    wxBitmap& GetBitmapFocus() const { return (wxBitmap&) m_focus; }
-    wxBitmap& GetBitmapLabel() const { return (wxBitmap&) m_bitmap; }
-    wxBitmap& GetBitmapSelected() const { return (wxBitmap&) m_selected; }
-    
-    void SetBitmapDisabled( const wxBitmap& bitmap );
-    void SetBitmapFocus( const wxBitmap& bitmap );
-    void SetBitmapLabel( const wxBitmap& bitmap );
-    void SetBitmapSelected( const wxBitmap& bitmap );
-    
-    void SetMargins(int x, int y) { m_marginX = x; m_marginY = y; }
-    int GetMarginX() const { return m_marginX; }
-    int GetMarginY() const { return m_marginY; }
-
-    virtual bool Enable(bool enable);
-  
     // implementation
     // --------------
   
@@ -92,19 +62,12 @@ public:
   
     bool         m_hasFocus;
     bool         m_isSelected;
-    wxBitmap     m_bitmap; 
-    wxBitmap     m_disabled;
-    wxBitmap     m_focus;
-    wxBitmap     m_selected;   
   
 protected:
-    int      m_marginX;
-    int      m_marginY;
+    virtual void OnSetBitmap();
 
 private:
     DECLARE_DYNAMIC_CLASS(wxBitmapButton)
 };
-
-#endif
 
 #endif // __BMPBUTTONH__

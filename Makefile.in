@@ -32,6 +32,7 @@ include ./src/make.env
 srcdir = @srcdir@
 
 VP1 = @top_srcdir@/src/common
+VP1_5 = @top_srcdir@/src/univ@PATH_IFS@@top_srcdir@/src/univ/themes
 VP2 = @top_srcdir@/src/@TOOLKIT_DIR@
 VP3 = @top_srcdir@/src/motif/xmcombo
 VP4 = @top_srcdir@/src/generic
@@ -46,7 +47,7 @@ VP11 = @top_srcdir@/src/iodbc
 # the comment at the end of the next line is needed because otherwise autoconf
 # would remove this line completely - it contains a built-in hack to remove
 # any VPATH assignment not containing ':'
-VPATH = $(VP1)@PATH_IFS@$(VP2)@PATH_IFS@$(VP3)@PATH_IFS@$(VP4)@PATH_IFS@$(VP5)@PATH_IFS@$(VP6)@PATH_IFS@$(VP7)@PATH_IFS@$(VP8)@PATH_IFS@$(VP9)@PATH_IFS@$(VP10)@PATH_IFS@$(VP11) # ':' for autoconf
+VPATH = $(VP1)@PATH_IFS@$(VP1_5)@PATH_IFS@$(VP2)@PATH_IFS@$(VP3)@PATH_IFS@$(VP4)@PATH_IFS@$(VP5)@PATH_IFS@$(VP6)@PATH_IFS@$(VP7)@PATH_IFS@$(VP8)@PATH_IFS@$(VP9)@PATH_IFS@$(VP10)@PATH_IFS@$(VP11) # ':' for autoconf
 
 top_srcdir = @top_srcdir@
 prefix = @prefix@
@@ -561,7 +562,7 @@ ALL_GUI_DIST: ALL_DIST
 	mkdir $(DISTDIR)/src/tiff
 	mkdir $(DISTDIR)/src/iodbc
 	mkdir $(DISTDIR)/src/unix
-	cp $(WXDIR)/@PORT_FILES@ $(DISTDIR)/@PORT_FILES@
+	cp $(WXDIR)/@PORT_FILES@ $(DISTDIR)
 	cp $(SRCDIR)/*.in $(DISTDIR)/src
 	cp $(COMMDIR)/*.cpp $(DISTDIR)/src/common
 	cp $(COMMDIR)/*.c $(DISTDIR)/src/common
@@ -601,7 +602,7 @@ BASE_DIST: ALL_DIST
 	mkdir $(DISTDIR)/include/wx/unix
 	mkdir $(DISTDIR)/src/common
 	mkdir $(DISTDIR)/src/unix
-	cp $(WXDIR)/@PORT_FILES@ $(DISTDIR)/@PORT_FILES@
+	cp $(WXDIR)/@PORT_FILES@ $(DISTDIR)
 	cp $(WXDIR)/@RPM_FILES@ $(DISTDIR)/@RPM_FILES@
 	cp $(WXDIR)/@RPM_SPEC@ $(DISTDIR)/@RPM_SPEC@
 	cp $(WXDIR)/wxBase.dsp $(DISTDIR)
