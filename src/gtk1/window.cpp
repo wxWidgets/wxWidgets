@@ -2758,7 +2758,7 @@ void wxWindow::SetWidgetStyle()
 
     if (m_foregroundColour.Ok())
     {
-        m_foregroundColour.CalcPixel( gdk_window_get_colormap( m_widget->window ) );
+        m_foregroundColour.CalcPixel( gtk_widget_get_colormap( m_widget ) );
         style->fg[GTK_STATE_NORMAL] = *m_foregroundColour.GetColor();
         style->fg[GTK_STATE_PRELIGHT] = *m_foregroundColour.GetColor();
         style->fg[GTK_STATE_ACTIVE] = *m_foregroundColour.GetColor();
@@ -2766,7 +2766,7 @@ void wxWindow::SetWidgetStyle()
 
     if (m_backgroundColour.Ok())
     {
-        m_backgroundColour.CalcPixel( gdk_window_get_colormap( m_widget->window ) );
+        m_backgroundColour.CalcPixel( gtk_widget_get_colormap( m_widget ) );
         style->bg[GTK_STATE_NORMAL] = *m_backgroundColour.GetColor();
         style->base[GTK_STATE_NORMAL] = *m_backgroundColour.GetColor();
         style->bg[GTK_STATE_PRELIGHT] = *m_backgroundColour.GetColor();
@@ -2896,26 +2896,7 @@ bool wxWindow::SetFont( const wxFont &font )
 
     if (!wxWindowBase::SetFont(font))
     {
-        // don't leave if the GTK widget has just
-        // been realized
-        if (!m_delayedFont) return FALSE;
-    }
-
-    GdkWindow *window = (GdkWindow*) NULL;
-    if (m_wxwindow)
-        window = GTK_PIZZA(m_wxwindow)->bin_window;
-    else
-        window = GetConnectWidget()->window;
-        
-    if (!window)
-    {
-        // indicate that a new style has been set
-        // but it couldn't get applied as the
-        // widget hasn't been realized yet.
-        m_delayedFont = TRUE;
-
-        // pretend we have done something
-        return TRUE;
+        return FALSE;
     }
 
     wxColour sysbg = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE );
