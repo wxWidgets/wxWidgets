@@ -469,6 +469,41 @@ static PyObject *_wrap_wxEvent_Skip(PyObject *self, PyObject *args, PyObject *kw
     return _resultobj;
 }
 
+#define wxEvent_Clone(_swigobj)  (_swigobj->Clone())
+static PyObject *_wrap_wxEvent_Clone(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxEvent * _result;
+    wxEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxEvent_Clone",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxEvent_Clone. Expected _wxEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxEvent *)wxEvent_Clone(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxEvent_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
 static void *SwigwxSizeEventTowxEvent(void *ptr) {
     wxSizeEvent *src;
     wxEvent *dest;
@@ -7179,6 +7214,7 @@ static PyMethodDef eventscMethods[] = {
 	 { "new_wxCloseEvent", (PyCFunction) _wrap_new_wxCloseEvent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizeEvent_GetSize", (PyCFunction) _wrap_wxSizeEvent_GetSize, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxSizeEvent", (PyCFunction) _wrap_new_wxSizeEvent, METH_VARARGS | METH_KEYWORDS },
+	 { "wxEvent_Clone", (PyCFunction) _wrap_wxEvent_Clone, METH_VARARGS | METH_KEYWORDS },
 	 { "wxEvent_Skip", (PyCFunction) _wrap_wxEvent_Skip, METH_VARARGS | METH_KEYWORDS },
 	 { "wxEvent_SetTimestamp", (PyCFunction) _wrap_wxEvent_SetTimestamp, METH_VARARGS | METH_KEYWORDS },
 	 { "wxEvent_SetId", (PyCFunction) _wrap_wxEvent_SetId, METH_VARARGS | METH_KEYWORDS },

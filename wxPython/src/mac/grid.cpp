@@ -235,7 +235,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 
 #define PYCALLBACK_BOOL_INTINTSTRING(PCLASS, CBNAME)                            \
     bool CBNAME(int a, int b, const wxString& c)  {                             \
-        bool rval;                                                              \
+        bool rval = 0;                                                          \
         bool found;                                                             \
         wxPyTState* state = wxPyBeginBlockThreads();                            \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME)))                  \
@@ -272,7 +272,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 
 #define PYCALLBACK_BOOL_INTINT(PCLASS, CBNAME)                                  \
     bool CBNAME(int a, int b)  {                                                \
-        bool rval;                                                              \
+        bool rval = 0;                                                          \
         bool found;                                                             \
         wxPyTState* state = wxPyBeginBlockThreads();                            \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME)))                  \
@@ -332,7 +332,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 
 #define PYCALLBACK_BOOL_SIZETSIZET(PCLASS, CBNAME)                              \
     bool CBNAME(size_t a, size_t b)  {                                          \
-        bool rval;                                                              \
+        bool rval = 0;                                                          \
         bool found;                                                             \
         wxPyTState* state = wxPyBeginBlockThreads();                            \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME)))                  \
@@ -350,7 +350,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 
 #define PYCALLBACK_BOOL_SIZET(PCLASS, CBNAME)                                   \
     bool CBNAME(size_t a)  {                                                    \
-        bool rval;                                                              \
+        bool rval = 0;                                                          \
         bool found;                                                             \
         wxPyTState* state = wxPyBeginBlockThreads();                            \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME)))                  \
@@ -410,7 +410,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 
 #define PYCALLBACK_BOOL_(PCLASS, CBNAME)                                        \
     bool CBNAME()  {                                                            \
-        bool rval;                                                              \
+        bool rval = 0;                                                          \
         bool found;                                                             \
         wxPyTState* state = wxPyBeginBlockThreads();                            \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME)))                  \
