@@ -3,7 +3,6 @@
 % htmltaghandler.tex at 18/Mar/99 19:20:29
 %
 
-
 \section{\class{wxHtmlTagHandler}}\label{wxhtmltaghandler}
 
 \wxheading{Derived from}
@@ -14,8 +13,6 @@ wxObject
 
 \helpref{Overview}{handlers},
 \helpref{wxHtmlTag}{wxhtmltag}
-
-
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -46,7 +43,6 @@ is guaranteed to be called only from the parser.
 Returns list of supported tags. The list is in uppercase and tags
 are delimited by ','. Example : {\tt "I,B,FONT,P" }
 
-
 \membersection{wxHtmlTagHandler::HandleTag}\label{wxhtmltaghandlerhandletag}
 
 \func{virtual bool}{HandleTag}{\param{const wxHtmlTag\& }{tag}}
@@ -75,7 +71,6 @@ bool MyHandler::HandleTag(const wxHtmlTag& tag)
 
 You shouldn't call ParseInner if the tag is not paired with ending one.
 
-
 \membersection{wxHtmlTagHandler::ParseInner}\label{wxhtmltaghandlerparseinner}
 
 \func{void}{ParseInner}{\param{const wxHtmlTag\& }{tag}}
@@ -87,5 +82,6 @@ for the string between this tag and paired ending tag:
 ...<A HREF="x.htm">Hello, world!</A>...
 \end{verbatim}
 
-In this example, call to ParseInner (with {\it tag} pointing to A tag)
-will parse 'Hello, world!'
+In this example, a call to ParseInner (with {\it tag} pointing to A tag)
+will parse 'Hello, world!'.
+

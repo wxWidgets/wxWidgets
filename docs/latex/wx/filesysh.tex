@@ -3,7 +3,6 @@
 % filesystemhandler.tex at 21/Mar/99 23:00:52
 %
 
-
 \section{\class{wxFileSystemHandler}}\label{wxfilesystemhandler}
 
 wxFileSystemHandler (or derived classes to be exact) is used
@@ -16,7 +15,6 @@ GetAnchor, GetMimeTypeFromExt.
 
 Please have a look at \helpref{overview}{fs} if you don't know how locations
 are constructed.
-
 
 \wxheading{Notes}
 
@@ -38,7 +36,6 @@ wxObject
 \helpref{wxFileSystem}{wxfilesystem},
 \helpref{wxFSFile}{wxfsfile},
 \helpref{Overview}{fs}
-
 
 \membersection{wxFileSystemHandler::wxFileSystemHandler}\label{wxfilesystemhandlerwxfilesystemhandler}
 
@@ -78,15 +75,13 @@ for details how to use it.}
 
 \docparam{location}{The {\bf absolute} location of file.}
 
-
-
 \membersection{wxFileSystemHandler::GetProtocol}\label{wxfilesystemhandlergetprotocol}
 
 \constfunc{wxString}{GetProtocol}{\param{const wxString\& }{location}}
 
 Returns protocol string extracted from {\it location}. 
 
-Example : GetProtocol("file:myzipfile.zip\#zip:index.htm") == "zip"
+Example: GetProtocol("file:myzipfile.zip\#zip:index.htm") == "zip"
 
 \membersection{wxFileSystemHandler::GetLeftLocation}\label{wxfilesystemhandlergetleftlocation}
 
@@ -94,8 +89,7 @@ Example : GetProtocol("file:myzipfile.zip\#zip:index.htm") == "zip"
 
 Returns left location string extracted from {\it location}. 
 
-Example : GetLeftLocation("file:myzipfile.zip\#zip:index.htm") == "file:myzipfile.zip"
-
+Example: GetLeftLocation("file:myzipfile.zip\#zip:index.htm") == "file:myzipfile.zip"
 
 \membersection{wxFileSystemHandler::GetAnchor}\label{wxfilesystemhandlergetanchor}
 
@@ -115,7 +109,6 @@ Example : GetAnchor("index.htm\#chapter2") == "chapter2"
 Returns right location string extracted from {\it location}. 
 
 Example : GetRightLocation("file:myzipfile.zip\#zip:index.htm") == "index.htm"
-
 
 \membersection{wxFileSystemHandler::GetMimeTypeFromExt}\label{wxfilesystemhandlergetmimetypefromext}
 

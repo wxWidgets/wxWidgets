@@ -3,9 +3,7 @@
 % htmlwinparser.tex at 14/Mar/99 20:13:37
 %
 
-
 \section{\class{wxHtmlWinParser}}\label{wxhtmlwinparser}
-
 
 This class is derived from \helpref{wxHtmlParser}{wxhtmlparser} and 
 its mail goal is to parse HTML input so that it can be displayed in
@@ -19,7 +17,6 @@ its mail goal is to parse HTML input so that it can be displayed in
 \item This parser produces temporary data! You should call 
 \helpref{delete GetTempData()}{wxhtmlparsergettempdata}!
 \end{enumerate}
-
 
 \wxheading{Derived from}
 
@@ -39,7 +36,6 @@ its mail goal is to parse HTML input so that it can be displayed in
 
 Constructor. Don't use the default one, use constructor with
 {\it wnd} paremeter ({\it wnd} is pointer to associated \helpref{wxHtmlWindow}{wxhtmlwindow})
-
 
 \membersection{wxHtmlWinParser::SetDC}\label{wxhtmlwinparsersetdc}
 
@@ -86,13 +82,11 @@ title only if some window is associated, otherwise it does nothing)
 
 Sets fonts. This method is identical to \helpref{wxHtmlWindow::SetFonts}{wxhtmlwindowsetfonts}
 
-
 \membersection{wxHtmlWinParser::AddModule}\label{wxhtmlwinparseraddmodule}
 
 \func{static void}{AddModule}{\param{wxHtmlTagsModule }{*module}}
 
 Adds \helpref{module}{handlers} to the list of wxHtmlWinParser tag handler.
-
 
 \membersection{wxHtmlWinParser::GetContainer}\label{wxhtmlwinparsergetcontainer}
 
@@ -126,8 +120,6 @@ Opens new container and returns pointer to it (see \helpref{Overview}{cells}).
 
 Closes the container, sets actual container to the parent one
 and returns pointer to it (see \helpref{Overview}{cells}).
-
-
 
 \membersection{wxHtmlWinParser::GetFontSize}\label{wxhtmlwinparsergetfontsize}
 
@@ -259,3 +251,4 @@ and returns pointer to it.
 Fonts created during parsing are temporary data and are not freed on DoneParser. 
 You must call \helpref{delete myparser->GetTempData();}{wxhtmlparsergettempdata}
 to free the memory!
+

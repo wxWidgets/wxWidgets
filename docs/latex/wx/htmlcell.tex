@@ -1,16 +1,15 @@
 \subsection{Cells and Containers}\label{cells}
 
 This article describes mechanism used by 
-\helpref{wxHtmlWinParser}{wxhtmlwinparser} and
-\helpref{wxHtmlWindow}{wxhtmlwindow}
-to parse and display HTML documents.
+\helpref{wxHtmlWinParser}{wxhtmlwinparser} and 
+\helpref{wxHtmlWindow}{wxhtmlwindow} to parse and display HTML documents.
 
 \wxheading{Cells}
 
 You can divide any text (or HTML) into small fragments. Let's call these
 fragments {\bf cells}. Cell is for example one word, horizontal line, image
 or any other part of document. Each cell has width and height (except special
-"magic" cells with zero dimensions - e.g. color changers or font changers).
+"magic" cells with zero dimensions - e.g. colour changers or font changers).
 
 See \helpref{wxHtmlCell}{wxhtmlcell}.
 
@@ -24,22 +23,22 @@ See \helpref{wxHtmlContainerCell}{wxhtmlcontainercell},
 
 \begin{comment}
 % Bitmap is corrupt!
-This image shows you cells\ &\ containers:
+This image shows you cells and containers:
 
 \image{}{contbox.bmp}
 \end{comment}
 \wxheading{Using Containers in Tag Handler}
 
-\helpref{wxHtmlWinParser}{wxhtmlwinparser} provides user-friendly way
-of managing containers. It's based on idea of opening and closing containers.
+\helpref{wxHtmlWinParser}{wxhtmlwinparser} provides a user-friendly way
+of managing containers. It's based on the idea of opening and closing containers.
 
 Use \helpref{OpenContainer}{wxhtmlwinparseropencontainer} to open new
-container {\it within actually opened container}. This new container is 
-{\it sub-container} of the old one. (If you want to create new container with
-same depth level you can call {\tt CloseContainer(); OpenContainer();}.)
+a container {\it within an already opened container}. This new container is a 
+{\it sub-container} of the old one. (If you want to create a new container with
+the same depth level you can call {\tt CloseContainer(); OpenContainer();}.)
 
 Use \helpref{CloseContaier}{wxhtmlwinparserclosecontainer} to close the 
-container. This doesn't create new container with same depth level but
+container. This doesn't create a new container with same depth level but
 it returns "control" to the parent container.
 
 \begin{comment}
@@ -53,8 +52,8 @@ OpenContainer as to CloseContainer...
 
 \wxheading{Example}
 
-This code creates new paragraph (container at same depth level)
-with "Hello, world!" :
+This code creates a new paragraph (container at same depth level)
+with "Hello, world!":
 
 \begin{verbatim}
 m_WParser -> CloseContainer();
@@ -77,7 +76,7 @@ and here is image of the situation:
 You can see that there was opened container before running the code. We closed
 it, created our own container, then closed our container and opened
 new container. The result was that we had {\it same depth level} after
-executing. This is general rule that should be followed by tag handlers :
+executing. This is general rule that should be followed by tag handlers:
 leave depth level of containers unmodified (in other words, number of
 OpenContainer and CloseContainer calls should be same within \helpref{HandleTag}{wxhtmltaghandlerhandletag}'s body).
 

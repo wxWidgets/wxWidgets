@@ -3,18 +3,16 @@
 % htmlcell.tex at 21/Mar/99 22:45:23
 %
 
-
 \section{\class{wxHtmlCell}}\label{wxhtmlcell}
 
 Internal data structure. It represents fragments of parsed HTML
 page, so-called {\bf cell} - a word, picture, table, horizontal line and so on.
-It is used by \helpref{wxHtmlWindow}{wxhtmlwindow} and
+It is used by \helpref{wxHtmlWindow}{wxhtmlwindow} and 
 \helpref{wxHtmlWinParser}{wxhtmlwinparser} to represent HTML page in memory.
 
 You can divide cells into two groups : {\it visible} cells with non-zero width and
 height and {\it helper} cells (usually with zero width and height) that
 perform special actions such as color or font change.
-
 
 \wxheading{Derived from}
 
@@ -23,17 +21,15 @@ wxObject
 \wxheading{See Also}
 
 \helpref{Cells Overview}{cells},
-\helpref{wxHtmlContainerCell}{wxhtmlcontainercell},
+\helpref{wxHtmlContainerCell}{wxhtmlcontainercell}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
-
 
 \membersection{wxHtmlCell::wxHtmlCell}\label{wxhtmlcellwxhtmlcell}
 
 \func{}{wxHtmlCell}{\void}
 
 Constructor.
-
 
 \membersection{wxHtmlCell::SetParent}\label{wxhtmlcellsetparent}
 
@@ -110,7 +106,6 @@ interested in details).
 
 Sets cell's position within parent container.
 
-
 \membersection{wxHtmlCell::SetLink}\label{wxhtmlcellsetlink}
 
 \func{void}{SetLink}{\param{const wxString\& }{link}}
@@ -179,7 +174,6 @@ or font setter) must be drawn even if they are invisible!
 add this to m\_PosX,m\_PosY when passing coordinates to dc's methods
 Example : {\tt dc -> DrawText("hello", x + m\_PosX, y + m\_PosY)}}
 
-
 \membersection{wxHtmlCell::Find}\label{wxhtmlcellfind}
 
 \func{virtual const wxHtmlCell*}{Find}{\param{int }{condition}, \param{const void* }{param}}
@@ -208,10 +202,7 @@ HTML_COND_ISANCHOR condition)
 from this number}
 \end{twocollist}
 
-
-
 \membersection{wxHtmlCell::OnMouseClick}\label{wxhtmlcellonmouseclick}
-
 
 \func{virtual void}{OnMouseClick}{\param{wxWindow* }{parent}, \param{int }{x}, \param{int }{y}, \param{bool }{left}, \param{bool }{middle}, \param{bool }{right}}
 
@@ -232,7 +223,4 @@ key events or whatsoever) you should use wxHtmlBinderCell instead.
 
 \docparam{left, middle, right}{boolean flags for mouse buttons. TRUE if the left/middle/right
 button is pressed, FALSE otherwise}
-
-
-
 

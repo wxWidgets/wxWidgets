@@ -43,13 +43,13 @@ Then you must define handlers and one module.
 The handler is derived from \helpref{wxHtmlWinTagHandler}{wxhtmlwintaghandler}
 (or directly from \helpref{wxHtmlTagHandler}{wxhtmltaghandler})
 
-You can use set of macros to define the handler (see src/mod_*.cpp files
-for details). Handler definition must start with {\bf TAG_HANDLER_BEGIN} macro
-and end with {\bf TAG_HANDLER_END} macro. I strongly recommend to have a look
-at {\it include/wxhtml/mod_templ.h} file. Otherwise you won't understand
+You can use set of macros to define the handler (see src/mod\_*.cpp files
+for details). Handler definition must start with {\bf TAG\_HANDLER\_BEGIN} macro
+and end with {\bf TAG\_HANDLER\_END} macro. I strongly recommend to have a look
+at {\it include/wxhtml/mod\_templ.h} file. Otherwise you won't understand
 the structure of macros... See macros reference:
 
-{\bf TAG_HANDLER_BEGIN}({\it name}, {\it tags})
+{\bf TAG\_HANDLER\_BEGIN}({\it name}, {\it tags})
 
 Starts handler definition. {\it name} is handler identifier (in fact
 part of class name), {\it tags} is string containing list of tags
@@ -57,9 +57,9 @@ supported by this handler (in uppercase). This macro derives new class from
 wxHtmlWinTagHandler and implements it's 
 \helpref{GetSupportedTags}{wxhtmltaghandlergetsupportedtags} method.
 
-Example: TAG_HANDLER_BEGIN(FONTS, "B,I,U,T")
+Example: TAG\_HANDLER\_BEGIN(FONTS, "B,I,U,T")
 
-{\bf TAG_HANDLER_VARS}
+{\bf TAG\_HANDLER\_VARS}
 
 This macro starts block of variables definitions. (Variables are identical
 to class attributes.) Example:
@@ -74,10 +74,10 @@ TAG_HANDLER_END(VARS_ONLY)
 
 This macro is used only in rare cases.
 
-{\bf TAG_HANDLER_CONSTR}({\it name})
+{\bf TAG\_HANDLER\_CONSTR}({\it name})
 
 This macro supplies object constructor. {\it name} is same name as the one
-from TAG_HANDLER_BEGIN macro. Body of constructor follow after
+from TAG\_HANDLER\_BEGIN macro. Body of constructor follow after
 this macro (you must use { and } ). Example:
 
 \begin{verbatim}
@@ -93,7 +93,7 @@ TAG_HANDLER_END(VARS2)
 
 Never used in wxHTML :-)
 
-{\bf TAG_HANDLER_PROC}({\it varib})
+{\bf TAG\_HANDLER\_PROC}({\it varib})
 
 This is very important macro. It defines \helpref{HandleTag}{wxhtmltaghandlerhandletag}
 method. {\it varib} is name of parameter passed to the method, usually
@@ -109,29 +109,29 @@ TAG_HANDLER_BEGIN(TITLE, "TITLE")
 TAG_HANDLER_END(TITLE)
 \end{verbatim}
 
-{\bf TAG_HANDLER_END}({\it name})
+{\bf TAG\_HANDLER\_END}({\it name})
 
 Ends definition of tag handler {\it name}. 
 
 
 \wxheading{Tags Modules}
 
-You can use set of 3 macros TAGS_MODULE_BEGIN, TAGS_MODULE_ADD and 
-TAGS_MODULE_END to inherit new module from
+You can use set of 3 macros TAGS\_MODULE\_BEGIN, TAGS\_MODULE\_ADD and 
+TAGS\_MODULE\_END to inherit new module from
 \helpref{wxHtmlTagsModule}{wxhtmltagsmodule} and to create instance of it.
 See macros reference:
 
-{\bf TAGS_MODULE_BEGIN}({\it modname})
+{\bf TAGS\_MODULE\_BEGIN}({\it modname})
 
 Begins module definition. {\it modname} is part of class name and must
 be unique.
 
-{\bf TAGS_MODULE_ADD}({\it name})
+{\bf TAGS\_MODULE\_ADD}({\it name})
 
 Adds the handler to this module. {\it name} is the identifier from
-TAG_HANDLER_BEGIN.
+TAG\_HANDLER\_BEGIN.
 
-{\bf TAGS_MODULE_END}({\it modname})
+{\bf TAGS\_MODULE\_END}({\it modname})
 
 Ends the definition of module.
 
@@ -144,3 +144,4 @@ TAGS_MODULE_BEGIN(Examples)
     TAGS_MODULE_ADD(TITLE)
 TAGS_MODULE_END(Examples)
 \end{verbatim}
+

@@ -3,12 +3,10 @@
 % htmlcontainercell.tex at 21/Mar/99 22:45:23
 %
 
-
 \section{\class{wxHtmlContainerCell}}\label{wxhtmlcontainercell}
 
-wxHtmlContainerCell class an implementation of cell that may
-contain more cells in it. It is heavily used in layouting algorithm.
-
+wxHtmlContainerCell class an implementation of a cell that may
+contain more cells in it. It is heavily used in the wxHTML layout algorithm.
 
 \wxheading{Derived from}
 
@@ -19,7 +17,6 @@ contain more cells in it. It is heavily used in layouting algorithm.
 \helpref{Cells Overview}{cells}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
-
 
 \membersection{wxHtmlContainerCell::wxHtmlContainerCell}\label{wxhtmlcontainercellwxhtmlcontainercell}
 
@@ -83,7 +80,6 @@ Sets container's {\it vertical alignment}. This is per-line alignment!
 \constfunc{int}{GetAlignVer}{\void}
 
 Returns container's vertical alignment.
-
 
 \membersection{wxHtmlContainerCell::SetIndent}\label{wxhtmlcontainercellsetindent}
 
@@ -211,14 +207,11 @@ E.g. if you have 640x480 image and the wxHtmlWindow is only 100x100...)
 
 Call to this method is valid only after calling \helpref{Layout}{wxhtmlcelllayout}
 
-
 \membersection{wxHtmlContainerCell::SetBackgroundColour}\label{wxhtmlcontainercellsetbackgroundcolour}
 
 \func{void}{SetBackgroundColour}{\param{const wxColour\& }{clr}}
 
 Sets background color for this container.
-
-
 
 \membersection{wxHtmlContainerCell::SetBorder}\label{wxhtmlcontainercellsetborder}
 
@@ -232,8 +225,6 @@ Sets border (frame) colours. Border is rectangle around the container.
 
 \docparam{clr2}{Color of bottom and right lines}
 
-
-
 \membersection{wxHtmlContainerCell::GetFirstCell}\label{wxhtmlcontainercellgetfirstcell}
 
 \func{wxHtmlCell*}{GetFirstCell}{\void}
@@ -242,9 +233,7 @@ Returns pointer to the first cell in the list.
 You can then use wxHtmlCell's GetNext method to obtain pointer to the next
 cell in list.
 
-{\bf Note} : This shouldn't be used by end user. If you need some way of
+{\bf Note} : This shouldn't be used by the end user. If you need some way of
 finding particular cell in the list, try \helpref{Find}{wxhtmlcellfind} method
 instead.
-
-
 

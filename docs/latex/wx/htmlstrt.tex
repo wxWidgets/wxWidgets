@@ -6,7 +6,7 @@ First of all, you must include <wx/wxhtml.h>.
 
 Class \helpref{wxHtmlWindow}{wxhtmlwindow} (derived from wxScrolledWindow)
 is used to display HTML documents.
-It has 2 important methods : \helpref{LoadPage}{wxhtmlwindowloadpage}
+It has two important methods : \helpref{LoadPage}{wxhtmlwindowloadpage} 
 and \helpref{SetPage}{wxhtmlwindowsetpage}.
 LoadPage loads and displays HTML file while SetPage displays directly the
 passed {\bf string}. See the example:
@@ -19,7 +19,7 @@ passed {\bf string}. See the example:
 		     "</body></hmtl>");
 \end{verbatim}
 
-I think the difference is quite clear...
+I think the difference is quite clear.
 
 \wxheading{Displaying Help}
 
@@ -30,9 +30,9 @@ See \helpref{wxHtmlHelpController}{wxhtmlhelpcontroller}.
 Because wxHtmlWindow is derived from wxScrolledWindow and not from
 wxFrame, it doesn't have visible frame. But the user usually want to see
 the title of HTML page displayed somewhere and frame's titlebar is 
-ideal place for it... 
+ideal place for it.
 
-wxHtmlWindow provides 2 methods in order to handle this : 
+wxHtmlWindow provides 2 methods in order to handle this: 
 \helpref{SetRelatedFrame}{wxhtmlwindowsetrelatedframe} and 
 \helpref{SetRelatedStatusBar}{wxhtmlwindowsetrelatedstatusbar}. 
 See the example:
@@ -64,5 +64,5 @@ borders (space between border of window and displayed HTML). Related functions:
 \end{itemize}
 
 The last two functions are used to store user customization info wxConfig stuff
-(for example registry under Windows or dotfile under Unix)
+(for example registry under Windows or dotfile under Unix).
 

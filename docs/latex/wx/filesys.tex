@@ -3,7 +3,6 @@
 % filesystem.tex at 21/Mar/99 23:00:52
 %
 
-
 \section{\class{wxFileSystem}}\label{wxfilesystem}
 
 This class provides interface for opening files on different
@@ -21,9 +20,7 @@ wxObject
 \helpref{wxFSFile}{wxfsfile},
 \helpref{Overview}{fs}
 
-
 \latexignore{\rtfignore{\wxheading{Members}}}
-
 
 \membersection{wxFileSystem::wxFileSystem}\label{wxfilesystemwxfilesystem}
 
@@ -63,13 +60,11 @@ fs -> ChangePathTo("subdir/folder", TRUE);
 f = fs -> OpenFile("hello.htm"); // opens file 'subdir/folder/hello.htm' !!
 \end{verbatim}
 
-
 \membersection{wxFileSystem::GetPath}\label{wxfilesystemgetpath}
 
 \func{wxString}{GetPath}{\void}
 
 Returns actual path (set by \helpref{ChangePathTo}{wxfilesystemchangepathto}).
-
 
 \membersection{wxFileSystem::OpenFile}\label{wxfilesystemopenfile}
 
@@ -80,7 +75,6 @@ or NULL if failed. It first tries to open the file in relative scope
 (based on value passed to ChangePathTo() method) and then as an
 absolute path.
 
-
 \membersection{wxFileSystem::AddHandler}\label{wxfilesystemaddhandler}
 
 \func{static void}{AddHandler}{\param{wxFileSystemHandler }{*handler}}
@@ -90,12 +84,13 @@ The \helpref{handlers}{wxfilesystemhandler} provide access to virtual FS.
 
 \wxheading{Note}
 
-You can call
+You can call:
 
 \begin{verbatim}
 wxFileSystem::AddHandler(new My_FS_Handler);
 \end{verbatim}
 
-This is because a) AddHandler is static method and b) the handlers
+This is because (a) AddHandler is a static method, and (b) the handlers
 are deleted in wxFileSystem's destructor so that you don't have to
 care about it.
+

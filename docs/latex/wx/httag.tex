@@ -3,19 +3,16 @@
 % htmltag.tex at 14/Mar/99 20:13:37
 %
 
-
 \section{\class{wxHtmlTag}}\label{wxhtmltag}
 
 This class represents single HTML tag. 
 It is used by \helpref{tag handlers}{handlers}.
-
 
 \wxheading{Derived from}
 
 wxObject
 
 \latexignore{\rtfignore{\wxheading{Members}}}
-
 
 \membersection{wxHtmlTag::wxHtmlTag}\label{wxhtmltagwxhtmltag}
 
@@ -32,7 +29,6 @@ yourself. Feel free to ignore the constructor parameters...
 Returns tag's name. The name is always in uppercase and it doesn't contain
 '<' or '/' characters. (So the name of {\tt <FONT SIZE=+2>} tag is "FONT"
 and name of {\tt </table>} is "TABLE")
-
 
 \membersection{wxHtmlTag::HasParam}\label{wxhtmltaghasparam}
 
@@ -72,8 +68,6 @@ dummy = tag.GetParam("COLOR");
 dummy = tag.GetParam("COLOR", TRUE);
    // dummy == "\"#0000FF\"" -- see the difference!!
 \end{verbatim}
-
-
 
 \membersection{wxHtmlTag::ScanParam}\label{wxhtmltagscanparam}
 
@@ -160,7 +154,6 @@ bla bla bla <MYTAG> bla bla intenal text</MYTAG> bla bla
                                         ^
 \end{verbatim}
 
-
 \membersection{wxHtmlTag::GetEndPos2}\label{wxhtmltaggetendpos2}
 
 \constfunc{int}{GetEndPos2}{\void}
@@ -171,6 +164,6 @@ See explanation (returned position is marked with '^'):
 
 \begin{verbatim}
 bla bla bla <MYTAG> bla bla intenal text</MYTAG> bla bla
-                                                ^
+                                               ^
 \end{verbatim}
 

@@ -3,10 +3,9 @@
 % htmlhelp.h at 02/May/99 19:58:53
 %
 
-
 \section{\class{wxHtmlHelpController}}\label{wxhtmlhelpcontroller}
 
-{\bf WARNING! This help controller has API incompatible with wxWindows
+{\bf WARNING! This help controller has an API incompatible with wxWindows
 wxHelpController!}
 
 This help controller provides easy way how to display HTML help in your
@@ -29,22 +28,17 @@ have following line in your .rc file:
 #include "wx/html/msw/wxhtml.rc"
 \end{verbatim}
 
-
 \wxheading{Derived from}
 
 wxEvtHandler
 
-
 \latexignore{\rtfignore{\wxheading{Members}}}
-
 
 \membersection{wxHtmlHelpController::wxHtmlHelpController}\label{wxhtmlhelpcontrollerwxhtmlhelpcontroller}
 
 \func{}{wxHtmlHelpController}{\void}
 
-
 Constructor.
-
 
 \membersection{wxHtmlHelpController::SetTitleFormat}\label{wxhtmlhelpcontrollersettitleformat}
 
@@ -52,7 +46,6 @@ Constructor.
 
 Sets format of title of the frame. Must contain exactly one "\%s"
 (for title of displayed HTML page).
-
 
 \membersection{wxHtmlHelpController::SetTempDir}\label{wxhtmlhelpcontrollersettempdir}
 
@@ -63,7 +56,6 @@ forms are much faster to read.) Default value is empty string (empty string mean
 that no cached data are stored). Note that these files are NOT
 deleted when program exits!
 
-
 \membersection{wxHtmlHelpController::AddBook}\label{wxhtmlhelpcontrolleraddbook}
 
 \func{bool}{AddBook}{\param{const wxString\& }{book}, \param{bool }{show_wait_msg}}
@@ -72,7 +64,6 @@ Adds book (\helpref{.hhp file}{helpformat} - HTML Help Workshop project file) in
 This must be called at least once before displaying  any help.
 
 If {\it show_wait_msg} is TRUE then a decorationless window with progress message is displayed.
-
 
 \membersection{wxHtmlHelpController::Display}\label{wxhtmlhelpcontrollerdisplay}
 
@@ -104,9 +95,6 @@ Looking for the page runs in these steps:
 
 This alternative form is used to search help contents by numeric IDs.
 
-
-
-
 \membersection{wxHtmlHelpController::DisplayContents}\label{wxhtmlhelpcontrollerdisplaycontents}
 
 \func{void}{DisplayContents}{\void}
@@ -119,7 +107,6 @@ Displays help window and focuses contents panel.
 
 Displays help window and focuses index panel.
 
-
 \membersection{wxHtmlHelpController::KeywordSearch}\label{wxhtmlhelpcontrollerkeywordsearch}
 
 \func{bool}{KeywordSearch}{\param{const wxString\& }{keyword}}
@@ -129,7 +116,6 @@ Returns TRUE if the keyword was found.
 
 IMPORTANT! KeywordSearch searches only pages listed in .htc file(s)!
 (you should have all pages in contents file...)
-
 
 \membersection{wxHtmlHelpController::UseConfig}\label{wxhtmlhelpcontrolleruseconfig}
 
@@ -142,13 +128,11 @@ reads and writes settings (including wxHtmlWindow's settings) when needed.
 
 The only thing you must do is create wxConfig object and call UseConfig. 
 
-
 \membersection{wxHtmlHelpController::ReadCustomization}\label{wxhtmlhelpcontrollerreadcustomization}
 
 \func{void}{ReadCustomization}{\param{wxConfigBase* }{cfg}, \param{wxString }{path = wxEmptyString}}
 
 Reads controllers setting (position of window etc.)
-
 
 \membersection{wxHtmlHelpController::WriteCustomization}\label{wxhtmlhelpcontrollerwritecustomization}
 

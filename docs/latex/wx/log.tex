@@ -96,8 +96,8 @@ format disables timestamping of the messages completely.
 
 \helpref{SetVerbose}{wxlogsetverbose}\\
 \helpref{GetVerbose}{wxloggetverbose}\\
-\helpref{SetTimeStampFormat}{wxlogsettimestampformat}\\
-\helpref{GetTimeStampFormat}{wxloggettimestampformat}\\
+\helpref{SetTimestamp}{wxlogsettimestamp}\\
+\helpref{GetTimestamp}{wxloggettimestamp}\\
 \helpref{SetTraceMask}{wxlogsettracemask}\\
 \helpref{GetTraceMask}{wxloggettracemask}
 
@@ -162,18 +162,18 @@ logged as the normal ones instead of being silently dropped.
 
 Returns whether the verbose mode is currently active.
 
-\membersection{wxLog::SetTimeStampFormat}\label{wxlogsettimestampformat}
+\membersection{wxLog::SetTimestamp}\label{wxlogsettimestamp}
 
-\func{void}{SetTimeStampFormat}{\param{const char * }{ format}}
+\func{void}{SetTimestamp}{\param{const char * }{ format}}
 
 Sets the timestamp format prepended by the default log targets to all
 messages. The string may contain any normal characters as well as \%
 prefixed format specificators, see {\it strftime()} manual for details.
-Passing an empty string to this function disables message timestamping.
+Passing a null value (not empty string) to this function disables message timestamping.
 
-\membersection{wxLog::GetTimeStampFormat}\label{wxloggettimestampformat}
+\membersection{wxLog::GetTimestamp}\label{wxloggettimestamp}
 
-\constfunc{const char *}{GetTimeStampFormat}{\void}
+\constfunc{const char *}{GetTimestamp}{\void}
 
 Returns the current timestamp format string.
 
