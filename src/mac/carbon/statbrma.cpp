@@ -77,6 +77,27 @@ void wxStatusBarMac::DrawField(wxDC& dc, int i)
     DrawFieldText(dc, i);
 }
 
+void wxStatusBarMac::SetStatusText(const wxString& text, int number)
+{
+    wxCHECK_RET( (number >= 0) && (number < m_nFields),
+                 _T("invalid status bar field index") );
+
+    m_statusStrings[number] = text;
+    wxRect rect;
+    GetFieldRect(number, rect);
+    Refresh( TRUE , &rect ) ;
+    /*
+    // TODO make clear work again also when using themes
+    wxClientDC dc(this);
+    dc.SetBackground( wxBrush(GetBackgroundColour(), wxSOLID) );
+    dc.SetClippingRegion( rect.x+1, rect.y+1, rect.width-1, rect.height-1 );
+    dc.Clear();
+    dc.DestroyClippingRegion();
+    DrawFieldText( dc, number );
+    */
+
+}
+
 void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event) )
 {
   	wxPaintDC dc(this);
