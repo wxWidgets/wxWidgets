@@ -233,6 +233,8 @@ public:
     wxString GetTitle();
     wxRegion GetUpdateRegion();
     long GetWindowStyleFlag();
+    void SetWindowStyleFlag(long style);
+    void SetWindowStyle(long style);
     bool Hide();
     void InitDialog();
     bool IsEnabled();

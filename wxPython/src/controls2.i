@@ -650,6 +650,8 @@ public:
     bool IsBold(const wxTreeItemId& item) const;
     wxTreeItemId HitTest(const wxPoint& point, int& OUTPUT);
 
+
+
     void SetItemTextColour(const wxTreeItemId& item, const wxColour& col);
     void SetItemBackgroundColour(const wxTreeItemId& item, const wxColour& col);
     void SetItemFont(const wxTreeItemId& item, const wxFont& font);
@@ -677,14 +679,19 @@ public:
 #endif
 
 %pragma(python) addtoclass = "
-    # Redefine a couple methods that SWIG gets a bit confused on...
-    def GetFirstChild(self,arg0,arg1):
-        val1, val2 = controls2c.wxTreeCtrl_GetFirstChild(self.this,arg0.this,arg1)
+    # Redefine some methods that SWIG gets a bit confused on...
+    def GetFirstChild(self, *_args, **_kwargs):
+        val1,val2 = apply(controls2c.wxTreeCtrl_GetFirstChild,(self,) + _args, _kwargs)
         val1 = wxTreeItemIdPtr(val1)
         val1.thisown = 1
         return (val1,val2)
-    def GetNextChild(self,arg0,arg1):
-        val1, val2 = controls2c.wxTreeCtrl_GetNextChild(self.this,arg0.this,arg1)
+    def GetNextChild(self, *_args, **_kwargs):
+        val1,val2 = apply(controls2c.wxTreeCtrl_GetNextChild,(self,) + _args, _kwargs)
+        val1 = wxTreeItemIdPtr(val1)
+        val1.thisown = 1
+        return (val1,val2)
+    def HitTest(self, *_args, **_kwargs):
+        val1, val2 = apply(controls2c.wxTreeCtrl_HitTest,(self,) + _args, _kwargs)
         val1 = wxTreeItemIdPtr(val1)
         val1.thisown = 1
         return (val1,val2)

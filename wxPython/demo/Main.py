@@ -22,7 +22,7 @@ _useSplitter       = true
 _useNestedSplitter = true
 
 _treeList = [
-    ('New since last release', ['wxDragImage', 'wxCalendarCtrl',
+    ('New since last release', ['wxDragImage', 'wxCalendarCtrl', 'wxSpinCtrl',
                                 ]),
 
     ('Managed Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame']),
@@ -40,8 +40,9 @@ _treeList = [
 
     ('Controls', ['wxButton', 'wxCheckBox', 'wxCheckListBox', 'wxChoice',
                   'wxComboBox', 'wxGauge', 'wxListBox', 'wxListCtrl', 'wxTextCtrl',
-                  'wxTreeCtrl', 'wxSpinButton', 'wxStaticText', 'wxStaticBitmap',
-                  'wxRadioBox', 'wxSlider', 'wxToolBar', #'wxToggleButton'
+                  'wxTreeCtrl', 'wxSpinButton', 'wxSpinCtrl', 'wxStaticText',
+                  'wxStaticBitmap', 'wxRadioBox', 'wxSlider', 'wxToolBar',
+                  #'wxToggleButton'
                   ]),
 
     ('Window Layout', ['wxLayoutConstraints', 'Sizers', 'OldSizers']),

@@ -798,14 +798,19 @@ class wxTreeCtrlPtr(wxControlPtr):
     def __repr__(self):
         return "<C wxTreeCtrl instance at %s>" % (self.this,)
     
-    # Redefine a couple methods that SWIG gets a bit confused on...
-    def GetFirstChild(self,arg0,arg1):
-        val1, val2 = controls2c.wxTreeCtrl_GetFirstChild(self.this,arg0.this,arg1)
+    # Redefine some methods that SWIG gets a bit confused on...
+    def GetFirstChild(self, *_args, **_kwargs):
+        val1,val2 = apply(controls2c.wxTreeCtrl_GetFirstChild,(self,) + _args, _kwargs)
         val1 = wxTreeItemIdPtr(val1)
         val1.thisown = 1
         return (val1,val2)
-    def GetNextChild(self,arg0,arg1):
-        val1, val2 = controls2c.wxTreeCtrl_GetNextChild(self.this,arg0.this,arg1)
+    def GetNextChild(self, *_args, **_kwargs):
+        val1,val2 = apply(controls2c.wxTreeCtrl_GetNextChild,(self,) + _args, _kwargs)
+        val1 = wxTreeItemIdPtr(val1)
+        val1.thisown = 1
+        return (val1,val2)
+    def HitTest(self, *_args, **_kwargs):
+        val1, val2 = apply(controls2c.wxTreeCtrl_HitTest,(self,) + _args, _kwargs)
         val1 = wxTreeItemIdPtr(val1)
         val1.thisown = 1
         return (val1,val2)

@@ -63,12 +63,17 @@ below.)
 	   wxUSE_NEW_GRID		    1
 	   wxUSE_GLOBAL_MEMORY_OPERATORS    0
 	   wxUSE_LIBTIFF		    1
+	   wxUSE_GLCANVAS		    1
 
    I also change these:
 
 	   wxUSE_DIALUP_MANAGER		    0
-	   wxUSE_SOCKETS		    0
-	   wxUSE_FS_INET		    0
+	   wxUSE_DYNLIB_CLASS		    0
+	   wxUSE_DOC_VIEW_ARCHITECTURE	    0
+	   wxUSE_MDI_ARCHITECTURE	    0
+	   wxUSE_PLOT			    0
+	   wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 0
+
 
    There are probably other flags that can be disabled to remove
    things not being used in wxPython, but I havn't investigated all
@@ -84,12 +89,6 @@ below.)
    If you want to make a release build, add FINAL=1 to the nmake
    command, as well as to build.local for wxPython, (see below.)
 
-   If you want the optional OGL (Object Graphics Library) and/or STC
-   (Styled Text Control) then you need to go to contrib/src/ogl and
-   contrib/src/stc and build those libraries.  The command to use is:
-
-   nmake -f makefile.vc WXUSINGDLL=1 CRTFLAG=/MD EXTRAFLAGS=-D__NO_VC_CRTDBG__
-
 
 2. For either platform, you should be sure to set an environment
    variable named WXWIN to be the path to the top of the wxWindows
@@ -97,25 +96,24 @@ below.)
 
 
 3. If you are working from a copy of the code retrieved from CVS, then
-   you will find wxPython in $WXWIN/utils/wxPython.  If you are
-   working from the tar.gz or .zip files then you will probably want
-   to unpack wxPython in the $WXWIN/utils directory and rename the new
-   directory to wxPython (or use a symlink.)  If you want to keep it
-   in a separate directory then you can change where the build.py tool
-   expects to find it by creating a file named build.local (see step 7
-   for more examples about build.local,) containing something like
-   this:
+   you will find wxPython in $WXWIN/wxPython.  If you are working from
+   the tar.gz or .zip files then you will probably want to unpack
+   wxPython in the $WXWIN directory and rename the new directory to
+   wxPython (or use a symlink.)  If you want to keep it in a separate
+   directory then you can change where the build.py tool expects to
+   find it by creating a file named build.local (see step 7 for more
+   examples about build.local,) containing something like this:
 
    WXPSRCDIR = "~/MyStuff/wxPython-2.1.15/src"
 
 
 4. At this point you may want to make an alias, symlink, script,
    batch file, or whatever on the PATH that invokes
-   $WXWIN/utils/wxPython/distrib/build.py to help simplify matters
-   somewhat.  For example, on my win32 system I have a file named
-   build.bat in a directory on the PATH that contains:
+   $WXWIN/wxPython/distrib/build.py to help simplify matters somewhat.
+   For example, on my win32 system I have a file named build.bat in a
+   directory on the PATH that contains:
 
-   python %WXWIN%/utils/wxPython/distrib/build.py %1 %2 %3 %4 %5 %6
+   python %WXWIN%/wxPython/distrib/build.py %1 %2 %3 %4 %5 %6
 
 
 5. Change into the $(WXWIN)/utils/wxPython/src directory.
@@ -151,8 +149,8 @@ below.)
 
 
 8. To build and install the add-on modules, change to the appropriate
-   directory under $WXWIN/utils/wxPython/modules and run the build
-   utility again.
+   directory under $WXWIN/wxPython/contrib and run the build utility
+   again.
 
 
 9. Change to the $WXWIN/utils/wxPython/demo directory.
@@ -165,8 +163,4 @@ below.)
     To run it without requiring a console on win32, you can use the
     pythonw.exe version of Python either from the command line or from
     a shortcut.
-
-
-
-
 

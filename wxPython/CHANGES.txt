@@ -42,6 +42,7 @@ modify your code to add the EVT_* to hook the event to the method.
     OnCloseWindow
     OnScroll
 
+Added wxSpinCtrl.
 
 
 

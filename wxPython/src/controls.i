@@ -16,6 +16,7 @@
 #include "helpers.h"
 #include <wx/slider.h>
 #include <wx/spinbutt.h>
+#include <wx/spinctrl.h>
 #include <wx/dynarray.h>
 #include <wx/statline.h>
 //#include <wx/toggbutt.h>
@@ -328,7 +329,7 @@ public:
           wxArrayInt lst;
           self->GetSelections(lst);
           PyObject *tup = PyTuple_New(lst.GetCount());
-          for(int i=0; i<lst.GetCount(); i++) {
+          for(size_t i=0; i<lst.GetCount(); i++) {
               PyTuple_SetItem(tup, i, PyInt_FromLong(lst[i]));
           }
           return tup;
@@ -575,6 +576,23 @@ public:
     void SetThumbLength(int len);
     void SetTick(int tickPos);
     void SetValue(int value);
+};
+
+
+//----------------------------------------------------------------------
+
+class wxSpinCtrl : public wxSpinButton {
+public:
+    wxSpinCtrl(wxWindow *parent,
+               wxWindowID id = -1,
+               const char* value = "",
+               const wxPoint& pos = wxPyDefaultPosition,
+               const wxSize& size = wxPyDefaultSize,
+               long style = wxSP_ARROW_KEYS,
+               int min = 0, int max = 100, int initial = 0,
+               const char* name = "wxSpinCtrl");
+
+
 };
 
 

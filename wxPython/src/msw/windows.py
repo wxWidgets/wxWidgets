@@ -262,6 +262,12 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def GetWindowStyleFlag(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_GetWindowStyleFlag,(self,) + _args, _kwargs)
         return val
+    def SetWindowStyleFlag(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_SetWindowStyleFlag,(self,) + _args, _kwargs)
+        return val
+    def SetWindowStyle(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_SetWindowStyle,(self,) + _args, _kwargs)
+        return val
     def Hide(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_Hide,(self,) + _args, _kwargs)
         return val

@@ -305,6 +305,18 @@ public:
 
 //---------------------------------------------------------------------------
 
+
+enum
+{
+    wxSPLIT_HORIZONTAL,
+    wxSPLIT_VERTICAL,
+    wxSPLIT_DRAG_NONE,
+    wxSPLIT_DRAG_DRAGGING,
+    wxSPLIT_DRAG_LEFT_DOWN
+
+};
+
+
 class wxSplitterEvent : public wxCommandEvent {
 public:
     int GetSashPosition();
