@@ -579,11 +579,23 @@ bool wxListCtrl::GetColumn(int col, wxListItem& item) const
     LV_COLUMN lvCol;
     wxZeroMemory(lvCol);
 
+    lvCol.mask = LVCF_WIDTH;
+
     if ( item.m_mask & wxLIST_MASK_TEXT )
     {
         lvCol.mask |= LVCF_TEXT;
         lvCol.pszText = new wxChar[513];
         lvCol.cchTextMax = 512;
+    }
+
+    if ( item.m_mask & wxLIST_MASK_FORMAT )
+    {
+        lvCol.mask |= LVCF_FMT;
+    }
+
+    if ( item.m_mask & wxLIST_MASK_IMAGE )
+    {
+        lvCol.mask |= LVCF_IMAGE;
     }
 
     bool success = ListView_GetColumn(GetHwnd(), col, & lvCol) != 0;
@@ -605,6 +617,11 @@ bool wxListCtrl::GetColumn(int col, wxListItem& item) const
             item.m_format = wxLIST_FORMAT_RIGHT;
         else if (lvCol.fmt == LVCFMT_CENTER)
             item.m_format = wxLIST_FORMAT_CENTRE;
+    }
+
+    if ( item.m_mask & wxLIST_MASK_IMAGE )
+    {
+        item.m_image = lvCol.iImage;
     }
 
     return success;
