@@ -54,6 +54,10 @@ IMPLEMENT_APP(DatabaseDemoApp)
 extern char ListDB_Selection[];        /* Used to return the first column value for the selected line from the listDB routines */
 extern char ListDB_Selection2[];    /* Used to return the second column value for the selected line from the listDB routines */
 
+#if !wxUSE_ODBC
+  #error Sample cannot be compiled unless setup.h has wxUSE_ODBC set to 1
+#endif
+
 DatabaseDemoFrame *DemoFrame;       /* Pointer to the main frame */
 
 /* Pointer to the main database connection used in the program.  This
