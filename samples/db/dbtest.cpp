@@ -168,12 +168,18 @@ bool DatabaseDemoApp::OnInit()
 		return NULL;
 	}
 
+	params.ODBCSource[0] = 0;
+	params.UserName[0]	= 0;
+	params.Password[0]	= 0;
+	params.DirPath[0]		= 0;
+
 	FILE *paramFile;
 	if ((paramFile = fopen(paramFilename, "r")) == NULL)
 	{
 		wxString tStr;
 		tStr.Printf("Unable to open the parameter file '%s' for reading.\n\nYou must specify the data source, user name, and\npassword that will be used and save those settings.",paramFilename);
 		wxMessageBox(tStr,"File I/O Error...",wxOK | wxICON_EXCLAMATION);
+
 		DemoFrame->BuildParameterDialog(NULL);
 		if ((paramFile = fopen(paramFilename, "r")) == NULL)
 			return FALSE;
@@ -1429,7 +1435,8 @@ bool CparameterDlg::PutData()
 	FillDataSourceList();
 
 	// Fill in the fields from the params object
-	pParamODBCSourceList->SetStringSelection(wxGetApp().params.ODBCSource);
+	if (wxGetApp().params.ODBCSource && wxStrlen(wxGetApp().params.ODBCSource))
+		pParamODBCSourceList->SetStringSelection(wxGetApp().params.ODBCSource);
 	pParamUserNameTxt->SetValue(wxGetApp().params.UserName);
 	pParamPasswordTxt->SetValue(wxGetApp().params.Password);
 	pParamDirPathTxt->SetValue(wxGetApp().params.DirPath);
