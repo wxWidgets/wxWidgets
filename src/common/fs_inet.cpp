@@ -98,7 +98,7 @@ wxFSFile* wxInternetFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxStri
             m_Cache.Put(right, info);
 
             {   // ok, now copy it:
-                wxFileOutputStream sout(wxString(buf));
+                wxFileOutputStream sout((wxString)buf);
                 s -> Read(sout); // copy the stream
             }
             delete s;
