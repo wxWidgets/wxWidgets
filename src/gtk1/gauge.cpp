@@ -48,7 +48,7 @@ void wxGauge::SetRange( int r )
   m_rangeMax = r;
   if (m_gaugePos > m_rangeMax) m_gaugePos = m_rangeMax;
   
-  gtk_progress_bar_update( GTK_PROGRESS_BAR(m_widget), (float)(m_rangeMax/m_gaugePos) );
+  gtk_progress_bar_update( GTK_PROGRESS_BAR(m_widget), ((float)m_gaugePos)/m_rangeMax );
 };
 
 void wxGauge::SetValue( int pos )
@@ -56,7 +56,7 @@ void wxGauge::SetValue( int pos )
   m_gaugePos = pos;
   if (m_gaugePos > m_rangeMax) m_gaugePos = m_rangeMax;
   
-  gtk_progress_bar_update( GTK_PROGRESS_BAR(m_widget), (float)(m_rangeMax/m_gaugePos) );
+  gtk_progress_bar_update( GTK_PROGRESS_BAR(m_widget), ((float)m_gaugePos)/m_rangeMax );
 };
 
 int wxGauge::GetRange(void) const
