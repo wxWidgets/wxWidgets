@@ -17,6 +17,13 @@ Once the window is created you can set its content by calling
 \helpref{SetPage(text)}{wxhtmlwindowsetpage} or 
 \helpref{LoadPage(filename)}{wxhtmlwindowloadpage}. 
 
+\wxheading{Note}
+
+wxHtmlWindow uses the \helpref{wxImage}{wximage} class for displaying images.
+Don't forget to initialize all image formats you need before loading any page!
+(See \helpref{wxInitAllImageHandlers}{wxinitallimagehandlers} and
+\helpref{wxImage::AddHandler}{wximageaddhandler}.)
+
 \wxheading{Derived from}
 
 \helpref{wxScrolledWindow}{wxscrolledwindow}
