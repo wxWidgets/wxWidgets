@@ -50,6 +50,7 @@ _treeList = [
         'StockButtons',
         'Ticker',
         'Choicebook',
+        'ListCtrl_edit',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -98,6 +99,7 @@ _treeList = [
         'ListBox',
         'ListCtrl',
         'ListCtrl_virtual',
+        'ListCtrl_edit',
         'Listbook',
         'Menu',
         'Notebook',

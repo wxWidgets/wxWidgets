@@ -165,6 +165,16 @@ MaskedEdit updates from Will Sadkin:
     - lots of doc string improvements and function hiding to better
       reflect package's public contents.
 
+Restructured the installer packages slightly to help facilitate having
+multiple versions of wxPython installed at the same time.  See the
+Migrarion Guide for more information.
+
+Applied patch from Pim Van Heuven that modifies 4 files:
+    - wxPython/demo/ListCtrl_edit.py (new demo)
+    - wxPython/demo/Main.py (include new demo in demo app)
+    - wxPython/wx/lib/mixins/listctrl.py (several improvements to 
+      TextEditMixin)
+    - wxPython/wx/lib/wxpTag.py (some small fixes)
 
 
 
