@@ -67,6 +67,8 @@ void  wxSTCDropTarget::OnLeave() {
 #define param2 -1 // wxWindow's 2nd param is ID
 #endif
 
+#include <wx/dcbuffer.h>
+
 class wxSTCCallTip : public wxSTCCallTipBase {
 public:
     wxSTCCallTip(wxWindow* parent, CallTip* ct, ScintillaWX* swx)
@@ -76,12 +78,17 @@ public:
         }
 
     ~wxSTCCallTip() {
+#if wxUSE_POPUPWIN && wxSTC_USE_POPUP && defined(__WXGTK__)
+        wxRect rect = GetRect();
+        GetParent()->ScreenToClient(&rect.x, &rect.y);
+        GetParent()->Refresh(false, &rect);
+#endif
     }
 
     bool AcceptsFocus() const { return FALSE; }
 
     void OnPaint(wxPaintEvent& WXUNUSED(evt)) {
-        wxPaintDC dc(this);
+        wxBufferedPaintDC dc(this);
         Surface* surfaceWindow = Surface::Allocate();
         surfaceWindow->Init(&dc, m_ct->wDraw.GetID());
         m_ct->PaintCT(surfaceWindow);
@@ -885,7 +892,11 @@ void ScintillaWX::ClipChildren(wxDC& dc, PRectangle rect) {
         rgn.Subtract(childRect);
     }
     if (ct.inCallTipMode) {
-        wxRect childRect = ((wxWindow*)ct.wCallTip.GetID())->GetRect();
+        wxWindow* tip = (wxWindow*)ct.wCallTip.GetID();
+        wxRect childRect = tip->GetRect();
+#if wxUSE_POPUPWIN && wxSTC_USE_POPUP
+        tip->GetParent()->ScreenToClient(&childRect.x, &childRect.y);
+#endif
         rgn.Subtract(childRect);
     }
 
