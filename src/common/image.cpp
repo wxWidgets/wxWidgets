@@ -1417,8 +1417,7 @@ wxBitmap wxImage::ConvertToBitmap() const
                     int pixel = -1;
                     if (wxTheApp->m_colorCube)
                     {
-                        pixel = wxTheApp->m_colorCube
-                           [ ((r & 0xf8) << 7) + ((g & 0xf8) << 2) + ((b & 0xf8) >> 3) ];
+                        pixel = wxTheApp->m_colorCube[ ((r & 0xf8) << 7) + ((g & 0xf8) << 2) + ((b & 0xf8) >> 3) ];
                     }
                     else
                     {
@@ -1588,6 +1587,7 @@ wxImage::wxImage( const wxBitmap &bitmap )
 
 #include <Xm/Xm.h>
 #include "wx/utils.h"
+#include <math.h>
 
 wxBitmap wxImage::ConvertToBitmap() const
 {
@@ -1630,8 +1630,6 @@ wxBitmap wxImage::ConvertToBitmap() const
     }
 */
 
-//    bitmap.SetDepth( bpp );
-    
     // Retrieve depth info
     
     XVisualInfo vinfo_template;
@@ -1650,6 +1648,8 @@ wxBitmap wxImage::ConvertToBitmap() const
         return wxNullBitmap;
     }
 	
+    XFree( vi );
+
     if ((bpp == 16) && (vi->red_mask != 0xf800)) bpp = 15;
     if (bpp < 8) bpp = 8;
 
@@ -1673,6 +1673,15 @@ wxBitmap wxImage::ConvertToBitmap() const
     int g_mask = GetMaskGreen();
     int b_mask = GetMaskBlue();
 */
+
+    XColor colors[256];
+    if (bpp == 8)
+    {
+	Colormap cmap = (Colormap) wxTheApp->GetMainColormap( dpy );
+	
+        for (int i = 0; i < 256; i++) colors[i].pixel = i;
+	XQueryColors( dpy, cmap, colors, 256 );
+    }
 
     unsigned char* data = GetData();
 
@@ -1702,8 +1711,8 @@ wxBitmap wxImage::ConvertToBitmap() const
 	    {
 	        case 8:
 	        {
-/*
                     int pixel = -1;
+/*
 		    if (wxTheApp->m_colorCube)
 		    {
 		        pixel = wxTheApp->m_colorCube
@@ -1711,23 +1720,20 @@ wxBitmap wxImage::ConvertToBitmap() const
                     } 		    
                     else
 		    {
-	                GdkColormap *cmap = gtk_widget_get_default_colormap();
-                        GdkColor *colors = cmap->colors;
+*/
                         int max = 3 * (65536);
-
-                        for (int i = 0; i < cmap->size; i++)
+                        for (int i = 0; i < 256; i++)
                         {
                             int rdiff = (r << 8) - colors[i].red;
                             int gdiff = (g << 8) - colors[i].green;
                             int bdiff = (b << 8) - colors[i].blue;
-                            int sum = ABS (rdiff) + ABS (gdiff) + ABS (bdiff);
+                            int sum = abs (rdiff) + abs (gdiff) + abs (bdiff);
                             if (sum < max) { pixel = i; max = sum; }
 			}
-                    }
-
-	            gdk_image_put_pixel( data_image, x, y, pixel );
+/*
+		    }
 */
-
+		    XPutPixel( data_image, x, y, pixel );
 	            break;
 	        }
 	        case 15:
@@ -1791,6 +1797,121 @@ wxBitmap wxImage::ConvertToBitmap() const
 
 wxImage::wxImage( const wxBitmap &bitmap )
 {
-  wxFAIL_MSG("Sorry, wxImage::wxImage(const wxBitmap&) isn't implemented for wxMotif yet.");
+    wxCHECK_RET( bitmap.Ok(), "invalid bitmap" );
+
+    Display *dpy = (Display*) wxGetDisplay();
+    Visual* vis = DefaultVisual( dpy, DefaultScreen( dpy ) );
+    int bpp = DefaultDepth( dpy, DefaultScreen( dpy ) );
+    
+    XImage *ximage = XGetImage( dpy,
+                                (Drawable)bitmap.GetPixmap(),
+                                0, 0,
+                                bitmap.GetWidth(), bitmap.GetHeight(),
+				AllPlanes, ZPixmap );
+
+    wxCHECK_RET( ximage, "couldn't create image" );
+
+    Create( bitmap.GetWidth(), bitmap.GetHeight() );
+    char unsigned *data = GetData();
+
+    if (!data)
+    {
+        XDestroyImage( ximage );
+        wxFAIL_MSG( "couldn't create image" );
+        return;
+    }
+
+/*
+    GdkImage *gdk_image_mask = (GdkImage*) NULL;
+    if (bitmap.GetMask())
+    {
+        gdk_image_mask = gdk_image_get( bitmap.GetMask()->GetBitmap(),
+                                        0, 0,
+                                        bitmap.GetWidth(), bitmap.GetHeight() );
+
+        SetMaskColour( 16, 16, 16 );  // anything unlikely and dividable
+    }
+*/
+
+    // Retrieve depth info
+    
+    XVisualInfo vinfo_template;
+    XVisualInfo *vi;
+    
+    vinfo_template.visual = vis;
+    vinfo_template.visualid = XVisualIDFromVisual( vis );
+    vinfo_template.depth = bpp;
+    int nitem = 0;
+    
+    vi = XGetVisualInfo( dpy, VisualIDMask|VisualDepthMask, &vinfo_template, &nitem );
+    
+    if (!vi) 
+    {
+        printf("no visual.\n" );
+        return;
+    }
+	
+    if ((bpp == 16) && (vi->red_mask != 0xf800)) bpp = 15;
+    
+    XFree( vi );
+
+    XColor colors[256];
+    if (bpp == 8)
+    {
+	Colormap cmap = (Colormap)wxTheApp->GetMainColormap( dpy );
+	
+        for (int i = 0; i < 256; i++) colors[i].pixel = i;
+	XQueryColors( dpy, cmap, colors, 256 );
+    }
+
+    long pos = 0;
+    for (int j = 0; j < bitmap.GetHeight(); j++)
+    {
+        for (int i = 0; i < bitmap.GetWidth(); i++)
+        {
+	    int pixel = XGetPixel( ximage, i, j );
+            if (bpp <= 8)
+            {
+                data[pos] = colors[pixel].red >> 8;
+                data[pos+1] = colors[pixel].green >> 8;
+                data[pos+2] = colors[pixel].blue >> 8;
+            } else if (bpp == 15)
+            {
+                data[pos] = (pixel >> 7) & 0xf8;
+                data[pos+1] = (pixel >> 2) & 0xf8;
+                data[pos+2] = (pixel << 3) & 0xf8;
+            } else if (bpp == 16)
+            {
+                data[pos] = (pixel >> 8) & 0xf8;
+                data[pos+1] = (pixel >> 3) & 0xfc;
+                data[pos+2] = (pixel << 3) & 0xf8;
+            } else
+            {
+                data[pos] = (pixel >> 16) & 0xff;
+                data[pos+1] = (pixel >> 8) & 0xff;
+                data[pos+2] = pixel & 0xff;
+            }
+
+/*
+            if (gdk_image_mask)
+            {
+                int mask_pixel = gdk_image_get_pixel( gdk_image_mask, i, j );
+                if (mask_pixel == 0)
+                {
+                    data[pos] = 16;
+                    data[pos+1] = 16;
+                    data[pos+2] = 16;
+               }
+            }
+*/
+
+            pos += 3;
+        }
+    }
+
+    XDestroyImage( ximage );
+/*
+    if (gdk_image_mask) gdk_image_destroy( gdk_image_mask );
+*/
 }
 #endif

@@ -99,32 +99,20 @@ MyCanvas::MyCanvas( wxWindow *parent, const wxWindowID id,
   dir = wxString("../");
 #endif
 
-//#ifdef __WXMOTIF__
-  dir = wxString("../");
-//#endif
-
-#ifndef __WXMOTIF__
   wxImage image( bitmap );
   image.SaveFile( dir + wxString("test.png"), wxBITMAP_TYPE_PNG );
-#else
-  wxImage image;
-#endif
   
   image.LoadFile( dir + wxString("horse.png"), wxBITMAP_TYPE_PNG );
   my_horse = new wxBitmap( image.ConvertToBitmap() );
   
-#ifndef __WXMOTIF__
   image.LoadFile( dir + wxString("test.png"), wxBITMAP_TYPE_PNG );
   my_square = new wxBitmap( image.ConvertToBitmap() );
-#endif
 }
 
 MyCanvas::~MyCanvas()
 {
   delete my_horse;
-#ifndef __WXMOTIF__
   delete my_square;
-#endif
 }
 
 void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
@@ -132,7 +120,6 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
   wxPaintDC dc( this );
   PrepareDC( dc );
 
-#ifndef __WXMOTIF__
   dc.DrawText( "Loaded image", 30, 100 );
   if (my_square->Ok()) dc.DrawBitmap( *my_square, 30, 120 );
 
@@ -140,7 +127,6 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
   dc.SetBrush( wxBrush( "orange", wxSOLID ) );
   dc.SetPen( *wxWHITE_PEN );
   dc.DrawRectangle( 150, 120, 100, 100 );
-#endif
 
   if (my_horse->Ok()) dc.DrawBitmap( *my_horse, 30, 240 );
 }
