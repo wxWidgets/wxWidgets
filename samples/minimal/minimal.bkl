@@ -1,4 +1,6 @@
 <?xml version="1.0" ?>
+<!-- $Id$ -->
+
 <makefile>
 
     <include file="../../build/bakefiles/common_samples.bkl"/>
@@ -7,6 +9,7 @@
         <sources>minimal.cpp</sources>
         <wx-lib>core</wx-lib>
         <win32-res>minimal.rc</win32-res>
+        <mac-res>mondrian.r</mac-res>
     </exe>
 
 </makefile>
