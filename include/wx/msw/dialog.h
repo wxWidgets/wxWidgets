@@ -89,8 +89,7 @@ public:
     void SetModal(bool flag);
 
     virtual void Centre(int direction = wxBOTH);
-    virtual bool IsModal() const
-        { return ((GetWindowStyleFlag() & wxDIALOG_MODAL) == wxDIALOG_MODAL); }
+    virtual bool IsModal() const;
 
     // For now, same as Show(TRUE) but returns return code
     virtual int ShowModal();
