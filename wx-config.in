@@ -29,6 +29,7 @@ update_prefixes
 
 CC="@CC@"
 GCC="@GCC@"
+GCC_SEARCHES_USR_LOCAL_INCLUDE="@GCC_SEARCHES_USR_LOCAL_INCLUDE@"
 CXX="@CXX@"
 LD="@SHARED_LD@"
 srcdir="@top_srcdir@"
@@ -205,10 +206,13 @@ cppflags()
     # the ANSI-fied versions of them in its private directory which is searched
     # after all the directories on the cmd line.
     #
-    # the situation is a bit more complicated with -I/usr/local/include: again,
-    # it shouldn't be specified with gcc which looks there by default anyhow
-    # and gives warnings (at least 3.1 does) if it is specified explicitly --
-    # but this -I switch *is* needed for the other compilers
+    # the situation is a bit more complicated with -I/usr/local/include:
+    # it shouldn't be specified with some gcc installations which look there
+    # by default anyhow and give warnings (at least 3.1 does) if it is
+    # specified explicitly --
+    # but this -I switch *is* needed for other gcc installation and for
+    # the other compilers.
+    # So I put a suitable test into configure.in and reuse the result here.
     #
     # note that we assume that if we use GNU cc we also use GNU c++ and vice
     # versa, i.e. this won't work (either for --cflags or --cxxflags) if GNU C
@@ -216,7 +220,7 @@ cppflags()
     # this when/if anybody complains about it
     if test "${includedir}" != "/usr/include" \
             -a "${includedir}" != "/usr/include/c++" \
-            -a \( "${GCC}" != "yes" \
+            -a \( "${GCC_SEARCHES_USR_LOCAL_INCLUDE}" != "yes" \
                   -o "${includedir}" != "/usr/local/include" \) \
             -a \( "${cross_compiling}" != "yes" \
                   -o "${includedir}" != "/usr/${target}/include" \) ;
