@@ -36,6 +36,7 @@
     #include "wx/settings.h"
     #include "wx/bitmap.h"
     #include "wx/dcmemory.h"
+    #include "wx/settings.h"
 #endif
 
 #if wxUSE_TOOLBAR && defined(__WIN95__) && wxUSE_TOOLBAR_NATIVE
@@ -393,7 +394,8 @@ bool wxToolBar::Realize()
     wxMemoryDC dcAllButtons;
     wxBitmap bitmap(totalBitmapWidth, totalBitmapHeight);
     dcAllButtons.SelectObject(bitmap);
-    dcAllButtons.SetBackground(*wxLIGHT_GREY_BRUSH);
+    wxColour colTbar = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BTNFACE);
+    dcAllButtons.SetBackground(wxBrush(colTbar, wxSOLID));
     dcAllButtons.Clear();
 
     m_hBitmap = bitmap.GetHBITMAP();
@@ -433,8 +435,14 @@ bool wxToolBar::Realize()
             if ( bmp.Ok() )
             {
 #if USE_BITMAP_MASKS
-                // notice the last parameter: do use mask
-                dcAllButtons.DrawBitmap(tool->GetBitmap1(), x, 0, TRUE);
+                // blit the bitmap to the DC with the mask
+                wxBitmap bmpTool = tool->GetBitmap1();
+                if ( !bmpTool.GetMask() )
+                {
+                    // it doesn't have mask - create a default one
+                    bmpTool.SetMask(new wxMask(bmpTool, *wxLIGHT_GREY));
+                }
+                dcAllButtons.DrawBitmap(bmpTool, x, 0, TRUE);
 #else // !USE_BITMAP_MASKS
                 HBITMAP hbmp = GetHbitmapOf(bmp);
                 HBITMAP oldBitmap2 = (HBITMAP)::SelectObject(memoryDC2, hbmp);
@@ -471,10 +479,10 @@ bool wxToolBar::Realize()
     ::SelectObject(memoryDC, oldBitmap);
     ::DeleteDC(memoryDC);
     ::DeleteDC(memoryDC2);
-#endif // USE_BITMAP_MASKS/!USE_BITMAP_MASKS
 
     // Map to system colours
     wxMapBitmap(hBitmap, totalBitmapWidth, totalBitmapHeight);
+#endif // USE_BITMAP_MASKS/!USE_BITMAP_MASKS
 
     int bitmapId = 0;
 
@@ -1002,6 +1010,8 @@ long wxToolBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 // private functions
 // ----------------------------------------------------------------------------
 
+#if !USE_BITMAP_MASKS
+
 // These are the default colors used to map the bitmap colors to the current
 // system colors. Note that they are in BGR format because this is what Windows
 // wants (and not RGB)
@@ -1068,6 +1078,8 @@ void wxMapBitmap(HBITMAP hBitmap, int width, int height)
   }
 
 }
+
+#endif // USE_BITMAP_MASKS
 
 // Some experiments...
 #if 0
