@@ -787,8 +787,10 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
             // want to process arrows ourselves because neither of them is
             // smart enough to handle arrows properly for us
             {
-                long lDlgCode = ::CallWindowProc(s_wndprocRadioBtn, hwnd,
+                long lDlgCode = ::CallWindowProc(CASTWNDPROC s_wndprocRadioBtn, hwnd,
                                                  message, wParam, lParam);
+		//CallWindowProc(CASTWNDPROC gs_wndprocToolTip, hwndTT, msg, wParam, lParam);
+
                 return lDlgCode | DLGC_WANTARROWS;
             }
 
@@ -872,7 +874,9 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
             }
     }
 
-    return ::CallWindowProc(s_wndprocRadioBtn, hwnd, message, wParam, lParam);
+    return ::CallWindowProc(CASTWNDPROC s_wndprocRadioBtn, hwnd, message, wParam, lParam);
+    
+
 }
 
 #endif // __WIN32__
