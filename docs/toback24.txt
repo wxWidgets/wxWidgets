@@ -234,3 +234,33 @@ Checking in docs/latex/wx/progdlg.tex;
 new revision: 1.10; previous revision: 1.9
 done
 
+21. [ 668155 ] Refresh problem when msgbox is shown (wxUniversal)
+
+https://sourceforge.net/tracker/index.php?func=detail&aid=668155&group_id=9863&atid=309863
+
+Index: e:/dev/wxWindows/src/univ/winuniv.cpp
+===================================================================
+RCS file: /pack/cvsroots/wxwindows/wxWindows/src/univ/winuniv.cpp,v
+retrieving revision 1.35
+diff -u -2 -r1.35 winuniv.cpp
+--- e:/dev/wxWindows/src/univ/winuniv.cpp	2002/12/09 10:19:08	1.35
++++ e:/dev/wxWindows/src/univ/winuniv.cpp	2003/01/14 21:24:21
+@@ -392,4 +392,17 @@
+ 
+     wxWindowNative::Refresh(eraseBackground, &rectWin);
++
++    // Refresh all sub controls if any.
++    wxWindowList::Node *node = GetChildren().GetFirst();
++    while ( node )
++    {
++        wxWindow *win = node->GetData();
++        // Only refresh sub controls when it is visible 
++        // and when it is in the update region.
++        if(win->IsShown() && wxRegion(rectWin).Contains(win->GetRect()) != wxOutRegion)
++            win->Refresh(eraseBackground, &rectWin);
++            
++        node = node->GetNext();
++    }
+ }
+ 
+
