@@ -1218,6 +1218,11 @@ OSStatus wxMacControl::SetSelectedItems(UInt32 numItems,
     return SetDataBrowserSelectedItems( m_controlRef , numItems , items, operation ) ;
 }
 
+OSStatus wxMacControl::GetSelectionAnchor( DataBrowserItemID * first, DataBrowserItemID * last ) 
+{
+    return GetDataBrowserSelectionAnchor( m_controlRef , first , last ) ;
+}
+
 //
 // Tab Control
 //
