@@ -823,8 +823,6 @@ class wxPythonDemo(wx.Frame):
         self.dying = True
         self.window = None
         self.mainmenu = None
-        if hasattr(self, "tbicon"):
-            del self.tbicon
         self.Destroy()
 
 
