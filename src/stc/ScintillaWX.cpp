@@ -273,8 +273,6 @@ void ScintillaWX::AddToPopUp(const char *label, int cmd, bool enabled) {
 
     if (!enabled)
         popup.GetID()->Enable(cmd, enabled);
-
-    // TODO:  need to create event handler mappings for the cmd ID
 }
 
 
