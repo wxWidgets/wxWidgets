@@ -111,7 +111,7 @@ public:
 
     // Destructor.
     ~wxXmlResource();
-    
+
     // Loads resources from XML files that match given filemask.
     // This method understands VFS (see filesys.h).
     bool Load(const wxString& filemask);
@@ -127,6 +127,9 @@ public:
     // (xmlres) can create include file that contains initialization code for
     // all controls used within the resource.
     void AddHandler(wxXmlResourceHandler *handler);
+
+    // Add a new handler at the begining of the handler list
+    void InsertHandler(wxXmlResourceHandler *handler);
 
     // Removes all handlers
     void ClearHandlers();
@@ -165,7 +168,19 @@ public:
     bool LoadPanel(wxPanel *panel, wxWindow *parent, const wxString& name);
 
     // Loads a frame.
+    wxFrame *LoadFrame(wxWindow* parent, const wxString& name);
     bool LoadFrame(wxFrame* frame, wxWindow *parent, const wxString& name);
+
+    // Load an object from the resource specifying both the resource name and
+    // the classname.  This lets you load nonstandard container windows.
+    wxObject *LoadObject(wxWindow *parent, const wxString& name,
+                         const wxString& classname);
+
+    // Load an object from the resource specifying both the resource name and
+    // the classname.  This form lets you finish the creation of an existing
+    // instance.
+    bool LoadObject(wxObject *instance, wxWindow *parent, const wxString& name,
+                    const wxString& classname);
 
     // Loads a bitmap resource from a file.
     wxBitmap LoadBitmap(const wxString& name);
@@ -191,9 +206,9 @@ public:
     int CompareVersion(int major, int minor, int release, int revision) const
         { return GetVersion() -
                  (major*256*256*256 + minor*256*256 + release*256 + revision); }
-                 
+
 //// Singleton accessors.
-    
+
     // Gets the global resources object or creates one if none exists.
     static wxXmlResource *Get();
 
@@ -229,7 +244,7 @@ private:
 #endif
 
     friend class wxXmlResourceHandler;
-    
+
     // singleton instance:
     static wxXmlResource *ms_instance;
 };
@@ -423,7 +438,7 @@ protected:
 void wxXmlInitResourceModule();
 
 
-/* ------------------------------------------------------------------------- 
+/* -------------------------------------------------------------------------
    Backward compatibility macros. Do *NOT* use, they may disappear in future
    versions of the XRC library!
    ------------------------------------------------------------------------- */

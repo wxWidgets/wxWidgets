@@ -132,6 +132,12 @@ void wxXmlResource::AddHandler(wxXmlResourceHandler *handler)
     handler->SetParentResource(this);
 }
 
+void wxXmlResource::InsertHandler(wxXmlResourceHandler *handler)
+{
+    m_handlers.Insert(handler);
+    handler->SetParentResource(this);
+}
+
 
 
 void wxXmlResource::ClearHandlers()
@@ -188,6 +194,11 @@ bool wxXmlResource::LoadPanel(wxPanel *panel, wxWindow *parent, const wxString& 
     return CreateResFromNode(FindResource(name, wxT("wxPanel")), parent, panel) != NULL;
 }
 
+wxFrame *wxXmlResource::LoadFrame(wxWindow* parent, const wxString& name)
+{
+    return (wxFrame*)CreateResFromNode(FindResource(name, wxT("wxFrame")), parent, NULL);
+}
+
 bool wxXmlResource::LoadFrame(wxFrame* frame, wxWindow *parent, const wxString& name)
 {
     return CreateResFromNode(FindResource(name, wxT("wxFrame")), parent, frame) != NULL;
@@ -212,6 +223,18 @@ wxIcon wxXmlResource::LoadIcon(const wxString& name)
     if (icon) { rt = *icon; delete icon; }
     return rt;
 }
+
+
+wxObject *wxXmlResource::LoadObject(wxWindow *parent, const wxString& name, const wxString& classname)
+{
+    return CreateResFromNode(FindResource(name, classname), parent, NULL);
+}
+
+bool wxXmlResource::LoadObject(wxObject *instance, wxWindow *parent, const wxString& name, const wxString& classname)
+{
+    return CreateResFromNode(FindResource(name, classname), parent, instance) != NULL;
+}
+
 
 bool wxXmlResource::AttachUnknownControl(const wxString& name,
                                          wxWindow *control, wxWindow *parent)
@@ -756,7 +779,7 @@ wxColour wxXmlResourceHandler::GetColour(const wxString& param)
 
 
 
-wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param, 
+wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param,
                                          const wxArtClient& defaultArtClient,
                                          wxSize size)
 {
@@ -768,7 +791,7 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param,
         if ( !sid.empty() )
         {
             wxString scl = bmpNode->GetPropVal(wxT("stock_client"), defaultArtClient);
-            wxBitmap stockArt = 
+            wxBitmap stockArt =
                 wxArtProvider::GetBitmap(wxART_MAKE_ART_ID_FROM_STR(sid),
                                          wxART_MAKE_CLIENT_ID_FROM_STR(scl),
                                          size);
@@ -777,9 +800,9 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param,
         }
     }
 
-    /* ...or load the bitmap from file: */  
+    /* ...or load the bitmap from file: */
     wxString name = GetParamValue(param);
-    if (name.IsEmpty()) return wxNullBitmap;        
+    if (name.IsEmpty()) return wxNullBitmap;
 #if wxUSE_FILESYSTEM
     wxFSFile *fsfile = GetCurFileSystem().OpenFile(name);
     if (fsfile == NULL)
@@ -805,7 +828,7 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param,
 
 
 
-wxIcon wxXmlResourceHandler::GetIcon(const wxString& param, 
+wxIcon wxXmlResourceHandler::GetIcon(const wxString& param,
                                      const wxArtClient& defaultArtClient,
                                      wxSize size)
 {

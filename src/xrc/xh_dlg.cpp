@@ -7,7 +7,7 @@
 // Copyright:   (c) 2000 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
- 
+
 #ifdef __GNUG__
 #pragma implementation "xh_dlg.h"
 #endif
@@ -46,11 +46,9 @@ wxDialogXmlHandler::wxDialogXmlHandler() : wxXmlResourceHandler()
 }
 
 wxObject *wxDialogXmlHandler::DoCreateResource()
-{ 
-    wxDialog *dlg = wxDynamicCast(m_instance, wxDialog);
-    
-    wxASSERT_MSG(dlg, _("XRC resource: Cannot create dialog without instance."));
-    
+{
+    XRC_MAKE_INSTANCE(dlg, wxDialog);
+
     dlg->Create(m_parentAsWindow,
                 GetID(),
                 GetText(wxT("title")),
@@ -66,10 +64,10 @@ wxObject *wxDialogXmlHandler::DoCreateResource()
     SetupWindow(dlg);
 
     CreateChildren(dlg);
-    
+
     if (GetBool(wxT("centered"), FALSE))
         dlg->Centre();
-    
+
     return dlg;
 }
 
