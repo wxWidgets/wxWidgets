@@ -604,6 +604,9 @@
 // number entry dialog
 #define wxUSE_NUMBERDLG 1
 
+// color chooser dialog
+#define wxUSE_COLOURDLG 1
+
 // ----------------------------------------------------------------------------
 // Metafiles support
 // ----------------------------------------------------------------------------
