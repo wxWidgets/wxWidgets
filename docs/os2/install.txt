@@ -1,0 +1,147 @@
+Installing wxWindows 2.3.3
+--------------------------
+
+This is wxWindows 2.3.3 for IBM OS/2 Warp3 and Warp4. This is an unstable
+development release and OS/2 is considered to be in beta.
+
+IMPORTANT NOTE: If you experience problems installing, please
+re-read this instructions and other related files (changes.txt,
+readme.txt, notes on the Web site) carefully before mailing
+wx-users or the author. Preferably, try to fix the problem first and
+then send a patch to the author. Please report bugs using the
+bug report form on the wxWindows web site.
+
+Unarchiving
+-----------
+
+At this time there is no comprehensive setup.exe type installation program.
+wxWindows for OS/2 requires you download various .zip files and unpack them
+to your desired location on your system.  Pick a location say,
+C:\wx\wxwindows, copy the .zip files to there and unzip them ensuring you
+unzip the subdirectories as well.  You will need:
+
+- All common, generic and OS2-specific wxWindows source;
+- samples;
+- documentation in HTML Help format;
+- makefiles for VisualAge V3.0 (possibly for EMX and Watcom C++);
+- HTML library source;
+- JPEG library source;
+- TIFF library source;
+- PNG library source;
+- ZLIB library source;
+
+Other add-on packages are available from the wxWindows Web site, such as:
+
+- mmedia.zip. Audio, CD, video access for Windows and Linux.
+- ogl3.zip. Object Graphics Library: build network diagrams, CASE tools etc.
+- tex2rtf3.zip. Tex2RTF: create Windows Help, HTML, and Word RTF files from
+  the same document source.
+
+General installation notes
+--------------------------
+
+After unzipping everything your directory tree should look something like
+this:
+
+x:\wx\wxwindows\docs (your HTML reference manual)
+x:\wx\wxwindows\include\wx
+x:\wx\wxwindows\include\wx\generic
+x:\wx\wxwindows\include\wx\html
+x:\wx\wxwindows\include\wx\os2
+x:\wx\wxwindows\samples\....  (all the sample directories)
+x:\wx\wxwindows\src
+x:\wx\wxwindows\src\common
+x:\wx\wxwindows\src\generic
+x:\wx\wxwindows\src\html
+x:\wx\wxwindows\src\jpeg
+x:\wx\wxwindows\src\os2
+x:\wx\wxwindows\src\png
+x:\wx\wxwindows\src\tiff
+x:\wx\wxwindows\src\zlib
+
+You will need to ensure you have a \lib directory as well,
+x:\wx\wxwindows\lib.
+
+Set a WXWIN environment variable in your config.sys,
+SET WXWIN=X:\WX\WXWINDOWS;
+
+Compilation
+-----------
+
+For now, only VisualAge V3.0 FP 8 is supported.  However, the library has
+been successfully compiled with EMX and Watcom C++.  As those build
+environments get a bit more "formalized", I will add them here.
+
+In addition to VisualAge V3.0 Fixpack 8 you will need the following inorder
+to successfully build and use wxWindows for OS/2:
+
+1.  IBM OS/2 Toolkit Version 4.5 or later
+2.  IBM TCPIP V4.0 or later
+3.  You will need the IBMLAN Lan Requester service and UPM if you wish to use
+    network based components of the library (generally a standard part of any
+    Warp Connect 3.0 or Warp 4.0 installation.
+4.  I strongly suggest that you have the latest IBM fixpacks installed for
+    all your components.
+
+Go to the \src directory and open the file, makeva.env (there should be a
+.env for each supported compiler when they are fully supported), for edit.
+This is where the "make" environment for wxOS2 is set.  Locate UMPLIB, NETLIB,
+and TCPIP environment variables about 20 lines down.  Set these to match
+your system.
+
+There are number of possible outputs you can produce.  There is a static
+lib and a dynamically linked lib, and both can be built in debug or release
+mode.  Since wxOS2 is a beta and a rough one at that, I suggest, for now,
+you stick to the debug builds.  The resultant linkable binaries will be
+output to the \lib directory as will the .dll files.  The statically linked
+lib will be named wx.lib.  Each of the third party libs will be there as well,
+including png.lib, jpeg.lib, tiff.lib, and zlib.lib.  For DLL builds the
+import libs will have the same name, only with a 'd' appended.  Thus the
+import library for the main lib in a dll build is wxd.lib.
+
+Object modules will be output into paths dictated by the build mode.  For
+example, for debug static the outputs will be in DebugOS2, for DLLs in
+DebugOS2DLL.
+
+For your first build, you can directly build the library.  For subsequent
+builds you will want to "clean" the output paths.  To build the static library
+go to \src and execute nmake all -f makefile.va.  To clean out the outputs
+execute nmake clean -f makefile.va.
+
+To build the wx.dll execut nmake all -f makefile.va WXMAKINGDLL=1.  To clean
+the outputs execute namek clean -f makefile.va WXMAKINGDLL=1.  For
+VisualAge 3.0 we use the module definition file method.
+
+If, for some reason you encounter linking problems with your dll build you may
+need to rebuild the module definition file, wx23.def, found in \src\os2.  To
+do this you need to have a static version built.  Go to the \lib directoy and
+execute CPPFILT /B /P wx.lib>temp.def.  Copy this file to \src\os2.  Delete
+the temp.def from your \lib directory.
+
+I find the following to be the easiest to reconstruct the .def file.  Open
+both the wx23.def and the temp.def file.  Copy the header of the wx23.def to
+the clipboard and paste it into the top of the temp.def file.  If you have
+a valid SQL database client with its SDK on your system you can skip the next
+step.  wxWindows included some ODBC and SQL modules.  They expect the standard
+sql.h and such to available.  If you do not have a database client with its
+SDK (such as DB/2) then for the .dll build you need to delete the exports for
+the following three modules from your temp.def file, db.cpp, dbgrid.cpp and
+dbtable.cpp.  save you changes to temp.def.  Delete wx23.def and rename your
+temp.def to wx23.def and you are ready to go.
+
+I hope to clean up the .dll builds at some point before the the library is
+a full fledged production caliber product.  Fortunately EMX and Watcom can use
+the import and export pragmas successfully negating the need for manual .def
+files.  VA 3.0, unfortunately in C++ does not properly export the mangled
+names so we are stuck with the CPPFILT .def file method of .dll builds for
+now.
+
+When building an application that uses the wx.dll you need to build it using
+the WXUSINGDLL=1 macro.  For example to build the minimal sample you would
+go to \samples\minimal and execute nmake all -f makefile.va WXUSINGDLL=1.
+
+I strongly suggest when developing apps using wxWindows for OS/2 under old
+VisualAge 3.0, that you use the dynamically linked library. The library is
+very large and even the most trivial statically linked .exe can be very
+large and take a long time to link.  The release builds are much smaller,
+however.  Fortunately, EMX seems to build much smaller static executables.
