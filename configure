@@ -6735,7 +6735,6 @@ if test "x$wxUSE_COCOA" != "x" -a "$wxUSE_COCOA" != "0" ; then
   wxUSE_DRAG_AND_DROP=no
   # Generic notebook requires tab dialog
   DEFAULT_wxUSE_TABDIALOG=yes
-  DEFAULT_wxUSE_TOOLBAR_NATIVE=no
   DEFAULT_wxUSE_SCROLLBAR=no
   DEFAULT_wxUSE_TOOLTIPS=no
   DEFAULT_wxUSE_DRAGIMAGE=no
@@ -9833,6 +9832,7 @@ if test "$wxUSE_WINE" = "yes"; then
         CC=winegcc
     CXX=wineg++
     RESCOMP=wrc
+    LDFLAGS_GUI="-mwindows"
 fi
 
 if test "$wants_win32" = 1 ; then
@@ -18909,6 +18909,12 @@ if test "$wxUSE_REGEX" != "no"; then
 #define wxUSE_REGEX 1
 _ACEOF
 
+
+    if test "$wxUSE_UNICODE" = "yes" -a "$wxUSE_REGEX" = "yes"; then
+        { echo "$as_me:$LINENO: WARNING: Unicode build requires built-in regex library, will use it instead" >&5
+echo "$as_me: WARNING: Unicode build requires built-in regex library, will use it instead" >&2;}
+        wxUSE_REGEX=builtin
+    fi
 
     if test "$wxUSE_REGEX" = "sys" -o "$wxUSE_REGEX" = "yes" ; then
                         if test "${ac_cv_header_regex_h+set}" = set; then
@@ -33789,11 +33795,6 @@ if test "$wxUSE_SOCKETS" = "yes"; then
     if test "$wxUSE_MGL" = "1"; then
         { echo "$as_me:$LINENO: WARNING: wxSocket not yet supported under MGL... disabled" >&5
 echo "$as_me: WARNING: wxSocket not yet supported under MGL... disabled" >&2;}
-        wxUSE_SOCKETS="no"
-    fi
-    if test "$wxUSE_COCOA" = "1"; then
-        { echo "$as_me:$LINENO: WARNING: wxSocket not yet supported under Cocoa... disabled" >&5
-echo "$as_me: WARNING: wxSocket not yet supported under Cocoa... disabled" >&2;}
         wxUSE_SOCKETS="no"
     fi
 fi

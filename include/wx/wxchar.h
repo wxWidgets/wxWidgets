@@ -869,9 +869,11 @@ WXDLLIMPEXP_BASE int wxStrnicmp(const wxChar *psz1, const wxChar *psz2, size_t l
 WXDLLIMPEXP_BASE wxChar * wxStrtok(wxChar *psz, const wxChar *delim, wxChar **save_ptr);
 #endif
 
+#ifdef __cplusplus
 #ifndef wxSetlocale
 class WXDLLIMPEXP_BASE wxWCharBuffer;
 WXDLLIMPEXP_BASE wxWCharBuffer wxSetlocale(int category, const wxChar *locale);
+#endif
 #endif
 
 /*  stdio.h functions */

@@ -1877,6 +1877,11 @@ dnl ------------------------------------------------------------------------
 
 if test "$wxUSE_REGEX" != "no"; then
     AC_DEFINE(wxUSE_REGEX)
+            
+    if test "$wxUSE_UNICODE" = "yes" -a "$wxUSE_REGEX" = "yes"; then
+        AC_MSG_WARN([Unicode build requires built-in regex library, will use it instead])
+        wxUSE_REGEX=builtin
+    fi
 
     if test "$wxUSE_REGEX" = "sys" -o "$wxUSE_REGEX" = "yes" ; then
         dnl according to Unix 98 specs, regcomp() is in libc but I believe that
