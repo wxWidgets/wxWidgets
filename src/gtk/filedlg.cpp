@@ -110,8 +110,13 @@ static void gtk_filedialog_response_callback(GtkWidget *w,
     
     if (response == GTK_RESPONSE_ACCEPT)
         gtk_filedialog_ok_callback(w, dialog);
-    else
+    else if (response == GTK_RESPONSE_CANCEL)
         gtk_filedialog_cancel_callback(w, dialog);
+    else // "delete"
+    {
+        gtk_filedialog_cancel_callback(w, dialog);
+        dialog->m_destroyed_by_delete = TRUE;
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -129,6 +134,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
                        wildCard, style, pos)
 {
     m_needParent = FALSE;
+    m_destroyed_by_delete = FALSE;
 
     if (!PreCreation(parent, pos, wxDefaultSize) ||
         !CreateBase(parent, wxID_ANY, pos, wxDefaultSize, style,
@@ -182,6 +188,8 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
 
 wxFileDialog::~wxFileDialog()
 {
+    if (m_destroyed_by_delete)
+        m_widget = NULL;
 }
 
 void wxFileDialog::GetFilenames(wxArrayString& files) const 
