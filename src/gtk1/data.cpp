@@ -7,7 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
 #ifdef __GNUG__
 // #pragma implementation
 #endif
@@ -21,14 +20,6 @@
 #include "wx/icon.h"
 
 #define _MAXPATHLEN 500
-
-/* Used for X resources */
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/Xresource.h>
-
-wxResourceCache *wxTheResourceCache = (wxResourceCache *) NULL;
-XrmDatabase wxResourceDatabase;
 
 /* Useful buffer, initialized in wxCommonInit */
 wxChar *wxBuffer = (wxChar *) NULL;

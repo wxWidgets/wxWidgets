@@ -47,14 +47,11 @@
 wxApp *wxTheApp = (wxApp *)  NULL;
 wxAppInitializerFunction wxAppBase::m_appInitFn = (wxAppInitializerFunction) NULL;
 
-extern wxResourceCache *wxTheResourceCache;
 extern bool g_isIdle;
 
 //-----------------------------------------------------------------------------
 // local functions
 //-----------------------------------------------------------------------------
-
-extern void wxFlushResources();
 
 /* forward declaration */
 gint   wxapp_idle_callback( gpointer WXUNUSED(data) );
@@ -498,12 +495,6 @@ bool wxApp::Initialize()
     wxInitializeStockLists();
     wxInitializeStockObjects();
 
-#if wxUSE_WX_RESOURCES
-    wxTheResourceCache = new wxResourceCache( wxKEY_STRING );
-
-    wxInitializeResourceSystem();
-#endif
-
     wxModule::RegisterModules();
     if (!wxModule::InitializeModules()) return FALSE;
 
@@ -513,16 +504,6 @@ bool wxApp::Initialize()
 void wxApp::CleanUp()
 {
     wxModule::CleanUpModules();
-
-#if wxUSE_WX_RESOURCES
-    wxFlushResources();
-
-    if (wxTheResourceCache)
-        delete wxTheResourceCache;
-    wxTheResourceCache = (wxResourceCache*) NULL;
-
-    wxCleanUpResourceSystem();
-#endif
 
     if (wxTheColourDatabase)
         delete wxTheColourDatabase;

@@ -325,6 +325,7 @@ GSocket *GSocket_WaitConnection(GSocket *socket)
   struct sockaddr from;
   SOCKLEN_T fromlen = sizeof(from);
   GSocket *connection;
+  GSocketError err;
   int arg = 1;
 
   assert(socket != NULL);
