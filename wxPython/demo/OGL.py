@@ -2,11 +2,6 @@
 #
 # o Updated for wx namespace
 # 
-# 11/30/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
-# o OGL's busted bigtime. Can't even use OGLInitialize() without a 
-#   program error on w2k.
-# 
 
 import  wx
 import  wx.ogl  as  ogl
@@ -249,7 +244,7 @@ class TestWindow(ogl.ShapeCanvas):
             # for some reason, the shapes have to be moved for the line to show up...
             fromShape.Move(dc, fromShape.GetX(), fromShape.GetY())
 
-        wx.EVT_WINDOW_DESTROY(self, self.OnDestroy)
+        self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy)
 
 
     def MyAddShape(self, shape, x, y, pen, brush, text):
