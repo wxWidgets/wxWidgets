@@ -1229,7 +1229,6 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
         }
 
     case WM_KEYDOWN:
-    {
         // If this has been processed by an event handler,
         // return 0 now (we've handled it).
         if (MSWOnKeyDown((WORD) wParam, lParam))
@@ -1255,24 +1254,41 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             case VK_RIGHT:
             case VK_DOWN:
             case VK_UP:
-            {
                 return Default();
+
+#ifdef VK_APPS
+            // special case of VK_APPS: treat it the same as right mouse click
+            // because both usually pop up a context menu
+            case VK_APPS:
+                {
+                    // construct the key mask
+                    WPARAM fwKeys = MK_RBUTTON;
+                    if ( (::GetKeyState(VK_CONTROL) & 0x100) != 0 )
+                        fwKeys |= MK_CONTROL;
+                    if ( (::GetKeyState(VK_SHIFT) & 0x100) != 0 )
+                        fwKeys |= MK_SHIFT;
+
+                    // simulate right mouse button click
+                    DWORD dwPos = ::GetMessagePos();
+                    int x = GET_X_LPARAM(dwPos),
+                        y = GET_Y_LPARAM(dwPos);
+
+                    ScreenToClient(&x, &y);
+                    MSWOnRButtonDown(x, y, fwKeys);
+                }
                 break;
-            }
+#endif // VK_APPS
+
             default:
                 if (!MSWOnChar((WORD)wParam, lParam))
                 {
                     return Default();
                 }
-/*
-                if ( ::GetKeyState(VK_CONTROL) & 0x100 )
-                    return Default();
-*/
                 break;
         }
 
         break;
-    }
+
     case WM_KEYUP:
     {
         if (!MSWOnKeyUp((WORD) wParam, lParam))
