@@ -29,7 +29,7 @@
 #include "wx/dcclient.h"
 #endif
 
-#include "wx/statusbr.h"
+#include "wx/generic/statusbr.h"
 
 #ifdef __WXMSW__
 #include <windows.h>
