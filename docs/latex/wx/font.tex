@@ -19,6 +19,23 @@ You can retrieve the current system font settings with \helpref{wxSystemSettings
 
 \wxheading{Constants}
 
+The possible values for the \arg{family} parameter of \helpref{wxFont
+constructor}{wxfontconstr} are (the old names are for compatibility only):
+
+\begin{verbatim}
+enum wxFontFamily
+{
+    wxFONTFAMILY_DEFAULT = wxDEFAULT,
+    wxFONTFAMILY_DECORATIVE = wxDECORATIVE,
+    wxFONTFAMILY_ROMAN = wxROMAN,
+    wxFONTFAMILY_SCRIPT = wxSCRIPT,
+    wxFONTFAMILY_SWISS = wxSWISS,
+    wxFONTFAMILY_MODERN = wxMODERN,
+    wxFONTFAMILY_TELETYPE = wxTELETYPE,
+    wxFONTFAMILY_MAX
+};
+\end{verbatim}
+
 The font flags which can be used during the font creation are:
 
 \begin{verbatim}
@@ -128,22 +145,31 @@ wxSWISS\_FONT}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxFont::wxFont}\label{wxfontconstr}
 
 \func{}{wxFont}{\void}
 
 Default constructor.
 
-\func{}{wxFont}{\param{int}{ pointSize}, \param{int}{ family}, \param{int}{ style}, \param{int}{ weight},
+\func{}{wxFont}{\param{int}{ pointSize}, \param{wxFontFamily}{ family}, \param{int}{ style}, \param{int}{ weight},
  \param{const bool}{ underline = false}, \param{const wxString\& }{faceName = ""},
  \param{wxFontEncoding }{encoding = wxFONTENCODING\_DEFAULT}}
 
-Creates a font object (see \helpref{font encoding
-overview}{wxfontencodingoverview} for the meaning of the last parameter).
+\func{}{wxFont}{\param{const wxSize\&}{ pixelSize}, \param{wxFontFamily}{ family}, \param{int}{ style}, \param{int}{ weight},
+ \param{const bool}{ underline = false}, \param{const wxString\& }{faceName = ""},
+ \param{wxFontEncoding }{encoding = wxFONTENCODING\_DEFAULT}}
+
+Creates a font object with the specified attributes.
 
 \wxheading{Parameters}
 
 \docparam{pointSize}{Size in points.}
+
+\docparam{pixelSize}{Size in pixels: this is directly supported only under MSW
+currently where this constructor can be used directly, under other platforms a
+font with the closest size to the given one is found using binary search and
+the static \helpref{New}{wxfontnew} method must be used.}
 
 \docparam{family}{Font family, a generic way of referring to fonts without specifying actual facename. One of:
 
@@ -179,7 +205,8 @@ default application encoding is the same as default system encoding.}
 \twocolitem{{\bf wxFONTENCODING\_KOI8}}{The standard Russian encoding for Internet.}
 \twocolitem{{\bf wxFONTENCODING\_CP1250...1252}}{Windows encodings similar to ISO8859 (but not identical).}
 \end{twocollist}
-If the specified encoding isn't available, no font is created.
+If the specified encoding isn't available, no font is created
+(see also \helpref{font encoding overview}{wxfontencodingoverview}).
 }
 
 \wxheading{Remarks}
@@ -189,6 +216,7 @@ Under Windows, only scalable TrueType fonts are used.
 
 See also \helpref{wxDC::SetFont}{wxdcsetfont}, \helpref{wxDC::DrawText}{wxdcdrawtext}
 and \helpref{wxDC::GetTextExtent}{wxdcgettextextent}.
+
 
 \membersection{wxFont::\destruct{wxFont}}
 
@@ -206,12 +234,14 @@ the application should try to clean up all fonts itself. This is because
 wxWidgets cannot know if a pointer to the font object is stored in an
 application data structure, and there is a risk of double deletion.
 
+
 \membersection{wxFont::IsFixedWidth}\label{wxfontisfixedwidth}
 
 \constfunc{bool}{IsFixedWidth}{\void}
 
 Returns {\tt true} if the font is a fixed width (or monospaced) font, 
 {\tt false} if it is a proportional one or font is invalid.
+
 
 \membersection{wxFont::GetDefaultEncoding}\label{wxfontgetdefaultencoding}
 
@@ -224,6 +254,7 @@ Returns the current application's default encoding.
 \helpref{Font encoding overview}{wxfontencodingoverview}, 
 \helpref{SetDefaultEncoding}{wxfontsetdefaultencoding}
 
+
 \membersection{wxFont::GetFaceName}\label{wxfontgetfacename}
 
 \constfunc{wxString}{GetFaceName}{\void}
@@ -234,6 +265,7 @@ typeface information.
 \wxheading{See also}
 
 \helpref{wxFont::SetFaceName}{wxfontsetfacename}
+
 
 \membersection{wxFont::GetFamily}\label{wxfontgetfamily}
 
@@ -246,6 +278,7 @@ family identifiers.
 
 \helpref{wxFont::SetFamily}{wxfontsetfamily}
 
+
 \membersection{wxFont::GetNativeFontInfoDesc}\label{wxfontgetnativefontinfodesc}
 
 \constfunc{wxString}{GetNativeFontInfoDesc}{\void}
@@ -257,6 +290,7 @@ empty string if the font wasn't constructed using the native font description.
 
 \helpref{wxFont::SetNativeFontInfo}{wxfontsetnativefontinfo}
 
+
 \membersection{wxFont::GetPointSize}\label{wxfontgetpointsize}
 
 \constfunc{int}{GetPointSize}{\void}
@@ -266,6 +300,7 @@ Gets the point size.
 \wxheading{See also}
 
 \helpref{wxFont::SetPointSize}{wxfontsetpointsize}
+
 
 \membersection{wxFont::GetStyle}\label{wxfontgetstyle}
 
@@ -278,6 +313,7 @@ styles.
 
 \helpref{wxFont::SetStyle}{wxfontsetstyle}
 
+
 \membersection{wxFont::GetUnderlined}\label{wxfontgetunderlined}
 
 \constfunc{bool}{GetUnderlined}{\void}
@@ -287,6 +323,7 @@ Returns true if the font is underlined, false otherwise.
 \wxheading{See also}
 
 \helpref{wxFont::SetUnderlined}{wxfontsetunderlined}
+
 
 \membersection{wxFont::GetWeight}\label{wxfontgetweight}
 
@@ -299,11 +336,38 @@ weight identifiers.
 
 \helpref{wxFont::SetWeight}{wxfontsetweight}
 
+
+\membersection{wxFont::New}\label{wxfontnew}
+
+\func{static wxFont *}{New}{\param{int}{ pointSize}, \param{wxFontFamily}{ family}, \param{int}{ style}, \param{int}{ weight},
+ \param{const bool}{ underline = false}, \param{const wxString\& }{faceName = ""},
+ \param{wxFontEncoding }{encoding = wxFONTENCODING\_DEFAULT}}
+
+\func{static wxFont *}{New}{\param{int}{ pointSize}, \param{wxFontFamily}{ family}, 
+ \param{int}{ flags = \texttt{wxFONTFLAG\_DEFAULT}}, \param{const wxString\& }{faceName = ""},
+ \param{wxFontEncoding }{encoding = wxFONTENCODING\_DEFAULT}}
+
+\func{static wxFont *}{New}{\param{const wxSize\&}{ pixelSize}, \param{wxFontFamily}{ family}, \param{int}{ style}, \param{int}{ weight},
+ \param{const bool}{ underline = false}, \param{const wxString\& }{faceName = ""},
+ \param{wxFontEncoding }{encoding = wxFONTENCODING\_DEFAULT}}
+
+\func{static wxFont *}{New}{\param{const wxSize\&}{ pixelSize}, \param{wxFontFamily}{ family}, 
+ \param{int}{ flags = \texttt{wxFONTFLAG\_DEFAULT}}, \param{const wxString\& }{faceName = ""},
+ \param{wxFontEncoding }{encoding = wxFONTENCODING\_DEFAULT}}
+
+These functions take the same parameters as \helpref{wxFont
+constructor}{wxfontconstr} and return a new font object allocated on the heap.
+
+Using \texttt{New()} is currently the only way to directly create a font with
+the given size in pixels on platforms other than wxMSW.
+
+
 \membersection{wxFont::Ok}\label{wxfontok}
 
 \constfunc{bool}{Ok}{\void}
 
 Returns {\tt true} if this object is a valid font, {\tt false} otherwise.
+
 
 \membersection{wxFont::SetDefaultEncoding}\label{wxfontsetdefaultencoding}
 
@@ -315,6 +379,7 @@ Sets the default font encoding.
 
 \helpref{Font encoding overview}{wxfontencodingoverview}, 
 \helpref{GetDefaultEncoding}{wxfontgetdefaultencoding}
+
 
 \membersection{wxFont::SetFaceName}\label{wxfontsetfacename}
 
@@ -336,6 +401,7 @@ and then for a font belonging to the same family.
 \wxheading{See also}
 
 \helpref{wxFont::GetFaceName}{wxfontgetfacename}, \helpref{wxFont::SetFamily}{wxfontsetfamily}
+
 
 \membersection{wxFont::SetFamily}\label{wxfontsetfamily}
 
@@ -361,6 +427,7 @@ Sets the font family.
 
 \helpref{wxFont::GetFamily}{wxfontgetfamily}, \helpref{wxFont::SetFaceName}{wxfontsetfacename}
 
+
 \membersection{wxFont::SetNativeFontInfo}\label{wxfontsetnativefontinfo}
 
 \func{void}{SetNativeFontInfo}{\param{const wxString\& }{info}}
@@ -369,6 +436,7 @@ Creates the font corresponding to the given native font description string
 which must have been previously returned by 
 \helpref{GetNativeFontInfoDesc}{wxfontgetnativefontinfodesc}. If the string is
 invalid, font is unchanged.
+
 
 \membersection{wxFont::SetPointSize}\label{wxfontsetpointsize}
 
@@ -384,6 +452,7 @@ Sets the point size.
 
 \helpref{wxFont::GetPointSize}{wxfontgetpointsize}
 
+
 \membersection{wxFont::SetStyle}\label{wxfontsetstyle}
 
 \func{void}{SetStyle}{\param{int}{ style}}
@@ -397,6 +466,7 @@ Sets the font style.
 \wxheading{See also}
 
 \helpref{wxFont::GetStyle}{wxfontgetstyle}
+
 
 \membersection{wxFont::SetUnderlined}\label{wxfontsetunderlined}
 
@@ -412,6 +482,7 @@ Sets underlining.
 
 \helpref{wxFont::GetUnderlined}{wxfontgetunderlined}
 
+
 \membersection{wxFont::SetWeight}\label{wxfontsetweight}
 
 \func{void}{SetWeight}{\param{int}{ weight}}
@@ -426,12 +497,14 @@ Sets the font weight.
 
 \helpref{wxFont::GetWeight}{wxfontgetweight}
 
+
 \membersection{wxFont::operator $=$}\label{wxfontassignment}
 
 \func{wxFont\&}{operator $=$}{\param{const wxFont\& }{font}}
 
 Assignment operator, using reference counting. Returns a reference
 to `this'.
+
 
 \membersection{wxFont::operator $==$}\label{wxfontequals}
 
@@ -441,6 +514,7 @@ Equality operator. Two fonts are equal if they contain pointers
 to the same underlying font data. It does not compare each attribute,
 so two independently-created fonts using the same parameters will
 fail the test.
+
 
 \membersection{wxFont::operator $!=$}\label{wxfontnotequals}
 

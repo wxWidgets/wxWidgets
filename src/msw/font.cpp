@@ -108,11 +108,14 @@ public:
     // constructors
     wxFontRefData()
     {
-        Init(-1, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL,
-             false, wxEmptyString, wxFONTENCODING_DEFAULT);
+        Init(-1, wxSize(0, 0), FALSE, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL,
+             wxFONTWEIGHT_NORMAL, FALSE, wxEmptyString,
+             wxFONTENCODING_DEFAULT);
     }
 
     wxFontRefData(int size,
+                  const wxSize& pixelSize,
+                  bool sizeUsingPixels,
                   int family,
                   int style,
                   int weight,
@@ -120,7 +123,8 @@ public:
                   const wxString& faceName,
                   wxFontEncoding encoding)
     {
-        Init(size, family, style, weight, underlined, faceName, encoding);
+        Init(size, pixelSize, sizeUsingPixels, family, style, weight,
+             underlined, faceName, encoding);
     }
 
     wxFontRefData(const wxNativeFontInfo& info, WXHFONT hFont = 0)
@@ -136,7 +140,8 @@ public:
         }
         else
         {
-            Init(data.m_pointSize, data.m_family, data.m_style, data.m_weight,
+            Init(data.m_pointSize, data.m_pixelSize, data.m_sizeUsingPixels,
+                 data.m_family, data.m_style, data.m_weight,
                  data.m_underlined, data.m_faceName, data.m_encoding);
         }
     }
@@ -153,6 +158,17 @@ public:
     {
         return m_nativeFontInfoOk ? m_nativeFontInfo.GetPointSize()
                                   : m_pointSize;
+    }
+
+    wxSize GetPixelSize() const
+    {
+        return m_nativeFontInfoOk ? m_nativeFontInfo.GetPixelSize()
+                                  : m_pixelSize;
+    }
+    
+    bool IsUsingSizeInPixels() const
+    {
+        return m_nativeFontInfoOk ? TRUE : m_sizeUsingPixels;
     }
 
     int GetFamily() const
@@ -201,9 +217,27 @@ public:
     void SetPointSize(int pointSize)
     {
         if ( m_nativeFontInfoOk )
+        {
             m_nativeFontInfo.SetPointSize(pointSize);
+        }
         else
+        {
             m_pointSize = pointSize;
+            m_sizeUsingPixels = FALSE;
+        }
+    }
+
+    void SetPixelSize(const wxSize& pixelSize)
+    {
+        if ( m_nativeFontInfoOk )
+        {
+            m_nativeFontInfo.SetPixelSize(pixelSize);
+        }
+        else
+        {
+            m_pixelSize = pixelSize;
+            m_sizeUsingPixels = TRUE;
+        }
     }
 
     void SetFamily(int family)
@@ -260,6 +294,8 @@ public:
 protected:
     // common part of all ctors
     void Init(int size,
+              const wxSize& pixelSize,
+              bool sizeUsingPixels,
               int family,
               int style,
               int weight,
@@ -271,6 +307,8 @@ protected:
 
     // font characterstics
     int           m_pointSize;
+    wxSize        m_pixelSize;
+    bool          m_sizeUsingPixels;
     int           m_family;
     int           m_style;
     int           m_weight;
@@ -295,6 +333,8 @@ protected:
 // ----------------------------------------------------------------------------
 
 void wxFontRefData::Init(int pointSize,
+                         const wxSize& pixelSize,
+                         bool sizeUsingPixels,
                          int family,
                          int style,
                          int weight,
@@ -304,6 +344,8 @@ void wxFontRefData::Init(int pointSize,
 {
     m_style = style;
     m_pointSize = pointSize == -1 ? wxNORMAL_FONT->GetPointSize() : pointSize;
+    m_pixelSize = pixelSize;
+    m_sizeUsingPixels = sizeUsingPixels;
     m_family = family;
     m_style = style;
     m_weight = weight;
@@ -388,6 +430,14 @@ int wxNativeFontInfo::GetPointSize() const
     return (int) (((72.0*(double)abs(lf.lfHeight)) / (double) ppInch) + 0.5);
 }
 
+wxSize wxNativeFontInfo::GetPixelSize() const
+{
+    wxSize ret;
+    ret.SetHeight(lf.lfHeight);
+    ret.SetWidth(lf.lfWidth);
+    return ret;
+}
+
 wxFontStyle wxNativeFontInfo::GetStyle() const
 {
     return lf.lfItalic ? wxFONTSTYLE_ITALIC : wxFONTSTYLE_NORMAL;
@@ -467,6 +517,13 @@ void wxNativeFontInfo::SetPointSize(int pointsize)
     lf.lfHeight = -(int)((pointsize*((double)ppInch)/72.0) + 0.5);
 #endif // wxFONT_SIZE_COMPATIBILITY/!wxFONT_SIZE_COMPATIBILITY
 }
+
+void wxNativeFontInfo::SetPixelSize(const wxSize& pixelSize)
+{
+    lf.lfHeight = pixelSize.GetHeight();
+    lf.lfWidth = pixelSize.GetWidth();
+}
+
 
 void wxNativeFontInfo::SetStyle(wxFontStyle style)
 {
@@ -731,6 +788,8 @@ wxFont::wxFont(const wxString& fontdesc)
  * in wxDC::SetFont, when information is available about scaling etc.
  */
 bool wxFont::Create(int pointSize,
+                    const wxSize& pixelSize,
+                    bool sizeUsingPixels,
                     int family,
                     int style,
                     int weight,
@@ -747,7 +806,8 @@ bool wxFont::Create(int pointSize,
         pointSize = wxNORMAL_FONT->GetPointSize();
     }
 
-    m_refData = new wxFontRefData(pointSize, family, style, weight,
+    m_refData = new wxFontRefData(pointSize, pixelSize, sizeUsingPixels,
+                                  family, style, weight,
                                   underlined, faceName, encoding);
 
     RealizeResource();
@@ -830,6 +890,15 @@ void wxFont::SetPointSize(int pointSize)
     RealizeResource();
 }
 
+void wxFont::SetPixelSize(const wxSize& pixelSize)
+{
+    Unshare();
+
+    M_FONTDATA->SetPixelSize(pixelSize);
+
+    RealizeResource();
+}
+
 void wxFont::SetFamily(int family)
 {
     Unshare();
@@ -904,6 +973,18 @@ int wxFont::GetPointSize() const
     wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
 
     return M_FONTDATA->GetPointSize();
+}
+
+wxSize wxFont::GetPixelSize() const
+{
+    return M_FONTDATA->GetPixelSize();
+}
+
+bool wxFont::IsUsingSizeInPixels() const
+{
+    wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
+
+    return M_FONTDATA->IsUsingSizeInPixels();
 }
 
 int wxFont::GetFamily() const

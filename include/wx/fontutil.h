@@ -162,7 +162,14 @@ public:
         SetStyle((wxFontStyle)font.GetStyle());
         SetWeight((wxFontWeight)font.GetWeight());
         SetUnderlined(font.GetUnderlined());
+#if defined(__WXMSW__)
+        if ( font.IsUsingSizeInPixels() )
+            SetPixelSize(font.GetPixelSize());
+        else
         SetPointSize(font.GetPointSize());
+#else
+        SetPointSize(font.GetPointSize());
+#endif
 
         // set the family/facename
         SetFamily((wxFontFamily)font.GetFamily());
@@ -179,6 +186,7 @@ public:
 
     // accessors and modifiers for the font elements
     int GetPointSize() const;
+    wxSize GetPixelSize() const;
     wxFontStyle GetStyle() const;
     wxFontWeight GetWeight() const;
     bool GetUnderlined() const;
@@ -187,6 +195,7 @@ public:
     wxFontEncoding GetEncoding() const;
 
     void SetPointSize(int pointsize);
+    void SetPixelSize(const wxSize& pixelSize);
     void SetStyle(wxFontStyle style);
     void SetWeight(wxFontWeight weight);
     void SetUnderlined(bool underlined);
