@@ -448,16 +448,17 @@ void wxTreeTextCtrl::OnKeyUp( wxKeyEvent &event )
 
 void wxTreeTextCtrl::OnKillFocus( wxFocusEvent &event )
 {
-    if ( m_finished )
+    if ( !m_finished )
     {
-        event.Skip();
-        return;
-    }
-
-    if ( AcceptChanges() )
-    {
+        AcceptChanges();
+        // We must finish regardless of success, otherwise we'll get
+        // focus problems:
         Finish();
     }
+
+    // We must let the native text control handle focus, too, otherwise
+    // it could have problems with the cursor (e.g., in wxGTK):
+    event.Skip();
 }
 
 // -----------------------------------------------------------------------------
