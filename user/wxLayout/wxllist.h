@@ -413,7 +413,8 @@ public:
    */
    wxLayoutObjectList::iterator FindObjectScreen(wxDC &dc,
                                                  CoordType xpos,
-                                                 CoordType *offset) const ;
+                                                 CoordType *offset,
+                                                 bool *found = NULL) const ;
 
    /** Get the first object in the list. This is used by the wxlparser 
        functions to export the list.
@@ -469,9 +470,13 @@ public:
        position. It assumes that Layout() has been called before.
        @param dc the wxDC to use for calculations
        @param xpos screen x position
+       @param found if non-NULL set to false if we return the last
+       object before the cursor, to true if we really have an object
+       for that position
        @return pointer to the object
    */
-   wxLayoutObject * FindObjectScreen(wxDC &dc, CoordType xpos);
+   wxLayoutObject * FindObjectScreen(wxDC &dc, CoordType xpos, bool
+                                     *found = NULL);
    //@}
 
    /**@name List traversal */
@@ -505,6 +510,11 @@ public:
    void RecalculatePositions(int recurse, wxLayoutList *llist);
    /// Recalculates the position of this line on the canvas.
    wxPoint RecalculatePosition(wxLayoutList *llist);
+
+#ifdef WXLAYOUT_DEBUG
+   void Debug(void);
+#endif
+   
 private:
    /// Destructor is private. Use DeleteLine() to remove it.
    ~wxLayoutLine();
@@ -723,7 +733,8 @@ public:
        @param top optional y coordinate where to start drawing
        @param bottom optional y coordinate where to stop drawing
    */
-   void Draw(wxDC &dc, const wxPoint &offset = wxPoint(0,0),
+   void Draw(wxDC &dc,
+             const wxPoint &offset = wxPoint(0,0),
              CoordType top = -1, CoordType bottom = -1);
 
    /** Calculates new layout for the list, like Draw() but does not
@@ -766,16 +777,25 @@ public:
        position. It assumes that Layout() has been called before.
        @param pos screen position
        @param cursorPos if non NULL, store cursor position in there
+       @param found if used, set this to true if we really found an
+       object, to false if we had to take the object near to it
        @return pointer to the object
    */
    wxLayoutObject * FindObjectScreen(wxDC &dc,
                                      wxPoint const pos,
-                                     wxPoint *cursorPos = NULL);
+                                     wxPoint *cursorPos = NULL,
+                                     bool *found = NULL);
 
+   /** Called by the objects to update the update rectangle.
+       @param x horizontal coordinate to include in rectangle
+       @param y vertical coordinate to include in rectangle
+   */
+   void SetUpdateRect(CoordType x, CoordType y);
    /** Called by the objects to update the update rectangle.
        @param p a point to include in it
    */
-   void SetUpdateRect(const wxPoint &p);
+   inline void SetUpdateRect(const wxPoint &p)
+      { SetUpdateRect(p.x,p.y); }
    /// Invalidates the update rectangle.
    void InvalidateUpdateRect(void) { m_UpdateRectValid = false; }
    /// Returns the update rectangle.
@@ -792,10 +812,17 @@ public:
       }
    //@}
 
+   /// Begin selecting text.
    void StartSelection(void);
+   /// End selecting text.
    void EndSelection(void);
+   /// Are we still selecting text?
+   bool IsSelecting(void);
    bool IsSelected(const wxPoint &cursor);
 
+#ifdef WXLAYOUT_DEBUG
+   void Debug(void);
+#endif
 private:
    /// Clear the list.
    void InternalClear(void);
@@ -825,7 +852,9 @@ private:
    struct Selection
    {
       bool m_valid;
+      bool m_selecting;
       wxPoint m_CursorA, m_CursorB;
+      Selection() { m_valid = false; m_selecting = true; }
    } m_Selection;
    /** @name Font parameters. */
    //@{
@@ -862,6 +891,9 @@ public:
    wxLayoutPrintout(wxLayoutList *llist,
                     wxString const & title =
                     "wxLayout Printout");
+   /// Destructor.
+   ~wxLayoutPrintout();
+   
    /** Function which prints the n-th page.
        @param page the page number to print
        @return bool true if we are not at end of document yet
@@ -906,6 +938,10 @@ private:
    int           m_NumOfPages;
    /// Top left corner where we start printing.
    wxPoint       m_Offset;
+#ifdef M_BASEDIR
+   /// A progress dialog for printing
+   MProgressDialog *m_ProgressDialog;
+#endif
 };
 
 

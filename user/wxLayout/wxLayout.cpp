@@ -37,7 +37,8 @@ IMPLEMENT_APP(MyApp)
              ID_PRINT_SETUP, ID_PAGE_SETUP, ID_PREVIEW, ID_PRINT_PS,
              ID_PRINT_SETUP_PS, ID_PAGE_SETUP_PS,ID_PREVIEW_PS,
              ID_WRAP, ID_NOWRAP, ID_PASTE,
-             ID_WXLAYOUT_DEBUG, ID_QUIT, ID_CLICK, ID_HTML, ID_TEXT, ID_TEST };
+             ID_WXLAYOUT_DEBUG, ID_QUIT, ID_CLICK, ID_HTML, ID_TEXT,
+             ID_TEST, ID_LONG_TEST };
 
 
 IMPLEMENT_DYNAMIC_CLASS( MyFrame, wxFrame )
@@ -87,6 +88,7 @@ MyFrame::MyFrame(void) :
    wxMenu *edit_menu = new wxMenu;
    edit_menu->Append( ID_CLEAR, "Clear");
    edit_menu->Append( ID_ADD_SAMPLE, "Example");
+   edit_menu->Append( ID_LONG_TEST, "Add many lines");
    edit_menu->AppendSeparator();
    edit_menu->Append(ID_WRAP, "Wrap mode", "Activate wrapping at pixel 200.");
    edit_menu->Append(ID_NOWRAP, "No-wrap mode", "Deactivate wrapping.");
@@ -260,6 +262,21 @@ void MyFrame::OnCommand( wxCommandEvent &event )
       }
    }
    break;
+   case ID_LONG_TEST:
+   {
+      wxString line;
+      wxLayoutList *llist = m_lwin->GetLayoutList();
+      for(int i = 1; i < 5000; i++)
+      {
+         line.Printf("This is line number %d.", i);
+         llist->Insert(line);
+         llist->LineBreak();
+      }
+      llist->MoveCursorTo(wxPoint(0,0));
+      m_lwin->SetDirty();
+      m_lwin->Refresh();
+      break;
+   }
    }
 };
 

@@ -23,7 +23,6 @@
 #     include "gui/wxMenuDefs.h"
 #     include "gui/wxMApp.h"
 #   endif // USE_PCH
-
 #   include "gui/wxlwindow.h"
 #   include "gui/wxlparser.h"
 #else
@@ -55,6 +54,7 @@
 BEGIN_EVENT_TABLE(wxLayoutWindow,wxScrolledWindow)
    EVT_PAINT    (wxLayoutWindow::OnPaint)
    EVT_CHAR     (wxLayoutWindow::OnChar)
+   EVT_KEY_UP   (wxLayoutWindow::OnKeyUp)
    EVT_LEFT_DOWN(wxLayoutWindow::OnLeftMouseClick)
    EVT_RIGHT_DOWN(wxLayoutWindow::OnRightMouseClick)
    EVT_LEFT_DCLICK(wxLayoutWindow::OnMouseDblClick)
@@ -128,25 +128,29 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
 
    m_ClickPosition = wxPoint(event.GetX(), event.GetY());
 #ifdef WXLAYOUT_DEBUG
-   wxLogDebug("wxLayoutWindow::OnMouse: (%d, %d) -> (%d, %d)",
-              event.GetX(), event.GetY(), findPos.x, findPos.y);
+//   wxLogDebug("wxLayoutWindow::OnMouse: (%d, %d) -> (%d, %d)",
+//              event.GetX(), event.GetY(), findPos.x, findPos.y);
 #endif
 
    wxPoint cursorPos;
-   wxLayoutObject *obj = m_llist->FindObjectScreen(dc, findPos, &cursorPos);
+   bool found;
+   wxLayoutObject *obj = m_llist->FindObjectScreen(dc, findPos,
+                                                   &cursorPos, &found);
 
 #ifdef WXLAYOUT_DEBUG
-   if(obj)
-      wxLogDebug("wxLayoutWindow::OnMouse: Found object of type %d.",
-                 obj->GetType());
-   else
-      wxLogDebug("wxLayoutWindow::OnMouse: Found no object.");
+//   if(obj)
+//      wxLogDebug("wxLayoutWindow::OnMouse: Found object of type %d.",
+//                 obj->GetType());
+//   else
+//      wxLogDebug("wxLayoutWindow::OnMouse: Found no object.");
 #endif
 
    //has the mouse only been moved?
    if(eventId == WXLOWIN_MENU_MOUSEMOVE)
    {
-      if(obj && obj->GetUserData() != NULL)
+      // found is only true if we are really over an object, not just
+      // behind it
+      if(found && obj && obj->GetUserData() != NULL)
       {
          if(!m_HandCursor)
             SetCursor(wxCURSOR_HAND);
@@ -195,6 +199,14 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
 void
 wxLayoutWindow::OnChar(wxKeyEvent& event)
 {
+#ifdef WXLAYOUT_DEBUG
+   if(event.KeyCode() == WXK_F1)
+   {
+      m_llist->Debug();
+      return;
+   }
+#endif
+   
    if(!IsEditable()) // do nothing
    {
       event.Skip();
@@ -320,10 +332,17 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
    m_ScrollToCursor = true;
    //DoPaint(true); // paint and scroll to cursor
    wxRect r = *m_llist->GetUpdateRect();
-   r.x -= WXLO_XOFFSET; r.y -= WXLO_YOFFSET;
    Refresh( FALSE, &r);
 }
 
+void
+wxLayoutWindow::OnKeyUp(wxKeyEvent& event)
+{
+   if(event.KeyCode() == WXK_SHIFT && m_llist->IsSelecting())
+      m_llist->EndSelection();
+   event.Skip();
+}
+   
 void
 wxLayoutWindow::OnPaint( wxPaintEvent &WXUNUSED(event))  // or: OnDraw(wxDC& dc)
 {
@@ -364,10 +383,10 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
    if(y1 > m_maxy) m_maxy = y1;
 
 
-   m_llist->InvalidateUpdateRect();
-   const wxRect *r = m_llist->GetUpdateRect();
-   wxLogDebug("Update rect before calling Layout: %ld,%ld / %ld,%ld",
-              r->x, r->y, r->x+r->width, r->y+r->height);
+   //m_llist->InvalidateUpdateRect();
+   //const wxRect *r = m_llist->GetUpdateRect();
+   wxLogDebug("Update rect: %ld,%ld / %ld,%ld",
+              updateRect->x, updateRect->y, updateRect->x+updateRect->width, updateRect->y+updateRect->height);
 
 #if 0
    //FIXME: we should never need to call Layout at all because the
@@ -418,6 +437,7 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
       m_bitmap = new wxBitmap(x1,y1);
       m_memDC->SelectObject(*m_bitmap);
    }
+
    // Device origins on the memDC are suspect, we translate manually
    // with the translate parameter of Draw().
    m_memDC->SetDeviceOrigin(0,0);
@@ -438,13 +458,16 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
    else
       m_memDC->DrawRectangle(0,0,x1, y1);
 
-   // The offsets give the window a tiny border on the left and top, looks nice.
-   wxPoint offset(-x0+WXLO_XOFFSET,-y0+WXLO_YOFFSET);
-   m_llist->Draw(*m_memDC,offset);
-   if(IsEditable())
-      m_llist->DrawCursor(*m_memDC,m_HaveFocus,offset);
 
-   // Now copy everything to the screen:
+   
+   /* This is the important bit: we tell the list to draw itself: */
+   wxLogDebug("Update rect: %ld,%ld / %ld,%ld",
+              updateRect->x, updateRect->y, updateRect->x+updateRect->width, updateRect->y+updateRect->height);
+   
+   wxPoint offset(-x0+WXLO_XOFFSET,-y0+WXLO_YOFFSET);
+   m_llist->Draw(*m_memDC,offset, y0, y0+y1);
+
+// Now copy everything to the screen:
 #if 0
    //FIXME:
    //   1. the update region as calculated by the list is wrong
@@ -462,15 +485,24 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
       }
    else
 #endif
-      // If there are no update rectangles, we got called to reflect 
-      // a change in the list. Currently there is no mechanism to
-      // easily find out which bits need updating, so we update
-      // all. The wxLayoutList could handle this, creating a list or
-      // at least one large rectangle of changes. FIXME
+   {
+      // FIXME: Trying to copy only the changed parts, but it does not seem
+      // to work:
+//      x0 = updateRect->x; y0 = updateRect->y;
+//      if(updateRect->height < y1)
+//         y1 = updateRect->height;
+//      y1 += WXLO_YOFFSET; //FIXME might not be needed
       dc.Blit(x0,y0,x1,y1,m_memDC,0,0,wxCOPY,FALSE);
+   }
+   //FIXME: we need to make sure we blit draw the cursor!
+   // How about drawing it directly to the screen?
+   if(IsEditable())
+      //m_llist->DrawCursor(*m_memDC,m_HaveFocus,offset);
+      m_llist->DrawCursor(dc,m_HaveFocus, wxPoint(WXLO_XOFFSET,WXLO_YOFFSET)); //direct to screen
 
    ResetDirty();
    m_ScrollToCursor = false;
+   m_llist->InvalidateUpdateRect();
 }
 
 // change the range and position of scroll bars
@@ -510,11 +542,6 @@ wxLayoutWindow::Paste(void)
       }  
       wxTheClipboard->Close();
    }
-#ifdef __WXGTK__
-   /* wxGTK's sophisticated multi-format copy/paste is not supported
-      by 99% of the X11 clients available. If there was no selection,
-      do the dumb thing, too:
-   */
 #if 0
    /* Unfortunately, this little hack doesn't work. So I'll go back to 
       pure X11. */
@@ -524,8 +551,6 @@ wxLayoutWindow::Paste(void)
       tmp_tctrl.Paste();
       text += tmp_tctrl.GetValue();
    }
-#endif
-   
 #endif
    wxLayoutImportText( m_llist, text);
 }

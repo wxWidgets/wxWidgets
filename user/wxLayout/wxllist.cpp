@@ -22,8 +22,9 @@
 #  pragma hdrstop
 #endif
 
-#ifdef M_PREFIX
+#ifdef M_BASEDIR
 #   include "gui/wxllist.h"
+#   include "gui/wxMDialogs.h"
 #else
 #   include "wxllist.h"
 #endif
@@ -89,17 +90,17 @@ bool operator <=(wxPoint const &p1, wxPoint const &p2)
 /// grows a wxRect so that it includes the given point
 
 static
-void GrowRect(wxRect &r, const wxPoint & p)
+void GrowRect(wxRect &r, CoordType x, CoordType y)
 {
-   if(r.x > p.x)
-      r.x = p.x;
-   else if(r.x + r.width < p.x)
-      r.width = p.x - r.x;
+   if(r.x > x)
+      r.x = x;
+   else if(r.x + r.width < x)
+      r.width = x - r.x;
    
-   if(r.y > p.y)
-      r.y = p.y;
-   else if(r.y + r.height < p.y)
-      r.height = p.y - r.y;
+   if(r.y > y)
+      r.y = y;
+   else if(r.y + r.height < y)
+      r.height = y - r.y;
 }
 
 /// returns true if the point is in the rectangle
@@ -407,7 +408,9 @@ wxLayoutLine::FindObject(CoordType xpos, CoordType *offset) const
 }
 
 wxLayoutObjectList::iterator
-wxLayoutLine::FindObjectScreen(wxDC &dc, CoordType xpos, CoordType *cxpos) const
+wxLayoutLine::FindObjectScreen(wxDC &dc,
+                               CoordType xpos, CoordType *cxpos,
+                               bool *found) const
 {
    wxASSERT(cxpos);
    wxASSERT(cxpos);
@@ -422,6 +425,7 @@ wxLayoutLine::FindObjectScreen(wxDC &dc, CoordType xpos, CoordType *cxpos) const
       {
          *cxpos = cx + (**i).GetOffsetScreen(dc, xpos-x);
          wxLogDebug("wxLayoutLine::FindObjectScreen: cursor xpos = %ld", *cxpos);
+         if(found) *found = true;
          return i;
       }
       x += (**i).GetWidth();
@@ -429,6 +433,7 @@ wxLayoutLine::FindObjectScreen(wxDC &dc, CoordType xpos, CoordType *cxpos) const
    }
    // behind last object:
    *cxpos = cx;
+   if(found) *found = false;
    return m_ObjectList.tail();
 }
 
@@ -898,6 +903,21 @@ wxLayoutLine::GetWrapPosition(CoordType column)
 }
    
 
+#ifdef WXLAYOUT_DEBUG
+void
+wxLayoutLine::Debug(void)
+{
+   wxString tmp;
+   wxPoint pos = GetPosition();
+   tmp.Printf("Line %ld, Pos (%ld,%ld), Height %ld",
+              (long int) GetLineNumber(),
+              (long int) pos.x, (long int) pos.y,
+              (long int) GetHeight());
+              
+   wxLogDebug(tmp);
+}
+#endif
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
    
    The wxLayoutList object
@@ -1320,8 +1340,10 @@ wxLayoutList::Layout(wxDC &dc, CoordType bottom)
 }
 
 void
-wxLayoutList::Draw(wxDC &dc, wxPoint const &offset,
-                   CoordType top, CoordType bottom)
+wxLayoutList::Draw(wxDC &dc,
+                   wxPoint const &offset,
+                   CoordType top,
+                   CoordType bottom)
 {
    wxLayoutLine *line = m_FirstLine;
 
@@ -1333,10 +1355,10 @@ wxLayoutList::Draw(wxDC &dc, wxPoint const &offset,
    while(line)
    {
       // only draw if between top and bottom:
-      if((top == -1 || line->GetPosition().y >= top))
+      if((top == -1 || line->GetPosition().y + line->GetHeight() >= top))
          line->Draw(dc, this, offset);
       // little condition to speed up redrawing:
-      if(bottom != -1 && line->GetPosition().y + line->GetHeight() > bottom) break;
+      if(bottom != -1 && line->GetPosition().y > bottom) break;
       line = line->GetNextLine();
    }
    // can only be 0 if we are on the first line and have no next line
@@ -1347,7 +1369,9 @@ wxLayoutList::Draw(wxDC &dc, wxPoint const &offset,
 }
 
 wxLayoutObject *
-wxLayoutList::FindObjectScreen(wxDC &dc, wxPoint const pos, wxPoint *cursorPos)
+wxLayoutList::FindObjectScreen(wxDC &dc, wxPoint const pos,
+                               wxPoint *cursorPos,
+                               bool *found)
 {
    // First, find the right line:
    wxLayoutLine *line = m_FirstLine;
@@ -1363,10 +1387,16 @@ wxLayoutList::FindObjectScreen(wxDC &dc, wxPoint const pos, wxPoint *cursorPos)
       line->Layout(dc, this);
       line = line->GetNextLine();
    }
-   if(line == NULL) return NULL; // not found
+   if(line == NULL)
+   {
+      if(found) *found = false;
+      return NULL; // not found
+   }
    if(cursorPos) cursorPos->y = line->GetLineNumber();
    // Now, find the object in the line:
-   wxLOiterator i = line->FindObjectScreen(dc, pos.x, & cursorPos->x);
+   wxLOiterator i = line->FindObjectScreen(dc, pos.x,
+                                           cursorPos ? & cursorPos->x : NULL ,
+                                           found);
    return (i == NULLIT) ? NULL : *i;
    
 }
@@ -1425,18 +1455,15 @@ wxLayoutList::DrawCursor(wxDC &dc, bool active, wxPoint const &translate)
    //dc.SetBrush(wxNullBrush);
 }
 
-/** Called by the objects to update the update rectangle.
-    @param p a point to include in it
-*/
 void
-wxLayoutList::SetUpdateRect(const wxPoint &p)
+wxLayoutList::SetUpdateRect(CoordType x, CoordType y)
 {
    if(m_UpdateRectValid)
-      GrowRect(m_UpdateRect, p);
+      GrowRect(m_UpdateRect, x, y);
    else
    {
-      m_UpdateRect.x = p.x;
-      m_UpdateRect.y = p.y;
+      m_UpdateRect.x = x;
+      m_UpdateRect.y = y;
       m_UpdateRect.width = 4; // large enough to avoid surprises from
       m_UpdateRect.height = 4;// wxGTK :-)
       m_UpdateRectValid = true;
@@ -1448,6 +1475,8 @@ wxLayoutList::StartSelection(void)
 {
    wxLogDebug("Starting selection at %ld/%ld", m_CursorPos.x, m_CursorPos.y);
    m_Selection.m_CursorA = m_CursorPos;
+   m_Selection.m_selecting = true;
+   m_Selection.m_valid = false;
 }
 
 void
@@ -1455,6 +1484,14 @@ wxLayoutList::EndSelection(void)
 {
    wxLogDebug("Ending selection at %ld/%ld", m_CursorPos.x, m_CursorPos.y);
    m_Selection.m_CursorB = m_CursorPos;
+   m_Selection.m_selecting = false;
+   m_Selection.m_valid = true;
+}
+
+bool
+wxLayoutList::IsSelecting(void)
+{
+   return m_Selection.m_selecting;
 }
 
 bool
@@ -1463,6 +1500,22 @@ wxLayoutList::IsSelected(const wxPoint &cursor)
    return m_Selection.m_CursorA <= cursor
       && cursor <= m_Selection.m_CursorB;
 }
+
+#ifdef WXLAYOUT_DEBUG
+
+void
+wxLayoutList::Debug(void)
+{
+   wxLayoutLine *line;
+
+
+   for(line = m_FirstLine;
+       line;
+       line = line->GetNextLine())
+      line->Debug();
+}
+
+#endif
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
@@ -1477,6 +1530,16 @@ wxLayoutPrintout::wxLayoutPrintout(wxLayoutList *llist,
 {
    m_llist = llist;
    m_title = title;
+#ifdef   M_BASEDIR
+   m_ProgressDialog = NULL;
+#endif
+}
+
+wxLayoutPrintout::~wxLayoutPrintout()
+{
+#ifdef   M_BASEDIR
+   if(m_ProgressDialog) delete m_ProgressDialog;
+#endif
 }
 
 float
@@ -1531,6 +1594,12 @@ wxLayoutPrintout::ScaleDC(wxDC *dc)
 
 bool wxLayoutPrintout::OnPrintPage(int page)
 {
+#ifdef M_BASEDIR
+   wxString msg;
+   msg.Printf(_("Printing page %d..."), page);
+   if(! m_ProgressDialog->Update(page, msg))
+      return false;
+#endif
    wxDC *dc = GetDC();
 
    ScaleDC(dc);
@@ -1581,6 +1650,12 @@ void wxLayoutPrintout::GetPageInfo(int *minPage, int *maxPage, int *selPageFrom,
    *selPageFrom = 1;
    *selPageTo = m_NumOfPages;
    wxRemoveFile(WXLLIST_TEMPFILE);
+
+#ifdef M_BASEDIR
+   m_ProgressDialog = new MProgressDialog(
+      title, _("Printing..."),m_NumOfPages, NULL, false, true);
+#endif
+   
 }
 
 bool wxLayoutPrintout::HasPage(int pageNum)

@@ -128,6 +128,7 @@ public:
    //@{
    void OnPaint(wxPaintEvent &event);
    void OnChar(wxKeyEvent& event);
+   void OnKeyUp(wxKeyEvent& event);
    void OnMenu(wxCommandEvent& event);
    void OnLeftMouseClick(wxMouseEvent& event)  { OnMouse(WXLOWIN_MENU_LCLICK, event); }
    void OnRightMouseClick(wxMouseEvent& event) { OnMouse(WXLOWIN_MENU_RCLICK, event); }
