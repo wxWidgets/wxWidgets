@@ -14,8 +14,8 @@
 #ifndef _WX_BUFFER_H
 #define _WX_BUFFER_H
 
+#include "wx/wxchar.h"
 #include <string.h> // strdup
-#include <wchar.h>  // wchar_t
 
 // ----------------------------------------------------------------------------
 // Special classes for (wide) character strings: they use malloc/free instead
@@ -66,9 +66,12 @@ public:
     {
         wxASSERT_MSG( wcs, _T("NULL string in wxWCharBuffer") );
 
-        m_wcs = wcs ? (wchar_t *)malloc((wcslen(wcs)+1)*sizeof(wchar_t))
-	            : (wchar_t *)NULL;
-	if (m_wcs) wcscpy(m_wcs, wcs);
+        if (wcs) {
+          size_t siz = (wcslen(wcs)+1)*sizeof(wchar_t);
+          m_wcs = (wchar_t *)malloc(siz);
+          memcpy(m_wcs, wcs, siz);
+        }
+        else m_wcs = (wchar_t *)NULL;
     }
     wxWCharBuffer(size_t len)
     {

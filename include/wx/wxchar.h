@@ -21,6 +21,26 @@
 #error "MBCS is not supported by wxChar"
 #endif
 
+// set wxUSE_UNICODE to 1 if UNICODE or _UNICODE is defined
+#if defined(_UNICODE) || defined(UNICODE)
+#undef wxUSE_UNICODE
+#define wxUSE_UNICODE 1
+#else
+#ifndef wxUSE_UNICODE
+#define wxUSE_UNICODE 0
+#endif
+#endif
+
+// and vice versa: define UNICODE and _UNICODE if wxUSE_UNICODE is 1...
+#if wxUSE_UNICODE
+#ifndef _UNICODE
+#define _UNICODE
+#endif
+#ifndef UNICODE
+#define UNICODE
+#endif
+#endif
+
 // Windows (VC++) has broad TCHAR support
 #if defined(__VISUALC__) && defined(__WIN32__)
 
@@ -61,6 +81,8 @@ typedef  _TUCHAR     wxUChar;
 #define  wxStrcpy    _tcscpy
 #define  wxStrcspn   _tcscspn
 #define  wxStrftime  _tcsftime
+#define  wxStricmp   _tcsicmp
+#define  wxStrlen_   _tcslen // used in wxStrlen inline function
 #define  wxStrncat   _tcsncat
 #define  wxStrncmp   _tcsncmp
 #define  wxStrncpy   _tcsncpy
@@ -123,7 +145,57 @@ typedef  _TUCHAR     wxUChar;
 
    // translate wxZZZ names
 
-#else//!Windows (VC++)
+#elif defined(__BORLANDC__) && defined(__WIN32__)
+
+// Borland C++ 4.52 doesn't have much tchar support
+// maybe Borland C++ 5.02 has, can't check right now
+// but I'll use the Win32 API instead here
+
+#include <tchar.h>
+#if wxUSE_UNICODE // temporary - preserve binary compatibility
+typedef  _TCHAR      wxChar;
+typedef  _TSCHAR     wxSChar;
+typedef  _TUCHAR     wxUChar;
+#else
+#define wxChar char
+#define wxSChar signed char
+#define wxUChar unsigned char
+#endif
+
+#include <windef.h>
+#include <winbase.h>
+#include <winnls.h>
+#include <winnt.h>
+
+   // ctype.h functions
+inline WORD __wxMSW_ctype(wxChar ch)
+{
+  WORD ret;
+  GetStringTypeEx(LOCALE_USER_DEFAULT, CT_CTYPE1, &ch, 1, &ret);
+  return ret;
+}
+#define  wxIsalnum(x)  IsCharAlphaNumeric
+#define  wxIsalpha     IsCharAlpha
+#define  wxIsctrl(x)   (__wxMSW_ctype(x) & C1_CNTRL)
+#define  wxIsdigit(x)  (__wxMSW_ctype(x) & C1_DIGIT)
+#define  wxIsgraph(x)  (__wxMSW_ctype(x) & (C1_DIGIT|C1_PUNCT|C1_ALPHA))
+#define  wxIslower(x)  IsCharLower
+#define  wxIsprint(x)  (__wxMSW_ctype(x) & (C1_DIGIT|C1_SPACE|C1_PUNCT|C1_ALPHA))
+#define  wxIspunct(x)  (__wxMSW_ctype(x) & C1_PUNCT)
+#define  wxIsspace(x)  (__wxMSW_ctype(x) & C1_SPACE)
+#define  wxIsupper(x)  IsCharUpper
+#define  wxIsxdigit(x) (__wxMSW_ctype(x) & C1_XDIGIT)
+#define  wxTolower(x)  (wxChar)CharLower((LPTSTR)(x))
+#define  wxToupper(x)  (wxChar)CharUpper((LPTSTR)(x))
+
+// #define  wxStrtok    strtok_r // Borland C++ 4.52 doesn't have strtok_r
+#define wxNEED_WX_STRING_H
+#define wxNEED_WX_STDIO_H
+#define wxNEED_WX_STDLIB_H
+#define wxNEED_WX_TIME_H
+#define wxNEED_WCSLEN
+
+#else//!Windows
 
 // check whether we are doing Unicode
 #if wxUSE_UNICODE
@@ -170,6 +242,7 @@ typedef unsigned __WCHAR_TYPE__ wxUChar;
 #define  wxStrcoll   wcscoll
 #define  wxStrcpy    wcscpy
 #define  wxStrcspn   wcscspn
+#define  wxStrlen_   wcslen // used in wxStrlen inline function
 #define  wxStrncat   wcsncat
 #define  wxStrncmp   wcsncmp
 #define  wxStrncpy   wcsncpy
@@ -188,7 +261,7 @@ typedef unsigned __WCHAR_TYPE__ wxUChar;
 #define wxNEED_WX_STDLIB_H
 #define wxNEED_WX_TIME_H
 
-#else
+#else//!glibc
 #error   "Please define your compiler's Unicode conventions in wxChar.h"
 #endif
 #else//!Unicode
@@ -227,6 +300,38 @@ typedef unsigned char   wxUChar;
 #define  wxSetlocale setlocale
 
    // string.h functions
+#define  wxStricmp   strcasecmp
+// #define  wxStrtok    strtok_r // this needs a configure check
+
+   // leave the rest to defaults below
+#define wxNEED_WX_STRING_H
+#define wxNEED_WX_STDIO_H
+#define wxNEED_WX_STDLIB_H
+#define wxNEED_WX_TIME_H
+
+#endif//Unicode
+#endif//TCHAR-aware compilers
+
+// define wxStricmp for various compilers without Unicode possibilities
+#if !defined(wxStricmp) && !wxUSE_UNICODE
+#if defined(__BORLANDC__) || defined(__WATCOMC__) || defined(__SALFORDC__)
+    #define wxStricmp stricmp
+#elif defined(__SC__) || defined(__VISUALC__) || (defined(__MWERKS) && defined(__INTEL__))
+    #define wxStricmp _stricmp
+#elif defined(__UNIX__) || defined(__GNUWIN32__)
+    #define wxStricmp strcasecmp
+#elif defined(__MWERKS__) && !defined(__INTEL__)
+    // use wxWindows' implementation
+#else
+    // if you leave wxStricmp undefined, wxWindows' implementation will be used
+    #error  "Please define string case-insensitive compare for your OS/compiler"
+#endif
+#endif
+
+// if we need to define for standard headers, and we're not using Unicode,
+// just define to standard C library routines
+#if !wxUSE_UNICODE
+#ifdef wxNEED_WX_STRING_H
 #define  wxStrcat    strcat
 #define  wxStrchr    strchr
 #define  wxStrcmp    strcmp
@@ -234,6 +339,7 @@ typedef unsigned char   wxUChar;
 #define  wxStrcpy    strcpy
 #define  wxStrcspn   strcspn
 #define  wxStrdup    strdup
+#define  wxStrlen_   strlen // used in wxStrlen inline function
 #define  wxStrncat   strncat
 #define  wxStrncmp   strncmp
 #define  wxStrncpy   strncpy
@@ -242,12 +348,13 @@ typedef unsigned char   wxUChar;
 #define  wxStrspn    strspn
 #define  wxStrstr    strstr
 #define  wxStrtod    strtod
-// #define  wxStrtok    strtok_r // this needs a configure check
 #define  wxStrtol    strtol
 #define  wxStrtoul   strtoul
 #define  wxStrxfrm   strxfrm
+#undef wxNEED_WX_STRING_H
+#endif
 
-   // stdio.h functions
+#ifdef wxNEED_WX_STDIO_H
 #define  wxFgetc     fgetc
 #define  wxFgetchar  fgetchar
 #define  wxFgets     fgets
@@ -276,72 +383,39 @@ typedef unsigned char   wxUChar;
 #define  wxVprintf   vprintf
 #define  wxVsscanf   vsscanf
 #define  wxVsprintf  vsprintf
+#undef wxNEED_WX_STDIO_H
+#endif
 
-   // stdlib.h functions
+#ifdef wxNEED_WX_STDLIB_H
 #define  wxAtof      atof
 #define  wxAtoi      atoi
 #define  wxAtol      atol
 #define  wxGetenv    getenv
 #define  wxSystem    system
+#undef wxNEED_WX_STDLIB_H
+#endif
 
-   // time.h functions
+#ifdef wxNEED_WX_TIME_H
 #define  wxAsctime   asctime
 #define  wxCtime     ctime
 #define  wxStrftime  strftime
-
-#endif//Unicode
+#undef wxNEED_WX_TIME_H
 #endif
+#endif //!Unicode
 
+#if defined(wxNEED_WCSLEN) && wxUSE_UNICODE
+#define wcslen wxStrlen
+#undef wxNEED_WCSLEN
+#endif
 
 /// checks whether the passed in pointer is NULL and if the string is empty
 inline bool WXDLLEXPORT wxIsEmpty(const wxChar *p) { return !p || !*p; }
 
+#ifndef wxNEED_WX_STRING_H
 /// safe version of strlen() (returns 0 if passed NULL pointer)
 inline size_t WXDLLEXPORT wxStrlen(const wxChar *psz)
-#if defined(__VISUALC__)
-   { return psz ? _tcslen(psz) : 0; }
-#elif wxUSE_UNICODE
-   { return psz ? wcslen(psz) : 0; }
-#else
-   { return psz ? strlen(psz) : 0; }
+   { return psz ? wxStrlen_(psz) : 0; }
 #endif
-
-/// portable strcasecmp/_stricmp
-inline int WXDLLEXPORT wxStricmp(const wxChar *psz1, const wxChar *psz2)
-#if defined(__VISUALC__)
-   { return _tcsicmp(psz1, psz2); }
-#elif defined(__BORLANDC__) && !wxUSE_UNICODE
-   { return stricmp(psz1, psz2); }
-#elif defined(__UNIX__) || defined(__GNUWIN32__)
-#if !wxUSE_UNICODE
-   { return strcasecmp(psz1, psz2); }
-#else // glibc doesn't seem to have wide char equivalent
-   {
-     register wxChar c1, c2;
-     do {
-       c1 = wxTolower(*psz1++);
-       c2 = wxTolower(*psz2++);
-     } while ( c1 && (c1 == c2) );
-
-     return c1 - c2;
-   }
-#endif
-#else
-  // almost all compilers/libraries provide this function (unfortunately under
-  // different names), that's why we don't implement our own which will surely
-  // be more efficient than this code (uncomment to use):
-  /*
-    register wxChar c1, c2;
-    do {
-      c1 = wxTolower(*psz1++);
-      c2 = wxTolower(*psz2++);
-    } while ( c1 && (c1 == c2) );
-
-    return c1 - c2;
-  */
-
-  #error  "Please define string case-insensitive compare for your OS/compiler"
-#endif  // OS/compiler
 
 // multibyte<->widechar conversion
 size_t WXDLLEXPORT wxMB2WC(wchar_t *buf, const char *psz, size_t n);
@@ -369,6 +443,14 @@ wxChar * WXDLLEXPORT wxStrtok(wxChar *psz, const wxChar *delim, wxChar **save_pt
 
 #ifndef wxSetlocale
 wxChar * WXDLLEXPORT wxSetlocale(int category, const wxChar *locale);
+#endif
+
+#ifdef wxNEED_WCSLEN // for use in buffer.h
+size_t   WXDLLEXPORT wcslen(const wchar_t *s);
+#endif
+
+#ifdef wxNEED_WX_STRING_H
+size_t   WXDLLEXPORT wxStrlen(const wxChar *s);
 #endif
 
 #ifdef wxNEED_WX_STDIO_H
