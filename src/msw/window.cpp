@@ -430,7 +430,10 @@ bool wxWindowMSW::Create(wxWindow *parent,
         msflags |= WS_VISIBLE;
     }
 
-    return MSWCreate(wxCanvasClassName, NULL, pos, size, msflags, exstyle);
+    bool retValue = MSWCreate(wxCanvasClassName, NULL, pos, size, msflags, exstyle);
+    if (retVal)
+        SetWindowLong( (HWND)m_hWnd, GWL_WNDPROC, (LONG)wxWndProc);
+    return retVal;
 }
 
 // ---------------------------------------------------------------------------

@@ -338,8 +338,6 @@ bool wxApp::RegisterWindowClasses()
     if ( !RegisterClass(&wndclass) )
     {
         wxLogLastError(wxT("RegisterClass(frame)"));
-
-        return FALSE;
     }
 
     // "no redraw" frame
@@ -349,8 +347,6 @@ bool wxApp::RegisterWindowClasses()
     if ( !RegisterClass(&wndclass) )
     {
         wxLogLastError(wxT("RegisterClass(no redraw frame)"));
-
-        return FALSE;
     }
 
     // Register the MDI frame window class.
@@ -361,8 +357,6 @@ bool wxApp::RegisterWindowClasses()
     if ( !RegisterClass(&wndclass) )
     {
         wxLogLastError(wxT("RegisterClass(MDI parent)"));
-
-        return FALSE;
     }
 
     // "no redraw" MDI frame
@@ -372,8 +366,6 @@ bool wxApp::RegisterWindowClasses()
     if ( !RegisterClass(&wndclass) )
     {
         wxLogLastError(wxT("RegisterClass(no redraw MDI parent frame)"));
-
-        return FALSE;
     }
 
     // Register the MDI child frame window class.
@@ -384,8 +376,6 @@ bool wxApp::RegisterWindowClasses()
     if ( !RegisterClass(&wndclass) )
     {
         wxLogLastError(wxT("RegisterClass(MDI child)"));
-
-        return FALSE;
     }
 
     // "no redraw" MDI child frame
@@ -395,8 +385,6 @@ bool wxApp::RegisterWindowClasses()
     if ( !RegisterClass(&wndclass) )
     {
         wxLogLastError(wxT("RegisterClass(no redraw MDI child)"));
-
-        return FALSE;
     }
 
     return TRUE;
