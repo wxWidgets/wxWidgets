@@ -31,6 +31,7 @@ All (GUI):
 - Fixed memory leak in DoPrint, htmprint.cpp
 - Fixed calendar sample bug with using wxCommandEvent::GetInt()
   instead of GetId()
+- Added wxDbGrid combining wxODBC classes with wxGrid
 
 wxMSW:
 
