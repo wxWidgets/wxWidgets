@@ -12,41 +12,51 @@
 // Define a new application
 class MyApp: public wxApp
 {
-  public:
-    bool OnInit(void);
-    bool InitToolbar(wxToolBar* toolBar);
-};
-
-class MyTimer : public wxTimer
-{
 public:
-  MyTimer(wxFrame *frame) { m_frame = frame; }
-
-  virtual void Notify() { wxLogStatus(m_frame, _T("Timer arrived!") ); }
-
-private:
-  wxFrame *m_frame;
+    bool OnInit();
+    bool InitToolbar(wxToolBar* toolBar, bool small = FALSE);
 };
 
 // Define a new frame
 class MyFrame: public wxFrame
 {
 public:
-    MyFrame(wxFrame *parent, wxWindowID id = -1, const wxString& title = "wxToolBar Sample",
-        const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-        long style = wxDEFAULT_FRAME_STYLE);
+    MyFrame(wxFrame *parent,
+            wxWindowID id = -1,
+            const wxString& title = "wxToolBar Sample",
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize,
+            long style = wxDEFAULT_FRAME_STYLE);
 
-    void OnCloseWindow(wxCloseEvent& event);
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
+
+    void OnToggleToolbar(wxCommandEvent& event);
+    void OnEnablePrint(wxCommandEvent& event) { DoEnablePrint(); }
+    void OnToggleHelp(wxCommandEvent& event) { DoToggleHelp(); }
+
     void OnToolLeftClick(wxCommandEvent& event);
     void OnToolEnter(wxCommandEvent& event);
 
 private:
+    void DoEnablePrint();
+    void DoToggleHelp();
+
+    bool                m_smallToolbar;
     wxTextCtrl*         m_textWindow;
 
     DECLARE_EVENT_TABLE()
 };
 
-#define ID_TOOLBAR  500
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
 
+const int ID_TOOLBAR = 500;
+
+enum
+{
+    IDM_TOOLBAR_TOGGLETOOLBAR = 200,
+    IDM_TOOLBAR_ENABLEPRINT,
+    IDM_TOOLBAR_TOGGLEHELP
+};
