@@ -97,18 +97,6 @@ bool MyApp::OnInit(void)
   // Give it a status line
   frame->CreateStatusBar(2);
 
-/*
-  // Make a menubar
-  wxMenu *file_menu = new wxMenu;
-
-  file_menu->Append(RESOURCE_TEST1, "&Dialog box test",                "Test dialog box resource");
-  file_menu->Append(RESOURCE_QUIT, "E&xit",                "Quit program");
-
-  wxMenuBar *menu_bar = new wxMenuBar;
-
-  menu_bar->Append(file_menu, "&File");
-*/
-
   wxMenuBar *menu_bar = wxResourceCreateMenuBar("menu1");
   
   // Associate the menu bar with the frame
@@ -123,6 +111,12 @@ bool MyApp::OnInit(void)
   return TRUE;
 }
 
+MyApp::~MyApp()
+{
+    delete dialog1;
+    delete menu1;
+}
+
 BEGIN_EVENT_TABLE(MyPanel, wxPanel)
 	EVT_LEFT_DOWN( MyPanel::OnClick)
 END_EVENT_TABLE()
@@ -133,17 +127,18 @@ MyPanel::MyPanel( wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxS
 {
 }
 
-void MyPanel::OnClick( wxMouseEvent &WXUNUSED(event) )
+void MyPanel::OnClick( wxMouseEvent &WXUNUSED(event2) )
 {
   MyFrame *frame = (MyFrame*)(wxTheApp->GetTopWindow());
   wxCommandEvent event;
-  frame->OnTest1( event );
+  frame->OnTestDialog( event );
 }
 
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+	EVT_MENU(RESOURCE_ABOUT, MyFrame::OnAbout)
 	EVT_MENU(RESOURCE_QUIT, MyFrame::OnQuit)
-	EVT_MENU(RESOURCE_TEST1, MyFrame::OnTest1)
+	EVT_MENU(RESOURCE_TESTDIALOG, MyFrame::OnTestDialog)
 END_EVENT_TABLE()
 
 // Define my frame constructor
@@ -153,12 +148,19 @@ MyFrame::MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title, c
   panel = (wxWindow *) NULL;
 }
 
+void MyFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
+{
+    wxMessageBox("wxWindows resource sample.\n"
+                 "(c) Julian Smart", "About wxWindows sample",
+                 wxICON_INFORMATION | wxOK);
+}
+
 void MyFrame::OnQuit( wxCommandEvent& WXUNUSED(event) )
 {
 	Close(TRUE);
 }
 
-void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event) )
+void MyFrame::OnTestDialog(wxCommandEvent& WXUNUSED(event) )
 {
       MyDialog *dialog = new MyDialog;
       if (dialog->LoadFromResource(this, "dialog1"))

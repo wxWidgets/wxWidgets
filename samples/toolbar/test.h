@@ -45,9 +45,7 @@ public:
 private:
     wxTextCtrl*         m_textWindow;
 
-    MyTimer m_timer;
-
-DECLARE_EVENT_TABLE()
+    DECLARE_EVENT_TABLE()
 };
 
 #define ID_TOOLBAR  500

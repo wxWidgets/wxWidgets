@@ -1,6 +1,6 @@
 /*
  * Program: image
- * 
+ *
  * Author: Robert Roebling
  *
  * Copyright: (C) 1998, Robert Roebling
@@ -29,47 +29,41 @@ class MyApp;
 
 class MyCanvas: public wxScrolledWindow
 {
-  DECLARE_DYNAMIC_CLASS(MyCanvas)
-  
-  public:
-  
-    MyCanvas(void) {};
+public:
+    MyCanvas() {};
     MyCanvas( wxWindow *parent, wxWindowID, const wxPoint &pos, const wxSize &size );
-    ~MyCanvas(void);
+    ~MyCanvas();
     void OnPaint( wxPaintEvent &event );
-    
+
     wxBitmap  *my_horse;
     wxBitmap  *my_square;
-    
-  DECLARE_EVENT_TABLE()
+
+    DECLARE_DYNAMIC_CLASS(MyCanvas)
+    DECLARE_EVENT_TABLE()
 };
 
 // MyFrame
 
 class MyFrame: public wxFrame
 {
-  DECLARE_DYNAMIC_CLASS(MyFrame)
+public:
+    MyFrame();
 
-  public:
-  
-    MyFrame(void);
-    void OnSize( wxSizeEvent &event );
     void OnAbout( wxCommandEvent &event );
     void OnQuit( wxCommandEvent &event );
-    
+
     MyCanvas         *m_canvas;
-    
-  DECLARE_EVENT_TABLE()
+
+    DECLARE_DYNAMIC_CLASS(MyFrame)
+    DECLARE_EVENT_TABLE()
 };
 
 // MyApp
 
 class MyApp: public wxApp
 {
-  public:
-  
-    MyApp(void);
-    virtual bool OnInit(void);
+public:
+    virtual bool OnInit();
 };
 
 // main program
@@ -80,17 +74,18 @@ IMPLEMENT_APP(MyApp)
 
 IMPLEMENT_DYNAMIC_CLASS(MyCanvas, wxScrolledWindow)
 
-BEGIN_EVENT_TABLE(MyCanvas,wxScrolledWindow)
-  EVT_PAINT  (MyCanvas::OnPaint)
+BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
+  EVT_PAINT(MyCanvas::OnPaint)
 END_EVENT_TABLE()
 
-MyCanvas::MyCanvas( wxWindow *parent, const wxWindowID id, const wxPoint &pos, const wxSize &size ) 
-  : wxScrolledWindow( parent, id, pos, size, wxSUNKEN_BORDER ) 
+MyCanvas::MyCanvas( wxWindow *parent, const wxWindowID id,
+                    const wxPoint &pos, const wxSize &size )
+        : wxScrolledWindow( parent, id, pos, size, wxSUNKEN_BORDER )
 {
   SetBackgroundColour(* wxWHITE);
 
   wxBitmap bitmap( 100, 100 );
-  
+
   wxMemoryDC dc;
   dc.SelectObject( bitmap );
   dc.SetBrush( wxBrush( "orange", wxSOLID ) );
@@ -106,18 +101,18 @@ MyCanvas::MyCanvas( wxWindow *parent, const wxWindowID id, const wxPoint &pos, c
 
   wxImage image( bitmap );
   image.SaveFile( dir + wxString("test.png"), wxBITMAP_TYPE_PNG );
-  
+
   image.LoadFile( dir + wxString("horse.png"), wxBITMAP_TYPE_PNG );
   image.SetRGB( 0, 0, 250, 0, 0 );
   image.SetRGB( 1, 0, 100, 100, 100 );
   image.SetRGB( 2, 0, 250, 250, 250 );
   my_horse = new wxBitmap( image.ConvertToBitmap() );
-  
+
   image.LoadFile( dir + wxString("test.png"), wxBITMAP_TYPE_PNG );
   my_square = new wxBitmap( image.ConvertToBitmap() );
 }
 
-MyCanvas::~MyCanvas(void)
+MyCanvas::~MyCanvas()
 {
   delete my_horse;
   delete my_square;
@@ -130,12 +125,12 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
   dc.DrawText( "Loaded image", 30, 100 );
   if (my_square->Ok()) dc.DrawBitmap( *my_square, 30, 120 );
-  
+
   dc.DrawText( "Drawn directly", 150, 100 );
   dc.SetBrush( wxBrush( "orange", wxSOLID ) );
   dc.SetPen( *wxWHITE_PEN );
   dc.DrawRectangle( 150, 120, 100, 100 );
-  
+
   if (my_horse->Ok()) dc.DrawBitmap( *my_horse, 30, 240 );
 }
 
@@ -149,25 +144,25 @@ IMPLEMENT_DYNAMIC_CLASS( MyFrame, wxFrame )
 BEGIN_EVENT_TABLE(MyFrame,wxFrame)
   EVT_MENU    (ID_ABOUT, MyFrame::OnAbout)
   EVT_MENU    (ID_QUIT,  MyFrame::OnQuit)
-  EVT_SIZE    (MyFrame::OnSize)
 END_EVENT_TABLE()
 
-MyFrame::MyFrame(void) :
-  wxFrame( (wxFrame *) NULL, -1, "wxImage sample", wxPoint(20,20), wxSize(470,360) )
+MyFrame::MyFrame()
+       : wxFrame( (wxFrame *)NULL, -1, "wxImage sample",
+                  wxPoint(20,20), wxSize(470,360) )
 {
   wxMenu *file_menu = new wxMenu();
   file_menu->Append( ID_ABOUT, "About..");
   file_menu->Append( ID_QUIT, "Exit");
-  
+
   wxMenuBar *menu_bar = new wxMenuBar();
   menu_bar->Append(file_menu, "File");
 
   SetMenuBar( menu_bar );
-  
+
   CreateStatusBar(2);
   int widths[] = { -1, 100 };
   SetStatusWidths( 2, widths );
-  
+
   m_canvas = new MyCanvas( this, -1, wxPoint(0,0), wxSize(10,10) );
   m_canvas->SetScrollbars( 10, 10, 50, 50 );
 }
@@ -179,33 +174,22 @@ void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
 
 void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
 {
-  (void) wxMessageBox( "wxImage demo\nRobert Roebling (c) 1998", "About wxImage Demo", wxOK );
-}
-
-void MyFrame::OnSize( wxSizeEvent &WXUNUSED(event) )
-{
-  int w,h;
-  GetClientSize( &w, &h );
-  if (m_canvas)
-    m_canvas->SetSize( w, h );
+  (void)wxMessageBox( "wxImage demo\n"
+                      "Robert Roebling (c) 1998",
+                      "About wxImage Demo", wxICON_INFORMATION | wxOK );
 }
 
 //-----------------------------------------------------------------------------
 // MyApp
 //-----------------------------------------------------------------------------
 
-MyApp::MyApp(void) : 
-  wxApp( )
-{
-}
-
-bool MyApp::OnInit(void)
+bool MyApp::OnInit()
 {
   wxImage::AddHandler( new wxPNGHandler );
-  
+
   wxFrame *frame = new MyFrame();
   frame->Show( TRUE );
-  
+
   return TRUE;
 }
 
