@@ -108,12 +108,12 @@ bool wxYield()
         g_isIdle = TRUE;
     }
 
-    while (gtk_events_pending())
-        gtk_main_iteration();
-
     // disable log flushing from here because a call to wxYield() shouldn't
     // normally result in message boxes popping up &c
     wxLog::Suspend();
+
+    while (gtk_events_pending())
+        gtk_main_iteration();
 
     /* it's necessary to call ProcessIdle() to update the frames sizes which
        might have been changed (it also will update other things set from
