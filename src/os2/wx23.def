@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  F:\DEV\WX2\WXWINDOWS\LIB\wx.lib
+;From library:  H:\Dev\Wx2\WxWindows\lib\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -61,6 +61,10 @@ EXPORTS
       OnInitCmdLine__9wxAppBaseFR15wxCmdLineParser
       ;wxAppBase::OnCmdLineParsed(wxCmdLineParser&)
       OnCmdLineParsed__9wxAppBaseFR15wxCmdLineParser
+      ;wxAppBase::CheckBuildOptions(const wxBuildOptions&)
+      CheckBuildOptions__9wxAppBaseFRC14wxBuildOptions
+      ;wxAppBase::FilterEvent(wxEvent&)
+      FilterEvent__9wxAppBaseFR7wxEvent
       __vft9wxAppBase8wxObject
       ;wxAppBase::OnCmdLineHelp(wxCmdLineParser&)
       OnCmdLineHelp__9wxAppBaseFR15wxCmdLineParser
@@ -231,6 +235,8 @@ EXPORTS
       wxConstructorForwxPageSetupDialogData__Fv
       ;wxPrintDialogData::~wxPrintDialogData()
       __dt__17wxPrintDialogDataFv
+      ;wxFontDialogBase::~wxFontDialogBase()
+      __dt__16wxFontDialogBaseFv
       ;wxColourData::wxColourData()
       __ct__12wxColourDataFv
       ;wxPageSetupDialogData::CalculatePaperSizeFromId()
@@ -245,12 +251,12 @@ EXPORTS
       sm_classwxFontData__10wxFontData
       ;wxPageSetupDialogData::SetPaperSize(wxPaperSize)
       SetPaperSize__21wxPageSetupDialogDataF11wxPaperSize
+      ;wxFontData::~wxFontData()
+      __dt__10wxFontDataFv
       ;wxConstructorForwxColourData()
       wxConstructorForwxColourData__Fv
       ;wxColourData::~wxColourData()
       __dt__12wxColourDataFv
-      ;wxFontData::~wxFontData()
-      __dt__10wxFontDataFv
       ;wxPrintData::wxPrintData(const wxPrintData&)
       __ct__11wxPrintDataFRC11wxPrintData
       ;wxPrintDialogData::sm_classwxPrintDialogData
@@ -265,17 +271,20 @@ EXPORTS
       __as__17wxPrintDialogDataFRC17wxPrintDialogData
       ;wxPrintDialogData::operator=(const wxPrintData&)
       __as__17wxPrintDialogDataFRC11wxPrintData
-      ;wxConstructorForwxFontData()
-      wxConstructorForwxFontData__Fv
       ;wxFontData::wxFontData()
       __ct__10wxFontDataFv
-      __vft12wxColourData8wxObject
-      __vft17wxPrintDialogData8wxObject
+      ;wxConstructorForwxFontData()
+      wxConstructorForwxFontData__Fv
       __vft10wxFontData8wxObject
+      __vft17wxPrintDialogData8wxObject
+      __vft16wxFontDialogBase8wxObject
+      __vft12wxColourData8wxObject
       ;wxColourData::operator=(const wxColourData&)
       __as__12wxColourDataFRC12wxColourData
       ;wxPrintDialogData::wxPrintDialogData(const wxPrintDialogData&)
       __ct__17wxPrintDialogDataFRC17wxPrintDialogData
+      ;wxPrintData::Ok() const
+      Ok__11wxPrintDataCFv
       ;wxConstructorForwxPrintData()
       wxConstructorForwxPrintData__Fv
       ;wxPageSetupDialogData::~wxPageSetupDialogData()
@@ -510,15 +519,19 @@ EXPORTS
       GetClientObject__15wxItemContainerCFi
       ;wxItemContainer::SetClientData(int,void*)
       SetClientData__15wxItemContainerFiPv
+      __vft18wxControlWithItems8wxObject
       ;wxItemContainer::Append(const wxArrayString&)
       Append__15wxItemContainerFRC13wxArrayString
       ;wxItemContainer::~wxItemContainer()
       __dt__15wxItemContainerFv
+      ;wxControlWithItems::~wxControlWithItems()
+      __dt__18wxControlWithItemsFv
       ;wxItemContainer::GetStringSelection() const
       GetStringSelection__15wxItemContainerCFv
       ;wxItemContainer::SetClientObject(int,wxClientData*)
       SetClientObject__15wxItemContainerFiP12wxClientData
       __vft15wxItemContainer
+      __vft18wxControlWithItems15wxItemContainer
   ;From object file:  ..\common\datetime.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxDateTime::wxDateTime(double)
@@ -967,6 +980,8 @@ EXPORTS
       RemoveChild__12wxDialogBaseFP12wxWindowBase
       ;wxDialogBase::GetEventTable() const
       GetEventTable__12wxDialogBaseCFv
+      ;wxDialogBase::SetTmpDefaultItem(wxWindow*)
+      SetTmpDefaultItem__12wxDialogBaseFP8wxWindow
   ;From object file:  ..\common\dobjcmn.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxDataObjectComposite::GetDataSize(const wxDataFormat&) const
@@ -1925,7 +1940,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -3688,6 +3703,8 @@ EXPORTS
       SetActiveTarget__5wxLogFP5wxLog
       ;wxLogWarning(const char*,...)
       wxLogWarning__FPCce
+      ;wxSafeShowMessage(const wxString&,const wxString&)
+      wxSafeShowMessage__FRC8wxStringT1
       ;wxLogVerbose(const char*,...)
       wxLogVerbose__FPCce
       ;wxLogTrace(unsigned long,const char*,...)
@@ -4353,6 +4370,8 @@ EXPORTS
       CreateRefData__8wxObjectCFv
       ;wxClassInfo::sm_classTable
       sm_classTable__11wxClassInfo
+      ;wxObject::InitFrom(const wxObject&)
+      InitFrom__8wxObjectFRC8wxObject
       ;wxObject::operator new(unsigned int,const char*,int)
       __nw__8wxObjectFUiPCci
       ;wxObject::CloneRefData(const wxObjectRefData*) const
@@ -4430,6 +4449,57 @@ EXPORTS
       ;wxPrintPaperDatabase::AddPaperType(wxPaperSize,const wxString&,int,int)
       AddPaperType__20wxPrintPaperDatabaseF11wxPaperSizeRC8wxStringiT3
   ;From object file:  ..\common\popupcmn.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxPopupWindowHandler::OnLeftDown(wxMouseEvent&)
+      OnLeftDown__20wxPopupWindowHandlerFR12wxMouseEvent
+      __vft20wxPopupWindowHandler8wxObject
+      __vft19wxPopupFocusHandler8wxObject
+      __vft17wxPopupWindowBase8wxObject
+      ;wxPopupWindowHandler::sm_eventTableEntries
+      sm_eventTableEntries__20wxPopupWindowHandler
+      ;wxConstructorForwxPopupTransientWindow()
+      wxConstructorForwxPopupTransientWindow__Fv
+      ;wxPopupWindowHandler::sm_eventTable
+      sm_eventTable__20wxPopupWindowHandler
+      ;wxPopupWindowHandler::GetEventTable() const
+      GetEventTable__20wxPopupWindowHandlerCFv
+      ;wxPopupTransientWindow::Dismiss()
+      Dismiss__22wxPopupTransientWindowFv
+      ;wxPopupTransientWindow::sm_classwxPopupTransientWindow
+      sm_classwxPopupTransientWindow__22wxPopupTransientWindow
+      __vft22wxPopupTransientWindow8wxObject
+      ;wxPopupFocusHandler::GetEventTable() const
+      GetEventTable__19wxPopupFocusHandlerCFv
+      ;wxPopupFocusHandler::sm_eventTable
+      sm_eventTable__19wxPopupFocusHandler
+      ;wxPopupFocusHandler::sm_eventTableEntries
+      sm_eventTableEntries__19wxPopupFocusHandler
+      ;wxPopupTransientWindow::Popup(wxWindow*)
+      Popup__22wxPopupTransientWindowFP8wxWindow
+      ;wxPopupTransientWindow::ProcessLeftDown(wxMouseEvent&)
+      ProcessLeftDown__22wxPopupTransientWindowFR12wxMouseEvent
+      ;wxPopupFocusHandler::OnKillFocus(wxFocusEvent&)
+      OnKillFocus__19wxPopupFocusHandlerFR12wxFocusEvent
+      ;wxPopupFocusHandler::OnKeyDown(wxKeyEvent&)
+      OnKeyDown__19wxPopupFocusHandlerFR10wxKeyEvent
+      ;wxPopupWindowBase::Create(wxWindow*,int)
+      Create__17wxPopupWindowBaseFP8wxWindowi
+      ;wxPopupWindowBase::~wxPopupWindowBase()
+      __dt__17wxPopupWindowBaseFv
+      ;wxPopupTransientWindow::OnDismiss()
+      OnDismiss__22wxPopupTransientWindowFv
+      ;wxPopupTransientWindow::DismissAndNotify()
+      DismissAndNotify__22wxPopupTransientWindowFv
+      ;wxPopupWindowBase::Position(const wxPoint&,const wxSize&)
+      Position__17wxPopupWindowBaseFRC7wxPointRC6wxSize
+      ;wxPopupTransientWindow::wxPopupTransientWindow(wxWindow*,int)
+      __ct__22wxPopupTransientWindowFP8wxWindowi
+      ;wxPopupTransientWindow::Init()
+      Init__22wxPopupTransientWindowFv
+      ;wxPopupTransientWindow::~wxPopupTransientWindow()
+      __dt__22wxPopupTransientWindowFv
+      ;wxPopupTransientWindow::PopHandlers()
+      PopHandlers__22wxPopupTransientWindowFv
   ;From object file:  ..\common\prntbase.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxPreviewControlBar::OnZoom(wxCommandEvent&)
@@ -6068,7 +6138,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -9201,8 +9271,6 @@ EXPORTS
       GetEventTable__14wxListTextCtrlCFv
       ;wxListMainWindow::DoDeleteAllItems()
       DoDeleteAllItems__16wxListMainWindowFv
-      ;wxListItem::ClearAttributes()
-      ClearAttributes__10wxListItemFv
       ;wxListLineData::wxListLineData(wxListMainWindow*)
       __ct__14wxListLineDataFP16wxListMainWindow
       wxEVT_COMMAND_LIST_SET_INFO
@@ -9412,8 +9480,8 @@ EXPORTS
       DeleteColumn__16wxListMainWindowFi
       ;wxListLineData::CalculateSize(wxDC*,int)
       CalculateSize__14wxListLineDataFP4wxDCi
-      ;wxListItem::wxListItem()
-      __ct__10wxListItemFv
+      ;wxListCtrl::~wxListCtrl()
+      __dt__10wxListCtrlFv
       wxSizeTCmpFn
       ;wxConstructorForwxListItem()
       wxConstructorForwxListItem__Fv
@@ -9421,8 +9489,6 @@ EXPORTS
       __dt__19wxListLineDataArrayFv
       ;wxListItemData::~wxListItemData()
       __dt__14wxListItemDataFv
-      ;wxListCtrl::~wxListCtrl()
-      __dt__10wxListCtrlFv
       ;wxListCtrl::SetItemImage(long,int,int)
       SetItemImage__10wxListCtrlFliT2
       ;wxListCtrl::SetForegroundColour(const wxColour&)
@@ -9575,8 +9641,6 @@ EXPORTS
       DoEmpty__19wxListLineDataArrayFv
       ;wxListCtrl::DeleteAllItems()
       DeleteAllItems__10wxListCtrlFv
-      ;wxListItem::Clear()
-      Clear__10wxListItemFv
       ;wxListCtrl::ClearAll()
       ClearAll__10wxListCtrlFv
       ;wxListItemData::wxListItemData(wxListMainWindow*)
@@ -9703,6 +9767,8 @@ EXPORTS
       Init__7wxPanelFv
       ;wxPanel::Create(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxString&)
       Create__7wxPanelFP8wxWindowiRC7wxPointRC6wxSizelRC8wxString
+      ;wxPanel::SetTmpDefaultItem(wxWindow*)
+      SetTmpDefaultItem__7wxPanelFP8wxWindow
       ;wxPanel::SetDefaultItem(wxWindow*)
       SetDefaultItem__7wxPanelFP8wxWindow
       __vft7wxPanel8wxObject
@@ -10019,6 +10085,8 @@ EXPORTS
       InitColours__16wxSplitterWindowFv
       ;wxSplitterWindow::SetDefaultItem(wxWindow*)
       SetDefaultItem__16wxSplitterWindowFP8wxWindow
+      ;wxSplitterWindow::SetTmpDefaultItem(wxWindow*)
+      SetTmpDefaultItem__16wxSplitterWindowFP8wxWindow
       ;wxSplitterWindow::OnFocus(wxFocusEvent&)
       OnFocus__16wxSplitterWindowFR12wxFocusEvent
       wxEVT_COMMAND_SPLITTER_UNSPLIT
@@ -10287,6 +10355,43 @@ EXPORTS
       ;wxTipDialog::wxTipDialog(wxWindow*,wxTipProvider*,unsigned long)
       __ct__11wxTipDialogFP8wxWindowP13wxTipProviderUl
   ;From object file:  ..\generic\tipwin.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxTipWindow::SetBoundingRect(const wxRect&)
+      SetBoundingRect__11wxTipWindowFRC6wxRect
+      ;wxTipWindowView::OnMouseMove(wxMouseEvent&)
+      OnMouseMove__15wxTipWindowViewFR12wxMouseEvent
+      ;wxTipWindow::OnDismiss()
+      OnDismiss__11wxTipWindowFv
+      ;wxTipWindowView::sm_eventTable
+      sm_eventTable__15wxTipWindowView
+      ;wxTipWindowView::OnMouseClick(wxMouseEvent&)
+      OnMouseClick__15wxTipWindowViewFR12wxMouseEvent
+      __vft11wxTipWindow8wxObject
+      ;wxTipWindowView::GetEventTable() const
+      GetEventTable__15wxTipWindowViewCFv
+      ;wxTipWindow::Close()
+      Close__11wxTipWindowFv
+      ;wxTipWindow::OnMouseClick(wxMouseEvent&)
+      OnMouseClick__11wxTipWindowFR12wxMouseEvent
+      ;wxTipWindow::GetEventTable() const
+      GetEventTable__11wxTipWindowCFv
+      ;wxTipWindow::~wxTipWindow()
+      __dt__11wxTipWindowFv
+      ;wxTipWindow::sm_eventTable
+      sm_eventTable__11wxTipWindow
+      ;wxTipWindow::wxTipWindow(wxWindow*,const wxString&,int,wxTipWindow**,wxRect*)
+      __ct__11wxTipWindowFP8wxWindowRC8wxStringiPP11wxTipWindowP6wxRect
+      __vft15wxTipWindowView8wxObject
+      ;wxTipWindowView::OnPaint(wxPaintEvent&)
+      OnPaint__15wxTipWindowViewFR12wxPaintEvent
+      ;wxTipWindowView::wxTipWindowView(wxWindow*)
+      __ct__15wxTipWindowViewFP8wxWindow
+      ;wxTipWindow::sm_eventTableEntries
+      sm_eventTableEntries__11wxTipWindow
+      ;wxTipWindowView::Adjust(const wxString&,int)
+      Adjust__15wxTipWindowViewFRC8wxStringi
+      ;wxTipWindowView::sm_eventTableEntries
+      sm_eventTableEntries__15wxTipWindowView
   ;From object file:  ..\generic\treectlg.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxTreeRenameTimer::wxTreeRenameTimer(wxGenericTreeCtrl*)
@@ -11662,18 +11767,24 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxButton::Command(wxCommandEvent&)
       Command__8wxButtonFR14wxCommandEvent
-      ;wxButton::MakeOwnerDrawn()
-      MakeOwnerDrawn__8wxButtonFv
+      ;wxButton::SetTmpDefault()
+      SetTmpDefault__8wxButtonFv
       ;wxButton::WindowProc(unsigned int,void*,void*)
       WindowProc__8wxButtonFUiPvT2
+      ;wxButton::MakeOwnerDrawn()
+      MakeOwnerDrawn__8wxButtonFv
       ;wxButton::OS2GetStyle(long,unsigned long*) const
       OS2GetStyle__8wxButtonCFlPUl
       ;wxButton::OnCtlColor(unsigned long,unsigned long,unsigned int,unsigned int,void*,void*)
       OnCtlColor__8wxButtonFUlT1UiT3PvT5
+      ;wxButton::UnsetTmpDefault()
+      UnsetTmpDefault__8wxButtonFv
       ;wxButton::~wxButton()
       __dt__8wxButtonFv
       ;wxButton::SendClickEvent()
       SendClickEvent__8wxButtonFv
+      ;wxButton::UpdateDefaultStyle(wxWindow*,wxWindow*)
+      UpdateDefaultStyle__8wxButtonFP8wxWindowT1
       ;wxConstructorForwxButton()
       wxConstructorForwxButton__Fv
       ;wxButton::GetDefaultSize()
@@ -11859,10 +11970,10 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxColour::Set(unsigned char,unsigned char,unsigned char)
       Set__8wxColourFUcN21
-      ;wxColour::wxColour()
-      __ct__8wxColourFv
       ;wxColour::operator=(const wxColour&)
       __as__8wxColourFRC8wxColour
+      ;wxColour::wxColour()
+      __ct__8wxColourFv
       ;wxColour::InitFromName(const wxString&)
       InitFromName__8wxColourFRC8wxString
       ;wxConstructorForwxColour()
@@ -11870,12 +11981,12 @@ EXPORTS
       __vft8wxColour8wxObject
       ;wxColour::wxColour(unsigned char,unsigned char,unsigned char)
       __ct__8wxColourFUcN21
-      ;wxColour::~wxColour()
-      __dt__8wxColourFv
-      ;wxColour::sm_classwxColour
-      sm_classwxColour__8wxColour
       ;wxColour::wxColour(const wxColour&)
       __ct__8wxColourFRC8wxColour
+      ;wxColour::sm_classwxColour
+      sm_classwxColour__8wxColour
+      ;wxColour::~wxColour()
+      __dt__8wxColourFv
   ;From object file:  ..\os2\combobox.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxComboBox::sm_classwxComboBox
@@ -13727,6 +13838,15 @@ EXPORTS
       GetBitmap__11wxPNGReaderFv
       ;wxPNGReader::CreateMask()
       CreateMask__11wxPNGReaderFv
+  ;From object file:  ..\os2\popupwin.cpp
+    ;PUBDEFs (Symbols available from object file):
+      __vft13wxPopupWindow8wxObject
+      ;wxPopupWindow::DoGetPosition(int*,int*) const
+      DoGetPosition__13wxPopupWindowCFPiT1
+      ;wxPopupWindow::OS2GetStyle(long,unsigned long*) const
+      OS2GetStyle__13wxPopupWindowCFlPUl
+      ;wxPopupWindow::Create(wxWindow*,int)
+      Create__13wxPopupWindowFP8wxWindowi
   ;From object file:  ..\os2\print.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxPrintPreview::Print(unsigned long)
@@ -14982,6 +15102,8 @@ EXPORTS
       GetEventTable__8wxWindowCFv
       ;wxWindow::GetClientAreaOrigin() const
       GetClientAreaOrigin__8wxWindowCFv
+      ;FindWindowForMouseEvent(wxWindow*,short*,short*)
+      FindWindowForMouseEvent__FP8wxWindowPsT2
       ;wxWindow::Create(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxString&)
       Create__8wxWindowFP8wxWindowiRC7wxPointRC6wxSizelRC8wxString
       ;wxAssociateWinWithHandle(unsigned long,wxWindow*)

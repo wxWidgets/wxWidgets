@@ -138,10 +138,14 @@ MRESULT EXPENTRY wxWndProc( HWND hWnd
     const char *wxGetMessageName(int message);
 #endif  //__WXDEBUG__
 
-void      wxRemoveHandleAssociation(wxWindowOS2* pWin);
-void      wxAssociateWinWithHandle( HWND         hWnd
-                                   ,wxWindowOS2* pWin
-                                  );
+wxWindowOS2* FindWindowForMouseEvent( wxWindow* pWin
+                                     ,short*    pnX
+                                     ,short*    pnY
+                                    );
+void         wxRemoveHandleAssociation(wxWindowOS2* pWin);
+void         wxAssociateWinWithHandle( HWND         hWnd
+                                      ,wxWindowOS2* pWin
+                                     );
 wxWindow* wxFindWinFromHandle(WXHWND hWnd);
 
 //
@@ -2657,12 +2661,38 @@ MRESULT wxWindowOS2::OS2WindowProc(
         case WM_BUTTON3MOTIONEND:
         case WM_BUTTON3MOTIONSTART:
             {
-                short x = LOWORD(wParam);
-                short y = HIWORD(wParam);
+                if (uMsg == WM_BUTTON1DOWN && AcceptsFocus())
+                    SetFocus();
 
-                bProcessed = HandleMouseEvent(uMsg, x, y, (WXUINT)wParam);
+                short               nX = LOWORD(wParam);
+                short               nY = HIWORD(wParam);
+
+                //
+                // Redirect the event to a static control if necessary
+                //
+                if (this == GetCapture())
+                {
+                    bProcessed = HandleMouseEvent( uMsg
+                                                  ,nX
+                                                  ,nY
+                                                  ,(WXUINT)SHORT1FROMMP(wParam)
+                                                 );
+                }
+                else
+                {
+                    wxWindow*       pWin = FindWindowForMouseEvent( this
+                                                                   ,&nX
+                                                                   ,&nY
+                                                                  );
+                    bProcessed = pWin->HandleMouseEvent( uMsg
+                                                        ,nX
+                                                        ,nY
+                                                        ,(WXUINT)SHORT1FROMMP(wParam)
+                                                       );
+                }
             }
             break;
+
         case WM_SYSCOMMAND:
             bProcessed = HandleSysCommand(wParam, lParam);
             break;
@@ -5108,4 +5138,60 @@ wxPoint wxGetMousePosition()
     ::WinQueryPointerPos(HWND_DESKTOP, &vPt);
     return wxPoint(vPt.x, vPt.y);
 }
+
+wxWindowOS2* FindWindowForMouseEvent(
+  wxWindow*                         pWin
+, short*                            pnX
+, short*                            pnY
+)
+{
+    wxCHECK_MSG( pnX && pnY, pWin, _T("NULL pointer in FindWindowForMouseEvent") );
+    POINTL                          vPoint = { *pnX, *pnY };
+    HWND                            hWnd = GetHwndOf(pWin);
+    HWND                            hWndUnderMouse;
+
+    //
+    // First try to find a non transparent child: this allows us to send events
+    // to a static text which is inside a static box, for example
+    //
+
+    hWndUnderMouse = ::WinWindowFromPoint( hWnd
+                                          ,&vPoint
+                                          ,TRUE
+                                         );
+    if (!hWndUnderMouse || hWndUnderMouse == hWnd)
+    {
+        //
+        // Now try any child window at all
+        //
+        hWndUnderMouse = ::WinWindowFromPoint( HWND_DESKTOP
+                                              ,&vPoint
+                                              ,TRUE
+                                             );
+
+    }
+
+    //
+    // Check that we have a child window which is susceptible to receive mouse
+    // events: for this it must be shown and enabled
+    if ( hWndUnderMouse &&
+         hWndUnderMouse != hWnd &&
+         ::WinIsWindowVisible(hWndUnderMouse) &&
+         ::WinIsWindowEnabled(hWndUnderMouse))
+    {
+        wxWindow*                   pWinUnderMouse = wxFindWinFromHandle((WXHWND)hWndUnderMouse);
+        if (pWinUnderMouse)
+        {
+            // translate the mouse coords to the other window coords
+            pWin->ClientToScreen( (int*)pnX
+                                 ,(int*)pnY
+                                );
+            pWinUnderMouse->ScreenToClient( (int*)pnX
+                                           ,(int*)pnY
+                                          );
+            pWin = pWinUnderMouse;
+        }
+    }
+    return pWin;
+} // end of FindWindowForMouseEvent
 

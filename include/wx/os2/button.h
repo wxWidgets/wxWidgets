@@ -81,6 +81,13 @@ class WXDLLEXPORT wxButton: public wxButtonBase
 protected:
 
     bool            SendClickEvent(void);
+    void            SetTmpDefault(void);
+    void            UnsetTmpDefault(void);
+
+    static void UpdateDefaultStyle( wxWindow* pWinDefault
+                                   ,wxWindow* pWinOldDefault
+                                  );
+
     virtual wxSize  DoGetBestSize(void) const;
     virtual WXDWORD OS2GetStyle( long     style
                                 ,WXDWORD* exstyle

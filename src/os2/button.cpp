@@ -221,27 +221,64 @@ bool wxButton::SendClickEvent()
 void wxButton::SetDefault()
 {
     wxWindow*                       pParent = GetParent();
-    wxButton*                       pBtnOldDefault = NULL;
-    wxPanel*                        pPanel = wxDynamicCast(pParent, wxPanel);
-    long                            lStyle = 0L;
 
-    if (pParent)
+    wxCHECK_RET( pParent, _T("button without parent?") );
+
+    //
+    // Set this one as the default button both for wxWindows and Windows
+    //
+    wxWindow*                       pWinOldDefault = pParent->SetDefaultItem(this);
+    UpdateDefaultStyle( this
+                       ,pWinOldDefault
+                      );
+} // end of wxButton::SetDefault
+
+void wxButton::SetTmpDefault()
+{
+    wxWindow*                       pParent = GetParent();
+
+    wxCHECK_RET( pParent, _T("button without parent?") );
+
+    wxWindow*                       pWinOldDefault = pParent->GetDefaultItem();
+    pParent->SetTmpDefaultItem(this);
+    if (pWinOldDefault != this)
     {
-        wxWindow*                   pWinOldDefault = pParent->SetDefaultItem(this);
-
-        pBtnOldDefault = wxDynamicCast(pWinOldDefault, wxButton);
+        UpdateDefaultStyle( this
+                           ,pWinOldDefault
+                          );
     }
-    if (pBtnOldDefault && pBtnOldDefault != this)
-    {
-        //
-        // Remove the BS_DEFPUSHBUTTON style from the other button
-        //
-        lStyle = ::WinQueryWindowULong(GetHwndOf(pBtnOldDefault), QWL_STYLE);
+    //else: no styles to update
+} // end of wxButton::SetTmpDefault
 
-        //
-        // Don't do it with the owner drawn buttons because it will reset
-        // BS_OWNERDRAW style bit too (BS_OWNERDRAW & BS_DEFPUSHBUTTON != 0)!
-        //
+void wxButton::UnsetTmpDefault()
+{
+    wxWindow*                       pParent = GetParent();
+
+    wxCHECK_RET( pParent, _T("button without parent?") );
+
+    pParent->SetTmpDefaultItem(NULL);
+
+    wxWindow*                       pWinOldDefault = pParent->GetDefaultItem();
+
+    if (pWinOldDefault != this)
+    {
+        UpdateDefaultStyle( pWinOldDefault
+                           ,this
+                          );
+    }
+    //else: we had been default before anyhow
+} // end of wxButton::UnsetTmpDefault
+
+void wxButton::UpdateDefaultStyle(
+  wxWindow*                         pWinDefault
+, wxWindow*                         pWinOldDefault)
+{
+    wxButton*                       pBtnOldDefault = wxDynamicCast(pWinOldDefault, wxButton);
+    long                            lStyle;
+
+    if ( pBtnOldDefault && pBtnOldDefault != pWinDefault )
+    {
+        lStyle = ::WinQueryWindowULong(GetHwndOf(pBtnOldDefault), QWL_STYLE);
         if ((lStyle & BS_USERBUTTON) != BS_USERBUTTON)
         {
             lStyle &= ~BS_DEFAULT;
@@ -249,24 +286,24 @@ void wxButton::SetDefault()
         }
         else
         {
-            //
-            // Redraw the button - it will notice itself that it's not the
+            // redraw the button - it will notice itself that it's not the
             // default one any longer
-            //
             pBtnOldDefault->Refresh();
         }
     }
 
-    //
-    // Set this button as the default
-    //
-    lStyle = ::WinQueryWindowULong(GetHwnd(), QWL_STYLE);
-    if ((lStyle & BS_USERBUTTON) != BS_USERBUTTON)
+    wxButton*                       pBtnDefault = wxDynamicCast(pWinDefault, wxButton);
+
+    if (pBtnDefault)
     {
-        lStyle != BS_DEFAULT;
-        ::WinSetWindowULong(GetHwnd(), QWL_STYLE, lStyle);
+        lStyle = ::WinQueryWindowULong(GetHwndOf(pBtnDefault), QWL_STYLE);
+        if ((lStyle & BS_USERBUTTON) != BS_USERBUTTON)
+        {
+            lStyle != BS_DEFAULT;
+            ::WinSetWindowULong(GetHwndOf(pBtnDefault), QWL_STYLE, lStyle);
+        }
     }
-} // end of wxButton::SetDefault
+} // end of wxButton::UpdateDefaultStyle
 
 // ----------------------------------------------------------------------------
 // event/message handlers
@@ -348,12 +385,16 @@ MRESULT wxButton::WindowProc(
 )
 {
     //
-    // When we receive focus, we want to become the default button in our
-    // parent panel
+    // When we receive focus, we want to temporary become the default button in
+    // our parent panel so that pressing "Enter" would activate us -- and when
+    // losing it we should restore the previous default button as well
     //
     if (uMsg == WM_SETFOCUS)
     {
-        SetDefault();
+        if (SHORT1FROMMP(lParam) == TRUE)
+            SetTmpDefault();
+        else
+            UnsetTmpDefault();
 
         //
         // Let the default processign take place too

@@ -21,15 +21,20 @@ class WXDLLEXPORT wxPopupWindow : public wxPopupWindowBase
 public:
     wxPopupWindow() { }
 
-    wxPopupWindow(wxWindow *parent) { (void)Create(parent); }
+    wxPopupWindow(wxWindow* pParent) { (void)Create(pParent); }
 
-    bool Create(wxWindow *parent, int flags = wxBORDER_NONE)
-    {
-        return wxPopupWindowBase::Create(parent) &&
-               wxWindow::Create(parent, -1,
-                                wxDefaultPosition, wxDefaultSize,
-                                (flags & wxBORDER_MASK) | wxPOPUP_WINDOW);
-    }
-};
+    bool Create( wxWindow* pParent
+                ,int       nFlags = wxBORDER_NONE
+               );
+protected:
+    virtual void DoGetPosition( int* pnX
+                               ,int* pny
+                              ) const;
+
+    virtual WXDWORD OS2GetStyle( long     lFlags
+                                ,WXDWORD* dwExstyle
+                               ) const;
+    DECLARE_DYNAMIC_CLASS(wxPopupWindow)
+}; // end of CLASS wxPopupWindow
 
 #endif // _WX_PM_POPUPWIN_H_
