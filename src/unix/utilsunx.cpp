@@ -651,12 +651,14 @@ long wxExecute(wxChar **argv,
                     close(fd);
             }
 
-            if ( flags & wxEXEC_MAKE_GROUP_LEADER )
+#ifndef __VMS
+	   if ( flags & wxEXEC_MAKE_GROUP_LEADER )
             {
                 // Set process group to child process' pid.  Then killing -pid
                 // of the parent will kill the process and all of its children.
                 setsid();
             }
+#endif
         }
 
         // redirect stdio, stdout and stderr

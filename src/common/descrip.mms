@@ -99,6 +99,7 @@ OBJECTS1=fs_inet.obj,\
 		imagall.obj,\
 		imagbmp.obj,\
 		image.obj,\
+		imagfill.obj,\
 		imaggif.obj,\
 		imagiff.obj,\
 		imagjpeg.obj,\
@@ -218,6 +219,7 @@ SOURCES = \
 		imagall.cpp,\
 		imagbmp.cpp,\
 		image.cpp,\
+		imagfill.cpp,\
 		imaggif.cpp,\
 		imagiff.cpp,\
 		imagjpeg.cpp,\
@@ -375,6 +377,7 @@ iconbndl.obj : iconbndl.cpp
 imagall.obj : imagall.cpp
 imagbmp.obj : imagbmp.cpp
 image.obj : image.cpp
+imagfill.obj : imagfill.cpp
 imaggif.obj : imaggif.cpp
 imagiff.obj : imagiff.cpp
 imagjpeg.obj : imagjpeg.cpp
