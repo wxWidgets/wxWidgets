@@ -150,10 +150,6 @@ const wxChar*                       wxPanelClassNameNR               = wxT("wxPa
 const wxChar*                       wxCanvasClassName                = wxT("wxCanvasClass");
 const wxChar*                       wxCanvasClassNameNR              = wxT("wxCanvasClassNR");
 
-// See wx/utils.h
-const wxChar *wxFloatToStringStr = wxT("%.2f");
-const wxChar *wxDoubleToStringStr = wxT("%.2f");
-
 const wxChar *wxUserResourceStr = wxT("TEXT");
 
 const wxSize wxDefaultSize(-1, -1);

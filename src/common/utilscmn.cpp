@@ -133,6 +133,15 @@ wxRegisterId (long id)
     wxCurrentId = id + 1;
 }
 
+// ----------------------------------------------------------------------------
+// String <-> Number conversions (deprecated)
+// ----------------------------------------------------------------------------
+
+#if WXWIN_COMPATIBILITY_2_4
+
+WXDLLEXPORT_DATA(const wxChar *) wxFloatToStringStr = wxT("%.2f");
+WXDLLEXPORT_DATA(const wxChar *) wxDoubleToStringStr = wxT("%.2f");
+
 void
 StringToFloat (const wxChar *s, float *number)
 {
@@ -196,6 +205,8 @@ LongToString (long number)
   wxSprintf (buf, wxT("%ld"), number);
   return buf;
 }
+
+#endif // WXWIN_COMPATIBILITY_2_4
 
 // Array used in DecToHex conversion routine.
 static wxChar hexArray[] = wxT("0123456789ABCDEF");

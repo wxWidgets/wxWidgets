@@ -126,10 +126,6 @@ const wxChar *wxTreeCtrlNameStr = wxT("treeCtrl");
 const wxChar *wxDirDialogNameStr = wxT("wxDirCtrl");
 const wxChar *wxDirDialogDefaultFolderStr = wxT("/");
 
-// See wx/utils.h
-const wxChar *wxFloatToStringStr = wxT("%.2f");
-const wxChar *wxDoubleToStringStr = wxT("%.2f");
-
 #if wxUSE_SHARED_LIBRARY
 ///// Event tables (also must be in one, statically-linked file for shared libraries)
 

@@ -168,10 +168,6 @@ const wxChar *wxDirDialogNameStr = wxT("wxDirCtrl");
 const wxChar *wxDirDialogDefaultFolderStr = wxT("/");
 const wxChar *wxTreeCtrlNameStr = wxT("wxTreeCtrl");
 
-/* See wx/utils.h */
-const wxChar *wxFloatToStringStr = wxT("%.2f");
-const wxChar *wxDoubleToStringStr = wxT("%.2f");
-
 /* Dafaults for wxWindow etc. */
 const wxSize wxDefaultSize(-1, -1);
 const wxPoint wxDefaultPosition(-1, -1);

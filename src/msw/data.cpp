@@ -140,10 +140,6 @@ WXDLLEXPORT_DATA(const wxChar *) wxTreeCtrlNameStr = wxT("treeCtrl");
 WXDLLEXPORT_DATA(const wxChar *) wxDirDialogNameStr = wxT("wxDirCtrl");
 WXDLLEXPORT_DATA(const wxChar *) wxDirDialogDefaultFolderStr = wxT("/");
 
-// See wx/utils.h
-WXDLLEXPORT_DATA(const wxChar *) wxFloatToStringStr = wxT("%.2f");
-WXDLLEXPORT_DATA(const wxChar *) wxDoubleToStringStr = wxT("%.2f");
-
 #ifdef __WXMSW__
 WXDLLEXPORT_DATA(const wxChar *) wxUserResourceStr = wxT("TEXT");
 #endif
