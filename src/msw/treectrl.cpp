@@ -545,7 +545,8 @@ wxTreeItemId wxTreeCtrl::AppendItem(const wxTreeItemId& parent,
 void wxTreeCtrl::Delete(const wxTreeItemId& item)
 {
     wxTreeItemData *data = GetItemData(item);
-    delete data;    // may be NULL, ok
+	if(data!=NULL)
+		delete data;    // may be NULL, ok
 
     if ( !TreeView_DeleteItem(wxhWnd, (HTREEITEM)(WXHTREEITEM)item) )
     {
@@ -610,6 +611,11 @@ void wxTreeCtrl::CollapseAndReset(const wxTreeItemId& item)
 void wxTreeCtrl::Toggle(const wxTreeItemId& item)
 {
     DoExpand(item, TVE_TOGGLE);
+}
+
+void wxTreeCtrl::ExpandItem(const wxTreeItemId& item, int action)
+{
+	DoExpand(item, action);
 }
 
 void wxTreeCtrl::Unselect()

@@ -29,6 +29,7 @@
 #include "wx/log.h"
 #include "wx/treectrl.h"
 #include "wx/msw/registry.h"
+#include "wx/msw/imaglist.h"
 
 // ----------------------------------------------------------------------------
 // application type
@@ -58,8 +59,7 @@ public:
 };
 
 // array of children of the node
-struct TreeNode;
-WX_DEFINE_ARRAY(TreeNode *, TreeChildren);
+//class TreeNode;
 
 // ----------------------------------------------------------------------------
 // our control
@@ -96,8 +96,10 @@ public:
 private:
 
   // structure describing a registry key/value
-  struct TreeNode
+	class TreeNode : public wxTreeItemData
   {
+WX_DEFINE_ARRAY(TreeNode *, TreeChildren);
+  public:
     RegTreeCtrl  *m_pTree;     // must be !NULL
     TreeNode     *m_pParent;    // NULL only for the root node
     long          m_id;         // the id of the tree control item
@@ -138,7 +140,7 @@ private:
   wxImageList *m_imageList;
 
   TreeNode *GetNode(const wxTreeEvent& event)
-    { return (TreeNode *)GetItemData(event.m_item.m_itemId); }
+    { return (TreeNode *)GetItemData((WXHTREEITEM)event.GetItem()); }
 
 public:
   // create a new node and insert it to the tree
@@ -389,7 +391,7 @@ RegImageList::RegImageList() : wxImageList(16, 16, TRUE)
   // should be in sync with enum RegImageList::RegIcon
   static const char *aszIcons[] = { "key1","key2","key3","value1","value2" };
   wxString str = "icon_";
-  for ( uint n = 0; n < WXSIZEOF(aszIcons); n++ ) {
+  for ( unsigned int n = 0; n < WXSIZEOF(aszIcons); n++ ) {
     Add(wxIcon(str + aszIcons[n], wxBITMAP_TYPE_ICO_RESOURCE));
   }
 }
@@ -418,9 +420,7 @@ RegTreeCtrl::TreeNode *RegTreeCtrl::InsertNewTreeNode(TreeNode *pParent,
   wxASSERT_MSG( pNewNode->m_id, "can't create tree control item!");
 
   // save the pointer in the item
-  if ( !SetItemData(pNewNode->m_id, (long)pNewNode) ) {
-    wxFAIL_MSG("can't store item's data in tree control!");
-  }
+  SetItemData(pNewNode->m_id, pNewNode);
 
   // add it to the list of parent's children
   if ( pParent != NULL ) {
@@ -461,7 +461,7 @@ RegTreeCtrl::~RegTreeCtrl()
 
 void RegTreeCtrl::AddStdKeys()
 {
-  for ( uint ui = 0; ui < wxRegKey::nStdKeys; ui++ ) {
+  for ( unsigned int ui = 0; ui < wxRegKey::nStdKeys; ui++ ) {
     InsertNewTreeNode(m_pRoot, wxRegKey::GetStdKeyName(ui));
   }
 }
@@ -541,7 +541,7 @@ void RegTreeCtrl::OnSelChanged(wxTreeEvent& event)
 void RegTreeCtrl::OnItemExpanding(wxTreeEvent& event)
 {
   TreeNode *pNode = GetNode(event);
-  bool bExpanding = event.m_code == wxTREE_EXPAND_EXPAND;
+  bool bExpanding = event.GetCode() == wxTREE_EXPAND_EXPAND;
 
   // expansion might take some time
   wxSetCursor(*wxHOURGLASS_CURSOR);
@@ -563,7 +563,7 @@ void RegTreeCtrl::OnItemExpanding(wxTreeEvent& event)
     if ( !pNode->IsRoot() ) {
       int idIcon = bExpanding ? RegImageList::OpenedKey 
                               : RegImageList::ClosedKey;
-      SetItemImage(pNode->Id(), idIcon, idIcon);
+      SetItemImage(pNode->Id(), idIcon);
     }
   }
 
@@ -578,7 +578,7 @@ bool RegTreeCtrl::TreeNode::OnExpand()
 {
   // remove dummy item
   if ( m_lDummy != 0 ) {
-    m_pTree->DeleteItem(m_lDummy);
+    m_pTree->Delete(m_lDummy);
     m_lDummy = 0;
   }
   else {
@@ -691,11 +691,11 @@ void RegTreeCtrl::TreeNode::AddDummy()
 void RegTreeCtrl::TreeNode::DestroyChildren()
 {
   // destroy all children
-  uint nCount = m_aChildren.Count();
-  for ( uint n = 0; n < nCount; n++ ) {
-    long lId = m_aChildren[n]->Id();
+  unsigned int nCount = m_aChildren.Count();
+  for ( unsigned int n = 0; n < nCount; n++ ) {
+	  long lId = m_aChildren[n]->Id();
     delete m_aChildren[n];
-    m_pTree->DeleteItem(lId);
+    m_pTree->Delete(lId);
   }
 
   m_aChildren.Empty();
