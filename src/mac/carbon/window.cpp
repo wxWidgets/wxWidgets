@@ -151,13 +151,21 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
         case kEventControlDraw :
             {
                 RgnHandle updateRgn = NULL ;
-
+                RgnHandle allocatedRgn = NULL ;
                 wxRegion visRegion = thisWindow->MacGetVisibleRegion() ;
                 if ( cEvent.GetParameter<RgnHandle>(kEventParamRgnHandle, &updateRgn) != noErr ) 
                 {
                     updateRgn = (RgnHandle) visRegion.GetWXHRGN() ;
                 }
-                // GrafPtr myport = cEvent.GetParameter<GrafPtr>(kEventParamGrafPort,typeGrafPtr) ;
+                else
+                {
+                    if ( thisWindow->MacGetLeftBorderSize() != 0 || thisWindow->MacGetTopBorderSize() != 0 )
+                    {
+                        allocatedRgn = NewRgn() ;
+                        CopyRgn( updateRgn , allocatedRgn ) ;
+                        OffsetRgn( updateRgn , thisWindow->MacGetLeftBorderSize() , thisWindow->MacGetTopBorderSize() ) ;
+                    }
+                }
 
 #if 0 
               // in case we would need a coregraphics compliant background erase first
@@ -184,6 +192,8 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
 #endif
                 if ( thisWindow->MacDoRedraw( updateRgn , cEvent.GetTicks() ) )
                     result = noErr ;
+                if ( allocatedRgn )
+                    DisposeRgn( allocatedRgn ) ;
             }
             break ;
         case kEventControlVisibilityChanged :
@@ -994,6 +1004,9 @@ void wxWindowMac::DragAcceptFiles(bool accept)
     // TODO
 }
 
+// Returns the size of the native control. In the case of the toplevel window
+// this is the content area root control
+
 void wxWindowMac::MacGetPositionAndSizeFromControl(int& x, int& y,
                                            int& w, int& h) const 
 {
@@ -1016,6 +1029,8 @@ void wxWindowMac::MacGetPositionAndSizeFromControl(int& x, int& y,
     }
 }
 
+// From a wx position / size calculate the appropriate size of the native control
+ 
 bool wxWindowMac::MacGetBoundsForControl(const wxPoint& pos,
                                        const wxSize& size,
                                        int& x, int& y,
@@ -1197,8 +1212,8 @@ void wxWindowMac::MacWindowToRootWindow( int *x , int *y ) const
     {
         Rect bounds ;
         m_peer->GetRect( &bounds ) ;   
-        if(x)   *x += bounds.left ;
-        if(y)   *y += bounds.top ;
+        if(x)   *x += bounds.left - MacGetLeftBorderSize() ;
+        if(y)   *y += bounds.top - MacGetTopBorderSize() ;
     }
 #endif
 }
@@ -1234,8 +1249,8 @@ void wxWindowMac::MacRootWindowToWindow( int *x , int *y ) const
     {
         Rect bounds ;
         m_peer->GetRect( &bounds ) ;   
-        if(x)   *x -= bounds.left ;
-        if(y)   *y -= bounds.top ;
+        if(x)   *x -= bounds.left + MacGetLeftBorderSize() ;
+        if(y)   *y -= bounds.top + MacGetTopBorderSize() ;
     }
 #endif
 }
@@ -1330,10 +1345,10 @@ void wxWindowMac::DoGetClientSize(int *x, int *y) const
 #endif 
     ww = content.right - content.left ;
     hh = content.bottom - content.top ;
-    
+    /*
     ww -= MacGetLeftBorderSize(  )  + MacGetRightBorderSize(  ) ;
     hh -= MacGetTopBorderSize(  ) + MacGetBottomBorderSize( );
-
+    */
     if ( (m_vScrollBar && m_vScrollBar->IsShown()) || (m_hScrollBar  && m_hScrollBar->IsShown()) )
     {
         int x1 = 0 ;
@@ -2390,8 +2405,6 @@ void wxWindowMac::OnSetFocus(wxFocusEvent& event)
     if ( MacGetTopLevelWindow() && m_peer->NeedsFocusRect() )
     {
         wxMacWindowStateSaver sv( this ) ;
-//        wxWindowDC dc(this) ;
-//        wxMacPortSetter helper(&dc) ;
 
         int w , h ;
         int x , y ;
@@ -2887,17 +2900,11 @@ long wxWindowMac::MacGetLeftBorderSize( ) const
     if (m_windowStyle & wxRAISED_BORDER || m_windowStyle & wxSUNKEN_BORDER )
     {
         SInt32 border = 3 ;
-#if 0 // wxMAC_USE_THEME_BORDER
-          GetThemeMetric( kThemeMetricListBoxFrameOutset , &border ) ;
-#endif
           return border ;
     }
     else if (  m_windowStyle &wxDOUBLE_BORDER)
     {
           SInt32 border = 3 ;
-#if 0 // wxMAC_USE_THEME_BORDER
-          GetThemeMetric( kThemeMetricEditTextFrameOutset , &border ) ;
-#endif
           return border ;
     }
     else if (m_windowStyle &wxSIMPLE_BORDER)
@@ -2927,7 +2934,7 @@ long wxWindowMac::MacGetBottomBorderSize( ) const
 
 long wxWindowMac::MacRemoveBordersFromStyle( long style )
 {
-    return style & ~( wxDOUBLE_BORDER | wxSUNKEN_BORDER | wxRAISED_BORDER | wxBORDER | wxSTATIC_BORDER ) ;
+    return style & ~wxBORDER_MASK ;
 }
 
 // Find the wxWindowMac at the current mouse position, returning the mouse
