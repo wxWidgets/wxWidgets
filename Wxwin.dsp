@@ -39,7 +39,7 @@ CPP=cl.exe
 # PROP Intermediate_Dir ".\Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /c
-# ADD CPP /nologo /G5 /MD /w /W0 /GX /O2 /I ".\include" /I ".\include\wx\msw" /I ".\include\wx\generic" /I ".\include\wx\other" /I ".\src\png" /I ".\src\zlib" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D "__WINDOWS__" /YX"wx\wxprec.h" /FD /c
+# ADD CPP /nologo /MD /GX /O2 /I ".\include" /I ".\include\wx\msw" /I ".\include\wx\generic" /I ".\include\wx\other" /I ".\src\png" /I ".\src\zlib" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D "__WINDOWS__" /D "STRICT" /YX"wx\wxprec.h" /FD /c
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -60,7 +60,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir ".\Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /Z7 /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /c
-# ADD CPP /nologo /G5 /MDd /w /W0 /GX /Z7 /Od /Gf /Gy /I ".\include" /I ".\include\wx\msw" /I ".\include\wx\generic" /I ".\include\wx\other" /I ".\src\png" /I ".\src\zlib" /D "__WXDEBUG__" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D WXDEBUG=1 /D "__WINDOWS__" /YX"wx\wxprec.h" /FD /c
+# ADD CPP /nologo /MDd /W3 /GX /Zi /Od /Gf /Gy /I ".\include" /I ".\include\wx\msw" /I ".\include\wx\generic" /I ".\include\wx\other" /I ".\src\png" /I ".\src\zlib" /D "__WXDEBUG__" /D WXDEBUG=1 /D "STRICT" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D "__WINDOWS__" /YX"wx\wxprec.h" /FD /c
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -433,9 +433,11 @@ SOURCE=.\src\msw\dummy.cpp
 
 !IF  "$(CFG)" == "wxWin - Win32 Release"
 
+# ADD CPP /Yc""
+
 !ELSEIF  "$(CFG)" == "wxWin - Win32 Debug"
 
-# ADD CPP /D "STRICT"
+# ADD CPP /D "STRICT" /Yc""
 
 !ENDIF 
 
