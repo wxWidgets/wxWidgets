@@ -133,9 +133,9 @@ public:
 
    // New constructor: one size fits all. Specify wxCONFIG_USE_LOCAL_FILE
    // or wxCONFIG_USE_GLOBAL_FILE to say which files should be used.
-  wxFileConfig(const wxString& appName, const wxString& vendorName = wxEmptyString,
-    const wxString& localFilename = wxEmptyString, const wxString& globalFilename = wxEmptyString,
-    long style = wxCONFIG_USE_LOCAL_FILE);
+  wxFileConfig(const wxString& appName, const wxString& vendorName = "",
+               const wxString& localFilename = "", const wxString& globalFilename = "",
+               long style = wxCONFIG_USE_LOCAL_FILE);
 
     // dtor will save unsaved data
   virtual ~wxFileConfig();
@@ -154,18 +154,6 @@ public:
 
   virtual bool HasGroup(const wxString& strName) const;
   virtual bool HasEntry(const wxString& strName) const;
-
-#if 0
-  virtual bool Read(wxString *pstr, const char *szKey,
-                    const char *szDefault = 0) const;
-  virtual const char *Read(const char *szKey,
-                           const char *szDefault = 0) const;
-  virtual bool Read(long *pl, const char *szKey, long lDefault) const;
-  virtual long Read(const char *szKey, long lDefault) const
-    { return wxConfigBase::Read(szKey, lDefault); }
-  virtual bool Write(const char *szKey, const char *szValue);
-  virtual bool Write(const char *szKey, long lValue);
-#endif
 
   virtual bool Read(const wxString& key, wxString *pStr) const;
   virtual bool Read(const wxString& key, wxString *pStr, const wxString& defValue) const;

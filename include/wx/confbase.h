@@ -112,9 +112,9 @@ public:
   // Not all args will always be used by derived classes, but
   // including them all in each class ensures compatibility.
   // If appName is empty, uses wxApp name
-  wxConfigBase(const wxString& appName = wxEmptyString, const wxString& vendorName = wxEmptyString,
-    const wxString& localFilename = wxEmptyString, const wxString& globalFilename = wxEmptyString,
-    long style = 0);
+  wxConfigBase(const wxString& appName = "", const wxString& vendorName = "",
+               const wxString& localFilename = "", const wxString& globalFilename = "",
+               long style = 0);
 
     // empty but ensures that dtor of all derived classes is virtual
   virtual ~wxConfigBase() { }
@@ -155,7 +155,7 @@ public:
   virtual bool Read(const wxString& key, wxString *pStr) const = 0;
   virtual bool Read(const wxString& key, wxString *pStr, const wxString& defVal) const;
 
-  virtual wxString Read(const wxString& key, const wxString& defVal) const;
+  virtual wxString Read(const wxString& key, const wxString& defVal = "") const;
 
   virtual bool Read(const wxString& key, long *pl) const = 0;
   virtual bool Read(const wxString& key, long *pl, long defVal) const;
