@@ -739,7 +739,7 @@ public:
     virtual bool Layout();
 
         // sizers
-    void SetSizer( wxSizer *sizer );
+    void SetSizer(wxSizer *sizer, bool deleteOld = TRUE );
     wxSizer *GetSizer() const { return m_windowSizer; }
 
     // Track if this window is a member of a sizer

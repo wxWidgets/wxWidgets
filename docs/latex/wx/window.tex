@@ -2483,17 +2483,20 @@ The resizing increments are only significant under Motif or Xt.
 
 \membersection{wxWindow::SetSizer}\label{wxwindowsetsizer}
 
-\func{void}{SetSizer}{\param{wxSizer* }{sizer}}
+\func{void}{SetSizer}{\param{wxSizer* }{sizer}, \param{bool }{deleteOld=TRUE}}
 
 Sets the window to have the given layout sizer. The window
 will then own the object, and will take care of its deletion.
 If an existing layout constraints object is already owned by the
-window, it will be deleted.
+window, it will be deleted if the deleteOld parameter is TRUE.
 
 \wxheading{Parameters}
 
-\docparam{sizer}{The sizer to set. Pass NULL to disassociate and delete the window's
-sizer.}
+\docparam{sizer}{The sizer to set. Pass NULL to disassociate and conditionally delete
+the window's sizer.  See below.}
+
+\docparam{deleteOld}{If TRUE (the default), this will delete any prexisting sizer.
+Pass FALSE if you wish to handle deleting the old sizer yourself.}
 
 \wxheading{Remarks}
 
