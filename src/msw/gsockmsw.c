@@ -35,16 +35,11 @@
     /* windows.h results in tons of warnings at max warning level */
 #   ifdef _MSC_VER
 #       pragma warning(push, 1)
-        /*
-           "unreferenced inline function has been removed": this is not
-           suppressed by push above as it is given at the end of the
-           compilation unit
-         */
-#       pragma warning(disable:4514)
 #   endif
 #   include <windows.h>
 #   ifdef _MSC_VER
 #       pragma warning(pop)
+#       pragma warning(disable:4514)
 #   endif
 #endif
 

@@ -918,11 +918,12 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
 
     wxToolBarToolBase *tool = FindById(id);
     if ( !tool )
-        return FALSE;
+        return false;
 
     return HandleTooltipNotify(code, lParam, tool->GetShortHelp());
 #else
-    return FALSE;
+    wxUnusedVar(lParam);
+    return false;
 #endif
 }
 
@@ -1133,7 +1134,7 @@ void wxToolBar::OnMouseEvent(wxMouseEvent& event)
     }
 }
 
-void wxToolBar::HandleMouseMove(WXWPARAM wParam, WXLPARAM lParam)
+void wxToolBar::HandleMouseMove(WXWPARAM WXUNUSED(wParam), WXLPARAM lParam)
 {
     wxCoord x = GET_X_LPARAM(lParam),
             y = GET_Y_LPARAM(lParam);

@@ -27,13 +27,17 @@
 #  pragma warning(disable:4100)
 
 #ifdef __WXWINCE__
-    /*
-       "unreferenced inline function has been removed": this is not
-       suppressed by push above as it is given at the end of the
-       compilation unit
-     */
-#   pragma warning(disable:4514)
-#endif /* __WXWINCE__ */
+    /* windows.h results in tons of warnings at max warning level */
+#   ifdef _MSC_VER
+#       pragma warning(push, 1)
+#   endif
+#   include <windows.h>
+#   ifdef _MSC_VER
+#       pragma warning(pop)
+#       pragma warning(disable:4514)
+#   endif
+#endif
+
 #endif /* _MSC_VER */
 
 #include <winsock.h>
@@ -780,7 +784,7 @@ GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
     FD_ZERO(&writefds);
     FD_ZERO(&exceptfds);
     FD_SET(socket->m_fd, &readfds);
-	if (flags & GSOCK_OUTPUT_FLAG || flags & GSOCK_CONNECTION_FLAG)
+    if (flags & GSOCK_OUTPUT_FLAG || flags & GSOCK_CONNECTION_FLAG)
       FD_SET(socket->m_fd, &writefds);
     FD_SET(socket->m_fd, &exceptfds);
 
@@ -799,7 +803,7 @@ GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
 
     /* Try select now */
     if (select(socket->m_fd + 1, &readfds, &writefds, &exceptfds,
-	    &socket->m_timeout) <= 0)
+        &socket->m_timeout) <= 0)
     {
       /* What to do here? */
       return (result & flags);

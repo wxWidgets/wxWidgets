@@ -420,10 +420,11 @@ bool wxTopLevelWindowMSW::CreateFrame(const wxString& title,
 #if !defined(__HANDHELDPC__) && ((defined(_WIN32_WCE) && _WIN32_WCE < 400) || \
     defined(__POCKETPC__) || \
     defined(__SMARTPHONE__))
-	// Always expand to fit the screen in PocketPC or SmartPhone
-	wxSize sz(wxDefaultSize);
+    // Always expand to fit the screen in PocketPC or SmartPhone
+    wxSize sz(wxDefaultSize);
+    wxUnusedVar(size);
 #else // other (including normal desktop) Windows
-	wxSize sz(size);
+    wxSize sz(size);
 #endif
 
     return MSWCreate(wxCanvasClassName, title, pos, sz, flags, exflags);
@@ -519,12 +520,12 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
         );
     }
 
-	// Native look is full screen window on Smartphones and Standard SDK
+    // Native look is full screen window on Smartphones and Standard SDK
 #if defined(__WXWINCE__)
     if ( style & wxMAXIMIZE )
-	{
-	    this->Maximize();
-	}
+    {
+        this->Maximize();
+    }
 #endif
 
 #ifdef __SMARTPHONE__
@@ -576,9 +577,9 @@ bool wxTopLevelWindowMSW::Show(bool show)
             // show and maximize
             nShowCmd = SW_MAXIMIZE;
 
-			// This is necessary, or no window appears
+            // This is necessary, or no window appears
 #ifdef __WINCE_STANDARDSDK__
-			DoShowWindow(SW_SHOW);
+            DoShowWindow(SW_SHOW);
 #endif
 
             m_maximizeOnShow = FALSE;

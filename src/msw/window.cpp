@@ -4710,6 +4710,9 @@ int wxWindowMSW::HandleMenuChar(int chAccel, WXLPARAM lParam)
             wxLogLastError(_T("GetMenuItemInfo"));
         }
     }
+#else
+    wxUnusedVar(chAccel);
+    wxUnusedVar(lParam);
 #endif
     return wxNOT_FOUND;
 }
@@ -4798,6 +4801,10 @@ bool wxWindowMSW::HandleJoystickEvent(WXUINT msg, int x, int y, WXUINT flags)
 
     return GetEventHandler()->ProcessEvent(event);
 #else
+    wxUnusedVar(msg);
+    wxUnusedVar(x);
+    wxUnusedVar(y);
+    wxUnusedVar(flags);
     return false;
 #endif
 }
