@@ -37,13 +37,6 @@ wxWindowList wxTopLevelWindows;
 // List of windows pending deletion
 wxList WXDLLEXPORT wxPendingDelete;
 
-// Current cursor, in order to hang on to
-// cursor handle when setting the cursor globally
-wxCursor *g_globalCursor = NULL;
-
-// Message Strings for Internationalization
-char **wx_msg_str = (char**)NULL;
-
 // Custom OS version, as optionally placed in wx.ini/.wxrc
 // Currently this can be Win95, Windows, Win32s, WinNT.
 // For some systems, you can't tell until run-time what services you

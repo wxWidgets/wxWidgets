@@ -68,5 +68,28 @@ void wxControlBase::InheritAttributes()
 
 void wxControlBase::Command(wxCommandEvent& event)
 {
-    (void)ProcessEvent(event);
+    (void)GetEventHandler()->ProcessEvent(event);
 }
+
+void wxControlBase::InitCommandEvent(wxCommandEvent& event) const
+{
+    event.SetEventObject((wxControlBase *)this);    // const_cast
+
+    // event.SetId(GetId()); -- this is usuall done in the event ctor
+
+    switch ( m_clientDataType )
+    {
+        case ClientData_Void:
+            event.SetClientData(GetClientData());
+            break;
+
+        case ClientData_Object:
+            event.SetClientObject(GetClientObject());
+            break;
+
+        case ClientData_None:
+            // nothing to do
+            ;
+    }
+}
+

@@ -126,7 +126,6 @@ extern wxChar *wxOsVersion;
 extern wxList *wxWinHandleList;
 extern wxList WXDLLEXPORT wxPendingDelete;
 extern void wxSetKeyboardHook(bool doIt);
-extern wxCursor *g_globalCursor;
 
 MSG s_currentMsg;
 wxApp *wxTheApp = NULL;
@@ -227,8 +226,6 @@ bool wxApp::Initialize()
 
     Ctl3dAutoSubclass(wxhInstance);
 #endif
-
-    g_globalCursor = new wxCursor;
 
     // VZ: these icons are not in wx.rc anyhow (but should they?)!
 #if 0
@@ -496,13 +493,6 @@ void wxApp::CleanUp()
 
     //  wxDefaultResourceTable->ClearTable();
 #endif
-
-    // Indicate that the cursor can be freed, so that cursor won't be deleted
-    // by deleting the bitmap list before g_globalCursor goes out of scope
-    // (double deletion of the cursor).
-    wxSetCursor(wxNullCursor);
-    delete g_globalCursor;
-    g_globalCursor = NULL;
 
     wxDeleteStockObjects();
 

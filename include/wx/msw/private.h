@@ -300,6 +300,9 @@ private:
 #define GetHmenu()              ((HMENU)GetHMenu())
 #define GetHmenuOf(menu)        ((HMENU)menu->GetHMenu())
 
+#define GetHcursor()            ((HCURSOR)GetHCURSOR())
+#define GetHcursorOf(cursor)    ((HCURSOR)(cursor).GetHCURSOR())
+
 // ---------------------------------------------------------------------------
 // global data
 // ---------------------------------------------------------------------------
@@ -325,6 +328,10 @@ extern "C"
 WXDLLEXPORT void wxSetInstance(HINSTANCE hInst);
 
 #if wxUSE_GUI
+
+// cursor stuff
+extern HCURSOR wxGetCurrentBusyCursor();    // from msw/utils.cpp
+extern const wxCursor *wxGetGlobalCursor(); // from msw/cursor.cpp
 
 WXDLLEXPORT wxWindow* wxFindWinFromHandle(WXHWND hWnd);
 

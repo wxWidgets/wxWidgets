@@ -51,6 +51,11 @@ public:
 
     const wxString& GetFileName() const { return m_filename; }
 
+    // copy the metafile to the clipboard: the width and height parameters are
+    // for backwards compatibility (with wxMetaFile) only, they are ignored by
+    // this method
+    bool SetClipboard(int width = 0, int height = 0);
+
     // implementation
     WXHANDLE GetHENHMETAFILE() const { return m_hMF; }
     void SetHENHMETAFILE(WXHANDLE hMF) { Free(); m_hMF = hMF; }
@@ -96,7 +101,7 @@ private:
 #if wxUSE_DRAG_AND_DROP
 
 // notice that we want to support both CF_METAFILEPICT and CF_ENHMETAFILE and
-// so we derive from and not from wxDataObjectSimple
+// so we derive from wxDataObject and not from wxDataObjectSimple
 class WXDLLEXPORT wxEnhMetaFileDataObject : public wxDataObject
 {
 public:

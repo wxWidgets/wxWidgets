@@ -36,6 +36,7 @@
 #endif //WX_PRECOMP
 
 #include "wx/metafile.h"
+#include "wx/clipbrd.h"
 
 #include "wx/msw/private.h"
 
@@ -159,6 +160,13 @@ wxSize wxEnhMetaFile::GetSize() const
     }
 
     return size;
+}
+
+bool wxEnhMetaFile::SetClipboard(int WXUNUSED(width), int WXUNUSED(height))
+{
+    wxCHECK_MSG( m_hMF, FALSE, _T("can't copy invalid metafile to clipboard") );
+
+    return wxTheClipboard->AddData(new wxEnhMetaFileDataObject(*this));
 }
 
 // ----------------------------------------------------------------------------

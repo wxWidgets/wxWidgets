@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        textctrl.cpp
+// Name:        msw/textctrl.cpp
 // Purpose:     wxTextCtrl
 // Author:      Julian Smart
 // Modified by:
@@ -887,7 +887,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
             if ( !(m_windowStyle & wxTE_MULTILINE) )
             {
                 wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
-                event.SetEventObject( this );
+                InitCommandEvent(event);
                 if ( GetEventHandler()->ProcessEvent(event) )
                     return;
             }
@@ -934,9 +934,9 @@ bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
         case EN_CHANGE:
             {
                 wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, m_windowId);
-                event.SetEventObject( this );
-                event.SetString( GetValue() );
-                ProcessCommand( event );
+                InitCommandEvent(event);
+                event.SetString(GetValue());
+                ProcessCommand(event);
             }
             break;
 
@@ -1016,27 +1016,27 @@ wxSize wxTextCtrl::DoGetBestSize() const
 // standard handlers for standard edit menu events
 // ----------------------------------------------------------------------------
 
-void wxTextCtrl::OnCut(wxCommandEvent& event)
+void wxTextCtrl::OnCut(wxCommandEvent& WXUNUSED(event))
 {
     Cut();
 }
 
-void wxTextCtrl::OnCopy(wxCommandEvent& event)
+void wxTextCtrl::OnCopy(wxCommandEvent& WXUNUSED(event))
 {
     Copy();
 }
 
-void wxTextCtrl::OnPaste(wxCommandEvent& event)
+void wxTextCtrl::OnPaste(wxCommandEvent& WXUNUSED(event))
 {
     Paste();
 }
 
-void wxTextCtrl::OnUndo(wxCommandEvent& event)
+void wxTextCtrl::OnUndo(wxCommandEvent& WXUNUSED(event))
 {
     Undo();
 }
 
-void wxTextCtrl::OnRedo(wxCommandEvent& event)
+void wxTextCtrl::OnRedo(wxCommandEvent& WXUNUSED(event))
 {
     Redo();
 }

@@ -46,6 +46,9 @@ protected:
 
     // inherit colour and font settings from the parent window
     void InheritAttributes();
+
+    // initialize the common fields of wxCommandEvent
+    void InitCommandEvent(wxCommandEvent& event) const;
 };
 
 // ----------------------------------------------------------------------------

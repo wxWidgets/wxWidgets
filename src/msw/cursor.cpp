@@ -49,7 +49,40 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-    IMPLEMENT_DYNAMIC_CLASS(wxCursor, wxCursorBase)
+IMPLEMENT_DYNAMIC_CLASS(wxCursor, wxCursorBase)
+
+// ----------------------------------------------------------------------------
+// globals
+// ----------------------------------------------------------------------------
+
+// Current cursor, in order to hang on to cursor handle when setting the cursor
+// globally
+static wxCursor *gs_globalCursor = NULL;
+
+// ----------------------------------------------------------------------------
+// private classes
+// ----------------------------------------------------------------------------
+
+class wxCursorModule : public wxModule
+{
+public:
+    virtual bool OnInit()
+    {
+        gs_globalCursor = new wxCursor;
+
+        return TRUE;
+    }
+
+    virtual void OnExit()
+    {
+        delete gs_globalCursor;
+        gs_globalCursor = (wxCursor *)NULL;
+    }
+};
+
+// ============================================================================
+// implementation
+// ============================================================================
 
 // ----------------------------------------------------------------------------
 // wxCursorRefData
@@ -278,16 +311,19 @@ wxCursor::~wxCursor()
 // Global cursor setting
 // ----------------------------------------------------------------------------
 
+const wxCursor *wxGetGlobalCursor()
+{
+    return gs_globalCursor;
+}
+
 void wxSetCursor(const wxCursor& cursor)
 {
-    extern wxCursor *g_globalCursor;
-
-    if ( cursor.Ok() && cursor.GetHCURSOR() )
+    if ( cursor.Ok() )
     {
-        ::SetCursor((HCURSOR) cursor.GetHCURSOR());
+        ::SetCursor(GetHcursorOf(cursor));
 
-        if ( g_globalCursor )
-            (*g_globalCursor) = cursor;
+        if ( gs_globalCursor )
+            *gs_globalCursor = cursor;
     }
 }
 

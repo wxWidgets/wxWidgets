@@ -480,7 +480,7 @@ bool wxWindow::SetCursor(const wxCursor& cursor)
     ::GetWindowRect(hWnd, &rect);
 
     if ( ::PtInRect(&rect, point) && !wxIsBusy() )
-        ::SetCursor((HCURSOR)m_cursor.GetHCURSOR());
+        ::SetCursor(GetHcursorOf(m_cursor));
 
     return TRUE;
 }
@@ -2664,54 +2664,46 @@ bool wxWindow::HandleSetCursor(WXHWND hWnd,
                                short nHitTest,
                                int WXUNUSED(mouseMsg))
 {
-    // don't set cursor for other windows, only for this one: this prevents
-    // children of this window from getting the same cursor as the parent has
-    // (don't forget that this message is propagated by default up the window
-    // parent-child hierarchy)
-    if ( GetHWND() == hWnd )
+    // the logic is as follows:
+    //  1. if we have the cursor set it unless wxIsBusy()
+    //  2. if we're a top level window, set some cursor anyhow
+    //  3. if wxIsBusy(), set the busy cursor, otherwise the global one
+
+    HCURSOR hcursor = 0;
+    bool isBusy = wxIsBusy();
+    if ( m_cursor.Ok() )
     {
-        // don't set cursor when the mouse is not in the client part
-        if ( nHitTest == HTCLIENT || nHitTest == HTERROR )
+        hcursor = GetHcursorOf(m_cursor);
+    }
+
+    if ( !GetParent() )
+    {
+        if ( isBusy )
         {
-            HCURSOR hcursor = 0;
-            if ( wxIsBusy() )
+            hcursor = wxGetCurrentBusyCursor();
+        }
+        else if ( !hcursor )
+        {
+            const wxCursor *cursor = wxGetGlobalCursor();
+            if ( cursor && cursor->Ok() )
             {
-                // from msw\utils.cpp
-                extern HCURSOR gs_wxBusyCursor;
-
-                hcursor = gs_wxBusyCursor;
-            }
-            else
-            {
-                wxCursor *cursor = NULL;
-
-                if ( m_cursor.Ok() )
-                {
-                    cursor = &m_cursor;
-                }
-                else
-                {
-                    // from msw\data.cpp
-                    extern wxCursor *g_globalCursor;
-
-                    if ( g_globalCursor && g_globalCursor->Ok() )
-                        cursor = g_globalCursor;
-                }
-
-                if ( cursor )
-                    hcursor = (HCURSOR)cursor->GetHCURSOR();
-            }
-
-            if ( hcursor )
-            {
-                ::SetCursor(hcursor);
-
-                return TRUE;
+                hcursor = GetHcursorOf(*cursor);
             }
         }
     }
 
-    return FALSE;
+    if ( hcursor )
+    {
+        ::SetCursor(hcursor);
+
+        // cursor set, stop here
+        return TRUE;
+    }
+    else
+    {
+        // pass up the window chain
+        return FALSE;
+    }
 }
 
 // ---------------------------------------------------------------------------
