@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        regextest.cpp
-// Purpose:     Application to test regular expression (wxRegEx)
+// Purpose:     Test regex libs and some gui components
 // Author:      Ryan Norton
 // Modified by: 
 // RCS-ID:      $Id$
@@ -90,10 +90,10 @@
 //
 
 //---------------------------------------------------------------------------
-//                          MyDialog
+//                          MyFrame
 //---------------------------------------------------------------------------
 
-class MyDialog : public wxFrame
+class MyFrame : public wxFrame
 {
 public:
 
@@ -113,11 +113,36 @@ public:
         NewLineID,
         NotBolID,
         NotEolID,
-        CompID
+        CompID,
+        MatchID
     };
 
 
-    MyDialog() : wxFrame(  NULL, -1, _("regextest - wxRegEx Testing App"),
+    void AddMenuItem(wxMenu* pMenu, int nID = wxID_SEPARATOR, const wxChar* szTitle = _(""), 
+                                    const wxChar* szToolTip = _(""))
+    {
+        wxMenuItem* pItem;
+
+        if (nID == wxID_SEPARATOR)
+            pItem = new wxMenuItem (NULL, wxID_SEPARATOR, szTitle, szToolTip, wxITEM_SEPARATOR);
+        else
+            pItem = new wxMenuItem (NULL, nID, szTitle, szToolTip, wxITEM_CHECK);
+
+        pItem->SetBackgroundColour(wxColour(115, 113, 115));
+        pItem->SetTextColour(*wxBLACK);
+
+        pMenu->Append(pItem);
+    }
+
+#if defined( __WXMSW__ ) || defined( __WXMAC__ )
+    void OnContextMenu(wxContextMenuEvent& event)
+        { PopupMenu(OptionsMenu, ScreenToClient(event.GetPosition())); }
+#else
+    void OnRightUp(wxMouseEvent& event)
+        { PopupMenu(OptionsMenu, event.GetPosition()); }
+#endif
+
+    MyFrame() : wxFrame(  NULL, -1, _("regextest - wxRegEx Testing App"),
                             wxPoint(20,20), wxSize(300,400), wxDEFAULT_FRAME_STYLE | wxTAB_TRAVERSAL )
     {
         //Set the background to something light gray-ish
@@ -126,25 +151,28 @@ public:
         //
         //  Create the menus (Exit & About)
         //
-     #if wxUSE_MENUS
+#if wxUSE_MENUS
         wxMenu *FileMenu = new wxMenu;
                 OptionsMenu = new wxMenu;
         wxMenu *HelpMenu = new wxMenu;
 
-        FileMenu->Append(wxID_EXIT, _T("&Exit"), _("Quit this program"));
+        AddMenuItem(FileMenu, wxID_EXIT, _("&Exit"), _("Quit this program"));
 
-        OptionsMenu->AppendCheckItem(ExtendedID, _T("wxRE_EXTENDED"), _("Extended Regular Expressions?"));
-        OptionsMenu->AppendCheckItem(ICaseID, _T("wxRE_ICASE"), _("Enable case-insensitive matching?"));
-        OptionsMenu->AppendCheckItem(NewLineID, _T("wxRE_NEWLINE"), _("Treat \n as special?"));
-        OptionsMenu->AppendSeparator();
-        OptionsMenu->AppendCheckItem(NotBolID, _T("wxRE_NOTBOL"), _("Use functionality of ^ character?"));
-        OptionsMenu->AppendCheckItem(NotEolID, _T("wxRE_NOTEOL"), _("Use functionality of $ character?"));
-        OptionsMenu->AppendSeparator();
-        OptionsMenu->AppendSeparator();
-        OptionsMenu->AppendCheckItem(CompID, _T("Test Compile"), _("Added Compiling to Match Time?"));
+        AddMenuItem(OptionsMenu, ExtendedID, _T("wxRE_EXTENDED"), _("Extended Regular Expressions?"));
+        AddMenuItem(OptionsMenu, ICaseID, _T("wxRE_ICASE"), _("Enable case-insensitive matching?"));
+        AddMenuItem(OptionsMenu,  NewLineID, _T("wxRE_NEWLINE"), _("Treat \n as special?"));
+        AddMenuItem(OptionsMenu);
+        AddMenuItem(OptionsMenu,  NotBolID, _T("wxRE_NOTBOL"), _("Use functionality of ^ character?"));
+        AddMenuItem(OptionsMenu,  NotEolID, _T("wxRE_NOTEOL"), _("Use functionality of $ character?"));
+        AddMenuItem(OptionsMenu);
+        AddMenuItem(OptionsMenu);
+        AddMenuItem(OptionsMenu,  CompID, _("Test Compile"), _("Added Compiling to Match Time?"));
+        AddMenuItem(OptionsMenu,  MatchID, _("Test Match"), _("Added Matching to Match Time?"));
+
+        AddMenuItem(HelpMenu, wxID_ABOUT, _T("&About...\tF1"), _("Show about dialog"));
+
         OptionsMenu->Check(ExtendedID, true);
-
-        HelpMenu->Append(wxID_ABOUT, _T("&About...\tF1"), _("Show about dialog"));
+        OptionsMenu->Check(MatchID, true);
 
         wxMenuBar *MenuBar = new wxMenuBar();
         MenuBar->Append(FileMenu, _T("&File"));
@@ -323,10 +351,9 @@ public:
                     for(i = 0; i < n; ++i)
                     {
                         Regex.Compile(szPattern, nCompileFlags);
-                        Regex.Matches(szSearch, nMatchFlags);
                     }
                 }
-                else
+                if (OptionsMenu->IsChecked(MatchID))
                 {
                     for(i = 0; i < n; ++i)
                     {
@@ -375,10 +402,9 @@ public:
                     for(i = 0; i < n; ++i)
                     {
                         Re.Comp(szPattern, nCompileFlags2);
-                        Re.Exec(szSearch, nMatchFlags2);
                     }
                 }
-                else
+                if (OptionsMenu->IsChecked(MatchID))
                 {
                     for(i = 0; i < n; ++i)
                     {
@@ -417,11 +443,15 @@ public:
             {
                 for(i = 0; i < n; ++i)
                 {
+                    //Supposively GRETA doesn't compile, but
+                    //it's clear that it slows performance greatly
+                    //when creating a rpattern object,
+                    //so one can only surmize that it performs
+                    //some kind of optimizations in the constructor
                     Greta = rpattern(stdszPattern,EXTENDED,MODE_MIXED);
-                    Greta.match(stdszSearch, r);
                 }
             }
-            else
+            if (OptionsMenu->IsChecked(MatchID))
             {
                 for(i = 0; i < n; ++i)
                 {
@@ -466,15 +496,15 @@ public:
 
                 dwStartTime4 = clock();
         
+                
                 if (OptionsMenu->IsChecked(CompID))
                 {
                     for(i = 0; i < n; ++i)
                     {
                         pPcre = pcre_compile(szPattern, nCompileFlags4, &szError, &nErrOff, 0);
-                        pcre_exec(pPcre, 0, szSearch, szSearch.Length(), 0, 0, m, msize);
                     }
                 }
-                else
+                if (OptionsMenu->IsChecked(MatchID))
                 {
                     for(i = 0; i < n; ++i)
                     {
@@ -512,19 +542,25 @@ public:
     DECLARE_EVENT_TABLE()
 };
 
-BEGIN_EVENT_TABLE(MyDialog, wxFrame)
+BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
-//menu
-EVT_MENU(wxID_EXIT,  MyDialog::OnQuit)
-EVT_MENU(wxID_ABOUT,  MyDialog::OnAbout)
+    //menu
+    EVT_MENU(wxID_EXIT,  MyFrame::OnQuit)
+    EVT_MENU(wxID_ABOUT,  MyFrame::OnAbout)
 
-//text
-EVT_TEXT_ENTER(MyDialog::PatternTextID, MyDialog::OnMatch)
-EVT_TEXT_ENTER(MyDialog::SearchTextID, MyDialog::OnMatch)
+    //text
+    EVT_TEXT_ENTER(MyFrame::PatternTextID, MyFrame::OnMatch)
+    EVT_TEXT_ENTER(MyFrame::SearchTextID, MyFrame::OnMatch)
 
-//button
-EVT_BUTTON(MyDialog::OkButtonID, MyDialog::OnMatch)
+    //button
+    EVT_BUTTON(MyFrame::OkButtonID, MyFrame::OnMatch)
 
+#if defined( __WXMSW__ ) || defined( __WXMAC__ )
+    EVT_CONTEXT_MENU(MyFrame::OnContextMenu)
+#else
+    EVT_RIGHT_UP(MyFrame::OnRightUp)
+#endif
+    
 END_EVENT_TABLE()
 
 //---------------------------------------------------------------------------
@@ -536,7 +572,7 @@ class MyApp : public wxApp
 public:
 	bool OnInit()
     {
-       MyDialog* dialog = new MyDialog();
+       MyFrame* dialog = new MyFrame();
        dialog->Show();
        return true;
     }

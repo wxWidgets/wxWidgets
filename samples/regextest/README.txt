@@ -21,7 +21,7 @@ Select your options from the Options menu -
 Most of them are documented in the wxRegEx
 class docs in wxWindows.
 
-Test Compile - Adds compile to the match time
+Test Compile/Match - Adds compile/match to the match time
 speed test (i.e. it compiles and matches 
 the number of times that are specified 
 in the iterations field, otherwise
