@@ -121,7 +121,7 @@ public:
                const wxString& vendorName = wxEmptyString,
                const wxString& localFilename = wxEmptyString,
                const wxString& globalFilename = wxEmptyString,
-               long style = wxCONFIG_USE_LOCAL_FILE,
+               long style = wxCONFIG_USE_LOCAL_FILE | wxCONFIG_USE_GLOBAL_FILE,
                wxMBConv& conv = wxConvUTF8);
 
 #if wxUSE_STREAMS

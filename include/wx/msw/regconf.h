@@ -34,7 +34,7 @@ public:
               const wxString& vendorName = wxEmptyString,
               const wxString& localFilename = wxEmptyString,
               const wxString& globalFilename = wxEmptyString,
-              long style = 0);
+              long style = wxCONFIG_USE_GLOBAL_FILE);
 
     // dtor will save unsaved data
   virtual ~wxRegConfig();
