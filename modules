@@ -1,11 +1,69 @@
-wxGTK -a wxWindows !wxWindows/docs/latex \
-	!wxWindows/docs/msw !wxWindows/docs/motif \
-	!wxWindows/include/wx/msw !wxWindows/include/wx/motif  !wxWindows/include/wx/qt \
-	!wxWindows/include/wx/stubs !wxWindows/src/msw !wxWindows/src/qt !wxWindows/src/motif \
-	!wxWindows/include/wx/mac !wxWindows/src/stubs !wxWindows/misc !wxWindows/user \
-	!wxWindows/samples !wxWindows/utils !wxWindows/include/wx/os2 \
-    !wxWindows/src/os2 !wxWindows/src/mac !wxWindows/testconf !wxWindows/setup \
-    !wxWindows/distrib !wxWindows/install
+###############################################################################
+# File:    modules
+# Purpose: The list of modules which can be checked out using cvs from
+#          wxWindows cvs repository
+# Author:  Karsten Ballueder
+# Created: 26.07.99
+# Version: $Id$
+#
+# The format of this file is described in the cvs manual but should be clar
+# enough from the module definitions which follow.
+###############################################################################
+
+# a template for a new module
+#
+#wxPortName -a wxWindows \
+#    !wxWindows/docs/latex \
+#    !wxWindows/docs/gtk !wxWindows/docs/msw !wxWindows/docs/motif \
+#    \
+#	 !wxWindows/include/wx/gtk !wxWindows/include/wx/msw !wxWindows/include/wx/motif \
+#    !wxWindows/include/wx/qt !wxWindows/include/wx/stubs \
+#    !wxWindows/include/wx/mac !wxWindows/include/wx/os2 \
+#    \
+#    !wxWindows/src/gtk !wxWindows/src/msw !wxWindows/src/motif \
+#	 !wxWindows/src/qt !wxWindows/src/stubs !wxWindows/src/os2 !wxWindows/src/mac \
+#    \
+#    !wxWindows/misc !wxWindows/user !wxWindows/samples !wxWindows/utils \
+#    !wxWindows/install !wxWindows/distrib !wxWindows/setup !wxWindows/testconf \
+
+wxGTK -a wxWindows \
+    !wxWindows/docs/latex !wxWindows/docs/msw !wxWindows/docs/motif \
+    \
+	!wxWindows/include/wx/msw !wxWindows/include/wx/motif \
+    !wxWindows/include/wx/qt !wxWindows/include/wx/stubs \
+    !wxWindows/include/wx/mac !wxWindows/include/wx/os2 \
+    \
+    !wxWindows/src/msw !wxWindows/src/motif !wxWindows/src/qt \
+	!wxWindows/src/stubs !wxWindows/src/os2 !wxWindows/src/mac \
+    \
+    !wxWindows/misc !wxWindows/user !wxWindows/samples !wxWindows/utils \
+    !wxWindows/install !wxWindows/distrib !wxWindows/setup !wxWindows/testconf \
+
+wxMotif -a wxWindows \
+    !wxWindows/docs/latex !wxWindows/docs/msw !wxWindows/docs/gtk \
+    \
+	!wxWindows/include/wx/msw !wxWindows/include/wx/gtk \
+    !wxWindows/include/wx/qt !wxWindows/include/wx/stubs \
+    !wxWindows/include/wx/mac !wxWindows/include/wx/os2 \
+    \
+    !wxWindows/src/msw !wxWindows/src/gtk !wxWindows/src/qt \
+	!wxWindows/src/stubs !wxWindows/src/os2 !wxWindows/src/mac \
+    \
+    !wxWindows/misc !wxWindows/user !wxWindows/samples !wxWindows/utils \
+	!wxWindows/install !wxWindows/distrib !wxWindows/setup !wxWindows/testconf
+
+wxMSW -a wxWindows \
+    !wxWindows/docs/latex !wxWindows/docs/motif !wxWindows/docs/gtk \
+    \
+	!wxWindows/include/wx/motif !wxWindows/include/wx/gtk \
+    !wxWindows/include/wx/qt !wxWindows/include/wx/stubs \
+    !wxWindows/include/wx/mac !wxWindows/include/wx/os2 \
+    \
+    !wxWindows/src/motif !wxWindows/src/qt !wxWindows/src/gtk \
+	!wxWindows/src/stubs !wxWindows/src/os2 !wxWindows/src/mac \
+    \
+    !wxWindows/misc !wxWindows/user !wxWindows/samples !wxWindows/utils \
+	!wxWindows/install !wxWindows/distrib !wxWindows/setup !wxWindows/testconf
 
 wxQt -a wxWindows/Makefile wxWindows/install/unix wxWindows/install-sh \
 	wxWindows/template.mak wxWindows/docs !wxWindows/docs/latex !wxWindows/docs/msw \
@@ -21,28 +79,6 @@ wxQt -a wxWindows/Makefile wxWindows/install/unix wxWindows/install-sh \
 wxMac -a wxWindows/include/wx_cw.pch wxWindows/include/wx_cw.pch++ \
 	wxWindows/include/wx_cw_d.pch wxWindows/include/wx_cw_d.pch++ \
 	wxWindows/include/wx/mac wxWindows/src/mac
-
-wxMotif -a wxWindows !wxWindows/docs/latex \
-	!wxWindows/docs/msw !wxWindows/docs/gtk \
-	!wxWindows/include/wx/msw !wxWindows/include/wx/gtk  !wxWindows/include/wx/qt \
-	!wxWindows/include/wx/stubs !wxWindows/src/msw !wxWindows/src/qt !wxWindows/src/gtk \
-	!wxWindows/include/wx/mac !wxWindows/src/stubs !wxWindows/misc !wxWindows/user \
-	!wxWindows/samples !wxWindows/utils !wxWindows/include/wx/os2 \
-	!wxWindows/src/os2 !wxWindows/src/mac !wxWindows/install \
-	!wxWindows/distrib !wxWindows/setup !wxWindows/testconf
-
-wxMSW -a wxWindows/docs !wxWindows/docs/latex !wxWindows/docs/gtk !wxWindows/docs/qt \
-	!wxWindows/docs/motif wxWindows/install !wxWindows/install/unix \
-	wxWindows/include !wxWindows/include/wx/gtk !wxWindows/include/wx/qt !wxWindows/include/wx/motif \
-	wxWindows/src !wxWindows/src/Makefile \
-	!wxWindows/src/Makefile.in !wxWindows/src/gtk !wxWindows/src/qt !wxWindows/src/motif \
-	!wxWindows/src/gdk_imlib \
-	wxWindows/src/png wxWindows/src/zlib !wxWindows/src/mkdirs \
-	!wxWindows/include/wx/stubs !wxWindows/src/stubs \
-	wxWindows/lib \
-	wxWindows/misc !wxWindows/misc/imlib \
-	wxWindows/template.mak !wxWindows/include/wx/os2 !wxWindows/src/os2 \
-    !wxWindows/include/wx/mac !wxWindows/src/mac
 
 wxEtc -a wxWindows/misc wxWindows/user wxWindows/samples wxWindows/utils
 
