@@ -241,7 +241,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
     GtkRequisition req;
     req.width = 2;
     req.height = 2;
-    (* GTK_WIDGET_CLASS( GTK_OBJECT(m_widget)->klass )->size_request ) (m_widget, &req );
+    (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(m_widget) )->size_request ) (m_widget, &req );
     if (req.width > ls.x) ls.x = req.width;
     
     wxSize newSize = size;
@@ -321,7 +321,7 @@ wxSize wxRadioBox::LayoutItems()
                 GtkRequisition req;
                 req.width = 2;
                 req.height = 2;
-                (* GTK_WIDGET_CLASS( GTK_OBJECT(button)->klass )->size_request )
+                (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(button) )->size_request )
                       (button, &req );
 		
                 if (req.width > max_len) max_len = req.width;
@@ -366,7 +366,7 @@ wxSize wxRadioBox::LayoutItems()
             GtkRequisition req;
             req.width = 2;
             req.height = 2;
-            (* GTK_WIDGET_CLASS( GTK_OBJECT(button)->klass )->size_request )
+            (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(button) )->size_request )
                   (button, &req );
 
             if (req.width > max) max = req.width;

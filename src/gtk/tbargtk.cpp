@@ -406,7 +406,8 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
     }
 
     GtkRequisition req;
-    (* GTK_WIDGET_CLASS( GTK_OBJECT(m_widget)->klass )->size_request ) (m_widget, &req );
+    (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(m_widget) )->size_request )
+        (m_widget, &req );
     m_width = req.width + m_xMargin;
     m_height = req.height + 2*m_yMargin;
 
