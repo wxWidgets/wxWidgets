@@ -57,6 +57,12 @@
 //     but _not_ ']' (group name delimiter)
 inline bool IsValid(char c) { return isalnum(c) || strchr("@_/-!.*%", c); }
 
+// compare functions for sorting the arrays
+static int CompareEntries(wxFileConfig::ConfigEntry *p1,
+                          wxFileConfig::ConfigEntry *p2);
+static int CompareGroups(wxFileConfig::ConfigGroup *p1,
+                         wxFileConfig::ConfigGroup *p2);
+
 // filter strings
 static wxString FilterIn(const wxString& str);
 static wxString FilterOut(const wxString& str);
@@ -637,7 +643,9 @@ bool wxFileConfig::LineListIsEmpty()
 wxFileConfig::ConfigGroup::ConfigGroup(wxFileConfig::ConfigGroup *pParent,
                                        const wxString& strName,
                                        wxFileConfig *pConfig)
-                         : m_strName(strName)
+                         : m_aEntries(CompareEntries),
+                           m_aSubgroups(CompareGroups),
+                           m_strName(strName)
 {
   m_pConfig = pConfig;
   m_pParent = pParent;
@@ -741,13 +749,32 @@ wxString wxFileConfig::ConfigGroup::GetFullName() const
 // find an item
 // ----------------------------------------------------------------------------
 
+// use binary search because the array is sorted
 wxFileConfig::ConfigEntry *
 wxFileConfig::ConfigGroup::FindEntry(const char *szName) const
 {
-  uint nCount = m_aEntries.Count();
-  for ( uint n = 0; n < nCount; n++ ) {
-    if ( m_aEntries[n]->Name().IsSameAs(szName, APPCONF_CASE_SENSITIVE) )
-      return m_aEntries[n];
+  uint i,
+       lo = 0,
+       hi = m_aEntries.Count();
+  int res;
+  wxFileConfig::ConfigEntry *pEntry;
+
+  while ( lo < hi ) {
+    i = (lo + hi)/2;
+    pEntry = m_aEntries[i];
+
+    #if APPCONF_CASE_SENSITIVE
+      res = strcmp(pEntry->Name(), szName);
+    #else
+      res = Stricmp(pEntry->Name(), szName);
+    #endif
+
+    if ( res < 0 )
+      hi = i;
+    else if ( res > 0 )
+      lo = i + 1;
+    else
+      return pEntry;
   }
 
   return NULL;
@@ -756,10 +783,28 @@ wxFileConfig::ConfigGroup::FindEntry(const char *szName) const
 wxFileConfig::ConfigGroup *
 wxFileConfig::ConfigGroup::FindSubgroup(const char *szName) const
 {
-  uint nCount = m_aSubgroups.Count();
-  for ( uint n = 0; n < nCount; n++ ) {
-    if ( m_aSubgroups[n]->Name().IsSameAs(szName, APPCONF_CASE_SENSITIVE) )
-      return m_aSubgroups[n];
+  uint i,
+       lo = 0,
+       hi = m_aSubgroups.Count();
+  int res;
+  wxFileConfig::ConfigGroup *pGroup;
+
+  while ( lo < hi ) {
+    i = (lo + hi)/2;
+    pGroup = m_aSubgroups[i];
+
+    #if APPCONF_CASE_SENSITIVE
+      res = strcmp(pGroup->Name(), szName);
+    #else
+      res = Stricmp(pGroup->Name(), szName);
+    #endif
+
+    if ( res < 0 )
+      hi = i;
+    else if ( res > 0 )
+      lo = i + 1;
+    else
+      return pGroup;
   }
 
   return NULL;
@@ -945,6 +990,34 @@ void wxFileConfig::ConfigEntry::SetDirty()
 // ============================================================================
 // global functions
 // ============================================================================
+
+// ----------------------------------------------------------------------------
+// compare functions for array sorting
+// ----------------------------------------------------------------------------
+
+int CompareEntries(wxFileConfig::ConfigEntry *p1,
+                   wxFileConfig::ConfigEntry *p2)
+{
+  #if APPCONF_CASE_SENSITIVE
+    return strcmp(p1->Name(), p2->Name());
+  #else
+    return Stricmp(p1->Name(), p2->Name());
+  #endif
+}
+
+int CompareGroups(wxFileConfig::ConfigGroup *p1,
+                  wxFileConfig::ConfigGroup *p2)
+{
+  #if APPCONF_CASE_SENSITIVE
+    return strcmp(p1->Name(), p2->Name());
+  #else
+    return Stricmp(p1->Name(), p2->Name());
+  #endif
+}
+
+// ----------------------------------------------------------------------------
+// filter functions
+// ----------------------------------------------------------------------------
 
 // undo FilterOut
 wxString FilterIn(const wxString& str)

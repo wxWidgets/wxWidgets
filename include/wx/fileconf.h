@@ -197,8 +197,8 @@ private:
 //protected: --- if wxFileConfig::ConfigEntry is not public, functions in
 //               ConfigGroup such as Find/AddEntry can't return "ConfigEntry *"
 public:
-  WX_DEFINE_ARRAY(ConfigEntry *, ArrayEntries);
-  WX_DEFINE_ARRAY(ConfigGroup *, ArrayGroups);
+  WX_DEFINE_SORTED_ARRAY(ConfigEntry *, ArrayEntries);
+  WX_DEFINE_SORTED_ARRAY(ConfigGroup *, ArrayGroups);
 
   class ConfigEntry
   {
