@@ -1641,6 +1641,7 @@ private:
 
 class wxStyledTextEvent : public wxCommandEvent {
 public:
+    wxStyledTextEvent(const wxStyledTextEvent& event);
     wxStyledTextEvent(wxEventType commandType=0, int id=0);
     ~wxStyledTextEvent() {}
 
@@ -1694,7 +1695,8 @@ public:
     bool GetControl() const;
     bool GetAlt() const;
 
-    void CopyObject(wxObject& obj) const;
+//    void CopyObject(wxObject& obj) const;
+    virtual wxEvent* Clone() const { return new wxStyledTextEvent(*this); }
 
 #ifndef SWIG
 private:

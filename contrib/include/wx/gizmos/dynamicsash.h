@@ -90,7 +90,10 @@ class wxScrollBar;
 class wxDynamicSashSplitEvent : public wxCommandEvent {
 public:
     wxDynamicSashSplitEvent();
+    wxDynamicSashSplitEvent(const wxDynamicSashSplitEvent& event): wxCommandEvent(event) { }
     wxDynamicSashSplitEvent(wxObject *target);
+
+    virtual wxEvent* Clone() const { return new wxDynamicSashSplitEvent(*this); }
 
 private:
     DECLARE_DYNAMIC_CLASS(wxDynamicSashSplitEvent)
@@ -109,7 +112,10 @@ private:
 class wxDynamicSashUnifyEvent : public wxCommandEvent {
 public:
     wxDynamicSashUnifyEvent();
+    wxDynamicSashUnifyEvent(const wxDynamicSashUnifyEvent& event): wxCommandEvent(event) {}
     wxDynamicSashUnifyEvent(wxObject *target);
+
+    virtual wxEvent* Clone() const { return new wxDynamicSashUnifyEvent(*this); }
 
 private:
     DECLARE_DYNAMIC_CLASS(wxDynamicSashUnifyEvent);

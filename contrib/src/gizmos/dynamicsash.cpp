@@ -84,6 +84,8 @@ public:
     wxDynamicSashReparentEvent();
     wxDynamicSashReparentEvent(wxObject *object);
 
+    virtual wxEvent* Clone() const { return NULL; }
+
     DECLARE_DYNAMIC_CLASS(wxDynamicSashReparentEvent);
 };
 

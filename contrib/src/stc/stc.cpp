@@ -2064,35 +2064,34 @@ bool wxStyledTextEvent::GetShift() const { return (m_modifiers & SCI_SHIFT) != 0
 bool wxStyledTextEvent::GetControl() const { return (m_modifiers & SCI_CTRL) != 0; }
 bool wxStyledTextEvent::GetAlt() const { return (m_modifiers & SCI_ALT) != 0; }
 
-void wxStyledTextEvent::CopyObject(wxObject& obj) const {
-    wxCommandEvent::CopyObject(obj);
+wxStyledTextEvent::wxStyledTextEvent(const wxStyledTextEvent& event):
+  wxCommandEvent(event)
+{
+    m_position =      event.m_position;
+    m_key =           event.m_key;
+    m_modifiers =     event.m_modifiers;
+    m_modificationType = event.m_modificationType;
+    m_text =          event.m_text;
+    m_length =        event.m_length;
+    m_linesAdded =    event.m_linesAdded;
+    m_line =          event.m_line;
+    m_foldLevelNow =  event.m_foldLevelNow;
+    m_foldLevelPrev = event.m_foldLevelPrev;
 
-    wxStyledTextEvent* o = (wxStyledTextEvent*)&obj;
-    o->m_position =      m_position;
-    o->m_key =           m_key;
-    o->m_modifiers =     m_modifiers;
-    o->m_modificationType = m_modificationType;
-    o->m_text =          m_text;
-    o->m_length =        m_length;
-    o->m_linesAdded =    m_linesAdded;
-    o->m_line =          m_line;
-    o->m_foldLevelNow =  m_foldLevelNow;
-    o->m_foldLevelPrev = m_foldLevelPrev;
+    m_margin =        event.m_margin;
 
-    o->m_margin =        m_margin;
+    m_message =       event.m_message;
+    m_wParam =        event.m_wParam;
+    m_lParam =        event.m_lParam;
 
-    o->m_message =       m_message;
-    o->m_wParam =        m_wParam;
-    o->m_lParam =        m_lParam;
-
-    o->m_listType =     m_listType;
-    o->m_x =            m_x;
-    o->m_y =            m_y;
+    m_listType =     event.m_listType;
+    m_x =            event.m_x;
+    m_y =            event.m_y;
 
 #if wxUSE_DRAG_AND_DROP
-    o->m_dragText =     m_dragText;
-    o->m_dragAllowMove =m_dragAllowMove;
-    o->m_dragResult =   m_dragResult;
+    m_dragText =     event.m_dragText;
+    m_dragAllowMove =event.m_dragAllowMove;
+    m_dragResult =   event.m_dragResult;
 #endif
 }
 
