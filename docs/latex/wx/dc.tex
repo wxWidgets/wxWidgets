@@ -175,9 +175,9 @@ Draw a bitmap on the device context at the specified point. If {\it transparent}
 a transparency mask, the bitmap will be drawn transparently.
 
 When drawing a mono-bitmap, the current text foreground colour will be used to draw the foreground
-of the bitmap (all bit set to 1), and the current text background colour to draw the background
-(all bits set 0). See also \helpref{SetTextForeground}{wxwindowsettextforeground},
- \helpref{SetTextForeground}{wxwindowsettextforeground} and \helpref{wxMemoryDC}{wxmemorydc}.
+of the bitmap (all bits set to 1), and the current text background colour to draw the background
+(all bits set to 0). See also \helpref{SetTextForeground}{wxdcsettextforeground},
+\helpref{SetTextBackground}{wxdcsettextbackground} and \helpref{wxMemoryDC}{wxmemorydc}.
 
 \membersection{wxDC::DrawEllipse}\label{wxdcdrawellipse}
 
@@ -631,6 +631,9 @@ be destroyed safely.
 
 See also \helpref{wxBrush}{wxbrush}.
 
+See also \helpref{wxMemoryDC}{wxmemorydc} for the interpretation of colours
+when drawing into a monochrome bitmap.
+
 \membersection{wxDC::SetFont}\label{wxdcsetfont}
 
 \func{void}{SetFont}{\param{const wxFont\& }{font}}
@@ -733,6 +736,9 @@ Sets the current pen for the DC.
 If the argument is wxNullPen, the current pen is selected out of the device
 context, and the original pen restored.
 
+See also \helpref{wxMemoryDC}{wxmemorydc} for the interpretation of colours
+when drawing into a monochrome bitmap.
+
 \membersection{wxDC::SetTextBackground}\label{wxdcsettextbackground}
 
 \func{void}{SetTextBackground}{\param{const wxColour\& }{colour}}
@@ -744,6 +750,9 @@ Sets the current text background colour for the DC.
 \func{void}{SetTextForeground}{\param{const wxColour\& }{colour}}
 
 Sets the current text foreground colour for the DC.
+
+See also \helpref{wxMemoryDC}{wxmemorydc} for the interpretation of colours
+when drawing into a monochrome bitmap.
 
 \membersection{wxDC::SetUserScale}\label{wxdcsetuserscale}
 

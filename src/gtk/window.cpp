@@ -303,27 +303,33 @@ static void draw_frame( GtkWidget *widget, wxWindow *win )
 
     if (win->HasScrolling())
     {
-        GtkScrolledWindow *scroll_window = GTK_SCROLLED_WINDOW(widget);
-        GtkScrolledWindowClass *scroll_class = GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT(widget)->klass );
+            GtkScrolledWindow *scroll_window = GTK_SCROLLED_WINDOW(widget);
+            
+            GtkRequisition vscroll_req;
+            vscroll_req.width = 2;
+            vscroll_req.height = 2;
+            (* GTK_WIDGET_CLASS( GTK_OBJECT(scroll_window->vscrollbar)->klass )->size_request )
+                (scroll_window->vscrollbar, &vscroll_req );
+                
+            GtkRequisition hscroll_req;
+            hscroll_req.width = 2;
+            hscroll_req.height = 2;
+            (* GTK_WIDGET_CLASS( GTK_OBJECT(scroll_window->hscrollbar)->klass )->size_request )
+                (scroll_window->hscrollbar, &hscroll_req );
 
-/*
-            GtkWidget *hscrollbar = scroll_window->hscrollbar;
-            GtkWidget *vscrollbar = scroll_window->vscrollbar;
+            GtkScrolledWindowClass *scroll_class = GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT(widget)->klass );
 
-            we use this instead:  range.slider_width = 11 + 2*2pts edge
-*/
+            if (scroll_window->vscrollbar_visible)
+            {
+                dw += vscroll_req.width;
+                dw += scroll_class->scrollbar_spacing;
+            }
 
-        if (scroll_window->vscrollbar_visible)
-        {
-            dw += 15;   /* dw += vscrollbar->allocation.width; */
-            dw += scroll_class->scrollbar_spacing;
-        }
-
-        if (scroll_window->hscrollbar_visible)
-        {
-            dh += 15;   /* dh += hscrollbar->allocation.height; */
-            dh += scroll_class->scrollbar_spacing;
-        }
+            if (scroll_window->hscrollbar_visible)
+            {
+                dh += hscroll_req.height;
+                dh += scroll_class->scrollbar_spacing;
+            }
     }
 
     int dx = 0;
@@ -2411,24 +2417,6 @@ void wxWindow::DoSetClientSize( int width, int height )
         int dw = 0;
         int dh = 0;
 
-#if (GTK_MINOR_VERSION == 0)
-        if (HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER))
-        {
-            if (HasScrolling())
-            {
-                GtkScrolledWindow *scroll_window = GTK_SCROLLED_WINDOW(m_widget);
-#if 0 // unused - if this is ok, just remove this line (VZ)
-                GtkScrolledWindowClass *scroll_class = GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT(m_widget)->klass );
-#endif // 0
-
-                GtkWidget *viewport = scroll_window->viewport;
-                GtkStyleClass *viewport_class = viewport->style->klass;
-
-                dw += 2 * viewport_class->xthickness;
-                dh += 2 * viewport_class->ythickness;
-            }
-        }
-#else
         if (HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER))
         {
             /* when using GTK 1.2 we set the shadow border size to 2 */
@@ -2441,32 +2429,37 @@ void wxWindow::DoSetClientSize( int width, int height )
             dw += 1 * 2;
             dh += 1 * 2;
         }
-#endif
 
         if (HasScrolling())
         {
-/*
-            GtkWidget *hscrollbar = scroll_window->hscrollbar;
-            GtkWidget *vscrollbar = scroll_window->vscrollbar;
-
-            we use this instead:  range.slider_width = 11 + 2*2pts edge
-*/
-
             GtkScrolledWindow *scroll_window = GTK_SCROLLED_WINDOW(m_widget);
+            
+            GtkRequisition vscroll_req;
+            vscroll_req.width = 2;
+            vscroll_req.height = 2;
+            (* GTK_WIDGET_CLASS( GTK_OBJECT(scroll_window->vscrollbar)->klass )->size_request )
+                (scroll_window->vscrollbar, &vscroll_req );
+                
+            GtkRequisition hscroll_req;
+            hscroll_req.width = 2;
+            hscroll_req.height = 2;
+            (* GTK_WIDGET_CLASS( GTK_OBJECT(scroll_window->hscrollbar)->klass )->size_request )
+                (scroll_window->hscrollbar, &hscroll_req );
+
             GtkScrolledWindowClass *scroll_class = GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT(m_widget)->klass );
 
             if (scroll_window->vscrollbar_visible)
             {
-                dw += 15;   /* dw += vscrollbar->allocation.width; */
+                dw += vscroll_req.width;
                 dw += scroll_class->scrollbar_spacing;
             }
 
             if (scroll_window->hscrollbar_visible)
             {
-                dh += 15;   /* dh += hscrollbar->allocation.height; */
+                dh += hscroll_req.height;
                 dh += scroll_class->scrollbar_spacing;
             }
-       }
+        }
 
        SetSize( width+dw, height+dh );
     }
@@ -2486,24 +2479,6 @@ void wxWindow::DoGetClientSize( int *width, int *height ) const
         int dw = 0;
         int dh = 0;
 
-#if (GTK_MINOR_VERSION == 0)
-        if (HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER))
-        {
-            if (HasScrolling())
-            {
-                GtkScrolledWindow *scroll_window = GTK_SCROLLED_WINDOW(m_widget);
-#if 0 // unused - if this is ok, just remove this line (VZ)
-                GtkScrolledWindowClass *scroll_class = GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT(m_widget)->klass );
-#endif // 0
-
-                GtkWidget *viewport = scroll_window->viewport;
-                GtkStyleClass *viewport_class = viewport->style->klass;
-
-                dw += 2 * viewport_class->xthickness;
-                dh += 2 * viewport_class->ythickness;
-            }
-        }
-#else
         if (HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER))
         {
             /* when using GTK 1.2 we set the shadow border size to 2 */
@@ -2516,28 +2491,34 @@ void wxWindow::DoGetClientSize( int *width, int *height ) const
             dw += 1 * 2;
             dh += 1 * 2;
         }
-#endif
+
         if (HasScrolling())
         {
-/*
-            GtkWidget *hscrollbar = scroll_window->hscrollbar;
-            GtkWidget *vscrollbar = scroll_window->vscrollbar;
-
-            we use this instead:  range.slider_width = 11 + 2*2pts edge
-*/
-
             GtkScrolledWindow *scroll_window = GTK_SCROLLED_WINDOW(m_widget);
+            
+            GtkRequisition vscroll_req;
+            vscroll_req.width = 2;
+            vscroll_req.height = 2;
+            (* GTK_WIDGET_CLASS( GTK_OBJECT(scroll_window->vscrollbar)->klass )->size_request )
+                (scroll_window->vscrollbar, &vscroll_req );
+                
+            GtkRequisition hscroll_req;
+            hscroll_req.width = 2;
+            hscroll_req.height = 2;
+            (* GTK_WIDGET_CLASS( GTK_OBJECT(scroll_window->hscrollbar)->klass )->size_request )
+                (scroll_window->hscrollbar, &hscroll_req );
+
             GtkScrolledWindowClass *scroll_class = GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT(m_widget)->klass );
 
             if (scroll_window->vscrollbar_visible)
             {
-                dw += 15;   /* dw += vscrollbar->allocation.width; */
+                dw += vscroll_req.width;
                 dw += scroll_class->scrollbar_spacing;
             }
 
             if (scroll_window->hscrollbar_visible)
             {
-                dh += 15;   /* dh += hscrollbar->allocation.height; */
+                dh += hscroll_req.height;
                 dh += scroll_class->scrollbar_spacing;
             }
         }
