@@ -77,9 +77,10 @@ WX_IMPLEMENT_POSER(wxPoserNSApplication);
     If nil is returned then idle event processing occurs until the user
     does not request anymore idle events or until a real event comes through.
 
-    Apple documentation states that nil can be passed in place of
-    [NSDate distantPast] to the untilDate parameter.  However, according
-    to Ryan Norton this crashes on Jaguar (10.2).
+    RN: Even though Apple documentation states that nil can be passed in place 
+    of [NSDate distantPast] in the untilDate parameter, this causes Jaguar (10.2)
+    to get stuck in some kind of loop deep within nextEventMatchingMask:, thus we 
+    need to explicitly pass [NSDate distantPast] instead.
 */
    
 - (NSEvent *)nextEventMatchingMask:(unsigned int)mask untilDate:(NSDate *)expiration inMode:(NSString *)mode dequeue:(BOOL)flag
