@@ -238,9 +238,9 @@ void MySTC::OnKeyPressed(wxKeyEvent& evt)
         if (evt.ShiftDown()) {
             // show how to do CallTips
             CallTipSetBackground(wxColour(_T("YELLOW")));
-            CallTipShow(pos, _T("lots of of text: blah, blah, blah\n\n"
-                                "show some suff, maybe parameters..\n\n"
-                                "fubar(param1, param2)"));
+            CallTipShow(pos, _T("lots of of text: blah, blah, blah\n\n\
+show some suff, maybe parameters..\n\n\
+fubar(param1, param2)"));
         }
         else {
             // show how to do AutoComplete
