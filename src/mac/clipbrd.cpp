@@ -22,6 +22,8 @@
 #include "wx/clipbrd.h"
 #include "wx/intl.h"
 
+#include "wx/mac/private.h"
+
 #define wxUSE_DATAOBJ 1
 
 #include <string.h>
@@ -254,7 +256,7 @@ bool wxClipboard::AddData( wxDataObject *data )
               wxMetafileDataObject* metaFileDataObject =
                 (wxMetafileDataObject*) data;
               wxMetafile metaFile = metaFileDataObject->GetMetafile();
-      				PicHandle pict = metaFile.GetHMETAFILE() ;
+      				PicHandle pict = (PicHandle) metaFile.GetHMETAFILE() ;
       				HLock( (Handle) pict ) ;
       #if !TARGET_CARBON
       				err = PutScrap( GetHandleSize(  (Handle) pict ) , 'PICT' , *pict ) ;

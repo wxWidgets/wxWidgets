@@ -47,6 +47,10 @@
 
 #include "wx/generic/dirctrlg.h"
 
+#if defined(__WXMAC__)
+  #include  "wx/mac/private.h"  // includes mac headers
+#endif
+
 #ifdef __WXMSW__
 #include <windows.h>
 

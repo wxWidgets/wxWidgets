@@ -249,30 +249,30 @@ void wxMenuItem::Enable(bool bDoEnable)
     if ( m_subMenu == NULL ) 
     {     
     	// normal menu item
-	    if ( m_parentMenu->GetHMenu() )
+	    if ( MAC_WXHMENU(m_parentMenu->GetHMenu()) )
 	    {
 	   	 	int index = m_parentMenu->MacGetIndexFromItem( this ) ;
 	   	 	if ( index >= 1 )
 	   	 	{
 	   	 		if ( bDoEnable )
-	   	 			UMAEnableMenuItem( m_parentMenu->GetHMenu() , index ) ;
+	   	 			UMAEnableMenuItem( MAC_WXHMENU(m_parentMenu->GetHMenu()) , index ) ;
 	   	 		else
-	   	 			UMADisableMenuItem( m_parentMenu->GetHMenu() , index ) ;
+	   	 			UMADisableMenuItem( MAC_WXHMENU(m_parentMenu->GetHMenu()) , index ) ;
 	   	 	}
 	    }
     }
     else                            
     {
   		// submenu
-	    if ( m_parentMenu->GetHMenu() )
+	    if ( MAC_WXHMENU(m_parentMenu->GetHMenu()) )
 	    {
 	   	 	int index = m_parentMenu->MacGetIndexFromItem( this ) ;
 	   	 	if ( index >= 1 )
 	   	 	{
 	   	 		if ( bDoEnable )
-	   	 			UMAEnableMenuItem( m_parentMenu->GetHMenu() , index ) ;
+	   	 			UMAEnableMenuItem( MAC_WXHMENU(m_parentMenu->GetHMenu()) , index ) ;
 	   	 		else
-	   	 			UMADisableMenuItem( m_parentMenu->GetHMenu() , index ) ;
+	   	 			UMADisableMenuItem( MAC_WXHMENU(m_parentMenu->GetHMenu()) , index ) ;
 	   	 	}
 	    }
     }
@@ -288,15 +288,15 @@ void wxMenuItem::Check(bool bDoCheck)
   if ( m_isChecked != bDoCheck ) 
   {
     m_isChecked = bDoCheck;
-   	if ( m_parentMenu->GetHMenu() )
+   	if ( MAC_WXHMENU(m_parentMenu->GetHMenu()) )
     {
    	 	int index = m_parentMenu->MacGetIndexFromItem( this ) ;
    	 	if ( index >= 1 )
    	 	{
    	 		if ( bDoCheck )
-					::SetItemMark( m_parentMenu->GetHMenu() , index , 0x12 ) ; // checkmark
+					::SetItemMark( MAC_WXHMENU(m_parentMenu->GetHMenu()) , index , 0x12 ) ; // checkmark
 				else
- 					::SetItemMark( m_parentMenu->GetHMenu() , index , 0 ) ; // no mark
+ 					::SetItemMark( MAC_WXHMENU(m_parentMenu->GetHMenu()) , index , 0 ) ; // no mark
   	 	}
   	}
   }
@@ -312,14 +312,14 @@ void wxMenuItem::SetText(const wxString& text)
 //    OWNER_DRAWN_ONLY( wxOwnerDrawn::SetName(text) );
 
     wxCHECK_RET( m_parentMenu && m_parentMenu->GetHMenu(), wxT("menuitem without menu") );
-   	if ( m_parentMenu->GetHMenu() )
+   	if ( MAC_WXHMENU(m_parentMenu->GetHMenu()) )
     {
    	 	int index = m_parentMenu->MacGetIndexFromItem( this ) ;
    	 	if ( index >= 1 )
    	 	{
  			Str255 label;
 			MacBuildMenuString( label , NULL , NULL , text ,false);
-   	 		::SetMenuItemText( m_parentMenu->GetHMenu() , index , label ) ; // checkmark
+   	 		::SetMenuItemText( MAC_WXHMENU(m_parentMenu->GetHMenu()) , index , label ) ; // checkmark
   	 	}
   	}
 

@@ -45,7 +45,7 @@ wxGLContext::wxGLContext(
 {
     m_window = win;
 
-    m_drawable = (AGLDrawable) UMAGetWindowPort(win->MacGetRootWindow());
+    m_drawable = (AGLDrawable) UMAGetWindowPort(MAC_WXHWND(win->MacGetRootWindow()));
 
     m_glContext = aglCreateContext(fmt, other ? other->m_glContext : NULL);
     wxCHECK_RET( m_glContext, wxT("Couldn't create OpenGl context") );
@@ -251,7 +251,7 @@ void wxGLCanvas::SetViewport()
     int width, height;
     GetClientSize(& width, & height);
     Rect bounds ;
-    GetWindowPortBounds( MacGetRootWindow() , &bounds ) ;
+    GetWindowPortBounds( MAC_WXHWND(MacGetRootWindow()) , &bounds ) ;
     GLint parms[4] ;
     parms[0] = x ;
     parms[1] = bounds.bottom - bounds.top - ( y + height ) ;

@@ -19,6 +19,17 @@
 IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxObject)
 #endif
 
+#ifdef __WXMAC__
+#include "wx/mac/private.h"
+#endif
+
+typedef struct MacTimerInfo
+{
+    TMTask m_task;
+    wxMacNotifierTableRef m_table ;
+    wxTimer* m_timer ;
+} ;
+
 static void wxProcessTimer( unsigned long event , void *data ) ;
 
 static pascal void MacTimerProc( TMTask * t )
@@ -38,30 +49,33 @@ static void wxProcessTimer( unsigned long event , void *data )
 		
     timer->Notify();
 
-    if ( timer->m_info.m_task.tmAddr && !timer->IsOneShot() )
+    if ( timer->m_info->m_task.tmAddr && !timer->IsOneShot() )
     {
-	    PrimeTime( (QElemPtr)  &timer->m_info.m_task , timer->GetInterval() ) ;
+	    PrimeTime( (QElemPtr)  &timer->m_info->m_task , timer->GetInterval() ) ;
     }
 }
 
 void wxTimer::Init()
 {
-	m_info.m_task.tmAddr = NULL ;
-	m_info.m_task.tmWakeUp = 0 ;
-	m_info.m_task.tmReserved = 0 ;
-	m_info.m_task.qType = 0 ;
-	m_info.m_table = wxMacGetNotifierTable() ;
-	m_info.m_timer = this ;
+    m_info = new MacTimerInfo() ;
+	m_info->m_task.tmAddr = NULL ;
+	m_info->m_task.tmWakeUp = 0 ;
+	m_info->m_task.tmReserved = 0 ;
+	m_info->m_task.qType = 0 ;
+	m_info->m_table = wxMacGetNotifierTable() ;
+	m_info->m_timer = this ;
 }
 
 bool wxTimer::IsRunning() const 
 {
-	return ( m_info.m_task.qType & kTMTaskActive ) ;
+	return ( m_info->m_task.qType & kTMTaskActive ) ;
 }
 
 wxTimer::~wxTimer()
 {
     Stop();
+    delete m_info ;
+    m_info = NULL ;
 }
 
 bool wxTimer::Start(int milliseconds,bool mode)
@@ -69,31 +83,31 @@ bool wxTimer::Start(int milliseconds,bool mode)
     (void)wxTimerBase::Start(milliseconds, mode);
 
     wxCHECK_MSG( m_milli > 0, FALSE, wxT("invalid value for timer timeour") );
-    wxCHECK_MSG( m_info.m_task.tmAddr == NULL , FALSE, wxT("attempting to restart a timer") );
+    wxCHECK_MSG( m_info->m_task.tmAddr == NULL , FALSE, wxT("attempting to restart a timer") );
 
     m_milli = milliseconds;
 #if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0340)
-    m_info.m_task.tmAddr = NewTimerUPP( MacTimerProc ) ;
+    m_info->m_task.tmAddr = NewTimerUPP( MacTimerProc ) ;
 #else
-    m_info.m_task.tmAddr = NewTimerProc( MacTimerProc ) ;
+    m_info->m_task.tmAddr = NewTimerProc( MacTimerProc ) ;
 #endif
-    m_info.m_task.tmWakeUp = 0 ;
-    m_info.m_task.tmReserved = 0 ;
-	m_info.m_task.qType = 0 ;
-	m_info.m_timer = this ;
-    InsXTime((QElemPtr) &m_info.m_task ) ;
-    PrimeTime( (QElemPtr) &m_info.m_task , m_milli ) ;
+    m_info->m_task.tmWakeUp = 0 ;
+    m_info->m_task.tmReserved = 0 ;
+	m_info->m_task.qType = 0 ;
+	m_info->m_timer = this ;
+    InsXTime((QElemPtr) &m_info->m_task ) ;
+    PrimeTime( (QElemPtr) &m_info->m_task , m_milli ) ;
     return FALSE;
 }
 
 void wxTimer::Stop()
 {
     m_milli = 0 ;
-    if ( m_info.m_task.tmAddr )
+    if ( m_info->m_task.tmAddr )
     {
-    	RmvTime(  (QElemPtr) &m_info.m_task ) ;
-    	DisposeTimerUPP(m_info.m_task.tmAddr) ;
-    	m_info.m_task.tmAddr = NULL ;
+    	RmvTime(  (QElemPtr) &m_info->m_task ) ;
+    	DisposeTimerUPP(m_info->m_task.tmAddr) ;
+    	m_info->m_task.tmAddr = NULL ;
     }
     wxMacRemoveAllNotifiersForData( wxMacGetNotifierTable() , this ) ;
 }

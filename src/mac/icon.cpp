@@ -19,6 +19,9 @@
 IMPLEMENT_DYNAMIC_CLASS(wxIcon, wxBitmap)
 #endif
 
+#include "wx/mac/private.h"
+
+
 /*
  * Icons
  */
@@ -43,18 +46,18 @@ wxIcon::wxIcon( char **bits ) :
 {
 }
 
-wxIcon::wxIcon(const wxString& icon_file, long flags,
+wxIcon::wxIcon(const wxString& icon_file, int flags,
     int desiredWidth, int desiredHeight)
 
 {
-    LoadFile(icon_file, flags, desiredWidth, desiredHeight);
+    LoadFile(icon_file, (wxBitmapType) flags, desiredWidth, desiredHeight);
 }
 
 wxIcon::~wxIcon()
 {
 }
 
-bool wxIcon::LoadFile(const wxString& filename, long type,
+bool wxIcon::LoadFile(const wxString& filename, wxBitmapType type,
     int desiredWidth, int desiredHeight)
 {
   UnRef();

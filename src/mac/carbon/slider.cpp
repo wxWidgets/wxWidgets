@@ -84,12 +84,12 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     }
   
 
-     m_macControl = ::NewControl( parent->MacGetRootWindow(), &bounds, title, false,
+     m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()), &bounds, title, false,
                                    value, minValue, maxValue, procID, (long) this);
  
-     wxASSERT_MSG( m_macControl != NULL , "No valid mac control" ) ;
+     wxASSERT_MSG( (ControlHandle) m_macControl != NULL , "No valid mac control" ) ;
  
-     ::SetControlAction( m_macControl , wxMacLiveScrollbarActionUPP ) ;
+     ::SetControlAction( (ControlHandle) m_macControl , wxMacLiveScrollbarActionUPP ) ;
  
      if(style & wxSL_LABELS)
      {
@@ -127,7 +127,7 @@ wxSlider::~wxSlider()
 
 int wxSlider::GetValue() const
 {
- 	return GetControlValue( m_macControl) ;
+ 	return GetControlValue( (ControlHandle) m_macControl) ;
 }
 
 void wxSlider::SetValue(int value)
@@ -136,7 +136,7 @@ void wxSlider::SetValue(int value)
 	valuestring.Printf( "%d" , value ) ;	
 	if ( m_macValueStatic )
 		m_macValueStatic->SetLabel( valuestring ) ;
- 	SetControlValue( m_macControl , value ) ;
+ 	SetControlValue( (ControlHandle) m_macControl , value ) ;
 }
 
 void wxSlider::SetRange(int minValue, int maxValue)
@@ -146,8 +146,8 @@ void wxSlider::SetRange(int minValue, int maxValue)
   m_rangeMin = minValue;
   m_rangeMax = maxValue;
 
-  SetControlMinimum(m_macControl, m_rangeMin);
-  SetControlMaximum(m_macControl, m_rangeMax);
+  SetControlMinimum( (ControlHandle) m_macControl, m_rangeMin);
+  SetControlMaximum( (ControlHandle) m_macControl, m_rangeMax);
   
   if(m_macMinimumStatic) {
     value.Printf("%d", m_rangeMin);
@@ -239,9 +239,9 @@ void wxSlider::Command (wxCommandEvent & event)
   ProcessCommand (event);
 }
 
-void wxSlider::MacHandleControlClick( ControlHandle control , SInt16 controlpart ) 
+void wxSlider::MacHandleControlClick( WXWidget control , wxInt16 controlpart ) 
 {
-	SInt16 value = ::GetControlValue( m_macControl ) ;
+	SInt16 value = ::GetControlValue( (ControlHandle) m_macControl ) ;
 	
 	SetValue( value ) ;		
 	
@@ -372,7 +372,7 @@ void wxSlider::MacHandleControlClick( ControlHandle control , SInt16 controlpart
          GetParent()->MacClientToRootWindow(&mac_x, &mac_y);
      }
  
-     GetControlBounds(m_macControl, &oldbounds);
+     GetControlBounds( (ControlHandle) m_macControl, &oldbounds);
      oldbounds.right = oldbounds.left + m_width;
      oldbounds.bottom = oldbounds.top + m_height;
  
@@ -408,7 +408,7 @@ void wxSlider::MacHandleControlClick( ControlHandle control , SInt16 controlpart
  
          // Update window at old and new positions
          SetRect(&newbounds, m_x, m_y, m_x + m_width, m_y + m_height);
-         WindowRef rootwindow = MacGetRootWindow();
+         WindowRef rootwindow = (WindowRef) MacGetRootWindow();
          InvalWindowRect( rootwindow , &oldbounds );
          InvalWindowRect( rootwindow , &newbounds );
  
@@ -485,6 +485,6 @@ void wxSlider::MacHandleControlClick( ControlHandle control , SInt16 controlpart
      if(GetParent()) {
          GetParent()->MacClientToRootWindow(&x, &y);
      }
-     UMAMoveControl(m_macControl, x, y);
-     UMASizeControl(m_macControl, width - xborder, height - yborder);
+     UMAMoveControl( (ControlHandle) m_macControl, x, y);
+     UMASizeControl( (ControlHandle) m_macControl, width - xborder, height - yborder);
 }

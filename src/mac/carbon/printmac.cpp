@@ -29,6 +29,8 @@
 #include "wx/msgdlg.h"
 #endif
 
+#include "wx/mac/private.h"
+
 #include "wx/mac/printmac.h"
 #include "wx/dcprint.h"
 #include "wx/printdlg.h"

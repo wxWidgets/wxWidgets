@@ -14,6 +14,7 @@
 #endif
 
 #include "wx/dcmemory.h"
+#include "wx/mac/private.h"
 
 //-----------------------------------------------------------------------------
 // wxMemoryDC
@@ -43,7 +44,7 @@ wxMemoryDC::~wxMemoryDC()
 {
 	if ( m_selected.Ok() )
 	{
- 		UnlockPixels( GetGWorldPixMap(m_selected.GetHBITMAP()) );
+ 		UnlockPixels( GetGWorldPixMap(MAC_WXHBITMAP(m_selected.GetHBITMAP())) );
 	}
 };
 
@@ -51,7 +52,7 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
 {
 	if ( m_selected.Ok() )
 	{
- 		UnlockPixels( GetGWorldPixMap(m_selected.GetHBITMAP()) );
+ 		UnlockPixels( GetGWorldPixMap(MAC_WXHBITMAP(m_selected.GetHBITMAP())) );
 	}
     m_selected = bitmap;
     if (m_selected.Ok())

@@ -90,6 +90,10 @@
 #include "wx/msw/winundef.h"
 #endif
 
+#if defined(__WXMAC__)
+  #include  "wx/mac/private.h"  // includes mac headers
+#endif
+
 // utime() is POSIX so should normally be available on all Unices
 #ifdef __UNIX_LIKE__
 #include <sys/types.h>

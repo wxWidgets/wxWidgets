@@ -34,6 +34,8 @@
 #include "wx/metafile.h"
 #include "wx/clipbrd.h"
 
+#include "wx/mac/private.h"
+
 #include <stdio.h>
 #include <string.h>
 
@@ -59,7 +61,7 @@ wxMetafileRefData::~wxMetafileRefData(void)
 {
     if (m_metafile)
     {
-		KillPicture( m_metafile ) ;
+		KillPicture( (PicHandle) m_metafile ) ;
         m_metafile = 0;
     }
 }
@@ -104,7 +106,7 @@ bool wxMetaFile::SetClipboard(int width, int height)
     return TRUE ;
 }
 
-void wxMetafile::SetHMETAFILE(PicHandle mf)
+void wxMetafile::SetHMETAFILE(WXHMETAFILE mf)
 {
     if (!m_refData)
         m_refData = new wxMetafileRefData;
@@ -122,7 +124,7 @@ bool wxMetaFile::Play(wxDC *dc)
 		
 	{
 		wxMacPortSetter helper( dc ) ;
-		PicHandle pict = GetHMETAFILE() ;
+		PicHandle pict = (PicHandle) GetHMETAFILE() ;
 		DrawPicture( pict , &(**pict).picFrame ) ;
 	}
     return TRUE;
@@ -149,7 +151,7 @@ wxMetaFileDC::wxMetaFileDC(const wxString& file)
   Rect r={0,0,1000,1000} ;
 	
   m_metaFile->SetHMETAFILE( OpenPicture( &r ) ) ;
-  ::GetPort( &m_macPort ) ;	
+  ::GetPort( (GrafPtr*) &m_macPort ) ;	
   m_ok = TRUE ;
 
   SetMapMode(wxMM_TEXT); 
@@ -171,7 +173,7 @@ wxMetaFileDC::wxMetaFileDC(const wxString& file, int xext, int yext, int xorg, i
 	Rect r={yorg,xorg,yorg+yext,xorg+xext} ;
 	
 	m_metaFile->SetHMETAFILE( OpenPicture( &r ) ) ;
-	::GetPort( &m_macPort ) ;	
+	::GetPort( (GrafPtr*) &m_macPort ) ;	
   m_ok = TRUE ;
 
   SetMapMode(wxMM_TEXT); 
@@ -195,7 +197,7 @@ size_t wxMetafileDataObject::GetDataSize() const
 
 bool wxMetafileDataObject::GetDataHere(void *buf) const
 {
-  memcpy( buf , (*(*((wxMetafile*)&m_metafile)).GetHMETAFILE()) ,
+  memcpy( buf , (*(PicHandle)(*((wxMetafile*)&m_metafile)).GetHMETAFILE()) ,
     GetHandleSize( (Handle) (*((wxMetafile*)&m_metafile)).GetHMETAFILE() ) ) ;
   return true ;
 }

@@ -1048,7 +1048,7 @@ pascal SInt32 AGABevelButtonDefProc (SInt16 procID, ControlHandle theControl, Co
 					return 0 ;
 					
 				{
-					AGAPortHelper help((**theControl).contrlOwner) ;
+					wxMacPortStateHelper help((**theControl).contrlOwner) ;
 					AGASetFontStyle( &info->fontStyle ) ;
 					Boolean mRadioBehavior = false ;
 					
@@ -1188,7 +1188,7 @@ pascal SInt32 AGAButtonDefProc (SInt16 procID, ControlHandle theControl, Control
 					return 0 ;
 					
 				{
-					AGAPortHelper help((**theControl).contrlOwner) ;
+					wxMacPortStateHelper help((**theControl).contrlOwner) ;
 					AGASetFontStyle( &info->fontStyle ) ;
 					Boolean mRadioBehavior = false ;
 					
@@ -1425,7 +1425,7 @@ pascal SInt32 AGACheckBoxDefProc (SInt16 procID, ControlHandle theControl, Contr
 						return 0 ;
 						
 					{
-						AGAPortHelper help((**theControl).contrlOwner) ;
+						wxMacPortStateHelper help((**theControl).contrlOwner) ;
 						Rect frame =  (**theControl).contrlRect ;
 						Boolean hasColor = true;
 						Boolean disabled = (*theControl)->contrlHilite == 255 ;
@@ -1621,7 +1621,7 @@ pascal SInt32 AGARadioButtonDefProc (SInt16 procID, ControlHandle theControl, Co
 						return 0 ;
 						
 					{
-						AGAPortHelper help() ;
+						wxMacPortStateHelper help() ;
 						Rect frame =  (**theControl).contrlRect ;
 						Boolean hasColor = true;
 						Boolean disabled = (*theControl)->contrlHilite == 255 ;
@@ -1813,7 +1813,7 @@ pascal SInt32 AGAStaticGroupBoxTextDefProc (SInt16 procID, ControlHandle theCont
 				{
 					bool disabled = false ;
 					bool hasColor = true ;
-					AGAPortHelper help((**theControl).contrlOwner) ;
+					wxMacPortStateHelper help((**theControl).contrlOwner) ;
 					AGASetFontStyle( &info->fontStyle ) ;
 					FontInfo fi ;
 					::GetFontInfo( &fi ) ;
@@ -1899,7 +1899,7 @@ pascal SInt32 AGAStaticTextDefProc (SInt16 procID, ControlHandle theControl, Con
 					return 0 ;
 					
 				{
-					AGAPortHelper help((**theControl).contrlOwner) ;
+					wxMacPortStateHelper help((**theControl).contrlOwner) ;
 					AGASetFontStyle( &info->fontStyle ) ;
 					int x =	(**theControl).contrlRect.left ;
 					int y =	(**theControl).contrlRect.top ;
@@ -2094,7 +2094,7 @@ pascal SInt32 AGAEditTextDefProc (SInt16 procID, ControlHandle theControl, Contr
 	{
 		case initCntl :
 			{
-				AGAPortHelper help((**theControl).contrlOwner) ;
+				wxMacPortStateHelper help((**theControl).contrlOwner) ;
 				SetPort( (**theControl).contrlOwner ) ;
 				::TextFont( kFontIDGeneva ) ; 
 				::TextSize( 10 ) ;
@@ -2116,7 +2116,7 @@ pascal SInt32 AGAEditTextDefProc (SInt16 procID, ControlHandle theControl, Contr
 			break ;
 		case drawCntl :
 			{
-				AGAPortHelper help((**theControl).contrlOwner) ;
+				wxMacPortStateHelper help((**theControl).contrlOwner) ;
 				AGASetFontStyle( &info->fontStyle ) ;
 				SetPort( (**theControl).contrlOwner ) ;
 				RGBBackColor( &gAGARamp[ kAGAWhite ] ) ;
@@ -2223,7 +2223,7 @@ pascal SInt32 AGAEditTextDefProc (SInt16 procID, ControlHandle theControl, Contr
 			break ;
 		case kControlMsgKeyDown :
 			{
-				AGAPortHelper help( (**theControl).contrlOwner ) ;
+				wxMacPortStateHelper help( (**theControl).contrlOwner ) ;
 				AGASetFontStyle( &info->fontStyle ) ;
 				RGBBackColor( &gAGARamp[ kAGAWhite ] ) ;
 				RGBForeColor( &gAGARamp[ kAGABlack ] ) ;
@@ -2332,7 +2332,7 @@ pascal SInt32 AGAListControlDefProc (SInt16 procID, ControlHandle theControl, Co
 			break ;
 		case drawCntl :
 			{
-				AGAPortHelper help((**theControl).contrlOwner) ;
+				wxMacPortStateHelper help((**theControl).contrlOwner) ;
 				AGASetFontStyle( &info->fontStyle ) ;
 				RGBBackColor( &gAGARamp[ kAGAWhite ] ) ;
 				EraseRect( &(**theControl).contrlRect ) ;
@@ -2560,52 +2560,4 @@ void AGAApplyThemeBackground(ThemeBackgroundKind 	inKind,
 // status in a theme savvy manner, pen mode, patterns and fonts
 // attributes
 
-AGAPortHelper::AGAPortHelper( GrafPtr newport) 
-{
-  m_clip = NULL ;
-  Setup( newport ) ;
-}
-AGAPortHelper::AGAPortHelper()
-{
-	m_clip = NULL ;
-}
-
-void AGAPortHelper::Setup( GrafPtr newport )
-{
-	GetPort( &m_oldPort ) ;
-	SetPort( newport ) ;
-	wxASSERT_MSG( m_clip == NULL , "Cannot call setup twice" ) ;
-	m_clip = NewRgn() ;
-	GetClip( m_clip );
-	m_textFont = GetPortTextFont( newport);
-	m_textSize = GetPortTextSize( newport);
-	m_textStyle = GetPortTextFace( newport);
-	m_textMode = GetPortTextMode( newport);	
-	GetThemeDrawingState( &m_drawingState ) ;
-	m_currentPort = newport ;
-}
-void AGAPortHelper::Clear()
-{
-	if ( m_clip )
-	{
-		DisposeRgn( m_clip ) ;
-		DisposeThemeDrawingState( m_drawingState ) ;
-		m_clip = NULL ;
-	}
-}
-AGAPortHelper::~AGAPortHelper()
-{
-	if ( m_clip )
-	{
-		SetPort( m_currentPort ) ;
-		SetClip( m_clip ) ;
-		DisposeRgn( m_clip ) ;
-		TextFont( m_textFont );
-		TextSize( m_textSize );
-		TextFace( m_textStyle );
-		TextMode( m_textMode );
-		SetThemeDrawingState( m_drawingState , true ) ;
-		SetPort( m_oldPort ) ;
-	}
-}
 

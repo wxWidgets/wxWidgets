@@ -35,7 +35,7 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
 	
 	MacPreControlCreate( parent , id ,  label , pos , size ,style, validator , name , &bounds , title ) ;
 
-	m_macControl = ::NewControl( parent->MacGetRootWindow() , &bounds , title , false , 0 , 0 , 1, 
+	m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , 1, 
 	  	kControlRadioButtonProc , (long) this ) ;
 	
 	MacPostControlCreate() ;
@@ -70,10 +70,10 @@ void wxRadioButton::SetValue(bool val)
 {
 	int i;
 	wxRadioButton *cycle;
-	  if ( GetControlValue( m_macControl ) == val )
+	  if ( GetControlValue( (ControlHandle) m_macControl ) == val )
 	    return ;
 	    
-   ::SetControlValue( m_macControl , val ) ;
+   ::SetControlValue( (ControlHandle) m_macControl , val ) ;
    if (val) 
    {
    		cycle=this->NextInCycle();
@@ -89,7 +89,7 @@ void wxRadioButton::SetValue(bool val)
 
 bool wxRadioButton::GetValue() const
 {
-    return ::GetControlValue( m_macControl ) ;
+    return ::GetControlValue( (ControlHandle) m_macControl ) ;
 }
 
 void wxRadioButton::Command (wxCommandEvent & event)
@@ -98,7 +98,7 @@ void wxRadioButton::Command (wxCommandEvent & event)
   ProcessCommand (event);
 }
 
-void wxRadioButton::MacHandleControlClick( ControlHandle control , SInt16 controlpart ) 
+void wxRadioButton::MacHandleControlClick( WXWidget control , wxInt16 controlpart ) 
 {
     if ( GetValue() )
       return ;

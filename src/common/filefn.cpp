@@ -50,6 +50,10 @@
     #endif
 #endif
 
+#if defined(__WXMAC__)
+  #include  "wx/mac/private.h"  // includes mac headers
+#endif
+
 #include <time.h>
 
 #ifndef __MWERKS__

@@ -40,6 +40,8 @@
   #include <windows.h>
 #endif
 
+#include "wx/mac/private.h"
+
 #include "MoreFiles.h"
 #include "MoreFilesExtras.h"
 

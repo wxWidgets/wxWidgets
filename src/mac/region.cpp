@@ -63,25 +63,25 @@ wxRegion::wxRegion()
 wxRegion::wxRegion(WXHRGN hRegion )
 {
     m_refData = new wxRegionRefData;
-    CopyRgn( hRegion , M_REGION ) ;
+    CopyRgn( (RgnHandle) hRegion , (RgnHandle) M_REGION ) ;
 }
 
 wxRegion::wxRegion(long x, long y, long w, long h)
 {
     m_refData = new wxRegionRefData;
-    SetRectRgn( M_REGION , x , y , x+w , y+h ) ;
+    SetRectRgn( (RgnHandle) M_REGION , x , y , x+w , y+h ) ;
 }
 
 wxRegion::wxRegion(const wxPoint& topLeft, const wxPoint& bottomRight)
 {
     m_refData = new wxRegionRefData;
-    SetRectRgn( M_REGION , topLeft.x , topLeft.y , bottomRight.x , bottomRight.y ) ;
+    SetRectRgn( (RgnHandle) M_REGION , topLeft.x , topLeft.y , bottomRight.x , bottomRight.y ) ;
 }
 
 wxRegion::wxRegion(const wxRect& rect)
 {
     m_refData = new wxRegionRefData;
-    SetRectRgn( M_REGION , rect.x , rect.y , rect.x+rect.width , rect.y+rect.height ) ;
+    SetRectRgn( (RgnHandle) M_REGION , rect.x , rect.y , rect.x+rect.width , rect.y+rect.height ) ;
 }
 
 /*!

@@ -65,7 +65,7 @@ wxWindowList wxModelessWindows;
 // Find an item given the Macintosh Window Reference
 
 wxList *wxWinMacWindowList = NULL;
-wxTopLevelWindowMac *wxFindWinFromMacWindow(WindowRef inWindowRef)
+wxTopLevelWindowMac *wxFindWinFromMacWindow(WXWindow inWindowRef)
 {
     wxNode *node = wxWinMacWindowList->Find((long)inWindowRef);
     if (!node)
@@ -73,7 +73,7 @@ wxTopLevelWindowMac *wxFindWinFromMacWindow(WindowRef inWindowRef)
     return (wxTopLevelWindowMac *)node->Data();
 }
 
-void wxAssociateWinWithMacWindow(WindowRef inWindowRef, wxTopLevelWindowMac *win)
+void wxAssociateWinWithMacWindow(WXWindow inWindowRef, wxTopLevelWindowMac *win)
 {
     // adding NULL WindowRef is (first) surely a result of an error and
     // (secondly) breaks menu command processing
@@ -93,7 +93,7 @@ void wxRemoveMacWindowAssociation(wxTopLevelWindowMac *win)
 // wxTopLevelWindowMac creation
 // ----------------------------------------------------------------------------
 
-WindowRef wxTopLevelWindowMac::s_macWindowInUpdate = NULL;
+WXHWND wxTopLevelWindowMac::s_macWindowInUpdate = NULL;
 
 void wxTopLevelWindowMac::Init()
 {
@@ -131,7 +131,7 @@ bool wxTopLevelWindowMac::Create(wxWindow *parent,
 wxTopLevelWindowMac::~wxTopLevelWindowMac()
 {
     wxToolTip::NotifyWindowDelete(m_macWindow) ;
-    UMADisposeWindow( m_macWindow ) ;
+    UMADisposeWindow( (WindowRef) m_macWindow ) ;
 
     wxRemoveMacWindowAssociation( this ) ;
 
@@ -150,7 +150,7 @@ wxTopLevelWindowMac::~wxTopLevelWindowMac()
           wxTheApp->ExitMainLoop() ;        
         }
     }
-    DisposeRgn( m_macNoEraseUpdateRgn ) ;
+    DisposeRgn( (RgnHandle) m_macNoEraseUpdateRgn ) ;
 }
 
 
@@ -267,27 +267,27 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
         attr |= kWindowCloseBoxAttribute ;
     }
     
-    ::CreateNewWindow( wclass , attr , &theBoundsRect , &m_macWindow ) ;
+    ::CreateNewWindow( wclass , attr , &theBoundsRect , (WindowRef*)&m_macWindow ) ;
     wxAssociateWinWithMacWindow( m_macWindow , this ) ;
     wxString label ;
     if( wxApp::s_macDefaultEncodingIsPC )
         label = wxMacMakeMacStringFromPC( title ) ;
     else
         label = title ;
-    UMASetWTitleC( m_macWindow , label ) ;
-    ::CreateRootControl( m_macWindow , &m_macRootControl ) ;
+    UMASetWTitleC( (WindowRef)m_macWindow , label ) ;
+    ::CreateRootControl( (WindowRef)m_macWindow , (ControlHandle*)&m_macRootControl ) ;
 
     m_macFocus = NULL ;
 }
 
-void wxTopLevelWindowMac::MacGetPortParams(Point* localOrigin, Rect* clipRect, WindowRef *window  , wxWindowMac** rootwin) 
+void wxTopLevelWindowMac::MacGetPortParams(WXPOINTPTR localOrigin, WXRECTPTR clipRect, WXHWND *window  , wxWindowMac** rootwin) 
 {
-    localOrigin->h = 0;
-    localOrigin->v = 0;
-    clipRect->left = 0;
-    clipRect->top = 0;
-    clipRect->right = m_width;
-    clipRect->bottom = m_height;
+    ((Point*)localOrigin)->h = 0;
+    ((Point*)localOrigin)->v = 0;
+    ((Rect*)clipRect)->left = 0;
+    ((Rect*)clipRect)->top = 0;
+    ((Rect*)clipRect)->right = m_width;
+    ((Rect*)clipRect)->bottom = m_height;
     *window = m_macWindow ;
     *rootwin = this ;
 }
@@ -297,7 +297,7 @@ void wxTopLevelWindowMac::Clear()
   wxWindow::Clear() ;
 }
 
-ControlHandle wxTopLevelWindowMac::MacGetContainerForEmbedding() 
+WXWidget wxTopLevelWindowMac::MacGetContainerForEmbedding() 
 {
     return m_macRootControl ;
 }
@@ -305,19 +305,17 @@ ControlHandle wxTopLevelWindowMac::MacGetContainerForEmbedding()
 
 void wxTopLevelWindowMac::MacUpdate( long timestamp)
 {
-    #if TARGET_CARBON
-    AGAPortHelper help( GetWindowPort(m_macWindow) ) ;
-    #else
-    AGAPortHelper help( (m_macWindow) ) ;
-    #endif
-    BeginUpdate( m_macWindow ) ;
+
+    wxMacPortStateHelper help( GetWindowPort( (WindowRef) m_macWindow) ) ;
+
+    BeginUpdate( (WindowRef)m_macWindow ) ;
 
     RgnHandle       updateRgn = NewRgn();    
     RgnHandle       diffRgn = NewRgn() ;
     if ( updateRgn && diffRgn )
     {
-        GetPortVisibleRegion( GetWindowPort( m_macWindow ), updateRgn );
-        DiffRgn( updateRgn , m_macNoEraseUpdateRgn , diffRgn ) ;
+        GetPortVisibleRegion( GetWindowPort( (WindowRef)m_macWindow ), updateRgn );
+        DiffRgn( updateRgn , (RgnHandle) m_macNoEraseUpdateRgn , diffRgn ) ;
         if ( !EmptyRgn( updateRgn ) )
         {
             MacRedraw( updateRgn , timestamp , m_macNeedsErasing || !EmptyRgn( diffRgn )  ) ;
@@ -327,8 +325,8 @@ void wxTopLevelWindowMac::MacUpdate( long timestamp)
         DisposeRgn( updateRgn );
     if ( diffRgn )
         DisposeRgn( diffRgn );
-    EndUpdate( m_macWindow ) ;
-    SetEmptyRgn( m_macNoEraseUpdateRgn ) ;
+    EndUpdate( (WindowRef)m_macWindow ) ;
+    SetEmptyRgn( (RgnHandle) m_macNoEraseUpdateRgn ) ;
     m_macNeedsErasing = false ;
 }
 
@@ -336,21 +334,22 @@ void wxTopLevelWindowMac::MacUpdate( long timestamp)
 // Raise the window to the top of the Z order
 void wxTopLevelWindowMac::Raise()
 {
-    ::BringToFront( m_macWindow ) ;
+    ::BringToFront( (WindowRef)m_macWindow ) ;
 }
 
 // Lower the window to the bottom of the Z order
 void wxTopLevelWindowMac::Lower()
 {
-    ::SendBehind( m_macWindow , NULL ) ;
+    ::SendBehind( (WindowRef)m_macWindow , NULL ) ;
 }
 
 Point lastWhere ;
 long lastWhen = 0 ;
 extern int wxBusyCursorCount ;
 
-void wxTopLevelWindowMac::MacFireMouseEvent( EventRecord *ev )
+void wxTopLevelWindowMac::MacFireMouseEvent( WXEVENTREF evr )
 {
+    EventRecord *ev = (EventRecord*) evr ;
     wxMouseEvent event(wxEVT_LEFT_DOWN);
     bool isDown = !(ev->modifiers & btnState) ; // 1 is for up
     bool controlDown = ev->modifiers & controlKey ; // for simulating right mouse
@@ -388,7 +387,7 @@ void wxTopLevelWindowMac::MacFireMouseEvent( EventRecord *ev )
         
     GrafPtr     port ;  
     ::GetPort( &port ) ;
-    ::SetPort( UMAGetWindowPort( m_macWindow ) ) ;
+    ::SetPort( UMAGetWindowPort( (WindowRef)m_macWindow ) ) ;
     ::GlobalToLocal( &localwhere ) ;
     ::SetPort( port ) ;
 
@@ -449,12 +448,12 @@ void wxTopLevelWindowMac::MacFireMouseEvent( EventRecord *ev )
     }
 }
 
-void wxTopLevelWindowMac::MacMouseDown( EventRecord *ev , short part)
+void wxTopLevelWindowMac::MacMouseDown( WXEVENTREF ev , short part)
 {
     MacFireMouseEvent( ev ) ;
 }
 
-void wxTopLevelWindowMac::MacMouseUp( EventRecord *ev , short part)
+void wxTopLevelWindowMac::MacMouseUp( WXEVENTREF ev , short part)
 {
     switch (part)
     {
@@ -466,7 +465,7 @@ void wxTopLevelWindowMac::MacMouseUp( EventRecord *ev , short part)
     }
 }
 
-void wxTopLevelWindowMac::MacMouseMoved( EventRecord *ev , short part)
+void wxTopLevelWindowMac::MacMouseMoved( WXEVENTREF ev , short part)
 {
     switch (part)
     {
@@ -477,20 +476,20 @@ void wxTopLevelWindowMac::MacMouseMoved( EventRecord *ev , short part)
             break ;
     }
 }
-void wxTopLevelWindowMac::MacActivate( EventRecord *ev , bool inIsActivating )
+void wxTopLevelWindowMac::MacActivate( WXEVENTREF ev , bool inIsActivating )
 {
     wxActivateEvent event(wxEVT_ACTIVATE, inIsActivating , m_windowId);
-    event.m_timeStamp = ev->when ;
+    event.m_timeStamp = ((EventRecord*)ev)->when ;
     event.SetEventObject(this);
     
     GetEventHandler()->ProcessEvent(event);
     
-    UMAHighlightAndActivateWindow( m_macWindow , inIsActivating ) ;
+    UMAHighlightAndActivateWindow( (WindowRef)m_macWindow , inIsActivating ) ;
     
     MacSuperEnabled( inIsActivating ) ;
 }
 
-void wxTopLevelWindowMac::MacKeyDown( EventRecord *ev ) 
+void wxTopLevelWindowMac::MacKeyDown( WXEVENTREF ev ) 
 {
 }
 
@@ -505,7 +504,7 @@ void wxTopLevelWindowMac::SetTitle(const wxString& title)
     else
         label = m_label ;
 
-    UMASetWTitleC( m_macWindow , label ) ;
+    UMASetWTitleC( (WindowRef)m_macWindow , label ) ;
 }
 
 bool wxTopLevelWindowMac::Show(bool show)
@@ -515,8 +514,8 @@ bool wxTopLevelWindowMac::Show(bool show)
 
     if (show)
     {
-      ::ShowWindow( m_macWindow ) ;
-      ::SelectWindow( m_macWindow ) ;
+      ::ShowWindow( (WindowRef)m_macWindow ) ;
+      ::SelectWindow( (WindowRef)m_macWindow ) ;
       // no need to generate events here, they will get them triggered by macos
       // actually they should be , but apparently they are not
       wxSize size(m_width, m_height);
@@ -526,7 +525,7 @@ bool wxTopLevelWindowMac::Show(bool show)
     }
     else
     {
-      ::HideWindow( m_macWindow ) ;
+      ::HideWindow( (WindowRef)m_macWindow ) ;
     }
 
     if ( !show )
@@ -581,10 +580,10 @@ void wxTopLevelWindowMac::DoMoveWindow(int x, int y, int width, int height)
         m_height = actualHeight ;
 
         if ( doMove )
-            ::MoveWindow(m_macWindow, m_x, m_y  , false); // don't make frontmost
+            ::MoveWindow((WindowRef)m_macWindow, m_x, m_y  , false); // don't make frontmost
         
         if ( doResize )
-            ::SizeWindow(m_macWindow, m_width, m_height  , true); 
+            ::SizeWindow((WindowRef)m_macWindow, m_width, m_height  , true); 
         
         // the OS takes care of invalidating and erasing the new area
         // we have erased the old one   
@@ -632,11 +631,11 @@ void wxTopLevelWindowMac::DoMoveWindow(int x, int y, int width, int height)
  * will get the eraseBackground event first
  */
  
-void wxTopLevelWindowMac::MacInvalidate( const Rect * rect, bool eraseBackground ) 
+void wxTopLevelWindowMac::MacInvalidate( const WXRECTPTR rect, bool eraseBackground ) 
 {
   GrafPtr formerPort ;
   GetPort( &formerPort ) ;
-  SetPortWindowPort( m_macWindow ) ;
+  SetPortWindowPort( (WindowRef)m_macWindow ) ;
   
   m_macNeedsErasing |= eraseBackground ;
   
@@ -651,11 +650,11 @@ void wxTopLevelWindowMac::MacInvalidate( const Rect * rect, bool eraseBackground
     RgnHandle       diffRgn = NewRgn() ;
     if ( updateRgn && diffRgn )
     {
-        GetWindowUpdateRgn( m_macWindow , updateRgn );
+        GetWindowUpdateRgn( (WindowRef)m_macWindow , updateRgn );
         Point pt = {0,0} ;
         LocalToGlobal( &pt ) ;
         OffsetRgn( updateRgn , -pt.h , -pt.v ) ;
-        DiffRgn( updateRgn , m_macNoEraseUpdateRgn , diffRgn ) ;
+        DiffRgn( updateRgn , (RgnHandle) m_macNoEraseUpdateRgn , diffRgn ) ;
         if ( !EmptyRgn( diffRgn ) )
         {
             m_macNeedsErasing = true ;
@@ -669,12 +668,12 @@ void wxTopLevelWindowMac::MacInvalidate( const Rect * rect, bool eraseBackground
     if ( !m_macNeedsErasing )
     {
       RgnHandle rectRgn = NewRgn() ;
-      SetRectRgn( rectRgn , rect->left , rect->top , rect->right , rect->bottom ) ;
-      UnionRgn( m_macNoEraseUpdateRgn , rectRgn , m_macNoEraseUpdateRgn ) ;
+      SetRectRgn( rectRgn , ((Rect*)rect)->left , ((Rect*)rect)->top , ((Rect*)rect)->right , ((Rect*)rect)->bottom ) ;
+      UnionRgn( (RgnHandle) m_macNoEraseUpdateRgn , rectRgn , (RgnHandle) m_macNoEraseUpdateRgn ) ;
       DisposeRgn( rectRgn ) ;
     }
   }
-  InvalWindowRect( m_macWindow , rect ) ;
+  InvalWindowRect( (WindowRef)m_macWindow , (Rect*)rect ) ;
   // turn this on to debug the refreshing cycle
 #if wxMAC_DEBUG_REDRAW
   PaintRect( rect ) ;

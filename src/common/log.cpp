@@ -60,6 +60,10 @@
   #include  "wx/msw/private.h"      // includes windows.h for OutputDebugString
 #endif
 
+#if defined(__WXMAC__)
+  #include  "wx/mac/private.h"  // includes mac headers
+#endif
+
 // ----------------------------------------------------------------------------
 // non member functions
 // ----------------------------------------------------------------------------

@@ -46,6 +46,10 @@
 
 #include  "wx/utils.h"    // for wxGetHomeDir
 
+#if defined(__WXMAC__)
+  #include  "wx/mac/private.h"  // includes mac headers
+#endif
+
 // _WINDOWS_ is defined when windows.h is included,
 // __WXMSW__ is defined for MS Windows compilation
 #if       defined(__WXMSW__) && !defined(_WINDOWS_)

@@ -168,7 +168,7 @@ bool wxToolBar::Realize()
 
     Point localOrigin ;
     Rect clipRect ;
-    WindowRef window = MacGetRootWindow() ;
+    WindowRef window = (WindowRef) MacGetRootWindow() ;
     wxWindow *win ;
     
     int lx , ly ;
@@ -215,20 +215,20 @@ bool wxToolBar::Realize()
                 if ( bmap->m_bitmapType == kMacBitmapTypePict )
                 {
                     info.contentType = kControlContentPictHandle ;
-                    info.u.picture = bmap->m_hPict ;
+                    info.u.picture = MAC_WXHMETAFILE(bmap->m_hPict) ;
                 }
                 else if ( bmap->m_bitmapType == kMacBitmapTypeGrafWorld )
                 {
                     if ( tool->GetBitmap1().GetMask() )
                     {
                         info.contentType = kControlContentCIconHandle ;
-                        info.u.cIconHandle = wxMacCreateCIcon( bmap->m_hBitmap , tool->GetBitmap1().GetMask()->GetMaskBitmap() ,
+                        info.u.cIconHandle = wxMacCreateCIcon( MAC_WXHBITMAP(bmap->m_hBitmap) , MAC_WXHBITMAP(tool->GetBitmap1().GetMask()->GetMaskBitmap()) ,
                                                                8 , 16 ) ;
                     }
                     else
                     {
                         info.contentType = kControlContentCIconHandle ;
-                        info.u.cIconHandle = wxMacCreateCIcon( bmap->m_hBitmap , NULL ,
+                        info.u.cIconHandle = wxMacCreateCIcon( MAC_WXHBITMAP(bmap->m_hBitmap) , NULL ,
                                                                8 , 16 ) ;
                     }
                 }
@@ -270,7 +270,7 @@ bool wxToolBar::Realize()
             /*
               ::SetControlFontStyle( m_macToolHandle , &controlstyle ) ;
             */
-            ControlHandle container = GetParent()->MacGetContainerForEmbedding() ;
+            ControlHandle container = (ControlHandle) GetParent()->MacGetContainerForEmbedding() ;
             wxASSERT_MSG( container != NULL , "No valid mac container control" ) ;
             ::EmbedControl( m_macToolHandle , container ) ;
             
@@ -346,7 +346,7 @@ wxSize wxToolBar::GetToolSize() const
     return wxSize(m_defaultWidth + 4, m_defaultHeight + 4);
 }
 
-void wxToolBar::MacHandleControlClick( ControlHandle control , SInt16 controlpart ) 
+void wxToolBar::MacHandleControlClick( WXWidget control , wxInt16 controlpart ) 
 {
     int index = 0 ;
     for ( index = 0 ; index < m_macToolHandles.Count() ; ++index )
@@ -356,7 +356,7 @@ void wxToolBar::MacHandleControlClick( ControlHandle control , SInt16 controlpar
             wxToolBarTool *tool = (wxToolBarTool *)m_tools.Nth( index )->Data();
             if ( tool->CanBeToggled() )
             {
-                tool->Toggle( GetControlValue( control ) ) ;
+                tool->Toggle( GetControlValue( (ControlHandle) control ) ) ;
             }
             OnLeftClick( tool->GetId() , tool -> IsToggled() ) ;
             break ;
@@ -410,7 +410,7 @@ void wxToolBar::MacSuperChangedPosition()
     int maxHeight = 0 ;
     int toolcount = 0 ;
     {
-      WindowRef rootwindow = MacGetRootWindow() ;
+      WindowRef rootwindow = (WindowRef) MacGetRootWindow() ;
     	while (node)
     	{
     		wxToolBarTool *tool = (wxToolBarTool *)node->Data();
@@ -611,7 +611,7 @@ void  wxToolBar::OnMouse( wxMouseEvent &event )
 		Point		localwhere ;
 		GrafPtr		port ;
 		SInt16		controlpart ;
-		WindowRef	window = MacGetRootWindow() ;
+		WindowRef	window = (WindowRef) MacGetRootWindow() ;
 		
 		localwhere.h = x ;
 		localwhere.v = y ;

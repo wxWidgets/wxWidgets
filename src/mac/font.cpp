@@ -22,6 +22,9 @@
 
 #include "wx/fontutil.h"
 
+#include "wx/mac/private.h"
+
+
 #if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
 #endif

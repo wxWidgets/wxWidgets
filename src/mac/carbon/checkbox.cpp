@@ -36,7 +36,7 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
 	
 	MacPreControlCreate( parent , id ,  label , pos , size ,style, validator , name , &bounds , title ) ;
 
-	m_macControl = ::NewControl( parent->MacGetRootWindow() , &bounds , title , false , 0 , 0 , 1, 
+	m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , 1, 
 	  	kControlCheckBoxProc , (long) this ) ;
 	
 	MacPostControlCreate() ;
@@ -46,13 +46,13 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
 
 void wxCheckBox::SetValue(bool val)
 {
-   ::SetControlValue( m_macControl , val ) ;
+   ::SetControlValue( (ControlHandle) m_macControl , val ) ;
    MacRedrawControl() ;
 }
 
 bool wxCheckBox::GetValue() const
 {
-    return ::GetControlValue( m_macControl ) ;
+    return ::GetControlValue( (ControlHandle) m_macControl ) ;
 }
 
 void wxCheckBox::Command (wxCommandEvent & event)
@@ -61,7 +61,7 @@ void wxCheckBox::Command (wxCommandEvent & event)
     ProcessCommand (event);
 }
 
-void wxCheckBox::MacHandleControlClick( ControlHandle control , SInt16 controlpart ) 
+void wxCheckBox::MacHandleControlClick( WXWidget control , wxInt16 controlpart ) 
 {
 	SetValue( !GetValue() ) ;
     wxCommandEvent event(wxEVT_COMMAND_CHECKBOX_CLICKED, m_windowId );

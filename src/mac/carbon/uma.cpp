@@ -142,6 +142,7 @@ bool UMAGetProcessModeDoesActivateOnFGSwitch()
 
 void UMASetMenuTitle( MenuRef menu , StringPtr title )
 {
+/*
 #if !TARGET_CARBON
 	long 			size = GetHandleSize( (Handle) menu ) ;
 	const long 		headersize = 14 ;
@@ -164,8 +165,9 @@ void UMASetMenuTitle( MenuRef menu , StringPtr title )
 		SetHandleSize( (Handle) menu , size + (newlen - oldlen ) ) ;
 	}
 #else
+*/
 	SetMenuTitle( menu , title ) ;
-#endif
+//#endif
 }
 
 UInt32 UMAMenuEvent( EventRecord *inEvent )
@@ -602,3 +604,55 @@ OSStatus UMAGetHelpMenu(
   return helpMenuStatus ;
 #endif
 }
+
+wxMacPortStateHelper::wxMacPortStateHelper( GrafPtr newport) 
+{
+  m_clip = NULL ;
+  Setup( newport ) ;
+}
+
+wxMacPortStateHelper::wxMacPortStateHelper()
+{
+	m_clip = NULL ;
+}
+
+void wxMacPortStateHelper::Setup( GrafPtr newport )
+{
+	GetPort( &m_oldPort ) ;
+	SetPort( newport ) ;
+	wxASSERT_MSG( m_clip == NULL , "Cannot call setup twice" ) ;
+	m_clip = NewRgn() ;
+	GetClip( m_clip );
+	m_textFont = GetPortTextFont( (CGrafPtr) newport);
+	m_textSize = GetPortTextSize( (CGrafPtr) newport);
+	m_textStyle = GetPortTextFace( (CGrafPtr) newport);
+	m_textMode = GetPortTextMode( (CGrafPtr) newport);	
+	GetThemeDrawingState( &m_drawingState ) ;
+	m_currentPort = newport ;
+}
+void wxMacPortStateHelper::Clear()
+{
+	if ( m_clip )
+	{
+		DisposeRgn( m_clip ) ;
+		DisposeThemeDrawingState( m_drawingState ) ;
+		m_clip = NULL ;
+	}
+}
+
+wxMacPortStateHelper::~wxMacPortStateHelper()
+{
+	if ( m_clip )
+	{
+		SetPort( m_currentPort ) ;
+		SetClip( m_clip ) ;
+		DisposeRgn( m_clip ) ;
+		TextFont( m_textFont );
+		TextSize( m_textSize );
+		TextFace( m_textStyle );
+		TextMode( m_textMode );
+		SetThemeDrawingState( m_drawingState , true ) ;
+		SetPort( m_oldPort ) ;
+	}
+}
+

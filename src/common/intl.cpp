@@ -60,6 +60,10 @@
     #include "wx/fontmap.h"         // for CharsetToEncoding()
 #endif
 
+#if defined(__WXMAC__)
+  #include  "wx/mac/private.h"  // includes mac headers
+#endif
+
 // ----------------------------------------------------------------------------
 // simple types
 // ----------------------------------------------------------------------------

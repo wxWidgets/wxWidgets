@@ -19,6 +19,7 @@
 #include "wx/window.h"
 #include "wx/toplevel.h"
 #include <math.h>
+#include "wx/mac/private.h"
 
 //-----------------------------------------------------------------------------
 // constants
@@ -49,16 +50,16 @@ wxWindowDC::wxWindowDC()
 wxWindowDC::wxWindowDC(wxWindow *the_canvas) 
 {
 	wxTopLevelWindowMac* rootwindow = the_canvas->MacGetTopLevelWindow() ;
-	WindowRef windowref = rootwindow->MacGetWindowRef() ;
+	WindowRef windowref = (WindowRef) rootwindow->MacGetWindowRef() ;
 	
 	int x , y ;
 	x = y = 0 ;
 	the_canvas->MacWindowToRootWindow( &x , &y ) ;
-	m_macLocalOrigin.h = x ;
-	m_macLocalOrigin.v = y ;
-	CopyRgn( the_canvas->MacGetVisibleRegion().GetWXHRGN() , m_macBoundaryClipRgn ) ;
-	OffsetRgn( m_macBoundaryClipRgn , m_macLocalOrigin.h , m_macLocalOrigin.v ) ;
-	CopyRgn( m_macBoundaryClipRgn , m_macCurrentClipRgn ) ;
+	m_macLocalOrigin.x = x ;
+	m_macLocalOrigin.y = y ;
+	CopyRgn( (RgnHandle) the_canvas->MacGetVisibleRegion().GetWXHRGN() , (RgnHandle) m_macBoundaryClipRgn ) ;
+	OffsetRgn( (RgnHandle) m_macBoundaryClipRgn , m_macLocalOrigin.x , m_macLocalOrigin.y ) ;
+	CopyRgn( (RgnHandle) m_macBoundaryClipRgn , (RgnHandle) m_macCurrentClipRgn ) ;
 	m_macPort = UMAGetWindowPort( windowref ) ;
 	m_minY = m_minX =  0;
 	wxSize size = the_canvas->GetSize() ;
@@ -84,20 +85,20 @@ wxClientDC::wxClientDC()
 wxClientDC::wxClientDC(wxWindow *window)
 {
 	wxTopLevelWindowMac* rootwindow = window->MacGetTopLevelWindow() ;
-	WindowRef windowref = rootwindow->MacGetWindowRef() ;
+	WindowRef windowref = (WindowRef) rootwindow->MacGetWindowRef() ;
 	wxPoint origin = window->GetClientAreaOrigin() ;
 	wxSize size = window->GetClientSize() ;
 	int x , y ;
 	x = origin.x ;
 	y = origin.y ;
 	window->MacWindowToRootWindow( &x , &y ) ;
-	m_macLocalOrigin.h = x ;
-	m_macLocalOrigin.v = y ;
-	SetRectRgn( m_macBoundaryClipRgn , origin.x , origin.y , origin.x + size.x , origin.y + size.y ) ;
-	SectRgn( m_macBoundaryClipRgn , window->MacGetVisibleRegion().GetWXHRGN() , m_macBoundaryClipRgn ) ;
-	OffsetRgn( m_macBoundaryClipRgn , -origin.x , -origin.y ) ;
-	OffsetRgn( m_macBoundaryClipRgn , m_macLocalOrigin.h , m_macLocalOrigin.v ) ;
-	CopyRgn( m_macBoundaryClipRgn , m_macCurrentClipRgn ) ;
+	m_macLocalOrigin.x = x ;
+	m_macLocalOrigin.y = y ;
+	SetRectRgn( (RgnHandle) m_macBoundaryClipRgn , origin.x , origin.y , origin.x + size.x , origin.y + size.y ) ;
+	SectRgn( (RgnHandle) m_macBoundaryClipRgn , (RgnHandle) window->MacGetVisibleRegion().GetWXHRGN() , (RgnHandle) m_macBoundaryClipRgn ) ;
+	OffsetRgn( (RgnHandle) m_macBoundaryClipRgn , -origin.x , -origin.y ) ;
+	OffsetRgn( (RgnHandle) m_macBoundaryClipRgn , m_macLocalOrigin.x , m_macLocalOrigin.y ) ;
+	CopyRgn( (RgnHandle) m_macBoundaryClipRgn ,(RgnHandle)  m_macCurrentClipRgn ) ;
 	m_macPort = UMAGetWindowPort( windowref ) ;
 	m_minY = m_minX =  0;
 	m_maxX = size.x  ;
@@ -122,21 +123,21 @@ wxPaintDC::wxPaintDC()
 wxPaintDC::wxPaintDC(wxWindow *window)
 {
 	wxTopLevelWindowMac* rootwindow = window->MacGetTopLevelWindow() ;
-	WindowRef windowref = rootwindow->MacGetWindowRef() ;
+	WindowRef windowref = (WindowRef) rootwindow->MacGetWindowRef() ;
 	wxPoint origin = window->GetClientAreaOrigin() ;
 	wxSize size = window->GetClientSize() ;
 	int x , y ;
 	x = origin.x ;
 	y = origin.y ;
 	window->MacWindowToRootWindow( &x , &y ) ;
-	m_macLocalOrigin.h = x ;
-	m_macLocalOrigin.v = y ;
-	SetRectRgn( m_macBoundaryClipRgn , origin.x , origin.y , origin.x + size.x , origin.y + size.y ) ;
-	SectRgn( m_macBoundaryClipRgn , window->MacGetVisibleRegion().GetWXHRGN() , m_macBoundaryClipRgn ) ;
-	OffsetRgn( m_macBoundaryClipRgn , -origin.x , -origin.y ) ;
-  SectRgn( m_macBoundaryClipRgn  , window->GetUpdateRegion().GetWXHRGN() , m_macBoundaryClipRgn ) ;
-	OffsetRgn( m_macBoundaryClipRgn , m_macLocalOrigin.h , m_macLocalOrigin.v ) ;
-	CopyRgn( m_macBoundaryClipRgn , m_macCurrentClipRgn ) ;
+	m_macLocalOrigin.x = x ;
+	m_macLocalOrigin.y = y ;
+	SetRectRgn( (RgnHandle) m_macBoundaryClipRgn , origin.x , origin.y , origin.x + size.x , origin.y + size.y ) ;
+	SectRgn( (RgnHandle) m_macBoundaryClipRgn , (RgnHandle) window->MacGetVisibleRegion().GetWXHRGN() , (RgnHandle) m_macBoundaryClipRgn ) ;
+	OffsetRgn( (RgnHandle) m_macBoundaryClipRgn , -origin.x , -origin.y ) ;
+  SectRgn( (RgnHandle) m_macBoundaryClipRgn  , (RgnHandle) window->GetUpdateRegion().GetWXHRGN() , (RgnHandle) m_macBoundaryClipRgn ) ;
+	OffsetRgn( (RgnHandle) m_macBoundaryClipRgn , m_macLocalOrigin.x , m_macLocalOrigin.y ) ;
+	CopyRgn( (RgnHandle) m_macBoundaryClipRgn , (RgnHandle) m_macCurrentClipRgn ) ;
 	m_macPort = UMAGetWindowPort( windowref ) ;
 	m_minY = m_minX =  0;
 	m_maxX = size.x  ;

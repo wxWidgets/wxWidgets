@@ -45,15 +45,15 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
 	
 		MacPreControlCreate( parent , id ,  "" , pos , size ,style, validator , name , &bounds , title ) ;
 
-		m_macControl = ::NewControl( parent->MacGetRootWindow() , &bounds , title , false , 0 , -12345 , 0 , 
+		m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , -12345 , 0 , 
 	  	kControlPopupButtonProc + kControlPopupFixedWidthVariant , (long) this ) ; 
 	
 		m_macPopUpMenuHandle =  NewUniqueMenu() ;
-		SetControlData( m_macControl , kControlNoPart , kControlPopupButtonMenuHandleTag , sizeof( MenuHandle ) , (char*) &m_macPopUpMenuHandle) ;
-	 	SetControlMinimum( m_macControl , 0 ) ;
-		SetControlMaximum( m_macControl , 0) ;
+		SetControlData( (ControlHandle) m_macControl , kControlNoPart , kControlPopupButtonMenuHandleTag , sizeof( MenuHandle ) , (char*) &m_macPopUpMenuHandle) ;
+	 	SetControlMinimum( (ControlHandle) m_macControl , 0 ) ;
+		SetControlMaximum( (ControlHandle) m_macControl , 0) ;
 		if ( n > 0 )
-			SetControlValue( m_macControl , 1 ) ;
+			SetControlValue( (ControlHandle) m_macControl , 1 ) ;
 
 		MacPostControlCreate() ;
 
@@ -72,12 +72,12 @@ int wxChoice::DoAppend(const wxString& item)
 {
 	Str255 label;
 	wxMenuItem::MacBuildMenuString( label , NULL , NULL , item ,false);
-	AppendMenu( m_macPopUpMenuHandle , label ) ;
+	AppendMenu( MAC_WXHMENU( m_macPopUpMenuHandle ) , label ) ;
 	m_strings.Add( item ) ;
 	m_datas.Add( NULL ) ;
 	int index = m_strings.GetCount()  - 1  ;
 	DoSetItemClientData( index , NULL ) ;
-	SetControlMaximum( m_macControl , GetCount()) ;
+	SetControlMaximum( (ControlHandle) m_macControl , GetCount()) ;
 	return index ;
 }
 
@@ -90,10 +90,10 @@ void wxChoice::Delete(int n)
         delete GetClientObject(n);
     }
 
-    ::DeleteMenuItem( m_macPopUpMenuHandle , n + 1) ;
+    ::DeleteMenuItem( MAC_WXHMENU(m_macPopUpMenuHandle) , n + 1) ;
     m_strings.Remove( n ) ;
     m_datas.RemoveAt( n ) ;
-	SetControlMaximum( m_macControl , GetCount()) ;
+	SetControlMaximum( (ControlHandle) m_macControl , GetCount()) ;
 }
 
 void wxChoice::Clear()
@@ -102,11 +102,11 @@ void wxChoice::Clear()
 
     for ( int i = 0 ; i < GetCount() ; i++ )
     {
-    	::DeleteMenuItem( m_macPopUpMenuHandle , 1 ) ;
+    	::DeleteMenuItem( MAC_WXHMENU(m_macPopUpMenuHandle) , 1 ) ;
 	  }
     m_strings.Empty() ;
     m_datas.Empty() ;
-	SetControlMaximum( m_macControl , 0 ) ;
+	SetControlMaximum( (ControlHandle) m_macControl , 0 ) ;
 }
 
 void wxChoice::Free()
@@ -127,12 +127,12 @@ void wxChoice::Free()
 
 int wxChoice::GetSelection() const
 {
-    return GetControlValue( m_macControl ) -1 ;
+    return GetControlValue( (ControlHandle) m_macControl ) -1 ;
 }
 
 void wxChoice::SetSelection(int n)
 {
-    SetControlValue( m_macControl , n + 1 ) ;
+    SetControlValue( (ControlHandle) m_macControl , n + 1 ) ;
 }
 
 // ----------------------------------------------------------------------------
@@ -208,7 +208,7 @@ wxClientData* wxChoice::DoGetItemClientObject( int n ) const
     return (wxClientData *)DoGetItemClientData(n);
 }
 
-void wxChoice::MacHandleControlClick( ControlHandle control , SInt16 controlpart ) 
+void wxChoice::MacHandleControlClick( WXWidget control , wxInt16 controlpart ) 
 {
     wxCommandEvent event(wxEVT_COMMAND_CHOICE_SELECTED, m_windowId );
 	  event.SetInt(GetSelection());

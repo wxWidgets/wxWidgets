@@ -41,7 +41,7 @@ bool wxGauge::Create(wxWindow *parent, wxWindowID id,
 	
 	MacPreControlCreate( parent , id ,  "" , pos , size ,style & 0xE0FFFFFF /* no borders on mac */ , validator , name , &bounds , title ) ;
 
-	m_macControl = ::NewControl( parent->MacGetRootWindow() , &bounds , title , false , 0 , 0 , range, 
+	m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , range, 
 	  	kControlProgressBarProc , (long) this ) ;
 	
 	MacPostControlCreate() ;
@@ -60,13 +60,13 @@ void wxGauge::SetBezelFace(int w)
 void wxGauge::SetRange(int r)
 {
     m_rangeMax = r;
-    ::SetControlMaximum( m_macControl , m_rangeMax ) ;
+    ::SetControlMaximum( (ControlHandle) m_macControl , m_rangeMax ) ;
 }
 
 void wxGauge::SetValue(int pos)
 {
     m_gaugePos = pos;
-   	::SetControlValue( m_macControl , m_gaugePos ) ;
+   	::SetControlValue( (ControlHandle) m_macControl , m_gaugePos ) ;
 }
 
 int wxGauge::GetShadowWidth() const

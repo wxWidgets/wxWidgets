@@ -130,7 +130,7 @@ bool wxNotebook::Create(wxWindow *parent,
 	
 	MacPreControlCreate( parent , id ,  "" , pos , size ,style, wxDefaultValidator , name , &bounds , title ) ;
 
-	m_macControl = ::NewControl( parent->MacGetRootWindow() , &bounds , title , false , 0 , 0 , 1, 
+	m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , 1, 
 	  	kControlTabSmallProc , (long) this ) ;
 	
 	MacPostControlCreate() ;
@@ -168,7 +168,7 @@ int wxNotebook::SetSelection(int nPage)
     return m_nSelection ;
 
     ChangePage(m_nSelection, nPage);
-	SetControlValue( m_macControl , m_nSelection + 1 ) ;
+	SetControlValue( (ControlHandle) m_macControl , m_nSelection + 1 ) ;
 
     return m_nSelection;
 }
@@ -291,7 +291,7 @@ bool wxNotebook::InsertPage(int nPage,
  */
 void wxNotebook::MacSetupTabs()
 {
-    SetControlMaximum( m_macControl , GetPageCount() ) ;
+    SetControlMaximum( (ControlHandle) m_macControl , GetPageCount() ) ;
 
     wxNotebookPage *page;
     ControlTabInfoRec info;
@@ -307,14 +307,14 @@ void wxNotebook::MacSetupTabs()
 		strcpy( (char *) info.name , page->GetLabel() ) ;
 		c2pstr( (char *) info.name ) ;
 #endif
-        SetControlData( m_macControl, ii+1, kControlTabInfoTag,
+        SetControlData( (ControlHandle) m_macControl, ii+1, kControlTabInfoTag,
                         sizeof( ControlTabInfoRec) , (char*) &info ) ;
-        SetControlData( m_macControl, ii+1, kControlTabEnabledFlagTag,
+        SetControlData( (ControlHandle) m_macControl, ii+1, kControlTabEnabledFlagTag,
                         sizeof( Boolean ), (Ptr)&enabled );
     }
     Rect bounds;
-    GetControlBounds(m_macControl, &bounds);
-    InvalWindowRect(MacGetRootWindow(), &bounds);
+    GetControlBounds((ControlHandle)m_macControl, &bounds);
+    InvalWindowRect((WindowRef)MacGetRootWindow(), &bounds);
 }
 
 // ----------------------------------------------------------------------------
@@ -436,9 +436,9 @@ void wxNotebook::ChangePage(int nOldSel, int nSel)
     m_nSelection = nSel;
 }
 
-void wxNotebook::MacHandleControlClick( ControlHandle control , SInt16 controlpart ) 
+void wxNotebook::MacHandleControlClick( WXWidget control , wxInt16 controlpart ) 
 {
-  wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, m_windowId , ::GetControlValue(m_macControl) - 1, m_nSelection);
+  wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, m_windowId , ::GetControlValue((ControlHandle)m_macControl) - 1, m_nSelection);
   event.SetEventObject(this);
 
   ProcessEvent(event);

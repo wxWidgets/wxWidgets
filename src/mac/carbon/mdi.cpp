@@ -17,6 +17,8 @@
 #include "wx/menu.h"
 #include "wx/settings.h"
 
+#include "wx/mac/private.h"
+
 extern wxWindowList wxModelessWindows;
 
 #if !USE_SHARED_LIBRARY

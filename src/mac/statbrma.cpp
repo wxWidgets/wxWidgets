@@ -25,6 +25,10 @@ BEGIN_EVENT_TABLE(wxStatusBarMac, wxStatusBarGeneric)
 	EVT_PAINT(wxStatusBarMac::OnPaint)
 END_EVENT_TABLE()
 
+#ifdef __WXMAC__
+#include "wx/mac/private.h"
+#endif
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -56,7 +60,7 @@ void wxStatusBarMac::DrawFieldText(wxDC& dc, int i)
   wxRect rect;
   GetFieldRect(i, rect);
   
-  if ( !IsWindowHilited( MacGetRootWindow() ) )
+  if ( !IsWindowHilited( MAC_WXHWND( MacGetRootWindow() ) ) )
   {
     dc.SetTextForeground( wxColour( 0x80 , 0x80 , 0x80 ) ) ;
   }
@@ -107,7 +111,7 @@ void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event) )
 {
   	wxPaintDC dc(this);
   	
-  if ( IsWindowHilited( MacGetRootWindow() ) )
+  if ( IsWindowHilited( MAC_WXHWND( MacGetRootWindow() ) ) )
   {
   	wxPen black( wxBLACK , 1 , wxSOLID ) ;
 	wxPen white( wxWHITE , 1 , wxSOLID ) ;

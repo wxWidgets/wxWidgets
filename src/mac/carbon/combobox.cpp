@@ -47,20 +47,20 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
 	
 		MacPreControlCreate( parent , id ,  "" , pos , size ,style, validator , name , &bounds , title ) ;
 	
-		m_macControl = ::NewControl( parent->MacGetRootWindow() , &bounds , title , false , 0 , -12345 , 0, 
+		m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , -12345 , 0, 
 	  	kControlPopupButtonProc , (long) this ) ; 
 	
 		m_macPopUpMenuHandle =  NewUniqueMenu() ;
-		SetControlData( m_macControl , kControlNoPart , kControlPopupButtonMenuHandleTag , sizeof( MenuHandle ) , (char*) &m_macPopUpMenuHandle) ;
+		SetControlData( (ControlHandle) m_macControl , kControlNoPart , kControlPopupButtonMenuHandleTag , sizeof( MenuHandle ) , (char*) &m_macPopUpMenuHandle) ;
 		for ( int i = 0 ; i < n ; i++ )
 		{
 			Str255 label;
 			wxMenuItem::MacBuildMenuString( label , NULL , NULL , choices[i] ,false);
-			AppendMenu( m_macPopUpMenuHandle , label ) ;
+			AppendMenu( (MenuHandle) m_macPopUpMenuHandle , label ) ;
 		}
-		SetControlMinimum( m_macControl , 0 ) ;
-		SetControlMaximum( m_macControl , m_noStrings) ;
-		SetControlValue( m_macControl , 1 ) ;
+		SetControlMinimum( (ControlHandle) m_macControl , 0 ) ;
+		SetControlMaximum( (ControlHandle) m_macControl , m_noStrings) ;
+		SetControlValue( (ControlHandle) m_macControl , 1 ) ;
 
 		MacPostControlCreate() ;
 
@@ -139,37 +139,37 @@ void wxComboBox::Append(const wxString& item)
 {
 	Str255 label;
 	wxMenuItem::MacBuildMenuString( label , NULL , NULL , item ,false);
-	AppendMenu( m_macPopUpMenuHandle , label ) ;
+	AppendMenu( (MenuHandle) m_macPopUpMenuHandle , label ) ;
     m_noStrings ++;
-	SetControlMaximum( m_macControl , m_noStrings) ;
+	SetControlMaximum( (ControlHandle) m_macControl , m_noStrings) ;
 }
 
 void wxComboBox::Delete(int n)
 {
 	wxASSERT( n < m_noStrings ) ;
-    ::DeleteMenuItem( m_macPopUpMenuHandle , n + 1) ;
+    ::DeleteMenuItem( (MenuHandle) m_macPopUpMenuHandle , n + 1) ;
     m_noStrings --;
-	SetControlMaximum( m_macControl , m_noStrings) ;
+	SetControlMaximum( (ControlHandle) m_macControl , m_noStrings) ;
 }
 
 void wxComboBox::Clear()
 {
     for ( int i = 0 ; i < m_noStrings ; i++ )
     {
-    	::DeleteMenuItem( m_macPopUpMenuHandle , 1 ) ;
+    	::DeleteMenuItem((MenuHandle) m_macPopUpMenuHandle , 1 ) ;
 	}
     m_noStrings = 0;
-	SetControlMaximum( m_macControl , m_noStrings) ;
+	SetControlMaximum( (ControlHandle) m_macControl , m_noStrings) ;
 }
 
 int wxComboBox::GetSelection() const
 {
-    return GetControlValue( m_macControl ) -1 ;
+    return GetControlValue( (ControlHandle) m_macControl ) -1 ;
 }
 
 void wxComboBox::SetSelection(int n)
 {
-    SetControlValue( m_macControl , n + 1 ) ;
+    SetControlValue( (ControlHandle) m_macControl , n + 1 ) ;
 }
 
 int wxComboBox::FindString(const wxString& s) const
@@ -186,7 +186,7 @@ wxString wxComboBox::GetString(int n) const
 {
     Str255 p_text ;
     char   c_text[255];
-    ::GetMenuItemText( m_macPopUpMenuHandle , n+1 , p_text ) ;
+    ::GetMenuItemText( (MenuHandle) m_macPopUpMenuHandle , n+1 , p_text ) ;
 #if TARGET_CARBON
     p2cstrcpy( c_text, p_text ) ;
 #else
@@ -217,7 +217,7 @@ bool wxComboBox::SetStringSelection(const wxString& sel)
         return FALSE;
 }
 
-void wxComboBox::MacHandleControlClick( ControlHandle control , SInt16 controlpart ) 
+void wxComboBox::MacHandleControlClick( WXWidget control , wxInt16 controlpart ) 
 {
     wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_SELECTED, m_windowId );
 	event.SetInt(GetSelection());

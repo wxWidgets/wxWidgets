@@ -63,9 +63,9 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
 	}
 	
 #if !TARGET_CARBON
-	if ( ::PrValidate( m_printData.m_macPrintInfo ) )
+	if ( ::PrValidate( (THPrint) m_printData.m_macPrintInfo ) )
 	{
-		::PrStlDialog( m_printData.m_macPrintInfo ) ;
+		::PrStlDialog( (THPrint) m_printData.m_macPrintInfo ) ;
 		// the driver has changed in the mean time, should we pop up a page setup dialog ?
 	}
 	err = PrError() ;
@@ -79,7 +79,7 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
 		return;
 	}
 	::GetPort( &macPrintFormerPort ) ;
-	m_macPrintPort = ::PrOpenDoc( m_printData.m_macPrintInfo , NULL , NULL ) ;
+	m_macPrintPort = ::PrOpenDoc( (THPrint) m_printData.m_macPrintInfo , NULL , NULL ) ;
 	err = PrError() ;
 	if ( err )
 	{
@@ -143,8 +143,8 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
 	m_maxX = rPaper.right - rPaper.left ;
 	m_maxY = rPaper.bottom - rPaper.top ;
 #else
-	m_maxX = (**m_printData.m_macPrintInfo).rPaper.right - (**m_printData.m_macPrintInfo).rPaper.left ;
-	m_maxY = (**m_printData.m_macPrintInfo).rPaper.bottom - (**m_printData.m_macPrintInfo).rPaper.top ;
+	m_maxX = (**(THPrint)m_printData.m_macPrintInfo).rPaper.right - (**(THPrint)m_printData.m_macPrintInfo).rPaper.left ;
+	m_maxY = (**(THPrint)m_printData.m_macPrintInfo).rPaper.bottom - (**(THPrint)m_printData.m_macPrintInfo).rPaper.top ;
 #endif
 }
 
@@ -155,15 +155,15 @@ wxPrinterDC::~wxPrinterDC(void)
 #if !TARGET_CARBON
 	if ( m_ok )
 	{
-		::PrCloseDoc( m_macPrintPort  ) ;
+		::PrCloseDoc( (TPPrPort) m_macPrintPort  ) ;
 		err = PrError() ;
 		
 		if ( err == noErr )
 		{
-			if ( (**m_printData.m_macPrintInfo).prJob.bJDocLoop == bSpoolLoop )
+			if ( (**(THPrint)m_printData.m_macPrintInfo).prJob.bJDocLoop == bSpoolLoop )
 			{
 				TPrStatus status ;
-				::PrPicFile( m_printData.m_macPrintInfo , NULL , NULL , NULL , &status ) ;
+				::PrPicFile( (THPrint) m_printData.m_macPrintInfo , NULL , NULL , NULL , &status ) ;
 			}
 		}
 		else
@@ -233,9 +233,9 @@ void wxPrinterDC::StartPage(void)
 	wxString message ;
 
 #if !TARGET_CARBON
-  	PrOpenPage( m_macPrintPort , NULL ) ;
-  	m_macLocalOrigin.h =  (**m_printData.m_macPrintInfo).rPaper.left ;
-  	m_macLocalOrigin.v =  (**m_printData.m_macPrintInfo).rPaper.top ;
+  	PrOpenPage( (TPPrPort) m_macPrintPort , NULL ) ;
+  	m_macLocalOrigin.x =  (**(THPrint)m_printData.m_macPrintInfo).rPaper.left ;
+  	m_macLocalOrigin.y =  (**(THPrint)m_printData.m_macPrintInfo).rPaper.top ;
   	
 	Rect clip = { -32000 , -32000 , 32000 , 32000 } ;
 	::ClipRect( &clip ) ;
@@ -245,8 +245,8 @@ void wxPrinterDC::StartPage(void)
 		message.Printf( "Print Error %d", err ) ;
 		wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
 		dialog.ShowModal();
-   		::PrClosePage( m_macPrintPort ) ;
-		::PrCloseDoc( m_macPrintPort ) ;
+   		::PrClosePage( (TPPrPort) m_macPrintPort ) ;
+		::PrCloseDoc( (TPPrPort) m_macPrintPort ) ;
 		::UMAPrClose() ;
 	   	::SetPort( macPrintFormerPort ) ;
 	   	m_ok = FALSE ;
@@ -288,14 +288,14 @@ void wxPrinterDC::EndPage(void)
 	wxString message ;
 
 #if !TARGET_CARBON
-   	PrClosePage(  (TPrPort*) m_macPort ) ;
+   	PrClosePage(  (TPPrPort) m_macPort ) ;
 	err = PrError() ;
 	if ( err != noErr )
 	{
 		message.Printf( "Print Error %d", err ) ;
 		wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
 		dialog.ShowModal();
-		::PrCloseDoc( m_macPrintPort  ) ;
+		::PrCloseDoc( (TPPrPort) m_macPrintPort  ) ;
 		::UMAPrClose() ;
 	   	::SetPort( macPrintFormerPort ) ;
 	   	m_ok = FALSE ;

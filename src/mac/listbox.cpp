@@ -93,10 +93,10 @@ static pascal void wxMacListDefinition( short message, Boolean isSelected, Rect 
             //  appropriate QuickDraw transform mode.
             
             if( isSelected ) {
-                savedPenMode = GetPortPenMode( grafPtr );
-                SetPortPenMode( grafPtr, hilitetransfermode );
+                savedPenMode = GetPortPenMode( (CGrafPtr) grafPtr );
+                SetPortPenMode( (CGrafPtr)grafPtr, hilitetransfermode );
                 PaintRect( drawRect );
-                SetPortPenMode( grafPtr, savedPenMode );
+                SetPortPenMode( (CGrafPtr)grafPtr, savedPenMode );
             }
             
             //  Restore the saved clip region.
@@ -111,10 +111,10 @@ static pascal void wxMacListDefinition( short message, Boolean isSelected, Rect 
             //  appropriate QuickDraw transform mode.
             
             GetPort( &grafPtr );
-            savedPenMode = GetPortPenMode( grafPtr );
-            SetPortPenMode( grafPtr, hilitetransfermode );
+            savedPenMode = GetPortPenMode( (CGrafPtr)grafPtr );
+            SetPortPenMode( (CGrafPtr)grafPtr, hilitetransfermode );
             PaintRect( drawRect );
-            SetPortPenMode( grafPtr, savedPenMode );
+            SetPortPenMode( (CGrafPtr)grafPtr, savedPenMode );
             break;
         default :
           break ;
@@ -171,36 +171,36 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     CreateListBoxControl( parent->MacGetRootWindow(), &bounds, false, 0, 1, false, true,
                           kwxMacListItemHeight, kwxMacListItemHeight, false, &listDef, &m_macControl );
 
-    GetControlData(m_macControl, kControlNoPart, kControlListBoxListHandleTag,
+    GetControlData( (ControlHandle) m_macControl, kControlNoPart, kControlListBoxListHandleTag,
                    sizeof(ListHandle), (Ptr) &m_macList, &asize);
 
-    SetControlReference(m_macControl, (long) this);
-    SetControlVisibility(m_macControl, false, false);
+    SetControlReference( (ControlHandle) m_macControl, (long) this);
+    SetControlVisibility( (ControlHandle) m_macControl, false, false);
 
 #else
 
     long    result ;
 
-    m_macControl = ::NewControl( parent->MacGetRootWindow() , &bounds , title , false ,
+    m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false ,
                   kwxMacListWithVerticalScrollbar , 0 , 0, 
                   kControlListBoxProc , (long) this ) ;
-    ::GetControlData( m_macControl , kControlNoPart , kControlListBoxListHandleTag ,
+    ::GetControlData( (ControlHandle) m_macControl , kControlNoPart , kControlListBoxListHandleTag ,
                sizeof( ListHandle ) , (char*) &m_macList  , &result ) ;
 
     HLock( (Handle) m_macList ) ;
     ldefHandle ldef ;
     ldef = (ldefHandle) NewHandle( sizeof(ldefRec) ) ;
-    if (  (**m_macList).listDefProc != NULL )
+    if (  (**(ListHandle)m_macList).listDefProc != NULL )
     {
       (**ldef).instruction = 0x4EF9;  /* JMP instruction */
       (**ldef).function = (void(*)()) listDef.u.userProc;
-      (**m_macList).listDefProc = (Handle) ldef ;
+      (**(ListHandle)m_macList).listDefProc = (Handle) ldef ;
     }
         
-    Point pt = (**m_macList).cellSize ;
+    Point pt = (**(ListHandle)m_macList).cellSize ;
     pt.v = kwxMacListItemHeight ;
-    LCellSize( pt , m_macList ) ;
-    LAddColumn( 1 , 0 , m_macList ) ;
+    LCellSize( pt , (ListHandle)m_macList ) ;
+    LAddColumn( 1 , 0 , (ListHandle)m_macList ) ;
 #endif
     OptionBits  options = 0;
     if ( style & wxLB_MULTIPLE )
@@ -215,7 +215,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     {
         options = lOnlyOne ;
     }
-    SetListSelectionFlags(m_macList, options);
+    SetListSelectionFlags((ListHandle)m_macList, options);
     
     MacPostControlCreate() ;
     
@@ -224,7 +224,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
         Append( choices[i] ) ;
     }
     
-    LSetDrawingMode( true , m_macList ) ;
+    LSetDrawingMode( true , (ListHandle)m_macList ) ;
 
     return TRUE;
 }
@@ -235,8 +235,8 @@ wxListBox::~wxListBox()
     if ( m_macList )
     {
 #if !TARGET_CARBON
-      DisposeHandle( (**m_macList).listDefProc ) ;
-      (**m_macList).listDefProc = NULL ;
+      DisposeHandle( (**(ListHandle)m_macList).listDefProc ) ;
+      (**(ListHandle)m_macList).listDefProc = NULL ;
 #endif
         m_macList = NULL ;
     }
@@ -272,7 +272,7 @@ void  wxListBox::DoSetSize(int x, int y,
     wxControl::DoSetSize( x , y , width , height , sizeFlags ) ;
 #if TARGET_CARBON
     Rect bounds ;
-    GetControlBounds( m_macControl , &bounds ) ;
+    GetControlBounds( (ControlHandle) m_macControl , &bounds ) ;
     ControlRef control = GetListVerticalScrollBar( m_macList ) ;
     if ( control )
     {
@@ -633,7 +633,7 @@ void MacDrawStringCell(Rect *cellRect, Cell lCell, ListHandle theList, long refC
 
 void wxListBox::MacDelete( int N )
 {
-    LDelRow( 1 , N , m_macList) ;
+    LDelRow( 1 , N , (ListHandle)m_macList) ;
     Refresh();
 }
 
@@ -641,7 +641,7 @@ void wxListBox::MacInsert( int n , const char * text)
 {
     Cell cell = { 0 , 0 } ;
     cell.v = n ;
-    LAddRow( 1 , cell.v , m_macList ) ;
+    LAddRow( 1 , cell.v , (ListHandle)m_macList ) ;
 //    LSetCell(text, strlen(text), cell, m_macList);
     Refresh();
 }
@@ -649,15 +649,15 @@ void wxListBox::MacInsert( int n , const char * text)
 void wxListBox::MacAppend( const char * text) 
 {
     Cell cell = { 0 , 0 } ;
-    cell.v = (**m_macList).dataBounds.bottom ;
-    LAddRow( 1 , cell.v , m_macList ) ;
+    cell.v = (**(ListHandle)m_macList).dataBounds.bottom ;
+    LAddRow( 1 , cell.v , (ListHandle)m_macList ) ;
  //   LSetCell(text, strlen(text), cell, m_macList);
     Refresh();
 }
 
 void wxListBox::MacClear() 
 {
-    LDelRow( (**m_macList).dataBounds.bottom , 0 , m_macList ) ;
+    LDelRow( (**(ListHandle)m_macList).dataBounds.bottom , 0 ,(ListHandle) m_macList ) ;
     Refresh();
 }
 
@@ -666,15 +666,15 @@ void wxListBox::MacSetSelection( int n , bool select )
     Cell cell = { 0 , 0 } ;
     if ( ! (m_windowStyle & wxLB_MULTIPLE) )
     {
-    if ( LGetSelect( true , &cell , m_macList ) )
+    if ( LGetSelect( true , &cell , (ListHandle)m_macList ) )
     {
-        LSetSelect( false , cell , m_macList ) ;
+        LSetSelect( false , cell , (ListHandle)m_macList ) ;
     }
     }
     
     cell.v = n ;
-    LSetSelect( select , cell , m_macList ) ;
-    LAutoScroll( m_macList ) ;
+    LSetSelect( select , cell , (ListHandle)m_macList ) ;
+    LAutoScroll( (ListHandle)m_macList ) ;
     Refresh();
 }
 
@@ -682,7 +682,7 @@ bool wxListBox::MacIsSelected( int n ) const
 {
     Cell cell = { 0 , 0 } ;
     cell.v = n ;
-    return LGetSelect( false , &cell , m_macList ) ;
+    return LGetSelect( false , &cell , (ListHandle)m_macList ) ;
 }
 
 void wxListBox::MacDestroy()
@@ -693,7 +693,7 @@ void wxListBox::MacDestroy()
 int wxListBox::MacGetSelection() const
 {
     Cell cell = { 0 , 0 } ;
-    if ( LGetSelect( true , &cell , m_macList ) )
+    if ( LGetSelect( true , &cell , (ListHandle)m_macList ) )
         return cell.v ;
     else
         return -1 ;
@@ -708,7 +708,7 @@ int wxListBox::MacGetSelections( wxArrayInt& aSelections ) const
     Cell cell = { 0 , 0 } ;
     cell.v = 0 ;
     
-    while ( LGetSelect( true , &cell , m_macList ) )
+    while ( LGetSelect( true , &cell ,(ListHandle) m_macList ) )
     {
         aSelections.Add( cell.v ) ;
         no_sel++ ;
@@ -739,18 +739,18 @@ void wxListBox::OnSize( const wxSizeEvent &event)
 #if TARGET_CARBON
     GetListCellSize(m_macList, &pt);
 #else
-    pt = (**m_macList).cellSize ;
+    pt = (**(ListHandle)m_macList).cellSize ;
 #endif
     pt.h =  m_width - 15  ;
-    LCellSize( pt , m_macList ) ;
+    LCellSize( pt , (ListHandle)m_macList ) ;
 }
 
-void wxListBox::MacHandleControlClick( ControlHandle control , SInt16 controlpart ) 
+void wxListBox::MacHandleControlClick( WXWidget control , wxInt16 controlpart ) 
 {
     Boolean wasDoubleClick = false ;
     long    result ;
 
-    ::GetControlData( m_macControl , kControlNoPart , kControlListBoxDoubleClickTag , sizeof( wasDoubleClick ) , (char*) &wasDoubleClick  , &result ) ;
+    ::GetControlData( (ControlHandle) m_macControl , kControlNoPart , kControlListBoxDoubleClickTag , sizeof( wasDoubleClick ) , (char*) &wasDoubleClick  , &result ) ;
     if ( !wasDoubleClick )
     {
         MacDoClick() ;
@@ -763,7 +763,7 @@ void wxListBox::MacHandleControlClick( ControlHandle control , SInt16 controlpar
 
 void wxListBox::MacSetRedraw( bool doDraw ) 
 {
-    LSetDrawingMode( doDraw , m_macList ) ;
+    LSetDrawingMode( doDraw , (ListHandle)m_macList ) ;
     
 }
 

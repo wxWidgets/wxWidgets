@@ -20,6 +20,8 @@
 IMPLEMENT_DYNAMIC_CLASS(wxColourDialog, wxDialog)
 #endif
 
+#include "wx/mac/private.h"
+
 /*
  * wxColourDialog
  */
@@ -46,13 +48,13 @@ bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
 int wxColourDialog::ShowModal()
 {
 	Point where ;
-	RGBColor currentColor = m_colourData.dataColour.GetPixel() , newColor ;
+	RGBColor currentColor = *((RGBColor*)m_colourData.dataColour.GetPixel()) , newColor ;
 	
 	where.h = where.v = -1;
 
 	if (GetColor( where, "\pSelect a new palette color.", &currentColor, &newColor ))
 	{
-		m_colourData.dataColour.Set( newColor ) ;
+		m_colourData.dataColour.Set( (WXCOLORREF*) &newColor ) ;
     	return wxID_OK;
 	}
 	else

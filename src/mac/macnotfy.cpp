@@ -8,6 +8,9 @@
  */
 
 #include "wx/wx.h"
+
+#include "wx/mac/private.h"
+
 #include "wx/mac/macnotfy.h"
 
 const short kMaxEvents = 1000 ;
@@ -74,6 +77,7 @@ void wxMacAddEvent(
 	short wakeUp ) 
 {
 	wxMacNotificationEvents *e = (wxMacNotificationEvents *) table ;
+	wxASSERT_MSG( handler != NULL , "illegal notification proc ptr" ) ;
 	/* this should be protected eventually */
 	short index = e->top++ ;
 	
@@ -125,7 +129,8 @@ void wxMacProcessNotifierEvents()
 	gMacNotificationEvents.events[index] = NULL ;
 	gMacNotificationEvents.proc[index]  = NULL ;
     
-	handler( event , data  ) ;
+    if ( handler )
+	    handler( event , data  ) ;
   }
   gInProcessing = false ;
 }

@@ -205,7 +205,7 @@ void wxWindowMac::SetFocus()
             wxControl* control = wxDynamicCast( gFocusWindow , wxControl ) ;
             if ( control && control->GetMacControl() )
             {
-                UMASetKeyboardFocus( gFocusWindow->MacGetRootWindow() , control->GetMacControl()  , kControlFocusNoPart ) ;
+                UMASetKeyboardFocus( (WindowRef) gFocusWindow->MacGetRootWindow() , (ControlHandle) control->GetMacControl()  , kControlFocusNoPart ) ;
                 control->MacRedrawControl() ;
             }
             #endif
@@ -230,7 +230,7 @@ void wxWindowMac::SetFocus()
             wxControl* control = wxDynamicCast( gFocusWindow , wxControl ) ;
             if ( control && control->GetMacControl() )
             {
-                UMASetKeyboardFocus( gFocusWindow->MacGetRootWindow() , control->GetMacControl()  , kControlEditTextPart ) ;
+                UMASetKeyboardFocus( (WindowRef) gFocusWindow->MacGetRootWindow() , (ControlHandle) control->GetMacControl()  , kControlEditTextPart ) ;
             }
       #endif
             wxFocusEvent event(wxEVT_SET_FOCUS, m_windowId);
@@ -318,8 +318,8 @@ bool wxWindowMac::DoPopupMenu(wxMenu *menu, int x, int y)
     menu->UpdateUI();
     ClientToScreen( &x , &y ) ;
 
-    ::InsertMenu( menu->GetHMenu() , -1 ) ;
-    long menuResult = ::PopUpMenuSelect(menu->GetHMenu() ,y,x, 0) ;
+    ::InsertMenu( (MenuHandle) menu->GetHMenu() , -1 ) ;
+    long menuResult = ::PopUpMenuSelect((MenuHandle) menu->GetHMenu() ,y,x, 0) ;
     menu->MacMenuSelect( this , TickCount() , HiWord(menuResult) , LoWord(menuResult) ) ;
     ::DeleteMenu( menu->MacGetMenuId() ) ;
     menu->SetInvokingWindow(NULL);
@@ -330,7 +330,7 @@ bool wxWindowMac::DoPopupMenu(wxMenu *menu, int x, int y)
 
 void wxWindowMac::DoScreenToClient(int *x, int *y) const
 {
-    WindowRef window = MacGetRootWindow() ;
+    WindowRef window = (WindowRef) MacGetRootWindow() ;
 
     Point       localwhere = {0,0} ;
 
@@ -351,7 +351,7 @@ void wxWindowMac::DoScreenToClient(int *x, int *y) const
 
 void wxWindowMac::DoClientToScreen(int *x, int *y) const
 {
-    WindowRef window = MacGetRootWindow() ;
+    WindowRef window = (WindowRef) MacGetRootWindow() ;
     
     MacClientToRootWindow( x , y ) ;
     
@@ -681,7 +681,7 @@ bool wxWindowMac::Show(bool show)
     MacSuperShown( show ) ;
     if ( !show )
     {
-        WindowRef window = MacGetRootWindow() ;
+        WindowRef window = (WindowRef) MacGetRootWindow() ;
         wxWindowMac* win = wxFindWinFromMacWindow( window ) ;
         if ( win && !win->m_isBeingDeleted )
             Refresh() ; 
@@ -869,7 +869,7 @@ const wxBrush& wxWindowMac::MacGetBackgroundBrush()
         // it is on a notebook panel or not, in order to take care of that we walk up the hierarchy until we have
         // either a non gray background color or a non control window
         
-            WindowRef window = MacGetRootWindow() ;
+            WindowRef window = (WindowRef) MacGetRootWindow() ;
             
             wxWindowMac* parent = GetParent() ;
             while( parent )
@@ -902,7 +902,7 @@ const wxBrush& wxWindowMac::MacGetBackgroundBrush()
                         extent.top-- ;
                         extent.right = x + size.x ;
                         extent.bottom = y + size.y ;
-                        m_macBackgroundBrush.SetMacThemeBackground( kThemeBackgroundTabPane , extent ) ; // todo eventually change for inactive
+                        m_macBackgroundBrush.SetMacThemeBackground( kThemeBackgroundTabPane , (WXRECTPTR) &extent ) ; // todo eventually change for inactive
                         break ;
                     }
                 }
@@ -932,7 +932,7 @@ void wxWindowMac::OnNcPaint( wxNcPaintEvent& event )
     wxWindowDC dc(this) ;
     wxMacPortSetter helper(&dc) ;
     
-    MacPaintBorders( dc.m_macLocalOrigin.h , dc.m_macLocalOrigin.v) ;
+    MacPaintBorders( dc.m_macLocalOrigin.x , dc.m_macLocalOrigin.y) ;
 }
 
 int wxWindowMac::GetScrollPos(int orient) const
@@ -1120,7 +1120,7 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
             SectRect( &scrollrect , &r , &scrollrect ) ;        
         }
         ScrollRect( &scrollrect , dx , dy , updateRgn ) ;
-        InvalWindowRgn( MacGetRootWindow() ,  updateRgn ) ;
+        InvalWindowRgn( (WindowRef) MacGetRootWindow() ,  updateRgn ) ;
         DisposeRgn( updateRgn ) ;
     }
     
@@ -1309,7 +1309,7 @@ bool wxWindowMac::MacGetWindowFromPointSub( const wxPoint &point , wxWindowMac**
           return FALSE;
     }
     
-    WindowRef window = MacGetRootWindow() ;
+    WindowRef window = (WindowRef) MacGetRootWindow() ;
 
     wxPoint newPoint( point ) ;
 
@@ -1363,7 +1363,7 @@ bool wxWindowMac::MacDispatchMouseEvent(wxMouseEvent& event)
     if ( IsKindOf( CLASSINFO ( wxStaticBox ) ) )
         return FALSE ; 
     
-    WindowRef window = MacGetRootWindow() ;
+    WindowRef window = (WindowRef) MacGetRootWindow() ;
 
     event.m_x -= m_x;
     event.m_y -= m_y;
@@ -1425,7 +1425,7 @@ void wxWindowMac::Update()
 wxTopLevelWindowMac* wxWindowMac::MacGetTopLevelWindow() const 
 {
     wxTopLevelWindowMac* win = NULL ;
-    WindowRef window = MacGetRootWindow() ;
+    WindowRef window = (WindowRef) MacGetRootWindow() ;
     if ( window )
     {
         win = wxFindWinFromMacWindow( window ) ;
@@ -1510,19 +1510,20 @@ const wxRegion& wxWindowMac::MacGetVisibleRegion()
   return m_macVisibleRegion ;
 }
 
-void wxWindowMac::MacRedraw( RgnHandle updatergn , long time, bool erase)
+void wxWindowMac::MacRedraw( WXHRGN updatergnr , long time, bool erase)
 {
+    RgnHandle updatergn = (RgnHandle) updatergnr ;
     // updatergn is always already clipped to our boundaries
     // it is in window coordinates, not in client coordinates
     
-    WindowRef window = MacGetRootWindow() ;
+    WindowRef window = (WindowRef) MacGetRootWindow() ;
 
     {
         // ownUpdateRgn is the area that this window has to repaint, it is in window coordinates
         RgnHandle ownUpdateRgn = NewRgn() ;
         CopyRgn( updatergn , ownUpdateRgn ) ;
                 
-        SectRgn( ownUpdateRgn , MacGetVisibleRegion().GetWXHRGN() , ownUpdateRgn ) ;
+        SectRgn( ownUpdateRgn , (RgnHandle) MacGetVisibleRegion().GetWXHRGN() , ownUpdateRgn ) ;
         
         // newupdate is the update region in client coordinates
         RgnHandle newupdate = NewRgn() ;
@@ -1578,7 +1579,7 @@ void wxWindowMac::MacRedraw( RgnHandle updatergn , long time, bool erase)
  
 }
 
-WindowRef wxWindowMac::MacGetRootWindow() const
+WXHWND wxWindowMac::MacGetRootWindow() const
 {
     wxWindowMac *iter = (wxWindowMac*)this ;
     
@@ -1711,7 +1712,7 @@ bool wxWindowMac::AcceptsFocus() const
     return MacCanFocus() && wxWindowBase::AcceptsFocus();
 }
 
-ControlHandle wxWindowMac::MacGetContainerForEmbedding() 
+WXWidget wxWindowMac::MacGetContainerForEmbedding() 
 {
     return GetParent()->MacGetContainerForEmbedding() ;
 }

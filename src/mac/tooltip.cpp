@@ -21,12 +21,13 @@
 #include "wx/tooltip.h"
 #include "wx/timer.h"
 #include "wx/geometry.h"
-#include "wx/mac/aga.h"
 #include "wx/mac/uma.h"
 
 //-----------------------------------------------------------------------------
 // global data
 //-----------------------------------------------------------------------------
+
+class wxMacToolTipTimer ;
 
 class wxMacToolTip
 {
@@ -48,6 +49,7 @@ class wxMacToolTip
 		PicHandle	m_backpict ;
 		bool		m_shown ;
 		long		m_mark ;
+		wxMacToolTipTimer* m_timer ;
 } ;
 
 class wxMacToolTipTimer : wxTimer
@@ -60,7 +62,6 @@ public:
 		if ( m_mark == m_tip->GetMark() )
 			m_tip->Draw() ;
 
-		delete this;
 	}
 	
 protected:
@@ -148,7 +149,7 @@ void wxToolTip::RelayEvent( wxWindow *win , wxMouseEvent &event )
 				s_ToolTipArea = wxRect2DInt( event.m_x - 2 , event.m_y - 2 , 4 , 4 ) ;
 				s_LastWindowEntered = win ;
 				
-				WindowRef window = win->MacGetRootWindow() ;
+				WindowRef window = MAC_WXHWND( win->MacGetRootWindow() ) ;
 				int x = event.m_x ;
 				int y = event.m_y ;
 				wxPoint local( x , y ) ;
@@ -179,6 +180,7 @@ wxMacToolTip::wxMacToolTip()
 	m_backpict = NULL ;
 	m_mark = 0 ;
 	m_shown = false ;
+    m_timer = NULL ;
 }
 
 void wxMacToolTip::Setup( WindowRef window  , wxString text , wxPoint localPosition ) 
@@ -190,11 +192,15 @@ void wxMacToolTip::Setup( WindowRef window  , wxString text , wxPoint localPosit
 	m_window = window ;
 	s_ToolTipWindowRef = window ;
 	m_backpict = NULL ;
-	new wxMacToolTipTimer( this , s_ToolTipDelay ) ;
+	if ( m_timer )
+	    delete m_timer ;
+	m_timer = new wxMacToolTipTimer( this , s_ToolTipDelay ) ;
 }
 
 wxMacToolTip::~wxMacToolTip() 
 {
+    if ( m_timer )
+        delete m_timer ;
 	if ( m_backpict ) 
 		Clear() ;
 }
@@ -219,11 +225,8 @@ void wxMacToolTip::Draw()
 */
 #endif
 	  {
-  		#if TARGET_CARBON
-  		AGAPortHelper help( GetWindowPort( m_window ) );
-  		#else
-  		AGAPortHelper help( ( m_window ) );
-  		#endif
+   		wxMacPortStateHelper help( GetWindowPort( m_window ) );
+ 
   		m_shown = true ;
 
   		TextFont( kFontIDGeneva ) ;
@@ -309,7 +312,7 @@ void wxMacToolTip::Draw()
 	}
 }
 
-void wxToolTip::NotifyWindowDelete( WindowRef win ) 
+void wxToolTip::NotifyWindowDelete( WXHWND win ) 
 {
 	if ( win == s_ToolTipWindowRef )
 	{
@@ -325,11 +328,8 @@ void wxMacToolTip::Clear()
 		 
 	if ( m_window == s_ToolTipWindowRef && m_backpict )
 	{
-		#if TARGET_CARBON
-		AGAPortHelper help( GetWindowPort(m_window) ) ;
-		#else
-		AGAPortHelper help( (m_window) ) ;
-		#endif
+		wxMacPortStateHelper help( GetWindowPort(m_window) ) ;
+
 		m_shown = false ;
 
 		BackColor( whiteColor ) ;

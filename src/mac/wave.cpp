@@ -17,6 +17,10 @@
 #include "wx/string.h"
 #include "wx/wave.h"
 
+#ifdef __WXMAC__
+#include "wx/mac/private.h"
+#endif
+
 wxWave::wxWave()
   : m_sndChan(0), m_hSnd(NULL), m_waveLength(0), m_isResource(true)
 {
@@ -136,7 +140,7 @@ bool wxWave::Play(bool async, bool looped) const
 	  
 	  hSnd = (SndListHandle) GetNamedResource('snd ',(const unsigned char *) lpSnd);
 
-	  if ((hSnd != NULL) && (SndPlay(m_sndChan, hSnd, async) == noErr))
+	  if ((hSnd != NULL) && (SndPlay((SndChannelPtr)m_sndChan, (SndListHandle) hSnd, async) == noErr))
 	    ret = true;
 	} 
 	

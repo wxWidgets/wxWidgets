@@ -38,6 +38,10 @@
 #include "wx/intl.h"
 #include "wx/log.h"
 
+#if defined(__WXMAC__)
+    #include "wx/mac/private.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // conditional compilation
 // ----------------------------------------------------------------------------
@@ -105,7 +109,7 @@ const char *dlerror(void);
 #   define wxDllGetSymbol(handle, name)    ::GetProcAddress(handle, name)
 #   define wxDllClose                      ::FreeLibrary
 #elif defined(__WXMAC__)
-#   define wxDllClose(handle)               CloseConnection(&handle)
+#   define wxDllClose(handle)               CloseConnection(&((CFragConnectionID)handle))
 #else
 #   error "Don't know how to load shared libraries on this platform."
 #endif // OS
@@ -242,7 +246,7 @@ wxDllType wxDllLoader::LoadLibrary(const wxString & libname, bool *success)
                          kCFragGoesToEOF,
                          "\p",
                          kPrivateCFragCopy,
-                         &handle,
+                         &((CFragConnectionID)handle),
                          &myMainAddr,
                          myErrName ) != noErr )
     {
@@ -310,7 +314,7 @@ void *wxDllLoader::GetSymbol(wxDllType dllHandle, const wxString &name, bool *su
     strcpy( (char *) symName, name );
     c2pstr( (char *) symName );
 #endif
-    if( FindSymbol( dllHandle, symName, &symAddress, &symClass ) == noErr )
+    if( FindSymbol( ((CFragConnectionID)dllHandle), symName, &symAddress, &symClass ) == noErr )
         symbol = (void *)symAddress;
 
 #elif defined(__WXPM__) || defined(__EMX__)

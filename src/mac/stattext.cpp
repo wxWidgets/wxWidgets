@@ -129,7 +129,7 @@ void wxStaticText::OnDraw( wxDC &dc )
     if (m_width <= 0 || m_height <= 0)
         return;
 
-  if ( !IsWindowHilited( MacGetRootWindow() ) && 
+  if ( !IsWindowHilited( (WindowRef) MacGetRootWindow() ) && 
     ( GetBackgroundColour() == wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE ) 
       || GetBackgroundColour() == wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE) ) )
   {

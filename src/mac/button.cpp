@@ -37,9 +37,9 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
 	
 	MacPreControlCreate( parent , id ,  label , pos , size ,style, validator , name , &bounds , title ) ;
 
-	m_macControl = ::NewControl( parent->MacGetRootWindow() , &bounds , title , false , 0 , 0 , 1, 
+	m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , 1, 
 	  	kControlPushButtonProc , (long) this ) ;
-	wxASSERT_MSG( m_macControl != NULL , "No valid mac control" ) ;
+	wxASSERT_MSG( (ControlHandle) m_macControl != NULL , "No valid mac control" ) ;
 	
 	MacPostControlCreate() ;
 
@@ -61,13 +61,13 @@ void wxButton::SetDefault()
 	if ( btnOldDefault && btnOldDefault->m_macControl )
 	{
   		inData = 0;
-		::SetControlData( btnOldDefault->m_macControl , kControlButtonPart ,
+		::SetControlData( (ControlHandle) btnOldDefault->m_macControl , kControlButtonPart ,
 						   kControlPushButtonDefaultTag , sizeof( Boolean ) , (char*)(&inData) ) ;
 	}
-	if ( m_macControl )
+	if ( (ControlHandle) m_macControl )
 	{
   		inData = 1;
-		::SetControlData( m_macControl , kControlButtonPart ,
+		::SetControlData(  (ControlHandle) m_macControl , kControlButtonPart ,
 						   kControlPushButtonDefaultTag , sizeof( Boolean ) , (char*)(&inData) ) ;
 	}
 }
@@ -95,17 +95,17 @@ wxSize wxButton::GetDefaultSize()
 
 void wxButton::Command (wxCommandEvent & event)
 {
-	if ( m_macControl )
+	if ( (ControlHandle) m_macControl )
 	{
-		HiliteControl( m_macControl , kControlButtonPart ) ;
+		HiliteControl(  (ControlHandle) m_macControl , kControlButtonPart ) ;
 		unsigned long finalTicks ;
 		Delay( 8 , &finalTicks ) ;
-		HiliteControl( m_macControl , 0 ) ;
+		HiliteControl(  (ControlHandle) m_macControl , 0 ) ;
 	}
     ProcessCommand (event);
 }
 
-void wxButton::MacHandleControlClick( ControlHandle control , SInt16 controlpart ) 
+void wxButton::MacHandleControlClick( WXWidget control , wxInt16 controlpart ) 
 {
   if ( controlpart != kControlNoPart )
   {

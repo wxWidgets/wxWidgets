@@ -22,6 +22,7 @@
 #include "wx/toplevel.h"
 #include "wx/app.h"
 #include "wx/gdicmn.h"
+#include "wx/mac/private.h"
 
 // ----------------------------------------------------------------------------
 // global
@@ -104,17 +105,17 @@ bool wxDropTarget::CurrentDragHasSupportedFormat()
     {
       UInt16 items ;
       OSErr result;
-      CountDragItems(m_currentDrag, &items);
+      CountDragItems((DragReference)m_currentDrag, &items);
       for (UInt16 index = 1; index <= items && supported == false ; ++index) 
       {
           ItemReference theItem;
           FlavorType theType ;
           UInt16 flavors = 0 ;
-          GetDragItemReferenceNumber(m_currentDrag, index, &theItem);
-          CountDragItemFlavors( m_currentDrag, theItem , &flavors ) ;
+          GetDragItemReferenceNumber((DragReference)m_currentDrag, index, &theItem);
+          CountDragItemFlavors( (DragReference)m_currentDrag, theItem , &flavors ) ;
           for ( UInt16 flavor = 1 ; flavor <= flavors ; ++flavor )
           {
-            result = GetFlavorType(m_currentDrag, theItem, flavor , &theType);
+            result = GetFlavorType((DragReference)m_currentDrag, theItem, flavor , &theType);
             if ( m_dataObject->IsSupportedFormat( wxDataFormat( theType ) ) )
             {
               supported = true ;
@@ -172,31 +173,31 @@ bool wxDropTarget::GetData()
     {
       UInt16 items ;
       OSErr result;
-      CountDragItems(m_currentDrag, &items);
+      CountDragItems((DragReference)m_currentDrag, &items);
       for (UInt16 index = 1; index <= items; ++index) 
       {
           ItemReference theItem;
           FlavorType theType ;
           UInt16 flavors = 0 ;
-          GetDragItemReferenceNumber(m_currentDrag, index, &theItem);
-          CountDragItemFlavors( m_currentDrag, theItem , &flavors ) ;
+          GetDragItemReferenceNumber((DragReference)m_currentDrag, index, &theItem);
+          CountDragItemFlavors( (DragReference)m_currentDrag, theItem , &flavors ) ;
           for ( UInt16 flavor = 1 ; flavor <= flavors ; ++flavor )
           {
-            result = GetFlavorType(m_currentDrag, theItem, flavor , &theType);
+            result = GetFlavorType((DragReference)m_currentDrag, theItem, flavor , &theType);
             wxDataFormat format(theType) ;
             if ( m_dataObject->IsSupportedFormat( format ) )
             {
               FlavorFlags theFlags;
-              result = GetFlavorFlags(m_currentDrag, theItem, theType, &theFlags);
+              result = GetFlavorFlags((DragReference)m_currentDrag, theItem, theType, &theFlags);
               if (result == noErr) 
               {
                   Size dataSize ;
                   Ptr theData ;
-                  GetFlavorDataSize(m_currentDrag, theItem, theType, &dataSize);
+                  GetFlavorDataSize((DragReference)m_currentDrag, theItem, theType, &dataSize);
           			  if ( theType == 'TEXT' )
           			    dataSize++ ;
                   theData = new char[dataSize];
-                  GetFlavorData(m_currentDrag, theItem, theType, (void*) theData, &dataSize, 0L); 
+                  GetFlavorData((DragReference)m_currentDrag, theItem, theType, (void*) theData, &dataSize, 0L); 
                   if( theType == 'TEXT' )
                   {
                     theData[dataSize]=0 ;       
@@ -335,7 +336,7 @@ wxDragResult wxDropSource::DoDragDrop( bool allowMove )
     dragRegion = NewRgn();
     RgnHandle tempRgn = NewRgn() ;
     
-    EventRecord* ev = wxTheApp->MacGetCurrentEvent() ;
+    EventRecord* ev = (EventRecord*) wxTheApp->MacGetCurrentEvent() ;
     const short dragRegionOuterBoundary = 10 ;
     const short dragRegionInnerBoundary = 9 ;
     

@@ -15,6 +15,7 @@
 
 #include "wx/cursor.h"
 #include "wx/icon.h"
+#include "wx/mac/private.h"
 
 #if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxCursor, wxBitmap)
@@ -195,8 +196,8 @@ void wxCursor::MacInstall() const
 {
 	if ( m_refData && M_CURSORDATA->m_hCursor )
 	{
-		::SetCursor( *M_CURSORDATA->m_hCursor ) ;
-		gMacCurrentCursor = M_CURSORDATA->m_hCursor ;
+		::SetCursor(  *((CursHandle)M_CURSORDATA->m_hCursor) ) ;
+		gMacCurrentCursor = (CursHandle)M_CURSORDATA->m_hCursor ;
 	}
 	else
 	{

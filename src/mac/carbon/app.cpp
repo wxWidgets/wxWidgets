@@ -85,7 +85,7 @@ const short    kMacMinHeap = (29 * 1024) ;
 const short kwxMacMenuBarResource = 1 ;
 const short kwxMacAppleMenuId = 1 ;
 
-RgnHandle            wxApp::s_macCursorRgn = NULL;
+WXHRGN            wxApp::s_macCursorRgn = NULL;
 wxWindow*            wxApp::s_captureWindow = NULL ;
 int                    wxApp::s_lastMouseDown = 0 ;
 long                     wxApp::sm_lastMessageTime = 0;
@@ -125,7 +125,7 @@ pascal OSErr AEHandleQuit( const AppleEvent *event , AppleEvent *reply , long re
     return wxTheApp->MacHandleAEQuit( (AppleEvent*) event , reply) ;
 }
 
-OSErr wxApp::MacHandleAEODoc(const AppleEvent *event , AppleEvent *reply)
+short wxApp::MacHandleAEODoc(const WXEVENTREF event , WXEVENTREF reply)
 {
     SysBeep(40) ;
     ProcessSerialNumber PSN ;
@@ -135,17 +135,17 @@ OSErr wxApp::MacHandleAEODoc(const AppleEvent *event , AppleEvent *reply)
     return noErr ;
 }
 
-OSErr wxApp::MacHandleAEPDoc(const AppleEvent *event , AppleEvent *reply)
+short wxApp::MacHandleAEPDoc(const WXEVENTREF event , WXEVENTREF reply)
 {
     return noErr ;
 }
 
-OSErr wxApp::MacHandleAEOApp(const AppleEvent *event , AppleEvent *reply)
+short wxApp::MacHandleAEOApp(const WXEVENTREF event , WXEVENTREF reply)
 {
     return noErr ;
 }
 
-OSErr wxApp::MacHandleAEQuit(const AppleEvent *event , AppleEvent *reply)
+short wxApp::MacHandleAEQuit(const WXEVENTREF event , WXEVENTREF reply)
 {
     wxWindow* win = GetTopWindow() ;
     if ( win )
@@ -603,7 +603,7 @@ void wxApp::CleanUp()
 
     UMACleanupToolbox() ;
     if (s_macCursorRgn)
-        ::DisposeRgn(s_macCursorRgn);
+        ::DisposeRgn((RgnHandle)s_macCursorRgn);
 
     #if 0
         TerminateAE() ;
@@ -958,11 +958,11 @@ bool wxApp::Yield(bool onlyIfNeeded)
 
     long sleepTime = 1 ; //::GetCaretTime();
 
-    while ( !wxTheApp->IsExiting() && WaitNextEvent(everyEvent, &event,sleepTime, wxApp::s_macCursorRgn))
+    while ( !wxTheApp->IsExiting() && WaitNextEvent(everyEvent, &event,sleepTime, (RgnHandle) wxApp::s_macCursorRgn))
     {
         wxTheApp->MacHandleOneEvent( &event );
         if ( event.what != kHighLevelEvent )
-            SetRectRgn( wxApp::s_macCursorRgn , event.where.h , event.where.v ,  event.where.h + 1 , event.where.v + 1 ) ;
+            SetRectRgn( (RgnHandle) wxApp::s_macCursorRgn , event.where.h , event.where.v ,  event.where.h + 1 , event.where.v + 1 ) ;
     }
 
     wxMacProcessNotifierAndPendingEvents() ;
@@ -1021,7 +1021,7 @@ void wxApp::MacDoOneEvent()
 
     long sleepTime = 1; // GetCaretTime() / 4 ;
 
-    if (WaitNextEvent(everyEvent, &event, sleepTime, s_macCursorRgn))
+    if (WaitNextEvent(everyEvent, &event, sleepTime, (RgnHandle) s_macCursorRgn))
     {
         MacHandleOneEvent( &event );
     }
@@ -1035,7 +1035,7 @@ void wxApp::MacDoOneEvent()
         wxTheApp->ProcessIdle() ;
     }
     if ( event.what != kHighLevelEvent )
-        SetRectRgn( s_macCursorRgn , event.where.h , event.where.v ,  event.where.h + 1 , event.where.v + 1 ) ;
+        SetRectRgn( (RgnHandle) s_macCursorRgn , event.where.h , event.where.v ,  event.where.h + 1 , event.where.v + 1 ) ;
 
     // repeaters
 
@@ -1043,8 +1043,9 @@ void wxApp::MacDoOneEvent()
     wxMacProcessNotifierAndPendingEvents() ;
 }
 
-void wxApp::MacHandleOneEvent( EventRecord *ev )
+void wxApp::MacHandleOneEvent( WXEVENTREF evr )
 {
+    EventRecord* ev = (EventRecord*) evr ;
     m_macCurrentEvent = ev ;
 
     wxApp::sm_lastMessageTime = ev->when ;
@@ -1098,15 +1099,17 @@ void wxApp::MacHandleOneEvent( EventRecord *ev )
     wxMacProcessNotifierAndPendingEvents() ;
 }
 
-void wxApp::MacHandleHighLevelEvent( EventRecord *ev )
+void wxApp::MacHandleHighLevelEvent( WXEVENTREF evr )
 {
+    EventRecord* ev = (EventRecord*) evr ;
     ::AEProcessAppleEvent( ev ) ;
 }
 
 bool s_macIsInModalLoop = false ;
 
-void wxApp::MacHandleMouseDownEvent( EventRecord *ev )
+void wxApp::MacHandleMouseDownEvent( WXEVENTREF evr )
 {
+    EventRecord* ev = (EventRecord*) evr ;
     wxToolTip::RemoveToolTips() ;
 
     WindowRef window;
@@ -1156,11 +1159,7 @@ void wxApp::MacHandleMouseDownEvent( EventRecord *ev )
                     GrafPtr port ;
                     GetPort( &port ) ;
                     Point pt = { 0, 0 } ;
-                    #if TARGET_CARBON
                     SetPort( GetWindowPort(window) ) ;
-                    #else
-                    SetPort( (window) ) ;
-                    #endif
                     LocalToGlobal( &pt ) ;
                     SetPort( port ) ;
                         win->SetSize( pt.h , pt.v , -1 ,
@@ -1226,11 +1225,7 @@ void wxApp::MacHandleMouseDownEvent( EventRecord *ev )
                 {
                     GrafPtr port ;
                     GetPort( &port ) ;
-                    #if TARGET_CARBON
                     SetPort( GetWindowPort(window) ) ;
-                    #else
-                    SetPort( (window) ) ;
-                    #endif
                     SetPort( port ) ;
                 }
                 if ( window != frontWindow && wxTheApp->s_captureWindow == NULL )
@@ -1263,8 +1258,9 @@ void wxApp::MacHandleMouseDownEvent( EventRecord *ev )
     }
 }
 
-void wxApp::MacHandleMouseUpEvent( EventRecord *ev )
+void wxApp::MacHandleMouseUpEvent( WXEVENTREF evr )
 {
+    EventRecord* ev = (EventRecord*) evr ;
     WindowRef window;
 
     short windowPart = ::FindWindow(ev->where, &window);
@@ -1394,8 +1390,9 @@ long wxMacTranslateKey(unsigned char key, unsigned char code)
     return retval;
 }
 
-void wxApp::MacHandleKeyDownEvent( EventRecord *ev )
+void wxApp::MacHandleKeyDownEvent( WXEVENTREF evr )
 {
+    EventRecord* ev = (EventRecord*) evr ;
     wxToolTip::RemoveToolTips() ;
 
     UInt32 menuresult = UMAMenuEvent(ev) ;
@@ -1511,8 +1508,9 @@ void wxApp::MacHandleKeyDownEvent( EventRecord *ev )
     }
 }
 
-void wxApp::MacHandleKeyUpEvent( EventRecord *ev )
+void wxApp::MacHandleKeyUpEvent( WXEVENTREF evr )
 {
+    EventRecord* ev = (EventRecord*) evr ;
     wxToolTip::RemoveToolTips() ;
 
     UInt32 menuresult = UMAMenuEvent(ev) ;
@@ -1546,8 +1544,9 @@ void wxApp::MacHandleKeyUpEvent( EventRecord *ev )
     }
 }
 
-void wxApp::MacHandleActivateEvent( EventRecord *ev )
+void wxApp::MacHandleActivateEvent( WXEVENTREF evr )
 {
+    EventRecord* ev = (EventRecord*) evr ;
     WindowRef window = (WindowRef) ev->message ;
     if ( window )
     {
@@ -1565,8 +1564,9 @@ void wxApp::MacHandleActivateEvent( EventRecord *ev )
     }
 }
 
-void wxApp::MacHandleUpdateEvent( EventRecord *ev )
+void wxApp::MacHandleUpdateEvent( WXEVENTREF evr )
 {
+    EventRecord* ev = (EventRecord*) evr ;
     WindowRef window = (WindowRef) ev->message ;
     wxTopLevelWindowMac * win = wxFindWinFromMacWindow( window ) ;
     if ( win )
@@ -1584,8 +1584,9 @@ void wxApp::MacHandleUpdateEvent( EventRecord *ev )
     }
 }
 
-void wxApp::MacHandleDiskEvent( EventRecord *ev )
+void wxApp::MacHandleDiskEvent( WXEVENTREF evr )
 {
+    EventRecord* ev = (EventRecord*) evr ;
     if ( HiWord( ev->message ) != noErr )
   {
  #if !TARGET_CARBON
@@ -1599,8 +1600,9 @@ void wxApp::MacHandleDiskEvent( EventRecord *ev )
     }
 }
 
-void wxApp::MacHandleOSEvent( EventRecord *ev )
+void wxApp::MacHandleOSEvent( WXEVENTREF evr )
 {
+    EventRecord* ev = (EventRecord*) evr ;
     switch( ( ev->message & osEvtMessageMask ) >> 24 )
     {
         case suspendResumeMessage :

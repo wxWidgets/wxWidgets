@@ -109,10 +109,10 @@ static pascal void wxMacCheckListDefinition( short message, Boolean isSelected, 
             //  appropriate QuickDraw transform mode.
             
             if( isSelected ) {
-                savedPenMode = GetPortPenMode( grafPtr );
-                SetPortPenMode( grafPtr, hilitetransfermode );
+                savedPenMode = GetPortPenMode( (CGrafPtr) grafPtr );
+                SetPortPenMode( (CGrafPtr) grafPtr, hilitetransfermode );
                 PaintRect( drawRect );
-                SetPortPenMode( grafPtr, savedPenMode );
+                SetPortPenMode( (CGrafPtr) grafPtr, savedPenMode );
             }
             
             //  Restore the saved clip region.
@@ -127,10 +127,10 @@ static pascal void wxMacCheckListDefinition( short message, Boolean isSelected, 
             //  appropriate QuickDraw transform mode.
             
             GetPort( &grafPtr );
-            savedPenMode = GetPortPenMode( grafPtr );
-            SetPortPenMode( grafPtr, hilitetransfermode );
+            savedPenMode = GetPortPenMode( (CGrafPtr) grafPtr );
+            SetPortPenMode( (CGrafPtr) grafPtr, hilitetransfermode );
             PaintRect( drawRect );
-            SetPortPenMode( grafPtr, savedPenMode );
+            SetPortPenMode( (CGrafPtr) grafPtr, savedPenMode );
             break;
         default :
           break ;
@@ -183,36 +183,36 @@ bool wxCheckListBox::Create(wxWindow *parent,
     CreateListBoxControl( parent->MacGetRootWindow(), &bounds, false, 0, 1, false, true,
                           14, 14, false, &listDef, &m_macControl );
 
-    GetControlData(m_macControl, kControlNoPart, kControlListBoxListHandleTag,
+    GetControlData( (ControlHandle) m_macControl, kControlNoPart, kControlListBoxListHandleTag,
                    sizeof(ListHandle), (Ptr) &m_macList, &asize);
 
-    SetControlReference(m_macControl, (long) this);
-    SetControlVisibility(m_macControl, false, false);
+    SetControlReference( (ControlHandle) m_macControl, (long) this);
+    SetControlVisibility( (ControlHandle) m_macControl, false, false);
 
 #else
 
     long    result ;
 
-    m_macControl = ::NewControl( parent->MacGetRootWindow() , &bounds , title , false ,
+    m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false ,
                   kwxMacListWithVerticalScrollbar , 0 , 0, 
                   kControlListBoxProc , (long) this ) ;
-    ::GetControlData( m_macControl , kControlNoPart , kControlListBoxListHandleTag ,
+    ::GetControlData( (ControlHandle) m_macControl , kControlNoPart , kControlListBoxListHandleTag ,
                sizeof( ListHandle ) , (char*) &m_macList  , &result ) ;
 
     HLock( (Handle) m_macList ) ;
     ldefHandle ldef ;
     ldef = (ldefHandle) NewHandle( sizeof(ldefRec) ) ;
-    if (  (**m_macList).listDefProc != NULL )
+    if (  (**(ListHandle)m_macList).listDefProc != NULL )
     {
       (**ldef).instruction = 0x4EF9;  /* JMP instruction */
       (**ldef).function = (void(*)()) listDef.u.userProc;
-      (**m_macList).listDefProc = (Handle) ldef ;
+      (**(ListHandle)m_macList).listDefProc = (Handle) ldef ;
     }
         
-    Point pt = (**m_macList).cellSize ;
+    Point pt = (**(ListHandle)m_macList).cellSize ;
     pt.v = 14 ;
-    LCellSize( pt , m_macList ) ;
-    LAddColumn( 1 , 0 , m_macList ) ;
+    LCellSize( pt , (ListHandle)m_macList ) ;
+    LAddColumn( 1 , 0 , (ListHandle)m_macList ) ;
 #endif
     OptionBits  options = 0;
     if ( style & wxLB_MULTIPLE )
@@ -227,7 +227,7 @@ bool wxCheckListBox::Create(wxWindow *parent,
     {
         options = lOnlyOne ;
     }
-    SetListSelectionFlags(m_macList, options);
+    SetListSelectionFlags((ListHandle)m_macList, options);
     
     MacPostControlCreate() ;
     
@@ -236,7 +236,7 @@ bool wxCheckListBox::Create(wxWindow *parent,
         Append( choices[i] ) ;
     }
     
-    LSetDrawingMode( true , m_macList ) ;
+    LSetDrawingMode( true , (ListHandle) m_macList ) ;
 
     return TRUE;
 }
@@ -358,8 +358,8 @@ void wxCheckListBox::OnLeftClick(wxMouseEvent& event)
     GetListVisibleCells( m_macList , &visible ) ;
     topcell = visible.top ;
 #else
-    lineheight =  (**m_macList).cellSize.v ;
-    topcell = (**m_macList).visible.top ;
+    lineheight =  (**(ListHandle)m_macList).cellSize.v ;
+    topcell = (**(ListHandle)m_macList).visible.top ;
 #endif
     size_t nItem = ((size_t)event.GetY()) / lineheight + topcell ;
     

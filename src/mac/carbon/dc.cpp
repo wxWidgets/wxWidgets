@@ -20,6 +20,8 @@
 #include "wx/region.h"
 #include "wx/image.h"
 
+#include "wx/mac/private.h"
+
 #if __MSL__ >= 0x6000
 #include "math.h"
 #endif
@@ -42,6 +44,10 @@ IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
 const double M_PI = 3.14159265358979 ;
 #endif
 const double RAD2DEG  = 180.0 / M_PI;
+const short kEmulatedMode = -1 ;
+const short kUnsupportedMode = -2 ;
+
+#define wxMAC_EXPERIMENTAL_PATTERN 0
 
 //-----------------------------------------------------------------------------
 // Local functions
@@ -54,6 +60,95 @@ static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
 //-----------------------------------------------------------------------------
 // wxDC
 //-----------------------------------------------------------------------------
+
+// this function emulates all wx colour manipulations, used to verify the implementation
+// by setting the mode in the blitting functions to kEmulatedMode
+
+void wxMacCalculateColour( int logical_func , const RGBColor &srcColor , RGBColor &dstColor ) ;
+void wxMacCalculateColour( int logical_func , const RGBColor &srcColor , RGBColor &dstColor )
+{
+    switch ( logical_func )
+    {
+    	case wxAND:        // src AND dst
+    	    dstColor.red = dstColor.red & srcColor.red ;
+    	    dstColor.green = dstColor.green & srcColor.green ;
+    	    dstColor.blue = dstColor.blue & srcColor.blue ;
+    	    break ;
+    	case wxAND_INVERT: // (NOT src) AND dst
+    	    dstColor.red = dstColor.red & ~srcColor.red ;
+    	    dstColor.green = dstColor.green & ~srcColor.green ;
+    	    dstColor.blue = dstColor.blue & ~srcColor.blue ;
+    	    break ;
+    	case wxAND_REVERSE:// src AND (NOT dst)
+    	    dstColor.red = ~dstColor.red & srcColor.red ;
+    	    dstColor.green = ~dstColor.green & srcColor.green ;
+    	    dstColor.blue = ~dstColor.blue & srcColor.blue ;
+    	    break ;
+    	case wxCLEAR:      // 0
+    	    dstColor.red = 0 ;
+    	    dstColor.green = 0 ;
+    	    dstColor.blue = 0 ;
+    	    break ;
+        case wxCOPY:       // src
+    	    dstColor.red = srcColor.red ;
+    	    dstColor.green = srcColor.green ;
+    	    dstColor.blue = srcColor.blue ;
+    		break ;
+    	case wxEQUIV:      // (NOT src) XOR dst
+    	    dstColor.red = dstColor.red ^ ~srcColor.red ;
+    	    dstColor.green = dstColor.green ^ ~srcColor.green ;
+    	    dstColor.blue = dstColor.blue ^ ~srcColor.blue ;
+    	    break ;
+    	case wxINVERT:     // NOT dst
+    	    dstColor.red = ~dstColor.red ;
+    	    dstColor.green = ~dstColor.green ;
+    	    dstColor.blue = ~dstColor.blue ;
+    		break ;
+    	case wxNAND:       // (NOT src) OR (NOT dst)
+    	    dstColor.red = ~dstColor.red | ~srcColor.red ;
+    	    dstColor.green = ~dstColor.green | ~srcColor.green ;
+    	    dstColor.blue = ~dstColor.blue | ~srcColor.blue ;
+    	    break ;
+    	case wxNOR:        // (NOT src) AND (NOT dst)
+    	    dstColor.red = ~dstColor.red & ~srcColor.red ;
+    	    dstColor.green = ~dstColor.green & ~srcColor.green ;
+    	    dstColor.blue = ~dstColor.blue & ~srcColor.blue ;
+    	    break ;
+    	case wxNO_OP:      // dst
+    	    break ;
+    	case wxOR:         // src OR dst
+    	    dstColor.red = dstColor.red | srcColor.red ;
+    	    dstColor.green = dstColor.green | srcColor.green ;
+    	    dstColor.blue = dstColor.blue | srcColor.blue ;
+    	    break ;
+    	case wxOR_INVERT:  // (NOT src) OR dst
+    	    dstColor.red = dstColor.red | ~srcColor.red ;
+    	    dstColor.green = dstColor.green | ~srcColor.green ;
+    	    dstColor.blue = dstColor.blue | ~srcColor.blue ;
+    	    break ;
+    	case wxOR_REVERSE: // src OR (NOT dst)
+    	    dstColor.red = ~dstColor.red | srcColor.red ;
+    	    dstColor.green = ~dstColor.green | srcColor.green ;
+    	    dstColor.blue = ~dstColor.blue | srcColor.blue ;
+    		break ;
+    	case wxSET:        // 1
+    	    dstColor.red = 0xFFFF ;
+    	    dstColor.green = 0xFFFF ;
+    	    dstColor.blue = 0xFFFF ;
+    	    break ;
+    	case wxSRC_INVERT: // (NOT src)
+    	    dstColor.red = ~srcColor.red ;
+    	    dstColor.green = ~srcColor.green ;
+    	    dstColor.blue = ~srcColor.blue ;
+    		break ;
+    	case wxXOR:        // src XOR dst
+    	    dstColor.red = dstColor.red ^ srcColor.red ;
+    	    dstColor.green = dstColor.green ^ srcColor.green ;
+    	    dstColor.blue = dstColor.blue ^ srcColor.blue ;
+    		break ;
+    }
+
+}
 
 wxDC::wxDC()
 {
@@ -78,9 +173,6 @@ wxDC::wxDC()
   m_needComputeScaleX = FALSE;
   m_needComputeScaleY = FALSE;
   
-  m_maxX = m_maxY = -100000;
-  m_minY = m_minY =  100000;
-
   m_macPort = NULL ;
   m_macMask = NULL ;
   m_ok = FALSE ;
@@ -89,19 +181,19 @@ wxDC::wxDC()
 	m_macBrushInstalled = false ;
 	m_macPenInstalled = false ;
 	
-	m_macLocalOrigin.h = m_macLocalOrigin.v = 0 ;
+	m_macLocalOrigin.x = m_macLocalOrigin.y = 0 ;
 	m_macBoundaryClipRgn = NewRgn() ;
 	m_macCurrentClipRgn = NewRgn() ;
 
-	SetRectRgn( m_macBoundaryClipRgn , -32000 , -32000 , 32000 , 32000 ) ;
-	SetRectRgn( m_macCurrentClipRgn , -32000 , -32000 , 32000 , 32000 ) ;
+	SetRectRgn( (RgnHandle) m_macBoundaryClipRgn , -32000 , -32000 , 32000 , 32000 ) ;
+	SetRectRgn( (RgnHandle) m_macCurrentClipRgn , -32000 , -32000 , 32000 , 32000 ) ;
 
     m_pen = *wxBLACK_PEN;
     m_font = *wxNORMAL_FONT;
     m_brush = *wxWHITE_BRUSH;
 }
 wxMacPortSetter::wxMacPortSetter( const wxDC* dc ) :
-	m_ph( dc->m_macPort ) 
+	m_ph( (GrafPtr) dc->m_macPort ) 
 {
 	wxASSERT( dc->Ok() ) ;
 	
@@ -114,12 +206,12 @@ wxMacPortSetter::~wxMacPortSetter()
 
 wxDC::~wxDC(void)
 {
-  DisposeRgn( m_macBoundaryClipRgn ) ;
-  DisposeRgn( m_macCurrentClipRgn ) ;
+    DisposeRgn( (RgnHandle) m_macBoundaryClipRgn ) ;
+    DisposeRgn( (RgnHandle) m_macCurrentClipRgn ) ;
 }
-void wxDC::MacSetupPort(AGAPortHelper* help) const
+void wxDC::MacSetupPort(wxMacPortStateHelper* help) const
 {
-	SetClip( m_macCurrentClipRgn);
+	SetClip( (RgnHandle) m_macCurrentClipRgn);
 
 	m_macFontInstalled = false ;
 	m_macBrushInstalled = false ;
@@ -159,18 +251,18 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
      if ( bmp.GetBitmapType() == kMacBitmapTypePict ) {
          Rect bitmaprect = { 0 , 0 , hh, ww };
          ::OffsetRect( &bitmaprect, xx, yy ) ;
-         ::DrawPicture( bmp.GetPict(), &bitmaprect ) ;
+         ::DrawPicture( (PicHandle) bmp.GetPict(), &bitmaprect ) ;
     }
      else if ( bmp.GetBitmapType() == kMacBitmapTypeGrafWorld )
      {
-         GWorldPtr    bmapworld = bmp.GetHBITMAP();
+         GWorldPtr    bmapworld = MAC_WXHBITMAP( bmp.GetHBITMAP() );
          PixMapHandle bmappixels ;
  
          // Set foreground and background colours (for bitmaps depth = 1)
          if(bmp.GetDepth() == 1)
         {
-             RGBColor fore = m_textForegroundColour.GetPixel();
-             RGBColor back = m_textBackgroundColour.GetPixel();
+             RGBColor fore = MAC_WXCOLORREF(m_textForegroundColour.GetPixel());
+             RGBColor back = MAC_WXCOLORREF(m_textBackgroundColour.GetPixel());
              RGBForeColor(&fore);
              RGBBackColor(&back);
          }
@@ -192,21 +284,21 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
  
          if ( useMask && bmp.GetMask() )
          {
-             if( LockPixels(GetGWorldPixMap(bmp.GetMask()->GetMaskBitmap())))
+             if( LockPixels(GetGWorldPixMap(MAC_WXHBITMAP(bmp.GetMask()->GetMaskBitmap()))))
              {
                  CopyDeepMask
                      (
                       GetPortBitMapForCopyBits(bmapworld),
-                      GetPortBitMapForCopyBits(bmp.GetMask()->GetMaskBitmap()),
-                      GetPortBitMapForCopyBits( m_macPort ),
+                      GetPortBitMapForCopyBits(MAC_WXHBITMAP(bmp.GetMask()->GetMaskBitmap())),
+                      GetPortBitMapForCopyBits( MAC_WXHBITMAP(m_macPort) ),
                       &source, &source, &dest, mode, NULL
                       );
-                 UnlockPixels(GetGWorldPixMap(bmp.GetMask()->GetMaskBitmap()));
+                 UnlockPixels(GetGWorldPixMap(MAC_WXHBITMAP(bmp.GetMask()->GetMaskBitmap())));
              }
          }
          else {
              CopyBits( GetPortBitMapForCopyBits( bmapworld ),
-                       GetPortBitMapForCopyBits( m_macPort ),
+                       GetPortBitMapForCopyBits( MAC_WXHBITMAP(m_macPort) ),
                        &source, &dest, mode, NULL ) ;
          }
          UnlockPixels( bmappixels ) ;
@@ -215,7 +307,7 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
      {
         Rect bitmaprect = { 0 , 0 , bmp.GetHeight(), bmp.GetWidth() } ;
         OffsetRect( &bitmaprect, xx, yy ) ;
-        PlotCIconHandle( &bitmaprect , atNone , ttNone , bmp.GetHICON() ) ;
+        PlotCIconHandle( &bitmaprect , atNone , ttNone , MAC_WXHICON(bmp.GetHICON()) ) ;
      }
      m_macPenInstalled = false ;
      m_macBrushInstalled = false ;
@@ -241,8 +333,8 @@ void wxDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord hei
     ww = XLOG2DEVREL(width);
     hh = YLOG2DEVREL(height);
 
-    SetRectRgn( m_macCurrentClipRgn , xx , yy , xx + ww , yy + hh ) ;
-    SectRgn( m_macCurrentClipRgn , m_macBoundaryClipRgn , m_macCurrentClipRgn ) ;
+    SetRectRgn( (RgnHandle) m_macCurrentClipRgn , xx , yy , xx + ww , yy + hh ) ;
+    SectRgn( (RgnHandle) m_macCurrentClipRgn , (RgnHandle) m_macBoundaryClipRgn , (RgnHandle) m_macCurrentClipRgn ) ;
     
     if( m_clipping )
     {
@@ -290,12 +382,12 @@ void wxDC::DoSetClippingRegionAsRegion( const wxRegion &region  )
     }
     else
     {
-        CopyRgn( region.GetWXHRGN() , m_macCurrentClipRgn ) ;
+        CopyRgn( (RgnHandle) region.GetWXHRGN() , (RgnHandle) m_macCurrentClipRgn ) ;
         if ( xx != x || yy != y )
         {
-            OffsetRgn( m_macCurrentClipRgn , xx - x , yy - y ) ;
+            OffsetRgn( (RgnHandle) m_macCurrentClipRgn , xx - x , yy - y ) ;
         }
-        SectRgn( m_macCurrentClipRgn , m_macBoundaryClipRgn , m_macCurrentClipRgn ) ;
+        SectRgn( (RgnHandle) m_macCurrentClipRgn , (RgnHandle) m_macBoundaryClipRgn , (RgnHandle) m_macCurrentClipRgn ) ;
         if( m_clipping )
         {
             m_clipX1 = wxMax( m_clipX1 , xx );
@@ -318,7 +410,7 @@ void wxDC::DoSetClippingRegionAsRegion( const wxRegion &region  )
 void wxDC::DestroyClippingRegion()
 {
   wxMacPortSetter helper(this) ;
-  CopyRgn( m_macBoundaryClipRgn , m_macCurrentClipRgn ) ;
+  CopyRgn( (RgnHandle) m_macBoundaryClipRgn , (RgnHandle) m_macCurrentClipRgn ) ;
   m_clipping = FALSE;
 }    
 void wxDC::DoGetSize( int* width, int* height ) const
@@ -418,15 +510,8 @@ void wxDC::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
   m_signX = (xLeftRight ?  1 : -1);
   m_signY = (yBottomUp  ? -1 :  1);
   ComputeScaleAndOrigin();
-}/*
-    
-void wxDC::CalcBoundingBox( long x, long y )
-{
-  if (x < m_minX) m_minX = x;
-  if (y < m_minY) m_minY = y;
-  if (x > m_maxX) m_maxX = x;
-  if (y > m_maxY) m_maxY = y;
-}*/
+}
+
 wxSize wxDC::GetPPI() const
 {
     return wxSize(72, 72);
@@ -787,13 +872,19 @@ void  wxDC::DoDrawPolygon(int n, wxPoint points[],
 	y1 = YLOG2DEVMAC(points[0].y + yoffset);   
 	::MoveTo(x1,y1);
 
-	for (int i = 0; i < n-1; i++)
+	for (int i = 1; i < n; i++)
 	{
-		x2 = XLOG2DEVMAC(points[i+1].x + xoffset);
-		y2 = YLOG2DEVMAC(points[i+1].y + yoffset);
+		x2 = XLOG2DEVMAC(points[i].x + xoffset);
+		y2 = YLOG2DEVMAC(points[i].y + yoffset);
 		::LineTo(x2, y2);
 	}
 
+    // close the polyline if necessary
+    if ( x1 != x2 || y1 != y2 )
+    {
+        ::LineTo(x1,y1 ) ;
+    }
+    
 	ClosePoly();
 
   	if (m_brush.GetStyle() != wxTRANSPARENT)
@@ -959,82 +1050,222 @@ bool  wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
 {
     wxCHECK_MSG(Ok(), false, wxT("wxDC::DoBlit Illegal dc"));
     wxCHECK_MSG(source->Ok(), false, wxT("wxDC::DoBlit  Illegal source DC"));
-    wxMacPortSetter helper(this) ;
+    
+    if ( logical_func == wxNO_OP )
+        return TRUE ;
 
-    /* TODO: use the mask origin when drawing transparently */
     if (xsrcMask == -1 && ysrcMask == -1)
     {
         xsrcMask = xsrc; ysrcMask = ysrc;
     }
 
+    // correct the parameter in case this dc does not have a mask at all
+    
+    if ( useMask && !source->m_macMask )
+        useMask = false ;
+        
+	Rect srcrect , dstrect ;
+	srcrect.top = source->YLOG2DEVMAC(ysrc) ;
+	srcrect.left = source->XLOG2DEVMAC(xsrc)  ;
+	srcrect.right = source->XLOG2DEVMAC(xsrc + width ) ;
+	srcrect.bottom = source->YLOG2DEVMAC(ysrc + height) ;
+	dstrect.top = YLOG2DEVMAC(ydest) ;
+	dstrect.left = XLOG2DEVMAC(xdest) ;
+	dstrect.bottom = YLOG2DEVMAC(ydest + height )  ;
+	dstrect.right = XLOG2DEVMAC(xdest + width ) ;
+
+    short mode = kUnsupportedMode ;
+    bool invertDestinationFirst = false ;
+    switch ( logical_func )
+    {
+		case wxAND:        // src AND dst
+		    mode = srcOr ; // ok
+		    break ;
+		case wxAND_INVERT: // (NOT src) AND dst
+		    mode = notSrcOr  ; // ok
+		    break ;
+		case wxAND_REVERSE:// src AND (NOT dst)
+		    invertDestinationFirst = true ;
+		    mode = srcOr ; 
+		    break ;
+		case wxCLEAR:      // 0
+		    mode = kEmulatedMode ; 
+		    break ;
+        case wxCOPY:       // src
+			mode = srcCopy ; // ok
+			break ;
+		case wxEQUIV:      // (NOT src) XOR dst
+		    mode = srcXor ; // ok
+		    break ;
+		case wxINVERT:     // NOT dst
+			mode = kEmulatedMode ; //or hilite ;
+			break ;
+		case wxNAND:       // (NOT src) OR (NOT dst)
+		    invertDestinationFirst = true ;
+		    mode = srcBic ; 
+		    break ;
+		case wxNOR:        // (NOT src) AND (NOT dst)
+		    invertDestinationFirst = true ;
+		    mode = notSrcOr ; 
+		    break ;
+		case wxNO_OP:      // dst
+		    mode = kEmulatedMode ; // this has already been handled upon entry
+		    break ;
+		case wxOR:         // src OR dst
+		    mode = notSrcBic ;
+		    break ;
+		case wxOR_INVERT:  // (NOT src) OR dst
+		    mode = srcBic ; 
+		    break ;
+		case wxOR_REVERSE: // src OR (NOT dst)
+		    invertDestinationFirst = true ;
+			mode = notSrcBic ;
+			break ;
+		case wxSET:        // 1
+		    mode = kEmulatedMode ; 
+		    break ;
+		case wxSRC_INVERT: // (NOT src)
+			mode = notSrcCopy ; // ok
+			break ;
+		case wxXOR:        // src XOR dst
+			mode = notSrcXor ; // ok
+			break ;
+
+        default :
+			break ;
+
+    }
+
+    if ( mode == kUnsupportedMode )
+    {
+        wxFAIL_MSG("unsupported blitting mode" )
+        return FALSE ;
+    }
+    
 	CGrafPtr			sourcePort = (CGrafPtr) source->m_macPort ;
 	PixMapHandle	bmappixels =  GetGWorldPixMap( sourcePort ) ; 
-	RGBColor	white = { 0xFFFF, 0xFFFF,0xFFFF} ;
-	RGBColor	black = { 0,0,0} ;
-	RGBColor        forecolor = m_textForegroundColour.GetPixel();
-	RGBColor        backcolor = m_textBackgroundColour.GetPixel();
-	RGBForeColor( &forecolor ) ;
-	RGBBackColor( &backcolor ) ;
-
 	if ( LockPixels(bmappixels) )
 	{
-		Rect srcrect , dstrect ;
-		srcrect.top = source->YLOG2DEVMAC(ysrc) ;
-		srcrect.left = source->XLOG2DEVMAC(xsrc)  ;
-		srcrect.right = source->XLOG2DEVMAC(xsrc + width ) ;
-		srcrect.bottom = source->YLOG2DEVMAC(ysrc + height) ;
-		dstrect.top = YLOG2DEVMAC(ydest) ;
-		dstrect.left = XLOG2DEVMAC(xdest) ;
-		dstrect.bottom = YLOG2DEVMAC(ydest + height )  ;
-		dstrect.right = XLOG2DEVMAC(xdest + width ) ;
-
-    	short  mode = (logical_func == wxCOPY ? srcCopy :
- //   	logical_func == wxCLEAR ? WHITENESS :
- //   	logical_func == wxSET ? BLACKNESS :
-   		logical_func == wxINVERT ? hilite :
-  //  	logical_func == wxAND ? MERGECOPY :
-    	logical_func == wxOR ? srcOr :
-    	logical_func == wxSRC_INVERT ? notSrcCopy :
-    	logical_func == wxXOR ? srcXor :
-  //  	logical_func == wxOR_REVERSE ? MERGEPAINT :
-  //  	logical_func == wxAND_REVERSE ? SRCERASE :
-  //  	logical_func == wxSRC_OR ? srcOr :
-  //  	logical_func == wxSRC_AND ? SRCAND :
-    		srcCopy );
+        wxMacPortSetter helper(this) ;
+        RGBColor tempColor ;
+    
+    	if ( source->GetDepth() == 1 )
+    	{
+    	    RGBForeColor( &MAC_WXCOLORREF(m_textForegroundColour.GetPixel()) ) ;
+    	    RGBBackColor( &MAC_WXCOLORREF(m_textBackgroundColour.GetPixel()) ) ;
+        }
+        else
+        {
+            // the modes need this, otherwise we'll end up having really nice colors...
+    	    RGBColor	white = { 0xFFFF, 0xFFFF,0xFFFF} ;
+    	    RGBColor	black = { 0,0,0} ;
+    	    RGBForeColor( &black ) ;
+    	    RGBBackColor( &white ) ;
+        }
 
 		if ( useMask && source->m_macMask )
 		{
 		    if ( mode == srcCopy )
 		    {
-    			if ( LockPixels( GetGWorldPixMap( source->m_macMask ) ) )
+    			if ( LockPixels( GetGWorldPixMap( MAC_WXHBITMAP(source->m_macMask) ) ) )
     			{
     				CopyMask( GetPortBitMapForCopyBits( sourcePort ) , 
-    				            GetPortBitMapForCopyBits( source->m_macMask ) , 
-    				            GetPortBitMapForCopyBits( m_macPort ) ,
+    				            GetPortBitMapForCopyBits( MAC_WXHBITMAP(source->m_macMask) ) , 
+    				            GetPortBitMapForCopyBits( MAC_WXHBITMAP(m_macPort) ) ,
     					        &srcrect, &srcrect , &dstrect ) ;
-    				UnlockPixels( GetGWorldPixMap( source->m_macMask )  ) ;
+    				UnlockPixels( GetGWorldPixMap( MAC_WXHBITMAP(source->m_macMask) )  ) ;
     			}
 		    }
 		    else
 		    {
                 RgnHandle clipRgn = NewRgn() ;
-                
-                LockPixels( GetGWorldPixMap( source->m_macMask ) ) ;
-                BitMapToRegion( clipRgn , (BitMap*) *GetGWorldPixMap( source->m_macMask ) ) ;
-                UnlockPixels( GetGWorldPixMap( source->m_macMask ) ) ;
-                //OffsetRgn( clipRgn , -source->m_macMask->portRect.left , -source->m_macMask->portRect.top ) ;
+                LockPixels( GetGWorldPixMap( MAC_WXHBITMAP(source->m_macMask) ) ) ;
+                BitMapToRegion( clipRgn , (BitMap*) *GetGWorldPixMap( MAC_WXHBITMAP(source->m_macMask) ) ) ;
+                UnlockPixels( GetGWorldPixMap( MAC_WXHBITMAP(source->m_macMask) ) ) ;
                 OffsetRgn( clipRgn , -srcrect.left + dstrect.left, -srcrect.top +  dstrect.top ) ;
-    			CopyBits( GetPortBitMapForCopyBits( sourcePort ) , 
-    			    GetPortBitMapForCopyBits( m_macPort ) ,
-    				&srcrect, &dstrect, mode, clipRgn ) ;
+                if ( mode == kEmulatedMode )
+                {
+                    Pattern pat ;
+		            ::PenPat(GetQDGlobalsBlack(&pat));
+                    if ( logical_func == wxSET )
+                    {
+                        RGBColor col= { 0xFFFF, 0xFFFF, 0xFFFF } ;
+		                ::RGBForeColor( &col  ) ;
+                        ::PaintRgn( clipRgn ) ;
+                    }
+                    else if ( logical_func == wxCLEAR )
+                    {
+                        RGBColor col= { 0x0000, 0x0000, 0x0000 } ;
+		                ::RGBForeColor( &col  ) ;
+                        ::PaintRgn( clipRgn ) ;
+                    }
+                    else if ( logical_func == wxINVERT )
+                    {
+                        MacInvertRgn( clipRgn ) ;
+                    }
+                    else
+                    {
+                        for ( int y = 0 ; y < srcrect.right - srcrect.left ; ++y )
+                        {
+                            for ( int x = 0 ; x < srcrect.bottom - srcrect.top ; ++x )
+                            {
+                                Point dstPoint = { dstrect.top + y , dstrect.left + x } ;
+                                Point srcPoint = { srcrect.top + y , srcrect.left + x } ;
+                                if ( PtInRgn( dstPoint , clipRgn ) )
+                                {
+                                    RGBColor srcColor ;
+                                    RGBColor dstColor ;
+                                    
+                                    SetPort( (GrafPtr) sourcePort ) ;
+                                    GetCPixel(  srcPoint.h , srcPoint.v , &srcColor) ;
+                                    SetPort( (GrafPtr) m_macPort ) ;
+                                    GetCPixel( dstPoint.h , dstPoint.v , &dstColor ) ;
+                                    
+                                    wxMacCalculateColour( logical_func , srcColor ,  dstColor ) ;
+                                    SetCPixel( dstPoint.h , dstPoint.v , &dstColor ) ;
+                                }
+                            }
+                        }
+                        // wxFAIL_MSG("unimplemented emulated mode") ;
+                    }
+                }
+                else
+                {
+                    if ( invertDestinationFirst )
+                    {
+                        MacInvertRgn( clipRgn ) ;
+                    }
+        			CopyBits( GetPortBitMapForCopyBits( sourcePort ) , 
+        			    GetPortBitMapForCopyBits( MAC_WXHBITMAP(m_macPort) ) ,
+        				&srcrect, &dstrect, mode, clipRgn ) ;
+        	    }
     		    DisposeRgn( clipRgn ) ;
     		}
 		}
 		else
 		{
-			CopyBits( GetPortBitMapForCopyBits( sourcePort ) , 
-			    GetPortBitMapForCopyBits( m_macPort ) ,
-				&srcrect, &dstrect, mode, NULL ) ;
+		    if ( mode == kEmulatedMode )
+		    {
+    			CopyBits( GetPortBitMapForCopyBits( sourcePort ) , 
+    			    GetPortBitMapForCopyBits( MAC_WXHBITMAP(m_macPort) ) ,
+    				&srcrect, &dstrect, mode, NULL ) ;
+    		}
+    		else
+    		{
+                    Pattern pat ;
+		            ::PenPat(GetQDGlobalsBlack(&pat));
+                    if ( logical_func == wxSET )
+                    {
+                        RGBColor col= { 0xFFFF, 0xFFFF, 0xFFFF } ;
+		                ::RGBForeColor( &col  ) ;
+                    }
+                    else
+                    {
+                        RGBColor col= { 0x0000, 0x0000, 0x0000 } ;
+		                ::RGBForeColor( &col  ) ;
+                    }
+                    ::PaintRect( &dstrect ) ;
+    		}
 		}
 		UnlockPixels( bmappixels ) ;
 	} 
@@ -1100,8 +1331,8 @@ void  wxDC::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
     // prepare to blit-with-rotate the bitmap to the DC
     wxImage image(src);
 
-    RGBColor colText = m_textForegroundColour.GetPixel();
-    RGBColor colBack = m_textBackgroundColour.GetPixel();
+    RGBColor colText = MAC_WXCOLORREF( m_textForegroundColour.GetPixel() );
+    RGBColor colBack = MAC_WXCOLORREF( m_textBackgroundColour.GetPixel() );
 
     unsigned char *data = image.GetData();
 
@@ -1336,7 +1567,8 @@ void  wxDC::Clear(void)
 	
 	if (m_backgroundBrush.GetStyle() != wxTRANSPARENT) 
 	{
-		MacInstallBrush() ;
+        MacSetupBackgroundForCurrentPort( m_backgroundBrush ) ;
+	
 		::EraseRect( &rect ) ;
 	}
 }
@@ -1360,8 +1592,8 @@ void wxDC::MacInstallFont() const
 		m_macBrushInstalled = false ;
 		m_macPenInstalled = false ;
 
-		RGBColor forecolor = m_textForegroundColour.GetPixel();
-		RGBColor backcolor = m_textBackgroundColour.GetPixel();
+		RGBColor forecolor = MAC_WXCOLORREF( m_textForegroundColour.GetPixel());
+		RGBColor backcolor = MAC_WXCOLORREF( m_textBackgroundColour.GetPixel());
 		::RGBForeColor( &forecolor );
 		::RGBBackColor( &backcolor );
 	}
@@ -1380,8 +1612,8 @@ void wxDC::MacInstallFont() const
 		m_macBrushInstalled = false ;
 		m_macPenInstalled = false ;
 
-		RGBColor forecolor = m_textForegroundColour.GetPixel();
-		RGBColor backcolor = m_textBackgroundColour.GetPixel();
+		RGBColor forecolor = MAC_WXCOLORREF( m_textForegroundColour.GetPixel());
+		RGBColor backcolor = MAC_WXCOLORREF( m_textBackgroundColour.GetPixel());
 		::RGBForeColor( &forecolor );
 		::RGBBackColor( &backcolor );
 	}
@@ -1470,8 +1702,8 @@ void wxDC::MacInstallPen() const
 //	if ( m_macPenInstalled )
 //		return ;
 
-	RGBColor forecolor = m_pen.GetColour().GetPixel();
-	RGBColor backcolor = m_backgroundBrush.GetColour().GetPixel();
+	RGBColor forecolor = MAC_WXCOLORREF( m_pen.GetColour().GetPixel());
+	RGBColor backcolor = MAC_WXCOLORREF( m_backgroundBrush.GetColour().GetPixel());
 	::RGBForeColor( &forecolor );
 	::RGBBackColor( &backcolor );
 	
@@ -1604,7 +1836,7 @@ void wxDC::MacSetupBackgroundForCurrentPort(const wxBrush& background )
         }
       case kwxMacBrushColour :
         {
-       	  ::RGBBackColor( &background.GetColour().GetPixel() );
+       	  ::RGBBackColor( &MAC_WXCOLORREF( background.GetColour().GetPixel()) );
         	int brushStyle = background.GetStyle();
         	if (brushStyle == wxSOLID)
         		::BackPat(GetQDGlobalsWhite(&whiteColor));
@@ -1632,8 +1864,10 @@ void wxDC::MacInstallBrush() const
 //		return ;
 
 	// foreground
+	
+	bool backgroundTransparent = (GetBackgroundMode() == wxTRANSPARENT) ;
 
-	::RGBForeColor( &m_brush.GetColour().GetPixel() );
+	::RGBForeColor( &MAC_WXCOLORREF( m_brush.GetColour().GetPixel()) );
 
 	int brushStyle = m_brush.GetStyle();
 	if (brushStyle == wxSOLID)
@@ -1646,62 +1880,109 @@ void wxDC::MacInstallBrush() const
 	}
 	else if ( m_brush.GetStyle() == wxSTIPPLE || m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE )
 	{
+	    // we force this in order to be compliant with wxMSW
+	    backgroundTransparent = false ;
 	    // for these the text fore (and back for MASK_OPAQUE) colors are used
 	    wxBitmap* bitmap = m_brush.GetStipple() ;
 	    int width = bitmap->GetWidth() ;
 	    int height = bitmap->GetHeight() ;
-	    int depth = bitmap->GetDepth() ;
+        GWorldPtr gw = NULL ;
+
 	    if ( m_brush.GetStyle() == wxSTIPPLE )
+	        gw = MAC_WXHBITMAP(bitmap->GetHBITMAP())  ;
+	    else 
+	        gw = MAC_WXHBITMAP(bitmap->GetMask()->GetMaskBitmap()) ;
+	        
+        PixMapHandle gwpixmaphandle = GetGWorldPixMap( gw ) ;
+        LockPixels( gwpixmaphandle ) ;
+
+	    bool isMonochrome = !IsPortColor( gw ) ;
+
+        if ( !isMonochrome )
+        {
+            if ( (**gwpixmaphandle).pixelSize == 1 )
+                isMonochrome = true ;
+        }
+
+
+	    if ( isMonochrome )
 	    {
-	        GWorldPtr gw = bitmap->GetHBITMAP() ;
-	        if ( width == 8 && height == 8 && depth == 1)
-	        {
-	            Pattern pat ;
-                LockPixels( GetGWorldPixMap( gw ) ) ;
-                BitMap* gwbitmap = (BitMap*) *GetGWorldPixMap( gw ) ; // since the color depth is 1 it is a BitMap
-	            int alignment = gwbitmap->rowBytes & 0x7FFF ;
-                UInt8 *gwbits = (UInt8*) gwbitmap->baseAddr ;
+	        ::RGBForeColor( &MAC_WXCOLORREF( m_textForegroundColour.GetPixel()) );
+
+            BitMap* gwbitmap = (BitMap*) *gwpixmaphandle ; // since the color depth is 1 it is a BitMap
+            UInt8 *gwbits = (UInt8*) gwbitmap->baseAddr ;
+            int alignment = gwbitmap->rowBytes & 0x7FFF ;
+
+    	    if( width == 8 && height == 8 )
+    	    {
+                Pattern pat ;
                 for ( int i = 0 ; i < 8 ; ++i )
                 {
                     pat.pat[i] = gwbits[i*alignment+0] ;
                 }
                 UnlockPixels( GetGWorldPixMap( gw ) ) ;
-	            
-	            ::PenPat( &pat ) ;
-	        }
-	        else
-	        {
-		        ::PenPat(GetQDGlobalsBlack(&blackColor));
-		    }
+                ::PenPat( &pat ) ;
+    	    }
+    	    else
+    	    {
+ #if wxMAC_EXPERIMENTAL_PATTERN
+ // this will be the code to handle power of 2 patterns, we will have to arrive at a nice
+ // caching scheme before putting this into production
+            	Handle      image;
+            	long		imageSize;
+    	        PixPatHandle pixpat = NewPixPat() ;
+
+		        CopyPixMap(gwpixmaphandle, (**pixpat).patMap);
+	            imageSize = GetPixRowBytes((**pixpat).patMap) *
+				    ((**(**pixpat).patMap).bounds.bottom -
+				    (**(**pixpat).patMap).bounds.top);
+				
+	            PtrToHand( (**gwpixmaphandle).baseAddr, &image, imageSize );
+	            (**pixpat).patData = image;
+	            CTabHandle ctable = ((**((**pixpat).patMap)).pmTable) ;
+	            ColorSpecPtr ctspec = (ColorSpecPtr) &(**ctable).ctTable ;
+	            if ( ctspec[0].rgb.red == 0x0000 )
+	            {
+	                ctspec[1].rgb = MAC_WXCOLORREF( m_textBackgroundColour.GetPixel()) ;
+	                ctspec[0].rgb = MAC_WXCOLORREF( m_textForegroundColour.GetPixel()) ;
+	            }
+	            else
+	            {
+	                ctspec[0].rgb = MAC_WXCOLORREF( m_textBackgroundColour.GetPixel()) ;
+	                ctspec[1].rgb = MAC_WXCOLORREF( m_textForegroundColour.GetPixel()) ;
+	            }
+	            ::CTabChanged( ctable ) ;
+	            ::PenPixPat(pixpat);
+#endif
+    	    }
 	    }
-	    else if (m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE )
+	    else
 	    {
-	        ::RGBForeColor( &m_textForegroundColour.GetPixel() );
-	        ::RGBForeColor( &m_textBackgroundColour.GetPixel() );
-		    ::PenPat(GetQDGlobalsBlack(&blackColor));
 	    }
+	    UnlockPixels( gwpixmaphandle ) ;
 	}
     else
     {
 	    ::PenPat(GetQDGlobalsBlack(&blackColor));
 	}
-
 	
-	// background
-	
-    MacSetupBackgroundForCurrentPort( m_backgroundBrush ) ;
-	
-
-	// todo :
+    if ( !backgroundTransparent )
+        ::RGBBackColor( &MAC_WXCOLORREF( m_textBackgroundColour.GetPixel()) ) ;
 	
 	short mode = patCopy ;
 	switch( m_logicalFunction )
 	{
 		case wxCOPY:       // src
-			mode = patCopy ;
+		    if ( backgroundTransparent )
+		        mode = patOr ;
+		    else
+			    mode = patCopy ;
 			break ;
 		case wxINVERT:     // NOT dst
-			::PenPat(GetQDGlobalsBlack(&blackColor));
+		    if ( !backgroundTransparent )
+		    {
+			    ::PenPat(GetQDGlobalsBlack(&blackColor));
+			}
 			mode = patXor ;
 			break ;
 		case wxXOR:        // src XOR dst

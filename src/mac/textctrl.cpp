@@ -124,7 +124,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     }
 
 
-    m_macControl = ::NewControl( parent->MacGetRootWindow() , &bounds , "\p" , true , 0 , 0 , 1, 
+    m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , "\p" , true , 0 , 0 , 1, 
         ( style & wxTE_PASSWORD ) ? kControlEditTextPasswordProc : kControlEditTextProc , (long) this ) ;
     MacPostControlCreate() ;
 
@@ -134,7 +134,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
         TEHandle teH ;
         long size ;
    
-        ::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+        ::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
         (*teH)->lineHeight = -1 ;
     }
     
@@ -142,7 +142,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
         value = wxMacMakeMacStringFromPC( st ) ;
     else
         value = st ;
-    ::SetControlData( m_macControl, 0, ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag , value.Length() , (char*) ((const char*)value) ) ;
+    ::SetControlData( (ControlHandle) m_macControl, 0, ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag , value.Length() , (char*) ((const char*)value) ) ;
 
   return TRUE;
 }
@@ -150,7 +150,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 wxString wxTextCtrl::GetValue() const
 {
     Size actualsize;
-    ::GetControlData( m_macControl, 0, ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag , 32767 , wxBuffer , &actualsize) ;
+    ::GetControlData( (ControlHandle) m_macControl, 0, ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag , 32767 , wxBuffer , &actualsize) ;
     wxBuffer[actualsize] = 0 ;
     if( wxApp::s_macDefaultEncodingIsPC )
         return wxMacMakePCStringFromMac( wxBuffer ) ;
@@ -164,7 +164,7 @@ void wxTextCtrl::GetSelection(long* from, long* to) const
    TEHandle teH ;
    long size ;
    
-   ::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+   ::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
 
     *from = (**teH).selStart;
     *to = (**teH).selEnd;
@@ -178,7 +178,7 @@ void wxTextCtrl::SetValue(const wxString& st)
         value = wxMacMakeMacStringFromPC( st ) ;
     else
         value = st ;
-    ::SetControlData( m_macControl, 0, ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag , value.Length() , (char*) ((const char*)value) ) ;
+    ::SetControlData( (ControlHandle) m_macControl, 0, ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag , value.Length() , (char*) ((const char*)value) ) ;
     MacRedrawControl() ;
 }
 
@@ -190,7 +190,7 @@ void wxTextCtrl::Copy()
         TEHandle teH ;
         long size ;
    
-  		  ::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+  		  ::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
 		    TECopy( teH ) ;
         ClearCurrentScrap();
 		    TEToScrap() ;
@@ -204,7 +204,7 @@ void wxTextCtrl::Cut()
         TEHandle teH ;
         long size ;
    
-   		  ::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+   		  ::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
 		    TECut( teH ) ;
         ClearCurrentScrap();
 		    TEToScrap() ;
@@ -219,7 +219,7 @@ void wxTextCtrl::Paste()
         TEHandle teH ;
         long size ;
    
-        ::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+        ::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
         TEFromScrap() ;
         TEPaste( teH ) ;
         MacRedrawControl() ;
@@ -280,9 +280,9 @@ bool wxTextCtrl::CanPaste() const
 void wxTextCtrl::SetEditable(bool editable)
 {
     if ( editable )
-        UMAActivateControl( m_macControl ) ;
+        UMAActivateControl( (ControlHandle) m_macControl ) ;
     else
-        UMADeactivateControl( m_macControl ) ;
+        UMADeactivateControl( (ControlHandle) m_macControl ) ;
 }
 
 void wxTextCtrl::SetInsertionPoint(long pos)
@@ -302,8 +302,8 @@ long wxTextCtrl::GetInsertionPoint() const
    TEHandle teH ;
    long size ;
    
-   ::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
-//   ::GetControlData( m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection , &size ) ;
+   ::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+//   ::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection , &size ) ;
     return (**teH).selStart ;
 }
 
@@ -313,9 +313,9 @@ long wxTextCtrl::GetLastPosition() const
    TEHandle teH ;
    long size ;
    
-   ::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+   ::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
    
-//   ::GetControlData( m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection , &size ) ;
+//   ::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection , &size ) ;
     return (**teH).teLength ;
 }
 
@@ -328,8 +328,8 @@ void wxTextCtrl::Replace(long from, long to, const wxString& value)
    
     selection.selStart = from ;
     selection.selEnd = to ;
-    ::SetControlData( m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection ) ;
-        ::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+    ::SetControlData( (ControlHandle) m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection ) ;
+        ::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
     TESetSelect( from , to  , teH ) ;
     TEDelete( teH ) ;
         TEInsert( value , value.Length() , teH ) ;
@@ -345,8 +345,8 @@ void wxTextCtrl::Remove(long from, long to)
    
     selection.selStart = from ;
     selection.selEnd = to ;
-    ::SetControlData( m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection ) ;
-    ::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+    ::SetControlData( (ControlHandle) m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection ) ;
+    ::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
     TEDelete( teH ) ;
     Refresh() ;
 }
@@ -357,12 +357,12 @@ void wxTextCtrl::SetSelection(long from, long to)
    TEHandle teH ;
    long size ;
    
-   ::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+   ::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
    
    selection.selStart = from ;
    selection.selEnd = to ;
    
-   ::SetControlData( m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection ) ;
+   ::SetControlData( (ControlHandle) m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection ) ;
    TESetSelect( selection.selStart , selection.selEnd , teH ) ;
 }
 
@@ -385,7 +385,7 @@ void wxTextCtrl::WriteText(const wxString& text)
     wxBuffer[text.Length() ] = 0 ;
 //    wxMacConvertNewlines( wxBuffer , wxBuffer ) ;
    
-    ::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+    ::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
    
         TEInsert( wxBuffer , strlen( wxBuffer) , teH ) ;
         Refresh() ;
@@ -399,7 +399,7 @@ void wxTextCtrl::AppendText(const wxString& text)
 
 void wxTextCtrl::Clear()
 {
-    ::SetControlData( m_macControl, 0, ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag , 0 , (char*) ((const char*)NULL) ) ;
+    ::SetControlData( (ControlHandle) m_macControl, 0, ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag , 0 , (char*) ((const char*)NULL) ) ;
     Refresh() ;
 }
 
@@ -484,7 +484,7 @@ void wxTextCtrl::DiscardEdits()
 int wxTextCtrl::GetNumberOfLines() const
 {
     Size actualsize;
-    ::GetControlData( m_macControl, 0, ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag , 32767 , wxBuffer , &actualsize) ;
+    ::GetControlData( (ControlHandle) m_macControl, 0, ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag , 32767 , wxBuffer , &actualsize) ;
     
     int count = 1;
     for (int i = 0; i < actualsize; i++)
@@ -514,7 +514,7 @@ void wxTextCtrl::ShowPosition(long pos)
 int wxTextCtrl::GetLineLength(long lineNo) const
 {
     Size actualsize;
-    ::GetControlData( m_macControl, 0, ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag , 32767 , wxBuffer , &actualsize) ;
+    ::GetControlData( (ControlHandle) m_macControl, 0, ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag , 32767 , wxBuffer , &actualsize) ;
     
     // Find line first
     int count = 0;
@@ -541,7 +541,7 @@ int wxTextCtrl::GetLineLength(long lineNo) const
 wxString wxTextCtrl::GetLineText(long lineNo) const
 {
     Size actualsize;
-    ::GetControlData( m_macControl, 0, ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag , 32767 , wxBuffer , &actualsize) ;
+    ::GetControlData( (ControlHandle) m_macControl, 0, ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag , 32767 , wxBuffer , &actualsize) ;
     
     // Find line first
     int count = 0;
@@ -649,12 +649,12 @@ void wxTextCtrl::OnChar(wxKeyEvent& key_event)
             break;
     }
     
-    EventRecord *ev = wxTheApp->MacGetCurrentEvent();
+    EventRecord *ev = (EventRecord*) wxTheApp->MacGetCurrentEvent();
     short keychar = short(ev->message & charCodeMask);
     if (!eat_key)
     {
         short keycode = short(ev->message & keyCodeMask) >> 8 ;
-        ::HandleControlKey( m_macControl , keycode , keychar , ev->modifiers );
+        ::HandleControlKey( (ControlHandle) m_macControl , keycode , keychar , ev->modifiers );
     }
     if ( keychar >= 0x20 ||
          key_event.KeyCode() == WXK_RETURN ||
@@ -1706,7 +1706,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 
     if ( style & wxTE_PASSWORD )
     {
-      m_macControl = ::NewControl( parent->MacGetRootWindow() , &bounds , "\p" , true , 0 , 0 , 1, 
+      m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , "\p" , true , 0 , 0 , 1, 
         kControlEditTextPasswordProc , (long) this ) ;
     }
     else
@@ -1725,13 +1725,13 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
         
     if ( style & wxTE_PASSWORD )
     {
-      ::SetControlData( m_macControl, 0, ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag , value.Length() , (char*) ((const char*)value) ) ;
+      ::SetControlData( (ControlHandle) m_macControl, 0, ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag , value.Length() , (char*) ((const char*)value) ) ;
   }
   else
   {
     STPTextPaneVars **tpvars;
         /* set up locals */
-    tpvars = (STPTextPaneVars **) GetControlReference(m_macControl);
+    tpvars = (STPTextPaneVars **) GetControlReference( (ControlHandle) m_macControl);
         /* set the text in the record */
     TXNSetData( (**tpvars).fTXNRec, kTXNTextData,  (const char*)value, value.Length(),
       kTXNStartOffset, kTXNEndOffset);
@@ -1745,14 +1745,14 @@ wxString wxTextCtrl::GetValue() const
     Size actualsize;
   if ( m_windowStyle & wxTE_PASSWORD )
   {
-      ::GetControlData( m_macControl, 0, ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag , 32767 , wxBuffer , &actualsize) ;
+      ::GetControlData( (ControlHandle) m_macControl, 0, ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag , 32767 , wxBuffer , &actualsize) ;
   }
   else
   {
     STPTextPaneVars **tpvars;
     OSStatus err;
         /* set up locals */
-    tpvars = (STPTextPaneVars **) GetControlReference(m_macControl);
+    tpvars = (STPTextPaneVars **) GetControlReference( (ControlHandle) m_macControl);
         /* extract the text from the record */
     Handle theText ;
     err = TXNGetDataEncoded( (**tpvars).fTXNRec, kTXNStartOffset, kTXNEndOffset, &theText , kTXNTextData );
@@ -1783,7 +1783,7 @@ void wxTextCtrl::GetSelection(long* from, long* to) const
    TEHandle teH ;
    long size ;
    
-   ::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+   ::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
 
     *from = (**teH).selStart;
     *to = (**teH).selEnd;
@@ -1793,7 +1793,7 @@ void wxTextCtrl::GetSelection(long* from, long* to) const
         STPTextPaneVars **tpvars;
 
             /* set up locals */
-        tpvars = (STPTextPaneVars **) GetControlReference(m_macControl);
+        tpvars = (STPTextPaneVars **) GetControlReference( (ControlHandle) m_macControl);
 
         TXNGetSelection(  (**tpvars).fTXNRec , (TXNOffset*) from , (TXNOffset*) to ) ;
 
@@ -1810,13 +1810,13 @@ void wxTextCtrl::SetValue(const wxString& st)
         value = st ;
   if ( m_windowStyle & wxTE_PASSWORD )
   {
-      ::SetControlData( m_macControl, 0, ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag , value.Length() , (char*) ((const char*)value) ) ;
+      ::SetControlData( (ControlHandle) m_macControl, 0, ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag , value.Length() , (char*) ((const char*)value) ) ;
   }
   else
   {
     STPTextPaneVars **tpvars;
         /* set up locals */
-    tpvars = (STPTextPaneVars **) GetControlReference(m_macControl);
+    tpvars = (STPTextPaneVars **) GetControlReference( (ControlHandle) m_macControl);
         /* set the text in the record */
     TXNSetData( (**tpvars).fTXNRec, kTXNTextData,  (const char*)value, value.Length(),
       kTXNStartOffset, kTXNEndOffset);
@@ -1834,14 +1834,14 @@ void wxTextCtrl::Copy()
             TEHandle teH ;
             long size ;
        
-      		 ::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+      		 ::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
     		TECopy( teH ) ;
     		ClearCurrentScrap();
     		TEToScrap() ;
     	}
     	else
     	{
-    	  mUPDoEditCommand( m_macControl , kmUPCopy ) ;
+    	  mUPDoEditCommand( (ControlHandle) m_macControl , kmUPCopy ) ;
     	}
 	}
 }
@@ -1855,7 +1855,7 @@ void wxTextCtrl::Cut()
             TEHandle teH ;
             long size ;
        
-       		::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+       		::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
     		TECut( teH ) ;
     		ClearCurrentScrap();
     		TEToScrap() ;
@@ -1863,7 +1863,7 @@ void wxTextCtrl::Cut()
     }
     	else
     	{
-    	  mUPDoEditCommand( m_macControl , kmUPCut ) ;
+    	  mUPDoEditCommand( (ControlHandle) m_macControl , kmUPCut ) ;
     	}
 	}
 }
@@ -1877,14 +1877,14 @@ void wxTextCtrl::Paste()
             TEHandle teH ;
             long size ;
      
-     		::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+     		::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
   		TEFromScrap() ;
   		TEPaste( teH ) ;
       MacRedrawControl() ;
   	}
    	else
    	{
-   	  mUPDoEditCommand( m_macControl , kmUPPaste ) ;
+   	  mUPDoEditCommand( (ControlHandle) m_macControl , kmUPPaste ) ;
    	}
 	}
 }
@@ -1943,9 +1943,9 @@ bool wxTextCtrl::CanPaste() const
 void wxTextCtrl::SetEditable(bool editable)
 {
     if ( editable )
-        UMAActivateControl( m_macControl ) ;
+        UMAActivateControl( (ControlHandle) m_macControl ) ;
     else
-        UMADeactivateControl( m_macControl ) ;
+        UMADeactivateControl( (ControlHandle) m_macControl ) ;
 }
 
 void wxTextCtrl::SetInsertionPoint(long pos)
@@ -1975,14 +1975,14 @@ long wxTextCtrl::GetLastPosition() const
    TEHandle teH ;
    long size ;
    
-   ::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+   ::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
    
-//   ::GetControlData( m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection , &size ) ;
+//   ::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection , &size ) ;
     return (**teH).teLength ;
   }
   else
   {
-     STPTextPaneVars**	tpvars = (STPTextPaneVars **) GetControlReference(m_macControl);
+     STPTextPaneVars**	tpvars = (STPTextPaneVars **) GetControlReference( (ControlHandle) m_macControl);
 
     int actualsize = 0 ;
   	Handle theText ;
@@ -2012,8 +2012,8 @@ void wxTextCtrl::Replace(long from, long to, const wxString& value)
    
    	selection.selStart = from ;
    	selection.selEnd = to ;
-   	::SetControlData( m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection ) ;
-		::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+   	::SetControlData( (ControlHandle) m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection ) ;
+		::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
    	TESetSelect( from , to  , teH ) ;
    	TEDelete( teH ) ;
 		TEInsert( value , value.Length() , teH ) ;
@@ -2036,8 +2036,8 @@ void wxTextCtrl::Remove(long from, long to)
    
    	selection.selStart = from ;
    	selection.selEnd = to ;
-   	::SetControlData( m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection ) ;
-	::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+   	::SetControlData( (ControlHandle) m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection ) ;
+	::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
    	TEDelete( teH ) ;
   }
   else
@@ -2055,19 +2055,19 @@ void wxTextCtrl::SetSelection(long from, long to)
    TEHandle teH ;
    long size ;
    
-   ::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+   ::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
    
    selection.selStart = from ;
    selection.selEnd = to ;
    
-   ::SetControlData( m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection ) ;
+   ::SetControlData( (ControlHandle) m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection ) ;
    TESetSelect( selection.selStart , selection.selEnd , teH ) ;
   }
   else
   {
     STPTextPaneVars **tpvars;
         /* set up our locals */
-    tpvars = (STPTextPaneVars **) GetControlReference(m_macControl);
+    tpvars = (STPTextPaneVars **) GetControlReference( (ControlHandle) m_macControl);
         /* and our drawing environment as the operation
         may force a redraw in the text area. */
     SetPort((**tpvars).fDrawingEnvironment);
@@ -2098,14 +2098,14 @@ void wxTextCtrl::WriteText(const wxString& text)
       TEHandle teH ;
       long size ;
           
-      ::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+      ::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
         TEInsert( value , value.Length() , teH ) ;
         }
         else
         {
         STPTextPaneVars **tpvars;
             /* set up locals */
-        tpvars = (STPTextPaneVars **) GetControlReference(m_macControl);
+        tpvars = (STPTextPaneVars **) GetControlReference( (ControlHandle) m_macControl);
             /* set the text in the record */
         TXNSetData( (**tpvars).fTXNRec, kTXNTextData,  (const char*)value, value.Length(),
           kTXNUseCurrentSelection, kTXNUseCurrentSelection);
@@ -2124,11 +2124,11 @@ void wxTextCtrl::Clear()
   if ( m_windowStyle & wxTE_PASSWORD )
   {
 
-    ::SetControlData( m_macControl, 0, ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag , 0 , (char*) ((const char*)NULL) ) ;
+    ::SetControlData( (ControlHandle) m_macControl, 0, ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag , 0 , (char*) ((const char*)NULL) ) ;
   }
   else
   {
-    mUPDoEditCommand( m_macControl , kmUPClear) ;
+    mUPDoEditCommand( (ControlHandle) m_macControl , kmUPClear) ;
   }
 	Refresh() ;
 }
@@ -2374,7 +2374,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
     short keychar ;
     keychar = short(ev->message & charCodeMask);
     keycode = short(ev->message & keyCodeMask) >> 8 ;
-    UMAHandleControlKey( m_macControl , keycode , keychar , ev->modifiers ) ;
+    UMAHandleControlKey( (ControlHandle) m_macControl , keycode , keychar , ev->modifiers ) ;
     if ( keychar >= 0x20 || event.KeyCode() == WXK_RETURN || event.KeyCode() == WXK_DELETE || event.KeyCode() == WXK_BACK)
     {
         wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, m_windowId);

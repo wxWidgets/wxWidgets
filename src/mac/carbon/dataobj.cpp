@@ -33,6 +33,7 @@
 #include "wx/dataobj.h"
 #include "wx/mstream.h"
 #include "wx/image.h"
+#include "wx/mac/private.h"
 
 // ----------------------------------------------------------------------------
 // functions

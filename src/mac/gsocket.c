@@ -29,6 +29,7 @@
     #define TRUE 1
   #endif
 #else
+  #include <MacHeaders.c>
   #define OTUNIXERRORS 1
   #include <OpenTransport.h>
   #include <OpenTransportProviders.h>

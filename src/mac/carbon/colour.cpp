@@ -22,9 +22,12 @@ IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
 
 // Colour
 
-static void wxComposeRGBColor( RGBColor * col , int red, int blue, int green ) ;
-static void wxComposeRGBColor( RGBColor * col , int red, int blue, int green ) 
+#include "wx/mac/private.h"
+
+static void wxComposeRGBColor( WXCOLORREF* color , int red, int blue, int green ) ;
+static void wxComposeRGBColor( WXCOLORREF* color , int red, int blue, int green ) 
 {
+    RGBColor* col = (RGBColor*) color ;
 	col->red = (red << 8) + red;
 	col->blue = (blue << 8) + blue;
 	col->green = (green << 8) + green;
@@ -55,7 +58,7 @@ wxColour::wxColour (const wxColour& col)
     m_blue = col.m_blue;
     m_isInit = col.m_isInit;
 
-    m_pixel = col.m_pixel;
+    memcpy( &m_pixel , &col.m_pixel , 6 ) ;
 }
 
 wxColour::wxColour (const wxColour* col)
@@ -65,7 +68,7 @@ wxColour::wxColour (const wxColour* col)
     m_blue = col->m_blue;
     m_isInit = col->m_isInit;
 
-    m_pixel = col->m_pixel;
+    memcpy( &m_pixel , &col->m_pixel , 6 ) ;
 }
 
 wxColour& wxColour::operator =(const wxColour& col)
@@ -75,7 +78,7 @@ wxColour& wxColour::operator =(const wxColour& col)
   m_blue = col.m_blue;
   m_isInit = col.m_isInit;
  
-  m_pixel = col.m_pixel;
+  memcpy( &m_pixel , &col.m_pixel , 6 ) ;
 
   return *this;
 }
@@ -113,4 +116,13 @@ void wxColour::Set (unsigned char r, unsigned char g, unsigned char b)
     m_isInit = TRUE;
 
 	wxComposeRGBColor( &m_pixel , m_red , m_blue , m_green ) ;
+}
+
+void wxColour::Set( const WXCOLORREF* color )
+{ 
+    RGBColor* col = (RGBColor*) color ;
+    memcpy( &m_pixel , color , 6 ) ;
+    m_red = col->red>>8 ;
+    m_blue = col->blue>>8 ;
+    m_green = col->green>>8 ;
 }
