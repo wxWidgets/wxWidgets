@@ -86,6 +86,7 @@ static RECT        g_paintStruct;
 wxWindowDC::wxWindowDC()
 {
     m_pCanvas = NULL;
+    m_PageSize.cx = m_PageSize.cy = 0;
 }
 
 wxWindowDC::wxWindowDC(
@@ -94,8 +95,12 @@ wxWindowDC::wxWindowDC(
 {
     ERRORID                         vError;
     wxString                        sError;
+    int                             nWidth, nHeight;
 
     m_pCanvas = pTheCanvas;
+    DoGetSize(&nWidth, &nHeight);
+    m_PageSize.cx = nWidth;
+    m_PageSize.cy = nHeight;
     m_hDC = (WXHDC) ::WinOpenWindowDC(GetWinHwnd(pTheCanvas) );
 
     //
@@ -109,6 +114,12 @@ wxWindowDC::wxWindowDC(
                            ,&m_PageSize
                            ,PU_PELS | GPIF_LONG | GPIA_ASSOC
                           );
+    if (!m_hPS)
+    {
+        vError = ::WinGetLastError(vHabmain);
+        sError = wxPMErrorToStr(vError);
+        wxLogError("Unable to create presentation space. Error: %s\n", sError.c_str());
+    }
     ::GpiAssociate(m_hPS, NULLHANDLE);
     ::GpiAssociate(m_hPS, m_hDC);
 
