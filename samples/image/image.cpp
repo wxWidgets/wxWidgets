@@ -101,7 +101,8 @@ END_EVENT_TABLE()
 MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
                     const wxPoint &pos, const wxSize &size )
         : wxScrolledWindow( parent, id, pos, size, wxSUNKEN_BORDER ),
-          m_bmpSmileXpm(smile_xpm), m_iconSmileXpm(smile_xpm)
+          m_bmpSmileXpm((const char **) smile_xpm),
+          m_iconSmileXpm((const char **) smile_xpm)
 {
     my_horse_png = (wxBitmap*) NULL;
     my_horse_jpeg = (wxBitmap*) NULL;
@@ -130,7 +131,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     // try to find the directory with our images
     wxString dir;
     if ( wxFile::Exists("./horse.png") )
-        dir = "./";
+        dir = "./";          
     else if ( wxFile::Exists("../horse.png") )
         dir = "../";
     else
@@ -188,13 +189,17 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
         my_horse_tiff = new wxBitmap( image.ConvertToBitmap() );
 #endif
 
-    image.LoadFile( dir + wxString("test.png") );
+    image.LoadFile( dir + wxString("test.pcx") );
     my_square = new wxBitmap( image.ConvertToBitmap() );
 
     CreateAntiAliasedBitmap();
 
     my_smile_xbm = new wxBitmap( (const char*)smile_bits, smile_width,
                                  smile_height, 1 );
+
+    // demonstrates XPM automatically using the mask when saving
+    if ( m_bmpSmileXpm.Ok() )
+        m_bmpSmileXpm.SaveFile("saved.xpm", wxBITMAP_TYPE_XPM);
 }
 
 MyCanvas::~MyCanvas()
@@ -284,7 +289,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     wxBitmap mono( 60,50,1 );
     wxMemoryDC memdc;
     memdc.SelectObject( mono );
-    memdc.SetPen( *wxTRANSPARENT_PEN );
+    memdc.SetPen( *wxBLACK_PEN );
     memdc.SetBrush( *wxWHITE_BRUSH );
     memdc.DrawRectangle( 0,0,60,50 );
     memdc.SetTextForeground( *wxBLACK );
