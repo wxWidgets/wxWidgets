@@ -33,6 +33,7 @@ rem just remove the *.pyd's
 elseiff "%1" == "d" then
 	shift
 	set CMD=del wxPython\*.pyd
+	set OTHERCMD=del wxPython\*.pdb
 
 rem touch all the *.i files so swig will regenerate
 elseiff "%1" == "t" then
