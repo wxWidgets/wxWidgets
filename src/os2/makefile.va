@@ -176,6 +176,7 @@ COMMONOBJS = \
   ..\common\$D\ctrlcmn.obj \
   ..\common\$D\ctrlsub.obj \
   ..\common\$D\date.obj \
+  ..\common\$D\datetime.obj \
   ..\common\$D\datstrm.obj \
   ..\common\$D\db.obj \
   ..\common\$D\dbtable.obj \
@@ -272,6 +273,7 @@ COMLIBOBJS1 = \
   ctrlcmn.obj \
   ctrlsub.obj \
   date.obj \
+  datetime.obj \
   datstrm.obj \
   db.obj \
   dbtable.obj \
@@ -306,10 +308,10 @@ COMLIBOBJS1 = \
   imagjpeg.obj \
   imagpcx.obj \
   imagpng.obj \
-  imagpnm.obj \
-  intl.obj
+  imagpnm.obj
 
 COMLIBOBJS2 = \
+  intl.obj \
   ipcbase.obj \
   layout.obj \
   lboxcmn.obj \
@@ -340,7 +342,6 @@ COMLIBOBJS2 = \
   stream.obj \
   string.obj \
   tbarbase.obj \
-  tbarsmpl.obj \
   textcmn.obj \
   textfile.obj \
   time.obj \
@@ -351,10 +352,10 @@ COMLIBOBJS2 = \
   url.obj \
   utilscmn.obj \
   valgen.obj \
-  validate.obj \
-  valtext.obj
+  validate.obj 
 
 COMLIBOBJS3 = \
+  valtext.obj \
   variant.obj \
   wfstream.obj \
   wincmn.obj \
@@ -579,6 +580,7 @@ $(COMLIBOBJS1):
   copy ..\common\$D\ctrlcmn.obj
   copy ..\common\$D\ctrlsub.obj
   copy ..\common\$D\date.obj
+  copy ..\common\$D\datetime.obj
   copy ..\common\$D\datstrm.obj
   copy ..\common\$D\db.obj
   copy ..\common\$D\dbtable.obj
@@ -614,9 +616,9 @@ $(COMLIBOBJS1):
   copy ..\common\$D\imagpcx.obj
   copy ..\common\$D\imagpng.obj
   copy ..\common\$D\imagpnm.obj
-  copy ..\common\$D\intl.obj
 
 $(COMLIBOBJS2):
+  copy ..\common\$D\intl.obj
   copy ..\common\$D\ipcbase.obj
   copy ..\common\$D\layout.obj
   copy ..\common\$D\lboxcmn.obj
@@ -647,7 +649,6 @@ $(COMLIBOBJS2):
   copy ..\common\$D\stream.obj
   copy ..\common\$D\string.obj
   copy ..\common\$D\tbarbase.obj
-  copy ..\common\$D\tbarsmpl.obj
   copy ..\common\$D\textcmn.obj
   copy ..\common\$D\textfile.obj
   copy ..\common\$D\time.obj
@@ -659,9 +660,9 @@ $(COMLIBOBJS2):
   copy ..\common\$D\utilscmn.obj
   copy ..\common\$D\valgen.obj
   copy ..\common\$D\validate.obj
-  copy ..\common\$D\valtext.obj
 
 $(COMLIBOBJS3):
+  copy ..\common\$D\valtext.obj
   copy ..\common\$D\variant.obj
   copy ..\common\$D\wfstream.obj
   copy ..\common\$D\wincmn.obj
