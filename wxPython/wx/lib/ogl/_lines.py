@@ -991,8 +991,8 @@ class LineShape(Shape):
             if self._to.GetAttachmentMode() == ATTACHMENT_MODE_NONE:
                 other_end_x, other_end_y = self._to.GetPerimeterPoint(self._to.GetX(), self._to.GetY(), fromX, fromY)
 
-            #print type(self._from), type(self._to), end_x, end_y, other_end_x, other_end_y
-            return end_x, end_y, other_end_x, other_end_y
+        return end_x, end_y, other_end_x, other_end_y
+
 
     def OnDraw(self, dc):
         if not self._lineControlPoints:
@@ -1146,7 +1146,7 @@ class LineShape(Shape):
         dc.SetBrush(wx.TRANSPARENT_BRUSH)
 
         if pt._type == CONTROL_POINT_LINE:
-            x, y = self._canvas.Snap()
+            x, y = self._canvas.Snap(x, y)
 
             pt.SetX(x)
             pt.SetY(y)
@@ -1170,7 +1170,7 @@ class LineShape(Shape):
 
         if pt._type == CONTROL_POINT_LINE:
             pt._originalPos = pt._point
-            x, y = self._canvas.Snap()
+            x, y = self._canvas.Snap(x, y)
 
             self.Erase(dc)
 
@@ -1202,7 +1202,7 @@ class LineShape(Shape):
             self.SetBrush(old_brush)
 
         if pt._type == CONTROL_POINT_ENDPOINT_FROM or pt._type == CONTROL_POINT_ENDPOINT_TO:
-            self._canvas.SetCursor(wx.Cursor(wx.CURSOR_BULLSEYE))
+            self._canvas.SetCursor(wx.StockCursor(wx.CURSOR_BULLSEYE))
             pt._oldCursor = wx.STANDARD_CURSOR
 
     def OnSizingEndDragLeft(self, pt, x, y, keys = 0, attachment = 0):
@@ -1212,7 +1212,7 @@ class LineShape(Shape):
         self.SetDisableLabel(False)
 
         if pt._type == CONTROL_POINT_LINE:
-            x, y = self._canvas.Snap()
+            x, y = self._canvas.Snap(x, y)
 
             rpt = wx.RealPoint(x, y)
 
