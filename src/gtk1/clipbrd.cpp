@@ -422,7 +422,8 @@ bool wxClipboard::Open()
     wxCHECK_MSG( !m_open, FALSE, _T("clipboard already open") );
   
     m_open = TRUE;
-  
+    UsePrimarySelection(FALSE);
+    
     return TRUE;
 }
 
@@ -547,7 +548,7 @@ bool wxClipboard::IsSupported( wxDataFormat format )
     m_waiting = TRUE;
 
     gtk_selection_convert( m_targetsWidget,
-			   g_clipboardAtom, 
+			   m_usePrimary?GDK_SELECTION_PRIMARY:g_clipboardAtom, 
 			   g_targetsAtom,
 			   GDK_CURRENT_TIME );
 
@@ -592,7 +593,7 @@ bool wxClipboard::GetData( wxDataObject *data )
     m_waiting = TRUE;
 
     gtk_selection_convert( m_clipboardWidget,
-			   g_clipboardAtom, 
+			   m_usePrimary?GDK_SELECTION_PRIMARY:g_clipboardAtom, 
 			   m_targetRequested,
 			   GDK_CURRENT_TIME );
   
