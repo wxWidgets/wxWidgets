@@ -461,7 +461,7 @@ class wxPythonDemo(wx.Frame):
         self.CreateStatusBar(1, wx.ST_SIZEGRIP)
 
         splitter = wx.SplitterWindow(self, -1)
-        splitter2 = wx.SplitterWindow(splitter, -1)
+        splitter2 = wx.SplitterWindow(splitter, -1) ##, size=(20,20))
 
         # Set up a log on the View Log Notebook page
         self.log = wx.TextCtrl(splitter2, -1,
@@ -895,6 +895,7 @@ class MySplashScreen(wx.SplashScreen):
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
     def OnClose(self, evt):
+        self.Hide()
         frame = wxPythonDemo(None, -1, "wxPython: (A Demonstration)")
         frame.Show()
         evt.Skip()  # Make sure the default handler runs too...

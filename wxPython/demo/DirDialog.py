@@ -32,5 +32,5 @@ methods; see the <code>DirDialog</code> documentation for specifics.
 if __name__ == '__main__':
     import sys,os
     import run
-    run.main(['', os.path.basename(sys.argv[0])])
+    run.main(['', os.path.basename(sys.argv[0])] + sys.argv[1:])
 

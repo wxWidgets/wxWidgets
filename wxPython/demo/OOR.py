@@ -151,5 +151,5 @@ and the second will show #2 (<i>working as of Python 2.3.2</i>)
 if __name__ == '__main__':
     import sys,os
     import run
-    run.main(['', os.path.basename(sys.argv[0])])
+    run.main(['', os.path.basename(sys.argv[0])] + sys.argv[1:])
 

@@ -849,7 +849,7 @@ V\xab\x95\xb2\xd9,y<\x1e2\x18\x0c\x8ak\xb5Z-9\x9dN*\x14\n\xdf\x9e\x9c$@*\x95\
 if __name__ == '__main__':
     import sys,os
     import run
-    run.main(['', os.path.basename(sys.argv[0])])
+    run.main(['', os.path.basename(sys.argv[0])] + sys.argv[1:])
 
 
 

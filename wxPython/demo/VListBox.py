@@ -14,7 +14,8 @@ class MyVListBox(wx.VListBox):
         if self.GetSelection() == n:
             c = wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHTTEXT)
         else:
-            c = self.GetForegroundColour()#wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHTTEXT) 
+            c = self.GetForegroundColour()#wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHTTEXT)
+        dc.SetFont(self.GetFont())
         dc.SetTextForeground(c)
         dc.DrawLabel(self._getItemText(n), rect,
                      wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL)
@@ -127,5 +128,5 @@ of HTML for each item when requested.
 if __name__ == '__main__':
     import sys,os
     import run
-    run.main(['', os.path.basename(sys.argv[0])])
+    run.main(['', os.path.basename(sys.argv[0])] + sys.argv[1:])
 

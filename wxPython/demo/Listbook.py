@@ -112,7 +112,7 @@ wx.ListCtrl instead of a set of tabs.
 if __name__ == '__main__':
     import sys,os
     import run
-    run.main(['', os.path.basename(sys.argv[0])])
+    run.main(['', os.path.basename(sys.argv[0])] + sys.argv[1:])
 
 
 

@@ -40,9 +40,10 @@ class Log:
 
 
 class RunDemoApp(wx.App):
-    def __init__(self, name, module):
+    def __init__(self, name, module, useShell):
         self.name = name
         self.demoModule = module
+        self.useShell = useShell
         wx.App.__init__(self, 0)
 
 
@@ -62,6 +63,11 @@ class RunDemoApp(wx.App):
         self.Bind(wx.EVT_MENU, self.OnButton, item)
         menuBar.Append(menu, "&File")
 
+        ns = {}
+        ns['app'] = self
+        ns['module'] = self.demoModule
+        ns['frame'] = frame
+        
         frame.SetMenuBar(menuBar)
         frame.Show(True)
         frame.Bind(wx.EVT_CLOSE, self.OnCloseFrame)
@@ -75,11 +81,15 @@ class RunDemoApp(wx.App):
             frame.SetSize((640, 480))
             win.SetFocus()
             self.window = win
+            ns['win'] = win
+            frect = frame.GetRect()
 
         else:
             # otherwise the demo made its own frame, so just put a
             # button in this one
             if hasattr(frame, 'otherWin'):
+                ns['win'] = frame.otherWin
+                frect = frame.otherWin.GetRect()
                 p = wx.Panel(frame, -1)
                 b = wx.Button(p, -1, " Exit ", (10,10))
                 p.Fit()
@@ -96,6 +106,23 @@ class RunDemoApp(wx.App):
         self.frame = frame
         #wx.Log_SetActiveTarget(wx.LogStderr())
         #wx.Log_SetTraceMask(wx.TraceMessages)
+
+        if self.useShell:
+            # Make a PyShell window, and position it below our test window
+            from wx import py
+            shell = py.shell.ShellFrame(None, locals=ns)
+            frect.OffsetXY(0, frect.height)
+            frect.height = 400
+            shell.SetRect(frect)
+            shell.Show()
+
+            # Hook the close event of the test window so that we close
+            # the shell at the same time
+            def CloseShell(evt):
+                shell.Close()
+                evt.Skip()
+            frame.Bind(wx.EVT_CLOSE, CloseShell)
+                    
         return True
 
 
@@ -113,6 +140,13 @@ class RunDemoApp(wx.App):
 
 
 def main(argv):
+    useShell = False
+    for x in range(len(sys.argv)):
+        if sys.argv[x] in ['--shell', '-shell', '-s']:
+            useShell = True
+            del sys.argv[x]
+            break
+            
     if len(argv) < 2:
         print "Please specify a demo module name on the command-line"
         raise SystemExit
@@ -121,7 +155,7 @@ def main(argv):
     module = __import__(name)
 
 
-    app = RunDemoApp(name, module)
+    app = RunDemoApp(name, module, useShell)
     app.MainLoop()
 
 

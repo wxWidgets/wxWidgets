@@ -5,7 +5,10 @@ import  wx
 
 class MySplitter(wx.SplitterWindow):
     def __init__(self, parent, ID, log):
-        wx.SplitterWindow.__init__(self, parent, ID)
+        wx.SplitterWindow.__init__(self, parent, ID,
+                                   style = wx.SP_3D
+                                   #| wx.SP_LIVE_UPDATE
+                                   )
         self.log = log
         
         self.Bind(wx.EVT_SPLITTER_SASH_POS_CHANGED, self.OnSashChanged)
@@ -13,13 +16,12 @@ class MySplitter(wx.SplitterWindow):
 
     def OnSashChanged(self, evt):
         self.log.WriteText("sash changed to %s\n" % str(evt.GetSashPosition()))
-        # uncomment this to not allow the change
-        #evt.SetSashPosition(-1)
 
     def OnSashChanging(self, evt):
         self.log.WriteText("sash changing to %s\n" % str(evt.GetSashPosition()))
         # uncomment this to not allow the change
         #evt.SetSashPosition(-1)
+
 
 #---------------------------------------------------------------------------
 
@@ -28,14 +30,15 @@ def runTest(frame, nb, log):
 
     p1 = wx.Window(splitter, -1)
     p1.SetBackgroundColour(wx.RED)
-    wx.StaticText(p1, -1, "Panel One", (5,5)).SetBackgroundColour(wx.RED)
+    wx.StaticText(p1, -1, "Panel One", (5,5))#.SetBackgroundColour(wx.RED)
 
     p2 = wx.Window(splitter, -1)
     p2.SetBackgroundColour(wx.BLUE)
-    wx.StaticText(p2, -1, "Panel Two", (5,5)).SetBackgroundColour(wx.BLUE)
+    p2.SetForegroundColour(wx.WHITE)
+    wx.StaticText(p2, -1, "Panel Two", (5,5))#.SetBackgroundColour(wx.BLUE)
 
     splitter.SetMinimumPaneSize(20)
-    splitter.SplitVertically(p1, p2, 100)
+    splitter.SplitVertically(p1, p2, -100)
 
     return splitter
 
@@ -52,5 +55,5 @@ either programmatically or via the wx.SplitterWindow user interface.
 if __name__ == '__main__':
     import sys,os
     import run
-    run.main(['', os.path.basename(sys.argv[0])])
+    run.main(['', os.path.basename(sys.argv[0])] + sys.argv[1:])
 

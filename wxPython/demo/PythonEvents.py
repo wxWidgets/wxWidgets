@@ -104,5 +104,5 @@ is required if you used the *.Bind() method of setting up event handlers.
 if __name__ == '__main__':
     import sys,os
     import run
-    run.main(['', os.path.basename(sys.argv[0])])
+    run.main(['', os.path.basename(sys.argv[0])] + sys.argv[1:])
 
