@@ -684,6 +684,8 @@ static long map_to_wx_keysym( GdkEventKey *event )
         case GDK_F12:           key_code = WXK_F12;         break;
         default:
         {
+        if (event->length == 1)
+        {
             if (event->length == 1)
             {
                 key_code = (unsigned char)*event->string;
@@ -1713,17 +1715,18 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget,
     }
 #endif // wxUSE_CARET
 
-    
     wxWindowGTK *active = wxGetTopLevelParent(win);
     if ( active != g_activeFrame )
     {
         if ( g_activeFrame )
         {
+            wxLogTrace(wxT("activate"), wxT("Deactivating frame %p (from focus_in)"), g_activeFrame);
             wxActivateEvent event(wxEVT_ACTIVATE, FALSE, g_activeFrame->GetId());
             event.SetEventObject(g_activeFrame);
             g_activeFrame->GetEventHandler()->ProcessEvent(event);
         }
 
+        wxLogTrace(wxT("activate"), wxT("Activating frame %p (from focus_in)"), active);
         g_activeFrame = active;
         wxActivateEvent event(wxEVT_ACTIVATE, TRUE, g_activeFrame->GetId());
         event.SetEventObject(g_activeFrame);
@@ -1761,9 +1764,6 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEvent *WXUNUSED
     if (!win->m_hasVMT) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;
 
-    //wxASSERT_MSG( wxGetTopLevelParent(win) == g_activeFrame, wxT("unfocusing window that haven't gained focus properly") )
-    g_activeFrameLostFocus = TRUE;
-
     // VZ: this is really weird but GTK+ seems to call us from inside
     //     gtk_widget_grab_focus(), i.e. it first sends "focus_out" signal to
     //     this widget and then "focus_in". This is totally unexpected and
@@ -1774,6 +1774,12 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEvent *WXUNUSED
         gs_widgetLastFocus = NULL;
 
         return FALSE;
+    }
+
+    if ( !g_activeFrameLostFocus && g_activeFrame )
+    {
+        wxASSERT_MSG( wxGetTopLevelParent(win) == g_activeFrame, wxT("unfocusing window that haven't gained focus properly") )
+        g_activeFrameLostFocus = TRUE;
     }
 
     // if the focus goes out of our app alltogether, OnIdle() will send
@@ -2825,6 +2831,7 @@ void wxWindowGTK::OnInternalIdle()
     {
         if ( g_activeFrame )
         {
+            wxLogTrace(wxT("activate"), wxT("Deactivating frame %p (from idle)"), g_activeFrame);
             wxActivateEvent event(wxEVT_ACTIVATE, FALSE, g_activeFrame->GetId());
             event.SetEventObject(g_activeFrame);
             g_activeFrame->GetEventHandler()->ProcessEvent(event);
