@@ -1217,6 +1217,8 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
         return true;
     }
     
+#endif  // #ifndef  __WXGTK20__
+
     // Only send wxEVT_CHAR event if not processed yet. Thus, ALT-x
     // will only be sent if it is not in an accelerator table.
     if (!ret)
@@ -1262,7 +1264,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
             }
         }
     }
-#endif  // #ifndef  __WXGTK20__
+
 
 
 #if wxUSE_ACCEL
