@@ -699,11 +699,11 @@ public:
 
     %extend {
         int GetUniChar() {
-        #if wxUSE_UNICODE
+        %#if wxUSE_UNICODE
             return self->m_uniChar;
-        #else
+        %#else
             return 0;
-        #endif
+        %#endif
         }
     }
     

@@ -571,7 +571,7 @@ void wxPy_ReinitStockObjects(bool init)
     obj = PyDict_GetItemString(wxPython_dict, dropwx(#name)); \
     wxCHECK_RET(obj != NULL, wxT("Unable to find stock object for " #name)) \
     wxCHECK_RET(wxPySwigInstance_Check(obj), wxT("Not a swig instance: " #name)); \
-    ptrobj = wxPyMakeSwigPtr((void*)name, #classname); \
+    ptrobj = wxPyMakeSwigPtr((void*)name, wxT(#classname)); \
     PyObject_SetAttrString(obj, "this", ptrobj); \
     Py_DECREF(ptrobj); }
 
@@ -580,7 +580,7 @@ void wxPy_ReinitStockObjects(bool init)
     obj = PyDict_GetItemString(wxPython_dict, dropwx(#name)); \
     wxCHECK_RET(obj != NULL, wxT("Unable to find stock object for " #name)) \
     wxCHECK_RET(wxPySwigInstance_Check(obj), wxT("Not a swig instance: " #name)); \
-    ptrobj = wxPyMakeSwigPtr((void*)&name, #classname); \
+    ptrobj = wxPyMakeSwigPtr((void*)&name, wxT(#classname)); \
     PyObject_SetAttrString(obj, "this", ptrobj); \
     Py_DECREF(ptrobj); }
 

@@ -929,11 +929,11 @@ void wxEvtHandler__setOORInfo(wxEvtHandler *self,PyObject *_self){
             }
         }
 int wxKeyEvent_GetUniChar(wxKeyEvent *self){
-        
-
-
+        #if wxUSE_UNICODE
+            return self->m_uniChar;
+        #else
             return 0;
-        
+        #endif
         }
 void wxSizeEvent_SetSize(wxSizeEvent *self,wxSize size){
             self->m_size = size;
