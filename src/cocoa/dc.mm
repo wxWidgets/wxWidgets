@@ -12,6 +12,8 @@
 #include "wx/dc.h"
 #include "wx/log.h"
 
+#include "wx/cocoa/autorelease.h"
+
 #import <AppKit/NSBezierPath.h>
 #import <AppKit/NSTextStorage.h>
 #import <AppKit/NSLayoutManager.h>
@@ -83,6 +85,7 @@ void wxDC::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 
 void wxDC::DoGetTextExtent(const wxString& text, wxCoord *x, wxCoord *y, wxCoord *descent, wxCoord *externalLeading, wxFont *theFont) const
 {
+    wxAutoNSAutoreleasePool pool;
 // FIXME: Cache this so it can be used for DoDrawText
     wxASSERT_MSG(sm_cocoaNSTextStorage && sm_cocoaNSLayoutManager && sm_cocoaNSTextContainer, "Text system has not been initialized.  BAD PROGRAMMER!");
     NSAttributedString *attributedString = [[NSAttributedString alloc]

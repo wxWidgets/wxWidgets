@@ -14,6 +14,8 @@
 #include "wx/settings.h"
 #include "wx/log.h"
 
+#include "wx/cocoa/autorelease.h"
+
 #import <AppKit/NSPanel.h>
 #import <AppKit/NSApplication.h>
 
@@ -44,6 +46,7 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID winid,
            long style,
            const wxString& name)
 {
+    wxAutoNSAutoreleasePool pool;
     wxTopLevelWindows.Append(this);
 
     if(!CreateBase(parent,winid,pos,size,style,wxDefaultValidator,name))
@@ -108,6 +111,7 @@ bool wxDialog::Show(bool show)
     {
         if(show)
         {
+            wxAutoNSAutoreleasePool pool;
             wxModalDialogs.Append(this);
             wxLogDebug("runModal");
             [wxTheApp->GetNSApplication() runModalForWindow:m_cocoaNSWindow];

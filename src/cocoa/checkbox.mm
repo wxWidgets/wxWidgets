@@ -13,6 +13,8 @@
 #include "wx/checkbox.h"
 #include "wx/log.h"
 
+#include "wx/cocoa/autorelease.h"
+
 #import <AppKit/NSButton.h>
 #import <Foundation/NSString.h>
 
@@ -29,6 +31,7 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID winid,
            const wxValidator& validator,
            const wxString& name)
 {
+    wxAutoNSAutoreleasePool pool;
     if(!CreateControl(parent,winid,pos,size,style,validator,name))
         return false;
     m_cocoaNSView = NULL;

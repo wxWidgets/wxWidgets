@@ -16,6 +16,8 @@
 #include "wx/log.h"
 #include "wx/statusbr.h"
 
+#include "wx/cocoa/autorelease.h"
+
 #import <AppKit/NSWindow.h>
 #import <AppKit/NSApplication.h>
 
@@ -73,6 +75,7 @@ void wxFrame::DetachMenuBar()
 
 bool wxFrame::Show(bool show)
 {
+    wxAutoNSAutoreleasePool pool;
     bool ret = wxFrameBase::Show(show);
     if(show && GetMenuBar())
         [wxTheApp->GetNSApplication() setMenu:GetMenuBar()->GetNSMenu() ];

@@ -24,6 +24,7 @@
 
 #include "wx/cocoa/NSMenu.h"
 #include "wx/cocoa/ObjcPose.h"
+#include "wx/cocoa/autorelease.h"
 
 #import <Foundation/NSString.h>
 #import <AppKit/NSMenu.h>
@@ -53,6 +54,7 @@ WX_IMPLEMENT_POSER(wxPoserNSMenu);
 // ============================================================================
 bool wxCocoaNSMenu::CocoaCreate(const wxString &title)
 {
+    wxAutoNSAutoreleasePool pool;
     wxLogDebug("CocoaCreate: "+title);
     m_cocoaNSMenu = [[NSMenu alloc] initWithTitle: [NSString stringWithCString: title.c_str()]];
     return true;

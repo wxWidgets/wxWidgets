@@ -28,6 +28,8 @@
     #include "wx/app.h"
 #endif //WX_PRECOMP
 
+#include "wx/cocoa/autorelease.h"
+
 #import <AppKit/NSView.h>
 #import <AppKit/NSWindow.h>
 // ----------------------------------------------------------------------------
@@ -63,6 +65,7 @@ bool wxTopLevelWindowCocoa::Create(wxWindow *parent,
                                  long style,
                                  const wxString& name)
 {
+    wxAutoNSAutoreleasePool pool;
     wxTopLevelWindows.Append(this);
 
     if(!CreateBase(parent,winid,pos,size,style,wxDefaultValidator,name))
@@ -94,6 +97,7 @@ bool wxTopLevelWindowCocoa::Create(wxWindow *parent,
 
 wxTopLevelWindowCocoa::~wxTopLevelWindowCocoa()
 {
+    wxAutoNSAutoreleasePool pool;
     // Hand ownership of the content view to wxWindow so it can destroy
     // itself properly.
     NSView *view = [m_cocoaNSView retain];
@@ -169,6 +173,7 @@ void wxTopLevelWindowCocoa::Restore()
 
 bool wxTopLevelWindowCocoa::Show(bool show)
 {
+    wxAutoNSAutoreleasePool pool;
     if(show)
         [m_cocoaNSWindow makeKeyAndOrderFront:m_cocoaNSWindow];
     else

@@ -12,6 +12,8 @@
 #include "wx/app.h"
 #include "wx/stattext.h"
 
+#include "wx/cocoa/autorelease.h"
+
 #import <Foundation/NSString.h>
 #import <AppKit/NSTextField.h>
 
@@ -27,6 +29,7 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID winid,
            long style,
            const wxString& name)
 {
+    wxAutoNSAutoreleasePool pool;
     if(!CreateControl(parent,winid,pos,size,style,wxDefaultValidator,name))
         return false;
     m_cocoaNSView = NULL;

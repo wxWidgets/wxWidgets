@@ -14,6 +14,8 @@
 
 #include "wx/cocoa/string.h"
 
+#include "wx/cocoa/autorelease.h"
+
 #import <Foundation/NSString.h>
 #import <AppKit/NSTextField.h>
 
@@ -30,6 +32,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID winid,
             const wxValidator& validator,
             const wxString& name)
 {
+    wxAutoNSAutoreleasePool pool;
     if(!CreateControl(parent,winid,pos,size,style,validator,name))
         return false;
     m_cocoaNSView = NULL;
@@ -113,6 +116,7 @@ void wxTextCtrl::Replace(long, long, wxString const&)
 
 void wxTextCtrl::SetValue(wxString const& value)
 {
+    wxAutoNSAutoreleasePool pool;
     [GetNSTextField() setStringValue: wxNSStringWithWxString(value)];
 }
 
@@ -181,6 +185,7 @@ bool wxTextCtrl::CanUndo() const
 
 wxString wxTextCtrl::GetValue() const
 {
+    wxAutoNSAutoreleasePool pool;
     return wxString([[GetNSTextField() stringValue] lossyCString]);
 }
 

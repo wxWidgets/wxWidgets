@@ -12,6 +12,8 @@
 #include "wx/app.h"
 #include "wx/statbox.h"
 
+#include "wx/cocoa/autorelease.h"
+
 #import <AppKit/NSBox.h>
 #import <Foundation/NSString.h>
 
@@ -27,6 +29,7 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID winid,
            long style, const wxValidator& validator,
            const wxString& name)
 {
+    wxAutoNSAutoreleasePool pool;
     if(!CreateControl(parent,winid,pos,size,style,validator,name))
         return false;
     m_cocoaNSView = NULL;

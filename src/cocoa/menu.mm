@@ -23,6 +23,8 @@
     #include "wx/log.h"
 #endif // WX_PRECOMP
 
+#include "wx/cocoa/autorelease.h"
+
 #import <Foundation/NSString.h>
 #import <AppKit/NSMenu.h>
 
@@ -53,6 +55,7 @@ wxMenu::~wxMenu()
 
 bool wxMenu::DoAppend(wxMenuItem *item)
 {
+    wxAutoNSAutoreleasePool pool;
     if(!wxMenuBase::DoAppend(item))
         return false;
     [m_cocoaNSMenu addItem: item->GetNSMenuItem()];
@@ -61,6 +64,7 @@ bool wxMenu::DoAppend(wxMenuItem *item)
 
 bool wxMenu::DoInsert(unsigned long pos, wxMenuItem *item)
 {
+    wxAutoNSAutoreleasePool pool;
     if(!wxMenuBase::DoInsert(pos,item))
         return false;
     [m_cocoaNSMenu insertItem:item->GetNSMenuItem() atIndex:pos];
@@ -69,6 +73,7 @@ bool wxMenu::DoInsert(unsigned long pos, wxMenuItem *item)
 
 wxMenuItem* wxMenu::DoRemove(wxMenuItem *item)
 {
+    wxAutoNSAutoreleasePool pool;
     wxMenuItem *retitem = wxMenuBase::DoRemove(item);
     wxASSERT(retitem->GetNSMenuItem());
     [m_cocoaNSMenu removeItem:retitem->GetNSMenuItem()];
@@ -93,6 +98,7 @@ wxMenuBar::~wxMenuBar()
 
 bool wxMenuBar::Append( wxMenu *menu, const wxString &title )
 {
+    wxAutoNSAutoreleasePool pool;
     wxLogDebug("append menu=%p, title=%s",menu,title.c_str());
     if(!wxMenuBarBase::Append(menu,title))
         return false;
@@ -112,6 +118,7 @@ bool wxMenuBar::Append( wxMenu *menu, const wxString &title )
 
 bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
 {
+    wxAutoNSAutoreleasePool pool;
     wxLogDebug("insert pos=%lu, menu=%p, title=%s",pos,menu,title.c_str());
     if(!wxMenuBarBase::Insert(pos,menu,title))
         return false;

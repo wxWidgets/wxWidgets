@@ -12,6 +12,8 @@
 #include "wx/window.h"
 #include "wx/log.h"
 
+#include "wx/cocoa/autorelease.h"
+
 #import <Appkit/NSView.h>
 #import <AppKit/NSEvent.h>
 
@@ -64,6 +66,7 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID winid,
 // Destructor
 wxWindow::~wxWindow()
 {
+    wxAutoNSAutoreleasePool pool;
     DestroyChildren();
 
     if(m_parent)
@@ -244,6 +247,7 @@ bool wxWindow::Close(bool force)
 
 bool wxWindow::Show(bool show)
 {
+    wxAutoNSAutoreleasePool pool;
     // If the window is marked as visible, then it shouldn't have a dummy view
     // If the window is marked hidden, then it should have a dummy view
     wxASSERT_MSG( (m_isShown && !m_dummyNSView) || (!m_isShown && m_dummyNSView),"wxWindow: m_isShown does not agree with m_dummyNSView");
@@ -485,6 +489,7 @@ void wxWindow::Clear()
 // Raise the window to the top of the Z order
 void wxWindow::Raise()
 {
+    wxAutoNSAutoreleasePool pool;
     NSView *nsview = m_dummyNSView?m_dummyNSView:m_cocoaNSView;
     NSView *superview = [nsview superview];
     [nsview retain];

@@ -14,6 +14,8 @@
 #include "wx/gdicmn.h"
 #include "wx/colour.h"
 
+#include "wx/cocoa/autorelease.h"
+
 IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
 
 wxColour::wxColour ()
@@ -65,6 +67,7 @@ wxColour::~wxColour ()
 
 void wxColour::Set (unsigned char r, unsigned char g, unsigned char b)
 {
+    wxAutoNSAutoreleasePool pool;
     [m_cocoaNSColor release];
     m_cocoaNSColor = [[NSColor colorWithCalibratedRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1.0] retain];
     m_red = r;

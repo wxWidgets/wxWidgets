@@ -16,6 +16,8 @@
     #include "wx/log.h"
 #endif
 
+#include "wx/cocoa/autorelease.h"
+
 #import <AppKit/NSButton.h>
 #include "wx/cocoa/string.h"
 
@@ -29,6 +31,7 @@ bool wxButton::Create(wxWindow *parent, wxWindowID winid,
             const wxSize& size, long style,
             const wxValidator& validator, const wxString& name)
 {
+    wxAutoNSAutoreleasePool pool;
     wxLogDebug("Creating control with id=%d",winid);
     if(!CreateControl(parent,winid,pos,size,style,validator,name))
         return false;
