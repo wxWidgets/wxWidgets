@@ -184,7 +184,7 @@ cd bld
 ../configure --with-gtk \
 	--prefix=%{wxpref} \
 	--enable-monolithic \
-	--enable-rpath=%{wxpref}/lib \
+	--disable-rpath \
 	--with-opengl \
 	--enable-geometry \
 	--enable-optimise \
@@ -224,8 +224,9 @@ cd $WXDIR/wxPython
 	UNICODE=%{unicode} \
 	EP_ADD_OPTS=1 \
 	NO_SCRIPTS=1 \
-	WX_CONFIG="$WXDIR/bld/wx-config --inplace" \
-       	build
+	WX_CONFIG="$WXDIR/bld/wx-config --no_rpath" \
+       	build_ext --rpath=%{wxpref}/lib \
+	build
 
 
 
@@ -250,7 +251,8 @@ cd $WXDIR/wxPython
 	UNICODE=%{unicode} \
 	EP_ADD_OPTS=1 \
 	NO_SCRIPTS=1 \
-	WX_CONFIG="$RPM_BUILD_ROOT%{wxpref}/bin/wx-config --prefix=$RPM_BUILD_ROOT%{wxpref}" \
+	WX_CONFIG="$RPM_BUILD_ROOT%{wxpref}/bin/wx-config --prefix=$RPM_BUILD_ROOT%{wxpref} --no_rpath" \
+       	build_ext --rpath=%{wxpref}/lib \
 	install \
 	--root=$RPM_BUILD_ROOT
 
