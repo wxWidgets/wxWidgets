@@ -370,7 +370,12 @@ HTMLOBJS = ..\html\$D\helpctrl.obj \
 OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) $(HTMLOBJS)
 
 # Normal, static library
-all:    dirs $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) png zlib xpm jpeg tiff $(LIBTARGET)
+all:    setuph dirs $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) png zlib xpm jpeg tiff $(LIBTARGET)
+
+setuph:
+    cd $(WXDIR)\include\wx\msw
+    if not exist setup.h copy setup0.h setup.h
+    cd $(WXDIR)\src\msw
 
 dirs: $(MSWDIR)\$D $(COMMDIR)\$D $(GENDIR)\$D $(OLEDIR)\$D $(HTMLDIR)\$D
 
