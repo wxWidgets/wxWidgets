@@ -636,13 +636,6 @@ void wxHtmlWindow::OnDraw(wxDC& dc)
     if (m_tmpCanDrawLocks > 0) return;
 
     dc.SetMapMode(wxMM_TEXT);
-#if 0
-/* VS - I don't think this is neccessary any longer
-        MSC_VER 1200 means MSVC 6.0 and it works fine */
-#if defined(_MSC_VER) && (_MSC_VER == 1200)
-    ::SetMapMode((HDC)dc.GetHDC(), MM_TEXT);
-#endif
-#endif
     dc.SetBackgroundMode(wxTRANSPARENT);
     GetViewStart(&x, &y);
 
@@ -686,6 +679,8 @@ void wxHtmlWindow::OnMouseEvent(wxMouseEvent& event)
             wxHtmlCell *cell = m_Cell->FindCellByPos(pos.x, pos.y);
 
             // VZ: is it possible that we don't find anything at all?
+            // VS: yes. FindCellByPos returns terminal cell and
+            //     containers may have empty borders
             if ( cell )
                 OnCellClicked(cell, pos.x, pos.y, event);
         }
