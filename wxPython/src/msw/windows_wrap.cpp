@@ -5808,6 +5808,31 @@ static PyObject *_wrap_SplitterWindow_ReplaceWindow(PyObject *self, PyObject *ar
 }
 
 
+static PyObject *_wrap_SplitterWindow_UpdateSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxSplitterWindow *arg1 = (wxSplitterWindow *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:SplitterWindow_UpdateSize",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxSplitterWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->UpdateSize();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_SplitterWindow_IsSplit(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSplitterWindow *arg1 = (wxSplitterWindow *) 0 ;
@@ -23451,6 +23476,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SplitterWindow_SplitHorizontally", (PyCFunction) _wrap_SplitterWindow_SplitHorizontally, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"SplitterWindow_Unsplit", (PyCFunction) _wrap_SplitterWindow_Unsplit, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"SplitterWindow_ReplaceWindow", (PyCFunction) _wrap_SplitterWindow_ReplaceWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SplitterWindow_UpdateSize", (PyCFunction) _wrap_SplitterWindow_UpdateSize, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"SplitterWindow_IsSplit", (PyCFunction) _wrap_SplitterWindow_IsSplit, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"SplitterWindow_SetSashSize", (PyCFunction) _wrap_SplitterWindow_SetSashSize, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"SplitterWindow_SetBorderSize", (PyCFunction) _wrap_SplitterWindow_SetBorderSize, METH_VARARGS | METH_KEYWORDS },

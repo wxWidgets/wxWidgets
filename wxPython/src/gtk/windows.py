@@ -668,12 +668,20 @@ SPLIT_DRAG_NONE = _windows.SPLIT_DRAG_NONE
 SPLIT_DRAG_DRAGGING = _windows.SPLIT_DRAG_DRAGGING
 SPLIT_DRAG_LEFT_DOWN = _windows.SPLIT_DRAG_LEFT_DOWN
 class SplitterWindow(core.Window):
+    """
+    wx.SplitterWindow manages up to two subwindows or panes,
+    with an optional vertical or horizontal split which can be
+    used with the mouse or programmatically.
+
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSplitterWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
         __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=SP_3D, String name=SplitterNameStr) -> SplitterWindow
+
+        Constructor.  Creates and shows a SplitterWindow.
         """
         if kwargs.has_key('point'): kwargs['pos'] = kwargs['point']
         newobj = _windows.new_SplitterWindow(*args, **kwargs)
@@ -686,87 +694,254 @@ class SplitterWindow(core.Window):
         """
         Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=SP_3D, String name=SplitterNameStr) -> bool
+
+        Create the GUI part of the SplitterWindow for the 2-phase create.
         """
         return _windows.SplitterWindow_Create(*args, **kwargs)
 
     def GetWindow1(*args, **kwargs):
-        """GetWindow1() -> Window"""
+        """
+        GetWindow1() -> Window
+
+        Gets the only or left/top pane.
+        """
         return _windows.SplitterWindow_GetWindow1(*args, **kwargs)
 
     def GetWindow2(*args, **kwargs):
-        """GetWindow2() -> Window"""
+        """
+        GetWindow2() -> Window
+
+        Gets the right/bottom pane.
+        """
         return _windows.SplitterWindow_GetWindow2(*args, **kwargs)
 
     def SetSplitMode(*args, **kwargs):
-        """SetSplitMode(int mode)"""
+        """
+        SetSplitMode(int mode)
+
+        Sets the split mode.  The mode can be wx.SPLIT_VERTICAL or
+        wx.SPLIT_HORIZONTAL.  This only sets the internal variable;
+        does not update the display.
+        """
         return _windows.SplitterWindow_SetSplitMode(*args, **kwargs)
 
     def GetSplitMode(*args, **kwargs):
-        """GetSplitMode() -> int"""
+        """
+        GetSplitMode() -> int
+
+        Gets the split mode
+        """
         return _windows.SplitterWindow_GetSplitMode(*args, **kwargs)
 
     def Initialize(*args, **kwargs):
-        """Initialize(Window window)"""
+        """
+        Initialize(Window window)
+
+        Initializes the splitter window to have one pane.  This
+        should be called if you wish to initially view only a single
+        pane in the splitter window.
+        """
         return _windows.SplitterWindow_Initialize(*args, **kwargs)
 
     def SplitVertically(*args, **kwargs):
-        """SplitVertically(Window window1, Window window2, int sashPosition=0) -> bool"""
+        """
+        SplitVertically(Window window1, Window window2, int sashPosition=0) -> bool
+
+        Initializes the left and right panes of the splitter window.
+
+            window1       The left pane.
+            window2       The right pane.
+            sashPosition  The initial position of the sash. If this
+                          value is positive, it specifies the size
+                          of the left pane. If it is negative, it is
+                          absolute value gives the size of the right
+                          pane. Finally, specify 0 (default) to
+                          choose the default position (half of the
+                          total window width).
+
+        Returns True if successful, False otherwise (the window was
+        already split).
+
+        SplitVertically should be called if you wish to initially
+        view two panes. It can also be called at any subsequent
+        time, but the application should check that the window is
+        not currently split using IsSplit.
+        """
         return _windows.SplitterWindow_SplitVertically(*args, **kwargs)
 
     def SplitHorizontally(*args, **kwargs):
-        """SplitHorizontally(Window window1, Window window2, int sashPosition=0) -> bool"""
+        """
+        SplitHorizontally(Window window1, Window window2, int sashPosition=0) -> bool
+
+        Initializes the top and bottom panes of the splitter window.
+
+            window1       The top pane.
+            window2       The bottom pane.
+            sashPosition  The initial position of the sash. If this
+                          value is positive, it specifies the size
+                          of the upper pane. If it is negative, it
+                          is absolute value gives the size of the
+                          lower pane. Finally, specify 0 (default)
+                          to choose the default position (half of
+                          the total window height).
+
+        Returns True if successful, False otherwise (the window was
+        already split).
+
+        SplitHorizontally should be called if you wish to initially
+        view two panes. It can also be called at any subsequent
+        time, but the application should check that the window is
+        not currently split using IsSplit.
+        """
         return _windows.SplitterWindow_SplitHorizontally(*args, **kwargs)
 
     def Unsplit(*args, **kwargs):
-        """Unsplit(Window toRemove=None) -> bool"""
+        """
+        Unsplit(Window toRemove=None) -> bool
+
+        Unsplits the window.  Pass the pane to remove, or None to
+        remove the right or bottom pane.  Returns True if
+        successful, False otherwise (the window was not split).
+
+        This function will not actually delete the pane being
+        removed; it sends EVT_SPLITTER_UNSPLIT which can be handled
+        for the desired behaviour. By default, the pane being
+        removed is only hidden.
+        """
         return _windows.SplitterWindow_Unsplit(*args, **kwargs)
 
     def ReplaceWindow(*args, **kwargs):
-        """ReplaceWindow(Window winOld, Window winNew) -> bool"""
+        """
+        ReplaceWindow(Window winOld, Window winNew) -> bool
+
+        This function replaces one of the windows managed by the
+        SplitterWindow with another one. It is in general better to
+        use it instead of calling Unsplit() and then resplitting the
+        window back because it will provoke much less flicker. It is
+        valid to call this function whether the splitter has two
+        windows or only one.
+
+        Both parameters should be non-None and winOld must specify
+        one of the windows managed by the splitter. If the
+        parameters are incorrect or the window couldn't be replaced,
+        False is returned. Otherwise the function will return True,
+        but please notice that it will not Destroy the replaced
+        window and you may wish to do it yourself.
+        """
         return _windows.SplitterWindow_ReplaceWindow(*args, **kwargs)
 
+    def UpdateSize(*args, **kwargs):
+        """
+        UpdateSize()
+
+        Causes any pending sizing of the sash and child panes to
+        take place immediately.
+
+        Such resizing normally takes place in idle time, in order to
+        wait for layout to be completed. However, this can cause
+        unacceptable flicker as the panes are resized after the
+        window has been shown. To work around this, you can perform
+        window layout (for example by sending a size event to the
+        parent window), and then call this function, before showing
+        the top-level window.
+        """
+        return _windows.SplitterWindow_UpdateSize(*args, **kwargs)
+
     def IsSplit(*args, **kwargs):
-        """IsSplit() -> bool"""
+        """
+        IsSplit() -> bool
+
+        Is the window split?
+        """
         return _windows.SplitterWindow_IsSplit(*args, **kwargs)
 
     def SetSashSize(*args, **kwargs):
-        """SetSashSize(int width)"""
+        """
+        SetSashSize(int width)
+
+        Sets the sash size
+        """
         return _windows.SplitterWindow_SetSashSize(*args, **kwargs)
 
     def SetBorderSize(*args, **kwargs):
-        """SetBorderSize(int width)"""
+        """
+        SetBorderSize(int width)
+
+        Sets the border size
+        """
         return _windows.SplitterWindow_SetBorderSize(*args, **kwargs)
 
     def GetSashSize(*args, **kwargs):
-        """GetSashSize() -> int"""
+        """
+        GetSashSize() -> int
+
+        Gets the sash size
+        """
         return _windows.SplitterWindow_GetSashSize(*args, **kwargs)
 
     def GetBorderSize(*args, **kwargs):
-        """GetBorderSize() -> int"""
+        """
+        GetBorderSize() -> int
+
+        Gets the border size
+        """
         return _windows.SplitterWindow_GetBorderSize(*args, **kwargs)
 
     def SetSashPosition(*args, **kwargs):
-        """SetSashPosition(int position, bool redraw=True)"""
+        """
+        SetSashPosition(int position, bool redraw=True)
+
+        Sets the sash position, in pixels.  If redraw is Ttrue then
+        the panes are resized and the sash and border are redrawn.
+        """
         return _windows.SplitterWindow_SetSashPosition(*args, **kwargs)
 
     def GetSashPosition(*args, **kwargs):
-        """GetSashPosition() -> int"""
+        """
+        GetSashPosition() -> int
+
+        Returns the surrent sash position.
+        """
         return _windows.SplitterWindow_GetSashPosition(*args, **kwargs)
 
     def SetMinimumPaneSize(*args, **kwargs):
-        """SetMinimumPaneSize(int min)"""
+        """
+        SetMinimumPaneSize(int min)
+
+        Sets the minimum pane size in pixels.
+
+        The default minimum pane size is zero, which means that
+        either pane can be reduced to zero by dragging the sash,
+        thus removing one of the panes. To prevent this behaviour (and
+        veto out-of-range sash dragging), set a minimum size,
+        for example 20 pixels. If the wx.SP_PERMIT_UNSPLIT style is
+        used when a splitter window is created, the window may be
+        unsplit even if minimum size is non-zero.
+        """
         return _windows.SplitterWindow_SetMinimumPaneSize(*args, **kwargs)
 
     def GetMinimumPaneSize(*args, **kwargs):
-        """GetMinimumPaneSize() -> int"""
+        """
+        GetMinimumPaneSize() -> int
+
+        Gets the minimum pane size in pixels.
+        """
         return _windows.SplitterWindow_GetMinimumPaneSize(*args, **kwargs)
 
     def SashHitTest(*args, **kwargs):
-        """SashHitTest(int x, int y, int tolerance=5) -> bool"""
+        """
+        SashHitTest(int x, int y, int tolerance=5) -> bool
+
+        Tests for x, y over the sash
+        """
         return _windows.SplitterWindow_SashHitTest(*args, **kwargs)
 
     def SizeWindows(*args, **kwargs):
-        """SizeWindows()"""
+        """
+        SizeWindows()
+
+        Resizes subwindows
+        """
         return _windows.SplitterWindow_SizeWindows(*args, **kwargs)
 
     def SetNeedUpdating(*args, **kwargs):
@@ -787,38 +962,79 @@ _windows.SplitterWindow_swigregister(SplitterWindowPtr)
 SplitterNameStr = cvar.SplitterNameStr
 
 def PreSplitterWindow(*args, **kwargs):
-    """PreSplitterWindow() -> SplitterWindow"""
+    """
+    PreSplitterWindow() -> SplitterWindow
+
+    Precreate a SplitterWindow for 2-phase creation.
+    """
     val = _windows.new_PreSplitterWindow(*args, **kwargs)
     val.thisown = 1
     return val
 
 class SplitterEvent(core.NotifyEvent):
+    """This class represents the events generated by a splitter control."""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSplitterEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(wxEventType type=wxEVT_NULL, SplitterWindow splitter=(wxSplitterWindow *) NULL) -> SplitterEvent"""
+        """
+        __init__(wxEventType type=wxEVT_NULL, SplitterWindow splitter=(wxSplitterWindow *) NULL) -> SplitterEvent
+
+        This class represents the events generated by a splitter control.
+        """
         newobj = _windows.new_SplitterEvent(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def SetSashPosition(*args, **kwargs):
-        """SetSashPosition(int pos)"""
+        """
+        SetSashPosition(int pos)
+
+        This funciton is only meaningful during
+        EVT_SPLITTER_SASH_POS_CHANGING and
+        EVT_SPLITTER_SASH_POS_CHANGED events.  In the case of
+        _CHANGED events, sets the the new sash position. In the case
+        of _CHANGING events, sets the new tracking bar position so
+        visual feedback during dragging will represent that change
+        that will actually take place. Set to -1 from the event
+        handler code to prevent repositioning.
+        """
         return _windows.SplitterEvent_SetSashPosition(*args, **kwargs)
 
     def GetSashPosition(*args, **kwargs):
-        """GetSashPosition() -> int"""
+        """
+        GetSashPosition() -> int
+
+        Returns the new sash position while in
+        EVT_SPLITTER_SASH_POS_CHANGING and
+        EVT_SPLITTER_SASH_POS_CHANGED events.
+        """
         return _windows.SplitterEvent_GetSashPosition(*args, **kwargs)
 
     def GetWindowBeingRemoved(*args, **kwargs):
-        """GetWindowBeingRemoved() -> Window"""
+        """
+        GetWindowBeingRemoved() -> Window
+
+        Returns a pointer to the window being removed when a
+        splitter window is unsplit.
+        """
         return _windows.SplitterEvent_GetWindowBeingRemoved(*args, **kwargs)
 
     def GetX(*args, **kwargs):
-        """GetX() -> int"""
+        """
+        GetX() -> int
+
+        Returns the x coordinate of the double-click point in a
+        EVT_SPLITTER_DCLICK event.
+        """
         return _windows.SplitterEvent_GetX(*args, **kwargs)
 
     def GetY(*args, **kwargs):
-        """GetY() -> int"""
+        """
+        GetY() -> int
+
+        Returns the y coordinate of the double-click point in a
+        EVT_SPLITTER_DCLICK event.
+        """
         return _windows.SplitterEvent_GetY(*args, **kwargs)
 
 

@@ -636,6 +636,10 @@ class HtmlCell(core.Object):
         """GetDescent() -> int"""
         return _html.HtmlCell_GetDescent(*args, **kwargs)
 
+    def GetMaxTotalWidth(*args, **kwargs):
+        """GetMaxTotalWidth() -> int"""
+        return _html.HtmlCell_GetMaxTotalWidth(*args, **kwargs)
+
     def GetId(*args, **kwargs):
         """GetId() -> String"""
         return _html.HtmlCell_GetId(*args, **kwargs)
