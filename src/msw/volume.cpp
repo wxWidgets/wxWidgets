@@ -41,9 +41,6 @@
 
 #include "wx/volume.h"
 
-// Win32 headers
-#include <shlobj.h>
-
 #ifndef SHGFI_ATTRIBUTES
     #define SHGFI_ATTRIBUTES 2048
 #endif
