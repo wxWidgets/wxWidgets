@@ -2038,27 +2038,23 @@ long wxWindow::MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 
 long wxWindow::Default()
 {
-    // Ignore 'fake' events (perhaps generated as a result of a separate real event)
-    if (m_lastMsg == 0)
+    // Ignore 'fake' events (perhaps generated as a result of a separate real
+    // event)
+    if ( m_lastMsg == 0 )
         return 0;
 
 #ifdef __WXDEBUG__
     wxLogTrace(wxTraceMessages, "Forwarding %s to DefWindowProc.",
-        wxGetMessageName(m_lastMsg));
+               wxGetMessageName(m_lastMsg));
 #endif // __WXDEBUG__
 
-    long ret = this->MSWDefWindowProc(m_lastMsg, m_lastWParam, m_lastLParam);
-
-    // The idea here is to prevent MSWDefWindowProc from being called twice,
-    // which it can be where OnChar/OnKeyDown are concerned (because OnChar is
-    // sometimes called in wxWin where it isn't in MSW)
-    m_lastMsg = 0;
-    return ret;
+    return MSWDefWindowProc(m_lastMsg, m_lastWParam, m_lastLParam);
 }
 
 bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
 {
-    if ( m_hWnd != 0 && (GetWindowStyleFlag() & wxTAB_TRAVERSAL) ) {
+    if ( m_hWnd != 0 && (GetWindowStyleFlag() & wxTAB_TRAVERSAL) )
+    {
         // intercept dialog navigation keys
         MSG *msg = (MSG *)pMsg;
         bool bProcess = TRUE;
@@ -3790,17 +3786,7 @@ WXDWORD wxWindow::Determine3DEffects(WXDWORD defaultBorderStyle, bool *want3D)
 
 void wxWindow::OnChar(wxKeyEvent& event)
 {
-    bool isVirtual;
-    int id = wxCharCodeWXToMSW((int)event.KeyCode(), &isVirtual);
-
-    if ( id == -1 )
-        id= m_lastWParam;
-
-    if ( !event.ControlDown() ) // Why this test?
-    {
-        if (m_lastMsg != 0)
-            (void) MSWDefWindowProc(m_lastMsg, (WPARAM) id, m_lastLParam);
-    }
+    event.Skip();
 }
 
 void wxWindow::OnKeyDown(wxKeyEvent& event)

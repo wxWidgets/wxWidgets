@@ -443,7 +443,7 @@ long wxTextCtrl::GetLastPosition() const
 
     // This gets the char index for the _beginning_ of the last line
     int charIndex = (int)SendMessage(hWnd, EM_LINEINDEX, (WPARAM)(noLines-1), (LPARAM)0L);
-    
+
     // Get number of characters in the last line. We'll add this to the character
     // index for the last line, 1st position.
     int lineLength = (int)SendMessage(hWnd, EM_LINELENGTH, (WPARAM)charIndex, (LPARAM)0L);
@@ -457,7 +457,7 @@ void wxTextCtrl::Replace(long from, long to, const wxString& value)
     HWND hWnd = (HWND) GetHWND();
     long fromChar = from;
     long toChar = to;
-    
+
     // Set selection and remove it
 #ifdef __WIN32__
     SendMessage(hWnd, EM_SETSEL, fromChar, toChar);
@@ -481,7 +481,7 @@ void wxTextCtrl::Remove(long from, long to)
     HWND hWnd = (HWND) GetHWND();
     long fromChar = from;
     long toChar = to;
-    
+
     // Cut all selected text
 #ifdef __WIN32__
     SendMessage(hWnd, EM_SETSEL, fromChar, toChar);
@@ -504,7 +504,7 @@ void wxTextCtrl::SetSelection(long from, long to)
       fromChar = 0;
       toChar = -1;
     }
-    
+
 #ifdef __WIN32__
     SendMessage(hWnd, EM_SETSEL, (WPARAM)fromChar, (LPARAM)toChar);
     SendMessage(hWnd, EM_SCROLLCARET, (WPARAM)0, (LPARAM)0);
@@ -659,7 +659,7 @@ void wxTextCtrl::DiscardEdits()
  * Some of the following functions are yet to be implemented
  *
  */
- 
+
 int wxTextCtrl::GetNumberOfLines() const
 {
     return (int)SendMessage((HWND) GetHWND(), EM_GETLINECOUNT, (WPARAM)0, (LPARAM)0);
@@ -705,7 +705,7 @@ void wxTextCtrl::ShowPosition(long pos)
     int currentLineLineNo = (int)SendMessage(hWnd, EM_GETFIRSTVISIBLELINE, (WPARAM)0, (LPARAM)0L);
 
     int specifiedLineLineNo = (int)SendMessage(hWnd, EM_LINEFROMCHAR, (WPARAM)pos, (LPARAM)0L);
-    
+
     int linesToScroll = specifiedLineLineNo - currentLineLineNo;
 
     if (linesToScroll != 0)
@@ -732,7 +732,7 @@ wxString wxTextCtrl::GetLineText(long lineNo) const
 /*
  * Text item
  */
- 
+
 void wxTextCtrl::Command(wxCommandEvent & event)
 {
   SetValue (event.GetString());
@@ -752,7 +752,7 @@ void wxTextCtrl::OnDropFiles(wxDropFilesEvent& event)
 // AT&T's "C++ Lanuage System Release 3.0 Library Manual" - Stein Somers
 
 //=========================================================================
-// Called then the buffer is full (gcc 2.6.3) 
+// Called then the buffer is full (gcc 2.6.3)
 // or when "endl" is output (Borland 4.5)
 //=========================================================================
 // Class declaration using multiple inheritance doesn't work properly for
@@ -770,7 +770,7 @@ int wxTextCtrl::overflow(int c)
     return EOF;
   }
 #endif
-  
+
   // Verify that there are no characters in get area
   if ( gptr() && gptr() < egptr() )
   {
@@ -955,26 +955,8 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
 {
     switch( event.KeyCode() )
     {
-        // VZ: commented out until somebody explains to me what it does
-#if 0
-        // Fix by Marcel Rasche to allow Alt-Ctrl insertion of special characters
-        case '{':
-        case '}':
-        case '[':
-        case ']':
-        case '|':
-        case '~':
-        case '\\':
-            {
-                char c = (char)event.KeyCode();
-                WriteText(c);
-            }
-            break;
-#endif // 0
-
         case WXK_RETURN:
-        {
-            if ( (m_windowStyle & wxTE_MULTILINE) == 0 )
+            if ( !(m_windowStyle & wxTE_MULTILINE) )
             {
                 wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
                 event.SetEventObject( this );
@@ -984,7 +966,6 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
             //else: multiline controls need Enter for themselves
 
             break;
-        }
 
         case WXK_TAB:
             // only produce navigation event if we don't process TAB ourself or
@@ -999,7 +980,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
                 eventNav.SetDirection(!event.ShiftDown());
                 eventNav.SetWindowChange(FALSE);
                 eventNav.SetEventObject(this);
-    
+
                 if ( GetEventHandler()->ProcessEvent(eventNav) )
                     return;
             }
@@ -1007,8 +988,9 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
 
         default:
             event.Skip();
+            return;
     }
-    
+
     // don't just call event.Skip() because this will cause TABs and ENTERs
     // be passed upwards and we don't always want this - instead process it
     // right here
@@ -1032,7 +1014,7 @@ long wxTextCtrl::MSWGetDlgCode()
         lRc |= DLGC_WANTMESSAGE;
     if ( m_windowStyle & wxTE_PROCESS_TAB )
         lRc |= DLGC_WANTTAB;
-    
+
     return lRc;
 }
 
