@@ -146,7 +146,7 @@ WXDLLEXPORT_DATA(extern wxMBConv *) wxConvCurrent;
 // ----------------------------------------------------------------------------
 
 // filenames are multibyte on Unix and probably widechar on Windows?
-#if defined(__UNIX__) || defined(__BORLANDC__)
+#if defined(__UNIX__) || defined(__WIN32__)
     #define wxMBFILES 1
 #else
     #define wxMBFILES 0

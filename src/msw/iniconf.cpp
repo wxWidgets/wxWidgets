@@ -28,7 +28,9 @@
   #include  "wx/utils.h"
 #endif  //WX_PRECOMP
 
-#if wxUSE_CONFIG
+// Doesn't yet compile in Unicode mode
+
+#if wxUSE_CONFIG && !wxUSE_UNICODE
 
 #include  "wx/dynarray.h"
 #include  "wx/log.h"
@@ -81,19 +83,19 @@ wxIniConfig::wxIniConfig(const wxString& strAppName,
     m_strLocalFilename = localFilename;
     if (m_strLocalFilename.IsEmpty())
     {
-        m_strLocalFilename = GetAppName() + ".ini";
+        m_strLocalFilename = GetAppName() + wxT(".ini");
     }
 
     // append the extension if none given and it's not an absolute file name
     // (otherwise we assume that they know what they're doing)
     if ( !wxIsPathSeparator(m_strLocalFilename[0u]) &&
-        m_strLocalFilename.Find('.') == wxNOT_FOUND )
+        m_strLocalFilename.Find(wxT('.')) == wxNOT_FOUND )
     {
-        m_strLocalFilename << ".ini";
+        m_strLocalFilename << wxT(".ini");
     }
 
     // set root path
-    SetPath("");
+    SetPath(wxT(""));
 }
 
 wxIniConfig::~wxIniConfig()
@@ -491,4 +493,4 @@ bool wxIniConfig::RenameGroup(const wxString& oldName, const wxString& newName)
 }
 
 #endif
-    // wxUSE_CONFIG
+    // wxUSE_CONFIG && wxUSE_UNICODE

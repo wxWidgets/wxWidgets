@@ -160,6 +160,9 @@
 // non GUI features selection
 // ----------------------------------------------------------------------------
 
+// Set to 1 to build in Unicode mode (wxchar.h will define _UNICODE and UNICODE)
+#define wxUSE_UNICODE       1
+
 // Set wxUSE_LONGLONG to 1 to compile the wxLongLong class. This is a 64 bit
 // integer which is implemented in terms of native 64 bit integers if any or
 // uses emulation otherwise.
@@ -629,6 +632,12 @@
 #undef  wxUSE_DEBUG_NEW_ALWAYS
 #define wxUSE_DEBUG_NEW_ALWAYS          0
 #endif // wxUSE_MFC
+
+// ODBC classes aren't Unicode-compatible yet
+#if wxUSE_UNICODE
+#undef wxUSE_ODBC
+#define wxUSE_ODBC 0
+#endif
 
 #if (!defined(WIN32) && !defined(__WIN32__)) || (defined(__GNUWIN32__) && !wxUSE_NORLANDER_HEADERS)
 // Can't use OLE drag and drop in Windows 3.1 because we don't know how

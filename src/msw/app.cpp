@@ -157,7 +157,9 @@ LRESULT WXDLLEXPORT APIENTRY wxWndProc(HWND, UINT, WPARAM, LPARAM);
 // FIXME wxUSE_ON_FATAL_EXCEPTION is only supported for VC++ now because it
 //       needs compiler support for Win32 SEH. Others (especially Borland)
 //       probably have it too, but I'm not sure about how it works
-#if !defined(__VISUALC__) || defined(__WIN16__)
+// JACS: get 'Cannot use __try in functions that require unwinding
+// in Unicode mode, so disabling.
+#if !defined(__VISUALC__) || defined(__WIN16__) || defined(UNICODE)
     #undef wxUSE_ON_FATAL_EXCEPTION
     #define wxUSE_ON_FATAL_EXCEPTION 0
 #endif // VC++

@@ -127,7 +127,7 @@ extern "C" {
 #endif
 
 #  if defined(__WXDEBUG__) && wxUSE_GLOBAL_MEMORY_OPERATORS && wxUSE_DEBUG_NEW_ALWAYS
-#  define new new(__FILE__,__LINE__)
+#  define new new(__TFILE__,__LINE__)
 #  endif
 
 #endif
