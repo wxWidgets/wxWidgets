@@ -232,6 +232,15 @@ void wxSizerItem::SetDimension( wxPoint pos, wxSize size )
     m_size = size;
 }
 
+void wxSizerItem::DeleteWindows()
+{
+    if (m_window)
+         m_window->Destroy();
+         
+    if (m_sizer)
+        m_sizer->DeleteWindows();
+}
+
 bool wxSizerItem::IsWindow()
 {
     return (m_window != NULL);
@@ -353,6 +362,25 @@ bool wxSizer::Remove( int pos )
     m_children.DeleteNode( node );
 
     return TRUE;
+}
+
+void wxSizer::Clear( bool delete_windows )
+{
+    if (delete_windows)
+        DeleteWindows();
+        
+    m_children.Clear();
+}
+
+void wxSizer::DeleteWindows()
+{
+    wxNode *node = m_children.First();
+    while (node)
+    {
+        wxSizerItem *item = (wxSizerItem*)node->Data();
+        item->DeleteWindows();
+        node = node->Next();
+    }
 }
 
 void wxSizer::Fit( wxWindow *window )

@@ -47,6 +47,8 @@ public:
     wxSizerItem( wxSizer *sizer, int option, int flag, int border, wxObject* userData );
 
     ~wxSizerItem();
+    
+    virtual void DeleteWindows();
 
     virtual wxSize GetSize();
     virtual wxSize CalcMin();
@@ -143,6 +145,9 @@ public:
     virtual bool Remove( wxWindow *window );
     virtual bool Remove( wxSizer *sizer );
     virtual bool Remove( int pos );
+    
+    virtual void Clear( bool delete_windows=FALSE );
+    virtual void DeleteWindows();
 
     void SetMinSize( int width, int height )
         { DoSetMinSize( width, height ); }

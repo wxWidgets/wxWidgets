@@ -182,12 +182,17 @@ bool wxFrameBase::ProcessCommand(int id)
     commandEvent.SetEventObject(this);
 
     wxMenuItem *item = bar->FindItem(id);
-    if ( item && item->IsCheckable() )
+    if (item)
     {
-        item->Toggle();
-
-        // use the new value
-        commandEvent.SetInt(item->IsChecked());
+        if (!item->IsEnabled())
+            return TRUE;
+            
+        if (item->IsCheckable())
+        {
+            item->Toggle();
+            // use the new value
+            commandEvent.SetInt(item->IsChecked());
+        }
     }
 
     return GetEventHandler()->ProcessEvent(commandEvent);
