@@ -1083,23 +1083,10 @@ void  wxWindow::MacCreateRealWindow( const wxString& title,
 		{
 			wclass = kMovableModalWindowClass ;
 		}
-		else if ( HasFlag( wxDIALOG_MODELESS ) )
+		else 
 		{
 			wclass = kDocumentWindowClass ;
 		}
-		/*
-		else
-		{
-			if ( HasFlag( wxCAPTION ) )
-			{
-				wclass = kDocumentWindowClass ;
-			}
-			else
-			{
-				wclass = kModalWindowClass ;
-			}
-		}
-		*/
 	}
 	else
 	{
