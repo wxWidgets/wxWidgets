@@ -868,15 +868,21 @@ void wxLogDialog::CreateDetailsControls()
     m_listctrl->SetColumnWidth(0, wxLIST_AUTOSIZE);
     m_listctrl->SetColumnWidth(1, wxLIST_AUTOSIZE);
 
-    // get the approx height of the listctrl
-    wxFont font = GetFont();
-    if ( !font.Ok() )
-        font = *wxSWISS_FONT;
+    // calculate an approximately nice height for the listctrl
+    int height = GetCharHeight()*(count + 2);
 
-    int y;
-    GetTextExtent(_T("H"), (int*)NULL, &y, (int*)NULL, (int*)NULL, &font);
-    int height = wxMax(y*(count + 3), 100);
-    m_listctrl->SetSize(-1, height);
+    // but check that the dialog won't fall fown from the screen
+    //
+    // we use GetMinHeight() to get the height of the dialog part without the
+    // details and we consider that the "Save" button below and the separator
+    // line (and the margins around it) take about as much, hence double it
+    int heightMax = wxGetDisplaySize().y - GetPosition().y - 2*GetMinHeight();
+
+    // we should leave a margin
+    heightMax *= 9;
+    heightMax /= 10;
+
+    m_listctrl->SetSize(-1, wxMin(height, heightMax));
 }
 
 void wxLogDialog::OnListSelect(wxListEvent& event)
