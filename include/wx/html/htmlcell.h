@@ -195,10 +195,6 @@ class WXDLLEXPORT wxHtmlContainerCell : public wxHtmlCell
                 // -15 pixels percent (this means 100 % - 15 pixels)
         void SetMinHeight(int h, int align = wxHTML_ALIGN_TOP) {m_MinHeight = h; m_MinHeightAlign = align; m_LastLayout = -1;}
                 // sets minimal height of this container.
-        int GetMaxLineWidth() const {return m_MaxLineWidth;}
-            // returns maximal line width in this container.
-            // Call to this method is valid only after calling
-            // Layout()
         void SetBackgroundColour(const wxColour& clr) {m_UseBkColour = TRUE; m_BkColour = clr;}
         void SetBorder(const wxColour& clr1, const wxColour& clr2) {m_UseBorder = TRUE; m_BorderColour1 = clr1, m_BorderColour2 = clr2;}
         virtual wxHtmlLinkInfo* GetLink(int x = 0, int y = 0) const;
@@ -215,8 +211,6 @@ class WXDLLEXPORT wxHtmlContainerCell : public wxHtmlCell
                 // it m_Indent < 0 it is in PERCENTS, otherwise it is in pixels
         int m_MinHeight, m_MinHeightAlign;
             // minimal height.
-        int m_MaxLineWidth;
-            // maximal widht of line. Filled during Layout()
         wxHtmlCell *m_Cells, *m_LastCell;
                 // internal cells, m_Cells points to the first of them, m_LastCell to the last one.
                 // (LastCell is needed only to speed-up InsertCell)

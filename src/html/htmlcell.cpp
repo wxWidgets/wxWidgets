@@ -241,7 +241,7 @@ wxHtmlContainerCell::wxHtmlContainerCell(wxHtmlContainerCell *parent) : wxHtmlCe
     m_WidthFloat = 100; m_WidthFloatUnits = wxHTML_UNITS_PERCENT;
     m_UseBkColour = FALSE;
     m_UseBorder = FALSE;
-    m_MinHeight = m_MaxLineWidth = 0;
+    m_MinHeight = 0;
     m_MinHeightAlign = wxHTML_ALIGN_TOP;
     m_LastLayout = -1;
 }
@@ -318,6 +318,9 @@ void wxHtmlContainerCell::Layout(int w)
     int xdelta = 0, ybasicpos = 0, ydiff;
     int s_width, s_indent;
     int ysizeup = 0, ysizedown = 0;
+    int MaxLineWidth = 0;
+    int xcnt = 0;
+
 
     /*
 
@@ -350,8 +353,6 @@ void wxHtmlContainerCell::Layout(int w)
     s_indent = (m_IndentLeft < 0) ? (-m_IndentLeft * m_Width / 100) : m_IndentLeft;
     s_width = m_Width - s_indent - ((m_IndentRight < 0) ? (-m_IndentRight * m_Width / 100) : m_IndentRight);
 
-    m_MaxLineWidth = 0;
-
     // my own layouting:
     while (cell != NULL) {
         switch (m_AlignVer) {
@@ -367,28 +368,51 @@ void wxHtmlContainerCell::Layout(int w)
         cell -> SetPos(xpos, ybasicpos + cell -> GetDescent());
         xpos += cell -> GetWidth();
         cell = cell -> GetNext();
+        xcnt++;
 
         // force new line if occured:
         if ((cell == NULL) || (xpos + cell -> GetWidth() > s_width)) {
-            if (xpos > m_MaxLineWidth) m_MaxLineWidth = xpos;
+            if (xpos > MaxLineWidth) MaxLineWidth = xpos;
             if (ysizeup < 0) ysizeup = 0;
             if (ysizedown < 0) ysizedown = 0;
             switch (m_AlignHor) {
-                case wxHTML_ALIGN_LEFT : xdelta = 0; break;
-                case wxHTML_ALIGN_RIGHT : xdelta = 0 + (s_width - xpos); break;
-                case wxHTML_ALIGN_CENTER : xdelta = 0 + (s_width - xpos) / 2; break;
+                case wxHTML_ALIGN_LEFT : 
+                case wxHTML_ALIGN_JUSTIFY : 
+                         xdelta = 0; 
+                         break;
+                case wxHTML_ALIGN_RIGHT : 
+                         xdelta = 0 + (s_width - xpos); 
+                         break;
+                case wxHTML_ALIGN_CENTER : 
+                         xdelta = 0 + (s_width - xpos) / 2; 
+                         break;
             }
             if (xdelta < 0) xdelta = 0;
             xdelta += s_indent;
 
             ypos += ysizeup;
-            while (line != cell) {
-                line -> SetPos(line -> GetPosX() + xdelta, ypos + line -> GetPosY());
-                line = line -> GetNext();
+            
+            if (m_AlignHor != wxHTML_ALIGN_JUSTIFY || cell == NULL)
+                while (line != cell) {
+                    line -> SetPos(line -> GetPosX() + xdelta, 
+                                   ypos + line -> GetPosY());
+                    line = line -> GetNext();
+                }
+            else
+            { 
+                int counter = 0;
+                int step = (s_width - xpos);
+                if (step < 0) step = 0;
+                while (line != cell) {
+                    line -> SetPos(line -> GetPosX() + s_indent +
+                                   (counter++ * step / xcnt),
+                                   ypos + line -> GetPosY());
+                    line = line -> GetNext();
+                }
             }
 
             ypos += ysizedown;
-            xpos = 0;
+            xpos = xcnt = 0;
             ysizeup = ysizedown = 0;
             line = cell;
         }
@@ -410,8 +434,8 @@ void wxHtmlContainerCell::Layout(int w)
         m_Height = m_MinHeight;
     }
 
-    m_MaxLineWidth += s_indent + ((m_IndentRight < 0) ? (-m_IndentRight * m_Width / 100) : m_IndentRight);
-    if (m_Width < m_MaxLineWidth) m_Width = m_MaxLineWidth;
+    MaxLineWidth += s_indent + ((m_IndentRight < 0) ? (-m_IndentRight * m_Width / 100) : m_IndentRight);
+    if (m_Width < MaxLineWidth) m_Width = MaxLineWidth;
 
     m_LastLayout = w;
 
@@ -510,6 +534,8 @@ void wxHtmlContainerCell::SetAlign(const wxHtmlTag& tag)
             SetAlignHor(wxHTML_ALIGN_CENTER);
         else if (alg == wxT("LEFT"))
             SetAlignHor(wxHTML_ALIGN_LEFT);
+        else if (alg == wxT("JUSTIFY"))
+            SetAlignHor(wxHTML_ALIGN_JUSTIFY);
         else if (alg == wxT("RIGHT"))
             SetAlignHor(wxHTML_ALIGN_RIGHT);
         m_LastLayout = -1;
