@@ -68,6 +68,8 @@ rm -rf $RPM_BUILD_ROOT
 (cd obj-static ; make prefix=$RPM_BUILD_ROOT%{pref} install)
 (cd obj-shared ; make prefix=$RPM_BUILD_ROOT%{pref} install)
 
+%find_lang wxstd
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -93,11 +95,10 @@ if test -f %{_bindir}/wx-config -a -f /usr/bin/md5sum ; then
   fi
 fi
 
-%files
+%files -f wxstd.lang
 %defattr (-,root,root)
 %doc COPYING.LIB *.txt
 %{_libdir}/libwx_base*so.*
-%{_datadir}/locale/*/*/*.mo
 
 %files devel
 %defattr (-,root,root)

@@ -1,7 +1,7 @@
 %define pref /usr
 %define ver 2.3.2
 %define ver2 2.3
-%define rel 0
+%define rel 1
 
 Summary: The GTK+ 1.2 port of the wxWindows library
 Name: wxGTK
@@ -82,6 +82,8 @@ rm -rf $RPM_BUILD_ROOT
 (cd obj-static; make prefix=$RPM_BUILD_ROOT%{pref} install)
 (cd obj-shared; make prefix=$RPM_BUILD_ROOT%{pref} install)
 
+%find_lang wxstd
+
 %post
 /sbin/ldconfig
 
@@ -111,12 +113,11 @@ if test -f %{_bindir}/wx-config -a -f /usr/bin/md5sum ; then
 fi
 
 
-%files
+%files -f wxstd.lang
 %defattr(-,root,root)
 %doc COPYING.LIB *.txt
 %dir %{_datadir}/wx
 %{_datadir}/wx/*
-%{_datadir}/locale/*/*/*.mo
 %{_libdir}/libwx_gtk-%{ver2}*.so.*
 
 %files devel
