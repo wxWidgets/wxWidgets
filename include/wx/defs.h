@@ -1441,6 +1441,7 @@ enum wxBorder
 #define wxSL_BOTTOM          0x0200
 #define wxSL_BOTH            0x0400
 #define wxSL_SELRANGE        0x0800
+#define wxSL_INVERSE         0x1000
 
 /*
  * wxScrollBar flags
