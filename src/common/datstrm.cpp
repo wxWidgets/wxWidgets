@@ -134,6 +134,10 @@ wxDataOutputStream::wxDataOutputStream(wxOutputStream& s)
 {
 }
 
+wxDataOutputStream::~wxDataOutputStream()
+{
+}
+
 void wxDataOutputStream::Write32(unsigned long i)
 {
   char buf[4];

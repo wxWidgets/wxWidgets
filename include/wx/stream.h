@@ -13,7 +13,7 @@
 #define __WXSTREAM_H__
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "stream.h"
 #endif
 
 #include <stdio.h>

@@ -32,6 +32,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxInputStream, wxObject)
 IMPLEMENT_ABSTRACT_CLASS(wxOutputStream, wxObject)
 IMPLEMENT_ABSTRACT_CLASS2(wxStream, wxInputStream, wxOutputStream)
 IMPLEMENT_CLASS(wxFilterInputStream, wxInputStream)
+IMPLEMENT_CLASS(wxFilterOutputStream, wxOutputStream)
 #endif
 
 wxInputStream::wxInputStream()
