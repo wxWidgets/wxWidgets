@@ -79,7 +79,8 @@ GENERICOBJS= \
   ..\generic\$D\splitter.obj \
   ..\generic\$D\statusbr.obj \
   ..\generic\$D\tabg.obj \
-  ..\generic\$D\textdlgg.obj
+  ..\generic\$D\textdlgg.obj \
+  ..\generic\$D\tipdlg.obj
 
 #  ..\generic\$D\imaglist.obj \
 #  ..\generic\$D\treectrl.obj \
@@ -165,6 +166,7 @@ COMMONOBJS = \
   ..\common\$D\datstrm.obj \
   ..\common\$D\objstrm.obj \
   ..\common\$D\variant.obj \
+  ..\common\$D\dlgcmn.obj \
   ..\common\$D\wincmn.obj \
   ..\common\$D\wxchar.obj
 
@@ -240,6 +242,7 @@ MSWOBJS = \
   ..\msw\$D\spinbutt.obj \
   ..\msw\$D\statbmp.obj \
   ..\msw\$D\statbox.obj \
+  ..\msw\$D\statline.obj \
   ..\msw\$D\statbr95.obj \
   ..\msw\$D\stattext.obj \
   ..\msw\$D\tabctrl.obj \

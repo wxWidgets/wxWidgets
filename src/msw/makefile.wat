@@ -39,7 +39,8 @@ GENERICOBJS= choicdgg.obj &
   splitter.obj &
   statusbr.obj &
   tabg.obj &
-  textdlgg.obj
+  textdlgg.obj &
+  tipdlg.obj
 
 # These are generic things that don't need to be compiled on MSW,
 # but sometimes it's useful to do so for testing purposes.
@@ -112,6 +113,7 @@ COMMONOBJS = cmndata.obj &
   datstrm.obj &
   objstrm.obj &
   variant.obj &
+  dlgcmn.obj &
   wincmn.obj &
   wxchar.obj
 
@@ -191,6 +193,7 @@ MSWOBJS = &
   spinbutt.obj &
   statbmp.obj &
   statbox.obj &
+  statline.obj &
   statbr95.obj &
   stattext.obj &
   tabctrl.obj &
@@ -451,6 +454,9 @@ statbmp.obj:     $(MSWDIR)\statbmp.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 statbox.obj:     $(MSWDIR)\statbox.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+statline.obj:     $(MSWDIR)\statline.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 statbr95.obj:     $(MSWDIR)\statbr95.cpp
@@ -720,6 +726,9 @@ process.obj:     $(COMMDIR)\process.cpp
 variant.obj:     $(COMMDIR)\variant.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
+dlgcmn.obj:     $(COMMDIR)\dlgcmn.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
 wincmn.obj:     $(COMMDIR)\wincmn.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
@@ -799,6 +808,9 @@ tabg.obj:     $(GENDIR)\tabg.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 textdlgg.obj: $(GENDIR)\textdlgg.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+tipdlg.obj: $(GENDIR)\tipdlg.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 crbuffri.obj: $(XPMDIR)\crbuffri.c

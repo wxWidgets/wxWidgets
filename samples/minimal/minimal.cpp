@@ -69,6 +69,9 @@ public:
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
+    void OnTest(wxCommandEvent& event);
+
+    void OnPaint(wxPaintEvent& event);
 
 private:
     // any class wishing to process wxWindows events must use this macro
@@ -85,8 +88,7 @@ enum
     // menu items
     Minimal_Quit = 1,
     Minimal_About,
-    Minimal_Test1,
-    Minimal_Test2,
+    Minimal_Test,
 
     // controls start here (the numbers are, of course, arbitrary)
     Minimal_Text = 1000,
@@ -102,6 +104,10 @@ enum
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Minimal_Quit,  MyFrame::OnQuit)
     EVT_MENU(Minimal_About, MyFrame::OnAbout)
+
+    EVT_BUTTON(-1, MyFrame::OnTest)
+
+    EVT_PAINT(MyFrame::OnPaint)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWindows to create
@@ -163,9 +169,11 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
 
+#if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);
     SetStatusText("Welcome to wxWindows!");
+#endif // wxUSE_STATUSBAR
 }
 
 
@@ -192,4 +200,29 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
               );
 
     wxMessageBox(msg, "About Minimal", wxOK | wxICON_INFORMATION, this);
+}
+
+void MyFrame::OnTest(wxCommandEvent& event)
+{
+}
+
+void MyFrame::OnPaint(wxPaintEvent& event)
+{
+    wxPaintDC dc(this);
+
+    wxMemoryDC dcMem;
+    wxSize size(GetClientSize());
+    dcMem.SelectObject(wxBitmap(size.x, size.y, -1));
+
+    dcMem.SetBackground(wxBrush(wxColour(0, 0, 255), wxSOLID));
+    dcMem.SetTextForeground(wxColour(0, 255, 0));
+    dcMem.SetTextBackground(wxColour(0, 0, 0));
+    dcMem.SetBackgroundMode(wxSOLID);
+    dcMem.Clear();
+    dcMem.DrawText("Hello, wxWindows!", 10, 10);
+
+    wxPoint ptOrig(0, 0);
+    dc.Blit(ptOrig, size, &dcMem, ptOrig);
+
+    dcMem.SelectObject(wxNullBitmap);
 }

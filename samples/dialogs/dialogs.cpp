@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -30,6 +30,7 @@
 #include <wx/dirdlg.h>
 #include <wx/fontdlg.h>
 #include <wx/choicdlg.h>
+#include <wx/tipdlg.h>
 
 #define wxTEST_GENERIC_DIALOGS_IN_MSW 0
 
@@ -77,6 +78,8 @@ bool MyApp::OnInit(void)
   file_menu->Append(DIALOGS_MESSAGE_BOX, "&Message box");
   file_menu->Append(DIALOGS_TEXT_ENTRY,  "Text &entry");
   file_menu->Append(DIALOGS_SINGLE_CHOICE,  "&Single choice");
+  file_menu->AppendSeparator();
+  file_menu->Append(DIALOGS_TIP,  "&Tip of the day");
   file_menu->AppendSeparator();
   file_menu->Append(DIALOGS_FILE_OPEN,  "&Open file");
   file_menu->Append(DIALOGS_FILE_SAVE,  "Sa&ve file");
@@ -190,23 +193,20 @@ void MyFrame::ChooseFontGeneric(wxCommandEvent& WXUNUSED(event) )
 void MyFrame::MessageBox(wxCommandEvent& WXUNUSED(event) )
 {
   wxMessageDialog dialog(NULL, "This is a message box\nA long, long string to test out the message box properly",
-  	"Message box text", wxYES_NO|wxCANCEL);
+      "Message box text", wxYES_NO|wxCANCEL|wxICON_INFORMATION);
 
   dialog.ShowModal();
-  
- ::wxMessageBox("MsgBox with a really long long string", 
-    "this is the text", wxYES_NO|wxICON_EXCLAMATION);
 }
 
 void MyFrame::TextEntry(wxCommandEvent& WXUNUSED(event) )
 {
   wxTextEntryDialog dialog(this, "This is a small sample\nA long, long string to test out the text entrybox",
-  	"Please enter a string", "Default value", wxOK|wxCANCEL);
+      "Please enter a string", "Default value", wxOK|wxCANCEL);
 
   if (dialog.ShowModal() == wxID_OK)
   {
-	wxMessageDialog dialog2(this, dialog.GetValue(), "Got string");
-	dialog2.ShowModal();
+    wxMessageDialog dialog2(this, dialog.GetValue(), "Got string");
+    dialog2.ShowModal();
   }
 }
 
@@ -229,10 +229,10 @@ void MyFrame::SingleChoice(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::FileOpen(wxCommandEvent& WXUNUSED(event) )
 {
-	wxFileDialog dialog(this, "Testing open file dialog", "", "", "*.txt", 0);
+    wxFileDialog dialog(this, "Testing open file dialog", "", "", "*.txt", 0);
 
-	if (dialog.ShowModal() == wxID_OK)
-	{
+    if (dialog.ShowModal() == wxID_OK)
+    {
         wxString info;
         info.Printf(_T("Full file name: %s\n")
                     _T("Path: %s\n")
@@ -240,45 +240,72 @@ void MyFrame::FileOpen(wxCommandEvent& WXUNUSED(event) )
                     dialog.GetPath().c_str(),
                     dialog.GetDirectory().c_str(),
                     dialog.GetFilename().c_str());
-		wxMessageDialog dialog2(this, info, "Selected file");
-		dialog2.ShowModal();
-	}
+        wxMessageDialog dialog2(this, info, "Selected file");
+        dialog2.ShowModal();
+    }
 }
 
 void MyFrame::FileSave(wxCommandEvent& WXUNUSED(event) )
 {
-	wxFileDialog dialog(this, "Testing save file dialog", "", "",
-		"Text files (*.txt)|*.txt|Document files (*.doc)|*.doc",
-		wxSAVE|wxOVERWRITE_PROMPT);
+    wxFileDialog dialog(this, "Testing save file dialog", "", "",
+        "Text files (*.txt)|*.txt|Document files (*.doc)|*.doc",
+        wxSAVE|wxOVERWRITE_PROMPT);
 
-	if (dialog.ShowModal() == wxID_OK)
-	{
-		wxChar buf[400];
-		wxSprintf(buf, _T("%s, filter %d"), (const wxChar*)dialog.GetPath(), dialog.GetFilterIndex());
-		wxMessageDialog dialog2(this, wxString(buf), "Selected path");
-		dialog2.ShowModal();
-	}
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        wxChar buf[400];
+        wxSprintf(buf, _T("%s, filter %d"), (const wxChar*)dialog.GetPath(), dialog.GetFilterIndex());
+        wxMessageDialog dialog2(this, wxString(buf), "Selected path");
+        dialog2.ShowModal();
+    }
 }
 
 void MyFrame::DirChoose(wxCommandEvent& WXUNUSED(event) )
 {
-	wxDirDialog dialog(this, "Testing directory picker", "");
+    wxDirDialog dialog(this, "Testing directory picker", "");
 
-	if (dialog.ShowModal() == wxID_OK)
-	{
-		wxMessageDialog dialog2(this, dialog.GetPath(), "Selected path");
-		dialog2.ShowModal();
-	}
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        wxMessageDialog dialog2(this, dialog.GetPath(), "Selected path");
+        dialog2.ShowModal();
+    }
+}
+
+void MyFrame::ShowTip(wxCommandEvent& event)
+{
+    static size_t s_index = (size_t)-1;
+
+    if ( s_index == (size_t)-1 )
+    {
+        srand(time(NULL));
+
+        // this is completely bogus, we don't know how many lines are there
+        // in the file, but who cares, it's a demo only...
+        s_index = rand() % 5;
+    }
+
+    wxTipProvider *tipProvider = wxCreateFileTipProvider("tips.txt", s_index);
+
+    bool showAtStartup = wxShowTip(this, tipProvider);
+
+    if ( showAtStartup )
+    {
+        wxMessageBox("Will show tips on startup", "Tips dialog",
+                     wxOK | wxICON_INFORMATION, this);
+    }
+
+    s_index = tipProvider->GetCurrentTip();
+    delete tipProvider;
 }
 
 void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event) )
 {
-	Close(TRUE);
+    Close(TRUE);
 }
 
 void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event) )
 {
-	wxPaintDC dc(this);
+    wxPaintDC dc(this);
     dc.SetFont(wxGetApp().m_canvasFont);
     dc.SetTextForeground(wxGetApp().m_canvasTextColour);
     dc.SetBackgroundMode(wxTRANSPARENT);
@@ -286,22 +313,23 @@ void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event) )
 }
 
 BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
-	EVT_PAINT(MyCanvas::OnPaint)
+    EVT_PAINT(MyCanvas::OnPaint)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-	EVT_MENU(DIALOGS_CHOOSE_COLOUR,				MyFrame::ChooseColour)
-	EVT_MENU(DIALOGS_CHOOSE_FONT,				MyFrame::ChooseFont)
-	EVT_MENU(DIALOGS_MESSAGE_BOX,				MyFrame::MessageBox)
-	EVT_MENU(DIALOGS_TEXT_ENTRY,				MyFrame::TextEntry)
-	EVT_MENU(DIALOGS_SINGLE_CHOICE,				MyFrame::SingleChoice)
-	EVT_MENU(DIALOGS_FILE_OPEN,					MyFrame::FileOpen)
-	EVT_MENU(DIALOGS_FILE_SAVE,					MyFrame::FileSave)
-	EVT_MENU(DIALOGS_DIR_CHOOSE,				MyFrame::DirChoose)
+    EVT_MENU(DIALOGS_CHOOSE_COLOUR,                MyFrame::ChooseColour)
+    EVT_MENU(DIALOGS_CHOOSE_FONT,                MyFrame::ChooseFont)
+    EVT_MENU(DIALOGS_MESSAGE_BOX,                MyFrame::MessageBox)
+    EVT_MENU(DIALOGS_TEXT_ENTRY,                MyFrame::TextEntry)
+    EVT_MENU(DIALOGS_SINGLE_CHOICE,                MyFrame::SingleChoice)
+    EVT_MENU(DIALOGS_FILE_OPEN,                    MyFrame::FileOpen)
+    EVT_MENU(DIALOGS_FILE_SAVE,                    MyFrame::FileSave)
+    EVT_MENU(DIALOGS_DIR_CHOOSE,                MyFrame::DirChoose)
+    EVT_MENU(DIALOGS_TIP,                        MyFrame::ShowTip)
 #if defined(__WXMSW__) && wxTEST_GENERIC_DIALOGS_IN_MSW
-	EVT_MENU(DIALOGS_CHOOSE_COLOUR_GENERIC,		MyFrame::ChooseColourGeneric)
-	EVT_MENU(DIALOGS_CHOOSE_FONT_GENERIC,		MyFrame::ChooseFontGeneric)
+    EVT_MENU(DIALOGS_CHOOSE_COLOUR_GENERIC,        MyFrame::ChooseColourGeneric)
+    EVT_MENU(DIALOGS_CHOOSE_FONT_GENERIC,        MyFrame::ChooseFontGeneric)
 #endif
-	EVT_MENU(wxID_EXIT,							MyFrame::OnExit)
+    EVT_MENU(wxID_EXIT,                            MyFrame::OnExit)
 END_EVENT_TABLE()
 

@@ -35,7 +35,7 @@ extern const wxChar *wxDialogNameStr;
 // wxDialog
 //-----------------------------------------------------------------------------
 
-class wxDialog: public wxPanel
+class wxDialog: public wxDialogBase
 {
     DECLARE_DYNAMIC_CLASS(wxDialog)
 

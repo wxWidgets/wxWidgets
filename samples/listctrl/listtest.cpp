@@ -235,6 +235,7 @@ void MyFrame::OnListView(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnReportView(wxCommandEvent& WXUNUSED(event))
 {
     m_listCtrl->DeleteAllItems();
+    m_listCtrl->DeleteAllColumns();
     m_logWindow->Clear();
    
     m_listCtrl->SetSingleStyle(wxLC_REPORT);

@@ -183,23 +183,23 @@ void debug_focus_in( GtkWidget* widget, const wxChar* name, const wxChar *window
 
 void
 gdk_window_warp_pointer (GdkWindow      *window,
-			 gint            x,
-			 gint            y)
+                         gint            x,
+                         gint            y)
 {
   GdkWindowPrivate *priv;
-  
+
   if (!window)
     window = (GdkWindow*) &gdk_root_parent;
-  
+
   priv = (GdkWindowPrivate*) window;
-  
+
   if (!priv->destroyed)
   {
-      XWarpPointer (priv->xdisplay, 
+      XWarpPointer (priv->xdisplay,
                     None,              /* not source window -> move from anywhere */
-		    priv->xwindow,  /* dest window */
+                    priv->xwindow,  /* dest window */
                     0, 0, 0, 0,        /* not source window -> move from anywhere */
-		    x, y );
+                    x, y );
   }
 }
 
@@ -218,139 +218,139 @@ extern bool g_isIdle;
 /* these functions are copied verbatim from GTK 1.2 */
 static void
 gdkx_XConvertCase (KeySym symbol,
-		   KeySym *lower,
-		   KeySym *upper)
+                   KeySym *lower,
+                   KeySym *upper)
 {
   register KeySym sym = symbol;
-  
+
   g_return_if_fail (lower != NULL);
   g_return_if_fail (upper != NULL);
-  
+
   *lower = sym;
   *upper = sym;
-  
+
   switch (sym >> 8)
     {
-#if	defined (GDK_A) && defined (GDK_Ooblique)
+#if        defined (GDK_A) && defined (GDK_Ooblique)
     case 0: /* Latin 1 */
       if ((sym >= GDK_A) && (sym <= GDK_Z))
-	*lower += (GDK_a - GDK_A);
+        *lower += (GDK_a - GDK_A);
       else if ((sym >= GDK_a) && (sym <= GDK_z))
-	*upper -= (GDK_a - GDK_A);
+        *upper -= (GDK_a - GDK_A);
       else if ((sym >= GDK_Agrave) && (sym <= GDK_Odiaeresis))
-	*lower += (GDK_agrave - GDK_Agrave);
+        *lower += (GDK_agrave - GDK_Agrave);
       else if ((sym >= GDK_agrave) && (sym <= GDK_odiaeresis))
-	*upper -= (GDK_agrave - GDK_Agrave);
+        *upper -= (GDK_agrave - GDK_Agrave);
       else if ((sym >= GDK_Ooblique) && (sym <= GDK_Thorn))
-	*lower += (GDK_oslash - GDK_Ooblique);
+        *lower += (GDK_oslash - GDK_Ooblique);
       else if ((sym >= GDK_oslash) && (sym <= GDK_thorn))
-	*upper -= (GDK_oslash - GDK_Ooblique);
+        *upper -= (GDK_oslash - GDK_Ooblique);
       break;
-#endif	/* LATIN1 */
-      
-#if	defined (GDK_Aogonek) && defined (GDK_tcedilla)
+#endif        /* LATIN1 */
+
+#if        defined (GDK_Aogonek) && defined (GDK_tcedilla)
     case 1: /* Latin 2 */
       /* Assume the KeySym is a legal value (ignore discontinuities) */
       if (sym == GDK_Aogonek)
-	*lower = GDK_aogonek;
+        *lower = GDK_aogonek;
       else if (sym >= GDK_Lstroke && sym <= GDK_Sacute)
-	*lower += (GDK_lstroke - GDK_Lstroke);
+        *lower += (GDK_lstroke - GDK_Lstroke);
       else if (sym >= GDK_Scaron && sym <= GDK_Zacute)
-	*lower += (GDK_scaron - GDK_Scaron);
+        *lower += (GDK_scaron - GDK_Scaron);
       else if (sym >= GDK_Zcaron && sym <= GDK_Zabovedot)
-	*lower += (GDK_zcaron - GDK_Zcaron);
+        *lower += (GDK_zcaron - GDK_Zcaron);
       else if (sym == GDK_aogonek)
-	*upper = GDK_Aogonek;
+        *upper = GDK_Aogonek;
       else if (sym >= GDK_lstroke && sym <= GDK_sacute)
-	*upper -= (GDK_lstroke - GDK_Lstroke);
+        *upper -= (GDK_lstroke - GDK_Lstroke);
       else if (sym >= GDK_scaron && sym <= GDK_zacute)
-	*upper -= (GDK_scaron - GDK_Scaron);
+        *upper -= (GDK_scaron - GDK_Scaron);
       else if (sym >= GDK_zcaron && sym <= GDK_zabovedot)
-	*upper -= (GDK_zcaron - GDK_Zcaron);
+        *upper -= (GDK_zcaron - GDK_Zcaron);
       else if (sym >= GDK_Racute && sym <= GDK_Tcedilla)
-	*lower += (GDK_racute - GDK_Racute);
+        *lower += (GDK_racute - GDK_Racute);
       else if (sym >= GDK_racute && sym <= GDK_tcedilla)
-	*upper -= (GDK_racute - GDK_Racute);
+        *upper -= (GDK_racute - GDK_Racute);
       break;
-#endif	/* LATIN2 */
-      
-#if	defined (GDK_Hstroke) && defined (GDK_Cabovedot)
+#endif        /* LATIN2 */
+
+#if        defined (GDK_Hstroke) && defined (GDK_Cabovedot)
     case 2: /* Latin 3 */
       /* Assume the KeySym is a legal value (ignore discontinuities) */
       if (sym >= GDK_Hstroke && sym <= GDK_Hcircumflex)
-	*lower += (GDK_hstroke - GDK_Hstroke);
+        *lower += (GDK_hstroke - GDK_Hstroke);
       else if (sym >= GDK_Gbreve && sym <= GDK_Jcircumflex)
-	*lower += (GDK_gbreve - GDK_Gbreve);
+        *lower += (GDK_gbreve - GDK_Gbreve);
       else if (sym >= GDK_hstroke && sym <= GDK_hcircumflex)
-	*upper -= (GDK_hstroke - GDK_Hstroke);
+        *upper -= (GDK_hstroke - GDK_Hstroke);
       else if (sym >= GDK_gbreve && sym <= GDK_jcircumflex)
-	*upper -= (GDK_gbreve - GDK_Gbreve);
+        *upper -= (GDK_gbreve - GDK_Gbreve);
       else if (sym >= GDK_Cabovedot && sym <= GDK_Scircumflex)
-	*lower += (GDK_cabovedot - GDK_Cabovedot);
+        *lower += (GDK_cabovedot - GDK_Cabovedot);
       else if (sym >= GDK_cabovedot && sym <= GDK_scircumflex)
-	*upper -= (GDK_cabovedot - GDK_Cabovedot);
+        *upper -= (GDK_cabovedot - GDK_Cabovedot);
       break;
-#endif	/* LATIN3 */
-      
-#if	defined (GDK_Rcedilla) && defined (GDK_Amacron)
+#endif        /* LATIN3 */
+
+#if        defined (GDK_Rcedilla) && defined (GDK_Amacron)
     case 3: /* Latin 4 */
       /* Assume the KeySym is a legal value (ignore discontinuities) */
       if (sym >= GDK_Rcedilla && sym <= GDK_Tslash)
-	*lower += (GDK_rcedilla - GDK_Rcedilla);
+        *lower += (GDK_rcedilla - GDK_Rcedilla);
       else if (sym >= GDK_rcedilla && sym <= GDK_tslash)
-	*upper -= (GDK_rcedilla - GDK_Rcedilla);
+        *upper -= (GDK_rcedilla - GDK_Rcedilla);
       else if (sym == GDK_ENG)
-	*lower = GDK_eng;
+        *lower = GDK_eng;
       else if (sym == GDK_eng)
-	*upper = GDK_ENG;
+        *upper = GDK_ENG;
       else if (sym >= GDK_Amacron && sym <= GDK_Umacron)
-	*lower += (GDK_amacron - GDK_Amacron);
+        *lower += (GDK_amacron - GDK_Amacron);
       else if (sym >= GDK_amacron && sym <= GDK_umacron)
-	*upper -= (GDK_amacron - GDK_Amacron);
+        *upper -= (GDK_amacron - GDK_Amacron);
       break;
-#endif	/* LATIN4 */
-      
-#if	defined (GDK_Serbian_DJE) && defined (GDK_Cyrillic_yu)
+#endif        /* LATIN4 */
+
+#if        defined (GDK_Serbian_DJE) && defined (GDK_Cyrillic_yu)
     case 6: /* Cyrillic */
       /* Assume the KeySym is a legal value (ignore discontinuities) */
       if (sym >= GDK_Serbian_DJE && sym <= GDK_Serbian_DZE)
-	*lower -= (GDK_Serbian_DJE - GDK_Serbian_dje);
+        *lower -= (GDK_Serbian_DJE - GDK_Serbian_dje);
       else if (sym >= GDK_Serbian_dje && sym <= GDK_Serbian_dze)
-	*upper += (GDK_Serbian_DJE - GDK_Serbian_dje);
+        *upper += (GDK_Serbian_DJE - GDK_Serbian_dje);
       else if (sym >= GDK_Cyrillic_YU && sym <= GDK_Cyrillic_HARDSIGN)
-	*lower -= (GDK_Cyrillic_YU - GDK_Cyrillic_yu);
+        *lower -= (GDK_Cyrillic_YU - GDK_Cyrillic_yu);
       else if (sym >= GDK_Cyrillic_yu && sym <= GDK_Cyrillic_hardsign)
-	*upper += (GDK_Cyrillic_YU - GDK_Cyrillic_yu);
+        *upper += (GDK_Cyrillic_YU - GDK_Cyrillic_yu);
       break;
-#endif	/* CYRILLIC */
-      
-#if	defined (GDK_Greek_ALPHAaccent) && defined (GDK_Greek_finalsmallsigma)
+#endif        /* CYRILLIC */
+
+#if        defined (GDK_Greek_ALPHAaccent) && defined (GDK_Greek_finalsmallsigma)
     case 7: /* Greek */
       /* Assume the KeySym is a legal value (ignore discontinuities) */
       if (sym >= GDK_Greek_ALPHAaccent && sym <= GDK_Greek_OMEGAaccent)
-	*lower += (GDK_Greek_alphaaccent - GDK_Greek_ALPHAaccent);
+        *lower += (GDK_Greek_alphaaccent - GDK_Greek_ALPHAaccent);
       else if (sym >= GDK_Greek_alphaaccent && sym <= GDK_Greek_omegaaccent &&
-	       sym != GDK_Greek_iotaaccentdieresis &&
-	       sym != GDK_Greek_upsilonaccentdieresis)
-	*upper -= (GDK_Greek_alphaaccent - GDK_Greek_ALPHAaccent);
+               sym != GDK_Greek_iotaaccentdieresis &&
+               sym != GDK_Greek_upsilonaccentdieresis)
+        *upper -= (GDK_Greek_alphaaccent - GDK_Greek_ALPHAaccent);
       else if (sym >= GDK_Greek_ALPHA && sym <= GDK_Greek_OMEGA)
-	*lower += (GDK_Greek_alpha - GDK_Greek_ALPHA);
+        *lower += (GDK_Greek_alpha - GDK_Greek_ALPHA);
       else if (sym >= GDK_Greek_alpha && sym <= GDK_Greek_omega &&
-	       sym != GDK_Greek_finalsmallsigma)
-	*upper -= (GDK_Greek_alpha - GDK_Greek_ALPHA);
+               sym != GDK_Greek_finalsmallsigma)
+        *upper -= (GDK_Greek_alpha - GDK_Greek_ALPHA);
       break;
-#endif	/* GREEK */
+#endif        /* GREEK */
     }
 }
 
 static guint
-gdk_keyval_to_upper (guint	  keyval)
+gdk_keyval_to_upper (guint          keyval)
 {
   if (keyval)
     {
       KeySym lower_val = 0;
       KeySym upper_val = 0;
-      
+
       gdkx_XConvertCase (keyval, &lower_val, &upper_val);
       return upper_val;
     }
@@ -368,12 +368,12 @@ static long map_to_unmodified_wx_keysym( KeySym keysym )
         case GDK_Shift_R:       key_code = WXK_SHIFT;       break;
         case GDK_Control_L:
         case GDK_Control_R:     key_code = WXK_CONTROL;     break;
-	case GDK_Meta_L:
-	case GDK_Meta_R:
-	case GDK_Alt_L:
-	case GDK_Alt_R:
-	case GDK_Super_L:
-	case GDK_Super_R:       key_code = WXK_ALT;         break;
+        case GDK_Meta_L:
+        case GDK_Meta_R:
+        case GDK_Alt_L:
+        case GDK_Alt_R:
+        case GDK_Super_L:
+        case GDK_Super_R:       key_code = WXK_ALT;         break;
         case GDK_Menu:          key_code = WXK_MENU;        break;
         case GDK_Help:          key_code = WXK_HELP;        break;
         case GDK_BackSpace:     key_code = WXK_BACK;        break;
@@ -440,7 +440,7 @@ static long map_to_unmodified_wx_keysym( KeySym keysym )
         case GDK_KP_Subtract:  key_code = WXK_NUMPAD_SUBTRACT;  break;
         case GDK_KP_Decimal:   key_code = WXK_NUMPAD_DECIMAL;   break;
         case GDK_KP_Divide:    key_code = WXK_NUMPAD_DIVIDE;    break;
-    
+
         case GDK_F1:            key_code = WXK_F1;          break;
         case GDK_F2:            key_code = WXK_F2;          break;
         case GDK_F3:            key_code = WXK_F3;          break;
@@ -539,7 +539,7 @@ static long map_to_wx_keysym( KeySym keysym )
         case GDK_KP_Subtract:  key_code = '-';   break;
         case GDK_KP_Decimal:   key_code = '.';   break;
         case GDK_KP_Divide:    key_code = '/';   break;
-    
+
         case GDK_F1:            key_code = WXK_F1;          break;
         case GDK_F2:            key_code = WXK_F2;          break;
         case GDK_F3:            key_code = WXK_F3;          break;
@@ -692,7 +692,7 @@ static void gtk_window_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExp
 
 static void gtk_window_draw_callback( GtkWidget *WXUNUSED(widget), GdkRectangle *rect, wxWindow *win )
 {
-    if (g_isIdle) 
+    if (g_isIdle)
         wxapp_install_idle_handler();
 
     if (!win->m_hasVMT)
@@ -714,7 +714,7 @@ static void gtk_window_draw_callback( GtkWidget *WXUNUSED(widget), GdkRectangle 
 
 static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxWindow *win )
 {
-    if (g_isIdle) 
+    if (g_isIdle)
         wxapp_install_idle_handler();
 
     if (!win->m_hasVMT) return FALSE;
@@ -738,13 +738,13 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
     if (gdk_event->window) gdk_window_get_pointer(gdk_event->window, &x, &y, &state);
 
     long key_code = map_to_unmodified_wx_keysym( gdk_event->keyval );
-    
+
     /* sending unknown key events doesn't really make sense */
     if (key_code == 0) return FALSE;
 
     bool ret = FALSE;
-    
-    wxKeyEvent event( wxEVT_KEY_DOWN );         
+
+    wxKeyEvent event( wxEVT_KEY_DOWN );
     event.SetTimestamp( gdk_event->time );
     event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK);
     event.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK);
@@ -756,7 +756,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
     event.m_y = y;
     event.SetEventObject( win );
     ret = win->GetEventHandler()->ProcessEvent( event );
-    
+
     key_code = map_to_wx_keysym( gdk_event->keyval );
 
 #if wxUSE_ACCEL
@@ -781,7 +781,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
        will only be sent if it is not a menu accelerator. */
     if ((key_code != 0) && ! ret )
     {
-        wxKeyEvent event2( wxEVT_CHAR );                 
+        wxKeyEvent event2( wxEVT_CHAR );
         event2.SetTimestamp( gdk_event->time );
         event2.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK);
         event2.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK);
@@ -818,7 +818,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
         new_event.SetEventObject( win );
         ret = win->GetEventHandler()->ProcessEvent( new_event );
     }
-    
+
 #if (GTK_MINOR_VERSION > 0)
     /* pressing F10 will activate the menu bar of the top frame */
     if ( (!ret) &&
@@ -828,22 +828,22 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
         while (ancestor)
         {
             if (wxIsKindOf(ancestor,wxFrame))
-	    {
-	        wxFrame *frame = (wxFrame*) ancestor;
+            {
+                wxFrame *frame = (wxFrame*) ancestor;
                 wxMenuBar *menubar = frame->GetMenuBar();
-		if (menubar)
-		{
+                if (menubar)
+                {
                     wxNode *node = menubar->GetMenus().First();
-		    if (node)
-		    {
-			// doesn't work correctly
+                    if (node)
+                    {
+                        // doesn't work correctly
             // wxMenu *firstMenu = (wxMenu*) node->Data();
-			// gtk_menu_item_select( GTK_MENU_ITEM(firstMenu->m_owner) );
-			// ret = TRUE;
-			break;
-		    }
-		}
-	    }
+                        // gtk_menu_item_select( GTK_MENU_ITEM(firstMenu->m_owner) );
+                        // ret = TRUE;
+                        break;
+                    }
+                }
+            }
             ancestor = ancestor->GetParent();
         }
     }
@@ -887,7 +887,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
 
 static gint gtk_window_key_release_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxWindow *win )
 {
-    if (g_isIdle) 
+    if (g_isIdle)
         wxapp_install_idle_handler();
 
     if (!win->m_hasVMT) return FALSE;
@@ -907,7 +907,7 @@ static gint gtk_window_key_release_callback( GtkWidget *widget, GdkEventKey *gdk
 */
 
     long key_code = map_to_unmodified_wx_keysym( gdk_event->keyval );
-    
+
     /* sending unknown key events doesn't really make sense */
     if (key_code == 0) return FALSE;
 
@@ -943,7 +943,7 @@ static gint gtk_window_key_release_callback( GtkWidget *widget, GdkEventKey *gdk
 
 static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton *gdk_event, wxWindow *win )
 {
-    if (g_isIdle) 
+    if (g_isIdle)
         wxapp_install_idle_handler();
 
 /*
@@ -1097,7 +1097,7 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
 
 static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButton *gdk_event, wxWindow *win )
 {
-    if (g_isIdle) 
+    if (g_isIdle)
         wxapp_install_idle_handler();
 
     if (!win->m_hasVMT) return FALSE;
@@ -1205,7 +1205,7 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
 
 static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion *gdk_event, wxWindow *win )
 {
-    if (g_isIdle) 
+    if (g_isIdle)
         wxapp_install_idle_handler();
 
     if (!win->m_hasVMT) return FALSE;
@@ -1316,7 +1316,7 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion
 
 static gint gtk_window_focus_in_callback( GtkWidget *widget, GdkEvent *WXUNUSED(event), wxWindow *win )
 {
-    if (g_isIdle) 
+    if (g_isIdle)
         wxapp_install_idle_handler();
 
     if (!win->m_hasVMT) return FALSE;
@@ -1366,7 +1366,7 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget, GdkEvent *WXUNUSED(
 
 static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEvent *WXUNUSED(event), wxWindow *win )
 {
-    if (g_isIdle) 
+    if (g_isIdle)
         wxapp_install_idle_handler();
 
     if (!win->m_hasVMT) return FALSE;
@@ -1403,7 +1403,7 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEvent *WXUNUSED
 
 static gint gtk_window_enter_callback( GtkWidget *widget, GdkEventCrossing *gdk_event, wxWindow *win )
 {
-    if (g_isIdle) 
+    if (g_isIdle)
         wxapp_install_idle_handler();
 
     if (!win->m_hasVMT) return FALSE;
@@ -1449,14 +1449,14 @@ static gint gtk_window_enter_callback( GtkWidget *widget, GdkEventCrossing *gdk_
 
 static gint gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_event, wxWindow *win )
 {
-    if (g_isIdle) 
+    if (g_isIdle)
         wxapp_install_idle_handler();
 
     if (!win->m_hasVMT) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;
 
     if (!win->IsOwnGtkWindow( gdk_event->window )) return FALSE;
-    
+
     wxMouseEvent event( wxEVT_LEAVE_WINDOW );
 #if (GTK_MINOR_VERSION > 0)
     event.SetTimestamp( gdk_event->time );
@@ -1495,7 +1495,7 @@ static gint gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_
 
 static void gtk_window_vscroll_callback( GtkWidget *WXUNUSED(widget), wxWindow *win )
 {
-    if (g_isIdle) 
+    if (g_isIdle)
         wxapp_install_idle_handler();
 
     if (g_blockEventsOnDrag) return;
@@ -1539,7 +1539,7 @@ static void gtk_window_vscroll_callback( GtkWidget *WXUNUSED(widget), wxWindow *
 
 static void gtk_window_hscroll_callback( GtkWidget *WXUNUSED(widget), wxWindow *win )
 {
-    if (g_isIdle) 
+    if (g_isIdle)
         wxapp_install_idle_handler();
 
     if (g_blockEventsOnDrag) return;
@@ -1582,7 +1582,7 @@ static void gtk_window_hscroll_callback( GtkWidget *WXUNUSED(widget), wxWindow *
 
 static void gtk_window_vscroll_change_callback( GtkWidget *WXUNUSED(widget), wxWindow *win )
 {
-    if (g_isIdle) 
+    if (g_isIdle)
         wxapp_install_idle_handler();
 
     if (g_blockEventsOnDrag) return;
@@ -1602,7 +1602,7 @@ static void gtk_window_vscroll_change_callback( GtkWidget *WXUNUSED(widget), wxW
 
 static void gtk_window_hscroll_change_callback( GtkWidget *WXUNUSED(widget), wxWindow *win )
 {
-    if (g_isIdle) 
+    if (g_isIdle)
         wxapp_install_idle_handler();
 
     if (g_blockEventsOnDrag) return;
@@ -1624,7 +1624,7 @@ static gint gtk_scrollbar_button_press_callback( GtkRange *WXUNUSED(widget),
                                                  GdkEventButton *WXUNUSED(gdk_event),
                                                  wxWindow *win )
 {
-    if (g_isIdle) 
+    if (g_isIdle)
         wxapp_install_idle_handler();
 
 //  don't test here as we can release the mouse while being over
@@ -1683,7 +1683,7 @@ wxWindow *wxWindowBase::FindFocus()
 static gint
 gtk_window_realized_callback( GtkWidget * WXUNUSED(widget), wxWindow *win )
 {
-    if (g_isIdle) 
+    if (g_isIdle)
         wxapp_install_idle_handler();
 
     if (win->m_delayedFont)
@@ -1696,7 +1696,7 @@ gtk_window_realized_callback( GtkWidget * WXUNUSED(widget), wxWindow *win )
         win->SetForegroundColour( win->GetForegroundColour() );
 
     win->SetCursor( win->GetCursor() );
-    
+
     wxWindowCreateEvent event( win );
     event.SetEventObject( win );
     win->GetEventHandler()->ProcessEvent( event );
@@ -1962,25 +1962,25 @@ wxWindow::~wxWindow()
     if (m_widgetStyle)
     {
         gtk_style_unref( m_widgetStyle );
-	m_widgetStyle = (GtkStyle*) NULL;
+        m_widgetStyle = (GtkStyle*) NULL;
     }
 
     if (m_scrollGC)
     {
         gdk_gc_unref( m_scrollGC );
-	m_scrollGC = (GdkGC*) NULL;
+        m_scrollGC = (GdkGC*) NULL;
     }
 
     if (m_wxwindow)
     {
         gtk_widget_destroy( m_wxwindow );
-	m_wxwindow = (GtkWidget*) NULL;
+        m_wxwindow = (GtkWidget*) NULL;
     }
 
     if (m_widget)
     {
         gtk_widget_destroy( m_widget );
-	m_widget = (GtkWidget*) NULL;
+        m_widget = (GtkWidget*) NULL;
     }
 }
 
@@ -2049,7 +2049,7 @@ void wxWindow::PostCreation()
    /*  we cannot set colours, fonts and cursors before the widget has
        been realized, so we do this directly after realization */
     gtk_signal_connect( GTK_OBJECT(connect_widget), "realize",
-			    GTK_SIGNAL_FUNC(gtk_window_realized_callback), (gpointer) this );
+                            GTK_SIGNAL_FUNC(gtk_window_realized_callback), (gpointer) this );
 
     m_hasVMT = TRUE;
 }
@@ -2142,42 +2142,42 @@ void wxWindow::DoSetSize( int x, int y, int width, int height, int sizeFlags )
         if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_maxHeight;
 
         int border = 0;
-	int bottom_border = 0;
+        int bottom_border = 0;
 
         if (GTK_WIDGET_CAN_DEFAULT(m_widget))
-	{
-	    /* the default button has a border around it */
-	    border = 6;
-	    bottom_border = 5;
-	}
+        {
+            /* the default button has a border around it */
+            border = 6;
+            bottom_border = 5;
+        }
 
-	/* this is the result of hours of debugging: the following code
-	   means that if we have a m_wxwindow and we set the size of
-	   m_widget, m_widget (which is a GtkScrolledWindow) does NOT
-	   automatically propagate its size down to its m_wxwindow,
-	   which is its client area. therefore, we have to tell the
-	   client area directly that it has to resize itself.
-	   this will lead to that m_widget (GtkScrolledWindow) will
-	   calculate how much size it needs for scrollbars etc and
-	   it will then call XXX_size_allocate of its child, which
-	   is m_wxwindow. m_wxwindow in turn will do the same with its
-	   children and so on. problems can arise if this happens
-	   before all the children have been realized as some widgets
-	   stupidy need to be realized during XXX_size_allocate (e.g.
-	   GtkNotebook) and they will segv if called otherwise. this
-	   emergency is tested in gtk_myfixed_size_allocate. Normally
-	   this shouldn't be needed and only gtk_widget_queue_resize()
-	   should be enough to provoke a resize at the next appropriate
-	   moment, but this seems to fail, e.g. when a wxNotebook contains
-	   a wxSplitterWindow: the splitter window's children won't
-	   show up properly resized then. */
-	   
-        gtk_myfixed_set_size( GTK_MYFIXED(m_parent->m_wxwindow), 
-	                      m_widget, 
-			      m_x-border, 
-			      m_y-border,
-			      m_width+2*border, 
-			      m_height+border+bottom_border );
+        /* this is the result of hours of debugging: the following code
+           means that if we have a m_wxwindow and we set the size of
+           m_widget, m_widget (which is a GtkScrolledWindow) does NOT
+           automatically propagate its size down to its m_wxwindow,
+           which is its client area. therefore, we have to tell the
+           client area directly that it has to resize itself.
+           this will lead to that m_widget (GtkScrolledWindow) will
+           calculate how much size it needs for scrollbars etc and
+           it will then call XXX_size_allocate of its child, which
+           is m_wxwindow. m_wxwindow in turn will do the same with its
+           children and so on. problems can arise if this happens
+           before all the children have been realized as some widgets
+           stupidy need to be realized during XXX_size_allocate (e.g.
+           GtkNotebook) and they will segv if called otherwise. this
+           emergency is tested in gtk_myfixed_size_allocate. Normally
+           this shouldn't be needed and only gtk_widget_queue_resize()
+           should be enough to provoke a resize at the next appropriate
+           moment, but this seems to fail, e.g. when a wxNotebook contains
+           a wxSplitterWindow: the splitter window's children won't
+           show up properly resized then. */
+
+        gtk_myfixed_set_size( GTK_MYFIXED(m_parent->m_wxwindow),
+                              m_widget,
+                              m_x-border,
+                              m_y-border,
+                              m_width+2*border,
+                              m_height+border+bottom_border );
     }
 
     m_sizeSet = TRUE;
@@ -2196,13 +2196,13 @@ void wxWindow::OnInternalIdle()
         {
             wxCursor cursor = m_cursor;
             if (g_globalCursor.Ok()) cursor = g_globalCursor;
-	
-	    if (cursor.Ok() && m_currentGdkCursor != cursor)
-	    {
-	        gdk_window_set_cursor( window, cursor.GetCursor() );
-	        m_currentGdkCursor = cursor;
-	    }
-	}
+
+            if (cursor.Ok() && m_currentGdkCursor != cursor)
+            {
+                gdk_window_set_cursor( window, cursor.GetCursor() );
+                m_currentGdkCursor = cursor;
+            }
+        }
 
     UpdateWindowUI();
 }
@@ -2513,7 +2513,7 @@ bool wxWindow::AcceptsFocus() const
 bool wxWindow::Reparent( wxWindow *newParent )
 {
     wxCHECK_MSG( (m_widget != NULL), FALSE, _T("invalid window") );
-    
+
     wxWindow *oldParent = m_parent;
 
     if ( !wxWindowBase::Reparent(newParent) )
@@ -2523,27 +2523,27 @@ bool wxWindow::Reparent( wxWindow *newParent )
     {
         gtk_container_remove( GTK_CONTAINER(oldParent->m_wxwindow), m_widget );
     }
-    
+
     if (newParent)
     {
         /* insert GTK representation */
         (*(newParent->m_insertCallback))(newParent, this);
     }
-    
+
     return TRUE;
 }
 
-void wxWindow::DoAddChild(wxWindow *child) 
+void wxWindow::DoAddChild(wxWindow *child)
 {
     wxASSERT_MSG( (m_widget != NULL), _T("invalid window") );
 
     wxASSERT_MSG( (child != NULL), _T("invalid child window") );
 
     wxASSERT_MSG( (m_insertCallback != NULL), _T("invalid child insertion function") );
-    
+
     /* add to list */
     AddChild( child );
-    
+
     /* insert GTK representation */
     (*m_insertCallback)(this, child);
 }
@@ -2576,16 +2576,16 @@ bool wxWindow::SetCursor( const wxCursor &cursor )
         // been realized
         if (!m_delayedCursor) return FALSE;
     }
-    
+
     GtkWidget *connect_widget = GetConnectWidget();
     if (!connect_widget->window)
     {
         // indicate that a new style has been set
-	// but it couldn't get applied as the
-	// widget hasn't been realized yet.
-	m_delayedCursor = TRUE;
-	
-	// pretend we have done something
+        // but it couldn't get applied as the
+        // widget hasn't been realized yet.
+        m_delayedCursor = TRUE;
+
+        // pretend we have done something
         return TRUE;
     }
 
@@ -2603,7 +2603,7 @@ void wxWindow::WarpPointer( int x, int y )
     if (connect_widget->window)
     {
         /* we provide this function ourselves as it is
-	   missing in GDK */
+           missing in GDK */
         gdk_window_warp_pointer( connect_widget->window, x, y );
     }
 }
@@ -2687,16 +2687,16 @@ bool wxWindow::SetBackgroundColour( const wxColour &colour )
         // been realized
         if (!m_delayedBackgroundColour) return FALSE;
     }
-    
+
     GtkWidget *connect_widget = GetConnectWidget();
     if (!connect_widget->window)
     {
         // indicate that a new style has been set
-	// but it couldn't get applied as the
-	// widget hasn't been realized yet.
-	m_delayedBackgroundColour = TRUE;
-	
-	// pretend we have done something
+        // but it couldn't get applied as the
+        // widget hasn't been realized yet.
+        m_delayedBackgroundColour = TRUE;
+
+        // pretend we have done something
         return TRUE;
     }
 
@@ -2734,16 +2734,16 @@ bool wxWindow::SetForegroundColour( const wxColour &colour )
         // been realized
         if (!m_delayedForegroundColour) return FALSE;
     }
-    
+
     GtkWidget *connect_widget = GetConnectWidget();
     if (!connect_widget->window)
     {
         // indicate that a new style has been set
-	// but it couldn't get applied as the
-	// widget hasn't been realized yet.
-	m_delayedForegroundColour = TRUE;
-	
-	// pretend we have done something
+        // but it couldn't get applied as the
+        // widget hasn't been realized yet.
+        m_delayedForegroundColour = TRUE;
+
+        // pretend we have done something
         return TRUE;
     }
 
@@ -2890,7 +2890,7 @@ bool wxWindow::IsOwnGtkWindow( GdkWindow *window )
 
 bool wxWindow::SetFont( const wxFont &font )
 {
-    wxCHECK_MSG( m_widget != NULL, FALSE, _T(	"invalid window") );
+    wxCHECK_MSG( m_widget != NULL, FALSE, _T(        "invalid window") );
 
     if (!wxWindowBase::SetFont(font))
     {
@@ -2898,16 +2898,16 @@ bool wxWindow::SetFont( const wxFont &font )
         // been realized
         if (!m_delayedFont) return FALSE;
     }
-    
+
     GtkWidget *connect_widget = GetConnectWidget();
     if (!connect_widget->window)
     {
         // indicate that a new style has been set
-	// but it couldn't get applied as the
-	// widget hasn't been realized yet.
-	m_delayedFont = TRUE;
-	
-	// pretend we have done something
+        // but it couldn't get applied as the
+        // widget hasn't been realized yet.
+        m_delayedFont = TRUE;
+
+        // pretend we have done something
         return TRUE;
     }
 
@@ -2934,7 +2934,7 @@ void wxWindow::CaptureMouse()
 
     GtkWidget *connect_widget = GetConnectWidget();
     if (!connect_widget->window) return;
-    
+
     gdk_pointer_grab( connect_widget->window, FALSE,
                       (GdkEventMask)
                          (GDK_BUTTON_PRESS_MASK |
@@ -2954,7 +2954,7 @@ void wxWindow::ReleaseMouse()
 
     GtkWidget *connect_widget = GetConnectWidget();
     if (!connect_widget->window) return;
-    
+
     gdk_pointer_ungrab ( GDK_CURRENT_TIME );
     g_captureWindow = (wxWindow*) NULL;
 }
@@ -3114,16 +3114,16 @@ void wxWindow::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
         m_scrollGC = gdk_gc_new( m_wxwindow->window );
         gdk_gc_set_exposures( m_scrollGC, TRUE );
     }
-    
+
     wxNode *node = m_children.First();
     while (node)
     {
         wxWindow *child = (wxWindow*) node->Data();
-	int sx = 0;
-	int sy = 0;
-	child->GetSize( &sx, &sy );
-	child->SetSize( child->m_x + dx, child->m_y + dy, sx, sy, wxSIZE_ALLOW_MINUS_ONE );
-	node = node->Next();
+        int sx = 0;
+        int sy = 0;
+        child->GetSize( &sx, &sy );
+        child->SetSize( child->m_x + dx, child->m_y + dy, sx, sy, wxSIZE_ALLOW_MINUS_ONE );
+        node = node->Next();
     }
 
     int cw = 0;
@@ -3131,7 +3131,7 @@ void wxWindow::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
     GetClientSize( &cw, &ch );
     int w = cw - abs(dx);
     int h = ch - abs(dy);
-    
+
     if ((h < 0) || (w < 0))
     {
         Refresh();

@@ -182,6 +182,8 @@ public:
     virtual void AdoptAttributesFromHWND();
     virtual void SetupColours();
 
+    virtual bool AcceptsFocus() const;
+
 protected:
 #if wxUSE_RICHEDIT
     bool      m_isRich; // Are we using rich text edit to implement this?

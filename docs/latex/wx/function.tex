@@ -405,6 +405,27 @@ parameters are optional. However, it is recommended to pass a parent frame
 parameter, or (in MS Windows or Motif) the wrong window frame may be brought to
 the front when the dialog box is popped up.
 
+\membersection{::wxCreateFileTipProvider}\label{wxcreatefiletipprovider}
+
+\func{wxTipProvider *}{wxCreateFileTipProvider}{
+    \param{const wxString\& }{filename},
+    \param{size\_t }{currentTip}}
+
+This function creates a \helpref{wxTipProvider}{wxtipprovider} which may be
+used with \helpref{wxShowTip}{wxshowtip}.
+
+\docparam{filename}{The name of the file containing the tips, one per line}
+\docparam{currentTip}{The index of the first tip to show - normally this index
+    is remembered between the 2 program runs.}
+
+\wxheading{See also:}
+
+\helpref{Tips overview}{tipsoverview}
+
+\wxheading{Include files}
+
+<wx/tipdlg.h>
+
 \membersection{::wxFileSelector}\label{wxfileselector}
 
 \func{wxString}{wxFileSelector}{\param{const wxString\& }{message}, \param{const wxString\& }{default\_path = ""},\\
@@ -584,6 +605,33 @@ The symbols are not shown when the generic function is used.
 \wxheading{Include files}
 
 <wx/msgdlg.h>
+
+\membersection{::wxShowTip}\label{wxshowtip}
+
+\func{bool}{wxShowTip}{
+    \param{wxWindow *}{parent},
+    \parent{wxTipProvider *}{tipProvider},
+    \param{bool }{showAtStartup = TRUE}}
+
+This function shows a "startup tip" to the user.
+
+\docparam{parent}{The parent window for the modal dialog}
+
+\docparam{tipProvider}{An object which is used to get the text of the tips.
+    It may be created with 
+    \helpref{wxCreateFileTipProvider}{wxcreatefiletipprovider} function.}
+
+\docparam{showAtStartup}{Should be TRUE if startup tips are shown, FALSE
+    otherwise. This is used as the initial value for "Show tips at startup"
+    checkbox which is shown in the tips dialog.}
+
+\wxheading{See also:}
+
+\helpref{Tips overview}{tipsoverview}
+
+\wxheading{Include files}
+
+<wx/tipdlg.h>
 
 \section{GDI functions}\label{gdifunctions}
 

@@ -174,10 +174,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
       m_btnAbort = new wxButton(this, -1, _("Cancel"));
       c = new wxLayoutConstraints;
       c->centreX.SameAs(this, wxCentreX);
-      if(lastWindow)
-         c->top.Below(lastWindow, 2*LAYOUT_Y_MARGIN);
-      else
-         c->top.Below(m_btnAbort, 2*LAYOUT_Y_MARGIN);
+      c->top.Below(lastWindow, 2*LAYOUT_Y_MARGIN);
       c->width.AsIs();
       c->height.AsIs();
       m_btnAbort->SetConstraints(c);
@@ -194,9 +191,8 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
    // wide under Windows, so try to find a reasonable value for the width, not
    // too big and not too small
    wxSize size = GetClientSize();
-   size.x = 2*widthText;
-   if ( size.x < 2*size.y )
-      SetClientSize(2*size.y, size.y);
+   size.x = wxMax(3*widthText/2, 2*size.y);
+   SetClientSize(size);
 
    Show(TRUE);
    Centre(wxCENTER_FRAME | wxBOTH);
@@ -235,18 +231,18 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
 
       if (m_elapsed) 
       {
-	 s.Printf("%i:%02i:%02i", diff.GetHour(), diff.GetMinute(), diff.GetSecond());
-	 if (s != m_elapsed->GetLabel()) m_elapsed->SetLabel(s);
+         s.Printf("%i:%02i:%02i", diff.GetHour(), diff.GetMinute(), diff.GetSecond());
+         if (s != m_elapsed->GetLabel()) m_elapsed->SetLabel(s);
       }
       if (m_estimated) 
       {
-	 s.Printf("%i:%02i:%02i", estim / (60 * 60), (estim / 60) % 60, estim % 60);
-	 if (s != m_estimated->GetLabel()) m_estimated->SetLabel(s);
+         s.Printf("%i:%02i:%02i", estim / (60 * 60), (estim / 60) % 60, estim % 60);
+         if (s != m_estimated->GetLabel()) m_estimated->SetLabel(s);
       }
       if (m_remaining) 
       {
-	 s.Printf("%i:%02i:%02i", remai / (60 * 60), (remai / 60) % 60, remai % 60);
-	 if (s != m_remaining->GetLabel()) m_remaining->SetLabel(s);
+         s.Printf("%i:%02i:%02i", remai / (60 * 60), (remai / 60) % 60, remai % 60);
+         if (s != m_remaining->GetLabel()) m_remaining->SetLabel(s);
       }
    }
 

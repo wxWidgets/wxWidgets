@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -12,12 +12,12 @@
 #define __GTKSTATICLINEH__
 
 #ifdef __GNUG__
-#pragma interface
+    #pragma interface
 #endif
 
-#include "wx/defs.h"
-
-#if wxUSE_STATLINE
+#if !wxUSE_STATLINE
+    #error "This file should only be included if wxUSE_STATLINE == 1"
+#endif
 
 #include "wx/object.h"
 #include "wx/list.h"
@@ -30,31 +30,23 @@
 class wxStaticLine;
 
 //-----------------------------------------------------------------------------
-// global data
-//-----------------------------------------------------------------------------
-
-extern const char *wxStaticTextNameStr;
-
-//-----------------------------------------------------------------------------
 // wxStaticLine
 //-----------------------------------------------------------------------------
 
-class wxStaticLine: public wxControl
+class wxStaticLine : public wxStaticLineBase
 {
-  DECLARE_DYNAMIC_CLASS(wxStaticLine)
+    DECLARE_DYNAMIC_CLASS(wxStaticLine)
 
-  public:
-
-    wxStaticLine(void);
+public:
+    wxStaticLine();
     wxStaticLine( wxWindow *parent, wxWindowID id,
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      long style = wxLI_HORIZONTAL, const wxString &name = wxStaticTextNameStr );
+            const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
+            long style = wxLI_HORIZONTAL, const wxString &name = wxStaticTextNameStr );
     bool Create(  wxWindow *parent, wxWindowID id,
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      long style = wxLI_HORIZONTAL, const wxString &name = wxStaticTextNameStr );
-    
+            const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
+            long style = wxLI_HORIZONTAL, const wxString &name = wxStaticTextNameStr );
 };
 
-#endif
+#endif // wxUSE_STATLINE
 
 #endif // __GTKSTATICLINEH__

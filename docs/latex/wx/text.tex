@@ -19,10 +19,14 @@ streambuf\\
 
 \twocolwidtha{5cm}
 \begin{twocollist}\itemsep=0pt
-\twocolitem{\windowstyle{wxTE\_PROCESS\_ENTER}}{The callback function will
-receive the message wxEVENT\_TYPE\_TEXT\_ENTER\_COMMAND. Note
-that this will break tab traversal for this panel item under
-Windows.}
+\twocolitem{\windowstyle{wxTE\_PROCESS\_ENTER}}{The control will generate
+the message wxEVENT\_TYPE\_TEXT\_ENTER\_COMMAND (otherwise pressing <Enter> is
+either processed internally by the control or used for navigation between
+dialog controls).}
+\twocolitem{\windowstyle{wxTE\_PROCESS\_TAB}}{The control will receieve
+EVT\_CHAR messages for TAB pressed - normally, TAB is used for passing to the
+next control in a dialog instead. For the control created with this style,
+you can still use Ctrl-Enter to pass to the next control from the keyboard.}
 \twocolitem{\windowstyle{wxTE\_MULTILINE}}{The text control allows multiple lines.}
 \twocolitem{\windowstyle{wxTE\_PASSWORD}}{The text will be echoed as asterisks.}
 \twocolitem{\windowstyle{wxTE\_READONLY}}{The text will not be user-editable.}

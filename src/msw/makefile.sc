@@ -35,7 +35,8 @@ GENERICOBJS= \
   $(GENDIR)\splitter.obj \
   $(GENDIR)\statusbr.obj \
   $(GENDIR)\tabg.obj \
-  $(GENDIR)\textdlgg.obj
+  $(GENDIR)\textdlgg.obj \
+  $(GENDIR)\tipdlg.obj
 
 #  $(GENDIR)\imaglist.obj \
 #  $(GENDIR)\treectrl.obj \
@@ -105,6 +106,7 @@ COMMONOBJS = \
   $(COMMDIR)\datstrm.obj \
   $(COMMDIR)\objstrm.obj \
   $(COMMDIR)\variant.obj \
+  $(COMMDIR)\dlgcmn.obj \
   $(COMMDIR)\wincmn.obj \
   $(COMMDIR)\wxchar.obj
 
@@ -189,6 +191,7 @@ MSWOBJS = \
   $(MSWDIR)\spinbutt.obj \
   $(MSWDIR)\statbmp.obj \
   $(MSWDIR)\statbox.obj \
+  $(MSWDIR)\statline.obj \
   $(MSWDIR)\statbr95.obj \
   $(MSWDIR)\stattext.obj \
   $(MSWDIR)\tabctrl.obj \

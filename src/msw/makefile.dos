@@ -71,6 +71,7 @@ GENERICOBJS= \
   $(GENDIR)\statusbr.obj \
   $(GENDIR)\tabg.obj \
   $(GENDIR)\textdlgg.obj\
+  $(GENDIR)\tipdlg.obj\
   $(GENDIR)\prntdlgg.obj \
   $(GENDIR)\treectrl.obj
 
@@ -128,6 +129,7 @@ COMMONOBJS = \
   $(COMMDIR)\zstream.obj \
   $(COMMDIR)\datstrm.obj \
   $(COMMDIR)\extended.obj \
+  $(COMMDIR)\dlgcmn.obj \
   $(COMMDIR)\wincmn.obj \
   $(COMMDIR)\wxchar.obj
 
@@ -201,6 +203,7 @@ MSWOBJS = \
   $(MSWDIR)\spinbutt.obj \
   $(MSWDIR)\statbmp.obj \
   $(MSWDIR)\statbox.obj \
+  $(MSWDIR)\statline.obj \
   $(MSWDIR)\stattext.obj \
   $(MSWDIR)\tbarmsw.obj \
   $(MSWDIR)\textctrl.obj \
@@ -610,6 +613,11 @@ $(MSWDIR)/statbox.obj:     $*.$(SRCSUFF)
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
+$(MSWDIR)/statline.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
 $(MSWDIR)/stattext.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
@@ -948,6 +956,11 @@ $(COMMDIR)/extended.obj:     $*.c
 $(CPPFLAGS2) /Fo$@ /c /Tp $*.c
 <<
 
+$(COMMDIR)/dlgcmn.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
 $(COMMDIR)/wincmn.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
@@ -1079,6 +1092,11 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(GENDIR)/textdlgg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(GENDIR)/tipdlg.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<

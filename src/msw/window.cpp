@@ -281,11 +281,10 @@ wxWindow::~wxWindow()
     {
         if ( !::DestroyWindow(GetHwnd()) )
             wxLogLastError("DestroyWindow");
-    }
 
-    // Restore old Window proc, if required and remove hWnd <-> wxWindow
-    // association
-    UnsubclassWin();
+        // remove hWnd <-> wxWindow association
+        wxRemoveHandleAssociation(this);
+    }
 }
 
 // real construction (Init() must have been called before!)
@@ -328,7 +327,6 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
         // want everything: i.e. all keys and WM_CHAR message
         m_lDlgCode = DLGC_WANTARROWS | DLGC_WANTCHARS |
                      DLGC_WANTTAB | DLGC_WANTMESSAGE;
-        
     }
 
     MSWCreate(m_windowId, parent, wxCanvasClassName, this, NULL,
@@ -448,7 +446,7 @@ bool wxWindow::SetFont(const wxFont& font)
 
         wxASSERT_MSG( hFont, _T("should have valid font") );
 
-        ::SendMessage(hWnd, WM_SETFONT, (WPARAM)hFont, TRUE);
+        ::SendMessage(hWnd, WM_SETFONT, (WPARAM)hFont, MAKELPARAM(TRUE, 0));
     }
 
     return TRUE;
@@ -801,10 +799,13 @@ void wxWindow::SubclassWin(WXHWND hWnd)
 {
     wxASSERT_MSG( !m_oldWndProc, _T("subclassing window twice?") );
 
-    wxAssociateWinWithHandle((HWND)hWnd, this);
+    HWND hwnd = (HWND)hWnd;
+    wxCHECK_RET( ::IsWindow(hwnd), _T("invalid HWND in SubclassWin") );
 
-    m_oldWndProc = (WXFARPROC) GetWindowLong((HWND) hWnd, GWL_WNDPROC);
-    SetWindowLong((HWND) hWnd, GWL_WNDPROC, (LONG) wxWndProc);
+    wxAssociateWinWithHandle(hwnd, this);
+
+    m_oldWndProc = (WXFARPROC) GetWindowLong(hwnd, GWL_WNDPROC);
+    SetWindowLong(hwnd, GWL_WNDPROC, (LONG) wxWndProc);
 }
 
 void wxWindow::UnsubclassWin()
@@ -812,16 +813,19 @@ void wxWindow::UnsubclassWin()
     wxRemoveHandleAssociation(this);
 
     // Restore old Window proc
-    if ( GetHwnd() )
+    HWND hwnd = GetHwnd();
+    if ( hwnd )
     {
-        FARPROC farProc = (FARPROC) GetWindowLong(GetHwnd(), GWL_WNDPROC);
+        m_hWnd = 0;
+
+        wxCHECK_RET( ::IsWindow(hwnd), _T("invalid HWND in SubclassWin") );
+
+        FARPROC farProc = (FARPROC) GetWindowLong(hwnd, GWL_WNDPROC);
         if ( (m_oldWndProc != 0) && (farProc != (FARPROC) m_oldWndProc) )
         {
-            SetWindowLong(GetHwnd(), GWL_WNDPROC, (LONG) m_oldWndProc);
+            SetWindowLong(hwnd, GWL_WNDPROC, (LONG) m_oldWndProc);
             m_oldWndProc = 0;
         }
-
-        m_hWnd = 0;
     }
 }
 
@@ -1368,6 +1372,31 @@ void wxWindow::GetCaretPos(int *x, int *y) const
 }
 #endif // wxUSE_CARET
 
+// ---------------------------------------------------------------------------
+// popup menu
+// ---------------------------------------------------------------------------
+
+bool wxWindow::PopupMenu(wxMenu *menu, int x, int y)
+{
+    menu->SetInvokingWindow(this);
+    menu->UpdateUI();
+
+    HWND hWnd = GetHwnd();
+    HMENU hMenu = GetHmenuOf(menu);
+    POINT point;
+    point.x = x;
+    point.y = y;
+    ::ClientToScreen(hWnd, &point);
+    wxCurrentPopupMenu = menu;
+    ::TrackPopupMenu(hMenu, TPM_RIGHTBUTTON, point.x, point.y, 0, hWnd, NULL);
+    wxYield();
+    wxCurrentPopupMenu = NULL;
+
+    menu->SetInvokingWindow(NULL);
+
+    return TRUE;
+}
+
 // ===========================================================================
 // pre/post message processing
 // ===========================================================================
@@ -1454,9 +1483,28 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
                             // buttons want process Enter themselevs
                             bProcess = FALSE;
                         }
-                        // else: but if it does not it makes sense to make it
-                        //       work like a TAB - and that's what we do.
-                        //       Note that Ctrl-Enter always works this way.
+                        else
+                        {
+                            wxPanel *panel = wxDynamicCast(this, wxPanel);
+                            wxButton *btn = NULL;
+                            if ( panel )
+                            {
+                                // panel may have a default button which should
+                                // be activated by Enter
+                                btn = panel->GetDefaultItem();
+                            }
+
+                            if ( btn )
+                            {
+                                // if we do have a default button, do press it
+                                btn->MSWCommand(BN_CLICKED, 0 /* unused */);
+
+                                return TRUE;
+                            }
+                            // else: but if it does not it makes sense to make
+                            //       it work like a TAB - and that's what we do.
+                            //       Note that Ctrl-Enter always works this way.
+                        }
                     }
                     break;
 
@@ -1504,10 +1552,7 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
 
 bool wxWindow::MSWTranslateMessage(WXMSG* pMsg)
 {
-    return m_acceleratorTable.Ok() &&
-           ::TranslateAccelerator(GetHwnd(),
-                                  GetTableHaccel(m_acceleratorTable),
-                                  (MSG *)pMsg);
+    return m_acceleratorTable.Translate(this, pMsg);
 }
 
 // ---------------------------------------------------------------------------

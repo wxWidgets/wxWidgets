@@ -846,10 +846,7 @@ bool wxFrame::MSWTranslateMessage(WXMSG* pMsg)
         return FALSE;
 
     const wxAcceleratorTable& acceleratorTable = menuBar->GetAccelTable();
-    return acceleratorTable.Ok() &&
-           ::TranslateAccelerator(GetHwnd(),
-                                  GetTableHaccel(acceleratorTable),
-                                  (MSG *)pMsg);
+    return acceleratorTable.Translate(this, pMsg);
 }
 
 // ---------------------------------------------------------------------------
@@ -863,7 +860,7 @@ bool wxFrame::HandlePaint()
     {
         if ( m_iconized )
         {
-            HICON hIcon = m_icon.Ok() ? GetIconHicon(m_icon)
+            HICON hIcon = m_icon.Ok() ? GetHiconOf(m_icon)
                                       : (HICON)m_defaultIcon;
 
             // Hold a pointer to the dc so long as the OnPaint() message
@@ -1059,7 +1056,7 @@ long wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 
         case WM_QUERYDRAGICON:
             {
-                HICON hIcon = m_icon.Ok() ? GetIconHicon(m_icon)
+                HICON hIcon = m_icon.Ok() ? GetHiconOf(m_icon)
                                           : (HICON)(m_defaultIcon);
                 rc = (long)hIcon;
                 processed = rc != 0;

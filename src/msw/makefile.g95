@@ -69,6 +69,7 @@ GENERICOBJS= \
   $(GENDIR)/statusbr.$(OBJSUFF) \
   $(GENDIR)/tabg.$(OBJSUFF) \
   $(GENDIR)/textdlgg.$(OBJSUFF)
+  $(GENDIR)/tipdlg.$(OBJSUFF)
 
 #  $(GENDIR)/colrdlgg.$(OBJSUFF) \
 #  $(GENDIR)/fontdlgg.$(OBJSUFF) \
@@ -131,6 +132,7 @@ COMMONOBJS = \
   $(COMMDIR)/datstrm.$(OBJSUFF) \
   $(COMMDIR)/objstrm.$(OBJSUFF) \
   $(COMMDIR)/extended.$(OBJSUFF) \
+  $(COMMDIR)/dlgcmn.$(OBJSUFF) \
   $(COMMDIR)/wincmn.$(OBJSUFF) \
   $(COMMDIR)/wxchar.$(OBJSUFF)
 
@@ -214,6 +216,7 @@ MSWOBJS = \
   spinbutt.$(OBJSUFF) \
   statbmp.$(OBJSUFF) \
   statbox.$(OBJSUFF) \
+  statline.$(OBJSUFF) \
   statbr95.$(OBJSUFF) \
   stattext.$(OBJSUFF) \
   tabctrl.$(OBJSUFF) \

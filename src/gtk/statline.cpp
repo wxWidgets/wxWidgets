@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:           wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -22,38 +22,38 @@
 // wxStaticLine
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxStaticLine,wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxStaticLine, wxControl)
 
-wxStaticLine::wxStaticLine(void)
+wxStaticLine::wxStaticLine()
 {
 }
 
 wxStaticLine::wxStaticLine( wxWindow *parent, wxWindowID id,
-      const wxPoint &pos, const wxSize &size, 
-      long style, const wxString &name )
+                            const wxPoint &pos, const wxSize &size,
+                            long style, const wxString &name )
 {
     Create( parent, id, pos, size, style, name );
 }
 
-bool wxStaticLine::Create( wxWindow *parent, wxWindowID id, 
-      const wxPoint &pos, const wxSize &size, 
-      long style, const wxString &name )
+bool wxStaticLine::Create( wxWindow *parent, wxWindowID id,
+                           const wxPoint &pos, const wxSize &size,
+                           long style, const wxString &name )
 {
     m_needParent = TRUE;
-  
+
     PreCreation( parent, id, pos, size, style, name );
 
-    if (style & wxVERTICAL)
+    if ( IsVertical() )
         m_widget = gtk_vseparator_new();
     else
         m_widget = gtk_hseparator_new();
-  
+
     m_parent->DoAddChild( this );
-  
+
     PostCreation();
-  
+
     Show( TRUE );
-    
+
     return TRUE;
 }
 

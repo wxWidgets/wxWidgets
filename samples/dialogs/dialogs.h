@@ -35,6 +35,7 @@ class MyFrame: public wxFrame
     void FileOpen(wxCommandEvent& event);
     void FileSave(wxCommandEvent& event);
     void DirChoose(wxCommandEvent& event);
+    void ShowTip(wxCommandEvent& event);
 
 #if !defined(__WXMSW__) || wxTEST_GENERIC_DIALOGS_IN_MSW
 	void ChooseColourGeneric(wxCommandEvent& event);
@@ -67,6 +68,7 @@ DECLARE_EVENT_TABLE()
 #define DIALOGS_FILE_OPEN                   8
 #define DIALOGS_FILE_SAVE                   9
 #define DIALOGS_DIR_CHOOSE                  10
+#define DIALOGS_TIP                         11
 
 #endif
 

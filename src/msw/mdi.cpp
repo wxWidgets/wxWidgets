@@ -537,10 +537,7 @@ bool wxMDIParentFrame::MSWTranslateMessage(WXMSG* msg)
         return TRUE;
     }
 
-    if ( m_acceleratorTable.Ok() &&
-         ::TranslateAccelerator(GetHwnd(),
-                                GetTableHaccel(m_acceleratorTable),
-                                pMsg) )
+    if ( m_acceleratorTable.Translate(this, msg) )
     {
         return TRUE;
     }
@@ -993,15 +990,7 @@ long wxMDIChildFrame::MSWDefWindowProc(WXUINT message, WXUINT wParam, WXLPARAM l
 
 bool wxMDIChildFrame::MSWTranslateMessage(WXMSG* msg)
 {
-    MSG *pMsg = (MSG *)msg;
-    if ( m_acceleratorTable.Ok() )
-    {
-        return ::TranslateAccelerator(GetWinHwnd(GetParent()),
-                                      GetTableHaccel(m_acceleratorTable),
-                                      pMsg) != 0;
-    }
-
-    return FALSE;
+    return m_acceleratorTable.Translate(GetParent(), msg);
 }
 
 // ---------------------------------------------------------------------------

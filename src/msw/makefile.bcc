@@ -89,6 +89,7 @@ GENERICOBJS= \
   $(MSWDIR)\statusbr.obj \
   $(MSWDIR)\tabg.obj \
   $(MSWDIR)\textdlgg.obj \
+  $(MSWDIR)\tipdlg.obj \
   $(MSWDIR)\treectrl.obj
 
 #  $(MSWDIR)\msgdlgg.obj \
@@ -144,6 +145,7 @@ COMMONOBJS = \
   $(MSWDIR)\datstrm.obj \
   $(MSWDIR)\sckstrm.obj \
   $(MSWDIR)\extended.obj \
+  $(MSWDIR)\dlgcmn.obj \
   $(MSWDIR)\wincmn.obj \
   $(MSWDIR)\objstrm.obj \
   $(MSWDIR)\dynlib.obj \
@@ -230,6 +232,7 @@ MSWOBJS = \
   $(MSWDIR)\spinbutt.obj \
   $(MSWDIR)\statbmp.obj \
   $(MSWDIR)\statbox.obj \
+  $(MSWDIR)\statline.obj \
   $(MSWDIR)\stattext.obj \
   $(MSWDIR)\tbarmsw.obj \
   $(MSWDIR)\textctrl.obj \
@@ -425,6 +428,8 @@ $(MSWDIR)\statbmp.obj:     $(MSWDIR)\statbmp.$(SRCSUFF)
 
 $(MSWDIR)\statbox.obj:     $(MSWDIR)\statbox.$(SRCSUFF)
 
+$(MSWDIR)\statline.obj:     $(MSWDIR)\statline.$(SRCSUFF)
+
 $(MSWDIR)\statbr95.obj:     $(MSWDIR)\statbr95.$(SRCSUFF)
 
 $(MSWDIR)\stattext.obj:     $(MSWDIR)\stattext.$(SRCSUFF)
@@ -572,6 +577,8 @@ $(MSWDIR)\stream.obj:	$(COMMDIR)\stream.$(SRCSUFF)
 
 $(MSWDIR)\objstrm.obj:  $(COMMDIR)\objstrm.$(SRCSUFF)
 
+$(MSWDIR)\dlgcmn.obj:	$(COMMDIR)\dlgcmn.$(SRCSUFF)
+
 $(MSWDIR)\wincmn.obj:	$(COMMDIR)\wincmn.$(SRCSUFF)
 
 $(MSWDIR)\extended.obj:	$(COMMDIR)\extended.c
@@ -637,6 +644,8 @@ $(MSWDIR)\splitter.obj:     $(GENDIR)\splitter.$(SRCSUFF)
 $(MSWDIR)\statusbr.obj:     $(GENDIR)\statusbr.$(SRCSUFF)
 
 $(MSWDIR)\textdlgg.obj:     $(GENDIR)\textdlgg.$(SRCSUFF)
+
+$(MSWDIR)\tipdlg.obj:     $(GENDIR)\tipdlg.$(SRCSUFF)
 
 $(MSWDIR)\tabg.obj:     $(GENDIR)\tabg.$(SRCSUFF)
 

@@ -1,0 +1,5 @@
+Startup tips are documented in "Startup tips overview" section of wxWindows documentation.
+This is the first tip!
+And this is another great tip...
+And here is a very very very very very very very very very very very long one.
+If you have something useful to add to this file, please do.

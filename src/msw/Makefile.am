@@ -51,6 +51,7 @@ libwx_msw_la_SOURCES = \
  date.cpp \
  datstrm.cpp \
  dcbase.cpp \
+ dlgcmn.cpp \
  docmdi.cpp \
  docview.cpp \
  dynlib.cpp \
@@ -114,6 +115,7 @@ libwx_msw_la_SOURCES = \
  statusbr.cpp \
  tabg.cpp \
  textdlgg.cpp \
+ tipdlg.cpp \
 \
  accel.cpp \
  app.cpp \

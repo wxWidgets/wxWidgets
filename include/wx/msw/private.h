@@ -207,20 +207,27 @@ extern LONG APIENTRY _EXPORT
 
 // ---------------------------------------------------------------------------
 // macros to make casting between WXFOO and FOO a bit easier: the GetFoo()
-// returns Foo cast to the Windows type for oruselves, while GetFoosFoo() takes
-// an argument which should be a pointer to wxFoo (is this really clear?)
+// returns Foo cast to the Windows type for oruselves, while GetFooOf() takes
+// an argument which should be a pointer or reference to the object of the
+// corresponding class (this depends on the macro)
 // ---------------------------------------------------------------------------
 
 #define GetHwnd()               ((HWND)GetHWND())
-#define GetWinHwnd(win)         ((HWND)((win)->GetHWND()))
+#define GetHwndOf(win)          ((HWND)((win)->GetHWND()))
+// old name
+#define GetWinHwnd              GetHwndOf
 
 #define GetHdc()                ((HDC)GetHDC())
+#define GetHdcOf(dc)            ((HDC)(dc).GetHDC())
 
 #define GetHicon()              ((HICON)GetHICON())
-#define GetIconHicon(icon)      ((HICON)(icon).GetHICON())
+#define GetHiconOf(icon)        ((HICON)(icon).GetHICON())
 
 #define GetHaccel()             ((HACCEL)GetHACCEL())
-#define GetTableHaccel(table)   ((HACCEL)((table).GetHACCEL()))
+#define GetHaccelOf(table)      ((HACCEL)((table).GetHACCEL()))
+
+#define GetHmenu()              ((HMENU)GetHMenu())
+#define GetHmenuOf(menu)        ((HMENU)menu->GetHMenu())
 
 // ---------------------------------------------------------------------------
 // global data

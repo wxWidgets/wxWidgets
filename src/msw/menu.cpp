@@ -69,10 +69,6 @@ static const int idMenuTitle = -2;
     IMPLEMENT_DYNAMIC_CLASS(wxMenuBar, wxEvtHandler)
 #endif
 
-// convenience macros
-#define GetHMENU()          ((HMENU)GetHMenu())
-#define GetHMenuOf(menu)    ((HMENU)menu->GetHMenu())
-
 // ============================================================================
 // implementation
 // ============================================================================
@@ -257,7 +253,7 @@ void wxMenu::Append(wxMenuItem *pItem)
         pData = label;
     }
 
-    if ( !::AppendMenu(GetHMENU(), flags, id, pData) )
+    if ( !::AppendMenu(GetHmenu(), flags, id, pData) )
     {
         wxLogLastError("AppendMenu");
     }
@@ -272,7 +268,7 @@ void wxMenu::Append(wxMenuItem *pItem)
             mii.fMask = MIIM_STATE;
             mii.fState = MFS_DEFAULT;
 
-            if ( !SetMenuItemInfo(GetHMENU(), (unsigned)id, FALSE, &mii) )
+            if ( !SetMenuItemInfo(GetHmenu(), (unsigned)id, FALSE, &mii) )
             {
                 wxLogLastError(_T("SetMenuItemInfo"));
             }
@@ -323,7 +319,7 @@ void wxMenu::Delete(int id)
 
     wxCHECK_RET( node, _T("wxMenu::Delete(): item doesn't exist") );
 
-    HMENU menu = GetHMENU();
+    HMENU menu = GetHmenu();
 
     wxMenu *pSubMenu = item->GetSubMenu();
     if ( pSubMenu != NULL ) {
@@ -453,7 +449,7 @@ void wxMenu::SetTitle(const wxString& label)
     bool hasNoTitle = m_title.IsEmpty();
     m_title = label;
 
-    HMENU hMenu = GetHMENU();
+    HMENU hMenu = GetHmenu();
 
     if ( hasNoTitle )
     {
@@ -622,27 +618,6 @@ wxMenuItem *wxMenu::FindItemForId(int itemId, wxMenu ** itemMenu) const
 // other
 // ---------------------------------------------------------------------------
 
-bool wxWindow::PopupMenu(wxMenu *menu, int x, int y)
-{
-    menu->SetInvokingWindow(this);
-    menu->UpdateUI();
-
-    HWND hWnd = (HWND) GetHWND();
-    HMENU hMenu = (HMENU)menu->GetHMenu();
-    POINT point;
-    point.x = x;
-    point.y = y;
-    ::ClientToScreen(hWnd, &point);
-    wxCurrentPopupMenu = menu;
-    ::TrackPopupMenu(hMenu, TPM_RIGHTBUTTON, point.x, point.y, 0, hWnd, NULL);
-    wxYield();
-    wxCurrentPopupMenu = NULL;
-
-    menu->SetInvokingWindow(NULL);
-
-    return TRUE;
-}
-
 void wxMenu::Attach(wxMenuBar *menubar)
 {
     // menu can be in at most one menubar because otherwise they would both
@@ -793,7 +768,7 @@ bool wxMenuBar::IsChecked(int id) const
 
     wxCHECK_MSG( item, FALSE, _T("wxMenuBar::IsChecked(): no such item") );
 
-    int flag = ::GetMenuState(GetHMenuOf(itemMenu), id, MF_BYCOMMAND);
+    int flag = ::GetMenuState(GetHmenuOf(itemMenu), id, MF_BYCOMMAND);
 
     return (flag & MF_CHECKED) != 0;
 }
@@ -805,7 +780,7 @@ bool wxMenuBar::IsEnabled(int id) const
 
     wxCHECK_MSG( item, FALSE, _T("wxMenuBar::IsEnabled(): no such item") );
 
-    int flag = ::GetMenuState(GetHMenuOf(itemMenu), id, MF_BYCOMMAND) ;
+    int flag = ::GetMenuState(GetHmenuOf(itemMenu), id, MF_BYCOMMAND) ;
 
     return (flag & MF_ENABLED) != 0;
 }
@@ -879,7 +854,7 @@ void wxMenuBar::SetLabelTop(int pos, const wxString& label)
         id = pos;
     }
 
-    if ( ::ModifyMenu(GetHMENU(), pos, MF_BYPOSITION | MF_STRING | flagsOld,
+    if ( ::ModifyMenu(GetHmenu(), pos, MF_BYPOSITION | MF_STRING | flagsOld,
                       id, label) == 0xFFFFFFFF )
     {
         wxLogLastError("ModifyMenu");
@@ -892,7 +867,7 @@ wxString wxMenuBar::GetLabelTop(int pos) const
 
     len++;  // for the NUL character
     wxString label;
-    ::GetMenuString(GetHMENU(), pos, label.GetWriteBuf(len), len, MF_BYCOMMAND);
+    ::GetMenuString(GetHmenu(), pos, label.GetWriteBuf(len), len, MF_BYCOMMAND);
     label.UngetWriteBuf();
 
     return label;
@@ -938,7 +913,7 @@ bool wxMenuBar::OnAppend(wxMenu *a_menu, const wxChar *title)
 
     a_menu->Attach(this);
 
-    if ( !::AppendMenu(GetHMENU(), MF_POPUP | MF_STRING,
+    if ( !::AppendMenu(GetHmenu(), MF_POPUP | MF_STRING,
                        (UINT)submenu, title) )
     {
         wxLogLastError(_T("AppendMenu"));

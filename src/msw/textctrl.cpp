@@ -1280,3 +1280,8 @@ void wxTextCtrl::OnUpdateRedo(wxUpdateUIEvent& event)
     event.Enable( CanRedo() );
 }
 
+bool wxTextCtrl::AcceptsFocus() const
+{
+    // we don't want focus if we can't be edited
+    return IsEditable() && wxControl::AcceptsFocus();
+}

@@ -37,6 +37,7 @@ libwx_gtk_la_SOURCES = \
  date.cpp \
  datstrm.cpp \
  dcbase.cpp \
+ dlgcmn.cpp \
  docmdi.cpp \
  docview.cpp \
  dynarray.cpp \
@@ -186,6 +187,7 @@ libwx_gtk_la_SOURCES = \
  textctrl.cpp \
  textdlg.cpp \
  timer.cpp \
+ tipdlg.cpp \
  tooltip.cpp \
  utilsgtk.cpp \
  utilsres.cpp \

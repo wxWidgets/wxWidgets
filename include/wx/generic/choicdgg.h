@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c)
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __CHOICEDLGH_G__
@@ -79,7 +79,6 @@ public:
     void OnListBoxDClick(wxCommandEvent& event);
 
 protected:
-    long        m_dialogStyle;
     int         m_selection;
     wxString    m_stringSelection;
     void       *m_clientData;

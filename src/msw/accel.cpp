@@ -38,8 +38,8 @@ class WXDLLEXPORT wxAcceleratorRefData: public wxObjectRefData
 {
     friend class WXDLLEXPORT wxAcceleratorTable;
 public:
-    wxAcceleratorRefData(void);
-    ~wxAcceleratorRefData(void);
+    wxAcceleratorRefData();
+    ~wxAcceleratorRefData();
 
     inline HACCEL GetHACCEL() const { return m_hAccel; }
 protected:
@@ -132,13 +132,14 @@ wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]
 
     M_ACCELDATA->m_ok = (M_ACCELDATA->m_hAccel != 0);
 }
-#else
+#else // Win16
 wxAcceleratorTable::wxAcceleratorTable(int WXUNUSED(n), const wxAcceleratorEntry WXUNUSED(entries)[])
 {
+    wxFAIL_MSG("not implemented");
 }
-#endif
+#endif // Win32/16
 
-bool wxAcceleratorTable::Ok(void) const
+bool wxAcceleratorTable::Ok() const
 {
     return (M_ACCELDATA && (M_ACCELDATA->m_ok));
 }
@@ -158,3 +159,8 @@ WXHACCEL wxAcceleratorTable::GetHACCEL() const
     return (WXHACCEL) M_ACCELDATA->m_hAccel;
 }
 
+bool wxAcceleratorTable::Translate(wxWindow *window, WXMSG *wxmsg) const
+{
+    MSG *msg = (MSG *)wxmsg;
+
+    return Ok() && ::TranslateAccelerator(GetHwndOf(window), GetHaccel(), msg); }

@@ -86,6 +86,9 @@
 #define wxUSE_SPINBTN 1
                                     // Define 1 to compile spin button
 
+// use wxStaticLine class (separator line in the dialog)?
+#define wxUSE_STATLINE 1
+
 #define wxUSE_CHECKLISTBOX 1
                                     // Define 1 to compile check listbox
 
@@ -103,6 +106,9 @@
                                   // under MSW.
 #define wxUSE_WX_RESOURCES        1
                                   // Use .wxr resource mechanism (requires PrologIO library)
+
+// support for startup tips (wxShowTip &c)
+#define wxUSE_STARTUP_TIPS       1
 
 // BC++/Win16 can't cope with the amount of data in resource.cpp
 #if defined(__WIN16__) && defined(__BORLANDC__)

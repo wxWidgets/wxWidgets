@@ -21,7 +21,7 @@
 WXDLLEXPORT_DATA(extern const wxChar*) wxDialogNameStr;
 
 // Dialog boxes
-class WXDLLEXPORT wxDialog : public wxPanel
+class WXDLLEXPORT wxDialog : public wxDialogBase
 {
     DECLARE_DYNAMIC_CLASS(wxDialog)
 

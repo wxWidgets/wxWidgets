@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart, Markus Holzem, Robert Roebling
-// Licence:           wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -21,15 +21,15 @@
 #endif
 
 #ifndef WX_PRECOMP
-  #include "wx/utils.h"
-  #include "wx/dialog.h"
-  #include "wx/button.h"
-  #include "wx/stattext.h"
-  #include "wx/statbmp.h"
-  #include  "wx/layout.h"
-  #include "wx/intl.h"
-  #include "wx/dcclient.h"
-  #include "wx/settings.h"
+    #include "wx/utils.h"
+    #include "wx/dialog.h"
+    #include "wx/button.h"
+    #include "wx/stattext.h"
+    #include "wx/statbmp.h"
+    #include "wx/layout.h"
+    #include "wx/intl.h"
+    #include "wx/dcclient.h"
+    #include "wx/settings.h"
 #endif
 
 #include <stdio.h>
@@ -71,9 +71,6 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
                                                 const wxPoint& pos)
                       : wxDialog( parent, -1, caption, pos, wxDefaultSize, wxDEFAULT_DIALOG_STYLE )
 {
-    static const int LAYOUT_X_MARGIN = 5;
-    static const int LAYOUT_Y_MARGIN = 5;
-
     m_dialogStyle = style;
 
     wxBeginBusyCursor();
@@ -122,34 +119,12 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
 
     // split the message in lines
     // --------------------------
-    wxClientDC dc(this);
-    dc.SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
 
     wxArrayString lines;
-    wxString curLine;
-    long height, width, heightTextMax = 0, widthTextMax = 0;
-    for ( const char *pc = message; ; pc++ ) {
-        if ( *pc == '\n' || *pc == '\0' ) {
-            dc.GetTextExtent(curLine, &width, &height);
-            if ( width > widthTextMax )
-                widthTextMax = width;
-            if ( height > heightTextMax )
-                heightTextMax = height;
-
-            lines.Add(curLine);
-
-            if ( *pc == '\n' ) {
-               curLine.Empty();
-            }
-            else {
-               // the end of string
-               break;
-            }
-        }
-        else {
-            curLine += *pc;
-        }
-    }
+    wxSize sizeText = SplitTextMessage(message, &lines);
+    long widthTextMax = sizeText.GetWidth(),
+         heightTextMax = sizeText.GetHeight();
+    size_t nLineCount = lines.GetCount();
 
     // calculate the total dialog size
     enum
@@ -194,7 +169,7 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
 
     // get the longest caption and also calc the number of buttons
     size_t nBtn, nButtons = 0;
-    long widthBtnMax = 0;
+    long width, widthBtnMax = 0;
     for ( nBtn = 0; nBtn < Btn_Max; nBtn++ ) {
         if ( buttons[nBtn] ) {
             nButtons++;
@@ -214,8 +189,6 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
     // *1.2 baselineskip
     heightTextMax *= 12;
     heightTextMax /= 10;
-
-    size_t nLineCount = lines.Count();
 
     long widthButtonsTotal = nButtons * (widthBtnMax + LAYOUT_X_MARGIN) -
                              LAYOUT_X_MARGIN;
