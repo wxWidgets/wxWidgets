@@ -16,7 +16,7 @@
 #endif
 
 
-//#include "Mpch.h"
+#include "Mpch.h"
 #ifdef M_BASEDIR
 #   ifndef USE_PCH
 #     include "Mcommon.h"
@@ -277,6 +277,9 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
       case 'k':
          m_llist->DeleteToEndOfLine();
          break;
+      case 'v':
+         Paste();
+         break;
 #ifdef WXLAYOUT_DEBUG
       case WXK_F1:
          m_llist->SetFont(-1,-1,-1,-1,true);  // underlined
@@ -327,6 +330,10 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
          break;
       case WXK_END:
          m_llist->MoveCursorToEndOfLine();
+         break;
+      case WXK_INSERT:
+         if(event.ShiftDown())
+            Paste();
          break;
       case WXK_DELETE :
          m_llist->Delete(1);
