@@ -539,7 +539,9 @@ list or report views (this is a limitation of the native Win32 control).
 \func{long}{HitTest}{\param{const wxPoint\& }{point}, \param{int\& }{flags}}
 
 Determines which item (if any) is at the specified point,
-giving details in {\it flags}. {\it flags} will be a combination of the following flags:
+giving details in {\it flags}. Returns index of the item or {\tt wxNOT\_FOUND}
+if no item is at the specified point.
+{\it flags} will be a combination of the following flags:
 
 \twocolwidtha{5cm}
 \begin{twocollist}\itemsep=0pt
