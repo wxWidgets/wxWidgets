@@ -128,13 +128,10 @@ void wxStaticText::OnDraw( wxDC &dc )
     if (m_width <= 0 || m_height <= 0)
         return;
 
-     wxString paragraph;
+    wxString paragraph;
     int i = 0 ;
     wxString text = m_label;
     
-    int major,minor;
-    wxGetOsVersion( &major, &minor );
-
     PrepareDC(dc);
     
     bool doClear = true ;
@@ -152,41 +149,23 @@ void wxStaticText::OnDraw( wxDC &dc )
                     break ;
                 }
                 
-                if (major < 10)
-                {
-                if( parent->IsKindOf( CLASSINFO( wxNotebook ) ) ||  parent->IsKindOf( CLASSINFO( wxTabCtrl ) ))
-                {
-                    if ( ((wxControl*)parent)->GetMacControl() ) {
-                        Rect rect = { -10000 , -10000 , 10000 , 10000 } ; // MacOS X was having a coord rollover
-                        if ( DrawThemeTabPane != (void*)kUnresolvedCFragSymbolAddress )
-                        {
-                          DrawThemeTabPane ( &rect, kThemeStateActive);
-                          doClear = false ;
-                        }
-                    }
-                    break ;
-                }
-                }
-                
                 parent = parent->GetParent() ;
             } 
         }
     }
     
-    if ( (major < 10) && doClear )
-        dc.Clear() ;
-        
     while (i < text.Length())
     {
-      paragraph += text[i];
+        paragraph += text[i];
       
-    if (text[i] == 13 || text[i] == 10)
-        DrawParagraph(dc, paragraph);
+        if (text[i] == 13 || text[i] == 10)
+            DrawParagraph(dc, paragraph);
         
-    ++i;
-  }
-  if (paragraph.Length() > 0)
-      DrawParagraph(dc, paragraph);
+        ++i;
+    }
+    
+    if (paragraph.Length() > 0)
+        DrawParagraph(dc, paragraph);
 }
 
 void wxStaticText::OnPaint( wxPaintEvent &event ) 
