@@ -255,7 +255,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     }
     else
     {
-        options = lOnlyOne ;
+        options = (OptionBits) lOnlyOne ;
     }
     SetListSelectionFlags((ListHandle)m_macList, options);
 
