@@ -765,7 +765,11 @@ BasicString::BasicString(const char *sz)
 {
   // get the size of required buffer
   UINT lenAnsi = strlen(sz);
+  #ifdef __MWERKS__
+  UINT lenWide = lenAnsi * 2 ;
+  #else
   UINT lenWide = mbstowcs(NULL, sz, lenAnsi);
+  #endif
 
   if ( lenWide > 0 ) {
     m_wzBuf = new OLECHAR[lenWide + 1];

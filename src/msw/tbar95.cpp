@@ -374,8 +374,12 @@ bool wxToolBar95::MSWNotify(WXWPARAM WXUNUSED(wParam),
             // FIXME this is a temp hack only until I understand better what
             //       must be done in both ANSI and Unicode builds
             size_t lenAnsi = tool->m_shortHelpString.Len();
+            #ifdef __MWERKS__
+            wchar_t *pwz = new wchar_t[lenAnsi * 2 + 1];
+            #else
             size_t lenUnicode = mbstowcs(NULL, tool->m_shortHelpString, lenAnsi);
             wchar_t *pwz = new wchar_t[lenUnicode + 1];
+            #endif
             mbstowcs(pwz, tool->m_shortHelpString, lenAnsi + 1);
             memcpy(ttText->szText, pwz,
                    (sizeof(ttText->szText) - 1)/sizeof(ttText->szText[0]));
