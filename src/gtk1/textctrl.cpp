@@ -195,7 +195,7 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
 
     if (multi_line)
     {
-        gtk_widget_realize(m_text);
+//        gtk_widget_realize(m_text);
         gtk_widget_show(m_text);
     }
 

@@ -117,6 +117,10 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
 
     for (int i = 0; i < n; i++)
     {
+        /* don't send first event, which GTK sends aways when
+	   inserting the first item */
+        m_alreadySent = TRUE;
+    
         GtkWidget *list_item = gtk_list_item_new_with_label( choices[i].mbc_str() );
 
         m_clientDataList.Append( (wxObject*)NULL );
@@ -124,10 +128,10 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
 
         gtk_container_add( GTK_CONTAINER(list), list_item );
 
-        gtk_widget_show( list_item );
-
         gtk_signal_connect( GTK_OBJECT(list_item), "select",
-        GTK_SIGNAL_FUNC(gtk_combo_clicked_callback), (gpointer)this );
+           GTK_SIGNAL_FUNC(gtk_combo_clicked_callback), (gpointer)this );
+
+        gtk_widget_show( list_item );
     }
 
     m_parent->AddChild( this );

@@ -102,15 +102,15 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     m_oldPos = 0.0;
 
     if (style & wxSL_VERTICAL)
-        m_widget = gtk_hscale_new( (GtkAdjustment *) NULL );
-    else
         m_widget = gtk_vscale_new( (GtkAdjustment *) NULL );
+    else
+        m_widget = gtk_hscale_new( (GtkAdjustment *) NULL );
     
     if (style & wxSL_LABELS)
         gtk_scale_set_draw_value( GTK_SCALE( m_widget ), TRUE );
     else
         gtk_scale_set_draw_value( GTK_SCALE( m_widget ), FALSE );
-  
+
     m_adjust = gtk_range_get_adjustment( GTK_RANGE(m_widget) );
   
     gtk_signal_connect( GTK_OBJECT(m_adjust), 

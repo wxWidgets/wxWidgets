@@ -697,8 +697,11 @@ void MyPanel::OnPageChanged( wxNotebookEvent &event )
 
 void MyPanel::OnListBox( wxCommandEvent &event )
 {
-    m_text->AppendText( "ListBox selection string is: " );
+    m_text->AppendText( "ListBox event selection string is: " );
     m_text->AppendText( event.GetString() );
+    m_text->AppendText( "\n" );
+    m_text->AppendText( "ListBox control selection string is: " );
+    m_text->AppendText( m_listbox->GetStringSelection() );
     m_text->AppendText( "\n" );
 }
 
@@ -763,8 +766,11 @@ void MyPanel::OnListBoxButtons( wxCommandEvent &event )
 
 void MyPanel::OnChoice( wxCommandEvent &event )
 {
-    m_text->AppendText( "Choice selection string is: " );
+    m_text->AppendText( "Choice event selection string is: " );
     m_text->AppendText( event.GetString() );
+    m_text->AppendText( "\n" );
+    m_text->AppendText( "Choice control selection string is: " );
+    m_text->AppendText( m_choice->GetStringSelection() );
     m_text->AppendText( "\n" );
 }
 
@@ -813,8 +819,11 @@ void MyPanel::OnChoiceButtons( wxCommandEvent &event )
 
 void MyPanel::OnCombo( wxCommandEvent &event )
 {
-    m_text->AppendText( "ComboBox selection string is: " );
+    m_text->AppendText( "ComboBox event selection string is: " );
     m_text->AppendText( event.GetString() );
+    m_text->AppendText( "\n" );
+    m_text->AppendText( "ComboBox control selection string is: " );
+    m_text->AppendText( m_combo->GetStringSelection() );
     m_text->AppendText( "\n" );
 }
 

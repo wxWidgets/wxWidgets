@@ -2051,7 +2051,17 @@ void wxWindow::DoSetSize( int x, int y, int width, int height, int sizeFlags )
             gtk_myfixed_move( GTK_MYFIXED(m_parent->m_wxwindow), m_widget, m_x, m_y );
 
             if ((old_width != m_width) || (old_height != m_height))
-              gtk_widget_set_usize( m_widget, m_width, m_height );
+	    {
+/*
+	        GtkAllocation alloc;
+	        alloc.x = m_x;
+	        alloc.y = m_y;
+	        alloc.width = m_width;
+	        alloc.height = m_height;
+		gtk_widget_size_allocate( m_widget, &alloc );
+*/		
+                gtk_widget_set_usize( m_widget, m_width, m_height );
+	    }
 	}
     }
 

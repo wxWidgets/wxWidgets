@@ -90,7 +90,7 @@ bool wxSpinButton::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, c
     m_needParent = TRUE;
 
     wxSize new_size = size;
-    new_size.x = 16;
+    new_size.x = 15;
     if (new_size.y == -1)
         new_size.y = 30;
 
@@ -185,7 +185,7 @@ void wxSpinButton::OnSize( wxSizeEvent &WXUNUSED(event) )
 {
     wxCHECK_RET( (m_widget != NULL), _T("invalid spin button") );
 
-    m_width = 16;
+    m_width = 15;
     gtk_widget_set_usize( m_widget, m_width, m_height );
 }
 

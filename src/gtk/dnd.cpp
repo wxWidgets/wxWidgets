@@ -613,7 +613,7 @@ source_drag_data_get  (GtkWidget          *WXUNUSED(widget),
 		
                 gtk_selection_data_set( selection_data,
 			                selection_data->target,
-			                8,   /* 8-bit */
+			                8,   // 8-bit
 					buffer, 
 					data_size );
 					
@@ -776,8 +776,11 @@ wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
     
     m_waiting = TRUE;
 
+    GdkAtom atom = gdk_atom_intern( "STRING", FALSE );
+//    wxPrintf( _T("atom id: %d.\n"), (int)atom );
+
     GtkTargetList *target_list = gtk_target_list_new( (GtkTargetEntry*) NULL, 0 );
-    gtk_target_list_add( target_list, gdk_atom_intern( "STRING", FALSE ), 0, 0 );
+    gtk_target_list_add( target_list, atom, 0, 0 );
     
     GdkEventMotion event;
     event.window = m_widget->window;
@@ -788,6 +791,7 @@ wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
     event.x = x;
     event.y = y;
     event.state = state;
+    event.time = GDK_CURRENT_TIME;
     
     /* GTK wants to know which button was pressed which caused the dragging */
     int button_number = 0;
@@ -816,7 +820,7 @@ wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
 				  0,
 				  0 );
     
-        while (m_waiting) wxYield();
+        while (m_waiting) gtk_main_iteration();;
     }
 
     g_blockEventsOnDrag = FALSE;
