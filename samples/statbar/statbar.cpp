@@ -316,8 +316,8 @@ void MyFrame::DoCreateStatusBar(MyFrame::StatBarKind kind)
             wxFAIL_MSG("unknown stat bar kind");
     }
 
-    PositionStatusBar();
     GetStatusBar()->Show();
+    PositionStatusBar();
 
     m_statbarKind = kind;
 }
