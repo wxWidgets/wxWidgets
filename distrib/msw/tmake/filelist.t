@@ -49,6 +49,7 @@
         $fileflags =~ s/NotMSW/U/;
         $fileflags =~ s/NotOS2/P/;
         $fileflags =~ s/LowLevel/L/;
+        $fileflags =~ s/Theme/T/;
 
         if ( $filetype eq "Common" ) {
             $wxCommon{$filename} = $fileflags;
