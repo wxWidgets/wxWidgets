@@ -86,20 +86,34 @@ wxString wxIfElsePrep::Process(
 {
 	int b;
 	char ft[] = "<!--#if ";
-	
+	char ftnot[] = "<!--#if NOT ";
+    char ftnot2[] = "<!--#if !";
+
+    	
 	// make a copy so we can replace text as we go without affecting the original
 	wxString output = text;
     while ((b = ReverseFind(output.Lower(), ft)) != -1) {
-		// Loop until every #echo directive is found
+		// Loop until every #if directive is found
 		// We search from the end of the string so that #if statements will properly recurse
 		// and we avoid the hassle of matching statements with the correct <!--#endif-->
-		int end, c, n;
+        bool notval = false;
+        int off = 0;
+        int end, c, n;
         wxString usecode, code;
         wxString cname;
         wxString tag;
         bool value;
 
         code = wxString("");
+
+        if (output.Mid(b, strlen(ftnot) ).CmpNoCase(ftnot) == 0 ) {
+            notval = true;
+            off = 4;
+            }
+        else if (output.Mid(b, strlen(ftnot2) ).CmpNoCase(ftnot2) == 0 ) {
+            notval = true;
+            off = 1;
+            }
 
         // grab the tag and get the name of the variable
         end = (output.Mid(b)).Find("-->");
@@ -118,10 +132,10 @@ wxString wxIfElsePrep::Process(
         n = c;
 
         // find the classname
-        c = (tag.Mid(8, n-8)).Find(" ");
-	    if (c == -1) n -= 8;
+        c = (tag.Mid(8+off, n-(8+off))).Find(" ");
+	    if (c == -1) n -= (8+off);
         else n = c;
-        cname = tag.Mid(8, n);
+        cname = tag.Mid(8+off, n);
 
         cname.Trim(false);
         c = cname.Find("\"");
@@ -131,6 +145,7 @@ wxString wxIfElsePrep::Process(
 
         // Grab the value from the variable class identified by cname
         value = wxIfElseVariable::FindValue(cname);
+        if (notval) value = !value;
 
         // Find the end of the tag (<!--#endif-->) and copy it all into the variable code
         end = ((output.Mid(b)).Lower()).Find("<!--#endif-->");

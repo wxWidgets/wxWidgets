@@ -37,10 +37,14 @@
 #include "wx/spawnbrowser.h"
 #include "wx/html/forcelnk.h"
 
+// crt
+#include <process.h>        // spawnl()
+
 // Include private headers
 #include "wx/applet/applet.h"
 #include "wx/applet/window.h"
 #include "wx/applet/loadpage.h"
+#include "wx/applet/plugin.h"
 
 // Preprocessor Stuff
 #include "wx/applet/prepinclude.h"
@@ -101,6 +105,9 @@ wxHtmlAppletWindow::wxHtmlAppletWindow(
     // Set up docroot
     m_DocRoot = docroot;
 
+    // Set the key_type for applets
+    m_AppletList = wxAppletList(wxKEY_STRING);
+
     // Add HTML preprocessors
     // deleting preprocessors is done by the code within the window
 
@@ -157,8 +164,49 @@ wxApplet *wxHtmlAppletWindow::CreateApplet(
         delete applet;
         return NULL;
         }
-    m_AppletList.Append(iName,applet);
+    else {
+        // do some fixups on the size if its screwed up
+        wxSize nsize = applet->GetBestSize();
+        if (nsize.x < size.x) nsize.x = size.x;
+        if (nsize.y < size.y) nsize.y = size.y;
+        applet->SetSize(nsize);
+        }
+
+    m_AppletList.Append(iName,(wxObject*)applet);
     return applet;
+}
+
+/****************************************************************************
+PARAMETERS:
+classId       - Name of the Plugin class to create an object for
+
+RETURNS:
+Pointer to the wxplugIn created, or NULL if unable to create the PlugIn.
+
+REMARKS:
+This function is used to create new wxPlugIn objects dynamically based on the
+class name as a string. This allows instances of wxPlugIn classes to be
+created dynamically based on string values embedded in the custom tags of an
+HTML page.
+****************************************************************************/
+bool wxHtmlAppletWindow::CreatePlugIn(
+    const wxString& classId )
+{
+    // Dynamically create the class instance at runtime
+    wxClassInfo *info = wxClassInfo::FindClass(classId.c_str());
+    if (!info)
+        return false;
+    wxObject *obj = info->CreateObject();
+    if (!obj)
+        return false;
+    wxPlugIn *plugIn = wxDynamicCast(obj,wxPlugIn);
+    if (!plugIn)
+        return false;
+    if (!plugIn->Create(this)) {
+        delete plugIn;
+        return false;
+        }
+    return true;
 }
 
 /****************************************************************************
@@ -213,28 +261,41 @@ True if page loaded successfully, false if not
 REMARKS:
 Remove an applet from the manager. Called during applet destruction
 ****************************************************************************/
+#include "scitech"
 bool wxHtmlAppletWindow::LoadPage(
     const wxString& link)
 {
-    wxString    href(link);
+    wxString href(link);
 
-    // Check for abs path. If it is not then tack on the path
-    // supplied at creation.
-    if (!wxIsAbsolutePath(href))
-        href = m_DocRoot + href;
+    // TODO: technically we allow no relative paths
 
-    // TODO: This needs to be made platform inde if possible.
+    // Check to see if it is a real url, if not it is a file
+    if (link.Mid(0, 5).CmpNoCase("http:") != 0) {
+
+        // Check for abs path. If it is not then tack on the path
+        // supplied at creation.
+        // TODO: Abs paths are only used in testing (remove this)
+        if (link.GetChar(1) != ':')
+            href = m_DocRoot + href;
+        }
+
     if (link.GetChar(0) == '?'){
         wxString cmd = link.BeforeFirst('=');
         wxString cmdValue = link.AfterFirst('=');
+
+        // Launches the default Internet browser for the system.
         if(!(cmd.CmpNoCase("?EXTERNAL"))){
             return wxSpawnBrowser(this, cmdValue.c_str());
             }
+
+        // Launches an external program on the system.
         if (!(cmd.CmpNoCase("?EXECUTE"))){
-            wxProcess *child = new AppletProcess(this);
-            wxExecute(cmdValue, false, child);
-            return true;
+            int code = spawnl( P_NOWAIT, cmdValue , NULL );
+            return (!code);
             }
+
+        // Looks for a href in a variable stored as a cookie. The href can be
+        // changed on the fly.
         if (!(cmd.CmpNoCase("?VIRTUAL"))){
             VirtualData& temp = *((VirtualData*)FindCookie(cmdValue));
             if (&temp) {
@@ -246,6 +307,19 @@ bool wxHtmlAppletWindow::LoadPage(
 #endif
                 return true;
                 }
+            }
+
+        // This launches a qlet - It is like an applet but is more generic in that it
+        // can be of any wxWin type so it then has the freedom to do more stuff.
+        if (!(cmd.CmpNoCase("?WXAPPLET"))){
+            if (!cmdValue.IsNull()){
+                if (!CreatePlugIn(cmdValue)){
+#ifdef CHECKED
+                    wxLogError(_T("Launch Applet ERROR: '%s' does not exist."), cmdValue.c_str());
+#endif
+                    }
+                }
+             return true;
             }
         }
 
@@ -528,8 +602,28 @@ TAG_HANDLER_PROC(tag)
 	wnd = m_WParser->GetWindow();
 
 	if ((appletWindow = wxDynamicCast(wnd,wxHtmlAppletWindow)) != NULL){
-		tag.ScanParam("WIDTH", "%i", &width);
-		tag.ScanParam("HEIGHT", "%i", &height);	
+        wxSize size = wxDefaultSize;
+		int al;
+        if (tag.HasParam("WIDTH")) {
+            tag.GetParamAsInt("WIDTH", &width);
+            size.SetWidth(width);
+            }
+		
+        if (tag.HasParam("HEIGHT")) {
+            tag.GetParamAsInt("HEIGHT", &height);
+            size.SetHeight(height);
+            }
+
+        al = wxHTML_ALIGN_BOTTOM;
+        if (tag.HasParam(wxT("ALIGN"))) {
+            wxString alstr = tag.GetParam(wxT("ALIGN"));
+            alstr.MakeUpper();  // for the case alignment was in ".."
+            if (alstr == wxT("TEXTTOP") || alstr == wxT("TOP"))
+                al = wxHTML_ALIGN_TOP;
+            else if ((alstr == wxT("CENTER")) || (alstr == wxT("ABSCENTER")))
+                al = wxHTML_ALIGN_CENTER;
+            }
+
         if (tag.HasParam("CLASSID")){
             classId = tag.GetParam("CLASSID");
             if ( classId.IsNull() || classId.Len() == 0 ){
@@ -545,9 +639,9 @@ TAG_HANDLER_PROC(tag)
                 name = classId;
 
             // We got all the params and can now create the applet
-			if ((applet = appletWindow->CreateApplet(classId, name, tag , wxSize(width, height))) != NULL){
+			if ((applet = appletWindow->CreateApplet(classId, name, tag , size)) != NULL){
 				applet->Show(true);
-				m_WParser->OpenContainer()->InsertCell(new wxHtmlWidgetCell(applet,0));
+				m_WParser->OpenContainer()->InsertCell(new wxHtmlAppletCell(applet,al));
 				}
             else
                 wxMessageBox("wxApplet error: Could not create:" + classId + "," + name);
@@ -569,6 +663,81 @@ TAG_HANDLER_END(wxApplet)
 TAGS_MODULE_BEGIN(wxApplet)
     TAGS_MODULE_ADD(wxApplet)
 TAGS_MODULE_END(wxApplet)
+
+/*********************************************************************************
+wxHtmlAppletCell
+*********************************************************************************/
+wxHtmlAppletCell::wxHtmlAppletCell(wxWindow *wnd, int align) : wxHtmlCell()
+{
+    int sx, sy;
+    m_Wnd = wnd;
+    m_Wnd->GetSize(&sx, &sy);
+    m_Width = sx, m_Height = sy;
+
+    switch (align) {
+        case wxHTML_ALIGN_TOP :
+            m_Descent = m_Height;
+            break;
+        case wxHTML_ALIGN_CENTER :
+            m_Descent = m_Height / 2;
+            break;
+        case wxHTML_ALIGN_BOTTOM :
+        default :
+            m_Descent = 0;
+            break;
+        }
+
+    SetCanLiveOnPagebreak(FALSE);
+}
+
+
+void wxHtmlAppletCell::Draw(wxDC& WXUNUSED(dc), int WXUNUSED(x), int WXUNUSED(y), int WXUNUSED(view_y1), int WXUNUSED(view_y2))
+{
+    int absx = 0, absy = 0, stx, sty;
+    wxHtmlCell *c = this;
+
+    while (c)
+    {
+        absx += c->GetPosX();
+        absy += c->GetPosY();
+        c = c->GetParent();
+    }
+
+    ((wxScrolledWindow*)(m_Wnd->GetParent()))->GetViewStart(&stx, &sty);
+    m_Wnd->Move(absx - wxHTML_SCROLL_STEP * stx, absy  - wxHTML_SCROLL_STEP * sty);
+}
+
+
+
+void wxHtmlAppletCell::DrawInvisible(wxDC& WXUNUSED(dc), int WXUNUSED(x), int WXUNUSED(y))
+{
+    int absx = 0, absy = 0, stx, sty;
+    wxHtmlCell *c = this;
+
+    while (c)
+    {
+        absx += c->GetPosX();
+        absy += c->GetPosY();
+        c = c->GetParent();
+    }
+
+    ((wxScrolledWindow*)(m_Wnd->GetParent()))->GetViewStart(&stx, &sty);
+    m_Wnd->Move(absx - wxHTML_SCROLL_STEP * stx, absy  - wxHTML_SCROLL_STEP * sty);
+}
+
+
+
+void wxHtmlAppletCell::Layout(int w)
+{
+    int sx, sy;
+    m_Wnd->GetSize(&sx, &sy);
+    m_Width = sx, m_Height = sy;
+
+    wxHtmlCell::Layout(w);
+}
+
+
+
 
 // This is our little forcelink hack.
 FORCE_LINK(loadpage)

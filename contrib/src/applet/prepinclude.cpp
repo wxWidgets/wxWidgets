@@ -92,11 +92,11 @@ wxString wxIncludePrep::Process(
 		// remove the #include tag
         output.Remove(i, n+21+3);
 
-        wxFSFile * file = fs->OpenFile(fname);
+        wxFSFile * file = fs->OpenFile(DOC_ROOT + fname);
     			
         if (!file) {
 #ifdef CHECKED		
-			wxMessageBox(wxString("wxHTML #include error: File not Found ") + fname + wxString("."),"Error",wxICON_ERROR);
+			wxMessageBox(wxString("wxHTML #include error: File not Found ") + DOC_ROOT + fname + wxString("."),"Error",wxICON_ERROR);
 #endif
             delete file;
             continue;

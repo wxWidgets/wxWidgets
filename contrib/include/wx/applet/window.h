@@ -38,6 +38,7 @@
 
 // Forward declare
 class wxApplet;
+class wxQlet;
 class wxLoadPageEvent;
 class wxPageLoadedEvent;
 class wxIncludePrep;
@@ -119,6 +120,9 @@ public:
                 const wxHtmlTag &params,
                 const wxSize& size);
 
+            // Create an instance of an Qlet based on it's class name
+            bool CreatePlugIn(const wxString& classId );
+
             // Find an instance of an applet based on it's class name
             wxApplet *FindApplet(const wxString& className);
 
@@ -185,6 +189,24 @@ public:
     virtual void OnTerminate(int pid, int status);
 
     };
+
+/****************************************************************************
+REMARKS:
+Defines the class for wxHtmlAppletCell
+***************************************************************************/
+class wxHtmlAppletCell : public wxHtmlCell
+{
+public:
+    wxHtmlAppletCell(wxWindow *wnd, int w = 0);
+    ~wxHtmlAppletCell() { m_Wnd->Destroy(); }
+    virtual void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2);
+    virtual void DrawInvisible(wxDC& dc, int x, int y);
+    virtual void Layout(int w);
+
+protected:
+    wxWindow* m_Wnd;
+            // width float is used in adjustWidth (it is in percents)
+};
 
 
 #endif // __WX_APPLET_WINDOW_H
