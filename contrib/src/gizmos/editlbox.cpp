@@ -65,6 +65,7 @@ private:
     void OnSize(wxSizeEvent& event)
     {
         SizeColumns();
+        event.Skip();
     }
 };
 
