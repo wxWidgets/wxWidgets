@@ -94,7 +94,7 @@ aStdKeys[] =
 
 // useful for Windows programmers: makes somewhat more clear all these zeroes
 // being passed to Windows APIs
-#define   RESERVED        (NULL)
+#define   RESERVED        (0)
 
 // ----------------------------------------------------------------------------
 // macros
