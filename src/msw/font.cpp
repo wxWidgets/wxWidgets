@@ -482,7 +482,7 @@ void wxNativeFontInfo::SetFamily(wxFontFamily family)
 
         case wxDECORATIVE:
             ff_family = FF_DECORATIVE;
-            facename = _T("Wingdings");
+            facename = _T("Old English Text MT");
             break;
 
         case wxROMAN:
