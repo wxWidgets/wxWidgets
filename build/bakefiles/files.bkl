@@ -1490,8 +1490,25 @@
     src/generic/fdrepdlg.cpp
     src/generic/tabg.cpp
     src/generic/fontdlgg.cpp
+    src/generic/colrdlgg.cpp
+    src/generic/msgdlgg.cpp
+    src/generic/dirdlgg.cpp
+    src/generic/filedlgg.cpp
+    src/generic/notebook.cpp
+    src/generic/accel.cpp
+    src/generic/paletteg.cpp
+    src/generic/timer.cpp
     <!-- Unix files used by wxCocoa: -->
+    <!-- FIXME(DE): All UNIX files are needed for wxCocoa, this is a hack
+         because I don't know Bakefile well enough yet to make it use the
+         files from the base UNIX section. -->
+    src/unix/baseunix.cpp
+    src/unix/dir.cpp
+    src/unix/gsocket.c
+    src/unix/mimetype.cpp
     src/unix/snglinst.cpp
+    src/unix/threadpsx.cpp
+    src/unix/utilsunx.cpp
 </set>
 <set var="COCOA_HDR">
     wx/cocoa/NSBox.h
