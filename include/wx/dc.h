@@ -60,7 +60,7 @@ public:
         m_userScaleX = m_userScaleY =
         m_scaleX = m_scaleY = 1.0;
 
-        m_logicalFunction = -1;
+        m_logicalFunction = wxCOPY;
 
         m_backgroundMode = wxTRANSPARENT;
 
