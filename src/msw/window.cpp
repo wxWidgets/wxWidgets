@@ -130,8 +130,8 @@ wxWindow *wxFindWinFromHandle(WXHWND hWnd);
 static void TranslateKbdEventToMouse(wxWindow *win, int *x, int *y, WPARAM *flags);
 
 // get the current state of SHIFT/CTRL keys
-static inline bool IsShiftDown() { return GetKeyState(VK_SHIFT)& 0x100 != 0; }
-static inline bool IsCtrlDown() { return GetKeyState(VK_CONTROL)& 0x100 != 0; }
+static inline bool IsShiftDown() { return (GetKeyState(VK_SHIFT) & 0x100) != 0; }
+static inline bool IsCtrlDown() { return (GetKeyState(VK_CONTROL) & 0x100) != 0; }
 
 // ---------------------------------------------------------------------------
 // event tables
