@@ -127,6 +127,12 @@ public:
   
   wxImage Scale( int width, int height );
   
+  // these routines are slow but safe  
+  void SetRGB( int x, int y, unsigned char r, unsigned char g, unsigned char b );
+  unsigned char GetRed( int x, int y );
+  unsigned char GetGreen( int x, int y );
+  unsigned char GetBlue( int x, int y );
+  
   virtual bool LoadFile( const wxString& name, long type = wxBITMAP_TYPE_PNG );
   virtual bool SaveFile( const wxString& name, int type );
 

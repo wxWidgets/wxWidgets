@@ -153,6 +153,64 @@ wxImage wxImage::Scale( int width, int height )
     return image;
 }
   
+void wxImage::SetRGB( int x, int y, unsigned char r, unsigned char g, unsigned char b )
+{
+    wxCHECK_RET( Ok(), "invalid image" );
+    
+    int w = M_IMGDATA->m_width;
+    int h = M_IMGDATA->m_height;
+    
+    wxCHECK_RET( (x>=0) && (y>=0) && (x<w) && (y<h), "invalid image index" );
+    
+    long pos = (y * w + x) * 3;
+    
+    M_IMGDATA->m_data[ pos   ] = r;
+    M_IMGDATA->m_data[ pos+1 ] = g;
+    M_IMGDATA->m_data[ pos+2 ] = b;
+}
+
+unsigned char wxImage::GetRed( int x, int y )
+{
+    wxCHECK_MSG( Ok(), 0, "invalid image" );
+    
+    int w = M_IMGDATA->m_width;
+    int h = M_IMGDATA->m_height;
+    
+    wxCHECK_MSG( (x>=0) && (y>=0) && (x<w) && (y<h), 0, "invalid image index" );
+    
+    long pos = (y * w + x) * 3;
+    
+    return M_IMGDATA->m_data[pos];
+}
+
+unsigned char wxImage::GetGreen( int x, int y )
+{
+    wxCHECK_MSG( Ok(), 0, "invalid image" );
+    
+    int w = M_IMGDATA->m_width;
+    int h = M_IMGDATA->m_height;
+    
+    wxCHECK_MSG( (x>=0) && (y>=0) && (x<w) && (y<h), 0, "invalid image index" );
+    
+    long pos = (y * w + x) * 3;
+    
+    return M_IMGDATA->m_data[pos+1];
+}
+
+unsigned char wxImage::GetBlue( int x, int y )
+{
+    wxCHECK_MSG( Ok(), 0, "invalid image" );
+    
+    int w = M_IMGDATA->m_width;
+    int h = M_IMGDATA->m_height;
+    
+    wxCHECK_MSG( (x>=0) && (y>=0) && (x<w) && (y<h), 0, "invalid image index" );
+    
+    long pos = (y * w + x) * 3;
+    
+    return M_IMGDATA->m_data[pos+2];
+}
+  
 bool wxImage::Ok() const 
 { 
     return (M_IMGDATA && M_IMGDATA->m_ok); 
