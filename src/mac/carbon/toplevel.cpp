@@ -112,6 +112,21 @@ void wxTopLevelWindowMac::Init()
     m_macWindow = NULL ;
 }
 
+class wxMacDeferredWindowDeleter : public wxObject
+{
+public :
+    wxMacDeferredWindowDeleter( WindowRef windowRef ) 
+    { 
+        m_macWindow = windowRef ; 
+    }
+    virtual ~wxMacDeferredWindowDeleter() 
+    { 
+        UMADisposeWindow( (WindowRef) m_macWindow ) ; 
+    }
+ protected :
+    WindowRef m_macWindow ;
+} ;
+
 bool wxTopLevelWindowMac::Create(wxWindow *parent,
                                  wxWindowID id,
                                  const wxString& title,
@@ -142,7 +157,7 @@ wxTopLevelWindowMac::~wxTopLevelWindowMac()
     if ( m_macWindow )
     {
         wxToolTip::NotifyWindowDelete(m_macWindow) ;
-        UMADisposeWindow( (WindowRef) m_macWindow ) ;
+        wxPendingDelete.Append( new wxMacDeferredWindowDeleter( (WindowRef) m_macWindow ) ) ;
     }
     
     wxRemoveMacWindowAssociation( this ) ;
