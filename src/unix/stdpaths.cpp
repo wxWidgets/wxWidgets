@@ -57,9 +57,11 @@ wxString wxStandardPaths::GetInstallPrefix() const
 
 #ifdef __LINUX__
         // under Linux, we can get location of the executable
-        wxString exe;
-        if ( readlink("/proc/self/exe", wxStringBuffer(exe), 1024) != -1 )
+        char buf[4096];
+        if ( readlink("/proc/self/exe", buf, WXSIZEOF(buf)) != -1 )
         {
+            wxString exe(buf, wxConvLibc);
+
             // consider that we're in the last "bin" subdirectory of our prefix
             wxString basename(wxString(wxTheApp->argv[0]).AfterLast(_T('/')));
             size_t pos = exe.find(_T("/bin/") + basename);
