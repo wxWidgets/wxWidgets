@@ -6,6 +6,9 @@ class wxEventPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def __del__(self,eventsc=eventsc):
+        if self.thisown == 1 :
+            eventsc.delete_wxEvent(self)
     def GetEventObject(self, *_args, **_kwargs):
         val = apply(eventsc.wxEvent_GetEventObject,(self,) + _args, _kwargs)
         return val
@@ -39,8 +42,9 @@ class wxEventPtr :
     def __repr__(self):
         return "<C wxEvent instance at %s>" % (self.this,)
 class wxEvent(wxEventPtr):
-    def __init__(self,this):
-        self.this = this
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxEvent,_args,_kwargs)
+        self.thisown = 1
 
 
 
@@ -56,8 +60,9 @@ class wxSizeEventPtr(wxEventPtr):
     def __repr__(self):
         return "<C wxSizeEvent instance at %s>" % (self.this,)
 class wxSizeEvent(wxSizeEventPtr):
-    def __init__(self,this):
-        self.this = this
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxSizeEvent,_args,_kwargs)
+        self.thisown = 1
 
 
 
@@ -87,8 +92,9 @@ class wxCloseEventPtr(wxEventPtr):
     def __repr__(self):
         return "<C wxCloseEvent instance at %s>" % (self.this,)
 class wxCloseEvent(wxCloseEventPtr):
-    def __init__(self,this):
-        self.this = this
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxCloseEvent,_args,_kwargs)
+        self.thisown = 1
 
 
 
@@ -118,8 +124,9 @@ class wxCommandEventPtr(wxEventPtr):
     def __repr__(self):
         return "<C wxCommandEvent instance at %s>" % (self.this,)
 class wxCommandEvent(wxCommandEventPtr):
-    def __init__(self,this):
-        self.this = this
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxCommandEvent,_args,_kwargs)
+        self.thisown = 1
 
 
 
@@ -137,8 +144,9 @@ class wxScrollEventPtr(wxCommandEventPtr):
     def __repr__(self):
         return "<C wxScrollEvent instance at %s>" % (self.this,)
 class wxScrollEvent(wxScrollEventPtr):
-    def __init__(self,this):
-        self.this = this
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxScrollEvent,_args,_kwargs)
+        self.thisown = 1
 
 
 
@@ -156,8 +164,9 @@ class wxScrollWinEventPtr(wxEventPtr):
     def __repr__(self):
         return "<C wxScrollWinEvent instance at %s>" % (self.this,)
 class wxScrollWinEvent(wxScrollWinEventPtr):
-    def __init__(self,this):
-        self.this = this
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxScrollWinEvent,_args,_kwargs)
+        self.thisown = 1
 
 
 
@@ -169,8 +178,9 @@ class wxSpinEventPtr(wxScrollEventPtr):
     def __repr__(self):
         return "<C wxSpinEvent instance at %s>" % (self.this,)
 class wxSpinEvent(wxSpinEventPtr):
-    def __init__(self,this):
-        self.this = this
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxSpinEvent,_args,_kwargs)
+        self.thisown = 1
 
 
 
@@ -277,8 +287,9 @@ class wxMouseEventPtr(wxEventPtr):
     def __repr__(self):
         return "<C wxMouseEvent instance at %s>" % (self.this,)
 class wxMouseEvent(wxMouseEventPtr):
-    def __init__(self,this):
-        self.this = this
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxMouseEvent,_args,_kwargs)
+        self.thisown = 1
 
 
 
@@ -302,11 +313,58 @@ class wxKeyEventPtr(wxEventPtr):
     def KeyCode(self, *_args, **_kwargs):
         val = apply(eventsc.wxKeyEvent_KeyCode,(self,) + _args, _kwargs)
         return val
+    def GetX(self, *_args, **_kwargs):
+        val = apply(eventsc.wxKeyEvent_GetX,(self,) + _args, _kwargs)
+        return val
+    def GetY(self, *_args, **_kwargs):
+        val = apply(eventsc.wxKeyEvent_GetY,(self,) + _args, _kwargs)
+        return val
+    def GetPosition(self, *_args, **_kwargs):
+        val = apply(eventsc.wxKeyEvent_GetPosition,(self,) + _args, _kwargs)
+        if val: val = wxPointPtr(val) ; val.thisown = 1
+        return val
+    def GetPositionTuple(self, *_args, **_kwargs):
+        val = apply(eventsc.wxKeyEvent_GetPositionTuple,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxKeyEvent instance at %s>" % (self.this,)
 class wxKeyEvent(wxKeyEventPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxKeyEvent,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxNavigationKeyEventPtr(wxCommandEventPtr):
     def __init__(self,this):
         self.this = this
+        self.thisown = 0
+    def GetDirection(self, *_args, **_kwargs):
+        val = apply(eventsc.wxNavigationKeyEvent_GetDirection,(self,) + _args, _kwargs)
+        return val
+    def SetDirection(self, *_args, **_kwargs):
+        val = apply(eventsc.wxNavigationKeyEvent_SetDirection,(self,) + _args, _kwargs)
+        return val
+    def IsWindowChange(self, *_args, **_kwargs):
+        val = apply(eventsc.wxNavigationKeyEvent_IsWindowChange,(self,) + _args, _kwargs)
+        return val
+    def SetWindowChange(self, *_args, **_kwargs):
+        val = apply(eventsc.wxNavigationKeyEvent_SetWindowChange,(self,) + _args, _kwargs)
+        return val
+    def GetCurrentFocus(self, *_args, **_kwargs):
+        val = apply(eventsc.wxNavigationKeyEvent_GetCurrentFocus,(self,) + _args, _kwargs)
+        if val: val = wxWindowPtr(val) 
+        return val
+    def SetCurrentFocus(self, *_args, **_kwargs):
+        val = apply(eventsc.wxNavigationKeyEvent_SetCurrentFocus,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxNavigationKeyEvent instance at %s>" % (self.this,)
+class wxNavigationKeyEvent(wxNavigationKeyEventPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxNavigationKeyEvent,_args,_kwargs)
+        self.thisown = 1
 
 
 
@@ -322,8 +380,9 @@ class wxMoveEventPtr(wxEventPtr):
     def __repr__(self):
         return "<C wxMoveEvent instance at %s>" % (self.this,)
 class wxMoveEvent(wxMoveEventPtr):
-    def __init__(self,this):
-        self.this = this
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxMoveEvent,_args,_kwargs)
+        self.thisown = 1
 
 
 
@@ -335,8 +394,9 @@ class wxPaintEventPtr(wxEventPtr):
     def __repr__(self):
         return "<C wxPaintEvent instance at %s>" % (self.this,)
 class wxPaintEvent(wxPaintEventPtr):
-    def __init__(self,this):
-        self.this = this
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxPaintEvent,_args,_kwargs)
+        self.thisown = 1
 
 
 
@@ -352,8 +412,9 @@ class wxEraseEventPtr(wxEventPtr):
     def __repr__(self):
         return "<C wxEraseEvent instance at %s>" % (self.this,)
 class wxEraseEvent(wxEraseEventPtr):
-    def __init__(self,this):
-        self.this = this
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxEraseEvent,_args,_kwargs)
+        self.thisown = 1
 
 
 
@@ -365,8 +426,9 @@ class wxFocusEventPtr(wxEventPtr):
     def __repr__(self):
         return "<C wxFocusEvent instance at %s>" % (self.this,)
 class wxFocusEvent(wxFocusEventPtr):
-    def __init__(self,this):
-        self.this = this
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxFocusEvent,_args,_kwargs)
+        self.thisown = 1
 
 
 
@@ -381,8 +443,9 @@ class wxActivateEventPtr(wxEventPtr):
     def __repr__(self):
         return "<C wxActivateEvent instance at %s>" % (self.this,)
 class wxActivateEvent(wxActivateEventPtr):
-    def __init__(self,this):
-        self.this = this
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxActivateEvent,_args,_kwargs)
+        self.thisown = 1
 
 
 
@@ -394,8 +457,9 @@ class wxInitDialogEventPtr(wxEventPtr):
     def __repr__(self):
         return "<C wxInitDialogEvent instance at %s>" % (self.this,)
 class wxInitDialogEvent(wxInitDialogEventPtr):
-    def __init__(self,this):
-        self.this = this
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxInitDialogEvent,_args,_kwargs)
+        self.thisown = 1
 
 
 
@@ -410,8 +474,9 @@ class wxMenuEventPtr(wxEventPtr):
     def __repr__(self):
         return "<C wxMenuEvent instance at %s>" % (self.this,)
 class wxMenuEvent(wxMenuEventPtr):
-    def __init__(self,this):
-        self.this = this
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxMenuEvent,_args,_kwargs)
+        self.thisown = 1
 
 
 
@@ -429,8 +494,9 @@ class wxShowEventPtr(wxEventPtr):
     def __repr__(self):
         return "<C wxShowEvent instance at %s>" % (self.this,)
 class wxShowEvent(wxShowEventPtr):
-    def __init__(self,this):
-        self.this = this
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxShowEvent,_args,_kwargs)
+        self.thisown = 1
 
 
 
@@ -442,8 +508,9 @@ class wxIconizeEventPtr(wxEventPtr):
     def __repr__(self):
         return "<C wxIconizeEvent instance at %s>" % (self.this,)
 class wxIconizeEvent(wxIconizeEventPtr):
-    def __init__(self,this):
-        self.this = this
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxIconizeEvent,_args,_kwargs)
+        self.thisown = 1
 
 
 
@@ -455,8 +522,9 @@ class wxMaximizeEventPtr(wxEventPtr):
     def __repr__(self):
         return "<C wxMaximizeEvent instance at %s>" % (self.this,)
 class wxMaximizeEvent(wxMaximizeEventPtr):
-    def __init__(self,this):
-        self.this = this
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxMaximizeEvent,_args,_kwargs)
+        self.thisown = 1
 
 
 
@@ -517,8 +585,9 @@ class wxJoystickEventPtr(wxEventPtr):
     def __repr__(self):
         return "<C wxJoystickEvent instance at %s>" % (self.this,)
 class wxJoystickEvent(wxJoystickEventPtr):
-    def __init__(self,this):
-        self.this = this
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxJoystickEvent,_args,_kwargs)
+        self.thisown = 1
 
 
 
@@ -559,8 +628,9 @@ class wxIdleEventPtr(wxEventPtr):
     def __repr__(self):
         return "<C wxIdleEvent instance at %s>" % (self.this,)
 class wxIdleEvent(wxIdleEventPtr):
-    def __init__(self,this):
-        self.this = this
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxIdleEvent,_args,_kwargs)
+        self.thisown = 1
 
 
 
@@ -599,8 +669,9 @@ class wxUpdateUIEventPtr(wxEventPtr):
     def __repr__(self):
         return "<C wxUpdateUIEvent instance at %s>" % (self.this,)
 class wxUpdateUIEvent(wxUpdateUIEventPtr):
-    def __init__(self,this):
-        self.this = this
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxUpdateUIEvent,_args,_kwargs)
+        self.thisown = 1
 
 
 
@@ -612,8 +683,9 @@ class wxSysColourChangedEventPtr(wxEventPtr):
     def __repr__(self):
         return "<C wxSysColourChangedEvent instance at %s>" % (self.this,)
 class wxSysColourChangedEvent(wxSysColourChangedEventPtr):
-    def __init__(self,this):
-        self.this = this
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxSysColourChangedEvent,_args,_kwargs)
+        self.thisown = 1
 
 
 
@@ -631,8 +703,86 @@ class wxNotifyEventPtr(wxCommandEventPtr):
     def __repr__(self):
         return "<C wxNotifyEvent instance at %s>" % (self.this,)
 class wxNotifyEvent(wxNotifyEventPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxNotifyEvent,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxPaletteChangedEventPtr(wxEventPtr):
     def __init__(self,this):
         self.this = this
+        self.thisown = 0
+    def SetChangedWindow(self, *_args, **_kwargs):
+        val = apply(eventsc.wxPaletteChangedEvent_SetChangedWindow,(self,) + _args, _kwargs)
+        return val
+    def GetChangedWindow(self, *_args, **_kwargs):
+        val = apply(eventsc.wxPaletteChangedEvent_GetChangedWindow,(self,) + _args, _kwargs)
+        if val: val = wxWindowPtr(val) 
+        return val
+    def __repr__(self):
+        return "<C wxPaletteChangedEvent instance at %s>" % (self.this,)
+class wxPaletteChangedEvent(wxPaletteChangedEventPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxPaletteChangedEvent,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxQueryNewPaletteEventPtr(wxEventPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def SetPaletteRealized(self, *_args, **_kwargs):
+        val = apply(eventsc.wxQueryNewPaletteEvent_SetPaletteRealized,(self,) + _args, _kwargs)
+        return val
+    def GetPaletteRealized(self, *_args, **_kwargs):
+        val = apply(eventsc.wxQueryNewPaletteEvent_GetPaletteRealized,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxQueryNewPaletteEvent instance at %s>" % (self.this,)
+class wxQueryNewPaletteEvent(wxQueryNewPaletteEventPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxQueryNewPaletteEvent,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxWindowCreateEventPtr(wxEventPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def GetWindow(self, *_args, **_kwargs):
+        val = apply(eventsc.wxWindowCreateEvent_GetWindow,(self,) + _args, _kwargs)
+        if val: val = wxWindowPtr(val) 
+        return val
+    def __repr__(self):
+        return "<C wxWindowCreateEvent instance at %s>" % (self.this,)
+class wxWindowCreateEvent(wxWindowCreateEventPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxWindowCreateEvent,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxWindowDestroyEventPtr(wxEventPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def GetWindow(self, *_args, **_kwargs):
+        val = apply(eventsc.wxWindowDestroyEvent_GetWindow,(self,) + _args, _kwargs)
+        if val: val = wxWindowPtr(val) 
+        return val
+    def __repr__(self):
+        return "<C wxWindowDestroyEvent instance at %s>" % (self.this,)
+class wxWindowDestroyEvent(wxWindowDestroyEventPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxWindowDestroyEvent,_args,_kwargs)
+        self.thisown = 1
 
 
 
