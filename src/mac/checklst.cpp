@@ -102,13 +102,12 @@ static pascal void wxMacCheckListDefinition( short message, Boolean isSelected, 
             ClipRect( drawRect );
             EraseRect( drawRect );
             
-            wxFontRefData * font = (wxFontRefData*) (list->GetFont().GetRefData()) ;
-
-            if ( font )
+            const wxFont& font = list->GetFont();
+            if ( font.Ok() )
             {
-                ::TextFont( font->m_macFontNum ) ;
-                ::TextSize( font->m_macFontSize)  ;
-                ::TextFace( font->m_macFontStyle ) ;
+                ::TextFont( font.GetMacFontNum() ) ;
+                ::TextSize( font.GetMacFontSize())  ;
+                ::TextFace( font.GetMacFontStyle() ) ;
             }
                        
             ThemeButtonDrawInfo info ;
@@ -198,10 +197,11 @@ bool wxCheckListBox::Create(wxWindow *parent,
     GetThemeMetric(kThemeMetricCheckBoxWidth,(long *)&m_checkBoxWidth);    
     GetThemeMetric(kThemeMetricCheckBoxHeight,&h);
 #endif
-      wxFontRefData * font = (wxFontRefData*) (GetFont().GetRefData()) ;
+
+    const wxFont& font = GetFont();
 
     FontInfo finfo;
-    FetchFontInfo(font->m_macFontNum,short(font->m_macFontSize),font->m_macFontStyle,&finfo);
+    FetchFontInfo(font.GetMacFontNum(),font.GetMacFontSize(),font.GetMacFontStyle(),&finfo);
     
     m_TextBaseLineOffset= finfo.leading+finfo.ascent;
     m_checkBoxHeight= finfo.leading+finfo.ascent+finfo.descent;

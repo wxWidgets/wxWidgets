@@ -1371,11 +1371,10 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
     wxMacFastPortSetter helper(this) ;
     MacInstallFont() ;
 
-    wxFontRefData * font = (wxFontRefData*) m_font.GetRefData() ;
     if ( 0 )
     {
         m_macFormerAliasState = IsAntiAliasedTextEnabled(&m_macFormerAliasSize);
-        SetAntiAliasedTextEnabled(true, SInt16(m_scaleY * font->m_macFontSize));
+        SetAntiAliasedTextEnabled(true, SInt16(m_scaleY * m_font.GetMacFontSize()));
         m_macAliasWasEnabled = true ;
     }
     OSStatus status = noErr ;
@@ -1735,12 +1734,11 @@ void wxDC::MacInstallFont() const
     //        return ;
     Pattern blackColor ;
     MacSetupBackgroundForCurrentPort(m_backgroundBrush) ;
-    wxFontRefData * font = (wxFontRefData*) m_font.GetRefData() ;
-    if ( font )
+    if ( m_font.Ok() )
     {
-        ::TextFont( font->m_macFontNum ) ;
-        ::TextSize( short(m_scaleY * font->m_macFontSize) ) ;
-        ::TextFace( font->m_macFontStyle ) ;
+        ::TextFont( m_font.GetMacFontNum() ) ;
+        ::TextSize( (short)(m_scaleY * m_font.GetMacFontSize()) ) ;
+        ::TextFace( m_font.GetMacFontStyle() ) ;
         m_macFontInstalled = true ;
         m_macBrushInstalled = false ;
         m_macPenInstalled = false ;
@@ -1809,9 +1807,9 @@ void wxDC::MacInstallFont() const
     }
     ::PenMode( mode ) ;
     OSStatus status = noErr ;
-    Fixed atsuSize = IntToFixed( int(m_scaleY * font->m_macFontSize) ) ;
-    Style qdStyle = font->m_macFontStyle ;
-    ATSUFontID    atsuFont = font->m_macATSUFontID ;
+    Fixed atsuSize = IntToFixed( int(m_scaleY * m_font.GetMacFontSize()) ) ;
+    Style qdStyle = m_font.GetMacFontStyle() ;
+    ATSUFontID    atsuFont = m_font.GetMacATSUFontID() ;
     status = ::ATSUCreateStyle((ATSUStyle *)&m_macATSUIStyle) ;
     wxASSERT_MSG( status == noErr , wxT("couldn't create ATSU style") ) ;
     ATSUAttributeTag atsuTags[] =

@@ -370,6 +370,8 @@ void wxFont::SetNoAntiAliasing( bool no )
 // accessors
 // ----------------------------------------------------------------------------
 
+// TODO: insert checks everywhere for M_FONTDATA == NULL!
+
 int wxFont::GetPointSize() const
 {
     return M_FONTDATA->m_pointSize;
@@ -411,6 +413,26 @@ wxFontEncoding wxFont::GetEncoding() const
 bool wxFont::GetNoAntiAliasing()
 {
     return M_FONTDATA->m_noAA;
+}
+
+short wxFont::GetMacFontNum() const
+{
+    return M_FONTDATA->m_macFontNum;
+}
+
+short wxFont::GetMacFontSize() const
+{
+    return M_FONTDATA->m_macFontSize;
+}
+
+wxByte wxFont::GetMacFontStyle() const
+{
+    return M_FONTDATA->m_macFontStyle;
+}
+
+wxUint32 wxFont::GetMacATSUFontID() const
+{
+    return M_FONTDATA->m_macATSUFontID;
 }
 
 const wxNativeFontInfo *wxFont::GetNativeFontInfo() const

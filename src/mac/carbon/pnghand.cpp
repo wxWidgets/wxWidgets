@@ -902,4 +902,3 @@ bool wxPNGFileHandler::SaveFile(const wxBitmap *bitmap, const wxString& name, in
     return FALSE;
 }
 
-

@@ -105,13 +105,12 @@ static pascal void wxMacListDefinition( short message, Boolean isSelected, Rect 
             ClipRect( drawRect );
             EraseRect( drawRect );
             
-            wxFontRefData * font = (wxFontRefData*) list->GetFont().GetRefData() ;
-            
-            if ( font )
+            const wxFont& font = list->GetFont();
+            if ( font.Ok() )
             {
-                ::TextFont( font->m_macFontNum ) ;
-                ::TextSize( short(font->m_macFontSize) ) ;
-                ::TextFace( font->m_macFontStyle ) ;
+                ::TextFont( font.GetMacFontNum() ) ;
+                ::TextSize( font.GetMacFontSize() ) ;
+                ::TextFace( font.GetMacFontStyle() ) ;
             }
             else
             {
@@ -604,13 +603,11 @@ wxSize wxListBox::DoGetBestSize() const
     {
         wxMacPortStateHelper st( UMAGetWindowPort( (WindowRef) MacGetRootWindow() ) ) ; 
         
-        wxFontRefData * font = (wxFontRefData*) m_font.GetRefData() ;
-        
-        if ( font )
+        if ( m_font.Ok() )
         {
-            ::TextFont( font->m_macFontNum ) ;
-            ::TextSize( short(font->m_macFontSize) ) ;
-            ::TextFace( font->m_macFontStyle ) ;
+            ::TextFont( m_font.GetMacFontNum() ) ;
+            ::TextSize( m_font.GetMacFontSize() ) ;
+            ::TextFace( m_font.GetMacFontStyle() ) ;
         }
         else
         {

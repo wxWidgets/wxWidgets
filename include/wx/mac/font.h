@@ -95,6 +95,13 @@ public:
     // Unofficial API, don't use
     virtual void SetNoAntiAliasing( bool noAA = TRUE ) ;
     virtual bool GetNoAntiAliasing() ;
+
+    // Mac-specific, risks to change, don't use in portable code
+    short GetMacFontNum() const;
+    short GetMacFontSize() const;
+    wxByte  GetMacFontStyle() const;
+    wxUint32 GetMacATSUFontID() const;
+
 protected:
     // common part of all ctors
     void Init();

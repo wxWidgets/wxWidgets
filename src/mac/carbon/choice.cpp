@@ -245,12 +245,11 @@ wxSize wxChoice::DoGetBestSize() const
 #endif
     {
         wxMacPortStateHelper st( UMAGetWindowPort( (WindowRef) MacGetRootWindow() ) ) ;
-        wxFontRefData * font = (wxFontRefData*) m_font.GetRefData() ;
-        if ( font )
+        if ( m_font.Ok() )
         {
-            ::TextFont( font->m_macFontNum ) ;
-            ::TextSize( short(font->m_macFontSize) ) ;
-            ::TextFace( font->m_macFontStyle ) ;
+            ::TextFont( m_font.GetMacFontNum() ) ;
+            ::TextSize( m_font.GetMacFontSize() ) ;
+            ::TextFace( m_font.GetMacFontStyle() ) ;
         }
         else
         {
