@@ -963,10 +963,9 @@ enum wxStretch
 /*
  * wxTextCtrl style flags
  */
-#define wxPROCESS_ENTER     0x0004
-#define wxPASSWORD          0x0008
-#define wxTE_PROCESS_ENTER  wxPROCESS_ENTER
-#define wxTE_PASSWORD       wxPASSWORD
+// the flag bits 0x0001, 2, 4 and 8 are free but should be used only for the
+// things which don't make sense for a text control used by wxTextEntryDialog
+// because they would otherwise conflict with wxOK, wxCANCEL, wxCENTRE
 #define wxTE_READONLY       0x0010
 #define wxTE_MULTILINE      0x0020
 #define wxTE_PROCESS_TAB    0x0040
@@ -975,6 +974,10 @@ enum wxStretch
 #define wxTE_RICH           0x0080
 #define wxTE_NO_VSCROLL     0x0100
 #define wxTE_AUTO_SCROLL    0x0200
+#define wxPROCESS_ENTER     0x0400
+#define wxPASSWORD          0x0800
+#define wxTE_PROCESS_ENTER  wxPROCESS_ENTER
+#define wxTE_PASSWORD       wxPASSWORD
 
 /*
  * wxComboBox style flags
