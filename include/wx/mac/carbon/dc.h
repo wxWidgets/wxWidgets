@@ -316,15 +316,16 @@ protected:
 #if wxMAC_USE_CORE_GRAPHICS
     // CoreGraphics
     wxGraphicContext                * m_graphicContext ;
+    wxPoint                         m_macLocalOriginInPort ;
 #else
-    mutable bool    m_macFontInstalled ;
-    mutable bool    m_macPenInstalled ;
-    mutable bool    m_macBrushInstalled ;
+    mutable bool                    m_macFontInstalled ;
+    mutable bool                    m_macPenInstalled ;
+    mutable bool                    m_macBrushInstalled ;
 
-    WXHRGN                    m_macBoundaryClipRgn ;
-    WXHRGN                  m_macCurrentClipRgn ;
-    void                    MacSetupPort( wxMacPortStateHelper* ph ) const ;
-    void                    MacCleanupPort( wxMacPortStateHelper* ph ) const ;
+    WXHRGN                          m_macBoundaryClipRgn ;
+    WXHRGN                          m_macCurrentClipRgn ;
+    void                            MacSetupPort( wxMacPortStateHelper* ph ) const ;
+    void                            MacCleanupPort( wxMacPortStateHelper* ph ) const ;
     mutable wxMacPortStateHelper*   m_macCurrentPortStateHelper ;
     mutable bool                    m_macFormerAliasState ;
     mutable short                   m_macFormerAliasSize ;

@@ -906,8 +906,17 @@ bool wxDC::DoFloodFill(wxCoord x, wxCoord y,
 bool  wxDC::DoGetPixel( wxCoord x, wxCoord y, wxColour *col ) const
 {
     wxCHECK_MSG( Ok(), false, wxT("wxDC::DoGetPixel  Invalid DC") );
-    wxFAIL_MSG( wxT("GetPixel not implemented on Core Graphics") ) ;
-    return false ;
+    wxCHECK_MSG( Ok(), false, wxT("wxDC::DoGetPixel  Invalid DC") );
+    wxMacPortSaver helper((CGrafPtr)m_macPort) ;
+    RGBColor colour;
+    GetCPixel( 
+        XLOG2DEVMAC(x) + m_macLocalOriginInPort.x - m_macLocalOrigin.x, 
+        YLOG2DEVMAC(y) + m_macLocalOriginInPort.y - m_macLocalOrigin.y, &colour );
+    // Convert from Mac colour to wx
+    col->Set( colour.red   >> 8,
+        colour.green >> 8,
+        colour.blue  >> 8);
+    return true ;
 }
 
 void  wxDC::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 )
