@@ -39,6 +39,10 @@
 
 #if wxUSE_OWNER_DRAWN
 
+#ifndef SPI_GETKEYBOARDCUES
+#define SPI_GETKEYBOARDCUES 0x100A
+#endif
+
 class wxMSWSystemMenuFontModule : public wxModule
 {
 public:
