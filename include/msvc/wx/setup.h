@@ -17,15 +17,15 @@
     #ifdef _UNICODE
         #ifdef WXUSINGDLL
             #ifdef _DEBUG
-                #include "../../lib/vc_dll/mswud/wx/setup.h"
+                #include "../../../lib/vc_dll/mswud/wx/setup.h"
             #else
-                #include "../../lib/vc_dll/mswu/wx/setup.h"
+                #include "../../../lib/vc_dll/mswu/wx/setup.h"
             #endif
         #else
             #ifdef _DEBUG
-                #include "../../lib/vc_lib/mswud/wx/setup.h"
+                #include "../../../lib/vc_lib/mswud/wx/setup.h"
             #else
-                #include "../../lib/vc_lib/mswu/wx/setup.h"
+                #include "../../../lib/vc_lib/mswu/wx/setup.h"
             #endif
         #endif
 
@@ -61,15 +61,15 @@
     #else // !_UNICODE
         #ifdef WXUSINGDLL
             #ifdef _DEBUG
-                #include "../../lib/vc_dll/mswd/wx/setup.h"
+                #include "../../../lib/vc_dll/mswd/wx/setup.h"
             #else
-                #include "../../lib/vc_dll/msw/wx/setup.h"
+                #include "../../../lib/vc_dll/msw/wx/setup.h"
             #endif
         #else // static lib
             #ifdef _DEBUG
-                #include "../../lib/vc_lib/mswd/wx/setup.h"
+                #include "../../../lib/vc_lib/mswd/wx/setup.h"
             #else
-                #include "../../lib/vc_lib/msw/wx/setup.h"
+                #include "../../../lib/vc_lib/msw/wx/setup.h"
             #endif
         #endif // shared/static
 
