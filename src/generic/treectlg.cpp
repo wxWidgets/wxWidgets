@@ -664,7 +664,7 @@ bool wxGenericTreeCtrl::Create(wxWindow *parent,
     SetBackgroundColour( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_LISTBOX ) );
 
 //  m_dottedPen = wxPen( "grey", 0, wxDOT );  too slow under XFree86
-    m_dottedPen = wxPen( "grey", 0, 0 );
+    m_dottedPen = wxPen( wxT("grey"), 0, 0 );
 
     return TRUE;
 }

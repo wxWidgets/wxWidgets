@@ -509,8 +509,8 @@ void wxToolBarSimple::DrawTool(wxDC& dc, wxToolBarToolBase *toolBase)
     PrepareDC(dc);
 
     wxPen dark_grey_pen(wxColour( 85,85,85 ), 1, wxSOLID);
-    wxPen white_pen("WHITE", 1, wxSOLID);
-    wxPen black_pen("BLACK", 1, wxSOLID);
+    wxPen white_pen(wxT("WHITE"), 1, wxSOLID);
+    wxPen black_pen(wxT("BLACK"), 1, wxSOLID);
 
     wxBitmap bitmap = tool->GetBitmap();
 
@@ -612,7 +612,7 @@ void wxToolBarSimple::DrawTool(wxDC& dc, wxToolBarToolBase *toolBase)
                 wxCoord y = tool->m_y;
                 wxCoord w = bitmap.GetWidth();
                 wxCoord h = bitmap.GetHeight();
-                wxPen thick_black_pen("BLACK", 3, wxSOLID);
+                wxPen thick_black_pen(wxT("BLACK"), 3, wxSOLID);
 
                 memDC.SelectObject(bitmap);
                 dc.SetClippingRegion(tool->m_x, tool->m_y, w, h);

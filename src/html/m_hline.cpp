@@ -50,8 +50,8 @@ class wxHtmlLineCell : public wxHtmlCell
 
 void wxHtmlLineCell::Draw(wxDC& dc, int x, int y, int WXUNUSED(view_y1), int WXUNUSED(view_y2))
 {
-    wxBrush mybrush("BLACK", wxSOLID);
-    wxPen mypen("BLACK", 1, wxSOLID);
+    wxBrush mybrush(wxT("BLACK"), wxSOLID);
+    wxPen mypen(wxT("BLACK"), 1, wxSOLID);
     dc.SetBrush(mybrush);
     dc.SetPen(mypen);
     dc.DrawRectangle(x + m_PosX, y + m_PosY, m_Width, m_Height);
