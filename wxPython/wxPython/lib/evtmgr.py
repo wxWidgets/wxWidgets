@@ -34,7 +34,7 @@ This module is Python 2.1+ compatible.
 
 Author: Robb Shecter
 """
-
+from wxPython import wx
 import pubsub
 
 #---------------------------------------------------------------------------
@@ -86,7 +86,8 @@ class EventManager:
         if source is not None:
             id  = source.GetId()
         if win is None:
-            win = source
+            # Some widgets do not function as their own windows.
+            win = self._determineWindow(source)
         topic = (event, win, id)
 
         #  Create an adapter from the PS system back to wxEvents, and
@@ -132,7 +133,7 @@ class EventManager:
             except AttributeError:
                 pass
 
-    # Some aliases for Register
+    # Some aliases for Register, just for kicks
     Bind = Register
     Subscribe = Register
 
@@ -141,6 +142,7 @@ class EventManager:
         """
         Deregister all events coming from the given window.
         """
+        win    = self._determineWindow(win)
         topics = self.__getTopics(win)
         if topics:
             for aTopic in topics:
@@ -206,12 +208,11 @@ class EventManager:
         """
         A string rep of a window for debugging
         """
-        from wxPython.wx import wxPyDeadObjectError
         try:
             name = aWin.GetClassName()
             i    = id(aWin)
             return '%s #%d' % (name, i)
-        except wxPyDeadObjectError:
+        except wx.wxPyDeadObjectError:
             return '(dead wxObject)'
 
 
@@ -257,8 +258,7 @@ class EventManager:
 
 
     def __isDeadWxObject(self, anObject):
-        from wxPython.wx import _wxPyDeadObject
-        return isinstance(anObject, _wxPyDeadObject)
+        return isinstance(anObject, wx._wxPyDeadObject)
 
 
     def __isDeadTopic(self, aTopic):
@@ -274,6 +274,22 @@ class EventManager:
             return self.messageAdapterDict[topicPattern].has_key(eventHandler)
         except KeyError:
             return 0
+
+
+    def _determineWindow(self, aComponent):
+        """
+        Return the window that corresponds to this component.
+        A window is something that supports the Connect protocol.
+        Most things registered with the event manager are a window,
+        but there are apparently some exceptions.  If more are
+        discovered, the implementation can be changed to a dictionary
+        lookup along the lines of class : function-to-get-window.
+        """
+        if isinstance(aComponent, wx.wxMenuItem):
+            return aComponent.GetMenu()
+        else:
+            return aComponent
+
 
 
 #---------------------------------------------------------------------------
@@ -351,11 +367,10 @@ class EventMacroInfo:
 
 class FakeWindow:
     """
-    Used internally by the EventMacroInfo class.  The
-    FakeWindow is the most important component of the
-    macro-info utility: it implements the Connect()
-    protocol of wxWindow, but instead of registering
-    for events, it keeps track of what parameters were
+    Used internally by the EventMacroInfo class.  The FakeWindow is
+    the most important component of the macro-info utility: it
+    implements the Connect() protocol of wxWindow, but instead of
+    registering for events, it keeps track of what parameters were
     passed to it.
     """
     def __init__(self):
@@ -412,11 +427,10 @@ class EventAdapter:
 
 
     def Destroy(self):
-        from wxPython.wx import wxPyDeadObjectError
         try:
             if not self.disconnect():
                 print 'disconnect failed'
-        except wxPyDeadObjectError:
+        except wx.wxPyDeadObjectError:
             print 'disconnect failed: dead object'              ##????
 
 
@@ -443,17 +457,14 @@ class MessageAdapter:
         given eventHandler.
         """
         self.eventHandler = eventHandler
-        pubsub.Publisher().subscribe(listener=self.notify, topic=(topicPattern,))
+        pubsub.Publisher().subscribe(listener=self.deliverEvent, topic=(topicPattern,))
 
-
-    def notify(self, message):
+    def deliverEvent(self, message):
         event = message.data        # Extract the wxEvent
         self.eventHandler(event)    # Perform the call as wxWindows would
-        ##event.Skip(1)               # Make sure Skip(1) wasn't set.       ##????
-
 
     def Destroy(self):
-        pubsub.Publisher().unsubscribe(listener=self.notify)
+        pubsub.Publisher().unsubscribe(listener=self.deliverEvent)
 
 
 #---------------------------------------------------------------------------
@@ -485,22 +496,22 @@ if __name__ == '__main__':
     # one event, and 3) Multiple events going to one listener.
     #
 
-    def handleEvents(event):
-        print event.GetClassName(), event.GetTimestamp()
+    def printEvent(event):
+        print 'Name:',event.GetClassName(),'Timestamp',event.GetTimestamp()
 
     def enableFrameEvents(event):
         # Turn the output of mouse events on and off
         if event.IsChecked():
             print '\nEnabling mouse events...'
-            eventManager.Register(handleEvents, EVT_MOTION,    frame)
-            eventManager.Register(handleEvents, EVT_LEFT_DOWN, frame)
+            eventManager.Register(printEvent, EVT_MOTION,    frame)
+            eventManager.Register(printEvent, EVT_LEFT_DOWN, frame)
         else:
             print '\nDisabling mouse events...'
             eventManager.DeregisterWindow(frame)
 
     # Send togglebutton events to both the on/off code as well
     # as the function that prints to stdout.
-    eventManager.Register(handleEvents,      EVT_TOGGLEBUTTON, button)
+    eventManager.Register(printEvent,        EVT_TOGGLEBUTTON, button)
     eventManager.Register(enableFrameEvents, EVT_TOGGLEBUTTON, button)
 
     frame.CenterOnScreen()
