@@ -46,6 +46,9 @@
 #ifdef __WXGTK__
     #include <gtk/gtk.h>
 #endif
+#ifdef __WXX11__
+#include "wx/x11/private.h"
+#endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxPopupWindow, wxWindow)
 IMPLEMENT_DYNAMIC_CLASS(wxPopupTransientWindow, wxPopupWindow)
@@ -284,6 +287,13 @@ bool wxPopupTransientWindow::Show( bool show )
     }
 #endif
 
+#ifdef __WXX11__
+    if (!show)
+    {
+        XUngrabPointer( wxGlobalDisplay(), CurrentTime );
+    }
+#endif
+
     bool ret = wxPopupWindow::Show( show );
     
 #ifdef __WXGTK__
@@ -303,6 +313,21 @@ bool wxPopupTransientWindow::Show( bool show )
     }
 #endif
 
+#ifdef __WXX11__
+    if (show)
+    {
+        Window xwindow = (Window) m_clientWindow;
+        
+        /* int res =*/ XGrabPointer(wxGlobalDisplay(), xwindow,
+            True,
+            ButtonPressMask | ButtonReleaseMask | ButtonMotionMask | EnterWindowMask | LeaveWindowMask | PointerMotionMask,
+            GrabModeAsync,
+            GrabModeAsync,
+            None,
+            None,
+            CurrentTime );
+    }
+#endif
     return ret;
 }
 
