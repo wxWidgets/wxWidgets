@@ -357,7 +357,7 @@ typedef int wxWindowID;
             #define wxVaCopy(d, s) ((d) = (s))
         #endif
     #endif /* va_copy/!va_copy */
-#endif // wxVaCopy
+#endif /* wxVaCopy */
 
 
 /*  ---------------------------------------------------------------------------- */
