@@ -27,6 +27,10 @@
 #include "wx/notebook.h"
 #include "wx/listimpl.cpp"
 
+#ifdef __WXMAC__
+#   include "wx/mac/uma.h"
+#endif
+
 //---------------------------------------------------------------------------
 
 IMPLEMENT_CLASS(wxSizerItem, wxObject)
@@ -1555,15 +1559,11 @@ static void GetStaticBoxBorders( wxStaticBox *box,
 
     if ( extraTop == -1 )
     {
-        int verMaj, verMin;
-        (void) ::wxGetOsVersion(&verMaj, &verMin);
-
         // The minimal border used for the top. Later on the staticbox'
         // font height is added to this.
         extraTop = 0;
 
-        // Is the Mac OS version OS X Panther or higher?
-        if ( ((verMaj << 16) + verMin) >= 0x00100030 )
+        if ( UMAGetSystemVersion() >= 0x1030 /*Panther*/ )
         {
             // As indicated by the HIG, Panther needs an extra border of 11
             // pixels (otherwise overlapping occurs at the top). The "other"
