@@ -432,7 +432,14 @@ public:
     %extend {
         wxListItem* GetColumn(int col) {
             wxListItem item;
-            item.SetMask(0xFFFF);
+            item.SetMask( wxLIST_MASK_STATE |
+                          wxLIST_MASK_TEXT  |
+                          wxLIST_MASK_IMAGE |
+                          wxLIST_MASK_DATA  |
+                          wxLIST_SET_ITEM   |
+                          wxLIST_MASK_WIDTH |
+                          wxLIST_MASK_FORMAT
+                          );
             if (self->GetColumn(col, item))
                 return new wxListItem(item);
             else
@@ -568,9 +575,12 @@ public:
     wxImageList *GetImageList(int which) const ;
 
     // Sets the image list
-    void SetImageList(wxImageList *imageList, int which) ;
-    %addtofunc AssignImageList "args[1].thisown = 0";
-    void AssignImageList(wxImageList *imageList, int which) ;
+    void SetImageList(wxImageList *imageList, int which);
+
+    // is there a way to tell SWIG to disown this???
+
+    %addtofunc AssignImageList "args[1].thisown = 0";    
+    void AssignImageList(wxImageList *imageList, int which);
 
     // returns true if it is a virtual list control
     bool IsVirtual() const;
@@ -694,8 +704,15 @@ public:
         return self.GetItemState(idx, wxLIST_STATE_SELECTED) != 0
 
     def SetColumnImage(self, col, image):
-        item = wxListItem()
-        item.SetMask(wxLIST_MASK_IMAGE)
+        item = self.GetColumn(col)
+        # preserve all other attributes too
+        item.SetMask( wxLIST_MASK_STATE |
+                      wxLIST_MASK_TEXT  |
+                      wxLIST_MASK_IMAGE |
+                      wxLIST_MASK_DATA  |
+                      wxLIST_SET_ITEM   |
+                      wxLIST_MASK_WIDTH |
+                      wxLIST_MASK_FORMAT )
         item.SetImage(image)
         self.SetColumn(col, item)
 
