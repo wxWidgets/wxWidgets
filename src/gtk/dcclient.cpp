@@ -535,7 +535,7 @@ void wxWindowDC::DoDrawArc( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2,
         if (m_pen.GetStyle() != wxTRANSPARENT)
         {
             gdk_draw_arc( m_window, m_penGC, FALSE, xxc-r, yyc-r, 2*r,2*r, alpha1, alpha2 );
-            
+
             gdk_draw_line( m_window, m_penGC, xx1, yy1, xxc, yyc );
             gdk_draw_line( m_window, m_penGC, xxc, yyc, xx2, yy2 );
         }
@@ -2224,20 +2224,15 @@ void wxWindowDC::DoDrawSpline( wxList *points )
 // wxPaintDC
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxPaintDC,wxWindowDC)
-
-wxPaintDC::wxPaintDC()
-  : wxWindowDC()
-{
-}
+IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxClientDC)
 
 wxPaintDC::wxPaintDC( wxWindow *win )
-  : wxWindowDC( win )
+         : wxClientDC( win )
 {
 #if USE_PAINT_REGION
     if (!win->m_clipPaintRegion)
         return;
-        
+
     m_paintClippingRegion = win->GetUpdateRegion();
     GdkRegion *region = m_paintClippingRegion.GetRegion();
     if ( region )
@@ -2256,16 +2251,18 @@ wxPaintDC::wxPaintDC( wxWindow *win )
 // wxClientDC
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxClientDC,wxWindowDC)
+IMPLEMENT_DYNAMIC_CLASS(wxClientDC, wxWindowDC)
 
-wxClientDC::wxClientDC()
-  : wxWindowDC()
+wxClientDC::wxClientDC( wxWindow *win )
+          : wxWindowDC( win )
 {
 }
 
-wxClientDC::wxClientDC( wxWindow *win )
-  : wxWindowDC( win )
+void wxClientDC::DoGetSize(int *width, int *height) const
 {
+    wxCHECK_RET( m_owner, _T("GetSize() doesn't work without window") );
+
+    m_owner->GetClientSize( &width, &height );
 }
 
 // ----------------------------------------------------------------------------
