@@ -33,10 +33,12 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID winid,
     if(!CreateControl(parent,winid,pos,size,style,validator,name))
         return false;
     m_cocoaNSView = NULL;
-    SetNSBox([[NSBox alloc] initWithFrame:NSMakeRect(0,0,30,30)]);
+    SetNSBox([[NSBox alloc] initWithFrame:MakeDefaultNSRect(size)]);
     [GetNSBox() setTitle:[NSString stringWithCString:title.c_str()]];
     if(m_parent)
         m_parent->CocoaAddChild(this);
+    SetInitialFrameRect(pos,size);
+
     return true;
 }
 

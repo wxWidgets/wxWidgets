@@ -36,9 +36,8 @@ bool wxButton::Create(wxWindow *parent, wxWindowID winid,
     if(!CreateControl(parent,winid,pos,size,style,validator,name))
         return false;
     wxLogDebug("Created control with id=%d",GetId());
-    NSRect cocoaRect = NSMakeRect(10,10,20,20);
     m_cocoaNSView = NULL;
-    SetNSButton([[NSButton alloc] initWithFrame: cocoaRect]);
+    SetNSButton([[NSButton alloc] initWithFrame: MakeDefaultNSRect(size)]);
     // NOTE: YES we want to release this (to match the alloc).
     // DoAddChild(this) will retain us again since addSubView doesn't.
     [m_cocoaNSView release];
@@ -49,6 +48,7 @@ bool wxButton::Create(wxWindow *parent, wxWindowID winid,
 
     if(m_parent)
         m_parent->CocoaAddChild(this);
+    SetInitialFrameRect(pos,size);
 
     return true;
 }

@@ -29,10 +29,12 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID winid,
 {
     if(!CreateControl(parent,winid,pos,size,style,validator,name))
         return false;
-    SetNSView([[NSView alloc] initWithFrame: NSMakeRect(10,10,20,20)]);
+    SetNSView([[NSView alloc] initWithFrame: MakeDefaultNSRect(size)]);
     [m_cocoaNSView release];
     if(m_parent)
         m_parent->CocoaAddChild(this);
+    SetInitialFrameRect(pos,size);
+
     return true;
 }
 

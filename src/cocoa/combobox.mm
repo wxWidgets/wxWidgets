@@ -41,12 +41,14 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID winid,
         return false;
 
     m_cocoaNSView = NULL;
-    SetNSTextField([[NSComboBox alloc] initWithFrame:NSMakeRect(0,0,30,30)]);
+    SetNSTextField([[NSComboBox alloc] initWithFrame:MakeDefaultNSRect(size)]);
     [m_cocoaNSView release];
     [GetNSTextField() setStringValue:wxNSStringWithWxString(value.c_str())];
     [GetNSControl() sizeToFit];
     if(m_parent)
         m_parent->CocoaAddChild(this);
+    SetInitialFrameRect(pos,size);
+
     return true;
 }
 

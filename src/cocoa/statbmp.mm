@@ -29,10 +29,12 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID winid,
     if(!CreateControl(parent,winid,pos,size,style,wxDefaultValidator,name))
         return false;
     m_cocoaNSView = NULL;
-    SetNSView([[NSView alloc] initWithFrame: NSMakeRect(10,10,20,20)]);
+    SetNSView([[NSView alloc] initWithFrame: MakeDefaultNSRect(size)]);
     [m_cocoaNSView release];
     if(m_parent)
         m_parent->CocoaAddChild(this);
+    SetInitialFrameRect(pos,size);
+
     return true;
 }
 

@@ -34,7 +34,7 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID winid,
     if(!CreateControl(parent,winid,pos,size,style,wxDefaultValidator,name))
         return false;
     m_cocoaNSView = NULL;
-    SetNSTextField([[NSTextField alloc] initWithFrame:NSMakeRect(0,0,30,30)]);
+    SetNSTextField([[NSTextField alloc] initWithFrame:MakeDefaultNSRect(size)]);
     [m_cocoaNSView release];
     [GetNSTextField() setStringValue:[NSString stringWithCString:label.c_str()]];
 //    [GetNSTextField() setBordered: NO];
@@ -50,6 +50,8 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID winid,
 
     if(m_parent)
         m_parent->CocoaAddChild(this);
+    SetInitialFrameRect(pos,size);
+
     return true;
 }
 

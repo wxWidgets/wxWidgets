@@ -35,8 +35,7 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID winid,
     if(!CreateControl(parent,winid,pos,size,style,validator,name))
         return false;
     m_cocoaNSView = NULL;
-    NSRect cocoaRect = NSMakeRect(10,10,20,20);
-    SetNSButton([[NSButton alloc] initWithFrame: cocoaRect]);
+    SetNSButton([[NSButton alloc] initWithFrame: MakeDefaultNSRect(size)]);
     [m_cocoaNSView release];
     [GetNSButton() setButtonType: NSRadioButton];
     [GetNSButton() setTitle:wxNSStringWithWxString(label)];
@@ -44,6 +43,8 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID winid,
 
     if(m_parent)
         m_parent->CocoaAddChild(this);
+    SetInitialFrameRect(pos,size);
+
     return true;
 }
 

@@ -28,10 +28,12 @@ bool wxGauge::Create(wxWindow *parent, wxWindowID winid, int range,
 {
     if(!CreateControl(parent,winid,pos,size,style,validator,name))
         return false;
-    SetNSView([[NSProgressIndicator alloc] initWithFrame: NSMakeRect(10,10,20,20)]);
+    SetNSView([[NSProgressIndicator alloc] initWithFrame: MakeDefaultNSRect(size)]);
     [m_cocoaNSView release];
     if(m_parent)
         m_parent->CocoaAddChild(this);
+    SetInitialFrameRect(pos,size);
+
     return true;
 }
 
