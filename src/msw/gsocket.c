@@ -6,7 +6,6 @@
  * -------------------------------------------------------------------------
  */
 
-
 #ifdef __WXMSW__
 
 #include "wx/setup.h"
@@ -200,7 +199,6 @@ void GSocket_Shutdown(GSocket *socket)
   /* If socket has been created, we shutdown it */
   if (socket->m_fd != INVALID_SOCKET)
   {
-    /* TODO: Guilhem only does this for connection oriented sockets (?) */
     shutdown(socket->m_fd, 2);
     closesocket(socket->m_fd);
     socket->m_fd = INVALID_SOCKET;
@@ -420,12 +418,12 @@ GSocket *GSocket_WaitConnection(GSocket *sck)
     return NULL;
   }
 
-  ioctlsocket(connection->m_fd, FIONBIO, (u_long FAR *) &arg);
-
   /* Initialize all fields */
   connection->m_server   = FALSE;
   connection->m_stream   = TRUE;
   connection->m_oriented = TRUE;
+
+  ioctlsocket(connection->m_fd, FIONBIO, (u_long FAR *) &arg);
 
   return connection;
 }
@@ -497,9 +495,8 @@ GSocketError GSocket_SetBroadcast(GSocket *sck)
 /* GSocket_Connect:
  *  Establishes a client connection to a server using the "Peer"
  *  field of GSocket. "Peer" must be set by GSocket_SetPeer() before
- *  GSocket_Connect() is called. Possible error codes are GSOCK_INVSOCK
- *  if the socket is alredy in use, GSOCK_INVADDR if the peer address
- *  has not been set, or GSOCK_IOERR for other internal errors.
+ *  GSocket_Connect() is called. Possible error codes are GSOCK_INVSOCK,
+ *  GSOCK_INVADDR, GSOCK_TIMEDOUT, GSOCK_WOULDBLOCK and GSOCK_IOERR.
  */
 GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
 {
@@ -552,13 +549,13 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
      * checking for writability to see if the connection request
      * completes.
      */
-    if ((err == WSAEWOULDBLOCK) && (sck->m_non_blocking == FALSE))
+    if ((err == WSAEWOULDBLOCK) && (!sck->m_non_blocking))
     {
       if (_GSocket_Output_Timeout(sck) == GSOCK_TIMEDOUT)
       {
         closesocket(sck->m_fd);
         sck->m_fd = INVALID_SOCKET;
-        /* sck->m_error is set in _GSocket_Input_Timeout */
+        /* sck->m_error is set in _GSocket_Output_Timeout */
         return GSOCK_TIMEDOUT;
       }
       else
@@ -571,7 +568,7 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
      * this way if the connection completes, a GSOCK_CONNECTION
      * event will be generated, if enabled.
      */
-    if ((err == WSAEWOULDBLOCK) && (sck->m_non_blocking == TRUE))
+    if ((err == WSAEWOULDBLOCK) && (sck->m_non_blocking))
     {
       sck->m_error = GSOCK_WOULDBLOCK;
       return GSOCK_WOULDBLOCK;
@@ -807,7 +804,14 @@ LRESULT CALLBACK _GSocket_Internal_WinProc(HWND hWnd,
         case FD_READ:    event = GSOCK_INPUT; break;
         case FD_WRITE:   event = GSOCK_OUTPUT; break;
         case FD_ACCEPT:  event = GSOCK_CONNECTION; break;
-        case FD_CONNECT: event = GSOCK_CONNECTION; break;
+        case FD_CONNECT:
+        {
+          if (WSAGETSELECTERROR(lParam) != 0)
+            event = GSOCK_LOST;
+          else
+            event = GSOCK_CONNECTION;
+          break;
+        }
         case FD_CLOSE:   event = GSOCK_LOST; break;
       }
 
@@ -839,7 +843,7 @@ GSocketError _GSocket_Input_Timeout(GSocket *socket)
 {
   fd_set readfds;
 
-  if (socket->m_non_blocking == FALSE)
+  if (!socket->m_non_blocking)
   {
     FD_ZERO(&readfds);
     FD_SET(socket->m_fd, &readfds);
@@ -860,7 +864,7 @@ GSocketError _GSocket_Output_Timeout(GSocket *socket)
 {
   fd_set writefds;
 
-  if (socket->m_non_blocking == FALSE)
+  if (!socket->m_non_blocking)
   {
     FD_ZERO(&writefds);
     FD_SET(socket->m_fd, &writefds);
@@ -924,8 +928,8 @@ int _GSocket_Recv_Dgram(GSocket *socket, char *buffer, int size)
   }
   if (_GAddress_translate_from(socket->m_peer, &from, fromlen) != GSOCK_NOERROR)
   {
-    socket->m_error = GSOCK_MEMERR;     /* TODO: bug in Unix GSocket! */
-    GAddress_destroy(socket->m_peer);   /* TODO: bug in Unix GSocket! */
+    socket->m_error = GSOCK_MEMERR;
+    GAddress_destroy(socket->m_peer);
     return -1;
   }
 
