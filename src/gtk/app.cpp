@@ -52,7 +52,7 @@ extern bool g_isIdle;
 bool   g_mainThreadLocked = FALSE;
 gint   g_pendingTag = 0;
 
-GtkWidget *wxRootWindow = (GtkWidget*) NULL;
+static GtkWidget *gs_RootWindow = (GtkWidget*) NULL;
 
 //-----------------------------------------------------------------------------
 // local functions
@@ -92,11 +92,11 @@ bool wxYield()
     }
 #endif // wxUSE_THREADS
 
-#ifdef __WXDEBUG__    
+#ifdef __WXDEBUG__
     if (gs_inYield)
         wxFAIL_MSG( wxT("wxYield called recursively" ) );
 #endif
-    
+
     gs_inYield = TRUE;
 
     if (!g_isIdle)
@@ -137,8 +137,8 @@ bool wxYieldIfNeeded()
 {
     if (gs_inYield)
         return FALSE;
-        
-    return wxYield();    
+
+    return wxYield();
 }
 
 //-----------------------------------------------------------------------------
@@ -168,7 +168,7 @@ void wxWakeUpIdle()
 gint wxapp_pending_callback( gpointer WXUNUSED(data) )
 {
     if (!wxTheApp) return TRUE;
-    
+
     // when getting called from GDK's time-out handler
     // we are no longer within GDK's grab on the GUI
     // thread so we must lock it here ourselves
@@ -195,7 +195,7 @@ gint wxapp_pending_callback( gpointer WXUNUSED(data) )
 gint wxapp_idle_callback( gpointer WXUNUSED(data) )
 {
     if (!wxTheApp) return TRUE;
-    
+
     // when getting called from GDK's time-out handler
     // we are no longer within GDK's grab on the GUI
     // thread so we must lock it here ourselves
@@ -228,7 +228,7 @@ void wxapp_install_idle_handler()
 
     if (g_pendingTag == 0)
         g_pendingTag = gtk_idle_add_priority( 900, wxapp_pending_callback, (gpointer) NULL );
-        
+
     /* This routine gets called by all event handlers
        indicating that the idle is over. It may also
        get called from other thread for sending events
@@ -245,7 +245,7 @@ static int g_threadUninstallLevel = 0;
 void wxapp_install_thread_wakeup()
 {
     g_threadUninstallLevel++;
-    
+
     if (g_threadUninstallLevel != 1) return;
 
     if (wxTheApp->m_wakeUpTimerTag) return;
@@ -256,7 +256,7 @@ void wxapp_install_thread_wakeup()
 void wxapp_uninstall_thread_wakeup()
 {
     g_threadUninstallLevel--;
-    
+
     if (g_threadUninstallLevel != 0) return;
 
     if (!wxTheApp->m_wakeUpTimerTag) return;
@@ -627,6 +627,19 @@ void wxApp::CleanUp()
 }
 
 //-----------------------------------------------------------------------------
+// Access to the root window global
+//-----------------------------------------------------------------------------
+
+GtkWidget* wxGetRootWindow()
+{
+    if (gs_RootWindow == NULL) {
+        gs_RootWindow = gtk_window_new( GTK_WINDOW_TOPLEVEL );
+        gtk_widget_realize( gs_RootWindow );
+    }
+    return gs_RootWindow;
+}
+
+//-----------------------------------------------------------------------------
 // wxEntry
 //-----------------------------------------------------------------------------
 
@@ -676,6 +689,7 @@ int wxEntryStart( int argc, char *argv[] )
     return 0;
 }
 
+
 int wxEntryInitGui()
 {
     int retValue = 0;
@@ -683,8 +697,7 @@ int wxEntryInitGui()
     if ( !wxTheApp->OnInitGui() )
         retValue = -1;
 
-    wxRootWindow = gtk_window_new( GTK_WINDOW_TOPLEVEL );
-    gtk_widget_realize( wxRootWindow );
+    wxGetRootWindow();
 
     return retValue;
 }

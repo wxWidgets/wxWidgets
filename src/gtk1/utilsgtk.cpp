@@ -46,7 +46,7 @@
 // data
 //-----------------------------------------------------------------------------
 
-extern GtkWidget *wxRootWindow;
+extern GtkWidget *wxGetRootWindow();
 
 //----------------------------------------------------------------------------
 // misc.
@@ -117,7 +117,7 @@ bool wxColourDisplay()
 
 int wxDisplayDepth()
 {
-    return gdk_window_get_visual( wxRootWindow->window )->depth;
+    return gdk_window_get_visual( wxGetRootWindow()->window )->depth;
 }
 
 int wxGetOsVersion(int *majorVsn, int *minorVsn)

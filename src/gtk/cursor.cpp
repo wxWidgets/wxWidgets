@@ -110,7 +110,7 @@ wxCursor::wxCursor( int cursorId )
     M_CURSORDATA->m_cursor = gdk_cursor_new( gdk_cur );
 }
 
-extern GtkWidget *wxRootWindow;
+extern GtkWidget *wxGetRootWindow();
 
 wxCursor::wxCursor(const char bits[], int width, int  height,
                    int hotSpotX, int hotSpotY,
@@ -127,8 +127,8 @@ wxCursor::wxCursor(const char bits[], int width, int  height,
     if (hotSpotY < 0 || hotSpotY >= height)
         hotSpotY = 0;
 
-    GdkBitmap *data = gdk_bitmap_create_from_data( wxRootWindow->window, (gchar *) bits, width, height );
-    GdkBitmap *mask = gdk_bitmap_create_from_data( wxRootWindow->window, (gchar *) maskBits, width, height);
+    GdkBitmap *data = gdk_bitmap_create_from_data( wxGetRootWindow()->window, (gchar *) bits, width, height );
+    GdkBitmap *mask = gdk_bitmap_create_from_data( wxGetRootWindow()->window, (gchar *) maskBits, width, height);
 
     m_refData = new wxCursorRefData;
     M_CURSORDATA->m_cursor = gdk_cursor_new_from_pixmap(

@@ -54,7 +54,7 @@
 static GdkPixmap  *hatches[num_hatches];
 static GdkPixmap **hatch_bitmap = (GdkPixmap **) NULL;
 
-extern GtkWidget *wxRootWindow;
+extern GtkWidget *wxGetRootWindow();
 
 //-----------------------------------------------------------------------------
 // constants
@@ -415,7 +415,7 @@ bool wxWindowDC::DoGetPixel( wxCoord x1, wxCoord y1, wxColour *col ) const
     memdc.SelectObject(bitmap);
     memdc.Blit(0, 0, 1, 1, (wxDC*) this, x1, y1);
     memdc.SelectObject(wxNullBitmap);
-    
+
     wxImage image(bitmap);
     col->Set(image.GetRed(0, 0), image.GetGreen(0, 0), image.GetBlue(0, 0));
     return TRUE;
@@ -1021,7 +1021,7 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
             if (!m_currentClippingRegion.IsNull())
             {
                 GdkColor col;
-                new_mask = gdk_pixmap_new( wxRootWindow->window, ww, hh, 1 );
+                new_mask = gdk_pixmap_new( wxGetRootWindow()->window, ww, hh, 1 );
                 GdkGC *gc = gdk_gc_new( new_mask );
                 col.pixel = 0;
                 gdk_gc_set_foreground( gc, &col );
@@ -1206,7 +1206,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
             if (!m_currentClippingRegion.IsNull())
             {
                 GdkColor col;
-                new_mask = gdk_pixmap_new( wxRootWindow->window, bm_ww, bm_hh, 1 );
+                new_mask = gdk_pixmap_new( wxGetRootWindow()->window, bm_ww, bm_hh, 1 );
                 GdkGC *gc = gdk_gc_new( new_mask );
                 col.pixel = 0;
                 gdk_gc_set_foreground( gc, &col );
