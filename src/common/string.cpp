@@ -1407,18 +1407,22 @@ const wxCharBuffer wxString::ToAscii() const
     // this will allocate enough space for the terminating NUL too
     wxCharBuffer buffer(length());
 
-    signed char *dest = (signed char *)buffer.data();
+    #define LOCAL_DEST_TYPE signed char
+
+    LOCAL_DEST_TYPE *dest = (LOCAL_DEST_TYPE *)buffer.data();
 
     const wchar_t *pwc = c_str();
     for ( ;; )
     {
-        *dest++ = *pwc > SCHAR_MAX ? wxT('_') : *pwc;
+        *dest++ = (LOCAL_DEST_TYPE)(*pwc > SCHAR_MAX ? wxT('_') : *pwc);
 
         // the output string can't have embedded NULs anyhow, so we can safely
         // stop at first of them even if we do have any
         if ( !*pwc++ )
             break;
     }
+
+    #undef LOCAL_DEST_TYPE
 
     return buffer;
 }
