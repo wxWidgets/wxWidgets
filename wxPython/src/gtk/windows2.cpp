@@ -55,9 +55,6 @@ extern PyObject *SWIG_newvarlink(void);
 #define SWIG_name    "windows2c"
 
 #include "helpers.h"
-#ifdef OLD_GRID
-#include <wx/grid.h>
-#endif
 #include <wx/notebook.h>
 #include <wx/splitter.h>
 #include <wx/imaglist.h>
