@@ -846,7 +846,7 @@ gdiobj.h	WXH
 geometry.h	WXH
 gifdecod.h	WXH
 xpmdecod.h	WXH
-dbkeyg.h	WXH
+dbkeyg.h	WXH	Base
 glcanvas.h	WXH
 grid.h	WXH
 gsocket.h	WXH	Base

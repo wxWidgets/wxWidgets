@@ -193,6 +193,7 @@ copy /q include\wx\datetime.h %DEST%\include\wx\datetime.h
 copy /q include\wx\datetime.inl %DEST%\include\wx\datetime.inl
 copy /q include\wx\datstrm.h %DEST%\include\wx\datstrm.h
 copy /q include\wx\db.h %DEST%\include\wx\db.h
+copy /q include\wx\dbkeyg.h %DEST%\include\wx\dbkeyg.h
 copy /q include\wx\dbtable.h %DEST%\include\wx\dbtable.h
 copy /q include\wx\dde.h %DEST%\include\wx\dde.h
 copy /q include\wx\debug.h %DEST%\include\wx\debug.h
