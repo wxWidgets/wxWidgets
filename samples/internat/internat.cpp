@@ -64,7 +64,7 @@ public:
     void OnTest1(wxCommandEvent& event);
     void OnTest2(wxCommandEvent& event);
     void OnTest3(wxCommandEvent& event);
-    
+
     DECLARE_EVENT_TABLE()
 
     wxLocale& m_locale;
@@ -77,8 +77,7 @@ public:
 // ID for the menu commands
 enum
 {
-    INTERNAT_QUIT = 1,
-    INTERNAT_TEXT,
+    INTERNAT_TEXT = wxID_HIGHEST + 1,
     INTERNAT_TEST,
     INTERNAT_TEST_1,
     INTERNAT_TEST_2,
@@ -91,7 +90,7 @@ enum
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_MENU(INTERNAT_QUIT, MyFrame::OnQuit)
+    EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
     EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
     EVT_MENU(INTERNAT_TEST, MyFrame::OnPlay)
     EVT_MENU(INTERNAT_OPEN, MyFrame::OnOpen)
@@ -130,6 +129,7 @@ bool MyApp::OnInit()
         wxLANGUAGE_RUSSIAN,
         wxLANGUAGE_BULGARIAN,
         wxLANGUAGE_CZECH,
+        wxLANGUAGE_POLISH,
 #if wxUSE_UNICODE
         wxLANGUAGE_JAPANESE,
         wxLANGUAGE_GEORGIAN,
@@ -150,6 +150,7 @@ bool MyApp::OnInit()
             _T("Russian"),
             _T("Bulgarian"),
             _T("Czech"),
+            _T("Polish"),
 #if wxUSE_UNICODE
             _T("Japanese"),
             _T("Georgian"),
@@ -165,7 +166,7 @@ bool MyApp::OnInit()
         lng = wxGetSingleChoiceIndex
               (
                 _T("Please choose language:"),
-                _T("Language"), 
+                _T("Language"),
                 WXSIZEOF(langNames),
                 langNames
               );
@@ -199,7 +200,7 @@ bool MyApp::OnInit()
     wxMenu *file_menu = new wxMenu;
     file_menu->Append(wxID_ABOUT, _("&About..."));
     file_menu->AppendSeparator();
-    file_menu->Append(INTERNAT_QUIT, _("E&xit"));
+    file_menu->Append(wxID_EXIT, _("E&xit"));
 
     wxMenu *test_menu = new wxMenu;
     test_menu->Append(INTERNAT_OPEN, _("&Open bogus file"));
@@ -215,10 +216,10 @@ bool MyApp::OnInit()
     frame->SetMenuBar(menu_bar);
 
     // Show the frame
-    frame->Show(TRUE);
+    frame->Show(true);
     SetTopWindow(frame);
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -228,10 +229,8 @@ bool MyApp::OnInit()
 // main frame constructor
 MyFrame::MyFrame(wxLocale& locale)
        : wxFrame(NULL,
-                 -1,
-                 _("International wxWidgets App"),
-                 wxPoint(50, 50),
-                 wxSize(350, 60)),
+                 wxID_ANY,
+                 _("International wxWidgets App")),
          m_locale(locale)
 {
     // Empty
@@ -239,7 +238,7 @@ MyFrame::MyFrame(wxLocale& locale)
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
 {
-    Close(TRUE);
+    Close(true);
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
@@ -249,7 +248,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     wxString sysname = m_locale.GetSysName();
     wxString canname = m_locale.GetCanonicalName();
 
-    localeInfo.Printf(_("Language: %s\nSystem locale name: %s\nCanonical locale name: %s\n"),
+    localeInfo.Printf(_("Language: %s\nSystem locale name:\n%s\nCanonical locale name: %s\n"),
         locale.c_str(), sysname.c_str(), canname.c_str() );
 
     wxMessageDialog
@@ -258,7 +257,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
         wxString(_("I18n sample\n(c) 1998, 1999 Vadim Zeitlin and Julian Smart"))
             + wxT("\n\n")
             + localeInfo,
-        _("About Internat"), 
+        _("About Internat"),
         wxOK | wxICON_INFORMATION
     ).ShowModal();
 }
@@ -322,14 +321,14 @@ void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event))
 {
     const wxChar* title = _("Testing _() (gettext)");
     wxTextEntryDialog d(this, _("Please enter text to translate"),
-		title, wxTRANSLATE("default value"));
+        title, wxTRANSLATE("default value"));
     if (d.ShowModal() == wxID_OK)
     {
-    	wxString v = d.GetValue();
-    	wxString s(title);
-    	s << _T("\n") << v << _T(" -> ")
-    	    << wxGetTranslation(v.c_str()) << _T("\n");
-    	wxMessageBox(s);
+        wxString v = d.GetValue();
+        wxString s(title);
+        s << _T("\n") << v << _T(" -> ")
+            << wxGetTranslation(v.c_str()) << _T("\n");
+        wxMessageBox(s);
     }
 }
 
@@ -337,20 +336,20 @@ void MyFrame::OnTest2(wxCommandEvent& WXUNUSED(event))
 {
     const wxChar* title = _("Testing _N() (ngettext)");
     wxTextEntryDialog d(this,
-	    _("Please enter range for plural forms of \"n files deleted\" phrase"),
-	    title, _T("0-10"));
+        _("Please enter range for plural forms of \"n files deleted\" phrase"),
+        title, _T("0-10"));
     if (d.ShowModal() == wxID_OK)
     {
-    	int first, last;
-    	wxSscanf(d.GetValue(), _T("%d-%d"), &first, &last);
-    	wxString s(title);
-    	s << _T("\n");
-    	for (int n = first; n <= last; ++n)
+        int first, last;
+        wxSscanf(d.GetValue(), _T("%d-%d"), &first, &last);
+        wxString s(title);
+        s << _T("\n");
+        for (int n = first; n <= last; ++n)
         {
-            s << n << _T(" ") << 
+            s << n << _T(" ") <<
                 wxGetTranslation(_T("file deleted"), _T("files deleted"), n) <<
                 _T("\n");
-    	}
+        }
         wxMessageBox(s);
     }
 }
@@ -359,15 +358,15 @@ void MyFrame::OnTest3(wxCommandEvent& WXUNUSED(event))
 {
     const wxChar* lines[] =
     {
-    	wxTRANSLATE("line 1"),
-    	wxTRANSLATE("line 2"),
-    	wxTRANSLATE("line 3"),
+        wxTRANSLATE("line 1"),
+        wxTRANSLATE("line 2"),
+        wxTRANSLATE("line 3"),
     };
     wxString s(_("Testing wxTRANSLATE() (gettext_noop)"));
     s << _T("\n");
     for (size_t i = 0; i < WXSIZEOF(lines); ++i)
     {
-    	s << lines[i] << _T(" -> ") << wxGetTranslation(lines[i]) << _T("\n");
+        s << lines[i] << _T(" -> ") << wxGetTranslation(lines[i]) << _T("\n");
     }
     wxMessageBox(s);
 }
