@@ -49,7 +49,8 @@ wxUssSound::~wxUssSound()
       m_sleep_cond.Signal();
       m_sleep_mtx.Unlock();
     }
-    Join();
+    while (IsAlive())
+      Yield();
   }
 
   if (m_fd != -1)

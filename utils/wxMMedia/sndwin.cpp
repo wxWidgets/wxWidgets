@@ -42,12 +42,10 @@ void wxSndWinFragment::AllocIOBuffer(void)
   m_maxoq = 5;
   m_maxiq = 5;
 
-  m_lstoptrs = m_optrs = new wxFragBufPtr[m_maxoq];
-  m_lstiptrs = m_iptrs = new wxFragBufPtr[m_maxiq];
+  m_lstoptrs = new wxFragBufPtr[m_maxoq];
+  m_lstiptrs = new wxFragBufPtr[m_maxiq];
 
   for (i=0;i<m_maxoq;i++) {
-    m_lstoptrs[i].size = MMD_WIN_IO_BSIZE;
-    m_lstoptrs[i].ptr = 0;
     m_lstoptrs[i].buffers = new wxList();
     m_lstoptrs[i].state = wxBUFFER_FREE;
 
@@ -198,7 +196,7 @@ void wxWinSound::PrepareHeader(wxFragmentBuffer::wxFragBufPtr& frag,
 
   info = new wxSndWinInfo;
 
-  info->h_data = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE, frag.size);
+  info->h_data = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE, MMD_WIN_IO_BSIZE);
   info->h_hdr = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE, sizeof(WAVEHDR));
 
   info->data = (char *)GlobalLock(info->h_data);
@@ -214,19 +212,18 @@ void wxWinSound::PrepareHeader(wxFragmentBuffer::wxFragBufPtr& frag,
     MMRESULT result = waveInPrepareHeader(internal->devin_id, hdr,
                                           sizeof(WAVEHDR));
 
-    printf("prepareIn = %d\n", result);
     if (result != MMSYSERR_NOERROR)
       wxExit();
   } else {
     MMRESULT result = waveOutPrepareHeader(internal->devout_id, hdr,
                                            sizeof(WAVEHDR));
-    printf("prepareOut = %d\n", result);
     if (result != MMSYSERR_NOERROR)
       wxExit();
   }
 
+  frag.sndbuf = new wxStreamBuffer();
+  frag.sndbuf->SetBufferIO(info->data, info->data + MMD_WIN_IO_BSIZE);
   frag.user_data = (char *)info;
-  frag.data = info->data;
 }
 
 void wxWinSound::UnprepareHeader(wxFragmentBuffer::wxFragBufPtr& frag,
@@ -245,6 +242,8 @@ void wxWinSound::UnprepareHeader(wxFragmentBuffer::wxFragBufPtr& frag,
   } else {
     result = waveOutUnprepareHeader(internal->devout_id, info->hdr, sizeof(*info->hdr));
   }
+
+  delete frag.sndbuf;
 
   printf("unprepare = %d\n", result);
 
@@ -282,6 +281,7 @@ LRESULT APIENTRY _EXPORT wxSoundHandlerWndProc(HWND hWnd, UINT message,
     printf("wave Close ack\n");
     break;
   default:
+    // TODO: Useful ?
     return DefWindowProc(hWnd, message, wParam, lParam);
   }
   return (LRESULT)0;

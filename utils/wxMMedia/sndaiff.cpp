@@ -103,7 +103,7 @@ wxUint32 wxSndAiffCodec::PrepareToPlay()
   m_spos = 0;
   m_slen = 0;
   m_sndformat.SetSampleRate(0);
-  while (1) {
+  while (!m_spos || !m_sndformat.GetSampleRate()) {
     READ_STRING(chunk_name, 4);
     READ32(m_chunksize);
     
@@ -113,9 +113,6 @@ wxUint32 wxSndAiffCodec::PrepareToPlay()
       ParseCOMM();
     else
       m_istream->SeekI(m_chunksize, wxFromCurrent);
-
-    if (m_spos && m_sndformat.GetSampleRate())
-      break;
   }
 
   m_sndmode = wxSND_OUTPUT;
@@ -183,13 +180,51 @@ bool wxSndAiffCodec::OnWriteData(char *buf, wxUint32 size)
   return ( !(m_ostream->Write(buf, size).LastError()) );
 }
 
-bool wxSndAiffCodec::PrepareToRecord(wxUint32 m_fsize)
+void wxSndAiffCodec::WriteCOMM()
 {
 /*
-  wxUint32 total_size;
+  wxDataOutputStream data_s(*m_ostream);
+  char tmp_buf[10];
+  wxUint16 channels;
+  wxUint32 srate, num_samples;
+  wxUint16 bps;
+
+  m_chunksize = 18;
+  WRITE32(m_chunksize);
+  channels = m_sndformat.GetChannels();
+  srate = m_sndformat.GetSampleRate();
+  bps = m_sndformat.GetBps();
+
+  WRITE16(channels);
+  WRITE32(num_samples);
+  WRITE16(bps);
+
+  data_s.WriteDouble((double)srate);
+
+  m_sndformat.SetByteOrder(wxSND_SAMPLE_BE);
+  m_sndformat.SetSign(wxSND_SAMPLE_UNSIGNED);
+  ChangeCodec(WXSOUND_PCM);
+*/
+}
+
+void wxSndAiffCodec::WriteSSND(wxUint32 fsize)
+{
+/*
   char tmp_buf[10];
 
-  m_ostream->SeekO(0, wxBeginPosition);
+  WRITE32(m_spos);
+//   WRITE32(dummy ??);
+
+  m_slen = m_chunksize - m_spos;
+  m_spos += m_istream->TellI();
+*/
+}
+
+
+bool wxSndAiffCodec::PrepareToRecord(wxUint32 m_fsize)
+{
+  wxUint32 total_size = m_fsize + 0;
+  char tmp_buf[10];
 
   m_ostream->Write("FORM", 4);
   WRITE32(total_size);
@@ -199,7 +234,6 @@ bool wxSndAiffCodec::PrepareToRecord(wxUint32 m_fsize)
   WriteCOMM();
   WriteSSND(m_fsize);
 
-*/
   return TRUE;
 }
 

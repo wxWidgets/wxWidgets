@@ -284,7 +284,12 @@ Returns the current position (counted in bytes) in the stream buffer.
 
 \func{void}{SetIntPosition}{\void}
 
-Sets the current position in the stream buffer.
+Sets the current position (in bytes) in the stream buffer.
+
+\wxheading{Warning}
+
+Since it is a very low-level function, there is no check on the position:
+specify an invalid position can induce unexpected results.
 
 \membersection{wxStreamBuffer::GetLastAccess}
 

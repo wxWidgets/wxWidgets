@@ -251,8 +251,8 @@ void wxStreamBuffer::PutChar(char c)
     return;
   }
 
-  if (!GetDataLeft() && !FlushBuffer()) {
-    CHECK_ERROR(wxStream_READ_ERR);
+  if (GetDataLeft() == 0 && !FlushBuffer()) {
+    CHECK_ERROR(wxStream_WRITE_ERR);
     return;
   }
 

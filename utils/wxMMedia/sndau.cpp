@@ -51,8 +51,6 @@ wxUint32 wxSndAuCodec::PrepareToPlay()
   int offset, srate, codec, ch_count;
   size_t len;
 
-  m_istream->SeekI(0);
-
   m_istream->Read(temp_buf, 4);
   temp_buf[4] = 0;
 

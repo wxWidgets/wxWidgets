@@ -85,7 +85,7 @@ void wxMMediaFile::SetFile(wxInputStream& str, bool preload, bool seekable)
     m_o_temp = new wxOutputStream(streamb);
     m_i_temp = new wxInputStream(streamb);
 
-    m_o_temp->Write(is);
+    m_o_temp->Write(str);
     streamb->ResetBuffer();
   }
 }
@@ -116,7 +116,7 @@ void wxMMediaFile::CleanUpPrevious()
     if (m_ostream)
       m_ostream->Write(*m_i_temp);
 
-    delete m_i_temp->StreamBuffer();
+    delete (m_i_temp->InputStreamBuffer());
     delete m_i_temp;
     delete m_o_temp;
 
