@@ -539,6 +539,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxClipboard, wxObject)
 wxClipboard::wxClipboard()
 {
     m_clearOnExit = FALSE;
+    m_isOpened = FALSE;
 }
 
 wxClipboard::~wxClipboard()
@@ -582,6 +583,7 @@ bool wxClipboard::Flush()
 bool wxClipboard::Open()
 {
     // OLE opens clipboard for us
+    m_isOpened = TRUE;
 #if wxUSE_OLE_CLIPBOARD
     return TRUE;
 #else
@@ -592,7 +594,7 @@ bool wxClipboard::Open()
 bool wxClipboard::IsOpened() const
 {
 #if wxUSE_OLE_CLIPBOARD
-    return TRUE;
+    return m_isOpened;
 #else
     return wxIsClipboardOpened();
 #endif
@@ -696,6 +698,7 @@ bool wxClipboard::AddData( wxDataObject *data )
 
 void wxClipboard::Close()
 {
+    m_isOpened = FALSE;
     // OLE closes clipboard for us
 #if !wxUSE_OLE_CLIPBOARD
     wxCloseClipboard();

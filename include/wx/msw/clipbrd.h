@@ -94,6 +94,7 @@ public:
 
 private:
     bool m_clearOnExit;
+    bool m_isOpened;
 };
 
 #endif // wxUSE_CLIPBOARD
