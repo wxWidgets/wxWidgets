@@ -432,7 +432,7 @@ _WX_DEFINE_BASEARRAY(double,       wxBaseArrayDouble)
 
 _WX_DEFINE_BASEARRAY(wxString, wxBaseArrayStringBase);
 
-int wxArrayString::Index(const wxChar* sz, bool bCase, bool bFromEnd) const
+int wxArrayString::Index(const wxChar* sz, bool bCase, bool WXUNUSED(bFromEnd)) const
 {
     wxArrayString::const_iterator it;
 
@@ -458,7 +458,7 @@ private:
     fnc m_f;
 };
 
-int wxSortedArrayString::Index(const wxChar* sz, bool bCase, bool bFromEnd) const
+int wxSortedArrayString::Index(const wxChar* sz, bool bCase, bool WXUNUSED(bFromEnd)) const
 {
     wxSortedArrayString::const_iterator it;
 
