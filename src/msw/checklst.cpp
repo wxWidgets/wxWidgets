@@ -67,7 +67,57 @@
 // implementation
 // ============================================================================
 
+// TODO: WX_CONSTRUCTOR
+#if 0 // wxUSE_EXTENDED_RTTI
+WX_DEFINE_FLAGS( wxCheckListBoxStyle )
+
+WX_BEGIN_FLAGS( wxCheckListBoxStyle )
+    // new style border flags, we put them first to
+    // use them for streaming out
+    WX_FLAGS_MEMBER(wxBORDER_SIMPLE)
+    WX_FLAGS_MEMBER(wxBORDER_SUNKEN)
+    WX_FLAGS_MEMBER(wxBORDER_DOUBLE)
+    WX_FLAGS_MEMBER(wxBORDER_RAISED)
+    WX_FLAGS_MEMBER(wxBORDER_STATIC)
+    WX_FLAGS_MEMBER(wxBORDER_NONE)
+    
+    // old style border flags
+    WX_FLAGS_MEMBER(wxSIMPLE_BORDER)
+    WX_FLAGS_MEMBER(wxSUNKEN_BORDER)
+    WX_FLAGS_MEMBER(wxDOUBLE_BORDER)
+    WX_FLAGS_MEMBER(wxRAISED_BORDER)
+    WX_FLAGS_MEMBER(wxSTATIC_BORDER)
+    WX_FLAGS_MEMBER(wxNO_BORDER)
+
+    // standard window styles
+    WX_FLAGS_MEMBER(wxTAB_TRAVERSAL)
+    WX_FLAGS_MEMBER(wxCLIP_CHILDREN)
+    WX_FLAGS_MEMBER(wxTRANSPARENT_WINDOW)
+    WX_FLAGS_MEMBER(wxWANTS_CHARS)
+    WX_FLAGS_MEMBER(wxNO_FULL_REPAINT_ON_RESIZE)
+    WX_FLAGS_MEMBER(wxALWAYS_SHOW_SB )
+    WX_FLAGS_MEMBER(wxVSCROLL)
+    WX_FLAGS_MEMBER(wxHSCROLL)
+
+    WX_FLAGS_MEMBER(wxLB_SINGLE)
+    WX_FLAGS_MEMBER(wxLB_MULTIPLE)
+    WX_FLAGS_MEMBER(wxLB_EXTENDED)
+    WX_FLAGS_MEMBER(wxLB_HSCROLL)
+    WX_FLAGS_MEMBER(wxLB_ALWAYS_SB)
+    WX_FLAGS_MEMBER(wxLB_NEEDED_SB)
+    WX_FLAGS_MEMBER(wxLB_SORT)
+
+WX_END_FLAGS( wxCheckListBoxStyle )
+
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxCheckListBox, wxListBox,"wx/checklst.h")
+
+WX_BEGIN_PROPERTIES_TABLE(wxCheckListBox)
+    WX_PROPERTY_FLAGS( WindowStyle , wxCheckListBoxStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
+WX_END_PROPERTIES_TABLE()
+
+#else
 IMPLEMENT_DYNAMIC_CLASS(wxCheckListBox, wxListBox)
+#endif
 
 /*
 TODO PROPERTIES

@@ -38,6 +38,49 @@
 #endif
 
 #if wxUSE_EXTENDED_RTTI
+WX_DEFINE_FLAGS( wxSliderStyle )
+
+WX_BEGIN_FLAGS( wxSliderStyle )
+    // new style border flags, we put them first to
+    // use them for streaming out
+    WX_FLAGS_MEMBER(wxBORDER_SIMPLE)
+    WX_FLAGS_MEMBER(wxBORDER_SUNKEN)
+    WX_FLAGS_MEMBER(wxBORDER_DOUBLE)
+    WX_FLAGS_MEMBER(wxBORDER_RAISED)
+    WX_FLAGS_MEMBER(wxBORDER_STATIC)
+    WX_FLAGS_MEMBER(wxBORDER_NONE)
+    
+    // old style border flags
+    WX_FLAGS_MEMBER(wxSIMPLE_BORDER)
+    WX_FLAGS_MEMBER(wxSUNKEN_BORDER)
+    WX_FLAGS_MEMBER(wxDOUBLE_BORDER)
+    WX_FLAGS_MEMBER(wxRAISED_BORDER)
+    WX_FLAGS_MEMBER(wxSTATIC_BORDER)
+    WX_FLAGS_MEMBER(wxNO_BORDER)
+
+    // standard window styles
+    WX_FLAGS_MEMBER(wxTAB_TRAVERSAL)
+    WX_FLAGS_MEMBER(wxCLIP_CHILDREN)
+    WX_FLAGS_MEMBER(wxTRANSPARENT_WINDOW)
+    WX_FLAGS_MEMBER(wxWANTS_CHARS)
+    WX_FLAGS_MEMBER(wxNO_FULL_REPAINT_ON_RESIZE)
+    WX_FLAGS_MEMBER(wxALWAYS_SHOW_SB )
+    WX_FLAGS_MEMBER(wxVSCROLL)
+    WX_FLAGS_MEMBER(wxHSCROLL)
+
+    WX_FLAGS_MEMBER(wxSL_HORIZONTAL)
+    WX_FLAGS_MEMBER(wxSL_VERTICAL)
+    WX_FLAGS_MEMBER(wxSL_AUTOTICKS)
+    WX_FLAGS_MEMBER(wxSL_LABELS)
+    WX_FLAGS_MEMBER(wxSL_LEFT)
+    WX_FLAGS_MEMBER(wxSL_TOP)
+    WX_FLAGS_MEMBER(wxSL_RIGHT)
+    WX_FLAGS_MEMBER(wxSL_BOTTOM)
+    WX_FLAGS_MEMBER(wxSL_BOTH)
+    WX_FLAGS_MEMBER(wxSL_SELRANGE)
+
+WX_END_FLAGS( wxSliderStyle )
+
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxSlider95, wxControl,"wx/scrolbar.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxSlider95)
@@ -47,6 +90,7 @@ WX_BEGIN_PROPERTIES_TABLE(wxSlider95)
 	WX_PROPERTY( PageSize , int , SetPageSize, GetLineSize, 1 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
 	WX_PROPERTY( LineSize , int , SetLineSize, GetLineSize, 1 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
 	WX_PROPERTY( ThumbLength , int , SetThumbLength, GetThumbLength, 1 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+    WX_PROPERTY_FLAGS( WindowStyle , wxSliderStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
 WX_END_PROPERTIES_TABLE()
 
 WX_BEGIN_HANDLERS_TABLE(wxSlider95)

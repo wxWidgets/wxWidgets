@@ -57,12 +57,50 @@ IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxNotifyEvent)
 
 
 #if wxUSE_EXTENDED_RTTI
+WX_DEFINE_FLAGS( wxSpinButtonStyle )
+
+WX_BEGIN_FLAGS( wxSpinButtonStyle )
+    // new style border flags, we put them first to
+    // use them for streaming out
+    WX_FLAGS_MEMBER(wxBORDER_SIMPLE)
+    WX_FLAGS_MEMBER(wxBORDER_SUNKEN)
+    WX_FLAGS_MEMBER(wxBORDER_DOUBLE)
+    WX_FLAGS_MEMBER(wxBORDER_RAISED)
+    WX_FLAGS_MEMBER(wxBORDER_STATIC)
+    WX_FLAGS_MEMBER(wxBORDER_NONE)
+    
+    // old style border flags
+    WX_FLAGS_MEMBER(wxSIMPLE_BORDER)
+    WX_FLAGS_MEMBER(wxSUNKEN_BORDER)
+    WX_FLAGS_MEMBER(wxDOUBLE_BORDER)
+    WX_FLAGS_MEMBER(wxRAISED_BORDER)
+    WX_FLAGS_MEMBER(wxSTATIC_BORDER)
+    WX_FLAGS_MEMBER(wxNO_BORDER)
+
+    // standard window styles
+    WX_FLAGS_MEMBER(wxTAB_TRAVERSAL)
+    WX_FLAGS_MEMBER(wxCLIP_CHILDREN)
+    WX_FLAGS_MEMBER(wxTRANSPARENT_WINDOW)
+    WX_FLAGS_MEMBER(wxWANTS_CHARS)
+    WX_FLAGS_MEMBER(wxNO_FULL_REPAINT_ON_RESIZE)
+    WX_FLAGS_MEMBER(wxALWAYS_SHOW_SB )
+    WX_FLAGS_MEMBER(wxVSCROLL)
+    WX_FLAGS_MEMBER(wxHSCROLL)
+
+    WX_FLAGS_MEMBER(wxSP_HORIZONTAL)
+    WX_FLAGS_MEMBER(wxSP_VERTICAL)
+    WX_FLAGS_MEMBER(wxSP_ARROW_KEYS)
+    WX_FLAGS_MEMBER(wxSP_WRAP)
+
+WX_END_FLAGS( wxSpinButtonStyle )
+
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxSpinButton, wxControl,"wx/spinbut.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxSpinButton)
 	WX_PROPERTY( Value , int , SetValue, GetValue, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
 	WX_PROPERTY( Min , int , SetMin, GetMin, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
 	WX_PROPERTY( Max , int , SetMax, GetMax, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+    WX_PROPERTY_FLAGS( WindowStyle , wxSpinButtonStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
 /*
 	TODO PROPERTIES
 		style wxSP_VERTICAL | wxSP_ARROW_KEYS
