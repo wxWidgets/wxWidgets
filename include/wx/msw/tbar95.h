@@ -68,6 +68,8 @@ public:
     void OnMouseEvent(wxMouseEvent& event);
     void OnSysColourChanged(wxSysColourChangedEvent& event);
 
+    void SetFocus() {}
+
     static WXHBITMAP MapBitmap(WXHBITMAP bitmap, int width, int height);
 
 protected:
