@@ -81,7 +81,7 @@ private:
 enum
 {
     // menu items
-    Minimal_Quit = 1,
+    Minimal_Quit = wxID_EXIT,
 
     // it is important for the id corresponding to the "About" command to have
     // this standard value as otherwise it won't be handled properly under Mac
@@ -122,7 +122,7 @@ bool MyApp::OnInit()
     // create the main application window
     MyFrame *frame = new MyFrame(_T("Minimal wxWindows App"),
 #ifdef __WXWINCE__
-        wxPoint(0, 0), wxDefaultSize, wxNO_BORDER|wxSYSTEM_MENU);
+        wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxSYSTEM_MENU|wxCLIP_CHILDREN);
 #else
         wxPoint(50, 50), wxSize(450, 340));
 #endif
