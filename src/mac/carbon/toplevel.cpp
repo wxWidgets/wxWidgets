@@ -35,6 +35,7 @@
     #include "wx/string.h"
     #include "wx/log.h"
     #include "wx/intl.h"
+    #include "wx/settings.h"
 #endif //WX_PRECOMP
 
 #include "wx/mac/uma.h"
