@@ -1241,8 +1241,6 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/treectrl/*.cpp $(DISTDIR)/samples/treectrl
 	cp $(SAMPDIR)/treectrl/*.h $(DISTDIR)/samples/treectrl
 	cp $(SAMPDIR)/treectrl/*.xpm $(DISTDIR)/samples/treectrl
-	mkdir $(DISTDIR)/samples/treectrl/bitmaps
-	cp $(SAMPDIR)/treectrl/bitmaps/*.bmp $(DISTDIR)/samples/treectrl/bitmaps
 
 	mkdir $(DISTDIR)/samples/treelay
 	cp $(SAMPDIR)/treelay/Makefile.in $(DISTDIR)/samples/treelay
