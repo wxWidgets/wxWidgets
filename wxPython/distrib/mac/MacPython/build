@@ -7,7 +7,7 @@
 # Script configs
 PYVERSION=2.3a2
 PYVER=2.3
-BUILDNUM=2
+BUILDNUM=3
 DOCLEANUP=no
 
 PROGDIR="`dirname \"$0\"`"

@@ -22,12 +22,12 @@ fi
 mkdir -p $TOOLDIR
 
 # Make some links to the python executable
-if [ -e $TOOLDIR/python$PYVER]; then
+if [ -e $TOOLDIR/python$PYVER ]; then
     rm $TOOLDIR/python$PYVER
 fi
 ln -fs $DEST/Library/Frameworks/Python.framework/Versions/$PYVER/bin/python $TOOLDIR/python$PYVER
 
-if [ -e $TOOLDIR/python]; then
+if [ -e $TOOLDIR/python ]; then
     rm $TOOLDIR/python
 fi
 ln -fs python$PYVER $TOOLDIR/python
@@ -44,18 +44,19 @@ chmod +x $TOOLDIR/pythonw
 # Compile the .py files in the Python library to .pyc's and then .pyo's
 $TOOLDIR/python -Wi -tt \
     $DEST/Library/Frameworks/Python.framework/Versions/$PYVER/lib/python$PYVER/compileall.py \
-    -x badsyntax $DEST/Library/Frameworks/Python.framework/Versions/$PYVER/lib/python$PYVER
+    -x badsyntax -x site-packages $DEST/Library/Frameworks/Python.framework/Versions/$PYVER/lib/python$PYVER
 
 $TOOLDIR/python -Wi -tt -O \
     $DEST/Library/Frameworks/Python.framework/Versions/$PYVER/lib/python$PYVER/compileall.py \
-    -x badsyntax $DEST/Library/Frameworks/Python.framework/Versions/$PYVER/lib/python$PYVER
+    -x badsyntax -x site-packages  $DEST/Library/Frameworks/Python.framework/Versions/$PYVER/lib/python$PYVER
 
 
 # Make the site-packages and other dirs writable by the admin.
-
-for d in lib/python$PYVER/site-packages bin; do
-    chgrp admin $DEST/Library/Frameworks/Python.framework/Versions/$PYVER/$d
-    chmod g+w  $DEST/Library/Frameworks/Python.framework/Versions/$PYVER/$d
+for d in $DEST/Library/Frameworks/Python.framework/Versions/$PYVER/lib/python$PYVER/site-packages \
+         $DEST/Library/Frameworks/Python.framework/Versions/$PYVER/bin \
+         $DEST/Applications/MacPython-$PYVER; do
+    chgrp -R admin $d
+    chmod -R g+w   $d
 done
 
 
