@@ -593,6 +593,12 @@ void wxTextCtrl::WriteText( const wxString &text )
 #else
         wxCharBuffer buffer( wxConvUTF8.cWC2MB( wxConvLocal.cWX2WC( text ) ) );
 #endif
+        if ( !buffer )
+        {
+            // what else can we do? at least don't crash...
+            return;
+        }
+
         GtkTextBuffer *text_buffer = gtk_text_view_get_buffer( GTK_TEXT_VIEW(m_text) );
 
         // TODO: Call whatever is needed to delete the selection.
