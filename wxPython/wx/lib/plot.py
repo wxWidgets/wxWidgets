@@ -34,6 +34,14 @@
 #   - Added functions GetClosestPoints (all curves) and GetClosestPoint (only closest curve)
 #       can be in either user coords or screen coords.
 #   
+# Nov 2004  Oliver Schoenborn (oliver.schoenborn@utoronto.ca) with 
+# valuable input from and testing by Gary)
+# - Factored out "draw command" so extensions easier to implement: clean 
+#   separation b/w user's "draw" (Draw) and internal "draw" (_draw)
+# - Added ability to define your own ticks at PlotCanvas.Draw
+# - Added better bar charts: PolyBar class and getBarTicksGen()
+# - Put legend writing for a Poly* into Poly* class where it belongs
+# - If no legend specified or exists, no gap created
 #
 
 """
@@ -151,6 +159,20 @@ class PolyPoints:
             self.currentShift= shift
         # else unchanged use the current scaling
         
+    def drawLegend(self, dc, printerScale, symWidth, hgap, textHeight, x0, y0):
+        legend = self.getLegend()
+        if legend != '':
+            self._drawLegendSym(dc, printerScale, symWidth, x0, y0)
+            dc.DrawText(legend, x0+symWidth+hgap, y0-textHeight/2)
+            return True
+        
+        return False
+        
+    def _drawLegendSym(self, dc, printerScale, symWidth, x0, y0):
+        # default:
+        pnt= (x0+symWidth/2., y0)
+        self.draw(dc, printerScale, coord= _Numeric.array([pnt]))
+
     def getLegend(self):
         return self.attributes['legend']
 
@@ -201,13 +223,18 @@ class PolyLine(PolyPoints):
         colour = self.attributes['colour']
         width = self.attributes['width'] * printerScale
         style= self.attributes['style']
-        pen = wx.Pen(wx.NamedColour(colour), width, style)
+        pen = wx.Pen(colour, width, style)
         pen.SetCap(wx.CAP_BUTT)
         dc.SetPen(pen)
         if coord == None:
             dc.DrawLines(self.scaled)
         else:
             dc.DrawLines(coord) # draw legend line
+
+    def _drawLegendSym(self, dc, printerScale, symWidth, x0, y0):
+        pnt1= (x0, y0)
+        pnt2= (x0+symWidth/1.5, y0)
+        self.draw(dc, printerScale, coord= _Numeric.array([pnt1,pnt2]))
 
     def getSymExtent(self, printerScale):
         """Width and Height of Marker"""
@@ -237,7 +264,7 @@ class PolyMarker(PolyPoints):
                 'colour'= 'black',          - wx.Pen Colour any wx.NamedColour
                 'width'= 1,                 - Pen width
                 'size'= 2,                  - Marker size
-                'fillcolour'= same as colour,      - wx.Brush Colour any wx.NamedColour
+                'fillcolour'= same as colour, - wx.Brush Colour
                 'fillstyle'= wx.SOLID,      - wx.Brush fill style (use wx.TRANSPARENT for no fill)
                 'marker'= 'circle'          - Marker shape
                 'legend'= ''                - Marker Legend to display
@@ -262,11 +289,11 @@ class PolyMarker(PolyPoints):
         fillstyle = self.attributes['fillstyle']
         marker = self.attributes['marker']
 
-        dc.SetPen(wx.Pen(wx.NamedColour(colour), width))
+        dc.SetPen(wx.Pen(colour, width))
         if fillcolour:
-            dc.SetBrush(wx.Brush(wx.NamedColour(fillcolour),fillstyle))
+            dc.SetBrush(wx.Brush(fillcolour,fillstyle))
         else:
-            dc.SetBrush(wx.Brush(wx.NamedColour(colour), fillstyle))
+            dc.SetBrush(wx.Brush(colour, fillstyle))
         if coord == None:
             self._drawmarkers(dc, self.scaled, marker, size)
         else:
@@ -323,6 +350,148 @@ class PolyMarker(PolyPoints):
         for f in [[-fact,0,fact,0],[0,-fact,0,fact]]:
             lines= _Numeric.concatenate((coords,coords),axis=1)+f
             dc.DrawLineList(lines.astype(_Numeric.Int32))
+
+class PolyBar(PolyPoints):
+    """Class to define one or more bars for bar chart.  All bars in a 
+       PolyBar share same style etc. 
+        - All methods except __init__ are private.
+    """
+  
+    _attributes = {'colour': 'black',
+                   'width': 1,
+                   'size': 2,
+                   'legend': '',
+                   'fillcolour': None,
+                   'fillstyle': wx.SOLID}
+
+    def __init__(self, points, **attr):
+        """Creates several bars. 
+        points - sequence (array, tuple or list) of (x,y) points
+                 indicating *top left* corner of bar. Can also be
+                 just one (x,y) tuple if labels attribute is just
+                 a string (not a list)
+        **attr - key word attributes
+            Defaults:
+                'colour'= wx.BLACK,           - wx.Pen Colour
+                'width'= 1,                   - Pen width
+                'size'= 2,                    - Bar size
+                'fillcolour'= same as colour, - wx.Brush Colour
+                'fillstyle'= wx.SOLID,        - wx.Brush fill style (use wx.TRANSPARENT for no fill)
+                'legend'= ''                  - string used for PolyBar legend
+                'labels'= ''                  - string if only one point, or list of labels, one per point
+            Note that if no legend is given the label is used. 
+        """
+        barPoints = [(0,0)] # needed so height of bar can be determined
+        self.labels = []
+        # add labels and points to above data members:
+        try: 
+            labels = attr['labels']
+            del attr['labels']
+        except:
+            labels = None
+        if labels is None: # figure out if we have 1 point or many
+            try: 
+                points[0][0] # ok: we have a seq of points
+                barPoints.extend(points)
+            except: # failed, so have just one point:
+                barPoints.append(points)
+        elif isinstance(labels, list) or isinstance(labels, tuple):
+            # labels is a sequence so points must be too, with same length:
+            self.labels.extend(labels)
+            barPoints.extend(points)
+            if len(labels) != len(points):
+                msg = "%d bar labels missing" % (len(points)-len(labels))
+                raise ValueError, msg
+        else: # label given, but only one, so must be only one point:
+            barPoints.append(points)
+            self.labels.append(labels)
+
+        PolyPoints.__init__(self, barPoints, attr)
+        
+    def draw(self, dc, printerScale, coord= None):
+        colour = self.attributes['colour']
+        width = self.attributes['width'] * printerScale
+        size = self.attributes['size'] * printerScale
+        fillcolour = self.attributes['fillcolour']
+        fillstyle = self.attributes['fillstyle']
+
+        dc.SetPen(wx.Pen(colour,int(width)))
+        if fillcolour:
+            dc.SetBrush(wx.Brush(fillcolour,fillstyle))
+        else:
+            dc.SetBrush(wx.Brush(colour, fillstyle))
+        if coord == None:
+            self._drawbar(dc, self.scaled, size)
+        else:
+            self._drawLegendMarker(dc, coord, size) #draw legend marker
+
+    def _drawLegendMarker(self, dc, coord, size):
+        fact= 10 
+        wh= 2*fact
+        rect= _Numeric.zeros((len(coord),4),_Numeric.Float)+[0.0,0.0,wh,wh]
+        rect[:,0:2]= coord-[fact,fact]
+        dc.DrawRectangleList(rect.astype(_Numeric.Int32))
+        
+    def offset(self, heights, howMany = 1, shift=0.25):
+        """Return a list of points, where x's are those of this bar,
+        shifted by shift*howMany (in caller's units, not pixel units), and
+        heights are given in heights."""
+        points = [(point[0][0]+shift*howMany,point[1]) for point 
+                    in zip(self.points[1:], heights)]
+        return points
+            
+    def getSymExtent(self, printerScale):
+        """Width and Height of bar symbol"""
+        s= 5*self.attributes['size'] * printerScale
+        return (s,s)
+
+    def getLegend(self):
+        """This returns a comma-separated list of bar labels (one string)"""
+        try: legendItem = self.attributes['legend']
+        except: 
+            legendItem = ", ".join(self.labels)
+        return legendItem
+    
+    def _drawbar(self, dc, coords, size=1):
+        width = 5.0*size
+        y0 = coords[0][1]
+        bars = []
+        for coord in coords[1:]:
+            x = coord[0] # - width/2 not as good
+            y = coord[1]
+            height = int(y0) - int(y)
+            bars.append((int(x),int(y),int(width),int(height)))
+            #print x,y,width, height
+        dc.DrawRectangleList(bars)
+
+    def getTicks(self):
+        """Get the list of (tick pos, label) pairs for this PolyBar. 
+        It is unlikely you need this, but it is used by 
+        getBarTicksGen."""
+        ticks = []
+        # remember to skip first point:
+        for point, label in zip(self.points[1:], self.labels):
+            ticks.append((point[0], label))
+        return ticks
+
+def getBarTicksGen(*polyBars):
+    """Get a function that can be given as xTicks argument when
+    calling PolyCanvas.Draw() when plotting one or more PolyBar.
+    The returned function allows the bar chart to have the bars 
+    labelled at the x axis. """
+    ticks = []
+    for polyBar in polyBars:
+        ticks.extend(polyBar.getTicks())
+            
+    def tickGenerator(lower,upper,gg,ff):
+        tickPairs = []
+        for tick in ticks:
+            if lower <= tick[0] < upper:
+                tickPairs.append(tick)
+        return tickPairs
+
+    return tickGenerator
+
 
 class PlotGraphics:
     """Container to hold PolyXXX objects and graph labels
@@ -459,7 +628,7 @@ class PlotCanvas(wx.Window):
         self._hasDragged= False
         
         # Drawing Variables
-        self.last_draw = None
+        self._drawCmd = None
         self._pointScale= 1
         self._pointShift= 0
         self._xSpec= 'auto'
@@ -675,24 +844,23 @@ class PlotCanvas(wx.Window):
     def Reset(self):
         """Unzoom the plot."""
         self.last_PointLabel = None        #reset pointLabel
-        if self.last_draw is not None:
-            self.Draw(self.last_draw[0])
+        if self.BeenDrawn():
+            self._drawCmd.resetAxes(self._xSpec, self._ySpec)
+            self._draw()
         
     def ScrollRight(self, units):          
         """Move view right number of axis units."""
         self.last_PointLabel = None        #reset pointLabel
-        if self.last_draw is not None:
-            graphics, xAxis, yAxis= self.last_draw
-            xAxis= (xAxis[0]+units, xAxis[1]+units)
-            self.Draw(graphics,xAxis,yAxis)
+        if self.BeenDrawn():
+            self._drawCmd.scrollAxisX(units, self._xSpec)
+            self._draw()
 
     def ScrollUp(self, units):
         """Move view up number of axis units."""
         self.last_PointLabel = None        #reset pointLabel
-        if self.last_draw is not None:
-            graphics, xAxis, yAxis= self.last_draw
-            yAxis= (yAxis[0]+units, yAxis[1]+units)
-            self.Draw(graphics,xAxis,yAxis)
+        if self.BeenDrawn():
+            self._drawCmd.scrollAxisY(units, self._ySpec)
+            self._draw()
         
     def GetXY(self,event):
         """Takes a mouse event and returns the XY user axis values."""
@@ -739,33 +907,43 @@ class PlotCanvas(wx.Window):
     
     def GetXMaxRange(self):
         """Returns (minX, maxX) x-axis range for displayed graph"""
-        graphics= self.last_draw[0]
-        p1, p2 = graphics.boundingBox()     # min, max points of graphics
-        xAxis = self._axisInterval(self._xSpec, p1[0], p2[0]) # in user units
-        return xAxis
+        return self._drawCmd.getXMaxRange()
 
     def GetYMaxRange(self):
         """Returns (minY, maxY) y-axis range for displayed graph"""
-        graphics= self.last_draw[0]
-        p1, p2 = graphics.boundingBox()     # min, max points of graphics
-        yAxis = self._axisInterval(self._ySpec, p1[1], p2[1])
-        return yAxis
+        return self._drawCmd.getYMaxRange()
 
     def GetXCurrentRange(self):
         """Returns (minX, maxX) x-axis for currently displayed portion of graph"""
-        return self.last_draw[1]
+        return self._drawCmd.xAxis
     
     def GetYCurrentRange(self):
         """Returns (minY, maxY) y-axis for currently displayed portion of graph"""
-        return self.last_draw[2]
+        return self._drawCmd.yAxis
         
-    def Draw(self, graphics, xAxis = None, yAxis = None, dc = None):
+    def BeenDrawn(self):
+        """Return true if Draw() has been called once, false otherwise."""
+        return self._drawCmd is not None
+    
+    def Draw(self, graphics, xAxis = None, yAxis = None, dc = None, 
+        xTicks = None, yTicks = None):
         """Draw objects in graphics with specified x and y axis.
         graphics- instance of PlotGraphics with list of PolyXXX objects
         xAxis - tuple with (min, max) axis range to view
         yAxis - same as xAxis
         dc - drawing context - doesn't have to be specified.    
-        If it's not, the offscreen buffer is used
+        If it's not, the offscreen buffer is used.
+        xTicks and yTicks - can be either 
+          - a list of floats where the ticks should be, only visible 
+            ticks will be used;
+          - a function that generates a list of (tick, label) pairs; 
+            The function must be of form func(lower, upper, grid,
+            format), and the pairs must contain only ticks between lower and
+            upper. Function can use grid and format that are computed by
+            PlotCanvas, if desired, where grid is the spacing between ticks,
+            and format is the format string for how tick labels
+            will appear. See tickGeneratorDefault and
+            tickGeneratorFromList for examples of such functions.
         """
         # check Axis is either tuple or none
         if type(xAxis) not in [type(None),tuple]:
@@ -773,12 +951,18 @@ class PlotCanvas(wx.Window):
         if type(yAxis) not in [type(None),tuple]:
             raise TypeError, "yAxis should be None or (minY,maxY)"
              
+        self._drawCmd = DrawCmd(graphics, xAxis, yAxis, 
+                                 self._xSpec, self._ySpec,
+                                 xTicks, yTicks)
+        self._draw(dc)
+    
+    def _draw(self, dc=None):
+        """Implement the draw command, with dc if given, using any new 
+        settings (legend toggled, axis specs, zoom, etc). """
+        assert self._drawCmd is not None
+        
         # check case for axis = (a,b) where a==b caused by improper zooms
-        if xAxis != None:
-            if xAxis[0] == xAxis[1]:
-                return
-        if yAxis != None:
-            if yAxis[0] == yAxis[1]:
+        if self._drawCmd.isEmpty():
                 return
             
         if dc == None:
@@ -792,33 +976,15 @@ class PlotCanvas(wx.Window):
         # set font size for every thing but title and legend
         dc.SetFont(self._getFont(self._fontSizeAxis))
 
-        # sizes axis to axis type, create lower left and upper right corners of plot
-        if xAxis == None or yAxis == None:
-            # One or both axis not specified in Draw
-            p1, p2 = graphics.boundingBox()     # min, max points of graphics
-            if xAxis == None:
-                xAxis = self._axisInterval(self._xSpec, p1[0], p2[0]) # in user units
-            if yAxis == None:
-                yAxis = self._axisInterval(self._ySpec, p1[1], p2[1])
-            # Adjust bounding box for axis spec
-            p1[0],p1[1] = xAxis[0], yAxis[0]     # lower left corner user scale (xmin,ymin)
-            p2[0],p2[1] = xAxis[1], yAxis[1]     # upper right corner user scale (xmax,ymax)
-        else:
-            # Both axis specified in Draw
-            p1= _Numeric.array([xAxis[0], yAxis[0]])    # lower left corner user scale (xmin,ymin)
-            p2= _Numeric.array([xAxis[1], yAxis[1]])     # upper right corner user scale (xmax,ymax)
-
-        self.last_draw = (graphics, xAxis, yAxis)       # saves most recient values
-
         # Get ticks and textExtents for axis if required
         if self._xSpec is not 'none':        
-            xticks = self._ticks(xAxis[0], xAxis[1])
+            xticks = self._drawCmd.getTicksX()
             xTextExtent = dc.GetTextExtent(xticks[-1][1])# w h of x axis text last number on axis
         else:
             xticks = None
             xTextExtent= (0,0) # No text for ticks
         if self._ySpec is not 'none':
-            yticks = self._ticks(yAxis[0], yAxis[1])
+            yticks = self._drawCmd.getTicksY()
             yTextExtentBottom= dc.GetTextExtent(yticks[0][1])
             yTextExtentTop   = dc.GetTextExtent(yticks[-1][1])
             yTextExtent= (max(yTextExtentBottom[0],yTextExtentTop[0]),
@@ -828,10 +994,12 @@ class PlotCanvas(wx.Window):
             yTextExtent= (0,0) # No text for ticks
 
         # TextExtents for Title and Axis Labels
+        graphics = self._drawCmd.graphics
         titleWH, xLabelWH, yLabelWH= self._titleLablesWH(dc, graphics)
 
         # TextExtents for Legend
-        legendBoxWH, legendSymExt, legendTextExt = self._legendWH(dc, graphics)
+        legendBoxWH, legendSymExt, legendHGap, legendTextExt \
+            = self._legendWH(dc, graphics)
 
         # room around graph area
         rhsW= max(xTextExtent[0], legendBoxWH[0]) # use larger of number width or legend width
@@ -857,7 +1025,11 @@ class PlotCanvas(wx.Window):
 
         # drawing legend makers and text
         if self._legendEnabled:
-            self._drawLegend(dc,graphics,rhsW,topH,legendBoxWH, legendSymExt, legendTextExt)
+            self._drawLegend(dc,graphics,rhsW,topH,legendBoxWH, 
+                legendSymExt, legendHGap, legendTextExt)
+
+        #sizes axis to axis type, create lower left and upper right corners of plot
+        p1, p2 = self._drawCmd.getBoundingBox()
 
         # allow for scaling and shifting plotted points
         scale = (self.plotbox_size-textSize_scale) / (p2-p1)* _Numeric.array((1,-1))
@@ -882,16 +1054,15 @@ class PlotCanvas(wx.Window):
         
     def Redraw(self, dc= None):
         """Redraw the existing plot."""
-        if self.last_draw is not None:
-            graphics, xAxis, yAxis= self.last_draw
-            self.Draw(graphics,xAxis,yAxis,dc)
+        if self.BeenDrawn():
+            self._draw(dc)
 
     def Clear(self):
         """Erase the window."""
         self.last_PointLabel = None        #reset pointLabel
         dc = wx.BufferedDC(wx.ClientDC(self), self._Buffer)
         dc.Clear()
-        self.last_draw = None
+        self._drawCmd = None
 
     def Zoom(self, Center, Ratio):
         """ Zoom on the plot
@@ -899,15 +1070,19 @@ class PlotCanvas(wx.Window):
             Zooms by the Ratio = (Xratio, Yratio) given
         """
         self.last_PointLabel = None   #reset maker
-        x,y = Center
-        if self.last_draw != None:
-            (graphics, xAxis, yAxis) = self.last_draw
-            w = (xAxis[1] - xAxis[0]) * Ratio[0]
-            h = (yAxis[1] - yAxis[0]) * Ratio[1]
-            xAxis = ( x - w/2, x + w/2 )
-            yAxis = ( y - h/2, y + h/2 )
-            self.Draw(graphics, xAxis, yAxis)
+        if self.BeenDrawn():
+            self._drawCmd.zoom(Center, Ratio)
+            self._draw()
         
+    def ChangeAxes(self, xAxis, yAxis):
+        """Change axes specified at last Draw() command. If 
+        Draw() never called yet, RuntimeError raised. """
+        if not self.BeenDrawn(): 
+            raise RuntimeError, "Must call Draw() at least once"
+        self._drawCmd.changeAxisX(xAxis, self._xSpec)
+        self._drawCmd.changeAxisY(yAxis, self._ySpec)
+        self._draw()
+
     def GetClosestPoints(self, pntXY, pointScaled= True):
         """Returns list with
             [curveNumber, legend, index of closest point, pointXY, scaledXY, distance]
@@ -918,19 +1093,11 @@ class PlotCanvas(wx.Window):
             if pointScaled == True based on screen coords
             if pointScaled == False based on user coords
         """
-        if self.last_draw == None:
+        if self.BeenDrawn():
+            return self._drawCmd.getClosestPoints(pntXY, pointScaled)
+        else:
             #no graph available
             return []
-        graphics, xAxis, yAxis= self.last_draw
-        l = []
-        for curveNum,obj in enumerate(graphics):
-            #check there are points in the curve
-            if len(obj.points) == 0:
-                continue  #go to next obj
-            #[curveNumber, legend, index of closest point, pointXY, scaledXY, distance]
-            cn = [curveNum]+ [obj.getLegend()]+ obj.getClosestPoint( pntXY, pointScaled)
-            l.append(cn)
-        return l
 
     def GetClosetPoint(self, pntXY, pointScaled= True):
         """Returns list with
@@ -979,6 +1146,7 @@ class PlotCanvas(wx.Window):
 
     # event handlers **********************************
     def OnMotion(self, event):
+        if not self.BeenDrawn(): return
         if self._zoomEnabled and event.LeftIsDown():
             if self._hasDragged:
                 self._drawRubberBand(self._zoomCorner1, self._zoomCorner2) # remove old
@@ -988,9 +1156,11 @@ class PlotCanvas(wx.Window):
             self._drawRubberBand(self._zoomCorner1, self._zoomCorner2) # add new
 
     def OnMouseLeftDown(self,event):
-        self._zoomCorner1[0], self._zoomCorner1[1]= self.GetXY(event)
+        if self.BeenDrawn(): 
+        	self._zoomCorner1[0], self._zoomCorner1[1]= self.GetXY(event)
 
     def OnMouseLeftUp(self, event):
+        if not self.BeenDrawn(): return
         if self._zoomEnabled:
             if self._hasDragged == True:
                 self._drawRubberBand(self._zoomCorner1, self._zoomCorner2) # remove old
@@ -999,8 +1169,9 @@ class PlotCanvas(wx.Window):
                 minX, minY= _Numeric.minimum( self._zoomCorner1, self._zoomCorner2)
                 maxX, maxY= _Numeric.maximum( self._zoomCorner1, self._zoomCorner2)
                 self.last_PointLabel = None        #reset pointLabel
-                if self.last_draw != None:
-                    self.Draw(self.last_draw[0], xAxis = (minX,maxX), yAxis = (minY,maxY), dc = None)
+                self._drawCmd.changeAxisX((minX,maxX))
+                self._drawCmd.changeAxisY((minY,maxY))
+                self._draw()
             #else: # A box has not been drawn, zoom in on a point
             ## this interfered with the double click, so I've disables it.
             #    X,Y = self.GetXY(event)
@@ -1035,11 +1206,10 @@ class PlotCanvas(wx.Window):
 
         self.last_PointLabel = None        #reset pointLabel
 
-        if self.last_draw is None:
-            self.Clear()
+        if self.BeenDrawn():
+            self._draw()
         else:
-            graphics, xSpec, ySpec = self.last_draw
-            self.Draw(graphics,xSpec,ySpec)
+            self.Clear()
 
     def OnLeave(self, event):
         """Used to erase pointLabel when mouse outside window"""
@@ -1067,9 +1237,8 @@ class PlotCanvas(wx.Window):
      
     def _printDraw(self, printDC):
         """Used for printing."""
-        if self.last_draw != None:
-            graphics, xSpec, ySpec= self.last_draw
-            self.Draw(graphics,xSpec,ySpec,printDC)
+        if self.BeenDrawn():
+            self._draw(printDC)
 
     def _drawPointLabel(self, mDataDict):
         """Draws and erases pointLabels"""
@@ -1088,30 +1257,21 @@ class PlotCanvas(wx.Window):
         dc.Blit(0, 0, width, height, dcs, 0, 0, wx.EQUIV)  #(NOT src) XOR dst
         
 
-    def _drawLegend(self,dc,graphics,rhsW,topH,legendBoxWH, legendSymExt, legendTextExt):
+    def _drawLegend(self,dc,graphics,rhsW,topH,legendBoxWH, legendSymExt, hgap, legendTextExt):
         """Draws legend symbols and text"""
         # top right hand corner of graph box is ref corner
         trhc= self.plotbox_origin+ (self.plotbox_size-[rhsW,topH])*[1,-1]
         legendLHS= .091* legendBoxWH[0]  # border space between legend sym and graph box
         lineHeight= max(legendSymExt[1], legendTextExt[1]) * 1.1 #1.1 used as space between lines
         dc.SetFont(self._getFont(self._fontSizeLegend))
-        for i in range(len(graphics)):
-            o = graphics[i]
-            s= i*lineHeight
-            if isinstance(o,PolyMarker):
-                # draw marker with legend
-                pnt= (trhc[0]+legendLHS+legendSymExt[0]/2., trhc[1]+s+lineHeight/2.)
-                o.draw(dc, self.printerScale, coord= _Numeric.array([pnt]))
-            elif isinstance(o,PolyLine):
-                # draw line with legend
-                pnt1= (trhc[0]+legendLHS, trhc[1]+s+lineHeight/2.)
-                pnt2= (trhc[0]+legendLHS+legendSymExt[0], trhc[1]+s+lineHeight/2.)
-                o.draw(dc, self.printerScale, coord= _Numeric.array([pnt1,pnt2]))
-            else:
-                raise TypeError, "object is neither PolyMarker or PolyLine instance"
-            # draw legend txt
-            pnt= (trhc[0]+legendLHS+legendSymExt[0], trhc[1]+s+lineHeight/2.-legendTextExt[1]/2)
-            dc.DrawText(o.getLegend(),pnt[0],pnt[1])
+        legendIdx = 0
+        for gr in graphics:
+            s = legendIdx * lineHeight
+            drew = gr.drawLegend(dc, self.printerScale, 
+                                 legendSymExt[0], hgap, legendTextExt[1], 
+                                 trhc[0]+legendLHS, trhc[1]+s+lineHeight/2.)
+            if drew:
+                legendIdx += 1
         dc.SetFont(self._getFont(self._fontSizeAxis)) # reset
 
     def _titleLablesWH(self, dc, graphics):
@@ -1130,23 +1290,25 @@ class PlotCanvas(wx.Window):
         """Returns the size in screen units for legend box"""
         if self._legendEnabled != True:
             legendBoxWH= symExt= txtExt= (0,0)
+            hgap= 0
         else:
-            # find max symbol size
+            #find max symbol size and gap b/w symbol and text
             symExt= graphics.getSymExtent(self.printerScale)
+            hgap = symExt[0]*0.1
             # find max legend text extent
             dc.SetFont(self._getFont(self._fontSizeLegend))
             txtList= graphics.getLegendNames()
             txtExt= dc.GetTextExtent(txtList[0])
             for txt in graphics.getLegendNames()[1:]:
                 txtExt= _Numeric.maximum(txtExt,dc.GetTextExtent(txt))
-            maxW= symExt[0]+txtExt[0]    
+            maxW= symExt[0]+hgap+txtExt[0]    
             maxH= max(symExt[1],txtExt[1])
             # padding .1 for lhs of legend box and space between lines
             maxW= maxW* 1.1
             maxH= maxH* 1.1 * len(txtList)
             dc.SetFont(self._getFont(self._fontSizeAxis))
             legendBoxWH= (maxW,maxH)
-        return (legendBoxWH, symExt, txtExt)
+        return (legendBoxWH, symExt, hgap, txtExt)
 
     def _drawRubberBand(self, corner1, corner2):
         """Draws/erases rect box from corner1 to corner2"""
@@ -1224,7 +1386,7 @@ class PlotCanvas(wx.Window):
     def _drawAxes(self, dc, p1, p2, scale, shift, xticks, yticks):
         
         penWidth= self.printerScale        # increases thickness for printing only
-        dc.SetPen(wx.Pen(wx.NamedColour('BLACK'), penWidth))
+        dc.SetPen(wx.Pen(wx.BLACK, penWidth))
         
         # set length of tick marks--long ones make grid
         if self._gridEnabled:
@@ -1265,7 +1427,147 @@ class PlotCanvas(wx.Window):
                                     pt[1]-0.5*h)
                 text = 0    # axis values not drawn on right side
 
-    def _ticks(self, lower, upper):
+
+class DrawCmd:
+    """Represent a "draw" command, i.e. the one given in call to 
+    PlotCanvas.Draw(). The axis specs are not saved to preserve 
+    backward compatibility: they could be specified before the 
+    first Draw() command."""
+    def __init__(self, graphics, xAxis, yAxis, xSpec, ySpec, xTicks, yTicks):
+        """Same args as PlotCanvas.Draw(), plus axis specs."""
+        self.graphics = graphics
+        self.xTickGen = xTicks
+        self.yTickGen = yTicks
+        self.xAxisInit, self.yAxisInit = xAxis, yAxis
+
+        self.xAxis = None
+        self.yAxis = None
+        self.changeAxisX(xAxis, xSpec)
+        self.changeAxisY(yAxis, ySpec)
+        assert self.xAxis is not None
+        assert self.yAxis is not None
+    
+    def isEmpty(self):
+        """Return true if either axis has 0 size."""
+        if self.xAxis[0] == self.xAxis[1]:
+            return True
+        if self.yAxis[0] == self.yAxis[1]:
+            return True
+        
+        return False
+    
+    def resetAxes(self, xSpec, ySpec):
+        """Reset the axes to what they were initially, using axes specs given."""
+        self.changeAxisX(self.xAxisInit, xSpec)
+        self.changeAxisY(self.yAxisInit, ySpec)
+        
+    def getBoundingBox(self):
+        """Returns p1, p2 (two pairs)"""
+        p1 = _Numeric.array((self.xAxis[0], self.yAxis[0]))
+        p2 = _Numeric.array((self.xAxis[1], self.yAxis[1]))
+        return p1, p2
+    
+    def getClosestPoints(self, pntXY, pointScaled=True):
+        ll = []
+        for curveNum,obj in enumerate(self.graphics):
+            #check there are points in the curve
+            if len(obj.points) == 0:
+                continue  #go to next obj
+            #[curveNumber, legend, index of closest point, pointXY, scaledXY, distance]
+            cn = [curveNum, obj.getLegend()]+\
+                  obj.getClosestPoint( pntXY, pointScaled)
+            ll.append(cn)
+        return ll
+
+    def scrollAxisX(self, units, xSpec):
+        """Scroll y axis by units, using ySpec for axis spec."""
+        self.changeAxisX((self.xAxis[0]+units, self.xAxis[1]+units), xSpec)
+        
+    def scrollAxisY(self, units, ySpec):
+        """Scroll y axis by units, using ySpec for axis spec."""
+        self.changeAxisY((self.yAxis[0]+units, self.yAxis[1]+units), ySpec)
+        
+    def changeAxisX(self, xAxis=None, xSpec=None):
+        """Change the x axis to new given, or if None use ySpec to get it. """
+        assert type(xAxis) in [type(None),tuple]
+        if xAxis is None:
+            p1, p2 = self.graphics.boundingBox()     #min, max points of graphics
+            self.xAxis = self._axisInterval(xSpec, p1[0], p2[0]) #in user units
+        else: 
+            self.xAxis = xAxis
+            
+    def changeAxisY(self, yAxis=None, ySpec=None):
+        """Change the y axis to new given, or if None use ySpec to get it. """
+        assert type(yAxis) in [type(None),tuple]
+        if yAxis is None:
+            p1, p2 = self.graphics.boundingBox()     #min, max points of graphics
+            self.yAxis = self._axisInterval(ySpec, p1[1], p2[1])
+        else: 
+            self.yAxis = yAxis
+
+    def zoom(self, center, ratio):
+        """Zoom to center and ratio."""
+        x,y = Center
+        w = (self.xAxis[1] - self.xAxis[0]) * Ratio[0]
+        h = (self.yAxis[1] - self.yAxis[0]) * Ratio[1]
+        self.xAxis = ( x - w/2, x + w/2 )
+        self.yAxis = ( y - h/2, y + h/2 )
+        
+    def getXMaxRange(self):
+        p1, p2 = self.graphics.boundingBox()     #min, max points of graphics
+        return self._axisInterval(self._xSpec, p1[0], p2[0]) #in user units
+        
+    def getYMaxRange(self):
+        p1, p2 = self.graphics.boundingBox()     #min, max points of graphics
+        return self._axisInterval(self._ySpec, p1[1], p2[1]) #in user units
+        
+    def getTicksX(self):
+        """Get the ticks along y axis. Actually pairs of (t, str)."""
+        xticks = self._ticks(self.xAxis[0], self.xAxis[1], self.xTickGen)
+        if xticks == []: # try without the generator
+            xticks = self._ticks(self.xAxis[0], self.xAxis[1])
+        return xticks
+
+    def getTicksY(self):
+        """Get the ticks along y axis. Actually pairs of (t, str)."""
+        yticks = self._ticks(self.yAxis[0], self.yAxis[1], self.yTickGen)
+        if yticks == []: # try without the generator
+            yticks = self._ticks(self.yAxis[0], self.yAxis[1])
+        return yticks
+
+    def _axisInterval(self, spec, lower, upper):
+        """Returns sensible axis range for given spec."""
+        if spec == 'none' or spec == 'min':
+            if lower == upper:
+                return lower-0.5, upper+0.5
+            else:
+                return lower, upper
+        elif spec == 'auto':
+            range = upper-lower
+            if range == 0.:
+                return lower-0.5, upper+0.5
+            log = _Numeric.log10(range)
+            power = _Numeric.floor(log)
+            fraction = log-power
+            if fraction <= 0.05:
+                power = power-1
+            grid = 10.**power
+            lower = lower - lower % grid
+            mod = upper % grid
+            if mod != 0:
+                upper = upper - mod + grid
+            return lower, upper
+        elif type(spec) == type(()):
+            lower, upper = spec
+            if lower <= upper:
+                return lower, upper
+            else:
+                return upper, lower
+        else:
+            raise ValueError, str(spec) + ': illegal axis specification'
+
+    def _ticks(self, lower, upper, generator=None):
+        """Get ticks between lower and upper, using generator if given. """
         ideal = (upper-lower)/7.
         log = _Numeric.log10(ideal)
         power = _Numeric.floor(log)
@@ -1286,15 +1588,34 @@ class PlotCanvas(wx.Window):
         else:
             digits = -int(power)
             format = '%'+`digits+2`+'.'+`digits`+'f'
-        ticks = []
-        t = -grid*_Numeric.floor(-lower/grid)
-        while t <= upper:
-            ticks.append( (t, format % (t,)) )
-            t = t + grid
-        return ticks
+        
+        if generator is None:
+            return tickGeneratorDefault(lower, upper, grid, format)
+        elif isinstance(generator, list):
+            return tickGeneratorFromList(generator, lower, upper, format)
+        else:
+            return generator(lower, upper, grid, format)
 
     _multiples = [(2., _Numeric.log10(2.)), (5., _Numeric.log10(5.))]
 
+
+def tickGeneratorDefault(lower, upper, grid, format):
+    """Default tick generator used by PlotCanvas.Draw() if not specified."""
+    ticks = []
+    t = -grid*_Numeric.floor(-lower/grid)
+    while t <= upper:
+        ticks.append( (t, format % (t,)) )
+        t = t + grid
+    return ticks
+
+def tickGeneratorFromList(ticks, lower, upper, format):
+    """Tick generator used by PlotCanvas.Draw() if
+    a list is given for xTicks or yTicks. """
+    tickPairs = []
+    for tick in ticks:
+        if lower <= tick <= upper:
+            tickPairs.append((tick, format % tick))
+    return tickPairs
 
 #-------------------------------------------------------------------------------
 # Used to layout the printer page
@@ -1470,6 +1791,28 @@ def _draw6Objects():
     return PlotGraphics([line1, line1g, line1b, line2, line2g, line2b],
                         "Bar Graph - (Turn on Grid, Legend)", "Months", "Number of Students")
 
+def _draw7Objects():
+    # four bars of various styles colors and sizes
+    bar1 = PolyBar((0,1), colour='green', size=4, labels='Green bar')
+    bar2 = PolyBar((2,1), colour='red',   size=7, labels='Red bar',
+                    fillstyle=wx.CROSSDIAG_HATCH)
+    bar3 = PolyBar([(1,3),(3,4)], colour='blue',  
+                    labels=['Blue bar 1', 'Blue bar 2'], 
+                    fillstyle=wx.TRANSPARENT)
+    bars = [bar1, bar2, bar3]
+    return PlotGraphics(bars,
+        "Graph Title", "Bar names", "Bar height"), getBarTicksGen(*bars)
+
+def _draw8Objects():
+    # four bars in two groups, overlayed to a line plot
+    x1,x2 = 0.0,0.5
+    bar1 = PolyBar([(x1,1.),(x1+2,2.)], colour='green', size=4, 
+                    legend="1998", fillstyle=wx.CROSSDIAG_HATCH)
+    bar2 = PolyBar(bar1.offset([1.2,2.5]), colour='red', size=7,
+                    legend="2000", labels=['cars','trucks'])
+    line1 = PolyLine([(x1,1.5), (x2,1.2), (x1+2,1), (x2+2,2)], colour='blue')
+    return PlotGraphics([bar1, bar2, line1],
+        "Graph Title", "Bar names", "Bar height"), getBarTicksGen(bar1, bar2)
 
 class TestFrame(wx.Frame):
     def __init__(self, parent, id, title):
@@ -1509,6 +1852,10 @@ class TestFrame(wx.Frame):
         self.Bind(wx.EVT_MENU,self.OnPlotDraw5, id=210)
         menu.Append(260, 'Draw6', 'Draw plots6')
         self.Bind(wx.EVT_MENU,self.OnPlotDraw6, id=260)
+        menu.Append(261, 'Draw7', 'Draw plots7')
+        self.Bind(wx.EVT_MENU,self.OnPlotDraw7, id=261)
+        menu.Append(262, 'Draw8', 'Draw plots8')
+        self.Bind(wx.EVT_MENU,self.OnPlotDraw8, id=262)
        
 
         menu.Append(211, '&Redraw', 'Redraw plots')
@@ -1659,6 +2006,22 @@ class TestFrame(wx.Frame):
         self.client.SetYSpec('auto')
         self.client.Draw(_draw6Objects(), xAxis= (0,7))
 
+    def OnPlotDraw7(self, event):
+        #Bar Graph and custom ticks Example, using PolyBar
+        self.resetDefaults()
+        bars, tickGenerator = _draw7Objects()
+        #note that yTicks is not necessary here, used only 
+        #to show off custom ticks
+        self.client.Draw(bars, xAxis=(0,4),yAxis = (0,5), 
+            xTicks=tickGenerator, yTicks=[0,1,3])
+    
+    def OnPlotDraw8(self, event):
+        #Bar Graph and custom ticks Example, using PolyBar
+        self.resetDefaults()
+        plot, tickGenerator = _draw8Objects()
+        self.client.Draw(plot, xAxis=(0,4),yAxis = (0,5), xTicks=tickGenerator)
+    
+
     def OnPlotRedraw(self,event):
         self.client.Redraw()
 
@@ -1666,9 +2029,9 @@ class TestFrame(wx.Frame):
         self.client.Clear()
         
     def OnPlotScale(self, event):
-        if self.client.last_draw != None:
-            graphics, xAxis, yAxis= self.client.last_draw
-            self.client.Draw(graphics,(1,3.05),(0,1))
+        if self.client.BeenDrawn():
+            self.client.ChangeAxes((1,3.05),(0,1))
+
 
     def OnEnableZoom(self, event):
         self.client.SetEnableZoom(event.IsChecked())
