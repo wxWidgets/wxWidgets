@@ -115,7 +115,8 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     if ( !CreateBase(parent, id, pos, size, style, validator, name) )
         return FALSE;
 
-    SetValidator(validator);
+    // Validator was set in CreateBase
+    //SetValidator(validator);
     if ( parent )
         parent->AddChild(this);
 

@@ -70,7 +70,8 @@ bool wxButton::Create(wxWindow *parent,
     if ( !CreateBase(parent, id, pos, size, style, validator, name) )
         return FALSE;
 
-    SetValidator(validator);
+    // Validator was set in CreateBase
+    //SetValidator(validator);
 
     parent->AddChild((wxButton *)this);
 
@@ -83,7 +84,7 @@ bool wxButton::Create(wxWindow *parent,
                       _T("BUTTON"),
                       label,
                       WS_VISIBLE | WS_TABSTOP | WS_CHILD,
-                      0, 0, 0, 0, 
+                      0, 0, 0, 0,
                       GetWinHwnd(parent),
                       (HMENU)m_windowId,
                       wxGetInstance(),
