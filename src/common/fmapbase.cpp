@@ -353,6 +353,8 @@ void wxFontMapperBase::RestorePath(const wxString& pathOld)
     GetConfig()->SetPath(pathOld);
 }
 
+#endif
+
 // ----------------------------------------------------------------------------
 // charset/encoding correspondence
 // ----------------------------------------------------------------------------
@@ -641,8 +643,6 @@ wxString wxFontMapperBase::GetEncodingName(wxFontEncoding encoding)
 
     return str;
 }
-
-#endif // wxUSE_CONFIG
 
 #endif // wxUSE_FONTMAP
 

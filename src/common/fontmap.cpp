@@ -153,7 +153,7 @@ wxFontMapper::CharsetToEncoding(const wxString& charset, bool interactive)
             encoding = GetEncoding(n);
         }
 
-#if wxUSE_CONFIG
+#if wxUSE_CONFIG && wxUSE_FILECONFIG
         // save the result in the config now
         wxFontMapperPathChanger path(this, FONTMAPPER_CHARSET_PATH);
         if ( path.IsOk() )
@@ -187,7 +187,7 @@ bool wxFontMapper::TestAltEncoding(const wxString& configEntry,
     if ( wxGetNativeFontEncoding(encReplacement, info) &&
          wxTestFontEncoding(*info) )
     {
-#if wxUSE_CONFIG
+#if wxUSE_CONFIG && wxUSE_FILECONFIG
         // remember the mapping in the config
         wxFontMapperPathChanger path(this, FONTMAPPER_FONT_FROM_ENCODING_PATH);
 
@@ -253,7 +253,7 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
     }
     configEntry += encName;
 
-#if wxUSE_CONFIG
+#if wxUSE_CONFIG && wxUSE_FILECONFIG
     // do we have a font spec for this encoding?
     wxString fontinfo;
     wxFontMapperPathChanger path(this, FONTMAPPER_FONT_FROM_ENCODING_PATH);
@@ -365,7 +365,7 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
                 *info = retData.EncodingInfo();
                 info->encoding = retData.GetEncoding();
 
-#if wxUSE_CONFIG
+#if wxUSE_CONFIG && wxUSE_FILECONFIG
                 // remember this in the config
                 wxFontMapperPathChanger path(this,
                                              FONTMAPPER_FONT_FROM_ENCODING_PATH);
@@ -385,7 +385,7 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
             // or selected to use equivalent encoding
             //
             // remember it to avoid asking the same question again later
-#if wxUSE_CONFIG
+#if wxUSE_CONFIG && wxUSE_FILECONFIG
             wxFontMapperPathChanger path(this,
                                          FONTMAPPER_FONT_FROM_ENCODING_PATH);
             if ( path.IsOk() )

@@ -24,7 +24,7 @@
     #include "wx/fontutil.h"    // for wxNativeEncodingInfo
 #endif // wxUSE_GUI
 
-#if wxUSE_CONFIG
+#if wxUSE_CONFIG && wxUSE_FILECONFIG
     class WXDLLIMPEXP_BASE wxConfigBase;
 #endif // wxUSE_CONFIG
 
@@ -62,9 +62,8 @@ public:
     // return instance of the wxFontMapper singleton
     static wxFontMapper *Get();
 
-    // set the sigleton to 'mapper' instance and return previous one
+    // set the singleton to 'mapper' instance and return previous one
     static wxFontMapper *Set(wxFontMapper *mapper);
-
 
     // translates charset strings to encoding
     // --------------------------------------
@@ -76,7 +75,6 @@ public:
     // were always false
     virtual wxFontEncoding CharsetToEncoding(const wxString& charset,
                                              bool interactive = true);
-
 
     // information about supported encodings
     // -------------------------------------
@@ -103,7 +101,7 @@ public:
     // GetDefaultConfigPath()
     // ----------------------------------------------------------------------
 
-#if wxUSE_CONFIG
+#if wxUSE_CONFIG && wxUSE_FILECONFIG
     // set the config object to use (may be NULL to use default)
     void SetConfig(wxConfigBase *config) { m_config = config; }
 
@@ -116,7 +114,7 @@ public:
 
 
 protected:
-#if wxUSE_CONFIG
+#if wxUSE_CONFIG && wxUSE_FILECONFIG
     // get the config object we're using -- if it wasn't set explicitly, this
     // function will use wxConfig::Get() to get the global one
     wxConfigBase *GetConfig();

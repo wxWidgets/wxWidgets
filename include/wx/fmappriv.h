@@ -35,7 +35,7 @@ enum { wxFONTENCODING_UNKNOWN = -2 };
 // wxFontMapperPathChanger: change the config path during our lifetime
 // ----------------------------------------------------------------------------
 
-#if wxUSE_CONFIG
+#if wxUSE_CONFIG && wxUSE_FILECONFIG
 
 class wxFontMapperPathChanger
 {
