@@ -75,7 +75,7 @@ USE_HTML = 1
 !endif
 # Build OpenGL canvas library (USE_GUI must be 1)? [0,1]
 !ifndef USE_OPENGL
-USE_OPENGL = 1
+USE_OPENGL = 0
 !endif
 # Use this to name your customized DLLs differently 
 !ifndef VENDOR

@@ -44,7 +44,7 @@ USE_GUI = 1
 # Build wxHTML library (USE_GUI must be 1)? [0,1]
 USE_HTML = 1
 # Build OpenGL canvas library (USE_GUI must be 1)? [0,1]
-USE_OPENGL = 1
+USE_OPENGL = 0
 # Use this to name your customized DLLs differently 
 VENDOR = custom
 # Build wxUniversal instead of native port? [0,1]
