@@ -22,10 +22,10 @@ This example shows how a main thread may launch a worker thread which starts
 running and then waits until the main thread signals it to continue:
 
 \begin{verbatim}
-class MyWaitingThread : public wxThread
+class MySignallingThread : public wxThread
 {
 public:
-    MyWaitingThread(wxMutex *mutex, wxCondition *condition)
+    MySignallingThread(wxMutex *mutex, wxCondition *condition)
     {
         m_mutex = mutex;
         m_condition = condition;
@@ -35,19 +35,20 @@ public:
 
     virtual ExitCode Entry()
     {
-        // wait for the signal from the main thread: it is absolutely necessary
-        // to look the mutex before doing it!
-        m_mutex->Lock();
-        m_condition->Signal();
-        m_mutex->Unlock();
-
         ... do our job ...
+
+        // tell the other(s) thread(s) that we're about to terminate: we must
+        // lock the mutex first or we might signal the condition before the
+        // waiting threads start waiting on it!
+        wxMutexLocker lock(m_mutex);
+        m_condition.Broadcast(); // same as Signal() here -- one waiter only
 
         return 0;
     }
 
 private:
     wxCondition *m_condition;
+    wxMutex *m_mutex;
 };
 
 int main()
@@ -55,24 +56,28 @@ int main()
     wxMutex mutex;
     wxCondition condition(mutex);
 
-    for ( int i = 0; i < 10; i++ )
-    {
-        MyWaitingThread *thread = new MyWaitingThread(&mutex, &condition);
+    // the mutex should be initially locked
+    mutex.Lock();
 
-        thread->Run();
-    }
+    // create and run the thread but notice that it won't be able to
+    // exit (and signal its exit) before we unlock the mutex below
+    MySignallingThread *thread = new MySignallingThread(&mutex, &condition);
 
-    // wake up one of the threads
-    condition.Signal();
+    thread->Run();
 
-    // wake up all the other ones
-    condition.Broadcast();
+    // wait for the thread termination: Wait() atomically unlocks the mutex
+    // which allows the thread to continue and starts waiting
+    condition.Wait();
 
-    ... wait until they terminate or do something else ...
-
+    // now we can exit
     return 0;
 }
 \end{verbatim}
+
+Of course, here it would be much better to simply use a joinable thread and
+call \helpref{wxThread::Wait}{wxthreadwait} on it, but this example does
+illustrate the importance of properly locking the mutex when using
+wxCondition.
 
 \wxheading{Derived from}
 
