@@ -696,14 +696,16 @@ public:
     %pythoncode { KeyCode = GetKeyCode }
 
     %extend {
-        int GetUniChar() {
+        int GetUnicodeKey() {
         %#if wxUSE_UNICODE
-            return self->m_uniChar;
+            return self->GetUnicodeKey();
         %#else
             return 0;
         %#endif
         }
     }
+    %pythoncode { GetUniChar = GetUnicodeKey }
+    
     
     // get the raw key code (platform-dependent)
     wxUint32 GetRawKeyCode() const;
