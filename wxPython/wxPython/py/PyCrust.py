@@ -32,12 +32,6 @@ class App(wx.wxApp):
         self.frame.SetSize((800, 600))
         self.frame.Show()
         self.SetTopWindow(self.frame)
-        # Add the application object to the sys module's namespace.
-        # This allows a shell user to do:
-        # >>> import sys
-        # >>> sys.app.whatever
-        import sys
-        sys.app = self
         return True
 
 '''
@@ -46,11 +40,13 @@ pycrust script that wxPython installs:
 
     #!/usr/bin/env python
 
-    from wxPython.lib.PyCrust.PyCrustApp import main
+    from wx.py.PyCrust import main
     main()
 '''
 
 def main():
+    """The main function for the PyCrust program."""
+    # Cleanup the main namespace, leaving the App class.
     import __main__
     md = __main__.__dict__
     keepers = original
@@ -58,11 +54,24 @@ def main():
     for key in md.keys():
         if key not in keepers:
             del md[key]
+    # Create an application instance.
     app = App(0)
+    # Mimic the contents of the standard Python shell's sys.path.
+    import sys
+    if sys.path[0]:
+        sys.path[0] = ''
+    # Add the application object to the sys module's namespace.
+    # This allows a shell user to do:
+    # >>> import sys
+    # >>> sys.app.whatever
+    sys.app = app
+    del sys
+    # Cleanup the main namespace some more.
     if md.has_key('App') and md['App'] is App:
         del md['App']
     if md.has_key('__main__') and md['__main__'] is __main__:
         del md['__main__']
+    # Start the wxPython event loop.
     app.MainLoop()
 
 if __name__ == '__main__':
