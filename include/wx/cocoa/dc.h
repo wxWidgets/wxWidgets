@@ -1,62 +1,34 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dc.h
-// Purpose:     wxDC class
-// Author:      AUTHOR
+// Name:        wx/cocoa/dc.h
+// Purpose:     wxDC
+// Author:      David Elliott
 // Modified by:
-// Created:     ??/??/98
+// Created:     2003/04/01
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) 2003 David Elliott
+// Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DC_H_
-#define _WX_DC_H_
+#ifndef __WX_COCOA_DC_H__
+#define __WX_COCOA_DC_H__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "dc.h"
-#endif
-
-#include "wx/pen.h"
-#include "wx/brush.h"
-#include "wx/icon.h"
-#include "wx/font.h"
-#include "wx/gdicmn.h"
-
-//-----------------------------------------------------------------------------
-// constants
-//-----------------------------------------------------------------------------
-
-#ifndef MM_TEXT
-#define MM_TEXT			0
-#define MM_ISOTROPIC	1
-#define MM_ANISOTROPIC	2
-#define MM_LOMETRIC		3
-#define MM_HIMETRIC		4
-#define MM_TWIPS		5
-#define MM_POINTS		6
-#define MM_METRIC		7
-#endif
-
-//-----------------------------------------------------------------------------
-// global variables
-//-----------------------------------------------------------------------------
-
-extern int wxPageNumber;
-
-//-----------------------------------------------------------------------------
+//=========================================================================
 // wxDC
-//-----------------------------------------------------------------------------
-
+//=========================================================================
 class WXDLLEXPORT wxDC: public wxDCBase
 {
     DECLARE_DYNAMIC_CLASS(wxDC)
     DECLARE_NO_COPY_CLASS(wxDC)
-
-  public:
-
+public:
     wxDC();
     ~wxDC();
     
+    static void CocoaInitializeTextSystem();
+    static void CocoaShutdownTextSystem();
+    static wxDC *sm_focusedDC;
+    static WX_NSTextStorage sm_cocoaNSTextStorage;
+    static WX_NSLayoutManager sm_cocoaNSLayoutManager;
+    static WX_NSTextContainer sm_cocoaNSTextContainer;
 
     // implement base class pure virtuals
     // ----------------------------------
@@ -104,70 +76,6 @@ class WXDLLEXPORT wxDC: public wxDCBase
     virtual void SetTextBackground(const wxColour& colour) ;
 
     void ComputeScaleAndOrigin(void);
-  public:
-  
-    
-    wxCoord XDEV2LOG(wxCoord x) const
-	{
-	  long new_x = x - m_deviceOriginX ;
-	  if (new_x > 0) 
-	    return (wxCoord)((double)(new_x) / m_scaleX + 0.5) * m_signX + m_logicalOriginX;
-	  else
-	    return (wxCoord)((double)(new_x) / m_scaleX - 0.5) * m_signX + m_logicalOriginX;
-	}
-    wxCoord XDEV2LOGREL(wxCoord x) const
-	{ 
-	  if (x > 0) 
-	    return (wxCoord)((double)(x) / m_scaleX + 0.5);
-	  else
-	    return (wxCoord)((double)(x) / m_scaleX - 0.5);
-	}
-    wxCoord YDEV2LOG(wxCoord y) const
-	{
-	  long new_y = y - m_deviceOriginY ;
-	  if (new_y > 0)
-	    return (wxCoord)((double)(new_y) / m_scaleY + 0.5) * m_signY + m_logicalOriginY;
-	  else
-	    return (wxCoord)((double)(new_y) / m_scaleY - 0.5) * m_signY + m_logicalOriginY;
-	}
-    wxCoord YDEV2LOGREL(wxCoord y) const
-	{ 
-	  if (y > 0)
-	    return (wxCoord)((double)(y) / m_scaleY + 0.5);
-	  else
-	    return (wxCoord)((double)(y) / m_scaleY - 0.5);
-	}
-    wxCoord XLOG2DEV(wxCoord x) const
-	{ 
-	  long new_x = x - m_logicalOriginX;
-	  if (new_x > 0)
-	    return (wxCoord)((double)(new_x) * m_scaleX + 0.5) * m_signX + m_deviceOriginX  ;
-	  else
-	    return (wxCoord)((double)(new_x) * m_scaleX - 0.5) * m_signX + m_deviceOriginX ;
-	}
-    wxCoord XLOG2DEVREL(wxCoord x) const
-	{ 
-	  if (x > 0)
-	    return (wxCoord)((double)(x) * m_scaleX + 0.5);
-	  else
-	    return (wxCoord)((double)(x) * m_scaleX - 0.5);
-	}
-    wxCoord YLOG2DEV(wxCoord y) const
-	{
-	  long new_y = y - m_logicalOriginY ;
-	  if (new_y > 0)
-	    return (wxCoord)((double)(new_y) * m_scaleY + 0.5) * m_signY + m_deviceOriginY ;
-	  else
-	    return (wxCoord)((double)(new_y) * m_scaleY - 0.5) * m_signY + m_deviceOriginY ;
-	}
-    wxCoord YLOG2DEVREL(wxCoord y) const
-	{ 
-	  if (y > 0)
-	    return (wxCoord)((double)(y) * m_scaleY + 0.5);
-	  else
-	    return (wxCoord)((double)(y) * m_scaleY - 0.5);
-	}
-  
 protected:
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
                              int style = wxFLOOD_SURFACE);
@@ -209,11 +117,6 @@ protected:
     virtual void DoSetClippingRegionAsRegion(const wxRegion& region);
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y,
                                      wxCoord width, wxCoord height);
-    virtual void DoGetClippingRegion(wxCoord *x, wxCoord *y,
-                                     wxCoord *width, wxCoord *height)
-    {
-        GetClippingBox(x, y, width, height);
-    }
 
     virtual void DoGetSize(int *width, int *height) const;
     virtual void DoGetSizeMM(int* width, int* height) const;
@@ -224,8 +127,6 @@ protected:
                                wxCoord xoffset, wxCoord yoffset,
                                int fillStyle = wxODDEVEN_RULE);
 
-  protected:
 };
 
-#endif
-    // _WX_DC_H_
+#endif // __WX_COCOA_DC_H__

@@ -1,69 +1,51 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcclient.h
+// Name:        wx/cocoa/dcclient.h
 // Purpose:     wxClientDC, wxPaintDC and wxWindowDC classes
-// Author:      AUTHOR
+// Author:      David Elliott
 // Modified by:
-// Created:     ??/??/98
+// Created:     2003/04/01
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) 2003 David Elliott
+// Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DCCLIENT_H_
-#define _WX_DCCLIENT_H_
-
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "dcclient.h"
-#endif
+#ifndef __WX_COCOA_DCCLIENT_H__
+#define __WX_COCOA_DCCLIENT_H__
 
 #include "wx/dc.h"
 
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxPaintDC;
-class WXDLLEXPORT wxWindow;
-
-class WXDLLEXPORT wxWindowDC: public wxDC
+// DFE: A while ago I stumbled upon the fact that retrieving the parent
+// NSView of the content view seems to return the entire window rectangle
+// (including decorations).  Of course, that is not at all part of the
+// Cocoa or OpenStep APIs, but it might be a neat hack.
+class wxWindowDC: public wxDC
 {
-  DECLARE_DYNAMIC_CLASS(wxWindowDC)
-
- public:
-  wxWindowDC(void);
-
-  // Create a DC corresponding to a canvas
-  wxWindowDC(wxWindow *win);
-
-  ~wxWindowDC(void);
+    DECLARE_DYNAMIC_CLASS(wxWindowDC)
+public:
+    wxWindowDC(void);
+    // Create a DC corresponding to a window
+    wxWindowDC(wxWindow *win);
+    ~wxWindowDC(void);
 };
 
-
-class WXDLLEXPORT wxClientDC: public wxWindowDC
+class wxClientDC: public wxWindowDC
 {
-  DECLARE_DYNAMIC_CLASS(wxClientDC)
-
- public:
-  wxClientDC(void);
-
-  // Create a DC corresponding to a canvas
-  wxClientDC(wxWindow *win);
-
-  ~wxClientDC(void);
+    DECLARE_DYNAMIC_CLASS(wxClientDC)
+public:
+    wxClientDC(void);
+    // Create a DC corresponding to a window
+    wxClientDC(wxWindow *win);
+    ~wxClientDC(void);
 };
 
-class WXDLLEXPORT wxPaintDC: public wxWindowDC
+class wxPaintDC: public wxWindowDC
 {
-  DECLARE_DYNAMIC_CLASS(wxPaintDC)
-
- public:
-  wxPaintDC(void);
-
-  // Create a DC corresponding to a canvas
-  wxPaintDC(wxWindow *win);
-
-  ~wxPaintDC(void);
+    DECLARE_DYNAMIC_CLASS(wxPaintDC)
+public:
+    wxPaintDC(void);
+    // Create a DC corresponding to a window
+    wxPaintDC(wxWindow *win);
+    ~wxPaintDC(void);
 };
 
-#endif
-    // _WX_DCCLIENT_H_
+#endif // __WX_COCOA_DCCLIENT_H__
