@@ -169,24 +169,35 @@ Adds a separator for spacing groups of tools.
 
 \membersection{wxToolBar::AddTool}\label{wxtoolbaraddtool}
 
-\func{wxToolBarTool*}{AddTool}{\param{int}{ toolId}, \param{const wxBitmap\&}{ bitmap1},\rtfsp
-\param{const wxString\& }{shortHelpString = ""}, \param{const wxString\& }{longHelpString = ""}}
+\func{wxToolBarTool*}{AddTool}{\param{int}{ toolId},\rtfsp
+\param{const wxString\&}{ label},\rtfsp
+\param{const wxBitmap\&}{ bitmap1},\rtfsp
+\param{const wxString\& }{shortHelpString = ""},\rtfsp
+\param{wxItemKind}{ kind = wxITEM\_NORMAL}}
 
-\func{wxToolBarTool*}{AddTool}{\param{int}{ toolId}, \param{const wxBitmap\&}{ bitmap1},\rtfsp
-\param{const wxBitmap\&}{ bitmap2 = wxNullBitmap}, \param{bool}{ isToggle = FALSE},\rtfsp
-\param{long}{ xPos = -1}, \param{long}{ yPos = -1},\rtfsp
-\param{wxObject* }{clientData = NULL}, \param{const wxString\& }{shortHelpString = ""}, \param{const wxString\& }{longHelpString = ""}}
+\func{wxToolBarTool*}{AddTool}{\param{int}{ toolId},\rtfsp
+\param{const wxString\&}{ label},\rtfsp
+\param{const wxBitmap\&}{ bitmap1},\rtfsp
+\param{const wxBitmap\&}{ bitmap2 = wxNullBitmap},\rtfsp
+\param{wxItemKind}{ kind = wxITEM\_NORMAL},\rtfsp
+\param{const wxString\& }{shortHelpString = ""},
+\param{const wxString\& }{longHelpString = ""},\rtfsp
+\param{wxObject* }{clientData = NULL}}
 
 Adds a tool to the toolbar. The first (short and most commonly used) version
-adds a normal (and not a togglable) button without any associated client data.
+has fewer parameters than the full version at the price of not being able to
+specify some of the more rarely used button features.
 
 \wxheading{Parameters}
 
 \docparam{toolId}{An integer by which
 the tool may be identified in subsequent operations.}
 
-\docparam{isToggle}{Specifies whether the tool is a toggle or not: a toggle tool may be in
-two states, whereas a non-toggle tool is just a button.}
+\docparam{kind}{May be wxITEM\_NORMAL for a normal button (default),
+wxITEM\_CHECK for a checkable tool (such tool stays pressed after it had been
+toggled) or wxITEM\_RADIO for a checkable tool which makes part of a radio
+group of tools each of which is automatically unchecked whenever another button
+in the group is checked}
 
 \docparam{bitmap1}{The primary tool bitmap for toggle and button tools.}
 
@@ -196,17 +207,13 @@ used for the on-state of a toggle tool (monochrome displays) or a black
 border is drawn around the tool (colour displays) or the pixmap is shown
 as a pressed button (GTK). }
 
-\docparam{xPos}{Specifies the x position of the tool if automatic layout is not suitable.}
-
-\docparam{yPos}{Specifies the y position of the tool if automatic layout is not suitable.}
-
-\docparam{clientData}{An optional pointer to client data which can be
-retrieved later using \helpref{wxToolBar::GetToolClientData}{wxtoolbargettoolclientdata}.}
-
 \docparam{shortHelpString}{This string is used for the tools tooltip}
 
 \docparam{longHelpString}{This string is shown in the statusbar (if any) of the
 parent frame when the mouse pointer is inside the tool}
+
+\docparam{clientData}{An optional pointer to client data which can be
+retrieved later using \helpref{wxToolBar::GetToolClientData}{wxtoolbargettoolclientdata}.}
 
 \wxheading{Remarks}
 
@@ -215,10 +222,52 @@ order to have the tools appear.
 
 \wxheading{See also}
 
-\helpref{wxToolBar::AddSeparator}{wxtoolbaraddseparator},
-\helpref{wxToolBar::InsertTool}{wxtoolbarinserttool},
-\helpref{wxToolBar::DeleteTool}{wxtoolbardeletetool},
-\helpref{wxToolBar::Realize}{wxtoolbarrealize},
+\helpref{wxToolBar::AddSeparator}{wxtoolbaraddseparator},\rtfsp
+\helpref{wxToolBar::AddCheckTool}{wxtoolbaraddchecktool},\rtfsp
+\helpref{wxToolBar::AddRadioTool}{wxtoolbaraddradiotool},\rtfsp
+\helpref{wxToolBar::InsertTool}{wxtoolbarinserttool},\rtfsp
+\helpref{wxToolBar::DeleteTool}{wxtoolbardeletetool},\rtfsp
+\helpref{wxToolBar::Realize}{wxtoolbarrealize}
+
+\membersection{wxToolBar::AddCheckTool}\label{wxtoolbaraddchecktool}
+
+\func{wxToolBarTool*}{AddCheckTool}{\param{int}{ toolId},\rtfsp
+\param{const wxString\&}{ label},\rtfsp
+\param{const wxBitmap\&}{ bitmap1},\rtfsp
+\param{const wxBitmap\&}{ bitmap2},\rtfsp
+\param{const wxString\& }{shortHelpString = ""},\rtfsp
+\param{const wxString\& }{longHelpString = ""},\rtfsp
+\param{wxObject* }{clientData = NULL}}
+
+Adds a new check (or toggle) tool to the toolbar. The parameters are the same
+as in \helpref{wxToolBar::AddTool}{wxtoolbaraddtool}.
+
+\wxheading{See also}
+
+\helpref{wxToolBar::AddTool}{wxtoolbaraddtool}
+
+\membersection{wxToolBar::AddRadioTool}\label{wxtoolbaraddradiotool}
+
+\func{wxToolBarTool*}{AddRadioTool}{\param{int}{ toolId},\rtfsp
+\param{const wxString\&}{ label},\rtfsp
+\param{const wxBitmap\&}{ bitmap1},\rtfsp
+\param{const wxBitmap\&}{ bitmap2},\rtfsp
+\param{const wxString\& }{shortHelpString = ""},\rtfsp
+\param{const wxString\& }{longHelpString = ""},\rtfsp
+\param{wxObject* }{clientData = NULL}}
+
+Adds a new radio tool to the toolbar. Consecutive radio tools form a radio
+group such that exactly one button in the group is pressed at any moment, in
+other words whenever a button in the group is pressed the previously pressed
+button is automatically released. You should avoid having the radio groups of
+only one element as it would be impossible for the user to use such button.
+
+By default, the first button in the radio group is initially pressed, the
+others are not.
+
+\wxheading{See also}
+
+\helpref{wxToolBar::AddTool}{wxtoolbaraddtool}
 
 \membersection{wxToolBar::DeleteTool}\label{wxtoolbardeletetool}
 

@@ -432,6 +432,16 @@ in MyFrame::OnUpdateCopyAndCut.
 toolbar.
 \end{itemize}
 
+Some buttons in the main toolbar are check buttons, i.e. they stay checked when
+pressed. On the platforms which support it, the sample also add a combobox
+to the toolbar showing how you can use arbitrary controls and not only buttons
+in it.
+
+If you toggle another toolbar in the sample (using {\tt Ctrl-A}) you will also
+see the radio toolbar buttons in action: the first three buttons form a radio
+group, that is checking any of them automatically unchecks the previously
+checked one.
+
 \subsection{Treectrl sample}\label{sampletreectrl}
 
 This sample demonstrates using \helpref{wxTreeCtrl}{wxtreectrl} class. Here
