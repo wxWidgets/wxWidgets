@@ -30,6 +30,19 @@
 #include "wx/utils.h"
 #endif
 
+
+#ifdef __WIN32__
+
+#include "wx/minifram.h"
+
+#if !USE_SHARED_LIBRARY
+IMPLEMENT_DYNAMIC_CLASS(wxMiniFrame, wxFrame)
+#endif
+
+
+#else
+
+
 #if wxUSE_ITSY_BITSY
 
 #include "wx/minifram.h"
@@ -1610,3 +1623,5 @@ void PASCAL DrawArrow( HDC hdc, LPRECT lprc, UINT uiStyle )
 }  // DrawArrow()   
 
 #endif // wxUSE_ITSY_BITSY
+
+#endif // __WIN32__
