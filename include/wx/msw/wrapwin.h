@@ -17,6 +17,9 @@
     #define STRICT 1
 #endif
 
+// don't define min() and max() as macros, they conflict with standard C++ ones
+#define NOMINMAX
+
 #include <windows.h>
 
 #ifdef __WXWINCE__
