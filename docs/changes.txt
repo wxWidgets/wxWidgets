@@ -202,6 +202,7 @@ wxMSW:
 - no longer take ampersand into account in wxStaticText::GetBestSize
 - set orientation for scrollbar events
 - fix for explicit keyword detection (VC++)
+- fix for sending event from wxCheckListBox::Check()
 
 wxMotif:
 
