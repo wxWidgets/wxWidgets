@@ -20,7 +20,9 @@
 #endif
 
 #include "wx/defs.h"
-#include "wx/setup.h"
+
+#if wxUSE_SOCKETS
+
 #include "wx/ipcbase.h"
 #include "wx/socket.h"
 #include "wx/sckstrm.h"
@@ -135,5 +137,7 @@ public:
   // Tailor this to return own connection.
   virtual wxConnectionBase *OnMakeConnection();
 };
+
+#endif // wxUSE_SOCKETS
 
 #endif // ipcsock.h

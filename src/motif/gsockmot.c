@@ -117,4 +117,9 @@ void _GSocket_Disable_Events(GSocket *socket)
   _GSocket_Uninstall_Callback(socket, GSOCK_OUTPUT);
 }
 
-#endif /* wxUSE_SOCKETS */
+#else /* !wxUSE_SOCKETS */
+
+/* some compilers don't like having empty source files */
+static int wxDummyGsockVar = 0;
+
+#endif /* wxUSE_SOCKETS/!wxUSE_SOCKETS */
