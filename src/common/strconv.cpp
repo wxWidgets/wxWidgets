@@ -69,6 +69,13 @@
 #include "wx/encconv.h"
 #include "wx/fontmap.h"
 
+#ifdef __WXMAC__
+#include "ATSUnicode.h"
+#include "TextCommon.h"
+#include "TextEncodingConverter.h"
+
+#include  "wx/mac/private.h"  // includes mac headers
+#endif
 // ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------
@@ -1171,6 +1178,259 @@ public:
 
 #endif // wxHAVE_WIN32_MB2WC
 
+// ============================================================================
+// Mac conversion classes
+// ============================================================================
+
+#if defined(__WXMAC__) && defined(TARGET_CARBON)
+
+class wxMBConv_mac : public wxMBConv
+{
+public:
+    wxMBConv_mac()
+    {
+        Init(CFStringGetSystemEncoding()) ;
+    }
+
+    wxMBConv_mac(const wxChar* name)
+    {
+    	Init( EncodingToSystem(wxFontMapper::Get()->CharsetToEncoding(name, FALSE) ) ) ;
+    }
+
+    wxMBConv_mac(wxFontEncoding encoding)
+    {
+    	Init( EncodingToSystem(encoding) );
+    }
+    
+	~wxMBConv_mac()
+	{
+	    OSStatus status = noErr ;
+	    status = TECDisposeConverter(m_MB2WC_converter);
+	    status = TECDisposeConverter(m_WC2MB_converter);		
+	}
+	
+    static TextEncodingBase EncodingToSystem(wxFontEncoding encoding)
+    {    	
+    	TextEncodingBase enc = CFStringGetSystemEncoding() ;
+
+    	switch( encoding)
+    	{
+    		case wxFONTENCODING_ISO8859_1 :
+	    		enc = kTextEncodingISOLatin1 ;
+	    		break ;
+    		case wxFONTENCODING_ISO8859_2 :
+	    		enc = kTextEncodingISOLatin2;
+	    		break ;
+    		case wxFONTENCODING_ISO8859_3 :
+	    		enc = kTextEncodingISOLatin3 ;
+	    		break ;
+    		case wxFONTENCODING_ISO8859_4 :
+	    		enc = kTextEncodingISOLatin4;
+	    		break ;
+    		case wxFONTENCODING_ISO8859_5 :
+	    		enc = kTextEncodingISOLatinCyrillic;
+	    		break ;
+    		case wxFONTENCODING_ISO8859_6 :
+	    		enc = kTextEncodingISOLatinArabic;
+	    		break ;
+    		case wxFONTENCODING_ISO8859_7 :
+	    		enc = kTextEncodingISOLatinGreek;
+	    		break ;
+    		case wxFONTENCODING_ISO8859_8 :
+	    		enc = kTextEncodingISOLatinHebrew;
+	    		break ;
+    		case wxFONTENCODING_ISO8859_9 :
+	    		enc = kTextEncodingISOLatin5;
+	    		break ;
+    		case wxFONTENCODING_ISO8859_10 :
+	    		enc = kTextEncodingISOLatin6;
+	    		break ;
+    		case wxFONTENCODING_ISO8859_13 :
+	    		enc = kTextEncodingISOLatin7;
+	    		break ;
+    		case wxFONTENCODING_ISO8859_14 :
+	    		enc = kTextEncodingISOLatin8;
+	    		break ;
+    		case wxFONTENCODING_ISO8859_15 :
+	    		enc = kTextEncodingISOLatin9;
+	    		break ;
+
+    		case wxFONTENCODING_KOI8 :
+	    		enc = kTextEncodingKOI8_R;
+	    		break ;
+    		case wxFONTENCODING_ALTERNATIVE : // MS-DOS CP866
+	    		enc = kTextEncodingDOSRussian;
+	    		break ;
+/*
+    		case wxFONTENCODING_BULGARIAN : 
+	    		enc = ;
+	    		break ;
+*/	    		
+    		case wxFONTENCODING_CP437 : 
+	    		enc =kTextEncodingDOSLatinUS ;
+	    		break ;
+    		case wxFONTENCODING_CP850 :
+	    		enc = kTextEncodingDOSLatin1;
+	    		break ;
+    		case wxFONTENCODING_CP852 : 
+	    		enc = kTextEncodingDOSLatin2;
+	    		break ;
+    		case wxFONTENCODING_CP855 :
+	    		enc = kTextEncodingDOSCyrillic;
+	    		break ;
+    		case wxFONTENCODING_CP866 :
+	    		enc =kTextEncodingDOSRussian ;
+	    		break ;
+    		case wxFONTENCODING_CP874 :
+	    		enc = kTextEncodingDOSThai;
+	    		break ;
+    		case wxFONTENCODING_CP932 : 
+	    		enc = kTextEncodingDOSJapanese;
+	    		break ;
+    		case wxFONTENCODING_CP936 : 
+	    		enc =kTextEncodingDOSChineseSimplif ;
+	    		break ;
+    		case wxFONTENCODING_CP949 : 
+	    		enc = kTextEncodingDOSKorean;
+	    		break ;
+    		case wxFONTENCODING_CP950 : 
+	    		enc = kTextEncodingDOSChineseTrad;
+	    		break ;
+	    		
+    		case wxFONTENCODING_CP1250 : 
+	    		enc = kTextEncodingWindowsLatin2;
+	    		break ;
+    		case wxFONTENCODING_CP1251 : 
+	    		enc =kTextEncodingWindowsCyrillic ;
+	    		break ;
+    		case wxFONTENCODING_CP1252 : 
+	    		enc =kTextEncodingWindowsLatin1 ;
+	    		break ;
+    		case wxFONTENCODING_CP1253 : 
+	    		enc = kTextEncodingWindowsGreek;
+	    		break ;
+    		case wxFONTENCODING_CP1254 : 
+	    		enc = kTextEncodingWindowsLatin5;
+	    		break ;
+    		case wxFONTENCODING_CP1255 : 
+	    		enc =kTextEncodingWindowsHebrew ;
+	    		break ;
+    		case wxFONTENCODING_CP1256 : 
+	    		enc =kTextEncodingWindowsArabic ;
+	    		break ;
+    		case wxFONTENCODING_CP1257 : 
+	    		enc = kTextEncodingWindowsBalticRim;
+	    		break ;
+	    		
+    		case wxFONTENCODING_UTF7 : 
+	    		enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicodeUTF7Format) ;
+	    		break ;
+    		case wxFONTENCODING_UTF8 : 
+	    		enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicodeUTF8Format) ;
+	    		break ;
+    		case wxFONTENCODING_EUC_JP : 
+	    		enc = kTextEncodingEUC_JP;
+	    		break ;
+    		case wxFONTENCODING_UTF16BE : 
+	    		enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode16BitFormat) ;
+	    		break ;
+    		case wxFONTENCODING_UTF16LE : 
+	    		enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode16BitFormat) ;
+	    		break ;
+    		case wxFONTENCODING_UTF32BE : 
+	    		enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode32BitFormat) ;
+	    		break ;
+    		case wxFONTENCODING_UTF32LE : 
+	    		enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode32BitFormat) ;
+	    		break ;
+    	} ;
+    	return enc ;
+    }
+    
+	void Init( TextEncodingBase encoding)
+	{
+	    OSStatus status = noErr ;
+		m_char_encoding = encoding ;
+#if SIZEOF_WCHAR_T == 4
+		m_unicode_encoding = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode32BitFormat) ;
+#else
+		m_unicode_encoding = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode16BitFormat) ;
+#endif		
+	    status = TECCreateConverter(&m_MB2WC_converter,
+	                                m_char_encoding,
+	                                m_unicode_encoding);
+	    status = TECCreateConverter(&m_WC2MB_converter,
+	                                m_unicode_encoding,
+	                                m_char_encoding);
+	}
+	
+    size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const
+    {
+	    OSStatus status = noErr ;
+	    ByteCount byteOutLen ;
+	    ByteCount byteInLen = strlen(psz) ;
+	    ByteCount byteBufferLen = n ; 
+		wchar_t *tbuf = NULL ;
+		
+		if (buf == NULL)
+		{
+			n = byteInLen * SIZEOF_WCHAR_T ;
+			tbuf = (wchar_t*) malloc( n ) ;
+		}
+	
+	    status = TECConvertText(m_MB2WC_converter, (ConstTextPtr) psz , byteInLen, &byteInLen,
+	      (TextPtr) (buf ? buf : tbuf) , byteBufferLen, &byteOutLen);
+
+		if ( buf == NULL )
+			free(tbuf) ;
+
+		size_t res = byteOutLen / SIZEOF_WCHAR_T ;
+        if ( buf  && res < n)
+            buf[res] = 0;
+
+		return res ;
+    }
+
+    size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const
+    {    	
+	    OSStatus status = noErr ;
+	    ByteCount byteOutLen ;
+	    ByteCount byteInLen = wxWcslen(psz) * SIZEOF_WCHAR_T ;
+	    ByteCount byteBufferLen = n ;
+
+		char *tbuf = NULL ;
+		
+		if (buf == NULL)
+		{
+			n = byteInLen ;
+			tbuf = (char*) malloc( n ) ;
+		}
+
+	    status = TECConvertText(m_WC2MB_converter, (ConstTextPtr) psz , byteInLen, &byteInLen,
+	       (TextPtr) ( buf ? buf : tbuf ) , byteBufferLen, &byteOutLen);
+
+		if ( buf == NULL )
+			free(tbuf) ;
+
+		size_t res = byteOutLen ;
+        if ( buf  && res < n)
+            buf[res] = 0;
+
+		return res ;
+    }
+
+    bool IsOk() const
+        { return m_MB2WC_converter !=  NULL && m_WC2MB_converter != NULL  ; }
+
+private:
+	TECObjectRef m_MB2WC_converter ;
+	TECObjectRef m_WC2MB_converter ;
+	
+	TextEncodingBase m_char_encoding ;
+	TextEncodingBase m_unicode_encoding ;
+};
+
+#endif // defined(__WXMAC__) && defined(TARGET_CARBON)
 
 // ============================================================================
 // wxEncodingConverter based conversion classes
@@ -1367,7 +1627,20 @@ wxMBConv *wxCSConv::DoCreate() const
         delete conv;
     }
 #endif // wxHAVE_WIN32_MB2WC
+#if defined(__WXMAC__) 
+    {
+    	if ( m_name || ( m_encoding < wxFONTENCODING_UTF16BE ) )
+    	{
+	    		
+	        wxMBConv_mac *conv = m_name ? new wxMBConv_mac(m_name)
+	                                    : new wxMBConv_mac(m_encoding);
+	        if ( conv->IsOk() )
+	            return conv;
 
+	        delete conv;
+    	}
+    }
+#endif
     // step (2)
     wxFontEncoding enc = m_encoding;
 #if wxUSE_FONTMAP
