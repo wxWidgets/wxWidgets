@@ -68,36 +68,48 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 // Microsoft compiler loves underscores, feed them to it
 #ifdef  __VISUALC__
     // functions
-    #define   wxOpen       _wopen
     #define   wxClose      _close
     #define   wxRead       _read
     #define   wxWrite      _write
     #define   wxLseek      _lseek
     #define   wxFsync      _commit
-    #define   wxAccess     _waccess
     #define   wxEof        _eof
 
     #define   wxTell       _tell
 
-    #define   wxMkdir      _wmkdir
-    #define   wxRmdir      _wrmdir
+    #if wxUSE_UNICODE
+        #define   wxOpen       _wopen
+        #define   wxAccess     _waccess
 
-    #define   wxStat       _wstat
+        #define   wxMkdir      _wmkdir
+        #define   wxRmdir      _wrmdir
+
+        #define   wxStat       _wstat
+    #else // !wxUSE_UNICODE
+        #define   wxOpen       _open
+        #define   wxAccess     _access
+
+        #define   wxMkdir      _mkdir
+        #define   wxRmdir      _rmdir
+
+        #define   wxStat       _stat
+    #endif
 
     // types
     #define   wxStructStat struct _stat
 
-    // constants
+    // constants (unless already defined by the user code)
+    #ifndef O_RDONLY
+        #define   O_RDONLY    _O_RDONLY
+        #define   O_WRONLY    _O_WRONLY
+        #define   O_RDWR      _O_RDWR
+        #define   O_EXCL      _O_EXCL
+        #define   O_CREAT     _O_CREAT
+        #define   O_BINARY    _O_BINARY
 
-    #define   O_RDONLY    _O_RDONLY
-    #define   O_WRONLY    _O_WRONLY
-    #define   O_RDWR      _O_RDWR
-    #define   O_EXCL      _O_EXCL
-    #define   O_CREAT     _O_CREAT
-    #define   O_BINARY    _O_BINARY
-
-    #define   S_IFDIR     _S_IFDIR
-    #define   S_IFREG     _S_IFREG
+        #define   S_IFDIR     _S_IFDIR
+        #define   S_IFREG     _S_IFREG
+    #endif // O_RDONLY
 #else
     // functions
     #define   wxOpen       open
