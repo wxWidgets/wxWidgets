@@ -85,7 +85,7 @@ class WXDLLIMPEXP_BASE wxEncodingConverter : public wxObject
             //     both modes gurantee that output string will have same length
             //     as input string
             //
-            // Returns FALSE if given conversion is impossible, TRUE otherwise
+            // Returns false if given conversion is impossible, true otherwise
             // (conversion may be impossible either if you try to convert
             // to Unicode with non-Unicode build of wxWidgets or if input
             // or output encoding is not supported.)

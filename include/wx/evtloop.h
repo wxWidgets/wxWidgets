@@ -39,10 +39,10 @@ public:
     // exit from the loop with the given exit code
     virtual void Exit(int rc = 0) = 0;
 
-    // return TRUE if any events are available
+    // return true if any events are available
     virtual bool Pending() const = 0;
 
-    // dispatch a single event, return FALSE if we should exit from the loop
+    // dispatch a single event, return false if we should exit from the loop
     virtual bool Dispatch() = 0;
 
     // is the event loop running now?
@@ -83,7 +83,7 @@ class WXDLLEXPORT wxEventLoop : public wxEventLoopBase
 public:
     wxEventLoop() { m_impl = NULL; }
     virtual ~wxEventLoop();
-    
+
     virtual int Run();
     virtual void Exit(int rc = 0);
     virtual bool Pending() const;

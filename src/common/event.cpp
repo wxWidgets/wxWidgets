@@ -120,7 +120,7 @@ wxEventHashTable wxEvtHandler::sm_eventHashTable(wxEvtHandler::sm_eventTable);
 const wxEventTableEntry wxEvtHandler::sm_eventTableEntries[] =
     { DECLARE_EVENT_TABLE_ENTRY(wxEVT_NULL, 0, 0, (wxObjectEventFunction)NULL, NULL) };
 
-    
+
 #ifdef __WXDEBUG__
 // Clear up event hash table contents or we can get problems
 // when C++ is cleaning up the static object
@@ -137,7 +137,7 @@ public:
 };
 IMPLEMENT_DYNAMIC_CLASS(wxEventTableEntryModule, wxModule)
 #endif
-    
+
 // ----------------------------------------------------------------------------
 // global variables
 // ----------------------------------------------------------------------------
@@ -759,7 +759,7 @@ wxEventHashTable::wxEventHashTable(const wxEventTable &table)
                   m_rebuildHash(true)
 {
     AllocEventTypeTable(EVENT_TYPE_TABLE_INIT_SIZE);
-    
+
     m_next = sm_first;
     if (m_next)
         m_next->m_previous = this;
@@ -774,7 +774,7 @@ wxEventHashTable::~wxEventHashTable()
         m_previous->m_next = m_next;
     if (sm_first == this)
         sm_first = m_next;
-    
+
     Clear();
 }
 
@@ -817,9 +817,9 @@ bool wxEventHashTable::HandleEvent(wxEvent &event, wxEvtHandler *self)
         InitHashTable();
         m_rebuildHash = false;
     }
-    
+
     if (!m_eventTypeTable)
-        return FALSE;
+        return false;
 
     // Find all entries for the given event type.
     wxEventType eventType = event.GetEventType();
@@ -881,7 +881,7 @@ void wxEventHashTable::AddEntry(const wxEventTableEntry &entry)
     // This might happen 'accidentally' as the app is exiting
     if (!m_eventTypeTable)
         return;
-    
+
     EventTypeTablePointer *peTTnode = &m_eventTypeTable[entry.m_eventType % m_size];
     EventTypeTablePointer  eTTnode = *peTTnode;
 
@@ -1152,9 +1152,9 @@ wxEvtHandler::ProcessEventIfMatches(const wxEventTableEntryBase& entry,
     // the event table (meaning "any") or the event id matches the id
     // specified in the event table either exactly or by falling into
     // range between first and last
-    if ((tableId1 == -1) ||
-        (tableId2 == -1 && tableId1 == event.GetId()) ||
-        (tableId2 != -1 &&
+    if ((tableId1 == wxID_ANY) ||
+        (tableId2 == wxID_ANY && tableId1 == event.GetId()) ||
+        (tableId2 != wxID_ANY &&
          (event.GetId() >= tableId1 && event.GetId() <= tableId2)))
     {
         event.Skip(false);
@@ -1304,7 +1304,7 @@ bool wxEvtHandler::Disconnect( int id, int lastId, wxEventType eventType,
 #endif // WXWIN_COMPATIBILITY_EVENT_TYPES/!WXWIN_COMPATIBILITY_EVENT_TYPES
 
         if ((entry->m_id == id) &&
-            ((entry->m_lastId == lastId) || (lastId == -1)) &&
+            ((entry->m_lastId == lastId) || (lastId == wxID_ANY)) &&
             ((entry->m_eventType == eventType) || (eventType == wxEVT_NULL)) &&
             ((entry->m_fn == func) || (func == (wxObjectEventFunction)NULL)) &&
             ((entry->m_eventSink == eventSink) || (eventSink == (wxEvtHandler*)NULL)) &&

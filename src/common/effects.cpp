@@ -122,5 +122,5 @@ bool wxEffects::TileBitmap(const wxRect& rect, wxDC& dc, wxBitmap& bitmap)
     }
 #endif // wxUSE_PALETTE
 
-    return TRUE;
+    return true;
 }

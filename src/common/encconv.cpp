@@ -63,19 +63,19 @@ static wxUint16* GetEncTable(wxFontEncoding enc)
         {
             TECObjectRef converter ;
             TextEncodingBase code = wxMacGetSystemEncFromFontEnc( enc ) ;
-	        TextEncodingBase unicode = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode16BitFormat) ;
-    	    OSStatus status = TECCreateConverter(&converter,code,unicode);
-    	    char s[2] ;
-    	    s[1] = 0 ;
-    	    ByteCount byteInLen, byteOutLen ;
-    	    for( unsigned char c = 255 ; c >= 128 ; --c )
-    	    {
-    	        s[0] = c ;
+            TextEncodingBase unicode = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode16BitFormat) ;
+            OSStatus status = TECCreateConverter(&converter,code,unicode);
+            char s[2] ;
+            s[1] = 0 ;
+            ByteCount byteInLen, byteOutLen ;
+            for( unsigned char c = 255 ; c >= 128 ; --c )
+            {
+                s[0] = c ;
                 status = TECConvertText(converter, (ConstTextPtr) &s , 1, &byteInLen,
                 (TextPtr) &gMacEncodings[i][c-128] , 2, &byteOutLen);
-    	    }
+            }
             status = TECDisposeConverter(converter);
-            gMacEncodingsInited[i]=true;	
+            gMacEncodingsInited[i]=true;
         }
         return gMacEncodings[i] ;
     }
@@ -118,8 +118,8 @@ static CharsetItem* BuildReverseTable(wxUint16 *tbl)
 wxEncodingConverter::wxEncodingConverter()
 {
     m_Table = NULL;
-    m_UnicodeInput = m_UnicodeOutput = FALSE;
-    m_JustCopy = FALSE;
+    m_UnicodeInput = m_UnicodeOutput = false;
+    m_JustCopy = false;
 }
 
 
@@ -132,17 +132,17 @@ bool wxEncodingConverter::Init(wxFontEncoding input_enc, wxFontEncoding output_e
     if (m_Table) {delete[] m_Table; m_Table = NULL;}
 
 #if !wxUSE_WCHAR_T
-    if (input_enc == wxFONTENCODING_UNICODE || output_enc == wxFONTENCODING_UNICODE) return FALSE;
+    if (input_enc == wxFONTENCODING_UNICODE || output_enc == wxFONTENCODING_UNICODE) return false;
 #endif
 
-    if (input_enc == output_enc) {m_JustCopy = TRUE; return TRUE;}
+    if (input_enc == output_enc) {m_JustCopy = true; return true;}
 
     m_UnicodeOutput = (output_enc == wxFONTENCODING_UNICODE);
-    m_JustCopy = FALSE;
+    m_JustCopy = false;
 
     if (input_enc == wxFONTENCODING_UNICODE)
     {
-        if ((out_tbl = GetEncTable(output_enc)) == NULL) return FALSE;
+        if ((out_tbl = GetEncTable(output_enc)) == NULL) return false;
 
         m_Table = new tchar[65536];
         for (i = 0; i < 128; i++)  m_Table[i] = (tchar)i; // 7bit ASCII
@@ -158,15 +158,15 @@ bool wxEncodingConverter::Init(wxFontEncoding input_enc, wxFontEncoding output_e
         for (i = 0; i < 128; i++)
             m_Table[out_tbl[i]] = (tchar)(128 + i);
 
-        m_UnicodeInput = TRUE;
+        m_UnicodeInput = true;
     }
     else // input !Unicode
     {
-        if ((in_tbl = GetEncTable(input_enc)) == NULL) return FALSE;
+        if ((in_tbl = GetEncTable(input_enc)) == NULL) return false;
         if (output_enc != wxFONTENCODING_UNICODE)
-            if ((out_tbl = GetEncTable(output_enc)) == NULL) return FALSE;
+            if ((out_tbl = GetEncTable(output_enc)) == NULL) return false;
 
-        m_UnicodeInput = FALSE;
+        m_UnicodeInput = false;
 
         m_Table = new tchar[256];
         for (i = 0; i < 128; i++)  m_Table[i] = (tchar)i; // 7bit ASCII
@@ -174,7 +174,7 @@ bool wxEncodingConverter::Init(wxFontEncoding input_enc, wxFontEncoding output_e
         if (output_enc == wxFONTENCODING_UNICODE)
         {
             for (i = 0; i < 128; i++)  m_Table[128 + i] = (tchar)in_tbl[i];
-            return TRUE;
+            return true;
         }
         else // output !Unicode
         {
@@ -203,7 +203,7 @@ bool wxEncodingConverter::Init(wxFontEncoding input_enc, wxFontEncoding output_e
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 
