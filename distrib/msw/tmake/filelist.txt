@@ -90,7 +90,7 @@ prop.cpp	G
 propform.cpp	G
 proplist.cpp	G
 sashwin.cpp	G
-scrolwin.cpp	G
+scrolwin.cpp	G	R
 splash.cpp	G
 splitter.cpp	G
 statline.cpp	G	U,R,P
@@ -374,6 +374,7 @@ radiobox.cpp	R
 radiobut.cpp	R
 region.cpp	R
 scrolbar.cpp	R
+scrolwin.cpp	R
 settings.cpp	R
 slider.cpp	R
 spinbutt.cpp	R
@@ -806,6 +807,7 @@ radiobox.h	K
 radiobut.h	K
 region.h	K
 scrolbar.h	K
+scrolwin.h	K
 settings.h	K
 slider.h	K
 spinbutt.h	K

@@ -31,7 +31,6 @@ ALL_SOURCES = \
 		generic/propform.cpp \
 		generic/proplist.cpp \
 		generic/sashwin.cpp \
-		generic/scrolwin.cpp \
 		generic/splash.cpp \
 		generic/splitter.cpp \
 		generic/statusbr.cpp \
@@ -190,6 +189,7 @@ ALL_SOURCES = \
 		gtk/radiobut.cpp \
 		gtk/region.cpp \
 		gtk/scrolbar.cpp \
+		gtk/scrolwin.cpp \
 		gtk/settings.cpp \
 		gtk/slider.cpp \
 		gtk/spinbutt.cpp \

@@ -3129,7 +3129,10 @@ void wxListMainWindow::SortItems( wxListCtrlCompare fn, long data )
 
 void wxListMainWindow::OnScroll(wxScrollWinEvent& event)
 {
-        wxScrolledWindow::OnScroll( event ) ;
+#ifndef __WXGTK__
+     wxScrolledWindow::OnScroll( event ) ;
+#endif
+
 #if wxUSE_GENERIC_LIST_EXTENSIONS
 
     if (event.GetOrientation() == wxHORIZONTAL && ( m_mode & wxLC_REPORT ))
