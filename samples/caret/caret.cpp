@@ -358,6 +358,7 @@ void MyCanvas::OnSize( wxSizeEvent &event )
 //     would use GetUpdateRegion() and iterate over rectangles it contains
 void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
+    wxCaretSuspend cs(this);
     wxPaintDC dc( this );
     PrepareDC( dc );
     dc.Clear();
@@ -382,8 +383,6 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
 void MyCanvas::OnChar( wxKeyEvent &event )
 {
-    bool refresh = FALSE;
-
     switch ( event.KeyCode() )
     {
         case WXK_LEFT:
@@ -418,10 +417,17 @@ void MyCanvas::OnChar( wxKeyEvent &event )
         default:
             if ( !event.AltDown() && wxIsprint(event.KeyCode()) )
             {
-                CharAt(m_xCaret, m_yCaret) = (wxChar)event.KeyCode();
-                NextChar();
+                wxChar ch = (wxChar)event.KeyCode();
+                CharAt(m_xCaret, m_yCaret) = ch;
 
-                refresh = TRUE;
+                wxCaretSuspend cs(this);
+                wxClientDC dc(this);
+                dc.SetFont(m_font);
+                dc.SetBackgroundMode(wxSOLID); // overwrite old value
+                dc.DrawText(ch, m_xMargin + m_xCaret * m_widthChar,
+                                m_yMargin + m_yCaret * m_heightChar );
+
+                NextChar();
             }
             else
             {
@@ -430,8 +436,5 @@ void MyCanvas::OnChar( wxKeyEvent &event )
     }
 
     DoMoveCaret();
-
-    if ( refresh )
-        Refresh();
 }
 

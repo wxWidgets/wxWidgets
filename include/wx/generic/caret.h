@@ -73,6 +73,12 @@ private:
     // GTK specific initialization
     void InitGeneric();
 
+    // the bitmap holding the part of window hidden by the caret when it was
+    // at (m_xOld, m_yOld)
+    wxBitmap      m_bmpUnderCaret;
+    int           m_xOld,
+                  m_yOld;
+
     wxCaretTimer  m_timer;
     bool          m_blinkedOut,     // TRUE => caret hidden right now
                   m_hasFocus;       // TRUE => our window has focus

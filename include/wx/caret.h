@@ -196,5 +196,31 @@ private:
     #include "wx/generic/caret.h"
 #endif // platform
 
+// ----------------------------------------------------------------------------
+// wxCaretSuspend: a simple class which hides the caret in its ctor and
+// restores it in the dtor, this should be used when drawing on the screen to
+// avoid overdrawing the caret
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxCaretSuspend
+{
+public:
+    wxCaretSuspend(wxWindow *win)
+    {
+        m_caret = win->GetCaret();
+        if ( m_caret )
+            m_caret->Hide();
+    }
+
+    ~wxCaretSuspend()
+    {
+        if ( m_caret )
+            m_caret->Show();
+    }
+
+private:
+    wxCaret *m_caret;
+};
+
 #endif // _WX_CARET_H_BASE_
 
