@@ -316,7 +316,9 @@ public:
     void RefreshLine( wxListLineData *line );
     void OnPaint( wxPaintEvent &event );
     void HilightAll( bool on );
-    void SendNotify( wxListLineData *line, wxEventType command );
+    void SendNotify( wxListLineData *line,
+                     wxEventType command,
+                     wxPoint point = wxDefaultPosition );
     void FocusLine( wxListLineData *line );
     void UnfocusLine( wxListLineData *line );
     void SelectLine( wxListLineData *line );
@@ -1204,8 +1206,8 @@ void wxListHeaderWindow::DoDrawRect( wxDC *dc, int x, int y, int w, int h )
     
     x = dc->XLOG2DEV( x );
     
-	gtk_paint_box (m_wxwindow->style, GTK_PIZZA(m_wxwindow)->bin_window, state, GTK_SHADOW_OUT,
-		(GdkRectangle*) NULL, m_wxwindow, "button", x-1, y-1, w+2, h+2);
+    gtk_paint_box (m_wxwindow->style, GTK_PIZZA(m_wxwindow)->bin_window, state, GTK_SHADOW_OUT,
+                   (GdkRectangle*) NULL, m_wxwindow, "button", x-1, y-1, w+2, h+2);
 #else
     const int m_corner = 1;
 
@@ -1747,11 +1749,18 @@ void wxListMainWindow::HilightAll( bool on )
     }
 }
 
-void wxListMainWindow::SendNotify( wxListLineData *line, wxEventType command )
+void wxListMainWindow::SendNotify( wxListLineData *line,
+                                   wxEventType command,
+                                   wxPoint point )
 {
     wxListEvent le( command, GetParent()->GetId() );
     le.SetEventObject( GetParent() );
     le.m_itemIndex = GetIndexOfLine( line );
+
+    // set only for events which have position
+    if ( point != wxDefaultPosition )
+        le.m_pointDrag = point;
+
     line->GetItem( 0, le.m_item );
     GetParent()->GetEventHandler()->ProcessEvent( le );
 //    GetParent()->GetEventHandler()->AddPendingEvent( le );
@@ -1882,8 +1891,8 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
 
         if (m_dragCount != 3) return;
 
-        int command = wxEVT_COMMAND_LIST_BEGIN_DRAG;
-        if (event.RightIsDown()) command = wxEVT_COMMAND_LIST_BEGIN_RDRAG;
+        int command = event.RightIsDown() ? wxEVT_COMMAND_LIST_BEGIN_RDRAG
+                                          : wxEVT_COMMAND_LIST_BEGIN_DRAG;
 
         wxListEvent le( command, GetParent()->GetId() );
         le.SetEventObject( GetParent() );
@@ -1936,7 +1945,8 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
 
     if (event.RightDown())
     {
-        SendNotify( line, wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK );
+        SendNotify( line, wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK,
+                    event.GetPosition() );
         return;
     }
 
